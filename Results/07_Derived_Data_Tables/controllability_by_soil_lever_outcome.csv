@@ -1,0 +1,281 @@
+lever,exp,soil,out,lev_pct,n
+Dose,E1,S01_CoarseLoam,Yield,0.5240528920256383,20
+Dose,E1,S01_CoarseLoam,IE,3.5212804656238634,20
+Dose,E1,S01_CoarseLoam,Drainage fraction,62.061135371179056,20
+Dose,E1,S01_CoarseLoam,N-leaching fraction,8.4932562620424,20
+Dose,E1,S02_CoarseSand,Yield,3.7876435889475415,11
+Dose,E1,S02_CoarseSand,IE,32.4212271973466,11
+Dose,E1,S02_CoarseSand,Drainage fraction,39.37566512947855,11
+Dose,E1,S02_CoarseSand,N-leaching fraction,23.067269076305216,11
+Dose,E1,S03_Sand,Yield,0.0,20
+Dose,E1,S03_Sand,IE,,0
+Dose,E1,S03_Sand,Drainage fraction,0.0,20
+Dose,E1,S03_Sand,N-leaching fraction,0.0,20
+Dose,E1,S04_LoamySand,Yield,0.0,20
+Dose,E1,S04_LoamySand,IE,,0
+Dose,E1,S04_LoamySand,Drainage fraction,0.0,20
+Dose,E1,S04_LoamySand,N-leaching fraction,0.0,20
+Dose,E1,S05_SandyLoam,Yield,18.056285178236408,20
+Dose,E1,S05_SandyLoam,IE,12.46189756968283,20
+Dose,E1,S05_SandyLoam,Drainage fraction,8.43895930620415,20
+Dose,E1,S05_SandyLoam,N-leaching fraction,30.724000549526043,20
+Dose,E1,S06_Loam,Yield,1.3652482269503508,20
+Dose,E1,S06_Loam,IE,5.178940123881628,20
+Dose,E1,S06_Loam,Drainage fraction,38.37023914969,20
+Dose,E1,S06_Loam,N-leaching fraction,8.295514511873357,20
+Dose,E1,S07_SiltLoam,Yield,0.593669544146602,20
+Dose,E1,S07_SiltLoam,IE,4.212484497726319,20
+Dose,E1,S07_SiltLoam,Drainage fraction,49.6754250386399,20
+Dose,E1,S07_SiltLoam,N-leaching fraction,11.711456859971706,20
+Dose,E1,S08_SandyClayLoam,Yield,2.2909754479097635,20
+Dose,E1,S08_SandyClayLoam,IE,9.360134003350094,20
+Dose,E1,S08_SandyClayLoam,Drainage fraction,32.66898416376978,20
+Dose,E1,S08_SandyClayLoam,N-leaching fraction,7.098821396192206,20
+Dose,E1,S09_ClayLoam,Yield,0.4474340563827419,20
+Dose,E1,S09_ClayLoam,IE,5.358154593282075,20
+Dose,E1,S09_ClayLoam,Drainage fraction,49.353574926542606,20
+Dose,E1,S09_ClayLoam,N-leaching fraction,26.72955974842766,20
+Dose,E1,S10_SiltyClayLoam,Yield,4.3714661916195565,18
+Dose,E1,S10_SiltyClayLoam,IE,18.666085440278994,18
+Dose,E1,S10_SiltyClayLoam,Drainage fraction,51.278655119714735,18
+Dose,E1,S10_SiltyClayLoam,N-leaching fraction,161.05263157894737,18
+Trigger,E2,S01_CoarseLoam,Yield,26.22057001239158,20
+Trigger,E2,S01_CoarseLoam,IE,62.91334742318325,20
+Trigger,E2,S01_CoarseLoam,Drainage fraction,303.58208955223887,20
+Trigger,E2,S01_CoarseLoam,N-leaching fraction,119.08208955223888,20
+Trigger,E2,S02_CoarseSand,Yield,29.946679592825976,17
+Trigger,E2,S02_CoarseSand,IE,49.12101910828027,17
+Trigger,E2,S02_CoarseSand,Drainage fraction,53.61559888579387,17
+Trigger,E2,S02_CoarseSand,N-leaching fraction,45.75956937799043,17
+Trigger,E2,S03_Sand,Yield,13.701413427561915,20
+Trigger,E2,S03_Sand,IE,,2
+Trigger,E2,S03_Sand,Drainage fraction,1.6699300699300632,20
+Trigger,E2,S03_Sand,N-leaching fraction,2.5663641760664877,20
+Trigger,E2,S04_LoamySand,Yield,153.9042089985487,20
+Trigger,E2,S04_LoamySand,IE,68.54318224211904,4
+Trigger,E2,S04_LoamySand,Drainage fraction,17.813694820994098,20
+Trigger,E2,S04_LoamySand,N-leaching fraction,37.86910613508101,20
+Trigger,E2,S05_SandyLoam,Yield,112.36162960558352,20
+Trigger,E2,S05_SandyLoam,IE,113.91857121235054,12
+Trigger,E2,S05_SandyLoam,Drainage fraction,15.795776867317992,20
+Trigger,E2,S05_SandyLoam,N-leaching fraction,85.94493635860543,20
+Trigger,E2,S06_Loam,Yield,52.96148286710315,20
+Trigger,E2,S06_Loam,IE,111.32399457749663,18
+Trigger,E2,S06_Loam,Drainage fraction,124.59437751004025,20
+Trigger,E2,S06_Loam,N-leaching fraction,308.71069182389954,20
+Trigger,E2,S07_SiltLoam,Yield,23.512983447085585,20
+Trigger,E2,S07_SiltLoam,IE,94.49691991786446,19
+Trigger,E2,S07_SiltLoam,Drainage fraction,320.79404466501245,20
+Trigger,E2,S07_SiltLoam,N-leaching fraction,198.12067260138497,20
+Trigger,E2,S08_SandyClayLoam,Yield,58.20870994248151,20
+Trigger,E2,S08_SandyClayLoam,IE,97.83846940265812,18
+Trigger,E2,S08_SandyClayLoam,Drainage fraction,40.04574042309894,20
+Trigger,E2,S08_SandyClayLoam,N-leaching fraction,262.0754147812972,20
+Trigger,E2,S09_ClayLoam,Yield,18.942382357508937,20
+Trigger,E2,S09_ClayLoam,IE,84.86835568802785,20
+Trigger,E2,S09_ClayLoam,Drainage fraction,209.8435870698645,20
+Trigger,E2,S09_ClayLoam,N-leaching fraction,220.1061007957562,20
+Trigger,E2,S10_SiltyClayLoam,Yield,11.520672740014026,20
+Trigger,E2,S10_SiltyClayLoam,IE,77.93326157158236,20
+Trigger,E2,S10_SiltyClayLoam,Drainage fraction,216.7567567567569,20
+Trigger,E2,S10_SiltyClayLoam,N-leaching fraction,179.78260869565236,20
+Sensor depth,E3,S01_CoarseLoam,Yield,4.799550092391758,20
+Sensor depth,E3,S01_CoarseLoam,IE,11.754351652650108,20
+Sensor depth,E3,S01_CoarseLoam,Drainage fraction,68.06962025316453,20
+Sensor depth,E3,S01_CoarseLoam,N-leaching fraction,36.300784034212406,20
+Sensor depth,E3,S02_CoarseSand,Yield,1.3604028454959736,20
+Sensor depth,E3,S02_CoarseSand,IE,4.220607661822976,20
+Sensor depth,E3,S02_CoarseSand,Drainage fraction,8.920863309352525,20
+Sensor depth,E3,S02_CoarseSand,N-leaching fraction,3.121996589676009,20
+Sensor depth,E3,S03_Sand,Yield,0.0,20
+Sensor depth,E3,S03_Sand,IE,,0
+Sensor depth,E3,S03_Sand,Drainage fraction,0.0,20
+Sensor depth,E3,S03_Sand,N-leaching fraction,0.0,20
+Sensor depth,E3,S04_LoamySand,Yield,0.1596516690856299,20
+Sensor depth,E3,S04_LoamySand,IE,,0
+Sensor depth,E3,S04_LoamySand,Drainage fraction,0.0382342718109137,20
+Sensor depth,E3,S04_LoamySand,N-leaching fraction,0.0491534680502444,20
+Sensor depth,E3,S05_SandyLoam,Yield,62.13858424725823,20
+Sensor depth,E3,S05_SandyLoam,IE,16.879699248120293,17
+Sensor depth,E3,S05_SandyLoam,Drainage fraction,17.75657894736841,20
+Sensor depth,E3,S05_SandyLoam,N-leaching fraction,80.15520470966014,20
+Sensor depth,E3,S06_Loam,Yield,14.18023158248028,20
+Sensor depth,E3,S06_Loam,IE,19.660056657223787,20
+Sensor depth,E3,S06_Loam,Drainage fraction,31.194888178913736,20
+Sensor depth,E3,S06_Loam,N-leaching fraction,97.66115702479338,20
+Sensor depth,E3,S07_SiltLoam,Yield,2.924484416188558,20
+Sensor depth,E3,S07_SiltLoam,IE,8.986458760771434,20
+Sensor depth,E3,S07_SiltLoam,Drainage fraction,24.180264180264192,20
+Sensor depth,E3,S07_SiltLoam,N-leaching fraction,57.8181818181818,20
+Sensor depth,E3,S08_SandyClayLoam,Yield,18.24712643678161,20
+Sensor depth,E3,S08_SandyClayLoam,IE,24.57446808510639,20
+Sensor depth,E3,S08_SandyClayLoam,Drainage fraction,23.78461538461539,20
+Sensor depth,E3,S08_SandyClayLoam,N-leaching fraction,99.02731512325116,20
+Sensor depth,E3,S09_ClayLoam,Yield,2.888237110219204,20
+Sensor depth,E3,S09_ClayLoam,IE,10.153535353535355,20
+Sensor depth,E3,S09_ClayLoam,Drainage fraction,30.085106382978736,20
+Sensor depth,E3,S09_ClayLoam,N-leaching fraction,3.804627249357314,20
+Sensor depth,E3,S10_SiltyClayLoam,Yield,4.129724685020989,20
+Sensor depth,E3,S10_SiltyClayLoam,IE,7.897176569742932,20
+Sensor depth,E3,S10_SiltyClayLoam,Drainage fraction,23.273001508295625,20
+Sensor depth,E3,S10_SiltyClayLoam,N-leaching fraction,191.0,20
+Method,E4,S01_CoarseLoam,Yield,1.5166340508806258,10
+Method,E4,S01_CoarseLoam,IE,31.47786946736684,10
+Method,E4,S01_CoarseLoam,Drainage fraction,137.15542521994132,10
+Method,E4,S01_CoarseLoam,N-leaching fraction,5.756429652042365,10
+Method,E4,S02_CoarseSand,Yield,2.287711494161572,6
+Method,E4,S02_CoarseSand,IE,3.4987277353689663,6
+Method,E4,S02_CoarseSand,Drainage fraction,22.677275918558387,6
+Method,E4,S02_CoarseSand,N-leaching fraction,14.8353938046951,6
+Method,E4,S03_Sand,Yield,0.0,10
+Method,E4,S03_Sand,IE,,0
+Method,E4,S03_Sand,Drainage fraction,0.0,10
+Method,E4,S03_Sand,N-leaching fraction,0.0,10
+Method,E4,S04_LoamySand,Yield,0.0,10
+Method,E4,S04_LoamySand,IE,,0
+Method,E4,S04_LoamySand,Drainage fraction,0.0,10
+Method,E4,S04_LoamySand,N-leaching fraction,0.0,10
+Method,E4,S05_SandyLoam,Yield,52.79025589451336,10
+Method,E4,S05_SandyLoam,IE,91.80271692571289,10
+Method,E4,S05_SandyLoam,Drainage fraction,20.044261776794183,10
+Method,E4,S05_SandyLoam,N-leaching fraction,86.87898089171975,10
+Method,E4,S06_Loam,Yield,1.6900950678475537,10
+Method,E4,S06_Loam,IE,28.890178441897586,10
+Method,E4,S06_Loam,Drainage fraction,58.84484711211777,10
+Method,E4,S06_Loam,N-leaching fraction,9.689621726479132,10
+Method,E4,S07_SiltLoam,Yield,1.27101082201243,10
+Method,E4,S07_SiltLoam,IE,26.534996534996537,10
+Method,E4,S07_SiltLoam,Drainage fraction,75.35380507343126,10
+Method,E4,S07_SiltLoam,N-leaching fraction,27.44897959183673,10
+Method,E4,S08_SandyClayLoam,Yield,4.441062066632842,10
+Method,E4,S08_SandyClayLoam,IE,31.3620713400358,10
+Method,E4,S08_SandyClayLoam,Drainage fraction,46.20095693779904,10
+Method,E4,S08_SandyClayLoam,N-leaching fraction,22.89287203001252,10
+Method,E4,S09_ClayLoam,Yield,1.2488507508427849,10
+Method,E4,S09_ClayLoam,IE,26.834204756282663,10
+Method,E4,S09_ClayLoam,Drainage fraction,66.74714104193137,10
+Method,E4,S09_ClayLoam,N-leaching fraction,16.717948717948694,10
+Method,E4,S10_SiltyClayLoam,Yield,3.2474908581654,10
+Method,E4,S10_SiltyClayLoam,IE,24.96237907560014,10
+Method,E4,S10_SiltyClayLoam,Drainage fraction,68.96506262359921,10
+Method,E4,S10_SiltyClayLoam,N-leaching fraction,190.00000000000003,10
+Soil structure,E5,S01_CoarseLoam,Yield,0.0452761847268354,15
+Soil structure,E5,S01_CoarseLoam,IE,2.2306397306397283,15
+Soil structure,E5,S01_CoarseLoam,Drainage fraction,25.23076923076923,15
+Soil structure,E5,S01_CoarseLoam,N-leaching fraction,11.647254575707166,15
+Soil structure,E5,S02_CoarseSand,Yield,0.1085607940446599,15
+Soil structure,E5,S02_CoarseSand,IE,0.1924310455420071,15
+Soil structure,E5,S02_CoarseSand,Drainage fraction,0.3211991434689599,15
+Soil structure,E5,S02_CoarseSand,N-leaching fraction,7.250091541559862,15
+Soil structure,E5,S03_Sand,Yield,0.7423756019261621,15
+Soil structure,E5,S03_Sand,IE,3.833515881708656,15
+Soil structure,E5,S03_Sand,Drainage fraction,19.651995905834184,15
+Soil structure,E5,S03_Sand,N-leaching fraction,2.3236962982977563,15
+Soil structure,E5,S04_LoamySand,Yield,0.916422287390026,15
+Soil structure,E5,S04_LoamySand,IE,4.960422163588383,15
+Soil structure,E5,S04_LoamySand,Drainage fraction,19.628339140534266,15
+Soil structure,E5,S04_LoamySand,N-leaching fraction,3.8124285169653103,15
+Soil structure,E5,S05_SandyLoam,Yield,0.4362578768783346,15
+Soil structure,E5,S05_SandyLoam,IE,3.4482758620689635,15
+Soil structure,E5,S05_SandyLoam,Drainage fraction,18.83211678832118,15
+Soil structure,E5,S05_SandyLoam,N-leaching fraction,4.795050270688309,15
+Soil structure,E5,S06_Loam,Yield,0.3493847789761459,15
+Soil structure,E5,S06_Loam,IE,2.577737719693572,15
+Soil structure,E5,S06_Loam,Drainage fraction,16.42737896494157,15
+Soil structure,E5,S06_Loam,N-leaching fraction,18.181818181818176,15
+Soil structure,E5,S07_SiltLoam,Yield,0.090648134159242,15
+Soil structure,E5,S07_SiltLoam,IE,1.8398169336384445,15
+Soil structure,E5,S07_SiltLoam,Drainage fraction,10.262751159196291,15
+Soil structure,E5,S07_SiltLoam,N-leaching fraction,10.397553516819572,15
+Soil structure,E5,S08_SandyClayLoam,Yield,0.658196846777899,15
+Soil structure,E5,S08_SandyClayLoam,IE,3.016157989227993,15
+Soil structure,E5,S08_SandyClayLoam,Drainage fraction,19.35264054514482,15
+Soil structure,E5,S08_SandyClayLoam,N-leaching fraction,19.03133903133903,15
+Soil structure,E5,S09_ClayLoam,Yield,0.0785261250377577,15
+Soil structure,E5,S09_ClayLoam,IE,2.4647567075943724,15
+Soil structure,E5,S09_ClayLoam,Drainage fraction,13.488372093023257,15
+Soil structure,E5,S09_ClayLoam,N-leaching fraction,19.999999999999982,15
+Soil structure,E5,S10_SiltyClayLoam,Yield,0.2567975830815628,15
+Soil structure,E5,S10_SiltyClayLoam,IE,1.9357756671189383,15
+Soil structure,E5,S10_SiltyClayLoam,Drainage fraction,10.734824281150166,15
+Soil structure,E5,S10_SiltyClayLoam,N-leaching fraction,74.71698113207546,15
+N/water pathway,E6,S01_CoarseLoam,Yield,23.28232593726089,20
+N/water pathway,E6,S01_CoarseLoam,IE,68.09581564584599,20
+N/water pathway,E6,S01_CoarseLoam,Drainage fraction,25.037110341415143,20
+N/water pathway,E6,S01_CoarseLoam,N-leaching fraction,44.81306403094111,20
+N/water pathway,E6,S02_CoarseSand,Yield,30.42580370449223,4
+N/water pathway,E6,S02_CoarseSand,IE,30.135085797736405,4
+N/water pathway,E6,S02_CoarseSand,Drainage fraction,1.5639472746704686,4
+N/water pathway,E6,S02_CoarseSand,N-leaching fraction,40.49608620514384,4
+N/water pathway,E6,S03_Sand,Yield,0.0869187309865373,20
+N/water pathway,E6,S03_Sand,IE,,0
+N/water pathway,E6,S03_Sand,Drainage fraction,0.2592240559923867,20
+N/water pathway,E6,S03_Sand,N-leaching fraction,27.042987407729058,20
+N/water pathway,E6,S04_LoamySand,Yield,0.5854800936768155,20
+N/water pathway,E6,S04_LoamySand,IE,,0
+N/water pathway,E6,S04_LoamySand,Drainage fraction,0.4041220448575473,20
+N/water pathway,E6,S04_LoamySand,N-leaching fraction,12.963270732923396,20
+N/water pathway,E6,S05_SandyLoam,Yield,52.464261402314506,20
+N/water pathway,E6,S05_SandyLoam,IE,91.6989135610094,10
+N/water pathway,E6,S05_SandyLoam,Drainage fraction,5.949964260185846,20
+N/water pathway,E6,S05_SandyLoam,N-leaching fraction,30.24493392070486,20
+N/water pathway,E6,S06_Loam,Yield,32.56705783738475,20
+N/water pathway,E6,S06_Loam,IE,85.20845102248336,20
+N/water pathway,E6,S06_Loam,Drainage fraction,10.5432420686658,20
+N/water pathway,E6,S06_Loam,N-leaching fraction,24.86870559159718,20
+N/water pathway,E6,S07_SiltLoam,Yield,32.14271555996035,20
+N/water pathway,E6,S07_SiltLoam,IE,77.6639344262295,20
+N/water pathway,E6,S07_SiltLoam,Drainage fraction,21.0660545779138,20
+N/water pathway,E6,S07_SiltLoam,N-leaching fraction,36.98469846984697,20
+N/water pathway,E6,S08_SandyClayLoam,Yield,38.33875855876081,20
+N/water pathway,E6,S08_SandyClayLoam,IE,108.85927264513217,20
+N/water pathway,E6,S08_SandyClayLoam,Drainage fraction,6.18584239648922,20
+N/water pathway,E6,S08_SandyClayLoam,N-leaching fraction,22.585935036266186,20
+N/water pathway,E6,S09_ClayLoam,Yield,46.25394407572625,20
+N/water pathway,E6,S09_ClayLoam,IE,76.96537678207741,20
+N/water pathway,E6,S09_ClayLoam,Drainage fraction,16.8241347053321,20
+N/water pathway,E6,S09_ClayLoam,N-leaching fraction,48.65366759517178,20
+N/water pathway,E6,S10_SiltyClayLoam,Yield,51.92628992628994,20
+N/water pathway,E6,S10_SiltyClayLoam,IE,75.76619273301736,20
+N/water pathway,E6,S10_SiltyClayLoam,Drainage fraction,27.67571587950912,20
+N/water pathway,E6,S10_SiltyClayLoam,N-leaching fraction,65.27964205816555,20
+Mulch,E7,S01_CoarseLoam,Yield,6.908187090457189,20
+Mulch,E7,S01_CoarseLoam,IE,49.85563909774437,20
+Mulch,E7,S01_CoarseLoam,Drainage fraction,132.85223367697603,20
+Mulch,E7,S01_CoarseLoam,N-leaching fraction,61.36873156342183,20
+Mulch,E7,S02_CoarseSand,Yield,2.992844224266725,20
+Mulch,E7,S02_CoarseSand,IE,7.710384248967923,20
+Mulch,E7,S02_CoarseSand,Drainage fraction,22.072391767210785,20
+Mulch,E7,S02_CoarseSand,N-leaching fraction,2.734278668310724,20
+Mulch,E7,S03_Sand,Yield,38.30040998881849,20
+Mulch,E7,S03_Sand,IE,,0
+Mulch,E7,S03_Sand,Drainage fraction,22.53954305799649,20
+Mulch,E7,S03_Sand,N-leaching fraction,9.737788301324215,20
+Mulch,E7,S04_LoamySand,Yield,42.02059202059203,20
+Mulch,E7,S04_LoamySand,IE,,0
+Mulch,E7,S04_LoamySand,Drainage fraction,23.530026109660547,20
+Mulch,E7,S04_LoamySand,N-leaching fraction,12.737430167597774,20
+Mulch,E7,S05_SandyLoam,Yield,16.48380700594842,20
+Mulch,E7,S05_SandyLoam,IE,13.709607927617409,20
+Mulch,E7,S05_SandyLoam,Drainage fraction,31.366013071895445,20
+Mulch,E7,S05_SandyLoam,N-leaching fraction,38.75057736720553,20
+Mulch,E7,S06_Loam,Yield,5.240302889816105,20
+Mulch,E7,S06_Loam,IE,19.404630650496145,20
+Mulch,E7,S06_Loam,Drainage fraction,70.908077994429,20
+Mulch,E7,S06_Loam,N-leaching fraction,35.45271629778673,20
+Mulch,E7,S07_SiltLoam,Yield,0.2291572440826187,20
+Mulch,E7,S07_SiltLoam,IE,33.829241480395766,20
+Mulch,E7,S07_SiltLoam,Drainage fraction,79.59663865546219,20
+Mulch,E7,S07_SiltLoam,N-leaching fraction,50.09302325581396,20
+Mulch,E7,S08_SandyClayLoam,Yield,7.0271989820264,20
+Mulch,E7,S08_SandyClayLoam,IE,17.513987600181473,20
+Mulch,E7,S08_SandyClayLoam,Drainage fraction,56.32116788321171,20
+Mulch,E7,S08_SandyClayLoam,N-leaching fraction,51.33724722765819,20
+Mulch,E7,S09_ClayLoam,Yield,0.1811320754716915,20
+Mulch,E7,S09_ClayLoam,IE,31.60101192627394,20
+Mulch,E7,S09_ClayLoam,Drainage fraction,79.25243770314198,20
+Mulch,E7,S09_ClayLoam,N-leaching fraction,26.75,20
+Mulch,E7,S10_SiltyClayLoam,Yield,4.312233009708746,20
+Mulch,E7,S10_SiltyClayLoam,IE,31.284210526315785,20
+Mulch,E7,S10_SiltyClayLoam,Drainage fraction,83.21925133689842,20
+Mulch,E7,S10_SiltyClayLoam,N-leaching fraction,35.49999999999999,20
