@@ -27,12 +27,12 @@ eff = {
 pd.Series(eff).to_csv(os.path.join(OUT, "_effect_sizes.csv"))
 
 # 1 ---- causal loop diagram with data-derived effect sizes
-fig, ax = plt.subplots(figsize=(14, 9)); ax.set_xlim(-0.3, 13.3); ax.set_ylim(-0.4, 8.6); ax.axis("off")
+fig, ax = plt.subplots(figsize=(14, 9)); ax.set_xlim(-0.3, 13.3); ax.set_ylim(-0.75, 8.6); ax.axis("off")
 N = {"atm": (1.8, 7.3, "Atmospheric demand\n(temperature, ET₀)"), "rain": (6.5, 7.3, "Rainfall\n(amount, intensity)"),
      "irr": (11.2, 7.3, "Irrigation\n(trigger, dose, method)"), "theta": (6.5, 4.3, "Soil water θ, h\n(0–100 cm)"),
      "esoil": (1.8, 4.3, "Soil evaporation"), "mulch": (1.8, 1.3, "Mulch\n(vapour flux, interception)"),
      "tr": (11.2, 4.3, "Transpiration → yield"), "pores": (6.5, 1.3, "Pore structure\n(n, α, K(Se), tillage)"),
-     "drain": (11.2, 2.0, "Drainage below 1 m"), "N": (11.2, 0.2, "Nitrate leaching")}
+     "drain": (11.2, 2.2, "Drainage below 1 m"), "N": (11.2, 0.65, "Nitrate leaching")}
 for k, (x, y, t) in N.items():
     ax.add_patch(FancyBboxPatch((x - 1.3, y - 0.45), 2.6, 0.9, boxstyle="round,pad=0.05,rounding_size=0.18",
                  fc={"theta": "#DCEBF7", "pores": "#EFE3D3", "mulch": "#E8F3E1"}.get(k, "white"), ec=NAVY, lw=1.6, zorder=3))
@@ -57,11 +57,11 @@ arrow("theta", "drain", "excess water", "+", (8.55, 3.05))
 arrow("irr", "drain", f"{eff['irr_D']:.2f} mm per mm irrigated", "+", (12.75, 4.6), rad=-0.35)
 arrow("pores", "theta", "retention (n, α)", "+", (6.65, 2.8), ha="left")
 arrow("pores", "drain", "conductivity K", "+", (8.85, 1.35))
-arrow("drain", "N", f"{eff['D_NL']:.2f} kg N per mm", "+", (12.6, 1.1))
+arrow("drain", "N", f"{eff['D_NL']:.2f} kg N per mm", "+", (12.6, 1.4))
 ax.text(4.15, 5.35, "B1 balancing loop:\nevaporation ↔ soil water", fontsize=9, color="#555", ha="center", style="italic")
 ax.text(10.1, 6.05, "B2", fontsize=10, color="#555", ha="center", style="italic", weight="bold")
 ax.set_title("Soil–atmosphere feedback loops, quantified from the 10,190 Daisy runs", loc="left", fontsize=14)
-ax.text(-0.2, -0.35, "Labels: linear effect sizes (regression slopes) from E11 temperature/rain/EpFactor, E14 mulch, E12 trigger, "
+ax.text(-0.2, -0.55, "Labels: linear effect sizes (regression slopes) from E11 temperature/rain/EpFactor, E14 mulch, E12 trigger, "
         "E1+E10 irrigation→drainage, E13 drainage→N (coarse loam unless stated). Green = positive link, red = negative.", fontsize=8.5, color="#555")
 save(fig, FA, "01_Feedback_loop_diagram", "Feedback loops with data-derived effect sizes",
      "Causal-loop diagram; arrow labels are regression slopes from E11, E14, E12, E1/E10 and E13.", "E1,E10-E14")
