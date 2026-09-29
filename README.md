@@ -1,10 +1,77 @@
-# Coupled Water Fluxes and Pore-Scale Dynamics under Joint Precision Irrigation and Evaporation-Control Mulching: Mapping Non-Linear Soil–Atmosphere Feedback Loops
+# Coupled Water Fluxes and Pore Scale Dynamics under Joint Precision Irrigation and Evaporation Control Mulching: Mapping Non Linear Soil to Atmosphere Feedback Loops
 
-Results of 10,190 Daisy soil–plant–atmosphere simulations (10 soils, 17 experiments, 1980–2000 Taastrup and 1994–2005 Bologna weather) analysing how precision irrigation (trigger, sensor depth, dose, method) and evaporation control (mulch) jointly shape soil water fluxes, pore-structure-mediated dynamics, yield and nitrate leaching.
+## Problem
 
-![Soil pore structure gates management controllability](Results/00_Key_Synthesis_Figure/Soil_pore_structure_gates_management_controllability.png)
+Precision irrigation and evaporation control mulching are usually studied and tuned one soil at a time, so a trigger setting, sensor depth or mulch strength that works well on one soil is often reported without stating how much of that result is the management choice and how much is simply the soil's own pore structure acting underneath it. Two practical questions follow directly from this gap. First, when a fixed suction based trigger (for example, minus 300 cm) is deployed across different soils, does it protect yield equally well everywhere, or does it silently allow far more depletion on some soils than others. Second, when mulching saves soil evaporation, is that saved water reliably converted into less irrigation, or can it just as easily end up as extra drainage and nitrate loss depending on the season. This project uses one process based model, one consistent experimental design and ten physically distinct soils to answer both questions directly rather than inferring them from separate single soil studies.
 
-**Key synthesis.** How strongly management can steer drainage depends on soil pore structure. Controllability of drainage by the irrigation trigger, dose, method, N/water pathway and mulch rises with plant-available water (Spearman ρ +0.79 to +0.95 across 10 soils); soil structure is the only lever that works the other way (ρ −0.58). On coarse sands the irrigation levers barely move drainage at all.
+## Methods
+
+All simulations were run in Daisy 7.1 (University of Copenhagen), a one dimensional, Richards equation, soil, plant, atmosphere model with van Genuchten to Mualem unsaturated hydraulics and the WEPP dynamic structure model for tillage and consolidation effects on pore structure over time. Ten soils spanning sand to silty clay loam (USDA texture, Ap and Bt horizons) were simulated under two weather records, Taastrup, Denmark, 1980 to 1999, and Bologna, Italy, 1994 to 2005, used for the Mediterranean nitrogen and water experiment.
+
+**10,190 simulations across 17 experiments (E0 to E16):**
+
+| Experiment | Name | Runs | What was varied |
+|---|---|---:|---|
+| E0 | Baselines | 10 | Rainfed baseline, one run per soil |
+| E1 | Dose | 200 (11 failed) | Irrigation dose x duration, all soils |
+| E2 | Trigger pressure | 200 | Irrigation trigger suction, all soils |
+| E3 | Sensor depth | 200 (3 failed) | Soil moisture sensor installation depth |
+| E4 | Methods | 100 (4 failed) | Irrigation method (overhead, surface, drip at three depths) |
+| E5 | SHP dynamics | 300 | Tillage system x structural consolidation rate |
+| E6 | Mediterranean pollution | 210 (17 failed) | N rate x water strategy, Bologna climate |
+| E7 | Mulching | 200 | Mulch vapour flux factor x interception capacity |
+| E8 | Rain intensity, moisture | 1,000 | Rain intensity x initial soil moisture |
+| E9 | Soil moisture, rain | 1,000 (13 failed) | Initial suction x rain scale x soil |
+| E10 | Amount, timing, soil | 1,000 (46 failed) | Irrigation amount per event x timing window x soil |
+| E11 | Temperature, evaporation, rain | 1,000 | Temperature shift x soil evaporation factor x rain scale |
+| E12 | Sensor, trigger, rain | 1,000 (25 failed) | Sensor depth x trigger x rain scale |
+| E13 | N, water, soil | 1,000 | N rate x water strategy x soil |
+| E14 | Mulch, rain | 1,000 | Mulch vapour flux factor x interception capacity x rain scale |
+| E15 | Method, depth, amount | 1,000 | Irrigation method x rooting depth x amount |
+| E16 | Edge cases | 770 (30 failed) | 77 stress tested factorial edge cases per soil |
+
+149 runs across all experiments were flagged as solver failures and excluded from every analysis in this repository. Irrigation efficiency (IE) and irrigation water use efficiency (IWUE) are reported only where annual irrigation is at least 20 mm. 36 setups were re simulated at daily resolution in Daisy 7.1.14 to support the daily and per year figures; these reproduce the original batch results within 2 percent, median difference under 0.3 percent.
+
+## Results
+
+- How strongly management can steer drainage depends on soil pore structure. Controllability of drainage by the irrigation trigger, dose, method, N to water pathway and mulch rises with plant available water (Spearman rho +0.79 to +0.95 across 10 soils); soil structure is the only lever that works the other way (rho minus 0.58). On coarse sands the irrigation levers barely move drainage at all.
+- A fixed suction trigger means very different things on different soils: minus 300 cm is 84 percent of available water depleted in sand but only 24 percent depleted in silty clay loam. Expressed as root zone depletion instead of suction, irrigation and yield responses from all ten soils collapse onto single curves.
+- +1 degree C is associated with about +46 mm/yr more irrigation and +57 mm/yr more evapotranspiration; +1 percent more rain is associated with about minus 3.0 mm/yr less irrigation.
+- Mulch savings are convex in mulch strength; each additional mm of soil evaporation saved is associated with roughly 0.6 to 0.9 mm less irrigation, but the split between reduced irrigation and extra drainage depends strongly on how wet the season is.
+- Every mm of irrigation is associated with about 0.21 mm more drainage; every mm of drainage is associated with about 1.06 kg N/ha more nitrate leached.
+- 170 runs are Pareto optimal across three objectives at once: maximum irrigation efficiency, minimum drainage fraction and minimum nitrogen leaching fraction.
+
+## Novel contributions to the literature
+
+1. **A soil independent irrigation trigger law.** Re expressed as root zone depletion rather than suction, irrigation and yield responses from ten physically distinct soils collapse onto single curves (pooled R squared rises from 0.48 to 0.75 for irrigation and from 0.23 to 0.70 for yield), and the collapse converts directly into a per soil sensor suction table so one depletion target can be deployed as ten different, soil specific tension settings.
+2. **A closed water balance account of where evaporation saved by mulching actually goes.** In dry years about 60 percent of the water saved from evaporation is redirected into reduced irrigation; in wet years about 63 percent instead becomes extra drainage, with the crossover between the two regimes located at a specific rainfall scale (about 1.2 times the baseline).
+3. **A regime map of when the dominant water loss pathway switches from evaporation to drainage**, and where climate and mulch management drivers stop acting additively on that pathway, with the non additive share reaching up to 15 percent of irrigation at the climate extremes.
+
+Each of these builds on established concepts in unsaturated flow theory and irrigation scheduling practice (similar media scaling, FAO 56 management allowed depletion, standard soil water balance accounting); the specific demonstrations, the cross soil data collapse, the closed rainfall conditioned water balance partition and the explicit non additivity mapping, are, to our knowledge, new for a Daisy type model. None of the three claims has been checked exhaustively against the wider literature, and they should be read as a new synthesis of this dataset rather than a claim that no related result exists elsewhere.
+
+## Symbol and abbreviation key
+
+| Symbol | Meaning |
+|---|---|
+| IE | Irrigation efficiency: yield (kg dry matter) per cubic metre of irrigation applied |
+| IWUE | Irrigation water use efficiency: yield per cubic metre of total water (rain plus irrigation) |
+| DPF | Deep percolation fraction: drainage below 1 m as a fraction of total water input |
+| NLF | Nitrogen leaching fraction: nitrogen leached as a fraction of nitrogen applied |
+| PFPn | Partial factor productivity of nitrogen: yield per kg of nitrogen applied |
+| TAW | Total available water: plant available water capacity in 0 to 100 cm, field capacity minus wilting point |
+| f | Root zone depletion fraction: share of TAW already used, 0 = full, 1 = at wilting point |
+| h | Soil water pressure head (suction), cm; negative by convention, reported here as magnitude |
+| pF | log10 of suction in cm; pF 2 is approximately field capacity, pF 4.2 is approximately wilting point |
+| Ksat | Saturated hydraulic conductivity |
+| K(Se), K(h) | Unsaturated hydraulic conductivity as a function of effective saturation or suction |
+| vff | Mulch vapour flux factor: 1 = no mulch, lower values = stronger evaporation suppression |
+| cap | Mulch or litter layer interception capacity, mm |
+| Ep, EpFactor | Soil evaporation factor: multiplier on potential soil evaporation |
+| trig | Irrigation trigger: the suction or depletion value that starts an irrigation event |
+| E0 to E16 | Experiment identifiers; see the experiment table above |
+| rho | Spearman rank correlation coefficient |
+| R squared | Coefficient of determination |
+| N1, N2, N3 | The three novel synthesis figures (trigger law, fate of saved evaporation, feedback regime map) |
 
 ## Repository structure
 
@@ -22,20 +89,9 @@ Results of 10,190 Daisy soil–plant–atmosphere simulations (10 soils, 17 expe
 | `Results/08_Scripts` | Python code that produced every figure |
 | `Results/Figure_Catalogue.csv` | Title, caption and data source of every figure |
 
-## Key quantitative results (coarse loam unless stated)
+## Note on scale
 
-- +1 °C → +46 mm irrigation/yr and +57 mm ET/yr
-- +1 % rain → −3.0 mm irrigation/yr
-- Mulch savings are convex in mulch strength; each mm of evaporation saved saves ≈ 0.6–0.9 mm of irrigation
-- Irrigation → drainage 0.21 mm/mm; drainage → nitrate leaching 1.06 kg N/mm
-- 170 Pareto-optimal runs (maximum irrigation efficiency, minimum drainage and N-leaching fractions)
-
-## Methods notes
-
-- Model: Daisy 7.1 (University of Copenhagen), 1-D, Richards equation, van Genuchten–Mualem hydraulics; WEPP dynamic structure model for tillage/consolidation effects.
-- 149 runs flagged as solver failures are excluded from all analyses. IE and IWUE are reported only where irrigation ≥ 20 mm/yr.
-- Daisy is Darcy-scale: "pore-scale dynamics" are represented through proxies (pore-size distribution from n and α, K(Se), dynamic bulk density).
-- Daily and per-year figures use 36 re-simulated setups; they reproduce the batch results within 2 % (median < 0.3 %).
+Daisy is a Darcy scale model; the "pore scale dynamics" referred to throughout this repository are represented through validated proxies derived from the van Genuchten to Mualem parameters (pore size distribution from n and alpha, unsaturated conductivity K(Se), and dynamic bulk density from the WEPP structure model), not a directly resolved pore network.
 
 ## Viewing
 
@@ -53,19 +109,13 @@ All 67 figures, in catalogue order, each with the mechanism behind the pattern. 
 
 *Controllability of yield, IE, drainage and N-leaching fractions by seven management levers across ten soils, and its rank correlation with plant-available water.* (data: E1-E7)
 
-**Why this happens.** Controllability here means how much an outcome moves when a lever is changed, as a percentage of its own median. A lever can only move drainage if the soil has somewhere to put the water it withholds or releases: on a soil with a large plant-available water capacity (TAW), delaying or advancing irrigation changes how much water is stored in the root zone versus lost below it, so the trigger, dose, method and N/water pathway all show strong positive rank correlation with TAW (ρ = +0.79 to +0.95, panel e). On coarse sand, water passes through the profile in days regardless of when or how it is applied, so those same levers barely move drainage at all (panel f) — the soil's pore network sets an upper bound on what management can achieve before any lever is even considered. Soil structure is the one exception, and it runs the opposite way (ρ = −0.58): it is the only lever that changes the pore network itself rather than working within it, so it matters most exactly where the other levers matter least, on coarse soils with little water-holding capacity to begin with. Yield and irrigation efficiency follow the reverse logic: they are most controllable on the driest, lowest-TAW soils, because a small change in water supply or evaporative demand there is a large fraction of what the crop has to work with.
+**Why this happens.** Controllability here means how much an outcome moves when a lever is changed, as a percentage of its own median. A lever can only move drainage if the soil has somewhere to put the water it withholds or releases: on a soil with a large plant-available water capacity (TAW), delaying or advancing irrigation changes how much water is stored in the root zone versus lost below it, so the trigger, dose, method and N/water pathway all show strong positive rank correlation with TAW (ρ = +0.79 to +0.95, panel e). On coarse sand, water passes through the profile in days regardless of when or how it is applied, so those same levers barely move drainage at all (panel f): the soil's pore network sets an upper bound on what management can achieve before any lever is even considered. Soil structure is the one exception, and it runs the opposite way (ρ = −0.58): it is the only lever that changes the pore network itself rather than working within it, so it matters most exactly where the other levers matter least, on coarse soils with little water-holding capacity to begin with. Yield and irrigation efficiency follow the reverse logic: they are most controllable on the driest, lowest-TAW soils, because a small change in water supply or evaporative demand there is a large fraction of what the crop has to work with.
 
 **Idea and literature.** This follows directly from unsaturated flow theory: Miller and Miller's (1956) similar-media scaling and the van Genuchten (1980)/Mualem (1976) hydraulic functions used throughout this study both predict that a soil's characteristic pore-size distribution sets its retention and conductivity behaviour, and therefore how it responds to any external forcing. Irrigation scheduling research has long shown, soil by soil, that coarse soils need more frequent, smaller applications (the logic behind FAO-56's management-allowed-depletion approach, Allen et al., 1998) and that structural degradation reduces infiltration and available water capacity (captured here through the WEPP dynamic structure model, Flanagan and Nearing, 1995). What is usually shown, however, is that management effect sizes differ by soil. This figure instead asks a comparative question directly: for a fixed outcome, which lever dominates, on which soil, and does the ranking itself change with soil physical properties. Reducing seven experiments and ten soils to one soil × lever controllability map with a single explanatory variable (TAW) is, to our knowledge, not how Daisy or comparable crop-model studies have presented management sensitivity before; related work has looked at single-lever sensitivity per soil, not a cross-lever ranking gated by a soil property. It has not been checked against the full literature and should be read as a new synthesis of this dataset, not a claim that no related idea exists.
 
 ### New Synthesis Figures (00_Novel_Contributions)
 
-**Novel contribution.** Beyond the individual response curves in the 50-chart catalogue below, this dataset supports three results that, to our knowledge, are not already established in this combined form for a Daisy-type soil–plant–atmosphere model:
-
-1. **A soil-independent irrigation trigger law** (Fig. 2). Re-expressed as root-zone depletion rather than suction, irrigation and yield responses from ten physically distinct soils collapse onto single curves (pooled R² rises from 0.48 to 0.75 for irrigation and from 0.23 to 0.70 for yield), and the collapse converts directly into a per-soil sensor-suction table so a single depletion target can be deployed as a soil-specific tension setting.
-2. **A closed water-balance account of where evaporation saved by mulching actually goes** (Fig. 3), showing it is not a fixed benefit: in dry years about 60% of the saved water is redirected into reduced irrigation, while in wet years 63% instead becomes extra drainage, with the crossover between the two regimes located at a specific rainfall scale (≈ ×1.2).
-3. **A regime map of when the dominant water-loss pathway switches from evaporation to drainage**, and where climate and mulch-management drivers stop acting additively on that pathway (Fig. 4), with the non-additive share reaching up to 15% of irrigation at the climate extremes.
-
-Each of these is presented with the established literature it builds on and an explicit statement of what is new about this treatment; none of the three claims has been checked exhaustively against the wider literature, and they should be read as a new synthesis of this dataset rather than a claim that no related result exists elsewhere.
+The three results argued for in full under "Novel contributions to the literature" near the top of this README, the soil independent trigger law, the closed water balance account of saved evaporation, and the feedback regime map, each with a figure below.
 
 **Figure 2. Soil-independent trigger law (data collapse)**
 
@@ -73,7 +123,7 @@ Each of these is presented with the established literature it builds on and an e
 
 *E2 (10 soils × 20 triggers): relative irrigation and yield collapse onto single curves when the trigger is expressed as root-zone depletion f instead of suction; f* = 5 % yield-loss threshold and the soil-specific suction triggers that achieve it.* (data: E2 + soil hydraulics)
 
-**Why this happens.** A suction-based trigger (e.g. −300 cm) is a single number, but the same tension corresponds to a very different fraction of available water depending on the retention curve: in sand, −300 cm is already 84 % depletion (h* = −143 cm gets you to 5 % yield loss); in silty clay loam, the same −300 cm is only 24 % depletion (h* = −729 cm). This is exactly why the conventional plot (panel a, trigger in suction) scatters across soils, R² = 0.48 — the x-axis is not measuring the same underlying quantity in every soil. Root-zone depletion f, the fraction of plant-available water already used, is that same-footing quantity: it is defined relative to each soil's own field capacity and wilting point, so a given f means the same amount of remaining accessible water regardless of texture. Re-expressing the trigger this way collapses the irrigation curves onto one line (panel b, R² = 0.75) and the yield curves even more tightly (panel c, R² = 0.70 vs 0.23 in suction), because yield loss begins once the crop has used a soil-independent share of what it can extract, not once suction crosses a soil-specific number.
+**Why this happens.** A suction-based trigger (e.g. −300 cm) is a single number, but the same tension corresponds to a very different fraction of available water depending on the retention curve: in sand, −300 cm is already 84 % depletion (h* = −143 cm gets you to 5 % yield loss); in silty clay loam, the same −300 cm is only 24 % depletion (h* = −729 cm). This is exactly why the conventional plot (panel a, trigger in suction) scatters across soils, R² = 0.48, because the x-axis is not measuring the same underlying quantity in every soil. Root-zone depletion f, the fraction of plant-available water already used, is that same-footing quantity: it is defined relative to each soil's own field capacity and wilting point, so a given f means the same amount of remaining accessible water regardless of texture. Re-expressing the trigger this way collapses the irrigation curves onto one line (panel b, R² = 0.75) and the yield curves even more tightly (panel c, R² = 0.70 vs 0.23 in suction), because yield loss begins once the crop has used a soil-independent share of what it can extract, not once suction crosses a soil-specific number.
 
 **Idea and literature.** This is the same physical idea behind FAO-56 management-allowed depletion (Allen et al., 1998), which already recommends scheduling by depletion fraction rather than by a fixed tension, and behind Miller and Miller (1956) similar-media scaling, which formalises why two soils with different pore-size distributions require different absolute suctions to reach comparable relative water status. What this figure adds is a direct, data-driven test of that idea across ten simulated soils and twenty trigger settings from one consistent model run: it shows the R² gain from switching variables explicitly (0.48 → 0.75, 0.23 → 0.70) rather than assuming depletion is the better variable, and it turns the collapse into an operational table (panel d) of the suction each soil's sensor should actually be set to in order to reach the same 5 %-yield-loss depletion point. We are not aware of a published soil-independent trigger law demonstrated this way for Daisy specifically, but the underlying concept (schedule by depletion, not by tension) is established practice, and the claim here is the demonstration and the soil-specific suction table, not the invention of the depletion concept itself.
 
@@ -83,7 +133,7 @@ Each of these is presented with the established literature it builds on and an e
 
 *E14: total evaporation saved (soil + canopy + mulch layer) partitioned by water balance into reduced irrigation, extra transpiration, extra drainage and residual, vs mulch strength and rain; with the resulting change in N leaching.* (data: E14)
 
-**Why this happens.** Mulch reduces the vapour-flux factor at the soil surface, so soil evaporation falls by a physically fixed amount for a given mulch strength — but where that saved water goes afterwards is decided by the water balance, not by the mulch itself. In a dry year (rain ×0.6), the crop is water-limited and the profile has spare storage capacity, so most of the saved water (about 60 % of ≈87 mm) is redirected into less irrigation being applied, with the rest going to extra transpiration. In a wet year (rain ×1.4), the profile is already close to field capacity, so it cannot absorb more; instead of reducing irrigation, the saved water simply adds to the surplus that drains below 1 m (63 % of ≈130 mm, panel c). The crossover between these two regimes, drainage overtaking irrigation-saving as the dominant fate, sits near rain ×1.2 (panel d). Nitrate leaching keeps falling at every rain level because less evaporation always means somewhat less concentrated soil water, but the size of the benefit shrinks in wet years because the extra drainage carries part of that nitrate straight out of the root zone, offsetting the gain from applying less fertiliser-linked irrigation.
+**Why this happens.** Mulch reduces the vapour-flux factor at the soil surface, so soil evaporation falls by a physically fixed amount for a given mulch strength, but where that saved water goes afterwards is decided by the water balance, not by the mulch itself. In a dry year (rain ×0.6), the crop is water-limited and the profile has spare storage capacity, so most of the saved water (about 60 % of ≈87 mm) is redirected into less irrigation being applied, with the rest going to extra transpiration. In a wet year (rain ×1.4), the profile is already close to field capacity, so it cannot absorb more; instead of reducing irrigation, the saved water simply adds to the surplus that drains below 1 m (63 % of ≈130 mm, panel c). The crossover between these two regimes, drainage overtaking irrigation-saving as the dominant fate, sits near rain ×1.2 (panel d). Nitrate leaching keeps falling at every rain level because less evaporation always means somewhat less concentrated soil water, but the size of the benefit shrinks in wet years because the extra drainage carries part of that nitrate straight out of the root zone, offsetting the gain from applying less fertiliser-linked irrigation.
 
 **Idea and literature.** Mulch's effect on evaporation is well established (surface residue and plastic mulch studies going back decades consistently report reduced soil evaporation and water savings, broadly summarised in agronomy and soil-physics reviews of mulching). What is less commonly quantified is a full water-balance accounting of the saved evaporation itself: most mulch studies report the evaporation reduction or the resulting yield/water-use benefit, not a four-way partition (irrigation saved, extra transpiration, extra drainage, residual) tracked across a rainfall gradient with a closed balance (residual ≤ 6 %) and linked through to the nitrate consequence. That closed-balance, rainfall-conditioned partition, and the explicit statement that mulch's practical benefit changes character (and shrinks) as climate gets wetter, is the new synthesis offered here. Similar water-balance accounting ideas exist in the mulch literature; we have not found this specific rain-gated partition demonstrated with a process-based model in this form, but this has not been checked exhaustively against the literature.
 
@@ -121,7 +171,7 @@ This is the map of the whole study. Each row is an experiment and each column a 
 
 ![Climate forcing](Results/01_Charts_50/A_System_Forcing_Baseline/03_Climate_forcing.png)
 
-*Annual rain, reference ET and temperature for the two climates used (Taastrup: E0–E5, E7–E16; Bologna: E6).* (data: Weather files, E0)
+*Annual rain, reference ET and temperature for the two climates used (Taastrup: E0 to E5, E7 to E16; Bologna: E6).* (data: Weather files, E0)
 
 Weather drives everything downstream. Taastrup is a temperate site where annual rain (roughly 300-650 mm) is well below reference evapotranspiration (about 800-900 mm after the ×0.7 course correction and +2 °C), giving a mean aridity ET₀/P of 1.97, so the crop is water-limited in most years and irrigation matters. Bologna is warmer with a lower aridity index (1.38) but much larger year-to-year swings in rain, which is why it is used as the Mediterranean nitrogen-and-water case (E6). What makes irrigation useful is the mismatch in timing between when rain falls and when the crop needs water, not the annual totals alone.
 
@@ -163,7 +213,7 @@ The peak marks the dominant pore class. Sand has a tall, narrow peak at low suct
 
 ![Unsaturated conductivity](Results/01_Charts_50/B_PoreScale_Structure/08_Unsaturated_conductivity.png)
 
-*Mualem–van Genuchten K(Se) and K(h) (Ap horizon), mm/day; dotted line = trigger.* (data: Soil files)
+*Mualem to van Genuchten K(Se) and K(h) (Ap horizon), mm/day; dotted line = trigger.* (data: Soil files)
 
 Texture matters in both directions. At saturation sand conducts water fastest (roughly 10³-10⁴ mm/day), but as it dries its conductivity collapses by many orders of magnitude within a small suction range, because the large pores that carried the flow empty first and the remaining water films are thin and disconnected. Finer soils start lower but lose conductivity gradually because their small pores stay water-filled. At the −300 cm trigger (dotted line) the fine soils therefore still conduct more water than sand, so they can resupply the roots and the surface from below, while sand cannot. This is the physical reason sand has both low evaporation and high drainage.
 
@@ -199,9 +249,9 @@ Faster time-consolidation means a loosened topsoil re-densifies sooner after til
 
 The water regime matters far more than the tillage system. Irrigation raises yield by several Mg/ha (for example sand 1.5 → 5.0) and raises drainage sharply where storage is small (coarse sand from about 52 to 164 mm/yr), because water added to a soil that cannot hold it percolates below the root zone. Within a regime the three tillage systems differ by only a few mm of drainage and about 0-0.1 Mg/ha of yield; no-till drains slightly less in irrigated coarse loam (28 → 21 mm) because, in the model, its unloosened, structurally stable topsoil holds water slightly longer than plough-loosened soil.
 
-**Figure 17. Wetting–drying loops**
+**Figure 17. Wetting to drying loops**
 
-![Wetting–drying loops](Results/01_Charts_50/B_PoreScale_Structure/13_Wetting_drying_loops.png)
+![Wetting to drying loops](Results/01_Charts_50/B_PoreScale_Structure/13_Wetting_drying_loops.png)
 
 *Daily θ vs pF at 3.75 cm through the 1994 season for each tillage system.* (data: E5 daily)
 
@@ -237,7 +287,7 @@ Drainage responds to a threshold in stored water, not directly to rain. In 1983 
 
 ![Cumulative fluxes by method](Results/01_Charts_50/C_Coupled_Water_Fluxes/17_Cumulative_fluxes_by_method.png)
 
-*Cumulative irrigation, drainage and canopy evaporation 1980–2000 for four methods.* (data: E4 daily)
+*Cumulative irrigation, drainage and canopy evaporation 1980 to 2000 for four methods.* (data: E4 daily)
 
 Irrigation method decides where water is placed, and that changes how much of it a plant can intercept before it either drains or evaporates. Overhead irrigation wets the whole surface repeatedly, so it accumulates the most cumulative irrigation (over 4,000 mm across 20 years) and also the most canopy evaporation, because water lands on leaves as well as soil. Deep drip (50-60 cm) places water below most of the evaporating surface and near the active root zone, roughly halving both cumulative drainage and irrigation relative to overhead. Surface drip sits between the two. This is the same water-placement logic as Fig. 23-24, shown here as a running 20-year total rather than an annual mean, so the gap between methods can be seen compounding year on year.
 
@@ -389,9 +439,9 @@ Saved irrigation depends on both mulch settings and rain together, not on mulch 
 
 A mulch or litter layer has its own small storage capacity for intercepted water, and any water held there evaporates directly rather than reaching the soil, so a larger interception capacity means more water is caught and lost at that layer rather than reaching the roots, which is why evaporation from the mulch layer rises with interception capacity in both panels. The left panel shows this saturates as vapour-flux factor increases toward 1 (no suppression at the soil itself, so the mulch layer's own evaporation becomes relatively less important); the right panel shows sand and loamy sand losing the least in absolute terms simply because they have less water arriving at the surface overall (consistent with Fig. 9's lower interception losses on coarse soils), not because their mulch behaves differently.
 
-**Figure 40. Mulch–irrigation substitution**
+**Figure 40. Mulch to irrigation substitution**
 
-![Mulch–irrigation substitution](Results/01_Charts_50/E_Evaporation_Mulching/36_Mulch_irrigation_substitution.png)
+![Mulch to irrigation substitution](Results/01_Charts_50/E_Evaporation_Mulching/36_Mulch_irrigation_substitution.png)
 
 *Irrigation saved per mm of soil evaporation saved; 1:1 line for reference.* (data: E7,E14)
 
@@ -521,7 +571,7 @@ A Pareto-optimal run is one where no other run does better on all three objectiv
 
 ![Texture triangle](Results/02_Additional_Figures/X01_Texture_triangle.png)
 
-*Sand–silt–clay of each soil from the soil files.* (data: Soil files)
+*Sand to silt-clay of each soil from the soil files.* (data: Soil files)
 
 Texture (the sand/silt/clay split) is the raw material the van Genuchten-Mualem hydraulic functions are built from, so this triangle is the physical starting point for every soil-driven pattern in the study. Sand and loamy sand sit in the sand-dominated corner, silty clay loam and clay loam sit toward the clay/silt corner, and the visual spread across the triangle is deliberate: the ten soils were chosen to span the texture space broadly, which is what allows later figures (e.g. Figs. 1, 9, 25) to show clean, monotonic trends against soil properties rather than a narrow, clustered range. Coarse loam and coarse sand share the same coarse ResFarm texture class but differ in their hydraulic parameters (n, Ksat), which is why they can behave differently in later figures despite the similar texture label.
 
@@ -545,7 +595,7 @@ Topsoil conductivity when wet (top panel) is highly variable and occasionally sp
 
 ![Seasonal envelopes](Results/02_Additional_Figures/X04_Seasonal_envelopes.png)
 
-*Mean and 10–90 % band by day of year across 1980–2000; blue = mean net precipitation (rain − ET₀).* (data: E5, E0 daily)
+*Mean and 10 to 90 % band by day of year across 1980 to 2000; blue = mean net precipitation (rain − ET₀).* (data: E5, E0 daily)
 
 Plotting mean and 10-90% band together separates the typical seasonal cycle from how much it varies year to year. Topsoil water content (top row) rises through winter and falls through summer in all three tillage systems, tracking net precipitation (rain minus ET₀, blue line) with a lag, since the soil integrates water input over time rather than responding instantly. Conductivity (bottom row, log scale) falls even faster than water content in summer, because conductivity depends non-linearly on saturation (Fig. 12): a moderate drop in θ can mean an order-of-magnitude drop in K. The bands are widest exactly where the mean is falling fastest (into summer), showing year-to-year weather variability matters most during the drying phase, not the wetting phase.
 
@@ -553,7 +603,7 @@ Plotting mean and 10-90% band together separates the typical seasonal cycle from
 
 ![Evaporation decline after wetting](Results/02_Additional_Figures/X05_Evaporation_decline_after_wetting.png)
 
-*Composite of all Apr–Sep events 1980–2000 (> 5 mm) followed by 7 dry days; band = interquartile range.* (data: E0,E7 daily)
+*Composite of all Apr to Sep events 1980 to 2000 (> 5 mm) followed by 7 dry days; band = interquartile range.* (data: E0,E7 daily)
 
 This is a textbook two-stage drying curve, and it shows directly why mulch's effect on evaporation compounds over time rather than being a fixed daily reduction. Stage 1 (day 0-1) is energy-limited: the surface is wet enough that evaporation proceeds at close to the atmospheric demand rate for all three treatments, so the curves start together. Stage 2 begins once the surface dries below what the soil can resupply by capillary rise, and the curves separate sharply: rainfed, bare soil evaporation stays relatively high and declines only slowly, weak mulch behaves similarly to bare soil because it barely impedes vapour loss, while strong mulch collapses almost to zero within a day, because it cuts off the vapour pathway before stage 2 even properly begins. This is the event-level mechanism behind every mulch result in Figs. 3-4, 36-42.
 
@@ -609,7 +659,7 @@ A PCA biplot compresses many correlated outputs into the two directions of great
 
 ![Parallel coordinates of best runs](Results/02_Additional_Figures/X12_Parallel_coordinates_best_runs.png)
 
-*Each line one Pareto-optimal run (min–max scaled).* (data: Pareto set)
+*Each line one Pareto-optimal run (min to max scaled).* (data: Pareto set)
 
 Each line is one of the 170 Pareto-optimal runs from Fig. 54, scaled 0-1 per axis so different units can share one plot; the coloured experiment groups show which parts of factor space actually produce trade-off-optimal outcomes. Lines cluster toward high yield and high IE (left two axes) while staying low on irrigation, drainage, soil evaporation and N-leached (right-hand axes), which is definitionally what Pareto-optimal means here. E12 and E4 (green and dark-yellow families) contribute a visibly dense band of lines, consistent with Fig. 54's finding that sensor-trigger-rain and method experiments dominate the optimal set; the wide vertical spread on the irrigation_mm axis shows Pareto-optimal solutions are not a single recipe, several different irrigation levels can all be optimal depending on which soil and method they are paired with.
 
