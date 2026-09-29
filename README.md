@@ -44,15 +44,15 @@ All simulations were run in Daisy 7.1 (University of Copenhagen), a one dimensio
 ## Novel contributions to the literature
 
 1. **A soil independent irrigation trigger law.** Re expressed as root zone depletion rather than suction, irrigation and yield responses from ten physically distinct soils collapse onto single curves (pooled R squared rises from 0.48 to 0.75 for irrigation and from 0.23 to 0.70 for yield), and the collapse converts directly into a per soil sensor suction table so one depletion target can be deployed as ten different, soil specific tension settings.
-   ![Soil-independent trigger law (data collapse)](Results/00_Novel_Contributions/N1_Depletion_trigger_law.png)
+   **NOVEL CONTRIBUTION** -> [Jump to Figure 2](#fig-trigger-law)
 
    **Watch:** [Tensiometer widget, suction at 20 cm, 1980 to 2000, drag the range slider](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/04_Interactive_Charts/05_Sensor_widget_1980_2000.html) · [V1, sensor and irrigation, 1994 (video)](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/05_Videos/V1_Sensor_and_irrigation_1994.mp4) · [Pressure head profiles through the 1994 season, rainfed vs irrigated, loam vs sand](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/04_Interactive_Charts/06_Profile_animation_1994.html) · [V2, profiles, 1994 (video)](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/05_Videos/V2_Profiles_1994.mp4) · [E12, irrigation demand by sensor depth x trigger, slider = rain](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/04_Interactive_Charts/03_E12_Sensor_Trigger_Rain.html)
 2. **A closed water balance account of where evaporation saved by mulching actually goes.** In dry years about 60 percent of the water saved from evaporation is redirected into reduced irrigation; in wet years about 63 percent instead becomes extra drainage, with the crossover between the two regimes located at a specific rainfall scale (about 1.2 times the baseline).
-   ![Fate of water saved by mulching](Results/00_Novel_Contributions/N2_Fate_of_saved_evaporation.png)
+   **NOVEL CONTRIBUTION** -> [Jump to Figure 3](#fig-mulch-water-balance)
 
    **Watch:** [E14, soil evaporation under mulch, slider = rain](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/04_Interactive_Charts/04_E14_Mulch_3D_surface.html) · [V4, mulch vs bare soil, 1994 (video)](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/05_Videos/V4_Mulch_vs_bare_1994.mp4)
 3. **A regime map of when the dominant water loss pathway switches from evaporation to drainage**, and where climate and mulch management drivers stop acting additively on that pathway, with the non additive share reaching up to 15 percent of irrigation at the climate extremes.
-   ![Feedback regime map and non-additivity](Results/00_Novel_Contributions/N3_Feedback_regime_map.png)
+   **NOVEL CONTRIBUTION** -> [Jump to Figure 4](#fig-regime-map)
 
    **Watch:** [E11, temperature x rain response surfaces, slider = soil evaporation factor](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/04_Interactive_Charts/01_E11_Temp_Rain_Evap_3D_surfaces.html) · [E14, soil evaporation under mulch, slider = rain](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/04_Interactive_Charts/04_E14_Mulch_3D_surface.html) · [V5, feedback trajectories, 1994 (video)](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/05_Videos/V5_Feedback_trajectories_1994.mp4) · [V3, tillage and structure over 20 years (video)](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/05_Videos/V3_Tillage_structure_20yr.mp4)
 
@@ -126,6 +126,8 @@ All 67 figures, in catalogue order, each with the mechanism behind the pattern. 
 
 The three results argued for in full under "Novel contributions to the literature" near the top of this README, the soil independent trigger law, the closed water balance account of saved evaporation, and the feedback regime map, each with a figure below.
 
+<a id="fig-trigger-law"></a>
+
 **Figure 2. Soil-independent trigger law (data collapse)**
 
 ![Soil-independent trigger law (data collapse)](Results/00_Novel_Contributions/N1_Depletion_trigger_law.png)
@@ -136,6 +138,8 @@ The three results argued for in full under "Novel contributions to the literatur
 
 **Idea and literature.** This is the same physical idea behind FAO-56 management-allowed depletion (Allen et al., 1998), which already recommends scheduling by depletion fraction rather than by a fixed tension, and behind Miller and Miller (1956) similar-media scaling, which formalises why two soils with different pore-size distributions require different absolute suctions to reach comparable relative water status. What this figure adds is a direct, data-driven test of that idea across ten simulated soils and twenty trigger settings from one consistent model run: it shows the R² gain from switching variables explicitly (0.48 → 0.75, 0.23 → 0.70) rather than assuming depletion is the better variable, and it turns the collapse into an operational table (panel d) of the suction each soil's sensor should actually be set to in order to reach the same 5 %-yield-loss depletion point. We are not aware of a published soil-independent trigger law demonstrated this way for Daisy specifically, but the underlying concept (schedule by depletion, not by tension) is established practice, and the claim here is the demonstration and the soil-specific suction table, not the invention of the depletion concept itself.
 
+<a id="fig-mulch-water-balance"></a>
+
 **Figure 3. Fate of water saved by mulching**
 
 ![Fate of water saved by mulching](Results/00_Novel_Contributions/N2_Fate_of_saved_evaporation.png)
@@ -145,6 +149,8 @@ The three results argued for in full under "Novel contributions to the literatur
 **Why this happens.** Mulch reduces the vapour-flux factor at the soil surface, so soil evaporation falls by a physically fixed amount for a given mulch strength, but where that saved water goes afterwards is decided by the water balance, not by the mulch itself. In a dry year (rain ×0.6), the crop is water-limited and the profile has spare storage capacity, so most of the saved water (about 60 % of ≈87 mm) is redirected into less irrigation being applied, with the rest going to extra transpiration. In a wet year (rain ×1.4), the profile is already close to field capacity, so it cannot absorb more; instead of reducing irrigation, the saved water simply adds to the surplus that drains below 1 m (63 % of ≈130 mm, panel c). The crossover between these two regimes, drainage overtaking irrigation-saving as the dominant fate, sits near rain ×1.2 (panel d). Nitrate leaching keeps falling at every rain level because less evaporation always means somewhat less concentrated soil water, but the size of the benefit shrinks in wet years because the extra drainage carries part of that nitrate straight out of the root zone, offsetting the gain from applying less fertiliser-linked irrigation.
 
 **Idea and literature.** Mulch's effect on evaporation is well established (surface residue and plastic mulch studies going back decades consistently report reduced soil evaporation and water savings, broadly summarised in agronomy and soil-physics reviews of mulching). What is less commonly quantified is a full water-balance accounting of the saved evaporation itself: most mulch studies report the evaporation reduction or the resulting yield/water-use benefit, not a four-way partition (irrigation saved, extra transpiration, extra drainage, residual) tracked across a rainfall gradient with a closed balance (residual ≤ 6 %) and linked through to the nitrate consequence. That closed-balance, rainfall-conditioned partition, and the explicit statement that mulch's practical benefit changes character (and shrinks) as climate gets wetter, is the new synthesis offered here. Similar water-balance accounting ideas exist in the mulch literature; we have not found this specific rain-gated partition demonstrated with a process-based model in this form, but this has not been checked exhaustively against the literature.
+
+<a id="fig-regime-map"></a>
 
 **Figure 4. Feedback regime map and non-additivity**
 
