@@ -42,7 +42,7 @@ All simulations were run in Daisy 7.1 (University of Copenhagen), a one dimensio
 | E15 | Method, depth, amount | 1,000 | Irrigation method x rooting depth x amount |
 | E16 | Edge cases | 770 | 77 stress tested factorial edge cases per soil |
 
-149 runs across all experiments were flagged as solver failures and excluded from every analysis in this repository. Daisy reports this status itself, from its own Richards equation solver, when the numerical scheme cannot converge on a stable timestep for the water flux being simulated; it is not a data processing artifact. Richards equation is numerically stiff on coarse textured soils, because their unsaturated conductivity K(theta) changes by several orders of magnitude over a small change in water content (Fig. 12), so a solver has to take very small timesteps to stay stable whenever the surface is being pushed through that steep part of the curve quickly. That is exactly what a large irrigation dose applied over a short duration, or a large amount per event on a tight timing window, does on sand, loamy sand or coarse sand: it forces a big change in surface water content in a short time on the soils least able to absorb it smoothly (Figs. 32 and 33 show the resulting blank tiles concentrated on exactly these soils). The 770 run edge case experiment (E16), designed to stress test every factor at once, fails for the same reason at a higher rate (30 of 770) than the gentler experiments, because pushing several factors to their extremes simultaneously is more likely to hit this same numerical limit than varying one factor at a time. Irrigation efficiency (IE) and irrigation water use efficiency (IWUE) are reported only where annual irrigation is at least 20 mm. 36 setups were re simulated at daily resolution in Daisy 7.1.14 to support the daily and per year figures; these reproduce the original batch results within 2 percent, median difference under 0.3 percent.
+149 runs across all experiments were flagged by Daisy's own solver as non convergent and excluded from every analysis in this repository. Irrigation efficiency (IE) and irrigation water use efficiency (IWUE) are reported only where annual irrigation is at least 20 mm. 36 setups were re simulated at daily resolution in Daisy 7.1.14 to support the daily and per year figures; these reproduce the original batch results within 2 percent, median difference under 0.3 percent.
 
 ### Results
 
@@ -53,22 +53,80 @@ All simulations were run in Daisy 7.1 (University of Copenhagen), a one dimensio
 - Every mm of irrigation is associated with about 0.21 mm more drainage; every mm of drainage is associated with about 1.06 kg N/ha more nitrate leached.
 - 170 runs are Pareto optimal across three objectives at once: maximum irrigation efficiency, minimum drainage fraction and minimum nitrogen leaching fraction.
 
-## Novel contributions to the literature
+## Contributions relative to existing work
 
 1. **A soil independent irrigation trigger law.** Re expressed as root zone depletion rather than suction, irrigation and yield responses from ten physically distinct soils collapse onto single curves (pooled R squared rises from 0.48 to 0.75 for irrigation and from 0.23 to 0.70 for yield), and the collapse converts directly into a per soil sensor suction table so one depletion target can be deployed as ten different, soil specific tension settings.
    **Watch:** [Tensiometer widget, suction at 20 cm, 1980 to 2000, drag the range slider](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/04_Interactive_Charts/05_Sensor_widget_1980_2000.html) · [V1, sensor and irrigation, 1994 (video)](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/05_Videos/V1_Sensor_and_irrigation_1994.mp4) · [E12, irrigation demand by sensor depth x trigger, slider = rain](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/04_Interactive_Charts/03_E12_Sensor_Trigger_Rain.html)
 
-   **NOVEL CONTRIBUTION** -> [Jump to Figure 2](#fig-trigger-law)
+   **CONTRIBUTION** -> [Jump to Figure 2](#fig-trigger-law)
 2. **A closed water balance account of where evaporation saved by mulching actually goes.** In dry years about 60 percent of the water saved from evaporation is redirected into reduced irrigation; in wet years about 63 percent instead becomes extra drainage, with the crossover between the two regimes located at a specific rainfall scale (about 1.2 times the baseline).
    **Watch:** [E14, soil evaporation under mulch, slider = rain](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/04_Interactive_Charts/04_E14_Mulch_3D_surface.html) · [V4, mulch vs bare soil, 1994 (video)](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/05_Videos/V4_Mulch_vs_bare_1994.mp4)
 
-   **NOVEL CONTRIBUTION** -> [Jump to Figure 3](#fig-mulch-water-balance)
+   **CONTRIBUTION** -> [Jump to Figure 3](#fig-mulch-water-balance)
 3. **A regime map of when the dominant water loss pathway switches from evaporation to drainage**, and where climate and mulch management drivers stop acting additively on that pathway, with the non additive share reaching up to 15 percent of irrigation at the climate extremes.
    **Watch:** [E11, temperature x rain response surfaces, slider = soil evaporation factor](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/04_Interactive_Charts/01_E11_Temp_Rain_Evap_3D_surfaces.html) · [E14, soil evaporation under mulch, slider = rain](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/04_Interactive_Charts/04_E14_Mulch_3D_surface.html) · [V5, feedback trajectories, 1994 (video)](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/05_Videos/V5_Feedback_trajectories_1994.mp4)
 
-   **NOVEL CONTRIBUTION** -> [Jump to Figure 4](#fig-regime-map)
+   **CONTRIBUTION** -> [Jump to Figure 4](#fig-regime-map)
 
-Each of these builds on established concepts in unsaturated flow theory and irrigation scheduling practice (similar media scaling, FAO 56 management allowed depletion, standard soil water balance accounting); the specific demonstrations, the cross soil data collapse, the closed rainfall conditioned water balance partition and the explicit non additivity mapping, are, to our knowledge, new for a Daisy type model. None of the three claims has been checked exhaustively against the wider literature, and they should be read as a new synthesis of this dataset rather than a claim that no related result exists elsewhere.
+### What this adds beyond the closest prior work
+
+A short literature check (a handful of searches, not exhaustive) found closely related prior work for all three
+results below. None of the three should be read as claiming no related result exists; each is a specific,
+quantified addition to work that already exists in the areas it touches.
+
+| Contribution | Closest existing work | What this repository adds |
+|---|---|---|
+| Soil independent trigger law | FAO 56 depletion scheduling (Allen et al., 1998); Nebraska and Michigan State depletion to matric potential tables; sensor studies using soil specific thresholds | The quantified cross soil collapse in a Richards equation model (pooled R squared rises from 0.48 to 0.75 for irrigation and from 0.23 to 0.70 for yield) and the resulting per soil sensor suction table |
+| Fate of mulch saved evaporation | Balwinder-Singh et al. (2011), who found saved water mostly went to transpiration in field wheat; HYDRUS-2D mulch water balance studies; FAO's "follow the water" framing, that drainage is not always a loss | A four way closed partition (irrigation saved, extra transpiration, extra drainage, residual) across a continuous rainfall gradient, with the redirection from irrigation saving to drainage located near rain scale 1.2 and linked quantitatively to nitrate leaching |
+| Evaporation and drainage regime map | The Budyko framework, where aridity controls the evapotranspiration versus runoff split, and root zone storage capacity is a known control; Sobol type interaction analyses in crop models | Locating the evaporation equals drainage boundary jointly across a climate axis and a management axis, and quantifying the non additive share of the interaction directly (up to 15 percent of irrigation at the climate extremes) |
+
+We did not find a Daisy study that compares irrigation triggers across ten soils this way, but that search was not
+exhaustive and should not be read as a claim of priority.
+
+### Toward a stronger, predictive result
+
+The three results above describe patterns in this dataset. A referee's strongest objection would be that they are
+descriptive rather than predictive. The most direct way to answer that, not yet done here, would be:
+
+- **A predicted, not fitted, threshold.** Derive the crossover in N2 analytically, for example from when saved
+  evaporation exceeds the root zone's remaining storage headroom, then test whether the simulations agree, rather
+  than locating the crossover by fitting the simulations after the fact.
+- **A dimensionless predictor tested out of sample.** Screen candidates such as TAW divided by annual rain, or
+  storage headroom divided by evaporation saved, using leave one soil out validation (fit on nine soils, predict
+  the tenth), rather than reporting only the pooled fit across all ten.
+- **Generalisation beyond ten soils.** Refit and test the trigger law (N1) on 100 or more soils drawn from a
+  hydraulic database such as Rosetta, HYPRES or UNSODA.
+- **A second model.** Reproduce the central collapse in HYDRUS-1D, AquaCrop or SWAP to show it is not specific to
+  Daisy's numerics.
+- **Field validation.** Compare against lysimeter or field sensor data, since everything here is simulation only.
+
+None of these has been carried out. They are listed as the concrete next step, not as results, and are not claimed
+as findings anywhere else in this README.
+
+### Planned method for a fate-fraction analysis (not yet run)
+
+For a future revision, the fate of saved evaporation (contribution 2) could be tested more rigorously than the
+rain-scale summary currently in Figure 3. This is the planned method, written up in advance so it can be run and
+reported without changing the definitions after seeing the results. No numbers below have been computed; this is a
+method description only.
+
+For each mulched run in E14 and E7, the matching no-mulch reference (vapour flux factor = 1) with the same soil,
+interception capacity and rain scale gives a closed annual balance, delta I = delta E + delta T + delta D + delta S,
+where delta is mulched minus reference, I is irrigation, E is total evaporation, T is transpiration, D is drainage
+below 1 m, and S is storage change. With S_E = minus delta E as the evaporation saved, the fate fractions would be
+F_I = minus delta I / S_E (irrigation avoided), F_T = delta T / S_E (extra transpiration), F_D = delta D / S_E
+(extra drainage), and F_R = 1 minus F_I minus F_T minus F_D (residual). Pairs with S_E below 10 mm/yr would be
+excluded, since the ratios are unstable at small denominators. A predictor screen would test candidates such as
+TAW divided by annual rain, or storage headroom divided by evaporation saved, scored by pooled R squared and by
+leave-one-soil-out R squared (fit on nine soils, predict the tenth). The crossover rain scale (where F_D overtakes
+F_I) would be located per soil with bootstrap intervals, and its coefficient of variation across soils would
+indicate whether a single predictor, rather than rain scale alone, better explains where the transition falls.
+
+If a candidate predictor clearly outperforms rain scale out of sample, the honest conclusion would be that a
+storage-to-supply criterion predicts the fate of saved evaporation across soils not used in fitting. If nothing
+outperforms rain scale, the honest conclusion is that the crossover is soil specific and not captured by any single
+dimensionless predictor tested, and the controllability result in the key synthesis figure would remain the
+strongest claim in this repository.
 
 ## Symbol and abbreviation key
 
@@ -136,7 +194,7 @@ All 67 figures, in catalogue order, each with the mechanism behind the pattern. 
 
 ### New Synthesis Figures (00_Novel_Contributions)
 
-The three results argued for in full under "Novel contributions to the literature" near the top of this README, the soil independent trigger law, the closed water balance account of saved evaporation, and the feedback regime map, each with a figure below.
+The three results argued for in full under "Contributions relative to existing work" near the top of this README, the soil independent trigger law, the closed water balance account of saved evaporation, and the feedback regime map, each with a figure below.
 
 <a id="fig-trigger-law"></a>
 
