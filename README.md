@@ -42,8 +42,6 @@ All simulations were run in Daisy 7.1 (University of Copenhagen), a one dimensio
 | E15 | Method, depth, amount | 1,000 | Irrigation method x rooting depth x amount |
 | E16 | Edge cases | 770 | 77 stress tested factorial edge cases per soil |
 
-149 runs across all experiments were flagged by Daisy's own solver as non convergent and excluded from every analysis in this repository. Irrigation efficiency (IE) and irrigation water use efficiency (IWUE) are reported only where annual irrigation is at least 20 mm. 36 setups were re simulated at daily resolution in Daisy 7.1.14 to support the daily and per year figures; these reproduce the original batch results within 2 percent, median difference under 0.3 percent.
-
 ### Results
 
 - How strongly management can steer drainage depends on soil pore structure. Controllability of drainage by the irrigation trigger, dose, method, N to water pathway and mulch rises with plant available water (Spearman rho +0.79 to +0.95 across 10 soils); soil structure is the only lever that works the other way (rho minus 0.58). On coarse sands the irrigation levers barely move drainage at all.
