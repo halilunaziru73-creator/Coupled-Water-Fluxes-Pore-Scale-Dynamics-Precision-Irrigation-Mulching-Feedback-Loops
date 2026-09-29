@@ -6,10 +6,6 @@
 
 ## Problem, Methodology, and Results
 
-**Workflow sketch**
-
-![Workflow Sketch](workflow_sketch.png)
-
 [View interactive results catalogue online](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/04_Interactive_Charts/index.html)
 
 ### Problem
