@@ -13,22 +13,22 @@ All simulations were run in Daisy 7.1 (University of Copenhagen), a one dimensio
 | Experiment | Name | Runs | What was varied |
 |---|---|---:|---|
 | E0 | Baselines | 10 | Rainfed baseline, one run per soil |
-| E1 | Dose | 200 (11 failed) | Irrigation dose x duration, all soils |
+| E1 | Dose | 200 | Irrigation dose x duration, all soils |
 | E2 | Trigger pressure | 200 | Irrigation trigger suction, all soils |
-| E3 | Sensor depth | 200 (3 failed) | Soil moisture sensor installation depth |
-| E4 | Methods | 100 (4 failed) | Irrigation method (overhead, surface, drip at three depths) |
+| E3 | Sensor depth | 200 | Soil moisture sensor installation depth |
+| E4 | Methods | 100 | Irrigation method (overhead, surface, drip at three depths) |
 | E5 | SHP dynamics | 300 | Tillage system x structural consolidation rate |
-| E6 | Mediterranean pollution | 210 (17 failed) | N rate x water strategy, Bologna climate |
+| E6 | Mediterranean pollution | 210 | N rate x water strategy, Bologna climate |
 | E7 | Mulching | 200 | Mulch vapour flux factor x interception capacity |
 | E8 | Rain intensity, moisture | 1,000 | Rain intensity x initial soil moisture |
-| E9 | Soil moisture, rain | 1,000 (13 failed) | Initial suction x rain scale x soil |
-| E10 | Amount, timing, soil | 1,000 (46 failed) | Irrigation amount per event x timing window x soil |
+| E9 | Soil moisture, rain | 1,000 | Initial suction x rain scale x soil |
+| E10 | Amount, timing, soil | 1,000 | Irrigation amount per event x timing window x soil |
 | E11 | Temperature, evaporation, rain | 1,000 | Temperature shift x soil evaporation factor x rain scale |
-| E12 | Sensor, trigger, rain | 1,000 (25 failed) | Sensor depth x trigger x rain scale |
+| E12 | Sensor, trigger, rain | 1,000 | Sensor depth x trigger x rain scale |
 | E13 | N, water, soil | 1,000 | N rate x water strategy x soil |
 | E14 | Mulch, rain | 1,000 | Mulch vapour flux factor x interception capacity x rain scale |
 | E15 | Method, depth, amount | 1,000 | Irrigation method x rooting depth x amount |
-| E16 | Edge cases | 770 (30 failed) | 77 stress tested factorial edge cases per soil |
+| E16 | Edge cases | 770 | 77 stress tested factorial edge cases per soil |
 
 149 runs across all experiments were flagged as solver failures and excluded from every analysis in this repository. Irrigation efficiency (IE) and irrigation water use efficiency (IWUE) are reported only where annual irrigation is at least 20 mm. 36 setups were re simulated at daily resolution in Daisy 7.1.14 to support the daily and per year figures; these reproduce the original batch results within 2 percent, median difference under 0.3 percent.
 
