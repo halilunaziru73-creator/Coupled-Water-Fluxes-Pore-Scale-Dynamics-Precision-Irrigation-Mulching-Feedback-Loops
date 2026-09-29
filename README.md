@@ -18,8 +18,6 @@ Precision irrigation and evaporation control mulching are usually studied and tu
 
 ### Methodology
 
-![Step-by-step methodology diagram](methodology_diagram.png)
-
 All simulations were run in Daisy 7.1 (University of Copenhagen), a one dimensional, Richards equation, soil, plant, atmosphere model with van Genuchten to Mualem unsaturated hydraulics and the WEPP dynamic structure model for tillage and consolidation effects on pore structure over time. Ten soils spanning sand to silty clay loam (USDA texture, Ap and Bt horizons) were simulated under two weather records, Taastrup, Denmark, 1980 to 1999, and Bologna, Italy, 1994 to 2005, used for the Mediterranean nitrogen and water experiment.
 
 **10,190 simulations across 17 experiments (E0 to E16):**
