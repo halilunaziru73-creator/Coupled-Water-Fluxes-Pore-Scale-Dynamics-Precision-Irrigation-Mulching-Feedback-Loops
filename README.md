@@ -1,10 +1,22 @@
 # Coupled Water Fluxes and Pore Scale Dynamics under Joint Precision Irrigation and Evaporation Control Mulching: Mapping Non Linear Soil to Atmosphere Feedback Loops
 
-## Problem
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE) ![Python](https://img.shields.io/badge/Python-3.10%2B-blue) ![Simulations](https://img.shields.io/badge/Daisy%20runs-10%2C190-154378)
+
+**Author:** Naziru Halilu
+
+## Problem, Methodology, and Results
+
+**Workflow sketch**
+
+![Workflow Sketch](workflow_sketch.png)
+
+[View interactive results catalogue online](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/04_Interactive_Charts/index.html)
+
+### Problem
 
 Precision irrigation and evaporation control mulching are usually studied and tuned one soil at a time, so a trigger setting, sensor depth or mulch strength that works well on one soil is often reported without stating how much of that result is the management choice and how much is simply the soil's own pore structure acting underneath it. Two practical questions follow directly from this gap. First, when a fixed suction based trigger (for example, minus 300 cm) is deployed across different soils, does it protect yield equally well everywhere, or does it silently allow far more depletion on some soils than others. Second, when mulching saves soil evaporation, is that saved water reliably converted into less irrigation, or can it just as easily end up as extra drainage and nitrate loss depending on the season. This project uses one process based model, one consistent experimental design and ten physically distinct soils to answer both questions directly rather than inferring them from separate single soil studies.
 
-## Methods
+### Methodology
 
 All simulations were run in Daisy 7.1 (University of Copenhagen), a one dimensional, Richards equation, soil, plant, atmosphere model with van Genuchten to Mualem unsaturated hydraulics and the WEPP dynamic structure model for tillage and consolidation effects on pore structure over time. Ten soils spanning sand to silty clay loam (USDA texture, Ap and Bt horizons) were simulated under two weather records, Taastrup, Denmark, 1980 to 1999, and Bologna, Italy, 1994 to 2005, used for the Mediterranean nitrogen and water experiment.
 
@@ -32,7 +44,7 @@ All simulations were run in Daisy 7.1 (University of Copenhagen), a one dimensio
 
 149 runs across all experiments were flagged as solver failures and excluded from every analysis in this repository. Daisy reports this status itself, from its own Richards equation solver, when the numerical scheme cannot converge on a stable timestep for the water flux being simulated; it is not a data processing artifact. Richards equation is numerically stiff on coarse textured soils, because their unsaturated conductivity K(theta) changes by several orders of magnitude over a small change in water content (Fig. 12), so a solver has to take very small timesteps to stay stable whenever the surface is being pushed through that steep part of the curve quickly. That is exactly what a large irrigation dose applied over a short duration, or a large amount per event on a tight timing window, does on sand, loamy sand or coarse sand: it forces a big change in surface water content in a short time on the soils least able to absorb it smoothly (Figs. 32 and 33 show the resulting blank tiles concentrated on exactly these soils). The 770 run edge case experiment (E16), designed to stress test every factor at once, fails for the same reason at a higher rate (30 of 770) than the gentler experiments, because pushing several factors to their extremes simultaneously is more likely to hit this same numerical limit than varying one factor at a time. Irrigation efficiency (IE) and irrigation water use efficiency (IWUE) are reported only where annual irrigation is at least 20 mm. 36 setups were re simulated at daily resolution in Daisy 7.1.14 to support the daily and per year figures; these reproduce the original batch results within 2 percent, median difference under 0.3 percent.
 
-## Results
+### Results
 
 - How strongly management can steer drainage depends on soil pore structure. Controllability of drainage by the irrigation trigger, dose, method, N to water pathway and mulch rises with plant available water (Spearman rho +0.79 to +0.95 across 10 soils); soil structure is the only lever that works the other way (rho minus 0.58). On coarse sands the irrigation levers barely move drainage at all.
 - A fixed suction trigger means very different things on different soils: minus 300 cm is 84 percent of available water depleted in sand but only 24 percent depleted in silty clay loam. Expressed as root zone depletion instead of suction, irrigation and yield responses from all ten soils collapse onto single curves.
@@ -685,3 +697,18 @@ Each line is one of the 170 Pareto-optimal runs from Fig. 54, scaled 0-1 per axi
 *Main-effect sums of squares per factor; remainder = interactions (non-additivity).* (data: E8-E15)
 
 This decomposes each experiment's outcome variance into how much is explained by each factor's main effect versus how much is left over as interaction (grey). E8's yield is almost entirely explained by soil identity alone (96%, top bar), meaning rainfall intensity and timing barely matter once soil is accounted for, the same conclusion as Fig. 47. E10's irrigation is split roughly 70/17/13% across soil, amount and window, with real but modest interaction. E14's irrigation is dominated by rain (93%), leaving little room for mulch's main effect or interaction to show up in this particular decomposition, even though Figs. 3-4 and 36-42 show mulch's effect is real and rain-dependent, precisely because that dependency is itself an interaction, which this chart's grey segment (8% for E14) is measuring, not erasing. Interaction shares are generally modest (8-32%) across experiments, meaning most of the outcome variance in this study is explained by main effects rather than higher-order interactions.
+## License
+
+MIT License, see [LICENSE](./LICENSE).
+
+## Citation
+
+If you use this repository, please cite it as:
+
+Halilu, N. (2026). Coupled Water Fluxes and Pore-Scale Dynamics under Joint Precision Irrigation and Evaporation-Control Mulching: Mapping Non-Linear Soil-Atmosphere Feedback Loops. GitHub repository. https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops
+
+## Related work
+
+- [NaCROP](https://github.com/halilunaziru73-creator/NaCROP): reference/crop evapotranspiration, soil-water balance, and irrigation scheduling for five crops around Zaria, Nigeria.
+- [Digital Twin for Gully Biocontrol](https://github.com/halilunaziru73-creator/Digital-Twin-for-the-Evaluation-of-Experimental-Gully-Biocontrol-Using-Morning-Glory-Ipomoea-spp): a Bayesian-grounded digital twin for a different soil-water process, gully erosion, validated against real field-sensor data.
+- [Geometry-Agnostic Contrastive Learning (GACL)](https://github.com/halilunaziru73-creator/Geometry-Agnostic-Contrastive-Learning-GACL): a separate line of work on crop-disease imaging, unrelated in method but part of the same broader digital-agriculture programme.
