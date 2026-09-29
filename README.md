@@ -59,6 +59,14 @@ All 67 figures, in catalogue order, each with the mechanism behind the pattern. 
 
 ### New Synthesis Figures (00_Novel_Contributions)
 
+**Novel contribution.** Beyond the individual response curves in the 50-chart catalogue below, this dataset supports three results that, to our knowledge, are not already established in this combined form for a Daisy-type soil–plant–atmosphere model:
+
+1. **A soil-independent irrigation trigger law** (Fig. 2). Re-expressed as root-zone depletion rather than suction, irrigation and yield responses from ten physically distinct soils collapse onto single curves (pooled R² rises from 0.48 to 0.75 for irrigation and from 0.23 to 0.70 for yield), and the collapse converts directly into a per-soil sensor-suction table so a single depletion target can be deployed as a soil-specific tension setting.
+2. **A closed water-balance account of where evaporation saved by mulching actually goes** (Fig. 3), showing it is not a fixed benefit: in dry years about 60% of the saved water is redirected into reduced irrigation, while in wet years 63% instead becomes extra drainage, with the crossover between the two regimes located at a specific rainfall scale (≈ ×1.2).
+3. **A regime map of when the dominant water-loss pathway switches from evaporation to drainage**, and where climate and mulch-management drivers stop acting additively on that pathway (Fig. 4), with the non-additive share reaching up to 15% of irrigation at the climate extremes.
+
+Each of these is presented with the established literature it builds on and an explicit statement of what is new about this treatment; none of the three claims has been checked exhaustively against the wider literature, and they should be read as a new synthesis of this dataset rather than a claim that no related result exists elsewhere.
+
 **Figure 2. Soil-independent trigger law (data collapse)**
 
 ![Soil-independent trigger law (data collapse)](Results/00_Novel_Contributions/N1_Depletion_trigger_law.png)
