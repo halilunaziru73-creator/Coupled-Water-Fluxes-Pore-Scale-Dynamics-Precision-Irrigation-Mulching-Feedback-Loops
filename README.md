@@ -4,6 +4,12 @@
 
 **Author:** Naziru Halilu
 
+<p align="center">
+  <a href="https://doi.org/10.5281/zenodo.23043626">
+    <img src="https://img.shields.io/badge/%E2%86%92%20DATA-Click%20to%20open%20on%20Zenodo-2ea44f?style=for-the-badge&logo=zenodo&logoColor=white" alt="Data on Zenodo" />
+  </a>
+</p>
+
 ## Problem, Methodology, and Results
 
 [View interactive results catalogue online](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/04_Interactive_Charts/index.html)
@@ -157,6 +163,7 @@ strongest claim in this repository.
 | `Results/07_Derived_Data_Tables` | Effect sizes, elasticities, Pareto-optimal runs, controllability tables |
 | `Results/08_Scripts` | Python code that produced every figure |
 | `Results/Figure_Catalogue.csv` | Title, caption and data source of every figure |
+| [**DATA → Data_coupled_water_fluxes_pore_scale_dynamics.zip**](https://doi.org/10.5281/zenodo.23043626) | Full archived dataset (all 10,190 runs, raw and derived), permanently hosted on Zenodo. Click the file name to open. |
 
 ## Note on scale
 
@@ -755,8 +762,23 @@ If you use this repository, please cite it as:
 
 Halilu, N. (2026). Coupled Water Fluxes and Pore-Scale Dynamics under Joint Precision Irrigation and Evaporation-Control Mulching: Mapping Non-Linear Soil-Atmosphere Feedback Loops. GitHub repository. https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops
 
+For the underlying dataset itself, please cite:
+
+> Naziru Halilu. (2026). Data_coupled_water_fluxes_pore_scale_dynamics [Dataset]. Zenodo. [https://doi.org/10.5281/zenodo.23043626](https://doi.org/10.5281/zenodo.23043626)
+
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.23043626-2ea44f?style=flat-square&logo=zenodo&logoColor=white)](https://doi.org/10.5281/zenodo.23043626)
+
 ## Related work
 
 - [NaCROP](https://github.com/halilunaziru73-creator/NaCROP): reference/crop evapotranspiration, soil-water balance, and irrigation scheduling for five crops around Zaria, Nigeria.
 - [Digital Twin for Gully Biocontrol](https://github.com/halilunaziru73-creator/Digital-Twin-for-the-Evaluation-of-Experimental-Gully-Biocontrol-Using-Morning-Glory-Ipomoea-spp): a Bayesian-grounded digital twin for a different soil-water process, gully erosion, validated against real field-sensor data.
 - [Geometry-Agnostic Contrastive Learning (GACL)](https://github.com/halilunaziru73-creator/Geometry-Agnostic-Contrastive-Learning-GACL): a separate line of work on crop-disease imaging, unrelated in method but part of the same broader digital-agriculture programme.
+
+---
+
+<p align="center">
+  <a href="https://doi.org/10.5281/zenodo.23043626">
+    <img src="https://img.shields.io/badge/%E2%86%92%20DATA-Click%20to%20open%20on%20Zenodo-2ea44f?style=for-the-badge&logo=zenodo&logoColor=white" alt="Data on Zenodo" />
+  </a>
+</p>
+
