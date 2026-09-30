@@ -99,31 +99,6 @@ descriptive rather than predictive. The most direct way to answer that, not yet 
 None of these has been carried out. They are listed as the concrete next step, not as results, and are not claimed
 as findings anywhere else in this README.
 
-### Planned method for a fate-fraction analysis (not yet run)
-
-For a future revision, the fate of saved evaporation (contribution 2) could be tested more rigorously than the
-rain-scale summary currently in Figure 3. This is the planned method, written up in advance so it can be run and
-reported without changing the definitions after seeing the results. No numbers below have been computed; this is a
-method description only.
-
-For each mulched run in E14 and E7, the matching no-mulch reference (vapour flux factor = 1) with the same soil,
-interception capacity and rain scale gives a closed annual balance, delta I = delta E + delta T + delta D + delta S,
-where delta is mulched minus reference, I is irrigation, E is total evaporation, T is transpiration, D is drainage
-below 1 m, and S is storage change. With S_E = minus delta E as the evaporation saved, the fate fractions would be
-F_I = minus delta I / S_E (irrigation avoided), F_T = delta T / S_E (extra transpiration), F_D = delta D / S_E
-(extra drainage), and F_R = 1 minus F_I minus F_T minus F_D (residual). Pairs with S_E below 10 mm/yr would be
-excluded, since the ratios are unstable at small denominators. A predictor screen would test candidates such as
-TAW divided by annual rain, or storage headroom divided by evaporation saved, scored by pooled R squared and by
-leave-one-soil-out R squared (fit on nine soils, predict the tenth). The crossover rain scale (where F_D overtakes
-F_I) would be located per soil with bootstrap intervals, and its coefficient of variation across soils would
-indicate whether a single predictor, rather than rain scale alone, better explains where the transition falls.
-
-If a candidate predictor clearly outperforms rain scale out of sample, the honest conclusion would be that a
-storage-to-supply criterion predicts the fate of saved evaporation across soils not used in fitting. If nothing
-outperforms rain scale, the honest conclusion is that the crossover is soil specific and not captured by any single
-dimensionless predictor tested, and the controllability result in the key synthesis figure would remain the
-strongest claim in this repository.
-
 ## Symbol and abbreviation key
 
 | Symbol | Meaning |
