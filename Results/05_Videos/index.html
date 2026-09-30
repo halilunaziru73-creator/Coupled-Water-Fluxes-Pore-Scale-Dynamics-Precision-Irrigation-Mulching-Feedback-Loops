@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Coupled Water Fluxes: Videos, Widget and Key Figures</title>
+<style>
+  :root { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; margin: 0; background: #fff; color: #1a1a1a; }
+  header { background: #1F4D2E; color: white; padding: 2rem 1.5rem; text-align: center; }
+  header h1 { margin: 0 0 0.4rem; font-size: 1.6rem; }
+  header p { margin: 0; color: #d8e8d8; font-size: 0.95rem; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+  h2 { color: #1F4D2E; border-bottom: 3px solid #D4A94A; padding-bottom: 0.4rem; margin-top: 2.5rem; }
+  .imgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; margin-top: 1rem; }
+  .imgrid figure { margin: 0; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; background: #fafafa; }
+  .imgrid img { width: 100%; display: block; }
+  .imgrid figcaption { padding: 0.6rem 0.8rem; font-size: 0.85rem; color: #444; }
+  .widget-frame { width: 100%; height: 640px; border: 1px solid #e0e0e0; border-radius: 8px; margin-top: 1rem; }
+  .vidgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
+  .vidcard { border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; background: #fafafa; }
+  .vidcard video { width: 100%; display: block; background: black; }
+  .vidcard p { padding: 0.6rem 0.8rem; font-size: 0.9rem; color: #222; font-weight: 600; margin: 0; }
+  a.back { display: inline-block; margin-top: 2rem; color: #1F4D2E; font-weight: 600; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Coupled Water Fluxes and Pore-Scale Dynamics</h1>
+  <p>Interactive widget, key figures, and video simulations from the 10,190-run study</p>
+</header>
+<div class="wrap">
+
+  <h2>Interactive widget: soil-water suction (tensiometer) and irrigation, 1980&ndash;2000</h2>
+  <p>Drag the range slider to move through the 20-year record and see how suction at 20&nbsp;cm depth responds to rainfall and irrigation, for both an irrigated and a rainfed soil.</p>
+  <iframe class="widget-frame" src="../04_Interactive_Charts/05_Sensor_widget_1980_2000.html" title="Soil water suction widget"></iframe>
+
+  <h2>Key figures</h2>
+  <div class="imgrid">
+    <figure><img src="../00_Key_Synthesis_Figure/Soil_pore_structure_gates_management_controllability.png" alt="Key synthesis figure"><figcaption>Soil pore structure gates management controllability of drainage, yield, irrigation efficiency and nitrogen leaching.</figcaption></figure>
+    <figure><img src="../00_Novel_Contributions/N1_Depletion_trigger_law.png" alt="Trigger law"><figcaption>A soil-independent irrigation trigger law: sensor thresholds collapse when expressed as root-zone depletion.</figcaption></figure>
+    <figure><img src="../00_Novel_Contributions/N2_Fate_of_saved_evaporation.png" alt="Mulch water balance"><figcaption>The fate of evaporation saved by mulching: a rain-dependent switch from irrigation saving to drainage.</figcaption></figure>
+    <figure><img src="../00_Novel_Contributions/N3_Feedback_regime_map.png" alt="Regime map"><figcaption>Regime map of soil-atmosphere feedbacks: where losses switch from evaporation to drainage.</figcaption></figure>
+  </div>
+
+  <h2>Video simulations</h2>
+  <div class="vidgrid">
+    <div class="vidcard"><video controls preload="metadata"><source src="V1_Sensor_and_irrigation_1994.mp4" type="video/mp4"></video><p>V1. Sensor suction and irrigation events through the 1994 season</p></div>
+    <div class="vidcard"><video controls preload="metadata"><source src="V2_Profiles_1994.mp4" type="video/mp4"></video><p>V2. Soil profile evolution (pressure head with depth) through 1994</p></div>
+    <div class="vidcard"><video controls preload="metadata"><source src="V3_Tillage_structure_20yr.mp4" type="video/mp4"></video><p>V3. Tillage and structural consolidation over 20 years</p></div>
+    <div class="vidcard"><video controls preload="metadata"><source src="V4_Mulch_vs_bare_1994.mp4" type="video/mp4"></video><p>V4. Mulched vs bare soil evaporation, 1994</p></div>
+    <div class="vidcard"><video controls preload="metadata"><source src="V5_Feedback_trajectories_1994.mp4" type="video/mp4"></video><p>V5. Feedback-loop trajectories through the 1994 season</p></div>
+  </div>
+
+  <a class="back" href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops">&larr; Back to the repository</a>
+</div>
+</body>
+</html>
