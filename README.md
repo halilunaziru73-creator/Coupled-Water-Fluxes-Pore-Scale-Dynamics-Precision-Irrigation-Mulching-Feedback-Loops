@@ -79,26 +79,6 @@ beyond it.
 | Fate of mulch saved evaporation | Balwinder-Singh et al. (2011), who found saved water mostly went to transpiration in field wheat; HYDRUS-2D mulch water balance studies; FAO's "follow the water" framing, that drainage is not always a loss | A four way closed partition (irrigation saved, extra transpiration, extra drainage, residual) across a continuous rainfall gradient, with the redirection from irrigation saving to drainage located near rain scale 1.2 and linked quantitatively to nitrate leaching |
 | Evaporation and drainage regime map | The Budyko framework, where aridity controls the evapotranspiration versus runoff split, and root zone storage capacity is a known control; Sobol type interaction analyses in crop models | Locating the evaporation equals drainage boundary jointly across a climate axis and a management axis, and quantifying the non additive share of the interaction directly (up to 15 percent of irrigation at the climate extremes) |
 
-### Toward a stronger, predictive result
-
-The three results above describe patterns in this dataset. A referee's strongest objection would be that they are
-descriptive rather than predictive. The most direct way to answer that, not yet done here, would be:
-
-- **A predicted, not fitted, threshold.** Derive the crossover in N2 analytically, for example from when saved
-  evaporation exceeds the root zone's remaining storage headroom, then test whether the simulations agree, rather
-  than locating the crossover by fitting the simulations after the fact.
-- **A dimensionless predictor tested out of sample.** Screen candidates such as TAW divided by annual rain, or
-  storage headroom divided by evaporation saved, using leave one soil out validation (fit on nine soils, predict
-  the tenth), rather than reporting only the pooled fit across all ten.
-- **Generalisation beyond ten soils.** Refit and test the trigger law (N1) on 100 or more soils drawn from a
-  hydraulic database such as Rosetta, HYPRES or UNSODA.
-- **A second model.** Reproduce the central collapse in HYDRUS-1D, AquaCrop or SWAP to show it is not specific to
-  Daisy's numerics.
-- **Field validation.** Compare against lysimeter or field sensor data, since everything here is simulation only.
-
-None of these has been carried out. They are listed as the concrete next step, not as results, and are not claimed
-as findings anywhere else in this README.
-
 ## Symbol and abbreviation key
 
 | Symbol | Meaning |
@@ -756,4 +736,24 @@ For the underlying dataset itself, please cite:
     <img src="https://img.shields.io/badge/%E2%86%92%20DATA-Click%20to%20open%20on%20Zenodo-2ea44f?style=for-the-badge&logo=zenodo&logoColor=white" alt="Data on Zenodo" />
   </a>
 </p>
+
+### Toward a stronger, predictive result
+
+The three results above describe patterns in this dataset. A referee's strongest objection would be that they are
+descriptive rather than predictive. The most direct way to answer that, not yet done here, would be:
+
+- **A predicted, not fitted, threshold.** Derive the crossover in N2 analytically, for example from when saved
+  evaporation exceeds the root zone's remaining storage headroom, then test whether the simulations agree, rather
+  than locating the crossover by fitting the simulations after the fact.
+- **A dimensionless predictor tested out of sample.** Screen candidates such as TAW divided by annual rain, or
+  storage headroom divided by evaporation saved, using leave one soil out validation (fit on nine soils, predict
+  the tenth), rather than reporting only the pooled fit across all ten.
+- **Generalisation beyond ten soils.** Refit and test the trigger law (N1) on 100 or more soils drawn from a
+  hydraulic database such as Rosetta, HYPRES or UNSODA.
+- **A second model.** Reproduce the central collapse in HYDRUS-1D, AquaCrop or SWAP to show it is not specific to
+  Daisy's numerics.
+- **Field validation.** Compare against lysimeter or field sensor data, since everything here is simulation only.
+
+None of these has been carried out. They are listed as the concrete next step, not as results, and are not claimed
+as findings anywhere else in this README.
 
