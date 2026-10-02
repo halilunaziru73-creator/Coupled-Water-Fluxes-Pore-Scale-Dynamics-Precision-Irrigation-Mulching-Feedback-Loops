@@ -8,6 +8,9 @@
   <a href="https://doi.org/10.5281/zenodo.23043626">
     <img src="https://img.shields.io/badge/%E2%86%92%20DATA-Click%20to%20open%20on%20Zenodo-2ea44f?style=for-the-badge&logo=zenodo&logoColor=white" alt="Data on Zenodo" />
   </a>
+  <a href="https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/04_Interactive_Charts/10_SWAFL_Fused_Explorer.html">
+    <img src="https://img.shields.io/badge/%E2%86%92%20DSS%20DASHBOARD-Open%20the%20live%20decision%20support%20tool-2E7DE8?style=for-the-badge&logo=windowterminal&logoColor=white" alt="DSS Dashboard" />
+  </a>
 </p>
 
 ## Problem, Methodology, and Results
