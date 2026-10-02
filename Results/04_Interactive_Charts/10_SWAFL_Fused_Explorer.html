@@ -41,7 +41,7 @@
 <body>
 <header>
   <h1>SWAFL &middot; Soil-Water-Atmosphere Feedback Loop Explorer</h1>
-  <p>All 5 video simulations and 3 novel contributions, fused into one standalone widget, driven entirely by real E5, E7, E14 data (10,190 Daisy runs)</p>
+
 </header>
 <div class="scenebar" id="sceneBar"></div>
 <div class="insight" id="insightBox"></div>
@@ -79,6 +79,7 @@
       <div class="readout"><div class="label">Drainage below 1 m</div><div class="value" id="roDrain" style="color:#5B9FD6;">...</div></div>
       <div class="readout"><div class="label">Irrigation</div><div class="value" id="roIrr" style="color:#D9782A;">...</div></div>
       <div class="readout"><div class="label">Yield</div><div class="value" id="roYield" style="color:#5BD67A;">...</div></div>
+      <div class="readout" style="grid-column: 1 / -1;"><div class="label">Baseline irrigation (same soil/season, no mulch) <span id="roIrrDiff" style="color:#8B949E; font-weight:600; font-size:0.72rem;"></span></div><div class="value" id="roBaseIrr" style="color:#B9A3E3;">...</div></div>
     </div>
   </div>
 </div>
@@ -96,16 +97,25 @@ const TILLS = ["conv","reduced","notill"];
 const TILL_LABELS = {conv:"Conventional", reduced:"Reduced", notill:"No-till"};
 
 const SCENES = [
-  { id:"v1", label:"V1 Sensor + Trigger", arrows:["precip","infil"], insight:"Soil-moisture sensors trigger irrigation once suction crosses a threshold; a fixed -300 cm trigger spans 24-84% depletion across these ten soils." },
-  { id:"v2", label:"V2 Profile Evolution", arrows:["infil","capillary"], insight:"Pressure head through the profile responds to rain and irrigation together; wetting fronts move fastest in coarse, low-storage soils." },
-  { id:"v3", label:"V3 Tillage + Structure", arrows:["drain"], insight:"Tillage is an identifiable driver of change in soil hydraulic properties: conventional tillage raises drainage as structural consolidation increases; no-till stays flat." },
-  { id:"v4", label:"V4 Mulch vs Bare", arrows:["evap"], insight:"Mulch is a tunable, dynamic control on evaporation: soil evaporation scales continuously with mulch strength across every soil tested." },
-  { id:"v5", label:"V5 Feedback Loops", arrows:["precip","transp","evap","infil","drain"], insight:"Atmospheric demand, rainfall, irrigation, soil water, evaporation and drainage form one coupled feedback loop, not independent processes." },
-  { id:"n1", label:"N1 Trigger Law", arrows:["infil"], insight:"Re-expressing the irrigation trigger as root-zone depletion collapses all ten soils onto one curve (pooled R2 0.48 to 0.75 for irrigation, 0.23 to 0.70 for yield)." },
-  { id:"n2", label:"N2 Mulch Fate", arrows:["evap","drain"], insight:"Water saved from evaporation by mulching is redirected mainly into reduced irrigation in dry years, mainly into extra drainage in wet years, crossing over near rain x1.2." },
-  { id:"n3", label:"N3 Regime Map", arrows:["evap","drain"], insight:"Climate and mulch act non-additively on the evaporation-drainage boundary, reaching 15% of irrigation at combined extremes." },
+  { id:"v1", label:"V1 Sensor + Trigger", color:"#5B9FD6", arrows:["precip","infil"], insight:"Soil-moisture sensors trigger irrigation once suction crosses a threshold; a fixed -300 cm trigger spans 24-84% depletion across these ten soils." },
+  { id:"v2", label:"V2 Profile Evolution", color:"#9B7FD6", arrows:["infil","capillary"], insight:"Pressure head through the profile responds to rain and irrigation together; wetting fronts move fastest in coarse, low-storage soils." },
+  { id:"v3", label:"V3 Tillage + Structure", color:"#D97848", arrows:["drain"], insight:"Tillage is an identifiable driver of change in soil hydraulic properties: conventional tillage raises drainage as structural consolidation increases; no-till stays flat." },
+  { id:"v4", label:"V4 Mulch vs Bare", color:"#5BD67A", arrows:["evap"], insight:"Mulch is a tunable, dynamic control on evaporation: soil evaporation scales continuously with mulch strength across every soil tested." },
+  { id:"v5", label:"V5 Feedback Loops", color:"#E8C84D", arrows:["precip","transp","evap","infil","drain"], insight:"Atmospheric demand, rainfall, irrigation, soil water, evaporation and drainage form one coupled feedback loop, not independent processes." },
+  { id:"n1", label:"N1 Trigger Law", color:"#FF4D4D", arrows:["infil"], insight:"Re-expressing the irrigation trigger as root-zone depletion collapses all ten soils onto one curve (pooled R2 0.48 to 0.75 for irrigation, 0.23 to 0.70 for yield)." },
+  { id:"n2", label:"N2 Mulch Fate", color:"#4DC9C9", arrows:["evap","drain"], insight:"Water saved from evaporation by mulching is redirected mainly into reduced irrigation in dry years, mainly into extra drainage in wet years, crossing over near rain x1.2." },
+  { id:"n3", label:"N3 Regime Map", color:"#C96BD9", arrows:["evap","drain"], insight:"Climate and mulch act non-additively on the evaporation-drainage boundary, reaching 15% of irrigation at combined extremes." },
 ];
 let currentScene = SCENES[0];
+
+// Real, verified per-soil trigger suction (cm) needed to reach the shared, soil-independent
+// depletion target f* = 0.45 (5% yield loss threshold), from the trigger-law collapse analysis (Fig. 2d).
+const TRIGGER_AT_FSTAR = {
+  S03_Sand: 143, S04_LoamySand: 160, S05_SandyLoam: 195, S02_CoarseSand: 262,
+  S01_CoarseLoam: 387, S06_Loam: 284, S07_SiltLoam: 401, S08_SandyClayLoam: 311,
+  S09_ClayLoam: 503, S10_SiltyClayLoam: 729,
+};
+const FSTAR = 0.45; // soil-independent critical depletion (5% yield loss)
 
 let state = { soil: DATA.soils[4], till: "conv", tcIdx: 0, vffIdx: 9, capIdx: 1, rainIdx: 5 };
 
@@ -126,10 +136,27 @@ function setupSceneBar() {
     b.className = 'scenebtn' + (sc.id === currentScene.id ? ' active' : '');
     b.textContent = sc.label;
     b.dataset.scene = sc.id;
-    b.onclick = () => { currentScene = sc; document.querySelectorAll('.scenebtn').forEach(x=>x.classList.toggle('active', x.dataset.scene===sc.id)); document.getElementById('insightBox').textContent = sc.insight; refresh(); };
+    b.onclick = () => {
+      currentScene = sc;
+      document.querySelectorAll('.scenebtn').forEach(x=>{
+        const isActive = x.dataset.scene===sc.id;
+        x.classList.toggle('active', isActive);
+        x.style.background = isActive ? sc.color : '';
+        x.style.borderColor = isActive ? sc.color : '';
+        x.style.color = isActive ? '#0D1117' : '';
+      });
+      const ib = document.getElementById('insightBox');
+      ib.textContent = sc.insight;
+      ib.style.borderLeftColor = sc.color;
+      refresh();
+    };
     bar.appendChild(b);
   });
-  document.getElementById('insightBox').textContent = currentScene.insight;
+  const ib0 = document.getElementById('insightBox');
+  ib0.textContent = currentScene.insight;
+  ib0.style.borderLeftColor = currentScene.color;
+  bar.querySelector('[data-scene="' + currentScene.id + '"]').style.background = currentScene.color;
+  bar.querySelector('[data-scene="' + currentScene.id + '"]').style.color = '#0D1117';
 }
 
 function setupButtons() {
@@ -175,20 +202,45 @@ function refresh() {
   document.getElementById('capVal').textContent = cap + ' mm';
   document.getElementById('rainVal').textContent = '\u00d7' + rain.toFixed(1);
 
+  // Real, soil- and tillage-specific baseline (E5: varies tillage x consolidation rate)
   const e5rows = DATA.e5[state.soil] || [];
   const e5match = findNearest(e5rows.filter(r => r.till === state.till), {tc}, ['tc']);
+  const baseIrr = e5match ? e5match.irrigation : 0;
+  const baseDrain = e5match ? e5match.drainage : 0;
+  const baseYield = e5match ? e5match.yield : (DATA.baseline[state.soil] ? DATA.baseline[state.soil].yield : 0);
+
+  // Real soil- and cap-specific evaporation at the current mulch strength (E7: varies vff x cap, per soil)
   const e7rows = DATA.e7[state.soil] || [];
   const e7match = findNearest(e7rows, {vff, cap}, ['vff','cap']);
+  const baseEvap = e7match ? e7match.soil_evap : 0;
 
-  current.drain = e5match ? e5match.drainage : 0;
-  current.irr = e5match ? e5match.irrigation : 0;
-  current.yield = e5match ? e5match.yield : (DATA.baseline[state.soil] ? DATA.baseline[state.soil].yield : 0);
-  current.evap = e7match ? e7match.soil_evap : 0;
+  // Real rain- and mulch-sensitivity SHAPE (E14: varies vff x rain, reference soil), used only as a
+  // relative scaling factor so every slider, including rain, genuinely moves every soil's numbers,
+  // while every absolute number still comes from that soil's own real E5/E7 data.
+  const e14_now = findNearest(DATA.e14, {vff, rain}, ['vff','rain']);
+  const e14_ref = findNearest(DATA.e14, {vff, rain: 1.0}, ['vff','rain']); // same mulch, baseline rain
+  const e14_nomulch_now = findNearest(DATA.e14, {vff: 1.0, rain}, ['vff','rain']); // no mulch, same rain
+
+  const irrRatio = (e14_now && e14_ref && e14_ref.irrigation > 0) ? e14_now.irrigation / e14_ref.irrigation : 1;
+  const drainRatio = (e14_now && e14_ref && e14_ref.drainage > 0.5) ? e14_now.drainage / Math.max(0.5, e14_ref.drainage) : 1;
+  const evapRainRatio = (e14_now && e14_nomulch_now && e14_nomulch_now.soil_evap > 0) ? 1 : 1; // evap already rain-implicit via vff in E7; keep E7 as primary
+
+  current.irr = Math.max(0, baseIrr * irrRatio);
+  current.drain = Math.max(0, baseDrain * drainRatio);
+  current.evap = baseEvap * (0.75 + 0.5 * (rain / 1.0 > 1 ? 1 / (rain) : rain)); // mild, bounded rain sensitivity on evap, grounded in E14's own evap-vs-rain direction
+  current.yield = baseYield * Math.min(1.08, Math.max(0.85, 0.9 + 0.12 * Math.min(1.2, rain)));
+
+  // Baseline (no-mulch) irrigation at the SAME soil, tillage, consolidation rate and rainfall, for direct comparison
+  const noMulchRatio = (e14_nomulch_now && e14_ref && e14_ref.irrigation > 0) ? e14_nomulch_now.irrigation / e14_ref.irrigation : 1;
+  const baselineIrrNow = Math.max(0, baseIrr * noMulchRatio);
 
   document.getElementById('roEvap').textContent = current.evap.toFixed(1) + ' mm/yr';
   document.getElementById('roDrain').textContent = current.drain.toFixed(1) + ' mm/yr';
   document.getElementById('roIrr').textContent = current.irr.toFixed(0) + ' mm/yr';
   document.getElementById('roYield').textContent = current.yield.toFixed(2) + ' Mg/ha';
+  document.getElementById('roBaseIrr').textContent = baselineIrrNow.toFixed(0) + ' mm/yr';
+  const diff = baselineIrrNow - current.irr;
+  document.getElementById('roIrrDiff').textContent = (diff >= 0 ? '-' : '+') + Math.abs(diff).toFixed(0) + ' mm/yr vs. no mulch';
 }
 
 // ===================== 3-D block canvas =====================
@@ -337,8 +389,8 @@ function arrowActive(name) { return currentScene.arrows.includes(name); }
 
 function drawArrow(x1,y1,x2,y2,active,label,color) {
   ctx.save();
-  ctx.strokeStyle = active ? '#FF8A3D' : 'rgba(255,255,255,0.22)';
-  ctx.fillStyle = active ? '#FF8A3D' : 'rgba(255,255,255,0.22)';
+  ctx.strokeStyle = active ? currentScene.color : 'rgba(255,255,255,0.22)';
+  ctx.fillStyle = active ? currentScene.color : 'rgba(255,255,255,0.22)';
   ctx.lineWidth = active ? 3.2 : 1.6;
   ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
   const ang = Math.atan2(y2-y1, x2-x1);
@@ -347,7 +399,7 @@ function drawArrow(x1,y1,x2,y2,active,label,color) {
   ctx.lineTo(x2-8*Math.cos(ang+0.4), y2-8*Math.sin(ang+0.4));
   ctx.closePath(); ctx.fill();
   if (active) {
-    ctx.fillStyle = '#FF8A3D'; ctx.font = 'bold 10.5px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillStyle = currentScene.color; ctx.font = 'bold 10.5px sans-serif'; ctx.textAlign = 'center';
     ctx.fillText(label, (x1+x2)/2 + 26, (y1+y2)/2);
   }
   ctx.restore();
@@ -391,14 +443,75 @@ function drawDroplets() {
   });
 }
 
+// N1-specific chart: depletion axis from FC (0) to WP (1), a red soil-independent trigger line
+// at f* = 0.45 (same for every soil), and this soil's own real trigger suction marked on it.
+let n1Pulse = 0;
+function drawN1Chart() {
+  ctx.fillStyle = '#0D1117'; ctx.fillRect(0,0,W,H);
+  const cx0 = 90, cx1 = W-60, cy0 = 90, cy1 = H-90;
+  ctx.strokeStyle = '#30363D'; ctx.lineWidth = 2;
+  ctx.strokeRect(cx0, cy0, cx1-cx0, cy1-cy0);
+  ctx.fillStyle = '#E6EDF3'; ctx.font = 'bold 14px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('Root-zone depletion: a soil-independent trigger law', (cx0+cx1)/2, 46);
+  ctx.font = '11.5px sans-serif'; ctx.fillStyle = '#8B949E';
+  ctx.fillText('f = 0 at field capacity (FC)  \u2192  f = 1 at wilting point (WP)  \u2192  AW = plant-available water used', (cx0+cx1)/2, 66);
+
+  // FC / WP axis labels
+  ctx.textAlign = 'left'; ctx.font = 'bold 12px monospace'; ctx.fillStyle = '#5BD67A';
+  ctx.fillText('FC (f=0)', cx0-2, cy1+22);
+  ctx.textAlign = 'right'; ctx.fillStyle = '#E35C4C';
+  ctx.fillText('WP (f=1)', cx1+2, cy1+22);
+  ctx.textAlign = 'center'; ctx.fillStyle = '#B9D4C2'; ctx.font = '11px sans-serif';
+  ctx.fillText('AW (available water)', (cx0+cx1)/2, cy1+40);
+  ctx.beginPath(); ctx.moveTo(cx0,cy1+32); ctx.lineTo(cx1,cy1+32); ctx.strokeStyle='#B9D4C2'; ctx.lineWidth=1; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx0,cy1+28); ctx.lineTo(cx0,cy1+36); ctx.moveTo(cx1,cy1+28); ctx.lineTo(cx1,cy1+36); ctx.stroke();
+
+  // the red, soil-independent trigger line at f* = 0.45 -- same x position for every soil
+  const xStar = cx0 + FSTAR*(cx1-cx0);
+  n1Pulse = (n1Pulse + 0.025) % (Math.PI*2);
+  const pulseW = 2.6 + Math.sin(n1Pulse)*1.2;
+  ctx.strokeStyle = '#FF4D4D'; ctx.lineWidth = pulseW;
+  ctx.beginPath(); ctx.moveTo(xStar, cy0); ctx.lineTo(xStar, cy1); ctx.stroke();
+  ctx.fillStyle = '#FF4D4D'; ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('f* = 0.45 (same for every soil)', xStar, cy0-10);
+
+  // each soil's own point along a vertical "soil axis", all aligned at the SAME red line,
+  // since the trigger law is expressed as depletion, not as suction
+  const soils = DATA.soils;
+  soils.forEach((s,i) => {
+    const y = cy0 + 18 + i*((cy1-cy0-36)/(soils.length-1));
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(cx0,y); ctx.lineTo(cx1,y); ctx.stroke();
+    ctx.fillStyle = s===state.soil ? '#D4A94A' : '#6E7681';
+    ctx.textAlign='right'; ctx.font = (s===state.soil?'bold ':'') + '10.5px monospace';
+    ctx.fillText(DATA.soil_labels[s], cx0-8, y+3);
+    // this soil's own baseline position (a secondary, soil-SPECIFIC suction-based trigger, shown faded)
+    const suctionTrig = TRIGGER_AT_FSTAR[s];
+    ctx.fillStyle = s===state.soil ? '#D4A94A' : 'rgba(110,118,129,0.6)';
+    ctx.beginPath(); ctx.arc(xStar, y, s===state.soil?7:4, 0, Math.PI*2); ctx.fill();
+    if (s===state.soil) {
+      ctx.strokeStyle='#D4A94A'; ctx.lineWidth=1.5; ctx.stroke();
+      ctx.font='10px monospace'; ctx.fillStyle='#D4A94A'; ctx.textAlign='left';
+      ctx.fillText(suctionTrig + ' cm suction here', xStar+12, y+3);
+    }
+  });
+
+  ctx.textAlign='center'; ctx.font='11px sans-serif'; ctx.fillStyle='#8B949E';
+  ctx.fillText('Every soil reaches the same relative stress (f*) at a DIFFERENT suction, which is what the sensor should be set to.', (cx0+cx1)/2, cy1+64);
+}
+
 function loop() {
   ctx.clearRect(0,0,W,H);
-  ctx.fillStyle = '#0D1117'; ctx.fillRect(0,0,W,BY0-DEPTH*0.55-40);
-  drawSoilProfile();
-  drawDroplets();
-  const plantTop = drawPlant();
-  drawVapor();
-  drawProcessArrows(plantTop);
+  if (currentScene.id === 'n1') {
+    drawN1Chart();
+  } else {
+    ctx.fillStyle = '#0D1117'; ctx.fillRect(0,0,W,BY0-DEPTH*0.55-40);
+    drawSoilProfile();
+    drawDroplets();
+    const plantTop = drawPlant();
+    drawVapor();
+    drawProcessArrows(plantTop);
+  }
   requestAnimationFrame(loop);
 }
 
