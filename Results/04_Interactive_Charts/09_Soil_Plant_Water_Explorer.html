@@ -209,19 +209,131 @@ function drawSky() {
   ctx.fillStyle = grad; ctx.fillRect(0,0,W,SURFACE_Y);
 }
 
+let soilTextureCanvas = null;
+let cachedSoilKey = null;
+
+function hashStr(s) { let h=0; for (let i=0;i<s.length;i++) h = (h*31 + s.charCodeAt(i)) | 0; return h; }
+function seededRandom(seed) {
+  let s = seed % 2147483647; if (s <= 0) s += 2147483646;
+  return function() { s = (s*16807) % 2147483647; return (s-1) / 2147483646; };
+}
+
+function buildSoilTexture() {
+  const tex = DATA.texture[state.soil];
+  const key = state.soil;
+  if (cachedSoilKey === key) return;
+  cachedSoilKey = key;
+
+  const pw = W - 80, ph = BASE_Y - SURFACE_Y;
+  const off = document.createElement('canvas');
+  off.width = pw; off.height = ph;
+  const octx = off.getContext('2d');
+  const rand = seededRandom(hashStr(key) + 777);
+
+  // ---- Horizon definitions, fraction of total depth (O, A, B, C) ----
+  const horizons = [
+    { frac: 0.04, name: 'O', base: shadeColor(tex.color, -60), dark: true },
+    { frac: 0.18, name: 'A', base: shadeColor(tex.color, -38) },
+    { frac: 0.40, name: 'B', base: shadeColor(tex.color, -8) },
+    { frac: 0.38, name: 'C', base: shadeColor(tex.color, 22) },
+  ];
+  let y0 = 0;
+  const boundaries = [0];
+  horizons.forEach(h => { y0 += h.frac * ph; boundaries.push(y0); });
+
+  // base fill per horizon with a subtle vertical gradient inside each band
+  horizons.forEach((h, i) => {
+    const yTop = boundaries[i], yBot = boundaries[i+1];
+    const g = octx.createLinearGradient(0, yTop, 0, yBot);
+    g.addColorStop(0, shadeColor(h.base, 6));
+    g.addColorStop(1, shadeColor(h.base, -6));
+    octx.fillStyle = g;
+    // slightly irregular (wavy) horizon boundary like a real soil pit
+    octx.beginPath();
+    octx.moveTo(0, yTop);
+    for (let x=0; x<=pw; x+=14) octx.lineTo(x, yTop + Math.sin(x*0.05 + i*3)*2.5*(i>0?1:0));
+    octx.lineTo(pw, yBot);
+    for (let x=pw; x>=0; x-=14) octx.lineTo(x, yBot + Math.sin(x*0.05 + (i+1)*3)*2.5);
+    octx.closePath();
+    octx.fill();
+  });
+
+  // ---- Grain / particle texture, density and size scaled by sand % ----
+  const sandFrac = tex.sand / 100;
+  const clayFrac = tex.clay / 100;
+  const nGrains = Math.round(1800 * (0.35 + sandFrac));
+  for (let i=0;i<nGrains;i++) {
+    const gx = rand()*pw, gy = rand()*ph;
+    const hIdx = horizons.findIndex((h,i2) => gy >= boundaries[i2] && gy < boundaries[i2+1]);
+    if (hIdx < 0) continue;
+    const size = (0.5 + rand()*1.8) * (0.6 + sandFrac*0.9);
+    const shade = (rand()-0.5) * 30;
+    octx.fillStyle = 'rgba(' +
+      Math.max(0,Math.min(255, 150+shade)) + ',' +
+      Math.max(0,Math.min(255, 125+shade)) + ',' +
+      Math.max(0,Math.min(255, 85+shade)) + ',' + (0.25+rand()*0.35) + ')';
+    octx.beginPath(); octx.arc(gx, gy, size, 0, Math.PI*2); octx.fill();
+  }
+
+  // ---- Clay structure: blocky aggregate cracks, more visible with higher clay % ----
+  if (clayFrac > 0.12) {
+    octx.strokeStyle = 'rgba(30,20,10,' + (0.15 + clayFrac*0.35) + ')';
+    octx.lineWidth = 1;
+    const cellSize = 34;
+    for (let gy = boundaries[1]; gy < ph; gy += cellSize) {
+      for (let gx = 0; gx < pw; gx += cellSize) {
+        if (rand() > 0.35) continue;
+        octx.save();
+        octx.translate(gx + rand()*10, gy + rand()*10);
+        octx.beginPath();
+        const n = 5 + Math.floor(rand()*2);
+        for (let k=0;k<n;k++) {
+          const ang = (k/n)*Math.PI*2;
+          const r = cellSize*0.32 + rand()*6;
+          const px = Math.cos(ang)*r, py = Math.sin(ang)*r*0.8;
+          k===0 ? octx.moveTo(px,py) : octx.lineTo(px,py);
+        }
+        octx.closePath(); octx.stroke();
+        octx.restore();
+      }
+    }
+  }
+
+  // ---- Small stones / gravel fragments, more for coarse soils ----
+  const nStones = Math.round(14 * (0.4 + sandFrac));
+  for (let i=0;i<nStones;i++) {
+    const gx = rand()*pw, gy = boundaries[1] + rand()*(ph-boundaries[1]);
+    const r = 3 + rand()*5;
+    octx.save(); octx.translate(gx,gy); octx.rotate(rand()*Math.PI);
+    octx.fillStyle = 'rgba(120,110,100,0.55)';
+    octx.beginPath(); octx.ellipse(0,0,r,r*0.68,0,0,Math.PI*2); octx.fill();
+    octx.strokeStyle = 'rgba(70,62,54,0.5)'; octx.lineWidth=0.6; octx.stroke();
+    octx.restore();
+  }
+
+  // ---- horizon boundary lines + labels baked into texture ----
+  octx.strokeStyle = 'rgba(0,0,0,0.35)'; octx.lineWidth = 1;
+  horizons.forEach((h,i) => {
+    octx.beginPath(); octx.moveTo(0, boundaries[i]); octx.lineTo(pw, boundaries[i]); octx.stroke();
+  });
+
+  soilTextureCanvas = { canvas: off, horizons, boundaries, pw, ph };
+}
+
 function drawSoilProfile() {
   const tex = DATA.texture[state.soil];
-  const grad = ctx.createLinearGradient(0,SURFACE_Y,0,BASE_Y);
-  grad.addColorStop(0, tex.color);
-  grad.addColorStop(1, shadeColor(tex.color, -35));
-  ctx.fillStyle = grad;
-  ctx.fillRect(40, SURFACE_Y, W-80, BASE_Y-SURFACE_Y);
-  // horizon lines
-  ctx.strokeStyle = 'rgba(255,255,255,0.15)'; ctx.lineWidth = 1;
-  for (let i=1;i<4;i++) {
-    const y = SURFACE_Y + (BASE_Y-SURFACE_Y)*i/4;
-    ctx.beginPath(); ctx.moveTo(40,y); ctx.lineTo(W-40,y); ctx.stroke();
-  }
+  buildSoilTexture();
+  ctx.drawImage(soilTextureCanvas.canvas, 40, SURFACE_Y);
+
+  // horizon letter labels
+  ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
+  const { horizons, boundaries } = soilTextureCanvas;
+  horizons.forEach((h,i) => {
+    const midY = SURFACE_Y + (boundaries[i]+boundaries[i+1])/2;
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.fillText(h.name, 46, midY+4);
+  });
+
   ctx.strokeStyle = '#30363D'; ctx.lineWidth = 2;
   ctx.strokeRect(40, SURFACE_Y, W-80, BASE_Y-SURFACE_Y);
   // depth labels
