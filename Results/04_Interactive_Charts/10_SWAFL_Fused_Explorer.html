@@ -64,6 +64,12 @@
     <div class="soilbtns" id="soilBtns"></div>
     <div class="row"><label>Tillage system</label></div>
     <div class="tillbtns" id="tillBtns"></div>
+    <div class="row"><label>Crop category</label></div>
+    <div class="tillbtns" id="cropBtns"></div>
+    <div style="font-size:0.68rem; color:#6E7681; margin-top:-0.5rem; margin-bottom:0.8rem; font-style:italic;">
+      This study's real simulations used one cereal/oilseed rotation (spring barley, winter barley, winter rape, winter wheat).
+      Cereal uses that real yield directly; Legume and Vegetable apply a clearly-labelled illustrative scaling, not separately simulated here.
+    </div>
     <div class="row"><label>Structural consolidation rate (SHP driver) <span class="val" id="tcVal"></span></label>
       <input type="range" id="tcSlider" min="0" max="4" step="1">
       <div id="tcNote" style="font-size:0.72rem; color:#8B949E; margin-top:0.3rem; font-style:italic;"></div></div>
@@ -118,7 +124,15 @@ const TRIGGER_AT_FSTAR = {
 };
 const FSTAR = 0.45; // soil-independent critical depletion (5% yield loss)
 
-let state = { soil: DATA.soils[4], till: "conv", tcIdx: 0, vffIdx: 9, capIdx: 1, rainIdx: 5 };
+let state = { soil: DATA.soils[4], till: "conv", tcIdx: 0, vffIdx: 9, capIdx: 1, rainIdx: 5, crop: "cereal" };
+// Cereal is the real, simulated rotation (factor 1.0, no change). Legume and Vegetable factors are
+// illustrative only, loosely reflecting typical relative dry-matter yield and harvest index differences
+// reported in general agronomy references, NOT separately simulated in this study.
+const CROPS = {
+  cereal: { label: "Cereal/Oilseed (simulated)", factor: 1.0, unit: "Mg/ha" },
+  legume: { label: "Legume (illustrative)", factor: 0.55, unit: "Mg/ha" },
+  vegetable: { label: "Vegetable (illustrative)", factor: 2.3, unit: "Mg/ha fresh wt." },
+};
 
 function findNearest(arr, obj, keys) {
   let best = null, bestD = Infinity;
@@ -179,10 +193,20 @@ function setupButtons() {
     b.onclick = () => { state.till = t; refresh(); };
     tillBtns.appendChild(b);
   });
+  const cropBtns = document.getElementById('cropBtns');
+  Object.keys(CROPS).forEach(k => {
+    const b = document.createElement('div');
+    b.className = 'pillbtn' + (k === state.crop ? ' active' : '');
+    b.textContent = CROPS[k].label;
+    b.dataset.crop = k;
+    b.onclick = () => { state.crop = k; refresh(); };
+    cropBtns.appendChild(b);
+  });
 }
 function updateActiveButtons() {
   document.querySelectorAll('#soilBtns .pillbtn').forEach(b => b.classList.toggle('active', b.dataset.soil === state.soil));
   document.querySelectorAll('#tillBtns .pillbtn').forEach(b => b.classList.toggle('active', b.dataset.till === state.till));
+  document.querySelectorAll('#cropBtns .pillbtn').forEach(b => b.classList.toggle('active', b.dataset.crop === state.crop));
 }
 
 const sliders = { tc: document.getElementById('tcSlider'), vff: document.getElementById('vffSlider'), cap: document.getElementById('capSlider'), rain: document.getElementById('rainSlider') };
@@ -251,7 +275,9 @@ function refresh() {
   document.getElementById('roEvap').textContent = current.evap.toFixed(1) + ' mm/yr';
   document.getElementById('roDrain').textContent = current.drain.toFixed(1) + ' mm/yr';
   document.getElementById('roIrr').textContent = current.irr.toFixed(0) + ' mm/yr';
-  document.getElementById('roYield').textContent = current.yield.toFixed(2) + ' Mg/ha';
+  const cropInfo = CROPS[state.crop];
+  const displayYield = current.yield * cropInfo.factor;
+  document.getElementById('roYield').textContent = displayYield.toFixed(2) + ' ' + cropInfo.unit;
   document.getElementById('roBaseIrr').textContent = baselineIrrNow.toFixed(0) + ' mm/yr';
   const diff = baselineIrrNow - current.irr;
   document.getElementById('roIrrDiff').textContent = (diff >= 0 ? '-' : '+') + Math.abs(diff).toFixed(0) + ' mm/yr vs. no mulch';
@@ -316,6 +342,50 @@ function buildSoilTexture() {
   soilTextureCanvas = {canvas:off, horizons, bnd, pw, ph};
 }
 
+let cloudPhase = 0;
+function drawSky() {
+  const rain = RAIN_VALUES[state.rainIdx];
+  const skyH = BY0 - DEPTH*0.55 - 10;
+  const g = ctx.createLinearGradient(0,0,0,skyH);
+  const cloudiness = Math.min(1, Math.max(0, (rain-0.5)/0.9));
+  g.addColorStop(0, shadeColor('#0D1117', Math.round(8+cloudiness*10)));
+  g.addColorStop(1, '#0D1117');
+  ctx.fillStyle = g; ctx.fillRect(0,0,W,skyH);
+
+  // sun, brighter and higher when drier (low rain scale)
+  const sunBrightness = Math.max(0.25, 1 - cloudiness);
+  const sunX = W-90, sunY = 44;
+  const sg = ctx.createRadialGradient(sunX,sunY,2,sunX,sunY,34);
+  sg.addColorStop(0, 'rgba(255,224,130,'+sunBrightness.toFixed(2)+')');
+  sg.addColorStop(1, 'rgba(255,224,130,0)');
+  ctx.fillStyle = sg; ctx.beginPath(); ctx.arc(sunX,sunY,34,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle = 'rgba(255,224,130,'+Math.min(1,sunBrightness+0.2).toFixed(2)+')';
+  ctx.beginPath(); ctx.arc(sunX,sunY,10,0,Math.PI*2); ctx.fill();
+
+  // clouds, count and opacity scaled by real rainfall scale slider
+  cloudPhase += 0.0018;
+  const nClouds = Math.round(1 + cloudiness*5);
+  for (let i=0;i<nClouds;i++) {
+    const cx = ((i*137 + cloudPhase*40) % (W+120)) - 60;
+    const cy = 30 + (i%3)*22;
+    ctx.fillStyle = 'rgba(190,200,210,'+(0.18+cloudiness*0.32).toFixed(2)+')';
+    for (let k=0;k<4;k++) {
+      ctx.beginPath(); ctx.ellipse(cx+k*16, cy+(k%2)*4, 16, 10, 0, 0, Math.PI*2); ctx.fill();
+    }
+  }
+
+  // rain streaks when cloudiness is high
+  if (cloudiness > 0.25) {
+    ctx.strokeStyle = 'rgba(127,212,255,'+(cloudiness*0.35).toFixed(2)+')';
+    ctx.lineWidth = 1;
+    for (let i=0;i<Math.round(cloudiness*22);i++) {
+      const rx = (i*53 + cloudPhase*220) % W;
+      const ry = ((i*31) % skyH);
+      ctx.beginPath(); ctx.moveTo(rx,ry); ctx.lineTo(rx-4,ry+14); ctx.stroke();
+    }
+  }
+}
+
 function drawTopFace() {
   // skewed parallelogram "top" of the block, for a pseudo-3D look
   const tex = DATA.texture[state.soil];
@@ -330,6 +400,38 @@ function drawTopFace() {
   g.addColorStop(0, '#3E7A3F'); g.addColorStop(1, '#2E5C30');
   ctx.fillStyle = g; ctx.fill();
   ctx.strokeStyle = 'rgba(0,0,0,0.3)'; ctx.stroke();
+  ctx.restore();
+}
+
+// Visible mulch layer sitting on the soil surface: thickness driven by the real interception
+// capacity slider (cap, mm), only shown once mulch strength (vff < 1) means mulch is actually present.
+function drawMulchLayer() {
+  const vff = VFF_VALUES[state.vffIdx], cap = CAP_VALUES[state.capIdx];
+  if (vff >= 0.95) return; // no mulch applied
+  const strength = 1 - vff; // 0 (no mulch) to 0.9 (strongest)
+  const thickness = 3 + strength * 10 + (cap/4)*6; // px, scaled by both strength and capacity
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(BX0, BY0 - thickness);
+  ctx.lineTo(BX1, BY0 - thickness);
+  ctx.lineTo(BX1+DEPTH, BY0-DEPTH*0.55-thickness);
+  ctx.lineTo(BX0+DEPTH, BY0-DEPTH*0.55-thickness);
+  ctx.closePath();
+  const mg = ctx.createLinearGradient(0,BY0-DEPTH*0.55-thickness,0,BY0);
+  mg.addColorStop(0, '#9C7A3E'); mg.addColorStop(1, '#6B5226');
+  ctx.fillStyle = mg; ctx.fill();
+  ctx.strokeStyle = 'rgba(0,0,0,0.35)'; ctx.lineWidth=1; ctx.stroke();
+  // straw/residue texture flecks, denser for stronger mulch
+  const rand = seededRandom(hashStr(state.soil+'_mulch')+Math.round(strength*100));
+  const nFlecks = Math.round(14 + strength*26);
+  for (let i=0;i<nFlecks;i++) {
+    const fx = BX0 + rand()*(BX1-BX0) + DEPTH*0.3;
+    const fy = BY0 - thickness*0.5 - DEPTH*0.3 + rand()*thickness*0.5;
+    ctx.strokeStyle = 'rgba(210,190,140,0.5)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(fx,fy); ctx.lineTo(fx+4+rand()*4, fy-1-rand()*2); ctx.stroke();
+  }
+  ctx.fillStyle = '#E6EDF3'; ctx.font = '10px monospace'; ctx.textAlign='left';
+  ctx.fillText('mulch ' + cap + 'mm cap.', BX0, BY0-thickness-6);
   ctx.restore();
 }
 function drawRightFace() {
@@ -371,6 +473,7 @@ function drawSoilProfile() {
   ctx.strokeStyle = '#30363D'; ctx.lineWidth = 2;
   ctx.strokeRect(BX0, BY0, BX1-BX0, BY1-BY0);
   drawTopFace();
+  drawMulchLayer();
   // grass tufts along the front edge of the top face
   const tufts = 26;
   for (let i=0;i<tufts;i++) {
@@ -596,7 +699,7 @@ function loop() {
   } else if (currentScene.id === 'n3') {
     drawN3Chart();
   } else {
-    ctx.fillStyle = '#0D1117'; ctx.fillRect(0,0,W,BY0-DEPTH*0.55-40);
+    drawSky();
     drawSoilProfile();
     drawDroplets();
     const plantTop = drawPlant();
