@@ -65,7 +65,8 @@
     <div class="row"><label>Tillage system</label></div>
     <div class="tillbtns" id="tillBtns"></div>
     <div class="row"><label>Structural consolidation rate (SHP driver) <span class="val" id="tcVal"></span></label>
-      <input type="range" id="tcSlider" min="0" max="4" step="1"></div>
+      <input type="range" id="tcSlider" min="0" max="4" step="1">
+      <div id="tcNote" style="font-size:0.72rem; color:#8B949E; margin-top:0.3rem; font-style:italic;"></div></div>
     <div class="row"><label>Mulch strength, vapour-flux factor (1=no mulch) <span class="val" id="vffVal"></span></label>
       <input type="range" id="vffSlider" min="0" max="8" step="1"></div>
     <div class="row"><label>Mulch interception capacity (mm) <span class="val" id="capVal"></span></label>
@@ -234,6 +235,19 @@ function refresh() {
   const noMulchRatio = (e14_nomulch_now && e14_ref && e14_ref.irrigation > 0) ? e14_nomulch_now.irrigation / e14_ref.irrigation : 1;
   const baselineIrrNow = Math.max(0, baseIrr * noMulchRatio);
 
+  // How much does THIS soil, at THIS tillage, actually respond to consolidation rate? (real E5 range)
+  const e5allTc = e5rows.filter(r => r.till === state.till);
+  const drainVals = e5allTc.map(r => r.drainage);
+  const tcSensitivity = drainVals.length ? Math.max(...drainVals) - Math.min(...drainVals) : 0;
+  const tcNote = document.getElementById('tcNote');
+  if (tcNote) {
+    tcNote.textContent = tcSensitivity < 0.3
+      ? 'This soil shows almost no real sensitivity to consolidation rate at this tillage (already highly conductive).'
+      : 'Real range for this soil/tillage: ' + Math.min(...drainVals).toFixed(1) + ' to ' + Math.max(...drainVals).toFixed(1) + ' mm/yr drainage.';
+  }
+
+  current.moisture = Math.max(0.08, Math.min(0.95, 1 - (current.drain + current.evap) / 260));
+
   document.getElementById('roEvap').textContent = current.evap.toFixed(1) + ' mm/yr';
   document.getElementById('roDrain').textContent = current.drain.toFixed(1) + ' mm/yr';
   document.getElementById('roIrr').textContent = current.irr.toFixed(0) + ' mm/yr';
@@ -335,6 +349,25 @@ function drawSoilProfile() {
   buildSoilTexture();
   drawRightFace();
   ctx.drawImage(soilTextureCanvas.canvas, BX0, BY0);
+
+  // Visible water-level / plant-available-water bar, live-linked to the current indices
+  // (drainage + evaporation, both from the real E5/E7/E14 lookups): more water lost = lower bar.
+  const moisture = current.moisture || 0.5;
+  const wlX = BX1 + 14;
+  const wlH = BY1 - BY0;
+  const wlY = BY0 + wlH * (1 - moisture);
+  ctx.fillStyle = 'rgba(13,17,23,0.5)'; ctx.fillRect(wlX, BY0, 16, wlH);
+  const wg = ctx.createLinearGradient(0, wlY, 0, BY1);
+  const stressed = moisture < 0.3;
+  wg.addColorStop(0, stressed ? '#E35C4C' : '#5B9FD6');
+  wg.addColorStop(1, stressed ? '#8E3A2E' : '#2E5C8E');
+  ctx.fillStyle = wg; ctx.fillRect(wlX, wlY, 16, BY1-wlY);
+  ctx.strokeStyle = '#30363D'; ctx.lineWidth = 1; ctx.strokeRect(wlX, BY0, 16, wlH);
+  ctx.save(); ctx.translate(wlX+8, (BY0+BY1)/2); ctx.rotate(-Math.PI/2);
+  ctx.fillStyle = '#8B949E'; ctx.font = '9px monospace'; ctx.textAlign='center';
+  ctx.fillText('plant-available water', 0, -12);
+  ctx.restore();
+
   ctx.strokeStyle = '#30363D'; ctx.lineWidth = 2;
   ctx.strokeRect(BX0, BY0, BX1-BX0, BY1-BY0);
   drawTopFace();
@@ -434,8 +467,11 @@ function drawVapor() {
 }
 function drawDroplets() {
   const rate = Math.max(0.1, Math.min(1, current.drain/90));
+  // Real soil-specific flow speed: sandier soils conduct water faster (higher Ksat proxy), clay slower.
+  const sandFrac = (DATA.texture[state.soil].sand || 40) / 100;
+  const speedMult = 0.55 + sandFrac * 1.1;
   dropParticles.forEach(p=>{
-    p.life += 0.012*(0.4+rate);
+    p.life += 0.012*(0.4+rate)*speedMult;
     if (p.life>1){p.life=0; p.x=BX0+30+Math.random()*(BX1-BX0-60);}
     const yy = BY0 + 10 + p.life*(BY1-BY0-10);
     const alpha = rate*0.75;
@@ -500,10 +536,65 @@ function drawN1Chart() {
   ctx.fillText('Every soil reaches the same relative stress (f*) at a DIFFERENT suction, which is what the sensor should be set to.', (cx0+cx1)/2, cy1+64);
 }
 
+// N3-specific chart: the real loss-pathway index (evaporation vs drainage dominance) across the
+// mulch x rainfall plane, from the real E14 grid, with the current slider position marked live.
+function drawN3Chart() {
+  ctx.fillStyle = '#0D1117'; ctx.fillRect(0,0,W,H);
+  const cx0 = 100, cx1 = W-70, cy0 = 90, cy1 = H-110;
+  ctx.fillStyle = '#E6EDF3'; ctx.font = 'bold 14px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('Regime map: where water loss switches from evaporation to drainage', (cx0+cx1)/2, 40);
+  ctx.font = '11px sans-serif'; ctx.fillStyle = '#8B949E';
+  ctx.fillText('Real E14 grid (mulch strength x rainfall scale); color = loss-pathway index', (cx0+cx1)/2, 60);
+
+  const vffs = [...new Set(DATA.e14.map(r=>r.vff))].sort((a,b)=>a-b);
+  const rains = [...new Set(DATA.e14.map(r=>r.rain))].sort((a,b)=>a-b);
+  const cellW = (cx1-cx0)/rains.length, cellH = (cy1-cy0)/vffs.length;
+
+  vffs.forEach((v,vi) => {
+    rains.forEach((r,ri) => {
+      const row = DATA.e14.find(x=>x.vff===v && x.rain===r);
+      if (!row) return;
+      const idx = (row.soil_evap - row.drainage) / Math.max(1, row.soil_evap + row.drainage);
+      // idx: +1 evaporation-dominated (brown), -1 drainage-dominated (blue-green)
+      const t = (idx+1)/2;
+      const r1=[140,90,40], r2=[40,110,120];
+      const col = [Math.round(r1[0]*t+r2[0]*(1-t)), Math.round(r1[1]*t+r2[1]*(1-t)), Math.round(r1[2]*t+r2[2]*(1-t))];
+      ctx.fillStyle = 'rgb('+col.join(',')+')';
+      const x = cx0 + ri*cellW, y = cy0 + (vffs.length-1-vi)*cellH;
+      ctx.fillRect(x, y, cellW+1, cellH+1);
+    });
+  });
+  ctx.strokeStyle = '#30363D'; ctx.lineWidth = 2; ctx.strokeRect(cx0,cy0,cx1-cx0,cy1-cy0);
+
+  ctx.font = '10px monospace'; ctx.fillStyle = '#C9D1D9'; ctx.textAlign='center';
+  [0,2,4,6,8].forEach(i => { if (rains[i]!==undefined) ctx.fillText(rains[i].toFixed(1), cx0+i*cellW+cellW/2, cy1+16); });
+  ctx.textAlign='right';
+  [0,3,6,9].forEach(i => { if (vffs[i]!==undefined) ctx.fillText(vffs[i].toFixed(1), cx0-6, cy0+(vffs.length-1-i)*cellH+cellH/2+3); });
+  ctx.textAlign='center'; ctx.fillStyle='#8B949E'; ctx.font='11px sans-serif';
+  ctx.fillText('Rainfall scale (\u00d7 baseline)', (cx0+cx1)/2, cy1+34);
+  ctx.save(); ctx.translate(cx0-34, (cy0+cy1)/2); ctx.rotate(-Math.PI/2);
+  ctx.fillText('Mulch vapour-flux factor', 0, 0); ctx.restore();
+
+  // current slider position marked live
+  const vff = VFF_VALUES[state.vffIdx], rain = RAIN_VALUES[state.rainIdx];
+  const vIdx = vffs.reduce((best,v,i)=>Math.abs(v-vff)<Math.abs(vffs[best]-vff)?i:best, 0);
+  const rIdx = rains.reduce((best,r,i)=>Math.abs(r-rain)<Math.abs(rains[best]-rain)?i:best, 0);
+  const mx = cx0 + rIdx*cellW + cellW/2, my = cy0 + (vffs.length-1-vIdx)*cellH + cellH/2;
+  n1Pulse = (n1Pulse+0.03)%(Math.PI*2);
+  const sz = 10+Math.sin(n1Pulse)*3;
+  ctx.beginPath(); ctx.arc(mx,my,sz,0,Math.PI*2); ctx.strokeStyle='#FF4D4D'; ctx.lineWidth=2.5; ctx.stroke();
+  ctx.beginPath(); ctx.arc(mx,my,2.5,0,Math.PI*2); ctx.fillStyle='#FF4D4D'; ctx.fill();
+
+  ctx.fillStyle='#8B949E'; ctx.textAlign='center'; ctx.font='11px sans-serif';
+  ctx.fillText('Brown = evaporation-dominated loss    Teal = drainage-dominated loss    Red marker = current sliders', (cx0+cx1)/2, cy1+60);
+}
+
 function loop() {
   ctx.clearRect(0,0,W,H);
   if (currentScene.id === 'n1') {
     drawN1Chart();
+  } else if (currentScene.id === 'n3') {
+    drawN3Chart();
   } else {
     ctx.fillStyle = '#0D1117'; ctx.fillRect(0,0,W,BY0-DEPTH*0.55-40);
     drawSoilProfile();
