@@ -585,15 +585,55 @@ function drawDroplets() {
 // N1-specific chart: depletion axis from FC (0) to WP (1), a red soil-independent trigger line
 // at f* = 0.45 (same for every soil), and this soil's own real trigger suction marked on it.
 let n1Pulse = 0;
+function drawN1SoilColumn(mx0, mx1, my0, my1) {
+  buildSoilTexture();
+  ctx.save();
+  ctx.beginPath(); ctx.rect(mx0, my0, mx1-mx0, my1-my0); ctx.clip();
+  const sx = (mx1-mx0) / soilTextureCanvas.pw, sy = (my1-my0) / soilTextureCanvas.ph;
+  ctx.drawImage(soilTextureCanvas.canvas, mx0, my0, soilTextureCanvas.pw*sx, soilTextureCanvas.ph*sy);
+  ctx.restore();
+  ctx.strokeStyle = '#30363D'; ctx.lineWidth = 2; ctx.strokeRect(mx0,my0,mx1-mx0,my1-my0);
+
+  // the baseline (soil-independent) trigger level, at height (1 - f*) from the bottom (WP) toward top (FC)
+  const yTrigger = my0 + FSTAR*(my1-my0);
+  n1Pulse = (n1Pulse+0.025)%(Math.PI*2);
+  ctx.strokeStyle = '#FF4D4D'; ctx.lineWidth = 2.4+Math.sin(n1Pulse)*1;
+  ctx.beginPath(); ctx.moveTo(mx0,yTrigger); ctx.lineTo(mx1,yTrigger); ctx.stroke();
+  ctx.fillStyle = '#FF4D4D'; ctx.font = 'bold 9px sans-serif'; ctx.textAlign='center';
+  ctx.fillText('trigger f*', (mx0+mx1)/2, yTrigger-5);
+
+  // the CURRENT live water level, from this soil's own real moisture state (current.moisture)
+  const moisture = current.moisture || 0.5;
+  const yNow = my0 + (1-moisture)*(my1-my0);
+  ctx.fillStyle = moisture < (1-FSTAR) ? 'rgba(227,92,76,0.35)' : 'rgba(91,159,214,0.35)';
+  ctx.fillRect(mx0, yNow, mx1-mx0, my1-yNow);
+  ctx.strokeStyle = moisture < (1-FSTAR) ? '#E35C4C' : '#5B9FD6'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(mx0,yNow); ctx.lineTo(mx1,yNow); ctx.stroke();
+  ctx.fillStyle = ctx.strokeStyle; ctx.font = 'bold 9px sans-serif'; ctx.textAlign='center';
+  ctx.fillText('current', (mx0+mx1)/2, yNow+12);
+
+  ctx.fillStyle='#5BD67A'; ctx.font='bold 10px monospace'; ctx.textAlign='center';
+  ctx.fillText('FC', (mx0+mx1)/2, my0-6);
+  ctx.fillStyle='#E35C4C';
+  ctx.fillText('WP', (mx0+mx1)/2, my1+16);
+}
+
 function drawN1Chart() {
   ctx.fillStyle = '#0D1117'; ctx.fillRect(0,0,W,H);
-  const cx0 = 90, cx1 = W-60, cy0 = 90, cy1 = H-90;
+  ctx.fillStyle = '#E6EDF3'; ctx.font = 'bold 14px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('Root-zone depletion: a soil-independent trigger law', W/2, 34);
+  ctx.font = '11px sans-serif'; ctx.fillStyle = '#8B949E';
+  ctx.fillText('Left: this soil column, trigger baseline vs. current level. Right: every soil at the same f*.', W/2, 52);
+
+  // --- LEFT: compact soil column for the CURRENTLY SELECTED soil, with baseline + live level ---
+  const mx0 = 60, mx1 = 230, my0 = 100, my1 = H-110;
+  drawN1SoilColumn(mx0, mx1, my0, my1);
+  ctx.fillStyle = '#E6EDF3'; ctx.font = 'bold 11px sans-serif'; ctx.textAlign='center';
+  ctx.fillText(DATA.soil_labels[state.soil], (mx0+mx1)/2, my1+34);
+
+  const cx0 = 330, cx1 = W-60, cy0 = 90, cy1 = H-90;
   ctx.strokeStyle = '#30363D'; ctx.lineWidth = 2;
   ctx.strokeRect(cx0, cy0, cx1-cx0, cy1-cy0);
-  ctx.fillStyle = '#E6EDF3'; ctx.font = 'bold 14px sans-serif'; ctx.textAlign = 'center';
-  ctx.fillText('Root-zone depletion: a soil-independent trigger law', (cx0+cx1)/2, 46);
-  ctx.font = '11.5px sans-serif'; ctx.fillStyle = '#8B949E';
-  ctx.fillText('f = 0 at field capacity (FC)  \u2192  f = 1 at wilting point (WP)  \u2192  AW = plant-available water used', (cx0+cx1)/2, 66);
 
   // FC / WP axis labels
   ctx.textAlign = 'left'; ctx.font = 'bold 12px monospace'; ctx.fillStyle = '#5BD67A';
