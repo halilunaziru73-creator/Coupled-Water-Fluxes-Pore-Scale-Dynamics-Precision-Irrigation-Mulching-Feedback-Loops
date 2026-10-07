@@ -13,6 +13,10 @@
   header h1 { margin: 0 0 0.3rem; font-size: 1.4rem; }
   header p { margin: 0; color: #B9D4C2; font-size: 0.88rem; }
   .scenebar { display: flex; gap: 0.5rem; overflow-x: auto; padding: 0.9rem 1.5rem; background: #161B22; border-bottom: 1px solid #30363D; }
+  @media (min-width: 900px) { .scenebar { flex-wrap: wrap; overflow-x: visible; } }
+  .swipehint { display: none; font-size: 0.7rem; color: #8B949E; text-align: center; margin-top: 0.35rem; }
+  @media (max-width: 700px) { .swipehint { display: block; } }
+  body.embed .swipehint { display: none !important; }
   .scenebtn { flex: 0 0 auto; background: #21262D; border: 1px solid #30363D; color: #C9D1D9; border-radius: 16px; padding: 0.4rem 0.9rem; font-size: 0.76rem; cursor: pointer; white-space: nowrap; }
   .scenebtn.active { background: #D4A94A; color: #1A2318; border-color: #D4A94A; font-weight: 700; }
   .insight { background: #1C2128; border-left: 3px solid #D4A94A; padding: 0.7rem 1.2rem; margin: 0 1.5rem; font-size: 0.86rem; color: #E6EDF3; border-radius: 0 6px 6px 0; min-height: 1.3em; }
@@ -67,6 +71,7 @@
   <div class="panel">
     <h2 id="panelTitle">Field water balance: precipitation, irrigation, evapotranspiration, drainage</h2>
     <div class="canvaswrap"><canvas id="profileCanvas" width="620" height="640"></canvas></div>
+    <div class="swipehint" id="swipeHint">Swipe the picture sideways to see all of it</div>
     <div id="playBar" style="display:none; align-items:center; gap:0.5rem; margin-top:0.55rem; flex-wrap:wrap;">
       <span id="fieldBtns" style="display:none; gap:0.3rem; align-items:center; flex-wrap:wrap;"><button class="pillbtn active" data-view="day">Day by day</button><button class="pillbtn" data-view="years">All 20 years</button><button class="pillbtn" data-view="gen">Average year</button><button id="yPrev" class="pillbtn">&#9664; year</button><button id="yNext" class="pillbtn">year &#9654;</button><button class="pillbtn" data-speed="1">1x</button><button class="pillbtn active" data-speed="2">2x</button><button class="pillbtn" data-speed="4">4x</button><button class="pillbtn" data-speed="8">8x</button></span>
       <span id="rangeBtns" style="display:none; gap:0.35rem;"><button id="rangeAll" class="pillbtn active">All 20 years</button><button id="range94" class="pillbtn">1994 detail</button></span>
@@ -152,7 +157,7 @@ const TILL_LABELS = {conv:"Conventional", reduced:"Reduced", notill:"No-till"};
 
 const SCENES = [
   { id:"field", label:"Field Balance", color:"#2E7DE8", fieldBar:true, interactive:true, onDown: p => fieldDown(p), onMove: p => fieldMove(p), onUp: () => { fieldUi.drag = false; }, onLeave: () => { fyUi.hover = -1; }, draw: () => drawField(), title:"Field water balance: precipitation, irrigation, evapotranspiration, drainage",
-    legend: [['#6FB1E8','Precipitation'],['#2E7DE8','Irrigation'],['#4FAE5E','Transpiration'],['#E0B04A','Soil evaporation'],['#A9B2BD','Interception and mulch layer'],['#3F7FC4','Drainage'],['#D9534F','Nitrogen leaching']], insight:"Rain plus irrigation is shared between transpiration, evaporation, drainage and storage; every flux follows the controls.",
+    legend: [['#6FB1E8','Precipitation'],['#2E7DE8','Irrigation'],['#4FAE5E','Transpiration'],['#E0B04A','Soil evaporation'],['#A9B2BD','Interception and mulch layer'],['#3F7FC4','Drainage'],['#D9534F','Nitrogen leaching'],['#8B5E34','Roots (grow, die back)'],['#1F6FE0','Wetting front']], insight:"Rain plus irrigation is shared between transpiration, evaporation, drainage and storage; every flux follows the controls.",
     insightFn: () => fieldInsight() },
   { id:"v1", label:"V1 Sensor + Trigger", color:"#5B9FD6", play:true, dur:16, draw: () => drawV1(), title:"Sensor suction through the season, irrigated against rainfed",
     legend:[['#1B6FD8','Irrigated'],['#E8912D','Rainfed'],['#D93025','Trigger'],['#E3C766','Growing season']], insight:"Soil-moisture sensors trigger irrigation once suction crosses a threshold; trigger spans 24-84% depletion across these ten soils." },
@@ -232,15 +237,15 @@ function switchScene(sc) {
   document.getElementById('insightBox').style.borderLeftColor = sc.color;
   const canvasEl = document.getElementById('profileCanvas');
   const panelEl = document.getElementById('figureIndexPanel');
-  applyPanelChrome(sc.id);
+  applyPanelChrome(sc.id); canvas.setAttribute('role', 'img'); canvas.setAttribute('aria-label', (sc.label || '') + ': ' + (sc.title || ''));
   const pb = document.getElementById('playBar'); pb.style.display = (sc.play || sc.fieldBar) ? 'flex' : 'none'; document.getElementById('fieldBtns').style.display = sc.fieldBar ? 'inline-flex' : 'none'; canvas.style.cursor = 'default'; setCanvasH(sc.h || 640); if (sc.fieldBar) document.getElementById('playBtn').textContent = fclock.on ? 'Pause' : 'Play'; document.getElementById('rangeBtns').style.display = (sc.id === 'v1' || sc.id === 'v2') ? 'inline-flex' : 'none';
   if (sc.play) { play.t = 0; play.on = true; play.hold = 0; document.getElementById('playBtn').textContent = 'Pause'; }
   if (sc.id === 'figs') {
-    canvasEl.style.display = 'none';
+    canvasEl.style.display = 'none'; document.getElementById('swipeHint').style.visibility = 'hidden';
     panelEl.style.display = 'block';
     renderFigureIndex();
   } else {
-    canvasEl.style.display = 'block';
+    canvasEl.style.display = 'block'; document.getElementById('swipeHint').style.visibility = 'visible';
     panelEl.style.display = 'none';
   }
   refresh();
@@ -1264,7 +1269,7 @@ function drawV3() {
   bars.forEach((b, i) => { const yy = 452 + i * 38; T(b[0], 16, yy - 4, { s: 10.5, c: INK }); const bw = clampN(Math.abs(b[1]) / 16, 0, 1) * 330; ctx.fillStyle = '#EEE9DA'; ctx.fillRect(16, yy, 330, 14); ctx.fillStyle = b[2]; ctx.fillRect(16, yy, bw, 14); ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.strokeRect(16, yy, 330, 14); T((b[1] >= 0 ? '+' : '-') + Math.abs(b[1]).toFixed(1) + ' mm/yr', 356, yy + 11.5, { s: 11.5, b: true }); });
   const cf = CROPS[state.crop].factor; T('Yield: conventional ' + (cv.yield * cf).toFixed(2) + ', reduced ' + (rd.yield * cf).toFixed(2) + ', no-till ' + (nt.yield * cf).toFixed(2) + ' Mg/ha;  irrigation ' + cv.irr.toFixed(0) + ' / ' + rd.irr.toFixed(0) + ' / ' + nt.irr.toFixed(0) + ' mm', 16, 566, { s: 10.2, c: INK });
   const sand = DATA.texture[state.soil].sand >= 60;
-  T(sand ? 'Coarse soil: tillage dominates, consolidation rate changes nothing.' : 'Finer soil: consolidation rate now matters as well as tillage.', 16, 586, { s: 11, b: true, c: sand ? '#8E4A3A' : '#1B6FD8' });
+  T(consEff < 0.3 ? 'In this soil the consolidation rate changes nothing; tillage is the driver.' : 'Here the consolidation rate matters as well as tillage.', 16, 586, { s: 11, b: true, c: consEff < 0.3 ? '#8E4A3A' : '#1B6FD8' });
   T('Structure curves show the mechanism; bars and yields are the simulated results under your settings.', 16, 604, { s: 10, i: true, c: MUTE });
 }
 
@@ -1716,7 +1721,7 @@ function computeSim() {
 const cropNameAt = (sim, d) => sim.widx[d] >= 0 ? sim.wins[sim.widx[d]].name : 'fallow';
 
 // the field clock: runs through twenty years and dwells slowly on each major wetting event
-const fclock = { day: 85, on: true, speed: 2, pause: 0, pauseTot: 1, lastT: 0, mem: [], lastKd: -1 };
+const fclock = { day: 140, on: true, speed: 2, pause: 0, pauseTot: 1, lastT: 0, mem: [], lastKd: -1 };
 fclock.kd = () => clampN(Math.floor(fclock.day), 0, ND - 1);
 fclock.fd = () => fclock.pause > 0 ? 1 - fclock.pause / fclock.pauseTot : fclock.day - Math.floor(fclock.day);
 const isMajor = (sim, q) => sim.irr[q] > 0 || sim.front[q] >= 20 || sim.drain[q] > 0.3;
@@ -2475,9 +2480,8 @@ document.querySelectorAll('.readout[data-jump]').forEach(el => {
   el.onclick = () => { const sc = SCENES.find(s=>s.id===el.dataset.jump); if (sc) switchScene(sc); };
 });
 setupSceneBar();
-applyPanelChrome(currentScene.id);
 setupButtons();
-refresh();
+switchScene(currentScene);          // full set-up of the starting scene: toolbar, title, legend, canvas size, insight
 loop();
 </script>
 </body>
