@@ -54,31 +54,12 @@
   @media (max-width: 700px) { .canvaswrap { overflow-x: auto; -webkit-overflow-scrolling: touch; } .canvaswrap canvas { min-width: 540px; } }
   body.embed .canvaswrap { overflow: hidden; }
   body.embed .canvaswrap canvas { min-width: 0; }
-  .dss { display: none; margin-top: 0.8rem; padding: 0.75rem 0.8rem; background: #0D1117; border: 1px solid #30363D; border-radius: 10px; }
-  .dss h3 { margin: 0 0 0.55rem; font-size: 0.95rem; color: #D4A94A; }
-  .dssrow { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-bottom: 0.6rem; font-size: 0.78rem; color: #8B949E; }
-  .dssrow input, .dssrow select { background: #161B22; color: #E6EDF3; border: 1px solid #30363D; border-radius: 8px; padding: 0.32rem 0.45rem; font-size: 0.8rem; font-family: inherit; }
-  .dsscards { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.5rem; margin-bottom: 0.6rem; }
-  .dsscard { background: #161B22; border: 1px solid #30363D; border-radius: 8px; padding: 0.45rem 0.6rem; }
-  .dsscard .dt { font-size: 0.68rem; color: #8B949E; } .dsscard .dv { font-size: 1.02rem; font-weight: 700; color: #E6EDF3; } .dsscard .ds { font-size: 0.68rem; color: #8B949E; }
-  .dssadvice { grid-column: 1 / -1; background: #161B22; border: 1px solid #30363D; border-left: 5px solid #3FA55A; border-radius: 8px; padding: 0.55rem 0.75rem; }
-  .dssadvice .dh { font-size: 1rem; font-weight: 700; } .dssadvice .dx { font-size: 0.8rem; color: #C9D1D9; margin-top: 0.15rem; }
-  #dssStrip { width: 100%; border-radius: 8px; display: block; cursor: pointer; }
-  .dssstripwrap { width: 100%; max-width: 100%; }
-  @media (max-width: 700px) { .dssstripwrap { overflow-x: auto; -webkit-overflow-scrolling: touch; } #dssStrip { min-width: 540px; } }
-  .dssnote { font-size: 0.7rem; color: #8B949E; margin-top: 0.4rem; }
-  body.embed .dss { display: none !important; }
   .todaybar { margin: 0.8rem 1.5rem 0; padding: 0.6rem 0.85rem; background: #161B22; border: 1px solid #30363D; border-left: 5px solid #D4A94A; border-radius: 10px; }
   .tbrow { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; font-size: 0.76rem; color: #8B949E; }
   .tbrow input, .tbrow select { background: #0D1117; color: #E6EDF3; border: 1px solid #30363D; border-radius: 8px; padding: 0.3rem 0.45rem; font-size: 0.8rem; font-family: inherit; }
   .tbtitle { font-weight: 700; color: #D4A94A; font-size: 0.86rem; margin-right: 0.3rem; }
   .tbline { margin-top: 0.5rem; font-size: 0.9rem; color: #E6EDF3; line-height: 1.45; } .tbsub { color: #A9B4C0; font-size: 0.8rem; } .tbline a { color: #6CB6FF; font-size: 0.8rem; margin-left: 0.4rem; }
   body.embed .todaybar { display: none !important; }
-  .dsstbl { grid-column: 1 / -1; width: 100%; border-collapse: collapse; font-size: 0.8rem; background: #161B22; border: 1px solid #30363D; border-radius: 8px; }
-  .dsstbl th { text-align: right; color: #8B949E; font-weight: 600; padding: 0.3rem 0.6rem; border-bottom: 1px solid #30363D; font-size: 0.72rem; } .dsstbl th:first-child { text-align: left; }
-  .dsstbl td { text-align: right; padding: 0.22rem 0.6rem; font-weight: 600; } .dsstbl td:first-child { text-align: left; color: #C9D1D9; font-weight: 400; } .dsstbl tr.tot td { border-top: 1px solid #30363D; font-weight: 700; }
-  .dssadvice .dp { font-size: 0.72rem; color: #8B949E; margin-top: 0.3rem; }
-  .gbar { position: relative; height: 8px; border-radius: 4px; background: linear-gradient(90deg, #3FA55A, #E8C14A, #D93025); margin: 0.45rem 0 0.3rem; } .gm { position: absolute; top: -4px; width: 4px; height: 16px; border: 1px solid #111; border-radius: 2px; transform: translateX(-2px); }
   .yearrow { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; } .yrlabel { font-size: 0.74rem; color: #8B949E; }
   .yearstrip { display: flex; gap: 0.3rem; overflow-x: auto; flex: 1; padding-bottom: 0.25rem; scrollbar-width: thin; } .yearstrip .pillbtn { flex: 0 0 auto; } .hasprofile::after { content: ' \25CF'; color: #2E7DE8; font-size: 0.6em; vertical-align: middle; }
   footer { text-align: center; padding: 1.3rem; font-size: 0.78rem; color: #6E7681; }
@@ -117,13 +98,6 @@
       <span id="playLabel" style="font-size:0.74rem; color:#8B949E; min-width:96px; text-align:right;"></span>
     </div>
     <div class="yearrow" id="yearRow" style="display:none;"><span class="yrlabel">Year</span><div class="yearstrip" id="yearStrip"></div></div>
-    <div class="dss" id="dssPanel">
-      <h3>Decision support for the date above</h3>
-      <div class="dsscards" id="dssCards"></div>
-      <div class="dssstripwrap"><canvas id="dssStrip" width="620" height="176"></canvas></div>
-      <div class="dssrow" style="margin-top:0.5rem; margin-bottom:0;"><button class="pillbtn" id="dssCsv">Download the look-ahead (CSV)</button><button class="pillbtn" id="dssSeason">Download this year's irrigation schedule (CSV)</button></div>
-      <div class="dssnote" id="dssNote"></div>
-    </div>
     <div id="figureIndexPanel" style="display:none; height:640px; overflow-y:auto; background:#0D1117; border-radius:8px; padding:0.8rem;"></div>
     <div class="legend" id="legendBox">
       <span><span class="dot" style="background:#E8F4FF;"></span> Evaporation vapor</span>
@@ -283,7 +257,7 @@ function switchScene(sc) {
   const canvasEl = document.getElementById('profileCanvas');
   const panelEl = document.getElementById('figureIndexPanel');
   applyPanelChrome(sc.id); canvas.setAttribute('role', 'img'); canvas.setAttribute('aria-label', (sc.label || '') + ': ' + (sc.title || ''));
-  const pb = document.getElementById('playBar'); pb.style.display = (sc.play || sc.fieldBar) ? 'flex' : 'none'; document.getElementById('fieldBtns').style.display = sc.fieldBar ? 'inline-flex' : 'none'; document.getElementById('dssPanel').style.display = sc.fieldBar ? 'block' : 'none'; document.getElementById('yearRow').style.display = (sc.id === 'v1' || sc.id === 'v2') ? 'flex' : 'none'; yearUi.last = -1; canvas.style.cursor = 'default'; setCanvasH(sc.h || 640); if (sc.fieldBar) document.getElementById('playBtn').textContent = fclock.on ? 'Pause' : 'Play'; document.getElementById('rangeBtns').style.display = (sc.id === 'v1' || sc.id === 'v2') ? 'inline-flex' : 'none';
+  const pb = document.getElementById('playBar'); pb.style.display = (sc.play || sc.fieldBar) ? 'flex' : 'none'; document.getElementById('fieldBtns').style.display = sc.fieldBar ? 'inline-flex' : 'none'; document.getElementById('yearRow').style.display = (sc.id === 'v1' || sc.id === 'v2') ? 'flex' : 'none'; yearUi.last = -1; canvas.style.cursor = 'default'; setCanvasH(sc.h || 640); if (sc.fieldBar) document.getElementById('playBtn').textContent = fclock.on ? 'Pause' : 'Play'; document.getElementById('rangeBtns').style.display = (sc.id === 'v1' || sc.id === 'v2') ? 'inline-flex' : 'none';
   if (sc.play) { play.t = 0; play.on = true; play.hold = 0; document.getElementById('playBtn').textContent = 'Pause'; if (typeof dss !== 'undefined' && dss.ready) dssSyncPlay(sc.id); }
   if (sc.id === 'figs') {
     canvasEl.style.display = 'none'; document.getElementById('swipeHint').style.visibility = 'hidden';
@@ -2570,17 +2544,7 @@ const isoDate = d => d.getUTCFullYear() + '-' + String(d.getUTCMonth() + 1).padS
 
 
 
-function dssStrip(rows, sim) {
-  const cv = document.getElementById('dssStrip'), c = cv.getContext('2d'), Wd = cv.width, Hd = cv.height, n = rows.length, l = 40, r = Wd - 10, bw = (r - l) / n; c.clearRect(0, 0, Wd, Hd); c.fillStyle = '#FBFAF5'; c.fillRect(0, 0, Wd, Hd);
-  const maxM = Math.max(12, ...rows.map(q => Math.max(q.rain, q.irr))), lineY = f => 22 + f * 44, base = 144, barY = v => base - v / maxM * 44, T2 = (s, x, y, o) => { c.font = (o.b ? 'bold ' : '') + (o.s || 10) + 'px sans-serif'; c.fillStyle = o.c || '#1B1F23'; c.textAlign = o.a || 'left'; c.fillText(s, x, y); };
-  c.strokeStyle = '#D8D4C6'; c.lineWidth = 1; [0, 0.5, 1].forEach(f => { c.beginPath(); c.moveTo(l, lineY(f)); c.lineTo(r, lineY(f)); c.stroke(); T2(f.toFixed(1), l - 5, lineY(f) + 3, { a: 'right', c: '#6B7280', s: 9 }); });
-  T2('sensor depletion (0 = wet, 1 = at wilting point)', 4, 12, { b: true, s: 9.5 }); c.strokeStyle = '#D93025'; c.lineWidth = 1.4; c.setLineDash([5, 3]); c.beginPath(); c.moveTo(l, lineY(sim.fTrig)); c.lineTo(r, lineY(sim.fTrig)); c.stroke(); c.setLineDash([]); T2('trigger', r, lineY(sim.fTrig) - 3, { a: 'right', c: '#D93025', b: true, s: 9 });
-  c.strokeStyle = '#5B2FA8'; c.lineWidth = 2.6; c.beginPath(); rows.forEach((q, i) => { const x = l + i * bw + bw / 2, y = lineY(clampN(q.f, 0, 1)); i ? c.lineTo(x, y) : c.moveTo(x, y); }); c.stroke();
-  c.strokeStyle = '#D8D4C6'; c.lineWidth = 1; c.beginPath(); c.moveTo(l, base); c.lineTo(r, base); c.stroke(); T2('rain and irrigation, mm', 4, 92, { b: true, s: 9.5 });
-  c.fillStyle = '#9CC9F0'; c.fillRect(l + 150, 85, 9, 7); T2('rain', l + 162, 92, { s: 9 }); c.fillStyle = '#1F6FE0'; c.fillRect(l + 200, 85, 9, 7); T2('irrigation', l + 212, 92, { s: 9 }); c.fillStyle = '#2C8FA8'; c.beginPath(); c.moveTo(l + 282, 85); c.lineTo(l + 278, 92); c.lineTo(l + 286, 92); c.fill(); T2('drainage day', l + 291, 92, { s: 9 });
-  rows.forEach((q, i) => { const x = l + i * bw; if (q.rain > 0.2) { c.fillStyle = '#9CC9F0'; c.fillRect(x + 2, barY(q.rain), bw / 2 - 2, base - barY(q.rain)); } if (q.irr > 0) { c.fillStyle = '#1F6FE0'; c.fillRect(x + bw / 2, barY(q.irr), bw / 2 - 1, base - barY(q.irr)); } if (q.dr > 0.3) { c.fillStyle = '#2C8FA8'; c.beginPath(); c.moveTo(x + bw / 2, 154); c.lineTo(x + bw / 2 - 4, 148); c.lineTo(x + bw / 2 + 4, 148); c.fill(); }
-    if (i === 0) { c.strokeStyle = '#D93025'; c.lineWidth = 2; c.strokeRect(x + 0.5, 98, bw - 1, 58); } if (i % Math.max(1, Math.ceil(n / 8)) === 0) T2(q.date.getUTCDate() + ' ' + MON[q.date.getUTCMonth()], x + bw / 2, 168, { a: 'center', s: 9, c: '#4B5563' }); });
-}
+
 
 
 
@@ -2703,26 +2667,10 @@ function dssRender(force) {
   const sim = simCache.val; if (!sim) return; const k = fclock.kd(), key = simKey() + '|' + k + '|' + dss.ahead + '|' + dss.mode; if (!force && key === dss.shown) return; dss.shown = key;
   const rows = dssRows(sim), r0 = rows[0], next = rows.slice(1), adv = dssAdvice(sim, rows), dt = dateOfK(k), ay = yearOf(k), need = dssNeed(sim), fT = sim.fTrig, N = dss.ahead;
   const like = 'weather like ' + (1980 + ay) + (dss.mode === 'typ' ? ', a typical year' : dss.mode === 'dry' ? ', a dry year' : dss.mode === 'wet' ? ', a wet year' : '');
-  document.getElementById('todayLine').innerHTML = '<b style="color:' + adv.tone + '">' + adv.head + '</b><span class="tbsub"> &middot; ' + fmtDate(dt) + ' (' + like + ') &middot; sensor ' + r0.f.toFixed(2) + ' of trigger ' + fT.toFixed(2) + ' &middot; next ' + N + ' days: ' + mmTxt(sumKey(next, 'irr')) + ' mm irrigation, ' + mmTxt(sumKey(next, 'rain')) + ' mm rain</span> <a href="#" id="tbDetails">details</a>';
+  document.getElementById('todayLine').innerHTML = '<b style="color:' + adv.tone + '">' + adv.head + '</b><span class="tbsub"> &middot; ' + fmtDate(dt) + ' (' + like + ') &middot; sensor ' + r0.f.toFixed(2) + ' of trigger ' + fT.toFixed(2) + ' &middot; next ' + N + ' days: ' + mmTxt(sumKey(next, 'irr')) + ' mm irrigation, ' + mmTxt(sumKey(next, 'rain')) + ' mm rain</span>';
   const inp = document.getElementById('dssDate'); if (document.activeElement !== inp) inp.value = isoDate(dt);
-  document.getElementById('tbDetails').onclick = e => { e.preventDefault(); document.querySelector('[data-scene="field"]').click(); setTimeout(() => document.getElementById('dssPanel').scrollIntoView({ behavior: 'smooth', block: 'start' }), 60); };
-  if (document.getElementById('dssPanel').style.display === 'none') return;
-  const cell = (v, c) => '<td style="color:' + c + '">' + mmTxt(v) + '</td>', row = (lab, c, key, bold) => '<tr' + (bold ? ' class="tot"' : '') + '><td>' + lab + '</td>' + cell(r0[key], c) + cell(sumKey(next, key), c) + '</tr>';
-  const gauge = '<div class="gbar"><span class="gm" style="left:' + clampN(fT * 100, 0, 100) + '%;background:#5B2FA8"></span><span class="gm" style="left:' + clampN(r0.f * 100, 0, 100) + '%;background:#fff"></span></div>';
-  document.getElementById('dssCards').innerHTML =
-    '<div class="dssadvice" style="border-left-color:' + adv.tone + '"><div class="dh" style="color:' + adv.tone + '">' + adv.head + '</div><div class="dx">' + adv.text + '</div>' + (need > 0 || r0.irr > 0 ? '<div class="dp">In ' + need + ' of the 20 simulated years irrigation was needed in the week from this date.</div>' : '') + '</div>' +
-    '<div class="dsscard"><div class="dt">Sensor at ' + Z_VALUES[state.zIdx] + ' cm</div><div class="dv" style="color:' + (r0.f >= fT ? '#E35C4C' : '#5BD67A') + '">' + r0.f.toFixed(2) + '</div>' + gauge + '<div class="ds">white = now, purple = trigger ' + fT.toFixed(2) + '</div></div>' +
-    '<div class="dsscard"><div class="dt">Crop and roots</div><div class="dv">' + cropNameAt(sim, k) + '</div><div class="ds">roots ' + Math.round(r0.rd) + ' cm, canopy cover ' + Math.round(r0.cv * 100) + '%</div></div>' +
-    '<table class="dsstbl"><tr><th>Water, mm</th><th>Today</th><th>Next ' + N + ' days</th></tr>' + row('Rain', '#6FB1E8', 'rain') + row('Rain reaching the soil', '#6FB1E8', 'thr') + row('Irrigation', '#2E7DE8', 'irr') + row('Soil evaporation', '#E6B23A', 'evap') + row('Transpiration', '#5BD67A', 'tr') + row('Drainage below 1 m', '#3B8FE0', 'dr') + row('Change in soil water', '#C9A8F0', 'store', true) + '</table>';
-  document.getElementById('dssNote').textContent = 'Simulated for weather like ' + (1980 + ay) + ', not a forecast. Every figure is on the same basis as the live indices; the change in soil water closes each balance.';
-  dssStrip(rows, sim);
 }
-function dssCsv(season) {
-  const sim = simCache.val; if (!sim) return; const S = dssScale(sim); let rows, head;
-  if (season) { const ay = yearOf(fclock.kd()), out = []; for (let d = ay * DPY; d < (ay + 1) * DPY; d++) if (sim.irr[d] > 0) out.push([isoDate(dateOfK(d)), 1980 + ay, cropNameAt(sim, d), sim.irr[d].toFixed(1), Math.round(sim.front[d]), sim.fs[d].toFixed(2), sim.fTrig.toFixed(2), Math.round(sim.rd[d])]); head = 'date,weather_like_year,crop,irrigation_mm,wetting_depth_cm,sensor_depletion,trigger_depletion,root_depth_cm'; rows = out; }
-  else { head = 'date,weather_like_year,crop,rain_mm,rain_reaching_soil_mm,irrigation_mm,soil_evaporation_mm,transpiration_mm,drainage_mm,change_in_soil_water_mm,sensor_depletion,trigger_depletion,root_depth_cm'; rows = dssRows(sim).map(r => [isoDate(r.date), 1980 + yearOf(r.k), r.crop, r.rain.toFixed(1), r.thr.toFixed(1), r.irr.toFixed(1), r.evap.toFixed(1), r.tr.toFixed(1), r.dr.toFixed(1), r.store.toFixed(1), r.f.toFixed(2), sim.fTrig.toFixed(2), Math.round(r.rd)]); }
-  const csv = [head].concat(rows.map(r => r.join(','))).join('\n'), a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.download = 'SWAFL_' + (season ? 'irrigation_schedule_' : 'look_ahead_') + DATA.soil_labels[state.soil].replace(/\s+/g, '') + '.csv'; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
-}
+
 function dssLines() {
   const sim = simCache.val; if (!sim) return []; const rows = dssRows(sim), adv = dssAdvice(sim, rows), k = fclock.kd(), next = rows.slice(1);
   return ['Decision support for ' + fmtDate(dateOfK(k)) + ' (weather like ' + (1980 + yearOf(k)) + '): ' + adv.head + '. ' + adv.text, 'Next ' + dss.ahead + ' days (simulated, not a forecast): rain ' + mmTxt(sumKey(next, 'rain')) + ' mm, irrigation ' + mmTxt(sumKey(next, 'irr')) + ' mm, soil evaporation ' + mmTxt(sumKey(next, 'evap')) + ' mm, transpiration ' + mmTxt(sumKey(next, 'tr')) + ' mm, drainage ' + mmTxt(sumKey(next, 'dr')) + ' mm, change in soil water ' + mmTxt(sumKey(next, 'store')) + ' mm.'];
@@ -2746,8 +2694,6 @@ function dssInit() {
   d.onchange = () => go(false); ys.onchange = () => { dss.mode = ys.value; go(false); }; document.getElementById('dssAhead').onchange = e => { dss.ahead = +e.target.value; dssRender(true); };
   document.getElementById('dssToday').onclick = () => { const t = new Date(); d.value = isoDate(new Date(Date.UTC(t.getFullYear(), t.getMonth(), t.getDate()))); go(false); };
   document.getElementById('dssPrev').onclick = () => { fclock.day = Math.max(0, fclock.kd() - 1); stay(); }; document.getElementById('dssNext').onclick = () => { fclock.day = Math.min(ND - 2, fclock.kd() + 1); stay(); };
-  document.getElementById('dssCsv').onclick = () => dssCsv(false); document.getElementById('dssSeason').onclick = () => dssCsv(true);
-  document.getElementById('dssStrip').onclick = e => { const sim = simCache.val; if (!sim) return; const cv = e.currentTarget, r = cv.getBoundingClientRect(), x = (e.clientX - r.left) * cv.width / r.width, rows = dssRows(sim), i = clampN(Math.floor((x - 40) / ((cv.width - 50) / rows.length)), 0, rows.length - 1); fclock.day = rows[i].k; stay(); };
   if (!document.body.classList.contains('embed')) { const t = new Date(); d.value = isoDate(new Date(Date.UTC(t.getFullYear(), t.getMonth(), t.getDate()))); go(false); dss.ready = true; }
 }
 
