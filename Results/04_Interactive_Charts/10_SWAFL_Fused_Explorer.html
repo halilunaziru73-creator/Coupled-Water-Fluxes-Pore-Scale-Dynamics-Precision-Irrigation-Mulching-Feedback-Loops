@@ -209,7 +209,7 @@ const SCENES = [
     legend:[['#2E9E4F','Irrigation saved'],['#2E6FD0','Extra drainage'],['#E8912D','Extra transpiration'],['#1B1F23','Evaporation saved']], insight:"Water saved from evaporation by mulching is redirected mainly into reduced irrigation in dry years, mainly into extra drainage in wet years, crossing over near rain x1.2." },
   { id:"n3", label:"N3 Regime Map", color:"#C96BD9", draw: () => { drawN3Chart(); hotN3(); }, title:"Regime map: where vapor gives way to drainage",
     legend:[['#8A8F98','Vapor rising = evaporation'],['#1F66C8','Droplets falling = drainage'],['#D93025','Your rainfall']], insight:"Climate and mulch act non-additively on the evaporation-drainage boundary, reaching 15% of irrigation at combined extremes." },
-  { id:"r1", label:"R1 Root Structure", color:"#8B5E34", h:720, draw: () => drawR1Chart(), interactive:true, onDown: p => r1Down(p), onMove: p => r1Move(p), onUp: () => { r1ui.drag = false; }, onLeave: () => { r1ui.drag = false; }, title:"Root structure: where the roots are and where the water is taken",
+  { id:"r1", label:"R1 Root Structure", color:"#8B5E34", h:1010, draw: () => drawR1Chart(), interactive:true, onDown: p => r1Down(p), onMove: p => r1Move(p), onUp: () => { r1ui.drag = false; }, onLeave: () => { r1ui.drag = false; }, title:"Root structure: where the roots are and where the water is taken",
     legend:[['#8B5E34','Root density (relative, model)'],['#2E9E4F','Water taken up today'],['#1B6FE0','Water taken up this year'],['#D93025','Depth of 50% and 90% of the uptake']], insight:"Roots are drawn from the model's own root depth, root density and uptake for every layer and day; root density is relative, not a measured root length." },
   { id:"figs", label:"Figures and Videos", color:"#8B949E", draw: null, title:"Figures and Videos", legend:null, insight:"Every figure and video from the results, listed by name. Click a figure to jump to the scene it belongs to, or open its image on GitHub." },
 ];
@@ -2918,6 +2918,50 @@ function r1Down(p) {
   return false;
 }
 function r1Move(p) { if (r1ui.drag) { r1Set(p); return true; } canvas.style.cursor = (p.x >= R1.ax0 && p.x <= R1.ax1 && p.y >= R1.ay0 && p.y <= R1.ay1) ? 'ew-resize' : 'default'; return false; }
+
+// R1: the same root analysis for every soil, tillage and crop option, so the effect of each choice can be compared
+const r1Alt = { cache: {}, queue: [] };
+function r1Metrics(over) {
+  const sv = Object.assign({}, state), cv = Object.assign({}, current); let out = null;
+  try {
+    Object.assign(state, over); if (state.trigMode === 'own') state.trigIdx = ownIdx(state.soil);
+    Object.assign(current, model(VFF_VALUES[state.vffIdx], RAIN_VALUES[state.rainIdx]));
+    const sim = computeSim(), y = r1Years(sim), m = f => y.reduce((a, q) => a + q[f], 0) / y.length;
+    out = { rd: m('mxRd'), d50: m('d50'), d90: m('d90'), top30: m('top30') * 100 };
+  } finally { Object.assign(state, sv); Object.assign(current, cv); }
+  return out;
+}
+function r1AltGet(over) {
+  const base = Object.assign({ soil: state.soil, till: state.till, crop: state.crop }, over), k = simKey() + '|' + base.soil + '|' + base.till + '|' + base.crop;
+  if (r1Alt.cache[k]) return r1Alt.cache[k];
+  if (!r1Alt.queue.some(q => q.k === k)) r1Alt.queue.push({ k, base }); return null;
+}
+function r1AltStep() {
+  const q = r1Alt.queue.shift(); if (!q) return; r1Alt.cache[q.k] = r1Metrics(q.base);
+  const ks = Object.keys(r1Alt.cache); if (ks.length > 120) delete r1Alt.cache[ks[0]];
+}
+function drawR1Compare() {
+  const C = R1, x0 = 16, y0 = 722; T('What your choices do to the roots (20-year means)', x0, y0, { s: 11, b: true });
+  T('Bar = deepest roots. Dark tick = depth of half the water taken, light tick = depth of nine tenths. Click a row to switch to it.', x0, y0 + 14, { s: 9.5, c: MUTE });
+  const groups = [['Soil', Object.keys(DATA.soil_labels).map(k => [k, DATA.soil_labels[k], 'soil'])], ['Tillage', Object.keys(TILL_LABELS).map(k => [k, TILL_LABELS[k], 'till'])], ['Crop', [['cereal', 'Cereal/Oilseed', 'crop'], ['legume', 'Legume', 'crop'], ['vegetable', 'Vegetable', 'crop']]]];
+  let y = y0 + 34; const bx = 120, bw = 250, sc = bw / 100;
+  for (const [gn, rows] of groups) {
+    T(gn, x0, y, { s: 10.5, b: true, c: '#6B4423' }); y += 6;
+    for (const [k, lab, f] of rows) {
+      const m = r1AltGet({ [f]: k }), on = state[f] === k; y += 13;
+      if (on) { ctx.fillStyle = 'rgba(212,169,74,.28)'; ctx.fillRect(x0, y - 11, 612, 13); }
+      T(lab, x0 + 6, y - 1, { s: 9.5, b: on });
+      ctx.fillStyle = '#F4F1E6'; ctx.fillRect(bx, y - 9, bw, 9);
+      if (m) {
+        ctx.fillStyle = '#C9B08A'; ctx.fillRect(bx, y - 9, m.rd * sc, 9);
+        ctx.fillStyle = '#1B6B35'; ctx.fillRect(bx + m.d50 * sc - 1.5, y - 11, 3, 13); ctx.fillStyle = '#2E9E4F'; ctx.fillRect(bx + m.d90 * sc - 1.5, y - 11, 3, 13);
+        T('roots ' + Math.round(m.rd) + ' cm | 50% by ' + m.d50.toFixed(0) + ' | 90% by ' + m.d90.toFixed(0) + ' cm', bx + bw + 8, y - 1, { s: 9, c: INK });
+      } else T('working it out', bx + 6, y - 1, { s: 9, c: MUTE });
+      hot(x0, y - 11, 612, 13, () => { state[f] = k; refresh(); }, 'click to use ' + lab);
+    }
+    y += 8;
+  }
+}
 function drawR1Chart() {
   paper(); const sim = seasonSim(), { dd } = n1Bucket(sim), ay = yearOf(dd), yrs = r1Years(sim), Y = yrs[ay], t = nowSec(), C = R1, ppc = C.ppc, rd = sim.rd[dd], rho = sim.rho[dd], upt = sim.upt[dd], s = sim.s[dd], cv = sim.cover[dd];
   T('Root structure: where the roots are and where the water is taken', 16, 22, { s: 14, b: true });
@@ -2968,6 +3012,7 @@ function drawR1Chart() {
   hot(16, 676, 74, 22, () => { n1ui.play = !n1ui.play; }, n1ui.play ? 'click to hold the day' : 'click to replay the season');
   const crop = cropNameAt(sim, dd), live = cv > 0.03;
   TW(Y.y + ' (' + (crop || 'fallow') + '): roots reached ' + Math.round(Y.mxRd) + ' cm. Half of the water the crop took came from the top ' + (Y.d50 || 0) + ' cm and nine tenths from the top ' + (Y.d90 || 0) + ' cm; ' + Math.round(Y.top30 * 100) + '% came from the top 30 cm. ' + (live ? 'On this day the roots reach ' + Math.round(rd) + ' cm and the crop takes ' + upt.reduce((a, b) => a + b, 0).toFixed(1) + ' mm.' : 'On this day there is no crop taking water.'), 100, 680, 500, { s: 10.5 });
+  drawR1Compare(); r1AltStep();
 }
 
 let frameN = 0, dssFrame = 0, ysFrame = 0;
