@@ -99,6 +99,14 @@
   @media (max-width: 920px) { .wrap { grid-template-columns: 1fr; } }
   @media (max-width: 520px) { .readouts { grid-template-columns: 1fr 1fr; } .readout { min-width: 0; } }
   body.embed header { display: none; }
+
+  .gui { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; margin: 0.5rem 0.8rem 0; padding: 0.35rem 0.65rem; background: #161B22; border: 1px solid #30363D; border-radius: 8px; font-size: 0.72rem; color: #8B949E; }
+  .gui select { background: #0D1117; color: #E6EDF3; border: 1px solid #30363D; border-radius: 8px; padding: 0.15rem 0.35rem; font-size: 0.74rem; max-width: 230px; }
+  .gui .pillbtn.on { background: #7FD4FF; color: #0D1117; border-color: #7FD4FF; font-weight: 700; }
+  .guimsg { color: #5BD67A; font-size: 0.72rem; margin-left: 0.3rem; }
+  .guihelp { margin: 0.35rem 0.8rem 0; padding: 0.4rem 0.7rem; background: #1C2128; border-radius: 8px; font-size: 0.74rem; color: #C9D1D9; }
+  .delta { display: block; font-size: 0.62rem; font-weight: 700; letter-spacing: 0; margin-top: 0.05rem; } .delta.good { color: #5BD67A; } .delta.bad { color: #FF8A7A; } .delta.neu { color: #8B949E; }
+  body.embed .gui, body.embed .guihelp { display: none !important; }
 </style>
 </head>
 <body>
@@ -110,6 +118,17 @@
 <div class="shell">
 <nav class="scenebar" id="sceneBar" aria-label="Scenes"></nav>
 <main class="mainarea">
+<div class="gui" id="guiBar">
+  <label>Scenario <select id="guiPreset"><option value="">Choose a ready-made case</option></select></label>
+  <button class="pillbtn" id="guiReset" title="Back to the default settings (R)">Reset</button>
+  <button class="pillbtn" id="guiPin" title="Keep these results as a baseline and show every change against it (P)">Pin as baseline</button>
+  <button class="pillbtn" id="guiLink" title="Copy a link that opens this scene with these settings">Copy link</button>
+  <button class="pillbtn" id="guiPng" title="Save the picture on screen">Save picture</button>
+  <button class="pillbtn" id="guiCsv" title="Save the live numbers as a spreadsheet file">Save numbers</button>
+  <button class="pillbtn" id="guiHelp" title="Keyboard shortcuts (?)">Keys ?</button>
+  <span class="guimsg" id="guiMsg"></span>
+</div>
+<div class="guihelp" id="guiHelpBox" style="display:none;"><b>Keyboard</b> &nbsp; [ and ] previous / next scene &nbsp;&middot;&nbsp; Space hold / play &nbsp;&middot;&nbsp; &larr; &rarr; step one day &nbsp;&middot;&nbsp; R reset &nbsp;&middot;&nbsp; P pin baseline &nbsp;&middot;&nbsp; ? this help. Click any live number to open the scene it comes from. Drag on the graphs to move the day.</div>
 <div class="todaybar" id="todayBar">
   <div class="tbrow">
     <span class="tbtitle">Today's prediction</span>
@@ -3046,6 +3065,66 @@ buildYearStrip(); autoWire();
 switchScene(currentScene);          // full set-up of the starting scene: toolbar, title, legend, canvas size, insight
 dssInit();                          // the field starts at today's date, with weather like a typical year
 loop();
+
+// ===================== dashboard controls: ready-made cases, reset, baseline comparison, link, saves, keys =====================
+(function guiSetup() {
+  const $ = id => document.getElementById(id), msg = t => { const m = $('guiMsg'); m.textContent = t; clearTimeout(msg.t); msg.t = setTimeout(() => m.textContent = '', 2600); };
+  const KEYS = ['soil', 'till', 'tcIdx', 'vffIdx', 'capIdx', 'rainIdx', 'tempIdx', 'trigIdx', 'zIdx', 'nIdx', 'method', 'mulchType', 'crop'];
+  const DEFAULT = {}; KEYS.forEach(k => DEFAULT[k] = state[k]); DEFAULT.trigBy = {};
+  const soilKey = n => DATA.soils.find(k => DATA.soil_labels[k] === n) || DATA.soils[0];
+  const mul = k => { const m = k === 'none' ? { vff: 1, cap: 1 } : mulchBy(k); return { mulchType: k === 'none' ? state.mulchType : k, vffIdx: nearestIdx(VFF_VALUES, m.vff), capIdx: nearestIdx(CAP_VALUES, m.cap) }; };
+  const PRESETS = [
+    ['Default: Coarse Loam, bare, normal climate', {}],
+    ['Dry year on Sand, no mulch', { soil: soilKey('Sand'), rainIdx: nearestIdx(RAIN_VALUES, 0.6), tempIdx: nearestIdx(TEMP_VALUES, 1.0), ...mul('none') }],
+    ['Wheat straw mulch on Loam, drip 10 to 20 cm', { soil: soilKey('Loam'), method: 'M04_Drip10-20cm', ...mul('straw') }],
+    ['Wet year on Silty Clay Loam, no-till', { soil: soilKey('Silty Clay Loam'), till: 'notill', rainIdx: nearestIdx(RAIN_VALUES, 1.3), ...mul('none') }],
+    ['Hot year (+3 °C), vegetables on Sandy Loam', { soil: soilKey('Sandy Loam'), crop: 'vegetable', tempIdx: nearestIdx(TEMP_VALUES, 3.0), ...mul('none') }],
+    ['Plastic film, deep drip 40 to 50 cm, Clay Loam', { soil: soilKey('Clay Loam'), method: 'M09_Drip40-50cm', ...mul('plastic') }],
+    ['Low nitrogen (40%), legume on Silt Loam', { soil: soilKey('Silt Loam'), crop: 'legume', nIdx: nearestIdx(NRATE_VALUES, 40), ...mul('none') }],
+  ];
+  const sel = $('guiPreset'); PRESETS.forEach((p, i) => { const o = document.createElement('option'); o.value = i; o.textContent = p[0]; sel.appendChild(o); });
+  const apply = o => { state.trigBy = {}; applyState(Object.assign({}, DEFAULT, o)); };
+  sel.onchange = () => { if (sel.value === '') return; apply(PRESETS[+sel.value][1]); msg('Loaded: ' + PRESETS[+sel.value][0]); };
+  const reset = () => { apply({}); sel.value = ''; msg('Settings reset'); }; $('guiReset').onclick = reset;
+  // baseline comparison
+  let base = null; const GOOD = { roEvap: -1, roDrain: -1, roIrr: -1, roYield: 1, roNL: -1, roIE: 1, roTransp: 0, roET: 0, roRain: 0 };
+  const NUM = { roEvap: () => current.evap, roDrain: () => current.drain, roIrr: () => current.irr, roYield: () => current.yield * CROPS[state.crop].factor, roTransp: () => current.transp, roET: () => current.et, roNL: () => current.nl, roIE: () => current.ie, roRain: () => current.rain };
+  const DEC = { roEvap: 1, roDrain: 1, roIrr: 0, roYield: 2, roTransp: 0, roET: 0, roNL: 1, roIE: 2, roRain: 0 };
+  function deltas() {
+    document.querySelectorAll('.readout .delta').forEach(e => e.remove());
+    if (!base) return;
+    Object.keys(NUM).forEach(id => { const el = $(id); if (!el) return; const d = NUM[id]() - base[id], tiny = Math.abs(d) < Math.pow(10, -DEC[id]) / 2, sp = document.createElement('span');
+      sp.className = 'delta ' + (tiny || !GOOD[id] ? 'neu' : (d * GOOD[id] > 0 ? 'good' : 'bad')); sp.textContent = tiny ? 'same as baseline' : (d > 0 ? '+' : '') + d.toFixed(DEC[id]) + ' vs baseline'; el.appendChild(sp); });
+  }
+  const pin = () => { if (base) { base = null; $('guiPin').classList.remove('on'); $('guiPin').textContent = 'Pin as baseline'; deltas(); msg('Baseline cleared'); return; }
+    base = {}; Object.keys(NUM).forEach(id => base[id] = NUM[id]()); $('guiPin').classList.add('on'); $('guiPin').textContent = 'Baseline pinned (click to clear)'; deltas(); msg('Change any setting to see it against this baseline'); };
+  $('guiPin').onclick = pin;
+  const origRefresh = refresh; refresh = function () { origRefresh.apply(this, arguments); deltas(); queueHash(); };
+  // link
+  const enc = () => { const o = KEYS.map(k => k + '=' + encodeURIComponent(state[k])); o.unshift('scene=' + currentScene.id); return o.join('&'); };
+  let ht = 0; function queueHash() { clearTimeout(ht); ht = setTimeout(() => { try { if (!document.body.classList.contains('embed')) history.replaceState(null, '', '#' + enc()); } catch (e) {} }, 400); }
+  $('guiLink').onclick = () => { const u = location.href.split('#')[0] + '#' + enc(); const done = () => msg('Link copied'); try { navigator.clipboard.writeText(u).then(done, () => { prompt('Copy this link', u); }); } catch (e) { prompt('Copy this link', u); } };
+  function fromHash() { const h = location.hash.replace(/^#/, ''); if (!h) return; const q = new URLSearchParams(h), o = {};
+    KEYS.forEach(k => { if (!q.has(k)) return; const v = q.get(k); if (/Idx$/.test(k)) { const n = +v; if (isFinite(n)) o[k] = n; } else o[k] = v; });
+    if (o.soil && !DATA.soils.includes(o.soil)) delete o.soil; if (o.crop && !CROPS[o.crop]) delete o.crop; if (o.till && !TILLS.includes(o.till)) delete o.till;
+    if (Object.keys(o).length) { state.trigBy = {}; applyState(Object.assign({}, DEFAULT, o)); }
+    const sc = SCENES.find(x => x.id === q.get('scene')); if (sc && sc !== currentScene) switchScene(sc); }
+  // saves
+  $('guiPng').onclick = () => { const a = document.createElement('a'); a.download = 'SWAFL_' + currentScene.id + '.png'; a.href = canvas.toDataURL('image/png'); a.click(); msg('Picture saved'); };
+  $('guiCsv').onclick = () => { const rows = [['setting', 'value'], ['scene', currentScene.label], ['soil', DATA.soil_labels[state.soil]], ['tillage', TILL_LABELS[state.till]], ['crop', CROPS[state.crop].label || state.crop], ['mulch strength (vapour-flux factor)', VFF_VALUES[state.vffIdx]], ['mulch capacity (mm)', CAP_VALUES[state.capIdx]], ['rainfall scale', RAIN_VALUES[state.rainIdx]], ['temperature shift (C)', TEMP_VALUES[state.tempIdx]], ['irrigation method', state.method], ['nitrogen rate (%)', NRATE_VALUES[state.nIdx]], ['sensor depth (cm)', Z_VALUES[state.zIdx]], ['', ''], ['result', 'value']];
+    [['soil evaporation (mm/yr)', 'roEvap'], ['drainage below 1 m (mm/yr)', 'roDrain'], ['irrigation (mm/yr)', 'roIrr'], ['yield', 'roYield'], ['transpiration (mm/yr)', 'roTransp'], ['evapotranspiration (mm/yr)', 'roET'], ['nitrogen leaching (kg N/ha)', 'roNL'], ['irrigation efficiency (kg/m3)', 'roIE'], ['rainfall (mm/yr)', 'roRain']].forEach(([l, id]) => rows.push([l, NUM[id]().toFixed(DEC[id] + 1)]));
+    const csv = rows.map(r => r.map(c => '"' + String(c).replace(/"/g, '""') + '"').join(',')).join('\r\n'), a = document.createElement('a'); a.download = 'SWAFL_settings_and_results.csv'; a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.click(); msg('Numbers saved'); };
+  $('guiHelp').onclick = () => { const b = $('guiHelpBox'); b.style.display = b.style.display === 'none' ? 'block' : 'none'; };
+  // keys
+  document.addEventListener('keydown', e => { if (e.ctrlKey || e.metaKey || e.altKey || /INPUT|SELECT|TEXTAREA/.test((e.target.tagName || '')) && e.key !== 'Escape') return;
+    const i = SCENES.indexOf(currentScene);
+    if (e.key === ']') switchScene(SCENES[(i + 1) % SCENES.length]); else if (e.key === '[') switchScene(SCENES[(i + SCENES.length - 1) % SCENES.length]);
+    else if (e.key === 'r' || e.key === 'R') reset(); else if (e.key === 'p' || e.key === 'P') pin(); else if (e.key === '?') $('guiHelp').click();
+    else if (e.key === ' ') { const b = $('playBtn'); if (currentScene.id === 'n1' || currentScene.id === 'r1') n1ui.play = !n1ui.play; else if (b && b.offsetParent) b.click(); else return; e.preventDefault(); }
+    else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { const d = e.key === 'ArrowRight' ? 1 : -1; if (document.getElementById('dssDate') && (currentScene.id === 'field' || currentScene.id === 'n1' || currentScene.id === 'r1')) { n1ui.play = false; fclock.pause = 0; fclock.mem = []; fclock.day = clampN(Math.round(fclock.day) + d, 0, ND - 1); e.preventDefault(); } } });
+  window.__guiFromHash = fromHash; window.__guiDeltas = deltas;
+})();
+if (window.__guiFromHash) window.__guiFromHash(); refresh();
 </script>
 </body>
 </html>
