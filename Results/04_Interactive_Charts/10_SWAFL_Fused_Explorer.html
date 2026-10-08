@@ -71,12 +71,40 @@
   .yearstrip { display: flex; gap: 0.3rem; overflow-x: auto; flex: 1; padding-bottom: 0.25rem; scrollbar-width: thin; } .yearstrip .pillbtn { flex: 0 0 auto; } .hasprofile::after { content: ' \25CF'; color: #2E7DE8; font-size: 0.6em; vertical-align: middle; }
   footer { text-align: center; padding: 1.3rem; font-size: 0.78rem; color: #6E7681; }
   footer a { color: #7FD4FF; }
+
+  /* compact layout */
+  header { display: flex; align-items: center; justify-content: space-between; gap: 0.8rem; flex-wrap: wrap; padding: 0.55rem 1rem; text-align: left; }
+  header h1 { margin: 0; font-size: 1.05rem; }
+  .shell { grid-template-columns: 172px minmax(0, 1fr); }
+  .scenebar { gap: 0.2rem; padding: 0.55rem 0.5rem; }
+  .scenebtn { padding: 0.32rem 0.45rem; font-size: 0.76rem; gap: 0.4rem; border-radius: 6px; }
+  .scenebtn .no { min-width: 1.45rem; font-size: 0.64rem; }
+  .todaybar { margin: 0.5rem 0.8rem 0; padding: 0.4rem 0.65rem; border-radius: 8px; }
+  .tbrow { gap: 0.35rem; font-size: 0.72rem; }
+  .tbrow .pillbtn { padding: 0.2rem 0.5rem; font-size: 0.72rem; }
+  .tbrow input, .tbrow select { padding: 0.15rem 0.35rem; font-size: 0.74rem; }
+  .tbline { margin-top: 0.3rem; font-size: 0.8rem; line-height: 1.35; }
+  .insight { margin: 0.5rem 0.8rem 0; padding: 0.4rem 0.75rem; font-size: 0.78rem; }
+  .wrap { padding: 0.5rem 0.8rem 0.6rem; gap: 0.8rem; grid-template-columns: 1.25fr 1fr; }
+  .panel { padding: 0.65rem 0.8rem; border-radius: 8px; }
+  .panel h2 { font-size: 0.88rem; margin: 0 0 0.45rem; padding-bottom: 0.3rem; }
+  .row { margin-bottom: 0.5rem; } .row label { font-size: 0.76rem; margin-bottom: 0.15rem; }
+  .soilbtns, .tillbtns { gap: 0.25rem; margin-bottom: 0.5rem; }
+  .pillbtn { padding: 0.2rem 0.5rem; font-size: 0.72rem; }
+  .readouts { grid-template-columns: repeat(3, 1fr); gap: 0.4rem; margin-top: 0.5rem; }
+  .readout { padding: 0.35rem 0.5rem; } .readout .label { font-size: 0.6rem; } .readout .value { font-size: 1rem; margin-top: 0; }
+  .legend { margin-top: 0.35rem; gap: 0.6rem; font-size: 0.66rem; }
+  footer { padding: 0.5rem; font-size: 0.72rem; }
+  @media (max-width: 899px) { .shell { display: block; } header { padding: 0.5rem 0.8rem; } .todaybar, .insight { margin-left: 0.5rem; margin-right: 0.5rem; } .wrap { padding: 0.5rem; } }
+  @media (max-width: 920px) { .wrap { grid-template-columns: 1fr; } }
+  @media (max-width: 520px) { .readouts { grid-template-columns: 1fr 1fr; } .readout { min-width: 0; } }
+  body.embed header { display: none; }
 </style>
 </head>
 <body>
 <header>
   <h1>SWAFL &middot; Soil-Water-Atmosphere Feedback Loop Explorer</h1>
-  <div style="text-align:center; margin-top:0.5rem;"><button id="reportBtn" class="pillbtn active" style="font-weight:700;">Download report (PDF)</button></div>
+  <button id="reportBtn" class="pillbtn active" style="font-weight:700;">Download report (PDF)</button>
 
 </header>
 <div class="shell">
@@ -107,7 +135,6 @@
       <span id="playLabel" style="font-size:0.74rem; color:#8B949E; min-width:96px; text-align:right;"></span>
     </div>
     <div class="yearrow" id="yearRow" style="display:none;"><span class="yrlabel">Year</span><div class="yearstrip" id="yearStrip"></div></div>
-    <div id="figureIndexPanel" style="display:none; height:640px; overflow-y:auto; background:#0D1117; border-radius:8px; padding:0.8rem;"></div>
     <div class="legend" id="legendBox">
       <span><span class="dot" style="background:#E8F4FF;"></span> Evaporation vapor</span>
       <span><span class="dot" style="background:#7FD4FF;"></span> Drainage droplets</span>
@@ -209,9 +236,8 @@ const SCENES = [
     legend:[['#2E9E4F','Irrigation saved'],['#2E6FD0','Extra drainage'],['#E8912D','Extra transpiration'],['#1B1F23','Evaporation saved']], insight:"Water saved from evaporation by mulching is redirected mainly into reduced irrigation in dry years, mainly into extra drainage in wet years, crossing over near rain x1.2." },
   { id:"n3", label:"N3 Regime Map", color:"#C96BD9", draw: () => { drawN3Chart(); hotN3(); }, title:"Regime map: where vapor gives way to drainage",
     legend:[['#8A8F98','Vapor rising = evaporation'],['#1F66C8','Droplets falling = drainage'],['#D93025','Your rainfall']], insight:"Climate and mulch act non-additively on the evaporation-drainage boundary, reaching 15% of irrigation at combined extremes." },
-  { id:"r1", label:"R1 Root Structure", color:"#8B5E34", h:1010, draw: () => drawR1Chart(), interactive:true, onDown: p => r1Down(p), onMove: p => r1Move(p), onUp: () => { r1ui.drag = false; }, onLeave: () => { r1ui.drag = false; }, title:"Root structure: where the roots are and where the water is taken",
+  { id:"r1", label:"R1 Root Structure", color:"#8B5E34", h:1030, draw: () => drawR1Chart(), interactive:true, onDown: p => r1Down(p), onMove: p => r1Move(p), onUp: () => { r1ui.drag = false; }, onLeave: () => { r1ui.drag = false; }, title:"Root structure: where the roots are and where the water is taken",
     legend:[['#8B5E34','Root density (relative, model)'],['#2E9E4F','Water taken up today'],['#1B6FE0','Water taken up this year'],['#D93025','Depth of 50% and 90% of the uptake']], insight:"Roots are drawn from the model's own root depth, root density and uptake for every layer and day; root density is relative, not a measured root length." },
-  { id:"figs", label:"Figures and Videos", color:"#8B949E", draw: null, title:"Figures and Videos", legend:null, insight:"Every figure and video from the results, listed by name. Click a figure to jump to the scene it belongs to, or open its image on GitHub." },
 ];
 let currentScene = SCENES[0];
 
@@ -269,73 +295,13 @@ function switchScene(sc) {
   updateInsight();
   document.getElementById('insightBox').style.borderLeftColor = sc.color;
   const canvasEl = document.getElementById('profileCanvas');
-  const panelEl = document.getElementById('figureIndexPanel');
   applyPanelChrome(sc.id); canvas.setAttribute('role', 'img'); canvas.setAttribute('aria-label', (sc.label || '') + ': ' + (sc.title || ''));
-  const pb = document.getElementById('playBar'); pb.style.display = sc.id === 'figs' ? 'none' : 'flex'; document.getElementById('playRange').style.display = (sc.play || sc.fieldBar) ? '' : 'none'; document.getElementById('fieldBtns').style.display = sc.fieldBar ? 'inline-flex' : 'none'; document.getElementById('yearRow').style.display = (sc.id === 'v1' || sc.id === 'v2') ? 'flex' : 'none'; yearUi.last = -1; autoEnter(sc, prevId); if (sc.id === 'n1' && prevId !== 'n1') { state.n1Prev = { mode: state.trigMode, idx: state.trigIdx }; refresh(); } else if (prevId === 'n1' && sc.id !== 'n1' && state.n1Prev) { state.trigMode = state.n1Prev.mode; if (state.trigMode === 'common') state.trigIdx = state.n1Prev.idx; state.n1Prev = null; refresh(); } canvas.style.cursor = 'default'; setCanvasH(sc.h || 640); if (sc.fieldBar) document.getElementById('playBtn').textContent = fclock.on ? 'Pause' : 'Play'; document.getElementById('rangeBtns').style.display = (sc.id === 'v1' || sc.id === 'v2') ? 'inline-flex' : 'none';
+  const pb = document.getElementById('playBar'); pb.style.display = 'flex'; document.getElementById('playRange').style.display = (sc.play || sc.fieldBar) ? '' : 'none'; document.getElementById('fieldBtns').style.display = sc.fieldBar ? 'inline-flex' : 'none'; document.getElementById('yearRow').style.display = (sc.id === 'v1' || sc.id === 'v2') ? 'flex' : 'none'; yearUi.last = -1; autoEnter(sc, prevId); if (sc.id === 'n1' && prevId !== 'n1') { state.n1Prev = { mode: state.trigMode, idx: state.trigIdx }; refresh(); } else if (prevId === 'n1' && sc.id !== 'n1' && state.n1Prev) { state.trigMode = state.n1Prev.mode; if (state.trigMode === 'common') state.trigIdx = state.n1Prev.idx; state.n1Prev = null; refresh(); } canvas.style.cursor = 'default'; setCanvasH(sc.h || 640); if (sc.fieldBar) document.getElementById('playBtn').textContent = fclock.on ? 'Pause' : 'Play'; document.getElementById('rangeBtns').style.display = (sc.id === 'v1' || sc.id === 'v2') ? 'inline-flex' : 'none';
   if (sc.play) { play.t = 0; play.on = true; play.hold = 0; document.getElementById('playBtn').textContent = 'Pause'; if (typeof dss !== 'undefined' && dss.ready) dssSyncPlay(sc.id); }
-  if (sc.id === 'figs') {
-    canvasEl.style.display = 'none'; document.getElementById('swipeHint').style.visibility = 'hidden';
-    panelEl.style.display = 'block';
-    renderFigureIndex();
-  } else {
-    canvasEl.style.display = 'block'; document.getElementById('swipeHint').style.visibility = 'visible';
-    panelEl.style.display = 'none';
-  }
+  canvasEl.style.display = 'block'; document.getElementById('swipeHint').style.visibility = 'visible';
   refresh();
 }
 
-const VIDEOS = [
-  { file: "V1_Sensor_and_irrigation_1994.mp4", title: "Sensor suction at five depths and irrigation demand through the 1994 season" },
-  { file: "V2_Profiles_1994.mp4", title: "Soil profile evolution (pressure head with depth) through 1994" },
-  { file: "V3_Tillage_structure_20yr.mp4", title: "Tillage and structural consolidation over 20 years" },
-  { file: "V4_Mulch_vs_bare_1994.mp4", title: "Mulched versus bare soil evaporation, 1994" },
-  { file: "V5_Feedback_trajectories_1994.mp4", title: "Feedback-loop trajectories through the 1994 season" },
-  { file: "V7_Drivers_of_SHP.mp4", title: "What drives change in soil hydraulic properties: tillage and consolidation rate across soils" },
-  { file: "V6_SHP_drivers_and_mulch_dynamic_control.mp4", title: "Drivers of change in soil hydraulic properties and mulch as a dynamic evaporation control" },
-];
-
-function renderFigureIndex() {
-  const panel = document.getElementById('figureIndexPanel');
-  if (panel.dataset.built) return;
-  panel.dataset.built = '1';
-  const head = (txt, color) => '<div style="font-weight:700; font-size:0.84rem; color:' + color + '; margin:0.2rem 0 0.5rem; border-bottom:1px solid #30363D; padding-bottom:0.25rem;">' + txt + '</div>';
-  let html = '';
-
-  html += head('Videos', '#D4A94A');
-  html += '<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0.7rem; margin-bottom:1.1rem;">';
-  VIDEOS.forEach(v => {
-    html += '<div style="background:#161B22; border:1px solid #30363D; border-radius:8px; overflow:hidden;">' +
-      '<video controls preload="none" src="../05_Videos/' + v.file + '" style="width:100%; display:block; background:#000;"></video>' +
-      '<div style="padding:0.4rem 0.55rem; font-size:0.74rem; font-weight:600; color:#E6EDF3;">' + v.title + '</div></div>';
-  });
-  html += '</div>';
-  html += '<div style="margin-bottom:1.2rem;"><a href="../05_Videos/" target="_blank" style="font-size:0.74rem; color:#7FD4FF; text-decoration:none; border:1px solid #30363D; border-radius:10px; padding:0.2rem 0.65rem;">Open all videos on one page &rarr;</a></div>';
-
-  html += head('Figures', '#D4A94A');
-  const groups = {};
-  FIGURES.forEach(f => { (groups[f.scene] = groups[f.scene] || []).push(f); });
-  SCENES.filter(sc => sc.id !== 'figs').forEach(sc => {
-    const items = groups[sc.id] || [];
-    if (!items.length) return;
-    html += '<div style="margin-bottom:1rem;"><div style="font-weight:700; font-size:0.78rem; color:' + sc.color + '; margin-bottom:0.35rem;">' + sc.label + '</div>';
-    items.forEach(f => {
-      html += '<div class="figidx-item" data-jump="' + sc.id + '" style="padding:0.4rem 0.5rem; border-radius:6px; margin-bottom:0.2rem; display:flex; justify-content:space-between; align-items:flex-start; gap:0.5rem;">' +
-        '<div style="cursor:pointer; flex:1;">' +
-        '<span style="color:#E6EDF3; font-size:0.8rem; font-weight:600;">' + f.title + '</span>' +
-        '<div style="color:#8B949E; font-size:0.7rem; margin-top:0.1rem;">' + f.caption + '</div>' +
-        '</div>' +
-        '<a href="' + f.url + '" target="_blank" onclick="event.stopPropagation()" style="flex-shrink:0; font-size:0.68rem; color:#7FD4FF; text-decoration:none; border:1px solid #30363D; border-radius:10px; padding:0.15rem 0.5rem; white-space:nowrap;">View image &rarr;</a>' +
-        '</div>';
-    });
-    html += '</div>';
-  });
-  panel.innerHTML = html;
-  panel.querySelectorAll('.figidx-item').forEach(el => {
-    el.onmouseenter = () => el.style.background = '#1C2128';
-    el.onmouseleave = () => el.style.background = '';
-    el.onclick = () => { const sc = SCENES.find(x => x.id === el.dataset.jump); if (sc) switchScene(sc); };
-  });
-}
 
 function setupSceneBar() {
   const bar = document.getElementById('sceneBar');
@@ -1891,7 +1857,6 @@ function snapshotOf(sc, view) {
 }
 function updateInsightText(sc, view) {
   try {
-    if (sc.id === 'figs') return 'Every figure and video available in the results repository, listed by name.';
     if (sc.id === 'field') { const k = fclock.day, p = fclock.pause, fv = state.fview; fclock.pause = 0; state.fview = view || 'day'; const t = fieldInsight(); fclock.day = k; fclock.pause = p; state.fview = fv; return (view === 'day' || !view ? 'Snapshot: ' : '') + t.replace(/ Click a bar.*$/, ''); }
     return sc.insightFn ? sc.insightFn() : sc.insight;
   } catch (e) { return sc.insight; }
@@ -1950,11 +1915,7 @@ function buildReport(ids, title) {
     views.forEach(([view, vlabel]) => {
       p = doc.page(); p.rect(0, 0, 595, 54, sc.color); p.text(sc.label + (vlabel ? ': ' + vlabel : ''), 40, 34, 18, { b: true, c: '#111111' });
       let y = p.wrap(sc.title || '', 40, 78, 515, 12, { b: true }); y = p.wrap(updateInsightText(sc, view), 40, y + 2, 515, 9.5, { i: true, c: '#4b5563' });
-      if (sc.id === 'figs') {
-        p.text('Videos', 40, y + 14, 12, { b: true, c: GREEN }); let vy = y + 32; VIDEOS.forEach(v => { vy = p.wrap(v.title, 46, vy, 500, 9.5); });
-        p.text('Figures', 40, vy + 12, 12, { b: true, c: GREEN }); let c1 = vy + 30, c2 = vy + 30; FIGURES.forEach((f, i) => { if (i < 34) c1 = p.wrap(f.title, 46, c1, 240, 8, {}); else c2 = p.wrap(f.title, 306, c2, 240, 8, {}); });
-        p.text('All images and videos: github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops', 40, 800, 8, { c: '#6b7280' }); footer(p);
-      } else {
+      {
         const crops = snapshotOf(sc, view); let ny = p.image(crops[0].jpeg, crops[0].w, crops[0].h, 40, y + 8, 515) + 18;
         p.text('Key numbers at your inputs', 40, ny, 11, { b: true, c: GREEN }); ny += 16; reportNotes(sc, view).forEach(l => { ny = p.wrap(l, 46, ny, 505, 9.5); }); footer(p);
         if (crops[1]) { const p2 = doc.page(); p2.rect(0, 0, 595, 40, sc.color); p2.text(sc.label + ', continued', 40, 27, 14, { b: true, c: '#111111' }); p2.image(crops[1].jpeg, crops[1].w, crops[1].h, 40, 56, 515); footer(p2); }
@@ -2899,7 +2860,7 @@ const fstarOwn = () => 0.45, hstarOwn = sn => TRIGGER_AT_FSTAR[sn];
 // Everything is model output (root depth, root density and uptake per layer); root density is relative, not a measured length.
 // ------------------------------------------------------------------------------------------------
 const r1ui = { drag: false, hover: -1 };
-const R1 = { ax0: 46, ax1: 604, ay0: 74, ay1: 174, by: 246, ppc: 2.7, cx: 52, cw: 88, dx: 188, dw: 128, ux: 350, uw: 112, sx: 496, sw: 108, yy0: 566, yy1: 640 };
+const R1 = { ax0: 46, ax1: 604, ay0: 74, ay1: 174, by: 246, ppc: 2.7, cx: 52, cw: 130, dx: 204, dw: 104, ux: 330, uw: 104, sx: 456, sw: 148, yy0: 566, yy1: 640 };
 function r1Years(sim) {
   const key = simKey(); if (sim._ry && sim._ryKey === key) return sim._ry; const out = [];
   for (let y = 0; y < NYR; y++) {
@@ -2946,7 +2907,7 @@ function drawR1Compare() {
   const groups = [['Soil', Object.keys(DATA.soil_labels).map(k => [k, DATA.soil_labels[k], 'soil'])], ['Tillage', Object.keys(TILL_LABELS).map(k => [k, TILL_LABELS[k], 'till'])], ['Crop', [['cereal', 'Cereal/Oilseed', 'crop'], ['legume', 'Legume', 'crop'], ['vegetable', 'Vegetable', 'crop']]]];
   let y = y0 + 34; const bx = 120, bw = 250, sc = bw / 100;
   for (const [gn, rows] of groups) {
-    T(gn, x0, y, { s: 10.5, b: true, c: '#6B4423' }); y += 6;
+    y += 6; T(gn, x0, y, { s: 10.5, b: true, c: '#6B4423' }); y += 4;
     for (const [k, lab, f] of rows) {
       const m = r1AltGet({ [f]: k }), on = state[f] === k; y += 13;
       if (on) { ctx.fillStyle = 'rgba(212,169,74,.28)'; ctx.fillRect(x0, y - 11, 612, 13); }
@@ -2961,6 +2922,36 @@ function drawR1Compare() {
     }
     y += 8;
   }
+}
+
+// R1: root architecture drawn from the simulated root density of each layer, on the same scale for all days, so the
+// picture changes with the season, the year, the soil and the crop (fibrous cereal, tap-rooted legume, shallow vegetable)
+function r1GMax(sim) { if (sim._gm && sim._gmKey === simKey()) return sim._gm; let m = 1e-6; for (let k = 0; k < ND; k += 5) { const r = sim.rho[k]; for (let i = 0; i < NLAY; i++) if (r[i] > m) m = r[i]; } sim._gm = m; sim._gmKey = simKey(); return m; }
+function drawRootsR1(sim, k, x0, w, GY, PX) {
+  const rho = sim.rho[k], rd = sim.rd[k], s = sim.s[k], upt = sim.upt[k], crop = state.crop, grow = sim.live[k], dead = sim.cover[k] <= 0.01, t = nowSec(), gm = r1GMax(sim), cx = x0 + w / 2;
+  const seed = DATA.soils.indexOf(state.soil) * 17.3 + ['cereal', 'legume', 'vegetable'].indexOf(crop) * 5.1 + yearOf(k) * 2.9;
+  const depthPx = Math.max(6, rd * PX), ax = [];
+  if (crop === 'legume') { ax.push({ off: 0, f: 1, a: 2.5, wd: 3.4 }); [-1, 1].forEach((q, i) => ax.push({ off: q * w * 0.12, f: 0.34 + 0.12 * fr(seed + i), a: 3, wd: 1.6, fan: q * 0.9 })); }
+  else if (crop === 'vegetable') for (let i = 0; i < 5; i++) ax.push({ off: (i - 2) * w * 0.12, f: 0.62 + 0.38 * fr(seed + i), a: 3.5, wd: 1.3, fan: (i - 2) * 0.35 });
+  else for (let i = 0; i < 7; i++) ax.push({ off: (i - 3) * w * 0.07, f: 0.55 + 0.45 * fr(seed + i * 1.7), a: 3.2, wd: 1.3, fan: (i - 3) * 0.28 });
+  ax.forEach((a, i) => { a.ph = fr(seed + i * 3.3) * 6.28; a.dp = depthPx * a.f; a.x = y => cx + a.off + Math.sin(y * 0.05 + a.ph) * a.a + (a.fan || 0) * y * 0.12; });
+  const path = a => { ctx.beginPath(); ctx.moveTo(a.x(0), GY); for (let y = 3; y <= a.dp; y += 4) ctx.lineTo(a.x(y), GY + y); ctx.stroke(); };
+  ax.forEach(a => { const lw = a.wd * (0.6 + 0.4 * Math.max(0.3, grow)); ctx.strokeStyle = 'rgba(40,24,10,0.85)'; ctx.lineWidth = lw + 1.6; path(a); ctx.strokeStyle = dead ? '#B7AD9C' : '#E9D2A0'; ctx.lineWidth = lw; path(a); });
+  const reach = w * (crop === 'legume' ? 0.42 : crop === 'vegetable' ? 0.46 : 0.5);
+  for (let i = 0; i < NLAY; i++) {
+    if (rho[i] <= 0) continue; const rn = Math.min(1, Math.sqrt(rho[i] / gm)), zc = (i + 0.5) * DZ * PX; if (zc > depthPx) continue;
+    const n = Math.round(rn * 10 * (0.25 + 0.75 * grow)) + (rn > 0.03 ? 1 : 0), wet = 0.5 + 0.5 * s[i];
+    const par = ax.filter(a => a.dp > zc); if (!par.length) continue;
+    for (let j = 0; j < n; j++) {
+      const sd = seed * 7 + i * 13.7 + j * 3.1, a = par[Math.floor(fr(sd) * par.length)], side = fr(sd + 1) < 0.5 ? -1 : 1, y0 = GY + zc + (fr(sd + 2) - 0.5) * DZ * PX, x0b = a.x(zc);
+      const L = reach * (0.18 + 0.82 * Math.sqrt(rn)) * wet * (0.4 + 0.6 * grow) * (0.7 + 0.5 * fr(sd + 3)), drop = crop === 'legume' ? 0.25 : 0.5 + 0.4 * fr(sd + 4);
+      const ex = x0b + side * L, ey = y0 + L * drop, cxm = x0b + side * L * 0.55, cym = y0 + L * 0.05;
+      ctx.strokeStyle = dead ? 'rgba(190,180,165,0.6)' : 'rgba(' + (245 - Math.round(60 * s[i])) + ',' + (222 - Math.round(40 * s[i])) + ',' + (170 + Math.round(30 * s[i])) + ',' + (0.8 + 0.2 * rn).toFixed(2) + ')'; ctx.lineWidth = 0.9 + 1.2 * rn; ctx.beginPath(); ctx.moveTo(x0b, y0); ctx.quadraticCurveTo(cxm, cym, ex, ey); ctx.stroke();
+      if (L > reach * 0.35) for (let q = 0; q < 2; q++) { const f = 0.45 + 0.35 * q, bx = x0b + (ex - x0b) * f, by = y0 + (ey - y0) * f, bl = L * 0.3 * (0.6 + 0.6 * fr(sd + 9 + q)); ctx.lineWidth = 0.5; ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(bx + side * bl * 0.7, by + bl * 0.7); ctx.stroke(); }
+      if (!dead && upt[i] > 0.02 && j === 0) { const ph = (t * 0.6 + fr(sd)) % 1; ctx.fillStyle = 'rgba(80,170,255,' + (0.95 - ph * 0.6).toFixed(2) + ')'; ctx.beginPath(); ctx.arc(ex + (x0b - ex) * ph, ey + (y0 - ey) * ph, 2, 0, 6.283); ctx.fill(); }
+    }
+  }
+  ax.forEach(a => { ctx.fillStyle = dead ? '#CFC6B6' : '#FFF6D0'; ctx.strokeStyle = '#8A6A2A'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(a.x(a.dp), GY + a.dp, a.wd > 3 ? 3.2 : 2, 0, 6.283); ctx.fill(); ctx.stroke(); });
 }
 function drawR1Chart() {
   paper(); const sim = seasonSim(), { dd } = n1Bucket(sim), ay = yearOf(dd), yrs = r1Years(sim), Y = yrs[ay], t = nowSec(), C = R1, ppc = C.ppc, rd = sim.rd[dd], rho = sim.rho[dd], upt = sim.upt[dd], s = sim.s[dd], cv = sim.cover[dd];
@@ -2983,7 +2974,7 @@ function drawR1Chart() {
   const y0 = C.by; T('The day on the clock', 16, y0 - 28, { s: 11, b: true }); T('soil, roots and water', C.cx, y0 - 12, { s: 10, c: MUTE }); T('root density (relative)', C.dx, y0 - 12, { s: 10, c: MUTE }); T('water taken today', C.ux, y0 - 12, { s: 10, c: MUTE }); T('taken this year', C.sx, y0 - 12, { s: 10, c: MUTE });
   drawSection(C.cx, y0, C.cw, 100, ppc); horizonTags(C.cx - 34, y0, ppc, 100); depthAxis(C.cx, y0, 100, ppc, 25);
   if (cv > 0.03) cropPlants(C.cx + C.cw / 2, y0, clampN(18 + current.yield * 2, 20, 34) * (0.2 + 0.8 * cv), C.cw / 6, 5, 0, 1, 5);
-  drawSoilWater(sim, dd, C.cx, C.cw, y0, ppc); ctx.save(); ctx.beginPath(); ctx.rect(C.cx, y0 - 2, C.cw, 100 * ppc + 2); ctx.clip(); drawRoots(sim, dd, y0, ppc, [C.cx + C.cw / 2], 1.1); ctx.restore(); ctx.strokeStyle = INK; ctx.lineWidth = 1.5; ctx.strokeRect(C.cx, y0, C.cw, 100 * ppc);
+  drawSoilWater(sim, dd, C.cx, C.cw, y0, ppc); ctx.save(); ctx.beginPath(); ctx.rect(C.cx, y0 - 2, C.cw, 100 * ppc + 2); ctx.clip(); drawRootsR1(sim, dd, C.cx, C.cw, y0, ppc); ctx.restore(); ctx.strokeStyle = INK; ctx.lineWidth = 1.5; ctx.strokeRect(C.cx, y0, C.cw, 100 * ppc);
   const zS = Z_VALUES[state.zIdx]; ctx.strokeStyle = '#111'; ctx.setLineDash([4, 3]); ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(C.cx, y0 + zS * ppc); ctx.lineTo(C.sx + C.sw, y0 + zS * ppc); ctx.stroke(); ctx.setLineDash([]); T('sensor ' + zS, C.cx + C.cw + 4, y0 + zS * ppc - 3, { s: 8.5, c: '#111' });
   let mxR = 1e-9, mxU = 1e-9, mxS = 1e-9; for (let i = 0; i < NLAY; i++) { if (rho[i] > mxR) mxR = rho[i]; if (upt[i] > mxU) mxU = upt[i]; if (Y.U[i] > mxS) mxS = Y.U[i]; }
   const panel = (x, w, title) => { ctx.fillStyle = '#F4F1E6'; ctx.fillRect(x, y0, w, 100 * ppc); ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.strokeRect(x, y0, w, 100 * ppc); };
