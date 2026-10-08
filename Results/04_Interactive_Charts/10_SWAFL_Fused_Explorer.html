@@ -131,7 +131,7 @@
     <div class="row"><label>Temperature shift <span class="val" id="tempVal"></span></label>
       <input type="range" id="tempSlider" min="0" max="9" step="1">
       <div id="tempNote" style="font-size:0.72rem; color:#8B949E; margin-top:0.3rem; font-style:italic;"></div></div>
-    <div class="row"><label>Irrigation trigger, sensor suction <span class="val" id="trigVal"></span></label>
+    <div class="row"><label><span id="trigLblTxt">Irrigation trigger, sensor suction</span> <span class="val" id="trigVal"></span></label>
       <input type="range" id="trigSlider" min="0" max="19" step="1">
       <div id="trigNote" style="font-size:0.72rem; color:#8B949E; margin-top:0.3rem; font-style:italic;"></div></div>
     <div class="row"><label>Sensor depth <span class="val" id="zVal"></span></label>
@@ -211,7 +211,7 @@ const TRIGGER_AT_FSTAR = {
 };
 const FSTAR = 0.45; // soil-independent critical depletion (5% yield loss)
 
-let state = { soil: DATA.soils[4], till: "conv", tcIdx: 0, vffIdx: 9, capIdx: 1, rainIdx: 5, tempIdx: 2, trigIdx: 6, zIdx: 3, nIdx: 6, method: 'M02_Surface', range: 'all', mulchType: 'straw', fview: 'day', trigMode: 'common', trigF: 0.45, crop: "cereal" };
+let state = { soil: DATA.soils[4], till: "conv", tcIdx: 0, vffIdx: 9, capIdx: 1, rainIdx: 5, tempIdx: 2, trigIdx: 6, zIdx: 3, nIdx: 6, method: 'M02_Surface', range: 'all', mulchType: 'straw', fview: 'day', trigMode: 'common', trigF: 0.45, trigBy: {}, crop: "cereal" };
 const TEMP_VALUES = [-1.0,-0.5,0.0,0.5,1.0,1.5,2.0,2.5,3.0,3.5];
 // Cereal is the real, simulated rotation (factor 1.0, no change). Legume and Vegetable factors are
 // illustrative only, loosely reflecting typical relative dry-matter yield and harvest index differences
@@ -258,7 +258,7 @@ function switchScene(sc) {
   const canvasEl = document.getElementById('profileCanvas');
   const panelEl = document.getElementById('figureIndexPanel');
   applyPanelChrome(sc.id); canvas.setAttribute('role', 'img'); canvas.setAttribute('aria-label', (sc.label || '') + ': ' + (sc.title || ''));
-  const pb = document.getElementById('playBar'); pb.style.display = sc.id === 'figs' ? 'none' : 'flex'; document.getElementById('playRange').style.display = (sc.play || sc.fieldBar) ? '' : 'none'; document.getElementById('fieldBtns').style.display = sc.fieldBar ? 'inline-flex' : 'none'; document.getElementById('yearRow').style.display = (sc.id === 'v1' || sc.id === 'v2') ? 'flex' : 'none'; yearUi.last = -1; autoEnter(sc, prevId); canvas.style.cursor = 'default'; setCanvasH(sc.h || 640); if (sc.fieldBar) document.getElementById('playBtn').textContent = fclock.on ? 'Pause' : 'Play'; document.getElementById('rangeBtns').style.display = (sc.id === 'v1' || sc.id === 'v2') ? 'inline-flex' : 'none';
+  const pb = document.getElementById('playBar'); pb.style.display = sc.id === 'figs' ? 'none' : 'flex'; document.getElementById('playRange').style.display = (sc.play || sc.fieldBar) ? '' : 'none'; document.getElementById('fieldBtns').style.display = sc.fieldBar ? 'inline-flex' : 'none'; document.getElementById('yearRow').style.display = (sc.id === 'v1' || sc.id === 'v2') ? 'flex' : 'none'; yearUi.last = -1; autoEnter(sc, prevId); if (sc.id === 'n1' && prevId !== 'n1') { state.n1Prev = { mode: state.trigMode, idx: state.trigIdx }; refresh(); } else if (prevId === 'n1' && sc.id !== 'n1' && state.n1Prev) { state.trigMode = state.n1Prev.mode; if (state.trigMode === 'common') state.trigIdx = state.n1Prev.idx; state.n1Prev = null; refresh(); } canvas.style.cursor = 'default'; setCanvasH(sc.h || 640); if (sc.fieldBar) document.getElementById('playBtn').textContent = fclock.on ? 'Pause' : 'Play'; document.getElementById('rangeBtns').style.display = (sc.id === 'v1' || sc.id === 'v2') ? 'inline-flex' : 'none';
   if (sc.play) { play.t = 0; play.on = true; play.hold = 0; document.getElementById('playBtn').textContent = 'Pause'; if (typeof dss !== 'undefined' && dss.ready) dssSyncPlay(sc.id); }
   if (sc.id === 'figs') {
     canvasEl.style.display = 'none'; document.getElementById('swipeHint').style.visibility = 'hidden';
@@ -397,7 +397,10 @@ sliders.cap.oninput = () => { state.capIdx = +sliders.cap.value; refresh(); };
 sliders.rain.oninput = () => { state.rainIdx = +sliders.rain.value; refresh(); };
 sliders.temp.oninput = () => { state.tempIdx = +sliders.temp.value; refresh(); };
 sliders.trig.value = state.trigIdx; sliders.z.value = state.zIdx; sliders.n.value = state.nIdx;
-sliders.trig.oninput = () => { state.trigIdx = +sliders.trig.value; refresh(); };
+sliders.trig.oninput = () => {
+  if (currentScene && currentScene.id === 'n1') { state.trigBy[state.soil] = clampN(+sliders.trig.value / 100, 0.02, 0.98); refresh(); return; }
+  state.trigIdx = +sliders.trig.value; refresh();
+};
 sliders.z.oninput = () => { state.zIdx = +sliders.z.value; refresh(); };
 sliders.n.oninput = () => { state.nIdx = +sliders.n.value; refresh(); };
 
@@ -504,6 +507,8 @@ function model(vff, rain, ov) {
 }
 
 function refresh() {
+  if (currentScene && currentScene.id === 'n1') state.trigMode = 'own';
+  if (state.trigMode === 'own') { const oi = ownIdx(state.soil); if (oi !== state.trigIdx) state.trigIdx = oi; }
   updateActiveButtons();
   const tc = TC_VALUES[state.tcIdx], vff = VFF_VALUES[state.vffIdx], cap = CAP_VALUES[state.capIdx], rain = RAIN_VALUES[state.rainIdx];
   const dT = TEMP_VALUES[state.tempIdx], trig = trigSigned();
@@ -512,7 +517,10 @@ function refresh() {
   document.getElementById('capVal').textContent = cap + ' mm';
   document.getElementById('rainVal').textContent = '\u00d7' + rain.toFixed(1);
   document.getElementById('tempVal').textContent = (dT >= 0 ? '+' : '') + dT.toFixed(1) + '\u00b0C';
-  document.getElementById('trigVal').textContent = trig + ' cm';
+  { const inN1 = currentScene && currentScene.id === 'n1', fS = depletionAt(state.soil, trigAbsFor(state.soil)), ts = sliders.trig;
+    document.getElementById('trigVal').textContent = inN1 ? fS.toFixed(2) : trig + ' cm';
+    document.getElementById('trigLblTxt').textContent = inN1 ? "This soil's trigger (0 = field capacity, 1 = wilting point)" : 'Irrigation trigger, sensor suction';
+    if (inN1) { ts.min = 2; ts.max = 98; ts.step = 1; ts.value = Math.round(fS * 100); } else { ts.min = 0; ts.max = 19; ts.step = 1; ts.value = state.trigIdx; } }
   document.getElementById('zVal').textContent = Z_VALUES[state.zIdx] + ' cm';
   document.getElementById('nVal').textContent = NRATE_VALUES[state.nIdx] + '%';
 
@@ -525,7 +533,7 @@ function refresh() {
       : dT === 0 ? 'Baseline climate.' : dT < 1.5 ? 'Warmer: higher demand triggers more irrigation and keeps the surface wetter, so evaporation rises.'
       : 'Much warmer: faster canopy growth increasingly out-competes bare soil for the same water.';
   const trigNote = document.getElementById('trigNote');
-  if (trigNote) trigNote.textContent = trig === -300 ? 'Standard trigger: irrigate when the sensor reads beyond this suction.'
+  if (trigNote) trigNote.textContent = currentScene && currentScene.id === 'n1' ? 'In N1 every soil has its own trigger, a share of its available water; set it for the selected soil here or on the gauge.' : trig === -300 ? 'Standard trigger: irrigate when the sensor reads beyond this suction.'
       : trig > -300 ? 'Wetter trigger: irrigation starts earlier and more often.' : 'Drier trigger: irrigation waits for more stress.';
   const rows = (DATA.e5[state.soil] || []).filter(r => r.till === state.till);
   const dv = rows.map(r => r.drainage), sens = dv.length ? Math.max(...dv) - Math.min(...dv) : 0;
@@ -1749,11 +1757,7 @@ const N1 = { cx: 52, cy: 112, cw: 90, ch: 336, gx: 178, gw: 26, rx0: 296, rw: 31
 const n1F = () => depletionAt(state.soil, trigAbsFor(state.soil));
 
 
-function n1Set(y) {
-  const f = clampN((y - N1.cy) / N1.ch, 0.01, 0.99); let bi = 0, bd = 9;
-  TRIG_VALUES.forEach((v, i) => { const d = Math.abs(depletionAt(state.soil, Math.abs(v)) - f); if (d < bd) { bd = d; bi = i; } });
-  if (bi !== state.trigIdx) { state.trigIdx = bi; sliders.trig.value = bi; refresh(); }
-}
+
 
 
 function n1Up() { n1ui.drag = false; n1ui.scrub = false; }
@@ -1868,13 +1872,14 @@ function PdfDoc() {
 
 function snapshotOf(sc, view) {
   const keep = { cs: currentScene, pt: play.t, fd: fclock.day, fp: fclock.pause, lk: fclock.lastKd, mem: fclock.mem, cur: canvas.style.cursor, h: canvas.height, fv: state.fview };
+  const keepTrig = { m: state.trigMode, i: state.trigIdx }; if (sc.id === 'n1') { state.trigMode = 'own'; state.trigIdx = ownIdx(state.soil); }
   seasonSim(true); currentScene = sc; setCanvasH(sc.h || 640);
   if (sc.id === 'v1') play.t = state.range === 'all' ? 1 : 0.72; else if (sc.id === 'v2') play.t = state.range === 'all' ? 0.725 : 0.55; else if (sc.id === 'v3') play.t = 0.5;
   if (sc.id === 'field') { state.fview = view || 'day'; fclock.pause = 0; fclock.lastKd = -1; fclock.mem = []; }
   ctx.clearRect(0, 0, W, H); if (sc.id === 'v4') { anim.v4 = null; for (let i = 0; i < 70; i++) sc.draw(); } sc.draw();
   const crops = [], cut = (sy, sh) => { const c = document.createElement('canvas'); c.width = 620; c.height = sh; c.getContext('2d').drawImage(canvas, 0, sy, 620, sh, 0, 0, 620, sh); const b = atob(c.toDataURL('image/jpeg', 0.9).split(',')[1]), a = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); crops.push({ jpeg: a, w: 620, h: sh }); };
   cut(0, Math.min(640, H)); if (H > 700) cut(640, H - 640);
-  currentScene = keep.cs; setCanvasH(keep.h); state.fview = keep.fv; play.t = keep.pt; fclock.day = keep.fd; fclock.pause = keep.fp; fclock.lastKd = keep.lk; fclock.mem = keep.mem; canvas.style.cursor = keep.cur;
+  currentScene = keep.cs; setCanvasH(keep.h); state.fview = keep.fv; state.trigMode = keepTrig.m; state.trigIdx = keepTrig.i; play.t = keep.pt; fclock.day = keep.fd; fclock.pause = keep.fp; fclock.lastKd = keep.lk; fclock.mem = keep.mem; canvas.style.cursor = keep.cur;
   return crops;
 }
 function updateInsightText(sc, view) {
@@ -1909,7 +1914,7 @@ function reportNotes(sc, view) {
   else if (sc.id === 'v6') { const ev = []; VFF_VALUES.forEach(v => CAP_VALUES.forEach((c, ci) => ev.push(model(v, rain, { capIdx: ci }).evap))); const dr = []; TILLS.forEach(tl => TC_VALUES.forEach((tc, ti) => dr.push(model(vff, rain, { till: tl, tcIdx: ti }).drain)));
     L.push('Soil evaporation across the mulch map: ' + f0(Math.min(...ev)) + ' to ' + f0(Math.max(...ev)) + ' mm/yr; at your setting ' + f0(m.evap) + ' mm.'); L.push('Drainage across tillage and consolidation: ' + f1(Math.min(...dr)) + ' to ' + f1(Math.max(...dr)) + ' mm/yr; at your setting ' + f1(m.drain) + ' mm.'); }
   else if (sc.id === 'v7') { const me = v7Data().find(r => r.s === state.soil), rs = v7Reason(me); L.push(DATA.soil_labels[state.soil] + ' (' + me.clay + '% clay): tillage ' + sgn(me.till, 1, 'mm/yr') + ', consolidation rate ' + sgn(me.cons, 1, 'mm/yr') + '.'); L.push('Leading driver: ' + (rs.lead === 'none' ? 'neither' : rs.lead) + '. ' + rs.data); L.push(rs.why); }
-  else if (sc.id === 'n1') { DATA.soils.forEach(x => { const tv = trigAbsFor(x), f = depletionAt(x, tv), r = n1Rel(x), mv = n1ModelFor(x); L.push(DATA.soil_labels[x] + ': critical suction ' + TRIGGER_AT_FSTAR[x] + ' cm; at your ' + tv + ' cm trigger depletion ' + f.toFixed(2) + (f > 0.455 ? ' (beyond f*)' : ' (before f*)') + ', yield ' + (mv.yield * cf.factor).toFixed(2) + ' ' + cf.unit.split(' ')[0] + ', irrigation ' + mv.irr.toFixed(0) + ' mm' + (r == null ? '' : ', ' + Math.round(r * 100) + '% of the best trigger') + '.'); }); }
+  else if (sc.id === 'n1') { DATA.soils.forEach(x => { const tv = ownAbs(x), f = depletionAt(x, tv), gi = nearestIdx(TRIG_VALUES.map(Math.abs), tv), mv = model(VFF_VALUES[state.vffIdx], RAIN_VALUES[state.rainIdx], { soil: x, trigIdx: gi }), rows = DATA.e2[x] || [], cur = rowAt(MAPS.e2[x], TRIG_VALUES[gi]), mx = Math.max(...rows.map(q => q.yield)), r = cur && mx > 0 ? cur.yield / mx : null; L.push(DATA.soil_labels[x] + ': its own trigger is ' + Math.round(f * 100) + '% of the available water used (depletion ' + f.toFixed(2) + '; critical f* at ' + TRIGGER_AT_FSTAR[x] + ' cm), yield ' + (mv.yield * cf.factor).toFixed(2) + ' ' + cf.unit.split(' ')[0] + ', irrigation ' + mv.irr.toFixed(0) + ' mm' + (r == null ? '' : ', ' + Math.round(r * 100) + '% of the best trigger') + '.'); }); }
   else if (sc.id === 'n2') { const v = vff >= 0.95 ? 0.5 : vff, b = model(1.0, rain), c = model(v, rain); L.push('Mulch factor ' + v.toFixed(1) + (vff >= 0.95 ? ' (preview, none set)' : '') + ' at rainfall x' + rain.toFixed(1) + ': evaporation saved ' + f0(b.evap - c.evap) + ' mm.'); L.push('Irrigation saved ' + f0(b.irr - c.irr) + ' mm, extra drainage ' + f0(c.drain - b.drain) + ' mm, extra transpiration ' + f0(c.transp - b.transp) + ' mm.'); }
   else if (sc.id === 'n3') { [0.5, 0.7, 0.9, 1.2, 1.4].forEach(r => { const q = model(vff, r), ix = (q.evap - q.drain) / Math.max(1, q.evap + q.drain); L.push('Rain x' + r.toFixed(1) + ': evaporation ' + f0(q.evap) + ' mm, drainage ' + f0(q.drain) + ' mm, ' + (ix > 0.05 ? 'evaporation-dominated' : ix < -0.05 ? 'drainage-dominated' : 'on the boundary') + '.'); }); }
   return L;
@@ -2744,13 +2749,15 @@ function n1Move(p) {
 // a trigger that belongs to each soil. Every soil reaches the same stress f* = 0.45 at its own suction (143 cm for sand up to 729 cm
 // for silty clay loam). The trigger can be one suction shared by all soils, or each soil's own.
 // ------------------------------------------------------------------------------------------------
-const ownAbs = s => Math.round(invDepletion(s, state.trigF));   // this soil's suction at the chosen depletion (f* = 0.45 gives its critical suction)
+const ownF = s => state.trigBy[s] != null ? state.trigBy[s] : F300[s];   // this soil's trigger, as a share of its available water used
+const ownAbs = s => Math.round(invDepletion(s, ownF(s)));
 const ownIdx = s => nearestIdx(TRIG_VALUES.map(Math.abs), ownAbs(s));
 const trigValFor = s => state.trigMode === 'own' ? TRIG_VALUES[ownIdx(s)] : TRIG_VALUES[state.trigIdx];
 const trigAbsFor = s => state.trigMode === 'own' ? ownAbs(s) : Math.abs(TRIG_VALUES[state.trigIdx]);   // each soil's exact critical suction, or the shared one
 const trigSigned = () => -trigAbsFor(state.soil);
 
 
+function n1Set(y) { const f = clampN((y - N1.cy) / N1.ch, 0.02, 0.98), nf = Math.round(f * 100) / 100; if (state.trigBy[state.soil] !== nf) { state.trigBy[state.soil] = nf; refresh(); } }
 function n1Rel(s) { const rows = DATA.e2[s] || [], cur = rowAt(MAPS.e2[s], trigValFor(s)), mx = Math.max(...rows.map(r => r.yield)); return cur && mx > 0 ? cur.yield / mx : null; }
 
 
@@ -2778,7 +2785,7 @@ function drawN1Chart() {
   const th = has ? Math.min(8, mulchThick(state.mulchType) * 0.6) : 0; if (th) mulchLayer(C.cx, C.cw, C.cy, th, state.mulchType, 21, state.mulchType === 'plastic' ? [C.cx + C.cw / 2] : null);
   const sy = C.cy + z * ppc, hotS = fSensor >= fT; ctx.strokeStyle = '#111'; ctx.setLineDash([4, 3]); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(C.cx, sy); ctx.lineTo(C.cx + C.cw, sy); ctx.stroke(); ctx.setLineDash([]);
   ctx.fillStyle = hotS ? '#D93025' : '#2E9E4F'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(C.cx + C.cw / 2, sy, 7, 0, 6.283); ctx.fill(); ctx.stroke();
-  const lines = [['sensor ' + z + ' cm', INK], ['reads ' + sensorCm.toLocaleString('en-US') + ' cm', '#1B4FA0'], ['trigger ' + Math.abs(tVal).toLocaleString('en-US') + ' cm', '#3F1D80']]; if (Math.abs(tVal) !== hStar) lines.push(['own f*: ' + hStar + ' cm', '#B01E14']);
+  const lines = [['sensor ' + z + ' cm', INK], ['reads ' + sensorCm.toLocaleString('en-US') + ' cm', '#1B4FA0'], ['trigger ' + fT.toFixed(2), '#3F1D80']]; if (Math.abs(fT - 0.45) > 0.005) lines.push(['critical f* 0.45', '#B01E14']);
   const py = sy + 17 + lines.length * 16 > C.cy + C.ch ? sy - 14 - lines.length * 16 : sy + 17; lines.forEach((l, i) => pill(l[0], C.cx + 4, py + i * 16, { b: true, s: 9.5, c: l[1] }));
   if ([0, 1, 2].some(q => sim.irr[dd - q] > 0)) { for (let i = 0; i < 6; i++) { const p2 = (t * 0.6 + i * 0.17) % 1; ctx.fillStyle = 'rgba(30,110,235,0.9)'; ctx.beginPath(); ctx.ellipse(C.cx + 12 + i * 14, C.cy + p2 * 70, 2.2, 3.6, 0, 0, 6.283); ctx.fill(); } pill('irrigation', C.cx + C.cw / 2, C.cy + 26, { a: 'center', b: true, c: '#1B4FA0' }); }
   ctx.strokeStyle = INK; ctx.lineWidth = 1.6; ctx.strokeRect(C.cx, C.cy, C.cw, C.ch);
@@ -2794,7 +2801,7 @@ function drawN1Chart() {
   const hx = gx + gw + 14; ctx.fillStyle = '#5B2FA8'; ctx.beginPath(); ctx.arc(hx, yT, big ? 10 : 8, 0, 6.283); ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(hx - 3.5, yT - 2); ctx.lineTo(hx, yT - 5.5); ctx.lineTo(hx + 3.5, yT - 2); ctx.moveTo(hx - 3.5, yT + 2); ctx.lineTo(hx, yT + 5.5); ctx.lineTo(hx + 3.5, yT + 2); ctx.stroke();
   const labs = [{ y: yS, t: 'f*', c: '#B01E14' }, { y: yT, t: 'trigger', c: '#3F1D80' }, { y: lvl, t: 'sensor now', c: '#1B4FA0' }].sort((a, b) => a.y - b.y); for (let i = 1; i < labs.length; i++) if (labs[i].y - labs[i - 1].y < 13) labs[i].y = labs[i - 1].y + 13;
   labs.forEach(l => T(l.t, gx + gw + 28, l.y + 3.5, { s: 9.5, b: true, c: l.c }));
-  T('trigger ' + Math.abs(tVal).toLocaleString('en-US') + ' cm: depletion ' + fT.toFixed(2), C.cx + C.cw + 10, 62, { s: 10, b: true, c: '#3F1D80' }); T('this soil f*: ' + hStar + ' cm', C.cx + C.cw + 10, 76, { s: 10, b: true, c: '#B01E14' }); T('sensor ' + sensorCm.toLocaleString('en-US') + ' cm: depletion ' + fSensor.toFixed(2), C.cx + C.cw + 10, 90, { s: 10, b: true, c: '#1B4FA0' });
+  T("this soil's trigger: " + fT.toFixed(2), C.cx + C.cw + 10, 62, { s: 10, b: true, c: '#3F1D80' }); T('this soil f*: ' + hStar + ' cm', C.cx + C.cw + 10, 76, { s: 10, b: true, c: '#B01E14' }); T('sensor ' + sensorCm.toLocaleString('en-US') + ' cm: depletion ' + fSensor.toFixed(2), C.cx + C.cw + 10, 90, { s: 10, b: true, c: '#1B4FA0' });
   hot(C.cx, C.cy, C.cw, C.ch, p => applyState({ zIdx: nearestIdx(Z_VALUES, (p.y - C.cy) / ppc) }), 'click: put the sensor at this depth');
   n1Controls(sim);
   // what is applied: tillage and its pores, mulch, crop, weather, irrigation method, nitrogen
@@ -2803,13 +2810,13 @@ function drawN1Chart() {
   ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.strokeRect(sx + 48, 50, 40, 26);
   const dT = TEMP_VALUES[state.tempIdx]; T(TILL_LABELS[state.till] + ', settling ' + TC_VALUES[state.tcIdx] + '/day', sx + 96, 56, { s: 9.5, b: true }); T((has ? mulchBy(state.mulchType).label + ' ' + vff.toFixed(1) + ', ' + CAP_VALUES[state.capIdx] + ' mm' : 'no mulch') + '; rain \u00d7' + RAIN_VALUES[state.rainIdx].toFixed(1) + ', ' + (dT >= 0 ? '+' : '') + dT.toFixed(1) + '\u00b0C', sx + 96, 69, { s: 9.5 }); T(cf.label.split('/')[0] + ', ' + meth.label.toLowerCase() + ', N ' + NRATE_VALUES[state.nIdx] + '%', sx + 96, 82, { s: 9.5 });
   // which trigger every soil uses, with the model's yield and irrigation for that soil under the current settings
-  T('Same suction, a different depletion in each soil.', C.rx0, 99, { s: 10.5, b: true, c: '#3F1D80' });
-  T('Every soil at your trigger', C.rx0, 122, { s: 11, b: true }); T('f = 0', C.ax0, 122, { s: 10, c: '#1E7A36', b: true }); T('f = 1', C.ax1, 122, { s: 10, c: '#B01E14', b: true, a: 'right' }); T('Mg/ha', (C.yx0 + C.yx1) / 2, 122, { s: 10, b: true, a: 'center' });
+  T('Each soil has its own trigger level.', C.rx0, 99, { s: 10.5, b: true, c: '#3F1D80' });
+  T('Each soil, its own trigger', C.rx0, 122, { s: 11, b: true }); T('f = 0', C.ax0, 122, { s: 10, c: '#1E7A36', b: true }); T('f = 1', C.ax1, 122, { s: 10, c: '#B01E14', b: true, a: 'right' }); T('Mg/ha', (C.yx0 + C.yx1) / 2, 122, { s: 10, b: true, a: 'center' });
   const xS = C.ax0 + 0.45 * (C.ax1 - C.ax0);
   DATA.soils.forEach((sn, i) => {
     const y = C.ry + i * C.rh, cy = y + C.rh / 2, sel = sn === soil, hov = n1ui.hover === i, tv = trigAbsFor(sn), mv = n1ModelFor(sn);
     ctx.fillStyle = sel ? '#FFF0BF' : hov ? '#E3EEFC' : i % 2 ? '#F4F1E6' : PAPER; ctx.fillRect(C.rx0, y, C.rw, C.rh); if (sel) { ctx.strokeStyle = '#C79A1E'; ctx.lineWidth = 1.6; ctx.strokeRect(C.rx0 + 0.5, y + 0.5, C.rw - 1, C.rh - 1); }
-    T(DATA.soil_labels[sn], C.ax0 - 14, cy - 1, { s: 11.5, b: sel, a: 'right' }); T(TRIGGER_AT_FSTAR[sn] + ' cm at f*, ' + mv.irr.toFixed(0) + ' mm', C.ax0 - 14, cy + 11, { s: 9, a: 'right', c: MUTE });
+    T(DATA.soil_labels[sn], C.ax0 - 14, cy - 1, { s: 11.5, b: sel, a: 'right' }); T('trigger ' + depletionAt(sn, tv).toFixed(2) + ', ' + mv.irr.toFixed(0) + ' mm', C.ax0 - 14, cy + 11, { s: 9, a: 'right', c: '#3F1D80', b: true });
     ctx.strokeStyle = '#B8B2A0'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(C.ax0, cy); ctx.lineTo(C.ax1, cy); ctx.stroke();
     const fS = depletionAt(sn, tv), rx = C.ax0 + fS * (C.ax1 - C.ax0), bad = fS > 0.455;
     if (Math.abs(rx - xS) > 8) { ctx.strokeStyle = bad ? '#D93025' : '#1E8E3E'; ctx.lineWidth = 1.4; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(xS + (rx > xS ? 4 : -4), cy); ctx.lineTo(rx + (rx > xS ? -7 : 7), cy); ctx.stroke(); ctx.setLineDash([]); }
@@ -2821,7 +2828,7 @@ function drawN1Chart() {
   const si = n1ui.hover >= 0 ? n1ui.hover : DATA.soils.indexOf(soil), sf = DATA.soils[si], tf = trigAbsFor(sf), fs = depletionAt(sf, tf), rl = n1Rel(sf), mf = n1ModelFor(sf), by0 = 498;
   box(14, by0, W - 28, 136, { fill: '#fff', r: 8 });
   T(DATA.soil_labels[sf] + ': reaches the critical stress f = 0.45 at ' + TRIGGER_AT_FSTAR[sf] + ' cm suction', 26, by0 + 18, { s: 12, b: true });
-  let yq = TW('The trigger of ' + tf.toLocaleString('en-US') + ' cm is depletion ' + fs.toFixed(2) + (fs > 0.455 ? ', beyond the critical point: this soil is stressed before irrigation starts.' : fs > 0.43 ? ', the critical point, which is where irrigation should start.' : ', before the critical point: irrigation starts early in this soil.'), 26, by0 + 35, 560, { s: 11, b: true, c: fs > 0.455 ? '#B01E14' : '#1E7A36' });
+  let yq = TW('Its own trigger is ' + Math.round(fs * 100) + '% of the available water used (depletion ' + fs.toFixed(2) + ')' + (fs > 0.455 ? ', beyond the critical point: this soil is stressed before irrigation starts.' : fs > 0.43 ? ', the critical point, which is where irrigation should start.' : ', before the critical point: irrigation starts early in this soil.'), 26, by0 + 35, 560, { s: 11, b: true, c: fs > 0.455 ? '#B01E14' : '#1E7A36' });
   yq = TW('Under your settings: yield ' + (mf.yield * cf.factor).toFixed(2) + ' ' + cf.unit.split(' ')[0] + ', irrigation ' + mf.irr.toFixed(0) + ' mm, drainage ' + mf.drain.toFixed(0) + ' mm a year' + (rl == null ? '' : '; the trigger gives ' + Math.round(rl * 100) + '% of the best trigger\'s yield for this soil') + '.', 26, yq + 1, 560, { s: 10.5 });
   TW('On this day the sensor reads ' + sensorCm.toLocaleString('en-US') + ' cm (depletion ' + fSensor.toFixed(2) + ') against the trigger of ' + fT.toFixed(2) + ': ' + (fSensor >= fT ? (growing ? 'irrigation is due.' : 'beyond it, but no crop is growing, so nothing is irrigated.') : 'within it.') + (fSensor >= fT && growing && sim.irrFront > 0 && z > sim.irrFront + 3 ? ' Irrigation here wets only to about ' + Math.round(sim.irrFront) + ' cm, so a sensor at ' + z + ' cm is not reached.' : '') + ' ' + beyond + ' of ' + inRoot + ' root-zone layers are beyond the trigger (red).', 26, yq + 2, 560, { s: 10.5 });
 }
