@@ -1,0 +1,68 @@
+folder,file,title,caption,data
+00_Key_Synthesis_Figure,Soil_pore_structure_gates_management_controllability.png,Soil pore structure gates management controllability,"Controllability of yield, IE, drainage and N-leaching fractions by seven management levers across ten soils, and its rank correlation with plant-available water.",E1-E7
+00_Novel_Contributions,N1_Depletion_trigger_law.png,Soil-independent trigger law (data collapse),E2 (10 soils × 20 triggers): relative irrigation and yield collapse onto single curves when the trigger is expressed as root-zone depletion f instead of suction; f* = 5 % yield-loss threshold and the soil-specific suction triggers that achieve it.,E2 + soil hydraulics
+00_Novel_Contributions,N2_Fate_of_saved_evaporation.png,Fate of water saved by mulching,"E14: total evaporation saved (soil + canopy + mulch layer) partitioned by water balance into reduced irrigation, extra transpiration, extra drainage and residual, vs mulch strength and rain; with the resulting change in N leaching.",E14
+00_Novel_Contributions,N3_Feedback_regime_map.png,Feedback regime map and non-additivity,"Loss-pathway index (evaporation vs drainage dominance) across climate (E11) and mulch-management (E14) planes, with the regime boundary E = D, irrigation contours, and maps of where drivers interact non-additively.","E11, E14"
+01_Charts_50/A_System_Forcing_Baseline,01_Feedback_loop_diagram.png,Feedback loops with data-derived effect sizes,"Causal-loop diagram; arrow labels are regression slopes from E11, E14, E12, E1/E10 and E13.","E1,E10-E14"
+01_Charts_50/A_System_Forcing_Baseline,02_Experiment_design_matrix.png,Experiment design matrix,Number of levels of each factor per experiment (from the run names) and the number of simulations; red = runs excluded for solver failure.,All
+01_Charts_50/A_System_Forcing_Baseline,03_Climate_forcing.png,Climate forcing,"Annual rain, reference ET and temperature for the two climates used (Taastrup: E0–E5, E7–E16; Bologna: E6).","Weather files, E0"
+01_Charts_50/A_System_Forcing_Baseline,04_Rainfed_yields_all_years.png,Rainfed yields per year and soil,Harvest-by-harvest yields from the E0 baselines (re-run for per-year output; matches the user's runs within 0.4 %).,E0
+01_Charts_50/A_System_Forcing_Baseline,05_Rainfed_water_balance.png,Rainfed water balance per soil,Mean annual partitioning of rain in the 10 rainfed baselines.,E0
+01_Charts_50/B_PoreScale_Structure,06_Retention_curves.png,Retention curves of the 10 soils,"van Genuchten θ(h) with field capacity (pF 2), the −300 cm trigger and wilting point (pF 4.2).",Soil files
+01_Charts_50/B_PoreScale_Structure,07_Pore_size_distribution.png,Pore-size distribution,Derivative of the retention curve (−dθ/dpF) for each soil; top axis converts suction to equivalent pore radius.,Soil files
+01_Charts_50/B_PoreScale_Structure,08_Unsaturated_conductivity.png,Unsaturated conductivity,"Mualem–van Genuchten K(Se) and K(h) (Ap horizon), mm/day; dotted line = trigger.",Soil files
+01_Charts_50/B_PoreScale_Structure,09_TAW_airentry_Ksat.png,"Available water, air entry and Ksat",Soil-physical indicators computed from the hydraulic parameters of each soil.,Soil files
+01_Charts_50/B_PoreScale_Structure,10_Topsoil_logK_theta_20yr.png,Topsoil conductivity and water content over time,"Daily log10 K and θ at 3.75 cm (30-day rolling statistics), E5 re-runs.",E5 daily
+01_Charts_50/B_PoreScale_Structure,11_Consolidation_rate_effects.png,Structural degradation rate effects,"E5: change in yield, drainage and irrigation relative to tc = 0.001/day, per tillage system.",E5
+01_Charts_50/B_PoreScale_Structure,12_Tillage_water_heatmaps.png,Tillage × water-regime interaction,E5 means over the five consolidation rates.,E5
+01_Charts_50/B_PoreScale_Structure,13_Wetting_drying_loops.png,Wetting–drying loops,Daily θ vs pF at 3.75 cm through the 1994 season for each tillage system.,E5 daily
+01_Charts_50/C_Coupled_Water_Fluxes,14_Flux_Sankey_loam_sand.png,"Water-flux Sankey, loam vs sand","Mean annual inputs (rain, irrigation) and outputs (T, E, interception, other evaporation, drainage) from E2 at the course trigger.",E2
+01_Charts_50/C_Coupled_Water_Fluxes,15_E_T_partitioning_season.png,Seasonal E/T partitioning,"Daily transpiration and soil evaporation (7-day means) with LAI, rainfed vs irrigated vs mulched.","E0,E2,E7 daily"
+01_Charts_50/C_Coupled_Water_Fluxes,16_Daily_drainage_vs_rain.png,Daily drainage vs rain events,"Daily rain and irrigation (bars, top) and drainage at 1 m (shaded, inverted) in the driest and wettest years.",E2 daily
+01_Charts_50/C_Coupled_Water_Fluxes,17_Cumulative_fluxes_by_method.png,Cumulative fluxes by method,"Cumulative irrigation, drainage and canopy evaporation 1980–2000 for four methods.",E4 daily
+01_Charts_50/C_Coupled_Water_Fluxes,18_Partitioning_method_x_soil.png,Partitioning by method × soil,Stacked mean annual fluxes for 10 methods in all 10 soils; dots = irrigation.,E4
+01_Charts_50/C_Coupled_Water_Fluxes,19_Drip_depth_drainage_evap.png,Drip depth vs drainage and evaporation,E4 lines per soil; E15 averaged over the 10 amounts per rooting depth.,"E4,E15"
+01_Charts_50/C_Coupled_Water_Fluxes,20_E15_method_depth_amount_IE.png,Method × rooting depth × amount,"IE for 1,000 runs; each panel one application method.",E15
+01_Charts_50/C_Coupled_Water_Fluxes,21_Annual_drainage_vs_rain.png,Annual drainage vs water input,One point per year; lines = linear fits per soil.,"E0,E2 per year"
+01_Charts_50/C_Coupled_Water_Fluxes,22_Profile_pF_heatmap_1994.png,Profile pressure-head evolution,Depth × date pF with the trigger iso-line; dashed line = sensor depth.,E2 daily
+01_Charts_50/C_Coupled_Water_Fluxes,23_Interannual_variability.png,Year-to-year variability,Boxplots across the 20 harvest years for each trigger and method.,"E2,E4 per year"
+01_Charts_50/D_Irrigation_Control,24_Sensor_suction_1994.png,Sensor suction time series,Daily suction at 20 cm (log) with the trigger and irrigation days.,"E0,E2 daily"
+01_Charts_50/D_Irrigation_Control,25_Trigger_response.png,Trigger pressure response,"Irrigation, yield and IE vs trigger for each soil.",E2
+01_Charts_50/D_Irrigation_Control,26_Sensor_depth_response.png,Sensor depth response,"Events, irrigation and IE vs sensor depth per soil.",E3
+01_Charts_50/D_Irrigation_Control,27_E12_depth_trigger_rain.png,Sensor depth × trigger × rain,"1,000 runs; each panel one rainfall scaling.",E12
+01_Charts_50/D_Irrigation_Control,28_E1_dose_duration.png,Dose × duration,IE and DPF per soil for 4 doses × 5 durations.,E1
+01_Charts_50/D_Irrigation_Control,29_E10_amount_timing.png,Amount × timing window,"IE per soil; x = irrigation window, y = amount per event.",E10
+01_Charts_50/D_Irrigation_Control,30_Irrigation_production_function.png,Irrigation production function,All irrigated runs; saturating fits anchored at each soil's rainfed yield.,"E1-E4,E10"
+01_Charts_50/D_Irrigation_Control,31_Events_per_year_by_trigger.png,Irrigation events per year,Number of irrigation starts per calendar year.,E2 daily
+01_Charts_50/E_Evaporation_Mulching,32_E7_mulch_soil_evaporation.png,Mulch evaporation reduction × interception,"Soil evaporation (mm/yr); titles give the no-mulch value (E2, −300 cm).","E7,E2"
+01_Charts_50/E_Evaporation_Mulching,33_Mulch_nonlinearity.png,Non-linearity of the mulch effect,Saved soil evaporation relative to no mulch; dotted lines = proportional (linear) response.,"E7,E14"
+01_Charts_50/E_Evaporation_Mulching,34_E14_mulch_rain_irrigation_saved.png,Mulch × rain interaction,Irrigation saved relative to vff = 1.0 at the same capacity and rain.,E14
+01_Charts_50/E_Evaporation_Mulching,35_Interception_loss_vs_capacity.png,Interception loss vs capacity,Evaporation of water held in the mulch/litter layer (with ponded water and snow).,"E7,E14"
+01_Charts_50/E_Evaporation_Mulching,36_Mulch_irrigation_substitution.png,Mulch–irrigation substitution,Irrigation saved per mm of soil evaporation saved; 1:1 line for reference.,"E7,E14"
+01_Charts_50/E_Evaporation_Mulching,37_EpFactor_response.png,Soil evaporation factor response,E11 lines per temperature shift at normal rain.,E11
+01_Charts_50/E_Evaporation_Mulching,38_Mulch_benefit_by_soil.png,Mulch benefit by soil,Differences between the strongest mulch and the unmulched reference.,"E7,E2"
+01_Charts_50/F_Nonlinear_Feedbacks,39_Temp_rain_response_surfaces.png,Temperature × rain response surfaces,"Filled contours of yield, irrigation and drainage.",E11
+01_Charts_50/F_Nonlinear_Feedbacks,40_Threshold_breakpoints.png,Threshold detection,Grid-search two-segment linear fits; red dotted line = breakpoint.,"E9,E12,E14"
+01_Charts_50/F_Nonlinear_Feedbacks,41_Elasticity_matrix.png,Elasticities,Log-log slopes of factor-level means (temperature is a semi-elasticity per °C).,E10-E15
+01_Charts_50/F_Nonlinear_Feedbacks,42_Two_way_interactions.png,Two-way interaction plots,Mean irrigation for each pair of drivers.,"E11,E12,E14"
+01_Charts_50/F_Nonlinear_Feedbacks,43_E8_intensity_moisture.png,Rain intensity × starting moisture,Heatmaps averaged over intensity; right panel averaged over rain and moisture.,E8
+01_Charts_50/F_Nonlinear_Feedbacks,44_E9_soil_moisture_rain.png,Soil × initial moisture × rain,"1,000 single-season runs.",E9
+01_Charts_50/F_Nonlinear_Feedbacks,45_Feedback_phase_diagram.png,Feedback phase diagram,Daily trajectories of pF at the sensor vs actual ET.,"E0,E2,E7 daily"
+01_Charts_50/G_Nitrogen_Coupling,46_E13_N_rate_water_strategy.png,N rate × water strategy,Means over soils for each of 10 water strategies.,E13
+01_Charts_50/G_Nitrogen_Coupling,47_E6_Mediterranean_pathways.png,Mediterranean pathways,Bars = means over 10 soils; whiskers = SD.,E6
+01_Charts_50/G_Nitrogen_Coupling,48_Drainage_concentration.png,Drainage nitrate concentration,c = N leached / drainage × 100; log axes; dashed = EU nitrate limit.,"E6,E13"
+01_Charts_50/H_Synthesis,49_Edge_cases_and_tornado.png,Edge-case robustness and factor ranking,"Left: 77 cases per soil; right: main effects (high − low level) from the 64-case factorial, as % of the mean.",E16
+01_Charts_50/H_Synthesis,50_Pareto_tradeoff.png,Trade-off (Pareto) front,"Non-dominated runs for (max IE, min DPF, min NLF), irrigation ≥ 20 mm/yr.",All
+02_Additional_Figures,X01_Texture_triangle.png,Texture triangle,Sand–silt–clay of each soil from the soil files.,Soil files
+02_Additional_Figures,X02_Pore_domains.png,Pore-domain decomposition,Macro/meso/micro pore water split at pF 1.5 and 4.2 (after the multi-domain concept in the examples).,Soil files
+02_Additional_Figures,X03_Ksat_proxy_timeseries.png,Near-saturated conductivity over time,"Topsoil K on wet days (a Ksat proxy) and subsoil K, per tillage system.",E5 daily
+02_Additional_Figures,X04_Seasonal_envelopes.png,Seasonal envelopes,Mean and 10–90 % band by day of year across 1980–2000; blue = mean net precipitation (rain − ET₀).,"E5, E0 daily"
+02_Additional_Figures,X05_Evaporation_decline_after_wetting.png,Evaporation decline after wetting,Composite of all Apr–Sep events 1980–2000 (> 5 mm) followed by 7 dry days; band = interquartile range.,"E0,E7 daily"
+02_Additional_Figures,X06_Model_structure_with_fluxes.png,Model structure with fluxes,Model compartments annotated with the 20-year mean fluxes of one run (after the Daisy diagrams in the examples).,E2
+02_Additional_Figures,X07_Root_LAI_development.png,Root and LAI development,Daily LAI and rooting depth from the crop module.,E2 daily
+02_Additional_Figures,X08_Correlation_matrix.png,Correlation matrix,Spearman rank correlations between long-term outputs.,All
+02_Additional_Figures,X09_RandomForest_drivers.png,Random-forest drivers,Impurity-based importance of design factors and soil properties; out-of-bag R² shown. Moderate R² for irrigation/drainage reflects strong soil × management interactions.,E10-E16
+02_Additional_Figures,X10_Validation_reruns.png,Validation of re-runs,"1:1 comparison; median difference < 0.3 %, all within 2 %.",Re-runs
+02_Additional_Figures,X11_PCA_biplot.png,PCA biplot,Standardised outputs; points coloured by experiment; arrows = loadings.,All
+02_Additional_Figures,X12_Parallel_coordinates_best_runs.png,Parallel coordinates of best runs,Each line one Pareto-optimal run (min–max scaled).,Pareto set
+02_Additional_Figures,X13_Variance_decomposition.png,Variance decomposition,Main-effect sums of squares per factor; remainder = interactions (non-additivity).,E8-E15
