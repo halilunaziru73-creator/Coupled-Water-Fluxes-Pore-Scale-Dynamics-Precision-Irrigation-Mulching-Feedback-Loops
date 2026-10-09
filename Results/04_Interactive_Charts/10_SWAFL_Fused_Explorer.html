@@ -1059,6 +1059,46 @@ function soilAtm(x, sy, w, soilPx, airPx, rate, seed, o) {
   }
   ctx.restore();
 }
+// ---- real irrigation hardware: furrow ditch with siphon tubes (surface), lateral line with risers and sprinkler heads (overhead), valve and filter, riser and buried drip lateral with emitters and wetted bulbs (drip) ----
+function irrigSys(x, w, gy, ppc, hx, o) {
+  o = o || {}; const meth = METHODS.find(q => q.k === state.method) || METHODS[0], t = nowSec(), on = o.on !== false, air = o.air || 70, k3 = clampN(ppc / 3, 0.5, 1.2);
+  const tube = (pts, wd, col, hi) => { ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round'; const path = () => { ctx.beginPath(); pts.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); };
+    path(); ctx.strokeStyle = '#161A1E'; ctx.lineWidth = wd + 2; ctx.stroke(); path(); ctx.strokeStyle = col || '#4A525B'; ctx.lineWidth = wd; ctx.stroke(); path(); ctx.strokeStyle = 'rgba(255,255,255,0.35)'; ctx.lineWidth = Math.max(1, wd * 0.22); ctx.translate(0, -wd * 0.2); ctx.stroke(); ctx.restore();
+    if (on) { ctx.save(); ctx.lineCap = 'butt'; path(); ctx.strokeStyle = 'rgba(110,190,255,0.9)'; ctx.lineWidth = Math.max(1.2, wd * 0.4); ctx.setLineDash([5, 9]); ctx.lineDashOffset = -t * 26; ctx.stroke(); ctx.restore(); } };
+  const dot = (px, py, r, a) => { ctx.fillStyle = 'rgba(200,242,255,' + a + ')'; ctx.strokeStyle = 'rgba(11,95,165,' + a + ')'; ctx.lineWidth = 0.8; ctx.beginPath(); ctx.arc(px, py, r, 0, 6.283); ctx.fill(); ctx.stroke(); };
+  ctx.save(); ctx.beginPath(); ctx.rect(x, gy - air - 40, w, air + 40 + 200 * ppc); ctx.clip();
+  if (meth.k === 'M01_Overhead') {
+    const ay = gy - air, legs = Math.max(2, Math.round(w / 150)), bm = gy + 34 * ppc;
+    tube([[x + 2, bm], [hx - 40, bm], [hx - 40, gy], [hx - 40, ay]], 6 * k3 + 2, '#3A6EA5');          // buried main and hydrant riser
+    ctx.fillStyle = '#C0392B'; ctx.fillRect(hx - 46, gy - 22, 12, 5); ctx.fillStyle = '#6B747E'; ctx.fillRect(hx - 44, gy - 20, 8, 20);
+    tube([[hx - 40, ay], [x + w - 4, ay]], 7 * k3 + 1.5, '#B8C0C8');                                    // aluminium lateral
+    for (let i = 0; i <= legs; i++) { const lx = x + 30 + i * (w - 60) / legs; ctx.strokeStyle = '#2E3338'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(lx - 7, gy); ctx.lineTo(lx, ay + 4); ctx.lineTo(lx + 7, gy); ctx.stroke(); ctx.beginPath(); ctx.moveTo(lx - 4, gy - 8); ctx.lineTo(lx + 4, gy - 8); ctx.stroke(); }
+    const heads = [hx, hx + (w - 60) / 3, hx + 2 * (w - 60) / 3].filter(h => h < x + w - 30);
+    heads.forEach((h, hi) => { ctx.fillStyle = '#6B747E'; ctx.fillRect(h - 2, ay - 12, 4, 12); ctx.fillStyle = '#2E3338'; ctx.beginPath(); ctx.moveTo(h - 6, ay - 12); ctx.lineTo(h + 7, ay - 14); ctx.lineTo(h + 7, ay - 10); ctx.closePath(); ctx.fill(); ctx.fillStyle = '#C0392B'; ctx.fillRect(h - 3, ay - 15, 6, 3);
+      if (on) for (const dir of [-1, 1]) for (let k = 0; k < 12; k++) { const R = (34 + 52 * fr(k * 3.1 + hi + (dir > 0 ? 7 : 0))) * (0.7 + 0.3 * k3), p = (t * 0.7 + fr(k + hi * 5)) % 1, px = h + dir * R * p, py = ay - 12 - 26 * 4 * p * (1 - p) + (gy - ay + 12) * p * p; if (px > x + 2 && px < x + w - 2) dot(px, py, 1.5, (1 - p * 0.35).toFixed(2)); } });
+    if (on) { ctx.fillStyle = 'rgba(30,110,235,0.28)'; heads.forEach(h => { ctx.beginPath(); ctx.ellipse(h, gy - 1, 54 * k3 + 10, 3, 0, 0, 6.283); ctx.fill(); }); }
+  } else if (meth.mid) {
+    const dy = gy + meth.mid * ppc, sp = 46 * (0.8 + 0.4 * k3), n = Math.floor((w - 60) / sp) + 1, bulb = (22 + meth.mid * 0.12) * k3;
+    for (let i = 0; i < n; i++) { const ex = x + 40 + i * sp; if (on) { const g = ctx.createRadialGradient(ex, dy + 4, 1, ex, dy + 4, bulb * (1 + 0.08 * Math.sin(t * 1.5 + i))); g.addColorStop(0, 'rgba(30,110,235,0.42)'); g.addColorStop(1, 'rgba(30,110,235,0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(ex, dy + 4, bulb, bulb * 0.85, 0, 0, 6.283); ctx.fill(); } }
+    tube([[hx, gy - 18], [hx, dy]], 5 * k3 + 1.5, '#4A525B');                                           // riser from the valve box down to the lateral
+    tube([[x + 3, dy], [x + w - 3, dy]], 5 * k3 + 1.5, '#2E3338');                                       // polyethylene drip lateral
+    for (let i = 0; i < n; i++) { const ex = x + 40 + i * sp; ctx.fillStyle = '#0E1114'; ctx.beginPath(); ctx.arc(ex, dy + 3.5 * k3 + 1.5, 2.2, 0, 6.283); ctx.fill(); ctx.strokeStyle = '#8FA0B0'; ctx.lineWidth = 0.8; ctx.stroke();
+      if (on) for (let k = 0; k < 2; k++) { const p = (t * 0.7 + i * 0.17 + k * 0.5) % 1; dot(ex + Math.sin(p * 6 + i) * 1.4, dy + 6 + p * 12 * k3, 1.6, (1 - p).toFixed(2)); } }
+    ctx.fillStyle = '#6B747E'; ctx.strokeStyle = '#161A1E'; ctx.lineWidth = 1; ctx.fillRect(hx - 9, gy - 34, 18, 16); ctx.strokeRect(hx - 9, gy - 34, 18, 16); ctx.fillStyle = '#2F7FC0'; ctx.fillRect(hx - 9, gy - 30, 18, 4);   // valve and filter box
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(hx + 14, gy - 36, 5, 0, 6.283); ctx.fill(); ctx.stroke(); ctx.strokeStyle = '#C0392B'; ctx.beginPath(); ctx.moveTo(hx + 14, gy - 36); ctx.lineTo(hx + 16.5, gy - 39); ctx.stroke(); // pressure gauge
+  } else {
+    const dw = 66 * k3 + 12, sx0 = x + dw, front = (0.35 + 0.55 * ((t * 0.12) % 1)) * (w - dw - 20);
+    ctx.fillStyle = '#7A5A3A'; ctx.strokeStyle = '#3B2A1A'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(x, gy - 16); ctx.lineTo(x + dw - 24, gy - 16); ctx.lineTo(x + dw - 8, gy - 1); ctx.lineTo(x + dw + 2, gy - 1); ctx.lineTo(x + dw + 2, gy + 3); ctx.lineTo(x, gy + 3); ctx.closePath(); ctx.fill(); ctx.stroke();   // bank of the head ditch
+    ctx.fillStyle = '#2F7FC0'; ctx.beginPath(); ctx.moveTo(x + 3, gy - 11); ctx.lineTo(x + dw - 28, gy - 11); ctx.lineTo(x + dw - 16, gy - 2); ctx.lineTo(x + 3, gy - 2); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.75)'; ctx.lineWidth = 1; for (let i = 0; i < 4; i++) { const wx = x + 6 + ((t * 18 + i * 14) % (dw - 40)); ctx.beginPath(); ctx.moveTo(wx, gy - 8); ctx.lineTo(wx + 6, gy - 8); ctx.stroke(); }
+    for (let s = 0; s < 3; s++) { const bx = x + 8 + s * 13, ox = sx0 + 6 + s * 13; tube([[bx, gy - 5], [bx + 1, gy - 27 - s * 2], [bx + 14, gy - 33 - s * 2], [ox - 14, gy - 24], [ox, gy - 6]], 4.5, '#D9A53A'); }   // siphon tubes over the bank
+    const fg = ctx.createLinearGradient(0, gy - 6, 0, gy); fg.addColorStop(0, 'rgba(90,170,245,0.85)'); fg.addColorStop(1, 'rgba(30,100,210,0.9)'); ctx.fillStyle = fg; ctx.fillRect(sx0, gy - 5, front, 5);   // water sheet advancing along the furrow
+    ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = 1.2; for (let i = 0; i < 8; i++) { const wx = sx0 + ((t * 40 + i * 47) % Math.max(20, front - 8)); ctx.beginPath(); ctx.moveTo(wx, gy - 3.5); ctx.lineTo(wx + 8, gy - 3.5); ctx.stroke(); }
+    ctx.fillStyle = 'rgba(40,120,225,0.9)'; ctx.beginPath(); ctx.ellipse(sx0 + front, gy - 2.5, 5, 3, 0, 0, 6.283); ctx.fill();
+    if (on) for (let s = 0; s < 3; s++) for (let k = 0; k < 2; k++) { const p = (t * 0.9 + s * 0.3 + k * 0.5) % 1; dot(sx0 + 6 + s * 13, gy - 8 + p * 6, 1.6, (1 - p * 0.5).toFixed(2)); }
+  }
+  ctx.restore();
+}
 function depthAxis(x, y, maxCm, pxPerCm, step) {
   ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y + maxCm * pxPerCm); ctx.stroke();
   for (let d = 0; d <= maxCm; d += step) { const yy = y + d * pxPerCm; ctx.beginPath(); ctx.moveTo(x - 4, yy); ctx.lineTo(x, yy); ctx.stroke(); T(String(d), x - 7, yy + 3.5, { s: 9.5, a: 'right', c: MUTE }); }
@@ -1112,7 +1152,6 @@ function drawField() {
   // rain streaks and sprinkler
   ctx.strokeStyle = 'rgba(90,150,215,0.75)'; ctx.lineWidth = 1.4;
   for (let i = 0; i < 8 + Math.round(rain * 8); i++) { const rx = 40 + (i * 53 + t * 120) % 140, ry = 84 + (i * 37 + t * 160) % 110; ctx.beginPath(); ctx.moveTo(rx, ry); ctx.lineTo(rx - 3, ry + 9); ctx.stroke(); }
-  if (meth.k === 'M01_Overhead') { ctx.strokeStyle = INK; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(212, tipY - 6); ctx.lineTo(212, tipY + 10); ctx.stroke(); }
   // ground: crop, mulch, section
   drawSection(SX, GY, SW, 100, PX); depthAxis(SX - 2, GY, 100, PX, 25); horizonTags(SX - 48, GY, PX, 100);
   poresIn(SX, GY + 12, SW, 3 * 21, TILL_F[state.till], state.tcIdx / (TC_VALUES.length - 1));
@@ -1131,10 +1170,8 @@ function drawField() {
   ctx.strokeStyle = '#D93025'; ctx.lineWidth = 1.6; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.arc(sx, GY + z * PX, 11, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
   const by = clampN(GY + z * PX - 14, GY + 24, GY + 250);
   box(SX + 66, by, 178, 34, { fill: 'rgba(255,255,255,0.93)', r: 7 }); T('Sensor at ' + z + ' cm: depletion ' + (1 - sim.s[kd][clampN(Math.round(z / DZ), 0, NLAY - 1)]).toFixed(2), SX + 76, by + 14, { s: 10.5, b: true }); T('irrigates at ' + sim.fTrig.toFixed(2) + ' (' + Math.abs(trig) + ' cm suction)', SX + 76, by + 27, { s: 10, c: MUTE });
-  // irrigation delivery
-  if (meth.mid) {
-    const dy = GY + meth.mid * PX; ctx.strokeStyle = CL.irr; ctx.lineWidth = 2.5; ctx.setLineDash([2, 5]); ctx.beginPath(); ctx.moveTo(SX + 6, dy); ctx.lineTo(SX + SW - 6, dy); ctx.stroke(); ctx.setLineDash([]);
-    for (let i = 0; i < 9; i++) { const dx = SX + 30 + i * 56, ph = (t * 0.8 + i * 0.13) % 1; ctx.fillStyle = CL.irr; ctx.beginPath(); ctx.arc(dx, dy + ph * 12, 2.6, 0, Math.PI * 2); ctx.fill(); }
+  // irrigation delivery: the real hardware of the chosen method
+  if (meth.mid) { const dy = GY + meth.mid * PX;
     box(SX + 300, dy - 12, 150, 24, { fill: 'rgba(255,255,255,0.93)', r: 6 }); T(meth.label.toLowerCase() + ' line', SX + 310, dy + 4, { s: 10.5 });
   }
   // moving droplets and vapor
@@ -1782,12 +1819,7 @@ function drawInfiltration(sim, k, f, SX, SW, GY, PX, t) {
     const ty = GY + depth - 22 < GY + 4 ? GY + 6 : GY + depth - 22; box(SX + SW - 126, ty, 122, 17, { fill: 'rgba(255,255,255,0.95)', r: 5, lw: 1 }); T('front at ' + Math.round(F * eased) + ' of ' + Math.round(F) + ' cm', SX + SW - 65, ty + 12.5, { s: 10, b: true, a: 'center', c: '#1B4FA0' });
   }
   if (sim.rain[k] > 0) { ctx.strokeStyle = 'rgba(70,130,210,0.9)'; ctx.lineWidth = 1.6; for (let i = 0; i < 30; i++) { const rx = 30 + (i * 31 + t * 60) % (SW + 40), ry = GY - 50 + (i * 23 + t * 160) % 50; ctx.beginPath(); ctx.moveTo(rx, ry); ctx.lineTo(rx - 3, ry + 10); ctx.stroke(); } }
-  if (I) {
-    const meth = METHODS.find(q => q.k === state.method) || METHODS[0];
-    if (meth.k === 'M01_Overhead') { ctx.strokeStyle = 'rgba(30,110,235,0.8)'; ctx.lineWidth = 1.4; for (let a = -5; a <= 5; a++) { ctx.beginPath(); ctx.moveTo(212, GY - 76); ctx.quadraticCurveTo(212 + a * 14, GY - 96, 212 + a * 24, GY - 4); ctx.stroke(); } }
-    else if (meth.mid) { const dy = GY + meth.mid * PX; for (let i = 0; i < 9; i++) { ctx.fillStyle = 'rgba(30,110,235,0.95)'; ctx.beginPath(); ctx.arc(SX + 30 + i * 56, dy + ((t * 0.8 + i * 0.2) % 1) * 22, 3.4, 0, Math.PI * 2); ctx.fill(); } }
-    else { ctx.fillStyle = 'rgba(30,110,235,0.45)'; ctx.fillRect(SX, GY - 3, SW, 3); }
-  }
+  irrigSys(SX, SW, GY, PX, 212, { air: 76, on: !!I });
   const nv = clampN(Math.round(current.evap / 28), 1, 7);
   for (let i = 0; i < nv; i++) { const ph = (t * 0.22 + i * 0.19) % 1; ctx.strokeStyle = 'rgba(200,170,90,' + (0.7 - ph * 0.6).toFixed(2) + ')'; ctx.lineWidth = 1.5; ctx.beginPath(); const vx = SX + 40 + (i * 71) % (SW - 80); ctx.moveTo(vx, GY - 4 - ph * 26); ctx.quadraticCurveTo(vx + 4, GY - 12 - ph * 26, vx, GY - 20 - ph * 26); ctx.stroke(); }
 }
@@ -2163,6 +2195,7 @@ function drawSWA(x, y, w, mode, o) {
   const th = vff < 0.95 ? mulchThick(state.mulchType) : 0; if (th) mulchLayer(x + 1, w - 2, gy, th, state.mulchType, 11, state.mulchType === 'plastic' ? pxs : null);
   const cvr = sim.cover[kd], ph = clampN(20 + current.yield * 2.2, 22, 34) * (0.15 + 0.85 * cvr);
   if (cvr > 0.03) cropPlants(x + w / 2, gy - th, ph, spread, np, 0, PXs, 3);
+  irrigSys(x, w, gy - th, PXs, x + 34, { air: 46 });
   // water leaving and entering
   const vap = (vx, vy, col, k) => { for (let i = 0; i < k; i++) { const p = (t * 0.25 + i * 0.31 + vx * 0.013) % 1; ctx.strokeStyle = col.replace('A', (0.85 - p * 0.8).toFixed(2)); ctx.lineWidth = 1.7; ctx.beginPath(); const px = vx + (i - k / 2) * 9, py = vy - p * 44; ctx.moveTo(px, py); ctx.quadraticCurveTo(px + 5, py - 7, px, py - 14); ctx.stroke(); } };
   const nE = clampN(Math.round(m.evap / 40), 1, 5), nT = clampN(Math.round(m.transp / 60), 1, 5);
@@ -2700,9 +2733,7 @@ function drawSWAx(x, y, w, sky, soilPx, gwH) {
   const nn = clampN(Math.round(m.nl / 2.2), 3, 26); for (let i = 0; i < nn; i++) { const p = (t * (0.08 + m.drain / 1200) + i * 0.137) % 1, dx = x + 30 + (i * 53) % (w - 60); ctx.fillStyle = 'rgba(232,120,40,' + (0.95 - p * 0.4).toFixed(2) + ')'; ctx.beginPath(); ctx.arc(dx, gy + 8 + p * (soilPx - 12), 2.2, 0, 6.283); ctx.fill(); }
   // irrigation hardware and the sensor, each in its own place
   const hwX = x + w * 0.36, sx = x + w * 0.2;
-  if (meth.k === 'M01_Overhead') { ctx.strokeStyle = '#555'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(hwX, gy - th); ctx.lineTo(hwX, gy - th - 58); ctx.stroke(); ctx.fillStyle = '#555'; ctx.fillRect(hwX - 6, gy - th - 64, 12, 6); ctx.strokeStyle = 'rgba(30,110,235,0.85)'; ctx.lineWidth = 1.4; for (let a = -4; a <= 4; a++) { ctx.beginPath(); ctx.moveTo(hwX, gy - th - 62); ctx.quadraticCurveTo(hwX + a * 11, gy - th - 84, hwX + a * 17, gy - th - 6); ctx.stroke(); } }
-  else if (meth.mid) { const dy = gy + meth.mid * PXs; ctx.strokeStyle = CL.irr; ctx.lineWidth = 2.5; ctx.setLineDash([2, 5]); ctx.beginPath(); ctx.moveTo(x + 6, dy); ctx.lineTo(x + w - 6, dy); ctx.stroke(); ctx.setLineDash([]); for (let i = 0; i < 12; i++) { ctx.fillStyle = CL.irr; ctx.beginPath(); ctx.arc(x + 30 + i * 46, dy + ((t * 0.8 + i * 0.13) % 1) * 12, 2.6, 0, 6.283); ctx.fill(); } ctx.fillStyle = '#555'; ctx.fillRect(hwX - 5, gy - th, 10, dy - gy + th); }
-  else { ctx.fillStyle = 'rgba(30,110,235,0.5)'; ctx.fillRect(x, gy - th - 3, w, 3); for (let i = 0; i < 6; i++) { ctx.fillStyle = CL.irr; ctx.beginPath(); ctx.ellipse(x + 60 + i * 90, gy - th - 8 + Math.sin(t * 2 + i) * 1.5, 7, 2.4, 0, 0, 6.283); ctx.fill(); } ctx.fillStyle = '#555'; ctx.fillRect(hwX - 5, gy - th - 50, 10, 50); }
+  irrigSys(x, w, gy - th, PXs, hwX, { air: 66 });
   const irrP = pill('irrigation ' + m.irr.toFixed(0) + ' mm, ' + meth.label.toLowerCase() + '; trigger ' + trig + ' cm', x + 176, y + 76, { b: true, s: 10, c: '#1B4FA0' });
   ctx.strokeStyle = '#222'; ctx.lineWidth = 3.2; ctx.beginPath(); ctx.moveTo(sx, gy - th - 34); ctx.lineTo(sx, gy + z * PXs); ctx.stroke(); ctx.fillStyle = '#E8E1D0'; ctx.strokeStyle = '#222'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(sx, gy + z * PXs, 6, 0, 6.283); ctx.fill(); ctx.stroke();
   pill('sensor ' + z + ' cm', sx + 12, gy + z * PXs + 4, { b: true, s: 10 });
@@ -3186,7 +3217,7 @@ function drawR1Data(y0) {
   const nax = 6; for (let a = 0; a < nax; a++) { const ox = cx + cwid / 2 + (a - (nax - 1) / 2) * 11, dp = eff * ppc * (a === 2 ? 1 : 0.6 + 0.4 * fr(seed + a)); ctx.strokeStyle = 'rgba(30,18,8,0.9)'; ctx.lineWidth = 3.4; ctx.beginPath(); ctx.moveTo(ox, cy); for (let y = 3; y <= dp; y += 4) ctx.lineTo(ox + Math.sin(y * 0.05 + a) * 3 + (a - 2.5) * y * 0.025, cy + y); ctx.stroke(); ctx.strokeStyle = '#F2DDAA'; ctx.lineWidth = 1.9; ctx.beginPath(); ctx.moveTo(ox, cy); for (let y = 3; y <= dp; y += 4) ctx.lineTo(ox + Math.sin(y * 0.05 + a) * 3 + (a - 2.5) * y * 0.025, cy + y); ctx.stroke(); }
   for (let z = 2; z < eff; z += 3) { const dens = Math.exp(-z / 45), n = Math.round(1 + dens * 5); for (let j = 0; j < n; j++) { const sd = seed + z * 1.7 + j * 3.3, side = fr(sd) < 0.5 ? -1 : 1, L = (6 + 40 * fr(sd + 1)) * (0.4 + dens), x0 = cx + cwid / 2 + (fr(sd + 2) - 0.5) * 40, y = cy + z * ppc; ctx.strokeStyle = 'rgba(240,222,176,' + (0.55 + 0.4 * dens).toFixed(2) + ')'; ctx.lineWidth = 0.7 + dens; ctx.beginPath(); ctx.moveTo(x0, y); ctx.quadraticCurveTo(x0 + side * L * 0.6, y + 1, x0 + side * L, y + L * 0.5); ctx.stroke(); } }
   ctx.restore();
-  if (meth.mid) { const yy = cy + meth.mid * ppc; ctx.fillStyle = '#1F66C8'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(cx + cwid / 2, yy, 5, 0, 6.283); ctx.fill(); ctx.stroke(); T('drip ' + meth.mid + ' cm', cx + cwid + 6, yy + 3, { s: 9, b: true, c: '#1F66C8' }); }
+  if (meth.mid) { const yy = cy + meth.mid * ppc; ctx.fillStyle = '#4A525B'; ctx.strokeStyle = '#161A1E'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(cx + cwid / 2, yy, 5.5, 0, 6.283); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#6EBEFF'; ctx.beginPath(); ctx.arc(cx + cwid / 2, yy, 2.4, 0, 6.283); ctx.fill(); T('drip ' + meth.mid + ' cm', cx + cwid + 8, yy + 3, { s: 9, b: true, c: '#1F66C8' }); }
   ctx.setLineDash([5, 3]); ctx.strokeStyle = '#0D1117'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(cx, cy + 100 * ppc); ctx.lineTo(cx + cwid + 4, cy + 100 * ppc); ctx.stroke(); T('1 m balance border', cx + cwid + 6, cy + 100 * ppc + 3, { s: 9, c: INK }); ctx.setLineDash([]);
   ctx.strokeStyle = INK; ctx.lineWidth = 1.5; ctx.strokeRect(cx, cy, cwid, 180 * ppc); [0, 50, 100, 150, 180].forEach(d => T(String(d), cx - 4, cy + d * ppc + 3, { s: 8.5, a: 'right', c: MUTE }));
   ctx.fillStyle = '#D93025'; ctx.fillRect(cx - 3, cy + rdep * ppc - 1, cwid + 6, 2.4); T('roots set to ' + rdep + ' cm' + (rdep > 120 ? ' (the crop does not use more than 120)' : ''), cx + cwid + 6, cy + rdep * ppc + (rdep > 150 ? -4 : 12), { s: 9, b: true, c: '#D93025' });
