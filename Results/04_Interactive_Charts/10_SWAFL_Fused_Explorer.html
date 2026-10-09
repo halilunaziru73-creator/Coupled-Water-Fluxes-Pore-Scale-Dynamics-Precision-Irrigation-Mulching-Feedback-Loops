@@ -946,46 +946,7 @@ function n3Cells() {
 
 function buildN3Texture(pw, ph) {
   if (n3Tex && n3TexKey === state.soil && n3Tex.width === Math.round(pw) && n3Tex.height === Math.round(ph)) return;
-  n3TexKey = state.soil;
-  const tex = DATA.texture[state.soil];
-  const off = document.createElement('canvas'); off.width = Math.round(pw); off.height = Math.round(ph);
-  const o = off.getContext('2d');
-  const rand = seededRandom(hashStr(state.soil) + 4242);
-  o.fillStyle = tex.color; o.fillRect(0, 0, pw, ph);
-  for (let i = 0; i < 70; i++) {
-    const x = rand() * pw, y = rand() * ph, r = 18 + rand() * 46;
-    const g = o.createRadialGradient(x, y, 0, x, y, r);
-    g.addColorStop(0, rand() < 0.5 ? 'rgba(0,0,0,0.11)' : 'rgba(255,255,255,0.09)');
-    g.addColorStop(1, 'rgba(0,0,0,0)');
-    o.fillStyle = g; o.fillRect(x - r, y - r, 2 * r, 2 * r);
-  }
-  const sand = tex.sand / 100, clay = tex.clay / 100;
-  const nG = Math.round(6500 * (0.4 + sand));
-  for (let i = 0; i < nG; i++) {
-    const x = rand() * pw, y = rand() * ph;
-    const r = (0.7 + rand() * 1.6) * (0.6 + sand * 1.1), sh = (rand() - 0.5) * 70;
-    o.fillStyle = 'rgba(' + cl255(165 + sh) + ',' + cl255(138 + sh) + ',' + cl255(95 + sh) + ',' + (0.35 + rand() * 0.4).toFixed(2) + ')';
-    o.beginPath(); o.ellipse(x, y, r, r * (0.7 + rand() * 0.3), rand() * 3, 0, Math.PI * 2); o.fill();
-    if (r > 1.4) { o.fillStyle = 'rgba(255,255,255,0.18)'; o.beginPath(); o.arc(x - r * 0.3, y - r * 0.3, r * 0.35, 0, Math.PI * 2); o.fill(); }
-  }
-  const nS = Math.round(34 * (0.4 + sand));
-  for (let i = 0; i < nS; i++) {
-    const x = rand() * pw, y = rand() * ph, r = 3 + rand() * 6;
-    o.save(); o.translate(x, y); o.rotate(rand() * Math.PI);
-    o.fillStyle = 'rgba(122,112,100,0.6)'; o.beginPath(); o.ellipse(0, 0, r, r * 0.68, 0, 0, Math.PI * 2); o.fill();
-    o.strokeStyle = 'rgba(60,54,48,0.55)'; o.lineWidth = 0.7; o.stroke(); o.restore();
-  }
-  if (clay > 0.12) {
-    o.strokeStyle = 'rgba(30,20,10,' + (0.15 + clay * 0.35).toFixed(2) + ')'; o.lineWidth = 1;
-    for (let gy = 0; gy < ph; gy += 30) for (let gx = 0; gx < pw; gx += 30) {
-      if (rand() > 0.4) continue;
-      o.save(); o.translate(gx + rand() * 8, gy + rand() * 8); o.beginPath();
-      const n = 5 + Math.floor(rand() * 2);
-      for (let k = 0; k < n; k++) { const ang = (k / n) * Math.PI * 2, r = 12 + rand() * 5; const px = Math.cos(ang) * r, py = Math.sin(ang) * r * 0.8; k === 0 ? o.moveTo(px, py) : o.lineTo(px, py); }
-      o.closePath(); o.stroke(); o.restore();
-    }
-  }
-  n3Tex = off;
+  n3TexKey = state.soil; n3Tex = soilParticles(Math.round(pw), Math.round(ph), Math.abs(hashStr(state.soil)) + 4242, state.soil, () => -14, () => 0.07);
 }
 
 
@@ -1033,47 +994,70 @@ function shade(hex, p) { return shadeColor(hex, p); }
 
 // ---- soil horizons with texture, cached per soil (0 to 150 cm at 3 px per cm, 520 px wide) ----
 const HZ = [{ n: 'O', from: 0, to: 4, label: 'surface litter' }, { n: 'A', from: 4, to: 25, label: 'topsoil' }, { n: 'B', from: 25, to: 70, label: 'subsoil' }, { n: 'C', from: 70, to: 150, label: 'parent material' }];
-let schemTex = null, schemKey = null;
-function buildSchem() {
-  if (schemTex && schemKey === state.soil) return schemTex;
-  schemKey = state.soil; const tex = DATA.texture[state.soil], sand = tex.sand / 100, clay = tex.clay / 100;
-  const w = 520, h = 450, off = document.createElement('canvas'); off.width = w; off.height = h; const o = off.getContext('2d');
-  const rand = seededRandom(hashStr(state.soil) + 5151);
-  const tone = { O: -62, A: -40, B: -10, C: 20 };
-  HZ.forEach(z => { o.fillStyle = shade(tex.color, tone[z.n]); o.fillRect(0, z.from * 3, w, (z.to - z.from) * 3); });
-  for (let i = 0; i < 90; i++) {                           // soft mottling
-    const x = rand() * w, y = rand() * h, r = 14 + rand() * 40, g = o.createRadialGradient(x, y, 0, x, y, r);
-    g.addColorStop(0, rand() < 0.5 ? 'rgba(0,0,0,0.10)' : 'rgba(255,255,255,0.08)'); g.addColorStop(1, 'rgba(0,0,0,0)'); o.fillStyle = g; o.fillRect(x - r, y - r, 2 * r, 2 * r);
+// ---- real soil particles (the same grain look as the evaporation core: one particle per cell, quartz, feldspar, dark mineral, mica), cached per soil, scale and width ----
+const _schemC = {};
+function parseHex(h) { const n = parseInt(h.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255]; }
+const HZ_TONE = { O: -62, A: -40, B: -10, C: 20 }, HZ_POR = { O: 0.30, A: 0.20, B: 0.12, C: 0.08 };
+const hzAt = cm => cm < 4 ? 'O' : cm < 25 ? 'A' : cm < 70 ? 'B' : 'C';
+// flat particle field: toneAt(y) gives a lightness offset and porAt(y) a pore fraction for the row at y
+function soilParticles(w, h, seed, soilKey, toneAt, porAt) {
+  const tex = DATA.texture[soilKey], sand = tex.sand / 100, base = parseHex(tex.color), rand = seededRandom(seed), nz = cNoise(seed + 3), nz2 = cNoise(seed + 9);
+  const off = document.createElement('canvas'); off.width = w; off.height = h; const o = off.getContext('2d');
+  o.fillStyle = '#1D140E'; o.fillRect(0, 0, w, h);
+  const b = 2.2 + sand * 2.2;                                   // grain size in pixels (clay fine, sand coarse)
+  for (let y = 0; y < h; y += b * 0.8) {
+    const tone = toneAt(y), por = porAt(y);
+    for (let x = -b * rand(); x < w; x += b * (0.85 + rand() * 0.5)) {
+      const gw = b * (0.9 + rand() * 0.5), gh = b * (0.78 + rand() * 0.45);
+      if (nz(x * 0.045, y * 0.045) * 0.62 + rand() * 0.38 < por * 1.35 - 0.04) continue;           // air-filled pore: leave dark
+      const gt = grainTint((x / b) | 0, (y / b) | 0, seed), s = (0.82 + 0.3 * nz2(x * 0.07, y * 0.07)) * (0.9 + rand() * 0.2);
+      o.fillStyle = 'rgb(' + cl255((base[0] + tone) * gt[0] * s) + ',' + cl255((base[1] + tone) * gt[1] * s) + ',' + cl255((base[2] + tone) * gt[2] * s) + ')';
+      o.beginPath(); o.ellipse(x + gw / 2, y + gh / 2, gw * 0.53, gh * 0.53, rand() * 3, 0, 6.283); o.fill();
+    }
   }
-  const nG = Math.round(4200 * (0.4 + sand));
-  for (let i = 0; i < nG; i++) {                           // grains
-    const x = rand() * w, y = rand() * h, inA = y > 12 && y < 75, r = (0.7 + rand() * 1.5) * (0.6 + sand * 1.1);
-    o.fillStyle = inA && rand() < 0.5 ? 'rgba(255,255,255,0.55)' : 'rgba(' + cl255(160 + (rand() - 0.5) * 70) + ',' + cl255(135 + (rand() - 0.5) * 60) + ',' + cl255(95 + (rand() - 0.5) * 50) + ',' + (0.3 + rand() * 0.4).toFixed(2) + ')';
-    o.beginPath(); o.ellipse(x, y, r, r * 0.75, rand() * 3, 0, Math.PI * 2); o.fill();
+  return off;
+}
+function buildSchem(ppc, wpx) {
+  ppc = ppc || 3; wpx = Math.round(wpx || 520); const key = state.soil + '|' + ppc.toFixed(2) + '|' + wpx; if (_schemC[key]) return _schemC[key];
+  if (Object.keys(_schemC).length > 18) for (const k in _schemC) delete _schemC[k];
+  const tex = DATA.texture[state.soil], sand = tex.sand / 100, clay = tex.clay / 100, w = wpx, h = Math.ceil(150 * ppc) + 2, seed = Math.abs(hashStr(state.soil)) + 5151, rand = seededRandom(seed + 1);
+  const off = soilParticles(w, h, seed, state.soil, y => HZ_TONE[hzAt(y / ppc)], y => HZ_POR[hzAt(y / ppc)]), o = off.getContext('2d'), k3 = ppc / 3;
+  for (let i = 0; i < Math.round(40 * w / 520); i++) {         // litter strokes in the O horizon
+    const x = rand() * w, y = 1 + rand() * Math.max(2, 4 * ppc - 3); o.strokeStyle = 'rgba(190,160,110,0.7)'; o.lineWidth = 1; o.beginPath(); o.moveTo(x, y); o.lineTo(x + 5 + rand() * 7, y + (rand() - 0.5) * 3); o.stroke();
   }
-  for (let i = 0; i < 40; i++) {                           // litter strokes in the O horizon
-    const x = rand() * w, y = 2 + rand() * 9; o.strokeStyle = 'rgba(190,160,110,0.55)'; o.lineWidth = 1; o.beginPath(); o.moveTo(x, y); o.lineTo(x + 6 + rand() * 8, y + (rand() - 0.5) * 3); o.stroke();
-  }
-  if (clay > 0.12) {                                       // aggregates in the subsoil
-    o.strokeStyle = 'rgba(30,20,10,' + (0.14 + clay * 0.34).toFixed(2) + ')'; o.lineWidth = 1;
-    for (let gy = 78; gy < 210; gy += 26) for (let gx = 0; gx < w; gx += 26) {
-      if (rand() > 0.4) continue; o.save(); o.translate(gx + rand() * 8, gy + rand() * 8); o.beginPath();
-      const n = 5 + Math.floor(rand() * 2); for (let k = 0; k < n; k++) { const a = k / n * Math.PI * 2, rr = 10 + rand() * 4; const px = Math.cos(a) * rr, py = Math.sin(a) * rr * 0.8; k === 0 ? o.moveTo(px, py) : o.lineTo(px, py); }
+  if (clay > 0.12) {                                           // aggregates in the subsoil
+    o.strokeStyle = 'rgba(20,12,6,' + (0.2 + clay * 0.34).toFixed(2) + ')'; o.lineWidth = 1; const st = Math.max(14, 26 * k3 * 1.6), rr0 = st * 0.4;
+    for (let gy = 25 * ppc + 4; gy < 70 * ppc; gy += st) for (let gx = 0; gx < w; gx += st) {
+      if (rand() > 0.45) continue; o.save(); o.translate(gx + rand() * 6, gy + rand() * 6); o.beginPath();
+      const n = 5 + Math.floor(rand() * 2); for (let k = 0; k < n; k++) { const a = k / n * 6.283, rr = rr0 + rand() * 4; const px = Math.cos(a) * rr, py = Math.sin(a) * rr * 0.8; k === 0 ? o.moveTo(px, py) : o.lineTo(px, py); }
       o.closePath(); o.stroke(); o.restore();
     }
   }
-  for (let i = 0; i < 26; i++) {                           // stones in the parent material
-    const x = rand() * w, y = 215 + rand() * 230, r = 4 + rand() * 7; o.save(); o.translate(x, y); o.rotate(rand() * 3);
-    o.fillStyle = 'rgba(128,120,108,0.5)'; o.beginPath(); o.ellipse(0, 0, r, r * 0.65, 0, 0, Math.PI * 2); o.fill(); o.strokeStyle = 'rgba(60,54,48,0.5)'; o.lineWidth = 0.8; o.stroke(); o.restore();
+  for (let i = 0; i < Math.round(26 * w / 520); i++) {         // stones in the parent material
+    const x = rand() * w, y = (72 + rand() * 76) * ppc, r = Math.max(3, (4 + rand() * 7) * Math.min(1, k3 * 1.5)); o.save(); o.translate(x, y); o.rotate(rand() * 3);
+    o.fillStyle = 'rgba(128,120,108,0.6)'; o.beginPath(); o.ellipse(0, 0, r, r * 0.65, 0, 0, 6.283); o.fill(); o.strokeStyle = 'rgba(40,34,30,0.7)'; o.lineWidth = 0.8; o.stroke(); o.restore();
   }
-  o.strokeStyle = 'rgba(0,0,0,0.35)'; o.lineWidth = 1;     // horizon boundaries, slightly wavy
-  HZ.slice(1).forEach(z => { o.beginPath(); for (let x = 0; x <= w; x += 10) { const y = z.from * 3 + Math.sin(x * 0.045 + z.from) * 2.2; x === 0 ? o.moveTo(x, y) : o.lineTo(x, y); } o.stroke(); });
-  schemTex = off; return off;
+  o.strokeStyle = 'rgba(0,0,0,0.4)'; o.lineWidth = 1;          // horizon boundaries, slightly wavy
+  HZ.slice(1).forEach(z => { o.beginPath(); for (let x = 0; x <= w; x += 8) { const y = z.from * ppc + Math.sin(x * 0.045 + z.from) * 2.2; x === 0 ? o.moveTo(x, y) : o.lineTo(x, y); } o.stroke(); });
+  _schemC[key] = off; return off;
 }
-// draws the textured section from the surface down to maxCm at pxPerCm; returns nothing
+// draws the textured section from the surface down to maxCm at pxPerCm
 function drawSection(x, y, w, maxCm, pxPerCm) {
-  const t = buildSchem(); ctx.drawImage(t, 0, 0, 520, maxCm * 3, x, y, w, maxCm * pxPerCm);
-  ctx.strokeStyle = INK; ctx.lineWidth = 1.5; ctx.strokeRect(x, y, w, maxCm * pxPerCm);
+  const t = buildSchem(pxPerCm, w), hh = maxCm * pxPerCm; ctx.drawImage(t, 0, 0, Math.round(w), hh, x, y, Math.round(w), hh);
+  ctx.strokeStyle = INK; ctx.lineWidth = 1.5; ctx.strokeRect(x, y, w, hh);
+}
+// ---- the atmosphere as in the evaporation scene: pale dots ringed in blue rise through the pores, turn into white vapour dots at the surface and leave upward ----
+// rate 0 to 1 sets how many; sy is the soil surface (or the top of the mulch), soilPx how far down the rising liquid starts, airPx how far the vapour climbs
+function soilAtm(x, sy, w, soilPx, airPx, rate, seed, o) {
+  o = o || {}; const t = nowSec(), r = clampN(rate, 0, 1), n = Math.round((o.n || 14) * (0.15 + 0.85 * r)); if (n < 1) return;
+  ctx.save(); ctx.lineWidth = 0.9;
+  for (let i = 0; i < n; i++) {
+    const s0 = (seed || 0) * 7.7 + i * 3.17, px = x + 6 + fr(s0) * (w - 12), ph = (t * (0.14 + 0.1 * r) + fr(s0 + 1)) % 1;
+    if (soilPx > 0 && i % 2 === 0) { const q = (t * (0.1 + 0.12 * r) + fr(s0 + 2)) % 1; ctx.fillStyle = '#C8F2FF'; ctx.strokeStyle = '#0B5FA5'; ctx.beginPath(); ctx.arc(px + Math.sin(q * 9 + s0) * 1.6, sy + soilPx * (1 - q), 1.7, 0, 6.283); ctx.fill(); ctx.stroke(); }
+    const a = Math.min(1, (1 - ph) * 1.6).toFixed(2), vy = sy - 2 - ph * airPx, vx = px + Math.sin(ph * 7 + s0) * 4 * ph;
+    ctx.fillStyle = 'rgba(255,255,255,' + a + ')'; ctx.strokeStyle = 'rgba(43,108,176,' + a + ')'; ctx.beginPath(); ctx.arc(vx, vy, 2 + ph * 0.8, 0, 6.283); ctx.fill(); ctx.stroke();
+  }
+  ctx.restore();
 }
 function depthAxis(x, y, maxCm, pxPerCm, step) {
   ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y + maxCm * pxPerCm); ctx.stroke();
@@ -1135,6 +1119,7 @@ function drawField() {
   const th = mulchBand(SX, SW, GY);
   surfaceCover(SX, SW, GY - th);
   drawSoilWater(sim, kd, SX, SW, GY, PX);
+  soilAtm(SX + 4, GY - th, SW - 8, 40, 70, m.evap / 200, 2, { n: 30 });
   drawRoots(sim, kd, GY, PX, PLX, 0.4);
   const Hmax = clampN(34 + current.yield * 6.5, 40, 84), cropH = Hmax * (0.12 + 0.88 * sim.cover[kd]);
   if (sim.cover[kd] > 0.03) cropPlants(365, GY - th, cropH * 0.82, 50, 8, 0, PX, 7);
@@ -1867,8 +1852,7 @@ function drawN3Chart() {
     const m = model(vff, r), idx = (m.evap - m.drain) / Math.max(1, m.evap + m.drain), x = 14 + i * slotW + (slotW - colW) / 2, you = i === near;
     ctx.fillStyle = '#E4EFFA'; ctx.fillRect(x - 6, y0 - 54, colW + 12, 54); drawSection(x, y0, colW, 100, ppc);
     ctx.fillStyle = regTint(idx, 0.24); ctx.fillRect(x, y0, colW, colH); ctx.save(); ctx.beginPath(); ctx.rect(x, y0 - 80, colW, colH + 80); ctx.clip(); cropPlants(x + colW / 2, y0, 26, colW / 4, 4, 55, ppc, 9 + i); ctx.restore();
-    const nv = clampN(Math.round(m.evap / 24), 1, 8);
-    for (let k = 0; k < nv; k++) { const ph = (t * 0.2 + k * 0.137 + i * 0.31) % 1, vx = x + 10 + (k * 47) % (colW - 20), vy = y0 - 3 - ph * 48; ctx.strokeStyle = 'rgba(90,104,120,' + (0.9 - ph * 0.8).toFixed(2) + ')'; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.moveTo(vx, vy); ctx.quadraticCurveTo(vx + 5, vy - 6, vx, vy - 12); ctx.stroke(); }
+    soilAtm(x, y0, colW, 30, 52, m.evap / N3_MAX_E, i + 1, { n: 12 });
     const nd = clampN(Math.round(m.drain / 9), 0, 14);
     for (let k = 0; k < nd; k++) { const ph = (t * 0.22 + k * 0.173 + i * 0.2) % 1, dx = x + 8 + (k * 37) % (colW - 16); ctx.fillStyle = 'rgba(25,100,200,' + (1 - ph * 0.6).toFixed(2) + ')'; ctx.beginPath(); ctx.ellipse(dx, y0 + 6 + ph * (colH - 10), 2.2, 3.6, 0, 0, Math.PI * 2); ctx.fill(); }
     hollow(x + colW / 2, y0 + colH + 3, 'down', 28, clampN(5 + m.drain / 4, 5, 34), CL.drain);
@@ -1886,7 +1870,7 @@ function drawN3Chart() {
   for (let vi = 0; vi < ny; vi++) for (let ri = 0; ri < nx; ri++) { const c0 = cells[vi][ri], idx = (c0.evap - c0.drain) / Math.max(1, c0.evap + c0.drain); ctx.fillStyle = regTint(idx, 0.34 + 0.26 * Math.abs(idx)); ctx.fillRect(cx0 + ri * cw, cy0 + (ny - 1 - vi) * ch, cw + 0.5, ch + 0.5); }
   ctx.strokeStyle = 'rgba(0,0,0,0.25)'; ctx.lineWidth = 1; for (let i = 1; i < nx; i++) { ctx.beginPath(); ctx.moveTo(cx0 + i * cw, cy0); ctx.lineTo(cx0 + i * cw, cy1); ctx.stroke(); } for (let j = 1; j < ny; j++) { ctx.beginPath(); ctx.moveTo(cx0, cy0 + j * ch); ctx.lineTo(cx1, cy0 + j * ch); ctx.stroke(); }
   for (let vi = 0; vi < ny; vi++) for (let ri = 0; ri < nx; ri++) { const c0 = cells[vi][ri], top = cy0 + (ny - 1 - vi) * ch, left = cx0 + ri * cw; const nv = clampN(Math.round(c0.evap / N3_MAX_E * 2), 0, 2), nd = clampN(Math.round(c0.drain / N3_MAX_D * 2), 0, 2);
-    for (let k = 0; k < nv; k++) { const sd = vi * 131 + ri * 17 + k * 7.3, p = (t * 0.18 + fr(sd)) % 1; ctx.fillStyle = 'rgba(255,255,255,' + ((1 - p) * 0.85).toFixed(2) + ')'; ctx.beginPath(); ctx.arc(left + cw * (0.2 + 0.6 * fr(sd + 2)), top + ch * 0.9 - p * ch * 1.3, 1.6, 0, Math.PI * 2); ctx.fill(); }
+    for (let k = 0; k < nv; k++) { const sd = vi * 131 + ri * 17 + k * 7.3, p = (t * 0.18 + fr(sd)) % 1; ctx.fillStyle = 'rgba(255,255,255,' + ((1 - p) * 0.95).toFixed(2) + ')'; ctx.strokeStyle = 'rgba(43,108,176,' + ((1 - p) * 0.95).toFixed(2) + ')'; ctx.lineWidth = 0.8; ctx.beginPath(); ctx.arc(left + cw * (0.2 + 0.6 * fr(sd + 2)), top + ch * 0.9 - p * ch * 1.3, 1.8, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
     for (let k = 0; k < nd; k++) { const sd = vi * 71 + ri * 29 + k * 5.1, p = (t * 0.22 + fr(sd)) % 1; ctx.fillStyle = 'rgba(150,215,255,' + (0.95 - p * 0.4).toFixed(2) + ')'; ctx.beginPath(); ctx.ellipse(left + cw * (0.2 + 0.6 * fr(sd + 2)), top + ch * 0.1 + p * ch * 0.85, 1.4, 2.2, 0, 0, Math.PI * 2); ctx.fill(); } }
   ctx.strokeStyle = INK; ctx.lineWidth = 1.6; ctx.strokeRect(cx0, cy0, pw, ph);
   RAIN_VALUES.forEach((r, i) => { if (i % 2 === 0) T(r.toFixed(1), cx0 + i * cw + cw / 2, cy1 + 13, { s: 9.5, a: 'center', c: INK }); }); [0, 3, 6, 9].forEach(i => T(VFF_VALUES[i].toFixed(1), cx0 - 6, cy0 + (ny - 1 - i) * ch + ch / 2 + 3.5, { s: 9.5, a: 'right', c: INK }));
@@ -2182,7 +2166,7 @@ function drawSWA(x, y, w, mode, o) {
   // water leaving and entering
   const vap = (vx, vy, col, k) => { for (let i = 0; i < k; i++) { const p = (t * 0.25 + i * 0.31 + vx * 0.013) % 1; ctx.strokeStyle = col.replace('A', (0.85 - p * 0.8).toFixed(2)); ctx.lineWidth = 1.7; ctx.beginPath(); const px = vx + (i - k / 2) * 9, py = vy - p * 44; ctx.moveTo(px, py); ctx.quadraticCurveTo(px + 5, py - 7, px, py - 14); ctx.stroke(); } };
   const nE = clampN(Math.round(m.evap / 40), 1, 5), nT = clampN(Math.round(m.transp / 60), 1, 5);
-  if (vff < 0.95 && state.mulchType !== 'plastic') vap(x + w * 0.22, gy - th - 2, 'rgba(200,150,40,A)', Math.max(1, Math.round(nE * (0.4 + vff * 0.6)))); else vap(x + w * 0.22, gy - th - 2, 'rgba(200,150,40,A)', nE);
+  soilAtm(x + 6, gy - th, w - 12, 30, 62, m.evap / 200, 4, { n: 30 });
   vap(x + w * 0.62, gy - ph - th - 2, 'rgba(60,150,70,A)', nT);
   if (mode !== 'fate') pill('evaporation ' + m.evap.toFixed(0) + ' mm', x + w * 0.30, y + 66, { b: true, s: 10, c: '#8A6A1F' }); pill('transpiration ' + m.transp.toFixed(0) + ' mm', x + w * 0.58, y + 66, { b: true, s: 10, c: '#2F7F3E' });
   if (mode !== 'fate') pill('rain ' + m.rain.toFixed(0) + ' mm', x + 112, y + 66, { b: true, s: 10, c: '#245E92' });
@@ -2318,15 +2302,15 @@ function v4Hit(p) { const C = V4CH, i = Math.floor((p.x - C.x0) / (C.w + C.gap))
 function v4Down(p) { const i = v4Hit(p); if (i >= 0) { setMulch(v4List()[i].k); return true; } return false; }
 function v4Move(p) { v4ui.hover = v4Hit(p); canvas.style.cursor = v4ui.hover >= 0 ? 'pointer' : 'default'; return false; }
 function drawV4() {
-  paper(); const t = nowSec(), rain = RAIN_VALUES[state.rainIdx], tex = buildSchem(), vff = VFF_VALUES[state.vffIdx], has = vff < 0.95, mt = mulchBy(state.mulchType);
+  paper(); const t = nowSec(), rain = RAIN_VALUES[state.rainIdx], vff = VFF_VALUES[state.vffIdx], has = vff < 0.95, mt = mulchBy(state.mulchType);
   const bare = model(1.0, rain), cur = model(vff, rain), strong = model(0.1, rain);
   T('Mulched against bare soil', 16, 22, { s: 14, b: true }); T('Six common mulch materials, ' + DATA.soil_labels[state.soil].toLowerCase() + ', rain \u00d7' + rain.toFixed(1) + '. Click a material to apply it.', 16, 38, { s: 10.5, c: MUTE });
   [[14, 'Bare soil', bare, false], [312, has ? mt.label : 'No mulch set', cur, true]].forEach(([x, name, mm, mulched]) => {
     const w = 294, y = 46, gy = y + 70, th = mulched && has ? mulchThick(state.mulchType) : 0, sp = (w - 36) / 7, pxs = []; for (let i = 0; i < 7; i++) pxs.push(x + 18 + sp * i + sp / 2);
-    const sg = ctx.createLinearGradient(0, y, 0, gy); sg.addColorStop(0, '#CFE5F8'); sg.addColorStop(1, '#EEF6FC'); ctx.fillStyle = sg; ctx.fillRect(x, y, w, gy - y); ctx.drawImage(tex, 0, 0, 520, 150, x, gy, w, 52);
+    const sg = ctx.createLinearGradient(0, y, 0, gy); sg.addColorStop(0, '#CFE5F8'); sg.addColorStop(1, '#EEF6FC'); ctx.fillStyle = sg; ctx.fillRect(x, y, w, gy - y); ctx.drawImage(buildSchem(1.04, w), 0, 0, w, 52, x, gy, w, 52);
     const nd = clampN(Math.round(mm.drain / 16), 0, 10); for (let i = 0; i < nd; i++) { const ph = (t * 0.25 + i * 0.211) % 1; ctx.fillStyle = 'rgba(30,110,200,' + (1 - ph * 0.5).toFixed(2) + ')'; ctx.beginPath(); ctx.ellipse(x + 18 + (i * 53) % (w - 36), gy + 6 + ph * 40, 2, 3.2, 0, 0, 6.283); ctx.fill(); }
     if (th) mulchLayer(x, w, gy, th, state.mulchType, 19, state.mulchType === 'plastic' ? pxs : null);
-    const nv = clampN(Math.round(mm.evap / 16), 1, 10); for (let i = 0; i < nv; i++) { const ph = (t * 0.2 + i * 0.137) % 1; ctx.strokeStyle = 'rgba(190,140,40,' + (0.85 - ph * 0.75).toFixed(2) + ')'; ctx.lineWidth = 1.5; const vx = x + 14 + (i * 41) % (w - 28), vy = gy - th - 2 - ph * 24; ctx.beginPath(); ctx.moveTo(vx, vy); ctx.quadraticCurveTo(vx + 4, vy - 5, vx, vy - 10); ctx.stroke(); }
+    soilAtm(x, gy - th, w, 44, 64, mm.evap / Math.max(1, bare.evap), mulched ? 3 : 1, { n: 20 });
     cropPlants(x + w / 2, gy - th, 30, sp, 7, 0, 1, 3);
     ctx.strokeStyle = INK; ctx.lineWidth = 1.3; ctx.strokeRect(x, y, w, 122); T(name, x + 8, y + 15, { s: 11.5, b: true }); T('evaporation ' + mm.evap.toFixed(0) + ' mm', x + 8, y + 112, { s: 10.5, b: true, c: '#fff' }); T('drainage ' + mm.drain.toFixed(0) + ' mm', x + w - 8, y + 112, { s: 10.5, b: true, a: 'right', c: '#fff' });
     if (mulched && has) mulchLens(x + w - 30, y + 36, 25, state.mulchType);
@@ -2511,7 +2495,7 @@ function drawV2Detail() {
   const x0 = 104, x1 = 410, y0 = 96, ppc = 2.2, maxCm = 150, y1 = y0 + maxCm * ppc, xm = v => x0 + clampN((logv(v) - 1) / 4, 0, 1) * (x1 - x0);
   T('Soil pressure head through 1994', 16, 22, { s: 14, b: true }); T(datasetNote(), 16, 38, { s: 10.5, c: MUTE });
   legendRow([{ c: '#1B6FD8', t: 'irrigated' }, { c: '#E8912D', t: 'rainfed' }, { c: '#111', w: 1.4, dash: [3, 3], t: 'sensor depth ' + z + ' cm' }], 16, 62);
-  drawSection(x0, y0, x1 - x0, maxCm, ppc); ctx.fillStyle = 'rgba(255,255,255,0.45)'; ctx.fillRect(x0, y0, x1 - x0, maxCm * ppc);
+  drawSection(x0, y0, x1 - x0, maxCm, ppc); ctx.fillStyle = 'rgba(255,255,255,0.22)'; ctx.fillRect(x0, y0, x1 - x0, maxCm * ppc);
   depthAxis(x0, y0, maxCm, ppc, 25); horizonTags(x0 - 30, y0, ppc, maxCm); T('depth', 40, y0 - 8, { s: 10, c: MUTE });
   ctx.strokeStyle = 'rgba(0,0,0,0.18)'; ctx.lineWidth = 1; [10, 100, 1000, 10000, 100000].forEach(v => { ctx.beginPath(); ctx.moveTo(xm(v), y0); ctx.lineTo(xm(v), y1); ctx.stroke(); T(v.toLocaleString('en-US'), xm(v), y1 + 14, { s: 9, a: 'center', c: MUTE }); });
   T('suction (cm, log scale)', (x0 + x1) / 2, y1 + 28, { s: 10, a: 'center', c: MUTE });
@@ -2723,7 +2707,7 @@ function drawSWAx(x, y, w, sky, soilPx, gwH) {
   ctx.strokeStyle = '#222'; ctx.lineWidth = 3.2; ctx.beginPath(); ctx.moveTo(sx, gy - th - 34); ctx.lineTo(sx, gy + z * PXs); ctx.stroke(); ctx.fillStyle = '#E8E1D0'; ctx.strokeStyle = '#222'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(sx, gy + z * PXs, 6, 0, 6.283); ctx.fill(); ctx.stroke();
   pill('sensor ' + z + ' cm', sx + 12, gy + z * PXs + 4, { b: true, s: 10 });
   const vap = (vx, vy, col, k) => { for (let i = 0; i < k; i++) { const p = (t * 0.25 + i * 0.31 + vx * 0.013) % 1; ctx.strokeStyle = col.replace('A', (0.85 - p * 0.8).toFixed(2)); ctx.lineWidth = 1.8; ctx.beginPath(); const px = vx + (i - k / 2) * 9, py = vy - p * 40; ctx.moveTo(px, py); ctx.quadraticCurveTo(px + 5, py - 8, px, py - 16); ctx.stroke(); } };
-  vap(x + w * 0.74, gy - th - 2, 'rgba(200,150,40,A)', clampN(Math.round(m.evap / 45), 1, 5)); vap(x + w * 0.5, gy - ph - th - 2, 'rgba(60,150,70,A)', clampN(Math.round(m.transp / 60), 1, 5));
+  soilAtm(x + 6, gy - th, w - 12, 34, 74, m.evap / 200, 5, { n: 30 }); vap(x + w * 0.5, gy - ph - th - 2, 'rgba(60,150,70,A)', clampN(Math.round(m.transp / 60), 1, 5));
   pill('rain \u00d7' + rain.toFixed(1) + ' (' + m.rain.toFixed(0) + ' mm)', x + 24, y + 92, { b: true, s: 10, c: '#245E92' });
   pill('transpiration ' + m.transp.toFixed(0) + ' mm', x + 250, y + 100, { b: true, s: 10, c: '#2F7F3E' }); pill('evaporation ' + m.evap.toFixed(0) + ' mm', x + 396, y + 100, { b: true, s: 10, c: '#8A6A1F' });
   hollow(x + w * 0.37, gy + 24 * PXs / 0.9, 'down', 40, clampN(5 + m.irr / 40, 5, 16), CL.irr); T('infiltration', x + w * 0.37 + 18, gy + 44, { s: 10, b: true, c: '#fff' });
