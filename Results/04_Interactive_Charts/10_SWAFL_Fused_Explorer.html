@@ -59,6 +59,7 @@
   body.embedlive canvas { height: auto; object-fit: fill; object-position: 0 0; border-radius: 0; cursor: auto; }
   body.embedlive .panel h2, body.embedlive .legend, body.embedlive #playBar, body.embedlive .swipehint { display: none !important; }
   body.embedlive { background: #0D1117; overflow: hidden; }
+  body.embedlive canvas { margin-top: calc(var(--vy, 0) / 620 * -100vw); }
   body.embedlive .ux-views, body.embedlive .ux-fold, body.embedlive #uxPlain, body.embedlive .ux-welcome, body.embedlive .ux-live, body.embedlive .ux-set, body.embedlive .ux-search, body.embedlive [class^='ux-'] { display: none !important; }
   body.embedlive .shell, body.embedlive .mainarea { display: block; padding: 0; margin: 0; }
   body.embed #playBar { display: none !important; }
@@ -3770,6 +3771,7 @@ document.querySelectorAll('.readout[data-jump]').forEach(el => {
 setupSceneBar();
 setupButtons();
 buildYearStrip(); autoWire();
+{ const vy = new URLSearchParams(location.search).get('vy'); if (vy) document.body.style.setProperty('--vy', parseFloat(vy) || 0); }
 { const em = new URLSearchParams(location.search).get('embed'); const es = em && em !== '1' && SCENES.find(x => x.id === em); if (es) currentScene = es; }
 switchScene(currentScene);          // full set-up of the starting scene: toolbar, title, legend, canvas size, insight
 // the first screen is shown before the heavy first calculation (the field starts at today's date, with weather like a typical year)
