@@ -107,6 +107,19 @@
   .guihelp { margin: 0.35rem 0.8rem 0; padding: 0.4rem 0.7rem; background: #1C2128; border-radius: 8px; font-size: 0.74rem; color: #C9D1D9; }
   .delta { display: block; font-size: 0.62rem; font-weight: 700; letter-spacing: 0; margin-top: 0.05rem; } .delta.good { color: #5BD67A; } .delta.bad { color: #FF8A7A; } .delta.neu { color: #8B949E; }
   body.embed .gui, body.embed .guihelp { display: none !important; }
+  /* bigger picture, controls and play bar that stay in view while you scroll */
+  .shell { grid-template-columns: 188px minmax(0, 1fr); }
+  .scenebtn { padding: 0.45rem 0.55rem; font-size: 0.84rem; }
+  .scenebtn .no { font-size: 0.7rem; }
+  @media (min-width: 921px) {
+    .wrap { max-width: 1900px; grid-template-columns: minmax(0, 1.9fr) minmax(310px, 0.85fr); align-items: start; }
+    .wrap > .panel:nth-child(2) { position: sticky; top: 8px; max-height: calc(100vh - 16px); overflow-y: auto; scrollbar-width: thin; }
+  }
+  #playBar { position: sticky; bottom: 0; z-index: 6; background: #161B22; padding: 0.5rem 0.4rem; margin-left: -0.4rem; margin-right: -0.4rem; border-top: 1px solid #30363D; }
+  @media (max-width: 920px) { .wrap > .panel:nth-child(2) { position: static; max-height: none; } }
+  body.embed .wrap > .panel:nth-child(2) { position: static; }
+  #jumpBtn { display: none; }
+  @media (max-width: 920px) { #jumpBtn { display: block; position: fixed; right: 12px; bottom: 64px; z-index: 20; padding: 0.55rem 0.9rem; border-radius: 999px; border: 1px solid #D4A94A; background: #D4A94A; color: #1A2318; font-weight: 700; font-size: 0.85rem; box-shadow: 0 2px 8px rgba(0,0,0,0.4); } body.embed #jumpBtn { display: none; } }
 </style>
 </head>
 <body>
@@ -3653,5 +3666,7 @@ loop();
 })();
 if (window.__guiFromHash) window.__guiFromHash(); refresh();
 </script>
+<button id="jumpBtn" type="button">Controls &darr;</button>
+<script>(function(){var b=document.getElementById("jumpBtn");if(!b)return;function ctl(){return document.querySelectorAll(".wrap > .panel")[1];}b.addEventListener("click",function(){var c=ctl();if(!c)return;var r=c.getBoundingClientRect();var down=r.top>innerHeight*0.5;if(down){c.scrollIntoView({behavior:"smooth",block:"start"});}else{document.getElementById("profileCanvas").scrollIntoView({behavior:"smooth",block:"start"});}});addEventListener("scroll",function(){var c=ctl();if(!c)return;b.innerHTML=c.getBoundingClientRect().top>innerHeight*0.5?"Controls &darr;":"Picture &uarr;";},{passive:true});})();</script>
 </body>
 </html>
