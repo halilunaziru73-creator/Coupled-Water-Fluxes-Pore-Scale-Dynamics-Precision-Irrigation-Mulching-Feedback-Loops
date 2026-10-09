@@ -3435,26 +3435,35 @@ function coreField(S, G, day, top) {
 }
 const CW = [[59, 76, 192], [98, 130, 234], [141, 176, 254], [184, 208, 249], [221, 221, 221], [245, 196, 173], [244, 154, 123], [222, 96, 77], [180, 4, 38]];
 function cw(t) { t = clampN(t, 0, 1) * 8; const i = Math.min(7, t | 0), f = t - i, a = CW[i], b = CW[i + 1]; return [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f, a[2] + (b[2] - a[2]) * f]; }
+function grainTint(x, y, seed) {   // one soil particle per cell: quartz, feldspar, dark mineral, mica
+  const u = (((x * 73856093) ^ (y * 19349663) ^ (seed * 83492791)) >>> 0) % 1000 / 1000;
+  return u < 0.48 ? [1, 1, 1, 1] : u < 0.7 ? [1.28, 1.24, 1.16, 1.2] : u < 0.82 ? [1.22, 1.0, 0.92, 1.1] : u < 0.94 ? [0.62, 0.6, 0.6, 0.7] : [1.6, 1.58, 1.5, 1.35];
+}
+const lerp3 = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
+function pal(st, t) { t = clampN(t, 0, 1) * (st.length - 1); const i = Math.min(st.length - 2, t | 0); return lerp3(st[i], st[i + 1], t - i); }
+const WST = [[212, 184, 140], [150, 112, 76], [88, 64, 48], [28, 96, 188], [14, 60, 150]], VST = [[70, 50, 38], [36, 78, 160], [30, 140, 220], [100, 230, 250], [255, 255, 255]];
+const wpal = t => pal(WST, t), vpal = t => pal(VST, t);
 function coreImg(G, vals, mode, top, base, vmax) {   // mode 'v' velocity, 'th' water content, 'm' macrostructure
   const W = G.W, H = G.H, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const cx = cv.getContext('2d'), im = cx.createImageData(W, H), px = im.data, nz = cNoise(G.seed + 3);
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { const i = y * W + x, p = i * 4; let r = 0, g = 0, b = 0, a = 255;
     if (top && ((x + 0.5 - W / 2) / (W / 2)) ** 2 + ((y + 0.5) / H) ** 2 > 1) a = 0;
     else if (G.vd[i] === 2) a = 0;
-    else if (G.vd[i] === 1) { if (mode === 'm') { r = g = b = 250; } else a = 0; }
-    else if (mode === 'm') { const s = 0.78 + 0.3 * nz(x * 0.35, y * 0.35), e = Math.min(1, G.dist[i] / 3); [r, g, b] = [base[0] * s * (0.8 + 0.2 * e), base[1] * s * (0.8 + 0.2 * e), base[2] * s * (0.8 + 0.2 * e)]; }
-    else if (mode === 'v') [r, g, b] = cw(vals[i] / vmax); else [r, g, b] = cw(1 - vals[i] / 0.55);
+    else if (G.vd[i] === 1) { if (mode === 'm') { r = 30; g = 22; b = 17; } else a = 0; }
+    else { const gt = grainTint(x, y, G.seed), e = Math.min(1, G.dist[i] / 3);
+      if (mode === 'm') { const s = (0.82 + 0.25 * nz(x * 0.35, y * 0.35)) * (0.85 + 0.15 * e); r = base[0] * s * gt[0]; g = base[1] * s * gt[1]; b = base[2] * s * gt[2]; }
+      else { const c = mode === 'v' ? vpal(vals[i] / vmax) : wpal(vals[i] / 0.55), k = 0.55 + 0.45 * gt[3]; r = c[0] * k; g = c[1] * k; b = c[2] * k; } }
     px[p] = r; px[p + 1] = g; px[p + 2] = b; px[p + 3] = a; }
   cx.putImageData(im, 0, 0); return cv;
 }
 function core3(x, y, w, faceCv, topCv, depthDots) {
   const fw = w - 8, a = fw / 2, b = fw * 0.15, fh = fw * 0.625, cx = x + w / 2, ty = y + b, fx = cx - a;
-  ctx.save(); ctx.beginPath(); ctx.ellipse(cx, ty, a, b, 0, Math.PI, 2 * Math.PI); ctx.closePath(); ctx.fillStyle = '#F2EFE4'; ctx.fill(); ctx.clip(); ctx.translate(fx, ty); ctx.scale(1, -1); ctx.imageSmoothingEnabled = true; ctx.drawImage(topCv, 0, 0, topCv.width, topCv.height, 0, 0, fw, b); ctx.restore();
+  ctx.save(); ctx.beginPath(); ctx.ellipse(cx, ty, a, b, 0, Math.PI, 2 * Math.PI); ctx.closePath(); ctx.fillStyle = '#2A1F17'; ctx.fill(); ctx.clip(); ctx.translate(fx, ty); ctx.scale(1, -1); ctx.imageSmoothingEnabled = true; ctx.drawImage(topCv, 0, 0, topCv.width, topCv.height, 0, 0, fw, b); ctx.restore();
   ctx.beginPath(); ctx.ellipse(cx, ty, a, b, 0, Math.PI, 2 * Math.PI); ctx.strokeStyle = 'rgba(0,0,0,0.35)'; ctx.lineWidth = 0.8; ctx.stroke();
-  ctx.fillStyle = '#F2EFE4'; ctx.fillRect(fx, ty, fw, fh); ctx.imageSmoothingEnabled = true; ctx.drawImage(faceCv, 0, 0, faceCv.width, faceCv.height, fx, ty, fw, fh); ctx.strokeStyle = 'rgba(0,0,0,0.5)'; ctx.lineWidth = 1; ctx.strokeRect(fx, ty, fw, fh);
+  ctx.fillStyle = '#2A1F17'; ctx.fillRect(fx, ty, fw, fh); ctx.imageSmoothingEnabled = true; ctx.drawImage(faceCv, 0, 0, faceCv.width, faceCv.height, fx, ty, fw, fh); ctx.strokeStyle = 'rgba(0,0,0,0.5)'; ctx.lineWidth = 1; ctx.strokeRect(fx, ty, fw, fh);
   if (depthDots) [1.25, 3.75].forEach(dd => { const yy = ty + dd / 5 * fh; ctx.fillStyle = '#111'; ctx.beginPath(); ctx.arc(fx + 5, yy, 2.6, 0, 6.283); ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.stroke(); });
   return { fx, ty, fw, fh };
 }
-function coreBar(x, y, w, mode, lab, vmax) { const g = ctx.createLinearGradient(x, 0, x + w, 0); for (let i = 0; i <= 8; i++) { const c = cw(mode === 'th' ? 1 - i / 8 : i / 8); g.addColorStop(i / 8, 'rgb(' + (c[0] | 0) + ',' + (c[1] | 0) + ',' + (c[2] | 0) + ')'); }
+function coreBar(x, y, w, mode, lab, vmax) { const g = ctx.createLinearGradient(x, 0, x + w, 0); for (let i = 0; i <= 8; i++) { const c = mode === 'th' ? wpal(i / 8) : vpal(i / 8); g.addColorStop(i / 8, 'rgb(' + (c[0] | 0) + ',' + (c[1] | 0) + ',' + (c[2] | 0) + ')'); }
   ctx.fillStyle = g; ctx.fillRect(x, y, w, 7); ctx.strokeStyle = INK; ctx.lineWidth = 0.6; ctx.strokeRect(x, y, w, 7); const tk = mode === 'th' ? [0, 0.1, 0.2, 0.3, 0.4, 0.5] : [0, 0.25, 0.5, 0.75, 1].map(u => u * vmax);
   tk.forEach(v => T(String(+v.toFixed(3)), x + v / (mode === 'th' ? 0.55 : vmax) * w, y + 17, { s: 8.5, a: 'center', c: MUTE })); T(lab, x + w / 2, y + 28, { s: 9, a: 'center', c: INK }); }
 function coreTip(lines) { const hv = CORE.hv; ctx.font = 'bold 10px sans-serif'; const w = Math.max(...lines.map(q => ctx.measureText(q).width)) + 14, h2 = lines.length * 14 + 8; let bx = hv.x + 14, by = hv.y + 12; if (bx + w > W - 4) bx = hv.x - w - 14;
@@ -3478,10 +3487,10 @@ function coreAtm(S, r, macro, idx, R, showLiq) {
       if (gone) P.vap.splice(a, 1); }
     if (P.cl.length && P.vap.length < 40 && rnd() < 0.5 * rf) { const i = P.cl[(rnd() * P.cl.length) | 0]; P.vap.push({ x: (i % Wc) + 0.5, y: ((i / Wc) | 0) + 0.5 }); }
     for (const q of P.plume) { q.h += 0.45 + rnd() * 0.5; q.u += q.vx / r.fw + Math.sin(q.h * 0.15 + q.y0) * 0.0015; q.life -= 0.013; } P.plume = P.plume.filter(q => q.life > 0); }
-  ctx.save(); if (showLiq || macro) for (const q of P.liq) { ctx.fillStyle = macro ? '#FFE082' : '#1B1F23'; ctx.strokeStyle = 'rgba(255,255,255,0.9)'; ctx.lineWidth = 0.8; ctx.beginPath(); ctx.arc(r.fx + q.x * sx, r.ty + q.y * sy, 1.7, 0, 6.283); ctx.fill(); ctx.stroke(); }
+  ctx.save(); if (showLiq || macro) for (const q of P.liq) { ctx.fillStyle = '#C8F2FF'; ctx.strokeStyle = '#0B5FA5'; ctx.lineWidth = 0.8; ctx.beginPath(); ctx.arc(r.fx + q.x * sx, r.ty + q.y * sy, 1.7, 0, 6.283); ctx.fill(); ctx.stroke(); }
   for (const q of P.vap) { ctx.fillStyle = '#FFFFFF'; ctx.strokeStyle = '#2B6CB0'; ctx.lineWidth = 0.9; ctx.beginPath(); ctx.arc(r.fx + q.x * sx, r.ty + q.y * sy, 2, 0, 6.283); ctx.fill(); ctx.stroke(); }
   for (const q of P.plume) { const a = Math.min(1, q.life * 1.3).toFixed(2); ctx.fillStyle = 'rgba(255,255,255,' + a + ')'; ctx.strokeStyle = 'rgba(40,100,170,' + a + ')'; ctx.lineWidth = 0.9; ctx.beginPath(); ctx.arc(r.fx + q.u * r.fw, r.ty + q.y0 * sy - q.h, 2.3, 0, 6.283); ctx.fill(); ctx.stroke(); }
-  ctx.restore(); T('↑ ' + (S.gnow || 0).toFixed(1) + ' g/day', r.fx + r.fw - 4, r.ty - r.fw * 0.15 - (macro ? 36 : 30) + (macro ? 0 : 0), { s: 9, b: true, a: 'right', c: macro ? '#BFE3FF' : '#1F4E7F' });
+  ctx.restore(); T('↑ ' + (S.gnow || 0).toFixed(1) + ' g/day', r.fx + r.fw - 4, r.ty - r.fw * 0.15 - (macro ? 36 : 30) + (macro ? 0 : 0), { s: 9, b: true, a: 'right', c: '#12304D' });
 }
 
 function drawE1Core(y0) {
@@ -3497,8 +3506,8 @@ function drawE1Core(y0) {
   const X3 = [16, 214, 412], PW = 192, mmx = CORE.mm; C.S.forEach(S => { S.rf = clampN(e1Rate(S.mk, S.mk.e0, day) / S.mk.e0, 0.05, 1); S.gnow = e1Rate(S.mk, S.mk.e0, day) * GPERMM; });
   // ---- Figure 1: macrostructure
   let yy = y0 + 90; T('1  Pore network: matrix (colour) and air-filled voids (white)', 16, yy, { s: 10.5, b: true });
-  C.S.forEach((S, i) => { if (!S.mf) { S.mf = coreImg(S.Gf, null, 'm', false, hexRGB(S.col)); S.mt = coreImg(S.Gt, null, 'm', true, hexRGB(S.col)); } const f = S.mf, t = S.mt; ctx.fillStyle = '#121416'; ctx.fillRect(X3[i], yy + 8, PW, 186); const r1 = core3(X3[i], yy + 52, PW, f, t, true); coreAtm(S, r1, true, i);
-    T(S.name, X3[i] + 6, yy + 22, { s: 9.5, b: true, c: '#fff' }); if (i === 0) { ctx.strokeStyle = S.col; ctx.lineWidth = 2.5; ctx.strokeRect(X3[i], yy + 8, PW, 186); } });
+  C.S.forEach((S, i) => { if (!S.mf) { const bs = S.k === 'notill' ? [128, 92, 60] : S.k === 'reduced' ? [146, 106, 70] : [166, 122, 82]; S.mf = coreImg(S.Gf, null, 'm', false, bs); S.mt = coreImg(S.Gt, null, 'm', true, bs); } const f = S.mf, t = S.mt; { const sg = ctx.createLinearGradient(0, yy + 8, 0, yy + 120); sg.addColorStop(0, '#9CC9EA'); sg.addColorStop(1, '#E4F1FA'); ctx.fillStyle = sg; ctx.fillRect(X3[i], yy + 8, PW, 186); } const r1 = core3(X3[i], yy + 52, PW, f, t, true); coreAtm(S, r1, true, i);
+    T(S.name, X3[i] + 6, yy + 22, { s: 9.5, b: true, c: '#12304D' }); if (i === 0) { ctx.strokeStyle = S.col; ctx.lineWidth = 2.5; ctx.strokeRect(X3[i], yy + 8, PW, 186); } });
   { const x = X3[2]; ctx.fillStyle = '#F4F1E6'; rrect(x, yy + 8, PW, 186, 6); ctx.fill(); ctx.strokeStyle = '#C9C2AC'; ctx.lineWidth = 1; ctx.stroke(); const A = C.S[0], B = C.S[1];
     T('Numbers for this core', x + 8, yy + 24, { s: 10, b: true }); [[A, 0], [B, 1]].forEach(([S, j]) => { const y1 = yy + 42 + j * 58; ctx.fillStyle = S.col; ctx.fillRect(x + 8, y1 - 8, 8, 8); T(S.name, x + 20, y1, { s: 9.5, b: true, c: S.col });
       T('voids: ' + (S.Gf.voidFrac * 100).toFixed(0) + '% of the face, ' + (S.Gf.connFrac * 100).toFixed(0) + '% open to air', x + 8, y1 + 13, { s: 9, c: INK }); T('clods cut off (top 17 mm): ' + (S.Gf.rho * 100).toFixed(0) + '%', x + 8, y1 + 26, { s: 9, c: INK });
@@ -3528,13 +3537,14 @@ function drawE1Core(y0) {
     { const x0 = X3[0] + 36, w0 = PW - 44, hh = 128, top = y1 + 46, mxH = Math.max(1, ...R.hist) * 1.08; ctx.fillStyle = '#F4F1E6'; ctx.fillRect(x0, top, w0, hh); ctx.fillStyle = S.col; R.hist.forEach((c, b) => { const bw = w0 / 80, bh = c / mxH * hh; ctx.fillRect(x0 + b * bw, top + hh - bh, bw + 0.3, bh); });
       ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.strokeRect(x0, top, w0, hh); [0, 0.25, 0.5, 0.75, 1].forEach(u => T((u * R.vmax).toFixed(R.vmax < 0.1 ? 3 : 2).replace(/0+$/, '').replace(/\.$/, ''), x0 + u * w0, top + hh + 12, { s: 8.5, a: 'center', c: MUTE })); T('V, cm per day (mean ' + R.mean.toFixed(3).replace(/0+$/, '') + ')', x0 + w0 / 2, top + hh + 25, { s: 9, a: 'center', c: INK });
       [0, 0.5, 1].forEach(u => T(String(Math.round(u * mxH / 10) * 10), x0 - 4, top + hh - u * hh + 3, { s: 8.5, a: 'right', c: MUTE })); T('(a) number of cells', X3[0], top - 8, { s: 9, b: true, c: MUTE }); }
+    { const sg = ctx.createLinearGradient(0, y1 + 20, 0, y1 + 100); sg.addColorStop(0, '#9CC9EA'); sg.addColorStop(1, '#E4F1FA'); ctx.fillStyle = sg; ctx.fillRect(X3[1], y1 + 20, PW, 100); ctx.fillRect(X3[2], y1 + 20, PW, 100); }
     const rv = core3(X3[1], y1 + 46, PW, R.vf, R.vt, true), rt = core3(X3[2], y1 + 46, PW, R.tf, R.tt, true); coreAtm(S, rv, false, i, R, true); coreAtm(S, rt, false, i, R, false); T('(b) water velocity', X3[1], y1 + 16, { s: 9, b: true, c: MUTE }); T('(c) water content', X3[2], y1 + 16, { s: 9, b: true, c: MUTE });
     const by = y1 + 46 + (PW - 8) * 0.775 + 12; coreBar(X3[1] + 16, by, PW - 32, 'v', 'velocity, cm per day', R.vmax); coreBar(X3[2] + 16, by, PW - 32, 'th', 'water content, cm³ per cm³');
     [[rv, R.F.vl, 'Water velocity', ' cm/day', 3], [rt, R.F.th, 'Water content', '', 3]].forEach(([r, arr, nm, un, dg]) => { if (hv && hv.x >= r.fx && hv.x <= r.fx + r.fw && hv.y >= r.ty && hv.y <= r.ty + r.fh) { const cxi = Math.min(CORE.W - 1, Math.floor((hv.x - r.fx) / r.fw * CORE.W)), cyi = Math.min(CORE.H - 1, Math.floor((hv.y - r.ty) / r.fh * CORE.H)), ii = cyi * CORE.W + cxi, vdv = S.Gf.vd[ii];
         tip = vdv === 2 ? ['Above the surface'] : vdv === 1 ? ['Air-filled void', S.Gf.conn[ii] ? 'open to the air above' : 'closed, not open to the air'] : [nm + ': ' + arr[ii].toFixed(dg) + un, 'depth ' + (S.Gf.zs[ii] * mmx / 10).toFixed(1) + ' cm below the surface', 'distance to open void or surface ' + (S.Gf.dist[ii] * mmx).toFixed(1) + ' mm', S.Gf.reach[ii] ? 'matrix joined to the bottom' : 'clod cut off from the matrix below']; } }); });
   yy += 2 * rowH + 4;
   ['How to read it: matrix next to voids that open to the air dries from the void wall as well as from the top, so a',
-   'ploughed core dries in patches around its clods (red in the water content map) while an untilled core dries as a',
+   'ploughed core dries in patches around its clods (tan, dry, in the water content map) while an untilled core dries as a',
    'flat layer from the top. Water speed is highest near the top and beside open voids and falls to zero at the closed',
    'bottom. Drying uses your soil\u2019s van Genuchten fit and the E1 rates above (mulch, temperature, rain and irrigation',
    'method all act). Tillage acts through the pore geometry only.'].forEach((l, k) => T(l, 16, yy + k * 12.5, { s: 9, c: INK }));
