@@ -270,7 +270,7 @@ const SCENES = [
     legend:[['#2E9E4F','Irrigation saved'],['#2E6FD0','Extra drainage'],['#E8912D','Extra transpiration'],['#1B1F23','Evaporation saved']], insight:"Water saved from evaporation by mulching is redirected mainly into reduced irrigation in dry years, mainly into extra drainage in wet years, crossing over near rain x1.2." },
   { id:"n3", label:"N3 Regime Map", color:"#C96BD9", draw: () => { drawN3Chart(); hotN3(); }, title:"Regime map: where vapor gives way to drainage",
     legend:[['#8A8F98','Vapor rising = evaporation'],['#1F66C8','Droplets falling = drainage'],['#D93025','Your rainfall']], insight:"Climate and mulch act non-additively on the evaporation-drainage boundary, reaching 15% of irrigation at combined extremes." },
-  { id:"r1", label:"R1 Root Structure", color:"#8B5E34", h:1600, draw: () => drawR1Chart(), interactive:true, onDown: p => r1Down(p), onMove: p => r1Move(p), onUp: () => { r1ui.drag = false; }, onLeave: () => { r1ui.drag = false; }, title:"Root structure: where the roots are and where the water is taken",
+  { id:"r1", label:"R1 Root Structure", color:"#8B5E34", h:2120, draw: () => drawR1Chart(), interactive:true, onDown: p => r1Down(p), onMove: p => r1Move(p), onUp: () => { r1ui.drag = false; }, onLeave: () => { r1ui.drag = false; }, title:"Root structure: where the roots are and where the water is taken",
     legend:[['#8B5E34','Root density (relative, model)'],['#2E9E4F','Water taken up today'],['#1B6FE0','Water taken up this year'],['#D93025','Depth of 50% and 90% of the uptake']], insight:"Roots are drawn from the model's own root depth, root density and uptake for every layer and day; root density is relative, not a measured root length." },
 ];
 let currentScene = SCENES[0];
@@ -3087,6 +3087,46 @@ const E15OUT = [['Yield', 'Mg/ha', '#2E9E4F', 1], ['Irrigation', 'mm/yr', '#1F66
 const e15Method = () => E15.m[state.method] ? state.method : 'M02_Surface';
 const e15Run = (ri, ai) => E15.m[e15Method()][ri][ai];
 function e15Heat(t) { const a = [[247, 244, 222], [250, 206, 120], [214, 120, 60], [120, 50, 40]]; const x = clampN(t, 0, 1) * 3, i = Math.min(2, Math.floor(x)), f = x - i, c = a[i].map((v, k) => Math.round(v + (a[i + 1][k] - v) * f)); return 'rgb(' + c.join(',') + ')'; }
+// R1: the roots of every soil on the same day, with the same weather and the same controls
+const r1All = { key: '', soils: {}, queue: [], n: 0 };
+const r1AllKey = () => [state.trigMode, state.till, state.tcIdx, state.vffIdx, state.capIdx, state.rainIdx, state.tempIdx, state.trigIdx, state.zIdx, state.method, state.nIdx, state.crop, state.mulchType].join('|');
+const r1SoilList = () => DATA.soils.slice().sort((a, b) => soilTex(a).clay - soilTex(b).clay || a.localeCompare(b));
+function withSoil(soil, cur, fn) { const sv = Object.assign({}, state), cv = Object.assign({}, current); try { state.soil = soil; if (state.trigMode === 'own') state.trigIdx = ownIdx(soil); Object.assign(current, cur); return fn(); } finally { Object.assign(state, sv); Object.assign(current, cv); } }
+function r1AllStep() {
+  const k = r1AllKey(); if (r1All.key !== k) { r1All.key = k; r1All.soils = {}; r1All.n = 0; r1All.queue = [state.soil].concat(r1SoilList().filter(s => s !== state.soil)); }
+  const s = r1All.queue.shift(); if (!s) return false;
+  const sv = Object.assign({}, state), cv = Object.assign({}, current);
+  try { state.soil = s; if (state.trigMode === 'own') state.trigIdx = ownIdx(s); Object.assign(current, model(VFF_VALUES[state.vffIdx], RAIN_VALUES[state.rainIdx]));
+    const cur = Object.assign({}, current), sim = computeSim(), y = r1Years(sim), mean = f => y.reduce((a, q) => a + q[f], 0) / y.length, mx = Math.max(...y.map(q => q.mxRd));
+    r1All.soils[s] = { sim, cur, rd: mean('mxRd'), d50: mean('d50'), d90: mean('d90'), mx }; r1All.n++;
+  } finally { Object.assign(state, sv); Object.assign(current, cv); }
+  return true;
+}
+function drawR1All(y0, dd) {
+  const list = r1SoilList(), cw = 56, X0 = 44, PX = 2.3, GY = y0 + 66, hh = 100 * PX, ink = '#6B4423';
+  T('Rooting depth in all ten soils', 16, y0, { s: 12.5, b: true, c: ink }); ctx.strokeStyle = ink; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(16, y0 + 6); ctx.lineTo(W - 16, y0 + 6); ctx.stroke();
+  T('Same day and weather for every soil. Crop, tillage, consolidation, mulch, rain, temperature, trigger, sensor depth,', 16, y0 + 21, { s: 9.2, c: MUTE });
+  T('irrigation method and nitrogen all act on every column. Brown dashed line: deepest roots (20-year mean). Green ticks: depth', 16, y0 + 33, { s: 9.2, c: MUTE });
+  T('holding 50% and 90% of the water taken. Click a column to use that soil.', 16, y0 + 45, { s: 9.2, c: MUTE });
+  if (r1All.queue.length) T('working out the soils: ' + r1All.n + ' of ' + list.length, W - 16, y0 + 50, { s: 9.5, b: true, a: 'right', c: '#B8651A' });
+  [0, 25, 50, 75, 100].forEach(d => { T(String(d), X0 - 5, GY + d * PX + 3, { s: 8.5, a: 'right', c: MUTE }); }); T('cm', X0 - 5, GY - 6, { s: 8.5, a: 'right', c: MUTE });
+  list.forEach((s, i) => { const x = X0 + i * cw, E = r1All.soils[s], sel = s === state.soil, base = v7pBase(s, 'conv', false);
+    const g = ctx.createLinearGradient(0, GY, 0, GY + hh); g.addColorStop(0, 'rgb(' + (base[0] * 0.8 | 0) + ',' + (base[1] * 0.8 | 0) + ',' + (base[2] * 0.8 | 0) + ')'); g.addColorStop(1, 'rgb(' + Math.min(255, base[0] * 1.05 | 0) + ',' + Math.min(255, base[1] * 1.05 | 0) + ',' + Math.min(255, base[2] * 1.05 | 0) + ')'); ctx.fillStyle = g; ctx.fillRect(x + 1, GY, cw - 2, hh);
+    ctx.strokeStyle = 'rgba(255,255,255,0.25)'; ctx.lineWidth = 1; [25, 50, 75].forEach(d => { ctx.beginPath(); ctx.moveTo(x + 1, GY + d * PX); ctx.lineTo(x + cw - 1, GY + d * PX); ctx.stroke(); });
+    if (E) { ctx.save(); ctx.beginPath(); ctx.rect(x + 1, GY, cw - 2, hh); ctx.clip(); withSoil(s, E.cur, () => drawRootsR1(E.sim, dd, x + 1, cw - 2, GY, PX)); ctx.restore();
+      ctx.setLineDash([4, 3]); ctx.strokeStyle = '#FFE9B0'; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.moveTo(x + 1, GY + E.rd * PX); ctx.lineTo(x + cw - 1, GY + E.rd * PX); ctx.stroke(); ctx.strokeStyle = '#6B4423'; ctx.lineWidth = 1.1; ctx.stroke(); ctx.setLineDash([]);
+      [[E.d50, '#1B6B35'], [E.d90, '#38D06A']].forEach(([d, c]) => { ctx.fillStyle = c; ctx.fillRect(x + 1, GY + d * PX - 1.5, 9, 3); ctx.fillRect(x + cw - 10, GY + d * PX - 1.5, 9, 3); }); }
+    else { T('...', x + cw / 2, GY + hh / 2, { s: 12, a: 'center', c: '#fff' }); }
+    ctx.strokeStyle = sel ? '#111' : 'rgba(0,0,0,0.45)'; ctx.lineWidth = sel ? 3 : 1; ctx.strokeRect(x + 1, GY, cw - 2, hh); hot(x, GY, cw, hh, () => applyState({ soil: s }), 'click to use ' + DATA.soil_labels[s].toLowerCase());
+    const nm = DATA.soil_labels[s].split(' '), ln = nm.length > 2 ? [nm.slice(0, 2).join(' '), nm.slice(2).join(' ')] : nm.length === 2 && DATA.soil_labels[s].length > 9 ? nm : [DATA.soil_labels[s]];
+    ln.forEach((q, k) => T(q, x + cw / 2, GY + hh + 13 + k * 10, { s: 8.5, b: sel, a: 'center', c: sel ? '#111' : INK })); T(soilTex(s).clay + '% clay', x + cw / 2, GY + hh + 35, { s: 8, a: 'center', c: MUTE }); });
+  const ty = GY + hh + 52, rowsT = [['deepest roots', e => e.rd, '#6B4423', true], ['50% of water by', e => e.d50, '#1B6B35', false], ['90% of water by', e => e.d90, '#1F8F47', false], ['deepest in any year', e => e.mx, MUTE, false]];
+  ctx.fillStyle = '#F4F1E6'; ctx.fillRect(16, ty - 12, W - 32, rowsT.length * 25 + 8);
+  rowsT.forEach(([lab, f, col, bold], r) => { T(lab + ' (cm)', 20, ty + r * 25, { s: 8.5, b: true, c: col }); list.forEach((s, i) => { const E = r1All.soils[s]; if (E) T(String(Math.round(f(E))), X0 + i * cw + cw / 2, ty + r * 25 + 12, { s: bold ? 10 : 9.5, b: bold, a: 'center', c: col }); }); });
+  const es = list.map(s => r1All.soils[s]).filter(Boolean); if (es.length > 1) { const mn = Math.min(...es.map(e => e.rd)), mxx = Math.max(...es.map(e => e.rd)); T('Across the soils the deepest roots differ by ' + (mxx - mn).toFixed(0) + ' cm (' + mn.toFixed(0) + ' to ' + mxx.toFixed(0) + ' cm) at these settings.', 16, ty + rowsT.length * 25 + 10, { s: 9.5, b: true, c: ink }); T('The model stops roots at 1 m; your Daisy runs reach 120 cm.', 16, ty + rowsT.length * 25 + 23, { s: 9.2, i: true, c: MUTE }); }
+  return y0 + 500;
+}
+
 function drawR1Data(y0) {
   const k = E15UI.out, od = E15OUT[k], rt = E15.roots, am = E15.amts, run = e15Run(E15UI.ri, E15UI.ai), mlab = (METHODS.find(m => m.k === e15Method()) || { label: e15Method() }).label;
   T('What your rooting-depth runs show', 16, y0, { s: 12.5, b: true, c: '#6B4423' });
@@ -3185,7 +3225,7 @@ function drawR1Chart() {
   hot(16, 676, 74, 22, () => { n1ui.play = !n1ui.play; }, n1ui.play ? 'click to hold the day' : 'click to replay the season');
   const crop = cropNameAt(sim, dd), live = cv > 0.03;
   TW(Y.y + ' (' + (crop || 'fallow') + '): roots reached ' + Math.round(Y.mxRd) + ' cm. Half of the water the crop took came from the top ' + (Y.d50 || 0) + ' cm and nine tenths from the top ' + (Y.d90 || 0) + ' cm; ' + Math.round(Y.top30 * 100) + '% came from the top 30 cm. ' + (live ? 'On this day the roots reach ' + Math.round(rd) + ' cm and the crop takes ' + upt.reduce((a, b) => a + b, 0).toFixed(1) + ' mm.' : 'On this day there is no crop taking water.'), 100, 680, 500, { s: 10.5 });
-  drawR1Compare(); drawR1Data(1052); r1AltStep();
+  drawR1Compare(); drawR1All(1052, dd); drawR1Data(1052 + 520); if (!r1AllStep()) r1AltStep();
 }
 
 
