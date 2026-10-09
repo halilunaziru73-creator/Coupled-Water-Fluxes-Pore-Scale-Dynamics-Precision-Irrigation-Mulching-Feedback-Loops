@@ -260,7 +260,7 @@ const SCENES = [
     legend:[['#D93025','Two-way link (label = change for one step)']], insight:"Atmospheric demand, rainfall, irrigation, soil water, evaporation and drainage form one coupled feedback loop, not independent processes." },
   { id:"v6", label:"V6 Mulch Control", color:"#2FA3A3", h:946, draw: () => { drawV6x(); hotV6(); }, title:"Mulch and tillage as controls on evaporation and drainage",
     legend:[['#ECA03C','Evaporation'],['#5AA0E1','Drainage'],['#D93025','Current setting']], insight:"Mulch strength and interception capacity set evaporation; tillage and consolidation set drainage. The red outline marks your current settings." },
-  { id:"v7", label:"V7 SHP Drivers", color:"#E8912D", h:1188, interactive:true, onDown: p => v7Down(p), onMove: p => v7Move(p), onLeave: () => { v7ui.hov = null; }, draw: () => drawV7x(), title:"What drives change in soil hydraulic properties",
+  { id:"v7", label:"V7 SHP Drivers", color:"#E8912D", h:1900, interactive:true, onDown: p => v7Down(p), onMove: p => { V7P.hv = p; return v7Move(p); }, onLeave: () => { v7ui.hov = null; V7P.hv = null; }, draw: () => drawV7x(), title:"What drives change in soil hydraulic properties",
     legend:[['#2E7DE8','Tillage'],['#E8912D','Consolidation rate'],['#D93025','Selected soil']], insight:"Tillage drives drainage change in coarse soils; consolidation rate takes over in finer soils, and soil texture sets the baseline." },
   { id:"e1", label:"E1 Evaporation", color:"#4FC3F7", play:true, dur:16, h:1960, interactive:true, onMove: p => { E1.hv = p; return false; }, onLeave: () => { E1.hv = null; }, draw: () => drawE1(), title:"Evaporation: from the pore to the atmosphere, in a modelled section",
     legend:[['#1F66C8','Liquid water in the pores'],['#FFFFFF','Vapour moving up'],['#E8912D','Drying front'],['#8A8F98','No mulch']], insight:"Water leaves a drying soil in two stages. While films keep the surface wet, the soil loses water at the atmospheric rate; once the surface pores empty, the water has to cross a growing dry layer as vapour. Your mulch lowers the demand and so lengthens stage 1." },
@@ -2360,7 +2360,52 @@ function v7Hit(p) {
 }
 function v7Down(p) { const h = v7Hit(p); if (!h) return false; if (h.c === 'A') { state.tcIdx = h.i; state.till = TILLS[h.li]; sliders.tc.value = h.i; refresh(); } else { state.soil = h.s; refresh(); } return true; }
 function v7Move(p) { const h = v7Hit(p); v7ui.hov = h && h.c !== 'R' ? h : null; canvas.style.cursor = h ? 'pointer' : 'default'; return false; }
-function drawV7x() { drawV7(); drawV7Graphs(); sectionHeader('The system in the field: how tillage and settling change the pores', 906); drawSWA(14, 918, 592, 'structure'); }
+// ===================== V7: real soil profiles, 1 m deep, and what each driver does to them =====================
+// Each column is a 48 cm wide, 1 m deep face of the selected soil. The top 24 cm is the tilled layer: its clods, cracks and pores follow the tillage system and how long the soil has been settling
+// (pore index from your tillage and consolidation settings). Below it is the subsoil, which tillage does not touch. The drainage figures are your Daisy runs (E5).
+const V7P = { day: 120, cache: {}, hv: null };
+function v7pBase(soil, till, top) {
+  const c = soilTex(soil).clay, u = clampN(c / 45, 0, 1), a = top ? [184, 148, 104] : [198, 160, 110], b = top ? [118, 80, 54] : [152, 106, 72], m = lerp3(a, b, u), om = top ? { conv: 0.95, reduced: 0.86, notill: 0.76 }[till] : 1;
+  return [m[0] * om, m[1] * om, m[2] * om];
+}
+function v7pSys() {
+  const key = [state.soil, state.till, state.tcIdx, V7P.day].join('|'); if (V7P.cache.key === key) return V7P.cache; const tc = TC_VALUES[state.tcIdx], tex = soilTex(state.soil), out = { key, S: [] }, ks = TILLS;
+  ks.forEach(k => { const p = poreIdx(k, V7P.day, tc), f = CORE_F[k], wf = clampN((p - 0.30) / 0.14, 0.3, 1.4) * clampN(0.75 + 0.012 * tex.clay, 0.8, 1.4), seed = hashStr(state.soil) + TILLS.indexOf(k) * 131 + 3;
+    const Gt = genCore(f, wf, seed, true, 60), Gs = genCore(0, 0.5, hashStr(state.soil) + 77, true, 190), r = e5row(state.soil, k, tc);
+    out.S.push({ k, p, Gt, Gs, imT: coreImg(Gt, null, 'm', false, v7pBase(state.soil, k, true)), imS: coreImg(Gs, null, 'm', false, v7pBase(state.soil, k, false)), drain: r ? r.drainage : null, yield: r ? r.yield : null }); });
+  V7P.cache = out; return out;
+}
+function drawV7Profiles(y0) {
+  const C = v7pSys(), tex = soilTex(state.soil), PW = 176, X = [38, 232, 426], top = y0 + 114, rows = 250, ppc = PW / 120, ph = rows * ppc, apH = 60 * ppc; let tip = null;
+  sectionHeader('Real soil profiles: how tillage and settling change the soil, layer by layer', y0);
+  T(DATA.soil_labels[state.soil] + ' (' + tex.sand + '% sand, ' + tex.silt + '% silt, ' + tex.clay + '% clay). Each column is a 48 cm wide, 1 m deep face of this soil.', 16, y0 + 24, { s: 9.5, c: MUTE }); T('Only the tilled layer (top 24 cm) changes with the drivers; the subsoil is the same in all three.', 16, y0 + 36, { s: 9.5, c: MUTE });
+  { let x = 16; const by = y0 + 46; T('Days since tillage:', x, by + 15, { s: 10, b: true }); x += 112; [0, 30, 120, 365].forEach(d => { const on = V7P.day === d; ctx.fillStyle = on ? '#D4A94A' : '#EEE9DA'; rrect(x, by, 44, 22, 5); ctx.fill(); ctx.strokeStyle = INK; ctx.lineWidth = on ? 2 : 1; ctx.stroke(); T(String(d), x + 22, by + 15, { s: 10, b: on, a: 'center' }); hot(x, by, 44, 22, () => { V7P.day = d; }, 'soil settled for ' + d + ' days since tillage'); x += 48; });
+    T('consolidation rate ' + TC_VALUES[state.tcIdx] + ' per day', x + 8, by + 15, { s: 9.5, i: true, c: MUTE }); }
+  const sg = ctx.createLinearGradient(0, top - 26, 0, top); sg.addColorStop(0, '#9CC9EA'); sg.addColorStop(1, '#E4F1FA');
+  C.S.forEach((S, i) => { const x = X[i], sel = S.k === state.till; ctx.fillStyle = sg; ctx.fillRect(x, top - 26, PW, 26); ctx.fillStyle = '#2A1F17'; ctx.fillRect(x, top, PW, ph);
+    ctx.drawImage(S.imT, 0, 0, S.imT.width, S.imT.height, x, top, PW, apH); ctx.drawImage(S.imS, 0, 0, S.imS.width, S.imS.height, x, top + apH, PW, ph - apH);
+    const sh = ctx.createLinearGradient(0, top + apH, 0, top + ph); sh.addColorStop(0, 'rgba(0,0,0,0)'); sh.addColorStop(1, 'rgba(20,12,6,0.28)'); ctx.fillStyle = sh; ctx.fillRect(x, top + apH, PW, ph - apH);
+    ctx.setLineDash([4, 3]); ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(x, top + apH); ctx.lineTo(x + PW, top + apH); ctx.stroke(); ctx.setLineDash([]);
+    ctx.strokeStyle = sel ? '#111' : 'rgba(0,0,0,0.5)'; ctx.lineWidth = sel ? 3 : 1; ctx.strokeRect(x, top, PW, ph); hot(x, top, PW, ph, () => applyState({ till: S.k }), 'click to use ' + TILL_LABELS[S.k].toLowerCase() + ' tillage');
+    T(TILL_LABELS[S.k] + (sel ? ' (your setting)' : ''), x, top - 32, { s: 10.5, b: true, c: SYS[i].col }); T('tilled layer', x + 6, top + 14, { s: 9, b: true, c: '#fff' }); T('subsoil', x + 6, top + apH + 16, { s: 9, b: true, c: '#fff' });
+    const hv = V7P.hv; if (hv && hv.x >= x && hv.x <= x + PW && hv.y >= top && hv.y <= top + ph) { const cx = Math.min(119, ((hv.x - x) / PW * 120) | 0), cyp = hv.y - top, inT = cyp < apH, G = inT ? S.Gt : S.Gs, cy = Math.min(G.H - 1, (inT ? cyp / ppc : (cyp - apH) / ppc) | 0), ii = cy * 120 + cx, v = G.vd[ii];
+      tip = [(inT ? 'Tilled layer' : 'Subsoil') + ', ' + Math.round(cyp / ph * 100) + ' cm deep', v === 2 ? 'above the surface' : v === 1 ? (G.conn[ii] ? 'crack or channel, open to the air' : 'closed pore') : 'soil matrix, ' + (G.reach[ii] || !inT ? 'joined to the soil below' : 'a clod cut off by cracks')]; } });
+  // depth axis
+  [0, 25, 50, 75, 100].forEach(d => { const yy = top + d / 100 * ph; T(String(d), X[0] - 5, yy + 3, { s: 8.5, a: 'right', c: MUTE }); ctx.strokeStyle = MUTE; ctx.lineWidth = 0.8; ctx.beginPath(); ctx.moveTo(X[0] - 3, yy); ctx.lineTo(X[0], yy); ctx.stroke(); }); T('cm', X[0] - 5, top - 8, { s: 8.5, a: 'right', c: MUTE });
+  // numbers per column
+  const ny = top + ph + 16, nd = C.S.find(s => s.k === 'notill');
+  C.S.forEach((S, i) => { const x = X[i]; ctx.fillStyle = '#F4F1E6'; rrect(x, ny, PW, 86, 6); ctx.fill(); ctx.strokeStyle = '#C9C2AC'; ctx.lineWidth = 1; ctx.stroke();
+    T('pore index of the tilled layer ' + S.p.toFixed(2), x + 7, ny + 15, { s: 9, c: INK }); T('voids on the face: ' + (S.Gt.voidFrac * 100).toFixed(0) + '%, ' + (S.Gt.connFrac * 100).toFixed(0) + '% open to air', x + 7, ny + 29, { s: 9, c: INK });
+    T('drainage below 1 m (Daisy): ' + (S.drain == null ? 'n/a' : S.drain.toFixed(0) + ' mm/yr'), x + 7, ny + 45, { s: 9, b: true, c: '#1B4FA0' });
+    T(S.k === 'notill' || S.drain == null || !nd || nd.drain == null ? 'reference system' : (S.drain - nd.drain >= 0 ? '+' : '') + (S.drain - nd.drain).toFixed(1) + ' mm/yr against no-till', x + 7, ny + 59, { s: 9, c: MUTE });
+    T(S.yield == null ? '' : 'yield ' + (S.yield * CROPS[state.crop].factor).toFixed(2) + ' ' + CROPS[state.crop].unit.split(' ')[0], x + 7, ny + 74, { s: 9, c: INK }); });
+  ['What each driver does here:', 'Tillage system sets how loose the tilled layer starts (pore index 1.0, 0.72 or 0.42) and so how big the clods and cracks are.', 'Consolidation rate sets how fast that layer settles back towards 0.30, so cracks close sooner at a high rate.',
+   'Soil sets the colour, the crack pattern (more clay, wider cracks) and the water the pores hold. The subsoil is the same for all three systems.'].forEach((l, k) => T(l, 16, ny + 106 + k * 13, { s: 9.2, b: k === 0, c: k ? INK : '#1F4D2E' }));
+  if (tip && V7P.hv) { const hv = V7P.hv; ctx.font = 'bold 10px sans-serif'; const w = Math.max(...tip.map(q => ctx.measureText(q).width)) + 14, h2 = tip.length * 14 + 8; let bx = hv.x + 14, by = hv.y + 12; if (bx + w > W - 4) bx = hv.x - w - 14; ctx.fillStyle = 'rgba(255,252,225,0.97)'; ctx.strokeStyle = INK; ctx.lineWidth = 1; rrect(bx, by, w, h2, 6); ctx.fill(); ctx.stroke(); tip.forEach((q, k) => T(q, bx + 7, by + 15 + k * 14, { s: 10, b: k === 0, c: INK })); }
+  return ny + 160;
+}
+
+function drawV7x() { drawV7(); drawV7Graphs(); sectionHeader('The system in the field: how tillage and settling change the pores', 906); drawSWA(14, 918, 592, 'structure'); drawV7Profiles(1200); }
 
 // field: the all-years view reacts to the pointer, the day view keeps the draggable sensor
 function fieldDown(p) { if (state.fview === 'years') { const i = fyHit(p); if (i >= 0) { fclock.day = i * DPY + 150; fclock.pause = 0; fclock.mem = []; return true; } return false; } return state.fview === 'gen' ? false : fieldDownDay(p); }
@@ -3393,8 +3438,8 @@ function chamfer(src, W, H) { const d = new Float32Array(W * H); for (let i = 0;
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { const i = y * W + x; let v = d[i]; if (x > 0) v = Math.min(v, d[i - 1] + 1); if (y > 0) { v = Math.min(v, d[i - W] + 1); if (x > 0) v = Math.min(v, d[i - W - 1] + 1.414); if (x < W - 1) v = Math.min(v, d[i - W + 1] + 1.414); } d[i] = v; }
   for (let y = H - 1; y >= 0; y--) for (let x = W - 1; x >= 0; x--) { const i = y * W + x; let v = d[i]; if (x < W - 1) v = Math.min(v, d[i + 1] + 1); if (y < H - 1) { v = Math.min(v, d[i + W] + 1); if (x < W - 1) v = Math.min(v, d[i + W + 1] + 1.414); if (x > 0) v = Math.min(v, d[i + W - 1] + 1.414); } d[i] = v; } return d; }
 // vd: 0 matrix, 1 air-filled void, 2 above the surface. f = 1 ploughed (clods, wide gaps, rough surface), f = 0 untilled (dense matrix, root channels)
-function genCore(f, wf, seed, face) {
-  const W = CORE.W, H = face ? CORE.H : CORE.TD, R = seededRandom(seed), nz = cNoise(seed + 5), nz2 = cNoise(seed + 11), vd = new Uint8Array(W * H), surf = new Float32Array(W), amp = face ? 0.6 + 4.4 * f : 0;
+function genCore(f, wf, seed, face, Hr) {
+  const W = CORE.W, H = face ? (Hr || CORE.H) : CORE.TD, R = seededRandom(seed), nz = cNoise(seed + 5), nz2 = cNoise(seed + 11), vd = new Uint8Array(W * H), surf = new Float32Array(W), amp = face ? 0.6 + 4.4 * f : 0;
   for (let x = 0; x < W; x++) surf[x] = amp * nz(x * 0.09, 0.5);
   if (face) for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if (y < surf[x]) vd[y * W + x] = 2;
   if (f > 0.04) { const nS = Math.round(3 + 11 * f), gx = Math.max(2, Math.round(Math.sqrt(nS * W / H))), gy = Math.max(1, Math.round(nS / gx)), sd = [];
