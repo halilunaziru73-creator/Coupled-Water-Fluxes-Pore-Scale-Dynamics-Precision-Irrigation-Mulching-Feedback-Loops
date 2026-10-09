@@ -3420,12 +3420,22 @@ function microScaleBar(x, y, w, g) { const mmPerPx = g.mmW / w, nice = [5, 2, 1,
 // atmospheric rate. Stage 2: the surface pores empty, a dry layer grows and the water leaves as vapour through the air-filled pores.
 // The stage lengths come from the soil's fitted van Genuchten curve; the mulch reduces the demand by your vapour-flux factor.
 const E1 = { W: 220, H: 330, mm: 7, days: 24, pts: [], plume: [], key: '', lastPaint: '', cv: null, flow: true };
+// atmospheric demand (potential evaporation, mm/day) from the controls: temperature, rainfall scale (cloud and humidity), the date (season), the weather year of that date, and the crop canopy shading the soil
+let _yrf = null;
+function e1Atm() {
+  const dT = TEMP_VALUES[state.tempIdx], rain = RAIN_VALUES[state.rainIdx], kd = clampN(fclock.kd(), 0, ND - 1), doy = kd % DPY;
+  if (!_yrf) { try { _yrf = yearRainFactors(); } catch (e) { _yrf = []; } }
+  const temp = 1 + 0.07 * dT, season = (0.35 + 0.65 * 0.5 * (1 + Math.sin(2 * Math.PI * (doy - 100) / DPY))) / 0.675, cloud = clampN(1 - 0.12 * (rain - 1), 0.85, 1.12), wy = Math.sqrt(_yrf[yearOf(kd)] || 1);
+  let cover = 0; try { const sm = seasonSim(); cover = sm.cover ? sm.cover[kd] || 0 : 0; } catch (e) {}
+  const canopy = 1 - 0.4 * cover;
+  return { e0b: 4.2 * temp * season * cloud * wy, temp, season, cloud, wy, canopy, cover, doy };
+}
 function e1Model() {
   const soil = state.soil, [a, n] = VGE[soil], vff = VFF_VALUES[state.vffIdx], dT = TEMP_VALUES[state.tempIdx], tex = soilTex(soil);
-  const th = h => soilTheta(soil, h), hi = 0.25 / a * (1.5 - 0.5 * RAIN_VALUES[state.rainIdx]), hs = 4 / a, L1 = 40, Q1 = Math.max(2, (th(hi) - th(hs)) * L1 * (0.6 + 0.4 * RAIN_VALUES[state.rainIdx])), e0b = 4.2 * (1 + 0.07 * dT), e0 = e0b * vff, tau = 0.006 + 0.03 * (tex.clay + tex.silt) / 100;
+  const th = h => soilTheta(soil, h), hi = 0.25 / a * (1.5 - 0.5 * RAIN_VALUES[state.rainIdx]), hs = 4 / a, L1 = 40, Q1 = Math.max(2, (th(hi) - th(hs)) * L1 * (0.6 + 0.4 * RAIN_VALUES[state.rainIdx])), atm = e1Atm(), e0b = atm.e0b, e0 = e0b * vff * atm.canopy, tau = 0.006 + 0.03 * (tex.clay + tex.silt) / 100;
   const dth = clampN(th(hi) - th(1e4), 0.05, 0.4);
   const meth = METHODS.find(q => q.k === state.method) || METHODS[0], drip = meth.mid || 0, wf = drip ? clampN(1 - drip / 50, 0.05, 1) : 1;
-  return { soil, a, n, vff, e0, e0b, hi, hs, Q1, q0: (1 - wf) * Q1 * 0.95, drip, tau, dth, lam: L1 / 3, phi: soilPhi(soil) };
+  return { atm, soil, a, n, vff, e0, e0b, hi, hs, Q1, q0: (1 - wf) * Q1 * 0.95, drip, tau, dth, lam: L1 / 3, phi: soilPhi(soil) };
 }
 const e1T1 = (m, e0) => (m.Q1 - m.q0) / e0;
 const e1Lost = (m, e0, t) => { const t1 = e1T1(m, e0); return t <= t1 ? e0 * t : (m.Q1 - m.q0) + 2 * e0 * m.tau * (Math.sqrt(1 + (t - t1) / m.tau) - 1); };
@@ -3457,12 +3467,12 @@ function drawE1() {
   const ay0 = 50, th = vffOn ? Math.round(mulchThick(state.mulchType)) : 0, gy = sy - th;
   const sk = ctx.createLinearGradient(0, ay0, 0, gy); sk.addColorStop(0, '#CFE4F7'); sk.addColorStop(1, '#EEF4F2'); ctx.fillStyle = sk; ctx.fillRect(16, ay0, sx + sw - 16 + 4, gy - ay0);
   sunIcon(sx + sw - 30, ay0 + 26, 12 + 4 * clampN((TEMP_VALUES[state.tempIdx] + 1) / 4.5, 0, 1), clampN((TEMP_VALUES[state.tempIdx] + 1) / 4.5, 0, 1));
-  for (let i = 0; i < 6; i++) { const yy = ay0 + 14 + i * ((gy - ay0 - 20) / 6), off = (tNow * 40 + i * 37) % 120; ctx.strokeStyle = 'rgba(90,120,150,0.25)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(sx + off * 2.4 - 80, yy); ctx.lineTo(sx + off * 2.4 - 20, yy); ctx.stroke(); }
-  T('Atmosphere: demand ' + m.e0b.toFixed(1) + ' mm/day', 20, ay0 + 14, { s: 10.5, b: true, c: '#1F4E7F' });
+  for (let i = 0; i < 6; i++) { const yy = ay0 + 14 + i * ((gy - ay0 - 20) / 6), off = (tNow * 40 * clampN(m.e0b / 4.2, 0.4, 2.2) + i * 37) % 120; ctx.strokeStyle = 'rgba(90,120,150,0.25)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(sx + off * 2.4 - 80, yy); ctx.lineTo(sx + off * 2.4 - 20, yy); ctx.stroke(); }
+  T('Atmosphere: demand ' + m.e0b.toFixed(1) + ' mm/day', 20, ay0 + 14, { s: 10.5, b: true, c: '#1F4E7F' }); { const A = m.atm, f = (n, v) => Math.abs(v - 1) > 0.015 ? n + ' \u00d7' + v.toFixed(2) + '  ' : '', txt = (f('season', A.season) + f('temperature', A.temp) + f('cloud', A.cloud) + f('weather year', A.wy)).trim() + (A.cover > 0.05 ? '  canopy -' + Math.round((1 - A.canopy) * 100) + '%' : ''); T(txt || 'baseline season and climate', 20, ay0 + 27, { s: 8.8, c: '#37597F' }); }
   ctx.setLineDash([4, 3]); ctx.strokeStyle = '#5B7FA6'; ctx.beginPath(); ctx.moveTo(16, gy - 26); ctx.lineTo(sx + sw + 4, gy - 26); ctx.stroke(); ctx.setLineDash([]); T('boundary layer', 20, gy - 30, { s: 9, c: '#5B7FA6' });
   // section
   ctx.save(); const fr = e1Front(m, day), frPx = fr * ppm / k; const headAt = m2 => z => 1;
-  const keyP = [state.soil, state.till, state.tcIdx, vffOn ? 1 : 0, ct, Math.round(day * 20), state.tempIdx, state.vffIdx].join('|'); g.key0 = [state.soil, state.till, state.tcIdx].join('|');
+  const keyP = [state.soil, state.till, state.tcIdx, vffOn ? 1 : 0, ct, Math.round(day * 20), state.tempIdx, state.vffIdx, Math.round(m.e0 * 50)].join('|'); g.key0 = [state.soil, state.till, state.tcIdx].join('|');
   if (E1.lastPaint !== keyP || !g.cv) { E1.lastPaint = keyP; const hf = e1HeadAt(m, day); microPaint(g, y => hf((y + 0.5) * E1.mm / E1.W), ct, 0); }
   ctx.imageSmoothingEnabled = true; ctx.drawImage(g.cv, 0, 0, g.W, g.H, sx, sy, sw, sh);
   if (ct) { ctx.globalCompositeOperation = 'source-over'; }
@@ -3579,7 +3589,7 @@ function coreHead(mk, t) {   // the E1 suction profile, with a smooth rise (not 
   return z => z >= dl ? hf(z) : Math.pow(10, lh + (5 - lh) * Math.pow(1 - z / dl, 1.3));
 }
 function coreSystems() {
-  const tc = TC_VALUES[state.tcIdx], key = [state.soil, state.till, state.tcIdx, state.vffIdx, state.tempIdx, state.rainIdx, state.method, state.mulchType].join('|');
+  const tc = TC_VALUES[state.tcIdx], key = [state.soil, state.till, state.tcIdx, state.vffIdx, state.tempIdx, state.rainIdx, state.method, state.mulchType, Math.round(e1Atm().e0b * 50), Math.round(e1Atm().canopy * 50)].join('|');
   if (CORE.cache.key === key) return CORE.cache; const m = e1Model(), tex = soilTex(state.soil), out = { key, S: [] }, ks = [state.till, state.till === 'conv' ? 'notill' : 'conv'];
   ks.forEach((k, idx) => { const f = CORE_F[k], wf = clampN((poreIdx(k, 120, tc) - 0.30) / 0.14, 0.3, 1.4) * clampN(0.75 + 0.012 * tex.clay, 0.8, 1.4), seed = hashStr(state.soil) + TILLS.indexOf(k) * 101 + 7;
     const Gf = genCore(f, wf, seed, true), Gt = genCore(f, wf, seed + 1, false), mk = Object.assign({}, m, { Q1: m.Q1 * (1 - 0.6 * Gf.rho) }); mk.dth = m.dth;
