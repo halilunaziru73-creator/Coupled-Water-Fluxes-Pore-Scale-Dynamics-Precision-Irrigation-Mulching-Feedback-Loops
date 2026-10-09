@@ -120,6 +120,41 @@
   body.embed .wrap > .panel:nth-child(2) { position: static; }
   #jumpBtn { display: none; }
   @media (max-width: 920px) { #jumpBtn { display: block; position: fixed; right: 12px; bottom: 64px; z-index: 20; padding: 0.55rem 0.9rem; border-radius: 999px; border: 1px solid #D4A94A; background: #D4A94A; color: #1A2318; font-weight: 700; font-size: 0.85rem; box-shadow: 0 2px 8px rgba(0,0,0,0.4); } body.embed #jumpBtn { display: none; } }
+  /* friendlier layout: grouped views, settings in groups, results first, search, tour */
+  .scenegrp { font-size: 0.64rem; letter-spacing: 0.09em; text-transform: uppercase; color: #8B949E; margin: 0.55rem 0.2rem 0.1rem; font-weight: 700; }
+  .scenegrp:first-child { margin-top: 0.1rem; }
+  header .hbtns { display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap; }
+  details.ux-sec { background: #0D1117; border: 1px solid #30363D; border-radius: 9px; margin: 0 0 0.5rem; }
+  details.ux-sec > summary { list-style: none; cursor: pointer; display: flex; align-items: baseline; justify-content: space-between; gap: 0.6rem; padding: 0.55rem 0.75rem; }
+  details.ux-sec > summary::-webkit-details-marker { display: none; }
+  details.ux-sec > summary .t { font-weight: 700; font-size: 0.86rem; color: #E6EDF3; white-space: nowrap; }
+  details.ux-sec > summary .t::before { content: "\25B8"; display: inline-block; width: 1rem; color: #D4A94A; transition: transform .15s; }
+  details.ux-sec[open] > summary .t::before { transform: rotate(90deg); }
+  details.ux-sec > summary .s { color: #8B949E; font-size: 0.72rem; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  details.ux-sec .ux-body { padding: 0.1rem 0.75rem 0.6rem; }
+  details.ux-sec.used { border-color: #D4A94A; }
+  details.ux-sec.used > summary .t::after { content: " used here"; font-weight: 600; font-size: 0.64rem; color: #D4A94A; margin-left: 0.4rem; }
+  .ux-live h2 { margin-top: 0; } .ux-set h2 { margin-top: 1rem; }
+  #uxTry { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin: 0.45rem 0.8rem 0; }
+  #uxTry .lab { font-size: 0.74rem; color: #8B949E; font-weight: 700; }
+  #uxTry .chip { background: #1C2128; border: 1px solid #30363D; color: #E6EDF3; border-radius: 999px; padding: 0.22rem 0.7rem; font-size: 0.76rem; cursor: pointer; }
+  #uxTry .chip:hover { border-color: #D4A94A; color: #D4A94A; }
+  #uxTry .pager { margin-left: auto; display: flex; gap: 0.35rem; align-items: center; font-size: 0.74rem; color: #8B949E; }
+  #uxTry .pager .chip { border-radius: 8px; }
+  #uxPal { position: fixed; inset: 0; z-index: 90; background: rgba(1,4,9,0.72); display: none; align-items: flex-start; justify-content: center; padding-top: 12vh; }
+  #uxPal.on { display: flex; }
+  #uxPal .box { width: min(560px, 92vw); background: #161B22; border: 1px solid #30363D; border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,.6); overflow: hidden; }
+  #uxPal input { width: 100%; box-sizing: border-box; background: #0D1117; border: none; border-bottom: 1px solid #30363D; color: #E6EDF3; font-size: 1rem; padding: 0.9rem 1rem; outline: none; }
+  #uxPal .list { max-height: 50vh; overflow-y: auto; }
+  #uxPal .it { display: flex; justify-content: space-between; gap: 1rem; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.88rem; color: #E6EDF3; }
+  #uxPal .it small { color: #8B949E; }
+  #uxPal .it.sel { background: #21262D; box-shadow: inset 3px 0 #D4A94A; }
+  #uxPal .hint { padding: 0.45rem 1rem; font-size: 0.7rem; color: #8B949E; border-top: 1px solid #30363D; }
+  #uxTourBox { position: fixed; z-index: 95; width: min(320px, 88vw); background: #161B22; border: 1px solid #D4A94A; border-radius: 12px; padding: 0.85rem 1rem; color: #E6EDF3; font-size: 0.86rem; box-shadow: 0 10px 30px rgba(0,0,0,.6); display: none; }
+  #uxTourBox .row2 { display: flex; justify-content: space-between; align-items: center; margin-top: 0.7rem; gap: 0.4rem; }
+  #uxSpot { position: fixed; z-index: 94; border-radius: 10px; box-shadow: 0 0 0 9999px rgba(1,4,9,0.7); pointer-events: none; display: none; transition: all .25s; }
+  @media (max-width: 920px) { #uxTry .pager { margin-left: 0; } }
+  body.embed #uxTry, body.embed #uxPal, body.embed #uxTourBox, body.embed #uxSpot { display: none !important; }
 </style>
 </head>
 <body>
@@ -3758,5 +3793,70 @@ if (window.__guiFromHash) window.__guiFromHash(); refresh();
 </script>
 <button id="jumpBtn" type="button">Controls &darr;</button>
 <script>(function(){var b=document.getElementById("jumpBtn");if(!b)return;function ctl(){return document.querySelectorAll(".wrap > .panel")[1];}b.addEventListener("click",function(){var c=ctl();if(!c)return;var r=c.getBoundingClientRect();var down=r.top>innerHeight*0.5;if(down){c.scrollIntoView({behavior:"smooth",block:"start"});}else{document.getElementById("profileCanvas").scrollIntoView({behavior:"smooth",block:"start"});}});addEventListener("scroll",function(){var c=ctl();if(!c)return;b.innerHTML=c.getBoundingClientRect().top>innerHeight*0.5?"Controls &darr;":"Picture &uarr;";},{passive:true});})();</script>
+<script>
+(function () { try {
+  const $ = s => document.querySelector(s), $$ = s => Array.from(document.querySelectorAll(s)), LS = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} } };
+  if (document.body.classList.contains('embed')) return;
+  const hadHash = !!location.hash;
+  // ---------- views grouped by the question they answer, in plain words
+  const PLAIN = { field: ['Today’s field', 'What is happening in the field today'], v2: ['Water in the soil', 'Soil water by depth and day'], v3: ['Pores and tillage', 'Microscope view of the pores'], v7: ['Soil profiles', 'What changes the soil’s hydraulic properties'], e1: ['Evaporation', 'From the pore to the atmosphere'], r1: ['Roots', 'Root depth in every soil'],
+    v1: ['When to irrigate', 'Sensor, trigger and the water front'], n1: ['Irrigation rule', 'How the trigger decides'], v4: ['Mulch or bare', 'Side by side'], v6: ['Mulch strength', 'Evaporation and drainage maps'], n2: ['Saved water', 'Where the water saved by mulch goes'], n3: ['Where mulch pays', 'Regime map'], v5: ['How it connects', 'The feedback loops'] };
+  const GROUPS = [['Start here', ['field']], ['Water in the soil', ['v2', 'v3', 'v7', 'e1', 'r1']], ['Irrigation', ['v1', 'n1']], ['Mulch', ['v4', 'v6', 'n2', 'n3']], ['The big picture', ['v5']]];
+  const order = GROUPS.flatMap(g => g[1]); SCENES.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
+  const bar = $('#sceneBar'), btn = {}; $$('#sceneBar .scenebtn').forEach(b => { btn[b.dataset.scene] = b; });
+  GROUPS.forEach(([name, ids]) => { const h = document.createElement('div'); h.className = 'scenegrp'; h.textContent = name; bar.appendChild(h); ids.forEach(id => { const b = btn[id]; if (!b) return; const sp = b.querySelectorAll('span'); if (sp[0] && !sp[0].textContent && id !== 'field') sp[0].textContent = id.toUpperCase(); if (sp[1] && PLAIN[id]) sp[1].textContent = PLAIN[id][0]; b.title = PLAIN[id] ? PLAIN[id][1] : ''; bar.appendChild(b); }); });
+  // ---------- settings in groups, with a one-line summary each; live results first
+  const panel = document.querySelectorAll('.wrap > .panel')[1], kids = Array.from(panel.children), liveH = kids.find(e => e.tagName === 'H2' && /Live indices/.test(e.textContent)), ro = liveH.nextElementSibling, setH = kids[0], ctrl = kids.slice(1, kids.indexOf(liveH));
+  const starts = { vffSlider: 1, rainSlider: 2, trigSlider: 3, nSlider: 4 }; const secs = [[], [], [], [], []]; let cur = 0;
+  ctrl.forEach(el => { const sl = el.querySelector && el.querySelector('input[type=range]'); if (el.classList.contains('row') && sl && starts[sl.id] !== undefined) cur = starts[sl.id]; secs[cur].push(el); });
+  const T = ['Soil and field', 'Mulch', 'Weather', 'Irrigation', 'Nutrients'], txt = s => { const e = $(s); return e ? e.textContent.trim() : ''; };
+  const SUM = [() => (DATA.soil_labels[state.soil] || '') + ' · ' + (TILL_LABELS[state.till] || '') + ' · ' + ((CROPS[state.crop] || {}).label || ''), () => 'factor ' + txt('#vffVal') + ' · ' + txt('#capVal'), () => 'rain ' + txt('#rainVal') + ' · ' + txt('#tempVal'), () => txt('#trigVal') + ' at ' + txt('#zVal') + ' · ' + ((METHODS.find(m => m.k === state.method) || {}).label || ''), () => txt('#nVal') + ' of standard'];
+  const USED = { field: [0, 1, 2], v1: [3], v2: [0, 2], v3: [0], v4: [1], v5: [1, 2], v6: [1], v7: [0], e1: [0, 1, 2, 3], n1: [3], n2: [1, 2], n3: [1, 2], r1: [0, 3, 4] };
+  const live = document.createElement('div'); live.className = 'ux-live'; liveH.textContent = 'Live results'; live.appendChild(liveH); live.appendChild(ro);
+  const set = document.createElement('div'); set.className = 'ux-set'; setH.textContent = 'Settings'; set.appendChild(setH); const dts = [];
+  secs.forEach((els, i) => { const d = document.createElement('details'); d.className = 'ux-sec'; if (i === 0) d.open = true; d.innerHTML = '<summary><span class="t">' + T[i] + '</span><span class="s"></span></summary><div class="ux-body"></div>'; const body = d.querySelector('.ux-body'); els.forEach(e => body.appendChild(e)); set.appendChild(d); dts.push(d); });
+  panel.appendChild(live); panel.appendChild(set);
+  const upd = () => { dts.forEach((d, i) => { const s = d.querySelector('.s'); try { s.textContent = SUM[i](); } catch (e) {} }); };
+  const mark = () => { const u = USED[currentScene.id] || []; dts.forEach((d, i) => { const on = u.indexOf(i) >= 0; d.classList.toggle('used', on); }); };
+  const openFor = () => { const u = USED[currentScene.id] || []; dts.forEach((d, i) => { if (u.indexOf(i) >= 0) d.open = true; }); };
+  const oR = refresh; refresh = function () { const r = oR.apply(this, arguments); upd(); return r; }; upd(); setInterval(upd, 700);
+  // ---------- things to try, and previous / next
+  const click = s => () => { const e = $(s); if (e) e.click(); }, rng = (id, v) => () => { const e = document.getElementById(id); if (e) { e.value = v; e.dispatchEvent(new Event('input', { bubbles: true })); } }, meth = re => () => { const m = METHODS.find(q => re.test(q.label)); if (m) { const e = $('[data-method="' + m.k + '"]'); if (e) e.click(); } };
+  const TRY = { field: [['Add straw mulch', click('[data-mulch="straw"]')], ['A dry year', rng('rainSlider', 2)], ['3.5 °C warmer', rng('tempSlider', 9)]], v1: [['Drip 20 to 30 cm', meth(/20 to 30/)], ['Sensor deeper', rng('zSlider', 12)], ['Drier trigger', rng('trigSlider', 15)]], v2: [['Sand', click('[data-soil="S03_Sand"]')], ['Clay loam', click('[data-soil="S09_ClayLoam"]')], ['A wet year', rng('rainSlider', 8)]],
+    v3: [['No-till', click('[data-till="notill"]')], ['Conventional', click('[data-till="conv"]')], ['Fast settling', rng('tcSlider', 4)]], v4: [['Wood chips', click('[data-mulch="woodchips"]')], ['Black plastic', click('[data-mulch="plastic"]')], ['No mulch', click('[data-mulch="none"]')]], v5: [['Strong mulch', rng('vffSlider', 1)], ['Warmer', rng('tempSlider', 9)], ['A dry year', rng('rainSlider', 2)]],
+    v6: [['Straw', click('[data-mulch="straw"]')], ['Strongest mulch', rng('vffSlider', 0)], ['No mulch', click('[data-mulch="none"]')]], v7: [['No-till', click('[data-till="notill"]')], ['Clay loam', click('[data-soil="S09_ClayLoam"]')], ['Slow settling', rng('tcSlider', 0)]], e1: [['Straw mulch', click('[data-mulch="straw"]')], ['Drip 40 to 50 cm', meth(/40 to 50/)], ['Sand', click('[data-soil="S03_Sand"]')]],
+    n1: [['Drier trigger', rng('trigSlider', 15)], ['Sensor deeper', rng('zSlider', 12)], ['Vegetable crop', click('[data-crop="vegetable"]')]], n2: [['A wet year', rng('rainSlider', 8)], ['A dry year', rng('rainSlider', 2)], ['Straw mulch', click('[data-mulch="straw"]')]], n3: [['Strong mulch', rng('vffSlider', 1)], ['A dry year', rng('rainSlider', 2)], ['A wet year', rng('rainSlider', 8)]], r1: [['Legume', click('[data-crop="legume"]')], ['Vegetable', click('[data-crop="vegetable"]')], ['Low nitrogen', rng('nSlider', 1)]] };
+  const tryBar = document.createElement('div'); tryBar.id = 'uxTry'; $('#insightBox').after(tryBar); let lastId = '';
+  const go = d => { const i = SCENES.indexOf(currentScene), n = SCENES[(i + d + SCENES.length) % SCENES.length]; switchScene(n); };
+  const build = () => { const id = currentScene.id, i = SCENES.indexOf(currentScene), p = SCENES[(i + SCENES.length - 1) % SCENES.length], n = SCENES[(i + 1) % SCENES.length]; tryBar.innerHTML = '<span class="lab">Try</span>'; (TRY[id] || []).forEach(([l, f]) => { const c = document.createElement('span'); c.className = 'chip'; c.textContent = l; c.onclick = f; tryBar.appendChild(c); });
+    const pg = document.createElement('span'); pg.className = 'pager'; const a = document.createElement('span'); a.className = 'chip'; a.textContent = '‹ ' + (PLAIN[p.id] || [p.label])[0]; a.onclick = () => go(-1); const b = document.createElement('span'); b.className = 'chip'; b.textContent = (PLAIN[n.id] || [n.label])[0] + ' ›'; b.onclick = () => go(1); pg.appendChild(a); pg.appendChild(document.createTextNode((i + 1) + ' of ' + SCENES.length)); pg.appendChild(b); tryBar.appendChild(pg); mark(); openFor(); };
+  setInterval(() => { if (currentScene.id !== lastId) { lastId = currentScene.id; build(); } }, 200); build(); lastId = currentScene.id;
+  // ---------- search and jump (Ctrl+K)
+  const hb = document.createElement('span'); hb.className = 'hbtns'; const rb = $('#reportBtn'); rb.parentNode.insertBefore(hb, rb); hb.innerHTML = '<button id="uxSearch" class="pillbtn" title="Jump to any view or setting (Ctrl+K)">Search · Ctrl K</button><button id="uxTour" class="pillbtn" title="A short tour of the explorer">Tour</button>'; hb.appendChild(rb);
+  const pal = document.createElement('div'); pal.id = 'uxPal'; pal.innerHTML = '<div class="box"><input id="uxQ" placeholder="Type a view, soil, mulch, crop or action, for example: no-till, drip, roots" autocomplete="off"><div class="list" id="uxL"></div><div class="hint">Enter to go · ↑ ↓ to move · Esc to close</div></div>'; document.body.appendChild(pal);
+  const items = () => { const a = []; SCENES.forEach(sc => a.push({ t: (PLAIN[sc.id] || [sc.label])[0], s: 'view · ' + (PLAIN[sc.id] || ['', ''])[1], f: () => switchScene(sc) }));
+    $$('#soilBtns [data-soil], #tillBtns [data-till], #cropBtns [data-crop], #mulchBtns [data-mulch], #methodBtns [data-method]').forEach(e => { const k = e.dataset.soil ? 'soil' : e.dataset.till ? 'tillage' : e.dataset.crop ? 'crop' : e.dataset.mulch ? 'mulch' : 'irrigation'; a.push({ t: e.textContent.trim(), s: 'set ' + k, f: () => e.click() }); });
+    $$('#guiPreset option').forEach(o => { if (o.value) a.push({ t: o.textContent.trim(), s: 'ready-made case', f: () => { const s = $('#guiPreset'); s.value = o.value; s.dispatchEvent(new Event('change', { bubbles: true })); } }); });
+    [['Reset to the defaults', 'guiReset'], ['Pin these results as a baseline', 'guiPin'], ['Copy a link to these settings', 'guiLink'], ['Save the picture', 'guiPng'], ['Save the numbers', 'guiCsv'], ['Download the report (PDF)', 'reportBtn']].forEach(([t, id]) => a.push({ t, s: 'action', f: () => { const e = document.getElementById(id); if (e) e.click(); } })); a.push({ t: 'Take the tour', s: 'action', f: () => tour(0) }); return a; };
+  let list = [], sel = 0; const render = () => { const q = $('#uxQ').value.toLowerCase().trim().split(/\s+/).filter(Boolean); list = items().filter(it => q.every(w => (it.t + ' ' + it.s).toLowerCase().indexOf(w) >= 0)).slice(0, 40); sel = Math.min(sel, Math.max(0, list.length - 1));
+    $('#uxL').innerHTML = ''; list.forEach((it, i) => { const d = document.createElement('div'); d.className = 'it' + (i === sel ? ' sel' : ''); d.innerHTML = '<span></span><small></small>'; d.firstChild.textContent = it.t; d.lastChild.textContent = it.s; d.onclick = () => run(i); $('#uxL').appendChild(d); }); };
+  const run = i => { const it = list[i]; close(); if (it) it.f(); }, open = () => { pal.classList.add('on'); $('#uxQ').value = ''; sel = 0; render(); setTimeout(() => $('#uxQ').focus(), 30); }, close = () => pal.classList.remove('on');
+  $('#uxQ').addEventListener('input', () => { sel = 0; render(); }); pal.addEventListener('mousedown', e => { if (e.target === pal) close(); });
+  $('#uxQ').addEventListener('keydown', e => { if (e.key === 'Escape') close(); else if (e.key === 'ArrowDown') { sel = Math.min(list.length - 1, sel + 1); render(); e.preventDefault(); } else if (e.key === 'ArrowUp') { sel = Math.max(0, sel - 1); render(); e.preventDefault(); } else if (e.key === 'Enter') run(sel); e.stopPropagation(); });
+  document.addEventListener('keydown', e => { const tag = (e.target.tagName || '').toLowerCase(); if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); pal.classList.contains('on') ? close() : open(); } else if (e.key === '/' && tag !== 'input' && tag !== 'select' && tag !== 'textarea') { e.preventDefault(); open(); } }, true);
+  $('#uxSearch').onclick = open;
+  // ---------- a short tour, shown once
+  const spot = document.createElement('div'); spot.id = 'uxSpot'; const box = document.createElement('div'); box.id = 'uxTourBox'; document.body.appendChild(spot); document.body.appendChild(box);
+  const STEPS = [['#sceneBar', 'Views are grouped by the question they answer: the soil, irrigation, mulch, and how it all connects. Click one to open it.'], ['#profileCanvas', 'The picture is live. Hover or click things in it. The play bar underneath runs time forward.'], ['.ux-live', 'Live results: these numbers move with every setting you change.'], ['.ux-set', 'Settings in groups: soil and field, mulch, weather, irrigation and nutrients. A closed group shows its current values in one line. The groups used by the open view are marked.'], ['#uxTry', 'Try: one click changes a setting so you can see its effect in this view. Use the arrows to move to the next view.'], ['#uxSearch', 'Search jumps to any view, setting or action. Press Ctrl+K, or the slash key, from anywhere.']];
+  let ti = -1; const endTour = () => { ti = -1; spot.style.display = 'none'; box.style.display = 'none'; LS.set('swafl_tour_v2', '1'); };
+  const tour = i => { ti = i; if (i >= STEPS.length) return endTour(); const [sel2, msg] = STEPS[i], el = $(sel2); if (!el) return tour(i + 1); el.scrollIntoView({ block: 'center', behavior: 'instant' in window ? 'auto' : 'auto' });
+    setTimeout(() => { const r = el.getBoundingClientRect(), pad = 6, rr = { x: Math.max(4, r.left - pad), y: Math.max(4, r.top - pad), w: Math.min(innerWidth - 8, r.width + 2 * pad), h: Math.min(innerHeight - 8, r.height + 2 * pad) }; spot.style.cssText = 'display:block;left:' + rr.x + 'px;top:' + rr.y + 'px;width:' + rr.w + 'px;height:' + rr.h + 'px';
+      box.innerHTML = '<div style="color:#D4A94A;font-weight:700;font-size:.72rem;margin-bottom:.3rem">' + (i + 1) + ' of ' + STEPS.length + '</div><div></div><div class="row2"><button class="pillbtn" id="uxSk">Skip</button><span><button class="pillbtn" id="uxBk">Back</button> <button class="pillbtn active" id="uxNx">' + (i === STEPS.length - 1 ? 'Done' : 'Next') + '</button></span></div>'; box.children[1].textContent = msg; box.style.display = 'block';
+      const bw = box.offsetWidth, bh = box.offsetHeight; let bx = rr.x + rr.w + 14, by = rr.y; if (bx + bw > innerWidth - 8) bx = Math.max(8, rr.x + rr.w - bw); if (rr.x + rr.w + 14 + bw > innerWidth - 8 && rr.y + rr.h + 14 + bh < innerHeight) by = rr.y + rr.h + 14; else if (by + bh > innerHeight - 8) by = Math.max(8, innerHeight - bh - 8); box.style.left = bx + 'px'; box.style.top = by + 'px';
+      $('#uxSk').onclick = endTour; $('#uxBk').onclick = () => tour(Math.max(0, i - 1)); $('#uxNx').onclick = () => tour(i + 1); }, 60); };
+  $('#uxTour').onclick = () => tour(0); addEventListener('keydown', e => { if (ti >= 0 && e.key === 'Escape') endTour(); });
+  if (!LS.get('swafl_tour_v2') && innerWidth > 920) setTimeout(() => { if (!document.getElementById('splash') && !hadHash) tour(0); }, 2600);
+} catch (err) { console.warn('ux layer', err); } })();
+</script>
 </body>
 </html>
