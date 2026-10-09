@@ -3946,5 +3946,83 @@ if (window.__guiFromHash) window.__guiFromHash(); refresh();
   addEventListener('scroll', () => up.classList.toggle('show', scrollY > 700), { passive: true });
 } catch (err) { console.warn('ux2', err); } })();
 </script>
+<style id="plaincss">
+  .ux-hint { font-size: 0.78rem; color: #A9B4C0; line-height: 1.4; margin: 0.15rem 0 0.5rem; padding-left: 0.5rem; border-left: 2px solid #3A4450; }
+  .ux-cap { font-size: 0.68rem; color: #8B949E; line-height: 1.3; margin-top: 0.1rem; font-weight: 400; text-transform: none; letter-spacing: 0; }
+  #uxPlain { margin: 0.5rem 1rem 0; background: #12202B; border: 1px solid #24465E; border-left: 4px solid #4FC3F7; border-radius: 10px; color: #DCEBF5; }
+  #uxPlain > summary { cursor: pointer; padding: 0.55rem 0.8rem; font-weight: 700; font-size: 0.9rem; color: #7FD4FF; min-height: 36px; }
+  #uxPlain .body { padding: 0 0.9rem 0.7rem; font-size: 0.92rem; line-height: 1.55; }
+  #uxPlain .look { margin-top: 0.4rem; color: #BBD3E6; font-size: 0.84rem; }
+  #uxPlain .look b { color: #D4A94A; }
+  #uxVerdict { background: #14201A; border: 1px solid #2B5A3E; border-radius: 10px; padding: 0.7rem 0.8rem; margin-bottom: 0.8rem; font-size: 0.88rem; line-height: 1.55; color: #DDEFE3; }
+  #uxVerdict h3 { margin: 0 0 0.3rem; font-size: 0.82rem; letter-spacing: 0.04em; text-transform: uppercase; color: #6FD08C; }
+  #uxVerdict b { color: #fff; } #uxVerdict .good { color: #6FD08C; font-weight: 700; } #uxVerdict .warn { color: #F2B84B; font-weight: 700; } #uxVerdict .bad { color: #FF7B6B; font-weight: 700; }
+  #uxGloss { margin: 1rem; background: #161B22; border: 1px solid #30363D; border-radius: 10px; color: #C9D1D9; }
+  #uxGloss summary { cursor: pointer; padding: 0.7rem 0.9rem; font-weight: 700; color: #D4A94A; }
+  #uxGloss dl { margin: 0; padding: 0 0.9rem 0.8rem; display: grid; grid-template-columns: max-content 1fr; gap: 0.35rem 1rem; font-size: 0.86rem; line-height: 1.45; }
+  #uxGloss dt { font-weight: 700; color: #E6EDF3; } #uxGloss dd { margin: 0; }
+  @media (max-width: 700px) { #uxGloss dl { grid-template-columns: 1fr; gap: 0.1rem; } #uxGloss dd { margin-bottom: 0.45rem; } #uxPlain { margin: 0.5rem; } }
+</style>
+<script>
+(function () { try {
+  const $ = s => document.querySelector(s), LS = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} } };
+  // 1. every control gets a sentence in everyday words
+  const H = [
+    [/^Soil$/, 'Soil type. Sandy soil lets water run through quickly and holds little. Clay holds a lot but drains slowly. Loam is in between.'],
+    [/^Tillage/, 'How the ground is worked. Ploughing (conventional) loosens the top soil. No-till leaves it firm with old stalks on top.'],
+    [/^Crop category/, 'What is being grown. Vegetables have shallow roots and need water more often than cereals.'],
+    [/^Structural consolidation/, 'How quickly loosened soil settles and packs down again after ploughing. Faster settling means fewer open holes for water.'],
+    [/^Mulch strength/, 'How well the cover on the soil blocks evaporation. 1.0 means no mulch. The lower the number, the less water is lost to the air.'],
+    [/^Mulch interception/, 'How much rain the mulch layer can soak up and keep before any reaches the soil (in mm of water).'],
+    [/^Mulch material/, 'What the soil is covered with. Pick one to set a typical strength and thickness, or use the sliders above.'],
+    [/^Rainfall scale/, 'How rainy the climate is. x1.0 is normal, x0.5 is half as much rain, x1.4 is 40% more.'],
+    [/^Temperature shift/, 'How much warmer or cooler than normal. Warmer air pulls more water out of the soil and the crop.'],
+    [/^Irrigation trigger/, 'How dry the soil gets before watering starts. It is read from a sensor. A bigger negative number means drier soil before irrigating (-300 is fairly dry, -100 is still moist).'],
+    [/^Sensor depth/, 'How deep in the soil the sensor sits. A deeper sensor reacts later, so you water less often.'],
+    [/^Irrigation method/, 'How the water reaches the crop: flooded over the surface, sprayed from above, or dripped through a buried pipe at the chosen depth.'],
+    [/^Nitrogen rate/, 'How much fertiliser (nitrogen) is applied. More feeds the crop but more can wash away below the roots.']
+  ];
+  const addHints = () => document.querySelectorAll('.row > label, .row').forEach(el => { const row = el.classList.contains('row') ? el : el.parentNode; if (!row || row.dataset.hint) return; const lab = row.querySelector('label') || (el.tagName === 'LABEL' ? el : null); if (!lab) return; const tx = lab.textContent.trim(); const h = H.find(q => q[0].test(tx)); if (!h) return; row.dataset.hint = '1'; const d = document.createElement('div'); d.className = 'ux-hint'; d.textContent = h[1]; lab.insertAdjacentElement('afterend', d); });
+  addHints(); setTimeout(addHints, 800);
+  // 2. every live number says what it means
+  const CAP = { roEvap: 'water lost from the soil surface straight into the air', roDrain: 'water that sinks below the roots and is lost to the crop', roIrr: 'water you have to add in a year', roYield: 'what the crop produces', roTransp: 'water the crop itself drinks and breathes out', roET: 'soil and crop water use together', roNL: 'fertiliser washed below the roots (lower is better)', roIE: 'crop produced for each cubic metre of irrigation (higher is better)', roRain: 'rain that falls in a year' };
+  Object.keys(CAP).forEach(id => { const v = document.getElementById(id); if (!v || !v.parentNode) return; const c = document.createElement('div'); c.className = 'ux-cap'; c.textContent = CAP[id]; v.parentNode.appendChild(c); v.parentNode.title = CAP[id]; });
+  // 3. a verdict in plain words, updated live
+  const live = document.querySelector('.ux-live'); const vd = document.createElement('div'); vd.id = 'uxVerdict'; if (live) live.insertBefore(vd, live.children[1] || null);
+  const verdict = () => { try { const m = current, bare = model(1.0, RAIN_VALUES[state.rainIdx]), has = VFF_VALUES[state.vffIdx] < 0.95, f0 = v => Math.round(v), pct = (a, b) => b > 0 ? Math.round(a / b * 100) : 0;
+    const lossPct = pct(m.evap, m.rain + m.irr), nl = m.nl, nlc = nl < 10 ? ['low', 'good'] : nl < 25 ? ['moderate', 'warn'] : ['high', 'bad'], dr = pct(m.drain, m.rain + m.irr), drc = dr < 8 ? 'good' : dr < 20 ? 'warn' : 'bad';
+    let h = '<h3>In plain words</h3>Each year this field gets <b>' + f0(m.rain) + ' mm</b> of rain and <b>' + f0(m.irr) + ' mm</b> of irrigation. The crop drinks about <b>' + f0(m.transp) + ' mm</b>. <b>' + f0(m.evap) + ' mm</b> (' + lossPct + '%) goes straight from the soil into the air, and <span class="' + drc + '">' + f0(m.drain) + ' mm</span> drains below the roots.';
+    if (has) { const saved = bare.evap - m.evap, irrSaved = bare.irr - m.irr; h += ' Your mulch cuts evaporation by <span class="good">' + f0(saved) + ' mm</span> compared with bare soil' + (irrSaved > 1 ? ' and saves about <span class="good">' + f0(irrSaved) + ' mm</span> of irrigation.' : '.'); } else h += ' There is no mulch, so <span class="warn">more water evaporates</span>. Try adding straw.';
+    h += ' Fertiliser loss is <span class="' + nlc[1] + '">' + nlc[0] + '</span> (' + nl.toFixed(1) + ' kg of nitrogen per hectare).'; vd.innerHTML = h; } catch (e) {} };
+  setInterval(verdict, 700); verdict();
+  // 4. each view explained, with what to look for
+  const PL = {
+    field: ['A slice through one farm field. Blue arrows are water coming in (rain and irrigation). Green is the crop drinking, gold is water evaporating from the soil, grey is water caught on leaves, and the rest drains down below the roots.', 'the arrows: fatter means more water. Press play to watch the year go by.'],
+    v2: ['How wet or dry the soil is at every depth, day by day. Dry soil pulls hard on its water (high "suction"). Blue lines are the irrigated field, orange the rain-only field.', 'the orange line drifting far to the right in summer: that soil is very dry. The irrigated blue line stays moist.'],
+    v3: ['A magnified look at the tiny holes (pores) in the top soil under different ploughing. Water and air travel through these holes.', 'more open holes under ploughing, fewer once the soil settles or under no-till.'],
+    v7: ['How soil type, ploughing and settling change how fast water moves through the soil.', 'the curves moving when you pick a different soil.'],
+    e1: ['How a wet soil dries out. At first the surface stays damp and water escapes fast (stage 1). Then the top layer dries into a crust that slows the loss (stage 2). Mulch and cooler air stretch stage 1 out less.', 'the blue line dropping when the crust forms, and the demand number in the sky: hotter days pull harder.'],
+    r1: ['How roots grow and where they take up water during the season.', 'roots reaching deeper over time and thinning in dry layers.'],
+    v1: ['A sensor in the soil decides when to irrigate. When the soil gets too dry the water switches on, and stops once the soil is wet enough.', 'the moving blue wetting front, and the sensor reading against the trigger line.'],
+    n1: ['The rule behind irrigation: which soil layers have dried past the trigger, and how much water is left for the crop.', 'red layers are too dry; blue is water still available to the crop.'],
+    v4: ['The same field with and without mulch (straw, husks or plastic laid on the soil). Mulch slows evaporation, so you need less irrigation.', 'the bars: bare soil (grey) against your mulch (green).'],
+    v6: ['Maps showing how mulch strength and rainfall change evaporation and drainage.', 'where the red square sits: that is your current setting.'],
+    n2: ['Where the water saved by mulch goes: less irrigation, a bit more drainage, or more water for the crop.', 'the green line (irrigation saved) in dry years and the blue line (extra drainage) in wet years.'],
+    n3: ['A map of when evaporation wins and when drainage wins, depending on rain and mulch. Gold is evaporation, blue is drainage.', 'the red outline: it shows which side you are on.'],
+    v5: ['The whole system in one picture. Climate, soil, crop, irrigation and fertiliser all affect one another. The red arrows show which control acts on which part, and the list underneath says what one step of each does. The picture steps through the season: irrigation runs only when the soil needs it.', 'the grey or blue banner at the top: it says whether irrigation is running right now.']
+  };
+  const pd = document.createElement('details'); pd.id = 'uxPlain'; pd.open = true; const anchor = $('#insightBox') || $('#todayBar'); anchor.parentNode.insertBefore(pd, anchor);
+  let lastId = '', seen = {}; try { seen = JSON.parse(LS.get('swafl_plain_seen') || '{}'); } catch (e) {}
+  const showPlain = () => { const id = currentScene.id, e = PL[id]; if (!e) { pd.style.display = 'none'; return; } pd.style.display = ''; pd.innerHTML = '<summary>What am I looking at?</summary><div class="body">' + e[0] + '<div class="look"><b>Look for:</b> ' + e[1] + '</div></div>'; pd.open = !seen[id]; };
+  pd.addEventListener('toggle', () => { if (!pd.open && lastId) { seen[lastId] = 1; LS.set('swafl_plain_seen', JSON.stringify(seen)); } });
+  setInterval(() => { if (currentScene.id !== lastId) { lastId = currentScene.id; showPlain(); } }, 200);
+  // 5. glossary
+  const G = [['Evaporation', 'water turning to vapour and leaving the soil surface'], ['Transpiration', 'water that the crop takes up through its roots and releases from its leaves'], ['Drainage', 'water that moves down past the roots and is lost to the crop'], ['Leaching', 'fertiliser (such as nitrogen) carried down with drainage water'], ['Irrigation', 'water you add to the field'], ['Mulch', 'a cover on the soil, such as straw, wood chips or plastic, that slows evaporation'], ['Tillage', 'how the soil is worked: ploughed, lightly worked, or left alone (no-till)'], ['Pores', 'the tiny holes between soil grains that hold air and water'], ['Suction (or pressure head)', 'how hard the soil holds on to its water; more suction means drier soil'], ['Trigger', 'the sensor reading at which irrigation starts'], ['Water front', 'the edge of the wet soil as water soaks downward'], ['Consolidation', 'loosened soil settling and packing down again'], ['Drip irrigation', 'water delivered slowly through a pipe with small outlets (emitters), here at a chosen depth underground']];
+  const gl = document.createElement('details'); gl.id = 'uxGloss'; gl.innerHTML = '<summary>Words explained</summary><dl>' + G.map(g => '<dt>' + g[0] + '</dt><dd>' + g[1] + '</dd>').join('') + '</dl>'; const ft = document.querySelector('footer'); ft.parentNode.insertBefore(gl, ft);
+  // 6. text size
+  const hb = document.querySelector('.hbtns') || document.querySelector('header'); const tz = document.createElement('button'); tz.className = 'pillbtn'; tz.type = 'button'; tz.id = 'uxText'; tz.title = 'Make the text bigger or smaller'; tz.textContent = 'Aa'; let sz = +(LS.get('swafl_size') || 0); const sizes = ['100%', '112%', '125%'];
+  const applySz = () => { document.documentElement.style.fontSize = sizes[sz]; tz.textContent = ['Aa', 'Aa+', 'Aa++'][sz]; }; tz.onclick = () => { sz = (sz + 1) % 3; LS.set('swafl_size', sz); applySz(); }; hb.insertBefore(tz, hb.firstChild); applySz();
+} catch (err) { console.warn('plain layer', err); } })();
+</script>
 </body>
 </html>
