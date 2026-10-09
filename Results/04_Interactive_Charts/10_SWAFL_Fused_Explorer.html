@@ -249,7 +249,7 @@ const SCENES = [
     legend:[['#ECA03C','Evaporation'],['#5AA0E1','Drainage'],['#D93025','Current setting']], insight:"Mulch strength and interception capacity set evaporation; tillage and consolidation set drainage. The red outline marks your current settings." },
   { id:"v7", label:"V7 SHP Drivers", color:"#E8912D", h:1188, interactive:true, onDown: p => v7Down(p), onMove: p => v7Move(p), onLeave: () => { v7ui.hov = null; }, draw: () => drawV7x(), title:"What drives change in soil hydraulic properties",
     legend:[['#2E7DE8','Tillage'],['#E8912D','Consolidation rate'],['#D93025','Selected soil']], insight:"Tillage drives drainage change in coarse soils; consolidation rate takes over in finer soils, and soil texture sets the baseline." },
-  { id:"e1", label:"E1 Evaporation CT", color:"#4FC3F7", play:true, dur:16, h:830, interactive:true, onMove: p => { E1.hv = p; return false; }, onLeave: () => { E1.hv = null; }, draw: () => drawE1(), title:"Evaporation: from the pore to the atmosphere, in a CT-style section",
+  { id:"e1", label:"E1 Evaporation", color:"#4FC3F7", play:true, dur:16, h:830, interactive:true, onMove: p => { E1.hv = p; return false; }, onLeave: () => { E1.hv = null; }, draw: () => drawE1(), title:"Evaporation: from the pore to the atmosphere, in a modelled section",
     legend:[['#1F66C8','Liquid water in the pores'],['#FFFFFF','Vapour moving up'],['#E8912D','Drying front'],['#8A8F98','No mulch']], insight:"Water leaves a drying soil in two stages. While films keep the surface wet, the soil loses water at the atmospheric rate; once the surface pores empty, the water has to cross a growing dry layer as vapour. Your mulch lowers the demand and so lengthens stage 1." },
   { id:"n1", label:"N1 Trigger Law", color:"#FF4D4D", draw: () => drawN1Chart(), interactive:true, onDown: p => n1Down(p), onMove: p => n1Move(p), onUp: () => n1Up(), onLeave: () => { n1ui.hover = -1; ptrN1.x = -99; }, title:"Root-zone depletion: soil column and the soil-independent trigger",
     legend:[['#D93025','Critical f* = 0.45, same for every soil'],['#5B2FA8','This soil\'s trigger (dashed line in the column; drag the gauge)'],['#D93025','Layer past the trigger'],['#1B63C8','Water left for the crop'],['#1E8E3E','Before f*']], insight:"Re-expressing the irrigation trigger as root-zone depletion collapses all ten soils onto one curve (pooled R2 0.48 to 0.75 for irrigation, 0.23 to 0.70 for yield)." },
@@ -1254,7 +1254,7 @@ function drawMicroSide() {
   ctx.fillStyle = '#EEE9DA'; ctx.fillRect(V3S.sx, V3S.sy - 2, V3S.sw, 4); const kx = V3S.sx + MICRO.pF / 4.2 * V3S.sw; ctx.fillStyle = '#1F66C8'; ctx.fillRect(V3S.sx, V3S.sy - 2, kx - V3S.sx, 4); ctx.fillStyle = '#fff'; ctx.strokeStyle = '#1F66C8'; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.arc(kx, V3S.sy, 7, 0, 6.283); ctx.fill(); ctx.stroke();
   T('wet', x, V3S.sy + 20, { s: 9, c: MUTE }); T('dry', x + w, V3S.sy + 20, { s: 9, a: 'right', c: MUTE });
   T('Pores wider than ' + (rUm * 2 >= 10 ? Math.round(rUm * 2) : (rUm * 2).toFixed(1)) + ' µm are empty', x, V3S.sy + 36, { s: 9.5, c: '#1B4FA0' });
-  [['Photo', false], ['X-ray CT style', true]].forEach(([l, v], i) => { const bx = x + i * 96, on = ct === v; ctx.fillStyle = on ? '#D4A94A' : '#EEE9DA'; rrect(bx, 262, 92, 24, 6); ctx.fill(); ctx.strokeStyle = INK; ctx.lineWidth = on ? 2 : 1; ctx.stroke(); T(l, bx + 46, 278, { s: 10.5, b: on, a: 'center' }); hot(bx, 262, 92, 24, () => { MICRO.ct = v; }, 'show as ' + l.toLowerCase()); });
+  [['Photo', false], ['Density view', true]].forEach(([l, v], i) => { const bx = x + i * 96, on = ct === v; ctx.fillStyle = on ? '#D4A94A' : '#EEE9DA'; rrect(bx, 262, 92, 24, 6); ctx.fill(); ctx.strokeStyle = INK; ctx.lineWidth = on ? 2 : 1; ctx.stroke(); T(l, bx + 46, 278, { s: 10.5, b: on, a: 'center' }); hot(bx, 262, 92, 24, () => { MICRO.ct = v; }, 'show as ' + l.toLowerCase()); });
   const tex = soilTex(soil), phi = soilPhi(soil), t = h => soilTheta(soil, h), mac = phi - t(31.6), mes = t(31.6) - t(15849), mic = t(15849);
   T('Pore sizes of this soil, % of volume', x, 302, { s: 10.5, b: true, c: MUTE });
   [['Macro, empty at pF 1.5', mac, '#1B1F23'], ['Meso, plant-available', mes, '#1F66C8'], ['Micro, below wilting', mic, '#8E4A3A']].forEach(([l, v, c], i) => { const y = 316 + i * 17; T(l, x, y, { s: 9, c: INK }); T((v * 100).toFixed(1) + '%', x + w, y, { s: 9, b: true, a: 'right', c: INK }); ctx.fillStyle = '#EEE9DA'; ctx.fillRect(x, y + 2, w, 5); ctx.fillStyle = c; ctx.fillRect(x, y + 2, w * v / phi, 5); });
@@ -1264,7 +1264,7 @@ function drawV3() {
   T('Tillage and structure of the topsoil, under the microscope', 16, 22, { s: 14, b: true });
   T('Modelled thin section of ' + DATA.soil_labels[state.soil].toLowerCase() + ', ' + TILL_LABELS[state.till].toLowerCase() + ' tillage, day ' + Math.round(day) + ' after tillage (consolidation rate ' + tc + ' per day)', 16, 38, { s: 10, c: MUTE });
   const g = microFor(state.till, day, tc), mz = MZ[MICRO.z];
-  microFrame(16, 48, 388, 291, g, MICRO.pF, MICRO.ct, (MICRO.ct ? 'X-ray CT style' : 'Light microscope style') + ' · modelled section', '#fff');
+  microFrame(16, 48, 388, 291, g, MICRO.pF, MICRO.ct, (MICRO.ct ? 'Density view' : 'Light microscope style') + ' · modelled section', '#fff');
   microScaleBar(26, 322, 388, g);
   if (microProbe(g, 16, 48, 388, 291, v3ui.hv, () => Math.pow(10, MICRO.pF))) canvas.style.cursor = 'crosshair';
   ctx.strokeStyle = INK; ctx.lineWidth = 1.5; rrect(16, 48, 388, 291, 6); ctx.stroke();
@@ -1947,7 +1947,7 @@ function reportNotes(sc, view) {
   else if (sc.id === 'e1') { const em = e1Model(), t1 = em.Q1 / em.e0, t1b = em.Q1 / em.e0b, d = e1Cum(em, em.e0, 12), db = e1Cum(em, em.e0b, 12);
     L.push('Modelled drying after a wetting on ' + DATA.soil_labels[state.soil].toLowerCase() + ': stage 1 (films keep the surface wet) lasts ' + f1(t1) + ' days' + (vff < 0.95 ? ' with the mulch, ' + f1(t1b) + ' days without' : '') + ', then a dry layer grows and the loss falls to vapour diffusion.');
     L.push('Water lost in 12 days: ' + f1(d) + ' mm' + (vff < 0.95 ? ' with the mulch against ' + f1(db) + ' mm bare' : '') + '. Atmospheric demand ' + f1(em.e0b) + ' mm/day, reduced to ' + f1(em.e0) + ' by the mulch factor ' + vff.toFixed(1) + '.');
-    L.push('Your Daisy runs give ' + f0(DATA.baseline[state.soil].soil_evap) + ' mm/yr of soil evaporation for this soil at baseline. The section is modelled from texture and the fitted van Genuchten curve, not a CT scan.'); }
+    L.push('Your Daisy runs give ' + f0(DATA.baseline[state.soil].soil_evap) + ' mm/yr of soil evaporation for this soil at baseline. The section is modelled from texture and the fitted van Genuchten curve, not a scan.'); }
   else if (sc.id === 'r1') { const yr = r1Years(seasonSim(true)), mm = f => yr.reduce((a, q) => a + q[f], 0) / yr.length;
     L.push('Twenty-year means: roots reach ' + f0(mm('mxRd')) + ' cm; half of the water taken comes from the top ' + f0(mm('d50')) + ' cm and nine tenths from the top ' + f0(mm('d90')) + ' cm; ' + f0(mm('top30') * 100) + '% comes from the top 30 cm.');
     L.push('Root depth and uptake by layer come from the explorer\u2019s 20-year daily engine, scaled to your annual Daisy totals and limited to the 1 m balance depth; the Daisy run for coarse loam shows roots reaching 120 cm.');
@@ -3124,7 +3124,7 @@ function drawR1Chart() {
 }
 
 
-// ===================== pore-scale engine: a modelled thin section of the topsoil, drawn like a microscope or CT slice =====================
+// ===================== pore-scale engine: a modelled thin section of the topsoil, drawn like a microscope or density slice =====================
 // Structure is generated from the soil's texture (sand, silt, clay), the porosity estimated from texture, the tillage system and the consolidation
 // rate. Water sits in the pores by the capillary rule r = 0.149 / h (cm), with h the suction from the soil's fitted van Genuchten curve.
 const MICRO = { z: 1, pF: 1.6, ct: false, cache: {}, imgc: {}, order: [] };
@@ -3235,7 +3235,7 @@ function microScaleBar(x, y, w, g) { const mmPerPx = g.mmW / w, nice = [5, 2, 1,
   ctx.fillStyle = 'rgba(0,0,0,0.55)'; ctx.fillRect(x, y - 16, pxL + 56, 20); ctx.fillStyle = '#fff'; ctx.fillRect(x + 6, y - 5, pxL, 3); T((L >= 1 ? L + ' mm' : Math.round(L * 1000) + ' µm'), x + pxL + 10, y - 3, { s: 10, b: true, c: '#fff' }); }
 
 // ===================== E1: evaporation, from the pore up to the atmosphere =====================
-// A modelled CT-style section of the topsoil dries after a wetting. Stage 1: films and capillary flow keep the surface wet and the soil loses water at the
+// A modelled modelled section of the topsoil dries after a wetting. Stage 1: films and capillary flow keep the surface wet and the soil loses water at the
 // atmospheric rate. Stage 2: the surface pores empty, a dry layer grows and the water leaves as vapour through the air-filled pores.
 // The stage lengths come from the soil's fitted van Genuchten curve; the mulch reduces the demand by your vapour-flux factor.
 const E1 = { W: 220, H: 330, mm: 7, days: 24, pts: [], plume: [], key: '', lastPaint: '', cv: null, flow: true };
@@ -3267,7 +3267,7 @@ function e1Step(g, frontPx, sx, sy, k) {
 function drawE1() {
   paper(); const tNow = nowSec(), day = play.t * E1.days, m = e1Model(), g = e1Grid(), ct = MICRO.ct, vffOn = m.vff < 0.95;
   T('Evaporation from the pore to the atmosphere', 16, 22, { s: 14, b: true });
-  T('Modelled CT-style section of ' + DATA.soil_labels[state.soil].toLowerCase() + ' (' + E1.mm.toFixed(0) + ' mm wide) drying after a wetting. Not a scan of a real sample.', 16, 38, { s: 10, c: MUTE });
+  T('Modelled section of ' + DATA.soil_labels[state.soil].toLowerCase() + ' (' + E1.mm.toFixed(0) + ' mm wide) drying after a wetting. Not a scan of a real sample.', 16, 38, { s: 10, c: MUTE });
   const sx = 44, sw = 330, sy = 176, sh = Math.round(sw * E1.H / E1.W), k = sw / E1.W, ppm = sw / E1.mm;
   // atmosphere
   const ay0 = 50, th = vffOn ? Math.round(mulchThick(state.mulchType)) : 0, gy = sy - th;
@@ -3298,7 +3298,7 @@ function drawE1() {
     for (const q of E1.plume) { const yy = q.y - (th ? th * 0.0 : 0); ctx.fillStyle = 'rgba(255,255,255,' + (0.85 * q.life).toFixed(2) + ')'; ctx.strokeStyle = 'rgba(90,120,150,' + (0.5 * q.life).toFixed(2) + ')'; ctx.lineWidth = 0.7; ctx.beginPath(); ctx.arc(q.x, yy - th, 2.2, 0, 6.283); ctx.fill(); ctx.stroke(); }
   }
   { const hf = e1HeadAt(m, day); if (microProbe(g, sx, sy, sw, sh, E1.hv, yy => hf((yy + 0.5) * E1.mm / E1.W))) canvas.style.cursor = 'crosshair'; }
-  T(ct ? 'X-ray CT style: air black, water dark grey, fine matrix mid grey, grains light grey' : 'Light microscope style', sx, sy + sh + 14, { s: 9.5, c: MUTE });
+  T(ct ? 'Density view: air black, water dark grey, fine matrix mid grey, grains light grey' : 'Light microscope style', sx, sy + sh + 14, { s: 9.5, c: MUTE });
   // the right-hand column
   const rx = 392, rw = 212, t1 = m.Q1 / m.e0, t1b = m.Q1 / m.e0b, Q = e1Cum(m, m.e0, day), Qb = e1Cum(m, m.e0b, day), rate = e1Rate(m, m.e0, day), stage = day < t1 ? 1 : 2;
   const rg = { x: rx, y: 70, w: rw, h: 112 }, cg = { x: rx, y: 232, w: rw, h: 112 }, X = d => rg.x + d / E1.days * rg.w;
@@ -3331,8 +3331,8 @@ function drawE1() {
   T('Your Daisy simulations, this soil', rx, y0 + 176, { s: 10, b: true }); T('bare soil: ' + bare.toFixed(0) + ' mm/yr soil evaporation (baseline)', rx, y0 + 191, { s: 9.5, c: INK });
   if (e7 && vffOn) T('mulch strength ' + e7.r.vff + ', capacity ' + e7.r.cap + ' mm: ' + e7.r.soil_evap.toFixed(0) + ' mm/yr (E7)', rx, y0 + 205, { s: 9.5, c: '#1F66C8' });
   // buttons
-  [['Photo', false], ['X-ray CT style', true]].forEach(([l, v], i) => { const bx = rx + i * 108, on = ct === v; ctx.fillStyle = on ? '#D4A94A' : '#EEE9DA'; rrect(bx, 62 + 0, 0, 0, 0); });
-  const bx = [[rx, 'Photo', false], [rx + 106, 'X-ray CT style', true]]; bx.forEach(([x, l, v]) => { const on = ct === v; ctx.fillStyle = on ? '#D4A94A' : '#EEE9DA'; rrect(x, 612, 100, 24, 6); ctx.fill(); ctx.strokeStyle = INK; ctx.lineWidth = on ? 2 : 1; ctx.stroke(); T(l, x + 50, 628, { s: 10.5, b: on, a: 'center' }); hot(x, 612, 100, 24, () => { MICRO.ct = v; }, 'show as ' + l.toLowerCase()); });
+  [['Photo', false], ['Density view', true]].forEach(([l, v], i) => { const bx = rx + i * 108, on = ct === v; ctx.fillStyle = on ? '#D4A94A' : '#EEE9DA'; rrect(bx, 62 + 0, 0, 0, 0); });
+  const bx = [[rx, 'Photo', false], [rx + 106, 'Density view', true]]; bx.forEach(([x, l, v]) => { const on = ct === v; ctx.fillStyle = on ? '#D4A94A' : '#EEE9DA'; rrect(x, 612, 100, 24, 6); ctx.fill(); ctx.strokeStyle = INK; ctx.lineWidth = on ? 2 : 1; ctx.stroke(); T(l, x + 50, 628, { s: 10.5, b: on, a: 'center' }); hot(x, 612, 100, 24, () => { MICRO.ct = v; }, 'show as ' + l.toLowerCase()); });
   ctx.fillStyle = E1.flow ? '#D4A94A' : '#EEE9DA'; rrect(rx, 642, 206, 24, 6); ctx.fill(); ctx.strokeStyle = INK; ctx.lineWidth = E1.flow ? 2 : 1; ctx.stroke(); T(E1.flow ? 'Water paths: on' : 'Water paths: off', rx + 103, 658, { s: 10.5, b: E1.flow, a: 'center' }); hot(rx, 642, 206, 24, () => { E1.flow = !E1.flow; }, 'show or hide the vapour and liquid paths');
   // legend and explanation
   const ly = sy + sh + 32;
