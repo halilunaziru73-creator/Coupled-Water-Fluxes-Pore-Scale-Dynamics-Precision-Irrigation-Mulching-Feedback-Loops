@@ -3972,6 +3972,21 @@ if (window.__guiFromHash) window.__guiFromHash(); refresh();
   #uxGloss dt { font-weight: 700; color: #E6EDF3; } #uxGloss dd { margin: 0; }
   @media (max-width: 700px) { #uxGloss dl { grid-template-columns: 1fr; gap: 0.1rem; } #uxGloss dd { margin-bottom: 0.45rem; } #uxPlain { margin: 0.5rem; } }
 </style>
+<style id="compactcss">
+  /* compact live results */
+  .ux-live h2 { font-size: 0.95rem; margin-bottom: 0.3rem; }
+  .readouts { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.3rem; margin-top: 0.3rem; }
+  .readout { padding: 0.3rem 0.45rem; border-radius: 6px; }
+  .readout .label { font-size: 0.56rem; line-height: 1.15; letter-spacing: 0.02em; }
+  .readout .value { font-size: 0.86rem; margin-top: 0.05rem; line-height: 1.2; }
+  .ux-cap { font-size: 0.54rem; line-height: 1.2; margin-top: 0.05rem; }
+  .readout .delta { font-size: 0.54rem; } #roIrrDiff { font-size: 0.56rem !important; }
+  #uxVerdict { padding: 0.4rem 0.55rem; margin-bottom: 0.4rem; font-size: 0.72rem; line-height: 1.38; border-radius: 7px; }
+  #uxVerdict h3 { font-size: 0.64rem; margin-bottom: 0.15rem; }
+  #uxVerdict .chg { font-size: 0.68rem; margin-top: 0.3rem; padding-top: 0.25rem; }
+  @media (max-width: 520px) { .readouts { grid-template-columns: 1fr 1fr; } }
+</style>
+
 <script>
 (function () { try {
   const $ = s => document.querySelector(s), LS = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} } };
