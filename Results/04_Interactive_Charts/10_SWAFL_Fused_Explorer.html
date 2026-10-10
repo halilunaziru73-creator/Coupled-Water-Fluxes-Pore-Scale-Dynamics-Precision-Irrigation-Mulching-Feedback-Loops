@@ -330,40 +330,76 @@ function spSetLayout(k) { autoPause(); if (k === 'sprinkler') applyState({ metho
 const _spBund = {}; function spBund(w, h) { const k = state.soil + w + h; return _spBund[k] || (_spBund[k] = soilParticles(w, h, Math.abs(hashStr(state.soil)) + 909, state.soil, () => -30, () => 0.06)); }
 function spDown(p) { const b = SP.soilBox; if (b && p.x >= b.x && p.x <= b.x + b.w && p.y >= b.gy && p.y <= b.gy + b.h && !hotAt(p)) { SP.drag = true; spMoveZ(p); return true; } return false; }
 function spMoveZ(p) { const b = SP.soilBox; if (!b) return; const zc = clampN((p.y - b.gy) / b.PX, 5, 100), bi = nearestIdx(Z_VALUES, zc); if (bi !== state.zIdx) applyState({ zIdx: bi }); }
-const _spC = {};
-function spPoly(o, g) { o.beginPath(); for (let q = 0; q < g.nv; q++) { const an = g.rot + q / g.nv * 6.283, rv = g.r * g.j[q]; const px = g.x + Math.cos(an) * rv, py = g.y + Math.sin(an) * rv * 0.88; q ? o.lineTo(px, py) : o.moveTo(px, py); } o.closePath(); }
-function spPack(soil, mode) {
-  const key = soil + '|' + mode; if (_spC[key]) return _spC[key];
-  const W0 = 300, H0 = 200, tex = DATA.texture[soil], sand = tex.sand / 100, clay = tex.clay / 100, rand = seededRandom(Math.abs(hashStr(soil)) + 31), cv = document.createElement('canvas'); cv.width = W0; cv.height = H0; const o = cv.getContext('2d');
-  o.fillStyle = mode === 'ct' ? '#0A0B0D' : '#07080C'; o.fillRect(0, 0, W0, H0);
-  const gr = [], cell = 18, hash = {}; const near = (x, y, r) => { for (let cx = ((x - 30) / cell) | 0; cx <= ((x + 30) / cell) | 0; cx++) for (let cy = ((y - 30) / cell) | 0; cy <= ((y + 30) / cell) | 0; cy++) { const L = hash[cx + ',' + cy]; if (L) for (const q of L) if (Math.hypot(q.x - x, q.y - y) < (q.r + r) * 0.93) return true; } return false; };
-  for (let n = 0; n < 14000; n++) { const big = rand() < 0.2 + 0.8 * sand, r = big ? 7 + rand() * 9 * (0.55 + sand) : 2.4 + rand() * 4.2, x = rand() * W0, y = rand() * H0; if (near(x, y, r)) continue;
-    const nv = 5 + ((rand() * 4) | 0), g = { x, y, r, rot: rand() * 6.283, nv, j: Array.from({ length: nv }, () => 0.7 + rand() * 0.5), t: rand(), big }; gr.push(g); const k = ((x / cell) | 0) + ',' + ((y / cell) | 0); (hash[k] || (hash[k] = [])).push(g); }
-  gr.sort((a, b) => b.r - a.r);
-  gr.forEach(g => { const lit = o.createRadialGradient(g.x - g.r * 0.35, g.y - g.r * 0.4, g.r * 0.1, g.x, g.y, g.r * 1.15);
-    if (mode === 'ct') { const v = 150 + g.t * 90; lit.addColorStop(0, 'rgb(' + Math.min(255, v + 40) + ',' + Math.min(255, v + 40) + ',' + Math.min(255, v + 36) + ')'); lit.addColorStop(1, 'rgb(' + (v * 0.45 | 0) + ',' + (v * 0.45 | 0) + ',' + (v * 0.43 | 0) + ')'); }
-    else { const u = g.t, c = g.big ? [236, 150 + u * 30, 40 + u * 20] : [196, 104 + u * 30, 34]; lit.addColorStop(0, 'rgb(' + Math.min(255, c[0] + 22) + ',' + Math.min(255, c[1] + 28) + ',' + Math.min(255, c[2] + 24) + ')'); lit.addColorStop(1, 'rgb(' + (c[0] * 0.62 | 0) + ',' + (c[1] * 0.55 | 0) + ',' + (c[2] * 0.5 | 0) + ')'); }
-    o.fillStyle = lit; spPoly(o, g); o.fill(); o.strokeStyle = 'rgba(0,0,0,0.55)'; o.lineWidth = 0.7; o.stroke(); });
-  const nd = Math.round(900 + clay * 2600); for (let i = 0; i < nd; i++) { const x = rand() * W0, y = rand() * H0; if (near(x, y, 0.6)) continue; const v = mode === 'ct' ? 70 + rand() * 80 : 150; o.fillStyle = mode === 'ct' ? 'rgba(' + v + ',' + v + ',' + v + ',0.7)' : 'rgba(150,80,30,0.55)'; o.fillRect(x, y, 1.2, 1.2); }
-  if (mode === 'ct') { const im = o.getImageData(0, 0, W0, H0), d = im.data; for (let i = 0; i < d.length; i += 4) { const nz = (rand() - 0.5) * 22; d[i] += nz; d[i + 1] += nz; d[i + 2] += nz; } o.putImageData(im, 0, 0); }
-  _spC[key] = cv; return cv;
+// ===================== particle lab: a live, coloured thin section driven by the soil's texture and the suction =====================
+const MINN = ['Quartz', 'Feldspar', 'Dark mineral', 'Mica', 'Organic'], MINC = [[240, 232, 205], [232, 138, 112], [58, 72, 130], [214, 196, 112], [112, 68, 34]];
+const minOf = hv => hv < 0.55 ? 0 : hv < 0.75 ? 1 : hv < 0.86 ? 2 : hv < 0.93 ? 3 : 4;
+const LAB = { view: 'min', zi: 1, where: 'rz', follow: true, pF: 2.4, drag: false, hv: null, cache: {}, ord: [] };
+function labPaint(g, h, mode, tag) {
+  const key = [tag, mode, Math.round(Math.log10(Math.max(h, 1)) * 40), state.soil].join('|'); if (LAB.cache[key]) return LAB.cache[key];
+  const { W, H, N, s } = g, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const cx = cv.getContext('2d'), im = cx.createImageData(W, H), px = im.data, base = hexRGB(soilTex(state.soil).color);
+  const rpx = 1.49 / Math.max(h, 1) / s, film = Math.min(1.6, rpx * 0.9 + 0.3), water = new Uint8Array(N); let nw = 0, na = 0;
+  for (let i = 0; i < N; i++) if (g.type[i] === 0) { const w = g.T[i] <= rpx || g.D[i] <= Math.min(film, 1.4) * (h < 30000 ? 1 : 0.4); water[i] = w ? 1 : 0; if (w) nw++; else na++; }
+  const rnd = i => { const v = Math.sin(i * 12.9898) * 43758.5453; return v - Math.floor(v); }, wetDeep = clampN(1 - Math.log10(Math.max(h, 1)) / 4.6, 0, 1);
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { const i = y * W + x, t = g.type[i], p = i * 4, hv = g.hue[i] / 255, rn = rnd(i), nz = g.nz[i]; let r, gg, b;
+    if (t === 1) { const e = Math.min(1, g.Ds[i] / 3), dxs = (x < W - 1 ? g.Ds[i + 1] : g.Ds[i]) - (x > 0 ? g.Ds[i - 1] : g.Ds[i]), dys = (y < H - 1 ? g.Ds[i + W] : g.Ds[i]) - (y > 0 ? g.Ds[i - W] : g.Ds[i]), L = clampN(1 + 0.42 * (dxs + dys), 0.5, 1.5) * (0.82 + 0.18 * e), dMm = 2 * (g.rads[g.own[i]] || 0.05);
+      if (mode === 'size') { let c; if (dMm >= 0.05) { const u = clampN((dMm - 0.05) / 0.35, 0, 1); c = [255 - 20 * u, 196 - 90 * u, 60 - 30 * u]; } else c = [40, 190, 170]; r = c[0] * L; gg = c[1] * L; b = c[2] * L; }
+      else if (mode === 'phase') { const v = 150 * (0.8 + 0.2 * e) * L; r = v; gg = v; b = v; }
+      else { const mi = minOf(hv), c = MINC[mi], k = 0.14; let sh = 1; if (mi === 3) sh = 0.85 + 0.35 * Math.sin(x * 0.9 + y * 0.35); if (mi === 4) sh = 0.8 + 0.3 * Math.sin(x * 0.7 + y * 0.9); const spec = (mi === 0 && rn > 0.9 ? 40 : 0) + (mi === 3 && rn > 0.8 ? 55 : 0); r = (c[0] + (base[0] - c[0]) * k) * L * sh + spec; gg = (c[1] + (base[1] - c[1]) * k) * L * sh + spec; b = (c[2] + (base[2] - c[2]) * k) * L * sh + spec; if (g.Ds[i] < 1.2) { r = r * 0.9 + 22; gg = gg * 0.82 + 8; b = b * 0.72; } } }
+    else if (t === 2) { if (mode === 'size') { const v = 0.85 + 0.25 * nz; r = 190 * v; gg = 70 * v; b = 150 * v; } else if (mode === 'phase') { const v = 118 + 22 * nz; r = v; gg = v; b = v; } else { const v = 0.62 + 0.4 * nz + (g.hue[i] % 9) * 0.012; r = base[0] * v * 0.96 + 18; gg = base[1] * v * 0.7; b = base[2] * v * 0.55; } }
+    else { const w = water[i] === 1, d = Math.min(1, g.D[i] / 8);
+      if (w) { const edge = x > 0 && g.type[i - 1] === 0 && !water[i - 1] || x < W - 1 && g.type[i + 1] === 0 && !water[i + 1] || y > 0 && g.type[i - W] === 0 && !water[i - W] || y < H - 1 && g.type[i + W] === 0 && !water[i + W];
+        if (mode === 'phase') { r = edge ? 120 : 96; gg = edge ? 175 : 160; b = edge ? 240 : 232; } else { r = edge ? 190 : 30 + 26 * d; gg = edge ? 240 : 130 + 40 * d + 25 * wetDeep; b = edge ? 255 : 220 + 25 * d; } }
+      else { if (mode === 'phase') { r = 247 - 14 * d; gg = 243 - 14 * d; b = 232 - 14 * d; } else { r = 30 + 14 * d; gg = 24 + 8 * d; b = 58 + 22 * d; } } }
+    px[p] = r; px[p + 1] = gg; px[p + 2] = b; px[p + 3] = 255; }
+  cx.putImageData(im, 0, 0); cv.nWater = nw; cv.nAir = na; LAB.cache[key] = cv; LAB.ord.push(key); if (LAB.ord.length > 26) delete LAB.cache[LAB.ord.shift()]; return cv;
 }
-function spGrain(soil) {
-  const key = soil + '|grain'; if (_spC[key]) return _spC[key];
-  const W0 = 300, H0 = 200, rand = seededRandom(Math.abs(hashStr(soil)) + 77), cv = document.createElement('canvas'); cv.width = W0; cv.height = H0; const o = cv.getContext('2d');
-  o.fillStyle = '#0B0C10'; o.fillRect(0, 0, W0, H0);
-  const cx = 150, cy = 100, R = 78, a = rand() * 6, b = rand() * 6, c = rand() * 6, pts = []; for (let i = 0; i < 64; i++) { const th = i / 64 * 6.283, rr = R * (1 + 0.16 * Math.sin(3 * th + a) + 0.09 * Math.sin(5 * th + b) + 0.05 * Math.sin(9 * th + c)); pts.push([cx + Math.cos(th) * rr * 1.1, cy + Math.sin(th) * rr * 0.82]); }
-  const path = () => { o.beginPath(); pts.forEach((p, i) => i ? o.lineTo(p[0], p[1]) : o.moveTo(p[0], p[1])); o.closePath(); };
-  const g = o.createRadialGradient(cx - 30, cy - 34, 8, cx, cy, 120); g.addColorStop(0, '#E8E2D0'); g.addColorStop(0.6, '#B7B09C'); g.addColorStop(1, '#5E5A4E'); o.fillStyle = g; path(); o.fill();
-  o.save(); path(); o.clip();
-  for (let i = 0; i < 160; i++) { const x = cx + (rand() - 0.5) * 190, y = cy + (rand() - 0.5) * 140; o.fillStyle = 'rgba(' + (rand() < 0.5 ? '30,26,20' : '250,246,232') + ',' + (0.05 + rand() * 0.12).toFixed(2) + ')'; o.beginPath(); o.ellipse(x, y, 1 + rand() * 4, 1 + rand() * 3, rand() * 3, 0, 6.283); o.fill(); }
-  const holes = []; for (let i = 0; i < 7; i++) { const th = rand() * 6.283, rr = 0.9; holes.push([cx + Math.cos(th) * R * 1.0 * 1.1, cy + Math.sin(th) * R * 0.82]); }
-  o.lineCap = 'round'; holes.forEach(h => { let x = h[0], y = h[1], dir = Math.atan2(cy - y, cx - x), w = 3.4; const walk = (x, y, dir, w, depth) => { for (let s = 0; s < 22 && w > 0.5; s++) { const nx = x + Math.cos(dir) * 5, ny = y + Math.sin(dir) * 5; o.strokeStyle = 'rgba(40,10,10,0.55)'; o.lineWidth = w + 2; o.beginPath(); o.moveTo(x, y); o.lineTo(nx, ny); o.stroke(); o.strokeStyle = '#E0504A'; o.lineWidth = w; o.beginPath(); o.moveTo(x, y); o.lineTo(nx, ny); o.stroke(); x = nx; y = ny; dir += (rand() - 0.5) * 0.7; w *= 0.965; if (depth < 2 && rand() < 0.08) walk(x, y, dir + (rand() < 0.5 ? 0.9 : -0.9), w * 0.7, depth + 1); } }; walk(x, y, dir, w, 0); });
-  o.restore(); holes.forEach(h => { o.fillStyle = '#1A0B0B'; o.strokeStyle = '#F2D7D0'; o.lineWidth = 1; o.beginPath(); o.ellipse(h[0] - Math.sign(h[0] - cx) * 2, h[1] - Math.sign(h[1] - cy) * 1.5, 5.5, 3.6, rand() * 3, 0, 6.283); o.fill(); o.stroke(); });
-  o.strokeStyle = 'rgba(0,0,0,0.6)'; o.lineWidth = 1.4; path(); o.stroke();
-  o.strokeStyle = '#6FD0E8'; o.fillStyle = '#6FD0E8'; o.font = 'bold 10px sans-serif'; o.fillText('surface pits', 10, 22); o.fillText('internal tunnels', 188, 186); o.lineWidth = 1; o.beginPath(); o.moveTo(70, 26); o.lineTo(98, 52); o.stroke(); o.beginPath(); o.moveTo(214, 176); o.lineTo(190, 140); o.stroke();
-  _spC[key] = cv; return cv;
+function labMix(g) { if (g._mix) return g._mix; const a = [0, 0, 0, 0, 0], seen = {}; for (let i = 0; i < g.N; i++) if (g.type[i] === 1) { const id = g.own[i]; if (seen[id] === undefined) { seen[id] = minOf(g.hue[i] / 255); } a[seen[id]]++; } const tot = Math.max(1, a.reduce((p, q) => p + q, 0)); g._mix = a.map(v => v / tot); g._cnt = Object.keys(seen).length; return g._mix; }
+function labProbe(g, fx, fy) { const x = clampN(Math.floor(fx), 0, g.W - 1), y = clampN(Math.floor(fy), 0, g.H - 1), i = y * g.W + x, t = g.type[i], mm = g.s;
+  if (t === 1) { const hv = g.hue[i] / 255, d = 2 * (g.rads[g.own[i]] || 0.05) * 1000; return ['Grain: ' + MINN[minOf(hv)], 'diameter about ' + Math.round(d) + ' µm (' + (d >= 50 ? 'sand' : 'silt') + ')']; }
+  if (t === 2) return ['Fine matrix', 'clay and fine silt with coatings']; return null; }
+const labHeadFor = A => LAB.follow ? ({ surf: A.heads[2], rz: A.hRZ, sens: A.hS, deep: A.hD })[LAB.where] : Math.pow(10, LAB.pF);
+function labGrid(A) { const zi = LAB.zi, mm = [0.6, 2.5, 10][zi], deep = LAB.where === 'deep' || (LAB.where === 'sens' && A.z > 40); return microGet({ soil: state.soil, mmW: mm, W: 320, H: 200, p: deep ? 0.3 : poreIdx(state.till, 120, TC_VALUES[state.tcIdx]), seed: 5 + zi, nb: 3 }); }
+function drawLab(A, Yr) {
+  const soil = state.soil, tex = DATA.texture[soil], h = Math.max(5, labHeadFor(A)), pF = Math.log10(h), g = labGrid(A), VW = 290, VH = 181, vx1 = 14, vx2 = 314, vy = Yr + 16;
+  const modeL = LAB.view, cvL = labPaint(g, h, modeL, 'L' + LAB.zi + LAB.where + state.till + state.tcIdx), cvR = labPaint(g, h, 'phase', 'R' + LAB.zi + LAB.where + state.till + state.tcIdx), tag = (g.W * g.H);
+  const put = (cv, x0, cap) => { ctx.save(); ctx.beginPath(); rrect(x0, vy, VW, VH, 6); ctx.clip(); ctx.imageSmoothingEnabled = true; ctx.drawImage(cv, 0, 0, g.W, g.H, x0, vy, VW, VH); ctx.restore(); ctx.strokeStyle = INK; ctx.lineWidth = 1.2; rrect(x0, vy, VW, VH, 6); ctx.stroke(); T(cap, x0 + 2, vy + VH + 12, { s: 8.5, c: MUTE }); };
+  put(cvL, vx1, { min: 'minerals, coloured by type', size: 'grain size: sand amber, silt teal, clay magenta', phase: 'solid, air, water' }[modeL]); put(cvR, vx2, 'solid (grey), air (white), water (blue)');
+  const mmW = g.mmW; ctx.fillStyle = '#fff'; ctx.fillRect(vx1 + 8, vy + VH - 14, VW * 0.25, 3); T(mmW < 1 ? (mmW * 0.25 * 1000).toFixed(0) + ' µm' : (mmW * 0.25).toFixed(2) + ' mm', vx1 + 8, vy + VH - 18, { s: 8.5, b: true, c: '#fff' });
+  // hover probe linked across both views
+  const hv = LAB.hv; let probe = null;
+  if (hv) { [vx1, vx2].forEach(x0 => { if (hv.x >= x0 && hv.x <= x0 + VW && hv.y >= vy && hv.y <= vy + VH) { const fx = (hv.x - x0) / VW * g.W, fy = (hv.y - vy) / VH * g.H, rel = [(hv.x - x0) / VW, (hv.y - vy) / VH]; probe = { fx, fy, rel }; } });
+    if (probe) { [vx1, vx2].forEach(x0 => { ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.arc(x0 + probe.rel[0] * VW, vy + probe.rel[1] * VH, 9, 0, 6.283); ctx.stroke(); ctx.strokeStyle = '#000'; ctx.lineWidth = 0.8; ctx.beginPath(); ctx.arc(x0 + probe.rel[0] * VW, vy + probe.rel[1] * VH, 10, 0, 6.283); ctx.stroke(); }); } }
+  // controls
+  const chip = (x0, y0, w0, label, on, fn, tip) => { ctx.fillStyle = on ? '#1E8E3E' : '#fff'; ctx.strokeStyle = on ? '#14532D' : '#9AA3AE'; ctx.lineWidth = on ? 2 : 1; rrect(x0, y0, w0, 22, 6); ctx.fill(); ctx.stroke(); T(label, x0 + w0 / 2, y0 + 15, { s: 9.5, b: true, a: 'center', c: on ? '#fff' : INK }); hot(x0, y0, w0, 22, fn, tip); };
+  const y1 = vy + VH + 24; T('Colour by', 14, y1 + 15, { s: 9, b: true, c: MUTE });
+  [['min', 'Minerals'], ['size', 'Grain size'], ['phase', 'Phases']].forEach((q, i) => chip(62 + i * 72, y1, 68, q[1], LAB.view === q[0], () => { LAB.view = q[0]; }, 'Colour the grains by mineral, by size class, or show only solid, air and water'));
+  T('Zoom', 296, y1 + 15, { s: 9, b: true, c: MUTE }); [0.6, 2.5, 10].forEach((q, i) => chip(328 + i * 66, y1, 62, q + ' mm', LAB.zi === i, () => { LAB.zi = i; }, 'Width of the section: finer (silt, clay films) to coarser (aggregates)'));
+  const y2 = y1 + 30; T('Look at', 14, y2 + 15, { s: 9, b: true, c: MUTE });
+  [['surf', 'Topsoil 5 cm'], ['rz', 'Root zone'], ['sens', 'Sensor ' + A.z + ' cm'], ['deep', 'Deep 90 cm']].forEach((q, i) => chip(62 + i * 92, y2, 88, q[1], LAB.where === q[0], () => { LAB.where = q[0]; LAB.follow = true; }, 'Take the suction from this place in your simulated profile'));
+  chip(436, y2, 166, LAB.follow ? 'Following your season' : 'Manual suction (tap to follow)', LAB.follow, () => { LAB.follow = true; }, 'Follow the Daisy-based season, or drag the gauge below to dry or wet the soil yourself');
+  // suction gauge
+  const y3 = y2 + 44, gx = 24, gw = W - 48; T('Drag to dry or wet the soil: suction ' + (h >= 1000 ? Math.round(h).toLocaleString('en-US') : Math.round(h)) + ' cm (pF ' + pF.toFixed(1) + ', ' + (-h * MPA_PER_CM).toFixed(3) + ' MPa)', 14, y3 - 6, { s: 10, b: true, c: INK });
+  const gr = ctx.createLinearGradient(gx, 0, gx + gw, 0); gr.addColorStop(0, '#2E8FD6'); gr.addColorStop(0.45, '#7CC4A0'); gr.addColorStop(0.75, '#E8C45A'); gr.addColorStop(1, '#C0532B'); ctx.fillStyle = gr; rrect(gx, y3, gw, 12, 6); ctx.fill(); ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.stroke();
+  const xp = v => gx + clampN(v / 4.6, 0, 1) * gw; [[2, 'field capacity'], [4.2, 'wilting point']].forEach(([v, l]) => { ctx.strokeStyle = '#111'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(xp(v), y3 - 3); ctx.lineTo(xp(v), y3 + 15); ctx.stroke(); T(l, xp(v), y3 + 27, { s: 8.5, b: true, a: 'center', c: INK }); });
+  const tg = Math.log10(trigAbsFor(state.soil)); ctx.fillStyle = '#5B2FA8'; ctx.beginPath(); ctx.moveTo(xp(tg), y3 + 14); ctx.lineTo(xp(tg) - 5, y3 + 22); ctx.lineTo(xp(tg) + 5, y3 + 22); ctx.fill(); T('your trigger', xp(tg), y3 + 34, { s: 8.5, b: true, a: 'center', c: '#5B2FA8' });
+  ctx.fillStyle = '#fff'; ctx.strokeStyle = '#1B1F23'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(xp(pF), y3 + 6, 9, 0, 6.283); ctx.fill(); ctx.stroke();
+  LAB.gauge = { x: gx, y: y3 - 10, w: gw, h: 30 }; hot(gx - 8, y3 - 12, gw + 16, 34, () => {}, 'Drag the white dot: wet soil on the left, dry soil on the right');
+  T('wet', gx, y3 + 27, { s: 8.5, c: MUTE }); T('dry', gx + gw, y3 + 27, { s: 8.5, a: 'right', c: MUTE });
+  // live numbers
+  const y4 = y3 + 48, th = soilTheta(soil, h), phi = soilPhi(soil), pv = Math.max(1, cvR.nWater + cvR.nAir), Se = vgS(h, VGE[soil]), mm2 = 1 - 1 / VGE[soil][1], Kr = Math.sqrt(Se) * Math.pow(1 - Math.pow(1 - Math.pow(Se, 1 / mm2), mm2), 2), rUm = 1.49 / h * 1000 * 2, filmUm = Math.max(0.05, 3.2 * Math.pow(100 / h, 0.33) * 0.35);
+  const stats = [['Suction', Math.round(h).toLocaleString('en-US') + ' cm', (-h * MPA_PER_CM).toFixed(3) + ' MPa', true, '#8E4A3A'], ['Water content', (th * 100).toFixed(1) + ' % of volume', 'saturated: ' + (phi * 100).toFixed(0) + ' %', true, '#2E6FD0'], ['Pores holding water', (cvR.nWater / pv * 100).toFixed(0) + ' %', 'in this section', true, '#1B7FA8'], ['Pores filled up to', (rUm >= 10 ? Math.round(rUm) : rUm.toFixed(1)) + ' µm wide', 'wider pores are empty', true, '#3F8F6E'], ['Soil conductivity', (Kr * 100 < 1 ? '<1' : (Kr * 100).toFixed(Kr < 0.1 ? 1 : 0)) + ' %', 'of saturated (van Genuchten)', true, '#C9A227'], ['Plant stress', pF > 4.2 ? 'wilting' : pF > Math.log10(trigAbsFor(state.soil)) ? 'past your trigger' : pF > 2 ? 'mild' : 'none', pF > 4.2 ? 'no water for roots' : 'at this suction', false, '#B0452A']];
+  const sw = (W - 28 - 2 * 8) / 3; stats.forEach((q, i) => { const sx = 14 + (i % 3) * (sw + 8), sy = y4 + Math.floor(i / 3) * 56; ctx.fillStyle = '#fff'; ctx.strokeStyle = q[4]; ctx.lineWidth = 2; rrect(sx, sy, sw, 50, 7); ctx.fill(); ctx.stroke(); ctx.fillStyle = q[4]; ctx.fillRect(sx, sy + 6, 4, 38); T(q[0], sx + 10, sy + 13, { s: 8.5, b: true, c: MUTE }); T(q[1], sx + 10, sy + 30, { s: q[1].length > 14 ? 11 : 13, b: true, c: INK }); T(q[2], sx + 10, sy + 44, { s: 8, c: MUTE }); spBadge(q[3] ? 'DAISY' : 'derived', sx + sw - 6, sy + 12, q[3], true); });
+  // mineral mix and texture
+  const y5 = y4 + 124, mix = labMix(g); T('Mineral mix of the grains in this section', 14, y5, { s: 10, b: true, c: INK }); let mx0 = 14; const mw = W - 28; mix.forEach((v, i) => { const ww = mw * v; ctx.fillStyle = 'rgb(' + MINC[i].join(',') + ')'; ctx.fillRect(mx0, y5 + 6, ww, 16); if (ww > 74) T(MINN[i] + ' ' + Math.round(v * 100) + '%', mx0 + 4, y5 + 18, { s: 8.5, b: true, c: i === 2 || i === 4 ? '#fff' : INK }); mx0 += ww; }); ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.strokeRect(14, y5 + 6, mw, 16);
+  T('Texture of ' + DATA.soil_labels[soil].toLowerCase() + ': ' + Math.round(tex.sand) + '% sand · ' + Math.round(tex.silt) + '% silt · ' + Math.round(tex.clay) + '% clay. Change the soil in Settings and every grain, film and number here is rebuilt.', 14, y5 + 40, { s: 9, i: true, c: MUTE });
+  // probe card
+  if (probe) { const q = labProbe(g, probe.fx, probe.fy), i = Math.floor(probe.fy) * g.W + Math.floor(probe.fx); let lines = q; if (!lines) { const w = g.type[i] === 0 && cvR && false; const inWater = (() => { const rpx = 1.49 / h / g.s, film = Math.min(1.6, rpx * 0.9 + 0.3); return g.T[i] <= rpx || g.D[i] <= Math.min(film, 1.4) * (h < 30000 ? 1 : 0.4); })(); lines = inWater ? ['Water in a pore', 'held by capillarity at ' + Math.round(h) + ' cm suction'] : ['Air in a pore', 'too wide to hold water at ' + Math.round(h) + ' cm suction']; }
+    ctx.font = 'bold 10px sans-serif'; const tw = Math.max(...lines.map(l => ctx.measureText(l).width)) + 14; let bx = hv.x + 14, by = hv.y + 12; if (bx + tw > W - 4) bx = hv.x - tw - 14; ctx.fillStyle = 'rgba(255,252,225,0.97)'; ctx.strokeStyle = INK; ctx.lineWidth = 1; rrect(bx, by, tw, 36, 6); ctx.fill(); ctx.stroke(); T(lines[0], bx + 7, by + 14, { s: 10, b: true, c: INK }); T(lines[1], bx + 7, by + 28, { s: 9, c: MUTE }); }
+  return y5 + 56;
 }
+function labDown(p) { const q = LAB.gauge; if (q && p.x >= q.x - 10 && p.x <= q.x + q.w + 10 && p.y >= q.y && p.y <= q.y + q.h + 6) { LAB.drag = true; labSet(p); return true; } return false; }
+function labSet(p) { const q = LAB.gauge; LAB.pF = clampN((p.x - q.x) / q.w * 4.6, 0.3, 4.55); LAB.follow = false; }
+
 function spacState() {
   const sim = seasonSim(), kd = v5Day(), soil = state.soil, m = current, S = dssScale(sim), F = dssFlux(sim, kd, S), z = Z_VALUES[state.zIdx];
   const heads = [], rho = sim.rho[kd]; let sw = 0, sp = 0;
@@ -480,7 +516,7 @@ function drawSPAC() {
   // ---- the particle lens ----
   const Yl = ky + 78; ctx.strokeStyle = '#1F4D2E'; ctx.lineWidth = 1.5; T('The root meets the real soil particles', 16, Yl, { s: 12.5, b: true, c: '#1F4D2E' }); ctx.beginPath(); ctx.moveTo(16, Yl + 6); ctx.lineTo(W - 16, Yl + 6); ctx.stroke();
   const lw2 = 372, lh2 = 232, lx2 = 14, ly2 = Yl + 16, key = [soil, Math.round(A.hRZ), state.till, state.tcIdx].join('|');
-  if (SP.key !== key) { SP.g = microGet({ soil, mmW: 2.0, W: 320, H: 200, p: poreIdx(state.till, 120, TC_VALUES[state.tcIdx]), seed: 5, nb: 3 }); SP.cv = microPaint(SP.g, () => A.hRZ, 'soil', 0); SP.key = key; }
+  if (SP.key !== key) { SP.g = microGet({ soil, mmW: 2.0, W: 320, H: 200, p: poreIdx(state.till, 120, TC_VALUES[state.tcIdx]), seed: 5, nb: 3 }); SP.cv = labPaint(SP.g, A.hRZ, 'min', 'lens'); SP.key = key; }
   ctx.save(); ctx.beginPath(); rrect(lx2, ly2, lw2, lh2, 8); ctx.clip(); ctx.imageSmoothingEnabled = true; ctx.drawImage(SP.cv, 0, 0, 320, 200, lx2, ly2, lw2, lh2);
   const rx = lx2 + lw2 - 62, ry = ly2 + lh2 * 0.5, rr = 40; // the root, in cross-section, with hairs reaching into the water films
   const hr = seededRandom(11); ctx.strokeStyle = 'rgba(245,235,205,0.95)'; ctx.lineWidth = 1.3; for (let i = 0; i < 26; i++) { const a = Math.PI * 0.5 + (i / 25) * Math.PI, L = 24 + hr() * 30; ctx.beginPath(); ctx.moveTo(rx + Math.cos(a) * rr, ry + Math.sin(a) * rr); ctx.quadraticCurveTo(rx + Math.cos(a) * (rr + L * 0.6) + (hr() - 0.5) * 10, ry + Math.sin(a) * (rr + L * 0.6) + (hr() - 0.5) * 10, rx + Math.cos(a) * (rr + L), ry + Math.sin(a) * (rr + L)); ctx.stroke(); }
@@ -492,25 +528,18 @@ function drawSPAC() {
   ctx.fillStyle = INK; ctx.fillRect(lx2 + 12, ly2 + lh2 - 14, lw2 * 0.25, 3); T('0.5 mm', lx2 + 12, ly2 + lh2 - 19, { s: 8.5, b: true, c: '#fff' });
   pill('root hairs drink from the water films', rx - 150, ly2 + 62, { b: true, s: 9.5, c: '#0B5FA5' });
   // facts beside the lens
-  const fx = 404, g0 = SP.g, rUm = 1.49 / Math.max(A.hRZ, 1) * 1000, rp = g0.nWater + g0.nAir;
+  const fx = 404, g0 = SP.g, rUm = 1.49 / Math.max(A.hRZ, 1) * 1000, rp = SP.cv.nWater + SP.cv.nAir;
   spBadge('YOUR DATA', fx, ly2 + 4, true); T('Soil texture (measured)', fx + 62, ly2 + 4, { s: 9.5, b: true, c: INK });
   [['sand', tex.sand, '#ECB240'], ['silt', tex.silt, '#4EA88E'], ['clay', tex.clay, '#B65A46']].forEach((r, i) => { const yy = ly2 + 20 + i * 24; T(r[0], fx, yy + 9, { s: 9.5, c: INK }); ctx.fillStyle = '#E8E4D6'; ctx.fillRect(fx + 34, yy, 120, 11); ctx.fillStyle = r[2]; ctx.fillRect(fx + 34, yy, 120 * r[1] / 100, 11); T(r[1].toFixed(0) + '%', fx + 160, yy + 9, { s: 9.5, b: true, c: INK }); });
   const q = (a, b, yy, hd) => { T(a, fx, yy, { s: 8.5, c: MUTE }); T(b, fx, yy + 14, { s: 12, b: true, c: INK }); if (hd) spBadge(hd[0], fx + 196, yy + 12, hd[1], true); };
-  q('Pores holding water in this view', (rp ? g0.nWater / rp * 100 : 0).toFixed(0) + '%', ly2 + 100, ['DAISY', true]);
+  q('Pores holding water in this view', (rp ? SP.cv.nWater / rp * 100 : 0).toFixed(0) + '%', ly2 + 100, ['DAISY', true]);
   q('Water films stay in pores narrower than', (rUm * 2 >= 10 ? Math.round(rUm * 2) : (rUm * 2).toFixed(1)) + ' µm', ly2 + 138, ['DAISY', true]);
   q('Grain / fine matrix / pore space', (g0.stats.grain * 100).toFixed(0) + ' / ' + (g0.stats.matrix * 100).toFixed(0) + ' / ' + (g0.stats.pore * 100).toFixed(0) + ' %', ly2 + 176, ['DAISY', true]);
-  // ---- particle imagery generated from your soil ----
-  const Yr = ly2 + lh2 + 40; ctx.strokeStyle = '#1F4D2E'; ctx.lineWidth = 1.5; T('Your soil\u2019s particles, generated from your texture data', 16, Yr, { s: 12.5, b: true, c: '#1F4D2E' }); ctx.beginPath(); ctx.moveTo(16, Yr + 6); ctx.lineTo(W - 16, Yr + 6); ctx.stroke();
-  const pw = 290, ph2 = 193, put = (cv, x0, y0, cap) => { ctx.save(); ctx.beginPath(); rrect(x0, y0, pw, ph2, 6); ctx.clip(); ctx.imageSmoothingEnabled = true; ctx.drawImage(cv, 0, 0, cv.width, cv.height, x0, y0, pw, ph2); ctx.restore(); ctx.strokeStyle = INK; ctx.lineWidth = 1.2; rrect(x0, y0, pw, ph2, 6); ctx.stroke(); T(cap, x0 + 2, y0 + ph2 + 13, { s: 8.5, c: MUTE }); };
-  const r1 = Yr + 16, r2 = r1 + ph2 + 34;
-  put(spPack(soil, 'ct'), 14, r1, 'grain pack slice, CT style: ' + Math.round(tex.sand) + '% sand, ' + Math.round(tex.silt) + '% silt');
-  put(spPack(soil, 'seg'), 14 + pw + 10, r1, 'the same grains, segmented, coloured by grain size');
-  put(spGrain(soil), 14, r2, 'one sand grain: surface pits and internal pores');
-  { const pk = [soil, Math.round(A.hRZ)].join('|'); if (SP.pk !== pk) { SP.cvPhase = microPaint(SP.g, () => A.hRZ, 'phase', 0); SP.pk = pk; } put(SP.cvPhase, 14 + pw + 10, r2, 'grains (grey), air (white) and water films (blue) at ' + Math.round(A.hRZ) + ' cm suction'); }
-  T('Drawn by the explorer from the sand, silt and clay of ' + sName.toLowerCase() + ' and its suction; no outside images.', 16, r2 + ph2 + 34, { s: 9.5, b: true, c: INK });
+  const Yr = ly2 + lh2 + 40; ctx.strokeStyle = '#1F4D2E'; ctx.lineWidth = 1.5; T('Particle lab: your soil, live and in colour', 16, Yr, { s: 12.5, b: true, c: '#1F4D2E' }); ctx.beginPath(); ctx.moveTo(16, Yr + 6); ctx.lineTo(W - 16, Yr + 6); ctx.stroke(); spBadge('YOUR DATA', W - 20, Yr - 2, true, true);
+  const endY = drawLab(A, Yr);
   T('Source: Daisy ensemble, 10 soils, 10,190 runs · github.com/halilunaziru73-creator', 16, ly2 + lh2 + 22, { s: 8.5, i: true, c: MUTE });
 }
-SCENES.push({ id: 'spac', label: 'S1 Soil-Plant-Air', color: '#1E8E3E', h: 1700, interactive: true, onDown: p => spDown(p), onMove: p => { if (SP.drag) { spMoveZ(p); return true; } return false; }, onUp: () => { SP.drag = false; }, onLeave: () => { SP.drag = false; }, draw: () => drawSPAC(), title: 'Soil-plant-atmosphere continuum: the water column from the particles to the sky',
+SCENES.push({ id: 'spac', label: 'S1 Soil-Plant-Air', color: '#1E8E3E', h: 1700, interactive: true, onDown: p => labDown(p) || spDown(p), onMove: p => { LAB.hv = p; if (LAB.drag) { labSet(p); return true; } if (SP.drag) { spMoveZ(p); return true; } return false; }, onUp: () => { SP.drag = false; LAB.drag = false; }, onLeave: () => { SP.drag = false; LAB.drag = false; LAB.hv = null; }, draw: () => drawSPAC(), title: 'Soil-plant-atmosphere continuum: the water column from the particles to the sky',
   legend: [['#1E8E3E', 'From your Daisy data'], ['#8A8F98', 'Derived along the path'], ['#2E8FD6', 'Water potential (log scale)'], ['#E8912D', 'Water leaving to the air']],
   insight: 'Water moves from wet soil to dry air along a falling potential. Your Daisy data sets the soil end; the air sets the pull; the plant is the pipe between.' });
 
