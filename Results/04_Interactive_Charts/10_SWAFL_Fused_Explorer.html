@@ -4017,22 +4017,24 @@ if (window.__guiFromHash) window.__guiFromHash(); refresh();
   body.pro .scenebtn { border: 0; border-left: 3px solid var(--sc, #3A4452); border-radius: 0; margin: 0; padding: 4px 8px; font-size: 0.74rem; background: transparent; color: #C9D1D9; }
   body.pro .scenebtn:hover { background: #232A33; }
   body.pro .scenebtn.active { background: #2F6FB5; color: #fff; font-weight: 600; border-left-color: #8EC3F5; }
-  body.pro .mainarea { height: 100%; overflow-y: auto; display: grid; grid-template-columns: minmax(0, 1fr) var(--rw, 380px); align-content: start; background: #14181D; scrollbar-width: thin; }
-  body.pro.hide-right .mainarea { grid-template-columns: minmax(0, 1fr) 0; } body.pro.hide-right .wrap > .panel:nth-child(2) { display: none; }
-  body.pro .mainarea > * { grid-column: 1; }
-  body.pro .mainarea > .ux-fold { grid-column: 1 / -1; margin: 0; border: 0; border-radius: 0; background: #181D23; border-bottom: 1px solid #0B0E12; }
+  body.pro .mainarea { height: 100%; overflow: hidden; display: flex; background: #14181D; }
+  body.pro #proCenter { flex: 1 1 auto; min-width: 0; height: 100%; overflow-y: auto; scrollbar-width: thin; padding-bottom: 12px; }
+  body.pro.hide-right #proDock { display: none; }
+  body.pro #proCenter > .ux-fold { margin: 0; border: 0; border-radius: 0; background: #181D23; border-bottom: 1px solid #0B0E12; }
   body.pro .ux-fold > .todaybar { margin: 0; border: 0; border-radius: 0; border-top: 1px solid #2B333D; background: #181D23; padding: 4px 10px; }
-  body.pro .ux-fold > .gui { margin: 0; z-index: 6; padding: 3px 6px; gap: 2px; background: #1D232B; border: 0; border-bottom: 1px solid #0B0E12; border-radius: 0; height: 34px; align-items: center; flex-wrap: nowrap; overflow: hidden; }
-  body.pro .gui label { font-size: 0.7rem; color: #AAB4C0; } body.pro .gui select { font-size: 0.7rem; border-radius: 2px; }
+  body.pro .ux-fold > .gui { margin: 0; z-index: 6; padding: 3px 6px; gap: 2px; background: #1D232B; border: 0; border-bottom: 1px solid #0B0E12; border-radius: 0; min-height: 34px; align-items: center; flex-wrap: wrap; }
+  body.pro .gui label { font-size: 0.7rem; color: #AAB4C0; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; } body.pro .gui select { font-size: 0.7rem; border-radius: 2px; max-width: 150px; }
+  body.pro .gui .pillbtn { padding: 0.2rem 0.38rem !important; }
+  body.pro .gui .pillbtn::before { margin-right: 0.25rem !important; }
   body.pro .gui .pillbtn { background: transparent; border: 1px solid transparent; border-radius: 2px; padding: 0.2rem 0.5rem; font-size: 0.7rem; color: #DDE3EA; min-height: 0; white-space: nowrap; }
   body.pro .gui .pillbtn:hover { background: #2B3440; border-color: #3A4452; }
   body.pro .gui .pillbtn::before { color: #6FB4F2; margin-right: 0.35rem; font-size: 0.85rem; }
   #guiReset::before { content: '\21BA'; } #guiPin::before { content: '\2691'; } #guiLink::before { content: '\29C9'; } #guiPng::before { content: '\25A3'; } #guiCsv::before { content: '\25A4'; } #guiHelp::before { content: '\2328'; }
-  body.pro .wrap { display: contents; }
-  body.pro .wrap > .panel:nth-child(1) { grid-column: 1; margin: 8px; }
-  body.pro .wrap > .panel:nth-child(2) { grid-column: 2; grid-row: 2 / span 40; position: sticky; top: 0; align-self: start; max-height: calc(100vh - 30px - 24px); overflow-y: auto; margin: 0; border: 0; border-left: 1px solid #0B0E12; border-radius: 0; padding: 0 0 10px; background: #181D23; scrollbar-width: thin; }
-  body.pro .wrap > .panel:nth-child(2)::before { content: 'Results and settings'; position: sticky; top: 0; z-index: 3; display: block; padding: 5px 10px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #AAB4C0; background: #252C35; border-bottom: 1px solid #0B0E12; }
-  body.pro .wrap > .panel:nth-child(2) > * { margin-left: 8px; margin-right: 8px; }
+  body.pro .wrap { display: block; padding: 0; }
+  body.pro .wrap > .panel:nth-child(1) { margin: 8px; }
+  body.pro #proDock { flex: 0 0 var(--rw, 380px); width: var(--rw, 380px); height: 100%; overflow-y: auto; margin: 0; border: 0; border-left: 1px solid #0B0E12; border-radius: 0; padding: 0 0 10px; background: #181D23; scrollbar-width: thin; }
+  body.pro #proDock::before { content: 'Results and settings'; position: sticky; top: 0; z-index: 3; display: block; padding: 5px 10px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #AAB4C0; background: #252C35; border-bottom: 1px solid #0B0E12; }
+  body.pro #proDock > * { margin-left: 8px; margin-right: 8px; }
   body.pro .panel { border-radius: 3px; border-color: #2B333D; }
   body.pro .wrap > .panel:nth-child(1) { padding: 0 0 8px; }
   body.pro .wrap > .panel:nth-child(1) > * { margin-left: 8px; margin-right: 8px; }
@@ -4041,6 +4043,17 @@ if (window.__guiFromHash) window.__guiFromHash(); refresh();
   body.pro .todaybar, body.pro .insight, body.pro #uxTry, body.pro #uxPlain { margin: 6px 8px 0; border-radius: 3px; }
   body.pro .readout, body.pro #uxVerdict, body.pro .ux-fold, body.pro .ux-sec { border-radius: 3px; }
   body.pro .pillbtn.active { background: #2F6FB5; border-color: #2F6FB5; color: #fff; }
+  /* context card: key finding + try bar in normal flow (cannot overlap) */
+  body.pro #proCtx { display: block; margin: 8px 8px 0; background: #181D23; border: 1px solid #2B333D; border-radius: 3px; overflow: hidden; }
+  body.pro #proCtx > .insight { display: block; margin: 0; border: 0; border-left: 3px solid #D4A94A; border-radius: 0; background: #1E252D; padding: 7px 12px 8px; font-size: 0.8rem; line-height: 1.45; height: auto !important; min-height: 0; }
+  body.pro #proCtx > .insight::before { content: 'Key finding'; display: block; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #D4A94A; margin-bottom: 2px; }
+  body.pro #proCtx > #uxPlain { margin: 0; border-radius: 0; border-width: 0 0 1px 0; }
+  body.pro #proCtx > #uxTry { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0; padding: 7px 10px; border-top: 1px solid #2B333D; background: #14181D; }
+  body.pro #proCtx > #uxTry .lab { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #8EA0B3; }
+  body.pro #proCtx > #uxTry .lab::after { content: ' this:'; text-transform: none; letter-spacing: 0; font-weight: 600; }
+  body.pro #proCtx > #uxTry .chip { border-radius: 3px; padding: 3px 9px; font-size: 0.72rem; background: #232B35; border: 1px solid #3A4452; color: #E6EDF3; cursor: pointer; }
+  body.pro #proCtx > #uxTry .chip:hover { background: #2F6FB5; border-color: #2F6FB5; color: #fff; }
+  body.pro #proCtx > #uxTry .pager { margin-left: auto; display: flex; align-items: center; gap: 6px; }
   body.pro .insight { height: max-content !important; max-height: none !important; overflow: visible !important; white-space: normal; line-height: 1.4; }
   body.pro .scenebtn.active { background: #2F6FB5 !important; color: #fff !important; border-left-color: #8EC3F5 !important; }
   body.pro .ux-up { display: none !important; }
@@ -4161,6 +4174,12 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
     bar.appendChild(m);
   });
   document.addEventListener('click', e => { if (!e.target.closest('#proMenu')) closeAll(); });
+  // real docking: centre column and right dock scroll independently
+  const dock = () => { const m = document.querySelector('.mainarea'), w = document.querySelector('.wrap'); if (!m || !w || document.getElementById('proCenter')) return; const ps = w.querySelectorAll(':scope > .panel'); if (ps.length < 2) return; const c = document.createElement('div'); c.id = 'proCenter'; Array.from(m.children).forEach(e => c.appendChild(e)); m.appendChild(c); const d = ps[1]; d.id = 'proDock'; m.appendChild(d); };
+  dock();
+  // wrap key finding + try bar in one block-flow card
+  const wrapCtx = () => { const ib = document.getElementById('insightBox'), tb = document.getElementById('uxTry'); if (!ib || !tb || document.getElementById('proCtx')) return !!document.getElementById('proCtx'); const w = document.createElement('div'); w.id = 'proCtx'; ib.parentNode.insertBefore(w, document.getElementById('uxPlain') || ib); [document.getElementById('uxPlain'), ib, tb].forEach(e => e && w.appendChild(e)); return true; };
+  if (!wrapCtx()) { let n = 0; const iv = setInterval(() => { if (wrapCtx() || ++n > 40) clearInterval(iv); }, 150); }
   // status bar
   const sb = document.createElement('div'); sb.id = 'proStatus'; document.body.appendChild(sb);
   const upd = () => { try {
