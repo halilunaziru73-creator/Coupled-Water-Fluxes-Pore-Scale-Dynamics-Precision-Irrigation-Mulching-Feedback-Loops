@@ -329,6 +329,12 @@ const SP = { sel: 0, key: '', cv: null, g: null };
 const MPA_PER_CM = 9.807e-5;
 const spBadge = (txt, x, y, daisy, right) => { ctx.font = 'bold 8px sans-serif'; const w = ctx.measureText(txt).width + 8, xx = right ? x - w : x; ctx.fillStyle = daisy ? '#1E8E3E' : '#8A8F98'; rrect(xx, y - 9, w, 12, 6); ctx.fill(); ctx.fillStyle = '#fff'; ctx.fillText(txt, xx + 4, y); return w; };
 const spFmt = v => (v < 0 ? '−' : '') + (Math.abs(v) >= 10 ? Math.abs(v).toFixed(0) : Math.abs(v) >= 1 ? Math.abs(v).toFixed(1) : Math.abs(v).toFixed(2)) + ' MPa';
+const SPL = [['furrow', 'Furrow', 'Water runs down the furrows between raised beds and soaks sideways into the beds.'], ['basin', 'Basin', 'A levelled plot with bunds: the whole surface is flooded and the water soaks straight down.'], ['border', 'Border strip', 'A gently sloping strip: a sheet of water advances downslope, so the upstream end gets wetted deeper.'], ['sprinkler', 'Sprinkler', 'Overhead sprinklers wet the canopy and the top of the soil evenly (the Overhead method in your runs).'], ['drip', 'Drip', 'Emitters on or under the soil wet a bulb around each one (the Drip methods in your runs).']];
+function spLayout() { const mk = state.method; if (mk === 'M01_Overhead') return 'sprinkler'; if (/Drip/.test(mk)) return 'drip'; return (SP.lay === 'basin' || SP.lay === 'border') ? SP.lay : 'furrow'; }
+function spSetLayout(k) { autoPause(); if (k === 'sprinkler') applyState({ method: 'M01_Overhead' }); else if (k === 'drip') applyState({ method: 'M06_Drip20-30cm' }); else { SP.lay = k; applyState({ method: 'M02_Surface' }); } }
+const _spBund = {}; function spBund(w, h) { const k = state.soil + w + h; return _spBund[k] || (_spBund[k] = soilParticles(w, h, Math.abs(hashStr(state.soil)) + 909, state.soil, () => -30, () => 0.06)); }
+function spDown(p) { const b = SP.soilBox; if (b && p.x >= b.x && p.x <= b.x + b.w && p.y >= b.gy && p.y <= b.gy + b.h && !hotAt(p)) { SP.drag = true; spMoveZ(p); return true; } return false; }
+function spMoveZ(p) { const b = SP.soilBox; if (!b) return; const zc = clampN((p.y - b.gy) / b.PX, 5, 100), bi = nearestIdx(Z_VALUES, zc); if (bi !== state.zIdx) applyState({ zIdx: bi }); }
 function spacState() {
   const sim = seasonSim(), kd = v5Day(), soil = state.soil, m = current, S = dssScale(sim), F = dssFlux(sim, kd, S), z = Z_VALUES[state.zIdx];
   const heads = [], rho = sim.rho[kd]; let sw = 0, sp = 0;
@@ -350,28 +356,65 @@ function drawSPAC() {
   ctx.fillStyle = '#EAF5EC'; ctx.strokeStyle = '#1E8E3E'; ctx.lineWidth = 1.5; rrect(14, 50, W - 28, 36, 8); ctx.fill(); ctx.stroke();
   spBadge('YOUR DATA', 22, 66, true); T('soil water, roots, evaporation, drainage, transpiration, irrigation: your 10,190 Daisy simulations', 80, 66, { s: 9.5, b: true, c: '#14532D' });
   spBadge('DERIVED', 22, 80, false); T('leaf and air potentials: Ohm’s law along the path, driven by your transpiration', 80, 80, { s: 9.5, c: '#4B5563' });
+  // ---- irrigation layout buttons ----
+  const LAY = spLayout(), lbw = (W - 28 - 4 * 6) / 5;
+  T('Irrigation layout (tap one):', 16, 99, { s: 9, b: true, c: MUTE });
+  SPL.forEach((q, i) => { const bx = 14 + i * (lbw + 6), on = q[0] === LAY; ctx.fillStyle = on ? '#1E8E3E' : '#fff'; ctx.strokeStyle = on ? '#14532D' : '#9AA3AE'; ctx.lineWidth = on ? 2 : 1; rrect(bx, 104, lbw, 24, 7); ctx.fill(); ctx.stroke(); T(q[1], bx + lbw / 2, 120, { s: 10.5, b: true, a: 'center', c: on ? '#fff' : INK }); hot(bx, 104, lbw, 24, () => spSetLayout(q[0]), q[2]); });
   // ---- the picture ----
-  const x = 14, w = 372, Y0 = 98, sky = 152, gy = Y0 + sky, PX = 3.2, soilPx = 100 * PX, gwY = gy + soilPx, gwH = 34, H0 = sky + soilPx + gwH, heat = clampN((TEMP_VALUES[state.tempIdx] + 1) / 4.5, 0, 1);
+  const x = 14, w = 372, Y0 = 138, sky = 152, gy = Y0 + sky, PX = 3.2, soilPx = 100 * PX, gwY = gy + soilPx, gwH = 34, H0 = sky + soilPx + gwH, heat = clampN((TEMP_VALUES[state.tempIdx] + 1) / 4.5, 0, 1);
+  const dose = A.sim.dose || 25, ph0 = (t * 0.1) % 1, ease = Math.min(1, ph0 / 0.6), srcOn = ph0 < 0.78, fade = srcOn ? 1 : Math.max(0, 1 - (ph0 - 0.78) / 0.22);
+  const meth = METHODS.find(q => q.k === state.method) || METHODS[0], baseCm = { furrow: 40, basin: 55, border: 45, sprinkler: 16, drip: 26 }[LAY] * clampN(0.55 + dose / 60, 0.55, 1.25), wetPx = baseCm * PX * ease;
+  const PER = 62, off = xx => LAY === 'furrow' ? 16 * (0.5 + 0.5 * Math.cos(2 * Math.PI * (xx - x) / PER)) : LAY === 'border' ? 0.05 * (xx - x) : 0;
   ctx.save(); ctx.beginPath(); rrect(x, Y0, w, H0, 10); ctx.clip();
-  const g = ctx.createLinearGradient(0, Y0, 0, gy); g.addColorStop(0, '#9CC9EE'); g.addColorStop(1, '#EAF4FB'); ctx.fillStyle = g; ctx.fillRect(x, Y0, w, sky);
+  const g = ctx.createLinearGradient(0, Y0, 0, gy); g.addColorStop(0, '#9CC9EE'); g.addColorStop(1, '#EAF4FB'); ctx.fillStyle = g; ctx.fillRect(x, Y0, w, sky + 24);
   sunIcon(x + w - 44, Y0 + 40, 12 + heat * 6, heat); cloud(x + 70, Y0 + 34, 1.0, 0.8); cloud(x + 190, Y0 + 52, 0.8, 0.7);
-  drawSection(x, gy, w, 100, PX); drawSoilWater(sim, kd, x, w, gy, PX);
+  // the soil, real particles, cut to the surface shape of the layout
+  ctx.save(); ctx.beginPath(); ctx.moveTo(x, gwY); ctx.lineTo(x, gy + off(x)); for (let xx = x; xx <= x + w; xx += 2) ctx.lineTo(xx, gy + off(xx)); ctx.lineTo(x + w, gwY); ctx.closePath(); ctx.clip();
+  drawSection(x, gy, w, 100, PX); drawSoilWater(A.sim, A.kd, x, w, gy, PX);
+  // wetting from the layout: bulbs, sheets and fronts, sized by your simulated dose
+  const wetFill = (cx, cy, rx, ry, al) => { const gr = ctx.createRadialGradient(cx, cy, 2, cx, cy, Math.max(rx, ry)); gr.addColorStop(0, 'rgba(30,110,225,' + (0.62 * al).toFixed(2) + ')'); gr.addColorStop(0.7, 'rgba(60,150,235,' + (0.34 * al).toFixed(2) + ')'); gr.addColorStop(1, 'rgba(90,170,240,0)'); ctx.save(); ctx.translate(cx, cy); ctx.scale(rx / Math.max(rx, ry), ry / Math.max(rx, ry)); ctx.translate(-cx, -cy); ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(cx, cy, Math.max(rx, ry), 0, 6.283); ctx.fill(); ctx.restore(); };
+  if (LAY === 'furrow') for (let k = 0; k <= 6; k++) wetFill(x + k * PER, gy + 14, wetPx * 0.85, wetPx * 1.05, fade);
+  else if (LAY === 'basin') { const gr = ctx.createLinearGradient(0, gy, 0, gy + wetPx); gr.addColorStop(0, 'rgba(30,110,225,' + (0.55 * fade).toFixed(2) + ')'); gr.addColorStop(1, 'rgba(60,150,235,' + (0.12 * fade).toFixed(2) + ')'); ctx.fillStyle = gr; ctx.beginPath(); ctx.moveTo(x, gy); ctx.lineTo(x + w, gy); for (let xx = x + w; xx >= x; xx -= 6) ctx.lineTo(xx, gy + wetPx + Math.sin(xx * 0.09 + t) * 3); ctx.closePath(); ctx.fill(); }
+  else if (LAY === 'border') { const xf = x + w * Math.min(1, ease * 1.15); const gr = ctx.createLinearGradient(x, 0, x + w, 0); gr.addColorStop(0, 'rgba(30,110,225,' + (0.6 * fade).toFixed(2) + ')'); gr.addColorStop(1, 'rgba(60,150,235,' + (0.2 * fade).toFixed(2) + ')'); ctx.fillStyle = gr; ctx.beginPath(); ctx.moveTo(x, gy); for (let xx = x; xx <= xf; xx += 4) ctx.lineTo(xx, gy + off(xx)); for (let xx = xf; xx >= x; xx -= 4) ctx.lineTo(xx, gy + off(xx) + wetPx * (1 - 0.55 * (xx - x) / w) + Math.sin(xx * 0.1 + t) * 2); ctx.closePath(); ctx.fill(); }
+  else if (LAY === 'sprinkler') { const gr = ctx.createLinearGradient(0, gy, 0, gy + wetPx); gr.addColorStop(0, 'rgba(30,110,225,' + (0.5 * fade).toFixed(2) + ')'); gr.addColorStop(1, 'rgba(60,150,235,' + (0.1 * fade).toFixed(2) + ')'); ctx.fillStyle = gr; ctx.beginPath(); ctx.moveTo(x, gy); ctx.lineTo(x + w, gy); for (let xx = x + w; xx >= x; xx -= 6) ctx.lineTo(xx, gy + wetPx + Math.sin(xx * 0.14 + t * 1.2) * 4); ctx.closePath(); ctx.fill(); }
+  else { const dpx = (meth.mid || 0) * PX; for (let k = 0; k < 8; k++) wetFill(x + 24 + k * 46, gy + dpx + 4, wetPx * 0.8, wetPx * 0.75, fade); }
+  ctx.restore();
+  // basin bunds and furrow / border water, drawn over the soil
+  const bundTex = spBund(Math.round(w), 22);
+  if (LAY === 'basin') { [[x, 1], [x + w, -1]].forEach(([bx, dir]) => { ctx.save(); ctx.beginPath(); ctx.moveTo(bx, gy); ctx.lineTo(bx + dir * 6, gy - 20); ctx.lineTo(bx + dir * 24, gy - 20); ctx.lineTo(bx + dir * 46, gy); ctx.closePath(); ctx.clip(); ctx.drawImage(bundTex, 0, 0, Math.round(w), 22, x, gy - 22, Math.round(w), 22); ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.fillRect(x, gy - 22, w, 22); ctx.restore(); ctx.strokeStyle = 'rgba(30,20,10,0.8)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(bx, gy); ctx.lineTo(bx + dir * 6, gy - 20); ctx.lineTo(bx + dir * 24, gy - 20); ctx.lineTo(bx + dir * 46, gy); ctx.stroke(); });
+    const lvl = 12 * (srcOn ? Math.min(1, ease * 2) : Math.max(0, 1 - (ph0 - 0.78) * 3)); ctx.fillStyle = 'rgba(70,150,230,0.82)'; ctx.beginPath(); ctx.moveTo(x + 40, gy); for (let xx = x + 40; xx <= x + w - 40; xx += 6) ctx.lineTo(xx, gy - lvl + Math.sin(xx * 0.12 + t * 2) * 1.2); ctx.lineTo(x + w - 40, gy); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = '#EAF6FF'; ctx.lineWidth = 1.4; ctx.beginPath(); for (let xx = x + 40; xx <= x + w - 40; xx += 6) { const yy = gy - lvl + Math.sin(xx * 0.12 + t * 2) * 1.2; xx === x + 40 ? ctx.moveTo(xx, yy) : ctx.lineTo(xx, yy); } ctx.stroke(); T('ponded water', x + w / 2, gy - lvl - 6, { s: 9.5, b: true, a: 'center', c: '#1B4FA0' }); }
+  if (LAY === 'furrow') { const lvl = 8 * (srcOn ? Math.min(1, ease * 2) : Math.max(0, 1 - (ph0 - 0.78) * 3)); for (let k = 0; k <= 6; k++) { const cx = x + k * PER; ctx.fillStyle = 'rgba(70,150,230,0.85)'; ctx.beginPath(); let started = false; for (let xx = cx - PER * 0.5; xx <= cx + PER * 0.5; xx += 2) { if (xx < x || xx > x + w) continue; const sy = gy + off(xx), wy = gy + 16 - lvl; if (sy > wy) { if (!started) { ctx.moveTo(xx, wy); started = true; } ctx.lineTo(xx, wy); } } for (let xx = cx + PER * 0.5; xx >= cx - PER * 0.5; xx -= 2) { if (xx < x || xx > x + w) continue; const sy = gy + off(xx), wy = gy + 16 - lvl; if (sy > wy) ctx.lineTo(xx, sy); } ctx.closePath(); ctx.fill(); } }
+  if (LAY === 'border') { const xf = x + w * Math.min(1, ease * 1.15); if (srcOn || fade > 0) { ctx.fillStyle = 'rgba(70,150,230,' + (0.85 * fade).toFixed(2) + ')'; ctx.beginPath(); ctx.moveTo(x, gy); for (let xx = x; xx <= xf; xx += 4) ctx.lineTo(xx, gy + off(xx) - 4 - Math.sin(xx * 0.2 + t * 3) * 0.8); for (let xx = xf; xx >= x; xx -= 4) ctx.lineTo(xx, gy + off(xx)); ctx.closePath(); ctx.fill(); } ctx.strokeStyle = '#1B4FA0'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(x + 8, gy - 16); ctx.lineTo(x + 52, gy - 16 + 2); ctx.stroke(); ctx.fillStyle = '#1B4FA0'; ctx.beginPath(); ctx.moveTo(x + 52, gy - 20); ctx.lineTo(x + 60, gy - 14); ctx.lineTo(x + 52, gy - 12); ctx.fill(); T('sheet flow, downslope', x + 66, gy - 14, { s: 9.5, b: true, c: '#1B4FA0' }); }
   const gg = ctx.createLinearGradient(0, gwY, 0, gwY + gwH); gg.addColorStop(0, '#6FB6EE'); gg.addColorStop(1, '#2A66AC'); ctx.fillStyle = gg; ctx.fillRect(x, gwY, w, gwH);
   T('groundwater · 0 MPa', x + 10, gwY + 22, { s: 10.5, b: true, c: '#fff' });
-  const px3 = [x + w * 0.26, x + w * 0.52, x + w * 0.78]; drawRoots(sim, kd, gy, PX, px3, 0.8);
-  const ph = 78 * (0.18 + 0.82 * A.cover); if (A.cover > 0.03) cropPlants(x + w / 2, gy, ph, 62, 3, 0, PX, 3);
-  // water path: a dotted blue column from the groundwater to the air, with drops moving up it
+  const px3 = LAY === 'furrow' ? [x + PER * 1.5, x + PER * 3.5, x + PER * 5.5] : [x + w * 0.26, x + w * 0.52, x + w * 0.78]; const plantY = LAY === 'furrow' ? gy : gy + (LAY === 'border' ? off(x + w * 0.52) : 0);
+  drawRoots(A.sim, A.kd, plantY, PX, px3, 0.8);
+  const ph = 78 * (0.18 + 0.82 * A.cover); if (A.cover > 0.03) { ctx.save(); if (LAY === 'furrow') { cropPlants(x + PER * 3.5, gy, ph, PER * 2, 3, 0, PX, 3); } else cropPlants(x + w / 2, plantY, ph, 62, 3, 0, PX, 3); ctx.restore(); }
+  // the water path and the vapour leaving
   const colX = x + w * 0.52, topY = Y0 + 30; ctx.setLineDash([2, 4]); ctx.strokeStyle = 'rgba(30,110,200,0.8)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(colX, gwY); ctx.lineTo(colX, topY); ctx.stroke(); ctx.setLineDash([]);
   for (let i = 0; i < 9; i++) { const u = (t * (0.08 + 0.1 * clampN(A.E / 6, 0, 1)) + i / 9) % 1; ctx.fillStyle = 'rgba(40,120,225,0.95)'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(colX, gwY - u * (gwY - topY), 3, 0, 6.283); ctx.fill(); ctx.stroke(); }
   soilAtm(x + 6, gy, w - 12, 34, 70, m.evap / 200, 5, { n: 30 });
   const nv = clampN(Math.round(A.E * 3), 2, 14); for (let i = 0; i < nv; i++) { const u = (t * 0.22 + i * 0.173) % 1; ctx.strokeStyle = 'rgba(46,140,70,' + (0.9 - u * 0.8).toFixed(2) + ')'; ctx.lineWidth = 1.8; const vx = x + w * 0.52 - 44 + (i * 37) % 90 + Math.sin(u * 6 + i) * 4, vy = gy - ph - 2 - u * 70; ctx.beginPath(); ctx.moveTo(vx, vy); ctx.quadraticCurveTo(vx + 4, vy - 5, vx, vy - 10); ctx.stroke(); }
+  // irrigation hardware of the layout
+  const drop = (dx, dy) => { ctx.fillStyle = 'rgba(60,150,235,0.95)'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 0.8; ctx.beginPath(); ctx.arc(dx, dy, 2.2, 0, 6.283); ctx.fill(); ctx.stroke(); };
+  if (LAY === 'sprinkler') { const sx0 = x + 38, sy0 = gy - 66; ctx.strokeStyle = '#555'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(sx0, gy); ctx.lineTo(sx0, sy0); ctx.stroke(); ctx.fillStyle = '#C9A227'; ctx.strokeStyle = '#555'; ctx.lineWidth = 1.5; rrect(sx0 - 7, sy0 - 8, 14, 9, 3); ctx.fill(); ctx.stroke();
+    if (srcOn) for (let i = 0; i < 34; i++) { const u = (t * 0.55 + i * 0.0613) % 1, ang = (i % 6) / 5 * 0.9 + 0.2, vx = 120 * (0.5 + 0.5 * (i % 3) / 2), px0 = sx0 + vx * u * Math.cos(ang) * 1.2, py0 = sy0 - 8 + (-90 * Math.sin(ang) * u + 150 * u * u); if (py0 < gy) drop(px0, py0); } }
+  if (LAY === 'drip') { const dpx = (meth.mid || 0) * PX, ly = dpx ? gy + dpx : gy - 3; ctx.strokeStyle = '#222'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(x + 4, ly); ctx.lineTo(x + w - 4, ly); ctx.stroke(); for (let k = 0; k < 8; k++) { const ex = x + 24 + k * 46; ctx.fillStyle = '#2E7D32'; ctx.strokeStyle = '#111'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(ex, ly, 3.4, 0, 6.283); ctx.fill(); ctx.stroke(); if (srcOn) for (let j = 0; j < 2; j++) { const u = (t * 0.7 + j * 0.5 + k * 0.13) % 1; drop(ex, ly + 4 + u * (dpx ? 22 : 16)); } } T(dpx ? 'buried drip line, ' + meth.mid + ' cm' : 'surface drip line', x + 8, ly - 7, { s: 9.5, b: true, c: '#14532D' }); }
+  // the sensor probe: drag it, or tap the soil
+  const sxp = x + w * 0.12, syp = gy + A.z * PX; ctx.strokeStyle = '#222'; ctx.lineWidth = 3.2; ctx.beginPath(); ctx.moveTo(sxp, gy - 20); ctx.lineTo(sxp, syp); ctx.stroke(); ctx.fillStyle = '#F5E9B8'; ctx.strokeStyle = '#222'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(sxp, syp, 5.5, 0, 6.283); ctx.fill(); ctx.stroke();
+  pill('sensor ' + A.z + ' cm: drag or tap the soil', sxp + 10, syp + 4, { b: true, s: 9.5 });
+  pill(SPL.find(q => q[0] === LAY)[1] + ' \u00b7 event of ' + dose.toFixed(0) + ' mm (your Daisy run)', x + 8, gy - 8, { b: true, s: 9.5, c: '#14532D' });
   ctx.restore(); ctx.strokeStyle = INK; ctx.lineWidth = 1.4; rrect(x, Y0, w, H0, 10); ctx.stroke();
+  hot(x + w - 70, Y0 + 12, 54, 56, () => applyState({ tempIdx: state.tempIdx >= 8 ? 2 : 9 }), 'Tap the sun: warm the climate by 3.5 °C, tap again to undo');
+  hot(x + 30, Y0 + 14, 230, 62, () => applyState({ rainIdx: state.rainIdx === 5 ? 8 : state.rainIdx === 8 ? 2 : 5 }), 'Tap the clouds: wetter year, dry year, normal rain');
+  SP.soilBox = { x, y: gy, w, h: soilPx, PX, gy };
   // ---- the potential ladder ----
   const nodes = [
-    { k: 'Air', v: A.psiAir, d: false, py: Y0 + 74, note: 'at ' + Math.round(A.RH * 100) + '% relative humidity, the pull on the water' },
-    { k: 'Leaf', v: A.psiLeaf, d: false, py: gy - ph - 4, note: A.cover < 0.05 ? 'no crop on this date' : A.closed ? 'stomata closing: the leaf is short of water' : 'stomata open, water is flowing' },
-    { k: 'Stem (xylem)', v: A.psiStem, d: false, py: gy - ph * 0.35, note: 'the pipe: pulled in tension' },
-    { k: 'Root surface', v: A.psiRoot, d: false, py: gy + 16, note: 'where the root meets the soil water' },
+    { k: 'Air', v: A.psiAir, d: false, py: Y0 + 74, note: 'at ' + Math.round(A.RH * 100) + '% relative humidity, the pull on the water', tip: 'Dry air is the engine: it pulls water out of the leaf pores.' },
+    { k: 'Leaf', v: A.psiLeaf, d: false, py: gy - ph - 4, note: A.cover < 0.05 ? 'no crop on this date' : A.closed ? 'stomata closing: the leaf is short of water' : 'stomata open, water is flowing', tip: 'Leaf water potential falls as transpiration rises. Below about -1.6 MPa the stomata start to close.' },
+    { k: 'Stem (xylem)', v: A.psiStem, d: false, py: gy - ph * 0.35, note: 'the pipe: pulled in tension', tip: 'Water in the xylem is under tension, like a stretched rope.' },
+    { k: 'Root surface', v: A.psiRoot, d: false, py: gy + 16, note: 'where the root meets the soil water', tip: 'The drop between soil and root surface grows as the soil dries and its conductivity falls.' },
     { k: 'Soil, root zone', v: A.psiRZ, d: true, py: gy + Math.max(20, A.rd * 0.5) * PX, note: 'mean over the roots, ' + Math.round(A.hRZ) + ' cm suction' },
     { k: 'Soil at the sensor ' + A.z + ' cm', v: A.psiS, d: true, py: gy + A.z * PX, note: Math.round(A.hS) + ' cm suction in your sensor layer' },
     { k: 'Deep soil, 90 cm', v: A.psiD, d: true, py: gy + 90 * PX, note: Math.round(A.hD) + ' cm suction below the roots' },
@@ -383,6 +426,7 @@ function drawSPAC() {
     const ry = ry0 + i * rowH + 14, on = SP.sel === i + 1;
     ctx.strokeStyle = on ? '#D93025' : 'rgba(80,90,110,0.45)'; ctx.setLineDash([2, 3]); ctx.lineWidth = on ? 1.8 : 1; ctx.beginPath(); ctx.moveTo(x + w - 2, clampN(n.py, Y0 + 6, gwY + gwH - 4)); ctx.lineTo(lx - 6, ry + 4); ctx.stroke(); ctx.setLineDash([]);
     ctx.fillStyle = n.d ? '#1E8E3E' : '#8A8F98'; ctx.beginPath(); ctx.arc(x + w - 4, clampN(n.py, Y0 + 6, gwY + gwH - 4), 4.2, 0, 6.283); ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.2; ctx.stroke();
+    hot(lx - 4, ry - 17, lw + 8, rowH - 6, () => { autoPause(); SP.sel = i + 1; }, n.tip || (n.k + ': ' + n.note + '. Tap to follow it.'));
     if (on) { ctx.strokeStyle = '#D93025'; ctx.lineWidth = 2; ctx.strokeRect(lx - 4, ry - 17, lw + 8, rowH - 6); }
     T(n.k, lx, ry - 4, { s: 10, b: true, c: INK }); spBadge(n.d ? 'DAISY' : 'derived', lx + lw, ry - 4, n.d, true);
     T(n.v === 0 ? '0 MPa' : spFmt(n.v), lx, ry + 13, { s: 13, b: true, c: n.d ? '#1B5E8C' : '#5B6470' });
@@ -435,7 +479,7 @@ function drawSPAC() {
   T('Reference images supplied by the author; credit the original sources in the paper.', 16, yP + hC + 46, { s: 8.5, i: true, c: MUTE });
   T('Source: Daisy ensemble, 10 soils, 10,190 runs · github.com/halilunaziru73-creator', 16, ly2 + lh2 + 22, { s: 8.5, i: true, c: MUTE });
 }
-SCENES.push({ id: 'spac', label: 'S1 Soil-Plant-Air', color: '#1E8E3E', h: 1640, draw: () => drawSPAC(), title: 'Soil-plant-atmosphere continuum: the water column from the particles to the sky',
+SCENES.push({ id: 'spac', label: 'S1 Soil-Plant-Air', color: '#1E8E3E', h: 1680, interactive: true, onDown: p => spDown(p), onMove: p => { if (SP.drag) { spMoveZ(p); return true; } return false; }, onUp: () => { SP.drag = false; }, onLeave: () => { SP.drag = false; }, draw: () => drawSPAC(), title: 'Soil-plant-atmosphere continuum: the water column from the particles to the sky',
   legend: [['#1E8E3E', 'From your Daisy data'], ['#8A8F98', 'Derived along the path'], ['#2E8FD6', 'Water potential (log scale)'], ['#E8912D', 'Water leaving to the air']],
   insight: 'Water moves from wet soil to dry air along a falling potential. Your Daisy data sets the soil end; the air sets the pull; the plant is the pipe between.' });
 
@@ -1139,7 +1183,10 @@ function soilParticles(w, h, seed, soilKey, toneAt, porAt) {
       if (nz(x * 0.045, y * 0.045) * 0.62 + rand() * 0.38 < por * 1.35 - 0.04) continue;           // air-filled pore: leave dark
       const gt = grainTint((x / b) | 0, (y / b) | 0, seed), s = (0.82 + 0.3 * nz2(x * 0.07, y * 0.07)) * (0.9 + rand() * 0.2);
       o.fillStyle = 'rgb(' + cl255((base[0] + tone) * gt[0] * s) + ',' + cl255((base[1] + tone) * gt[1] * s) + ',' + cl255((base[2] + tone) * gt[2] * s) + ')';
-      o.beginPath(); o.ellipse(x + gw / 2, y + gh / 2, gw * 0.53, gh * 0.53, rand() * 3, 0, 6.283); o.fill();
+      { const cx0 = x + gw / 2, cy0 = y + gh / 2, big = rand() < sand * 0.07 ? 1.7 : rand() < 0.12 ? 0.6 : 1, nv = 5 + ((rand() * 3) | 0), a0 = rand() * 6.283, rr = (gw + gh) * 0.29 * big; o.beginPath();
+        for (let q = 0; q < nv; q++) { const an = a0 + q / nv * 6.283 + (rand() - 0.5) * 0.5, rv = rr * (0.72 + rand() * 0.5); const px = cx0 + Math.cos(an) * rv, py = cy0 + Math.sin(an) * rv * 0.86; q ? o.lineTo(px, py) : o.moveTo(px, py); }
+        o.closePath(); o.fill(); o.strokeStyle = 'rgba(12,8,4,0.42)'; o.lineWidth = 0.55; o.stroke();
+        if (b > 2.6) { o.fillStyle = 'rgba(255,248,230,0.16)'; o.beginPath(); o.ellipse(cx0 - rr * 0.22, cy0 - rr * 0.25, rr * 0.38, rr * 0.26, -0.5, 0, 6.283); o.fill(); } }
     }
   }
   return off;
