@@ -4546,5 +4546,116 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   setInterval(upd, 300); upd();
 } catch (err) { console.warn('hint bar', err); } })();
 </script>
+<script id="r1hero">
+(function () {
+  const sc = SCENES.find(s => s.id === 'r1'); if (!sc || sc._hero) return; sc._hero = true;
+  const HERO = 640, h0 = sc.h, od = sc.draw, odn = sc.onDown, omv = sc.onMove;
+  sc.h = h0 + HERO; sc.hero = HERO;
+  const X0 = 46, X1 = 604, A0 = 70, A1 = 206, B0 = 240, B1 = 376, MONS = ['Jan', 'Mar', 'May', 'Jul', 'Sep', 'Nov'], MD = [0, 59, 120, 181, 243, 304];
+  const hs = { drag: false };
+  const ayOf = () => { const { dd } = n1Bucket(seasonSim()); return yearOf(dd); };
+  const kOfX = (x, ay) => ay * DPY + clampN(Math.round((x - X0) / (X1 - X0) * (DPY - 1)), 0, DPY - 1);
+  const setDay = (p, ay) => { fclock.day = kOfX(p.x, ay); fclock.pause = 0; fclock.mem = []; n1ui.play = false; };
+  function heat(sim, ay) {
+    const key = ay + '|' + r1AllKey(); if (sim._heroC && sim._heroC.key === key) return sim._heroC;
+    const mk = () => { const c = document.createElement('canvas'); c.width = DPY; c.height = NLAY; return c; }, a = mk(), b = mk(), ca = a.getContext('2d'), cb = b.getContext('2d'), ia = ca.createImageData(DPY, NLAY), ib = cb.createImageData(DPY, NLAY);
+    let mr = 1e-9, mu = 1e-9; for (let d = 0; d < DPY; d++) { const k = ay * DPY + d; for (let i = 0; i < NLAY; i++) { if (sim.rho[k][i] > mr) mr = sim.rho[k][i]; if (sim.upt[k][i] > mu) mu = sim.upt[k][i]; } }
+    for (let d = 0; d < DPY; d++) { const k = ay * DPY + d; for (let i = 0; i < NLAY; i++) { const p = (i * DPY + d) * 4, r = Math.sqrt(Math.max(0, sim.rho[k][i]) / mr), u = Math.sqrt(Math.max(0, sim.upt[k][i]) / mu);
+      ia.data[p] = 244 - 137 * r; ia.data[p + 1] = 241 - 172 * r; ia.data[p + 2] = 230 - 195 * r; ia.data[p + 3] = 255;
+      ib.data[p] = 244 - 206 * u; ib.data[p + 1] = 241 - 82 * u; ib.data[p + 2] = 230 - 151 * u; ib.data[p + 3] = 255; } }
+    ca.putImageData(ia, 0, 0); cb.putImageData(ib, 0, 0); return (sim._heroC = { key, a, b, mr, mu });
+  }
+  function panel(img, y0, y1, label, sub, sim, ay, dd, col) {
+    ctx.imageSmoothingEnabled = false; ctx.drawImage(img, X0, y0, X1 - X0, y1 - y0); ctx.imageSmoothingEnabled = true;
+    ctx.strokeStyle = INK; ctx.lineWidth = 1.2; ctx.strokeRect(X0, y0, X1 - X0, y1 - y0);
+    [0, 25, 50, 75, 100].forEach(cm => { const y = y0 + cm / 100 * (y1 - y0); ctx.strokeStyle = 'rgba(0,0,0,0.12)'; ctx.lineWidth = 1; if (cm && cm < 100) { ctx.beginPath(); ctx.moveTo(X0, y); ctx.lineTo(X1, y); ctx.stroke(); } T(cm + '', X0 - 5, y + 3.5, { s: 9, a: 'right', c: MUTE }); });
+    T('cm', X0 - 5, y0 - 4, { s: 9, a: 'right', c: MUTE }); T(label, X0, y0 - 8, { s: 11, b: true }); T(sub, X1, y0 - 8, { s: 9.5, a: 'right', c: MUTE });
+  }
+  function drawHero() {
+    const sim = seasonSim(), { dd } = n1Bucket(sim), ay = yearOf(dd), k0 = ay * DPY, H = heat(sim, ay), xd = X0 + (dd - k0) / (DPY - 1) * (X1 - X0);
+    ctx.fillStyle = PAPER; ctx.fillRect(0, 0, W, HERO + 4);
+    T('Roots through the season: real model output, day by day', 16, 22, { s: 14, b: true });
+    T('Daisy root-model output for ' + profName() + ' · ' + (state.crop === 'vegetable' ? 'vegetable' : state.crop === 'legume' ? 'legume' : 'cereal/oilseed') + ', weather of ' + (1980 + ay) + '. Click or drag to move the day.', 16, 38, { s: 10.5, c: MUTE });
+    panel(H.a, A0, A1, 'Where the roots are (root density)', 'darker = more roots', sim, ay, dd);
+    // rooting depth line + crop cover
+    ctx.strokeStyle = '#2B1A0A'; ctx.lineWidth = 1.8; ctx.beginPath(); for (let d = 0; d < DPY; d++) { const x = X0 + d / (DPY - 1) * (X1 - X0), y = A0 + clampN(sim.rd[k0 + d], 0, 100) / 100 * (A1 - A0); d ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke();
+    panel(H.b, B0, B1, 'Where the water is taken (uptake)', 'darker green = more water taken · blue ▼ = irrigation', sim, ay, dd);
+    for (let d = 0; d < DPY; d++) { const x = X0 + d / (DPY - 1) * (X1 - X0); if (sim.irr[k0 + d] > 0) { ctx.fillStyle = '#1E64D8'; ctx.beginPath(); ctx.moveTo(x - 2.5, B0 - 1); ctx.lineTo(x + 2.5, B0 - 1); ctx.lineTo(x, B0 + 6); ctx.fill(); } }
+    MD.forEach((d, i) => { const x = X0 + d / (DPY - 1) * (X1 - X0); ctx.strokeStyle = 'rgba(0,0,0,0.25)'; ctx.beginPath(); ctx.moveTo(x, B1); ctx.lineTo(x, B1 + 4); ctx.stroke(); T(MONS[i], x, B1 + 14, { s: 9, a: 'center', c: MUTE }); });
+    // cursor
+    ctx.strokeStyle = '#D93025'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(xd, A0 - 3); ctx.lineTo(xd, B1); ctx.stroke(); const rd = sim.rd[dd]; ctx.fillStyle = '#D93025'; ctx.beginPath(); ctx.arc(xd, A0 + clampN(rd, 0, 100) / 100 * (A1 - A0), 4.5, 0, 6.283); ctx.fill();
+    const lab = fmtDate(dateOfK(dd)); const lw = 118, lx = clampN(xd - lw / 2, X0, X1 - lw); ctx.fillStyle = '#D93025'; rrect(lx, A1 - 22, lw, 16, 4); ctx.fill(); T(lab + ' · roots ' + Math.round(rd) + ' cm', lx + lw / 2, A1 - 10.5, { s: 9.5, b: true, a: 'center', c: '#fff' });
+    hot(X0, A0, X1 - X0, B1 - A0, p => setDay(p, ay), 'click or drag: go to this day');
+    // snapshots
+    T('The root system on six dates this season', 16, 410, { s: 11, b: true }); T('drawn from the model’s root density, depth and uptake on each date · click one', X1, 410, { s: 9.5, a: 'right', c: MUTE });
+    let ks = -1, ke = -1; for (let d = 0; d < DPY; d++) { if (sim.cover[k0 + d] > 0.03 && sim.rd[k0 + d] > 3) { if (ks < 0) ks = d; ke = d; } }
+    if (ks < 0) { ks = 60; ke = 300; } const dates = []; for (let i = 0; i < 6; i++) dates.push(k0 + Math.round(ks + (ke - ks) * i / 5));
+    const sw = 84, gap = (X1 - X0 - 6 * sw) / 5, GY = 424, PX = 1.35, tc = hexRGB(soilTex(state.soil).color);
+    dates.forEach((k, i) => { const x = X0 + i * (sw + gap), near = Math.abs(k - dd) <= (ke - ks) / 10 + 1;
+      ctx.save(); ctx.beginPath(); ctx.rect(x, GY, sw, 100 * PX); ctx.clip(); const g = ctx.createLinearGradient(0, GY, 0, GY + 100 * PX); g.addColorStop(0, 'rgb(' + tc.map(v => Math.round(v * 0.62)).join(',') + ')'); g.addColorStop(1, 'rgb(' + tc.map(v => Math.round(v * 0.4)).join(',') + ')'); ctx.fillStyle = g; ctx.fillRect(x, GY, sw, 100 * PX);
+      drawRootsR1(sim, k, x, sw, GY, PX); ctx.restore();
+      ctx.strokeStyle = near ? '#D93025' : INK; ctx.lineWidth = near ? 2.4 : 1; ctx.strokeRect(x, GY, sw, 100 * PX);
+      T(dateOfK(k).getUTCDate() + ' ' + MON[dateOfK(k).getUTCMonth()], x + sw / 2, GY + 100 * PX + 13, { s: 10, b: true, a: 'center' }); T('roots ' + Math.round(sim.rd[k]) + ' cm', x + sw / 2, GY + 100 * PX + 25, { s: 9, a: 'center', c: '#6B4423' });
+      hot(x, GY, sw, 100 * PX + 28, () => { fclock.day = k; fclock.pause = 0; fclock.mem = []; n1ui.play = false; }, 'click: show ' + fmtDate(dateOfK(k))); });
+    // sentence
+    const rho = sim.rho[dd]; let tot = 0, c = 0, d50 = 0; for (let i = 0; i < NLAY; i++) tot += rho[i]; for (let i = 0; i < NLAY; i++) { c += rho[i]; if (!d50 && tot > 0 && c >= 0.5 * tot) d50 = (i + 1) * DZ; }
+    let mx = 0, md = 0; for (let d = 0; d < DPY; d++) if (sim.rd[k0 + d] > mx) { mx = sim.rd[k0 + d]; md = d; }
+    TW((1980 + ay) + ': roots deepest at ' + Math.round(mx) + ' cm on ' + fmtDate(dateOfK(k0 + md)) + '. On ' + fmtDate(dateOfK(dd)) + ' half of all roots sit in the top ' + (d50 || 0) + ' cm. These are modelled roots, not a scan of real ones.', 16, 600, 588, { s: 10.5, c: INK });
+    ctx.strokeStyle = RULE; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(16, HERO - 4); ctx.lineTo(604, HERO - 4); ctx.stroke();
+  }
+  sc.draw = function () {
+    drawHero(); const n0 = hotspots.length; ctx.save(); ctx.translate(0, HERO); od(); ctx.restore();
+    for (let i = n0; i < hotspots.length; i++) hotspots[i].y += HERO;
+  };
+  sc.onDown = p => { const ay = ayOf(); if (p.y >= A0 - 4 && p.y <= B1 && p.x >= X0 - 4 && p.x <= X1 + 4) { hs.drag = true; setDay(p, ay); return true; } if (p.y < HERO) return false; return odn({ x: p.x, y: p.y - HERO }); };
+  sc.onMove = p => { if (hs.drag) { setDay(p, ayOf()); return true; } if (p.y >= A0 && p.y <= B1 && p.x >= X0 && p.x <= X1) { canvas.style.cursor = 'ew-resize'; return false; } return omv({ x: p.x, y: p.y - HERO }); };
+  const ou = sc.onUp, ol = sc.onLeave; sc.onUp = function () { hs.drag = false; return ou && ou.apply(this, arguments); }; sc.onLeave = function () { hs.drag = false; return ol && ol.apply(this, arguments); };
+})();
+</script>
+<style id="fitcss">
+@media (min-width:1100px){
+  body.pro:not(.embed) .wrap, body.pro:not(.embed) .wrap > .panel { display: contents; }
+  body.pro:not(.embed) #proCenter { display: flex; flex-direction: column; }
+  body.pro:not(.embed) #proCenter > * { flex: 0 0 auto; }
+  body.pro:not(.embed) #proCenter > .ux-fold { order: 1; }
+  body.pro:not(.embed) #panelTitle { display: none; }
+  body.pro:not(.embed) .canvaswrap { order: 2; margin: 6px auto 0; }
+  body.pro:not(.embed) #swipeHint { order: 3; }
+  body.pro:not(.embed) #playBar { order: 4; margin: 0; }
+  body.pro:not(.embed) #proCtx { order: 5; margin-top: 10px; }
+  body.pro:not(.embed) #dataStrip { order: 6; }
+  body.pro:not(.embed) #touchHint { order: 7; }
+  body.pro:not(.embed) #legendBox { order: 8; }
+  body.pro:not(.embed) #yearRow { order: 4; }
+  body.pro:not(.embed) #uxGloss { order: 9; }
+  body.pro:not(.embed) #proCenter > footer { order: 10; }
+  body.pro:not(.embed) #proCenter > .ux-fold #todayLine { display: none; }
+  body.pro:not(.embed) #fitLine { order: 1; }
+}
+#fitLine { display: none; }
+@media (min-width:1100px){ body.pro:not(.embed) #fitLine { display: block; font-size: 11.5px; color: #9DA7B3; padding: 3px 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: #12161B; border-top: 1px solid #0B0E12; } }
+</style>
+<script id="fitjs">
+(function () {
+  if (new URLSearchParams(location.search).get('embed')) return;
+  const HERO = { v3: 570, v7: 650, e1: 740, spac: 670, r1: 640, v6: 650, n2: 650 };
+  const cvs = document.getElementById('profileCanvas'), cw = cvs && cvs.parentElement, pc = document.getElementById('proCenter');
+  if (!cvs || !pc) return;
+  const tl = document.getElementById('todayLine'), fl = document.createElement('div'); fl.id = 'fitLine'; pc.appendChild(fl);
+  const heroOf = () => { const sc = currentScene || {}; return sc.hero || HERO[sc.id] || (sc.h || 640); };
+  function fit() {
+    if (!document.body.classList.contains('pro') || innerWidth < 1100) { cw.style.maxWidth = ''; return; }
+    if (tl) { fl.textContent = tl.textContent.replace(/\s+/g, ' ').trim(); fl.style.display = fl.textContent && ['field', 'n1', 'r1', 'v1'].includes(currentScene.id) ? '' : 'none'; }
+    const hero = Math.min(heroOf(), currentScene.h || 640), avail = pc.clientHeight;
+    let other = 0; ['playBar', 'yearRow', 'swipeHint'].forEach(i => { const e = document.getElementById(i); if (e && e.offsetParent !== null) other += e.offsetHeight; }); const f = pc.querySelector('.ux-fold'); if (f) other += f.offsetHeight; if (fl.style.display !== 'none') other += fl.offsetHeight;
+    const room = avail - other - 26, cap = pc.clientWidth - 24;
+    const w = Math.max(430, Math.min(cap, room * 620 / hero, 1100));
+    cw.style.maxWidth = Math.round(w) + 'px';
+  }
+  const sw = window.switchScene; if (sw) window.switchScene = function (sc) { const r = sw.apply(this, arguments); pc.scrollTop = 0; fit(); return r; };
+  addEventListener('resize', fit); new ResizeObserver(fit).observe(pc); setInterval(fit, 700); setTimeout(fit, 200);
+  window.fitNow = fit;
+})();
+</script>
 </body>
 </html>
