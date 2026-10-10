@@ -2595,7 +2595,7 @@ function drawV4() {
   if (!anim.v4) anim.v4 = target.map(r => r.map(() => 0)); anim.v4 = anim.v4.map((r, i) => r.map((v, j) => v + (target[i][j] - v) * 0.12));
   const gx0 = 30, gw = 112, by = 478, bh = 190, cols = ['#9AA3AE', '#4FAE5E', '#1E6B4A'];
   T('Bare soil, your mulch, and the strongest mulch', 16, 278, { s: 11, b: true }); cols.forEach((c, j) => { ctx.fillStyle = c; ctx.fillRect(360 + j * 82, 269, 11, 9); T(['bare', 'yours', 'strongest'][j], 375 + j * 82, 278, { s: 9.5 }); });
-  cats.forEach((c, i) => { const mx = Math.max(...target[i], 1) * 1.1, gx = gx0 + i * (gw + 2); anim.v4[i].forEach((v, j) => { const h = v / mx * bh * 0.82, x = gx + j * 31; ctx.fillStyle = cols[j]; ctx.fillRect(x, by - h, 26, h); ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.strokeRect(x, by - h, 26, h); T(target[i][j].toFixed(c[1] === 'nl' ? 1 : 0), x + 13, by - h - 4, { s: 9.5, b: true, a: 'center' }); }); T(c[0], gx + 46, by + 15, { s: 10, a: 'center' }); T(c[2], gx + 46, by + 28, { s: 9, a: 'center', c: MUTE }); });
+  cats.forEach((c, i) => { const mx = Math.max(...target[i], 1) * 1.1, gx = gx0 + i * (gw + 2); anim.v4[i].forEach((v, j) => { const h = v / mx * bh * 0.96, x = gx + j * 31; ctx.fillStyle = cols[j]; ctx.fillRect(x, by - h, 26, h); ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.strokeRect(x, by - h, 26, h); T(target[i][j].toFixed(c[1] === 'nl' ? 1 : 0), x + 13, by - h - 4, { s: 9.5, b: true, a: 'center' }); }); T(c[0], gx + 46, by + 15, { s: 10, a: 'center' }); T(c[2], gx + 46, by + 28, { s: 9, a: 'center', c: MUTE }); });
   ctx.strokeStyle = INK; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(gx0 - 8, by); ctx.lineTo(W - 20, by); ctx.stroke();
   const dE = bare.evap - cur.evap, dI = bare.irr - cur.irr, dD = cur.drain - bare.drain;
   box(14, 530, W - 28, 92, { fill: '#fff', r: 8 }); T((has ? mt.label : 'Your setting') + ' against bare soil', 24, 548, { s: 11.5, b: true });
@@ -4619,7 +4619,9 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   body.pro:not(.embed) #proCenter > * { flex: 0 0 auto; }
   body.pro:not(.embed) #proCenter > .ux-fold { order: 1; }
   body.pro:not(.embed) #panelTitle { display: none; }
-  body.pro:not(.embed) .canvaswrap { order: 2; margin: 6px auto 0; }
+  body.pro:not(.embed) .canvaswrap { order: 2; margin: 0; width: 100%; max-width: none !important; background: #FBF8EE; border-bottom: 1px solid #0B0E12; }
+  body.pro:not(.embed) .canvaswrap canvas { margin: 0 auto; border-radius: 0; max-width: 100%; }
+  body.pro:not(.embed) #playBar { border-top: 0; }
   body.pro:not(.embed) #swipeHint { order: 3; }
   body.pro:not(.embed) #playBar { order: 4; margin: 0; }
   body.pro:not(.embed) #proCtx { order: 5; margin-top: 10px; }
@@ -4644,13 +4646,13 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   const tl = document.getElementById('todayLine'), fl = document.createElement('div'); fl.id = 'fitLine'; pc.appendChild(fl);
   const heroOf = () => { const sc = currentScene || {}; return sc.hero || HERO[sc.id] || (sc.h || 640); };
   function fit() {
-    if (!document.body.classList.contains('pro') || innerWidth < 1100) { cw.style.maxWidth = ''; return; }
+    if (!document.body.classList.contains('pro') || innerWidth < 1100) { cvs.style.width = ''; return; }
     if (tl) { fl.textContent = tl.textContent.replace(/\s+/g, ' ').trim(); fl.style.display = fl.textContent && ['field', 'n1', 'r1', 'v1'].includes(currentScene.id) ? '' : 'none'; }
     const hero = Math.min(heroOf(), currentScene.h || 640), avail = pc.clientHeight;
     let other = 0; ['playBar', 'yearRow', 'swipeHint'].forEach(i => { const e = document.getElementById(i); if (e && e.offsetParent !== null) other += e.offsetHeight; }); const f = pc.querySelector('.ux-fold'); if (f) other += f.offsetHeight; if (fl.style.display !== 'none') other += fl.offsetHeight;
-    const room = avail - other - 26, cap = pc.clientWidth - 24;
+    const room = avail - other - 3, cap = pc.clientWidth - 24;
     const w = Math.max(430, Math.min(cap, room * 620 / hero, 1100));
-    cw.style.maxWidth = Math.round(w) + 'px';
+    cvs.style.width = Math.round(w) + 'px';
   }
   const sw = window.switchScene; if (sw) window.switchScene = function (sc) { const r = sw.apply(this, arguments); pc.scrollTop = 0; fit(); return r; };
   addEventListener('resize', fit); new ResizeObserver(fit).observe(pc); setInterval(fit, 700); setTimeout(fit, 200);
