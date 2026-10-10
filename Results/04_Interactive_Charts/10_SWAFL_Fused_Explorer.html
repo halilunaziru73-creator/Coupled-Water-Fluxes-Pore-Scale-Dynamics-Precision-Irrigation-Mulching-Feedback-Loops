@@ -374,6 +374,7 @@ function drawLab(A, Yr) {
   const y1 = vy + VH + 24; T('Colour by', 14, y1 + 15, { s: 9, b: true, c: MUTE });
   [['min', 'Minerals'], ['size', 'Grain size'], ['phase', 'Phases']].forEach((q, i) => chip(62 + i * 72, y1, 68, q[1], LAB.view === q[0], () => { LAB.view = q[0]; }, 'Colour the grains by mineral, by size class, or show only solid, air and water'));
   T('Zoom', 296, y1 + 15, { s: 9, b: true, c: MUTE }); [0.6, 2.5, 10].forEach((q, i) => chip(328 + i * 66, y1, 62, q + ' mm', LAB.zi === i, () => { LAB.zi = i; }, 'Width of the section: finer (silt, clay films) to coarser (aggregates)'));
+  chip(540, y1, 58, 'Reset', false, () => { LAB.view = 'min'; LAB.zi = 1; LAB.where = 'rz'; LAB.follow = true; }, 'Back to the default view of the lab');
   const y2 = y1 + 30; T('Look at', 14, y2 + 15, { s: 9, b: true, c: MUTE });
   [['surf', 'Topsoil 5 cm'], ['rz', 'Root zone'], ['sens', 'Sensor ' + A.z + ' cm'], ['deep', 'Deep 90 cm']].forEach((q, i) => chip(62 + i * 92, y2, 88, q[1], LAB.where === q[0], () => { LAB.where = q[0]; LAB.follow = true; }, 'Take the suction from this place in your simulated profile'));
   chip(436, y2, 166, LAB.follow ? 'Following your season' : 'Manual suction (tap to follow)', LAB.follow, () => { LAB.follow = true; }, 'Follow the Daisy-based season, or drag the gauge below to dry or wet the soil yourself');
@@ -426,6 +427,7 @@ function drawSPAC() {
   T('Irrigation layout (tap one):', 16, 99, { s: 9, b: true, c: MUTE });
   SPL.forEach((q, i) => { const bx = 14 + i * (lbw + 6), on = q[0] === LAY; ctx.fillStyle = on ? '#1E8E3E' : '#fff'; ctx.strokeStyle = on ? '#14532D' : '#9AA3AE'; ctx.lineWidth = on ? 2 : 1; rrect(bx, 104, lbw, 24, 7); ctx.fill(); ctx.stroke(); T(q[1], bx + lbw / 2, 120, { s: 10.5, b: true, a: 'center', c: on ? '#fff' : INK }); hot(bx, 104, lbw, 24, () => spSetLayout(q[0]), q[2]); });
   // ---- the picture ----
+  SP.ys = {};
   const x = 14, w = 372, Y0 = 138, sky = 152, gy = Y0 + sky, PX = 3.2, soilPx = 100 * PX, gwY = gy + soilPx, gwH = 34, H0 = sky + soilPx + gwH, heat = clampN((TEMP_VALUES[state.tempIdx] + 1) / 4.5, 0, 1);
   const dose = A.sim.dose || 25, ph0 = (t * 0.1) % 1, ease = Math.min(1, ph0 / 0.6), srcOn = ph0 < 0.78, fade = srcOn ? 1 : Math.max(0, 1 - (ph0 - 0.78) / 0.22);
   const meth = METHODS.find(q => q.k === state.method) || METHODS[0], baseCm = { furrow: 40, basin: 55, border: 45, sprinkler: 16, drip: 26 }[LAY] * clampN(0.55 + dose / 60, 0.55, 1.25), wetPx = baseCm * PX * ease;
@@ -500,7 +502,7 @@ function drawSPAC() {
   });
   T('bar length: log scale, 0.01 to 100 MPa', lx, ry0 + 8 * rowH + 12, { s: 8.5, i: true, c: MUTE });
   // ---- the chain in numbers ----
-  const Yc = Y0 + H0 + 22; ctx.strokeStyle = '#1F4D2E'; ctx.lineWidth = 1.5; T('The same water, as your simulated numbers', 16, Yc, { s: 12.5, b: true, c: '#1F4D2E' }); ctx.beginPath(); ctx.moveTo(16, Yc + 6); ctx.lineTo(W - 16, Yc + 6); ctx.stroke();
+  const Yc = Y0 + H0 + 22; SP.ys.pic = Y0 - 40; SP.ys.num = Yc - 20; ctx.strokeStyle = '#1F4D2E'; ctx.lineWidth = 1.5; T('The same water, as your simulated numbers', 16, Yc, { s: 12.5, b: true, c: '#1F4D2E' }); ctx.beginPath(); ctx.moveTo(16, Yc + 6); ctx.lineTo(W - 16, Yc + 6); ctx.stroke();
   const cards = [['Rain + irrigation', (m.rain + m.irr).toFixed(0) + ' mm/yr', 'rain ' + m.rain.toFixed(0) + ' + irrigation ' + m.irr.toFixed(0), true, '#2E6FD0'], ['Soil store', A.hRZ.toFixed(0) + ' cm', 'root-zone suction today', true, '#8E4A3A'], ['Root uptake', m.transp.toFixed(0) + ' mm/yr', 'roots reach ' + A.rd.toFixed(0) + ' cm today', true, '#2E9E4F'], ['Leaf', spFmt(A.psiLeaf), A.closed ? 'stomata closing' : 'stomata open', false, '#5B6470'], ['To the air', m.et.toFixed(0) + ' mm/yr', 'evapotranspiration', true, '#E8912D']];
   const cw2 = (W - 32 - 4 * 8) / 5; cards.forEach((c, i) => { const cx = 16 + i * (cw2 + 8), cy = Yc + 18; ctx.fillStyle = '#fff'; ctx.strokeStyle = c[4]; ctx.lineWidth = 2; rrect(cx, cy, cw2, 82, 8); ctx.fill(); ctx.stroke(); ctx.fillStyle = c[4]; ctx.fillRect(cx, cy + 6, 4, 70);
     T(c[0], cx + 10, cy + 16, { s: 9, b: true, c: MUTE }); T(c[1], cx + 10, cy + 38, { s: c[1].length > 9 ? 12 : 14, b: true, c: INK }); T(c[2], cx + 10, cy + 54, { s: 8, c: MUTE }); spBadge(c[3] ? 'DAISY' : 'derived', cx + 10, cy + 74, c[3]);
@@ -535,7 +537,7 @@ function drawSPAC() {
   q('Pores holding water in this view', (rp ? SP.cv.nWater / rp * 100 : 0).toFixed(0) + '%', ly2 + 100, ['DAISY', true]);
   q('Water films stay in pores narrower than', (rUm * 2 >= 10 ? Math.round(rUm * 2) : (rUm * 2).toFixed(1)) + ' µm', ly2 + 138, ['DAISY', true]);
   q('Grain / fine matrix / pore space', (g0.stats.grain * 100).toFixed(0) + ' / ' + (g0.stats.matrix * 100).toFixed(0) + ' / ' + (g0.stats.pore * 100).toFixed(0) + ' %', ly2 + 176, ['DAISY', true]);
-  const Yr = ly2 + lh2 + 40; ctx.strokeStyle = '#1F4D2E'; ctx.lineWidth = 1.5; T('Particle lab: your soil, live and in colour', 16, Yr, { s: 12.5, b: true, c: '#1F4D2E' }); ctx.beginPath(); ctx.moveTo(16, Yr + 6); ctx.lineTo(W - 16, Yr + 6); ctx.stroke(); spBadge('YOUR DATA', W - 20, Yr - 2, true, true);
+  const Yr = ly2 + lh2 + 40; SP.ys.root = Yl - 20; SP.ys.lab = Yr - 20; ctx.strokeStyle = '#1F4D2E'; ctx.lineWidth = 1.5; T('Particle lab: your soil, live and in colour', 16, Yr, { s: 12.5, b: true, c: '#1F4D2E' }); ctx.beginPath(); ctx.moveTo(16, Yr + 6); ctx.lineTo(W - 16, Yr + 6); ctx.stroke(); spBadge('YOUR DATA', W - 20, Yr - 2, true, true);
   const endY = drawLab(A, Yr);
   T('Source: Daisy ensemble, 10 soils, 10,190 runs · github.com/halilunaziru73-creator', 16, ly2 + lh2 + 22, { s: 8.5, i: true, c: MUTE });
 }
@@ -4244,6 +4246,15 @@ if (window.__guiFromHash) window.__guiFromHash(); refresh();
   .row .gic { display: inline-block; width: 1.4em; text-align: center; margin-right: 4px; color: #6FB4F2; }
   .row label .val { background: #12171D; border: 1px solid #2B333D; border-radius: 10px; padding: 1px 8px; color: #7FD4FF; }
 </style>
+<style id="uxcss">
+  :focus-visible { outline: 2px solid #6FB4F2 !important; outline-offset: 2px; }
+  @media (pointer: coarse) { .pillbtn, .vgrid > .pillbtn, select, button, input[type=date] { min-height: 44px; } .scenebtn { min-height: 44px; } }
+  #touchHint { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; padding: 6px 10px; background: #12202F; border: 1px solid #24465E; border-left: 5px solid #4FA3E8; border-radius: 4px; color: #DCEBF5; font-size: 0.76rem; line-height: 1.35; flex-wrap: wrap; }
+  #touchHint .ic { font-size: 1rem; } #touchHint .tx { flex: 1 1 260px; } #touchHint .tx b { color: #7FD4FF; }
+  #touchHint .go { display: flex; gap: 6px; flex-wrap: wrap; } #touchHint .go button, #touchHint .x { background: #1D3A55; border: 1px solid #3A6A94; color: #E6F2FB; border-radius: 4px; padding: 3px 9px; font-size: 0.72rem; cursor: pointer; min-height: 0; }
+  #touchHint .go button:hover, #touchHint .x:hover { background: #2F6FB5; border-color: #2F6FB5; }
+  body.embed #touchHint { display: none; }
+</style>
 <style id="procss">
 @media (min-width: 1100px) {
   html, body.pro { height: 100%; overflow: hidden; }
@@ -4512,6 +4523,28 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   const build = () => { soilCards(); tri(); decorate($('#tillBtns'), 'till', b => b.dataset.till); decorate($('#cropBtns'), 'crop', b => b.dataset.crop); decorate($('#mulchBtns'), 'mulch', b => b.dataset.mulch); decorate($('#methodBtns'), 'method', b => b.dataset.method); };
   const css = document.getElementById('viscss'); build(); setInterval(() => { build(); gauges(); }, 400); document.addEventListener('input', gauges, true); gauges();
 } catch (err) { console.warn('visual controls', err); } })();
+</script>
+<script>
+(function () { try {
+  if (new URLSearchParams(location.search).get('embed')) return;
+  const st = document.getElementById('dataStrip'); if (!st) return;
+  const H = {
+    field: ['<b>Touch:</b> drag the sensor in the soil to change its depth \u00b7 press Play to run the 20 years \u00b7 tap an arrow to see what drives it.'],
+    n1: ['<b>Touch:</b> drag the gauge to move the trigger \u00b7 tap a soil row to move the sensor \u00b7 use the Try buttons for one-click experiments.'],
+    v4: ['<b>Touch:</b> tap a mulch material to compare it with bare soil \u00b7 the bars show evaporation, irrigation and drainage.'],
+    v5: ['<b>Touch:</b> tap a numbered red arrow to see what that feedback loop does \u00b7 the list underneath gives the size of each effect.'],
+    spac: ['<b>Touch:</b> tap a layout (furrow, basin, border, sprinkler, drip) \u00b7 tap the sun or clouds \u00b7 drag the sensor in the soil \u00b7 tap a row of the ladder \u00b7 drag the suction gauge in the particle lab.', true],
+    def: ['<b>Touch:</b> hover or tap the picture to explore \u00b7 every number on the right moves with each setting you change \u00b7 use <b>Try</b> for one-click experiments.']
+  };
+  const bar = document.createElement('div'); bar.id = 'touchHint'; st.after(bar); let last = '';
+  const LS = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} } };
+  const jump = key => { const c = document.getElementById('profileCanvas'), y = SP.ys && SP.ys[key]; if (!c || y == null) return; const sc = document.getElementById('proCenter'), r = c.getBoundingClientRect(), ty = r.top + y * r.height / c.height; if (sc && getComputedStyle(sc).overflowY !== 'visible') { const cr = sc.getBoundingClientRect(); sc.scrollTo({ top: sc.scrollTop + ty - cr.top - 8, behavior: 'smooth' }); } else window.scrollTo({ top: window.scrollY + ty - 70, behavior: 'smooth' }); };
+  const upd = () => { const id = currentScene ? currentScene.id : ''; if (id === last) return; last = id; const h = H[id] || H.def; if (LS.get('swafl_hint_' + id) === '1') { bar.style.display = 'none'; return; } bar.style.display = '';
+    bar.innerHTML = '<span class="ic">\u261D</span><span class="tx">' + h[0] + '</span><span class="go"></span><button class="x" type="button" title="Hide this tip for this view">Got it</button>';
+    if (h[1]) { const go = bar.querySelector('.go'); [['Picture', 'pic'], ['Numbers', 'num'], ['Root and soil', 'root'], ['Particle lab', 'lab']].forEach(q => { const b = document.createElement('button'); b.type = 'button'; b.textContent = '\u2193 ' + q[0]; b.onclick = () => jump(q[1]); go.appendChild(b); }); }
+    bar.querySelector('.x').onclick = () => { LS.set('swafl_hint_' + id, '1'); bar.style.display = 'none'; }; };
+  setInterval(upd, 300); upd();
+} catch (err) { console.warn('hint bar', err); } })();
 </script>
 </body>
 </html>
