@@ -920,7 +920,7 @@ function drawSID() {
   T('Intake from soil: Saxton–Rawls (sand, clay, OM) → θfc, θwp, θs, Ks → Green-Ampt → log–log fit to Kostiakov.   Source: Surface Irrigation lecture notes (Kargas).', 16, y + 32 + EQ.length * 17 + 8, { s: 8.3, i: true, c: MUTE });
   return y + 32 + EQ.length * 17 + 24;
 }
-SCENES.push({ id: 'sid', label: 'S2 Design', color: '#0B7285', play: true, dur: 16, h: 2650, interactive: true,
+SCENES.push({ id: 'sid', label: 'S2 Design', color: '#0B7285', play: true, dur: 16, h: 2690, interactive: true,
   onDown: p => sidDown(p), onMove: p => { if (SID.drag) { sidSet(SID.drag, p); return true; } return false; }, onUp: () => { SID.drag = null; }, onLeave: () => { SID.drag = null; },
   draw: () => { const e = drawSID(); if (e && Math.abs(currentScene.h - Math.ceil(e)) > 2) { sidEnd = Math.ceil(e); } }, title: 'Surface irrigation design: intake, advance, cutoff, efficiency and layout for your soil',
   legend: [['#0B7285', 'Design from the lecture equations'], ['#3E9B5A', 'Water stored in the root zone'], ['#3F7FC4', 'Deep percolation'], ['#E0803A', 'Runoff']],
