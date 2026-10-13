@@ -97,12 +97,12 @@ def weather(path):
     L = open(path, encoding="latin-1").read().replace("\r", "").split("\n")
     i = [k for k, l in enumerate(L) if l.startswith("-----")][0]
     return pd.read_csv(io.StringIO("\n".join([L[i + 1]] + [l for l in L[i + 3:] if l.strip()])), sep=r"\s+", on_bad_lines="skip").apply(pd.to_numeric, errors="coerce").dropna(subset=["Year"])
-tw = weather("/home/claude/v2/Common/weather/Daily-1965-2000.dwf"); tw = tw[(tw.Year >= 1980) & (tw.Year <= 1999)]
+tw = weather("./v2/Common/weather/Daily-1965-2000.dwf"); tw = tw[(tw.Year >= 1980) & (tw.Year <= 1999)]
 tw["AirTemp"] = (tw.T_min + tw.T_max) / 2; ta = tw.groupby("Year").agg(P=("Precip", "sum"), T=("AirTemp", "mean"))
 ta["P"] *= 0.7; ta["T"] += 2.0
 sw = dlf("E0_S01_CoarseLoam_Rainfed", "Daily-SWater.dlf"); sw["y"] = sw.date.dt.year
 et0 = sw.groupby("y")["Reference evapotranspiration (dry)"].sum()
-bw = weather("/home/claude/v2/Common/weather/it-bologna.dwf"); ba = bw[(bw.Year >= 1995) & (bw.Year <= 2004)].groupby("Year").agg(P=("Precip", "sum"), T=("AirTemp", "mean"), E=("RefEvap", "sum"))
+bw = weather("./v2/Common/weather/it-bologna.dwf"); ba = bw[(bw.Year >= 1995) & (bw.Year <= 2004)].groupby("Year").agg(P=("Precip", "sum"), T=("AirTemp", "mean"), E=("RefEvap", "sum"))
 fig, ax = plt.subplots(1, 2, figsize=(15, 5.2), sharey=False); fig.subplots_adjust(wspace=0.38)
 for a, (lab, yrs, P, E, T) in zip(ax, [("Taastrup (DK), 1980–1999 (course correction ×0.7, +2 °C)", ta.index, ta.P, et0.reindex(ta.index), ta["T"]),
                                        ("Bologna (IT), 1995–2004", ba.index, ba.P, ba.E, ba["T"])]):

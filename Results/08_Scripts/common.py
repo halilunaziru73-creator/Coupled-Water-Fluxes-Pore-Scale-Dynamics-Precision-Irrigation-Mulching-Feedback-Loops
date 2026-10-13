@@ -5,10 +5,10 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-RES = "/home/claude/up/res/results/summary_all.csv"      # the user's 10,190-run results
-RUNS = "/home/claude/runs/experiments"                    # targeted re-runs (daily + per-year)
+RES = "./up/res/results/summary_all.csv"      # the user's 10,190-run results
+RUNS = "./runs/experiments"                    # targeted re-runs (daily + per-year)
 OUT = "Results"
-sys.path.insert(0, "/home/claude/v2")
+sys.path.insert(0, "./v2")
 import generate_setups as G                                 # soil parameters, design lists
 
 SOILS = list(G.SOILS)

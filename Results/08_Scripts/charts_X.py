@@ -151,7 +151,7 @@ fig.suptitle("Random-forest drivers across E10–E16 (6,669 runs): which factors
 save(fig, FX, "X09_RandomForest_drivers", "Random-forest drivers", "Impurity-based importance of design factors and soil properties; out-of-bag R² shown. Moderate R² for irrigation/drainage reflects strong soil × management interactions.", "E10-E16")
 
 # X10 validation: re-runs vs user's runs
-m = pd.read_csv("/home/claude/runs/results/summary_all.csv"); m = m[m.status == "ok"].set_index("run_id")
+m = pd.read_csv("./runs/results/summary_all.csv"); m = m[m.status == "ok"].set_index("run_id")
 u = d.set_index("run_id"); c = m.index.intersection(u.index)
 fig, ax = plt.subplots(1, 4, figsize=(18, 4.6))
 for a, k in zip(ax, ["yield_Mg_ha", "irrigation_mm", "drainage_1m_mm", "N_leached_kg_ha"]):
