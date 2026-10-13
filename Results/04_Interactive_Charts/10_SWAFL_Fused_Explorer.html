@@ -842,7 +842,7 @@ function drawSID() {
     ctx.fillStyle = 'rgba(12,24,36,0.80)'; rrect(px2, py2, pw, 76, 6); ctx.fill(); LN.forEach((q, i) => { T(q[0], px2 + 7, py2 + 14 + i * 14, { s: 8.8, b: true, c: q[2] }); T(q[1], px2 + pw - 6, py2 + 14 + i * 14, { s: 8.8, a: 'right', c: '#fff' }); }); }
   sidHover({ x: ux, w: ux1 - ux, x0: 0, x1: P.L, y: sy0 - 20, h: secH + 20 }, v => { const z = prof(v) * 1000; return ['x = ' + sidF(v) + ' m', 'water arrived ' + sidF(R.txf(v)) + ' min', 'infiltrated now ' + sidF(z) + ' mm', 'wetting front ' + sidF(z / Zn * rm) + ' cm', 'end depth ' + sidF(Math.max(0, tco - R.txf(v)) > 0 ? P.k * Math.pow(tco - R.txf(v), P.A) * 1000 : 0) + ' mm']; });
   const ly = sy0 + secH + 14; [['rgb(120,160,225)', 'wet soil, water stored'], ['rgb(88,104,196)', 'wet below the roots: lost'], [sidMix(scol, [255, 255, 255], 0.1), 'dry soil'], ['#388AEE', 'water on the surface']].forEach((q, i) => { ctx.fillStyle = q[0]; ctx.fillRect(ux + i * 135, ly - 8, 10, 9); T(q[1], ux + 14 + i * 135, ly, { s: 8.8, c: MUTE }); });
-  T(sName + ': ' + Math.round(I.sand) + '% sand · ' + Math.round(I.clay) + '% clay', ux1, sy0 + secH - 5, { s: 8.8, i: true, a: 'right', c: '#FFF3DA' });
+  T(sName + ': ' + Math.round(I.sand) + '% sand · ' + Math.round(I.clay) + '% clay', ux + 8, sy0 + secH - 5, { s: 8.8, i: true, c: '#FFF3DA' });
   y = ly + 22;
   // ---- results strip: Zn, volumes infiltrated, runoff, deep percolation, deficit (every case) ----
   const mmOf = V => V / (P.L * P.w) * 1000, HY = sidHyd(R), iTA = Math.min(HY.t.length - 1, Math.max(0, Math.round(tA / HY.tend * (HY.t.length - 1))));
