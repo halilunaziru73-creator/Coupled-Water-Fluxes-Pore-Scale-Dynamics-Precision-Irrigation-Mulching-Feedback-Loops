@@ -765,7 +765,7 @@ function sidArrowH(x1, x2, y, lab) { ctx.strokeStyle = '#374151'; ctx.fillStyle 
 function drawSID() {
   paper(); SIDW = []; const sim = seasonSim(), I = sidIntake(), soil = state.soil, sName = DATA.soil_labels[soil], sys = SID.sys, d = SIDDEF[sys], soilMode = SID.intake === 'soil';
   if (SID.autoQ && SID.intake === 'soil' && !SID.adv && !SID.drag) SID.qLs = sidAutoQ();
-  const R = sidRun(), P = R.P, tco = R.tco, tA = play.t * tco * 1.0, Zn = P.Zn * 1000, fur = sys === 'furrow';
+  const R = sidRun(), P = R.P, tco = R.tco; SID.lastTco = tco; const tA = play.t * tco * 1.0, Zn = P.Zn * 1000, fur = sys === 'furrow';
   T('Surface irrigation design: from your soil to a working layout', 16, 26, { s: 15, b: true, c: SIDC.ink });
   T(sName + ' · ' + (CROPS[state.crop] || {}).label + ' · root zone ' + Math.round(sim.Rmax) + ' cm · trigger at ' + Math.round(sim.fTrig * 100) + '% depleted · ' + fmtDate(dateOfK(fclock.kd())) + ' (weather like ' + (1980 + yearOf(fclock.kd())) + ')', 16, 42, { s: 10.5, c: MUTE });
   ctx.fillStyle = '#E6F4F7'; ctx.strokeStyle = SIDC.ac; ctx.lineWidth = 1.5; rrect(14, 50, W - 28, 36, 8); ctx.fill(); ctx.stroke();
@@ -1065,7 +1065,7 @@ function switchScene(sc) {
   const canvasEl = document.getElementById('profileCanvas');
   applyPanelChrome(sc.id); canvas.setAttribute('role', 'img'); canvas.setAttribute('aria-label', (sc.label || '') + ': ' + (sc.title || ''));
   const pb = document.getElementById('playBar'); pb.style.display = 'flex'; document.getElementById('playRange').style.display = (sc.play || sc.fieldBar) ? '' : 'none'; document.getElementById('fieldBtns').style.display = sc.fieldBar ? 'inline-flex' : 'none'; document.getElementById('yearRow').style.display = 'flex'; yearUi.last = -1; autoEnter(sc, prevId); if (sc.id === 'n1' && prevId !== 'n1') { state.n1Prev = { mode: state.trigMode, idx: state.trigIdx }; refresh(); } else if (prevId === 'n1' && sc.id !== 'n1' && state.n1Prev) { state.trigMode = state.n1Prev.mode; if (state.trigMode === 'common') state.trigIdx = state.n1Prev.idx; state.n1Prev = null; refresh(); } canvas.style.cursor = 'default'; setCanvasH(sc.h || 640); if (sc.fieldBar) document.getElementById('playBtn').textContent = fclock.on ? 'Pause' : 'Play'; document.getElementById('rangeBtns').style.display = (sc.id === 'v1' || sc.id === 'v2') ? 'inline-flex' : 'none';
-  if (sc.play) { play.t = 0; play.on = true; play.hold = 0; document.getElementById('playBtn').textContent = 'Pause'; if (typeof dss !== 'undefined' && dss.ready) dssSyncPlay(sc.id); }
+  if (sc.play) { play.t = 0; play.on = !(typeof dss !== 'undefined' && dss.held); play.hold = 0; document.getElementById('playBtn').textContent = play.on ? 'Pause' : 'Play'; if (typeof dss !== 'undefined' && dss.ready) dssSyncPlay(sc.id); }
   canvasEl.style.display = 'block'; document.getElementById('swipeHint').style.visibility = 'visible';
   refresh();
 }
@@ -3389,7 +3389,7 @@ function n1ScrubDown(p) { const S = N1S; if (p.y >= S.y - 8 && p.y <= S.y + 20 &
 // ------------------------------------------------------------------------------------------------
 // decision support for the field: pick a date, see the simulated state today and over the coming days
 // ------------------------------------------------------------------------------------------------
-const dss = { ahead: 14, mode: 'typ', Y0: new Date().getFullYear(), ay0: 0, shown: '', lastFrame: 0, ready: false };
+const dss = { held: false, ahead: 14, mode: 'typ', Y0: new Date().getFullYear(), ay0: 0, shown: '', lastFrame: 0, ready: false };
 const dssYears = sim => { const r = Array.from(sim.yRain), idx = r.map((v, i) => i).sort((a, b) => r[a] - r[b]); return { dry: idx[0], wet: idx[idx.length - 1], typ: idx[10] }; };
 const dssAnalog = sim => (dss.mode === 'typ' || dss.mode === 'dry' || dss.mode === 'wet') ? dssYears(sim)[dss.mode] : clampN(+dss.mode - 1980, 0, NYR - 1);
 const dateOfK = k => new Date(Date.UTC(dss.Y0 + (yearOf(k) - dss.ay0), 0, 1 + (k - yearOf(k) * DPY)));
@@ -3518,12 +3518,13 @@ function dssAdvice(sim, rows) {
 function dssNeed(sim) {                                         // in how many of the 20 simulated years irrigation was needed in the week from this date
   const k = fclock.kd(), doy = k - yearOf(k) * DPY; let hit = 0; for (let y = 0; y < NYR; y++) { let any = false; for (let q = 0; q <= 7; q++) { const d = y * DPY + doy + q; if (d < ND && sim.irr[d] > 0) any = true; } if (any) hit++; } return hit;
 }
+function dssHold() { dss.held = true; fclock.on = false; play.on = false; play.hold = 0; n1ui.play = false; const pb = document.getElementById('playBtn'); if (pb) pb.textContent = 'Play'; }
 function dssSyncPlay(id) {                                      // the scenes with their own time axis show the date on the clock
   const k = fclock.kd(), ay = yearOf(k), doy = k - ay * DPY, dt = dateOfK(k), idx = Math.round((Date.UTC(1980 + ay, dt.getUTCMonth(), dt.getUTCDate()) - D20START) / DAYMS);
   if (id === 'v1') play.t = state.range === 'all' ? clampN(idx / (D20.n - 1), 0, 1) : clampN((doy - 90) / 2 / (PDAYS - 1), 0, 1);
   else if (id === 'v2') play.t = state.range === 'all' ? clampN((ay + clampN((doy - 90) / SEASON, 0, 0.999)) / NYEARS, 0, 1) : clampN((doy - 90) / 2 / (PDAYS - 1), 0, 1);
   else if (id === 'v3') play.t = clampN(doy / 365, 0, 1);
-  else return; play.hold = 0;
+  else return; play.hold = 0; if (dss.held) { play.on = false; const pb = document.getElementById('playBtn'); if (pb) pb.textContent = 'Play'; }
 }
 function dssGo(dt, keepPlaying) {
   const sim = seasonSim(true); dss.ay0 = dssAnalog(sim); dss.Y0 = dt.getUTCFullYear(); const doy = clampN(Math.round((Date.UTC(dt.getUTCFullYear(), dt.getUTCMonth(), dt.getUTCDate()) - Date.UTC(dt.getUTCFullYear(), 0, 1)) / DAYMS), 0, 364);
@@ -3555,8 +3556,8 @@ function fieldInsight() {
 }
 function dssInit() {
   const d = document.getElementById('dssDate'), ys = document.getElementById('dssYear'); for (let y = 1980; y < 2000; y++) { const o = document.createElement('option'); o.value = y; o.textContent = 'like ' + y; ys.appendChild(o); }
-  const stay = () => { fclock.pause = 0; fclock.on = false; if (currentScene.fieldBar) document.getElementById('playBtn').textContent = 'Play'; dssSyncPlay(currentScene.id); dssRender(true); };
-  const go = keep => { const v = d.value; if (!v) return; const p = v.split('-').map(Number); dssGo(new Date(Date.UTC(p[0], p[1] - 1, p[2])), keep); dssRender(true); };
+  const stay = () => { dssHold(); fclock.pause = 0; fclock.on = false; if (currentScene.fieldBar) document.getElementById('playBtn').textContent = 'Play'; dssSyncPlay(currentScene.id); dssRender(true); };
+  const go = keep => { const v = d.value; if (!v) return; const p = v.split('-').map(Number); dssGo(new Date(Date.UTC(p[0], p[1] - 1, p[2])), keep); if (dss.ready) dssHold(); dssRender(true); };
   d.onchange = () => go(true); ys.onchange = () => { dss.mode = ys.value; go(true); }; document.getElementById('dssAhead').onchange = e => { dss.ahead = +e.target.value; dssRender(true); };
   document.getElementById('dssToday').onclick = () => { const t = new Date(); d.value = isoDate(new Date(Date.UTC(t.getFullYear(), t.getMonth(), t.getDate()))); go(true); };
   document.getElementById('dssPrev').onclick = () => { fclock.day = Math.max(0, fclock.kd() - 1); stay(); }; document.getElementById('dssNext').onclick = () => { fclock.day = Math.min(ND - 2, fclock.kd() + 1); stay(); };
@@ -3724,7 +3725,7 @@ function autoPause() { if (AUTO.busy || !AUTO.on || !SWEEPS[currentScene.id]) re
 function autoEnter(sc, prevId) {
   if (prevId && prevId !== sc.id && SWEEPS[prevId] && AUTO.on && AUTO.snap) { AUTO.busy = true; applyState(AUTO.snap); AUTO.busy = false; }
   AUTO.on = true; AUTO.k = 0; const sw = SWEEPS[sc.id]; AUTO.last = performance.now() - (sw ? sw.every - 900 : 0); autoSnap();
-  if (sc.fieldBar) fclock.on = true; if (sc.id === 'n1' || sc.id === 'r1') n1ui.play = true; if (sc.id !== 'v5') v5ui.sel = 0;
+  if (sc.fieldBar && !dss.held) fclock.on = true; if ((sc.id === 'n1' || sc.id === 'r1') && !dss.held) n1ui.play = true; if (sc.id !== 'v5') v5ui.sel = 0;
 }
 function autoToggle() {
   const sc = currentScene;
@@ -4438,6 +4439,8 @@ function loop() {
     const pr = document.getElementById('playRange'), pl = document.getElementById('playLabel');
     if (document.activeElement !== pr) pr.value = Math.round(play.t * 1000);
     pl.textContent = sc.id === 'v3' ? 'day ' + Math.round(play.t * 365) : sc.id === 'e1' ? 'day ' + (play.t * E1.days).toFixed(1) : wide ? (sc.id === 'v1' ? d20Label(play.t) : v2AllLabel()) : dayLabel(play.t * (PDAYS - 1));
+    if (sc.id === 'sid') pl.textContent = 'irrigation time ' + Math.round(play.t * (SID.lastTco || 0)) + ' of ' + Math.round(SID.lastTco || 0) + ' min';
+    else if (dss.held && sc.id === 'v2' && (fclock.kd() - yearOf(fclock.kd()) * DPY < 90 || fclock.kd() - yearOf(fclock.kd()) * DPY > 90 + SEASON)) pl.textContent = fmtDate(dateOfK(fclock.kd())) + ' (outside the plotted Apr\u2013Sep window)';
   }
   if (sc.id === 'field') { stepField(); const pr = document.getElementById('playRange'), pl = document.getElementById('playLabel'); if (document.activeElement !== pr) pr.value = Math.round(fclock.day / (ND - 1) * 1000); pl.textContent = fieldLabel(); }
   autoTick(sc); hotspots.length = 0; if (sc.draw) sc.draw(); drawHotTip();
