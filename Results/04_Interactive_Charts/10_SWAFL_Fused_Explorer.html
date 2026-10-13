@@ -4439,6 +4439,7 @@ function loop() {
     const pr = document.getElementById('playRange'), pl = document.getElementById('playLabel');
     if (document.activeElement !== pr) pr.value = Math.round(play.t * 1000);
     pl.textContent = sc.id === 'v3' ? 'day ' + Math.round(play.t * 365) : sc.id === 'e1' ? 'day ' + (play.t * E1.days).toFixed(1) : wide ? (sc.id === 'v1' ? d20Label(play.t) : v2AllLabel()) : dayLabel(play.t * (PDAYS - 1));
+    if (dss.held && sc.id === 'v1' && wide && Math.abs(play.t - (function(){ const k = fclock.kd(), ay = yearOf(k), dt = dateOfK(k); return clampN((Math.round((Date.UTC(1980 + ay, dt.getUTCMonth(), dt.getUTCDate()) - D20START) / DAYMS)) / (D20.n - 1), 0, 1); })()) < 0.0005) pl.textContent = fmtDate(dateOfK(fclock.kd())) + ' (like ' + (1980 + yearOf(fclock.kd())) + ')';
     if (sc.id === 'sid') pl.textContent = 'irrigation time ' + Math.round(play.t * (SID.lastTco || 0)) + ' of ' + Math.round(SID.lastTco || 0) + ' min';
     else if (dss.held && sc.id === 'v2' && (fclock.kd() - yearOf(fclock.kd()) * DPY < 90 || fclock.kd() - yearOf(fclock.kd()) * DPY > 90 + SEASON)) pl.textContent = fmtDate(dateOfK(fclock.kd())) + ' (outside the plotted Apr\u2013Sep window)';
   }
