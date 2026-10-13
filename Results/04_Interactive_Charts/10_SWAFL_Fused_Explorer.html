@@ -618,7 +618,7 @@ const SIDM = (function () {
     const dx = L / N; let Vinf = 0, Vst = 0, Vdp = 0, Vdf = 0, sumAbs = 0, mean = 0, cnt = 0;
     for (let i = 0; i < N; i++) { const z1 = Z[i], z2 = Z[i + 1]; Vinf += (z1 + z2) / 2 * dx * w; for (let s = 0; s < 4; s++) { const zz = z1 + (z2 - z1) * (s + 0.5) / 4; Vst += Math.min(zz, Zn) * dx * w / 4; Vdp += Math.max(zz - Zn, 0) * dx * w / 4; Vdf += Math.max(Zn - zz, 0) * dx * w / 4; } }
     for (let i = 0; i <= N; i++) { mean += Z[i]; } mean /= (N + 1); for (let i = 0; i <= N; i++) sumAbs += Math.abs(Z[i] - mean);
-    R.Vapp = q * tco; R.Vreq = Zn * L * w; R.Vinf = Vinf; R.Vst = Vst; R.Vdp = Vdp; R.Vdf = Vdf; R.Vro = Math.max(R.Vapp - Vinf, 0);
+    R.cb = P.cb == null ? 1 : P.cb; R.Vapp = R.cb < 1 && tco > tL ? q * tL + q * R.cb * (tco - tL) : q * tco; R.Vreq = Zn * L * w; R.Vinf = Vinf; R.Vst = Vst; R.Vdp = Vdp; R.Vdf = Vdf; R.Vro = Math.max(R.Vapp - Vinf, 0);
     R.Ea = R.Vst / R.Vapp; R.Es = R.Vst / R.Vreq; R.dp = R.Vdp / R.Vapp; R.ro = R.Vro / R.Vapp; R.cu = mean > 0 ? (1 - sumAbs / (N + 1) / mean) * 100 : 0; R.sdi = R.Es; R.di = 1 - R.Es;
     R.mean = mean; R.X = (R.Z0 > Zn && R.ZL < Zn) ? L * (R.Z0 - Zn) / (R.Z0 - R.ZL) : null; R.tco = tco;
     return R;
@@ -628,7 +628,7 @@ const SIDM = (function () {
 
 
 // ===== S2 Surface Irrigation Design: the scene (inputs, drawings, design table) =====
-const SID = { sys: 'border', intake: 'soil', L: 150, S: 0.20, qLs: 6, n: 0.15, w: 0.75, Zn: null, om: 1.5, k: 0.002, A: 0.7, sy: 0.8, sz: null, a0: null, adv: null, cut: 'es1', tman: null, prof: 'line', Qs: 30, Wf: 120, preset: 'soil', drag: null, autoQ: true };
+const SID = { sys: 'border', intake: 'soil', L: 150, S: 0.20, qLs: 6, n: 0.15, w: 0.75, Zn: null, om: 1.5, k: 0.002, A: 0.7, sy: 0.8, sz: null, a0: null, adv: null, cut: 'es1', tman: null, prof: 'line', Qs: 30, Wf: 120, preset: 'soil', drag: null, autoQ: true, cb: 1 };
 const SIDDEF = { border: { L: 150, S: 0.2, q: 6, n: 0.15, Lr: [50, 400, 5], Sr: [0.02, 1, 0.01], qr: [0.2, 20, 0.05], ql: 'L/s per m width' }, furrow: { L: 180, S: 0.3, q: 1.2, n: 0.04, Lr: [60, 400, 5], Sr: [0.05, 1.5, 0.01], qr: [0.2, 4, 0.05], ql: 'L/s per furrow' }, basin: { L: 80, S: 0.05, q: 25, n: 0.15, Lr: [20, 200, 5], Sr: [0.02, 0.2, 0.01], qr: [5, 60, 0.5], ql: 'L/s per m width' } };
 const sidWet = {}, _sidTex = {};
 function sidTex(w, h, v) { w = Math.round(w); h = Math.round(h); const k = state.soil + '|' + w + '|' + h + '|' + v; if (_sidTex[k]) return _sidTex[k]; if (Object.keys(_sidTex).length > 12) for (const q in _sidTex) delete _sidTex[q]; return (_sidTex[k] = soilParticles(w, h, Math.abs(hashStr(state.soil)) + 4040 + v, state.soil, y => -12 + 22 * Math.min(1, y / h), y => 0.14 - 0.06 * Math.min(1, y / h))); }
@@ -637,7 +637,7 @@ const SIDPRE = [['soil', 'Your soil'], ['A7', 'A7 border'], ['A9', 'A9 furrow'],
 const SIDC = { st: '#3E9B5A', dp: '#3F7FC4', ro: '#E0803A', df: '#D9534F', ac: '#0B7285', ink: '#12303A' };
 function sidSys(sys) { const d = SIDDEF[sys]; SID.sys = sys; SID.L = d.L; SID.S = d.S; SID.qLs = d.q; SID.n = d.n; SID.adv = null; SID.sz = null; SID.a0 = null; }
 function sidPreset(id) {
-  SID.preset = id; SID.tman = null; SID.prof = 'line';
+  SID.preset = id; SID.tman = null; SID.prof = 'line'; SID.cb = 1;
   if (id === 'soil') { SID.autoQ = true; SID.intake = 'soil'; SID.Zn = null; SID.cut = 'es1'; SID.w = 0.75; sidSys(SID.sys); return; }
   SID.intake = 'lec'; SID.sz = null; SID.sy = 0.8;
   if (id === 'A7') Object.assign(SID, { sys: 'border', L: 200, S: 0.2, qLs: 2.5, n: 0.15, w: 1, k: 0.002, A: 0.8, Zn: 90, a0: 0.007, adv: { mode: 'given', tL: 120 }, cut: 'man', tman: 170 });
@@ -671,11 +671,11 @@ function sidEff(ov) {
   ov = ov || {}; const I = sidIntake(), soilMode = SID.intake === 'soil';
   const k = ov.k != null ? ov.k : (soilMode ? I.fit.k : SID.k), A = ov.A != null ? ov.A : (soilMode ? I.fit.A : SID.A);
   const Zn = (ov.Zn != null ? ov.Zn : (SID.Zn != null ? SID.Zn : sidZnAuto())) / 1000, L = ov.L != null ? ov.L : SID.L, qLs = ov.qLs != null ? ov.qLs : SID.qLs, q3 = qLs * 0.06, w = SID.sys === 'furrow' ? SID.w : 1;
-  return { L, w, q: q3, k, A, Zn, A0: sidA0(ov, q3), sy: SID.sy, sz: SID.sz, adv: SID.adv || { mode: 'vb' }, cut: { mode: SID.cut, t: SID.tman }, prof: SID.prof };
+  return { L, w, q: q3, k, A, Zn, A0: sidA0(ov, q3), sy: SID.sy, sz: SID.sz, adv: SID.adv || { mode: 'vb' }, cut: ov.tco != null ? { mode: 'man', t: ov.tco } : { mode: SID.cut, t: SID.tman }, prof: SID.prof, cb: ov.cb != null ? ov.cb : SID.cb };
 }
 const _sidRC = {};
 function sidRun(ov, aux) {
-  let P = sidEff(ov); P.N = aux || SID.drag ? 140 : 300; if (P.cut.mode === 'man' && P.cut.t == null) { const R0 = SIDM.compute(Object.assign({}, P, { cut: { mode: 'es1' } })); SID.tman = P.cut.t = Math.round(R0.tco); }
+  let P = sidEff(ov); P.N = aux === 2 ? 90 : aux || SID.drag ? 140 : 300; if (P.cut.mode === 'man' && P.cut.t == null) { const R0 = SIDM.compute(Object.assign({}, P, { cut: { mode: 'es1' } })); SID.tman = P.cut.t = Math.round(R0.tco); }
   const key = JSON.stringify(P); if (_sidRC[key]) return _sidRC[key]; const R = SIDM.compute(P); R.P = P; if (Object.keys(_sidRC).length > 160) for (const kk in _sidRC) delete _sidRC[kk]; return (_sidRC[key] = R);
 }
 function sidFront(R, t) { if (t <= 0) return 0; if (t >= R.tL) return R.P.L; let lo = 0, hi = R.P.L; for (let i = 0; i < 30; i++) { const m = (lo + hi) / 2; if (R.txf(m) < t) lo = m; else hi = m; } return (lo + hi) / 2; }
@@ -688,6 +688,26 @@ function sidAutoQ() {
   const sv = SID.qLs; for (let i = 0; i <= 24; i++) { const q = d.qr[0] + (qmax - d.qr[0]) * i / 24; const R = sidRun({ qLs: q }, 1); const sc = R.Ea * R.Es; if (sc > be) { be = sc; best = q; } } SID.qLs = sv;
   return (_sidAQ[key] = Math.round(best / d.qr[2]) * d.qr[2]);
 }
+// ---------- design iterations: one change per step, towards Ea >= 85 % while the root zone stays >= 80 % refilled ----------
+const SIDOPT = { key: '', rows: [], done: true, step: 0, best: null, seq: ['tco', 'q', 'cb', 'L', 'tco', 'cb', 'q', 'L', 'tco', 'cb'] };
+const sidScore = R => Math.min(R.Ea, 1) - Math.max(0, 0.8 - R.Es) * 3 - (R.cb < 1 ? Math.max(0, 0.05 - R.ro) * 3 : 0) - Math.max(0, R.Ea - 1) * 5;
+function sidOptKey() { const f = Math.round(seasonSim().fTrig * 100); return JSON.stringify([state.soil, f, SID.sys, SID.S, SID.n, SID.w, SID.Zn, SID.intake, SID.k, SID.A, SID.om, SID.a0, SID.adv, SID.sz, SID.L, SID.qLs, SID.cb, SID.cut, SID.cut === 'man' ? SID.tman : 0, SID.prof]); }
+function sidEvalD(d, lvl) { return sidRun({ qLs: d.q, L: d.L, cb: d.cb, tco: d.tco }, lvl); }
+function sidDescribe(v, d) { return v === 'tco' ? 'Cut off at ' + sidF(d.tco) + ' min' : v === 'q' ? 'Inflow ' + d.q.toFixed(2) + ' L/s' : v === 'cb' ? 'Cut back to ' + sidF(d.cb * 100) + ' % of q' : 'Field length ' + sidF(d.L) + ' m'; }
+function sidOptStep() {
+  const O = SIDOPT, d0 = SIDDEF[SID.sys]; if (SID.drag) return; const key = sidOptKey();
+  if (O.key !== key) { const R0 = sidRun(), d = { q: SID.qLs, L: SID.L, cb: SID.cb, tco: R0.tco }; O.key = key; O.rows = [{ label: 'Your current layout', d, R: R0, score: sidScore(R0) }]; O.best = O.rows[0]; O.step = 0; O.done = O.best.R.Ea >= 0.85 && O.best.R.Es >= 0.8; }
+  if (O.done) return; if (O.step >= O.seq.length) { O.done = true; return; }
+  const v = O.seq[O.step++], cur = O.best.d, qmax = SID.sys === 'furrow' ? Math.min(d0.qr[1], 0.04 / SID.S * 1000 / 60) : d0.qr[1]; let cands = [];
+  if (v === 'tco') cands = [0.5, 0.58, 0.66, 0.74, 0.8, 0.85, 0.9, 0.95, 1, 1.05, 1.1, 1.2].map(f => ({ ...cur, tco: cur.tco * f }));
+  if (v === 'q') for (let i = 0; i < 12; i++) cands.push({ ...cur, q: Math.round(d0.qr[0] * Math.pow(qmax / d0.qr[0], i / 11) / d0.qr[2]) * d0.qr[2] });
+  if (v === 'cb') cands = [1, 0.85, 0.7, 0.6, 0.5, 0.4, 0.3, 0.25, 0.2].map(c => ({ ...cur, cb: c }));
+  if (v === 'L') for (let i = 0; i < 11; i++) cands.push({ ...cur, L: Math.round(Math.max(d0.Lr[0], 30) * Math.pow(Math.min(d0.Lr[1], SID.L * 1.5) / Math.max(d0.Lr[0], 30), i / 10) / 5) * 5 });
+  let bestC = null, bestS = -9;
+  cands.forEach(c => { const trial = v === 'tco' ? [c] : [0.62, 0.7, 0.78, 0.86, 0.94, 1.02].map(f => ({ ...c, tco: sidEvalD({ ...c, tco: null }, 2).tco * f })); trial.forEach(t => { const R = sidEvalD(t, 2), s = sidScore(R); if (s > bestS) { bestS = s; bestC = t; } }); });
+  if (bestC && bestS > O.best.score + 0.003) { const R = sidEvalD(bestC, 0); const row = { label: sidDescribe(v, bestC), d: bestC, R, score: sidScore(R) }; O.rows.push(row); O.best = row; if (R.Ea >= 0.85 && R.Es >= 0.8) O.done = true; }
+}
+function sidApply(d) { SID.autoQ = false; SID.qLs = +d.q.toFixed(2); SID.L = Math.round(d.L); SID.cb = d.cb; SID.cut = 'man'; SID.tman = Math.round(d.tco); SID.preset = null; if (SID.adv && SID.adv.mode === 'given') SID.adv = null; }
 // ---------- widgets ----------
 let SIDW = [];
 function sidSlider(key, label, x, y, w, rng, val, fmt, dis, sub) {
@@ -699,7 +719,7 @@ function sidSlider(key, label, x, y, w, rng, val, fmt, dis, sub) {
 }
 function sidSet(sl, p) { const v0 = sl.rng[0] + clampN((p.x - sl.x) / sl.w, 0, 1) * (sl.rng[1] - sl.rng[0]), st = sl.rng[2] || 0.01, v = Math.round(v0 / st) * st; SID[sl.key] = +(v * (sl.scale || 1)).toFixed(6); sidTouch(sl.key); }
 function sidDown(p) { for (const s of SIDW) if (p.x >= s.x - 8 && p.x <= s.x + s.w + 8 && Math.abs(p.y - s.y) <= 10) { if (s.key === 'qLs') SID.autoQ = false; SID.drag = s; sidSet(s, p); return true; } return false; }
-function sidPill(txt, x, y) { ctx.font = 'bold 9px sans-serif'; const w = ctx.measureText(txt).width + 8; ctx.fillStyle = 'rgba(15,30,45,0.72)'; rrect(x, y - 10, w, 13, 4); ctx.fill(); T(txt, x + 4, y, { s: 9, b: true, c: '#fff' }); }
+function sidPill(txt, x, y, bg) { ctx.font = 'bold 9px sans-serif'; const w = ctx.measureText(txt).width + 8; ctx.fillStyle = bg || 'rgba(15,30,45,0.72)'; rrect(x, y - 10, w, 13, 4); ctx.fill(); T(txt, x + 4, y, { s: 9, b: true, c: '#fff' }); }
 function sidChip(x, y, w, h, label, on, fn, tip) {
   ctx.fillStyle = on ? SIDC.ac : '#fff'; ctx.strokeStyle = on ? '#08505F' : '#9AA3AE'; ctx.lineWidth = on ? 2 : 1; rrect(x, y, w, h, 6); ctx.fill(); ctx.stroke();
   T(label, x + w / 2, y + h / 2 + 3.5, { s: 9.5, b: true, a: 'center', c: on ? '#fff' : '#374151' }); hot(x, y, w, h, fn, tip);
@@ -708,18 +728,19 @@ function sidRow(label, y, items) { T(label, 16, y + 15, { s: 9, b: true, c: MUTE
 function sidHead(txt, y, sub) { T(txt, 16, y, { s: 12.5, b: true, c: SIDC.ink }); ctx.strokeStyle = SIDC.ac; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(16, y + 6); ctx.lineTo(W - 16, y + 6); ctx.stroke(); if (sub) T(sub, 16, y + 19, { s: 9, i: true, c: MUTE }); }
 function sidBadge(txt, x, y, solid) { ctx.font = 'bold 8px sans-serif'; const w = ctx.measureText(txt).width + 10; ctx.fillStyle = solid ? '#14532D' : '#fff'; ctx.strokeStyle = solid ? '#14532D' : '#6B7280'; ctx.lineWidth = 1; rrect(x, y - 8, w, 12, 6); ctx.fill(); ctx.stroke(); T(txt, x + 5, y + 1, { s: 8, b: true, c: solid ? '#fff' : '#4B5563' }); return w; }
 // hydrograph from the same advance and intake the design uses: infiltration rate from the opportunity-time integral, runoff after the front reaches the tail, recession after cutoff
+function sidApplied(R, t) { const P = R.P, te = Math.min(t, R.tco); return R.cb < 1 && te > R.tL ? P.q * R.tL + P.q * R.cb * (te - R.tL) : P.q * te; }
 function sidHyd(R) {
   if (R._hy) return R._hy; const P = R.P, w = P.w, q = P.q, tco = R.tco, tL = R.tL, N = 240, tend = R._tend || tco * 1.3, dt = tend / N, xs = R.xs, tx = R.tx, dx = P.L / (xs.length - 1);
   const Vc = t => { if (t <= 0) return 0; const te = Math.min(t, tco); let s = 0; for (let i = 0; i < xs.length - 1; i++) { const tau = te - (tx[i] + tx[i + 1]) / 2; if (tau > 0) s += P.k * Math.pow(tau, P.A) * dx; } return s * w; };
   const sc = Vc(tco) > 0 ? R.Vinf / Vc(tco) : 1, H = { t: [], Qin: [], I: [], Ro: [], Vcum: [], Rocum: [], Vs: [], tend }; let vprev = 0, rc = 0, vs = 0;
   for (let i = 0; i < N; i++) {
-    const t = dt * i, v = Vc(t) * sc, Iq = i ? Math.max(0, (v - vprev) / dt) : 0, qin = t <= tco ? q : 0; let ro = 0;
+    const t = dt * i, v = Vc(t) * sc, Iq = i ? Math.max(0, (v - vprev) / dt) : 0, qin = t <= tco ? (R.cb < 1 && t >= tL ? q * R.cb : q) : 0; let ro = 0;
     if (t <= tco && t >= tL) ro = Math.max(0, q - Iq);
     H.t.push(t); H.Qin.push(qin); H.I.push(t <= tco ? Iq : 0); H.Ro.push(ro); vprev = v; if (i) rc += ro * dt; H.Vcum.push(v); H.Rocum.push(rc);
   }
   const Vs = Math.max(0, R.Vapp - R.Vinf - rc); const iC = Math.min(N - 1, Math.round(tco / dt)), tr = Math.max(4, Math.min(0.3 * tco, 0.25 * Math.max(tL, 10)), 2 * Vs / (1.4 * q)); if (!R._tend && tco + tr * 1.15 > tend) { R._tend = tco + tr * 1.15; return sidHyd(R); }
   let acc = 0; for (let i = 0; i < N; i++) { const t = H.t[i]; if (t > tco) { const f = Math.max(0, 1 - (t - tco) / tr), r = 2 * Vs / tr * f; H.Ro[i] = r; acc += r * dt; H.Rocum[i] = rc + Math.min(acc, Vs); H.Vcum[i] = R.Vinf; } }
-  for (let i = 0; i < N; i++) { const t = H.t[i], ap = Math.min(t, tco) * q; H.Vs.push(t <= tco ? ap - H.Vcum[i] - H.Rocum[i] : Math.max(0, Vs - (H.Rocum[i] - rc))); }
+  for (let i = 0; i < N; i++) { const t = H.t[i], ap = sidApplied(R, t); H.Vs.push(t <= tco ? ap - H.Vcum[i] - H.Rocum[i] : Math.max(0, Vs - (H.Rocum[i] - rc))); }
   return (R._hy = H);
 }
 function sidHover(ax, fn) {
@@ -761,6 +782,7 @@ function drawSID() {
   sidSlider('qLs', 'Inflow q (' + d.ql + ')', cx1, y + 62, cw, d.qr, SID.qLs, v => v.toFixed(2) + ' L/s');
   sidSlider('n', 'Manning roughness n', cx1, y + 93, cw, [0.02, 0.25, 0.005], SID.n, v => v.toFixed(3));
   if (fur) sidSlider('w', 'Furrow spacing (m)', cx1, y + 124, cw, [0.5, 1.5, 0.05], SID.w, v => v.toFixed(2) + ' m'); else T('Strip analysed per metre of width', cx1, y + 127, { s: 9, i: true, c: MUTE });
+  sidSlider('cb', 'Cutback after the front arrives', cx1, y + 155, cw, [0.2, 1, 0.05], SID.cb, v => v >= 0.995 ? 'none' : sidF(v * 100) + ' % of q');
   T('Required depth Zn (mm)' + (SID.Zn == null ? ' · from the DSS' : ' · tap to reset'), cx2, y, { s: 9.5, b: true, c: SIDC.ink }); hot(cx2, y - 10, 200, 14, () => { SID.Zn = null; SID.preset = null; }, 'Back to the depth set by the trigger, root depth and soil');
   sidSlider('Zn', '', cx2, y, cw, [20, 150, 1], Zn, v => sidF(v) + ' mm');
   sidSlider('tman', 'Cutoff time (min)' + (SID.cut === 'man' ? '' : ' · set by rule'), cx2, y + 31, cw, [10, 1200, 5], SID.cut === 'man' ? SID.tman : tco, v => sidF(v) + ' min', SID.cut !== 'man');
@@ -768,7 +790,7 @@ function drawSID() {
   sidSlider('Wf', 'Field width (m)', cx2, y + 93, cw, [30, 400, 5], SID.Wf, v => sidF(v) + ' m');
   if (soilMode) sidSlider('om', 'Organic matter (%)', cx2, y + 124, cw, [0.5, 5, 0.1], SID.om, v => v.toFixed(1) + ' %'); else { sidSlider('k', 'Kostiakov k (mm per min^A)', cx2, y + 124, cw, [0.2, 10, 0.05], SID.k * 1000, v => v.toFixed(2)); sidSlider('A', 'Kostiakov A', cx2, y + 155, cw, [0.2, 0.95, 0.01], SID.A, v => v.toFixed(2)); }
   SIDW.forEach(s => { if (s.key === 'k') s.scale = 1e-3; if (s.key === 'Zn' || s.key === 'tman') s.keep = 1; });
-  y = soilMode ? 380 : 410;
+  y = 418;
   // ---- plan view ----
   sidHead('Layout in plan: the advance front, shaded by the depth already infiltrated', y, 'Press Play below: water runs down the field, is cut off, and the colours show where the root zone is filled, short or overwatered');
   const py = y + 44, ph = 126, px0 = 66, px1 = W - 44, sxm = m => px0 + m / P.L * (px1 - px0);
@@ -801,10 +823,12 @@ function drawSID() {
   y = py + ph + 62;
   // ---- longitudinal section: the real picture ----
   sidHead('Longitudinal section: water running over your soil and soaking in', y, 'Grains of your ' + sName.toLowerCase() + '; moving drops show the flow on the surface and the water draining into the soil');
-  const sy0 = y + 56, secH = 190, ux = 52, ux1 = W - 28, gx = xm => ux + xm / P.L * (ux1 - ux), drop = 6 + 30 * Math.min(1, SID.S / 1.0), gyAt = xm => sy0 + drop * xm / P.L;
+  // zones along the field from the infiltrated profile: where the root zone gets more or less than Zn
+  const ZN = R.Z.length - 1, zones = []; { let k0 = 0, kind = R.Z[0] >= P.Zn ? 'ex' : 'df'; for (let i = 1; i <= ZN; i++) { const kd = R.Z[i] >= P.Zn ? 'ex' : 'df'; if (kd !== kind || i === ZN) { const i1 = i === ZN ? ZN : i; let s = 0, n = 0; for (let j = k0; j <= i1; j++) { s += R.Z[j]; n++; } zones.push({ kind, x0: R.xs[k0], x1: R.xs[i1], avg: s / n * 1000 }); k0 = i; kind = kd; } } }
+  const sy0 = y + 70, secH = 190, ux = 52, ux1 = W - 28, gx = xm => ux + xm / P.L * (ux1 - ux), drop = 6 + 30 * Math.min(1, SID.S / 1.0), gyAt = xm => sy0 + drop * xm / P.L;
   const rm = sim.Rmax, ppc = (secH - drop - 14) / (1.4 * rm), scol = hexRGB(soilTex(soil).color || '#8B6B4A'), t1 = nowSec();
   const tex = sidTex(ux1 - ux, secH + 4, 0), prof = xm => { const tau = Math.min(tA, tco) - R.txf(xm); return tau > 0 ? P.k * Math.pow(tau, P.A) : 0; }, depthAt = xm => prof(xm) / P.Zn * rm, NSX = 150, fxs = Math.min(frontX, P.L);
-  ctx.fillStyle = '#EAF3FA'; ctx.fillRect(ux, sy0 - 26, ux1 - ux, 26 + drop);
+  ctx.fillStyle = '#EAF3FA'; ctx.fillRect(ux, sy0 - 42, ux1 - ux, 42 + drop); ctx.fillStyle = 'rgba(255,255,255,0.55)'; ctx.fillRect(ux, sy0 - 42, ux1 - ux, 14);
   ctx.save(); ctx.beginPath(); ctx.moveTo(ux, sy0); ctx.lineTo(ux1, sy0 + drop); ctx.lineTo(ux1, sy0 + secH); ctx.lineTo(ux, sy0 + secH); ctx.closePath(); ctx.clip(); ctx.drawImage(tex, ux, sy0);
   ctx.fillStyle = 'rgba(255,248,235,0.10)'; ctx.fillRect(ux, sy0, ux1 - ux, secH);
   // wetted body: the same grains, darkened and tinted, down to the wetting front
@@ -822,9 +846,12 @@ function drawSID() {
   // roots
   ctx.strokeStyle = 'rgba(246,238,214,0.55)'; ctx.lineWidth = 0.9; for (let i = 0; i < 26; i++) { const xm = P.L * (i + 0.5) / 26, g0 = gyAt(xm), rr = rm * ppc * (0.7 + 0.25 * Math.sin(i * 2.3)); ctx.beginPath(); ctx.moveTo(gx(xm), g0); ctx.bezierCurveTo(gx(xm) - 3, g0 + rr * 0.3, gx(xm) + 4, g0 + rr * 0.6, gx(xm) - 1, g0 + rr); ctx.stroke(); for (let j = 1; j < 5; j++) { const yy = g0 + rr * j / 5; ctx.beginPath(); ctx.moveTo(gx(xm), yy); ctx.lineTo(gx(xm) + (j % 2 ? 7 : -7) * (1 - j / 6), yy + 3); ctx.stroke(); } }
   ctx.restore();
-  ctx.strokeStyle = '#2F7D3E'; ctx.setLineDash([5, 3]); ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(ux, sy0 + rm * ppc); ctx.lineTo(ux1, sy0 + drop + rm * ppc); ctx.stroke(); ctx.setLineDash([]);
-  // crop above ground
-  ctx.strokeStyle = '#4C9A3E'; ctx.lineWidth = 1.4; for (let i = 0; i < 60; i++) { const xm = P.L * (i + 0.5) / 60, g0 = gyAt(xm), hh = 11 + 5 * Math.sin(i * 1.7), sw = Math.sin(t1 * 1.5 + i) * 1.2; ctx.beginPath(); ctx.moveTo(gx(xm), g0); ctx.quadraticCurveTo(gx(xm) + sw, g0 - hh * 0.6, gx(xm) + sw * 1.6, g0 - hh); ctx.stroke(); }
+  ctx.strokeStyle = '#E5322D'; ctx.lineWidth = 2.6; ctx.beginPath(); ctx.moveTo(ux, sy0 + rm * ppc); ctx.lineTo(ux1, sy0 + drop + rm * ppc); ctx.stroke(); ctx.strokeStyle = 'rgba(255,255,255,0.55)'; ctx.lineWidth = 0.8; ctx.setLineDash([6, 6]); ctx.stroke(); ctx.setLineDash([]);
+  // crop above ground: plants colour by how well their patch of the field is watered
+  for (let i = 0; i < 44; i++) { const xm = P.L * (i + 0.5) / 44, g0 = gyAt(xm), gxx = gx(xm), hh = 22 + 6 * Math.sin(i * 1.7), sw = Math.sin(t1 * 1.4 + i * 0.7) * 1.6, zi = R.Z[Math.min(ZN, Math.round(xm / P.L * ZN))] / P.Zn, ok = clampN((zi - 0.55) / 0.4, 0, 1), cl = sidMix([196, 170, 70], [66, 160, 62], ok), cl2 = sidMix([170, 140, 60], [96, 190, 80], ok);
+    ctx.strokeStyle = cl; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(gxx, g0 + 1); ctx.quadraticCurveTo(gxx + sw * 0.6, g0 - hh * 0.55, gxx + sw * 1.6, g0 - hh); ctx.stroke();
+    ctx.strokeStyle = cl2; ctx.lineWidth = 1.3; [[-1, 0.45], [1, 0.62], [-1, 0.78]].forEach(([sd, f]) => { const yy = g0 - hh * f; ctx.beginPath(); ctx.moveTo(gxx + sw * f, yy); ctx.quadraticCurveTo(gxx + sd * 7 + sw * f, yy - 6 * (0.6 + ok * 0.6), gxx + sd * 11 + sw * f, yy - 2 + (1 - ok) * 7); ctx.stroke(); });
+    if (hh > 22) { ctx.fillStyle = ok > 0.5 ? '#D9B94A' : '#9E8B3E'; ctx.beginPath(); ctx.ellipse(gxx + sw * 1.6, g0 - hh - 2, 1.7, 3.2, 0, 0, 6.2832); ctx.fill(); } }
   // surface water with moving flow lines
   if (ponded) {
     const dep = clampN(SIDM.manningWide(SID.qLs / 1000, SID.S / 100, SID.n).y * 100 * 3, 3, 12);
@@ -836,19 +863,29 @@ function drawSID() {
   ctx.fillStyle = '#2E7DE8'; ctx.beginPath(); ctx.moveTo(ux - 32, sy0 - 12); ctx.lineTo(ux - 8, sy0 - 12); ctx.lineTo(ux - 8, sy0 - 17); ctx.lineTo(ux + 2, sy0 - 8); ctx.lineTo(ux - 8, sy0 + 1); ctx.lineTo(ux - 8, sy0 - 4); ctx.lineTo(ux - 32, sy0 - 4); ctx.closePath(); ctx.fill(); T('q', ux - 20, sy0 - 15, { s: 8.5, b: true, a: 'center', c: '#fff' });
   // depth ruler
   ctx.strokeStyle = '#6B7280'; ctx.lineWidth = 1; ctx.fillStyle = 'rgba(255,255,255,0.0)'; for (let cm = 0; cm * ppc < secH - drop - 4; cm += 20) { const yy = sy0 + cm * ppc; ctx.beginPath(); ctx.moveTo(ux - 4, yy); ctx.lineTo(ux, yy); ctx.stroke(); T(cm + ' cm', ux - 6, yy + 3, { s: 8, a: 'right', c: MUTE }); }
-  sidPill('root zone ' + Math.round(rm) + ' cm', ux + 6, sy0 + rm * ppc - 6); T('S = ' + SID.S.toFixed(2) + ' %', ux1, sy0 - 12, { s: 9, b: true, a: 'right', c: '#3A2C18' });
+  sidPill('Zn = ' + sidF(Zn) + ' mm refills the root zone (' + Math.round(rm) + ' cm)', ux + 6, sy0 + rm * ppc - 6, 'rgba(176,24,24,0.9)'); T('S = ' + SID.S.toFixed(2) + ' %', ux1, sy0 - 12, { s: 9, b: true, a: 'right', c: '#3A2C18' });
   if (fxs > 0 && depthAt(0) > 0) sidPill('wetting front ' + sidF(depthAt(0)) + ' cm at the inlet' + (depthAt(0) > rm ? ' · beyond the roots' : ''), ux + 8, sy0 + Math.min(depthAt(0), 1.3 * rm) * ppc + 16);
+  // demarcation: where the water stops arriving and where Z crosses Zn
+  zones.forEach((z, i) => { if (i > 0) { const xb = gx(z.x0); ctx.strokeStyle = 'rgba(255,255,255,0.9)'; ctx.lineWidth = 1.4; ctx.setLineDash([5, 4]); ctx.beginPath(); ctx.moveTo(xb, sy0 - 30); ctx.lineTo(xb, sy0 + secH); ctx.stroke(); ctx.setLineDash([]); sidPill('X = ' + sidF(z.x0) + ' m', xb - 24, sy0 - 32, 'rgba(15,30,45,0.85)'); }
+    if (gx(z.x1) - gx(z.x0) > 96) sidPill(z.kind === 'ex' ? 'EXCESS: deep percolation' : 'DEFICIT: root zone short', (gx(z.x0) + gx(z.x1)) / 2 - 62, sy0 + drop * (z.x0 + z.x1) / 2 / P.L + 38, z.kind === 'ex' ? 'rgba(30,70,170,0.9)' : 'rgba(176,24,24,0.9)'); });
+  if (fxs > 0 && fxs < P.L && ponded) { const xb = gx(fxs); ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.setLineDash([2, 3]); ctx.beginPath(); ctx.moveTo(xb, sy0 - 30); ctx.lineTo(xb, gyAt(fxs)); ctx.stroke(); ctx.setLineDash([]); }
+  { const g1 = sy0 + drop; ctx.fillStyle = '#3A2C18'; ctx.beginPath(); ctx.moveTo(ux1, g1); ctx.lineTo(ux1 + 4, g1 + 14); ctx.lineTo(ux1 + 20, g1 + 14); ctx.lineTo(ux1 + 25, g1 - 2); ctx.closePath(); ctx.fill(); if (rof) { ctx.fillStyle = 'rgba(224,128,58,0.95)'; ctx.fillRect(ux1 + 5, g1 + 8, 15, 6); } T('drain', ux1 + 12, g1 + 25, { s: 8, b: true, a: 'center', c: '#6B7280' }); }
   { const mm = V => sidF(V / (P.L * P.w) * 1000), LN = [['Zn required', sidF(Zn) + ' mm = ' + sidF(R.Vreq, 1) + ' m³', '#8FE3F0'], ['Infiltrated', sidF(R.Vinf, 1) + ' m³ (' + mm(R.Vinf) + ' mm)', '#9CC6F5'], ['Runoff', sidF(R.Vro, 1) + ' m³ (' + sidF(R.ro * 100) + ' %)', '#FFB27A'], ['Deep perc.', sidF(R.Vdp, 1) + ' m³ (' + sidF(R.dp * 100) + ' %)', '#9FB4FF'], ['Deficit', sidF(R.Vdf, 1) + ' m³ (' + mm(R.Vdf) + ' mm)', '#FF9C98']], pw = 168, px2 = ux1 - pw - 6, py2 = sy0 + secH - 82;
     ctx.fillStyle = 'rgba(12,24,36,0.80)'; rrect(px2, py2, pw, 76, 6); ctx.fill(); LN.forEach((q, i) => { T(q[0], px2 + 7, py2 + 14 + i * 14, { s: 8.8, b: true, c: q[2] }); T(q[1], px2 + pw - 6, py2 + 14 + i * 14, { s: 8.8, a: 'right', c: '#fff' }); }); }
   sidHover({ x: ux, w: ux1 - ux, x0: 0, x1: P.L, y: sy0 - 20, h: secH + 20 }, v => { const z = prof(v) * 1000; return ['x = ' + sidF(v) + ' m', 'water arrived ' + sidF(R.txf(v)) + ' min', 'infiltrated now ' + sidF(z) + ' mm', 'wetting front ' + sidF(z / Zn * rm) + ' cm', 'end depth ' + sidF(Math.max(0, tco - R.txf(v)) > 0 ? P.k * Math.pow(tco - R.txf(v), P.A) * 1000 : 0) + ' mm']; });
-  const ly = sy0 + secH + 14; [['rgb(120,160,225)', 'wet soil, water stored'], ['rgb(88,104,196)', 'wet below the roots: lost'], [sidMix(scol, [255, 255, 255], 0.1), 'dry soil'], ['#388AEE', 'water on the surface']].forEach((q, i) => { ctx.fillStyle = q[0]; ctx.fillRect(ux + i * 135, ly - 8, 10, 9); T(q[1], ux + 14 + i * 135, ly, { s: 8.8, c: MUTE }); });
-  T(sName + ': ' + Math.round(I.sand) + '% sand · ' + Math.round(I.clay) + '% clay', ux + 8, sy0 + secH - 5, { s: 8.8, i: true, c: '#FFF3DA' });
-  y = ly + 22;
+  const ly = sy0 + secH + 14; [['rgb(120,160,225)', 'wet soil, water stored'], ['rgb(88,104,196)', 'wet below the Zn line: lost'], ['rgba(217,83,79,0.6)', 'still short of Zn'], ['#388AEE', 'water on the surface']].forEach((q, i) => { ctx.fillStyle = q[0]; ctx.fillRect(ux + i * 135, ly - 8, 10, 9); T(q[1], ux + 14 + i * 135, ly, { s: 8.8, c: MUTE }); });
+  // ---- design drawing: sections of the field, demarcated ----
+  { const zy = ly + 14, zx = ux, zw = ux1 - ux; T('Field sections along the length (from the infiltrated depth against Zn)', 16, zy + 8, { s: 9.5, b: true, c: SIDC.ink });
+    zones.forEach(z => { const x0 = zx + z.x0 / P.L * zw, x1 = zx + z.x1 / P.L * zw, col = z.kind === 'ex' ? '#3F7FC4' : '#D9534F'; ctx.fillStyle = col; ctx.fillRect(x0, zy + 14, x1 - x0, 20); ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.strokeRect(x0, zy + 14, x1 - x0, 20); if (x1 - x0 > 60) T(z.kind === 'ex' ? 'EXCESS' : 'DEFICIT', (x0 + x1) / 2, zy + 28, { s: 10, b: true, a: 'center', c: '#fff' });
+      ctx.strokeStyle = '#374151'; ctx.fillStyle = '#374151'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x0 + 1, zy + 44); ctx.lineTo(x1 - 1, zy + 44); ctx.stroke(); [[x0 + 1, 1], [x1 - 1, -1]].forEach(([xx, dd]) => { ctx.beginPath(); ctx.moveTo(xx, zy + 44); ctx.lineTo(xx + 5 * dd, zy + 41); ctx.lineTo(xx + 5 * dd, zy + 47); ctx.closePath(); ctx.fill(); ctx.beginPath(); ctx.moveTo(xx - dd * 1, zy + 36); ctx.lineTo(xx - dd * 1, zy + 50); ctx.stroke(); });
+      T(sidF(z.x0) + ' to ' + sidF(z.x1) + ' m (' + sidF((z.x1 - z.x0) / P.L * 100) + ' % of length)', (x0 + x1) / 2, zy + 58, { s: 8.8, b: true, a: 'center', c: '#374151' }); T('mean Z = ' + sidF(z.avg) + ' mm ' + (z.kind === 'ex' ? '(+' + sidF(z.avg - Zn) + ' over Zn)' : '(' + sidF(Zn - z.avg) + ' short of Zn)'), (x0 + x1) / 2, zy + 70, { s: 8.8, c: col, a: 'center', b: true }); });
+    T('Excess water becomes deep percolation ' + sidF(R.Vdp, 2) + ' m³; the deficit is ' + sidF(R.Vdf, 2) + ' m³; ' + sidF(R.Vro, 2) + ' m³ leaves at the tail drain.', 16, zy + 88, { s: 9, i: true, c: '#374151' }); }
+  y = ly + 14 + 108;
   // ---- results strip: Zn, volumes infiltrated, runoff, deep percolation, deficit (every case) ----
   const mmOf = V => V / (P.L * P.w) * 1000, HY = sidHyd(R), iTA = Math.min(HY.t.length - 1, Math.max(0, Math.round(tA / HY.tend * (HY.t.length - 1))));
   { const tw = (W - 28 - 5 * 5) / 6, ty0 = y, TL = [['Required Zn', sidF(Zn) + ' mm', sidF(R.Vreq, 2) + ' m³ to refill', '#0B7285'], ['Infiltrated', sidF(R.Vinf, 2) + ' m³', sidF(mmOf(R.Vinf)) + ' mm · ' + sidF(R.Vinf / R.Vapp * 100) + ' % of applied', SIDC.dp], ['Stored in roots', sidF(R.Vst, 2) + ' m³', sidF(mmOf(R.Vst)) + ' mm · Ea ' + sidF(R.Ea * 100) + ' %', SIDC.st], ['Deep percolation', sidF(R.Vdp, 2) + ' m³', sidF(mmOf(R.Vdp)) + ' mm · ' + sidF(R.dp * 100) + ' %', '#2B4FA8'], ['Runoff', sidF(R.Vro, 2) + ' m³', sidF(mmOf(R.Vro)) + ' mm · ' + sidF(R.ro * 100) + ' %', SIDC.ro], ['Deficit', sidF(R.Vdf, 2) + ' m³', sidF(mmOf(R.Vdf)) + ' mm short · Es ' + sidF(R.Es * 100) + ' %', SIDC.df]];
     TL.forEach((q, i) => { const bx = 14 + i * (tw + 5); ctx.fillStyle = '#fff'; ctx.strokeStyle = q[3]; ctx.lineWidth = 1.5; rrect(bx, ty0, tw, 52, 7); ctx.fill(); ctx.stroke(); ctx.fillStyle = q[3]; ctx.fillRect(bx + 1, ty0 + 8, 3, 36); T(q[0], bx + 9, ty0 + 12, { s: 8.5, b: true, c: '#4B5563' }); T(q[1], bx + 9, ty0 + 30, { s: 12.5, b: true, c: q[3] }); T(q[2], bx + 9, ty0 + 44, { s: 7.6, c: '#6B7280' }); });
-    T('now (t = ' + sidF(Math.min(tA, HY.tend)) + ' min): applied ' + sidF(Math.min(P.q * Math.min(tA, tco), R.Vapp), 2) + ' m³ · infiltrated ' + sidF(HY.Vcum[iTA], 2) + ' m³ · runoff so far ' + sidF(HY.Rocum[iTA], 2) + ' m³ · on the surface ' + sidF(Math.max(0, HY.Vs[iTA]), 2) + ' m³', 16, ty0 + 68, { s: 9.2, b: true, c: '#374151' }); }
+    T('now (t = ' + sidF(Math.min(tA, HY.tend)) + ' min): applied ' + sidF(Math.min(sidApplied(R, tA), R.Vapp), 2) + ' m³ · infiltrated ' + sidF(HY.Vcum[iTA], 2) + ' m³ · runoff so far ' + sidF(HY.Rocum[iTA], 2) + ' m³ · on the surface ' + sidF(Math.max(0, HY.Vs[iTA]), 2) + ' m³', 16, ty0 + 68, { s: 9.2, b: true, c: '#374151' }); }
   y += 98;
   // ---- hydrograph ----
   sidHead('Hydrograph: inflow, infiltration and runoff through time', y, 'What the field does with the stream: green soaks in, orange leaves at the tail (including the recession after cutoff), light blue fills the surface');
@@ -924,26 +961,26 @@ function drawSID() {
   // ---- indices ----
   sidHead('Performance indices and the water balance of one irrigation', y, 'Ea = Vstored ÷ Vapplied · Es = Vstored ÷ Vrequired · DP, RO as shares of Vapplied · CU after Christiansen');
   const iy2 = y + 30, bw = 150;
-  const IND = [['Application efficiency Ea', R.Ea, SIDC.st, 1], ['Storage efficiency Es', R.Es, '#2F7D3E', 1], ['Deep percolation DP', R.dp, SIDC.dp, 0], ['Runoff RO', R.ro, SIDC.ro, 0], ['Uniformity CU', R.cu / 100, '#7B61C9', 1], ['Deficit DI = 1 − Es', R.di, SIDC.df, 0]];
+  const IND = [['Application efficiency Ea', R.Ea, SIDC.st, 1], ['Storage efficiency Es', R.Es, '#2F7D3E', 1], ['Deep percolation DP', R.dp, SIDC.dp, 0], ['Runoff RO', R.ro, SIDC.ro, 0], ['Uniformity CU', R.cu / 100, '#7B61C9', 1], ['Deficit DI = 1 − Es', Math.max(0, R.di), SIDC.df, 0]];
   IND.forEach((q, i) => { const yy = iy2 + i * 24; T(q[0], 16, yy + 12, { s: 9.5, b: true, c: SIDC.ink }); ctx.fillStyle = '#E5E9ED'; rrect(170, yy + 3, bw, 11, 5); ctx.fill(); if (q[1] > 0.004) { ctx.fillStyle = q[2]; rrect(170, yy + 3, Math.max(4, bw * clampN(q[1], 0, 1)), 11, 5); ctx.fill(); } T(sidF(q[1] * 100, 1) + ' %', 170 + bw + 8, yy + 13, { s: 10, b: true, c: q[2] }); });
   const vx = 372, vw = 224, Vap = R.Vapp; T('Volume applied (per ' + (fur ? 'furrow of ' + SID.w.toFixed(2) + ' m' : 'metre of width') + ')', vx, iy2 + 10, { s: 9.5, b: true, c: SIDC.ink });
   const parts = [[R.Vst, SIDC.st, 'stored'], [R.Vdp, SIDC.dp, 'deep perc.'], [R.Vro, SIDC.ro, 'runoff']]; let xx = vx; parts.forEach(q => { const wpx2 = vw * (q[0] / Vap); ctx.fillStyle = q[1]; ctx.fillRect(xx, iy2 + 18, Math.max(0, wpx2), 26); xx += wpx2; });
   ctx.strokeStyle = '#374151'; ctx.strokeRect(vx + 0.5, iy2 + 18.5, vw, 26); parts.forEach((q, i) => { T(q[2] + ' ' + sidF(q[0], 2) + ' m³', vx, iy2 + 62 + i * 14, { s: 9.2, b: true, c: q[1] }); });
-  T('applied ' + sidF(Vap, 2) + ' m³ = q × t_cutoff = ' + sidF(P.q, 3) + ' × ' + sidF(tco) + ' min', vx, iy2 + 106, { s: 8.8, c: '#374151' }); T('required ' + sidF(R.Vreq, 2) + ' m³ = Zn × L × w', vx, iy2 + 120, { s: 8.8, c: '#374151' });
+  T('applied ' + sidF(Vap, 2) + ' m³ = ' + (R.cb < 1 ? 'q·t_L + ' + sidF(R.cb * 100) + ' % · q · (t_cutoff − t_L)' : 'q × t_cutoff = ' + sidF(P.q, 3) + ' × ' + sidF(tco) + ' min'), vx, iy2 + 106, { s: 8.8, c: '#374151' }); T('required ' + sidF(R.Vreq, 2) + ' m³ = Zn × L × w', vx, iy2 + 120, { s: 8.8, c: '#374151' });
   T('Gross depth applied ' + sidF(Vap / (P.L * P.w) * 1000) + ' mm for ' + sidF(Zn) + ' mm needed', 16, iy2 + 6 * 24 + 12, { s: 10, b: true, c: SIDC.ac });
-  { const grade = R.Ea >= 0.65 ? ['Good', '#14532D'] : R.Ea >= 0.45 ? ['Fair', '#8A5A00'] : ['Poor', '#B91C1C']; const hint = tco > 2880 ? 'the soil takes water so fast the front barely advances: shorten the field, raise the inflow, or choose drip or sprinklers' : R.Ea >= 0.65 ? 'a sound layout for this soil' : (R.dp >= R.ro ? 'deep percolation dominates: shorten the field, raise the inflow, or use a shorter set' : 'runoff dominates: lower the inflow, cut off earlier, or reuse the tail water');
+  { const grade = R.Ea >= 0.85 ? ['Good', '#14532D'] : R.Ea >= 0.65 ? ['Fair', '#8A5A00'] : ['Poor', '#B91C1C']; const hint = tco > 2880 ? 'the soil takes water so fast the front barely advances: shorten the field, raise the inflow, or choose drip or sprinklers' : R.Ea >= 0.85 ? 'a sound layout for this soil' : (R.dp >= R.ro ? 'deep percolation dominates' : 'runoff dominates') + ': the design table below finds a better layout';
     T('Verdict: ' + grade[0] + ' (Ea ' + sidF(R.Ea * 100) + ' %) · ' + hint, 16, iy2 + 6 * 24 + 30, { s: 10, b: true, c: grade[1] }); }
   y = iy2 + 6 * 24 + 58;
-  // ---- design table ----
-  const qmaxLs = fur ? 0.04 / SID.S * 1000 / 60 : null;
-  sidHead('Design table: the same field at five inflows', y, fur ? 'Maximum non-erosive furrow stream qmax = 0.04 / S% = ' + qmaxLs.toFixed(2) + ' L/s (m³/min per furrow). Tap a row to use that inflow.' : 'Tap a row to use that inflow. Smaller streams advance slower and lose more to deep percolation; larger ones run off.');
-  const ratios = [1.5, 1.25, 1, 0.75, 0.5], rows = SID.drag && SID._rows ? SID._rows : (SID._rows = ratios.map(r => { const ql = SID.qLs * r, Rr = sidRun({ qLs: ql }, 1), Pq = Rr.P, N0 = SID.Qs / ql, N = SID.Wf / Pq.w; return { ql, Rr, N0, Nset: Math.max(1, N / N0), T: Math.max(1, N / N0) * Rr.tco / 60 }; }));
-  const bestEa = Math.max(...rows.map(r => r.Rr.Ea)), ty = y + 32, cols = [['Inflow L/s', 62], ['t_L min', 120], ['t_irr min', 182], ['Ea %', 244], ['DP %', 296], ['RO %', 348], ['Sets', 404], ['Time h', 462], ['Note', 516]];
-  ctx.fillStyle = '#E6F4F7'; ctx.fillRect(14, ty, W - 28, 20); cols.forEach(c => T(c[0], c[1], ty + 14, { s: 9, b: true, a: 'center', c: SIDC.ink }));
-  rows.forEach((r, i) => { const yy = ty + 22 + i * 24, cur = i === 2, erosive = fur && r.ql > qmaxLs + 1e-9, best = r.Rr.Ea === bestEa; ctx.fillStyle = cur ? 'rgba(11,114,133,0.16)' : (i % 2 ? '#F6F7F5' : '#fff'); ctx.fillRect(14, yy, W - 28, 24); if (cur) { ctx.strokeStyle = SIDC.ac; ctx.lineWidth = 1.5; ctx.strokeRect(14.5, yy + 0.5, W - 29, 23); }
-    const v = [r.ql.toFixed(2), sidF(r.Rr.tL), sidF(r.Rr.tL + r.Rr.tst), sidF(r.Rr.Ea * 100, 1), sidF(r.Rr.dp * 100, 1), sidF(r.Rr.ro * 100, 1), r.Nset.toFixed(1), r.T.toFixed(1), erosive ? 'erosive' : best ? 'best Ea' : cur ? 'current' : ''];
-    v.forEach((s, j) => T(s, cols[j][1], yy + 16, { s: 9.5, b: cur || best, a: 'center', c: j === 8 ? (erosive ? '#B91C1C' : '#14532D') : j === 3 && best ? '#14532D' : '#1B1F23' })); hot(14, yy, W - 28, 24, () => { SID.autoQ = false; SID.qLs = +Math.max(d.qr[0], Math.min(d.qr[1], r.ql)).toFixed(2); sidTouch('qLs'); }, 'Use ' + r.ql.toFixed(2) + ' L/s'); });
-  y = ty + 22 + 5 * 24 + 22;
+  // ---- design table: iterations toward Ea >= 85 % ----
+  sidOptStep(); const O = SIDOPT, qmaxLs = fur ? 0.04 / SID.S * 1000 / 60 : null, okRow = r => r.R.Ea >= 0.85 && r.R.Es >= 0.8, bestRow = O.best || O.rows[0];
+  sidHead('Design table: iterations toward an application efficiency of 85 % or more', y, 'One change per step; the root zone stays ≥ 80 % refilled' + (fur ? '; furrow stream ≤ qmax ' + qmaxLs.toFixed(2) + ' L/s' : '') + '. Tap a row to apply it.');
+  const ty = y + 34, cols = [['#', 22], ['Step', 118], ['q L/s', 196], ['L m', 238], ['Cutback', 280], ['Cutoff', 326], ['Ea %', 372], ['Es %', 412], ['DP %', 450], ['RO %', 488], ['Result', 548]];
+  ctx.fillStyle = '#E6F4F7'; ctx.fillRect(14, ty, W - 28, 20); cols.forEach(c => T(c[0], c[1], ty + 14, { s: 8.8, b: true, a: c[0] === 'Step' ? 'center' : 'center', c: SIDC.ink }));
+  O.rows.forEach((r, i) => { const yy = ty + 22 + i * 24, last = r === bestRow, ok = okRow(r); ctx.fillStyle = last ? (ok ? 'rgba(62,155,90,0.20)' : 'rgba(224,128,58,0.16)') : (i % 2 ? '#F6F7F5' : '#fff'); ctx.fillRect(14, yy, W - 28, 24); if (last) { ctx.strokeStyle = ok ? SIDC.st : SIDC.ro; ctx.lineWidth = 1.5; ctx.strokeRect(14.5, yy + 0.5, W - 29, 23); }
+    const lab = r.label.length > 24 ? r.label.slice(0, 23) + '…' : r.label, v = [String(i), lab, r.d.q.toFixed(2), sidF(r.d.L), r.d.cb >= 0.995 ? 'none' : sidF(r.d.cb * 100) + '%', sidF(r.d.tco) + ' min', sidF(r.R.Ea * 100, 1), sidF(r.R.Es * 100, 1), sidF(r.R.dp * 100, 1), sidF(r.R.ro * 100, 1), ok ? 'meets target' : last && O.done ? 'best found' : ''];
+    v.forEach((s, j) => T(s, j === 1 ? 70 : cols[j][1], yy + 16, { s: j === 1 ? 8.6 : 9.4, b: last || j === 6, a: j === 1 ? 'left' : 'center', c: j === 6 ? (r.R.Ea >= 0.85 ? '#14532D' : '#1B1F23') : j === 10 ? '#14532D' : '#1B1F23' })); hot(14, yy, W - 28, 24, () => sidApply(r.d), 'Apply this design: q ' + r.d.q.toFixed(2) + ' L/s, length ' + sidF(r.d.L) + ' m, cutback ' + sidF(r.d.cb * 100) + ' %, cutoff ' + sidF(r.d.tco) + ' min'); });
+  { const yy = ty + 22 + O.rows.length * 24 + 14, ok = okRow(bestRow); T(O.done ? (ok ? 'Target reached: Ea ' + sidF(bestRow.R.Ea * 100, 1) + ' % with Es ' + sidF(bestRow.R.Es * 100) + ' %. Tap the green row to apply it.' : 'Best found: Ea ' + sidF(bestRow.R.Ea * 100, 1) + ' %, short of 85 % for this soil and layout. Try a shorter field, tailwater reuse, or drip or sprinklers.') : 'Iterating… step ' + O.step + ' of ' + O.seq.length, 16, yy, { s: 9.6, b: true, c: O.done ? (ok ? '#14532D' : '#B4531A') : SIDC.ac }); }
+  y = ty + 22 + O.rows.length * 24 + 34;
   // ---- sensitivity ----
   sidHead('What the efficiency is most sensitive to', y, 'Change in Ea when one input moves, all others held (soil intake k ±20%, A ±10%, q ±20%, L ±20%, Zn ±20%, n ±30%, S ±30%)');
   const base = sidRun({}, 1).Ea, sens = SID.drag && SID._sens ? SID._sens : (SID._sens = [['Intake k', { k: P.k }, 0.2], ['Intake exponent A', { A: P.A }, 0.1], ['Inflow q', { qLs: SID.qLs }, 0.2], ['Length L', { L: P.L }, 0.2], ['Required depth Zn', { Zn: Zn }, 0.2], ['Roughness n', { n: SID.n }, 0.3], ['Slope S', { S: SID.S }, 0.3]].map(([nm, o, f]) => { const key = Object.keys(o)[0], hi = sidRun({ [key]: o[key] * (1 + f) }, 1).Ea - base, lo = sidRun({ [key]: o[key] * (1 - f) }, 1).Ea - base; return [nm, lo, hi]; }).sort((a, b) => Math.max(Math.abs(b[1]), Math.abs(b[2])) - Math.max(Math.abs(a[1]), Math.abs(a[2]))));
@@ -959,7 +996,7 @@ function drawSID() {
   L9.forEach((q, i) => { const yy = y + 34 + i * 20; ctx.fillStyle = i % 2 ? '#F6F7F5' : '#fff'; ctx.fillRect(14, yy - 12, W - 28, 20); T(q[0], 20, yy + 2, { s: 9.5, c: '#374151' }); T(q[1], W - 20, yy + 2, { s: 9.5, b: true, a: 'right', c: SIDC.ac }); });
   return y + 34 + 6 * 20 + 16;
 }
-SCENES.push({ id: 'sid', label: 'S2 Design', color: '#0B7285', play: true, dur: 16, h: 2920, interactive: true,
+SCENES.push({ id: 'sid', label: 'S2 Design', color: '#0B7285', play: true, dur: 16, h: 3060, interactive: true,
   onDown: p => sidDown(p), onMove: p => { SID.hv = p; if (SID.drag) { sidSet(SID.drag, p); return true; } return false; }, onUp: () => { SID.drag = null; }, onLeave: () => { SID.drag = null; SID.hv = null; },
   draw: () => { const e = drawSID(); if (e && Math.abs(currentScene.h - Math.ceil(e)) > 2) { sidEnd = Math.ceil(e); } }, title: 'Surface irrigation design: intake, advance, cutoff, efficiency and layout for your soil',
   legend: [['#0B7285', 'Design from the lecture equations'], ['#3E9B5A', 'Water stored in the root zone'], ['#3F7FC4', 'Deep percolation'], ['#E0803A', 'Runoff']],
