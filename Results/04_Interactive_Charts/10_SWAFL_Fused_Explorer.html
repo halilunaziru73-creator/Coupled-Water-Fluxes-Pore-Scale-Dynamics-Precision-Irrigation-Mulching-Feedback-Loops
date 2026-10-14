@@ -1071,7 +1071,8 @@ const IRM = (function () {
     gun: { label: 'Big gun', cR: 0.95, m: 1.0, F: 1.3, dr: [10, 25, 0.5], pr: [350, 700, 10], d: 16, P: 500, Ss: 30, Sl: 36, ssr: [20, 80, 1], slr: [20, 90, 1], Sd: 0 }
   };
   const pHat = (type, x) => { if (x >= 1) return 0; const m = STYPE[type].m; if (m === 'ring') return (0.5 + 0.5 * x) * (1 - Math.pow(x, 6)); if (m === 'ring2') return (0.55 + 0.45 * x) * (1 - Math.pow(x, 5)); return 1 - Math.pow(x, m); };
-  function nozzle(o) { const h = o.P / 9.81, A = Math.PI * Math.pow(o.d / 2000, 2), q = 0.95 * A * Math.sqrt(2 * 9.81 * h) * 60000, R = STYPE[o.type].cR * Math.sqrt(o.d * h); return { q, R, h }; }
+  const angF = a => a == null ? 1 : Math.pow(Math.max(0.05, Math.sin(3.1 * a * Math.PI / 180)) / 0.9763, 0.45);   // range against trajectory angle: peaks near 29 degrees, 1 at the 25 degree default
+  function nozzle(o) { const h = o.P / 9.81, A = Math.PI * Math.pow(o.d / 2000, 2), q = 0.95 * A * Math.sqrt(2 * 9.81 * h) * 60000, R = STYPE[o.type].cR * Math.sqrt(o.d * h) * angF(o.alpha); return { q, R, h }; }
   const _pat = {};
   function pattern(o) {
     const nz = nozzle(o), key = [o.type, nz.q.toFixed(2), nz.R.toFixed(2), o.u.toFixed(1)].join('|'); if (_pat[key]) return _pat[key]; if (Object.keys(_pat).length > 40) for (const k in _pat) delete _pat[k];
@@ -1087,7 +1088,7 @@ const IRM = (function () {
       for (let j = -rj; j <= rows - 1 + rj; j++) { const off = o.tri && ((j % 2) + 2) % 2 ? o.Ss / 2 : 0; for (let i = -ri; i <= ri + 1; i++) s += look(P, x - (i * o.Ss + off), y - j * o.Sl); } cells[b * nx + a] = s; }
     return { cells, nx, ny, P };
   }
-  const WD = (o, Tair) => clamp((1.2 + 0.5 * o.u + 0.04 * o.u * o.u) * STYPE[o.type].F * Math.pow(o.P / 250, 0.7) * (1 + 0.025 * (Tair - 20)), 0.5, 45) / 100;
+  const WD = (o, Tair) => clamp((1.2 + 0.5 * o.u + 0.04 * o.u * o.u) * STYPE[o.type].F * Math.pow(o.P / 250, 0.7) * (1 + 0.025 * (Tair - 20)) * (o.alpha == null ? 1 : 0.6 + 0.4 * Math.sin(o.alpha * Math.PI / 180) / 0.4226), 0.5, 45) / 100;
   // water balance at a point: rate a (mm/min) for T min, Kostiakov intake K t^A (K in mm), depression storage Sd (mm)
   function point(a, T, K, A, Sd) { const sup = a * T; let F = sup; if (a > 0) { const tp = Math.pow(a / K, 1 / (A - 1)); if (T > tp) F = K * Math.pow(T, A); } const R = sup - F, ro = Math.max(0, R - Sd); return { I: sup - ro, ro, sup }; }
   function sprinkler(o) {
@@ -1104,7 +1105,7 @@ const IRM = (function () {
     const R = run(T); const g = R.gross;
     return Object.assign(R, { nz, P, CU, AR, wdel, f, nx, ny, K, A, Sd, Q: nz.q, Ae: area, wdTot: R.wd / g, fr: { st: R.st / g, dp: R.ex / g, ro: R.ro / g, wd: R.wd / g }, dp: R.ex / g, ro: R.ro / g });
   }
-  return { clamp, shape, bulb, DKIND, drip, dripAt, latProfile, STYPE, nozzle, pattern, field, sprinkler, point, WD };
+  return { clamp, shape, bulb, DKIND, drip, dripAt, latProfile, STYPE, angF, nozzle, pattern, field, sprinkler, point, WD };
 })();
 
 
@@ -1281,12 +1282,12 @@ SCENES.push({ id: 'drip', label: 'S3 Drip', color: '#1B7F8C', play: true, dur: 1
   insight: 'Your soil sets how far the water spreads from each emitter, your trigger sets the depth to refill, and the emitter, spacing and depth decide how much of it stays in the root zone.' });
 
 // ---------------------------------------------------------------- S4 SPRINKLERS
-const SPR = { type: 'impact', d: 4.4, P: 300, Ss: 12, Sl: 18, tri: false, u: 3, S: 1, Sd: null, T: null, tauto: true, Zn: null, Qs: 40, Af: 5, touch(k) { if (k === 'T') this.tauto = false; } };
+const SPR = { alpha: 25, type: 'impact', d: 4.4, P: 300, Ss: 12, Sl: 18, tri: false, u: 3, S: 1, Sd: null, T: null, tauto: true, Zn: null, Qs: 40, Af: 5, touch(k) { if (k === 'T') this.tauto = false; } };
 function spType(k) { const t = IRM.STYPE[k]; SPR.type = k; SPR.d = t.d; SPR.P = t.P; SPR.Ss = t.Ss; SPR.Sl = t.Sl; SPR.tauto = true; }
 function spInput(ov) {
   const C = irCtx(); ov = ov || {}; const g = n => (ov[n] != null ? ov[n] : SPR[n]), ft = I => I.fit;
   const till = state.till === 'conv' ? 5 : state.till === 'red' ? 3.5 : 2, Zn = ov.Zn != null ? ov.Zn : (SPR.Zn != null ? SPR.Zn : C.ZnD);
-  return { type: g('type'), d: g('d'), P: g('P'), Ss: g('Ss'), Sl: g('Sl'), tri: ov.tri != null ? ov.tri : SPR.tri, u: g('u'), S: g('S'), Sd: ov.Sd != null ? ov.Sd : (SPR.Sd != null ? SPR.Sd : till), T: ov.T !== undefined ? ov.T : (SPR.tauto ? null : SPR.T), Zn, K: C.I.fit.k, A: C.I.fit.A, Tair: 24 + C.tmp, intc: (VFF_VALUES[state.vffIdx] < 0.95 ? 0.6 * CAP_VALUES[state.capIdx] : 0) + 1.2 * C.sim.live[fclock.kd()] };
+  return { alpha: g('alpha'), type: g('type'), d: g('d'), P: g('P'), Ss: g('Ss'), Sl: g('Sl'), tri: ov.tri != null ? ov.tri : SPR.tri, u: g('u'), S: g('S'), Sd: ov.Sd != null ? ov.Sd : (SPR.Sd != null ? SPR.Sd : till), T: ov.T !== undefined ? ov.T : (SPR.tauto ? null : SPR.T), Zn, K: C.I.fit.k, A: C.I.fit.A, Tair: 24 + C.tmp, intc: (VFF_VALUES[state.vffIdx] < 0.95 ? 0.6 * CAP_VALUES[state.capIdx] : 0) + 1.2 * C.sim.live[fclock.kd()] };
 }
 const _spC = {};
 function spRun(ov) { const o = spInput(ov), key = JSON.stringify(o); if (_spC[key]) return _spC[key]; const R = IRM.sprinkler(o); R.o = o; if (Object.keys(_spC).length > 120) for (const k in _spC) delete _spC[k]; return (_spC[key] = R); }
@@ -1372,6 +1373,7 @@ function drawSPR() {
   irTile(14, ty + 62, tw, 'Runoff', irF(R.ro * 100, 1) + ' %', IRC.ro); irTile(14 + tw + 10, ty + 62, tw, 'Deep percolation', irF(R.dp * 100, 1) + ' %', IRC.dp); irTile(14 + 2 * (tw + 10), ty + 62, tw, 'Drift, evaporation, interception', irF(R.wdTot * 100, 1) + ' %', IRC.wd);
   irPart(16, ty + 134, W - 32, 18, [[R.Ea, IRC.st], [R.dp, IRC.dp], [R.ro, IRC.ro], [R.wdTot, IRC.wd]]); irLeg([[IRC.st, 'stored'], [IRC.dp, 'deep percolation'], [IRC.ro, 'runoff'], [IRC.wd, 'drift, evaporation, interception']], 16, ty + 170);
   y = ty + 192;
+  y = spTextbook(y, C, R, o, tau);
   { const G = irSystem('spr', R, o); G.Rm = R.nz.R; sidHead('Layout and infrastructure: source, pump, filter, mainline, valves, submain and sprinkler laterals', y, 'To scale, with the wetted circles of the running zone. Press Play: the sets run one after the other'); y = irHeadUnit(G, y + 34) + 14; y = irLayoutDraw(G, y, play.t, C) + 14; irPressure(G, y, o); T('Head along the flow path', 70, y + 138, { s: 9, b: true, c: IRC.ink });
     irRows2(430, y + 14, [['Sets', G.zones + ' (\u00d7 ' + G.lpz + ' laterals)'], ['Laterals / sprinklers', irF(G.NL) + ' / ' + irF(G.nSpr)], ['Pump head TDH', G.TDH.toFixed(1) + ' m'], ['Pump power', G.kW.toFixed(1) + ' kW'], ['Lateral head loss', G.hfLat.toFixed(1) + ' m (\u2264 20%)'], ['Pipe laid per ha', irF((G.NL * G.LL + G.Lsm) / SPR.Af) + ' m']]); y += 168; y = irSchedule(G, y) + 12; R.G = G; }
   spOptStep(); const O = SPOPT;
@@ -1504,6 +1506,292 @@ function irToday(y, C, R, kind) {
   const k = fclock.kd(), nm = cropNameAt(C.sim, k), vff = VFF_VALUES[state.vffIdx], mu = vff >= 0.95 ? 'none' : mulchBy(state.mulchType).label.toLowerCase(), meth = (METHODS.find(m => m.k === state.method) || METHODS[0]).label.toLowerCase();
   const L = ['Date ' + fmtDate(dateOfK(k)) + ' (weather like ' + (1980 + yearOf(k)) + ')', 'Crop today: ' + nm + ', roots ' + irF(C.sim.rd[k]) + ' cm of ' + irF(C.Rmax) + ' cm', 'Explorer method: ' + meth + ' \u00b7 mulch: ' + mu + ' \u00b7 tillage: ' + ({ conv: 'conventional', red: 'reduced', notill: 'no-till' }[state.till] || state.till), 'Trigger: refill when ' + irF(C.fT * 100) + '% depleted (water ' + irF(irTh(C).t0 * 100, 1) + '% by volume)'];
   L.forEach((t, i) => T(t, 200, y + 112 + i * 14 + 0, { s: 8.8, c: '#374151' }));
+}
+
+// ===== S4 add-on: design by the textbook (sprinkler course notes) =====
+// Everything here reads the live sprinkler run (R), its inputs (o) and the explorer's soil, crop and weather (C)
+const SPD = { sys: 'solid', top: 16, pan: false, touch() {} };
+const SPSYS = [
+  { k: 'solid', n: 'Solid-set', ea: [0.70, 0.75], l1: 'Sprinklers stay in place all season on buried laterals', l2: 'Highest capital cost, least labour. Turf, orchards and high-value crops; also used for frost protection' },
+  { k: 'hand', n: 'Hand-move', ea: [0.70, 0.75], l1: 'The lateral is moved by hand after each set: 1 to 4 sets a day', l2: 'Interval 5 to 7 days; works down to 3 mm/h intake; not for tall or delicate crops' },
+  { k: 'pivot', n: 'Center pivot', ea: [0.65, 0.70], l1: 'The lateral turns about a fixed pivot; drive towers about 30 m apart', l2: 'Low labour, high pressure and energy; near-square fields, the corners stay dry' },
+  { k: 'linear', n: 'Linear-move', ea: [0.65, 0.70], l1: 'The lateral travels in a straight line across the field', l2: 'Low labour, high energy cost; suits long rectangular fields' },
+  { k: 'gun', n: 'Traveling gun', ea: [0.65, 0.70], l1: 'One high-pressure gun on a hose reel covers a 220 degree sector, strip by strip', l2: 'High application rate, so light to medium soils; large drops and strong wind sensitivity' }
+];
+const SPCLS = [{ n: 'Low pressure', p: '8 to 20 m', q: '0.035 to 0.5 m³/h', r: '3 to 7 m', t: 'spray type' }, { n: 'Medium pressure', p: '20 to 45 m', q: '0.5 to 15 m³/h', r: '9 to 20 m', t: 'rotary, impact' }, { n: 'High pressure', p: '45 to 100 m', q: '15 to 150 m³/h', r: '30 to 100 m', t: 'gun sprinklers' }];
+const SPUMAX = { cols: ['0–5 %', '5–8 %', '8–12 %', '12–16 %'], rows: [['Deep coarse sandy soils', 50, 38, 25, 13], ['Coarse sandy, compact layer below', 38, 25, 19, 10], ['Deep sandy loam', 25, 20, 15, 10], ['Sandy loam, compact layer below', 19, 13, 10, 8], ['Deep silt loam', 13, 10, 8, 5], ['Silt loam, compact layer below', 8, 6, 4, 2.5], ['Clay or clay loam, strong structure', 4, 2.5, 2, 1.5]] };
+const SPPIPE = [46.4, 58, 63, 65.8, 75, 84.9, 100];          // internal diameters, mm (the course's commercial plastic pipes)
+const spJ = (QLh, D) => 0.472 * Math.pow(QLh, 1.75) / Math.pow(D, 4.75);      // m per m, Q in L/h, D in mm
+const spWindK = kmh => kmh <= 5.5 ? 1 : kmh <= 13 ? 0.9 : kmh <= 22 ? 0.8 : 0.7;
+function spSoilRow() {
+  const m = { S02_CoarseSand: 0, S03_Sand: 0, S04_LoamySand: 0, S05_SandyLoam: 2, S01_CoarseLoam: 2, S06_Loam: 4, S07_SiltLoam: 4, S08_SandyClayLoam: 5, S09_ClayLoam: 6, S10_SiltyClayLoam: 6 };
+  let r = m[state.soil] != null ? m[state.soil] : 4; if (SPD.pan && r < 6 && r % 2 === 0) r++; return r;
+}
+// the textbook sequence: sprinkler class, spacing limits, application rate, sets per day, pipes, pump
+function spBook(R, o, C, Lx0, Af, Qs, lift, Lconv) {
+  const B = {}; B.hs = o.P / 9.81; B.qh = R.Q * 0.06; B.Rw = R.nz.R; B.kmh = o.u * 3.6; B.k = spWindK(B.kmh); B.cls = B.hs < 20 ? 0 : B.hs <= 45 ? 1 : 2;
+  B.row = spSoilRow(); B.col = o.S < 5 ? 0 : o.S < 8 ? 1 : o.S < 12 ? 2 : 3; B.umax = SPUMAX.rows[B.row][1 + B.col]; B.r = R.AR; B.qmax = B.umax * o.Ss * o.Sl / 1000; B.Ks = C.s.ks;
+  B.Lx = Lx0; B.Ly = Af * 1e4 / B.Lx; B.N = Math.max(1, Math.floor(B.Lx / o.Ss)); B.Nm = Math.max(1, Math.floor(B.Ly / o.Sl));
+  B.ZG = R.gross; B.tset = B.ZG / B.r; B.sets = Math.max(0, Math.floor(SPD.top / B.tset + 1e-6)); B.Tint = Math.max(1, Math.floor(o.Zn / C.ETpk));
+  B.opts = [1, 2, 3, 4].map(n => { const sd = Math.max(1, B.sets), Nd = Math.ceil(B.Nm / (n * sd)), Qin = n * B.N * B.qh; return { n, Nd, Qin, okT: B.sets > 0 && Nd <= B.Tint, okQ: Qin <= Qs * 3.6 }; });
+  B.pick = B.opts.find(q => q.okT && q.okQ) || B.opts.find(q => q.okT) || B.opts[3];
+  const n = B.pick.n, QL = B.N * B.qh * 1000, Qm = n * QL; B.QL = QL; B.Qm = Qm;
+  B.Llat = Math.max(1, B.Lx - o.Ss / 2); B.F = 1 / 2.75 + 1 / (2 * B.N);
+  B.latTr = SPPIPE.map(D => { const J = spJ(QL, D), hf = 1.1 * B.F * J * B.Llat; return { D, J, hf, ok: hf <= 0.2 * B.hs }; }); B.lat = B.latTr.find(q => q.ok) || B.latTr[B.latTr.length - 1];
+  B.Lmain = Math.max(1, B.Ly - o.Sl / 2); B.mainTr = SPPIPE.filter(D => D >= B.lat.D).map(D => { const J = spJ(Qm, D); return { D, J, ok: J < 0.05 }; }); B.main = B.mainTr.find(q => q.ok) || B.mainTr[B.mainTr.length - 1];
+  B.Lconv = Lconv; B.lift = lift; B.hfMain = B.main.J * B.Lmain; B.hfConv = B.main.J * B.Lconv; B.hinLat = B.hs + 0.75 * B.lat.hf; B.Hman = lift + B.hfConv + B.hfMain + B.hinLat;
+  B.PS = 1000 * (Qm / 1000 / 3600) * B.Hman / (75 * 0.75); B.kW = B.PS * 0.7355;
+  // planning side: reservoir, gross depth, flow the whole field needs
+  B.A = Af * 1e4; B.Vtot = B.ZG * B.A / 1000; B.QinReq = B.Vtot / (B.Tint * SPD.top);
+  B.chk = [
+    ['Spacing along the lateral S ≤ k·Rw', o.Ss <= B.k * B.Rw + 0.05, o.Ss.toFixed(1) + ' m against ' + (B.k * B.Rw).toFixed(1) + ' m (k ' + B.k.toFixed(1) + ' for ' + B.kmh.toFixed(0) + ' km/h)'],
+    ['Spacing between laterals Sm ≤ 1.5 Rw', o.Sl <= 1.5 * B.Rw + 0.05, o.Sl.toFixed(1) + ' m against ' + (1.5 * B.Rw).toFixed(1) + ' m'],
+    ['Wind below 16 km/h', B.kmh <= 16, B.kmh.toFixed(0) + ' km/h' + (B.kmh > 16 ? ': stop irrigating' : '')],
+    ['Application rate r ≤ maximum allowed', B.r <= B.umax, B.r.toFixed(1) + ' against ' + B.umax + ' mm/h (table)'],
+    ['Rate below the soil’s saturated conductivity', B.r < B.Ks, B.r.toFixed(1) + ' against Ks ' + B.Ks.toFixed(1) + ' mm/h'],
+    ['Christiansen uniformity CU ≥ 85 %', R.CU >= 0.85, (R.CU * 100).toFixed(0) + ' %'],
+    ['Lateral head loss ≤ 20 % of hs', B.lat.ok, B.lat.hf.toFixed(1) + ' m against ' + (0.2 * B.hs).toFixed(1) + ' m (Ø' + B.lat.D + ')'],
+    ['Mainline gradient J < 0.05', B.main.ok, B.main.J.toFixed(3) + ' m/m (Ø' + B.main.D + ')'],
+    ['Whole field done within the interval T', B.pick.okT, (B.sets > 0 ? B.pick.Nd + ' days against T = ' + B.Tint + ' days' : 'one set takes ' + B.tset.toFixed(1) + ' h, more than the ' + SPD.top + ' h working day')],
+    ['Flow within the farm supply', B.pick.okQ, B.pick.Qin.toFixed(1) + ' against ' + (Qs * 3.6).toFixed(1) + ' m³/h']
+  ];
+  return B;
+}
+
+// ---------- drawing helpers ----------
+const spdBox = (x, y, w, h, f) => { ctx.fillStyle = f || '#fff'; ctx.fillRect(x, y, w, h); ctx.strokeStyle = '#B9C0C7'; ctx.lineWidth = 1; ctx.strokeRect(x + 0.5, y + 0.5, w, h); };
+const spdDot = (x, y, r, c) => { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fill(); };
+const spdLn = (x1, y1, x2, y2, c, lw, dash) => { ctx.strokeStyle = c; ctx.lineWidth = lw || 1; if (dash) ctx.setLineDash(dash); ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); if (dash) ctx.setLineDash([]); };
+const spdCol = ok => ok ? '#14532D' : '#B91C1C';
+function spdArrow(x1, y1, x2, y2, c, lw) { const a = Math.atan2(y2 - y1, x2 - x1); spdLn(x1, y1, x2, y2, c, lw || 1.5); ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(x2, y2); ctx.lineTo(x2 - 7 * Math.cos(a - 0.4), y2 - 7 * Math.sin(a - 0.4)); ctx.lineTo(x2 - 7 * Math.cos(a + 0.4), y2 - 7 * Math.sin(a + 0.4)); ctx.closePath(); ctx.fill(); }
+function spdWrap(txt, x, y, w, lh, o) { const words = txt.split(' '); let line = '', yy = y; ctx.font = (o && o.b ? 'bold ' : '') + ((o && o.s) || 9) + 'px sans-serif'; words.forEach(wd => { const t = line ? line + ' ' + wd : wd; if (ctx.measureText(t).width > w && line) { T(line, x, yy, o); line = wd; yy += lh; } else line = t; }); if (line) { T(line, x, yy, o); yy += lh; } return yy; }
+
+// ---------- 1. what the textbook checks say about this design ----------
+function spdChecks(y, B) {
+  sidHead('Design by the textbook: the checks every sprinkler design must pass', y, 'Your design run through the course rules: spacing, rate, uniformity, pipes and pump');
+  const cw = (W - 28 - 10) / 2, ok = B.chk.filter(q => q[1]).length; let yy = y + 36;
+  B.chk.forEach((q, i) => { const col = i % 2, row = (i / 2) | 0, x = 14 + col * (cw + 10), yy2 = yy + row * 24; ctx.fillStyle = q[1] ? '#EAF6EE' : '#FCEDEA'; rrect(x, yy2, cw, 21, 5); ctx.fill(); spdDot(x + 11, yy2 + 10.5, 6, q[1] ? '#2E9E5B' : '#C0503A'); T(q[1] ? '✓' : '!', x + 11, yy2 + 14, { s: 9, b: true, a: 'center', c: '#fff' }); T(q[0], x + 22, yy2 + 9, { s: 8.4, b: true, c: '#12303A' }); T(q[2], x + 22, yy2 + 18, { s: 7.6, c: '#4B5563' }); });
+  yy += 5 * 24 + 6; T(ok + ' of ' + B.chk.length + ' checks pass' + (ok === B.chk.length ? ': this design is acceptable by the textbook rules.' : '. Fix the red ones: they name the input to change (spacing, pressure, nozzle, pipe or run arrangement).'), 16, yy + 4, { s: 9.4, b: true, c: ok === B.chk.length ? '#14532D' : '#8A5A00' });
+  return yy + 20;
+}
+
+// ---------- 2. kinds of sprinkler system, with a plan of the selected one ----------
+function spdMini(k, x, y, w, h, on) {
+  spdBox(x, y, w, h, on ? '#E6F4F7' : '#F8F9F7'); if (on) { ctx.strokeStyle = '#0B7285'; ctx.lineWidth = 2; ctx.strokeRect(x + 1, y + 1, w - 2, h - 2); }
+  const cx = x + w / 2, cy = y + 40, pale = 'rgba(70,90,60,0.7)', blue = '#2B6CB0', ink = '#12303A';
+  if (k === 'solid') { for (let j = 0; j < 4; j++) { spdLn(x + 16, cy - 22 + j * 14, x + w - 10, cy - 22 + j * 14, pale, 1); for (let i = 0; i < 5; i++) spdDot(x + 26 + i * 17, cy - 22 + j * 14, 2.4, j === 1 ? blue : ink); } spdLn(x + 10, cy - 26, x + 10, cy + 24, '#2A5FA8', 3); }
+  else if (k === 'hand') { for (let j = 0; j < 4; j++) { spdLn(x + 16, cy - 22 + j * 14, x + w - 10, cy - 22 + j * 14, j === 1 ? ink : 'rgba(70,90,60,0.35)', j === 1 ? 1.4 : 1, j === 1 ? null : [3, 3]); if (j === 1) for (let i = 0; i < 5; i++) spdDot(x + 26 + i * 17, cy - 22 + j * 14, 2.4, blue); } spdLn(x + 10, cy - 26, x + 10, cy + 24, '#2A5FA8', 3); spdArrow(cx + 4, cy - 12, cx + 4, cy + 12, '#B23A2E', 1.4); }
+  else if (k === 'pivot') { ctx.strokeStyle = pale; ctx.lineWidth = 1; ctx.strokeRect(cx - 34, cy - 30, 68, 62); ctx.fillStyle = 'rgba(80,170,120,0.22)'; ctx.beginPath(); ctx.arc(cx, cy + 1, 31, 0, 6.2832); ctx.fill(); ctx.stroke(); spdLn(cx, cy + 1, cx + 28, cy - 12, ink, 1.6); for (let i = 1; i <= 3; i++) spdDot(cx + 28 * i / 3, cy + 1 - 13 * i / 3, 2, blue); spdDot(cx, cy + 1, 3.2, '#B23A2E'); }
+  else if (k === 'linear') { ctx.strokeStyle = pale; ctx.lineWidth = 1; ctx.strokeRect(x + 12, cy - 28, w - 24, 60); ctx.fillStyle = 'rgba(80,170,120,0.22)'; ctx.fillRect(x + 12, cy - 28, 46, 60); spdLn(x + 58, cy - 28, x + 58, cy + 32, ink, 2.2); for (let i = 0; i < 5; i++) spdDot(x + 58, cy - 22 + i * 13, 2, blue); spdArrow(x + 62, cy + 2, x + w - 18, cy + 2, '#B23A2E', 1.4); }
+  else { ctx.strokeStyle = pale; ctx.lineWidth = 1; ctx.strokeRect(x + 12, cy - 28, w - 24, 60); for (let i = 0; i < 3; i++) { const xx = x + 28 + i * 28; spdLn(xx, cy + 32, xx, cy - 24, 'rgba(70,90,60,0.5)', 1, [3, 3]); } ctx.fillStyle = 'rgba(80,170,120,0.28)'; ctx.beginPath(); ctx.moveTo(x + 56, cy - 2); ctx.arc(x + 56, cy - 2, 24, -2.4, 0.9 + Math.PI * 0 - 0.0); ctx.closePath(); ctx.fill(); spdLn(x + 12, cy + 32, x + w - 12, cy + 32, '#2A5FA8', 3); spdDot(x + 56, cy - 2, 3, '#B23A2E'); }
+}
+function spdSysLayout(k, y, B, o, R) {
+  const bx = 14, bw = W - 28, bh = 204, fx0 = bx + 14, fy0 = y + 26, fw = bw - 28, fh = bh - 82; spdBox(bx, y, bw, bh, '#EFEBDD');
+  const tm = performance.now() / 1000, Lx = B.Lx, Ly = Math.max(B.Ly, 10), pt = (typeof play !== 'undefined' ? play.t : 0), Rw = B.Rw; let sc = Math.min(fw / Lx, fh / Ly); if (k === 'pivot') { const m = Math.min(Lx, Ly); sc = Math.min(fw, fh) / m; }
+  const FW = (k === 'pivot' ? Math.min(Lx, Ly) : Lx) * sc, FH = (k === 'pivot' ? Math.min(Lx, Ly) : Ly) * sc, ox = fx0 + (fw - FW) / 2, oy = fy0 + (fh - FH) / 2;
+  ctx.fillStyle = 'rgba(190,205,150,0.34)'; ctx.fillRect(ox, oy, FW, FH); ctx.strokeStyle = '#6F7B4E'; ctx.lineWidth = 1.5; ctx.strokeRect(ox + 0.5, oy + 0.5, FW, FH);
+  const Rpx = Rw * sc; let cap = '';
+  if (k === 'solid' || k === 'hand') {
+    const nl = Math.min(B.Nm, Math.max(2, Math.floor(FH / 7))), ns = Math.min(B.N, Math.max(2, Math.floor(FW / 9))), act = Math.min(nl - 1, Math.floor(pt * nl)), nOp = Math.min(B.pick.n, nl);
+    spdLn(ox - 8, oy, ox - 8, oy + FH, '#2A5FA8', 4);
+    for (let j = 0; j < nl; j++) { const yy = oy + (j + 0.5) / nl * FH, on = k === 'solid' ? (j % Math.max(1, Math.round(nl / Math.max(1, B.Nm / nOp))) === (act % Math.max(1, Math.round(nl / Math.max(1, B.Nm / nOp))))) : j === act, done = k === 'hand' && j < act;
+      if (done) { ctx.fillStyle = 'rgba(80,170,120,0.34)'; ctx.fillRect(ox, yy - FH / nl / 2, FW, FH / nl); }
+      spdLn(ox, yy, ox + FW, yy, on ? '#0B7285' : 'rgba(70,90,60,0.5)', on ? 1.6 : 0.8, k === 'hand' && !on ? [3, 3] : null); if (k === 'solid') { ctx.fillStyle = on ? '#2E9E5B' : '#8A93A0'; ctx.fillRect(ox - 13, yy - 2.5, 7, 5); }
+      if (k === 'solid' || on) for (let i = 0; i < ns; i++) { const xx = ox + (i + 0.5) / ns * FW; if (on) { ctx.fillStyle = 'rgba(43,108,176,0.12)'; ctx.strokeStyle = 'rgba(43,108,176,0.5)'; ctx.lineWidth = 0.8; ctx.beginPath(); ctx.arc(xx, yy, Math.max(3, Math.min(Rpx, FH / nl * 2.2)), 0, 6.2832); ctx.fill(); ctx.stroke(); } spdDot(xx, yy, on ? 2.2 : 1.3, on ? '#1B4F8A' : '#8A93A0'); } }
+    if (k === 'hand') { const yy = oy + (act + 0.5) / nl * FH; if (act < nl - 1) spdArrow(ox + FW * 0.5, yy + 4, ox + FW * 0.5, yy + FH / nl - 2, '#B23A2E', 1.4); }
+    cap = k === 'solid' ? 'Fixed laterals; valves open ' + nOp + ' lateral' + (nOp > 1 ? 's' : '') + ' at a time, the rest stand by. ' + B.Nm + ' lateral positions of ' + B.N + ' sprinklers.' : 'Lateral position ' + (act + 1) + ' of ' + B.Nm + ' (' + Math.max(1, B.sets) + ' sets a day, ' + B.pick.Nd + ' days to cover the field). Moved after every set of ' + (B.tset).toFixed(1) + ' h.';
+  } else if (k === 'pivot') {
+    const R0 = FW / 2, cx = ox + R0, cy = oy + R0, th = pt * 6.2832 - 1.57, nTow = Math.max(2, Math.round(Math.min(Lx, Ly) / 2 / 30));
+    ctx.fillStyle = 'rgba(80,170,120,0.22)'; ctx.beginPath(); ctx.arc(cx, cy, R0, 0, 6.2832); ctx.fill(); ctx.strokeStyle = '#4B6E3A'; ctx.lineWidth = 1; ctx.stroke();
+    ctx.fillStyle = 'rgba(80,170,120,0.5)'; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, R0, -1.57, th, false); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = 'rgba(184,116,58,0.28)'; [[ox, oy], [ox + FW, oy], [ox, oy + FH], [ox + FW, oy + FH]].forEach(c => { ctx.beginPath(); ctx.moveTo(c[0], c[1]); ctx.lineTo(c[0] + (cx > c[0] ? 1 : -1) * R0 * 0.3, c[1]); ctx.lineTo(c[0], c[1] + (cy > c[1] ? 1 : -1) * R0 * 0.3); ctx.closePath(); ctx.fill(); });
+    spdLn(cx, cy, cx + R0 * Math.cos(th), cy + R0 * Math.sin(th), '#12303A', 2.4); for (let i = 1; i <= nTow; i++) spdDot(cx + R0 * i / nTow * Math.cos(th), cy + R0 * i / nTow * Math.sin(th), 2.6, '#2B6CB0'); spdDot(cx, cy, 4, '#B23A2E');
+    cap = 'Pivot arm of ' + irF(Math.min(Lx, Ly) / 2) + ' m, about ' + nTow + ' towers 30 m apart; it irrigates ' + irF(Math.PI / 4 * 100) + ' % of the square, the corners stay dry.';
+  } else if (k === 'linear') {
+    const px = ox + FW * clampN(pt, 0.02, 1);
+    ctx.fillStyle = 'rgba(80,170,120,0.45)'; ctx.fillRect(ox, oy, px - ox, FH); spdLn(ox - 8, oy + FH / 2, ox, oy + FH / 2, '#2A5FA8', 4); T('hydrant / ditch', ox - 4, oy - 5, { s: 8, c: '#2A5FA8' });
+    spdLn(px, oy, px, oy + FH, '#12303A', 2.6); const nTow = Math.max(2, Math.round(Ly / 30)); for (let i = 0; i <= nTow; i++) spdDot(px, oy + FH * i / nTow, 2.6, '#2B6CB0'); spdArrow(px + 4, oy + FH / 2, Math.min(px + 40, ox + FW), oy + FH / 2, '#B23A2E', 1.6);
+    cap = 'Lateral of ' + irF(Ly) + ' m with about ' + nTow + ' spans, travelling ' + irF(Lx) + ' m; the whole rectangle is irrigated, with a ditch or hose feeding it at the start.';
+  } else {
+    const ws = Math.min(Lx, 1.4 * B.k * Rw), nst = Math.max(1, Math.ceil(Lx / ws)), wsPx = Lx / nst * sc, act = Math.min(nst - 1, Math.floor(pt * nst)), fr = pt * nst - act, gy = oy + FH - FH * clampN(fr, 0.03, 1);
+    spdLn(ox, oy + FH + 7, ox + FW, oy + FH + 7, '#2A5FA8', 4);
+    for (let i = 0; i < nst; i++) { const xx = ox + (i + 0.5) * wsPx; if (i < act) { ctx.fillStyle = 'rgba(80,170,120,0.42)'; ctx.fillRect(ox + i * wsPx, oy, wsPx, FH); } spdLn(xx, oy + FH + 7, xx, oy, i === act ? '#0B7285' : 'rgba(70,90,60,0.5)', i === act ? 1.4 : 0.8, [4, 3]); spdDot(xx, oy + FH + 7, 2.8, '#2E9E5B'); }
+    const gx = ox + (act + 0.5) * wsPx; ctx.fillStyle = 'rgba(43,108,176,0.22)'; ctx.strokeStyle = 'rgba(43,108,176,0.7)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(gx, gy); ctx.arc(gx, gy, Math.min(Rpx, FH * 0.55), -1.57 - 1.92, -1.57 + 1.92, false); ctx.closePath(); ctx.fill(); ctx.stroke(); spdLn(gx, gy, gx, oy + FH + 7, '#7A5A1E', 1.6); spdDot(gx, gy, 3, '#B23A2E');
+    cap = nst + ' strips about ' + irF(Lx / nst) + ' m apart (the gun reaches ' + irF(Rw) + ' m, strips at 1.4 Rw adjusted for wind); a tractor moves the hose reel to the next strip after each pass. The gun sweeps 220 degrees, so the hose side stays dry.';
+  }
+  sidArrowH(ox, ox + FW, oy + FH + (k === 'gun' ? 22 : 14), irF(k === 'pivot' ? Math.min(Lx, Ly) : Lx) + ' m'); spdWrap(cap, bx + 10, y + bh - 22, bw - 20, 10, { s: 8.4, c: '#374151' });
+  T(SPSYS.find(q => q.k === k).n + ' system in plan, to scale (field ' + irF(Lx) + ' × ' + irF(B.Ly) + ' m). Press Play for the movement', bx + 8, y + 15, { s: 9.4, b: true, c: IRC.ink });
+}
+function spdSystems(y, B, o, R) {
+  sidHead('Kinds of sprinkler system', y, 'Pick one: the plan and efficiency range follow it. Set systems 70 to 75 %, self-propelled 65 to 70 %');
+  const pw = (W - 28 - 4 * 8) / 5; SPSYS.forEach((q, i) => { const x = 14 + i * (pw + 8); spdMini(q.k, x, y + 34, pw, 94, SPD.sys === q.k); T(q.n, x + pw / 2, y + 34 + 86, { s: 9.2, b: true, a: 'center', c: SPD.sys === q.k ? IRC.ac : '#374151' }); hot(x, y + 34, pw, 94, () => { SPD.sys = q.k; }, q.l1); });
+  const S = SPSYS.find(q => q.k === SPD.sys); let yy = y + 142; spdWrap(S.l1 + '. ' + S.l2 + '.', 16, yy, W - 32, 11, { s: 8.8, c: '#374151' }); yy += 26;
+  const bx = 120, bw = 300, f = e => bx + (e - 0.5) / 0.5 * bw; ctx.fillStyle = '#E8ECEF'; ctx.fillRect(bx, yy, bw, 12); ctx.fillStyle = 'rgba(80,170,120,0.55)'; ctx.fillRect(f(S.ea[0]), yy, f(S.ea[1]) - f(S.ea[0]), 12); ctx.strokeStyle = '#6B7280'; ctx.lineWidth = 1; ctx.strokeRect(bx + 0.5, yy + 0.5, bw, 12);
+  const ex = f(clampN(R.Ea, 0.5, 1)); ctx.fillStyle = '#12303A'; ctx.beginPath(); ctx.moveTo(ex, yy - 2); ctx.lineTo(ex - 5, yy - 9); ctx.lineTo(ex + 5, yy - 9); ctx.closePath(); ctx.fill(); T('Ea 50 %', bx, yy + 24, { s: 8, c: MUTE }); T('100 %', bx + bw, yy + 24, { s: 8, a: 'right', c: MUTE });
+  T('Application efficiency', 16, yy + 9, { s: 9, b: true, c: IRC.ink }); T('textbook ' + irF(S.ea[0] * 100) + ' to ' + irF(S.ea[1] * 100) + ' %', f((S.ea[0] + S.ea[1]) / 2), yy + 24, { s: 8.4, b: true, a: 'center', c: '#14532D' });
+  T('this design ' + irF(R.Ea * 100, 1) + ' %', bx + bw + 10, yy + 9, { s: 9, b: true, c: R.Ea >= S.ea[0] ? '#14532D' : '#B91C1C' }); T(R.Ea > S.ea[1] ? 'above the range' : R.Ea >= S.ea[0] ? 'inside the range' : 'below the range', bx + bw + 10, yy + 21, { s: 8.4, c: R.Ea >= S.ea[0] ? '#14532D' : '#B91C1C' });
+  yy += 38; spdSysLayout(SPD.sys, yy, B, o, R); return yy + 204 + 12;
+}
+
+// ---------- 3. the sprinkler itself: parts, and the three pressure classes ----------
+function spdAnatomy(y, B, o, R) {
+  sidHead('The sprinkler: parts and pressure class', y, 'Parts of a rotary impact sprinkler, and where your choice falls among the three pressure classes');
+  const bx = 14, by = y + 32, bw = 250, bh = 176; spdBox(bx, by, bw, bh, '#F4F7FA');
+  const cx = bx + 92, gy = by + bh - 16, ink = '#1B1F23'; ctx.fillStyle = '#C9B88A'; ctx.fillRect(bx + 4, gy, bw - 8, 12); spdLn(bx + 4, gy, bx + bw - 4, gy, '#6B5B2E', 1.5);
+  ctx.fillStyle = '#9AA7B8'; ctx.strokeStyle = ink; ctx.lineWidth = 1; ctx.fillRect(cx - 5, gy - 56, 10, 56); ctx.strokeRect(cx - 4.5, gy - 55.5, 10, 56);
+  ctx.fillStyle = '#7C8896'; rrect(cx - 10, gy - 80, 20, 24, 3); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#B9C4D0'; ctx.fillRect(cx - 3, gy - 98, 6, 18); ctx.strokeRect(cx - 2.5, gy - 97.5, 6, 18);
+  const al = o.alpha * Math.PI / 180, nx0 = cx + 8, ny0 = gy - 70, nl = 34, nx1 = nx0 + nl * Math.cos(al), ny1 = ny0 - nl * Math.sin(al);
+  spdLn(nx0, ny0, nx1, ny1, '#4A5568', 6); spdLn(nx0, ny0, nx1, ny1, '#8FA0B3', 3);
+  ctx.strokeStyle = '#444'; ctx.lineWidth = 1.3; ctx.beginPath(); for (let i = 0; i < 8; i++) ctx.lineTo(cx + (i % 2 ? 4 : -4), gy - 98 + i * 1.6 - 0); ctx.stroke();
+  spdLn(cx - 16, gy - 99, cx + 56, gy - 103, '#4A5568', 3.4); ctx.fillStyle = '#C0503A'; ctx.fillRect(cx - 24, gy - 104, 10, 10); ctx.fillStyle = '#4A5568'; ctx.beginPath(); ctx.moveTo(cx + 50, gy - 103); ctx.lineTo(cx + 64, gy - 98); ctx.lineTo(cx + 60, gy - 92); ctx.lineTo(cx + 46, gy - 98); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = '#2B6CB0'; ctx.lineWidth = 2; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(nx1, ny1); ctx.quadraticCurveTo(nx1 + 44, ny1 - 22, nx1 + 74, gy - 6); ctx.stroke(); ctx.setLineDash([]);
+  const lab = (t, x, y2, x2, y3, al2) => { spdLn(x2, y3, x, y2 - 3, '#6B7280', 0.8); T(t, x, y2, { s: 8.6, b: true, a: al2, c: '#12303A' }); };
+  lab('Riser', cx - 14, gy - 26, cx - 5, gy - 26, 'right'); lab('Bearing', cx - 14, gy - 64, cx - 10, gy - 66, 'right'); lab('Spring', cx - 14, gy - 112, cx - 3, gy - 97, 'right'); lab('Swing arm', cx + 30, gy - 118, cx + 30, gy - 101, 'left'); lab('Spoon', cx + 66, gy - 108, cx + 58, gy - 98, 'left'); lab('Nozzle', cx + 46, gy - 50, nx0 + nl * 0.6 * Math.cos(al), ny0 - nl * 0.6 * Math.sin(al), 'left');
+  T('Jet leaves at ' + o.alpha.toFixed(0) + '°', bx + bw - 6, gy - 30, { s: 8.6, b: true, a: 'right', c: '#2B6CB0' }); T('The arm is struck by the jet, turns the head and springs back', bx + 8, by + 13, { s: 8.2, c: '#374151' });
+  const x2 = bx + bw + 14, w2 = W - 14 - x2; T('Class by operating pressure', x2, by + 10, { s: 9.4, b: true, c: IRC.ink });
+  SPCLS.forEach((q, i) => { const yy = by + 20 + i * 42, on = B.cls === i; ctx.fillStyle = on ? '#E6F4F7' : '#fff'; ctx.strokeStyle = on ? '#0B7285' : '#B9C0C7'; ctx.lineWidth = on ? 2 : 1; rrect(x2, yy, w2, 37, 6); ctx.fill(); ctx.stroke(); T(q.n + ' (' + q.t + ')', x2 + 8, yy + 13, { s: 9, b: true, c: on ? IRC.ac : '#374151' }); T('pressure ' + q.p + ' · discharge ' + q.q + ' · throw ' + q.r, x2 + 8, yy + 27, { s: 8.3, c: '#374151' }); });
+  T('Yours: head ' + B.hs.toFixed(1) + ' m, ' + B.qh.toFixed(2) + ' m³/h, throw ' + B.Rw.toFixed(1) + ' m → ' + SPCLS[B.cls].n.toLowerCase(), x2, by + 20 + 3 * 42 + 6, { s: 9, b: true, c: IRC.ac });
+  T('q = c·d²·√h   and   Rw = kr·h^0.25', x2, by + 20 + 3 * 42 + 22, { s: 8.4, c: '#374151' });
+  return by + bh + 28;
+}
+
+// ---------- 4. the jet: trajectory angle, droplets, throw ----------
+function spdJet(y, B, o, R) {
+  sidHead('The jet: trajectory angle, throw radius and droplet size', y, 'Farthest throw at about 28 to 30 degrees; low angles (8 degrees) go under foliage and drift less');
+  SIDCUR = SPR; sidSlider('alpha', 'Trajectory angle (°)', 16, y + 40, 270, [8, 45, 1], o.alpha, v => v.toFixed(0) + '°');
+  const by = y + 64, bw = 400, bh = 172, bx = 14; spdBox(bx, by, bw, bh, '#F2F7FB'); const base = R.nz.R / IRM.angF(o.alpha), gy = by + bh - 54, sx = (bw - 40) / (base * 1.12), x0 = bx + 20;
+  ctx.fillStyle = '#C9B88A'; ctx.fillRect(bx, gy, bw, 8); spdLn(bx, gy, bx + bw, gy, '#6B5B2E', 1.5);
+  [8, 15, 25, 35, 45].forEach(a => { const Ra = base * IRM.angF(a), tn = Math.tan(a * Math.PI / 180), on = Math.abs(a - o.alpha) < 0.5; if (on) return; ctx.strokeStyle = 'rgba(80,100,120,0.45)'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]); ctx.beginPath(); for (let i = 0; i <= 30; i++) { const x = Ra * i / 30, h = x * tn * (1 - x / Ra) * 0.8; i ? ctx.lineTo(x0 + x * sx, gy - h * sx) : ctx.moveTo(x0, gy); } ctx.stroke(); ctx.setLineDash([]); T(a + '°', x0 + Ra * sx * 0.5, gy - Ra * tn * 0.2 * sx - 3, { s: 7.6, c: MUTE, a: 'center' }); });
+  { const Ra = R.nz.R, tn = Math.tan(o.alpha * Math.PI / 180); ctx.strokeStyle = '#2B6CB0'; ctx.lineWidth = 2.6; ctx.beginPath(); let hm = 0; for (let i = 0; i <= 40; i++) { const x = Ra * i / 40, h = x * tn * (1 - x / Ra) * 0.8; hm = Math.max(hm, h); i ? ctx.lineTo(x0 + x * sx, gy - h * sx) : ctx.moveTo(x0, gy); } ctx.stroke();
+    for (let i = 0; i < 26; i++) { const f = Math.pow((i + 1) / 26, 1.4), dx = x0 + Ra * sx * (0.04 + 0.96 * f), big = 1.2 + 4.2 * f * (1.25 - Math.min(0.6, B.hs / 90)); spdDot(dx, gy + 14 + (i % 2) * 3, Math.min(big, 5.5), 'rgba(43,108,176,0.75)'); }
+    spdArrow(x0 + 2, gy - 6 - 0, x0 + 2 + Ra * sx, gy - 6, 'rgba(18,48,58,0.0)', 0); sidArrowH(x0, x0 + Ra * sx, gy + 42, 'throw radius Rw = ' + Ra.toFixed(1) + ' m'); T('top of jet ' + (hm).toFixed(1) + ' m', x0 + Ra * sx * 0.5, gy - hm * sx - 6, { s: 8.4, b: true, a: 'center', c: '#2B6CB0' }); }
+  spdDot(x0, gy, 4, '#12303A'); T('droplets: small near the sprinkler, large far away (0.5 to 4 mm)', bx + 8, by + 13, { s: 8.4, c: '#374151' });
+  if (o.u > 0.4) { spdArrow(bx + bw - 90, by + 30, bx + bw - 30, by + 30, '#1B1F23', 2); T('wind ' + o.u.toFixed(1) + ' m/s', bx + bw - 60, by + 44, { s: 8.4, b: true, a: 'center', c: '#1B1F23' }); }
+  const cx = bx + bw + 12, cw = W - 14 - cx; T('Throw against angle', cx, by + 10, { s: 9, b: true, c: IRC.ink }); const ax = sidAxes(cx + 26, by + 18, cw - 34, 92, 8, 45, base * 0.55, base * 1.08, 'trajectory angle (°)', 'Rw (m)', 3, 3);
+  ctx.strokeStyle = IRC.ac; ctx.lineWidth = 2; ctx.beginPath(); for (let i = 0; i <= 40; i++) { const a = 8 + 37 * i / 40, r = base * IRM.angF(a); i ? ctx.lineTo(ax.sx(a), ax.sy(r)) : ctx.moveTo(ax.sx(a), ax.sy(r)); } ctx.stroke(); spdDot(ax.sx(o.alpha), ax.sy(R.nz.R), 4, '#B23A2E'); spdDot(ax.sx(29), ax.sy(base * IRM.angF(29)), 3, '#14532D'); T('best ~29°', ax.sx(29), ax.sy(base * IRM.angF(29)) - 6, { s: 7.8, b: true, a: 'center', c: '#14532D' });
+  sidHover(ax, v => [v.toFixed(0) + '°', 'throw ' + (base * IRM.angF(v)).toFixed(1) + ' m']);
+  const dr = IRM.WD(o, o.Tair) * 100;
+  spdWrap('Drift and evaporation loss ' + dr.toFixed(1) + ' % at ' + o.alpha.toFixed(0) + '° and ' + o.u.toFixed(1) + ' m/s. Pressure sets drop size: lower pressure gives larger drops that throw farther but can seal the soil surface; higher pressure gives finer drops that drift more.', 16, by + bh + 14, W - 32, 11, { s: 8.6, c: '#374151' });
+  return by + bh + 46;
+}
+
+// ---------- 5. the water pattern, and how overlap evens it out ----------
+function spSlice(o, sc) { const P = IRM.pattern({ ...o, P: o.P * sc }), n = P.n, j = (n - 1) >> 1, g = P.g, hh = P.hh, ext = P.ext; return x => { const fx = (x + ext) / hh; if (fx < 0 || fx >= n - 1) return 0; const i = fx | 0, a = fx - i; return (g[j * n + i] * (1 - a) + g[j * n + i + 1] * a) * 60; }; }
+function spdOverlap(y, B, o, R) {
+  sidHead('The water pattern of one sprinkler, and how overlap evens it out', y, 'Pressure and wind distort one pattern; neighbouring patterns add up to the depth the soil gets');
+  const by = y + 34, bw = (W - 28 - 12) / 2, bh = 150, Rw = R.nz.R, fns = [[0.7, 'low pressure', '#D9A441'], [1, 'your pressure', '#2B6CB0'], [1.3, 'high pressure', '#3F8F6B']].map(q => [spSlice(o, q[0]), q[1], q[2], q[0]]);
+  let pk = 0; fns.forEach(q => { for (let x = -1.4 * Rw; x <= 1.4 * Rw; x += Rw / 20) pk = Math.max(pk, q[0](x)); });
+  const a1 = sidAxes(14 + 34, by + 6, bw - 42, bh - 46, -1.3 * Rw, 1.3 * Rw, 0, Math.ceil(pk * 1.1 / 5) * 5, 'distance from the sprinkler (m)', 'rate (mm/h)', 4, 3);
+  fns.forEach(q => { ctx.strokeStyle = q[2]; ctx.lineWidth = q[3] === 1 ? 2.4 : 1.4; ctx.beginPath(); for (let i = 0; i <= 80; i++) { const x = -1.3 * Rw + 2.6 * Rw * i / 80, v = q[0](x); i ? ctx.lineTo(a1.sx(x), a1.sy(v)) : ctx.moveTo(a1.sx(x), a1.sy(v)); } ctx.stroke(); });
+  irLeg(fns.map(q => [q[2], q[1]]), 14 + 34, by + bh + 2); if (o.u > 0.4) T('wind →', a1.x + a1.w - 4, a1.y + 12, { s: 8.4, b: true, a: 'right', c: '#1B1F23' });
+  sidHover(a1, v => ['at ' + v.toFixed(1) + ' m', 'low ' + fns[0][0](v).toFixed(1) + ' mm/h', 'yours ' + fns[1][0](v).toFixed(1) + ' mm/h', 'high ' + fns[2][0](v).toFixed(1) + ' mm/h']);
+  const x2 = 14 + bw + 12, f1 = fns[1][0], lat = k => f1(k), sum = x => { let t = 0; for (let k = -4; k <= 5; k++) t += f1(x - k * o.Ss); return t; }, nx = R.nx, fld = x => { const xx = ((x % o.Ss) + o.Ss) % o.Ss, i = Math.min(nx - 1, Math.floor(xx / o.Ss * nx)); return R.f.cells[i] * 60; };
+  let mx = 0; for (let x = 0; x <= 2 * o.Ss; x += o.Ss / 30) mx = Math.max(mx, sum(x), fld(x));
+  const a2 = sidAxes(x2 + 34, by + 6, bw - 42, bh - 46, 0, 2 * o.Ss, 0, Math.ceil(mx * 1.15 / 5) * 5, 'distance along the lateral (m)', 'rate (mm/h)', 4, 3);
+  for (let k = -1; k <= 3; k++) { ctx.strokeStyle = 'rgba(43,108,176,0.35)'; ctx.lineWidth = 1; ctx.beginPath(); let st = false; for (let i = 0; i <= 80; i++) { const x = 2 * o.Ss * i / 80, v = f1(x - k * o.Ss); if (v <= 0.01) { st = false; continue; } const px = a2.sx(x), py = a2.sy(v); st ? ctx.lineTo(px, py) : ctx.moveTo(px, py); st = true; } ctx.stroke(); }
+  ctx.strokeStyle = '#2B6CB0'; ctx.lineWidth = 2; ctx.beginPath(); for (let i = 0; i <= 80; i++) { const x = 2 * o.Ss * i / 80; i ? ctx.lineTo(a2.sx(x), a2.sy(sum(x))) : ctx.moveTo(a2.sx(x), a2.sy(sum(x))); } ctx.stroke();
+  ctx.strokeStyle = '#12303A'; ctx.lineWidth = 2.4; ctx.beginPath(); for (let i = 0; i <= 80; i++) { const x = 2 * o.Ss * i / 80; i ? ctx.lineTo(a2.sx(x), a2.sy(fld(x))) : ctx.moveTo(a2.sx(x), a2.sy(fld(x))); } ctx.stroke();
+  const mean = R.AR; ctx.strokeStyle = '#B23A2E'; ctx.setLineDash([5, 3]); ctx.lineWidth = 1.3; ctx.beginPath(); ctx.moveTo(a2.x, a2.sy(mean)); ctx.lineTo(a2.x + a2.w, a2.sy(mean)); ctx.stroke(); ctx.setLineDash([]); T('mean ' + mean.toFixed(1) + ' mm/h', a2.x + a2.w - 4, a2.sy(mean) - 4, { s: 8.4, b: true, a: 'right', c: '#B23A2E' });
+  for (let k = 0; k <= 2; k++) spdDot(a2.sx(k * o.Ss), a2.y + a2.h, 3, '#12303A');
+  irLeg([['rgba(43,108,176,0.6)', 'each sprinkler'], ['#2B6CB0', 'one lateral (added)'], ['#12303A', 'whole field']], x2 + 34, by + bh + 2); sidHover(a2, v => ['at ' + v.toFixed(1) + ' m', 'one lateral ' + sum(v).toFixed(1) + ' mm/h', 'whole field ' + fld(v).toFixed(1) + ' mm/h']);
+  spdWrap('CU of the whole pattern is ' + irF(R.CU * 100, 1) + ' % (Christiansen; above 85 % is good). Overlap of S = ' + o.Ss.toFixed(1) + ' m against a throw of ' + Rw.toFixed(1) + ' m is ' + irF(Math.max(0, (1 - o.Ss / (2 * Rw)) * 100)) + ' % of the diameter.', 16, by + bh + 24, W - 32, 11, { s: 8.8, c: '#374151' });
+  return by + bh + 46;
+}
+
+// ---------- 6. the three layouts: rectangle, square, triangle ----------
+function spdLayouts(y, B, o, R) {
+  sidHead('Layouts: rectangular, square and triangular spacing for this sprinkler', y, 'To scale. Wind lowers the spacing along the lateral. Shaded: the area one sprinkler serves');
+  const Re = B.k * B.Rw, defs = [['Rectangular', Re, 1.5 * B.Rw, 'S ≤ Rw, Sm ≤ 1.5 Rw', 'rect'], ['Square', Math.SQRT2 * Re, Math.SQRT2 * Re, 'S = Sm ≤ √2·Rw', 'sq'], ['Triangular', Math.sqrt(3) * Re, 1.5 * Re, 'S = √3·Rw, Sm = 1.5 Rw', 'tri']], pw = (W - 28 - 20) / 3, by = y + 34, ph = 150, cur = SPR.tri ? 2 : Math.abs(o.Ss - o.Sl) < 0.1 ? 1 : 0;
+  defs.forEach((q, i) => { const x = 14 + i * (pw + 10), on = cur === i; spdBox(x, by, pw, ph, on ? '#E6F4F7' : '#fff'); if (on) { ctx.strokeStyle = '#0B7285'; ctx.lineWidth = 2; ctx.strokeRect(x + 1, by + 1, pw - 2, ph - 2); }
+    const S = q[1], Sm = q[2], sc = Math.min((pw - 24) / (S * 2.1), (ph - 60) / (Sm * 2.1), 3.2), cx = x + pw / 2, cy = by + 22 + (ph - 66) / 2; ctx.save(); ctx.beginPath(); ctx.rect(x + 2, by + 22, pw - 4, ph - 66); ctx.clip();
+    const pts = []; for (let j = -2; j <= 2; j++) for (let k = -2; k <= 2; k++) pts.push([cx + (k * S + (q[4] === 'tri' && (j & 1) ? S / 2 : 0)) * sc, cy + j * Sm * sc]);
+    ctx.fillStyle = 'rgba(80,170,120,0.28)'; ctx.strokeStyle = '#2E7A4E'; ctx.lineWidth = 1.2; if (q[4] === 'tri') { const rh = S / Math.sqrt(3) * sc; ctx.beginPath(); for (let a = 0; a < 6; a++) { const th = -1.5708 + a * 1.0472, px = cx + rh * Math.cos(th), py = cy + rh * Math.sin(th); a ? ctx.lineTo(px, py) : ctx.moveTo(px, py); } ctx.closePath(); ctx.fill(); ctx.stroke(); } else { ctx.fillRect(cx - S * sc / 2, cy - Sm * sc / 2, S * sc, Sm * sc); ctx.strokeRect(cx - S * sc / 2, cy - Sm * sc / 2, S * sc, Sm * sc); }
+    pts.forEach(p => { ctx.fillStyle = 'rgba(43,108,176,0.08)'; ctx.strokeStyle = 'rgba(43,108,176,0.45)'; ctx.lineWidth = 0.8; ctx.beginPath(); ctx.arc(p[0], p[1], B.Rw * sc, 0, 6.2832); ctx.fill(); ctx.stroke(); spdDot(p[0], p[1], 2, '#12303A'); }); ctx.restore();
+    const A = S * Sm, rate = B.qh * 1000 / A; T(q[0] + (on ? '  ← yours' : ''), x + 8, by + 13, { s: 9.4, b: true, c: on ? IRC.ac : IRC.ink }); T(q[3], x + pw - 6, by + 13, { s: 7.6, a: 'right', c: MUTE });
+    T('S × Sm = ' + S.toFixed(1) + ' × ' + Sm.toFixed(1) + ' m', x + 8, by + ph - 28, { s: 8.8, b: true, c: '#12303A' }); T('area ' + irF(A) + ' m² · rate ' + rate.toFixed(1) + ' mm/h' + (rate > B.umax ? ' (over ' + B.umax + ')' : ''), x + 8, by + ph - 14, { s: 8.6, b: true, c: rate > B.umax ? '#B91C1C' : '#14532D' }); });
+  T('Your layout: ' + o.Ss.toFixed(1) + ' × ' + o.Sl.toFixed(1) + ' m (' + (SPR.tri ? 'triangular' : Math.abs(o.Ss - o.Sl) < 0.1 ? 'square' : 'rectangular') + '), ' + (o.Ss / B.Rw * 100).toFixed(0) + ' % and ' + (o.Sl / B.Rw * 100).toFixed(0) + ' % of the throw. Spacing in the wind (' + B.kmh.toFixed(0) + ' km/h) uses k = ' + B.k.toFixed(1) + '.', 16, by + ph + 16, { s: 8.8, b: true, c: '#374151' });
+  return by + ph + 34;
+}
+
+// ---------- 7. wind and soil limits ----------
+function spdLimits(y, B, o, R) {
+  sidHead('What wind and soil allow', y, 'Largest spacing the wind permits, and largest rate the soil accepts without runoff (course table)');
+  const by = y + 34, lw = 270, bh = 190; T('Spacing against wind', 16, by + 6, { s: 9.2, b: true, c: IRC.ink });
+  const ax = sidAxes(48, by + 14, lw - 42, bh - 56, 0, 25, 0.6, 1.1, 'wind speed (km/h)', 'S ÷ Rw', 5, 5), step = [[0, 5.5, 1], [5.5, 13, 0.9], [13, 22, 0.8], [22, 25, 0.7]];
+  ctx.fillStyle = 'rgba(184,50,40,0.13)'; ctx.fillRect(ax.sx(16), ax.y, ax.sx(25) - ax.sx(16), ax.h); T('stop irrigating', (ax.sx(16) + ax.sx(25)) / 2, ax.y + 12, { s: 8.2, b: true, a: 'center', c: '#B91C1C' });
+  ctx.fillStyle = 'rgba(80,170,120,0.22)'; step.forEach(q => ctx.fillRect(ax.sx(q[0]), ax.sy(q[2]), ax.sx(q[1]) - ax.sx(q[0]), ax.y + ax.h - ax.sy(q[2]))); ctx.strokeStyle = '#2E7A4E'; ctx.lineWidth = 2; ctx.beginPath(); step.forEach((q, i) => { i ? ctx.lineTo(ax.sx(q[0]), ax.sy(q[2])) : ctx.moveTo(ax.sx(q[0]), ax.sy(q[2])); ctx.lineTo(ax.sx(q[1]), ax.sy(q[2])); }); ctx.stroke();
+  const px = ax.sx(clampN(B.kmh, 0, 25)), pyy = ax.sy(clampN(o.Ss / B.Rw, 0.6, 1.1)), ok = o.Ss <= B.k * B.Rw + 0.05 && B.kmh <= 16; spdDot(px, pyy, 5, ok ? '#14532D' : '#B91C1C'); ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(px, pyy, 5, 0, 6.2832); ctx.stroke(); T('yours', px + 8, pyy + 3, { s: 8.4, b: true, c: ok ? '#14532D' : '#B91C1C' });
+  sidHover(ax, v => [v.toFixed(0) + ' km/h', 'S ≤ ' + spWindK(v).toFixed(1) + ' Rw = ' + (spWindK(v) * B.Rw).toFixed(1) + ' m']);
+  const tx = 14 + lw + 18, tw = W - 14 - tx, rh = 17, th = 88; T('Maximum allowable application rate (mm/h)', tx, by + 6, { s: 9.2, b: true, c: IRC.ink });
+  const lbl = 118, cwid = (tw - lbl) / 4; SPUMAX.cols.forEach((c, j) => T(c, tx + lbl + cwid * (j + 0.5), by + 24, { s: 8.2, b: true, a: 'center', c: '#374151' }));
+  SPUMAX.rows.forEach((r, i) => { const yy = by + 30 + i * rh; T(r[0].length > 28 ? r[0].slice(0, 27) + '…' : r[0], tx, yy + 12, { s: 7.8, b: i === B.row, c: i === B.row ? IRC.ac : '#374151' }); for (let j = 0; j < 4; j++) { const v = r[j + 1], on = i === B.row && j === B.col; ctx.fillStyle = sidMix([252, 232, 200], [110, 185, 150], Math.min(1, Math.sqrt(v / 50))); ctx.fillRect(tx + lbl + j * cwid, yy, cwid - 1, rh - 1); if (on) { ctx.strokeStyle = '#12303A'; ctx.lineWidth = 2; ctx.strokeRect(tx + lbl + j * cwid + 1, yy + 1, cwid - 3, rh - 3); } T(String(v), tx + lbl + cwid * (j + 0.5), yy + 12, { s: 8.4, b: on, a: 'center', c: '#12303A' }); } });
+  const yb = spdWrap('Your soil (' + B.C.sName.toLowerCase() + ') and slope ' + o.S.toFixed(1) + ' % allow ' + B.umax + ' mm/h. Applied: ' + B.r.toFixed(1) + ' mm/h, ' + (B.r <= B.umax ? 'within the limit' : 'too fast: runoff'), tx, by + 30 + 7 * rh + 10, tw, 10, { s: 8.6, b: true, c: spdCol(B.r <= B.umax) }) - 6;
+  sidChip(tx, yb + 8, tw, 17, SPD.pan ? 'Compact layer below the soil: yes (tap to remove)' : 'Compact layer below the soil: no (tap to add)', SPD.pan, () => { SPD.pan = !SPD.pan; }, 'A compact layer below the topsoil lowers the allowed rate');
+  return by + bh + 22;
+}
+
+// ---------- 8. catch-can test and the Christiansen coefficient ----------
+function spdCans(y, B, o, R, tau) {
+  sidHead('Catch-can test: measuring the uniformity the way it is done in the field', y, 'Cans on a grid between sprinklers; press Play and they fill. CU = 100 (1 − Σ|x − mean| ÷ (N·mean))');
+  const by = y + 34, ph = 160, pw = 310, nx = R.nx, ny = R.ny, rows = o.tri ? 2 : 1, k = (1 - R.wdel) * Math.min(Math.max(0.01, tau), R.T), cans = [];
+  for (let b = 1; b < ny; b += 2) for (let a = 1; a < nx; a += 2) cans.push({ a, b, d: R.f.cells[b * nx + a] * k });
+  const mean = cans.reduce((t, c) => t + c.d, 0) / cans.length, dev = cans.reduce((t, c) => t + Math.abs(c.d - mean), 0), cu = mean > 0 ? 100 * (1 - dev / (cans.length * mean)) : 0;
+  spdBox(14, by, pw, ph, '#EFEBDD'); const sc = Math.min((pw - 24) / (2 * o.Ss), (ph - 30) / (o.Sl * rows)), ox = 26, oy = by + 14, cr = Math.max(2.6, Math.min(5.2, sc * o.Ss / nx * 0.8)); let near = null;
+  for (let j = 0; j <= rows; j++) for (let i = 0; i <= 2; i++) { const off = o.tri && (j & 1) ? o.Ss / 2 : 0; if (off && i === 2) continue; spdDot(ox + (i * o.Ss + off) * sc, oy + j * o.Sl * sc, 3.2, '#12303A'); }
+  for (let rep = 0; rep < 2; rep++) cans.forEach(c => { const px = ox + (rep * o.Ss + (c.a + 0.5) / nx * o.Ss) * sc, py = oy + (c.b + 0.5) / ny * o.Sl * rows * sc, f = mean > 0 ? c.d / mean : 0; ctx.fillStyle = f < 1 ? sidMix([196, 96, 72], [150, 205, 120], clampN(f, 0, 1)) : sidMix([62, 155, 90], [40, 90, 190], clampN((f - 1) / 0.6, 0, 1)); ctx.beginPath(); ctx.arc(px, py, cr, 0, 6.2832); ctx.fill(); ctx.strokeStyle = 'rgba(20,30,40,0.55)'; ctx.lineWidth = 0.8; ctx.stroke(); const p = SID.hv; if (p && Math.hypot(p.x - px, p.y - py) < cr + 3) near = { px, py, c }; });
+  if (near) sidTip({ x: near.px, y: near.py }, ['Catch can', irF(near.c.d, 1) + ' mm collected', irF(near.c.d / Math.max(1e-6, mean) * 100) + ' % of the mean']);
+  T(cans.length + ' cans per cell, sprinklers as black dots', 20, by + ph - 6, { s: 8.2, c: '#374151' });
+  const x2 = 14 + pw + 14, w2 = W - 14 - x2, sorted = cans.map(c => c.d).sort((a, b) => a - b), mx = Math.max(sorted[sorted.length - 1] || 1, mean * 1.4), ax = sidAxes(x2 + 30, by + 8, w2 - 34, ph - 52, 0, sorted.length, 0, Math.max(1, Math.ceil(mx)), 'cans, driest to wettest', 'depth (mm)', 2, 3);
+  const bwid = ax.w / sorted.length; sorted.forEach((d, i) => { const f = mean > 0 ? d / mean : 0; ctx.fillStyle = f < 1 ? sidMix([196, 96, 72], [150, 205, 120], clampN(f, 0, 1)) : sidMix([62, 155, 90], [40, 90, 190], clampN((f - 1) / 0.6, 0, 1)); ctx.fillRect(ax.sx(i), ax.sy(d), Math.max(1, bwid - 0.5), ax.y + ax.h - ax.sy(d)); });
+  ctx.strokeStyle = '#B23A2E'; ctx.setLineDash([5, 3]); ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(ax.x, ax.sy(mean)); ctx.lineTo(ax.x + ax.w, ax.sy(mean)); ctx.stroke(); ctx.setLineDash([]); T('mean ' + irF(mean, 1) + ' mm', ax.x + 6, ax.sy(mean) - 4, { s: 8.4, b: true, c: '#B23A2E' });
+  T('CU from the cans: ' + irF(cu, 1) + ' %', x2, by + ph - 18 + 2 + 12, { s: 10, b: true, c: cu >= 85 ? '#14532D' : '#8A5A00' }); T(cu >= 85 ? 'good (above 85 %)' : 'below the 85 % goal', x2 + w2, by + ph - 4 + 2, { s: 8.6, b: true, a: 'right', c: cu >= 85 ? '#14532D' : '#8A5A00' });
+  return by + ph + 26;
+}
+
+// ---------- 9. soil water reservoir, interval, and what the supply must give ----------
+function spdBucket(y, B, o, R, C) {
+  sidHead('Soil water as a reservoir: interval, sets per day and the flow the field needs', y, 'The crop empties the root-zone reservoir; irrigation refills it every T days. The rate sets set time and sets a day');
+  const by = y + 34, bw = 300, AW = Math.max(o.Zn * 1.6, (C.s.fc - C.s.wp) * C.Rmax * 10), Td = o.Zn / C.ETpk, Tt = Td * 3, ax = sidAxes(48, by + 6, bw - 40, 118, 0, Tt, 0, Math.ceil(AW / 10) * 10, 'days', 'water in the root zone (mm)', 3, 4);
+  ctx.fillStyle = 'rgba(80,170,120,0.2)'; ctx.fillRect(ax.x, ax.sy(AW), ax.w, ax.sy(AW - o.Zn) - ax.sy(AW)); ctx.fillStyle = 'rgba(184,116,58,0.16)'; ctx.fillRect(ax.x, ax.sy(AW - o.Zn), ax.w, ax.y + ax.h - ax.sy(AW - o.Zn));
+  spdLn(ax.x, ax.sy(AW), ax.x + ax.w, ax.sy(AW), '#2E7A4E', 1.2, [4, 3]); T('field capacity', ax.x + 4, ax.sy(AW) - 3, { s: 8, b: true, c: '#2E7A4E' }); spdLn(ax.x, ax.sy(AW - o.Zn), ax.x + ax.w, ax.sy(AW - o.Zn), '#B23A2E', 1.2, [4, 3]); T('trigger: refill ' + irF(o.Zn) + ' mm', ax.x + ax.w - 4, ax.sy(AW - o.Zn) + 11, { s: 8, b: true, a: 'right', c: '#B23A2E' }); T('stress zone', ax.x + 6, ax.y + ax.h - 5, { s: 8, c: '#8A5A00' });
+  ctx.strokeStyle = IRC.ac; ctx.lineWidth = 2.2; ctx.beginPath(); let t = 0, lv = AW; ctx.moveTo(ax.sx(0), ax.sy(lv)); while (t < Tt) { const dt = Math.min(Td, Tt - t); t += dt; lv = AW - C.ETpk * dt; ctx.lineTo(ax.sx(t), ax.sy(lv)); if (dt >= Td - 1e-6 && t < Tt) { ctx.stroke(); ctx.strokeStyle = IRC.wd; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.moveTo(ax.sx(t), ax.sy(lv)); ctx.lineTo(ax.sx(t), ax.sy(AW)); ctx.stroke(); ctx.strokeStyle = IRC.ac; ctx.beginPath(); ctx.moveTo(ax.sx(t), ax.sy(AW)); lv = AW; } } ctx.stroke();
+  sidArrowH(ax.sx(0), ax.sx(Td), ax.sy(AW) + 17, 'T = ' + Td.toFixed(1) + ' d'); sidHover(ax, v => ['day ' + v.toFixed(1), 'water ' + irF(AW - C.ETpk * (v % Td)) + ' mm']);
+  const rx = 14 + bw + 14, rw = W - 14 - rx; const rows = [['Peak crop use ETc', C.ETpk.toFixed(1) + ' mm/day'], ['Net depth Zn = f·θAW·Dr', irF(o.Zn) + ' mm'], ['Gross ZG = Zn ÷ Ea', irF(B.ZG, 1) + ' mm (Ea ' + irF(R.Ea * 100) + ' %)'], ['Interval T = Zn ÷ ETc', B.Tint + ' days'], ['Water per irrigation', irF(B.Vtot) + ' m³ on ' + SPR.Af.toFixed(1) + ' ha'], ['Flow to finish in T days', B.QinReq.toFixed(1) + ' m³/h at ' + SPD.top + ' h/day'], ['Farm supply', (SPR.Qs * 3.6).toFixed(1) + ' m³/h']];
+  rows.forEach((q, i) => { T(q[0], rx, by + 14 + i * 17, { s: 8.6, c: '#374151' }); T(q[1], rx + rw, by + 14 + i * 17, { s: 9, b: true, a: 'right', c: i === 5 && B.QinReq > SPR.Qs * 3.6 ? '#B91C1C' : IRC.ac }); });
+  let yy = by + 168; SIDCUR = SPD; sidSlider('top', 'Operating hours per day', 16, yy, 270, [4, 24, 1], SPD.top, v => v + ' h'); SIDCUR = SPR;
+  spdWrap('Set time = ZG ÷ r = ' + B.ZG.toFixed(1) + ' ÷ ' + B.r.toFixed(1) + ' = ' + B.tset.toFixed(2) + ' h → ' + (B.sets > 0 ? B.sets + ' set' + (B.sets > 1 ? 's' : '') + ' per day' : 'longer than the ' + SPD.top + ' h working day: raise the hours or the rate') + '; ' + B.Nm + ' lateral positions to cover the field', 304, yy + 4, W - 14 - 304, 10.5, { s: 8.6, b: true, c: B.sets > 0 ? IRC.ink : '#B91C1C' });
+  yy += 36; const cols = [['Laterals running', 30], ['Sets/day', 130], ['Days to finish', 220], ['Flow m³/h', 320], ['Within T', 410], ['Within supply', 490], ['Verdict', 570]]; ctx.fillStyle = '#E6F4F7'; ctx.fillRect(14, yy, W - 28, 18); cols.forEach(c => T(c[0], c[1], yy + 12, { s: 8.4, b: true, a: c[1] === 30 ? 'left' : 'center', c: IRC.ink }));
+  B.opts.forEach((q, i) => { const yy2 = yy + 19 + i * 19, ch = q === B.pick; ctx.fillStyle = ch ? '#EAF6EE' : i % 2 ? '#F6F7F5' : '#fff'; ctx.fillRect(14, yy2, W - 28, 19); [[q.n, 30, 'left'], [Math.max(B.sets, 1), 130], [q.Nd, 220], [q.Qin.toFixed(1), 320], [q.okT ? 'yes' : 'no', 410], [q.okQ ? 'yes' : 'no', 490], [ch ? 'chosen' : '', 570]].forEach((c, j) => T(String(c[0]), c[1], yy2 + 13, { s: 8.8, b: ch || j === 0, a: c[2] || 'center', c: j === 4 ? spdCol(q.okT) : j === 5 ? spdCol(q.okQ) : ch ? '#14532D' : '#1B1F23' })); });
+  return yy + 19 + 4 * 19 + 14;
+}
+
+// ---------- 10. pipes, pump and the hydraulic grade line ----------
+function spdHydraulics(y, B, o, R) {
+  sidHead('Pipes, pump and the hydraulic grade line (the textbook sizing)', y, 'Lateral loss ≤ 20 % of the head, mainline gradient < 5 %; pump head = lift + losses + sprinkler head');
+  const by = y + 34, tw = (W - 28 - 12) / 2, tr = (x, title, rows, hdr) => { T(title, x, by + 4, { s: 9.2, b: true, c: IRC.ink }); ctx.fillStyle = '#E6F4F7'; ctx.fillRect(x, by + 10, tw, 17); hdr.forEach((h, j) => T(h, j === hdr.length - 1 ? x + tw - 8 : x + 8 + j * (tw - 16) / (hdr.length - 1), by + 22, { s: 8.2, b: true, a: j === hdr.length - 1 ? 'right' : j ? 'center' : 'left', c: IRC.ink })); rows.forEach((r, i) => { const yy = by + 28 + i * 17, ch = r[4]; ctx.fillStyle = ch ? '#EAF6EE' : i % 2 ? '#F6F7F5' : '#fff'; ctx.fillRect(x, yy, tw, 17); r.slice(0, 4).forEach((v, j) => T(String(v), j === 3 ? x + tw - 8 : x + 8 + j * (tw - 16) / (hdr.length - 1), yy + 12, { s: 8.6, b: ch || j === 3, a: j === 3 ? 'right' : j ? 'center' : 'left', c: j === 3 ? (r[3].indexOf('rejected') === 0 ? '#B91C1C' : '#14532D') : '#1B1F23' })); }); };
+  const li = Math.max(B.latTr.indexOf(B.lat), 0), lrows = B.latTr.slice(Math.max(0, li - 1), li + 2).map(q => ['Ø' + q.D + ' mm', 'J ' + q.J.toFixed(3), q.hf.toFixed(2) + ' m', q.ok ? 'accepted' : 'rejected', q === B.lat]);
+  const mi = Math.max(B.mainTr.indexOf(B.main), 0), mrows = B.mainTr.slice(Math.max(0, mi - 1), mi + 2).map(q => ['Ø' + q.D + ' mm', 'J ' + q.J.toFixed(3), q.J < 0.05 ? '< 0.05' : '≥ 0.05', q.ok ? 'accepted' : 'rejected', q === B.main]);
+  tr(14, 'Lateral: ' + B.N + ' sprinklers, ' + B.QL.toFixed(0) + ' L/h, F = ' + B.F.toFixed(3), lrows, ['Pipe', 'Gradient', 'Loss 1.1·F·J·L', 'Result']); tr(14 + tw + 12, 'Mainline: ' + B.pick.n + ' lateral' + (B.pick.n > 1 ? 's' : '') + ' running, ' + B.Qm.toFixed(0) + ' L/h', mrows, ['Pipe', 'Gradient', 'Limit', 'Result']);
+  const gy = by + 28 + 3 * 17 + 18, gh = 150, gx = 62, gw = W - 14 - gx - 8, segs = [['', 0.04], ['conveyance ' + irF(B.Lconv) + ' m', Math.max(0.14, Math.min(0.4, B.Lconv / (B.Lconv + B.Lmain + B.Llat)))], ['mainline ' + irF(B.Lmain) + ' m', Math.max(0.14, Math.min(0.4, B.Lmain / (B.Lconv + B.Lmain + B.Llat)))], ['lateral ' + irF(B.Llat) + ' m', 0.4]], ts = segs.reduce((t, q) => t + q[1], 0);
+  const top = Math.ceil(B.Hman * 1.08 / 10) * 10, sy = v => gy + gh - v / top * gh; spdBox(gx, gy, gw, gh, '#fff'); for (let v = 0; v <= top; v += 10) { spdLn(gx, sy(v), gx + gw, sy(v), '#EEF1F3', 1); T(String(v), gx - 4, sy(v) + 3, { s: 8.2, a: 'right', c: MUTE }); } ctx.save(); ctx.translate(14, gy + gh / 2); ctx.rotate(-Math.PI / 2); T('head (m)', 0, 0, { s: 8.6, a: 'center', c: '#374151' }); ctx.restore();
+  let xx = gx; const xs = segs.map(q => { const a = xx; xx += q[1] / ts * gw; return [a, xx]; }), H1 = B.Hman - B.lift, H2 = H1 - B.hfConv, H3 = H2 - B.hfMain, H4 = B.hinLat;
+  ctx.fillStyle = 'rgba(184,116,58,0.18)'; ctx.fillRect(xs[0][0], sy(B.lift), xs[0][1] - xs[0][0], sy(0) - sy(B.lift)); ctx.strokeStyle = IRC.dp; ctx.lineWidth = 2.6; ctx.beginPath(); ctx.moveTo(xs[0][0], sy(B.Hman)); ctx.lineTo(xs[0][1], sy(H1)); ctx.lineTo(xs[1][1], sy(H2)); ctx.lineTo(xs[2][1], sy(H3)); ctx.lineTo(xs[3][0], sy(H4)); for (let i = 0; i <= 30; i++) { const f = i / 30, h = B.hinLat - B.lat.hf * (1 - Math.pow(1 - f, 2.75)); ctx.lineTo(xs[3][0] + f * (xs[3][1] - xs[3][0]), sy(h)); } ctx.stroke();
+  spdLn(xs[3][0], sy(B.hs), xs[3][1], sy(B.hs), '#14532D', 1.4, [4, 3]); T('sprinkler head hs ' + B.hs.toFixed(1) + ' m', xs[3][1] - 4, sy(B.hs) + 12, { s: 8.4, b: true, a: 'right', c: '#14532D' });
+  [[xs[0][0] + 4, B.Hman, 'pump ' + B.Hman.toFixed(1)], [xs[1][0] + 4, H1, H1.toFixed(1)], [xs[2][0] + 4, H2, H2.toFixed(1)], [xs[3][0] + 4, H3, H3.toFixed(1)], [xs[3][1] - 4, B.hinLat - B.lat.hf, (B.hinLat - B.lat.hf).toFixed(1)]].forEach((q, i) => { spdDot(i === 4 ? q[0] + 4 : q[0] - 4, sy(q[1]), 3, IRC.dp); T(q[2], q[0], sy(q[1]) - 6, { s: 8.2, b: true, a: i === 4 ? 'right' : 'left', c: IRC.dp }); });
+  segs.forEach((q, i) => { T(q[0], (xs[i][0] + xs[i][1]) / 2, gy + gh - 5, { s: 8, a: 'center', c: '#374151' }); if (i) spdLn(xs[i][0], gy, xs[i][0], gy + gh, '#D5DADF', 1, [3, 3]); });
+  T('losses ' + B.hfConv.toFixed(1) + ' + ' + B.hfMain.toFixed(1) + ' + ¾·' + B.lat.hf.toFixed(1) + ' m', gx + gw * 0.5, gy + 12, { s: 8.4, b: true, a: 'center', c: '#374151' });
+  const ry = gy + gh + 22, col2 = (x, xr, rows) => rows.forEach((q, i) => { T(q[0], x, ry + i * 17, { s: 8.8, c: '#374151' }); T(q[1], xr, ry + i * 17, { s: 9, b: true, a: 'right', c: IRC.ac }); });
+  col2(16, 300, [['Pump head Hman', B.Hman.toFixed(1) + ' m'], ['Pump power (efficiency 75 %)', B.PS.toFixed(2) + ' PS = ' + B.kW.toFixed(2) + ' kW']]); col2(322, W - 16, [['Lateral / mainline pipe', 'Ø' + B.lat.D + ' / Ø' + B.main.D + ' mm'], ['Sprinkler suitable if r < Ks', B.r.toFixed(1) + ' < ' + B.Ks.toFixed(1) + ' mm/h: ' + (B.r < B.Ks ? 'yes' : 'no')]]);
+  spdWrap('Pipes here follow the course formula J = 0.472·Q^1.75 ÷ D^4.75 and its limits. The layout section below sizes the pipes with Hazen-Williams and a velocity limit, so its numbers differ a little.', 16, ry + 44, W - 32, 10.5, { s: 8.2, c: MUTE });
+  return ry + 76;
+}
+
+// ---------- the whole block ----------
+function spTextbook(y, C, R, o, tau) {
+  const B = spBook(R, o, C, IRX.LLs, SPR.Af, SPR.Qs, IRX.lift, IRX.Lm); B.C = C; R.B = B; SIDCUR = SPR;
+  y = spdChecks(y, B) + 6; y = spdSystems(y, B, o, R); y = spdAnatomy(y, B, o, R); y = spdJet(y, B, o, R) + 4; y = spdOverlap(y, B, o, R); y = spdLayouts(y, B, o, R); y = spdLimits(y, B, o, R); y = spdCans(y, B, o, R, tau) + 4; y = spdBucket(y, B, o, R, C); y = spdHydraulics(y, B, o, R) + 6;
+  return y;
 }
 
 let currentScene = SCENES[0];
