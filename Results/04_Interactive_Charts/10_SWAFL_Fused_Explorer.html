@@ -1988,8 +1988,12 @@ function spInputs(C, R, o, ST, T0, y) {
     return c;
   }
   const chip = (x, y, w, h, label, on, fn, tip) => sidChip(x, y, w, h, label, on, fn, tip);
+  function warm(sec) {      // run the sim ahead so a snapshot shows wet ground and a jet in the air
+    const c = ctxState(); C0 = c; const key = [c.o.type, c.o.P, c.o.d, Math.round(c.o.alpha), c.o.u, state.soil].join('|'); if (key !== S.key || !S.dep) { S.key = key; reset(c); }
+    for (let t = 0; t < sec; t += 1 / 30) { stepSim(c, 1 / 30); stepClose(c, { x: 0, y: 0, w: 300, h: 190 }, 1 / 30); } paintTex(c);
+  }
   window.SPA = {
-    tick, S,
+    tick, warm, S,
     field: r => { if (C0 && S.tx) { drawField(C0, r); hot(r.x, r.y, r.w, r.h, () => { S.run = !S.run; }, S.run ? 'Tap to pause' : 'Tap to play'); } },
     close: r => { if (C0 && S.tx) drawClose(C0, r); },
     plan: r => { if (C0 && S.tx) drawPlan(C0, r); },
@@ -3691,15 +3695,20 @@ function PdfDoc() {
 // report content
 // ------------------------------------------------------------------------------------------------
 
-function snapshotOf(sc, view) {
+function snapshotOf(sc, view, firstPx) {
   const keep = { cs: currentScene, pt: play.t, fd: fclock.day, fp: fclock.pause, lk: fclock.lastKd, mem: fclock.mem, cur: canvas.style.cursor, h: canvas.height, fv: state.fview };
   const keepTrig = { m: state.trigMode, i: state.trigIdx }; if (sc.id === 'n1') { state.trigMode = 'own'; state.trigIdx = ownIdx(state.soil); }
   seasonSim(true); currentScene = sc; setCanvasH(sc.h || 640);
   if (sc.id === 'v1') play.t = state.range === 'all' ? 1 : 0.72; else if (sc.id === 'v2') play.t = state.range === 'all' ? 0.725 : 0.55; else if (sc.id === 'v3') play.t = 0.5;
   if (sc.id === 'field') { state.fview = view || 'day'; fclock.pause = 0; fclock.lastKd = -1; fclock.mem = []; }
+  if (sc.id === 'spr' && window.SPA) { try { SPA.warm(45); } catch (e) {} }
   ctx.clearRect(0, 0, W, H); if (sc.id === 'v4') { anim.v4 = null; for (let i = 0; i < 70; i++) sc.draw(); } sc.draw();
-  const crops = [], cut = (sy, sh) => { const c = document.createElement('canvas'); c.width = 620; c.height = sh; c.getContext('2d').drawImage(canvas, 0, sy, 620, sh, 0, 0, 620, sh); const b = atob(c.toDataURL('image/jpeg', 0.9).split(',')[1]), a = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); crops.push({ jpeg: a, w: 620, h: sh }); };
-  cut(0, Math.min(640, H)); if (H > 700) cut(640, H - 640);
+  for (let k = 0; k < 3; k++) { const h0 = canvas.height; ctx.clearRect(0, 0, W, canvas.height); sc.draw(); if (canvas.height === h0) break; }      // scenes that size themselves to their content settle after a draw or two
+  const Hn = canvas.height, crops = [], full = ctx.getImageData(0, 0, W, Hn).data;
+  const ink = y => { let n = 0; const o = y * W * 4, q0 = o + 8 * 4, r0 = full[q0], g0 = full[q0 + 1], b0 = full[q0 + 2]; for (let x = 8; x < W - 8; x++) { const q = o + x * 4; if (Math.abs(full[q] - r0) + Math.abs(full[q + 1] - g0) + Math.abs(full[q + 2] - b0) > 30) n++; } return n; };
+  const brk = (from, limit) => { const end = from + limit; if (end >= Hn) return Hn; let best = end, bi = 1e9; for (let y = end; y > from + limit * 0.55; y--) { let t = 0; for (let k = 0; k < 5; k++) t += ink(Math.min(Hn - 1, y - k)); if (t < bi) { bi = t; best = y; } if (t === 0) return y - 2; } return best; };
+  const cut = (sy, sh) => { const c = document.createElement('canvas'); c.width = W; c.height = sh; c.getContext('2d').drawImage(canvas, 0, sy, W, sh, 0, 0, W, sh); const b = atob(c.toDataURL('image/jpeg', 0.9).split(',')[1]), a = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); crops.push({ jpeg: a, w: W, h: sh }); };
+  let y0 = 0, lim = firstPx || 640; while (y0 < Hn - 2) { const y1 = Math.max(y0 + 60, brk(y0, lim)); cut(y0, Math.min(y1, Hn) - y0); y0 = Math.min(y1, Hn); lim = 880; }
   currentScene = keep.cs; setCanvasH(keep.h); state.fview = keep.fv; state.trigMode = keepTrig.m; state.trigIdx = keepTrig.i; play.t = keep.pt; fclock.day = keep.fd; fclock.pause = keep.fp; fclock.lastKd = keep.lk; fclock.mem = keep.mem; canvas.style.cursor = keep.cur;
   return crops;
 }
@@ -3722,6 +3731,13 @@ function reportNotes(sc, view) {
     L.push('Transpiration ' + f0(m.transp) + ' mm, soil evaporation ' + f0(m.evap) + ' mm, interception and mulch layer ' + f0(m.other) + ' mm; nitrogen leaching ' + f1(m.nl) + ' kg/ha.');
     L.push('Twenty-year run: mean irrigation ' + f0(sim.meanIrr) + ' mm per year, mean drainage ' + f0(sim.meanDrain) + ' mm per year; roots reached ' + f0(mx) + ' cm at the deepest, in ' + (1980 + my) + '.');
     L.push('The picture is the field on ' + fmtDate(dateOfK(fclock.kd())) + ' (weather like ' + (1980 + yearOf(fclock.kd())) + ', ' + cropNameAt(sim, fclock.kd()) + '): wetted layers are blue, roots follow the water.'); dssLines().forEach(l => L.push(l)); }
+  else if (sc.id === 'spr') { try { const R = spRun(), o = R.o, B = R.B || spBook(R, o, irCtx(), IRX.LLs, SPR.Af, SPR.Qs, IRX.lift, IRX.Lm), ok = B.chk.filter(q => q[1]).length;
+    L.push('Sprinkler: ' + IRM.STYPE[o.type].label.toLowerCase() + ', nozzle ' + o.d.toFixed(1) + ' mm at ' + f0(o.P) + ' kPa, ' + (o.tri ? 'triangular' : 'rectangular') + ' spacing ' + f1(o.Ss) + ' x ' + f1(o.Sl) + ' m, jet angle ' + f0(o.alpha) + ' degrees, wind ' + f1(o.u) + ' m/s, slope ' + f1(o.S) + ' %.');
+    L.push('Throw radius ' + f1(R.nz.R) + ' m, flow ' + f1(R.nz.q) + ' L/min, application rate ' + f1(R.AR) + ' mm/h against the ' + B.umax + ' mm/h this soil and slope allow. Christiansen uniformity ' + f0(R.CU * 100) + ' %.');
+    L.push('Application efficiency ' + f1(R.Ea * 100) + ' % (runoff ' + f1(R.ro * 100) + ' %, deep percolation ' + f1(R.dp * 100) + ' %, drift, evaporation and interception ' + f1(R.wdTot * 100) + ' %); run time ' + f0(R.T) + ' min for ' + f0(o.Zn) + ' mm net.');
+    L.push('Textbook checks passed: ' + ok + ' of ' + B.chk.length + '. Pipes: lateral and mainline sized by the course rules; pump head ' + f1(B.Hman) + ' m, pump power ' + f1(B.PS) + ' hp.'); } catch (e) { L.push('Sprinkler design: see the picture.'); } }
+  else if (sc.id === 'drip') { try { const R = drRun(), o = R.o; L.push('Drip: ' + IRM.DKIND[o.kind].label.toLowerCase() + ', emitter spacing ' + o.Se + ' m, lateral spacing ' + o.Sl + ' m, flow ' + o.q + ' L/h, lateral length ' + o.LL + ' m.');
+    L.push('Application efficiency ' + f1(R.Ea * 100) + ' %, emission uniformity ' + f1(R.Eu * 100) + ' %; run time ' + R.t.toFixed(1) + ' h per irrigation.'); } catch (e) { L.push('Drip design: see the picture.'); } }
   else if (sc.id === 'v1' || sc.id === 'v2') { const ys = yearStats(thr), mI = ys.reduce((a, r) => a + r.ci, 0) / 20, mR = ys.reduce((a, r) => a + r.cr, 0) / 20, dry = ys.slice().sort((a, b) => b.mr - a.mr);
     L.push('Record: ' + nameSoil20() + '.'); L.push('Growing-season days beyond the ' + thr + ' cm trigger, mean of 1980 to 1999: irrigated ' + f0(mI) + ', rainfed ' + f0(mR) + ' of 183.');
     L.push('Driest rainfed season ' + dry[0].y + ' (mean suction ' + fmtS(dry[0].mr) + ' cm); wettest ' + dry[19].y + ' (' + fmtS(dry[19].mr) + ' cm).'); L.push('Irrigation removes ' + (mR > 0 ? Math.round((1 - mI / mR) * 100) : 0) + '% of the days beyond this trigger.'); }
@@ -3762,8 +3778,9 @@ function buildReport(ids, title) {
     ['Yield (' + cf.label.toLowerCase() + ')', (m.yield * cf.factor).toFixed(2) + ' ' + cf.unit], ['Irrigation efficiency', m.ie.toFixed(2) + ' kg/m3'], ['Rainfall', m.rain.toFixed(0) + ' mm/yr'], ['Irrigation with no mulch', model(1.0, RAIN_VALUES[state.rainIdx]).irr.toFixed(0) + ' mm/yr'], ['Storage and small terms', m.store.toFixed(0) + ' mm/yr']], 305, 180, 250);
   p.rect(40, 392, 515, 44, '#ffffff'); p.line(40, 392, 555, 392, '#d8d4c6', 1); p.line(40, 436, 555, 436, '#d8d4c6', 1);
   p.text('Water balance, mm per year', 48, 408, 10, { b: true, c: '#4b5563' }); p.text('rain ' + m.rain.toFixed(0) + ' + irrigation ' + m.irr.toFixed(0) + ' = transpiration ' + m.transp.toFixed(0) + ' + soil evaporation ' + m.evap.toFixed(0) + ' + interception ' + m.other.toFixed(0) + ' + drainage ' + m.drain.toFixed(0) + ' + storage ' + m.store.toFixed(0), 48, 426, 9.5, { b: true });
-  p.text('Included in this report', 40, 466, 12, { b: true, c: GREEN }); let yy = 486; chosen.forEach((sc, i) => { p.text((i + 1) + '.  ' + sc.label + ': ' + (sc.title || ''), 46, yy, 10); yy += 15; });
-  yy += 14; yy = p.wrap('How to read this: every number is an annual mean from 10,190 Daisy simulations across ten soils, combined by the explorer so that each control changes the outputs the way the simulations did. The pictures are snapshots of the live scenes at your inputs.', 40, yy, 515, 9.5, { i: true, c: '#6b7280' });
+  p.text('Included in this report: ' + chosen.length + ' part' + (chosen.length === 1 ? '' : 's'), 40, 466, 12, { b: true, c: GREEN });
+  { const half = Math.ceil(chosen.length / 2); chosen.forEach((sc, i) => { const col = i < half ? 0 : 1, row = col ? i - half : i; p.text((i + 1) + '.  ' + sc.label + ': ' + (sc.title || '').slice(0, 44), 46 + col * 262, 486 + row * 14, 8.6); }); var yy = 486 + half * 14 + 12; }
+  yy = p.wrap('How to read this: every number is an annual mean from 10,190 Daisy simulations across ten soils, combined by the explorer so that each control changes the outputs the way the simulations did. The pictures are snapshots of the live scenes at your inputs; long scenes continue over several pages.', 40, yy, 515, 9, { i: true, c: '#6b7280' });
   p.text('github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops', 40, 800, 8, { c: '#6b7280' });
   let pageNo = 1; const footer = pg => { pageNo++; pg.text('Page ' + pageNo, 520, 826, 8, { c: '#6b7280' }); pg.text('SWAFL explorer report', 40, 826, 8, { c: '#6b7280' }); };
   chosen.forEach(sc => {
@@ -3772,9 +3789,10 @@ function buildReport(ids, title) {
       p = doc.page(); p.rect(0, 0, 595, 54, sc.color); p.text(sc.label + (vlabel ? ': ' + vlabel : ''), 40, 34, 18, { b: true, c: '#111111' });
       let y = p.wrap(sc.title || '', 40, 78, 515, 12, { b: true }); y = p.wrap(updateInsightText(sc, view), 40, y + 2, 515, 9.5, { i: true, c: '#4b5563' });
       {
-        const crops = snapshotOf(sc, view); let ny = p.image(crops[0].jpeg, crops[0].w, crops[0].h, 40, y + 8, 515) + 18;
-        p.text('Key numbers at your inputs', 40, ny, 11, { b: true, c: GREEN }); ny += 16; reportNotes(sc, view).forEach(l => { ny = p.wrap(l, 46, ny, 505, 9.5); }); footer(p);
-        if (crops[1]) { const p2 = doc.page(); p2.rect(0, 0, 595, 40, sc.color); p2.text(sc.label + ', continued', 40, 27, 14, { b: true, c: '#111111' }); p2.image(crops[1].jpeg, crops[1].w, crops[1].h, 40, 56, 515); footer(p2); }
+        let ny = y + 14; p.text('Key numbers at your inputs', 40, ny, 11, { b: true, c: GREEN }); ny += 16; reportNotes(sc, view).forEach(l => { ny = p.wrap(l, 46, ny, 505, 9.5); });
+        const room = 806 - (ny + 8), firstPx = room >= 220 ? Math.floor(room * 620 / 515) : 0, crops = snapshotOf(sc, view, firstPx || 880), total = crops.length;
+        let k = 0; if (firstPx) { p.image(crops[0].jpeg, crops[0].w, crops[0].h, 40, ny + 8, 515); footer(p); k = 1; } else footer(p);
+        for (; k < total; k++) { const p2 = doc.page(); p2.rect(0, 0, 595, 40, sc.color); p2.text(sc.label + (vlabel ? ': ' + vlabel : '') + ', continued (' + (k + (firstPx ? 1 : 1)) + ' of ' + (firstPx ? total : total + 1) + ')', 40, 27, 13, { b: true, c: '#111111' }); p2.image(crops[k].jpeg, crops[k].w, crops[k].h, 40, 52, 515); footer(p2); }
       }
     });
   });
@@ -3788,17 +3806,21 @@ function buildReport(ids, title) {
 function openReportDialog() {
   if (document.getElementById('rptOverlay')) return;
   const ov = document.createElement('div'); ov.id = 'rptOverlay'; ov.style.cssText = 'position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:50; display:flex; align-items:center; justify-content:center; padding:1rem;';
-  const card = document.createElement('div'); card.style.cssText = 'background:#161B22; border:1px solid #30363D; border-radius:12px; max-width:460px; width:100%; max-height:92vh; overflow:auto; padding:1.2rem 1.3rem; color:#E6EDF3; font-family:inherit;';
+  const card = document.createElement('div'); card.style.cssText = 'background:#161B22; border:1px solid #30363D; border-radius:12px; max-width:780px; width:100%; max-height:94vh; overflow:auto; padding:1.2rem 1.3rem 0; color:#E6EDF3; font-family:inherit;';
   card.innerHTML = '<div style="font-size:1.1rem; font-weight:700; color:#D4A94A; margin-bottom:0.3rem;">Download your report</div>' +
     '<div style="font-size:0.8rem; color:#8B949E; margin-bottom:0.8rem;">A PDF with your inputs, the results at those inputs, and a picture and key numbers for each part you choose.</div>' +
     '<label style="display:block; font-size:0.78rem; color:#8B949E; margin-bottom:0.2rem;">Report title (optional)</label><input id="rptTitle" type="text" maxlength="80" placeholder="For example: Irrigation plan, sandy loam" style="width:100%; background:#0D1117; color:#E6EDF3; border:1px solid #30363D; border-radius:8px; padding:0.45rem 0.6rem; margin-bottom:0.8rem; font-size:0.85rem;">' +
     '<div style="font-size:0.8rem; color:#E6EDF3; font-weight:600; margin-bottom:0.3rem;">What are you interested in?</div>' +
     '<label style="display:flex; gap:0.5rem; align-items:center; padding:0.35rem 0.5rem; background:#1C2128; border-radius:8px; margin-bottom:0.3rem; cursor:pointer;"><input type="checkbox" id="rptAll" checked><b>Everything</b></label><div id="rptList"></div>' +
-    '<div style="display:flex; gap:0.6rem; margin-top:1rem; justify-content:flex-end;"><button id="rptCancel" class="pillbtn">Cancel</button><button id="rptGo" class="pillbtn active" style="font-weight:700;">Download PDF</button></div><div id="rptMsg" style="font-size:0.75rem; color:#8B949E; margin-top:0.5rem; min-height:1em;"></div>';
+    '<div style="display:flex; gap:0.6rem; margin-top:0.8rem; padding:0.7rem 0 1rem; justify-content:flex-end; position:sticky; bottom:0; background:#161B22; border-top:1px solid #30363D;"><span id="rptCount" style="margin-right:auto; align-self:center; font-size:0.78rem; color:#8B949E;"></span><button id="rptCancel" class="pillbtn">Cancel</button><button id="rptGo" class="pillbtn active" style="font-weight:700;">Download PDF</button></div><div id="rptMsg" style="font-size:0.75rem; color:#8B949E; margin-top:0.5rem; min-height:1em;"></div>';
   ov.appendChild(card); document.body.appendChild(ov);
-  const list = card.querySelector('#rptList'); SCENES.forEach(sc => { const l = document.createElement('label'); l.style.cssText = 'display:flex; gap:0.5rem; align-items:center; padding:0.28rem 0.5rem; cursor:pointer; font-size:0.84rem;'; l.innerHTML = '<input type="checkbox" class="rptSc" value="' + sc.id + '" checked><span style="width:10px; height:10px; border-radius:50%; background:' + sc.color + '; display:inline-block;"></span>' + sc.label; list.appendChild(l); });
+  const list = card.querySelector('#rptList'), RG = [['Start here', ['field']], ['Water in the soil', ['v2', 'v3', 'v7', 'e1', 'r1']], ['Irrigation', ['v1', 'n1']], ['Design', ['sid', 'drip', 'spr']], ['Design', ['sid', 'drip', 'spr']], ['Mulch', ['v4', 'v6', 'n2', 'n3']], ['The big picture', ['spac', 'v5']]], seen = new Set();
+  list.style.cssText = 'display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:0.5rem 0.8rem;';
+  const addGroup = (name, ids) => { const items = ids.filter(i => !seen.has(i)).map(i => SCENES.find(q => q.id === i)).filter(Boolean); if (!items.length) return; const g = document.createElement('div'); g.innerHTML = '<div style="font-size:0.68rem; letter-spacing:0.06em; text-transform:uppercase; color:#8B949E; margin:0.2rem 0 0.1rem;">' + name + '</div>'; items.forEach(sc => { seen.add(sc.id); const l = document.createElement('label'); l.style.cssText = 'display:flex; gap:0.5rem; align-items:center; padding:0.3rem 0.4rem; cursor:pointer; font-size:0.84rem; border-radius:6px;'; l.innerHTML = '<input type="checkbox" class="rptSc" value="' + sc.id + '" checked><span style="width:10px; height:10px; border-radius:50%; background:' + sc.color + '; display:inline-block; flex:0 0 auto;"></span><span>' + sc.label + '</span>'; g.appendChild(l); }); list.appendChild(g); };
+  RG.forEach(g => addGroup(g[0], g[1])); addGroup('Other', SCENES.filter(q => !seen.has(q.id)).map(q => q.id));
+  const cnt = () => { const n = card.querySelectorAll('.rptSc:checked').length; card.querySelector('#rptCount').textContent = n + ' of ' + SCENES.length + ' parts chosen'; }; card.addEventListener('change', cnt); cnt();
   const all = card.querySelector('#rptAll'), boxes = () => [...card.querySelectorAll('.rptSc')];
-  all.onchange = () => boxes().forEach(b => b.checked = all.checked); card.addEventListener('change', e => { if (e.target.classList.contains('rptSc')) all.checked = boxes().every(b => b.checked); });
+  all.onchange = () => { boxes().forEach(b => b.checked = all.checked); cnt(); }; card.addEventListener('change', e => { if (e.target.classList.contains('rptSc')) all.checked = boxes().every(b => b.checked); });
   card.querySelector('#rptCancel').onclick = () => ov.remove(); ov.addEventListener('mousedown', e => { if (e.target === ov) ov.remove(); });
   card.querySelector('#rptGo').onclick = () => {
     const ids = boxes().filter(b => b.checked).map(b => b.value), msg = card.querySelector('#rptMsg'); if (!ids.length) { msg.textContent = 'Choose at least one part.'; return; }
