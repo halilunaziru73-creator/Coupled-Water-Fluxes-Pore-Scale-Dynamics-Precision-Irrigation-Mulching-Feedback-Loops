@@ -1624,19 +1624,7 @@ function spdSystems(y, B, o, R) {
 // ---------- 3. the sprinkler itself: parts, and the three pressure classes ----------
 function spdAnatomy(y, B, o, R) {
   sidHead('The sprinkler: parts and pressure class', y, 'Parts of a rotary impact sprinkler, and where your choice falls among the three pressure classes');
-  const bx = 14, by = y + 32, bw = 250, bh = 176; spdBox(bx, by, bw, bh, '#F4F7FA');
-  const cx = bx + 92, gy = by + bh - 16, ink = '#1B1F23'; ctx.fillStyle = '#C9B88A'; ctx.fillRect(bx + 4, gy, bw - 8, 12); spdLn(bx + 4, gy, bx + bw - 4, gy, '#6B5B2E', 1.5);
-  ctx.fillStyle = '#9AA7B8'; ctx.strokeStyle = ink; ctx.lineWidth = 1; ctx.fillRect(cx - 5, gy - 56, 10, 56); ctx.strokeRect(cx - 4.5, gy - 55.5, 10, 56);
-  ctx.fillStyle = '#7C8896'; rrect(cx - 10, gy - 80, 20, 24, 3); ctx.fill(); ctx.stroke();
-  ctx.fillStyle = '#B9C4D0'; ctx.fillRect(cx - 3, gy - 98, 6, 18); ctx.strokeRect(cx - 2.5, gy - 97.5, 6, 18);
-  const al = o.alpha * Math.PI / 180, nx0 = cx + 8, ny0 = gy - 70, nl = 34, nx1 = nx0 + nl * Math.cos(al), ny1 = ny0 - nl * Math.sin(al);
-  spdLn(nx0, ny0, nx1, ny1, '#4A5568', 6); spdLn(nx0, ny0, nx1, ny1, '#8FA0B3', 3);
-  ctx.strokeStyle = '#444'; ctx.lineWidth = 1.3; ctx.beginPath(); for (let i = 0; i < 8; i++) ctx.lineTo(cx + (i % 2 ? 4 : -4), gy - 98 + i * 1.6 - 0); ctx.stroke();
-  spdLn(cx - 16, gy - 99, cx + 56, gy - 103, '#4A5568', 3.4); ctx.fillStyle = '#C0503A'; ctx.fillRect(cx - 24, gy - 104, 10, 10); ctx.fillStyle = '#4A5568'; ctx.beginPath(); ctx.moveTo(cx + 50, gy - 103); ctx.lineTo(cx + 64, gy - 98); ctx.lineTo(cx + 60, gy - 92); ctx.lineTo(cx + 46, gy - 98); ctx.closePath(); ctx.fill();
-  ctx.strokeStyle = '#2B6CB0'; ctx.lineWidth = 2; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(nx1, ny1); ctx.quadraticCurveTo(nx1 + 44, ny1 - 22, nx1 + 74, gy - 6); ctx.stroke(); ctx.setLineDash([]);
-  const lab = (t, x, y2, x2, y3, al2) => { spdLn(x2, y3, x, y2 - 3, '#6B7280', 0.8); T(t, x, y2, { s: 8.6, b: true, a: al2, c: '#12303A' }); };
-  lab('Riser', cx - 14, gy - 26, cx - 5, gy - 26, 'right'); lab('Bearing', cx - 14, gy - 64, cx - 10, gy - 66, 'right'); lab('Spring', cx - 14, gy - 112, cx - 3, gy - 97, 'right'); lab('Swing arm', cx + 30, gy - 118, cx + 30, gy - 101, 'left'); lab('Spoon', cx + 66, gy - 108, cx + 58, gy - 98, 'left'); lab('Nozzle', cx + 46, gy - 50, nx0 + nl * 0.6 * Math.cos(al), ny0 - nl * 0.6 * Math.sin(al), 'left');
-  T('Jet leaves at ' + o.alpha.toFixed(0) + '°', bx + bw - 6, gy - 30, { s: 8.6, b: true, a: 'right', c: '#2B6CB0' }); T('The arm is struck by the jet, turns the head and springs back', bx + 8, by + 13, { s: 8.2, c: '#374151' });
+  const bx = 14, by = y + 32, bw = 250, bh = 176; spdBox(bx, by, bw, bh, '#DCEBF7'); SPA.tick(); SPA.close({ x: bx, y: by + 9, w: bw, h: 158 }); T('Live: jet, arm, spring and the turning head', bx + 8, by + bh - 4, { s: 7.6, i: true, c: '#374151' });
   const x2 = bx + bw + 14, w2 = W - 14 - x2; T('Class by operating pressure', x2, by + 10, { s: 9.4, b: true, c: IRC.ink });
   SPCLS.forEach((q, i) => { const yy = by + 20 + i * 42, on = B.cls === i; ctx.fillStyle = on ? '#E6F4F7' : '#fff'; ctx.strokeStyle = on ? '#0B7285' : '#B9C0C7'; ctx.lineWidth = on ? 2 : 1; rrect(x2, yy, w2, 37, 6); ctx.fill(); ctx.stroke(); T(q.n + ' (' + q.t + ')', x2 + 8, yy + 13, { s: 9, b: true, c: on ? IRC.ac : '#374151' }); T('pressure ' + q.p + ' · discharge ' + q.q + ' · throw ' + q.r, x2 + 8, yy + 27, { s: 8.3, c: '#374151' }); });
   T('Yours: head ' + B.hs.toFixed(1) + ' m, ' + B.qh.toFixed(2) + ' m³/h, throw ' + B.Rw.toFixed(1) + ' m → ' + SPCLS[B.cls].n.toLowerCase(), x2, by + 20 + 3 * 42 + 6, { s: 9, b: true, c: IRC.ac });
@@ -1661,7 +1649,7 @@ function spdJet(y, B, o, R) {
   sidHover(ax, v => [v.toFixed(0) + '°', 'throw ' + (base * IRM.angF(v)).toFixed(1) + ' m']);
   const dr = IRM.WD(o, o.Tair) * 100;
   spdWrap('Drift and evaporation loss ' + dr.toFixed(1) + ' % at ' + o.alpha.toFixed(0) + '° and ' + o.u.toFixed(1) + ' m/s. Pressure sets drop size: lower pressure gives larger drops that throw farther but can seal the soil surface; higher pressure gives finer drops that drift more.', 16, by + bh + 14, W - 32, 11, { s: 8.6, c: '#374151' });
-  return by + bh + 46;
+  { const fy = by + bh + 46; T('Seen from the field: the jet sweeps round, drops fly with the wind and wet the ground', 16, fy, { s: 9.4, b: true, c: '#12303A' }); SPA.tick(); SPA.field({ x: 14, y: fy + 8, w: W - 28, h: 232 }); return fy + 8 + 232 + 30; }
 }
 
 // ---------- 5. the water pattern, and how overlap evens it out ----------
@@ -1684,7 +1672,7 @@ function spdOverlap(y, B, o, R) {
   for (let k = 0; k <= 2; k++) spdDot(a2.sx(k * o.Ss), a2.y + a2.h, 3, '#12303A');
   irLeg([['rgba(43,108,176,0.6)', 'each sprinkler'], ['#2B6CB0', 'one lateral (added)'], ['#12303A', 'whole field']], x2 + 34, by + bh + 2); sidHover(a2, v => ['at ' + v.toFixed(1) + ' m', 'one lateral ' + sum(v).toFixed(1) + ' mm/h', 'whole field ' + fld(v).toFixed(1) + ' mm/h']);
   spdWrap('CU of the whole pattern is ' + irF(R.CU * 100, 1) + ' % (Christiansen; above 85 % is good). Overlap of S = ' + o.Ss.toFixed(1) + ' m against a throw of ' + Rw.toFixed(1) + ' m is ' + irF(Math.max(0, (1 - o.Ss / (2 * Rw)) * 100)) + ' % of the diameter.', 16, by + bh + 24, W - 32, 11, { s: 8.8, c: '#374151' });
-  return by + bh + 46;
+  { const fy = by + bh + 46; T('One sprinkler seen from above: the wetted disc, three spokes of catch cans, and depth against distance', 16, fy, { s: 9.4, b: true, c: '#12303A' }); SPA.tick(); SPA.plan({ x: 14, y: fy + 8, w: W - 28, h: 210 }); return fy + 8 + 210 + 30; }
 }
 
 // ---------- 6. the three layouts: rectangle, square, triangle ----------
@@ -1779,7 +1767,7 @@ function spdHydraulics(y, B, o, R) {
 const SPY = {}; window.SPY = SPY;
 function spPart(y, key, n, title, sub) {
   SPY[key] = y; ctx.fillStyle = '#12303A'; rrect(10, y, W - 20, 50, 9); ctx.fill(); ctx.fillStyle = '#D4A94A'; ctx.beginPath(); ctx.arc(34, y + 25, 13, 0, 6.2832); ctx.fill();
-  T(String(n), 34, y + 30, { s: 14, b: true, a: 'center', c: '#12303A' }); T('PART ' + n + ' OF 6', 56, y + 17, { s: 8, b: true, c: '#D4A94A' }); T(title, 56, y + 32, { s: 13.5, b: true, c: '#FFFFFF' }); T(sub, 56, y + 44, { s: 8.6, c: '#BFD3DC' }); return y + 66;
+  T(String(n), 34, y + 30, { s: 14, b: true, a: 'center', c: '#12303A' }); T('PART ' + n + ' OF 5', 56, y + 17, { s: 8, b: true, c: '#D4A94A' }); T(title, 56, y + 32, { s: 13.5, b: true, c: '#FFFFFF' }); T(sub, 56, y + 44, { s: 8.6, c: '#BFD3DC' }); return y + 66;
 }
 function spTextbook(y, C, R, o, tau) {
   const B = spBook(R, o, C, IRX.LLs, SPR.Af, SPR.Qs, IRX.lift, IRX.Lm); B.C = C; R.B = B; SIDCUR = SPR;
@@ -1791,6 +1779,11 @@ function spTextbook(y, C, R, o, tau) {
 function spInHead(y, n, title, sub) {
   ctx.fillStyle = '#12303A'; rrect(10, y, W - 20, 22, 6); ctx.fill(); ctx.fillStyle = '#D4A94A'; ctx.beginPath(); ctx.arc(26, y + 11, 8, 0, 6.2832); ctx.fill();
   T(n, 26, y + 15, { s: 10, b: true, a: 'center', c: '#12303A' }); T(title, 42, y + 15, { s: 11, b: true, c: '#FFFFFF' }); if (sub) T(sub, W - 18, y + 15, { s: 8.3, a: 'right', c: '#BFD3DC' }); return y + 36;
+}
+function spLive(y) {
+  const c = SPA.tick(); SPY.live = y - 6; T('Live view: what the settings above do', 16, y + 6, { s: 10.5, b: true, c: '#12303A' }); T('Tap a picture to pause', W - 16, y + 6, { s: 8.4, a: 'right', i: true, c: MUTE });
+  const fy = y + 14; SPA.field({ x: 14, y: fy, w: 352, h: 224 }); SPA.close({ x: 372, y: fy, w: 234, h: 148 }); SPA.controls(372, fy + 156, 234); T('Turn speed', 372, fy + 196, { s: 8.4, c: MUTE }); T(SPA.S.fast ? 'about 5 times faster than real' : 'real speed: a turn takes about a minute', 372, fy + 208, { s: 8.4, c: '#374151' }); T('Set time squeezed to about 90 s', 372, fy + 220, { s: 8.4, c: '#374151' });
+  T(SPA.caption(), 16, fy + 240, { s: 8.8, b: true, c: '#12303A' }); T(SPA.wet(), 16, fy + 253, { s: 8.8, c: '#374151' }); return fy + 270;
 }
 function spInputs(C, R, o, ST, T0, y) {
   const cx1 = 16, cx2 = 322, cw = 282, st = 31, srow = (a, b) => { };
@@ -1821,7 +1814,8 @@ function spInputs(C, R, o, ST, T0, y) {
   sidRow('Layout', y, [['Square', !SPR.tri, () => { SPR.tri = false; }, 'Sprinklers in a rectangle'], ['Triangular', SPR.tri, () => { SPR.tri = true; }, 'Every second lateral shifted by half a spacing']]); y += 38;
   sidSlider('d', 'Nozzle diameter (mm)', cx1, y, cw, ST.dr, SPR.d, v => v.toFixed(1) + ' mm'); sidSlider('P', 'Operating pressure (kPa)', cx2, y, cw, ST.pr, SPR.P, v => irF(v) + ' kPa');
   sidSlider('alpha', 'Trajectory angle (°)', cx1, y + st, cw, [8, 45, 1], o.alpha, v => v.toFixed(0) + '°'); y += st;
-  sidSlider('Ss', 'Spacing along the lateral (m)', cx2, y, cw, ST.ssr, SPR.Ss, v => v.toFixed(1) + ' m'); sidSlider('Sl', 'Spacing between laterals (m)', cx1, y + st, cw, ST.slr, SPR.Sl, v => v.toFixed(1) + ' m'); y += st + 28;
+  sidSlider('Ss', 'Spacing along the lateral (m)', cx2, y, cw, ST.ssr, SPR.Ss, v => v.toFixed(1) + ' m'); sidSlider('Sl', 'Spacing between laterals (m)', cx1, y + st, cw, ST.slr, SPR.Sl, v => v.toFixed(1) + ' m'); y += st + 26;
+  y = spLive(y);
   // ---- C. operation ----
   y = spInHead(y, 'C', 'How you run it', 'sets the depth, the time and the hours');
   sidRow('Run time', y, [['Automatic', SPR.tauto, () => { SPR.tauto = true; }, 'Time for the driest quarter of the field to receive the depth'], ['Manual', !SPR.tauto, () => { SPR.tauto = false; SPR.T = Math.round(T0); }, 'Choose the run time yourself']]); y += 38;
@@ -1836,98 +1830,14 @@ function spInputs(C, R, o, ST, T0, y) {
   return y + 2 * st + 44;
 }
 
-// "Sprinkler in action": a live, self-sizing panel (own canvas, own layout) for the Sprinklers scene.
-// Field view: the jet sweeps round, drops fly with gravity and wind drift, land and wet the ground.
-// Close-up: the impact head in slow motion (jet on the spoon, swing arm, spring, hit, head turns a step).
-// Plan view: wetted disc, catch cans on three spokes, radial depth bars against the model pattern.
+// Live sprinkler simulation, drawn straight into the scene canvas: the field view (jet, drops, wind, wetting), the head close-up and the plan view.
 (function () {
-  if (new URLSearchParams(location.search).get('embed')) return;
-  const wrap0 = document.querySelector('.canvaswrap'); if (!wrap0) return;
-  const root = document.createElement('section'); root.id = 'spAct'; root.style.display = 'none';
-  root.innerHTML = `<style>
-  #spAct{margin:12px 0 10px;padding:10px 12px 12px;background:#0F1419;border:1px solid #2B333D;border-radius:10px;color:#E6EDF3;font:13px/1.35 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-  #spAct h3{margin:0 0 2px;font-size:15px;color:#D4A94A;font-weight:700}
-  #spAct .sub{margin:0 0 8px;color:#9AA7B4;font-size:12px}
-  #spAct canvas{display:block;width:100%;border-radius:8px;background:#0b0f13;touch-action:manipulation}
-  #spAct .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 4px}
-  #spAct button{min-height:40px;padding:0 14px;border-radius:20px;border:1px solid #3a4452;background:#18202a;color:#E6EDF3;font:600 13px inherit;cursor:pointer}
-  #spAct button.on{background:#D4A94A;border-color:#D4A94A;color:#1a1405}
-  #spAct .sl{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:6px 18px;margin-top:6px}
-  #spAct label{display:block;font-size:12px;color:#9AA7B4}
-  #spAct label b{float:right;color:#E6EDF3;font-weight:600}
-  #spAct input[type=range]{width:100%;height:30px;margin:0;accent-color:#D4A94A}
-  #spAct .rd{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px;margin-top:10px}
-  #spAct .rd div{background:#151c24;border:1px solid #232c37;border-radius:8px;padding:6px 9px;font-size:11px;color:#9AA7B4}
-  #spAct .rd div b{display:block;font-size:14px;color:#E6EDF3;font-weight:600;margin-top:1px}
-  #spAct .rd div.bad b{color:#ff8a7a}
-  #spAct .note{margin-top:8px;font-size:11.5px;color:#9AA7B4}
-  @media (max-width:520px){#spAct{padding:8px}#spAct button{flex:1 1 auto}}
-  </style>
-  <div style="display:flex;align-items:center;gap:10px;margin:0 0 6px"><span style="flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:#D4A94A;color:#12303A;font:700 15px system-ui;display:flex;align-items:center;justify-content:center">6</span><div><div style="font-size:10px;font-weight:700;color:#D4A94A;letter-spacing:.04em">PART 6 OF 6</div><h3 style="margin:0">Sprinkler in action</h3></div></div>
-  <p class="sub">Drops leave the nozzle, fly under gravity and wind, and wet the ground as the head turns. It follows the settings you chose above and the soil you picked; the sliders here change the same settings.</p>
-  <canvas id="spaCv"></canvas>
-  <div class="bar"><button id="spaPlay" class="on">Pause</button><button id="spaSp1">Real turn speed</button><button id="spaSp2" class="on">Fast turn</button><button id="spaRst">Dry the ground</button></div>
-  <div class="sl" id="spaSl"></div>
-  <div class="rd" id="spaRd"></div>
-  <div class="note" id="spaNote"></div>`;
-  wrap0.after(root);
-
-  // ---- sticky jump bar: one tap to each part of the page ----
-  const nav = document.createElement('nav'); nav.id = 'spNav'; nav.style.display = 'none';
-  nav.innerHTML = `<style>
-  #spNav{position:sticky;top:0;z-index:30;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:7px 8px;margin:0 0 8px;background:rgba(15,20,25,0.96);border:1px solid #2B333D;border-radius:10px;scrollbar-width:none}
-  #spNav::-webkit-scrollbar{display:none}
-  #spNav button{flex:0 0 auto;min-height:38px;padding:0 13px;border-radius:19px;border:1px solid #3a4452;background:#18202a;color:#E6EDF3;font:600 12.5px system-ui,sans-serif;cursor:pointer;white-space:nowrap}
-  #spNav button b{color:#D4A94A;margin-right:5px}
-  #spNav button.on{background:#D4A94A;border-color:#D4A94A;color:#1a1405}#spNav button.on b{color:#1a1405}
-  </style>`;
-  const NAV = [['design', 'Your design'], ['result', 'Result'], ['checks', 'Does it pass?'], ['learn', 'How it works'], ['check', 'Check step by step'], ['improve', 'Improve it'], ['season', 'Season'], ['act', 'See it in action']];
-  NAV.forEach((n, i) => { const b = document.createElement('button'); b.innerHTML = '<b>' + (i + 1) + '</b>' + n[1]; b.dataset.k = n[0]; b.onclick = () => goTo(n[0]); nav.appendChild(b); });
-  { const pc0 = document.getElementById('proCenter'), w0 = pc0 && pc0.querySelector(':scope > .wrap'); if (w0) pc0.insertBefore(nav, w0); else wrap0.parentNode.insertBefore(nav, wrap0); }
-  function scroller() { let e = cv; while ((e = e.parentElement)) { const o = getComputedStyle(e).overflowY; if ((o === 'auto' || o === 'scroll') && e.scrollHeight > e.clientHeight + 4) return e; } return null; }
-  function posOf(k) { // absolute document y of a section
-    if (k === 'act') return root.getBoundingClientRect().top + (scroller() ? scroller().scrollTop - scroller().getBoundingClientRect().top : scrollY);
-    const c = document.getElementById('profileCanvas'), r = c.getBoundingClientRect(), y = (window.SPY || {})[k]; if (y == null) return null;
-    return r.top + y * r.height / c.height + (scroller() ? scroller().scrollTop - scroller().getBoundingClientRect().top : scrollY);
-  }
-  function goTo(k) { const y = posOf(k); if (y == null) return; const sc = scroller(), off = nav.offsetHeight + 10; if (sc) sc.scrollTo({ top: y - off, left: 0, behavior: 'smooth' }); else scrollTo({ top: y - off, behavior: 'smooth' }); }
-  function markNav() { const sc = scroller(), cur = (sc ? sc.scrollTop - 0 : scrollY) + nav.offsetHeight + 40; let best = 'design'; NAV.forEach(n => { const y = posOf(n[0]); if (y != null && y <= cur + (sc ? 0 : 0)) best = n[0]; }); [...nav.querySelectorAll('button')].forEach(b => b.classList.toggle('on', b.dataset.k === best)); }
-  setInterval(() => { if (nav.style.display !== 'none') markNav(); }, 400);
-  const cv = root.querySelector('#spaCv'), cx = cv.getContext('2d');
   const G = 9.81, rnd = Math.random, clampN = (v, a, b) => Math.max(a, Math.min(b, v));
   const S = { run: true, fast: true, th: 0, thAcc: 0, parts: [], spl: [], cp: [], N: 150, E: 20, dep: null, tex: null, tx: null, key: '', vol: 0, tsim: 0, cph: 0, armHit: 0, step: 0, lastT: 0, W: 0, H: 0, dpr: 1, mode: 'wide', sc: null, ok: false, Rs: 13, Es: 20, acc: 0, cacc: 0 };
-  const SL = [['P', 'Pressure', 'kPa', t => t.pr[0], t => t.pr[1], t => t.pr[2], v => Math.round(v)], ['d', 'Nozzle diameter', 'mm', t => t.dr[0], t => t.dr[1], t => t.dr[2], v => v.toFixed(1)], ['alpha', 'Trajectory angle', '°', () => 8, () => 45, () => 1, v => Math.round(v)], ['u', 'Wind speed', 'm/s', () => 0, () => 10, () => 0.5, v => v.toFixed(1)]];
-  const slEl = {}; const slBox = root.querySelector('#spaSl');
-  SL.forEach(s => { const l = document.createElement('label'); l.innerHTML = s[1] + ' <b></b><input type="range">'; slBox.appendChild(l); const i = l.querySelector('input'); slEl[s[0]] = { l, i, b: l.querySelector('b') }; i.addEventListener('input', () => { SPR[s[0]] = +i.value; if (s[0] === 'P' || s[0] === 'd') SPR.tauto = SPR.tauto; syncSl(true); }); });
-  let slType = ''; function syncSl(force) {
-    const t = IRM.STYPE[SPR.type];
-    SL.forEach(s => { const e = slEl[s[0]], i = e.i; if (slType !== SPR.type || force === 'range') { i.min = s[3](t); i.max = s[4](t); i.step = s[5](t); } if (document.activeElement !== i) i.value = SPR[s[0]]; e.b.textContent = s[6](+SPR[s[0]]) + ' ' + s[2]; });
-    slType = SPR.type;
-  }
-  const bt = id => root.querySelector(id);
-  bt('#spaPlay').onclick = () => { S.run = !S.run; bt('#spaPlay').textContent = S.run ? 'Pause' : 'Play'; bt('#spaPlay').classList.toggle('on', S.run); };
-  bt('#spaSp1').onclick = () => { S.fast = false; bt('#spaSp1').classList.add('on'); bt('#spaSp2').classList.remove('on'); };
-  bt('#spaSp2').onclick = () => { S.fast = true; bt('#spaSp2').classList.add('on'); bt('#spaSp1').classList.remove('on'); };
-  bt('#spaRst').onclick = () => { if (S.dep) S.dep.fill(0); S.vol = 0; S.tsim = 0; };
-  cv.addEventListener('click', () => bt('#spaPlay').click());
-
-  function size() {
-    const w = Math.max(280, Math.round(cv.parentNode.clientWidth - 0)), mode = w >= 720 ? 'wide' : 'narrow', dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const h = mode === 'wide' ? Math.round(w * 0.50) : Math.round(w * (0.66 + 0.64 + 1.15));
-    if (w === S.W && h === S.H && dpr === S.dpr) return; S.W = w; S.H = h; S.dpr = dpr; S.mode = mode;
-    cv.style.height = h + 'px'; cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
-  }
-  new ResizeObserver(size).observe(root);
-  function layout() {
-    const W = S.W, H = S.H, g = 6;
-    if (S.mode === 'wide') { const fw = Math.round(W * 0.60); return { f: { x: 0, y: 0, w: fw, h: H }, c: { x: fw + g, y: 0, w: W - fw - g, h: Math.round(H * 0.46) }, p: { x: fw + g, y: Math.round(H * 0.46) + g, w: W - fw - g, h: H - Math.round(H * 0.46) - g } }; }
-    const fh = Math.round(W * 0.66), ch = Math.round(W * 0.64); return { f: { x: 0, y: 0, w: W, h: fh }, c: { x: 0, y: fh + g, w: W, h: ch - g }, p: { x: 0, y: fh + ch + g, w: W, h: H - fh - ch - g } };
-  }
-  const rr = (r, rad) => { cx.beginPath(); cx.roundRect ? cx.roundRect(r.x, r.y, r.w, r.h, rad) : cx.rect(r.x, r.y, r.w, r.h); };
+  const rr = (r, rad) => { ctx.beginPath(); ctx.roundRect ? ctx.roundRect(r.x, r.y, r.w, r.h, rad) : ctx.rect(r.x, r.y, r.w, r.h); };
   const soilCol = () => { try { return DATA.texture[state.soil].color || '#8a6a48'; } catch (e) { return '#8a6a48'; } };
   const hexRGBa = h => { const n = parseInt(h.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
   const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
-
   // ----- model hooks -----
   function ctxState() {
     const o = spInput(), nz = IRM.nozzle(o), R = spRun(), ST = IRM.STYPE[o.type]; const al = clampN(+o.alpha || 25, 8, 45) * Math.PI / 180, v0 = Math.sqrt(nz.R * G / Math.max(0.2, Math.sin(2 * al)));
@@ -1985,114 +1895,136 @@ function spInputs(C, R, o, ST, T0, y) {
 
   // ----- drawing -----
   function drawField(c, r) {
-    cx.save(); cx.beginPath(); rr(r, 8); cx.clip();
-    const hz = r.y + r.h * 0.33; let g = cx.createLinearGradient(0, r.y, 0, hz); g.addColorStop(0, '#6fb2e8'); g.addColorStop(1, '#d6ebf8'); cx.fillStyle = g; cx.fillRect(r.x, r.y, r.w, hz - r.y + 1);
-    cx.fillStyle = '#9ec9a0'; cx.beginPath(); cx.moveTo(r.x, hz); for (let i = 0; i <= 24; i++) { const x = r.x + r.w * i / 24; cx.lineTo(x, hz - 5 - 6 * Math.abs(Math.sin(i * 1.9 + 0.7)) - (i % 5 === 0 ? 5 : 0)); } cx.lineTo(r.x + r.w, hz); cx.fill();
+    ctx.save(); ctx.beginPath(); rr(r, 8); ctx.clip();
+    const hz = r.y + r.h * 0.33; let g = ctx.createLinearGradient(0, r.y, 0, hz); g.addColorStop(0, '#6fb2e8'); g.addColorStop(1, '#d6ebf8'); ctx.fillStyle = g; ctx.fillRect(r.x, r.y, r.w, hz - r.y + 1);
+    ctx.fillStyle = '#9ec9a0'; ctx.beginPath(); ctx.moveTo(r.x, hz); for (let i = 0; i <= 24; i++) { const x = r.x + r.w * i / 24; ctx.lineTo(x, hz - 5 - 6 * Math.abs(Math.sin(i * 1.9 + 0.7)) - (i % 5 === 0 ? 5 : 0)); } ctx.lineTo(r.x + r.w, hz); ctx.fill();
     const soil = hexRGBa(soilCol()), lite = mix(soil, [255, 255, 255], 0.12), dark = mix(soil, [0, 0, 0], 0.22);
-    g = cx.createLinearGradient(0, hz, 0, r.y + r.h); g.addColorStop(0, 'rgb(' + lite + ')'); g.addColorStop(1, 'rgb(' + dark + ')'); cx.fillStyle = g; cx.fillRect(r.x, hz, r.w, r.y + r.h - hz);
+    g = ctx.createLinearGradient(0, hz, 0, r.y + r.h); g.addColorStop(0, 'rgb(' + lite + ')'); g.addColorStop(1, 'rgb(' + dark + ')'); ctx.fillStyle = g; ctx.fillRect(r.x, hz, r.w, r.y + r.h - hz);
     const s = (r.w * 0.46) / S.E, k = 0.32 * s, Cx = r.x + r.w * 0.5, Cy = r.y + r.h * 0.64;
-    cx.strokeStyle = 'rgba(0,0,0,0.07)'; cx.lineWidth = 1; for (let i = -9; i <= 9; i++) { const zz = i * S.E / 5; cx.beginPath(); cx.moveTo(r.x, Cy + zz * k); cx.lineTo(r.x + r.w, Cy + zz * k); cx.stroke(); }
-    cx.fillStyle = 'rgba(40,60,95,0.07)'; cx.beginPath(); cx.ellipse(Cx, Cy, c.Rm * s, c.Rm * k, 0, 0, 7); cx.fill();
-    cx.save(); cx.translate(Cx, Cy); cx.scale(s * 2 * S.E / S.N, k * 2 * S.E / S.N); cx.translate(-S.N / 2, -S.N / 2); cx.imageSmoothingEnabled = true; cx.drawImage(S.tx, 0, 0); cx.restore();
-    cx.strokeStyle = 'rgba(255,255,255,0.5)'; cx.setLineDash([4, 4]); cx.lineWidth = 1; cx.beginPath(); cx.ellipse(Cx, Cy, c.Rm * s, c.Rm * k, 0, 0, 7); cx.stroke(); cx.setLineDash([]);
-    cx.fillStyle = 'rgba(255,255,255,0.85)'; cx.font = '600 ' + Math.max(10, r.w * 0.017) + 'px system-ui,sans-serif'; cx.textAlign = 'left'; cx.fillText('throw radius ' + c.Rm.toFixed(1) + ' m', Cx + c.Rm * s * 0.62, Cy + c.Rm * k + 14);
-    const px = p => Cx + p.x * s, py = p => Cy + p.z * k - p.y * s, drops = pass => { for (const b of [[0, 0.9, 1.0], [0.9, 1.9, 1.5], [1.9, 9, 2.1]]) { cx.beginPath(); for (const p of S.parts) { if ((p.z >= 0) !== pass || p.s < b[0] || p.s >= b[1]) continue; const x = px(p), y = py(p); cx.moveTo(x, y); cx.lineTo(x - p.vx * s * 0.014, y + p.vy * s * 0.014 - p.vz * k * 0.014); } cx.lineWidth = Math.max(0.8, b[2] * (r.w / 700)); cx.strokeStyle = 'rgba(70,150,230,0.92)'; cx.lineCap = 'round'; cx.stroke(); } };
+    ctx.strokeStyle = 'rgba(0,0,0,0.07)'; ctx.lineWidth = 1; for (let i = -9; i <= 9; i++) { const zz = i * S.E / 5; ctx.beginPath(); ctx.moveTo(r.x, Cy + zz * k); ctx.lineTo(r.x + r.w, Cy + zz * k); ctx.stroke(); }
+    ctx.fillStyle = 'rgba(40,60,95,0.07)'; ctx.beginPath(); ctx.ellipse(Cx, Cy, c.Rm * s, c.Rm * k, 0, 0, 7); ctx.fill();
+    ctx.save(); ctx.translate(Cx, Cy); ctx.scale(s * 2 * S.E / S.N, k * 2 * S.E / S.N); ctx.translate(-S.N / 2, -S.N / 2); ctx.imageSmoothingEnabled = true; ctx.drawImage(S.tx, 0, 0); ctx.restore();
+    ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.setLineDash([4, 4]); ctx.lineWidth = 1; ctx.beginPath(); ctx.ellipse(Cx, Cy, c.Rm * s, c.Rm * k, 0, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(255,255,255,0.85)'; ctx.font = '600 ' + Math.max(10, r.w * 0.017) + 'px system-ui,sans-serif'; ctx.textAlign = 'left'; ctx.fillText('throw radius ' + c.Rm.toFixed(1) + ' m', Cx + c.Rm * s * 0.62, Cy + c.Rm * k + 14);
+    const px = p => Cx + p.x * s, py = p => Cy + p.z * k - p.y * s, drops = pass => { for (const b of [[0, 0.9, 1.0], [0.9, 1.9, 1.5], [1.9, 9, 2.1]]) { ctx.beginPath(); for (const p of S.parts) { if ((p.z >= 0) !== pass || p.s < b[0] || p.s >= b[1]) continue; const x = px(p), y = py(p); ctx.moveTo(x, y); ctx.lineTo(x - p.vx * s * 0.014, y + p.vy * s * 0.014 - p.vz * k * 0.014); } ctx.lineWidth = Math.max(0.8, b[2] * (r.w / 700)); ctx.strokeStyle = 'rgba(70,150,230,0.92)'; ctx.lineCap = 'round'; ctx.stroke(); } };
     drops(false);
-    cx.fillStyle = 'rgba(0,0,0,0.25)'; cx.beginPath(); cx.ellipse(Cx, Cy, Math.max(5, s * 0.5), Math.max(2, k * 0.5), 0, 0, 7); cx.fill(); cx.strokeStyle = '#6b7480'; cx.lineWidth = Math.max(2.5, s * 0.2); cx.beginPath(); cx.moveTo(Cx, Cy); cx.lineTo(Cx, Cy - 0.55 * s); cx.stroke(); cx.fillStyle = '#c79a3a'; cx.beginPath(); cx.arc(Cx, Cy - 0.65 * s, Math.max(2.5, s * 0.17), 0, 7); cx.fill();
-    cx.strokeStyle = '#b8892f'; cx.lineWidth = Math.max(1.5, s * 0.1); cx.beginPath(); cx.moveTo(Cx, Cy - 0.65 * s); cx.lineTo(Cx + Math.cos(S.th) * 0.5 * s, Cy - 0.7 * s + Math.sin(S.th) * 0.5 * k); cx.stroke();
+    ctx.fillStyle = 'rgba(0,0,0,0.25)'; ctx.beginPath(); ctx.ellipse(Cx, Cy, Math.max(5, s * 0.5), Math.max(2, k * 0.5), 0, 0, 7); ctx.fill(); ctx.strokeStyle = '#6b7480'; ctx.lineWidth = Math.max(2.5, s * 0.2); ctx.beginPath(); ctx.moveTo(Cx, Cy); ctx.lineTo(Cx, Cy - 0.55 * s); ctx.stroke(); ctx.fillStyle = '#c79a3a'; ctx.beginPath(); ctx.arc(Cx, Cy - 0.65 * s, Math.max(2.5, s * 0.17), 0, 7); ctx.fill();
+    ctx.strokeStyle = '#b8892f'; ctx.lineWidth = Math.max(1.5, s * 0.1); ctx.beginPath(); ctx.moveTo(Cx, Cy - 0.65 * s); ctx.lineTo(Cx + Math.cos(S.th) * 0.5 * s, Cy - 0.7 * s + Math.sin(S.th) * 0.5 * k); ctx.stroke();
     drops(true);
-    cx.fillStyle = 'rgba(255,255,255,0.9)'; cx.beginPath(); for (const q of S.spl) { const x = px(q), y = py(q); cx.moveTo(x + 1, y); cx.arc(x, y, Math.max(0.8, r.w * 0.0016), 0, 7); } cx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.beginPath(); for (const q of S.spl) { const x = px(q), y = py(q); ctx.moveTo(x + 1, y); ctx.arc(x, y, Math.max(0.8, r.w * 0.0016), 0, 7); } ctx.fill();
     // wind arrow and sock
-    const wu = c.u, wx = r.x + 14, wy = r.y + 22; cx.fillStyle = 'rgba(255,255,255,0.9)'; cx.font = '600 ' + Math.max(10, r.w * 0.017) + 'px system-ui,sans-serif'; cx.fillText('wind ' + wu.toFixed(1) + ' m/s', wx, wy);
-    cx.strokeStyle = 'rgba(255,255,255,0.9)'; cx.fillStyle = cx.strokeStyle; cx.lineWidth = 2; const al = 14 + wu * 7; cx.beginPath(); cx.moveTo(wx, wy + 10); cx.lineTo(wx + al, wy + 10); cx.stroke(); cx.beginPath(); cx.moveTo(wx + al + 6, wy + 10); cx.lineTo(wx + al - 2, wy + 6); cx.lineTo(wx + al - 2, wy + 14); cx.fill();
-    cx.restore();
+    const wu = c.u, wx = r.x + 14, wy = r.y + 22; ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.font = '600 ' + Math.max(10, r.w * 0.017) + 'px system-ui,sans-serif'; ctx.fillText('wind ' + wu.toFixed(1) + ' m/s', wx, wy);
+    ctx.strokeStyle = 'rgba(255,255,255,0.9)'; ctx.fillStyle = ctx.strokeStyle; ctx.lineWidth = 2; const al = 14 + wu * 7; ctx.beginPath(); ctx.moveTo(wx, wy + 10); ctx.lineTo(wx + al, wy + 10); ctx.stroke(); ctx.beginPath(); ctx.moveTo(wx + al + 6, wy + 10); ctx.lineTo(wx + al - 2, wy + 6); ctx.lineTo(wx + al - 2, wy + 14); ctx.fill();
+    ctx.restore();
   }
-  function drawClose(c, r) {
-    const geo = closeGeo(c, r), u = geo.u, gy = geo.gy;
-    cx.save(); cx.beginPath(); rr(r, 8); cx.clip(); cx.translate(r.x, r.y);
-    let g = cx.createLinearGradient(0, 0, 0, r.h); g.addColorStop(0, '#79b9ea'); g.addColorStop(1, '#d9edf8'); cx.fillStyle = g; cx.fillRect(0, 0, r.w, r.h);
-    const soil = hexRGBa(soilCol()); cx.fillStyle = 'rgb(' + mix(soil, [0, 0, 0], 0.1) + ')'; cx.fillRect(0, gy, r.w, r.h - gy);
-    cx.fillStyle = 'rgba(255,255,255,0.9)'; cx.font = '600 ' + Math.max(10, r.w * 0.03) + 'px system-ui,sans-serif'; cx.textAlign = 'left'; cx.fillText('Close-up of the head, slow motion', 8, 15);
+  function drawClose(c, rO) {
+    const r = { x: 0, y: 0, w: 300, h: 190 }, geo = closeGeo(c, r), u = geo.u, gy = geo.gy;
+    ctx.save(); ctx.beginPath(); rr(rO, 8); ctx.clip(); ctx.translate(rO.x, rO.y); ctx.scale(rO.w / 300, rO.h / 190);
+    let g = ctx.createLinearGradient(0, 0, 0, r.h); g.addColorStop(0, '#79b9ea'); g.addColorStop(1, '#d9edf8'); ctx.fillStyle = g; ctx.fillRect(0, 0, r.w, r.h);
+    const soil = hexRGBa(soilCol()); ctx.fillStyle = 'rgb(' + mix(soil, [0, 0, 0], 0.1) + ')'; ctx.fillRect(0, gy, r.w, r.h - gy);
+    ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.font = '600 ' + Math.max(10, r.w * 0.03) + 'px system-ui,sans-serif'; ctx.textAlign = 'left'; ctx.fillText('Close-up of the head, slow motion', 8, 15);
     const cxp = geo.cxp, al = c.al, ar = armAng(), AM = 0.55, impact = c.o.type === 'impact' || c.o.type === 'gun';
     // jet drops (behind head)
-    const drawDrops = () => { cx.lineCap = 'round'; cx.beginPath(); for (const p of S.cp) { if (p.sp) continue; cx.moveTo(p.x, p.y); cx.lineTo(p.x - p.vx * 0.018, p.y - p.vy * 0.018); } cx.lineWidth = Math.max(1.6, u * 0.16); cx.strokeStyle = 'rgba(62,145,232,0.8)'; cx.stroke(); cx.beginPath(); for (const p of S.cp) { if (!p.sp) continue; cx.moveTo(p.x, p.y); cx.lineTo(p.x - p.vx * 0.02, p.y - p.vy * 0.02); } cx.lineWidth = Math.max(1, u * 0.08); cx.strokeStyle = 'rgba(200,230,255,0.95)'; cx.stroke(); };
+    const drawDrops = () => { ctx.lineCap = 'round'; ctx.beginPath(); for (const p of S.cp) { if (p.sp) continue; ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - p.vx * 0.018, p.y - p.vy * 0.018); } ctx.lineWidth = Math.max(1.6, u * 0.16); ctx.strokeStyle = 'rgba(62,145,232,0.8)'; ctx.stroke(); ctx.beginPath(); for (const p of S.cp) { if (!p.sp) continue; ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - p.vx * 0.02, p.y - p.vy * 0.02); } ctx.lineWidth = Math.max(1, u * 0.08); ctx.strokeStyle = 'rgba(200,230,255,0.95)'; ctx.stroke(); };
     drawDrops();
-    const metal = (x0, y0, x1, y1, a, b) => { const gg = cx.createLinearGradient(x0, y0, x1, y1); gg.addColorStop(0, a); gg.addColorStop(0.45, '#fff6d0'); gg.addColorStop(1, b); return gg; };
+    const metal = (x0, y0, x1, y1, a, b) => { const gg = ctx.createLinearGradient(x0, y0, x1, y1); gg.addColorStop(0, a); gg.addColorStop(0.45, '#fff6d0'); gg.addColorStop(1, b); return gg; };
     // riser
-    cx.fillStyle = metal(cxp - 0.5 * u, 0, cxp + 0.5 * u, 0, '#80878f', '#4c525a'); cx.fillRect(cxp - 0.5 * u, geo.bodyTop + 1.2 * u, u, gy - geo.bodyTop - 1.2 * u);
-    cx.fillStyle = '#3d444b'; cx.fillRect(cxp - 0.75 * u, gy - 0.3 * u, 1.5 * u, 0.3 * u);
+    ctx.fillStyle = metal(cxp - 0.5 * u, 0, cxp + 0.5 * u, 0, '#80878f', '#4c525a'); ctx.fillRect(cxp - 0.5 * u, geo.bodyTop + 1.2 * u, u, gy - geo.bodyTop - 1.2 * u);
+    ctx.fillStyle = '#3d444b'; ctx.fillRect(cxp - 0.75 * u, gy - 0.3 * u, 1.5 * u, 0.3 * u);
     // body, bearing
-    cx.fillStyle = metal(cxp - 0.75 * u, 0, cxp + 0.75 * u, 0, '#9b7020', '#d8ab43'); rr({ x: cxp - 0.75 * u, y: geo.bodyTop, w: 1.5 * u, h: 1.3 * u }, 0.3 * u); cx.fill(); cx.strokeStyle = 'rgba(0,0,0,0.35)'; cx.lineWidth = 1; cx.stroke();
-    cx.fillStyle = '#6f7780'; cx.fillRect(cxp - 0.62 * u, geo.bodyTop + 1.2 * u, 1.24 * u, 0.22 * u);
+    ctx.fillStyle = metal(cxp - 0.75 * u, 0, cxp + 0.75 * u, 0, '#9b7020', '#d8ab43'); rr({ x: cxp - 0.75 * u, y: geo.bodyTop, w: 1.5 * u, h: 1.3 * u }, 0.3 * u); ctx.fill(); ctx.strokeStyle = 'rgba(0,0,0,0.35)'; ctx.lineWidth = 1; ctx.stroke();
+    ctx.fillStyle = '#6f7780'; ctx.fillRect(cxp - 0.62 * u, geo.bodyTop + 1.2 * u, 1.24 * u, 0.22 * u);
     // turn marks on the bearing: rotates a step at each hit
-    const turn = S.th * 3; cx.strokeStyle = 'rgba(30,20,0,0.55)'; for (let i = 0; i < 5; i++) { const a = turn + i * 1.2, xx = cxp + Math.sin(a) * 0.55 * u; if (Math.cos(a) > 0) { cx.beginPath(); cx.moveTo(xx, geo.bodyTop + 0.3 * u); cx.lineTo(xx, geo.bodyTop + 1.1 * u); cx.stroke(); } }
+    const turn = S.th * 3; ctx.strokeStyle = 'rgba(30,20,0,0.55)'; for (let i = 0; i < 5; i++) { const a = turn + i * 1.2, xx = cxp + Math.sin(a) * 0.55 * u; if (Math.cos(a) > 0) { ctx.beginPath(); ctx.moveTo(xx, geo.bodyTop + 0.3 * u); ctx.lineTo(xx, geo.bodyTop + 1.1 * u); ctx.stroke(); } }
     // main nozzle
-    cx.save(); cx.translate(cxp + 0.4 * u, geo.bodyTop + 0.2 * u); cx.rotate(-al); cx.fillStyle = metal(0, -0.35 * u, 0, 0.35 * u, '#d9ab40', '#8d681f'); cx.fillRect(0, -0.34 * u, 2.5 * u, 0.68 * u); cx.fillStyle = '#c0c6cc'; cx.fillRect(2.1 * u, -0.28 * u, 0.5 * u, 0.56 * u); cx.fillStyle = '#10151b'; cx.fillRect(2.58 * u, -Math.min(0.24 * u, 0.04 * u * c.o.d), 0.06 * u, Math.min(0.48 * u, 0.08 * u * c.o.d)); cx.restore();
+    ctx.save(); ctx.translate(cxp + 0.4 * u, geo.bodyTop + 0.2 * u); ctx.rotate(-al); ctx.fillStyle = metal(0, -0.35 * u, 0, 0.35 * u, '#d9ab40', '#8d681f'); ctx.fillRect(0, -0.34 * u, 2.5 * u, 0.68 * u); ctx.fillStyle = '#c0c6cc'; ctx.fillRect(2.1 * u, -0.28 * u, 0.5 * u, 0.56 * u); ctx.fillStyle = '#10151b'; ctx.fillRect(2.58 * u, -Math.min(0.24 * u, 0.04 * u * c.o.d), 0.06 * u, Math.min(0.48 * u, 0.08 * u * c.o.d)); ctx.restore();
     if (impact) {
       // swing arm: pivot above the body, spoon swings into the jet and out
-      const px0 = cxp, py0 = geo.pivY; cx.fillStyle = '#6f7780'; cx.beginPath(); cx.arc(px0, py0, 0.28 * u, 0, 7); cx.fill(); cx.fillRect(px0 - 0.12 * u, py0, 0.24 * u, geo.bodyTop - py0);
-      const ang = -0.2 + ar * 0.5; cx.save(); cx.translate(px0, py0); cx.rotate(ang); cx.strokeStyle = '#7b838c'; cx.lineWidth = 0.22 * u; cx.lineCap = 'round'; cx.beginPath(); cx.moveTo(-1.0 * u, 0); cx.lineTo(3.1 * u, 0); cx.stroke();
-      cx.fillStyle = '#b3bac1'; cx.fillRect(-1.3 * u, -0.28 * u, 0.55 * u, 0.56 * u);
-      cx.fillStyle = '#d4a94a'; cx.beginPath(); cx.moveTo(2.8 * u, -0.1 * u); cx.quadraticCurveTo(3.5 * u, 0.1 * u, 3.4 * u, 0.9 * u); cx.lineTo(2.9 * u, 0.9 * u); cx.quadraticCurveTo(3.0 * u, 0.3 * u, 2.6 * u, 0.1 * u); cx.fill(); cx.restore();
+      const px0 = cxp, py0 = geo.pivY; ctx.fillStyle = '#6f7780'; ctx.beginPath(); ctx.arc(px0, py0, 0.28 * u, 0, 7); ctx.fill(); ctx.fillRect(px0 - 0.12 * u, py0, 0.24 * u, geo.bodyTop - py0);
+      const ang = -0.2 + ar * 0.5; ctx.save(); ctx.translate(px0, py0); ctx.rotate(ang); ctx.strokeStyle = '#7b838c'; ctx.lineWidth = 0.22 * u; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(-1.0 * u, 0); ctx.lineTo(3.1 * u, 0); ctx.stroke();
+      ctx.fillStyle = '#b3bac1'; ctx.fillRect(-1.3 * u, -0.28 * u, 0.55 * u, 0.56 * u);
+      ctx.fillStyle = '#d4a94a'; ctx.beginPath(); ctx.moveTo(2.8 * u, -0.1 * u); ctx.quadraticCurveTo(3.5 * u, 0.1 * u, 3.4 * u, 0.9 * u); ctx.lineTo(2.9 * u, 0.9 * u); ctx.quadraticCurveTo(3.0 * u, 0.3 * u, 2.6 * u, 0.1 * u); ctx.fill(); ctx.restore();
       // spring
-      cx.strokeStyle = '#363c43'; cx.lineWidth = Math.max(1, 0.07 * u); cx.beginPath(); const sx0 = px0 - 0.9 * u, sy0 = py0 - 0.05 * u, sx1 = px0 - 0.4 * u, sy1 = py0 - 1.0 * u, n = 9; for (let i = 0; i <= n; i++) { const t = i / n, x = sx0 + (sx1 - sx0) * t + (i % 2 ? 0.14 : -0.14) * u * (i > 0 && i < n), y = sy0 + (sy1 - sy0) * t; i ? cx.lineTo(x, y) : cx.moveTo(x, y); } cx.stroke();
+      ctx.strokeStyle = '#363c43'; ctx.lineWidth = Math.max(1, 0.07 * u); ctx.beginPath(); const sx0 = px0 - 0.9 * u, sy0 = py0 - 0.05 * u, sx1 = px0 - 0.4 * u, sy1 = py0 - 1.0 * u, n = 9; for (let i = 0; i <= n; i++) { const t = i / n, x = sx0 + (sx1 - sx0) * t + (i % 2 ? 0.14 : -0.14) * u * (i > 0 && i < n), y = sy0 + (sy1 - sy0) * t; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke();
     }
     drawDrops && 0;
     // labels
-    cx.fillStyle = '#10161d'; cx.font = '600 ' + Math.max(9, r.w * 0.026) + 'px system-ui,sans-serif'; const lab = (t, x, y) => { cx.fillText(t, x, y); };
-    lab('riser', cxp - 0.5 * u - cx.measureText('riser').width - 4, gy - 2 * u); if (impact) { lab('swing arm', cxp - 1.0 * u - cx.measureText('swing arm').width - 4, geo.pivY - 0.5 * u); lab('spoon', cxp + 3.1 * u, geo.pivY - 0.8 * u); lab('spring', cxp + 0.2 * u, geo.pivY - 0.9 * u); } lab('nozzle', geo.tx - 0.3 * u, geo.ty + 1.6 * u); lab('bearing', cxp - 0.75 * u - cx.measureText('bearing').width - 4, geo.bodyTop + 1.35 * u);
-    if (impact && S.armHit > 0.3) { cx.fillStyle = '#c0392b'; cx.font = '700 ' + Math.max(10, r.w * 0.03) + 'px system-ui,sans-serif'; cx.fillText('hit: head turns one step', cxp - 0.9 * u, gy - 4.3 * u - 7 * u * 0 + 4); }
-    cx.restore();
+    ctx.fillStyle = '#10161d'; ctx.font = '600 ' + Math.max(9, r.w * 0.026) + 'px system-ui,sans-serif'; const lab = (t, x, y) => { ctx.fillText(t, x, y); };
+    lab('riser', cxp - 0.5 * u - ctx.measureText('riser').width - 4, gy - 2 * u); if (impact) { lab('swing arm', cxp - 1.0 * u - ctx.measureText('swing arm').width - 4, geo.pivY - 0.5 * u); lab('spoon', cxp + 3.1 * u, geo.pivY - 0.8 * u); lab('spring', cxp + 0.2 * u, geo.pivY - 0.9 * u); } lab('nozzle', geo.tx - 0.3 * u, geo.ty + 1.6 * u); lab('bearing', cxp - 0.75 * u - ctx.measureText('bearing').width - 4, geo.bodyTop + 1.35 * u);
+    if (impact && S.armHit > 0.3) { ctx.fillStyle = '#c0392b'; ctx.font = '700 ' + Math.max(10, r.w * 0.03) + 'px system-ui,sans-serif'; ctx.fillText('hit: head turns one step', cxp - 0.9 * u, gy - 4.3 * u - 7 * u * 0 + 4); }
+    ctx.restore();
   }
   function drawPlan(c, r) {
-    cx.save(); cx.beginPath(); rr(r, 8); cx.clip(); cx.fillStyle = '#12181f'; cx.fillRect(r.x, r.y, r.w, r.h);
+    ctx.save(); ctx.beginPath(); rr(r, 8); ctx.clip(); ctx.fillStyle = '#12181f'; ctx.fillRect(r.x, r.y, r.w, r.h);
     const wide = r.w / r.h > 1.3, side = wide ? Math.min(r.h - 26, r.w * 0.5) : Math.min(r.w - 24, r.h * 0.52), dx = r.x + 10 + (wide ? 0 : (r.w - 20 - side) / 2), dy = r.y + 22;
-    cx.fillStyle = '#e8edf3'; cx.font = '600 ' + Math.max(10, Math.min(13, r.w * 0.034)) + 'px system-ui,sans-serif'; cx.textAlign = 'left'; cx.fillText('Seen from above: wetted ground and catch cans', r.x + 8, r.y + 14);
-    const soil = hexRGBa(soilCol()); cx.fillStyle = 'rgb(' + soil + ')'; cx.fillRect(dx, dy, side, side); cx.imageSmoothingEnabled = true; cx.drawImage(S.tx, dx, dy, side, side);
-    const pc = side / (2 * S.E), ox = dx + side / 2, oy = dy + side / 2; cx.strokeStyle = 'rgba(255,255,255,0.6)'; cx.setLineDash([4, 4]); cx.beginPath(); cx.arc(ox, oy, c.Rm * pc, 0, 7); cx.stroke(); cx.setLineDash([]);
-    cx.strokeStyle = 'rgba(255,230,140,0.9)'; cx.lineWidth = 1.5; cx.beginPath(); cx.moveTo(ox, oy); cx.lineTo(ox + Math.cos(S.th) * c.Rm * pc, oy + Math.sin(S.th) * c.Rm * pc); cx.stroke();
-    cx.fillStyle = '#d4a94a'; cx.beginPath(); cx.arc(ox, oy, 3.5, 0, 7); cx.fill();
+    ctx.fillStyle = '#e8edf3'; ctx.font = '600 ' + Math.max(10, Math.min(13, r.w * 0.034)) + 'px system-ui,sans-serif'; ctx.textAlign = 'left'; ctx.fillText('Seen from above: wetted ground and catch cans', r.x + 8, r.y + 14);
+    const soil = hexRGBa(soilCol()); ctx.fillStyle = 'rgb(' + soil + ')'; ctx.fillRect(dx, dy, side, side); ctx.imageSmoothingEnabled = true; ctx.drawImage(S.tx, dx, dy, side, side);
+    const pc = side / (2 * S.E), ox = dx + side / 2, oy = dy + side / 2; ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.arc(ox, oy, c.Rm * pc, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+    ctx.strokeStyle = 'rgba(255,230,140,0.9)'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(ox + Math.cos(S.th) * c.Rm * pc, oy + Math.sin(S.th) * c.Rm * pc); ctx.stroke();
+    ctx.fillStyle = '#d4a94a'; ctx.beginPath(); ctx.arc(ox, oy, 3.5, 0, 7); ctx.fill();
     const N = S.N, d = S.dep, cell = 2 * S.E / N, depAt = (x, y) => { let s = 0, n = 0; const i0 = Math.floor((x + S.E) / cell), j0 = Math.floor((y + S.E) / cell); for (let j = j0 - 1; j <= j0 + 1; j++)for (let i = i0 - 1; i <= i0 + 1; i++) if (i >= 0 && j >= 0 && i < N && j < N) { s += d[j * N + i]; n++; } return n ? s / n : 0; };
-    let mx = 0.001; for (let i = 0; i < d.length; i++) if (d[i] > mx) mx = d[i]; const spokes = [Math.PI / 2, Math.PI * 7 / 6, Math.PI * 11 / 6]; for (const a of spokes) for (let k = 1; k <= 6; k++) { const rad = c.Rm * k / 6.5, x = Math.cos(a) * rad, y = Math.sin(a) * rad, dv = depAt(x, y), f = clampN(dv / (mx * 0.8), 0, 1); const X = ox + x * pc, Y = oy + y * pc; cx.fillStyle = '#0c1116'; cx.beginPath(); cx.arc(X, Y, 5.2, 0, 7); cx.fill(); cx.fillStyle = 'rgba(80,170,255,' + (0.25 + 0.75 * f) + ')'; cx.beginPath(); cx.arc(X, Y, 3.8 * (0.35 + 0.65 * f) + 0.6, 0, 7); cx.fill(); }
+    let mx = 0.001; for (let i = 0; i < d.length; i++) if (d[i] > mx) mx = d[i]; const spokes = [Math.PI / 2, Math.PI * 7 / 6, Math.PI * 11 / 6]; for (const a of spokes) for (let k = 1; k <= 6; k++) { const rad = c.Rm * k / 6.5, x = Math.cos(a) * rad, y = Math.sin(a) * rad, dv = depAt(x, y), f = clampN(dv / (mx * 0.8), 0, 1); const X = ox + x * pc, Y = oy + y * pc; ctx.fillStyle = '#0c1116'; ctx.beginPath(); ctx.arc(X, Y, 5.2, 0, 7); ctx.fill(); ctx.fillStyle = 'rgba(80,170,255,' + (0.25 + 0.75 * f) + ')'; ctx.beginPath(); ctx.arc(X, Y, 3.8 * (0.35 + 0.65 * f) + 0.6, 0, 7); ctx.fill(); }
     // radial bars against the model
     const bx = wide ? dx + side + 14 : r.x + 12, by = wide ? dy + 16 : dy + side + 26, bw = wide ? r.x + r.w - bx - 10 : r.w - 24, bh = wide ? side - 34 : r.y + r.h - by - 26, nb = 20, bs = new Float32Array(nb), bn = new Float32Array(nb), ms = new Float32Array(nb), mn = new Float32Array(nb), P = c.R.P, ext = c.Rm * 1.2;
     for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) { const x = (i + 0.5) * cell - S.E, y = (j + 0.5) * cell - S.E, rd = Math.hypot(x, y); if (rd < ext) { const b = Math.floor(rd / ext * nb); bs[b] += d[j * N + i]; bn[b]++; } }
     for (let j = 0; j < P.n; j++) for (let i = 0; i < P.n; i++) { const x = -P.ext + i * P.hh, y = -P.ext + j * P.hh, rd = Math.hypot(x, y); if (rd < ext) { const b = Math.floor(rd / ext * nb); ms[b] += P.g[j * P.n + i]; mn[b]++; } }
     let m1 = 0.0001, m2 = 0.0001; for (let b = 0; b < nb; b++) { bs[b] = bn[b] ? bs[b] / bn[b] : 0; ms[b] = mn[b] ? ms[b] / mn[b] : 0; m1 = Math.max(m1, bs[b]); m2 = Math.max(m2, ms[b]); }
-    cx.fillStyle = '#9AA7B4'; cx.font = Math.max(9, Math.min(11, r.w * 0.03)) + 'px system-ui,sans-serif'; cx.fillText('depth by distance: bars live, line model', bx, by - 6, bw);
-    cx.fillStyle = '#0c1116'; cx.fillRect(bx, by, bw, bh); const w1 = bw / nb;
-    for (let b = 0; b < nb; b++) { const h = bs[b] / m1 * bh * 0.92; cx.fillStyle = 'rgba(74,160,240,0.85)'; cx.fillRect(bx + b * w1 + 1, by + bh - h, w1 - 2, h); }
-    cx.strokeStyle = '#ffb84d'; cx.lineWidth = 2; cx.beginPath(); for (let b = 0; b < nb; b++) { const x = bx + (b + 0.5) * w1, y = by + bh - ms[b] / m2 * bh * 0.92; b ? cx.lineTo(x, y) : cx.moveTo(x, y); } cx.stroke();
-    cx.fillStyle = '#9AA7B4'; cx.fillText('0', bx, by + bh + 12); cx.textAlign = 'right'; cx.fillText(ext.toFixed(0) + ' m', bx + bw, by + bh + 12); cx.textAlign = 'left';
-    cx.restore();
-  }
-  function readout(c) {
-    const R = c.R, sc = c.o, q = c.q, Rs = R.AR, rate = R.P.g.reduce((m, v) => Math.max(m, v), 0) * 60, area = Math.PI * c.Rm * c.Rm, mean = S.vol * 1000 / 1000 / area * (1);
-    const items = [['Throw radius', c.Rm.toFixed(1) + ' m'], ['Flow', q.toFixed(1) + ' L/min (' + (q * 0.06).toFixed(2) + ' m³/h)'], ['Jet speed', c.v0.toFixed(1) + ' m/s at ' + Math.round(c.al * 180 / Math.PI) + '°'], ['Biggest drop', (c.dmax).toFixed(1) + ' mm'], ['Lost to wind and air', (R.wdel * 100).toFixed(1) + ' %'], ['Peak rate of the pattern', rate.toFixed(0) + ' mm/h'], ['Soil can take', (c.R.K * 0 + R.K * 60 * Math.pow(30, R.A - 1) * R.A * 1).toFixed(0) + ' mm/h at 30 min'], ['Water so far, one sprinkler alone', (S.vol / area).toFixed(1) + ' mm in ' + Math.round(S.tsim) + ' of ' + Math.round(c.R.T) + ' min']];
-    const bad = rate > R.K * 60 * Math.pow(30, R.A - 1) * R.A;
-    root.querySelector('#spaRd').innerHTML = items.map((x, i) => '<div' + (i === 5 && bad ? ' class="bad"' : '') + '>' + x[0] + '<b>' + x[1] + '</b></div>').join('');
-    root.querySelector('#spaNote').textContent = (c.o.type === 'impact' || c.o.type === 'gun' ? 'The jet pushes the swing arm out, the spring brings it back, and each hit turns the head a few degrees. ' : 'This head turns by a gear or by the water, with no swing arm. ') + (S.fast ? 'The head turns about 5 times faster than real, and a whole irrigation set is squeezed into about 90 seconds so you can watch the ground wet up.' : 'Real turning speed: one turn takes about a minute.') + (bad ? ' Under the jet the water arrives faster than this soil can drink it, so it can run off.' : '') + ' Tap the picture to pause.';
+    ctx.fillStyle = '#9AA7B4'; ctx.font = Math.max(9, Math.min(11, r.w * 0.03)) + 'px system-ui,sans-serif'; ctx.fillText('depth by distance: bars live, line model', bx, by - 6, bw);
+    ctx.fillStyle = '#0c1116'; ctx.fillRect(bx, by, bw, bh); const w1 = bw / nb;
+    for (let b = 0; b < nb; b++) { const h = bs[b] / m1 * bh * 0.92; ctx.fillStyle = 'rgba(74,160,240,0.85)'; ctx.fillRect(bx + b * w1 + 1, by + bh - h, w1 - 2, h); }
+    ctx.strokeStyle = '#ffb84d'; ctx.lineWidth = 2; ctx.beginPath(); for (let b = 0; b < nb; b++) { const x = bx + (b + 0.5) * w1, y = by + bh - ms[b] / m2 * bh * 0.92; b ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke();
+    ctx.fillStyle = '#9AA7B4'; ctx.fillText('0', bx, by + bh + 12); ctx.textAlign = 'right'; ctx.fillText(ext.toFixed(0) + ' m', bx + bw, by + bh + 12); ctx.textAlign = 'left';
+    ctx.restore();
   }
 
-  // ----- loop -----
-  let last = 0, frame = 0;
-  function tick(ts) {
-    requestAnimationFrame(tick);
-    const vis = typeof currentScene !== 'undefined' && currentScene && currentScene.id === 'spr';
-    if (root.style.display === 'none' === vis) { root.style.display = vis ? '' : 'none'; nav.style.display = vis ? 'flex' : 'none'; }
-    if (!vis || document.hidden) { last = 0; return; }
-    { const pc = document.getElementById('proCenter') || wrap0.parentNode; if (root.parentNode !== pc || root.nextElementSibling) pc.appendChild(root); }
-    if (!S.W || !cv.clientWidth) size(); if (!S.W) return;
-    const dt = Math.min(0.05, last ? (ts - last) / 1000 : 0.016); last = ts;
-    let c; try { c = ctxState(); } catch (e) { return; }
+  // ----- interface used by the scene drawings -----
+  let last = 0, frame = 0, C0 = null;
+  function tick() {
+    const now = performance.now(), dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016); if (now - last < 4 && last) return C0; last = now;
+    let c; try { c = ctxState(); } catch (e) { return C0; } C0 = c;
     const key = [c.o.type, c.o.P, c.o.d, Math.round(c.o.alpha), c.o.u, state.soil].join('|'); if (key !== S.key || !S.dep) { S.key = key; reset(c); }
-    syncSl(); if (S.run) { let rem = dt; while (rem > 0) { const h = Math.min(rem, 1 / 60); stepSim(c, h); rem -= h; } }
-    const L = layout(); if (S.run) stepClose(c, L.c, dt);
+    if (S.run) { let rem = dt; while (rem > 0) { const h = Math.min(rem, 1 / 60); stepSim(c, h); rem -= h; } stepClose(c, { x: 0, y: 0, w: 300, h: 190 }, dt); }
     if (frame++ % 3 === 0 || !S.run) paintTex(c);
-    cx.setTransform(S.dpr, 0, 0, S.dpr, 0, 0); cx.clearRect(0, 0, S.W, S.H); drawField(c, L.f); drawClose(c, L.c); drawPlan(c, L.p); if (frame % 8 === 0) readout(c);
+    return c;
   }
-  size(); requestAnimationFrame(tick);
-  window.spActionState = S;
+  const chip = (x, y, w, h, label, on, fn, tip) => sidChip(x, y, w, h, label, on, fn, tip);
+  window.SPA = {
+    tick, S,
+    field: r => { if (C0 && S.tx) { drawField(C0, r); hot(r.x, r.y, r.w, r.h, () => { S.run = !S.run; }, S.run ? 'Tap to pause' : 'Tap to play'); } },
+    close: r => { if (C0 && S.tx) drawClose(C0, r); },
+    plan: r => { if (C0 && S.tx) drawPlan(C0, r); },
+    controls: (x, y, w) => { const cw = (w - 8) / 3; chip(x, y, cw, 22, S.run ? 'Pause' : 'Play', S.run, () => { S.run = !S.run; }, 'Pause or play the live pictures');
+      chip(x + cw + 4, y, cw, 22, S.fast ? 'Fast turn' : 'Real turn', S.fast, () => { S.fast = !S.fast; }, 'Fast: one turn in 12 s. Real: about a minute'); chip(x + 2 * (cw + 4), y, cw, 22, 'Dry the ground', false, () => { if (S.dep) S.dep.fill(0); S.vol = 0; S.tsim = 0; }, 'Start the wetting again'); },
+    caption: () => { const c = C0; if (!c) return ''; const R = c.R; return 'throw ' + c.Rm.toFixed(1) + ' m · flow ' + c.q.toFixed(1) + ' L/min · jet ' + c.v0.toFixed(0) + ' m/s · biggest drop ' + c.dmax.toFixed(1) + ' mm · lost to wind and air ' + (R.wdel * 100).toFixed(1) + ' %'; },
+    wet: () => (C0 ? 'water on the ground so far, one sprinkler alone: ' + (S.vol / (Math.PI * C0.Rm * C0.Rm)).toFixed(1) + ' mm after ' + Math.round(S.tsim) + ' of ' + Math.round(C0.R.T) + ' min' : '')
+  };
+})();
+
+// Sticky jump bar for the Sprinklers scene: one tap to each part of the page.
+(function () {
+  if (new URLSearchParams(location.search).get('embed')) return;
+  // ---- sticky jump bar: one tap to each part of the page ----
+  const cv = document.getElementById('profileCanvas'), wrap0 = document.querySelector('.canvaswrap'); if (!cv || !wrap0) return;
+  const nav = document.createElement('nav'); nav.id = 'spNav'; nav.style.display = 'none';
+  nav.innerHTML = `<style>
+  #spNav{position:sticky;top:0;z-index:30;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:7px 8px;margin:0 0 8px;background:rgba(15,20,25,0.96);border:1px solid #2B333D;border-radius:10px;scrollbar-width:none}
+  #spNav::-webkit-scrollbar{display:none}
+  #spNav button{flex:0 0 auto;min-height:38px;padding:0 13px;border-radius:19px;border:1px solid #3a4452;background:#18202a;color:#E6EDF3;font:600 12.5px system-ui,sans-serif;cursor:pointer;white-space:nowrap}
+  #spNav button b{color:#D4A94A;margin-right:5px}
+  #spNav button.on{background:#D4A94A;border-color:#D4A94A;color:#1a1405}#spNav button.on b{color:#1a1405}
+  </style>`;
+  const NAV = [['design', 'Inputs'], ['live', 'Live view'], ['result', 'Result'], ['checks', 'Does it pass?'], ['learn', 'How it works'], ['check', 'Check step by step'], ['improve', 'Improve it'], ['season', 'Season']];
+  NAV.forEach((n, i) => { const b = document.createElement('button'); b.innerHTML = '<b>' + (i + 1) + '</b>' + n[1]; b.dataset.k = n[0]; b.onclick = () => goTo(n[0]); nav.appendChild(b); });
+  { const pc0 = document.getElementById('proCenter'), w0 = pc0 && pc0.querySelector(':scope > .wrap'); if (w0) pc0.insertBefore(nav, w0); else wrap0.parentNode.insertBefore(nav, wrap0); }
+  function scroller() { let e = cv; while ((e = e.parentElement)) { const o = getComputedStyle(e).overflowY; if ((o === 'auto' || o === 'scroll') && e.scrollHeight > e.clientHeight + 4) return e; } return null; }
+  function posOf(k) { // absolute document y of a section
+    const c = document.getElementById('profileCanvas'), r = c.getBoundingClientRect(), y = (window.SPY || {})[k]; if (y == null) return null;
+    return r.top + y * r.height / c.height + (scroller() ? scroller().scrollTop - scroller().getBoundingClientRect().top : scrollY);
+  }
+  function goTo(k) { const y = posOf(k); if (y == null) return; const sc = scroller(), off = nav.offsetHeight + 10; if (sc) sc.scrollTo({ top: y - off, left: 0, behavior: 'smooth' }); else scrollTo({ top: y - off, behavior: 'smooth' }); }
+  function markNav() { const sc = scroller(), cur = (sc ? sc.scrollTop - 0 : scrollY) + nav.offsetHeight + 40; let best = 'design'; NAV.forEach(n => { const y = posOf(n[0]); if (y != null && y <= cur + (sc ? 0 : 0)) best = n[0]; }); [...nav.querySelectorAll('button')].forEach(b => b.classList.toggle('on', b.dataset.k === best)); }
+
+  setInterval(() => { const vis = typeof currentScene !== 'undefined' && currentScene && currentScene.id === 'spr'; nav.style.display = vis ? 'flex' : 'none'; if (vis) markNav(); }, 400);
 })();
 
 let currentScene = SCENES[0];
