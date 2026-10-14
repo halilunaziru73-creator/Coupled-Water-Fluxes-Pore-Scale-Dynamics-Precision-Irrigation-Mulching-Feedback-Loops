@@ -1791,7 +1791,7 @@ function spdHydraulics(y, B, o, R) {
 const SPY = {}; window.SPY = SPY;
 function spPart(y, key, n, title, sub) {
   SPY[key] = y; ctx.fillStyle = '#12303A'; rrect(10, y, W - 20, 50, 9); ctx.fill(); ctx.fillStyle = '#D4A94A'; ctx.beginPath(); ctx.arc(34, y + 25, 13, 0, 6.2832); ctx.fill();
-  T(String(n), 34, y + 30, { s: 14, b: true, a: 'center', c: '#12303A' }); T('PART ' + n + ' OF 5', 56, y + 17, { s: 8, b: true, c: '#D4A94A' }); T(title, 56, y + 32, { s: 13.5, b: true, c: '#FFFFFF' }); T(sub, 56, y + 44, { s: 8.6, c: '#BFD3DC' }); return y + 66;
+  T(String(n), 34, y + 30, { s: 14, b: true, a: 'center', c: '#12303A' }); T('PART ' + n + ' OF 6', 56, y + 17, { s: 8, b: true, c: '#D4A94A' }); T(title, 56, y + 32, { s: 13.5, b: true, c: '#FFFFFF' }); T(sub, 56, y + 44, { s: 8.6, c: '#BFD3DC' }); return y + 66;
 }
 function spTextbook(y, C, R, o, tau) {
   const B = spBook(R, o, C, IRX.LLs, SPR.Af, SPR.Qs, IRX.lift, IRX.Lm); B.C = C; R.B = B; SIDCUR = SPR;
@@ -1808,7 +1808,7 @@ function spTextbook(y, C, R, o, tau) {
   const wrap0 = document.querySelector('.canvaswrap'); if (!wrap0) return;
   const root = document.createElement('section'); root.id = 'spAct'; root.style.display = 'none';
   root.innerHTML = `<style>
-  #spAct{margin:0 0 10px;padding:10px 12px 12px;background:#0F1419;border:1px solid #2B333D;border-radius:10px;color:#E6EDF3;font:13px/1.35 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+  #spAct{margin:12px 0 10px;padding:10px 12px 12px;background:#0F1419;border:1px solid #2B333D;border-radius:10px;color:#E6EDF3;font:13px/1.35 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
   #spAct h3{margin:0 0 2px;font-size:15px;color:#D4A94A;font-weight:700}
   #spAct .sub{margin:0 0 8px;color:#9AA7B4;font-size:12px}
   #spAct canvas{display:block;width:100%;border-radius:8px;background:#0b0f13;touch-action:manipulation}
@@ -1826,14 +1826,14 @@ function spTextbook(y, C, R, o, tau) {
   #spAct .note{margin-top:8px;font-size:11.5px;color:#9AA7B4}
   @media (max-width:520px){#spAct{padding:8px}#spAct button{flex:1 1 auto}}
   </style>
-  <h3>Sprinkler in action</h3>
-  <p class="sub">Drops leave the nozzle, fly under gravity and wind, and wet the ground as the head turns. Everything follows the settings below and the soil you picked.</p>
+  <div style="display:flex;align-items:center;gap:10px;margin:0 0 6px"><span style="flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:#D4A94A;color:#12303A;font:700 15px system-ui;display:flex;align-items:center;justify-content:center">6</span><div><div style="font-size:10px;font-weight:700;color:#D4A94A;letter-spacing:.04em">PART 6 OF 6</div><h3 style="margin:0">Sprinkler in action</h3></div></div>
+  <p class="sub">Drops leave the nozzle, fly under gravity and wind, and wet the ground as the head turns. It follows the settings you chose above and the soil you picked; the sliders here change the same settings.</p>
   <canvas id="spaCv"></canvas>
   <div class="bar"><button id="spaPlay" class="on">Pause</button><button id="spaSp1">Real turn speed</button><button id="spaSp2" class="on">Fast turn</button><button id="spaRst">Dry the ground</button></div>
   <div class="sl" id="spaSl"></div>
   <div class="rd" id="spaRd"></div>
   <div class="note" id="spaNote"></div>`;
-  wrap0.parentNode.insertBefore(root, wrap0);
+  wrap0.after(root);
 
   // ---- sticky jump bar: one tap to each part of the page ----
   const nav = document.createElement('nav'); nav.id = 'spNav'; nav.style.display = 'none';
@@ -1844,17 +1844,17 @@ function spTextbook(y, C, R, o, tau) {
   #spNav button b{color:#D4A94A;margin-right:5px}
   #spNav button.on{background:#D4A94A;border-color:#D4A94A;color:#1a1405}#spNav button.on b{color:#1a1405}
   </style>`;
-  const NAV = [['act', 'See it work'], ['design', 'Your design'], ['result', 'Result'], ['checks', 'Does it pass?'], ['learn', 'How it works'], ['check', 'Check step by step'], ['improve', 'Improve it'], ['season', 'Season']];
+  const NAV = [['design', 'Your design'], ['result', 'Result'], ['checks', 'Does it pass?'], ['learn', 'How it works'], ['check', 'Check step by step'], ['improve', 'Improve it'], ['season', 'Season'], ['act', 'See it in action']];
   NAV.forEach((n, i) => { const b = document.createElement('button'); b.innerHTML = '<b>' + (i + 1) + '</b>' + n[1]; b.dataset.k = n[0]; b.onclick = () => goTo(n[0]); nav.appendChild(b); });
-  root.parentNode.insertBefore(nav, root);
+  wrap0.parentNode.insertBefore(nav, wrap0);
   function scroller() { let e = cv; while ((e = e.parentElement)) { const o = getComputedStyle(e).overflowY; if ((o === 'auto' || o === 'scroll') && e.scrollHeight > e.clientHeight + 4) return e; } return null; }
   function posOf(k) { // absolute document y of a section
     if (k === 'act') return root.getBoundingClientRect().top + (scroller() ? scroller().scrollTop - scroller().getBoundingClientRect().top : scrollY);
     const c = document.getElementById('profileCanvas'), r = c.getBoundingClientRect(), y = (window.SPY || {})[k]; if (y == null) return null;
     return r.top + y * r.height / c.height + (scroller() ? scroller().scrollTop - scroller().getBoundingClientRect().top : scrollY);
   }
-  function goTo(k) { const y = posOf(k); if (y == null) return; const sc = scroller(), off = nav.offsetHeight + 10; if (sc) sc.scrollTo({ top: y - off, behavior: 'smooth' }); else scrollTo({ top: y - off, behavior: 'smooth' }); }
-  function markNav() { const sc = scroller(), cur = (sc ? sc.scrollTop - 0 : scrollY) + nav.offsetHeight + 40; let best = 'act'; NAV.forEach(n => { const y = posOf(n[0]); if (y != null && y <= cur + (sc ? 0 : 0)) best = n[0]; }); [...nav.querySelectorAll('button')].forEach(b => b.classList.toggle('on', b.dataset.k === best)); }
+  function goTo(k) { const y = posOf(k); if (y == null) return; const sc = scroller(), off = nav.offsetHeight + 10; if (sc) sc.scrollTo({ top: y - off, left: 0, behavior: 'smooth' }); else scrollTo({ top: y - off, behavior: 'smooth' }); }
+  function markNav() { const sc = scroller(), cur = (sc ? sc.scrollTop - 0 : scrollY) + nav.offsetHeight + 40; let best = 'design'; NAV.forEach(n => { const y = posOf(n[0]); if (y != null && y <= cur + (sc ? 0 : 0)) best = n[0]; }); [...nav.querySelectorAll('button')].forEach(b => b.classList.toggle('on', b.dataset.k === best)); }
   setInterval(() => { if (nav.style.display !== 'none') markNav(); }, 400);
   const cv = root.querySelector('#spaCv'), cx = cv.getContext('2d');
   const G = 9.81, rnd = Math.random, clampN = (v, a, b) => Math.max(a, Math.min(b, v));
