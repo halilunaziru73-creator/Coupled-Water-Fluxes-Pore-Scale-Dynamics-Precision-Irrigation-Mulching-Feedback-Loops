@@ -1203,10 +1203,10 @@ function drPanel(x, y, w, h, R, qi, label, fr, pxcm, C) {
 function drawDRIP() {
   irFit('drip'); paper(); SIDW = []; SIDCUR = DRP; const C = irCtx(), R = drRun(), o = R.o, K = IRM.DKIND[o.kind], tau = play.t * R.t; IRLAB = 'irrigation time ' + irF(tau, 1) + ' of ' + irF(R.t, 1) + ' h';
   irHead(C, 'Drip irrigation design: emitters, wetted bulb and uniformity for your soil', 'wetted bulb, emitter hydraulics (Keller-Karmeli, Hazen-Williams) and where the water ends up');
-  irCtl(96); sidRow('Emitter', 180, Object.keys(IRM.DKIND).map(k => [IRM.DKIND[k].label.replace('Pressure-compensating', 'Pressure-comp.'), DRP.kind === k, () => drKind(k), 'Typical flow, spacing and variation for this emitter type']));
-  sidRow('Placement', 208, DRDEP.map(q => [q[1], drDepEff() === q[0], () => { if (!q[0]) DRP.surf = true; else { DRP.surf = false; DRP.dep = q[0]; applyState({ method: METHODS.find(m => m.mid === q[0]).k }); } }, q[0] ? 'Buried line at ' + q[0] + ' cm (also sets the explorer irrigation method)' : 'Laid on the surface (design only)']));
-  sidRow('Run time', 236, [['Automatic', DRP.tauto, () => { DRP.tauto = true; }, 'Time to deliver the depth at the driest emitters'], ['Manual', !DRP.tauto, () => { DRP.tauto = false; DRP.t = +R.t.toFixed(2); }, 'Choose the run time yourself']]);
-  const cx1 = 16, cx2 = 322, cw = 282; let y = 280;
+  irCtl(96); sidRow('Emitter', 152, Object.keys(IRM.DKIND).map(k => [IRM.DKIND[k].label.replace('Pressure-compensating', 'Pressure-comp.'), DRP.kind === k, () => drKind(k), 'Typical flow, spacing and variation for this emitter type']));
+  sidRow('Placement', 180, DRDEP.map(q => [q[1], drDepEff() === q[0], () => { if (!q[0]) DRP.surf = true; else { DRP.surf = false; DRP.dep = q[0]; applyState({ method: METHODS.find(m => m.mid === q[0]).k }); } }, q[0] ? 'Buried line at ' + q[0] + ' cm (also sets the explorer irrigation method)' : 'Laid on the surface (design only)']));
+  sidRow('Run time', 208, [['Automatic', DRP.tauto, () => { DRP.tauto = true; }, 'Time to deliver the depth at the driest emitters'], ['Manual', !DRP.tauto, () => { DRP.tauto = false; DRP.t = +R.t.toFixed(2); }, 'Choose the run time yourself']]);
+  const cx1 = 16, cx2 = 322, cw = 282; let y = 252;
   sidSlider('Se', 'Emitter spacing Se (m)', cx1, y, cw, [0.1, 1.5, 0.05], DRP.Se, v => v.toFixed(2) + ' m');
   sidSlider('Sl', 'Lateral spacing Sl (m)', cx1, y + 31, cw, [0.5, 3, 0.05], DRP.Sl, v => v.toFixed(2) + ' m');
   sidSlider('q', 'Emitter flow q (L/h)', cx1, y + 62, cw, [0.5, 8, 0.1], DRP.q, v => v.toFixed(1) + ' L/h');
@@ -1219,7 +1219,7 @@ function drawDRIP() {
   sidSlider('Af', 'Area to irrigate (ha)', cx2, y + 124, cw, [0.2, 10, 0.1], DRP.Af, v => v.toFixed(1) + ' ha');
   sidSlider('Qs', 'Farm supply Qs (L/s)', cx1, y + 155, cw, [2, 120, 1], DRP.Qs, v => irF(v) + ' L/s');
   SIDCUR = IRX; sidSlider('Lm', 'Mainline length (m)', cx2, y + 155, cw, [20, 600, 10], IRX.Lm, v => irF(v) + ' m'); sidSlider('lift', 'Water lift, source to field (m)', cx1, y + 186, cw, [0, 60, 1], IRX.lift, v => irF(v) + ' m'); SIDCUR = DRP;
-  y = 514;
+  y = 486;
   sidHead('Soil moisture around the emitter: the driest, the average and the wettest emitter', y, 'Press Play: the real water content spreads from the emitter. Blue is the water in the soil, indigo is below the roots, yellow evaporates at the surface');
   const pw = (W - 28 - 16) / 3, pxcm = Math.min(pw / 130, 236 / Math.max(C.Rmax * 1.4, Math.max(...R.quant.map(q => q.zb)) / 10 + 8)), ph = Math.min(280, 36 + Math.max(C.Rmax * 1.4, Math.max(...R.quant.map(q => q.zb)) / 10 + 8) * pxcm), py = y + 34;
   [[0, 'Driest 10% of emitters'], [2, 'Average emitter'], [4, 'Wettest 10% of emitters']].forEach(([qi, lab], i) => drPanel(14 + i * (pw + 8), py, pw, ph, R, qi, lab, play.t, pxcm, C));
@@ -1390,9 +1390,8 @@ function irCtl(y) {                                     // the explorer's own cr
   if (_irCropSeen !== state.crop) { if (_irCropSeen != null) { DRP.Sl = state.crop === 'vegetable' ? 1.5 : 1.0; } _irCropSeen = state.crop; }
   const vff = VFF_VALUES[state.vffIdx], curM = vff >= 0.95 ? 'none' : state.mulchType;
   sidRow('Crop', y, Object.keys(CROPS).map(k => [CROPS[k].label, state.crop === k, () => applyState({ crop: k }), 'Changes the crop in the whole explorer: roots, water need, season']));
-  sidRow('Method', y + 28, IRMETH.map(q => [q[1], state.method === q[0], () => { if (q[0].indexOf('Drip') >= 0) DRP.surf = false; applyState({ method: q[0] }); }, 'Irrigation method of the whole explorer']));
-  sidRow('Mulch', y + 56, IRMUL.map(q => [q[1], curM === q[0], () => setMulch(q[0]), 'Cover on the soil: less evaporation, interception of sprays']));
-  return y + 84;
+  sidRow('Mulch', y + 28, IRMUL.map(q => [q[1], curM === q[0], () => setMulch(q[0]), 'Cover on the soil: less evaporation, interception of sprays']));
+  return y + 56;
 }
 // ---------- soil moisture ----------
 function irTh(C) { const s = C.s; return { wp: s.wp, fc: s.fc, sat: s.sat, t0: s.fc - C.fT * (s.fc - s.wp) }; }
