@@ -1308,18 +1308,7 @@ function drawSPR() {
   irFit('spr'); paper(); SIDW = []; SIDCUR = SPR; const C = irCtx(), R = spRun(), o = R.o, T0 = R.T, tau = play.t * T0; IRLAB = 'irrigation time ' + irF(tau) + ' of ' + irF(T0) + ' min';
   const ST = IRM.STYPE[o.type];
   SPY.design = 86; irHead(C, 'Sprinkler irrigation design: nozzle, spacing, wind and soil intake', 'overlap pattern (Christiansen CU), wind drift, and the soil intake (Kostiakov) that decides runoff');
-  irCtl(96); sidRow('Sprinkler', 180, Object.keys(IRM.STYPE).map(k => [IRM.STYPE[k].label, SPR.type === k, () => spType(k), 'Typical nozzle, pressure and spacing']));
-  sidRow('Layout', 208, [['Square', !SPR.tri, () => { SPR.tri = false; }, 'Sprinklers in a rectangle'], ['Triangular', SPR.tri, () => { SPR.tri = true; }, 'Every second lateral shifted by half a spacing']]);
-  sidRow('Run time', 236, [['Automatic', SPR.tauto, () => { SPR.tauto = true; }, 'Time for the driest quarter of the field to receive the depth'], ['Manual', !SPR.tauto, () => { SPR.tauto = false; SPR.T = Math.round(T0); }, 'Choose the run time yourself']]);
-  const cx1 = 16, cx2 = 322, cw = 282; let y = 280;
-  sidSlider('d', 'Nozzle diameter (mm)', cx1, y, cw, ST.dr, SPR.d, v => v.toFixed(1) + ' mm'); sidSlider('P', 'Operating pressure (kPa)', cx1, y + 31, cw, ST.pr, SPR.P, v => irF(v) + ' kPa');
-  sidSlider('Ss', 'Spacing along the lateral (m)', cx1, y + 62, cw, ST.ssr, SPR.Ss, v => v.toFixed(1) + ' m'); sidSlider('Sl', 'Spacing between laterals (m)', cx1, y + 93, cw, ST.slr, SPR.Sl, v => v.toFixed(1) + ' m');
-  sidSlider('Zn', 'Depth per irrigation (mm)' + (SPR.Zn == null ? ' · from the DSS' : ' · tap to reset'), cx1, y + 124, cw, [5, 100, 1], o.Zn, v => irF(v) + ' mm'); hot(cx1, y + 114, 200, 12, () => { SPR.Zn = null; }, 'Back to the depth set by the trigger, root depth and soil');
-  sidSlider('u', 'Wind speed (m/s)', cx2, y, cw, [0, 12, 0.5], SPR.u, v => v.toFixed(1) + ' m/s'); sidSlider('S', 'Ground slope (%)', cx2, y + 31, cw, [0, 12, 0.5], SPR.S, v => v.toFixed(1) + ' %');
-  sidSlider('Sd', 'Surface storage (mm)' + (SPR.Sd == null ? ' · from tillage' : ''), cx2, y + 62, cw, [0, 20, 0.5], o.Sd, v => v.toFixed(1) + ' mm'); sidSlider('T', 'Run time (min)' + (SPR.tauto ? ' · automatic' : ''), cx2, y + 93, cw, [10, 1200, 5], SPR.tauto ? T0 : SPR.T, v => irF(v) + ' min', SPR.tauto);
-  sidSlider('Af', 'Area to irrigate (ha)', cx2, y + 124, cw, [0.5, 40, 0.5], SPR.Af, v => v.toFixed(1) + ' ha'); sidSlider('Qs', 'Farm supply Qs (L/s)', cx1, y + 155, cw, [5, 200, 1], SPR.Qs, v => irF(v) + ' L/s');
-  SIDCUR = IRX; sidSlider('Lm', 'Mainline length (m)', cx2, y + 155, cw, [20, 600, 10], IRX.Lm, v => irF(v) + ' m'); sidSlider('lift', 'Water lift, source to field (m)', cx1, y + 186, cw, [0, 60, 1], IRX.lift, v => irF(v) + ' m'); sidSlider('LLs', 'Lateral length (m)', cx2, y + 186, cw, [40, 500, 10], IRX.LLs, v => irF(v) + ' m'); SIDCUR = SPR;
-  y = 514;
+  let y = spInputs(C, R, o, ST, T0, 90);
   // ---- plan ----
   sidHead('Layout in plan: depth infiltrated so far, from the overlapping spray patterns', y, 'Press Play. Green is the depth needed, red-brown is short, blue is more than needed, and brown hatching is water running off');
   const pw = W - 32, ph0 = 210, rows = o.tri ? 2 : 1, cellH = o.Sl * rows, sc = ph0 / Math.max(2 * o.Sl, R.nz.R * 1.6), px0 = 16, py0 = y + 36, phh = ph0, nI = Math.ceil(pw / (o.Ss * sc)) + 1, nJ = Math.ceil(ph0 / (cellH * sc)) + 1, wx = pw / sc;
@@ -1523,9 +1512,9 @@ const SPUMAX = { cols: ['0–5 %', '5–8 %', '8–12 %', '12–16 %'], rows: [[
 const SPPIPE = [46.4, 58, 63, 65.8, 75, 84.9, 100];          // internal diameters, mm (the course's commercial plastic pipes)
 const spJ = (QLh, D) => 0.472 * Math.pow(QLh, 1.75) / Math.pow(D, 4.75);      // m per m, Q in L/h, D in mm
 const spWindK = kmh => kmh <= 5.5 ? 1 : kmh <= 13 ? 0.9 : kmh <= 22 ? 0.8 : 0.7;
-function spSoilRow() {
+function spSoilRow(key) {
   const m = { S02_CoarseSand: 0, S03_Sand: 0, S04_LoamySand: 0, S05_SandyLoam: 2, S01_CoarseLoam: 2, S06_Loam: 4, S07_SiltLoam: 4, S08_SandyClayLoam: 5, S09_ClayLoam: 6, S10_SiltyClayLoam: 6 };
-  let r = m[state.soil] != null ? m[state.soil] : 4; if (SPD.pan && r < 6 && r % 2 === 0) r++; return r;
+  key = key || state.soil; let r = m[key] != null ? m[key] : 4; if (SPD.pan && r < 6 && r % 2 === 0) r++; return r;
 }
 // the textbook sequence: sprinkler class, spacing limits, application rate, sets per day, pipes, pump
 function spBook(R, o, C, Lx0, Af, Qs, lift, Lconv) {
@@ -1799,6 +1788,55 @@ function spTextbook(y, C, R, o, tau) {
   return y;
 }
 
+// ---------- the inputs, in the order a designer works: site, sprinkler, operation, pipes and water ----------
+function spInHead(y, n, title, sub) {
+  ctx.fillStyle = '#12303A'; rrect(10, y, W - 20, 22, 6); ctx.fill(); ctx.fillStyle = '#D4A94A'; ctx.beginPath(); ctx.arc(26, y + 11, 8, 0, 6.2832); ctx.fill();
+  T(n, 26, y + 15, { s: 10, b: true, a: 'center', c: '#12303A' }); T(title, 42, y + 15, { s: 11, b: true, c: '#FFFFFF' }); if (sub) T(sub, W - 18, y + 15, { s: 8.3, a: 'right', c: '#BFD3DC' }); return y + 36;
+}
+function spInputs(C, R, o, ST, T0, y) {
+  const cx1 = 16, cx2 = 322, cw = 282, st = 31, srow = (a, b) => { };
+  SPY.design = y - 10;
+  T('Inputs, in the order you would work them. Every slider and chip below changes the design and every picture on this page.', 16, y + 4, { s: 8.8, i: true, c: MUTE }); y += 14;
+  // ---- A. site ----
+  y = spInHead(y, 'A', 'Your site: crop, soil, slope and wind', 'sets what the soil can take');
+  y = irCtl(y) + 2;
+  const soils = (DATA.soils || Object.keys(DATA.soil_labels)), col = o.S < 5 ? 0 : o.S < 8 ? 1 : o.S < 12 ? 2 : 3, chW = (W - 32 - 4 * 5) / 5;
+  T('Soil type, with the largest application rate it accepts at your slope', 16, y + 8, { s: 9, b: true, c: MUTE }); y += 14;
+  soils.forEach((k, i) => {
+    const x = 16 + (i % 5) * (chW + 5), yy = y + ((i / 5) | 0) * 33, on = state.soil === k, um = SPUMAX.rows[spSoilRow(k)][1 + col];
+    ctx.fillStyle = on ? SIDC.ac : '#fff'; ctx.strokeStyle = on ? '#08505F' : '#9AA3AE'; ctx.lineWidth = on ? 2 : 1; rrect(x, yy, chW, 28, 6); ctx.fill(); ctx.stroke();
+    T(DATA.soil_labels[k], x + chW / 2, yy + 12, { s: 8.8, b: true, a: 'center', c: on ? '#fff' : '#374151' }); T('max ' + um + ' mm/h', x + chW / 2, yy + 23, { s: 8, a: 'center', c: on ? '#E0F2F6' : '#6B7280' });
+    hot(x, yy, chW, 28, () => { const b = document.querySelector('[data-soil="' + k + '"]'); if (b) b.click(); }, 'Use ' + DATA.soil_labels[k] + ' for the whole explorer');
+  }); y += Math.ceil(soils.length / 5) * 33 + 4;
+  sidSlider('S', 'Ground slope (%)', cx1, y + 4, cw, [0, 16, 0.5], SPR.S, v => v.toFixed(1) + ' %'); sidSlider('u', 'Wind speed (m/s)', cx2, y + 4, cw, [0, 12, 0.5], SPR.u, v => v.toFixed(1) + ' m/s');
+  sidSlider('Sd', 'Surface storage (mm)' + (SPR.Sd == null ? ' · from tillage' : ''), cx1, y + 4 + st, cw, [0, 20, 0.5], o.Sd, v => v.toFixed(1) + ' mm');
+  sidChip(cx2, y + 4 + st - 5, cw, 22, SPD.pan ? 'Compact layer below the soil: yes' : 'Compact layer below the soil: no', SPD.pan, () => { SPD.pan = !SPD.pan; }, 'A compact layer below the topsoil lowers the allowed rate');
+  y += 4 + 2 * st + 4;
+  { const row = spSoilRow(), um = SPUMAX.rows[row][1 + col], ok = R.AR <= um; ctx.fillStyle = ok ? '#EAF6EE' : '#FCEDEA'; rrect(14, y, W - 28, 30, 7); ctx.fill(); ctx.strokeStyle = ok ? '#2E9E5B' : '#C0503A'; ctx.lineWidth = 1.2; ctx.stroke();
+    spdDot(30, y + 15, 7, ok ? '#2E9E5B' : '#C0503A'); T('Maximum allowable application rate for ' + DATA.soil_labels[state.soil].toLowerCase() + ' on a ' + o.S.toFixed(1) + ' % slope: ' + um + ' mm/h', 44, y + 13, { s: 9.6, b: true, c: '#12303A' });
+    T('Your sprinkler applies ' + R.AR.toFixed(1) + ' mm/h: ' + (ok ? 'within the limit, no runoff expected from the rate.' : 'above the limit. Use a smaller nozzle, wider spacing or lower pressure.'), 44, y + 25, { s: 8.8, c: '#374151' }); y += 40; }
+  // ---- B. sprinkler ----
+  y = spInHead(y, 'B', 'The sprinkler and its layout', 'sets the pattern and the rate');
+  sidRow('System', y, SPSYS.map(q => [q.n, SPD.sys === q.k, () => { SPD.sys = q.k; }, q.l1])); y += 28;
+  sidRow('Sprinkler', y, Object.keys(IRM.STYPE).map(k => [IRM.STYPE[k].label, SPR.type === k, () => spType(k), 'Typical nozzle, pressure and spacing'])); y += 28;
+  sidRow('Layout', y, [['Square', !SPR.tri, () => { SPR.tri = false; }, 'Sprinklers in a rectangle'], ['Triangular', SPR.tri, () => { SPR.tri = true; }, 'Every second lateral shifted by half a spacing']]); y += 38;
+  sidSlider('d', 'Nozzle diameter (mm)', cx1, y, cw, ST.dr, SPR.d, v => v.toFixed(1) + ' mm'); sidSlider('P', 'Operating pressure (kPa)', cx2, y, cw, ST.pr, SPR.P, v => irF(v) + ' kPa');
+  sidSlider('alpha', 'Trajectory angle (°)', cx1, y + st, cw, [8, 45, 1], o.alpha, v => v.toFixed(0) + '°'); y += st;
+  sidSlider('Ss', 'Spacing along the lateral (m)', cx2, y, cw, ST.ssr, SPR.Ss, v => v.toFixed(1) + ' m'); sidSlider('Sl', 'Spacing between laterals (m)', cx1, y + st, cw, ST.slr, SPR.Sl, v => v.toFixed(1) + ' m'); y += st + 28;
+  // ---- C. operation ----
+  y = spInHead(y, 'C', 'How you run it', 'sets the depth, the time and the hours');
+  sidRow('Run time', y, [['Automatic', SPR.tauto, () => { SPR.tauto = true; }, 'Time for the driest quarter of the field to receive the depth'], ['Manual', !SPR.tauto, () => { SPR.tauto = false; SPR.T = Math.round(T0); }, 'Choose the run time yourself']]); y += 38;
+  sidSlider('Zn', 'Depth per irrigation (mm)' + (SPR.Zn == null ? ' · from the DSS' : ' · tap to reset'), cx1, y, cw, [5, 100, 1], o.Zn, v => irF(v) + ' mm'); hot(cx1, y - 10, 200, 12, () => { SPR.Zn = null; }, 'Back to the depth set by the trigger, root depth and soil');
+  sidSlider('T', 'Run time (min)' + (SPR.tauto ? ' · automatic' : ''), cx2, y, cw, [10, 1200, 5], SPR.tauto ? T0 : SPR.T, v => irF(v) + ' min', SPR.tauto);
+  SIDCUR = SPD; sidSlider('top', 'Operating hours per day', cx1, y + st, cw, [4, 24, 1], SPD.top, v => v + ' h'); SIDCUR = SPR; y += st + 28;
+  // ---- D. water supply and pipes ----
+  y = spInHead(y, 'D', 'Farm, water supply and pipes', 'sets the pumps, the pipes and the sets');
+  sidSlider('Af', 'Area to irrigate (ha)', cx1, y, cw, [0.5, 40, 0.5], SPR.Af, v => v.toFixed(1) + ' ha'); sidSlider('Qs', 'Farm supply Qs (L/s)', cx2, y, cw, [5, 200, 1], SPR.Qs, v => irF(v) + ' L/s');
+  SIDCUR = IRX; sidSlider('LLs', 'Lateral length (m)', cx1, y + st, cw, [40, 500, 10], IRX.LLs, v => irF(v) + ' m'); sidSlider('Lm', 'Mainline length (m)', cx2, y + st, cw, [20, 600, 10], IRX.Lm, v => irF(v) + ' m');
+  sidSlider('lift', 'Water lift, source to field (m)', cx1, y + 2 * st, cw, [0, 60, 1], IRX.lift, v => irF(v) + ' m'); SIDCUR = SPR;
+  return y + 2 * st + 44;
+}
+
 // "Sprinkler in action": a live, self-sizing panel (own canvas, own layout) for the Sprinklers scene.
 // Field view: the jet sweeps round, drops fly with gravity and wind drift, land and wet the ground.
 // Close-up: the impact head in slow motion (jet on the spoon, swing arm, spring, hit, head turns a step).
@@ -1846,7 +1884,7 @@ function spTextbook(y, C, R, o, tau) {
   </style>`;
   const NAV = [['design', 'Your design'], ['result', 'Result'], ['checks', 'Does it pass?'], ['learn', 'How it works'], ['check', 'Check step by step'], ['improve', 'Improve it'], ['season', 'Season'], ['act', 'See it in action']];
   NAV.forEach((n, i) => { const b = document.createElement('button'); b.innerHTML = '<b>' + (i + 1) + '</b>' + n[1]; b.dataset.k = n[0]; b.onclick = () => goTo(n[0]); nav.appendChild(b); });
-  wrap0.parentNode.insertBefore(nav, wrap0);
+  { const pc0 = document.getElementById('proCenter'), w0 = pc0 && pc0.querySelector(':scope > .wrap'); if (w0) pc0.insertBefore(nav, w0); else wrap0.parentNode.insertBefore(nav, wrap0); }
   function scroller() { let e = cv; while ((e = e.parentElement)) { const o = getComputedStyle(e).overflowY; if ((o === 'auto' || o === 'scroll') && e.scrollHeight > e.clientHeight + 4) return e; } return null; }
   function posOf(k) { // absolute document y of a section
     if (k === 'act') return root.getBoundingClientRect().top + (scroller() ? scroller().scrollTop - scroller().getBoundingClientRect().top : scrollY);
@@ -2044,6 +2082,7 @@ function spTextbook(y, C, R, o, tau) {
     const vis = typeof currentScene !== 'undefined' && currentScene && currentScene.id === 'spr';
     if (root.style.display === 'none' === vis) { root.style.display = vis ? '' : 'none'; nav.style.display = vis ? 'flex' : 'none'; }
     if (!vis || document.hidden) { last = 0; return; }
+    { const pc = document.getElementById('proCenter') || wrap0.parentNode; if (root.parentNode !== pc || root.nextElementSibling) pc.appendChild(root); }
     if (!S.W || !cv.clientWidth) size(); if (!S.W) return;
     const dt = Math.min(0.05, last ? (ts - last) / 1000 : 0.016); last = ts;
     let c; try { c = ctxState(); } catch (e) { return; }
