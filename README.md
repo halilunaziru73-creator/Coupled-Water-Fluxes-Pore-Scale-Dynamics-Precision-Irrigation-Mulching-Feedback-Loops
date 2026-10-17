@@ -40,7 +40,7 @@ It downloads the app, builds `SWAFL.exe`, puts it on your Desktop and starts it.
 
 **Option B - download the zip:** [SWAFL_Desktop.zip](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/SWAFL_Desktop.zip). Extract it, open the inner `SWAFL_Desktop` folder (the one that contains `package.json`) in VS Code and run `npm.cmd install` then `npm.cmd run get-app`.
 
-**No Node/VS Code?** Run the web version: `npm.cmd run web` and open http://127.0.0.1:5199.
+**Nothing to install?** Open the online version in any browser: [SWAFL web explorer](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/04_Interactive_Charts/10_SWAFL_Fused_Explorer.html). **Have Node.js?** `npm.cmd run web` prints the address to open (normally http://127.0.0.1:5173).
 
 ## Problem, Methodology, and Results
 
