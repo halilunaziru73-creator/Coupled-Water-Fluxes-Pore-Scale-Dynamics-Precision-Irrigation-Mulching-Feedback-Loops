@@ -160,6 +160,6 @@ table.tbl{border-collapse:collapse;width:100%;background:var(--white)}
 @media (max-width:1180px){#rightDock{width:260px}#leftDock{width:250px}}
 @media print{#menubar,#toolbar,#leftDock,#rightDock,#statusbar,.hsplit,.vsplit,#dashDock,#docTabs,#viewBar{display:none!important}}
 
-@media (max-width:1240px){.tb span{display:none}.tb{padding:0 7px}}
+@media (max-width:1240px){.tb>span{display:none}.tb{padding:0 7px}}
 @media (max-height:720px){#toolbar{min-height:32px;padding:2px 8px}.vb{height:22px;padding:0 9px}#viewBar{padding:3px 8px;min-height:28px}}
 #dashDock.min{height:25px!important;min-height:25px}#dashDock.min #dashBody{display:none}

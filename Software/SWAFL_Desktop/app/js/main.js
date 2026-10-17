@@ -99,8 +99,16 @@ function buildToolbar() {
     B('pipe', 'Surface', () => Layers.open('sid'), 'Surface irrigation design'), B('drop', 'Drip', () => Layers.open('drip'), 'Drip irrigation design'), B('sprinkler', 'Sprinklers', () => Layers.open('spr'), 'Sprinkler design and pipes'), 0,
     B('help', 'Help', Act.guide, 'How to use SWAFL (F1)')];
   const tb = document.getElementById('toolbar'); tb.innerHTML = '';
+  items.splice(items.length - 1, 0, 0, 'date');
   items.forEach(it => {
     if (!it) { const s = document.createElement('div'); s.className = 'tbsep'; tb.appendChild(s); return; }
+    if (it === 'date') {
+      const w = document.createElement('div'); w.className = 'tb'; w.style.cursor = 'default'; w.title = 'Working date: the whole workbench moves to this date (1980 to 2100). 1980-1999 is the baseline record; later dates are projected from it.';
+      w.innerHTML = UI.icon('sun') + '<span style="display:inline">Date</span><input type="date" id="tbDate" min="1980-01-01" max="2100-12-31" class="tbsel" style="width:130px"><button class="btn" id="tbToday" style="height:22px;padding:0 8px">Today</button>';
+      tb.appendChild(w);
+      const di = w.querySelector('#tbDate'); di.onchange = () => { if (di.value) { E.setDate(di.value); UI.log('Working date set to ' + di.value); } };
+      w.querySelector('#tbToday').onclick = () => { const t = new Date(), p = n => String(n).padStart(2, '0'); const v = t.getFullYear() + '-' + p(t.getMonth() + 1) + '-' + p(t.getDate()); di.value = v; E.setDate(v); UI.log('Working date set to today'); };
+      return; }
     const b = document.createElement('button'); b.className = 'tb ' + (it.cls || ''); b.title = it.tip; b.innerHTML = UI.icon(it.icon) + (it.label ? '<span>' + it.label + '</span>' : ''); b.onclick = it.act; b.dataset.l = it.label; tb.appendChild(b);
   });
 }
@@ -145,6 +153,8 @@ function updateStatus(s) {
   const st = s.state, M = E.metaData;
   document.getElementById('stScene').textContent = Layers.nameOf(s.scene);
   document.getElementById('stCase').textContent = [M.soilLabels[st.soil] || st.soil, M.tills[st.till], (M.mulches.find(m => m[0] === st.mulchType) || [])[1], (M.methods.find(m => m[0] === st.method) || [])[1]].filter(Boolean).join('  |  ');
+  document.getElementById('stDate').textContent = s.dateLbl || '';
+  const td = document.getElementById('tbDate'); if (td && s.date && document.activeElement !== td && td.value !== s.date) td.value = s.date;
   document.getElementById('stPlay').textContent = s.playOn ? 'Running' : 'Paused';
   const rb = document.querySelector('#toolbar .tb.run'); if (rb) rb.innerHTML = UI.icon(s.playOn ? 'pause' : 'play') + '<span>' + (s.playOn ? 'Pause' : 'Run') + '</span>';
 }

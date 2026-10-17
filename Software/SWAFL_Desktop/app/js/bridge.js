@@ -43,7 +43,7 @@ const E = (() => {
         var o={state:state,scene:currentScene.id,sceneLabel:currentScene.label,playOn:play.on,playT:play.t,
           vals:{tc:g('tcVal'),vff:g('vffVal'),cap:g('capVal'),rain:g('rainVal'),temp:g('tempVal'),trig:g('trigVal'),z:g('zVal'),n:g('nVal')},
           ro:{evap:g('roEvap'),drain:g('roDrain'),irr:g('roIrr'),yield:g('roYield'),transp:g('roTransp'),et:g('roET'),nl:g('roNL'),ie:g('roIE'),rain:g('roRain'),baseIrr:g('roBaseIrr')},
-          year:(document.getElementById('dssYear')||{}).value,date:(document.getElementById('dssDate')||{}).value,
+          year:(document.getElementById('dssYear')||{}).value,date:isoDate(dateOfK(fclock.kd())),dateLbl:fmtDate(dateOfK(fclock.kd()))+' (weather like '+(1980+yearOf(fclock.kd()))+')',
           sec:window.__SEC||{}};
         return o;})()`);
     },
@@ -89,7 +89,7 @@ const E = (() => {
               // visit the three design scenes once so their section headings become layer sub-nodes
               const keep = w.eval('currentScene.id'), sw = id => { try { w.eval("switchScene(SCENES.find(function(s){return s.id==='" + id + "'}))"); } catch (e) {} };
               const seq = ['sid', 'drip', 'spr', keep]; let i = 0;
-              (function step() { sw(seq[i]); i++; if (i < seq.length) setTimeout(step, 420); else setTimeout(() => { api.poll(true); res(true); }, 300); })();
+              (function step() { sw(seq[i]); i++; if (i < seq.length) setTimeout(step, 420); else setTimeout(() => { const t = new Date(), p = n => String(n).padStart(2, '0'); api.setDate(t.getFullYear() + '-' + p(t.getMonth() + 1) + '-' + p(t.getDate())); api.ev('dssHold()'); api.poll(true); res(true); }, 300); })();
             } else if (Date.now() - t0 > 40000) { clearInterval(iv); res(false); }
           } catch (e) { /* not loaded yet */ }
         }, 150);

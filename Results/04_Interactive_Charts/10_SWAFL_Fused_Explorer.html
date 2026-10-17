@@ -4632,7 +4632,7 @@ function dssSyncPlay(id) {                                      // the scenes wi
   if (id === 'v1') play.t = state.range === 'all' ? clampN(idx / (D20.n - 1), 0, 1) : clampN((doy - 90) / 2 / (PDAYS - 1), 0, 1);
   else if (id === 'v2') play.t = state.range === 'all' ? clampN((ay + clampN((doy - 90) / SEASON, 0, 0.999)) / NYEARS, 0, 1) : clampN((doy - 90) / 2 / (PDAYS - 1), 0, 1);
   else if (id === 'v3') play.t = clampN(doy / 365, 0, 1);
-  else return; play.hold = 0; if (dss.held) { play.on = false; const pb = document.getElementById('playBtn'); if (pb) pb.textContent = 'Play'; }
+  else return; play.hold = 0; dss.lastT = play.t; dss.lastId = id; if (dss.held) { play.on = false; const pb = document.getElementById('playBtn'); if (pb) pb.textContent = 'Play'; }
 }
 function dssGo(dt, keepPlaying) {
   { const yy = dt.getUTCFullYear(); if (yy >= 1980 && yy <= 1999) { dss.mode = String(yy); const ysel = document.getElementById('dssYear'); if (ysel) ysel.value = String(yy); } }   // inside the baseline record: use that very year
@@ -5550,6 +5550,7 @@ function loop() {
     pl.textContent = calTxt(sc.id === 'v3' ? 'day ' + Math.round(play.t * 365) : sc.id === 'e1' ? 'day ' + (play.t * E1.days).toFixed(1) : wide ? (sc.id === 'v1' ? d20Label(play.t) : v2AllLabel()) : dayLabel(play.t * (PDAYS - 1)));
     if (dss.held && sc.id === 'v1' && wide && Math.abs(play.t - (function(){ const k = fclock.kd(), ay = yearOf(k), dt = dateOfK(k); return clampN((Math.round((Date.UTC(1980 + ay, dt.getUTCMonth(), dt.getUTCDate()) - D20START) / DAYMS)) / (D20.n - 1), 0, 1); })()) < 0.0005) pl.textContent = calTxt(fmtDate(dateOfK(fclock.kd())) + ' (like ' + (1980 + yearOf(fclock.kd())) + ')');
     if (sc.id === 'drip' || sc.id === 'spr') pl.textContent = calTxt(IRLAB);
+    if (dss.held && (sc.id === 'v2' || sc.id === 'v3') && dss.lastId === sc.id && Math.abs(play.t - dss.lastT) < 0.0008) pl.textContent = calTxt(fmtDate(dateOfK(fclock.kd())) + ' (like ' + (1980 + yearOf(fclock.kd())) + ')');
     if (sc.id === 'sid') pl.textContent = calTxt('irrigation time ' + Math.round(play.t * (SID.lastTco || 0)) + ' of ' + Math.round(SID.lastTco || 0) + ' min');
     else if (dss.held && sc.id === 'v2' && (fclock.kd() - yearOf(fclock.kd()) * DPY < 90 || fclock.kd() - yearOf(fclock.kd()) * DPY > 90 + SEASON)) pl.textContent = calTxt(fmtDate(dateOfK(fclock.kd())) + ' (outside the plotted Apr\u2013Sep window)');
   }
