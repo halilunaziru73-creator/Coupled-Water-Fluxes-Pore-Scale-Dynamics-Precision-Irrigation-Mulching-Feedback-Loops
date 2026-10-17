@@ -4707,7 +4707,7 @@ function dssInit() {
   d.onchange = () => go(true); ys.onchange = () => { dss.mode = ys.value; go(true); }; document.getElementById('dssAhead').onchange = e => { dss.ahead = +e.target.value; dssRender(true); };
   document.getElementById('dssToday').onclick = () => { const t = new Date(); d.value = isoDate(new Date(Date.UTC(t.getFullYear(), t.getMonth(), t.getDate()))); go(true); };
   document.getElementById('dssPrev').onclick = () => { fclock.day = Math.max(0, fclock.kd() - 1); stay(); }; document.getElementById('dssNext').onclick = () => { fclock.day = Math.min(ND - 2, fclock.kd() + 1); stay(); };
-  if (!document.body.classList.contains('embed')) { const t = new Date(); d.value = isoDate(new Date(Date.UTC(t.getFullYear(), t.getMonth(), t.getDate()))); go(!new URLSearchParams(location.search).get('app')); dss.ready = true; }
+  if (!document.body.classList.contains('embed')) { const t = new Date(); d.value = isoDate(new Date(Date.UTC(t.getFullYear(), t.getMonth(), t.getDate()))); go(false); dss.ready = true; dssHold(); dssSyncPlay(currentScene.id); yearUi.last = -1; [0, 400, 1200].forEach(ms => setTimeout(() => { if (!dss.userMoved) { dssHold(); dssSyncPlay(currentScene.id); yearUi.last = -1; } }, ms)); }
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -4715,16 +4715,18 @@ function dssInit() {
 // ------------------------------------------------------------------------------------------------
 const yearUi = { last: -1 };
 function buildYearStrip() {
-  const el = document.getElementById('yearStrip'); for (let y = 1980; y < 2000; y++) { const b = document.createElement('button'); b.className = 'pillbtn' + (y === 1994 ? ' hasprofile' : ''); b.textContent = y - 1980 + CAL0; b.dataset.year = y; b.title = y === 1994 ? 'the year with a full-depth profile' : 'look at ' + (y - 1980 + CAL0); b.onclick = () => yearPick(y); el.appendChild(b); }
+  const el = document.getElementById('yearStrip'); for (let y = 1980; y <= 2100; y++) { const b = document.createElement('button'); b.className = 'pillbtn' + (y === 1994 ? ' hasprofile' : ''); b.textContent = y; b.dataset.year = y; if (y >= 2000) b.style.borderStyle = 'dashed'; b.title = y === 1994 ? 'the year with a full-depth profile' : y < 2000 ? 'baseline record: look at ' + y : 'projected from the baseline weather: ' + y; b.onclick = () => yearPick(y); el.appendChild(b); }
 }
 function curYearIdx() { if (currentScene.id !== 'v1' && currentScene.id !== 'v2') return clampN(yearOf(fclock.kd()), 0, 19); if (state.range === 'y94') return 14; if (currentScene.id === 'v1') return clampN(new Date(D20START + Math.floor(play.t * (D20.n - 1)) * DAYMS).getUTCFullYear() - 1980, 0, 19); return clampN(Math.floor(play.t * NYEARS), 0, 19); }
 function yearPick(y) {
   if (currentScene.id !== 'v1' && currentScene.id !== 'v2') { dss.mode = String(y); const ys = document.getElementById('dssYear'); ys.value = String(y); document.getElementById('dssDate').dispatchEvent(new Event('change')); yearUi.last = -1; return; }
-  if (state.range === 'y94' && y !== 1994) setRange('all'); if (state.range === 'y94') return;
-  if (currentScene.id === 'v1') setPlayT((Date.UTC(y, 5, 1) - D20START) / DAYMS / (D20.n - 1)); else setPlayT((y - 1980 + 0.4) / NYEARS);
+  if (state.range === 'y94' && y !== 1994 && y < 2000) setRange('all'); if (state.range === 'y94' && y < 2000) return;
+  if (state.range === 'y94') setRange('all');
+  const t = dateOfK(fclock.kd()), mo = t.getUTCMonth(); let da = t.getUTCDate(); const last = new Date(Date.UTC(y, mo + 1, 0)).getUTCDate(); if (da > last) da = last;
+  const d = document.getElementById('dssDate'); d.value = isoDate(new Date(Date.UTC(y, mo, da))); d.dispatchEvent(new Event('change', { bubbles: true }));
 }
 function updateYearStrip() {
-  const i = curYearIdx(); if (i === yearUi.last) return; yearUi.last = i; const el = document.getElementById('yearStrip');
+  const i = dss.held ? clampN(dateOfK(fclock.kd()).getUTCFullYear() - 1980, 0, 120) : curYearIdx(); if (i === yearUi.last) return; yearUi.last = i; const el = document.getElementById('yearStrip');
   [...el.children].forEach((b, j) => b.classList.toggle('active', j === i)); const b = el.children[i]; if (b) { const l = b.offsetLeft - el.clientWidth / 2 + b.offsetWidth / 2; el.scrollTo({ left: Math.max(0, l), behavior: 'smooth' }); }
 }
 // legends that only list what the current view draws
