@@ -935,11 +935,7 @@ function drawSID() {
   ctx.strokeStyle = '#B23A2E'; ctx.lineWidth = 2.6; ctx.beginPath(); ctx.moveTo(ux, sy0 + znD * ppc); ctx.lineTo(ux1, sy0 + drop + znD * ppc); ctx.stroke(); ctx.strokeStyle = 'rgba(255,240,230,0.6)'; ctx.lineWidth = 0.8; ctx.setLineDash([6, 6]); ctx.stroke(); ctx.setLineDash([]);
   if (rm * ppc < secH - drop - 4) { ctx.strokeStyle = '#4E8F3A'; ctx.lineWidth = 1.8; ctx.setLineDash([8, 4]); ctx.beginPath(); ctx.moveTo(ux, sy0 + rm * ppc); ctx.lineTo(ux1, sy0 + drop + rm * ppc); ctx.stroke(); ctx.setLineDash([]); }
   { const zc = '#0F766E'; ctx.strokeStyle = zc; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.moveTo(ux, sy0 + z0D * ppc); ctx.lineTo(ux + 30, sy0 + z0D * ppc); ctx.stroke(); ctx.strokeStyle = '#8A8A1E'; ctx.beginPath(); ctx.moveTo(ux1 - 30, sy0 + drop + zLD * ppc); ctx.lineTo(ux1, sy0 + drop + zLD * ppc); ctx.stroke(); }
-  // crop above ground: plants colour by how well their patch of the field is watered
-  for (let i = 0; i < 44; i++) { const xm = P.L * (i + 0.5) / 44, g0 = gyAt(xm), gxx = gx(xm), hh = 22 + 6 * Math.sin(i * 1.7), sw = Math.sin(t1 * 1.4 + i * 0.7) * 1.6, zi = R.Z[Math.min(ZN, Math.round(xm / P.L * ZN))] / P.Zn, ok = clampN((zi - 0.55) / 0.4, 0, 1), cl = sidMix([196, 170, 70], [66, 160, 62], ok), cl2 = sidMix([170, 140, 60], [96, 190, 80], ok);
-    ctx.strokeStyle = cl; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(gxx, g0 + 1); ctx.quadraticCurveTo(gxx + sw * 0.6, g0 - hh * 0.55, gxx + sw * 1.6, g0 - hh); ctx.stroke();
-    ctx.strokeStyle = cl2; ctx.lineWidth = 1.3; [[-1, 0.45], [1, 0.62], [-1, 0.78]].forEach(([sd, f]) => { const yy = g0 - hh * f; ctx.beginPath(); ctx.moveTo(gxx + sw * f, yy); ctx.quadraticCurveTo(gxx + sd * 7 + sw * f, yy - 6 * (0.6 + ok * 0.6), gxx + sd * 11 + sw * f, yy - 2 + (1 - ok) * 7); ctx.stroke(); });
-    if (hh > 22) { ctx.fillStyle = ok > 0.5 ? '#D9B94A' : '#9E8B3E'; ctx.beginPath(); ctx.ellipse(gxx + sw * 1.6, g0 - hh - 2, 1.7, 3.2, 0, 0, 6.2832); ctx.fill(); } }
+  // bare soil surface: no plants are drawn on the design sections
   // surface water with moving flow lines
   if (ponded) {
     const dep = clampN(SIDM.manningWide(SID.qLs / 1000, SID.S / 100, SID.n).y * 100 * 3, 3, 12);
@@ -1289,7 +1285,7 @@ function drPanel(x, y, w, h, R, qi, label, fr, pxcm, C) {
   ctx.strokeStyle = 'rgba(92,60,30,0.6)'; ctx.lineWidth = 1; for (let kk = -3; kk <= 3; kk++) { ctx.beginPath(); ctx.moveTo(cx, y0 + 4); ctx.quadraticCurveTo(cx + kk * 5 * pxcm / 2.5, y0 + rdNow * pxcm * 0.45, cx + kk * 9 * pxcm / 2.5, y0 + rdNow * pxcm * (0.75 + 0.05 * Math.abs(kk))); ctx.stroke(); }
   const rootY = y0 + R.o.Rmax * pxcm; ctx.strokeStyle = IRC.ac; ctx.lineWidth = 1.5; ctx.setLineDash([5, 3]); ctx.beginPath(); ctx.moveTo(x, rootY); ctx.lineTo(x + w, rootY); ctx.stroke(); ctx.setLineDash([]); T('root zone to ' + irF(R.o.Rmax) + ' cm', x + 4, rootY - 3, { s: 8.5, b: true, c: '#fff' });
   const ey = y0 + zd / 10 * pxcm; ctx.strokeStyle = '#1B1F23'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x, zd ? ey : y0 - 1); ctx.lineTo(x + w, zd ? ey : y0 - 1); ctx.stroke(); ctx.fillStyle = '#1B1F23'; ctx.beginPath(); ctx.arc(cx, zd ? ey : y0 - 1, 3.4, 0, 6.2832); ctx.fill();
-  const cr = IRCROP[state.crop] || IRCROP.cereal, sp0 = Math.max(7, cr.row * 100 * pxcm); const th = mulchBand(x, w, y0); const grown = irPlants(C, cx, x, x + w, y0, pxcm); if (!grown) T('no crop on this date', x + w - 4, y0 - 6, { s: 8.5, i: true, a: 'right', c: '#6B7280' });
+  const cr = IRCROP[state.crop] || IRCROP.cereal, sp0 = Math.max(7, cr.row * 100 * pxcm); const th = mulchBand(x, w, y0); const grown = irPlants(C, cx, x, x + w, y0, pxcm); 
   ctx.restore(); ctx.strokeStyle = '#6B7280'; ctx.lineWidth = 1; ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);
   T(label, x + 4, y + 13, { s: 9.5, b: true, c: IRC.ink }); T(irF(Vt, 1) + ' L so far', x + w - 4, y + 13, { s: 8.8, b: true, a: 'right', c: '#374151' });
   T('width ' + irF(2 * b.r / 10) + ' cm \u00b7 depth ' + irF(zmax / 10) + ' cm', x + w - 4, y + h - 5, { s: 8.8, b: true, a: 'right', c: '#fff' });
@@ -1523,11 +1519,7 @@ function irProfile(x, y, w, h, C, label) {
 }
 function sidTip(p, L) { ctx.font = 'bold 9.5px sans-serif'; const tw = Math.max(...L.map(l => ctx.measureText(l).width)) + 14, th = L.length * 13 + 8; let bx = p.x + 12, by = p.y - th / 2; if (bx + tw > W - 6) bx = p.x - tw - 12; ctx.fillStyle = 'rgba(255,252,225,0.97)'; ctx.strokeStyle = '#1B1F23'; ctx.lineWidth = 1; rrect(bx, by, tw, th, 5); ctx.fill(); ctx.stroke(); L.forEach((l, i) => T(l, bx + 7, by + 14 + i * 13, { s: 9.5, b: i === 0, c: '#1B1F23' })); }
 // plants of the crop on the selected date (none on fallow)
-function irPlants(C, cx, xmin, xmax, ground, pxcm) {
-  const k = fclock.kd(), nm = cropNameAt(C.sim, k), live = C.sim.live[k]; const ghost = nm === 'fallow' || live < 0.1; if (ghost) ctx.globalAlpha = 0.28; const cr = IRCROP[state.crop] || IRCROP.cereal, sp = Math.max(7, cr.row * 100 * pxcm), hh = cr.h * (ghost ? 0.8 : 0.35 + 0.65 * live) * pxcm * 0.9;
-  for (let kk = -Math.ceil((cx - xmin) / sp); kk <= Math.ceil((xmax - cx) / sp); kk++) { const x = cx + kk * sp; if (x < xmin || x > xmax) continue; ctx.strokeStyle = '#3B7D3A'; ctx.fillStyle = '#4C9A45'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(x, ground); ctx.lineTo(x, ground - hh); ctx.stroke(); [-1, 1].forEach(sd => [0.45, 0.75].forEach(f => { ctx.beginPath(); ctx.ellipse(x + sd * 4, ground - hh * f, 4.5, 1.8, sd * -0.5, 0, 6.2832); ctx.fill(); })); }
-  ctx.globalAlpha = 1; return !ghost;
-}
+function irPlants() { return false; }   // the design sections show the bare soil surface: no plants
 // ---------- hydraulics (Hazen-Williams, PVC) ----------
 const IRPIPES = [32, 40, 50, 63, 75, 90, 110, 125, 160, 200, 250, 315];
 const irHW = (Q, D, L) => Q <= 0 ? 0 : 10.67 * L * Math.pow(Q / 1000, 1.852) / (Math.pow(140, 1.852) * Math.pow(D / 1000, 4.871));

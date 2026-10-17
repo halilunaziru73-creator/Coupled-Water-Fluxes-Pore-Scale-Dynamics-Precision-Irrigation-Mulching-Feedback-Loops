@@ -28,6 +28,7 @@
     "files": [
       "main.js",
       "preload.js",
+      "serve.js",
       "app/**/*",
       "build/icon.png",
       "package.json"
