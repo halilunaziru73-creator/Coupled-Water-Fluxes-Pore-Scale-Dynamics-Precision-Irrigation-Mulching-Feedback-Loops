@@ -3,7 +3,8 @@ on:
   workflow_dispatch:
   push:
     tags: ['v*']
-    paths: ['Software/SWAFL_Desktop/**', 'package.json']
+permissions:
+  contents: write
 jobs:
   build:
     runs-on: windows-latest
