@@ -44,8 +44,6 @@ It downloads the app, builds `SWAFL.exe`, puts it on your Desktop and starts it.
 
 ## Problem, Methodology, and Results
 
-[View interactive results catalogue online](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/05_Videos/)
-
 ### Problem
 
 Precision irrigation and evaporation control mulching are usually studied and tuned one soil at a time, so a trigger setting, sensor depth or mulch strength that works well on one soil is often reported without stating how much of that result is the management choice and how much is simply the soil's own pore structure acting underneath it. Two practical questions follow directly from this gap. First, when a fixed suction based trigger (for example, minus 300 cm) is deployed across different soils, does it protect yield equally well everywhere, or does it silently allow far more depletion on some soils than others. Second, when mulching saves soil evaporation, is that saved water reliably converted into less irrigation, or can it just as easily end up as extra drainage and nitrate loss depending on the season. This project uses one process based model, one consistent experimental design and ten physically distinct soils to answer both questions directly rather than inferring them from separate single soil studies.
