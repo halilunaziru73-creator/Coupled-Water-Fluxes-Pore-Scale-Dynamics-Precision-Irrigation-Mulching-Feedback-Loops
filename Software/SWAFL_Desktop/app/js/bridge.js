@@ -32,6 +32,7 @@ const E = (() => {
     togglePlay() { api.click('playBtn'); },
     restart() { api.ev('play.t=0;play.on=true;play.hold=0;'); const b = api.win.document.getElementById('playBtn'); if (b) b.textContent = 'Pause'; api.poll(true); },
     reset() { api.ev('applyState(' + JSON.stringify(api.defaults) + ')'); api.poll(true); },
+    setFit(m) { try { api.win.__setFit(m); } catch (e) {} },
     redraw() { api.ev('refresh()'); },
     canvasPNG() { const c = api.win.document.getElementById('profileCanvas'); return c ? c.toDataURL('image/png') : null; },
     print() { try { api.win.focus(); api.win.print(); } catch (e) { window.print(); } },
@@ -90,7 +91,7 @@ const E = (() => {
             const w = frame.contentWindow;
             if (w && w.document.getElementById('profileCanvas') && w.eval("typeof SCENES!=='undefined'&&typeof state!=='undefined'&&typeof switchScene==='function'&&typeof DATA!=='undefined'")) {
               clearInterval(iv); api.win = w; api.ready = true;
-              api.defaults = JSON.parse(w.eval('JSON.stringify(state)'));
+              api.defaults = JSON.parse(w.eval('JSON.stringify(state)')); api.setFit('window');
               // visit the three design scenes once so their section headings become layer sub-nodes
               const keep = w.eval('currentScene.id'), sw = id => { try { w.eval("switchScene(SCENES.find(function(s){return s.id==='" + id + "'}))"); } catch (e) {} };
               const seq = ['sid', 'drip', 'spr', keep]; let i = 0;

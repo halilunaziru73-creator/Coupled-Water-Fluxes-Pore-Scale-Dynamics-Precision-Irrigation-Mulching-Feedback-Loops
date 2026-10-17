@@ -192,7 +192,8 @@ body.appmode .ux-views, body.appmode #uxViews, body.appmode .ux-bar, body.appmod
 body.appmode * { scrollbar-color: #9DB6D0 #E2EAF3; }
 body.appmode #yearStrip { display: flex !important; flex-wrap: nowrap !important; overflow-x: auto !important; overflow-y: hidden; grid-template-columns: none !important; gap: 4px; padding-bottom: 2px; }
 body.appmode #yearStrip > * { flex: none !important; width: auto !important; min-width: 52px; }
-body.appmode #yearRow { display: flex; align-items: center; gap: 8px; }
+body.appmode #yearRow[style*="display: flex"] { display: flex !important; align-items: center; gap: 8px; }
+body.appmode #yearRow[style*="display: none"] { display: none !important; }
 body.appmode #playBar { display: flex !important; flex-wrap: nowrap; overflow-x: auto; gap: 6px; align-items: center; }
 body.appmode .legend { max-height: 46px; overflow-y: auto; }
 @media (max-height:700px) { body.appmode .legend { display: none !important; } body.appmode #yearRow { padding: 2px 10px; } }
@@ -205,6 +206,9 @@ body.appmode .shell, body.appmode .mainarea, body.appmode .wrap, body.appmode .w
 body.appmode #yearStrip { width: 0; }
 body.appmode #playBar { min-width: 0; max-width: 100%; }
 body.appmode .wrap, body.appmode .wrap > .panel:first-child, body.appmode .canvaswrap { width: 100% !important; }
+
+body.appmode .canvaswrap { text-align: center; }
+body.appmode canvas#profileCanvas { margin: 0 auto; }
 
 </style>
 </head>
@@ -2433,22 +2437,33 @@ const canvas = document.getElementById('profileCanvas');
 const ctx = canvas.getContext('2d');
 // Weather years are stored as 1980 to 1999; every label drawn on the canvas shows them as calendar years ending in the current year.
 const calTxt = t => t;
-// ---- desktop (app) mode only: sharp drawing at the screen's resolution, and a calmer frame rate so the app stays fast ----
+// ---- desktop (app) mode only: fit the whole drawing to the window, sharp resolution, quick response ----
 if (new URLSearchParams(location.search).get('app')) {
   const dW = Object.getOwnPropertyDescriptor(HTMLCanvasElement.prototype, 'width'), dH = Object.getOwnPropertyDescriptor(HTMLCanvasElement.prototype, 'height');
-  let lw = canvas.width, lh = canvas.height, SS = 1;
+  let lw = canvas.width, lh = canvas.height, SS = 1, curS = 1, fitMode = 'window', lastKey = '';
+  const wrapEl = () => canvas.closest('.canvaswrap') || canvas.parentElement;
   const phys = () => {
-    const cw = (canvas.parentElement && canvas.parentElement.clientWidth) || lw; SS = Math.max(1, Math.min(2, cw * (window.devicePixelRatio || 1) / lw)); if (lw * lh * SS * SS > 40e6) SS = Math.sqrt(40e6 / (lw * lh));
+    SS = Math.max(1, Math.min(2, curS * (window.devicePixelRatio || 1))); if (lw * lh * SS * SS > 30e6) SS = Math.sqrt(30e6 / (lw * lh));
     dW.set.call(canvas, Math.round(lw * SS)); dH.set.call(canvas, Math.round(lh * SS)); ctx.setTransform(SS, 0, 0, SS, 0, 0);
   };
-  Object.defineProperty(canvas, 'width', { get: () => lw, set: v => { lw = v; phys(); }, configurable: true });
-  Object.defineProperty(canvas, 'height', { get: () => lh, set: v => { lh = v; phys(); }, configurable: true });
-  phys(); let rsT = 0; window.addEventListener('resize', () => { clearTimeout(rsT); rsT = setTimeout(phys, 250); });
-  const raf0 = window.requestAnimationFrame.bind(window); let lastF = 0;
+  const fit = () => {
+    const w = wrapEl(); if (!w) return; const aw = w.clientWidth, ah = w.clientHeight; if (aw < 50 || ah < 50) return;
+    const fW = aw / lw, fH = ah / lh; let sc;
+    if (fitMode === 'window' && lh <= 1050) sc = Math.min(fW, fH, 2.2); else if (lh <= 1050) sc = Math.min(fW, 1.6); else sc = Math.min(fW, 1.3);
+    if (fitMode === 'window' && lh <= 1050 && sc < 0.7) sc = Math.min(fW, 1.0);   // too small to read: use the full width and scroll (Focus view fits it all)
+    sc = Math.max(0.35, sc); const key = lw + 'x' + lh + '@' + sc.toFixed(3); if (key === lastKey) return; lastKey = key;
+    canvas.style.width = Math.round(lw * sc) + 'px'; canvas.style.maxWidth = 'none'; canvas.style.margin = '0 auto'; canvas.style.display = 'block';
+    const old = SS; curS = sc; const nS = Math.max(1, Math.min(2, sc * (window.devicePixelRatio || 1))); if (Math.abs(nS - old) > 0.12) phys();
+  };
+  Object.defineProperty(canvas, 'width', { get: () => lw, set: v => { lw = v; phys(); lastKey = ''; fit(); }, configurable: true });
+  Object.defineProperty(canvas, 'height', { get: () => lh, set: v => { lh = v; phys(); lastKey = ''; fit(); }, configurable: true });
+  window.__setFit = m => { fitMode = m; lastKey = ''; fit(); }; window.__fit = () => { lastKey = ''; fit(); };
+  phys(); try { new ResizeObserver(() => { lastKey = ''; fit(); }).observe(wrapEl()); } catch (e) { window.addEventListener('resize', () => { lastKey = ''; fit(); }); }
+  const raf0 = window.requestAnimationFrame.bind(window); let lastF = 0, act = 0; ['pointermove', 'pointerdown', 'wheel', 'keydown'].forEach(ev => window.addEventListener(ev, () => { act = performance.now(); }, { passive: true, capture: true }));
   window.requestAnimationFrame = cb => raf0(t => {
     let busy = true; try { busy = !!(play.on || fclock.on || n1ui.play || dss.drag); } catch (e) {}
-    const gap = busy ? 34 : 90, el = performance.now() - lastF;
-    if (el < gap) setTimeout(() => raf0(cb), gap - el); else { lastF = performance.now(); cb(t); }
+    const now = performance.now(), gap = (now - act < 1500) ? 16 : busy ? 34 : 60, el = now - lastF;
+    if (el < gap) setTimeout(() => raf0(cb), gap - el); else { lastF = now; cb(t); }
   });
 }
 

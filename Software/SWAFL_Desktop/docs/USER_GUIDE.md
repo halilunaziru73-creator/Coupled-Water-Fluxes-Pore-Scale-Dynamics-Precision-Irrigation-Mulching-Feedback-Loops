@@ -6,6 +6,9 @@
 * **Properties** – all inputs, grouped and collapsible. Changes apply instantly to the drawing and the dashboard. `Ctrl+Z` undoes a setting.
 * **Dashboard** – *Results* (soil evaporation, transpiration, drainage, irrigation, yield, efficiency, nitrogen leaching…), *Design* (efficiencies, uniformity, times, volumes of the design you have open), *Charts* (20 weather years), *Messages* (log). Double-click the tab strip to collapse the dashboard; drag the splitters to resize any panel.
 
+## Seeing the whole drawing
+The drawing is fitted to the window automatically. Short scenes (for example Field balance) show completely with no scrolling. Very tall scenes (the irrigation designs) fit the width and use the view buttons to jump to a section. Press **Focus** (toolbar or `F9`) to hide all panels and see the whole drawing as large as possible; press `F9` again to restore them. *View → Drawing at full width* switches off the fit.
+
 ## Working date
 The **Date** box in the toolbar (also in Properties → Scenario) moves the whole workbench to that date, from 1980 to 2100. 1980–1999 is the baseline record; later dates, including today, are projected from the baseline weather year you choose (typical, dry, wet or a single year). The status bar always shows the working date. **Today** jumps back to the current date.
 
