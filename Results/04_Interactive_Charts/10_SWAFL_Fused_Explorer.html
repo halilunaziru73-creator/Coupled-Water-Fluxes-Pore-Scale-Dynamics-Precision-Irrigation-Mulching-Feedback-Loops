@@ -1038,7 +1038,6 @@ function drawSID() {
   sens.forEach((q, i) => { const yy = s0 + i * 22; T(q[0], 16, yy + 12, { s: 9.5, b: true, c: SIDC.ink }); [[q[1], 'lo'], [q[2], 'hi']].forEach(([dv]) => { const wv = dv / sm * (sw2 / 2 - 24); ctx.fillStyle = dv >= 0 ? SIDC.st : SIDC.df; ctx.globalAlpha = 0.75; ctx.fillRect(Math.min(scx, scx + wv), yy + 2, Math.abs(wv), 7); ctx.globalAlpha = 1; }); const mx2 = Math.max(Math.abs(q[1]), Math.abs(q[2])); T('±' + (mx2 * 100).toFixed(1) + ' pts', scx + sw2 / 2 + 6, yy + 11, { s: 9, b: true, c: '#374151' }); });
   T('lower input ◂  ▸ higher input · bars: green raises Ea, red lowers it', nc ? W / 2 : scx, s0 + sens.length * 22 + 14, { s: 8.8, i: true, a: 'center', c: MUTE });
   y = s0 + sens.length * 22 + 34;
-  y = drawWS(y);
   // ---- season ----
   const ayr = clampN(yearOf(fclock.kd()), 0, NYR - 1); let yIrr = 0, yEv = 0; for (let d = ayr * DPY; d < Math.min(ND, (ayr + 1) * DPY); d++) { const v = sim.irr[d] || 0; yIrr += v; if (v > 0.5) yEv++; }
   const dose = sim.dose, events = yIrr / Zn, gross = Vap / (P.L * P.w) * 1000, seasonGross = events * gross, N0M = SID.Qs / SID.qLs, Nunits = SID.Wf / P.w, Nset = Math.max(1, Nunits / N0M), Ttot = Nset * tco / 60;
@@ -1603,10 +1602,10 @@ function spdWrap(txt, x, y, w, lh, o) { const words = txt.split(' '); let line =
 
 // ---------- 1. what the textbook checks say about this design ----------
 function spdChecks(y, B) {
-  SPY.checks = y; sidHead('Does your design pass? The textbook checks', y, 'Your design run through the course rules: spacing, rate, uniformity, pipes and pump');
+  SPY.checks = y; sidHead('Does your design pass? The course checks', y, 'Your design run through the course rules: spacing, rate, uniformity, pipes and pump');
   const cw = (W - 28 - 10) / 2, ok = B.chk.filter(q => q[1]).length; let yy = y + 36;
   B.chk.forEach((q, i) => { const col = i % 2, row = (i / 2) | 0, x = 14 + col * (cw + 10), yy2 = yy + row * 24; ctx.fillStyle = q[1] ? '#EAF6EE' : '#FCEDEA'; rrect(x, yy2, cw, 21, 5); ctx.fill(); spdDot(x + 11, yy2 + 10.5, 6, q[1] ? '#2E9E5B' : '#C0503A'); T(q[1] ? '✓' : '!', x + 11, yy2 + 14, { s: 9, b: true, a: 'center', c: '#fff' }); T(q[0], x + 22, yy2 + 9, { s: 8.4, b: true, c: '#12303A' }); T(q[2], x + 22, yy2 + 18, { s: 7.6, c: '#4B5563' }); });
-  yy += 5 * 24 + 6; T(ok + ' of ' + B.chk.length + ' checks pass' + (ok === B.chk.length ? ': this design is acceptable by the textbook rules.' : '. Fix the red ones: they name the input to change (spacing, pressure, nozzle, pipe or run arrangement).'), 16, yy + 4, { s: 9.4, b: true, c: ok === B.chk.length ? '#14532D' : '#8A5A00' });
+  yy += 5 * 24 + 6; T(ok + ' of ' + B.chk.length + ' checks pass' + (ok === B.chk.length ? ': this design is acceptable by the course rules.' : '. Fix the red ones: they name the input to change (spacing, pressure, nozzle, pipe or run arrangement).'), 16, yy + 4, { s: 9.4, b: true, c: ok === B.chk.length ? '#14532D' : '#8A5A00' });
   return yy + 20;
 }
 
@@ -1663,7 +1662,7 @@ function spdSystems(y, B, o, R) {
   const S = SPSYS.find(q => q.k === SPD.sys); let yy = y + 142; spdWrap(S.l1 + '. ' + S.l2 + '.', 16, yy, W - 32, 11, { s: 8.8, c: '#374151' }); yy += 26;
   const bx = 120, bw = 300, f = e => bx + (e - 0.5) / 0.5 * bw; ctx.fillStyle = '#E8ECEF'; ctx.fillRect(bx, yy, bw, 12); ctx.fillStyle = 'rgba(80,170,120,0.55)'; ctx.fillRect(f(S.ea[0]), yy, f(S.ea[1]) - f(S.ea[0]), 12); ctx.strokeStyle = '#6B7280'; ctx.lineWidth = 1; ctx.strokeRect(bx + 0.5, yy + 0.5, bw, 12);
   const ex = f(clampN(R.Ea, 0.5, 1)); ctx.fillStyle = '#12303A'; ctx.beginPath(); ctx.moveTo(ex, yy - 2); ctx.lineTo(ex - 5, yy - 9); ctx.lineTo(ex + 5, yy - 9); ctx.closePath(); ctx.fill(); T('Ea 50 %', bx, yy + 24, { s: 8, c: MUTE }); T('100 %', bx + bw, yy + 24, { s: 8, a: 'right', c: MUTE });
-  T('Application efficiency', 16, yy + 9, { s: 9, b: true, c: IRC.ink }); T('textbook ' + irF(S.ea[0] * 100) + ' to ' + irF(S.ea[1] * 100) + ' %', f((S.ea[0] + S.ea[1]) / 2), yy + 24, { s: 8.4, b: true, a: 'center', c: '#14532D' });
+  T('Application efficiency', 16, yy + 9, { s: 9, b: true, c: IRC.ink }); T('course range ' + irF(S.ea[0] * 100) + ' to ' + irF(S.ea[1] * 100) + ' %', f((S.ea[0] + S.ea[1]) / 2), yy + 24, { s: 8.4, b: true, a: 'center', c: '#14532D' });
   T('this design ' + irF(R.Ea * 100, 1) + ' %', bx + bw + 10, yy + 9, { s: 9, b: true, c: R.Ea >= S.ea[0] ? '#14532D' : '#B91C1C' }); T(R.Ea > S.ea[1] ? 'above the range' : R.Ea >= S.ea[0] ? 'inside the range' : 'below the range', bx + bw + 10, yy + 21, { s: 8.4, c: R.Ea >= S.ea[0] ? '#14532D' : '#B91C1C' });
   yy += 38; spdSysLayout(SPD.sys, yy, B, o, R); return yy + 204 + 12;
 }
@@ -1791,7 +1790,7 @@ function spdBucket(y, B, o, R, C) {
 
 // ---------- 10. pipes, pump and the hydraulic grade line ----------
 function spdHydraulics(y, B, o, R) {
-  sidHead('Pipes, pump and the hydraulic grade line (the textbook sizing)', y, 'Lateral loss ≤ 20 % of the head, mainline gradient < 5 %; pump head = lift + losses + sprinkler head');
+  sidHead('Pipes, pump and the hydraulic grade line (the course sizing)', y, 'Lateral loss ≤ 20 % of the head, mainline gradient < 5 %; pump head = lift + losses + sprinkler head');
   const by = y + 34, tw = (W - 28 - 12) / 2, tr = (x, title, rows, hdr) => { T(title, x, by + 4, { s: 9.2, b: true, c: IRC.ink }); ctx.fillStyle = '#E6F4F7'; ctx.fillRect(x, by + 10, tw, 17); hdr.forEach((h, j) => T(h, j === hdr.length - 1 ? x + tw - 8 : x + 8 + j * (tw - 16) / (hdr.length - 1), by + 22, { s: 8.2, b: true, a: j === hdr.length - 1 ? 'right' : j ? 'center' : 'left', c: IRC.ink })); rows.forEach((r, i) => { const yy = by + 28 + i * 17, ch = r[4]; ctx.fillStyle = ch ? '#EAF6EE' : i % 2 ? '#F6F7F5' : '#fff'; ctx.fillRect(x, yy, tw, 17); r.slice(0, 4).forEach((v, j) => T(String(v), j === 3 ? x + tw - 8 : x + 8 + j * (tw - 16) / (hdr.length - 1), yy + 12, { s: 8.6, b: ch || j === 3, a: j === 3 ? 'right' : j ? 'center' : 'left', c: j === 3 ? (r[3].indexOf('rejected') === 0 ? '#B91C1C' : '#14532D') : '#1B1F23' })); }); };
   const li = Math.max(B.latTr.indexOf(B.lat), 0), lrows = B.latTr.slice(Math.max(0, li - 1), li + 2).map(q => ['Ø' + q.D + ' mm', 'J ' + q.J.toFixed(3), q.hf.toFixed(2) + ' m', q.ok ? 'accepted' : 'rejected', q === B.lat]);
   const mi = Math.max(B.mainTr.indexOf(B.main), 0), mrows = B.mainTr.slice(Math.max(0, mi - 1), mi + 2).map(q => ['Ø' + q.D + ' mm', 'J ' + q.J.toFixed(3), q.J < 0.05 ? '< 0.05' : '≥ 0.05', q.ok ? 'accepted' : 'rejected', q === B.main]);
@@ -2077,370 +2076,6 @@ function spInputs(C, R, o, ST, T0, y) {
 
   setInterval(() => { const vis = typeof currentScene !== 'undefined' && currentScene && currentScene.id === 'spr'; nav.style.display = vis ? 'flex' : 'none'; if (vis) markNav(); }, 400);
 })();
-
-// ===== S2 textbook design: Walker & Skogerboe (1987), Surface Irrigation: Theory and Practice, Chapter 6 (volume balance field design) =====
-// Units follow the book: lengths m, times min, flows m3/min (per furrow, or per metre width for borders and basins),
-// intake Z = k*tau^a + f0*tau in m3 per m of length (per furrow) or m3 per m2 (border, basin).
-const WSB = (function () {
-  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-  const Zin = (K, t) => K.k * Math.pow(t, K.a) + K.f0 * t;
-  // Eq 6.5: Newton-Raphson for the intake opportunity time that infiltrates the required volume Zreq (Eq 6.1)
-  function treq(K, Zreq) {
-    if (!(Zreq > 0)) return 0;
-    let T = 300; for (let i = 0; i < 80; i++) { const f = Zreq - Zin(K, T), d = K.a * K.k * Math.pow(T, K.a - 1) + K.f0, Tn = Math.max(T + f / d, 0.01); if (Math.abs(Tn - T) < 1e-7) { T = Tn; break; } T = Tn; }
-    return T;
-  }
-  // flow shape: A^2 R^(4/3) = rho1 * A^rho2 (Eq 6.6). Furrows use fitted values, borders and basins use rho1 = 1, rho2 = 10/3.
-  function shapeV(z) { return { rho1: Math.pow(z / (4 * (1 + z * z)), 2 / 3), rho2: 8 / 3 }; }
-  const SH_WIDE = { rho1: 1, rho2: 10 / 3 };
-  // Eq 6.7: inlet flow area (m2) for flow Q0 (m3/min); basin form Eq 6.40 when S0 is null
-  function A0of(Q0, n, S0, sh, x) {
-    if (S0 == null) return Math.pow(Q0 * Q0 * n * n * x / 3600, 0.23);
-    return Math.pow(Q0 * Q0 * n * n / (3600 * Math.max(S0, 1e-6) * sh.rho1), 1 / sh.rho2);
-  }
-  // Eq 6.13: largest furrow stream (m3/min) whose inlet velocity does not exceed umax (m/min)
-  function furrowQmax(umax, n, S0, sh) { return Math.pow(Math.pow(umax, sh.rho2) * n * n / (3600 * S0 * sh.rho1), 1 / (sh.rho2 - 2)); }
-  const borderQmax = (S0, sod) => 0.01059 / Math.pow(S0, 0.75) * (sod ? 2 : 1);              // Eq 6.23 (Hart et al.), m3/min per m
-  const borderQmin = (L, S0, n) => 0.000357 * L * Math.sqrt(S0) / n;                         // Eq 6.24
-  const basinQmax = (vmax, n, L) => Math.pow(vmax * Math.pow(n * n * L / 7200, 0.23), 1.857); // Eq 6.43
-  // Eqs 5.13, 5.14, 6.9, 6.10: time for the front to reach x, with the power-advance exponent r found from two points (L/2 and L)
-  function advance(o) {
-    const { Q0, L, K, n, S0, sh } = o, sy = o.sy == null ? 0.77 : o.sy, a = K.a;
-    const A0 = x => A0of(Q0, n, S0, sh, x);
-    let r = 0.5, tL = Infinity, th = Infinity, sz = 0;
-    const front = (x, rr, szz) => {
-      const f = t => Q0 * t - sy * A0(x) * x - szz * K.k * Math.pow(t, a) * x - K.f0 * t * x / (1 + rr);
-      let hi = 5 * A0(x) * x / Q0 + 1; let n1 = 0; while (f(hi) < 0 && n1 < 60) { hi *= 2; n1++; } if (f(hi) < 0) return Infinity;
-      let lo = 0; for (let i = 0; i < 70; i++) { const m = (lo + hi) / 2; if (f(m) < 0) lo = m; else hi = m; } return (lo + hi) / 2;
-    };
-    for (let it = 0; it < 40; it++) {
-      sz = (a + r * (1 - a) + 1) / ((1 + a) * (1 + r)); tL = front(L, r, sz); th = front(L / 2, r, sz);
-      if (!isFinite(tL) || !isFinite(th)) return { tL: Infinity, r, sz, th, p: NaN, A0: A0(L), A0h: A0(L / 2) };
-      const rn = Math.log(2) / Math.log(tL / th); if (Math.abs(rn - r) < 1e-5) { r = rn; break; } r = clamp(rn, 0.05, 0.99);
-    }
-    return { tL, th, r, sz, p: L / Math.pow(tL, r), A0: A0(L), A0h: A0(L / 2) };
-  }
-  // ---- furrows (Example 6.1 to 6.3 style) ----
-  // option list: every whole number of sets that divides the furrows, flow = supply / furrows per set, within the erosive limit
-  function furrowOptions(o) {
-    const { Wf, w, Qs, L, K, n, S0, sh, Zdepth, umax } = o, N = Math.max(1, Math.round(Wf / w)), Zreq = Zdepth * w, Tq = treq(K, Zreq), Qmax = furrowQmax(umax, n, S0, sh), rows = [];
-    for (let s = 1; s <= N && rows.length < 14; s++) {
-      if (N % s) continue; const f = N / s, Q0 = Qs / f; if (Q0 > Qmax * 1.0001) continue;
-      const ad = advance({ Q0, L, K, n, S0, sh, sy: o.sy }), tL = ad.tL, ok = isFinite(tL) && tL <= 1440 * (o.maxDays || 1), tco = Tq + tL, Ea = ok ? Zreq * L / (Q0 * tco) : NaN;
-      rows.push({ sets: s, per: f, Q0, tL, treq: Tq, tco, Ea, ok, hours: ok ? s * tco / 60 : NaN, r: ad.r, A0: ad.A0 });
-    }
-    let best = null; rows.forEach(r => { if (r.ok && (!best || r.Ea > best.Ea)) best = r; });
-    return { N, Zreq, Tq, Qmax, rows, best };
-  }
-  // flow that makes the advance take exactly tt minutes (bisection, advance time falls as flow rises)
-  function flowForAdvance(o, tt, Qhi) {
-    let lo = 1e-5, hi = Qhi; const t = q => advance(Object.assign({}, o, { Q0: q })).tL;
-    if (!(t(hi) <= tt)) return { Q0: hi, capped: true, tL: t(hi) };
-    for (let i = 0; i < 50; i++) { const m = Math.sqrt(lo * hi); if (t(m) > tt) lo = m; else hi = m; } return { Q0: hi, capped: false, tL: t(hi) };
-  }
-  // Eqs 6.15 to 6.18: two-bay cutback: advance at Q0 for tL = treq, then soak at Q0' = 1.1 f0 L for treq
-  function furrowCutback(o) {
-    const { Wf, w, Qs, L, K, n, S0, sh, Zdepth, umax } = o, N = Math.max(1, Math.round(Wf / w)), Zreq = Zdepth * w, Tq = treq(K, Zreq), Qmax = furrowQmax(umax, n, S0, sh);
-    const fa = flowForAdvance({ L, K, n, S0, sh, sy: o.sy }, Tq, Qmax), Q0 = fa.Q0, Qc = 1.1 * K.f0 * L, tL = fa.capped ? fa.tL : Tq;
-    const Ea = Zreq * L / (tL * (Q0 + Qc)), sets = []; let used = 0; for (let i = 0; i < 12 && used < N; i++) { const ni = i === 0 ? Qs / Q0 : (Qs - sets[i - 1] * Qc) / Q0; const c = Math.max(0, Math.min(Math.round(ni), N - used)); if (c <= 0) break; sets.push(c); used += c; }
-    return { N, Zreq, Tq, Qmax, Q0, Qc, ratio: Qc / Q0, tL, tco: tL + Tq, Ea, capped: fa.capped, sets, covered: used };
-  }
-  // Eqs 6.19 to 6.22: tailwater reuse: advance in about 30 to 40 % of treq, runoff pumped back to the next set
-  function furrowReuse(o, frac) {
-    const { Wf, w, Qs, L, K, n, S0, sh, Zdepth, umax } = o, N = Math.max(1, Math.round(Wf / w)), Zreq = Zdepth * w, Tq = treq(K, Zreq), Qmax = furrowQmax(umax, n, S0, sh);
-    const fa = flowForAdvance({ L, K, n, S0, sh, sy: o.sy }, (frac || 0.35) * Tq, Qmax), Q0 = o.Q0 != null ? o.Q0 : fa.Q0, ad = advance({ Q0, L, K, n, S0, sh, sy: o.sy });
-    return reuseAt(Object.assign({}, o, { Q0, ad, Tq, Zreq, N, Qmax }));
-  }
-  function reuseAt(o) {
-    const { Q0, ad, Tq, Zreq, N, L, K, Qs, Qmax } = o, tL = ad.tL, tco = Tq + tL; const M = 20; let V = 0, prev = Zin(K, tco);
-    for (let i = 1; i <= M; i++) { const x = L * i / M, tx = Math.pow(x / ad.p, 1 / ad.r), tau = Math.max(tco - tx, 0), z = Zin(K, tau); V += (prev + z) / 2 * (L / M); prev = z; }
-    const Vin = Q0 * tco, DPR = Math.max(0, (V - Zreq * L) / Vin), TWR = Math.max(0, (Vin - V) / Vin), Vtw = TWR * Vin, N1 = Math.floor(Qs / Q0), Vres = Vtw * N1, Qpb = Vres / tco, N2 = Math.floor((Qs + Qpb) / Q0);
-    return { Q0, tL, treq: Tq, tco, Vin, Vinf: V, DPR, TWR, Ea: 1 - DPR, Vtw, N1, Vres, Qpb, N2, N, Qmax, frac: tL / Tq };
-  }
-  // ---- borders (Eqs 6.23 to 6.37) ----
-  function borderCase(o, Q0) {
-    const { L, S0, n, K, Zreq } = o, ad = advance({ Q0, L, K, n, S0, sh: SH_WIDE, sy: o.sy }), tL = ad.tL, Tq = treq(K, Zreq);
-    if (!isFinite(tL)) return { Q0, tL: Infinity, ok: false, Tq };
-    const y0 = A0of(Q0, n, S0, SH_WIDE), tr = Tq + tL, a = K.a;
-    const Irate = T => (a * K.k / 2) * (Math.pow(T, a - 1) + Math.pow(Math.max(T - tL, 1e-6), a - 1)) + K.f0;
-    const Sy = I => { const q = Math.max(Q0 - I * L, 1e-9); return Math.pow(q * n / (60 * Math.sqrt(S0)), 0.6) / L; };
-    const dep = (I, S) => 0.095 * Math.pow(n, 0.47565) * Math.pow(S, 0.20735) * Math.pow(L, 0.6829) / (Math.pow(I, 0.52435) * Math.pow(S0, 0.237825));
-    let T1 = tr, T2 = tr, I = 0, S = 0, hist = [];
-    for (let i = 0; i < 40; i++) { I = Irate(T1); S = Sy(I); T2 = tr - dep(I, S); hist.push([T1, I, S, T2]); if (Math.abs(T2 - T1) < 0.05) break; T1 = T2; }
-    const td = T2, Z0 = Zin(K, td); let tco, Ea, complete = Z0 >= Zreq, ZL = null, trec = tr;
-    if (complete) { tco = td - y0 * L / (2 * Q0); Ea = Zreq * L / (Q0 * tco); }
-    else {
-      tco = Tq - y0 * L / (2 * Q0); I = (a * K.k / 2) * (Math.pow(Tq, a - 1) + Math.pow(Math.max(Tq - tL, 1e-6), a - 1)) + K.f0; S = Sy(I); trec = Tq + dep(I, S); ZL = Zin(K, trec - tL); Ea = Zreq * L / (Q0 * tco);
-    }
-    return { Q0, tL, tr, td, tco, Ea, y0, Z0, ZL, complete, ok: tco > 0 && isFinite(tco), Tq, r: ad.r, hist };
-  }
-  function borderOptions(o) {
-    const Qa = Math.max(borderQmin(o.L, o.S0, o.n), 0.02), Qb = borderQmax(o.S0, o.sod), rows = []; const q0 = Math.min(Qa, Qb * 0.9), q1 = Qb;
-    for (let i = 0; i < 14; i++) { const q = q0 * Math.pow(q1 / q0, i / 13), r = borderCase(o, q); r.Wb = o.Qs / q; r.nb = Math.max(1, Math.round(o.Wf / r.Wb)); rows.push(r); }
-    let best = null; rows.forEach(r => { if (r.ok && r.Ea <= 1.0001 && (!best || r.Ea > best.Ea)) best = r; });
-    // refine around the best by golden-section on log flow
-    if (best) { let lo = best.Q0 / 1.25, hi = best.Q0 * 1.25, b2 = best; for (let i = 0; i < 24; i++) { const m1 = lo + (hi - lo) * 0.382, m2 = lo + (hi - lo) * 0.618, r1 = borderCase(o, m1), r2 = borderCase(o, m2); const e1 = r1.ok && r1.Ea <= 1 ? r1.Ea : -1, e2 = r2.ok && r2.Ea <= 1 ? r2.Ea : -1; if (e1 > e2) { hi = m2; if (e1 > b2.Ea) b2 = r1; } else { lo = m1; if (e2 > b2.Ea) b2 = r2; } } best = b2; }
-    if (best) { best.Wb = o.Qs / best.Q0; best.nb = Math.max(1, Math.round(o.Wf / best.Wb)); }
-    return { rows, best, Qmin: Qa, Qmax: Qb };
-  }
-  // ---- basins (Eqs 6.38 to 6.43) ----
-  function basinCase(o, Q0) {
-    const { L, n, K, Zreq } = o, ad = advance({ Q0, L, K, n, S0: null, sh: SH_WIDE, sy: o.sy }), tL = ad.tL, y0 = A0of(Q0, n, null, SH_WIDE, L), y0h = A0of(Q0, n, null, SH_WIDE, L / 2);
-    if (!isFinite(tL)) return { Q0, tL: Infinity, ok: false };
-    let tco = (Zreq * L - 0.8 * y0 * L) / Q0 + tL; if (tco < tL) tco = tL; const Ea = Zreq * L / (Q0 * tco);
-    return { Q0, tL, tco, Ea, y0, y0h, ok: true, r: ad.r, Z0: Zin(K, tL) + 0.8 * y0 + Q0 * (tco - tL) / L };
-  }
-  function basinOptions(o) {
-    const rows = []; for (let nb = 1; nb <= 12; nb++) { const Wb = o.Wf / nb; if (Wb < 5) break; const Q0 = o.Qs / Wb, r = basinCase(o, Q0); r.nb = nb; r.Wb = Wb; r.along = Math.max(1, Math.round((o.Lfield || o.L) / o.L)); r.hours = r.ok ? nb * r.along * r.tco / 60 : NaN; r.dike = r.y0h; rows.push(r); }
-    let best = null; rows.forEach(r => { if (r.ok && r.Ea <= 1.0001 && (!best || r.Ea > best.Ea)) best = r; });
-    return { rows, best, Qmax: basinQmax(o.vmax || 13, o.n, o.L) };
-  }
-  // ---- field indicators from Chapter 2 (Eqs 2.33 to 2.35) ----
-  const ind = { DPR: (Vdp, Vap) => Vdp / Vap, TWR: (Vtw, Vap) => Vtw / Vap, Er: (Vst, Vpot) => Vst / Vpot };
-  // ---- the book's own worked examples (inputs as printed, results as printed) ----
-  const EXAMPLES = {
-    furrowFirst: { name: 'Example 6.1 furrows, first irrigation', K: { k: 0.0028, a: 0.534, f0: 0.00022 }, sh: { rho1: 0.325, rho2: 2.734 }, n: 0.04, S0: 0.008, L: 200, w: 1.5, Wf: 720, Qs: 6, Zdepth: 0.1, umax: 13, sys: 'furrow' },
-    furrowLater: { name: 'Example 6.1 furrows, later irrigations', K: { k: 0.0021, a: 0.331, f0: 0.00015 }, sh: { rho1: 0.325, rho2: 2.734 }, n: 0.04, S0: 0.008, L: 200, w: 1.5, Wf: 720, Qs: 6, Zdepth: 0.1, umax: 13, sys: 'furrow' },
-    clayFirst: { name: 'Example 6.2 clay loam furrows, first irrigation', K: { k: 0.0036, a: 0.357, f0: 0.000046 }, sh: { rho1: 0.325, rho2: 2.734 }, n: 0.04, S0: 0.008, L: 200, w: 0.75, Wf: 720, Qs: 6, Zdepth: 0.1, umax: 8, sys: 'furrow' },
-    clayLater: { name: 'Example 6.2 clay loam furrows, later irrigations', K: { k: 0.00383, a: 0.317, f0: 0.000035 }, sh: { rho1: 0.325, rho2: 2.734 }, n: 0.04, S0: 0.008, L: 200, w: 0.75, Wf: 720, Qs: 6, Zdepth: 0.1, umax: 8, sys: 'furrow' },
-    borderFirst: { name: 'Example 6.4 border, first irrigation', K: { k: 0.0032, a: 0.49, f0: 0.000107 }, n: 0.04, S0: 0.001, L: 360, w: 1, Wf: 360, Qs: 8.64, Zdepth: 0.0525, sys: 'border' },
-    borderLater: { name: 'Example 6.4 border, later irrigations', K: { k: 0.00327, a: 0.474, f0: 0.000098 }, n: 0.04, S0: 0.001, L: 360, w: 1, Wf: 360, Qs: 8.64, Zdepth: 0.0525, sys: 'border' },
-    basinFirst: { name: 'Example 6.5 basin, first irrigation', K: { k: 0.0032, a: 0.49, f0: 0.000107 }, n: 0.04, S0: 0, L: 180, w: 1, Wf: 360, Qs: 12.6, Zdepth: 0.1, sys: 'basin' },
-    basinLater: { name: 'Example 6.5 basin, later irrigations', K: { k: 0.00327, a: 0.474, f0: 0.000098 }, n: 0.04, S0: 0, L: 180, w: 1, Wf: 360, Qs: 12.6, Zdepth: 0.1, sys: 'basin' }
-  };
-  return { clamp, Zin, treq, shapeV, SH_WIDE, A0of, furrowQmax, borderQmax, borderQmin, basinQmax, advance, furrowOptions, flowForAdvance, furrowCutback, furrowReuse, reuseAt, borderCase, borderOptions, basinCase, basinOptions, ind, EXAMPLES };
-})();
-
-
-// ===== S2 textbook design section: Walker & Skogerboe (1987), Chapter 6, drawn inside the S2 scene =====
-const WSBS = { sys: null, src: 'soil', umax: 13, sod: false, L: 200, S0: 0.8, Qs: 100, Wf: 720, w: 1.5, n: 0.04, Zd: 100, Lf: 360, sel: -1, edited: false, touch(k) { this.sel = -1; this.edited = true; } };
-const WSX = {
-  furrow: [['soil', 'My soil (DSS)', 'furrowFirst'], ['f1', 'Ex 6.1 first', 'furrowFirst'], ['f2', 'Ex 6.1 later', 'furrowLater'], ['c1', 'Ex 6.2 first', 'clayFirst'], ['c2', 'Ex 6.2 later', 'clayLater']],
-  border: [['soil', 'My soil (DSS)', 'borderFirst'], ['b1', 'Ex 6.4 first', 'borderFirst'], ['b2', 'Ex 6.4 later', 'borderLater']],
-  basin: [['soil', 'My soil (DSS)', 'basinFirst'], ['a1', 'Ex 6.5 first', 'basinFirst'], ['a2', 'Ex 6.5 later', 'basinLater']]
-};
-const WSSYS = { furrow: 'Furrows', border: 'Borders', basin: 'Basins' };
-function wsLoad(sys, src) {
-  const S = WSBS, list = WSX[sys], it = list.find(q => q[0] === src) || list[0], e = WSB.EXAMPLES[it[2]];
-  S.sys = sys; S.src = it[0]; S.L = e.L; S.S0 = +(e.S0 * 100).toFixed(2); S.Qs = Math.round(e.Qs / 0.06); S.Wf = e.Wf; S.w = e.w; S.n = e.n; S.Zd = Math.round(e.Zdepth * 1000 * 10) / 10; S.umax = e.umax || 13; S.sod = false; S.Lf = 360; S.sel = -1; S.edited = false;
-  if (sys === 'basin') S.S0 = 0;
-}
-// Kostiakov-Lewis constants for the explorer's own soil: Green-Ampt intake minus the final-rate term f0 = Ks, fitted to k·t^a
-function wsSoilK() {
-  const I = sidIntake(); if (I._ws) return I._ws;
-  const f0 = I.s.ks / 60000, fn = t => Math.max(SIDM.gaF(t, I.s.ks, I.psi, I.dth) / 1000 - f0 * t, 1e-9), fit = SIDM.fitKostiakov(fn, 10, 600);
-  return (I._ws = { k: fit.k, a: clampN(fit.A, 0.05, 0.95), f0, r2: fit.r2 });
-}
-const WS_SH = { rho1: 0.325, rho2: 2.734 };
-let _wsMemo = { key: '', val: null };
-function wsCompute() {
-  const S = WSBS, soil = S.src === 'soil', K0 = soil ? wsSoilK() : null, ex = WSB.EXAMPLES[WSX[S.sys].find(q => q[0] === S.src)[2]];
-  const Zd = soil ? (SID.Zn != null ? SID.Zn : sidZnAuto()) : S.Zd, fur = S.sys === 'furrow', w = fur ? S.w : 1;
-  const K = soil ? { k: K0.k * w, a: K0.a, f0: K0.f0 * w } : ex.K;
-  const key = JSON.stringify([S.sys, S.src, S.umax, S.sod, S.L, S.S0, S.Qs, S.Wf, S.w, S.n, S.Lf, Zd, K, state.soil]); if (_wsMemo.key === key) return _wsMemo.val;
-  const base = { K, n: S.n, L: S.L, S0: S.S0 / 100, Qs: S.Qs * 0.06, Wf: S.Wf, w, umax: S.umax, sod: S.sod, vmax: S.umax, Lfield: S.Lf, sh: WS_SH }, out = { S: S.sys, K, Zd, soil, K0, base, ex };
-  try {
-    if (fur) { const o = Object.assign({}, base, { Zdepth: Zd / 1000, maxDays: 1 }); out.o = o; out.opt = WSB.furrowOptions(o); out.Zreq = out.opt.Zreq; out.Tq = out.opt.Tq; out.Qmax = out.opt.Qmax; out.cut = WSB.furrowCutback(o); out.reu = WSB.furrowReuse(Object.assign({}, o, { Qs: base.Qs }), 0.35); }
-    else if (S.sys === 'border') { const o = Object.assign({}, base, { Zreq: Zd / 1000 }); out.o = o; out.Zreq = o.Zreq; out.Tq = WSB.treq(K, o.Zreq); out.Qmax = WSB.borderQmax(o.S0, S.sod); out.Qmin = WSB.borderQmin(o.L, o.S0, o.n); out.opt = WSB.borderOptions(o); }
-    else { const o = Object.assign({}, base, { Zreq: Zd / 1000, S0: 0 }); out.o = o; out.Zreq = o.Zreq; out.Tq = WSB.treq(K, o.Zreq); out.Qmax = WSB.basinQmax(S.umax, o.n, o.L); out.opt = WSB.basinOptions(o); }
-  } catch (e) { out.err = String(e); }
-  _wsMemo = { key, val: out }; return out;
-}
-// the book's printed figures against this model (independent of the sliders)
-let _wsChk = null;
-function wsChecks() {
-  if (_wsChk) return _wsChk; const E = WSB.EXAMPLES, rows = [], add = (lab, book, calc, d, unit) => rows.push([lab, book, calc, d, unit]);
-  const tq = e => WSB.treq(e.K, e.Zdepth * e.w), adv = (e, q) => WSB.advance({ Q0: q, L: e.L, K: e.K, n: e.n, S0: e.S0, sh: e.sh }).tL;
-  add('6.1 furrows: time to fill the root zone, first irrigation', 378.73, tq(E.furrowFirst), 1, 'min'); add('6.1 same, later irrigations', 868.5, tq(E.furrowLater), 1, 'min');
-  add('6.1 largest stable furrow stream (13 m/min)', 0.104, WSB.furrowQmax(13, 0.04, 0.008, E.furrowFirst.sh), 3, 'm³/min');
-  add('6.1 advance to 200 m at 0.100 m³/min, first', 80.2, adv(E.furrowFirst, 0.1), 1, 'min'); add('6.1 advance at 0.075 m³/min, first', 198.6, adv(E.furrowFirst, 0.075), 1, 'min'); add('6.1 advance at 0.0625 m³/min, first', 441.6, adv(E.furrowFirst, 0.0625), 1, 'min');
-  add('6.1 advance at 0.100 m³/min, later', 26.2, adv(E.furrowLater, 0.1), 1, 'min'); add('6.1 advance at 0.0375 m³/min, later', 143.5, adv(E.furrowLater, 0.0375), 1, 'min');
-  add('6.2 clay loam: time to fill, first irrigation', 785, tq(E.clayFirst), 0, 'min'); add('6.2 clay loam, later irrigations', 1127, tq(E.clayLater), 0, 'min'); add('6.2 largest erosion-safe stream (8 m/min)', 0.017, WSB.furrowQmax(8, 0.04, 0.008, E.clayFirst.sh), 3, 'm³/min');
-  const rr = WSB.furrowReuse(Object.assign({}, E.clayFirst, { Qs: 2.4, Q0: 0.017 }), 0.35);
-  add('6.3 tailwater reuse: cutoff time', 1340, rr.tco, 0, 'min'); add('6.3 tailwater fraction TWR', 14.2, rr.TWR * 100, 1, '%'); add('6.3 deep-percolation fraction DPR', 20, rr.DPR * 100, 1, '%'); add('6.3 tailwater volume per furrow', 3.235, rr.Vtw, 2, 'm³');
-  const be = E.borderFirst, bc = WSB.borderCase(Object.assign({}, be, { Zreq: be.Zdepth }), 0.14);
-  add('6.4 border: largest stream on 0.1 % slope', 1.88, WSB.borderQmax(0.001), 2, 'm³/min/m'); add('6.4 border: time to fill, first irrigation', 146.4, WSB.treq(be.K, be.Zdepth), 1, 'min');
-  add('6.4 border at 0.14: advance to 360 m', 158, bc.tL, 0, 'min'); add('6.4 border at 0.14: cutoff time', 205, bc.tco, 0, 'min'); add('6.4 border at 0.14: application efficiency', 66, bc.Ea * 100, 0, '%');
-  const bo = WSB.basinOptions(Object.assign({}, E.basinFirst, { Zreq: E.basinFirst.Zdepth, Lfield: 360 })), b4 = bo.rows.find(r => r.nb === 4), b1 = bo.rows[0];
-  add('6.5 basin, 4 basins across: advance', 77, b4.tL, 0, 'min'); add('6.5 same: cutoff', 158, b4.tco, 0, 'min'); add('6.5 same: hours to irrigate the field', 21.1, b4.hours, 1, 'h'); add('6.5 one wide basin: hours', 36.0, b1.hours, 1, 'h');
-  return (_wsChk = rows);
-}
-function wsFx(v, d) { return Number.isFinite(v) ? sidF(v, d) : '–'; }
-function wsHM(min) { return Number.isFinite(min) ? (min >= 90 ? (min / 60).toFixed(1) + ' h' : sidF(min) + ' min') : '–'; }
-function wsTable(y, heads, rows, sel, best, pick) {
-  ctx.fillStyle = '#E6F4F7'; ctx.fillRect(14, y, W - 28, 20); heads.forEach(h => T(h[0], h[1], y + 14, { s: 8.6, b: true, a: h[2] || 'center', c: SIDC.ink }));
-  rows.forEach((r, i) => {
-    const yy = y + 22 + i * 20, on = i === sel, bst = i === best; ctx.fillStyle = on ? 'rgba(11,114,133,0.20)' : bst ? 'rgba(63,143,107,0.16)' : (i % 2 ? '#F6F7F5' : '#fff'); ctx.fillRect(14, yy, W - 28, 20);
-    if (on) { ctx.strokeStyle = SIDC.ac; ctx.lineWidth = 1.5; ctx.strokeRect(14.5, yy + 0.5, W - 29, 19); }
-    r.cells.forEach((c, j) => T(c, heads[j][1], yy + 14, { s: j === heads.length - 1 ? 8.4 : 9.2, b: bst || on, a: heads[j][2] || 'center', c: r.dim ? '#9AA3AE' : (j === r.hi ? (bst ? '#14532D' : '#1B1F23') : '#1B1F23') }));
-    hot(14, yy, W - 28, 20, () => pick(i), 'Show this layout in the charts below');
-  });
-  return y + 22 + rows.length * 20;
-}
-function wsCards(y, heads, rows, sel, best, pick) {
-  let yy = y; const eaIdx = heads.findIndex(h => h[0] === 'Ea %'), last = heads.length - 1;
-  rows.forEach((r, i) => {
-    const parts = []; r.cells.forEach((c, j) => { if (j === last || j === eaIdx) return; parts.push(heads[j][0] + ': ' + c); });
-    const nl = sidWrap(parts.join(' · '), 0, 0, W - 48, { s: 9 }, 11, true), h = 30 + nl * 11 + 6, on = i === sel, bst = i === best;
-    ctx.fillStyle = on ? 'rgba(11,114,133,0.16)' : bst ? 'rgba(63,143,107,0.14)' : (i % 2 ? '#F2F4F2' : '#fff'); rrect(14, yy, W - 28, h, 7); ctx.fill(); ctx.strokeStyle = on ? SIDC.ac : bst ? SIDC.st : '#D5DADF'; ctx.lineWidth = on ? 2 : 1; rrect(14, yy, W - 28, h, 7); ctx.stroke();
-    const dim = r.dim; T(eaIdx >= 0 ? 'Ea ' + r.cells[eaIdx] + ' %' : '', 22, yy + 17, { s: 11, b: true, c: dim ? '#9AA3AE' : (bst ? '#14532D' : SIDC.ink) }); T(r.cells[last], W - 22, yy + 17, { s: 9, b: true, a: 'right', c: dim ? '#9AA3AE' : '#14532D' });
-    sidWrap(parts.join(' · '), 22, yy + 32, W - 48, { s: 9, c: dim ? '#9AA3AE' : '#374151' }, 11);
-    hot(14, yy, W - 28, h, () => pick(i), 'Show this layout in the charts below'); yy += h + 5;
-  });
-  return yy;
-}
-function wsCard(x, y, w, h, title, lines, col) {
-  ctx.fillStyle = '#F6F9F8'; ctx.strokeStyle = col || SIDC.ac; ctx.lineWidth = 1.2; rrect(x, y, w, h, 8); ctx.fill(); ctx.stroke(); T(title, x + 10, y + 16, { s: 10.5, b: true, c: col || SIDC.ac });
-  lines.forEach((q, i) => { T(q[0], x + 10, y + 34 + i * 15, { s: 9, c: q[1] === '' && q[2] ? q[2] : '#374151' }); T(q[1], x + w - 10, y + 34 + i * 15, { s: 9, b: true, a: 'right', c: q[2] || SIDC.ink }); });
-}
-function wsAdvOf(c, q) { const o = c.o; return WSB.advance({ Q0: q, L: o.L, K: o.K, n: o.n, S0: c.S === 'basin' ? null : o.S0, sh: c.S === 'furrow' ? o.sh : WSB.SH_WIDE }); }
-
-function drawWS(y) {
-  const S = WSBS; if (!S.sys) wsLoad(SID.sys === 'furrow' || SID.sys === 'border' || SID.sys === 'basin' ? SID.sys : 'furrow', 'soil');
-  const prevCur = SIDCUR; SIDCUR = S; const sys = S.sys, fur = sys === 'furrow', bas = sys === 'basin', bor = sys === 'border', soilMode = S.src === 'soil';
-  const nc = W < 620;
-  y += sidHead('Textbook design: Walker & Skogerboe, Surface Irrigation: Theory and Practice (Ch. 6)', y, 'The book\'s volume-balance method with its own figures. "My soil" uses your DSS soil; the Ex rows reproduce the worked examples in the book.');
-  if (!nc) sidBadge('BOOK', W - 56, y - 3, true);
-  y += nc ? 32 : 30;
-  y = RW('Layout', y, Object.keys(WSSYS).map(s => [WSSYS[s], sys === s, () => wsLoad(s, 'soil'), 'Design for ' + WSSYS[s].toLowerCase()]));
-  y = RW('Inputs', y, WSX[sys].map(q => [q[1], S.src === q[0], () => wsLoad(sys, q[0]), q[0] === 'soil' ? 'Intake and depth from your soil in the DSS, book layout figures' : 'All inputs as printed in the book']));
-  if (bor) y = RW('Surface', y, [['Bare soil', !S.sod, () => { S.sod = false; S.sel = -1; }, 'Qmax = 0.01059 / S0^0.75 (Eq 6.23)'], ['Sod / grass (×2 flow)', S.sod, () => { S.sod = true; S.sel = -1; }, 'Erosion limit doubled for sod']]);
-  else y = RW(fur ? 'Umax' : 'Vmax', y, [['Erosive silt 8 m/min', S.umax === 8, () => { S.umax = 8; S.sel = -1; }, 'Book: about 8 m/min in erosive silt soils'], ['Stable clay or sand 13 m/min', S.umax === 13, () => { S.umax = 13; S.sel = -1; }, 'Book: up to about 13 m/min in stable soils']]);
-  y += nc ? 4 : 6;
-  const c = wsCompute(); const cx1 = 16, cx2 = 322, cw = 282, rg = { furrow: [60, 600, 5], border: [60, 600, 5], basin: [30, 300, 5] }[sys];
-  if (!nc) {
-  sidSlider('L', (bas ? 'Basin length' : 'Field length') + ' L (m)', cx1, y, cw, rg, S.L, v => sidF(v) + ' m');
-  if (!bas) sidSlider('S0', 'Slope S0 (%)', cx1, y + 31, cw, fur ? [0.1, 2, 0.05] : [0.05, 1, 0.05], S.S0, v => v.toFixed(2) + ' %');
-  sidSlider('n', 'Manning n', cx1, y + (bas ? 31 : 62), cw, [0.02, 0.15, 0.005], S.n, v => v.toFixed(3));
-  if (fur) sidSlider('w', 'Furrow spacing w (m)', cx1, y + 93, cw, [0.5, 2, 0.05], S.w, v => v.toFixed(2) + ' m'); if (bas) sidSlider('Lf', 'Field length along the supply (m)', cx1, y + 62, cw, [60, 720, 10], S.Lf, v => sidF(v) + ' m');
-  sidSlider('Qs', 'Farm supply Qs (L/s)', cx2, y, cw, [5, 400, 1], S.Qs, v => sidF(v) + ' L/s');
-  sidSlider('Wf', 'Field width Wf (m)', cx2, y + 31, cw, [60, 1000, 10], S.Wf, v => sidF(v) + ' m');
-  sidSlider('Zd', 'Required depth Zreq (mm)' + (soilMode ? ' · from the DSS' : ''), cx2, y + 62, cw, [20, 200, 1], c.Zd, v => sidF(v) + ' mm', soilMode);
-  SIDCUR = prevCur;
-  y += (fur ? 124 : 95);
-  } else {
-  { let yy = y; const cwc = W - 32, SS = (k, lab, rng, val, fmt, dis) => { sidSlider(k, lab, 16, yy, cwc, rng, val, fmt, dis); yy += 34; };
-    SS('L', (bas ? 'Basin length' : 'Field length') + ' L (m)', rg, S.L, v => sidF(v) + ' m'); if (!bas) SS('S0', 'Slope S0 (%)', fur ? [0.1, 2, 0.05] : [0.05, 1, 0.05], S.S0, v => v.toFixed(2) + ' %'); SS('n', 'Manning n', [0.02, 0.15, 0.005], S.n, v => v.toFixed(3));
-    if (fur) SS('w', 'Furrow spacing w (m)', [0.5, 2, 0.05], S.w, v => v.toFixed(2) + ' m'); if (bas) SS('Lf', 'Field length along the supply (m)', [60, 720, 10], S.Lf, v => sidF(v) + ' m');
-    SS('Qs', 'Farm supply Qs (L/s)', [5, 400, 1], S.Qs, v => sidF(v) + ' L/s'); SS('Wf', 'Field width Wf (m)', [60, 1000, 10], S.Wf, v => sidF(v) + ' m');
-    SS('Zd', 'Required depth Zreq (mm)' + (soilMode ? ' · from the DSS' : ''), [20, 200, 1], c.Zd, v => sidF(v) + ' mm', soilMode); SIDCUR = prevCur; y = yy; }
-  }
-  if (S.edited && !soilMode) sidPill('values changed from the book example', 16, y + 4, '#8A5A00');
-  if (c.err) { T('Could not evaluate this layout: ' + c.err, 16, y + 24, { s: 10, b: true, c: SIDC.df }); return y + 50; }
-  y += 22;
-  // ---- step 1: required depth, intake, limits ----
-  const unitZ = fur ? 'm³ per m of furrow' : 'm³ per m²', K = c.K, k0 = K.k / (fur ? S.w : 1);
-  y += (sidTx('1 · Required depth, intake and the flow limit', 16, y, { s: 11, b: true, c: SIDC.ink }, 13) - 1) * 13;
-  const L1 = [
-    ['Zreq = ' + sidF(c.Zd) + ' mm' + (fur ? ' × w ' + S.w.toFixed(2) + ' m' : ''), '= ' + c.Zreq.toFixed(4) + ' ' + unitZ],
-    ['Intake  Z = k·τ^a + f0·τ  (Kostiakov-Lewis)', ''],
-    ['   k = ' + K.k.toPrecision(3) + '   a = ' + K.a.toFixed(3) + '   f0 = ' + K.f0.toPrecision(3), soilMode ? 'fitted to your soil' : 'as printed'],
-    ['Time to infiltrate Zreq  τreq (Newton, Eq 6.5)', wsFx(c.Tq, 1) + ' min = ' + (c.Tq / 60).toFixed(1) + ' h'],
-    [fur ? 'Largest stream, inlet velocity ≤ ' + S.umax + ' m/min (Eq 6.13)' : bor ? 'Largest stream, Qmax (Eq 6.23)' : 'Largest stream, Vmax ' + S.umax + ' m/min (Eq 6.43)', fur ? (c.Qmax / 0.06).toFixed(2) + ' L/s per furrow' : (c.Qmax / 0.06).toFixed(2) + ' L/s per m'],
-    [bor ? 'Smallest stream to reach the end, Qmin (Eq 6.24)' : 'Manning roughness n', bor ? (c.Qmin / 0.06).toFixed(2) + ' L/s per m' : S.n.toFixed(3)]
-  ];
-  L1.forEach((q, i) => { if (nc) { const yy = y + 14 + i * 30; T(q[0], 16, yy + 8, { s: 9, c: '#374151' }); if (q[1]) T(q[1], 16, yy + 21, { s: 9.5, b: true, c: SIDC.ac }); return; } const yy = y + 12 + i * 17; T(q[0], 16, yy + 12, { s: 9, c: '#374151' }); T(q[1], 330, yy + 12, { s: 9, b: true, a: 'right', c: SIDC.ac }); });
-  // intake chart (depth per unit width)
-  const ix = nc ? 58 : 372, iw = nc ? W - 76 : 226, ih = nc ? 110 : 98, iy = nc ? y + 14 + 6 * 30 + 14 : y + 18, tmx = Math.max(c.Tq * 1.35, 60), uw = fur ? S.w : 1, zmx = Math.max(c.Zd * 1.35, 30);
-  const ax = sidAxes(ix, iy, iw, ih, 0, tmx, 0, zmx, 'contact time τ (min)', 'Z (mm)', 3, 2);
-  ctx.strokeStyle = SIDC.ac; ctx.lineWidth = 2.2; ctx.beginPath(); for (let i = 0; i <= 60; i++) { const t = tmx * i / 60, z = WSB.Zin(K, t) / uw * 1000; i ? ctx.lineTo(ax.sx(t), ax.sy(Math.min(z, zmx))) : ctx.moveTo(ax.sx(t), ax.sy(z)); } ctx.stroke();
-  ctx.strokeStyle = SIDC.df; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(ix, ax.sy(c.Zd)); ctx.lineTo(ix + iw, ax.sy(c.Zd)); ctx.stroke(); ctx.setLineDash([]);
-  if (Number.isFinite(c.Tq)) { ctx.fillStyle = SIDC.df; ctx.beginPath(); ctx.arc(ax.sx(c.Tq), ax.sy(c.Zd), 3.5, 0, 6.2832); ctx.fill(); T('τreq ' + sidF(c.Tq) + ' min', ax.sx(c.Tq) - 5, ax.sy(c.Zd) - 6, { s: 8.8, b: true, a: 'right', c: SIDC.df }); }
-  y = nc ? iy + ih + 44 : y + 12 + 6 * 17 + 40;
-  // ---- step 2: layout options ----
-  const opt = c.opt; let heads, rows = [], best = -1, rowQ = [];
-  if (fur) {
-    y += (sidTx('2 · Layout options: whole sets of furrows share the supply (' + opt.N + ' furrows, supply ' + sidF(S.Qs) + ' L/s)', 16, y, { s: 11, b: true, c: SIDC.ink }, 13) - 1) * 13;
-    heads = [['Sets', 34], ['Furrows/set', 96], ['Q0 L/s', 160], ['Advance tL', 224], ['Cutoff tco', 288], ['Ea %', 342], ['Hours', 390], ['Note', 430, 'left']];
-    opt.rows.forEach((r, i) => { if (r === opt.best) best = i; rowQ.push(r.Q0); rows.push({ cells: [String(r.sets), String(r.per), (r.Q0 / 0.06).toFixed(2), r.ok ? wsHM(r.tL) : '–', r.ok ? wsHM(r.tco) : '–', r.ok ? sidF(r.Ea * 100, 1) : '–', r.ok ? sidF(r.hours, 1) : '–', r === opt.best ? 'highest efficiency' : !isFinite(r.tL) ? 'front never reaches the end' : !r.ok ? 'advance takes over a day' : ''], dim: !r.ok, hi: 5 }); });
-  } else if (bor) {
-    y += (sidTx('2 · Layout options: stream per metre of width, strip width = supply ÷ stream', 16, y, { s: 11, b: true, c: SIDC.ink }, 13) - 1) * 13;
-    heads = [['Q0 L/s/m', 40], ['Strip width', 100], ['Strips', 148], ['Advance tL', 206], ['Cutoff tco', 268], ['Ea %', 322], ['Recession td', 380], ['Note', 424, 'left']];
-    opt.rows.forEach((r, i) => { if (opt.best && Math.abs(r.Q0 - opt.best.Q0) < 1e-12) best = i; rowQ.push(r.Q0); rows.push({ cells: [(r.Q0 / 0.06).toFixed(2), r.ok ? sidF(r.Wb, 1) + ' m' : '–', r.ok ? String(r.nb) : '–', r.ok ? wsHM(r.tL) : '–', r.ok ? wsHM(r.tco) : '–', r.ok ? sidF(r.Ea * 100, 1) : '–', r.ok && r.td ? wsHM(r.td) : '–', !r.ok ? 'front never reaches the end' : r.Ea > 1.0001 ? 'over 100 %: tail short of Zreq' : r.complete ? '' : 'cutoff set by τreq'], dim: !r.ok || r.Ea > 1.0001, hi: 5 }); });
-    if (opt.best) { rows.push({ cells: [(opt.best.Q0 / 0.06).toFixed(2), sidF(opt.best.Wb, 1) + ' m', String(opt.best.nb), wsHM(opt.best.tL), wsHM(opt.best.tco), sidF(opt.best.Ea * 100, 1), opt.best.td ? wsHM(opt.best.td) : '–', 'refined optimum'], hi: 5 }); best = rows.length - 1; rowQ.push(opt.best.Q0); }
-  } else {
-    y += (sidTx('2 · Layout options: how many basins across the supply (' + sidF(S.Wf) + ' m wide field, ' + sidF(S.Lf) + ' m along)', 16, y, { s: 11, b: true, c: SIDC.ink }, 13) - 1) * 13;
-    heads = [['Basins', 34], ['Width m', 84], ['Q0 L/s/m', 138], ['y0 mm', 190], ['Advance tL', 244], ['Cutoff tco', 300], ['Ea %', 348], ['Hours', 392], ['Note', 430, 'left']];
-    opt.rows.forEach((r, i) => { if (opt.best && r.nb === opt.best.nb) best = i; rowQ.push(r.Q0); rows.push({ cells: [String(r.nb), sidF(r.Wb, 1), (r.Q0 / 0.06).toFixed(2), r.ok ? sidF(r.y0 * 1000, 0) : '–', r.ok ? wsHM(r.tL) : '–', r.ok ? wsHM(r.tco) : '–', r.ok ? sidF(r.Ea * 100, 1) : '–', r.ok ? sidF(r.hours, 1) : '–', r === opt.best ? 'highest efficiency' : (r.Q0 / 0.06 > c.Qmax / 0.06 ? 'above Vmax stream' : '')], dim: !r.ok || r.Ea > 1.0001, hi: 6 }); });
-  }
-  if (!rows.length) { T('No layout fits these inputs: the supply is too small for the field width at the allowed stream size.', 16, y + 22, { s: 10, b: true, c: SIDC.df }); SIDCUR = prevCur; return y + 50; }
-  if (S.sel < 0 || S.sel >= rows.length) S.sel = best >= 0 ? best : 0;
-  const sel = S.sel; y = nc ? wsCards(y + 6, heads, rows, sel, best, i => { S.sel = i; }) : wsTable(y + 8, heads, rows, sel, best, i => { S.sel = i; });
-  const selQ = rowQ[sel], selRow = fur ? opt.rows[sel] : bor ? (sel < opt.rows.length ? opt.rows[sel] : opt.best) : opt.rows[sel];
-  if (selRow && selRow.ok) {
-    const msg = fur ? selRow.sets + ' sets of ' + selRow.per + ' furrows at ' + (selRow.Q0 / 0.06).toFixed(2) + ' L/s each; front reaches ' + sidF(S.L) + ' m in ' + wsHM(selRow.tL) + '; cut off at ' + wsHM(selRow.tco) + '; Ea ' + sidF(selRow.Ea * 100, 1) + ' %; whole field in ' + sidF(selRow.hours, 1) + ' h'
-      : bor ? selRow.nb + ' strips of ' + sidF(selRow.Wb, 1) + ' m at ' + (selRow.Q0 / 0.06).toFixed(2) + ' L/s per m; front arrives in ' + wsHM(selRow.tL) + '; cutoff ' + wsHM(selRow.tco) + '; Ea ' + sidF(selRow.Ea * 100, 1) + ' %'
-      : selRow.nb + ' basins across, each ' + sidF(selRow.Wb, 1) + ' m wide at ' + (selRow.Q0 / 0.06).toFixed(2) + ' L/s per m; inlet depth ' + sidF(selRow.y0 * 1000, 0) + ' mm; cutoff ' + wsHM(selRow.tco) + '; Ea ' + sidF(selRow.Ea * 100, 1) + ' %; whole field in ' + sidF(selRow.hours, 1) + ' h';
-    const lines = []; let tmp = msg; ctx.font = '9.5px sans-serif'; while (tmp.length) { let n = tmp.length; while (n > 8 && ctx.measureText(tmp.slice(0, n)).width > W - 34) { n = tmp.lastIndexOf(' ', n - 1); if (n < 0) { n = 60; break; } } lines.push(tmp.slice(0, n)); tmp = tmp.slice(n).trim(); }
-    lines.forEach((l, i) => T(l, 16, y + 14 + i * 13, { s: 9.5, b: true, c: SIDC.ac })); y += 14 + lines.length * 13;
-  }
-  { const nn = sidTx(fur ? 'Sets that need a stream above the limit (' + (c.Qmax / 0.06).toFixed(2) + ' L/s per furrow) are left out. Tap a ' + (nc ? 'card' : 'row') + ' to see it in the charts.' : 'Tap a ' + (nc ? 'card' : 'row') + ' to see it in the charts.', 16, y + 12, { s: 8.8, i: true, c: MUTE }, 11); y += 30 + (nn - 1) * 11; }
-  // ---- step 3: charts ----
-  y += (sidTx('3 · Efficiency against stream size, and the advance of the selected layout', 16, y, { s: 11, b: true, c: SIDC.ink }, 13) - 1) * 13;
-  const cy = y + 22, chH = 150, ex0 = 50, ew = nc ? W - 70 : 238, rx = nc ? 50 : 366, rw = nc ? W - 70 : 232, cya = nc ? cy + chH + 60 : cy, qs = rows.map((r, i) => ({ q: rowQ[i] / 0.06, ea: fur ? opt.rows[i] : bor ? (i < opt.rows.length ? opt.rows[i] : opt.best) : opt.rows[i] })).filter(p => p.ea && p.ea.ok && p.ea.Ea <= 1.0001);
-  const qmx = Math.max(...rowQ.map(q => q / 0.06)) * 1.08, ea = sidAxes(ex0, cy, ew, chH, 0, qmx, 0, 100, 'inlet stream Q0 (L/s' + (fur ? ' per furrow)' : ' per m)'), 'Ea (%)', 4, 4);
-  if (qs.length) {
-    const sorted = qs.slice().sort((a, b) => a.q - b.q); ctx.strokeStyle = SIDC.ac; ctx.lineWidth = 2; ctx.beginPath(); sorted.forEach((p, i) => { const px = ea.sx(p.q), py = ea.sy(p.ea.Ea * 100); i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); }); ctx.stroke();
-    sorted.forEach(p => { ctx.fillStyle = '#7FC4D3'; ctx.beginPath(); ctx.arc(ea.sx(p.q), ea.sy(p.ea.Ea * 100), 3, 0, 6.2832); ctx.fill(); });
-  }
-  if (selRow && selRow.ok) { ctx.fillStyle = '#E8912D'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(ea.sx(selQ / 0.06), ea.sy(Math.min(selRow.Ea, 1) * 100), 5, 0, 6.2832); ctx.fill(); ctx.stroke(); }
-  if (fur) { ctx.strokeStyle = SIDC.df; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(ea.sx(c.Qmax / 0.06), cy); ctx.lineTo(ea.sx(c.Qmax / 0.06), cy + chH); ctx.stroke(); ctx.setLineDash([]); T('Qmax', ea.sx(c.Qmax / 0.06) - 3, cy + 10, { s: 8.5, b: true, a: 'right', c: SIDC.df }); }
-  sidHover(ea, v => ['Q0 ' + sidF(v, 2) + ' L/s']);
-  // advance
-  let ad = null; if (selRow && selRow.ok) { try { ad = wsAdvOf(c, selQ); } catch (e) { ad = null; } }
-  if (ad && isFinite(ad.tL)) {
-    const tco = selRow.tco, tmx2 = Math.max(tco, ad.tL) * 1.1, aa = sidAxes(rx, cya, rw, chH, 0, S.L, 0, tmx2, 'distance from the inlet (m)', 'time (min)', 4, 4), tx = x => Math.pow(x / ad.p, 1 / ad.r);
-    ctx.fillStyle = 'rgba(40,120,230,0.14)'; ctx.beginPath(); ctx.moveTo(aa.sx(0), aa.sy(tco)); for (let i = 0; i <= 60; i++) { const x = S.L * i / 60; ctx.lineTo(aa.sx(x), aa.sy(Math.min(tx(x), tco))); } ctx.lineTo(aa.sx(S.L), aa.sy(tco)); ctx.closePath(); ctx.fill();
-    ctx.strokeStyle = '#1F5FA8'; ctx.lineWidth = 2.2; ctx.beginPath(); for (let i = 0; i <= 60; i++) { const x = S.L * i / 60, t = tx(x); i ? ctx.lineTo(aa.sx(x), aa.sy(Math.min(t, tmx2))) : ctx.moveTo(aa.sx(x), aa.sy(t)); } ctx.stroke();
-    ctx.strokeStyle = SIDC.df; ctx.lineWidth = 1.6; ctx.setLineDash([6, 3]); ctx.beginPath(); ctx.moveTo(aa.sx(0), aa.sy(tco)); ctx.lineTo(aa.sx(S.L), aa.sy(tco)); ctx.stroke(); ctx.setLineDash([]);
-    T('cutoff ' + wsHM(tco), rx + 6, aa.sy(tco) - 4, { s: 8.8, b: true, c: SIDC.df }); T('x = ' + sidF(ad.p, 2) + ' · t^' + ad.r.toFixed(2) + '  (advance exponent r)', rx + rw, cya - 6, { s: 8.6, b: true, a: 'right', c: '#1F5FA8' });
-    sidHover(aa, v => ['x = ' + sidF(v) + ' m', 'front arrives ' + wsHM(tx(v)), 'opportunity time ' + wsHM(Math.max(0, tco - tx(v)))]);
-  } else T('Pick a feasible row to draw its advance.', rx + 10, cya + chH / 2, { s: 9.5, i: true, c: MUTE });
-  if (nc) { T('Efficiency against stream size', 16, cy - 8, { s: 9.5, b: true, c: SIDC.ink }); T('Advance of the selected layout', 16, cya - 22, { s: 9.5, b: true, c: SIDC.ink }); }
-  y = cya + chH + 46;
-  // ---- step 4: cutoff rule detail ----
-  if (fur) {
-    y += (sidTx('4 · Ways to raise the efficiency of furrows (Eqs 6.15 to 6.22)', 16, y, { s: 11, b: true, c: SIDC.ink }, 13) - 1) * 13;
-    const cb = c.cut, ru = c.reu, hw = nc ? W - 28 : 292, cyc = y + 12;
-    wsCard(14, cyc, hw, 150, 'Cutback after the front arrives', [['Advance stream Q0', (cb.Q0 / 0.06).toFixed(2) + ' L/s'], ['Soak stream Q0\' = 1.1·f0·L', (cb.Qc / 0.06).toFixed(2) + ' L/s'], ['Ratio Q0\' ÷ Q0', cb.ratio.toFixed(2)], ['Advance time = τreq', wsHM(cb.tL)], ['Cutoff after the soak', wsHM(cb.tco)], ['Application efficiency', sidF(cb.Ea * 100, 1) + ' %', '#14532D'], ['Furrows per set, in turn', cb.sets.slice(0, 4).join(' · ') + (cb.sets.length > 4 ? ' …' : '')], [cb.ratio >= 1 ? 'No gain: soak stream ≥ advance stream' : cb.capped ? 'Stream capped by Umax: advance is slower than τreq' : 'Whole number of furrows per set', '', cb.ratio >= 1 ? '#B91C1C' : MUTE]], '#0B7285');
-    wsCard(nc ? 14 : 314, nc ? cyc + 162 : cyc, hw, 150, 'Tailwater reuse: runoff pumped back', [['Stream Q0 (advance in ' + sidF(ru.frac * 100) + ' % of τreq)', (ru.Q0 / 0.06).toFixed(2) + ' L/s'], ['Advance / cutoff', wsHM(ru.tL) + ' / ' + wsHM(ru.tco)], ['Deep percolation DPR', sidF(ru.DPR * 100, 1) + ' %'], ['Tailwater TWR', sidF(ru.TWR * 100, 1) + ' %'], ['Efficiency with reuse, 1 − DPR', sidF(ru.Ea * 100, 1) + ' %', '#14532D'], ['Runoff per furrow', sidF(ru.Vtw, 2) + ' m³'], ['Reservoir after ' + ru.N1 + ' furrows', sidF(ru.Vres, 0) + ' m³'], ['Pump-back flow', (ru.Qpb / 0.06).toFixed(2) + ' L/s']], '#B8743A');
-    y = nc ? cyc + 162 + 150 + 22 : cyc + 150 + 22;
-  } else if (bor) {
-    y += (sidTx('4 · Cutoff by recession: the book\'s iteration for the selected strip (Eqs 6.26 to 6.37)', 16, y, { s: 11, b: true, c: SIDC.ink }, 13) - 1) * 13;
-    const bc = selRow && selRow.ok ? WSB.borderCase(c.o, selRow.Q0) : null; let yy = y + 12;
-    if (bc) {
-      const fx = W / 620, hh = [['Pass', 40 * fx], ['T1 min', 130 * fx], [nc ? 'Rate I' : 'Intake rate I m/min', 250 * fx], [nc ? 'Factor S' : 'Runoff factor S', 370 * fx], ['T2 min', 470 * fx]]; ctx.fillStyle = '#E6F4F7'; ctx.fillRect(14, yy, W - 28, 18); hh.forEach(h => T(h[0], h[1], yy + 13, { s: 8.6, b: true, a: 'center', c: SIDC.ink }));
-      bc.hist.slice(0, 6).forEach((h, i) => { const y2 = yy + 18 + i * 17; ctx.fillStyle = i % 2 ? '#F6F7F5' : '#fff'; ctx.fillRect(14, y2, W - 28, 17); [String(i + 1), sidF(h[0], 1), h[1].toExponential(2), h[2].toExponential(2), sidF(h[3], 1)].forEach((s, j) => T(s, hh[j][1], y2 + 12, { s: 9, a: 'center', c: '#1B1F23' })); });
-      yy += 18 + Math.min(6, bc.hist.length) * 17 + 14;
-      [['Advance tL ' + wsHM(bc.tL) + ' · τreq ' + wsHM(bc.Tq) + ' → tr = τreq + tL = ' + wsHM(bc.tr), ''], ['Recession at the inlet td = ' + wsHM(bc.td) + (bc.complete ? ' (inlet takes at least Zreq: tco = td − y0·L/(2·Q0))' : ' (inlet short of Zreq: cut off at τreq − y0·L/(2·Q0))'), ''], ['Cutoff tco = ' + wsHM(bc.tco) + ' · Ea = Zreq·L ÷ (Q0·tco) = ' + sidF(bc.Ea * 100, 1) + ' % · inlet depth y0 = ' + sidF(bc.y0 * 1000, 0) + ' mm', '']].forEach((q, i) => { const nn = sidTx(q[0], 16, yy, { s: 9.2, b: i === 2, c: i === 2 ? '#14532D' : '#374151' }, 12); yy += nn * (nc ? 12 : 14); }); yy += 8;
-    } else { T('Pick a feasible row to see the iteration.', 16, yy + 14, { s: 9.5, i: true, c: MUTE }); yy += 30; }
-    y = yy + 6;
-  } else {
-    y += (sidTx('4 · Cutoff for a level basin (Eqs 6.38 to 6.42)', 16, y, { s: 11, b: true, c: SIDC.ink }, 13) - 1) * 13; let yy = y + 12;
-    if (selRow && selRow.ok) {
-      [['Inlet depth y0 = (Q0²·n²·L ÷ 3600)^0.23', sidF(selRow.y0 * 1000, 0) + ' mm (half-way ' + sidF(selRow.y0h * 1000, 0) + ' mm)'], ['Advance time tL (volume balance)', wsHM(selRow.tL)], ['tco = (Zreq·L − 0.8·y0·L) ÷ Q0 + tL', wsHM(selRow.tco)], ['Application efficiency Ea = Zreq·L ÷ (Q0·tco)', sidF(selRow.Ea * 100, 1) + ' %'], ['Basins to irrigate in turn (' + sidF(S.Lf) + ' m field, ' + selRow.along + ' along its length)', selRow.nb * selRow.along + ' basins · ' + sidF(selRow.hours, 1) + ' h']].forEach((q, i) => { if (nc) { T(q[0], 16, yy + 12 + i * 32, { s: 9, c: '#374151' }); T(q[1], 16, yy + 25 + i * 32, { s: 9.5, b: true, c: SIDC.ac }); return; } T(q[0], 16, yy + 12 + i * 17, { s: 9.2, c: '#374151' }); T(q[1], 590, yy + 12 + i * 17, { s: 9.2, b: true, a: 'right', c: SIDC.ac }); }); yy += nc ? 5 * 32 + 14 : 5 * 17 + 14;
-    } else { T('Pick a feasible row to see the numbers.', 16, yy + 14, { s: 9.5, i: true, c: MUTE }); yy += 30; }
-    y = yy + 6;
-  }
-  // ---- step 5: check against the book ----
-  y += (sidTx('5 · Check against the figures printed in the book', 16, y, { s: 11, b: true, c: SIDC.ink }, 13) - 1) * 13;
-  const ch = wsChecks(), cy2 = y + 8;
-  if (!nc) {
-  ctx.fillStyle = '#E6F4F7'; ctx.fillRect(14, cy2, W - 28, 18); [['Quantity', 20, 'left'], ['Book', 440, 'right'], ['This model', 520, 'right'], ['Diff', 592, 'right']].forEach(h => T(h[0], h[1], cy2 + 13, { s: 8.6, b: true, a: h[2], c: SIDC.ink }));
-  ch.forEach((r, i) => { const yy = cy2 + 18 + i * 16, df = (r[2] - r[1]) / r[1] * 100; ctx.fillStyle = i % 2 ? '#F6F7F5' : '#fff'; ctx.fillRect(14, yy, W - 28, 16); T(r[0], 20, yy + 12, { s: 8.8, c: '#374151' }); T(r[1].toFixed(r[3]) + ' ' + r[4], 440, yy + 12, { s: 8.8, a: 'right', c: '#1B1F23' }); T(r[2].toFixed(r[3]) + ' ' + r[4], 520, yy + 12, { s: 8.8, b: true, a: 'right', c: SIDC.ac }); T((df >= 0 ? '+' : '') + df.toFixed(1) + ' %', 592, yy + 12, { s: 8.8, b: true, a: 'right', c: Math.abs(df) < 2.5 ? '#14532D' : '#8A5A00' }); });
-  y = cy2 + 18 + ch.length * 16 + 18;
-  } else {
-    ch.forEach((r, i) => { const yy = cy2 + i * 34, df = (r[2] - r[1]) / r[1] * 100; ctx.fillStyle = i % 2 ? '#F6F7F5' : '#fff'; ctx.fillRect(14, yy, W - 28, 34); T(r[0], 20, yy + 12, { s: 8.8, c: '#374151' }); T('book ' + r[1].toFixed(r[3]) + ' · model ' + r[2].toFixed(r[3]) + ' ' + r[4], 20, yy + 26, { s: 9, b: true, c: SIDC.ac }); T((df >= 0 ? '+' : '') + df.toFixed(1) + ' %', W - 20, yy + 26, { s: 9, b: true, a: 'right', c: Math.abs(df) < 2.5 ? '#14532D' : '#8A5A00' }); });
-    y = cy2 + ch.length * 34 + 18;
-  }
-  // ---- real figures used ----
-  T('Real figures the book gives, as used above', 16, y, { s: 11, b: true, c: SIDC.ink }); ctx.strokeStyle = SIDC.ac; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(16, y + 5); ctx.lineTo(W - 16, y + 5); ctx.stroke();
-  const RF = [['Manning n', '0.02 previously irrigated, smooth soil · 0.04 freshly tilled · 0.15 dense growth'], ['Furrow velocity limit Umax', '8 m/min erosive silt · 13 m/min stable clay and sandy soils'], ['Furrow flow shape', 'A²·R^(4/3) = 0.325·A^2.734 (the book\'s furrow); borders and basins ρ1 = 1, ρ2 = 10/3'], ['Surface shape factor σy', '0.77; σz = (a + r(1 − a) + 1) ÷ ((1 + a)(1 + r)) from the advance exponent r'], ['Border stream limit', 'Qmax = 0.01059 ÷ S0^0.75 m³/min per m (twice that on sod); Qmin = 0.000357·L·√S0 ÷ n'], ['Cutback soak stream', 'Q0\' = 1.1·f0·L, set sizes from the supply (Eq 6.17)'], ['Tailwater reuse', 'advance in 30 to 40 % of τreq; DPR, TWR and the reservoir from the runoff volume'], ['Indicators', 'Ea = Zreq·L ÷ (Q0·tco); DPR = Vdp ÷ Vap; TWR = Vtw ÷ Vap; Er (Eqs 2.33 to 2.35)']];
-  { let yy = y + 12; RF.forEach((q, i) => { const nl = nc ? sidWrap(q[1], 0, 0, W - 40, { s: 8.8 }, 11, true) : 1, h = 18 + nl * 12; ctx.fillStyle = i % 2 ? '#F6F7F5' : '#fff'; ctx.fillRect(14, yy, W - 28, h); T(q[0], 20, yy + 12, { s: 9, b: true, c: SIDC.ink }); if (nc) sidWrap(q[1], 20, yy + 25, W - 40, { s: 8.8, c: '#374151' }, 11); else T(q[1], 20, yy + 25, { s: 8.8, c: '#374151' }); yy += nc ? h + 2 : 30; }); y = yy + 12; }
-  const ns = sidTx('Source: Walker, W.R. and Skogerboe, G.V. (1987), Surface Irrigation: Theory and Practice, Prentice-Hall. Worked examples 6.1 to 6.5.', 16, y + 6, { s: 8.6, i: true, c: MUTE }, 11);
-  SIDCUR = prevCur;
-  return y + 34 + (ns - 1) * 11;
-}
 
 let currentScene = SCENES[0];
 
