@@ -25,6 +25,15 @@ npm install        # downloads Electron (once)
 npm start          # opens the SWAFL window
 ```
 
+## One command: build the app, put it on your Desktop, start it
+
+```bash
+npm install
+npm run get-app
+```
+
+(or double-click `BUILD_AND_INSTALL_SWAFL.bat`). Afterwards just double-click **SWAFL** on your Desktop, with no code.
+
 ## Make the downloadable `SWAFL.exe`
 
 On **Windows**:
