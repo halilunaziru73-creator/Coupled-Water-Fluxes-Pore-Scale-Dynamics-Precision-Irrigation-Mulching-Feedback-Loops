@@ -20,8 +20,6 @@ const Dash = (() => {
     const D = dayCache.D, Y = D && D.year ? D.year : null;
     let h = '<div class="dwrap">';
     if (D) {
-      const likeTxt = 'weather like ' + D.like + (D.mode === 'typ' ? ', typical year' : D.mode === 'dry' ? ', dry year' : D.mode === 'wet' ? ', wet year' : '');
-      h += '<div class="dadv" style="border-left-color:' + (D.tone || '#1F6FB2') + '"><b>' + UI.esc(D.date) + '</b> <span>(' + UI.esc(likeTxt) + ')</span> &nbsp; <b style="color:' + (D.tone || '#16304A') + '">' + UI.esc(D.head) + '</b><br><span>' + UI.esc(D.text) + '</span></div>';
       h += '<div class="dsec"><h4>On ' + UI.esc(D.date) + '<span>mm per day</span></h4><div class="kgrid">' +
         K('Crop', UI.esc(D.crop), '', 't4') + K('Root depth', f1(D.rd), 'cm', 't4') + K('Sensor / trigger', (D.f || 0).toFixed(2) + ' / ' + (D.fT || 0).toFixed(2), '', 't3') +
         K('Rain', f1(D.rain), 'mm') + K('Irrigation', f1(D.irr), 'mm', 't3') + K('Soil evaporation', f1(D.evap), 'mm', 't1') + K('Transpiration', f1(D.tr), 'mm', 't1') + K('Drainage', f1(D.dr), 'mm', 't2') + '</div></div>';

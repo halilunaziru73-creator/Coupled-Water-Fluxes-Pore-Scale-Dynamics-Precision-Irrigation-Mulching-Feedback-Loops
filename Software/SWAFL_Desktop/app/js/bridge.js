@@ -44,7 +44,7 @@ const E = (() => {
         var o={state:state,scene:currentScene.id,sceneLabel:currentScene.label,playOn:play.on,playT:play.t,
           vals:{tc:g('tcVal'),vff:g('vffVal'),cap:g('capVal'),rain:g('rainVal'),temp:g('tempVal'),trig:g('trigVal'),z:g('zVal'),n:g('nVal')},
           ro:{evap:g('roEvap'),drain:g('roDrain'),irr:g('roIrr'),yield:g('roYield'),transp:g('roTransp'),et:g('roET'),nl:g('roNL'),ie:g('roIE'),rain:g('roRain'),baseIrr:g('roBaseIrr')},
-          year:(document.getElementById('dssYear')||{}).value,date:isoDate(dateOfK(fclock.kd())),dateLbl:fmtDate(dateOfK(fclock.kd()))+' (weather like '+(1980+yearOf(fclock.kd()))+')',
+          year:(document.getElementById('dssYear')||{}).value,date:isoDate(dateOfK(fclock.kd())),dateLbl:fmtDate(dateOfK(fclock.kd())),
           sec:window.__SEC||{}};
         return o;})()`);
     },
