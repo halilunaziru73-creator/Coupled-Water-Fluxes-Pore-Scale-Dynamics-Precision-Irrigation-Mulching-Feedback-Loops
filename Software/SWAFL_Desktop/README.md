@@ -15,6 +15,23 @@ It runs the same simulation engine as the web explorer, inside a professional wo
 | **Properties** (right) | Every input: scenario, soil, tillage, crop, mulch, climate, irrigation, nitrogen |
 | **Dashboard** (bottom) | Results, Design results, 20-year Charts, Messages |
 
+## Download the software (Windows)
+
+**Option A - one paste in VS Code** (needs [Node.js LTS](https://nodejs.org) and [Git](https://git-scm.com); restart VS Code after installing them). Open `Terminal -> New Terminal` and paste:
+
+```
+git clone https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops.git
+cd Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops\Software\SWAFL_Desktop
+npm.cmd install
+npm.cmd run get-app
+```
+
+It downloads the app, builds `SWAFL.exe`, puts it on your Desktop and starts it. Next time just double-click **SWAFL** on the Desktop. Use `npm.cmd` (not `npm`) so PowerShell never blocks it. To update later: `git pull` in the `Software\SWAFL_Desktop` folder, then `npm.cmd run get-app`.
+
+**Option B - download the zip:** [SWAFL_Desktop.zip](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/SWAFL_Desktop.zip). Extract it, open the inner `SWAFL_Desktop` folder (the one that contains `package.json`) in VS Code and run `npm.cmd install` then `npm.cmd run get-app`.
+
+**No Node/VS Code?** Run the web version: `npm.cmd run web` and open http://127.0.0.1:5199.
+
 ## Run it in VS Code (3 commands)
 
 1. Install **Node.js 18+** from <https://nodejs.org>.
