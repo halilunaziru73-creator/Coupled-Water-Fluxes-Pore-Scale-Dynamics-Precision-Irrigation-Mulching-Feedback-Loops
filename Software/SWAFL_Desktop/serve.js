@@ -23,6 +23,14 @@ module.exports = { listen };
 if (require.main === module) {
   const root = path.join(__dirname, 'app');
   listen(root, Number(process.env.PORT) || 5173).then(({ port }) => {
-    console.log('SWAFL is running in your browser:  http://127.0.0.1:' + port + '/');
+    const url = 'http://127.0.0.1:' + port + '/';
+    console.log('SWAFL is running in your browser:  ' + url);
+    console.log('Keep this window OPEN while you use SWAFL. Close it (or press Ctrl+C) to stop.');
+    try {
+      const cp = require('child_process');
+      if (process.platform === 'win32') cp.exec('start "" "' + url + '"');
+      else if (process.platform === 'darwin') cp.exec('open "' + url + '"');
+      else cp.exec('xdg-open "' + url + '"');
+    } catch (e) {}
   });
 }
