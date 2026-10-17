@@ -36,6 +36,14 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
+          name: SWAFL Desktop ${{ github.ref_name }}
+          body: |
+            Download area for the SWAFL desktop app (Windows).
+            - `SWAFL.exe`: portable app, double-click to run.
+            - `SWAFL-Setup.exe`: installer.
+            - `SWAFL_Desktop.zip`: the source; build it yourself with `npm.cmd install` then `npm.cmd run get-app`.
+            The exe files are unsigned, so Windows SmartScreen may ask: More info, then Run anyway.
           files: |
+            Software/SWAFL_Desktop.zip
             ${{ env.PROJ }}/dist/SWAFL.exe
             ${{ env.PROJ }}/dist/SWAFL-Setup.exe
