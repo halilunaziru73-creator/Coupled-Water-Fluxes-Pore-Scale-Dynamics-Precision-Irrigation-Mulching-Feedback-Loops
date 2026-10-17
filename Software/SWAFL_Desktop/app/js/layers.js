@@ -2,12 +2,12 @@
 'use strict';
 const Layers = (() => {
   const GROUPS = [
+        { id: 'g-design', name: 'Irrigation design', icon: 'pipe', items: [['sid', 'Surface irrigation design', 'S2'], ['drip', 'Drip irrigation design', 'S3'], ['spr', 'Sprinkler design and pipes', 'S4']] },
     { id: 'g-water', name: 'Field water balance', icon: 'field', items: [['field', 'Field balance', ''], ['spac', 'Soil, plant and air', 'S1'], ['v2', 'Profile evolution', 'V2']] },
     { id: 'g-ctrl', name: 'Irrigation control', icon: 'drop', items: [['v1', 'Sensor and trigger', 'V1'], ['n1', 'Trigger law', 'N1']] },
     { id: 'g-soil', name: 'Soil structure and tillage', icon: 'soil', items: [['v3', 'Tillage and structure', 'V3'], ['v7', 'Soil hydraulic drivers', 'V7'], ['r1', 'Root structure', 'R1']] },
     { id: 'g-mulch', name: 'Mulch and evaporation', icon: 'layers', items: [['v4', 'Mulch against bare soil', 'V4'], ['v6', 'Mulch control', 'V6'], ['e1', 'Evaporation physics', 'E1'], ['n2', 'Fate of saved water', 'N2'], ['n3', 'Regime map', 'N3']] },
-    { id: 'g-loop', name: 'Feedback loops', icon: 'refresh', items: [['v5', 'Feedback loops', 'V5']] },
-    { id: 'g-design', name: 'Irrigation design', icon: 'pipe', items: [['sid', 'Surface irrigation design', 'S2'], ['drip', 'Drip irrigation design', 'S3'], ['spr', 'Sprinkler design and pipes', 'S4']] }
+    { id: 'g-loop', name: 'Feedback loops', icon: 'refresh', items: [['v5', 'Feedback loops', 'V5']] }
   ];
   const DESIGN = ['sid', 'drip', 'spr'];
   let tabs = ['field'], cur = 'field', collapsed = { 'g-water': true, 'g-ctrl': true, 'g-soil': true, 'g-mulch': true, 'g-loop': true, 'g-design': true, 's-sid': true, 's-drip': true, 's-spr': true }, sectionPick = {};

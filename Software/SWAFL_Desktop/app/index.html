@@ -41,11 +41,12 @@
     <section id="center">
       <div id="docTabs"></div>
       <div id="viewBar"></div>
+      <div id="centerRow">
       <div id="engineHost">
         <iframe id="engine" title="SWAFL simulation window" src="engine/engine.html?app=1#scene=field"></iframe>
         <div id="loading"><img src="assets/logo.svg" width="64" height="64" alt=""><div>Loading simulation engine&hellip;</div></div>
       </div>
-      <div class="vsplit" id="splitDash" title="Drag to resize"></div>
+        <div class="hsplit" id="splitDash" title="Drag to resize"></div>
       <section class="dock" id="dashDock">
         <div class="dockhead tabs" id="dashTabs">
           <button data-tab="results" class="on">Results</button>
@@ -53,12 +54,13 @@
           <button data-tab="charts">Charts</button>
           <button data-tab="messages">Messages</button>
           <span class="grow"></span>
-          <button class="mini" data-act="maxDash" title="Make the dashboard larger or smaller">Larger</button>
-          <button class="mini" data-act="pinBaseline" title="Pin current results as baseline">Pin baseline</button>
+          <button class="mini" data-act="maxDash" title="Make the dashboard larger or smaller">Wider</button>
+          <button class="mini" data-act="pinBaseline" title="Pin current results as baseline">Pin</button>
           <button class="mini" data-act="clearBaseline" title="Clear baseline">Clear</button>
         </div>
         <div id="dashBody"></div>
       </section>
+      </div>
     </section>
 
     <div class="hsplit" id="splitRight"></div>
