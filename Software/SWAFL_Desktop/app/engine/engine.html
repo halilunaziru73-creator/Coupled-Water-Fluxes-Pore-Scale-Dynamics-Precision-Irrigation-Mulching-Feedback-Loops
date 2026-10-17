@@ -778,7 +778,7 @@ function RW(label, y, items) { if (W < 620) return sidRowC(label, y, items); sid
 function sidHeaderC(sName, sim) {
   let y = 22; const mw = W - 32, crop = (CROPS[state.crop] || {}).label;
   let n = sidWrap('Surface irrigation design: from your soil to a working layout', 16, y, mw, { s: 14, b: true, c: SIDC.ink }, 17); y += (n - 1) * 17 + 18;
-  n = sidWrap(sName + ' · ' + crop + ' · root zone ' + Math.round(sim.Rmax) + ' cm · trigger at ' + Math.round(sim.fTrig * 100) + '% depleted · ' + fmtDate(dateOfK(fclock.kd())) + ' (weather like ' + (CAL0 + yearOf(fclock.kd())) + ')', 16, y, mw, { s: 10, c: MUTE }, 13); y += n * 13 + 4;
+  n = sidWrap(sName + ' · ' + crop + ' · root zone ' + Math.round(sim.Rmax) + ' cm · trigger at ' + Math.round(sim.fTrig * 100) + '% depleted · ' + fmtDate(dateOfK(fclock.kd())) + ' (weather like ' + (1980 + yearOf(fclock.kd())) + ')', 16, y, mw, { s: 10, c: MUTE }, 13); y += n * 13 + 4;
   const t1 = 'soil texture, field capacity, wilting point, root depth, depletion trigger and yearly irrigation come from the DSS simulation', t2 = 'intake (Kostiakov), advance (volume balance), cutoff and efficiencies: the Surface Irrigation lecture equations', x0 = 76, tw = W - 22 - x0;
   const n1 = sidWrap(t1, 0, 0, tw, { s: 9, b: true }, 11, true), n2 = sidWrap(t2, 0, 0, tw, { s: 9 }, 11, true), bh = (n1 + n2) * 11 + 20;
   ctx.fillStyle = '#E6F4F7'; ctx.strokeStyle = SIDC.ac; ctx.lineWidth = 1.5; rrect(14, y, W - 28, bh, 8); ctx.fill(); ctx.stroke();
@@ -827,7 +827,7 @@ function drawSID() {
   let y = 96; const nc = W < 620;
   if (!nc) {
     T('Surface irrigation design: from your soil to a working layout', 16, 26, { s: 15, b: true, c: SIDC.ink });
-    T(sName + ' · ' + (CROPS[state.crop] || {}).label + ' · root zone ' + Math.round(sim.Rmax) + ' cm · trigger at ' + Math.round(sim.fTrig * 100) + '% depleted · ' + fmtDate(dateOfK(fclock.kd())) + ' (weather like ' + (CAL0 + yearOf(fclock.kd())) + ')', 16, 42, { s: 10.5, c: MUTE });
+    T(sName + ' · ' + (CROPS[state.crop] || {}).label + ' · root zone ' + Math.round(sim.Rmax) + ' cm · trigger at ' + Math.round(sim.fTrig * 100) + '% depleted · ' + fmtDate(dateOfK(fclock.kd())) + ' (weather like ' + (1980 + yearOf(fclock.kd())) + ')', 16, 42, { s: 10.5, c: MUTE });
     ctx.fillStyle = '#E6F4F7'; ctx.strokeStyle = SIDC.ac; ctx.lineWidth = 1.5; rrect(14, 50, W - 28, 36, 8); ctx.fill(); ctx.stroke();
     sidBadge('DSS', 22, 66, true); T('soil texture, field capacity, wilting point, root depth, depletion trigger and yearly irrigation come from the DSS simulation', 80, 66, { s: 9.2, b: true, c: '#0B4F5C' });
     sidBadge('DESIGN', 22, 80, false); T('intake (Kostiakov), advance (volume balance), cutoff and efficiencies: the Surface Irrigation lecture equations', 80, 80, { s: 9.2, c: '#4B5563' });
@@ -1078,8 +1078,8 @@ function drawSID() {
   // ---- season ----
   const ayr = clampN(yearOf(fclock.kd()), 0, NYR - 1); let yIrr = 0, yEv = 0; for (let d = ayr * DPY; d < Math.min(ND, (ayr + 1) * DPY); d++) { const v = sim.irr[d] || 0; yIrr += v; if (v > 0.5) yEv++; }
   const dose = sim.dose, events = yIrr / Zn, gross = Vap / (P.L * P.w) * 1000, seasonGross = events * gross, N0M = SID.Qs / SID.qLs, Nunits = SID.Wf / P.w, Nset = Math.max(1, Nunits / N0M), Ttot = Nset * tco / 60;
-  y += sidHead('What this means for the season and the farm', y, 'Weather like ' + (CAL0 + ayr) + ' (change it with the date above or the year strip below the picture). The DSS sets the crop need; the design decides what is pumped');
-  const L9 = [['Net irrigation need in a year like ' + (CAL0 + ayr) + ' (DSS)', sidF(yIrr) + ' mm → ' + events.toFixed(1) + ' irrigations of ' + sidF(Zn) + ' mm'], ['Gross water per irrigation', sidF(gross) + ' mm (Ea ' + sidF(R.Ea * 100) + ' %)'], ['Gross water per season', sidF(seasonGross) + ' mm = ' + sidF(seasonGross * 10) + ' m³ per hectare'], ['Units run at once N0M = Qs ÷ q', sidF(N0M, 1) + ' (' + sidF(SID.Qs) + ' L/s ÷ ' + SID.qLs.toFixed(2) + ' L/s)'], ['Sets to cover ' + sidF(SID.Wf) + ' m of width', Nset.toFixed(1) + ' sets × ' + sidF(tco) + ' min = ' + Ttot.toFixed(1) + ' h per irrigation'], ['Pumping per season', sidF(Ttot * events) + ' hours']];
+  y += sidHead('What this means for the season and the farm', y, 'Weather like ' + (1980 + ayr) + ' (change it with the date above or the year strip below the picture). The DSS sets the crop need; the design decides what is pumped');
+  const L9 = [['Net irrigation need in a year like ' + (1980 + ayr) + ' (DSS)', sidF(yIrr) + ' mm → ' + events.toFixed(1) + ' irrigations of ' + sidF(Zn) + ' mm'], ['Gross water per irrigation', sidF(gross) + ' mm (Ea ' + sidF(R.Ea * 100) + ' %)'], ['Gross water per season', sidF(seasonGross) + ' mm = ' + sidF(seasonGross * 10) + ' m³ per hectare'], ['Units run at once N0M = Qs ÷ q', sidF(N0M, 1) + ' (' + sidF(SID.Qs) + ' L/s ÷ ' + SID.qLs.toFixed(2) + ' L/s)'], ['Sets to cover ' + sidF(SID.Wf) + ' m of width', Nset.toFixed(1) + ' sets × ' + sidF(tco) + ' min = ' + Ttot.toFixed(1) + ' h per irrigation'], ['Pumping per season', sidF(Ttot * events) + ' hours']];
   L9.forEach((q, i) => { if (nc) { const yy = y + 28 + i * 36; ctx.fillStyle = i % 2 ? '#F6F7F5' : '#fff'; ctx.fillRect(14, yy - 12, W - 28, 36); sidWrap(q[0], 20, yy, W - 40, { s: 9, c: '#374151' }, 11); T(q[1], W - 20, yy + 16, { s: 9.5, b: true, a: 'right', c: SIDC.ac }); return; } const yy = y + 34 + i * 20; ctx.fillStyle = i % 2 ? '#F6F7F5' : '#fff'; ctx.fillRect(14, yy - 12, W - 28, 20); T(q[0], 20, yy + 2, { s: 9.5, c: '#374151' }); T(q[1], W - 20, yy + 2, { s: 9.5, b: true, a: 'right', c: SIDC.ac }); });
   return nc ? y + 28 + 6 * 36 + 16 : y + 34 + 6 * 20 + 16;
 }
@@ -1205,7 +1205,7 @@ function irCtx() {
 const irF = (v, d) => (isFinite(v) ? v.toFixed(d == null ? 0 : d) : '—');
 function irHead(C, title, sub) {
   T(title, 16, 26, { s: 15, b: true, c: IRC.ink });
-  T(C.sName + ' · ' + (CROPS[state.crop] || {}).label + ' · root zone ' + Math.round(C.Rmax) + ' cm · trigger at ' + Math.round(C.fT * 100) + '% depleted · ' + fmtDate(dateOfK(fclock.kd())) + ' (weather like ' + (CAL0 + yearOf(fclock.kd())) + ')', 16, 42, { s: 10.5, c: MUTE });
+  T(C.sName + ' · ' + (CROPS[state.crop] || {}).label + ' · root zone ' + Math.round(C.Rmax) + ' cm · trigger at ' + Math.round(C.fT * 100) + '% depleted · ' + fmtDate(dateOfK(fclock.kd())) + ' (weather like ' + (1980 + yearOf(fclock.kd())) + ')', 16, 42, { s: 10.5, c: MUTE });
   ctx.fillStyle = '#E6F4F7'; ctx.strokeStyle = IRC.ac; ctx.lineWidth = 1.5; rrect(14, 50, W - 28, 36, 8); ctx.fill(); ctx.stroke();
   sidBadge('DSS', 22, 66, true); T('soil texture, field capacity, wilting point, root depth, trigger, crop need and weather come from the DSS simulation', 80, 66, { s: 9.2, b: true, c: '#0B4F5C' });
   sidBadge('DESIGN', 22, 80, false); T(sub, 80, 80, { s: 9.2, c: '#4B5563' });
@@ -1354,8 +1354,8 @@ function drawDRIP() {
   y = irSens(y, [['Emitter flow q', 'q', 0.25, () => o.q], ['Emitter spacing', 'Se', 0.25, () => o.Se], ['Lateral spacing', 'Sl', 0.25, () => o.Sl], ['Placement depth', 'dep', 0.3, () => Math.max(10, o.dep)], ['Depth per irrigation', 'Zn', 0.25, () => o.Zn], ['Run time', 't', 0.2, () => R.t]], base, ov => drRun(ov).Ea, 'Change in Ea when one input moves ±25–30 %, all others held');
   // season
   const ay = C.ay, events = C.yIrr / o.Zn, gross = R.gross, flowHa = o.q * (1e4 / R.Ae) / 3600, zones = Math.max(1, Math.ceil(flowHa * DRP.Af / DRP.Qs)), cyc = zones * R.t;
-  sidHead('What this means for the season and the farm', y, 'Weather like ' + (CAL0 + ay) + '. The DSS sets the crop need; the design decides what is pumped');
-  y = irRows(y + 34, [['Net irrigation need in a year like ' + (CAL0 + ay) + ' (DSS)', irF(C.yIrr) + ' mm → ' + events.toFixed(0) + ' irrigations of ' + irF(o.Zn) + ' mm'], ['Gross water per irrigation', irF(gross, 1) + ' mm (Ea ' + irF(R.Ea * 100) + ' %)'], ['Gross water per season', irF(events * gross) + ' mm = ' + irF(events * gross * 10) + ' m³ per hectare'], ['Peak crop need / interval', C.ETpk.toFixed(1) + ' mm/day × ' + o.Se * 0 + irF(DRP.intv) + ' days'], ['System flow per hectare', flowHa.toFixed(2) + ' L/s/ha (' + irF(1e4 / R.Ae) + ' emitters/ha, ' + irF(1e4 / o.Sl) + ' m of lateral/ha)'], ['Sets for ' + DRP.Af.toFixed(1) + ' ha with ' + irF(DRP.Qs) + ' L/s', zones + ' sets × ' + irF(R.t, 1) + ' h = ' + cyc.toFixed(1) + ' h per round'], ['Pumping per season', irF(cyc * events) + ' hours \u00b7 ' + irF(cyc * events * R.G.kW) + ' kWh']]) + 16;
+  sidHead('What this means for the season and the farm', y, 'Weather like ' + (1980 + ay) + '. The DSS sets the crop need; the design decides what is pumped');
+  y = irRows(y + 34, [['Net irrigation need in a year like ' + (1980 + ay) + ' (DSS)', irF(C.yIrr) + ' mm → ' + events.toFixed(0) + ' irrigations of ' + irF(o.Zn) + ' mm'], ['Gross water per irrigation', irF(gross, 1) + ' mm (Ea ' + irF(R.Ea * 100) + ' %)'], ['Gross water per season', irF(events * gross) + ' mm = ' + irF(events * gross * 10) + ' m³ per hectare'], ['Peak crop need / interval', C.ETpk.toFixed(1) + ' mm/day × ' + o.Se * 0 + irF(DRP.intv) + ' days'], ['System flow per hectare', flowHa.toFixed(2) + ' L/s/ha (' + irF(1e4 / R.Ae) + ' emitters/ha, ' + irF(1e4 / o.Sl) + ' m of lateral/ha)'], ['Sets for ' + DRP.Af.toFixed(1) + ' ha with ' + irF(DRP.Qs) + ' L/s', zones + ' sets × ' + irF(R.t, 1) + ' h = ' + cyc.toFixed(1) + ' h per round'], ['Pumping per season', irF(cyc * events) + ' hours \u00b7 ' + irF(cyc * events * R.G.kW) + ' kWh']]) + 16;
   return y;
 }
 SCENES.push({ id: 'drip', label: 'S3 Drip', color: '#1B7F8C', play: true, dur: 14, h: 3300, interactive: true,
@@ -1454,8 +1454,8 @@ function drawSPR() {
     (O2, b, ok) => O2.done ? (ok ? 'Target reached: Ea ' + irF(b.R.Ea * 100, 1) + ' % with CU ' + irF(b.R.CU * 100) + ' %. Tap the green row to apply it.' : 'Best found: Ea ' + irF(b.R.Ea * 100, 1) + ' %, short of 85 % for this soil and wind. Try a lower application rate (smaller nozzle, wider spacing) or another sprinkler type.') : 'Iterating… step ' + O2.step + ' of ' + O2.seq.length);
   y = irSens(y, [['Soil intake k', 'K', 0.2, () => 1], ['Wind speed', 'u', 0.5, () => Math.max(1, o.u)], ['Pressure', 'P', 0.2, () => o.P], ['Nozzle diameter', 'd', 0.15, () => o.d], ['Spacing along lateral', 'Ss', 0.2, () => o.Ss], ['Spacing between laterals', 'Sl', 0.2, () => o.Sl], ['Depth per irrigation', 'Zn', 0.25, () => o.Zn], ['Ground slope', 'S', 0.5, () => Math.max(0.5, o.S)]], R.Ea, ov => { if (ov.K) return IRM.sprinkler({ ...o, K: o.K * ov.K, T: SPR.tauto ? null : o.T }).Ea; return spRun(ov).Ea; }, 'Change in Ea when one input moves, all others held');
   const ay = C.ay, events = C.yIrr / o.Zn, gross = R.gross, nsp = Math.max(1, Math.round(SPR.Af * 1e4 / (o.Ss * o.Sl))), flowTot = nsp * R.Q / 60, sets = Math.max(1, Math.ceil(flowTot / SPR.Qs)), cyc = sets * T0 / 60;
-  y = spPart(y, 'season', 5, 'What it means for the season', 'Water, hours and energy for a whole year of irrigating'); sidHead('What this means for the season and the farm', y, 'Weather like ' + (CAL0 + ay) + '. The DSS sets the crop need; the design decides what is pumped');
-  y = irRows(y + 34, [['Net irrigation need in a year like ' + (CAL0 + ay) + ' (DSS)', irF(C.yIrr) + ' mm → ' + events.toFixed(0) + ' irrigations of ' + irF(o.Zn) + ' mm'], ['Gross water per irrigation', irF(gross, 1) + ' mm (Ea ' + irF(R.Ea * 100) + ' %)'], ['Gross water per season', irF(events * gross) + ' mm = ' + irF(events * gross * 10) + ' m³ per hectare'], ['One sprinkler', R.Q.toFixed(1) + ' L/min at ' + irF(o.P) + ' kPa, reaches ' + R.nz.R.toFixed(1) + ' m'], ['Sprinklers for ' + SPR.Af.toFixed(1) + ' ha', irF(nsp) + ' (' + irF(flowTot, 1) + ' L/s if all run)'], ['Sets with ' + irF(SPR.Qs) + ' L/s', sets + ' sets × ' + irF(T0) + ' min = ' + cyc.toFixed(1) + ' h per round'], ['Pumping per season', irF(cyc * events) + ' hours \u00b7 ' + irF(cyc * events * R.G.kW) + ' kWh']]) + 16;
+  y = spPart(y, 'season', 5, 'What it means for the season', 'Water, hours and energy for a whole year of irrigating'); sidHead('What this means for the season and the farm', y, 'Weather like ' + (1980 + ay) + '. The DSS sets the crop need; the design decides what is pumped');
+  y = irRows(y + 34, [['Net irrigation need in a year like ' + (1980 + ay) + ' (DSS)', irF(C.yIrr) + ' mm → ' + events.toFixed(0) + ' irrigations of ' + irF(o.Zn) + ' mm'], ['Gross water per irrigation', irF(gross, 1) + ' mm (Ea ' + irF(R.Ea * 100) + ' %)'], ['Gross water per season', irF(events * gross) + ' mm = ' + irF(events * gross * 10) + ' m³ per hectare'], ['One sprinkler', R.Q.toFixed(1) + ' L/min at ' + irF(o.P) + ' kPa, reaches ' + R.nz.R.toFixed(1) + ' m'], ['Sprinklers for ' + SPR.Af.toFixed(1) + ' ha', irF(nsp) + ' (' + irF(flowTot, 1) + ' L/s if all run)'], ['Sets with ' + irF(SPR.Qs) + ' L/s', sets + ' sets × ' + irF(T0) + ' min = ' + cyc.toFixed(1) + ' h per round'], ['Pumping per season', irF(cyc * events) + ' hours \u00b7 ' + irF(cyc * events * R.G.kW) + ' kWh']]) + 16;
   return y;
 }
 SCENES.push({ id: 'spr', label: 'S4 Sprinklers', color: '#2B6CB0', play: true, dur: 14, h: 3500, interactive: true,
@@ -1575,7 +1575,7 @@ function irRows2(x, y, rows) { rows.forEach((q, i) => { T(q[0], x, y + i * 20, {
 function irToday(y, C, R, kind) {
   irProfile(40, y + 8, 120, 96, C, 'Soil water today (DSS)');
   const k = fclock.kd(), nm = cropNameAt(C.sim, k), vff = VFF_VALUES[state.vffIdx], mu = vff >= 0.95 ? 'none' : mulchBy(state.mulchType).label.toLowerCase(), meth = (METHODS.find(m => m.k === state.method) || METHODS[0]).label.toLowerCase();
-  const L = ['Date ' + fmtDate(dateOfK(k)) + ' (weather like ' + (CAL0 + yearOf(k)) + ')', 'Crop today: ' + nm + ', roots ' + irF(C.sim.rd[k]) + ' cm of ' + irF(C.Rmax) + ' cm', 'Explorer method: ' + meth + ' \u00b7 mulch: ' + mu + ' \u00b7 tillage: ' + ({ conv: 'conventional', red: 'reduced', notill: 'no-till' }[state.till] || state.till), 'Trigger: refill when ' + irF(C.fT * 100) + '% depleted (water ' + irF(irTh(C).t0 * 100, 1) + '% by volume)'];
+  const L = ['Date ' + fmtDate(dateOfK(k)) + ' (weather like ' + (1980 + yearOf(k)) + ')', 'Crop today: ' + nm + ', roots ' + irF(C.sim.rd[k]) + ' cm of ' + irF(C.Rmax) + ' cm', 'Explorer method: ' + meth + ' \u00b7 mulch: ' + mu + ' \u00b7 tillage: ' + ({ conv: 'conventional', red: 'reduced', notill: 'no-till' }[state.till] || state.till), 'Trigger: refill when ' + irF(C.fT * 100) + '% depleted (water ' + irF(irTh(C).t0 * 100, 1) + '% by volume)'];
   L.forEach((t, i) => T(t, 200, y + 112 + i * 14 + 0, { s: 8.8, c: '#374151' }));
 }
 
@@ -2423,7 +2423,7 @@ function refresh() {
 const canvas = document.getElementById('profileCanvas');
 const ctx = canvas.getContext('2d');
 // Weather years are stored as 1980 to 1999; every label drawn on the canvas shows them as calendar years ending in the current year.
-const calTxt = t => typeof t === 'string' ? t.replace(/\b(19[89]\d)\b(?!\s*(?:mm|cm|%|kPa|hPa|d\b|days|L\b|kg|Mg|m\b|[.,]\d))/g, (m, y) => String(CAL0 + (+y - 1980))) : t;
+const calTxt = t => t;
 { const _ft = ctx.fillText.bind(ctx), _st = ctx.strokeText.bind(ctx), _mt = ctx.measureText.bind(ctx);
   ctx.fillText = (t, ...a) => _ft(calTxt(t), ...a); ctx.strokeText = (t, ...a) => _st(calTxt(t), ...a); ctx.measureText = t => _mt(calTxt(t)); }
 let W = canvas.width; let H = canvas.height; const W_DEF = 620;
@@ -3338,7 +3338,7 @@ function drawN2() {
 // ------------------------------------------------------------------------------------------------
 // 20-year record (1980 to 2000) at the 20 cm sensor depth: V1 and V2 "All 20 years" views
 // ------------------------------------------------------------------------------------------------
-const CAL0 = 1980;   // the baseline record is 1980 to 1999; later dates (2000 to 2100) are projected from it
+let CAL0 = 1980;   // calendar label of the first plotted weather year: follows the working date (1980 when the date is inside the baseline record)
 const D20START = Date.UTC(1980, 0, 1), SEASON = 183, NYEARS = 20;
 const seasonIdx = y => Math.round((Date.UTC(y, 3, 1) - D20START) / DAYMS);
 const d20 = (key, i) => Math.pow(10, D20[key][i] / 1000);
@@ -3391,11 +3391,11 @@ function drawV1All() {
     const x = x0 + i * bw + 3, hi = r.ci / SEASON * bh, hr = r.cr / SEASON * bh, reached = i <= ci;
     ctx.fillStyle = reached ? '#1B6FD8' : 'rgba(27,111,216,0.25)'; ctx.fillRect(x, by - hi, bw / 2 - 2, hi); ctx.fillStyle = reached ? '#E8912D' : 'rgba(232,145,45,0.25)'; ctx.fillRect(x + bw / 2 - 1, by - hr, bw / 2 - 2, hr);
     if (i === ci) { ctx.strokeStyle = '#D93025'; ctx.lineWidth = 2; ctx.strokeRect(x - 2, by - bh - 2, bw - 2, bh + 22); }
-    if (i % 2 === 0 || i === ci) T(String(r.y).slice(2), x + bw / 2 - 2, by + 13, { s: 9, a: 'center', b: i === ci, c: i === ci ? '#D93025' : MUTE });
+    if (i % 2 === 0 || i === ci) T(String(CAL0 + (r.y - 1980)).slice(2), x + bw / 2 - 2, by + 13, { s: 9, a: 'center', b: i === ci, c: i === ci ? '#D93025' : MUTE });
   });
   // numbers for the year under the cursor and for the whole record
   const mI = ys.reduce((a, r) => a + r.ci, 0) / NYEARS, mR = ys.reduce((a, r) => a + r.cr, 0) / NYEARS;
-  T(String(curY), 16, 500, { s: 22, b: true, c: '#1F3864' });
+  T(String(curY - 1980 + CAL0), 16, 500, { s: 22, b: true, c: '#1F3864' });
   T('Irrigated: ' + fmtDays(st.ci) + ' days beyond ' + thr.toLocaleString('en-US') + ' cm, mean suction ' + fmtS(st.mi) + ' cm', 90, 489, { s: 11, b: true, c: '#1B4FA0' });
   T('Rainfed: ' + fmtDays(st.cr) + ' days beyond, mean suction ' + fmtS(st.mr) + ' cm', 90, 505, { s: 11, b: true, c: '#A8620F' });
   T('Across ' + CAL0 + ' to ' + (CAL0 + 19) + ': irrigated ' + mI.toFixed(0) + ' days, rainfed ' + mR.toFixed(0) + ' days beyond the trigger per season', 16, 530, { s: 11 });
@@ -3593,7 +3593,7 @@ function stepField() {
   const nk = Math.floor(fclock.day);
   if (nk !== prev) for (let q = prev + 1; q <= nk; q++) if (isMajor(sim, q)) { fclock.day = q; fclock.pauseTot = fclock.pause = 3.2 / Math.sqrt(fclock.speed); break; }
 }
-const fieldLabel = () => { const sim = simCache.val, k = fclock.kd(); return fmtDate(dateOfK(k)) + ' (like ' + (CAL0 + yearOf(k)) + ')' + (sim ? ' \u00b7 ' + cropNameAt(sim, k) : ''); };
+const fieldLabel = () => { const sim = simCache.val, k = fclock.kd(); return fmtDate(dateOfK(k)) + ' (like ' + (1980 + yearOf(k)) + ')' + (sim ? ' \u00b7 ' + cropNameAt(sim, k) : ''); };
 
 function drawSoilWater(sim, k, SX, SW, GY, PX) {
   const s = sim.s[k];
@@ -3830,7 +3830,7 @@ function reportNotes(sc, view) {
     L.push('Annual water balance (mm): rain ' + f0(m.rain) + ' + irrigation ' + f0(m.irr) + ' = evapotranspiration ' + f0(m.et) + ' + drainage ' + f0(m.drain) + ' + storage and small terms ' + f0(m.store) + '.');
     L.push('Transpiration ' + f0(m.transp) + ' mm, soil evaporation ' + f0(m.evap) + ' mm, interception and mulch layer ' + f0(m.other) + ' mm; nitrogen leaching ' + f1(m.nl) + ' kg/ha.');
     L.push('Twenty-year run: mean irrigation ' + f0(sim.meanIrr) + ' mm per year, mean drainage ' + f0(sim.meanDrain) + ' mm per year; roots reached ' + f0(mx) + ' cm at the deepest, in ' + (CAL0 + my) + '.');
-    L.push('The picture is the field on ' + fmtDate(dateOfK(fclock.kd())) + ' (weather like ' + (CAL0 + yearOf(fclock.kd())) + ', ' + cropNameAt(sim, fclock.kd()) + '): wetted layers are blue, roots follow the water.'); dssLines().forEach(l => L.push(l)); }
+    L.push('The picture is the field on ' + fmtDate(dateOfK(fclock.kd())) + ' (weather like ' + (1980 + yearOf(fclock.kd())) + ', ' + cropNameAt(sim, fclock.kd()) + '): wetted layers are blue, roots follow the water.'); dssLines().forEach(l => L.push(l)); }
   else if (sc.id === 'spr') { try { const R = spRun(), o = R.o, B = R.B || spBook(R, o, irCtx(), IRX.LLs, SPR.Af, SPR.Qs, IRX.lift, IRX.Lm), ok = B.chk.filter(q => q[1]).length;
     L.push('Sprinkler: ' + IRM.STYPE[o.type].label.toLowerCase() + ', nozzle ' + o.d.toFixed(1) + ' mm at ' + f0(o.P) + ' kPa, ' + (o.tri ? 'triangular' : 'rectangular') + ' spacing ' + f1(o.Ss) + ' x ' + f1(o.Sl) + ' m, jet angle ' + f0(o.alpha) + ' degrees, wind ' + f1(o.u) + ' m/s, slope ' + f1(o.S) + ' %.');
     L.push('Throw radius ' + f1(R.nz.R) + ' m, flow ' + f1(R.nz.q) + ' L/min, application rate ' + f1(R.AR) + ' mm/h against the ' + B.umax + ' mm/h this soil and slope allow. Christiansen uniformity ' + f0(R.CU * 100) + ' %.');
@@ -3840,7 +3840,7 @@ function reportNotes(sc, view) {
     L.push('Application efficiency ' + f1(R.Ea * 100) + ' %, emission uniformity ' + f1(R.Eu * 100) + ' %; run time ' + R.t.toFixed(1) + ' h per irrigation.'); } catch (e) { L.push('Drip design: see the picture.'); } }
   else if (sc.id === 'v1' || sc.id === 'v2') { const ys = yearStats(thr), mI = ys.reduce((a, r) => a + r.ci, 0) / 20, mR = ys.reduce((a, r) => a + r.cr, 0) / 20, dry = ys.slice().sort((a, b) => b.mr - a.mr);
     L.push('Record: ' + nameSoil20() + '.'); L.push('Growing-season days beyond the ' + thr + ' cm trigger, mean of ' + CAL0 + ' to ' + (CAL0 + 19) + ': irrigated ' + f0(mI) + ', rainfed ' + f0(mR) + ' of 183.');
-    L.push('Driest rainfed season ' + dry[0].y + ' (mean suction ' + fmtS(dry[0].mr) + ' cm); wettest ' + dry[19].y + ' (' + fmtS(dry[19].mr) + ' cm).'); L.push('Irrigation removes ' + (mR > 0 ? Math.round((1 - mI / mR) * 100) : 0) + '% of the days beyond this trigger.'); }
+    L.push('Driest rainfed season ' + (CAL0 + dry[0].y - 1980) + ' (mean suction ' + fmtS(dry[0].mr) + ' cm); wettest ' + (CAL0 + dry[19].y - 1980) + ' (' + fmtS(dry[19].mr) + ' cm).'); L.push('Irrigation removes ' + (mR > 0 ? Math.round((1 - mI / mR) * 100) : 0) + '% of the days beyond this trigger.'); }
   else if (sc.id === 'v3') { const mv = (till) => model(vff, rain, { till }), c = mv('conv'), r = mv('reduced'), n = mv('notill');
     L.push('Drainage (mm/yr): conventional ' + f1(c.drain) + ', reduced ' + f1(r.drain) + ', no-till ' + f1(n.drain) + '.'); L.push('Yield (' + cf.unit + '): conventional ' + (c.yield * cf.factor).toFixed(2) + ', reduced ' + (r.yield * cf.factor).toFixed(2) + ', no-till ' + (n.yield * cf.factor).toFixed(2) + '.');
     L.push('Irrigation (mm/yr): ' + f0(c.irr) + ', ' + f0(r.irr) + ', ' + f0(n.irr) + '. Pores close after tillage at ' + TC_VALUES[state.tcIdx] + ' per day.'); }
@@ -4090,11 +4090,11 @@ const fyUi = { hover: -1 };
 const meanOf = a => { let s = 0; for (let i = 0; i < a.length; i++) s += a[i]; return s / a.length; };
 // per-year fluxes from the day-by-day run, scaled so their twenty-year means equal the model's annual numbers; storage closes each year
 function yearTable(sim) {
-  if (sim._yt && sim._ytKey === simKey()) return sim._yt;
+  if (sim._yt && sim._ytKey === simKey() + CAL0) return sim._yt;
   const m = current, sc = (arr, target) => { const mu = meanOf(arr); return Array.from(arr, v => mu > 1e-6 ? v * target / mu : target); };
   const R = sc(sim.yR, m.rain), I = sc(sim.yI, m.irr), In = sc(sim.yInt, m.other), E = sc(sim.yE, m.evap), Tr = sc(sim.yT, m.transp), D = sc(sim.yD, m.drain), rows = [];
   for (let y = 0; y < NYR; y++) rows.push({ y: CAL0 + y, rain: R[y], irr: I[y], int: In[y], evap: E[y], tr: Tr[y], dr: D[y], store: R[y] + I[y] - In[y] - E[y] - Tr[y] - D[y], crop: cropNameAt(sim, y * DPY + 150), rd: sim.yRd[y] });
-  sim._yt = rows; sim._ytKey = simKey(); return rows;
+  sim._yt = rows; sim._ytKey = simKey() + CAL0; return rows;
 }
 function genStats(sim) {
   if (sim._gen && sim._genKey === simKey()) return sim._gen;
@@ -4408,7 +4408,7 @@ function drawV2All() {
   paper(); const pk = profKey(), thr = trigAbsFor(state.soil), tp = play.t * NYEARS, cy = clampN(Math.floor(tp), 0, NYEARS - 1), dayI = clampN(Math.floor((tp - cy) * (SEASON - 1)), 0, SEASON - 1), ys = yearStats(thr), st = ys[cy];
   const x0 = 70, x1 = 430, y0 = 96, y1 = 292, xm = d => x0 + d / (SEASON - 1) * (x1 - x0), ym = v => y1 - lg5(v) * (y1 - y0), med = seasonMedian(pk), a = seasonIdx(1980 + cy) + dayI;
   T('Soil pressure head through the season, every year ' + CAL0 + ' to ' + (CAL0 + 19), 16, 22, { s: 14, b: true }); T(nameSoil20(), 16, 38, { s: 10.5, c: MUTE });
-  let lx = legendRow([{ c: '#1B6FD8', t: 'irrigated' }, { c: '#FF9A2E', t: 'rainfed' }, { c: '#14407F', w: 2, dash: [6, 3], t: 'median' }, { c: '#D93025', w: 1.6, dash: [6, 4], t: 'trigger ' + thr.toLocaleString('en-US') + ' cm' }], 16, 62); T('bold = ' + st.y + ', faint = other years', lx, 62, { s: 10, c: MUTE });
+  let lx = legendRow([{ c: '#1B6FD8', t: 'irrigated' }, { c: '#FF9A2E', t: 'rainfed' }, { c: '#14407F', w: 2, dash: [6, 3], t: 'median' }, { c: '#D93025', w: 1.6, dash: [6, 4], t: 'trigger ' + thr.toLocaleString('en-US') + ' cm' }], 16, 62); T('bold = ' + (CAL0 + st.y - 1980) + ', faint = other years', lx, 62, { s: 10, c: MUTE });
   ctx.strokeStyle = RULE; ctx.lineWidth = 1; [1, 10, 100, 1000, 10000, 100000].forEach(v => { ctx.beginPath(); ctx.moveTo(x0, ym(v)); ctx.lineTo(x1, ym(v)); ctx.stroke(); T(v.toLocaleString('en-US'), x0 - 6, ym(v) + 3.5, { s: 9.5, a: 'right', c: MUTE }); });
   [0, 30, 61, 91, 122, 153].forEach((dd, i) => { ctx.beginPath(); ctx.moveTo(xm(dd), y0); ctx.lineTo(xm(dd), y1); ctx.stroke(); T(MON[3 + i], xm(dd) + 3, y1 + 14, { s: 9.5, c: MUTE }); });
   ctx.save(); ctx.translate(13, (y0 + y1) / 2); ctx.rotate(-Math.PI / 2); T('suction (cm)', 0, 0, { s: 10, a: 'center', c: MUTE }); ctx.restore(); ctx.strokeStyle = INK; ctx.lineWidth = 1.2; ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
@@ -4432,7 +4432,7 @@ function drawV2All() {
   T(v2Date(cy, dayI), 16, 452, { s: 19, b: true, c: '#1F3864' }); T('Rainfed ' + fmtS(vR) + ' cm, irrigated ' + fmtS(vI) + ' cm on this day', 16, 474, { s: 11, b: true });
   T('Season mean: rainfed ' + fmtS(st.mr) + ' cm, irrigated ' + fmtS(st.mi) + ' cm (' + (st.mr / Math.max(st.mi, 1)).toFixed(1) + ' times lower)', 16, 494, { s: 11 });
   T('Days beyond the trigger: irrigated ' + fmtDays(st.ci) + ', rainfed ' + fmtDays(st.cr), 16, 514, { s: 11, b: true });
-  const dry = ys.slice().sort((p, q) => q.mr - p.mr), wet = dry[dry.length - 1]; T('Driest rainfed season: ' + dry[0].y + ' (' + fmtS(dry[0].mr) + ' cm).  Wettest: ' + wet.y + ' (' + fmtS(wet.mr) + ' cm).', 16, 536, { s: 11 });
+  const dry = ys.slice().sort((p, q) => q.mr - p.mr), wet = dry[dry.length - 1]; T('Driest rainfed season: ' + (CAL0 + dry[0].y - 1980) + ' (' + fmtS(dry[0].mr) + ' cm).  Wettest: ' + (CAL0 + wet.y - 1980) + ' (' + fmtS(wet.mr) + ' cm).', 16, 536, { s: 11 });
   T('Every irrigated season stays within a narrow band while rainfed seasons spread over orders of magnitude.', 16, 560, { s: 10.5, i: true, c: MUTE }); T('Full-depth profiles are simulated for 1994 only; the columns above show 1994 in full when you click them.', 16, 600, { s: 9.5, i: true, c: MUTE });
   annualLine(16, 619, 633);
   hot(x0, y0, x1 - x0, y1 - y0, p => setPlayT((cy + clampN((p.x - x0) / (x1 - x0), 0, 1)) / NYEARS), 'click to move the cursor in this season');
@@ -4673,20 +4673,20 @@ function dssSyncPlay(id) {                                      // the scenes wi
 }
 function dssGo(dt, keepPlaying) {
   { const yy = dt.getUTCFullYear(); if (yy >= 1980 && yy <= 1999) { dss.mode = String(yy); const ysel = document.getElementById('dssYear'); if (ysel) ysel.value = String(yy); } }   // inside the baseline record: use that very year
-  const sim = seasonSim(true); dss.ay0 = dssAnalog(sim); dss.Y0 = dt.getUTCFullYear(); const doy = clampN(Math.round((Date.UTC(dt.getUTCFullYear(), dt.getUTCMonth(), dt.getUTCDate()) - Date.UTC(dt.getUTCFullYear(), 0, 1)) / DAYMS), 0, 364);
+  const sim = seasonSim(true); dss.ay0 = dssAnalog(sim); dss.Y0 = dt.getUTCFullYear(); CAL0 = dss.Y0 - dss.ay0; ysCache = {};  const doy = clampN(Math.round((Date.UTC(dt.getUTCFullYear(), dt.getUTCMonth(), dt.getUTCDate()) - Date.UTC(dt.getUTCFullYear(), 0, 1)) / DAYMS), 0, 364);
   fclock.day = dss.ay0 * DPY + doy; fclock.pause = 0; fclock.mem = []; fclock.lastKd = -1; if (!keepPlaying) fclock.on = false; if (currentScene.fieldBar) setFieldView('day'); document.getElementById('playBtn').textContent = currentScene.fieldBar ? (fclock.on ? 'Pause' : 'Play') : document.getElementById('playBtn').textContent; dss.shown = ''; dssSyncPlay(currentScene.id);
 }
 function dssRender(force) {
   const sim = simCache.val; if (!sim) return; const k = fclock.kd(), key = simKey() + '|' + k + '|' + dss.ahead + '|' + dss.mode; if (!force && key === dss.shown) return; dss.shown = key;
   const rows = dssRows(sim), r0 = rows[0], next = rows.slice(1), adv = dssAdvice(sim, rows), dt = dateOfK(k), ay = yearOf(k), need = dssNeed(sim), fT = sim.fTrigRaw, N = dss.ahead;
-  const like = 'weather like ' + (CAL0 + ay) + (dss.mode === 'typ' ? ', a typical year' : dss.mode === 'dry' ? ', a dry year' : dss.mode === 'wet' ? ', a wet year' : '');
+  const like = 'weather like ' + (1980 + ay) + (dss.mode === 'typ' ? ', a typical year' : dss.mode === 'dry' ? ', a dry year' : dss.mode === 'wet' ? ', a wet year' : '');
   document.getElementById('todayLine').innerHTML = '<b style="color:' + adv.tone + '">' + adv.head + '</b><span class="tbsub"> &middot; ' + fmtDate(dt) + ' (' + like + ') &middot; sensor ' + r0.f.toFixed(2) + ' of trigger ' + fT.toFixed(2) + ' &middot; next ' + N + ' days: ' + mmTxt(sumKey(next, 'irr')) + ' mm irrigation, ' + mmTxt(sumKey(next, 'rain')) + ' mm rain</span>';
   const inp = document.getElementById('dssDate'); if (document.activeElement !== inp) inp.value = isoDate(dt);
 }
 
 function dssLines() {
   const sim = simCache.val; if (!sim) return []; const rows = dssRows(sim), adv = dssAdvice(sim, rows), k = fclock.kd(), next = rows.slice(1);
-  return ['Decision support for ' + fmtDate(dateOfK(k)) + ' (weather like ' + (CAL0 + yearOf(k)) + '): ' + adv.head + '. ' + adv.text, 'Next ' + dss.ahead + ' days (simulated, not a forecast): rain ' + mmTxt(sumKey(next, 'rain')) + ' mm, irrigation ' + mmTxt(sumKey(next, 'irr')) + ' mm, soil evaporation ' + mmTxt(sumKey(next, 'evap')) + ' mm, transpiration ' + mmTxt(sumKey(next, 'tr')) + ' mm, drainage ' + mmTxt(sumKey(next, 'dr')) + ' mm, change in soil water ' + mmTxt(sumKey(next, 'store')) + ' mm.'];
+  return ['Decision support for ' + fmtDate(dateOfK(k)) + ' (weather like ' + (1980 + yearOf(k)) + '): ' + adv.head + '. ' + adv.text, 'Next ' + dss.ahead + ' days (simulated, not a forecast): rain ' + mmTxt(sumKey(next, 'rain')) + ' mm, irrigation ' + mmTxt(sumKey(next, 'irr')) + ' mm, soil evaporation ' + mmTxt(sumKey(next, 'evap')) + ' mm, transpiration ' + mmTxt(sumKey(next, 'tr')) + ' mm, drainage ' + mmTxt(sumKey(next, 'dr')) + ' mm, change in soil water ' + mmTxt(sumKey(next, 'store')) + ' mm.'];
 }
 // the line above the picture in the field scene says exactly what is happening on the day on the clock
 function fieldInsight() {
@@ -4698,7 +4698,7 @@ function fieldInsight() {
     : fx.rain > 0.2 ? 'rain ' + mmTxt(fx.rain) + ' mm, ' + (fx.thr > 0.3 ? mmTxt(fx.thr) + ' mm gets past the canopy and wets the soil down to ' + Math.round(sim.front[k]) + ' cm' : 'all of it caught by the canopy and litter')
     : 'no rain; ' + (fx.tr > 0.05 ? 'the crop uses ' + mmTxt(fx.tr) + ' mm and ' : '') + 'the soil surface loses ' + mmTxt(fx.evap) + ' mm to evaporation';
   let iy = 0, dy = 0; for (let d = y * DPY; d <= k; d++) { iy += sim.irr[d]; dy += sim.drain[d] * S.dr; }
-  return fmtDate(dateOfK(k)) + ' (weather like ' + (CAL0 + y) + ', ' + crop + '): ' + today + '. Roots reach ' + Math.round(sim.rd[k]) + ' cm. This year so far: ' + iy.toFixed(0) + ' mm irrigated, ' + dy.toFixed(0) + ' mm drained.';
+  return fmtDate(dateOfK(k)) + ' (weather like ' + (1980 + y) + ', ' + crop + '): ' + today + '. Roots reach ' + Math.round(sim.rd[k]) + ' cm. This year so far: ' + iy.toFixed(0) + ' mm irrigated, ' + dy.toFixed(0) + ' mm drained.';
 }
 function dssInit() {
   const d = document.getElementById('dssDate'), ys = document.getElementById('dssYear'); d.min = '1980-01-01'; d.max = '2100-12-31'; for (let y = 1980; y < 2000; y++) { const o = document.createElement('option'); o.value = y; o.textContent = 'like ' + (y - 1980 + CAL0); ys.appendChild(o); }
@@ -4905,7 +4905,7 @@ const fstarOwn = () => 0.45, hstarOwn = sn => TRIGGER_AT_FSTAR[sn];
 const r1ui = { drag: false, hover: -1 };
 const R1 = { ax0: 46, ax1: 604, ay0: 74, ay1: 174, by: 246, ppc: 2.7, cx: 52, cw: 130, dx: 204, dw: 104, ux: 330, uw: 104, sx: 456, sw: 148, yy0: 566, yy1: 640 };
 function r1Years(sim) {
-  const key = simKey(); if (sim._ry && sim._ryKey === key) return sim._ry; const out = [];
+  const key = simKey() + CAL0; if (sim._ry && sim._ryKey === key) return sim._ry; const out = [];
   for (let y = 0; y < NYR; y++) {
     const U = new Float64Array(NLAY); let mxRd = 0, wd = 0, wn = 0;
     for (let d = y * DPY; d < (y + 1) * DPY; d++) { const u = sim.upt[d]; for (let i = 0; i < NLAY; i++) U[i] += u[i]; if (sim.rd[d] > mxRd) mxRd = sim.rd[d]; }
@@ -5577,7 +5577,7 @@ function drawE1Core(y0) {
 }
 
 let frameN = 0, dssFrame = 0, ysFrame = 0;
-const d20Label = t => { const dt = new Date(D20START + Math.round(t * (D20.n - 1)) * DAYMS); return dt.getUTCDate() + ' ' + MON[dt.getUTCMonth()] + ' ' + dt.getUTCFullYear(); };
+const d20Label = t => { const dt = new Date(D20START + Math.round(t * (D20.n - 1)) * DAYMS); return dt.getUTCDate() + ' ' + MON[dt.getUTCMonth()] + ' ' + (dt.getUTCFullYear() + CAL0 - 1980); };
 function loop() {
   ctx.clearRect(0, 0, W, H);
   const sc = currentScene;
@@ -6192,7 +6192,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
     const sim = seasonSim(), { dd } = n1Bucket(sim), ay = yearOf(dd), k0 = ay * DPY, H = heat(sim, ay), xd = X0 + (dd - k0) / (DPY - 1) * (X1 - X0);
     ctx.fillStyle = PAPER; ctx.fillRect(0, 0, W, HERO + 4);
     T('Roots through the season: real model output, day by day', 16, 22, { s: 14, b: true });
-    T('Daisy root-model output for ' + profName() + ' · ' + (state.crop === 'vegetable' ? 'vegetable' : state.crop === 'legume' ? 'legume' : 'cereal/oilseed') + ', weather of ' + (CAL0 + ay) + '. Click or drag to move the day.', 16, 38, { s: 10.5, c: MUTE });
+    T('Daisy root-model output for ' + profName() + ' · ' + (state.crop === 'vegetable' ? 'vegetable' : state.crop === 'legume' ? 'legume' : 'cereal/oilseed') + ', weather of ' + (1980 + ay) + '. Click or drag to move the day.', 16, 38, { s: 10.5, c: MUTE });
     panel(H.a, A0, A1, 'Where the roots are (root density)', 'darker = more roots', sim, ay, dd);
     // rooting depth line + crop cover
     ctx.strokeStyle = '#2B1A0A'; ctx.lineWidth = 1.8; ctx.beginPath(); for (let d = 0; d < DPY; d++) { const x = X0 + d / (DPY - 1) * (X1 - X0), y = A0 + clampN(sim.rd[k0 + d], 0, 100) / 100 * (A1 - A0); d ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke();
