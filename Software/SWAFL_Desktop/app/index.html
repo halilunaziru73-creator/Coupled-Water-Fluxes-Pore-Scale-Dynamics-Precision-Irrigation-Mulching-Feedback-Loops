@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SWAFL - Soil Water Atmosphere Feedback Layout</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="assets/logo-64.png">
+<link rel="stylesheet" href="css/swafl.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ===== Title / menu bar ===== -->
+  <header id="menubar">
+    <div class="brand"><img src="assets/logo.svg" alt="" width="22" height="22"><b>SWAFL</b></div>
+    <nav id="menus"></nav>
+    <div class="grow"></div>
+    <div id="projName" class="projname">Untitled project</div>
+  </header>
+
+  <!-- ===== Toolbar ===== -->
+  <div id="toolbar"></div>
+
+  <!-- ===== Workbench ===== -->
+  <main id="work">
+    <aside id="leftDock">
+      <section class="dock" id="layersDock">
+        <div class="dockhead"><span>Layers</span>
+          <span class="dockbtns"><button data-act="expandAll" title="Expand all">+</button><button data-act="collapseAll" title="Collapse all">&minus;</button></span></div>
+        <div id="layerTree" class="tree" role="tree"></div>
+      </section>
+      <div class="vsplit" id="splitLeftV" title="Drag to resize"></div>
+      <section class="dock" id="toolboxDock">
+        <div class="dockhead"><span>Processing Toolbox</span></div>
+        <div class="searchbox"><input id="tbSearch" type="search" placeholder="Search tools (e.g. drip, export, baseline)"></div>
+        <div id="toolTree" class="tree" role="tree"></div>
+      </section>
+    </aside>
+    <div class="hsplit" id="splitLeft"></div>
+
+    <section id="center">
+      <div id="docTabs"></div>
+      <div id="viewBar"></div>
+      <div id="engineHost">
+        <iframe id="engine" title="SWAFL simulation window" src="engine/engine.html?app=1#scene=field"></iframe>
+        <div id="loading"><img src="assets/logo.svg" width="64" height="64" alt=""><div>Loading simulation engine&hellip;</div></div>
+      </div>
+      <div class="vsplit" id="splitDash" title="Drag to resize"></div>
+      <section class="dock" id="dashDock">
+        <div class="dockhead tabs" id="dashTabs">
+          <button data-tab="results" class="on">Results</button>
+          <button data-tab="design">Design</button>
+          <button data-tab="charts">Charts</button>
+          <button data-tab="messages">Messages</button>
+          <span class="grow"></span>
+          <button class="mini" data-act="pinBaseline" title="Pin current results as baseline">Pin baseline</button>
+          <button class="mini" data-act="clearBaseline" title="Clear baseline">Clear</button>
+        </div>
+        <div id="dashBody"></div>
+      </section>
+    </section>
+
+    <div class="hsplit" id="splitRight"></div>
+    <aside id="rightDock">
+      <section class="dock" style="height:100%">
+        <div class="dockhead"><span>Properties</span>
+          <span class="dockbtns"><button data-act="expandProps" title="Expand all">+</button><button data-act="collapseProps" title="Collapse all">&minus;</button></span></div>
+        <div id="props"></div>
+      </section>
+    </aside>
+  </main>
+
+  <!-- ===== Status bar ===== -->
+  <footer id="statusbar">
+    <span id="stReady">Ready</span><span class="sep"></span>
+    <span id="stScene">Field Balance</span><span class="sep"></span>
+    <span id="stCase">&nbsp;</span>
+    <span class="grow"></span>
+    <span id="stPlay">Stopped</span><span class="sep"></span>
+    <span>SWAFL <span id="stVer">1.0.0</span></span>
+  </footer>
+</div>
+
+<div id="modalRoot"></div>
+<div id="ctxMenu" class="menu" hidden></div>
+
+<script src="js/bridge.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/layers.js"></script>
+<script src="js/toolbox.js"></script>
+<script src="js/props.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
