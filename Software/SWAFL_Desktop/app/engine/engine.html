@@ -239,7 +239,7 @@ body.appmode .legend { max-height: 46px; overflow-y: auto; }
     <div class="swipehint" id="swipeHint">Swipe the picture sideways to see all of it</div>
     <div id="playBar" style="display:none; align-items:center; gap:0.5rem; margin-top:0.55rem; flex-wrap:wrap;">
       <span id="fieldBtns" style="display:none; gap:0.3rem; align-items:center; flex-wrap:wrap;"><button class="pillbtn active" data-view="day">Day by day</button><button class="pillbtn" data-view="years">All 20 years</button><button class="pillbtn" data-view="gen">Average year</button><button id="yPrev" class="pillbtn">&#9664; year</button><button id="yNext" class="pillbtn">year &#9654;</button><button class="pillbtn" data-speed="1">1x</button><button class="pillbtn active" data-speed="2">2x</button><button class="pillbtn" data-speed="4">4x</button><button class="pillbtn" data-speed="8">8x</button></span>
-      <span id="rangeBtns" style="display:none; gap:0.35rem;"><button id="rangeAll" class="pillbtn active">All 20 years</button><button id="range94" class="pillbtn">Full-depth detail</button></span>
+      <span id="rangeBtns" style="display:none; gap:0.35rem;"><button id="rangeAll" class="pillbtn active">All 20 years</button><button id="range94" class="pillbtn">1994 detail</button></span>
       <button id="playBtn" class="pillbtn active" style="min-width:64px; text-align:center;">Pause</button>
       <input type="range" id="playRange" min="0" max="1000" value="0" style="flex:1; min-width:120px;">
       <span id="playLabel" style="font-size:0.74rem; color:#8B949E; min-width:96px; text-align:right;"></span>
@@ -3338,7 +3338,7 @@ function drawN2() {
 // ------------------------------------------------------------------------------------------------
 // 20-year record (1980 to 2000) at the 20 cm sensor depth: V1 and V2 "All 20 years" views
 // ------------------------------------------------------------------------------------------------
-const CAL0 = new Date().getFullYear() - 19;   // calendar label of the first simulated weather year: the 20 years end in the current year
+const CAL0 = 1980;   // the baseline record is 1980 to 1999; later dates (2000 to 2100) are projected from it
 const D20START = Date.UTC(1980, 0, 1), SEASON = 183, NYEARS = 20;
 const seasonIdx = y => Math.round((Date.UTC(y, 3, 1) - D20START) / DAYMS);
 const d20 = (key, i) => Math.pow(10, D20[key][i] / 1000);
@@ -4672,6 +4672,7 @@ function dssSyncPlay(id) {                                      // the scenes wi
   else return; play.hold = 0; if (dss.held) { play.on = false; const pb = document.getElementById('playBtn'); if (pb) pb.textContent = 'Play'; }
 }
 function dssGo(dt, keepPlaying) {
+  { const yy = dt.getUTCFullYear(); if (yy >= 1980 && yy <= 1999) { dss.mode = String(yy); const ysel = document.getElementById('dssYear'); if (ysel) ysel.value = String(yy); } }   // inside the baseline record: use that very year
   const sim = seasonSim(true); dss.ay0 = dssAnalog(sim); dss.Y0 = dt.getUTCFullYear(); const doy = clampN(Math.round((Date.UTC(dt.getUTCFullYear(), dt.getUTCMonth(), dt.getUTCDate()) - Date.UTC(dt.getUTCFullYear(), 0, 1)) / DAYMS), 0, 364);
   fclock.day = dss.ay0 * DPY + doy; fclock.pause = 0; fclock.mem = []; fclock.lastKd = -1; if (!keepPlaying) fclock.on = false; if (currentScene.fieldBar) setFieldView('day'); document.getElementById('playBtn').textContent = currentScene.fieldBar ? (fclock.on ? 'Pause' : 'Play') : document.getElementById('playBtn').textContent; dss.shown = ''; dssSyncPlay(currentScene.id);
 }
@@ -4700,7 +4701,7 @@ function fieldInsight() {
   return fmtDate(dateOfK(k)) + ' (weather like ' + (CAL0 + y) + ', ' + crop + '): ' + today + '. Roots reach ' + Math.round(sim.rd[k]) + ' cm. This year so far: ' + iy.toFixed(0) + ' mm irrigated, ' + dy.toFixed(0) + ' mm drained.';
 }
 function dssInit() {
-  const d = document.getElementById('dssDate'), ys = document.getElementById('dssYear'); for (let y = 1980; y < 2000; y++) { const o = document.createElement('option'); o.value = y; o.textContent = 'like ' + (y - 1980 + CAL0); ys.appendChild(o); }
+  const d = document.getElementById('dssDate'), ys = document.getElementById('dssYear'); d.min = '1980-01-01'; d.max = '2100-12-31'; for (let y = 1980; y < 2000; y++) { const o = document.createElement('option'); o.value = y; o.textContent = 'like ' + (y - 1980 + CAL0); ys.appendChild(o); }
   const stay = () => { dssHold(); fclock.pause = 0; fclock.on = false; if (currentScene.fieldBar) document.getElementById('playBtn').textContent = 'Play'; dssSyncPlay(currentScene.id); dssRender(true); };
   const go = keep => { const v = d.value; if (!v) return; const p = v.split('-').map(Number); dssGo(new Date(Date.UTC(p[0], p[1] - 1, p[2])), keep); if (dss.ready) dssHold(); dssRender(true); };
   d.onchange = () => go(true); ys.onchange = () => { dss.mode = ys.value; go(true); }; document.getElementById('dssAhead').onchange = e => { dss.ahead = +e.target.value; dssRender(true); };
