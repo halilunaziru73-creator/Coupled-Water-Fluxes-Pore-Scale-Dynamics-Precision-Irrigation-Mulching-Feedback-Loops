@@ -37,7 +37,7 @@ const Toolbox = (() => {
     T().forEach(g => {
       const items = g.tools.map((t, i) => ({ t, i })).filter(o => !ql || (o.t[0] + ' ' + o.t[3] + ' ' + g.name).toLowerCase().includes(ql));
       if (!items.length) return;
-      const col = !ql && Toolbox.col[g.id];
+      const col = !ql && Toolbox.col[g.id] !== false;
       h += '<div class="tn grp" data-g="' + g.id + '"><span class="tw">' + (col ? '&#9654;' : '&#9660;') + '</span>' + UI.icon(g.icon) + '<span class="lbl">' + g.name + '</span></div><div class="tkids" ' + (col ? 'hidden' : '') + '>';
       items.forEach(o => { h += '<div class="tn' + (ql ? ' hit' : '') + '" style="padding-left:32px" data-g="' + g.id + '" data-i="' + o.i + '" title="Double-click to run">' + UI.icon(o.t[1]) + '<span class="lbl">' + UI.esc(o.t[0]) + '</span></div>'; });
       h += '</div>';
@@ -48,7 +48,7 @@ const Toolbox = (() => {
   let selEl = null;
   tree.addEventListener('click', e => {
     const n = e.target.closest('.tn'); if (!n) return;
-    if (n.dataset.i === undefined) { Toolbox.col[n.dataset.g] = !Toolbox.col[n.dataset.g]; render(); return; }
+    if (n.dataset.i === undefined) { Toolbox.col[n.dataset.g] = Toolbox.col[n.dataset.g] === false; render(); return; }
     tree.querySelectorAll('.sel').forEach(x => x.classList.remove('sel')); n.classList.add('sel'); selEl = n;
   });
   tree.addEventListener('dblclick', e => { const n = e.target.closest('.tn[data-i]'); if (n) run(n); });

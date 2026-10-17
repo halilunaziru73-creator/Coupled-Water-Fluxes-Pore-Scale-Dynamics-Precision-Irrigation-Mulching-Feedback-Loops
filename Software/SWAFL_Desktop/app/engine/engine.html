@@ -197,6 +197,15 @@ body.appmode #playBar { display: flex !important; flex-wrap: nowrap; overflow-x:
 body.appmode .legend { max-height: 46px; overflow-y: auto; }
 @media (max-height:700px) { body.appmode .legend { display: none !important; } body.appmode #yearRow { padding: 2px 10px; } }
 
+body.appmode #yearRow { min-width: 0; width: 100%; }
+body.appmode #yearRow .yrlabel { flex: none; }
+body.appmode #yearStrip { flex: 1 1 0; min-width: 0; max-width: 100%; }
+body.appmode .canvaswrap, body.appmode .panel { min-width: 0; }
+body.appmode .shell, body.appmode .mainarea, body.appmode .wrap, body.appmode .wrap > .panel:first-child { min-width: 0 !important; max-width: 100vw; overflow-x: hidden; }
+body.appmode #yearStrip { width: 0; }
+body.appmode #playBar { min-width: 0; max-width: 100%; }
+body.appmode .wrap, body.appmode .wrap > .panel:first-child, body.appmode .canvaswrap { width: 100% !important; }
+
 </style>
 </head>
 <body>
@@ -2424,6 +2433,25 @@ const canvas = document.getElementById('profileCanvas');
 const ctx = canvas.getContext('2d');
 // Weather years are stored as 1980 to 1999; every label drawn on the canvas shows them as calendar years ending in the current year.
 const calTxt = t => t;
+// ---- desktop (app) mode only: sharp drawing at the screen's resolution, and a calmer frame rate so the app stays fast ----
+if (new URLSearchParams(location.search).get('app')) {
+  const dW = Object.getOwnPropertyDescriptor(HTMLCanvasElement.prototype, 'width'), dH = Object.getOwnPropertyDescriptor(HTMLCanvasElement.prototype, 'height');
+  let lw = canvas.width, lh = canvas.height, SS = 1;
+  const phys = () => {
+    const cw = (canvas.parentElement && canvas.parentElement.clientWidth) || lw; SS = Math.max(1, Math.min(2, cw * (window.devicePixelRatio || 1) / lw)); if (lw * lh * SS * SS > 40e6) SS = Math.sqrt(40e6 / (lw * lh));
+    dW.set.call(canvas, Math.round(lw * SS)); dH.set.call(canvas, Math.round(lh * SS)); ctx.setTransform(SS, 0, 0, SS, 0, 0);
+  };
+  Object.defineProperty(canvas, 'width', { get: () => lw, set: v => { lw = v; phys(); }, configurable: true });
+  Object.defineProperty(canvas, 'height', { get: () => lh, set: v => { lh = v; phys(); }, configurable: true });
+  phys(); let rsT = 0; window.addEventListener('resize', () => { clearTimeout(rsT); rsT = setTimeout(phys, 250); });
+  const raf0 = window.requestAnimationFrame.bind(window); let lastF = 0;
+  window.requestAnimationFrame = cb => raf0(t => {
+    let busy = true; try { busy = !!(play.on || fclock.on || n1ui.play || dss.drag); } catch (e) {}
+    const gap = busy ? 34 : 90, el = performance.now() - lastF;
+    if (el < gap) setTimeout(() => raf0(cb), gap - el); else { lastF = performance.now(); cb(t); }
+  });
+}
+
 { const _ft = ctx.fillText.bind(ctx), _st = ctx.strokeText.bind(ctx), _mt = ctx.measureText.bind(ctx);
   ctx.fillText = (t, ...a) => _ft(calTxt(t), ...a); ctx.strokeText = (t, ...a) => _st(calTxt(t), ...a); ctx.measureText = t => _mt(calTxt(t)); }
 let W = canvas.width; let H = canvas.height; const W_DEF = 620;

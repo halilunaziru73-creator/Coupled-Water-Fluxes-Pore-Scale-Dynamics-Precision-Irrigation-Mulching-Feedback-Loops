@@ -10,7 +10,9 @@ const Layers = (() => {
     { id: 'g-design', name: 'Irrigation design', icon: 'pipe', items: [['sid', 'Surface irrigation design', 'S2'], ['drip', 'Drip irrigation design', 'S3'], ['spr', 'Sprinkler design and pipes', 'S4']] }
   ];
   const DESIGN = ['sid', 'drip', 'spr'];
-  let tabs = ['field'], cur = 'field', collapsed = {}, sectionPick = {};
+  let tabs = ['field'], cur = 'field', collapsed = { 'g-water': true, 'g-ctrl': true, 'g-soil': true, 'g-mulch': true, 'g-loop': true, 'g-design': true, 's-sid': true, 's-drip': true, 's-spr': true }, sectionPick = {};
+  const groupOf = id => { const g = GROUPS.find(x => x.items.some(i => i[0] === id)); return g && g.id; };
+  const reveal = (id, sec) => { collapsed['root'] = false; const g = groupOf(id); if (g) collapsed[g] = false; if (sec) collapsed['s-' + id] = false; };
   const tree = document.getElementById('layerTree');
 
   const nameOf = id => { for (const g of GROUPS) for (const it of g.items) if (it[0] === id) return it[1]; return id; };
@@ -53,7 +55,7 @@ const Layers = (() => {
     sectionPick = {}; if (sec) sectionPick[id] = sec;
     const need = !E.snap || E.snap.scene !== id; if (need) E.scene(id);
     if (sec) setTimeout(() => E.scrollTo(id, sec), need ? 260 : 20); else if (need) setTimeout(() => E.scrollTop(), 80);
-    cur = id; renderTabs(); render(); renderViewBar();
+    cur = id; reveal(id, sec); renderTabs(); render(); renderViewBar();
   }
   function closeTab(id) {
     if (tabs.length <= 1) return; const i = tabs.indexOf(id); tabs = tabs.filter(t => t !== id);

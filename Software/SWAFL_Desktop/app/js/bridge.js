@@ -67,9 +67,14 @@ const E = (() => {
         years:[].map.call(document.querySelectorAll('#dssYear option'),function(o){return[o.value,o.textContent]}),
         defaults:state,NYR:NYR,DPY:DPY})`);
     },
+    day() {
+      return api.json(`(function(){var sim=seasonSim(true),rows=dssRows(sim),adv=dssAdvice(sim,rows),k=fclock.kd(),r0=rows[0],nx=rows.slice(1),yt=yearTable(sim)[yearOf(k)]||{};
+        return{date:fmtDate(dateOfK(k)),like:1980+yearOf(k),mode:dss.mode,N:dss.ahead,head:adv.head,text:adv.text,tone:adv.tone,crop:cropNameAt(sim,k),rd:sim.rd[k],f:r0.f,fT:sim.fTrigRaw,
+        rain:r0.rain,evap:r0.evap,irr:r0.irr,tr:r0.tr,dr:r0.dr,next:{rain:sumKey(nx,'rain'),irr:sumKey(nx,'irr'),evap:sumKey(nx,'evap'),tr:sumKey(nx,'tr'),dr:sumKey(nx,'dr')},year:yt}})()`);
+    },
     season() {
       return api.json(`(function(){var r=seasonSim(true);var f=function(a){return a?Array.prototype.slice.call(a):[]};
-        return{yI:f(r.yI),yD:f(r.yD),yRain:f(r.yRain),yE:f(r.yE),yT:f(r.yT),yR:f(r.yR),meanIrr:r.meanIrr,meanDrain:r.meanDrain}})()`);
+        return{yI:f(r.yI),yD:f(r.yD),yRain:f(r.yRain),yE:f(r.yE),yT:f(r.yT),yR:f(r.yR),meanIrr:r.meanIrr,meanDrain:r.meanDrain,cal0:CAL0}})()`);
     },
     design(scene) {
       const fn = { sid: 'sidRun', drip: 'drRun', spr: 'spRun' }[scene]; if (!fn) return null;
@@ -96,6 +101,6 @@ const E = (() => {
       });
     }
   };
-  setInterval(() => api.poll(false), 600);
+  setInterval(() => { if (!document.hidden) api.poll(false); }, 900);
   return api;
 })();

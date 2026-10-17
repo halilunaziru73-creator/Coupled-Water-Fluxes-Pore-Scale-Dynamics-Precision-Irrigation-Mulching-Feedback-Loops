@@ -85,7 +85,7 @@ const MENUS = [
     { label: 'Run / pause the season', icon: 'play', key: 'F5', act: Act.togglePlay }, { label: 'Restart from day 1', icon: 'restart', key: 'Shift+F5', act: Act.restart }, { label: '20-year season simulation', icon: 'chart', act: Act.runSeason }, { sep: 1 },
     { label: 'Optimise surface layout', icon: 'run', act: Act.optimise }, { label: 'Ready-made cases', sub: casesMenu }] },
   { label: 'Help', items: [
-    { label: 'How to use SWAFL', icon: 'book', key: 'F1', act: Act.guide }, { label: 'Keyboard shortcuts', icon: 'key', act: Act.shortcuts }, { sep: 1 },
+    { label: 'How to use SWAFL', icon: 'book', key: 'F1', act: Act.guide }, { label: 'Troubleshooting (running the app)', icon: 'bug', act: () => guideModal('trouble') }, { label: 'Keyboard shortcuts', icon: 'key', act: Act.shortcuts }, { sep: 1 },
     { label: 'SWAFL on GitHub (repository)', icon: 'github', act: Act.github }, { label: 'Full documentation on GitHub', icon: 'book', act: Act.docs }, { label: 'Report a problem', icon: 'bug', act: Act.issues }, { sep: 1 }, { label: 'About SWAFL', icon: 'info', act: Act.about }] }
 ];
 
@@ -115,20 +115,33 @@ function buildToolbar() {
 
 /* ---------- help windows ---------- */
 function link(u, t) { return '<a data-url="' + u + '">' + t + '</a>'; }
-function guideModal() {
-  UI.modal({ title: 'How to use SWAFL', icon: 'book', width: 'min(780px,94vw)', html: `
-  <h3>1. The window</h3>
-  <p><b>Layers</b> (top left) list every view of the model. Click a layer to open it; the Irrigation design layers have sub-layers - click one to jump straight to that part of the drawing. <b>Processing Toolbox</b> (bottom left) holds ready-to-run tools - double-click one, or type in the search box. <b>Properties</b> (right) holds every input. The <b>Dashboard</b> (bottom) shows the results.</p>
-  <h3>2. Run a simulation</h3>
-  <p>Choose a <b>Ready-made case</b> in Properties (or File &rarr; Open project), then press <b>Run</b> (F5). The season plays day by day; drag the time slider under the picture to stop on any date. Change soil, mulch, rainfall, irrigation method and the picture and the Results tab update immediately.</p>
-  <h3>3. Compare two settings</h3>
-  <p>Press <b>Baseline</b> (Ctrl+B) to keep the current results, change a setting, and every result card shows the difference (green = better, red = worse).</p>
-  <h3>4. Design an irrigation system</h3>
-  <p>Open <b>Irrigation design</b> in Layers: <b>Surface</b> (border, furrow, basin layouts with the advance and recession drawing), <b>Drip</b> (emitters and laterals), <b>Sprinklers and pipes</b> (sprinkler layout, mainline, laterals and the pipe network). Use the view buttons above the drawing - <i>Simulation</i>, <i>Layout design</i>, <i>Pipes and infrastructure</i>, <i>Results</i> - to move between the parts. Click and drag inside the drawing to change lengths, spacing and times. The <b>Design</b> tab of the Dashboard lists efficiencies, uniformity, times and volumes. Use Tools &rarr; <i>Optimise surface layout</i> for the best surface design.</p>
-  <h3>5. Save and share</h3>
-  <p>File &rarr; <b>Save project</b> keeps all settings in a <code>.swafl</code> file. File &rarr; Export saves the picture (PNG) or numbers (CSV); Print makes a PDF.</p>
-  <h3>6. More help</h3>
-  <p>Model description, data and papers: ` + link(REPO, 'SWAFL repository on GitHub') + ` &middot; ` + link(DOCS, 'full user guide') + ` &middot; ` + link(REPO + '/issues', 'report a problem') + `.</p>`, buttons: [{ label: 'Open GitHub', act: () => { Act.github(); return false; } }, { label: 'Close', pri: true }] });
+function guideModal(start) {
+  const S = (id, t, body) => '<h3 id="g-' + id + '">' + t + '</h3>' + body;
+  const html = '<p><b>Jump to:</b> <a data-go="quick">Quick start</a> &middot; <a data-go="win">The window</a> &middot; <a data-go="date">Working date</a> &middot; <a data-go="sim">Run a simulation</a> &middot; <a data-go="design">Irrigation design</a> &middot; <a data-go="files">Files</a> &middot; <a data-go="install">Install and run</a> &middot; <a data-go="trouble">Troubleshooting</a></p>' +
+  S('quick', '1. Quick start', '<ol><li>Open the <b>Layers</b> panel (top left) and click the arrow next to a group, for example <i>Field water balance</i>, then click <i>Field balance</i>.</li><li>Press <b>Run</b> on the toolbar (or <span class="kbd">F5</span>) to play the season. Press it again to pause.</li><li>Change anything in <b>Properties</b> (right): soil, mulch, rainfall, irrigation method. The picture and the <b>Dashboard</b> (bottom) update at once.</li><li>Type a date in the toolbar <b>Date</b> box, or press <b>Today</b>. Everything moves to that date.</li></ol>') +
+  S('win', '2. The window', '<ul><li><b>Menu bar</b>: File, Edit, View, Tools, Refresh, Review, Run, Help.</li><li><b>Layers</b> (left, top): groups are closed until you open them. Click a layer to open it in a tab. Layers under <i>Irrigation design</i> have sub-layers: click one to jump to that part of the drawing.</li><li><b>Processing Toolbox</b> (left, bottom): groups are closed until opened. Type in the search box and double-click a tool to run it.</li><li><b>Simulation window</b> (centre): tabs, view buttons (for design layers: Layout design, Simulation, Pipes and pump, Results...), the drawing, the play bar and the Year strip. Scroll the Year strip sideways from 1980 to 2100 and click a year.</li><li><b>Properties</b> (right): every input in groups. Click a group title to fold it.</li><li><b>Dashboard</b> (bottom): <i>Results</i> for the working date, <i>Design</i>, <i>Charts</i>, <i>Messages</i>. Drag the thin bar above it to resize, press <b>Larger</b> to enlarge it, double-click its tab bar to fold it.</li></ul>') +
+  S('date', '3. Working date: today, 2050 or any date', '<p>The <b>Date</b> box in the toolbar (also in Properties) accepts any date from 1980 to 2100. The status bar, the drawings, the Year strip and the Dashboard all show that date. <b>1980-1999</b> is the real baseline record. Dates from 2000 to 2100, including today, are projected from a baseline weather year: choose <i>typical</i>, <i>dry</i>, <i>wet</i> or a single year in Properties &rarr; Scenario &rarr; Weather year. The text &ldquo;weather like 1987&rdquo; names the baseline year used. Projections are not forecasts.</p>') +
+  S('sim', '4. Run a simulation', '<ol><li>Pick a <b>Ready-made case</b> (Properties &rarr; Scenario or Tools &rarr; Ready-made cases).</li><li>Set soil, tillage, crop, mulch, climate, irrigation method, trigger and nitrogen in Properties.</li><li>Press <b>Run</b>; drag the slider under the picture to any day.</li><li>Press <b>Baseline</b> (<span class="kbd">Ctrl+B</span>), change a setting, and the Dashboard shows the change (green better, red worse).</li><li>Press <b>20-year run</b> to see yearly charts.</li></ol>') +
+  S('design', '5. Irrigation design (layout, pipes, results)', '<p>Open <b>Irrigation design</b> in Layers: <b>Surface</b> (layout, advance and recession, hydrograph, performance), <b>Drip</b> (emitters, laterals, layout and infrastructure), <b>Sprinklers and pipes</b> (layout, sprinkler and jet, overlap, pipe sizing, pump and hydraulic grade line, infrastructure layout, design checks). Use the view buttons above the drawing to jump between parts. Click and drag inside the drawing to change lengths, spacing and times. The Dashboard <b>Design</b> tab lists efficiencies, uniformity, times and volumes. <i>Tools &rarr; Optimise surface layout</i> applies the best surface design.</p>') +
+  S('files', '6. Save, open, export, print', '<p><b>File &rarr; Save project</b> stores all settings in a <code>.swafl</code> file; <b>Open project</b> restores it. <b>File &rarr; Export</b> saves the picture (PNG) or the numbers (CSV). <b>Print</b> makes a PDF.</p>') +
+  S('install', '7. Install and run (Windows)', '<ol><li>Install <b>Node.js LTS</b> from nodejs.org. Restart VS Code afterwards.</li><li>Extract <code>SWAFL_Desktop.zip</code> to <code>C:\\</code> so the project is <code>C:\\SWAFL_Desktop</code>. Check: <code>dir package.json</code> must list the file.</li><li>Open that folder in VS Code and use a <b>Command Prompt</b> terminal.</li><li>Run <code>npm install</code> (once), then <code>npm start</code> to open SWAFL.</li><li>To make the app for your Desktop: <code>npm run get-app</code>. It builds <code>SWAFL.exe</code>, copies it to the Desktop and starts it. Afterwards no code is needed: double-click <b>SWAFL</b>.</li><li>Browser version: <code>npm run web</code> then open <code>http://127.0.0.1:5173/</code>.</li></ol>') +
+  S('trouble', '8. Troubleshooting', '<table class="tbl"><tr><th>Problem</th><th style="text-align:left">Fix</th></tr>' +
+  '<tr><td>&ldquo;running scripts is disabled&rdquo; in PowerShell</td><td style="text-align:left">Use a <b>Command Prompt</b> terminal, or run <code>Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned</code>, or type <code>cmd /c npm install</code>.</td></tr>' +
+  '<tr><td><code>npm</code> is not recognised</td><td style="text-align:left">Install Node.js, then close and reopen VS Code.</td></tr>' +
+  '<tr><td>ENOENT &hellip; package.json not found</td><td style="text-align:left">You are in the wrong folder. The zip makes a folder inside a folder: <code>cd</code> into the one that shows <code>package.json</code>.</td></tr>' +
+  '<tr><td>Install or build is slow or fails inside OneDrive</td><td style="text-align:left">Copy the project to <code>C:\\SWAFL_Desktop</code> and run it there.</td></tr>' +
+  '<tr><td>&ldquo;Windows protected your PC&rdquo;</td><td style="text-align:left">Click <b>More info &rarr; Run anyway</b> (the app is not code-signed).</td></tr>' +
+  '<tr><td>Build error about symbolic links or permissions</td><td style="text-align:left">Turn on Windows <b>Developer Mode</b> or run the terminal as Administrator, then repeat <code>npm run get-app</code>.</td></tr>' +
+  '<tr><td>Download of Electron fails</td><td style="text-align:left">Check internet or VPN/firewall, delete the <code>node_modules</code> folder and run <code>npm install</code> again.</td></tr>' +
+  '<tr><td>White or empty window</td><td style="text-align:left">Wait 10 seconds (the engine loads), then <i>Refresh &rarr; Reload simulation engine</i>. Close any second SWAFL window.</td></tr>' +
+  '<tr><td>No results in the Dashboard</td><td style="text-align:left">Press the <b>Larger</b> button on the Dashboard tab bar, or drag the bar above it upward. Choose the <i>Results</i> tab.</td></tr>' +
+  '<tr><td>The app feels slow</td><td style="text-align:left">Pause the run (F5), close other heavy programs, fold the Dashboard when not needed, and avoid very large windows on old laptops.</td></tr>' +
+  '<tr><td>Date shows old years</td><td style="text-align:left">Press <b>Today</b>, or type the date again in the toolbar Date box.</td></tr>' +
+  '<tr><td>Still stuck</td><td style="text-align:left">Open Help &rarr; Report a problem and describe what you did and what you saw (a screenshot helps).</td></tr></table>') +
+  '<p>More: ' + link(REPO, 'SWAFL repository on GitHub') + ' &middot; ' + link(DOCS, 'full documentation') + ' &middot; ' + link(REPO + '/issues', 'report a problem') + '</p>';
+  const r = UI.modal({ title: 'How to use SWAFL', icon: 'book', width: 'min(900px,95vw)', html, buttons: [{ label: 'Open GitHub', act: () => { Act.github(); return false; } }, { label: 'Close', pri: true }] });
+  r.querySelectorAll('a[data-go]').forEach(a => a.addEventListener('click', () => { const el = r.querySelector('#g-' + a.dataset.go); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }));
+  if (start) { const el = r.querySelector('#g-' + start); if (el) setTimeout(() => el.scrollIntoView(), 30); }
 }
 function shortcutsModal() {
   const R = [['Ctrl+N / O / S', 'New / open / save project'], ['Ctrl+Z / Ctrl+Y', 'Undo / redo a setting'], ['F5', 'Run or pause the season'], ['Shift+F5', 'Restart from day 1'], ['F6', 'Refresh display'], ['Ctrl+B', 'Pin results as baseline'], ['Ctrl+E', 'Save picture (PNG)'], ['Ctrl+P', 'Print / PDF'], ['Ctrl+F', 'Find a tool'], ['F1', 'Help'], ['F11', 'Full screen'], ['Ctrl+Q', 'Exit']];
@@ -169,7 +182,9 @@ async function boot(again) {
   document.getElementById('loading').classList.add('gone');
   if (!bootedOnce) { bootedOnce = true; UI.log('SWAFL ' + VERSION + ' started. Simulation engine ready.'); }
   Dash.render();
+  try { if (!localStorage.getItem('swafl.welcome')) { localStorage.setItem('swafl.welcome', '1'); welcome(); } } catch (e) {}
 }
+function welcome() { UI.modal({ title: 'Welcome to SWAFL', icon: 'info', width: 'min(620px,94vw)', html: '<div class="about"><img src="assets/logo.svg" width="84" height="84" alt=""><div><p><b>Start in three clicks</b></p><ol><li>Open a group in <b>Layers</b> (left) and click a layer.</li><li>Press <b>Run</b> in the toolbar.</li><li>Change the <b>Date</b> in the toolbar: the whole workbench moves to that date, today or up to 2100.</li></ol><p>Results are in the <b>Dashboard</b> at the bottom. Help &rarr; How to use SWAFL has every step and troubleshooting.</p></div></div>', buttons: [{ label: 'Open the guide', act: () => { setTimeout(guideModal, 50); } }, { label: 'Start', pri: true }] }); }
 E.on('snap', ({ s }) => { if (E.metaData) updateStatus(s); });
 E.on('state', s => histPush(s));
 
@@ -178,6 +193,7 @@ UI.hsplit(document.getElementById('splitLeft'), document.getElementById('leftDoc
 UI.hsplit(document.getElementById('splitRight'), document.getElementById('rightDock'), 'right', 220, 560);
 UI.vsplit(document.getElementById('splitDash'), () => document.getElementById('dashDock'), 'up', 80, 560);
 UI.vsplit(document.getElementById('splitLeftV'), () => document.getElementById('toolboxDock'), 'up', 80, 560);
+document.querySelector('#dashTabs [data-act=maxDash]').onclick = e => { const d = document.getElementById('dashDock'); d.classList.toggle('max'); d.classList.remove('min'); e.target.textContent = d.classList.contains('max') ? 'Smaller' : 'Larger'; };
 document.getElementById('dashTabs').addEventListener('dblclick', e => { if (e.target.closest('button')) return; document.getElementById('dashDock').classList.toggle('min'); });
 if (window.swafl) window.swafl.version().then(v => { document.getElementById('stVer').textContent = v; }).catch(() => {});
 document.getElementById('engine').addEventListener('load', () => { if (bootedOnce) boot(true); });

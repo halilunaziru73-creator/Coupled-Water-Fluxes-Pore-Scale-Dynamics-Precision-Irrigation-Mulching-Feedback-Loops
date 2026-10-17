@@ -2,6 +2,8 @@
 'use strict';
 const Dash = (() => {
   const body = document.getElementById('dashBody'), tabs = document.getElementById('dashTabs');
+  let lastHtml = '';
+  const setBody = h => { if (h !== lastHtml) { const st = body.scrollTop; body.innerHTML = h; body.scrollTop = st; lastHtml = h; } };
   let tab = 'results', baseline = null, chartTimer = null;
   const RO = [   // key, label, colour class, which direction is "better" (+1 higher, -1 lower, 0 neutral)
     ['evap', 'Soil evaporation', '', -1], ['transp', 'Transpiration', 't1', 0], ['et', 'Evapotranspiration', 't1', 0], ['drain', 'Drainage', 't2', -1],
@@ -9,17 +11,35 @@ const Dash = (() => {
   ];
   const num = t => { const m = String(t || '').replace(/,/g, '').match(/-?\d+(\.\d+)?/); return m ? parseFloat(m[0]) : NaN; };
 
+  const f1 = v => (v === undefined || v === null || isNaN(v)) ? '-' : (Math.abs(v) >= 100 ? Math.round(v) : (Math.round(v * 10) / 10)).toString();
+  const K = (l, v, u, c) => '<div class="kpi ' + (c || '') + '"><div class="kl">' + l + '</div><div class="kv">' + v + (u ? '<span class="ku">' + u + '</span>' : '') + '</div></div>';
+  let dayCache = { key: '', D: null };
   function results(s) {
-    let h = '<div class="dnote">' + UI.esc(Layers.nameOf(s.scene)) + ' &middot; ' + (baseline ? 'changes are shown against the pinned baseline' : 'pin a baseline to see every change against it') + '</div><div class="kgrid">';
+    const key = s.date + '|' + JSON.stringify(s.state) + '|' + s.year;
+    if (dayCache.key !== key) { dayCache = { key, D: E.day() }; }
+    const D = dayCache.D, Y = D && D.year ? D.year : null;
+    let h = '<div class="dwrap">';
+    if (D) {
+      const likeTxt = 'weather like ' + D.like + (D.mode === 'typ' ? ', typical year' : D.mode === 'dry' ? ', dry year' : D.mode === 'wet' ? ', wet year' : '');
+      h += '<div class="dadv" style="border-left-color:' + (D.tone || '#1F6FB2') + '"><b>' + UI.esc(D.date) + '</b> <span>(' + UI.esc(likeTxt) + ')</span> &nbsp; <b style="color:' + (D.tone || '#16304A') + '">' + UI.esc(D.head) + '</b><br><span>' + UI.esc(D.text) + '</span></div>';
+      h += '<div class="dsec"><h4>On ' + UI.esc(D.date) + '<span>mm per day</span></h4><div class="kgrid">' +
+        K('Crop', UI.esc(D.crop), '', 't4') + K('Root depth', f1(D.rd), 'cm', 't4') + K('Sensor / trigger', (D.f || 0).toFixed(2) + ' / ' + (D.fT || 0).toFixed(2), '', 't3') +
+        K('Rain', f1(D.rain), 'mm') + K('Irrigation', f1(D.irr), 'mm', 't3') + K('Soil evaporation', f1(D.evap), 'mm', 't1') + K('Transpiration', f1(D.tr), 'mm', 't1') + K('Drainage', f1(D.dr), 'mm', 't2') + '</div></div>';
+      h += '<div class="dsec"><h4>Next ' + D.N + ' days<span>simulated, not a forecast</span></h4><div class="kgrid">' +
+        K('Rain', f1(D.next.rain), 'mm') + K('Irrigation', f1(D.next.irr), 'mm', 't3') + K('Soil evaporation', f1(D.next.evap), 'mm', 't1') + K('Transpiration', f1(D.next.tr), 'mm', 't1') + K('Drainage', f1(D.next.dr), 'mm', 't2') + '</div></div>';
+      if (Y && Y.y) h += '<div class="dsec"><h4>Whole year ' + Y.y + '<span>' + UI.esc(Y.crop || '') + '</span></h4><div class="kgrid">' +
+        K('Rain', f1(Y.rain), 'mm') + K('Irrigation', f1(Y.irr), 'mm', 't3') + K('Interception', f1(Y.int), 'mm') + K('Soil evaporation', f1(Y.evap), 'mm', 't1') + K('Transpiration', f1(Y.tr), 'mm', 't1') + K('Drainage', f1(Y.dr), 'mm', 't2') + K('Storage change', f1(Y.store), 'mm') + K('Deepest roots', f1(Y.rd), 'cm', 't4') + '</div></div>';
+    }
+    h += '<div class="dsec"><h4>20-year averages at these settings' + (baseline ? '<span>changes against the pinned baseline</span>' : '<span>pin a baseline to compare</span>') + '</h4><div class="kgrid">';
     RO.forEach(r => {
-      const v = s.ro[r[0]], n = num(v); let d = '';
+      const v = s.ro[r[0]], n = num(v); let dd = '';
       if (baseline && !isNaN(n) && !isNaN(num(baseline[r[0]]))) {
         const diff = n - num(baseline[r[0]]), cls = Math.abs(diff) < 1e-9 ? 'eq' : (r[3] === 0 ? 'eq' : ((diff > 0) === (r[3] > 0) ? 'up' : 'dn'));
-        d = '<div class="kd ' + cls + '">' + (diff > 0 ? '&#9650; +' : diff < 0 ? '&#9660; ' : '= ') + (Math.abs(diff) < 1e-9 ? 'no change' : (Math.round(diff * 100) / 100)) + '</div>';
+        dd = '<div class="kd ' + cls + '">' + (diff > 0 ? '&#9650; +' : diff < 0 ? '&#9660; ' : '= ') + (Math.abs(diff) < 1e-9 ? 'no change' : (Math.round(diff * 100) / 100)) + '</div>';
       }
-      h += '<div class="kpi ' + r[2] + '"><div class="kl">' + r[1] + '</div><div class="kv">' + UI.esc(v || '...') + '</div>' + d + '</div>';
+      h += '<div class="kpi ' + r[2] + '"><div class="kl">' + r[1] + '</div><div class="kv" style="font-size:14px;white-space:nowrap">' + UI.esc(v || '...') + '</div>' + dd + '</div>';
     });
-    body.innerHTML = h + '</div>';
+    setBody(h + '</div></div></div>');
   }
 
   const DL = {
@@ -29,7 +49,7 @@ const Dash = (() => {
   };
   function design(s) {
     const id = s.scene;
-    if (!DL[id]) { body.innerHTML = '<div class="dnote">The Design tab shows efficiencies, uniformity, times and volumes of the irrigation system you are designing. Open <b>Surface irrigation design</b>, <b>Drip irrigation design</b> or <b>Sprinkler design and pipes</b> in the Layers panel.</div>'; return; }
+    if (!DL[id]) { setBody( '<div class="dnote">The Design tab shows efficiencies, uniformity, times and volumes of the irrigation system you are designing. Open <b>Surface irrigation design</b>, <b>Drip irrigation design</b> or <b>Sprinkler design and pipes</b> in the Layers panel.</div>'); return; }
     const R = E.design(id); if (!R) return;
     let h = '<div class="dnote">' + UI.esc(Layers.nameOf(id)) + ' &middot; live results of the layout drawn above</div><div class="kgrid">';
     DL[id].forEach((r, i) => {
@@ -37,7 +57,7 @@ const Dash = (() => {
       const v = R[r[0]], txt = r[2] === 'pct' ? (v * 100).toFixed(1) + ' %' : (Math.abs(v) >= 100 ? v.toFixed(0) : v.toFixed(2)) + (r[3] ? ' ' + r[3] : '');
       h += '<div class="kpi ' + ['', 't1', 't2', 't3', 't4'][i % 5] + '"><div class="kl">' + r[1] + '</div><div class="kv">' + txt + '</div></div>';
     });
-    body.innerHTML = h + '</div>';
+    setBody(h + '</div>');
   }
 
   function lineChart(cv, series, o) {
@@ -47,7 +67,7 @@ const Dash = (() => {
     c.font = '10.5px Segoe UI,Arial'; c.strokeStyle = '#D5E1EE'; c.fillStyle = '#5A7490'; c.lineWidth = 1;
     for (let i = 0; i <= 4; i++) { const y = T + (h - T - B) * i / 4, val = mx - (mx - mn) * i / 4; c.beginPath(); c.moveTo(L, y); c.lineTo(w - R, y); c.stroke(); c.textAlign = 'right'; c.fillText(val >= 100 ? val.toFixed(0) : val.toFixed(1), L - 4, y + 3); }
     const X = i => L + (w - L - R) * (o.bars ? (i + 0.5) / n : i / Math.max(1, n - 1)), Y = v => T + (h - T - B) * (1 - (v - mn) / (mx - mn || 1));
-    c.textAlign = 'center'; for (let i = 0; i < n; i += Math.ceil(n / 10)) c.fillText(String(i + 1), X(i), h - 6);
+    c.textAlign = 'center'; for (let i = 0; i < n; i += Math.ceil(n / 10)) c.fillText(String((o.cal0 || 0) ? o.cal0 + i : i + 1), X(i), h - 6);
     series.forEach((s, k) => {
       c.strokeStyle = c.fillStyle = s.c;
       if (o.bars) { const bw = (w - L - R) / n * 0.7 / series.length; s.v.forEach((v, i) => { c.fillRect(X(i) - bw * series.length / 2 + k * bw, Y(v), bw, Y(mn) - Y(v)); }); }
@@ -56,12 +76,12 @@ const Dash = (() => {
     c.textAlign = 'left'; series.forEach((s, k) => { if (!s.n) return; c.fillStyle = s.c; c.fillRect(L + 6 + k * 120, 10, 10, 3); c.fillStyle = '#16304A'; c.fillText(s.n, L + 20 + k * 120, 15); });
   }
   function charts() {
-    body.innerHTML = '<div class="dnote">Twenty weather years for the current settings (year number on the horizontal axis, millimetres per year).</div><div class="charts"><div class="chart"><h4>Rainfall and irrigation</h4><canvas id="c1"></canvas></div><div class="chart"><h4>Drainage below the root zone</h4><canvas id="c2"></canvas></div><div class="chart"><h4>Evaporation and transpiration</h4><canvas id="c3"></canvas></div></div>';
+    body.innerHTML = '<div class="dnote">Twenty years around the working date (calendar years on the horizontal axis, millimetres per year).</div><div class="charts"><div class="chart"><h4>Rainfall and irrigation</h4><canvas id="c1"></canvas></div><div class="chart"><h4>Drainage below the root zone</h4><canvas id="c2"></canvas></div><div class="chart"><h4>Evaporation and transpiration</h4><canvas id="c3"></canvas></div></div>';
     clearTimeout(chartTimer); chartTimer = setTimeout(() => {
       const S = E.season(); if (!S || !document.getElementById('c1')) return;
-      lineChart(document.getElementById('c1'), [{ v: S.yR, c: '#5AA0E1', n: 'Rain' }, { v: S.yI, c: '#C77D1A', n: 'Irrigation' }], { bars: true, zero: true });
-      lineChart(document.getElementById('c2'), [{ v: S.yD, c: '#7A5AA8' }], { bars: true, zero: true });
-      lineChart(document.getElementById('c3'), [{ v: S.yE, c: '#00859B', n: 'Evaporation' }, { v: S.yT, c: '#2E7D4F', n: 'Transpiration' }], { zero: true });
+      lineChart(document.getElementById('c1'), [{ v: S.yR, c: '#5AA0E1', n: 'Rain' }, { v: S.yI, c: '#C77D1A', n: 'Irrigation' }], { bars: true, zero: true, cal0: S.cal0 });
+      lineChart(document.getElementById('c2'), [{ v: S.yD, c: '#7A5AA8' }], { bars: true, zero: true, cal0: S.cal0 });
+      lineChart(document.getElementById('c3'), [{ v: S.yE, c: '#00859B', n: 'Evaporation' }, { v: S.yT, c: '#2E7D4F', n: 'Transpiration' }], { zero: true, cal0: S.cal0 });
     }, 30);
   }
   function messages() {
@@ -71,7 +91,7 @@ const Dash = (() => {
     const s = E.snap; if (!s) return;
     if (tab === 'results') results(s); else if (tab === 'design') design(s); else if (tab === 'charts') charts(); else messages();
   }
-  function setTab(t) { tab = t; tabs.querySelectorAll('button[data-tab]').forEach(b => b.classList.toggle('on', b.dataset.tab === t)); render(); }
+  function setTab(t) { tab = t; lastHtml = ''; tabs.querySelectorAll('button[data-tab]').forEach(b => b.classList.toggle('on', b.dataset.tab === t)); render(); }
   tabs.addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return;
     if (b.dataset.tab) setTab(b.dataset.tab); else if (b.dataset.act === 'pinBaseline') pin(); else if (b.dataset.act === 'clearBaseline') clearPin();

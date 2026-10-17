@@ -70,3 +70,17 @@ docs/USER_GUIDE.md                   how to use SWAFL
 ```
 
 See [docs/USER_GUIDE.md](docs/USER_GUIDE.md) for the step-by-step guide. Author: Naziru Halilu. MIT licence.
+
+## Troubleshooting
+
+| Problem | Fix |
+|---|---|
+| "running scripts is disabled" (PowerShell) | Use a **Command Prompt** terminal, or `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned`, or `cmd /c npm install` |
+| `npm` not recognised | Install Node.js LTS, then restart VS Code |
+| `ENOENT ... package.json` | Wrong folder: the zip makes a folder inside a folder; `cd` into the one showing `package.json` |
+| Slow/failed install in OneDrive | Copy the project to `C:\SWAFL_Desktop` and run there |
+| "Windows protected your PC" | More info → Run anyway (app is not code-signed) |
+| Build error about symlinks/permissions | Enable Windows Developer Mode or run the terminal as Administrator |
+| Electron download fails | Check internet/VPN, delete `node_modules`, run `npm install` again |
+| White window | Wait ~10 s, then Refresh → Reload simulation engine |
+| No results visible | Press **Larger** on the Dashboard tab bar, choose the Results tab |
