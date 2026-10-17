@@ -2136,7 +2136,7 @@ function setupButtons() {
     const b = document.createElement('div');
     b.className = 'pillbtn' + (mm.k === state.method ? ' active' : '');
     b.textContent = mm.label; b.dataset.method = mm.k;
-    b.onclick = () => { state.method = mm.k; refresh(); };
+    b.onclick = () => { state.method = mm.k; refresh(); methodToDesign(mm.k); };
     methodBtns.appendChild(b);
   });
   const mulchBtns = document.getElementById('mulchBtns');
@@ -2150,6 +2150,18 @@ function setupButtons() {
     b.onclick = () => { state.crop = k; refresh(); };
     cropBtns.appendChild(b);
   });
+}
+/* picking an irrigation method opens the matching design: Surface -> S2, Overhead -> S4, any Drip depth -> S3 */
+function methodToDesign(k) {
+  try {
+    const id = k === 'M02_Surface' ? 'sid' : k === 'M01_Overhead' ? 'spr' : /Drip/.test(k) ? 'drip' : null;
+    const sc = id && SCENES.find(x => x.id === id);
+    if (sc && currentScene !== sc) {
+      switchScene(sc);
+      const cv = document.getElementById('proCenter') || document.querySelector('canvas');
+      try { if (cv && cv.scrollIntoView && window.innerWidth < 900) cv.scrollIntoView({ block: 'start' }); } catch (e) {}
+    }
+  } catch (e) {}
 }
 function updateActiveButtons() {
   document.querySelectorAll('#soilBtns .pillbtn').forEach(b => b.classList.toggle('active', b.dataset.soil === state.soil));
