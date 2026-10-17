@@ -186,7 +186,9 @@ async function boot(again) {
   document.getElementById('loading').classList.add('gone');
   if (!bootedOnce) { bootedOnce = true; UI.log('SWAFL ' + VERSION + ' started. Simulation engine ready.'); }
   Dash.render();
-  try { if (!localStorage.getItem('swafl.welcome')) { localStorage.setItem('swafl.welcome', '1'); welcome(); } } catch (e) {}
+  let deep = null; try { const m = /[#&?](?:open|layer)=([a-z0-9]+)/i.exec(location.hash + location.search); if (m) deep = m[1]; } catch (e) {}
+  if (deep) setTimeout(() => { try { Layers.open(deep); } catch (e) {} }, 300);   // links like index.html#open=n1 land straight on a layer (n1 = Irrigation trigger law)
+  try { if (!deep && !localStorage.getItem('swafl.welcome')) { localStorage.setItem('swafl.welcome', '1'); welcome(); } } catch (e) {}
 }
 function welcome() { UI.modal({ title: 'Welcome to SWAFL', icon: 'info', width: 'min(620px,94vw)', html: '<div class="about"><img src="assets/logo.svg" width="84" height="84" alt=""><div><p><b>Start in three clicks</b></p><ol><li>Open a group in <b>Layers</b> (left) and click a layer.</li><li>Press <b>Run</b> in the toolbar.</li><li>Change the <b>Date</b> in the toolbar: the whole workbench moves to that date, today or up to 2100.</li></ol><p>Results are in the <b>Dashboard</b> at the bottom. Help &rarr; How to use SWAFL has every step and troubleshooting.</p></div></div>', buttons: [{ label: 'Open the guide', act: () => { setTimeout(guideModal, 50); } }, { label: 'Start', pri: true }] }); }
 E.on('snap', ({ s }) => { if (E.metaData) updateStatus(s); });
