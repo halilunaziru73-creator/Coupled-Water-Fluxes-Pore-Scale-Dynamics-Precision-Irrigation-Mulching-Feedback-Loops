@@ -5,6 +5,12 @@
 **Author:** Naziru Halilu
 
 <p align="center">
+  <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases/latest/download/SWAFL.exe">
+    <img src="https://img.shields.io/badge/%E2%86%93%20DOWNLOAD-SWAFL.exe%20for%20Windows-1F6FB2?style=for-the-badge&logo=windows&logoColor=white" alt="Download SWAFL.exe">
+  </a>
+</p>
+
+<p align="center">
   <a href="https://doi.org/10.5281/zenodo.23043626">
     <img src="https://img.shields.io/badge/%E2%86%92%20DATA-Click%20to%20open%20on%20Zenodo-2ea44f?style=for-the-badge&logo=zenodo&logoColor=white" alt="Data on Zenodo" />
   </a>
@@ -14,6 +20,12 @@
 </p>
 
 ## Download the software (Windows)
+
+**[Download SWAFL.exe for Windows](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases/latest/download/SWAFL.exe)** (180 MB, no installation: double-click to run) · [all releases](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases/latest)
+
+> Windows may show a SmartScreen warning because the app is not code-signed: click **More info**, then **Run anyway**.
+
+**Prefer to build it yourself?** Use the options below.
 
 **Option A - one paste in VS Code** (needs [Node.js LTS](https://nodejs.org) and [Git](https://git-scm.com); restart VS Code after installing them). Open `Terminal -> New Terminal` and paste:
 
