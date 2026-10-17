@@ -185,3 +185,10 @@ table.tbl{border-collapse:collapse;width:100%;background:var(--white)}
 
 body.focus #leftDock,body.focus #rightDock,body.focus #dashDock,body.focus .hsplit,body.focus .vsplit{display:none!important}
 #dashTabs{flex-wrap:nowrap;white-space:nowrap}#dashTabs button{padding-left:8px;padding-right:8px}
+.pal{position:fixed;inset:0;z-index:300;background:rgba(22,48,74,.28);display:flex;justify-content:center;align-items:flex-start;padding-top:12vh}
+.pbox{width:min(620px,92vw);background:var(--panel);border:1px solid var(--border);border-radius:8px;box-shadow:0 12px 40px rgba(15,59,99,.35);overflow:hidden}
+.pbox input{width:100%;box-sizing:border-box;border:0;border-bottom:1px solid var(--border);padding:14px 16px;font-size:16px;background:#fff;color:var(--text);outline:0}
+.pl{max-height:50vh;overflow:auto}.pi{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;color:var(--text)}
+.pi.on,.pi:hover{background:#BBD6F0}.pt{flex:1}.pk{font-size:12px;color:#5B7691}.pe{padding:18px 16px;color:#5B7691}
+.ph{padding:6px 16px;font-size:12px;color:#5B7691;border-top:1px solid var(--border);background:#E8EEF5}
+:focus-visible{outline:2px solid #1F6FB2;outline-offset:1px}

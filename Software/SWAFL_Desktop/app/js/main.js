@@ -101,7 +101,7 @@ function buildToolbar() {
     B('play', 'Run', Act.togglePlay, 'Run or pause the season (F5)', 'run'), B('restart', 'Restart', Act.restart, 'Restart from day 1 (Shift+F5)'), B('chart', '20-year run', Act.runSeason, 'Run the 20-year season simulation'), 0,
     B('refresh', 'Refresh', Act.refresh, 'Refresh display (F6)'), B('pin', 'Baseline', () => Dash.pin(), 'Pin results as baseline (Ctrl+B)'), B('img', 'Picture', Act.exportPNG, 'Save a picture of the window'), B('csv', 'Results', Act.exportSeasonCSV, 'Save yearly results (CSV)'), 0,
     B('pipe', 'Surface', () => Layers.open('sid'), 'Surface irrigation design'), B('drop', 'Drip', () => Layers.open('drip'), 'Drip irrigation design'), B('sprinkler', 'Sprinklers', () => Layers.open('spr'), 'Sprinkler design and pipes'), 0,
-    B('fit', 'Focus', Act.focus, 'Focus view: hide the panels to see the whole drawing (F9)'), B('help', 'Help', Act.guide, 'How to use SWAFL (F1)')];
+    B('fit', 'Focus', Act.focus, 'Focus view: hide the panels to see the whole drawing (F9)'), B('search', 'Search', () => Palette.open(), 'Find anything: layers, tools, dates (Ctrl+K)'), B('help', 'Help', Act.guide, 'How to use SWAFL (F1)')];
   const tb = document.getElementById('toolbar'); tb.innerHTML = '';
   items.splice(items.length - 1, 0, 0, 'date');
   items.forEach(it => {
@@ -148,7 +148,7 @@ function guideModal(start) {
   if (start) { const el = r.querySelector('#g-' + start); if (el) setTimeout(() => el.scrollIntoView(), 30); }
 }
 function shortcutsModal() {
-  const R = [['Ctrl+N / O / S', 'New / open / save project'], ['Ctrl+Z / Ctrl+Y', 'Undo / redo a setting'], ['F5', 'Run or pause the season'], ['Shift+F5', 'Restart from day 1'], ['F6', 'Refresh display'], ['Ctrl+B', 'Pin results as baseline'], ['Ctrl+E', 'Save picture (PNG)'], ['Ctrl+P', 'Print / PDF'], ['Ctrl+F', 'Find a tool'], ['F1', 'Help'], ['F9', 'Focus view (hide panels)'], ['F11', 'Full screen'], ['Ctrl+Q', 'Exit']];
+  const R = [['Ctrl+K','Search everything: layers, tools, a year or date'], ['Ctrl+N / O / S', 'New / open / save project'], ['Ctrl+Z / Ctrl+Y', 'Undo / redo a setting'], ['F5', 'Run or pause the season'], ['Shift+F5', 'Restart from day 1'], ['F6', 'Refresh display'], ['Ctrl+B', 'Pin results as baseline'], ['Ctrl+E', 'Save picture (PNG)'], ['Ctrl+P', 'Print / PDF'], ['Ctrl+F', 'Find a tool'], ['F1', 'Help'], ['F9', 'Focus view (hide panels)'], ['F11', 'Full screen'], ['Ctrl+Q', 'Exit']];
   UI.modal({ title: 'Keyboard shortcuts', icon: 'key', width: 'min(520px,94vw)', html: '<table class="tbl">' + R.map(r => '<tr><td><span class="kbd">' + r[0] + '</span></td><td style="text-align:left">' + r[1] + '</td></tr>').join('') + '</table>' });
 }
 function aboutModal() {
@@ -201,3 +201,11 @@ document.querySelector('#dashTabs [data-act=maxDash]').onclick = e => { const d 
 if (window.swafl) window.swafl.version().then(v => { document.getElementById('stVer').textContent = v; }).catch(() => {});
 document.getElementById('engine').addEventListener('load', () => { if (bootedOnce) boot(true); });
 boot();
+
+/* remember panel sizes between sessions */
+try {
+  const KEY = 'swafl.layout', ids = ['leftDock', 'rightDock', 'dashDock'];
+  const saved = JSON.parse(localStorage.getItem(KEY) || '{}');
+  ids.forEach(i => { if (saved[i]) document.getElementById(i).style.width = saved[i]; });
+  window.addEventListener('beforeunload', () => { const o = {}; ids.forEach(i => { const w = document.getElementById(i).style.width; if (w) o[i] = w; }); localStorage.setItem(KEY, JSON.stringify(o)); });
+} catch (e) {}

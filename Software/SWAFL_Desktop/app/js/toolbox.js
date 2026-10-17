@@ -54,5 +54,5 @@ const Toolbox = (() => {
   tree.addEventListener('dblclick', e => { const n = e.target.closest('.tn[data-i]'); if (n) run(n); });
   search.addEventListener('input', () => { q = search.value; render(); });
   search.addEventListener('keydown', e => { if (e.key === 'Enter') { const n = tree.querySelector('.tn[data-i]'); if (n) run(n); } });
-  return { render, col: {} };
+  return { render, col: {}, T };
 })();

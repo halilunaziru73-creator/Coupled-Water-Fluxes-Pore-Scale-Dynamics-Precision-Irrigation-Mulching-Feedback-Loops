@@ -105,5 +105,5 @@ const Layers = (() => {
   let lastSec = '';
   E.on('snap', ({ s }) => { const k = JSON.stringify(s.sec); if (k !== lastSec) { lastSec = k; render(); renderViewBar(); } });
 
-  return { render, open, renderTabs, renderViewBar, expandAll, collapseAll, nameOf, current: () => cur, DESIGN };
+  return { GROUPS, render, open, renderTabs, renderViewBar, expandAll, collapseAll, nameOf, current: () => cur, DESIGN };
 })();
