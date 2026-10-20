@@ -1,0 +1,50 @@
+\subsection{Result views of the explorer and the evidence behind each}
+\label{sec:views}
+The explorer presents the coupled soil--water--atmosphere system as seventeen result views grouped by question: the field and the soil, irrigation timing, system design, mulch, and the system as a whole. Every view is a rendering of numbered relations in the manual, and each relation carries its provenance label. \Cref{fig:viewsA,fig:viewsB,fig:viewsC} reproduce the result panels only (screenshots of the drawing area, with the interface chrome removed), and \cref{tab:views} gives for every view the physical process shown, the governing relations with their literature origin, and the test in this article that supports it.
+
+\paragraph{Soil and field.} The field view closes the annual water balance of the root zone, $P+I=E+T+D+\Delta S$, with the fluxes taken from the Daisy ensemble \citep{Hansen2012,Abrahamsen2000} and the crop term referenced to the FAO-56 framework \citep{Allen1998}. The soil-water view shows the water-content and suction profile, converting between the two with the van~Genuchten--Mualem retention and conductivity functions \citep{vanGenuchten1980,Mualem1976} that close Richards' equation \citep{Richards1931} in widely used solvers \citep{Simunek2008}. The pore view shows how tillage and consolidation change the structural porosity that controls drainage, in line with X-ray evidence on pore networks and their temporal dynamics \citep{Strudley2008,Blunt2017,Leuther2021}. The profile view displays the hydraulic drivers by texture, derived from pedotransfer functions \citep{Saxton2006,Schaap2001} and from the global soil-hydraulic data compilations that now underpin such functions \citep{Vereecken2016,Weber2024}. The evaporation view follows the two-stage description of soil drying \citep{Ritchie1972,Philip1957}, in which a capillary-supplied first stage gives way to a vapour-diffusion-limited second stage, as established by pore-scale and macroscopic work \citep{Lehmann2008,Or2013,Shokri2011}. The root view distributes uptake over depth with a sink-term formulation \citep{Feddes1978} scaled to the reference demand \citep{Allen1998}.
+
+\paragraph{Irrigation timing.} The two timing views express the trigger as depletion of plant-available water, the quantity used in the FAO-56 management-allowed-depletion concept \citep{Allen1998}, and translate it into a sensor suction at the chosen depth. Sensor-based scheduling is reviewed by \citet{Datta2023}, and the sensitivity of schedules to deficit strategy by \citet{Fereres2007}. Collapsing ten soils onto one depletion curve is the result that distinguishes the framework from soil-specific suction thresholds, and it is quantified in the held-out tests of \cref{sec:e1}.
+
+\paragraph{System design.} The surface view reproduces the volume-balance design procedure of \citet{Walker1989} and \citet{Elliott1982}, with Green--Ampt infiltration \citep{GreenAmpt1911}, Kostiakov intake \citep{Kostiakov1932} and Manning flow resistance \citep{Manning1891}; the results are compared with the worked examples in \cref{tab:ws,tab:border}, and the efficiency definitions follow \citet{Burt1997}. The drip view solves the lateral hydraulics with a Hazen--Williams friction law \citep{Hazen1905}, uniformity as defined by \citet{KellerKarmeli1974} and the bulb geometry of \citet{Warrick1988} and \citet{Schwartzman1986}; it is tested against an independent solver in \cref{tab:drip}. The sprinkler view builds the spray pattern, the overlap and the Christiansen coefficient \citep{Christiansen1942} from nozzle hydraulics \citep{Keller1990}, with ballistic and drift losses following \citet{Playan2005} and \citet{Dechmi2003}, and is compared with the textbook design checks.
+
+\paragraph{Mulch and the whole system.} The mulch views separate the three effects of a surface cover on evaporation, rain interception and soil warming. Their sign and size agree with field and modelling evidence for straw and residue mulches \citep{BalwinderSingh2011,Zheng2021,Vuaille2024,Kang2024}, and the regime map shows where the saving is recoverable, which is the question treated in the companion study on hydraulic memory. The closing views connect the chain from the soil surface to the atmosphere through the catenary description of water flow from soil to leaf \citep{vandenHonert1948,Nobel2009} and the energy-limited and water-limited regimes of evaporation \citep{Roderick2002,Seneviratne2010}, and then follow the feedbacks between soil moisture and the atmosphere \citep{Entekhabi1996,Koster2004}. No earlier open tool known to the literature reviewed here shows all of these processes under one set of controls with every number traceable to a labelled relation and a stated test.
+
+\begin{figure}[p]\centering
+\includegraphics[width=\textwidth]{\figdir/p3/fig_views_A.jpg}
+\caption{Result views of the explorer for the soil and the field (coarse loam, conventional tillage, cereal rotation). (a) Field water balance of the root zone; (b) soil-water pressure-head profile; (c) pores and tillage; (d) soil hydraulic drivers by texture; (e) evaporation from the pore to the atmosphere; (f) root density and uptake. Governing relations are listed in \cref{tab:views}.}
+\label{fig:viewsA}
+\end{figure}
+\begin{figure}[p]\centering
+\includegraphics[width=\textwidth]{\figdir/p3/fig_views_B.jpg}
+\caption{Result views for irrigation timing and design. (a) Sensor and trigger; (b) irrigation rule collapsing ten soils onto one depletion curve; (c) surface irrigation; (d) drip irrigation; (e) sprinklers; (f) soil selection on the texture triangle, which drives every view.}
+\label{fig:viewsB}
+\end{figure}
+\begin{figure}[p]\centering
+\includegraphics[width=\textwidth]{\figdir/p3/fig_views_C.jpg}
+\caption{Result views for mulch and the whole system. (a) Mulch against bare soil; (b) mulch strength; (c) fate of the saved water; (d) regime map of where mulch pays; (e) soil to sky; (f) how the effects connect.}
+\label{fig:viewsC}
+\end{figure}
+
+{\small
+\begin{longtable}{>{\raggedright\arraybackslash}p{2.3cm}>{\raggedright\arraybackslash}p{3.3cm}>{\raggedright\arraybackslash}p{4.6cm}>{\raggedright\arraybackslash}p{4.0cm}}
+\caption{Result views, governing relations and verification. Manual equation numbers refer to the printed manual; provenance labels are L (literature), D (data-driven), E (engineered).}\label{tab:views}\\
+\toprule
+View & Result shown & Governing relations (manual; origin) & Evidence in this article\\\midrule\endfirsthead
+\toprule View & Result shown & Governing relations & Evidence\\\midrule\endhead
+Field & annual water balance, yield, leaching & balance and flux ratios, Eqs.~5.4--5.12 (D, E); FAO-56 demand (L) & mass closure of Engine~2 (median 0.1\,\%); Engine~1 rank fidelity\\
+V2 Water in the soil & pressure-head and water-content profile & van Genuchten--Mualem retention, Eqs.~5.1--5.2 (L) & Engine~2 closure; agreement with Engine~1\\
+V3 Pores and tillage & structural porosity, consolidation & pore index and consolidation rate, Eq.~8.1 (D, E) & Engine~1 held-out tests (drainage response)\\
+V7 Soil profiles & hydraulic drivers by texture & pedotransfer relations, Eq.~8.1 (L, D) & ledger audit of provenance\\
+E1 Evaporation & stage-1 and stage-2 evaporation & Eqs.~5.26, 8.3--8.4, 9.5 (L, E) & warming-response checks and sensitivity\\
+R1 Roots & root density, uptake by depth & sink-term and root curves (L, E) & Engine~2 closure\\
+V1 When to irrigate & sensor suction against trigger & Eq.~5.3 (L) & Engine~2 calibration grid\\
+N1 Irrigation rule & depletion trigger, ten soils & Eqs.~5.3, 5.27 (D) & held-out irrigation $\rho=0.96$\\
+S2 Surface irrigation & advance, intake, efficiencies & Eqs.~11.5--11.18 (L) & worked examples within 3\,\%; median 0.08\,\% and maximum 1.81\,\% (\cref{tab:ws,tab:border})\\
+S3 Drip irrigation & lateral head loss, bulb, uniformity & Eqs.~12.3--12.15 (L, E) & independent solver, $3.2\times10^{-7}$ for $h_f/H_0\le0.6$ (\cref{tab:drip})\\
+S4 Sprinklers & nozzle, pattern, overlap & Eqs.~12.21--12.23 and chapter~13 (L, E) & diameter within 1\,\%, nozzle discharge within 1.3\,\%, Christiansen 0.01\,\%\\
+V4, V6 Mulch & evaporation, interception, warming & mulch model, Eqs.~5.4--5.9 (D, E) & Engine~1 held-out tests; sensitivity (\cref{sec:sens})\\
+N2, N3 Saved water, regime map & fate of saved water; where mulch pays & recoverability classification (D, E) & companion hydraulic-memory study\\
+S1 Soil to sky & soil--plant--air resistance chain & Eqs.~5.1--5.3, 7.1--7.5 (L, E) & ledger audit; closure of Engine~2\\
+V5 How it connects & seven coupled effects & feedback combination, chapter~10 (E) & sensitivity analysis\\\bottomrule
+\end{longtable}}

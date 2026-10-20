@@ -1,0 +1,57 @@
+%==========================================================
+\section{Derivations, error propagation and notation}
+\label{sec:deriv}
+This section sets out the short derivations behind the closed-form layers, so that each can be audited line by line, and the elementary error analysis that explains which deviations in the verification were to be expected.
+
+Assume a sharp wetting front at depth $L_f$ with suction head $\psi_f$ and a saturated transmission zone of conductivity $K_s$. Darcy's law across the wetted zone gives the infiltration rate
+\begin{equation}
+f=\frac{\mathrm dF}{\mathrm dt}=K_s\Bigl(1+\frac{\psi_f\Delta\theta}{F}\Bigr),\qquad F=L_f\Delta\theta,
+\label{eq:GAode}
+\end{equation}
+and separating variables, $\int_0^{F}\bigl(1+\psi_f\Delta\theta/F'\bigr)^{-1}\mathrm dF'=K_st$, yields \cref{eq:GA} \citep{GreenAmpt1911}. Two limits are used as sanity checks in the code: for small $t$ the logarithm expands as $F-\psi_f\Delta\theta\ln(1+F/\psi_f\Delta\theta)\approx F^2/(2\psi_f\Delta\theta)$, so $F\approx\sqrt{2K_s\psi_f\Delta\theta\,t}$ (sorptivity-dominated, $F\propto t^{1/2}$); for large $t$, $F\to K_st$ (gravity-dominated). The Kostiakov exponent $A$ fitted to $F(\tau)$ over 10--600\,min is therefore expected to lie between $0.5$ and $1$ (the fitted exponents have not been tabulated for the ten soils; the interface displays them with the fit $R^2$). Because \cref{eq:GAode} is monotone, the Newton iteration of the code converges from the starting value $F_0=\sqrt{2K_s\psi_f\Delta\theta t}+K_st$.
+
+Let the advance front be at $x(t)$ and the inflow be $Q$. Conservation of volume over $[0,t]$ states that the inflow equals the volume stored on the surface plus the volume infiltrated:
+\begin{equation}
+Qt=\sigma_yA_0\,x+\sigma_z\,Z(t)\,w\,x,
+\label{eq:vbderiv}
+\end{equation}
+where $A_0$ is the flow cross-section at the inlet, $\sigma_y$ the surface-storage shape factor (the ratio of the mean to the inlet cross-section along the wetted length) and $\sigma_z$ the sub-surface shape factor. For a power-law advance $x=pt^{r}$ and Kostiakov intake, the infiltrated volume per unit width is $\int_0^x Z(t-t_x)\,\mathrm dx$, which evaluates to $\sigma_zZ(t)x$ with $\sigma_z$ as in \cref{eq:vb} \citep{Elliott1982,Walker1987}. Solving \cref{eq:vbderiv} for $x$ gives \cref{eq:vb}, and the exponent $r$ is found from the two measured (or predicted) times $t_{L/2}$ and $t_L$ by $r=\ln 2/\ln(t_L/t_{L/2})$, since $x\propto t^{r}$ implies $L/(L/2)=(t_L/t_{L/2})^{r}$. Because $\sigma_z$ depends on $r$ and $r$ on the times, the solution is a fixed point, found by iteration; the code reports non-convergence rather than returning a number.
+
+Let $V_{\mathrm{inf}}=V_{\mathrm{st}}+V_{\mathrm{dp}}$, which holds by construction since $\min(Z,Z_n)+\max(Z-Z_n,0)=Z$ pointwise. If the infiltrated volume does not exceed the applied volume, $V_{\mathrm{ro}}=V_{\mathrm{app}}-V_{\mathrm{inf}}\ge0$, so
+\begin{equation}
+E_a+\mathrm{DP}+\mathrm{RO}=\frac{V_{\mathrm{st}}+V_{\mathrm{dp}}+V_{\mathrm{ro}}}{V_{\mathrm{app}}}=\frac{V_{\mathrm{inf}}+V_{\mathrm{app}}-V_{\mathrm{inf}}}{V_{\mathrm{app}}}=1.
+\label{eq:effclose}
+\end{equation}
+The identity fails only when the numerical $V_{\mathrm{inf}}$ exceeds $V_{\mathrm{app}}$, which signals a violated volume balance and is flagged in the interface. The same argument gives $E_a+\mathrm{DP}+\mathrm{EV}=1$ for the drip layer, where evaporation takes the place of runoff.
+
+For $n$ catch-can depths $a_k$ with mean $\bar a$, the Christiansen coefficient $\mathrm{CU}=1-\sum|a_k-\bar a|/(n\bar a)$ equals one minus the relative mean absolute deviation \citep{Christiansen1942}. For normally distributed depths the mean absolute deviation is $\sigma\sqrt{2/\pi}$, so $\mathrm{CU}\approx1-0.80\,\sigma/\bar a$; this relation allows the coefficient of variation to be inferred from a reported CU and was used to translate the ``CU $\ge85$\,\%'' check into a coefficient of variation of at most $0.19$. For the drip layer, \cref{eq:Eu} of \citet{KellerKarmeli1974} treats the lowest quartile of emitters; the factor $1.27$ arises from the expectation of the minimum of $n_e$ independent emitters assuming a coefficient of variation $c_v$, and its use for $n_e=1$ gives the most conservative estimate.
+
+For a lateral of $N$ emitters at spacing $s_e$, the flow in segment $j$ (counting from the inlet) is $Q_j=\sum_{i\ge j}q_i$, and the head at emitter $j$ is the inlet head less the accumulated losses. With uniform emitters and the exponent $x_e$, the total head loss for a pipe of length $L$ with outlet factor $F_c$ is approximated by Christiansen's factor
+\begin{equation}
+h_f\approx F_c\,\frac{10.67\,L\,Q_0^{1.852}}{C^{1.852}D^{4.871}},\qquad F_c=\frac1{2.852}+\frac1{2N}+\frac{\sqrt{1.852-1}}{6N^2},
+\label{eq:Fc}
+\end{equation}
+which tends to $1/2.852=0.351$ for large $N$ and is the textbook shortcut used as an independent plausibility check on the segment-by-segment iteration. Because $q_j\propto h_j^{x_e}$ with $x_e<1$, the loop \emph{head $\to$ flow $\to$ loss $\to$ head} is a contraction when the relative loss $h_f/H_0$ is small, with contraction ratio of the order $x_e\,h_f/H_0$; four iterations then reduce the initial error by a factor of order $(x_eh_f/H_0)^4$, which is below $10^{-4}$ for $h_f/H_0\le0.2$ and is not for $h_f/H_0\ge0.5$ (where the ratio is of order $0.3$). This simple analysis predicts the qualitative result of \cref{tab:drip} before any numerical test, and it explains why the failures occur only in poorly designed laterals.
+
+Engine~1 returns products of ratios, \cref{eq:E1E,eq:E1T,eq:E1ET,eq:E1I,eq:E1Y}. If each ratio carries an independent relative error $\delta_i$, the relative error of the product is $\delta\approx\sqrt{\sum\delta_i^2}$; with the three to five factors per flux and ratio errors of a few per cent this gives a few per cent, so random error cannot explain the $+53$\,mm bias reported in Section~\ref{sec:e1}, which is consistent with a \emph{systematic} baseline offset ($\delta_b=(720-673)/673=7\,\%$ for ET and $(282-228)/228=24\,\%$ for irrigation). The additive treatment of drainage and leaching propagates absolute errors, $\sigma_D^2=\sum\sigma_i^2$, and because the mean drainage is small (35\,mm) a modest absolute error is a large relative one, which explains the normalised RMSE of 48.7\,\% despite $R^2=0.82$. Finally, the closure window of \cref{eq:E1close} bounds the storage drift to $-15\le\Delta S\le30$\,mm\,yr$^{-1}$, which over a 20-year simulation could accumulate to a few hundred millimetres in the extreme; in practice the window is active in a small share of cases, and the user-facing balance reports $\Delta S$.
+
+Rank correlation is invariant to monotone transformations, whereas $R^2$ and RMSE are not. A systematic multiplicative or additive offset shifts RMSE and $R^2$ but leaves Spearman's $\rho$ unchanged; this is why the raw irrigation $R^2$ of 0.18 becomes 0.79 after re-anchoring while $\rho$ is 0.96 in both cases. A screening emulator is judged by whether it orders the options correctly, a budgeting model by whether it reproduces the magnitude, and the verification therefore reports both families of metric \citep{Moriasi2007,Bennett2013}.
+
+
+%==========================================================
+\section{End-to-end workflow from question to decision}
+\label{sec:workflow}
+To make the traceability concrete, one decision is followed through the software, naming at each step the equation that produces the displayed quantity and the test that supports it.
+\begin{enumerate}[label=\textbf{Step \arabic*.}]
+\item \textbf{Choose the soil and crop setting.} The soil sets $(\alpha,n)$ and the baseline vector $\mathbf b$ (\cref{tab:soilsP3}, E5). \emph{Support.} class means of \citet{Carsel1988}; the baseline is Data-driven.
+\item \textbf{Set the trigger and sensor depth.} The trigger suction $h_T$ is converted to a depletion fraction by \cref{eq:depl}. \emph{Support.} FAO convention \citep{Allen1998}; the inverse is a monotone bisection.
+\item \textbf{Read the annual consequences.} Engine~1 returns $E,T,\mathit{ET},I,Y,D,N_L$ by \cref{eq:E1E,eq:E1T,eq:E1ET,eq:E1I,eq:E1Y,eq:E1D,eq:E1N,eq:corr}. \emph{Support.} held-out test (\cref{tab:e1}); the interface should be read as a ranking of options, and absolute yield is not to be used.
+\item \textbf{Inspect the seasonal timing.} Engine~2 produces dates and doses with \cref{eq:rain,eq:interc,eq:transp,eq:scale}. \emph{Support.} mass closure and annual agreement (Section~\ref{sec:e2}); timing within the year is plausible but unverified.
+\item \textbf{Select an application method.} The surface, drip or sprinkler layer is opened with the soil, depth and trigger carried over. \emph{Support.} \cref{tab:ws,tab:border,tab:drip}.
+\item \textbf{Read the design check.} Closure identities (\cref{eq:effclose}) are printed; a warning when a layer is outside its tested range (for example, a drip loss ratio above $0.2$) is a recommended addition and is not implemented in the tested version.
+\item \textbf{Record.} The configuration and the equation numbers (manual) allow the decision to be reconstructed by hand.
+\end{enumerate}
+This chain is deliberately shallow: each displayed number is at most three function calls from its equation, so a reader can reproduce a value with a calculator.
+
+A user comparing two triggers for coarse loam can conclude, with the rank fidelity reported, which uses less irrigation and by roughly how much \emph{relative} to the other; they should not quote the absolute millimetres as a field requirement. A user designing a furrow can use the volume-balance outputs as a textbook calculation. A user designing a sprinkler layout should treat the wetted radius as conservative by roughly 14\,\% for the tested nozzle and check the manufacturer's tables. A user designing a long drip lateral should verify that the head loss does not exceed 20\,\% of the inlet head.
+

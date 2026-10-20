@@ -1,0 +1,63 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{amsmath,amssymb,bm,mathtools}
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Termes}
+\setsansfont{TeX Gyre Heros}
+\setmonofont{Latin Modern Mono}[Scale=0.9]
+\usepackage{graphicx,float,caption,subcaption,booktabs,longtable,array,multirow,tabularx}
+\usepackage{xcolor}
+\usepackage{setspace}
+\usepackage{lineno}
+\usepackage{microtype}
+\usepackage{xurl}
+\usepackage{siunitx}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\titleformat{\paragraph}[runin]{\normalfont\itshape}{}{0pt}{}
+\titlespacing*{\paragraph}{0pt}{1.1ex plus .2ex}{0.7em}
+\usepackage[authoryear,round,semicolon,sort&compress]{natbib}
+\definecolor{lk}{RGB}{0,70,140}
+\usepackage[colorlinks=true,linkcolor=lk,citecolor=lk,urlcolor=lk,breaklinks=true,pdfborder={0 0 0}]{hyperref}
+\usepackage[nameinlink,capitalise]{cleveref}
+\sisetup{detect-all,separate-uncertainty=false}
+\setstretch{1.5}
+\setlength{\parskip}{3pt}
+\captionsetup{font=small,labelfont=bf,justification=centering,singlelinecheck=true}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}{\normalsize\itshape}{\thesubsubsection}{0.5em}{}
+\pagestyle{fancy}\fancyhf{}\fancyfoot[C]{\small\thepage}\renewcommand{\headrulewidth}{0pt}
+\setlength{\headheight}{14pt}
+\bibliographystyle{plainnathl}
+\newcommand{\doihl}[1]{doi: \href{https://doi.org/#1}{\nolinkurl{#1}}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\ET}{\mathit{ET}}
+\newcommand{\Ent}{\mathit{ET}_{\mathrm{nt}}}
+\newcommand{\Ks}{K_{\mathrm{s}}}
+\newcommand{\Se}{S_{\mathrm{e}}}
+\newcommand{\TAW}{\mathit{TAW}}
+\newcommand{\repourl}{https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops}
+\newcommand{\repo}{\href{\repourl}{repository}}
+\newcommand{\datalink}{\href{\repourl}{Data}}
+\newcommand{\codelink}{\href{\repourl/tree/main/Manuscripts}{Code}}
+\newcommand{\softlink}{\href{\repourl/tree/main/Software/SWAFL_Desktop}{Software}}
+\newcommand{\manuallink}{\href{\manualurl}{Manual}}
+\newcommand{\downloadlink}{\href{\exeurl}{SWAFL.exe}}
+\newcommand{\figdir}{../figures}
+\newcommand{\manualurl}{https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/blob/main/Software/SWAFL_Desktop/docs/SWAFL_Manual.pdf}
+\newcommand{\exeurl}{https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases/latest/download/SWAFL.exe}
+\newcommand{\authorblock}{%
+\begin{center}
+{\large\textbf{Naziru Halilu}}$^{1,2,*}$\\[3pt]
+{\small $^{1}$ Agricultural University of Athens, Athens, Greece\\
+$^{2}$ Public University of Navarre, Pamplona, Spain\\
+ORCID: \href{https://orcid.org/0009-0006-2324-9599}{0009-0006-2324-9599}\\
+$^{*}$ Correspondence: \href{mailto:halilunaziru73@gmail.com}{halilunaziru73@gmail.com}}
+\end{center}}
+\newcommand{\codeavail}{%
+\datalink{} (the complete Daisy ensemble outputs), \codelink{} (analysis and figure scripts) and \softlink{} (the SWAFL Desktop source) are in the project repository; the \manuallink{} (93 pages) can be reviewed or downloaded as a PDF. The dataset (all 10\,190 runs, raw and derived) is archived on Zenodo, \doihl{10.5281/zenodo.23043626}, and the ensemble table used here is also stored in the repository as \texttt{Manuscripts/reproducibility/data/daisy\_ensemble.csv.gz}. The folder \texttt{Manuscripts/reproducibility} is a self-contained package: pinned software versions (Python 3.13.16, NumPy 2.5.3, SciPy 1.18.1, pandas 3.0.5, scikit-learn 1.9.1, Matplotlib 3.11.2, Node.js 22.22.0), fixed random seeds in every stochastic step, SHA-256 checksums, and one command (\texttt{run\_all.sh}) that regenerates all results and figures from the ensemble and then compares every regenerated value with the archived result and with the headline numbers printed in the manuscripts. Each table and figure names the script that produced it (Appendix~\ref{app:repro}). Daisy itself was not re-run for this package, no field measurements are used, and three small intermediate arrays and the interface screenshots are archived rather than regenerated; these limits are listed in \texttt{README\_REPRODUCE.md}.}
+
+\usepackage{pdflscape}
+\setlength{\emergencystretch}{3em}

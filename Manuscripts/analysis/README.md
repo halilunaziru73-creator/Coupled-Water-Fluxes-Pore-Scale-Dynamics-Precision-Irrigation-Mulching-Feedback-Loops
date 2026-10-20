@@ -1,0 +1,1 @@
+The analysis and figure scripts now live in `../reproducibility/analysis/` (path-independent, with fixed seeds), together with the data, the run-all script and the checks. See `../reproducibility/README_REPRODUCE.md`.

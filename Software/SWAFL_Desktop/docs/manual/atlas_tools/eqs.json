@@ -1,0 +1,1390 @@
+{
+ "4.1": {
+  "file": "04_dates.md",
+  "h2": "The date control",
+  "h3": "",
+  "body": "k_{\\mathrm{start}} = 365\\,a + d_{\\mathrm{oy}}, \\qquad\n\\text{date}(k) = \\text{1 Jan of year } \\bigl(Y_0 + \\lfloor k/365\\rfloor - a\\bigr) + \\bigl(k - 365\\lfloor k/365\\rfloor\\bigr)\\ \\text{days},\n\\tag{4.1}",
+  "prov": "*Provenance (Eq. 4.1):* **[Engineered]**: calendar bookkeeping and choice of analogue year; no physical law.",
+  "group": [
+   "4.1"
+  ]
+ },
+ "4.2": {
+  "file": "04_dates.md",
+  "h2": "The date control",
+  "h3": "",
+  "body": "a = \\begin{cases}\n\\mathrm{argsort}_y\\,(P_{\\mathrm{thr},y})_{[10]} & \\text{typical (median, 11th smallest of 20)}\\\\\n\\arg\\min_y P_{\\mathrm{thr},y} & \\text{dry}\\\\\n\\arg\\max_y P_{\\mathrm{thr},y} & \\text{wet}\\\\\nY_0 - 1980 & 1980\\le Y_0\\le 1999\n\\end{cases}\n\\tag{4.2}",
+  "prov": "*Provenance (Eq. 4.2):* **[Engineered]**: calendar bookkeeping and choice of analogue year; no physical law.",
+  "group": [
+   "4.2"
+  ]
+ },
+ "5.1": {
+  "file": "05_engine.md",
+  "h2": "Engine 1 \u2014 the Daisy simulations and the meta-model",
+  "h3": "The simulation campaign",
+  "body": "S_e(h) = \\Bigl[\\,1 + (\\alpha |h|)^{n}\\Bigr]^{-m},\\quad m = 1 - \\tfrac{1}{n}, \\qquad\n\\theta(h) = \\theta_r + (\\theta_s - \\theta_r)\\,S_e(h)\n\\tag{5.1}",
+  "prov": "*Provenance (Eq. 5.1):* **[Literature]**: van Genuchten (1980).",
+  "group": [
+   "5.1"
+  ]
+ },
+ "5.2": {
+  "file": "05_engine.md",
+  "h2": "Engine 1 \u2014 the Daisy simulations and the meta-model",
+  "h3": "The simulation campaign",
+  "body": "K_r(S_e) = S_e^{\\,1/2}\\Bigl[\\,1 - \\bigl(1 - S_e^{\\,1/m}\\bigr)^{m}\\Bigr]^{2}.\n\\tag{5.2}",
+  "prov": "*Provenance (Eq. 5.2):* **[Literature]**: Mualem (1976) with van Genuchten (1980).",
+  "group": [
+   "5.2"
+  ]
+ },
+ "5.3": {
+  "file": "05_engine.md",
+  "h2": "Engine 1 \u2014 the Daisy simulations and the meta-model",
+  "h3": "Plant-available water and depletion",
+  "body": "f(h) \\;=\\; \\frac{S_e(100) - S_e(|h|)}{S_e(100) - S_e(15\\,849)},\n\\qquad f_{\\mathrm{used}} = \\min\\{1,\\max\\{0, f\\}\\}.\n\\tag{5.3}",
+  "prov": "*Provenance (Eq. 5.3):* **[Literature]**: standard definition of plant-available water between field capacity and wilting point.",
+  "group": [
+   "5.3"
+  ]
+ },
+ "5.4": {
+  "file": "05_engine.md",
+  "h2": "Engine 1 \u2014 the Daisy simulations and the meta-model",
+  "h3": "The meta-model",
+  "body": "\\begin{aligned}\nE &= \\bar E(\\mathrm{soil},\\varphi,c)\\ \\Bigl[\\tfrac{\\mathrm{now}.E}{\\mathrm{ref}.E}\\Bigr]\\Bigl[\\tfrac{\\mathrm{tN}.E}{\\mathrm{tB}.E}\\Bigr]\\Bigl[\\tfrac{E_b}{E_{b,\\mathrm{ref}}}\\Bigr] &&(5.4)\\\\\nT &= T_b\\ \\Bigl[\\tfrac{\\mathrm{now}.T}{\\mathrm{bare}.T}\\Bigr]\\ \\mathrm{clip}\\Bigl(\\tfrac{\\mathrm{tN}.T}{\\mathrm{tB}.T};\\,0.3,\\,2.5\\Bigr) &&(5.5)\\\\\nET &= ET_b\\ \\Bigl[\\tfrac{\\mathrm{now}.ET}{\\mathrm{bare}.ET}\\Bigr]\\ \\mathrm{clip}\\Bigl(\\tfrac{\\mathrm{tN}.ET}{\\mathrm{tB}.ET};\\,0.5,\\,2\\Bigr) &&(5.6)\\\\\nI &= I_b\\ \\Bigl[\\tfrac{\\mathrm{now}.I}{\\mathrm{bare}.I}\\Bigr]\\ \\mathrm{clip}\\Bigl(\\tfrac{\\mathrm{tN}.I}{\\mathrm{tB}.I};\\,0.4,\\,2.5\\Bigr) &&(5.7)\\\\\nY &= Y_b\\ \\Bigl[\\tfrac{\\mathrm{tN}.Y}{\\mathrm{tR}.Y}\\Bigr]\\Bigl[\\tfrac{\\mathrm{now}.Y}{\\mathrm{nm}.Y}\\Bigr] &&(5.8)\\\\\nD &= D_b + (\\mathrm{now}.D-\\mathrm{bare}.D) + (\\mathrm{tN}.D-\\mathrm{tB}.D) &&(5.9)\\\\\nN_L &= N_b + (\\mathrm{now}.N-\\mathrm{bare}.N) + (\\mathrm{tN}.N-\\mathrm{tB}.N) &&(5.10)\n\\end{aligned}",
+  "prov": "*Provenance (Eq. 5.4--5.10):* **[Data-driven]**: ratios of Daisy ensemble results (run sets E2--E14); the clip bounds are engineered limits.",
+  "group": [
+   "5.4",
+   "5.5",
+   "5.6",
+   "5.7",
+   "5.8",
+   "5.9",
+   "5.10"
+  ]
+ },
+ "5.5": {
+  "file": "05_engine.md",
+  "h2": "Engine 1 \u2014 the Daisy simulations and the meta-model",
+  "h3": "The meta-model",
+  "body": "\\begin{aligned}\nE &= \\bar E(\\mathrm{soil},\\varphi,c)\\ \\Bigl[\\tfrac{\\mathrm{now}.E}{\\mathrm{ref}.E}\\Bigr]\\Bigl[\\tfrac{\\mathrm{tN}.E}{\\mathrm{tB}.E}\\Bigr]\\Bigl[\\tfrac{E_b}{E_{b,\\mathrm{ref}}}\\Bigr] &&(5.4)\\\\\nT &= T_b\\ \\Bigl[\\tfrac{\\mathrm{now}.T}{\\mathrm{bare}.T}\\Bigr]\\ \\mathrm{clip}\\Bigl(\\tfrac{\\mathrm{tN}.T}{\\mathrm{tB}.T};\\,0.3,\\,2.5\\Bigr) &&(5.5)\\\\\nET &= ET_b\\ \\Bigl[\\tfrac{\\mathrm{now}.ET}{\\mathrm{bare}.ET}\\Bigr]\\ \\mathrm{clip}\\Bigl(\\tfrac{\\mathrm{tN}.ET}{\\mathrm{tB}.ET};\\,0.5,\\,2\\Bigr) &&(5.6)\\\\\nI &= I_b\\ \\Bigl[\\tfrac{\\mathrm{now}.I}{\\mathrm{bare}.I}\\Bigr]\\ \\mathrm{clip}\\Bigl(\\tfrac{\\mathrm{tN}.I}{\\mathrm{tB}.I};\\,0.4,\\,2.5\\Bigr) &&(5.7)\\\\\nY &= Y_b\\ \\Bigl[\\tfrac{\\mathrm{tN}.Y}{\\mathrm{tR}.Y}\\Bigr]\\Bigl[\\tfrac{\\mathrm{now}.Y}{\\mathrm{nm}.Y}\\Bigr] &&(5.8)\\\\\nD &= D_b + (\\mathrm{now}.D-\\mathrm{bare}.D) + (\\mathrm{tN}.D-\\mathrm{tB}.D) &&(5.9)\\\\\nN_L &= N_b + (\\mathrm{now}.N-\\mathrm{bare}.N) + (\\mathrm{tN}.N-\\mathrm{tB}.N) &&(5.10)\n\\end{aligned}",
+  "prov": "*Provenance (Eq. 5.4--5.10):* **[Data-driven]**: ratios of Daisy ensemble results (run sets E2--E14); the clip bounds are engineered limits.",
+  "group": [
+   "5.4",
+   "5.5",
+   "5.6",
+   "5.7",
+   "5.8",
+   "5.9",
+   "5.10"
+  ]
+ },
+ "5.6": {
+  "file": "05_engine.md",
+  "h2": "Engine 1 \u2014 the Daisy simulations and the meta-model",
+  "h3": "The meta-model",
+  "body": "\\begin{aligned}\nE &= \\bar E(\\mathrm{soil},\\varphi,c)\\ \\Bigl[\\tfrac{\\mathrm{now}.E}{\\mathrm{ref}.E}\\Bigr]\\Bigl[\\tfrac{\\mathrm{tN}.E}{\\mathrm{tB}.E}\\Bigr]\\Bigl[\\tfrac{E_b}{E_{b,\\mathrm{ref}}}\\Bigr] &&(5.4)\\\\\nT &= T_b\\ \\Bigl[\\tfrac{\\mathrm{now}.T}{\\mathrm{bare}.T}\\Bigr]\\ \\mathrm{clip}\\Bigl(\\tfrac{\\mathrm{tN}.T}{\\mathrm{tB}.T};\\,0.3,\\,2.5\\Bigr) &&(5.5)\\\\\nET &= ET_b\\ \\Bigl[\\tfrac{\\mathrm{now}.ET}{\\mathrm{bare}.ET}\\Bigr]\\ \\mathrm{clip}\\Bigl(\\tfrac{\\mathrm{tN}.ET}{\\mathrm{tB}.ET};\\,0.5,\\,2\\Bigr) &&(5.6)\\\\\nI &= I_b\\ \\Bigl[\\tfrac{\\mathrm{now}.I}{\\mathrm{bare}.I}\\Bigr]\\ \\mathrm{clip}\\Bigl(\\tfrac{\\mathrm{tN}.I}{\\mathrm{tB}.I};\\,0.4,\\,2.5\\Bigr) &&(5.7)\\\\\nY &= Y_b\\ \\Bigl[\\tfrac{\\mathrm{tN}.Y}{\\mathrm{tR}.Y}\\Bigr]\\Bigl[\\tfrac{\\mathrm{now}.Y}{\\mathrm{nm}.Y}\\Bigr] &&(5.8)\\\\\nD &= D_b + (\\mathrm{now}.D-\\mathrm{bare}.D) + (\\mathrm{tN}.D-\\mathrm{tB}.D) &&(5.9)\\\\\nN_L &= N_b + (\\mathrm{now}.N-\\mathrm{bare}.N) + (\\mathrm{tN}.N-\\mathrm{tB}.N) &&(5.10)\n\\end{aligned}",
+  "prov": "*Provenance (Eq. 5.4--5.10):* **[Data-driven]**: ratios of Daisy ensemble results (run sets E2--E14); the clip bounds are engineered limits.",
+  "group": [
+   "5.4",
+   "5.5",
+   "5.6",
+   "5.7",
+   "5.8",
+   "5.9",
+   "5.10"
+  ]
+ },
+ "5.7": {
+  "file": "05_engine.md",
+  "h2": "Engine 1 \u2014 the Daisy simulations and the meta-model",
+  "h3": "The meta-model",
+  "body": "\\begin{aligned}\nE &= \\bar E(\\mathrm{soil},\\varphi,c)\\ \\Bigl[\\tfrac{\\mathrm{now}.E}{\\mathrm{ref}.E}\\Bigr]\\Bigl[\\tfrac{\\mathrm{tN}.E}{\\mathrm{tB}.E}\\Bigr]\\Bigl[\\tfrac{E_b}{E_{b,\\mathrm{ref}}}\\Bigr] &&(5.4)\\\\\nT &= T_b\\ \\Bigl[\\tfrac{\\mathrm{now}.T}{\\mathrm{bare}.T}\\Bigr]\\ \\mathrm{clip}\\Bigl(\\tfrac{\\mathrm{tN}.T}{\\mathrm{tB}.T};\\,0.3,\\,2.5\\Bigr) &&(5.5)\\\\\nET &= ET_b\\ \\Bigl[\\tfrac{\\mathrm{now}.ET}{\\mathrm{bare}.ET}\\Bigr]\\ \\mathrm{clip}\\Bigl(\\tfrac{\\mathrm{tN}.ET}{\\mathrm{tB}.ET};\\,0.5,\\,2\\Bigr) &&(5.6)\\\\\nI &= I_b\\ \\Bigl[\\tfrac{\\mathrm{now}.I}{\\mathrm{bare}.I}\\Bigr]\\ \\mathrm{clip}\\Bigl(\\tfrac{\\mathrm{tN}.I}{\\mathrm{tB}.I};\\,0.4,\\,2.5\\Bigr) &&(5.7)\\\\\nY &= Y_b\\ \\Bigl[\\tfrac{\\mathrm{tN}.Y}{\\mathrm{tR}.Y}\\Bigr]\\Bigl[\\tfrac{\\mathrm{now}.Y}{\\mathrm{nm}.Y}\\Bigr] &&(5.8)\\\\\nD &= D_b + (\\mathrm{now}.D-\\mathrm{bare}.D) + (\\mathrm{tN}.D-\\mathrm{tB}.D) &&(5.9)\\\\\nN_L &= N_b + (\\mathrm{now}.N-\\mathrm{bare}.N) + (\\mathrm{tN}.N-\\mathrm{tB}.N) &&(5.10)\n\\end{aligned}",
+  "prov": "*Provenance (Eq. 5.4--5.10):* **[Data-driven]**: ratios of Daisy ensemble results (run sets E2--E14); the clip bounds are engineered limits.",
+  "group": [
+   "5.4",
+   "5.5",
+   "5.6",
+   "5.7",
+   "5.8",
+   "5.9",
+   "5.10"
+  ]
+ },
+ "5.8": {
+  "file": "05_engine.md",
+  "h2": "Engine 1 \u2014 the Daisy simulations and the meta-model",
+  "h3": "The meta-model",
+  "body": "\\begin{aligned}\nE &= \\bar E(\\mathrm{soil},\\varphi,c)\\ \\Bigl[\\tfrac{\\mathrm{now}.E}{\\mathrm{ref}.E}\\Bigr]\\Bigl[\\tfrac{\\mathrm{tN}.E}{\\mathrm{tB}.E}\\Bigr]\\Bigl[\\tfrac{E_b}{E_{b,\\mathrm{ref}}}\\Bigr] &&(5.4)\\\\\nT &= T_b\\ \\Bigl[\\tfrac{\\mathrm{now}.T}{\\mathrm{bare}.T}\\Bigr]\\ \\mathrm{clip}\\Bigl(\\tfrac{\\mathrm{tN}.T}{\\mathrm{tB}.T};\\,0.3,\\,2.5\\Bigr) &&(5.5)\\\\\nET &= ET_b\\ \\Bigl[\\tfrac{\\mathrm{now}.ET}{\\mathrm{bare}.ET}\\Bigr]\\ \\mathrm{clip}\\Bigl(\\tfrac{\\mathrm{tN}.ET}{\\mathrm{tB}.ET};\\,0.5,\\,2\\Bigr) &&(5.6)\\\\\nI &= I_b\\ \\Bigl[\\tfrac{\\mathrm{now}.I}{\\mathrm{bare}.I}\\Bigr]\\ \\mathrm{clip}\\Bigl(\\tfrac{\\mathrm{tN}.I}{\\mathrm{tB}.I};\\,0.4,\\,2.5\\Bigr) &&(5.7)\\\\\nY &= Y_b\\ \\Bigl[\\tfrac{\\mathrm{tN}.Y}{\\mathrm{tR}.Y}\\Bigr]\\Bigl[\\tfrac{\\mathrm{now}.Y}{\\mathrm{nm}.Y}\\Bigr] &&(5.8)\\\\\nD &= D_b + (\\mathrm{now}.D-\\mathrm{bare}.D) + (\\mathrm{tN}.D-\\mathrm{tB}.D) &&(5.9)\\\\\nN_L &= N_b + (\\mathrm{now}.N-\\mathrm{bare}.N) + (\\mathrm{tN}.N-\\mathrm{tB}.N) &&(5.10)\n\\end{aligned}",
+  "prov": "*Provenance (Eq. 5.4--5.10):* **[Data-driven]**: ratios of Daisy ensemble results (run sets E2--E14); the clip bounds are engineered limits.",
+  "group": [
+   "5.4",
+   "5.5",
+   "5.6",
+   "5.7",
+   "5.8",
+   "5.9",
+   "5.10"
+  ]
+ },
+ "5.9": {
+  "file": "05_engine.md",
+  "h2": "Engine 1 \u2014 the Daisy simulations and the meta-model",
+  "h3": "The meta-model",
+  "body": "\\begin{aligned}\nE &= \\bar E(\\mathrm{soil},\\varphi,c)\\ \\Bigl[\\tfrac{\\mathrm{now}.E}{\\mathrm{ref}.E}\\Bigr]\\Bigl[\\tfrac{\\mathrm{tN}.E}{\\mathrm{tB}.E}\\Bigr]\\Bigl[\\tfrac{E_b}{E_{b,\\mathrm{ref}}}\\Bigr] &&(5.4)\\\\\nT &= T_b\\ \\Bigl[\\tfrac{\\mathrm{now}.T}{\\mathrm{bare}.T}\\Bigr]\\ \\mathrm{clip}\\Bigl(\\tfrac{\\mathrm{tN}.T}{\\mathrm{tB}.T};\\,0.3,\\,2.5\\Bigr) &&(5.5)\\\\\nET &= ET_b\\ \\Bigl[\\tfrac{\\mathrm{now}.ET}{\\mathrm{bare}.ET}\\Bigr]\\ \\mathrm{clip}\\Bigl(\\tfrac{\\mathrm{tN}.ET}{\\mathrm{tB}.ET};\\,0.5,\\,2\\Bigr) &&(5.6)\\\\\nI &= I_b\\ \\Bigl[\\tfrac{\\mathrm{now}.I}{\\mathrm{bare}.I}\\Bigr]\\ \\mathrm{clip}\\Bigl(\\tfrac{\\mathrm{tN}.I}{\\mathrm{tB}.I};\\,0.4,\\,2.5\\Bigr) &&(5.7)\\\\\nY &= Y_b\\ \\Bigl[\\tfrac{\\mathrm{tN}.Y}{\\mathrm{tR}.Y}\\Bigr]\\Bigl[\\tfrac{\\mathrm{now}.Y}{\\mathrm{nm}.Y}\\Bigr] &&(5.8)\\\\\nD &= D_b + (\\mathrm{now}.D-\\mathrm{bare}.D) + (\\mathrm{tN}.D-\\mathrm{tB}.D) &&(5.9)\\\\\nN_L &= N_b + (\\mathrm{now}.N-\\mathrm{bare}.N) + (\\mathrm{tN}.N-\\mathrm{tB}.N) &&(5.10)\n\\end{aligned}",
+  "prov": "*Provenance (Eq. 5.4--5.10):* **[Data-driven]**: ratios of Daisy ensemble results (run sets E2--E14); the clip bounds are engineered limits.",
+  "group": [
+   "5.4",
+   "5.5",
+   "5.6",
+   "5.7",
+   "5.8",
+   "5.9",
+   "5.10"
+  ]
+ },
+ "5.10": {
+  "file": "05_engine.md",
+  "h2": "Engine 1 \u2014 the Daisy simulations and the meta-model",
+  "h3": "The meta-model",
+  "body": "\\begin{aligned}\nE &= \\bar E(\\mathrm{soil},\\varphi,c)\\ \\Bigl[\\tfrac{\\mathrm{now}.E}{\\mathrm{ref}.E}\\Bigr]\\Bigl[\\tfrac{\\mathrm{tN}.E}{\\mathrm{tB}.E}\\Bigr]\\Bigl[\\tfrac{E_b}{E_{b,\\mathrm{ref}}}\\Bigr] &&(5.4)\\\\\nT &= T_b\\ \\Bigl[\\tfrac{\\mathrm{now}.T}{\\mathrm{bare}.T}\\Bigr]\\ \\mathrm{clip}\\Bigl(\\tfrac{\\mathrm{tN}.T}{\\mathrm{tB}.T};\\,0.3,\\,2.5\\Bigr) &&(5.5)\\\\\nET &= ET_b\\ \\Bigl[\\tfrac{\\mathrm{now}.ET}{\\mathrm{bare}.ET}\\Bigr]\\ \\mathrm{clip}\\Bigl(\\tfrac{\\mathrm{tN}.ET}{\\mathrm{tB}.ET};\\,0.5,\\,2\\Bigr) &&(5.6)\\\\\nI &= I_b\\ \\Bigl[\\tfrac{\\mathrm{now}.I}{\\mathrm{bare}.I}\\Bigr]\\ \\mathrm{clip}\\Bigl(\\tfrac{\\mathrm{tN}.I}{\\mathrm{tB}.I};\\,0.4,\\,2.5\\Bigr) &&(5.7)\\\\\nY &= Y_b\\ \\Bigl[\\tfrac{\\mathrm{tN}.Y}{\\mathrm{tR}.Y}\\Bigr]\\Bigl[\\tfrac{\\mathrm{now}.Y}{\\mathrm{nm}.Y}\\Bigr] &&(5.8)\\\\\nD &= D_b + (\\mathrm{now}.D-\\mathrm{bare}.D) + (\\mathrm{tN}.D-\\mathrm{tB}.D) &&(5.9)\\\\\nN_L &= N_b + (\\mathrm{now}.N-\\mathrm{bare}.N) + (\\mathrm{tN}.N-\\mathrm{tB}.N) &&(5.10)\n\\end{aligned}",
+  "prov": "*Provenance (Eq. 5.4--5.10):* **[Data-driven]**: ratios of Daisy ensemble results (run sets E2--E14); the clip bounds are engineered limits.",
+  "group": [
+   "5.4",
+   "5.5",
+   "5.6",
+   "5.7",
+   "5.8",
+   "5.9",
+   "5.10"
+  ]
+ },
+ "5.11": {
+  "file": "05_engine.md",
+  "h2": "Engine 1 \u2014 the Daisy simulations and the meta-model",
+  "h3": "The meta-model",
+  "body": "Q \\leftarrow Q\\ \\mathrm{clip}\\Bigl(\\tfrac{r_\\kappa.Q}{r_{\\kappa_0}.Q};\\,0.05,\\,6\\Bigr)\\ \\ (Q\\in\\{E,T,ET,I,Y\\}),\\qquad\nD \\leftarrow D + (r_\\kappa.D - r_{\\kappa_0}.D),\\quad N_L \\leftarrow N_L + (r_\\kappa.N - r_{\\kappa_0}.N).\n\\tag{5.11}",
+  "prov": "*Provenance (Eq. 5.11):* **[Data-driven]**: set-specific corrections from the Daisy run sets; clip bounds engineered.",
+  "group": [
+   "5.11"
+  ]
+ },
+ "5.12": {
+  "file": "05_engine.md",
+  "h2": "Engine 1 \u2014 the Daisy simulations and the meta-model",
+  "h3": "The meta-model",
+  "body": "\\begin{gathered}\nET \\in [\\,P + I - D - 30,\\ P + I - D + 15\\,]\\ \\text{(if not, } ET\\ \\text{is clipped and } E, T \\text{ are scaled by the same factor)},\\\\\nE_{\\mathrm{other}} = \\max(0,\\ ET - T - E),\\qquad \\Delta S = P + I - ET - D,\\qquad\n\\mathrm{IE} = \\frac{100\\,Y}{I}\\ \\ [\\mathrm{kg\\ m^{-3}}].\n\\end{gathered}\n\\tag{5.12}",
+  "prov": "*Provenance (Eq. 5.12):* **[Engineered]**: closure constraint and bounds chosen for the workbench.",
+  "group": [
+   "5.12"
+  ]
+ },
+ "5.13": {
+  "file": "05_engine.md",
+  "h2": "Engine 2 \u2014 the daily bucket model",
+  "h3": "Crop calendar and canopy cover",
+  "body": "c_{\\text{spring}}(d) = \\frac{1}{1 + \\exp\\bigl(-(d - d_{\\mathrm{mid}})/s\\bigr)},\\quad s = 13\\ (\\text{vegetable } 8),\n\\tag{5.13}",
+  "prov": "*Provenance (Eq. 5.13):* **[Engineered]**: canopy curves, parameters chosen for the workbench; not a measured leaf-area record.",
+  "group": [
+   "5.13"
+  ]
+ },
+ "5.14": {
+  "file": "05_engine.md",
+  "h2": "Engine 2 \u2014 the daily bucket model",
+  "h3": "Crop calendar and canopy cover",
+  "body": "c_{\\text{winter}}(d) = \\begin{cases}0.08 + 0.12\\,\\min\\{1,(d-d_{\\mathrm{sow}})/60\\} & d < d_{\\mathrm{pk}} - 90\\\\[2pt] 0.2 + \\dfrac{0.8}{1 + \\exp\\bigl(-(d - d_{\\mathrm{pk}} + 45)/12\\bigr)} & \\text{otherwise}\\end{cases}\n\\tag{5.14}",
+  "prov": "*Provenance (Eq. 5.14):* **[Engineered]**: canopy curves, parameters chosen for the workbench; not a measured leaf-area record.",
+  "group": [
+   "5.14"
+  ]
+ },
+ "5.15": {
+  "file": "05_engine.md",
+  "h2": "Engine 2 \u2014 the daily bucket model",
+  "h3": "Rainfall generator",
+  "body": "R = \\min\\bigl\\{70,\\ \\mu_0\\,\\gamma_y\\,(-\\ln U)\\bigr\\},\\qquad U\\sim\\mathrm{Uniform}(0,1),\n\\tag{5.15}",
+  "prov": "*Provenance (Eq. 5.15):* **[Engineered]**: stochastic rain and interception generator; the exponential wet-day depth is a standard weather-generator form, the constants are chosen.",
+  "group": [
+   "5.15"
+  ]
+ },
+ "5.16": {
+  "file": "05_engine.md",
+  "h2": "Engine 2 \u2014 the daily bucket model",
+  "h3": "Rainfall generator",
+  "body": "I_c = \\mu_0 \\ln\\!\\frac{1}{r},\\qquad r = \\frac{\\max\\{40,\\ P - P_{\\mathrm{other}}\\}}{P},\n\\qquad T_f = \\max\\{0,\\,R - I_c\\}.\n\\tag{5.16}",
+  "prov": "*Provenance (Eq. 5.16):* **[Engineered]**: stochastic rain and interception generator; the exponential wet-day depth is a standard weather-generator form, the constants are chosen.",
+  "group": [
+   "5.16"
+  ]
+ },
+ "5.17": {
+  "file": "05_engine.md",
+  "h2": "Engine 2 \u2014 the daily bucket model",
+  "h3": "Infiltration, redistribution and drainage",
+  "body": "q_{i} = 0.08\\,(w_{i+1} - w_i),\\qquad w_i \\leftarrow w_i + q_i,\\ \\ w_{i+1}\\leftarrow w_{i+1} - q_i,\n\\tag{5.17}",
+  "prov": "*Provenance (Eq. 5.17):* **[Engineered]**: tipping-bucket redistribution with a chosen coefficient.",
+  "group": [
+   "5.17"
+  ]
+ },
+ "5.18": {
+  "file": "05_engine.md",
+  "h2": "Engine 2 \u2014 the daily bucket model",
+  "h3": "Roots",
+  "body": "R_{\\max} = \\mathrm{clip}\\Bigl(R_{c}\\,(0.85 + 0.3\\,\\mathrm{sand})\\bigl[1 + 0.12\\log_{10}(|h_T|/300)\\bigr]\\bigl[1 - 0.18\\,\\tfrac{N-100}{100}\\bigr];\\ 25,\\ 100\\Bigr)\\ \\mathrm{cm},\n\\tag{5.18}",
+  "prov": "*Provenance (Eq. 5.18):* **[Engineered]**: rooting rules with constants chosen for the workbench.",
+  "group": [
+   "5.18"
+  ]
+ },
+ "5.19": {
+  "file": "05_engine.md",
+  "h2": "Engine 2 \u2014 the daily bucket model",
+  "h3": "Roots",
+  "body": "R_d \\leftarrow \\max\\Bigl\\{R_d,\\ \\min\\bigl\\{R_{\\max}\\,\\mathrm{clip}\\bigl(\\tfrac{c-0.04}{0.96};0,1\\bigr)^{0.8},\\ R_{\\max},\\ R_d + 1.7\\,(0.35 + \\bar s_{\\mathrm{wet}})\\,\\kappa\\bigr\\}\\Bigr\\},\n\\tag{5.19}",
+  "prov": "*Provenance (Eq. 5.19):* **[Engineered]**: rooting rules with constants chosen for the workbench.",
+  "group": [
+   "5.19"
+  ]
+ },
+ "5.20": {
+  "file": "05_engine.md",
+  "h2": "Engine 2 \u2014 the daily bucket model",
+  "h3": "Roots",
+  "body": "\\rho_i \\propto \\exp\\!\\Bigl(-\\frac{z_i}{\\lambda R_d + 8}\\Bigr)\\bigl(0.45 + 0.9\\,s_i\\bigr)\\Bigl[1 + 3\\,e^{-((z_i - z_d)/12)^2}\\Bigr]_{\\text{drip only}},\\quad z_i\\le R_d,\\qquad \\sum_i \\rho_i = 1,\n\\tag{5.20}",
+  "prov": "*Provenance (Eq. 5.20):* **[Engineered]**: rooting rules with constants chosen for the workbench.",
+  "group": [
+   "5.20"
+  ]
+ },
+ "5.21": {
+  "file": "05_engine.md",
+  "h2": "Engine 2 \u2014 the daily bucket model",
+  "h3": "Transpiration, evaporation",
+  "body": "E_d = E_{\\mathrm{yr}}\\,\\frac{w(\\mathrm{doy})}{\\sum_{k=0}^{364} w(k)}\\,(1 - 0.3\\,c),\\qquad w(\\mathrm{doy}) = 0.35 + 0.65\\cdot\\tfrac12\\Bigl[1 + \\sin\\tfrac{2\\pi(\\mathrm{doy} - 100)}{365}\\Bigr],\n\\tag{5.21}",
+  "prov": "*Provenance (Eq. 5.21):* **[Engineered]**: demand partitioning with chosen weights and a calibration factor.",
+  "group": [
+   "5.21"
+  ]
+ },
+ "5.22": {
+  "file": "05_engine.md",
+  "h2": "Engine 2 \u2014 the daily bucket model",
+  "h3": "Transpiration, evaporation",
+  "body": "T_d = k_t\\,T_{\\mathrm{yr}}\\,\\frac{c(d)}{\\bar C},\\qquad \\bar C = \\tfrac{1}{20}\\sum_{\\text{20 yr}} c,\n\\tag{5.22}",
+  "prov": "*Provenance (Eq. 5.22):* **[Engineered]**: demand partitioning with chosen weights and a calibration factor.",
+  "group": [
+   "5.22"
+  ]
+ },
+ "5.23": {
+  "file": "05_engine.md",
+  "h2": "Engine 2 \u2014 the daily bucket model",
+  "h3": "Transpiration, evaporation",
+  "body": "q^{T}_i = T_d\\,\\frac{\\rho_i\\,a_i}{\\sum_j \\rho_j a_j},\\qquad a_i = \\mathrm{clip}\\Bigl(\\frac{s_i - 0.15}{0.6};\\,0,\\,1\\Bigr),\n\\tag{5.23}",
+  "prov": "*Provenance (Eq. 5.23):* **[Engineered]**: demand partitioning with chosen weights and a calibration factor.",
+  "group": [
+   "5.23"
+  ]
+ },
+ "5.24": {
+  "file": "05_engine.md",
+  "h2": "Engine 2 \u2014 the daily bucket model",
+  "h3": "Scaling to the annual model",
+  "body": "S_P = \\frac{P}{\\overline{P_{\\mathrm{sim}}}},\\quad\nS_{\\mathrm{thr}} = \\frac{P - P_{\\mathrm{other}}}{\\overline{T_{f,\\mathrm{sim}}}},\\quad\nS_E = \\frac{E}{\\overline{E_{\\mathrm{sim}}}},\\quad\nS_T = \\frac{T}{\\overline{T_{\\mathrm{sim}}}},\\quad\nS_D = \\frac{D}{\\overline{D_{\\mathrm{sim}}}},\n\\tag{5.24}",
+  "prov": "*Provenance (Eq. 5.24):* **[Data-driven]**: scaling of the daily series to the Engine 1 twenty-year means.",
+  "group": [
+   "5.24"
+  ]
+ },
+ "5.25": {
+  "file": "05_engine.md",
+  "h2": "Engine 2 \u2014 the daily bucket model",
+  "h3": "Scaling to the annual model",
+  "body": "\\Delta S_d = T_f + I - E - T - D.\n\\tag{5.25}",
+  "prov": "*Provenance (Eq. 5.25):* **[Literature]**: water-balance identity.",
+  "group": [
+   "5.25"
+  ]
+ },
+ "5.26": {
+  "file": "05_engine.md",
+  "h2": "Engine 2 \u2014 the daily bucket model",
+  "h3": "Evaporation under warming (used by the E1 layer)",
+  "body": "E_{0,\\mathrm{bare}} = 4.2\\,(1 + 0.07\\,\\Delta T)\\,\\frac{0.35 + 0.65\\cdot\\tfrac12[1 + \\sin(2\\pi(\\mathrm{doy}-100)/365)]}{0.675}\\,\\mathrm{clip}\\bigl(1 - 0.12(\\rho-1);\\,0.85,\\,1.12\\bigr)\\sqrt{\\gamma_y}\\ \\ \\mathrm{mm\\,d^{-1}},\n\\tag{5.26}",
+  "prov": "*Provenance (Eq. 5.26):* **[Engineered]**: atmosphere factor with chosen constants.",
+  "group": [
+   "5.26"
+  ]
+ },
+ "5.27": {
+  "file": "05_engine.md",
+  "h2": "The design layers and their link to the engines",
+  "h3": "Evaporation under warming (used by the E1 layer)",
+  "body": "Z_n = \\mathrm{clip}\\bigl(f_T\\cdot \\mathrm{AWC}\\cdot R_{\\max};\\ 25,\\ 150\\bigr)\\ \\mathrm{mm}\\qquad(\\text{surface; drip and sprinkler use their own limits})\n\\tag{5.27}",
+  "prov": "*Provenance (Eq. 5.27):* **[Literature]**: readily available water as in FAO-56 practice, with an engineered clip.",
+  "group": [
+   "5.27"
+  ]
+ },
+ "6.1": {
+  "file": "06_control.md",
+  "h2": "Sensor and trigger (V1)",
+  "h3": "How the numbers are generated",
+  "body": "N_y(h_T) = \\#\\bigl\\{\\,d \\in \\text{growing season of year } y : h_d > h_T\\,\\bigr\\}\\quad(183\\ \\text{days from 1 April}),\n\\tag{6.1}",
+  "prov": "*Provenance (Eq. 6.1):* **[Data-driven]**: counts over the simulated daily series.",
+  "group": [
+   "6.1"
+  ]
+ },
+ "6.2": {
+  "file": "06_control.md",
+  "h2": "Sensor and trigger (V1)",
+  "h3": "How the numbers are generated",
+  "body": "X = 100\\Bigl(1 - \\frac{\\bar N_{\\mathrm{irr}}}{\\bar N_{\\mathrm{rainfed}}}\\Bigr),\\qquad \\bar N = \\tfrac{1}{20}\\sum_{y} N_y.\n\\tag{6.2}",
+  "prov": "*Provenance (Eq. 6.2):* **[Data-driven]**: counts over the simulated daily series.",
+  "group": [
+   "6.2"
+  ]
+ },
+ "6.3": {
+  "file": "06_control.md",
+  "h2": "Trigger law (N1)",
+  "h3": "Governing relations",
+  "body": "h(f) = \\Bigl\\{\\,h : f(h) = f\\,\\Bigr\\},\n\\tag{6.3}",
+  "prov": "*Provenance (Eq. 6.3):* **[Literature]**: inverse of the van Genuchten curve, solved by bisection.",
+  "group": [
+   "6.3"
+  ]
+ },
+ "6.4": {
+  "file": "06_control.md",
+  "h2": "Trigger law (N1)",
+  "h3": "Governing relations",
+  "body": "Z_n = f\\cdot \\mathrm{AWC}\\cdot R_{\\max}\\quad[\\mathrm{mm}]\n\\tag{6.4}",
+  "prov": "*Provenance (Eq. 6.4):* **[Literature]**: same relation as Eq. (5.27) without the clip.",
+  "group": [
+   "6.4"
+  ]
+ },
+ "6.5": {
+  "file": "06_control.md",
+  "h2": "Trigger law (N1)",
+  "h3": "Governing relations",
+  "body": "Y_{\\mathrm{rel}} = \\frac{Y(h_T)}{\\max_{h}\\,Y(h)},\n\\tag{6.5}",
+  "prov": "*Provenance (Eq. 6.5):* **[Data-driven]**: ratio of Daisy run-set E2 yields.",
+  "group": [
+   "6.5"
+  ]
+ },
+ "7.1": {
+  "file": "07_field.md",
+  "h2": "Soil, plant and air (S1)",
+  "h3": "Governing equations",
+  "body": "h_i = \\max\\{30,\\ h(f_i)\\},\\qquad f_i = 1 - s_i,\\qquad\n\\psi_{\\mathrm{soil},i} = -h_i\\cdot 9.807\\times10^{-5}\\ \\mathrm{MPa\\ cm^{-1}}.\n\\tag{7.1}",
+  "prov": "*Provenance (Eq. 7.1):* **[Literature]**: inverse of Eq. (5.3); the 30 cm floor is engineered.",
+  "group": [
+   "7.1"
+  ]
+ },
+ "7.2": {
+  "file": "07_field.md",
+  "h2": "Soil, plant and air (S1)",
+  "h3": "Governing equations",
+  "body": "\\begin{aligned}\nR_{\\mathrm{soil}} &= 0.03\\,\\max\\{K_r,\\,0.002\\}^{-0.55}, \\quad R_{\\mathrm{root}} = 0.10,\\quad R_{\\mathrm{xyl}} = 0.05,\\quad R_{\\mathrm{leaf}} = 0.08 &&(7.2)\\\\\n\\psi_{\\mathrm{root}} &= \\psi_{RZ} - a\\,E\\,R_{\\mathrm{soil}}, \\qquad\n\\psi_{\\mathrm{stem}} = \\psi_{\\mathrm{root}} - a\\,E\\,R_{\\mathrm{root}}, &&(7.3)\\\\\n\\psi_{\\mathrm{leaf}} &= \\mathrm{clip}\\bigl(\\psi_{\\mathrm{stem}} - a\\,E\\,(R_{\\mathrm{xyl}} + R_{\\mathrm{leaf}});\\ -3.2,\\ 0\\bigr), &&(7.4)\n\\end{aligned}",
+  "prov": "*Provenance (Eq. 7.2--7.4):* **[Engineered]**: series-resistance chain after van den Honert (1948); resistance values chosen for the workbench.",
+  "group": [
+   "7.2",
+   "7.3",
+   "7.4"
+  ]
+ },
+ "7.3": {
+  "file": "07_field.md",
+  "h2": "Soil, plant and air (S1)",
+  "h3": "Governing equations",
+  "body": "\\begin{aligned}\nR_{\\mathrm{soil}} &= 0.03\\,\\max\\{K_r,\\,0.002\\}^{-0.55}, \\quad R_{\\mathrm{root}} = 0.10,\\quad R_{\\mathrm{xyl}} = 0.05,\\quad R_{\\mathrm{leaf}} = 0.08 &&(7.2)\\\\\n\\psi_{\\mathrm{root}} &= \\psi_{RZ} - a\\,E\\,R_{\\mathrm{soil}}, \\qquad\n\\psi_{\\mathrm{stem}} = \\psi_{\\mathrm{root}} - a\\,E\\,R_{\\mathrm{root}}, &&(7.3)\\\\\n\\psi_{\\mathrm{leaf}} &= \\mathrm{clip}\\bigl(\\psi_{\\mathrm{stem}} - a\\,E\\,(R_{\\mathrm{xyl}} + R_{\\mathrm{leaf}});\\ -3.2,\\ 0\\bigr), &&(7.4)\n\\end{aligned}",
+  "prov": "*Provenance (Eq. 7.2--7.4):* **[Engineered]**: series-resistance chain after van den Honert (1948); resistance values chosen for the workbench.",
+  "group": [
+   "7.2",
+   "7.3",
+   "7.4"
+  ]
+ },
+ "7.4": {
+  "file": "07_field.md",
+  "h2": "Soil, plant and air (S1)",
+  "h3": "Governing equations",
+  "body": "\\begin{aligned}\nR_{\\mathrm{soil}} &= 0.03\\,\\max\\{K_r,\\,0.002\\}^{-0.55}, \\quad R_{\\mathrm{root}} = 0.10,\\quad R_{\\mathrm{xyl}} = 0.05,\\quad R_{\\mathrm{leaf}} = 0.08 &&(7.2)\\\\\n\\psi_{\\mathrm{root}} &= \\psi_{RZ} - a\\,E\\,R_{\\mathrm{soil}}, \\qquad\n\\psi_{\\mathrm{stem}} = \\psi_{\\mathrm{root}} - a\\,E\\,R_{\\mathrm{root}}, &&(7.3)\\\\\n\\psi_{\\mathrm{leaf}} &= \\mathrm{clip}\\bigl(\\psi_{\\mathrm{stem}} - a\\,E\\,(R_{\\mathrm{xyl}} + R_{\\mathrm{leaf}});\\ -3.2,\\ 0\\bigr), &&(7.4)\n\\end{aligned}",
+  "prov": "*Provenance (Eq. 7.2--7.4):* **[Engineered]**: series-resistance chain after van den Honert (1948); resistance values chosen for the workbench.",
+  "group": [
+   "7.2",
+   "7.3",
+   "7.4"
+  ]
+ },
+ "7.5": {
+  "file": "07_field.md",
+  "h2": "Soil, plant and air (S1)",
+  "h3": "Governing equations",
+  "body": "\\psi_{\\mathrm{air}} = \\frac{R\\,T}{V_w}\\,\\ln \\mathrm{RH} \\;\\approx\\; 135.5\\,\\ln\\mathrm{RH}\\ \\ \\mathrm{MPa}\n\\tag{7.5}",
+  "prov": "*Provenance (Eq. 7.5):* **[Literature]**: Nobel (2009).",
+  "group": [
+   "7.5"
+  ]
+ },
+ "7.6": {
+  "file": "07_field.md",
+  "h2": "Profile evolution (V2)",
+  "h3": "How it is generated",
+  "body": "\\mathrm{share} = \\frac{\\sum_{i:\\ z_i\\le 60\\,\\mathrm{cm},\\ h_i>h_T}\\Delta z_i}{\\sum_{i:\\ z_i\\le 60\\,\\mathrm{cm}}\\Delta z_i},\n\\tag{7.6}",
+  "prov": "*Provenance (Eq. 7.6):* **[Engineered]**: indicator defined for the workbench.",
+  "group": [
+   "7.6"
+  ]
+ },
+ "8.1": {
+  "file": "08_structure.md",
+  "h2": "Tillage and structure (V3)",
+  "h3": "Pore index and consolidation",
+  "body": "p(t) = p_c + (p_0 - p_c)\\,e^{-\\tau_c t},\\qquad p_0 = 1.00\\ (\\text{conventional}),\\ 0.72\\ (\\text{reduced}),\n\\tag{8.1}",
+  "prov": "*Provenance (Eq. 8.1):* **[Engineered]**: exponential relaxation with chosen constants.",
+  "group": [
+   "8.1"
+  ]
+ },
+ "8.2": {
+  "file": "08_structure.md",
+  "h2": "Tillage and structure (V3)",
+  "h3": "How the section is generated",
+  "body": "\\phi = \\mathrm{clip}\\bigl(0.36 + 0.0016\\,\\mathrm{clay} + 0.0009\\,\\mathrm{silt};\\ 0.34,\\ 0.50\\bigr),\\qquad\n\\theta_r = 0.01 + 0.0006\\,\\mathrm{clay},\n\\tag{8.2}",
+  "prov": "*Provenance (Eq. 8.2):* **[Engineered]**: porosity relation with chosen coefficients.",
+  "group": [
+   "8.2"
+  ]
+ },
+ "8.3": {
+  "file": "08_structure.md",
+  "h2": "Tillage and structure (V3)",
+  "h3": "How the section is generated",
+  "body": "\\theta(h) = \\theta_r + (\\phi - \\theta_r)\\,S_e(h).\n\\tag{8.3}",
+  "prov": "*Provenance (Eq. 8.3):* **[Literature]**: van Genuchten (1980).",
+  "group": [
+   "8.3"
+  ]
+ },
+ "8.4": {
+  "file": "08_structure.md",
+  "h2": "Tillage and structure (V3)",
+  "h3": "How the section is generated",
+  "body": "r_c = \\frac{2\\,\\sigma\\cos\\gamma}{\\rho_w\\, g\\, h} \\;\\approx\\; \\frac{0.149\\ \\mathrm{cm^2}}{h}\\quad(\\mathrm{or}\\ r_c[\\mathrm{mm}] \\approx 1.49/h[\\mathrm{cm}]),\n\\tag{8.4}",
+  "prov": "*Provenance (Eq. 8.4):* **[Literature]**: Young--Laplace (Jurin) capillary law.",
+  "group": [
+   "8.4"
+  ]
+ },
+ "8.5": {
+  "file": "08_structure.md",
+  "h2": "Soil hydraulic drivers (V7)",
+  "h3": "Generation",
+  "body": "\\Delta_{\\mathrm{till}}(s) = D_s(\\mathrm{conv},\\tau^\\ast) - D_s(\\mathrm{notill},\\tau^\\ast),\\qquad\n\\Delta_{\\mathrm{cons}}(s) = D_s(\\mathrm{till}^\\ast,\\tau_{\\mathrm{fast}}) - D_s(\\mathrm{till}^\\ast,\\tau_{\\mathrm{slow}}),\n\\tag{8.5}",
+  "prov": "*Provenance (Eq. 8.5):* **[Data-driven]**: differences of Daisy run-set E5 results.",
+  "group": [
+   "8.5"
+  ]
+ },
+ "8.6": {
+  "file": "08_structure.md",
+  "h2": "Soil hydraulic drivers (V7)",
+  "h3": "Generation",
+  "body": "\\hat\\Delta = a + b\\,c,\\qquad b = \\frac{\\sum_s (c_s - \\bar c)(\\Delta_s - \\bar\\Delta)}{\\sum_s (c_s - \\bar c)^2},\\quad a = \\bar\\Delta - b\\,\\bar c .\n\\tag{8.6}",
+  "prov": "*Provenance (Eq. 8.6):* **[Data-driven]**: ordinary least squares applied to Daisy results.",
+  "group": [
+   "8.6"
+  ]
+ },
+ "8.7": {
+  "file": "08_structure.md",
+  "h2": "Root structure (R1)",
+  "h3": "Generation",
+  "body": "z_p = k_p\\,\\Delta z,\\qquad k_p = \\min\\Bigl\\{k :\\ \\frac{\\sum_{i\\le k} U_i}{\\sum_{i} U_i} \\ge p\\Bigr\\},\\qquad U_i=\\sum_{d\\in\\text{year}}u_i(d),\\quad p = 0.5,\\ 0.9,\n\\tag{8.7}",
+  "prov": "*Provenance (Eq. 8.7):* **[Engineered]**: diagnostic defined for the workbench.",
+  "group": [
+   "8.7"
+  ]
+ },
+ "9.1": {
+  "file": "09_mulch.md",
+  "h2": "Mulch against bare soil (V4)",
+  "h3": "",
+  "body": "\\Delta E = E_{1.0} - E_{\\varphi},\\qquad\n\\Delta I = I_{1.0} - I_{\\varphi},\\qquad\n\\Delta D = D_{\\varphi} - D_{1.0},\n\\tag{9.1}",
+  "prov": "*Provenance (Eq. 9.1):* **[Data-driven]**: differences and ratios of Daisy run-set E14 and E11 results.",
+  "group": [
+   "9.1"
+  ]
+ },
+ "9.2": {
+  "file": "09_mulch.md",
+  "h2": "Evaporation physics (E1)",
+  "h3": "",
+  "body": "t_1 = \\frac{Q_1 - q_0}{e_0},\\qquad\ne(t) = \\begin{cases} e_0, & t \\le t_1\\\\[3pt] \\dfrac{e_0}{\\sqrt{1 + (t - t_1)/\\tau}}, & t > t_1\\end{cases}\n\\tag{9.2}",
+  "prov": "*Provenance (Eq. 9.2):* **[Engineered]**: two-stage evaporation of the type described by Ritchie (1972) and Philip, with parameters chosen for the workbench.",
+  "group": [
+   "9.2"
+  ]
+ },
+ "9.3": {
+  "file": "09_mulch.md",
+  "h2": "Evaporation physics (E1)",
+  "h3": "",
+  "body": "Q(t) = q_0 + \\begin{cases} e_0\\,t, & t \\le t_1\\\\[3pt] (Q_1 - q_0) + 2\\,e_0\\,\\tau\\Bigl(\\sqrt{1 + (t - t_1)/\\tau} - 1\\Bigr), & t > t_1\\end{cases}\n\\tag{9.3}",
+  "prov": "*Provenance (Eq. 9.3):* **[Engineered]**: two-stage evaporation of the type described by Ritchie (1972) and Philip, with parameters chosen for the workbench.",
+  "group": [
+   "9.3"
+  ]
+ },
+ "9.4": {
+  "file": "09_mulch.md",
+  "h2": "Evaporation physics (E1)",
+  "h3": "",
+  "body": "\\ell(t) = \\min\\Bigl\\{60,\\ \\frac{Q(t) - Q_1}{\\Delta\\theta}\\Bigr\\}\\ \\mathrm{mm}\\quad (Q > Q_1),\n\\tag{9.4}",
+  "prov": "*Provenance (Eq. 9.4):* **[Engineered]**: drying-front geometry chosen for drawing.",
+  "group": [
+   "9.4"
+  ]
+ },
+ "9.5": {
+  "file": "09_mulch.md",
+  "h2": "Evaporation physics (E1)",
+  "h3": "",
+  "body": "\\log_{10}h(z) = \\log_{10}h_s + \\bigl(\\log_{10}h_i - \\log_{10}h_s\\bigr)\\bigl(1 - e^{-(z-\\ell)/\\lambda}\\bigr)\\quad (z \\ge \\ell),\\qquad h = 10^{5}\\ \\mathrm{cm\\ for}\\ z<\\ell.\n\\tag{9.5}",
+  "prov": "*Provenance (Eq. 9.5):* **[Engineered]**: drying-front geometry chosen for drawing.",
+  "group": [
+   "9.5"
+  ]
+ },
+ "9.6": {
+  "file": "09_mulch.md",
+  "h2": "Fate of saved water (N2)",
+  "h3": "",
+  "body": "\\begin{aligned}\n\\Delta E(\\rho) &= E_{1.0}(\\rho) - E_{\\varphi^\\ast}(\\rho), & \\Delta I(\\rho) &= I_{1.0}(\\rho) - I_{\\varphi^\\ast}(\\rho),\\\\\n\\Delta D(\\rho) &= D_{\\varphi^\\ast}(\\rho) - D_{1.0}(\\rho), & \\Delta T(\\rho) &= T_{\\varphi^\\ast}(\\rho) - T_{1.0}(\\rho),\n\\end{aligned}\n\\tag{9.6}",
+  "prov": "*Provenance (Eq. 9.6):* **[Data-driven]**: differences and ratios of Daisy run-set E14 and E11 results.",
+  "group": [
+   "9.6"
+  ]
+ },
+ "9.7": {
+  "file": "09_mulch.md",
+  "h2": "Fate of saved water (N2)",
+  "h3": "",
+  "body": "f_I = \\frac{\\max\\{\\Delta I,0\\}}{\\max\\{\\Delta E,0.1\\}},\\ f_D = \\frac{\\max\\{\\Delta D,0\\}}{\\max\\{\\Delta E,0.1\\}},\\ f_T = \\frac{\\max\\{\\Delta T,0\\}}{\\max\\{\\Delta E,0.1\\}},\\ f_{\\mathrm{rest}} = \\max\\{0,\\ 1 - f_I - f_D - f_T\\}.\n\\tag{9.7}",
+  "prov": "*Provenance (Eq. 9.7):* **[Data-driven]**: differences and ratios of Daisy run-set E14 and E11 results.",
+  "group": [
+   "9.7"
+  ]
+ },
+ "9.8": {
+  "file": "09_mulch.md",
+  "h2": "Regime map (N3)",
+  "h3": "",
+  "body": "\\mathcal{I} = \\frac{E - D}{\\max\\{1,\\ E + D\\}},\\qquad\n\\text{regime} = \\begin{cases}\n\\text{evaporation-dominated} & \\mathcal I > +0.05\\\\\n\\text{drainage-dominated} & \\mathcal I < -0.05\\\\\n\\text{on the boundary} & |\\mathcal I|\\le 0.05\n\\end{cases}\n\\tag{9.8}",
+  "prov": "*Provenance (Eq. 9.8):* **[Engineered]**: index defined for the workbench.",
+  "group": [
+   "9.8"
+  ]
+ },
+ "10.1": {
+  "file": "10_loops.md",
+  "h2": "How the seven effects are computed",
+  "h3": "",
+  "body": "w_k = 5 + \\mathrm{clip}(\\mu_k;\\,0,\\,4).\n\\tag{10.1}",
+  "prov": "*Provenance (Eq. 10.1):* **[Engineered]**: drawing rule.",
+  "group": [
+   "10.1"
+  ]
+ },
+ "10.2": {
+  "file": "10_loops.md",
+  "h2": "How the seven effects are computed",
+  "h3": "",
+  "body": "\\kappa_{N} = \\frac{N_L^{(\\mathrm{rain\\ step})} - N_L}{D^{(\\mathrm{rain\\ step})} - D} \\quad [\\mathrm{kg\\ N\\ ha^{-1}\\ mm^{-1}}],\n\\tag{10.2}",
+  "prov": "*Provenance (Eq. 10.2):* **[Data-driven]**: one-step differences of Daisy results.",
+  "group": [
+   "10.2"
+  ]
+ },
+ "11.1": {
+  "file": "11_surface.md",
+  "h2": "Intake from your soil (Saxton\u2013Rawls $\\to$ Green\u2013Ampt $\\to$ Kostiakov)",
+  "h3": "",
+  "body": "\\begin{aligned}\n\\theta_{1500,t} &= -0.024\\,S + 0.487\\,C + 0.006\\,\\mathrm{OM} + 0.005\\,S\\,\\mathrm{OM} - 0.013\\,C\\,\\mathrm{OM} + 0.068\\,S\\,C + 0.031,\\\\\n\\theta_{1500} &= \\theta_{1500,t} + \\bigl(0.14\\,\\theta_{1500,t} - 0.02\\bigr),\\\\\n\\theta_{33,t} &= -0.251\\,S + 0.195\\,C + 0.011\\,\\mathrm{OM} + 0.006\\,S\\,\\mathrm{OM} - 0.027\\,C\\,\\mathrm{OM} + 0.452\\,S\\,C + 0.299,\\\\\n\\theta_{33} &= \\theta_{33,t} + \\bigl(1.283\\,\\theta_{33,t}^{2} - 0.374\\,\\theta_{33,t} - 0.015\\bigr),\n\\end{aligned}\n\\tag{11.1}",
+  "prov": "*Provenance (Eq. 11.1):* **[Literature]**: Saxton and Rawls (2006), implemented as written.",
+  "group": [
+   "11.1"
+  ]
+ },
+ "11.2": {
+  "file": "11_surface.md",
+  "h2": "Intake from your soil (Saxton\u2013Rawls $\\to$ Green\u2013Ampt $\\to$ Kostiakov)",
+  "h3": "",
+  "body": "\\begin{aligned}\n\\theta_{(S-33),t} &= 0.278\\,S + 0.034\\,C + 0.022\\,\\mathrm{OM} - 0.018\\,S\\,\\mathrm{OM} - 0.027\\,C\\,\\mathrm{OM} - 0.584\\,S\\,C + 0.078,\\\\\n\\theta_{(S-33)} &= \\theta_{(S-33),t} + \\bigl(0.636\\,\\theta_{(S-33),t} - 0.107\\bigr),\\qquad\n\\theta_{s} = \\theta_{33} + \\theta_{(S-33)} - 0.097\\,S + 0.043,\\\\\nB &= \\frac{\\ln 1500 - \\ln 33}{\\ln\\theta_{33} - \\ln\\theta_{1500}},\\qquad \\lambda = \\frac1B,\\qquad\nK_s = 1930\\,(\\theta_s - \\theta_{33})^{\\,3-\\lambda}.\n\\end{aligned}\n\\tag{11.2}",
+  "prov": "*Provenance (Eq. 11.2):* **[Literature]**: Saxton and Rawls (2006), implemented as written.",
+  "group": [
+   "11.2"
+  ]
+ },
+ "11.3": {
+  "file": "11_surface.md",
+  "h2": "Intake from your soil (Saxton\u2013Rawls $\\to$ Green\u2013Ampt $\\to$ Kostiakov)",
+  "h3": "",
+  "body": "\\psi_f = \\frac{10}{\\alpha}\\,\\frac{0.046\\,m + 2.07\\,m^{2} + 19.5\\,m^{3}}{1 + 4.7\\,m + 16\\,m^{2}}.\n\\tag{11.3}",
+  "prov": "*Provenance (Eq. 11.3):* **[Engineered]**: rational-polynomial approximation of a Rawls-type suction.",
+  "group": [
+   "11.3"
+  ]
+ },
+ "11.4": {
+  "file": "11_surface.md",
+  "h2": "Intake from your soil (Saxton\u2013Rawls $\\to$ Green\u2013Ampt $\\to$ Kostiakov)",
+  "h3": "",
+  "body": "\\theta_0 = \\theta_{fc} - f_T\\,(\\theta_{fc} - \\theta_{wp}),\\qquad\n\\Delta\\theta = \\max\\{0.05,\\ 0.95\\,\\theta_s - \\theta_0\\}.\n\\tag{11.4}",
+  "prov": "*Provenance (Eq. 11.4):* **[Engineered]**: initial and wetted water contents chosen for the workbench.",
+  "group": [
+   "11.4"
+  ]
+ },
+ "11.5": {
+  "file": "11_surface.md",
+  "h2": "Intake from your soil (Saxton\u2013Rawls $\\to$ Green\u2013Ampt $\\to$ Kostiakov)",
+  "h3": "",
+  "body": "F - \\psi_f\\,\\Delta\\theta\\,\\ln\\!\\Bigl(1 + \\frac{F}{\\psi_f\\,\\Delta\\theta}\\Bigr) = K_s\\,\\frac{t}{60}\\quad(t\\ \\text{in min}),\n\\tag{11.5}",
+  "prov": "*Provenance (Eq. 11.5):* **[Literature]**: Green and Ampt (1911).",
+  "group": [
+   "11.5"
+  ]
+ },
+ "11.6": {
+  "file": "11_surface.md",
+  "h2": "Intake from your soil (Saxton\u2013Rawls $\\to$ Green\u2013Ampt $\\to$ Kostiakov)",
+  "h3": "",
+  "body": "Z(\\tau) = k\\,\\tau^{A}\\qquad (Z\\ \\text{in m},\\ \\tau\\ \\text{in min}),\n\\tag{11.6}",
+  "prov": "*Provenance (Eq. 11.6):* **[Literature]**: Kostiakov (1932).",
+  "group": [
+   "11.6"
+  ]
+ },
+ "11.7": {
+  "file": "11_surface.md",
+  "h2": "Intake from your soil (Saxton\u2013Rawls $\\to$ Green\u2013Ampt $\\to$ Kostiakov)",
+  "h3": "",
+  "body": "A = \\frac{\\sum (x_i - \\bar x)(y_i - \\bar y)}{\\sum (x_i - \\bar x)^2},\\quad\n\\ln k = \\bar y - A\\,\\bar x,\\qquad x_i=\\ln\\tau_i,\\ y_i=\\ln\\bigl(F(\\tau_i)/1000\\bigr),\n\\tag{11.7}",
+  "prov": "*Provenance (Eq. 11.7):* **[Literature]**: ordinary least squares on the log--log plot.",
+  "group": [
+   "11.7"
+  ]
+ },
+ "11.8": {
+  "file": "11_surface.md",
+  "h2": "Inlet flow area (Manning)",
+  "h3": "",
+  "body": "Q = \\frac{1}{n}\\,A\\,R_h^{2/3}\\,S^{1/2},\\qquad R_h=\\frac{A}{P}.\n\\tag{11.8}",
+  "prov": "*Provenance (Eq. 11.8):* **[Literature]**: Manning (1891).",
+  "group": [
+   "11.8"
+  ]
+ },
+ "11.9": {
+  "file": "11_surface.md",
+  "h2": "Advance (volume balance)",
+  "h3": "",
+  "body": "Q\\,t = \\sigma_y\\,A_0\\,x + \\sigma_z\\,k\\,t^{A}\\,w\\,x\n\\ \\Longrightarrow\\ x(t) = \\frac{Q\\,t}{\\sigma_y A_0 + \\sigma_z\\,k\\,t^{A}\\,w}.\n\\tag{11.9}",
+  "prov": "*Provenance (Eq. 11.9):* **[Literature]**: volume balance of Walker and Skogerboe (1987) and Elliott and Walker (1982); tested against FAO-45 examples (Paper 3).",
+  "group": [
+   "11.9"
+  ]
+ },
+ "11.10": {
+  "file": "11_surface.md",
+  "h2": "Advance (volume balance)",
+  "h3": "",
+  "body": "\\sigma_z = \\frac{A + r\\,(1 - A) + 1}{(1 + A)(1 + r)},\n\\tag{11.10}",
+  "prov": "*Provenance (Eq. 11.10):* **[Literature]**: volume balance of Walker and Skogerboe (1987) and Elliott and Walker (1982); tested against FAO-45 examples (Paper 3).",
+  "group": [
+   "11.10"
+  ]
+ },
+ "11.11": {
+  "file": "11_surface.md",
+  "h2": "Advance (volume balance)",
+  "h3": "",
+  "body": "r = \\frac{\\ln 2}{\\ln (t_L / t_{L/2})},\n\\tag{11.11}",
+  "prov": "*Provenance (Eq. 11.11):* **[Literature]**: volume balance of Walker and Skogerboe (1987) and Elliott and Walker (1982); tested against FAO-45 examples (Paper 3).",
+  "group": [
+   "11.11"
+  ]
+ },
+ "11.12": {
+  "file": "11_surface.md",
+  "h2": "Advance (volume balance)",
+  "h3": "",
+  "body": "t_x(x)=t_L\\Bigl(\\frac{x}{L}\\Bigr)^{1/r}\\quad\\text{(given advance)},\\qquad t_x(x)=c\\,q^{-q_e}\\,x^{x_e}\\quad\\text{(field advance)}.\n\\tag{11.12}",
+  "prov": "*Provenance (Eq. 11.12):* **[Engineered]**: alternative advance models set by worked examples and course notes.",
+  "group": [
+   "11.12"
+  ]
+ },
+ "11.13": {
+  "file": "11_surface.md",
+  "h2": "Advance (volume balance)",
+  "h3": "",
+  "body": "t_L = (1 + 0.15\\,A)\\,\\frac{A_0 L}{Q} + \\Bigl(\\frac{\\sigma_F\\,k\\,w\\,L}{Q}\\Bigr)^{\\frac{1}{1-A}},\\qquad\n\\sigma_F = \\frac{\\pi A (1 - A)}{\\sin(\\pi A)},\\qquad t_x(x) = t_{V}(x)\\,\\frac{t_L}{t_{V}(L)},\n\\tag{11.13}",
+  "prov": "*Provenance (Eq. 11.13):* **[Engineered]**: alternative advance models set by worked examples and course notes.",
+  "group": [
+   "11.13"
+  ]
+ },
+ "11.15": {
+  "file": "11_surface.md",
+  "h2": "Cut-off, opportunity time and the infiltrated depth",
+  "h3": "",
+  "body": "t_{st} = \\Bigl(\\frac{Z_n}{k}\\Bigr)^{1/A}.\n\\tag{11.15}",
+  "prov": "*Provenance (Eq. 11.15):* **[Literature]**: inversion of the Kostiakov law.",
+  "group": [
+   "11.15"
+  ]
+ },
+ "11.16": {
+  "file": "11_surface.md",
+  "h2": "Cut-off, opportunity time and the infiltrated depth",
+  "h3": "",
+  "body": "t_{co} = \\begin{cases}\nt_L + t_{st} & \\text{\u201c}E_s=1\\text{\u201d: the tail receives exactly } Z_n\\\\\nt_x(0.85\\,L) + t_{st} & \\text{\u201c85 \\% of L\u201d}\\\\\nt_{co}^{\\,\\mathrm{set}} & \\text{\u201cManual\u201d}\n\\end{cases}\n\\tag{11.16}",
+  "prov": "*Provenance (Eq. 11.16):* **[Engineered]**: cut-off rules chosen as design options.",
+  "group": [
+   "11.16"
+  ]
+ },
+ "11.17": {
+  "file": "11_surface.md",
+  "h2": "Cut-off, opportunity time and the infiltrated depth",
+  "h3": "",
+  "body": "Z(x) = k\\,\\bigl[t_{co} - t_x(x)\\bigr]^{A},\\quad Z_0 = k\\,t_{co}^{A}\\ (\\text{inlet}),\\qquad Z_L = k\\,(t_{co}-t_L)^{A}\\ (\\text{tail}).\n\\tag{11.17}",
+  "prov": "*Provenance (Eq. 11.17):* **[Literature]**: standard opportunity-time and performance-index definitions (Walker and Skogerboe, 1987; Burt et al., 1997).",
+  "group": [
+   "11.17"
+  ]
+ },
+ "11.18": {
+  "file": "11_surface.md",
+  "h2": "Volumes, efficiencies and uniformity",
+  "h3": "",
+  "body": "\\begin{aligned}\nV_{\\mathrm{app}} &= Q\\,t_{co}\\quad\\bigl(\\text{with cutback } c_b<1:\\ Q\\,t_L + c_b\\,Q\\,(t_{co}-t_L)\\bigr), & V_{\\mathrm{req}} &= Z_n\\,L\\,w,\\\\\nV_{\\mathrm{inf}} &= w\\!\\int_0^L Z\\,dx, & V_{\\mathrm{st}} &= w\\!\\int_0^L \\min(Z, Z_n)\\,dx,\\\\\nV_{\\mathrm{dp}} &= w\\!\\int_0^L \\max(Z-Z_n,0)\\,dx, & V_{\\mathrm{df}} &= w\\!\\int_0^L \\max(Z_n - Z,0)\\,dx,\\\\\nV_{\\mathrm{ro}} &= \\max(V_{\\mathrm{app}} - V_{\\mathrm{inf}},\\ 0).\n\\end{aligned}\n\\tag{11.18}",
+  "prov": "*Provenance (Eq. 11.18):* **[Literature]**: standard opportunity-time and performance-index definitions (Walker and Skogerboe, 1987; Burt et al., 1997).",
+  "group": [
+   "11.18"
+  ]
+ },
+ "11.19": {
+  "file": "11_surface.md",
+  "h2": "Volumes, efficiencies and uniformity",
+  "h3": "",
+  "body": "E_a = \\frac{V_{\\mathrm{st}}}{V_{\\mathrm{app}}},\\quad\nE_s = \\frac{V_{\\mathrm{st}}}{V_{\\mathrm{req}}},\\quad\n\\mathrm{DP} = \\frac{V_{\\mathrm{dp}}}{V_{\\mathrm{app}}},\\quad\n\\mathrm{RO} = \\frac{V_{\\mathrm{ro}}}{V_{\\mathrm{app}}},\\quad\n\\mathrm{CU} = 100\\Bigl(1 - \\frac{\\tfrac{1}{N+1}\\sum_{i=0}^{N}|Z_i-\\bar Z|}{\\bar Z}\\Bigr)\\ \\%.\n\\tag{11.19}",
+  "prov": "*Provenance (Eq. 11.19):* **[Literature]**: standard opportunity-time and performance-index definitions (Walker and Skogerboe, 1987; Burt et al., 1997).",
+  "group": [
+   "11.19"
+  ]
+ },
+ "11.20": {
+  "file": "11_surface.md",
+  "h2": "Hydrograph",
+  "h3": "",
+  "body": "V_c(t) = w\\sum_i k\\,\\bigl[\\min(t,t_{co}) - \\bar t_{x,i}\\bigr]_{+}^{A}\\,\\Delta x\\ \\cdot s_c,\\qquad\ns_c = \\frac{V_{\\mathrm{inf}}}{V_c(t_{co})},\\qquad I(t)=\\frac{dV_c}{dt},\n\\tag{11.20}",
+  "prov": "*Provenance (Eq. 11.20):* **[Engineered]**: hydrograph shapes chosen for drawing; volume conserving.",
+  "group": [
+   "11.20"
+  ]
+ },
+ "11.21": {
+  "file": "11_surface.md",
+  "h2": "Hydrograph",
+  "h3": "",
+  "body": "R(t) = \\frac{2V_s}{t_r}\\Bigl(1 - \\frac{t - t_{co}}{t_r}\\Bigr),\\quad t_{co}<t<t_{co}+t_r.\n\\tag{11.21}",
+  "prov": "*Provenance (Eq. 11.21):* **[Engineered]**: hydrograph shapes chosen for drawing; volume conserving.",
+  "group": [
+   "11.21"
+  ]
+ },
+ "11.22": {
+  "file": "11_surface.md",
+  "h2": "Best inflow (\"Your soil\" mode)",
+  "h3": "",
+  "body": "q_{\\max} = \\min\\Bigl\\{q_{\\max}^{\\mathrm{sys}},\\ \\frac{0.04}{S}\\cdot\\frac{1000}{60}\\Bigr\\}\\ \\mathrm{L\\,s^{-1}}\\quad(S\\ \\text{in \\%}),\n\\tag{11.22}",
+  "prov": "*Provenance (Eq. 11.22):* **[Engineered]**: search limit; the furrow stream limit follows Criddle et al. (1956).",
+  "group": [
+   "11.22"
+  ]
+ },
+ "11.23": {
+  "file": "11_surface.md",
+  "h2": "The design table",
+  "h3": "",
+  "body": "\\mathrm{score} = \\min(E_a,1) - 3\\max(0,\\,0.8 - E_s) - 3\\,[c_b<1]\\,\\max(0,\\,0.05 - \\mathrm{RO}) - 5\\max(0,\\,E_a-1).\n\\tag{11.23}",
+  "prov": "*Provenance (Eq. 11.23):* **[Engineered]**: optimisation score and seasonal bookkeeping chosen for the workbench.",
+  "group": [
+   "11.23"
+  ]
+ },
+ "11.24": {
+  "file": "11_surface.md",
+  "h2": "Season and farm",
+  "h3": "",
+  "body": "\\begin{aligned}\nn_{\\mathrm{ev}} &= \\sum I\\,/\\,Z_n, & Z_g &= \\frac{V_{\\mathrm{app}}}{L\\,w}\\times1000\\ \\ (\\mathrm{mm}), & Z_{\\mathrm{season}} &= n_{\\mathrm{ev}}\\,Z_g,\\\\\nN_{0M} &= \\frac{Q_s}{q}, & N_{\\mathrm{units}} &= \\frac{W_f}{w},\\quad N_{\\mathrm{sets}}=\\max\\Bigl(1,\\frac{N_{\\mathrm{units}}}{N_{0M}}\\Bigr), & T_{\\mathrm{tot}} &= \\frac{N_{\\mathrm{sets}}\\,t_{co}}{60}\\ \\ (\\mathrm h),\n\\end{aligned}\n\\tag{11.24}",
+  "prov": "*Provenance (Eq. 11.24):* **[Engineered]**: optimisation score and seasonal bookkeeping chosen for the workbench.",
+  "group": [
+   "11.24"
+  ]
+ },
+ "12.1": {
+  "file": "12_drip.md",
+  "h2": "Inputs, step by step",
+  "h3": "",
+  "body": "Z_n = \\min\\bigl\\{Z_{n}^{\\mathrm{DSS}},\\ \\max(4,\\ \\mathrm{ET}_{\\mathrm{pk}}\\,\\Delta t)\\bigr\\}\\ \\ \\mathrm{mm},\n\\tag{12.1}",
+  "prov": "*Provenance (Eq. 12.1):* **[Engineered]**: depth and demand rules chosen for the workbench.",
+  "group": [
+   "12.1"
+  ]
+ },
+ "12.2": {
+  "file": "12_drip.md",
+  "h2": "Inputs, step by step",
+  "h3": "",
+  "body": "\\mathrm{ET}_{\\mathrm{pk}} = \\mathrm{clip}\\Bigl\\{\\max_d \\tfrac15\\sum_{j=0}^{4}\\bigl(E_{d+j}+T_{d+j}\\bigr);\\ 2.5,\\ 9\\Bigr\\}.\n\\tag{12.2}",
+  "prov": "*Provenance (Eq. 12.2):* **[Engineered]**: depth and demand rules chosen for the workbench.",
+  "group": [
+   "12.2"
+  ]
+ },
+ "12.3": {
+  "file": "12_drip.md",
+  "h2": "Lateral hydraulics: head loss and flow along the lateral",
+  "h3": "",
+  "body": "h_{f,j} = \\frac{10.67\\,S_e\\,Q_j^{1.852}}{C^{1.852}\\,D^{4.871}},\\qquad Q_j=\\sum_{i\\ge j+1} q_i\\ \\ (\\mathrm{m^3\\,s^{-1}}),\\quad D\\ \\text{in m}.\n\\tag{12.3}",
+  "prov": "*Provenance (Eq. 12.3):* **[Literature]**: Hazen and Williams (1905).",
+  "group": [
+   "12.3"
+  ]
+ },
+ "12.4": {
+  "file": "12_drip.md",
+  "h2": "Lateral hydraulics: head loss and flow along the lateral",
+  "h3": "",
+  "body": "q_j = q\\Bigl(\\frac{h_j}{H_0}\\Bigr)^{x}\\quad(\\text{non-compensating; } h_j/H_0\\ge0.01),\n\\tag{12.4}",
+  "prov": "*Provenance (Eq. 12.4):* **[Literature]**: Keller and Karmeli (1974) emitter law.",
+  "group": [
+   "12.4"
+  ]
+ },
+ "12.5": {
+  "file": "12_drip.md",
+  "h2": "Lateral hydraulics: head loss and flow along the lateral",
+  "h3": "",
+  "body": "q_j = \\begin{cases} q\\bigl[1 + 0.04\\,(h_j-H_0)/H_0\\bigr], & h_j\\ge H_{\\min},\\\\[2pt] q\\,\\bigl(\\max(h_j,0.1)/H_{\\min}\\bigr)^{0.5}, & h_j<H_{\\min},\\end{cases}\n\\tag{12.5}",
+  "prov": "*Provenance (Eq. 12.5):* **[Engineered]**: pressure-compensating emitter model with chosen constants.",
+  "group": [
+   "12.5"
+  ]
+ },
+ "12.6": {
+  "file": "12_drip.md",
+  "h2": "Lateral hydraulics: head loss and flow along the lateral",
+  "h3": "",
+  "body": "\\bar q = \\frac{1}{N+1}\\sum_{j=0}^{N} q_j,\\qquad q_{\\min}=\\min_j q_j,\\qquad\nQ_{\\mathrm{lat}} = \\frac{N\\,\\bar q}{3600}\\ \\ (\\mathrm{L\\,s^{-1}}),\n\\tag{12.6}",
+  "prov": "*Provenance (Eq. 12.6):* **[Literature]**: definitions of mean and minimum discharge.",
+  "group": [
+   "12.6"
+  ]
+ },
+ "12.7": {
+  "file": "12_drip.md",
+  "h2": "Lateral hydraulics: head loss and flow along the lateral",
+  "h3": "",
+  "body": "E_u = \\mathrm{clip}\\Bigl\\{\\Bigl(1 - \\frac{1.27\\,c_v}{\\sqrt{n_e}}\\Bigr)\\frac{q_{\\min}}{\\bar q};\\ 0.3,\\ 1\\Bigr\\}.\n\\tag{12.7}",
+  "prov": "*Provenance (Eq. 12.7):* **[Literature]**: Keller and Karmeli (1974).",
+  "group": [
+   "12.7"
+  ]
+ },
+ "12.8": {
+  "file": "12_drip.md",
+  "h2": "Lateral hydraulics: head loss and flow along the lateral",
+  "h3": "",
+  "body": "\\sigma_q = \\sqrt{c_v^{2} + \\sigma_P^{2}},\\qquad\n\\sigma_P^{2} = \\frac{1}{N+1}\\sum_{j=0}^{N}\\Bigl(\\frac{q_j}{\\bar q}-1\\Bigr)^{2}.\n\\tag{12.8}",
+  "prov": "*Provenance (Eq. 12.8):* **[Engineered]**: combined spread chosen to drive the bulb quantiles.",
+  "group": [
+   "12.8"
+  ]
+ },
+ "12.9": {
+  "file": "12_drip.md",
+  "h2": "The wetted bulb",
+  "h3": "",
+  "body": "\\Delta\\theta = \\max\\{0.03,\\ f_T\\,(\\theta_{fc}-\\theta_{wp})\\}.\n\\tag{12.9}",
+  "prov": "*Provenance (Eq. 12.9):* **[Engineered]**: wetted-bulb geometry and loss partition; constants chosen for the workbench.",
+  "group": [
+   "12.9"
+  ]
+ },
+ "12.10": {
+  "file": "12_drip.md",
+  "h2": "The wetted bulb",
+  "h3": "",
+  "body": "\\rho(z) = r\\,\\sqrt{1 - \\zeta^{2}},\\qquad\n\\zeta = \\begin{cases} (z - z_d)/(a\\,r), & z\\ge z_d,\\\\ (z_d - z)/(u\\,r), & z<z_d,\\end{cases}\\qquad \\rho=0\\ \\text{for}\\ |\\zeta|\\ge1.\n\\tag{12.10}",
+  "prov": "*Provenance (Eq. 12.10):* **[Engineered]**: wetted-bulb geometry and loss partition; constants chosen for the workbench.",
+  "group": [
+   "12.10"
+  ]
+ },
+ "12.11": {
+  "file": "12_drip.md",
+  "h2": "The wetted bulb",
+  "h3": "",
+  "body": "a = \\mathrm{clip}\\Bigl\\{1 + 0.6\\,\\log_{10}\\Bigl(1 + \\frac{K_s}{q\\cdot10^{6}/(2\\pi\\lambda^{2})}\\Bigr);\\ 1,\\ 1.9\\Bigr\\},\\qquad \\lambda=\\max(40,\\psi_f),\n\\tag{12.11}",
+  "prov": "*Provenance (Eq. 12.11):* **[Engineered]**: wetted-bulb geometry and loss partition; constants chosen for the workbench.",
+  "group": [
+   "12.11"
+  ]
+ },
+ "12.12": {
+  "file": "12_drip.md",
+  "h2": "The wetted bulb",
+  "h3": "",
+  "body": "V_w = \\int \\pi\\,\\rho(z)^{2}\\,dz,\n\\tag{12.12}",
+  "prov": "*Provenance (Eq. 12.12):* **[Engineered]**: wetted-bulb geometry and loss partition; constants chosen for the workbench.",
+  "group": [
+   "12.12"
+  ]
+ },
+ "12.13": {
+  "file": "12_drip.md",
+  "h2": "The wetted bulb",
+  "h3": "",
+  "body": "P_w = \\mathrm{clip}\\Bigl\\{\\frac{2r}{1000\\,S_l};\\ 0,\\ 1\\Bigr\\}.\n\\tag{12.13}",
+  "prov": "*Provenance (Eq. 12.13):* **[Engineered]**: wetted-bulb geometry and loss partition; constants chosen for the workbench.",
+  "group": [
+   "12.13"
+  ]
+ },
+ "12.14": {
+  "file": "12_drip.md",
+  "h2": "The wetted bulb",
+  "h3": "",
+  "body": "V_{\\mathrm{dp}}^{(1)} = V\\,\\frac{\\int_{z>R_{\\max}}\\pi\\rho^{2}\\,dz}{V_w},\n\\tag{12.14}",
+  "prov": "*Provenance (Eq. 12.14):* **[Engineered]**: wetted-bulb geometry and loss partition; constants chosen for the workbench.",
+  "group": [
+   "12.14"
+  ]
+ },
+ "12.15": {
+  "file": "12_drip.md",
+  "h2": "The wetted bulb",
+  "h3": "",
+  "body": "V_{\\mathrm{ev}} = \\min\\bigl\\{0.5\\,V,\\ \\pi\\rho(0)^{2}\\cdot10^{-6}\\cdot 2E_0\\bigr\\}\\quad(\\text{L},\\ \\text{area in m}^{2},\\ E_0\\ \\text{in mm d}^{-1}),\n\\tag{12.15}",
+  "prov": "*Provenance (Eq. 12.15):* **[Engineered]**: wetted-bulb geometry and loss partition; constants chosen for the workbench.",
+  "group": [
+   "12.15"
+  ]
+ },
+ "12.16": {
+  "file": "12_drip.md",
+  "h2": "Spread between emitters and the efficiencies",
+  "h3": "",
+  "body": "V_i = \\max\\bigl\\{0.02\\,\\bar V,\\ \\bar V\\,(1+\\sigma_q z_i)\\bigr\\},\\qquad \\bar V=\\bar q\\,t,\n\\tag{12.16}",
+  "prov": "*Provenance (Eq. 12.16):* **[Engineered]**: five-quantile delivery and run-time rules chosen for the workbench.",
+  "group": [
+   "12.16"
+  ]
+ },
+ "12.17": {
+  "file": "12_drip.md",
+  "h2": "Spread between emitters and the efficiencies",
+  "h3": "",
+  "body": "V_{\\mathrm{req}} = Z_n\\,S_e\\,S_l\\ \\ (\\mathrm L),\\qquad\nV_{\\mathrm{st},i}=\\min\\{V_{\\mathrm{root},i},\\ V_{\\mathrm{req}}\\},\\qquad V_{\\mathrm{ex},i} = V_{\\mathrm{root},i}-V_{\\mathrm{st},i}.\n\\tag{12.17}",
+  "prov": "*Provenance (Eq. 12.17):* **[Literature]**: definition of the requirement over the area served by one emitter.",
+  "group": [
+   "12.17"
+  ]
+ },
+ "12.18": {
+  "file": "12_drip.md",
+  "h2": "Spread between emitters and the efficiencies",
+  "h3": "",
+  "body": "t = \\mathrm{clip}\\Bigl\\{\\frac{V_{\\mathrm{req}}}{\\bar q\\,E_u};\\ 0.05,\\ 96\\Bigr\\}\\ \\ \\mathrm h.\n\\tag{12.18}",
+  "prov": "*Provenance (Eq. 12.18):* **[Engineered]**: five-quantile delivery and run-time rules chosen for the workbench.",
+  "group": [
+   "12.18"
+  ]
+ },
+ "12.19": {
+  "file": "12_drip.md",
+  "h2": "Spread between emitters and the efficiencies",
+  "h3": "",
+  "body": "E_a = \\frac{\\langle V_{\\mathrm{st}}\\rangle}{\\langle V\\rangle},\\quad\nE_s = \\frac{\\langle V_{\\mathrm{st}}\\rangle}{V_{\\mathrm{req}}},\\quad\n\\mathrm{DP} = \\frac{\\langle V_{\\mathrm{dp}}^{(1)}+V_{\\mathrm{ex}}\\rangle}{\\langle V\\rangle},\\quad\n\\mathrm{EV} = \\frac{\\langle V_{\\mathrm{ev}}\\rangle}{\\langle V\\rangle},\\quad\nZ_{\\mathrm{gross}}=\\frac{\\bar V}{S_eS_l},\n\\tag{12.19}",
+  "prov": "*Provenance (Eq. 12.19):* **[Engineered]**: five-quantile delivery and run-time rules chosen for the workbench.",
+  "group": [
+   "12.19"
+  ]
+ },
+ "12.20": {
+  "file": "12_drip.md",
+  "h2": "Layout and infrastructure",
+  "h3": "",
+  "body": "W_f=\\frac{10^{4}A_f}{L_L},\\quad N_L=\\Bigl\\lfloor \\frac{W_f}{S_l}\\Bigr\\rfloor,\\quad\nn_{\\mathrm{zone}}=\\Bigl\\lceil \\frac{N_L\\,Q_{\\mathrm{lat}}}{Q_s}\\Bigr\\rceil,\\quad\nn_{l}=\\Bigl\\lceil\\frac{N_L}{n_{\\mathrm{zone}}}\\Bigr\\rceil,\\quad Q_z=n_l\\,Q_{\\mathrm{lat}},\n\\tag{12.20}",
+  "prov": "*Provenance (Eq. 12.20):* **[Engineered]**: layout, sizing and scoring rules; the 1.5 m/s velocity limit is a common practice.",
+  "group": [
+   "12.20"
+  ]
+ },
+ "12.21": {
+  "file": "12_drip.md",
+  "h2": "Layout and infrastructure",
+  "h3": "",
+  "body": "D\\in\\{32,40,50,63,75,90,110,125,160,200,250,315\\}\\ \\mathrm{mm}\n\\tag{12.21}",
+  "prov": "*Provenance (Eq. 12.21):* **[Engineered]**: layout, sizing and scoring rules; the 1.5 m/s velocity limit is a common practice.",
+  "group": [
+   "12.21"
+  ]
+ },
+ "12.22": {
+  "file": "12_drip.md",
+  "h2": "Layout and infrastructure",
+  "h3": "",
+  "body": "h_{f,sm}=0.4\\,\\frac{10.67\\,L_{sm}\\,Q_z^{1.852}}{C^{1.852}D_{sm}^{4.871}},\\qquad\nh_{f,m}=\\frac{10.67\\,L_m\\,Q_z^{1.852}}{C^{1.852}D_m^{4.871}}.\n\\tag{12.22}",
+  "prov": "*Provenance (Eq. 12.22):* **[Engineered]**: Christiansen-type reduction with a chosen factor 0.4.",
+  "group": [
+   "12.22"
+  ]
+ },
+ "12.23": {
+  "file": "12_drip.md",
+  "h2": "Layout and infrastructure",
+  "h3": "",
+  "body": "\\mathrm{TDH} = z_{\\mathrm{lift}} + H_0 + h_{f,sm} + h_{f,m} + 9\\ \\mathrm m,\\qquad\nP = \\frac{\\rho g\\,Q_z\\,\\mathrm{TDH}}{\\eta} = \\frac{9.81\\,(Q_z/1000)\\,\\mathrm{TDH}}{0.65}\\ \\ \\mathrm{kW}.\n\\tag{12.23}",
+  "prov": "*Provenance (Eq. 12.23):* **[Engineered]**: layout, sizing and scoring rules; the 1.5 m/s velocity limit is a common practice.",
+  "group": [
+   "12.23"
+  ]
+ },
+ "12.24": {
+  "file": "12_drip.md",
+  "h2": "Season and farm",
+  "h3": "",
+  "body": "n_{\\mathrm{ev}}=\\frac{y_I}{Z_n},\\quad\nZ_{\\mathrm{season}} = n_{\\mathrm{ev}}\\,Z_{\\mathrm{gross}},\\quad\nq_{ha}=\\frac{q}{3600}\\,\\frac{10^{4}}{S_eS_l}\\ \\ (\\mathrm{L\\,s^{-1}\\,ha^{-1}}),\n\\tag{12.24}",
+  "prov": "*Provenance (Eq. 12.24):* **[Engineered]**: layout, sizing and scoring rules; the 1.5 m/s velocity limit is a common practice.",
+  "group": [
+   "12.24"
+  ]
+ },
+ "12.25": {
+  "file": "12_drip.md",
+  "h2": "Season and farm",
+  "h3": "",
+  "body": "n_{\\mathrm{set}}=\\Bigl\\lceil \\frac{q_{ha}A_f}{Q_s}\\Bigr\\rceil,\\qquad\nt_{\\mathrm{round}}=n_{\\mathrm{set}}\\,t,\\qquad\nH_{\\mathrm{pump}}=n_{\\mathrm{ev}}\\,t_{\\mathrm{round}},\\qquad\nE_{\\mathrm{kWh}}=H_{\\mathrm{pump}}\\,P.\n\\tag{12.25}",
+  "prov": "*Provenance (Eq. 12.25):* **[Engineered]**: layout, sizing and scoring rules; the 1.5 m/s velocity limit is a common practice.",
+  "group": [
+   "12.25"
+  ]
+ },
+ "12.26": {
+  "file": "12_drip.md",
+  "h2": "The design table",
+  "h3": "",
+  "body": "\\mathrm{score} = \\min(E_a,1) - 2.5\\,\\max(0,\\ 0.9 - E_s),\n\\tag{12.26}",
+  "prov": "*Provenance (Eq. 12.26):* **[Engineered]**: layout, sizing and scoring rules; the 1.5 m/s velocity limit is a common practice.",
+  "group": [
+   "12.26"
+  ]
+ },
+ "13.1": {
+  "file": "13_sprinkler.md",
+  "h2": "Inputs, step by step",
+  "h3": "",
+  "body": "S_{d}^{\\mathrm{eff}} = \\frac{\\max(0,S_d)}{1+0.25\\,S}\\qquad(S\\ \\text{in \\%}).\n\\tag{13.1}",
+  "prov": "*Provenance (Eq. 13.1):* **[Engineered]**: depression storage reduction with slope.",
+  "group": [
+   "13.1"
+  ]
+ },
+ "13.2": {
+  "file": "13_sprinkler.md",
+  "h2": "Nozzle discharge and wetted radius",
+  "h3": "",
+  "body": "q = 0.95\\,A_n\\sqrt{2g\\,h}\\times6\\times10^{4}\\ \\ (\\mathrm{L\\,min^{-1}}),\\qquad A_n=\\pi\\Bigl(\\frac{d}{2000}\\Bigr)^{2}\\ \\mathrm{m^2},\n\\tag{13.2}",
+  "prov": "*Provenance (Eq. 13.2):* **[Literature]**: Torricelli orifice equation.",
+  "group": [
+   "13.2"
+  ]
+ },
+ "13.3": {
+  "file": "13_sprinkler.md",
+  "h2": "Nozzle discharge and wetted radius",
+  "h3": "",
+  "body": "R = c_R\\sqrt{d\\,h}\\;f_\\alpha(\\alpha),\\qquad\nf_\\alpha(\\alpha)=\\Bigl[\\frac{\\max\\{0.05,\\ \\sin(3.1\\,\\alpha)\\}}{0.9763}\\Bigr]^{0.45},\n\\tag{13.3}",
+  "prov": "*Provenance (Eq. 13.3):* **[Engineered]**: range law of the Keller and Bliesner (1990) form; the impact coefficient 1.35 is the published value and is verified against their worked example (Paper 3); the coefficients of the other types and the angle function are chosen.",
+  "group": [
+   "13.3"
+  ]
+ },
+ "13.4": {
+  "file": "13_sprinkler.md",
+  "h2": "The spray pattern and the overlap",
+  "h3": "",
+  "body": "\\hat p(x)=\\begin{cases}\n1-x^{m}, & \\text{impact } (m=1.3),\\ \\text{gun } (m=1),\\\\\n(0.5+0.5x)(1-x^{6}), & \\text{rotating spray (ring)},\\\\\n(0.55+0.45x)(1-x^{5}), & \\text{micro-sprinkler (ring-2)},\n\\end{cases}\\qquad \\hat p=0\\ \\text{for}\\ x\\ge1.\n\\tag{13.4}",
+  "prov": "*Provenance (Eq. 13.4):* **[Engineered]**: pattern and wind shapes chosen to reproduce published qualitative patterns.",
+  "group": [
+   "13.4"
+  ]
+ },
+ "13.5": {
+  "file": "13_sprinkler.md",
+  "h2": "The spray pattern and the overlap",
+  "h3": "",
+  "body": "R_e(\\theta)=R\\,\\mathrm{clip}\\{1+0.022\\,u\\cos\\theta;\\ 0.7,\\ 1.4\\},\\qquad \\text{shift}=0.03\\,u\\,R,\n\\tag{13.5}",
+  "prov": "*Provenance (Eq. 13.5):* **[Engineered]**: pattern and wind shapes chosen to reproduce published qualitative patterns.",
+  "group": [
+   "13.5"
+  ]
+ },
+ "13.6": {
+  "file": "13_sprinkler.md",
+  "h2": "The spray pattern and the overlap",
+  "h3": "",
+  "body": "a(x,y) = \\sum_{i,j} p\\bigl(x-x_{ij},\\,y-y_{ij}\\bigr)\\quad(\\mathrm{mm\\,min^{-1}}),\\qquad\n\\bar a=\\frac1n\\sum_k a_k,\n\\tag{13.6}",
+  "prov": "*Provenance (Eq. 13.6):* **[Literature]**: overlap by superposition of single-sprinkler patterns.",
+  "group": [
+   "13.6"
+  ]
+ },
+ "13.7": {
+  "file": "13_sprinkler.md",
+  "h2": "The spray pattern and the overlap",
+  "h3": "",
+  "body": "\\mathrm{CU}=1-\\frac{\\sum_k |a_k-\\bar a|}{n\\,\\bar a}.\n\\tag{13.7}",
+  "prov": "*Provenance (Eq. 13.7):* **[Literature]**: Christiansen (1942).",
+  "group": [
+   "13.7"
+  ]
+ },
+ "13.8": {
+  "file": "13_sprinkler.md",
+  "h2": "Wind drift and evaporation loss",
+  "h3": "",
+  "body": "w_d=\\frac{1}{100}\\,\\mathrm{clip}\\Bigl\\{\\bigl(1.2+0.5u+0.04u^{2}\\bigr)\\,F\\Bigl(\\frac{P}{250}\\Bigr)^{0.7}\\bigl[1+0.025\\,(T_a-20)\\bigr]\\Bigl[0.6+0.4\\,\\frac{\\sin\\alpha}{0.4226}\\Bigr];\\ 0.5,\\ 45\\Bigr\\}.\n\\tag{13.8}",
+  "prov": "*Provenance (Eq. 13.8):* **[Engineered]**: loss and ponding rules chosen for the workbench.",
+  "group": [
+   "13.8"
+  ]
+ },
+ "13.9": {
+  "file": "13_sprinkler.md",
+  "h2": "The soil intake, ponding and runoff",
+  "h3": "",
+  "body": "t_p=\\Bigl(\\frac aK\\Bigr)^{1/(A-1)},\\qquad\nF=\\begin{cases}\\mathrm{sup}, & T\\le t_p\\\\ K\\,T^{A}, & T>t_p\\end{cases}\\qquad\nR=\\mathrm{sup}-F,\\quad \\mathrm{RO}=\\max(0,R-S_d^{\\mathrm{eff}}),\\quad I=\\mathrm{sup}-\\mathrm{RO}.\n\\tag{13.9}",
+  "prov": "*Provenance (Eq. 13.9):* **[Engineered]**: loss and ponding rules chosen for the workbench.",
+  "group": [
+   "13.9"
+  ]
+ },
+ "13.10": {
+  "file": "13_sprinkler.md",
+  "h2": "The soil intake, ponding and runoff",
+  "h3": "",
+  "body": "I_c=\\min\\{I,\\ I_{\\mathrm{int}}\\},\\qquad I_{\\mathrm{int}} = 0.6\\,\\mathrm{CAP}\\,[\\mathrm{VFF}<0.95] + 1.2\\,\\mathrm{LAI}_{\\mathrm{live}},\n\\tag{13.10}",
+  "prov": "*Provenance (Eq. 13.10):* **[Engineered]**: loss and ponding rules chosen for the workbench.",
+  "group": [
+   "13.10"
+  ]
+ },
+ "13.11": {
+  "file": "13_sprinkler.md",
+  "h2": "Efficiencies and run time",
+  "h3": "",
+  "body": "\\begin{aligned}\nE_a &= \\frac{\\overline{\\min(Z_k,Z_n)}}{\\mathrm{gross}}, & E_s &= \\frac{\\overline{\\min(Z_k,Z_n)}}{Z_n}, & \\mathrm{DU}&=\\frac{\\overline{Z}_{25}}{\\overline{Z}},\\\\\n\\mathrm{DP} &= \\frac{\\overline{\\max(Z_k-Z_n,0)}}{\\mathrm{gross}}, & \\mathrm{RO}&=\\frac{\\overline{\\mathrm{RO}_k}}{\\mathrm{gross}}, & \\mathrm{WD}&=w_d+\\frac{\\overline{I_c}}{\\mathrm{gross}},\n\\end{aligned}\n\\tag{13.11}",
+  "prov": "*Provenance (Eq. 13.11):* **[Literature]**: efficiency and distribution uniformity of Merriam and Keller (1978).",
+  "group": [
+   "13.11"
+  ]
+ },
+ "13.12": {
+  "file": "13_sprinkler.md",
+  "h2": "Efficiencies and run time",
+  "h3": "",
+  "body": "T=\\min\\{T:\\ \\overline{Z}_{25}(T)\\ge Z_n\\},\\qquad T\\in[1,\\,2400]\\ \\mathrm{min},\n\\tag{13.12}",
+  "prov": "*Provenance (Eq. 13.12):* **[Engineered]**: run-time, wind-spacing and set rules; the wind factors follow the practice of Keller and Bliesner (1990) but are not independently verified.",
+  "group": [
+   "13.12"
+  ]
+ },
+ "13.13": {
+  "file": "13_sprinkler.md",
+  "h2": "The ten textbook checks",
+  "h3": "",
+  "body": "k=\\begin{cases}1,&W\\le5.5\\\\0.9,&5.5<W\\le13\\\\0.8,&13<W\\le22\\\\0.7,&W>22.\\end{cases}\n\\tag{13.13}",
+  "prov": "*Provenance (Eq. 13.13):* **[Engineered]**: run-time, wind-spacing and set rules; the wind factors follow the practice of Keller and Bliesner (1990) but are not independently verified.",
+  "group": [
+   "13.13"
+  ]
+ },
+ "13.14": {
+  "file": "13_sprinkler.md",
+  "h2": "The ten textbook checks",
+  "h3": "",
+  "body": "S_s\\le k\\,R_w,\\qquad S_l\\le1.5\\,R_w,\\qquad\nL_y=\\frac{10^{4}A_f}{L_x},\\quad N=\\lfloor L_x/S_s\\rfloor,\\quad N_m=\\lfloor L_y/S_l\\rfloor,\n\\tag{13.14}",
+  "prov": "*Provenance (Eq. 13.14):* **[Engineered]**: run-time, wind-spacing and set rules; the wind factors follow the practice of Keller and Bliesner (1990) but are not independently verified.",
+  "group": [
+   "13.14"
+  ]
+ },
+ "13.15": {
+  "file": "13_sprinkler.md",
+  "h2": "The ten textbook checks",
+  "h3": "",
+  "body": "t_{\\mathrm{set}}=\\frac{Z_{\\mathrm{gross}}}{\\mathrm{AR}}\\ \\ (\\mathrm h),\\qquad\nn_{\\mathrm{sets/day}}=\\Bigl\\lfloor\\frac{h_{\\mathrm{op}}}{t_{\\mathrm{set}}}\\Bigr\\rfloor,\\qquad T_{\\mathrm{int}}=\\max\\Bigl(1,\\Bigl\\lfloor\\frac{Z_n}{\\mathrm{ET}_{\\mathrm{pk}}}\\Bigr\\rfloor\\Bigr)\\ \\mathrm{days},\n\\tag{13.15}",
+  "prov": "*Provenance (Eq. 13.15):* **[Engineered]**: run-time, wind-spacing and set rules; the wind factors follow the practice of Keller and Bliesner (1990) but are not independently verified.",
+  "group": [
+   "13.15"
+  ]
+ },
+ "13.16": {
+  "file": "13_sprinkler.md",
+  "h2": "The ten textbook checks",
+  "h3": "",
+  "body": "N_d(n)=\\Bigl\\lceil\\frac{N_m}{n\\,n_{\\mathrm{sets/day}}}\\Bigr\\rceil,\\qquad Q_{\\mathrm{in}}(n)=n\\,N\\,q_h,\n\\tag{13.16}",
+  "prov": "*Provenance (Eq. 13.16):* **[Engineered]**: run-time, wind-spacing and set rules; the wind factors follow the practice of Keller and Bliesner (1990) but are not independently verified.",
+  "group": [
+   "13.16"
+  ]
+ },
+ "13.17": {
+  "file": "13_sprinkler.md",
+  "h2": "The ten textbook checks",
+  "h3": "",
+  "body": "J=\\frac{0.472\\,Q^{1.75}}{D^{4.75}}\\ \\ (\\mathrm{m\\,m^{-1}};\\ Q\\ \\text{in L h}^{-1},\\ D\\ \\text{in mm}),\n\\tag{13.17}",
+  "prov": "*Provenance (Eq. 13.17):* **[Literature]**: Blasius friction law for smooth pipe.",
+  "group": [
+   "13.17"
+  ]
+ },
+ "13.18": {
+  "file": "13_sprinkler.md",
+  "h2": "The ten textbook checks",
+  "h3": "",
+  "body": "h_{f,\\mathrm{lat}}=1.1\\,F\\,J(Q_L,D)\\,\\bigl(L_x-S_s/2\\bigr)\\le0.2\\,h_s,\\qquad Q_L=1000\\,N\\,q_h,\n\\tag{13.18}",
+  "prov": "*Provenance (Eq. 13.18):* **[Literature]**: 20 % rule of Keller and Bliesner (1990).",
+  "group": [
+   "13.18"
+  ]
+ },
+ "13.19": {
+  "file": "13_sprinkler.md",
+  "h2": "The ten textbook checks",
+  "h3": "",
+  "body": "H_{\\mathrm{man}} = z_{\\mathrm{lift}} + J\\,L_{\\mathrm{conv}} + J\\,L_{\\mathrm{main}} + h_s + 0.75\\,h_{f,\\mathrm{lat}},\n\\tag{13.19}",
+  "prov": "*Provenance (Eq. 13.19):* **[Engineered]**: head and sets bookkeeping.",
+  "group": [
+   "13.19"
+  ]
+ },
+ "13.20": {
+  "file": "13_sprinkler.md",
+  "h2": "The ten textbook checks",
+  "h3": "",
+  "body": "P_{\\mathrm{CV}} = \\frac{1000\\,(Q_m/3.6\\times10^{6})\\,H_{\\mathrm{man}}}{75\\,\\eta},\\quad \\eta=0.75,\\qquad P_{\\mathrm{kW}}=0.7355\\,P_{\\mathrm{CV}},\n\\tag{13.20}",
+  "prov": "*Provenance (Eq. 13.20):* **[Literature]**: hydraulic power definition.",
+  "group": [
+   "13.20"
+  ]
+ },
+ "13.21": {
+  "file": "13_sprinkler.md",
+  "h2": "Layout and infrastructure",
+  "h3": "",
+  "body": "N_L=\\Bigl\\lfloor\\frac{10^4A_f/L_L}{S_l}\\Bigr\\rfloor,\\quad\nn_l=\\min\\Bigl(N_L,\\ \\Bigl\\lfloor\\frac{Q_s}{Q_{\\mathrm{lat}}}\\Bigr\\rfloor\\Bigr),\\quad\nn_{\\mathrm{set}}=\\Bigl\\lceil\\frac{N_L}{n_l}\\Bigr\\rceil,\\quad Q_z=n_l Q_{\\mathrm{lat}}.\n\\tag{13.21}",
+  "prov": "*Provenance (Eq. 13.21):* **[Engineered]**: head and sets bookkeeping.",
+  "group": [
+   "13.21"
+  ]
+ },
+ "13.22": {
+  "file": "13_sprinkler.md",
+  "h2": "Layout and infrastructure",
+  "h3": "",
+  "body": "F_m=\\frac1{2.852}+\\frac1{2N_s}+\\frac{\\sqrt{0.852}}{6N_s^{2}},\\qquad h_{f,\\mathrm{lat}}=F_m\\,h_{HW}(Q_{\\mathrm{lat}},D,L_L),\n\\tag{13.22}",
+  "prov": "*Provenance (Eq. 13.22):* **[Literature]**: Christiansen reduction factor with Hazen--Williams exponent.",
+  "group": [
+   "13.22"
+  ]
+ },
+ "13.23": {
+  "file": "13_sprinkler.md",
+  "h2": "Season and farm",
+  "h3": "",
+  "body": "n_{\\mathrm{ev}}=\\frac{y_I}{Z_n},\\qquad n_{\\mathrm{sp}}=\\mathrm{round}\\Bigl(\\frac{10^{4}A_f}{S_sS_l}\\Bigr),\\qquad\nQ_{\\mathrm{tot}}=\\frac{n_{\\mathrm{sp}}\\,q}{60},\\qquad n_{\\mathrm{set}}=\\Bigl\\lceil\\frac{Q_{\\mathrm{tot}}}{Q_s}\\Bigr\\rceil,\\qquad t_{\\mathrm{round}}=\\frac{n_{\\mathrm{set}}\\,T}{60}\\ \\mathrm h.\n\\tag{13.23}",
+  "prov": "*Provenance (Eq. 13.23):* **[Engineered]**: head and sets bookkeeping.",
+  "group": [
+   "13.23"
+  ]
+ },
+ "14.1": {
+  "file": "14_dashboard.md",
+  "h2": "Results",
+  "h3": "",
+  "body": "\\mathrm{Rain}=P_k,\\quad \\mathrm{Irr}=I_k,\\quad \\mathrm{Evap}=E_k,\\quad \\mathrm{Transp}=T_k,\\quad \\mathrm{Drain}=D_k\\ \\ (\\mathrm{mm\\,d^{-1}}).\n\\tag{14.1}",
+  "prov": "*Provenance (Eq. 14.1):* **[Engineered]**: bookkeeping of Engine 2 series.",
+  "group": [
+   "14.1"
+  ]
+ },
+ "14.2": {
+  "file": "14_dashboard.md",
+  "h2": "Results",
+  "h3": "",
+  "body": "\\Sigma X=\\sum_{j=1}^{N}X_{k+j},\\qquad X\\in\\{P,I,E,T,D\\}.\n\\tag{14.2}",
+  "prov": "*Provenance (Eq. 14.2):* **[Engineered]**: bookkeeping of Engine 2 series.",
+  "group": [
+   "14.2"
+  ]
+ },
+ "14.3": {
+  "file": "14_dashboard.md",
+  "h2": "Results",
+  "h3": "",
+  "body": "\\Delta S=P+I-E_{\\mathrm{int}}-E-T-D,\n\\tag{14.3}",
+  "prov": "*Provenance (Eq. 14.3):* **[Literature]**: water-balance identity.",
+  "group": [
+   "14.3"
+  ]
+ },
+ "14.4": {
+  "file": "14_dashboard.md",
+  "h2": "Results",
+  "h3": "The pinned baseline",
+  "body": "\\Delta_i=x_i-x_i^{\\mathrm{pin}},\n\\tag{14.4}",
+  "prov": "*Provenance (Eq. 14.4):* **[Engineered]**: bookkeeping of Engine 2 series.",
+  "group": [
+   "14.4"
+  ]
+ },
+ "14.5": {
+  "file": "14_dashboard.md",
+  "h2": "Charts",
+  "h3": "The pinned baseline",
+  "body": "Y^{(y)}=\\sum_{d\\in y}X_d,\\qquad X\\in\\{P,I,D,E,T\\}.\n\\tag{14.5}",
+  "prov": "*Provenance (Eq. 14.5):* **[Engineered]**: bookkeeping of Engine 2 series.",
+  "group": [
+   "14.5"
+  ]
+ }
+}
