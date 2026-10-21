@@ -3,3 +3,10 @@ __pycache__/
 .DS_Store
 Thumbs.db
 ~$*.xlsx
+# LaTeX build products (the PDFs are copied to Manuscripts/pdf)
+Manuscripts/tex/*.aux
+Manuscripts/tex/*.bbl
+Manuscripts/tex/*.blg
+Manuscripts/tex/*.log
+Manuscripts/tex/*.out
+Manuscripts/tex/*.pdf

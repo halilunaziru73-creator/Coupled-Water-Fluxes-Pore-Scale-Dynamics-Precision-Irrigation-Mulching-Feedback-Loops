@@ -24,11 +24,13 @@ WHAT IS IN THIS FOLDER
 06_3D_Project/            3D_Project_animation_1994.mp4 (moving 3D model of the whole project)
                           3D_Project_interactive.html (rotate / zoom / play)
 07_Derived_Data_Tables/   effect sizes, elasticities, Pareto runs, production fits, controllability tables
+                          README.md lists the raw outputs and derives each table from them step by step;
+                          derive_tables.py re-derives all seven tables from Data/daisy_ensemble.csv.gz
 08_Scripts/               Python that made every figure (reproducible)
 Figure_Catalogue.csv      title, caption and data source of every figure
 
 DATA AND RULES
-* Source: your summary_all.csv (10,190 runs). 149 runs flagged SOLVER_FAILURE are excluded everywhere.
+* Source: the 10,190-run table (Data/daisy_ensemble.csv.gz; complete archive on Zenodo, doi:10.5281/zenodo.23043626). 149 runs flagged SOLVER_FAILURE are excluded everywhere.
 * IE and IWUE are shown only where irrigation >= 20 mm/yr (smaller amounts give meaningless ratios).
 * Daily and per-year figures need daily output, which the batch run did not keep for E8-E16 and which
   was not in the results folder. 36 of the same setups were re-run (Daisy 7.1.14) to obtain it:

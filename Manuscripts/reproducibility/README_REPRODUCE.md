@@ -58,6 +58,7 @@ The engine under test is `Software/SWAFL_Desktop/app/engine/engine.html` of the 
 | Drip (Hazen-Williams) comparison (P3) | `v_drip.js`, `run_drip.js` -> `p3_drip_swafl.json`, `drip_out.json` |
 | Sprinkler: nozzle, wetted diameter, spacing (P3) | `v_sprinkler.js`, `run_spr.js` -> `p3_sprinkler.json`, `spr_out.json` |
 | Engine 1 versus Daisy, held-out E12 (P3) | `make_e12.py`, `e1_heldout.js` -> `e12.json`, `e12_pred.json` |
+| Soil-water-atmosphere variables of the ten soils (P3 Section 5.1, Tables 8-10, Figure 2) | `swa_vars.js`, `p3_swa_fig.py` -> `p3_swa_vars.json`, `fig04_swa_state.pdf` |
 | Engine 1 sensitivity; Engine 2 closure and grid (P3) | `e1_sens.js`, `e2_closure.js`, `e2_grid.js`, `l_sens.js` -> `p3_*.json` |
 | Figure 1 of each paper (A4 landscape canvas) | `p1_fig1_new.py`, `p2_fig1_new.py`, `p3_fig01_workflow_v9.py`, then `make_a4.py` |
 
@@ -66,11 +67,11 @@ The engine under test is `Software/SWAFL_Desktop/app/engine/engine.html` of the 
 * **No field validation.** All Daisy runs are simulations; the verification in P3 compares SWAFL Desktop with published worked examples and with Daisy. The package reproduces the computations, not the agreement of any model with measurements.
 * **Daisy itself is not re-run.** The ensemble is archived output of Daisy. Re-running it requires the Daisy executable and the setup files, which are not part of this package; the exact Daisy release used is not recorded in these files and should be added to the dataset record before submission.
 * **Three intermediate arrays are archived, not regenerated** (`intermediates/`): `p1_e11.pkl` (E11 grid summary for a P1 figure), `p3_drip_cmp.npy` and `drip_scatter.npy` (drip solver comparison for P3 figures). Their generating code was run interactively and was not kept. They feed figures only; no number in the text depends on them.
-* **Application screenshots.** The layer montage (P3 Figure 2) and the interface figures are screenshots of SWAFL Desktop taken by hand; `p3_figs.py` reports a failed step for the montage when these are absent.
+* **Application screenshots.** The interface figures of Paper 3 are screenshots of SWAFL Desktop taken by hand. They are archived in `Manuscripts/figures/shots/` and are not regenerated; `run_all.sh` copies them into the work directory, where `p3_figs.py` uses them for the layer montage.
 * **Stochastic components.** Seeds are fixed (above); a different NumPy, SciPy or scikit-learn version can change random streams or solver paths.
 * **Browser.** `p3_js/*.js` launch `/opt/pw-browsers/chromium`; set another path in the first line of each script if needed (Playwright 1.56.0 was used).
 * **Fonts.** Figures use the Carlito font if installed (fallback DejaVu Sans), which changes only text widths.
 
 ## Versions used
 
-Python 3.13.16; NumPy 2.5.3; SciPy 1.18.1; pandas 3.0.5; scikit-learn 1.9.1; Matplotlib 3.11.2; Node.js 22.22.0; Playwright 1.56.0 with Chromium. Typesetting: XeLaTeX and BibTeX.
+Python 3.13.16; NumPy 2.5.3; SciPy 1.18.1; pandas 3.0.5; scikit-learn 1.9.1; statsmodels 0.15.0; Matplotlib 3.11.2; Node.js 22.22.0; Playwright 1.56.0 with Chromium. Typesetting: XeLaTeX and BibTeX.

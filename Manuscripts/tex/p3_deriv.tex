@@ -1,5 +1,5 @@
 %==========================================================
-\section{Derivations, error propagation and notation}
+\subsection{Derivations and error propagation}
 \label{sec:deriv}
 This section sets out the short derivations behind the closed-form layers, so that each can be audited line by line, and the elementary error analysis that explains which deviations in the verification were to be expected.
 
@@ -37,21 +37,4 @@ Engine~1 returns products of ratios, \cref{eq:E1E,eq:E1T,eq:E1ET,eq:E1I,eq:E1Y}.
 
 Rank correlation is invariant to monotone transformations, whereas $R^2$ and RMSE are not. A systematic multiplicative or additive offset shifts RMSE and $R^2$ but leaves Spearman's $\rho$ unchanged; this is why the raw irrigation $R^2$ of 0.18 becomes 0.79 after re-anchoring while $\rho$ is 0.96 in both cases. A screening emulator is judged by whether it orders the options correctly, a budgeting model by whether it reproduces the magnitude, and the verification therefore reports both families of metric \citep{Moriasi2007,Bennett2013}.
 
-
-%==========================================================
-\section{End-to-end workflow from question to decision}
-\label{sec:workflow}
-To make the traceability concrete, one decision is followed through the software, naming at each step the equation that produces the displayed quantity and the test that supports it.
-\begin{enumerate}[label=\textbf{Step \arabic*.}]
-\item \textbf{Choose the soil and crop setting.} The soil sets $(\alpha,n)$ and the baseline vector $\mathbf b$ (\cref{tab:soilsP3}, E5). \emph{Support.} class means of \citet{Carsel1988}; the baseline is Data-driven.
-\item \textbf{Set the trigger and sensor depth.} The trigger suction $h_T$ is converted to a depletion fraction by \cref{eq:depl}. \emph{Support.} FAO convention \citep{Allen1998}; the inverse is a monotone bisection.
-\item \textbf{Read the annual consequences.} Engine~1 returns $E,T,\mathit{ET},I,Y,D,N_L$ by \cref{eq:E1E,eq:E1T,eq:E1ET,eq:E1I,eq:E1Y,eq:E1D,eq:E1N,eq:corr}. \emph{Support.} held-out test (\cref{tab:e1}); the interface should be read as a ranking of options, and absolute yield is not to be used.
-\item \textbf{Inspect the seasonal timing.} Engine~2 produces dates and doses with \cref{eq:rain,eq:interc,eq:transp,eq:scale}. \emph{Support.} mass closure and annual agreement (Section~\ref{sec:e2}); timing within the year is plausible but unverified.
-\item \textbf{Select an application method.} The surface, drip or sprinkler layer is opened with the soil, depth and trigger carried over. \emph{Support.} \cref{tab:ws,tab:border,tab:drip}.
-\item \textbf{Read the design check.} Closure identities (\cref{eq:effclose}) are printed; a warning when a layer is outside its tested range (for example, a drip loss ratio above $0.2$) is a recommended addition and is not implemented in the tested version.
-\item \textbf{Record.} The configuration and the equation numbers (manual) allow the decision to be reconstructed by hand.
-\end{enumerate}
-This chain is deliberately shallow: each displayed number is at most three function calls from its equation, so a reader can reproduce a value with a calculator.
-
-A user comparing two triggers for coarse loam can conclude, with the rank fidelity reported, which uses less irrigation and by roughly how much \emph{relative} to the other; they should not quote the absolute millimetres as a field requirement. A user designing a furrow can use the volume-balance outputs as a textbook calculation. A user designing a sprinkler layout should treat the wetted radius as conservative by roughly 14\,\% for the tested nozzle and check the manufacturer's tables. A user designing a long drip lateral should verify that the head loss does not exceed 20\,\% of the inlet head.
 

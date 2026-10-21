@@ -88,7 +88,7 @@ $$
 
 **Pore picture.** Which pores are water-filled at each depth is given by the capillary rule of Eq. (8.4) with the local suction of Eq. (9.5); vapour particles are released from the drying front and rise through air-filled pores. The picture is an **illustration of the mechanism**, not a pore-network simulation.
 
-**Steps.** (1) Open *Evaporation physics* and press **Play** (24 days). (2) Raise the mulch (lower $\varphi$): the grey bare-soil curve stays, your curve lengthens stage 1. (3) Change the soil: stage 1 shortens in sands (small $Q_1$) and lengthens in silty soils. (4) Set a drip method: $q_0>0$ shortens stage 1 because the surface has less water to lose. (5) Hover over a pore to read its radius and the suction at which it empties.
+**Steps.** (1) Open *Evaporation physics* and press **Play** (24 days). (2) Raise the mulch (lower $\varphi$): the grey bare-soil curve stays, your curve lengthens stage 1. (3) Change the soil: stage 1 lasts longest in the sands (largest $Q_1$, about 3 days for the Sand at the season-mean demand) and is shortest in the silty clay loam (about 1 day), because the window between $h_i$ and $h_s$ scales with $1/\alpha$; in stage 2 the fine soils lose water more slowly (larger $\tau$). (4) Set a drip method: $q_0>0$ shortens stage 1 because the surface has less water to lose. (5) Hover over a pore to read its radius and the suction at which it empties.
 
 ## Fate of saved water (N2)
 

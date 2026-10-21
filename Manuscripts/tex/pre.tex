@@ -40,9 +40,12 @@
 \newcommand{\TAW}{\mathit{TAW}}
 \newcommand{\repourl}{https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops}
 \newcommand{\repo}{\href{\repourl}{repository}}
-\newcommand{\datalink}{\href{\repourl}{Data}}
-\newcommand{\codelink}{\href{\repourl/tree/main/Manuscripts}{Code}}
-\newcommand{\softlink}{\href{\repourl/tree/main/Software/SWAFL_Desktop}{Software}}
+\newcommand{\dataurl}{\repourl/tree/main/Data}
+\newcommand{\codeurl}{\repourl/tree/main/Manuscripts}
+\newcommand{\softurl}{\repourl/tree/main/Software/SWAFL_Desktop}
+\newcommand{\datalink}{\href{\dataurl}{Data}}
+\newcommand{\codelink}{\href{\codeurl}{Code}}
+\newcommand{\softlink}{\href{\softurl}{Software}}
 \newcommand{\manuallink}{\href{\manualurl}{Manual}}
 \newcommand{\downloadlink}{\href{\exeurl}{SWAFL.exe}}
 \newcommand{\figdir}{../figures}
@@ -56,8 +59,16 @@ $^{2}$ Public University of Navarre, Pamplona, Spain\\
 ORCID: \href{https://orcid.org/0009-0006-2324-9599}{0009-0006-2324-9599}\\
 $^{*}$ Correspondence: \href{mailto:halilunaziru73@gmail.com}{halilunaziru73@gmail.com}}
 \end{center}}
-\newcommand{\codeavail}{%
-\datalink{} (the complete Daisy ensemble outputs), \codelink{} (analysis and figure scripts) and \softlink{} (the SWAFL Desktop source) are in the project repository; the \manuallink{} (93 pages) can be reviewed or downloaded as a PDF. The dataset (all 10\,190 runs, raw and derived) is archived on Zenodo, \doihl{10.5281/zenodo.23043626}, and the ensemble table used here is also stored in the repository as \texttt{Manuscripts/reproducibility/data/daisy\_ensemble.csv.gz}. The folder \texttt{Manuscripts/reproducibility} is a self-contained package: pinned software versions (Python 3.13.16, NumPy 2.5.3, SciPy 1.18.1, pandas 3.0.5, scikit-learn 1.9.1, Matplotlib 3.11.2, Node.js 22.22.0), fixed random seeds in every stochastic step, SHA-256 checksums, and one command (\texttt{run\_all.sh}) that regenerates all results and figures from the ensemble and then compares every regenerated value with the archived result and with the headline numbers printed in the manuscripts. Each table and figure names the script that produced it (Appendix~\ref{app:repro}). Daisy itself was not re-run for this package, no field measurements are used, and three small intermediate arrays and the interface screenshots are archived rather than regenerated; these limits are listed in \texttt{README\_REPRODUCE.md}.}
+% Data and code availability of the two analysis papers (P1, P2)
+\newcommand{\dataavail}{%
+\textbf{Data.} The complete Daisy ensemble outputs (all 10\,190 runs, raw and derived) are archived on Zenodo, \doihl{10.5281/zenodo.23043626}. The raw run table used here, and a linked list of every data file used, are in the \datalink{} folder of the project repository (\url{\dataurl}).
+\par\smallskip\textbf{Code.} The analysis and figure scripts are in the \codelink{} folder (\url{\codeurl}). The folder \texttt{Manuscripts/reproducibility} is a self-contained package: pinned software versions (Python 3.13.16, NumPy 2.5.3, SciPy 1.18.1, pandas 3.0.5, scikit-learn 1.9.1, statsmodels 0.15.0, Matplotlib 3.11.2), fixed random seeds in every stochastic step, SHA-256 checksums, and one command (\texttt{run\_all.sh}) that regenerates all results and figures from the ensemble and then compares every regenerated value with the archived result and with the headline numbers printed in the manuscript. Each table and figure names the script that produced it (Appendix~\ref{app:repro}). Daisy itself was not re-run for this package, no field measurements are used, and small intermediate arrays used only by figures are archived rather than regenerated; these limits are listed in \texttt{README\_REPRODUCE.md}.}
+% Software, data and code availability of the software paper (P3)
+\newcommand{\softavail}{%
+\textbf{Software.} SWAFL Desktop (version 1.0.0) is open source; the \softlink{} source is in the project repository (\url{\softurl}) and the program for Windows is \downloadlink{} (\url{\exeurl}).
+\par\smallskip\textbf{Manual.} The \manuallink{} (\url{\manualurl}) documents every control, view and equation and labels the provenance of all 134 numbered equations; it can be reviewed or downloaded as a PDF.
+\par\smallskip\textbf{Data.} The complete Daisy ensemble outputs (all 10\,190 runs, raw and derived) are archived on Zenodo, \doihl{10.5281/zenodo.23043626}. The raw run table, and a linked list of every data file used, are in the \datalink{} folder of the repository (\url{\dataurl}).
+\par\smallskip\textbf{Code.} The verification scripts (Node.js with Playwright, driving the shipped engine) and the analysis and figure scripts (Python) are in the \codelink{} folder (\url{\codeurl}). The folder \texttt{Manuscripts/reproducibility} is a self-contained package: pinned software versions (Python 3.13.16, NumPy 2.5.3, SciPy 1.18.1, pandas 3.0.5, scikit-learn 1.9.1, statsmodels 0.15.0, Matplotlib 3.11.2, Node.js 22.22.0, Playwright 1.56.0), fixed random seeds in every stochastic step, SHA-256 checksums, and one command (\texttt{run\_all.sh}) that regenerates all results and figures and then compares every regenerated value with the archived result and with the headline numbers printed in the manuscript. Each table and figure names the script that produced it (Appendix~\ref{app:repro}). Daisy itself was not re-run for this package, no field measurements are used, and small intermediate arrays and the interface screenshots are archived rather than regenerated; these limits are listed in \texttt{README\_REPRODUCE.md}.}
 
 \usepackage{pdflscape}
 \setlength{\emergencystretch}{3em}

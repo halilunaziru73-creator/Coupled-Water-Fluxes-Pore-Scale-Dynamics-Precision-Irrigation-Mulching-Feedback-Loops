@@ -1,0 +1,268 @@
+%==========================================================
+\section{The coupled soil--water--atmosphere system and its variables}
+\label{sec:system}
+This section sets out what the framework represents before it describes how the numbers are computed (Section~\ref{sec:methods}). The modelled system is a field column of 1\,m depth, from the air above the canopy to the lower boundary at which drainage is counted, with five compartments: the atmosphere, the soil surface and its cover, the soil matrix and its structure, the soil water, and the crop. The compartments exchange water through eight fluxes and are driven by twelve controls. Every state variable, flux and control is named in \cref{tab:compartments,tab:controls}, with the relation that produces it and the provenance label of that relation; the relations themselves follow in Sections~\ref{sec:sys-soil}--\ref{sec:sys-decision}. Manual equation numbers are given in brackets so that each relation can be followed into the Manual.
+
+\subsection{System boundary and the governing balance}
+\label{sec:sys-balance}
+Over any period the water entering the column equals the water leaving it plus the change in storage,
+\begin{equation}
+P+I=T+E+E_{\mathrm{oth}}+D+\Delta S,
+\label{eq:balance}
+\end{equation}
+where $P$ is precipitation, $I$ irrigation, $T$ transpiration, $E$ soil evaporation, $E_{\mathrm{oth}}$ the remaining evaporation (water intercepted by the canopy, evaporation from mulch and litter, and the unattributed term identified in the companion water-balance audit), $D$ the drainage across 1\,m (negative values denote net capillary rise) and $\Delta S$ the change in profile storage. On the annual scale \cref{eq:balance} is closed by Engine~1 (\cref{eq:E1close}); on the daily scale by Engine~2 (\cref{eq:scale}). Nitrate leaching $N_L$ is carried with $D$, and grain yield $Y$ with $T$. \Cref{tab:compartments} lists the state variables and fluxes of each compartment.
+
+{\small
+\begin{longtable}{>{\raggedright\arraybackslash}p{2.0cm}>{\raggedright\arraybackslash}p{4.1cm}>{\raggedright\arraybackslash}p{1.8cm}>{\raggedright\arraybackslash}p{4.0cm}>{\raggedright\arraybackslash}p{1.9cm}}
+\caption{State variables and fluxes of the modelled soil--water--atmosphere system. Source: E1 = Engine~1 (annual), E2 = Engine~2 (daily), D = Daisy output stored in the software, R = relation evaluated by the layer. Provenance: L literature, D data-driven, E engineered.}\label{tab:compartments}\\
+\toprule
+Compartment & Variable (symbol) & Unit & Relation (manual) & Source; provenance\\\midrule\endfirsthead
+\toprule Compartment & Variable (symbol) & Unit & Relation (manual) & Source; provenance\\\midrule\endhead
+Atmosphere & rainfall scale $\gamma_P$; temperature shift $\Delta T$ & $-$; K & controls (\cref{tab:controls}) & input\\
+ & annual precipitation $P=P_{\mathrm{base}}\gamma_P$ & mm\,yr$^{-1}$ & \cref{eq:E1close} (5.12) & E1; D\\
+ & daily rainfall $R$, year factor $\gamma_y$ & mm\,d$^{-1}$, $-$ & \cref{eq:rain} (5.15) & E2; E\\
+ & bare-soil evaporative demand $e_{0,b}$ & mm\,d$^{-1}$ & \cref{eq:e0} (5.26) & R; E\\
+ & relative humidity RH; air water potential $\psi_{\mathrm{air}}$ & $-$; MPa & \cref{eq:psiair} (7.5) & R; L\\
+Surface and cover & mulch vapour-flux factor $\varphi$; interception capacity $c$ & $-$; mm & controls & input\\
+ & interception per shower $I_c$; throughfall $T_f$ & mm & \cref{eq:interc} (5.16) & E2; E\\
+ & stage-1 storage $Q_1$; stage-2 time scale $\tau_E$; stage-1 duration $t_1$ & mm; d; d & \cref{eq:twostage} (9.2--9.3) & R; E\\
+ & cumulative evaporation $Q(t)$; drying-front depth $\ell$ & mm & \cref{eq:twostage,eq:front} (9.3--9.5) & R; E\\
+ & annual soil evaporation $E$; other evaporation $E_{\mathrm{oth}}$ & mm\,yr$^{-1}$ & \cref{eq:E1E,eq:E1close} (5.4, 5.12) & E1; D\\
+ & regime index $\mathcal I$ & $-$ & \cref{eq:regime} (9.8) & R; E\\
+Soil matrix & sand, silt, clay fractions & \% & measured texture & D\\
+ & porosity $\phi=\theta_s$; residual content $\theta_r$ & $-$ & \cref{eq:poros} (8.2) & R; E\\
+ & van~Genuchten $\alpha$, $n$; effective saturation $S_e$; relative conductivity $K_r$ & cm$^{-1}$, $-$ & \cref{eq:vgP3,eq:mualemP3} (5.1--5.2) & R; L\\
+ & capillary radius of the largest water-filled pore $r_c$ & cm & \cref{eq:jurin} (8.4) & R; L\\
+ & available-water capacity AWC & mm\,cm$^{-1}$ & \cref{tab:soilsP3} & E\\
+Soil structure & tillage system; consolidation rate $\tau_c$ & $-$; d$^{-1}$ & controls & input\\
+ & relative pore space $p(t)$ & $-$ & \cref{eq:pore} (8.1) & R; E\\
+ & tillage and consolidation effects on drainage $\Delta_{\mathrm{till}}$, $\Delta_{\mathrm{cons}}$ & mm\,yr$^{-1}$ & \cref{eq:drivers} (8.5) & D\\
+Soil water & layer storage $w_i$; relative content $s_i$; depletion $f_i$ (40 layers of 2.5\,cm) & mm; $-$; $-$ & \cref{eq:layer} (Section~5.3) & E2; E\\
+ & suction $h$, water content $\theta$, depletion $f$ & cm, $-$, $-$ & \cref{eq:vgP3,eq:depl} (5.1, 5.3) & R; L\\
+ & sensor suction record, days beyond the trigger $N_y$ & cm; d & \cref{eq:Ny} (6.1--6.2) & D\\
+ & share of root zone beyond the trigger & $-$ & \cref{eq:share} (7.6) & D; E\\
+ & wetting front; redistribution flux $q_i$ & cm; mm\,d$^{-1}$ & \cref{eq:redis} (5.17) & E2; E\\
+ & storage change $\Delta S$, $\Delta S_d$ & mm & \cref{eq:E1close,eq:scale} (5.12, 5.25) & E1, E2; L\\
+Crop & canopy cover $C(d)$ & $-$ & \cref{eq:cover} (5.13--5.14) & E2; E\\
+ & maximum and current rooting depth $R_{\max}$, $R_d$; root density $\beta_i$ & cm; $-$ & \cref{eq:rmax,eq:rd,eq:rootdens} (5.18--5.20) & E2; E\\
+ & transpiration demand $T_d$; layer uptake $q_i^{T}$; stress factor $a_i$ & mm\,d$^{-1}$ & \cref{eq:transp} (5.22--5.23) & E2; E\\
+ & depths holding 50\,\% and 90\,\% of uptake $z_{50}$, $z_{90}$ & cm & \cref{eq:zp} (8.7) & R; E\\
+ & water potential of root zone, root, stem and leaf $\psi_{\mathrm{RZ}},\psi_{\mathrm{root}},\psi_{\mathrm{stem}},\psi_{\mathrm{leaf}}$ & MPa & \cref{eq:psisoil,eq:spac} (7.1--7.4) & R; L, E\\
+ & annual transpiration $T$; yield $Y$; irrigation efficiency IE & mm\,yr$^{-1}$; Mg\,ha$^{-1}$; kg\,m$^{-3}$ & \cref{eq:E1T,eq:E1Y} (5.5, 5.8) & E1; D\\
+Lower boundary & drainage $D$; nitrate leaching $N_L$ & mm\,yr$^{-1}$; kg\,ha$^{-1}$ & \cref{eq:E1D,eq:E1N} (5.9--5.10) & E1; D\\
+ & nitrate cost of drainage $\kappa_N$ & kg\,ha$^{-1}$ per mm & \cref{eq:kappaN} (10.2) & R; D\\
+Management & trigger suction $h_T$; trigger depletion $f_T$; critical depletion $f^\ast$ & cm; $-$; $-$ & \cref{eq:depl,eq:invdepl} (5.3, 6.3) & R; L\\
+ & net irrigation depth $Z_n$; annual irrigation $I$ & mm; mm\,yr$^{-1}$ & \cref{eq:Zn,eq:E1I} (5.27, 5.7) & R, E1; L, D\\
+ & fate of evaporation saved by mulch $\eta_I,\eta_D,\eta_T,\eta_{\mathrm{rest}}$ & $-$ & \cref{eq:fate} (9.6--9.7) & R; D\\\bottomrule
+\end{longtable}}
+
+\subsection{Driving variables and controls}
+\label{sec:sys-controls}
+Every control is an index into the list of values at which simulations exist, so that no displayed value lies between runs (\cref{tab:controls}). Changing a control re-evaluates every view; the last column of \cref{tab:controls} states which variables respond.
+
+{\small
+\begin{longtable}{>{\raggedright\arraybackslash}p{2.6cm}>{\raggedright\arraybackslash}p{4.2cm}>{\raggedright\arraybackslash}p{1.7cm}>{\raggedright\arraybackslash}p{5.3cm}}
+\caption{The twelve controls of the framework, their values and defaults, and the variables that respond. Run set: the Daisy experiment from which the response is read.}\label{tab:controls}\\
+\toprule
+Control & Values & Default & Responding variables (run set)\\\midrule\endfirsthead
+\toprule Control & Values & Default & Responding variables (run set)\\\midrule\endhead
+Soil & ten soils S01--S10 & S01 & all: $(\alpha,n)$, AWC, baseline vector, trigger anchor; intake parameters of the design layers (E5 baseline)\\
+Tillage & conventional, reduced, no-till & conventional & $p_0$; $D$, $E$, $Y$ (E5)\\
+Consolidation rate $\tau_c$ & 0.001, 0.0025, 0.005, 0.01, 0.02\,d$^{-1}$ & 0.001 & $p(t)$; $D$ (E5); no effect under no-till\\
+Crop & cereal (simulated), legume, vegetable (scaled) & cereal & calendar, $C(d)$, $R_{\max}$; $Y\times f_{\mathrm{crop}}$\\
+Mulch factor $\varphi$ & 0.1, 0.2, \dots, 1.0 & 1.0 (bare) & $E$, $I$, $D$, $Y$ (E7, E14); $e_0$\\
+Interception capacity $c$ & 0.5, 1, 2, 4\,mm & 1\,mm & $E$ (E7, E14)\\
+Rainfall scale $\gamma_P$ & $\times$0.5, 0.6, \dots, 1.4 & $\times$1.0 & all (E11, E14); $R$, $I_c$\\
+Temperature shift $\Delta T$ & $-1.0$, $-0.5$, \dots, $+3.5$\,K & 0 & $E$, $T$, $I$, $Y$ (E11); $e_{0,b}$, RH\\
+Irrigation method & surface; overhead; drip at 10--20, 20--30, 40--50, 50--60\,cm & surface & $I$, $D$, $Y$ (E4); dose placement; $\beta_i$ near the emitter\\
+Trigger suction $h_T$ & $-50$ to $-10\,000$\,cm (20 values) & $-300$\,cm & $I$, $Y$, $D$ (E2); irrigation dates; $R_{\max}$; $Z_n$\\
+Sensor depth $z_s$ & 5, 10, \dots, 100\,cm & 20\,cm & $I$, $Y$ (E3); irrigation dates\\
+Nitrogen rate & 10 to 150\,\% of standard (10 values) & 100\,\% & $Y$, $N_L$ (E13); $R_{\max}$\\\bottomrule
+\end{longtable}}
+
+\subsection{Soil matrix: texture, porosity, retention and conductivity}
+\label{sec:sys-soil}
+Each soil is described by its measured texture and an effective van~Genuchten pair $(\alpha,n)$ (\cref{tab:soilsP3}). Porosity and residual water content follow an engineered texture relation [8.2],
+\begin{equation}
+\phi=\theta_s=\mathrm{clip}\bigl(0.36+0.0016\,\mathrm{clay}+0.0009\,\mathrm{silt};\,0.34,\,0.50\bigr),\qquad \theta_r=0.01+0.0006\,\mathrm{clay},
+\label{eq:poros}
+\end{equation}
+with clay and silt in per cent, and the water content, effective saturation and relative conductivity follow the van~Genuchten--Mualem relations \cref{eq:vgP3,eq:mualemP3} \citep{vanGenuchten1980,Mualem1976} [5.1--5.2, 8.3]. The relation between suction and the pores that hold water is the capillary (Young--Laplace) law [8.4],
+\begin{equation}
+r_c=\frac{2\sigma\cos\gamma_c}{\rho_wgh}\approx\frac{0.149\ \mathrm{cm^2}}{h},
+\label{eq:jurin}
+\end{equation}
+with surface tension $\sigma=0.0728$\,N\,m$^{-1}$ and contact angle $\gamma_c\approx0$ \citep{Hillel1998}: a pore of radius $r$ is water-filled when $r\le r_c(h)$ and empties at $h=0.149/r$\,cm (with $r$ in cm). The pore views draw this rule on a modelled section whose grain classes follow the measured texture; the section illustrates the mechanism and is not a pore-network simulation \citep{Blunt2017}.
+
+Plant-available water is the water held between field capacity (100\,cm) and the wilting point (15\,849\,cm) \citep{Allen1998}, and the depletion $f$ of \cref{eq:depl} [5.3] expresses the soil-water state as the share of that water already used. The same suction therefore corresponds to different depletions in different soils: $-300$\,cm uses 24\,\% of the plant-available water of the silty clay loam and 84\,\% of that of the sand (\cref{tab:swa-hyd}).
+
+\subsection{Soil structure, tillage and consolidation}
+\label{sec:sys-structure}
+After tillage the loosened topsoil re-settles. The structure views describe the relative pore space $p$ (1 for freshly loosened soil) by a first-order relaxation towards a consolidated value $p_c=0.30$ [8.1],
+\begin{equation}
+p(t)=p_c+(p_0-p_c)\,e^{-\tau_ct},\qquad p_0=1.00\ (\text{conventional}),\ 0.72\ (\text{reduced}),\qquad p=0.42\ (\text{no-till}),
+\label{eq:pore}
+\end{equation}
+with $t$ in days since tillage and $\tau_c$ the consolidation rate, so that loose pores have a half-life $\ln2/\tau_c$ of 693\,d at 0.001\,d$^{-1}$ and 35\,d at 0.02\,d$^{-1}$. The exponential form is the first-order consolidation used in the structure sub-model on which Daisy's tillage effect is based \citep{Flanagan1995}; $p_0$, $p_c$ and the no-till value are presentation constants, and the hydrological effect of tillage is read from the simulations, not from \cref{eq:pore}. For each soil the drivers of a change in hydraulic properties are summarised as the tillage effect and the consolidation effect on annual drainage [8.5],
+\begin{equation}
+\Delta_{\mathrm{till}}=D(\mathrm{conv},\tau_c^\ast)-D(\mathrm{no\text{-}till},\tau_c^\ast),\qquad \Delta_{\mathrm{cons}}=D(\mathrm{till}^\ast,\tau_{\mathrm{fast}})-D(\mathrm{till}^\ast,\tau_{\mathrm{slow}}),
+\label{eq:drivers}
+\end{equation}
+with the current settings starred and $D$ taken from the E5 runs; ordinary least-squares lines of each effect on clay content [8.6] show how the response to structure varies across textures \citep{Strudley2008,Leuther2021}.
+
+\subsection{Soil water in depth and time}
+\label{sec:sys-water}
+In the daily model the profile is 40 layers of $\Delta z=2.5$\,cm. Layer $i$ holds plant-available water $w_i$ between 0 and $W_{\max}=\mathrm{AWC}\,\Delta z$, and its relative content and depletion are
+\begin{equation}
+s_i=\frac{w_i}{W_{\max}},\qquad f_i=1-s_i,\qquad h_i=\max\{30,\ h(f_i)\},
+\label{eq:layer}
+\end{equation}
+where $h(f)$ is the inverse of \cref{eq:depl} \cref{eq:invdepl}; the 30\,cm floor is engineered. Infiltrating water fills the top layer and cascades downwards; the excess leaving layer 40 is drainage and the deepest wetted layer is the wetting front. Between neighbouring layers a slow redistribution moves water towards the drier layer [5.17],
+\begin{equation}
+q_i=0.08\,(w_{i+1}-w_i),
+\label{eq:redis}
+\end{equation}
+which is displayed as capillary rise when it is upward and larger than $0.03\,W_{\max}$. The tipping-bucket structure conserves water exactly but is not a Richards solution, which is why its drainage is scaled to Engine~1 (\cref{eq:scale}).
+
+The sensor views use the Daisy-simulated daily suction at 20\,cm for the 20 seasons, irrigated and rainfed. For year $y$ the number of growing-season days on which the sensor is beyond the trigger, and the share of such days removed by irrigation, are [6.1--6.2]
+\begin{equation}
+N_y(h_T)=\#\{d\in\text{season of }y:\ h_d>|h_T|\},\qquad X=100\Bigl(1-\frac{\bar N_{\mathrm{irr}}}{\bar N_{\mathrm{rainfed}}}\Bigr),
+\label{eq:Ny}
+\end{equation}
+over the 183 days from 1 April, and the profile view reports the share of the 0--60\,cm root zone that is beyond the trigger [7.6],
+\begin{equation}
+\mathrm{share}=\frac{\sum_{i:\,z_i\le60,\ h_i>|h_T|}\Delta z_i}{\sum_{i:\,z_i\le60}\Delta z_i}.
+\label{eq:share}
+\end{equation}
+
+\subsection{Atmosphere and the soil surface}
+\label{sec:sys-atmos}
+\paragraph{Evaporative demand.} The bare-soil demand used by the evaporation view combines a season-mean of 4.2\,mm\,d$^{-1}$ with a seasonal weight, a warming factor of 7\,\% per kelvin, a cloud factor and the dryness of the year [5.26],
+\begin{equation}
+\begin{aligned}e_{0,b}={}&4.2\,(1+0.07\Delta T)\,\frac{0.35+0.325\bigl[1+\sin\frac{2\pi(\mathrm{doy}-100)}{365}\bigr]}{0.675}\\&\times\mathrm{clip}\bigl(1-0.12(\gamma_P-1);0.85,1.12\bigr)\sqrt{\gamma_y}\ \ \mathrm{mm\,d^{-1}},\end{aligned}
+\label{eq:e0}
+\end{equation}
+and under mulch and canopy the demand is $e_0=e_{0,b}\,\varphi\,(1-0.4C)$. The warming factor is close to the Clausius--Clapeyron rate of the saturation vapour pressure; the constants are engineered.
+
+\paragraph{Two-stage drying of the surface.} After a wetting the surface loses water at the atmospheric rate while capillary flow keeps it wet (stage 1), and then at a rate limited by vapour diffusion through a growing dry layer (stage 2), with cumulative loss rising roughly as $\sqrt t$ \citep{Philip1957,Ritchie1972,Lehmann2008,Or2013}. The evaporation view implements [9.2--9.3]
+\begin{equation}
+t_1=\frac{Q_1-q_0}{e_0},\qquad
+Q(t)=q_0+\begin{cases}e_0t, & t\le t_1,\\ (Q_1-q_0)+2e_0\tau_E\bigl(\sqrt{1+(t-t_1)/\tau_E}-1\bigr), & t>t_1,\end{cases}
+\label{eq:twostage}
+\end{equation}
+whose derivative is the rate $e(t)=e_0\bigl[1+(t-t_1)/\tau_E\bigr]^{-1/2}$ in stage 2. The stage-1 storage is the water held in the top $L_1=40$\,mm between an initial and a surface-dry suction, $Q_1=\max\{2,\,[\theta(h_i)-\theta(h_s)]L_1(0.6+0.4\gamma_P)\}$ with $h_i=0.25(1.5-0.5\gamma_P)/\alpha$ and $h_s=4/\alpha$; the stage-2 time scale is $\tau_E=0.006+0.03(\mathrm{clay}+\mathrm{silt})/100$\,d; and $q_0$ is the loss already avoided when drip places the water below the surface ($q_0=(1-w_f)0.95Q_1$, $w_f=\mathrm{clip}(1-z_d/50;0.05,1)$, zero for surface methods). Because $h_i$ and $h_s$ scale with $1/\alpha$, $Q_1$ samples the steep part of every retention curve. The dry-layer depth and the suction profile below it are [9.4--9.5]
+\begin{equation}
+\begin{gathered}\ell(t)=\min\Bigl\{60,\ \frac{Q(t)-Q_1}{\Delta\theta}\Bigr\}\ \mathrm{mm},\\
+\log_{10}h(z)=\log_{10}h_s+\bigl(\log_{10}h_i-\log_{10}h_s\bigr)\bigl(1-e^{-(z-\ell)/\lambda_E}\bigr),\end{gathered}
+\label{eq:front}
+\end{equation}
+with $\Delta\theta=\mathrm{clip}(\theta(h_i)-\theta(10^4);0.05,0.4)$ and $\lambda_E=L_1/3$; the pores that hold water at each depth follow \cref{eq:jurin}. All constants of \cref{eq:twostage,eq:front} are engineered, and the annual soil evaporation of the framework is the Daisy value of \cref{eq:E1E}, not this curve.
+
+\paragraph{Interception and mulch.} The canopy and litter catch the first $I_c$ mm of each shower (\cref{eq:interc}). A mulch acts through $\varphi$ on the vapour flux and through $c$ on interception; its effect on the annual fluxes is the difference between Engine~1 evaluated bare and mulched [9.1],
+\begin{equation}
+\Delta E=E_{1.0}-E_\varphi,\qquad \Delta I=I_{1.0}-I_\varphi,\qquad \Delta D=D_\varphi-D_{1.0},\qquad \Delta T_{\mathrm{tr}}=T_\varphi-T_{1.0},
+\label{eq:mulchdelta}
+\end{equation}
+and the regime map classifies each combination of mulch and rainfall by the index [9.8]
+\begin{equation}
+\mathcal I=\frac{E-D}{\max\{1,E+D\}},
+\label{eq:regime}
+\end{equation}
+with evaporation dominating where $\mathcal I>0.05$, drainage where $\mathcal I<-0.05$, and the boundary in between.
+
+\paragraph{Air.} The water potential of the air follows the thermodynamic relation with relative humidity [7.5] \citep{Nobel2009},
+\begin{equation}
+\psi_{\mathrm{air}}=\frac{\mathcal RT_K}{V_w}\ln\mathrm{RH}\approx135.5\,\ln\mathrm{RH}\ \ \mathrm{MPa},\qquad \mathrm{RH}=\mathrm{clip}(0.66-0.03\Delta T;\,0.35,\,0.90),
+\label{eq:psiair}
+\end{equation}
+with $\mathcal R$ the gas constant, $T_K\approx293$\,K and $V_w=18\times10^{-6}$\,m$^3$\,mol$^{-1}$; at RH $=0.66$ the air is at $-56$\,MPa.
+
+\subsection{The crop: canopy, roots, uptake and the water-potential path}
+\label{sec:sys-plant}
+\paragraph{Canopy.} The cereal follows the four-year rotation of the simulations (spring barley, winter barley, winter rape, winter wheat). Canopy cover rises logistically, $C(d)=\{1+\exp[-(d-d_{\mathrm{mid}})/s]\}^{-1}$ with $s=13$\,d for spring crops [5.13], follows a two-phase curve for winter crops [5.14], and declines linearly from the peak to harvest:
+\begin{equation}
+C\leftarrow C\,\max\Bigl\{0,\ 1-\frac{d-d_{\mathrm{pk}}}{d_{\mathrm{harv}}-d_{\mathrm{pk}}}\Bigr\}\quad(d>d_{\mathrm{pk}}).
+\label{eq:cover}
+\end{equation}
+\paragraph{Roots.} The maximum rooting depth responds to texture, trigger and nitrogen [5.18],
+\begin{equation}
+R_{\max}=\mathrm{clip}\Bigl(R_c(0.85+0.3\,\mathrm{sand})\Bigl[1+0.12\log_{10}\frac{|h_T|}{300}\Bigr]\Bigl[1-0.18\,\frac{N_r-100}{100}\Bigr];\,25,\,100\Bigr)\ \mathrm{cm},
+\label{eq:rmax}
+\end{equation}
+with $R_c=95$\,cm for the cereal, sand as a fraction and $N_r$ the nitrogen rate in per cent, so that drier triggers deepen and nitrogen-rich soils shallow the roots. While the canopy grows, the rooting depth advances towards water [5.19],
+\begin{equation}
+R_d\leftarrow\max\Bigl\{R_d,\ \min\bigl\{R_{\max}\,\mathrm{clip}\bigl(\tfrac{C-0.04}{0.96};0,1\bigr)^{0.8},\ R_{\max},\ R_d+1.7(0.35+\bar s_{\mathrm{wet}})\kappa_r\bigr\}\Bigr\},
+\label{eq:rd}
+\end{equation}
+where $\bar s_{\mathrm{wet}}$ is the mean relative content of the four layers below the root front and $\kappa_r=1.3$ when the topsoil is dry; roots die back after harvest and are pruned by drought. Root density decreases exponentially with depth, increases with wetness and, under drip, concentrates around the emitter [5.20],
+\begin{equation}
+\beta_i\propto\exp\Bigl(-\frac{z_i}{\lambda_rR_d+8}\Bigr)(0.45+0.9s_i)\Bigl[1+3e^{-((z_i-z_d)/12)^2}\Bigr]_{\text{drip}},\qquad z_i\le R_d,\qquad \sum_i\beta_i=1,
+\label{eq:rootdens}
+\end{equation}
+with $\lambda_r=0.32$ for the cereal. The demand is divided among layers by availability-weighted root density, with the linear stress factor $a_i$ of \cref{eq:transp} in the spirit of the FAO-56 coefficient \citep{Allen1998,Feddes1978}. The depth that holds a share $u$ of the annual uptake $U_i$ of layer $i$ is [8.7]
+\begin{equation}
+z_u=k_u\Delta z,\qquad k_u=\min\Bigl\{k:\ \frac{\sum_{i\le k}U_i}{\sum_iU_i}\ge u\Bigr\},\qquad u=0.5,\ 0.9,
+\label{eq:zp}
+\end{equation}
+averaged over the 20 years.
+\paragraph{The water-potential path.} The continuum from soil to air is a chain of series resistances in the catenary description of \citet{vandenHonert1948}. The root-zone potential is the root-density-weighted mean of the layer suctions of \cref{eq:layer} [7.1],
+\begin{equation}
+\psi_{\mathrm{RZ}}=-9.807\times10^{-5}\,\frac{\sum_i\beta_ih_i}{\sum_i\beta_i}\ \ \mathrm{MPa},
+\label{eq:psisoil}
+\end{equation}
+and with the day's transpiration $E_t$ (mm\,d$^{-1}$) [7.2--7.4]
+\begin{equation}
+\begin{gathered}
+R_{\mathrm{soil}}=0.03\,\max\{K_r,0.002\}^{-0.55},\quad R_{\mathrm{root}}=0.10,\quad R_{\mathrm{xyl}}=0.05,\quad R_{\mathrm{leaf}}=0.08,\\
+\psi_{\mathrm{root}}=\psi_{\mathrm{RZ}}-E_tR_{\mathrm{soil}},\qquad \psi_{\mathrm{stem}}=\psi_{\mathrm{root}}-E_tR_{\mathrm{root}},\\ \psi_{\mathrm{leaf}}=\mathrm{clip}\bigl(\psi_{\mathrm{stem}}-E_t(R_{\mathrm{xyl}}+R_{\mathrm{leaf}});-3.2,0\bigr),
+\end{gathered}
+\label{eq:spac}
+\end{equation}
+with resistances in MPa per mm\,d$^{-1}$, $K_r$ the relative conductivity at the root-zone suction (\cref{eq:mualemP3}) and the transpiration terms set to zero when canopy cover is below 0.05; stomata are drawn as closing when $\psi_{\mathrm{leaf}}<-1.6$\,MPa. The physical relations are \cref{eq:psiair} and the retention and conductivity functions; the resistances are engineered.
+
+\subsection{Drainage, nitrogen and the fate of conserved water}
+\label{sec:sys-fate}
+Water that a mulch keeps in the soil can reduce irrigation, raise transpiration, drain below the root zone or remain in storage. The fate view divides each millimetre of evaporation saved among these destinations [9.6--9.7],
+\begin{equation}
+\begin{gathered}\eta_I=\frac{\max\{\Delta I,0\}}{\max\{\Delta E,0.1\}},\quad \eta_D=\frac{\max\{\Delta D,0\}}{\max\{\Delta E,0.1\}},\\ \eta_T=\frac{\max\{\Delta T_{\mathrm{tr}},0\}}{\max\{\Delta E,0.1\}},\quad \eta_{\mathrm{rest}}=\max\{0,1-\eta_I-\eta_D-\eta_T\},\end{gathered}
+\label{eq:fate}
+\end{equation}
+with the differences of \cref{eq:mulchdelta} evaluated at each rainfall scale, which is the annual counterpart of the loss fates analysed in the companion hydraulic-memory study. Nitrate moves with drainage, and the nitrate cost of a millimetre of drainage is the one-step difference [10.2]
+\begin{equation}
+\kappa_N=\frac{N_L^{(\gamma_P+0.1)}-N_L}{D^{(\gamma_P+0.1)}-D}\quad[\mathrm{kg\,N\,ha^{-1}\,mm^{-1}}].
+\label{eq:kappaN}
+\end{equation}
+
+\subsection{Coupling: the seven feedback loops}
+\label{sec:sys-loops}
+The compartments act on each other through seven loops, marked by numbered circles in \cref{fig:arch}: (1) temperature and the crop, (2) rain and soil water, (3) mulch and evaporation, (4) the sensor trigger and irrigation, (5) drainage and nitrate leaching, (6) nitrogen and roots, and (7) tillage structure and drainage. The loop view quantifies each by moving its control one step on its list and re-evaluating Engine~1; the printed effect is the change of the outputs listed in \cref{tab:loops}, and the drawn arrow width is $w_k=5+\mathrm{clip}(\mu_k;0,4)$ pixels [10.1] with $\mu_k$ the arrow-width input of the table. The effects are one-step differences of simulated results, not partial derivatives, so a step at the end of a list may be smaller than a step in its middle; loops between soil moisture and the atmosphere at regional scale \citep{Entekhabi1996,Koster2004,Seneviratne2010} are outside the column and are not represented.
+
+\begin{table}[H]\centering\small
+\caption{The seven feedback loops: control step, printed effect and arrow-width input $\mu$.}
+\label{tab:loops}
+\begin{tabular}{clll}
+\toprule
+Loop & Control step & Printed effect & $\mu$\\\midrule
+1 & temperature $\pm0.5$\,K & $\Delta Y f_{\mathrm{crop}}$, $\Delta I$ & $8|\Delta Y|$\\
+2 & rainfall scale $\pm0.1$ & $\Delta D$, $\Delta I$ & $|\Delta D|/12$\\
+3 & one step stronger mulch & $\Delta E$, $\Delta I$ & $|\Delta E|/14$\\
+4 & trigger one step drier or wetter & $\Delta I$, $\Delta Y f_{\mathrm{crop}}$ & $|\Delta I|/8$\\
+5 & one more millimetre of drainage & $\kappa_N$ (\cref{eq:kappaN}) & $|\Delta D|/10$\\
+6 & nitrogen $\pm15$\,\% & $\Delta N_L$, $\Delta Y f_{\mathrm{crop}}$ & $|\Delta N_L|/8$\\
+7 & consolidation rate one step & $\Delta D$ & $|\Delta D|/2$\\\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{From the soil-water state to the irrigation decision}
+\label{sec:sys-decision}
+The decision links the state of the soil to the action. A sensor at depth $z_s$ reads the suction of layer $j_s=\mathrm{round}(z_s/\Delta z)$, and irrigation is due when its depletion reaches the trigger depletion $f_T=f(|h_T|)$ of \cref{eq:depl}. Because the same suction means different dryness in different soils, the trigger can also be set as a soil-independent depletion $f^\ast$, whose suction in each soil is the inverse [6.3]
+\begin{equation}
+h(f^\ast)=\{h:\ f(h)=f^\ast\},
+\label{eq:invdepl}
+\end{equation}
+found by bisection; with $f^\ast=0.45$, the depletion beyond which the simulated yield falls by more than 5\,\%, this gives the soil-specific settings of \cref{tab:soilsP3} (143\,cm for sand to 729\,cm for silty clay loam). The net depth that refills the root zone from the trigger back to field capacity is [5.27]
+\begin{equation}
+Z_n=\mathrm{clip}\bigl(f_T\cdot\mathrm{AWC}\cdot R_{\max};\,25,\,150\bigr)\ \mathrm{mm},
+\label{eq:Zn}
+\end{equation}
+the readily-available-water idea of FAO-56 practice \citep{Allen1998}, which carries the soil, crop and trigger into the surface, drip and sprinkler design layers (Sections~\ref{sec:surf}--\ref{sec:sprk}). The relative yield at the trigger is $Y(h_T)/\max_hY(h)$ over the E2 runs of the soil [6.5].

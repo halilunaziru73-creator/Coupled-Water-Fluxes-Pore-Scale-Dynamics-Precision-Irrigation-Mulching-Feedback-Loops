@@ -166,6 +166,7 @@ beyond it.
 
 | Folder | Contents |
 |---|---|
+| [`Data`](Data) | **Data used in the project:** the Zenodo link to the complete dataset, the raw run table (`daisy_ensemble.csv.gz`, 10,190 Daisy runs) and a linked list of every data file in the repository |
 | `Results/00_Key_Synthesis_Figure` | The integrating figure above |
 | `Results/00_Novel_Contributions` | Three further synthesis figures (N1 trigger law, N2 fate of saved evaporation, N3 feedback regime map) |
 | `Results/01_Charts_50` | 50 charts in 8 themes: system & forcing, pore-scale proxies, coupled fluxes, irrigation control, mulching, non-linear feedbacks, nitrogen, synthesis |
@@ -174,7 +175,7 @@ beyond it.
 | `Results/04_Interactive_Charts` | 8 interactive HTML pages (start with `index.html`) |
 | `Results/05_Videos` | 5 MP4 animations (sensor, profiles, tillage, mulch, feedback trajectories) |
 | `Results/06_3D_Project` | Moving 3D model of the system (MP4) and an interactive 3D version |
-| `Results/07_Derived_Data_Tables` | Effect sizes, elasticities, Pareto-optimal runs, controllability tables |
+| `Results/07_Derived_Data_Tables` | Effect sizes, elasticities, Pareto-optimal runs, production functions, controllability and trigger tables, with a README that lists the raw outputs and shows how each table is derived from them, and `derive_tables.py`, which re-derives every table from the raw data |
 | `Results/08_Scripts` | Python code that produced every figure |
 | `Software/SWAFL_Desktop` | SWAFL Desktop source (Electron app, simulation engine, user guide) and `SWAFL_Desktop.zip` |
 | `Results/Figure_Catalogue.csv` | Title, caption and data source of every figure |

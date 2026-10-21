@@ -1,0 +1,77 @@
+\subsection{State and fluxes of the coupled system in ten soils}
+\label{sec:swa}
+The variables of Section~\ref{sec:system} were evaluated for the ten soils at the default state of Section~\ref{sec:swamethods}. \Cref{tab:swa-hyd} gives the soil and surface variables, \cref{tab:swa-bal} the annual water, nitrogen and yield balance, and \cref{tab:swa-plant} the crop, water-potential and mulch variables; \cref{fig:swa} shows them together.
+
+\begin{table}[H]\centering\small
+\caption{Soil and surface variables of the ten soils. Texture as sand/silt/clay (\%); $\theta_s$, $\theta_r$ from \cref{eq:poros}; $S_e(100)$ effective saturation at field capacity; $f(300)$ depletion reached at a suction of 300\,cm (\cref{eq:depl}); $Q_1$ stage-1 storage, $\tau_E$ stage-2 time scale, $t_1$ stage-1 duration and $Q(12)$ cumulative evaporation after 12 days at $e_0=4.2$\,mm\,d$^{-1}$ (\cref{eq:twostage}).}
+\label{tab:swa-hyd}
+\setlength{\tabcolsep}{3pt}\footnotesize
+\begin{tabular}{llcrrrrrrrr}
+\toprule
+ID & Soil & Texture & $\theta_s$ & $\theta_r$ & $S_e(100)$ & $f(300)$ & $Q_1$ (mm) & $\tau_E$ (d) & $t_1$ (d) & $Q(12)$ (mm)\\\midrule
+S01 & Coarse loam & 45/35/20 & 0.423 & 0.022 & 0.444 & 0.38 & 6.0 & 0.022 & 1.4 & 9.9\\
+S02 & Coarse sand & 88/8/4 & 0.374 & 0.012 & 0.356 & 0.50 & 7.8 & 0.010 & 1.9 & 10.4\\
+S03 & Sand & 92/5/3 & 0.369 & 0.012 & 0.011 & 0.84 & 12.7 & 0.008 & 3.0 & 15.0\\
+S04 & Loamy sand & 82/12/6 & 0.380 & 0.014 & 0.040 & 0.76 & 11.9 & 0.011 & 2.8 & 14.5\\
+S05 & Sandy loam & 65/25/10 & 0.399 & 0.016 & 0.165 & 0.63 & 10.5 & 0.017 & 2.5 & 13.7\\
+S06 & Loam & 40/40/20 & 0.428 & 0.022 & 0.466 & 0.47 & 8.4 & 0.024 & 2.0 & 12.3\\
+S07 & Silt loam & 20/65/15 & 0.443 & 0.019 & 0.686 & 0.37 & 7.1 & 0.030 & 1.7 & 11.5\\
+S08 & Sandy clay loam & 55/15/30 & 0.421 & 0.028 & 0.417 & 0.44 & 7.4 & 0.019 & 1.8 & 10.9\\
+S09 & Clay loam & 30/35/35 & 0.448 & 0.031 & 0.753 & 0.31 & 5.6 & 0.027 & 1.3 & 9.9\\
+S10 & Silty clay loam & 10/55/35 & 0.465 & 0.031 & 0.878 & 0.24 & 4.6 & 0.033 & 1.1 & 9.4\\\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]\centering\small
+\caption{Annual balance of the ten soils from Engine~1 (mm\,yr$^{-1}$, 20-year means; \cref{eq:balance}): precipitation $P$, irrigation $I$, transpiration $T$, soil evaporation $E$, other evaporation $E_{\mathrm{oth}}$, drainage $D$ and storage change $\Delta S$; yield $Y$ (Mg\,ha$^{-1}$), nitrate leaching $N_L$ (kg\,ha$^{-1}$\,yr$^{-1}$) and the regime index $\mathcal I$ (\cref{eq:regime}).}
+\label{tab:swa-bal}
+\begin{tabular}{lrrrrrrrrrr}
+\toprule
+ID & $P$ & $I$ & $T$ & $E$ & $E_{\mathrm{oth}}$ & $D$ & $\Delta S$ & $Y$ & $N_L$ & $\mathcal I$\\\midrule
+S01 & 464 & 282 & 239 & 175 & 307 & 27.6 & $-1.7$ & 6.63 & 14.6 & $+0.73$\\
+S02 & 464 & 414 & 237 & 118 & 362 & 163.6 & $-2.2$ & 6.45 & 62.5 & $-0.16$\\
+S03 & 464 & 278 & 202 & 58 & 408 & 76.5 & $-3.3$ & 4.98 & 85.2 & $-0.14$\\
+S04 & 464 & 293 & 215 & 74 & 402 & 70.1 & $-4.3$ & 5.46 & 61.1 & $+0.03$\\
+S05 & 464 & 298 & 230 & 102 & 378 & 57.8 & $-5.4$ & 6.20 & 30.8 & $+0.28$\\
+S06 & 464 & 302 & 238 & 138 & 344 & 50.4 & $-4.6$ & 6.58 & 10.1 & $+0.46$\\
+S07 & 464 & 305 & 239 & 159 & 322 & 52.1 & $-3.3$ & 6.62 & 7.8 & $+0.51$\\
+S08 & 464 & 299 & 237 & 124 & 357 & 50.0 & $-5.6$ & 6.54 & 9.0 & $+0.43$\\
+S09 & 464 & 306 & 239 & 155 & 326 & 54.0 & $-4.9$ & 6.62 & 4.4 & $+0.48$\\
+S10 & 464 & 303 & 239 & 161 & 320 & 51.7 & $-5.0$ & 6.62 & 1.3 & $+0.51$\\\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]\centering\small
+\caption{Crop, water-potential and mulch variables of the ten soils. Engine~2 (20 years): maximum rooting depth $R_{\max}$ (\cref{eq:rmax}), mean of the yearly deepest roots $\bar R_d$, depths holding 50 and 90\,\% of uptake (\cref{eq:zp}), irrigation events per year, dose $d$ (mm), median wetting depth of an irrigation (cm) and calibration factor $k_t$. Water-potential path (\cref{eq:psisoil,eq:spac}), means over crop days of day-of-year 120--210: $\psi_{\mathrm{RZ}}$, $\psi_{\mathrm{leaf}}$ (MPa) and share of days with $\psi_{\mathrm{leaf}}<-1.6$\,MPa. Straw mulch ($\varphi=0.4$, $c=4$\,mm) against bare soil: evaporation saved $\Delta E$ (mm\,yr$^{-1}$) and its fate shares (\cref{eq:fate}).}
+\label{tab:swa-plant}
+\setlength{\tabcolsep}{2.2pt}\footnotesize
+\begin{tabular}{lrrrrrrrrrrrrrrr}
+\toprule
+ID & $R_{\max}$ & $\bar R_d$ & $z_{50}$ & $z_{90}$ & Events & $d$ & Front & $k_t$ & $\psi_{\mathrm{RZ}}$ & $\psi_{\mathrm{leaf}}$ & Closed & $\Delta E$ & $\eta_I$ & $\eta_D$ & $\eta_T$\\
+ & (cm) & (cm) & (cm) & (cm) & (yr$^{-1}$) & (mm) & (cm) & & (MPa) & (MPa) & (\%) & (mm) & & & \\\midrule
+S01 & 94 & 90 & 19.2 & 47.0 & 10.1 & 28.2 & 45.0 & 1.64 & $-0.049$ & $-2.24$ & 74 & 127 & 0.27 & 0.06 & 0.14\\
+S02 & 100 & 96 & 24.5 & 64.8 & 12.1 & 35.0 & 100.0 & 1.12 & $-0.039$ & $-2.28$ & 75 & 102 & 0.50 & 0.07 & 0.14\\
+S03 & 100 & 96 & 27.0 & 52.4 & 10.2 & 27.8 & 55.0 & 2.05 & $-0.020$ & $-2.11$ & 71 & 50 & 0.69 & 0.15 & 0.30\\
+S04 & 100 & 92 & 20.4 & 39.5 & 9.9 & 29.3 & 42.5 & 1.93 & $-0.024$ & $-2.21$ & 73 & 60 & 0.60 & 0.12 & 0.27\\
+S05 & 99 & 92 & 17.9 & 35.6 & 9.9 & 29.8 & 37.5 & 1.81 & $-0.033$ & $-2.27$ & 75 & 77 & 0.48 & 0.09 & 0.22\\
+S06 & 92 & 87 & 16.0 & 35.8 & 10.2 & 30.2 & 32.5 & 1.81 & $-0.044$ & $-2.24$ & 74 & 100 & 0.37 & 0.07 & 0.18\\
+S07 & 86 & 83 & 15.8 & 36.6 & 10.5 & 30.5 & 32.5 & 1.81 & $-0.056$ & $-2.26$ & 74 & 117 & 0.32 & 0.06 & 0.15\\
+S08 & 96 & 92 & 19.0 & 43.2 & 10.2 & 29.9 & 45.0 & 1.76 & $-0.045$ & $-2.29$ & 75 & 91 & 0.41 & 0.08 & 0.20\\
+S09 & 89 & 86 & 19.8 & 54.2 & 10.4 & 30.6 & 70.0 & 1.70 & $-0.047$ & $-2.16$ & 72 & 114 & 0.33 & 0.06 & 0.16\\
+S10 & 84 & 80 & 18.5 & 51.1 & 10.3 & 30.3 & 100.0 & 1.35 & $-0.043$ & $-1.80$ & 58 & 119 & 0.32 & 0.06 & 0.15\\\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/p3/fig04_swa_state.pdf}
+\caption{Soil--water--atmosphere variables of the ten soils at the default state. (a) Retention curves $\theta(h)$ (\cref{eq:vgP3,eq:poros}); sand, coarse loam and silty clay loam highlighted; dotted lines are field capacity (FC, 100\,cm) and the wilting point (WP, 15\,849\,cm). (b) Annual balance: sinks stacked ($T$, $E$, $E_{\mathrm{oth}}$, $D$) against the input $P+I$ (black marks). (c) Cumulative evaporation after a wetting at the season-mean demand (\cref{eq:twostage}); dots mark the end of stage 1. (d) Mean annual root water uptake by depth from Engine~2 (unscaled); dotted lines mark $z_{90}$. (e) Water potential of the root zone, the root surface and the leaf (\cref{eq:psisoil,eq:spac}), crop days of day-of-year 120--210; the dashed line is the stomatal-closure threshold of the view; the air is at $-56$\,MPa (not shown). (f) Fate of the soil evaporation saved by a straw mulch (\cref{eq:fate}); in sand the three positive shares sum to 1.14, so the remainder is zero.}
+\label{fig:swa}
+\end{figure}
+
+\paragraph{Soil and surface.} The soils span the full range of the retention behaviour: at field capacity the sand retains 1\,\% of its drainable water ($S_e(100)=0.011$) and the silty clay loam 88\,\%, and the common trigger of $-300$\,cm uses 24 to 84\,\% of the plant-available water. The surface variables follow the retention curve. Stage-1 storage ranges from 4.6\,mm in the silty clay loam to 12.7\,mm in the sand, and stage 1 lasts 1.1 to 3.0 days at the season-mean demand. Stage 1 is therefore longest in the coarse soils, because the window between $h_i$ and $h_s$ scales with $1/\alpha$ and the narrow pore-size distribution of sands releases more water within it; this agrees in direction with the pore-scale analysis of \citet{Lehmann2008}, in which coarse media with a narrow pore-size distribution sustain capillary supply to the surface over a larger characteristic length. In stage 2 the order reverses (the longer time scale $\tau_E$ of fine soils), so cumulative loss after 12 days ranges only from 9.4 to 15.0\,mm.
+
+\paragraph{Annual balance.} With the same rainfall (464\,mm\,yr$^{-1}$) the soils differ chiefly in how the water leaves (\cref{tab:swa-bal}, \cref{fig:swa}b). Transpiration is nearly constant in the loams and clays (237--239\,mm) and lower in sand and loamy sand (202 and 215\,mm); soil evaporation falls from 175\,mm in the coarse loam to 58\,mm in the sand; drainage rises from 28\,mm in the coarse loam to 164\,mm in the coarse sand, which carries the largest irrigation (414\,mm) and nitrate leaching of 62\,kg\,ha$^{-1}$, exceeded only by the sand (85\,kg\,ha$^{-1}$). The storage change of $-1.7$ to $-5.6$\,mm\,yr$^{-1}$ lies inside the closure window of \cref{eq:E1close}. The regime index separates evaporation-dominated loams and clays ($\mathcal I=+0.28$ to $+0.73$) from drainage-dominated coarse sand and sand ($-0.16$ and $-0.14$), with the loamy sand on the boundary ($+0.03$); mulch is therefore expected to pay in the former and to feed drainage in the latter, which is the classification of the companion hydraulic-memory study. The term $E_{\mathrm{oth}}$ is large, 307--408\,mm\,yr$^{-1}$ or 43--61\,\% of ET. It is the remainder $\mathit{ET}-T-E$ of the simulations and contains canopy interception together with the evaporation term that the companion audit found unattributed in the Daisy partition; the field view labels it ``interception'', which overstates what is known about it.
+
+\paragraph{Crop and water-potential path.} Maximum rooting depth ranges from 84\,cm (silty clay loam) to the 100\,cm limit in the sandy soils, and half of the uptake comes from the top 16--27\,cm in every soil, with 90\,\% from the top 36--65\,cm (\cref{tab:swa-plant}, \cref{fig:swa}d). At the default trigger the calibrated daily model irrigates 9.9--12.1 times a year with doses of 28--35\,mm, and the median wetting depth of an irrigation ranges from 32.5\,cm in the loam and silt loam to the 1\,m boundary in the coarse sand and silty clay loam. The water-potential path exposes a property of the engineered resistances. The root zone is wet ($\psi_{\mathrm{RZ}}=-0.020$ to $-0.056$\,MPa, irrigated profiles), yet the mean leaf potential is $-1.80$ to $-2.29$\,MPa and falls below the closure threshold on 58--75\,\% of mid-season crop days. The cause is the soil resistance: at the root-zone suction the Mualem relative conductivity is below the floor of $0.002$ in \cref{eq:spac} on most days (mean $K_r\le0.0034$), so $R_{\mathrm{soil}}$ sits at its cap of 0.92\,MPa per mm\,d$^{-1}$ and dominates the path for every soil. The resistances were chosen to give leaf potentials of about $-1$ to $-1.5$\,MPa for a transpiring cereal; the evaluation shows that they do not, and that the leaf potential is set by the floor and not by the soil. The view is therefore an illustration of the series-resistance concept, and its numbers should not be read as plant water status.
+
+\paragraph{Mulch.} A straw mulch saves 50 (sand) to 127\,mm\,yr$^{-1}$ (coarse loam) of soil evaporation, of which 27--69\,\% becomes less irrigation and 14--30\,\% more transpiration (\cref{tab:swa-plant}, \cref{fig:swa}f). The extra drainage is 7.3\,mm\,yr$^{-1}$ in every soil, and the nitrate cost of drainage (\cref{eq:kappaN}) is 0.38\,kg\,N\,ha$^{-1}$\,mm$^{-1}$ in every soil. Both are identical because Engine~1 adds the drainage and leaching increments of mulch and rainfall from experiments E14 and E11, which were run on the coarse loam only (\cref{tab:expuse}); the evaporation saving is soil-specific because it is read from E7, which covers ten soils. The consequence is that the drainage share of the saving ($\eta_D=0.06$--0.15) is much smaller in the coarse soils than the drainage share of 0.61--0.71 that the ten-soil mulch experiment E7 gives directly for the coarse sand, sand, loamy sand and sandy loam in the companion hydraulic-memory study, so the fate partition of the software understates drainage in sandy soils. The one-step nitrate cost likewise differs from the regression slope of 1.06\,kg\,N\,ha$^{-1}$\,mm$^{-1}$ across the water strategies of E13, which is a different quantity (across soils and strategies at fixed nitrogen rate). Both limitations follow from the single-soil design of E11 and E14 and are stated in Section~\ref{sec:validity}.

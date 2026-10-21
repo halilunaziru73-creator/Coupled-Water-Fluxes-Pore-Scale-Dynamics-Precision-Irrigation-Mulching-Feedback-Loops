@@ -92,7 +92,7 @@ $$
 
 (Nobel, 2009), where $R$ is the gas constant, $T\approx 293$ K and $V_w = 18\times10^{-6}$ m$^3$ mol$^{-1}$ the molar volume of water. Relative humidity is $\mathrm{RH} = \mathrm{clip}(0.66 - 0.03\,\Delta T;\,0.35,\,0.90)$ with $\Delta T$ the temperature shift. At RH = 66 % the air is at $-56$ MPa, as shown.
 
-**What is literature and what is engineered.** Eqs. (7.1), (7.5) and (5.2) are physical relations. The resistances in (7.2)–(7.4) are **[Engineered]** values chosen so that a typical transpiring cereal reaches $\psi_{\mathrm{leaf}}$ of about $-1$ to $-1.5$ MPa and so that stress develops as the soil dries; they are *not* measured resistances, and the layer labels them "derived".
+**What is literature and what is engineered.** Eqs. (7.1), (7.5) and (5.2) are physical relations. The resistances in (7.2)–(7.4) are **[Engineered]** values chosen so that a typical transpiring cereal reaches $\psi_{\mathrm{leaf}}$ of about $-1$ to $-1.5$ MPa and so that stress develops as the soil dries; they are *not* measured resistances, and the layer labels them "derived". **Caution.** Evaluated over mid-season crop days in all ten soils (Paper 3, Section 5.1), the relative conductivity at the root-zone suction is usually below the floor of 0.002 in Eq. (7.2), so $R_{\mathrm{soil}}$ sits at its cap (0.92 MPa per mm d$^{-1}$) and the mean leaf potential is $-1.8$ to $-2.3$ MPa in every soil, below the intended range. The leaf, stem and root potentials of this layer therefore illustrate the series-resistance concept and should not be read as plant water status.
 
 ### Step-by-step
 

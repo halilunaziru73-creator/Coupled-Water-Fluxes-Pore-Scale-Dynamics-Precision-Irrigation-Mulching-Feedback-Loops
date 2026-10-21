@@ -557,7 +557,7 @@ The three-term law is competitive with gradient boosting under LOEO and LOSO, wh
 
 Equation discovery in soil hydrology has so far targeted the governing partial differential equation, notably the Richards equation recovered from soil-moisture time series by group-sparse regression \citep{Song2022,Song2025}, and deep-learning studies have imposed water-balance closure as a constraint on forecasts \citep{Li2024}. The present paper is complementary and differs in its object and its emphasis: it works with annual flux budgets, tests whether a pipeline recovers a known balance before interpreting any other result, audits the closure of the partition that supplies its targets, and validates by withheld regimes. The present approach shares with SINDy-style discovery \citep{Brunton2016} the use of sparse regression over a library, but differs in two respects: it targets steady annual relations rather than dynamics, and it places the validation burden on leave-one-regime-out testing \citep{Roberts2017}. It shares with physics-informed learning \citep{Raissi2019,Karniadakis2021} the emphasis on conservation, but imposes it as a \emph{diagnostic} (closure residual) rather than as a constraint \citep{Beucler2021}; applying it as a constraint would have hidden $R$, which is the finding most relevant to model users. Related work on learning conserved quantities \citep{Liu2021,Iten2020} would be a natural extension to daily dynamics.
 
-Emulators are used to make process-model knowledge available in fast decision tools \citep{Razavi2012,Asher2015}. The results here indicate which emulator targets are safe: ET and transpiration are predictable from compact laws; drainage and soil evaporation are not, and should be emulated with care or by closure. The companion software paper applies these lessons to the annual meta-model embedded in SWAFL Desktop and quantifies its rank-faithful (rather than absolute) accuracy.
+Emulators are used to make process-model knowledge available in fast decision tools \citep{Razavi2012,Asher2015}. The results here indicate which emulator targets are safe: ET and transpiration are predictable from compact laws; drainage and soil evaporation are not, and should be emulated with care or by closure. The companion software paper applies these lessons to an annual meta-model of the same ensemble and quantifies its rank-faithful (rather than absolute) accuracy.
 
 A software-level audit would resolve the identity of $R$ directly. Four questions, in order of cost: (i) Which state variables are summed into the output called ``evapotranspiration'' in the log file used here, and which into the three reported components? (ii) Is evaporation from surface ponds, mulch and litter reported in a separate column that was not exported in the ensemble? (iii) Does the canopy-evaporation column represent interception only, excluding evaporation of water retained on residue? (iv) Is the storage term in the model's own water balance consistent with the exported depth and boundary definitions (for example, is the 1\,m drainage column the flux at the bottom of the root zone or the soil column)? If the answer to (ii) is yes, the unattributed term would be explained and the diagnostic here would have served its purpose as an audit.
 
@@ -594,8 +594,8 @@ Each law is reported with the regimes in which it was validated, and each bounda
 \section{Conclusions}
 A blind linear-invariant search recovers the water balance from a flux matrix with every coefficient within 5\,\% of the exact value, calibrated against a permutation null, and flags two accounting gaps: an unattributed evapotranspiration term averaging 164\,mm\,yr$^{-1}$ (30\,\% of ET) that depends on irrigation method, evaporation factor and mulch, and a storage non-closure of 16\,\% in the two initial-moisture experiments. Compositional PCA shows that a single drainage--evaporation axis dominates water partitioning, with a variance share (52--89\,\%) that depends strongly on how zero drainage is handled. A three-term law, $\ln\mathit{ET}=2.503+0.646\ln W-0.299\,n+0.029\ln(1+I)$, matches gradient boosting in leave-one-experiment-out ($R^2=0.898$) and leave-one-soil-out ($R^2=0.904$) validation, while sparse laws for drainage fraction, soil evaporation and the unattributed term do not, and irrigation compensation is not a universal constant. The conclusions are limited to a single process model and weather series, and the discovered ``law'' is the known balance together with a diagnosed accounting gap.
 
-\section*{Data, code and software availability}
-\codeavail
+\section*{Data and code availability}
+\dataavail
 
 \section*{Author contributions}
 N.H.: conceptualisation, analysis, software, visualisation, writing.
@@ -635,16 +635,6 @@ Column & Unit & Definition\\\midrule
 \end{table}
 
 DPF$=D/W$ is exact by construction and its ``prediction'' is therefore the same task as predicting $D$; NLF and IE are ratios of other columns. They are not used as independent evidence in any result.
-
-\section{Software views of the water-balance partition}
-The partition analysed in this paper is displayed in the SWAFL Desktop interface, documented in the software \manuallink, which can be reviewed or downloaded as a PDF. \Cref{fig:swshots} shows the field water balance and the layers that expose the partition of evapotranspiration into transpiration, soil evaporation and canopy evaporation (captured at 4000$\times$2250 px; files in \texttt{figures/shots/} of the repository).
-\begin{figure}[H]\centering
-\includegraphics[width=0.92\textwidth]{\figdir/shots/layer_n1.png}\\[6pt]
-\includegraphics[width=0.92\textwidth]{\figdir/shots/layer_n2.png}\\[6pt]
-\includegraphics[width=0.92\textwidth]{\figdir/shots/dash_results.png}
-\caption{SWAFL Desktop views of the quantities analysed in this paper: water-balance layers (upper and middle) and the field water balance with the results panel (lower).}
-\label{fig:swshots}
-\end{figure}
 
 \section{Reproducibility map}\label{app:repro}
 \begin{table}[H]\centering\footnotesize

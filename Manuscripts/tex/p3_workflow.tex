@@ -1,0 +1,17 @@
+%==========================================================
+\subsection{End-to-end workflow from question to decision}
+\label{sec:workflow}
+To make the traceability concrete, one decision is followed through the software, naming at each step the equation that produces the displayed quantity and the test that supports it.
+\begin{enumerate}[label=\textbf{Step \arabic*.}]
+\item \textbf{Choose the soil and crop setting.} The soil sets $(\alpha,n)$, the porosity and retention of Section~\ref{sec:sys-soil} and the baseline vector $\mathbf b$ (\cref{tab:soilsP3}, E5). \emph{Support.} class means of \citet{Carsel1988}; the baseline is Data-driven.
+\item \textbf{Set the trigger and sensor depth.} The trigger suction $h_T$ is converted to a depletion fraction by \cref{eq:depl}. \emph{Support.} FAO convention \citep{Allen1998}; the inverse is a monotone bisection.
+\item \textbf{Read the annual consequences.} Engine~1 returns $E,T,\mathit{ET},I,Y,D,N_L$ by \cref{eq:E1E,eq:E1T,eq:E1ET,eq:E1I,eq:E1Y,eq:E1D,eq:E1N,eq:corr}. \emph{Support.} held-out test (\cref{tab:e1}); the interface should be read as a ranking of options, and absolute yield is not to be used.
+\item \textbf{Inspect the seasonal timing.} Engine~2 produces dates and doses with \cref{eq:rain,eq:interc,eq:transp,eq:scale}. \emph{Support.} mass closure and annual agreement (Section~\ref{sec:e2}); timing within the year is plausible but unverified.
+\item \textbf{Select an application method.} The surface, drip or sprinkler layer is opened with the soil, depth and trigger carried over. \emph{Support.} \cref{tab:ws,tab:border,tab:drip}.
+\item \textbf{Read the design check.} Closure identities (\cref{eq:effclose}) are printed, and the drip layer prints a red warning when the lateral loss exceeds 20\,\% of the inlet head or the iteration does not converge (Section~\ref{sec:drip}).
+\item \textbf{Record.} The configuration and the equation numbers (manual) allow the decision to be reconstructed by hand.
+\end{enumerate}
+This chain is deliberately shallow: each displayed number is at most three function calls from its equation, so a reader can reproduce a value with a calculator.
+
+A user comparing two triggers for coarse loam can conclude, with the rank fidelity reported, which uses less irrigation and by roughly how much \emph{relative} to the other; they should not quote the absolute millimetres as a field requirement. A user designing a furrow can use the volume-balance outputs as a textbook calculation. A user designing a sprinkler layout can rely on the corrected wetted radius for the impact type (within 1\,\% of the textbook nozzle), should check the manufacturer's tables for the other three sprinkler types, and should treat the uniformity coefficient as an upper bound for calm conditions. A user designing a long drip lateral should verify that the head loss does not exceed 20\,\% of the inlet head.
+
