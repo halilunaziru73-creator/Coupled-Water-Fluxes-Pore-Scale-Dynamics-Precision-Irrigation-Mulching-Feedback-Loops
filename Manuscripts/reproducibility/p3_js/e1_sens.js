@@ -11,7 +11,7 @@ const res=await p.evaluate(()=>{
  test('Trigger suction',0,0,()=>S.trigIdx=TRIG_VALUES.indexOf(-150),()=>S.trigIdx=TRIG_VALUES.indexOf(-1000),'-150 cm','-1000 cm');
  test('Sensor depth',0,0,()=>S.zIdx=Z_VALUES.indexOf(10),()=>S.zIdx=Z_VALUES.indexOf(40),'10 cm','40 cm');
  test('Mulch vapour-flux factor',0,0,()=>S.vffIdx=VFF_VALUES.indexOf(0.4),()=>S.vffIdx=VFF_VALUES.indexOf(0.7),'0.4','0.7');
- test('Irrigation method',0,0,()=>S.method='M01_Overhead',()=>S.method='M06_Drip20','overhead','drip 20');
+ test('Irrigation method',0,0,()=>S.method='M01_Overhead',()=>S.method='M06_Drip20-30cm','overhead','drip 20-30 cm');
  test('Tillage',0,0,()=>S.till='notill',()=>S.till='conv','no-till','conv (base)');
  test('Nitrogen rate',0,0,()=>S.nIdx=NRATE_VALUES.indexOf(55),()=>S.nIdx=NRATE_VALUES.indexOf(130),'55%','130%');
  // soils

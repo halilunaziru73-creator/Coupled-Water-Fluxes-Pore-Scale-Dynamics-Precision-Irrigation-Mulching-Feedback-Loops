@@ -1,7 +1,7 @@
 %==========================================================
 \section{The coupled soil--water--atmosphere system and its variables}
 \label{sec:system}
-This section sets out what the framework represents before it describes how the numbers are computed (Section~\ref{sec:methods}). The modelled system is a field column of 1\,m depth, from the air above the canopy to the lower boundary at which drainage is counted, with five compartments: the atmosphere, the soil surface and its cover, the soil matrix and its structure, the soil water, and the crop. The compartments exchange water through eight fluxes and are driven by twelve controls. Every state variable, flux and control is named in \cref{tab:compartments,tab:controls}, with the relation that produces it and the provenance label of that relation; the relations themselves follow in Sections~\ref{sec:sys-soil}--\ref{sec:sys-decision}. Manual equation numbers are given in brackets so that each relation can be followed into the Manual.
+This section sets out what the framework represents before it describes how the numbers are computed (Section~\ref{sec:methods}). The modelled system is a field column of 1\,m depth, from the air above the canopy to the lower boundary at which drainage is counted, with five compartments: the atmosphere, the soil surface and its cover, the soil matrix and its structure, the soil water, and the crop. The compartments exchange water through six fluxes (precipitation, irrigation, transpiration, soil evaporation, other evaporation and drainage, \cref{eq:balance}), which together with the storage change close the balance, and are driven by twelve controls. Every state variable, flux and control is named in \cref{tab:compartments,tab:controls}, with the relation that produces it and the provenance label of that relation; the relations themselves follow in Sections~\ref{sec:sys-soil}--\ref{sec:sys-decision}. Manual equation numbers are given in brackets so that each relation can be followed into the Manual.
 
 \subsection{System boundary and the governing balance}
 \label{sec:sys-balance}
@@ -14,7 +14,7 @@ where $P$ is precipitation, $I$ irrigation, $T$ transpiration, $E$ soil evaporat
 
 {\small
 \begin{longtable}{>{\raggedright\arraybackslash}p{2.0cm}>{\raggedright\arraybackslash}p{4.1cm}>{\raggedright\arraybackslash}p{1.8cm}>{\raggedright\arraybackslash}p{4.0cm}>{\raggedright\arraybackslash}p{1.9cm}}
-\caption{State variables and fluxes of the modelled soil--water--atmosphere system. Source: E1 = Engine~1 (annual), E2 = Engine~2 (daily), D = Daisy output stored in the software, R = relation evaluated by the layer. Provenance: L literature, D data-driven, E engineered.}\label{tab:compartments}\\
+\caption{State variables and fluxes of the modelled soil--water--atmosphere system, by compartment; the soil matrix and soil structure rows form the soil compartment, and the lower boundary (drainage) and the management decision are listed separately. Source: E1 = Engine~1 (annual), E2 = Engine~2 (daily), D = Daisy output stored in the software, R = relation evaluated by the layer. Provenance: L literature, D data-driven, E engineered.}\label{tab:compartments}\\
 \toprule
 Compartment & Variable (symbol) & Unit & Relation (manual) & Source; provenance\\\midrule\endfirsthead
 \toprule Compartment & Variable (symbol) & Unit & Relation (manual) & Source; provenance\\\midrule\endhead
@@ -172,7 +172,7 @@ with evaporation dominating where $\mathcal I>0.05$, drainage where $\mathcal I<
 
 \paragraph{Air.} The water potential of the air follows the thermodynamic relation with relative humidity [7.5] \citep{Nobel2009},
 \begin{equation}
-\psi_{\mathrm{air}}=\frac{\mathcal RT_K}{V_w}\ln\mathrm{RH}\approx135.5\,\ln\mathrm{RH}\ \ \mathrm{MPa},\qquad \mathrm{RH}=\mathrm{clip}(0.66-0.03\Delta T;\,0.35,\,0.90),
+\psi_{\mathrm{air}}=\frac{\mathcal RT_K}{V_w}\ln\mathrm{RH}\approx135.3\,\ln\mathrm{RH}\ \ \mathrm{MPa},\qquad \mathrm{RH}=\mathrm{clip}(0.66-0.03\Delta T;\,0.35,\,0.90),
 \label{eq:psiair}
 \end{equation}
 with $\mathcal R$ the gas constant, $T_K\approx293$\,K and $V_w=18\times10^{-6}$\,m$^3$\,mol$^{-1}$; at RH $=0.66$ the air is at $-56$\,MPa.
@@ -189,7 +189,7 @@ C\leftarrow C\,\max\Bigl\{0,\ 1-\frac{d-d_{\mathrm{pk}}}{d_{\mathrm{harv}}-d_{\m
 R_{\max}=\mathrm{clip}\Bigl(R_c(0.85+0.3\,\mathrm{sand})\Bigl[1+0.12\log_{10}\frac{|h_T|}{300}\Bigr]\Bigl[1-0.18\,\frac{N_r-100}{100}\Bigr];\,25,\,100\Bigr)\ \mathrm{cm},
 \label{eq:rmax}
 \end{equation}
-with $R_c=95$\,cm for the cereal, sand as a fraction and $N_r$ the nitrogen rate in per cent, so that drier triggers deepen and nitrogen-rich soils shallow the roots. While the canopy grows, the rooting depth advances towards water [5.19],
+with $R_c=95$\,cm for the cereal, sand as a fraction and $N_r$ the nitrogen rate in per cent, so that drier triggers deepen the roots and high nitrogen rates make them shallower. While the canopy grows, the rooting depth advances towards water [5.19],
 \begin{equation}
 R_d\leftarrow\max\Bigl\{R_d,\ \min\bigl\{R_{\max}\,\mathrm{clip}\bigl(\tfrac{C-0.04}{0.96};0,1\bigr)^{0.8},\ R_{\max},\ R_d+1.7(0.35+\bar s_{\mathrm{wet}})\kappa_r\bigr\}\Bigr\},
 \label{eq:rd}

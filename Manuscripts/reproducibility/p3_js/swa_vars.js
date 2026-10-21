@@ -1,6 +1,6 @@
 // Soil-water-atmosphere state and flux variables of SWAFL Desktop for the ten soils (Paper 3, Sections 3 and 5.1, Tables 8-10 and Figure 2).
 // Drives the shipped engine in headless Chromium, as the other p3_js scripts do, and writes out/p3_swa_vars.json.
-// Default state: conventional tillage, consolidation 0.005 d-1, bare soil (vapour-flux factor 1.0, capacity 1 mm), rain x1.0,
+// Reference state: conventional tillage, consolidation 0.005 d-1, bare soil (vapour-flux factor 1.0, capacity 1 mm), rain x1.0,
 // no warming, N 100 %, surface method, common trigger -300 cm, sensor 20 cm, cereal rotation (as e1_sens.js).
 const { chromium } = require('playwright'); const fs = require('fs');
 (async () => {
