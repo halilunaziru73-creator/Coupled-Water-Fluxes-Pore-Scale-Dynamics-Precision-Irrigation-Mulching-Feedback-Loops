@@ -74,4 +74,4 @@ The engine under test is `Software/SWAFL_Desktop/app/engine/engine.html` of the 
 
 ## Versions used
 
-Python 3.13.16; NumPy 2.5.3; SciPy 1.18.1; pandas 3.0.5; scikit-learn 1.9.1; statsmodels 0.15.0; Matplotlib 3.11.2; Node.js 22.22.0; Playwright 1.56.0 with Chromium. Typesetting: XeLaTeX and BibTeX.
+Python 3.13.16; NumPy 2.5.3; SciPy 1.18.1; pandas 3.0.5; scikit-learn 1.9.1; statsmodels 0.15.0; Matplotlib 3.11.2; Pillow 12.3.0; Node.js 22.22.0; Playwright 1.56.0 with Chromium. Typesetting: XeLaTeX and BibTeX.

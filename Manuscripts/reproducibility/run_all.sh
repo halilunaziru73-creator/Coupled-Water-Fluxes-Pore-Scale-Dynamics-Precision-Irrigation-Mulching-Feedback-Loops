@@ -17,7 +17,7 @@ py() { step "$1" python3 "$W/analysis/$1.py"; }
 js() { step "js_$1" node "$HERE/p3_js/$1.js"; }
 step make_data python3 "$HERE/make_data.py"
 echo "--- Paper 1 ---";  for s in p1_core p1_stats p1_mech p1_omega p1_rate_law p1_figs_a p1_figs_b p1_figs_c p1_figs_d p1_figs_e p1_fig12_drivers p1_fig13_time p1_fig14_ens p1_fig1_new; do py $s; done
-echo "--- Paper 2 ---";  for s in p2_a p2_laws p2_laws2 p2_R p2_et p2_dpf p2_nested p2_b p2_figs p2_figs2 p2_fig4 p2_fig6 p2_fig7 p2_figfail p2_fig1_new p2_s02_excl; do py $s; done
+echo "--- Paper 2 ---";  for s in p2_a p2_laws p2_laws2 p2_R p2_et p2_dpf p2_nested p2_b p2_figs p2_figs2 p2_fig4 p2_fig6 p2_fig7 p2_figfail p2_fig1_new p2_s02_excl p2_robust; do py $s; done
 echo "--- Paper 3 ---"
 step make_e12 python3 "$HERE/make_e12.py"
 for s in v_surface v_drip v_sprinkler bench e1_heldout e1_sens e2_closure e2_grid l_sens run_drip run_fao run_spr swa_vars; do js $s; done

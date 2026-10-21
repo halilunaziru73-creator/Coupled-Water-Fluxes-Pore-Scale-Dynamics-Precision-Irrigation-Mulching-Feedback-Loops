@@ -83,7 +83,7 @@ Irrigation $I$ & 180 & 191 & 0 & 178 & 268\\
 Water input $W=P_r+I$ & 597 & 251 & 464 & 654 & 722\\
 Evapotranspiration $\mathit{ET}$ & 546 & 196 & 386 & 611 & 671\\
 Drainage $D$ (1\,m) & 60 & 106 & 3 & 34 & 78\\
-Unattributed $R$ (\cref{eq:R}) & 164 & 97 & 103 & 129 & 223\\\bottomrule
+Unattributed $R$ (\cref{eq:R}) & 164 & 96 & 103 & 129 & 223\\\bottomrule
 \end{tabular}
 \end{table}
 
@@ -281,6 +281,8 @@ where $P$ is the rain scale, $E_p$ the soil-evaporation factor and $\Delta T$ th
 Experiment & Runs & $R$ (mm) & $R/\mathit{ET}$ & $\Delta S/W$\\\midrule
 E0 Baselines & 10 & 107 & 0.24 & $-0.021$\\
 E1 Doses & 189 & 118 & 0.21 & $-0.001$\\
+E2 Trigger pressure & 197 & 168 & 0.30 & $-0.009$\\
+E3 Sensor depth & 200 & 202 & 0.32 & $-0.009$\\
 E4 Methods & 96 & 103 & 0.19 & $-0.003$\\
 E5 SHP dynamics & 300 & 162 & 0.29 & $-0.007$\\
 E6 Mediterranean & 193 & 70 & 0.14 & $-0.012$\\
@@ -292,7 +294,7 @@ E11 Temperature$\times E_p\times$rain & 1000 & 296 & 0.38 & $-0.009$\\
 E12 Sensor, trigger, rain & 1000 & 218 & 0.32 & $-0.008$\\
 E13 N$\times$water & 975 & 125 & 0.28 & $-0.006$\\
 E14 Mulch$\times$rain & 1000 & 262 & 0.41 & $0.001$\\
-E15 Method, depth, amount & 1000 & 103 & 0.17 & 0.003\\
+E15 Method, depth, amount & 1000 & 103 & 0.17 & $0.003$\\
 E16 Edge cases & 740 & 157 & 0.30 & $-0.010$\\\bottomrule
 \end{tabular}
 \end{table}
@@ -350,7 +352,7 @@ Equation~\eqref{eq:ETlaw} has a straightforward physical reading. The exponent o
 \label{fig:ETlaw}
 \end{figure}
 
-The 17 experiments were resampled with replacement (2\,000 cluster-bootstrap resamples) and the cross-validated predictions of the law were compared with those of a gradient-boosting model that uses the same three inputs ($\ln W$, $n$, $\ln(1+I)$; LOEO $R^2=0.866$). The paired difference in $R^2$ is $+0.032$ with a 95\,\% interval of 0.006--0.080, so the law is better than a flexible learner given the same information in this resampling, with the caveat that the law's terms were selected with the same folds. With the \emph{full} library the benchmark reaches 0.876--0.879, and the two are regarded as comparable rather than claiming superiority.
+The 17 experiments were resampled with replacement (2\,000 cluster-bootstrap resamples) and the cross-validated predictions of the law were compared with those of a gradient-boosting model that uses the same three inputs ($\ln W$, $n$, $\ln(1+I)$; LOEO $R^2=0.866$). The paired difference in $R^2$ is $+0.032$ with a 95\,\% interval of 0.004--0.087, so the law is better than a flexible learner given the same information in this resampling, with the caveat that the law's terms were selected with the same folds. With the \emph{full} library the benchmark reaches 0.876--0.879, and the two are regarded as comparable rather than claiming superiority.
 
 The error is not uniform (\cref{tab:byexp}). Mean absolute percentage errors are 2.6--5.8\,\% in most one- and two-factor experiments, but 16.6\,\% in E16 (edge cases: extreme combinations), 16.7\,\% in E8 and 27.4\,\% in E9, the two experiments that violate storage closure, and 11.7\,\% in E5 (time-varying soil hydraulic properties, where a single static $n$ is wrong by construction). The law is therefore valid where the water balance is near equilibrium and soil hydraulics are static; it should not be extrapolated to initial-state perturbations or to dynamic soil structure.
 
@@ -557,7 +559,7 @@ The three-term law is competitive with gradient boosting under LOEO and LOSO, wh
 
 Equation discovery in soil hydrology has so far targeted the governing partial differential equation, notably the Richards equation recovered from soil-moisture time series by group-sparse regression \citep{Song2022,Song2025}, and deep-learning studies have imposed water-balance closure as a constraint on forecasts \citep{Li2024}. The present paper is complementary and differs in its object and its emphasis: it works with annual flux budgets, tests whether a pipeline recovers a known balance before interpreting any other result, audits the closure of the partition that supplies its targets, and validates by withheld regimes. The present approach shares with SINDy-style discovery \citep{Brunton2016} the use of sparse regression over a library, but differs in two respects: it targets steady annual relations rather than dynamics, and it places the validation burden on leave-one-regime-out testing \citep{Roberts2017}. It shares with physics-informed learning \citep{Raissi2019,Karniadakis2021} the emphasis on conservation, but imposes it as a \emph{diagnostic} (closure residual) rather than as a constraint \citep{Beucler2021}; applying it as a constraint would have hidden $R$, which is the finding most relevant to model users. Related work on learning conserved quantities \citep{Liu2021,Iten2020} would be a natural extension to daily dynamics.
 
-Emulators are used to make process-model knowledge available in fast decision tools \citep{Razavi2012,Asher2015}. The results here indicate which emulator targets are safe: ET and transpiration are predictable from compact laws; drainage and soil evaporation are not, and should be emulated with care or by closure. The companion software paper applies these lessons to an annual meta-model of the same ensemble and quantifies its rank-faithful (rather than absolute) accuracy.
+Emulators are used to make process-model knowledge available in fast decision tools \citep{Razavi2012,Asher2015}. The results here indicate which emulator targets are safe: ET and transpiration are predictable from compact laws; drainage and soil evaporation are not, and should be emulated with care or by closure.
 
 A software-level audit would resolve the identity of $R$ directly. Four questions, in order of cost: (i) Which state variables are summed into the output called ``evapotranspiration'' in the log file used here, and which into the three reported components? (ii) Is evaporation from surface ponds, mulch and litter reported in a separate column that was not exported in the ensemble? (iii) Does the canopy-evaporation column represent interception only, excluding evaporation of water retained on residue? (iv) Is the storage term in the model's own water balance consistent with the exported depth and boundary definitions (for example, is the 1\,m drainage column the flux at the bottom of the root zone or the soil column)? If the answer to (ii) is yes, the unattributed term would be explained and the diagnostic here would have served its purpose as an audit.
 
@@ -572,7 +574,7 @@ The unattributed term $R$ also defines a concrete verification programme for the
 
 Beyond hydrology, the same sequence of controls is relevant to other settings in which a regression of a conserved quantity on its drivers is read as a discovered relation. Sparse regression over a library is attractive because the result is an equation that can be examined, dimensionally checked and compared with theory \citep{Brunton2016,Udrescu2020,Champion2019}. Its reliability, however, depends on the design of the data. In an ensemble built by crossing factors, several drivers are correlated by construction, and the selection path of a forward algorithm reflects that correlation; the leave-one-experiment-out score then serves two roles, as selection criterion and as validation, which is why the LOSO scores, which are less affected by selection, are reported alongside it. The practical consequence is that the coefficients of a discovered law should be reported with the validation regime in which they were obtained, and that a law should be described as discovered only for the regimes in which it is validated.
 
-Finally, the results bear on the design of the emulators and decision tools that draw on process-model ensembles. A tool that reports evapotranspiration components should state whether they sum to the total; one that reports drainage should state whether it is simulated or derived by closure, and the evidence here shows that closure-derived drainage is accurate in sign and rank order but under-estimates large drainage. The companion software article applies these requirements by labelling each equation with its provenance and by testing the emulator against held-out simulations \citep{Razavi2012,Asher2015,Wilkinson2016}.
+Finally, the results bear on the design of the emulators and decision tools that draw on process-model ensembles. A tool that reports evapotranspiration components should state whether they sum to the total; one that reports drainage should state whether it is simulated or derived by closure, and the evidence here shows that closure-derived drainage is accurate in sign and rank order but under-estimates large drainage. Emulators built on such ensembles should also be tested against held-out simulations \citep{Razavi2012,Asher2015,Wilkinson2016}.
 
 \subsection{Domain of validity of the discovered laws}
 Each law is reported with the regimes in which it was validated, and each boundary defines the next test.
@@ -647,6 +649,7 @@ SVD, permutation null, closure (\cref{eq:law}, \cref{fig:invariants}) & \texttt{
 Unattributed term $R$ (\cref{eq:Rlaw}, \cref{fig:hidden}) & \texttt{p2\_R.py} $\to$ \texttt{p2\_R.json}\\
 clr-PCA (\cref{fig:manifold}, \cref{tab:clipsens}) & \texttt{p2\_a.py}, \texttt{p2\_figs.py}, \texttt{p2\_fig4.py} $\to$ \texttt{p2\_pca.json}, \texttt{p2\_pca\_sens.json}\\
 Sparse laws (\cref{tab:laws}, \cref{eq:ETlaw}) & \texttt{p2\_et.py}, \texttt{p2\_dpf.py}, \texttt{p2\_figs2.py}, \texttt{p2\_nested.py} $\to$ \texttt{p2\_et.json}, \texttt{p2\_dpf.json}, \texttt{p2\_etlaw.json}, \texttt{p2\_nested.json}; exclusion sensitivity \texttt{p2\_s02\_excl.py} $\to$ \texttt{p2\_s02\_excl.json}\\
+Cluster bootstrap, law without E8 and E9, descriptive statistics (Table~\ref{tab:desc}) and $R$ by experiment (\cref{tab:R}) & \texttt{p2\_robust.py} $\to$ \texttt{p2\_robust.json}\\
 Compensation (\cref{fig:comp}) & \texttt{p2\_laws2.py} $\to$ \texttt{p2\_laws2.json}\\
 Figures & \texttt{p2\_figs.py}, \texttt{p2\_figs2.py}, \texttt{p2\_fig4.py}, \texttt{p2\_fig6.py}, \texttt{p2\_fig7.py}, \texttt{p2\_figfail.py}, \texttt{p2\_fig1\_new.py}\\
 All steps, checks and limits & \texttt{run\_all.sh}, \texttt{compare\_results.py}, \texttt{audit\_numbers.py}, \texttt{README\_REPRODUCE.md}\\\bottomrule

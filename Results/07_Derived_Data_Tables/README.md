@@ -63,7 +63,7 @@ uses the 10 041 valid runs.
 | `Ep` | – | soil-evaporation factor |
 | `trig` | cm | irrigation trigger suction (negative) |
 | `z` | cm | sensor depth |
-| `amt_mm` | mm | irrigation amount per event (E10) |
+| `amt_mm` | mm | irrigation amount per event (E10, E15) |
 | `vff` | – | mulch vapour-flux factor (1.0 = bare) |
 | `cap` | mm | mulch interception capacity |
 | `Nrate` | % | nitrogen rate, per cent of standard |
@@ -90,7 +90,7 @@ uses the 10 041 valid runs.
 
 | Column | Formula | Unit |
 |:--|:--|:--|
-| `IE_kg_m3` | `yield_Mg_ha × 1000 / (irrigation_mm × 10)` (empty for rainfed runs) | kg m⁻³ |
+| `IE_kg_m3` | `yield_Mg_ha × 1000 / (irrigation_mm × 10)`, empty where irrigation is below 20 mm yr⁻¹ (this includes all rainfed runs). It was computed from the unrounded outputs, so the formula applied to the stored, rounded columns agrees to within 0.003 kg m⁻³ | kg m⁻³ |
 | `DPF` | `drainage_1m_mm / (rain_mm + irrigation_mm)` | – |
 | `NLF` | `N_leached_kg_ha / N_fertiliser_kg_ha` | – |
 
@@ -105,7 +105,9 @@ The original run table from which the 32-column table was extracted (`summary_al
 `N_uptake_kg_ha`, `IWUE_kg_m3`, `PFPn_kg_kg` (partial factor productivity of N), `h_max_cm` (largest suction reached),
 `rainfed_partner` and `failed`. None of the seven tables depends on them except as passengers in `pareto_runs.csv`.
 
-### 1.4 Columns added during analysis (step 0, applied before every table)
+### 1.4 Columns added during analysis
+
+**Step 0, applied before every table** (these are the only columns that `derive_tables.py` adds, in `load()`):
 
 | Added column | How it is obtained |
 |:--|:--|
@@ -113,9 +115,17 @@ The original run table from which the 32-column table was extracted (`summary_al
 | `water` | from `treatment`: `Irrigated` or `Rainfed` (E5) |
 | `e6strat` | from `treatment`: N/water pathway of E6 (`N100_Deficit600` → `Deficit600`; baseline rows → empty) |
 | `IE_kg_m3` | set to empty where `irrigation_mm < 20` (a ratio of a very small irrigation is not interpreted) |
+
+**Passenger columns of the archived `pareto_runs.csv` only.** The original scripts in `08_Scripts` also attached the
+following columns to every run. No table value depends on them; they are carried in `pareto_runs.csv` for reading,
+and `derive_tables.py` does not recreate them (it checks the set of Pareto runs and their IE, DPF and NLF):
+
+| Column | How it is obtained |
+|:--|:--|
 | `other_evap_mm` | `ET_mm − transpiration_mm − soil_evap_mm − canopy_evap_mm`, clipped at 0 (ponded water, snow, litter and mulch; shown so that the balance closes) |
 | `E_share`, `WP_ET` | `1 − transpiration_mm/ET_mm`; `yield × 1000 / (ET_mm × 10)` |
-| `soil_lab`, `soil_i`, parsed factors | labels, soil index and factor levels parsed from `treatment` (passengers in `pareto_runs.csv`) |
+| `soil_lab`, `soil_i`, parsed factors (`dose_mm`, `dur_h`, `tc`, `till`, `method`, `intensity`, `window`, `case`) | labels, soil index and factor levels parsed from `treatment` |
+| the columns of section 1.3 | carried from the original run table `summary_all.csv` |
 
 ### 1.5 What the raw data look like
 
@@ -234,8 +244,8 @@ Drivers (raw column): rain `P`, temperature `dT`, soil-evaporation factor `Ep` (
 1. Valid runs with `irrigation_mm ≥ 20` and non-empty `IE_kg_m3`, `DPF`, `NLF`.
 2. A run is **dominated** if another run has IE at least as high, DPF at least as low and NLF at least as low, and is
    strictly better in at least one of the three.
-3. The 170 runs that are not dominated are written with **all** their raw and added columns (one row per run) and
-   `pareto = True`. The same 170 runs carry `pareto = 1` in the raw table.
+3. The 170 runs that are not dominated are written with all their columns (one row per run; the archived file also
+   carries the passenger columns of section 1.4) and `pareto = True`. The same 170 runs carry `pareto = 1` in the raw table.
 
 ### 2.4 `production_function_fits.csv`: irrigation production functions per soil
 
@@ -275,6 +285,8 @@ For each outcome (row) and lever (column): Spearman rank correlation, across the
 Daisy Ap (0-25 cm) and Bt (25-100 cm) horizons; only its rank order enters the correlation:
 sand < loamy sand < sandy loam < sandy clay loam < coarse sand < loam < coarse loam < clay loam < silty clay loam < silt loam.
 Soils with an empty `lev_pct` are omitted from that correlation.
+This horizon-integrated order differs from the rounded TAW listed in Paper 1, Table 3 (which places coarse sand below
+coarse loam); the archived table was computed with the horizon-integrated order, which `derive_tables.py` uses.
 
 ### 2.7 `N1_soil_specific_triggers.csv`: the suction trigger that reaches the same depletion in every soil
 
