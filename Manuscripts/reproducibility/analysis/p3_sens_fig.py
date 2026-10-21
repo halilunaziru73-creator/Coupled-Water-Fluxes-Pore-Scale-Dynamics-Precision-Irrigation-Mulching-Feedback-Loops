@@ -8,8 +8,8 @@ ORDER=None
 def tornado(a,key,title,unit,first):
     global ORDER
     rows=[(f['name'],f['lo'][key]-b[key],f['hi'][key]-b[key],f['labLo'],f['labHi']) for f in E['F']]
-    rows=[r for r in rows if r[0] not in ('Irrigation method','Nitrogen rate')]
-    rows=[(r[0].replace('Mulch vapour-flux factor','Mulch factor'),)+r[1:] for r in rows]
+    rows=[r for r in rows if r[0]!='Nitrogen rate']                    # nitrogen acts on yield and leaching only
+    rows=[(r[0].replace('Mulch vapour-flux factor','Mulch factor').replace('Irrigation method','Method'),)+r[1:] for r in rows]
     if ORDER is None:
         ORDER=[r[0] for r in sorted(rows,key=lambda r:max(abs(r[1]),abs(r[2])))]
     rows.sort(key=lambda r:ORDER.index(r[0]))

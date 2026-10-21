@@ -20,7 +20,7 @@ echo "--- Paper 1 ---";  for s in p1_core p1_stats p1_mech p1_omega p1_rate_law 
 echo "--- Paper 2 ---";  for s in p2_a p2_laws p2_laws2 p2_R p2_et p2_dpf p2_nested p2_b p2_figs p2_figs2 p2_fig4 p2_fig6 p2_fig7 p2_figfail p2_fig1_new p2_s02_excl p2_robust; do py $s; done
 echo "--- Paper 3 ---"
 step make_e12 python3 "$HERE/make_e12.py"
-for s in v_surface v_drip v_sprinkler bench e1_heldout e1_sens e2_closure e2_grid l_sens run_drip run_fao run_spr swa_vars; do js $s; done
+for s in v_surface v_surface_shipped v_border v_drip v_sprinkler bench e1_heldout e1_sens e2_closure e2_grid l_sens run_drip run_fao run_spr swa_vars; do js $s; done
 for s in p3_figs p3_lit_figs p3_sens_fig p3_swa_fig p3_fig01_workflow_v9; do py $s; done
 step make_a4 python3 "$HERE/make_a4.py"
 echo "--- Checks ---"
