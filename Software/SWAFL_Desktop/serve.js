@@ -11,7 +11,7 @@ function createServer(root) {
     if (!f.startsWith(root)) { res.writeHead(403); return res.end('Forbidden'); }
     fs.readFile(f, (err, buf) => {
       if (err) { res.writeHead(404); return res.end('Not found'); }
-      res.writeHead(200, { 'Content-Type': MIME[path.extname(f).toLowerCase()] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
+      res.writeHead(200, { 'Content-Type': MIME[path.extname(f).toLowerCase()] || 'application/octet-stream', 'Cache-Control': 'no-store, max-age=0' });
       res.end(buf);
     });
   });

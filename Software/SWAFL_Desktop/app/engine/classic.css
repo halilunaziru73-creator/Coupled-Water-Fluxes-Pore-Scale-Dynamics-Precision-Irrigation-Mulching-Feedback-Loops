@@ -48,3 +48,6 @@ body.appmode *, body.appmode { scrollbar-color: auto !important; scrollbar-width
 body.appmode ::-webkit-scrollbar { width: 16px !important; height: 16px !important; background: #E8E6E0 !important; }
 body.appmode ::-webkit-scrollbar-track { background: #E8E6E0 !important; }
 body.appmode ::-webkit-scrollbar-thumb { background: #D4D0C8 !important; border: 0 !important; border-radius: 0 !important; box-shadow: inset -1px -1px #404040, inset 1px 1px #FFFFFF, inset -2px -2px #808080, inset 2px 2px #DFDFDF !important; }
+/* the working date and weather year are chosen in the Properties panel: no year strip or date slider under the drawing */
+html body.appmode div#yearRow[id], html body.appmode input#playRange[id], html body.appmode button#yPrev[id], html body.appmode button#yNext[id] { display: none !important; }
+body.appmode #playLabel { min-width: 0 !important; }

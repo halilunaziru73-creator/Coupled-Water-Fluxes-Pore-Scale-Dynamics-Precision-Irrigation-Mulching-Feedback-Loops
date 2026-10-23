@@ -34,7 +34,23 @@ const Act = {
     UI.saveFile('SWAFL_design_' + E.snap.scene + '.csv', c, false, 'text/csv');
   },
   print() { E.print(); },
-  report() { try { const b = E.win.document.getElementById('reportBtn'); if (b) { b.click(); UI.log('Choose the parts of the report, then Make the PDF'); return; } } catch (e) {} UI.toast('The report is not available yet'); },
+  // the whole report, every layer, built end to end and saved where the user chooses
+  report() {
+    const w = E.win; if (!w || typeof w.buildReport !== 'function') { UI.toast('The report is not available yet'); return; }
+    const ids = E.json('SCENES.map(function(s){return s.id})') || [], keep = E.snap ? E.snap.scene : 'field';
+    UI.modal({ title: 'Full report (PDF)', icon: 'print', html: '<p><b>Building the full report: ' + ids.length + ' layers, with your inputs, the results at these inputs and the key numbers and pictures of every layer.</b></p><p>This takes a few seconds. You choose where to save it when it is ready.</p>', buttons: [] });
+    UI.log('Building the full report (' + ids.length + ' layers)');
+    setTimeout(async () => {
+      let bytes = null, err = null;
+      try { w.__REPORTING = true; const t0 = performance.now(); bytes = w.buildReport(ids, 'Full report, ' + (E.snap ? E.snap.dateLbl : '')); UI.log('Report built: ' + Math.round(bytes.length / 1024) + ' kB in ' + ((performance.now() - t0) / 1000).toFixed(1) + ' s'); }
+      catch (e) { err = e; } finally { w.__REPORTING = false; try { E.scene(keep); } catch (e2) {} }
+      UI.closeModal && UI.closeModal(); document.getElementById('modalRoot').innerHTML = '';
+      if (err || !bytes) { UI.log('Report failed: ' + (err ? err.message : 'no data'), 'err'); UI.modal({ title: 'Full report', html: '<p>The report could not be built: ' + UI.esc(err ? err.message : 'no data') + '</p>' }); return; }
+      const soil = E.snap && E.snap.state ? E.snap.state.soil.replace(/^S\d+_/, '') : 'field', nm = 'SWAFL_full_report_' + soil + '_' + new Date().toISOString().slice(0, 10) + '.pdf';
+      try { const r = await w.saveBytes(nm, bytes, 'application/pdf'); if (r && r.ok === false) UI.log('Report not saved (cancelled)', 'warn'); else { UI.log('Full report saved' + (r && r.path ? ': ' + r.path : '')); UI.toast('Full report saved'); } } catch (e) { UI.log('Could not save the report: ' + e.message, 'err'); }
+    }, 80);
+  },
+  reportChoose() { try { const b = E.win.document.getElementById('reportBtn'); if (b) { b.click(); UI.log('Choose the parts of the report, then make the PDF'); return; } } catch (e) {} UI.toast('The report is not available yet'); },
   manual() { if (window.swafl && window.swafl.openManual) { window.swafl.openManual(); return; } window.open('SWAFL_Manual.pdf', '_blank'); },
   undo() { if (Hist.i > 0) { Hist.i--; histApply(Hist.stack[Hist.i]); } },
   redo() { if (Hist.i < Hist.stack.length - 1) { Hist.i++; histApply(Hist.stack[Hist.i]); } },
@@ -63,20 +79,28 @@ const vis = id => !document.getElementById(id).hidden;
 /* ---------- menus ---------- */
 const casesMenu = () => (E.metaData ? E.metaData.presets.filter(p => p[0] !== '').map(p => ({ label: p[1], act: () => Act.preset(p[0]) })) : []);
 const MENUS = [
-  { label: 'File', items: [
+  { label: 'File', items: () => { WxUI.offerOnce(); return [
     { label: 'New project', icon: 'new', key: 'Ctrl+N', act: Act.newProject }, { label: 'Open project...', icon: 'open', key: 'Ctrl+O', act: Act.openProject }, { label: 'Save project...', icon: 'save', key: 'Ctrl+S', act: Act.saveProject }, { sep: 1 },
     { label: 'Export', icon: 'img', sub: [{ label: 'Picture of the window (PNG)', icon: 'img', key: 'Ctrl+E', act: Act.exportPNG }, { label: 'Yearly results (CSV)', icon: 'csv', act: Act.exportSeasonCSV }, { label: 'Design results (CSV)', icon: 'csv', act: Act.exportDesignCSV }] },
-    { label: 'Save full report as PDF...', icon: 'print', key: 'Ctrl+Shift+P', act: Act.report }, { label: 'Print / save this view as PDF...', icon: 'print', key: 'Ctrl+P', act: Act.print }, { sep: 1 }, { label: 'Exit', icon: 'exit', key: 'Ctrl+Q', act: Act.exit }] },
+    { label: 'Import weather data (CSV, Excel, DWF, DLF, DAI)...', icon: 'open', act: () => WxUI.importFile() }, { label: 'Online weather for a location...', icon: 'search', act: () => WxUI.online() }, { sep: 1 }, { label: 'Save full report as PDF...', icon: 'print', key: 'Ctrl+Shift+P', act: Act.report }, { label: 'Report of chosen layers (PDF)...', icon: 'print', act: () => Act.reportChoose() }, { label: 'Print / save this view as PDF...', icon: 'print', key: 'Ctrl+P', act: Act.print }, { sep: 1 }, { label: 'Exit', icon: 'exit', key: 'Ctrl+Q', act: Act.exit }]; } },
   { label: 'Edit', items: [
     { label: 'Undo', icon: 'undo', key: 'Ctrl+Z', act: Act.undo, dis: () => Hist.i <= 0 }, { label: 'Redo', icon: 'redo', key: 'Ctrl+Y', act: Act.redo, dis: () => Hist.i >= Hist.stack.length - 1 }, { sep: 1 },
     { label: 'Reset all settings', icon: 'reset', act: Act.resetSettings }, { label: 'Copy settings as text', icon: 'copy', act: Act.copySettings }, { sep: 1 },
     { label: 'Pin results as baseline', icon: 'pin', key: 'Ctrl+B', act: () => Dash.pin() }, { label: 'Clear baseline', act: () => Dash.clearPin() }, { sep: 1 }, { label: 'Find a tool...', icon: 'search', key: 'Ctrl+F', act: Act.focusSearch }] },
   { label: 'View', items: () => [
+    { label: 'Design layouts', icon: 'pipe', sub: [{ label: 'Surface irrigation: layout in plan', act: () => Layers.open('sid', E.json("Object.keys((window.__SEC||{}).sid||{}).find(function(k){return /^Layout in plan/.test(k)})||''") || undefined) },
+      { label: 'Drip: layout and infrastructure', act: () => Layers.open('drip', E.json("Object.keys((window.__SEC||{}).drip||{}).find(function(k){return /^Layout and infrastructure/.test(k)})||''") || undefined) },
+      { label: 'Sprinklers: layout in plan', act: () => Layers.open('spr', E.json("Object.keys((window.__SEC||{}).spr||{}).find(function(k){return /^Layout in plan/.test(k)})||''") || undefined) },
+      { label: 'Sprinklers: layout and infrastructure', act: () => Layers.open('spr', E.json("Object.keys((window.__SEC||{}).spr||{}).find(function(k){return /^Layout and infrastructure/.test(k)})||''") || undefined) }] },
+    { label: 'Field sketch to design...', icon: 'field', act: () => Sketch.open() }, { label: 'Virtual farm simulation', icon: 'play', act: () => Layers.openFarm(Layers.DESIGN.includes(Layers.current()) ? Layers.current() : null) }, { sep: 1 },
     { label: 'Layers and Processing Toolbox', check: () => vis('leftDock'), act: () => Act.toggle('leftDock', 'splitLeft') }, { label: 'Properties', check: () => vis('rightDock'), act: () => Act.toggle('rightDock', 'splitRight') },
     { label: 'Dashboard', check: () => vis('dashDock'), act: () => Act.toggle('dashDock', 'splitDash') }, { sep: 1 },
     { label: 'Fit drawing to window', check: () => Act.fitMode === 'window', act: () => Act.fit('window') }, { label: 'Drawing at full width (scroll)', check: () => Act.fitMode === 'width', act: () => Act.fit('width') }, { label: 'Focus view (hide panels)', key: 'F9', act: Act.focus }, { sep: 1 },
     { label: 'Expand all layers', act: () => Layers.expandAll() }, { label: 'Collapse all layers', act: () => Layers.collapseAll() }, { sep: 1 }, { label: 'Full screen', key: 'F11', act: Act.fullscreen }] },
   { label: 'Tools', items: [
+    { label: 'Field sketch to design...', icon: 'field', act: () => Sketch.open() }, { label: 'Compare the irrigation systems on this field', icon: 'chart', act: () => Sketch.compare() },
+    { label: 'Find the most efficient design inputs', icon: 'gear', act: () => { const id = Layers.DESIGN.includes(Layers.current()) ? Layers.current() : 'sid'; Layers.open(id); setTimeout(() => { E.ev("designApplyBest('" + id + "')"); E.poll(true); Dash.tab('design'); UI.log('Most efficient inputs applied and run: ' + Layers.nameOf(id)); }, 400); } },
+    { label: 'Import weather data...', icon: 'open', act: () => WxUI.importFile() }, { label: 'Online weather for a location...', icon: 'cloud', act: () => WxUI.online() }, { sep: 1 },
     { label: 'Ready-made cases', icon: 'layers', sub: casesMenu },
     { label: 'Irrigation design', icon: 'pipe', sub: [{ label: 'Surface irrigation design', act: () => Layers.open('sid') }, { label: 'Drip irrigation design', act: () => Layers.open('drip') }, { label: 'Sprinkler design and pipes', act: () => Layers.open('spr') }, { sep: 1 }, { label: 'Optimise surface layout', act: Act.optimise }] },
     { label: 'Irrigation method', icon: 'drop', sub: () => (E.metaData ? E.metaData.methods.map(m => ({ label: m[1], check: () => E.snap && E.snap.state.method === m[0], act: () => E.set({ method: m[0] }) })) : []) },

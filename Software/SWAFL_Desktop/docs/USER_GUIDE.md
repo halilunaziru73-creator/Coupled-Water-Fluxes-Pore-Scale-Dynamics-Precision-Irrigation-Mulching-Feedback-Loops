@@ -39,7 +39,7 @@ The drawing is fitted to the window automatically. Short scenes (for example Fie
 The **Date** box in the toolbar (also in Properties → Scenario) moves the whole workbench to that date, from 1980 to 2100. 1980–1999 is the baseline record; later dates, including today, are projected from the baseline weather year you choose (typical, dry, wet or a single year). The status bar always shows the working date. **Today** jumps back to the current date.
 
 ## 2. Running a simulation
-1. Choose a **Ready-made case** (Properties → Scenario, or Tools → Ready-made cases).
+1. Choose a **Ready-made case** (Properties → Scenario, or Tools → Ready-made cases). The **Year** (1980 to 2100) and the **Date** are set in Properties → Scenario.
 2. Press **Run** (`F5`). The season plays day by day; drag the slider to any date, or pick a weather year.
 3. Change soil, tillage, mulch, rainfall, temperature, irrigation method, trigger or nitrogen in Properties.
 4. **20-year run** shows all years in the Charts tab.
@@ -55,7 +55,13 @@ Open **Irrigation design** in Layers.
 
 Use the **view bar** above the drawing (*Layout design · Simulation · Pipes and pump · Infrastructure layout · Results · Design checks · Design table*) to jump between parts. Click and drag in the drawing to change lengths, spacing and times.
 
-### Virtual farm (F1 in Layers → Irrigation design)
+### Running a design
+Opening a design layer does not start it. Click a value box to type the exact value with its unit (m or km, L/s or m³/h, ha or m² ...) or pick a value from the drop-down, then press **Run simulation**. After any change the results wait for the next run. **Find the most efficient inputs** searches and applies the inputs with the highest application efficiency. The dashboard **Design** tab shows the results of the run and the best combination; the **Charts** tab shows the hydrograph, the advance, cut-off and recession times, the infiltrated depth along the field and where the water goes. **View → Field sketch to design** turns a drawing of your field into the design inputs; **Tools → Compare the irrigation systems** lists the three systems side by side.
+
+### Weather data
+**File → Import weather data** reads a daily weather file (CSV, TXT, Excel, Daisy DWF or DLF). **File → Online weather for a location** gets the last twenty years and the 16-day forecast of a place. The whole program then runs on that weather; **Properties → Scenario → Weather source** switches back to the recorded weather of the simulations at any time.
+
+### Virtual farm (under each design layer, and the button on the view bar of every layer)
 A farm drawn in perspective with the water moving from the source to the plants for all six layouts: **furrow, basin,
 border strip** (canal, lifting gate, siphons, tail-water ditch), **sprinkler, surface drip and subsurface drip** (well,
 pump, filters, fertiliser tank, mainline, control valve, laterals). The gate or valve opens and closes on the dates of
@@ -71,7 +77,7 @@ Properties → Crop lists the Daisy cereal rotation (simulated) and 48 library c
 the Kc curve, the crop water use, the root-zone depletion and a table of all crops ranked by net irrigation (tap a row
 to select the crop).
 
-## 4b. Year by year
+## 4b. Seasonal records: Daisy data
 **Y1 Reliability over 20 seasons**, **W1 Full water balance** and **N4 Nitrogen budget** show every simulated year
 (1 003 Daisy runs with 20 years each, from `Data/Comprehensive_Summary`): yield, irrigation, drainage and leaching by
 year, exceedance curves, the full evapotranspiration split (transpiration, soil, canopy, litter, ponded-water and snow

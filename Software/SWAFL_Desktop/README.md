@@ -92,6 +92,10 @@ app/engine/peryear.js                per-year Daisy balances of 1 003 runs (buil
 app/engine/plus_core.js              crop water balance, crop drawings, auto-fit of long views, F1 manual
 app/engine/plus_layers.js            year-by-year, full water balance, nitrogen budget, crop water layers
 app/engine/farm.js                   virtual farm: source to plants, gate/valve on the predicted schedule, video
+app/engine/inputs.js                 design inputs as value boxes with units, Run simulation, most efficient inputs, design charts
+app/engine/weather.js                weather import (CSV, Excel, DWF, DLF) and online daily weather with forecast
+app/engine/vendor/xlsx.full.min.js   spreadsheet reader for Excel weather files (SheetJS, Apache 2.0 licence)
+app/js/weatherui.js sketch.js        weather dialogs; field sketch to design and comparison of the systems
 tools/make_peryear.py                extracts the per-year data from Data/Comprehensive_Summary
 app/assets/                          logo (SVG/PNG)
 build/icon.ico icon.png              application icon

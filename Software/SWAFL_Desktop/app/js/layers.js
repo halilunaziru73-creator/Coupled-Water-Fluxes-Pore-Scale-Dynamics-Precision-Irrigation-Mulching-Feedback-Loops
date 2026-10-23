@@ -2,22 +2,29 @@
 'use strict';
 const Layers = (() => {
   const GROUPS = [
-        { id: 'g-design', name: 'Irrigation design', icon: 'pipe', items: [['farm', 'Virtual farm simulation', 'F1'], ['sid', 'Surface irrigation design', 'S2'], ['drip', 'Drip irrigation design', 'S3'], ['spr', 'Sprinkler design and pipes', 'S4']] },
-    { id: 'g-crop', name: 'Crops', icon: 'drop', items: [['crop', 'Crop water requirement', 'C1']] },
-    { id: 'g-year', name: 'Year by year (Daisy data)', icon: 'refresh', items: [['yby', 'Reliability over 20 seasons', 'Y1'], ['wb2', 'Full water balance', 'W1'], ['nb', 'Nitrogen budget', 'N4']] },
-    { id: 'g-water', name: 'Field water balance', icon: 'field', items: [['field', 'Field balance', ''], ['spac', 'Soil, plant and air', 'S1'], ['v2', 'Profile evolution', 'V2']] },
+    { id: 'g-design', name: 'Irrigation design', icon: 'pipe', items: [['sid', 'Surface irrigation design', 'S2'], ['drip', 'Drip irrigation design', 'S3'], ['spr', 'Sprinkler design and pipes', 'S4']] },
     { id: 'g-ctrl', name: 'Irrigation control', icon: 'drop', items: [['v1', 'Sensor and trigger', 'V1'], ['n1', 'Trigger law', 'N1']] },
-    { id: 'g-soil', name: 'Soil structure and tillage', icon: 'soil', items: [['v3', 'Tillage and structure', 'V3'], ['v7', 'Soil hydraulic drivers', 'V7'], ['r1', 'Root structure', 'R1']] },
     { id: 'g-mulch', name: 'Mulch and evaporation', icon: 'layers', items: [['v4', 'Mulch against bare soil', 'V4'], ['v6', 'Mulch control', 'V6'], ['e1', 'Evaporation physics', 'E1'], ['n2', 'Fate of saved water', 'N2'], ['n3', 'Regime map', 'N3']] },
+    { id: 'g-soil', name: 'Soil structure and tillage', icon: 'soil', items: [['v3', 'Tillage and structure', 'V3'], ['v7', 'Soil hydraulic drivers', 'V7'], ['r1', 'Root structure', 'R1']] },
+    { id: 'g-water', name: 'Field water balance', icon: 'field', items: [['field', 'Field balance', ''], ['spac', 'Soil, plant and air', 'S1'], ['v2', 'Profile evolution', 'V2']] },
+    { id: 'g-year', name: 'Seasonal records: Daisy data', icon: 'refresh', items: [['yby', 'Reliability over 20 seasons', 'Y1'], ['wb2', 'Full water balance', 'W1'], ['nb', 'Nitrogen budget', 'N4']] },
+    { id: 'g-crop', name: 'Crops', icon: 'drop', items: [['crop', 'Crop water requirement', 'C1']] },
     { id: 'g-loop', name: 'Feedback loops', icon: 'refresh', items: [['v5', 'Feedback loops', 'V5']] }
   ];
+  // the virtual farm runs the irrigation system of a design layer (or of the method in Properties) on the predicted schedule
+  const FARM_METHOD = { sid: 'M02_Surface', drip: 'M04_Drip10-20cm', spr: 'M01_Overhead' };
+  function openFarm(from) {
+    const m = FARM_METHOD[from];
+    if (m) E.ev("(function(){var m='" + m + "';var cur=state.method;var ok=(m==='M02_Surface'&&cur==='M02_Surface')||(m==='M01_Overhead'&&cur==='M01_Overhead')||(m.indexOf('Drip')>=0&&cur.indexOf('Drip')>=0);if(!ok)applyState({method:m});})()");
+    open('farm');
+  }
   const DESIGN = ['sid', 'drip', 'spr'];
-  let tabs = ['field'], cur = 'field', collapsed = { 'g-water': true, 'g-ctrl': true, 'g-soil': true, 'g-mulch': true, 'g-loop': true, 'g-design': true, 'g-crop': true, 'g-year': true, 's-sid': true, 's-drip': true, 's-spr': true }, sectionPick = {};
-  const groupOf = id => { const g = GROUPS.find(x => x.items.some(i => i[0] === id)); return g && g.id; };
+  let farmFrom = null, tabs = ['field'], cur = 'field', collapsed = { 'g-water': true, 'g-ctrl': true, 'g-soil': true, 'g-mulch': true, 'g-loop': true, 'g-design': true, 'g-crop': true, 'g-year': true, 's-sid': true, 's-drip': true, 's-spr': true }, sectionPick = {};
+  const groupOf = id => { if (id === 'farm') return 'g-design'; const g = GROUPS.find(x => x.items.some(i => i[0] === id)); return g && g.id; };
   const reveal = (id, sec) => { collapsed['root'] = false; const g = groupOf(id); if (g) collapsed[g] = false; if (sec) collapsed['s-' + id] = false; };
   const tree = document.getElementById('layerTree');
 
-  const nameOf = id => { for (const g of GROUPS) for (const it of g.items) if (it[0] === id) return it[1]; return id; };
+  const nameOf = id => { if (id === 'farm') return 'Virtual farm simulation'; for (const g of GROUPS) for (const it of g.items) if (it[0] === id) return it[1]; return id; };
   const sections = id => { const s = (E.snap && E.snap.sec && E.snap.sec[id]) || {}; return Object.entries(s).sort((a, b) => a[1][0] - b[1][0]).map(e => e[0]); };
 
   function render() {
@@ -26,10 +33,11 @@ const Layers = (() => {
     GROUPS.forEach(g => {
       h += '<div class="tn grp" style="padding-left:14px" data-id="' + g.id + '"><span class="tw">' + (open(g.id) ? '&#9660;' : '&#9654;') + '</span>' + UI.icon(g.icon) + '<span class="lbl">' + g.name + '</span></div><div class="tkids" ' + (open(g.id) ? '' : 'hidden') + '>';
       g.items.forEach(it => {
-        const subs = DESIGN.includes(it[0]) ? sections(it[0]) : [], hasKids = subs.length > 0, op = open('s-' + it[0]);
+        const subs = DESIGN.includes(it[0]) ? sections(it[0]) : [], hasKids = DESIGN.includes(it[0]), op = open('s-' + it[0]);
         h += '<div class="tn' + (cur === it[0] && !sectionPick[it[0]] ? ' sel' : '') + '" style="padding-left:30px" data-scene="' + it[0] + '"><span class="tw" data-twist="' + it[0] + '">' + (hasKids ? (op ? '&#9660;' : '&#9654;') : '') + '</span>' + UI.icon('doc') + '<span class="lbl">' + UI.esc(it[1]) + '</span>' + (it[2] ? '<span class="badge">' + it[2] + '</span>' : '') + '</div>';
         if (hasKids) {
           h += '<div class="tkids" ' + (op ? '' : 'hidden') + '>';
+          h += '<div class="tn farmnode' + (cur === 'farm' && farmFrom === it[0] ? ' sel' : '') + '" style="padding-left:58px" data-farm="' + it[0] + '" title="Run this irrigation system on the virtual farm">' + UI.icon('play') + '<span class="lbl"><b>Virtual farm simulation</b></span></div>';
           subs.forEach(t => { h += '<div class="tn' + (cur === it[0] && sectionPick[it[0]] === t ? ' sel' : '') + '" style="padding-left:58px" data-scene="' + it[0] + '" data-sec="' + UI.esc(t) + '" title="' + UI.esc(t) + '"><span class="lbl">' + UI.esc(short(t)) + '</span></div>'; });
           h += '</div>';
         }
@@ -43,6 +51,7 @@ const Layers = (() => {
   tree.addEventListener('click', e => {
     const tw = e.target.closest('[data-twist]');
     if (tw) { const k = 's-' + tw.dataset.twist; collapsed[k] = !collapsed[k]; render(); e.stopPropagation(); return; }
+    const fm = e.target.closest('[data-farm]'); if (fm) { farmFrom = fm.dataset.farm; openFarm(fm.dataset.farm); return; }
     const n = e.target.closest('.tn'); if (!n) return;
     if (n.dataset.id) { collapsed[n.dataset.id] = !collapsed[n.dataset.id]; render(); return; }
     open(n.dataset.scene, n.dataset.sec);
@@ -86,14 +95,16 @@ const Layers = (() => {
       let h = '<span class="vtitle">' + UI.esc(nameOf(cur)) + '</span>';
       h += '<button class="vb' + (!sectionPick[cur] ? ' on' : '') + '" data-top>Whole design</button>';
       (VIEWS[cur] || []).forEach(v => { const t = secs.find(x => v[1].test(x)); if (t) h += '<button class="vb' + (sectionPick[cur] === t ? ' on' : '') + '" data-sec="' + UI.esc(t) + '" title="' + UI.esc(t) + '">' + v[0] + '</button>'; });
+      h += '<span class="grow"></span><button class="vb farmbtn" data-farmrun="' + cur + '">&#9654; Virtual farm simulation</button>';
       el.innerHTML = h;
   } else {
       const sc = E.meta && E.metaData ? E.metaData.scenes.find(s => s[0] === cur) : null;
-      el.innerHTML = '<span class="vtitle">' + UI.esc(nameOf(cur)) + '</span><span class="pnote">' + UI.esc(sc && sc[2] ? sc[2] : 'Use the Properties panel on the right to change the scenario. The picture updates live.') + '</span>';
+      el.innerHTML = '<span class="vtitle">' + UI.esc(nameOf(cur)) + '</span><span class="pnote">' + UI.esc(sc && sc[2] ? sc[2] : 'Use the Properties panel on the right to change the scenario. The picture updates live.') + '</span>' + (cur === 'farm' ? '' : '<span class="grow"></span><button class="vb farmbtn" data-farmrun="' + cur + '">&#9654; Virtual farm simulation</button>');
     }
   }
   document.getElementById('viewBar').addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.farmrun) { farmFrom = DESIGN.includes(b.dataset.farmrun) ? b.dataset.farmrun : null; openFarm(farmFrom); return; }
     if (b.hasAttribute('data-top')) { sectionPick = {}; E.scrollTop(); renderViewBar(); render(); return; }
     if (b.dataset.sec) open(cur, b.dataset.sec);
   });
@@ -107,5 +118,5 @@ const Layers = (() => {
   let lastSec = '';
   E.on('snap', ({ s }) => { const k = JSON.stringify(s.sec); if (k !== lastSec) { lastSec = k; render(); renderViewBar(); } });
 
-  return { GROUPS, render, open, renderTabs, renderViewBar, expandAll, collapseAll, nameOf, current: () => cur, DESIGN };
+  return { GROUPS, render, open, openFarm, renderTabs, renderViewBar, expandAll, collapseAll, nameOf, current: () => cur, DESIGN };
 })();
