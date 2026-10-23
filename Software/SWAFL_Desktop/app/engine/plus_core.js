@@ -58,7 +58,7 @@
   if (state.densIdx == null) state.densIdx = null;
   if (state.plantDoy == null) state.plantDoy = 120;
   const KINDROW = { rice: [0.2, 45], maize: [0.75, 90], millet: [0.45, 85], legume: [0.45, 35], soybean: [0.45, 45], groundnut: [0.45, 30], cotton: [0.9, 70],
-                    wheat: [0.2, 55], mustard: [0.45, 70], vine: [2.5, 95], bush: [1.5, 75], hop: [3.0, 140], citrus: [5.0, 120], olive: [6.0, 120], tree: [4.5, 130], palm: [8.0, 150], papaya: [2.5, 110] };
+                    wheat: [0.2, 55], mustard: [0.45, 70], vine: [2.5, 95], bush: [1.5, 75], hop: [3.0, 140], citrus: [5.0, 120], olive: [6.0, 120], tree: [4.5, 130], palm: [8.0, 150], papaya: [2.5, 110], sorghum: [0.75, 90], cassava: [1.0, 90], yam: [1.0, 80], cowpea: [0.6, 35], cocoa: [3.0, 110], vegetable: [0.75, 38] };
   for (const k in LIB.crops) {
     const c = LIB.crops[k];
     CROPS[k] = { label: c.label, factor: 1, unit: '% of potential', lib: true, kind: c.kind, group: c.group };
@@ -191,6 +191,14 @@
       const px = cx + (i - (nn - 1) / 2) * sp, hh = h * (0.9 + rand() * 0.2) * (per ? 1.8 : 1);
       if (kind === 'rice') { for (let k = -3; k <= 3; k++) { stem(px, ground, px + k * 3.5, ground - hh * (0.75 + 0.05 * Math.abs(k)), 1.3, '#5E9E3A'); } ctx.fillStyle = '#D8B85A'; for (let k = -2; k <= 2; k++) { ctx.beginPath(); ctx.ellipse(px + k * 4 + 2, ground - hh * 0.8, 1.8, 6, 0.4, 0, Math.PI * 2); ctx.fill(); } }
       else if (kind === 'maize') { stem(px, ground, px, ground - hh * 1.25, 3, '#4E8A2C'); for (let k = 0; k < 6; k++) { const ly = ground - hh * (0.2 + k * 0.17), sd = k % 2 ? 1 : -1; ctx.strokeStyle = '#5FA83F'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(px, ly); ctx.quadraticCurveTo(px + sd * 16, ly - 10, px + sd * 26, ly + 6); ctx.stroke(); } leaf(px + 5, ground - hh * 0.55, 3.5, 9, 0.3, '#E9C85A', '#9A7A20'); ctx.strokeStyle = '#C8A24A'; ctx.lineWidth = 1; for (let k = -2; k <= 2; k++) { ctx.beginPath(); ctx.moveTo(px, ground - hh * 1.25); ctx.lineTo(px + k * 4, ground - hh * 1.36); ctx.stroke(); } }
+      else if (kind === 'sorghum') { stem(px, ground, px, ground - hh * 1.15, 2.6, '#5A8F33'); for (let k = 0; k < 5; k++) { const ly = ground - hh * (0.2 + k * 0.17), sd = k % 2 ? 1 : -1; ctx.strokeStyle = '#6AAE45'; ctx.lineWidth = 2.6; ctx.beginPath(); ctx.moveTo(px, ly); ctx.quadraticCurveTo(px + sd * 14, ly - 9, px + sd * 23, ly + 5); ctx.stroke(); } ctx.fillStyle = '#A0482A'; for (let k = 0; k < 7; k++) { ctx.beginPath(); ctx.arc(px + (rand() - 0.5) * 7, ground - hh * 1.2 - k * 2.2, 2.4, 0, Math.PI * 2); ctx.fill(); } }
+      else if (kind === 'cassava') { for (let k = -1; k <= 1; k++) stem(px, ground, px + k * 5, ground - hh * 1.1, 2.4, '#8A6A55'); for (let k = 0; k < 4; k++) { const lx = px + (k - 1.5) * 9, ly = ground - hh * (0.8 + 0.1 * (k % 2)); for (let j = 0; j < 5; j++) { const a = -Math.PI / 2 + (j - 2) * 0.55; leaf(lx + Math.cos(a) * 6, ly + Math.sin(a) * 6, 6, 2, a, '#3E8A3A'); } } ctx.fillStyle = '#8A5A3A'; for (let k = -1; k <= 1; k++) { ctx.beginPath(); ctx.ellipse(px + k * 7, ground + 8, 3, 9, k * 0.4, 0, Math.PI * 2); ctx.fill(); } }
+      else if (kind === 'yam') { const ht = hh * 1.3; stem(px + 6, ground, px + 6, ground - ht, 2, '#8A7A60'); ctx.strokeStyle = '#4C7A2E'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(px, ground); for (let k = 1; k <= 12; k++) ctx.lineTo(px + 6 + Math.sin(k * 1.3) * 5, ground - ht * k / 12); ctx.stroke(); for (let k = 0; k < 7; k++) leaf(px + 6 + (k % 2 ? 7 : -7), ground - ht * (0.2 + k * 0.11), 6, 4.5, k % 2 ? -0.4 : 0.4, '#4E9A3A'); ctx.fillStyle = '#7A5030'; ctx.beginPath(); ctx.ellipse(px, ground + 12, 6, 11, 0.1, 0, Math.PI * 2); ctx.fill(); }
+      else if (kind === 'cowpea') { stem(px, ground, px, ground - hh * 0.8, 1.6, '#4C7A2E'); for (let k = 0; k < 5; k++) { const ly = ground - hh * (0.15 + k * 0.15); [-1, 1].forEach(sd => leaf(px + sd * 9, ly - 2, 7, 4.5, sd * -0.4, '#5BA544')); } for (let k = 0; k < 3; k++) { ctx.strokeStyle = '#8A9A3A'; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.moveTo(px + (k - 1) * 6, ground - hh * 0.55); ctx.quadraticCurveTo(px + (k - 1) * 9, ground - hh * 0.35, px + (k - 1) * 12, ground - hh * 0.3); ctx.stroke(); } }
+      else if (kind === 'cocoa') { const ht = hh * 1.0, r = Math.max(12, hh * 0.4); ctx.fillStyle = '#6B4A2E'; ctx.fillRect(px - 2.5, ground - ht * 0.6, 5, ht * 0.6); crown(px, ground - ht - r * 0.5, r, ground, rand, '#2A6A32', null); ctx.fillStyle = '#C8782A'; for (let k = 0; k < 4; k++) { ctx.beginPath(); ctx.ellipse(px + (k % 2 ? 4 : -4), ground - ht * (0.25 + k * 0.08), 2.6, 5, 0, 0, Math.PI * 2); ctx.fill(); } }
+      else if (kind === 'vegetable') { const key = c.key; if (key === 'onion') { for (let k = -2; k <= 2; k++) stem(px + k * 2, ground - 4, px + k * 4, ground - hh * (0.9 + 0.05 * Math.abs(k)), 1.6, '#5E9E3A'); ctx.fillStyle = '#C9A06A'; ctx.beginPath(); ctx.ellipse(px, ground - 3, 7, 6, 0, 0, Math.PI * 2); ctx.fill(); }
+        else if (key === 'cabbage') { for (let k = 0; k < 8; k++) { const a = -Math.PI * k / 7; leaf(px + Math.cos(a) * 12, ground - 6 + Math.sin(a) * 6, 8, 5, a, '#7FB86A'); } ctx.fillStyle = '#A8D48A'; ctx.beginPath(); ctx.arc(px, ground - hh * 0.45, Math.max(6, hh * 0.32), 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = 'rgba(40,80,30,0.6)'; ctx.stroke(); }
+        else { stem(px, ground, px, ground - hh * 0.95, 2, '#4C7A2E'); for (let k = 0; k < 6; k++) { const ly = ground - hh * (0.15 + k * 0.14); leaf(px + (k % 2 ? 8 : -8), ly, 7, 4, k % 2 ? -0.5 : 0.5, '#4E9A3A'); } const fr = { tomato: '#D9342A', pepper: '#C8302A', potato: '#F2F2F2' }[key] || '#D9342A'; for (let k = 0; k < (key === 'potato' ? 5 : 4); k++) { ctx.fillStyle = fr; ctx.beginPath(); ctx.arc(px + (rand() - 0.5) * 16, ground - hh * (0.35 + rand() * 0.5), key === 'potato' ? 2 : 3.2, 0, Math.PI * 2); ctx.fill(); } if (key === 'potato') { ctx.fillStyle = '#B8865A'; for (let k = -1; k <= 1; k++) { ctx.beginPath(); ctx.ellipse(px + k * 8, ground + 9 + Math.abs(k) * 3, 5, 4, 0, 0, Math.PI * 2); ctx.fill(); } } } }
       else if (kind === 'millet') { stem(px, ground, px, ground - hh * 1.2, 2.2, '#5A8F33'); for (let k = 0; k < 4; k++) { const ly = ground - hh * (0.25 + k * 0.2), sd = k % 2 ? 1 : -1; ctx.strokeStyle = '#6AAE45'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(px, ly); ctx.quadraticCurveTo(px + sd * 12, ly - 8, px + sd * 20, ly + 4); ctx.stroke(); } leaf(px, ground - hh * 1.32, 3, 11, 0, '#8E7A45', '#5A4A20'); }
       else if (kind === 'wheat') { stem(px, ground, px, ground - hh, 2, '#5C8E34'); for (let k = 0; k < 4; k++) { const ly = ground - hh * (0.3 + k * 0.17), sd = k % 2 ? 1 : -1; ctx.strokeStyle = '#6AAE45'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(px, ly); ctx.quadraticCurveTo(px + sd * 10, ly - 7, px + sd * 16, ly + 3); ctx.stroke(); } ctx.fillStyle = '#D9B25A'; for (let k = 0; k < 6; k++) { ctx.beginPath(); ctx.ellipse(px + (k % 2 ? 2 : -2), ground - hh - 3 - k * 3, 2.2, 3, 0, 0, Math.PI * 2); ctx.fill(); } }
       else if (kind === 'mustard') { stem(px, ground, px, ground - hh * 1.1, 1.8, '#5E9A3C'); for (let k = 0; k < 4; k++) leaf(px + (k % 2 ? 7 : -7), ground - hh * (0.15 + k * 0.15), 7, 3.5, k % 2 ? -0.5 : 0.5, '#6DB84A'); for (let k = 0; k < 9; k++) { ctx.fillStyle = '#F2D23A'; ctx.beginPath(); ctx.arc(px + (rand() - 0.5) * 16, ground - hh * (1.0 + rand() * 0.15), 2.2, 0, Math.PI * 2); ctx.fill(); } }
@@ -212,4 +220,27 @@
   };
   setInterval(() => { try { const n = cropNote(), el = document.getElementById('cropNoteBar'); if (n) { let e = el; if (!e) { e = document.createElement('div'); e.id = 'cropNoteBar'; const pc = document.getElementById('proCenter') || document.body; pc.insertBefore(e, pc.firstChild); } e.textContent = n; e.style.display = ''; } else if (el) el.style.display = 'none'; } catch (e) {} }, 600);
   try { refresh(); } catch (e) {}
+})();
+
+/* crop selector of the web explorer (all simulated and library crops, grouped) and migration of projects saved with the
+   former crop categories: legume -> soybean, vegetable -> tomato */
+(function () {
+  if (typeof applyState !== 'function' || !window.CROPLIB) return;
+  const MIG = { legume: 'soybean', vegetable: 'tomato' };
+  const oApply = applyState;
+  applyState = function (o) { if (o && o.crop && !CROPS[o.crop]) o.crop = MIG[o.crop] || 'cereal'; return oApply.apply(this, arguments); };
+  if (!CROPS[state.crop]) state.crop = MIG[state.crop] || 'cereal';
+  const box = document.getElementById('cropBtns'); if (!box) return;
+  const L = CROPLIB.crops, groups = [['Simulated in Daisy', ['cereal']],
+    ['Staple food crops', ['cassava', 'yam', 'rice', 'maize', 'sorghum', 'pearlmillet', 'cowpea', 'wheat', 'potato']],
+    ['Cash and oil crops', ['groundnut', 'soybean', 'cotton', 'mustard', 'greengram', 'chickpea', 'oilpalm', 'cocoa']],
+    ['Vegetables', ['tomato', 'onion', 'cabbage', 'pepper']],
+    ['Trees, vines and palms', Object.keys(L).filter(k => L[k].group === 'perennial' && !['oilpalm', 'cocoa'].includes(k))]];
+  const used = new Set(groups.flatMap(g => g[1])); const rest = Object.keys(L).filter(k => !used.has(k)); if (rest.length) groups.push(['Other field crops', rest]);
+  const sel = document.createElement('select'); sel.id = 'cropSel'; sel.style.cssText = 'width:100%;padding:4px;font:inherit';
+  groups.forEach(([g, ks]) => { const og = document.createElement('optgroup'); og.label = g; ks.filter(k => CROPS[k]).forEach(k => { const o = document.createElement('option'); o.value = k; o.textContent = CROPS[k].label; og.appendChild(o); }); if (og.children.length) sel.appendChild(og); });
+  sel.onchange = () => applyState({ crop: sel.value });
+  box.innerHTML = ''; box.appendChild(sel); box.style.display = 'block';
+  setInterval(() => { if (sel.value !== state.crop && document.activeElement !== sel) sel.value = state.crop; }, 500);
+  window.CROP_GROUPS = groups;
 })();

@@ -14,8 +14,9 @@ const Props = (() => {
       { id: 'p-soil', name: 'Soil and field', rows: [
         { t: 'select', label: 'Soil', id: 'soil', opts: M.soils.map(k => [k, M.soilLabels[k] || k]), get: s => s.state.soil, on: v => E.set({ soil: v }) },
         { t: 'seg', label: 'Tillage', id: 'till', opts: Object.entries(M.tills), get: s => s.state.till, on: v => E.set({ till: v }) },
-        { t: 'select', label: 'Crop', id: 'crop', opts: M.crops, get: s => s.state.crop, on: v => E.set({ crop: v }) },
-        SL('tcIdx', 'Structural consolidation rate', 4, 'tc') ] },
+        { t: 'select', label: 'Crop', id: 'crop', opts: M.crops, groups: M.cropGroups, get: s => s.state.crop, on: v => E.set({ crop: v }) },
+        SL('tcIdx', 'Structural consolidation rate', 4, 'tc'),
+        { t: 'note', text: 'In your Daisy runs (E5) the consolidation rate changes the results only in the five finer soils (loam to silty clay loam: up to 6 mm/yr of drainage and 14 kg N/ha of leaching); in the five coarser soils all rates give the same result.' } ] },
       { id: 'p-mul', name: 'Mulch', rows: [
         { t: 'select', label: 'Material', id: 'mulch', opts: M.mulches, get: s => s.state.mulchType, on: v => E.setMulch(v) },
         SL('vffIdx', 'Strength (vapour-flux factor)', 9, 'vff'), SL('capIdx', 'Interception capacity (mm)', 3, 'cap') ] },
@@ -35,7 +36,7 @@ const Props = (() => {
       h += '<div class="pg" data-g="' + g.id + '"><div class="pgh" data-gh="' + g.id + '"><span class="tw">' + (closed[g.id] ? '&#9654;' : '&#9660;') + '</span>' + g.name + '</div><div class="pgb" ' + (closed[g.id] ? 'hidden' : '') + '>';
       g.rows.forEach((r, i) => {
         const rid = g.id + '-' + i;
-        if (r.t === 'select') h += '<div class="pr"><label>' + r.label + '</label><select data-r="' + rid + '">' + r.opts.map(o => '<option value="' + UI.esc(o[0]) + '">' + UI.esc(o[1]) + '</option>').join('') + '</select></div>';
+        if (r.t === 'select') { const op = o => '<option value="' + UI.esc(o[0]) + '">' + UI.esc(o[1]) + '</option>'; h += '<div class="pr"><label>' + r.label + '</label><select data-r="' + rid + '">' + (r.groups && r.groups.length ? r.groups.map(g => '<optgroup label="' + UI.esc(g[0]) + '">' + g[1].map(op).join('') + '</optgroup>').join('') : r.opts.map(op).join('')) + '</select></div>'; }
         else if (r.t === 'date') h += '<div class="pr"><label>' + r.label + '</label><input type="date" data-r="' + rid + '"></div>';
         else if (r.t === 'seg') h += '<div class="pr"><label>' + r.label + '</label><div class="seg" data-r="' + rid + '">' + r.opts.map(o => '<button data-v="' + UI.esc(o[0]) + '">' + UI.esc(o[1]) + '</button>').join('') + '</div></div>';
         else if (r.t === 'slider') h += '<div class="pr"><label>' + r.label + '<b data-val="' + r.vk + '"></b></label><input type="range" min="0" max="' + r.max + '" step="1" data-r="' + rid + '" data-key="' + r.key + '"></div>';

@@ -160,7 +160,7 @@ Variable & Unit & Meaning\\\midrule
 \texttt{yield\_Mg\_ha} & Mg\,ha$^{-1}$ & grain yield $Y$\\
 \texttt{N\_fertiliser\_kg\_ha}, \texttt{N\_leached\_kg\_ha} & kg\,ha$^{-1}$\,yr$^{-1}$ & nitrogen applied and leached ($N_L$)\\
 \texttt{IE\_kg\_m3}, \texttt{DPF}, \texttt{NLF} & kg\,m$^{-3}$, $-$, $-$ & irrigation efficiency, $D/(P+I)$, $N_L$/N applied\\
-daily suction at 20\,cm; 1994 profiles & cm & sensor record (V1) and profile view (V2), irrigated and rainfed\\\bottomrule
+daily suction at 20\,cm; 1994 profiles & cm & sensor record (V1) and profile view (V2), irrigated and rainfed (coarse loam, coarse sand, standard settings); in release~1.1.0 other settings and soils add the difference between two Engine~2 runs (settings minus standard) to the record as depletion\\\bottomrule
 \end{tabularx}
 \end{table}
 
@@ -539,7 +539,7 @@ Read together, the envelopes sort the software's outputs by the kind of reliance
 \label{sec:validity}
 \begin{enumerate}[nosep]
 \item Validation status. The verification has not yet been extended to field or user data, and uncertainty propagation is not included. It is against published worked examples and relations, which tests that equations are implemented as written; it does not test that they describe a given field. The published examples are few (two for surface irrigation, one for sprinkler design, relations only for drip), and no field data for drip or sprinkler systems exist in the repository.
-\item One climate (Taastrup) and one cereal rotation simulated; legume and vegetable outputs are multipliers.
+\item One climate (Taastrup) and one cereal rotation simulated. Release~1.0.0 scaled the cereal result by fixed legume and vegetable multipliers; release~1.1.0 replaces them by 48 library crops (field crops, vegetables, trees, vines and palms) to which the cereal result is transferred by the ratio of two daily FAO-56 root-zone balances on the same weather years, so the values of these crops are transfers and not Daisy simulations.
 \item Engine~1 baseline offset between experiment families; yield is used for ranking.
 \item Engine~2 partition and drainage are scaled to Engine~1; irrigation is not matched in sand and loamy sand at dry triggers.
 \item Sprinkler range coefficient verified only for the impact type (+1\,\% in diameter); the coefficients of the rotating-spray, micro-sprinkler and big-gun types, the pattern shapes, the wind term (which barely changes CU) and the drift function are engineered and unverified.

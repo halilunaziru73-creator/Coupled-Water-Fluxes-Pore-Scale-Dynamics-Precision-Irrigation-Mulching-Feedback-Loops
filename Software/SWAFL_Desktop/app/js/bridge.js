@@ -62,6 +62,7 @@ const E = (() => {
     /* ---- data from the engine ---- */
     meta() {
       return api.json(`({soils:DATA.soils,soilLabels:DATA.soil_labels,tills:TILL_LABELS,crops:Object.keys(CROPS).map(function(k){return[k,CROPS[k].label]}),
+        cropGroups:window.CROP_GROUPS?CROP_GROUPS.map(function(g){return[g[0],g[1].filter(function(k){return CROPS[k]}).map(function(k){return[k,CROPS[k].label]})]}):null,
         methods:METHODS.map(function(m){return[m.k,m.label]}),mulches:MULCHES.map(function(m){return[m.k,m.label]}),
         scenes:SCENES.map(function(s){return[s.id,s.label,s.title||'']}),
         presets:[].map.call(document.querySelectorAll('#guiPreset option'),function(o){return[o.value,o.textContent]}),
