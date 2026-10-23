@@ -67,11 +67,7 @@ zone, deep percolation, runoff, evaporation and drift) from the S2, S3 or S4 des
 WebM film of the farm. Every control (soil, crop, mulch, rain, warming, trigger, sensor depth, method) changes the farm.
 
 ## 4a. Crops
-Properties → Crop lists the Daisy crops (cereal, legume, vegetable) and a library of field crops and 26 tree, vine and
-bush crops with FAO-56 crop coefficients (initial, mid-season and end), stage lengths, height, rooting depth, depletion
-fraction and yield-response factor; tree crops also have planting densities. For library crops the Daisy cereal results
-are transferred to the crop with a daily FAO-56 root-zone balance on the same 20 weather years, and yield is shown as a
-percentage of the potential. The bar under the drawing says which model is used. **C1 Crop water requirement** shows
+Properties → Crop lists the Daisy cereal rotation (simulated) and 48 library crops in five groups: staple food crops (cassava, yam, rice, maize, sorghum, millet, cowpea, wheat, potato), cash and oil crops (groundnut, soybean, cotton, mustard, green gram, chickpea, oil palm, cocoa), vegetables (tomato, onion, cabbage, sweet pepper) and 27 trees, vines and palms. Each carries its crop coefficients (initial, mid-season, end), stage lengths, height, rooting depth, depletion fraction and yield-response factor; trees have planting densities. For library crops the Daisy cereal results are transferred to the crop with a daily FAO-56 root-zone balance on the same 20 weather years, and yield is shown as a percentage of the potential. The bar under the drawing says which model is used. **C1 Crop water requirement** shows
 the Kc curve, the crop water use, the root-zone depletion and a table of all crops ranked by net irrigation (tap a row
 to select the crop).
 

@@ -12,15 +12,24 @@ window.CROPLIB = (function () {
   const F = (label, kind, kc, st, h, root, p, ky, opt) => Object.assign({ label, kind, group: 'field', habit: 'annual', kcIni: kc[0], kcMid: kc[1], kcEnd: kc[2], stages: st, height: h, root, p, ky, kySrc: ky == null ? 'not tabulated' : 'tabulated', fc: 0.9 }, opt || {});
   const crops = {
     rice:        F('Rice', 'rice', [1.05, 1.20, 0.90], [15, 30, 45, 30], 0.8, 75, 0.20, null, { ponded: true }),
-    maize:       F('Maize (grain)', 'maize', [0.30, 1.08, 0.23], [15, 30, 40, 20], 1.5, 135, 0.55, 1.25),
-    pearlmillet: F('Pearl millet', 'millet', [0.30, 0.89, 0.19], [15, 25, 35, 15], 1.5, 150, 0.55, null),
+    maize:       F('Maize (grain)', 'maize', [0.30, 1.20, 0.60], [15, 30, 40, 20], 1.5, 135, 0.55, 1.25),
+    pearlmillet: F('Millet', 'millet', [0.30, 1.00, 0.30], [15, 25, 40, 25], 1.5, 150, 0.55, null),
+    sorghum:     F('Sorghum (grain)', 'sorghum', [0.30, 1.00, 0.55], [20, 35, 40, 30], 1.5, 150, 0.55, 0.90),
+    cassava:     F('Cassava', 'cassava', [0.30, 0.80, 0.30], [20, 40, 90, 60], 1.0, 65, 0.35, null),
+    yam:         F('Yam', 'yam', [0.50, 1.10, 0.85], [30, 60, 90, 60], 1.5, 60, 0.40, null, { rootSrc: 'group default', stSrc: 'group default' }),
+    cowpea:      F('Cowpea (beans)', 'cowpea', [0.40, 1.05, 0.50], [20, 30, 30, 20], 0.4, 80, 0.45, null),
     greengram:   F('Green gram (mung bean)', 'legume', [0.40, 0.96, 0.51], [17, 23, 34, 16], 0.4, 75, 0.45, null),
-    soybean:     F('Soybean', 'soybean', [0.40, 1.05, 0.40], [20, 30, 45, 25], 0.6, 95, 0.50, 0.85),
-    groundnut:   F('Groundnut', 'groundnut', [0.40, 1.06, 0.51], [20, 35, 40, 25], 0.4, 75, 0.50, 0.70),
+    soybean:     F('Soybean', 'soybean', [0.40, 1.15, 0.50], [20, 30, 45, 25], 0.6, 95, 0.50, 0.85),
+    groundnut:   F('Groundnut', 'groundnut', [0.40, 1.15, 0.60], [20, 35, 40, 25], 0.4, 75, 0.50, 0.70),
     cotton:      F('Cotton', 'cotton', [0.35, 1.15, 0.50], [30, 45, 65, 50], 1.1, 135, 0.65, 0.85),
     wheat:       F('Wheat', 'wheat', [0.40, 1.15, 0.41], [20, 30, 45, 25], 0.8, 165, 0.55, 1.05),
     chickpea:    F('Chickpea', 'legume', [0.40, 1.00, 0.40], [15, 35, 45, 25], 0.4, 80, 0.50, null),
     mustard:     F('Mustard', 'mustard', [0.35, 1.15, 0.35], [15, 35, 45, 25], 1.3, 125, 0.60, null),
+    tomato:      F('Tomato', 'vegetable', [0.60, 1.15, 0.80], [30, 40, 40, 25], 0.6, 100, 0.40, 1.05),
+    potato:      F('Potato', 'vegetable', [0.50, 1.15, 0.75], [25, 30, 45, 30], 0.6, 50, 0.35, 1.10),
+    onion:       F('Onion (dry)', 'vegetable', [0.70, 1.05, 0.75], [15, 25, 70, 40], 0.4, 45, 0.30, 1.10),
+    cabbage:     F('Cabbage', 'vegetable', [0.70, 1.05, 0.95], [40, 60, 50, 15], 0.4, 65, 0.45, 0.95),
+    pepper:      F('Sweet pepper', 'vegetable', [0.60, 1.05, 0.90], [25, 35, 40, 20], 0.7, 75, 0.30, 1.10),
   };
   // tree, vine and berry crops: [density / training system, fc, height (m), Kc mid, Kc end]
   const P = (label, kind, habit, dens, root, p, opt) => Object.assign({ label, kind, group: 'perennial', habit, densities: dens, root, p, ky: null, kySrc: 'not tabulated' }, opt || {});
@@ -52,6 +61,8 @@ window.CROPLIB = (function () {
     coconut:    P('Coconut', 'palm', 'evergreen', [['Young, low', 0.20, 3.0, 0.75, 0.70], ['High', 0.50, 12.0, 0.95, 0.95], ['Very high', 0.65, 15.0, 1.00, 1.00]], 120, 0.50, Object.assign({ rootSrc: 'group default' }, EVG)),
     papaya:     P('Papaya', 'papaya', 'evergreen', [['High', 0.75, 3.0, 1.00, 0.75]], 90, 0.50, Object.assign({ rootSrc: 'group default' }, EVG)),
     guava:      P('Guava', 'citrus', 'evergreen', [['High', 0.75, 4.0, 0.80, 0.60]], 120, 0.50, Object.assign({ rootSrc: 'group default' }, EVG)),
+    oilpalm:    P('Oil palm', 'palm', 'evergreen', [['Young', 0.30, 3.0, 0.90, 0.90], ['Mature', 0.70, 8.0, 0.95, 0.95]], 90, 0.65, Object.assign({ kcIni: 0.90 }, EVG)),
+    cocoa:      P('Cocoa', 'cocoa', 'evergreen', [['Under high shade canopy', 0.80, 3.0, 1.05, 1.05]], 85, 0.30, Object.assign({ kcIni: 1.00 }, EVG)),
     cherimoya:  P('Cherimoya', 'citrus', 'evergreen', [['Medium', 0.57, 4.0, 0.65, 0.55]], 120, 0.50, Object.assign({ rootSrc: 'group default' }, EVG)),
   });
   for (const k in crops) { const c = crops[k]; c.key = k; if (!c.rootSrc) c.rootSrc = 'tabulated'; }
@@ -65,7 +76,7 @@ window.CROPLIB = (function () {
       return { key, c, label: c.label, sow, len: L, st, kcIni: c.kcIni, kcMid: c.kcMid, kcEnd: c.kcEnd, fc: c.fc, height: c.height, root: c.root, p: c.p, ky: c.ky, habit: 'annual', dens: null };
     }
     const d = c.densities[Math.max(0, Math.min(c.densities.length - 1, densIdx == null ? Math.floor((c.densities.length - 1) / 2) : densIdx))];
-    const kcEnd = d[4], kcMid = d[3], kcIni = c.habit === 'evergreen' ? kcEnd : Math.min(0.45, kcEnd);
+    const kcEnd = d[4], kcMid = d[3], kcIni = c.kcIni != null ? c.kcIni : c.habit === 'evergreen' ? kcEnd : Math.min(0.45, kcEnd);
     const L = c.stages.reduce((a, b) => a + b, 0);
     return { key, c, label: c.label + ' (' + d[0].toLowerCase() + ')', sow: c.start, len: c.habit === 'evergreen' ? 365 : L, st: c.stages, kcIni, kcMid, kcEnd, fc: d[1], height: d[2], root: c.root, p: c.p, ky: null, habit: c.habit, dens: d[0] };
   }
@@ -91,7 +102,7 @@ window.cropRootBase = function (crop) {
 window.cropLam = function (crop) {
   const o = { cereal: 0.32, legume: 0.24, vegetable: 0.40 }[crop]; if (o != null) return o;
   const c = window.CROPLIB.crops[crop]; if (!c) return 0.32;
-  return { rice: 0.40, maize: 0.30, millet: 0.30, legume: 0.30, soybean: 0.28, groundnut: 0.34, cotton: 0.26, wheat: 0.32, mustard: 0.28 }[c.kind] || 0.22;   // trees, vines and palms: deeper, flatter root distribution
+  return { rice: 0.40, maize: 0.30, millet: 0.30, legume: 0.30, soybean: 0.28, groundnut: 0.34, cotton: 0.26, wheat: 0.32, mustard: 0.28, sorghum: 0.30, cowpea: 0.30, cassava: 0.30, yam: 0.34, vegetable: 0.40 }[c.kind] || 0.22;   // trees, vines and palms: deeper, flatter root distribution
 };
 // save a file: through the desktop Save dialog when SWAFL runs as the desktop app, otherwise as a browser download
 window.saveBytes = function (name, bytes, mime) {
@@ -103,4 +114,14 @@ window.saveBytes = function (name, bytes, mime) {
   }
   const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([bytes], { type: mime || 'application/octet-stream' })); a.download = name;
   document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+};
+
+// root architecture used by the root drawings: fibrous (grasses), tap or woody (legumes, fibre and oil crops, tubers,
+// trees, vines and palms) or shallow (vegetables)
+window.cropRootType = function (crop) {
+  if (crop === 'cereal' || crop === 'legume' || crop === 'vegetable') return crop;
+  const c = window.CROPLIB && CROPLIB.crops[crop]; if (!c) return 'cereal';
+  if (['rice', 'maize', 'millet', 'sorghum', 'wheat', 'mustard'].includes(c.kind)) return 'cereal';
+  if (c.kind === 'vegetable') return 'vegetable';
+  return 'legume';
 };

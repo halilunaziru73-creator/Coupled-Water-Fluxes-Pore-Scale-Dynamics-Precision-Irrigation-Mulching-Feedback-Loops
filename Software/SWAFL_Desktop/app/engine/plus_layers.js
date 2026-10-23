@@ -33,6 +33,39 @@
     const c = CWB(state.crop), r = CWB('__ref'); return c.I.map((v, y) => r.I[y] > 5 ? v / r.I[y] : null);
   };
 
+  // The Daisy run carries the year-to-year pattern of the setting it simulates. Controls that its experiment does not
+  // vary (crop, rainfall, warming, nitrogen rate) are applied by the response of the annual model to each of them, so that
+  // the 20-year mean of every series equals the annual result at your settings and every control moves the years.
+  window.adjRun = function (pk, rainfed) {
+    const r0 = rainfed ? pk.rainfed : pk.r; if (!r0) return null;
+    const vff = VFF_VALUES[state.vffIdx], rain = RAIN_VALUES[state.rainIdx], dT = TEMP_VALUES[state.tempIdx], nR = NRATE_VALUES[state.nIdx] / 100;
+    const ref = model(vff, 1.0, { noCrop: true, tempIdx: TEMP_VALUES.indexOf(0), nIdx: NRATE_VALUES.indexOf(100) }), cur = model(vff, rain);
+    const lib = !!(CROPS[state.crop] && CROPS[state.crop].lib), q = (a, b) => Math.abs(b) > 1e-6 ? clampN(a / b, 0, 6) : 1;
+    const c = lib ? CWB(state.crop, { rainfed: !!rainfed }) : null, cr = lib ? CWB('__ref', { rainfed: !!rainfed }) : null;
+    const fT = q(cur.transp, ref.transp), fEs = q(cur.evap, ref.evap), fO = q(cur.other, ref.other), fNL = q(cur.nl, ref.nl), fY = lib ? q(c.mean.RY, cr.mean.RY) : q(cur.yield, ref.yield);
+    const fE0 = 1 + 0.035 * dT, fK = lib ? q(c.mean.ETc, cr.mean.ETc) : 1;
+    const o = { crop: r0.crop }, mp = (k, g) => { o[k] = (r0[k] || []).map((v, i) => v == null ? v : g(v, i)); };
+    mp('P', v => v * rain);
+    if (rainfed) mp('I', () => 0);
+    else if (lib && cr.mean.I > 5) { const raw = r0.I.map((v, i) => v * (cr.I[i] > 5 ? c.I[i] / cr.I[i] : c.mean.I / cr.mean.I)), m = mean(raw); mp('I', (v, i) => m > 0 ? raw[i] * cur.irr / m : 0); }
+    else { const fI = q(cur.irr, ref.irr); mp('I', v => v * fI); }
+    const mD = mean(r0.D), dD = cur.drain - ref.drain;
+    mp('D', v => mD > 5 && ref.drain > 5 && cur.drain > 0 ? v * cur.drain / ref.drain : v + dD);
+    mp('Dbio', (v, i) => r0.D[i] > 1e-6 ? v * o.D[i] / r0.D[i] : v);
+    mp('T', v => v * fT); mp('Es', v => v * fEs); ['Ec', 'El', 'Ep', 'Esn'].forEach(k => mp(k, v => v * fO));
+    mp('ET', (v, i) => o.T[i] + o.Es[i] + o.Ec[i] + o.El[i] + o.Ep[i] + o.Esn[i] + (v - (r0.T[i] + r0.Es[i] + r0.Ec[i] + r0.El[i] + r0.Ep[i] + r0.Esn[i])));
+    mp('ET0', v => v * fE0); mp('PET', v => v * fE0 * fK); mp('PT', v => v * fE0 * fK);
+    mp('RO', v => v * rain * rain);
+    mp('Imat', (v, i) => { const a = r0.P[i] + r0.I[i]; return a > 0 ? v * (o.P[i] + o.I[i]) / a : v; }); mp('Imac', (v, i) => { const a = r0.P[i] + r0.I[i]; return a > 0 ? v * (o.P[i] + o.I[i]) / a : v; });
+    mp('NL', v => v * fNL); mp('Nfert', v => v * nR); mp('Nvol', v => v * nR); mp('Nden', v => v * Math.sqrt(nR)); mp('Nmin', v => v); mp('Nup', v => v * fY);
+    if (lib) { const ry = c.RY, k = cur.yield / Math.max(1e-6, 100 * c.mean.RY); mp('Y', (v, i) => 100 * ry[i] * k); mp('WS', (v, i) => c.stress[i]); }
+    else { mp('Y', v => v * fY); mp('WS', v => v); }
+    ['stem', 'leaf'].forEach(k => mp(k, v => v * fY)); mp('HI', v => v);
+    const notes = []; if (Math.abs(rain - 1) > 1e-6) notes.push('rainfall ×' + rain.toFixed(1)); if (Math.abs(dT) > 1e-6) notes.push((dT > 0 ? '+' : '') + dT.toFixed(1) + ' °C'); if (Math.abs(nR - 1) > 1e-6) notes.push('nitrogen ' + Math.round(nR * 100) + ' %'); if (lib) notes.push(CROPS[state.crop].label.toLowerCase() + ' (crop coefficients)');
+    o.yUnit = lib ? '% of potential' : 'Mg/ha'; o.lib = lib; o.notes = notes; return o;
+  };
+  const adjText = (pk, r) => 'Daisy run ' + pk.id + ': ' + pk.why + (r.notes.length ? '; set to your ' + r.notes.join(', ') : '');
+
   // ------------------------------------------------------------------ small chart kit
   function frame(x, y, w, h, title, sub) {
     ctx.fillStyle = PANEL; ctx.fillRect(x, y, w, h); ctx.strokeStyle = '#B9B4A6'; ctx.lineWidth = 1; ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);
@@ -74,14 +107,13 @@
   function drawYby() {
     paper(); let y = header('Year by year: how reliable is this setting?', DATA.soil_labels[state.soil] + ' · ' + (CROPS[state.crop] || {}).label + ' · 20 seasons of weather, 1980/81 to 1999/2000', 4);
     const pk = pickRun(); if (!pk) { noData(y); return; }
-    const r = pk.r, rf = pk.rainfed, cf = cropYearFactor();
-    let bx = 16 + badge('YOUR DATA', 16, y, '#1E8E3E') + 8; TF('Daisy run ' + pk.id + ': ' + pk.why + '; red bar = the year on the clock (tap a bar to go to that year)', bx, y + 1, { s: 9.5, c: INK }); y += 14;
-    if (cf) { badge('YOUR CROP', 16, y + 2, '#7B2FA8'); TF('purple marks: irrigation of ' + CROPS[state.crop].label.toLowerCase() + ', the same years transferred with its crop coefficients', 92, y + 3, { s: 9.5, c: INK }); y += 14; }
+    const r = adjRun(pk), rf = adjRun(pk, true);
+    let bx = 16 + badge('YOUR DATA', 16, y, '#1E8E3E') + 8; TF(adjText(pk, r) + '; red bar = the year on the clock (tap a bar to go to that year)', bx, y + 1, { s: 9.5, c: INK }); y += 14;
     const cw = (W - 44) / 2, ph = 214, cols = r.crop.map(c => CROPCOL[c] || '#8A8F98');
     const P = [
-      ['Irrigation', 'mm per year', r.I, { col: '#2E7DE8', unit: 'mm', line: cf ? r.I.map((v, i) => cf[i] == null ? null : v * cf[i]) : null }],
+      ['Irrigation', 'mm per year', r.I, { col: '#2E7DE8', unit: 'mm' }],
       ['Drainage below 1 m', 'mm per year · black dots: rainfed', r.D, { col: '#5AA0E1', unit: 'mm', overlay: rf ? rf.D : null, extra: rf ? rf.D : [] }],
-      ['Grain yield', 'Mg dry matter per ha · black dots: rainfed', r.Y, { colors: cols, unit: 'Mg/ha', dec: 2, overlay: rf ? rf.Y : null, extra: rf ? rf.Y : [] }],
+      [r.lib ? 'Relative yield' : 'Grain yield', (r.lib ? '% of potential' : 'Mg dry matter per ha') + ' · black dots: rainfed', r.Y, { colors: cols, unit: r.lib ? '%' : 'Mg/ha', dec: r.lib ? 0 : 2, overlay: rf ? rf.Y : null, extra: rf ? rf.Y : [] }],
       ['Nitrate leaching below 1 m', 'kg N per ha per year', r.NL, { col: '#8E5A2A', unit: 'kg N', dec: 1 }],
       ['Evapotranspiration', 'mm per year', r.ET, { col: '#E8912D', unit: 'mm' }],
       ['Days of crop water stress', 'days per season', r.WS, { col: '#D93025', unit: 'days', dec: 1, overlay: rf ? rf.WS : null, extra: rf ? rf.WS : [] }],
@@ -118,7 +150,7 @@
   function drawWb2() {
     paper(); let y = header('Full water balance from Daisy, year by year', DATA.soil_labels[state.soil] + ' · every term of the simulated balance, including evaporation from litter, ponded water and snow', 4);
     const pk = pickRun(); if (!pk) { noData(y); return; }
-    const r = pk.r; badge('YOUR DATA', 16, y, '#1E8E3E'); TF('Daisy run ' + pk.id + ': ' + pk.why, 96, y + 1, { s: 9.5 }); y += 16;
+    const r = adjRun(pk); badge('YOUR DATA', 16, y, '#1E8E3E'); TF(adjText(pk, r), 96, y + 1, { s: 9.5 }); y += 16;
     const n = 20, x0 = 64, ww = W - 32 - 80, hh = 300, top = y + 34;
     frame(16, y, W - 32, hh + 90, 'Where the water comes from (up) and where it goes (down)', 'mm per year');
     let hi = 0; for (let i = 0; i < n; i++) hi = Math.max(hi, r.P[i] + r.I[i], r.T[i] + r.Es[i] + r.Ec[i] + r.El[i] + r.Ep[i] + r.Esn[i] + Math.max(0, r.D[i]) + r.RO[i]); hi = nice(hi * 1.05);
@@ -165,7 +197,7 @@
   function drawNb() {
     paper(); let y = header('Nitrogen budget, year by year', DATA.soil_labels[state.soil] + ' · fertiliser and soil supply against crop uptake and losses', 4);
     const pk = pickRun(); if (!pk) { noData(y); return; }
-    const r = pk.r; badge('YOUR DATA', 16, y, '#1E8E3E'); TF('Daisy run ' + pk.id + ': ' + pk.why, 96, y + 1, { s: 9.5 }); y += 16;
+    const r = adjRun(pk); badge('YOUR DATA', 16, y, '#1E8E3E'); TF(adjText(pk, r), 96, y + 1, { s: 9.5 }); y += 16;
     const NC = { fert: '#5B2FA8', min: '#9B7FD6', up: '#2E9E4F', NL: '#8E5A2A', den: '#E8912D', vol: '#B9B4A6' };
     const n = 20, x0 = 64, ww = W - 32 - 80, hh = 280, top = y + 34;
     frame(16, y, W - 32, hh + 76, 'Supply (up) against uptake and losses (down)', 'kg N per ha per year');
@@ -202,7 +234,7 @@
   // ================================================================== C1 Crop water requirement
   const CUI = { year: null };
   function drawCrop() {
-    paper(); let y = header('Crop water requirement', DATA.soil_labels[state.soil] + ' · choose the crop in Settings (Crop) · crop coefficients and growth stages from field studies', 4);
+    paper(); let y = header('Crop water requirement', DATA.soil_labels[state.soil] + ' · choose the crop in Settings (Crop) · crop coefficients, growth stages, rooting depth and yield response of each crop', 4);
     const lib = window.CROPLIB, key = lib.crops[state.crop] ? state.crop : 'wheat', pp = lib.params(key, state.densIdx, state.plantDoy), c = CWB(key, { daily: true }), dly = c.daily;
     if (!lib.crops[state.crop]) { badge('NOTE', 16, y, '#8A8F98'); TF('The Daisy rotation (cereal) is selected: the curves below show wheat. Pick any crop in Settings to see its own.', 60, y + 1, { s: 10 }); y += 18; }
     // controls drawn on the canvas: density, planting date
@@ -212,7 +244,13 @@
     else { btn('Plant 2 weeks earlier', false, () => { state.plantDoy = clampN(state.plantDoy - 14, 60, 250); refresh(); }); btn('Plant 2 weeks later', false, () => { state.plantDoy = clampN(state.plantDoy + 14, 60, 250); refresh(); }); T('planted ' + dateStr(pp.sow), cx + 4, y + 15, { s: 10.5, b: true }); }
     y += 32;
     // tiles
-    const tiles = [['Crop water need (ETc)', fmt(c.mean.ETc) + ' mm/yr', 'Kc x reference ET, whole year'], ['Water the crop uses (ETa)', fmt(c.mean.ETa) + ' mm/yr', 'after soil-water stress'], ['Net irrigation', fmt(c.mean.In) + ' mm/yr', 'to refill the root zone'], ['Gross irrigation', fmt(c.mean.I) + ' mm/yr', 'at ' + fmt(100 * c.effApp) + ' % application efficiency'], ['Irrigations', fmt(c.mean.ev, 1) + ' per year', 'trigger at ' + fmt(100 * c.fT) + ' % depletion'], ['Relative yield', fmt(100 * c.mean.RY) + ' %', 'Ky ' + (pp.ky == null ? 'assumed 1.0' : pp.ky.toFixed(2))], ['Below the root zone', fmt(c.mean.DP) + ' mm/yr', 'from the root-zone balance'], ['Stress days', fmt(c.mean.stress, 1) + ' per season', 'soil water below the readily available']];
+    // the irrigation, water use, drainage and yield shown here are the results of the whole program at your settings
+    // (Daisy, transferred to the crop), so they follow every control: soil, tillage, consolidation, mulch, rain, warming,
+    // method, trigger, sensor depth and nitrogen; the crop curves and the root-zone depletion are the FAO-56 balance
+    const cur = current, isL = !!(CROPS[state.crop] && CROPS[state.crop].lib), gSel = c.mean.I > 1 ? cur.irr / c.mean.I : 1;
+    const mNo = model(VFF_VALUES[state.vffIdx], RAIN_VALUES[state.rainIdx], { noCrop: true }), rref = CWB('__ref'), gI = rref.mean.I > 1 ? mNo.irr / rref.mean.I : 1;
+    const nRef = model(VFF_VALUES[state.vffIdx], RAIN_VALUES[state.rainIdx], { noCrop: true, nIdx: NRATE_VALUES.indexOf(100) }), gN = nRef.yield > 0 ? clampN(mNo.yield / nRef.yield, 0, 1.5) : 1;
+    const tiles = [['Crop water need (ETc)', fmt(c.mean.ETc) + ' mm/yr', 'Kc x reference ET, whole year'], ['Water the crop uses', fmt(cur.transp + cur.evap) + ' mm/yr', 'transpiration ' + fmt(cur.transp) + ' + soil evaporation ' + fmt(cur.evap)], ['Net irrigation', fmt(cur.irr * c.effApp) + ' mm/yr', 'reaching the root zone'], ['Gross irrigation', fmt(cur.irr) + ' mm/yr', 'at ' + fmt(100 * c.effApp) + ' % application efficiency'], ['Irrigations', fmt(c.mean.ev * gSel, 1) + ' per year', 'trigger at ' + fmt(100 * c.fT) + ' % depletion'], isL ? ['Relative yield', fmt(cur.yield) + ' %', 'Ky ' + (pp.ky == null ? 'assumed 1.0' : pp.ky.toFixed(2)) + (gN < 0.999 ? ', nitrogen-limited' : '')] : ['Yield', fmt(cur.yield, 2) + ' Mg/ha', 'Daisy cereal rotation'], ['Drainage below 1 m', fmt(cur.drain) + ' mm/yr', 'nitrate leached ' + fmt(cur.nl, 1) + ' kg N/ha'], ['Stress days', fmt(c.mean.stress, 1) + ' per season', 'soil water below the readily available']];
     const tw = (W - 32 - 3 * 8) / 4;
     tiles.forEach((t, i) => { const x = 16 + (i % 4) * (tw + 8), yy = y + Math.floor(i / 4) * 66; ctx.fillStyle = '#FFFFFF'; ctx.fillRect(x, yy, tw, 58); ctx.strokeStyle = '#B9B4A6'; ctx.strokeRect(x + 0.5, yy + 0.5, tw - 1, 57); ctx.fillStyle = '#2E7DE8'; ctx.fillRect(x, yy, 3, 58); T(t[0], x + 10, yy + 16, { s: 9.5, c: MUTE }); T(t[1], x + 10, yy + 36, { s: 15, b: true }); TF(t[2], x + 10, yy + 51, tw - 16, { s: 8.8, c: MUTE }); });
     y += 140;
@@ -239,13 +277,13 @@
     ctx.strokeStyle = '#5B2FA8'; ctx.beginPath(); for (let d = 0; d < 365; d++) { const xx = x0 + ww * d / 365, yy = t2 + c.fT * dly.TAW[yr * DPY + d] / dmax * h2; if (d) ctx.lineTo(xx, yy); else ctx.moveTo(xx, yy); } ctx.stroke();
     ctx.strokeStyle = '#1B1F23'; ctx.beginPath(); for (let d = 0; d < 365; d++) { const xx = x0 + ww * d / 365, yy = t2 + dly.TAW[yr * DPY + d] / dmax * h2; if (d) ctx.lineTo(xx, yy); else ctx.moveTo(xx, yy); } ctx.stroke(); ctx.setLineDash([]);
     ctx.strokeStyle = '#8E5A2A'; ctx.lineWidth = 2; ctx.beginPath(); for (let d = 0; d < 365; d++) { const xx = x0 + ww * d / 365, yy = t2 + dly.Dr[yr * DPY + d] / dmax * h2; if (d) ctx.lineTo(xx, yy); else ctx.moveTo(xx, yy); } ctx.stroke();
-    let pm = 1; for (let d = 0; d < 365; d++) pm = Math.max(pm, dly.P[yr * DPY + d], dly.I[yr * DPY + d]);
-    for (let d = 0; d < 365; d++) { const xx = x0 + ww * d / 365, pr = dly.P[yr * DPY + d], ir = dly.I[yr * DPY + d]; if (pr > 0.2) { ctx.fillStyle = '#9AA3AE'; ctx.fillRect(xx, t2, Math.max(1, ww / 365), pr / pm * 40); } if (ir > 0) { ctx.fillStyle = '#2E7DE8'; ctx.fillRect(xx - 1, t2, 3, ir / pm * 40); } }
+    let pm = 1; for (let d = 0; d < 365; d++) pm = Math.max(pm, dly.P[yr * DPY + d], dly.I[yr * DPY + d] * gSel);
+    for (let d = 0; d < 365; d++) { const xx = x0 + ww * d / 365, pr = dly.P[yr * DPY + d], ir = dly.I[yr * DPY + d] * gSel; if (pr > 0.2) { ctx.fillStyle = '#9AA3AE'; ctx.fillRect(xx, t2, Math.max(1, ww / 365), pr / pm * 40); } if (ir > 0) { ctx.fillStyle = '#2E7DE8'; ctx.fillRect(xx - 1, t2, 3, ir / pm * 40); } }
     MON0.forEach((d, i) => T(MON[i], x0 + ww * (d + 15) / 365, t2 + h2 + 14, { s: 8.5, c: MUTE, a: 'center' }));
     legend([['#8E5A2A', 'depletion of the root zone'], ['#5B2FA8', 'trigger (' + fmt(100 * c.fT) + ' % of available water)'], ['#D93025', 'readily available water (stress beyond)'], ['#1B1F23', 'total available water']], x0, t2 + h2 + 34);
     y += 270;
     // every crop for this soil
-    const keys = lib.FIELD.concat(lib.PERENNIAL), rows = keys.map(k => { const o = CWB(k); return [k, lib.params(k, null, state.plantDoy).label, o.mean.ETc, o.mean.In, o.mean.ev, o.mean.RY]; }).sort((a, b) => b[3] - a[3]);
+    const keys = lib.FIELD.concat(lib.PERENNIAL), rows = keys.map(k => { const o = CWB(k); return [k, lib.params(k, null, state.plantDoy).label, o.mean.ETc, o.mean.In * gI, o.mean.ev * gI, o.mean.RY * gN]; }).sort((a, b) => b[3] - a[3]);
     const rh = 19, th = 40 + rows.length * rh; frame(16, y, W - 32, th, 'Every crop in the library on this soil', 'net irrigation, highest first · tap a row to choose the crop');
     const cols = [30, W * 0.42, W * 0.58, W * 0.74, W * 0.9]; T('Crop', cols[0], y + 36, { s: 9.5, b: true, c: MUTE }); T('ETc (mm/yr)', cols[1], y + 36, { s: 9.5, b: true, c: MUTE, a: 'right' }); T('Net irrigation (mm/yr)', cols[2], y + 36, { s: 9.5, b: true, c: MUTE, a: 'right' }); T('Irrigations per year', cols[3], y + 36, { s: 9.5, b: true, c: MUTE, a: 'right' }); T('Relative yield', cols[4], y + 36, { s: 9.5, b: true, c: MUTE, a: 'right' });
     const imax = Math.max(...rows.map(r => r[3]), 1);
