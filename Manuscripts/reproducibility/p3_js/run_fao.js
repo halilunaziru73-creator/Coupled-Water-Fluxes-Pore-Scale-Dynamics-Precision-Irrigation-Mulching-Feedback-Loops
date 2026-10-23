@@ -11,7 +11,8 @@ const out=await p.evaluate(()=>{
  for(const c of cases){ const Zn=0.08; const Zf=t=>c.k*Math.pow(t,c.A)+c.f0*t; const treq=SIDM.solveT(Zf,Zn);
   const qm=0.000357*c.L*Math.sqrt(c.S)/0.10; // FAO-45 Qmin (m3/min/m) from Qmin=0.000357 L S0^0.5/n
   const rr=[]; for(const [q,ref] of c.rows){ const wd=SIDM.manningWide(q/60,c.S,c.n);
-    const R=SIDM.compute({L:c.L,w:1,q,k:c.k,A:c.A,f0:c.f0,Zn,A0:wd.A0,sy:0.77,sz:null}); rr.push({q,ref,adv:R.tL/60,err:(R.tL/60/ref-1)*100}); }
+    const P={L:c.L,w:1,q,k:c.k,A:c.A,f0:c.f0,Zn,A0:wd.A0,sy:0.77,sz:null}; const R=SIDM.compute(P), R0=SIDM.compute(Object.assign({},P,{rAdv:0.55}));
+    rr.push({q,ref,adv:R.tL/60,err:(R.tL/60/ref-1)*100,adv_v100:R0.tL/60,err_v100:(R0.tL/60/ref-1)*100}); }  // v100: fixed rAdv 0.55 of release 1.0.0
   res.push({id:c.id,treq,treqRef:c.treq,qm,qmRef:c.qmin,rows:rr}); }
  return res;});
 fs.writeFileSync((process.env.SWAFL_MS||'.')+'/out/fao_out.json',JSON.stringify(out,null,1)); 

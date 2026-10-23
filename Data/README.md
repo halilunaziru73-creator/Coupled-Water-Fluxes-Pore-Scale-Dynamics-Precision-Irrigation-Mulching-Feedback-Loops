@@ -29,6 +29,34 @@ runs = pd.read_csv("Data/daisy_ensemble.csv.gz")
 valid = runs[runs.valid == 1]          # 10 041 runs used in every analysis
 ```
 
+## 1a. Full simulation outputs (`Comprehensive_Summary/`)
+
+[`Comprehensive_Summary/`](Comprehensive_Summary) holds the complete per-run Daisy output of all 17 experiments, one
+gzip-compressed CSV per experiment, as summarised from the Daisy log files by
+[`summarize_results3.py`](Comprehensive_Summary/summarize_results3.py) (see [`00_README.txt`](Comprehensive_Summary/00_README.txt)).
+
+| File | Content |
+|:--|:--|
+| `E00_Baselines.csv.gz` … `E16_Edge_Cases.csv.gz` | every log line of every run: the annual water balance (`Annual-FWater`), the nitrogen balance, the harvest and the crop state, per simulated year |
+| `00_summary_all_simulations.csv.gz` | one row per run: factor levels and summary outputs, all experiments |
+| `00_SUMMARY_ALL_EXPERIMENTS.csv.gz` | the same, aggregated per experiment |
+| `Experiment_Summaries/Exx_*_SUMMARY.csv.gz` | the per-run summary of each experiment |
+
+Local computer paths in the original files were shortened to relative paths (`experiments\...`); no other value was changed.
+
+**Consistency with the run table.** The 20-year means of the annual balances closing on 1 April 1981-2000 reproduce the
+values of `daisy_ensemble.csv.gz` (largest relative difference below 2 % for every output; per experiment in
+[`Software/SWAFL_Desktop/tools/peryear_check.txt`](../Software/SWAFL_Desktop/tools/peryear_check.txt)).
+
+**Evapotranspiration closure.** In these outputs ET equals transpiration + soil evaporation + canopy (intercepted)
+evaporation + litter evaporation + evaporation of ponded water + snow evaporation, with a residual of 1.1 mm or less. The
+part of ET not attributed to transpiration, soil or canopy evaporation in the run table (about 30 %) is therefore
+evaporation of ponded water (21.6 % of ET), litter (7.6 %) and snow (2.7 %).
+
+**Use in the software.** [`Software/SWAFL_Desktop/tools/make_peryear.py`](../Software/SWAFL_Desktop/tools/make_peryear.py)
+extracts the year-by-year balances of experiments E00, E02, E03, E04, E05 and E07 (1 003 runs, 20 years each) into
+`app/engine/peryear.js`, which drives the year-by-year, full-water-balance, nitrogen-budget and crop-water layers.
+
 ## 2. Every data file used in the repository
 
 ### 2.1 Raw simulation data
@@ -38,6 +66,7 @@ valid = runs[runs.valid == 1]          # 10 041 runs used in every analysis
 | Raw run table (10 190 runs) | [`Data/daisy_ensemble.csv.gz`](daisy_ensemble.csv.gz) | everything below |
 | Same table, reproducibility copy | [`Manuscripts/reproducibility/data/daisy_ensemble.csv.gz`](../Manuscripts/reproducibility/data/daisy_ensemble.csv.gz) | `run_all.sh` (Papers 1-3) |
 | Same table with analysis sheets (live formulas) | [`Results/03_Excel_Analysis/Results_Analysis.xlsx`](../Results/03_Excel_Analysis/Results_Analysis.xlsx), sheet `Data` | Excel analysis |
+| Full per-year outputs of all 17 experiments | [`Data/Comprehensive_Summary/`](Comprehensive_Summary) | software year-by-year layers (`make_peryear.py`) |
 | Complete archive, all runs raw and derived | [Zenodo, doi: 10.5281/zenodo.23043626](https://doi.org/10.5281/zenodo.23043626) | – |
 
 ### 2.2 Derived data tables (Results)
@@ -79,8 +108,8 @@ Three small intermediate arrays used only by figures are in
 
 The SWAFL Desktop engine ([`Software/SWAFL_Desktop/app/engine/engine.html`](../Software/SWAFL_Desktop/app/engine/engine.html))
 carries, as JSON, the Daisy result tables it composes (baselines and experiments E2, E3, E4, E5, E7, E11, E13, E14,
-E15), the 20-year daily suction record at 20 cm and the 1994 profiles, all taken from the raw data above. It makes no
-external data call.
+E15), the 20-year daily suction record at 20 cm and the 1994 profiles, all taken from the raw data above, and
+(`peryear.js`) the per-year balances of 1 003 runs taken from `Comprehensive_Summary/`. It makes no external data call.
 
 ## 3. Licence and citation
 

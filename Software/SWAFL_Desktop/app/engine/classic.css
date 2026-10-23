@@ -1,0 +1,50 @@
+/* SWAFL 1.1 classic workbench theme for the engine: the controls around the drawing (inside the desktop app) and the
+   web explorer (standalone page). Grey 3-D chrome, white work area, navy selection, Tahoma. */
+:root { --raise: inset -1px -1px #404040, inset 1px 1px #FFFFFF, inset -2px -2px #808080, inset 2px 2px #DFDFDF; --sink: inset 1px 1px #808080, inset -1px -1px #FFFFFF, inset 2px 2px #404040, inset -2px -2px #D4D0C8; --thin: inset 1px 1px #808080, inset -1px -1px #FFFFFF; }
+body.appmode, body.pro { font-family: Tahoma, "Segoe UI", Verdana, Arial, sans-serif !important; }
+body.appmode { background: #D4D0C8 !important; color: #000 !important; }
+body.appmode .canvaswrap { background: #FFFFFF !important; box-shadow: var(--sink); scrollbar-color: auto !important; }
+body.appmode .pillbtn, body.pro .pillbtn, body.appmode button, body.pro .gui .pillbtn, body.pro header .pillbtn { background: #D4D0C8 !important; color: #000 !important; border: 0 !important; border-radius: 0 !important; box-shadow: var(--raise) !important; font-family: Tahoma, Verdana, sans-serif !important; }
+body.appmode .pillbtn:hover, body.pro .pillbtn:hover, body.appmode button:hover { background: #E3E0D8 !important; }
+body.appmode .pillbtn.active, body.pro .pillbtn.active, body.appmode button.on, body.pro header #reportBtn { background: #0A246A !important; color: #FFFFFF !important; box-shadow: var(--sink) !important; }
+body.appmode select, body.appmode input, body.pro select, body.pro input[type=date] { background: #FFFFFF !important; color: #000 !important; border: 0 !important; border-radius: 0 !important; box-shadow: var(--sink) !important; }
+/* web explorer: chrome, scene tree, docks */
+body.pro:not(.embed) { background: #D4D0C8 !important; color: #000 !important; }
+body.pro:not(.embed) > header { background: #D4D0C8 !important; border-bottom: 1px solid #808080 !important; box-shadow: 0 1px 0 #FFFFFF; }
+body.pro header h1 { color: #000 !important; border-right: 1px solid #808080 !important; }
+body.pro header h1::before { color: #0A246A !important; }
+#proMenu .mn { color: #000 !important; }
+#proMenu .mn:hover, #proMenu .mn.open { background: #D4D0C8 !important; box-shadow: var(--thin); }
+#proMenu .dd { background: #D4D0C8 !important; border: 0 !important; box-shadow: var(--raise), 2px 2px 0 rgba(0,0,0,0.25) !important; }
+#proMenu .it { color: #000 !important; }
+#proMenu .it:hover { background: #0A246A !important; color: #FFF !important; }
+#proMenu .it kbd { color: #404040 !important; }
+body.pro .scenebar { background: #FFFFFF !important; border-right: 0 !important; box-shadow: var(--sink); }
+body.pro .scenebar::before, body.pro #proDock::before { background: linear-gradient(90deg, #0A246A, #3A6EA5 70%, #A6CAF0) !important; color: #FFFFFF !important; text-transform: none !important; letter-spacing: 0 !important; font-weight: bold !important; }
+body.pro .scenebar > :not(.scenebtn) { color: #0A246A !important; font-weight: bold !important; }
+body.pro .scenebtn { color: #000 !important; background: transparent !important; box-shadow: none !important; }
+body.pro .scenebtn:hover { background: #E8E6F4 !important; }
+body.pro .scenebtn.active { background: #0A246A !important; color: #FFFFFF !important; }
+body.pro .mainarea, body.pro #proCenter { background: #D4D0C8 !important; }
+body.pro #proCenter > .ux-fold, body.pro .ux-fold > .todaybar, body.pro .ux-fold > .gui { background: #D4D0C8 !important; border-color: #808080 !important; color: #000 !important; }
+body.pro .gui label, body.pro .todaybar, body.pro .todaybar * { color: #000 !important; }
+body.pro #proDock { background: #D4D0C8 !important; border-left: 0 !important; color: #000 !important; }
+body.pro .panel { background: #FFFFFF !important; border: 0 !important; border-radius: 0 !important; box-shadow: var(--sink) !important; color: #000 !important; }
+body.pro .wrap > .panel:nth-child(1) > h2, body.pro .ux-live h2, body.pro .ux-set h2 { background: #C9C5EC !important; color: #14146A !important; border: 0 !important; text-transform: none !important; letter-spacing: 0 !important; font-size: 0.82rem !important; }
+body.pro .insight, body.pro #uxTry, body.pro #uxPlain, body.pro .todaybar { background: #FFFFE1 !important; border: 1px solid #808080 !important; border-radius: 0 !important; color: #000 !important; }
+body.pro .insight *, body.pro #uxTry *, body.pro #uxPlain * { color: #000 !important; }
+body.pro .row label .val { background: #FFFFFF !important; color: #0A246A !important; border: 0 !important; box-shadow: var(--sink); border-radius: 0 !important; }
+body.pro .row label, body.pro .note, body.pro .pnote, body.pro small { color: #202020 !important; }
+body.pro footer, body.pro .statusbar, body.pro #statusBar { background: #D4D0C8 !important; color: #000 !important; border-top: 1px solid #FFFFFF !important; }
+body.pro footer *, body.pro #statusBar * { color: #000 !important; }
+body.pro [class*="tile"], body.pro .ro, body.pro .rocard, body.pro .kv { background: #FFFFFF !important; color: #000 !important; border-color: #A0A0A0 !important; border-radius: 0 !important; }
+/* crop note: the provenance of results transferred to a library crop */
+#cropNoteBar { margin: 0; padding: 3px 10px; background: #FFFFE1; color: #000; border-bottom: 1px solid #808080; font: 11px Tahoma, Verdana, sans-serif; }
+#cropNoteBar::before { content: 'Crop: '; font-weight: bold; color: #0A246A; }
+::-webkit-scrollbar { width: 16px; height: 16px; background: #E8E6E0; }
+::-webkit-scrollbar-thumb { background: #D4D0C8; box-shadow: var(--raise); }
+::-webkit-scrollbar-button { background: #D4D0C8; box-shadow: var(--raise); height: 16px; width: 16px; }
+body.appmode *, body.appmode { scrollbar-color: auto !important; scrollbar-width: auto !important; }
+body.appmode ::-webkit-scrollbar { width: 16px !important; height: 16px !important; background: #E8E6E0 !important; }
+body.appmode ::-webkit-scrollbar-track { background: #E8E6E0 !important; }
+body.appmode ::-webkit-scrollbar-thumb { background: #D4D0C8 !important; border: 0 !important; border-radius: 0 !important; box-shadow: inset -1px -1px #404040, inset 1px 1px #FFFFFF, inset -2px -2px #808080, inset 2px 2px #DFDFDF !important; }

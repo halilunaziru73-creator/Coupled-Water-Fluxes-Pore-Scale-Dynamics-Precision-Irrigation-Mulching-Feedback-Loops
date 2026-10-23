@@ -47,3 +47,10 @@ ipcMain.handle('quit', () => app.quit());
 ipcMain.handle('fullscreen', () => { if (win) win.setFullScreen(!win.isFullScreen()); });
 ipcMain.handle('reload-app', () => { if (win) win.webContents.reloadIgnoringCache(); });
 ipcMain.handle('version', () => app.getVersion());
+// F1: the manual, shipped with the program (resources/SWAFL_Manual.pdf) or, when run from the source, docs/SWAFL_Manual.pdf
+ipcMain.handle('open-manual', async () => {
+  const cands = [path.join(process.resourcesPath || '', 'SWAFL_Manual.pdf'), path.join(__dirname, 'docs', 'SWAFL_Manual.pdf')];
+  const f = cands.find(p => { try { return fs.existsSync(p); } catch (e) { return false; } });
+  if (f) { const err = await shell.openPath(f); return !err; }
+  shell.openExternal('https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/blob/main/Software/SWAFL_Desktop/docs/SWAFL_Manual.pdf'); return true;
+});

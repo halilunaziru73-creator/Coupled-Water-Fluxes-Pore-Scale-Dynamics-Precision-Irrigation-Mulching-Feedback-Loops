@@ -2,7 +2,7 @@
 title: "SWAFL Desktop — Complete Technical Manual"
 subtitle: "Step-by-step use, every control and trigger, every layer and simulation, and the governing equations behind every output"
 author: "Naziru Halilu"
-date: "Version 1.0.0"
+date: "Version 1.1.0"
 documentclass: report
 geometry: margin=2.2cm
 fontsize: 10pt

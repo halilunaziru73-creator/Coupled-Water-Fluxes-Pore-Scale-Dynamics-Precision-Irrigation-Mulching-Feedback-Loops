@@ -1,0 +1,6 @@
+E00_Baselines                runs   10   largest relative difference of 20-year means: P 7.3e-05, I 0.0e+00, ET 3.6e-04, T 1.3e-03, Es 5.4e-05, Ec 1.8e-04, D 8.2e-04, NL 5.5e-05, Y 2.1e-04
+E02_TriggerPressure          runs  197   largest relative difference of 20-year means: P 7.3e-05, I 7.8e-03, ET 5.9e-04, T 1.3e-03, Es 1.8e-04, Ec 2.5e-04, D 2.5e-03, NL 1.0e-02, Y 2.0e-04
+E03_SensorDepth              runs  200   largest relative difference of 20-year means: P 7.3e-05, I 2.0e-02, ET 3.6e-04, T 1.3e-03, Es 1.1e-04, Ec 2.1e-04, D 3.9e-04, NL 1.0e-02, Y 1.8e-04
+E04_Methods                  runs   96   largest relative difference of 20-year means: P 7.3e-05, I 2.4e-03, ET 3.6e-04, T 1.3e-03, Es 1.3e-04, Ec 1.9e-04, D 7.5e-04, NL 8.0e-03, Y 1.1e-04
+E05_SHP_Dynamics             runs  300   largest relative difference of 20-year means: P 7.3e-05, I 4.8e-04, ET 2.9e-04, T 1.8e-03, Es 1.1e-04, Ec 3.0e-04, D 3.3e-03, NL 1.0e-02, Y 3.4e-04
+E07_Mulching                 runs  200   largest relative difference of 20-year means: P 7.3e-05, I 2.0e-02, ET 4.4e-04, T 2.1e-03, Es 1.8e-03, Ec 2.7e-04, D 5.9e-04, NL 9.0e-03, Y 4.2e-04

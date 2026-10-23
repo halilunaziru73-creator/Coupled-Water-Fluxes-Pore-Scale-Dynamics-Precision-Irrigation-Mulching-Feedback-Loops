@@ -55,12 +55,39 @@ Open **Irrigation design** in Layers.
 
 Use the **view bar** above the drawing (*Layout design · Simulation · Pipes and pump · Infrastructure layout · Results · Design checks · Design table*) to jump between parts. Click and drag in the drawing to change lengths, spacing and times.
 
+### Virtual farm (F1 in Layers → Irrigation design)
+A farm drawn in perspective with the water moving from the source to the plants for all six layouts: **furrow, basin,
+border strip** (canal, lifting gate, siphons, tail-water ditch), **sprinkler, surface drip and subsurface drip** (well,
+pump, filters, fertiliser tank, mainline, control valve, laterals). The gate or valve opens and closes on the dates of
+the schedule predicted by the daily model (board at the gate: the next four irrigations and the hours open; tap one to
+jump to it). Choose **Farmer opens the valve** or **Automatic controller** (sensor cable, controller and LED).
+Below the farm: a cross-section showing where the water goes in the soil layers, the 30-day predicted schedule
+(rain, irrigation, valve open, sensor depletion and trigger) and the fate of the next irrigation (stored in the root
+zone, deep percolation, runoff, evaporation and drift) from the S2, S3 or S4 design. **Record video (20 s)** saves a
+WebM film of the farm. Every control (soil, crop, mulch, rain, warming, trigger, sensor depth, method) changes the farm.
+
+## 4a. Crops
+Properties → Crop lists the Daisy crops (cereal, legume, vegetable) and a library of field crops and 26 tree, vine and
+bush crops with FAO-56 crop coefficients (initial, mid-season and end), stage lengths, height, rooting depth, depletion
+fraction and yield-response factor; tree crops also have planting densities. For library crops the Daisy cereal results
+are transferred to the crop with a daily FAO-56 root-zone balance on the same 20 weather years, and yield is shown as a
+percentage of the potential. The bar under the drawing says which model is used. **C1 Crop water requirement** shows
+the Kc curve, the crop water use, the root-zone depletion and a table of all crops ranked by net irrigation (tap a row
+to select the crop).
+
+## 4b. Year by year
+**Y1 Reliability over 20 seasons**, **W1 Full water balance** and **N4 Nitrogen budget** show every simulated year
+(1 003 Daisy runs with 20 years each, from `Data/Comprehensive_Summary`): yield, irrigation, drainage and leaching by
+year, exceedance curves, the full evapotranspiration split (transpiration, soil, canopy, litter, ponded-water and snow
+evaporation) and the nitrogen inputs and losses.
+
 ## 5. Files
 * **Save project** – all settings in a `.swafl` file; **Open project** restores it.
 * **Export** – picture (PNG), yearly results (CSV), design results (CSV). **Print** gives a PDF.
+* **Save full report as PDF** (`Ctrl+Shift+P`, File menu or the *Report* toolbar button) – the whole report of every layer, saved where you choose.
 
 ## 6. Keyboard shortcuts
-`Ctrl+N/O/S` new/open/save · `Ctrl+Z/Y` undo/redo · `F5` run/pause · `Shift+F5` restart · `F6` refresh · `Ctrl+B` baseline · `Ctrl+E` picture · `Ctrl+P` print · `Ctrl+F` find a tool · `F1` help · `F11` full screen.
+`Ctrl+N/O/S` new/open/save · `Ctrl+Z/Y` undo/redo · `F5` run/pause · `Shift+F5` restart · `F6` refresh · `Ctrl+B` baseline · `Ctrl+E` picture · `Ctrl+P` print · `Ctrl+F` find a tool · `F1` opens the manual (PDF) · `Ctrl+Shift+P` full report as PDF · `F11` full screen.
 
 ## 7. Help and source
 Repository: <https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops>
