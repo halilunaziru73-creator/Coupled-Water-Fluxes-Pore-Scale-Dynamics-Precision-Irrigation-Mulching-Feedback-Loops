@@ -7,5 +7,6 @@ contextBridge.exposeInMainWorld('swafl', {
   quit: () => ipcRenderer.invoke('quit'),
   toggleFullscreen: () => ipcRenderer.invoke('fullscreen'),
   reload: () => ipcRenderer.invoke('reload-app'),
-  version: () => ipcRenderer.invoke('version')
+  version: () => ipcRenderer.invoke('version'),
+  openManual: () => ipcRenderer.invoke('open-manual')
 });

@@ -1,7 +1,7 @@
 {
   "name": "swafl",
   "productName": "SWAFL",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "SWAFL - Soil Water, Atmosphere, Feedback and Layout workbench: irrigation, mulching and design simulation",
   "author": "Naziru Halilu <halilunaziru73@gmail.com>",
   "license": "MIT",
@@ -52,6 +52,15 @@
       "uninstallerIcon": "build/icon.ico",
       "createDesktopShortcut": true,
       "shortcutName": "SWAFL"
-    }
+    },
+    "extraResources": [
+      {
+        "from": "docs",
+        "to": ".",
+        "filter": [
+          "SWAFL_Manual.pdf"
+        ]
+      }
+    ]
   }
 }

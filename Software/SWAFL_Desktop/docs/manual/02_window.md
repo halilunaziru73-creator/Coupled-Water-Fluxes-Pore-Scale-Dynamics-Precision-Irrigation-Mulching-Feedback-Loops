@@ -24,6 +24,7 @@ The **status bar** shows, from left to right: state (*Ready*), the active layer,
 | | Open project… | Ctrl+O | Loads a `.swafl` file. |
 | | Save project… | Ctrl+S | Saves a `.swafl` file: JSON holding the application name and version, the open layer, every control, the weather year and the date. |
 | | Export ▸ | | Picture of the window (PNG, Ctrl+E); yearly results (CSV); design results (CSV). |
+| | Save full report as PDF… | Ctrl+Shift+P | Writes the complete report of all layers to a PDF file at a place you choose. |
 | | Print / save as PDF… | Ctrl+P | Prints the active layer through the system print dialog. |
 | | Exit | Ctrl+Q | Closes the program. |
 | Edit | Undo / Redo | Ctrl+Z / Ctrl+Y | Steps through the history of control changes. |
@@ -43,7 +44,7 @@ The **status bar** shows, from left to right: state (*Ready*), the active layer,
 | Refresh | Refresh display (F6); Reload simulation engine; Clear message log | | |
 | Review | Results dashboard / Design results / Yearly charts / Messages | | Switches the Dashboard tab. |
 | Run | Run / pause the season (F5); Restart from day 1 (Shift+F5); 20-year season; Optimise surface layout; Ready-made cases | | |
-| Help | How to use SWAFL (F1); Troubleshooting; Keyboard shortcuts; SWAFL on GitHub; Full documentation; Report a problem; About | | |
+| Help | Manual (PDF) (F1); How to use SWAFL; Troubleshooting; Keyboard shortcuts; SWAFL on GitHub; Full documentation; Report a problem; About | | |
 
 ## The command palette (Ctrl+K)
 

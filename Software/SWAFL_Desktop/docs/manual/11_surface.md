@@ -173,7 +173,7 @@ $$
 
 *Provenance (Eq. 11.9):* **[Literature]**: volume balance of Walker and Skogerboe (1987) and Elliott and Walker (1982); tested against FAO-45 examples (Paper 3).
 
-The code also accepts an optional steady-intake term, $Z=k\tau^{A}+f_0\tau$ (Kostiakov–Lewis), in which Eq. (11.9) gains the term $f_0\,t\,w/(1+r)$ in the denominator; the interface does not expose $f_0$ (it is zero), and it exists so that the FAO Irrigation Paper 45 examples, which use it, can be reproduced. Here $\sigma_y=0.8$ is the surface-storage shape factor, $w$ the width analysed (furrow spacing, or 1 m for borders and basins), and $\sigma_z$ the subsurface-storage shape factor
+The code also accepts an optional steady-intake term, $Z=k\tau^{A}+f_0\tau$ (Kostiakov–Lewis), in which Eq. (11.9) gains the term $f_0\,t\,w/(1+r)$ in the denominator, with $r$ the iterated advance exponent (release 1.1; release 1.0 used a fixed $r=0.55$); the interface does not expose $f_0$ (it is zero), and it exists so that the FAO Irrigation Paper 45 examples, which use it, can be reproduced. Here $\sigma_y=0.8$ is the surface-storage shape factor, $w$ the width analysed (furrow spacing, or 1 m for borders and basins), and $\sigma_z$ the subsurface-storage shape factor
 
 $$
 \sigma_z = \frac{A + r\,(1 - A) + 1}{(1 + A)(1 + r)},

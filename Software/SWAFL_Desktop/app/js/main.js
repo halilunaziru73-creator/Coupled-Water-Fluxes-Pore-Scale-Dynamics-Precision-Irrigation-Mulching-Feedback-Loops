@@ -2,7 +2,7 @@
 'use strict';
 const REPO = 'https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops';
 const DOCS = REPO + '/tree/main/Software/SWAFL_Desktop';
-const VERSION = '1.0.0';
+const VERSION = '1.1.0';
 
 /* ---------- undo / redo of settings ---------- */
 const Hist = { stack: [], i: -1, busy: false };
@@ -34,6 +34,8 @@ const Act = {
     UI.saveFile('SWAFL_design_' + E.snap.scene + '.csv', c, false, 'text/csv');
   },
   print() { E.print(); },
+  report() { try { const b = E.win.document.getElementById('reportBtn'); if (b) { b.click(); UI.log('Choose the parts of the report, then Make the PDF'); return; } } catch (e) {} UI.toast('The report is not available yet'); },
+  manual() { if (window.swafl && window.swafl.openManual) { window.swafl.openManual(); return; } window.open('SWAFL_Manual.pdf', '_blank'); },
   undo() { if (Hist.i > 0) { Hist.i--; histApply(Hist.stack[Hist.i]); } },
   redo() { if (Hist.i < Hist.stack.length - 1) { Hist.i++; histApply(Hist.stack[Hist.i]); } },
   resetSettings() { E.reset(); UI.log('Settings reset to default'); },
@@ -64,7 +66,7 @@ const MENUS = [
   { label: 'File', items: [
     { label: 'New project', icon: 'new', key: 'Ctrl+N', act: Act.newProject }, { label: 'Open project...', icon: 'open', key: 'Ctrl+O', act: Act.openProject }, { label: 'Save project...', icon: 'save', key: 'Ctrl+S', act: Act.saveProject }, { sep: 1 },
     { label: 'Export', icon: 'img', sub: [{ label: 'Picture of the window (PNG)', icon: 'img', key: 'Ctrl+E', act: Act.exportPNG }, { label: 'Yearly results (CSV)', icon: 'csv', act: Act.exportSeasonCSV }, { label: 'Design results (CSV)', icon: 'csv', act: Act.exportDesignCSV }] },
-    { label: 'Print / save as PDF...', icon: 'print', key: 'Ctrl+P', act: Act.print }, { sep: 1 }, { label: 'Exit', icon: 'exit', key: 'Ctrl+Q', act: Act.exit }] },
+    { label: 'Save full report as PDF...', icon: 'print', key: 'Ctrl+Shift+P', act: Act.report }, { label: 'Print / save this view as PDF...', icon: 'print', key: 'Ctrl+P', act: Act.print }, { sep: 1 }, { label: 'Exit', icon: 'exit', key: 'Ctrl+Q', act: Act.exit }] },
   { label: 'Edit', items: [
     { label: 'Undo', icon: 'undo', key: 'Ctrl+Z', act: Act.undo, dis: () => Hist.i <= 0 }, { label: 'Redo', icon: 'redo', key: 'Ctrl+Y', act: Act.redo, dis: () => Hist.i >= Hist.stack.length - 1 }, { sep: 1 },
     { label: 'Reset all settings', icon: 'reset', act: Act.resetSettings }, { label: 'Copy settings as text', icon: 'copy', act: Act.copySettings }, { sep: 1 },
@@ -89,7 +91,7 @@ const MENUS = [
     { label: 'Run / pause the season', icon: 'play', key: 'F5', act: Act.togglePlay }, { label: 'Restart from day 1', icon: 'restart', key: 'Shift+F5', act: Act.restart }, { label: '20-year season simulation', icon: 'chart', act: Act.runSeason }, { sep: 1 },
     { label: 'Optimise surface layout', icon: 'run', act: Act.optimise }, { label: 'Ready-made cases', sub: casesMenu }] },
   { label: 'Help', items: [
-    { label: 'How to use SWAFL', icon: 'book', key: 'F1', act: Act.guide }, { label: 'Troubleshooting (running the app)', icon: 'bug', act: () => guideModal('trouble') }, { label: 'Keyboard shortcuts', icon: 'key', act: Act.shortcuts }, { sep: 1 },
+    { label: 'Manual (PDF)', icon: 'book', key: 'F1', act: Act.manual }, { label: 'How to use SWAFL', icon: 'book', act: Act.guide }, { label: 'Troubleshooting (running the app)', icon: 'bug', act: () => guideModal('trouble') }, { label: 'Keyboard shortcuts', icon: 'key', act: Act.shortcuts }, { sep: 1 },
     { label: 'SWAFL on GitHub (repository)', icon: 'github', act: Act.github }, { label: 'Full documentation on GitHub', icon: 'book', act: Act.docs }, { label: 'Report a problem', icon: 'bug', act: Act.issues }, { sep: 1 }, { label: 'About SWAFL', icon: 'info', act: Act.about }] }
 ];
 
@@ -101,7 +103,7 @@ function buildToolbar() {
     B('play', 'Run', Act.togglePlay, 'Run or pause the season (F5)', 'run'), B('restart', 'Restart', Act.restart, 'Restart from day 1 (Shift+F5)'), B('chart', '20-year run', Act.runSeason, 'Run the 20-year season simulation'), 0,
     B('refresh', 'Refresh', Act.refresh, 'Refresh display (F6)'), B('pin', 'Baseline', () => Dash.pin(), 'Pin results as baseline (Ctrl+B)'), B('img', 'Picture', Act.exportPNG, 'Save a picture of the window'), B('csv', 'Results', Act.exportSeasonCSV, 'Save yearly results (CSV)'), 0,
     B('pipe', 'Surface', () => Layers.open('sid'), 'Surface irrigation design'), B('drop', 'Drip', () => Layers.open('drip'), 'Drip irrigation design'), B('sprinkler', 'Sprinklers', () => Layers.open('spr'), 'Sprinkler design and pipes'), 0,
-    B('fit', 'Focus', Act.focus, 'Focus view: hide the panels to see the whole drawing (F9)'), B('search', 'Search', () => Palette.open(), 'Find anything: layers, tools, dates (Ctrl+K)'), B('help', 'Help', Act.guide, 'How to use SWAFL (F1)')];
+    B('fit', 'Focus', Act.focus, 'Focus view: hide the panels to see the whole drawing (F9)'), B('search', 'Search', () => Palette.open(), 'Find anything: layers, tools, dates (Ctrl+K)'), B('print', 'Report', Act.report, 'Save the full report as PDF (Ctrl+Shift+P)'), B('book', 'Manual', Act.manual, 'Open the manual (F1)')];
   const tb = document.getElementById('toolbar'); tb.innerHTML = '';
   items.splice(items.length - 1, 0, 0, 'date');
   items.forEach(it => {
@@ -148,7 +150,7 @@ function guideModal(start) {
   if (start) { const el = r.querySelector('#g-' + start); if (el) setTimeout(() => el.scrollIntoView(), 30); }
 }
 function shortcutsModal() {
-  const R = [['Ctrl+K','Search everything: layers, tools, a year or date'], ['Ctrl+N / O / S', 'New / open / save project'], ['Ctrl+Z / Ctrl+Y', 'Undo / redo a setting'], ['F5', 'Run or pause the season'], ['Shift+F5', 'Restart from day 1'], ['F6', 'Refresh display'], ['Ctrl+B', 'Pin results as baseline'], ['Ctrl+E', 'Save picture (PNG)'], ['Ctrl+P', 'Print / PDF'], ['Ctrl+F', 'Find a tool'], ['F1', 'Help'], ['F9', 'Focus view (hide panels)'], ['F11', 'Full screen'], ['Ctrl+Q', 'Exit']];
+  const R = [['Ctrl+K','Search everything: layers, tools, a year or date'], ['Ctrl+N / O / S', 'New / open / save project'], ['Ctrl+Z / Ctrl+Y', 'Undo / redo a setting'], ['F5', 'Run or pause the season'], ['Shift+F5', 'Restart from day 1'], ['F6', 'Refresh display'], ['Ctrl+B', 'Pin results as baseline'], ['Ctrl+E', 'Save picture (PNG)'], ['Ctrl+P', 'Print / PDF'], ['Ctrl+F', 'Find a tool'], ['F1', 'Manual (PDF)'], ['Ctrl+Shift+P', 'Save the full report as PDF'], ['F9', 'Focus view (hide panels)'], ['F11', 'Full screen'], ['Ctrl+Q', 'Exit']];
   UI.modal({ title: 'Keyboard shortcuts', icon: 'key', width: 'min(520px,94vw)', html: '<table class="tbl">' + R.map(r => '<tr><td><span class="kbd">' + r[0] + '</span></td><td style="text-align:left">' + r[1] + '</td></tr>').join('') + '</table>' });
 }
 function aboutModal() {
@@ -159,9 +161,9 @@ function aboutModal() {
 function onKey(e) {
   const c = e.ctrlKey || e.metaKey, k = e.key.toLowerCase();
   const go = f => { e.preventDefault(); f(); };
-  if (e.key === 'F5') go(e.shiftKey ? Act.restart : Act.togglePlay); else if (e.key === 'F6') go(Act.refresh); else if (e.key === 'F1') go(Act.guide); else if (e.key === 'F11') go(Act.fullscreen); else if (e.key === 'F9') go(Act.focus);
+  if (e.key === 'F5') go(e.shiftKey ? Act.restart : Act.togglePlay); else if (e.key === 'F6') go(Act.refresh); else if (e.key === 'F1') go(Act.manual); else if (e.key === 'F11') go(Act.fullscreen); else if (e.key === 'F9') go(Act.focus);
   else if (c && k === 'n') go(Act.newProject); else if (c && k === 'o') go(Act.openProject); else if (c && k === 's') go(Act.saveProject); else if (c && k === 'z') go(Act.undo); else if (c && k === 'y') go(Act.redo);
-  else if (c && k === 'b') go(() => Dash.pin()); else if (c && k === 'e') go(Act.exportPNG); else if (c && k === 'p') go(Act.print); else if (c && k === 'f') go(Act.focusSearch); else if (c && k === 'q') go(Act.exit);
+  else if (c && k === 'b') go(() => Dash.pin()); else if (c && k === 'e') go(Act.exportPNG); else if (c && e.shiftKey && k === 'p') go(Act.report); else if (c && k === 'p') go(Act.print); else if (c && k === 'f') go(Act.focusSearch); else if (c && k === 'q') go(Act.exit);
 }
 document.addEventListener('keydown', onKey);
 
@@ -190,7 +192,7 @@ async function boot(again) {
   if (deep) setTimeout(() => { try { Layers.open(deep); } catch (e) {} }, 300);   // links like index.html#open=n1 land straight on a layer (n1 = Irrigation trigger law)
   try { if (!deep && !localStorage.getItem('swafl.welcome')) { localStorage.setItem('swafl.welcome', '1'); welcome(); } } catch (e) {}
 }
-function welcome() { UI.modal({ title: 'Welcome to SWAFL', icon: 'info', width: 'min(620px,94vw)', html: '<div class="about"><img src="assets/logo.svg" width="84" height="84" alt=""><div><p><b>Start in three clicks</b></p><ol><li>Open a group in <b>Layers</b> (left) and click a layer.</li><li>Press <b>Run</b> in the toolbar.</li><li>Change the <b>Date</b> in the toolbar: the whole workbench moves to that date, today or up to 2100.</li></ol><p>Results are in the <b>Dashboard</b> at the bottom. Help &rarr; How to use SWAFL has every step and troubleshooting.</p></div></div>', buttons: [{ label: 'Open the guide', act: () => { setTimeout(guideModal, 50); } }, { label: 'Start', pri: true }] }); }
+function welcome() { UI.modal({ title: 'Welcome to SWAFL', icon: 'info', width: 'min(620px,94vw)', html: '<div class="about"><img src="assets/logo.svg" width="84" height="84" alt=""><div><p><b>Start in three clicks</b></p><ol><li>Open a group in <b>Layers</b> (left) and click a layer.</li><li>Press <b>Run</b> in the toolbar.</li><li>Change the <b>Date</b> in the toolbar: the whole workbench moves to that date, today or up to 2100.</li></ol><p>Results are in the <b>Dashboard</b> at the bottom. Press <b>F1</b> for the full manual; <b>File &rarr; Save full report as PDF</b> saves the report of every layer. New: <b>Virtual farm simulation</b> (Irrigation design), <b>Crops</b> and <b>Year by year</b>.</p></div></div>', buttons: [{ label: 'Open the guide', act: () => { setTimeout(guideModal, 50); } }, { label: 'Start', pri: true }] }); }
 E.on('snap', ({ s }) => { if (E.metaData) updateStatus(s); });
 E.on('state', s => histPush(s));
 

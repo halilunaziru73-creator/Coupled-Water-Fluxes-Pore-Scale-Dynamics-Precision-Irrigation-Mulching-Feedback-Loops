@@ -3,11 +3,11 @@
 # SWAFL — Soil Water, Atmosphere, Feedback and Layout workbench
 
 A desktop application (Windows `SWAFL.exe`) for coupled water fluxes, pore-scale dynamics, precision irrigation and mulching feedback loops, with **surface, drip and sprinkler design** (layout drawings, pipe network, pump and hydraulic grade line, design checks).
-It runs the same simulation engine as the web explorer, inside a professional workbench (MIKE Zero / QGIS style):
+It runs the same simulation engine as the web explorer, inside a classic engineering workbench (grey 3-D chrome, white data tree, task tabs and status bar):
 
 | Area | What it holds |
 |---|---|
-| **Menu bar** | File · Edit · View · Tools · Refresh · Review · Run · Help (Help opens this repository) |
+| **Menu bar** | File · Edit · View · Tools · Refresh · Review · Run · Help (`F1` opens the manual; File → *Save full report as PDF*) |
 | **Toolbar** | New / open / save, undo / redo, Run, Restart, 20-year run, Refresh, Baseline, Picture, design shortcuts |
 | **Layers** (left, top) | Click a layer to open it; click a sub-layer to jump to that part of the drawing |
 | **Processing Toolbox** (left, bottom) | Searchable ready-to-run tools: simulations, ready-made cases, design, compare, export |
@@ -83,10 +83,16 @@ npm run web      # only for developers; everyone else: use the online link above
 ```
 main.js  preload.js  serve.js        Electron main process, secure bridge, local static server
 app/index.html                       workbench window
-app/css/swafl.css                    MIKE-style light palette
+app/css/swafl.css classic.css        workbench palette and classic 3-D theme
 app/js/bridge.js                     talks to the simulation engine
 app/js/ui.js layers.js toolbox.js props.js dashboard.js main.js
-app/engine/engine.html               the SWAFL simulation engine (single file)
+app/engine/engine.html               the SWAFL simulation engine
+app/engine/crops.js                  crop library (FAO-56 Kc, stages, roots, Ky; field, tree, vine and bush crops)
+app/engine/peryear.js                per-year Daisy balances of 1 003 runs (built by tools/make_peryear.py)
+app/engine/plus_core.js              crop water balance, crop drawings, auto-fit of long views, F1 manual
+app/engine/plus_layers.js            year-by-year, full water balance, nitrogen budget, crop water layers
+app/engine/farm.js                   virtual farm: source to plants, gate/valve on the predicted schedule, video
+tools/make_peryear.py                extracts the per-year data from Data/Comprehensive_Summary
 app/assets/                          logo (SVG/PNG)
 build/icon.ico icon.png              application icon
 docs/USER_GUIDE.md                   how to use SWAFL

@@ -1,0 +1,110 @@
+/* SWAFL 1.1 classic engineering-workbench theme: grey 3-D chrome (raised and sunken bevels), white data tree with
+   navy selection, lavender context header, task tabs, validation/log area and a sunken status bar. Loaded after swafl.css. */
+:root{
+  --bg:#D4D0C8; --panel:#FFFFFF; --panel2:#ECE9D8; --head1:#D4D0C8; --head2:#C8C4BC; --border:#808080; --border2:#A0A0A0;
+  --navy:#0A246A; --text:#000000; --muted:#404040; --accent:#0A246A; --accent2:#08205A; --teal:#00808A; --sel:#0A246A; --hover:#E8E6F4;
+  --status:#D4D0C8; --white:#FFFFFF;
+  --font:Tahoma,"Segoe UI","MS Sans Serif",Verdana,Arial,sans-serif;
+  --raise:inset -1px -1px #404040, inset 1px 1px #FFFFFF, inset -2px -2px #808080, inset 2px 2px #DFDFDF;
+  --sink:inset 1px 1px #808080, inset -1px -1px #FFFFFF, inset 2px 2px #404040, inset -2px -2px #D4D0C8;
+  --thin:inset 1px 1px #808080, inset -1px -1px #FFFFFF;
+}
+html,body{background:var(--bg);color:#000;font:11px/1.35 var(--font)}
+/* subtle woven texture of the classic workbench chrome */
+#app{background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%23D4D0C8'/%3E%3Crect width='1' height='1' fill='%23CFCBC2'/%3E%3Crect x='2' y='2' width='1' height='1' fill='%23D9D6CF'/%3E%3C/svg%3E")}
+/* menu bar and toolbar */
+#menubar{background:var(--bg);border-bottom:1px solid #808080;box-shadow:0 1px 0 #FFFFFF;min-height:22px;color:#000}
+#menubar .brand{color:#000;font-weight:bold}
+#menubar .brand b{color:#000}
+.mbtn{color:#000;border:1px solid transparent;border-radius:0;padding:1px 7px}
+.mbtn:hover,.mbtn.open{background:var(--bg);box-shadow:var(--thin);border-color:transparent}
+.mbtn.open{box-shadow:inset 1px 1px #808080, inset -1px -1px #FFFFFF}
+.projname{color:#404040}
+.menu{background:var(--bg);border:0;border-radius:0;box-shadow:var(--raise),2px 2px 0 rgba(0,0,0,0.25);padding:3px}
+.mi{border-radius:0;color:#000;padding:3px 22px 3px 26px}
+.mi:hover{background:var(--navy);color:#FFF}
+.mi:hover .key{color:#FFF}
+.msep{border-top:1px solid #808080;border-bottom:1px solid #FFF;margin:3px 2px}
+#toolbar{background:var(--bg);border-bottom:1px solid #808080;box-shadow:0 1px 0 #FFFFFF;padding:2px 4px;gap:1px}
+.tb{border:0;border-radius:0;background:transparent;color:#000;padding:2px 5px;box-shadow:none}
+.tb:hover{box-shadow:var(--thin)}
+.tb:active,.tb.on{box-shadow:inset 1px 1px #808080, inset -1px -1px #FFFFFF;background:#E3E0D8}
+.tb svg{stroke:#0A246A}
+.tbsep{width:2px;border-left:1px solid #808080;border-right:1px solid #FFF;background:none;margin:2px 3px}
+.tbsel,select,input[type=date],input[type=search],input[type=text],input[type=number]{background:#FFF;border:0;border-radius:0;box-shadow:var(--sink);padding:2px 4px;color:#000}
+/* docks: sunken white tree, grey headers */
+#leftDock,#rightDock,#center{background:var(--bg)}
+.dock{background:var(--bg);border:0;border-radius:0;box-shadow:var(--raise);padding:2px}
+.dockhead{background:linear-gradient(90deg,#0A246A,#3A6EA5 70%,#A6CAF0);color:#FFF;font-weight:bold;border:0;border-radius:0;min-height:18px;padding:1px 6px;letter-spacing:0;text-transform:none}
+.dockhead span{color:#FFF}
+.dockbtns button,.dockhead .mini{background:var(--bg);color:#000;border:0;border-radius:0;box-shadow:var(--raise);min-width:16px;height:14px;line-height:12px;padding:0 4px}
+.dockbtns button:hover,.dockhead .mini:hover{background:#E3E0D8}
+.dockbtns button:active,.dockhead .mini:active{box-shadow:var(--sink)}
+.tree{background:#FFF;box-shadow:var(--sink);margin:2px;border-radius:0;font-size:11px}
+.tn{border-radius:0;color:#000;padding-top:1px;padding-bottom:1px}
+.tn:hover{background:var(--hover)}
+.tn.sel,.tn.sel:hover{background:var(--navy);color:#FFF}
+.tn.sel .ico{stroke:#FFF}
+.tn .tw{color:#404040;font-size:8px}
+.tn .badge{background:#ECE9D8;color:#0A246A;border:1px solid #A0A0A0;border-radius:0}
+.tkids{border-left:1px dotted #A0A0A0;margin-left:12px}
+.searchbox{padding:2px}
+.searchbox input{width:100%}
+/* document tabs and the context header (like a classic "context sensitive dialogue" title) */
+#docTabs{background:var(--bg);border-bottom:1px solid #FFF;padding:3px 3px 0}
+.dt{background:var(--bg);color:#000;border:0;border-radius:0;box-shadow:inset 1px 1px #FFF, inset -1px 0 #404040, inset -2px 0 #808080;margin-right:1px;padding:2px 10px}
+.dt.on{background:#FFF;position:relative;top:1px;font-weight:bold;box-shadow:inset 1px 1px #FFF, inset -1px 0 #404040, inset -2px 0 #808080, 0 -2px 0 #F0B030}
+#viewBar{background:#C9C5EC;border:0;box-shadow:var(--thin);color:#14146A;padding:3px 8px;border-radius:0}
+#viewBar .vtitle{color:#14146A;font-weight:bold;font-size:15px;font-family:Tahoma,Verdana,sans-serif}
+.vb{background:var(--bg);color:#000;border:0;border-radius:0;box-shadow:var(--raise)}
+.vb.on,.vb:active{box-shadow:var(--sink);background:#E3E0D8}
+#engineHost{background:#FFF;box-shadow:var(--sink);border-radius:0;margin:2px}
+#loading{background:#D4D0C8;color:#000}
+/* dashboard: results, design, charts, messages as task tabs; the messages tab is the validation/log area */
+#dashDock{background:var(--bg)}
+.dockhead.tabs{background:var(--bg);color:#000;padding:2px 2px 0;border-bottom:1px solid #808080}
+.dockhead.tabs>button:not(.mini){background:var(--bg);color:#000;border:0;border-radius:0;box-shadow:inset 1px 1px #FFF, inset -1px 0 #404040, inset -2px 0 #808080;padding:2px 12px;font-weight:normal}
+.dockhead.tabs>button:not(.mini):hover{background:#E3E0D8}
+.dockhead.tabs>button.on{background:#FFF;font-weight:bold;position:relative;top:1px}
+#dashBody{background:#FFF;box-shadow:var(--sink);margin:0 2px 2px}
+.kpi{background:#FFF;border:0;border-radius:0;box-shadow:var(--thin)}
+.kpi .kl{color:#404040}
+.kpi .kv{color:#0A246A}
+.logline{font-family:"Courier New",Consolas,monospace;font-size:11px;color:#000;border-bottom:1px dotted #C0C0C0}
+.logline .tm{color:#606060}
+table.tbl{border-collapse:collapse}
+.tbl th{background:#D4D0C8;color:#000;box-shadow:var(--raise);border:0}
+.tbl td{border:1px solid #D0D0D0}
+/* properties: grouped like a classic property sheet */
+#props{background:#FFF;box-shadow:var(--sink);margin:2px}
+.pgh{background:linear-gradient(#ECE9D8,#D8D4C8);color:#000;border:0;border-top:1px solid #FFF;border-bottom:1px solid #808080;font-weight:bold;border-radius:0}
+.pgh:hover{background:linear-gradient(#F4F2E8,#E0DCD0)}
+.pr label{color:#000}
+.seg{border:0;box-shadow:none;gap:1px}
+.seg button{background:var(--bg);color:#000;border:0;border-radius:0 !important;box-shadow:var(--raise)}
+.seg button.on{background:#E3E0D8;box-shadow:var(--sink);font-weight:bold}
+.btn{background:var(--bg);color:#000;border:0;border-radius:0;box-shadow:var(--raise);padding:3px 12px}
+.btn:hover{background:#E3E0D8}
+.btn:active{box-shadow:var(--sink)}
+input[type=range]{accent-color:#0A246A}
+/* splitters */
+.hsplit,.vsplit{background:var(--bg)}
+.hsplit:hover,.vsplit:hover,.hsplit.drag,.vsplit.drag{background:#B8B4AC}
+/* status bar: sunken panes */
+#statusbar{background:var(--bg);color:#000;border-top:1px solid #FFF;padding:2px 3px;gap:2px;min-height:20px}
+#statusbar>span:not(.sep):not(.grow){box-shadow:var(--thin);padding:1px 8px;background:var(--bg)}
+#statusbar .sep{display:none}
+/* dialogs */
+.modal{background:var(--bg);border:0;border-radius:0;box-shadow:var(--raise),3px 3px 0 rgba(0,0,0,0.3)}
+.modal .mh{background:linear-gradient(90deg,#0A246A,#3A6EA5 70%,#A6CAF0);color:#FFF;font-weight:bold;border-radius:0;padding:3px 6px}
+.modal .mh .x{background:var(--bg);color:#000;box-shadow:var(--raise);border-radius:0;width:16px;height:14px;line-height:12px}
+.modal .mb{background:var(--bg);color:#000}
+.modal .mf{background:var(--bg);border-top:1px solid #808080}
+#toast{background:#FFFFE1;color:#000;border:1px solid #000;border-radius:0;box-shadow:2px 2px 0 rgba(0,0,0,0.3)}
+/* classic scroll bars */
+::-webkit-scrollbar{width:16px;height:16px;background:#E8E6E0}
+::-webkit-scrollbar-track{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Crect width='2' height='2' fill='%23FFFFFF'/%3E%3Crect width='1' height='1' fill='%23D4D0C8'/%3E%3Crect x='1' y='1' width='1' height='1' fill='%23D4D0C8'/%3E%3C/svg%3E")}
+::-webkit-scrollbar-thumb{background:#D4D0C8;box-shadow:var(--raise)}
+::-webkit-scrollbar-button{background:#D4D0C8;box-shadow:var(--raise);height:16px;width:16px}
+::-webkit-scrollbar-corner{background:#D4D0C8}
+:focus-visible{outline:1px dotted #000 !important;outline-offset:-3px}

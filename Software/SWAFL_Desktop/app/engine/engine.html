@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="crops.js"></script>
 <meta charset="UTF-8">
 <meta name="description" content="Interactive soil, water and atmosphere explorer built on 10,190 Daisy simulations: irrigation trigger law, mulch water balance, and evaporation-drainage regimes.">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -588,7 +589,7 @@ function drawSPAC() {
   q('Grain / fine matrix / pore space', (g0.stats.grain * 100).toFixed(0) + ' / ' + (g0.stats.matrix * 100).toFixed(0) + ' / ' + (g0.stats.pore * 100).toFixed(0) + ' %', ly2 + 176, ['DAISY', true]);
   const Yr = ly2 + lh2 + 40; SP.ys.root = Yl - 20; SP.ys.lab = Yr - 20; ctx.strokeStyle = '#1F4D2E'; ctx.lineWidth = 1.5; T('Particle lab: your soil, live and in colour', 16, Yr, { s: 12.5, b: true, c: '#1F4D2E' }); ctx.beginPath(); ctx.moveTo(16, Yr + 6); ctx.lineTo(W - 16, Yr + 6); ctx.stroke(); spBadge('YOUR DATA', W - 20, Yr - 2, true, true);
   const endY = drawLab(A, Yr);
-  T('Source: Daisy ensemble, 10 soils, 10,190 runs · github.com/halilunaziru73-creator', 16, ly2 + lh2 + 22, { s: 8.5, i: true, c: MUTE });
+  T('Your data: Daisy simulations, 10 soils, 10,190 runs', 16, ly2 + lh2 + 22, { s: 8.5, i: true, c: MUTE });
 }
 SCENES.push({ id: 'spac', label: 'S1 Soil-Plant-Air', color: '#1E8E3E', h: 1700, interactive: true, onDown: p => labDown(p) || spDown(p), onMove: p => { LAB.hv = p; if (LAB.drag) { labSet(p); return true; } if (SP.drag) { spMoveZ(p); return true; } return false; }, onUp: () => { SP.drag = false; LAB.drag = false; }, onLeave: () => { SP.drag = false; LAB.drag = false; LAB.hv = null; }, draw: () => drawSPAC(), title: 'Soil-plant-atmosphere continuum: the water column from the particles to the sky',
   legend: [['#1E8E3E', 'From your Daisy data'], ['#8A8F98', 'Derived along the path'], ['#2E8FD6', 'Water potential (log scale)'], ['#E8912D', 'Water leaving to the air']],
@@ -637,9 +638,10 @@ const SIDM = (function () {
     const L = P.L, w = P.w, q = P.q, k = P.k, A = P.A, Zn = P.Zn, A0 = P.A0, sy = P.sy == null ? 0.8 : P.sy;
     let sz = P.sz, R = {};
     // optional steady-intake term f0 (m per min): Z = k t^A + f0 t (Kostiakov-Lewis, as in FAO-45); f0 = 0 recovers the pure Kostiakov law
-    const f0 = P.f0 || 0, rAdv = P.rAdv || 0.55, Zf = t => k * Math.pow(t, A) + f0 * t;
+    // the steady-intake part infiltrates during advance as f0 t x / (1 + r): r is the advance exponent, iterated with the shape factor below (fixed at 0.55 in version 1.0.0)
+    const f0 = P.f0 || 0, Zf = t => k * Math.pow(t, A) + f0 * t; let rAdv = P.rAdv || 0.55;
     const Vx = (t, s) => q * t / (sy * A0 + (s * k * Math.pow(t, A) + f0 * t / (1 + rAdv)) * w);
-    if (sz == null) { sz = 0.8; for (let it = 0; it < 10; it++) { const f = t => Vx(t, sz), tL = solveT(f, L), th = solveT(f, L / 2); if (!isFinite(tL)) break; const r = Math.log(2) / Math.log(tL / th); sz = (A + r * (1 - A) + 1) / ((1 + A) * (1 + r)); R.r = r; } }
+    if (sz == null) { sz = 0.8; for (let it = 0; it < 10; it++) { const f = t => Vx(t, sz), tL = solveT(f, L), th = solveT(f, L / 2); if (!isFinite(tL)) break; const r = Math.log(2) / Math.log(tL / th); sz = (A + r * (1 - A) + 1) / ((1 + A) * (1 + r)); R.r = r; if (!P.rAdv) rAdv = r; } }
     R.sz = sz; R.sy = sy;
     const f = t => Vx(t, sz); const vbT = x => x <= 0 ? 0 : solveT(f, x);
     let txf, tL;
@@ -3032,7 +3034,7 @@ function drawField() {
   const g = ctx.createLinearGradient(0, 46, 0, GY); g.addColorStop(0, '#DCEBFA'); g.addColorStop(1, PAPER); ctx.fillStyle = g; ctx.fillRect(1, 46, W - 2, GY - 46);
   const cloudy = clampN((rain - 0.5) / 0.9, 0, 1), heat = clampN((dT + 1) / 4.5, 0, 1);
   sunIcon(572, 70, 11 + heat * 5, heat);
-  T('Yield ' + (m.yield * CROPS[state.crop].factor).toFixed(2) + ' ' + CROPS[state.crop].unit + ', ' + CROPS[state.crop].label.toLowerCase(), W - 16, 22, { s: 11.5, b: true, a: 'right', c: '#2F7F3E' });
+  T('Yield ' + (m.yield * CROPS[state.crop].factor).toFixed(CROPS[state.crop].lib ? 0 : 2) + ' ' + CROPS[state.crop].unit + ', ' + CROPS[state.crop].label.toLowerCase(), W - 16, 22, { s: 11.5, b: true, a: 'right', c: '#2F7F3E' });
   for (let i = 0; i < 1 + Math.round(cloudy * 3); i++) cloud(((i * 150 + t * 6) % (W + 80)) - 40, 88 + (i % 2) * 14, 0.8 + cloudy * 0.3, 0.55 + cloudy * 0.3);
   T('Field water balance, ' + (CAL0 + yearOf(kd)) + ' (' + cropNameAt(sim, kd) + ')', 16, 22, { s: 14, b: true });
   T(DATA.soil_labels[state.soil] + ', ' + TILL_LABELS[state.till].toLowerCase() + ' tillage, ' + (vff < 0.95 ? 'mulched' : 'bare') + ', rain \u00d7' + rain.toFixed(1) + ', ' + (dT >= 0 ? '+' : '') + dT.toFixed(1) + '\u00b0C', 16, 38, { s: 10.5, c: MUTE });
@@ -3130,7 +3132,7 @@ function shownDepths() {
 function datasetNote() { const exact = (profKey() === 'loam') === (DATA.soils.indexOf(state.soil) >= 0 && DATA.texture[state.soil].sand < 60); return 'Daily profile from the ' + profName() + ' simulation' + (state.soil === 'S01_CoarseLoam' || state.soil === 'S02_CoarseSand' ? '' : ' (nearest simulated soil to ' + DATA.soil_labels[state.soil].toLowerCase() + ')'); }
 
 function annualLine(x, y1, y2, short) {
-  const m = current; T((short ? 'Annual result: irrigation ' : 'Annual result at these settings: irrigation ') + m.irr.toFixed(0) + ' mm, yield ' + (m.yield * CROPS[state.crop].factor).toFixed(2) + ' ' + CROPS[state.crop].unit.split(' ')[0] + ', drainage ' + m.drain.toFixed(0) + ' mm', x, y1, { s: 10.8, b: true });
+  const m = current; T((short ? 'Annual result: irrigation ' : 'Annual result at these settings: irrigation ') + m.irr.toFixed(0) + ' mm, yield ' + (m.yield * CROPS[state.crop].factor).toFixed(CROPS[state.crop].lib ? 0 : 2) + ' ' + CROPS[state.crop].unit.split(' ')[0] + ', drainage ' + m.drain.toFixed(0) + ' mm', x, y1, { s: 10.8, b: true });
   T('The daily traces are the standard simulation; this line follows every control.', x, y2, { s: 9.5, i: true, c: MUTE });
 }
 // ------------------------------------------------------------------------------------------------
@@ -3328,7 +3330,7 @@ function drawV6() {
   ctx.fillStyle = '#D93025'; ctx.beginPath(); ctx.arc(xm(VFF_VALUES[state.vffIdx]), ym(cv), 6, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke();
   VFF_VALUES.forEach((v, i) => { if (i % 3 === 0 || i === 9) T(v.toFixed(1), xm(v), y1 + 14, { s: 9.5, a: 'center', c: MUTE }); }); T('mulch vapour-flux factor (lower = stronger)', (x0 + x1) / 2, y1 + 29, { s: 10, a: 'center', c: MUTE }); T('mm/yr', 16, (y0 + y1) / 2, { s: 10, c: MUTE });
   const bareE = model(1.0, rain).evap, mm = current;
-  T('Yield ' + (mm.yield * CROPS[state.crop].factor).toFixed(2) + ' ' + CROPS[state.crop].unit.split(' ')[0] + ' (' + CROPS[state.crop].label.toLowerCase() + '), nitrogen leaching ' + mm.nl.toFixed(1) + ' kg/ha at these settings', 16, 604, { s: 10.5, c: INK });
+  T('Yield ' + (mm.yield * CROPS[state.crop].factor).toFixed(CROPS[state.crop].lib ? 0 : 2) + ' ' + CROPS[state.crop].unit.split(' ')[0] + ' (' + CROPS[state.crop].label.toLowerCase() + '), nitrogen leaching ' + mm.nl.toFixed(1) + ' kg/ha at these settings', 16, 604, { s: 10.5, c: INK });
   T('Mulch removes ' + Math.round((1 - cv / bareE) * 100) + '% of bare-soil evaporation at this setting.', 16, 622, { s: 11, b: true });
 }
 
@@ -3406,7 +3408,7 @@ function drawN2() {
   T(cs.ir >= cs.dr ? 'Most of it returns as irrigation saved (' + cs.ir.toFixed(0) + ' mm).' : 'Most of it leaves as extra drainage (' + cs.dr.toFixed(0) + ' mm).', 26, 518, { s: 12, b: true, c: cs.ir >= cs.dr ? '#2E9E4F' : '#2E6FD0' });
   T(cross ? 'Above rainfall \u00d7' + cross.r.toFixed(1) + ' drainage exceeds the irrigation saved.' : 'Drainage stays below the irrigation saved across this rainfall range.', 26, 542, { s: 11.5 });
   const bR = model(1.0, rain), cR = model(vff, rain), cf = CROPS[state.crop].factor;
-  T('Yield ' + (bR.yield * cf).toFixed(2) + ' to ' + (cR.yield * cf).toFixed(2) + ' ' + CROPS[state.crop].unit.split(' ')[0] + ' (' + CROPS[state.crop].label.toLowerCase() + '), nitrogen leaching ' + bR.nl.toFixed(1) + ' to ' + cR.nl.toFixed(1) + ' kg/ha.', 26, 566, { s: 11, b: true });
+  T('Yield ' + (bR.yield * cf).toFixed(CROPS[state.crop].lib ? 0 : 2) + ' to ' + (cR.yield * cf).toFixed(CROPS[state.crop].lib ? 0 : 2) + ' ' + CROPS[state.crop].unit.split(' ')[0] + ' (' + CROPS[state.crop].label.toLowerCase() + '), nitrogen leaching ' + bR.nl.toFixed(1) + ' to ' + cR.nl.toFixed(1) + ' kg/ha.', 26, 566, { s: 11, b: true });
   T('Dry years turn mulch into an irrigation saving; wet years turn it into drainage.', 26, 592, { s: 11, i: true, c: MUTE });
 }
 
@@ -3586,9 +3588,9 @@ function computeSim() {
   const m = current, soil = state.soil, trigAbs = trigAbsFor(state.soil), z = Z_VALUES[state.zIdx];
   const awc = AWC[soil] * DZ, sand = DATA.texture[soil].sand / 100, fTrig = depletionAt(soil, trigAbs), sense = clampN(Math.round(z / DZ), 0, NLAY - 1);
   const meth = METHODS.find(q => q.k === state.method) || METHODS[0], drip = meth.mid || 0, crop = state.crop;
-  let Rmax = { cereal: 95, legume: 115, vegetable: 45 }[crop] * (0.85 + 0.3 * sand) * (1 + 0.12 * Math.log10(trigAbs / 300)) * (1 - 0.18 * (NRATE_VALUES[state.nIdx] - 100) / 100);
+  let Rmax = cropRootBase(crop) * (0.85 + 0.3 * sand) * (1 + 0.12 * Math.log10(trigAbs / 300)) * (1 - 0.18 * (NRATE_VALUES[state.nIdx] - 100) / 100);
   Rmax = clampN(Rmax, 25, 100);
-  const lam = { cereal: 0.32, legume: 0.24, vegetable: 0.40 }[crop], wins = windowsFor(crop), gy = yearRainFactors();
+  const lam = cropLam(crop), wins = windowsFor(crop), gy = yearRainFactors();
   const rainEff = Math.max(40, m.rain - m.other), r = rainEff / m.rain, mu0 = m.rain / (0.28 * DPY), Ic = mu0 * Math.log(1 / Math.max(r, 0.05));   // the canopy and litter catch the first Ic mm of every shower
   const budget = m.irr * 6;   // no practical cap: the trigger decides when to irrigate
   const cov = new Float32Array(ND), widx = new Int16Array(ND).fill(-1); let wi = 0, csum = 0;
@@ -3989,7 +3991,7 @@ function openReportDialog() {
     '<label style="display:flex; gap:0.5rem; align-items:center; padding:0.35rem 0.5rem; background:#1C2128; border-radius:8px; margin-bottom:0.3rem; cursor:pointer;"><input type="checkbox" id="rptAll" checked><b>Everything</b></label><div id="rptList"></div>' +
     '<div style="display:flex; gap:0.6rem; margin-top:0.8rem; padding:0.7rem 0 1rem; justify-content:flex-end; position:sticky; bottom:0; background:#161B22; border-top:1px solid #30363D;"><span id="rptCount" style="margin-right:auto; align-self:center; font-size:0.78rem; color:#8B949E;"></span><button id="rptCancel" class="pillbtn">Cancel</button><button id="rptGo" class="pillbtn active" style="font-weight:700;">Download PDF</button></div><div id="rptMsg" style="font-size:0.75rem; color:#8B949E; margin-top:0.5rem; min-height:1em;"></div>';
   ov.appendChild(card); document.body.appendChild(ov);
-  const list = card.querySelector('#rptList'), RG = [['Start here', ['field']], ['Water in the soil', ['v2', 'v3', 'v7', 'e1', 'r1']], ['Irrigation', ['v1', 'n1']], ['Design', ['sid', 'drip', 'spr']], ['Design', ['sid', 'drip', 'spr']], ['Mulch', ['v4', 'v6', 'n2', 'n3']], ['The big picture', ['spac', 'v5']]], seen = new Set();
+  const list = card.querySelector('#rptList'), RG = [['Start here', ['field']], ['Water in the soil', ['v2', 'v3', 'v7', 'e1', 'r1']], ['Irrigation', ['v1', 'n1']], ['Design', ['farm', 'sid', 'drip', 'spr']], ['Crops', ['crop']], ['Mulch', ['v4', 'v6', 'n2', 'n3']], ['Year by year', ['yby', 'wb2', 'nb']], ['The big picture', ['spac', 'v5']]], seen = new Set();
   list.style.cssText = 'display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:0.5rem 0.8rem;';
   const addGroup = (name, ids) => { const items = ids.filter(i => !seen.has(i)).map(i => SCENES.find(q => q.id === i)).filter(Boolean); if (!items.length) return; const g = document.createElement('div'); g.innerHTML = '<div style="font-size:0.68rem; letter-spacing:0.06em; text-transform:uppercase; color:#8B949E; margin:0.2rem 0 0.1rem;">' + name + '</div>'; items.forEach(sc => { seen.add(sc.id); const l = document.createElement('label'); l.style.cssText = 'display:flex; gap:0.5rem; align-items:center; padding:0.3rem 0.4rem; cursor:pointer; font-size:0.84rem; border-radius:6px;'; l.innerHTML = '<input type="checkbox" class="rptSc" value="' + sc.id + '" checked><span style="width:10px; height:10px; border-radius:50%; background:' + sc.color + '; display:inline-block; flex:0 0 auto;"></span><span>' + sc.label + '</span>'; g.appendChild(l); }); list.appendChild(g); };
   RG.forEach(g => addGroup(g[0], g[1])); addGroup('Other', SCENES.filter(q => !seen.has(q.id)).map(q => q.id));
@@ -4000,7 +4002,7 @@ function openReportDialog() {
   card.querySelector('#rptGo').onclick = () => {
     const ids = boxes().filter(b => b.checked).map(b => b.value), msg = card.querySelector('#rptMsg'); if (!ids.length) { msg.textContent = 'Choose at least one part.'; return; }
     msg.textContent = 'Building your report...'; setTimeout(() => {
-      try { const bytes = buildReport(ids, card.querySelector('#rptTitle').value.trim()), a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' })); a.download = 'SWAFL_report_' + DATA.soil_labels[state.soil].replace(/\s+/g, '') + '_' + new Date().toISOString().slice(0, 10) + '.pdf'; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500); ov.remove(); }
+      try { const bytes = buildReport(ids, card.querySelector('#rptTitle').value.trim()), nm = 'SWAFL_report_' + DATA.soil_labels[state.soil].replace(/\s+/g, '') + '_' + new Date().toISOString().slice(0, 10) + '.pdf'; saveBytes(nm, bytes, 'application/pdf'); ov.remove(); }
       catch (err) { msg.textContent = 'Could not build the report: ' + err.message; }
     }, 60);
   };
@@ -5769,7 +5771,7 @@ if (window.__guiFromHash) window.__guiFromHash(); refresh();
   // ---------- views grouped by the question they answer, in plain words
   const PLAIN = { field: ['Today’s field', 'What is happening in the field today'], v2: ['Water in the soil', 'Soil water by depth and day'], v3: ['Pores and tillage', 'Microscope view of the pores'], v7: ['Soil profiles', 'What changes the soil’s hydraulic properties'], e1: ['Evaporation', 'From the pore to the atmosphere'], r1: ['Roots', 'Root depth in every soil'],
     v1: ['When to irrigate', 'Sensor, trigger and the water front'], n1: ['Irrigation rule', 'How the trigger decides'], v4: ['Mulch or bare', 'Side by side'], v6: ['Mulch strength', 'Evaporation and drainage maps'], n2: ['Saved water', 'Where the water saved by mulch goes'], n3: ['Where mulch pays', 'Regime map'], v5: ['How it connects', 'The feedback loops'], sid: ['Surface irrigation', 'Border, furrow and basin design'], drip: ['Drip irrigation', 'Emitters, wetted bulb and uniformity'], spr: ['Sprinklers', 'Nozzles, spacing, wind and runoff'], spac: ['Soil to sky', 'The water column from particle to atmosphere'] };
-  const GROUPS = [['Start here', ['field']], ['Water in the soil', ['v2', 'v3', 'v7', 'e1', 'r1']], ['Irrigation', ['v1', 'n1']], ['Design', ['sid', 'drip', 'spr']], ['Mulch', ['v4', 'v6', 'n2', 'n3']], ['The big picture', ['spac', 'v5']]];
+  const GROUPS = [['Start here', ['field']], ['Water in the soil', ['v2', 'v3', 'v7', 'e1', 'r1']], ['Irrigation', ['v1', 'n1']], ['Design', ['farm', 'sid', 'drip', 'spr']], ['Crops', ['crop']], ['Mulch', ['v4', 'v6', 'n2', 'n3']], ['Year by year', ['yby', 'wb2', 'nb']], ['The big picture', ['spac', 'v5']]];
   const order = GROUPS.flatMap(g => g[1]); SCENES.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
   const bar = $('#sceneBar'), btn = {}; $$('#sceneBar .scenebtn').forEach(b => { btn[b.dataset.scene] = b; });
   GROUPS.forEach(([name, ids]) => { const h = document.createElement('div'); h.className = 'scenegrp'; h.textContent = name; bar.appendChild(h); ids.forEach(id => { const b = btn[id]; if (!b) return; const sp = b.querySelectorAll('span'); if (sp[0] && !sp[0].textContent && id !== 'field') sp[0].textContent = id.toUpperCase(); if (sp[1] && PLAIN[id]) sp[1].textContent = PLAIN[id][0]; b.title = PLAIN[id] ? PLAIN[id][1] : ''; bar.appendChild(b); }); });
@@ -6071,13 +6073,13 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
     else if (id === 'e1') { const em = e1Model(), t1 = e1T1(em, em.e0), t1b = e1T1(em, em.e0b), lost = e1Lost(em, em.e0, 12); h = 'After a wetting on ' + B(soil) + ', the air asks for ' + B(em.e0b.toFixed(1) + ' mm/day') + ' (' + (em.atm.season > 1.1 ? 'summer pull' : em.atm.season < 0.9 ? 'winter calm' : 'mid-season') + ', ' + (TEMP_VALUES[state.tempIdx] >= 0 ? '+' : '') + TEMP_VALUES[state.tempIdx].toFixed(1) + ' °C). The surface stays wet and loses water fast for ' + B(t1.toFixed(1) + ' days') + (has ? ' (' + t1b.toFixed(1) + ' days without mulch), because ' + mat + ' slows the demand to ' + em.e0.toFixed(1) + ' mm/day' : '') + '. After that a dry crust forms and slows the loss. In 12 days the soil loses ' + B(lost.toFixed(1) + ' mm') + '.'; }
     else if (id === 'r1') { const rd = sim.rd[k]; h = 'On ' + B(dateS) + ' the ' + B(crop) + ' roots reach ' + B(f0(rd) + ' cm') + ' in ' + soil + '. ' + (state.crop === 'vegetable' ? 'Vegetables root shallowly, so they depend on frequent irrigation near the surface.' : 'Cereals and oilseed root deeper and can use water stored lower down.') + ' With ' + B(meth) + ', water is delivered ' + (METHODS.find(q => q.k === state.method).mid ? 'at ' + B(METHODS.find(q => q.k === state.method).mid + ' cm') + ' depth, close to the roots.' : 'at the surface.'); }
     else if (id === 'spac') { const A = spacState(); h = 'In ' + B(soil) + ' the roots draw water at about ' + B(Math.round(A.hRZ) + ' cm') + ' of suction (' + B(spFmt(A.psiRZ)) + '). The leaf sits at ' + B(spFmt(A.psiLeaf)) + ' and the air at ' + B(spFmt(A.psiAir)) + ', so water climbs ' + B(m.transp.toFixed(0) + ' mm') + ' a year from your soil to the sky. ' + (A.cover < 0.05 ? 'No crop is growing on this date.' : A.closed ? w('The leaf is short of water, so the stomata close.') : g('The soil can keep up with the air today.')); }
-    else if (id === 'v1' || id === 'n1') h = 'Your sensor sits at ' + B(Z_VALUES[state.zIdx] + ' cm') + ' and starts irrigation when the soil there reaches dryness ' + B(trigD.toFixed(2)) + ' (suction about ' + B(Math.round(trigAbsFor(state.soil)) + ' cm') + '). On ' + dateS + ' it reads ' + B(dry.toFixed(2)) + ': ' + (dry >= trigD ? w('irrigation starts.') : g('no watering yet.')) + ' Over a year this rule adds ' + B(f0(m.irr) + ' mm') + ' through ' + B(meth) + ' and gives a yield of ' + B((m.yield * CROPS[state.crop].factor).toFixed(2) + ' ' + CROPS[state.crop].unit) + '.';
+    else if (id === 'v1' || id === 'n1') h = 'Your sensor sits at ' + B(Z_VALUES[state.zIdx] + ' cm') + ' and starts irrigation when the soil there reaches dryness ' + B(trigD.toFixed(2)) + ' (suction about ' + B(Math.round(trigAbsFor(state.soil)) + ' cm') + '). On ' + dateS + ' it reads ' + B(dry.toFixed(2)) + ': ' + (dry >= trigD ? w('irrigation starts.') : g('no watering yet.')) + ' Over a year this rule adds ' + B(f0(m.irr) + ' mm') + ' through ' + B(meth) + ' and gives a yield of ' + B((m.yield * CROPS[state.crop].factor).toFixed(CROPS[state.crop].lib ? 0 : 2) + ' ' + CROPS[state.crop].unit) + '.';
     else if (id === 'v4') { const st = model(0.1, rain), d = bare.evap - m.evap; h = (has ? 'Compared with bare ' + soil + ', ' + B(mat) + ' cuts evaporation from ' + B(f0(bare.evap) + ' mm') + ' to ' + g(f0(m.evap) + ' mm') + ' and irrigation from ' + B(f0(bare.irr) + ' mm') + ' to ' + g(f0(m.irr) + ' mm') + '.' : 'Right now there is no mulch, so evaporation is ' + w(f0(bare.evap) + ' mm') + ' and you irrigate ' + B(f0(bare.irr) + ' mm') + '. Click a material to see the change.') + ' The strongest possible mulch would reach ' + B(f0(st.evap) + ' mm') + ' evaporation. ' + (has ? 'Drainage goes from ' + f0(bare.drain) + ' to ' + f0(m.drain) + ' mm because less of the water is lost to the air.' : ''); }
     else if (id === 'v6') { const st = model(0.1, rain); h = 'At mulch factor ' + B(vff.toFixed(1)) + ' with ' + B(CAP_VALUES[state.capIdx] + ' mm') + ' of capacity, evaporation in ' + soil + ' is ' + B(f0(m.evap) + ' mm') + (has ? ' (' + g(Math.round((1 - m.evap / bare.evap) * 100) + '% less') + ' than bare soil)' : '') + ' and drainage ' + B(f0(m.drain) + ' mm') + '. Going to the strongest mulch would leave only ' + B(f0(st.evap) + ' mm') + ' of evaporation but push drainage to ' + B(f0(st.drain) + ' mm') + '.'; }
     else if (id === 'n2') { const v = has ? vff : 0.5, c = model(v, rain), ev = bare.evap - c.evap, ir = bare.irr - c.irr, dr = c.drain - bare.drain, tr = c.transp - bare.transp; h = (has ? '' : 'Previewing a mulch of factor 0.5 on bare ' + soil + ' (lower the mulch slider to set it). ') + 'At rainfall ×' + rain.toFixed(1) + ' mulch saves ' + B(f0(ev) + ' mm') + ' of evaporation. Of that, ' + g(f0(ir) + ' mm') + ' becomes less irrigation, ' + (dr > 5 ? bd(f0(dr) + ' mm') : B(f0(dr) + ' mm')) + ' extra drainage and ' + B(f0(tr) + ' mm') + ' more water for the crop. ' + (dr > ir * 0.5 ? 'In this wet setting much of the saving is lost to drainage.' : 'Most of the saving shows up as water you do not have to irrigate.'); }
     else if (id === 'n3') { const idx = (m.evap - m.drain) / Math.max(1, m.evap + m.drain); h = 'At rainfall ×' + rain.toFixed(1) + ' and mulch factor ' + B(vff.toFixed(1)) + ' on ' + soil + ', ' + (idx > 0.05 ? 'the main loss is ' + w('evaporation') + ' (' + f0(m.evap) + ' mm against ' + f0(m.drain) + ' mm drainage), so mulch will pay off here.' : idx < -0.05 ? 'the main loss is ' + bd('drainage') + ' (' + f0(m.drain) + ' mm against ' + f0(m.evap) + ' mm evaporation), so mulch saves less water than it would in a drier climate.' : 'evaporation and drainage are about equal (' + f0(m.evap) + ' and ' + f0(m.drain) + ' mm).'); }
-    else if (id === 'v5') { let top = ''; try { const E = v5Effects(), mi = E.mag.indexOf(Math.max.apply(null, E.mag)); top = E.eff[mi]; } catch (e) {} h = setup + 'Each year it needs ' + B(f0(m.irr) + ' mm') + ' of irrigation to produce ' + B((m.yield * CROPS[state.crop].factor).toFixed(2) + ' ' + CROPS[state.crop].unit) + ', and loses ' + B(m.nl.toFixed(1) + ' kg') + ' of nitrogen per hectare below the roots.' + (top ? ' The control with the biggest effect for one step is: <b>' + top + '</b>.' : ''); }
-    else h = setup + 'It uses ' + B(f0(m.irr) + ' mm') + ' of irrigation a year for a yield of ' + B((m.yield * CROPS[state.crop].factor).toFixed(2) + ' ' + CROPS[state.crop].unit) + '.';
+    else if (id === 'v5') { let top = ''; try { const E = v5Effects(), mi = E.mag.indexOf(Math.max.apply(null, E.mag)); top = E.eff[mi]; } catch (e) {} h = setup + 'Each year it needs ' + B(f0(m.irr) + ' mm') + ' of irrigation to produce ' + B((m.yield * CROPS[state.crop].factor).toFixed(CROPS[state.crop].lib ? 0 : 2) + ' ' + CROPS[state.crop].unit) + ', and loses ' + B(m.nl.toFixed(1) + ' kg') + ' of nitrogen per hectare below the roots.' + (top ? ' The control with the biggest effect for one step is: <b>' + top + '</b>.' : ''); }
+    else h = setup + 'It uses ' + B(f0(m.irr) + ' mm') + ' of irrigation a year for a yield of ' + B((m.yield * CROPS[state.crop].factor).toFixed(CROPS[state.crop].lib ? 0 : 2) + ' ' + CROPS[state.crop].unit) + '.';
     vd.innerHTML = '<h3>About your setup</h3>' + h + (Date.now() - changeAt < 30000 ? changeHtml : ''); } catch (e) { console.warn('verdict', e); } };
   setInterval(verdict, 700); verdict();
   // 4. each view explained, with what to look for
@@ -6373,5 +6375,9 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   window.fitNow = fit;
 })();
 </script>
+<script src="plus_core.js"></script>
+<script src="plus_layers.js"></script>
+<script src="farm.js"></script>
+<link rel="stylesheet" href="classic.css">
 </body>
 </html>
