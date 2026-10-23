@@ -13,13 +13,15 @@ async function createWindow() {
   srv = server;
   win = new BrowserWindow({
     width: 1480, height: 900, minWidth: 1000, minHeight: 640,
-    title: 'SWAFL', backgroundColor: '#E8EEF5', show: false,
+    title: 'SWAFL ' + app.getVersion(), backgroundColor: '#E8EEF5', show: false,
     icon: path.join(__dirname, 'build', 'icon.png'),
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false, sandbox: false }
   });
   Menu.setApplicationMenu(null);              // SWAFL draws its own menu bar (File, Edit, Tools, Refresh, Review, Run, Help)
   win.once('ready-to-show', () => { win.maximize(); win.show(); });
   win.webContents.setWindowOpenHandler(({ url }) => { if (/^https?:/i.test(url)) shell.openExternal(url); return { action: 'deny' }; });
+  try { await win.webContents.session.clearCache(); } catch (e) {}   // always load the files of this version
+  win.setTitle('SWAFL ' + app.getVersion());
   win.loadURL('http://127.0.0.1:' + port + '/index.html');
 }
 

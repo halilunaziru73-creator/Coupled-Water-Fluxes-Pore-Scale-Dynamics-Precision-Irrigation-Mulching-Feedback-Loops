@@ -3,7 +3,8 @@
 'use strict';
 (function () {
   if (typeof SCENES === 'undefined') return;
-  const YRS = () => (window.PERYEAR ? window.PERYEAR.years : []);
+  // the 20 simulated seasons are shown on the calendar of the working date, as everywhere in the program
+  const YRS = () => Array.from({ length: 20 }, (_, i) => String((typeof CAL0 !== 'undefined' ? CAL0 : 1980) + i));
   const fmt = (v, d) => v == null || !isFinite(v) ? '–' : v.toFixed(d == null ? 0 : d);
   const mean = a => a.reduce((x, y) => x + y, 0) / Math.max(1, a.length);
   const sd = a => { const m = mean(a); return Math.sqrt(mean(a.map(v => (v - m) * (v - m)))); };
@@ -105,7 +106,7 @@
 
   // ================================================================== Y1 Year by year
   function drawYby() {
-    paper(); let y = header('Year by year: how reliable is this setting?', DATA.soil_labels[state.soil] + ' · ' + (CROPS[state.crop] || {}).label + ' · 20 seasons of weather, 1980/81 to 1999/2000', 4);
+    paper(); let y = header('Year by year: how reliable is this setting?', DATA.soil_labels[state.soil] + ' · ' + (CROPS[state.crop] || {}).label + ' · 20 seasons, ' + YRS()[0] + ' to ' + YRS()[19] + ' (on the calendar of the working date)', 4);
     const pk = pickRun(); if (!pk) { noData(y); return; }
     const r = adjRun(pk), rf = adjRun(pk, true);
     let bx = 16 + badge('YOUR DATA', 16, y, '#1E8E3E') + 8; TF(adjText(pk, r) + '; red bar = the year on the clock (tap a bar to go to that year)', bx, y + 1, { s: 9.5, c: INK }); y += 14;
@@ -152,7 +153,7 @@
     const pk = pickRun(); if (!pk) { noData(y); return; }
     const r = adjRun(pk); badge('YOUR DATA', 16, y, '#1E8E3E'); TF(adjText(pk, r), 96, y + 1, { s: 9.5 }); y += 16;
     const n = 20, x0 = 64, ww = W - 32 - 80, hh = 300, top = y + 34;
-    frame(16, y, W - 32, hh + 90, 'Where the water comes from (up) and where it goes (down)', 'mm per year');
+    frame(16, y, W - 32, hh + 108, 'Where the water comes from (up) and where it goes (down)', 'mm per year');
     let hi = 0; for (let i = 0; i < n; i++) hi = Math.max(hi, r.P[i] + r.I[i], r.T[i] + r.Es[i] + r.Ec[i] + r.El[i] + r.Ep[i] + r.Esn[i] + Math.max(0, r.D[i]) + r.RO[i]); hi = nice(hi * 1.05);
     const mid = top + hh / 2, sc = (hh / 2) / hi, bw = ww / n;
     ctx.strokeStyle = GRID; [-1, -0.5, 0, 0.5, 1].forEach(f => { const yy = mid - f * hh / 2; ctx.beginPath(); ctx.moveTo(x0, yy + 0.5); ctx.lineTo(x0 + ww, yy + 0.5); ctx.stroke(); T(fmt(Math.abs(f * hi)), x0 - 4, yy + 3, { s: 8.5, c: MUTE, a: 'right' }); });
@@ -165,9 +166,9 @@
       hot(bx, top, w, hh, () => setYear(i), YRS()[i]);
       if (i % 4 === 0 || i === n - 1) T(YRS()[i], bx + w / 2, top + hh + 14, { s: 8, c: MUTE, a: 'center' });
     }
-    legend([[WBC.P, 'Precipitation'], [WBC.I, 'Irrigation'], [WBC.T, 'Transpiration'], [WBC.Es, 'Soil evaporation'], [WBC.Ec, 'Canopy (intercepted)']], x0, top + hh + 36);
-    legend([[WBC.El, 'Litter / mulch'], [WBC.Ep, 'Ponded water'], [WBC.Esn, 'Snow'], [WBC.D, 'Drainage below 1 m'], [WBC.RO, 'Surface runoff']], x0, top + hh + 54);
-    y += hh + 100;
+    legend([[WBC.P, 'Precipitation'], [WBC.I, 'Irrigation'], [WBC.T, 'Transpiration'], [WBC.Es, 'Soil evaporation'], [WBC.Ec, 'Canopy (intercepted)']], x0 - 40, top + hh + 40);
+    legend([[WBC.El, 'Litter / mulch'], [WBC.Ep, 'Ponded water'], [WBC.Esn, 'Snow'], [WBC.D, 'Drainage below 1 m'], [WBC.RO, 'Surface runoff']], x0 - 40, top + hh + 60);
+    y += hh + 118;
     // 20-year mean partition and the closure of ET
     const M = k => mean(r[k]), et = M('ET'), parts = [['Transpiration', M('T'), WBC.T], ['Soil evaporation', M('Es'), WBC.Es], ['Canopy (intercepted)', M('Ec'), WBC.Ec], ['Litter / mulch', M('El'), WBC.El], ['Ponded water', M('Ep'), WBC.Ep], ['Snow', M('Esn'), WBC.Esn]];
     const sum = parts.reduce((a, p) => a + p[1], 0);
@@ -200,7 +201,7 @@
     const r = adjRun(pk); badge('YOUR DATA', 16, y, '#1E8E3E'); TF(adjText(pk, r), 96, y + 1, { s: 9.5 }); y += 16;
     const NC = { fert: '#5B2FA8', min: '#9B7FD6', up: '#2E9E4F', NL: '#8E5A2A', den: '#E8912D', vol: '#B9B4A6' };
     const n = 20, x0 = 64, ww = W - 32 - 80, hh = 280, top = y + 34;
-    frame(16, y, W - 32, hh + 76, 'Supply (up) against uptake and losses (down)', 'kg N per ha per year');
+    frame(16, y, W - 32, hh + 100, 'Supply (up) against uptake and losses (down)', 'kg N per ha per year');
     let hi = 0; for (let i = 0; i < n; i++) hi = Math.max(hi, r.Nfert[i] + r.Nmin[i], r.Nup[i] + r.NL[i] + r.Nden[i] + r.Nvol[i]); hi = nice(hi * 1.05);
     const mid = top + hh / 2, sc = (hh / 2) / hi, bw = ww / n, sel = yearNow();
     ctx.strokeStyle = GRID; [-1, -0.5, 0, 0.5, 1].forEach(f => { const yy = mid - f * hh / 2; ctx.beginPath(); ctx.moveTo(x0, yy + 0.5); ctx.lineTo(x0 + ww, yy + 0.5); ctx.stroke(); T(fmt(Math.abs(f * hi)), x0 - 4, yy + 3, { s: 8.5, c: MUTE, a: 'right' }); });
@@ -211,8 +212,8 @@
       if (i === sel) { ctx.strokeStyle = '#D93025'; ctx.lineWidth = 2; ctx.strokeRect(bx - 2, up - 2, w + 4, dn - up + 4); }
       hot(bx, top, w, hh, () => setYear(i), YRS()[i]); if (i % 4 === 0 || i === n - 1) T(YRS()[i], bx + w / 2, top + hh + 14, { s: 8, c: MUTE, a: 'center' });
     }
-    legend([[NC.fert, 'Fertiliser'], [NC.min, 'Mineralisation'], [NC.up, 'Crop uptake'], [NC.NL, 'Leaching below 1 m'], [NC.den, 'Denitrification'], [NC.vol, 'Volatilisation']], x0, top + hh + 40);
-    y += hh + 86;
+    legend([[NC.fert, 'Fertiliser'], [NC.min, 'Mineralisation'], [NC.up, 'Crop uptake'], [NC.NL, 'Leaching below 1 m'], [NC.den, 'Denitrification'], [NC.vol, 'Volatilisation']], x0 - 40, top + hh + 46);
+    y += hh + 110;
     const M = k => mean(r[k]), sup = M('Nfert') + M('Nmin');
     frame(16, y, W - 32, 112, 'Nitrogen use (20-year mean)', '');
     TF('Supply ' + fmt(sup) + ' kg N/ha (fertiliser ' + fmt(M('Nfert')) + ', mineralisation ' + fmt(M('Nmin')) + ')', 30, y + 44, { s: 10.5 });

@@ -108,3 +108,35 @@ input[type=range]{accent-color:#0A246A}
 ::-webkit-scrollbar-button{background:#D4D0C8;box-shadow:var(--raise);height:16px;width:16px}
 ::-webkit-scrollbar-corner{background:#D4D0C8}
 :focus-visible{outline:1px dotted #000 !important;outline-offset:-3px}
+/* dashboard blocks: the same sheet as the Layers and Properties panels, each block with a collapsible header */
+#dashBody{background:#FFFFFF;padding:4px}
+.dwrap{gap:4px}
+.dsec{background:#FFFFFF;border:0;border-radius:0;padding:0;box-shadow:var(--thin)}
+.dsec h4{background:linear-gradient(#ECE9D8,#D8D4C8);color:#000;margin:0;padding:3px 6px;font-size:11px;border:0;border-top:1px solid #FFF;border-bottom:1px solid #808080;cursor:pointer;user-select:none;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.dsec h4:hover{background:linear-gradient(#F4F2E8,#E0DCD0)}
+.dsec h4 b{font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .dsec h4 span{font-weight:normal;color:#404040;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dsec h4 .tw{font-size:8px;margin-right:6px;color:#404040}
+.dsec .dsb{padding:6px}
+.dsec .kpi .kv{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi{border-left:3px solid #0A246A !important}
+.kpi.t1{border-left-color:#00808A !important}.kpi.t2{border-left-color:#7A5AA8 !important}.kpi.t3{border-left-color:#C77D1A !important}.kpi.t4{border-left-color:#2E7D32 !important}
+.drun{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.btn.prim{background:#0A246A;color:#FFF;font-weight:bold;box-shadow:inset -1px -1px #000,inset 1px 1px #3A6EA5}
+.btn.prim:hover{background:#163A8C}
+.best{display:flex;flex-direction:column;gap:4px;padding:2px}
+.best .btn{align-self:flex-start;margin-top:4px}
+.chart{background:#FFFFFF;border:0;border-radius:0;box-shadow:var(--thin)}
+.chart h4{color:#000;font-size:11px;background:linear-gradient(#ECE9D8,#D8D4C8);margin:-6px -6px 6px;padding:3px 6px;border-bottom:1px solid #808080}
+.chart canvas{height:200px}
+.fate{padding:4px}.fbar{display:flex;height:22px;box-shadow:var(--sink);margin-bottom:8px}.fbar span{display:block;height:100%}
+.fl{display:flex;align-items:center;gap:6px;margin:2px 0}.fl i{display:inline-block;width:10px;height:10px}
+.dnote{color:#404040}
+/* the virtual farm entries */
+.tn.farmnode .lbl b{color:#0A246A}
+.vb.farmbtn{font-weight:bold}
+#viewBar{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+#viewBar .grow{flex:1}
+/* selected buttons keep black text on the light pressed face */
+.vb.on,.vb.on:hover{color:#000 !important;background:#E3E0D8 !important}
+.seg button.on,.seg button.on:hover{color:#000 !important;background:#E3E0D8 !important}
+.warnbox{margin-top:6px;padding:6px 8px;background:#FFFFE1;border:1px solid #C0A000;color:#000}

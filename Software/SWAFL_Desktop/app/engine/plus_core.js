@@ -22,7 +22,7 @@
   track('lineTo', (c, a) => yOf(c, a[0], a[1]));
   let fitFrame = 0;
   const wrapDraw = sc => {
-    if (!sc || sc._fitWrapped || typeof sc.draw !== 'function') return; const od = sc.draw; sc._fitWrapped = true;
+    if (!sc || sc._fitWrapped || typeof sc.draw !== 'function' || ['sid', 'drip', 'spr'].includes(sc.id)) return; const od = sc.draw; sc._fitWrapped = true;   // the design views size themselves
     sc.draw = function () {
       const measure = (fitFrame++ % 20) === 0 && canvas.height < 9000;
       if (measure) { FIT.on = true; FIT.max = 0; }
@@ -33,7 +33,10 @@
           const need = Math.ceil(FIT.max + 28);
           if (sc._h0 == null) sc._h0 = sc.h || 640;
           const want = Math.max(sc._h0 > 900 ? 600 : sc._h0, need);
-          if (currentScene === sc && need < 9000 && (want > canvas.height || want < canvas.height - 120)) { sc.h = want; setCanvasH(want); }
+          // grow at once; shrink only after a control changed (never while an animation runs), so the view never flickers
+          const key = JSON.stringify(state) + '|' + innerWidth; const changed = sc._fitKey !== key;
+          if (currentScene === sc && need < 9000 && (want > canvas.height || (changed && want < canvas.height - 120))) { sc.h = want; setCanvasH(want); }
+          if (want <= canvas.height) sc._fitKey = key;
         }
       }
     };
@@ -102,7 +105,7 @@
     const pp = cropKey === '__ref' ? null : LIB.params(cropKey, opt.densIdx != null ? opt.densIdx : state.densIdx, opt.plantDoy != null ? opt.plantDoy : state.plantDoy);
     const meth = opt.method || state.method, effApp = meth === 'M01_Overhead' ? 0.75 : /Drip/.test(meth) ? 0.90 : 0.60;
     const f = yearlyForcing(), soil = state.soil, trig = trigAbsFor(soil), fT = opt.fT != null ? opt.fT : clampN(depletionAt(soil, trig), 0.05, 0.95);
-    const key = [cropKey, opt.densIdx, opt.plantDoy, state.densIdx, state.plantDoy, soil, meth, fT.toFixed(3), state.rainIdx, state.tempIdx, f.real, !!opt.daily, !!opt.rainfed].join('|');
+    const key = [cropKey, opt.densIdx, opt.plantDoy, state.densIdx, state.plantDoy, soil, meth, fT.toFixed(3), state.rainIdx, state.tempIdx, f.real, !!opt.daily, !!opt.rainfed, (window.WXD && WXD.on) ? WXD.key : 'rec'].join('|');
     if (_cwb[key]) return _cwb[key];
     let kc, rootMax, p0, ky, fcS;
     if (pp) { kc = LIB.kcCurve(pp); rootMax = Math.min(pp.root, 100); p0 = pp.p; ky = pp.ky; fcS = pp.fc; }
@@ -115,16 +118,16 @@
     let Dr = 0;
     for (let y = 0; y < NYR; y++) {
       const rainDays = []; let tot = 0; for (let d = 0; d < DPY; d++) { const r = rand() < 0.28 ? -Math.log(Math.max(1e-6, rand())) : 0; rainDays.push(r); tot += r; }
-      const sc = tot > 0 ? f.pr[y] / tot : 0;
+      const sc = tot > 0 ? f.pr[y] / tot : 0, WX = (window.WXD && WXD.on) ? WXD : null, wxP = WX ? RAIN_VALUES[state.rainIdx] / (WX.rainRef || 1) : 1, wxE = WX ? 1 + 0.035 * (TEMP_VALUES[state.tempIdx] - (WX.dTref || 0)) : 1;
       let I = 0, In = 0, ETc = 0, ETa = 0, DP = 0, RO = 0, Pt = 0, ev = 0, st = 0, sETc = 0, sETa = 0;
       for (let d = 0; d < DPY; d++) {
-        const k = y * DPY + d, doy = d, e0 = f.et0[y] * wE(doy) / wEs;
+        const k = y * DPY + d, doy = d, e0 = WX ? WX.ET0[k] * wxE : f.et0[y] * wE(doy) / wEs;
         const kcd = pp ? kc[doy] : kc[k], inSeason = kcd > 0.01;
         const kcEff = inSeason ? kcd : 0.25;                                     // bare soil outside the season
         const zr = inSeason ? (pp && pp.group === 'perennial' ? rootMax : clampN(15 + (rootMax - 15) * Math.min(1, kcd / Math.max(0.3, (pp ? pp.kcMid : 1.15)) * 1.15), 15, rootMax)) : 15;
         const TAW = awc * zr, p = clampN(p0 + 0.04 * (5 - kcEff * e0), 0.1, 0.8), RAW = p * TAW;
         if (Dr > TAW) Dr = TAW;
-        const P = rainDays[d] * sc; let ro = 0;
+        const P = WX ? WX.P[k] * wxP : rainDays[d] * sc; let ro = 0;
         if (pp && pp.c && pp.c.ponded && inSeason) ro = 0;                       // rice is bunded: no runoff
         else if (P > 35) ro = (P - 35) * 0.3;
         const ks = Dr > RAW ? clampN((TAW - Dr) / Math.max(1e-6, (1 - p) * TAW), 0, 1) : 1;

@@ -45,7 +45,7 @@ const E = (() => {
           vals:{tc:g('tcVal'),vff:g('vffVal'),cap:g('capVal'),rain:g('rainVal'),temp:g('tempVal'),trig:g('trigVal'),z:g('zVal'),n:g('nVal')},
           ro:{evap:g('roEvap'),drain:g('roDrain'),irr:g('roIrr'),yield:g('roYield'),transp:g('roTransp'),et:g('roET'),nl:g('roNL'),ie:g('roIE'),rain:g('roRain'),baseIrr:g('roBaseIrr')},
           year:(document.getElementById('dssYear')||{}).value,date:isoDate(dateOfK(fclock.kd())),dateLbl:fmtDate(dateOfK(fclock.kd())),
-          sec:window.__SEC||{}};
+          sec:window.__SEC||{},wx:(typeof wxStatus==='function'?wxStatus():{src:'record'})};
         return o;})()`);
     },
     poll(force) {
@@ -72,7 +72,7 @@ const E = (() => {
     day() {
       return api.json(`(function(){var sim=seasonSim(true),rows=dssRows(sim),adv=dssAdvice(sim,rows),k=fclock.kd(),r0=rows[0],nx=rows.slice(1),yt=yearTable(sim)[yearOf(k)]||{};
         return{date:fmtDate(dateOfK(k)),like:1980+yearOf(k),mode:dss.mode,N:dss.ahead,head:adv.head,text:adv.text,tone:adv.tone,crop:cropNameAt(sim,k),rd:sim.rd[k],f:r0.f,fT:sim.fTrigRaw,
-        rain:r0.rain,evap:r0.evap,irr:r0.irr,tr:r0.tr,dr:r0.dr,next:{rain:sumKey(nx,'rain'),irr:sumKey(nx,'irr'),evap:sumKey(nx,'evap'),tr:sumKey(nx,'tr'),dr:sumKey(nx,'dr')},year:yt}})()`);
+        rain:r0.rain,evap:r0.evap,irr:r0.irr,tr:r0.tr,dr:r0.dr,fc:(window.WXD&&WXD.on&&WXD.src==='online'&&WXD.fcStart!=null&&Math.abs(Date.UTC(dateOfK(k).getUTCFullYear(),dateOfK(k).getUTCMonth(),dateOfK(k).getUTCDate())-WXD.fcStart)<17*864e5)?1:0,next:{rain:sumKey(nx,'rain'),irr:sumKey(nx,'irr'),evap:sumKey(nx,'evap'),tr:sumKey(nx,'tr'),dr:sumKey(nx,'dr')},year:yt}})()`);
     },
     season() {
       return api.json(`(function(){var r=seasonSim(true);var f=function(a){return a?Array.prototype.slice.call(a):[]};
@@ -96,7 +96,7 @@ const E = (() => {
               // visit the three design scenes once so their section headings become layer sub-nodes
               const keep = w.eval('currentScene.id'), sw = id => { try { w.eval("switchScene(SCENES.find(function(s){return s.id==='" + id + "'}))"); } catch (e) {} };
               const seq = ['sid', 'drip', 'spr', keep]; let i = 0;
-              (function step() { sw(seq[i]); i++; if (i < seq.length) setTimeout(step, 420); else setTimeout(() => { const t = new Date(), p = n => String(n).padStart(2, '0'); api.setDate(t.getFullYear() + '-' + p(t.getMonth() + 1) + '-' + p(t.getDate())); api.ev('dssHold()'); api.poll(true); res(true); }, 300); })();
+              (function step() { sw(seq[i]); i++; if (i < seq.length) setTimeout(step, 140); else setTimeout(() => { const t = new Date(), p = n => String(n).padStart(2, '0'); api.setDate(t.getFullYear() + '-' + p(t.getMonth() + 1) + '-' + p(t.getDate())); api.ev('dssHold()'); api.poll(true); res(true); }, 300); })();
             } else if (Date.now() - t0 > 40000) { clearInterval(iv); res(false); }
           } catch (e) { /* not loaded yet */ }
         }, 150);

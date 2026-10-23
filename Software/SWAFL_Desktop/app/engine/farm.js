@@ -87,7 +87,7 @@
     const rain = sim.rain[kd] || 0, meth = METHODS.find(q => q.k === state.method) || METHODS[0];
     // ---- title and controls
     T('Virtual farm: irrigation from the water source to the plants', 16, 24, { s: 16, b: true });
-    T(DATA.soil_labels[soil] + ' · ' + (CROPS[state.crop] || {}).label + ' · ' + dateStr(kd) + ' ' + (1980 + yearOf(kd)) + ' · the valve follows the schedule predicted by the daily model', 16, 42, { s: 10.5, c: MUTE });
+    T(DATA.soil_labels[soil] + ' · ' + (CROPS[state.crop] || {}).label + ' · ' + fmtDate(dateOfK(kd)) + ' · the valve follows the schedule predicted by the daily model', 16, 42, { s: 10.5, c: MUTE });
     let bx = 16, by = 52;
     const btn = (txt, on, fn, tip, col) => { ctx.font = 'bold 10.5px sans-serif'; const w = ctx.measureText(txt).width + 20; if (bx + w > W - 12) { bx = 16; by += 30; } const g = ctx.createLinearGradient(0, by, 0, by + 24); g.addColorStop(0, on ? (col || '#3B82D6') : '#FDFDFB'); g.addColorStop(1, on ? shade(col || '#3B82D6', -18) : '#E4E1D8'); ctx.fillStyle = g; ctx.fillRect(bx, by, w, 24); ctx.strokeStyle = on ? shade(col || '#3B82D6', -35) : '#9C978A'; ctx.lineWidth = 1; ctx.strokeRect(bx + 0.5, by + 0.5, w - 1, 23); T(txt, bx + w / 2, by + 16, { s: 10.5, b: true, a: 'center', c: on ? '#fff' : '#1B1F23' }); hot(bx, by, w, 24, fn, tip); bx += w + 5; };
     SYS.forEach(([k, l]) => btn(l, sys === k, () => setSys(k), 'run the farm with ' + l.toLowerCase()));
@@ -197,7 +197,7 @@
     ctx.fillStyle = 'rgba(255,255,250,0.96)'; ctx.fillRect(bxx, byy, bw2, bh2); ctx.strokeStyle = '#6A6A6A'; ctx.lineWidth = 1; ctx.strokeRect(bxx + 0.5, byy + 0.5, bw2 - 1, bh2 - 1);
     ctx.fillStyle = open ? '#2E7D32' : '#5A6270'; ctx.fillRect(bxx, byy, bw2, 18); T((surf ? 'GATE' : 'VALVE') + ' · ' + (open ? 'OPEN' : irrToday && phase >= 0.78 ? 'CLOSED (event done)' : 'CLOSED'), bxx + 8, byy + 13, { s: 10, b: true, c: '#fff' });
     T('Predicted irrigations (daily model)', bxx + 8, byy + 32, { s: 9.5, b: true });
-    sch.forEach((d, i) => T(dateStr(d) + ' ' + (1980 + yearOf(d)) + '   ' + fmt(sim.irr[d]) + ' mm' + (D.hours ? '   ' + fmt(D.hours * sim.irr[d] / Math.max(1, sim.dose), 1) + ' h open' : '') + (d === kd ? '   ← today' : ''), bxx + 8, byy + 48 + i * 13, { s: 9.5, c: d === kd ? '#1E7A2E' : INK }));
+    sch.forEach((d, i) => T(fmtDate(dateOfK(d)) + '   ' + fmt(sim.irr[d]) + ' mm' + (D.hours ? '   ' + fmt(D.hours * sim.irr[d] / Math.max(1, sim.dose), 1) + ' h open' : '') + (d === kd ? '   ← today' : ''), bxx + 8, byy + 48 + i * 13, { s: 9.5, c: d === kd ? '#1E7A2E' : INK }));
     if (!sch.length) T('no more irrigation in this record', bxx + 8, byy + 48, { s: 9.5, c: MUTE });
     hot(bxx, byy, bw2, bh2, () => { if (sch.length) { fclock.day = sch[0] + 0.001; fclock.pause = 0; fclock.mem = []; } }, 'jump to the next irrigation');
     // ---- cross-section through the field: plants, roots, the wetting of the soil and the losses
@@ -240,8 +240,8 @@
     const parts = [['stored in the root zone', D.Ea, '#2E9E4F'], ['deep percolation', D.dp, '#1B4F9C'], ['surface runoff', D.ro, '#7A5AC9'], ['evaporation and drift', D.ev, '#E8912D']].filter(p => p[1] > 0.0005), tot = parts.reduce((a, p) => a + p[1], 0) || 1;
     let xx2 = fx0 + 12; const bwid = fw - 24; parts.forEach(p => { const w = bwid * p[1] / tot; ctx.fillStyle = p[2]; ctx.fillRect(xx2, y + 34, w, 26); xx2 += w; });
     parts.forEach((p, i) => { T(p[0] + ': ' + fmt(100 * p[1] / tot) + ' %  (' + fmt(gross * p[1] / tot, 1) + ' mm)', fx0 + 26, y + 82 + i * 18, { s: 10 }); ctx.fillStyle = p[2]; ctx.fillRect(fx0 + 12, y + 73 + i * 18, 9, 9); });
-    T('Gross depth ' + fmt(gross, 1) + ' mm on ' + dateStr(nd2) + (D.hours ? ' · open ' + fmt(D.hours * gross / Math.max(1, sim.dose), 1) + ' h' : ''), fx0 + 12, y + ch - 46, { s: 10, b: true });
-    T('Shares from the ' + D.label + (D.CU ? ' (uniformity ' + fmt(100 * D.CU) + ' %)' : '') + '; change the design there.', fx0 + 12, y + ch - 28, { s: 9, c: MUTE });
+    sidWrap('Gross depth ' + fmt(gross, 1) + ' mm on ' + fmtDate(dateOfK(nd2)) + (D.hours ? ' · open ' + fmt(D.hours * gross / Math.max(1, sim.dose), 1) + ' h' : ''), fx0 + 12, y + ch - 58, fw - 24, { s: 10, b: true }, 13);
+    sidWrap('Shares from the ' + D.label + (D.CU ? ' (uniformity ' + fmt(100 * D.CU) + ' %)' : '') + '; change the design there.', fx0 + 12, y + ch - 30, fw - 24, { s: 9, c: MUTE }, 11);
     if (surf && D.Ea < 0.4) T('Low efficiency: most water runs off the field end. Shorten the cut-off or reduce the inflow in S2.', fx0 + 12, y + ch - 12, { s: 9, b: true, c: '#C62828' });
     y += ch + 10;
     if (FM.rec && t - FM.recT > 20.2) stopVideo();

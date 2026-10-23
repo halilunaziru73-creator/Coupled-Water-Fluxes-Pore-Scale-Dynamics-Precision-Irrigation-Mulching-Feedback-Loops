@@ -9,8 +9,12 @@ const Props = (() => {
     return [
       { id: 'p-scn', name: 'Scenario', rows: [
         { t: 'select', label: 'Ready-made case', id: 'preset', opts: [['', 'Choose a case...']].concat(M.presets.filter(p => p[0] !== '')), on: v => { if (v !== '') Act.preset(v); } },
-        { t: 'select', label: 'Weather year', id: 'year', opts: M.years, get: s => s.year, on: v => E.setYear(v) },
-        { t: 'date', label: 'Date in the season', id: 'date', get: s => s.date, on: v => E.setDate(v) } ] },
+        { t: 'select', label: 'Year', id: 'calyear', opts: Array.from({ length: 121 }, (_, i) => [String(1980 + i), String(1980 + i)]), get: s => (s.date || '').slice(0, 4), on: v => { const d = (E.snap && E.snap.date) || (v + '-06-01'); let md = d.slice(4); if (md === '-02-29' && +v % 4) md = '-02-28'; if (+v >= 2000 && E.snap && !['typ', 'dry', 'wet'].includes(E.snap.year)) { E.ev("dss.mode='typ';var _ys=document.getElementById('dssYear');if(_ys)_ys.value='typ'"); } E.setDate(v + md); } },
+        { t: 'select', label: 'Weather of years after 1999', id: 'year', opts: [['typ', 'Typical year'], ['dry', 'Dry year'], ['wet', 'Wet year']], get: s => (['typ', 'dry', 'wet'].includes(s.year) ? s.year : 'typ'), on: v => E.setYear(v) },
+        { t: 'note', text: 'Years 1980 to 1999 use the recorded weather of that year; later years use the weather pattern chosen above, or your imported weather (File menu).' },
+        { t: 'date', label: 'Date in the season', id: 'date', get: s => s.date, on: v => E.setDate(v) },
+        { t: 'select', label: 'Weather source', id: 'wxsrc', opts: [['record', 'Recorded weather of the simulations'], ['file', 'Imported weather file'], ['online', 'Online weather of a location']], get: s => (s.wx && s.wx.src) || 'record', dis: (s, v) => v !== 'record' && !(s.wx && s.wx[v]), on: v => { if (v === 'record' || (E.snap.wx && E.snap.wx[v])) WxUI.use(v); else if (v === 'file') WxUI.importFile(); else WxUI.online(); } },
+        { t: 'btns', btns: [['Import weather...', () => WxUI.importFile()], ['Online weather...', () => WxUI.online()]] } ] },
       { id: 'p-soil', name: 'Soil and field', rows: [
         { t: 'select', label: 'Soil', id: 'soil', opts: M.soils.map(k => [k, M.soilLabels[k] || k]), get: s => s.state.soil, on: v => E.set({ soil: v }) },
         { t: 'seg', label: 'Tillage', id: 'till', opts: Object.entries(M.tills), get: s => s.state.till, on: v => E.set({ till: v }) },
@@ -60,6 +64,7 @@ const Props = (() => {
     const map = host.__map;
     host.querySelectorAll('[data-r]').forEach(el => {
       const r = map[el.dataset.r]; if (!r) return;
+      if (el.matches('select') && r.dis) [...el.options].forEach(o => { o.disabled = !!r.dis(s, o.value); });
       if (el.matches('select') && r.get) { const v = r.get(s); if (v !== undefined && document.activeElement !== el && el.value !== String(v)) el.value = v; }
       else if (el.matches('input[type=date]') && r.get) { const v = r.get(s); if (v && document.activeElement !== el && el.value !== v) el.value = v; }
       else if (el.classList.contains('seg')) el.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.v === r.get(s)));

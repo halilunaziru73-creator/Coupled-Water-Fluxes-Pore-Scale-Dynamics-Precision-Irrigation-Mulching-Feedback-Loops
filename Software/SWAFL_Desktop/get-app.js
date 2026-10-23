@@ -6,6 +6,10 @@ function run(cmd) { console.log('\n> ' + cmd + '\n'); execSync(cmd, { stdio: 'in
 
 try {
   if (process.platform !== 'win32') console.log('Note: this builds for Windows; on other systems use "npm start".');
+  const ver = require('./package.json').version;
+  console.log('Building SWAFL ' + ver);
+  // remove the previous build so an old SWAFL.exe can never be copied by mistake
+  try { fs.rmSync(path.join(__dirname, 'dist'), { recursive: true, force: true }); } catch (e) {}
   if (!fs.existsSync(path.join(__dirname, 'node_modules', 'electron-builder'))) run('npm install');
   run('npm run dist');
 } catch (e) { console.error('\nBuild failed. Read the message above (see README: Troubleshooting).'); process.exit(1); }
@@ -20,4 +24,4 @@ const target = path.join(desktop, 'SWAFL.exe');
 try { fs.copyFileSync(exe, target); console.log('\nSWAFL.exe copied to your Desktop: ' + target); spawn(target, [], { detached: true, stdio: 'ignore' }).unref(); }
 catch (e) { console.log('\nCould not copy to the Desktop. Your app is here: ' + exe); spawn(exe, [], { detached: true, stdio: 'ignore' }).unref(); }
 if (fs.existsSync(setup)) console.log('Installer (Start menu + shortcut): ' + setup);
-console.log('\nDone. From now on just double-click SWAFL on your Desktop - no code needed.');
+console.log('\nDone: SWAFL ' + require('./package.json').version + '. From now on just double-click SWAFL on your Desktop - no code needed.');

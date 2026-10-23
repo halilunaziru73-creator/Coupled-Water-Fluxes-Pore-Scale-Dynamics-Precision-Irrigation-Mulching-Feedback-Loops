@@ -1,10 +1,34 @@
-# Virtual farm, crops and year-by-year layers (release 1.1)
+# Release 1.1: design runs, weather, virtual farm, crops and seasonal records
 
 Release 1.1 adds four groups of layers and three workbench functions. Every new layer follows the controls of the Properties panel (soil, tillage, crop, mulch, rainfall, warming, irrigation method, trigger, sensor depth and nitrogen) and is redrawn when any of them changes.
 
-## F1 Virtual farm simulation
+## The layers
 
-The virtual farm (Layers → Irrigation design → *Virtual farm simulation*) draws a field in perspective with the water moving from the source to the plants. Six layouts are available:
+The Layers panel lists, in order: **Irrigation design** (surface, drip, sprinklers, each with its *Virtual farm simulation*), **Irrigation control**, **Mulch and evaporation**, **Soil structure and tillage**, **Field water balance**, **Seasonal records: Daisy data** (Y1, W1, N4), **Crops** (C1) and **Feedback loops**. The working date and the year are set only in Properties, Scenario (every year from 1980 to 2100); no year strip or date slider sits under the drawings.
+
+## Running an irrigation design
+
+Opening a design layer does not start it. Set the inputs at the top of the layer, then press **Run simulation** (in the drawing, on the bar under it, or on the dashboard Design tab). Until the run, and after any change of an input or of a Properties control, the results are hidden behind a panel that says why, so nothing moves while the inputs are being set.
+
+**Inputs.** Every number is a value box. A click opens a picker with the exact value, its unit (for example m, km or ft for lengths; L/s, m³/h or L/min for flows; ha, m² or acre for areas; kPa, bar, m of water or psi for pressure) and a drop-down of values across the allowed range. The allowed range is shown; a value outside it is set to the nearest limit. Choices such as the system, intake, cutoff, emitter or sprinkler type are buttons; the crop is a drop-down of all crops.
+
+**Most efficient inputs.** *Find the most efficient inputs* searches the inputs that matter most (surface: inflow, cutoff rule and cutback; drip: emitter flow, spacing and interval; sprinklers: nozzle, pressure and spacing) for the highest application efficiency with the root zone at least 95 % refilled, shows the combination on the Design tab and applies it with *Apply these inputs and run*.
+
+**Dashboard.** The Design tab gives the efficiencies, uniformity, times and volumes of the last run, the best combination and a warning when a surface stream cannot reach the end of the field in a practical time. The Charts tab of a design layer draws the hydrograph (inflow, infiltration and runoff), the advance, cut-off and recession times along the field, the infiltrated depth against the required depth, the times of the irrigation (tL, ts, tco, tr) and where the water goes; for drip the head and emitter flow along the lateral; for sprinklers the soil intake rate against the application rate and the sorted depths caught. Every dashboard block has a header: click it to hide or show the block.
+
+**Field sketch.** View or Tools, *Field sketch to design*: click the corners of the field on the grid (choose the size of a grid square), mark the water source, give the slope and the system. The area, run length, width and mainline length become the inputs of the design layer, which opens ready to run. *Compare the irrigation systems on this field* lists the three systems side by side.
+
+## Weather data
+
+File (or Tools, or Properties, Scenario) → **Import weather data** reads a daily weather file: CSV or TXT (comma, semicolon, tab or space separated), Excel (XLSX, XLS, ODS), a Daisy weather file (DWF) or a Daisy daily log (DLF). A Daisy setup file (DAI) names its weather file: import that file. The columns are found by their names: a date (or year, month and day, or year and day of year), daily rainfall (mm, or inches when the header says so) and, if present, daily reference evapotranspiration. Without it, reference ET is computed from the daily maximum and minimum temperature (Hargreaves, at the latitude given in the dialog) or from mean temperature and global radiation (Makkink). Hourly files are summed to days.
+
+**Online weather for a location** finds a place by name (or takes its latitude and longitude) and gets its measured daily weather for the last twenty years and the forecast for the next sixteen days. If the service cannot be reached, the current weather stays in use and the Messages tab says so.
+
+The weather is put on the twenty-year grid of the program (the last twenty complete years; fewer years are repeated in turn, and missing days of rain are filled from the same day of another year). Then the daily model takes the rain of each day and the evaporative demand of each day from its reference ET; the crop water balance takes the same daily rain and reference ET; and the annual model takes the rainfall and the demand of the new climate through its rainfall and warming controls, at the nearest simulated step (the report of the import says when the climate lies outside the simulated range). Properties, Scenario, **Weather source** switches between the recorded weather of the simulations, the imported file and the online weather; the choices of a file or online weather become active only after the data are loaded. The first time the File menu opens, the program offers to bring in weather data.
+
+## Virtual farm simulation
+
+The virtual farm (under each design layer, *Virtual farm simulation*, or the *Virtual farm simulation* button on the view bar of every layer) draws a field in perspective with the water moving from the source to the plants. Six layouts are available:
 
 | Layout | Head works drawn | Water on the field |
 |:--|:--|:--|
@@ -46,7 +70,7 @@ The layer **C1 Crop water requirement** shows the crop's tiles (water need, wate
 
 The 20-year sensor record (V1) and the season profiles (V2) start from your Daisy daily output, which exists for the coarse loam and the coarse sand at the standard settings (conventional tillage, bare soil, surface irrigation, trigger −300 cm at 20 cm, cereal, unscaled rain, no warming, full nitrogen). For any other soil or setting the daily model is run twice, at your settings and at the standard settings, and the difference in depletion of available water at the sensor depth is added day by day to the Daisy record, which is then converted to suction with the van Genuchten curve of your soil. The real weather sequence of the record is kept, and every control moves the traces.
 
-## Year by year: Y1, W1 and N4
+## Seasonal records: Daisy data (Y1, W1, N4)
 
 These layers use the per-year output of 1 003 Daisy runs (experiments E00, E02, E03, E04, E05 and E07, 20 years each), extracted from the complete simulation output by `tools/make_peryear.py`. The run matching the present settings is selected automatically (mulch, method, trigger, sensor depth, tillage and consolidation rate).
 
@@ -64,7 +88,8 @@ In your Daisy runs (E5) the consolidation rate of the tilled layer changes the r
 ## Workbench functions
 
 * **F1** opens this manual directly (Help → *Manual (PDF)*, or the book button on the toolbar).
-* **Save full report as PDF** (File menu, *Report* toolbar button, `Ctrl+Shift+P`) writes the complete report of all layers to a PDF file at a place you choose.
+* **Save full report as PDF** (File menu, *Report* toolbar button, `Ctrl+Shift+P`) builds the complete report of every layer end to end (inputs, results, key numbers and pictures of each layer) and asks where to save it. *Report of chosen layers* lets you pick the parts.
+* **Speed**: every frame paints only the part of the sheet on the screen; pictures, prints and reports always paint the whole sheet.
 * **Long layers** are fitted to their content: the drawing grows to show every panel and the centre window scrolls to the end of the layer.
 
 ## Correction of the surface layer (release 1.1.0)
