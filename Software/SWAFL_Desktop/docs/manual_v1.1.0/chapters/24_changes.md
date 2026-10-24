@@ -10,6 +10,10 @@
 * **Properties**: the *Weather of years after 1999* selector and the explanatory notes under it, under the consolidation rate and under the design shortcuts have gone; their content is in this manual. *Weather source* chooses the built-in record, an imported file or the online weather.
 * The name of the simulation model is no longer shown anywhere in the program; badges that said so now say *Simulated*.
 * Labels are drawn after the pictures and moved apart when they would overlap; text near the edge of a drawing is moved inwards instead of being cut; long drawings take their full height at once.
+* On screens narrower than 1500 pixels the docks give way so that the drawing keeps its size; the drawing always fits the window, nothing is cut off on the right.
+* The selected layer is marked in light blue; the Play/Pause button is small.
+* The first block of the Results tab gives the key numbers of the open layer (Chapter 14).
+* Layers that play by changing a setting (each soil in turn, rainfall from dry to wet) wait for **Play** in the program, so Properties and the dashboard keep your values.
 
 ## The designs
 
@@ -17,7 +21,10 @@
 * **Nothing runs while you type**: results appear after **Run simulation** and are withdrawn when an input or a setting changes (Section 18.1).
 * **Find the most efficient inputs**, with your present inputs competing (Section 18.4); the surface search also tries shorter runs.
 * **Field size** as an area or as a length and a width, for drip and sprinklers (Section 18.3).
-* **Field sketch** and **Compare the irrigation systems** (Sections 18.5–18.6).
+* The **field sketch** is a guided drawing: corners you drag, side lengths you type, the source and the inlet, the pipe layout drawn as you choose, and seven steps of questions (field, water, crop, soil, system, running, summary) (Section 18.5). **Compare the irrigation systems** (Section 18.7).
+* Each design ends with a **film of the soil water** in the days ahead: the root zone drying towards the trigger and, without irrigation, the wilting point (Section 18.6). The schedule takes its depths and times from the design.
+* Values may be typed up to the **physical limits** of the system, beyond the usual range of the list (Section 18.2).
+* A surface set lasts at most 48 hours; when the inflow is too small for the soil, the design and the farm say so (Chapter 11).
 * The surface layer iterates the advance exponent in the steady-intake term (Chapter 11); the slow-advance cases of the textbook example are now within 2 %.
 
 ## The data and the models
