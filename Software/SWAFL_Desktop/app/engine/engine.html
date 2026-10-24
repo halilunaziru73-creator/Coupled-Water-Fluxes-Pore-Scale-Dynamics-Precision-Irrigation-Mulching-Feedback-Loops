@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="icon" type="image/png" href="../assets/logo-64.png">
 <script src="crops.js"></script>
 <meta charset="UTF-8">
 <meta name="description" content="Interactive soil, water and atmosphere explorer built on 10,190 Daisy simulations: irrigation trigger law, mulch water balance, and evaporation-drainage regimes.">
@@ -1452,12 +1453,12 @@ function drawSPR() {
   const axr = sidAxes(70, y + 38, 250, 130, 0, tmax, 0, Math.ceil(top / 5) * 5, 'time (min)', 'rate (mm/h)', 5, 4);
   ctx.strokeStyle = IRC.ac; ctx.lineWidth = 2; ctx.beginPath(); for (let i = 0; i <= 80; i++) { const t = Math.max(0.5, tmax * i / 80), px = axr.sx(t), pyy = axr.sy(Math.min(ratef(t), axr.y1)); i ? ctx.lineTo(px, pyy) : ctx.moveTo(px, pyy); } ctx.stroke();
   ctx.fillStyle = 'rgba(184,116,58,0.35)'; ctx.beginPath(); let started = false; for (let i = 0; i <= 80; i++) { const t = Math.min(T0, tmax * i / 80 * (T0 / tmax)) ; const rt = Math.min(ratef(Math.max(0.5, t)), axr.y1); if (aMean > rt) { const px = axr.sx(t); if (!started) { ctx.moveTo(px, axr.sy(aMean)); started = true; } ctx.lineTo(px, axr.sy(rt)); } } if (started) { ctx.lineTo(axr.sx(T0), axr.sy(aMean)); ctx.closePath(); ctx.fill(); }
-  ctx.strokeStyle = IRC.wd; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(axr.sx(0), axr.sy(aMean)); ctx.lineTo(axr.sx(T0), axr.sy(aMean)); ctx.stroke(); T('applied ' + aMean.toFixed(1) + ' mm/h', axr.x + 6, axr.sy(aMean) - 4, { s: 8.8, b: true, c: '#2C6E96' }); T('soil intake', axr.x + axr.w - 4, axr.sy(Math.min(ratef(tmax * 0.7), axr.y1)) - 6, { s: 8.8, b: true, a: 'right', c: IRC.ac });
+  ctx.strokeStyle = IRC.wd; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(axr.sx(0), axr.sy(aMean)); ctx.lineTo(axr.sx(T0), axr.sy(aMean)); ctx.stroke(); T('reaching the soil ' + aMean.toFixed(1) + ' mm/h', axr.sx(T0) - 4, axr.sy(aMean) + 12, { s: 8.8, b: true, a: 'right', c: '#2C6E96' }); T('soil intake', axr.x + axr.w - 4, axr.sy(Math.min(ratef(tmax * 0.7), axr.y1)) - 6, { s: 8.8, b: true, a: 'right', c: IRC.ac });
   ctx.strokeStyle = '#1B1F23'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(axr.sx(Math.min(tau, tmax)), axr.y); ctx.lineTo(axr.sx(Math.min(tau, tmax)), axr.y + axr.h); ctx.stroke();
   sidHover(axr, v => [irF(v) + ' min', 'soil takes ' + ratef(v).toFixed(1) + ' mm/h', 'applied ' + aMean.toFixed(1) + ' mm/h']);
-  const tp = aMean > 0 ? Math.pow(aMean / 60 / KK, 1 / (AA - 1)) : 0, rx = 340, rl = [['Mean application rate', R.AR.toFixed(1) + ' mm/h'], ['Soil intake at 30 min', ratef(30).toFixed(1) + ' mm/h'], ['Ponding starts after', tp < T0 ? irF(tp) + ' min' : 'not reached'], ['Runoff', irF(R.ro * 100, 1) + ' % of the water applied'], ['Surface storage', R.Sd.toFixed(1) + ' mm (slope ' + o.S.toFixed(1) + ' %)'], ['Pattern uniformity CU', irF(R.CU * 100) + ' %']];
-  rl.forEach((q, i) => { T(q[0], rx, y + 52 + i * 22, { s: 9, c: '#374151' }); T(q[1], W - 16, y + 52 + i * 22, { s: 9.5, b: true, a: 'right', c: i === 3 && R.ro > 0.05 ? IRC.ro : IRC.ac }); });
-  y += 200;
+  const tp = aMean > 0 ? Math.pow(aMean / 60 / KK, 1 / (AA - 1)) : 0, rx = 340, rl = [['Application rate at the nozzles', R.AR.toFixed(1) + ' mm/h'], ['Reaching the soil (after drift)', aMean.toFixed(1) + ' mm/h'], ['Soil intake at 30 min', ratef(30).toFixed(1) + ' mm/h'], ['Ponding starts after', tp < T0 ? irF(tp) + ' min' : 'not reached'], ['Runoff', irF(R.ro * 100, 1) + ' % of the water applied'], ['Surface storage', R.Sd.toFixed(1) + ' mm (slope ' + o.S.toFixed(1) + ' %)'], ['Pattern uniformity CU', irF(R.CU * 100) + ' %']];
+  rl.forEach((q, i) => { T(q[0], rx, y + 48 + i * 20, { s: 9, c: '#374151' }); T(q[1], W - 16, y + 48 + i * 20, { s: 9.5, b: true, a: 'right', c: i === 4 && R.ro > 0.05 ? IRC.ro : IRC.ac }); });
+  y += 216;
   // ---- tiles ----
   SPY.result = y; sidHead('Result for this design', y, ''); const tw = (W - 28 - 20) / 3, ty = y + 14;
   irTile(14, ty, tw, 'Application efficiency Ea', irF(R.Ea * 100, 1) + ' %', R.Ea >= 0.85 ? '#14532D' : R.Ea >= 0.65 ? '#8A5A00' : '#B91C1C', R.Ea >= 0.85 ? 'meets 85 %' : '');
@@ -1577,8 +1578,8 @@ function irHeadUnit(G, y) {
 function irPressure(G, y, o) {
   const hs = [['Pump', G.TDH], ['Lift', G.TDH - G.lift], ['Head unit', G.TDH - G.lift - G.hHead], ['Mainline end', G.TDH - G.lift - G.hHead - G.hfM], ['Submain end', G.H0], ['Lateral inlet', G.H0], ['Lateral end', G.H0 - G.hfLat]]; hs.splice(1, 1); hs[hs.length - 3][1] = G.TDH - G.lift - G.hHead - G.hfM - G.hfSm;
   const ax = sidAxes(70, y + 4, 330, 110, 0, hs.length - 1, 0, Math.ceil(G.TDH * 1.1 / 10) * 10, '', 'head (m)', hs.length - 1, 4);
-  ctx.strokeStyle = IRC.dp; ctx.lineWidth = 2.2; ctx.beginPath(); hs.forEach((q, i) => { const px = ax.sx(i), py = ax.sy(q[1]); i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); }); ctx.stroke(); hs.forEach((q, i) => { ctx.fillStyle = IRC.dp; ctx.beginPath(); ctx.arc(ax.sx(i), ax.sy(q[1]), 3, 0, 6.2832); ctx.fill(); T(q[0], ax.sx(i), ax.y + ax.h + 11, { s: 7.6, a: 'center', c: MUTE }); T(q[1].toFixed(1), ax.sx(i), ax.sy(q[1]) - 6, { s: 8, b: true, a: 'center', c: IRC.dp }); });
-  ctx.fillStyle = PAPER; ctx.fillRect(ax.x - 4, ax.y + ax.h + 2, ax.w + 8, 12); hs.forEach((q, i) => T(q[0], ax.sx(i), ax.y + ax.h + 11, { s: 7.6, a: 'center', c: MUTE })); return ax;
+  ctx.strokeStyle = IRC.dp; ctx.lineWidth = 2.2; ctx.beginPath(); hs.forEach((q, i) => { const px = ax.sx(i), py = ax.sy(q[1]); i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); }); ctx.stroke(); hs.forEach((q, i) => { ctx.fillStyle = IRC.dp; ctx.beginPath(); ctx.arc(ax.sx(i), ax.sy(q[1]), 3, 0, 6.2832); ctx.fill(); const py = ax.sy(q[1]), top = py - 6 < ax.y + 12; T(q[1].toFixed(1), ax.sx(i) + (i === 0 ? 6 : i === hs.length - 1 ? -6 : 0), top ? py + 14 : py - 6, { s: 8, b: true, a: i === 0 ? 'left' : i === hs.length - 1 ? 'right' : 'center', c: IRC.dp }); });
+  ctx.fillStyle = PAPER; ctx.fillRect(ax.x - 40, ax.y + ax.h + 2, ax.w + 80, 12); hs.forEach((q, i) => T(q[0], ax.sx(i), ax.y + ax.h + 11, { s: 7.6, a: i === 0 ? 'left' : i === hs.length - 1 ? 'right' : 'center', c: MUTE })); return ax;
 }
 function irSchedule(G, y) {
   const cols = [['Pipe', 60], ['Ø mm', 150], ['Length m', 232], ['Flow L/s', 318], ['Speed m/s', 400], ['Head loss m', 490]], rows = [['Lateral', G.Dlat, G.LL, G.Qlat, irVel(G.Qlat, G.Dlat), G.hfLat], ['Submain', G.Dsm, G.Lsm, G.Qz, irVel(G.Qz, G.Dsm), G.hfSm], ['Mainline', G.Dm, G.Lm, G.Qz, irVel(G.Qz, G.Dm), G.hfM]];
@@ -1918,7 +1919,7 @@ function spLive(y) {
 function spInputs(C, R, o, ST, T0, y) {
   const cx1 = 16, cx2 = 322, cw = 282, st = 31, srow = (a, b) => { };
   SPY.design = y - 10;
-  T('Inputs, in the order you would work them. Every slider and chip below changes the design and every picture on this page.', 16, y + 4, { s: 8.8, i: true, c: MUTE }); y += 14;
+  T('Inputs, in the order you would work them. Click a value box to type the exact value or pick from the list, then press Run simulation.', 16, y + 4, { s: 8.8, i: true, c: MUTE }); y += 14;
   // ---- A. site ----
   y = spInHead(y, 'A', 'Your site: crop, soil, slope and wind', 'sets what the soil can take');
   y = irCtl(y) + 2;
@@ -2113,7 +2114,7 @@ function spInputs(C, R, o, ST, T0, y) {
     const now = performance.now(), dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016); if (now - last < 4 && last) return C0; last = now;
     let c; try { c = ctxState(); } catch (e) { return C0; } C0 = c;
     const key = [c.o.type, c.o.P, c.o.d, Math.round(c.o.alpha), c.o.u, state.soil].join('|'); if (key !== S.key || !S.dep) { S.key = key; reset(c); }
-    if (S.run) { let rem = dt; while (rem > 0) { const h = Math.min(rem, 1 / 60); stepSim(c, h); rem -= h; } stepClose(c, { x: 0, y: 0, w: 300, h: 190 }, dt); }
+    if (S.run && (!window.DESIGN_RUN || DESIGN_RUN.spr.on || window.__REPORTING)) { let rem = dt; while (rem > 0) { const h = Math.min(rem, 1 / 60); stepSim(c, h); rem -= h; } stepClose(c, { x: 0, y: 0, w: 300, h: 190 }, dt); }
     if (frame++ % 3 === 0 || !S.run) paintTex(c);
     return c;
   }
@@ -2441,7 +2442,7 @@ function refresh() {
       : dT === 0 ? 'Baseline climate.' : dT < 1.5 ? 'Warmer: higher demand triggers more irrigation and keeps the surface wetter, so evaporation rises.'
       : 'Much warmer: faster canopy growth increasingly out-competes bare soil for the same water.';
   const trigNote = document.getElementById('trigNote');
-  if (trigNote) trigNote.textContent = currentScene && currentScene.id === 'n1' ? 'In N1 every soil has its own trigger (its suction at the critical depletion); the slider and the gauge change it for the selected soil only.' : trig === -300 ? 'Standard trigger: irrigate when the sensor reads beyond this suction.'
+  if (trigNote) trigNote.textContent = currentScene && currentScene.id === 'n1' ? 'In N1 every soil has its own trigger (its suction at the critical depletion); the trigger setting and the gauge change it for the selected soil only.' : trig === -300 ? 'Standard trigger: irrigate when the sensor reads beyond this suction.'
       : trig > -300 ? 'Wetter trigger: irrigation starts earlier and more often.' : 'Drier trigger: irrigation waits for more stress.';
   const rows = (DATA.e5[state.soil] || []).filter(r => r.till === state.till);
   const dv = rows.map(r => r.drainage), sens = dv.length ? Math.max(...dv) - Math.min(...dv) : 0;
@@ -2450,7 +2451,7 @@ function refresh() {
     const sandFrac = DATA.texture[state.soil].sand / 100;
     const reason = state.till === 'notill' ? 'no-till leaves structure undisturbed' : sandFrac > 0.55 ? 'coarse pores already saturated-flow-dominated' : 'this soil equilibrates fast regardless of rate';
     tcNote.textContent = sens < 0.3 ? 'No change in drainage here: ' + reason + '.'
-      : 'Drainage ranges from ' + Math.min(...dv).toFixed(1) + ' to ' + Math.max(...dv).toFixed(1) + ' mm/yr across this slider.';
+      : 'Drainage ranges from ' + Math.min(...dv).toFixed(1) + ' to ' + Math.max(...dv).toFixed(1) + ' mm/yr across this setting.';
   }
   const set = (id, t) => { const e = document.getElementById(id); if (e) e.textContent = t; };
   set('roEvap', current.evap.toFixed(1) + ' mm/yr'); set('roDrain', current.drain.toFixed(1) + ' mm/yr'); set('roIrr', current.irr.toFixed(0) + ' mm/yr');
@@ -2476,7 +2477,7 @@ if (new URLSearchParams(location.search).get('app')) {
   const wrapEl = () => canvas.closest('.canvaswrap') || canvas.parentElement;
   const phys = () => {
     SS = Math.max(1, Math.min(2, curS * (window.devicePixelRatio || 1))); if (lw * lh * SS * SS > 30e6) SS = Math.sqrt(30e6 / (lw * lh));
-    dW.set.call(canvas, Math.round(lw * SS)); dH.set.call(canvas, Math.round(lh * SS)); ctx.setTransform(SS, 0, 0, SS, 0, 0);
+    dW.set.call(canvas, Math.round(lw * SS)); dH.set.call(canvas, Math.round(lh * SS)); ctx.setTransform(SS, 0, 0, SS, 0, 0); window.__SS = SS;
   };
   const fit = () => {
     const w = wrapEl(); if (!w) return; const aw = w.clientWidth, ah = w.clientHeight; if (aw < 50 || ah < 50) return;
@@ -3381,7 +3382,7 @@ function drawV7() {
   const rs = v7Reason(me); let yq = TW(rs.data, 26, 520, 572, { s: 10.8, b: true }); yq = TW(rs.why, 26, yq, 572, { s: 10.8 });
   const vq = VFF_VALUES[state.vffIdx], rq = RAIN_VALUES[state.rainIdx], ca = model(vq, rq, { till: 'conv', tcIdx: 2 }), na = model(vq, rq, { till: 'notill', tcIdx: 2 });
   T('Under the current settings, conventional tillage against no-till also changes:', 26, 588, { s: 10.8, b: true });
-  T('irrigation ' + sgn(ca.irr - na.irr, 0, 'mm') + ', evaporation ' + sgn(ca.evap - na.evap, 0, 'mm') + ', yield ' + sgn((ca.yield - na.yield) * CROPS[state.crop].factor, 2, 'Mg/ha') + ', N leaching ' + sgn(ca.nl - na.nl, 1, 'kg/ha'), 26, 603, { s: 10.8 });
+  T('irrigation ' + sgn(ca.irr - na.irr, 0, 'mm') + ', evaporation ' + sgn(ca.evap - na.evap, 0, 'mm') + ', yield ' + sgn((ca.yield - na.yield) * CROPS[state.crop].factor, yD(), yU()) + ', N leaching ' + sgn(ca.nl - na.nl, 1, 'kg/ha'), 26, 603, { s: 10.8 });
   T('Tillage falls and consolidation rises with clay; soil texture sets the baseline both act on.', 26, 624, { s: 10.2, i: true, c: MUTE });
 }
 
@@ -3391,7 +3392,7 @@ function drawV7() {
 function drawN2() {
   paper(); const noMulchSet = VFF_VALUES[state.vffIdx] >= 0.95, vff = noMulchSet ? 0.5 : VFF_VALUES[state.vffIdx], rain = RAIN_VALUES[state.rainIdx];
   const S = RAIN_VALUES.map(r => { const b = model(1.0, r), c = model(vff, r); return { r, ev: b.evap - c.evap, ir: b.irr - c.irr, dr: c.drain - b.drain, tr: c.transp - b.transp }; });
-  T('Fate of the water saved by mulch', 16, 22, { s: 14, b: true }); T(DATA.soil_labels[state.soil] + ', mulch factor ' + vff.toFixed(1) + (noMulchSet ? ' (preview: lower the mulch slider to set your own)' : '') + ', capacity ' + CAP_VALUES[state.capIdx] + ' mm', 16, 38, { s: 10.5, c: MUTE });
+  T('Fate of the water saved by mulch', 16, 22, { s: 14, b: true }); T(DATA.soil_labels[state.soil] + ', mulch factor ' + vff.toFixed(1) + (noMulchSet ? ' (preview: lower the mulch strength in Properties to set your own)' : '') + ', capacity ' + CAP_VALUES[state.capIdx] + ' mm', 16, 38, { s: 10.5, c: MUTE });
   const all = S.flatMap(s => [s.ev, s.ir, s.dr, s.tr]), lo = Math.min(0, ...all) - 5, hi = Math.max(...all) + 8;
   const x0 = 70, x1 = 596, y0 = 74, y1 = 330, xm = r => x0 + (r - 0.5) / 0.9 * (x1 - x0), ym = v => y1 - (v - lo) / (hi - lo) * (y1 - y0);
   ctx.strokeStyle = INK; ctx.lineWidth = 1.2; ctx.strokeRect(x0, y0, x1 - x0, y1 - y0); ctx.strokeStyle = RULE; ctx.lineWidth = 1;
@@ -4316,7 +4317,7 @@ function drawV4() {
     ctx.save(); rrect(x + 3, y + 3, C.w - 6, 26, 4); ctx.clip(); ctx.fillStyle = shade(DATA.texture[state.soil].color, -22); ctx.fillRect(x, y, C.w, 40); if (c.k !== 'none') mulchLayer(x + 3, C.w - 6, y + 28, c.k === 'plastic' ? 3 : 14, c.k, 40 + i, c.k === 'plastic' ? [x + 41] : null); ctx.restore();
     T(c.label.replace('Black plastic film', 'Plastic film'), x + C.w / 2, y + 42, { s: 9.6, b: true, a: 'center' }); T(c.k === 'none' ? 'no layer' : c.vff.toFixed(1) + ' / ' + c.cap + ' mm', x + C.w / 2, y + 54, { s: 9, a: 'center', c: MUTE });
   });
-  T('Strength / water held: typical values assumed for each material; the sliders change them.', 14, 256, { s: 9.5, i: true, c: MUTE });
+  T('Strength / water held: typical values assumed for each material; Properties, Mulch changes them.', 14, 256, { s: 9.5, i: true, c: MUTE });
   const cats = [['Soil evaporation', 'evap', 'mm'], ['Transpiration', 'transp', 'mm'], ['Irrigation', 'irr', 'mm'], ['Drainage', 'drain', 'mm'], ['N leaching', 'nl', 'kg/ha']], target = cats.map(c => [bare[c[1]], cur[c[1]], strong[c[1]]]);
   if (!anim.v4) anim.v4 = target.map(r => r.map(() => 0)); anim.v4 = anim.v4.map((r, i) => r.map((v, j) => v + (target[i][j] - v) * 0.12));
   const gx0 = 30, gw = 112, by = 478, bh = 190, cols = ['#9AA3AE', '#4FAE5E', '#1E6B4A'];
@@ -4615,12 +4616,12 @@ function v5Effects() {
   const sR = step('rainIdx', dir('rainIdx')), kR = dir('rainIdx'), sT = step('tempIdx', dir('tempIdx')), kT = dir('tempIdx'), sV = step('vffIdx', -1), sTr = step('trigIdx', dir('trigIdx')), kTr = dir('trigIdx'), sN = step('nIdx', dir('nIdx')), kN = dir('nIdx'), sC = step('tcIdx', dir('tcIdx'));
   const dI = sTr.irr - m.irr, dd = sR.drain - m.drain, dn = sR.nl - m.nl, cf = CROPS[state.crop].factor;
   return { eff: [
-    'Temperature ' + (kT > 0 ? '+' : '-') + '0.5\u00b0C: yield ' + sgn((sT.yield - m.yield) * cf, 2, 'Mg/ha') + ', irrigation ' + sgn(sT.irr - m.irr, 0, 'mm'),
+    'Temperature ' + (kT > 0 ? '+' : '-') + '0.5\u00b0C: yield ' + sgn((sT.yield - m.yield) * cf, yD(), yU()) + ', irrigation ' + sgn(sT.irr - m.irr, 0, 'mm'),
     'Rain ' + (kR > 0 ? '+' : '-') + '0.1: drainage ' + sgn(sR.drain - m.drain, 0, 'mm') + ', irrigation ' + sgn(sR.irr - m.irr, 0, 'mm'),
     'Stronger mulch: evaporation ' + sgn(sV.evap - m.evap, 0, 'mm') + ', irrigation ' + sgn(sV.irr - m.irr, 0, 'mm'),
-    'Trigger one step ' + (kTr > 0 ? 'drier' : 'wetter') + ': irrigation ' + sgn(dI, 0, 'mm') + ', yield ' + sgn((sTr.yield - m.yield) * cf, 2, 'Mg/ha'),
+    'Trigger one step ' + (kTr > 0 ? 'drier' : 'wetter') + ': irrigation ' + sgn(dI, 0, 'mm') + ', yield ' + sgn((sTr.yield - m.yield) * cf, yD(), yU()),
     '1 mm more drainage: ' + (Math.abs(dd) > 0.5 ? sgn(dn / dd, 2, 'kg N leached') : 'no change in leaching'),
-    'Nitrogen ' + (kN > 0 ? '+' : '-') + '15%: leaching ' + sgn(sN.nl - m.nl, 1, 'kg/ha') + ', yield ' + sgn((sN.yield - m.yield) * cf, 2, 'Mg/ha'),
+    'Nitrogen ' + (kN > 0 ? '+' : '-') + '15%: leaching ' + sgn(sN.nl - m.nl, 1, 'kg/ha') + ', yield ' + sgn((sN.yield - m.yield) * cf, yD(), yU()),
     'Consolidation one step: drainage ' + (Math.abs(sC.drain - m.drain) < 0.05 ? 'unchanged in this soil' : sgn(sC.drain - m.drain, 1, 'mm'))],
     mag: [Math.abs(sT.yield - m.yield) * 8, Math.abs(sR.drain - m.drain) / 12, Math.abs(sV.evap - m.evap) / 14, Math.abs(dI) / 8, Math.abs(dd) / 10, Math.abs(sN.nl - m.nl) / 8, Math.abs(sC.drain - m.drain) / 2] };
 }
@@ -6084,7 +6085,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
     [/^Structural consolidation/, 'How quickly loosened soil settles and packs down again after ploughing. Faster settling means fewer open holes for water.'],
     [/^Mulch strength/, 'How well the cover on the soil blocks evaporation. 1.0 means no mulch. The lower the number, the less water is lost to the air.'],
     [/^Mulch interception/, 'How much rain the mulch layer can soak up and keep before any reaches the soil (in mm of water).'],
-    [/^Mulch material/, 'What the soil is covered with. Pick one to set a typical strength and thickness, or use the sliders above.'],
+    [/^Mulch material/, 'What the soil is covered with. Pick one to set a typical strength and thickness, or set the strength and capacity in Properties.'],
     [/^Rainfall scale/, 'How rainy the climate is. x1.0 is normal, x0.5 is half as much rain, x1.4 is 40% more.'],
     [/^Temperature shift/, 'How much warmer or cooler than normal. Warmer air pulls more water out of the soil and the crop.'],
     [/^Irrigation trigger/, 'How dry the soil gets before watering starts. It is read from a sensor. A bigger negative number means drier soil before irrigating (-300 is fairly dry, -100 is still moist).'],
@@ -6118,7 +6119,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
     else if (id === 'v1' || id === 'n1') h = 'Your sensor sits at ' + B(Z_VALUES[state.zIdx] + ' cm') + ' and starts irrigation when the soil there reaches dryness ' + B(trigD.toFixed(2)) + ' (suction about ' + B(Math.round(trigAbsFor(state.soil)) + ' cm') + '). On ' + dateS + ' it reads ' + B(dry.toFixed(2)) + ': ' + (dry >= trigD ? w('irrigation starts.') : g('no watering yet.')) + ' Over a year this rule adds ' + B(f0(m.irr) + ' mm') + ' through ' + B(meth) + ' and gives a yield of ' + B((m.yield * CROPS[state.crop].factor).toFixed(CROPS[state.crop].lib ? 0 : 2) + ' ' + CROPS[state.crop].unit) + '.';
     else if (id === 'v4') { const st = model(0.1, rain), d = bare.evap - m.evap; h = (has ? 'Compared with bare ' + soil + ', ' + B(mat) + ' cuts evaporation from ' + B(f0(bare.evap) + ' mm') + ' to ' + g(f0(m.evap) + ' mm') + ' and irrigation from ' + B(f0(bare.irr) + ' mm') + ' to ' + g(f0(m.irr) + ' mm') + '.' : 'Right now there is no mulch, so evaporation is ' + w(f0(bare.evap) + ' mm') + ' and you irrigate ' + B(f0(bare.irr) + ' mm') + '. Click a material to see the change.') + ' The strongest possible mulch would reach ' + B(f0(st.evap) + ' mm') + ' evaporation. ' + (has ? 'Drainage goes from ' + f0(bare.drain) + ' to ' + f0(m.drain) + ' mm because less of the water is lost to the air.' : ''); }
     else if (id === 'v6') { const st = model(0.1, rain); h = 'At mulch factor ' + B(vff.toFixed(1)) + ' with ' + B(CAP_VALUES[state.capIdx] + ' mm') + ' of capacity, evaporation in ' + soil + ' is ' + B(f0(m.evap) + ' mm') + (has ? ' (' + g(Math.round((1 - m.evap / bare.evap) * 100) + '% less') + ' than bare soil)' : '') + ' and drainage ' + B(f0(m.drain) + ' mm') + '. Going to the strongest mulch would leave only ' + B(f0(st.evap) + ' mm') + ' of evaporation but push drainage to ' + B(f0(st.drain) + ' mm') + '.'; }
-    else if (id === 'n2') { const v = has ? vff : 0.5, c = model(v, rain), ev = bare.evap - c.evap, ir = bare.irr - c.irr, dr = c.drain - bare.drain, tr = c.transp - bare.transp; h = (has ? '' : 'Previewing a mulch of factor 0.5 on bare ' + soil + ' (lower the mulch slider to set it). ') + 'At rainfall ×' + rain.toFixed(1) + ' mulch saves ' + B(f0(ev) + ' mm') + ' of evaporation. Of that, ' + g(f0(ir) + ' mm') + ' becomes less irrigation, ' + (dr > 5 ? bd(f0(dr) + ' mm') : B(f0(dr) + ' mm')) + ' extra drainage and ' + B(f0(tr) + ' mm') + ' more water for the crop. ' + (dr > ir * 0.5 ? 'In this wet setting much of the saving is lost to drainage.' : 'Most of the saving shows up as water you do not have to irrigate.'); }
+    else if (id === 'n2') { const v = has ? vff : 0.5, c = model(v, rain), ev = bare.evap - c.evap, ir = bare.irr - c.irr, dr = c.drain - bare.drain, tr = c.transp - bare.transp; h = (has ? '' : 'Previewing a mulch of factor 0.5 on bare ' + soil + ' (lower the mulch strength in Properties to set it). ') + 'At rainfall ×' + rain.toFixed(1) + ' mulch saves ' + B(f0(ev) + ' mm') + ' of evaporation. Of that, ' + g(f0(ir) + ' mm') + ' becomes less irrigation, ' + (dr > 5 ? bd(f0(dr) + ' mm') : B(f0(dr) + ' mm')) + ' extra drainage and ' + B(f0(tr) + ' mm') + ' more water for the crop. ' + (dr > ir * 0.5 ? 'In this wet setting much of the saving is lost to drainage.' : 'Most of the saving shows up as water you do not have to irrigate.'); }
     else if (id === 'n3') { const idx = (m.evap - m.drain) / Math.max(1, m.evap + m.drain); h = 'At rainfall ×' + rain.toFixed(1) + ' and mulch factor ' + B(vff.toFixed(1)) + ' on ' + soil + ', ' + (idx > 0.05 ? 'the main loss is ' + w('evaporation') + ' (' + f0(m.evap) + ' mm against ' + f0(m.drain) + ' mm drainage), so mulch will pay off here.' : idx < -0.05 ? 'the main loss is ' + bd('drainage') + ' (' + f0(m.drain) + ' mm against ' + f0(m.evap) + ' mm evaporation), so mulch saves less water than it would in a drier climate.' : 'evaporation and drainage are about equal (' + f0(m.evap) + ' and ' + f0(m.drain) + ' mm).'); }
     else if (id === 'v5') { let top = ''; try { const E = v5Effects(), mi = E.mag.indexOf(Math.max.apply(null, E.mag)); top = E.eff[mi]; } catch (e) {} h = setup + 'Each year it needs ' + B(f0(m.irr) + ' mm') + ' of irrigation to produce ' + B((m.yield * CROPS[state.crop].factor).toFixed(CROPS[state.crop].lib ? 0 : 2) + ' ' + CROPS[state.crop].unit) + ', and loses ' + B(m.nl.toFixed(1) + ' kg') + ' of nitrogen per hectare below the roots.' + (top ? ' The control with the biggest effect for one step is: <b>' + top + '</b>.' : ''); }
     else h = setup + 'It uses ' + B(f0(m.irr) + ' mm') + ' of irrigation a year for a yield of ' + B((m.yield * CROPS[state.crop].factor).toFixed(CROPS[state.crop].lib ? 0 : 2) + ' ' + CROPS[state.crop].unit) + '.';

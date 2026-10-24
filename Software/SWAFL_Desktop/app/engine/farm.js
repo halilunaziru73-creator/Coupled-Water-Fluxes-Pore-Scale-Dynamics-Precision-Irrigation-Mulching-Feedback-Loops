@@ -226,14 +226,14 @@
     T('drainage below 1 m today ' + fmt(dr, 1) + ' mm', sx + 50, ground + 100 * depthPx - 4, { s: 9.5, b: true, c: '#fff' });
     y += sh + 12;
     // ---- charts: the predicted schedule at the gate and the fate of this irrigation
-    const cw = (sw - 12) * 0.62, ch = 230;
+    const cw = (sw - 12) * 0.62, ch = 262;
     ctx.fillStyle = '#FFFFFF'; ctx.fillRect(sx, y, cw, ch); ctx.strokeStyle = '#B9B4A6'; ctx.strokeRect(sx + 0.5, y + 0.5, cw - 1, ch - 1); ctx.fillStyle = '#ECE9E0'; ctx.fillRect(sx + 1, y + 1, cw - 2, 20); T('Predicted schedule at the ' + (surf ? 'gate' : 'valve') + ': the next 30 days', sx + 8, y + 15, { s: 11, b: true });
-    const x0 = sx + 46, ww = cw - 62, t0 = y + 36, hh = ch - 80, n = 30, d0 = kd; let pm = 5; for (let k = 0; k < n; k++) { const d = Math.min(ND - 1, d0 + k); pm = Math.max(pm, sim.rain[d], sim.irr[d]); } pm = Math.ceil(pm / 5) * 5;
+    const x0 = sx + 46, ww = cw - 62, t0 = y + 36, hh = ch - 104, n = 30, d0 = kd; let pm = 5; for (let k = 0; k < n; k++) { const d = Math.min(ND - 1, d0 + k); pm = Math.max(pm, sim.rain[d], sim.irr[d]); } pm = Math.ceil(pm / 5) * 5;
     for (let i = 0; i <= 4; i++) { const yy = t0 + hh - hh * i / 4; ctx.strokeStyle = '#E6E2D6'; ctx.beginPath(); ctx.moveTo(x0, yy); ctx.lineTo(x0 + ww, yy); ctx.stroke(); T(fmt(pm * i / 4), x0 - 4, yy + 3, { s: 8.5, c: MUTE, a: 'right' }); } T('mm', x0 - 4, t0 - 5, { s: 8.5, c: MUTE, a: 'right' });
     for (let k = 0; k < n; k++) { const d = Math.min(ND - 1, d0 + k), bxk = x0 + ww * k / n, bwk = ww / n * 0.8; if (sim.irr[d] > 0) { ctx.fillStyle = 'rgba(46,125,50,0.12)'; ctx.fillRect(bxk, t0, bwk, hh); } ctx.fillStyle = '#9AA3AE'; ctx.fillRect(bxk, t0 + hh - sim.rain[d] / pm * hh, bwk * 0.45, sim.rain[d] / pm * hh); ctx.fillStyle = '#2E7DE8'; ctx.fillRect(bxk + bwk * 0.45, t0 + hh - sim.irr[d] / pm * hh, bwk * 0.55, sim.irr[d] / pm * hh); if (k % 5 === 0) T(dateStr(d), bxk, t0 + hh + 12, { s: 8.5, c: MUTE }); }
     ctx.strokeStyle = '#8E5A2A'; ctx.lineWidth = 2; ctx.beginPath(); for (let k = 0; k < n; k++) { const d = Math.min(ND - 1, d0 + k), dp = 1 - sim.s[d][sIdx], xx = x0 + ww * (k + 0.4) / n, yy = t0 + hh - dp * hh; if (k) ctx.lineTo(xx, yy); else ctx.moveTo(xx, yy); } ctx.stroke();
     ctx.strokeStyle = '#5B2FA8'; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(x0, t0 + hh - (sim.fTrig || 0) * hh); ctx.lineTo(x0 + ww, t0 + hh - (sim.fTrig || 0) * hh); ctx.stroke(); ctx.setLineDash([]);
-    [['#9AA3AE', 'rain'], ['#2E7DE8', 'irrigation'], ['#8E5A2A', 'sensor depletion (0 to 1 of the axis)'], ['#5B2FA8', 'trigger'], ['rgba(46,125,50,0.35)', 'gate or valve open']].reduce((xx, [c, l]) => { ctx.fillStyle = c; ctx.fillRect(xx, y + ch - 20, 10, 10); T(l, xx + 14, y + ch - 11, { s: 9 }); ctx.font = '9px sans-serif'; return xx + ctx.measureText(l).width + 30; }, x0);
+    [['#9AA3AE', 'rain'], ['#2E7DE8', 'irrigation'], ['#8E5A2A', 'sensor depletion (0 to 1 of the axis)'], ['#5B2FA8', 'trigger'], ['rgba(46,125,50,0.35)', 'gate or valve open']].reduce((pp, [c, l]) => { ctx.font = '9px sans-serif'; const lw = ctx.measureText(l).width + 30; if (pp.x + lw > sx + cw - 8) { pp.x = sx + 12; pp.r++; } const ly = y + ch - 36 + pp.r * 16; ctx.fillStyle = c; ctx.fillRect(pp.x, ly, 10, 10); T(l, pp.x + 14, ly + 9, { s: 9 }); pp.x += lw; return pp; }, { x: sx + 12, r: 0 });
     // fate of the water of the current (or next) irrigation
     const fx0 = sx + cw + 12, fw = sw - cw - 12, nd2 = irrToday ? kd : (sch[0] != null ? sch[0] : kd), gross = sim.irr[nd2] || 0;
     ctx.fillStyle = '#FFFFFF'; ctx.fillRect(fx0, y, fw, ch); ctx.strokeStyle = '#B9B4A6'; ctx.strokeRect(fx0 + 0.5, y + 0.5, fw - 1, ch - 1); ctx.fillStyle = '#ECE9E0'; ctx.fillRect(fx0 + 1, y + 1, fw - 2, 20); T((irrToday ? 'This irrigation' : 'Next irrigation') + ': where the water goes', fx0 + 8, y + 15, { s: 11, b: true });
@@ -243,7 +243,7 @@
     sidWrap('Gross depth ' + fmt(gross, 1) + ' mm on ' + fmtDate(dateOfK(nd2)) + (D.hours ? ' · open ' + fmt(D.hours * gross / Math.max(1, sim.dose), 1) + ' h' : ''), fx0 + 12, y + ch - 58, fw - 24, { s: 10, b: true }, 13);
     sidWrap('Shares from the ' + D.label + (D.CU ? ' (uniformity ' + fmt(100 * D.CU) + ' %)' : '') + '; change the design there.', fx0 + 12, y + ch - 30, fw - 24, { s: 9, c: MUTE }, 11);
     if (surf && D.Ea < 0.4) T('Low efficiency: most water runs off the field end. Shorten the cut-off or reduce the inflow in S2.', fx0 + 12, y + ch - 12, { s: 9, b: true, c: '#C62828' });
-    y += ch + 10;
+    y += ch + 24;
     if (FM.rec && t - FM.recT > 20.2) stopVideo();
   }
 
@@ -260,7 +260,7 @@
   function stopVideo() { try { FM.rec.stop(); } catch (e) {} FM.rec = null; }
   function alertMsg(m) { try { const el = document.getElementById('playLabel'); if (el) el.textContent = m; } catch (e) {} }
 
-  SCENES.push({ id: 'farm', label: 'F1 Virtual farm', color: '#2E7D32', h: 1200, wide: 1180, fieldBar: true, interactive: true,
+  SCENES.push({ id: 'farm', label: 'F1 Virtual farm', color: '#2E7D32', h: 1320, wide: 1180, fieldBar: true, interactive: true,
     onDown: p => hotDown(p), onMove: p => { hotMove(p); return false; }, onLeave: () => { hotUi.hover = null; },
     draw: () => drawFarm(), title: 'Virtual farm: the irrigation system from the source to the plants, on the predicted schedule',
     legend: [['#2E7DE8', 'Irrigation water'], ['#9AA3AE', 'Rain'], ['#1B4F9C', 'Deep percolation'], ['#7A5AC9', 'Runoff'], ['#E8912D', 'Evaporation and drift']],
