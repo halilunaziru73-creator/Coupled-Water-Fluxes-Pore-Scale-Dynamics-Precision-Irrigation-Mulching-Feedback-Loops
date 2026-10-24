@@ -64,7 +64,7 @@ const Act = {
     }, 80);
   },
   reportChoose() { Act.report(); },
-  manual() { if (window.swafl && window.swafl.openManual) { window.swafl.openManual(); return; } window.open('SWAFL_Manual.pdf', '_blank'); },
+  manual() { if (window.swafl && window.swafl.openManual) { window.swafl.openManual(); return; } window.open(window.SWAFL_MANUAL_URL || '../docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf', '_blank'); },
   undo() { if (Hist.i > 0) { Hist.i--; histApply(Hist.stack[Hist.i]); } },
   redo() { if (Hist.i < Hist.stack.length - 1) { Hist.i++; histApply(Hist.stack[Hist.i]); } },
   resetSettings() { E.reset(); UI.log('Settings reset to default'); },

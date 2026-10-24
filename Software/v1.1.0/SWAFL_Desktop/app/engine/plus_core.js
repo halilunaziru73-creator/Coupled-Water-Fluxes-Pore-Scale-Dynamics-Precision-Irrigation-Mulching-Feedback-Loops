@@ -54,7 +54,7 @@
   window.openManual = function () {
     try { const host = window.parent && window.parent.swafl; if (host && host.openManual) return host.openManual(); } catch (e) {}
     try { if (window.swafl && window.swafl.openManual) return window.swafl.openManual(); } catch (e) {}
-    window.open('SWAFL_Manual.pdf', '_blank');
+    window.open(window.SWAFL_MANUAL_URL || '../../docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf', '_blank');   // the manual of the current version, beside the app (also on the online site)
   };
   addEventListener('keydown', e => { if (e.key === 'F1') { e.preventDefault(); e.stopPropagation(); openManual(); } }, true);
 

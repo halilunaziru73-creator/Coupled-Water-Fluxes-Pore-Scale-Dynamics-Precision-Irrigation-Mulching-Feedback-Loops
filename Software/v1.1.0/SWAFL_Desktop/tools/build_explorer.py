@@ -9,6 +9,7 @@ REL = os.path.relpath(ENG, os.path.dirname(OUT)).replace(os.sep, '/')          #
 s = open(os.path.join(ENG, 'engine.html'), encoding='utf-8').read()
 def inline_js(m):
     src = m.group(1); txt = open(os.path.join(ENG, src), encoding='utf-8').read()
+    txt = txt.replace("'../../docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf'", "'" + REL + "/../../docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf'")
     txt = txt.replace("sc.src = 'peryear.js'", "sc.src = '" + REL + "/peryear.js'").replace("loadScript('vendor/xlsx.full.min.js')", "loadScript('" + REL + "/vendor/xlsx.full.min.js')")
     return '<script>/* ' + src + ' */\n' + txt.replace('</script', '<\\/script') + '\n</script>'
 s = re.sub(r'<script src="([a-z_]+\.js)"></script>', inline_js, s)

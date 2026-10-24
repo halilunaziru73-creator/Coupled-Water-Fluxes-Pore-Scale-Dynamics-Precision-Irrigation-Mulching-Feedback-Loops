@@ -2,6 +2,8 @@
 
 <p align="center"><img src="v1.1.0/SWAFL_Desktop/docs/swafl_workbench.png" alt="SWAFL Desktop 1.1.0" width="900"></p>
 
+**Download the SWAFL manual (PDF):** [version 1.1.0, the latest](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf) · [version 1.0](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.0/SWAFL_Desktop/docs/SWAFL_Manual.pdf)
+
 Each version of SWAFL Desktop has its own folder with its source, its manual and its zip. Author: Naziru Halilu. MIT licence.
 
 | Version | Folder | Zip | Manual | Online workbench |

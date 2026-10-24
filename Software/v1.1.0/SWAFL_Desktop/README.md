@@ -1,5 +1,7 @@
 <p align="center"><img src="app/assets/logo-wordmark.svg" alt="SWAFL" width="360"></p>
 
+<p align="center"><b>Download the SWAFL manual (PDF):</b> <a href="docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">version 1.1.0, this version (530 pages)</a> · <a href="../../v1.0/SWAFL_Desktop/docs/SWAFL_Manual.pdf">version 1.0</a> · <a href="https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html?v=1.1.0">online workbench</a></p>
+
 <p align="center"><img src="docs/swafl_workbench.png" alt="SWAFL Desktop 1.1.0: the drip irrigation design with the soil water of the days ahead" width="900"></p>
 
 # SWAFL — Soil Water, Atmosphere, Feedback and Layout workbench

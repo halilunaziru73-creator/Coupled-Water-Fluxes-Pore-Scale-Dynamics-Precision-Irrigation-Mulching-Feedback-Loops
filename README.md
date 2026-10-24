@@ -8,7 +8,15 @@
   <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases/latest/download/SWAFL.exe">
     <img src="https://img.shields.io/badge/%E2%86%93%20DOWNLOAD-SWAFL.exe%20for%20Windows-1F6FB2?style=for-the-badge&logo=windows&logoColor=white" alt="Download SWAFL.exe">
   </a>
+  <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">
+    <img src="https://img.shields.io/badge/%E2%86%93%20DOWNLOAD-the%20SWAFL%20manual%20(PDF%2C%20v1.1.0)-B8432F?style=for-the-badge&logo=adobeacrobatreader&logoColor=white" alt="Download the SWAFL manual (PDF), version 1.1.0">
+  </a>
+  <a href="https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html?v=1.1.0">
+    <img src="https://img.shields.io/badge/%E2%86%92%20ONLINE-SWAFL%201.1.0%20workbench-0A246A?style=for-the-badge&logo=googlechrome&logoColor=white" alt="SWAFL 1.1.0 online workbench">
+  </a>
 </p>
+
+<p align="center"><b>Download the SWAFL manual (PDF):</b> <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">version 1.1.0, the latest (530 pages)</a> · <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.0/SWAFL_Desktop/docs/SWAFL_Manual.pdf">version 1.0</a></p>
 
 <p align="center">
   <a href="https://doi.org/10.5281/zenodo.23043626">
