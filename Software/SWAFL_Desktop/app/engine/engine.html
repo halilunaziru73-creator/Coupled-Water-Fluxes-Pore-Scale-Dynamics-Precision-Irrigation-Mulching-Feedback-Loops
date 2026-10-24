@@ -205,6 +205,7 @@ body.appmode #yearRow .yrlabel { flex: none; }
 body.appmode #yearStrip { flex: 1 1 0; min-width: 0; max-width: 100%; }
 body.appmode .canvaswrap, body.appmode .panel { min-width: 0; }
 body.appmode .canvaswrap canvas { min-width: 0 !important; }
+body.appmode .canvaswrap, html, body { scrollbar-gutter: stable; }
 body.appmode .shell, body.appmode .mainarea, body.appmode .wrap, body.appmode .wrap > .panel:first-child { min-width: 0 !important; max-width: 100vw; overflow-x: hidden; }
 body.appmode #yearStrip { width: 0; }
 body.appmode #playBar { min-width: 0; max-width: 100%; }
@@ -2562,7 +2563,7 @@ const calTxt = t => t;
 // ---- desktop (app) mode only: fit the whole drawing to the window, sharp resolution, quick response ----
 if (new URLSearchParams(location.search).get('app')) {
   const dW = Object.getOwnPropertyDescriptor(HTMLCanvasElement.prototype, 'width'), dH = Object.getOwnPropertyDescriptor(HTMLCanvasElement.prototype, 'height');
-  let lw = canvas.width, lh = canvas.height, SS = 1, curS = 1, fitMode = 'window', lastKey = '';
+  let lw = canvas.width, lh = canvas.height, SS = 1, curS = 1, fitMode = 'window', lastKey = '', fitDims = '', fitSc = 0;
   const wrapEl = () => canvas.closest('.canvaswrap') || canvas.parentElement;
   const phys = () => {
     SS = Math.max(1, Math.min(2, curS * (window.devicePixelRatio || 1))); if (lw * lh * SS * SS > 30e6) SS = Math.sqrt(30e6 / (lw * lh));
@@ -2573,13 +2574,17 @@ if (new URLSearchParams(location.search).get('app')) {
     const fW = aw / lw, fH = ah / lh; let sc;
     if (fitMode === 'window' && lh <= 1050) sc = Math.min(fW, fH, 2.2); else if (lh <= 1050) sc = Math.min(fW, 1.6); else sc = Math.min(fW, 1.3);
     if (fitMode === 'window' && lh <= 1050 && sc < 0.7) sc = Math.min(fW, 1.0);   // too small to read: use the full width and scroll (Focus view fits it all)
-    sc = Math.max(0.35, sc); const key = lw + 'x' + lh + '@' + sc.toFixed(3); if (key === lastKey) return; lastKey = key;
+    sc = Math.max(0.35, sc);
+    // no see-saw: a scroll bar that comes and goes changes the room by a few pixels; such small changes of the scale are ignored,
+    // otherwise the drawing would jump between two sizes many times a second (it looked as if it vibrated)
+    if (fitDims === lw + 'x' + lh && fitSc && Math.abs(sc - fitSc) / fitSc < 0.04) return; fitDims = lw + 'x' + lh; fitSc = sc;
+    const key = lw + 'x' + lh + '@' + sc.toFixed(3); if (key === lastKey) return; lastKey = key;
     canvas.style.width = Math.round(lw * sc) + 'px'; canvas.style.maxWidth = 'none'; canvas.style.margin = '0 auto'; canvas.style.display = 'block';
-    const old = SS; curS = sc; const nS = Math.max(1, Math.min(2, sc * (window.devicePixelRatio || 1))); if (Math.abs(nS - old) > 0.12) phys();
+    const old = SS; curS = sc; const nS = Math.max(1, Math.min(2, sc * (window.devicePixelRatio || 1))); if (Math.abs(nS - old) > 0.02) phys();
   };
   Object.defineProperty(canvas, 'width', { get: () => lw, set: v => { lw = v; phys(); lastKey = ''; fit(); }, configurable: true });
   Object.defineProperty(canvas, 'height', { get: () => lh, set: v => { lh = v; phys(); lastKey = ''; fit(); }, configurable: true });
-  window.__setFit = m => { fitMode = m; lastKey = ''; fit(); }; window.__fit = () => { lastKey = ''; fit(); };
+  window.__setFit = m => { fitMode = m; lastKey = ''; fitSc = 0; fit(); }; window.__fit = () => { lastKey = ''; fitSc = 0; fit(); };
   phys(); try { new ResizeObserver(() => { lastKey = ''; fit(); }).observe(wrapEl()); } catch (e) { window.addEventListener('resize', () => { lastKey = ''; fit(); }); }
   const raf0 = window.requestAnimationFrame.bind(window); let lastF = 0, act = 0; ['pointermove', 'pointerdown', 'wheel', 'keydown'].forEach(ev => window.addEventListener(ev, () => { act = performance.now(); }, { passive: true, capture: true }));
   window.requestAnimationFrame = cb => raf0(t => {
