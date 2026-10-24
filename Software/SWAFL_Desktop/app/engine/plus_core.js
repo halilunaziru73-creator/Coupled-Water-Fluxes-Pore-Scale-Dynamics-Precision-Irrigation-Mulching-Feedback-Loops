@@ -10,7 +10,7 @@
 
   // ------------------------------------------------------------------ 1. views grow to fit their drawing
   const C2 = CanvasRenderingContext2D.prototype, FIT = { on: false, max: 0, who: "" }; window.__FIT = FIT;
-  const yOf = (c, x, y) => { const m = c.getTransform(); return m.b * x + m.d * y + m.f; };
+  const yOf = (c, x, y) => { const m = c.getTransform(); return (m.b * x + m.d * y + m.f) / (window.__SS || 1); };
   const track = (name, ys) => { const o = C2[name]; C2[name] = function () { if (FIT.on && this.canvas === canvas) { const v = ys(this, arguments); if (v > FIT.max) { FIT.max = v; FIT.who = name + " " + Array.from(arguments).slice(1, 5).map(a => typeof a === "number" ? Math.round(a) : typeof a).join(","); } } return o.apply(this, arguments); }; };
   track('fillText', (c, a) => yOf(c, a[1], a[2]) + 6);
   const bg = (c, a) => (a[1] + a[3] >= c.canvas.height - 2) || (a[3] >= c.canvas.height * 0.8);     // a background filling the canvas is not content
@@ -35,7 +35,9 @@
           const want = Math.max(sc._h0 > 900 ? 600 : sc._h0, need);
           // grow at once; shrink only after a control changed (never while an animation runs), so the view never flickers
           const key = JSON.stringify(state) + '|' + innerWidth; const changed = sc._fitKey !== key;
-          if (currentScene === sc && need < 9000 && (want > canvas.height || (changed && want < canvas.height - 120))) { sc.h = want; setCanvasH(want); }
+          if (currentScene === sc && need < 9000 && (want > canvas.height || (changed && want < canvas.height - 120))) { sc.h = want; setCanvasH(want);
+            // a view that draws only what fits is measured again at once, so it reaches its full height in one frame, not in steps
+            for (let it = 0; it < 10; it++) { FIT.on = true; FIT.max = 0; try { od.apply(this, arguments); } catch (e) {} FIT.on = false; const n2 = Math.ceil(FIT.max + 28); if (n2 <= canvas.height || n2 >= 9000) break; sc.h = n2; setCanvasH(n2); } }
           if (want <= canvas.height) sc._fitKey = key;
         }
       }
@@ -160,7 +162,7 @@
       o.transp = m.transp * clampN((c.mean.ETa / Math.max(1, c.mean.ETc)) * c.mean.ETc / Math.max(1, r.mean.ETc) * (c.fc / r.fc) ** 0.3, 0.2, 3);
       o.evap = m.evap * clampN((1 - 0.7 * c.fc) / (1 - 0.7 * r.fc), 0.6, 1.6);
       o.drain = Math.max(m.drain > 0 ? 0.2 * m.drain : m.drain, m.drain + (c.mean.DP - r.mean.DP) * 0.5);   // never below a fifth of the simulated drainage
-      o.et = clampN(m.rain + o.irr - o.drain - (m.store || 0), 50, 2000);
+      o.et = clampN(m.rain + o.irr - o.drain - (m.store || 0), 50, 5000);
       // share the evaporative remainder between soil evaporation and the other evaporation terms (ponded water, litter,
       // snow) in proportion to their targets, so the balance closes without inflating either term
       o.transp = Math.min(o.transp, 0.9 * o.et);

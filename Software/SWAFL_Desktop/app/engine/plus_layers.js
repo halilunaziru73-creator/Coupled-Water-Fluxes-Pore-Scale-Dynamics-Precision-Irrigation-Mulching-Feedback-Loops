@@ -221,15 +221,15 @@
     TF('Nitrogen lost by leaching: ' + fmt(100 * M('NL') / Math.max(1, M('Nfert'))) + ' % of the fertiliser', 30, y + 88, { s: 10.5, b: true });
     y += 122;
     // leaching against drainage, the 20 years
-    frame(16, y, W - 32, 250, 'Nitrate goes where the water goes', 'each dot is one season: drainage below 1 m against nitrate leached');
+    frame(16, y, W - 32, 270, 'Nitrate goes where the water goes', 'each dot is one season: drainage below 1 m against nitrate leached');
     const D = r.D, L = r.NL, sx0 = 70, sw = W - 32 - 90, st0 = y + 34, sh = 170, dx = nice(Math.max(...D, 1) * 1.05), lx = nice(Math.max(...L, 1) * 1.05), dmin = Math.min(0, ...D);
     yAxis(sx0, st0, sw, sh, 0, lx, 'kg N'); { const stp = nice((dx - dmin) / 5); for (let v = Math.ceil(dmin / stp) * stp; v <= dx + 1e-9; v += stp) T(fmt(v), sx0 + (v - dmin) / (dx - dmin) * sw, st0 + sh + 14, { s: 8.5, c: MUTE, a: 'center' }); } T('drainage (mm)', sx0 + sw / 2, st0 + sh + 28, { s: 9, c: MUTE, a: 'center' });
     const mx = mean(D), my = mean(L); let sxy = 0, sxx = 0; D.forEach((d, i) => { sxy += (d - mx) * (L[i] - my); sxx += (d - mx) * (d - mx); }); const sl = sxx > 0 ? sxy / sxx : 0;
     const X = d => sx0 + (d - dmin) / (dx - dmin) * sw, Yv = v => st0 + sh - v / lx * sh;
     ctx.strokeStyle = '#8E5A2A'; ctx.lineWidth = 1.5; ctx.setLineDash([5, 3]); ctx.beginPath(); ctx.moveTo(X(dmin), Yv(Math.max(0, my + sl * (dmin - mx)))); ctx.lineTo(X(dx), Yv(Math.max(0, my + sl * (dx - mx)))); ctx.stroke(); ctx.setLineDash([]);
     D.forEach((d, i) => { ctx.fillStyle = i === sel ? '#D93025' : '#8E5A2A'; ctx.beginPath(); ctx.arc(X(d), Yv(L[i]), 4, 0, Math.PI * 2); ctx.fill(); hot(X(d) - 5, Yv(L[i]) - 5, 10, 10, () => setYear(i), YRS()[i] + ': ' + fmt(d) + ' mm, ' + fmt(L[i], 1) + ' kg N'); });
-    TF('Across these seasons each extra millimetre of drainage carries ' + fmt(sl, 2) + ' kg N/ha of nitrate.', sx0, y + 240, { s: 10.5, b: true });
-    return y + 260;
+    TF('Across these seasons each extra millimetre of drainage carries ' + fmt(sl, 2) + ' kg N/ha of nitrate.', sx0, y + 258, { s: 10.5, b: true });
+    return y + 280;
   }
 
   // ================================================================== C1 Crop water requirement
@@ -301,6 +301,7 @@
   add('wb2', 'W1 Full water balance', '#1F66C8', drawWb2, 'Every term of the simulated water balance, year by year', 'With evaporation from litter, ponded water and snow included, the parts of evapotranspiration add up to the simulated total.');
   add('nb', 'N4 Nitrogen budget', '#8E5A2A', drawNb, 'Nitrogen supply, uptake and losses, year by year', 'Nitrate leaching follows drainage: the wet years carry most of the nitrogen lost below the roots.');
   add('crop', 'C1 Crop water requirement', '#2F7F3E', drawCrop, 'Crop coefficients, daily water need and the irrigation schedule of the chosen crop', 'Each crop has its own season, crop coefficient and rooting depth: the same soil and weather give very different irrigation needs.');
+  { const c1 = SCENES.find(s => s.id === 'crop'); if (c1) c1.h = 1760; }   // its full height from the first frame (the schedule fills in as the daily model runs)
   // peryear.js is large: load it after the engine has started
   if (!window.PERYEAR) { const sc = document.createElement('script'); sc.src = 'peryear.js'; sc.onload = () => { try { refresh(); } catch (e) {} }; document.body.appendChild(sc); }
 })();

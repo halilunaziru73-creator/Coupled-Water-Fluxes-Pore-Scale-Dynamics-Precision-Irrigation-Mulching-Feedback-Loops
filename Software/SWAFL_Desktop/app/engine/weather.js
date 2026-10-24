@@ -41,7 +41,7 @@
   function fromTable(rows, name) {
     rows = rows.filter(r => r && r.some(v => v !== '' && v != null));
     let hi = rows.findIndex(r => r.filter(v => typeof v === 'string' && /[a-z]/i.test(v)).length >= 2);
-    if (hi < 0 || hi > 40) throw new Error('no header row with column names (date, rain or precipitation, reference ET ...) was found');
+    if (hi < 0 || hi > 40) throw new Error((rows.length < 2 ? 'the file holds no readable table (is it a real spreadsheet or text file?); ' : '') + 'no header row with column names (date, rain or precipitation, reference ET ...) was found');
     const C = findCols(rows[hi]); let start = hi + 1;
     if (rows[start] && rows[start].every(v => typeof v === 'string' && !/^\s*-?\d/.test(v))) start++;   // a units row
     if (C.p == null) throw new Error('no rainfall column (precipitation, rain, P) was found');
@@ -57,7 +57,8 @@
   function fromDaisy(txt, name) {
     // Daisy weather (dwf) and log (dlf) files: header lines, a line of dashes, then column names, often a units line, then data
     const lines = txt.replace(/\r/g, '').split('\n'); let di = lines.findIndex(l => /^-{8,}/.test(l.trim()));
-    if (di < 0) throw new Error('this Daisy file has no data table (a .dai setup file names its weather file: import that .dwf file, or a log file of daily weather)');
+    if (di < 0) { const wf = Array.from(new Set((txt.match(/"[^"\n]*\.(dwf|csv|dlf)"/gi) || []).map(x => x.replace(/"/g, '').split(/[\\/]/).pop())));
+      throw new Error(wf.length ? 'this Daisy setup file holds no weather itself; it uses the weather file ' + wf.join(', ') + ': import that file' : 'this Daisy file has no data table (a .dai setup file names its weather file: import that .dwf file, or a log file of daily weather)'); }
     let hi = di + 1; while (hi < lines.length && (lines[hi].trim() === '' || lines[hi].trim().startsWith('#'))) hi++;
     const rows = lines.slice(hi).filter(l => l.trim() !== '' && !l.trim().startsWith('#')).map(l => l.split(/\t|\s{2,}|\s+/).map(x => x.trim()));
     const res = fromTable(rows, name);
@@ -118,6 +119,7 @@
     const rf = B.Pmean / Pd, dT = (B.Emean / Ed - 1) / 0.035, ri = nearestIdx(RAIN_VALUES, Math.max(RAIN_VALUES[0], Math.min(RAIN_VALUES[RAIN_VALUES.length - 1], rf))), ti = nearestIdx(TEMP_VALUES, Math.max(TEMP_VALUES[0], Math.min(TEMP_VALUES[TEMP_VALUES.length - 1], dT)));
     if (rf < RAIN_VALUES[0] - 0.05 || rf > RAIN_VALUES[RAIN_VALUES.length - 1] + 0.05) B.notes.push('the annual rainfall is ' + rf.toFixed(2) + ' times that of the simulations: the annual results use the nearest simulated step (×' + RAIN_VALUES[ri].toFixed(1) + ')');
     if (dT > TEMP_VALUES[TEMP_VALUES.length - 1] + 0.25 || dT < TEMP_VALUES[0] - 0.25) B.notes.push('the evaporative demand equals a warming of ' + dT.toFixed(1) + ' °C against the simulations: the annual results use the nearest simulated step (' + TEMP_VALUES[ti].toFixed(1) + ' °C)');
+    if (!W.WXD || !W.WXD.on) W.__wxPrev = W.__wxPrev || { r: state.rainIdx, t: state.tempIdx };
     W.WXD = Object.assign(B, { on: true, key: meta.src + '|' + meta.name + '|' + B.y0 + '|' + B.Pmean.toFixed(1) + '|' + B.Emean.toFixed(1), src: meta.src, name: meta.name, rainRef: RAIN_VALUES[ri], dTref: TEMP_VALUES[ti], et0How: meta.how, fcStart: meta.fcStart == null ? null : meta.fcStart });
     W.WXSRC[meta.src === 'online' ? 'online' : 'file'] = W.WXD;
     applyState({ rainIdx: ri, tempIdx: ti });
@@ -132,8 +134,8 @@
     const s = apply(r.rows, { src: 'file', name, how }); s.cols = r.cols; s.first = r.rows[0].d.toISOString().slice(0, 10); s.last = r.rows[r.rows.length - 1].d.toISOString().slice(0, 10); return s;
   };
   W.wxUse = function (which) {
-    if (which === 'record') { if (W.WXD) W.WXD.on = false; W.WXD = null; applyState({ rainIdx: RAIN_VALUES.indexOf(1.0), tempIdx: TEMP_VALUES.indexOf(0) }); try { document.getElementById('dssDate').dispatchEvent(new Event('change')); } catch (e) {} return true; }
-    const d = W.WXSRC[which]; if (!d) return false; d.on = true; W.WXD = d; applyState({ rainIdx: RAIN_VALUES.indexOf(d.rainRef), tempIdx: TEMP_VALUES.indexOf(d.dTref) }); try { document.getElementById('dssDate').dispatchEvent(new Event('change')); } catch (e) {} return true;
+    if (which === 'record') { if (W.WXD) W.WXD.on = false; W.WXD = null; const pv = W.__wxPrev || { r: RAIN_VALUES.indexOf(1.0), t: TEMP_VALUES.indexOf(0) }; W.__wxPrev = null; applyState({ rainIdx: pv.r, tempIdx: pv.t }); try { document.getElementById('dssDate').dispatchEvent(new Event('change')); } catch (e) {} return true; }
+    const d = W.WXSRC[which]; if (!d) return false; if (!W.WXD) W.__wxPrev = { r: state.rainIdx, t: state.tempIdx }; d.on = true; W.WXD = d; applyState({ rainIdx: RAIN_VALUES.indexOf(d.rainRef), tempIdx: TEMP_VALUES.indexOf(d.dTref) }); try { document.getElementById('dssDate').dispatchEvent(new Event('change')); } catch (e) {} return true;
   };
   W.wxStatus = () => ({ src: W.WXD && W.WXD.on ? W.WXD.src : 'record', name: W.WXD && W.WXD.on ? W.WXD.name : '', file: !!W.WXSRC.file, online: !!W.WXSRC.online, years: W.WXD && W.WXD.on ? W.WXD.y0 + ' to ' + (W.WXD.y0 + NYRx - 1) : '', Pmean: W.WXD && W.WXD.on ? W.WXD.Pmean : null });
 

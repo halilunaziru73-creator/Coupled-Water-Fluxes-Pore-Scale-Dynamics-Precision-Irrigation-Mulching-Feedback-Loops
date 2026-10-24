@@ -79,10 +79,10 @@ const vis = id => !document.getElementById(id).hidden;
 /* ---------- menus ---------- */
 const casesMenu = () => (E.metaData ? E.metaData.presets.filter(p => p[0] !== '').map(p => ({ label: p[1], act: () => Act.preset(p[0]) })) : []);
 const MENUS = [
-  { label: 'File', items: () => { WxUI.offerOnce(); return [
-    { label: 'New project', icon: 'new', key: 'Ctrl+N', act: Act.newProject }, { label: 'Open project...', icon: 'open', key: 'Ctrl+O', act: Act.openProject }, { label: 'Save project...', icon: 'save', key: 'Ctrl+S', act: Act.saveProject }, { sep: 1 },
+  { label: 'File', items: () => { return [
+    { label: 'Import weather data (CSV, Excel, DWF, DLF, DAI)...', icon: 'open', act: () => WxUI.importFile() }, { label: 'Online weather for a location...', icon: 'search', act: () => WxUI.online() }, { sep: 1 }, { label: 'New project', icon: 'new', key: 'Ctrl+N', act: Act.newProject }, { label: 'Open project...', icon: 'open', key: 'Ctrl+O', act: Act.openProject }, { label: 'Save project...', icon: 'save', key: 'Ctrl+S', act: Act.saveProject }, { sep: 1 },
     { label: 'Export', icon: 'img', sub: [{ label: 'Picture of the window (PNG)', icon: 'img', key: 'Ctrl+E', act: Act.exportPNG }, { label: 'Yearly results (CSV)', icon: 'csv', act: Act.exportSeasonCSV }, { label: 'Design results (CSV)', icon: 'csv', act: Act.exportDesignCSV }] },
-    { label: 'Import weather data (CSV, Excel, DWF, DLF, DAI)...', icon: 'open', act: () => WxUI.importFile() }, { label: 'Online weather for a location...', icon: 'search', act: () => WxUI.online() }, { sep: 1 }, { label: 'Save full report as PDF...', icon: 'print', key: 'Ctrl+Shift+P', act: Act.report }, { label: 'Report of chosen layers (PDF)...', icon: 'print', act: () => Act.reportChoose() }, { label: 'Print / save this view as PDF...', icon: 'print', key: 'Ctrl+P', act: Act.print }, { sep: 1 }, { label: 'Exit', icon: 'exit', key: 'Ctrl+Q', act: Act.exit }]; } },
+    { label: 'Save full report as PDF...', icon: 'print', key: 'Ctrl+Shift+P', act: Act.report }, { label: 'Report of chosen layers (PDF)...', icon: 'print', act: () => Act.reportChoose() }, { label: 'Print / save this view as PDF...', icon: 'print', key: 'Ctrl+P', act: Act.print }, { sep: 1 }, { label: 'Exit', icon: 'exit', key: 'Ctrl+Q', act: Act.exit }]; } },
   { label: 'Edit', items: [
     { label: 'Undo', icon: 'undo', key: 'Ctrl+Z', act: Act.undo, dis: () => Hist.i <= 0 }, { label: 'Redo', icon: 'redo', key: 'Ctrl+Y', act: Act.redo, dis: () => Hist.i >= Hist.stack.length - 1 }, { sep: 1 },
     { label: 'Reset all settings', icon: 'reset', act: Act.resetSettings }, { label: 'Copy settings as text', icon: 'copy', act: Act.copySettings }, { sep: 1 },

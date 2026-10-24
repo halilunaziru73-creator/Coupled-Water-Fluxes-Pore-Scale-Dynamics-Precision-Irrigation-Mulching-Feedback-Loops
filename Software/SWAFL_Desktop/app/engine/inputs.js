@@ -11,6 +11,8 @@
 (function () {
   if (typeof SCENES === 'undefined' || typeof sidSlider !== 'function') return;
   const DES = ['sid', 'drip', 'spr'];
+  // yield unit of the crop: Mg/ha for the simulated cereal, % of the potential for the library crops
+  window.yU = () => (CROPS[state.crop] && CROPS[state.crop].lib) ? '% points' : 'Mg/ha'; window.yD = () => (CROPS[state.crop] && CROPS[state.crop].lib) ? 1 : 2;
   // one background and one accent for every layer: white sheets and the navy of the workbench
   // labels in pills never sit on top of each other: a pill that would overlap one already drawn moves down
   let PILLS = [];
@@ -19,15 +21,18 @@
   // no text runs past the edge of the sheet: it shrinks (to 7.5 px) and is then shortened with an ellipsis
   const oT = T;
   T = function (txt, x, y, o) {
-    o = o || {}; const M = ctx.getTransform();
+    o = o || {}; const M0 = ctx.getTransform(), ss = window.__SS || 1, M = { a: M0.a / ss, b: M0.b, c: M0.c, e: M0.e / ss };   // in sheet units (the app draws at a finer resolution)
     if (typeof txt === 'string' && txt.length > 3 && Math.abs(M.b) < 1e-9 && Math.abs(M.c) < 1e-9 && M.a > 0) {
       const X = M.a * x + M.e, a = o.a || 'left', avail = (a === 'left' ? (W - 4 - X) : a === 'right' ? (X - 4) : 2 * Math.min(X - 4, W - 4 - X)) / M.a;
       let sz = o.s || 11; const font = s2 => (o.i ? 'italic ' : '') + (o.b ? 'bold ' : '') + s2 + 'px ' + (o.f || 'sans-serif');
       ctx.font = font(sz);
       if (avail > 20 && ctx.measureText(txt).width > avail) {
         while (sz > 7.5 && ctx.measureText(txt).width > avail) { sz -= 0.5; ctx.font = font(sz); }
-        let t = txt; while (t.length > 4 && ctx.measureText(t + '…').width > avail) t = t.slice(0, -1);
-        if (t !== txt) txt = t.replace(/[\s,;:·]+$/, '') + '…';
+        const fw = ctx.measureText(txt).width, sheet = (W - 8) / M.a;
+        if (fw > avail && fw <= sheet) {   // the whole text fits on the sheet: move it inwards rather than cut it
+          if (a === 'left') x -= (fw - avail); else if (a === 'right') x += (fw - avail); else { const cx = X / M.a; x = Math.max(4 / M.a + fw / 2, Math.min((W - 4) / M.a - fw / 2, x)); }
+        } else { let t = txt; while (t.length > 4 && ctx.measureText(t + '…').width > avail) t = t.slice(0, -1);
+          if (t !== txt) txt = t.replace(/[\s,;:·]+$/, '') + '…'; }
         o = Object.assign({}, o, { s: sz });
       }
     }
@@ -37,6 +42,19 @@
   const OBJ = () => ({ sid: SID, drip: DRP, spr: SPR });
   const RUN = { sid: { on: false, st: '', why: '' }, drip: { on: false, st: '', why: '' }, spr: { on: false, st: '', why: '' } };
   const BEST = {};
+  // Sensor-triggered Daisy runs that never irrigate at the reference setting (the sand and loamy sand at -300 cm): the
+  // irrigation of another trigger, sensor depth or method is added as its simulated amount (a ratio to zero is undefined)
+  if (typeof model === 'function' && typeof rowAt === 'function') {
+    const oModel = model;
+    model = function (vff, rain, ov) {
+      const o = oModel.apply(this, arguments); try {
+        const S = ov ? Object.assign({}, state, ov) : state; let add = 0;
+        [[MAPS.e2[S.soil], TRIG_VALUES[S.trigIdx], -300], [MAPS.e3[S.soil], Z_VALUES[S.zIdx], 20], [MAPS.e4[S.soil], S.method, 'M02_Surface']].forEach(([map, k, k0]) => { const c = map && rowAt(map, k), b = map && rowAt(map, k0); if (c && b && b.irrigation < 1 && c.irrigation > b.irrigation) add += c.irrigation - b.irrigation; });
+        if (add > 0) { const r = Object.assign({}, o); r.irr += add; r.store = r.rain + r.irr - r.et - r.drain; r.ie = r.irr > 1 ? r.yield * 100 / r.irr : 0; return r; }
+      } catch (e) {}
+      return o;
+    };
+  }
   window.DESIGN_RUN = RUN; window.DESIGN_BEST = BEST;
   const curId = () => (currentScene && DES.includes(currentScene.id)) ? currentScene.id : null;
   const reporting = () => !!window.__REPORTING;
@@ -54,6 +72,8 @@
     [/\(h\)/, [['h', 1], ['min', 1 / 60]]],
     [/\(mm\)/, [['mm', 1], ['cm', 10]]],
     [/spacing.*\(m\)|Se \(m\)|Sl \(m\)/i, [['m', 1], ['cm', 0.01]]],
+    [/head.*\(m\)|pressure.*\(m\)/i, [['m', 1], ['kPa', 1 / 9.80665], ['bar', 100 / 9.80665], ['ft', 0.3048]]],
+    [/hours per day/i, [['h', 1]]],
     [/\(m\)/, [['m', 1], ['km', 1000], ['ft', 0.3048]]],
     [/\(%\)/, [['%', 1]]],
     [/\(°\)/, [['°', 1]]],
@@ -180,7 +200,7 @@
     };
   });
   // where the inputs end: the first result heading of the layer
-  function inputsEnd(id) { const sec = (window.__SEC || {})[id] || {}; let m = 1e9; for (const k in sec) m = Math.min(m, sec[k][0]); if (m < 1e9) return Math.max(200, m - 8); let e = 0; SIDW.forEach(s => { e = Math.max(e, (s.by || s.y) + (s.bh || 10)); }); return Math.max(e + 26, 300); }
+  function inputsEnd(id) { const sec = (window.__SEC || {})[id] || {}; let m = 1e9; for (const k in sec) m = Math.min(m, sec[k][0]); if (m < 1e9) return Math.max(200, m - 20); let e = 0; SIDW.forEach(s => { e = Math.max(e, (s.by || s.y) + (s.bh || 10)); }); return Math.max(e + 26, 300); }
   window.designInputsEnd = inputsEnd;
   // the Play button of the design layers is the Run button
   const pb = document.getElementById('playBtn');
@@ -195,9 +215,11 @@
     const t0 = performance.now(); let best = null;
     if (id === 'sid') {
       const d = SIDDEF[SID.sys], keep = { cut: SID.cut, tman: SID.tman }; const qs = []; for (let i = 0; i <= 10; i++) qs.push(+(d.qr[0] * Math.pow(d.qr[1] / d.qr[0], i / 10)).toFixed(2));
-      for (const cut of ['es1', 'r85']) for (const cb of [1, 0.75, 0.5]) for (const q of qs) {
-        SID.cut = cut; let R; try { R = sidRun({ qLs: q, cb }, 2); } catch (e) { continue; }
-        const sc = score(R); if (!best || sc > best.sc) best = { sc, set: { qLs: q, cut, cb }, Ea: R.Ea, Es: R.Es, dp: R.dp, ro: R.ro, tco: R.tco, txt: 'inflow ' + q.toFixed(2) + ' L/s, cutoff ' + (cut === 'es1' ? 'when the tail is filled' : 'at 85 % of the length') + ', cutback ' + (cb >= 1 ? 'none' : Math.round(cb * 100) + ' % of the inflow') };
+      const Ls = [1, 2, 3, 4].map(n => ({ n, L: Math.round(SID.L / n) })).filter(v => v.n === 1 || v.L >= d.Lr[0]);
+      outer: for (const { n, L } of Ls) for (const cut of ['es1', 'r85']) for (const cb of [1, 0.75, 0.5]) for (const q of qs) {
+        SID.cut = cut; let R; try { R = sidRun({ qLs: q, cb, L }, 2); } catch (e) { continue; }
+        const sc = score(R); if (!best || sc > best.sc) best = { sc, set: { qLs: q, cut, cb, L }, Ea: R.Ea, Es: R.Es, dp: R.dp, ro: R.ro, tco: R.tco, txt: (n > 1 ? 'run length ' + L + ' m (the field split into ' + n + ' runs), ' : 'run length ' + L + ' m, ') + 'inflow ' + q.toFixed(2) + ' L/s, cutoff ' + (cut === 'es1' ? 'when the tail is filled' : 'at 85 % of the length') + ', cutback ' + (cb >= 1 ? 'none' : Math.round(cb * 100) + ' % of the inflow') };
+        if (performance.now() - t0 > 3500) break outer;
       }
       SID.cut = keep.cut; SID.tman = keep.tman;
     } else if (id === 'drip') {
@@ -211,19 +233,30 @@
       const ds = [0, 0.25, 0.5, 0.75, 1].map(f => +(dr[0] + (dr[1] - dr[0]) * f).toFixed(1)), ps = [0, 0.33, 0.67, 1].map(f => Math.round(pr[0] + (pr[1] - pr[0]) * f));
       for (const d of ds) for (const P of ps) {
         let R0; try { R0 = spRun({ d, P }); } catch (e) { continue; } const Rw = R0.nz && R0.nz.R ? R0.nz.R : 10;
-        for (const f of [0.5, 0.6, 0.65]) { const Ss = +(Math.max(3, Math.round(2 * Rw * f))).toFixed(0), Sl = Ss; let R; try { R = spRun({ d, P, Ss, Sl }); } catch (e) { continue; }
+        for (const f of [0.4, 0.45, 0.5, 0.55, 0.6, 0.65]) { const Ss = +(Math.max(3, Math.round(2 * Rw * f))).toFixed(0), Sl = Ss; let R; try { R = spRun({ d, P, Ss, Sl }); } catch (e) { continue; }
           const sc = score(R) + (R.CU || 0) * 0.05 - (R.ro || 0) * 2; if (!best || sc > best.sc) best = { sc, set: { d, P, Ss, Sl }, Ea: R.Ea, Es: R.Es, dp: R.dp, CU: R.CU, txt: 'nozzle ' + d + ' mm at ' + P + ' kPa, spacing ' + Ss + ' × ' + Sl + ' m (wetted radius ' + Rw.toFixed(1) + ' m)' }; }
         if (performance.now() - t0 > 2500) break;
       }
     }
+    // the present inputs compete too: a combination is recommended only when it beats them
+    try { const R = id === 'sid' ? sidRun() : id === 'drip' ? drRun() : spRun(); const sc = score(R) + (id === 'drip' ? (R.Eu || 0) * 0.05 : id === 'spr' ? (R.CU || 0) * 0.05 - (R.ro || 0) * 2 : 0);
+      if (!best || sc >= best.sc - 1e-9) best = { sc, same: true, set: {}, Ea: R.Ea, Es: R.Es, dp: R.dp, ro: R.ro, CU: R.CU, Eu: R.Eu, txt: 'your present inputs: none of the combinations tried does better' }; } catch (e) {}
     if (best) best.ms = Math.round(performance.now() - t0);
     return best;
   }
   function applyBest(id) { const b = BEST[id]; if (!b) return false; const o = OBJ()[id]; Object.assign(o, b.set); if (id === 'sid') { SID.autoQ = false; SID.preset = null; } return true; }
-  window.designBest = id => { const b = BEST[id] || (BEST[id] = bestFor(id)); return b ? { txt: b.txt, Ea: b.Ea, Es: b.Es, dp: b.dp, ro: b.ro, CU: b.CU, Eu: b.Eu } : null; };
+  window.designBest = id => { const b = BEST[id] || (BEST[id] = bestFor(id)); return b ? { same: !!b.same, txt: b.txt, Ea: b.Ea, Es: b.Es, dp: b.dp, ro: b.ro, CU: b.CU, Eu: b.Eu } : null; };
   window.designApplyBest = id => { if (!BEST[id]) BEST[id] = bestFor(id); applyBest(id); runDesign(id); try { refresh(); } catch (e) {} return true; };
 
   // ------------------------------------------------------------------ chart series for the workbench
+  // the zones (drip) or sets (sprinklers) run one after the other, each for the run time: flow at the pump against time
+  function zoneHyd(kind, R, o, tRun, intv) {
+    let G; try { G = irSystem(kind, R, o); } catch (e) { return { hq: [], ht: [], times: [] }; }
+    const nz = G.zones, ht = [], hq = []; for (let z = 0; z < nz; z++) { ht.push(z * tRun, z * tRun, (z + 1) * tRun); hq.push(z ? G.Qz : 0, G.Qz, G.Qz); } ht.push(nz * tRun, nz * tRun + tRun * 0.05); hq.push(0, 0);
+    const times = [[kind === 'drip' ? 'run time of a zone' : 'set time', tRun], [kind === 'drip' ? 'whole field (' + nz + ' zones)' : 'whole field (' + nz + ' sets)', nz * tRun]];
+    if (intv) times.push(['irrigation interval', intv * 24]);
+    return { ht, hq, times, zones: nz, Qz: G.Qz };
+  }
   window.designCharts = function (id) {
     if (id === 'sid') {
       const R = sidRun(), P = R.P, H = sidHyd(R), cv = v => v * 1000 / 60, n = H.t.length;
@@ -237,14 +270,14 @@
       const R = drRun(), lat = R.lat || {}, o = R.o;
       const pick = (obj, names) => { for (const n of names) if (obj && Array.isArray(obj[n])) return obj[n]; for (const n of names) if (obj && obj[n] && obj[n].length) return Array.from(obj[n]); return null; };
       const h = pick(lat, ['h', 'H', 'head', 'hs']), q = pick(lat, ['q', 'Q', 'flow', 'qs']), x = pick(lat, ['x', 'xs']);
-      return { kind: 'drip', x: x || (h ? h.map((_, i) => i * (o.LL || 100) / Math.max(1, h.length - 1)) : []), h: h || [], q: q || [], fate: [['Stored in the root zone', R.Ea], ['Deep percolation', R.dp], ['Evaporation', R.ev || 0]], Eu: R.Eu, t: R.t, Pw: R.Pw, gross: R.gross };
+      return { kind: 'drip', x: x || (h ? h.map((_, i) => i * (o.LL || 100) / Math.max(1, h.length - 1)) : []), h: h || [], q: q || [], fate: [['Stored in the root zone', R.Ea], ['Deep percolation', R.dp], ['Evaporation', R.ev || 0]], Eu: R.Eu, t: R.t, Pw: R.Pw, gross: R.gross, ...zoneHyd('drip', R, o, R.t, o.intv) };
     }
     if (id === 'spr') {
       const R = spRun(), o = R.o, AR = R.AR, K = R.K, A = R.A, T0 = R.T, ts = [], ir = [], ar = [];
       for (let i = 1; i <= 60; i++) { const t = T0 * i / 60; ts.push(t); ir.push(K * A * Math.pow(t, A - 1) * 60); ar.push(AR); }
       const f = R.f && R.f.length ? R.f : null, prof = [];
       if (R.arr && R.arr.length) { const a = Array.from(R.arr); a.sort((p, q2) => p - q2); for (let i = 0; i < 20; i++) prof.push(a[Math.floor(i / 19 * (a.length - 1))]); }
-      return { kind: 'spr', t: ts, intake: ir, rate: ar, fate: [['Stored in the root zone', R.Ea], ['Deep percolation', R.dp], ['Runoff', R.ro], ['Wind drift and evaporation', R.wdTot || 0]], CU: R.CU, DU: R.DU, catchSorted: prof, T: T0 };
+      return { kind: 'spr', t: ts, intake: ir, rate: ar, fate: [['Stored in the root zone', R.Ea], ['Deep percolation', R.dp], ['Runoff', R.ro], ['Wind drift and evaporation', R.wdTot || 0]], CU: R.CU, DU: R.DU, catchSorted: prof, T: T0, ...zoneHyd('spr', R, o, T0 / 60, null) };
     }
     return null;
   };
@@ -270,4 +303,33 @@
   canvas.toBlob = function () { full(); return oBlob.apply(null, arguments); };
   addEventListener('beforeprint', full);
   if (typeof buildReport === 'function') { const ob = buildReport; buildReport = function () { const k = window.__REPORTING; window.__REPORTING = true; try { return ob.apply(this, arguments); } finally { window.__REPORTING = k; } }; }
+})();
+
+/* The virtual farm runs its own clock and shows the system of the design it was opened from: on leaving it, the working
+   date and the irrigation method of the project come back to what they were. */
+(function () {
+  if (typeof switchScene !== 'function') return;
+  const oSw = switchScene;
+  switchScene = function (sc) {
+    const id = sc && sc.id ? sc.id : sc, prev = (typeof currentScene !== 'undefined' && currentScene) ? currentScene.id : null;
+    if (id === 'farm' && prev !== 'farm' && !window.__farmPrev) window.__farmPrev = { m: state.method, d: fclock.day };
+    const r = oSw.apply(this, arguments);
+    if (prev !== id) try { const pl = document.getElementById('playLabel'); if (pl) pl.textContent = ''; } catch (e) {}
+    if (prev === 'farm' && id !== 'farm' && window.__farmPrev) { const p = window.__farmPrev; window.__farmPrev = null; try { fclock.day = p.d; fclock.mem = []; if (p.m && p.m !== state.method) applyState({ method: p.m }); } catch (e) {} }
+    return r;
+  };
+})();
+/* Labels in pills are drawn after the arrows and pictures of a layer, so no arrow covers a label; a pill that would
+   sit on another pill moves down. */
+(function () {
+  if (typeof pill !== 'function' || typeof pillBox !== 'function') return;
+  let Q = null; const oPill = pill;
+  pill = function (txt, x, y, o) {
+    if (!Q) return oPill(txt, x, y, o);
+    o = o || {}; ctx.font = (o.b ? 'bold ' : '') + (o.s || 10.5) + 'px sans-serif'; const w = ctx.measureText(txt).width + 10, xx = o.a === 'right' ? x - w : o.a === 'center' ? x - w / 2 : x;
+    Q.push([txt, x, y, o, xx, w]); return { x: xx, y: y - 11, w, h: 16 };
+  };
+  const flush = () => { const q = Q; Q = null; const done = []; q.forEach(([txt, x, y, o, xx, w]) => { let yy = y; for (let k = 0; k < 6; k++) { const hit = done.find(r => xx < r.x + r.w && xx + w > r.x && yy - 11 < r.y + 16 && yy + 5 > r.y); if (!hit) break; yy = hit.y + 16 + 11 + 1; } done.push({ x: xx, y: yy - 11, w }); oPill(txt, x, yy, o); }); };
+  const SKIP = { sid: 1, drip: 1, spr: 1, farm: 1 };
+  SCENES.forEach(sc => { if (SKIP[sc.id] || sc._pillWrap || typeof sc.draw !== 'function') return; sc._pillWrap = true; const od = sc.draw; sc.draw = function () { Q = []; let r; try { r = od.apply(this, arguments); } finally { if (Q) flush(); } return r; }; });
 })();

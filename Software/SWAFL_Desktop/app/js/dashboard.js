@@ -17,6 +17,7 @@ const Dash = (() => {
   // a block: header with a twist arrow (click to hide or show), and its content
   const SEC = (id, title, sub, inner) => '<div class="dsec' + (shut[id] ? ' shut' : '') + '" data-sec="' + id + '"><h4 data-tog="' + id + '"><b><span class="tw">' + (shut[id] ? '&#9654;' : '&#9660;') + '</span>' + title + '</b>' + (sub ? '<span>' + sub + '</span>' : '') + '</h4><div class="dsb"' + (shut[id] ? ' hidden' : '') + '>' + inner + '</div></div>';
 
+  const CB = (k, title, inner) => SEC('ch-' + k, title, '', '<div class="chart">' + inner + '</div>');
   let dayCache = { key: '', D: null };
   function results(s) {
     const key = s.date + '|' + JSON.stringify(s.state) + '|' + s.year;
@@ -66,7 +67,7 @@ const Dash = (() => {
     h += '</div>';
     if (id === 'sid') { const w = E.json("(function(){var R=sidRun();return {reach:!!R.reach,tco:R.tco,tL:R.tL,L:R.P.L}})()"); if (w && (!w.reach || w.tco > 2880)) h += '<div class="warnbox"><b>The stream does not reach the end of the field in a practical time</b> (advance ' + Math.round(w.tL) + ' min for ' + Math.round(w.L) + ' m). Shorten the run, raise the inflow, or choose drip or sprinklers: this soil takes the water in too fast for this surface layout.</div>'; }
     let best = ''; const B = bestCache[id];
-    if (B) best = '<div class="best"><div><b>Most efficient inputs found:</b> ' + UI.esc(B.txt) + '</div><div>Application efficiency ' + (B.Ea * 100).toFixed(1) + ' %, root zone filled ' + (B.Es * 100).toFixed(0) + ' %' + (B.dp != null ? ', deep percolation ' + (B.dp * 100).toFixed(1) + ' %' : '') + (B.ro != null ? ', runoff ' + (B.ro * 100).toFixed(1) + ' %' : '') + '</div><button class="btn prim" data-apply="' + id + '">Apply these inputs and run</button></div>';
+    if (B) best = '<div class="best"><div><b>' + (B.same ? 'Already the most efficient:' : 'Most efficient inputs found:') + '</b> ' + UI.esc(B.txt) + '</div><div>Application efficiency ' + (B.Ea * 100).toFixed(1) + ' %, root zone filled ' + (B.Es * 100).toFixed(0) + ' %' + (B.dp != null ? ', deep percolation ' + (B.dp * 100).toFixed(1) + ' %' : '') + (B.ro != null ? ', runoff ' + (B.ro * 100).toFixed(1) + ' %' : '') + '</div>' + (B.same ? '' : '<button class="btn prim" data-apply="' + id + '">Apply these inputs and run</button>') + '</div>';
     else best = '<div class="best"><button class="btn" data-best="' + id + '">Find the most efficient inputs</button></div>';
     setBody('<div class="dwrap">' + SEC('dr-' + id, UI.esc(Layers.nameOf(id)), 'results of the last run', h) + SEC('db-' + id, 'Best combination for the highest efficiency', 'searched over the inputs that matter most', best) + SEC('dx-' + id, 'Run again', '', runBtns(id)) + '</div>');
   }
@@ -85,12 +86,14 @@ const Dash = (() => {
     c.textAlign = 'center'; for (let i = 0; i <= 5; i++) { const v = xmn + (xmx - xmn) * i / 5; c.fillText(Math.abs(v) >= 100 ? v.toFixed(0) : v.toFixed(1), X(v), h - B + 13); }
     c.fillText(o.xl || '', L + (w - L - R) / 2, h - 4); c.save(); c.translate(10, T + (h - T - B) / 2); c.rotate(-Math.PI / 2); c.fillText(o.yl || '', 0, 0); c.restore();
     c.strokeStyle = '#808080'; c.strokeRect(L, T, w - L - R, h - T - B);
+    c.save(); c.beginPath(); c.rect(L, T, w - L - R, h - T - B); c.clip();
     o.series.forEach(s => {
       c.strokeStyle = s.c; c.lineWidth = s.w || 2; c.setLineDash(s.dash || []);
       if (s.fill) { c.fillStyle = s.fill; c.beginPath(); xs.forEach((x, i) => { const yy = Y(s.y[i]); i ? c.lineTo(X(x), yy) : c.moveTo(X(x), yy); }); c.lineTo(X(xs[xs.length - 1]), Y(Math.max(ymn, 0))); c.lineTo(X(xs[0]), Y(Math.max(ymn, 0))); c.closePath(); c.fill(); }
       c.beginPath(); xs.forEach((x, i) => { const yy = Y(s.y[i]); i ? c.lineTo(X(x), yy) : c.moveTo(X(x), yy); }); c.stroke(); c.setLineDash([]);
     });
-    (o.marks || []).forEach(m => { c.strokeStyle = m.c || '#C00000'; c.setLineDash([4, 3]); c.lineWidth = 1.2; c.beginPath(); if (m.x != null) { c.moveTo(X(m.x), T); c.lineTo(X(m.x), h - B); } else { c.moveTo(L, Y(m.y)); c.lineTo(w - R, Y(m.y)); } c.stroke(); c.setLineDash([]); c.fillStyle = m.c || '#C00000'; c.textAlign = 'left'; c.fillText(m.t, m.x != null ? X(m.x) + 3 : L + 4, m.x != null ? T + 10 : Y(m.y) - 3); });
+    c.restore();
+    (o.marks || []).forEach(m => { c.strokeStyle = m.c || '#C00000'; c.setLineDash([4, 3]); c.lineWidth = 1.2; c.beginPath(); if (m.x != null) { c.moveTo(X(m.x), T); c.lineTo(X(m.x), h - B); } else { c.moveTo(L, Y(m.y)); c.lineTo(w - R, Y(m.y)); } c.stroke(); c.setLineDash([]); c.fillStyle = m.c || '#C00000'; { const tw = c.measureText(m.t).width, right = m.x != null && X(m.x) + 3 + tw > w - R; const tx = m.x != null ? (right ? X(m.x) - 3 - tw : X(m.x) + 3) : w - R - 4 - tw, ty = m.x != null ? T + 11 + (o.marks.indexOf(m) % 2) * 12 : Y(m.y) - 4; c.fillStyle = 'rgba(255,255,255,0.88)'; c.fillRect(tx - 2, ty - 10, tw + 4, 13); c.fillStyle = m.c || '#C00000'; c.textAlign = 'left'; c.fillText(m.t, tx, ty); } });
     // legend
     let lx = L + 4; c.textAlign = 'left'; o.series.forEach(s => { if (!s.n) return; c.fillStyle = s.c; c.fillRect(lx, 8, 12, 3); c.fillStyle = '#000'; c.fillText(s.n, lx + 16, 13); lx += 22 + c.measureText(s.n).width; });
   }
@@ -99,21 +102,31 @@ const Dash = (() => {
     return '<div class="fate"><div class="fbar">' + F.map((q, i) => '<span style="width:' + (100 * Math.max(0, q[1] || 0) / tot).toFixed(2) + '%;background:' + col[i] + '" title="' + q[0] + '"></span>').join('') + '</div>' +
       F.map((q, i) => '<div class="fl"><i style="background:' + col[i] + '"></i>' + q[0] + ': <b>' + ((q[1] || 0) * 100).toFixed(1) + ' %</b></div>').join('') + '</div>';
   }
+  function timeBars(cv, tt, u) {
+    if (!cv) return; const dpr = window.devicePixelRatio || 1, w = cv.clientWidth, hh = cv.clientHeight; if (!w || !hh) return; cv.width = w * dpr; cv.height = hh * dpr; const c = cv.getContext('2d'); c.scale(dpr, dpr); c.fillStyle = '#fff'; c.fillRect(0, 0, w, hh);
+    const mx = Math.max(...tt.map(q => q[1]), 1e-9), bh = (hh - 20) / tt.length; c.font = '10.5px Tahoma,Arial'; c.textBaseline = 'alphabetic'; let lw = 0; tt.forEach(q => { lw = Math.max(lw, c.measureText(q[0]).width); }); const x0 = Math.min(lw + 12, w * 0.45);
+    tt.forEach((q, i) => { const y = 10 + i * bh; c.fillStyle = '#000'; c.textAlign = 'left'; c.fillText(q[0], 4, y + bh / 2 + 3); const bw = Math.max(1, (w - x0 - 70) * q[1] / mx); c.fillStyle = ['#1F5FA8', '#2E8B57', '#C00000', '#7A5AA8', '#404040'][i % 5]; c.fillRect(x0, y + 3, bw, bh - 7); c.fillStyle = '#000'; c.fillText((q[1] >= 100 ? q[1].toFixed(0) : q[1].toFixed(1)) + ' ' + u, x0 + bw + 4, y + bh / 2 + 3); });
+  }
+  function hydZ(D) {
+    const a = document.getElementById('dch'), b = document.getElementById('dct'); if (!D.ht || !D.ht.length) { if (a) a.parentNode.innerHTML = '<div class="dnote">Not available for this design.</div>'; return; }
+    if (a) xyChart(a, { x: D.ht, xl: 'time from the start of the irrigation (h)', yl: 'L/s', series: [{ y: D.hq, c: '#1F5FA8', n: 'flow at the pump', w: 2.2, fill: 'rgba(31,95,168,0.15)' }], ymin: 0, ymax: D.Qz * 1.25 });
+    if (b) timeBars(b, D.times, 'h');
+  }
   function designCharts(id) {
     if (!runOn(id)) { setBody(SEC('ch-' + id, 'Design charts', 'waiting for a run', '<div class="dnote">The hydrograph, the advance and recession times, the depth along the field and where the water goes are drawn after <b>Run simulation</b>.</div>' + runBtns(id))); return; }
     const D = E.json("designCharts('" + id + "')"); if (!D) return;
     let h = '<div class="dwrap"><div class="charts">';
     if (id === 'sid') {
-      h += '<div class="chart"><h4>Hydrograph: inflow, infiltration and runoff (' + D.unitQ + ')</h4><canvas id="dc1"></canvas></div>' +
-        '<div class="chart"><h4>Advance, cut-off and recession along the field</h4><canvas id="dc2"></canvas></div>' +
-        '<div class="chart"><h4>Infiltrated depth along the field against the required depth</h4><canvas id="dc3"></canvas></div>' +
-        '<div class="chart"><h4>Times of the irrigation (min)</h4><canvas id="dc4"></canvas></div>';
+      h += '' + CB('dc1', 'Hydrograph: inflow, infiltration and runoff (' + D.unitQ + ')', '<canvas id="dc1"></canvas>') + '' +
+        '' + CB('dc2', 'Advance, cut-off and recession along the field', '<canvas id="dc2"></canvas>') + '' +
+        '' + CB('dc3', 'Infiltrated depth along the field against the required depth', '<canvas id="dc3"></canvas>') + '' +
+        '' + CB('dc4', 'Times of the irrigation (min)', '<canvas id="dc4"></canvas>') + '';
     } else if (id === 'drip') {
-      h += '<div class="chart"><h4>Pressure head along the lateral</h4><canvas id="dc1"></canvas></div><div class="chart"><h4>Emitter flow along the lateral</h4><canvas id="dc2"></canvas></div>';
+      h += CB('dh', 'Hydrograph at the pump: the zones run one after the other (L/s)', '<canvas id="dch"></canvas>') + CB('dt', 'Times of the irrigation (h)', '<canvas id="dct"></canvas>') + CB('dc1', 'Pressure head along the lateral', '<canvas id="dc1"></canvas>') + CB('dc2', 'Emitter flow along the lateral', '<canvas id="dc2"></canvas>');
     } else {
-      h += '<div class="chart"><h4>Soil intake rate against the application rate</h4><canvas id="dc1"></canvas></div><div class="chart"><h4>Depth caught at each point, sorted (uniformity)</h4><canvas id="dc2"></canvas></div>';
+      h += CB('dh', 'Hydrograph at the pump: the sets run one after the other (L/s)', '<canvas id="dch"></canvas>') + CB('dt', 'Times of the irrigation (h)', '<canvas id="dct"></canvas>') + CB('dc1', 'Soil intake rate against the application rate', '<canvas id="dc1"></canvas>') + CB('dc2', 'Depth caught at each point, sorted (uniformity)', '<canvas id="dc2"></canvas>');
     }
-    h += '<div class="chart"><h4>Where the water goes</h4>' + fateBar(D.fate) + '</div></div></div>';
+    h += CB('fate', 'Where the water goes', fateBar(D.fate)) + '</div></div>';
     body.innerHTML = h; lastHtml = '';
     setTimeout(() => {
       const g = i => document.getElementById('dc' + i); if (!g(1)) return;
@@ -122,14 +135,12 @@ const Dash = (() => {
         xyChart(g(2), { x: D.xs, xl: 'distance from the inlet (m)', yl: 'time (min)', series: [{ y: D.adv, c: '#1F5FA8', n: 'advance', w: 2.4 }, { y: D.rec, c: '#7A5AA8', n: 'recession', w: 2.4, dash: [6, 3] }], marks: [{ y: D.tco, t: 'cut-off ' + D.tco.toFixed(0) + ' min', c: '#C00000' }] });
         xyChart(g(3), { x: D.xs, xl: 'distance from the inlet (m)', yl: 'mm', series: [{ y: D.Z, c: '#2E8B57', n: 'infiltrated depth', fill: 'rgba(46,139,87,0.2)', w: 2.2 }], marks: [{ y: D.Zn, t: 'required ' + D.Zn.toFixed(0) + ' mm', c: '#C00000' }] });
         const tt = [['tL advance', D.tL], ['ts fill root zone', D.tst], ['tco cut-off', D.tco], ['tr recession', D.tr], ['total', D.tco + D.tr]];
-        const cv = g(4), dpr = window.devicePixelRatio || 1, w = cv.clientWidth, hh = cv.clientHeight; cv.width = w * dpr; cv.height = hh * dpr; const c = cv.getContext('2d'); c.scale(dpr, dpr); c.fillStyle = '#fff'; c.fillRect(0, 0, w, hh);
-        const mx = Math.max(...tt.map(q => q[1]), 1), bh = (hh - 20) / tt.length; c.font = '10.5px Tahoma,Arial';
-        tt.forEach((q, i) => { const y = 10 + i * bh; c.fillStyle = '#000'; c.textAlign = 'left'; c.fillText(q[0], 4, y + bh / 2 + 3); const bw = (w - 170) * q[1] / mx; c.fillStyle = ['#1F5FA8', '#2E8B57', '#C00000', '#7A5AA8', '#404040'][i]; c.fillRect(110, y + 3, bw, bh - 7); c.fillStyle = '#000'; c.fillText(q[1].toFixed(0) + ' min', 114 + bw, y + bh / 2 + 3); });
+        timeBars(g(4), tt, 'min'); 
       } else if (id === 'drip') {
-        if (D.h.length) xyChart(g(1), { x: D.x, xl: 'distance along the lateral (m)', yl: 'head (m)', series: [{ y: D.h, c: '#1F5FA8', n: 'pressure head', w: 2.2 }] }); else g(1).parentNode.innerHTML += '<div class="dnote">Pressure profile not available for this emitter.</div>';
+        hydZ(D); if (D.h.length) xyChart(g(1), { x: D.x, xl: 'distance along the lateral (m)', yl: 'head (m)', series: [{ y: D.h, c: '#1F5FA8', n: 'pressure head', w: 2.2 }] }); else g(1).parentNode.innerHTML += '<div class="dnote">Pressure profile not available for this emitter.</div>';
         if (D.q.length) xyChart(g(2), { x: D.x, xl: 'distance along the lateral (m)', yl: 'L/h', series: [{ y: D.q, c: '#2E8B57', n: 'emitter flow', w: 2.2 }] }); else g(2).parentNode.innerHTML += '<div class="dnote">Emission uniformity ' + ((D.Eu || 0) * 100).toFixed(1) + ' %.</div>';
       } else {
-        xyChart(g(1), { x: D.t, xl: 'time since the start (min)', yl: 'mm/h', series: [{ y: D.intake, c: '#7A5A3A', n: 'soil intake rate', w: 2.2 }, { y: D.rate, c: '#1F5FA8', n: 'application rate', w: 2.2, dash: [6, 3] }], ymax: Math.max(D.rate[0] * 3, 5) });
+        hydZ(D); xyChart(g(1), { x: D.t, xl: 'time since the start (min)', yl: 'mm/h', series: [{ y: D.intake, c: '#7A5A3A', n: 'soil intake rate', w: 2.2 }, { y: D.rate, c: '#1F5FA8', n: 'application rate', w: 2.2, dash: [6, 3] }], ymax: Math.max(D.rate[0] * 3, 5) });
         if (D.catchSorted.length) xyChart(g(2), { x: D.catchSorted.map((_, i) => 100 * i / (D.catchSorted.length - 1)), xl: 'share of the field (%)', yl: 'mm', series: [{ y: D.catchSorted, c: '#1F5FA8', n: 'depth caught', w: 2.2, fill: 'rgba(31,95,168,0.15)' }] });
         else g(2).parentNode.innerHTML += '<div class="dnote">Christiansen uniformity ' + ((D.CU || 0) * 100).toFixed(1) + ' %, distribution uniformity ' + ((D.DU || 0) * 100).toFixed(1) + ' %.</div>';
       }
@@ -140,7 +151,7 @@ const Dash = (() => {
   }
   function charts() {
     const s = E.snap; if (s && DL[s.scene]) { designCharts(s.scene); return; }
-    body.innerHTML = '<div class="dnote">Twenty years around the working date (calendar years on the horizontal axis, millimetres per year).</div><div class="charts"><div class="chart"><h4>Rainfall and irrigation</h4><canvas id="c1"></canvas></div><div class="chart"><h4>Drainage below the root zone</h4><canvas id="c2"></canvas></div><div class="chart"><h4>Evaporation and transpiration</h4><canvas id="c3"></canvas></div></div>'; lastHtml = '';
+    body.innerHTML = '<div class="dnote">Twenty years around the working date (calendar years on the horizontal axis, millimetres per year).</div><div class="charts">' + CB('c1', 'Rainfall and irrigation', '<canvas id="c1"></canvas>') + '' + CB('c2', 'Drainage below the root zone', '<canvas id="c2"></canvas>') + '' + CB('c3', 'Evaporation and transpiration', '<canvas id="c3"></canvas>') + '</div>'; lastHtml = '';
     clearTimeout(chartTimer); chartTimer = setTimeout(() => {
       const S = E.season(); if (!S || !document.getElementById('c1')) return;
       lineChart(document.getElementById('c1'), [{ v: S.yR, c: '#5AA0E1', n: 'Rain' }, { v: S.yI, c: '#C77D1A', n: 'Irrigation' }], { bars: true, zero: true, cal0: S.cal0 });
@@ -149,7 +160,8 @@ const Dash = (() => {
     }, 30);
   }
   function messages() {
-    body.innerHTML = UI.logs.slice().reverse().map(l => '<div class="logline ' + (l.level === 'err' ? 'err' : l.level === 'warn' ? 'warn' : '') + '"><span class="tm">' + l.t + '</span>' + UI.esc(l.msg) + '</div>').join('') || '<div class="dnote">No messages yet.</div>'; lastHtml = '';
+    const L = UI.logs.slice().reverse(), row = l => '<div class="logline ' + (l.level === 'err' ? 'err' : l.level === 'warn' ? 'warn' : '') + '"><span class="tm">' + l.t + '</span>' + UI.esc(l.msg) + '</div>', wn = L.filter(l => l.level === 'err' || l.level === 'warn');
+    body.innerHTML = (wn.length ? SEC('m-warn', 'Warnings', wn.length + ' message' + (wn.length > 1 ? 's' : ''), wn.map(row).join('')) : '') + SEC('m-all', 'All messages', L.length + ' message' + (L.length === 1 ? '' : 's'), L.map(row).join('') || '<div class="dnote">No messages yet.</div>'); lastHtml = '';
   }
   function render() {
     const s = E.snap; if (!s) return;
@@ -161,7 +173,7 @@ const Dash = (() => {
     if (b.dataset.tab) setTab(b.dataset.tab); else if (b.dataset.act === 'pinBaseline') pin(); else if (b.dataset.act === 'clearBaseline') clearPin();
   });
   body.addEventListener('click', e => {
-    const tg = e.target.closest('[data-tog]'); if (tg) { const id = tg.dataset.tog; shut[id] = !shut[id]; lastHtml = ''; const sec = tg.parentNode; sec.classList.toggle('shut', !!shut[id]); const b = sec.querySelector('.dsb'); if (b) b.hidden = !!shut[id]; const tw = tg.querySelector('.tw'); if (tw) tw.innerHTML = shut[id] ? '&#9654;' : '&#9660;'; return; }
+    const tg = e.target.closest('[data-tog]'); if (tg) { const id = tg.dataset.tog; shut[id] = !shut[id]; lastHtml = ''; const sec = tg.parentNode; sec.classList.toggle('shut', !!shut[id]); const b = sec.querySelector('.dsb'); if (b) b.hidden = !!shut[id]; const tw = tg.querySelector('.tw'); if (tw) tw.innerHTML = shut[id] ? '&#9654;' : '&#9660;'; if (!shut[id] && /^ch-/.test(id)) { chartKey = ''; render(); } return; }
     const r = e.target.closest('[data-run]'); if (r) { E.ev("runDesign('" + r.dataset.run + "')"); E.poll(true); UI.log('Design run: ' + Layers.nameOf(r.dataset.run)); lastHtml = ''; chartKey = ''; setTimeout(render, 60); return; }
     const bb = e.target.closest('[data-best]'); if (bb) { const id = bb.dataset.best; UI.toast('Searching the inputs for the highest efficiency...'); setTimeout(() => { bestCache[id] = E.json("designBest('" + id + "')"); if (bestCache[id]) UI.log('Most efficient inputs (' + Layers.nameOf(id) + '): ' + bestCache[id].txt); lastHtml = ''; if (tab !== 'design') setTab('design'); else render(); }, 30); return; }
     const ap = e.target.closest('[data-apply]'); if (ap) { E.ev("designApplyBest('" + ap.dataset.apply + "')"); E.poll(true); UI.log('Most efficient inputs applied and run'); lastHtml = ''; chartKey = ''; setTimeout(render, 80); return; }

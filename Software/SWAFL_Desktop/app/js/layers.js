@@ -15,7 +15,7 @@ const Layers = (() => {
   const FARM_METHOD = { sid: 'M02_Surface', drip: 'M04_Drip10-20cm', spr: 'M01_Overhead' };
   function openFarm(from) {
     const m = FARM_METHOD[from];
-    if (m) E.ev("(function(){var m='" + m + "';var cur=state.method;var ok=(m==='M02_Surface'&&cur==='M02_Surface')||(m==='M01_Overhead'&&cur==='M01_Overhead')||(m.indexOf('Drip')>=0&&cur.indexOf('Drip')>=0);if(!ok)applyState({method:m});})()");
+    if (m) E.ev("(function(){if(!window.__farmPrev)window.__farmPrev={m:state.method,d:fclock.day};var m='" + m + "';var cur=state.method;var ok=(m==='M02_Surface'&&cur==='M02_Surface')||(m==='M01_Overhead'&&cur==='M01_Overhead')||(m.indexOf('Drip')>=0&&cur.indexOf('Drip')>=0);if(!ok)applyState({method:m});})()");
     open('farm');
   }
   const DESIGN = ['sid', 'drip', 'spr'];
