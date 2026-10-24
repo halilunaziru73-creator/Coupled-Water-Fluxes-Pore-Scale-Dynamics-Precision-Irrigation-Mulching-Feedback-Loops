@@ -88,12 +88,12 @@ const Sketch = (() => {
     if (sysS === 'spr') { const ss = px(S.sprSs), kk = Math.max(1, Math.ceil(6 / ss)); c.fillStyle = '#1F5FA8'; for (let t = g.wlo + sp / 2; t < g.whi; t += sp * k) for (let s = g.lo + ss / 2; s < g.hi; s += ss * kk) { const q = along(t, s); if (!inside(q.x, q.y)) continue; c.beginPath(); c.arc(q.x, q.y, 2.2, 0, Math.PI * 2); c.fill(); c.strokeStyle = 'rgba(31,95,168,0.12)'; c.beginPath(); c.arc(q.x, q.y, ss * kk * 0.65, 0, Math.PI * 2); c.stroke(); } }
     c.restore();
     // submain (or head ditch) along the inlet end of the run, mainline from the source
-    const sEnd = (g.inl.x * g.ux + g.inl.y * g.uy) - g.lo < g.hi - (g.inl.x * g.ux + g.inl.y * g.uy) ? g.lo : g.hi, a = along(g.wlo, sEnd), b = along(g.whi, sEnd);
+    const SM = submainSeg(g), sEnd = SM.sEnd, a = SM.a, b = SM.b;
     c.strokeStyle = S.sys === 'sid' ? '#3A7BD5' : '#0A246A'; c.lineWidth = S.sys === 'sid' ? 6 : 3.5; c.beginPath(); c.moveTo(a.x, a.y); c.lineTo(b.x, b.y); c.stroke();
     if (S.src) { c.strokeStyle = '#0A246A'; c.lineWidth = 3; c.setLineDash([8, 4]); c.beginPath(); c.moveTo(S.src.x, S.src.y); c.lineTo(g.inl.x, g.inl.y); c.stroke(); c.setLineDash([]); }
     const lab = (t, x, y, col) => { c.font = 'bold 10px Tahoma,Arial,sans-serif'; const tw = c.measureText(t).width + 8; c.fillStyle = 'rgba(255,255,255,0.92)'; c.fillRect(x - tw / 2, y - 10, tw, 15); c.fillStyle = col || '#0A246A'; c.textAlign = 'center'; c.fillText(t, x, y + 1); c.textAlign = 'left'; };
     if (S.src) { const dx = g.inl.x - S.src.x, dy = g.inl.y - S.src.y, dl = Math.hypot(dx, dy) || 1, nx = -dy / dl, ny = dx / dl, sg = ny > 0 ? -1 : 1; lab('mainline ' + fmt(g.main) + ' m', (S.src.x + g.inl.x) / 2 + nx * 16 * sg, (S.src.y + g.inl.y) / 2 + ny * 16 * sg + 4); }
-    { const inw = sEnd === g.lo ? 1 : -1, ti = g.inl.x * -g.uy + g.inl.y * g.ux, t0 = g.wlo + (g.whi - g.wlo) * (ti < (g.wlo + g.whi) / 2 ? 0.86 : 0.14), q = along(t0, sEnd); lab((S.sys === 'sid' ? 'head ditch ' : 'submain ') + fmt(g.wid) + ' m', q.x + inw * 52 * g.ux, q.y + inw * 52 * g.uy + 4); }
+    { const ln = m(len(a, b)), d0 = len(g.inl, a) > len(g.inl, b) ? 0.3 : 0.7, q = { x: a.x + (b.x - a.x) * d0, y: a.y + (b.y - a.y) * d0 }, dl = len(a, b) || 1; let nx = -(b.y - a.y) / dl, ny = (b.x - a.x) / dl; if (!inside(q.x + nx * 6, q.y + ny * 6)) { nx = -nx; ny = -ny; } lab((S.sys === 'sid' ? 'head ditch ' : 'submain ') + fmt(ln) + ' m', q.x + nx * 18, q.y + ny * 18 + 4); }
     const mid = along((g.wlo + g.whi) / 2, (g.lo + g.hi) / 2);
     lab((S.sys === 'sid' ? (S.sub === 'furrow' ? 'furrows ' : S.sub === 'basin' ? 'basins, run ' : 'borders ') : sysS === 'drip' ? 'laterals ' : 'sprinkler laterals ') + fmt(g.run) + ' m', mid.x, mid.y, '#12303A');
   }
@@ -224,7 +224,7 @@ const Sketch = (() => {
       '<div class="skright"><div class="seg skst" id="skSteps">' + STEPS.map((s, i) => '<button data-s="' + i + '">' + (i + 1) + '. ' + s + '</button>').join('') + '</div><div id="skQ" class="skq"></div>' +
       '<div class="skbtns"><button class="btn" id="skBack">Back</button><button class="btn" id="skNext">Next question</button></div></div></div>',
       buttons: [{ label: 'Turn the sketch into the design', pri: true, act: () => apply() }, { label: 'Close' }] });
-    cv = document.getElementById('skCv'); wire();
+    cv = document.getElementById('skCv'); wire(); setTimeout(() => { const P2 = S.pts.concat(S.src ? [S.src] : []); if (P2.some(p => p.x < 0 || p.y < 0 || p.x > CW || p.y > CH)) fitView(); }, 0);
     document.getElementById('skZin').onclick = () => zoomAt(1.25); document.getElementById('skZout').onclick = () => zoomAt(1 / 1.25); document.getElementById('skFit').onclick = fitView;
     document.getElementById('skMap').onclick = () => { if (typeof FieldMap !== 'undefined') FieldMap.open(); };
     document.getElementById('skMode').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S.mode = b.dataset.m; document.querySelectorAll('#skMode button').forEach(x => x.classList.toggle('on', x === b)); });
@@ -272,7 +272,16 @@ const Sketch = (() => {
     const sel = document.getElementById('skScale'); if (sel) sel.value = S.scale; if (cv && document.body.contains(cv)) draw(); else if (!stay) open();
   }
   // where the drawing sits on the earth: east = m(x) - offx, north = -(m(y) - offy), in metres from (lat, lon)
+  // the submain or head ditch: across the run at the inlet end, inside the field; on a field without a straight end, the edge that holds the inlet
+  function submainSeg(g) {
+    const along = (t, s2) => ({ x: s2 * g.ux - t * g.uy, y: s2 * g.uy + t * g.ux }), mid = (g.inl.x * g.ux + g.inl.y * g.uy), sEnd = mid - g.lo < g.hi - mid ? g.lo : g.hi, inw = sEnd === g.lo ? 1 : -1;
+    const P = S.pts, e = nearestOnEdge(g.inl).i, a = P[e], b = P[(e + 1) % P.length], el = len(a, b) || 1, cosr = Math.abs(((b.x - a.x) * g.ux + (b.y - a.y) * g.uy) / el);
+    if (cosr < 0.5) return { a, b, sEnd, inw, edge: true };   // the edge with the inlet runs across the laterals: the submain follows it
+    const segs = clipSeg(along(g.wlo - 5, sEnd + inw * 2), along(g.whi + 5, sEnd + inw * 2)); if (segs.length) { const best = segs.sort((p, q) => len(q[0], q[1]) - len(p[0], p[1]))[0]; return { a: best[0], b: best[1], sEnd, inw }; }
+    return { a, b, sEnd, inw, edge: true };
+  }
   function setGeo(g) { S.geo = g; if (cv && document.body.contains(cv)) draw(); }
+  function setAnswers(o) { Object.keys(o).forEach(k => { if (o[k] !== undefined) S[k] = o[k]; }); S.inlet = null; if (cv && document.body.contains(cv)) { draw(); try { showStep(); } catch (e) {} } }
   function setSrcMetres(e, n) { if (!S.geo) return; S.src = { x: px(e + S.geo.offx), y: px(-n + S.geo.offy) }; S.inlet = null; if (cv && document.body.contains(cv)) draw(); }
   // the irrigation layout of the sketch in metres east and north of the geographic origin, for the map
   function clipSeg(a, b) {
@@ -292,12 +301,11 @@ const Sketch = (() => {
     if (sysS === 'basin') { const nb = Math.max(1, Math.round(m(g.hi - g.lo) / 40)); for (let i = 1; i < nb; i++) { const s2 = g.lo + (g.hi - g.lo) * i / nb; clipSeg(along(g.wlo - 5, s2), along(g.whi + 5, s2)).forEach(sg => out.lines.push({ kind: 'basin', pts: sg.map(E2) })); } }
     if (sysS === 'spr') { const ss = px(S.sprSs), kk = Math.max(1, Math.ceil(n0 * (g.hi - g.lo) / ss / 1500)); for (let t = g.wlo + sp / 2; t < g.whi; t += sp * k) for (let s2 = g.lo + ss / 2; s2 < g.hi; s2 += ss * kk) { const q = along(t, s2); if (inside(q.x, q.y)) out.pts.push({ kind: 'sprinkler', p: E2(q), r: S.sprSs * 0.65 }); } }
     const sEnd = (g.inl.x * g.ux + g.inl.y * g.uy) - g.lo < g.hi - (g.inl.x * g.ux + g.inl.y * g.uy) ? g.lo : g.hi;
-    { const P = S.pts, e = nearestOnEdge(g.inl).i, a = P[e], b = P[(e + 1) % P.length], sh = (p, q, f) => ({ x: p.x + (q.x - p.x) * f, y: p.y + (q.y - p.y) * f });   // along the edge of the field that holds the inlet
-      out.lines.push({ kind: S.sys === 'sid' ? 'head ditch' : 'submain', pts: [E2(sh(a, b, 0.02)), E2(sh(a, b, 0.98))] }); }
+    { const SM = submainSeg(g); out.lines.push({ kind: S.sys === 'sid' ? 'head ditch' : 'submain', pts: [E2(SM.a), E2(SM.b)] }); }
     if (S.src) { out.lines.push({ kind: 'mainline', pts: [E2(S.src), E2(g.inl)] }); out.pts.push({ kind: 'source', p: E2(S.src), name: { well: 'well', borehole: 'borehole', canal: 'canal', river: 'river', tank: 'pond or tank' }[S.srcType] || 'source' }); }
     out.pts.push({ kind: 'inlet', p: E2(g.inl) }); out.spacing = spM * k; out.thinned = k > 1;
     out.label = (S.sys === 'sid' ? (S.sub === 'furrow' ? 'Furrows' : S.sub === 'basin' ? 'Basins' : 'Border strips') : sysS === 'drip' ? 'Drip laterals' : 'Sprinklers') + ' every ' + (spM * k).toFixed(spM * k < 10 ? 2 : 0) + ' m' + (k > 1 ? ' (one line of every ' + k + ' drawn)' : '');
     return out;
   }
-  return { open, compare, getMetres, setMetres, setGeo, setSrcMetres, layoutM, _S: S, _V: V };
+  return { open, compare, getMetres, setMetres, setGeo, setSrcMetres, setAnswers, layoutM, _S: S, _V: V };
 })();

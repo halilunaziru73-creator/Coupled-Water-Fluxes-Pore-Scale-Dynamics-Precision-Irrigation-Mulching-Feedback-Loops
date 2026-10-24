@@ -93,13 +93,13 @@ The last group of Properties opens the three designs (*Surface design, Drip desi
 
 | Control changed | Annual outputs (20-year means) | Day-by-day layers and schedules | Design layers |
 |:--|:--|:--|:--|
-| Soil | all (baseline run for that soil) | $\mathrm{AWC}$, $(\alpha,n)$, trigger anchor $\Rightarrow$ dates, depths | intake ($k$, $A$) via Saxton–Rawls and Green–Ampt; $Z_n$; the sprinkler maximum rate; the soil of the virtual farm |
+| Soil | all (baseline run for that soil) | $\mathrm{AWC}$, $(\alpha,n)$, trigger anchor $\Rightarrow$ dates, depths | intake ($k$, $A$) via Saxton–Rawls and Green–Ampt; $Z_n$; the sprinkler maximum rate |
 | Tillage, consolidation | drainage, evaporation, yield | pore index in the structure layers | surface storage $S_d$ of the sprinkler design |
 | Crop | yield, transpiration, evaporation (Section 21.4) | crop calendar, $K_c$, $R_{\max}$, cover | peak $ET_c$, $Z_n$, row spacing |
 | Mulch $\varphi$, capacity | evaporation, irrigation, drainage, yield | evaporation term | interception loss of the sprinklers |
 | Rain scale | all | rain amount per event | — |
 | Temperature | evaporation, transpiration, irrigation, yield | $E_0$ and seasonal weight | air temperature in the wind drift (Eq. 13.9) |
-| Method | irrigation, drainage, yield | dose placement | the design the virtual farm follows |
+| Method | irrigation, drainage, yield | dose placement | the design that belongs to the method |
 | Trigger | irrigation, yield, drainage | **dates of irrigation** | $Z_n$ (as $f_T\cdot \mathrm{AWC}\cdot R_{\max}$) |
 | Sensor depth | irrigation, yield | **dates of irrigation** | — |
 | Nitrogen | yield, N leaching | $R_{\max}$ | — |

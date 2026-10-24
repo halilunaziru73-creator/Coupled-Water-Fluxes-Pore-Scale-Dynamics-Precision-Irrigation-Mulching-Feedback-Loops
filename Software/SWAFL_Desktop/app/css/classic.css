@@ -196,3 +196,6 @@ input[type=range]{accent-color:#0A246A}
 .fmsrc{background:#1565C0;color:#fff;border:2px solid #fff;border-radius:50%;font:bold 11px/18px Tahoma,Arial,sans-serif;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.6)}
 .fminl{background:#F2C230;border:1.5px solid #5A4500}
 .fmlegc .fmchip{cursor:pointer}.fmlegc .fmchip:after{content:' \25BE';font-weight:normal}.fmlegc.min .fmchip:after{content:' \25B8'}.fmlegc.min>:not(.fmchip){display:none}.fmlegc.min .fmchip{margin:0}
+.fmws{background:#00B0FF;color:#fff;border:2px solid #fff;border-radius:50%;font:bold 11px/16px Tahoma,Arial,sans-serif;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.6)}.fmws.best{background:#0091EA;border-color:#FFEB3B;box-shadow:0 0 0 3px rgba(255,235,59,.6)}
+.fmadv{background:#E8F4FD;border:1px solid #90CAF9;padding:5px 8px;margin:4px 0;border-radius:3px}
+.fmlegc td{white-space:nowrap}

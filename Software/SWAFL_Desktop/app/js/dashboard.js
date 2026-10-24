@@ -19,15 +19,6 @@ const Dash = (() => {
 
   const CB = (k, title, inner) => SEC('ch-' + k, title, '', '<div class="chart">' + inner + '</div>');
   let dayCache = { key: '', D: null }, layerCache = { key: '', L: null }, n1Chart = null, N1T = null;
-  // the virtual farm, at the bottom of the dashboard of every layer: which system it runs, whether its design has been run,
-  // the next irrigation of the daily model, and a button for each system (the block folds like the others)
-  function farmBlock(s) {
-    let F = null; try { F = E.json("(function(){var S=seasonSim(),k=fclock.kd(),n=null;for(var d=k;d<ND;d++)if(S.irr[d]>0.5){n=d;break}var R=window.DESIGN_RUN||{};return {next:n!=null?fmtDate(dateOfK(n)):null,inDays:n!=null?n-k:null,depth:n!=null?S.irr[n]:null,runs:{sid:!!(R.sid&&R.sid.on),drip:!!(R.drip&&R.drip.on),spr:!!(R.spr&&R.spr.on)},method:state.method,soil:DATA.soil_labels[state.soil],crop:(CROPS[state.crop]||{}).label}})()"); } catch (e) {}
-    if (!F) return '';
-    const mine = F.method === 'M01_Overhead' ? 'spr' : /Drip/.test(F.method) ? 'drip' : 'sid', nm = { sid: 'Surface irrigation', drip: 'Drip irrigation', spr: 'Sprinklers' };
-    const row = id => '<div class="farmrow' + (id === mine ? ' on' : '') + '"><div><b>' + nm[id] + '</b>' + (id === mine ? ' <span class="tag">your method</span>' : '') + '<div class="dnote">' + (F.runs[id] ? 'design run: the farm shows it' : 'design not run yet: the farm asks to run it') + '</div></div><button class="btn' + (id === mine ? ' prim' : '') + '" data-farm="' + id + '">&#9654; Open</button></div>';
-    return SEC('farm', 'Virtual farm simulation', 'the irrigation system at work', '<div class="dnote">' + UI.esc(F.soil) + ' · ' + UI.esc(F.crop || '') + (F.next ? ' · next irrigation ' + UI.esc(F.next) + ' (in ' + F.inDays + ' day' + (F.inDays === 1 ? '' : 's') + ', ' + Math.round(F.depth) + ' mm)' : ' · no irrigation due in the record') + '</div>' + ['sid', 'drip', 'spr'].map(row).join(''));
-  }
   function results(s) {
     const key = s.date + '|' + JSON.stringify(s.state) + '|' + s.year + '|' + ((s.wx && s.wx.key) || '');
     if (dayCache.key !== key) { dayCache = { key, D: E.day() }; }
@@ -73,7 +64,6 @@ const Dash = (() => {
       g += '<div class="kpi ' + r[2] + '"><div class="kl">' + r[1] + '</div><div class="kv">' + UI.esc(v || '...') + '</div>' + dd + '</div>';
     });
     h += SEC('avg', '20-year averages at these settings', baseline ? 'changes against the pinned baseline' : 'pin a baseline to compare', g + '</div>');
-    h += farmBlock(s);
     setBody(h + '</div>');
     if (s.scene === 'n1' && n1Chart) { const cv = document.getElementById('n1dc'); if (cv) { const S = n1Chart; xyChart(cv, { x: S.x, xl: 'day of the season', yl: 'depletion', ymin: 0, ymax: 1, invert: false, series: [{ y: S.dep, c: '#8E24AA', n: 'sensor depletion', w: 2 }], marks: S.x.filter((q, i) => S.irr[i]).map(q => ({ x: q, t: '', c: '#1565C0' })).concat([{ y: N1T, t: 'trigger ' + (+N1T).toFixed(2), c: '#3F1D80' }], S.today >= 0 && S.today <= 155 ? [{ x: S.today, t: 'today', c: '#C00000' }] : []) }); } }
   }
@@ -84,7 +74,7 @@ const Dash = (() => {
     spr: [['Ea', 'Application efficiency', 'pct'], ['Es', 'Storage efficiency', 'pct'], ['DU', 'Distribution uniformity DU', 'pct'], ['CU', 'Christiansen uniformity CU', 'pct'], ['dp', 'Deep percolation', 'pct'], ['ro', 'Runoff', 'pct'], ['gross', 'Gross application', 'num', 'mm'], ['I', 'Net application', 'num', 'mm'], ['T', 'Set time', 'num', 'min'], ['Q', 'Sprinkler discharge', 'num', 'L/min'], ['AR', 'Application rate', 'num', 'mm/h']]
   };
   const runOn = id => !!E.ev("(window.DESIGN_RUN&&DESIGN_RUN['" + id + "']&&DESIGN_RUN['" + id + "'].on)?1:0");
-  const runBtns = id => '<div class="drun"><button class="btn prim" data-run="' + id + '">&#9654; Run simulation</button><button class="btn" data-best="' + id + '">Find the most efficient inputs</button><button class="btn" data-farm="' + id + '">&#9654; Virtual farm simulation</button></div>';
+  const runBtns = id => '<div class="drun"><button class="btn prim" data-run="' + id + '">&#9654; Run simulation</button><button class="btn" data-best="' + id + '">Find the most efficient inputs</button></div>';
   function design(s) {
     const id = s.scene;
     if (!DL[id]) { setBody('<div class="dnote">The Design tab shows efficiencies, uniformity, times and volumes of the irrigation system you are designing. Open <b>Surface irrigation design</b>, <b>Drip irrigation design</b> or <b>Sprinkler design and pipes</b> in the Layers panel.</div>'); return; }
@@ -227,7 +217,6 @@ const Dash = (() => {
     const r = e.target.closest('[data-run]'); if (r) { E.ev("runDesign('" + r.dataset.run + "')"); E.poll(true); UI.log('Design run: ' + Layers.nameOf(r.dataset.run)); lastHtml = ''; chartKey = ''; setTimeout(render, 60); return; }
     const bb = e.target.closest('[data-best]'); if (bb) { const id = bb.dataset.best; UI.toast('Searching the inputs for the highest efficiency...'); setTimeout(() => { bestCache[id] = E.json("designBest('" + id + "')"); if (bestCache[id]) UI.log('Most efficient inputs (' + Layers.nameOf(id) + '): ' + bestCache[id].txt); lastHtml = ''; if (tab !== 'design') setTab('design'); else render(); }, 30); return; }
     const ap = e.target.closest('[data-apply]'); if (ap) { E.ev("designApplyBest('" + ap.dataset.apply + "')"); E.poll(true); UI.log('Most efficient inputs applied and run'); lastHtml = ''; chartKey = ''; setTimeout(render, 80); return; }
-    const fm = e.target.closest('[data-farm]'); if (fm) { Layers.openFarm(fm.dataset.farm); return; }
   });
   function pin() { if (!E.snap) return; baseline = JSON.parse(JSON.stringify(E.snap.ro)); UI.log('Baseline pinned'); UI.toast('Baseline pinned. Results now show changes against it.'); setTab('results'); }
   function clearPin() { baseline = null; UI.log('Baseline cleared'); render(); }

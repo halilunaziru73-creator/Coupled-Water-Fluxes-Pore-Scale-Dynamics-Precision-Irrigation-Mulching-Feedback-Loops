@@ -6,9 +6,9 @@ The window has eight regions, named here as they are named in the program.
 
 1. **Menu bar** — File, Edit, View, Tools, Refresh, Review, Run, Help.
 2. **Toolbar** — icon buttons for New, Open, Save, Undo, Redo, Play/Pause, Restart, 20-year simulation, the three design layers, fit-to-window, search, the report, and the **Date** control with a **Today** button.
-3. **Layers** panel (top left) — the project tree. Each layer is one drawing of the model; each design layer lists its sections and its *Virtual farm simulation*.
+3. **Layers** panel (top left) — the project tree. Each layer is one drawing of the model; each design layer lists its sections.
 4. **Processing Toolbox** (bottom left) — a searchable list of ready-to-run actions.
-5. **Document tabs and view bar** (above the drawing) — one tab per open layer; the view bar names the layer, gives the buttons of its sections and the **Virtual farm simulation** button.
+5. **Document tabs and view bar** (above the drawing) — one tab per open layer; the view bar names the layer and gives the buttons of its sections.
 6. **Drawing** (centre) — the active layer, with the playback bar and the legend under it.
 7. **Dashboard** (right of the drawing) — four tabs: *Results, Design, Charts, Messages*. Every block can be folded and unfolded by clicking its header.
 8. **Properties** (far right) — every model input, in collapsible groups.
@@ -36,7 +36,7 @@ The **status bar** shows, from left to right: the state (*Ready*), the active la
 | | Pin results as baseline / Clear baseline | Ctrl+B | Freezes the 20-year averages for comparison (Chapter 14). |
 | | Find a tool… | Ctrl+F | Moves the cursor to the Toolbox search box. |
 | View | Design layouts ▸ | | Jumps to the layout drawing of the surface, drip or sprinkler design. |
-| | Field sketch to design…; Virtual farm simulation | | The field sketch (Chapter 18); the virtual farm of the design you are in (Chapter 20). |
+| | Field sketch to design… | | The field sketch (Chapter 18). |
 | | Layers and Processing Toolbox / Properties / Dashboard | | Show or hide each dock. |
 | | Fit drawing to window / Drawing at full width (scroll) / Focus view (hide panels) | F9 | Three ways of showing the drawing. |
 | | Expand all layers / Collapse all layers; Full screen | F11 | Tree display; full screen. |
@@ -61,7 +61,7 @@ The tree has the project root *SWAFL project* and eight groups, in the order in 
 
 | Group | Layers |
 |:--|:--|
-| **Irrigation design** | Surface irrigation design; Drip irrigation design; Sprinkler design and pipes — each with its sections and its *Virtual farm simulation* |
+| **Irrigation design** | Surface irrigation design; Drip irrigation design; Sprinkler design and pipes — each with its sections |
 | **Irrigation control** | Sensor and trigger; Trigger law |
 | **Mulch and evaporation** | Mulch against bare soil; Mulch control; Evaporation physics; Fate of saved water; Regime map |
 | **Soil structure and tillage** | Tillage and structure; Soil hydraulic drivers; Root structure |
@@ -74,9 +74,9 @@ In version 1.0 every layer carried a short code (S2, V1, N4 …). The codes have
 
 ![The Layers panel with every group expanded.](images/ui/w_tree.jpg){width=100%}
 
-## The view bar and the Virtual farm button
+## The view bar
 
-Above the drawing, the view bar names the open layer. For the design layers it carries one button per section (*Whole design, Layout design, Simulation, …*). Every layer carries the **Virtual farm simulation** button, which opens the farm of the design that belongs to the irrigation method in force; from a design layer it opens the farm of that design (Chapter 20).
+Above the drawing, the view bar names the open layer. For the design layers it carries one button per section (*Whole design, Layout design, Simulation, …*).
 
 ## Processing Toolbox
 

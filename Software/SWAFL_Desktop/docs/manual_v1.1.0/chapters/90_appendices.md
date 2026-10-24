@@ -214,6 +214,8 @@ Barnes, E. M., Clarke, T. R., Richards, S. E., et al. (2000). Coincident detecti
 
 Blasius, H. (1913). Das Ähnlichkeitsgesetz bei Reibungsvorgängen in Flüssigkeiten. *Forschungsarbeiten auf dem Gebiete des Ingenieurwesens* 131.
 
+Brouwer, C., Prins, K., Kay, M., and Heibloem, M. (1988). *Irrigation water management: irrigation methods*. FAO Training Manual 9. FAO, Rome.
+
 Burt, C. M., Clemmens, A. J., Strelkoff, T. S., Solomon, K. H., Bliesner, R. D., Hardy, L. A., Howell, T. A., and Eisenhauer, D. E. (1997). Irrigation performance measures: efficiency and uniformity. *Journal of Irrigation and Drainage Engineering* 123(6), 423–442.
 
 Carsel, R. F., and Parrish, R. S. (1988). Developing joint probability distributions of soil water retention characteristics. *Water Resources Research* 24(5), 755–769.
@@ -227,6 +229,8 @@ Criddle, W. D., Davis, S., Pair, C. H., and Shockley, D. G. (1956). *Methods for
 Elliott, R. L., and Walker, W. R. (1982). Field evaluation of furrow infiltration and advance functions. *Transactions of the ASAE* 25(2), 396–400.
 
 Gao, B.-C. (1996). NDWI: a normalized difference water index for remote sensing of vegetation liquid water from space. *Remote Sensing of Environment* 58, 257–266.
+
+Gitelson, A. A., Kaufman, Y. J., Stark, R., and Rundquist, D. (2002). Novel algorithms for remote estimation of vegetation fraction. *Remote Sensing of Environment* 80, 76–87.
 
 Green, W. H., and Ampt, G. A. (1911). Studies on soil physics: 1. The flow of air and water through soils. *Journal of Agricultural Science* 4(1), 1–24.
 
@@ -246,6 +250,8 @@ Keller, J., and Karmeli, D. (1974). Trickle irrigation design parameters. *Trans
 
 Kostiakov, A. N. (1932). On the dynamics of the coefficient of water-percolation in soils and on the necessity of studying it from a dynamic point of view for purposes of amelioration. *Transactions of the 6th Committee of the International Society of Soil Science*, Part A, 17–21.
 
+Louhaichi, M., Borman, M. M., and Johnson, D. E. (2001). Spatially located platform and aerial photography for documentation of grazing impacts on wheat. *Geocarto International* 16, 65–70.
+
 Manning, R. (1891). On the flow of water in open channels and pipes. *Transactions of the Institution of Civil Engineers of Ireland* 20, 161–207.
 
 Merriam, J. L., and Keller, J. (1978). *Farm irrigation system evaluation: a guide for management*. Utah State University, Logan.
@@ -256,17 +262,23 @@ Nobel, P. S. (2009). *Physicochemical and environmental plant physiology*, 4th e
 
 Philip, J. R. (1957). Evaporation, and moisture and heat fields in the soil. *Journal of Meteorology* 14(4), 354–366.
 
+Poggio, L., de Sousa, L. M., Batjes, N. H., et al. (2021). SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty. *SOIL* 7, 217–240.
+
 Ritchie, J. T. (1972). Model for predicting evaporation from a row crop with incomplete cover. *Water Resources Research* 8(5), 1204–1213.
 
 Rouse, J. W., Haas, R. H., Schell, J. A., and Deering, D. W. (1974). Monitoring vegetation systems in the Great Plains with ERTS. *Third ERTS Symposium*, NASA SP-351, 309–317.
 
 Saxton, K. E., and Rawls, W. J. (2006). Soil water characteristic estimates by texture and organic matter for hydrologic solutions. *Soil Science Society of America Journal* 70(5), 1569–1578.
 
+Tucker, C. J. (1979). Red and photographic infrared linear combinations for monitoring vegetation. *Remote Sensing of Environment* 8, 127–150.
+
 van den Honert, T. H. (1948). Water transport in plants as a catenary process. *Discussions of the Faraday Society* 3, 146–153.
 
 van Genuchten, M. Th. (1980). A closed-form equation for predicting the hydraulic conductivity of unsaturated soils. *Soil Science Society of America Journal* 44(5), 892–898.
 
 Walker, W. R., and Skogerboe, G. V. (1987). *Surface irrigation: theory and practice*. Prentice-Hall, Englewood Cliffs, NJ.
+
+Woebbecke, D. M., Meyer, G. E., Von Bargen, K., and Mortensen, D. A. (1995). Color indices for weed identification under various soil, residue, and lighting conditions. *Transactions of the ASAE* 38, 259–269.
 
 
 # Equation reference {-}

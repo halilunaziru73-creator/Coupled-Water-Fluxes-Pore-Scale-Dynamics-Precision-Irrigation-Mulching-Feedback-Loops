@@ -12,7 +12,6 @@ On *Trigger law* this block shows only the soil you are working on. It lists the
 
 ![The Trigger law block of the Dashboard: the soil, its numbers, the season chart and the advice.](images/ui/dash_n1.jpg){width=45%}
 
-The last block of the Results tab, on every layer, is **Virtual farm simulation** (Chapter 20). It replaces the button that version 1.1.0 first had on the view bar of every layer.
 
 The tab has four blocks.
 
@@ -71,7 +70,6 @@ With a design layer open, the tab shows the results of its **last run**. Before 
 | Key results | Surface: $E_a$, $E_s$, deep percolation, runoff, CU, cut-off, fill and advance times, the volumes. Drip: $E_a$, $E_s$, $E_u$, deep percolation, wetted fraction $P_w$, gross application, irrigation time, volumes per emitter. Sprinkler: $E_a$, $E_s$, DU, CU, deep percolation, runoff, gross and net application, set time, discharge, application rate. |
 | Warning | For a surface design whose stream does not reach the end of the field in a practical time. |
 | Most efficient inputs | The best combination found by the search of Section 18.4, with its $E_a$, $E_s$, deep percolation and runoff, and **Apply these inputs and run**; or *Already the most efficient* when no combination tried beats your inputs. |
-| Virtual farm | The button that opens the farm of this design (Chapter 20). |
 
 The definitions are Eqs. (11.18)–(11.19), (12.19) and (13.11). The Design tab and the *Design results (CSV)* export read the same object, so the numbers agree digit for digit.
 

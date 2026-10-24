@@ -38,7 +38,7 @@ const Act = {
   // first the user ticks the layers to put in the report (all are ticked to start with)
   report() {
     const w = E.win; if (!w || typeof w.buildReport !== 'function') { UI.toast('The report is not available yet'); return; }
-    const G = Layers.GROUPS.map(g => [g.name, g.items.map(it => [it[0], it[1]]).concat(g.id === 'g-design' ? [['farm', 'Virtual farm simulation']] : [])]);
+    const G = Layers.GROUPS.map(g => [g.name, g.items.map(it => [it[0], it[1]])]);
     const html = '<p>Tick the layers to save in the PDF. Each layer gets your inputs, its key numbers and its full drawing; long drawings continue on the next pages.</p>' +
       '<label class="rpall"><input type="checkbox" id="rpAll" checked> <b>All layers</b></label><div class="rpgrid">' +
       G.map(([gn, its], gi) => '<div class="rpg"><label><input type="checkbox" class="rpG" data-g="' + gi + '" checked> <b>' + UI.esc(gn) + '</b></label>' + its.map(([id, nm]) => '<label class="rpi"><input type="checkbox" class="rpI" data-g="' + gi + '" value="' + id + '" checked> ' + UI.esc(nm) + '</label>').join('') + '</div>').join('') + '</div><div id="rpCount" class="pnote"></div>';
@@ -105,7 +105,7 @@ const MENUS = [
       { label: 'Drip: layout and infrastructure', act: () => Layers.open('drip', E.json("Object.keys((window.__SEC||{}).drip||{}).find(function(k){return /^Layout and infrastructure/.test(k)})||''") || undefined) },
       { label: 'Sprinklers: layout in plan', act: () => Layers.open('spr', E.json("Object.keys((window.__SEC||{}).spr||{}).find(function(k){return /^Layout in plan/.test(k)})||''") || undefined) },
       { label: 'Sprinklers: layout and infrastructure', act: () => Layers.open('spr', E.json("Object.keys((window.__SEC||{}).spr||{}).find(function(k){return /^Layout and infrastructure/.test(k)})||''") || undefined) }] },
-    { label: 'Field sketch to design...', icon: 'field', act: () => Sketch.open() }, { label: 'Virtual farm simulation', icon: 'play', act: () => Layers.openFarm(Layers.DESIGN.includes(Layers.current()) ? Layers.current() : null) }, { sep: 1 },
+    { label: 'Field sketch to design...', icon: 'field', act: () => Sketch.open() }, { sep: 1 },
     { label: 'Layers and Processing Toolbox', check: () => vis('leftDock'), act: () => Act.toggle('leftDock', 'splitLeft') }, { label: 'Properties', check: () => vis('rightDock'), act: () => Act.toggle('rightDock', 'splitRight') },
     { label: 'Dashboard', check: () => vis('dashDock'), act: () => Act.toggle('dashDock', 'splitDash') }, { sep: 1 },
     { label: 'Fit drawing to window', check: () => Act.fitMode === 'window', act: () => Act.fit('window') }, { label: 'Drawing at full width (scroll)', check: () => Act.fitMode === 'width', act: () => Act.fit('width') }, { label: 'Focus view (hide panels)', key: 'F9', act: Act.focus }, { sep: 1 },
@@ -229,7 +229,7 @@ async function boot(again) {
   if (deep) setTimeout(() => { try { Layers.open(deep); } catch (e) {} }, 300);   // links like index.html#open=n1 land straight on a layer (n1 = Irrigation trigger law)
   try { if (!deep && !localStorage.getItem('swafl.welcome')) { localStorage.setItem('swafl.welcome', '1'); welcome(); } } catch (e) {}
 }
-function welcome() { UI.modal({ title: 'Welcome to SWAFL', icon: 'info', width: 'min(620px,94vw)', html: '<div class="about"><img src="assets/logo.svg" width="84" height="84" alt=""><div><p><b>Start in three clicks</b></p><ol><li>Open a group in <b>Layers</b> (left) and click a layer.</li><li>Press <b>Run</b> in the toolbar.</li><li>Change the <b>Date</b> in the toolbar: the whole workbench moves to that date, today or up to 2100.</li></ol><p>Results are in the <b>Dashboard</b> at the bottom. Press <b>F1</b> for the full manual; <b>File &rarr; Save full report as PDF</b> saves the report of every layer. New: <b>Virtual farm simulation</b> (Irrigation design), <b>Crops</b> and <b>Year by year</b>.</p></div></div>', buttons: [{ label: 'Open the guide', act: () => { setTimeout(guideModal, 50); } }, { label: 'Start', pri: true }] }); }
+function welcome() { UI.modal({ title: 'Welcome to SWAFL', icon: 'info', width: 'min(620px,94vw)', html: '<div class="about"><img src="assets/logo.svg" width="84" height="84" alt=""><div><p><b>Start in three clicks</b></p><ol><li>Open a group in <b>Layers</b> (left) and click a layer.</li><li>Press <b>Run</b> in the toolbar.</li><li>Change the <b>Date</b> in the toolbar: the whole workbench moves to that date, today or up to 2100.</li></ol><p>Results are in the <b>Dashboard</b> at the bottom. Press <b>F1</b> for the full manual; <b>File &rarr; Save full report as PDF</b> saves the report of every layer. New: <b>Crops</b>, <b>Year by year</b> and the <b>field on the map</b> (Tools).</p></div></div>', buttons: [{ label: 'Open the guide', act: () => { setTimeout(guideModal, 50); } }, { label: 'Start', pri: true }] }); }
 E.on('snap', ({ s }) => { if (E.metaData) updateStatus(s); });
 E.on('state', s => histPush(s));
 

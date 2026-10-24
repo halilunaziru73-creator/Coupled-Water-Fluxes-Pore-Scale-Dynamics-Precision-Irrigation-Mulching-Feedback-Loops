@@ -6229,10 +6229,6 @@ The screens below are new in version 1.1. The numbered arrows point to the headi
 
 ![The irrigation systems compared on this field (Chapter 18).](images/atlas11/ui_u13_compare.jpg){width=100%}
 
-### The virtual farm before its design has run
-
-![The virtual farm before its design has run (Chapter 20).](images/atlas11/ui_u16_farm_before_run.jpg){width=100%}
-
 ### The Charts tab of a design after its run
 
 ![The Charts tab of a design after its run (Chapter 14).](images/atlas11/ui_u05_dash_charts.jpg){width=100%}
@@ -6292,112 +6288,6 @@ The whole workbench with the drip design open after Run simulation (Chapters 12 
 The whole workbench with the sprinkler design open after Run simulation (Chapters 13 and 18).
 
 ![The sprinkler design after its run.](images/atlas11/ui_wb_spr.jpg){width=100%}
-
-\newpage
-
-### Virtual farm simulation: the surface design
-
-![Virtual farm simulation: the surface design: the whole workbench.](images/atlas11/ui_wb_farm.jpg){width=100%}
-
-The drawing of the layer from top to bottom. It is explained in Chapter 20; its equations are Eqs. 20.1, 20.2.
-
-![Virtual farm simulation: the surface design, part 1 of 3.](images/atlas11/L_farm_sid_p1.jpg){width=78%}
-
-**What the arrows point to.**
-
-- **1** The heading or label *Virtual farm: irrigation from the water source to the plants*.
-- **2** The heading or label *Border strip · from the surface irrigation design*.
-- **3** The heading or label *Irrigation running · t = 3.1 h of 5.2 h (water off the field at 7.0 h)*.
-- **4** The heading or label *Next irrigations: net / gross depth, time open*.
-- **5** The heading or label *canal from the reservoir*.
-- **6** The heading or label *Section along the run, inlet on the left: the wetting of this irrigation (simulated with the design)*.
-
-![Virtual farm simulation: the surface design, part 2 of 3.](images/atlas11/L_farm_sid_p2.jpg){width=78%}
-
-**What the arrows point to.**
-
-- **1** The heading or label *sensor 20 cm: 2 % depleted · trigger 38 %*.
-- **2** The heading or label *drainage below 1 m today 0.0 mm*.
-- **3** The heading or label *irrigation*.
-- **4** The heading or label *This irrigation in 3D: infiltration, water stored, deep percolation, runoff and evaporation*.
-
-![Virtual farm simulation: the surface design, part 3 of 3.](images/atlas11/L_farm_sid_p3.jpg){width=78%}
-
-**What the arrows point to.**
-
-- **1** The heading or label *Infiltration (water that enters the soil)*.
-- **2** The heading or label *Deep percolation below the roots*.
-- **3** The heading or label *Evaporation*.
-- **4** The heading or label *Coarse Loam (sand 45 %, clay 20 %): 1.5 mm of available water per cm. The root zone (0 to 36 cm) takes 53.3 mm, 1.47 mm per cm,*.
-
-\newpage
-
-### Virtual farm simulation: the drip design
-
-The drawing of the layer from top to bottom. It is explained in Chapter 20; its equations are Eqs. 20.1, 20.2.
-
-![Virtual farm simulation: the drip design, part 1 of 3.](images/atlas11/L_farm_drip_p1.jpg){width=78%}
-
-**What the arrows point to.**
-
-- **1** The heading or label *Virtual farm: irrigation from the water source to the plants*.
-- **2** The heading or label *Surface drip · from the drip irrigation design*.
-- **3** The heading or label *Irrigation running · t = 88 min of 3.3 h*.
-- **4** The heading or label *Next irrigations: net / gross depth, time open*.
-- **5** The heading or label *Cross-section through the field: the wetting of this irrigation (simulated with the design)*.
-
-![Virtual farm simulation: the drip design, part 2 of 3.](images/atlas11/L_farm_drip_p2.jpg){width=78%}
-
-**What the arrows point to.**
-
-- **1** The heading or label *sensor 20 cm: 5 % depleted · trigger 38 %*.
-- **2** The heading or label *drainage below 1 m today 0.0 mm*.
-- **3** The heading or label *irrigation*.
-- **4** The heading or label *This irrigation in 3D: infiltration, water stored, deep percolation, runoff and evaporation*.
-
-![Virtual farm simulation: the drip design, part 3 of 3.](images/atlas11/L_farm_drip_p3.jpg){width=78%}
-
-**What the arrows point to.**
-
-- **1** The heading or label *Infiltration (water that enters the soil)*.
-- **2** The heading or label *Deep percolation below the roots*.
-- **3** The heading or label *Evaporation*.
-- **4** The heading or label *Coarse Loam (sand 45 %, clay 20 %): 1.5 mm of available water per cm. The root zone (0 to 43 cm) takes 7.8 mm, 0.18 mm per cm,*.
-
-\newpage
-
-### Virtual farm simulation: the sprinkler design
-
-The drawing of the layer from top to bottom. It is explained in Chapter 20; its equations are Eqs. 20.1, 20.2.
-
-![Virtual farm simulation: the sprinkler design, part 1 of 3.](images/atlas11/L_farm_spr_p1.jpg){width=78%}
-
-**What the arrows point to.**
-
-- **1** The heading or label *Virtual farm: irrigation from the water source to the plants*.
-- **2** The heading or label *Sprinkler · from the sprinkler design*.
-- **3** The heading or label *Applied 26.4 of 59.6 mm gross · stored in the root zone 23.6 mm · rate 5.9 mm/h*.
-- **4** The heading or label *Next irrigations: net / gross depth, time open*.
-- **5** The heading or label *wind drift and evaporation 5.2 %*.
-- **6** The heading or label *Cross-section through the field: the wetting of this irrigation (simulated with the design)*.
-
-![Virtual farm simulation: the sprinkler design, part 2 of 3.](images/atlas11/L_farm_spr_p2.jpg){width=78%}
-
-**What the arrows point to.**
-
-- **1** The heading or label *sensor 20 cm: 3 % depleted · trigger 38 %*.
-- **2** The heading or label *drainage below 1 m today 0.0 mm*.
-- **3** The heading or label *irrigation*.
-- **4** The heading or label *This irrigation in 3D: infiltration, water stored, deep percolation, runoff and evaporation*.
-
-![Virtual farm simulation: the sprinkler design, part 3 of 3.](images/atlas11/L_farm_spr_p3.jpg){width=78%}
-
-**What the arrows point to.**
-
-- **1** The heading or label *Infiltration (water that enters the soil)*.
-- **2** The heading or label *Deep percolation below the roots*.
-- **3** The heading or label *Evaporation and wind drift*.
-- **4** The heading or label *Coarse Loam (sand 45 %, clay 20 %): 1.5 mm of available water per cm. The root zone (0 to 57 cm) takes 53.2 mm, 0.94 mm per cm,*.
 
 \newpage
 

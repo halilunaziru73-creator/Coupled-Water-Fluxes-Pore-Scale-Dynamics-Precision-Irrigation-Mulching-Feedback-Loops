@@ -44,7 +44,7 @@ This manual documents **SWAFL Desktop**, the Soil–Water–Atmosphere–Field�
 4. Chapters 11–13 document the three irrigation design layers (surface, drip, sprinkler) in full, including the irrigation schedule and the "When to irrigate" message.
 5. Chapters 14–16 document the dashboard, step-by-step workflows, exports and troubleshooting.
 6. Chapter 17 states the validity limits.
-7. Chapters 18–24 document the additions of version 1.1: running a design and finding the most efficient inputs, weather data (your own file or the online weather of a place), the virtual farm simulation, the crop library and the crop water requirement, the seasonal data, the reports, and every change from version 1.0.
+7. Chapters 18–24 document the additions of version 1.1: running a design and finding the most efficient inputs, weather data (your own file or the online weather of a place), the real field on the map (satellite indices, image analysis of the satellite photo, water sources and the choice of the irrigation system), the crop library and the crop water requirement, the seasonal data, the reports, and every change from version 1.0.
 8. Chapter 25 is the screenshot atlas. It shows every screen of the workbench (all layers, every section of the three design layers, the menus, the toolbox, the Properties panel, the Dashboard and the dialogs of version 1.1) from the program itself, and prints under each screenshot every equation that the screen draws on, with its number, source chapter and provenance. A reverse index gives, for every numbered equation, the screens that use it.
 9. The appendices give symbols, control value lists, data sets, the provenance ledger, the references and the reference of all numbered equations.
 

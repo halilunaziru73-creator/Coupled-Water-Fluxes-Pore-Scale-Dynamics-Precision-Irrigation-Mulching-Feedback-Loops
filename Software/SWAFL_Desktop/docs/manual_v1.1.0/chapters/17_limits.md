@@ -20,7 +20,7 @@ The program is a **teaching and design-exploration tool** built on a research da
 
 **The crop library (version 1.1).** The 48 library crops are not simulated: they are transferred from the simulated cereal rotation by the ratio of two FAO-56 balances (Section 21.4). The transfer is reliable for the water need and the irrigation (which follow from $K_c$ and $ET_0$), less so for drainage and nitrogen, and the yield is a relative yield (FAO-33), not a harvest in tonnes.
 
-**The virtual farm (version 1.1).** The farm is a picture of the design result and of the daily model: the partition of the water is that of the design run, the wetted depth follows Eq. (20.2), and the plants are drawings, not a crop model.
+**The real field (version 1.1).** Sentinel-2 indices are 10 m pixels of one date and need a scene without cloud over the field. The satellite photo is a mosaic of dates that varies by place and has no near-infrared band, so it gives the visible-band indices and the land cover only; the land cover of Eq. (20.4) is an image analysis by colour and texture, not a trained model, and mistakes dark soil for water or bright soil for roofs now and then. The water sources are those mapped in OpenStreetMap and those seen in the photo; groundwater depth is not known. The DEM is 90 m, so the slope of a small field is approximate. The ranking of the systems is guidance, to be checked on the ground.
 
 **Not included.** The package does not contain a soil-erosion model, a crop-pest model, an economic optimiser, or a groundwater model.
 

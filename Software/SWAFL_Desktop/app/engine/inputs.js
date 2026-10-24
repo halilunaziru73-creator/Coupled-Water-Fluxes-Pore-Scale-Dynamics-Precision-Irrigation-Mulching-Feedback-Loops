@@ -215,7 +215,7 @@
         const g = ctx.createLinearGradient(bx, 0, bx + bw, 0); g.addColorStop(0, '#0A246A'); g.addColorStop(0.7, '#3A6EA5'); g.addColorStop(1, '#A6CAF0'); ctx.fillStyle = g; ctx.fillRect(bx + 3, by + 3, bw - 6, 20);
         T('Run the design', bx + 10, by + 17, { s: 11, b: true, c: '#FFFFFF' });
         T(R.why ? 'The ' + R.why + ': the results wait for a new run.' : 'Set the inputs above (click a value box to type the exact value), then run.', bx + 14, by + 46, { s: 10.5, c: '#000' });
-        T('The results, charts, design table and virtual farm follow the run.', bx + 14, by + 64, { s: 10, c: '#404040' });
+        T('The results, charts and design table follow the run.', bx + 14, by + 64, { s: 10, c: '#404040' });
         btn3d(bx + 14, by + 82, 190, 34, '▶  Run simulation', true); hot(bx + 14, by + 82, 190, 34, () => runDesign(id), 'compute this design with the inputs above');
         btn3d(bx + 216, by + 82, 250, 34, 'Find the most efficient inputs', false); hot(bx + 216, by + 82, 250, 34, () => { BEST[id] = bestFor(id); applyBest(id); runDesign(id); }, 'search the inputs for the highest application efficiency, apply them and run');
         T('Results are hidden until the run, so nothing changes while you type.', bx + 14, by + 136, { s: 9, i: true, c: '#404040' });

@@ -240,7 +240,7 @@ $$
 
 *Provenance (Eq. 11.16):* **[Engineered]**: cut-off rules chosen as design options.
 
-**A set lasts at most 48 hours.** When the inflow is too small for the soil (a sand with a small inflow), the advance can need days or even years. The inflow then stops at $t_{co}=2880$ min, and the water front has reached $x_{\max}$ (from Eq. 11.9 at that time). The part of the run beyond $x_{\max}$ gets no water, and the deficit shows it. The design and the virtual farm both say so and suggest raising the inflow or shortening the run. *Provenance:* **[Engineered]**: a practical limit on the length of a set.
+**A set lasts at most 48 hours.** When the inflow is too small for the soil (a sand with a small inflow), the advance can need days or even years. The inflow then stops at $t_{co}=2880$ min, and the water front has reached $x_{\max}$ (from Eq. 11.9 at that time). The part of the run beyond $x_{\max}$ gets no water, and the deficit shows it. The design says so and suggest raising the inflow or shortening the run. *Provenance:* **[Engineered]**: a practical limit on the length of a set.
 
 The **opportunity time** at distance $x$ is the time the water stays on the soil, $\tau(x) = t_{co} - t_x(x)$ for $t_{co}>t_x$, and the **infiltrated depth** is
 
