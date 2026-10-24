@@ -49,4 +49,4 @@
 * *Tools ▸ Field on the map…* finds the farm (place search, coordinates, satellite image, Google Earth), demarcates it on the image, computes NDVI, EVI, SAVI, NDRE and NDWI of the demarcated field from Sentinel-2 or simulated by SWAFL, and exports the report (PDF or PNG at 96 to 600 dpi, with coordinates and authorship), GeoJSON and CSV (Section 18.6).
 * The Virtual farm simulation is a folding block at the bottom of the Dashboard instead of a button on top of every layer.
 * The Trigger law block of the Dashboard shows the current soil as a table, its season chart and the advice with each condition ticked.
-
+* The index map is cut exactly to the demarcated outline on the real map and follows every change of the outline; it shows continuous colours or five management zones with their areas, two indices side by side, the value under the cursor, and the irrigation layout of the sketch.

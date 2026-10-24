@@ -137,9 +137,9 @@ It also sets the mainline length, the lift, the source, the hours a day, the com
 
 *Tools ▸ Field on the map…*, or **Locate on the map** in the field sketch, opens the field on a satellite image.
 
-![The field on the map, demarcated, with its NDVI and the table of the five indices.](images/ui/fieldmap_indices.jpg){width=100%}
+![The field on the map: an irregular field demarcated with six corners, its NDVI cut exactly to the outline, the legend on the map (index, date, colour scale and spread of the field), the irrigation layout, and the value under the cursor. The screenshot was taken without internet; with internet the satellite image fills the background.](images/ui/fieldmap_indices.jpg){width=100%}
 
-**1. Find the farm.** Type a village, town or district and press *Find* (place search of Open-Meteo, the same as for the online weather), or type the latitude and longitude and press *Go*. If the online weather of a place is in use, the map opens there. The background is the satellite image (Esri World Imagery, with place names) or the map (OpenStreetMap). **Open in Google Earth** opens Google Earth on the centre of the field, to look at it in 3D.
+**1. Find the farm.** Type a village, town or district and press *Find* (place search of Open-Meteo, the same as for the online weather), or type the latitude and longitude and press *Go*. If the online weather of a place is in use, the map opens there. The background is the satellite image (Esri World Imagery, with place names), the satellite image with roads and names, or the map (OpenStreetMap); it needs the internet. **Open in Google Earth** opens Google Earth on the centre of the field, to look at it in 3D.
 
 **2. Demarcate the field.** In *Demarcate* mode, click the corners of the field on the image. Drag a corner to move it; right-click a corner to remove it; *Undo point* and *Clear* work as in the sketch. The *Hand* moves the map; **+** and **−** or the mouse wheel zoom; *Fit the field* shows the whole field. *Place my sketch here* puts the field of the sketch, at its true size, on the centre of the map. The panel gives the area, the perimeter and the centre, in decimal degrees and in degrees, minutes and seconds (WGS 84). On the sphere of radius $R = 6\,378\,137$ m,
 
@@ -150,6 +150,8 @@ P=\sum_i 2R\arcsin\sqrt{\sin^2\tfrac{\Delta\varphi}{2}+\cos\varphi_i\cos\varphi_
 $$
 
 *Provenance (Eq. 18.4):* **[Literature]**: spherical polygon area (Chamberlain and Duquette, 2007) and the haversine distance; $\varphi$ latitude, $\lambda$ longitude in radians.
+
+The bar of steps above the map shows what is done (with a tick) and what comes next: the field demarcated, the index on the map, the irrigation layout on the map, the report.
 
 **3. Compute the indices of the field.** The indices are computed only for the demarcated field, on cells of 10 m (Sentinel-2) or down to 2 m (simulated), and only after the field has at least three corners. Two sources:
 
@@ -177,11 +179,26 @@ $$
 | NDRE | Red edge, NIR | Deep canopy; nitrogen management, precision farming |
 | NDWI | NIR, SWIR | Water inside the canopy; crop water stress, fire risk |
 
-The table gives, for each index, the mean, the 10 and 90 % values, the minimum and maximum over the field, and what the mean means. Click a row to show that index on the map with its colour scale.
+The table gives, for each index, the mean, the 10 and 90 % values, the minimum and maximum over the field, and what the mean means. Click a row to show that index on the map.
+
+**The index follows your outline.** The colours are cut exactly to the demarcated outline and laid over the real map. When you add, drag or remove a corner, the simulated indices are computed again at once for the new outline; the pattern of the field stays where it is on the ground, so the new outline only takes in or leaves out part of it. Satellite indices are read again when you press *Compute*. In the simulated field, the crop vigour and the soil water vary in patches of some 25 to 40 m tied to the ground, and the wetting of the design falls from the inlet end (the end nearest the water source of the sketch) to the tail.
+
+**What the map shows.**
+
+* *Continuous colours* or *Management zones (5 classes)*: the zones split the values of the field by natural breaks (Jenks), drawn from the field smoothed over about 9 m so that each zone is a patch you can manage. The table under the indices gives, for each zone, its range, mean, area (ha) and share of the field.
+* *Smooth* (interpolated between cells) or *Pixels* (each cell as measured, 10 m for Sentinel-2).
+* *Compare with*: a second index side by side; the two maps move and zoom together.
+* The legend in the lower left corner of the map gives the index, the date and the source, the colour scale (or the zones with their area), the spread of the field as a histogram and the mean. Click its dark title to fold it.
+* Move the mouse over the field: the line under the map gives the coordinates and the value of the index at that point, its reading and its zone (and the value of the second index when two are shown).
+* *Irrigation layout* draws the system of the field sketch on the map: the furrows, borders, basins, drip laterals or sprinklers (light lines; one in every few when they are very close), the submain or head ditch along the edge that holds the inlet (thick blue), the mainline from the water source **W** to the inlet (dashed), and the inlet (yellow square). It appears after *Use this field in the sketch and the designs* (or *Place my sketch here*), and it follows the outline when you move a corner. Choose the system, the spacing and the source in the sketch.
+
+![Management zones of NDVI cut to the field, with the zones, their areas and the irrigation layout in the legend (without internet: no satellite image behind).](images/ui/fieldmap_zones.jpg){width=78%}
+
+![Two indices side by side, NDVI and NDRE, the maps moving together.](images/ui/fieldmap_compare.jpg){width=78%}
 
 **4. Use and export.** *Use this field in the sketch and the designs* makes the demarcated field the sketch (true lengths, centre coordinates kept); *Back to the field sketch* continues the design. *Online weather of this field* downloads the daily weather of the centre of the field and runs the program on it. The report has a **title, an author and an organisation**, a **resolution of 96, 150, 300 or 600 dpi** and a format:
 
-* **PDF (A4)**, two pages: page 1 with the map of the chosen index, the edges of the map in degrees, the north arrow and scale bar, the area, the perimeter, the centre, the coordinates of every corner and the table of the indices; page 2 with the five indices side by side, the spread of each over the field and what the five say together (water stress, nitrogen, evenness). The title, author, coordinates and keywords are also written in the properties of the PDF.
+* **PDF (A4)**, two pages: page 1 with the map of the chosen index (continuous or zones) on the satellite image, cut to the field, with the irrigation layout, a grid of latitude and longitude in degrees, minutes and seconds, the edges of the map in degrees, the north arrow and scale bar, the area, the perimeter, the centre, the coordinates of every corner, the table of the indices and the management zones of the chosen index with their areas; page 2 with the five indices side by side, the spread of each over the field and what the five say together (water stress, nitrogen, evenness). The title, author, coordinates and keywords are also written in the properties of the PDF.
 * **PNG (A4)**, one image per page, with the resolution written in the file so that it prints at the chosen dpi.
 * **GeoJSON** (the field polygon in WGS 84 with the area, the author and the means of the indices) and **CSV** (the corners and every statistic), for a GIS or a spreadsheet.
 

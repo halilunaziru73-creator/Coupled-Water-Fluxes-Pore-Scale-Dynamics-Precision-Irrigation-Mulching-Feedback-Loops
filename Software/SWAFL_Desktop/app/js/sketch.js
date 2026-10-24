@@ -267,9 +267,37 @@ const Sketch = (() => {
     const xs = xy.map(p => p[0]), ys = xy.map(p => p[1]), wM = Math.max(...xs) - Math.min(...xs), hM = Math.max(...ys) - Math.min(...ys);
     S.scale = SC.find(v => wM * GRID / v <= CW - 140 && hM * GRID / v <= CH - 120) || 100;
     const cx = (Math.max(...xs) + Math.min(...xs)) / 2, cy = (Math.max(...ys) + Math.min(...ys)) / 2;
-    S.pts = xy.map(p => ({ x: CW / 2 + 20 + px(p[0] - cx), y: CH / 2 + px(p[1] - cy) })); S.inlet = null; S.geo = geo || null;
+    S.pts = xy.map(p => ({ x: CW / 2 + 20 + px(p[0] - cx), y: CH / 2 + px(p[1] - cy) })); S.inlet = null; S.geo = geo ? Object.assign({}, geo, { offx: m(CW / 2 + 20) - cx, offy: m(CH / 2) - cy }) : null;
     const l = Math.min(...S.pts.map(p => p.x)); S.src = { x: Math.max(16, l - 60), y: CH / 2 }; V.z = 1; V.x = V.y = 0;
     const sel = document.getElementById('skScale'); if (sel) sel.value = S.scale; if (cv && document.body.contains(cv)) draw(); else if (!stay) open();
   }
-  return { open, compare, getMetres, setMetres, _S: S, _V: V };
+  // where the drawing sits on the earth: east = m(x) - offx, north = -(m(y) - offy), in metres from (lat, lon)
+  function setGeo(g) { S.geo = g; if (cv && document.body.contains(cv)) draw(); }
+  function setSrcMetres(e, n) { if (!S.geo) return; S.src = { x: px(e + S.geo.offx), y: px(-n + S.geo.offy) }; S.inlet = null; if (cv && document.body.contains(cv)) draw(); }
+  // the irrigation layout of the sketch in metres east and north of the geographic origin, for the map
+  function clipSeg(a, b) {
+    const P = S.pts, ts = [0, 1], dx = b.x - a.x, dy = b.y - a.y;
+    for (let i = 0; i < P.length; i++) { const p = P[i], q = P[(i + 1) % P.length], ex = q.x - p.x, ey = q.y - p.y, den = dx * ey - dy * ex; if (Math.abs(den) < 1e-9) continue;
+      const t = ((p.x - a.x) * ey - (p.y - a.y) * ex) / den, u = ((p.x - a.x) * dy - (p.y - a.y) * dx) / den; if (t > 0 && t < 1 && u >= 0 && u <= 1) ts.push(t); }
+    ts.sort((x, y) => x - y); const out = [];
+    for (let i = 0; i + 1 < ts.length; i++) { const tm = (ts[i] + ts[i + 1]) / 2; if (ts[i + 1] - ts[i] > 1e-6 && inside(a.x + dx * tm, a.y + dy * tm)) out.push([{ x: a.x + dx * ts[i], y: a.y + dy * ts[i] }, { x: a.x + dx * ts[i + 1], y: a.y + dy * ts[i + 1] }]); }
+    return out;
+  }
+  function layoutM() {
+    const g = geom(); if (!g || !S.geo) return null; const G2 = S.geo, E2 = p => [m(p.x) - G2.offx, -(m(p.y) - G2.offy)];
+    const sysS = S.sys === 'sid' ? S.sub : S.sys, along = (t, s2) => ({ x: s2 * g.ux - t * g.uy, y: s2 * g.uy + t * g.ux }), out = { lat: G2.lat, lon: G2.lon, sys: sysS, lines: [], pts: [] };
+    const spM = sysS === 'drip' ? S.row : sysS === 'spr' ? S.sprSl : sysS === 'furrow' ? S.row : sysS === 'border' ? 10 : 20, sp = px(spM), n0 = Math.max(1, Math.ceil((g.whi - g.wlo) / sp)), k = Math.max(1, Math.ceil(n0 / 160));
+    const kind = sysS === 'drip' ? 'lateral' : sysS === 'spr' ? 'sprinkler lateral' : sysS === 'furrow' ? 'furrow' : sysS === 'basin' ? 'basin' : 'border';
+    for (let t = g.wlo + sp / 2; t < g.whi; t += sp * k) clipSeg(along(t, g.lo - 5), along(t, g.hi + 5)).forEach(sg => out.lines.push({ kind, pts: sg.map(E2) }));
+    if (sysS === 'basin') { const nb = Math.max(1, Math.round(m(g.hi - g.lo) / 40)); for (let i = 1; i < nb; i++) { const s2 = g.lo + (g.hi - g.lo) * i / nb; clipSeg(along(g.wlo - 5, s2), along(g.whi + 5, s2)).forEach(sg => out.lines.push({ kind: 'basin', pts: sg.map(E2) })); } }
+    if (sysS === 'spr') { const ss = px(S.sprSs), kk = Math.max(1, Math.ceil(n0 * (g.hi - g.lo) / ss / 1500)); for (let t = g.wlo + sp / 2; t < g.whi; t += sp * k) for (let s2 = g.lo + ss / 2; s2 < g.hi; s2 += ss * kk) { const q = along(t, s2); if (inside(q.x, q.y)) out.pts.push({ kind: 'sprinkler', p: E2(q), r: S.sprSs * 0.65 }); } }
+    const sEnd = (g.inl.x * g.ux + g.inl.y * g.uy) - g.lo < g.hi - (g.inl.x * g.ux + g.inl.y * g.uy) ? g.lo : g.hi;
+    { const P = S.pts, e = nearestOnEdge(g.inl).i, a = P[e], b = P[(e + 1) % P.length], sh = (p, q, f) => ({ x: p.x + (q.x - p.x) * f, y: p.y + (q.y - p.y) * f });   // along the edge of the field that holds the inlet
+      out.lines.push({ kind: S.sys === 'sid' ? 'head ditch' : 'submain', pts: [E2(sh(a, b, 0.02)), E2(sh(a, b, 0.98))] }); }
+    if (S.src) { out.lines.push({ kind: 'mainline', pts: [E2(S.src), E2(g.inl)] }); out.pts.push({ kind: 'source', p: E2(S.src), name: { well: 'well', borehole: 'borehole', canal: 'canal', river: 'river', tank: 'pond or tank' }[S.srcType] || 'source' }); }
+    out.pts.push({ kind: 'inlet', p: E2(g.inl) }); out.spacing = spM * k; out.thinned = k > 1;
+    out.label = (S.sys === 'sid' ? (S.sub === 'furrow' ? 'Furrows' : S.sub === 'basin' ? 'Basins' : 'Border strips') : sysS === 'drip' ? 'Drip laterals' : 'Sprinklers') + ' every ' + (spM * k).toFixed(spM * k < 10 ? 2 : 0) + ' m' + (k > 1 ? ' (one line of every ' + k + ' drawn)' : '');
+    return out;
+  }
+  return { open, compare, getMetres, setMetres, setGeo, setSrcMetres, layoutM, _S: S, _V: V };
 })();

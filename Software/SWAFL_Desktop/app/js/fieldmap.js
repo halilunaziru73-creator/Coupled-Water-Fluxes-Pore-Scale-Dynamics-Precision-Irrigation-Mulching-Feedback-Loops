@@ -7,7 +7,7 @@
 'use strict';
 const FieldMap = (() => {
   const F = { map: null, pts: [], mk: [], poly: null, line: null, mode: 'draw', ov: null, res: null, idx: 'NDVI', src: 'sim', days: 90, cloud: 30,
-    author: '', org: '', title: 'Field report', dpi: 300, fmt: 'pdf', base: 'sat', place: '' };
+    author: '', org: '', title: 'Field report', dpi: 300, fmt: 'pdf', base: 'sat', place: '', view: 'cont', smooth: true, cmp: '', lay: true, map2: null, ov2: null, layG: null, layG2: null, leg: null, leg2: null };
   const R = 6378137, rad = Math.PI / 180;
   const IDX = {
     NDVI: { name: 'Normalized Difference Vegetation Index', bands: 'Red, NIR', use: 'Drought tracking, baseline crop health', ramp: 'veg', lo: -0.1, hi: 0.9,
@@ -52,13 +52,18 @@ const FieldMap = (() => {
       '<div class="fmbar"><div class="seg" id="fmMode"><button data-m="pan">&#9995; Hand (move)</button><button data-m="draw" class="on">&#9998; Demarcate</button></div>' +
       '<button class="btn" id="fmZin" title="Zoom in">&#43;</button><button class="btn" id="fmZout" title="Zoom out">&minus;</button><button class="btn" id="fmFit">Fit the field</button>' +
       '<button class="btn" id="fmUndo">Undo point</button><button class="btn" id="fmClear">Clear</button><button class="btn" id="fmSketch">Place my sketch here</button>' +
-      '<select id="fmBase"><option value="sat">Satellite (Esri World Imagery)</option><option value="osm">Map (OpenStreetMap)</option></select><button class="btn" id="fmGE">Open in Google Earth</button></div>' +
-      '<div id="fmMap" class="fmmap"></div><div id="fmInfo" class="fminfo"></div></div>' +
+      '<select id="fmBase"><option value="sat">Satellite (Esri World Imagery)</option><option value="hyb">Satellite with roads and names</option><option value="osm">Map (OpenStreetMap)</option></select><button class="btn" id="fmGE">Open in Google Earth</button>' +
+      '<label title="Draw the furrows, laterals or sprinklers, the submain and the mainline of the field sketch on the map"><input type="checkbox" id="fmLay"' + (F.lay ? ' checked' : '') + '> Irrigation layout</label></div>' +
+      '<div class="fmsteps" id="fmSteps"></div>' +
+      '<div class="fmmaps" id="fmMaps"><div id="fmMap" class="fmmap"></div><div id="fmMap2" class="fmmap" style="display:none"></div></div><div id="fmInfo" class="fminfo"></div></div>' +
       '<div class="fmright"><h4>1. The demarcated field</h4><div id="fmField" class="pnote">Click the corners of the field on the map (Demarcate). Drag a corner to move it. Use the hand to move the map, + and − or the mouse wheel to zoom.</div>' +
       '<h4>2. Vegetation and water indices</h4><div class="pr"><label>Data</label><select id="fmSrc"><option value="sim">Simulated by SWAFL (vegetation and soil water of the working date)</option><option value="s2">Sentinel-2 L2A satellite (open data, Element 84 Earth Search)</option></select></div>' +
       '<div class="pr" id="fmWhenR"><label>Simulated date</label><select id="fmWhen"><option value="now">The working date of the project</option><option value="peak">The peak of the crop (most cover in the last 12 months)</option></select></div>' +
       '<div class="fmrow" id="fmS2R"><label>Look back <input id="fmDays" type="number" value="' + F.days + '" min="5" max="730" style="width:60px"> days</label><label>Clouds below <input id="fmCloud" type="number" value="' + F.cloud + '" min="1" max="100" style="width:50px"> %</label></div>' +
-      '<button class="btn pri" id="fmRun">Compute the indices of the field</button><div id="fmStat" class="pnote"></div><div id="fmRes"></div>' +
+      '<button class="btn pri" id="fmRun">Compute the indices of the field</button><div id="fmStat" class="pnote"></div>' +
+      '<div class="fmrow" id="fmViewR" style="display:none"><label>Show on the map <select id="fmView"><option value="cont">Continuous colours</option><option value="zones">Management zones (5 classes)</option></select></label>' +
+      '<label>Rendering <select id="fmSmooth"><option value="1">Smooth</option><option value="0">Pixels (as measured)</option></select></label>' +
+      '<label>Compare with <select id="fmCmp"><option value="">nothing (one map)</option>' + KEYS.map(k => '<option value="' + k + '">' + k + ' side by side</option>').join('') + '</select></label></div><div id="fmRes"></div>' +
       '<h4>3. Use and export</h4><div class="fmrow"><button class="btn" id="fmUse">Use this field in the sketch and the designs</button><button class="btn" id="fmWx" title="Download the daily weather of this field (Open-Meteo) and run the program on it">Online weather of this field</button></div>' +
       '<div class="fmrow"><label>Title <input id="fmTitle" value="' + esc(F.title) + '" style="width:100%"></label></div>' +
       '<div class="fmrow"><label>Author <input id="fmAuthor" value="' + esc(F.author) + '" style="width:100%"></label><label>Organisation <input id="fmOrg" value="' + esc(F.org) + '" style="width:100%"></label></div>' +
@@ -68,35 +73,39 @@ const FieldMap = (() => {
       buttons: [{ label: 'Back to the field sketch', pri: true, act: () => { setTimeout(() => Sketch.open(), 0); } }, { label: 'Close' }] });
     setTimeout(initMap, 30);
   }
-  let baseLayer = null, labels = null;
-  function setBase(k) { F.base = k; if (baseLayer) F.map.removeLayer(baseLayer); if (labels) F.map.removeLayer(labels);
-    baseLayer = k === 'osm' ? L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, crossOrigin: 'anonymous', attribution: '© OpenStreetMap contributors' })
-      : L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19, crossOrigin: 'anonymous', attribution: 'Imagery © Esri, Maxar, Earthstar Geographics' });
-    baseLayer.addTo(F.map); if (k === 'sat') { labels = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19, crossOrigin: 'anonymous', opacity: 0.85 }); labels.addTo(F.map); } }
+  const ESRI = 'https://server.arcgisonline.com/ArcGIS/rest/services/';
+  function baseLayers(k) { const o = { maxZoom: 20, maxNativeZoom: 19, crossOrigin: 'anonymous' };
+    if (k === 'osm') return [L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', Object.assign({ attribution: '© OpenStreetMap contributors' }, o))];
+    const a = [L.tileLayer(ESRI + 'World_Imagery/MapServer/tile/{z}/{y}/{x}', Object.assign({ attribution: 'Imagery © Esri, Maxar, Earthstar Geographics' }, o))];
+    if (k === 'hyb') a.push(L.tileLayer(ESRI + 'Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}', Object.assign({ opacity: 0.9 }, o)));
+    a.push(L.tileLayer(ESRI + 'Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', Object.assign({ opacity: 0.85 }, o))); return a; }
+  function setBase(k) { F.base = k; [F.map, F.map2].forEach(mp => { if (!mp) return; (mp.__base || []).forEach(l => mp.removeLayer(l)); mp.__base = baseLayers(k); mp.__base.forEach(l => { l.addTo(mp); l.bringToBack(); }); }); }
   function initMap() {
     const el = document.getElementById('fmMap'); if (!el) return;
     if (F.map) { try { F.map.remove(); } catch (e) {} F.map = null; }
     let c0 = F.pts.length ? centroid(F.pts) : null; if (!c0 && window.__WXLOC) { c0 = [window.__WXLOC.lat, window.__WXLOC.lon]; if (!F.place) F.place = window.__WXLOC.name || ''; }
     F.map = L.map(el, { zoomControl: false, attributionControl: true, preferCanvas: false }).setView(c0 || [9.08, 7.4], c0 ? 16 : 6);
-    setBase(F.base); F.map.on('click', e => { if (F.mode !== 'draw') return; F.pts.push([e.latlng.lat, e.latlng.lng]); F.res = null; clearOverlay(); redraw(); });
-    F.map.on('mousemove', e => { const i = document.getElementById('fmInfo'); if (i) i.textContent = 'Cursor ' + e.latlng.lat.toFixed(6) + ', ' + e.latlng.lng.toFixed(6) + ' · zoom ' + F.map.getZoom() + (F.pts.length ? ' · ' + F.pts.length + ' corners' : ''); });
+    F.map2 = null; setBase(F.base); F.leg = legendCtl(F.map); F.map.on('click', e => { if (F.mode !== 'draw') return; F.pts.push([e.latlng.lat, e.latlng.lng]); changed(); });
+    F.map.on('mousemove', e => cursorInfo(e.latlng)); F.map.on('zoomend', () => drawLayout());
     const $ = id => document.getElementById(id);
     $('fmMode').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; F.mode = b.dataset.m; document.querySelectorAll('#fmMode button').forEach(x => x.classList.toggle('on', x === b)); el.style.cursor = F.mode === 'pan' ? 'grab' : 'crosshair'; });
     el.style.cursor = F.mode === 'pan' ? 'grab' : 'crosshair'; document.querySelectorAll('#fmMode button').forEach(x => x.classList.toggle('on', x.dataset.m === F.mode));
     $('fmZin').onclick = () => F.map.zoomIn(); $('fmZout').onclick = () => F.map.zoomOut(); $('fmFit').onclick = fit;
-    $('fmUndo').onclick = () => { F.pts.pop(); F.res = null; clearOverlay(); redraw(); }; $('fmClear').onclick = () => { F.pts = []; F.res = null; clearOverlay(); redraw(); };
+    $('fmUndo').onclick = () => { F.pts.pop(); changed(); }; $('fmClear').onclick = () => { F.pts = []; changed(); };
     $('fmBase').value = F.base; $('fmBase').onchange = e => setBase(e.target.value);
+    $('fmLay').onchange = e => { F.lay = e.target.checked; drawLayout(); if (F.lay && !layoutData()) UI.toast(needLayout()); };
+    $('fmView').value = F.view; $('fmView').onchange = e => { F.view = e.target.value; showRes(); }; $('fmSmooth').value = F.smooth ? '1' : '0'; $('fmSmooth').onchange = e => { F.smooth = e.target.value === '1'; showRes(); };
+    $('fmCmp').value = F.cmp; $('fmCmp').onchange = e => { F.cmp = e.target.value; showCompare(); showRes(); };
     $('fmGo').onclick = search; $('fmQ').addEventListener('keydown', e => { if (e.key === 'Enter') search(); });
     $('fmLL').onclick = () => { const a = parseFloat($('fmLat').value), b = parseFloat($('fmLon').value); if (isFinite(a) && isFinite(b)) F.map.setView([a, b], 16); };
     $('fmGE').onclick = () => { const c = F.pts.length > 2 ? centroid(F.pts) : [F.map.getCenter().lat, F.map.getCenter().lng]; UI.openExternal('https://earth.google.com/web/@' + c[0].toFixed(6) + ',' + c[1].toFixed(6) + ',400a,900d,35y,0h,0t,0r'); };
-    $('fmSketch').onclick = placeSketch; $('fmWx').onclick = fieldWeather; $('fmRun').onclick = compute; $('fmUse').onclick = useField;
+    $('fmSketch').onclick = placeSketch; $('fmWx').onclick = fieldWeather; $('fmRun').onclick = compute; $('fmUse').onclick = () => useField();
     $('fmRep').onclick = exportReport; $('fmGJ').onclick = exportGeoJSON; $('fmCSV').onclick = exportCSV;
     ['fmTitle', 'fmAuthor', 'fmOrg'].forEach(id => $(id).addEventListener('input', () => { F.title = $('fmTitle').value; F.author = $('fmAuthor').value; F.org = $('fmOrg').value; }));
     $('fmDpi').onchange = e => { F.dpi = +e.target.value; }; $('fmFmt').onchange = e => { F.fmt = e.target.value; }; $('fmFmt').value = F.fmt;
     $('fmSrc').value = F.src; $('fmSrc').onchange = e => { F.src = e.target.value; $('fmWhenR').style.display = F.src === 'sim' ? '' : 'none'; $('fmS2R').style.display = F.src === 'sim' ? 'none' : ''; }; $('fmWhenR').style.display = F.src === 'sim' ? '' : 'none'; $('fmS2R').style.display = F.src === 'sim' ? 'none' : ''; $('fmWhen').value = F.when || 'now'; $('fmWhen').onchange = e => { F.when = e.target.value; };
     $('fmDays').onchange = e => { F.days = Math.max(5, +e.target.value || 90); }; $('fmCloud').onchange = e => { F.cloud = Math.max(1, Math.min(100, +e.target.value || 30)); };
-    setTimeout(() => { F.map.invalidateSize(); redraw(); if (F.pts.length > 2) fit(); }, 60);
-    if (F.res) showRes();
+    setTimeout(() => { F.map.invalidateSize(); redraw(); if (F.pts.length > 2) fit(); if (F.cmp) showCompare(); if (F.res) showRes(); drawLayout(); steps(); }, 60);
   }
   async function search() {
     const q = document.getElementById('fmQ').value.trim(); if (!q) return; const st = document.getElementById('fmInfo');
@@ -107,12 +116,12 @@ const FieldMap = (() => {
   function fit() { if (F.pts.length > 1) F.map.fitBounds(L.latLngBounds(F.pts.map(p => L.latLng(p[0], p[1]))).pad(0.25)); }
   function redraw() {
     if (!F.map) return; F.mk.forEach(m => F.map.removeLayer(m)); F.mk = []; if (F.poly) F.map.removeLayer(F.poly); if (F.line) F.map.removeLayer(F.line); F.poly = F.line = null;
-    if (F.pts.length > 2) F.poly = L.polygon(F.pts, { color: '#FFD600', weight: 3, fillColor: '#FFD600', fillOpacity: F.ov ? 0 : 0.12 }).addTo(F.map);
+    if (F.pts.length > 2) F.poly = L.polygon(F.pts, { color: F.res ? '#FFFFFF' : '#FFD600', weight: F.res ? 2.5 : 3, fillColor: '#FFD600', fillOpacity: F.res ? 0 : 0.12, interactive: false }).addTo(F.map);
     else if (F.pts.length > 1) F.line = L.polyline(F.pts, { color: '#FFD600', weight: 3 }).addTo(F.map);
     F.pts.forEach((p, i) => { const m = L.marker(p, { draggable: true, icon: L.divIcon({ className: 'fmpt', html: String(i + 1), iconSize: [18, 18] }) }).addTo(F.map);
       m.on('drag', e => { F.pts[i] = [e.latlng.lat, e.latlng.lng]; if (F.poly) F.poly.setLatLngs(F.pts); else if (F.line) F.line.setLatLngs(F.pts); fieldInfo(); });
-      m.on('dragend', () => { F.res = null; clearOverlay(); redraw(); }); m.on('contextmenu', () => { F.pts.splice(i, 1); F.res = null; clearOverlay(); redraw(); }); F.mk.push(m); });
-    fieldInfo();
+      m.on('dragend', () => changed()); m.on('contextmenu', () => { F.pts.splice(i, 1); changed(); }); F.mk.push(m); });
+    fieldInfo(); steps(); if (F.map2) { if (F.poly2) F.map2.removeLayer(F.poly2); F.poly2 = F.pts.length > 2 ? L.polygon(F.pts, { color: '#FFFFFF', weight: 2.5, fill: false, interactive: false }).addTo(F.map2) : null; }
   }
   function fieldInfo() {
     const el = document.getElementById('fmField'); if (!el) return; if (F.pts.length < 3) { el.innerHTML = 'Click the corners of the field on the map (Demarcate). Drag a corner to move it; right-click a corner to remove it. Use the hand to move the map, + and − or the mouse wheel to zoom.' + (F.pts.length ? '<br><b>' + F.pts.length + ' corner' + (F.pts.length > 1 ? 's' : '') + ' so far.</b>' : ''); return; }
@@ -123,14 +132,51 @@ const FieldMap = (() => {
   function placeSketch() {
     const m = typeof Sketch !== 'undefined' && Sketch.getMetres ? Sketch.getMetres() : null; if (!m || m.length < 3) { UI.toast('Draw the field in the sketch first'); return; }
     const c = F.map.getCenter(), o = [c.lat, c.lng], cx = m.reduce((a, p) => a + p[0], 0) / m.length, cy = m.reduce((a, p) => a + p[1], 0) / m.length;
-    F.pts = m.map(p => unlocal([p[0] - cx, -(p[1] - cy)], o)); F.res = null; clearOverlay(); redraw(); fit();
+    F.pts = m.map(p => unlocal([p[0] - cx, -(p[1] - cy)], o)); if (Sketch.setGeo) Sketch.setGeo({ lat: o[0], lon: o[1], place: F.place, offx: cx, offy: cy }); F.linked = false; changed(); fit();
   }
-  function useField() {
-    if (F.pts.length < 3) { UI.toast('Demarcate the field first'); return; } const o = centroid(F.pts), xy = F.pts.map(p => local(p, o));
+  function useField(quiet) {
+    if (F.pts.length < 3) { if (!quiet) UI.toast('Demarcate the field first'); return; } const o = centroid(F.pts), xy = F.pts.map(p => local(p, o));
+    const D0 = layoutData(), sq = D0 && D0.pts.find(q2 => q2.kind === 'source'), srcLL = sq ? unlocal(sq.p, [D0.lat, D0.lon]) : null;
     if (typeof Sketch !== 'undefined' && Sketch.setMetres) Sketch.setMetres(xy.map(p => [p[0], -p[1]]), { lat: o[0], lon: o[1], place: F.place }, true);
-    UI.toast('The field is now the sketch: ' + (areaM2(F.pts) / 1e4).toFixed(2) + ' ha. Press Back to the field sketch to continue the design.'); UI.log('Field from the map: ' + (areaM2(F.pts) / 1e4).toFixed(3) + ' ha at ' + o[0].toFixed(5) + ', ' + o[1].toFixed(5));
+    if (srcLL && Sketch.setSrcMetres) { const l = local(srcLL, o); Sketch.setSrcMetres(l[0], l[1]); }
+    F.linked = true; if (quiet) return;
+    drawLayout(); UI.toast('The field is now the sketch: ' + (areaM2(F.pts) / 1e4).toFixed(2) + ' ha. Its irrigation layout is drawn on the map; press Back to the field sketch to change the system.'); UI.log('Field from the map: ' + (areaM2(F.pts) / 1e4).toFixed(3) + ' ha at ' + o[0].toFixed(5) + ', ' + o[1].toFixed(5));
   }
 
+  // the demarcation changed: the simulated indices follow at once; satellite indices are read again on request
+  function changed() {
+    if (F.linked && F.pts.length > 2) useField(true);   // the sketch and its irrigation layout follow the new outline
+    if (F.res && F.res.sim && F.pts.length > 2) { try { F.res = fromSim(); } catch (e) { F.res = null; } }
+    else if (F.res) { F.res = null; const st = document.getElementById('fmStat'); if (st) st.textContent = 'The field changed: press Compute to read the satellite again for the new outline.'; }
+    if (F.pts.length < 3) F.res = null; clearOverlay(); redraw(); if (F.res) showRes(); else { const r = document.getElementById('fmRes'); if (r) r.innerHTML = ''; const v = document.getElementById('fmViewR'); if (v) v.style.display = 'none'; legend(); }
+  }
+  function steps() {
+    const el = document.getElementById('fmSteps'); if (!el) return; const a = F.pts.length > 2, b = !!F.res, c = !!layoutData();
+    const st = (ok, n, t) => '<span class="' + (ok ? 'ok' : '') + '">' + (ok ? '&#10003;' : n) + ' ' + t + '</span>';
+    el.innerHTML = st(a, 1, a ? 'Field demarcated: ' + (areaM2(F.pts) / 1e4).toFixed(2) + ' ha' : 'Find the farm, then click its corners') + st(b, 2, b ? F.idx + ' on the map (' + (F.res.sim ? 'simulated' : 'Sentinel-2') + ', ' + F.res.date + ')' : 'Compute the indices') + st(c, 3, c ? 'Irrigation layout on the map' : 'Use the field in the sketch for the layout') + st(false, 4, 'Export the report');
+  }
+  // the value of the index under the cursor
+  function valueAt(k, lat, lon) { if (!F.res) return NaN; const G = F.res.G, l = local([lat, lon], G.o), i = Math.floor((l[0] - G.x0) / G.cell), j = Math.floor((G.y1 - l[1]) / G.cell); if (i < 0 || j < 0 || i >= G.nx || j >= G.ny || !inside(lat, lon, F.pts)) return NaN; return F.res.vals[KEYS.indexOf(k)][j * G.nx + i]; }
+  function cursorInfo(ll) {
+    const i = document.getElementById('fmInfo'); if (!i) return; let t = 'Cursor ' + ll.lat.toFixed(6) + ', ' + ll.lng.toFixed(6) + ' (' + dms(ll.lat, 'N', 'S') + ' ' + dms(ll.lng, 'E', 'W') + ') · zoom ' + F.map.getZoom();
+    if (F.res) { const v = valueAt(F.idx, ll.lat, ll.lng); if (isFinite(v)) { const z = zoneOf(F.idx, v); t += ' · <b>' + F.idx + ' ' + v.toFixed(3) + '</b> (' + IDX[F.idx].read(v) + ', zone ' + (z + 1) + ' of 5)'; if (F.cmp) { const v2 = valueAt(F.cmp, ll.lat, ll.lng); if (isFinite(v2)) t += ' · <b>' + F.cmp + ' ' + v2.toFixed(3) + '</b>'; } } }
+    i.innerHTML = t;
+  }
+  // the irrigation layout of the sketch, drawn on the map
+  const needLayout = () => 'To draw the irrigation layout, press "Use this field in the sketch and the designs" (or draw the field in the sketch and press "Place my sketch here").';
+  function layoutData() { try { return typeof Sketch !== 'undefined' && Sketch.layoutM ? Sketch.layoutM() : null; } catch (e) { return null; } }
+  const LSTY = { lateral: { color: '#4FC3F7', weight: 1.2 }, 'sprinkler lateral': { color: '#4FC3F7', weight: 1.4 }, furrow: { color: '#D7B98E', weight: 1.2 }, border: { color: '#E0C38C', weight: 1.6 }, basin: { color: '#E0C38C', weight: 2 },
+    submain: { color: '#1565C0', weight: 5 }, 'head ditch': { color: '#1E88E5', weight: 6 }, mainline: { color: '#0A246A', weight: 4, dashArray: '10 6' } };
+  function drawLayout() {
+    [[F.map, 'layG'], [F.map2, 'layG2']].forEach(([mp, key]) => { if (F[key] && F[key]._map) F[key].remove(); F[key] = null; if (!mp || !F.lay) return; const D = layoutData(); if (!D) return;
+      const o = [D.lat, D.lon], ll = p => unlocal(p, o), g = L.layerGroup(), dense = mp.getZoom() < 16;
+      D.lines.forEach(l => { const st = Object.assign({ interactive: false, opacity: 0.95 }, LSTY[l.kind] || {}), thin = /lateral|furrow|border|basin/.test(l.kind); if (thin && (dense || F.res)) { st.weight = 0.7; st.opacity = F.res ? 0.45 : 0.8; if (F.res) st.color = '#FFFFFF'; } if (l.kind === 'submain' || l.kind === 'mainline' || l.kind === 'head ditch') L.polyline(l.pts.map(ll), { color: '#fff', weight: st.weight + 3, opacity: 0.7, interactive: false }).addTo(g); L.polyline(l.pts.map(ll), st).addTo(g); });
+      D.pts.forEach(q => { if (q.kind === 'sprinkler') L.circle(ll(q.p), { radius: q.r, color: '#81D4FA', weight: 0.8, fillColor: '#4FC3F7', fillOpacity: 0.12, interactive: false }).addTo(g);
+        else if (q.kind === 'source') L.marker(ll(q.p), { icon: L.divIcon({ className: 'fmsrc', html: 'W', iconSize: [22, 22] }), title: 'Water source: ' + q.name }).addTo(g);
+        else if (q.kind === 'inlet') L.marker(ll(q.p), { icon: L.divIcon({ className: 'fminl', iconSize: [12, 12] }), title: 'Inlet' }).addTo(g); });
+      g.addTo(mp); F[key] = g; });
+    steps(); legend();
+  }
   async function fieldWeather() {
     if (F.pts.length < 3) { UI.toast('Demarcate the field first'); return; } const c = centroid(F.pts), st = document.getElementById('fmStat'); st.textContent = 'Downloading the weather of the field...';
     try { const s = await E.win.wxOnline(+c[0].toFixed(4), +c[1].toFixed(4), F.place || ('Field at ' + c[0].toFixed(4) + ', ' + c[1].toFixed(4))); window.__WXLOC = { lat: c[0], lon: c[1], name: F.place };
@@ -152,20 +198,36 @@ const FieldMap = (() => {
     catch (e) { if (/Failed to fetch|NetworkError|Load failed/i.test(e.message || '')) e = new Error('the satellite catalogue cannot be reached (no internet connection)'); st.innerHTML = '<b style="color:#B01E14">' + esc(e.message || e) + '</b>' + (F.src === 's2' ? ' The simulated indices are used instead.' : ''); if (F.src === 's2') { F.res = fromSim(); F.res.note = 'Satellite data not available (' + (e.message || e) + '); simulated by SWAFL instead.'; showRes(); } }
   }
   function stats(a) { const v = a.filter(x => isFinite(x)).sort((p, q) => p - q), n = v.length; if (!n) return null; const m = v.reduce((p, q) => p + q, 0) / n, sd = Math.sqrt(v.reduce((p, q) => p + (q - m) ** 2, 0) / n), pc = f => v[Math.min(n - 1, Math.max(0, Math.round(f * (n - 1))))]; return { n, mean: m, sd, min: v[0], max: v[n - 1], p10: pc(0.1), p50: pc(0.5), p90: pc(0.9) }; }
+  const hash = (i, j) => { let h = Math.imul(i, 374761393) + Math.imul(j, 668265263) | 0; h = Math.imul(h ^ (h >>> 13), 1274126177); h ^= h >>> 16; return (h & 0xffff) / 65535 * 2 - 1; };
+  const vnoise = (x, y) => { const i = Math.floor(x), j = Math.floor(y), fx = x - i, fy = y - j, sx = fx * fx * (3 - 2 * fx), sy = fy * fy * (3 - 2 * fy), a = hash(i, j), b = hash(i + 1, j), c = hash(i, j + 1), d = hash(i + 1, j + 1); return a + (b - a) * sx + (c - a) * sy + (a - b - c + d) * sx * sy; };
+  const fbm = (x, y) => 0.62 * vnoise(x, y) + 0.27 * vnoise(2.03 * x + 17.2, 2.03 * y + 5.1) + 0.11 * vnoise(4.1 * x + 3.7, 4.1 * y + 31.4);
+  function runAxis() {   // along the longest side of the field; the inlet end is the end nearest the water source of the sketch
+    let best = 0, ang = 0; const o = centroid(F.pts); F.pts.forEach((p, i) => { const q = F.pts[(i + 1) % F.pts.length], a = local(p, o), b = local(q, o), d = Math.hypot(b[0] - a[0], b[1] - a[1]); if (d > best) { best = d; ang = Math.atan2(b[1] - a[1], b[0] - a[0]); } });
+    const ux = Math.cos(ang), uy = Math.sin(ang), s = p => { const l = local(p, o); return l[0] * ux + l[1] * uy; }; let inletHi = false;
+    const D = layoutData(); if (D) { const src = D.pts.find(q => q.kind === 'inlet') || D.pts.find(q => q.kind === 'source'); if (src) { const sp = s(unlocal(src.p, [D.lat, D.lon])), v = F.pts.map(s); inletHi = Math.abs(sp - Math.max(...v)) < Math.abs(sp - Math.min(...v)); } }
+    return { s, inletHi };
+  }
   // simulated: the field's reflectance from the crop cover and the soil water of the daily model, with the spread of the design's uniformity
   function fromSim() {
     let D = null; try { D = E.json("(function(){var S=seasonSim(),k=fclock.kd();if(" + (F.when === 'peak') + "){var b=k;for(var d=Math.max(0,k-365);d<=k;d++)if((S.cover[d]||0)>(S.cover[b]||0))b=d;k=b}var rd=S.rd[k]||30,n=Math.max(1,Math.round(rd/DZ)),a=0;for(var i=0;i<n;i++)a+=Math.max(0,Math.min(1.2,S.s[k][i]));var t=DATA.texture[state.soil]||{},cu=0.85;try{cu=state.method==='M01_Overhead'?spRun().CU:/Drip/.test(state.method)?drRun().Eu:sidRun().cu/100}catch(e){}return {cover:S.cover[k]||0,s:a/n,s0:Math.max(0,Math.min(1.2,S.s[k][0])),fs:S.fs[k],fT:S.fTrig,crop:cropNameAt(S,k),date:fmtDate(dateOfK(k)),soil:DATA.soil_labels[state.soil],color:t.color||'#8B6B4A',sand:t.sand||40,cu:cu,nfac:NRATE_VALUES[state.nIdx]/100}})()"); } catch (e) {}
     if (!D) throw new Error('the simulation is not ready');
     const G = grid(2), hx = D.color.replace('#', ''), rgb = [0, 2, 4].map(i => parseInt(hx.substr(i, 2), 16) / 255), bright = 0.08 + 0.32 * (0.3 * rgb[0] + 0.59 * rgb[1] + 0.11 * rgb[2]);
-    const vals = KEYS.map(() => new Float32Array(G.nx * G.ny).fill(NaN)); let seed = 12345; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const vals = KEYS.map(() => new Float32Array(G.nx * G.ny).fill(NaN));
     const stress = Math.max(0, Math.min(1, (D.fs - D.fT) / Math.max(0.05, 1 - D.fT))), nst = Math.max(0, Math.min(1, D.nfac));
+    // the field's own pattern: soil and vigour patches tied to the ground (they stay where they are when the outline changes), and the
+    // wetting gradient of the design along the run, from the inlet end (the end nearest the water source of the sketch) to the tail
+    const cr = Math.cos(Math.round(G.o[0] * 10) / 10 * rad), AX = p => [p[1] * 111320 * cr, p[0] * 110540];
+    const ax = runAxis(), lo = Math.min(...F.pts.map(p => ax.s(p))), hi = Math.max(...F.pts.map(p => ax.s(p)));
     for (let j = 0; j < G.ny; j++) for (let i = 0; i < G.nx; i++) { const p = G.ll(i, j); if (!inside(p[0], p[1], F.pts)) continue;
-      const u = i / Math.max(1, G.nx - 1), wv = 1 + (1 - D.cu) * 1.4 * (0.5 - u) + (rnd() - 0.5) * 0.12, s = Math.max(0, Math.min(1.2, D.s * wv)), sTop = Math.max(0, Math.min(1.2, D.s0 * wv));
-      const c = Math.max(0, Math.min(1, D.cover * (0.92 + 0.16 * rnd()) * (1 - 0.25 * stress) * (0.85 + 0.15 * Math.min(1, s))));
+      const [X, Y] = AX(p), z1 = fbm(X / 42, Y / 42), z2 = fbm(X / 27 + 91.3, Y / 27 - 45.7), z3 = fbm(X / 9 + 13.1, Y / 9 + 7.9);
+      const u0 = (ax.s(p) - lo) / Math.max(1e-6, hi - lo), u = ax.inletHi ? 1 - u0 : u0;
+      const wv = 1 + (1 - D.cu) * 1.4 * (0.5 - u) + 0.16 * z2 + 0.03 * z3, s = Math.max(0, Math.min(1.2, D.s * wv)), sTop = Math.max(0, Math.min(1.2, D.s0 * wv));
+      const vig = 1 + 0.2 * z1 + 0.025 * z3 - 0.35 * Math.max(0, -z1 - 0.42);
+      const c = Math.max(0, Math.min(1, D.cover * vig * (1 - 0.25 * stress) * (0.85 + 0.15 * Math.min(1, s))));
       const wet = 1 - 0.35 * Math.min(1, sTop), Rs = bright * wet, soil = [0.75 * Rs, Rs, 1.06 * Rs, 1.15 * Rs, 1.3 * Rs * (1 - 0.3 * Math.min(1, sTop))];
       const chl = 0.6 + 0.4 * nst, veg = [0.035, 0.05 + 0.04 * (1 - chl) + 0.03 * stress, 0.18 + 0.08 * (1 - chl), 0.46 - 0.12 * stress, 0.16 + 0.12 * stress + 0.06 * (1 - Math.min(1, s))];
       const r = soil.map((x, q) => c * veg[q] + (1 - c) * x), ix = IX(r[0], r[1], r[2], r[3], r[4]); ix.forEach((v, q) => { vals[q][j * G.nx + i] = v; }); }
-    return pack(G, vals, { src: 'Simulated by SWAFL from the daily model on ' + D.date + ': ' + D.crop + ', crop cover ' + Math.round(D.cover * 100) + ' %, root-zone water ' + Math.round(D.s * 100) + ' % of available, ' + D.soil + '; spread from the design uniformity ' + Math.round(D.cu * 100) + ' %.', date: D.date, note: 'Simulated indices for ' + D.date + ' (no internet needed). Choose the Sentinel-2 data for the real field.' });
+    return pack(G, vals, { sim: true, src: 'Simulated by SWAFL from the daily model on ' + D.date + ': ' + D.crop + ', crop cover ' + Math.round(D.cover * 100) + ' %, root-zone water ' + Math.round(D.s * 100) + ' % of available, ' + D.soil + '; spread from the design uniformity ' + Math.round(D.cu * 100) + ' %.', date: D.date, note: 'Simulated indices for ' + D.date + ' (no internet needed). Choose the Sentinel-2 data for the real field.' });
   }
   // Sentinel-2 L2A from Element 84 Earth Search (open data on AWS): the least cloudy recent scene over the field
   async function fromS2(st) {
@@ -197,20 +259,86 @@ const FieldMap = (() => {
   }
   function pack(G, vals, meta) { const S = {}; KEYS.forEach((k, q) => { S[k] = stats(Array.from(vals[q])); }); return Object.assign({ G, vals, S, pts: F.pts.slice() }, meta); }
   const RAMP = { veg: [[0, [165, 0, 38]], [0.25, [244, 109, 67]], [0.45, [254, 224, 139]], [0.65, [166, 217, 106]], [0.85, [26, 152, 80]], [1, [0, 104, 55]]], wat: [[0, [140, 81, 10]], [0.35, [223, 194, 125]], [0.55, [199, 234, 229]], [0.8, [53, 151, 143]], [1, [1, 102, 94]]] };
-  function colour(k, v) { const I = IDX[k], t = Math.max(0, Math.min(1, (v - I.lo) / (I.hi - I.lo))), R2 = RAMP[I.ramp]; for (let i = 1; i < R2.length; i++) if (t <= R2[i][0]) { const a = R2[i - 1], b = R2[i], f = (t - a[0]) / (b[0] - a[0]); return a[1].map((c, q) => Math.round(c + (b[1][q] - c) * f)); } return R2[R2.length - 1][1]; }
-  function rasterCanvas(k) { const G = F.res.G, q = KEYS.indexOf(k), cv = document.createElement('canvas'); cv.width = G.nx; cv.height = G.ny; const c = cv.getContext('2d'), im = c.createImageData(G.nx, G.ny);
-    for (let i = 0; i < G.nx * G.ny; i++) { const v = F.res.vals[q][i]; if (!isFinite(v)) continue; const col = colour(k, v); im.data[i * 4] = col[0]; im.data[i * 4 + 1] = col[1]; im.data[i * 4 + 2] = col[2]; im.data[i * 4 + 3] = 235; } c.putImageData(im, 0, 0); return cv; }
-  function clearOverlay() { if (F.ov && F.map) F.map.removeLayer(F.ov); F.ov = null; const r = document.getElementById('fmRes'); if (r && !F.res) r.innerHTML = ''; }
-  function showOverlay() { if (!F.res || !F.map) return; if (F.ov) F.map.removeLayer(F.ov); const G = F.res.G; F.ov = L.imageOverlay(rasterCanvas(F.idx).toDataURL(), [[G.sw[0], G.sw[1]], [G.ne[0], G.ne[1]]], { opacity: 0.85, interactive: false, className: 'fmov' }).addTo(F.map); if (F.poly) F.poly.setStyle({ fillOpacity: 0 }); }
-  function legendHTML(k) { const I = IDX[k], st = []; for (let i = 0; i <= 10; i++) { const v = I.lo + (I.hi - I.lo) * i / 10, c = colour(k, v); st.push('rgb(' + c.join(',') + ') ' + (i * 10) + '%'); } return '<div class="fmleg"><span>' + I.lo + '</span><i style="background:linear-gradient(90deg,' + st.join(',') + ')"></i><span>' + I.hi + '</span></div>'; }
+  const rampAt = (name, t) => { const R2 = RAMP[name]; t = Math.max(0, Math.min(1, t)); for (let i = 1; i < R2.length; i++) if (t <= R2[i][0]) { const a = R2[i - 1], b = R2[i], f = (t - a[0]) / (b[0] - a[0]); return a[1].map((c, q) => Math.round(c + (b[1][q] - c) * f)); } return R2[R2.length - 1][1]; };
+  function colour(k, v) { const I = IDX[k]; return rampAt(I.ramp, (v - I.lo) / (I.hi - I.lo)); }
+  const ZT = [0.02, 0.27, 0.5, 0.73, 0.98], zoneCol = (k, z) => rampAt(IDX[k].ramp, ZT[z]);
+  // natural breaks (Jenks) of the field's values into five management zones, with the area and the mean of each
+  function zones(k) {
+    F.res._Z = F.res._Z || {}; if (F.res._Z[k]) return F.res._Z[k]; const q = KEYS.indexOf(k), all = Array.from(F.res.vals[q]).filter(isFinite).sort((a, b) => a - b), n0 = all.length; if (!n0) return null;
+    const step = Math.max(1, Math.floor(n0 / 1200)), v = all.filter((x, i) => i % step === 0), n = v.length, K = Math.min(5, n), LC = [], VAR = [];
+    for (let i = 0; i <= n; i++) { LC.push(new Array(K + 1).fill(0)); VAR.push(new Array(K + 1).fill(Infinity)); } for (let j = 1; j <= K; j++) { LC[1][j] = 1; VAR[1][j] = 0; }
+    for (let l = 2; l <= n; l++) { let s1 = 0, s2 = 0, w = 0, vv = 0; for (let m = 1; m <= l; m++) { const i3 = l - m + 1, val = v[i3 - 1]; s2 += val * val; s1 += val; w++; vv = s2 - s1 * s1 / w; const i4 = i3 - 1; if (i4 !== 0) for (let j = 2; j <= K; j++) if (VAR[l][j] >= vv + VAR[i4][j - 1]) { LC[l][j] = i3; VAR[l][j] = vv + VAR[i4][j - 1]; } } LC[l][1] = 1; VAR[l][1] = vv; }
+    const br = new Array(K + 1); br[K] = v[n - 1]; br[0] = v[0]; let kk = n; for (let j = K; j >= 2; j--) { const id = LC[kk][j] - 2; br[j - 1] = v[Math.max(0, id)]; kk = LC[kk][j] - 1; }
+    while (br.length < 6) br.push(br[br.length - 1]);
+    const A = areaM2(F.pts), Z = [0, 1, 2, 3, 4].map(() => ({ n: 0, s: 0, min: Infinity, max: -Infinity })); all.forEach(x => { const z = cls(br, x), c = Z[z]; c.n++; c.s += x; c.min = Math.min(c.min, x); c.max = Math.max(c.max, x); });
+    Z.forEach(c => { c.mean = c.n ? c.s / c.n : NaN; c.ha = c.n / n0 * A / 1e4; c.pct = c.n / n0 * 100; }); const out = { br, Z }; F.res._Z[k] = out; return out;
+  }
+  const cls = (br, x) => { for (let z = 1; z < 5; z++) if (x <= br[z]) return z - 1; return 4; };
+  const zoneOf = (k, v) => { const Z = zones(k); return Z ? cls(Z.br, v) : 0; };
+  // the index over the field: interpolated (smooth) or as measured (pixels), cut exactly to the demarcated outline
+  function fieldCanvas(k, view, smooth, maxPx) {
+    const G = F.res.G, q = KEYS.indexOf(k), src = view === 'zones' ? blurred(q) : filled(q), sc = Math.max(1, Math.min(48, (maxPx || 1400) / Math.max(G.nx, G.ny))), W = Math.max(1, Math.round(G.nx * sc)), H = Math.max(1, Math.round(G.ny * sc));
+    const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const c = cv.getContext('2d'), im = c.createImageData(W, H), Z = view === 'zones' ? zones(k) : null, zc = Z ? [0, 1, 2, 3, 4].map(z => zoneCol(k, z)) : null;
+    const at = (i, j) => src[Math.max(0, Math.min(G.ny - 1, j)) * G.nx + Math.max(0, Math.min(G.nx - 1, i))];
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { let v; const gx = (x + 0.5) / sc - 0.5, gy = (y + 0.5) / sc - 0.5;
+      if (smooth) { const i = Math.floor(gx), j = Math.floor(gy), fx = gx - i, fy = gy - j; v = at(i, j) * (1 - fx) * (1 - fy) + at(i + 1, j) * fx * (1 - fy) + at(i, j + 1) * (1 - fx) * fy + at(i + 1, j + 1) * fx * fy; } else v = at(Math.floor((x + 0.5) / sc), Math.floor((y + 0.5) / sc));
+      if (!isFinite(v)) continue; const col = Z ? zc[cls(Z.br, v)] : colour(k, v), o = (y * W + x) * 4; im.data[o] = col[0]; im.data[o + 1] = col[1]; im.data[o + 2] = col[2]; im.data[o + 3] = 255; }
+    c.putImageData(im, 0, 0); c.globalCompositeOperation = 'destination-in'; c.beginPath(); F.pts.forEach((p, i) => { const l = local(p, G.o), X = (l[0] - G.x0) / G.cell * sc, Y = (G.y1 - l[1]) / G.cell * sc; i ? c.lineTo(X, Y) : c.moveTo(X, Y); }); c.closePath(); c.fill(); c.globalCompositeOperation = 'source-over';
+    return cv;
+  }
+  function blurred(q) {   // the zones are drawn from the field smoothed over about 3 cells, like management zones with a minimum size
+    F.res._B = F.res._B || {}; if (F.res._B[q]) return F.res._B[q]; const G = F.res.G; let a = Float32Array.from(filled(q));
+    const np = Math.max(3, Math.min(12, Math.round(9 / G.cell)));
+    for (let pass = 0; pass < np; pass++) { const b = new Float32Array(a.length); for (let j = 0; j < G.ny; j++) for (let i = 0; i < G.nx; i++) { let s2 = 0, n = 0; for (let dj = -1; dj <= 1; dj++) for (let di = -1; di <= 1; di++) { const ii = i + di, jj = j + dj; if (ii < 0 || jj < 0 || ii >= G.nx || jj >= G.ny) continue; s2 += a[jj * G.nx + ii]; n++; } b[j * G.nx + i] = s2 / n; } a = b; }
+    F.res._B[q] = a; return a;
+  }
+  function filled(q) {   // cells outside the outline (or cloudy) take the value of their nearest clear neighbour, so the edge of the field keeps its colour
+    F.res._F = F.res._F || {}; if (F.res._F[q]) return F.res._F[q]; const G = F.res.G, a = Float32Array.from(F.res.vals[q]);
+    for (let pass = 0; pass < 6; pass++) { const b = Float32Array.from(a); let miss = 0; for (let j = 0; j < G.ny; j++) for (let i = 0; i < G.nx; i++) { const o = j * G.nx + i; if (isFinite(a[o])) continue; let s = 0, n = 0; for (let dj = -1; dj <= 1; dj++) for (let di = -1; di <= 1; di++) { const ii = i + di, jj = j + dj; if (ii < 0 || jj < 0 || ii >= G.nx || jj >= G.ny) continue; const v = a[jj * G.nx + ii]; if (isFinite(v)) { s += v; n++; } } if (n) b[o] = s / n; else miss++; } a.set(b); if (!miss) break; }
+    const m = F.res.S[KEYS[q]] ? F.res.S[KEYS[q]].mean : 0; for (let i = 0; i < a.length; i++) if (!isFinite(a[i])) a[i] = m; F.res._F[q] = a; return a;
+  }
+  function clearOverlay() { [['map', 'ov'], ['map2', 'ov2']].forEach(([m, o]) => { if (F[o] && F[m]) F[m].removeLayer(F[o]); F[o] = null; }); }
+  function overlay(mp, k) { const G = F.res.G; return L.imageOverlay(fieldCanvas(k, F.view, F.smooth).toDataURL(), [[G.sw[0], G.sw[1]], [G.ne[0], G.ne[1]]], { opacity: 0.9, interactive: false, className: F.smooth ? '' : 'fmov' }).addTo(mp); }
+  function showOverlay() { if (!F.res || !F.map) return; clearOverlay(); F.ov = overlay(F.map, F.idx); if (F.map2 && F.cmp) F.ov2 = overlay(F.map2, F.cmp); if (F.poly) F.poly.setStyle({ fillOpacity: 0, color: '#FFFFFF', weight: 2.5 }); [F.layG, F.layG2].forEach(g => g && g.eachLayer(l => l.bringToFront && l.bringToFront())); }
+  // the legend on the map: index, date and source, colour scale or zones, and the spread of the field (histogram)
+  function legendCtl(mp) { const C = L.Control.extend({ onAdd() { const d = L.DomUtil.create('div', 'fmlegc'); d.title = 'Click the dark title to fold or unfold the legend'; d.addEventListener('click', e => { if (e.target.closest('.fmchip')) d.classList.toggle('min'); }); L.DomEvent.disableClickPropagation(d); L.DomEvent.disableScrollPropagation(d); return d; } }); const c = new C({ position: 'bottomleft' }); c.addTo(mp); return c; }
+  function legendFor(k) {
+    if (!F.res) return '';
+    const I = IDX[k], s = F.res.S[k], head = '<div class="fmchip">' + k + ' · ' + esc(F.res.date) + ' · ' + (F.res.sim ? 'simulated' : 'Sentinel-2') + '</div>';
+    let body;
+    if (F.view === 'zones') { const Z = zones(k); body = Z ? '<table>' + Z.Z.map((z, i) => '<tr><td><i style="background:rgb(' + zoneCol(k, i).join(',') + ')"></i></td><td>' + (i + 1) + '</td><td>' + f2(Z.br[i]) + '–' + f2(Z.br[i + 1]) + '</td><td>' + z.ha.toFixed(2) + ' ha</td><td>' + z.pct.toFixed(0) + ' %</td></tr>').join('') + '</table>' : ''; }
+    else { const nb = 28, hb = new Array(nb).fill(0), q = KEYS.indexOf(k); F.res.vals[q].forEach(v => { if (isFinite(v)) hb[Math.max(0, Math.min(nb - 1, Math.floor((v - I.lo) / (I.hi - I.lo) * nb)))]++; }); const hm = Math.max(1, ...hb), st = [];
+      for (let i = 0; i <= 10; i++) st.push('rgb(' + colour(k, I.lo + (I.hi - I.lo) * i / 10).join(',') + ') ' + i * 10 + '%');
+      body = '<div class="fmhist">' + hb.map((h, i) => '<b style="height:' + (2 + 26 * h / hm).toFixed(1) + 'px;background:rgb(' + colour(k, I.lo + (I.hi - I.lo) * (i + 0.5) / nb).join(',') + ')"></b>').join('') + '</div><i class="fmgrad" style="background:linear-gradient(90deg,' + st.join(',') + ')"></i><div class="fmends"><span>' + I.lo + ' low</span><span>high ' + I.hi + '</span></div>'; }
+    return head + body + (s ? '<div class="fmmean">mean ' + f2(s.mean) + ' · ' + esc(I.read(s.mean)) + '</div>' : '');
+  }
+  function legend() {
+    const D = F.lay ? layoutData() : null, lay = D ? '<div class="fmlay"><b>Irrigation layout</b> · ' + esc(D.label) + '<br><i class="l1"></i> ' + (D.sys === 'drip' ? 'laterals' : D.sys === 'spr' ? 'sprinkler laterals' : D.sys === 'furrow' ? 'furrows' : D.sys === 'basin' ? 'basin borders' : 'borders') + ' <i class="l2"></i> ' + (D.sys === 'border' || D.sys === 'furrow' || D.sys === 'basin' ? 'head ditch' : 'submain') + ' <i class="l3"></i> mainline</div>' : '';
+    [[F.leg, F.idx], [F.leg2, F.cmp]].forEach(([c, k]) => { if (!c || !c.getContainer()) return; const html = (k && F.res ? legendFor(k) : '') + (c === F.leg ? lay : ''); c.getContainer().innerHTML = html; c.getContainer().style.display = html ? '' : 'none'; });
+  }
+  // two indices side by side, the two maps moving together
+  function showCompare() {
+    const m2 = document.getElementById('fmMap2'), wrap = document.getElementById('fmMaps'); if (!m2) return;
+    if (F._sync) { F.map.off('move', F._sync); F._sync = null; } if (F.map2) { try { F.map2.remove(); } catch (e) {} F.map2 = null; F.leg2 = null; F.ov2 = null; F.poly2 = null; F.layG2 = null; }
+    const on = !!F.cmp && !!F.res; m2.style.display = on ? '' : 'none'; wrap.classList.toggle('two', on); F.map.invalidateSize();
+    if (!on) return;
+    F.map2 = L.map(m2, { zoomControl: false, attributionControl: false }).setView(F.map.getCenter(), F.map.getZoom()); setBase(F.base); F.leg2 = legendCtl(F.map2);
+    let lock = false; const mk = (a, b) => () => { if (lock || !b._loaded || !a._loaded) return; lock = true; try { b.setView(a.getCenter(), a.getZoom(), { animate: false }); } catch (e) {} lock = false; };
+    F._sync = mk(F.map, F.map2); F.map.on('move', F._sync); F.map2.on('move', mk(F.map2, F.map)); F.map2.on('mousemove', e => cursorInfo(e.latlng)); F.map2.on('zoomend', () => drawLayout());
+    redraw(); drawLayout();
+  }
   function showRes() {
     const el = document.getElementById('fmRes'); if (!el || !F.res) return; const S = F.res.S;
     el.innerHTML = '<div class="pnote">' + esc(F.res.src) + '</div><table class="tbl fmtab"><tr><th>Index</th><th>Mean</th><th>10–90 %</th><th>Min · max</th><th>Reading of the mean</th></tr>' +
       KEYS.map(k => { const s = S[k]; return '<tr class="' + (k === F.idx ? 'on' : '') + '" data-k="' + k + '"><td><b>' + k + '</b><br><small>' + esc(IDX[k].bands) + '</small></td><td><b>' + f2(s && s.mean) + '</b></td><td>' + (s ? f2(s.p10) + ' to ' + f2(s.p90) : '-') + '</td><td>' + (s ? f2(s.min) + ' · ' + f2(s.max) : '-') + '</td><td>' + (s ? esc(IDX[k].read(s.mean)) : 'no clear cells') + '</td></tr>'; }).join('') + '</table>' +
-      '<div class="pnote">Click a row to show that index on the map. ' + esc(IDX[F.idx].name) + ': ' + esc(IDX[F.idx].use) + '.</div>' + legendHTML(F.idx);
+      '<div class="pnote">Click a row to show that index on the map. ' + esc(IDX[F.idx].name) + ': ' + esc(IDX[F.idx].use) + '. Move the mouse over the field to read the value at any point.</div>' + zoneTable(F.idx);
     el.querySelectorAll('tr[data-k]').forEach(tr => tr.onclick = () => { F.idx = tr.dataset.k; showRes(); });
-    showOverlay();
+    const vr = document.getElementById('fmViewR'); if (vr) vr.style.display = '';
+    showOverlay(); redraw(); drawLayout();
   }
+
+  function zoneTable(k) { const Z = zones(k); if (!Z) return ''; return '<div class="fmzt"><b>Management zones of ' + k + '</b> (natural breaks)<table class="tbl"><tr><th></th><th>Zone</th><th>Range</th><th>Mean</th><th>Area</th><th>Share</th></tr>' +
+    Z.Z.map((z, i) => '<tr><td><i style="background:rgb(' + zoneCol(k, i).join(',') + ')"></i></td><td>' + (i + 1) + (i === 0 ? ' low' : i === 4 ? ' high' : '') + '</td><td>' + f2(Z.br[i]) + ' to ' + f2(Z.br[i + 1]) + '</td><td><b>' + f2(z.mean) + '</b></td><td>' + z.ha.toFixed(3) + ' ha</td><td>' + z.pct.toFixed(1) + ' %</td></tr>').join('') + '</table></div>'; }
 
   // ------------------------------------------------------------------ exports
   function need() { if (F.pts.length < 3) { UI.toast('Demarcate the field first'); return false; } return true; }
@@ -236,15 +364,32 @@ const FieldMap = (() => {
     const jobs = []; let ok = 0; for (let tx = tx0; tx <= tx1; tx++) for (let ty = ty0; ty <= ty1; ty++) jobs.push(new Promise(res => { const im = new Image(); im.crossOrigin = 'anonymous'; im.onload = () => { try { c.drawImage(im, w / 2 + (tx * 256 - cxp) * sc, h / 2 + (ty * 256 - cyp) * sc, 256 * sc + 1, 256 * sc + 1); ok++; } catch (e) {} res(); }; im.onerror = () => res(); im.src = url(tx, ty); setTimeout(res, 12000); }));
     await Promise.all(jobs);
     try { c.getImageData(0, 0, 1, 1); } catch (e) { c.fillStyle = '#E9E6DE'; c.fillRect(0, 0, w, h); ok = 0; }   // a tile without permission would block the export: draw without tiles
-    if (withIdx && F.res) { const G = F.res.G, rc = rasterCanvas(key || F.idx); c.save(); c.beginPath(); F.pts.forEach((p, i) => i ? c.lineTo(X(p[1]), Y(p[0])) : c.moveTo(X(p[1]), Y(p[0]))); c.closePath(); c.clip(); c.imageSmoothingEnabled = false; c.globalAlpha = 0.85; c.drawImage(rc, X(G.nw[1]), Y(G.nw[0]), X(G.ne[1]) - X(G.nw[1]), Y(G.sw[0]) - Y(G.nw[0])); c.restore(); }
-    const u = small ? w / 600 : w / 900; c.strokeStyle = '#FFD600'; c.lineWidth = 3 * u; c.beginPath(); F.pts.forEach((p, i) => i ? c.lineTo(X(p[1]), Y(p[0])) : c.moveTo(X(p[1]), Y(p[0]))); c.closePath(); c.stroke();
-    c.font = 'bold ' + Math.round(11 * u) + 'px sans-serif'; F.pts.forEach((p, i) => { c.fillStyle = '#FFD600'; c.beginPath(); c.arc(X(p[1]), Y(p[0]), 8 * u, 0, 6.283); c.fill(); c.fillStyle = '#111'; c.textAlign = 'center'; c.fillText(String(i + 1), X(p[1]), Y(p[0]) + 4 * u); });
+    const u = small ? w / 600 : w / 900, path = () => { c.beginPath(); F.pts.forEach((p, i) => i ? c.lineTo(X(p[1]), Y(p[0])) : c.moveTo(X(p[1]), Y(p[0]))); c.closePath(); };
+    if (!ok) { c.fillStyle = '#F4F1E8'; path(); c.fill(); }
+    if (withIdx && F.res) { const G = F.res.G, rc = fieldCanvas(key || F.idx, F.view, F.smooth, Math.min(2400, Math.max(w, h))); c.save(); path(); c.clip(); c.imageSmoothingEnabled = F.smooth; c.globalAlpha = 0.92; c.drawImage(rc, X(G.nw[1]), Y(G.nw[0]), X(G.ne[1]) - X(G.nw[1]), Y(G.sw[0]) - Y(G.nw[0])); c.restore(); }
+    // the irrigation layout of the sketch
+    const D = F.lay ? layoutData() : null;
+    if (D) { const o2 = [D.lat, D.lon], P2 = q2 => { const l = unlocal(q2, o2); return [X(l[1]), Y(l[0])]; }, sty = { lateral: ['#4FC3F7', 1], 'sprinkler lateral': ['#4FC3F7', 1.2], furrow: ['#D7B98E', 1], border: ['#E0C38C', 1.4], basin: ['#E0C38C', 1.8], submain: ['#1565C0', 4], 'head ditch': ['#1E88E5', 5], mainline: ['#0A246A', 3.2] };
+      D.lines.forEach(l => { const st = sty[l.kind] || ['#4FC3F7', 1], a = P2(l.pts[0]), b = P2(l.pts[1]); if (st[1] > 2) { c.strokeStyle = 'rgba(255,255,255,0.75)'; c.lineWidth = (st[1] + 2.5) * u; c.setLineDash([]); c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.stroke(); }
+        const thin = st[1] < 2; c.strokeStyle = thin && withIdx && F.res ? 'rgba(255,255,255,0.4)' : st[0]; c.lineWidth = Math.max(0.6, st[1] * u * (small ? 0.7 : 1) * (thin && withIdx && F.res ? 0.6 : 1)); c.setLineDash(l.kind === 'mainline' ? [10 * u, 6 * u] : []); c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.stroke(); }); c.setLineDash([]);
+      D.pts.forEach(q2 => { const a = P2(q2.p); if (q2.kind === 'sprinkler') { c.fillStyle = '#E1F5FE'; c.beginPath(); c.arc(a[0], a[1], 1.6 * u, 0, 6.283); c.fill(); }
+        else if (q2.kind === 'source') { c.fillStyle = '#1565C0'; c.beginPath(); c.arc(a[0], a[1], 9 * u, 0, 6.283); c.fill(); c.strokeStyle = '#fff'; c.lineWidth = 1.5 * u; c.stroke(); c.fillStyle = '#fff'; c.font = 'bold ' + Math.round(9 * u) + 'px sans-serif'; c.textAlign = 'center'; c.fillText('W', a[0], a[1] + 3.2 * u); }
+        else if (q2.kind === 'inlet') { c.fillStyle = '#F2C230'; c.strokeStyle = '#5A4500'; c.lineWidth = 1.2 * u; c.fillRect(a[0] - 5 * u, a[1] - 5 * u, 10 * u, 10 * u); c.strokeRect(a[0] - 5 * u, a[1] - 5 * u, 10 * u, 10 * u); } }); }
+    c.strokeStyle = F.res ? '#FFFFFF' : '#FFD600'; c.lineWidth = 2.6 * u; path(); c.stroke(); c.strokeStyle = 'rgba(0,0,0,0.55)'; c.lineWidth = 0.8 * u; path(); c.stroke();
+    if (!small) { c.font = 'bold ' + Math.round(10 * u) + 'px sans-serif'; F.pts.forEach((p, i) => { c.fillStyle = '#FFD600'; c.beginPath(); c.arc(X(p[1]), Y(p[0]), 7 * u, 0, 6.283); c.fill(); c.fillStyle = '#111'; c.textAlign = 'center'; c.fillText(String(i + 1), X(p[1]), Y(p[0]) + 3.5 * u); }); }
     // north arrow, scale bar, frame with the coordinates of the edges
     c.fillStyle = 'rgba(255,255,255,0.9)'; c.fillRect(w - 46 * u, 10 * u, 36 * u, 50 * u); c.fillStyle = '#111'; c.beginPath(); c.moveTo(w - 28 * u, 16 * u); c.lineTo(w - 36 * u, 40 * u); c.lineTo(w - 20 * u, 40 * u); c.closePath(); c.fill(); c.fillText('N', w - 28 * u, 54 * u);
     const mpp = 156543.03392 * Math.cos((la0 + la1) / 2 * rad) / 2 ** z / sc, nice = [1, 2, 5, 10, 20, 25, 50, 100, 200, 250, 500, 1000, 2000, 5000, 10000], target = w * 0.22 * mpp, bar = nice.reduce((b, v) => v <= target ? v : b, 1), bw = bar / mpp;
     c.fillStyle = 'rgba(255,255,255,0.9)'; c.fillRect(10 * u, h - 34 * u, bw + 20 * u, 26 * u); c.fillStyle = '#111'; c.fillRect(20 * u, h - 18 * u, bw, 4 * u); c.textAlign = 'center'; c.font = Math.round(10 * u) + 'px sans-serif'; c.fillText(bar >= 1000 ? bar / 1000 + ' km' : bar + ' m', 20 * u + bw / 2, h - 22 * u);
     c.strokeStyle = '#111'; c.lineWidth = 1.2 * u; c.strokeRect(0.5, 0.5, w - 1, h - 1);
-    const tl = [(cyp - h / 2 / sc), (cxp - w / 2 / sc)], lat = yy => { const n = Math.PI - 2 * Math.PI * yy / (256 * 2 ** z); return Math.atan(Math.sinh(n)) / rad; }, lon = xx => xx / (256 * 2 ** z) * 360 - 180;
+    const lat = yy => { const n = Math.PI - 2 * Math.PI * yy / (256 * 2 ** z); return Math.atan(Math.sinh(n)) / rad; }, lon = xx => xx / (256 * 2 ** z) * 360 - 180;
+    // graticule: lines of latitude and longitude with their values in degrees, minutes and seconds
+    if (!small) { const N0 = lat(cyp - h / 2 / sc), S0 = lat(cyp + h / 2 / sc), W0 = lon(cxp - w / 2 / sc), E0 = lon(cxp + w / 2 / sc), steps = [1, 2, 5, 10, 15, 30, 60, 120, 300, 600, 900, 1800, 3600, 7200, 18000].map(v => v / 3600);
+      const pick = span => steps.find(v => span / v <= 5) || steps[steps.length - 1], dl = pick(E0 - W0), dp = pick(N0 - S0), lab = (v, pos, neg) => { const a = Math.abs(v), d = Math.floor(a + 1e-9), mm = Math.floor((a - d) * 60 + 1e-7), ss = Math.round(((a - d) * 60 - mm) * 60); return d + '°' + String(mm).padStart(2, '0') + '′' + String(ss % 60).padStart(2, '0') + '″' + (v < 0 ? neg : pos); };
+      c.save(); c.setLineDash([4 * u, 4 * u]); c.strokeStyle = 'rgba(255,255,255,0.6)'; c.lineWidth = 0.8 * u; c.font = Math.round(8.5 * u) + 'px sans-serif';
+      for (let v = Math.ceil(W0 / dl) * dl; v < E0; v += dl) { const x = X(v); c.beginPath(); c.moveTo(x, 0); c.lineTo(x, h); c.stroke(); const t = lab(v, 'E', 'W'), tw = c.measureText(t).width + 6 * u; c.fillStyle = 'rgba(255,255,255,0.88)'; c.fillRect(x - tw / 2, 0, tw, 13 * u); c.fillStyle = '#111'; c.textAlign = 'center'; c.fillText(t, x, 10 * u); }
+      for (let v = Math.ceil(S0 / dp) * dp; v < N0; v += dp) { const y = Y(v); if (y < 16 * u || y > h - 40 * u) continue; c.beginPath(); c.moveTo(0, y); c.lineTo(w, y); c.stroke(); const t = lab(v, 'N', 'S'), tw = c.measureText(t).width + 6 * u; c.fillStyle = 'rgba(255,255,255,0.88)'; c.fillRect(0, y - 7 * u, tw, 13 * u); c.fillStyle = '#111'; c.textAlign = 'left'; c.fillText(t, 3 * u, y + 3 * u); }
+      c.restore(); }
     return { cv, tiles: ok, z, edges: { n: lat(cyp - h / 2 / sc), s: lat(cyp + h / 2 / sc), w: lon(cxp - w / 2 / sc), e: lon(cxp + w / 2 / sc) } };
   }
   async function exportReport() {
@@ -266,15 +411,19 @@ const FieldMap = (() => {
       const mw = 523 * k, mh = 320 * k, M = await mapImage(Math.round(mw), Math.round(mh), true, F.idx); c.drawImage(M.cv, 36 * k, y * k, mw, mh);
       T('N edge ' + M.edges.n.toFixed(5) + '°', 559, y - 2, 7.5, { a: 'right', c: '#555' }); T('W edge ' + M.edges.w.toFixed(5) + '°', 36, y + 320 + 9, 7.5, { c: '#555' }); T('E edge ' + M.edges.e.toFixed(5) + '°', 559, y + 320 + 9, 7.5, { a: 'right', c: '#555' }); T('S edge ' + M.edges.s.toFixed(5) + '°', 36 + 523 / 2, y + 320 + 9, 7.5, { a: 'center', c: '#555' });
       y += 320 + 24;
-      if (F.res) { T(F.idx + ' on the map: ' + IDX[F.idx].name, 36, y, 9.5, { b: true }); p1.ramp(F.idx, 350, y, 190); y += 18; }
+      if (F.res) { T(F.idx + ' on the map' + (F.view === 'zones' ? ' (zones)' : '') + ': ' + IDX[F.idx].name, 36, y, 9.5, { b: true }); if (F.view === 'zones') { const Zt = zones(F.idx); for (let i = 0; i < 5; i++) { c.fillStyle = 'rgb(' + zoneCol(F.idx, i).join(',') + ')'; c.fillRect((380 + i * 34) * k, (y - 8) * k, 34 * k, 9 * k); } T('zone 1', 376, y, 7.5, { a: 'right' }); T('5', 554, y, 7.5); } else p1.ramp(F.idx, 380, y, 160); y += 18; }
+      { const D = F.lay ? layoutData() : null; if (D) y = wrap('Irrigation layout: ' + D.label + '; thick blue line: ' + (D.sys === 'border' || D.sys === 'furrow' || D.sys === 'basin' ? 'head ditch' : 'submain') + '; dashed: mainline from the water source (W) to the inlet (yellow square).', 36, y - 4, 523, 7.8, { c: '#333' }) + 6; }
       T('The field', 36, y, 12, { b: true, c: '#0A246A' }); y += 14;
       [['Area', (A / 1e4).toFixed(3) + ' ha (' + Math.round(A).toLocaleString('en-US') + ' m²)'], ['Perimeter', Math.round(P).toLocaleString('en-US') + ' m'], ['Corners', String(F.pts.length)]].forEach(r => { T(r[0], 40, y, 9.5, { c: '#444' }); T(r[1], 160, y, 9.5, { b: true }); y += 13; });
-      { const n = F.pts.length, cols = n > 6 ? 3 : 1, per = Math.ceil(n / cols); T('Corner coordinates (lat, lon, WGS 84)', 40, y, 9, { b: true }); y += 12; for (let i = 0; i < per; i++) { for (let cc = 0; cc < cols; cc++) { const q2 = cc * per + i; if (q2 >= n) continue; T((q2 + 1) + '.  ' + F.pts[q2][0].toFixed(6) + ', ' + F.pts[q2][1].toFixed(6), 44 + cc * 175, y, 8.2, { c: '#222' }); } y += 11; if (y > 640) { T('(all corners are in the CSV and GeoJSON exports)', 44, y, 8, { c: '#666' }); y += 11; break; } } y += 6; }
+      { const n = F.pts.length, cols = n > 8 ? 3 : n > 3 ? 2 : 1, per = Math.ceil(n / cols); T('Corner coordinates (lat, lon, WGS 84)', 40, y, 9, { b: true }); y += 12; for (let i = 0; i < per; i++) { for (let cc = 0; cc < cols; cc++) { const q2 = cc * per + i; if (q2 >= n) continue; T((q2 + 1) + '.  ' + F.pts[q2][0].toFixed(6) + ', ' + F.pts[q2][1].toFixed(6), 44 + cc * 175, y, 8.2, { c: '#222' }); } y += 11; if (y > 640) { T('(all corners are in the CSV and GeoJSON exports)', 44, y, 8, { c: '#666' }); y += 11; break; } } y += 6; }
       if (F.res) { T('Vegetation and water indices', 36, y, 12, { b: true, c: '#0A246A' }); y += 14; const cx = [40, 92, 140, 200, 262, 330];
         ['Index', 'Mean', 'SD', '10–90 %', 'Min · max', 'Reading of the mean'].forEach((t, i) => T(t, cx[i], y, 8.5, { b: true })); y += 4; c.fillStyle = '#999'; c.fillRect(36 * k, y * k, 523 * k, 0.6 * k); y += 10;
         KEYS.forEach(kk => { const s2 = F.res.S[kk]; [kk, f2(s2 && s2.mean), f2(s2 && s2.sd), s2 ? f2(s2.p10) + '–' + f2(s2.p90) : '-', s2 ? f2(s2.min) + ' · ' + f2(s2.max) : '-'].forEach((t, i) => T(t, cx[i], y, 8.5, { b: i === 0 })); const yy = wrap(s2 ? IDX[kk].read(s2.mean) : 'no clear cells', cx[5], y, 225, 8.2); y = Math.max(y + 15, yy + 3); });
-        y = wrap('Source: ' + F.res.src, 36, y + 2, 523, 8, { c: '#444' }) + 2; }
-      wrap('Bands: NDVI (Red, NIR), EVI (Blue, Red, NIR), SAVI (Red, NIR, L = 0.5), NDRE (Red Edge, NIR), NDWI (NIR, SWIR, after Gao). Sentinel-2 bands B02, B04, B05, B08 and B11, cloud and shadow cells removed with the scene classification.', 36, Math.min(y + 4, 800), 523, 7.6, { c: '#555' });
+        y = wrap('Source: ' + F.res.src, 36, y + 2, 523, 8, { c: '#444' }) + 2;
+        const Zt = zones(F.idx); if (Zt && y < 742) { y += 6; T('Management zones of ' + F.idx + ' (natural breaks)', 36, y, 10, { b: true, c: '#0A246A' }); y += 12; const zx = [40, 60, 110, 210, 270, 340];
+          ['', 'Zone', 'Range', 'Mean', 'Area', 'Share of the field'].forEach((t, i) => T(t, zx[i], y, 8.2, { b: true })); y += 10;
+          Zt.Z.forEach((z, i) => { c.fillStyle = 'rgb(' + zoneCol(F.idx, i).join(',') + ')'; c.fillRect(40 * k, (y - 7) * k, 12 * k, 8 * k); [String(i + 1) + (i === 0 ? ' low' : i === 4 ? ' high' : ''), f2(Zt.br[i]) + ' to ' + f2(Zt.br[i + 1]), f2(z.mean), z.ha.toFixed(3) + ' ha'].forEach((t, j) => T(t, zx[j + 1], y, 8.2)); c.fillStyle = 'rgb(' + zoneCol(F.idx, i).join(',') + ')'; c.fillRect(zx[5] * k, (y - 7) * k, Math.max(0.5, z.pct * 1.6) * k, 8 * k); T(z.pct.toFixed(1) + ' %', zx[5] + z.pct * 1.6 + 4, y, 8.2); y += 11; }); } }
+      if (y < 790) wrap('Bands: NDVI (Red, NIR), EVI (Blue, Red, NIR), SAVI (Red, NIR, L = 0.5), NDRE (Red Edge, NIR), NDWI (NIR, SWIR, after Gao). Sentinel-2 bands B02, B04, B05, B08 and B11, cloud and shadow cells removed with the scene classification.', 36, y + 4, 523, 7.6, { c: '#555' });
       p1.foot(M, 1);
       // page 2: the five indices side by side, their spread over the field and what they say together
       if (F.res) { const p2 = page(); p2.head(F.res.date); p2.T('The five indices of the field', 36, 80, 13, { b: true, c: '#0A246A' }); p2.wrap(F.res.src, 36, 95, 523, 8, { c: '#444' });

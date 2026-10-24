@@ -1,6 +1,6 @@
 # SWAFL Desktop 1.1.0 manual
 
-`SWAFL_Manual_v1.1.0.pdf` (525 pages) is the manual of version 1.1.0. It keeps the chapters and page style of the manual of version 1.0, with every screenshot taken again from version 1.1.0 and every numbered arrow placed on the item it names in the new interface. It adds the chapters of the new release:
+`SWAFL_Manual_v1.1.0.pdf` (527 pages) is the manual of version 1.1.0. It keeps the chapters and page style of the manual of version 1.0, with every screenshot taken again from version 1.1.0 and every numbered arrow placed on the item it names in the new interface. It adds the chapters of the new release:
 
 - 18, running a design and finding the most efficient inputs;
 - 19, weather data;

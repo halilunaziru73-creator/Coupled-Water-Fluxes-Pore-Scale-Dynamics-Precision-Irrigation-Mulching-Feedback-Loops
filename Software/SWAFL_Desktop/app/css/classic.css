@@ -183,3 +183,16 @@ input[type=range]{accent-color:#0A246A}
 .fmleg{display:flex;align-items:center;gap:6px;font-size:11px;margin:4px 0}.fmleg i{flex:1;height:12px;border:1px solid #888;display:block}
 .leaflet-container{font:12px Tahoma,Arial,sans-serif}
 .fmov{image-rendering:pixelated}.fmtab td{text-align:left}
+.fmmaps{display:flex;gap:6px}.fmmaps .fmmap{flex:1 1 0;min-width:0}
+.fmsteps{display:flex;gap:4px;flex-wrap:wrap;margin:0 0 6px}.fmsteps span{font-size:11.5px;padding:2px 8px;border-radius:10px;background:#EEF1F5;color:#444;border:1px solid #D0D6DE}.fmsteps span.ok{background:#E3F4E5;color:#1B5E20;border-color:#A5D6A7}
+.fmlegc{background:rgba(255,255,255,0.94);padding:6px 8px;border-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,.35);font:11px/1.35 Tahoma,Arial,sans-serif;color:#111;max-width:250px}
+.fmchip{display:inline-block;background:#1B2A3A;color:#fff;border-radius:3px;padding:2px 7px;font-weight:bold;margin-bottom:4px}
+.fmhist{display:flex;align-items:flex-end;height:30px;gap:1px;margin-top:2px}.fmhist b{flex:1;display:block;min-width:2px}
+.fmgrad{display:block;height:9px;border:1px solid #777;margin-top:1px}.fmends{display:flex;justify-content:space-between;font-size:10px;color:#333}
+.fmlegc table{border-collapse:collapse;font-size:10.5px}.fmlegc td{padding:1px 4px}.fmlegc td i,.fmzt td i{display:inline-block;width:14px;height:10px;border:1px solid #666}
+.fmmean{margin-top:3px;color:#333}.fmlay{margin-top:5px;padding-top:4px;border-top:1px solid #ccc}.fmlay i{display:inline-block;width:16px;height:0;vertical-align:middle;margin-left:4px}
+.fmlay i.l1{border-top:2px solid #4FC3F7}.fmlay i.l2{border-top:4px solid #1565C0}.fmlay i.l3{border-top:3px dashed #0A246A}
+.fmzt{margin-top:6px;font-size:12px}.fmzt table{width:100%;font-size:12px}.fmzt td{padding:2px 5px;text-align:left}
+.fmsrc{background:#1565C0;color:#fff;border:2px solid #fff;border-radius:50%;font:bold 11px/18px Tahoma,Arial,sans-serif;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.6)}
+.fminl{background:#F2C230;border:1.5px solid #5A4500}
+.fmlegc .fmchip{cursor:pointer}.fmlegc .fmchip:after{content:' \25BE';font-weight:normal}.fmlegc.min .fmchip:after{content:' \25B8'}.fmlegc.min>:not(.fmchip){display:none}.fmlegc.min .fmchip{margin:0}
