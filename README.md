@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases/latest/download/SWAFL.exe">
-    <img src="https://img.shields.io/badge/%E2%86%93%20DOWNLOAD-SWAFL.exe%20for%20Windows-1F6FB2?style=for-the-badge&logo=windows&logoColor=white" alt="Download SWAFL.exe">
+    <img src="https://img.shields.io/badge/%E2%86%93%20DOWNLOAD-SWAFL.exe%201.0%20for%20Windows-1F6FB2?style=for-the-badge&logo=windows&logoColor=white" alt="Download SWAFL.exe 1.0">
   </a>
   <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">
     <img src="https://img.shields.io/badge/%E2%86%93%20DOWNLOAD-the%20SWAFL%20manual%20(PDF%2C%20v1.1.0)-B8432F?style=for-the-badge&logo=adobeacrobatreader&logoColor=white" alt="Download the SWAFL manual (PDF), version 1.1.0">
@@ -32,7 +32,7 @@
 
 ## Download the software (Windows)
 
-**[Download SWAFL.exe for Windows](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases/latest/download/SWAFL.exe)** (180 MB, no installation: double-click to run) · [all releases](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases/latest)
+**[Download SWAFL.exe 1.0 for Windows](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases/latest/download/SWAFL.exe)** (180 MB, no installation: double-click to run) · [all releases](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases/latest)
 
 > Windows may show a SmartScreen warning because the app is not code-signed: click **More info**, then **Run anyway**.
 
