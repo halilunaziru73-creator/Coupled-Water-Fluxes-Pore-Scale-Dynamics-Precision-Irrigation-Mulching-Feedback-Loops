@@ -28,6 +28,24 @@
     } catch (e) { return { Ea: 0.6, dp: 0.28, ro: 0.12, ev: 0, hours: null, label: 'typical' }; }
   }
 
+  // ------------------------------------------------------------------ one irrigation event, simulated with the design that was run
+  // (its inflow, cut-off, advance and infiltration for surface; its run time and wetted bulbs for drip; its run time,
+  // application rate and losses for sprinklers). The dates come from the daily model; depth and time come from the design.
+  function evModel(from) {
+    try {
+      if (from === 'sid') {
+        const R = sidRun(), P = R.P, A = P.L * P.w, T = R.tco, Tend = Math.max(T * 1.02, R._tend || T * 1.3), mm = V => V / A * 1000;
+        return { from, T, Tend, gross: mm(R.Vapp), net: mm(R.Vst), inf: mm(R.Vinf), dp: mm(R.Vdp), ro: mm(R.Vro), ev: 0, L: P.L, q: P.q, Zn: P.Zn * 1000, R,
+          front: t => clampN(sidFront(R, Math.min(t, R.tL * 1.001)) / P.L, 0, 1),
+          applied: t => P.q * (t <= R.tL || R.cb >= 1 ? Math.min(t, T) : R.tL + R.cb * (Math.min(t, T) - R.tL)),
+          zAt: (x, t) => { const tx = R.txf(Math.max(0, Math.min(P.L, x))); if (!(t > tx)) return 0; return P.k * Math.pow(Math.min(t, Tend) - tx, P.A) * 1000; } };
+      }
+      if (from === 'drip') { const R = drRun(), T = R.t * 60; return { from, T, Tend: T, gross: R.gross, net: R.gross * R.Ea, inf: R.gross * (1 - R.ev), dp: R.gross * R.dp, ro: 0, ev: R.gross * R.ev, r: R.b.r, zb: R.b.zb, Zn: R.Vreq / R.Ae, R }; }
+      const R = spRun(), T = R.T; return { from, T, Tend: T, gross: R.gross, net: R.st, inf: R.I, dp: R.dpd, ro: R.rod || 0, ev: R.wd || 0, AR: R.AR, Zn: R.o.Zn, R };
+    } catch (e) { return null; }
+  }
+  const tTxt = m => m >= 90 ? fmt(m / 60, 1) + ' h' : fmt(m) + ' min';
+
   // surface subtype shown on the farm: its own layout and the inflow with the best application x storage efficiency
   const _sd = {};
   function sysDesign(sys) {
@@ -88,19 +106,38 @@
     if (RR && RR.on && window.designStateKey && RR.st !== designStateKey()) { RR.on = false; RR.why = 'the settings in Properties changed'; }
     if (RR && !RR.on && !window.__REPORTING) { drawGate(from, RR); return; }
     const kd = fclock.kd(), doy = kd % DPY, sys = sysNow(), D = design(sys), t = tnow(), soil = state.soil, tex = DATA.texture[soil];
-    const irrToday = sim.irr[kd] > 0, fd = fclock.fd ? fclock.fd() : 0, phase = irrToday ? clampN(fd, 0, 1) : 0;
-    const open = irrToday && phase > 0.06 && phase < 0.78, flowF = open ? clampN((phase - 0.06) / 0.64, 0, 1) : (irrToday && phase >= 0.78 ? 1 : 0);
+    const EV = evModel(from), irrToday = sim.irr[kd] > 0, fd = fclock.fd ? fclock.fd() : 0, phase0 = irrToday ? clampN(fd, 0, 1) : 0;
+    // on an irrigation day the clock holds long enough to watch the event: it runs from the opening of the gate or valve to the
+    // cut-off and (surface) the recession, on the time of the design
+    if (irrToday && fclock.pause > 0 && FM.evDay !== kd && !window.__REPORTING) { FM.evDay = kd; fclock.pauseTot = fclock.pause = 16; }
+    const Tend = EV ? EV.Tend : 1, Topen = EV ? EV.T : 0.72, tEv = irrToday ? clampN((phase0 - 0.06) / 0.88, 0, 1) * Tend : 0, pc = 0.06 + 0.88 * Topen / Tend;
+    const phase = !irrToday ? 0 : phase0 < 0.06 ? phase0 : phase0 < pc ? 0.06 + (phase0 - 0.06) * 0.72 / Math.max(1e-6, pc - 0.06) : Math.min(1, 0.78 + (phase0 - pc) * 0.22 / Math.max(1e-6, 1 - pc));
+    const open = irrToday && phase > 0.06 && phase < 0.78, flowF = irrToday && phase > 0.06 ? clampN(tEv / Math.max(1e-6, Topen), 0, 1) : 0;
     const cov = sim.cover[kd] || 0, kind = kindOf(), decid = isDecid(), cr = (typeof IRCROP !== 'undefined' && IRCROP[state.crop]) || { row: 0.5, h: 50 };
     const rain = sim.rain[kd] || 0, meth = METHODS.find(q => q.k === state.method) || METHODS[0];
     // ---- title and controls
     T('Virtual farm: irrigation from the water source to the plants', 16, 24, { s: 16, b: true });
-    T(DATA.soil_labels[soil] + ' · ' + (CROPS[state.crop] || {}).label + ' · ' + fmtDate(dateOfK(kd)) + ' · the valve follows the schedule predicted by the daily model', 16, 42, { s: 10.5, c: MUTE });
+    T(DATA.soil_labels[soil] + ' · ' + (CROPS[state.crop] || {}).label + ' · ' + fmtDate(dateOfK(kd)) + ' · dates from the daily model, each irrigation simulated with the design', 16, 42, { s: 10.5, c: MUTE });
     let bx = 16, by = 52;
     const btn = (txt, on, fn, tip, col) => { ctx.font = 'bold 10.5px sans-serif'; const w = ctx.measureText(txt).width + 20; if (bx + w > W - 12) { bx = 16; by += 30; } const g = ctx.createLinearGradient(0, by, 0, by + 24); g.addColorStop(0, on ? (col || '#3B82D6') : '#FDFDFB'); g.addColorStop(1, on ? shade(col || '#3B82D6', -18) : '#E4E1D8'); ctx.fillStyle = g; ctx.fillRect(bx, by, w, 24); ctx.strokeStyle = on ? shade(col || '#3B82D6', -35) : '#9C978A'; ctx.lineWidth = 1; ctx.strokeRect(bx + 0.5, by + 0.5, w - 1, 23); T(txt, bx + w / 2, by + 16, { s: 10.5, b: true, a: 'center', c: on ? '#fff' : '#1B1F23' }); hot(bx, by, w, 24, fn, tip); bx += w + 5; };
     { const nm = (SYS.find(q => q[0] === sys) || [0, sys])[1]; btn(nm + ' · from the ' + DES[from], true, () => { try { parent.Layers.open(from); } catch (e) {} }, 'the farm runs the system of the ' + DES[from] + ' with its results; click to open the design'); }
     bx += 12; btn('Farmer opens the valve', !FM.auto, () => { FM.auto = false; }, 'manual operation on the predicted schedule', '#2E7D32'); btn('Automatic controller', FM.auto, () => { FM.auto = true; }, 'sensor-driven controller and solenoid valve', '#2E7D32');
     bx += 12; btn(FM.rec ? 'Recording ' + Math.max(0, Math.ceil(20 - (t - FM.recT))) + ' s' : 'Record video (20 s)', !!FM.rec, () => recordVideo(), 'save a 20-second video of the farm', '#C62828');
     // ---- geometry of the farm block (isometric)
+    // the event clock of the simulation
+    { const sch0 = schedule(sim, kd, 1), sy0 = by + 30; ctx.fillStyle = irrToday && tEv < Tend ? '#E8F3E8' : '#F2F1EC'; ctx.fillRect(16, sy0, W - 32, 34); ctx.strokeStyle = '#B9B4A6'; ctx.strokeRect(16.5, sy0 + 0.5, W - 33, 33);
+      let l1, l2;
+      if (EV && irrToday) {
+        const run = tEv < Topen, done = tEv >= Tend * 0.999;
+        l1 = (done ? 'Irrigation of ' + fmtDate(dateOfK(kd)) + ' finished' : run ? 'Irrigation running' : 'Gate closed, water receding') + ' · t = ' + fmt(tEv) + ' of ' + fmt(Topen) + ' min' + (from === 'sid' ? ' (water off the field at ' + fmt(Tend) + ' min)' : '');
+        if (from === 'sid') { const V = EV.applied(tEv), A = EV.R.P.L * EV.R.P.w; let Vi = 0; const N = 40; for (let i = 0; i <= N; i++) Vi += EV.zAt(EV.L * i / N, tEv) / 1000 * (i === 0 || i === N ? 0.5 : 1); Vi *= A / N;
+          l2 = 'Inflow ' + fmt(EV.q * 1000 / 60, 2) + ' L/s · water front at ' + fmt(EV.front(tEv) * EV.L) + ' of ' + fmt(EV.L) + ' m · applied ' + fmt(V, 1) + ' m³ · infiltrated ' + fmt(Math.min(Vi, V), 1) + (EV.front(tEv) >= 0.999 ? ' m³ · on the surface and run off ' : ' m³ · on the surface ') + fmt(Math.max(0, V - Vi), 1) + ' m³'; }
+        else { const f = clampN(tEv / Topen, 0, 1); l2 = 'Applied ' + fmt(EV.gross * f, 1) + ' of ' + fmt(EV.gross, 1) + ' mm gross · stored in the root zone ' + fmt(EV.net * f, 1) + ' mm · ' + (from === 'drip' ? 'wetted bulb ' + fmt(EV.r / 10 * Math.cbrt(f)) + ' cm wide' : 'rate ' + fmt(EV.AR, 1) + ' mm/h'); }
+      } else if (EV) {
+        l1 = sch0.length ? 'Next irrigation ' + fmtDate(dateOfK(sch0[0])) + ' (in ' + (sch0[0] - kd) + ' day' + (sch0[0] - kd === 1 ? '' : 's') + '), when the sensor reaches the trigger' : 'No more irrigation in this record';
+        l2 = 'Each irrigation of the design: ' + fmt(EV.gross, 1) + ' mm gross, ' + fmt(EV.net, 1) + ' mm stored, ' + tTxt(Topen) + ' open. Press Run (F5) to let the days run; click the board to jump to the next irrigation.';
+      } else { l1 = 'The design could not be computed'; l2 = ''; }
+      T(l1, 24, sy0 + 14, { s: 10.5, b: true, c: irrToday ? '#1E5A2A' : '#1B1F23' }); T(l2, 24, sy0 + 28, { s: 9.5, c: '#303030' }); by = sy0 + 4; }
     const top = by + 40, sceneH = 540, ox = W * 0.33, oy = top + sceneH - 150, U = { x: W * 0.43, y: -190 }, V = { x: W * 0.22, y: 92 };
     const P = (u, v) => ({ x: ox + u * U.x + v * V.x, y: oy + u * U.y + v * V.y });
     // sky, weather and horizon
@@ -124,7 +161,7 @@
     const nRows = per ? 7 : sys === 'basin' ? 10 : 14, plantsPerRow = per ? 9 : 26;
     const surf = sys === 'furrow' || sys === 'basin' || sys === 'border';
     // furrow / border / basin water on the surface
-    const D2 = design(sys), rAdv = D2.r || 0.6, adv = flowF > 0 ? Math.min(1, Math.pow(flowF / 0.75, 1 / Math.max(0.3, rAdv))) : 0, recess = irrToday && phase > 0.78 ? clampN((phase - 0.78) / 0.22, 0, 1) : 0;
+    const D2 = design(sys), rAdv = D2.r || 0.6, adv = EV && EV.front ? (irrToday && phase > 0.06 ? EV.front(tEv) : 0) : (flowF > 0 ? Math.min(1, Math.pow(flowF / 0.75, 1 / Math.max(0.3, rAdv))) : 0), recess = irrToday && tEv > Topen ? clampN((tEv - Topen) / Math.max(1e-6, Tend - Topen), 0, 1) : 0;
     for (let i = 0; i < nRows; i++) {
       const v = (i + 0.5) / nRows, a = P(0, v), b = P(1, v);
       if (sys === 'furrow') { ctx.strokeStyle = shade(soilC, -40); ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); ctx.strokeStyle = shade(soilC, 18); ctx.lineWidth = 1.5; const a2 = P(0, v + 0.5 / nRows), b2 = P(1, v + 0.5 / nRows); ctx.beginPath(); ctx.moveTo(a2.x, a2.y); ctx.lineTo(b2.x, b2.y); ctx.stroke(); }
@@ -142,7 +179,7 @@
       if (sys === 'basin') { ctx.strokeStyle = shade(soilC, -45); ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(c00.x, c00.y); ctx.lineTo(c10.x, c10.y); ctx.lineTo(c11.x, c11.y); ctx.lineTo(c01.x, c01.y); ctx.closePath(); ctx.stroke(); }
     }
     // tail-water ditch (surface): runoff at the field end
-    if (surf) { const tA = P(1, 0), tB = P(1, 1); ctx.strokeStyle = shade(soilC, -55); ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(tA.x, tA.y); ctx.lineTo(tB.x, tB.y); ctx.stroke(); if (adv >= 0.999 && D.ro > 0.01) { ctx.strokeStyle = 'rgba(46,125,232,' + clampN(0.3 + D.ro, 0.3, 0.9) + ')'; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(tA.x, tA.y); ctx.lineTo(tB.x, tB.y); ctx.stroke(); T('runoff ' + fmt(100 * D.ro) + ' %', tB.x + 8, tB.y + 4, { s: 10, b: true, c: '#1B4F9C' }); } }
+    if (surf) { const tA = P(1, 0), tB = P(1, 1); ctx.strokeStyle = shade(soilC, -55); ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(tA.x, tA.y); ctx.lineTo(tB.x, tB.y); ctx.stroke(); if (adv >= 0.999 && D.ro > 0.01) { ctx.strokeStyle = 'rgba(46,125,232,' + clampN(0.3 + D.ro, 0.3, 0.9) + ')'; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(tA.x, tA.y); ctx.lineTo(tB.x, tB.y); ctx.stroke(); { const rs = 'runoff ' + fmt(100 * (EV && EV.gross > 0 ? EV.ro / EV.gross : D.ro)) + ' %'; ctx.font = 'bold 10px sans-serif'; const rw = ctx.measureText(rs).width; T(rs, Math.min(tB.x + 8, W - 14 - rw), tB.y + (tB.x + 8 + rw > W - 14 ? 20 : 4), { s: 10, b: true, c: '#1B4F9C' }); } } }
     // plants (back to front)
     const rand = seededRandom(hashStr(state.crop + soil) + 3), pts = [];
     for (let i = 0; i < nRows; i++) for (let j = 0; j < plantsPerRow; j++) { const v = (i + (sys === 'furrow' ? 1 : 0.5)) / nRows, u = (j + 0.5 + (rand() - 0.5) * 0.3) / plantsPerRow; if (sys === 'furrow' && i === nRows - 1) continue; pts.push([P(u, v), u, v]); }
@@ -157,7 +194,7 @@
         if (open) { const ang = t * 2.2 + i + j; for (let k = 0; k < 26; k++) { const f = ((k / 26) + t * 0.9) % 1, a = ang + (k % 5) * 0.12, rr = f * 70; const xx = p.x + Math.cos(a) * rr * 1.3, yy = p.y - 36 + Math.sin(a) * rr * 0.45 - Math.sin(f * Math.PI) * 26; ctx.fillStyle = 'rgba(90,160,230,' + (0.85 - f * 0.6) + ')'; ctx.beginPath(); ctx.arc(xx, yy, 1.6, 0, Math.PI * 2); ctx.fill(); }
           for (let k = 0; k < 7; k++) { const f = ((k / 7) + t * 0.35) % 1; ctx.fillStyle = 'rgba(225,238,250,' + (0.32 - f * 0.3) + ')'; ctx.beginPath(); ctx.arc(p.x + 20 + f * 90, p.y - 50 - f * 24, 3 + f * 5, 0, Math.PI * 2); ctx.fill(); } }
       }
-      if (open) T('wind drift and evaporation ' + fmt(100 * D.ev, 1) + ' %', P(0.95, 0.15).x, P(0.95, 0.15).y - 70, { s: 10, b: true, c: '#3A5A7A' });
+      if (open) { const ds = 'wind drift and evaporation ' + fmt(100 * (EV && EV.gross > 0 ? EV.ev / EV.gross : D.ev), 1) + ' %'; ctx.font = 'bold 10px sans-serif'; const dw = ctx.measureText(ds).width; T(ds, Math.min(P(0.95, 0.15).x, W - 14 - dw), P(0.95, 0.15).y - 70, { s: 10, b: true, c: '#3A5A7A' }); }
     }
     // drip emitters
     if ((sys === 'drip') && open) { for (let i = 0; i < nRows; i++) for (let j = 0; j < 14; j++) { const p = P((j + 0.5) / 14, (i + 0.5) / nRows), f = (t * 1.3 + i * 0.37 + j * 0.21) % 1; ctx.fillStyle = 'rgba(46,125,232,0.85)'; ctx.beginPath(); ctx.arc(p.x, p.y - 4 + f * 4, 1.7, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = 'rgba(46,90,160,' + (0.15 + 0.3 * flowF) + ')'; ctx.beginPath(); ctx.ellipse(p.x, p.y + 1, 4 + 8 * flowF, 2 + 3 * flowF, 0, 0, Math.PI * 2); ctx.fill(); } }
@@ -178,8 +215,8 @@
       // well, pump, filters, fertiliser tank, main line, control valve, sub-main and laterals
       ctx.fillStyle = '#7C8A96'; ctx.beginPath(); ctx.ellipse(src.x, src.y + 10, 26, 10, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#3F6E9E'; ctx.beginPath(); ctx.ellipse(src.x, src.y + 8, 20, 7, 0, 0, Math.PI * 2); ctx.fill(); T('well', src.x, src.y + 34, { s: 10, b: true, a: 'center', c: '#2E4F7A' });
       const pump = { x: src.x + 88, y: src.y + 2 }; ctx.fillStyle = '#2E5C9E'; rrect(pump.x - 14, pump.y - 12, 28, 20, 4); ctx.fill(); ctx.fillStyle = '#1B3F70'; ctx.beginPath(); ctx.arc(pump.x + 16, pump.y - 2, 8, 0, Math.PI * 2); ctx.fill(); if (open) { ctx.strokeStyle = '#9BC4F0'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(pump.x + 16, pump.y - 2, 5, t * 8, t * 8 + 4); ctx.stroke(); } T('pump', pump.x, pump.y + 22, { s: 9.5, b: true, a: 'center' });
-      const filt = { x: pump.x + 86, y: pump.y - 2 }; for (let k = 0; k < (sys === 'sprinkler' ? 1 : 3); k++) { ctx.fillStyle = sys === 'sprinkler' ? '#6A7A88' : '#C62828'; rrect(filt.x - 6 + k * 13, filt.y - 22, 11, 26, 5); ctx.fill(); } T(sys === 'sprinkler' ? 'screen filter' : 'sand and disc filters', filt.x + 12, filt.y + 16, { s: 9.5, b: true, a: 'center' });
-      if (sys !== 'sprinkler') { ctx.fillStyle = '#F2F2EE'; ctx.strokeStyle = '#888'; rrect(filt.x + 34, filt.y - 30, 18, 26, 4); ctx.fill(); ctx.stroke(); T('fertiliser', filt.x + 43, filt.y - 34, { s: 8.5, a: 'center', c: MUTE }); }
+      const filt = { x: pump.x + 86, y: pump.y - 2 }; for (let k = 0; k < (sys === 'sprinkler' ? 1 : 3); k++) { ctx.fillStyle = sys === 'sprinkler' ? '#6A7A88' : '#C62828'; rrect(filt.x - 6 + k * 13, filt.y - 22, 11, 26, 5); ctx.fill(); } T(sys === 'sprinkler' ? 'filter' : 'filters', filt.x + (sys === 'sprinkler' ? 0 : 7), filt.y - 28, { s: 9.5, b: true, a: 'center' });
+      if (sys !== 'sprinkler') { ctx.fillStyle = '#F2F2EE'; ctx.strokeStyle = '#888'; rrect(filt.x + 34, filt.y - 30, 18, 26, 4); ctx.fill(); ctx.stroke(); T('fertiliser', filt.x + 47, filt.y - 44, { s: 9, b: true, a: 'center', c: '#505050' }); }
       flowDash([{ x: src.x + 18, y: src.y + 4 }, { x: pump.x - 14, y: pump.y }, { x: filt.x - 6, y: filt.y }, { x: valve.x, y: valve.y }], 7, '#3E5A78', open);
       flowDash([valve, head1], 6, '#4A6A8A', open);
       if (sys !== 'sdi') for (let i = 0; i < nRows; i++) { if (sys === 'sprinkler') break; const a = P(0, (i + 0.5) / nRows), b = P(1, (i + 0.5) / nRows); if (open) { ctx.strokeStyle = 'rgba(160,210,255,0.9)'; ctx.lineWidth = 1.2; ctx.setLineDash([3, 8]); ctx.lineDashOffset = -t * 40; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); ctx.setLineDash([]); ctx.lineDashOffset = 0; } }
@@ -200,25 +237,34 @@
       if (turning) T(phase < 0.5 ? 'opening the valve' : 'closing the valve', fx, fy - 54, { s: 9.5, b: true, a: 'center', c: '#1E4F8A' });
     }
     // schedule board at the valve
-    const sch = schedule(sim, kd, 4), bw2 = 240, bh2 = 98, bxx = Math.min(W - bw2 - 16, valve.x + 60), byy = top + 12;
+    const sch = schedule(sim, kd, 4), bw2 = 292, bh2 = 98, bxx = Math.min(W - bw2 - 16, valve.x + 60), byy = top + 12;
     ctx.fillStyle = 'rgba(255,255,250,0.96)'; ctx.fillRect(bxx, byy, bw2, bh2); ctx.strokeStyle = '#6A6A6A'; ctx.lineWidth = 1; ctx.strokeRect(bxx + 0.5, byy + 0.5, bw2 - 1, bh2 - 1);
     ctx.fillStyle = open ? '#2E7D32' : '#5A6270'; ctx.fillRect(bxx, byy, bw2, 18); T((surf ? 'GATE' : 'VALVE') + ' · ' + (open ? 'OPEN' : irrToday && phase >= 0.78 ? 'CLOSED (event done)' : 'CLOSED'), bxx + 8, byy + 13, { s: 10, b: true, c: '#fff' });
-    T('Predicted irrigations (daily model)', bxx + 8, byy + 32, { s: 9.5, b: true });
-    sch.forEach((d, i) => T(fmtDate(dateOfK(d)) + '   ' + fmt(sim.irr[d]) + ' mm' + (D.hours ? '   ' + fmt(D.hours * sim.irr[d] / Math.max(1, sim.dose), 1) + ' h open' : '') + (d === kd ? '   ← today' : ''), bxx + 8, byy + 48 + i * 13, { s: 9.5, c: d === kd ? '#1E7A2E' : INK }));
+    T('Next irrigations: net / gross depth, time open', bxx + 8, byy + 32, { s: 9.5, b: true });
+    sch.forEach((d, i) => { const c = d === kd ? '#1E7A2E' : INK, yy = byy + 48 + i * 13; T(fmtDate(dateOfK(d)) + (d === kd ? ' (today)' : ''), bxx + 8, yy, { s: 9.5, c, b: d === kd }); T(EV ? fmt(EV.net) + ' / ' + fmt(EV.gross) + ' mm · ' + tTxt(Topen) : fmt(sim.irr[d]) + ' mm', bxx + bw2 - 8, yy, { s: 9.5, c, a: 'right' }); });
     if (!sch.length) T('no more irrigation in this record', bxx + 8, byy + 48, { s: 9.5, c: MUTE });
     hot(bxx, byy, bw2, bh2, () => { if (sch.length) { fclock.day = sch[0] + 0.001; fclock.pause = 0; fclock.mem = []; } }, 'jump to the next irrigation');
     // ---- cross-section through the field: plants, roots, the wetting of the soil and the losses
     let y = top + sceneH + 14;
     const plantPx = per ? 175 : clampN(cr.h * 0.62 * 1.35, 46, 120), depthPx = 2.1, sx = 16, sw = W - 32, ground = y + 28 + plantPx, sh = 28 + plantPx + 100 * depthPx + 8;
     ctx.fillStyle = '#FFFFFF'; ctx.fillRect(sx, y, sw, sh); ctx.strokeStyle = '#B9B4A6'; ctx.strokeRect(sx + 0.5, y + 0.5, sw - 1, sh - 1);
-    ctx.fillStyle = '#ECE9E0'; ctx.fillRect(sx + 1, y + 1, sw - 2, 20); T('Cross-section through the field: where the water goes in the soil (layer water from the daily model)', sx + 8, y + 15, { s: 11, b: true });
+    ctx.fillStyle = '#ECE9E0'; ctx.fillRect(sx + 1, y + 1, sw - 2, 20); T(surf ? 'Section along the run, inlet on the left: the wetting of this irrigation (simulated with the design)' : 'Cross-section through the field: the wetting of this irrigation (simulated with the design)', sx + 8, y + 15, { s: 11, b: true });
     const sg = ctx.createLinearGradient(0, ground, 0, ground + 100 * depthPx); sg.addColorStop(0, shade(soilC, 4)); sg.addColorStop(1, shade(soilC, -28)); ctx.fillStyle = sg; ctx.fillRect(sx + 1, ground, sw - 2, 100 * depthPx);
     const grain = seededRandom(hashStr(soil) + 11); for (let k = 0; k < 900; k++) { ctx.fillStyle = 'rgba(0,0,0,' + (0.05 + 0.1 * grain()) + ')'; ctx.fillRect(sx + 1 + grain() * (sw - 2), ground + grain() * 100 * depthPx, 1.5 + grain() * (tex.sand > 60 ? 2.5 : 1), 1.5); }
     // layer water content: before (yesterday) and after (today) the event, revealed down to the front as the event proceeds
-    const sNow = sim.s[kd], sPrev = sim.s[Math.max(0, kd - 1)], front = irrToday ? (sim.front[kd] || 30) * Math.min(1, flowF * 1.2) : 0;
-    for (let i = 0; i < NLAY; i++) { const z = i * DZ, v = (irrToday && z <= front) ? sNow[i] : (irrToday ? sPrev[i] : sNow[i]); ctx.fillStyle = 'rgba(30,100,210,' + clampN(v * 0.55, 0, 0.6) + ')'; ctx.fillRect(sx + 1, ground + z * depthPx, sw - 2, DZ * depthPx + 0.5); }
+    const sNow = sim.s[kd], sPrev = sim.s[Math.max(0, kd - 1)], base = irrToday ? sPrev : sNow;
+    for (let i = 0; i < NLAY; i++) { const z = i * DZ; ctx.fillStyle = 'rgba(30,100,210,' + clampN(base[i] * 0.45, 0, 0.5) + ')'; ctx.fillRect(sx + 1, ground + z * depthPx, sw - 2, DZ * depthPx + 0.5); }
+    // the wetting of this irrigation, simulated with the design: surface along the run (inlet left, tail right), sprinklers over the set
+    const dthW = (() => { try { const I = sidIntake(); return (SID.intake === 'soil' && I && I.dth) ? I.dth : 0.25; } catch (e) { return 0.25; } })();
+    if (irrToday && EV && phase > 0.06 && (sys === 'border' || sys === 'basin' || sys === 'furrow' || sys === 'sprinkler')) {
+      const N = 80, zcm = u => sys === 'sprinkler' ? EV.inf * clampN(tEv / Topen, 0, 1) * (1 + (1 - (D.CU || 0.9)) * 1.4 * Math.sin(u * Math.PI * 6)) / (dthW * 10) : EV.zAt(u * EV.L, tEv) / (dthW * 10);
+      ctx.beginPath(); ctx.moveTo(sx + 1, ground); for (let i = 0; i <= N; i++) { const u = i / N; ctx.lineTo(sx + 1 + (sw - 2) * u, ground + Math.min(100, zcm(u)) * depthPx); } ctx.lineTo(sx + sw - 1, ground); ctx.closePath();
+      ctx.fillStyle = 'rgba(30,110,230,0.55)'; ctx.fill(); ctx.strokeStyle = 'rgba(235,248,255,0.95)'; ctx.lineWidth = 1.5; ctx.stroke();
+      const znc = EV.Zn / (dthW * 10); if (znc < 100) { ctx.strokeStyle = '#B23A2E'; ctx.lineWidth = 1.6; ctx.setLineDash([6, 4]); ctx.beginPath(); ctx.moveTo(sx + 1, ground + znc * depthPx); ctx.lineTo(sx + sw - 1, ground + znc * depthPx); ctx.stroke(); ctx.setLineDash([]); }
+      if (sys !== 'sprinkler') { const xf = sx + 1 + (sw - 2) * EV.front(tEv); ctx.fillStyle = 'rgba(46,125,232,0.85)'; ctx.fillRect(sx + 1, ground - 5, xf - sx - 1, 5); }
+    }
     // drip and subsurface drip: wetted bulbs around the emitters
-    if ((sys === 'drip' || sys === 'sdi') && irrToday) { const zc = sys === 'sdi' ? (meth.mid || 45) : 3; for (let k = 0; k < 7; k++) { const ex = sx + sw * (k + 0.5) / 7, g = ctx.createRadialGradient(ex, ground + zc * depthPx, 2, ex, ground + zc * depthPx, 70 * flowF + 4); g.addColorStop(0, 'rgba(30,90,200,0.55)'); g.addColorStop(1, 'rgba(30,90,200,0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(ex, ground + zc * depthPx + 10 * flowF, 60 * flowF + 4, 75 * flowF + 4, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#1E1E1E'; ctx.beginPath(); ctx.arc(ex, ground + zc * depthPx, 3, 0, Math.PI * 2); ctx.fill(); } }
+    if ((sys === 'drip' || sys === 'sdi') && irrToday) { const zc = sys === 'sdi' ? drDepEff() : 3, gf = EV && EV.r ? Math.cbrt(clampN(tEv / Topen, 0, 1)) : flowF, rB = EV && EV.r ? EV.r / 10 * depthPx * 0.5 : 60, dB = EV && EV.zb ? Math.max(4, (EV.zb / 10 - zc)) * depthPx * 0.5 : 75; ctx.save(); ctx.beginPath(); ctx.rect(sx + 1, ground, sw - 2, 100 * depthPx); ctx.clip(); for (let k = 0; k < 7; k++) { const ex = sx + sw * (k + 0.5) / 7, g = ctx.createRadialGradient(ex, ground + zc * depthPx, 2, ex, ground + zc * depthPx, Math.max(rB, dB) * gf + 4); g.addColorStop(0, 'rgba(30,90,200,0.55)'); g.addColorStop(1, 'rgba(30,90,200,0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(ex, ground + zc * depthPx + dB * gf * 0.4, rB * gf + 4, dB * gf + 4, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#1E1E1E'; ctx.beginPath(); ctx.arc(ex, ground + zc * depthPx, 3, 0, Math.PI * 2); ctx.fill(); } ctx.restore(); }
     if (sys === 'furrow') for (let k = 0; k < 8; k++) { const fx2 = sx + sw * (k + 0.5) / 8; ctx.fillStyle = '#FFFFFF'; ctx.beginPath(); ctx.moveTo(fx2 - 22, ground); ctx.lineTo(fx2, ground + 14); ctx.lineTo(fx2 + 22, ground); ctx.fill(); if (irrToday && open) { ctx.fillStyle = 'rgba(46,125,232,0.7)'; ctx.beginPath(); ctx.moveTo(fx2 - 13, ground + 6); ctx.lineTo(fx2, ground + 14); ctx.lineTo(fx2 + 13, ground + 6); ctx.fill(); } }
     // plants with their roots
     const rootCm = sim.rd ? sim.rd[kd] : 40; ctx.save(); ctx.beginPath(); ctx.rect(sx + 1, y + 22, sw - 2, sh - 23); ctx.clip();
@@ -243,7 +289,7 @@
     [['#9AA3AE', 'rain'], ['#2E7DE8', 'irrigation'], ['#8E5A2A', 'sensor depletion (0 to 1 of the axis)'], ['#5B2FA8', 'trigger'], ['rgba(46,125,50,0.35)', 'gate or valve open']].reduce((pp, [c, l]) => { ctx.font = '9px sans-serif'; const lw = ctx.measureText(l).width + 30; if (pp.x + lw > sx + cw - 8) { pp.x = sx + 12; pp.r++; } const ly = y + ch - 36 + pp.r * 16; ctx.fillStyle = c; ctx.fillRect(pp.x, ly, 10, 10); T(l, pp.x + 14, ly + 9, { s: 9 }); pp.x += lw; return pp; }, { x: sx + 12, r: 0 });
     y += ch + 14;
     // fate of the water of the current (or next) irrigation, in three dimensions
-    const nd2 = irrToday ? kd : (sch[0] != null ? sch[0] : kd), gross = sim.irr[nd2] || 0;
+    const nd2 = irrToday ? kd : (sch[0] != null ? sch[0] : kd), gross = EV ? EV.gross : (sim.irr[nd2] || 0);
     y = fate3D(sx, y, sw, D, gross, sys, sim, nd2, soil, tex, kind, decid, per, cr, irrToday) - ch - 14;
     y += ch + 24;
     if (FM.rec && t - FM.recT > 20.2) stopVideo();
@@ -272,14 +318,14 @@
     T((irrToday ? 'This irrigation' : 'Next irrigation') + ' in 3D: infiltration, water stored, deep percolation, runoff and evaporation', x0 + 8, y + 15, { s: 11, b: true });
     const surf = sys === 'furrow' || sys === 'basin' || sys === 'border', soilC = tex.color || '#8B6A4A', awc = AWC[soil] || 1.5, fT = Math.max(0.15, sim.fTrig || 0.4), rz = clampN(sim.rd ? sim.rd[kd] : 60, 20, 100);
     const f = { st: Math.max(0, D.Ea), dp: Math.max(0, D.dp), ro: Math.max(0, D.ro), ev: Math.max(0, D.ev) }, tot = (f.st + f.dp + f.ro + f.ev) || 1; Object.keys(f).forEach(k => { f[k] /= tot; });
-    const inf = gross * (f.st + f.dp), wet = clampN(inf / (fT * awc), 3, 100);   // the depth the infiltrated water wets: it fills the depleted part of each centimetre
+    const inf = gross * (f.st + f.dp), dcm = f.st > 0.01 ? gross * f.st / rz : fT * awc, wet = clampN(inf / dcm, 3, 100);   // the depth the infiltrated water wets: the root zone takes the stored share of the design, the deep percolation wets the soil below at the same deficit per cm
     // the block: run length along u, width along v, depth along z (1 m)
     const bw = Math.min(w * 0.66, 620), bx = x0 + 64 + Math.max(0, (w - 64 - bw * 1.25) / 2), by = y + 168, Ux = bw * 0.7, Uy = -70, Vx = bw * 0.3, Vy = 58, Dz = 2.4;
     const P = (u, v, z) => ({ x: bx + u * Ux + v * Vx, y: by + u * Uy + v * Vy + z * Dz });
     const poly = (pts, fill, stroke) => { ctx.beginPath(); pts.forEach((q, i) => i ? ctx.lineTo(q.x, q.y) : ctx.moveTo(q.x, q.y)); ctx.closePath(); if (fill) { ctx.fillStyle = fill; ctx.fill(); } if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 1; ctx.stroke(); } };
     // depth wetted along the run: surface from the advance-recession of the design, sprinklers from the uniformity, drip in bulbs
     let Zu = u => wet;
-    if (surf) { try { const C = designCharts('sid'); if (C && C.Z && C.Z.length) { const Zm = C.Z, n = Zm.length - 1, sc = inf / (Zm.reduce((a, b) => a + b, 0) / Zm.length || 1); Zu = u => clampN(Zm[Math.round(u * n)] * sc / (fT * awc), 2, 100); } } catch (e) {} }
+    if (surf) { try { const C = designCharts('sid'); if (C && C.Z && C.Z.length) { const Zm = C.Z, n = Zm.length - 1, sc = inf / (Zm.reduce((a, b) => a + b, 0) / Zm.length || 1); Zu = u => clampN(Zm[Math.round(u * n)] * sc / dcm, 2, 100); } } catch (e) {} }
     else if (sys === 'sprinkler') { const cu = D.CU || 0.85; Zu = u => clampN(wet * (1 + (1 - cu) * 1.4 * Math.sin(u * Math.PI * 6)), 2, 100); }
     // front face (v = 1): the soil profile of the real soil, its root zone and the wetted zone
     const NU = 48, fr = [];
@@ -331,7 +377,7 @@
       if (it[3] > 0.05) { const q = it[4]; ctx.fillStyle = '#FFFFFF'; ctx.strokeStyle = it[0]; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(q.x + 14, q.y, 9, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); T(String(i + 1), q.x + 14, q.y + 4, { s: 10, b: true, a: 'center', c: it[0] }); }
       ctx.fillStyle = '#FFFFFF'; ctx.strokeStyle = it[0]; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(lx - 14, yy - 3, 9, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); T(String(i + 1), lx - 14, yy + 1, { s: 10, b: true, a: 'center', c: it[0] }); });
     const lx = x0 + 30, fy = ly + 3 * 44 + 6;
-    sidWrap(DATA.soil_labels[soil] + ' (sand ' + Math.round(tex.sand || 0) + ' %, clay ' + Math.round(tex.clay || 0) + ' %): ' + fmt(awc, 1) + ' mm of available water per cm; at the trigger ' + fmt(100 * fT) + ' % of it is used, so the ' + fmt(inf, 1) + ' mm that infiltrate wet the soil to about ' + fmt(wet) + ' cm.', lx, fy, w - 60, { s: 9.5, c: '#303030' }, 13);
+    sidWrap(DATA.soil_labels[soil] + ' (sand ' + Math.round(tex.sand || 0) + ' %, clay ' + Math.round(tex.clay || 0) + ' %): ' + fmt(awc, 1) + ' mm of available water per cm. The root zone (0 to ' + fmt(rz) + ' cm) takes ' + fmt(gross * f.st, 1) + ' mm, ' + fmt(dcm, 2) + ' mm per cm, so the ' + fmt(inf, 1) + ' mm that infiltrate wet the soil to about ' + fmt(wet) + ' cm.', lx, fy, w - 60, { s: 9.5, c: '#303030' }, 13);
     sidWrap('Shares from the ' + D.label + (D.CU ? ', uniformity ' + fmt(100 * D.CU) + ' %' : '') + '.', lx, fy + 34, w - 60, { s: 9.5, c: MUTE }, 13);
     return y + h + 14;
   }

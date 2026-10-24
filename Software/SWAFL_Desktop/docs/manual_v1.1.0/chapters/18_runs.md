@@ -35,7 +35,7 @@ Every input of a design is a value box. Clicking it opens a small window:
 * or pick a value from the list, which runs across the allowed range;
 * lengths can be given in m, km or ft; flows in L/s, m³/h or L/min (emitter flow in L/h or L/s); areas in ha, m² or acre; pressures in kPa, bar, m of water or psi; pressure heads in m, kPa, bar or ft; times in min or h; spacings in m or cm.
 
-A value outside the allowed range is set to the nearest limit, and the window says so. The value is converted to the unit of the model, $x_{\mathrm{model}} = x_{\mathrm{typed}}\,c_u$, with $c_u$ the factor of the chosen unit (for example 1000 for km, 1/3.6 for m³/h to L/s, 9.80665 for m of water to kPa).
+The value is kept exactly as typed (2.13 stays 2.13); it is not rounded to a step of the list, and the design runs on it. A value outside the allowed range is set to the nearest limit, and the window says so. The value is converted to the unit of the model, $x_{\mathrm{model}} = x_{\mathrm{typed}}\,c_u$, with $c_u$ the factor of the chosen unit (for example 1000 for km, 1/3.6 for m³/h to L/s, 9.80665 for m of water to kPa).
 
 ## Field size: an area, or a length and a width
 

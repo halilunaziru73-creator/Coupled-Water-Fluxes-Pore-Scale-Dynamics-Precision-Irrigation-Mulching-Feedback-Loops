@@ -2,13 +2,14 @@
 
 ## What you receive
 
-SWAFL Desktop is a self-contained Electron program. The simulation engine is one HTML page (`app/engine/engine.html`) with a few script files beside it, which the program serves to itself on a local port, so **no internet connection is needed once it is installed**. The internet is used only if you ask for the online weather of a location (Chapter 19). Three ways of running it are provided.
+SWAFL Desktop is a self-contained Electron program. The simulation engine is one HTML page (`app/engine/engine.html`) with a few script files beside it, which the program serves to itself on a local port, so **no internet connection is needed once it is installed**. The internet is used only if you ask for the online weather of a location (Chapter 19). Four ways of running it are provided.
 
 | Route | Who it suits | Steps |
 |:--|:--|:--|
 | **A. Build and install on Windows** | Most users | Unzip `SWAFL_Desktop.zip`, double-click `BUILD_AND_INSTALL_SWAFL.bat`. |
 | **B. Windows program** | Users who received `SWAFL.exe` | Double-click `SWAFL.exe`. |
 | **C. From source** | Developers | `npm install`, then `npm start` (desktop) or `npm run web` (browser). |
+| **D. Online, nothing to install** | Anyone with a browser | Open the online workbench (link below). |
 
 ## Route A — build and install, step by step
 
@@ -17,7 +18,15 @@ SWAFL Desktop is a self-contained Electron program. The simulation engine is one
 3. Double-click **`BUILD_AND_INSTALL_SWAFL.bat`**. It installs the packages, builds the program and puts **SWAFL** on the Desktop. The first build downloads Electron and takes a few minutes.
 4. Start **SWAFL** from the Desktop. The title bar reads *SWAFL 1.1.0*. If Windows SmartScreen shows "Windows protected your PC", click **More info** and then **Run anyway** (the program is not code-signed).
 
-`START_SWAFL.bat` starts the program from the source folder without building it, and `START_SWAFL_WEB.bat` opens the same program in the browser on `http://127.0.0.1:5199`.
+`START_SWAFL.bat` starts the program from the source folder without building it, and `START_SWAFL_WEB.bat` opens the same program in your browser from your own computer.
+
+## Route D — the online workbench
+
+The same program runs online in any current browser, with nothing to install and no server or Node.js:
+
+[SWAFL online workbench](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/SWAFL_Desktop/app/index.html)
+
+<https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/SWAFL_Desktop/app/index.html>
 
 ## Route C — from source
 
@@ -26,7 +35,7 @@ git clone https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Sc
 cd Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/SWAFL_Desktop
 npm install
 npm start          # desktop window
-npm run web        # the same program in a browser tab on http://127.0.0.1:5199
+npm run web        # the same program in a tab of your browser
 npm run get-app    # build SWAFL.exe, copy it to the Desktop and start it
 ```
 
