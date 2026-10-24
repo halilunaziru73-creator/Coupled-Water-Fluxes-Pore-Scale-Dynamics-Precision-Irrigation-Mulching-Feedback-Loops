@@ -210,11 +210,15 @@ Abrahamsen, P., and Hansen, S. (2000). Daisy: an open soil-crop-atmosphere syste
 
 Allen, R. G., Pereira, L. S., Raes, D., and Smith, M. (1998). *Crop evapotranspiration: guidelines for computing crop water requirements*. FAO Irrigation and Drainage Paper 56. FAO, Rome.
 
+Barnes, E. M., Clarke, T. R., Richards, S. E., et al. (2000). Coincident detection of crop water stress, nitrogen status and canopy density using ground-based multispectral data. *Proceedings of the 5th International Conference on Precision Agriculture*, Bloomington, MN.
+
 Blasius, H. (1913). Das Ähnlichkeitsgesetz bei Reibungsvorgängen in Flüssigkeiten. *Forschungsarbeiten auf dem Gebiete des Ingenieurwesens* 131.
 
 Burt, C. M., Clemmens, A. J., Strelkoff, T. S., Solomon, K. H., Bliesner, R. D., Hardy, L. A., Howell, T. A., and Eisenhauer, D. E. (1997). Irrigation performance measures: efficiency and uniformity. *Journal of Irrigation and Drainage Engineering* 123(6), 423–442.
 
 Carsel, R. F., and Parrish, R. S. (1988). Developing joint probability distributions of soil water retention characteristics. *Water Resources Research* 24(5), 755–769.
+
+Chamberlain, R. G., and Duquette, W. H. (2007). *Some algorithms for polygons on a sphere*. JPL Publication 07-03, Jet Propulsion Laboratory, Pasadena.
 
 Christiansen, J. E. (1942). *Irrigation by sprinkling*. University of California Agricultural Experiment Station Bulletin 670.
 
@@ -222,11 +226,17 @@ Criddle, W. D., Davis, S., Pair, C. H., and Shockley, D. G. (1956). *Methods for
 
 Elliott, R. L., and Walker, W. R. (1982). Field evaluation of furrow infiltration and advance functions. *Transactions of the ASAE* 25(2), 396–400.
 
+Gao, B.-C. (1996). NDWI: a normalized difference water index for remote sensing of vegetation liquid water from space. *Remote Sensing of Environment* 58, 257–266.
+
 Green, W. H., and Ampt, G. A. (1911). Studies on soil physics: 1. The flow of air and water through soils. *Journal of Agricultural Science* 4(1), 1–24.
 
 Hazen, A., and Williams, G. S. (1905). *Hydraulic tables*. John Wiley & Sons, New York.
 
 Hillel, D. (1998). *Environmental soil physics*. Academic Press, San Diego.
+
+Huete, A. R. (1988). A soil-adjusted vegetation index (SAVI). *Remote Sensing of Environment* 25, 295–309.
+
+Huete, A., Didan, K., Miura, T., Rodriguez, E. P., Gao, X., and Ferreira, L. G. (2002). Overview of the radiometric and biophysical performance of the MODIS vegetation indices. *Remote Sensing of Environment* 83, 195–213.
 
 Jurin, J. (1718). An account of some experiments shown before the Royal Society; with an enquiry into the cause of the ascent and suspension of water in capillary tubes. *Philosophical Transactions* 30(355), 739–747.
 
@@ -247,6 +257,8 @@ Nobel, P. S. (2009). *Physicochemical and environmental plant physiology*, 4th e
 Philip, J. R. (1957). Evaporation, and moisture and heat fields in the soil. *Journal of Meteorology* 14(4), 354–366.
 
 Ritchie, J. T. (1972). Model for predicting evaporation from a row crop with incomplete cover. *Water Resources Research* 8(5), 1204–1213.
+
+Rouse, J. W., Haas, R. H., Schell, J. A., and Deering, D. W. (1974). Monitoring vegetation systems in the Great Plains with ERTS. *Third ERTS Symposium*, NASA SP-351, 309–317.
 
 Saxton, K. E., and Rawls, W. J. (2006). Soil water characteristic estimates by texture and organic matter for hydrologic solutions. *Soil Science Society of America Journal* 70(5), 1569–1578.
 

@@ -5,7 +5,9 @@ The virtual farm shows **one irrigation system working in a field** — the sour
 ## Opening the farm
 
 * In the Layers panel, under each design layer, click **Virtual farm simulation**.
-* On the view bar of any layer, click **▶ Virtual farm simulation**. From a design layer this opens the farm of that design; from any other layer, the farm of the design that belongs to the irrigation method in force (surface method: the surface design; overhead: the sprinkler design; drip methods: the drip design).
+* At the bottom of the Dashboard, the folding block **Virtual farm simulation** (on every layer) names the soil, the crop and the next irrigation, and lists the three systems, each with the state of its design (run or not) and an **▶ Open** button; the system of the irrigation method in force is marked *your method*. Click the bar of the block to fold or unfold it.
+
+![The Virtual farm simulation block at the bottom of the Dashboard.](images/ui/dash_farm.jpg){width=45%}
 * View ▸ *Virtual farm simulation*.
 
 While the farm is open, the irrigation method of the project is set to the method of its design (for example *Surface* for the surface design), so that the daily model irrigates as that system does. **When you leave the farm, the working date and the irrigation method of the project return to what they were.**

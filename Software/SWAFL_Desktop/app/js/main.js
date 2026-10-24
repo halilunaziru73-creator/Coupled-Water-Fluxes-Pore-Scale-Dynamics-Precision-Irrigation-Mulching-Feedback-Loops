@@ -111,7 +111,7 @@ const MENUS = [
     { label: 'Fit drawing to window', check: () => Act.fitMode === 'window', act: () => Act.fit('window') }, { label: 'Drawing at full width (scroll)', check: () => Act.fitMode === 'width', act: () => Act.fit('width') }, { label: 'Focus view (hide panels)', key: 'F9', act: Act.focus }, { sep: 1 },
     { label: 'Expand all layers', act: () => Layers.expandAll() }, { label: 'Collapse all layers', act: () => Layers.collapseAll() }, { sep: 1 }, { label: 'Full screen', key: 'F11', act: Act.fullscreen }] },
   { label: 'Tools', items: [
-    { label: 'Field sketch to design...', icon: 'field', act: () => Sketch.open() }, { label: 'Compare the irrigation systems on this field', icon: 'chart', act: () => Sketch.compare() },
+    { label: 'Field sketch to design...', icon: 'field', act: () => Sketch.open() }, { label: 'Field on the map: satellite, indices, report...', icon: 'search', act: () => FieldMap.open() }, { label: 'Compare the irrigation systems on this field', icon: 'chart', act: () => Sketch.compare() },
     { label: 'Find the most efficient design inputs', icon: 'gear', act: () => { const id = Layers.DESIGN.includes(Layers.current()) ? Layers.current() : 'sid'; Layers.open(id); setTimeout(() => { E.ev("designApplyBest('" + id + "')"); E.poll(true); Dash.tab('design'); UI.log('Most efficient inputs applied and run: ' + Layers.nameOf(id)); }, 400); } },
     { label: 'Import weather data...', icon: 'open', act: () => WxUI.importFile() }, { label: 'Online weather for a location...', icon: 'cloud', act: () => WxUI.online() }, { sep: 1 },
     { label: 'Ready-made cases', icon: 'layers', sub: casesMenu },

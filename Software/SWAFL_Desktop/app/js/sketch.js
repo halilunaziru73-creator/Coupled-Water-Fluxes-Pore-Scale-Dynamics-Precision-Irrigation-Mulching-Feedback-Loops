@@ -14,7 +14,9 @@ const Sketch = (() => {
     sys: 'drip', sub: 'border', dep: 0, kind: 'inline', sprSys: 'solid', sprType: 'impact', dir: 'length',
     intv: 2, sprSs: 12, sprSl: 18, auto: false
   };
-  let cv = null, drag = null, hover = null, cursor = null, edit = null, LIST = null;
+  let cv = null, drag = null, hover = null, cursor = null, edit = null, LIST = null, panning = null;
+  const V = { z: 1, x: 0, y: 0 };                                // the view: zoom and the sketch point at the top left corner
+  const toScr = p => ({ x: (p.x - V.x) * V.z, y: (p.y - V.y) * V.z });
   const len = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
   const m = px => px * S.scale / GRID, px = mm => mm * GRID / S.scale;    // pixels <-> metres
   const snap = v => Math.round(v / (GRID / 4)) * (GRID / 4);
@@ -47,13 +49,11 @@ const Sketch = (() => {
 
   // ------------------------------------------------------------------ drawing
   function draw() {
-    if (!cv) return; const c = cv.getContext('2d'), w = CW, h = CH; c.setTransform(cv.width / CW, 0, 0, cv.height / CH, 0, 0);
-    c.fillStyle = '#FBFBF8'; c.fillRect(0, 0, w, h); c.strokeStyle = '#E6E4DC'; c.lineWidth = 1;
-    for (let x = 0; x <= w; x += GRID) { c.beginPath(); c.moveTo(x + 0.5, 0); c.lineTo(x + 0.5, h); c.stroke(); }
-    for (let y = 0; y <= h; y += GRID) { c.beginPath(); c.moveTo(0, y + 0.5); c.lineTo(w, y + 0.5); c.stroke(); }
-    c.font = '11px Tahoma,Arial,sans-serif'; c.fillStyle = '#505050'; c.fillText('1 square = ' + S.scale + ' m', 8, h - 8);
-    // scale bar
-    { const bl = GRID * 2; c.strokeStyle = '#303030'; c.lineWidth = 2; c.beginPath(); c.moveTo(w - bl - 14, h - 12); c.lineTo(w - 14, h - 12); c.stroke(); c.fillStyle = '#303030'; c.textAlign = 'center'; c.fillText(2 * S.scale + ' m', w - 14 - bl / 2, h - 17); c.textAlign = 'left'; }
+    if (!cv) return; const c = cv.getContext('2d'), k0 = cv.width / CW, vw = CW / V.z, vh = CH / V.z, w = V.x + vw, h = V.y + vh, x0 = V.x, y0 = V.y;
+    c.setTransform(k0, 0, 0, k0, 0, 0); c.fillStyle = '#FBFBF8'; c.fillRect(0, 0, CW, CH);
+    c.setTransform(k0 * V.z, 0, 0, k0 * V.z, -V.x * k0 * V.z, -V.y * k0 * V.z); c.strokeStyle = '#E6E4DC'; c.lineWidth = 1 / V.z;
+    for (let x = Math.floor(x0 / GRID) * GRID; x <= w; x += GRID) { c.beginPath(); c.moveTo(x, y0); c.lineTo(x, h); c.stroke(); }
+    for (let y = Math.floor(y0 / GRID) * GRID; y <= h; y += GRID) { c.beginPath(); c.moveTo(x0, y); c.lineTo(w, y); c.stroke(); }
     const P = S.pts, g = geom();
     if (P.length) {
       c.fillStyle = 'rgba(126,170,90,0.20)'; c.strokeStyle = '#2E7D32'; c.lineWidth = 2; c.beginPath(); P.forEach((p, i) => i ? c.lineTo(p.x, p.y) : c.moveTo(p.x, p.y)); if (P.length > 2) c.closePath(); c.fill(); c.stroke();
@@ -66,9 +66,14 @@ const Sketch = (() => {
     if (S.src) { const on = hover && hover.t === 'src'; c.fillStyle = '#1F5FA8'; c.beginPath(); c.arc(S.src.x, S.src.y, on ? 11 : 9, 0, Math.PI * 2); c.fill(); c.fillStyle = '#fff'; c.font = 'bold 10px Tahoma,Arial,sans-serif'; c.textAlign = 'center'; c.fillText('W', S.src.x, S.src.y + 3.5); c.fillStyle = '#1F5FA8'; c.font = 'bold 10px Tahoma,Arial,sans-serif'; c.fillText({ well: 'well', borehole: 'borehole', canal: 'canal', river: 'river', tank: 'pond or tank' }[S.srcType] || 'source', S.src.x, S.src.y + 22); c.textAlign = 'left'; }
     if (g && S.src) { const on = hover && hover.t === 'inlet'; c.fillStyle = '#F2C230'; c.strokeStyle = '#5A4500'; c.lineWidth = 1.5; c.beginPath(); c.rect(g.inl.x - (on ? 7 : 5), g.inl.y - (on ? 7 : 5), on ? 14 : 10, on ? 14 : 10); c.fill(); c.stroke(); }
     // the moving cursor: crosshair and its position in metres
-    if (cursor && !drag) { c.strokeStyle = 'rgba(198,40,40,0.35)'; c.lineWidth = 1; c.setLineDash([3, 3]); c.beginPath(); c.moveTo(cursor.x, 0); c.lineTo(cursor.x, h); c.moveTo(0, cursor.y); c.lineTo(w, cursor.y); c.stroke(); c.setLineDash([]); }
-    if (cursor) { const t = 'x ' + fmt(m(cursor.x)) + ' m · y ' + fmt(m(cursor.y)) + ' m'; c.font = '10px Tahoma,Arial,sans-serif'; const tw = c.measureText(t).width + 10, bx = Math.min(w - tw - 4, cursor.x + 12), by = Math.max(4, cursor.y - 24); c.fillStyle = 'rgba(27,31,35,0.85)'; c.fillRect(bx, by, tw, 16); c.fillStyle = '#fff'; c.fillText(t, bx + 5, by + 12); }
-    if (!P.length) { c.fillStyle = '#505050'; c.font = '13px Tahoma,Arial,sans-serif'; c.textAlign = 'center'; c.fillText('Click to place the corners of your field, or use "Make a rectangle" on the right.', w / 2, h / 2 - 8); c.fillText('Drag a corner to move it; click a side length to type it exactly.', w / 2, h / 2 + 12); c.textAlign = 'left'; }
+    if (cursor && !drag && !panning) { c.strokeStyle = 'rgba(198,40,40,0.35)'; c.lineWidth = 1 / V.z; c.setLineDash([3 / V.z, 3 / V.z]); c.beginPath(); c.moveTo(cursor.x, y0); c.lineTo(cursor.x, h); c.moveTo(x0, cursor.y); c.lineTo(w, cursor.y); c.stroke(); c.setLineDash([]); }
+    // what stays on the screen: the grid square, the scale bar, the zoom and the cursor position
+    c.setTransform(k0, 0, 0, k0, 0, 0); const W2 = CW, H2 = CH;
+    { const t = '1 square = ' + S.scale + ' m · zoom ' + Math.round(V.z * 100) + ' %' + (S.geo ? ' · ' + S.geo.lat.toFixed(5) + ', ' + S.geo.lon.toFixed(5) : ''); c.font = '11px Tahoma,Arial,sans-serif'; const tw = c.measureText(t).width + 10; c.fillStyle = 'rgba(251,251,248,0.92)'; c.fillRect(2, H2 - 20, tw, 17); c.fillStyle = '#505050'; c.fillText(t, 7, H2 - 8); }
+    { const nice = [1, 2, 5, 10, 20, 25, 50, 100, 200, 250, 500, 1000, 2000], mpp = S.scale / GRID / V.z, bm = nice.reduce((b, v) => v / mpp <= 110 ? v : b, nice[0]), bl = bm / mpp; c.fillStyle = 'rgba(251,251,248,0.92)'; c.fillRect(W2 - bl - 24, H2 - 32, bl + 20, 28); c.strokeStyle = '#303030'; c.lineWidth = 2; c.beginPath(); c.moveTo(W2 - bl - 14, H2 - 12); c.lineTo(W2 - 14, H2 - 12); c.moveTo(W2 - bl - 14, H2 - 16); c.lineTo(W2 - bl - 14, H2 - 8); c.moveTo(W2 - 14, H2 - 16); c.lineTo(W2 - 14, H2 - 8); c.stroke(); c.fillStyle = '#303030'; c.font = '11px Tahoma,Arial,sans-serif'; c.textAlign = 'center'; c.fillText(bm + ' m', W2 - 14 - bl / 2, H2 - 18); c.textAlign = 'left'; }
+    { c.fillStyle = 'rgba(255,255,255,0.9)'; c.fillRect(W2 - 34, 6, 28, 38); c.fillStyle = '#303030'; c.beginPath(); c.moveTo(W2 - 20, 10); c.lineTo(W2 - 27, 30); c.lineTo(W2 - 13, 30); c.closePath(); c.fill(); c.font = 'bold 10px Tahoma,Arial,sans-serif'; c.textAlign = 'center'; c.fillText('N', W2 - 20, 41); c.textAlign = 'left'; }
+    if (cursor && !panning) { const sp = toScr(cursor), t = 'x ' + fmt(m(cursor.x)) + ' m · y ' + fmt(m(cursor.y)) + ' m'; c.font = '10px Tahoma,Arial,sans-serif'; const tw = c.measureText(t).width + 10, bx = Math.min(W2 - tw - 4, sp.x + 12), by = Math.max(4, sp.y - 24); c.fillStyle = 'rgba(27,31,35,0.85)'; c.fillRect(bx, by, tw, 16); c.fillStyle = '#fff'; c.fillText(t, bx + 5, by + 12); }
+    if (!P.length) { c.fillStyle = '#505050'; c.font = '13px Tahoma,Arial,sans-serif'; c.textAlign = 'center'; c.fillText('Click to place the corners of your field, or use "Make a rectangle" on the right.', W2 / 2, H2 / 2 - 18); c.fillText('Drag a corner to move it; click a side length to type it exactly.', W2 / 2, H2 / 2 + 2); c.fillText('Or find the farm on the satellite map: "Locate on the map".', W2 / 2, H2 / 2 + 22); c.textAlign = 'left'; }
     info();
   }
   // the layout inside the field: furrows, borders or basins; drip laterals; sprinklers; submain, mainline and valves
@@ -106,23 +111,28 @@ const Sketch = (() => {
   }
 
   // ------------------------------------------------------------------ the mouse: add, drag and type
-  function at(e) { const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) * CW / r.width, y: (e.clientY - r.top) * CH / r.height }; }
+  function scr(e) { const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) * CW / r.width, y: (e.clientY - r.top) * CH / r.height }; }
+  function at(e) { const q = scr(e); return { x: V.x + q.x / V.z, y: V.y + q.y / V.z }; }
+  function zoomAt(f, sx, sy) { const nz = Math.max(0.1, Math.min(12, V.z * f)); if (sx == null) { sx = CW / 2; sy = CH / 2; } const wx = V.x + sx / V.z, wy = V.y + sy / V.z; V.z = nz; V.x = wx - sx / nz; V.y = wy - sy / nz; closeEdit(); draw(); }
+  function fitView() { const P = S.pts.concat(S.src ? [S.src] : []); if (P.length < 2) { V.z = 1; V.x = 0; V.y = 0; draw(); return; } const xs = P.map(p => p.x), ys = P.map(p => p.y), a = Math.min(...xs), b = Math.max(...xs), c2 = Math.min(...ys), d = Math.max(...ys); V.z = Math.max(0.1, Math.min(12, Math.min((CW - 80) / Math.max(1, b - a), (CH - 80) / Math.max(1, d - c2)))); V.x = (a + b) / 2 - CW / 2 / V.z; V.y = (c2 + d) / 2 - CH / 2 / V.z; closeEdit(); draw(); }
   function hit(p) {
-    for (let i = 0; i < S.pts.length; i++) if (len(S.pts[i], p) < 9) return { t: 'pt', i };
-    if (S.src && len(S.src, p) < 12) return { t: 'src' };
-    const g = geom(); if (g && S.src && len(g.inl, p) < 9) return { t: 'inlet' };
-    if (S.pts.length > 1) for (let i = 0; i < S.pts.length; i++) { if (S.pts.length < 3 && i === S.pts.length - 1) continue; const [lx, ly] = sideLab(i); if (Math.abs(lx - p.x) < 26 && Math.abs(ly - p.y) < 11) return { t: 'side', i }; }
+    const z = V.z; for (let i = 0; i < S.pts.length; i++) if (len(S.pts[i], p) < 9 / z) return { t: 'pt', i };
+    if (S.src && len(S.src, p) < 12 / z) return { t: 'src' };
+    const g = geom(); if (g && S.src && len(g.inl, p) < 9 / z) return { t: 'inlet' };
+    if (S.pts.length > 1) for (let i = 0; i < S.pts.length; i++) { if (S.pts.length < 3 && i === S.pts.length - 1) continue; const [lx, ly] = sideLab(i); if (Math.abs(lx - p.x) < 26 / z && Math.abs(ly - p.y) < 11 / z) return { t: 'side', i }; }
     return null;
   }
   function wire() {
     cv.addEventListener('pointermove', e => {
+      if (panning) { const q = scr(e); V.x = panning.vx - (q.x - panning.x) / V.z; V.y = panning.vy - (q.y - panning.y) / V.z; draw(); return; }
       const p = at(e); cursor = p;
-      if (drag) { const q = { x: Math.max(4, Math.min(CW - 4, snap(p.x))), y: Math.max(4, Math.min(CH - 4, snap(p.y))) }; if (drag.t === 'pt') S.pts[drag.i] = q; else if (drag.t === 'src') S.src = q; else if (drag.t === 'inlet') S.inlet = nearestOnEdge(p).p; }
-      else { hover = hit(p); cv.style.cursor = hover ? (hover.t === 'side' ? 'text' : 'move') : 'crosshair'; }
+      if (drag) { const q = { x: snap(p.x), y: snap(p.y) }; if (drag.t === 'pt') S.pts[drag.i] = q; else if (drag.t === 'src') S.src = q; else if (drag.t === 'inlet') S.inlet = nearestOnEdge(p).p; }
+      else { hover = S.mode === 'pan' ? null : hit(p); cv.style.cursor = S.mode === 'pan' ? 'grab' : hover ? (hover.t === 'side' ? 'text' : 'move') : 'crosshair'; }
       draw();
     });
     cv.addEventListener('pointerleave', () => { cursor = null; hover = null; draw(); });
     cv.addEventListener('pointerdown', e => {
+      if (S.mode === 'pan' || e.button === 1 || e.button === 2 || e.shiftKey) { const q = scr(e); panning = { x: q.x, y: q.y, vx: V.x, vy: V.y }; cv.setPointerCapture(e.pointerId); cv.style.cursor = 'grabbing'; e.preventDefault(); return; }
       const p = at(e), h = hit(p); closeEdit();
       if (h && h.t === 'side') { openEdit(h.i); return; }
       if (h && h.t !== 'side') { drag = h; cv.setPointerCapture(e.pointerId); return; }
@@ -132,7 +142,9 @@ const Sketch = (() => {
       else { if (S.pts.length > 2) { const ne = nearestOnEdge(p); if (ne.d < 10) { S.pts.splice(ne.i + 1, 0, q); draw(); return; } } S.pts.push(q); S.inlet = null; }
       draw();
     });
-    cv.addEventListener('pointerup', () => { drag = null; draw(); });
+    cv.addEventListener('pointerup', () => { drag = null; if (panning) { panning = null; cv.style.cursor = S.mode === 'pan' ? 'grab' : 'crosshair'; } draw(); });
+    cv.addEventListener('wheel', e => { e.preventDefault(); const q = scr(e); zoomAt(e.deltaY < 0 ? 1.2 : 1 / 1.2, q.x, q.y); }, { passive: false });
+    cv.addEventListener('contextmenu', e => e.preventDefault());
     cv.addEventListener('dblclick', e => { const h = hit(at(e)); if (h && h.t === 'pt' && S.pts.length > 3) { S.pts.splice(h.i, 1); S.inlet = null; draw(); } });
   }
   // type the exact length of a side: the second corner moves along the side
@@ -141,8 +153,8 @@ const Sketch = (() => {
     edit = document.createElement('div'); edit.className = 'skEdit';
     edit.innerHTML = '<input type="number" step="any" min="0.1" value="' + fmt(m(len(a, b)), 1) + '"> m <button class="btn">Set</button>';
     host.style.position = 'relative'; host.appendChild(edit);
-    const sx = r.width / CW; edit.style.left = Math.max(0, ((a.x + b.x) / 2) * sx - 70) + 'px'; edit.style.top = (((a.y + b.y) / 2) * sx + 12) + 'px';
-    const inp = edit.querySelector('input'), go = () => { const v = parseFloat(inp.value); if (isFinite(v) && v > 0) { const d = len(a, b) || 1, k = px(v) / d, nb = { x: a.x + (b.x - a.x) * k, y: a.y + (b.y - a.y) * k }; if (nb.x < 0 || nb.y < 0 || nb.x > CW || nb.y > CH) { const ns = SC.find(s => s >= S.scale * Math.max(nb.x / CW, nb.y / CH, 1) * 1.1) || 100; const f = S.scale / ns; S.scale = ns; S.pts = S.pts.map(p => ({ x: p.x * f, y: p.y * f })); if (S.src) S.src = { x: S.src.x * f, y: S.src.y * f }; const sel = document.getElementById('skScale'); if (sel) sel.value = ns; return openAfter(i, v); } S.pts[(i + 1) % S.pts.length] = nb; S.inlet = null; } closeEdit(); draw(); };
+    const sx = r.width / CW, mid = toScr({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }); edit.style.left = Math.max(0, mid.x * sx - 70) + 'px'; edit.style.top = (mid.y * sx + 12) + 'px';
+    const inp = edit.querySelector('input'), go = () => { const v = parseFloat(inp.value); if (isFinite(v) && v > 0) { const d = len(a, b) || 1, k = px(v) / d, nb = { x: a.x + (b.x - a.x) * k, y: a.y + (b.y - a.y) * k }; if (false) { const ns = SC.find(s => s >= S.scale * Math.max(nb.x / CW, nb.y / CH, 1) * 1.1) || 100; const f = S.scale / ns; S.scale = ns; S.pts = S.pts.map(p => ({ x: p.x * f, y: p.y * f })); if (S.src) S.src = { x: S.src.x * f, y: S.src.y * f }; const sel = document.getElementById('skScale'); if (sel) sel.value = ns; return openAfter(i, v); } S.pts[(i + 1) % S.pts.length] = nb; S.inlet = null; } closeEdit(); draw(); };
     edit.querySelector('button').onclick = go; inp.addEventListener('keydown', e => { if (e.key === 'Enter') go(); if (e.key === 'Escape') closeEdit(); }); setTimeout(() => { inp.focus(); inp.select(); }, 10);
   }
   function openAfter(i, v) { closeEdit(); openEdit(i); const inp = edit && edit.querySelector('input'); if (inp) { inp.value = v; edit.querySelector('button').click(); } }
@@ -205,16 +217,19 @@ const Sketch = (() => {
     LIST = E.json("({crops:Object.keys(CROPS).map(function(k){return [k,CROPS[k].label]}),soils:DATA.soils.map(function(k){return [k,DATA.soil_labels[k]]}),crop:state.crop,soil:state.soil,rows:Object.fromEntries(Object.keys(CROPS).map(function(k){var r=(typeof IRCROP!=='undefined'&&IRCROP[k])||{};return [k,Math.max(0.2,r.row||0.75)]})),sys:SID.sys,lift:IRX.lift,Qs:DRP.Qs})") || { crops: [], soils: [], rows: {} };
     if (!S.crop) { S.crop = LIST.crop; S.row = (LIST.rows || {})[S.crop] || S.row; } if (!S.soil) S.soil = LIST.soil;
     UI.modal({ title: 'Field sketch to design', icon: 'pipe', width: 'min(1120px,97vw)', html:
-      '<div class="skwrap"><div class="skleft"><div class="skbar"><div class="seg" id="skMode"><button data-m="field"' + (S.mode === 'field' ? ' class="on"' : '') + '>Field corners</button><button data-m="src"' + (S.mode === 'src' ? ' class="on"' : '') + '>Water source</button><button data-m="inlet"' + (S.mode === 'inlet' ? ' class="on"' : '') + '>Inlet</button></div>' +
+      '<div class="skwrap"><div class="skleft"><div class="skbar"><div class="seg" id="skMode"><button data-m="field"' + (S.mode === 'field' ? ' class="on"' : '') + '>Field corners</button><button data-m="src"' + (S.mode === 'src' ? ' class="on"' : '') + '>Water source</button><button data-m="inlet"' + (S.mode === 'inlet' ? ' class="on"' : '') + '>Inlet</button><button data-m="pan"' + (S.mode === 'pan' ? ' class="on"' : '') + ' title="Move the drawing (also: right button, middle button or Shift and drag)">&#9995; Hand</button></div>' +
+      '<button class="btn" id="skZin" title="Zoom in (mouse wheel up)">&#43;</button><button class="btn" id="skZout" title="Zoom out (mouse wheel down)">&minus;</button><button class="btn" id="skFit" title="Show the whole field">Fit</button><button class="btn pri" id="skMap" title="Find the farm on the satellite map, demarcate it and compute the vegetation and water indices">&#127757; Locate on the map</button>' +
       '<button class="btn" id="skUndo">Undo corner</button><button class="btn" id="skClear">Clear</button><label>Grid square <select id="skScale">' + SC.map(v => '<option value="' + v + '"' + (v === S.scale ? ' selected' : '') + '>' + v + ' m</option>').join('') + '</select></label></div>' +
       '<div class="skcv"><canvas id="skCv" width="' + CW * 2 + '" height="' + CH * 2 + '"></canvas></div><div id="skInfo" class="skinfo"></div></div>' +
       '<div class="skright"><div class="seg skst" id="skSteps">' + STEPS.map((s, i) => '<button data-s="' + i + '">' + (i + 1) + '. ' + s + '</button>').join('') + '</div><div id="skQ" class="skq"></div>' +
       '<div class="skbtns"><button class="btn" id="skBack">Back</button><button class="btn" id="skNext">Next question</button></div></div></div>',
       buttons: [{ label: 'Turn the sketch into the design', pri: true, act: () => apply() }, { label: 'Close' }] });
     cv = document.getElementById('skCv'); wire();
+    document.getElementById('skZin').onclick = () => zoomAt(1.25); document.getElementById('skZout').onclick = () => zoomAt(1 / 1.25); document.getElementById('skFit').onclick = fitView;
+    document.getElementById('skMap').onclick = () => { if (typeof FieldMap !== 'undefined') FieldMap.open(); };
     document.getElementById('skMode').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S.mode = b.dataset.m; document.querySelectorAll('#skMode button').forEach(x => x.classList.toggle('on', x === b)); });
     document.getElementById('skUndo').onclick = () => { S.pts.pop(); S.inlet = null; draw(); };
-    document.getElementById('skClear').onclick = () => { S.pts = []; S.src = null; S.inlet = null; draw(); };
+    document.getElementById('skClear').onclick = () => { S.pts = []; S.src = null; S.inlet = null; S.geo = null; V.z = 1; V.x = V.y = 0; draw(); };
     document.getElementById('skScale').onchange = e => { const ns = +e.target.value, f = S.scale / ns; S.scale = ns; S.pts = S.pts.map(p => ({ x: p.x * f, y: p.y * f })); if (S.src) S.src = { x: S.src.x * f, y: S.src.y * f }; S.inlet = null; draw(); };
     document.getElementById('skSteps').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; readStep(); S.step = +b.dataset.s; showStep(); });
     document.getElementById('skBack').onclick = () => { readStep(); S.step = Math.max(0, S.step - 1); showStep(); };
@@ -246,5 +261,15 @@ const Sketch = (() => {
     UI.modal({ title: 'Irrigation systems compared on this field', icon: 'chart', width: 'min(640px,94vw)', html: '<table class="tbl" style="width:100%"><tr><th>System</th><th>Application efficiency</th><th>Root zone filled</th><th>Deep percolation</th><th>Runoff / evaporation</th><th>Time per irrigation</th></tr>' +
       R.map(r => '<tr><td>' + UI.esc(r[0]) + '</td><td><b>' + p(r[1]) + '</b></td><td>' + p(r[2]) + '</td><td>' + p(r[3]) + '</td><td>' + p(r[4]) + '</td><td>' + r[5].toFixed(1) + ' h</td></tr>').join('') + '</table><p class="pnote">Each system with the inputs it has now in its design layer, on the same soil, crop and trigger. Open a design layer to change them and run it.</p>' });
   }
-  return { open, compare, _S: S };
+  // the field in metres (x east, y down) for the map, and a field from the map
+  function getMetres() { return S.pts.map(p => [m(p.x), m(p.y)]); }
+  function setMetres(xy, geo, stay) {
+    const xs = xy.map(p => p[0]), ys = xy.map(p => p[1]), wM = Math.max(...xs) - Math.min(...xs), hM = Math.max(...ys) - Math.min(...ys);
+    S.scale = SC.find(v => wM * GRID / v <= CW - 140 && hM * GRID / v <= CH - 120) || 100;
+    const cx = (Math.max(...xs) + Math.min(...xs)) / 2, cy = (Math.max(...ys) + Math.min(...ys)) / 2;
+    S.pts = xy.map(p => ({ x: CW / 2 + 20 + px(p[0] - cx), y: CH / 2 + px(p[1] - cy) })); S.inlet = null; S.geo = geo || null;
+    const l = Math.min(...S.pts.map(p => p.x)); S.src = { x: Math.max(16, l - 60), y: CH / 2 }; V.z = 1; V.x = V.y = 0;
+    const sel = document.getElementById('skScale'); if (sel) sel.value = S.scale; if (cv && document.body.contains(cv)) draw(); else if (!stay) open();
+  }
+  return { open, compare, getMetres, setMetres, _S: S, _V: V };
 })();

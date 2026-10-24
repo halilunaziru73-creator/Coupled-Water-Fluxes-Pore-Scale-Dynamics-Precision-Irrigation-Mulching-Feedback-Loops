@@ -18,7 +18,16 @@ const Dash = (() => {
   const SEC = (id, title, sub, inner) => '<div class="dsec' + (shut[id] ? ' shut' : '') + '" data-sec="' + id + '"><h4 data-tog="' + id + '"><b><span class="tw">' + (shut[id] ? '&#9654;' : '&#9660;') + '</span>' + title + '</b>' + (sub ? '<span>' + sub + '</span>' : '') + '</h4><div class="dsb"' + (shut[id] ? ' hidden' : '') + '>' + inner + '</div></div>';
 
   const CB = (k, title, inner) => SEC('ch-' + k, title, '', '<div class="chart">' + inner + '</div>');
-  let dayCache = { key: '', D: null }, layerCache = { key: '', L: null };
+  let dayCache = { key: '', D: null }, layerCache = { key: '', L: null }, n1Chart = null, N1T = null;
+  // the virtual farm, at the bottom of the dashboard of every layer: which system it runs, whether its design has been run,
+  // the next irrigation of the daily model, and a button for each system (the block folds like the others)
+  function farmBlock(s) {
+    let F = null; try { F = E.json("(function(){var S=seasonSim(),k=fclock.kd(),n=null;for(var d=k;d<ND;d++)if(S.irr[d]>0.5){n=d;break}var R=window.DESIGN_RUN||{};return {next:n!=null?fmtDate(dateOfK(n)):null,inDays:n!=null?n-k:null,depth:n!=null?S.irr[n]:null,runs:{sid:!!(R.sid&&R.sid.on),drip:!!(R.drip&&R.drip.on),spr:!!(R.spr&&R.spr.on)},method:state.method,soil:DATA.soil_labels[state.soil],crop:(CROPS[state.crop]||{}).label}})()"); } catch (e) {}
+    if (!F) return '';
+    const mine = F.method === 'M01_Overhead' ? 'spr' : /Drip/.test(F.method) ? 'drip' : 'sid', nm = { sid: 'Surface irrigation', drip: 'Drip irrigation', spr: 'Sprinklers' };
+    const row = id => '<div class="farmrow' + (id === mine ? ' on' : '') + '"><div><b>' + nm[id] + '</b>' + (id === mine ? ' <span class="tag">your method</span>' : '') + '<div class="dnote">' + (F.runs[id] ? 'design run: the farm shows it' : 'design not run yet: the farm asks to run it') + '</div></div><button class="btn' + (id === mine ? ' prim' : '') + '" data-farm="' + id + '">&#9654; Open</button></div>';
+    return SEC('farm', 'Virtual farm simulation', 'the irrigation system at work', '<div class="dnote">' + UI.esc(F.soil) + ' · ' + UI.esc(F.crop || '') + (F.next ? ' · next irrigation ' + UI.esc(F.next) + ' (in ' + F.inDays + ' day' + (F.inDays === 1 ? '' : 's') + ', ' + Math.round(F.depth) + ' mm)' : ' · no irrigation due in the record') + '</div>' + ['sid', 'drip', 'spr'].map(row).join(''));
+  }
   function results(s) {
     const key = s.date + '|' + JSON.stringify(s.state) + '|' + s.year + '|' + ((s.wx && s.wx.key) || '');
     if (dayCache.key !== key) { dayCache = { key, D: E.day() }; }
@@ -26,13 +35,23 @@ const Dash = (() => {
     let h = '<div class="dwrap">';
     // the key numbers of the open layer (the same lines as in the report), so every layer has its own results here
     { const lk = s.scene + '|' + key; if (layerCache.key !== lk) { let L = null; try { L = E.json("(function(){try{return reportNotes(currentScene,currentScene.id==='field'?(state.fview||'day'):null)}catch(e){return null}})()"); } catch (e) {} layerCache = { key: lk, L }; }
-      if (s.scene === 'n1') { let N = null; try { N = E.json('n1Dash()'); } catch (e) {} if (N) { const f2 = v => (v == null || !isFinite(v)) ? '-' : (+v).toFixed(2);
-        h += SEC('layer', 'Trigger law: ' + UI.esc(N.soil), 'your soil only', '<div class="kgrid">' +
-          K('Trigger', N.trigCm.toLocaleString('en-US'), 'cm', 't3') + K('Depletion at the trigger', f2(N.fT), '', 't3') + K('Critical f*', f2(N.fstar), '= ' + N.critCm + ' cm', 't2') + K('Sensor (' + N.z + ' cm) now', N.sensorCm.toLocaleString('en-US'), 'cm', 't1') +
-          K('Sensor depletion now', f2(N.fS), N.due ? 'irrigate' : 'within', N.due ? 't2' : 't4') + K('Days to the trigger', N.days != null ? Math.max(1, Math.round(N.days)) : '-', 'from FC', 't3') + K('Drying speed', (N.rate * 100).toFixed(1), '%/day', 't1') + K('Water held, root zone', Math.round(N.taw), 'mm', 't4') +
-          K('Yield', (+N.yield).toFixed(2), N.yUnit, 't4') + K('Irrigation', Math.round(N.irr), 'mm/yr', 't3') + K('Drainage', Math.round(N.drain), 'mm/yr', 't2') + K('Of the best trigger yield', N.rel != null ? Math.round(N.rel * 100) : '-', '%', 't4') + '</div>' +
-          (N.rec != null ? '<div class="dnote" style="margin-top:6px"><b>Choose f = ' + N.rec.toFixed(2) + '.</b> ' + UI.esc(N.why.replace(/^Advice for you: f = [0-9.]+,?\s*/, '').replace(/^because/, 'Because').replace(/^\.\s*/, '')) + '</div>' : '') +
-          '<div class="dnote">On ' + UI.esc(N.date) + ' · ' + UI.esc(N.crop) + '. Click another soil in the drawing to see its numbers here.</div>'); } }
+      if (s.scene === 'n1') { let N = null; try { N = E.json('n1Dash()'); } catch (e) {} if (N) { const f2 = v => (v == null || !isFinite(v)) ? '-' : (+v).toFixed(2), r = (a, b, c) => '<tr><td>' + a + '</td><td><b' + (c ? ' style="color:' + c + '"' : '') + '>' + b + '</b></td></tr>';
+        const tick = q => '<li class="' + (q[0] ? 'ok' : 'no') + '"><span>' + (q[0] ? '&#10003;' : '&ndash;') + '</span><div><b>' + UI.esc(q[1]) + '</b><br><small>' + UI.esc(q[2]) + '</small></div></li>';
+        h += SEC('layer', 'Trigger law: ' + UI.esc(N.soil), 'your soil only', '<table class="n1t">' +
+          r('Soil', UI.esc(N.soil) + ' · sand ' + Math.round(N.sand) + ' %, clay ' + Math.round(N.clay) + ' %') +
+          r('Water the soil holds', (+N.awc).toFixed(1) + ' mm per cm · ' + Math.round(N.taw) + ' mm in ' + N.roots + ' cm of roots') +
+          r('Trigger (when to irrigate)', N.trigCm.toLocaleString('en-US') + ' cm suction · depletion ' + f2(N.fT), '#3F1D80') +
+          r('Critical stress f*', f2(N.fstar) + ' = ' + N.critCm.toLocaleString('en-US') + ' cm suction', '#B01E14') +
+          r('Sensor at ' + N.z + ' cm on ' + UI.esc(N.date), N.sensorCm.toLocaleString('en-US') + ' cm · depletion ' + f2(N.fS) + ' · ' + (N.due ? 'irrigate now' : 'within the trigger'), N.due ? '#B01E14' : '#1E5A2A') +
+          r('Drying speed at the peak of the season', (N.rate * 100).toFixed(1) + ' % a day · crop uses ' + (+N.mm).toFixed(1) + ' mm a day') +
+          r('From field capacity to the trigger', N.days != null ? Math.max(1, Math.round(N.days)) + ' days' : '-') +
+          r('Yield', (+N.yield).toFixed(2) + ' ' + UI.esc(N.yUnit) + (N.rel != null ? ' · ' + Math.round(N.rel * 100) + ' % of the best trigger' : '')) +
+          r('Irrigation · drainage', Math.round(N.irr) + ' · ' + Math.round(N.drain) + ' mm a year') + '</table>' +
+          '<div class="chart"><canvas id="n1dc" style="height:170px"></canvas></div><div class="dnote">Depletion at the sensor through the season of ' + UI.esc(N.season.start.slice(-4)) + ' (day 0 = ' + UI.esc(N.season.start) + '); the dashed line is the trigger, blue days are irrigations.</div>' +
+          (N.rec != null ? '<div class="n1adv"><b>Choose f = ' + N.rec.toFixed(2) + '</b> · ' + UI.esc(N.why.replace(/^Advice for you: f = [0-9.]+,?\s*/, '').replace(/^because/, 'because')) + '</div>' : '') +
+          (N.q50.length ? '<div class="n1q"><div><h5>Choose f = 0.50 if</h5><ul>' + N.q50.map(tick).join('') + '</ul></div><div><h5>Choose f = 0.45 if</h5><ul>' + N.q45.map(tick).join('') + '</ul></div></div>' : '') +
+          '<div class="dnote">Click another soil in the drawing to see its numbers here.</div>');
+        n1Chart = N.season; N1T = N.fT; } }
       else {
       const L = (Layers.DESIGN || []).includes(s.scene) && !runOn(s.scene) ? null : layerCache.L; if (L && L.length) h += SEC('layer', UI.esc(Layers.nameOf(s.scene) || 'This layer'), 'key numbers of this layer', '<ul class="dlist">' + L.map(l => '<li>' + UI.esc(l) + '</li>').join('') + '</ul>'); } }
     if (D) {
@@ -54,7 +73,9 @@ const Dash = (() => {
       g += '<div class="kpi ' + r[2] + '"><div class="kl">' + r[1] + '</div><div class="kv">' + UI.esc(v || '...') + '</div>' + dd + '</div>';
     });
     h += SEC('avg', '20-year averages at these settings', baseline ? 'changes against the pinned baseline' : 'pin a baseline to compare', g + '</div>');
+    h += farmBlock(s);
     setBody(h + '</div>');
+    if (s.scene === 'n1' && n1Chart) { const cv = document.getElementById('n1dc'); if (cv) { const S = n1Chart; xyChart(cv, { x: S.x, xl: 'day of the season', yl: 'depletion', ymin: 0, ymax: 1, invert: false, series: [{ y: S.dep, c: '#8E24AA', n: 'sensor depletion', w: 2 }], marks: S.x.filter((q, i) => S.irr[i]).map(q => ({ x: q, t: '', c: '#1565C0' })).concat([{ y: N1T, t: 'trigger ' + (+N1T).toFixed(2), c: '#3F1D80' }], S.today >= 0 && S.today <= 155 ? [{ x: S.today, t: 'today', c: '#C00000' }] : []) }); } }
   }
 
   const DL = {

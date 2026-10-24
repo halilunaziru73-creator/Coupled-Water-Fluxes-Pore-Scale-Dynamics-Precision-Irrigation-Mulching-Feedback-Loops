@@ -21,7 +21,7 @@
 * **Nothing runs while you type**: results appear after **Run simulation** and are withdrawn when an input or a setting changes (Section 18.1).
 * **Find the most efficient inputs**, with your present inputs competing (Section 18.4); the surface search also tries shorter runs.
 * **Field size** as an area or as a length and a width, for drip and sprinklers (Section 18.3).
-* The **field sketch** is a guided drawing: corners you drag, side lengths you type, the source and the inlet, the pipe layout drawn as you choose, and seven steps of questions (field, water, crop, soil, system, running, summary) (Section 18.5). **Compare the irrigation systems** (Section 18.7).
+* The **field sketch** is a guided drawing: corners you drag, side lengths you type, the source and the inlet, the pipe layout drawn as you choose, and seven steps of questions (field, water, crop, soil, system, running, summary) (Section 18.6). **Compare the irrigation systems** (Section 18.7).
 * Each design ends with a **film of the soil water** covering the days ahead and the rest of the season. Every day is coloured by its phase (irrigation, rain, comfortable, nearing the trigger, stress, near wilting, no crop). The film shows the root zone drying towards the trigger and, without irrigation, towards the wilting point, and gives the totals and the share of days in each phase (Section 18.6). The schedule takes its depths and times from the design.
 * The seasonal layers have **one dashboard chart per part of the layer**, with how each quantity varies over the twenty seasons (Chapter 14).
 * *Trigger law* and *Mulch against bare soil* stand still until **Play**; the season plays at two days a second.
@@ -42,3 +42,11 @@
 ## Reports
 
 * The report asks which layers to include, all ticked to start with; notes and drawings continue on the next pages; designs are drawn complete (Chapter 23).
+
+## The field on the map
+
+* The field sketch has a hand to move the drawing, zoom in and out (buttons and mouse wheel), *Fit*, and a north arrow and scale bar that follow the zoom.
+* *Tools ▸ Field on the map…* finds the farm (place search, coordinates, satellite image, Google Earth), demarcates it on the image, computes NDVI, EVI, SAVI, NDRE and NDWI of the demarcated field from Sentinel-2 or simulated by SWAFL, and exports the report (PDF or PNG at 96 to 600 dpi, with coordinates and authorship), GeoJSON and CSV (Section 18.6).
+* The Virtual farm simulation is a folding block at the bottom of the Dashboard instead of a button on top of every layer.
+* The Trigger law block of the Dashboard shows the current soil as a table, its season chart and the advice with each condition ticked.
+

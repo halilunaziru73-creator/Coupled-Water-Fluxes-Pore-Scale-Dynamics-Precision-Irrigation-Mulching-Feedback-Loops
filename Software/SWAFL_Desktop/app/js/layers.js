@@ -96,11 +96,10 @@ const Layers = (() => {
       let h = '<span class="vtitle">' + UI.esc(nameOf(cur)) + '</span>';
       h += '<button class="vb' + (!sectionPick[cur] ? ' on' : '') + '" data-top>Whole design</button>';
       (VIEWS[cur] || []).forEach(v => { const t = secs.find(x => v[1].test(x)); if (t) h += '<button class="vb' + (sectionPick[cur] === t ? ' on' : '') + '" data-sec="' + UI.esc(t) + '" title="' + UI.esc(t) + '">' + v[0] + '</button>'; });
-      h += '<span class="grow"></span><button class="vb farmbtn" data-farmrun="' + cur + '">&#9654; Virtual farm simulation</button>';
       el.innerHTML = h;
   } else {
       const sc = E.meta && E.metaData ? E.metaData.scenes.find(s => s[0] === cur) : null;
-      el.innerHTML = '<span class="vtitle">' + UI.esc(nameOf(cur)) + '</span><span class="pnote">' + UI.esc(sc && sc[2] ? sc[2] : 'Use the Properties panel on the right to change the scenario. The picture updates live.') + '</span>' + (cur === 'farm' ? '' : '<span class="grow"></span><button class="vb farmbtn" data-farmrun="' + cur + '">&#9654; Virtual farm simulation</button>');
+      el.innerHTML = '<span class="vtitle">' + UI.esc(nameOf(cur)) + '</span><span class="pnote">' + UI.esc(sc && sc[2] ? sc[2] : 'Use the Properties panel on the right to change the scenario. The picture updates live.') + '</span>' + '';
     }
   }
   document.getElementById('viewBar').addEventListener('click', e => {

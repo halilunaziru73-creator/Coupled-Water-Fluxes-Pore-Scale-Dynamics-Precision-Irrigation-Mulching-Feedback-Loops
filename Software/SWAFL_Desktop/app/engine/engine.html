@@ -5127,7 +5127,9 @@ window.n1Dash = function () {
   const soil = state.soil, sim = seasonSim(), dd = clampN(fclock.kd(), 0, ND - 1), z = Z_VALUES[state.zIdx], si = clampN(Math.round(z / DZ), 0, NLAY - 1), fS = 1 - clampN(sim.s[dd][si], 0, 1);
   const tf = trigAbsFor(soil), fT = n1F(), mv = n1ModelFor(soil), rl = n1Rel(soil), sp = n1Speed(soil), cf = CROPS[state.crop] || { factor: 1, unit: 'Mg/ha' }; if (!(window.__N1ADV && window.__N1ADV.soil === soil) && currentScene && currentScene.id === 'n1') { try { currentScene.draw(); } catch (e) {} } const adv = window.__N1ADV && window.__N1ADV.soil === soil ? window.__N1ADV : null;
   return { soil: DATA.soil_labels[soil], date: fmtDate(dateOfK(dd)), crop: cropNameAt(sim, dd), trigCm: Math.round(tf), fT, fstar: 0.45, critCm: TRIGGER_AT_FSTAR[soil], z, sensorCm: Math.round(invDepletion(soil, fS)), fS,
-    due: fS >= fT, days: sp.days, rate: sp.rate, mm: sp.mm, taw: sp.taw, awc: AWC[soil], yield: mv.yield * cf.factor, yUnit: (cf.unit || 'Mg/ha').split(' ')[0], irr: mv.irr, drain: mv.drain, rel: rl, rec: adv ? adv.rec : null, why: adv ? adv.why : null };
+    due: fS >= fT, days: sp.days, rate: sp.rate, mm: sp.mm, taw: sp.taw, awc: AWC[soil], yield: mv.yield * cf.factor, yUnit: (cf.unit || 'Mg/ha').split(' ')[0], irr: mv.irr, drain: mv.drain, rel: rl, rec: adv ? adv.rec : null, why: adv ? adv.why : null,
+    q50: adv ? adv.q50 : [], q45: adv ? adv.q45 : [], sand: (DATA.texture[soil] || {}).sand, clay: (DATA.texture[soil] || {}).clay, roots: Math.round(sim.Rmax || 0),
+    season: (function () { const ay = clampN(yearOf(dd), 0, NYR - 1), d0 = ay * DPY + 95, x = [], dep = [], irr = []; for (let q = 0; q <= 155 && d0 + q < ND; q++) { x.push(q); dep.push(+(1 - clampN(sim.s[d0 + q][si], 0, 1)).toFixed(3)); irr.push(sim.irr[d0 + q] > 0.5 ? 1 : 0); } return { x, dep, irr, start: fmtDate(dateOfK(d0)), today: dd - d0 }; })() };
 };
 function n1Choice(y, sf, sim, dd) {
   const cl = window.CROPLIB && CROPLIB.crops[state.crop], cropLbl = (CROPS[state.crop] || {}).label || state.crop, p = cl && cl.p != null ? cl.p : 0.55;
@@ -5157,7 +5159,7 @@ function n1Choice(y, sf, sim, dd) {
   const R45 = ['the soil is sandy and dries out fast', 'the system needs several days for a full round', 'the crop is at flowering or pollination'], R50 = ['it is a standard field crop', 'the soil holds much water', 'the system covers the whole field quickly'];
   const join = a => a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1];
   const why = rec === 0.45 ? 'Advice for you: f = 0.45, because ' + join(Q45.map((q, i) => q[0] ? R45[i] : null).filter(Boolean)) + '. Irrigating a little earlier keeps the crop out of stress while the round goes on.' : 'Advice for you: f = 0.50' + (n50 ? ', because ' + join(Q50.map((q, i) => q[0] ? R50[i] : null).filter(Boolean)) : '') + '. The soil can give half of its available water before the crop feels it, with fewer irrigations.';
-  window.__N1ADV = { soil: sf, rec, why, cur };
+  window.__N1ADV = { soil: sf, rec, why, cur, q50: Q50.map(q => [!!q[0], q[1], q[2]]), q45: Q45.map(q => [!!q[0], q[1], q[2]]) };
   sidWrap(why + ' Now: f = ' + cur.toFixed(2) + '.', 26, y + 226, W - 52, { s: 9.6, b: true, c: rec === 0.45 ? '#8A5A00' : '#1E5A2A' }, 12);
 }
 

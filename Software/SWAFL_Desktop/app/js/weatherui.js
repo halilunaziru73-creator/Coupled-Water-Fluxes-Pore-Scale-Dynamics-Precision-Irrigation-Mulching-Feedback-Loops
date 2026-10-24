@@ -56,7 +56,7 @@ const WxUI = (() => {
       const lat = parseFloat(document.getElementById('wxLatO').value), lon = parseFloat(document.getElementById('wxLonO').value);
       if (!isFinite(lat) || !isFinite(lon)) { msg().textContent = 'Find a place or type its latitude and longitude.'; return; }
       msg().textContent = 'Getting twenty years of daily weather and the forecast...';
-      try { const s = await E.win.wxOnline(lat, lon, document.getElementById('wxPlace').dataset.label || ''); UI.log('Online weather in use: ' + s.name + ' (' + s.years + ')'); E.poll(true); Props.build(); Props.update(E.snap); Dash.render(); report(s, 'Online weather in use'); }
+      try { const s = await E.win.wxOnline(lat, lon, document.getElementById('wxPlace').dataset.label || ''); window.__WXLOC = { lat, lon, name: document.getElementById('wxPlace').dataset.label || '' }; UI.log('Online weather in use: ' + s.name + ' (' + s.years + ')'); E.poll(true); Props.build(); Props.update(E.snap); Dash.render(); report(s, 'Online weather in use'); }
       catch (e) { msg().innerHTML = '<b>The online weather could not be reached</b> (' + UI.esc(e.message) + '). The current weather stays in use.'; UI.log('Online weather not reachable: the current weather stays in use', 'warn'); }
     };
   }

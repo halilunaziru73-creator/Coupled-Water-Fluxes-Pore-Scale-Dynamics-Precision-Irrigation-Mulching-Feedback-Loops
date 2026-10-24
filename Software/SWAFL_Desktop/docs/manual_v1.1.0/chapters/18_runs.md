@@ -89,6 +89,10 @@ Applying a combination writes its values into the value boxes, so you can see an
 * **Water source:** in this mode, click where the water is and drag the blue marker to move it.
 * **Inlet:** in this mode, drag the yellow square along the edge of the field to where the pipe or the canal enters.
 * **Grid square:** sets the scale, from 1 to 100 m per square.
+* **Hand, zoom in and out, Fit:** the hand button moves the drawing; the right or middle mouse button, or Shift and drag, also move it in any mode. **+** and **−**, or the mouse wheel over the grid, zoom in and out around the cursor (10 % to 1200 %). **Fit** shows the whole field. The scale bar and the north arrow stay on the screen and follow the zoom.
+* **Locate on the map:** opens the field on the satellite map (Section 18.6), to find the farm, demarcate it on the image and compute its vegetation and water indices.
+
+![The sketch zoomed in, with the hand, zoom and map buttons.](images/ui/sketch_zoom.jpg){width=100%}
 
 While you draw, the window draws the layout of the system you choose:
 
@@ -128,6 +132,64 @@ and the mainline length from the source to the inlet. Here $L_{\mathrm{run}}$ is
 It also sets the mainline length, the lift, the source, the hours a day, the compact layer and the operator of the valves. Then it opens the design, which waits for **Run simulation**.
 
 ![The field sketch.](images/atlas11/ui_u12_sketch.jpg){width=100%}
+
+## The field on the map: satellite, vegetation and water indices, report
+
+*Tools ▸ Field on the map…*, or **Locate on the map** in the field sketch, opens the field on a satellite image.
+
+![The field on the map, demarcated, with its NDVI and the table of the five indices.](images/ui/fieldmap_indices.jpg){width=100%}
+
+**1. Find the farm.** Type a village, town or district and press *Find* (place search of Open-Meteo, the same as for the online weather), or type the latitude and longitude and press *Go*. If the online weather of a place is in use, the map opens there. The background is the satellite image (Esri World Imagery, with place names) or the map (OpenStreetMap). **Open in Google Earth** opens Google Earth on the centre of the field, to look at it in 3D.
+
+**2. Demarcate the field.** In *Demarcate* mode, click the corners of the field on the image. Drag a corner to move it; right-click a corner to remove it; *Undo point* and *Clear* work as in the sketch. The *Hand* moves the map; **+** and **−** or the mouse wheel zoom; *Fit the field* shows the whole field. *Place my sketch here* puts the field of the sketch, at its true size, on the centre of the map. The panel gives the area, the perimeter and the centre, in decimal degrees and in degrees, minutes and seconds (WGS 84). On the sphere of radius $R = 6\,378\,137$ m,
+
+$$
+A=\frac{R^2}{2}\Bigl|\sum_i(\lambda_{i+1}-\lambda_i)\bigl(2+\sin\varphi_i+\sin\varphi_{i+1}\bigr)\Bigr|,\qquad
+P=\sum_i 2R\arcsin\sqrt{\sin^2\tfrac{\Delta\varphi}{2}+\cos\varphi_i\cos\varphi_{i+1}\sin^2\tfrac{\Delta\lambda}{2}},
+\tag{18.4}
+$$
+
+*Provenance (Eq. 18.4):* **[Literature]**: spherical polygon area (Chamberlain and Duquette, 2007) and the haversine distance; $\varphi$ latitude, $\lambda$ longitude in radians.
+
+**3. Compute the indices of the field.** The indices are computed only for the demarcated field, on cells of 10 m (Sentinel-2) or down to 2 m (simulated), and only after the field has at least three corners. Two sources:
+
+* **Sentinel-2 L2A satellite** (open data, Copernicus, through the Element 84 Earth Search catalogue): the least cloudy scene over the field in the last *Look back* days with less than *Clouds below* % cloud. The bands B02 (blue), B04 (red), B05 (red edge), B08 (NIR) and B11 (SWIR) are read only over the field; cloud, cloud shadow, snow and no-data cells are removed with the scene classification (SCL). This needs the internet; without it the program says so and uses the simulated indices.
+* **Simulated by SWAFL**, on the working date or at the peak of the crop: each cell mixes the reflectance of the crop and of the soil by the crop cover $c$ of the daily model, $\rho=c\,\rho_{\mathrm{veg}}+(1-c)\,\rho_{\mathrm{soil}}$. The soil is darker when its top layer is wet; the canopy reflects less NIR and more SWIR when the crop is stressed (sensor depletion beyond the trigger) and less red edge when nitrogen is short; the water of each cell varies across the field with the uniformity of the design (CU, $E_u$).
+
+$$
+\begin{aligned}
+\mathrm{NDVI}&=\frac{\rho_N-\rho_R}{\rho_N+\rho_R}, &
+\mathrm{EVI}&=2.5\,\frac{\rho_N-\rho_R}{\rho_N+6\rho_R-7.5\rho_B+1}, &
+\mathrm{SAVI}&=\frac{(1+L)(\rho_N-\rho_R)}{\rho_N+\rho_R+L},\ L=0.5,\\
+\mathrm{NDRE}&=\frac{\rho_N-\rho_{RE}}{\rho_N+\rho_{RE}}, &
+\mathrm{NDWI}&=\frac{\rho_N-\rho_{SW}}{\rho_N+\rho_{SW}}.
+\end{aligned}
+\tag{18.5}
+$$
+
+*Provenance (Eq. 18.5):* **[Literature]**: Rouse et al. (1974), Huete et al. (2002), Huete (1988), Barnes et al. (2000), Gao (1996). The simulated reflectances are **[Engineered]**.
+
+| Index | Bands | What it follows |
+|:--|:--|:--|
+| NDVI | Red, NIR | Drought tracking, baseline crop health |
+| EVI | Blue, Red, NIR | Resists saturation in thick canopies (dense crops) |
+| SAVI | Red, NIR, soil factor $L$ | Removes the soil background (dry land, early crop) |
+| NDRE | Red edge, NIR | Deep canopy; nitrogen management, precision farming |
+| NDWI | NIR, SWIR | Water inside the canopy; crop water stress, fire risk |
+
+The table gives, for each index, the mean, the 10 and 90 % values, the minimum and maximum over the field, and what the mean means. Click a row to show that index on the map with its colour scale.
+
+**4. Use and export.** *Use this field in the sketch and the designs* makes the demarcated field the sketch (true lengths, centre coordinates kept); *Back to the field sketch* continues the design. *Online weather of this field* downloads the daily weather of the centre of the field and runs the program on it. The report has a **title, an author and an organisation**, a **resolution of 96, 150, 300 or 600 dpi** and a format:
+
+* **PDF (A4)**, two pages: page 1 with the map of the chosen index, the edges of the map in degrees, the north arrow and scale bar, the area, the perimeter, the centre, the coordinates of every corner and the table of the indices; page 2 with the five indices side by side, the spread of each over the field and what the five say together (water stress, nitrogen, evenness). The title, author, coordinates and keywords are also written in the properties of the PDF.
+* **PNG (A4)**, one image per page, with the resolution written in the file so that it prints at the chosen dpi.
+* **GeoJSON** (the field polygon in WGS 84 with the area, the author and the means of the indices) and **CSV** (the corners and every statistic), for a GIS or a spreadsheet.
+
+Every page carries the sources: imagery © Esri, Maxar, Earthstar Geographics; map © OpenStreetMap contributors; contains modified Copernicus Sentinel data.
+
+![The field report, page 1.](images/ui/fieldmap_report_p1.jpg){width=82%}
+
+![The field report, page 2: the five indices.](images/ui/fieldmap_report_p2.jpg){width=82%}
 
 ## The soil water in the days ahead
 

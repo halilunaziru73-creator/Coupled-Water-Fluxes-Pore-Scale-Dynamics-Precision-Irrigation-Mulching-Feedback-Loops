@@ -8,7 +8,11 @@ The Dashboard is the panel to the right of the drawing. It has four tabs (*Resul
 
 The first block of the Results tab carries the name of the open layer and its **key numbers** (the same lines as in the report). For example, on *Soil hydraulic drivers* it shows the change in drainage due to tillage and to the consolidation rate on your soil, and the leading driver. A design layer shows its key numbers after its run.
 
-On *Trigger law* this block shows only the soil you are working on. It lists the trigger (cm) and its depletion, the critical $f^*$, the sensor reading and its depletion now, the days from field capacity to the trigger, the drying speed, the water held in the root zone, the yield, the irrigation and drainage, the share of the best trigger's yield, and the advice $f = 0.50$ or $f = 0.45$ with its reasons. Click another soil in the drawing to see its numbers.
+On *Trigger law* this block shows only the soil you are working on. It lists the trigger (cm) and its depletion, the critical $f^*$, the sensor reading and its depletion now, the days from field capacity to the trigger, the drying speed, the water held in the root zone, the yield, the irrigation and drainage, the share of the best trigger's yield, and the advice $f = 0.50$ or $f = 0.45$ with its reasons. Click another soil in the drawing to see its numbers. Under the table, the chart of the season shows the depletion at the sensor day by day, the trigger (dashed) and the irrigation days (blue), with both axes named; then the advice, and the two lists *Choose f = 0.50 if* and *Choose f = 0.45 if*, each condition ticked or not with the value that decides it.
+
+![The Trigger law block of the Dashboard: the soil, its numbers, the season chart and the advice.](images/ui/dash_n1.jpg){width=45%}
+
+The last block of the Results tab, on every layer, is **Virtual farm simulation** (Chapter 20). It replaces the button that version 1.1.0 first had on the view bar of every layer.
 
 The tab has four blocks.
 
