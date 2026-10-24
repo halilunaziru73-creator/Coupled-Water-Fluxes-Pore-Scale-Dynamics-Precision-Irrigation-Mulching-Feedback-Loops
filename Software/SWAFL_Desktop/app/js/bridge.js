@@ -53,6 +53,9 @@ const E = (() => {
       let s; try { s = api.take(); } catch (e) { return; } if (!s) return;
       const str = JSON.stringify(s);
       if (!force && str === api._last) return;
+      // while a layer plays its own season or sweep, the rest of the window keeps your settings and date: it follows again on pause
+      let busy = false; try { busy = !!api.ev("(function(){var id=currentScene&&currentScene.id;return ((id==='n1'||id==='r1')&&n1ui.play)||(typeof SWEEPS!=='undefined'&&SWEEPS[id]&&SWEEPS[id].keys.length&&AUTO.on)})()"); } catch (e) {}
+      if (busy && api.snap && !force) return;
       const prev = api.snap; api._last = str; api.snap = s;
       api.emit('snap', { s, prev });
       if (!prev || prev.scene !== s.scene) api.emit('scene', s);
