@@ -153,7 +153,7 @@
     ctx.fillStyle = '#000'; ctx.beginPath(); ctx.moveTo(x + 4, y + h / 2 - 2); ctx.lineTo(x + 12, y + h / 2 - 2); ctx.lineTo(x + 8, y + h / 2 + 2); ctx.closePath(); ctx.fill(); };
   sidSlider = function (key, label, x, y, w, rng, val, fmt, dis, sub) {
     T(label, x, y, { s: 9.5, b: true, c: dis ? '#808080' : '#000000' });
-    const by = y + 4, bh = 18; box(x, by, w, bh, dis); T(exactFmt(fmt(val), val, rng), x + 6, by + 13, { s: 10, b: true, c: dis ? '#808080' : '#0A246A' });
+    const by = y + 4, bh = 18; box(x, by, w, bh, dis); T(typedOf(SIDCUR, key) ? exactFmt(fmt(val), val, rng) : fmt(val), x + 6, by + 13, { s: 10, b: true, c: dis ? '#808080' : '#0A246A' });
     if (!dis) dropBtn(x + w - 18, by + 1, bh - 2);
     const obj = SIDCUR;
     if (!dis) SIDW.push({ key, x, w, y: by + bh / 2, rng, sub, obj, field: true, label: label || (key === 'Zn' ? 'Required depth Zn (mm)' : key), cur: val, bx: x, by, bw: w, bh });
@@ -161,7 +161,9 @@
   // the box shows the value as typed (2.13 stays 2.13), not rounded to the decimals of the old slider label
   const exactFmt = (t, val, rng) => { if (typeof t !== 'string' || typeof val !== 'number' || !isFinite(val)) return t; const m = t.match(/-?\d+(?:\.\d+)?/); if (!m) return t; const n = parseFloat(m[0]), d = (m[0].split('.')[1] || '').length, ex = +val.toFixed(4);
     if (n === ex || Math.abs(n - val) > 0.5001 * Math.pow(10, -d) || String(ex).length > 9) return t; return t.slice(0, m.index) + String(ex) + t.slice(m.index + m[0].length); };
-  const setField = (s, v) => { s.obj[s.key] = +(v * (s.scale || 1)).toFixed(6); if (s.obj === SID) { if (s.key === 'qLs') SID.autoQ = false; if (s.key === 'tman') SID.cut = 'man'; sidTouch(s.key); } else if (s.obj.touch) s.obj.touch(s.key); };
+  // values the user typed are shown as typed; values set by the program keep the decimals of their label
+  const TYPED = new WeakMap(), typedOf = (o, k) => !!(o && TYPED.get(o) && TYPED.get(o).has(k));
+  const setField = (s, v) => { if (!TYPED.get(s.obj)) TYPED.set(s.obj, new Set()); TYPED.get(s.obj).add(s.key); s.obj[s.key] = +(v * (s.scale || 1)).toFixed(6); if (s.obj === SID) { if (s.key === 'qLs') SID.autoQ = false; if (s.key === 'tman') SID.cut = 'man'; sidTouch(s.key); } else if (s.obj.touch) s.obj.touch(s.key); };
   const oSidDown = sidDown;
   sidDown = function (p) {
     const id0 = curId(), lim = id0 && !RUN[id0].on ? inputsEnd(id0) : 1e9;

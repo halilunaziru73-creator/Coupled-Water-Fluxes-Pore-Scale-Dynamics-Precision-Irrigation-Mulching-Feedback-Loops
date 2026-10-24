@@ -657,6 +657,9 @@ const SIDM = (function () {
     const cut = P.cut || { mode: 'es1' };
     R.xcut = cut.mode === 'r85' ? 0.85 * L : L;
     if (cut.mode === 'r85') R.tco = txf(0.85 * L) + R.tst; else if (cut.mode === 'man') R.tco = cut.t; else R.tco = tL + R.tst;
+    // a set is not run for more than 48 hours: when the advance would take longer (a coarse sand with too small an inflow),
+    // the inflow stops at 48 h and the water front has reached only part of the run
+    const TMAX = P.tmax || 2880; if (!(tL <= TMAX)) { R.stall = true; R.xmax = Math.min(L, f(TMAX)); } if (R.tco > TMAX && cut.mode !== 'man') R.tco = TMAX;
     const tco = R.tco; R.reach = tco >= tL;
     R.Z0 = Zf(tco); R.ZL = tco > tL ? Zf(tco - tL) : 0;
     // infiltration profile Z(x) on a grid

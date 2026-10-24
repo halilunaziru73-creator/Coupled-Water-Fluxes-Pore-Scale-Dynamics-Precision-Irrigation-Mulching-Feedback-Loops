@@ -6308,10 +6308,10 @@ The drawing of the layer from top to bottom. It is explained in Chapter 20; its 
 
 - **1** The heading or label *Virtual farm: irrigation from the water source to the plants*.
 - **2** The heading or label *Border strip · from the surface irrigation design*.
-- **3** The heading or label *Predicted irrigations (daily model)*.
-- **4** The heading or label *3 Jun 2027   35 mm   247424.1 h open*.
+- **3** The heading or label *Irrigation running · t = 11249718 of 14845449 min (water off the field at 25383979 min)*.
+- **4** The heading or label *Next irrigations: net / gross depth, time open*.
 - **5** The heading or label *canal from the reservoir*.
-- **6** The heading or label *Cross-section through the field: where the water goes in the soil (layer water from the daily model)*.
+- **6** The heading or label *Section along the run, inlet on the left: the wetting of this irrigation (simulated with the design)*.
 
 ![Virtual farm simulation: the surface design, part 2 of 3.](images/atlas11/L_farm_sid_p2.jpg){width=78%}
 
@@ -6342,9 +6342,9 @@ The drawing of the layer from top to bottom. It is explained in Chapter 20; its 
 
 - **1** The heading or label *Virtual farm: irrigation from the water source to the plants*.
 - **2** The heading or label *Surface drip · from the drip irrigation design*.
-- **3** The heading or label *Predicted irrigations (daily model)*.
-- **4** The heading or label *29 May 2027   18 mm   2.6 h open*.
-- **5** The heading or label *Cross-section through the field: where the water goes in the soil (layer water from the daily model)*.
+- **3** The heading or label *Irrigation running · t = 139 of 314 min*.
+- **4** The heading or label *Next irrigations: net / gross depth, time open*.
+- **5** The heading or label *Cross-section through the field: the wetting of this irrigation (simulated with the design)*.
 
 ![Virtual farm simulation: the drip design, part 2 of 3.](images/atlas11/L_farm_drip_p2.jpg){width=78%}
 
@@ -6375,10 +6375,10 @@ The drawing of the layer from top to bottom. It is explained in Chapter 20; its 
 
 - **1** The heading or label *Virtual farm: irrigation from the water source to the plants*.
 - **2** The heading or label *Sprinkler · from the sprinkler design*.
-- **3** The heading or label *Predicted irrigations (daily model)*.
-- **4** The heading or label *3 Jun 2027   35 mm   9.5 h open*.
-- **5** The heading or label *wind drift and evaporation 4.8…*.
-- **6** The heading or label *Cross-section through the field: where the water goes in the soil (layer water from the daily model)*.
+- **3** The heading or label *Applied 24.9 of 56.3 mm gross · stored in the root zone 22.3 mm · rate 5.9 mm/h*.
+- **4** The heading or label *Next irrigations: net / gross depth, time open*.
+- **5** The heading or label *wind drift and evaporation 4.8 %*.
+- **6** The heading or label *Cross-section through the field: the wetting of this irrigation (simulated with the design)*.
 
 ![Virtual farm simulation: the sprinkler design, part 2 of 3.](images/atlas11/L_farm_spr_p2.jpg){width=78%}
 

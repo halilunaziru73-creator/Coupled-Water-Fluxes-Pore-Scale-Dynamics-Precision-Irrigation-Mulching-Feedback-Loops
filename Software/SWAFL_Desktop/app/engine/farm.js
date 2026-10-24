@@ -125,11 +125,11 @@
     bx += 12; btn(FM.rec ? 'Recording ' + Math.max(0, Math.ceil(20 - (t - FM.recT))) + ' s' : 'Record video (20 s)', !!FM.rec, () => recordVideo(), 'save a 20-second video of the farm', '#C62828');
     // ---- geometry of the farm block (isometric)
     // the event clock of the simulation
-    { const sch0 = schedule(sim, kd, 1), sy0 = by + 30; ctx.fillStyle = irrToday && tEv < Tend ? '#E8F3E8' : '#F2F1EC'; ctx.fillRect(16, sy0, W - 32, 34); ctx.strokeStyle = '#B9B4A6'; ctx.strokeRect(16.5, sy0 + 0.5, W - 33, 33);
+    { const sch0 = schedule(sim, kd, 1), sy0 = by + 30; ctx.fillStyle = irrToday && tEv < Tend ? '#E8F3E8' : '#F2F1EC'; const stl = EV && EV.R && EV.R.stall ? 14 : 0; ctx.fillRect(16, sy0, W - 32, 34 + stl); ctx.strokeStyle = '#B9B4A6'; ctx.strokeRect(16.5, sy0 + 0.5, W - 33, 33 + stl);
       let l1, l2;
       if (EV && irrToday) {
         const run = tEv < Topen, done = tEv >= Tend * 0.999;
-        l1 = (done ? 'Irrigation of ' + fmtDate(dateOfK(kd)) + ' finished' : run ? 'Irrigation running' : 'Gate closed, water receding') + ' · t = ' + fmt(tEv) + ' of ' + fmt(Topen) + ' min' + (from === 'sid' ? ' (water off the field at ' + fmt(Tend) + ' min)' : '');
+        l1 = (done ? 'Irrigation of ' + fmtDate(dateOfK(kd)) + ' finished' : run ? 'Irrigation running' : 'Gate closed, water receding') + ' · t = ' + tTxt(tEv) + ' of ' + tTxt(Topen) + (from === 'sid' ? ' (water off the field at ' + tTxt(Tend) + ')' : '');
         if (from === 'sid') { const V = EV.applied(tEv), A = EV.R.P.L * EV.R.P.w; let Vi = 0; const N = 40; for (let i = 0; i <= N; i++) Vi += EV.zAt(EV.L * i / N, tEv) / 1000 * (i === 0 || i === N ? 0.5 : 1); Vi *= A / N;
           l2 = 'Inflow ' + fmt(EV.q * 1000 / 60, 2) + ' L/s · water front at ' + fmt(EV.front(tEv) * EV.L) + ' of ' + fmt(EV.L) + ' m · applied ' + fmt(V, 1) + ' m³ · infiltrated ' + fmt(Math.min(Vi, V), 1) + (EV.front(tEv) >= 0.999 ? ' m³ · on the surface and run off ' : ' m³ · on the surface ') + fmt(Math.max(0, V - Vi), 1) + ' m³'; }
         else { const f = clampN(tEv / Topen, 0, 1); l2 = 'Applied ' + fmt(EV.gross * f, 1) + ' of ' + fmt(EV.gross, 1) + ' mm gross · stored in the root zone ' + fmt(EV.net * f, 1) + ' mm · ' + (from === 'drip' ? 'wetted bulb ' + fmt(EV.r / 10 * Math.cbrt(f)) + ' cm wide' : 'rate ' + fmt(EV.AR, 1) + ' mm/h'); }
@@ -137,7 +137,8 @@
         l1 = sch0.length ? 'Next irrigation ' + fmtDate(dateOfK(sch0[0])) + ' (in ' + (sch0[0] - kd) + ' day' + (sch0[0] - kd === 1 ? '' : 's') + '), when the sensor reaches the trigger' : 'No more irrigation in this record';
         l2 = 'Each irrigation of the design: ' + fmt(EV.gross, 1) + ' mm gross, ' + fmt(EV.net, 1) + ' mm stored, ' + tTxt(Topen) + ' open. Press Run (F5) to let the days run; click the board to jump to the next irrigation.';
       } else { l1 = 'The design could not be computed'; l2 = ''; }
-      T(l1, 24, sy0 + 14, { s: 10.5, b: true, c: irrToday ? '#1E5A2A' : '#1B1F23' }); T(l2, 24, sy0 + 28, { s: 9.5, c: '#303030' }); by = sy0 + 4; }
+      const l3 = EV && EV.R && EV.R.stall && EV.L ? 'The inflow is too small for this soil: the set stops at 48 h, when the water has reached ' + fmt(EV.R.xmax) + ' of ' + fmt(EV.L) + ' m. Raise the inflow or shorten the run in the design.' : '';
+      T(l1, 24, sy0 + 14, { s: 10.5, b: true, c: irrToday ? '#1E5A2A' : '#1B1F23' }); T(l2, 24, sy0 + 28, { s: 9.5, c: '#303030' }); if (l3) T(l3, 24, sy0 + 42, { s: 9.5, b: true, c: '#B23A2E' }); by = sy0 + 4 + stl; }
     const top = by + 40, sceneH = 540, ox = W * 0.33, oy = top + sceneH - 150, U = { x: W * 0.43, y: -190 }, V = { x: W * 0.22, y: 92 };
     const P = (u, v) => ({ x: ox + u * U.x + v * V.x, y: oy + u * U.y + v * V.y });
     // sky, weather and horizon
