@@ -20,18 +20,18 @@ so that every year follows the crop, rain, temperature, nitrogen, mulch, trigger
 
 ## Reliability over 20 seasons
 
-![Reliability over 20 seasons.](images/layers/d_yby_p1.jpg){width=100%}
+![Reliability over 20 seasons.](images/atlas11/L_yby_p1.jpg){width=100%}
 
 *Reliability of this setting over the 20 seasons*: the irrigation, drainage, yield (or relative yield) and water stress of each season, with their mean and spread. *How often a given irrigation is exceeded*: the twenty seasonal irrigation amounts sorted into an exceedance curve, so that the amount needed in four years out of five can be read off. Click a year to set the working year to it.
 
 ## Full water balance
 
-![Full water balance.](images/layers/d_wb2_p1.jpg){width=100%}
+![Full water balance.](images/atlas11/L_wb2_p1.jpg){width=100%}
 
 *Where the water comes from (up) and where it goes (down)*: the complete balance of each season, $P+I=E+T+E_{\mathrm{other}}+D+\Delta S$, stacked year by year, so that a dry season (high irrigation, little drainage) and a wet season can be told apart at a glance. *Evapotranspiration split into all its parts*: transpiration, soil evaporation, canopy, litter, ponded and snow evaporation (20-year mean). *The atmosphere*: reference demand, potential and actual evapotranspiration, year by year. *How the water enters and leaves the soil*: infiltration through the soil matrix and the macropores, runoff and drainage.
 
 ## Nitrogen budget
 
-![Nitrogen budget.](images/layers/d_nb_p1.jpg){width=100%}
+![Nitrogen budget.](images/atlas11/L_nb_p1.jpg){width=100%}
 
 *Supply (up) against uptake and losses (down)*: fertiliser and mineralisation against crop uptake, leaching, denitrification and volatilisation, season by season; *Nitrogen use (20-year mean)*; and *Nitrate goes where the water goes*: the leaching of every season against its drainage, with the regression line. The slope of that line is printed under the chart: *each extra millimetre of drainage carries … kg N/ha of nitrate*.

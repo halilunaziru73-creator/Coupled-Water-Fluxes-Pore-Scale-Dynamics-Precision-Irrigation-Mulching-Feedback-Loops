@@ -2,7 +2,7 @@
 
 The Dashboard is the panel to the right of the drawing. It has four tabs (*Results*, *Design*, *Charts*, *Messages*) and the buttons **Wider** (enlarges or shrinks the panel), **Pin** (stores the present 20-year averages as a baseline; Ctrl+B) and **Clear** (removes the baseline). It is laid out like the Properties panel: a white sheet with grey group bars. **Every block can be folded and unfolded on its own** by clicking its bar; the folding is remembered while the program runs, also when the numbers refresh. The dashboard re-reads the engine each time the state, the date or the weather changes, so it always agrees with the drawing.
 
-![The Dashboard, Results tab, with the Field balance layer open.](images/ui/dash_field_results.jpg){width=100%}
+![The Dashboard, Results tab, with the Field balance layer open.](images/atlas11/ui_u05_dash_results.jpg){width=100%}
 
 ## Results
 
@@ -67,7 +67,7 @@ With a design layer open, the tab shows the results of its **last run**. Before 
 
 The definitions are Eqs. (11.18)–(11.19), (12.19) and (13.11). The Design tab and the *Design results (CSV)* export read the same object, so the numbers agree digit for digit.
 
-![The Dashboard, Design tab, after a run of the surface design.](images/ui/dash_sid_design.jpg){width=100%}
+![The Dashboard, Design tab, after a run of the surface design.](images/atlas11/ui_u05_dash_design.jpg){width=100%}
 
 ## Charts
 
@@ -99,7 +99,7 @@ $$
 
 with $Q_z$ the flow of one zone or set, $n_z$ the number of zones or sets and $t_{\mathrm{run}}$ the run time of one zone (drip) or the set time (sprinklers).
 
-![The Dashboard, Charts tab, after a run of the drip design.](images/ui/dash_drip_charts.jpg){width=100%}
+![The Dashboard, Charts tab, after a run of the drip design.](images/atlas11/ui_u05_dash_charts.jpg){width=100%}
 
 ## Messages
 

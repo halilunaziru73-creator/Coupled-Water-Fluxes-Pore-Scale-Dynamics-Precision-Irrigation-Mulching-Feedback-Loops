@@ -4,7 +4,7 @@ The sprinkler layer designs the **nozzle, pressure, spacing and layout** of a sp
 
 The layer reads top to bottom: **A** site, **B** sprinkler and layout, **C** operation and **D** farm and pipes (the inputs); the layout in plan; the profile along the lateral; the intake against the application rate; result tiles and the water partition; the textbook checks and system plans; layout and infrastructure; the irrigation schedule; the design table with the sensitivity chart; the season and the advice.
 
-![Sprinkler design: inputs A to D and the layout in plan with the overlapping spray patterns. Volume 2 shows the whole layer, part by part, with its equations.](images/layers/d_spr_p1.jpg){width=80%}
+![Sprinkler design: inputs A to D and the layout in plan with the overlapping spray patterns. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/24_spr_draw.jpg){width=80%}
 
 ## Inputs, step by step
 
@@ -147,7 +147,7 @@ where CAP is the mulch storage capacity (mm, Table 3.1), the indicator is 1 when
 
 The intake figure shows the rate the soil accepts, $\dot I(t)=60\,K A\,t^{A-1}$ mm h$^{-1}$, the mean applied rate $\overline{AR}(1-w_d)$, the shaded area where the applied rate exceeds the intake (runoff), and the time at which ponding starts. (The plotted curve is the derivative of $Kt^{A}$; the point balance uses the ponding condition $a=Kt^{A-1}$, so the two differ by the constant factor $A$ in the intake rate, a documented simplification.)
 
-![Sprinkler design: depth applied and infiltrated along the lateral, and the soil intake against the application rate. Volume 2 shows the whole layer, part by part, with its equations.](images/sec/spr_intake.jpg){width=80%}
+![Sprinkler design: depth applied and infiltrated along the lateral, and the soil intake against the application rate. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/27_spr_soil_intake_against_the_application_rate_draw.jpg){width=80%}
 
 ## Efficiencies and run time
 
@@ -272,7 +272,7 @@ $$
 
 with $L_{\mathrm{conv}}$ the conveyance length (the mainline length box) and $0.75\,h_{f,\mathrm{lat}}$ the head at the lateral inlet above $h_s$ (the textbook inlet-head rule). The ten checks (spacing along the lateral, spacing between laterals, wind below 16 km h$^{-1}$, rate below the allowed value, rate below $K_s$, CU $\ge85$ %, lateral loss $\le20$ % of $h_s$, mainline gradient, the whole field within the interval, flow within the farm supply) are shown with a tick or an exclamation point and the numbers; "N of 10 checks pass" closes the panel. The textbook sequence in the layer also plots the class of sprinkler (low, medium or high pressure) from $h_s$: $<20$ m, 20–45 m, $>45$ m.
 
-![Sprinkler design: the ten textbook checks and the kinds of sprinkler system. Volume 2 shows the whole layer, part by part, with its equations.](images/sec/spr_checks.jpg){width=80%}
+![Sprinkler design: the ten textbook checks and the kinds of sprinkler system. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/29_spr_does_your_design_pass_the_course_checks_draw.jpg){width=80%}
 
 ## Kinds of sprinkler system
 

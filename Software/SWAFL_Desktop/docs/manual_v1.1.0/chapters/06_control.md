@@ -17,7 +17,7 @@ A simulated tensiometer at the **sensor depth** (default 20 cm) records soil-wat
 5. Press the play button under the drawing to sweep a cursor through the record; the working year is set in Properties ▸ Scenario.
 6. Read the text under the plot: *"Irrigated: 85 of 183 days beyond 300 cm, mean suction 255 cm. Rainfed: 168 of 183 days beyond, mean suction 1,945 cm. Irrigation removes 39 % of the days beyond this trigger."*
 
-![Sensor and trigger. Top: 20 years of suction at the sensor, irrigated (blue) and rainfed (orange) with the trigger (red dashed). Bottom: growing-season days beyond the trigger per year. Volume 2 shows the whole layer, part by part, with its equations.](images/layers/d_v1_p1.jpg){width=80%}
+![Sensor and trigger. Top: 20 years of suction at the sensor, irrigated (blue) and rainfed (orange) with the trigger (red dashed). Bottom: growing-season days beyond the trigger per year. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/v1_s0_p1.jpg){width=80%}
 
 ### How the numbers are generated
 
@@ -72,7 +72,7 @@ The same suction does not mean the same dryness in two soils. At $-300$ cm a san
 5. **Common and own mode.** By default one suction (the Trigger slider) applies to every soil (*common* mode). **Opening the Trigger law layer switches the program to *own* mode**: each soil then uses its own critical suction for the chosen depletion, and the Trigger slider in Properties shows the nearest value on its 20-value grid (simulated runs exist only on that grid). Own mode stays on until you choose *Reset all settings* or a ready-made case, which restore the common mode.
 6. Read the verdict box at the bottom: it states the soil's critical suction, the yield at the current trigger relative to the best trigger, and how many root-zone layers are beyond the trigger on this day.
 
-![Trigger law layer: ten soils on one depletion axis, with the critical $f^\ast = 0.45$ (red line) and the soil's own trigger. Volume 2 shows the whole layer, part by part, with its equations.](images/layers/d_n1_p1.jpg){width=80%}
+![Trigger law layer: ten soils on one depletion axis, with the critical $f^\ast = 0.45$ (red line) and the soil's own trigger. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/n1_s0_p1.jpg){width=80%}
 
 ### Governing relations
 

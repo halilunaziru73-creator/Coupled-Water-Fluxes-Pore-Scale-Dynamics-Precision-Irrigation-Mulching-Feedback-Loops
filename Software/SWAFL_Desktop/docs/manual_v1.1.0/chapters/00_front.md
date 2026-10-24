@@ -1,13 +1,13 @@
 ---
-title: "SWAFL Desktop 1.1.0 — User Guide and Technical Reference"
-subtitle: "Volume 1 of 3: installing, every window and control, every layer and design, the weather, the virtual farm, the crops, the reports, and the governing equations behind every output"
+title: "SWAFL Desktop — Complete Technical Manual"
+subtitle: "Step-by-step use, every control and trigger, every layer and simulation, and the governing equations behind every output"
 author: "Naziru Halilu"
 date: "Version 1.1.0"
 documentclass: report
-geometry: a4paper,margin=2cm
+geometry: margin=2.2cm
 fontsize: 10pt
 toc: true
-toc-depth: 2
+toc-depth: 3
 numbersections: true
 colorlinks: true
 linkcolor: blue
@@ -21,6 +21,8 @@ header-includes:
   - \setlength{\cftchapnumwidth}{2.4em}
   - \setlength{\cftsecindent}{2.4em}
   - \setlength{\cftsecnumwidth}{3.4em}
+  - \setlength{\cftsubsecindent}{5.8em}
+  - \setlength{\cftsubsecnumwidth}{4.4em}
   - \usepackage{fvextra}
   - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
   - \usepackage{enumitem}
@@ -32,35 +34,30 @@ header-includes:
 
 # About this manual {-}
 
-This is the manual of **SWAFL Desktop 1.1.0**, the Soil–Water–Atmosphere–Field–Loop decision-support workbench of the repository *Coupled Water Fluxes, Pore-Scale Dynamics, Precision Irrigation and Mulching Feedback Loops*. It replaces nothing: the manual of version 1.0 stays in the repository (`docs/SWAFL_Manual.pdf`) for readers of that version. Every picture in this manual was taken from version 1.1.0.
+This manual documents **SWAFL Desktop**, the Soil–Water–Atmosphere–Field–Loop decision-support workbench that accompanies the repository *Coupled Water Fluxes, Pore-Scale Dynamics, Precision Irrigation and Mulching Feedback Loops*. It is written for three readers: a farmer or adviser who wants to use the screens, a student who wants to know what each picture means, and a scientist who wants to know exactly which equation produced each number.
 
-**The three volumes.**
+**How the manual is organised.** This is the manual of version 1.1.0. It follows the manual of version 1.0 chapter by chapter, with every picture taken again from version 1.1.0 and every numbered arrow placed on the item it names in the new interface, and it adds the chapters and screens of the new release. The manual of version 1.0 stays in the repository (`docs/SWAFL_Manual.pdf`).
 
-| Volume | Contents |
-|:--|:--|
-| **1. User guide and technical reference** (this volume) | Installing; the window, menus and every control; the clock; the two computing engines; every layer and the three irrigation designs with their equations; the dashboard; the weather data; the virtual farm; the crop library and the crop water requirement; the seasonal data; reports; workflows; validity limits; appendices with the symbols, the provenance ledger and the complete reference of the 134 numbered equations. |
-| **2. Screenshot atlas at the default settings** | Every screen of the program: the window, the eight menus, every dialog, the Properties panel, the dashboard tabs, and every layer drawn from top to bottom, cut into page-size parts, each followed by the full text of every equation that the layer draws on. |
-| **3. Screenshot atlas by soil and by crop** | Every layer drawn for each of the ten soils, the three irrigation designs and their virtual farms for each soil, and the crop water requirement for each crop of the library. |
+1. Chapters 1–3 install the program and explain the window and every control.
+2. Chapters 4–5 explain the clock (dates) and the two computing engines that sit under every layer.
+3. Chapters 6–10 document each *layer* of the Layers panel: what it designs or shows, how the picture is generated, and the governing equations.
+4. Chapters 11–13 document the three irrigation design layers (surface, drip, sprinkler) in full, including the irrigation schedule and the "When to irrigate" message.
+5. Chapters 14–16 document the dashboard, step-by-step workflows, exports and troubleshooting.
+6. Chapter 17 states the validity limits.
+7. Chapters 18–24 document the additions of version 1.1: running a design and finding the most efficient inputs, weather data (your own file or the online weather of a place), the virtual farm simulation, the crop library and the crop water requirement, the seasonal data, the reports, and every change from version 1.0.
+8. Chapter 25 is the screenshot atlas. It shows every screen of the workbench (all layers, every section of the three design layers, the menus, the toolbox, the Properties panel, the Dashboard and the dialogs of version 1.1) from the program itself, and prints under each screenshot every equation that the screen draws on, with its number, source chapter and provenance. A reverse index gives, for every numbered equation, the screens that use it.
+9. The appendices give symbols, control value lists, data sets, the provenance ledger, the references and the reference of all numbered equations.
 
-**How this volume is organised.**
-
-1. Chapters 1–4 install the program and explain the window, every control and the clock.
-2. Chapter 5 explains the two computing engines under every layer.
-3. Chapters 6–10 document the layers of the Layers panel; chapters 11–13 the three irrigation designs.
-4. Chapters 14–17 cover the dashboard, worked workflows, files and troubleshooting, and the validity limits.
-5. Chapters 18–24 cover what is new in version 1.1: running a design and finding the most efficient inputs, weather data, the virtual farm, the crop library and the crop water requirement, the seasonal data, reports, and a list of every change from version 1.0.
-6. The appendices give the symbols, the control values, the data sets, the provenance ledger, the references and the equation reference.
-
-**A note on honesty of the equations.** SWAFL mixes three kinds of computation, and the manual labels them so that nothing is over-claimed. Every numbered equation carries its label directly beneath it:
+**A note on honesty of the equations.** SWAFL mixes three kinds of computation, and the manual labels them so that nothing is over-claimed. Every numbered equation carries its label directly beneath it, and the provenance ledger in the appendices lists them all:
 
 | Label | Meaning |
 |:--|:--|
 | **[Literature]** | A published relation implemented as written, cited to its source. |
-| **[Data-driven]** | Obtained by interpolating or scaling the 10,190 Daisy simulations that stand behind the program, not computed from a closed-form law. |
-| **[Engineered]** | A parameterisation chosen for the workbench (for drawing, for speed, or because no closed form exists), stated with its constants so that it can be audited, but not presented as a physical law. |
+| **[Data-driven]** | Obtained by interpolating or scaling the 10,190 Daisy simulations (Appendix C of the repository), not computed from a closed-form law. |
+| **[Engineered]** | A parameterisation chosen for the workbench (for drawing, for speed, or because no closed form exists). Stated explicitly with its constants so that it can be audited, but not presented as a physical law. |
 
-**Where the simulation model is named.** The program itself shows results only. The simulation model behind them (Daisy, 10,190 runs in seventeen experiments on ten soils) is described here, in Chapter 5 and in the appendices, and not on the screens.
+**Where the simulation model is named.** The program itself shows results only; the simulation model behind them (Daisy, 10,190 runs on ten soils) is described in this manual.
 
-**Units.** Unless stated, depths are in mm, lengths in m, suction in cm of water (1 cm $\approx$ 0.0980665 kPa), flows in L s$^{-1}$ or L h$^{-1}$ as marked on the screen, times in min or h, and areas in ha.
+**Units.** Unless stated, depths are in mm, lengths in m, suction in cm of water (1 cm $\approx$ 0.0980665 kPa), flows in L s$^{-1}$ or m$^3$ min$^{-1}$ as marked on the screen, times in min or h, and areas in ha.
 
 \newpage

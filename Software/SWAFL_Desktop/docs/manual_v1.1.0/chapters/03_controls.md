@@ -2,7 +2,7 @@
 
 All model inputs live in the **Properties** panel (far right). Each group can be collapsed; **+** and **−** in the panel header expand or collapse all. The sliders are *indices* into lists of discrete values, because every value in the lists corresponds to a set of simulations (Chapter 5). The number shown beside a slider is the value the index stands for. The inputs of the three irrigation designs are not in Properties: they are the value boxes inside each design layer (Chapters 11–13 and 18).
 
-![The Properties panel, with every group open (full page in Volume 2).](images/ui/w_start_props.jpg){width=45%}
+![The Properties panel, with every group open (the arrows point to the groups; Chapter 25).](images/atlas11/ui_u06_properties_page.jpg){width=45%}
 
 ## Scenario
 

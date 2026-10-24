@@ -6,7 +6,7 @@ This group follows the water that mulch keeps in the soil: how mulch lowers evap
 
 **What it shows.** Three soil blocks side by side: bare soil, the soil under *your* mulch, and under the strongest mulch (plastic film, $\varphi=0.1$), with bars for evaporation, irrigation and drainage, the six materials as buttons (click one to apply it), and a verdict.
 
-![Mulch against bare soil. Volume 2 shows the whole layer, part by part, with its equations.](images/layers/d_v4_p1.jpg){width=80%}
+![Mulch against bare soil. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/v4_s0_p1.jpg){width=80%}
 
 **How the numbers are generated.** All three blocks are Engine 1 evaluated at $\varphi = 1.0$ (bare), at your $\varphi$ and capacity, and at $\varphi=0.1$, at the current rainfall. With $E_\varphi$, $I_\varphi$, $D_\varphi$ from Eqs. (5.4), (5.7), (5.9),
 
@@ -35,7 +35,7 @@ are the evaporation saved, the irrigation saved and the extra drainage, in mm yr
 
 **What it shows.** A modelled thin section of the topsoil drying after a wetting, with liquid water in the pores (blue), vapour moving up (white), the **drying front** (orange) and, for comparison, the bare-soil curve (grey). To the right: the evaporation rate $e(t)$ and cumulative loss $Q(t)$ for 24 days, split into **stage 1** (the surface stays wet, loss at the atmospheric rate) and **stage 2** (a dry layer grows, loss is limited by the soil).
 
-![Evaporation physics layer. Volume 2 shows the whole layer, part by part, with its equations.](images/layers/d_e1_p1.jpg){width=80%}
+![Evaporation physics layer. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/e1_s0_p1.jpg){width=80%}
 
 **Governing relations.** The loss is described by the classical two-stage model of soil drying (Philip, 1957; Ritchie, 1972): stage 1 at the atmospheric rate $e_0$, then stage 2 with a rate falling roughly as $t^{-1/2}$ (cumulative loss $\propto \sqrt t$). The implementation in the workbench is
 
@@ -123,7 +123,7 @@ The crossover rainfall is the first $\rho$ with $\Delta D \ge \Delta I$ and $\De
 
 **What it shows.** A map of **mulch factor (rows) against rainfall scale (columns)** coloured by which loss dominates, together with soil columns in which vapour rises (grey) or droplets fall (blue), and a verdict for your settings.
 
-![Regime map. Volume 2 shows the whole layer, part by part, with its equations.](images/layers/d_n3_p1.jpg){width=80%}
+![Regime map. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/n3_s0_p1.jpg){width=80%}
 
 **Generation.** For each cell the engine takes annual soil evaporation $E$ and drainage $D$ from Engine 1, and forms the **regime index**
 

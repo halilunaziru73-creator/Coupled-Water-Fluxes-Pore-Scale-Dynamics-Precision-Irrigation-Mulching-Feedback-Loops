@@ -14,7 +14,7 @@ While the farm is open, the irrigation method of the project is set to the metho
 
 If the design has not been run, or its inputs or a setting changed since its last run (Eq. 18.0), the farm does not draw a field. It says which design it follows and offers two buttons:
 
-![The farm before its design has run.](images/ui/farmgate_sid.jpg){width=100%}
+![The farm before its design has run.](images/atlas11/ui_u16_farm_before_run.jpg){width=100%}
 
 * **Run the … design now** runs the design with its present inputs; the farm then appears.
 * **Open the design inputs** opens the design layer, to check the inputs first.

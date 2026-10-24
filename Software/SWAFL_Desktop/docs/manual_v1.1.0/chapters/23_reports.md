@@ -4,7 +4,7 @@
 
 *File ▸ Save report as PDF (choose the layers)…* (Ctrl+Shift+P, or the *Report* button of the toolbar) opens a window with every layer of the Layers panel, in its groups, and the *Virtual farm simulation*. **Every layer is ticked to start with.** Untick a layer, or a whole group with its box, or everything with *All layers*; the count at the bottom tells how many layers are ticked. **Make the PDF** builds the report and asks where to save it.
 
-![The report window: every layer ticked.](images/ui/dlg_report.jpg){width=100%}
+![The report window: every layer ticked.](images/atlas11/ui_u11_report.jpg){width=100%}
 
 ## What the report holds
 

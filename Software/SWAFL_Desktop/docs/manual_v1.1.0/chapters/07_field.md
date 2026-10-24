@@ -6,7 +6,7 @@
 
 One picture of the water budget of a field for one day, one year, or the twenty-year average: rain and irrigation arriving, transpiration, soil evaporation and interception leaving upward, drainage leaving downward, and the nitrogen leached with it. The soil profile is drawn to 100 cm with three depth marks A, B and C, the sensor at the chosen depth, the roots as they grow and die back, and the wetting front.
 
-![Field balance: arrows are the fluxes (mm per year in "Average year" view), the profile shows the root zone, the sensor, and drainage below 1 m. The equation strip under the picture is the closed budget. Volume 2 shows the whole layer, part by part, with its equations.](images/layers/d_field_p1.jpg){width=80%}
+![Field balance: arrows are the fluxes (mm per year in "Average year" view), the profile shows the root zone, the sensor, and drainage below 1 m. The equation strip under the picture is the closed budget. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/field_s0_p1.jpg){width=80%}
 
 ### The control bar under the drawing
 
@@ -48,7 +48,7 @@ One picture of the water budget of a field for one day, one year, or the twenty-
 
 The soil–plant–atmosphere continuum as one water column "from the particles to the sky": a section of the soil with roots, the plant, and the air above; five irrigation layouts (**Furrow, Basin, Border strip, Sprinkler, Drip**) that you can tap, which set the irrigation method; and, on the right, the **water potential along the path** from the air to the deep soil. Two data sources are labelled with badges: *DAISY* (taken from your simulations) and *DERIVED* (computed by the workbench along the path).
 
-![Soil, plant and air layer: potentials from the air to the deep soil. *Derived* badges mark the quantities computed along the path; *Simulated* badges mark simulation data. Volume 2 shows the whole layer, part by part, with its equations.](images/layers/d_spac_p1.jpg){width=80%}
+![Soil, plant and air layer: potentials from the air to the deep soil. *Derived* badges mark the quantities computed along the path; *Simulated* badges mark simulation data. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/spac_s0_p1.jpg){width=80%}
 
 ### Governing equations
 
