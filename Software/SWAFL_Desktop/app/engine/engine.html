@@ -204,6 +204,7 @@ body.appmode #yearRow { min-width: 0; width: 100%; }
 body.appmode #yearRow .yrlabel { flex: none; }
 body.appmode #yearStrip { flex: 1 1 0; min-width: 0; max-width: 100%; }
 body.appmode .canvaswrap, body.appmode .panel { min-width: 0; }
+body.appmode .canvaswrap canvas { min-width: 0 !important; }
 body.appmode .shell, body.appmode .mainarea, body.appmode .wrap, body.appmode .wrap > .panel:first-child { min-width: 0 !important; max-width: 100vw; overflow-x: hidden; }
 body.appmode #yearStrip { width: 0; }
 body.appmode #playBar { min-width: 0; max-width: 100%; }
@@ -508,7 +509,7 @@ function drawSPAC() {
   T('groundwater · 0 MPa', x + 10, gwY + 22, { s: 10.5, b: true, c: '#fff' });
   const px3 = LAY === 'furrow' ? [x + PER * 1.5, x + PER * 3.5, x + PER * 5.5] : [x + w * 0.26, x + w * 0.52, x + w * 0.78]; const plantY = LAY === 'furrow' ? gy : gy + (LAY === 'border' ? off(x + w * 0.52) : 0);
   drawRoots(A.sim, A.kd, plantY, PX, px3, 0.8);
-  const ph = 78 * (0.18 + 0.82 * A.cover); if (A.cover > 0.03) { ctx.save(); if (LAY === 'furrow') { cropPlants(x + PER * 3.5, gy, ph, PER * 2, 3, 0, PX, 3); } else cropPlants(x + w / 2, plantY, ph, 62, 3, 0, PX, 3); ctx.restore(); }
+  const ph = 78 * (0.18 + 0.82 * A.cover); if (A.cover > 0.03) { ctx.save(); if (LAY === 'furrow') { cropPlants(x + PER * 3.5, gy, ph, PER * 2, 3, 0, PX, 3, Y0 + 8); } else cropPlants(x + w / 2, plantY, ph, 62, 3, 0, PX, 3, Y0 + 8); ctx.restore(); }
   // the water path and the vapour leaving
   const colX = x + w * 0.52, topY = Y0 + 30; ctx.setLineDash([2, 4]); ctx.strokeStyle = 'rgba(30,110,200,0.8)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(colX, gwY); ctx.lineTo(colX, topY); ctx.stroke(); ctx.setLineDash([]);
   for (let i = 0; i < 9; i++) { const u = (t * (0.08 + 0.1 * clampN(A.E / 6, 0, 1)) + i / 9) % 1; ctx.fillStyle = 'rgba(40,120,225,0.95)'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(colX, gwY - u * (gwY - topY), 3, 0, 6.283); ctx.fill(); ctx.stroke(); }
@@ -3072,7 +3073,7 @@ function drawField() {
   soilAtm(SX + 4, GY - th, SW - 8, 40, 70, m.evap / 200, 2, { n: 30 });
   drawRoots(sim, kd, GY, PX, PLX, 0.4);
   const Hmax = clampN(34 + current.yield * 6.5, 40, 84), cropH = Hmax * (0.12 + 0.88 * sim.cover[kd]);
-  if (sim.cover[kd] > 0.03) cropPlants(365, GY - th, cropH * 0.82, 50, 8, 0, PX, 7);
+  if (sim.cover[kd] > 0.03) cropPlants(365, GY - th, cropH * 0.82, 50, 8, 0, PX, 7, 66);
   drawInfiltration(sim, kd, fd, SX, SW, GY, PX, t);
   structureGauge(SX, GY + 306);
   // tensiometer at the chosen depth, with its trigger
@@ -3839,7 +3840,7 @@ function drawN3Chart() {
   cols.forEach((r, i) => {
     const m = model(vff, r), idx = (m.evap - m.drain) / Math.max(1, m.evap + m.drain), x = 14 + i * slotW + (slotW - colW) / 2, you = i === near;
     ctx.fillStyle = '#E4EFFA'; ctx.fillRect(x - 6, y0 - 54, colW + 12, 54); drawSection(x, y0, colW, 100, ppc);
-    ctx.fillStyle = regTint(idx, 0.24); ctx.fillRect(x, y0, colW, colH); ctx.save(); ctx.beginPath(); ctx.rect(x, y0 - 80, colW, colH + 80); ctx.clip(); cropPlants(x + colW / 2, y0, 26, colW / 4, 4, 55, ppc, 9 + i); ctx.restore();
+    ctx.fillStyle = regTint(idx, 0.24); ctx.fillRect(x, y0, colW, colH); ctx.save(); ctx.beginPath(); ctx.rect(x, y0 - 80, colW, colH + 80); ctx.clip(); cropPlants(x + colW / 2, y0, 26, colW / 4, 4, 55, ppc, 9 + i, y0 - 50); ctx.restore();
     soilAtm(x, y0, colW, 30, 52, m.evap / N3_MAX_E, i + 1, { n: 12 });
     const nd = clampN(Math.round(m.drain / 9), 0, 14);
     for (let k = 0; k < nd; k++) { const ph = (t * 0.22 + k * 0.173 + i * 0.2) % 1, dx = x + 8 + (k * 37) % (colW - 16); ctx.fillStyle = 'rgba(25,100,200,' + (1 - ph * 0.6).toFixed(2) + ')'; ctx.beginPath(); ctx.ellipse(dx, y0 + 6 + ph * (colH - 10), 2.2, 3.6, 0, 0, Math.PI * 2); ctx.fill(); }
@@ -3896,27 +3897,32 @@ const pdfW = (s, size, bold) => { let w = 0; for (const ch of pdfSafe(s)) { cons
 const pdfEsc = s => pdfSafe(s).replace(/\\/g, '\\\\').replace(/\(/g, '\\(').replace(/\)/g, '\\)');
 const l1 = s => { const a = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) a[i] = s.charCodeAt(i) & 255; return a; };
 const rgbn = h => { const n = parseInt(h.slice(1), 16); return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255].map(v => v.toFixed(3)).join(' '); };
+// report text without dashes: ranges read "to", joined words are written apart, dashes between clauses become commas (negative numbers keep their sign)
+function dedash(s) {
+  return String(s).replace(/(\d{4})-(\d{2})-(\d{2})/g, '$1\u0001$2\u0001$3').replace(/\s+[—–]\s+/g, ', ').replace(/(\d)\s*[–—-]\s*(?=\d)/g, '$1 to ')
+    .replace(/\b(re|Re|non|Non|co|Co|pre|Pre|sub|Sub|semi|Semi|multi|Multi)-(?=[a-z])/g, '$1').replace(/([A-Za-z0-9%)])-(?=[A-Za-z(])/g, '$1 ').replace(/[—–]/g, ', ').replace(/,\s*,/g, ',').replace(/\u0001/g, '-');
+}
 function PdfDoc() {
   const pages = [];
-  this.page = () => { const p = { ops: [], img: null, y: 0 };
-    p.text = (s, x, y, size, o) => { o = o || {}; p.ops.push('BT /' + (o.i ? 'F3' : o.b ? 'F2' : 'F1') + ' ' + size + ' Tf ' + rgbn(o.c || '#1b1f23') + ' rg ' + x.toFixed(1) + ' ' + (842 - y).toFixed(1) + ' Td (' + pdfEsc(s) + ') Tj ET'); };
+  this.page = () => { const p = { ops: [], imgs: [], y: 0 };
+    p.text = (s, x, y, size, o) => { o = o || {}; if (!o.raw) s = dedash(s); p.ops.push('BT /' + (o.i ? 'F3' : o.b ? 'F2' : 'F1') + ' ' + size + ' Tf ' + rgbn(o.c || '#1b1f23') + ' rg ' + x.toFixed(1) + ' ' + (842 - y).toFixed(1) + ' Td (' + pdfEsc(s) + ') Tj ET'); };
     p.rect = (x, y, w, h, c) => p.ops.push(rgbn(c) + ' rg ' + x.toFixed(1) + ' ' + (842 - y - h).toFixed(1) + ' ' + w.toFixed(1) + ' ' + h.toFixed(1) + ' re f');
     p.line = (x1, y1, x2, y2, c, lw) => p.ops.push(rgbn(c) + ' RG ' + (lw || 0.8) + ' w ' + x1.toFixed(1) + ' ' + (842 - y1).toFixed(1) + ' m ' + x2.toFixed(1) + ' ' + (842 - y2).toFixed(1) + ' l S');
-    p.wrap = (s, x, y, maxW, size, o) => { o = o || {}; let line = '', yy = y; pdfSafe(s).split(' ').forEach(w => { const t = line ? line + ' ' + w : w; if (pdfW(t, size, o.b) > maxW && line) { p.text(line, x, yy, size, o); yy += size * 1.38; line = w; } else line = t; }); if (line) { p.text(line, x, yy, size, o); yy += size * 1.38; } return yy; };
-    p.image = (jpeg, w, h, x, y, dw) => { p.img = { jpeg, w, h, x, y, dw, dh: dw * h / w }; return y + dw * h / w; };
+    p.wrap = (s, x, y, maxW, size, o) => { o = o || {}; let line = '', yy = y; pdfSafe(o.raw ? s : dedash(s)).split(' ').forEach(w => { const t = line ? line + ' ' + w : w; if (pdfW(t, size, o.b) > maxW && line) { p.text(line, x, yy, size, o); yy += size * 1.38; line = w; } else line = t; }); if (line) { p.text(line, x, yy, size, o); yy += size * 1.38; } return yy; };
+    p.image = (jpeg, w, h, x, y, dw) => { p.imgs.push({ jpeg, w, h, x, y, dw, dh: dw * h / w }); return y + dw * h / w; };
     pages.push(p); return p; };
   this.build = () => {
     const chunks = []; let off = 0; const offs = []; const put = b => { chunks.push(b); off += b.length; };
     put(l1('%PDF-1.4\n%\xe2\xe3\xcf\xd3\n')); let n = 5; const kids = []; const objs = [];
     const fnt = (name, base) => '<< /Type /Font /Subtype /Type1 /BaseFont /' + base + ' /Encoding /WinAnsiEncoding >>';
-    pages.forEach(p => { p.imgNo = p.img ? ++n : 0; p.cNo = ++n; p.pNo = ++n; kids.push(p.pNo + ' 0 R'); });
+    pages.forEach(p => { p.imgs.forEach(im => { im.no = ++n; }); p.cNo = ++n; p.pNo = ++n; kids.push(p.pNo + ' 0 R'); });
     objs[1] = { h: '<< /Type /Catalog /Pages 2 0 R >>' }; objs[2] = { h: '<< /Type /Pages /Kids [' + kids.join(' ') + '] /Count ' + pages.length + ' >>' };
     objs[3] = { h: fnt('F1', 'Helvetica') }; objs[4] = { h: fnt('F2', 'Helvetica-Bold') }; objs[5] = { h: fnt('F3', 'Helvetica-Oblique') };
     pages.forEach(p => {
-      if (p.img) objs[p.imgNo] = { h: '<< /Type /XObject /Subtype /Image /Width ' + p.img.w + ' /Height ' + p.img.h + ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + p.img.jpeg.length + ' >>', s: p.img.jpeg };
-      const ops = p.ops.slice(); if (p.img) ops.push('q ' + p.img.dw.toFixed(1) + ' 0 0 ' + p.img.dh.toFixed(1) + ' ' + p.img.x.toFixed(1) + ' ' + (842 - p.img.y - p.img.dh).toFixed(1) + ' cm /Im1 Do Q');
+      p.imgs.forEach(im => { objs[im.no] = { h: '<< /Type /XObject /Subtype /Image /Width ' + im.w + ' /Height ' + im.h + ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + im.jpeg.length + ' >>', s: im.jpeg }; });
+      const ops = p.ops.slice(); p.imgs.forEach((im, j) => ops.push('q ' + im.dw.toFixed(1) + ' 0 0 ' + im.dh.toFixed(1) + ' ' + im.x.toFixed(1) + ' ' + (842 - im.y - im.dh).toFixed(1) + ' cm /Im' + (j + 1) + ' Do Q'));
       const content = l1(ops.join('\n')); objs[p.cNo] = { h: '<< /Length ' + content.length + ' >>', s: content };
-      objs[p.pNo] = { h: '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >>' + (p.img ? ' /XObject << /Im1 ' + p.imgNo + ' 0 R >>' : '') + ' >> /Contents ' + p.cNo + ' 0 R >>' };
+      objs[p.pNo] = { h: '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >>' + (p.imgs.length ? ' /XObject << ' + p.imgs.map((im, j) => '/Im' + (j + 1) + ' ' + im.no + ' 0 R').join(' ') + ' >>' : '') + ' >> /Contents ' + p.cNo + ' 0 R >>' };
     });
     for (let i = 1; i <= n; i++) { offs[i] = off; put(l1(i + ' 0 obj\n' + objs[i].h + '\n')); if (objs[i].s) { put(l1('stream\n')); put(objs[i].s); put(l1('\nendstream\n')); } put(l1('endobj\n')); }
     const xo = off; let x = 'xref\n0 ' + (n + 1) + '\n0000000000 65535 f \n'; for (let i = 1; i <= n; i++) x += String(offs[i]).padStart(10, '0') + ' 00000 n \n';
@@ -3944,7 +3950,7 @@ function snapshotOf(sc, view, firstPx) {
   const secY = Object.values(((window.__SEC || {})[sc.id]) || {}).map(v => v[0] - 24).filter(v => v > 0).sort((a, b) => a - b);
   const brk = (from, limit) => { const end = from + limit; if (end >= Hn) return Hn; { const hs = secY.filter(v => v > from + limit * 0.4 && v <= end); if (hs.length) return hs[hs.length - 1]; } let best = end, bi = 1e9; for (let y = end; y > from + limit * 0.55; y--) { let t = 0; for (let k = 0; k < 5; k++) t += ink(Math.min(Hn - 1, y - k)); if (t < bi) { bi = t; best = y; } if (t === 0) return y - 2; } return best; };
   const cut = (sy, sh) => { const c = document.createElement('canvas'); c.width = W; c.height = sh; c.getContext('2d').drawImage(canvas, 0, sy, W, sh, 0, 0, W, sh); const b = atob(c.toDataURL('image/jpeg', 0.9).split(',')[1]), a = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); crops.push({ jpeg: a, w: W, h: sh }); };
-  const kpt = W / 515, full1 = Math.floor(748 * kpt); let y0 = 0, lim = firstPx ? Math.floor(firstPx * kpt) : full1; while (y0 < Hn - 2) { const y1 = Math.max(y0 + 60, brk(y0, lim)); cut(y0, Math.min(y1, Hn) - y0); y0 = Math.min(y1, Hn); lim = full1; }
+  const kpt = W / 515, full1 = Math.floor(758 * kpt); let y0 = 0, lim = firstPx ? Math.floor(firstPx * kpt) : full1; while (y0 < Hn - 2) { const y1 = Math.max(y0 + 60, brk(y0, lim)); cut(y0, Math.min(y1, Hn) - y0); y0 = Math.min(y1, Hn); lim = full1; }
   currentScene = keep.cs; setCanvasH(keep.h); state.fview = keep.fv; state.trigMode = keepTrig.m; state.trigIdx = keepTrig.i; play.t = keep.pt; fclock.day = keep.fd; fclock.pause = keep.fp; fclock.lastKd = keep.lk; fclock.mem = keep.mem; canvas.style.cursor = keep.cur;
   return crops;
 }
@@ -4000,7 +4006,7 @@ function reportNotes(sc, view) {
   return L;
 }
 function buildReport(ids, title) {
-  const doc = new PdfDoc(), m = current, cf = CROPS[state.crop], date = new Date().toISOString().slice(0, 10), meth = METHODS.find(q => q.k === state.method) || METHODS[0];
+  const doc = new PdfDoc(), m = current, cf = CROPS[state.crop], date = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }), meth = METHODS.find(q => q.k === state.method) || METHODS[0];
   const chosen = SCENES.filter(sc => ids.includes(sc.id)), GREEN = '#1F4D2E', GOLD = '#B8860B';
   let p = doc.page(); p.rect(0, 0, 595, 78, GREEN); p.rect(0, 78, 595, 4, GOLD);
   p.text('SWAFL report', 40, 42, 24, { b: true, c: '#ffffff' }); p.text('Soil-Water-Atmosphere Feedback Loop Explorer', 40, 62, 11, { c: '#e9efe9' });
@@ -4017,20 +4023,22 @@ function buildReport(ids, title) {
   p.text('Included in this report: ' + chosen.length + ' part' + (chosen.length === 1 ? '' : 's'), 40, 466, 12, { b: true, c: GREEN });
   { const half = Math.ceil(chosen.length / 2); chosen.forEach((sc, i) => { const col = i < half ? 0 : 1, row = col ? i - half : i; p.text((i + 1) + '.  ' + sc.label, 46 + col * 262, 486 + row * 14, 9); }); var yy = 486 + half * 14 + 12; }
   yy = p.wrap('How to read this: every number is an annual mean from 10,190 simulations across ten soils, combined by the explorer so that each control changes the outputs the way the simulations did. The pictures are snapshots of the live scenes at your inputs; long scenes continue over several pages.', 40, yy, 515, 9, { i: true, c: '#6b7280' });
-  p.text('github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops', 40, 800, 8, { c: '#6b7280' });
-  let pageNo = 1; const footer = pg => { pageNo++; pg.text('Page ' + pageNo, 520, 826, 8, { c: '#6b7280' }); pg.text('SWAFL explorer report', 40, 826, 8, { c: '#6b7280' }); };
+  p.text('github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops', 40, 800, 8, { c: '#6b7280', raw: true });
+  // the layers follow one another on the pages with no empty space: a layer starts under the previous one when there is room,
+  // its drawing fills the rest of the page and continues on the next pages, cut at its section headings
+  let pageNo = 1, y = 900;
+  const newPage = lbl => { p = doc.page(); pageNo++; p.text('Page ' + pageNo, 520, 826, 8, { c: '#6b7280' }); p.text('SWAFL report', 40, 826, 8, { c: '#6b7280' }); if (lbl) { p.text(lbl, 40, 30, 9, { b: true, c: '#4b5563' }); p.line(40, 35, 555, 35, '#d8d4c6', 0.6); } y = 46; };
   chosen.forEach(sc => {
     const views = sc.id === 'field' ? [['day', 'day by day'], ['years', 'all 20 years'], ['gen', 'average year']] : [[null, '']];
     views.forEach(([view, vlabel]) => {
-      p = doc.page(); p.rect(0, 0, 595, 54, sc.color); p.text(sc.label + (vlabel ? ': ' + vlabel : ''), 40, 34, 18, { b: true, c: '#111111' });
-      let y = p.wrap(sc.title || '', 40, 78, 515, 12, { b: true }); y = p.wrap(updateInsightText(sc, view), 40, y + 2, 515, 9.5, { i: true, c: '#4b5563' });
-      {
-        let ny = y + 14; p.text('Key numbers at your inputs', 40, ny, 11, { b: true, c: GREEN }); ny += 16;
-        reportNotes(sc, view).forEach(l => { if (ny > 772) { footer(p); p = doc.page(); p.rect(0, 0, 595, 40, sc.color); p.text(sc.label + (vlabel ? ': ' + vlabel : '') + ', key numbers continued', 40, 27, 13, { b: true, c: '#111111' }); ny = 70; } ny = p.wrap(l, 46, ny, 505, 9.5); });
-        const room = 806 - (ny + 8), firstPx = room >= 220 ? room : 0, crops = snapshotOf(sc, view, firstPx), total = crops.length;
-        let k = 0; if (firstPx) { p.image(crops[0].jpeg, crops[0].w, crops[0].h, 40, ny + 8, 515); footer(p); k = 1; } else footer(p);
-        for (; k < total; k++) { const p2 = doc.page(); p2.rect(0, 0, 595, 40, sc.color); p2.text(sc.label + (vlabel ? ': ' + vlabel : '') + ', continued (' + (k + (firstPx ? 1 : 1)) + ' of ' + (firstPx ? total : total + 1) + ')', 40, 27, 13, { b: true, c: '#111111' }); p2.image(crops[k].jpeg, crops[k].w, crops[k].h, 40, 52, 515); footer(p2); }
-      }
+      const name = sc.label + (vlabel ? ': ' + vlabel : ''), cont = name + ' (continued)';
+      if (806 - y < 240) newPage(); else y += 12;
+      p.rect(40, y, 515, 22, sc.color); p.text(name, 48, y + 15.5, 12.5, { b: true, c: '#111111' }); y += 36;
+      y = p.wrap(sc.title || '', 40, y, 515, 11, { b: true }); y = p.wrap(updateInsightText(sc, view), 40, y + 1, 515, 9, { i: true, c: '#4b5563' });
+      y += 6; p.text('Key numbers at your inputs', 40, y, 10.5, { b: true, c: GREEN }); y += 14;
+      reportNotes(sc, view).forEach(l => { if (y > 796) newPage(cont); y = p.wrap(l, 46, y, 505, 9); });
+      const top = y - 4, room = 806 - top, crops = snapshotOf(sc, view, room >= 120 ? room : 0);
+      crops.forEach((c, i) => { if (i > 0 || room < 120) newPage(cont); y = p.image(c.jpeg, c.w, c.h, 40, (i === 0 && room >= 120) ? top : y, 515); });
     });
   });
   return doc.build();
@@ -4074,7 +4082,7 @@ document.getElementById('reportBtn').onclick = openReportDialog;
 // ------------------------------------------------------------------------------------------------
 function setCanvasH(h) { if (canvas.height !== h) { canvas.height = h; H = h; } }
 // the surface-irrigation design scene lays itself out for the pane width on phones (W follows the pane, text stays readable)
-function wantW() { const sc = currentScene; if (!sc || sc.id !== 'sid') return W_DEF; const wrap = canvas.parentElement, cw = wrap ? wrap.clientWidth : 0; return (innerWidth < 760 && cw > 100) ? Math.max(320, Math.min(W_DEF, Math.floor(cw))) : W_DEF; }
+function wantW() { const sc = currentScene; if (!sc || sc.id !== 'sid') return W_DEF; const wrap = canvas.parentElement, cw = wrap ? wrap.clientWidth : 0; let tw = innerWidth; try { tw = window.top.innerWidth; } catch (e) {} return (tw < 760 && innerWidth < 760 && cw > 100) ? Math.max(320, Math.min(W_DEF, Math.floor(cw))) : W_DEF; }   // narrow layout on phones only: on a desktop the drawing is scaled to the pane and keeps every label
 function setCanvasW(w) { if (canvas.width !== w) { canvas.width = w; W = w; } document.body.classList.toggle('ncw', w < 560); }
 
 // ------------------------------------------------------------------------------------------------
@@ -4174,7 +4182,7 @@ function drawSWA(x, y, w, mode, o) {
   drawRoots(sim, kd, gy, PXs, pxs.filter((_, i) => i % 3 === 1), 0.35);
   const th = vff < 0.95 ? mulchThick(state.mulchType) : 0; if (th) mulchLayer(x + 1, w - 2, gy, th, state.mulchType, 11, state.mulchType === 'plastic' ? pxs : null);
   const cvr = sim.cover[kd], ph = clampN(20 + current.yield * 2.2, 22, 34) * (0.15 + 0.85 * cvr);
-  if (cvr > 0.03) cropPlants(x + w / 2, gy - th, ph, spread, np, 0, PXs, 3);
+  if (cvr > 0.03) cropPlants(x + w / 2, gy - th, ph, spread, np, 0, PXs, 3, y + 24);
   irrigSys(x, w, gy - th, PXs, x + 34, { air: 46 });
   // water leaving and entering
   const vap = (vx, vy, col, k) => { for (let i = 0; i < k; i++) { const p = (t * 0.25 + i * 0.31 + vx * 0.013) % 1; ctx.strokeStyle = col.replace('A', (0.85 - p * 0.8).toFixed(2)); ctx.lineWidth = 1.7; ctx.beginPath(); const px = vx + (i - k / 2) * 9, py = vy - p * 44; ctx.moveTo(px, py); ctx.quadraticCurveTo(px + 5, py - 7, px, py - 14); ctx.stroke(); } };
@@ -4324,7 +4332,7 @@ function drawV4() {
     const nd = clampN(Math.round(mm.drain / 16), 0, 10); for (let i = 0; i < nd; i++) { const ph = (t * 0.25 + i * 0.211) % 1; ctx.fillStyle = 'rgba(30,110,200,' + (1 - ph * 0.5).toFixed(2) + ')'; ctx.beginPath(); ctx.ellipse(x + 18 + (i * 53) % (w - 36), gy + 6 + ph * 40, 2, 3.2, 0, 0, 6.283); ctx.fill(); }
     if (th) mulchLayer(x, w, gy, th, state.mulchType, 19, state.mulchType === 'plastic' ? pxs : null);
     soilAtm(x, gy - th, w, 44, 64, mm.evap / Math.max(1, bare.evap), mulched ? 3 : 1, { n: 20 });
-    cropPlants(x + w / 2, gy - th, 30, sp, 7, 0, 1, 3);
+    cropPlants(x + w / 2, gy - th, 30, sp, 7, 0, 1, 3, y + 22);
     ctx.strokeStyle = INK; ctx.lineWidth = 1.3; ctx.strokeRect(x, y, w, 122); T(name, x + 8, y + 15, { s: 11.5, b: true }); T('evaporation ' + mm.evap.toFixed(0) + ' mm', x + 8, y + 112, { s: 10.5, b: true, c: '#fff' }); T('drainage ' + mm.drain.toFixed(0) + ' mm', x + w - 8, y + 112, { s: 10.5, b: true, a: 'right', c: '#fff' });
     if (mulched && has) mulchLens(x + w - 30, y + 36, 25, state.mulchType);
   });
@@ -4362,7 +4370,7 @@ function drawN2x() {
 // V7: graphs of the drivers, interactive
 // ------------------------------------------------------------------------------------------------
 const V7G = { A: { x: 14, y: 676, w: 290, h: 214 }, B: { x: 316, y: 676, w: 290, h: 214 } }, v7ui = { hov: null };
-const v7Plot = g => ({ l: g.x + 44, r: g.x + g.w - 14, t: g.y + 40, b: g.y + g.h - 42 });
+const v7Plot = g => ({ l: g.x + 44, r: g.x + g.w - 14, t: g.y + 56, b: g.y + g.h - 50 });
 const v7Lines = () => { const vq = VFF_VALUES[state.vffIdx], rq = RAIN_VALUES[state.rainIdx]; return TILLS.map(tl => TC_VALUES.map((tc, ti) => model(vq, rq, { till: tl, tcIdx: ti }).drain)); };
 const v7Soils = () => { const vq = VFF_VALUES[state.vffIdx], rq = RAIN_VALUES[state.rainIdx]; return v7Data().map(r => ({ s: r.s, clay: r.clay, name: r.name, conv: model(vq, rq, { soil: r.s, till: 'conv' }).drain, nt: model(vq, rq, { soil: r.s, till: 'notill' }).drain })); };
 function v7ScaleA() { const lines = v7Lines(), all = lines.flat(), lo = Math.min(...all), hi = Math.max(...all), pad = Math.max(1.5, (hi - lo) * 0.18), a = Math.max(0, lo - pad), b = hi + pad, P = v7Plot(V7G.A); return { lines, a, b, P, xm: i => P.l + i / 4 * (P.r - P.l), ym: v => P.b - (v - a) / (b - a) * (P.b - P.t) }; }
@@ -4380,13 +4388,13 @@ function drawV7Graphs() {
   SA.lines.forEach((ln, li) => { ctx.strokeStyle = SYS[li].col; ctx.lineWidth = TILLS[li] === state.till ? 3.2 : 2; ctx.beginPath(); ln.forEach((v, i) => { i ? ctx.lineTo(SA.xm(i), SA.ym(v)) : ctx.moveTo(SA.xm(i), SA.ym(v)); }); ctx.stroke(); ln.forEach((v, i) => { ctx.fillStyle = SYS[li].col; ctx.beginPath(); ctx.arc(SA.xm(i), SA.ym(v), 3.4, 0, 6.283); ctx.fill(); }); });
   const li0 = TILLS.indexOf(state.till); ctx.strokeStyle = '#D93025'; ctx.lineWidth = 2.6; ctx.beginPath(); ctx.arc(SA.xm(state.tcIdx), SA.ym(SA.lines[li0][state.tcIdx]), 8, 0, 6.283); ctx.stroke();
   SYS.forEach((sy, i) => { ctx.fillStyle = sy.col; ctx.fillRect(A.x + 12 + i * 92, A.y + A.h - 14, 11, 8); T(sy.name, A.x + 27 + i * 92, A.y + A.h - 7, { s: 9.5 }); });
-  const hv = v7ui.hov; if (hv && hv.c === 'A') { ctx.strokeStyle = 'rgba(27,31,35,0.5)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(SA.xm(hv.i), PA.t); ctx.lineTo(SA.xm(hv.i), PA.b); ctx.stroke(); pill('rate ' + TC_VALUES[hv.i] + ':  conv ' + SA.lines[0][hv.i].toFixed(1) + ', red. ' + SA.lines[1][hv.i].toFixed(1) + ', no-till ' + SA.lines[2][hv.i].toFixed(1), clampN(SA.xm(hv.i) - 60, A.x + 6, A.x + A.w - 190), PA.t + 16, { s: 9.5, b: true }); }
+  const hv = v7ui.hov; if (hv && hv.c === 'A') { ctx.strokeStyle = 'rgba(27,31,35,0.5)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(SA.xm(hv.i), PA.t); ctx.lineTo(SA.xm(hv.i), PA.b); ctx.stroke(); pill('rate ' + TC_VALUES[hv.i] + ':  conv ' + SA.lines[0][hv.i].toFixed(1) + ', red. ' + SA.lines[1][hv.i].toFixed(1) + ', no-till ' + SA.lines[2][hv.i].toFixed(1), clampN(SA.xm(hv.i) - 60, A.x + 6, A.x + A.w - 190), PA.t - 8, { s: 9.5, b: true }); }
   const B = V7G.B, SB = v7ScaleB(), PB = SB.P; v7Axes(B, SB, 'drainage (mm/yr)', [0, 10, 20, 30].map(c => [SB.xm(c), String(c)]), 'clay content (%)');
   T('Drainage against clay content', B.x + 10, B.y + 18, { s: 11.5, b: true }); T('ten soils at your mulch, rain and consolidation', B.x + 10, B.y + 31, { s: 9.5, c: MUTE });
   [['conv', SYS[0].col], ['nt', SYS[2].col]].forEach(([key, col]) => { const n = SB.rows.length, mx = SB.rows.reduce((a, r) => a + r.clay, 0) / n, my = SB.rows.reduce((a, r) => a + r[key], 0) / n; let sxy = 0, sxx = 0; SB.rows.forEach(r => { sxy += (r.clay - mx) * (r[key] - my); sxx += (r.clay - mx) ** 2; }); const bb = sxx ? sxy / sxx : 0, a0 = my - bb * mx; ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.globalAlpha = 0.8; ctx.beginPath(); ctx.moveTo(SB.xm(2), SB.ym(a0 + bb * 2)); ctx.lineTo(SB.xm(36), SB.ym(a0 + bb * 36)); ctx.stroke(); ctx.globalAlpha = 1;
     SB.rows.forEach(r => { const sel = r.s === state.soil; ctx.fillStyle = col; ctx.beginPath(); ctx.arc(SB.xm(r.clay), SB.ym(r[key]), sel ? 6 : 3.6, 0, 6.283); ctx.fill(); if (sel) { ctx.strokeStyle = '#D93025'; ctx.lineWidth = 2.4; ctx.stroke(); } }); });
   ctx.fillStyle = SYS[0].col; ctx.fillRect(B.x + 12, B.y + B.h - 14, 11, 8); T('conventional', B.x + 27, B.y + B.h - 7, { s: 9.5 }); ctx.fillStyle = SYS[2].col; ctx.fillRect(B.x + 112, B.y + B.h - 14, 11, 8); T('no-till', B.x + 127, B.y + B.h - 7, { s: 9.5 });
-  const hs = v7ui.hov && v7ui.hov.c === 'B' ? SB.rows.find(r => r.s === v7ui.hov.s) : SB.rows.find(r => r.s === state.soil); if (hs) pill(hs.name + ' (' + hs.clay + '% clay): conv ' + hs.conv.toFixed(1) + ', no-till ' + hs.nt.toFixed(1) + ' mm', clampN(SB.xm(hs.clay) - 90, B.x + 6, B.x + B.w - 230), PB.t + 14, { s: 9.5, b: true });
+  const hs = v7ui.hov && v7ui.hov.c === 'B' ? SB.rows.find(r => r.s === v7ui.hov.s) : SB.rows.find(r => r.s === state.soil); if (hs) pill(hs.name + ' (' + hs.clay + '% clay): conv ' + hs.conv.toFixed(1) + ', no-till ' + hs.nt.toFixed(1) + ' mm', clampN(SB.xm(hs.clay) - 90, B.x + 6, B.x + B.w - 230), PB.t - 8, { s: 9.5, b: true });
 }
 function v7Hit(p) {
   const SA = v7ScaleA(), PA = SA.P; if (p.x >= PA.l - 10 && p.x <= PA.r + 10 && p.y >= PA.t - 8 && p.y <= PA.b + 8) { const i = clampN(Math.round((p.x - PA.l) / (PA.r - PA.l) * 4), 0, 4); let li = 0, bd = 1e9; SA.lines.forEach((ln, k) => { const d = Math.abs(SA.ym(ln[i]) - p.y); if (d < bd) { bd = d; li = k; } }); return { c: 'A', i, li }; }
@@ -4481,7 +4489,7 @@ function soilColumn(x, y, w, ppc, maxCm, wetAt, k, o) {
   drawSection(x, y, w, maxCm, ppc);
   for (let cm = 0; cm < maxCm; cm += 2.5) { const v = wetAt(cm + 1.25); ctx.fillStyle = v == null ? 'rgba(255,255,255,0.30)' : 'rgba(30,110,225,' + (0.05 + 0.55 * Math.pow(v, 1.15)).toFixed(3) + ')'; ctx.fillRect(x + 1, y + cm * ppc, w - 2, 2.5 * ppc + 0.6); }
   ctx.save(); ctx.beginPath(); ctx.rect(x, y - 2, w, maxCm * ppc + 2); ctx.clip(); drawRoots(sim, k, y, ppc, [x + w / 2], 0.5); ctx.restore();
-  const cv = sim.cover[k]; if (cv > 0.03) cropPlants(x + w / 2, y, clampN(18 + current.yield * 2, 20, 34) * (0.2 + 0.8 * cv), w / 4, 3, 0, ppc, 5);
+  const cv = sim.cover[k]; if (cv > 0.03) cropPlants(x + w / 2, y, clampN(18 + current.yield * 2, 20, 34) * (0.2 + 0.8 * cv), w / 4, 3, 0, ppc, 5, o.ceil != null ? o.ceil : y - 34);
   ctx.strokeStyle = '#111'; ctx.setLineDash([3, 3]); ctx.lineWidth = 1.1; ctx.beginPath(); ctx.moveTo(x, y + z * ppc); ctx.lineTo(x + w, y + z * ppc); ctx.stroke(); ctx.setLineDash([]);
   (o.sensors || []).forEach(q => { ctx.fillStyle = q.hot ? '#D93025' : q.col; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(x + w / 2, y + q.d * ppc, q.sens ? 6 : 4, 0, 6.283); ctx.fill(); ctx.stroke(); });
   ctx.strokeStyle = INK; ctx.lineWidth = 1.5; ctx.strokeRect(x, y, w, maxCm * ppc);
@@ -4716,7 +4724,7 @@ function drawSWAx(x, y, w, sky, soilPx, gwH) {
   const np = 12, spread = (w - 80) / np, pxs = []; for (let i = 0; i < np; i++) pxs.push(x + 50 + i * spread + spread / 2);
   drawRoots(sim, kd, gy, PXs, pxs.filter((_, i) => i % 3 === 1), 0.45);
   const th = vff < 0.95 ? mulchThick(state.mulchType) : 0; tillSurface(x, w, gy, state.till); if (th) { mulchLayer(x + 1, w - 2, gy, th, state.mulchType, 11, state.mulchType === 'plastic' ? pxs : null); const cf0 = CAP_VALUES[state.capIdx] / Math.max.apply(null, CAP_VALUES); ctx.fillStyle = 'rgba(40,120,220,' + (0.08 + 0.4 * cf0 * (rainD > 0.4 ? 1 : 0.5)).toFixed(2) + ')'; ctx.fillRect(x + 1, gy - th, w - 2, th); pill('mulch holds ' + CAP_VALUES[state.capIdx] + ' mm', x + 8, gy + 14, { b: true, s: 9.5, c: '#1B4FA0' }); }
-  const cvr = sim.cover[kd], ph = clampN(26 + current.yield * 2.6, 28, 46) * (0.15 + 0.85 * cvr); if (cvr > 0.03) cropPlants(x + w / 2 + 20, gy - th, ph, spread, np, 0, PXs, 3);
+  const cvr = sim.cover[kd], ph = clampN(26 + current.yield * 2.6, 28, 46) * (0.15 + 0.85 * cvr); if (cvr > 0.03) cropPlants(x + w / 2 + 20, gy - th, ph, spread, np, 0, PXs, 3, y + 22);
   pill((CROPS[state.crop] || {}).label ? CROPS[state.crop].label.toLowerCase() : state.crop, x + w * 0.62, y + 122, { b: true, s: 9.5, c: '#2F7F3E' });
   const rn = seededRandom(31), ng = Math.round(NRATE_VALUES[state.nIdx] / 4); for (let i = 0; i < ng; i++) { ctx.fillStyle = '#E5738A'; ctx.beginPath(); ctx.arc(x + 24 + rn() * (w - 48), gy - th - 1 - rn() * 2.5, 1.9, 0, 6.283); ctx.fill(); }
   const nn = clampN(Math.round(m.nl / 2.2), 3, 26); for (let i = 0; i < nn; i++) { const p = (t * (0.08 + m.drain / 1200) * (0.5 + 1.1 * sandF) + i * 0.137) % 1, dx = x + 30 + (i * 53) % (w - 60); ctx.fillStyle = 'rgba(232,120,40,' + (0.95 - p * 0.4).toFixed(2) + ')'; ctx.beginPath(); ctx.arc(dx, gy + 8 + p * (soilPx - 12), 2.2, 0, 6.283); ctx.fill(); }
@@ -4924,7 +4932,7 @@ function drawN1Chart() {
   T(DATA.soil_labels[soil], C.cx, 62, { s: 11, b: true, c: '#1F3864' });
   // the soil column, by depth
   drawSection(C.cx, C.cy, C.cw, 100, ppc); horizonTags(C.cx - 34, C.cy, ppc, 100); depthAxis(C.cx, C.cy, 100, ppc, 25);
-  if (sim.cover[dd] > 0.03) cropPlants(C.cx + C.cw / 2, C.cy, clampN(18 + current.yield * 2, 20, 34) * (0.2 + 0.8 * sim.cover[dd]), C.cw / 6, 5, 0, 1, 5);
+  if (sim.cover[dd] > 0.03) cropPlants(C.cx + C.cw / 2, C.cy, clampN(18 + current.yield * 2, 20, 34) * (0.2 + 0.8 * sim.cover[dd]), C.cw / 6, 5, 0, 1, 5, 70);
   drawSoilWater(sim, dd, C.cx, C.cw, C.cy, ppc);
   let beyond = 0, inRoot = 0; for (let i = 0; i < NLAY; i++) { if ((i + 0.5) * DZ <= rd) { inRoot++; if (1 - s[i] >= fT) { beyond++; ctx.fillStyle = 'rgba(217,48,37,0.34)'; ctx.fillRect(C.cx + 1, C.cy + i * DZ * ppc, C.cw - 2, DZ * ppc + 0.5); } } }
   ctx.save(); ctx.beginPath(); ctx.rect(C.cx, C.cy - 2, C.cw, C.ch + 2); ctx.clip(); drawRoots(sim, dd, C.cy, ppc, [C.cx + C.cw / 2], 0.7); ctx.restore();
@@ -5247,7 +5255,7 @@ function drawR1Chart() {
   // B: the profile on the day on the clock
   const y0 = C.by; T('The day on the clock', 16, y0 - 28, { s: 11, b: true }); T('soil, roots and water', C.cx, y0 - 12, { s: 10, c: MUTE }); T('root density (relative)', C.dx, y0 - 12, { s: 10, c: MUTE }); T('water taken today', C.ux, y0 - 12, { s: 10, c: MUTE }); T('taken this year', C.sx, y0 - 12, { s: 10, c: MUTE });
   drawSection(C.cx, y0, C.cw, 100, ppc); horizonTags(C.cx - 34, y0, ppc, 100); depthAxis(C.cx, y0, 100, ppc, 25);
-  if (cv > 0.03) cropPlants(C.cx + C.cw / 2, y0, clampN(18 + current.yield * 2, 20, 34) * (0.2 + 0.8 * cv), C.cw / 6, 5, 0, 1, 5);
+  if (cv > 0.03) cropPlants(C.cx + C.cw / 2, y0, clampN(18 + current.yield * 2, 20, 34) * (0.2 + 0.8 * cv), C.cw / 6, 5, 0, 1, 5, y0 - 8);
   drawSoilWater(sim, dd, C.cx, C.cw, y0, ppc); ctx.save(); ctx.beginPath(); ctx.rect(C.cx, y0 - 2, C.cw, 100 * ppc + 2); ctx.clip(); drawRootsR1(sim, dd, C.cx, C.cw, y0, ppc); ctx.restore(); ctx.strokeStyle = INK; ctx.lineWidth = 1.5; ctx.strokeRect(C.cx, y0, C.cw, 100 * ppc);
   const zS = Z_VALUES[state.zIdx]; ctx.strokeStyle = '#111'; ctx.setLineDash([4, 3]); ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(C.cx, y0 + zS * ppc); ctx.lineTo(C.sx + C.sw, y0 + zS * ppc); ctx.stroke(); ctx.setLineDash([]); T('sensor ' + zS, C.cx + C.cw + 4, y0 + zS * ppc - 3, { s: 8.5, c: '#111' });
   let mxR = 1e-9, mxU = 1e-9, mxS = 1e-9; for (let i = 0; i < NLAY; i++) { if (rho[i] > mxR) mxR = rho[i]; if (upt[i] > mxU) mxU = upt[i]; if (Y.U[i] > mxS) mxS = Y.U[i]; }

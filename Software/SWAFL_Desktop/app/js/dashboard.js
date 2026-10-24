@@ -151,7 +151,8 @@ const Dash = (() => {
   }
   function charts() {
     const s = E.snap; if (s && DL[s.scene]) { designCharts(s.scene); return; }
-    body.innerHTML = '<div class="dnote">Twenty years around the working date (calendar years on the horizontal axis, millimetres per year).</div><div class="charts">' + CB('c1', 'Rainfall and irrigation', '<canvas id="c1"></canvas>') + '' + CB('c2', 'Drainage below the root zone', '<canvas id="c2"></canvas>') + '' + CB('c3', 'Evaporation and transpiration', '<canvas id="c3"></canvas>') + '</div>'; lastHtml = '';
+    if (!(document.getElementById('c1') && document.getElementById('c3') && body.querySelector('.charts')))   // the charts are redrawn in place: no flash
+      body.innerHTML = '<div class="dnote">Twenty years around the working date (calendar years on the horizontal axis, millimetres per year).</div><div class="charts">' + CB('c1', 'Rainfall and irrigation', '<canvas id="c1"></canvas>') + '' + CB('c2', 'Drainage below the root zone', '<canvas id="c2"></canvas>') + '' + CB('c3', 'Evaporation and transpiration', '<canvas id="c3"></canvas>') + '</div>'; lastHtml = '';
     clearTimeout(chartTimer); chartTimer = setTimeout(() => {
       const S = E.season(); if (!S || !document.getElementById('c1')) return;
       lineChart(document.getElementById('c1'), [{ v: S.yR, c: '#5AA0E1', n: 'Rain' }, { v: S.yI, c: '#C77D1A', n: 'Irrigation' }], { bars: true, zero: true, cal0: S.cal0 });
@@ -165,7 +166,7 @@ const Dash = (() => {
   }
   function render() {
     const s = E.snap; if (!s) return;
-    if (tab === 'results') results(s); else if (tab === 'design') design(s); else if (tab === 'charts') { const k = s.scene + '|' + JSON.stringify(s.state) + '|' + s.date + '|' + ((s.wx && s.wx.key) || '') + '|' + (DL[s.scene] ? runOn(s.scene) + E.ev('JSON.stringify(window.DESIGN_RUN)') + E.ev("JSON.stringify(typeof sidRun==='function'?[sidRun().Ea,drRun().Ea,spRun().Ea]:0)") : ''); if (k !== chartKey) { chartKey = k; charts(); } } else messages();
+    if (tab === 'results') results(s); else if (tab === 'design') design(s); else if (tab === 'charts') { const k = s.scene + '|' + JSON.stringify(s.state) + '|' + (DL[s.scene] ? s.date : String(s.date || '').slice(0, 4)) + '|' + ((s.wx && s.wx.key) || '') + '|' + (DL[s.scene] ? runOn(s.scene) + E.ev('JSON.stringify(window.DESIGN_RUN)') + E.ev("JSON.stringify(typeof sidRun==='function'?[sidRun().Ea,drRun().Ea,spRun().Ea]:0)") : ''); if (k !== chartKey) { chartKey = k; charts(); } } else messages();
   }
   function setTab(t) { tab = t; lastHtml = ''; chartKey = ''; tabs.querySelectorAll('button[data-tab]').forEach(b => b.classList.toggle('on', b.dataset.tab === t)); render(); }
   tabs.addEventListener('click', e => {

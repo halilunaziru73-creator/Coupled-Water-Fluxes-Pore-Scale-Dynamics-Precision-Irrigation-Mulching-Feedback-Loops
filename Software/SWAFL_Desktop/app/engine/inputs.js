@@ -38,6 +38,19 @@
     }
     return oT(txt, x, y, o);
   };
+  // plants stay inside their picture: an optional ninth argument gives the top of the frame, and a crop too tall for it is drawn
+  // shorter (its height is estimated from the drawing of each crop kind: palms, trees and maize stand well above the given height)
+  if (typeof cropPlants === 'function') {
+    const oCP = cropPlants, KF = { rice: 1.0, maize: 1.45, sorghum: 1.3, cassava: 1.3, yam: 1.4, cowpea: 1.0, cocoa: 1.5, vegetable: 1.05, millet: 1.5, wheat: 1.15, mustard: 1.3, cotton: 1.15, groundnut: 0.6, legume: 1.0, soybean: 1.0, vine: 1.05, hop: 1.75, bush: 1.45, palm: 2.15, papaya: 1.45, citrus: 1.65, olive: 1.65, tree: 1.65 };
+    cropPlants = function (cx, ground, h, spread, n, rootCm, pxPerCm, seedBase, ceil) {
+      if (ceil != null && isFinite(ceil) && h > 0) {
+        const c = window.CROPLIB && CROPLIB.crops[state.crop], f = c ? (KF[c.kind] != null ? KF[c.kind] : 1.65) * (c.group === 'perennial' ? 1.8 : 1) : (state.crop === 'vegetable' ? 0.55 : 1.0);
+        const add = c ? 8 : 14, avail = ground - ceil, need = f * 1.1 * h + add;
+        if (need > avail) h = Math.max(3, (avail - add) / (f * 1.1));
+      }
+      return oCP.call(this, cx, ground, h, spread, n, rootCm, pxPerCm, seedBase);
+    };
+  }
   try { SIDC.ac = '#0A246A'; SIDC.ink = '#000000'; IRC.ac = '#0A246A'; IRC.ink = '#000000'; } catch (e) {}
   const OBJ = () => ({ sid: SID, drip: DRP, spr: SPR });
   const RUN = { sid: { on: false, st: '', why: '' }, drip: { on: false, st: '', why: '' }, spr: { on: false, st: '', why: '' } };
@@ -111,7 +124,7 @@
       '<div class="b"><button id="pkOk">OK</button><button id="pkNo">Cancel</button></div>';
     const [cx, cy] = toClient(w.bx, w.by + w.bh + 2); place(el, cx, cy);
     const iv = el.querySelector('#pkV'), iu = el.querySelector('#pkU'), il = el.querySelector('#pkL');
-    iv.value = nice(cur); iu.onchange = () => { const f = U[+iu.value][1]; iv.value = nice(cur / f); };
+    iv.value = +(+cur).toFixed(4); iu.onchange = () => { const f = U[+iu.value][1]; iv.value = nice(cur / f); };
     il.onchange = () => { if (il.value !== '') { iu.value = '0'; iv.value = il.value; } };
     const ok = () => { const raw = parseFloat(String(iv.value).replace(',', '.')); if (!isFinite(raw)) { iv.focus(); return; } let v = raw * U[+iu.value][1]; v = clampN(v, lo, hi); w.set(v); closePick(); invalidate('inputs changed'); try { refresh(); } catch (e) {} };
     el.querySelector('#pkOk').onclick = ok; el.querySelector('#pkNo').onclick = closePick;
@@ -140,12 +153,15 @@
     ctx.fillStyle = '#000'; ctx.beginPath(); ctx.moveTo(x + 4, y + h / 2 - 2); ctx.lineTo(x + 12, y + h / 2 - 2); ctx.lineTo(x + 8, y + h / 2 + 2); ctx.closePath(); ctx.fill(); };
   sidSlider = function (key, label, x, y, w, rng, val, fmt, dis, sub) {
     T(label, x, y, { s: 9.5, b: true, c: dis ? '#808080' : '#000000' });
-    const by = y + 4, bh = 18; box(x, by, w, bh, dis); T(fmt(val), x + 6, by + 13, { s: 10, b: true, c: dis ? '#808080' : '#0A246A' });
+    const by = y + 4, bh = 18; box(x, by, w, bh, dis); T(exactFmt(fmt(val), val, rng), x + 6, by + 13, { s: 10, b: true, c: dis ? '#808080' : '#0A246A' });
     if (!dis) dropBtn(x + w - 18, by + 1, bh - 2);
     const obj = SIDCUR;
     if (!dis) SIDW.push({ key, x, w, y: by + bh / 2, rng, sub, obj, field: true, label: label || (key === 'Zn' ? 'Required depth Zn (mm)' : key), cur: val, bx: x, by, bw: w, bh });
   };
-  const setField = (s, v) => { const st = s.rng[2] || 0; if (st) v = Math.round(v / st) * st; s.obj[s.key] = +(v * (s.scale || 1)).toFixed(6); if (s.obj === SID) { if (s.key === 'qLs') SID.autoQ = false; if (s.key === 'tman') SID.cut = 'man'; sidTouch(s.key); } else if (s.obj.touch) s.obj.touch(s.key); };
+  // the box shows the value as typed (2.13 stays 2.13), not rounded to the decimals of the old slider label
+  const exactFmt = (t, val, rng) => { if (typeof t !== 'string' || typeof val !== 'number' || !isFinite(val)) return t; const m = t.match(/-?\d+(?:\.\d+)?/); if (!m) return t; const n = parseFloat(m[0]), d = (m[0].split('.')[1] || '').length, ex = +val.toFixed(4);
+    if (n === ex || Math.abs(n - val) > 0.5001 * Math.pow(10, -d) || String(ex).length > 9) return t; return t.slice(0, m.index) + String(ex) + t.slice(m.index + m[0].length); };
+  const setField = (s, v) => { s.obj[s.key] = +(v * (s.scale || 1)).toFixed(6); if (s.obj === SID) { if (s.key === 'qLs') SID.autoQ = false; if (s.key === 'tman') SID.cut = 'man'; sidTouch(s.key); } else if (s.obj.touch) s.obj.touch(s.key); };
   const oSidDown = sidDown;
   sidDown = function (p) {
     const id0 = curId(), lim = id0 && !RUN[id0].on ? inputsEnd(id0) : 1e9;
