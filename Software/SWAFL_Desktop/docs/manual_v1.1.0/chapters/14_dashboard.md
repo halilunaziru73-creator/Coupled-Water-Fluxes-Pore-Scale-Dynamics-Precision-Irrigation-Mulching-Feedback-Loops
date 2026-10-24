@@ -8,6 +8,8 @@ The Dashboard is the panel to the right of the drawing. It has four tabs (*Resul
 
 The first block of the Results tab carries the name of the open layer and its **key numbers** (the same lines as in the report). For example, on *Soil hydraulic drivers* it shows the change in drainage due to tillage and to the consolidation rate on your soil, and the leading driver. A design layer shows its key numbers after its run.
 
+On *Trigger law* this block shows only the soil you are working on. It lists the trigger (cm) and its depletion, the critical $f^*$, the sensor reading and its depletion now, the days from field capacity to the trigger, the drying speed, the water held in the root zone, the yield, the irrigation and drainage, the share of the best trigger's yield, and the advice $f = 0.50$ or $f = 0.45$ with its reasons. Click another soil in the drawing to see its numbers.
+
 The tab has four blocks.
 
 **Block 1: On the working date** (mm per day unless stated). Crop, root depth (cm), *Sensor / trigger* (the simulated relative depletion $f$ of the sensor layer and the trigger $f_T$; irrigation fires when $f\ge f_T$, Eq. 6.1), rain, irrigation, soil evaporation, transpiration and drainage on that day. They are the Engine 2 daily series of Chapter 5, read at the day index $k$ of the working date:

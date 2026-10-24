@@ -143,6 +143,12 @@ Each design layer (surface, drip and sprinklers) ends with a film of the soil wa
   * The next irrigation, with the depth of this design, and the date the wilting point would be reached without it.
   * For the whole span: the number of irrigations, the rain, the evapotranspiration, the drainage, and the share of days in each phase.
 
+Every part of the film is labelled.
+
+* **The profile** has its depth axis (cm) and its water-content axis (% by volume, with the values at the wilting point and at field capacity). Labels mark the wilting point (WP), the trigger and field capacity (FC).
+* **The chart** has its axis of the water left in the root zone (%) and its axis of days, and the phase band is named. Arrows and lines mark each irrigation, and the first is labelled *irrigation starts* with its date. The trigger line is labelled with the water left at it, the point where it is reached is marked *trigger reached*, and the wilting point without irrigation is marked with a cross and its date.
+* **The colours** are distinct: irrigation dark blue, rain light blue, comfortable green, nearing the trigger yellow, stress orange, near wilting red, no crop grey. The root zone line is dark blue, the sensor purple, the trigger black dashed, the dry-down without irrigation red dotted, the rain ticks blue and the drainage ticks teal.
+
 Everything follows the settings. Change the trigger, the sensor depth, the soil, the crop, the mulch, the rain or the weather and the film is computed again.
 
 The phase of a day is set in this order: an irrigation day; a day with no crop; near wilting when the root zone has lost 85 % of its available water; beyond the trigger when the depletion at the sensor reaches the trigger $f_T$; a rain day (over 5 mm); nearing the trigger when the depletion at the sensor reaches $0.8\,f_T$; otherwise comfortable.

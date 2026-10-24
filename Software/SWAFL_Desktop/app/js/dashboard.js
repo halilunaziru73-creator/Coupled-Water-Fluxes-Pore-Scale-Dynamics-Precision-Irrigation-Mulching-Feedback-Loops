@@ -26,7 +26,15 @@ const Dash = (() => {
     let h = '<div class="dwrap">';
     // the key numbers of the open layer (the same lines as in the report), so every layer has its own results here
     { const lk = s.scene + '|' + key; if (layerCache.key !== lk) { let L = null; try { L = E.json("(function(){try{return reportNotes(currentScene,currentScene.id==='field'?(state.fview||'day'):null)}catch(e){return null}})()"); } catch (e) {} layerCache = { key: lk, L }; }
-      const L = (Layers.DESIGN || []).includes(s.scene) && !runOn(s.scene) ? null : layerCache.L; if (L && L.length) h += SEC('layer', UI.esc(Layers.nameOf(s.scene) || 'This layer'), 'key numbers of this layer', '<ul class="dlist">' + L.map(l => '<li>' + UI.esc(l) + '</li>').join('') + '</ul>'); }
+      if (s.scene === 'n1') { let N = null; try { N = E.json('n1Dash()'); } catch (e) {} if (N) { const f2 = v => (v == null || !isFinite(v)) ? '-' : (+v).toFixed(2);
+        h += SEC('layer', 'Trigger law: ' + UI.esc(N.soil), 'your soil only', '<div class="kgrid">' +
+          K('Trigger', N.trigCm.toLocaleString('en-US'), 'cm', 't3') + K('Depletion at the trigger', f2(N.fT), '', 't3') + K('Critical f*', f2(N.fstar), '= ' + N.critCm + ' cm', 't2') + K('Sensor (' + N.z + ' cm) now', N.sensorCm.toLocaleString('en-US'), 'cm', 't1') +
+          K('Sensor depletion now', f2(N.fS), N.due ? 'irrigate' : 'within', N.due ? 't2' : 't4') + K('Days to the trigger', N.days != null ? Math.max(1, Math.round(N.days)) : '-', 'from FC', 't3') + K('Drying speed', (N.rate * 100).toFixed(1), '%/day', 't1') + K('Water held, root zone', Math.round(N.taw), 'mm', 't4') +
+          K('Yield', (+N.yield).toFixed(2), N.yUnit, 't4') + K('Irrigation', Math.round(N.irr), 'mm/yr', 't3') + K('Drainage', Math.round(N.drain), 'mm/yr', 't2') + K('Of the best trigger yield', N.rel != null ? Math.round(N.rel * 100) : '-', '%', 't4') + '</div>' +
+          (N.rec != null ? '<div class="dnote" style="margin-top:6px"><b>Choose f = ' + N.rec.toFixed(2) + '.</b> ' + UI.esc(N.why.replace(/^Advice for you: f = [0-9.]+,?\s*/, '').replace(/^because/, 'Because').replace(/^\.\s*/, '')) + '</div>' : '') +
+          '<div class="dnote">On ' + UI.esc(N.date) + ' · ' + UI.esc(N.crop) + '. Click another soil in the drawing to see its numbers here.</div>'); } }
+      else {
+      const L = (Layers.DESIGN || []).includes(s.scene) && !runOn(s.scene) ? null : layerCache.L; if (L && L.length) h += SEC('layer', UI.esc(Layers.nameOf(s.scene) || 'This layer'), 'key numbers of this layer', '<ul class="dlist">' + L.map(l => '<li>' + UI.esc(l) + '</li>').join('') + '</ul>'); } }
     if (D) {
       h += SEC('day', 'On ' + UI.esc(D.date), 'mm per day', '<div class="kgrid">' +
         K('Crop', UI.esc(D.crop), '', 't4') + K('Root depth', f1(D.rd), 'cm', 't4') + K('Sensor / trigger', (D.f || 0).toFixed(2) + ' / ' + (D.fT || 0).toFixed(2), '', 't3') +

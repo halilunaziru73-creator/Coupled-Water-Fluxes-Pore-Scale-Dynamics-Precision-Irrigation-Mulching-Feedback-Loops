@@ -1636,7 +1636,7 @@ function dssMovie(y, sim, k0, up, sp) {
   const left = d => { const rz = rzOf(d), n = Math.max(1, Math.round(rz / DZ)); let a = 0; for (let i = 0; i < n; i++) a += clampN(sim.s[d][i], 0, 1); return a / n; };
   const fallow = d => /fallow/i.test(cropNameAt(sim, d) || '');
   // the phase of every day: irrigation, rain, comfortable, nearing the trigger, beyond the trigger (stress), near wilting, no crop
-  const PH = { irr: ['#2E7DE8', 'irrigation day'], rain: ['#7FB8E8', 'rain over 5 mm'], ok: ['#CFE8C8', 'comfortable'], near: ['#F6E3A1', 'nearing the trigger'], stress: ['#F2B27A', 'beyond the trigger: stress'], wilt: ['#E07A6E', 'near the wilting point'], fal: ['#E4E2DC', 'no crop (fallow)'] };
+  const PH = { irr: ['#1565C0', 'irrigation day'], rain: ['#4FC3F7', 'rain over 5 mm'], ok: ['#66BB6A', 'comfortable'], near: ['#FDD835', 'nearing the trigger'], stress: ['#FB8C00', 'beyond the trigger: stress'], wilt: ['#C62828', 'near the wilting point'], fal: ['#BDBDBD', 'no crop (fallow)'] };
   const path = [], sens = [], ph = [], cnt = {}; let irrN = 0, irrMM = 0, rainMM = 0, drMM = 0, etMM = 0;
   for (let j = 0; j <= span; j++) { const d = k0 + j, L = left(d), Sn = clampN(sim.s[d][iS], 0, 1.2), dS = 1 - Math.min(1, Sn); path.push(L); sens.push(Sn);
     const p = sim.irr[d] > 0.5 ? 'irr' : fallow(d) ? 'fal' : (1 - L) >= 0.85 ? 'wilt' : dS >= fT ? 'stress' : (sim.rain[d] || 0) > 5 ? 'rain' : dS >= 0.8 * fT ? 'near' : 'ok';
@@ -1655,32 +1655,43 @@ function dssMovie(y, sim, k0, up, sp) {
   [[wp, '#B23A2E'], [Th.t0, '#8A5A00'], [fc, '#1E63D0']].forEach(([v, c], i) => { ctx.strokeStyle = c; ctx.lineWidth = 1.4; ctx.setLineDash(i === 1 ? [4, 3] : []); ctx.beginPath(); ctx.moveTo(sx(v), top); ctx.lineTo(sx(v), top + ph0); ctx.stroke(); }); ctx.setLineDash([]);
   const rz = rzOf(d); ctx.strokeStyle = '#2E7D32'; ctx.lineWidth = 1.6; ctx.setLineDash([6, 3]); ctx.beginPath(); ctx.moveTo(px, sy(rz)); ctx.lineTo(px + pw, sy(rz)); ctx.stroke(); ctx.setLineDash([]);
   ctx.fillStyle = '#F2C230'; ctx.strokeStyle = '#5A4500'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(px + pw - 10, sy(zs), 5, 0, 6.2832); ctx.fill(); ctx.stroke();
-  for (let z = 0; z <= 100; z += 25) T(String(z), px - 5, sy(z) + 3, { s: 8.5, a: 'right', c: MUTE }); T('cm', px - 5, top - 6, { s: 8.5, a: 'right', c: MUTE });
-  pill(PH[ph[j]][1], px + pw / 2, top + ph0 + 16, { s: 9, b: true, a: 'center', c: '#12303A', bg: PH[ph[j]][0] + 'CC' });
-  [['#B23A2E', 'wilting point'], ['#8A5A00', 'trigger'], ['#1E63D0', 'field capacity'], ['#2E7D32', 'roots'], ['#F2C230', 'sensor ' + zs + ' cm']].forEach(([c, l], i) => { const lx = 14 + (i % 2) * 118, ly = top + ph0 + 38 + Math.floor(i / 2) * 14; ctx.fillStyle = c; ctx.fillRect(lx, ly - 8, 10, 8); T(l, lx + 14, ly, { s: 8.8, c: '#374151' }); });
+  for (let z = 0; z <= 100; z += 25) T(String(z), px - 5, sy(z) + 3, { s: 8.5, a: 'right', c: MUTE });
+  ctx.save(); ctx.translate(px - 30, top + ph0 / 2); ctx.rotate(-Math.PI / 2); T('depth (cm)', 0, 0, { s: 8.6, a: 'center', c: '#374151' }); ctx.restore();
+  { const L3 = [[wp, 'WP', '#B23A2E'], [Th.t0, 'trigger', '#8A5A00'], [fc, 'FC', '#1E63D0']].sort((a, c) => a[0] - c[0]); let lastX = -99, row = 0; L3.forEach(([v, l, c]) => { const xx = sx(v); row = xx - lastX < 44 ? row + 1 : 0; lastX = xx; pill(l, clampN(xx, px + 18, px + pw - 18), top + 14 + row * 17, { s: 8.2, b: true, a: 'center', c }); }); }
+  { const tk = [wp, fc, sat].map(v => Math.round(v * 100)); [wp, fc].forEach(v => T(Math.round(v * 100) + ' %', sx(v), top + ph0 + 9, { s: 7.8, a: 'center', c: MUTE })); T('water content (% by volume)', px + pw / 2, top + ph0 + 19, { s: 8.4, a: 'center', c: '#374151' }); }
+  pill(PH[ph[j]][1], px + pw / 2, top + ph0 + 36, { s: 9, b: true, a: 'center', c: '#12303A', bg: PH[ph[j]][0] + 'CC' });
+  [['#B23A2E', 'wilting point'], ['#8A5A00', 'trigger'], ['#1E63D0', 'field capacity'], ['#2E7D32', 'roots'], ['#F2C230', 'sensor ' + zs + ' cm']].forEach(([c, l], i) => { const lx = 14 + (i % 2) * 118, ly = top + ph0 + 56 + Math.floor(i / 2) * 14; ctx.fillStyle = c; ctx.fillRect(lx, ly - 8, 10, 8); T(l, lx + 14, ly, { s: 8.8, c: '#374151' }); });
   // right: phase band, the water left in the root zone and at the sensor, the trigger, rain and drainage, and the dry-down without irrigation
-  const cx = 272, cw = W - 16 - cx, chh = 170, Dx = Math.max(span, proj.length ? proj[proj.length - 1][0] : 0), X = q => cx + q / Math.max(1, Dx) * cw, Yv = v => top + 14 + (chh - 14) * (1 - clampN(v, 0, 1.1) / 1.1);
+  const cx = 300, cw = W - 16 - cx, chh = 170, Dx = Math.max(span, proj.length ? proj[proj.length - 1][0] : 0), X = q => cx + q / Math.max(1, Dx) * cw, Yv = v => top + 14 + (chh - 14) * (1 - clampN(v, 0, 1.1) / 1.1);
   ctx.fillStyle = '#fff'; ctx.fillRect(cx, top, cw, chh); 
   for (let q = 0; q <= span; q++) { ctx.fillStyle = PH[ph[q]][0]; ctx.globalAlpha = ph[q] === 'irr' ? 0.9 : 0.55; ctx.fillRect(X(q), top, Math.max(1, X(q + 1) - X(q)) + 0.5, 10); ctx.globalAlpha = ph[q] === 'stress' || ph[q] === 'wilt' ? 0.18 : 0; if (ctx.globalAlpha) ctx.fillRect(X(q), top + 10, Math.max(1, X(q + 1) - X(q)) + 0.5, chh - 10); ctx.globalAlpha = 1; }
   ctx.strokeStyle = '#B9C0C7'; ctx.lineWidth = 1; ctx.strokeRect(cx + 0.5, top + 0.5, cw, chh);
   for (let v = 0; v <= 1.0001; v += 0.25) { ctx.strokeStyle = '#EEF1F3'; ctx.beginPath(); ctx.moveTo(cx, Yv(v)); ctx.lineTo(cx + cw, Yv(v)); ctx.stroke(); T(Math.round(v * 100) + ' %', cx - 4, Yv(v) + 3, { s: 8.5, a: 'right', c: MUTE }); }
   { const stp = Dx > 200 ? 60 : Dx > 90 ? 30 : Dx > 40 ? 10 : 5; for (let q = 0; q <= Dx; q += stp) T(String(q), X(q), top + chh + 12, { s: 8.5, a: 'center', c: MUTE }); T('days from ' + fmtDate(dateOfK(k0)), cx + cw / 2, top + chh + 25, { s: 8.8, a: 'center', c: MUTE }); }
-  for (let q = 0; q <= span; q++) { const r = sim.rain[k0 + q] || 0, dr = sim.drain[k0 + q] || 0; if (r > 1) { ctx.fillStyle = 'rgba(70,130,210,0.75)'; ctx.fillRect(X(q), top + 10, 1.5, Math.min(26, r)); } if (dr > 0.5) { ctx.fillStyle = 'rgba(58,95,205,0.8)'; const hh = Math.min(20, dr * 2); ctx.fillRect(X(q), top + chh - hh, 1.5, hh); } }
-  ctx.strokeStyle = '#8A5A00'; ctx.setLineDash([5, 3]); ctx.lineWidth = 1.3; ctx.beginPath(); ctx.moveTo(cx, Yv(1 - fT)); ctx.lineTo(cx + cw, Yv(1 - fT)); ctx.stroke(); ctx.setLineDash([]);
-  if (proj.length > 1) { ctx.strokeStyle = '#B23A2E'; ctx.lineWidth = 1.6; ctx.setLineDash([3, 3]); ctx.beginPath(); proj.forEach(([q, v], i) => { i ? ctx.lineTo(X(q), Yv(v)) : ctx.moveTo(X(q), Yv(v)); }); ctx.stroke(); ctx.setLineDash([]); }
+  for (let q = 0; q <= span; q++) { const r = sim.rain[k0 + q] || 0, dr = sim.drain[k0 + q] || 0; if (r > 1) { ctx.fillStyle = '#0288D1'; ctx.fillRect(X(q), top + 10, 1.5, Math.min(26, r)); } if (dr > 0.5) { ctx.fillStyle = '#00897B'; const hh = Math.min(20, dr * 2); ctx.fillRect(X(q), top + chh - hh, 1.5, hh); } }
+  ctx.strokeStyle = '#111111'; ctx.setLineDash([6, 3]); ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(cx, Yv(1 - fT)); ctx.lineTo(cx + cw, Yv(1 - fT)); ctx.stroke(); ctx.setLineDash([]);
+  if (proj.length > 1) { ctx.strokeStyle = '#C62828'; ctx.lineWidth = 1.6; ctx.setLineDash([3, 3]); ctx.beginPath(); proj.forEach(([q, v], i) => { i ? ctx.lineTo(X(q), Yv(v)) : ctx.moveTo(X(q), Yv(v)); }); ctx.stroke(); ctx.setLineDash([]); }
   const line = (arr, c, wdt, upto) => { ctx.strokeStyle = c; ctx.lineWidth = wdt; ctx.beginPath(); arr.forEach((v, q) => { if (q > upto) return; q ? ctx.lineTo(X(q), Yv(v)) : ctx.moveTo(X(q), Yv(v)); }); ctx.stroke(); };
-  ctx.globalAlpha = 0.25; line(path, '#1E63D0', 1.5, span); line(sens, '#C98A00', 1.2, span); ctx.globalAlpha = 1; line(path, '#1E63D0', 2.4, j); line(sens, '#C98A00', 1.8, j);
-  ctx.strokeStyle = '#1B1F23'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(X(j), top); ctx.lineTo(X(j), top + chh); ctx.stroke(); ctx.fillStyle = '#1E63D0'; ctx.beginPath(); ctx.arc(X(j), Yv(path[j]), 4, 0, 6.2832); ctx.fill();
+  ctx.globalAlpha = 0.25; line(path, '#0D47A1', 1.5, span); line(sens, '#8E24AA', 1.2, span); ctx.globalAlpha = 1; line(path, '#0D47A1', 2.6, j); line(sens, '#8E24AA', 1.8, j);
+  ctx.strokeStyle = '#1B1F23'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(X(j), top); ctx.lineTo(X(j), top + chh); ctx.stroke(); ctx.fillStyle = '#0D47A1'; ctx.beginPath(); ctx.arc(X(j), Yv(path[j]), 4, 0, 6.2832); ctx.fill();
+  // the chart says what it shows: axis titles, the band, where each irrigation starts, where the trigger is reached, the wilting point
+  ctx.save(); ctx.translate(cx - 44, Yv(0.55)); ctx.rotate(-Math.PI / 2); T('water left in root zone (%)', 0, 0, { s: 8.6, a: 'center', c: '#374151' }); ctx.restore();
+  T('phase', cx - 4, top + 8, { s: 8.2, b: true, a: 'right', c: '#374151' });
+  { let firstI = true; for (let q = 1; q <= span; q++) if (sim.irr[k0 + q] > 0.5) { const xq = X(q); ctx.strokeStyle = 'rgba(21,101,192,0.55)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(xq, top + 10); ctx.lineTo(xq, top + chh); ctx.stroke(); ctx.fillStyle = '#1565C0'; ctx.beginPath(); ctx.moveTo(xq - 4, top + 11); ctx.lineTo(xq + 4, top + 11); ctx.lineTo(xq, top + 17); ctx.closePath(); ctx.fill();
+      if (firstI) { firstI = false; pill('irrigation starts ' + fmtDate(dateOfK(k0 + q)), Math.min(xq + 6, cx + cw - 150), top + 30, { s: 8.6, b: true, c: '#1565C0' }); } } }
+  if (nx != null && nx - k0 <= Dx) { const xq = X(nx - k0), yq = Yv(1 - fT); ctx.fillStyle = '#111'; ctx.beginPath(); ctx.arc(xq, yq, 4, 0, 6.2832); ctx.fill(); pill('trigger reached', Math.max(cx + 4, xq - 96), yq + 16, { s: 8.4, b: true, c: '#111' }); }
+  pill('trigger ' + Math.round((1 - fT) * 100) + ' % left', cx + 4, Yv(1 - fT) - 6, { s: 8.2, b: true, c: '#111' });
+  if (wilt != null && wilt - k0 <= Dx) { const xw = X(wilt - k0), yw = Yv(0.03); ctx.strokeStyle = '#C62828'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(xw - 4, yw - 4); ctx.lineTo(xw + 4, yw + 4); ctx.moveTo(xw + 4, yw - 4); ctx.lineTo(xw - 4, yw + 4); ctx.stroke(); pill('wilting point ' + fmtDate(dateOfK(wilt)), Math.max(cx + 4, Math.min(xw - 60, cx + cw - 150)), yw - 10, { s: 8.4, b: true, c: '#C62828' }); }
   // legend: the phases, then the lines
   { let lx = cx, ly = top + chh + 40; const item = (c, l, bar) => { ctx.font = '8.8px sans-serif'; const tw = ctx.measureText(l).width + 26; if (lx + tw > W - 14) { lx = cx; ly += 13; } ctx.fillStyle = c; if (bar) ctx.fillRect(lx, ly - 5, 12, 4); else ctx.fillRect(lx, ly - 8, 10, 8); T(l, lx + 15, ly, { s: 8.8, c: '#374151' }); lx += tw; };
-    ['irr', 'rain', 'ok', 'near', 'stress', 'wilt', 'fal'].forEach(k => item(PH[k][0], PH[k][1])); lx = cx; ly += 15; [['#1E63D0', 'root zone water left'], ['#C98A00', 'at the sensor'], ['#8A5A00', 'trigger'], ['#B23A2E', 'without the next irrigation'], ['rgba(58,95,205,0.8)', 'drainage']].forEach(q => item(q[0], q[1], true)); var legEnd = ly; }
+    ['irr', 'rain', 'ok', 'near', 'stress', 'wilt', 'fal'].forEach(k => item(PH[k][0], PH[k][1])); lx = cx; ly += 15; [['#0D47A1', 'root zone: water left'], ['#8E24AA', 'at the sensor'], ['#111111', 'trigger (irrigate here)'], ['#C62828', 'without the next irrigation'], ['#0288D1', 'rain (ticks at the top)'], ['#00897B', 'drainage (ticks at the bottom)']].forEach(q => item(q[0], q[1], true)); var legEnd = ly; }
   // the day in words, and the whole span in numbers
   const dn = nx != null ? nx - d : null, l1 = 'Day ' + j + ' of ' + span + ': ' + fmtDate(dateOfK(d)) + ' · ' + cropNameAt(sim, d) + ' · ' + PH[ph[j]][1] + ' · root zone ' + Math.round(path[j] * 100) + ' % of its available water left, sensor at depletion ' + (1 - Math.min(1, sens[j])).toFixed(2) + ' (trigger ' + fT.toFixed(2) + ')';
   const l2 = (nx == null ? 'No irrigation is due in the simulated record.' : dn > 0 ? 'The sensor reaches the trigger on ' + fmtDate(dateOfK(nx)) + ', in ' + dn + ' day' + (dn === 1 ? '' : 's') + ': irrigate ' + irF(sp.Zn, 0) + ' mm net (' + irF(sp.gross || sp.Zn, 0) + ' mm pumped with this design).' : dn === 0 ? 'Irrigation day: this design applies ' + irF(sp.Zn, 0) + ' mm net and the root zone is refilled.' : 'Irrigated on ' + fmtDate(dateOfK(nx)) + '; the root zone was refilled.')
     + (wilt != null ? ' Without that irrigation the root zone would reach the wilting point on ' + fmtDate(dateOfK(wilt)) + ' (' + (wilt - d0) + ' days later).' : nx != null ? ' Without that irrigation the root zone would still hold water after 150 days.' : '');
   const pct = k => Math.round(100 * (cnt[k] || 0) / (span + 1));
   const l3 = 'Over the ' + (span + 1) + ' days: ' + irrN + ' irrigation' + (irrN === 1 ? '' : 's') + ' (' + irF(irrMM) + ' mm by the daily model), rain ' + irF(rainMM) + ' mm, evapotranspiration ' + irF(etMM) + ' mm, drainage ' + irF(drMM) + ' mm. Days: comfortable ' + pct('ok') + ' %, nearing the trigger ' + pct('near') + ' %, beyond the trigger ' + pct('stress') + ' %, near wilting ' + pct('wilt') + ' %, fallow ' + pct('fal') + ' %.';
-  const by = Math.max(top + ph0 + 86, legEnd + 18); ctx.fillStyle = '#F2F7FB'; const hh = 16 + 12 * (sidWrap(l2, 0, 0, W - 44, { s: 9.2 }, 12, true) + sidWrap(l3, 0, 0, W - 44, { s: 9.2 }, 12, true)) + 10; ctx.fillRect(14, by - 12, W - 28, hh);
+  const by = Math.max(top + ph0 + 104, legEnd + 18); ctx.fillStyle = '#F2F7FB'; const hh = 16 + 12 * (sidWrap(l2, 0, 0, W - 44, { s: 9.2 }, 12, true) + sidWrap(l3, 0, 0, W - 44, { s: 9.2 }, 12, true)) + 10; ctx.fillRect(14, by - 12, W - 28, hh);
   T(l1, 22, by + 2, { s: 9.4, b: true, c: '#12303A' }); const n2 = sidWrap(l2, 22, by + 17, W - 44, { s: 9.2, c: '#374151' }, 12); sidWrap(l3, 22, by + 17 + 12 * n2 + 2, W - 44, { s: 9.2, c: '#12303A' }, 12);
   hot(14, top - 4, W - 28, ph0 + 50, () => { if (DSSMOV.paused) { DSSMOV.t0 = performance.now() - DSSMOV.j / speed * 1000; DSSMOV.paused = false; } else DSSMOV.paused = true; }, DSSMOV.paused ? 'play the film' : 'pause the film');
   if (DSSMOV.paused) pill('paused · click to play', cx + cw - 4, top + 26, { s: 8.8, b: true, a: 'right', c: '#12303A' });
@@ -5111,6 +5122,13 @@ function drawN1Chart() {
 // ------------------------------------------------------------------------------------------------
 // The core trade-off: trigger at depletion f = 0.50 or f = 0.45. Each question is answered from your settings (crop, soil, the time
 // your system takes for a full round, the growth stage on the date on the clock); a button sets the trigger of this soil.
+// the numbers of the Trigger law dashboard: only the soil you are working on
+window.n1Dash = function () {
+  const soil = state.soil, sim = seasonSim(), dd = clampN(fclock.kd(), 0, ND - 1), z = Z_VALUES[state.zIdx], si = clampN(Math.round(z / DZ), 0, NLAY - 1), fS = 1 - clampN(sim.s[dd][si], 0, 1);
+  const tf = trigAbsFor(soil), fT = n1F(), mv = n1ModelFor(soil), rl = n1Rel(soil), sp = n1Speed(soil), cf = CROPS[state.crop] || { factor: 1, unit: 'Mg/ha' }; if (!(window.__N1ADV && window.__N1ADV.soil === soil) && currentScene && currentScene.id === 'n1') { try { currentScene.draw(); } catch (e) {} } const adv = window.__N1ADV && window.__N1ADV.soil === soil ? window.__N1ADV : null;
+  return { soil: DATA.soil_labels[soil], date: fmtDate(dateOfK(dd)), crop: cropNameAt(sim, dd), trigCm: Math.round(tf), fT, fstar: 0.45, critCm: TRIGGER_AT_FSTAR[soil], z, sensorCm: Math.round(invDepletion(soil, fS)), fS,
+    due: fS >= fT, days: sp.days, rate: sp.rate, mm: sp.mm, taw: sp.taw, awc: AWC[soil], yield: mv.yield * cf.factor, yUnit: (cf.unit || 'Mg/ha').split(' ')[0], irr: mv.irr, drain: mv.drain, rel: rl, rec: adv ? adv.rec : null, why: adv ? adv.why : null };
+};
 function n1Choice(y, sf, sim, dd) {
   const cl = window.CROPLIB && CROPLIB.crops[state.crop], cropLbl = (CROPS[state.crop] || {}).label || state.crop, p = cl && cl.p != null ? cl.p : 0.55;
   const fieldKinds = ['maize', 'wheat', 'sorghum', 'millet', 'rice', 'cotton', 'soybean', 'groundnut', 'legume', 'cowpea', 'mustard'], standard = !cl ? true : (cl.group === 'field' && (fieldKinds.includes(cl.kind) || /alfalfa|lucerne|grain|cereal/i.test(cl.label))) && p >= 0.5;
@@ -5139,6 +5157,7 @@ function n1Choice(y, sf, sim, dd) {
   const R45 = ['the soil is sandy and dries out fast', 'the system needs several days for a full round', 'the crop is at flowering or pollination'], R50 = ['it is a standard field crop', 'the soil holds much water', 'the system covers the whole field quickly'];
   const join = a => a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1];
   const why = rec === 0.45 ? 'Advice for you: f = 0.45, because ' + join(Q45.map((q, i) => q[0] ? R45[i] : null).filter(Boolean)) + '. Irrigating a little earlier keeps the crop out of stress while the round goes on.' : 'Advice for you: f = 0.50' + (n50 ? ', because ' + join(Q50.map((q, i) => q[0] ? R50[i] : null).filter(Boolean)) : '') + '. The soil can give half of its available water before the crop feels it, with fewer irrigations.';
+  window.__N1ADV = { soil: sf, rec, why, cur };
   sidWrap(why + ' Now: f = ' + cur.toFixed(2) + '.', 26, y + 226, W - 52, { s: 9.6, b: true, c: rec === 0.45 ? '#8A5A00' : '#1E5A2A' }, 12);
 }
 
