@@ -73,6 +73,12 @@ The definitions are Eqs. (11.18)–(11.19), (12.19) and (13.11). The Design tab 
 
 ## Charts
 
+On the seasonal layers the Charts tab has one chart for each part of the layer, over the twenty seasons, with the year on the clock marked and the rainfed seasons dashed. Under each chart a line tells how the quantity varies: its mean, the 10 to 90 % range, the lowest and the highest season, and the variation from year to year.
+
+* *Reliability over 20 seasons:* irrigation, drainage below 1 m, grain yield, nitrate leaching, evapotranspiration, days of crop water stress.
+* *Full water balance:* rain and irrigation, transpiration and soil evaporation, other evaporation, drainage and drainage through biopores, runoff.
+* *Nitrogen budget:* nitrogen supplied, taken up and lost.
+
 With a design layer open and run, the tab draws the charts of the run:
 
 | Design | Charts |
