@@ -100,10 +100,11 @@ tools/make_peryear.py                extracts the per-year data from Data/Compre
 app/assets/                          logo (SVG/PNG)
 build/icon.ico icon.png              application icon
 docs/USER_GUIDE.md                   how to use SWAFL
-docs/SWAFL_Manual.pdf                complete technical manual (sources in docs/manual/)
+docs/manual_v1.1.0/                  manual of version 1.1.0 in three volumes (guide, atlas, atlas by soil and crop)
+docs/SWAFL_Manual.pdf                manual of version 1.0 (sources in docs/manual/)
 ```
 
-See [docs/USER_GUIDE.md](docs/USER_GUIDE.md) for the step-by-step guide and [docs/SWAFL_Manual.pdf](docs/SWAFL_Manual.pdf) for the complete technical manual (every control, layer and equation, with citations). Author: Naziru Halilu. MIT licence.
+See [docs/USER_GUIDE.md](docs/USER_GUIDE.md) for the step-by-step guide and [docs/manual_v1.1.0](docs/manual_v1.1.0/README.md) for the manual of version 1.1.0 (three volumes: every control, layer and equation, with screenshots of every screen; the manual of version 1.0 stays in [docs/SWAFL_Manual.pdf](docs/SWAFL_Manual.pdf)). Author: Naziru Halilu. MIT licence.
 
 ## Troubleshooting
 

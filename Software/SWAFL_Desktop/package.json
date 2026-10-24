@@ -55,10 +55,10 @@
     },
     "extraResources": [
       {
-        "from": "docs",
+        "from": "docs/manual_v1.1.0",
         "to": ".",
         "filter": [
-          "SWAFL_Manual.pdf"
+          "SWAFL_Manual_v1.1.0_Vol1_Guide.pdf"
         ]
       }
     ]
