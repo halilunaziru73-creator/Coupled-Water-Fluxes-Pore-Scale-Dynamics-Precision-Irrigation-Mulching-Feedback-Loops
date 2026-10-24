@@ -18,7 +18,7 @@ const Dash = (() => {
   const SEC = (id, title, sub, inner) => '<div class="dsec' + (shut[id] ? ' shut' : '') + '" data-sec="' + id + '"><h4 data-tog="' + id + '"><b><span class="tw">' + (shut[id] ? '&#9654;' : '&#9660;') + '</span>' + title + '</b>' + (sub ? '<span>' + sub + '</span>' : '') + '</h4><div class="dsb"' + (shut[id] ? ' hidden' : '') + '>' + inner + '</div></div>';
 
   const CB = (k, title, inner) => SEC('ch-' + k, title, '', '<div class="chart">' + inner + '</div>');
-  let dayCache = { key: '', D: null }, layerCache = { key: '', L: null }, n1Chart = null, N1T = null;
+  let dayCache = { key: '', D: null }, layerCache = { key: '', L: null }, n1Chart = null, N1T = null, v7Chart = null;
   function results(s) {
     const key = s.date + '|' + JSON.stringify(s.state) + '|' + s.year + '|' + ((s.wx && s.wx.key) || '');
     if (dayCache.key !== key) { dayCache = { key, D: E.day() }; }
@@ -44,6 +44,26 @@ const Dash = (() => {
           (N.q50.length ? '<div class="n1q"><div><h5>Choose f = 0.50 if</h5><ul>' + N.q50.map(tick).join('') + '</ul></div><div><h5>Choose f = 0.45 if</h5><ul>' + N.q45.map(tick).join('') + '</ul></div></div>' : '') +
           '<div class="dnote">Click another soil in the drawing to see its numbers here.</div>');
         n1Chart = N.season; N1T = N.fT; } }
+      else if (s.scene === 'v7') { let V = null; try { V = E.json('v7Dash()'); } catch (e) {} if (V) { const r = (a2, b2, c2) => '<tr><td>' + a2 + '</td><td><b' + (c2 ? ' style="color:' + c2 + '"' : '') + '>' + b2 + '</b></td></tr>', f1 = v => v == null || !isFinite(v) ? '-' : (+v).toFixed(1), sg = v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(1);
+        const mx = Math.max(...V.soils.map(q => Math.max(q.till, q.cons)), 1), bars = V.soils.map(q => '<div class="v7row' + (q.me ? ' me' : '') + '"><span class="v7n">' + UI.esc(q.n) + ' <small>' + q.clay + ' % clay</small></span><span class="v7b"><i class="t" style="width:' + (100 * q.till / mx).toFixed(1) + '%"></i><em>' + sg(q.till) + '</em><br><i class="c" style="width:' + (100 * q.cons / mx).toFixed(1) + '%"></i><em>' + sg(q.cons) + '</em></span></div>').join('');
+        const tbl = '<table class="tbl v7g"><tr><th>Tillage</th>' + V.tcs.map((t, i) => '<th' + (i === V.ci ? ' class="on"' : '') + '>' + t + '</th>').join('') + '</tr>' + V.grid.map(g => '<tr' + (g.n === V.till ? ' class="on"' : '') + '><td>' + g.n + '</td>' + g.d.map((d, i) => '<td' + (i === V.ci && g.n === V.till ? ' class="me"' : '') + '>' + f1(d) + '</td>').join('') + '</tr>').join('') + '</table>';
+        const lead = V.lead === 'none' ? 'neither driver' : V.lead, b0 = V.best[0], adv = V.lead === 'none' ? 'Drainage of this soil hardly moves with tillage or settling: choose the tillage for other reasons (fuel, erosion, weeds).' :
+          (b0.n === V.till ? 'Your tillage, ' + V.till + ', already gives the least drainage (' + f1(b0.d) + ' mm a year) at this consolidation rate.' : 'Changing from ' + V.till + ' to ' + b0.n + ' tillage would cut drainage from ' + f1(V.drainNow) + ' to ' + f1(b0.d) + ' mm a year and nitrate leaching from ' + f1(V.nlNow) + ' to ' + f1(b0.nl) + ' kg N/ha, with a yield of ' + (+b0.y).toFixed(2) + ' against ' + (+V.yNow).toFixed(2) + ' Mg/ha.');
+        h += SEC('layer', 'Soil hydraulic drivers: ' + UI.esc(V.soil), 'your soil and the ten soils', '<table class="n1t">' +
+          r('Soil', UI.esc(V.soil) + ' · sand ' + V.sand + ' %, silt ' + V.silt + ' %, clay ' + V.clay + ' %') +
+          r('Your settings', V.till + ' tillage · consolidation rate ' + V.tc + ' per day' + (V.pore != null ? ' · topsoil pore space ' + (+V.pore).toFixed(2) : '')) +
+          r('Drainage below 1 m', f1(V.drainNow) + ' mm a year (range over all settings ' + f1(V.range[0]) + ' to ' + f1(V.range[1]) + ')', '#00695C') +
+          r('Nitrate leaching', f1(V.nlNow) + ' kg N/ha a year', '#B01E14') +
+          r('Yield · irrigation', (+V.yNow).toFixed(2) + ' Mg/ha · ' + f1(V.irrNow) + ' mm a year') +
+          r('Effect of tillage', sg(V.effTill) + ' mm a year (conventional against no-till)', '#1B4FA0') +
+          r('Effect of the consolidation rate', sg(V.effCons) + ' mm a year (fastest against slowest)', '#A8620F') +
+          r('Leading driver', lead + ' · rank ' + V.rank + ' of 10 soils for sensitivity', '#12303A') + '</table>' +
+          '<div class="chart"><canvas id="v7dc" style="height:220px"></canvas></div><div class="dnote">Drainage below 1 m of ' + UI.esc(V.soil.toLowerCase()) + ' (20-year mean of the simulations) against the consolidation rate, for the three tillage systems; the red line is your consolidation rate.</div>' +
+          '<div class="dnote"><b>Drainage (mm a year) for every setting</b></div>' + tbl +
+          '<div class="n1adv"><b>Leading driver: ' + UI.esc(lead) + '.</b> ' + UI.esc(V.why) + ' ' + UI.esc(adv) + '</div>' +
+          '<div class="dnote"><b>The ten soils</b>, by clay content: <i class="v7k t"></i> tillage, <i class="v7k c"></i> consolidation rate (change of drainage, mm a year)</div><div class="v7list">' + bars + '</div>' +
+          '<div class="dnote">Change the soil, the tillage or the consolidation rate in Properties to see their numbers here.</div>');
+        v7Chart = V; } }
       else {
       const L = (Layers.DESIGN || []).includes(s.scene) && !runOn(s.scene) ? null : layerCache.L; if (L && L.length) h += SEC('layer', UI.esc(Layers.nameOf(s.scene) || 'This layer'), 'key numbers of this layer', '<ul class="dlist">' + L.map(l => '<li>' + UI.esc(l) + '</li>').join('') + '</ul>'); } }
     if (D) {
@@ -67,6 +87,7 @@ const Dash = (() => {
     h += SEC('avg', '20-year averages at these settings', baseline ? 'changes against the pinned baseline' : 'pin a baseline to compare', g + '</div>');
     setBody(h + '</div>');
     if (s.scene === 'n1') { n1Key = ''; n1Live(true); }
+    if (s.scene === 'v7' && v7Chart) { const V = v7Chart, cv = document.getElementById('v7dc'); if (cv) xyChart(cv, { x: V.tcs.map((_, i) => i), xl: 'consolidation rate (per day)', yl: 'drainage (mm/yr)', ymin: 0, xstep: 1, xfmt: q => String(V.tcs[Math.round(q)]), series: V.grid.map((g, i) => ({ y: g.d, c: ['#1B4FA0', '#2E8B57', '#A8620F'][i], n: g.n + (g.n === V.till ? ' (yours)' : ''), w: g.n === V.till ? 3 : 1.8 })), marks: [{ x: V.ci, t: 'your rate', c: '#C00000', solid: true }] }); }
   }
 
   const DL = {

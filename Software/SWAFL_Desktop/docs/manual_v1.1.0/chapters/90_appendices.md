@@ -212,6 +212,10 @@ Allen, R. G., Pereira, L. S., Raes, D., and Smith, M. (1998). *Crop evapotranspi
 
 Barnes, E. M., Clarke, T. R., Richards, S. E., et al. (2000). Coincident detection of crop water stress, nitrogen status and canopy density using ground-based multispectral data. *Proceedings of the 5th International Conference on Precision Agriculture*, Bloomington, MN.
 
+Barnes, R., Lehman, C., and Mulla, D. (2014). Priority-flood: an optimal depression-filling and watershed-labeling algorithm for digital elevation models. *Computers & Geosciences* 62, 117–127.
+
+Bausch, W. C., and Neale, C. M. U. (1987). Crop coefficients derived from reflected canopy radiation: a concept. *Transactions of the ASAE* 30, 703–709.
+
 Blasius, H. (1913). Das Ähnlichkeitsgesetz bei Reibungsvorgängen in Flüssigkeiten. *Forschungsarbeiten auf dem Gebiete des Ingenieurwesens* 131.
 
 Brouwer, C., Prins, K., Kay, M., and Heibloem, M. (1988). *Irrigation water management: irrigation methods*. FAO Training Manual 9. FAO, Rome.
@@ -227,6 +231,8 @@ Christiansen, J. E. (1942). *Irrigation by sprinkling*. University of California
 Criddle, W. D., Davis, S., Pair, C. H., and Shockley, D. G. (1956). *Methods for evaluating irrigation systems*. USDA Soil Conservation Service, Agriculture Handbook 82.
 
 Elliott, R. L., and Walker, W. R. (1982). Field evaluation of furrow infiltration and advance functions. *Transactions of the ASAE* 25(2), 396–400.
+
+Frangi, A. F., Niessen, W. J., Vincken, K. L., and Viergever, M. A. (1998). Multiscale vessel enhancement filtering. *MICCAI'98*, Lecture Notes in Computer Science 1496, 130–137.
 
 Gao, B.-C. (1996). NDWI: a normalized difference water index for remote sensing of vegetation liquid water from space. *Remote Sensing of Environment* 58, 257–266.
 
@@ -256,6 +262,8 @@ Manning, R. (1891). On the flow of water in open channels and pipes. *Transactio
 
 Merriam, J. L., and Keller, J. (1978). *Farm irrigation system evaluation: a guide for management*. Utah State University, Logan.
 
+Moore, I. D., and Wilson, J. P. (1992). Length-slope factors for the Revised Universal Soil Loss Equation: simplified method of estimation. *Journal of Soil and Water Conservation* 47, 423–428.
+
 Mualem, Y. (1976). A new model for predicting the hydraulic conductivity of unsaturated porous media. *Water Resources Research* 12(3), 513–522.
 
 Nobel, P. S. (2009). *Physicochemical and environmental plant physiology*, 4th ed. Academic Press, Amsterdam.
@@ -264,17 +272,25 @@ Philip, J. R. (1957). Evaporation, and moisture and heat fields in the soil. *Jo
 
 Poggio, L., de Sousa, L. M., Batjes, N. H., et al. (2021). SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty. *SOIL* 7, 217–240.
 
+Renard, K. G., and Freimund, J. R. (1994). Using monthly precipitation data to estimate the R-factor in the revised USLE. *Journal of Hydrology* 157, 287–306.
+
 Ritchie, J. T. (1972). Model for predicting evaporation from a row crop with incomplete cover. *Water Resources Research* 8(5), 1204–1213.
 
 Rouse, J. W., Haas, R. H., Schell, J. A., and Deering, D. W. (1974). Monitoring vegetation systems in the Great Plains with ERTS. *Third ERTS Symposium*, NASA SP-351, 309–317.
 
 Saxton, K. E., and Rawls, W. J. (2006). Soil water characteristic estimates by texture and organic matter for hydrologic solutions. *Soil Science Society of America Journal* 70(5), 1569–1578.
 
+Sharpley, A. N., and Williams, J. R. (1990). *EPIC, Erosion/Productivity Impact Calculator: 1. Model documentation*. USDA Technical Bulletin 1768.
+
 Tucker, C. J. (1979). Red and photographic infrared linear combinations for monitoring vegetation. *Remote Sensing of Environment* 8, 127–150.
 
 van den Honert, T. H. (1948). Water transport in plants as a catenary process. *Discussions of the Faraday Society* 3, 146–153.
 
+van der Knijff, J. M., Jones, R. J. A., and Montanarella, L. (1999). *Soil erosion risk assessment in Italy*. European Soil Bureau, JRC Ispra.
+
 van Genuchten, M. Th. (1980). A closed-form equation for predicting the hydraulic conductivity of unsaturated soils. *Soil Science Society of America Journal* 44(5), 892–898.
+
+Vandaele, K., Poesen, J., Govers, G., and van Wesemael, B. (1996). Geomorphic threshold conditions for ephemeral gully incision. *Geomorphology* 16, 161–173.
 
 Walker, W. R., and Skogerboe, G. V. (1987). *Surface irrigation: theory and practice*. Prentice-Hall, Englewood Cliffs, NJ.
 

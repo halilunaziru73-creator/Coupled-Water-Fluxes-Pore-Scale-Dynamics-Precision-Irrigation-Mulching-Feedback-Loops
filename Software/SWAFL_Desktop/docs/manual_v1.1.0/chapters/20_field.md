@@ -160,6 +160,51 @@ The advice names the best surface source within 1.5 km (with its distance, direc
 
 The table lists each system with its score, the reasons, and the application efficiency of the SWAFL design of that system as it stands. **Use** sets the system (and the slope of the site) in the field sketch; then *Turn the sketch into the design* and run it.
 
+## Precision maps: variable-rate irrigation, ephemeral gullies and soil loss
+
+Section 4 of the panel makes three maps of the demarcated field. Each is a choice of *Show on the map*, has its legend on the map, gives its values under the cursor, and goes into the report (one page with the three maps).
+
+![The variable-rate irrigation map: five zones of net depth, edited with the − and + buttons, the volume against one uniform depth (test data).](images/ui/prec_vri.jpg){width=100%}
+
+**Variable-rate irrigation.** **Variable-rate irrigation map** needs the indices of the field (Sentinel-2, the photo, or simulated). The base depth is the net depth of one irrigation of the SWAFL design in use (the film of Chapter 18), or else $Z_n = \mathrm{AWC}\,z_r\,f_T$. Each cell gets
+
+$$
+d_i = d_0\ \mathrm{clip}\!\Bigl(\frac{K_{cb,i}}{\overline{K_{cb}}}\,\Bigl[1+0.35\,\mathrm{clip}\Bigl(\frac{\overline{\mathrm{NDWI}}-\mathrm{NDWI}_i}{2\,\sigma_{\mathrm{NDWI}}};\,-1.5,\,1.5\Bigr)\Bigr];\ r_{lo},\ r_{hi}\Bigr),\qquad K_{cb}=0.15+\frac{\mathrm{NDVI}-0.15}{0.7},
+\tag{20.7}
+$$
+
+*Provenance (Eq. 20.7):* **[Engineered]** after the linear $K_{cb}$–NDVI relations of the FAO-56 remote-sensing literature (Bausch and Neale, 1987; Allen et al., 1998): stronger crop and drier canopy get more water; $r_{lo}$, $r_{hi}$ default to 50 and 150 % of $d_0$. With the photo, VARI is put on the NDVI scale.
+
+Cells that the photo shows as water, buildings or roads get no water. The depths are grouped into 3 to 7 zones of equal area; each zone takes its mean depth (to 0.5 mm), which you can change with **−** and **+**. The panel gives the area, depth and volume of each zone, and the volume pumped against one uniform depth (the water saved or added). The colours can be Blues, Viridis, red to blue or Greens. **Prescription GeoJSON** (a polygon for every cell with the zone, the net and gross rate in mm and the rate in m³/ha, WGS 84) and **Zones CSV** go to the VRI controller or a GIS.
+
+![Ephemeral gully risk with the predicted gullies, and the terrain values under the cursor (test data).](images/ui/prec_gully.jpg){width=100%}
+
+**Ephemeral gullies.** **Ephemeral gullies and soil loss** reads the terrain of the field and 250 m around it from open elevation tiles (AWS Terrain Tiles; about 5 m cells at the equator, from SRTM, Copernicus and national lidar where available). The terrain is smoothed (5-cell binomial filter), its sinks are filled (priority flood, Barnes et al., 2014), and every cell gets its D8 flow direction, upslope area $A$ and slope $S$. An ephemeral gully is likely where
+
+$$
+G=\frac{S\,A^{0.4}}{0.025}\ \ge 1\qquad (A\ \text{in ha},\ S\ \text{in m/m}),
+\tag{20.8}
+$$
+
+*Provenance (Eq. 20.8):* **[Literature]**: the topographic threshold of ephemeral gullies in cultivated fields, $S = 0.025\,A^{-0.4}$ (Vandaele et al., 1996).
+
+From every cell above the threshold with at least 0.1 ha upslope, the gully follows the flow lines down through the field. The map shows the risk ($G\ge1$ likely, 0.5–1 moderate, 0.25–0.5 low) and the predicted gullies. **Computer vision of the photo:** the satellite photo of the same area is searched for linear features with a Hessian ridge and valley filter at two scales (Frangi et al., 1998). A gully along which at least 40 % of the cells have a feature more than two standard deviations above the mean is drawn in purple, *seen in the photo*. **Gullies GeoJSON** exports the lines with their length, upslope area, mean slope and photo flag.
+
+**Soil loss (RUSLE).**
+
+$$
+A_s=R\,K\,LS\,C\,P,\quad R=0.0483\,P_a^{1.61}\ (P_a\le850\ \mathrm{mm}),\quad LS=\Bigl(\frac{A/w}{22.13}\Bigr)^{0.4}\Bigl(\frac{\sin\beta}{0.0896}\Bigr)^{1.3},\quad C=e^{-2\,\mathrm{NDVI}/(1-\mathrm{NDVI})},
+\tag{20.9}
+$$
+
+*Provenance (Eq. 20.9):* **[Literature]**: Renard and Freimund (1994) for $R$ from the annual rain of the weather in use ($587.8-1.219P_a+0.004105P_a^2$ above 850 mm); $K$ from sand, silt, clay and organic carbon (EPIC, Sharpley and Williams, 1990), from SoilGrids after a site analysis or from the SWAFL soil; $LS$ after Moore and Wilson (1992) with $w$ the cell width; $C$ from NDVI (van der Knijff et al., 1999), 0.35 without an index; $P$ chosen in the panel (1, 0.6 contour tillage, 0.3 contour strips, 0.15 terraces).
+
+The panel gives the relief and slope of the field, the share above the gully threshold, the number and length of the gullies (and how many are seen in the photo), the mean soil loss, the loss exceeded on 10 % of the field and the tonnes a year, with the advice that follows (grassed waterways on the gully lines, residue and contour tillage, drip or low-rate sprinklers on the steep parts).
+
+![Soil loss (RUSLE) cut to the field (test data).](images/ui/prec_rusle.jpg){width=78%}
+
+![The precision maps in the field report (test data).](images/ui/prec_report.jpg){width=82%}
+
 ## Use and export
 
 *Use this field in the sketch and the designs* makes the demarcated field the sketch (true lengths, centre coordinates kept), and *Irrigation layout* draws its system on the map. *Online weather of this field* downloads the daily weather of the centre of the field and runs the program on it. The report has a **title, an author and an organisation**, a **resolution of 96, 150, 300 or 600 dpi** and a format:

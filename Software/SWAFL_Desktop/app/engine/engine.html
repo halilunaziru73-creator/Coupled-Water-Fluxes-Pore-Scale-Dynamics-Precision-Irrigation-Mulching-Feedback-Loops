@@ -4099,6 +4099,20 @@ function TW(str, x, y, maxW, o) {
   str.split(' ').forEach(w => { const test = line ? line + ' ' + w : w; if (ctx.measureText(test).width > maxW && line) { T(line, x, yy, o); yy += o.lh || 14; line = w; } else line = test; });
   if (line) { T(line, x, yy, o); yy += o.lh || 14; } return yy;
 }
+// the dashboard of the soil hydraulic drivers: the soil in use, its drainage under the three tillage systems and the five
+// consolidation rates, the effect of each driver in the ten soils, the leading driver and what it means on the farm
+window.v7Dash = function () {
+  const rows = v7Data(), me = rows.find(r => r.s === state.soil), rs = v7Reason(me), E5 = DATA.e5[state.soil], tex = DATA.texture[state.soil], tc = TC_VALUES[state.tcIdx];
+  const val = (till, t, k) => { const r = E5.find(x => x.till === till && Math.abs(x.tc - t) < 1e-9); return r ? r[k] : null; };
+  const tills = [['conv', 'conventional'], ['reduced', 'reduced'], ['notill', 'no-till']], grid = tills.map(([k, n]) => ({ k, n, d: TC_VALUES.map(t => val(k, t, 'drainage')), nl: TC_VALUES.map(t => val(k, t, 'nl')), y: TC_VALUES.map(t => val(k, t, 'yield')), irr: TC_VALUES.map(t => val(k, t, 'irrigation')), ev: TC_VALUES.map(t => val(k, t, 'evap')) }));
+  const cur = grid.find(g => g.k === state.till) || grid[0], ci = TC_VALUES.indexOf(tc), m = model(VFF_VALUES[state.vffIdx], RAIN_VALUES[state.rainIdx]);
+  let pore = null; try { pore = poreIdx(state.till, 120, tc); } catch (e) {}
+  const dAll = grid.flatMap(g => g.d).filter(v => v != null), best = grid.map(g => ({ n: g.n, k: g.k, d: g.d[ci], nl: g.nl[ci], y: g.y[ci] })).sort((a, b) => a.d - b.d);
+  const rank = rows.slice().sort((a, b) => (b.till + b.cons) - (a.till + a.cons)).findIndex(r => r.s === state.soil) + 1;
+  return { soil: DATA.soil_labels[state.soil], sand: tex.sand, silt: tex.silt, clay: tex.clay, till: (tills.find(t => t[0] === state.till) || tills[0])[1], tc, tcs: TC_VALUES, ci, pore,
+    drainNow: cur.d[ci], nlNow: cur.nl[ci], yNow: cur.y[ci], irrNow: cur.irr[ci], evNow: cur.ev[ci], drainModel: m.drain, effTill: me.till, effCons: me.cons, lead: rs.lead, data: rs.data, why: rs.why, rank,
+    range: [Math.min(...dAll), Math.max(...dAll)], grid, best, soils: rows.map(r => ({ n: r.name, clay: r.clay, till: r.till, cons: r.cons, me: r.s === state.soil })) };
+};
 function v7Reason(me) {
   const lead = me.till < 0.3 && me.cons < 0.3 ? 'none' : me.till >= me.cons ? 'tillage' : 'consolidation';
   const sandy = DATA.texture[me.s].sand >= 60;

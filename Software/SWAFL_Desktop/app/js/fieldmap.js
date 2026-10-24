@@ -69,11 +69,12 @@ const FieldMap = (() => {
       '<div class="pr" id="fmWhenR"><label>Simulated date</label><select id="fmWhen"><option value="now">The working date of the project</option><option value="peak">The peak of the crop (most cover in the last 12 months)</option></select></div>' +
       '<div class="fmrow" id="fmS2R"><label>Look back <input id="fmDays" type="number" value="' + F.days + '" min="5" max="730" style="width:60px"> days</label><label>Clouds below <input id="fmCloud" type="number" value="' + F.cloud + '" min="1" max="100" style="width:50px"> %</label></div>' +
       '<button class="btn pri" id="fmRun">Compute the indices of the field</button><div id="fmStat" class="pnote"></div>' +
-      '<div class="fmrow" id="fmViewR" style="display:none"><label>Show on the map <select id="fmView"><option value="cont">Continuous colours</option><option value="zones">Management zones (5 classes)</option><option value="cover">Land cover read from the photo</option></select></label>' +
+      '<div class="fmrow" id="fmViewR" style="display:none"><label>Show on the map <select id="fmView"><option value="cont">Continuous colours</option><option value="zones">Management zones (5 classes)</option><option value="cover">Land cover read from the photo</option><option value="vri">Variable-rate irrigation zones</option><option value="gully">Ephemeral gully risk</option><option value="rusle">Soil loss (RUSLE)</option></select></label>' +
       '<label>Rendering <select id="fmSmooth"><option value="1">Smooth</option><option value="0">Pixels (as measured)</option></select></label>' +
       '<label>Compare with <select id="fmCmp"><option value="">nothing (one map)</option>' + KEYS.map(k => '<option value="' + k + '">' + k + ' side by side</option>').join('') + '</select></label></div><div id="fmRes"></div>' +
       '<h4>3. The site: soil, slope, water sources and the irrigation system</h4><button class="btn pri" id="fmSite">Analyse the site (real open data)</button><div id="fmSiteSt" class="pnote">Reads the water features around the field (OpenStreetMap), water seen in the photo, the ground elevation (Copernicus DEM) and the soil (SoilGrids), then suggests where to take the water from and which irrigation system suits the field.</div><div id="fmSiteRes"></div>' +
-      '<h4>4. Use and export</h4><div class="fmrow"><button class="btn" id="fmUse">Use this field in the sketch and the designs</button><button class="btn" id="fmWx" title="Download the daily weather of this field (Open-Meteo) and run the program on it">Online weather of this field</button></div>' +
+      '<h4>4. Precision maps: variable-rate irrigation, gullies and soil loss</h4><div class="fmrow"><button class="btn pri" id="fmVRI" title="Irrigation depth of every part of the field, from the satellite indices and the SWAFL simulation">Variable-rate irrigation map</button><button class="btn pri" id="fmEro" title="Terrain, ephemeral gullies (topographic threshold and the photo) and soil loss (RUSLE)">Ephemeral gullies and soil loss</button></div><div id="fmPrecSt" class="pnote">The variable-rate map needs the indices of the field (section 2). The erosion maps read the terrain from open elevation tiles (internet).</div><div id="fmPrecRes"></div>' +
+      '<h4>5. Use and export</h4><div class="fmrow"><button class="btn" id="fmUse">Use this field in the sketch and the designs</button><button class="btn" id="fmWx" title="Download the daily weather of this field (Open-Meteo) and run the program on it">Online weather of this field</button></div>' +
       '<div class="fmrow"><label>Title <input id="fmTitle" value="' + esc(F.title) + '" style="width:100%"></label></div>' +
       '<div class="fmrow"><label>Author <input id="fmAuthor" value="' + esc(F.author) + '" style="width:100%"></label><label>Organisation <input id="fmOrg" value="' + esc(F.org) + '" style="width:100%"></label></div>' +
       '<div class="fmrow"><label>Resolution <select id="fmDpi">' + [96, 150, 300, 600].map(d => '<option' + (d === F.dpi ? ' selected' : '') + ' value="' + d + '">' + d + ' dpi</option>').join('') + '</select></label><label>Format <select id="fmFmt"><option value="pdf">PDF (A4)</option><option value="png">PNG image (A4)</option></select></label></div>' +
@@ -108,7 +109,7 @@ const FieldMap = (() => {
     $('fmGo').onclick = search; $('fmQ').addEventListener('keydown', e => { if (e.key === 'Enter') search(); });
     $('fmLL').onclick = () => { const a = parseFloat($('fmLat').value), b = parseFloat($('fmLon').value); if (isFinite(a) && isFinite(b)) F.map.setView([a, b], 16); };
     $('fmGE').onclick = () => { const c = F.pts.length > 2 ? centroid(F.pts) : [F.map.getCenter().lat, F.map.getCenter().lng]; UI.openExternal('https://earth.google.com/web/@' + c[0].toFixed(6) + ',' + c[1].toFixed(6) + ',400a,900d,35y,0h,0t,0r'); };
-    $('fmSketch').onclick = placeSketch; $('fmSite').onclick = siteRun; $('fmWx').onclick = fieldWeather; $('fmRun').onclick = compute; $('fmUse').onclick = () => useField();
+    $('fmSketch').onclick = placeSketch; $('fmSite').onclick = siteRun; $('fmVRI').onclick = () => FieldPrec.runVRI(); $('fmEro').onclick = () => FieldPrec.runEro(); FieldPrec.panel(); $('fmWx').onclick = fieldWeather; $('fmRun').onclick = compute; $('fmUse').onclick = () => useField();
     $('fmRep').onclick = exportReport; $('fmGJ').onclick = exportGeoJSON; $('fmCSV').onclick = exportCSV;
     ['fmTitle', 'fmAuthor', 'fmOrg'].forEach(id => $(id).addEventListener('input', () => { F.title = $('fmTitle').value; F.author = $('fmAuthor').value; F.org = $('fmOrg').value; }));
     $('fmDpi').onchange = e => { F.dpi = +e.target.value; }; $('fmFmt').onchange = e => { F.fmt = e.target.value; }; $('fmFmt').value = F.fmt;
@@ -155,7 +156,7 @@ const FieldMap = (() => {
   // the demarcation changed: the simulated indices follow at once; satellite indices are read again on request
   function changed() {
     if (F.linked && F.pts.length > 2) useField(true);   // the sketch and its irrigation layout follow the new outline
-    F.cv = null; F.site = null; clearSite(); if (F.res && F.res.sim && F.pts.length > 2) { try { F.res = fromSim(); } catch (e) { F.res = null; } }
+    F.cv = null; F.site = null; clearSite(); FieldPrec.reset(); FieldPrec.panel(); if (PRECV[F.view]) F.view = 'cont'; if (F.res && F.res.sim && F.pts.length > 2) { try { F.res = fromSim(); } catch (e) { F.res = null; } }
     else if (F.res) { F.res = null; const st = document.getElementById('fmStat'); if (st) st.textContent = 'The field changed: press Compute to read the satellite data again for the new outline.'; }
     if (F.pts.length < 3) F.res = null; clearOverlay(); redraw(); if (F.res) showRes(); else { const r = document.getElementById('fmRes'); if (r) r.innerHTML = ''; const v = document.getElementById('fmViewR'); if (v) v.style.display = 'none'; legend(); }
   }
@@ -168,7 +169,8 @@ const FieldMap = (() => {
   function valueAt(k, lat, lon) { if (!F.res) return NaN; const G = F.res.G, l = local([lat, lon], G.o), i = Math.floor((l[0] - G.x0) / G.cell), j = Math.floor((G.y1 - l[1]) / G.cell); if (i < 0 || j < 0 || i >= G.nx || j >= G.ny || !inside(lat, lon, F.pts)) return NaN; return F.res.vals[RK().indexOf(k)][j * G.nx + i]; }
   function cursorInfo(ll) {
     const i = document.getElementById('fmInfo'); if (!i) return; let t = 'Cursor ' + ll.lat.toFixed(6) + ', ' + ll.lng.toFixed(6) + ' (' + dms(ll.lat, 'N', 'S') + ' ' + dms(ll.lng, 'E', 'W') + ') · zoom ' + F.map.getZoom();
-    if (F.res) { const v = valueAt(F.idx, ll.lat, ll.lng); if (isFinite(v)) { const z = zoneOf(F.idx, v); t += ' · <b>' + F.idx + ' ' + v.toFixed(3) + '</b> (' + IDX[F.idx].read(v) + ', zone ' + (z + 1) + ' of 5)'; if (F.cmp) { const v2 = valueAt(F.cmp, ll.lat, ll.lng); if (isFinite(v2)) t += ' · <b>' + F.cmp + ' ' + v2.toFixed(3) + '</b>'; } } }
+    if (PRECV[F.view]) { const t2 = FieldPrec.at(F.view, ll.lat, ll.lng); if (t2) t += ' · <b>' + t2 + '</b>'; }
+    else if (F.res) { const v = valueAt(F.idx, ll.lat, ll.lng); if (isFinite(v)) { const z = zoneOf(F.idx, v); t += ' · <b>' + F.idx + ' ' + v.toFixed(3) + '</b> (' + IDX[F.idx].read(v) + ', zone ' + (z + 1) + ' of 5)'; if (F.cmp) { const v2 = valueAt(F.cmp, ll.lat, ll.lng); if (isFinite(v2)) t += ' · <b>' + F.cmp + ' ' + v2.toFixed(3) + '</b>'; } } }
     i.innerHTML = t;
   }
   // the irrigation layout of the sketch, drawn on the map
@@ -331,11 +333,13 @@ const FieldMap = (() => {
     const m = F.res.S[RK()[q]] ? F.res.S[RK()[q]].mean : 0; for (let i = 0; i < a.length; i++) if (!isFinite(a[i])) a[i] = m; F.res._F[q] = a; return a;
   }
   function clearOverlay() { [['map', 'ov'], ['map2', 'ov2']].forEach(([m, o]) => { if (F[o] && F[m]) F[m].removeLayer(F[o]); F[o] = null; }); }
-  function overlay(mp, k) { if (F.view === 'cover' && F.cv && mp === F.map) return L.imageOverlay(F.cv.url, F.cv.bounds, { opacity: 0.85, interactive: false }).addTo(mp); const G = F.res.G; return L.imageOverlay(fieldCanvas(k, F.view, F.smooth).toDataURL(), [[G.sw[0], G.sw[1]], [G.ne[0], G.ne[1]]], { opacity: 0.9, interactive: false, className: F.smooth ? '' : 'fmov' }).addTo(mp); }
+  function overlay(mp, k) { if (PRECV[F.view] && mp === F.map) { const l = FieldPrec.layer(F.view); if (l) return l.addTo(mp); } if (F.view === 'cover' && F.cv && mp === F.map) return L.imageOverlay(F.cv.url, F.cv.bounds, { opacity: 0.85, interactive: false }).addTo(mp); const G = F.res.G; return L.imageOverlay(fieldCanvas(k, F.view, F.smooth).toDataURL(), [[G.sw[0], G.sw[1]], [G.ne[0], G.ne[1]]], { opacity: 0.9, interactive: false, className: F.smooth ? '' : 'fmov' }).addTo(mp); }
   function showOverlay() { if (!F.res || !F.map) return; clearOverlay(); F.ov = overlay(F.map, F.idx); if (F.map2 && F.cmp) F.ov2 = overlay(F.map2, F.cmp); if (F.poly) F.poly.setStyle({ fillOpacity: 0, color: '#FFFFFF', weight: 2.5 }); [F.layG, F.layG2].forEach(g => g && g.eachLayer(l => l.bringToFront && l.bringToFront())); }
   // the legend on the map: index, date and source, colour scale or zones, and the spread of the field (histogram)
   function legendCtl(mp) { const C = L.Control.extend({ onAdd() { const d = L.DomUtil.create('div', 'fmlegc'); d.title = 'Click the dark title to fold or unfold the legend'; d.addEventListener('click', e => { if (e.target.closest('.fmchip')) d.classList.toggle('min'); }); L.DomEvent.disableClickPropagation(d); L.DomEvent.disableScrollPropagation(d); return d; } }); const c = new C({ position: 'bottomleft' }); c.addTo(mp); return c; }
+  const PRECV = { vri: 1, gully: 1, rusle: 1 };
   function legendFor(k) {
+    if (PRECV[F.view] && k === F.idx) return FieldPrec.legend(F.view);
     if (!F.res) return '';
     if (F.view === 'cover' && F.cv && k === F.idx) return '<div class="fmchip">Land cover · satellite photo · image analysis</div><table>' + F.cv.shares.map(c => '<tr><td><i style="background:' + c.col + '"></i></td><td>' + c.name + '</td><td>' + c.ha.toFixed(2) + ' ha</td><td>' + c.pct.toFixed(0) + ' %</td></tr>').join('') + '</table>';
     const I = IDX[k], s = F.res.S[k], head = '<div class="fmchip">' + k + ' · ' + (F.res.photo ? '' : esc(F.res.date) + ' · ') + (F.res.sim ? 'simulated' : F.res.photo ? 'satellite photo' : 'Sentinel-2') + '</div>';
@@ -369,7 +373,7 @@ const FieldMap = (() => {
     el.querySelectorAll('tr[data-k]').forEach(tr => tr.onclick = () => { F.idx = tr.dataset.k; showRes(); });
     const vr = document.getElementById('fmViewR'); if (vr) vr.style.display = '';
     const cs = document.getElementById('fmCmp'); if (cs) { if (!RK().includes(F.cmp)) F.cmp = ''; cs.innerHTML = '<option value="">nothing (one map)</option>' + RK().filter(k => k !== F.idx).map(k => '<option value="' + k + '"' + (k === F.cmp ? ' selected' : '') + '>' + k + ' side by side</option>').join(''); }
-    const vs = document.getElementById('fmView'); if (vs) { vs.querySelector('option[value=cover]').disabled = !F.cv; if (F.view === 'cover' && !F.cv) F.view = 'cont'; vs.value = F.view; }
+    const vs = document.getElementById('fmView'); if (vs) { vs.querySelector('option[value=cover]').disabled = !F.cv; if (F.view === 'cover' && !F.cv) F.view = 'cont'; ['vri', 'gully', 'rusle'].forEach(v => { vs.querySelector('option[value=' + v + ']').disabled = !FieldPrec.has(v); if (F.view === v && !FieldPrec.has(v)) F.view = 'cont'; }); vs.value = F.view; }
     if (F.cv) el.insertAdjacentHTML('beforeend', coverTable());
     showOverlay(); redraw(); drawLayout();
   }
@@ -406,7 +410,8 @@ const FieldMap = (() => {
     try { c.getImageData(0, 0, 1, 1); } catch (e) { c.fillStyle = '#E9E6DE'; c.fillRect(0, 0, w, h); ok = 0; }   // a tile without permission would block the export: draw without tiles
     const u = small ? w / 600 : w / 900, path = () => { c.beginPath(); F.pts.forEach((p, i) => i ? c.lineTo(X(p[1]), Y(p[0])) : c.moveTo(X(p[1]), Y(p[0]))); c.closePath(); };
     if (!ok) { c.fillStyle = '#F4F1E8'; path(); c.fill(); }
-    if (withIdx === 'cover' && F.cv) { const im = new Image(); await new Promise(r => { im.onload = r; im.onerror = r; im.src = F.cv.url; }); const b = F.cv.bounds; c.save(); path(); c.clip(); c.globalAlpha = 0.9; c.drawImage(im, X(b[0][1]), Y(b[1][0]), X(b[1][1]) - X(b[0][1]), Y(b[0][0]) - Y(b[1][0])); c.restore(); }
+    if (typeof withIdx === 'string' && withIdx.indexOf('prec:') === 0) { const pic = FieldPrec.picture(withIdx.slice(5)); if (pic) { const b = pic.bounds; c.save(); c.globalAlpha = 0.9; c.drawImage(pic.cv, X(b[0][1]), Y(b[1][0]), X(b[1][1]) - X(b[0][1]), Y(b[0][0]) - Y(b[1][0])); c.restore(); } }
+    else if (withIdx === 'cover' && F.cv) { const im = new Image(); await new Promise(r => { im.onload = r; im.onerror = r; im.src = F.cv.url; }); const b = F.cv.bounds; c.save(); path(); c.clip(); c.globalAlpha = 0.9; c.drawImage(im, X(b[0][1]), Y(b[1][0]), X(b[1][1]) - X(b[0][1]), Y(b[0][0]) - Y(b[1][0])); c.restore(); }
     else if (withIdx && F.res) { const G = F.res.G, rc = fieldCanvas(key || F.idx, opt.view || (F.view === 'cover' ? 'cont' : F.view), F.smooth, Math.min(2400, Math.max(w, h))); c.save(); path(); c.clip(); c.imageSmoothingEnabled = F.smooth; c.globalAlpha = 0.92; c.drawImage(rc, X(G.nw[1]), Y(G.nw[0]), X(G.ne[1]) - X(G.nw[1]), Y(G.sw[0]) - Y(G.nw[0])); c.restore(); }
     // the irrigation layout of the sketch
     const D = F.lay ? layoutData() : null;
@@ -481,6 +486,13 @@ const FieldMap = (() => {
           p2.wrap(IDX[kk].use + (s2 ? '. Here: ' + IDX[kk].read(s2.mean) + '.' : ''), x, yb + bh + 69, bw, 7.6, { c: '#444' }); }
         const [ax, ay] = pos(5); p2.T('What the indices say together', ax, ay - 4, 9.5, { b: true }); let yy = ay + 8; advice().forEach(t => { yy = p2.wrap('• ' + t, ax, yy, bw, 8.2) + 3; });
         p2.foot(null, 2); }
+      if (FieldPrec.has('vri') || FieldPrec.has('gully')) { const p4 = page(); p4.head('precision maps'); let y4 = 80; p4.T('Precision maps of the field', 36, y4, 13, { b: true, c: '#0A246A' }); y4 += 12;
+        const two = [['vri', 'Variable-rate irrigation zones (net mm per irrigation)'], ['gully', 'Ephemeral gully risk and predicted gullies'], ['rusle', 'Soil loss, RUSLE (t/ha/yr)']].filter(q => FieldPrec.has(q[0]));
+        const mh4 = two.length > 2 ? 190 : 250;
+        for (const [v, t] of two) { p4.T(t, 36, y4 + 10, 9.5, { b: true }); const Mi = await mapImage(Math.round(523 * k), Math.round(mh4 * k), 'prec:' + v, null, false); p4.c.drawImage(Mi.cv, 36 * k, (y4 + 14) * k, 523 * k, mh4 * k);
+          const lg = document.createElement('div'); lg.innerHTML = FieldPrec.legend(v); const rows4 = [...lg.querySelectorAll('tr')].map(tr => [tr.querySelector('i') ? tr.querySelector('i').style.background : '#999', [...tr.querySelectorAll('td')].slice(1).map(td => td.textContent).join(' ')]); let lx = 36, ly = y4 + 14 + mh4 + 12; rows4.forEach(([col, txt]) => { p4.c.font = Math.round(7.8 * k) + 'px sans-serif'; const tw = p4.c.measureText(txt).width / k + 18; if (lx + tw > 559) { lx = 36; ly += 10; } p4.c.fillStyle = col; p4.c.fillRect(lx * k, (ly - 7) * k, 9 * k, 7 * k); p4.T(txt, lx + 12, ly, 7.8); lx += tw; }); y4 = ly + 8; }
+        const pn = document.getElementById('fmPrecRes'); if (pn) { const txt = [...pn.querySelectorAll('.fmadv')].map(e => e.textContent).join(' '); if (txt) p4.wrap(txt, 36, Math.min(y4 + 4, 780), 523, 8, { c: '#333' }); }
+        p4.foot(null, pages.length); }
       if (F.cv || F.site) { const p3 = page(); p3.head('the site'); let y3 = 80; p3.T('The site: land cover, soil, slope, water sources and the irrigation system', 36, y3, 13, { b: true, c: '#0A246A' }); y3 += 12;
         const M3 = await mapImage(Math.round(523 * k), Math.round(250 * k), F.cv ? 'cover' : false, null, false, { sources: true, extent: F.site ? F.site.water.list.slice(0, 8).filter(w2 => w2.d < 1200).map(w2 => w2.at) : [] }); p3.c.drawImage(M3.cv, 36 * k, y3 * k, 523 * k, 250 * k); y3 += 262;
         if (F.cv) { y3 = p3.wrap('Land cover read from the satellite photo by image analysis (colour and texture of every pixel, k-means clustering, named by rules, majority filter; ' + F.cv.mpp.toFixed(1) + ' m per pixel):', 36, y3, 523, 8.2, { c: '#333' });
@@ -494,7 +506,7 @@ const FieldMap = (() => {
           y3 += 4; p3.T('Which irrigation system suits this field', 36, y3, 11, { b: true, c: '#0A246A' }); y3 += 12;
           S3.systems.list.forEach((x, i) => { if (y3 > 790) return; p3.T(x.name + (i === 0 ? ' (best)' : ''), 40, y3, 8.4, { b: true }); p3.T(String(x.score), 175, y3, 8.4, { b: true }); const yy = p3.wrap(x.why.join('; ') || 'no strong reason for or against', 200, y3, 358, 7.4, { c: '#333' }); y3 = Math.max(y3 + 13, yy + 2); });
           p3.wrap('Open data: water features © OpenStreetMap contributors (Overpass API); elevation Copernicus DEM GLO-90 (Open-Meteo); soil ISRIC SoilGrids 250 m; photo © Esri, Maxar, Earthstar Geographics. Scores follow the FAO and USDA guidance for choosing an irrigation system; check on the ground.', 36, Math.min(y3 + 4, 806), 523, 7, { c: '#666' }); }
-        p3.foot(M3, 3); }
+        p3.foot(M3, pages.length); }
       const name = fileBase() + (F.res ? '_' + F.res.date.replace(/ /g, '_') : '');
       if (F.fmt === 'png') { for (let i = 0; i < pages.length; i++) await UI.saveFile(name + (pages.length > 1 ? '_page' + (i + 1) : '') + '.png', pngWithDpi(pages[i].toDataURL('image/png'), dpi), true, 'image/png'); }
       else { const pdf = pdfFromJpeg(pages.map(cv => cv.toDataURL('image/jpeg', 0.92)), W, H, { Title: F.title || 'Field report', Author: F.author || '', Subject: 'Field at ' + cen[0].toFixed(6) + ', ' + cen[1].toFixed(6) + ' (WGS 84), ' + (A / 1e4).toFixed(3) + ' ha', Keywords: 'SWAFL, NDVI, EVI, SAVI, NDRE, NDWI, ' + (F.place || ''), Creator: 'SWAFL 1.1.0' + (F.org ? ' · ' + F.org : '') }); await UI.saveFile(name + '.pdf', pdf, true, 'application/pdf'); }
@@ -590,7 +602,9 @@ const FieldMap = (() => {
     if (!L2) return; let b = null, bd = Infinity; L2.forEach(r => { if (r[2] == null) return; const d = Math.hypot(r[2] - so.sand, r[3] - so.clay); if (d < bd) { bd = d; b = r; } });
     if (!b) return; E.set({ soil: b[0] }); if (Sketch.setAnswers) Sketch.setAnswers({ soil: b[0] }); UI.toast('Soil of the project: ' + b[1] + ' (nearest to sand ' + so.sand.toFixed(0) + ' %, clay ' + so.clay.toFixed(0) + ' %)'); UI.log('Soil from SoilGrids: ' + b[1]);
   }
+  F.refresh = view => { if (!F.res && !FieldPrec.has(view)) return; F.view = view; const vr = document.getElementById('fmViewR'); if (vr) vr.style.display = ''; if (F.res) showRes(); else { clearOverlay(); const l = FieldPrec.layer(view); if (l) F.ov = l.addTo(F.map); legend(); } };
   if (typeof FieldSite !== 'undefined') FieldSite.init({ local, unlocal, centroid, areaM2, perim, inside, grid: mc => grid(mc), pack: (G, v, m, k) => pack(G, v, m, k) });
 
-  return { open, _F: F, _sim: () => { F.res = fromSim(); showRes(); return F.res; }, _pdf: pdfFromJpeg, _png: pngWithDpi, _area: areaM2 };
+  const _h = { F, local, unlocal, centroid, areaM2, perim, inside, valueAt: (k, a, b) => valueAt(k, a, b), refresh: v => F.refresh(v) };
+  return { open, _h, _F: F, _sim: () => { F.res = fromSim(); showRes(); return F.res; }, _pdf: pdfFromJpeg, _png: pngWithDpi, _area: areaM2 };
 })();

@@ -13,6 +13,10 @@ On *Trigger law* this block shows only the soil you are working on. It lists the
 ![The Trigger law block of the Dashboard: the soil, its numbers, the season chart and the advice.](images/ui/dash_n1.jpg){width=45%}
 
 
+On *Soil hydraulic drivers* this block shows your soil: its texture; your tillage, consolidation rate and topsoil pore space; its drainage below 1 m, nitrate leaching, yield and irrigation at these settings; the effect of tillage (conventional against no-till) and of the consolidation rate (fastest against slowest); the leading driver and the rank of the soil among the ten. A chart gives the drainage against the consolidation rate for the three tillage systems with your rate marked, a table the drainage for every setting, the advice says which tillage gives the least drainage and leaching, and bars compare the two effects in the ten soils.
+
+![The Soil hydraulic drivers block of the Dashboard.](images/ui/dash_v7.jpg){width=45%}
+
 The tab has four blocks.
 
 **Block 1: On the working date** (mm per day unless stated). Crop, root depth (cm), *Sensor / trigger* (the simulated relative depletion $f$ of the sensor layer and the trigger $f_T$; irrigation fires when $f\ge f_T$, Eq. 6.1), rain, irrigation, soil evaporation, transpiration and drainage on that day. They are the Engine 2 daily series of Chapter 5, read at the day index $k$ of the working date:
