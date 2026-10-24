@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SWAFL online</title>
+<style>
+  :root { --bg: #f4f3ef; --ink: #1b1f23; --mute: #555; --ac: #0a246a; --card: #fff; --rule: #d6d2c6; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #16181b; --ink: #e8e6e1; --mute: #a8a49b; --ac: #8fb0ff; --card: #202328; --rule: #34383e; } }
+  :root[data-theme="dark"] { --bg: #16181b; --ink: #e8e6e1; --mute: #a8a49b; --ac: #8fb0ff; --card: #202328; --rule: #34383e; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 system-ui, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 40px 16px; }
+  h1 { font-size: 26px; margin: 0 0 6px; } p { color: var(--mute); margin: 0 0 22px; }
+  a.card { display: block; background: var(--card); border: 1px solid var(--rule); border-radius: 8px; padding: 16px 18px; margin: 0 0 12px; color: var(--ink); text-decoration: none; }
+  a.card b { color: var(--ac); display: block; font-size: 17px; } a.card span { color: var(--mute); font-size: 14px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>SWAFL: Soil Water Atmosphere Feedback Layout</h1>
+  <p>Coupled water fluxes, pore-scale dynamics, precision irrigation and mulching feedback loops. Author: Naziru Halilu.</p>
+  <a class="card" href="Software/SWAFL_Desktop/app/index.html?v=1.1.0"><b>SWAFL 1.1.0 online workbench</b><span>The full program in the browser, nothing to install.</span></a>
+  <a class="card" href="Software/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf"><b>Manual of version 1.1.0 (PDF)</b><span>Every control, layer, design and equation, with screenshots.</span></a>
+  <a class="card" href="Results/04_Interactive_Charts/10_SWAFL_Fused_Explorer.html"><b>SWAFL web explorer</b><span>The small explorer of the simulation results.</span></a>
+  <a class="card" href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops"><b>Repository on GitHub</b><span>Data, papers, code and the desktop program.</span></a>
+</main>
+</body>
+</html>
