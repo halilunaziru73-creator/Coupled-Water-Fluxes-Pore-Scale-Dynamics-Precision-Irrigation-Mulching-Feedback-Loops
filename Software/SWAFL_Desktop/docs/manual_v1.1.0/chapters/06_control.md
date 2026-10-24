@@ -105,6 +105,19 @@ $$
 
 with $Y(h)$ the soil's yield at each simulated trigger (run set E2). **[Data-driven]**.
 
+### How fast each soil dries
+
+Each row of the soil list ends with the days from field capacity to the trigger, and the box under the drawing tells how fast the soil in focus dries. Every soil is compared on the same crop demand: the mean evapotranspiration of the peak of the season (days 150 to 220), from the daily model of a well-watered coarse loam at all your other settings. Only the water each soil holds differs:
+
+$$
+r_s=\frac{ET_c}{\mathrm{TAW}_s},\qquad \mathrm{TAW}_s=\mathrm{AWC}_s\,z_r,\qquad t_{\mathrm{trig},s}=\frac{f_{\mathrm{trig},s}}{r_s},
+\tag{6.6}
+$$
+
+*Provenance (Eq. 6.6):* **[Literature]**: the FAO-56 root-zone depletion rate; $\mathrm{AWC}_s$ is the available water of the soil (mm per cm), $z_r$ the root depth of the reference run and $f_{\mathrm{trig},s}$ the depletion at the soil's own trigger.
+
+A sand holds about 0.6 mm per cm, so the same demand empties it in about a third of the time of a loam: at the default settings, sand reaches its trigger in about 7 days and coarse loam in about 18. When you press **Play**, the gauge follows the daily model day by day, and its response is tied to the soil: it answers at once in a sand and slowly in a clay ($\text{rate} = 0.09 \times 1.5/\mathrm{AWC}_s$ per frame, between 0.04 and 0.35).
+
 ### Reading the sensor value
 
 The dashboard tile *Sensor / trigger* reads two numbers: the **current depletion** $f$ at the sensor layer and the **trigger depletion** $f_T$. When the first reaches the second, irrigation is due. On 18 Oct 2026 the tile reads $0.02/0.38$ for the Coarse Loam: the soil is almost at field capacity (0.02), and the trigger is at depletion 0.38 ($= f$ at 300 cm).
