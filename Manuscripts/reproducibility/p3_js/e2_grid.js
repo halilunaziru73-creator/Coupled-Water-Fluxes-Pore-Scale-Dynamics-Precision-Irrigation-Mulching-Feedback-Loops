@@ -1,6 +1,6 @@
 const { chromium } = require('playwright'); const fs=require('fs');
 (async()=>{const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium',args:['--no-sandbox']});const p=await b.newPage();
-await p.goto('file://'+(process.env.SWAFL_ENGINE||require('path').resolve(__dirname,'../../../Software/SWAFL_Desktop/app/engine/engine.html')));await p.waitForTimeout(3000);
+await p.goto('file://'+(process.env.SWAFL_ENGINE||require('path').resolve(__dirname,'../../../Software/v1.1.0/SWAFL_Desktop/app/engine/engine.html')));await p.waitForTimeout(3000);
 const res=await p.evaluate(()=>{
   const out=[];
   for(const soil of DATA.soils) for(const trig of [-100,-200,-300,-500,-1000]) for(const method of ['M02_Surface','M01_Overhead']) {

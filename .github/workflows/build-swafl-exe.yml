@@ -18,7 +18,7 @@ jobs:
       - name: Locate project
         shell: bash
         run: |
-          if [ -f package.json ]; then echo "PROJ=." >> $GITHUB_ENV; else echo "PROJ=Software/SWAFL_Desktop" >> $GITHUB_ENV; fi
+          if [ -f package.json ]; then echo "PROJ=." >> $GITHUB_ENV; else echo "PROJ=Software/v1.1.0/SWAFL_Desktop" >> $GITHUB_ENV; fi
       - name: Install
         shell: bash
         run: cd "$PROJ" && npm install
@@ -45,6 +45,6 @@ jobs:
             - `SWAFL_Desktop.zip`: the source; build it yourself with `npm.cmd install` then `npm.cmd run get-app`.
             The exe files are unsigned, so Windows SmartScreen may ask: More info, then Run anyway.
           files: |
-            Software/SWAFL_Desktop.zip
+            Software/v1.1.0/SWAFL_Desktop.zip
             ${{ env.PROJ }}/dist/SWAFL.exe
             ${{ env.PROJ }}/dist/SWAFL-Setup.exe

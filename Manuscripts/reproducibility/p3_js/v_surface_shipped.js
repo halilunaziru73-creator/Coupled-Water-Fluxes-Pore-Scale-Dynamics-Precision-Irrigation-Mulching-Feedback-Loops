@@ -13,7 +13,7 @@ const BOOK = { first: { 0.1: 80.2, 0.075: 198.6, 0.0625: 441.6 }, later: { 0.1: 
 (async () => {
   const b = await chromium.launch({ executablePath: process.env.CHROMIUM || '/opt/pw-browsers/chromium', args: ['--no-sandbox'] });
   const p = await b.newPage();
-  await p.goto('file://' + (process.env.SWAFL_ENGINE || path.resolve(__dirname, '../../../Software/SWAFL_Desktop/app/engine/engine.html')));
+  await p.goto('file://' + (process.env.SWAFL_ENGINE || path.resolve(__dirname, '../../../Software/v1.1.0/SWAFL_Desktop/app/engine/engine.html')));
   await p.waitForTimeout(2500);
   const sh = { rho1: 0.325, rho2: 2.734 }, n = 0.04, S0 = 0.008, L = 200;
   const K = { first: { k: 0.0028, a: 0.534, f0: 0.00022 }, later: { k: 0.0021, a: 0.331, f0: 0.00015 } };

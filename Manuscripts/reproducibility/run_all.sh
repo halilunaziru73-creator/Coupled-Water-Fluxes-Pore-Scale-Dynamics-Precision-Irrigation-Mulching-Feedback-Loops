@@ -2,7 +2,7 @@
 # Regenerate every numerical result and figure of the three manuscripts from the archived Daisy ensemble.
 # Usage:  bash run_all.sh [WORKDIR]      (default WORKDIR=./work; nothing outside it is modified)
 # Needs:  Python >= 3.13 with requirements.txt; Node >= 22 with `playwright` and Chromium (set CHROMIUM or edit p3_js/*.js);
-#         the repository layout (Software/SWAFL_Desktop/app/engine/engine.html is the engine under test).
+#         the repository layout (Software/v1.1.0/SWAFL_Desktop/app/engine/engine.html is the engine under test).
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 W="$(mkdir -p "${1:-$HERE/work}" && cd "${1:-$HERE/work}" && pwd)"

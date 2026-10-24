@@ -46,14 +46,14 @@ Local computer paths in the original files were shortened to relative paths (`ex
 
 **Consistency with the run table.** The 20-year means of the annual balances closing on 1 April 1981-2000 reproduce the
 values of `daisy_ensemble.csv.gz` (largest relative difference below 2 % for every output; per experiment in
-[`Software/SWAFL_Desktop/tools/peryear_check.txt`](../Software/SWAFL_Desktop/tools/peryear_check.txt)).
+[`Software/v1.1.0/SWAFL_Desktop/tools/peryear_check.txt`](../Software/v1.1.0/SWAFL_Desktop/tools/peryear_check.txt)).
 
 **Evapotranspiration closure.** In these outputs ET equals transpiration + soil evaporation + canopy (intercepted)
 evaporation + litter evaporation + evaporation of ponded water + snow evaporation, with a residual of 1.1 mm or less. The
 part of ET not attributed to transpiration, soil or canopy evaporation in the run table (about 30 %) is therefore
 evaporation of ponded water (21.6 % of ET), litter (7.6 %) and snow (2.7 %).
 
-**Use in the software.** [`Software/SWAFL_Desktop/tools/make_peryear.py`](../Software/SWAFL_Desktop/tools/make_peryear.py)
+**Use in the software.** [`Software/v1.1.0/SWAFL_Desktop/tools/make_peryear.py`](../Software/v1.1.0/SWAFL_Desktop/tools/make_peryear.py)
 extracts the year-by-year balances of experiments E00, E02, E03, E04, E05 and E07 (1 003 runs, 20 years each) into
 `app/engine/peryear.js`, which drives the year-by-year, full-water-balance, nitrogen-budget and crop-water layers.
 
@@ -106,7 +106,7 @@ Three small intermediate arrays used only by figures are in
 
 ### 2.4 Data embedded in the software
 
-The SWAFL Desktop engine ([`Software/SWAFL_Desktop/app/engine/engine.html`](../Software/SWAFL_Desktop/app/engine/engine.html))
+The SWAFL Desktop engine ([`Software/v1.1.0/SWAFL_Desktop/app/engine/engine.html`](../Software/v1.1.0/SWAFL_Desktop/app/engine/engine.html))
 carries, as JSON, the Daisy result tables it composes (baselines and experiments E2, E3, E4, E5, E7, E11, E13, E14,
 E15), the 20-year daily suction record at 20 cm and the 1994 profiles, all taken from the raw data above, and
 (`peryear.js`) the per-year balances of 1 003 runs taken from `Comprehensive_Summary/`. It makes no external data call.

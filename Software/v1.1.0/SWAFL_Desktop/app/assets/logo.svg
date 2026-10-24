@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0F3B63"/><stop offset="1" stop-color="#1F78BC"/></linearGradient>
+    <linearGradient id="drop" x1="0.2" y1="0" x2="0.8" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#9FD3F2"/></linearGradient>
+    <linearGradient id="s1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D2AE78"/><stop offset="1" stop-color="#B98F57"/></linearGradient>
+    <linearGradient id="s2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A7804D"/><stop offset="1" stop-color="#8A6639"/></linearGradient>
+    <linearGradient id="s3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7A5830"/><stop offset="1" stop-color="#5F4324"/></linearGradient>
+    <clipPath id="rr"><rect x="8" y="8" width="240" height="240" rx="52"/></clipPath>
+  </defs>
+  <rect x="8" y="8" width="240" height="240" rx="52" fill="url(#bg)"/>
+  <g clip-path="url(#rr)">
+    <path d="M8 168 Q68 152 128 166 T248 160 V248 H8 Z" fill="url(#s1)"/>
+    <path d="M8 196 Q68 182 128 194 T248 190 V248 H8 Z" fill="url(#s2)"/>
+    <path d="M8 224 Q68 212 128 222 T248 218 V248 H8 Z" fill="url(#s3)"/>
+    <g fill="#E6C99A" opacity="0.8"><circle cx="46" cy="182" r="3"/><circle cx="92" cy="176" r="2.4"/><circle cx="170" cy="178" r="3"/><circle cx="210" cy="172" r="2.4"/><circle cx="70" cy="206" r="2.6"/><circle cx="150" cy="208" r="3"/><circle cx="214" cy="204" r="2.6"/></g>
+  </g>
+  <path d="M128 38 C128 38 84 88 84 118 A44 44 0 0 0 172 118 C172 88 128 38 128 38 Z" fill="url(#drop)" stroke="#E8F5FF" stroke-width="3"/>
+  <path d="M104 116 C104 128 110 138 120 142" fill="none" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" opacity="0.85"/>
+  <path d="M128 172 L128 144" stroke="#2E8B3E" stroke-width="7" stroke-linecap="round"/>
+  <path d="M128 156 C108 152 98 140 98 128 C114 128 126 138 128 156 Z" fill="#43B04F"/>
+  <path d="M128 150 C148 146 158 134 158 122 C142 122 130 132 128 150 Z" fill="#5CC463"/>
+  <path d="M30 144 Q40 136 50 144 T70 144" fill="none" stroke="#BFE3F7" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+  <path d="M186 138 Q196 130 206 138 T226 138" fill="none" stroke="#BFE3F7" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+</svg>

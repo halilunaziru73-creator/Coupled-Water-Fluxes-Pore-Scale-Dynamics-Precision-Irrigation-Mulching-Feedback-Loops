@@ -1,6 +1,6 @@
 const { chromium } = require('playwright'); const fs=require('fs');
 (async()=>{const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium',args:['--no-sandbox']});const p=await b.newPage();
-await p.goto('file://'+(process.env.SWAFL_ENGINE||require('path').resolve(__dirname,'../../../Software/SWAFL_Desktop/app/engine/engine.html')));await p.waitForTimeout(3000);
+await p.goto('file://'+(process.env.SWAFL_ENGINE||require('path').resolve(__dirname,'../../../Software/v1.1.0/SWAFL_Desktop/app/engine/engine.html')));await p.waitForTimeout(3000);
 const info=await p.evaluate(()=>({TRIG:TRIG_VALUES,Z:Z_VALUES,RAIN:RAIN_VALUES,TEMP:TEMP_VALUES,VFF:VFF_VALUES,CAP:CAP_VALUES,TC:TC_VALUES,N:NRATE_VALUES,state:state,keys:Object.keys(DATA.e2).slice(0,3), e2s:JSON.stringify(Object.values(DATA.e2)[0]).slice(0,400)}));
 console.log(JSON.stringify(info,null,0));
 const rows=JSON.parse(fs.readFileSync((process.env.SWAFL_MS||'.')+'/out/e12.json'));

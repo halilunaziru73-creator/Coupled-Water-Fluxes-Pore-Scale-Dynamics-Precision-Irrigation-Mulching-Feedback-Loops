@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 200" width="640" height="200">
+  <g transform="translate(6,6) scale(0.72)">
+    <image href="logo.svg" width="256" height="256"/>
+  </g>
+  <text x="214" y="104" font-family="Segoe UI, Arial, sans-serif" font-size="84" font-weight="700" fill="#0F3B63" letter-spacing="4">SWAFL</text>
+  <text x="216" y="138" font-family="Segoe UI, Arial, sans-serif" font-size="21" fill="#2B5E8E">Soil-Water-Atmosphere Feedback-Loop Simulator</text>
+  <text x="216" y="164" font-family="Segoe UI, Arial, sans-serif" font-size="16" fill="#5A7490">Precision irrigation design · mulching · pore-scale dynamics</text>
+</svg>

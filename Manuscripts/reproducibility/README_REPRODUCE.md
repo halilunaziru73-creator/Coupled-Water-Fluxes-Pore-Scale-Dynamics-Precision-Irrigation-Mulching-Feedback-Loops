@@ -34,7 +34,7 @@ bash run_all.sh ./work                              # ~15-20 min; writes only in
 | `CHECKSUMS.sha256` | SHA-256 of every file in this folder (and of the engine under test). `sha256sum -c CHECKSUMS.sha256` |
 | `requirements.txt` | pinned versions. |
 
-The engine under test is `Software/SWAFL_Desktop/app/engine/engine.html` of the repository (override with `SWAFL_ENGINE`).
+The engine under test is `Software/v1.1.0/SWAFL_Desktop/app/engine/engine.html` of the repository (override with `SWAFL_ENGINE`).
 
 ## Determinism
 

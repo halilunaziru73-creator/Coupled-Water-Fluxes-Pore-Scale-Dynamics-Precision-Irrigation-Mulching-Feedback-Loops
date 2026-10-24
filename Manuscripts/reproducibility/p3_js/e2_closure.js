@@ -1,6 +1,6 @@
 const { chromium } = require('playwright'); const fs=require('fs');
 (async()=>{const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium',args:['--no-sandbox']});const p=await b.newPage();
-await p.goto('file://'+(process.env.SWAFL_ENGINE||require('path').resolve(__dirname,'../../../Software/SWAFL_Desktop/app/engine/engine.html')));await p.waitForTimeout(3000);
+await p.goto('file://'+(process.env.SWAFL_ENGINE||require('path').resolve(__dirname,'../../../Software/v1.1.0/SWAFL_Desktop/app/engine/engine.html')));await p.waitForTimeout(3000);
 const res=await p.evaluate(()=>{
   let seed=12345; const rnd=()=>{seed=(seed*1664525+1013904223)%4294967296;return seed/4294967296;};
   const pick=a=>a[Math.floor(rnd()*a.length)]; const out=[];

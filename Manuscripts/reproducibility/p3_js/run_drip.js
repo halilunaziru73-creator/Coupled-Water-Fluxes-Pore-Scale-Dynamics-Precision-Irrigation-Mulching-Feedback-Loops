@@ -1,5 +1,5 @@
 const { chromium } = require('playwright'); const fs=require('fs');
-const NEW='file://'+(process.env.SWAFL_ENGINE||require('path').resolve(__dirname,'../../../Software/SWAFL_Desktop/app/engine/engine.html')), OLD='file://'+(process.env.SWAFL_ENGINE_V1||require('path').resolve(__dirname,'../lib/engine_v1_pre_correction.html'));
+const NEW='file://'+(process.env.SWAFL_ENGINE||require('path').resolve(__dirname,'../../../Software/v1.1.0/SWAFL_Desktop/app/engine/engine.html')), OLD='file://'+(process.env.SWAFL_ENGINE_V1||require('path').resolve(__dirname,'../lib/engine_v1_pre_correction.html'));
 (async()=>{const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium',args:['--no-sandbox']});
 const out={};
 for (const [name,url] of [['new',NEW],['old',OLD]]){

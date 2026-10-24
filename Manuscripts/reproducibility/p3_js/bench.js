@@ -1,6 +1,6 @@
 const { chromium } = require('playwright'); const fs=require('fs');
 (async()=>{const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium',args:['--no-sandbox']});const p=await b.newPage();
-await p.goto('file://'+(process.env.SWAFL_ENGINE||require('path').resolve(__dirname,'../../../Software/SWAFL_Desktop/app/engine/engine.html')));await p.waitForTimeout(3000);
+await p.goto('file://'+(process.env.SWAFL_ENGINE||require('path').resolve(__dirname,'../../../Software/v1.1.0/SWAFL_Desktop/app/engine/engine.html')));await p.waitForTimeout(3000);
 const r=await p.evaluate(()=>{
   const time=(f,n)=>{f();const t0=performance.now();for(let i=0;i<n;i++)f();return (performance.now()-t0)/n;};
   const S=state; const out={};

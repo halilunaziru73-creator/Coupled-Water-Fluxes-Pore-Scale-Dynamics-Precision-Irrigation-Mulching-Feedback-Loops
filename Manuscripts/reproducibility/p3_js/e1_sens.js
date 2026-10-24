@@ -1,6 +1,6 @@
 const { chromium } = require('playwright'); const fs=require('fs');
 (async()=>{const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium',args:['--no-sandbox']});const p=await b.newPage();
-await p.goto('file://'+(process.env.SWAFL_ENGINE||require('path').resolve(__dirname,'../../../Software/SWAFL_Desktop/app/engine/engine.html')));await p.waitForTimeout(3000);
+await p.goto('file://'+(process.env.SWAFL_ENGINE||require('path').resolve(__dirname,'../../../Software/v1.1.0/SWAFL_Desktop/app/engine/engine.html')));await p.waitForTimeout(3000);
 const res=await p.evaluate(()=>{
  const S=state; const base=()=>{S.soil='S01_CoarseLoam';S.till='conv';S.tcIdx=TC_VALUES.indexOf(0.005);S.vffIdx=VFF_VALUES.length-1;S.tempIdx=TEMP_VALUES.indexOf(0);S.nIdx=NRATE_VALUES.indexOf(100);S.method='M02_Surface';S.trigIdx=TRIG_VALUES.indexOf(-300);S.zIdx=Z_VALUES.indexOf(20);S.rainIdx=RAIN_VALUES.indexOf(1);S.capIdx=0;};
  const run=()=>{const o=model(VFF_VALUES[S.vffIdx],RAIN_VALUES[S.rainIdx]);return {irr:o.irr,et:o.et,drain:o.drain,yield:o.yield,nl:o.nl,evap:o.evap,transp:o.transp};};
