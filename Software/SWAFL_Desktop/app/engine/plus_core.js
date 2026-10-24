@@ -78,7 +78,7 @@
     const pp = LIB.params(crop, state.densIdx, state.plantDoy), w = [], [a, b, m] = pp.st;
     for (let y = 0; y < NYR; y++) {
       if (pp.habit === 'evergreen') w.push({ name: pp.c.label.toLowerCase(), sow: y * DPY, harv: y * DPY + DPY - 1, winter: false, mid: y * DPY + a + b / 2, peak: y * DPY + DPY - 1, lib: pp });
-      else { const s0 = y * DPY + pp.sow; w.push({ name: pp.c.label.toLowerCase(), sow: s0, harv: Math.min(s0 + pp.len, y * DPY + DPY - 1), winter: false, mid: s0 + a + b / 2, peak: s0 + a + b + m, lib: pp }); }
+      else { for (const yy of (y === 0 && pp.sow + pp.len > DPY ? [-1, 0] : [y])) { const s0 = yy * DPY + pp.sow; w.push({ name: pp.c.label.toLowerCase(), sow: s0, harv: Math.min(s0 + pp.len, ND - 1), winter: false, mid: s0 + a + b / 2, peak: s0 + a + b + m, lib: pp }); } }
     }
     return w;
   };

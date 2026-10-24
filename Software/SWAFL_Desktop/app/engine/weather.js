@@ -94,6 +94,10 @@
   function daisyP() { try { const r = W.PERYEAR && PERYEAR.runs['E0_S01_CoarseLoam_Rainfed']; if (r) return r.P.reduce((a, b) => a + b, 0) / r.P.length; } catch (e) {} return 464; }
   function build(rows, meta) {
     const ND2 = NYRx * DPYx, byYear = new Map(); rows.forEach(r => { const j = doyOf(r.d); if (j < 0) return; const y = r.d.getUTCFullYear(); if (!byYear.has(y)) byYear.set(y, { P: new Float32Array(DPYx).fill(NaN), E: new Float32Array(DPYx).fill(NaN), n: 0 }); const q = byYear.get(y); if (isFinite(r.P)) { if (!isFinite(q.P[j])) q.n++; q.P[j] = r.P; } if (isFinite(r.ET0)) q.E[j] = r.ET0; });
+    // the climate of each day of the year (mean and minimum air temperature), when the weather has temperatures: for the planting advice
+    const tS = new Float64Array(DPYx), tN = new Float64Array(DPYx), nS = new Float64Array(DPYx), nN = new Float64Array(DPYx);
+    rows.forEach(r => { const j = doyOf(r.d); if (j < 0) return; const tm = isFinite(r.tmean) ? r.tmean : (isFinite(r.tmax) && isFinite(r.tmin) ? (r.tmax + r.tmin) / 2 : NaN); if (isFinite(tm)) { tS[j] += tm; nS[j]++; } if (isFinite(r.tmin)) { tN[j] += r.tmin; nN[j]++; } });
+    const Tclim = nS.some(v => v > 0) ? Array.from(tS, (v, j) => nS[j] ? v / nS[j] : NaN) : null, Tnclim = nN.some(v => v > 0) ? Array.from(tN, (v, j) => nN[j] ? v / nN[j] : NaN) : null;
     const years = [...byYear.keys()].sort((a, b) => a - b), full = years.filter(y => byYear.get(y).n >= 300);
     if (!years.length) throw new Error('no dated rainfall values were found');
     const useYears = (full.length ? full : years), notes = [];
@@ -112,7 +116,7 @@
     if (gapP > 0) notes.push(gapP + ' missing days of rain filled from the same day of another year');
     let sP = 0, sE = 0; for (let k = 0; k < ND2; k++) { sP += P[k]; sE += ET0[k]; }
     const Pmean = sP / NYRx, Emean = sE / NYRx, e0n = new Float32Array(ND2), md = sE / ND2 || 1; for (let k = 0; k < ND2; k++) e0n[k] = ET0[k] / md;
-    return { P, ET0, e0n, Pmean, Emean, y0, years: pick, notes, hasE };
+    return { P, ET0, e0n, Pmean, Emean, y0, years: pick, notes, hasE, Tclim, Tnclim };
   }
   function apply(rows, meta) {
     const B = build(rows, meta), Pd = daisyP(), Ed = daisyET0();

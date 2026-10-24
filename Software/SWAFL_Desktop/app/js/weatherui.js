@@ -70,3 +70,4 @@ const WxUI = (() => {
   }
   return { importFile, online, use, status: st, offerOnce };
 })();
+window.WxUI = WxUI;

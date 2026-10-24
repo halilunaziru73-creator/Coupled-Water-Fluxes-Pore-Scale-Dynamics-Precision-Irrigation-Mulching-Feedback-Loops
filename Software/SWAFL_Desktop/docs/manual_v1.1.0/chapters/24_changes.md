@@ -49,3 +49,4 @@
 * The virtual farm simulation has been removed; the real field on the map (Chapter 20) takes its place.
 * The Trigger law block of the Dashboard shows the current soil as a table, its season chart and the advice with each condition ticked.
 * The index map is cut exactly to the demarcated outline on the real map and follows every change of the outline; it shows continuous colours or five management zones with their areas, two indices side by side, the value under the cursor, and the irrigation layout of the sketch.
+* The soil-water film of every design follows the season of the crop in Properties (starting at its next sowing when the working date has no crop), gives the advice of when to plant over the whole year, and each design has the weather line with the button for the online weather of the farm.

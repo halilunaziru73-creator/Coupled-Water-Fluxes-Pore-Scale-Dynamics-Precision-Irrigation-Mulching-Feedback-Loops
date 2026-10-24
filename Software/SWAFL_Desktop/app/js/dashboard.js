@@ -254,13 +254,16 @@ const Dash = (() => {
     const el = document.getElementById('dssNow'); if (!el || !E.snap || !Layers.DESIGN.includes(E.snap.scene)) return; let N = null; try { N = E.json('window.__DSSNOW||null'); } catch (e) {}
     let run = null; try { run = E.json("(function(){var R=window.DESIGN_RUN||{};return R['" + E.snap.scene + "']?!!R['" + E.snap.scene + "'].on:null})()"); } catch (e) {}
     if (!N || N.sys !== SYS[E.snap.scene] || run === false) { if (!el.dataset.empty) { el.dataset.empty = '1'; el.innerHTML = '<div class="dnote">Run the design: the film of the soil water appears at the end of the design, and this block follows it day by day.</div>'; } return; }
+    let P = null, W2 = 'recorded weather of the simulations'; try { P = E.json('window.__PLANT||null'); const ws = E.json('wxStatus()') || {}; if (ws.src === 'online') W2 = 'online: ' + ws.name + ' (' + ws.years + ')'; else if (ws.src === 'file') W2 = 'file: ' + ws.name; } catch (e) {}
     el.dataset.empty = ''; const r = (a, b, c) => '<tr><td>' + a + '</td><td><b' + (c ? ' style="color:' + c + '"' : '') + '>' + b + '</b></td></tr>';
     const html = '<div class="dssday"><i style="background:' + N.col + '"></i><b>' + UI.esc(N.date) + '</b> · day ' + N.day + ' of ' + N.span + (N.paused ? ' · paused' : '') + '</div><table class="n1t">' +
       r('Crop', UI.esc(N.crop)) + r('Phase', UI.esc(N.phase)) +
       r('Water in the root zone', N.mm.toFixed(0) + ' of ' + N.taw.toFixed(0) + ' mm (' + N.pct + ' %)', '#0D47A1') +
       r('Sensor depletion', N.dep.toFixed(2) + ' (trigger ' + N.fT.toFixed(2) + ')', N.dep >= N.fT ? '#C62828' : '#1B5E20') +
       r('Next irrigation', N.next ? UI.esc(N.next) + (N.nextIn === 0 ? ' (today)' : ' (in ' + N.nextIn + ' day' + (N.nextIn === 1 ? '' : 's') + ')') + '<br><small>' + N.net.toFixed(0) + ' mm net, ' + N.gross.toFixed(0) + ' mm pumped</small>' : 'none in the record', '#1565C0') +
-      r('Wilting point without irrigation', N.wilt ? UI.esc(N.wilt) + ' (in ' + N.wiltIn + ' days)' + (N.trig ? '<br><small>root zone at the trigger level ' + UI.esc(N.trig) + '</small>' : '') : 'not within 200 days', '#C62828') + '</table>';
+      r('Wilting point without irrigation', N.wilt ? UI.esc(N.wilt) + ' (in ' + N.wiltIn + ' days)' + (N.trig ? '<br><small>root zone at the trigger level ' + UI.esc(N.trig) + '</small>' : '') : 'not within 200 days', '#C62828') +
+      (P ? r('When to plant ' + UI.esc(P.label.toLowerCase()), (P.none ? 'too cold in the open field; warmest window ' : '') + P.from + ' to ' + P.to + ' (best ' + P.best + ')<br><small>' + P.I + ' mm of irrigation a season; rain-fed ' + P.RYr + ' % of potential' + (P.cur ? '; your sowing ' + P.cur + ': ' + P.curI + ' mm' : '') + (P.temp ? '' : '; temperatures of Taastrup (recorded weather)') + '</small>', '#1B5E20') : '') +
+      r('Weather', UI.esc(W2), W2.indexOf('recorded') === 0 ? '#8A5300' : '#1B5E20') + '</table>' + (N.note ? '<div class="dnote">' + UI.esc(N.note) + '</div>' : '');
     if (el.innerHTML !== html) el.innerHTML = html;
   }
   setInterval(dssLive, 400);

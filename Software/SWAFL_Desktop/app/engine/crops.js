@@ -84,7 +84,7 @@ window.CROPLIB = (function () {
   function kcCurve(pp) {
     const out = new Float32Array(365), [a, b, m, e] = pp.st;
     for (let doy = 0; doy < 365; doy++) {
-      let t = doy - pp.sow; if (pp.habit === 'evergreen') t = ((t % 365) + 365) % 365; else if (t < 0 || t >= pp.len) { out[doy] = 0; continue; }
+      let t = doy - pp.sow; if (pp.habit === 'evergreen') t = ((t % 365) + 365) % 365; else { if (t < 0 && pp.sow + pp.len > 365) t += 365; if (t < 0 || t >= pp.len) { out[doy] = 0; continue; } }
       let kc;
       if (t < a) kc = pp.kcIni; else if (t < a + b) kc = pp.kcIni + (pp.kcMid - pp.kcIni) * (t - a) / b;
       else if (t < a + b + m) kc = pp.kcMid; else kc = pp.kcMid + (pp.kcEnd - pp.kcMid) * Math.min(1, (t - a - b - m) / Math.max(1, e));

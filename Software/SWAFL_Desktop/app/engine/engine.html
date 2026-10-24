@@ -856,8 +856,8 @@ function drawSID() {
     T(sName + ' · ' + (CROPS[state.crop] || {}).label + ' · root zone ' + Math.round(sim.Rmax) + ' cm · trigger at ' + Math.round(sim.fTrig * 100) + '% depleted · ' + fmtDate(dateOfK(fclock.kd())), 16, 42, { s: 10.5, c: MUTE });
     ctx.fillStyle = '#E6F4F7'; ctx.strokeStyle = SIDC.ac; ctx.lineWidth = 1.5; rrect(14, 50, W - 28, 36, 8); ctx.fill(); ctx.stroke();
     sidBadge('DSS', 22, 66, true); T('soil texture, field capacity, wilting point, root depth, depletion trigger and yearly irrigation come from the DSS simulation', 80, 66, { s: 9.2, b: true, c: '#0B4F5C' });
-    sidBadge('DESIGN', 22, 80, false); T('intake (Kostiakov), advance (volume balance), cutoff and efficiencies: the Surface Irrigation lecture equations', 80, 80, { s: 9.2, c: '#4B5563' });
-  } else { y = sidHeaderC(sName, sim); }
+    wxLine(80, 'intake (Kostiakov), advance (volume balance), cutoff and efficiencies: the Surface Irrigation lecture equations');
+  } else { y = sidHeaderC(sName, sim); wxCtl(y); y += 32; }
   // chips
   y = RW('Start from', y, SIDPRE.map(q => [q[1], SID.preset === q[0], () => sidPreset(q[0]), q[0] === 'soil' ? 'Intake, depth and layout from your soil' : 'Worked example from the lecture notes']));
   y = RW('System', y, Object.keys(SIDSYS).map(s => [SIDSYS[s], sys === s, () => { SID.preset = null; SID.autoQ = true; sidSys(s); }, 'Default layout for a ' + SIDSYS[s].toLowerCase()]));
@@ -1235,7 +1235,7 @@ function irHead(C, title, sub) {
   T(C.sName + ' · ' + (CROPS[state.crop] || {}).label + ' · root zone ' + Math.round(C.Rmax) + ' cm · trigger at ' + Math.round(C.fT * 100) + '% depleted · ' + fmtDate(dateOfK(fclock.kd())), 16, 42, { s: 10.5, c: MUTE });
   ctx.fillStyle = '#E6F4F7'; ctx.strokeStyle = IRC.ac; ctx.lineWidth = 1.5; rrect(14, 50, W - 28, 36, 8); ctx.fill(); ctx.stroke();
   sidBadge('DSS', 22, 66, true); T('soil texture, field capacity, wilting point, root depth, trigger, crop need and weather come from the DSS simulation', 80, 66, { s: 9.2, b: true, c: '#0B4F5C' });
-  sidBadge('DESIGN', 22, 80, false); T(sub, 80, 80, { s: 9.2, c: '#4B5563' });
+  wxLine(80, sub);
 }
 function irTile(x, y, w, lab, val, col, note) { ctx.fillStyle = '#fff'; ctx.strokeStyle = col; ctx.lineWidth = 1.5; rrect(x, y, w, 54, 7); ctx.fill(); ctx.stroke(); T(lab, x + 8, y + 15, { s: 9, b: true, c: MUTE }); T(val, x + 8, y + 37, { s: 17, b: true, c: col }); if (note) T(note, x + w - 8, y + 37, { s: 8.5, a: 'right', c: MUTE }); }
 function irLeg(items, x, y) { let xx = x; items.forEach(q => { ctx.fillStyle = q[0]; ctx.fillRect(xx, y - 8, 10, 10); T(q[1], xx + 14, y + 1, { s: 9, c: '#374151' }); ctx.font = '9px sans-serif'; xx += 22 + ctx.measureText(q[1]).width; }); }
@@ -1625,14 +1625,25 @@ function irToday(y, C, R, kind) {
 
 // ===== The soil water of the days ahead, as a film: the daily model from the working date to the next irrigation (and a few
 // days after it), and what would happen without that irrigation: the root zone dries on to the wilting point =====
+// the season of the decision: the working date when the crop is in the field; otherwise the next sowing of the crop in use; when the
+// record ends before it (online weather ends this year), the last season of the record, its dates moved on by one year
+let IRSH = 0; const FDK = k => fmtDate(dateOfK(k + IRSH));
+function irStart(sim, kW) {
+  const at = k => fmtDate(dateOfK(k));
+  if (sim.widx[kW] >= 0) return { k: kW, sh: 0, note: '' };
+  let w = sim.wins.find(q => q.sow > kW && q.sow < ND - 30); if (w) return { k: w.sow, sh: 0, note: at(kW) + ' is outside the season of ' + w.name + ': the film starts at its next sowing, ' + at(w.sow) + '.' };
+  w = sim.wins.slice().reverse().find(q => q.sow >= 0 && q.sow <= kW && q.harv < ND); if (w) { const sh = Math.ceil((kW - w.sow + 1) / DPY) * DPY; return { k: w.sow, sh, note: at(kW) + ' is outside the season of ' + w.name + ': its next season, from ' + at(w.sow + sh) + ', is predicted with the weather of its last season in the record (' + dateOfK(w.sow).getUTCFullYear() + ').' }; }
+  return { k: kW, sh: 0, note: '' };
+}
 const DSSMOV = { paused: false, t0: performance.now(), j: 0, key: '' };
 function dssMovie(y, sim, k0, up, sp) {
   window.__DSSY = y;
+  const seasonNote = sp.note || ''; let winNow = sim.widx[k0] >= 0 ? sim.wins[sim.widx[k0]] : null;
   sidHead('Soil water in the days ahead (DSS): every day from the working date, coloured by phase', y, 'The daily model with the weather record, your soil, crop, trigger and sensor; the depths of this design. Click the film to pause or play it');
   const C = irCtx(), Th = irTh(C), wp = Th.wp, fc = Th.fc, sat = Math.max(Th.sat || fc * 1.2, fc * 1.05), zs = (typeof Z_VALUES !== 'undefined' ? Z_VALUES[state.zIdx] : 20), iS = clampN(Math.floor(zs / DZ), 0, NLAY - 1);
   const fT = sim.fTrig != null ? sim.fTrig : 0.4, nx = up[0] != null ? up[0] : null;
   // end to end: from the working date through the next irrigation and the rest of that season (at least 120 days)
-  const span = Math.max(30, Math.min(ND - 1 - k0, Math.max(120, (nx != null ? nx - k0 : 0) + 90)));
+  const span = Math.max(30, Math.min(ND - 1 - k0, winNow ? Math.max(90, winNow.harv - k0 + 30) : Math.max(120, (nx != null ? nx - k0 : 0) + 90)));
   const awc = AWC[state.soil] || 1.5, rzOf = d => clampN(sim.rd ? sim.rd[d] : 60, 10, 100);
   const left = d => { const rz = rzOf(d), n = Math.max(1, Math.round(rz / DZ)); let a = 0; for (let i = 0; i < n; i++) a += clampN(sim.s[d][i], 0, 1); return a / n; };
   const fallow = d => /fallow/i.test(cropNameAt(sim, d) || '');
@@ -1643,9 +1654,10 @@ function dssMovie(y, sim, k0, up, sp) {
     const p = sim.irr[d] > 0.5 ? 'irr' : fallow(d) ? 'fal' : (1 - L) >= 0.85 ? 'wilt' : dS >= fT ? 'stress' : (sim.rain[d] || 0) > 5 ? 'rain' : dS >= 0.8 * fT ? 'near' : 'ok';
     ph.push(p); cnt[p] = (cnt[p] || 0) + 1; if (sim.irr[d] > 0.5) { irrN++; irrMM += sim.irr[d]; } rainMM += sim.rain[d] || 0; drMM += sim.drain[d] || 0; etMM += (sim.dE ? sim.dE[d] : 0) + (sim.dT ? sim.dT[d] : 0); }
   // the clock of the film
+  if (seasonNote) pill(seasonNote, 16, y + 36, { s: 8.8, b: true, c: '#7A4A00', bg: '#FFF4C2' });
   const key = k0 + '|' + span + '|' + state.soil; if (DSSMOV.key !== key) { DSSMOV.key = key; DSSMOV.t0 = performance.now(); DSSMOV.j = 0; }
   const speed = Math.max(3, span / 14); if (!DSSMOV.paused) DSSMOV.j = Math.floor(((performance.now() - DSSMOV.t0) / 1000 * speed) % (span + 1));
-  const j = window.__REPORTING ? (nx != null ? Math.min(nx - k0, span) : 0) : DSSMOV.j, d = k0 + j, top = y + 38;
+  const j = window.__REPORTING ? (nx != null ? Math.max(0, Math.min(nx - k0, span)) : 0) : DSSMOV.j, d = k0 + j, top = y + (seasonNote ? 56 : 38);
   // from the day shown: the next irrigation of the daily model, and the dry-down without it (FAO-56 root-zone balance, the crop
   // using less water as the soil dries) to the wilting point; both follow the film day by day
   const TAWd = q => awc * rzOf(q), mmL = q => left(q) * TAWd(q);
@@ -1653,7 +1665,7 @@ function dssMovie(y, sim, k0, up, sp) {
   const proj = [[j, mmL(d)]]; let wilt = null, trigD = null; { let Dr = (1 - left(d)) * TAWd(d); for (let q = 1; q <= 200 && d + q < ND; q++) { const dd = d + q, taw = TAWd(dd), et = (sim.dE ? sim.dE[dd] : 2) + (sim.dT ? sim.dT[dd] : 2), ks = Dr > 0.5 * taw ? clampN((taw - Dr) / (0.5 * taw), 0, 1) : 1; Dr = clampN(Dr + et * (0.35 + 0.65 * ks) - (sim.rain ? sim.rain[dd] : 0) * 0.8, 0, taw); if (j + q <= span) proj.push([j + q, taw - Dr]); if (trigD == null && Dr >= fT * taw) trigD = dd; if (Dr >= 0.97 * taw) { wilt = dd; break; } } }
   // left: the profile of the day, coloured by water content, with the wilting point, trigger, field capacity, roots and sensor
   const px = 58, pw = 180, ph0 = 200, vlo = Math.floor(wp * 0.85 * 100 / 5) * 5 / 100, sx = v => px + (v - vlo) / (sat - vlo) * pw, sy = z => top + z / (NLAY * DZ) * ph0;
-  pill(fmtDate(dateOfK(d)), px + pw / 2, top - 6, { s: 9, b: true, a: 'center', c: '#12303A' });
+  pill(FDK((d)), px + pw / 2, top - 6, { s: 9, b: true, a: 'center', c: '#12303A' });
   ctx.fillStyle = '#FBF8F1'; ctx.fillRect(px, top, pw, ph0); ctx.strokeStyle = PH[ph[j]][0]; ctx.lineWidth = 3; ctx.strokeRect(px - 1, top - 1, pw + 2, ph0 + 2);
   { const st = sat - vlo > 0.3 ? 0.1 : 0.05; for (let v = Math.ceil(vlo / st) * st; v <= sat + 1e-6; v += st) { const xx = sx(v); ctx.strokeStyle = '#ECE6D8'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(xx, top); ctx.lineTo(xx, top + ph0); ctx.stroke(); T(Math.round(v * 100) + '', xx, top + ph0 + 10, { s: 8, a: 'center', c: MUTE }); } }
   for (let i = 0; i < NLAY; i++) { const th = wp + clampN(sim.s[d][i], 0, 1.3) * (fc - wp), y1 = sy(i * DZ), y2 = sy((i + 1) * DZ), g = clampN((th - wp) / (fc - wp), 0, 1); ctx.fillStyle = 'rgba(' + Math.round(196 - 150 * g) + ',' + Math.round(160 - 40 * g) + ',' + Math.round(110 + 120 * g) + ',0.85)'; ctx.fillRect(px + 1, y1, sx(th) - px - 1, y2 - y1 + 0.5); }
@@ -1679,9 +1691,9 @@ function dssMovie(y, sim, k0, up, sp) {
   for (let v = 0; v <= 1.0001; v += 0.25) T(Math.round(v * 100) + '%', cx + cw + 4, Ys(v) + 3, { s: 8.2, c: '#8E24AA' });
   // the date axis: the first of each month (or each week on a short span), with the year at January and at the start
   { const MO = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; let last = -99; const weekly = span < 50;
-    for (let q = 0; q <= span; q++) { const dt = dateOfK(k0 + q), dd = dt.getUTCDate(), mo = dt.getUTCMonth(); if (weekly ? (q % 7 !== 0) : (dd !== 1 && q !== 0)) continue; const xx = X(q); if (xx - last < 19) continue; last = xx;
+    for (let q = 0; q <= span; q++) { const dt = dateOfK(k0 + q + IRSH), dd = dt.getUTCDate(), mo = dt.getUTCMonth(); if (weekly ? (q % 7 !== 0) : (dd !== 1 && q !== 0)) continue; const xx = X(q); if (xx - last < 19) continue; last = xx;
       ctx.strokeStyle = '#D5DADF'; ctx.beginPath(); ctx.moveTo(xx, top + chh); ctx.lineTo(xx, top + chh + 4); ctx.stroke(); T(weekly ? dd + ' ' + MO[mo] : MO[mo], xx, top + chh + 13, { s: 8.4, a: 'center', c: MUTE }); if (!weekly && (mo === 0 || q === 0)) T(String(dt.getUTCFullYear()), xx, top + chh + 23, { s: 8, b: true, a: 'center', c: '#374151' }); } }
-  T('date (' + fmtDate(dateOfK(k0)) + ' to ' + fmtDate(dateOfK(k0 + span)) + ')', cx + cw / 2, top + chh + 34, { s: 8.6, a: 'center', c: '#374151' });
+  T('date (' + FDK((k0)) + ' to ' + FDK((k0 + span)) + ')', cx + cw / 2, top + chh + 34, { s: 8.6, a: 'center', c: '#374151' });
   for (let q = 0; q <= span; q++) { const r = sim.rain[k0 + q] || 0, dr = sim.drain[k0 + q] || 0; if (r > 1) { ctx.fillStyle = '#0288D1'; ctx.fillRect(X(q), top + 10, 1.5, Math.min(26, r)); } if (dr > 0.5) { ctx.fillStyle = '#00897B'; const hh2 = Math.min(20, dr * 2); ctx.fillRect(X(q), top + chh - hh2, 1.5, hh2); } }
   const curve = (f, c, wdt, dash, upto) => { ctx.strokeStyle = c; ctx.lineWidth = wdt; ctx.setLineDash(dash || []); ctx.beginPath(); for (let q = 0; q <= (upto == null ? span : upto); q++) { const v = f(q); q ? ctx.lineTo(X(q), v) : ctx.moveTo(X(q), v); } ctx.stroke(); ctx.setLineDash([]); };
   curve(q => Ym(TAWd(k0 + q)), '#1E63D0', 1.1, [2, 3]);                              // full: field capacity over the roots of the day
@@ -1691,10 +1703,10 @@ function dssMovie(y, sim, k0, up, sp) {
   { let firstI = true; for (let q = 0; q <= span; q++) if (sim.irr[k0 + q] > 0.5) { const xq = X(q); ctx.strokeStyle = 'rgba(21,101,192,0.45)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(xq, top + 10); ctx.lineTo(xq, top + chh); ctx.stroke(); ctx.fillStyle = '#1565C0'; ctx.beginPath(); ctx.moveTo(xq - 4, top + 11); ctx.lineTo(xq + 4, top + 11); ctx.lineTo(xq, top + 17); ctx.closePath(); ctx.fill(); firstI = false; } }
   // the day of the film, and the two dates that follow it
   ctx.strokeStyle = '#1B1F23'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(X(j), top); ctx.lineTo(X(j), top + chh); ctx.stroke(); ctx.fillStyle = '#0D47A1'; ctx.beginPath(); ctx.arc(X(j), Ym(mmL(d)), 4, 0, 6.2832); ctx.fill();
-  pill(fmtDate(dateOfK(d)) + ' · ' + mmL(d).toFixed(0) + ' of ' + TAWd(d).toFixed(0) + ' mm', clampN(X(j), cx + 70, cx + cw - 70), top - 4, { s: 8.4, b: true, a: 'center', c: '#0D47A1' });
+  pill(FDK((d)) + ' · ' + mmL(d).toFixed(0) + ' of ' + TAWd(d).toFixed(0) + ' mm', clampN(X(j), cx + 70, cx + cw - 70), top - 4, { s: 8.4, b: true, a: 'center', c: '#0D47A1' });
   const ni = nI != null ? nI - d : null, wi = wilt != null ? wilt - d : null;
-  if (nI != null && nI - k0 <= span) { const xq = X(nI - k0), yq = Ym((1 - fT) * TAWd(nI)); ctx.fillStyle = '#111'; ctx.beginPath(); ctx.arc(xq, yq, 4.5, 0, 6.2832); ctx.fill(); pill(ni === 0 ? 'irrigation today' : 'next irrigation ' + fmtDate(dateOfK(nI)) + ' · in ' + ni + ' d', clampN(xq, cx + 90, cx + cw - 90), top + 30, { s: 8.6, b: true, a: 'center', c: '#1565C0' }); }
-  if (wilt != null && wilt - k0 <= span) { const xw = X(wilt - k0), yw = Ym(0) - 4; ctx.strokeStyle = '#C62828'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(xw - 4, yw - 4); ctx.lineTo(xw + 4, yw + 4); ctx.moveTo(xw + 4, yw - 4); ctx.lineTo(xw - 4, yw + 4); ctx.stroke(); pill('wilting point ' + fmtDate(dateOfK(wilt)) + ' · in ' + wi + ' d without irrigation', clampN(xw, cx + 130, cx + cw - 130), yw - 14, { s: 8.4, b: true, a: 'center', c: '#C62828' }); }
+  if (nI != null && nI - k0 <= span) { const xq = X(nI - k0), yq = Ym((1 - fT) * TAWd(nI)); ctx.fillStyle = '#111'; ctx.beginPath(); ctx.arc(xq, yq, 4.5, 0, 6.2832); ctx.fill(); pill(ni === 0 ? 'irrigation today' : 'next irrigation ' + FDK((nI)) + ' · in ' + ni + ' d', clampN(xq, cx + 90, cx + cw - 90), top + 30, { s: 8.6, b: true, a: 'center', c: '#1565C0' }); }
+  if (wilt != null && wilt - k0 <= span) { const xw = X(wilt - k0), yw = Ym(0) - 4; ctx.strokeStyle = '#C62828'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(xw - 4, yw - 4); ctx.lineTo(xw + 4, yw + 4); ctx.moveTo(xw + 4, yw - 4); ctx.lineTo(xw - 4, yw + 4); ctx.stroke(); pill('wilting point ' + FDK((wilt)) + ' · in ' + wi + ' d without irrigation', clampN(xw, cx + 130, cx + cw - 130), yw - 14, { s: 8.4, b: true, a: 'center', c: '#C62828' }); }
   { let qm = 0; for (let q = 0; q <= span; q++) if (TAWd(k0 + q) > TAWd(k0 + qm)) qm = q; const xt = clampN(X(qm), cx + 60, cx + cw - 60), yt = Ym((1 - fT) * TAWd(k0 + qm)); pill('trigger ' + Math.round((1 - fT) * 100) + ' % left', xt, yt + 15, { s: 8.2, b: true, a: 'center', c: '#111' }); }
   ctx.save(); ctx.translate(cx - 40, top + chh / 2 + 6); ctx.rotate(-Math.PI / 2); T('water in the root zone (mm)', 0, 0, { s: 8.6, b: true, a: 'center', c: '#0D47A1' }); ctx.restore();
   ctx.save(); ctx.translate(cx + cw + 34, top + chh / 2 + 6); ctx.rotate(Math.PI / 2); T('at the sensor (% of available)', 0, 0, { s: 8.6, b: true, a: 'center', c: '#8E24AA' }); ctx.restore();
@@ -1703,10 +1715,10 @@ function dssMovie(y, sim, k0, up, sp) {
   { let lx = cx, ly = top + chh + 50; const item = (c, l, bar) => { ctx.font = '8.8px sans-serif'; const tw = ctx.measureText(l).width + 26; if (lx + tw > W - 14) { lx = cx; ly += 13; } ctx.fillStyle = c; if (bar) ctx.fillRect(lx, ly - 5, 12, 4); else ctx.fillRect(lx, ly - 8, 10, 8); T(l, lx + 15, ly, { s: 8.8, c: '#374151' }); lx += tw; };
     ['irr', 'rain', 'ok', 'near', 'stress', 'wilt', 'fal'].forEach(k => item(PH[k][0], PH[k][1])); lx = cx; ly += 15; [['#0D47A1', 'root zone: water held (mm)'], ['#1E63D0', 'full: field capacity'], ['#111111', 'trigger (irrigate here)'], ['#8E24AA', 'at the sensor (right axis)'], ['#C62828', 'without irrigation, from the day shown'], ['#0288D1', 'rain (ticks at the top)'], ['#00897B', 'drainage (ticks at the bottom)']].forEach(q => item(q[0], q[1], true)); var legEnd = ly; }
   // the day in words, and the whole span in numbers
-  const l1 = 'Day ' + j + ' of ' + span + ': ' + fmtDate(dateOfK(d)) + ' · ' + cropNameAt(sim, d) + ' · ' + PH[ph[j]][1] + ' · root zone ' + mmL(d).toFixed(0) + ' of ' + TAWd(d).toFixed(0) + ' mm (' + Math.round(path[j] * 100) + ' %), sensor at depletion ' + (1 - Math.min(1, sens[j])).toFixed(2) + ' (trigger ' + fT.toFixed(2) + ')';
-  const l2 = (nI == null ? 'No irrigation is due after this day in the simulated record.' : ni > 0 ? 'Next irrigation ' + fmtDate(dateOfK(nI)) + ', in ' + ni + ' day' + (ni === 1 ? '' : 's') + ' (the sensor reaches the trigger): ' + irF(sp.Zn, 0) + ' mm net, ' + irF(sp.gross || sp.Zn, 0) + ' mm pumped with this design.' : 'Irrigation day: this design applies ' + irF(sp.Zn, 0) + ' mm net and the root zone is refilled.')
-    + (wilt != null ? ' Without irrigation from this day the root zone would reach the wilting point on ' + fmtDate(dateOfK(wilt)) + ', in ' + wi + ' days' + (trigD != null ? ' (the trigger on ' + fmtDate(dateOfK(trigD)) + ')' : '') + '.' : ' Without irrigation from this day the root zone would still hold water after 200 days.');
-  window.__DSSNOW = { date: fmtDate(dateOfK(d)), day: j, span, phase: PH[ph[j]][1], col: PH[ph[j]][0], mm: +mmL(d).toFixed(1), taw: +TAWd(d).toFixed(1), pct: Math.round(path[j] * 100), dep: +(1 - Math.min(1, sens[j])).toFixed(2), fT: +fT.toFixed(2), crop: cropNameAt(sim, d), next: nI != null ? fmtDate(dateOfK(nI)) : null, nextIn: ni, wilt: wilt != null ? fmtDate(dateOfK(wilt)) : null, wiltIn: wi, trig: trigD != null ? fmtDate(dateOfK(trigD)) : null, net: +(+sp.Zn || 0).toFixed(1), gross: +(+(sp.gross || sp.Zn) || 0).toFixed(1), paused: DSSMOV.paused, sys: sp.sys || '' };
+  const l1 = 'Day ' + j + ' of ' + span + ': ' + FDK((d)) + ' · ' + cropNameAt(sim, d) + ' · ' + PH[ph[j]][1] + ' · root zone ' + mmL(d).toFixed(0) + ' of ' + TAWd(d).toFixed(0) + ' mm (' + Math.round(path[j] * 100) + ' %), sensor at depletion ' + (1 - Math.min(1, sens[j])).toFixed(2) + ' (trigger ' + fT.toFixed(2) + ')';
+  const l2 = (nI == null ? 'No irrigation is due after this day in the simulated record.' : ni > 0 ? 'Next irrigation ' + FDK((nI)) + ', in ' + ni + ' day' + (ni === 1 ? '' : 's') + ' (the sensor reaches the trigger): ' + irF(sp.Zn, 0) + ' mm net, ' + irF(sp.gross || sp.Zn, 0) + ' mm pumped with this design.' : 'Irrigation day: this design applies ' + irF(sp.Zn, 0) + ' mm net and the root zone is refilled.')
+    + (wilt != null ? ' Without irrigation from this day the root zone would reach the wilting point on ' + FDK((wilt)) + ', in ' + wi + ' days' + (trigD != null ? ' (the trigger on ' + FDK((trigD)) + ')' : '') + '.' : ' Without irrigation from this day the root zone would still hold water after 200 days.');
+  window.__DSSNOW = { date: FDK((d)), day: j, span, phase: PH[ph[j]][1], col: PH[ph[j]][0], mm: +mmL(d).toFixed(1), taw: +TAWd(d).toFixed(1), pct: Math.round(path[j] * 100), dep: +(1 - Math.min(1, sens[j])).toFixed(2), fT: +fT.toFixed(2), crop: cropNameAt(sim, d), next: nI != null ? FDK((nI)) : null, nextIn: ni, wilt: wilt != null ? FDK((wilt)) : null, wiltIn: wi, trig: trigD != null ? FDK((trigD)) : null, net: +(+sp.Zn || 0).toFixed(1), gross: +(+(sp.gross || sp.Zn) || 0).toFixed(1), paused: DSSMOV.paused, sys: sp.sys || '', note: seasonNote };
   const pct = k => Math.round(100 * (cnt[k] || 0) / (span + 1));
   const l3 = 'Over the ' + (span + 1) + ' days: ' + irrN + ' irrigation' + (irrN === 1 ? '' : 's') + ' (' + irF(irrMM) + ' mm by the daily model), rain ' + irF(rainMM) + ' mm, evapotranspiration ' + irF(etMM) + ' mm, drainage ' + irF(drMM) + ' mm. Days: comfortable ' + pct('ok') + ' %, nearing the trigger ' + pct('near') + ' %, beyond the trigger ' + pct('stress') + ' %, near wilting ' + pct('wilt') + ' %, fallow ' + pct('fal') + ' %.';
   const by = Math.max(top + ph0 + 104, legEnd + 18); ctx.fillStyle = '#F2F7FB'; const hh = 16 + 12 * (sidWrap(l2, 0, 0, W - 44, { s: 9.2 }, 12, true) + sidWrap(l3, 0, 0, W - 44, { s: 9.2 }, 12, true)) + 10; ctx.fillRect(14, by - 12, W - 28, hh);
@@ -1726,13 +1738,99 @@ function dssMovie(y, sim, k0, up, sp) {
   { const me = rows.find(r => r.so === state.soil) || rows[0], fst = rows[0], slw = rows[rows.length - 1]; const txt = 'Your soil, ' + me.nm.toLowerCase() + ', holds ' + irF(AWC[me.so] || 0, 1) + ' mm of available water per cm, ' + irF(me.taw) + ' mm in the root zone: at ' + ETd.toFixed(1) + ' mm a day it loses ' + irF(me.rate * 100) + ' % of it a day, reaches its trigger in about ' + me.dT + ' days and the wilting point in about ' + me.dW + ' days from field capacity. ' + fst.nm + ' empties fastest (' + fst.dW + ' days), ' + slw.nm.toLowerCase() + ' slowest (' + slw.dW + ' days): sandy soils need smaller and more frequent irrigations.';
     ctx.fillStyle = '#9CCB8F'; ctx.fillRect(bx, y2, 10, 8); T('to the trigger', bx + 14, y2 + 8, { s: 8.6, c: '#374151' }); ctx.fillStyle = '#F2B27A'; ctx.fillRect(bx + 100, y2, 10, 8); T('trigger to the wilting point (stress)', bx + 114, y2 + 8, { s: 8.6, c: '#374151' }); y2 += 22;
     const n = sidWrap(txt, 16, y2, W - 32, { s: 9.4, c: '#12303A' }, 12); y2 += n * 12; }
-  return y2 + 6;
+  return plantAdviceDraw(y2 + 18, sim);
+}
+
+// ===== When to plant: the irrigation need of the crop in use for every sowing date of the year, from the weather in use
+// (FAO-56 root-zone balance of the crop library, Eq. 21.x), with the temperature limits of the crop when the weather has temperatures
+const PLANT_BASE = { cereal: 'wheat', legume: 'soybean', vegetable: 'tomato' };
+// warm-season crops: the air temperature needed at sowing and over the season (°C, FAO and seed-company guidance), no frost
+const WARM = { rice: [15, 20], maize: [10, 14], pearlmillet: [15, 20], sorghum: [14, 18], cassava: [15, 20], yam: [15, 20], cowpea: [15, 18], greengram: [15, 18], soybean: [10, 15], groundnut: [15, 18], cotton: [15, 20], tomato: [12, 15], pepper: [14, 17] };
+const COOL = { wheat: 1, chickpea: 1, mustard: 1, potato: 1, onion: 1, cabbage: 1 };
+let _plantAdv = { key: null, val: null };
+// typical monthly air temperature at Taastrup, Denmark, the site of the recorded weather (climate normals, mean and daily minimum, °C),
+// spread over the days of the year: used for the planting advice when the weather in use has no temperatures
+const TREC = (() => { const M = [0.5, 0.3, 2.5, 6.5, 11.2, 15.0, 16.4, 16.2, 12.9, 9.1, 4.8, 1.9], N = [-2.0, -2.3, -0.5, 2.5, 6.5, 10.0, 11.8, 11.6, 9.1, 6.0, 2.4, -0.7], mid = [15, 45, 74, 105, 135, 166, 196, 227, 258, 288, 319, 349];
+  const at = (A, d) => { for (let i = 0; i < 12; i++) { const a = mid[i], b = i < 11 ? mid[i + 1] : mid[0] + 365, dd = d < mid[0] ? d + 365 : d; if (dd >= a && dd < b) { const f = (dd - a) / (b - a); return A[i] + (A[(i + 1) % 12] - A[i]) * f; } } return A[0]; };
+  return { mean: Array.from({ length: 365 }, (_, d) => at(M, d)), min: Array.from({ length: 365 }, (_, d) => at(N, d)) }; })();
+function plantAdvice() {
+  const L = window.CROPLIB; if (!L || typeof CWB !== 'function') return null; const lib = !!L.crops[state.crop], ck = lib ? state.crop : PLANT_BASE[state.crop] || 'wheat', c = L.crops[ck]; if (!c) return null;
+  if (c.habit !== 'annual') return { perennial: true, label: c.label };
+  const WX = (window.WXD && WXD.on) ? WXD : null, key = [ck, state.soil, state.method, state.trigIdx, state.rainIdx, state.tempIdx, WX ? WX.key : 'rec'].join('|'); if (_plantAdv.key === key) return _plantAdv.val;
+  const len = c.stages.reduce((a, b) => a + b, 0), recT = !(WX && WX.Tclim), Tc = !recT ? WX.Tclim : TREC.mean, Tn = !recT ? WX.Tnclim : TREC.min, tAt = (A, j) => { j = ((j % 365) + 365) % 365; for (let r = 0; r < 20; r++) { const v = A[(j + r) % 365]; if (isFinite(v)) return v; } return NaN; };
+  const tSeason = p => { let s2 = 0, n2 = 0; for (let t = 0; t < len; t++) { const v = tAt(Tc, p + t); if (isFinite(v)) { s2 += v; n2++; } } return n2 ? s2 / n2 : NaN; };
+  const rows = []; for (let p = 0; p < 365; p += 7) { const o = CWB(ck, { plantDoy: p }), rf = CWB(ck, { plantDoy: p, rainfed: true }); let ok = true, why = '';
+    if (Tc) { let s = 0, n = 0, frost = 0, hot = 0; for (let t = 0; t < len; t++) { const v = tAt(Tc, p + t); if (isFinite(v)) { s += v; n++; if (v > 30) hot++; } const m = Tn ? tAt(Tn, p + t) : NaN; if (isFinite(m) && m < 0) frost++; } const mean = n ? s / n : NaN, sow = tAt(Tc, p);
+      if (WARM[ck]) { const sMin = WARM[ck][0], mMin = WARM[ck][1]; if (sow < sMin) { ok = false; why = 'too cold to sow (' + sow.toFixed(0) + ' °C, needs ' + sMin + ' °C)'; } else if (frost > 0) { ok = false; why = 'frost in the season'; } else if (mean < mMin) { ok = false; why = 'season too cool (' + mean.toFixed(0) + ' °C, needs ' + mMin + ' °C)'; } }
+      else if (COOL[ck]) { if (mean > 24) { ok = false; why = 'season too hot (' + mean.toFixed(0) + ' °C)'; } else if (frost > 25 && ck !== 'wheat' && ck !== 'mustard') { ok = false; why = 'too many frost days'; } else if (mean < 5) { ok = false; why = 'season too cold'; } } }
+    rows.push({ p, I: o.mean.I, In: o.mean.In, RYi: o.mean.RY, RYr: rf.mean.RY, ok, why, tm: tSeason(p) }); }
+  const okR = rows.filter(r => r.ok), none = !okR.length; let best, a, b;
+  if (!none) { const minI = Math.min(...okR.map(r => r.I)); best = okR.filter(r => r.I <= minI * 1.1 + 5).sort((p2, q2) => q2.RYr - p2.RYr || p2.I - q2.I)[0];
+    // the best window: the run of feasible weeks around the best date within 15 % of its need
+    a = rows.indexOf(best); b = a; while (a > 0 && rows[a - 1].ok && rows[a - 1].I <= best.I * 1.15 + 5) a--; while (b < rows.length - 1 && rows[b + 1].ok && rows[b + 1].I <= best.I * 1.15 + 5) b++; }
+  else { const tmx = Math.max(...rows.map(r => isFinite(r.tm) ? r.tm : -99)); best = rows.find(r => r.tm === tmx); a = rows.indexOf(best); b = a; while (a > 0 && rows[a - 1].tm >= tmx - 0.6) a--; while (b < rows.length - 1 && rows[b + 1].tm >= tmx - 0.6) b++; }
+  const val = { none, ck, lib, label: c.label, len, rows, best, from: rows[a].p, to: rows[b].p, temp: !!Tc, recT, cur: lib ? state.plantDoy : null, curRow: lib ? rows.reduce((q, r) => Math.abs(r.p - state.plantDoy) < Math.abs(q.p - state.plantDoy) ? r : q, rows[0]) : null };
+  _plantAdv = { key, val }; return val;
+}
+window.plantAdvice = plantAdvice;
+function plantAdviceDraw(y, sim) {
+  let A = null; try { A = plantAdvice(); } catch (e) { A = null; } if (!A) return y;
+  const doyStr = p => { const dt = new Date(Date.UTC(2001, 0, 1 + p)); return dt.getUTCDate() + ' ' + MON[dt.getUTCMonth()]; }, WX = (window.WXD && WXD.on) ? WXD : null;
+  sidHead('When to plant ' + A.label.toLowerCase() + ': the irrigation need for every sowing date of the year', y, 'FAO-56 root-zone balance of the crop over the 20 years of the weather in use (' + (WX ? (WX.src === 'online' ? 'online weather of ' : 'weather file ') + WX.name : 'recorded weather of the simulations') + '), with your soil, trigger and method');
+  y += 40; if (A.perennial) { sidWrap(A.label + ' stands in the field all year: there is no sowing date to choose. The film above and the schedule give the irrigations of each season.', 16, y, W - 32, { s: 9.6, c: '#12303A' }, 12); return y + 30; }
+  const bx = 60, bw = W - 16 - bx - 26, bh = 110, mx = Math.max(10, ...A.rows.map(r => r.I)), st = [10, 20, 25, 50, 100, 200, 250, 500].find(v => mx / v <= 5) || 500, Mx = Math.ceil(mx / st) * st, Xp = p => bx + p / 365 * bw, Yi = v => y + bh - v / Mx * bh;
+  ctx.fillStyle = '#fff'; ctx.fillRect(bx, y, bw, bh); ctx.strokeStyle = '#B9C0C7'; ctx.lineWidth = 1; ctx.strokeRect(bx + 0.5, y + 0.5, bw, bh);
+  for (let v = 0; v <= Mx; v += st) { ctx.strokeStyle = '#EEF1F3'; ctx.beginPath(); ctx.moveTo(bx, Yi(v)); ctx.lineTo(bx + bw, Yi(v)); ctx.stroke(); T(String(v), bx - 4, Yi(v) + 3, { s: 8.4, a: 'right', c: MUTE }); }
+  ctx.fillStyle = 'rgba(102,187,106,0.18)'; ctx.fillRect(Xp(A.from), y, Math.max(3, Xp(A.to + 7) - Xp(A.from)), bh);
+  A.rows.forEach(r => { const x = Xp(r.p) + 1, w = bw * 7 / 365 - 2; ctx.fillStyle = !r.ok ? '#CFCFCF' : r === A.best ? '#1B5E20' : r.p >= A.from && r.p <= A.to ? '#43A047' : '#64B5F6'; ctx.fillRect(x, Yi(r.I), w, y + bh - Yi(r.I)); });
+  ctx.strokeStyle = '#C62828'; ctx.lineWidth = 1.6; ctx.beginPath(); A.rows.forEach((r, i) => { const yy = y + bh - r.RYr * bh; i ? ctx.lineTo(Xp(r.p) + bw * 3.5 / 365, yy) : ctx.moveTo(Xp(r.p) + bw * 3.5 / 365, yy); }); ctx.stroke();
+  for (let m = 0; m < 12; m++) { const p = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334][m]; T(MON[m], Xp(p + 15), y + bh + 12, { s: 8.4, a: 'center', c: MUTE }); ctx.strokeStyle = '#E0E4E8'; ctx.beginPath(); ctx.moveTo(Xp(p), y + bh); ctx.lineTo(Xp(p), y + bh + 4); ctx.stroke(); }
+  T('sowing date', bx + bw / 2, y + bh + 25, { s: 8.6, a: 'center', c: '#374151' });
+  ctx.save(); ctx.translate(bx - 40, y + bh / 2); ctx.rotate(-Math.PI / 2); T('irrigation need (mm/season)', 0, 0, { s: 8.4, b: true, a: 'center', c: '#1565C0' }); ctx.restore();
+  for (let v = 0; v <= 1.0001; v += 0.5) T(Math.round(v * 100) + '%', bx + bw + 3, y + bh - v * bh + 3, { s: 7.8, c: '#C62828' });
+  if (A.cur != null) { const xc = Xp(A.cur); ctx.strokeStyle = '#111'; ctx.lineWidth = 1.4; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(xc, y); ctx.lineTo(xc, y + bh); ctx.stroke(); ctx.setLineDash([]); pill('your sowing ' + doyStr(A.cur), clampN(xc, bx + 60, bx + bw - 60), y + 12, { s: 8.4, b: true, a: 'center', c: '#111' }); }
+  pill('best ' + doyStr(A.best.p), clampN(Xp(A.best.p), bx + 40, bx + bw - 40), Yi(A.best.I) - 10, { s: 8.4, b: true, a: 'center', c: '#1B5E20' });
+  y += bh + 38;
+  { let lx = bx; const item = (c, l, bar) => { ctx.font = '8.8px sans-serif'; const tw = ctx.measureText(l).width + 26; if (lx + tw > W - 14) { lx = bx; y += 13; } ctx.fillStyle = c; if (bar) ctx.fillRect(lx, y - 5, 12, 3); else ctx.fillRect(lx, y - 8, 10, 8); T(l, lx + 15, y, { s: 8.8, c: '#374151' }); lx += tw; };
+    item('#1B5E20', 'best sowing week'); item('#43A047', 'best window'); item('#64B5F6', 'other weeks'); if (A.temp) item('#CFCFCF', 'too cold or too hot for the crop'); item('#C62828', 'rain-fed yield, % of potential (right axis)', true); y += 16; }
+  const cr = A.curRow, txt = (A.lib ? '' : 'The crop in Properties is the simulated ' + state.crop + ' rotation, sown on fixed dates; the advice is for ' + A.label.toLowerCase() + ' from the crop library. ') +
+    (A.none ? 'No week of the year is warm enough for ' + A.label.toLowerCase() + ' in the open field in this climate (' + A.best.why + ' even in the warmest weeks): grow it under cover, choose another crop, or load the weather of your own farm. The warmest sowing window is shown. ' : '') + (A.none ? 'Warmest window: ' : 'Sow ' + A.label.toLowerCase() + ' between ') + (A.none ? '' : '') + doyStr(A.from) + (A.none ? ' to ' : ' and ') + doyStr(A.to + 6) + ' (best ' + doyStr(A.best.p) + '): it needs about ' + irF(A.best.I) + ' mm of irrigation a season (' + irF(A.best.In) + ' mm net), and rain-fed it would give ' + Math.round(A.best.RYr * 100) + ' % of its potential yield.' +
+    (cr ? ' Sown on your date, ' + doyStr(A.cur) + ', it needs ' + irF(cr.I) + ' mm' + (cr.ok ? '' : ', and ' + cr.why) + '.' : '') +
+    (A.recT ? ' Weeks in grey are too cold or too hot for the crop in the typical climate of Taastrup, Denmark, the site of the recorded weather: load the online weather of your farm (button at the top of the design) for the temperatures, rain and evaporation of your own place.' : ' Weeks in grey are too cold or too hot for the crop in the weather of your farm.');
+  const n = sidWrap(txt, 16, y + 4, W - 32, { s: 9.4, c: '#12303A' }, 12); y += n * 12 + 10;
+  if (A.lib && Math.abs(A.best.p - A.cur) > 6) { btn3dE(16, y, 230, 26, 'Sow on ' + doyStr(A.best.p) + ' (best)', true); hot(16, y, 230, 26, () => { applyState({ plantDoy: A.best.p }); }, 'set the sowing date of the crop in Properties to the best date'); y += 34; }
+  else if (!A.lib) { btn3dE(16, y, 330, 26, 'Use ' + A.label.toLowerCase() + ' sown on ' + doyStr(A.best.p), false); hot(16, y, 330, 26, () => { applyState({ crop: A.ck, plantDoy: A.best.p }); }, 'choose this crop of the library with the best sowing date'); y += 34; }
+  window.__PLANT = { label: A.label, from: doyStr(A.from), to: doyStr(A.to + 6), best: doyStr(A.best.p), I: Math.round(A.best.I), RYr: Math.round(A.best.RYr * 100), cur: A.cur != null ? doyStr(A.cur) : null, curI: cr ? Math.round(cr.I) : null, temp: !A.recT, lib: A.lib, none: A.none };
+  return y;
+}
+function btn3dE(x, y, w, h, label, prim) { ctx.fillStyle = prim ? '#0A246A' : '#D4D0C8'; ctx.fillRect(x, y, w, h); ctx.fillStyle = prim ? '#3A6EA5' : '#FFFFFF'; ctx.fillRect(x, y, w, 2); ctx.fillRect(x, y, 2, h); ctx.fillStyle = prim ? '#000' : '#404040'; ctx.fillRect(x, y + h - 2, w, 2); ctx.fillRect(x + w - 2, y, 2, h); T(label, x + w / 2, y + h / 2 + 4, { s: 10, b: true, a: 'center', c: prim ? '#fff' : '#000' }); }
+// the second line of the design banner: the weather of the decision, with the button that loads the online weather of the farm
+function wxLine(yb, sub) {
+  let S = {}; try { S = wxStatus(); } catch (e) {}
+  const on = S.src === 'online' || S.src === 'file', lab = S.src === 'online' ? 'online weather of ' + S.name + ', ' + S.years + ' and the 16-day forecast' : S.src === 'file' ? 'weather file ' + S.name + ', ' + S.years : 'recorded weather, Taastrup (Denmark) 1980 to 1999';
+  const bw = on ? 128 : 186, bx = W - 20 - bw; sidBadge('WEATHER', 22, yb, on); ctx.font = 'bold 9px sans-serif'; let t = lab; while (ctx.measureText(t).width > bx - 92 && t.length > 20) t = t.slice(0, -2); if (t !== lab) t += '…';
+  T(t, 80, yb, { s: 9.2, b: true, c: on ? '#1B5E20' : '#8A5300' });
+  const by = yb - 11; ctx.fillStyle = on ? '#D4D0C8' : '#0A246A'; ctx.fillRect(bx, by, bw, 15); ctx.fillStyle = on ? '#fff' : '#3A6EA5'; ctx.fillRect(bx, by, bw, 1); ctx.fillStyle = '#404040'; ctx.fillRect(bx, by + 14, bw, 1); T(on ? 'Change the weather…' : '\u2601 Online weather of the farm…', bx + bw / 2, by + 11, { s: 8.8, b: true, a: 'center', c: on ? '#000' : '#fff' });
+  hot(bx, by, bw, 15, wxOpen, 'the daily weather of your farm (20 years and the 16-day forecast) calibrates the soil water, the schedule, the film and the planting advice');
+  if (sub) hot(22, yb - 26, 50, 14, () => {}, 'design equations: ' + sub);
+}
+function wxOpen() { try { const P = window.parent; if (P && P !== window && P.WxUI) { P.WxUI.online(); return; } } catch (e) {}
+  const q = prompt('Place of the farm (town, village or district):'); if (!q) return; wxGeocode(q).then(L => { if (!L || !L.length) { alert('No place found'); return; } return wxOnline(L[0].lat, L[0].lon, L[0].name); }).catch(e => alert('The online weather could not be reached: ' + e.message)); }
+// the weather of the decision, at the top of every design: the source in use and the button to load the online weather of the farm
+function wxCtl(y) {
+  let S = {}; try { S = wxStatus(); } catch (e) {}
+  const on = S.src === 'online', lab = on ? 'Online weather: ' + S.name + ' (' + S.years + ')' : S.src === 'file' ? 'Weather file: ' + S.name + ' (' + S.years + ')' : 'Weather: recorded weather of the simulations (1980 to 1999)';
+  const bw = on ? 150 : 210, bx = W - 14 - bw; ctx.font = 'bold 9px sans-serif'; let t = lab; while (ctx.measureText(t).width > bx - 30 && t.length > 20) t = t.slice(0, -2); if (t !== lab) t += '…';
+  ctx.fillStyle = on ? '#E8F5E9' : '#FFF8E1'; ctx.strokeStyle = on ? '#2E7D32' : '#F9A825'; ctx.lineWidth = 1; rrect(14, y, W - 28, 24, 5); ctx.fill(); ctx.stroke();
+  T((on ? '\u2601 ' : '\u26A0 ') + t, 22, y + 16, { s: 9, b: true, c: on ? '#1B5E20' : '#7A4A00' });
+  btn3dE(bx, y + 2, bw, 20, on ? 'Change the weather…' : '\u2601 Online weather of the farm…', !on);
+  hot(bx, y + 2, bw, 20, wxOpen, 'the daily weather of your farm (20 years and the 16-day forecast) calibrates the soil water, the schedule, the film and the planting advice');
 }
 
 // ===== Irrigation schedule and advice: closes every irrigation design (surface, drip, sprinkler) =====
 function irAdvice(y0, sp) {
   try { (window.__CYCLE = window.__CYCLE || {})[sp.sys] = sp.timeH || null; } catch (e) {}
-  const sim = simCache.val || seasonSim(), k0 = fclock.kd(), ay = clampN(yearOf(k0), 0, NYR - 1), Ea = Math.max(0.05, sp.Ea || 0.5), gross = sp.gross || sp.Zn / Ea;
+  const sim0 = simCache.val || seasonSim(), sim = sim0, kW = fclock.kd(), S0 = irStart(sim, kW), k0 = S0.k; IRSH = S0.sh; sp = Object.assign({}, sp, { note: S0.note }); const ay = clampN(yearOf(k0), 0, NYR - 1), Ea = Math.max(0.05, sp.Ea || 0.5), gross = sp.gross || sp.Zn / Ea;
   const yr = []; for (let d = ay * DPY; d < Math.min(ND, (ay + 1) * DPY); d++) if ((sim.irr[d] || 0) > 0.5) yr.push(d);
   const gaps = []; for (let i = 1; i < yr.length; i++) gaps.push(yr[i] - yr[i - 1]);
   const mean = gaps.length ? gaps.reduce((a, b) => a + b, 0) / gaps.length : 0, gmin = gaps.length ? Math.min(...gaps) : 0, gmax = gaps.length ? Math.max(...gaps) : 0;
@@ -1744,13 +1842,13 @@ function irAdvice(y0, sp) {
   ctx.fillStyle = '#E6F4F7'; ctx.fillRect(14, y - 12, W - 28, 20); cols.forEach(c => T(c[0], c[1], y + 2, { s: 9, b: true, c: IRC.ink })); y += 20;
   if (!up.length) { T('No irrigation is triggered in the simulation for these settings. It starts when the sensor at ' + zs + ' cm reaches the trigger.', 20, y + 2, { s: 9.5, c: '#374151' }); y += 24; }
   up.forEach((d, i) => { const dn = d - k0, nxt = up[i + 1] != null ? up[i + 1] - d : null; ctx.fillStyle = i % 2 ? '#F6F7F5' : '#fff'; ctx.fillRect(14, y - 12, W - 28, 20);
-    const row = [String(i + 1), fmtDate(dateOfK(d)), dn === 0 ? 'today' : dn === 1 ? 'tomorrow' : dn + ' days', irF(sp.Zn, 0), irF(gross, 0), sp.timeH ? irF(sp.timeH, 1) + ' h' : '-', nxt == null ? '-' : nxt + ' days'];
+    const dW = d + IRSH - kW, row = [String(i + 1), FDK((d)), dW === 0 ? 'today' : dW === 1 ? 'tomorrow' : dW + ' days', irF(sp.Zn, 0), irF(gross, 0), sp.timeH ? irF(sp.timeH, 1) + ' h' : '-', nxt == null ? '-' : nxt + ' days'];
     row.forEach((v, c) => T(v, cols[c][1], y + 2, { s: 9.3, b: c === 1, c: i === 0 ? IRC.ac : '#374151' })); y += 20; });
   y += 14; sidHead('Intervals, efficiency and the advice in short', y, 'Everything above in one message for ' + sp.sys.toLowerCase() + ' irrigation');
-  y = irRows(y + 34, [['Sensor trigger', 'irrigate when the sensor at ' + zs + ' cm reaches depletion ' + (fT != null ? fT.toFixed(2) : '-')], ['Irrigations in the season of this date', yr.length ? yr.length + ' (' + fmtDate(dateOfK(yr[0])) + ' to ' + fmtDate(dateOfK(yr[yr.length - 1])) + ')' : 'none'], ['Interval between irrigations', gaps.length ? irF(mean, 1) + ' days on average (shortest ' + gmin + ', longest ' + gmax + ')' : '-'], ['Depth per irrigation', irF(sp.Zn, 1) + ' mm net, ' + irF(gross, 1) + ' mm pumped'], ['Application efficiency Ea', irF(Ea * 100, 1) + ' %'], ['Storage efficiency Es', irF((sp.Es || 0) * 100, 1) + ' %'], ['Time per round', sp.timeH ? irF(sp.timeH, 1) + ' h' : '-']]) + 8;
-  const nx = up[0], dn = nx == null ? null : nx - k0;
+  y = irRows(y + 34, [['Sensor trigger', 'irrigate when the sensor at ' + zs + ' cm reaches depletion ' + (fT != null ? fT.toFixed(2) : '-')], ['Irrigations in the season of this date', yr.length ? yr.length + ' (' + FDK((yr[0])) + ' to ' + FDK((yr[yr.length - 1])) + ')' : 'none'], ['Interval between irrigations', gaps.length ? irF(mean, 1) + ' days on average (shortest ' + gmin + ', longest ' + gmax + ')' : '-'], ['Depth per irrigation', irF(sp.Zn, 1) + ' mm net, ' + irF(gross, 1) + ' mm pumped'], ['Application efficiency Ea', irF(Ea * 100, 1) + ' %'], ['Storage efficiency Es', irF((sp.Es || 0) * 100, 1) + ' %'], ['Time per round', sp.timeH ? irF(sp.timeH, 1) + ' h' : '-']]) + 8;
+  const nx = up[0], dn = nx == null ? null : nx + IRSH - kW;
   const msg = (nx == null ? 'No irrigation is due in the simulated record for these settings. Keep the sensor at ' + zs + ' cm: when it reaches depletion ' + (fT != null ? fT.toFixed(2) : '') + ', irrigate. '
-    : 'Next irrigation: ' + fmtDate(dateOfK(nx)) + (dn === 0 ? ' (today)' : dn === 1 ? ' (tomorrow)' : ' (in ' + dn + ' days)') + ', ' + irF(sp.Zn, 0) + ' mm net, ' + irF(gross, 0) + ' mm pumped with this design. ')
+    : 'Next irrigation: ' + FDK((nx)) + (dn === 0 ? ' (today)' : dn === 1 ? ' (tomorrow)' : ' (in ' + dn + ' days)') + ', ' + irF(sp.Zn, 0) + ' mm net, ' + irF(gross, 0) + ' mm pumped with this design. ')
     + (gaps.length ? 'Then irrigate about every ' + irF(mean, 0) + ' days (between ' + gmin + ' and ' + gmax + ' days, shorter in hot weather and longer after rain). ' : '')
     + 'With this ' + sp.sys.toLowerCase() + ' design ' + irF(Ea * 100) + ' % of the pumped water is used (Ea) and ' + irF((sp.Es || 0) * 100) + ' % of the root zone is refilled (Es)'
     + (sp.timeH ? ', and one round takes ' + irF(sp.timeH, 1) + ' h' : '') + '. If a rain above 10 mm is forecast, delay the irrigation by a day or two.';
@@ -3752,7 +3850,7 @@ function yearRainFactors() {
   return mr.map(v => clampN(Math.pow(med / v, 0.3), 0.65, 1.45));
 }
 let simCache = { key: null, val: null }, simPending = null;
-function simKey() { return [(window.WXD && window.WXD.on) ? window.WXD.key : 'rec', state.trigMode, state.soil, state.till, state.tcIdx, state.vffIdx, state.capIdx, state.rainIdx, state.tempIdx, state.trigIdx, state.zIdx, state.method, state.nIdx, state.crop, Math.round(current.transp), Math.round(current.evap), Math.round(current.irr), Math.round(current.rain - current.other)].join('|'); }
+function simKey() { return [(window.WXD && window.WXD.on) ? window.WXD.key : 'rec', state.trigMode, state.soil, state.till, state.tcIdx, state.vffIdx, state.capIdx, state.rainIdx, state.tempIdx, state.trigIdx, state.zIdx, state.method, state.nIdx, state.crop, state.plantDoy, state.densIdx, Math.round(current.transp), Math.round(current.evap), Math.round(current.irr), Math.round(current.rain - current.other)].join('|'); }
 function seasonSim(sync) {
   const key = simKey();
   if (simCache.key === key) return simCache.val;
@@ -3789,7 +3887,7 @@ function computeSim() {
       let R = 0, Tt = 0, front = 0, irrD = 0, drainD = 0;
       if (WXD) { R = WXD.P[d] * pSc; if (R > 0.05) { Tt = Math.max(0, R - Ic); if (Tt > 0.3) { const q = infiltrate(0, Tt); front = q.depth; drainD += q.drained; } } else R = 0; }
       else if (rand() < 0.28) { R = Math.min(70, mu0 * gy[Math.min(y, NYR - 1)] * (-Math.log(rand() + 1e-6))); Tt = Math.max(0, R - Ic); if (Tt > 0.3) { const q = infiltrate(0, Tt); front = q.depth; drainD += q.drained; } }
-      if (!rfFs && cv > 0.2 && doy >= 95 && doy <= 250 && d - lastIrr >= minInt && irrYear + dEff <= budget + 1e-6 && 1 - w[sense] / awc >= fTrig && fTrig < 0.995 && (!drip || 1 - w[clampN(Math.round(drip / DZ), 0, NLAY - 1)] / awc >= 0.12)) {
+      if (!rfFs && cv > 0.2 && ((wI >= 0 && wins[wI].lib) || (doy >= 95 && doy <= 250)) && d - lastIrr >= minInt && irrYear + dEff <= budget + 1e-6 && 1 - w[sense] / awc >= fTrig && fTrig < 0.995 && (!drip || 1 - w[clampN(Math.round(drip / DZ), 0, NLAY - 1)] / awc >= 0.12)) {
         const j = drip ? clampN(Math.round(drip / DZ), 0, NLAY - 1) : 0, q = drip ? spread(j, dEff, 3) : infiltrate(j, dEff); irrD = dEff; front = Math.max(front, q.depth); drainD += q.drained; lastIrr = d; irrYear += dEff; nEv++;
       }
       totI += irrD; totD += drainD;
