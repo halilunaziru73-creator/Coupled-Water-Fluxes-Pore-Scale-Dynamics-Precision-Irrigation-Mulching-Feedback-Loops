@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SWAFL online</title>
+<script>
+// The software was grouped by version (Software/v1.0 and Software/v1.1.0). Links to the former place,
+// Software/SWAFL_Desktop/..., are sent to the same file of the current version.
+(function () {
+  var p = location.pathname, q = location.search + location.hash, low = p.toLowerCase();
+  var old = low.indexOf('/software/swafl_desktop');
+  if (old >= 0 && low.indexOf('/software/v1.') < 0) {
+    location.replace(p.slice(0, old) + '/Software/v1.1.0/SWAFL_Desktop' + p.slice(old + '/software/swafl_desktop'.length) + q);
+  }
+})();
+</script>
+<style>
+  :root { --bg: #f4f3ef; --ink: #1b1f23; --mute: #555; --ac: #0a246a; --card: #fff; --rule: #d6d2c6; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #16181b; --ink: #e8e6e1; --mute: #a8a49b; --ac: #8fb0ff; --card: #202328; --rule: #34383e; } }
+  :root[data-theme="dark"] { --bg: #16181b; --ink: #e8e6e1; --mute: #a8a49b; --ac: #8fb0ff; --card: #202328; --rule: #34383e; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 system-ui, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 40px 16px; }
+  a { color: var(--ac); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Page not found</h1>
+  <p>This address does not exist on the SWAFL site. The software is now grouped by version:</p>
+  <ul>
+    <li><a id="w11" href="#">SWAFL 1.1.0 online workbench</a></li>
+    <li><a id="w10" href="#">SWAFL 1.0 online workbench</a></li>
+    <li><a id="home" href="#">SWAFL home page</a></li>
+  </ul>
+</main>
+<script>
+  (function () { var seg = location.pathname.split('/').filter(Boolean), base = location.hostname.endsWith('github.io') && seg.length ? '/' + seg[0] : '';
+    document.getElementById('w11').href = base + '/Software/v1.1.0/SWAFL_Desktop/app/index.html?v=1.1.0';
+    document.getElementById('w10').href = base + '/Software/v1.0/SWAFL_Desktop/app/index.html';
+    document.getElementById('home').href = base + '/'; })();
+</script>
+</body>
+</html>
