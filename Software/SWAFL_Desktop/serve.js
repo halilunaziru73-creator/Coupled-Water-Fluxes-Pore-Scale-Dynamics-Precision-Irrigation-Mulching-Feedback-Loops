@@ -6,7 +6,7 @@ function createServer(root) {
   return http.createServer((req, res) => {
     let p = decodeURIComponent((req.url || '/').split('?')[0]);
     if (p === '/') p = '/index.html';
-    if (/SWAFL_Manual\.pdf$/i.test(p)) { const mf = path.join(__dirname, 'docs', 'SWAFL_Manual.pdf'); return fs.readFile(mf, (e2, b2) => { if (e2) { res.writeHead(404); return res.end('Manual not found'); } res.writeHead(200, { 'Content-Type': 'application/pdf' }); res.end(b2); }); }
+    if (/SWAFL_Manual\.pdf$/i.test(p)) { const m11 = path.join(__dirname, 'docs', 'manual_v1.1.0', 'SWAFL_Manual_v1.1.0_Vol1_Guide.pdf'), mf = fs.existsSync(m11) ? m11 : path.join(__dirname, 'docs', 'SWAFL_Manual.pdf'); return fs.readFile(mf, (e2, b2) => { if (e2) { res.writeHead(404); return res.end('Manual not found'); } res.writeHead(200, { 'Content-Type': 'application/pdf' }); res.end(b2); }); }
     const f = path.normalize(path.join(root, p));
     if (!f.startsWith(root)) { res.writeHead(403); return res.end('Forbidden'); }
     fs.readFile(f, (err, buf) => {
