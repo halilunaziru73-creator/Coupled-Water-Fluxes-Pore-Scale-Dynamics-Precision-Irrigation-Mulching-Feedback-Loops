@@ -24,7 +24,7 @@ The complete library is listed in Table 21.2 at the end of this chapter.
 
 ## The Crop water requirement layer
 
-![The Crop water requirement layer.](images/layers/d_crop_p1.jpg){width=100%}
+![The Crop water requirement layer.](images/atlas11/L_crop_p1.jpg){width=100%}
 
 The layer *Crops ▸ Crop water requirement* shows, for the chosen crop on the soil, weather, trigger and method of the project:
 

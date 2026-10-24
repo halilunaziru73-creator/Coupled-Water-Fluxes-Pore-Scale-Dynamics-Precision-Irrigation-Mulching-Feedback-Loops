@@ -15,11 +15,11 @@ The window has eight regions, named here as they are named in the program.
 
 The **status bar** shows, from left to right: the state (*Ready*), the active layer, the working date, the soil, tillage, mulch and irrigation method, *Paused* or *Running*, and the version (*SWAFL 1.1.0*).
 
-![The window with the Field balance layer open.](images/ui/w_start.jpg){width=100%}
+![The window with the Field balance layer open.](images/atlas11/ui_u01_workbench.jpg){width=100%}
 
 ## Menu bar reference
 
-![The File menu.](images/ui/menu_file.jpg){width=100%}
+![The File menu.](images/atlas11/ui_u02_menu_file.jpg){width=100%}
 
 | Menu | Item | Shortcut | Action |
 |:--|:--|:--|:--|
@@ -49,7 +49,7 @@ The **status bar** shows, from left to right: the state (*Ready*), the active la
 | Run | Run / pause the season (F5); Restart from day 1 (Shift+F5); 20-year season simulation; Optimise surface layout; Ready-made cases ▸ | | |
 | Help | Manual (PDF) (F1); How to use SWAFL; Troubleshooting (running the app); Keyboard shortcuts; SWAFL on GitHub; Full documentation on GitHub; Report a problem; About SWAFL | | |
 
-The eight menus are pictured, opened, in Volume 2.
+The eight menus are pictured, opened, in the screenshot atlas (Chapter 25).
 
 ## The command palette (Ctrl+K)
 

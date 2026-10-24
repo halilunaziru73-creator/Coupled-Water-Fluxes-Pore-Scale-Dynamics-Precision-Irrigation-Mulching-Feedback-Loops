@@ -6,7 +6,7 @@ Version 1.1 changes how the three irrigation designs are used. Their inputs are 
 
 When a design layer opens, its inputs are drawn as usual and, below them, the results are replaced by the **Run the design** box:
 
-![The surface design before a run: the inputs are set, the results wait for the run.](images/ui/gate_sid.jpg){width=100%}
+![The surface design before a run: the inputs are set, the results wait for the run.](images/atlas11/ui_u14_design_before_run.jpg){width=100%}
 
 * **Run simulation** computes the design with the inputs above it. The run animates the irrigation from its start to its end (the time is shown on the playback bar, for example *irrigation time 0 of 314 min*), and then holds the finished state.
 * **Find the most efficient inputs** searches the inputs for the highest application efficiency (Section 18.4), puts the best combination into the value boxes and runs it.
@@ -29,7 +29,7 @@ and no input of the design has been changed since.
 
 Every input of a design is a value box. Clicking it opens a small window:
 
-![The value window of a surface-design input: exact value, unit, list of the allowed range.](images/ui/picker_sid.jpg){width=100%}
+![The value window of a surface-design input: exact value, unit, list of the allowed range.](images/atlas11/ui_u15_value_window.jpg){width=100%}
 
 * type the exact value, in the unit chosen beside it;
 * or pick a value from the list, which runs across the allowed range;
@@ -91,10 +91,10 @@ $$
 
 and the mainline length from the source to the nearest corner. **Turn the sketch into the design** fills the run length, width, area, lateral and mainline lengths and the slope of the chosen design (border strips, furrows, basins, drip or sprinklers), opens it and waits for the run.
 
-![The field sketch.](images/ui/dlg_sketch.jpg){width=100%}
+![The field sketch.](images/atlas11/ui_u12_sketch.jpg){width=100%}
 
 ## Comparing the three systems
 
 *Tools ▸ Compare the irrigation systems on this field* computes the surface, drip and sprinkler designs with the inputs they have now, on the same soil, crop and trigger, and lists their application efficiency, root zone filled, deep percolation, runoff or evaporation and the time per irrigation side by side.
 
-![The comparison of the three systems.](images/ui/dlg_compare.jpg){width=100%}
+![The comparison of the three systems.](images/atlas11/ui_u13_compare.jpg){width=100%}

@@ -4,7 +4,7 @@
 
 One large picture of a field, from sky to groundwater, on which red arrows join the parts that act on each other: temperature and the crop; rain and soil water; mulch and evaporation; the sensor trigger and irrigation; drainage and nitrogen leaching; nitrogen and the roots; tillage structure and drainage. Each arrow is numbered 1–7, and its **width grows with the size of the effect of one step** of the control behind it. Under the picture a panel lists "*What one step of each control does*"; click a row or an arrow to highlight it.
 
-![Feedback loops. Volume 2 shows the whole layer, part by part, with its equations.](images/layers/d_v5_p1.jpg){width=80%}
+![Feedback loops. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/v5_s0_p1.jpg){width=80%}
 
 The picture is also a set of controls: clicking the clouds cycles the rainfall, the sun the temperature, the mulch layer the material, the sensor the trigger (three grid steps drier each click, wrapping), the soil the tillage, the crop the crop category, the emitter or sprinkler the irrigation method, and the nitrogen band the nitrogen rate.
 

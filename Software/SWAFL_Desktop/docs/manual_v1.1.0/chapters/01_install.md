@@ -40,4 +40,4 @@ npm run get-app    # build SWAFL.exe, copy it to the Desktop and start it
 
 After start-up, verify three things: (i) the status bar at the bottom reads *Ready* and ends with *SWAFL 1.1.0*; (ii) the Results tab of the dashboard shows *On* followed by today's date with numbers below; (iii) clicking **Surface irrigation design** in the Layers panel opens the design with its inputs and a *Run the design* box. If the drawing area stays blank, see Chapter 16.
 
-![The workbench on first start: the Field balance layer for today's date. Left: Layers and Processing Toolbox. Centre: the drawing. Right of the drawing: the dashboard. Far right: Properties.](images/ui/w_start.jpg){width=100%}
+![The workbench on first start: the Field balance layer for today's date. Left: Layers and Processing Toolbox. Centre: the drawing. Right of the drawing: the dashboard. Far right: Properties.](images/atlas11/ui_u01_workbench.jpg){width=100%}

@@ -10,7 +10,7 @@ Without weather data of your own, SWAFL runs on the twenty recorded years of its
 
 ## Importing a file
 
-![The weather import dialog.](images/ui/dlg_weather_import.jpg){width=100%}
+![The weather import dialog.](images/atlas11/ui_u09_weather_import.jpg){width=100%}
 
 **Accepted files.**
 
@@ -95,7 +95,7 @@ The crop water requirement (Chapter 21) uses your daily rain and ET0 directly.
 
 ## The weather of a place
 
-![The online weather dialog.](images/ui/dlg_weather_online.jpg){width=100%}
+![The online weather dialog.](images/atlas11/ui_u10_weather_online.jpg){width=100%}
 
 Type the name of a town, village or district and press **Find**, then choose the place from the list; or type its latitude and longitude. **Get the weather** fetches:
 

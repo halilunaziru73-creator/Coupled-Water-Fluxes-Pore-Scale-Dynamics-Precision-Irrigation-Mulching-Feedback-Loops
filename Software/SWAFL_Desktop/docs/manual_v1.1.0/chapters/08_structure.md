@@ -66,7 +66,7 @@ with surface tension $\sigma = 0.0728$ N m$^{-1}$, contact angle $\gamma\approx0
 5. Read the bars *Change in drainage at the current settings* (conventional, reduced and no-till against no-till) and the yields. These come from the Daisy runs for the selected soil: $\Delta D_{\mathrm{conv}} = D_{\mathrm{conv}} - D_{\mathrm{notill}}$, $\Delta D_{\mathrm{red}} = D_{\mathrm{red}} - D_{\mathrm{notill}}$, at the current $\tau_c$.
 6. The sentence at the end states whether the consolidation rate changes anything: *"In this soil the consolidation rate changes nothing; tillage is the driver"* or *"Here the consolidation rate matters as well as tillage"*.
 
-![Tillage and structure layer: thin section, tillage comparison and the drainage consequences. Volume 2 shows the whole layer, part by part, with its equations.](images/layers/d_v3_p1.jpg){width=80%}
+![Tillage and structure layer: thin section, tillage comparison and the drainage consequences. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/v3_s0_p1.jpg){width=80%}
 
 ## Soil hydraulic drivers
 
@@ -74,7 +74,7 @@ with surface tension $\sigma = 0.0728$ N m$^{-1}$, contact angle $\gamma\approx0
 
 The question *"What drives change in soil hydraulic properties?"* answered for all ten soils together: for each soil sorted by clay content, a blue bar for the **tillage effect** (conventional minus no-till) and an orange bar for the **consolidation effect** (fastest minus slowest rate) on annual drainage, then scatter plots against clay content, and the 1-m soil profiles of the three tillage systems.
 
-![Soil hydraulic drivers. Volume 2 shows the whole layer, part by part, with its equations.](images/layers/d_v7_p1.jpg){width=80%}
+![Soil hydraulic drivers. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/v7_s0_p1.jpg){width=80%}
 
 ### Generation
 

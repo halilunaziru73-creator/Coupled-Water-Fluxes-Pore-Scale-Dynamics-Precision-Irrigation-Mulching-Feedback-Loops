@@ -49,8 +49,8 @@ ipcMain.handle('quit', () => app.quit());
 ipcMain.handle('fullscreen', () => { if (win) win.setFullScreen(!win.isFullScreen()); });
 ipcMain.handle('reload-app', () => { if (win) win.webContents.reloadIgnoringCache(); });
 ipcMain.handle('version', () => app.getVersion());
-// F1: the manual of this version (volume 1), shipped with the program or, when run from the source, in docs/manual_v1.1.0
-const MAN11 = 'SWAFL_Manual_v1.1.0_Vol1_Guide.pdf';
+// F1: the manual of this version , shipped with the program or, when run from the source, in docs/manual_v1.1.0
+const MAN11 = 'SWAFL_Manual_v1.1.0.pdf';
 ipcMain.handle('open-manual', async () => {
   const cands = [path.join(process.resourcesPath || '', MAN11), path.join(__dirname, 'docs', 'manual_v1.1.0', MAN11), path.join(process.resourcesPath || '', 'SWAFL_Manual.pdf'), path.join(__dirname, 'docs', 'SWAFL_Manual.pdf')];
   const f = cands.find(p => { try { return fs.existsSync(p); } catch (e) { return false; } });
