@@ -58,7 +58,7 @@
     // Daisy weather (dwf) and log (dlf) files: header lines, a line of dashes, then column names, often a units line, then data
     const lines = txt.replace(/\r/g, '').split('\n'); let di = lines.findIndex(l => /^-{8,}/.test(l.trim()));
     if (di < 0) { const wf = Array.from(new Set((txt.match(/"[^"\n]*\.(dwf|csv|dlf)"/gi) || []).map(x => x.replace(/"/g, '').split(/[\\/]/).pop())));
-      throw new Error(wf.length ? 'this Daisy setup file holds no weather itself; it uses the weather file ' + wf.join(', ') + ': import that file' : 'this Daisy file has no data table (a .dai setup file names its weather file: import that .dwf file, or a log file of daily weather)'); }
+      throw new Error(wf.length ? 'this setup file holds no weather itself; it uses the weather file ' + wf.join(', ') + ': import that file' : 'this file has no data table (a .dai setup file names its weather file: import that .dwf file, or a log file of daily weather)'); }
     let hi = di + 1; while (hi < lines.length && (lines[hi].trim() === '' || lines[hi].trim().startsWith('#'))) hi++;
     const rows = lines.slice(hi).filter(l => l.trim() !== '' && !l.trim().startsWith('#')).map(l => l.split(/\t|\s{2,}|\s+/).map(x => x.trim()));
     const res = fromTable(rows, name);
@@ -137,7 +137,7 @@
     if (which === 'record') { if (W.WXD) W.WXD.on = false; W.WXD = null; const pv = W.__wxPrev || { r: RAIN_VALUES.indexOf(1.0), t: TEMP_VALUES.indexOf(0) }; W.__wxPrev = null; applyState({ rainIdx: pv.r, tempIdx: pv.t }); try { document.getElementById('dssDate').dispatchEvent(new Event('change')); } catch (e) {} return true; }
     const d = W.WXSRC[which]; if (!d) return false; if (!W.WXD) W.__wxPrev = { r: state.rainIdx, t: state.tempIdx }; d.on = true; W.WXD = d; applyState({ rainIdx: RAIN_VALUES.indexOf(d.rainRef), tempIdx: TEMP_VALUES.indexOf(d.dTref) }); try { document.getElementById('dssDate').dispatchEvent(new Event('change')); } catch (e) {} return true;
   };
-  W.wxStatus = () => ({ src: W.WXD && W.WXD.on ? W.WXD.src : 'record', name: W.WXD && W.WXD.on ? W.WXD.name : '', file: !!W.WXSRC.file, online: !!W.WXSRC.online, years: W.WXD && W.WXD.on ? W.WXD.y0 + ' to ' + (W.WXD.y0 + NYRx - 1) : '', Pmean: W.WXD && W.WXD.on ? W.WXD.Pmean : null });
+  W.wxStatus = () => ({ src: W.WXD && W.WXD.on ? W.WXD.src : 'record', name: W.WXD && W.WXD.on ? W.WXD.name : '', file: !!W.WXSRC.file, online: !!W.WXSRC.online, years: W.WXD && W.WXD.on ? W.WXD.y0 + ' to ' + (W.WXD.y0 + NYRx - 1) : '', Pmean: W.WXD && W.WXD.on ? W.WXD.Pmean : null, key: W.WXD && W.WXD.on ? W.WXD.key : 'record' });
 
   // ------------------------------------------------------------------ online daily weather of a location (history and forecast)
   const ISO = d => d.toISOString().slice(0, 10);

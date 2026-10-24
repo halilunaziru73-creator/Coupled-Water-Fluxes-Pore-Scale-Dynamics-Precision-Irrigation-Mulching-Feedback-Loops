@@ -18,7 +18,7 @@ const WxUI = (() => {
   }
   function importFile() {
     const r = UI.modal({ title: 'Import weather data', icon: 'open', width: 'min(620px,94vw)', html:
-      '<p>Import daily weather to run the whole program on your own climate. Accepted: <b>CSV or TXT</b> (comma, semicolon, tab or space separated), <b>Excel (XLSX, XLS)</b>, Daisy <b>DWF</b> weather files and Daisy <b>DLF</b> daily logs (a Daisy <b>DAI</b> setup names its weather file: import that file).</p>' +
+      '<p>Import daily weather to run the whole program on your own climate. Accepted: <b>CSV or TXT</b> (comma, semicolon, tab or space separated), <b>Excel (XLSX, XLS)</b>, <b>DWF</b> weather files and <b>DLF</b> daily logs (a <b>DAI</b> setup names its weather file: import that file).</p>' +
       '<p>Columns: a date (or year, month and day), daily <b>rainfall</b> in mm, and if possible daily <b>reference evapotranspiration</b> (ET0) in mm. Without ET0 it is computed from the daily maximum and minimum temperature (Hargreaves) or from mean temperature and radiation (Makkink).</p>' +
       '<div class="pr"><label>Weather file</label><input type="file" id="wxFile" accept=".csv,.txt,.xlsx,.xls,.ods,.dwf,.dlf,.dai,.dat"></div>' +
       '<div class="pr"><label>Latitude of the station (°, north positive), used only to compute ET0 from temperature</label><input type="number" id="wxLat" value="45" step="0.1" min="-66" max="66" style="width:120px"></div>' +
@@ -65,7 +65,7 @@ const WxUI = (() => {
   let asked = false;
   function offerOnce() {
     if (asked || (st().src && st().src !== 'record')) return; asked = true;
-    setTimeout(() => UI.modal({ title: 'Weather data', icon: 'info', width: 'min(560px,94vw)', html: '<p>For the best results, run the program on the weather of your own field: import a daily weather file (CSV, Excel, Daisy DWF or DLF), or get the daily weather of your location online.</p><p>Without it the program uses the recorded weather of the simulations.</p>',
+    setTimeout(() => UI.modal({ title: 'Weather data', icon: 'info', width: 'min(560px,94vw)', html: '<p>For the best results, run the program on the weather of your own field: import a daily weather file (CSV, Excel, DWF or DLF), or get the daily weather of your location online.</p><p>Without it the program uses the recorded weather of the simulations.</p>',
       buttons: [{ label: 'Import a weather file...', pri: true, act: () => { setTimeout(importFile, 30); } }, { label: 'Online weather...', act: () => { setTimeout(online, 30); } }, { label: 'Use the current weather' }] }), 120);
   }
   return { importFile, online, use, status: st, offerOnce };

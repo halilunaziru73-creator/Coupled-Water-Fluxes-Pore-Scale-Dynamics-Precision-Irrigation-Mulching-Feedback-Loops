@@ -7,7 +7,7 @@ const Layers = (() => {
     { id: 'g-mulch', name: 'Mulch and evaporation', icon: 'layers', items: [['v4', 'Mulch against bare soil', 'V4'], ['v6', 'Mulch control', 'V6'], ['e1', 'Evaporation physics', 'E1'], ['n2', 'Fate of saved water', 'N2'], ['n3', 'Regime map', 'N3']] },
     { id: 'g-soil', name: 'Soil structure and tillage', icon: 'soil', items: [['v3', 'Tillage and structure', 'V3'], ['v7', 'Soil hydraulic drivers', 'V7'], ['r1', 'Root structure', 'R1']] },
     { id: 'g-water', name: 'Field water balance', icon: 'field', items: [['field', 'Field balance', ''], ['spac', 'Soil, plant and air', 'S1'], ['v2', 'Profile evolution', 'V2']] },
-    { id: 'g-year', name: 'Seasonal records: Daisy data', icon: 'refresh', items: [['yby', 'Reliability over 20 seasons', 'Y1'], ['wb2', 'Full water balance', 'W1'], ['nb', 'Nitrogen budget', 'N4']] },
+    { id: 'g-year', name: 'Seasonal data', icon: 'refresh', items: [['yby', 'Reliability over 20 seasons', 'Y1'], ['wb2', 'Full water balance', 'W1'], ['nb', 'Nitrogen budget', 'N4']] },
     { id: 'g-crop', name: 'Crops', icon: 'drop', items: [['crop', 'Crop water requirement', 'C1']] },
     { id: 'g-loop', name: 'Feedback loops', icon: 'refresh', items: [['v5', 'Feedback loops', 'V5']] }
   ];
@@ -15,6 +15,7 @@ const Layers = (() => {
   const FARM_METHOD = { sid: 'M02_Surface', drip: 'M04_Drip10-20cm', spr: 'M01_Overhead' };
   function openFarm(from) {
     const m = FARM_METHOD[from];
+    E.ev("window.__FARM&&(__FARM.from=" + (m ? "'" + from + "'" : "null") + ")");
     if (m) E.ev("(function(){if(!window.__farmPrev)window.__farmPrev={m:state.method,d:fclock.day};var m='" + m + "';var cur=state.method;var ok=(m==='M02_Surface'&&cur==='M02_Surface')||(m==='M01_Overhead'&&cur==='M01_Overhead')||(m.indexOf('Drip')>=0&&cur.indexOf('Drip')>=0);if(!ok)applyState({method:m});})()");
     open('farm');
   }
@@ -34,7 +35,7 @@ const Layers = (() => {
       h += '<div class="tn grp" style="padding-left:14px" data-id="' + g.id + '"><span class="tw">' + (open(g.id) ? '&#9660;' : '&#9654;') + '</span>' + UI.icon(g.icon) + '<span class="lbl">' + g.name + '</span></div><div class="tkids" ' + (open(g.id) ? '' : 'hidden') + '>';
       g.items.forEach(it => {
         const subs = DESIGN.includes(it[0]) ? sections(it[0]) : [], hasKids = DESIGN.includes(it[0]), op = open('s-' + it[0]);
-        h += '<div class="tn' + (cur === it[0] && !sectionPick[it[0]] ? ' sel' : '') + '" style="padding-left:30px" data-scene="' + it[0] + '"><span class="tw" data-twist="' + it[0] + '">' + (hasKids ? (op ? '&#9660;' : '&#9654;') : '') + '</span>' + UI.icon('doc') + '<span class="lbl">' + UI.esc(it[1]) + '</span>' + (it[2] ? '<span class="badge">' + it[2] + '</span>' : '') + '</div>';
+        h += '<div class="tn' + (cur === it[0] && !sectionPick[it[0]] ? ' sel' : '') + '" style="padding-left:30px" data-scene="' + it[0] + '"><span class="tw" data-twist="' + it[0] + '">' + (hasKids ? (op ? '&#9660;' : '&#9654;') : '') + '</span>' + UI.icon('doc') + '<span class="lbl">' + UI.esc(it[1]) + '</span>' + '</div>';
         if (hasKids) {
           h += '<div class="tkids" ' + (op ? '' : 'hidden') + '>';
           h += '<div class="tn farmnode' + (cur === 'farm' && farmFrom === it[0] ? ' sel' : '') + '" style="padding-left:58px" data-farm="' + it[0] + '" title="Run this irrigation system on the virtual farm">' + UI.icon('play') + '<span class="lbl"><b>Virtual farm simulation</b></span></div>';
