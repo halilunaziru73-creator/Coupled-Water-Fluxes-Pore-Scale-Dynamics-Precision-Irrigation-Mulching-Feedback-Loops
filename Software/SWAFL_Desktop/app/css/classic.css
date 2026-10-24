@@ -43,8 +43,8 @@ html,body{background:var(--bg);color:#000;font:11px/1.35 var(--font)}
 .tree{background:#FFF;box-shadow:var(--sink);margin:2px;border-radius:0;font-size:11px}
 .tn{border-radius:0;color:#000;padding-top:1px;padding-bottom:1px}
 .tn:hover{background:var(--hover)}
-.tn.sel,.tn.sel:hover{background:var(--navy);color:#FFF}
-.tn.sel .ico{stroke:#FFF}
+.tn.sel,.tn.sel:hover{background:#DCE8F6;color:#0A246A;box-shadow:inset 0 0 0 1px #A9C0DD}
+.tn.sel .ico{stroke:#0A246A}
 .tn .tw{color:#404040;font-size:8px}
 .tn .badge{background:#ECE9D8;color:#0A246A;border:1px solid #A0A0A0;border-radius:0}
 .tkids{border-left:1px dotted #A0A0A0;margin-left:12px}
@@ -152,3 +152,4 @@ input[type=range]{accent-color:#0A246A}
 .rpgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:6px 14px;max-height:52vh;overflow:auto;padding:4px}
 .rpg{border:1px solid #C0C0C0;background:#FFFFFF;padding:4px 6px}.rpg>label{display:block;border-bottom:1px solid #E0E0E0;margin-bottom:3px;padding-bottom:2px}
 .rpi{display:block;padding:1px 0 1px 16px;font-size:11px}
+.dlist{margin:4px 0 2px;padding:0 4px 0 18px;font-size:12px;line-height:1.45;color:#1b1f23}.dlist li{margin:0 0 3px}
