@@ -113,20 +113,25 @@
   function place(el, cx, cy) { document.body.appendChild(el); const r = el.getBoundingClientRect(); el.style.left = Math.max(4, Math.min(innerWidth - r.width - 4, cx)) + 'px'; el.style.top = Math.max(4, Math.min(innerHeight - r.height - 4, cy)) + 'px'; }
   const toClient = (x, y) => { const r = canvas.getBoundingClientRect(), s = r.width / canvas.width; return [r.left + x * s, r.top + y * s]; };
   // a numeric value: exact entry with units, or a value from the range
+  // what a farmer may type: any value within the physical limits of the system (the list below covers the usual range)
+  const LIM = {
+    sid: { L: [5, 3000], S: [0.001, 10], qLs: [0.01, 300], n: [0.01, 0.6], cb: [0.1, 1], Zn: [5, 400], Qs: [0.5, 2000], Wf: [1, 5000], om: [0, 20] },
+    drip: { Se: [0.05, 5], Sl: [0.1, 10], q: [0.1, 100], LL: [1, 1000], H0: [0.5, 100], D: [4, 110], intv: [1, 60], Zn: [0.5, 300], Af: [0.0001, 10000], Qs: [0.1, 2000], Lm: [0, 10000], lift: [0, 500] },
+    spr: { S: [0, 60], u: [0, 30], Sd: [0, 100], d: [1, 40], P: [50, 1200], alpha: [0, 60], Ss: [1, 120], Sl: [1, 120], Zn: [1, 300], top: [1, 24], Af: [0.001, 10000], Qs: [0.1, 5000], LLs: [5, 2000], Lm: [0, 10000], lift: [0, 500] } };
   function pickNumber(w) {
-    closePick(); const U = unitsFor(w.label), cur = w.cur, lo = w.rng[0], hi = w.rng[1], st = w.rng[2] || (hi - lo) / 100;
+    closePick(); const U = unitsFor(w.label), cur = w.cur, lo = w.rng[0], hi = w.rng[1], st = w.rng[2] || (hi - lo) / 100, PL = (LIM[curId()] || {})[w.key], plo = PL ? Math.min(PL[0], lo) : lo, phi = PL ? Math.max(PL[1], hi) : hi;
     const el = document.createElement('div'); el.id = 'swPick'; PK = el;
     const vals = []; for (let i = 0; i <= 12; i++) { let v = lo + (hi - lo) * i / 12; v = Math.round(v / st) * st; if (!vals.some(q => Math.abs(q - v) < st / 2)) vals.push(+v.toFixed(6)); }
     el.innerHTML = '<div class="h">' + (w.label || 'Value').replace(/</g, '&lt;') + '</div>' +
       '<div class="r"><label style="width:70px">Exact value</label><input id="pkV" type="number" step="any"><select id="pkU">' + U.map((u, i) => '<option value="' + i + '">' + u[0] + '</option>').join('') + '</select></div>' +
       '<div class="r"><label style="width:70px">Or choose</label><select id="pkL" class="list"><option value="">from the range...</option>' + vals.map(v => '<option value="' + v + '">' + nice(v) + ' ' + U[0][0] + '</option>').join('') + '</select></div>' +
-      '<div class="note">Allowed: ' + nice(lo) + ' to ' + nice(hi) + ' ' + U[0][0] + '. The design is computed when you press Run simulation.</div>' +
+      '<div class="note">Type any value from ' + nice(plo) + ' to ' + nice(phi) + ' ' + U[0][0] + ' (the physical limits); the list covers the usual range, ' + nice(lo) + ' to ' + nice(hi) + '. The design is computed when you press Run simulation.</div>' +
       '<div class="b"><button id="pkOk">OK</button><button id="pkNo">Cancel</button></div>';
     const [cx, cy] = toClient(w.bx, w.by + w.bh + 2); place(el, cx, cy);
     const iv = el.querySelector('#pkV'), iu = el.querySelector('#pkU'), il = el.querySelector('#pkL');
     iv.value = +(+cur).toFixed(4); iu.onchange = () => { const f = U[+iu.value][1]; iv.value = nice(cur / f); };
     il.onchange = () => { if (il.value !== '') { iu.value = '0'; iv.value = il.value; } };
-    const ok = () => { const raw = parseFloat(String(iv.value).replace(',', '.')); if (!isFinite(raw)) { iv.focus(); return; } let v = raw * U[+iu.value][1]; v = clampN(v, lo, hi); w.set(v); closePick(); invalidate('inputs changed'); try { refresh(); } catch (e) {} };
+    const ok = () => { const raw = parseFloat(String(iv.value).replace(',', '.')); if (!isFinite(raw)) { iv.focus(); return; } let v = raw * U[+iu.value][1]; v = clampN(v, plo, phi); w.set(v); closePick(); invalidate('inputs changed'); try { refresh(); } catch (e) {} };
     el.querySelector('#pkOk').onclick = ok; el.querySelector('#pkNo').onclick = closePick;
     iv.addEventListener('keydown', e => { if (e.key === 'Enter') ok(); if (e.key === 'Escape') closePick(); });
     setTimeout(() => { iv.focus(); iv.select(); }, 20);

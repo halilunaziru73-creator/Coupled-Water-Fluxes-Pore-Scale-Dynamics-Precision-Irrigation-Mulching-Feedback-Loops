@@ -18,12 +18,15 @@ const Dash = (() => {
   const SEC = (id, title, sub, inner) => '<div class="dsec' + (shut[id] ? ' shut' : '') + '" data-sec="' + id + '"><h4 data-tog="' + id + '"><b><span class="tw">' + (shut[id] ? '&#9654;' : '&#9660;') + '</span>' + title + '</b>' + (sub ? '<span>' + sub + '</span>' : '') + '</h4><div class="dsb"' + (shut[id] ? ' hidden' : '') + '>' + inner + '</div></div>';
 
   const CB = (k, title, inner) => SEC('ch-' + k, title, '', '<div class="chart">' + inner + '</div>');
-  let dayCache = { key: '', D: null };
+  let dayCache = { key: '', D: null }, layerCache = { key: '', L: null };
   function results(s) {
     const key = s.date + '|' + JSON.stringify(s.state) + '|' + s.year + '|' + ((s.wx && s.wx.key) || '');
     if (dayCache.key !== key) { dayCache = { key, D: E.day() }; }
     const D = dayCache.D, Y = D && D.year ? D.year : null;
     let h = '<div class="dwrap">';
+    // the key numbers of the open layer (the same lines as in the report), so every layer has its own results here
+    { const lk = s.scene + '|' + key; if (layerCache.key !== lk) { let L = null; try { L = E.json("(function(){try{return reportNotes(currentScene,currentScene.id==='field'?(state.fview||'day'):null)}catch(e){return null}})()"); } catch (e) {} layerCache = { key: lk, L }; }
+      const L = layerCache.L; if (L && L.length) h += SEC('layer', UI.esc(Layers.nameOf(s.scene) || 'This layer'), 'key numbers of this layer', '<ul class="dlist">' + L.map(l => '<li>' + UI.esc(l) + '</li>').join('') + '</ul>'); }
     if (D) {
       h += SEC('day', 'On ' + UI.esc(D.date), 'mm per day', '<div class="kgrid">' +
         K('Crop', UI.esc(D.crop), '', 't4') + K('Root depth', f1(D.rd), 'cm', 't4') + K('Sensor / trigger', (D.f || 0).toFixed(2) + ' / ' + (D.fT || 0).toFixed(2), '', 't3') +
@@ -77,13 +80,19 @@ const Dash = (() => {
   function xyChart(cv, o) {
     const dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return; cv.width = w * dpr; cv.height = h * dpr;
     const c = cv.getContext('2d'); c.scale(dpr, dpr); c.clearRect(0, 0, w, h); c.fillStyle = '#FFFFFF'; c.fillRect(0, 0, w, h);
-    const L = 46, R = 10, T = 22, B = 30, xs = o.x, all = o.series.flatMap(s => s.y.filter(v => isFinite(v)));
+    c.font = '10px Tahoma,Arial';
+    // the legend wraps onto as many lines as the width needs, and the plot starts below it
+    const leg = []; { let lx = 50, ly = 0; o.series.forEach(s => { if (!s.n) return; const lw = 22 + c.measureText(s.n).width; if (lx + lw > w - 6 && lx > 50) { lx = 50; ly++; } leg.push([s, lx, ly]); lx += lw; }); }
+    const nLeg = leg.length ? leg[leg.length - 1][2] + 1 : 0;
+    const L = 46, R = 12, T = 10 + 13 * nLeg, B = 30, xs = o.x, all = o.series.flatMap(s => s.y.filter(v => isFinite(v)));
+    const nice = (lo, hi, n) => { const raw = (hi - lo) / Math.max(1, n), p = Math.pow(10, Math.floor(Math.log10(raw || 1))), m = raw / p, st = (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p; const out = []; for (let v = Math.ceil(lo / st - 1e-9) * st; v <= hi + st * 1e-6; v += st) out.push(+v.toFixed(10)); return { out, st }; };
+    const tf = (v, st) => { const d = Math.abs(st - Math.round(st)) < 1e-9 && st >= 1 ? 0 : Math.abs(st * 10 - Math.round(st * 10)) < 1e-9 ? 1 : 2; return d ? v.toFixed(d) : Math.round(v).toLocaleString('en-US'); };
     let ymx = o.ymax != null ? o.ymax : Math.max(...all, 1e-9) * 1.08, ymn = o.ymin != null ? o.ymin : Math.min(0, ...all);
     if (o.invert) [ymn, ymx] = [ymx, ymn];
     const xmn = Math.min(...xs), xmx = Math.max(...xs), X = v => L + (w - L - R) * (v - xmn) / ((xmx - xmn) || 1), Y = v => T + (h - T - B) * (1 - (v - ymn) / ((ymx - ymn) || 1));
     c.font = '10px Tahoma,Arial'; c.strokeStyle = '#E0E0E0'; c.fillStyle = '#404040'; c.lineWidth = 1;
-    for (let i = 0; i <= 4; i++) { const v = ymn + (ymx - ymn) * i / 4, y = Y(v); c.beginPath(); c.moveTo(L, y); c.lineTo(w - R, y); c.stroke(); c.textAlign = 'right'; c.fillText(Math.abs(v) >= 100 ? v.toFixed(0) : v.toFixed(1), L - 4, y + 3); }
-    c.textAlign = 'center'; for (let i = 0; i <= 5; i++) { const v = xmn + (xmx - xmn) * i / 5; c.fillText(Math.abs(v) >= 100 ? v.toFixed(0) : v.toFixed(1), X(v), h - B + 13); }
+    { const lo = Math.min(ymn, ymx), hi = Math.max(ymn, ymx), yt = nice(lo, hi, Math.max(2, Math.floor((h - T - B) / 32))); yt.out.forEach(v => { const y = Y(v); c.beginPath(); c.moveTo(L, y); c.lineTo(w - R, y); c.stroke(); c.textAlign = 'right'; c.fillText(tf(v, yt.st), L - 4, y + 3); }); }
+    { const xt = nice(xmn, xmx, Math.max(2, Math.floor((w - L - R) / 52))); let last = -1e9; c.textAlign = 'center'; xt.out.forEach(v => { const x = X(v), t = tf(v, xt.st), tw = c.measureText(t).width; if (x - tw / 2 < last + 4) return; c.fillText(t, Math.min(w - tw / 2 - 1, x), h - B + 13); last = x + tw / 2; }); }
     c.fillText(o.xl || '', L + (w - L - R) / 2, h - 4); c.save(); c.translate(10, T + (h - T - B) / 2); c.rotate(-Math.PI / 2); c.fillText(o.yl || '', 0, 0); c.restore();
     c.strokeStyle = '#808080'; c.strokeRect(L, T, w - L - R, h - T - B);
     c.save(); c.beginPath(); c.rect(L, T, w - L - R, h - T - B); c.clip();
@@ -95,7 +104,7 @@ const Dash = (() => {
     c.restore();
     (o.marks || []).forEach(m => { c.strokeStyle = m.c || '#C00000'; c.setLineDash([4, 3]); c.lineWidth = 1.2; c.beginPath(); if (m.x != null) { c.moveTo(X(m.x), T); c.lineTo(X(m.x), h - B); } else { c.moveTo(L, Y(m.y)); c.lineTo(w - R, Y(m.y)); } c.stroke(); c.setLineDash([]); c.fillStyle = m.c || '#C00000'; { const tw = c.measureText(m.t).width, right = m.x != null && X(m.x) + 3 + tw > w - R; const tx = m.x != null ? (right ? X(m.x) - 3 - tw : X(m.x) + 3) : w - R - 4 - tw, ty = m.x != null ? T + 11 + (o.marks.indexOf(m) % 2) * 12 : Y(m.y) - 4; c.fillStyle = 'rgba(255,255,255,0.88)'; c.fillRect(tx - 2, ty - 10, tw + 4, 13); c.fillStyle = m.c || '#C00000'; c.textAlign = 'left'; c.fillText(m.t, tx, ty); } });
     // legend
-    let lx = L + 4; c.textAlign = 'left'; o.series.forEach(s => { if (!s.n) return; c.fillStyle = s.c; c.fillRect(lx, 8, 12, 3); c.fillStyle = '#000'; c.fillText(s.n, lx + 16, 13); lx += 22 + c.measureText(s.n).width; });
+    c.textAlign = 'left'; leg.forEach(([s, lx, ly]) => { c.fillStyle = s.c; c.fillRect(lx, 4 + ly * 13, 12, 3); c.fillStyle = '#000'; c.fillText(s.n, lx + 16, 9 + ly * 13); });
   }
   function fateBar(F) {
     const tot = F.reduce((a, q) => a + Math.max(0, q[1] || 0), 0) || 1, col = ['#2E8B57', '#3A5FCD', '#C77D1A', '#7FAFD0'];

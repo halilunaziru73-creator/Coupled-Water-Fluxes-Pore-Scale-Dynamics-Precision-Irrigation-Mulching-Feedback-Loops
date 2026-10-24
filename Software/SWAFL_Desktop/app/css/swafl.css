@@ -193,3 +193,6 @@ body.focus #leftDock,body.focus #rightDock,body.focus #dashDock,body.focus .hspl
 .ph{padding:6px 16px;font-size:12px;color:#5B7691;border-top:1px solid var(--border);background:#E8EEF5}
 :focus-visible{outline:2px solid #1F6FB2;outline-offset:1px}
 #dashTabs .mini[data-act=pinBaseline],#dashTabs .mini[data-act=clearBaseline]{display:none}
+/* on screens narrower than 1500 px the docks give way, so the drawing keeps (almost) its full size and its text stays readable */
+@media (max-width:1499px){#leftDock{width:220px;min-width:180px}#rightDock{width:250px;min-width:210px}#dashDock{width:270px;min-width:250px}}
+@media (max-width:1299px){#leftDock{width:200px}#rightDock{width:230px}#dashDock{width:250px;min-width:230px}}

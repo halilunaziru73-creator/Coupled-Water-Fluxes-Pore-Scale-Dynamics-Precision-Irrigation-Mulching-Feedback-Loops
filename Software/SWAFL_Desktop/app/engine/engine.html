@@ -208,6 +208,9 @@ body.appmode .canvaswrap canvas { min-width: 0 !important; }
 body.appmode .shell, body.appmode .mainarea, body.appmode .wrap, body.appmode .wrap > .panel:first-child { min-width: 0 !important; max-width: 100vw; overflow-x: hidden; }
 body.appmode #yearStrip { width: 0; }
 body.appmode #playBar { min-width: 0; max-width: 100%; }
+body.appmode #playBar { padding: 3px 8px !important; gap: 6px !important; }
+body.appmode #playBtn { min-height: 0 !important; height: 22px !important; min-width: 0 !important; width: auto !important; padding: 0 10px !important; font-size: 11px !important; line-height: 20px !important; background: #EEF3F9 !important; color: #16304A !important; border: 1px solid #A9BDD3 !important; box-shadow: none !important; font-weight: 600 !important; }
+body.appmode #playBtn::before { content: ''; }
 body.appmode .wrap, body.appmode .wrap > .panel:first-child, body.appmode .canvaswrap { width: 100% !important; }
 
 body.appmode .canvaswrap { text-align: center; }
@@ -1033,9 +1036,9 @@ function drawSID() {
   ctx.fillStyle = 'rgba(40,120,230,0.14)'; ctx.beginPath(); ctx.moveTo(aa.sx(0), aa.sy(tco)); for (let i = 0; i <= 80; i++) { const xm = P.L * i / 80; ctx.lineTo(aa.sx(xm), aa.sy(Math.min(R.txf(xm), tco))); } ctx.lineTo(aa.sx(P.L), aa.sy(tco)); ctx.closePath(); ctx.fill();
   ctx.strokeStyle = '#1F5FA8'; ctx.lineWidth = 2.4; ctx.beginPath(); for (let i = 0; i <= 80; i++) { const xm = P.L * i / 80, t = R.txf(xm); if (i) ctx.lineTo(aa.sx(xm), aa.sy(Math.min(t, tmx))); else ctx.moveTo(aa.sx(xm), aa.sy(t)); } ctx.stroke();
   ctx.strokeStyle = SIDC.df; ctx.lineWidth = 1.8; ctx.setLineDash([6, 3]); ctx.beginPath(); ctx.moveTo(aa.sx(0), aa.sy(tco)); ctx.lineTo(aa.sx(P.L), aa.sy(tco)); ctx.stroke(); ctx.setLineDash([]); T('cutoff ' + sidF(tco) + ' min' + (SID.cut === 'r85' ? ' (front at 85% L)' : ''), aa.sx(P.L) - 4, aa.sy(tco) - 4, { s: 9, b: true, a: 'right', c: SIDC.df });
-  if (R.tL < tmx) { ctx.fillStyle = '#1F5FA8'; ctx.beginPath(); ctx.arc(aa.sx(P.L), aa.sy(R.tL), 4, 0, 6.2832); ctx.fill(); T('t_L = ' + sidF(R.tL) + ' min', aa.sx(P.L) - 6, aa.sy(R.tL) + 13, { s: 9, b: true, a: 'right', c: '#1F5FA8' }); }
+  if (R.tL < tmx) { ctx.fillStyle = '#1F5FA8'; ctx.beginPath(); ctx.arc(aa.sx(P.L), aa.sy(R.tL), 4, 0, 6.2832); ctx.fill(); pill('t_L = ' + sidF(R.tL) + ' min', aa.sx(P.L) - 10, aa.sy(R.tL) - 10, { s: 9, b: true, a: 'right', c: '#1F5FA8' }); }
   const xm0 = P.L * 0.35, t0 = R.txf(xm0); ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(aa.sx(xm0), aa.sy(t0)); ctx.lineTo(aa.sx(xm0), aa.sy(tco)); ctx.stroke(); T('τ = ' + sidF(tco - t0) + ' min', aa.sx(xm0) + 4, aa.sy((t0 + tco) / 2), { s: 9, b: true, c: '#374151' });
-  T(nc ? 't_st ' + sidF(R.tst) + ' + t_L ' + sidF(R.tL) + ' = ' + sidF(R.tL + R.tst) + ' min' : 't_storage = (Zn/k)^(1/A) = ' + sidF(R.tst) + ' min  →  t_irr = t_L + t_st = ' + sidF(R.tL + R.tst) + ' min', 64, ay + 14, { s: 9.5, b: true, c: SIDC.ink });
+  pill(nc ? 't_st ' + sidF(R.tst) + ' + t_L ' + sidF(R.tL) + ' = ' + sidF(R.tL + R.tst) + ' min' : 't_storage = (Zn/k)^(1/A) = ' + sidF(R.tst) + ' min  →  t_irr = t_L + t_st = ' + sidF(R.tL + R.tst) + ' min', 66, aa.sy(tco) + 22, { s: 9.5, b: true, c: SIDC.ink, bg: 'rgba(255,255,255,0.95)' });
   if (tA > 0 && tA < tco * 1.1) { ctx.strokeStyle = '#E8912D'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(aa.sx(0), aa.sy(Math.min(tA, tmx))); ctx.lineTo(aa.sx(P.L), aa.sy(Math.min(tA, tmx))); ctx.stroke(); ctx.fillStyle = '#E8912D'; ctx.beginPath(); ctx.arc(aa.sx(frontX), aa.sy(Math.min(tA, tmx)), 4.5, 0, 6.2832); ctx.fill(); }
   sidHover(aa, v => ['x = ' + sidF(v) + ' m', 'front arrives ' + sidF(R.txf(v)) + ' min', 'opportunity time ' + sidF(Math.max(0, tco - R.txf(v))) + ' min']);
   y = ay + ah + 44;
@@ -1353,8 +1356,8 @@ function drawDRIP() {
   const ymax = Math.max(Math.ceil(Math.max(C.Rmax * 1.25, o.Sl * 100 * 1.05, ...g.map(q => q[2])) / 20) * 20, 40), ax2 = sidAxes(70, y + 38, 330, 130, 0, R.t * 1.15, 0, ymax, 'time since the start (h)', 'cm', 5, 4);
   const line = (k, col, w) => { ctx.strokeStyle = col; ctx.lineWidth = w; ctx.beginPath(); g.forEach((q, i) => { const px = ax2.sx(q[0]), pyy = ax2.sy(q[k]); i ? ctx.lineTo(px, pyy) : ctx.moveTo(px, pyy); }); ctx.stroke(); };
   line(2, IRC.dp, 2); line(1, IRC.st, 2); ctx.strokeStyle = IRC.ac; ctx.setLineDash([5, 3]); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(ax2.x, ax2.sy(C.Rmax)); ctx.lineTo(ax2.x + ax2.w, ax2.sy(C.Rmax)); ctx.stroke(); ctx.strokeStyle = IRC.ev; ctx.beginPath(); ctx.moveTo(ax2.x, ax2.sy(o.Sl * 100)); ctx.lineTo(ax2.x + ax2.w, ax2.sy(o.Sl * 100)); ctx.stroke(); ctx.setLineDash([]);
-  T('root zone ' + irF(C.Rmax) + ' cm', ax2.x + ax2.w - 4, ax2.sy(C.Rmax) - 4, { s: 8.8, b: true, a: 'right', c: IRC.ac }); T('lateral spacing', ax2.x + ax2.w - 4, ax2.sy(o.Sl * 100) - 4, { s: 8.8, b: true, a: 'right', c: '#8A5A00' });
   ctx.strokeStyle = '#1B1F23'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(ax2.sx(tau), ax2.y); ctx.lineTo(ax2.sx(tau), ax2.y + ax2.h); ctx.stroke();
+  { const yr = ax2.sy(C.Rmax), yl = ax2.sy(o.Sl * 100), sep = Math.abs(yr - yl) < 16 ? (yr < yl ? -8 : 8) : 0; pill('root zone ' + irF(C.Rmax) + ' cm', ax2.x + 6, yr - 4 + sep, { s: 8.8, b: true, c: IRC.ac }); pill('lateral spacing ' + irF(o.Sl * 100) + ' cm', ax2.x + 6, yl - 4 - sep, { s: 8.8, b: true, c: '#8A5A00' }); }
   sidHover(ax2, v => { const b = IRM.bulb(Math.max(1e-3, R.lat.qa * v), R.c); return [v.toFixed(1) + ' h', 'width ' + irF(2 * b.r / 10) + ' cm', 'depth ' + irF(b.zb / 10) + ' cm']; });
   irLeg([[IRC.st, 'bulb width'], [IRC.dp, 'bulb depth below the ground']], 420, y + 60);
   const rr = [['Wetted width of the bulb', irF(2 * R.b.r / 10) + ' cm'], ['Wetted depth', irF(R.b.zb / 10) + ' cm'], ['Roots reach', irF(C.Rmax) + ' cm'], ['Wetted share of the soil Pw', irF(R.Pw * 100) + ' %'], ['Bulb shape (depth ÷ radius)', R.aspect.toFixed(2)], ['Source', R.two ? 'line (bulbs merge)' : 'point']];
@@ -1380,7 +1383,7 @@ function drawDRIP() {
   // season
   const ay = C.ay, events = C.yIrr / o.Zn, gross = R.gross, flowHa = o.q * (1e4 / R.Ae) / 3600, zones = Math.max(1, Math.ceil(flowHa * DRP.Af / DRP.Qs)), cyc = zones * R.t;
   sidHead('What this means for the season and the farm', y, 'The DSS sets the crop need; the design decides what is pumped');
-  y = irRows(y + 34, [['Net irrigation need in a season (DSS)', irF(C.yIrr) + ' mm → ' + events.toFixed(0) + ' irrigations of ' + irF(o.Zn) + ' mm'], ['Gross water per irrigation', irF(gross, 1) + ' mm (Ea ' + irF(R.Ea * 100) + ' %)'], ['Gross water per season', irF(events * gross) + ' mm = ' + irF(events * gross * 10) + ' m³ per hectare'], ['Peak crop need / interval', C.ETpk.toFixed(1) + ' mm/day × ' + o.Se * 0 + irF(DRP.intv) + ' days'], ['System flow per hectare', flowHa.toFixed(2) + ' L/s/ha (' + irF(1e4 / R.Ae) + ' emitters/ha, ' + irF(1e4 / o.Sl) + ' m of lateral/ha)'], ['Sets for ' + DRP.Af.toFixed(1) + ' ha with ' + irF(DRP.Qs) + ' L/s', zones + ' sets × ' + irF(R.t, 1) + ' h = ' + cyc.toFixed(1) + ' h per round'], ['Pumping per season', irF(cyc * events) + ' hours \u00b7 ' + irF(cyc * events * R.G.kW) + ' kWh']]) + 16;
+  y = irRows(y + 34, [['Net irrigation need in a season (DSS)', irF(C.yIrr) + ' mm → ' + events.toFixed(0) + ' irrigations of ' + irF(o.Zn) + ' mm'], ['Gross water per irrigation', irF(gross, 1) + ' mm (Ea ' + irF(R.Ea * 100) + ' %)'], ['Gross water per season', irF(events * gross) + ' mm = ' + irF(events * gross * 10) + ' m³ per hectare'], ['Peak crop need / interval', C.ETpk.toFixed(1) + ' mm/day × ' + irF(DRP.intv) + ' day' + (DRP.intv === 1 ? '' : 's')], ['System flow per hectare', flowHa.toFixed(2) + ' L/s/ha (' + irF(1e4 / R.Ae) + ' emitters/ha, ' + irF(1e4 / o.Sl) + ' m of lateral/ha)'], ['Sets for ' + DRP.Af.toFixed(1) + ' ha with ' + irF(DRP.Qs) + ' L/s', zones + (zones === 1 ? ' set × ' : ' sets × ') + irF(R.t, 1) + ' h = ' + cyc.toFixed(1) + ' h per round'], ['Pumping per season', irF(cyc * events) + ' hours \u00b7 ' + irF(cyc * events * R.G.kW) + ' kWh']]) + 16;
   y = irAdvice(y, { sys: 'Drip', Zn: o.Zn, gross: gross, Ea: R.Ea, Es: R.Es, timeH: cyc });
   return y;
 }
@@ -1580,7 +1583,7 @@ function irLayoutDraw(G, y, tauFrac, C) {
   ctx.fillStyle = '#fff'; ctx.strokeStyle = '#1B1F23'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(px, py, 12, 0, 6.2832); ctx.fill(); ctx.stroke(); T('P', px, py + 4, { s: 12, b: true, a: 'center', c: '#2A5FA8' });
   ctx.fillStyle = '#7FB5D8'; ctx.fillRect(bx + 8, py + 22, 36, 14); ctx.strokeStyle = '#1B1F23'; ctx.strokeRect(bx + 8.5, py + 22.5, 36, 14); T(IRX.src === 'well' ? 'well' : IRX.src === 'canal' ? 'canal' : 'tank', bx + 26, py + 33, { s: 8, b: true, a: 'center', c: '#0F3D5C' }); ctx.strokeStyle = '#2A5FA8'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(px, py + 22); ctx.lineTo(px, py + 12); ctx.stroke();
   ctx.fillStyle = '#9CB5C9'; ctx.fillRect(px + 22, py - 7, 14, 14); ctx.strokeStyle = '#1B1F23'; ctx.strokeRect(px + 22.5, py - 6.5, 14, 14); T('F', px + 29, py + 4, { s: 9, b: true, a: 'center', c: '#1B1F23' });
-  T('mainline ' + irF(G.Lm) + ' m, Ø' + G.Dm, bx + 56, py - 12, { s: 9, b: true, c: '#2A5FA8' }); T('submain Ø' + G.Dsm, fx0 - 18, fy0 - 5, { s: 9, b: true, a: 'right', c: '#2A5FA8' });
+  { const mt = 'mainline ' + irF(G.Lm) + ' m, Ø' + G.Dm; ctx.font = 'bold 9px sans-serif'; const mw = ctx.measureText(mt).width, room = fx0 - 22 - (bx + 56); if (mw <= room) T(mt, bx + 56, py - 12, { s: 9, b: true, c: '#2A5FA8' }); else { T('mainline ' + irF(G.Lm) + ' m', bx + 56, py - 12, { s: 9, b: true, c: '#2A5FA8' }); T('Ø' + G.Dm + ' mm', bx + 56, py + 18, { s: 9, b: true, c: '#2A5FA8' }); } } T('submain Ø' + G.Dsm, fx0 - 18, fy0 - 5, { s: 9, b: true, a: 'right', c: '#2A5FA8' });
   T('running zone ' + (act + 1) + ' of ' + G.zones + ' (' + G.lpz + ' ' + (G.kind === 'drip' ? 'laterals' : 'laterals of sprinklers') + ', ' + G.Qz.toFixed(1) + ' L/s)', fx0, y + 18, { s: 10, b: true, c: IRC.ink });
   sidArrowH(fx0, fx0 + fwPx, fy0 + fhPx + 14, (G.kind === 'drip' ? 'lateral ' : 'lateral ') + irF(G.LL) + ' m'); ctx.save(); ctx.translate(fx0 + fwPx + 12, fy0 + fhPx / 2); ctx.rotate(-Math.PI / 2); T('field width ' + irF(G.Wf) + ' m', 0, 0, { s: 9, b: true, a: 'center', c: '#374151' }); ctx.restore();
   ctx.strokeStyle = '#374151'; ctx.lineWidth = 2; const sb = 50 / sc, sbn = sb > 80 ? 100 : sb > 40 ? 50 : sb > 15 ? 20 : 10, sbw = sbn * sc; ctx.beginPath(); ctx.moveTo(bx + 8, y + bh - 10); ctx.lineTo(bx + 8 + sbw, y + bh - 10); ctx.stroke(); T(sbn + ' m', bx + 8 + sbw + 4, y + bh - 7, { s: 8.5, c: '#374151' });
@@ -1595,9 +1598,9 @@ function irHeadUnit(G, y) {
 }
 function irPressure(G, y, o) {
   const hs = [['Pump', G.TDH], ['Lift', G.TDH - G.lift], ['Head unit', G.TDH - G.lift - G.hHead], ['Mainline end', G.TDH - G.lift - G.hHead - G.hfM], ['Submain end', G.H0], ['Lateral inlet', G.H0], ['Lateral end', G.H0 - G.hfLat]]; hs.splice(1, 1); hs[hs.length - 3][1] = G.TDH - G.lift - G.hHead - G.hfM - G.hfSm;
-  const ax = sidAxes(70, y + 4, 330, 110, 0, hs.length - 1, 0, Math.ceil(G.TDH * 1.1 / 10) * 10, '', 'head (m)', hs.length - 1, 4);
+  const ax = sidAxes(70, y + 4, 330, 110, 0, hs.length - 1, 0, Math.ceil(G.TDH * 1.1 / 10) * 10, '', 'head (m)', -1, 4);
   ctx.strokeStyle = IRC.dp; ctx.lineWidth = 2.2; ctx.beginPath(); hs.forEach((q, i) => { const px = ax.sx(i), py = ax.sy(q[1]); i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); }); ctx.stroke(); hs.forEach((q, i) => { ctx.fillStyle = IRC.dp; ctx.beginPath(); ctx.arc(ax.sx(i), ax.sy(q[1]), 3, 0, 6.2832); ctx.fill(); const py = ax.sy(q[1]), top = py - 6 < ax.y + 12; T(q[1].toFixed(1), ax.sx(i) + (i === 0 ? 6 : i === hs.length - 1 ? -6 : 0), top ? py + 14 : py - 6, { s: 8, b: true, a: i === 0 ? 'left' : i === hs.length - 1 ? 'right' : 'center', c: IRC.dp }); });
-  ctx.fillStyle = PAPER; ctx.fillRect(ax.x - 40, ax.y + ax.h + 2, ax.w + 80, 12); hs.forEach((q, i) => T(q[0], ax.sx(i), ax.y + ax.h + 11, { s: 7.6, a: i === 0 ? 'left' : i === hs.length - 1 ? 'right' : 'center', c: MUTE })); return ax;
+  hs.forEach((q, i) => T(q[0], ax.sx(i), ax.y + ax.h + 11, { s: 7.8, a: i === 0 ? 'left' : i === hs.length - 1 ? 'right' : 'center', c: MUTE })); return ax;
 }
 function irSchedule(G, y) {
   const cols = [['Pipe', 60], ['Ø mm', 150], ['Length m', 232], ['Flow L/s', 318], ['Speed m/s', 400], ['Head loss m', 490]], rows = [['Lateral', G.Dlat, G.LL, G.Qlat, irVel(G.Qlat, G.Dlat), G.hfLat], ['Submain', G.Dsm, G.Lsm, G.Qz, irVel(G.Qz, G.Dsm), G.hfSm], ['Mainline', G.Dm, G.Lm, G.Qz, irVel(G.Qz, G.Dm), G.hfM]];
@@ -1707,8 +1710,8 @@ function spdWrap(txt, x, y, w, lh, o) { const words = txt.split(' '); let line =
 function spdChecks(y, B) {
   SPY.checks = y; sidHead('Does your design pass? The course checks', y, 'Your design run through the course rules: spacing, rate, uniformity, pipes and pump');
   const cw = (W - 28 - 10) / 2, ok = B.chk.filter(q => q[1]).length; let yy = y + 36;
-  B.chk.forEach((q, i) => { const col = i % 2, row = (i / 2) | 0, x = 14 + col * (cw + 10), yy2 = yy + row * 24; ctx.fillStyle = q[1] ? '#EAF6EE' : '#FCEDEA'; rrect(x, yy2, cw, 21, 5); ctx.fill(); spdDot(x + 11, yy2 + 10.5, 6, q[1] ? '#2E9E5B' : '#C0503A'); T(q[1] ? '✓' : '!', x + 11, yy2 + 14, { s: 9, b: true, a: 'center', c: '#fff' }); T(q[0], x + 22, yy2 + 9, { s: 8.4, b: true, c: '#12303A' }); T(q[2], x + 22, yy2 + 18, { s: 7.6, c: '#4B5563' }); });
-  yy += 5 * 24 + 6; T(ok + ' of ' + B.chk.length + ' checks pass' + (ok === B.chk.length ? ': this design is acceptable by the course rules.' : '. Fix the red ones: they name the input to change (spacing, pressure, nozzle, pipe or run arrangement).'), 16, yy + 4, { s: 9.4, b: true, c: ok === B.chk.length ? '#14532D' : '#8A5A00' });
+  B.chk.forEach((q, i) => { const col = i % 2, row = (i / 2) | 0, x = 14 + col * (cw + 10), yy2 = yy + row * 31; ctx.fillStyle = q[1] ? '#EAF6EE' : '#FCEDEA'; rrect(x, yy2, cw, 28, 5); ctx.fill(); spdDot(x + 12, yy2 + 14, 7, q[1] ? '#2E9E5B' : '#C0503A'); T(q[1] ? '✓' : '!', x + 12, yy2 + 17.5, { s: 10, b: true, a: 'center', c: '#fff' }); T(q[0], x + 25, yy2 + 12, { s: 9.5, b: true, c: '#12303A' }); T(q[2], x + 25, yy2 + 24, { s: 8.8, c: '#4B5563' }); });
+  yy += Math.ceil(B.chk.length / 2) * 31 + 6; T(ok + ' of ' + B.chk.length + ' checks pass' + (ok === B.chk.length ? ': this design is acceptable by the course rules.' : '. Fix the red ones: they name the input to change (spacing, pressure, nozzle, pipe or run arrangement).'), 16, yy + 4, { s: 9.4, b: true, c: ok === B.chk.length ? '#14532D' : '#8A5A00' });
   return yy + 20;
 }
 
@@ -1850,7 +1853,7 @@ function spdLimits(y, B, o, R) {
   sidHover(ax, v => [v.toFixed(0) + ' km/h', 'S ≤ ' + spWindK(v).toFixed(1) + ' Rw = ' + (spWindK(v) * B.Rw).toFixed(1) + ' m']);
   const tx = 14 + lw + 18, tw = W - 14 - tx, rh = 17, th = 88; T('Maximum allowable application rate (mm/h)', tx, by + 6, { s: 9.2, b: true, c: IRC.ink });
   const lbl = 118, cwid = (tw - lbl) / 4; SPUMAX.cols.forEach((c, j) => T(c, tx + lbl + cwid * (j + 0.5), by + 24, { s: 8.2, b: true, a: 'center', c: '#374151' }));
-  SPUMAX.rows.forEach((r, i) => { const yy = by + 30 + i * rh; T(r[0].length > 28 ? r[0].slice(0, 27) + '…' : r[0], tx, yy + 12, { s: 7.8, b: i === B.row, c: i === B.row ? IRC.ac : '#374151' }); for (let j = 0; j < 4; j++) { const v = r[j + 1], on = i === B.row && j === B.col; ctx.fillStyle = sidMix([252, 232, 200], [110, 185, 150], Math.min(1, Math.sqrt(v / 50))); ctx.fillRect(tx + lbl + j * cwid, yy, cwid - 1, rh - 1); if (on) { ctx.strokeStyle = '#12303A'; ctx.lineWidth = 2; ctx.strokeRect(tx + lbl + j * cwid + 1, yy + 1, cwid - 3, rh - 3); } T(String(v), tx + lbl + cwid * (j + 0.5), yy + 12, { s: 8.4, b: on, a: 'center', c: '#12303A' }); } });
+  SPUMAX.rows.forEach((r, i) => { const yy = by + 30 + i * rh; T(({ 'Coarse sandy, compact layer below': 'Coarse sand, compact below', 'Sandy loam, compact layer below': 'Sandy loam, compact below', 'Silt loam, compact layer below': 'Silt loam, compact below', 'Clay or clay loam, strong structure': 'Clay, clay loam (structured)' })[r[0]] || r[0], tx, yy + 12, { s: 7.8, b: i === B.row, c: i === B.row ? IRC.ac : '#374151' }); for (let j = 0; j < 4; j++) { const v = r[j + 1], on = i === B.row && j === B.col; ctx.fillStyle = sidMix([252, 232, 200], [110, 185, 150], Math.min(1, Math.sqrt(v / 50))); ctx.fillRect(tx + lbl + j * cwid, yy, cwid - 1, rh - 1); if (on) { ctx.strokeStyle = '#12303A'; ctx.lineWidth = 2; ctx.strokeRect(tx + lbl + j * cwid + 1, yy + 1, cwid - 3, rh - 3); } T(String(v), tx + lbl + cwid * (j + 0.5), yy + 12, { s: 8.4, b: on, a: 'center', c: '#12303A' }); } });
   const yb = spdWrap('Your soil (' + B.C.sName.toLowerCase() + ') and slope ' + o.S.toFixed(1) + ' % allow ' + B.umax + ' mm/h. Applied: ' + B.r.toFixed(1) + ' mm/h, ' + (B.r <= B.umax ? 'within the limit' : 'too fast: runoff'), tx, by + 30 + 7 * rh + 10, tw, 10, { s: 8.6, b: true, c: spdCol(B.r <= B.umax) }) - 6;
   sidChip(tx, yb + 8, tw, 17, SPD.pan ? 'Compact layer below the soil: yes (tap to remove)' : 'Compact layer below the soil: no (tap to add)', SPD.pan, () => { SPD.pan = !SPD.pan; }, 'A compact layer below the topsoil lowers the allowed rate');
   return by + bh + 22;
@@ -5019,7 +5022,8 @@ function autoSnap() { const sw = SWEEPS[currentScene.id]; AUTO.snap = sw ? Objec
 function autoPause() { if (AUTO.busy || !AUTO.on || !SWEEPS[currentScene.id]) return; AUTO.on = false; AUTO.snap = null; }
 function autoEnter(sc, prevId) {
   if (prevId && prevId !== sc.id && SWEEPS[prevId] && AUTO.on && AUTO.snap) { AUTO.busy = true; applyState(AUTO.snap); AUTO.busy = false; }
-  AUTO.on = true; AUTO.k = 0; const sw = SWEEPS[sc.id]; AUTO.last = performance.now() - (sw ? sw.every - 900 : 0); autoSnap();
+  // in the desktop a sweep that changes your settings (soil, rain, mulch) waits for Play, so Properties and the Dashboard keep your values
+  const sw = SWEEPS[sc.id]; AUTO.on = !(document.body.classList.contains('appmode') && sw && sw.keys.length); AUTO.k = 0; AUTO.last = performance.now() - (sw ? sw.every - 900 : 0); autoSnap();
   if (sc.fieldBar && !dss.held) fclock.on = true; if ((sc.id === 'n1' || sc.id === 'r1') && !dss.held) n1ui.play = true; if (sc.id !== 'v5') v5ui.sel = 0;
 }
 function autoToggle() {
