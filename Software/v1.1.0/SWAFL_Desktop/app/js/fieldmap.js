@@ -115,7 +115,7 @@ const FieldMap = (() => {
     $('fmDpi').onchange = e => { F.dpi = +e.target.value; }; $('fmFmt').onchange = e => { F.fmt = e.target.value; }; $('fmFmt').value = F.fmt;
     $('fmSrc').value = F.src; $('fmSrc').onchange = e => { F.src = e.target.value; $('fmWhenR').style.display = F.src === 'sim' ? '' : 'none'; $('fmS2R').style.display = F.src === 'sim' || F.src === 'rgb' ? 'none' : ''; }; $('fmWhenR').style.display = F.src === 'sim' ? '' : 'none'; $('fmS2R').style.display = F.src === 'sim' || F.src === 'rgb' ? 'none' : ''; $('fmWhen').value = F.when || 'now'; $('fmWhen').onchange = e => { F.when = e.target.value; };
     $('fmDays').onchange = e => { F.days = Math.max(5, +e.target.value || 90); }; $('fmCloud').onchange = e => { F.cloud = Math.max(1, Math.min(100, +e.target.value || 30)); };
-    setTimeout(() => { F.map.invalidateSize(); redraw(); if (F.pts.length > 2) fit(); if (F.cmp) showCompare(); if (F.res) showRes(); drawLayout(); steps(); }, 60);
+    setTimeout(() => { F.map.invalidateSize(); redraw(); if (F.pts.length > 2) fit(); if (F.cmp) showCompare(); if (F.res) showRes(); else if (FieldPrec.has(F.view)) F.refresh(F.view); if (F.site) showSite(); drawLayout(); steps(); F.lyc = layersCtl(F.map); mapLayers(); if (!F._lyT) F._lyT = setInterval(() => { if (document.getElementById('fmMap') && F.lyc) { try { mapLayers(); } catch (e) {} } }, 1500); }, 60);
   }
   async function search() {
     const q = document.getElementById('fmQ').value.trim(); if (!q) return; const st = document.getElementById('fmInfo');
@@ -158,7 +158,7 @@ const FieldMap = (() => {
     if (F.linked && F.pts.length > 2) useField(true);   // the sketch and its irrigation layout follow the new outline
     F.cv = null; F.site = null; clearSite(); FieldPrec.reset(); FieldPrec.panel(); FieldMon.reset(); FieldMon.panel(); if (PRECV[F.view]) F.view = 'cont'; if (F.res && F.res.sim && F.pts.length > 2) { try { F.res = fromSim(); } catch (e) { F.res = null; } }
     else if (F.res) { F.res = null; const st = document.getElementById('fmStat'); if (st) st.textContent = 'The field changed: press Compute to read the satellite data again for the new outline.'; }
-    if (F.pts.length < 3) F.res = null; clearOverlay(); redraw(); if (F.res) showRes(); else { const r = document.getElementById('fmRes'); if (r) r.innerHTML = ''; const v = document.getElementById('fmViewR'); if (v) v.style.display = 'none'; legend(); }
+    if (F.pts.length < 3) F.res = null; clearOverlay(); redraw(); mapLayers(); if (F.res) showRes(); else { const r = document.getElementById('fmRes'); if (r) r.innerHTML = ''; const v = document.getElementById('fmViewR'); if (v) v.style.display = 'none'; legend(); }
   }
   function steps() {
     const el = document.getElementById('fmSteps'); if (!el) return; const a = F.pts.length > 2, b = !!F.res, c = !!layoutData();
@@ -338,6 +338,22 @@ const FieldMap = (() => {
   // the legend on the map: index, date and source, colour scale or zones, and the spread of the field (histogram)
   function legendCtl(mp) { const C = L.Control.extend({ onAdd() { const d = L.DomUtil.create('div', 'fmlegc'); d.title = 'Click the dark title to fold or unfold the legend'; d.addEventListener('click', e => { if (e.target.closest('.fmchip')) d.classList.toggle('min'); }); L.DomEvent.disableClickPropagation(d); L.DomEvent.disableScrollPropagation(d); return d; } }); const c = new C({ position: 'bottomleft' }); c.addTo(mp); return c; }
   const PRECV = { vri: 1, vridate: 1, gully: 1, rusle: 1, mzone: 1, mchange: 1, mtrend: 1, mstab: 1 };
+  // the maps already computed for this field, as layers: click one to show it again (nothing is computed again); they stay until
+  // the outline changes, also when the window is closed and opened again
+  function layersCtl(mp) { const C = L.Control.extend({ options: { position: 'topright' }, onAdd() { const d = L.DomUtil.create('div', 'fmlyc'); L.DomEvent.disableClickPropagation(d); L.DomEvent.disableScrollPropagation(d); d.addEventListener('click', e => { L.DomEvent.stop(e); if (e.target.closest('.fmlyh')) { d.classList.toggle('min'); return; } const b = e.target.closest('[data-ly]'); if (!b) return; const v = b.dataset.ly; setTimeout(() => act(v), 0); }); const act = v => { if (v === 'src') { F.showSrc = F.showSrc === false; drawSources(); return; } if (v === 'lay') { F.lay = !F.lay; const c = document.getElementById('fmLay'); if (c) c.checked = F.lay; drawLayout(); mapLayers(); return; } const [view, idx] = v.split(':'); if (idx) F.idx = idx; F.view = view; if (F.res) showRes(); else F.refresh(view); mapLayers(); }; return d; } }); const c = new C(); c.addTo(mp); return c; }
+  function mapLayers() {
+    if (!F.lyc || !F.lyc.getContainer) return; const d = F.lyc.getContainer(), rows = [], it = (v, lab, on, sub) => rows.push('<div class="fmly' + (on ? ' on' : '') + '" data-ly="' + v + '"><i>' + (on ? '&#9673;' : '&#9675;') + '</i>' + esc(lab) + (sub ? '<small>' + esc(sub) + '</small>' : '') + '</div>');
+    const pv = F.view;
+    if (F.res) { rows.push('<div class="fmlyg">Indices · ' + esc(F.res.photo ? 'satellite photo' : F.res.sim ? 'simulated' : 'Sentinel-2 ' + (F.res.date || '')) + '</div>'); RK().forEach(k => it('cont:' + k, k, (pv === 'cont') && F.idx === k)); RK().forEach(k => { if (F.idx === k) it('zones:' + k, k + ' management zones', pv === 'zones'); }); if (F.cv) it('cover', 'Land cover (image analysis)', pv === 'cover'); }
+    const mon = [['mzone', 'Monitoring zones'], ['mchange', 'Change since the last scene'], ['mtrend', 'Trend of the last scenes'], ['mstab', 'Stability over the season']].filter(q => FieldPrec.has(q[0]));
+    if (mon.length) { rows.push('<div class="fmlyg">Season · Sentinel-2</div>'); mon.forEach(q => it(q[0], q[1], pv === q[0])); }
+    const pr = [['vri', 'Irrigation depth by zone'], ['vridate', 'Irrigation date by zone'], ['gully', 'Ephemeral gullies'], ['rusle', 'Soil loss (RUSLE)']].filter(q => FieldPrec.has(q[0]));
+    if (pr.length) { rows.push('<div class="fmlyg">Precision maps</div>'); pr.forEach(q => it(q[0], q[1], pv === q[0])); }
+    const ov = []; if (F.site) ov.push('<div class="fmly' + (F.showSrc !== false ? ' on' : '') + '" data-ly="src"><i>' + (F.showSrc !== false ? '&#9745;' : '&#9744;') + '</i>Water sources</div>'); if (layoutData()) ov.push('<div class="fmly' + (F.lay ? ' on' : '') + '" data-ly="lay"><i>' + (F.lay ? '&#9745;' : '&#9744;') + '</i>Irrigation layout</div>');
+    if (ov.length) rows.push('<div class="fmlyg">On top</div>' + ov.join(''));
+    const html = '<div class="fmlyh">Maps of this field' + (rows.length ? '' : ' (none yet)') + '</div>' + (rows.length ? '<div class="fmlyb">' + rows.join('') + '</div>' : '<div class="fmlyb"><small>Each map you compute (indices, season, irrigation zones, erosion, site) is kept here; click it to show it again.</small></div>');
+    if (d.__h !== html) { d.__h = html; d.innerHTML = html; }
+  }
   function legendFor(k) {
     if (PRECV[F.view] && k === F.idx) return FieldPrec.legend(F.view);
     if (!F.res) return '';
@@ -375,7 +391,7 @@ const FieldMap = (() => {
     const cs = document.getElementById('fmCmp'); if (cs) { if (!RK().includes(F.cmp)) F.cmp = ''; cs.innerHTML = '<option value="">nothing (one map)</option>' + RK().filter(k => k !== F.idx).map(k => '<option value="' + k + '"' + (k === F.cmp ? ' selected' : '') + '>' + k + ' side by side</option>').join(''); }
     const vs = document.getElementById('fmView'); if (vs) { vs.querySelector('option[value=cover]').disabled = !F.cv; if (F.view === 'cover' && !F.cv) F.view = 'cont'; ['mzone', 'mchange', 'mtrend', 'mstab', 'vri', 'vridate', 'gully', 'rusle'].forEach(v => { vs.querySelector('option[value=' + v + ']').disabled = !FieldPrec.has(v); if (F.view === v && !FieldPrec.has(v)) F.view = 'cont'; }); vs.value = F.view; }
     if (F.cv) el.insertAdjacentHTML('beforeend', coverTable());
-    showOverlay(); redraw(); drawLayout();
+    showOverlay(); redraw(); drawLayout(); mapLayers();
   }
 
   function coverTable() { const C = F.cv; return '<div class="fmzt"><b>Land cover read from the satellite photo</b> (image analysis: colour and texture of every pixel, k-means clustering, named by rules; ' + C.mpp.toFixed(1) + ' m per pixel)<table class="tbl"><tr><th></th><th>Cover</th><th>Area</th><th>Share</th></tr>' +
@@ -568,23 +584,23 @@ const FieldMap = (() => {
       '<tr><td>Ground (Copernicus DEM)</td><td>' + (T2 ? 'elevation ' + T2.min.toFixed(0) + ' to ' + T2.max.toFixed(0) + ' m; slope <b>' + T2.slope.toFixed(2) + ' %</b>, falling to the ' + T2.to : 'not reached') + '</td></tr>' +
       '<tr><td>Field</td><td>' + sy.area.toFixed(2) + ' ha; shape ' + (sy.comp > 0.7 ? 'compact' : sy.comp > 0.55 ? 'fairly regular' : 'irregular') + (F.cv ? '; ' + F.cv.shares.filter(c => c.pct >= 2).map(c => c.name.toLowerCase() + ' ' + c.pct.toFixed(0) + ' %').join(', ') : '') + '</td></tr></table>';
     h += '<div class="fmzt"><b>Where to take the water from</b><div class="fmadv">' + esc(S.water.advice) + '</div>';
-    h += S.water.list.length ? '<table class="tbl fmtab"><tr><th>Source</th><th>Distance</th><th>Score</th><th>Why</th><th></th></tr>' + S.water.list.slice(0, 8).map((s, i) => '<tr data-src="' + i + '"><td><b>' + esc(s.name || '(no name)') + '</b><br><small>' + esc(s.type) + (s.photo ? ', photo' : ', OpenStreetMap') + '</small></td><td>' + (s.d > 0 ? Math.round(s.d) + ' m ' + s.dir : 'in the field') + '</td><td><b>' + s.score + '</b></td><td><small>' + esc(s.why.join('; ')) + '</small></td><td><button class="btn" data-usesrc="' + i + '">Use</button></td></tr>').join('') + '</table>' : '<div class="pnote">No water feature is mapped within 3 km.</div>';
+    h += S.water.list.length ? '<table class="tbl fmtab"><tr><th>Source</th><th>Distance</th><th>Score</th><th>Why</th><th></th></tr>' + S.water.list.slice(0, 8).map((s, i) => '<tr data-src="' + i + '"><td><b>' + esc(s.name || '(no name)') + '</b><br><small>' + esc(s.type) + (s.photo ? ', photo' : ', OpenStreetMap') + '</small></td><td>' + (s.d > 0 ? Math.round(s.d) + ' m ' + s.dir : 'in the field') + '</td><td><b>' + s.score + '</b></td><td><small>' + esc(s.why.join('; ')) + '</small></td><td style="white-space:nowrap"><button class="btn" data-showsrc="' + i + '" title="Move the map to this source">Show</button> <button class="btn" data-usesrc="' + i + '">Use</button></td></tr>').join('') + '</table>' : '<div class="pnote">No water feature is mapped within 3 km.</div>';
     h += '</div><div class="fmzt"><b>Which irrigation system suits this field</b><table class="tbl fmtab"><tr><th>System</th><th>Score</th><th>Reasons</th><th></th></tr>' +
       sy.list.map((x, i) => '<tr' + (i === 0 ? ' class="on"' : '') + '><td><b>' + x.name + '</b>' + (x.Ea != null ? '<br><small>' + (x.id === 'sid' ? 'surface' : x.id === 'drip' ? 'drip' : 'sprinkler') + ' design now: Ea ' + (x.Ea * 100).toFixed(0) + ' %</small>' : '') + '</td><td><b>' + x.score + '</b>' + (i === 0 ? '<br><small>best</small>' : '') + '</td><td><small>' + esc(x.why.join('; ') || 'no strong reason for or against') + '</small></td><td><button class="btn" data-usesys="' + i + '">Use</button></td></tr>').join('') + '</table>' +
       '<div class="pnote">Scores from the slope, the soil, the water source, the crop (' + esc(sy.crop || '-') + '), the field shape and the land cover, after the FAO and USDA guidance for choosing a system. "Use" sets the system or the source in the field sketch; then open the design and run it.</div></div>';
     el.innerHTML = h;
     el.querySelectorAll('[data-usesrc]').forEach(b => b.onclick = () => useSource(S.water.list[+b.dataset.usesrc]));
     el.querySelectorAll('[data-usesys]').forEach(b => b.onclick = () => useSystem(sy.list[+b.dataset.usesys]));
-    el.querySelectorAll('tr[data-src]').forEach(tr => tr.onmouseenter = () => { const s = S.water.list[+tr.dataset.src]; if (s && F.map) F.map.panTo(s.at); });
+    el.querySelectorAll('[data-showsrc]').forEach(b => b.onclick = () => { const s = S.water.list[+b.dataset.showsrc]; if (!s || !F.map) return; F.showSrc = true; drawSources(); F.map.panTo(s.at); if (F.srcMk && F.srcMk[+b.dataset.showsrc]) F.srcMk[+b.dataset.showsrc].openTooltip(); });
     const sb = document.getElementById('fmSoilUse'); if (sb) sb.onclick = useSoil;
     drawSources();
   }
   function drawSources() {
-    if (F.srcLay) F.map.removeLayer(F.srcLay); F.srcLay = null; const S = F.site; if (!S || !F.map) return; const g = L.layerGroup();
+    if (F.srcLay && F.map) F.map.removeLayer(F.srcLay); F.srcLay = null; F.srcMk = []; const S = F.site; if (!S || !F.map || F.showSrc === false) { mapLayers(); return; } const g = L.layerGroup();
     S.water.list.slice(0, 8).forEach((s, i) => { if (s.pts.length > 1 && !/well|borehole|spring/.test(s.type)) L.polyline(s.pts.length > 600 ? s.pts.filter((_, j) => j % 3 === 0) : s.pts, { color: '#00B0FF', weight: 3, opacity: 0.8, interactive: false }).addTo(g);
-      L.marker(s.at, { icon: L.divIcon({ className: 'fmws' + (s === S.water.best ? ' best' : ''), html: ICON[s.type] || '&#9679;', iconSize: [20, 20] }), title: (s.name || s.type) + ' · ' + s.type + ' · ' + Math.round(s.d) + ' m · score ' + s.score }).addTo(g);
+      F.srcMk[i] = L.marker(s.at, { icon: L.divIcon({ className: 'fmws' + (s === S.water.best ? ' best' : ''), html: ICON[s.type] || '&#9679;', iconSize: [20, 20] }), title: (s.name || s.type) + ' · ' + s.type + ' · ' + Math.round(s.d) + ' m · score ' + s.score }).bindTooltip((s.name || s.type) + ' · ' + Math.round(s.d) + ' m · score ' + s.score, { direction: 'top' }).addTo(g);
       if (s === S.water.best && s.d > 0) L.polyline([s.at, s.edge], { color: '#00E5FF', weight: 3, dashArray: '8 6', interactive: false }).addTo(g); });
-    g.addTo(F.map); F.srcLay = g;
+    g.addTo(F.map); F.srcLay = g; mapLayers();
   }
   function useSource(s) {
     if (!s) return; if (!layoutData()) useField(true); const D = layoutData(); if (!D || !Sketch.setAnswers) { UI.toast(needLayout()); return; }
@@ -602,7 +618,7 @@ const FieldMap = (() => {
     if (!L2) return; let b = null, bd = Infinity; L2.forEach(r => { if (r[2] == null) return; const d = Math.hypot(r[2] - so.sand, r[3] - so.clay); if (d < bd) { bd = d; b = r; } });
     if (!b) return; E.set({ soil: b[0] }); if (Sketch.setAnswers) Sketch.setAnswers({ soil: b[0] }); UI.toast('Soil of the project: ' + b[1] + ' (nearest to sand ' + so.sand.toFixed(0) + ' %, clay ' + so.clay.toFixed(0) + ' %)'); UI.log('Soil from SoilGrids: ' + b[1]);
   }
-  F.refresh = view => { if (!F.res && !FieldPrec.has(view)) return; F.view = view; const vr = document.getElementById('fmViewR'); if (vr) vr.style.display = ''; if (F.res) showRes(); else { clearOverlay(); const l = FieldPrec.layer(view); if (l) F.ov = l.addTo(F.map); legend(); } };
+  F.refresh = view => { if (!F.res && !FieldPrec.has(view)) return; F.view = view; const vr = document.getElementById('fmViewR'); if (vr) vr.style.display = ''; if (F.res) showRes(); else { clearOverlay(); const l = FieldPrec.layer(view); if (l) F.ov = l.addTo(F.map); legend(); mapLayers(); } };
   if (typeof FieldSite !== 'undefined') FieldSite.init({ local, unlocal, centroid, areaM2, perim, inside, grid: mc => grid(mc), pack: (G, v, m, k) => pack(G, v, m, k) });
 
   const _h = { F, grid: mc => grid(mc), toUTM, s2Search, IX, stats, local, unlocal, centroid, areaM2, perim, inside, valueAt: (k, a, b) => valueAt(k, a, b), refresh: v => F.refresh(v) };

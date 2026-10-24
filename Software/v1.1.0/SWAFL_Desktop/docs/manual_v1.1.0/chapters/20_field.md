@@ -160,9 +160,17 @@ The advice names the best surface source within 1.5 km (with its distance, direc
 
 The table lists each system with its score, the reasons, and the application efficiency of the SWAFL design of that system as it stands. **Use** sets the system (and the slope of the site) in the field sketch; then *Turn the sketch into the design* and run it.
 
+## The maps of this field, as layers
+
+Every map computed for the demarcated field is kept as a layer in the panel **Maps of this field** at the top right of the map: the five indices and the management zones of the index shown, the land cover read from the photo, the four maps of the season (monitoring zones, change, trend, stability), the irrigation depth and date of each zone, the ephemeral gullies and the soil loss, and, on top, the water sources and the irrigation layout. Click a layer to show it again: nothing is computed again. The layers stay when the window is closed and opened again (with the results of the site), and go only when the outline of the field changes. Click the dark title to fold the panel.
+
+In the list of water sources of the site, the map moves to a source only when its **Show** button is pressed (the mouse passing over the list leaves the map where it is); **Use** sets the source in the sketch and the design.
+
+![The maps of this field as layers, after the indices, the site, the season, the zone-by-zone irrigation and the erosion were computed (test data).](images/ui/fm_layers.jpg){width=88%}
+
 ## The season of the field, and the precision maps
 
-Section 4 of the panel reads the season of the real field and makes the precision maps from it and from the SWAFL simulation of the farm. Every map is a choice of *Show on the map*, has its legend on the map, gives its values under the cursor, and goes into the report (a page for the season and the irrigation, a page for the erosion).
+Section 4 of the panel reads the season of the real field and makes the precision maps from it and from the SWAFL simulation of the farm. Every map is a choice of *Show on the map* and a layer of *Maps of this field*, has its legend on the map, gives its values under the cursor, and goes into the report (a page for the season and the irrigation, a page for the erosion).
 
 ### The season seen by Sentinel-2
 
@@ -187,7 +195,7 @@ and the trend of the last three scenes (least squares, per 30 days). The **monit
 
 * **its soil**: SoilGrids at the centre of the zone (sand and clay), the nearest soil of SWAFL and its available water $\mathrm{AWC}_z$;
 * **its observed cover**: the crop development of the SWAFL daily model, scaled by the zone's cover from its last NDVI against the field, $f_{c,z}(t)=\min\bigl(1,\ c(t)\,f_{c}(\mathrm{NDVI}_z)/\overline{f_c}\bigr)$ with $f_c=(\mathrm{NDVI}-0.15)/0.7$, and the crop coefficient $K_c=K_{c,ini}+(K_{c,mid}-K_{c,ini})\,K_d$, $K_d=\min(1,\,1.5f_c,\,f_c^{0.5})$ (Allen and Pereira, 2009), with the coefficients of the crop in Properties;
-* **the farm of the simulation**: the roots of every day, the trigger, the depletion fraction and the past irrigations of the SWAFL model, the season of the decision of Chapter 18, and the application efficiency of the design in use;
+* **the farm of the simulation**: the roots of every day, the trigger, the depletion fraction and the past irrigations of the irrigation plan of Chapter 18 (Eq. 18.4), the season of the decision of Chapter 18, and the application efficiency of the design in use;
 * **the weather in use**: the daily reference ET and rain (the online weather of the farm with its forecast, a weather file, or the recorded weather).
 
 The balance starts 45 days before the decision with the water of the SWAFL model on that day:

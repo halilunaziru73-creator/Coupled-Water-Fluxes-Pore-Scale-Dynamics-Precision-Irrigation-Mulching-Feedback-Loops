@@ -1098,10 +1098,10 @@ function drawSID() {
   T('lower input ◂  ▸ higher input · bars: green raises Ea, red lowers it', nc ? W / 2 : scx, s0 + sens.length * 22 + 14, { s: 8.8, i: true, a: 'center', c: MUTE });
   y = s0 + sens.length * 22 + 34;
   // ---- season ----
-  const ayr = clampN(yearOf(fclock.kd()), 0, NYR - 1); let yIrr = 0, yEv = 0; for (let d = ayr * DPY; d < Math.min(ND, (ayr + 1) * DPY); d++) { const v = sim.irr[d] || 0; yIrr += v; if (v > 0.5) yEv++; }
-  const dose = sim.dose, events = yIrr / Zn, gross = Vap / (P.L * P.w) * 1000, seasonGross = events * gross, N0M = SID.Qs / SID.qLs, Nunits = SID.Wf / P.w, Nset = Math.max(1, Nunits / N0M), Ttot = Nset * tco / 60;
+  const PLs = irPlan({ Zn: Zn, Ea: R.Ea }), yIrr = PLs.season.In, yEv = PLs.season.ev.length;
+  const dose = sim.dose, events = yEv, gross = Vap / (P.L * P.w) * 1000, seasonGross = events * gross, N0M = SID.Qs / SID.qLs, Nunits = SID.Wf / P.w, Nset = Math.max(1, Nunits / N0M), Ttot = Nset * tco / 60;
   y += sidHead('What this means for the season and the farm', y, 'Change the date or the year in Properties. The DSS sets the crop need; the design decides what is pumped');
-  const L9 = [['Net irrigation need in a season (DSS)', sidF(yIrr) + ' mm → ' + events.toFixed(1) + ' irrigations of ' + sidF(Zn) + ' mm'], ['Gross water per irrigation', sidF(gross) + ' mm (Ea ' + sidF(R.Ea * 100) + ' %)'], ['Gross water per season', sidF(seasonGross) + ' mm = ' + sidF(seasonGross * 10) + ' m³ per hectare'], ['Units run at once N0M = Qs ÷ q', sidF(N0M, 1) + ' (' + sidF(SID.Qs) + ' L/s ÷ ' + SID.qLs.toFixed(2) + ' L/s)'], ['Sets to cover ' + sidF(SID.Wf) + ' m of width', Nset.toFixed(1) + ' sets × ' + sidF(tco) + ' min = ' + Ttot.toFixed(1) + ' h per irrigation'], ['Pumping per season', sidF(Ttot * events) + ' hours']];
+  const L9 = [['Net irrigation in the season (FAO-56, Kc × ET0)', sidF(yIrr) + ' mm → ' + events + ' irrigations of ' + sidF(Zn) + ' mm'], ['Gross water per irrigation', sidF(gross) + ' mm (Ea ' + sidF(R.Ea * 100) + ' %)'], ['Gross water per season', sidF(seasonGross) + ' mm = ' + sidF(seasonGross * 10) + ' m³ per hectare'], ['Units run at once N0M = Qs ÷ q', sidF(N0M, 1) + ' (' + sidF(SID.Qs) + ' L/s ÷ ' + SID.qLs.toFixed(2) + ' L/s)'], ['Sets to cover ' + sidF(SID.Wf) + ' m of width', Nset.toFixed(1) + ' sets × ' + sidF(tco) + ' min = ' + Ttot.toFixed(1) + ' h per irrigation'], ['Pumping per season', sidF(Ttot * events) + ' hours']];
   L9.forEach((q, i) => { if (nc) { const yy = y + 28 + i * 36; ctx.fillStyle = i % 2 ? '#F6F7F5' : '#fff'; ctx.fillRect(14, yy - 12, W - 28, 36); sidWrap(q[0], 20, yy, W - 40, { s: 9, c: '#374151' }, 11); T(q[1], W - 20, yy + 16, { s: 9.5, b: true, a: 'right', c: SIDC.ac }); return; } const yy = y + 34 + i * 20; ctx.fillStyle = i % 2 ? '#F6F7F5' : '#fff'; ctx.fillRect(14, yy - 12, W - 28, 20); T(q[0], 20, yy + 2, { s: 9.5, c: '#374151' }); T(q[1], W - 20, yy + 2, { s: 9.5, b: true, a: 'right', c: SIDC.ac }); });
   return irAdvice(nc ? y + 28 + 6 * 36 + 16 : y + 34 + 6 * 20 + 16, { sys: 'Surface', Zn: Zn, gross: gross, Ea: R.Ea, Es: R.Es, timeH: Ttot, nc: nc });
 }
@@ -1227,7 +1227,8 @@ function irCtx() {
   const sim = seasonSim(), I = sidIntake(), ay = clampN(yearOf(fclock.kd()), 0, NYR - 1); let pk = 0, e0 = 0, ne = 0, yIrr = 0;
   for (let d = ay * DPY; d < Math.min(ND, (ay + 1) * DPY); d++) { const et = (sim.dE ? sim.dE[d] : 2) + (sim.dT ? sim.dT[d] : 2); let a = 0; for (let q = 0; q < 5; q++) a += (sim.dE ? sim.dE[Math.min(ND - 1, d + q)] + sim.dT[Math.min(ND - 1, d + q)] : 4) / 5; if (a > pk) pk = a; const dd = d - ay * DPY; if (sim.dE && dd > 140 && dd < 250 && sim.dE[d] > 0) { e0 += sim.dE[d]; ne++; } yIrr += sim.irr[d] || 0; }
   const tmp = (typeof TEMP_VALUES !== 'undefined' ? TEMP_VALUES[state.tempIdx] : 0) || 0;
-  return { sim, I, s: I.s, fT: sim.fTrig, Rmax: sim.Rmax, ZnD: sidZnAuto(), ETpk: clampN(pk, 2.5, 9), E0: ne ? clampN(e0 / ne, 1, 5) : 3, yIrr, ay, tmp, sName: DATA.soil_labels[state.soil] };
+  let PLr = null; try { PLr = irPlan({}); } catch (e) { console.warn('irPlan', e); } if (PLr) { yIrr = PLr.season.In; if (PLr.season.ETpk > 0) pk = PLr.season.ETpk; }
+  return { sim, I, s: I.s, fT: sim.fTrig, Rmax: sim.Rmax, ZnD: sidZnAuto(), ETpk: clampN(pk, 1, 12), E0: ne ? clampN(e0 / ne, 1, 5) : 3, yIrr, ay, tmp, sName: DATA.soil_labels[state.soil], plan: PLr };
 }
 const irF = (v, d) => (isFinite(v) ? v.toFixed(d == null ? 0 : d) : '—');
 function irHead(C, title, sub) {
@@ -1384,9 +1385,9 @@ function drawDRIP() {
   const base = R.Ea;
   y = irSens(y, [['Emitter flow q', 'q', 0.25, () => o.q], ['Emitter spacing', 'Se', 0.25, () => o.Se], ['Lateral spacing', 'Sl', 0.25, () => o.Sl], ['Placement depth', 'dep', 0.3, () => Math.max(10, o.dep)], ['Depth per irrigation', 'Zn', 0.25, () => o.Zn], ['Run time', 't', 0.2, () => R.t]], base, ov => drRun(ov).Ea, 'Change in Ea when one input moves ±25–30 %, all others held');
   // season
-  const ay = C.ay, events = C.yIrr / o.Zn, gross = R.gross, flowHa = o.q * (1e4 / R.Ae) / 3600, zones = Math.max(1, Math.ceil(flowHa * DRP.Af / DRP.Qs)), cyc = zones * R.t;
+  const ay = C.ay, PLs = irPlan({ Zn: o.Zn, Ea: R.Ea }), events = PLs.season.ev.length, gross = R.gross, flowHa = o.q * (1e4 / R.Ae) / 3600, zones = Math.max(1, Math.ceil(flowHa * DRP.Af / DRP.Qs)), cyc = zones * R.t;
   sidHead('What this means for the season and the farm', y, 'The DSS sets the crop need; the design decides what is pumped');
-  y = irRows(y + 34, [['Net irrigation need in a season (DSS)', irF(C.yIrr) + ' mm → ' + events.toFixed(0) + ' irrigations of ' + irF(o.Zn) + ' mm'], ['Gross water per irrigation', irF(gross, 1) + ' mm (Ea ' + irF(R.Ea * 100) + ' %)'], ['Gross water per season', irF(events * gross) + ' mm = ' + irF(events * gross * 10) + ' m³ per hectare'], ['Peak crop need / interval', C.ETpk.toFixed(1) + ' mm/day × ' + irF(DRP.intv) + ' day' + (DRP.intv === 1 ? '' : 's')], ['System flow per hectare', flowHa.toFixed(2) + ' L/s/ha (' + irF(1e4 / R.Ae) + ' emitters/ha, ' + irF(1e4 / o.Sl) + ' m of lateral/ha)'], ['Sets for ' + DRP.Af.toFixed(1) + ' ha with ' + irF(DRP.Qs) + ' L/s', zones + (zones === 1 ? ' set × ' : ' sets × ') + irF(R.t, 1) + ' h = ' + cyc.toFixed(1) + ' h per round'], ['Pumping per season', irF(cyc * events) + ' hours \u00b7 ' + irF(cyc * events * R.G.kW) + ' kWh']]) + 16;
+  y = irRows(y + 34, [['Net irrigation in the season (FAO-56, Kc × ET0)', irF(PLs.season.In) + ' mm → ' + events + ' irrigations of ' + irF(o.Zn) + ' mm'], ['Gross water per irrigation', irF(gross, 1) + ' mm (Ea ' + irF(R.Ea * 100) + ' %)'], ['Gross water per season', irF(events * gross) + ' mm = ' + irF(events * gross * 10) + ' m³ per hectare'], ['Peak crop need / interval', C.ETpk.toFixed(1) + ' mm/day × ' + irF(DRP.intv) + ' day' + (DRP.intv === 1 ? '' : 's')], ['System flow per hectare', flowHa.toFixed(2) + ' L/s/ha (' + irF(1e4 / R.Ae) + ' emitters/ha, ' + irF(1e4 / o.Sl) + ' m of lateral/ha)'], ['Sets for ' + DRP.Af.toFixed(1) + ' ha with ' + irF(DRP.Qs) + ' L/s', zones + (zones === 1 ? ' set × ' : ' sets × ') + irF(R.t, 1) + ' h = ' + cyc.toFixed(1) + ' h per round'], ['Pumping per season', irF(cyc * events) + ' hours \u00b7 ' + irF(cyc * events * R.G.kW) + ' kWh']]) + 16;
   y = irAdvice(y, { sys: 'Drip', Zn: o.Zn, gross: gross, Ea: R.Ea, Es: R.Es, timeH: cyc });
   return y;
 }
@@ -1486,9 +1487,9 @@ function drawSPR() {
     (r, i, ok, last) => [String(i), r.label.length > 24 ? r.label.slice(0, 23) + '…' : r.label, irF(r.d.P), r.d.d.toFixed(1), irF(r.d.Ss) + '×' + irF(r.d.Sl), irF(r.R.T), irF(r.R.Ea * 100, 1), irF(r.R.Es * 100, 1), irF(r.R.ro * 100, 1), ok ? 'meets target' : last && O.done ? 'best found' : ''],
     (O2, b, ok) => O2.done ? (ok ? 'Target reached: Ea ' + irF(b.R.Ea * 100, 1) + ' % with CU ' + irF(b.R.CU * 100) + ' %. Tap the green row to apply it.' : 'Best found: Ea ' + irF(b.R.Ea * 100, 1) + ' %, short of 85 % for this soil and wind. Try a lower application rate (smaller nozzle, wider spacing) or another sprinkler type.') : 'Iterating… step ' + O2.step + ' of ' + O2.seq.length);
   y = irSens(y, [['Soil intake k', 'K', 0.2, () => 1], ['Wind speed', 'u', 0.5, () => Math.max(1, o.u)], ['Pressure', 'P', 0.2, () => o.P], ['Nozzle diameter', 'd', 0.15, () => o.d], ['Spacing along lateral', 'Ss', 0.2, () => o.Ss], ['Spacing between laterals', 'Sl', 0.2, () => o.Sl], ['Depth per irrigation', 'Zn', 0.25, () => o.Zn], ['Ground slope', 'S', 0.5, () => Math.max(0.5, o.S)]], R.Ea, ov => { if (ov.K) return IRM.sprinkler({ ...o, K: o.K * ov.K, T: SPR.tauto ? null : o.T }).Ea; return spRun(ov).Ea; }, 'Change in Ea when one input moves, all others held');
-  const ay = C.ay, events = C.yIrr / o.Zn, gross = R.gross, nsp = Math.max(1, Math.round(SPR.Af * 1e4 / (o.Ss * o.Sl))), flowTot = nsp * R.Q / 60, sets = Math.max(1, Math.ceil(flowTot / SPR.Qs)), cyc = sets * T0 / 60;
+  const ay = C.ay, PLs = irPlan({ Zn: o.Zn, Ea: R.Ea }), events = PLs.season.ev.length, gross = R.gross, nsp = Math.max(1, Math.round(SPR.Af * 1e4 / (o.Ss * o.Sl))), flowTot = nsp * R.Q / 60, sets = Math.max(1, Math.ceil(flowTot / SPR.Qs)), cyc = sets * T0 / 60;
   y = spPart(y, 'season', 5, 'What it means for the season', 'Water, hours and energy for a whole year of irrigating'); sidHead('What this means for the season and the farm', y, 'The DSS sets the crop need; the design decides what is pumped');
-  y = irRows(y + 34, [['Net irrigation need in a season (DSS)', irF(C.yIrr) + ' mm → ' + events.toFixed(0) + ' irrigations of ' + irF(o.Zn) + ' mm'], ['Gross water per irrigation', irF(gross, 1) + ' mm (Ea ' + irF(R.Ea * 100) + ' %)'], ['Gross water per season', irF(events * gross) + ' mm = ' + irF(events * gross * 10) + ' m³ per hectare'], ['One sprinkler', R.Q.toFixed(1) + ' L/min at ' + irF(o.P) + ' kPa, reaches ' + R.nz.R.toFixed(1) + ' m'], ['Sprinklers for ' + SPR.Af.toFixed(1) + ' ha', irF(nsp) + ' (' + irF(flowTot, 1) + ' L/s if all run)'], ['Sets with ' + irF(SPR.Qs) + ' L/s', sets + ' sets × ' + irF(T0) + ' min = ' + cyc.toFixed(1) + ' h per round'], ['Pumping per season', irF(cyc * events) + ' hours \u00b7 ' + irF(cyc * events * R.G.kW) + ' kWh']]) + 16;
+  y = irRows(y + 34, [['Net irrigation in the season (FAO-56, Kc × ET0)', irF(PLs.season.In) + ' mm → ' + events + ' irrigations of ' + irF(o.Zn) + ' mm'], ['Gross water per irrigation', irF(gross, 1) + ' mm (Ea ' + irF(R.Ea * 100) + ' %)'], ['Gross water per season', irF(events * gross) + ' mm = ' + irF(events * gross * 10) + ' m³ per hectare'], ['One sprinkler', R.Q.toFixed(1) + ' L/min at ' + irF(o.P) + ' kPa, reaches ' + R.nz.R.toFixed(1) + ' m'], ['Sprinklers for ' + SPR.Af.toFixed(1) + ' ha', irF(nsp) + ' (' + irF(flowTot, 1) + ' L/s if all run)'], ['Sets with ' + irF(SPR.Qs) + ' L/s', sets + ' sets × ' + irF(T0) + ' min = ' + cyc.toFixed(1) + ' h per round'], ['Pumping per season', irF(cyc * events) + ' hours \u00b7 ' + irF(cyc * events * R.G.kW) + ' kWh']]) + 16;
   y = irAdvice(y, { sys: 'Sprinkler', Zn: o.Zn, gross: gross, Ea: R.Ea, Es: R.Es, timeH: cyc });
   return y;
 }
@@ -1623,6 +1624,54 @@ function irToday(y, C, R, kind) {
 }
 
 
+// ===== The irrigation plan of the farm (FAO-56 daily root-zone balance, Allen et al., 1998): the crop coefficient Kc of every
+// day (four-stage curve of the crop in Properties, its sowing date and density; the Daisy rotation by its cover), the reference
+// ET and rain of the weather in use (online with its forecast, a weather file or the recorded weather; rain and temperature
+// controls), the roots of the daily model, the available water of the soil, the trigger, the mulch, and the net depth and
+// efficiency of the design. Irrigate when the root-zone deficit reaches the trigger depth or the design depth, whichever is
+// smaller; each irrigation refills the root zone up to the design depth (a shorter run when the trigger comes first). =====
+const _IRP = { keys: [], val: {} };
+function irPlan(opt) {
+  opt = opt || {}; const sim = seasonSim(), kW = fclock.kd(), S0 = irStart(sim, kW), k0 = S0.k, Zn = opt.Zn > 0 ? +opt.Zn : null, Ea = clampN(opt.Ea || ((state.method === 'M01_Overhead') ? 0.75 : /Drip/.test(state.method) ? 0.9 : 0.6), 0.05, 1);
+  const key = [simCache.key, kW, Zn == null ? 'refill' : Zn.toFixed(2), Ea.toFixed(3), state.vffIdx, state.mulchType, (window.WXD && WXD.on) ? WXD.key : 'rec', state.rainIdx, state.tempIdx].join('|');
+  if (_IRP.val[key]) return _IRP.val[key];
+  const wi = sim.widx[k0], w = wi >= 0 ? sim.wins[wi] : null, per = w && w.harv - w.sow >= DPY - 2;
+  const s0 = w ? Math.max(0, w.sow, k0 - 150) : Math.max(0, k0 - 30), end = Math.min(ND - 1, per ? k0 + DPY : w ? Math.max(k0 + 120, w.harv + 30) : k0 + 150), n = end - s0 + 1, ext = 220;
+  const fb = typeof dailyForcing !== 'function', F = !fb ? dailyForcing(s0, n + ext) : (() => { const et0 = [], rain = []; let ws = 0; for (let j = 0; j < DPY; j++) ws += 0.35 + 0.65 * 0.5 * (1 + Math.sin(2 * Math.PI * (j - 100) / DPY)); for (let q = 0; q < n + ext; q++) { const k = Math.min(ND - 1, s0 + q), doy = k % DPY; et0.push(878 * (0.35 + 0.65 * 0.5 * (1 + Math.sin(2 * Math.PI * (doy - 100) / DPY))) / ws); rain.push(sim.rain[k] || 0); } return { et0, rain, src: 'recorded weather of the simulations' }; })(), awc = AWC[state.soil] || 1.5, fT = clampN(sim.fTrig != null ? sim.fTrig : 0.4, 0.02, 0.98), vff = VFF_VALUES[state.vffIdx];
+  let pp = null, kcY = null; try { if (window.CROPLIB && CROPLIB.crops[state.crop]) { pp = cropParams(); kcY = CROPLIB.kcCurve(pp); } } catch (e) {}
+  const p0 = pp ? pp.p : 0.55, ky = pp && pp.ky != null ? pp.ky : 1.05, ponded = !!(pp && pp.c && pp.c.ponded), kcMid = pp ? pp.kcMid : 1.15, kcIni = pp ? pp.kcIni : 0.3;
+  const kcAt = k => { if (k >= ND || sim.widx[k] < 0) return 0; if (kcY) { const v = kcY[((k % DPY) + DPY) % DPY]; return v > 0.01 ? v : kcIni; } return 0.3 + 0.85 * (sim.cover[k] || 0); };
+  // the part of Kc that is evaporation from the soil between the plants (bare share of the ground); the mulch passes only vff of it
+  const kcEffAt = (k, kc) => { const cov = clampN(sim.cover[k] || 0, 0, 1), esh = Math.min(kc, 1.0) * (1 - cov) * 0.8; return Math.max(0.05, kc - (1 - vff) * esh); };
+  const zrAt = k => kcAt(k) > 0 ? clampN(sim.rd[Math.min(ND - 1, k)] || 15, 15, 100) : 15;
+  const leftM = d => { const rz = clampN(sim.rd[d] || 30, 10, 100), m = Math.max(1, Math.round(rz / DZ)); let a = 0; for (let i = 0; i < m; i++) a += clampN(sim.s[d][i], 0, 1); return a / m; };
+  const A = k => k - s0, N2 = n + ext, Dr = new Float32Array(N2), TAW = new Float32Array(N2), RAW = new Float32Array(N2), ETc = new Float32Array(N2), ETa = new Float32Array(N2), P = new Float32Array(N2), RO = new Float32Array(N2), DP = new Float32Array(N2), I = new Float32Array(N2), KC = new Float32Array(N2), KS = new Float32Array(N2), THR = new Float32Array(N2), live = new Uint8Array(N2);
+  const ev = []; let D = clampN((1 - leftM(s0)) * awc * zrAt(s0), 0, awc * zrAt(s0));
+  for (let i = 0; i < N2; i++) {
+    const k = s0 + i, kc = kcAt(k), lv = kc > 0.01, kce = lv ? kcEffAt(k, kc) : 0.25 * (0.4 + 0.6 * vff), e0 = F.et0[Math.min(i, F.et0.length - 1)] || 0, r = F.rain[Math.min(i, F.rain.length - 1)] || 0;
+    const taw = awc * zrAt(k), p = clampN(p0 + 0.04 * (5 - kce * e0), 0.1, 0.8), raw = p * taw; if (D > taw) D = taw;
+    const ro = ponded && lv ? 0 : r > 35 ? 0.3 * (r - 35) : 0, ks = lv ? (D > raw ? clampN((taw - D) / Math.max(1e-6, (1 - p) * taw), 0, 1) : 1) : 1;
+    const etc = kce * e0, eta = lv ? etc * ks : etc * (D < 0.3 * taw ? 1 : clampN((taw - D) / (0.7 * taw), 0, 1));
+    D = D - (r - ro) + eta; let dp = 0; if (D < 0) { dp = -D; D = 0; }
+    const thr = Zn != null ? Math.min(fT * taw, Zn) : fT * taw; let net = 0;
+    if (lv && i < n && fT < 0.995 && D >= thr - 1e-6 && D > 0.5) { net = Zn != null ? Math.min(Zn, D) : D; const st = Math.min(net, D); D -= st; dp += net - st; ev.push({ k, net, gross: net / Ea, before: taw - (D + st), deficit: D + st, taw, lost: net - st }); }
+    Dr[i] = D; TAW[i] = taw; RAW[i] = raw; ETc[i] = etc; ETa[i] = eta; P[i] = r; RO[i] = ro; DP[i] = dp; I[i] = net; KC[i] = lv ? kce : 0; KS[i] = ks; THR[i] = thr; live[i] = lv ? 1 : 0;
+  }
+  const at = (arr, k) => arr[clampN(A(k), 0, N2 - 1)];
+  // the season of the decision: its irrigations, water and yield
+  const sa = w ? Math.max(s0, w.sow) : k0, sb = w ? Math.min(end, w.harv) : end; let sI = 0, sG = 0, sEc = 0, sEa = 0, sP = 0, sDP = 0, sRO = 0, nSt = 0, nLv = 0, pk = 0;
+  for (let k = sa; k <= sb; k++) { const i = A(k); sI += I[i]; sG += I[i] / Ea; sP += P[i]; sDP += DP[i]; sRO += RO[i]; if (live[i]) { sEc += ETc[i]; sEa += ETa[i]; nLv++; if (KS[i] < 0.999) nSt++; } let a5 = 0; for (let q = 0; q < 5; q++) a5 += ETc[Math.min(N2 - 1, i + q)] / 5; if (live[i] && a5 > pk) pk = a5; }
+  const sev = ev.filter(e => e.k >= sa && e.k <= sb), gaps = []; for (let i = 1; i < sev.length; i++) gaps.push(sev[i].k - sev[i - 1].k);
+  // from any day, the dry-down without irrigation (the crop uses less water as the soil dries) to the trigger and the wilting point
+  const dry = (d) => { let Dd = at(Dr, d), trig = null, wilt = null; const out = []; for (let q = 1; q <= 200; q++) { const k = d + q, i = A(k); if (i >= N2) break; const taw = TAW[i], kc = KC[i] || 0.25, e0 = F.et0[Math.min(i, F.et0.length - 1)] || 0, p = clampN(p0 + 0.04 * (5 - kc * e0), 0.1, 0.8), ks = Dd > p * taw ? clampN((taw - Dd) / Math.max(1e-6, (1 - p) * taw), 0, 1) : 1;
+      Dd = clampN(Dd + kc * e0 * (0.35 + 0.65 * ks) - (P[i] - RO[i]), 0, taw); out.push([q, taw - Dd]); if (trig == null && Dd >= THR[i]) trig = k; if (Dd >= 0.97 * taw) { wilt = k; break; } } return { trig, wilt, out }; };
+  const res = { k0, s0, end, n, sh: S0.sh, note: S0.note, Zn, Ea, fT, F, Dr, TAW, RAW, ETc, ETa, P, RO, DP, I, KC, KS, THR, live, ev, at, dry, A,
+    next: d => ev.find(e => e.k >= d) || null, up: ev.filter(e => e.k >= k0).slice(0, 8), src: F.src, kcIni, kcMid, p0,
+    season: { a: sa, b: sb, ev: sev, In: sI, G: sG, ETc: sEc, ETa: sEa, P: sP, DP: sDP, RO: sRO, stress: nSt, days: nLv, RY: sEc > 0 ? clampN(1 - ky * (1 - sEa / sEc), 0, 1) : 1, gaps, mean: gaps.length ? gaps.reduce((a, b) => a + b, 0) / gaps.length : 0, gmin: gaps.length ? Math.min(...gaps) : 0, gmax: gaps.length ? Math.max(...gaps) : 0, ETpk: pk } };
+  if (!fb) { _IRP.keys.push(key); _IRP.val[key] = res; } if (_IRP.keys.length > 24) delete _IRP.val[_IRP.keys.shift()];
+  window.__IRPLAN = { next: res.up.slice(0, 5).map(e => [fmtDate(dateOfK(e.k + res.sh)), +e.net.toFixed(1), +e.gross.toFixed(1)]), season: { n: sev.length, net: +sI.toFixed(0), gross: +sG.toFixed(0), ETc: +sEc.toFixed(0), rain: +sP.toFixed(0), dp: +sDP.toFixed(0), mean: +res.season.mean.toFixed(1) }, Zn, Ea, src: F.src };
+  return res;
+}
 // ===== The soil water of the days ahead, as a film: the daily model from the working date to the next irrigation (and a few
 // days after it), and what would happen without that irrigation: the root zone dries on to the wilting point =====
 // the season of the decision: the working date when the crop is in the field; otherwise the next sowing of the crop in use; when the
@@ -1639,36 +1688,39 @@ const DSSMOV = { paused: false, t0: performance.now(), j: 0, key: '' };
 function dssMovie(y, sim, k0, up, sp) {
   window.__DSSY = y;
   const seasonNote = sp.note || ''; let winNow = sim.widx[k0] >= 0 ? sim.wins[sim.widx[k0]] : null;
-  sidHead('Soil water in the days ahead (DSS): every day from the working date, coloured by phase', y, 'The daily model with the weather record, your soil, crop, trigger and sensor; the depths of this design. Click the film to pause or play it');
+  const PL = sp.plan || irPlan({ Zn: sp.Zn, Ea: sp.Ea });
+  sidHead('Soil water in the days ahead (DSS): every day from the working date, coloured by phase', y, 'FAO-56 root-zone balance: Kc of the crop × ET0 and rain of ' + PL.src + ', your soil, roots and trigger, and the depth of this design. Click the film to pause or play it');
   const C = irCtx(), Th = irTh(C), wp = Th.wp, fc = Th.fc, sat = Math.max(Th.sat || fc * 1.2, fc * 1.05), zs = (typeof Z_VALUES !== 'undefined' ? Z_VALUES[state.zIdx] : 20), iS = clampN(Math.floor(zs / DZ), 0, NLAY - 1);
-  const fT = sim.fTrig != null ? sim.fTrig : 0.4, nx = up[0] != null ? up[0] : null;
+  const fT = PL.fT, nx = up[0] != null ? up[0] : null;
   // end to end: from the working date through the next irrigation and the rest of that season (at least 120 days)
-  const span = Math.max(30, Math.min(ND - 1 - k0, winNow ? Math.max(90, winNow.harv - k0 + 30) : Math.max(120, (nx != null ? nx - k0 : 0) + 90)));
+  const span = Math.max(30, Math.min(PL.end - k0, winNow ? Math.max(90, winNow.harv - k0 + 30) : Math.max(120, (nx != null ? nx - k0 : 0) + 90)));
   const awc = AWC[state.soil] || 1.5, rzOf = d => clampN(sim.rd ? sim.rd[d] : 60, 10, 100);
-  const left = d => { const rz = rzOf(d), n = Math.max(1, Math.round(rz / DZ)); let a = 0; for (let i = 0; i < n; i++) a += clampN(sim.s[d][i], 0, 1); return a / n; };
-  const fallow = d => /fallow/i.test(cropNameAt(sim, d) || '');
+  const leftM = d => { const rz = rzOf(d), n = Math.max(1, Math.round(rz / DZ)); let a = 0; for (let i = 0; i < n; i++) a += clampN(sim.s[d][i], 0, 1); return a / n; };
+  const left = d => clampN(1 - PL.at(PL.Dr, d) / Math.max(1e-6, PL.at(PL.TAW, d)), 0, 1), ratio = d => clampN(left(d) / Math.max(0.03, leftM(d)), 0, 3);
+  const fallow = d => !PL.at(PL.live, d);
   // the phase of every day: irrigation, rain, comfortable, nearing the trigger, beyond the trigger (stress), near wilting, no crop
-  const PH = { irr: ['#1565C0', 'irrigation day'], rain: ['#4FC3F7', 'rain over 5 mm'], ok: ['#66BB6A', 'comfortable'], near: ['#FDD835', 'nearing the trigger'], stress: ['#FB8C00', 'beyond the trigger: stress'], wilt: ['#C62828', 'near the wilting point'], fal: ['#BDBDBD', 'no crop (fallow)'] };
+  const PH = { irr: ['#1565C0', 'irrigation day'], rain: ['#4FC3F7', 'rain over 5 mm'], ok: ['#66BB6A', 'comfortable'], near: ['#FDD835', 'nearing the trigger'], stress: ['#FB8C00', 'crop stress (Ks below 1)'], wilt: ['#C62828', 'near the wilting point'], fal: ['#BDBDBD', 'no crop (fallow)'] };
   const path = [], sens = [], ph = [], cnt = {}; let irrN = 0, irrMM = 0, rainMM = 0, drMM = 0, etMM = 0;
-  for (let j = 0; j <= span; j++) { const d = k0 + j, L = left(d), Sn = clampN(sim.s[d][iS], 0, 1.2), dS = 1 - Math.min(1, Sn); path.push(L); sens.push(Sn);
-    const p = sim.irr[d] > 0.5 ? 'irr' : fallow(d) ? 'fal' : (1 - L) >= 0.85 ? 'wilt' : dS >= fT ? 'stress' : (sim.rain[d] || 0) > 5 ? 'rain' : dS >= 0.8 * fT ? 'near' : 'ok';
-    ph.push(p); cnt[p] = (cnt[p] || 0) + 1; if (sim.irr[d] > 0.5) { irrN++; irrMM += sim.irr[d]; } rainMM += sim.rain[d] || 0; drMM += sim.drain[d] || 0; etMM += (sim.dE ? sim.dE[d] : 0) + (sim.dT ? sim.dT[d] : 0); }
+  const IRd = d => PL.at(PL.I, d), RNd = d => PL.at(PL.P, d), DPd = d => PL.at(PL.DP, d);
+  for (let j = 0; j <= span; j++) { const d = k0 + j, L = left(d), Sn = clampN(sim.s[d][iS] * ratio(d), 0, 1.1), Dd = PL.at(PL.Dr, d), td = PL.at(PL.TAW, d); path.push(L); sens.push(Sn);
+    const p = IRd(d) > 0.05 ? 'irr' : fallow(d) ? 'fal' : (1 - L) >= 0.85 ? 'wilt' : PL.at(PL.KS, d) < 0.999 ? 'stress' : RNd(d) > 5 ? 'rain' : Dd >= 0.8 * PL.at(PL.THR, d) ? 'near' : 'ok';
+    ph.push(p); cnt[p] = (cnt[p] || 0) + 1; if (IRd(d) > 0.05) { irrN++; irrMM += IRd(d); } rainMM += RNd(d); drMM += DPd(d); etMM += PL.at(PL.ETa, d); }
   // the clock of the film
   if (seasonNote) pill(seasonNote, 16, y + 36, { s: 8.8, b: true, c: '#7A4A00', bg: '#FFF4C2' });
-  const key = k0 + '|' + span + '|' + state.soil; if (DSSMOV.key !== key) { DSSMOV.key = key; DSSMOV.t0 = performance.now(); DSSMOV.j = 0; }
+  const key = k0 + '|' + span + '|' + state.soil + '|' + PL.ev.length; if (DSSMOV.key !== key) { DSSMOV.key = key; DSSMOV.t0 = performance.now(); DSSMOV.j = 0; }
   const speed = Math.max(3, span / 14); if (!DSSMOV.paused) DSSMOV.j = Math.floor(((performance.now() - DSSMOV.t0) / 1000 * speed) % (span + 1));
   const j = window.__REPORTING ? (nx != null ? Math.max(0, Math.min(nx - k0, span)) : 0) : DSSMOV.j, d = k0 + j, top = y + (seasonNote ? 56 : 38);
   // from the day shown: the next irrigation of the daily model, and the dry-down without it (FAO-56 root-zone balance, the crop
   // using less water as the soil dries) to the wilting point; both follow the film day by day
-  const TAWd = q => awc * rzOf(q), mmL = q => left(q) * TAWd(q);
-  let nI = null; for (let q = d; q < ND; q++) if ((sim.irr[q] || 0) > 0.5) { nI = q; break; }
-  const proj = [[j, mmL(d)]]; let wilt = null, trigD = null; { let Dr = (1 - left(d)) * TAWd(d); for (let q = 1; q <= 200 && d + q < ND; q++) { const dd = d + q, taw = TAWd(dd), et = (sim.dE ? sim.dE[dd] : 2) + (sim.dT ? sim.dT[dd] : 2), ks = Dr > 0.5 * taw ? clampN((taw - Dr) / (0.5 * taw), 0, 1) : 1; Dr = clampN(Dr + et * (0.35 + 0.65 * ks) - (sim.rain ? sim.rain[dd] : 0) * 0.8, 0, taw); if (j + q <= span) proj.push([j + q, taw - Dr]); if (trigD == null && Dr >= fT * taw) trigD = dd; if (Dr >= 0.97 * taw) { wilt = dd; break; } } }
+  const TAWd = q => PL.at(PL.TAW, q), mmL = q => TAWd(q) - PL.at(PL.Dr, q), THRd = q => PL.at(PL.THR, q);
+  const nE = PL.next(d), nI = nE ? nE.k : null;
+  const DRY = PL.dry(d), wilt = DRY.wilt, trigD = DRY.trig, proj = [[j, mmL(d)]].concat(DRY.out.filter(o => j + o[0] <= span).map(o => [j + o[0], o[1]]));
   // left: the profile of the day, coloured by water content, with the wilting point, trigger, field capacity, roots and sensor
   const px = 58, pw = 180, ph0 = 200, vlo = Math.floor(wp * 0.85 * 100 / 5) * 5 / 100, sx = v => px + (v - vlo) / (sat - vlo) * pw, sy = z => top + z / (NLAY * DZ) * ph0;
   pill(FDK((d)), px + pw / 2, top - 6, { s: 9, b: true, a: 'center', c: '#12303A' });
   ctx.fillStyle = '#FBF8F1'; ctx.fillRect(px, top, pw, ph0); ctx.strokeStyle = PH[ph[j]][0]; ctx.lineWidth = 3; ctx.strokeRect(px - 1, top - 1, pw + 2, ph0 + 2);
   { const st = sat - vlo > 0.3 ? 0.1 : 0.05; for (let v = Math.ceil(vlo / st) * st; v <= sat + 1e-6; v += st) { const xx = sx(v); ctx.strokeStyle = '#ECE6D8'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(xx, top); ctx.lineTo(xx, top + ph0); ctx.stroke(); T(Math.round(v * 100) + '', xx, top + ph0 + 10, { s: 8, a: 'center', c: MUTE }); } }
-  for (let i = 0; i < NLAY; i++) { const th = wp + clampN(sim.s[d][i], 0, 1.3) * (fc - wp), y1 = sy(i * DZ), y2 = sy((i + 1) * DZ), g = clampN((th - wp) / (fc - wp), 0, 1); ctx.fillStyle = 'rgba(' + Math.round(196 - 150 * g) + ',' + Math.round(160 - 40 * g) + ',' + Math.round(110 + 120 * g) + ',0.85)'; ctx.fillRect(px + 1, y1, sx(th) - px - 1, y2 - y1 + 0.5); }
+  for (let i = 0; i < NLAY; i++) { const th = wp + clampN(sim.s[d][i] * ((i + 0.5) * DZ <= rzOf(d) ? ratio(d) : 1), 0, 1.3) * (fc - wp), y1 = sy(i * DZ), y2 = sy((i + 1) * DZ), g = clampN((th - wp) / (fc - wp), 0, 1); ctx.fillStyle = 'rgba(' + Math.round(196 - 150 * g) + ',' + Math.round(160 - 40 * g) + ',' + Math.round(110 + 120 * g) + ',0.85)'; ctx.fillRect(px + 1, y1, sx(th) - px - 1, y2 - y1 + 0.5); }
   [[wp, '#B23A2E'], [Th.t0, '#8A5A00'], [fc, '#1E63D0']].forEach(([v, c], i) => { ctx.strokeStyle = c; ctx.lineWidth = 1.4; ctx.setLineDash(i === 1 ? [4, 3] : []); ctx.beginPath(); ctx.moveTo(sx(v), top); ctx.lineTo(sx(v), top + ph0); ctx.stroke(); }); ctx.setLineDash([]);
   const rz = rzOf(d); ctx.strokeStyle = '#2E7D32'; ctx.lineWidth = 1.6; ctx.setLineDash([6, 3]); ctx.beginPath(); ctx.moveTo(px, sy(rz)); ctx.lineTo(px + pw, sy(rz)); ctx.stroke(); ctx.setLineDash([]);
   pill('roots ' + Math.round(rz) + ' cm', px + 6, Math.min(top + ph0 - 6, Math.max(sy(rz) + 13, top + 66)), { s: 7.8, b: true, c: '#2E7D32' });
@@ -1694,40 +1746,41 @@ function dssMovie(y, sim, k0, up, sp) {
     for (let q = 0; q <= span; q++) { const dt = dateOfK(k0 + q + IRSH), dd = dt.getUTCDate(), mo = dt.getUTCMonth(); if (weekly ? (q % 7 !== 0) : (dd !== 1 && q !== 0)) continue; const xx = X(q); if (xx - last < 19) continue; last = xx;
       ctx.strokeStyle = '#D5DADF'; ctx.beginPath(); ctx.moveTo(xx, top + chh); ctx.lineTo(xx, top + chh + 4); ctx.stroke(); T(weekly ? dd + ' ' + MO[mo] : MO[mo], xx, top + chh + 13, { s: 8.4, a: 'center', c: MUTE }); if (!weekly && (mo === 0 || q === 0)) T(String(dt.getUTCFullYear()), xx, top + chh + 23, { s: 8, b: true, a: 'center', c: '#374151' }); } }
   T('date (' + FDK((k0)) + ' to ' + FDK((k0 + span)) + ')', cx + cw / 2, top + chh + 34, { s: 8.6, a: 'center', c: '#374151' });
-  for (let q = 0; q <= span; q++) { const r = sim.rain[k0 + q] || 0, dr = sim.drain[k0 + q] || 0; if (r > 1) { ctx.fillStyle = '#0288D1'; ctx.fillRect(X(q), top + 10, 1.5, Math.min(26, r)); } if (dr > 0.5) { ctx.fillStyle = '#00897B'; const hh2 = Math.min(20, dr * 2); ctx.fillRect(X(q), top + chh - hh2, 1.5, hh2); } }
+  for (let q = 0; q <= span; q++) { const r = RNd(k0 + q), dr = DPd(k0 + q); if (r > 1) { ctx.fillStyle = '#0288D1'; ctx.fillRect(X(q), top + 10, 1.5, Math.min(26, r)); } if (dr > 0.5) { ctx.fillStyle = '#00897B'; const hh2 = Math.min(20, dr * 2); ctx.fillRect(X(q), top + chh - hh2, 1.5, hh2); } }
   const curve = (f, c, wdt, dash, upto) => { ctx.strokeStyle = c; ctx.lineWidth = wdt; ctx.setLineDash(dash || []); ctx.beginPath(); for (let q = 0; q <= (upto == null ? span : upto); q++) { const v = f(q); q ? ctx.lineTo(X(q), v) : ctx.moveTo(X(q), v); } ctx.stroke(); ctx.setLineDash([]); };
   curve(q => Ym(TAWd(k0 + q)), '#1E63D0', 1.1, [2, 3]);                              // full: field capacity over the roots of the day
-  curve(q => Ym((1 - fT) * TAWd(k0 + q)), '#111111', 1.4, [6, 3]);                    // the trigger of the day
+  curve(q => Ym(TAWd(k0 + q) - THRd(k0 + q)), '#111111', 1.4, [6, 3]);                 // the irrigation level of the day: the trigger, or the design depth when it is smaller
   if (proj.length > 1) { ctx.strokeStyle = '#C62828'; ctx.lineWidth = 1.8; ctx.setLineDash([3, 3]); ctx.beginPath(); proj.forEach(([q, v], i) => { i ? ctx.lineTo(X(q), Ym(v)) : ctx.moveTo(X(q), Ym(v)); }); ctx.stroke(); ctx.setLineDash([]); }
   ctx.globalAlpha = 0.25; curve(q => Ym(mmL(k0 + q)), '#0D47A1', 1.5); curve(q => Ys(sens[q]), '#8E24AA', 1.2); ctx.globalAlpha = 1; curve(q => Ym(mmL(k0 + q)), '#0D47A1', 2.6, null, j); curve(q => Ys(sens[q]), '#8E24AA', 1.8, null, j);
-  { let firstI = true; for (let q = 0; q <= span; q++) if (sim.irr[k0 + q] > 0.5) { const xq = X(q); ctx.strokeStyle = 'rgba(21,101,192,0.45)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(xq, top + 10); ctx.lineTo(xq, top + chh); ctx.stroke(); ctx.fillStyle = '#1565C0'; ctx.beginPath(); ctx.moveTo(xq - 4, top + 11); ctx.lineTo(xq + 4, top + 11); ctx.lineTo(xq, top + 17); ctx.closePath(); ctx.fill(); firstI = false; } }
+  { let firstI = true; for (let q = 0; q <= span; q++) if (IRd(k0 + q) > 0.05) { const xq = X(q); ctx.strokeStyle = 'rgba(21,101,192,0.45)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(xq, top + 10); ctx.lineTo(xq, top + chh); ctx.stroke(); ctx.fillStyle = '#1565C0'; ctx.beginPath(); ctx.moveTo(xq - 4, top + 11); ctx.lineTo(xq + 4, top + 11); ctx.lineTo(xq, top + 17); ctx.closePath(); ctx.fill(); firstI = false; } }
   // the day of the film, and the two dates that follow it
   ctx.strokeStyle = '#1B1F23'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(X(j), top); ctx.lineTo(X(j), top + chh); ctx.stroke(); ctx.fillStyle = '#0D47A1'; ctx.beginPath(); ctx.arc(X(j), Ym(mmL(d)), 4, 0, 6.2832); ctx.fill();
   pill(FDK((d)) + ' · ' + mmL(d).toFixed(0) + ' of ' + TAWd(d).toFixed(0) + ' mm', clampN(X(j), cx + 70, cx + cw - 70), top - 4, { s: 8.4, b: true, a: 'center', c: '#0D47A1' });
   const ni = nI != null ? nI - d : null, wi = wilt != null ? wilt - d : null;
-  if (nI != null && nI - k0 <= span) { const xq = X(nI - k0), yq = Ym((1 - fT) * TAWd(nI)); ctx.fillStyle = '#111'; ctx.beginPath(); ctx.arc(xq, yq, 4.5, 0, 6.2832); ctx.fill(); pill(ni === 0 ? 'irrigation today' : 'next irrigation ' + FDK((nI)) + ' · in ' + ni + ' d', clampN(xq, cx + 90, cx + cw - 90), top + 30, { s: 8.6, b: true, a: 'center', c: '#1565C0' }); }
+  if (nI != null && nI - k0 <= span) { const xq = X(nI - k0), yq = Ym(TAWd(nI) - THRd(nI)); ctx.fillStyle = '#111'; ctx.beginPath(); ctx.arc(xq, yq, 4.5, 0, 6.2832); ctx.fill(); pill(ni === 0 ? 'irrigation today' : 'next irrigation ' + FDK((nI)) + ' · in ' + ni + ' d', clampN(xq, cx + 90, cx + cw - 90), top + 30, { s: 8.6, b: true, a: 'center', c: '#1565C0' }); }
   if (wilt != null && wilt - k0 <= span) { const xw = X(wilt - k0), yw = Ym(0) - 4; ctx.strokeStyle = '#C62828'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(xw - 4, yw - 4); ctx.lineTo(xw + 4, yw + 4); ctx.moveTo(xw + 4, yw - 4); ctx.lineTo(xw - 4, yw + 4); ctx.stroke(); pill('wilting point ' + FDK((wilt)) + ' · in ' + wi + ' d without irrigation', clampN(xw, cx + 130, cx + cw - 130), yw - 14, { s: 8.4, b: true, a: 'center', c: '#C62828' }); }
-  { let qm = 0; for (let q = 0; q <= span; q++) if (TAWd(k0 + q) > TAWd(k0 + qm)) qm = q; const xt = clampN(X(qm), cx + 60, cx + cw - 60), yt = Ym((1 - fT) * TAWd(k0 + qm)); pill('trigger ' + Math.round((1 - fT) * 100) + ' % left', xt, yt + 15, { s: 8.2, b: true, a: 'center', c: '#111' }); }
+  { let qm = 0; for (let q = 0; q <= span; q++) if (TAWd(k0 + q) > TAWd(k0 + qm)) qm = q; const xt = clampN(X(qm), cx + 60, cx + cw - 60), yt = Ym(TAWd(k0 + qm) - THRd(k0 + qm)); pill('irrigate at ' + Math.round(100 - 100 * THRd(k0 + qm) / Math.max(1, TAWd(k0 + qm))) + ' % left', xt, yt + 15, { s: 8.2, b: true, a: 'center', c: '#111' }); }
   ctx.save(); ctx.translate(cx - 40, top + chh / 2 + 6); ctx.rotate(-Math.PI / 2); T('water in the root zone (mm)', 0, 0, { s: 8.6, b: true, a: 'center', c: '#0D47A1' }); ctx.restore();
   ctx.save(); ctx.translate(cx + cw + 34, top + chh / 2 + 6); ctx.rotate(Math.PI / 2); T('at the sensor (% of available)', 0, 0, { s: 8.6, b: true, a: 'center', c: '#8E24AA' }); ctx.restore();
   T('phase', cx - 4, top + 8, { s: 8.2, b: true, a: 'right', c: '#374151' });
   // legend: the phases, then the lines
   { let lx = cx, ly = top + chh + 50; const item = (c, l, bar) => { ctx.font = '8.8px sans-serif'; const tw = ctx.measureText(l).width + 26; if (lx + tw > W - 14) { lx = cx; ly += 13; } ctx.fillStyle = c; if (bar) ctx.fillRect(lx, ly - 5, 12, 4); else ctx.fillRect(lx, ly - 8, 10, 8); T(l, lx + 15, ly, { s: 8.8, c: '#374151' }); lx += tw; };
-    ['irr', 'rain', 'ok', 'near', 'stress', 'wilt', 'fal'].forEach(k => item(PH[k][0], PH[k][1])); lx = cx; ly += 15; [['#0D47A1', 'root zone: water held (mm)'], ['#1E63D0', 'full: field capacity'], ['#111111', 'trigger (irrigate here)'], ['#8E24AA', 'at the sensor (right axis)'], ['#C62828', 'without irrigation, from the day shown'], ['#0288D1', 'rain (ticks at the top)'], ['#00897B', 'drainage (ticks at the bottom)']].forEach(q => item(q[0], q[1], true)); var legEnd = ly; }
+    ['irr', 'rain', 'ok', 'near', 'stress', 'wilt', 'fal'].forEach(k => item(PH[k][0], PH[k][1])); lx = cx; ly += 15; [['#0D47A1', 'root zone: water held (mm)'], ['#1E63D0', 'full: field capacity'], ['#111111', 'irrigate here (trigger or design depth)'], ['#8E24AA', 'at the sensor (right axis)'], ['#C62828', 'without irrigation, from the day shown'], ['#0288D1', 'rain (ticks at the top)'], ['#00897B', 'drainage (ticks at the bottom)']].forEach(q => item(q[0], q[1], true)); var legEnd = ly; }
   // the day in words, and the whole span in numbers
-  const l1 = 'Day ' + j + ' of ' + span + ': ' + FDK((d)) + ' · ' + cropNameAt(sim, d) + ' · ' + PH[ph[j]][1] + ' · root zone ' + mmL(d).toFixed(0) + ' of ' + TAWd(d).toFixed(0) + ' mm (' + Math.round(path[j] * 100) + ' %), sensor at depletion ' + (1 - Math.min(1, sens[j])).toFixed(2) + ' (trigger ' + fT.toFixed(2) + ')';
-  const l2 = (nI == null ? 'No irrigation is due after this day in the simulated record.' : ni > 0 ? 'Next irrigation ' + FDK((nI)) + ', in ' + ni + ' day' + (ni === 1 ? '' : 's') + ' (the sensor reaches the trigger): ' + irF(sp.Zn, 0) + ' mm net, ' + irF(sp.gross || sp.Zn, 0) + ' mm pumped with this design.' : 'Irrigation day: this design applies ' + irF(sp.Zn, 0) + ' mm net and the root zone is refilled.')
+  const kcD = PL.at(PL.KC, d), e0D = PL.F.et0[clampN(d - PL.s0, 0, PL.F.et0.length - 1)] || 0;
+  const l1 = 'Day ' + j + ' of ' + span + ': ' + FDK((d)) + ' · ' + cropNameAt(sim, d) + ' · ' + PH[ph[j]][1] + ' · root zone ' + mmL(d).toFixed(0) + ' of ' + TAWd(d).toFixed(0) + ' mm (' + Math.round(path[j] * 100) + ' %) · Kc ' + kcD.toFixed(2) + ' × ET0 ' + e0D.toFixed(1) + ' = ETc ' + (kcD * e0D).toFixed(1) + ' mm/day';
+  const l2 = (nI == null ? 'No irrigation is due after this day in this season: rain covers the crop need, or the crop is not in the field.' : ni > 0 ? 'Next irrigation ' + FDK((nI)) + ', in ' + ni + ' day' + (ni === 1 ? '' : 's') + ' (the root zone has lost ' + irF(nE.deficit, 0) + ' of ' + irF(nE.taw, 0) + ' mm): ' + irF(nE.net, 0) + ' mm net, ' + irF(nE.gross, 0) + ' mm pumped with this design' + (nE.lost > 0.5 ? ', of which ' + irF(nE.lost, 0) + ' mm drains below the roots' : '') + '.' : 'Irrigation day: this design applies ' + irF(nE.net, 0) + ' mm net (' + irF(nE.gross, 0) + ' mm pumped)' + (nE.lost > 0.5 ? '; the root zone holds ' + irF(nE.net - nE.lost, 0) + ' mm of it' : ' and the root zone is refilled') + '.')
     + (wilt != null ? ' Without irrigation from this day the root zone would reach the wilting point on ' + FDK((wilt)) + ', in ' + wi + ' days' + (trigD != null ? ' (the trigger on ' + FDK((trigD)) + ')' : '') + '.' : ' Without irrigation from this day the root zone would still hold water after 200 days.');
-  window.__DSSNOW = { date: FDK((d)), day: j, span, phase: PH[ph[j]][1], col: PH[ph[j]][0], mm: +mmL(d).toFixed(1), taw: +TAWd(d).toFixed(1), pct: Math.round(path[j] * 100), dep: +(1 - Math.min(1, sens[j])).toFixed(2), fT: +fT.toFixed(2), crop: cropNameAt(sim, d), next: nI != null ? FDK((nI)) : null, nextIn: ni, wilt: wilt != null ? FDK((wilt)) : null, wiltIn: wi, trig: trigD != null ? FDK((trigD)) : null, net: +(+sp.Zn || 0).toFixed(1), gross: +(+(sp.gross || sp.Zn) || 0).toFixed(1), paused: DSSMOV.paused, sys: sp.sys || '', note: seasonNote };
+  window.__DSSNOW = { date: FDK((d)), day: j, span, phase: PH[ph[j]][1], col: PH[ph[j]][0], mm: +mmL(d).toFixed(1), taw: +TAWd(d).toFixed(1), pct: Math.round(path[j] * 100), dep: +(1 - Math.min(1, sens[j])).toFixed(2), fT: +fT.toFixed(2), crop: cropNameAt(sim, d), next: nI != null ? FDK((nI)) : null, nextIn: ni, wilt: wilt != null ? FDK((wilt)) : null, wiltIn: wi, trig: trigD != null ? FDK((trigD)) : null, net: +(nE ? nE.net : +sp.Zn || 0).toFixed(1), gross: +(nE ? nE.gross : +(sp.gross || sp.Zn) || 0).toFixed(1), kc: +kcD.toFixed(2), et0: +e0D.toFixed(1), etc: +(kcD * e0D).toFixed(1), irrAt: +(THRd(d) / Math.max(1, TAWd(d))).toFixed(2), byDepth: THRd(d) < fT * TAWd(d) - 0.5, src: PL.src, paused: DSSMOV.paused, sys: sp.sys || '', note: seasonNote };
   const pct = k => Math.round(100 * (cnt[k] || 0) / (span + 1));
-  const l3 = 'Over the ' + (span + 1) + ' days: ' + irrN + ' irrigation' + (irrN === 1 ? '' : 's') + ' (' + irF(irrMM) + ' mm by the daily model), rain ' + irF(rainMM) + ' mm, evapotranspiration ' + irF(etMM) + ' mm, drainage ' + irF(drMM) + ' mm. Days: comfortable ' + pct('ok') + ' %, nearing the trigger ' + pct('near') + ' %, beyond the trigger ' + pct('stress') + ' %, near wilting ' + pct('wilt') + ' %, fallow ' + pct('fal') + ' %.';
+  const l3 = 'Over the ' + (span + 1) + ' days: ' + irrN + ' irrigation' + (irrN === 1 ? '' : 's') + ' (' + irF(irrMM) + ' mm net with this design), rain ' + irF(rainMM) + ' mm, crop water use ' + irF(etMM) + ' mm, drainage ' + irF(drMM) + ' mm. Days: comfortable ' + pct('ok') + ' %, nearing the trigger ' + pct('near') + ' %, beyond the trigger ' + pct('stress') + ' %, near wilting ' + pct('wilt') + ' %, fallow ' + pct('fal') + ' %.';
   const by = Math.max(top + ph0 + 104, legEnd + 18); ctx.fillStyle = '#F2F7FB'; const hh = 16 + 12 * (sidWrap(l2, 0, 0, W - 44, { s: 9.2 }, 12, true) + sidWrap(l3, 0, 0, W - 44, { s: 9.2 }, 12, true)) + 10; ctx.fillRect(14, by - 12, W - 28, hh);
   T(l1, 22, by + 2, { s: 9.4, b: true, c: '#12303A' }); const n2 = sidWrap(l2, 22, by + 17, W - 44, { s: 9.2, c: '#374151' }, 12); sidWrap(l3, 22, by + 17 + 12 * n2 + 2, W - 44, { s: 9.2, c: '#12303A' }, 12);
   hot(14, top - 4, W - 28, ph0 + 50, () => { if (DSSMOV.paused) { DSSMOV.t0 = performance.now() - DSSMOV.j / speed * 1000; DSSMOV.paused = false; } else DSSMOV.paused = true; }, DSSMOV.paused ? 'play the film' : 'pause the film');
   if (DSSMOV.paused) pill('paused · click to play', cx + cw - 4, top + 26, { s: 8.8, b: true, a: 'right', c: '#12303A' });
   // how fast each soil dries: the same crop and the same days, the water each soil can hold decides the speed of depletion
   let y2 = by + hh + 18;
-  let etN = 0, etS = 0; for (let q = 0; q < 60 && k0 + q < ND; q++) { const dd = k0 + q; if (!fallow(dd)) { etS += (sim.dE ? sim.dE[dd] : 0) + (sim.dT ? sim.dT[dd] : 0); etN++; } } const ETd = Math.max(1, etN ? etS / etN : 3);
+  let etN = 0, etS = 0; for (let q = 0; q < 60 && k0 + q < ND; q++) { const dd = k0 + q; if (!fallow(dd)) { etS += PL.at(PL.ETc, dd); etN++; } } const ETd = Math.max(1, etN ? etS / etN : 3);
   T('How fast the root zone dries in each soil: same crop and roots (' + Math.round(rz) + ' cm), crop water use ' + ETd.toFixed(1) + ' mm/day', 16, y2, { s: 10.5, b: true, c: IRC.ink });
   const rows = DATA.soils.map(so => { const taw = (AWC[so] || 1.5) * rz, ft = clampN(depletionAt(so, trigAbsFor(so)), 0.05, 0.95); let D = 0, dT = null, dW = null; for (let q = 1; q <= 200; q++) { const ks = D > 0.5 * taw ? clampN((taw - D) / (0.5 * taw), 0, 1) : 1; D = Math.min(taw, D + ETd * (0.35 + 0.65 * ks)); if (dT == null && D >= ft * taw) dT = q; if (D >= 0.97 * taw) { dW = q; break; } } return { so, nm: DATA.soil_labels[so], taw, ft, dT: dT || 200, dW: dW || 200, rate: ETd / taw }; }).sort((p, q) => p.taw - q.taw);
   const bx = 130, bw = W - 16 - bx - 228, mxD = Math.max(...rows.map(r => r.dW)), Xd = v => bx + v / mxD * bw; y2 += 10;
@@ -1830,30 +1883,36 @@ function wxCtl(y) {
 // ===== Irrigation schedule and advice: closes every irrigation design (surface, drip, sprinkler) =====
 function irAdvice(y0, sp) {
   try { (window.__CYCLE = window.__CYCLE || {})[sp.sys] = sp.timeH || null; } catch (e) {}
-  const sim0 = simCache.val || seasonSim(), sim = sim0, kW = fclock.kd(), S0 = irStart(sim, kW), k0 = S0.k; IRSH = S0.sh; sp = Object.assign({}, sp, { note: S0.note }); const ay = clampN(yearOf(k0), 0, NYR - 1), Ea = Math.max(0.05, sp.Ea || 0.5), gross = sp.gross || sp.Zn / Ea;
-  const yr = []; for (let d = ay * DPY; d < Math.min(ND, (ay + 1) * DPY); d++) if ((sim.irr[d] || 0) > 0.5) yr.push(d);
-  const gaps = []; for (let i = 1; i < yr.length; i++) gaps.push(yr[i] - yr[i - 1]);
-  const mean = gaps.length ? gaps.reduce((a, b) => a + b, 0) / gaps.length : 0, gmin = gaps.length ? Math.min(...gaps) : 0, gmax = gaps.length ? Math.max(...gaps) : 0;
-  const up = []; for (let d = k0; d < ND && up.length < 8; d++) if ((sim.irr[d] || 0) > 0.5) up.push(d);
-  const fT = sim.fTrigRaw != null ? sim.fTrigRaw : sim.fTrig, zs = (typeof Z_VALUES !== 'undefined' ? Z_VALUES[state.zIdx] : 20);
-  let y = dssMovie(y0 + 14, sim, k0, up, Object.assign({ gross }, sp)) + 18; sidHead('Irrigation schedule: when to irrigate with this design', y, 'Dates come from the sensor trigger of the DSS, depths and times from this design. Soonest first');
+  const sim = simCache.val || seasonSim(), kW = fclock.kd(), Ea = Math.max(0.05, sp.Ea || 0.5), gross0 = sp.gross || sp.Zn / Ea, PL = irPlan({ Zn: sp.Zn, Ea: sp.Zn > 0 ? sp.Zn / gross0 : Ea }), k0 = PL.k0; IRSH = PL.sh; sp = Object.assign({}, sp, { note: PL.note, plan: PL });
+  const S = PL.season, yr = S.ev.map(e => e.k), up = PL.up.map(e => e.k), zs = (typeof Z_VALUES !== 'undefined' ? Z_VALUES[state.zIdx] : 20);
+  let y = dssMovie(y0 + 14, sim, k0, up, Object.assign({ gross: gross0 }, sp)) + 18; sidHead('Irrigation schedule: when to irrigate with this design', y, 'FAO-56 root-zone balance: crop Kc × ET0 and rain of ' + PL.src + '; depth, efficiency and run time of this design. Soonest first');
   y += 38;
-  const cols = [['#', 24], ['Date', 60], ['In', 170], ['Net mm', 250], ['Pumped mm', 330], ['Run time', 430], ['Gap to next', 520]];
+  const cols = [['#', 0.012], ['Date', 0.05], ['In', 0.2], ['Kc', 0.3], ['ETc mm/d', 0.37], ['Deficit mm', 0.47], ['Net mm', 0.6], ['Pumped mm', 0.69], ['Run time', 0.8], ['Gap', 0.91]].map(c => [c[0], Math.round(14 + c[1] * (W - 28))]);
   ctx.fillStyle = '#E6F4F7'; ctx.fillRect(14, y - 12, W - 28, 20); cols.forEach(c => T(c[0], c[1], y + 2, { s: 9, b: true, c: IRC.ink })); y += 20;
-  if (!up.length) { T('No irrigation is triggered in the simulation for these settings. It starts when the sensor at ' + zs + ' cm reaches the trigger.', 20, y + 2, { s: 9.5, c: '#374151' }); y += 24; }
-  up.forEach((d, i) => { const dn = d - k0, nxt = up[i + 1] != null ? up[i + 1] - d : null; ctx.fillStyle = i % 2 ? '#F6F7F5' : '#fff'; ctx.fillRect(14, y - 12, W - 28, 20);
-    const dW = d + IRSH - kW, row = [String(i + 1), FDK((d)), dW === 0 ? 'today' : dW === 1 ? 'tomorrow' : dW + ' days', irF(sp.Zn, 0), irF(gross, 0), sp.timeH ? irF(sp.timeH, 1) + ' h' : '-', nxt == null ? '-' : nxt + ' days'];
-    row.forEach((v, c) => T(v, cols[c][1], y + 2, { s: 9.3, b: c === 1, c: i === 0 ? IRC.ac : '#374151' })); y += 20; });
-  y += 14; sidHead('Intervals, efficiency and the advice in short', y, 'Everything above in one message for ' + sp.sys.toLowerCase() + ' irrigation');
-  y = irRows(y + 34, [['Sensor trigger', 'irrigate when the sensor at ' + zs + ' cm reaches depletion ' + (fT != null ? fT.toFixed(2) : '-')], ['Irrigations in the season of this date', yr.length ? yr.length + ' (' + FDK((yr[0])) + ' to ' + FDK((yr[yr.length - 1])) + ')' : 'none'], ['Interval between irrigations', gaps.length ? irF(mean, 1) + ' days on average (shortest ' + gmin + ', longest ' + gmax + ')' : '-'], ['Depth per irrigation', irF(sp.Zn, 1) + ' mm net, ' + irF(gross, 1) + ' mm pumped'], ['Application efficiency Ea', irF(Ea * 100, 1) + ' %'], ['Storage efficiency Es', irF((sp.Es || 0) * 100, 1) + ' %'], ['Time per round', sp.timeH ? irF(sp.timeH, 1) + ' h' : '-']]) + 8;
-  const nx = up[0], dn = nx == null ? null : nx + IRSH - kW;
-  const msg = (nx == null ? 'No irrigation is due in the simulated record for these settings. Keep the sensor at ' + zs + ' cm: when it reaches depletion ' + (fT != null ? fT.toFixed(2) : '') + ', irrigate. '
-    : 'Next irrigation: ' + FDK((nx)) + (dn === 0 ? ' (today)' : dn === 1 ? ' (tomorrow)' : ' (in ' + dn + ' days)') + ', ' + irF(sp.Zn, 0) + ' mm net, ' + irF(gross, 0) + ' mm pumped with this design. ')
-    + (gaps.length ? 'Then irrigate about every ' + irF(mean, 0) + ' days (between ' + gmin + ' and ' + gmax + ' days, shorter in hot weather and longer after rain). ' : '')
-    + 'With this ' + sp.sys.toLowerCase() + ' design ' + irF(Ea * 100) + ' % of the pumped water is used (Ea) and ' + irF((sp.Es || 0) * 100) + ' % of the root zone is refilled (Es)'
-    + (sp.timeH ? ', and one round takes ' + irF(sp.timeH, 1) + ' h' : '') + '. If a rain above 10 mm is forecast, delay the irrigation by a day or two.';
-  ctx.fillStyle = '#E6F4F7'; ctx.strokeStyle = IRC.ac; ctx.lineWidth = 1.5; const hh = sidWrap(msg, 0, 0, W - 56, { s: 10 }, 14, true);
-  const n = Math.ceil(String(msg).length / ((W - 56) / 5.4)), bh = n * 14 + 34; rrect(14, y + 6, W - 28, bh, 8); ctx.fill(); ctx.stroke();
+  if (!PL.up.length) { T('No irrigation is due in this season: the rain of ' + PL.src + ' covers the crop need' + (PL.at(PL.live, k0) ? '' : ', or the crop is not in the field') + '.', 20, y + 2, { s: 9.5, c: '#374151' }); y += 24; }
+  PL.up.forEach((e, i) => { const d = e.k, nxt = PL.up[i + 1] ? PL.up[i + 1].k - d : (PL.ev[PL.ev.indexOf(e) + 1] ? PL.ev[PL.ev.indexOf(e) + 1].k - d : null); ctx.fillStyle = i % 2 ? '#F6F7F5' : '#fff'; ctx.fillRect(14, y - 12, W - 28, 20);
+    const dW = d + IRSH - kW, kc = PL.at(PL.KC, d), etc = PL.at(PL.ETc, d), row = [String(i + 1), FDK((d)), dW === 0 ? 'today' : dW === 1 ? 'tomorrow' : dW + ' days', kc.toFixed(2), etc.toFixed(1), irF(e.deficit, 0) + ' of ' + irF(e.taw, 0), irF(e.net, 1), irF(e.net * gross0 / Math.max(0.1, sp.Zn), 1), sp.timeH ? irF(sp.timeH * e.net / Math.max(0.1, sp.Zn), 1) + ' h' : '-', nxt == null ? '-' : nxt + ' d'];
+    row.forEach((v, c) => T(v, cols[c][1], y + 2, { s: 9.1, b: c === 1, c: i === 0 ? IRC.ac : '#374151' })); y += 20; });
+  y += 14; sidHead('The season in numbers, and the advice in short', y, 'The season of the decision (' + FDK(S.a) + ' to ' + FDK(S.b) + '), with ' + sp.sys.toLowerCase() + ' irrigation');
+  const thrNow = PL.at(PL.THR, k0), tawNow = PL.at(PL.TAW, k0);
+  y = irRows(y + 34, [['Irrigate when', 'the root zone has lost ' + irF(thrNow, 0) + ' of ' + irF(tawNow, 0) + ' mm (' + (sp.Zn > 0 && sp.Zn < PL.fT * tawNow ? 'the design depth' : 'the trigger, depletion ' + PL.fT.toFixed(2)) + '; sensor at ' + zs + ' cm)'],
+    ['Crop water use ETc = Kc × ET0', irF(S.ETc) + ' mm in the season (peak ' + S.ETpk.toFixed(1) + ' mm/day; Kc ' + PL.kcIni.toFixed(2) + ' to ' + PL.kcMid.toFixed(2) + ')'],
+    ['Rain', irF(S.P) + ' mm (' + irF(S.RO) + ' mm runs off)'],
+    ['Irrigations in the season', yr.length ? yr.length + ' (' + FDK((yr[0])) + ' to ' + FDK((yr[yr.length - 1])) + '), ' + irF(S.In) + ' mm net, ' + irF(S.In * gross0 / Math.max(0.1, sp.Zn)) + ' mm pumped' : 'none'],
+    ['Interval between irrigations', S.gaps.length ? irF(S.mean, 1) + ' days on average (shortest ' + S.gmin + ', longest ' + S.gmax + ')' : '-'],
+    ['Depth per irrigation', irF(sp.Zn, 1) + ' mm net, ' + irF(gross0, 1) + ' mm pumped'],
+    ['Drainage below the roots', irF(S.DP) + ' mm in the season'],
+    ['Crop stress days (Ks < 1)', S.stress + ' of ' + S.days + ' · yield ' + Math.round(S.RY * 100) + ' % of potential'],
+    ['Efficiency of the design', 'Ea ' + irF(Ea * 100, 1) + ' %, Es ' + irF((sp.Es || 0) * 100, 1) + ' %' + (sp.timeH ? ', ' + irF(sp.timeH, 1) + ' h per round' : '')]]) + 8;
+  const nE = PL.up[0], dn = nE ? nE.k + IRSH - kW : null, big = sp.Zn > PL.fT * tawNow * 1.05;
+  const msg = (!nE ? 'No irrigation is due in this season with the rain of ' + PL.src + '. '
+    : 'Next irrigation: ' + FDK((nE.k)) + (dn === 0 ? ' (today)' : dn === 1 ? ' (tomorrow)' : ' (in ' + dn + ' days)') + ', ' + irF(nE.net, 0) + ' mm net, ' + irF(nE.net * gross0 / Math.max(0.1, sp.Zn), 0) + ' mm pumped with this design. ')
+    + (S.gaps.length ? 'Then irrigate about every ' + irF(S.mean, 0) + ' days (between ' + S.gmin + ' and ' + S.gmax + ' days: shorter when Kc × ET0 is high, longer after rain). ' : '')
+    + (big ? 'The root zone takes only ' + irF(PL.fT * tawNow, 0) + ' mm at the trigger, less than the design depth of ' + irF(sp.Zn, 0) + ' mm: run each irrigation for ' + irF(100 * PL.fT * tawNow / sp.Zn) + ' % of the design time, or lower the trigger. ' : '')
+    + (S.stress > 3 ? 'The crop is stressed on ' + S.stress + ' days: irrigate earlier (lower the trigger) or more often. ' : '')
+    + 'With this ' + sp.sys.toLowerCase() + ' design ' + irF(Ea * 100) + ' % of the pumped water is used (Ea). If a rain above 10 mm is forecast, delay the irrigation by a day or two.';
+  ctx.fillStyle = '#E6F4F7'; ctx.strokeStyle = IRC.ac; ctx.lineWidth = 1.5;
+  const n = sidWrap(msg, 0, 0, W - 52, { s: 10 }, 14, true), bh = n * 14 + 40; rrect(14, y + 6, W - 28, bh, 8); ctx.fill(); ctx.stroke();
   T('When to irrigate', 26, y + 26, { s: 11, b: true, c: IRC.ink }); sidWrap(msg, 26, y + 46, W - 52, { s: 10, c: '#12303A' }, 14);
   return y + bh + 26;
 }
@@ -4104,14 +4163,14 @@ function TW(str, x, y, maxW, o) {
 // the state of the farm for a zone-by-zone irrigation simulation: the season of the decision (Chapter 18), today's water in the
 // root zone of the daily model, the roots, crop cover and trigger of every day ahead, the crop coefficients, the design in use
 window.vriBase = function (n, spin) {
-  const sim = seasonSim(), kW = fclock.kd(), S0 = irStart(sim, kW), k0 = S0.k, sh = S0.sh; n = Math.min(n || 60, ND - k0); spin = Math.min(spin || 0, k0);
+  const sim = seasonSim(), kW = fclock.kd(), S0 = irStart(sim, kW), k0 = S0.k, sh = S0.sh, PL = irPlan({}); n = Math.min(n || 60, ND - k0); spin = Math.min(spin || 0, k0);
   const awc = AWC[state.soil] || 1.5, left = d => { const rz = clampN(sim.rd[d] || 30, 10, 100), m = Math.max(1, Math.round(rz / DZ)); let a = 0; for (let i = 0; i < m; i++) a += clampN(sim.s[d][i], 0, 1); return a / m; };
-  const F = dailyForcing(k0 - spin, n + spin), rd = [], cover = [], dates = [], live = [], irr = []; for (let q = -spin; q < n; q++) { const d = k0 + q; rd.push(clampN(sim.rd[d] || 10, 5, 100)); cover.push(sim.cover[d] || 0); live.push(sim.widx[d] >= 0); dates.push(fmtDate(dateOfK(d + sh))); irr.push(q < 0 ? (sim.irr[d] || 0) : 0); }
-  const simNext = []; for (let d = k0; d < k0 + n && simNext.length < 8; d++) if ((sim.irr[d] || 0) > 0.5) simNext.push([fmtDate(dateOfK(d + sh)), +sim.irr[d].toFixed(1)]);
+  const F = dailyForcing(k0 - spin, n + spin), rd = [], cover = [], dates = [], live = [], irr = []; for (let q = -spin; q < n; q++) { const d = k0 + q; rd.push(clampN(sim.rd[d] || 10, 5, 100)); cover.push(sim.cover[d] || 0); live.push(sim.widx[d] >= 0); dates.push(fmtDate(dateOfK(d + sh))); irr.push(q < 0 ? PL.at(PL.I, d) : 0); }
+  const simNext = PL.ev.filter(e => e.k >= k0 && e.k < k0 + n).slice(0, 8).map(e => [fmtDate(dateOfK(e.k + sh)), +e.net.toFixed(1)]);
   const mc = new Array(12).fill(0), mn = new Array(12).fill(0); for (let k = 0; k < ND; k++) { const mo = Math.min(11, Math.floor((k % DPY) / 30.42)); mc[mo] += sim.cover[k] || 0; mn[mo]++; }
   const m = state.method; let Ea = null, Zd = null; try { const R = m === 'M01_Overhead' ? spRun() : /Drip/.test(m) ? drRun() : sidRun(); Ea = R.Ea; } catch (e) {}
   let kcMid = 1.15, kcIni = 0.3, p0 = 0.55; try { const pp = window.CROPLIB && CROPLIB.crops[state.crop] ? CROPLIB.params(state.crop, state.densIdx, state.plantDoy) : null; if (pp) { kcMid = pp.kcMid; kcIni = pp.kcIni; p0 = pp.p; } } catch (e) {}
-  return { k0, sh, spin, irr, simNext, coverMonth: mc.map((v, i) => v / Math.max(1, mn[i])), depSpin: 1 - left(k0 - spin), note: S0.note, date0: fmtDate(dateOfK(k0 + sh)), dates, et0: F.et0, rain: F.rain, src: F.src, rd, cover, live, dep0: 1 - left(k0), awc, fT: sim.fTrig, Ea: Ea || (m === 'M01_Overhead' ? 0.75 : /Drip/.test(m) ? 0.9 : 0.6), method: (METHODS.find(q => q.k === m) || {}).label || m, crop: (CROPS[state.crop] || {}).label || state.crop, kcMid, kcIni, p0, soil: DATA.soil_labels[state.soil], soils: DATA.soils.map(k => [k, DATA.soil_labels[k], (DATA.texture[k] || {}).sand, (DATA.texture[k] || {}).clay, AWC[k]]) };
+  return { k0, sh, spin, irr, simNext, coverMonth: mc.map((v, i) => v / Math.max(1, mn[i])), depSpin: PL.at(PL.Dr, k0 - spin) / Math.max(1, PL.at(PL.TAW, k0 - spin)), note: S0.note, date0: fmtDate(dateOfK(k0 + sh)), dates, et0: F.et0, rain: F.rain, src: F.src, rd, cover, live, dep0: PL.at(PL.Dr, k0) / Math.max(1, PL.at(PL.TAW, k0)), awc, fT: sim.fTrig, Ea: Ea || (m === 'M01_Overhead' ? 0.75 : /Drip/.test(m) ? 0.9 : 0.6), method: (METHODS.find(q => q.k === m) || {}).label || m, crop: (CROPS[state.crop] || {}).label || state.crop, kcMid, kcIni, p0, soil: DATA.soil_labels[state.soil], soils: DATA.soils.map(k => [k, DATA.soil_labels[k], (DATA.texture[k] || {}).sand, (DATA.texture[k] || {}).clay, AWC[k]]) };
 };
 window.v7Dash = function () {
   const rows = v7Data(), me = rows.find(r => r.s === state.soil), rs = v7Reason(me), E5 = DATA.e5[state.soil], tex = DATA.texture[state.soil], tc = TC_VALUES[state.tcIdx];
@@ -4696,7 +4755,7 @@ function drawV7Profiles(y0) {
   return ny + 160;
 }
 
-function drawV7x() { drawV7(); drawV7Graphs(); sectionHeader('The system in the field: how tillage and settling change the pores', 906); drawSWA(14, 918, 592, 'structure'); drawV7Profiles(1200); }
+function drawV7x() { drawV7(); drawV7Graphs(); sectionHeader('The system in the field: how tillage and settling change the pores', 906); drawSWA(14, 918, 592, 'structure'); const e = drawV7Profiles(1200); if (Math.abs(H - (e + 30)) > 4) { currentScene.h = Math.ceil(e + 30); setCanvasH(currentScene.h); } }
 
 // field: the all-years view reacts to the pointer, the day view keeps the draggable sensor
 function fieldDown(p) { if (state.fview === 'years') { const i = fyHit(p); if (i >= 0) { fclock.day = i * DPY + 150; fclock.pause = 0; fclock.mem = []; return true; } return false; } return state.fview === 'gen' ? false : fieldDownDay(p); }
@@ -6070,7 +6129,7 @@ function loop() {
     else if (dss.held && sc.id === 'v2' && (fclock.kd() - yearOf(fclock.kd()) * DPY < 90 || fclock.kd() - yearOf(fclock.kd()) * DPY > 90 + SEASON)) pl.textContent = calTxt(fmtDate(dateOfK(fclock.kd())) + ' (outside the plotted Apr\u2013Sep window)');
   }
   if (sc.id === 'field') { stepField(); const pr = document.getElementById('playRange'), pl = document.getElementById('playLabel'); if (document.activeElement !== pr) pr.value = Math.round(fclock.day / (ND - 1) * 1000); pl.textContent = calTxt(fieldLabel()); }
-  autoTick(sc); hotspots.length = 0; if (sc.draw) sc.draw(); drawHotTip();
+  autoTick(sc); hotspots.length = 0; try { if (sc.draw) sc.draw(); } catch (e) { if (!window.__DRAWERR || window.__DRAWERR !== String(e)) { window.__DRAWERR = String(e); console.error('draw', sc.id, e); } } drawHotTip();
   if (sc.id === 'field' && frameN++ % 10 === 0) updateInsight();
   if (dssFrame++ % 10 === 0) dssRender(false);
   if (ysFrame++ % 6 === 0) updateYearStrip();

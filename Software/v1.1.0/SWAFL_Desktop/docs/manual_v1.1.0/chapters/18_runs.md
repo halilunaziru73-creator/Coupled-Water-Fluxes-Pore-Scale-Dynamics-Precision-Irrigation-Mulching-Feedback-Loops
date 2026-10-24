@@ -137,20 +137,36 @@ It also sets the mainline length, the lift, the source, the hours a day, the com
 
 Each design layer (surface, drip and sprinklers) ends with a film of the soil water: **Soil water in the days ahead (DSS)**. It plays day by day; click it to pause or play.
 
+**How the dates and depths are computed.** The film and the schedule under it come from one FAO-56 daily root-zone balance of the farm (Allen et al., 1998), the *irrigation plan*:
+
+* the **crop water use** of every day, $ET_c=K_c\,ET_0$: $K_c$ from the four-stage curve of the crop in Properties (its stages, $K_{c,ini}$, $K_{c,mid}$ and $K_{c,end}$, its sowing date and, for trees, its density; Chapter 21), or $0.3+0.85\,c$ from the crop cover $c$ for the simulated cereal rotation; the part of $K_c$ that is evaporation from the bare ground between the plants, $0.8\,\min(K_c,1)(1-c)$, is cut by the mulch to its vapour-flux fraction;
+* the **reference evapotranspiration $ET_0$ and the rain** of every day of the weather in use: the online weather of the farm with its 16-day forecast, a weather file, or the recorded weather, with the rainfall scale and the temperature shift of Properties;
+* the **root zone**: the roots of every day of the daily model (Chapter 5) and the available water of the soil, $\mathrm{TAW}=\mathrm{AWC}\,z_r$;
+* the **trigger** of the soil (Chapter 6) and the **design**: its net depth per irrigation $Z_n$, its pumped depth and its run time.
+
+An irrigation is due when the root zone has lost the trigger depth $f_T\,\mathrm{TAW}$ or the design depth $Z_n$, whichever is smaller; it puts back $\min(Z_n, D_r)$ (a shorter run when the trigger comes first). The balance starts at the sowing (or 150 days before the working date) from the water of the daily model, so the water of the working date carries the rain and the irrigations before it.
+
+$$
+\begin{aligned}D_r(d)&=D_r(d-1)+K_s\,K_c\,ET_0(d)-\bigl(P(d)-RO(d)\bigr)-I(d),\qquad K_s=\min\Bigl(1,\frac{\mathrm{TAW}-D_r}{(1-p)\,\mathrm{TAW}}\Bigr),\\ I(d)&=\min(Z_n,D_r)\quad\text{when}\quad D_r\ge\min(f_T\,\mathrm{TAW},\,Z_n),\end{aligned}
+\tag{18.4}
+$$
+
+*Provenance (Eq. 18.4):* **[Literature]** FAO-56 root-zone balance and water stress coefficient (Allen et al., 1998), $p=p_0+0.04(5-ET_c)$ with $p_0$ of the crop; runoff $RO=0.3(P-35)$ above 35 mm (none for bunded rice); water above field capacity drains. The irrigation rule is **[Engineered]**.
+
 **The season of your crop.** The crop chosen in Properties is the crop of the decision. When the working date falls in its season, the film runs from the working date to 30 days after the harvest. When the working date has no crop (before sowing or after harvest), the film starts at the **next sowing of that crop** and runs through its whole season, and a yellow note above the film says so; the schedule under the film follows the same season. With the online weather, whose record ends in the present year, the next season is predicted with the weather of the last season of the record, its dates moved on by one year. The crops of the library are sown on their sowing date (Properties), which may be any day of the year; their season may run past 31 December, and the daily model irrigates them whenever they are in the field.
 
 **The weather of the decision.** The banner at the top of every design has a **WEATHER** line: the weather in use (the recorded weather of Taastrup, Denmark, 1980 to 1999; a weather file; or the online weather of a place with the 16-day forecast) and the button **Online weather of the farm…** (or *Change the weather…*), which opens the online-weather window (Chapter 19). The weather of your farm calibrates everything that follows: the soil water of every day, the irrigation dates and depths, the film, the schedule and the planting advice.
 
 * **Left: the profile of the day.** The water content of each layer of the real soil, 0 to 100 cm, with lines at the wilting point, the trigger and field capacity, the depth of the roots and the sensor. The frame and the label below take the colour of the phase of the day.
-* **Right: the days, coloured by phase.** The band at the top colours every day: irrigation day (blue), rain over 5 mm (light blue), comfortable (green), nearing the trigger (yellow), beyond the trigger, i.e. stress (orange, also shaded across the chart), near the wilting point (red), and no crop (grey). The chart also shows:
-  * the water held in the root zone in mm (left axis), against the full level (field capacity over the roots of that day) and the trigger level of that day; both levels rise and fall with the roots, so the axis changes with the soil and the crop;
-  * the water left at the sensor, in % of the available water (right axis);
+* **Right: the days, coloured by phase.** The band at the top colours every day: irrigation day (blue), rain over 5 mm (light blue), comfortable (green), nearing the trigger (yellow), crop stress, $K_s<1$ (orange, also shaded across the chart), near the wilting point (red), and no crop (grey). The chart also shows:
+  * the water held in the root zone in mm (left axis), against the full level (field capacity over the roots of that day) and the level at which this design irrigates (the trigger, or the design depth when it is smaller); both levels rise and fall with the roots, so the axis changes with the soil and the crop;
+  * the water left at the sensor, in % of the available water (right axis), from the profile of the daily model scaled to the root zone of the plan;
   * rain as ticks at the top and drainage as ticks at the bottom;
   * a dashed red line for what would happen **without irrigation from the day shown**: the root zone dries on with the weather of the record until it reaches the wilting point. It starts again from each day of the film.
 * **Below: the analysis.**
-  * The day in words: the date, the crop, the phase, the water left, and the sensor against the trigger.
-  * The next irrigation after the day shown, with its date, the days to it and the depth of this design, and the date the wilting point would be reached without irrigation from that day. Both are counted again for every day of the film.
-  * For the whole span: the number of irrigations, the rain, the evapotranspiration, the drainage, and the share of days in each phase.
+  * The day in words: the date, the crop, the phase, the water left, and its crop water use, $K_c\times ET_0=ET_c$.
+  * The next irrigation after the day shown, with its date, the days to it, the water the root zone has lost by then, the net and pumped depths of this design (and the part that drains, if any), and the date the wilting point would be reached without irrigation from that day. Both are counted again for every day of the film.
+  * For the whole span: the number of irrigations and their water, the rain, the crop water use, the drainage, and the share of days in each phase.
 
 Every part of the film is labelled.
 
@@ -158,7 +174,9 @@ Every part of the film is labelled.
 * **The chart** has its axis of the water in the root zone (mm, left), of the water at the sensor (% of available, right) and its axis of dates (the first of each month, with the year at January). The day shown is marked by a line with its date and its water above the chart; arrows mark each irrigation; *next irrigation* names the date and the days to it, and the cross of the wilting point names its date and the days to it without irrigation. These labels move with the film.
 * **The colours** are distinct: irrigation dark blue, rain light blue, comfortable green, nearing the trigger yellow, stress orange, near wilting red, no crop grey. The root zone line is dark blue, the sensor purple, the trigger black dashed, the dry-down without irrigation red dotted, the rain ticks blue and the drainage ticks teal.
 
-**In the Dashboard**, the block *Soil water now: the film of this design* follows the film day by day: the date and day of the film, the crop and phase, the water in the root zone (mm and %), the sensor against the trigger, the next irrigation (date, days to it, depths) and the wilting point without irrigation (date, days to it).
+**In the Dashboard**, the block *Soil water now: the film of this design* follows the film day by day: the date and day of the film, the crop and phase, the water in the root zone (mm and %), the crop water use of the day ($K_c\times ET_0$), the depletion of the root zone against the level at which the design irrigates, the next irrigation (date, days to it, net and pumped depths) and the wilting point without irrigation (date, days to it).
+
+![The soil water in the days ahead: the FAO-56 plan of the drip design for maize, an irrigation day, with the crop water use of the day (Kc × ET0) and the next irrigation.](images/ui/dss_plan.jpg){width=88%}
 
 **When to plant.** Under the film, the chart *When to plant …* gives, for every sowing week of the year, the irrigation the crop needs in a season (bars, mm) and its rain-fed yield (red line, % of potential), from the FAO-56 root-zone balance of the crop library over the 20 years of the weather in use, with your soil, trigger and method. Weeks too cold or too hot for the crop are grey: warm-season crops need a minimum air temperature at sowing and over the season (maize 10 and 14 °C, soybean 10 and 15 °C, tomato 12 and 15 °C, pepper 14 and 17 °C, sorghum 14 and 18 °C, rice, millet, cotton and cassava 15 and 20 °C) and no frost; cool-season crops (wheat, chickpea, mustard, potato, onion, cabbage) a season mean between 5 and 24 °C. The temperatures are those of the weather in use when it has them (online weather, or a file with temperatures), otherwise the typical climate of Taastrup, Denmark, the site of the recorded weather. The best week is the feasible week with the least irrigation (within 10 %) and the highest rain-fed yield; the best window is the run of feasible weeks within 15 % of its need. The text gives the window, the need, the rain-fed yield and the need at your own sowing date; **Sow on … (best)** sets the sowing date in Properties. When no week is warm enough, the warmest window is shown and the text says so. For the simulated cereal rotation, whose dates are fixed, the advice is for wheat from the library (soybean for the legume, tomato for the vegetable) with a button to use that crop. Trees, vines and palms stand all year and have no sowing date.
 
@@ -166,18 +184,20 @@ The Dashboard block *Soil water now* also gives the planting window and the weat
 
 Everything follows the settings. Change the trigger, the sensor depth, the soil, the crop, the mulch, the rain or the weather and the film is computed again.
 
-The phase of a day is set in this order: an irrigation day; a day with no crop; near wilting when the root zone has lost 85 % of its available water; beyond the trigger when the depletion at the sensor reaches the trigger $f_T$; a rain day (over 5 mm); nearing the trigger when the depletion at the sensor reaches $0.8\,f_T$; otherwise comfortable.
+The phase of a day is set in this order: an irrigation day; a day with no crop; near wilting when the root zone has lost 85 % of its available water; crop stress when $K_s<1$; a rain day (over 5 mm); nearing the trigger when the depletion reaches 80 % of the level at which the design irrigates; otherwise comfortable.
 
-The water left in the root zone on day $d$ is the mean over the layers within the roots, $\bar s(d)$, where $s=(\theta-\theta_{wp})/(\theta_{fc}-\theta_{wp})$. Without the irrigation the depletion follows the FAO-56 root-zone balance:
+The water left in the root zone on day $d$ is $\mathrm{TAW}-D_r$ of Eq. 18.4. Without irrigation from the day shown, the depletion goes on with the same $K_c\,ET_0$ and rain:
 
 $$
-D_r(d+1)=\mathrm{clip}\bigl(D_r(d)+ET(d)\,[0.35+0.65\,K_s]-0.8\,P(d);\ 0,\ \mathrm{TAW}\bigr),\qquad K_s=\min\Bigl(1,\frac{\mathrm{TAW}-D_r}{0.5\,\mathrm{TAW}}\Bigr),
-\tag{18.4}
+D_r(d+1)=\mathrm{clip}\bigl(D_r(d)+K_c\,ET_0(d)\,[0.35+0.65\,K_s]-(P-RO)(d);\ 0,\ \mathrm{TAW}\bigr),
+\tag{18.5}
 $$
 
-*Provenance (Eq. 18.4):* **[Literature]** with **[Engineered]** constants: FAO-56 water stress coefficient with $p=0.5$. $\mathrm{TAW}=\mathrm{AWC}\,z_r$, and $ET$ and $P$ are the evapotranspiration and rain of the daily model. The wilting point is reached when $D_r\ge 0.97\,\mathrm{TAW}$.
+*Provenance (Eq. 18.5):* **[Literature]** with an **[Engineered]** floor: the crop and the soil keep losing about a third of $ET_c$ as the soil dries. The wilting point is reached when $D_r\ge 0.97\,\mathrm{TAW}$.
 
-The schedule under the film takes its dates from the daily model and its depths and times from the design.
+**The schedule** under the film lists the next eight irrigations of this design: the date and the days to it, $K_c$ and $ET_c$ of that day, the water the root zone has lost (of its TAW), the net and pumped depths and the run time (shorter when the trigger comes before the design depth), and the gap to the next one. *The season in numbers* gives, for the season of the decision, when to irrigate, the crop water use ($K_c\times ET_0$, with its peak), the rain and its runoff, the irrigations (their number, dates, net and pumped water), the mean, shortest and longest interval, the drainage below the roots, the days of crop stress with the yield as a share of the potential ($1-K_y(1-ET_a/ET_c)$), and the efficiency of the design. The season rows of each design (*Net irrigation in the season*, the gross water and the pumping hours) use the same plan, and so does the zone-by-zone irrigation of the field map (Chapter 20).
+
+![The schedule of the drip design and the season in numbers.](images/ui/dss_schedule.jpg){width=88%}
 
 ## Comparing the three systems
 

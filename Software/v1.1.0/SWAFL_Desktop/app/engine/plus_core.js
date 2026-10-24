@@ -22,7 +22,7 @@
   track('lineTo', (c, a) => yOf(c, a[0], a[1]));
   let fitFrame = 0;
   const wrapDraw = sc => {
-    if (!sc || sc._fitWrapped || typeof sc.draw !== 'function' || ['sid', 'drip', 'spr'].includes(sc.id)) return; const od = sc.draw; sc._fitWrapped = true;   // the design views size themselves
+    if (!sc || sc._fitWrapped || typeof sc.draw !== 'function' || ['sid', 'drip', 'spr', 'v7'].includes(sc.id)) return; const od = sc.draw; sc._fitWrapped = true;   // the design views size themselves
     sc.draw = function () {
       const measure = (fitFrame++ % 20) === 0 && canvas.height < 9000;
       if (measure) { FIT.on = true; FIT.max = 0; }

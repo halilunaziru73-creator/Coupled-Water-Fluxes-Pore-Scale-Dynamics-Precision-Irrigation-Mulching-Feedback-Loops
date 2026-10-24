@@ -40,7 +40,7 @@ It downloads the app, builds `SWAFL.exe`, puts it on your Desktop and starts it.
 
 **Option B - download the zip:** [SWAFL_Desktop.zip](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop.zip). Extract it, open the inner `SWAFL_Desktop` folder (the one that contains `package.json`) in VS Code and run `npm.cmd install` then `npm.cmd run get-app`.
 
-**Nothing to install - open the full SWAFL workbench online:** [https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html?v=1.1.0](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html?v=1.1.0) (works in any browser, no server, no Node). Prefer the small explorer? [SWAFL web explorer](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/04_Interactive_Charts/10_SWAFL_Fused_Explorer.html).
+**Nothing to install - open the full SWAFL workbench online:** [https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html?v=1.1.0](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html?v=1.1.0) (works in any browser, no server, no Node). Or the [SWAFL web explorer](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/04_Interactive_Charts/10_SWAFL_Fused_Explorer.html).
 
 ## About the software: SWAFL Desktop
 
@@ -48,7 +48,7 @@ The software is grouped by version in [`Software`](Software): [`Software/v1.1.0`
 
 **SWAFL** (Soil Water, Atmosphere, Feedback and Layout) turns the 10,190-simulation Daisy results of this repository into a working decision-support tool. It runs the same simulation engine as the [web explorer](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/04_Interactive_Charts/10_SWAFL_Fused_Explorer.html) inside a desktop workbench (Layers on the left, Properties on the right, a Dashboard of results beside the drawing).
 
-<p align="center"><img src="Software/v1.1.0/SWAFL_Desktop/docs/swafl_workbench.png" alt="SWAFL Desktop workbench showing the drip irrigation design" width="900"></p>
+<p align="center"><img src="Software/v1.1.0/SWAFL_Desktop/docs/swafl_workbench.png" alt="SWAFL Desktop 1.1.0: the drip irrigation design with the soil water of the days ahead (FAO-56 schedule from the crop Kc, the weather and the design)" width="900"></p>
 
 **Documentation:** the [complete technical manual of version 1.1.0 (PDF)](Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf) (the [manual of version 1.0](Software/v1.0/SWAFL_Desktop/docs/SWAFL_Manual.pdf) stays with version 1.0) explains every control, trigger, layer and design simulation step by step, with the governing equations and citations.
 
