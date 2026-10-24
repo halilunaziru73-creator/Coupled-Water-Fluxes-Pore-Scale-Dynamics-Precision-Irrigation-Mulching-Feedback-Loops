@@ -139,19 +139,22 @@ Each design layer (surface, drip and sprinklers) ends with a film of the soil wa
 
 * **Left: the profile of the day.** The water content of each layer of the real soil, 0 to 100 cm, with lines at the wilting point, the trigger and field capacity, the depth of the roots and the sensor. The frame and the label below take the colour of the phase of the day.
 * **Right: the days, coloured by phase.** The band at the top colours every day: irrigation day (blue), rain over 5 mm (light blue), comfortable (green), nearing the trigger (yellow), beyond the trigger, i.e. stress (orange, also shaded across the chart), near the wilting point (red), and no crop (grey). The chart also shows:
-  * the share of the available water left in the root zone and at the sensor, against the trigger;
+  * the water held in the root zone in mm (left axis), against the full level (field capacity over the roots of that day) and the trigger level of that day; both levels rise and fall with the roots, so the axis changes with the soil and the crop;
+  * the water left at the sensor, in % of the available water (right axis);
   * rain as ticks at the top and drainage as ticks at the bottom;
-  * a dashed red line for what would happen **without the next irrigation**: the root zone dries on with the weather of the record until it reaches the wilting point.
+  * a dashed red line for what would happen **without irrigation from the day shown**: the root zone dries on with the weather of the record until it reaches the wilting point. It starts again from each day of the film.
 * **Below: the analysis.**
   * The day in words: the date, the crop, the phase, the water left, and the sensor against the trigger.
-  * The next irrigation, with the depth of this design, and the date the wilting point would be reached without it.
+  * The next irrigation after the day shown, with its date, the days to it and the depth of this design, and the date the wilting point would be reached without irrigation from that day. Both are counted again for every day of the film.
   * For the whole span: the number of irrigations, the rain, the evapotranspiration, the drainage, and the share of days in each phase.
 
 Every part of the film is labelled.
 
 * **The profile** has its depth axis (cm) and its water-content axis (% by volume, with the values at the wilting point and at field capacity). Labels mark the wilting point (WP), the trigger and field capacity (FC).
-* **The chart** has its axis of the water left in the root zone (%) and its axis of days, and the phase band is named. Arrows and lines mark each irrigation, and the first is labelled *irrigation starts* with its date. The trigger line is labelled with the water left at it, the point where it is reached is marked *trigger reached*, and the wilting point without irrigation is marked with a cross and its date.
+* **The chart** has its axis of the water in the root zone (mm, left), of the water at the sensor (% of available, right) and its axis of dates (the first of each month, with the year at January). The day shown is marked by a line with its date and its water above the chart; arrows mark each irrigation; *next irrigation* names the date and the days to it, and the cross of the wilting point names its date and the days to it without irrigation. These labels move with the film.
 * **The colours** are distinct: irrigation dark blue, rain light blue, comfortable green, nearing the trigger yellow, stress orange, near wilting red, no crop grey. The root zone line is dark blue, the sensor purple, the trigger black dashed, the dry-down without irrigation red dotted, the rain ticks blue and the drainage ticks teal.
+
+**In the Dashboard**, the block *Soil water now: the film of this design* follows the film day by day: the date and day of the film, the crop and phase, the water in the root zone (mm and %), the sensor against the trigger, the next irrigation (date, days to it, depths) and the wilting point without irrigation (date, days to it).
 
 Everything follows the settings. Change the trigger, the sensor depth, the soil, the crop, the mulch, the rain or the weather and the film is computed again.
 

@@ -24,6 +24,7 @@ const Dash = (() => {
     if (dayCache.key !== key) { dayCache = { key, D: E.day() }; }
     const D = dayCache.D, Y = D && D.year ? D.year : null;
     let h = '<div class="dwrap">';
+    if (Layers.DESIGN.includes(s.scene)) h += SEC('dssnow', 'Soil water now: the film of this design', 'follows the film day by day', '<div id="dssNow" class="dssnow"><div class="dnote">Run the design: the film of the soil water appears at the end of the design, and this block follows it.</div></div>');
     // the key numbers of the open layer (the same lines as in the report), so every layer has its own results here
     { const lk = s.scene + '|' + key; if (layerCache.key !== lk) { let L = null; try { L = E.json("(function(){try{return reportNotes(currentScene,currentScene.id==='field'?(state.fview||'day'):null)}catch(e){return null}})()"); } catch (e) {} layerCache = { key: lk, L }; }
       if (s.scene === 'n1') { let N = null; try { N = E.json('n1Dash()'); } catch (e) {} if (N) { const f2 = v => (v == null || !isFinite(v)) ? '-' : (+v).toFixed(2), r = (a, b, c) => '<tr><td>' + a + '</td><td><b' + (c ? ' style="color:' + c + '"' : '') + '>' + b + '</b></td></tr>';
@@ -33,12 +34,12 @@ const Dash = (() => {
           r('Water the soil holds', (+N.awc).toFixed(1) + ' mm per cm · ' + Math.round(N.taw) + ' mm in ' + N.roots + ' cm of roots') +
           r('Trigger (when to irrigate)', N.trigCm.toLocaleString('en-US') + ' cm suction · depletion ' + f2(N.fT), '#3F1D80') +
           r('Critical stress f*', f2(N.fstar) + ' = ' + N.critCm.toLocaleString('en-US') + ' cm suction', '#B01E14') +
-          r('Sensor at ' + N.z + ' cm on ' + UI.esc(N.date), N.sensorCm.toLocaleString('en-US') + ' cm · depletion ' + f2(N.fS) + ' · ' + (N.due ? 'irrigate now' : 'within the trigger'), N.due ? '#B01E14' : '#1E5A2A') +
+          '<tr><td id="n1dL">Sensor</td><td><b id="n1dS">-</b></td></tr><tr><td>Next irrigation</td><td><b id="n1dN" style="color:#1565C0">-</b></td></tr><tr><td>Trigger reached</td><td><b id="n1dT" style="color:#3F1D80">-</b></td></tr><tr><td>Wilting point if no water comes</td><td><b id="n1dW" style="color:#B01E14">-</b></td></tr>' +
           r('Drying speed at the peak of the season', (N.rate * 100).toFixed(1) + ' % a day · crop uses ' + (+N.mm).toFixed(1) + ' mm a day') +
           r('From field capacity to the trigger', N.days != null ? Math.max(1, Math.round(N.days)) + ' days' : '-') +
           r('Yield', (+N.yield).toFixed(2) + ' ' + UI.esc(N.yUnit) + (N.rel != null ? ' · ' + Math.round(N.rel * 100) + ' % of the best trigger' : '')) +
           r('Irrigation · drainage', Math.round(N.irr) + ' · ' + Math.round(N.drain) + ' mm a year') + '</table>' +
-          '<div class="chart"><canvas id="n1dc" style="height:170px"></canvas></div><div class="dnote">Depletion at the sensor through the season of ' + UI.esc(N.season.start.slice(-4)) + ' (day 0 = ' + UI.esc(N.season.start) + '); the dashed line is the trigger, blue days are irrigations.</div>' +
+          '<div class="chart"><canvas id="n1dc" style="height:230px"></canvas></div><div class="dnote" id="n1dCap">-</div>' +
           (N.rec != null ? '<div class="n1adv"><b>Choose f = ' + N.rec.toFixed(2) + '</b> · ' + UI.esc(N.why.replace(/^Advice for you: f = [0-9.]+,?\s*/, '').replace(/^because/, 'because')) + '</div>' : '') +
           (N.q50.length ? '<div class="n1q"><div><h5>Choose f = 0.50 if</h5><ul>' + N.q50.map(tick).join('') + '</ul></div><div><h5>Choose f = 0.45 if</h5><ul>' + N.q45.map(tick).join('') + '</ul></div></div>' : '') +
           '<div class="dnote">Click another soil in the drawing to see its numbers here.</div>');
@@ -65,7 +66,7 @@ const Dash = (() => {
     });
     h += SEC('avg', '20-year averages at these settings', baseline ? 'changes against the pinned baseline' : 'pin a baseline to compare', g + '</div>');
     setBody(h + '</div>');
-    if (s.scene === 'n1' && n1Chart) { const cv = document.getElementById('n1dc'); if (cv) { const S = n1Chart; xyChart(cv, { x: S.x, xl: 'day of the season', yl: 'depletion', ymin: 0, ymax: 1, invert: false, series: [{ y: S.dep, c: '#8E24AA', n: 'sensor depletion', w: 2 }], marks: S.x.filter((q, i) => S.irr[i]).map(q => ({ x: q, t: '', c: '#1565C0' })).concat([{ y: N1T, t: 'trigger ' + (+N1T).toFixed(2), c: '#3F1D80' }], S.today >= 0 && S.today <= 155 ? [{ x: S.today, t: 'today', c: '#C00000' }] : []) }); } }
+    if (s.scene === 'n1') { n1Key = ''; n1Live(true); }
   }
 
   const DL = {
@@ -96,6 +97,28 @@ const Dash = (() => {
   const bestCache = {};
 
   // ------------------------------------------------------------------ charts
+  // the trigger law follows the replay: date, sensor, next irrigation, trigger and wilting point, and the season chart on dates
+  let n1Key = '', n1Timer = null;
+  function n1Live(force) {
+    const cv = document.getElementById('n1dc'); if (!cv) { if (n1Timer && !force) { clearInterval(n1Timer); n1Timer = null; } return; }
+    if (!n1Timer) n1Timer = setInterval(() => { if (Layers.current && Layers.current() !== 'n1') { clearInterval(n1Timer); n1Timer = null; return; } n1Live(); }, 350);
+    let V = null; try { V = E.json('n1Live()'); } catch (e) {} if (!V) return; const key = V.dd + '|' + V.fS.toFixed(3) + '|' + V.fT + '|' + V.soil + '|' + cv.clientWidth; if (key === n1Key && !force) return; n1Key = key;
+    const set = (id, t) => { const e = document.getElementById(id); if (e && e.innerHTML !== t) e.innerHTML = t; }, dn = n => n === 0 ? 'today' : n === 1 ? 'tomorrow' : 'in ' + n + ' days';
+    set('n1dL', 'Sensor at ' + V.z + ' cm on ' + UI.esc(V.date) + (V.play ? ' <small>(replay)</small>' : ''));
+    set('n1dS', V.sensorCm.toLocaleString('en-US') + ' cm · depletion ' + (V.fS * 100).toFixed(0) + ' % · ' + (V.due ? '<span style="color:#B01E14">irrigate now</span>' : 'within the trigger'));
+    set('n1dN', V.next ? UI.esc(V.next.date) + ' (' + dn(V.next.days) + ', ' + V.next.mm + ' mm)' : 'none in the next 12 months');
+    set('n1dT', V.due ? 'reached: ' + (V.fS * 100).toFixed(0) + ' % against ' + (V.fT * 100).toFixed(0) + ' %' : V.trig ? UI.esc(V.trig.date) + ' (' + dn(V.trig.days) + ')' : 'about ' + V.trigDry + ' days of drying');
+    set('n1dW', V.wilt ? UI.esc(V.wilt.date) + ' (' + dn(V.wilt.days) + ' at ' + (V.rate * 100).toFixed(1) + ' % a day' + (V.peak ? ', the speed of the peak of the season' : '') + ')' : '-');
+    set('n1dCap', 'Depletion at the sensor (' + V.z + ' cm) through the season of ' + V.season.year + ', ' + UI.esc(V.season.start) + ' to ' + UI.esc(V.season.end) + ': 0 % is field capacity, 100 % the wilting point. Purple: the simulated sensor; dashed purple: the trigger; blue: irrigation days; red line: the replay date' + (V.inSeason ? '' : ' (outside the season: the replay date is ' + UI.esc(V.date) + ')') + '; dashed red: drying to the wilting point if no water comes.');
+    const S = V.season, n = S.x.length, proj = S.x.map(() => NaN);
+    if (V.inSeason && !V.due && V.wilt) for (let q = V.today; q < n; q++) { const v = V.fS * 100 + (q - V.today) * V.rate * 100; proj[q] = Math.min(100, v); if (v >= 100) break; }
+    const marks = S.x.filter((q, i) => S.irr[i]).map(q => ({ x: q, t: '', c: '#1565C0' })).concat([{ y: V.fT * 100, t: 'trigger ' + (V.fT * 100).toFixed(0) + ' %', c: '#3F1D80' }]);
+    if (V.inSeason) marks.push({ x: V.today, t: V.date.replace(/ \d{4}$/, ''), c: '#C00000', solid: true });
+    if (V.next && V.next.q >= 0 && V.next.q < n && V.next.days > 0) marks.push({ x: V.next.q, t: 'next irrigation', c: '#1565C0' });
+    if (V.inSeason && V.wilt && V.wilt.q < n && !V.due) marks.push({ x: V.wilt.q, t: 'wilting', c: '#B01E14' });
+    xyChart(cv, { x: S.x, xl: 'date (season of ' + S.year + ')', yl: 'depletion at the sensor (%)', ymin: 0, ymax: 100, xfmt: q => S.lab[Math.max(0, Math.min(n - 1, Math.round(q)))], xstep: 15, yfmt: v => v === 0 ? '0 FC' : v === 100 ? '100 WP' : String(v),
+      series: [{ y: S.y, c: '#8E24AA', n: 'sensor depletion', w: 2 }, { y: proj, c: '#C62828', n: 'if no water comes', w: 1.6, dash: [5, 4] }], marks });
+  }
   function xyChart(cv, o) {
     const dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return; cv.width = w * dpr; cv.height = h * dpr;
     const c = cv.getContext('2d'); c.scale(dpr, dpr); c.clearRect(0, 0, w, h); c.fillStyle = '#FFFFFF'; c.fillRect(0, 0, w, h);
@@ -105,23 +128,24 @@ const Dash = (() => {
     const nLeg = leg.length ? leg[leg.length - 1][2] + 1 : 0;
     const L = 46, R = 12, T = 10 + 13 * nLeg, B = 30, xs = o.x, all = o.series.flatMap(s => s.y.filter(v => isFinite(v)));
     const nice = (lo, hi, n) => { const raw = (hi - lo) / Math.max(1, n), p = Math.pow(10, Math.floor(Math.log10(raw || 1))), m = raw / p, st = (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p; const out = []; for (let v = Math.ceil(lo / st - 1e-9) * st; v <= hi + st * 1e-6; v += st) out.push(+v.toFixed(10)); return { out, st }; };
-    const tf = (v, st) => { const d = Math.abs(st - Math.round(st)) < 1e-9 && st >= 1 ? 0 : Math.abs(st * 10 - Math.round(st * 10)) < 1e-9 ? 1 : 2; return d ? v.toFixed(d) : Math.round(v).toLocaleString('en-US'); };
+    const tf0 = (v, st) => { const d = Math.abs(st - Math.round(st)) < 1e-9 && st >= 1 ? 0 : Math.abs(st * 10 - Math.round(st * 10)) < 1e-9 ? 1 : 2; return d ? v.toFixed(d) : Math.round(v).toLocaleString('en-US'); };
+    const tf = (v, st) => o.yfmt ? o.yfmt(v) : tf0(v, st);
     let ymx = o.ymax != null ? o.ymax : (Math.max(...all, 0) > 0 ? Math.max(...all) * 1.08 : 1), ymn = o.ymin != null ? o.ymin : Math.min(0, ...all);
     if (o.invert) [ymn, ymx] = [ymx, ymn];
     const xmn = Math.min(...xs), xmx = Math.max(...xs), X = v => L + (w - L - R) * (v - xmn) / ((xmx - xmn) || 1), Y = v => T + (h - T - B) * (1 - (v - ymn) / ((ymx - ymn) || 1));
     c.font = '10px Tahoma,Arial'; c.strokeStyle = '#E0E0E0'; c.fillStyle = '#404040'; c.lineWidth = 1;
     { const lo = Math.min(ymn, ymx), hi = Math.max(ymn, ymx), yt = nice(lo, hi, Math.max(2, Math.floor((h - T - B) / 32))); yt.out.forEach(v => { const y = Y(v); c.beginPath(); c.moveTo(L, y); c.lineTo(w - R, y); c.stroke(); c.textAlign = 'right'; c.fillText(tf(v, yt.st), L - 4, y + 3); }); }
-    { const xt = nice(xmn, xmx, Math.max(2, Math.floor((w - L - R) / 52))); let last = -1e9; c.textAlign = 'center'; xt.out.forEach(v => { const x = X(v), t = o.xl === 'year' ? String(Math.round(v)) : tf(v, xt.st), tw = c.measureText(t).width; if (x - tw / 2 < last + 4) return; c.fillText(t, Math.min(w - tw / 2 - 1, x), h - B + 13); last = x + tw / 2; }); }
+    { const xt = o.xstep ? (() => { const px = (w - L - R) / ((xmx - xmn) || 1), st2 = [o.xstep, o.xstep * 2, o.xstep * 3, o.xstep * 4, o.xstep * 6].find(q => q * px >= 50) || o.xstep * 8, out = []; for (let v = xmn; v <= xmx + 1e-9; v += st2) out.push(v); return { out, st: st2 }; })() : nice(xmn, xmx, Math.max(2, Math.floor((w - L - R) / 52))); let last = -1e9; c.textAlign = 'center'; xt.out.forEach(v => { const x = X(v), t = o.xfmt ? o.xfmt(v) : o.xl === 'year' ? String(Math.round(v)) : tf0(v, xt.st), tw = c.measureText(t).width; if (x - tw / 2 < last + 4) return; c.fillText(t, Math.min(w - tw / 2 - 1, x), h - B + 13); last = x + tw / 2; }); }
     c.fillText(o.xl || '', L + (w - L - R) / 2, h - 4); c.save(); c.translate(10, T + (h - T - B) / 2); c.rotate(-Math.PI / 2); c.fillText(o.yl || '', 0, 0); c.restore();
     c.strokeStyle = '#808080'; c.strokeRect(L, T, w - L - R, h - T - B);
     c.save(); c.beginPath(); c.rect(L, T, w - L - R, h - T - B); c.clip();
     o.series.forEach(s => {
       c.strokeStyle = s.c; c.lineWidth = s.w || 2; c.setLineDash(s.dash || []);
       if (s.fill) { c.fillStyle = s.fill; c.beginPath(); xs.forEach((x, i) => { const yy = Y(s.y[i]); i ? c.lineTo(X(x), yy) : c.moveTo(X(x), yy); }); c.lineTo(X(xs[xs.length - 1]), Y(Math.max(ymn, 0))); c.lineTo(X(xs[0]), Y(Math.max(ymn, 0))); c.closePath(); c.fill(); }
-      c.beginPath(); xs.forEach((x, i) => { const yy = Y(s.y[i]); i ? c.lineTo(X(x), yy) : c.moveTo(X(x), yy); }); c.stroke(); c.setLineDash([]);
+      c.beginPath(); let pen = false; xs.forEach((x, i) => { const v = s.y[i]; if (!isFinite(v)) { pen = false; return; } const yy = Y(v); pen ? c.lineTo(X(x), yy) : c.moveTo(X(x), yy); pen = true; }); c.stroke(); c.setLineDash([]);
     });
     c.restore();
-    (o.marks || []).forEach(m => { c.strokeStyle = m.c || '#C00000'; c.setLineDash([4, 3]); c.lineWidth = 1.2; c.beginPath(); if (m.x != null) { c.moveTo(X(m.x), T); c.lineTo(X(m.x), h - B); } else { c.moveTo(L, Y(m.y)); c.lineTo(w - R, Y(m.y)); } c.stroke(); c.setLineDash([]); c.fillStyle = m.c || '#C00000'; { const tw = c.measureText(m.t).width, right = m.x != null && X(m.x) + 3 + tw > w - R; const tx = m.x != null ? (right ? X(m.x) - 3 - tw : X(m.x) + 3) : w - R - 4 - tw, ty = m.x != null ? T + 11 + (o.marks.indexOf(m) % 2) * 12 : Y(m.y) - 4; c.fillStyle = 'rgba(255,255,255,0.88)'; c.fillRect(tx - 2, ty - 10, tw + 4, 13); c.fillStyle = m.c || '#C00000'; c.textAlign = 'left'; c.fillText(m.t, tx, ty); } });
+    (o.marks || []).forEach(m => { c.strokeStyle = m.c || '#C00000'; c.setLineDash(m.solid ? [] : [4, 3]); c.lineWidth = m.solid ? 2 : 1.2; c.beginPath(); if (m.x != null) { c.moveTo(X(m.x), T); c.lineTo(X(m.x), h - B); } else { c.moveTo(L, Y(m.y)); c.lineTo(w - R, Y(m.y)); } c.stroke(); c.setLineDash([]); c.fillStyle = m.c || '#C00000'; if (m.t) { const tw = c.measureText(m.t).width, right = m.x != null && X(m.x) + 3 + tw > w - R; const tx = m.x != null ? (right ? X(m.x) - 3 - tw : X(m.x) + 3) : w - R - 4 - tw, ty = m.x != null ? T + 11 + (o.marks.filter(q => q.t && q.x != null).indexOf(m) % 3) * 13 : Y(m.y) - 4; c.fillStyle = 'rgba(255,255,255,0.88)'; c.fillRect(tx - 2, ty - 10, tw + 4, 13); c.fillStyle = m.c || '#C00000'; c.textAlign = 'left'; c.fillText(m.t, tx, ty); } });
     // legend
     c.textAlign = 'left'; leg.forEach(([s, lx, ly]) => { c.fillStyle = s.c; c.fillRect(lx, 4 + ly * 13, 12, 3); c.fillStyle = '#000'; c.fillText(s.n, lx + 16, 9 + ly * 13); });
   }
@@ -224,6 +248,22 @@ const Dash = (() => {
   E.on('snap', () => { if (tab !== 'messages') render(); });
   E.on('scene', () => { chartKey = ''; lastHtml = ''; render(); });
   document.addEventListener('swafl-log', () => { if (tab === 'messages') render(); });
+  // the soil water of the day the film shows, with the next irrigation and the wilting point counted from that day
+  const SYS = { sid: 'Surface', drip: 'Drip', spr: 'Sprinkler' };
+  function dssLive() {
+    const el = document.getElementById('dssNow'); if (!el || !E.snap || !Layers.DESIGN.includes(E.snap.scene)) return; let N = null; try { N = E.json('window.__DSSNOW||null'); } catch (e) {}
+    let run = null; try { run = E.json("(function(){var R=window.DESIGN_RUN||{};return R['" + E.snap.scene + "']?!!R['" + E.snap.scene + "'].on:null})()"); } catch (e) {}
+    if (!N || N.sys !== SYS[E.snap.scene] || run === false) { if (!el.dataset.empty) { el.dataset.empty = '1'; el.innerHTML = '<div class="dnote">Run the design: the film of the soil water appears at the end of the design, and this block follows it day by day.</div>'; } return; }
+    el.dataset.empty = ''; const r = (a, b, c) => '<tr><td>' + a + '</td><td><b' + (c ? ' style="color:' + c + '"' : '') + '>' + b + '</b></td></tr>';
+    const html = '<div class="dssday"><i style="background:' + N.col + '"></i><b>' + UI.esc(N.date) + '</b> · day ' + N.day + ' of ' + N.span + (N.paused ? ' · paused' : '') + '</div><table class="n1t">' +
+      r('Crop', UI.esc(N.crop)) + r('Phase', UI.esc(N.phase)) +
+      r('Water in the root zone', N.mm.toFixed(0) + ' of ' + N.taw.toFixed(0) + ' mm (' + N.pct + ' %)', '#0D47A1') +
+      r('Sensor depletion', N.dep.toFixed(2) + ' (trigger ' + N.fT.toFixed(2) + ')', N.dep >= N.fT ? '#C62828' : '#1B5E20') +
+      r('Next irrigation', N.next ? UI.esc(N.next) + (N.nextIn === 0 ? ' (today)' : ' (in ' + N.nextIn + ' day' + (N.nextIn === 1 ? '' : 's') + ')') + '<br><small>' + N.net.toFixed(0) + ' mm net, ' + N.gross.toFixed(0) + ' mm pumped</small>' : 'none in the record', '#1565C0') +
+      r('Wilting point without irrigation', N.wilt ? UI.esc(N.wilt) + ' (in ' + N.wiltIn + ' days)' + (N.trig ? '<br><small>root zone at the trigger level ' + UI.esc(N.trig) + '</small>' : '') : 'not within 200 days', '#C62828') + '</table>';
+    if (el.innerHTML !== html) el.innerHTML = html;
+  }
+  setInterval(dssLive, 400);
   setInterval(() => { if ((tab === 'design' || tab === 'charts') && E.snap && Layers.DESIGN.includes(E.snap.scene)) render(); }, 1000);
   return { tab: setTab, pin, clearPin, render, hasBaseline: () => !!baseline };
 })();
