@@ -2941,7 +2941,8 @@ function buildN3Texture(pw, ph) {
 // =====================================================================================================
 const PAPER = '#FFFFFF', INK = '#1B1F23', MUTE = '#6B7280', RULE = '#D8D4C6';
 const CL = { rain: '#6FB1E8', irr: '#2E7DE8', evap: '#E0B04A', transp: '#4FAE5E', other: '#A9B2BD', drain: '#3F7FC4', nl: '#D9534F', store: '#B58AD8', soil: '#8B6B4A' };
-const nowSec = () => performance.now() / 1000;
+// the clock of the moving pictures; Trigger law and Mulch against bare soil stand still (no drops, no vapour, no waves) until Play
+const nowSec = () => { try { const id = currentScene && currentScene.id; if ((id === 'v4' && !AUTO.on) || (id === 'n1' && !n1ui.play)) return 12.5; } catch (e) {} return performance.now() / 1000; };
 
 function T(txt, x, y, o) {
   o = o || {};
@@ -5077,7 +5078,7 @@ function drawN1Chart() {
 const AUTO = { on: true, last: 0, k: 0, busy: false, snap: null };
 const RAIN_SEQ = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1], VFF_SEQ = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8];
 const SWEEPS = {
-  v4: { every: 3400, keys: ['vffIdx', 'capIdx', 'mulchType'], label: 'Playing: each mulch material in turn', step: k => { const ks = MULCHES.map(m => m.k); setMulch(ks[k % ks.length]); } },
+  v4: { every: 3400, keys: ['vffIdx', 'capIdx', 'mulchType'], freeze: true, label: 'Playing: each mulch material in turn', step: k => { const ks = MULCHES.map(m => m.k); setMulch(ks[k % ks.length]); } },
   v5: { every: 2600, keys: [], label: 'Playing: each feedback loop in turn', step: k => { v5ui.sel = k % 7 + 1; } },
   spac: { every: 2200, keys: [], label: 'Playing: following the water from groundwater up to the air', step: k => { SP.sel = 8 - (k % 8); } },
   v6: { every: 1300, keys: ['vffIdx'], freeze: true, label: 'Playing: mulch factor from none to strongest and back', step: k => applyState({ vffIdx: VFF_SEQ[k % VFF_SEQ.length] }) },
