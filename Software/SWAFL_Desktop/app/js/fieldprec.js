@@ -1,9 +1,7 @@
 /* Precision maps of the demarcated field.
-   1. Variable-rate irrigation (VRI): the net depth of the farm's irrigation from the SWAFL simulation (the design in use, its
-      trigger and roots), shared out over the field by the crop need read from the vegetation index (basal crop coefficient from
-      NDVI) and by the canopy water status (NDWI): stronger or drier parts get more water, weak parts and non-crop ground
-      (water, buildings, roads) less or none. The depths are grouped into management zones that the farmer can edit; the
-      prescription exports as GeoJSON and CSV for a VRI controller.
+   1. Variable-rate irrigation (VRI): every monitoring zone of the Sentinel-2 season runs its own FAO-56 daily balance with its
+      soil (SoilGrids), its observed cover, and the roots, trigger, crop, past irrigations and weather of the SWAFL model: its own
+      dates and depths. The prescription exports as GeoJSON and CSV for a VRI controller.
    2. Ephemeral gullies: the terrain of the field and its surroundings from open elevation tiles (AWS Terrain Tiles, Terrarium,
       from SRTM, Copernicus and national lidar where available), smoothed, sinks filled (priority flood), D8 flow directions and
       upslope area; ephemeral gullies start where the slope and the contributing area pass the topographic threshold of
@@ -21,39 +19,48 @@ const FieldPrec = (() => {
   const PAL = { blues: [[247, 251, 255], [198, 219, 239], [107, 174, 214], [33, 113, 181], [8, 48, 107]], viridis: [[253, 231, 37], [94, 201, 98], [33, 145, 140], [59, 82, 139], [68, 1, 84]], ryb: [[215, 48, 39], [252, 141, 89], [254, 224, 144], [145, 191, 219], [69, 117, 180]], greens: [[247, 252, 245], [199, 233, 192], [116, 196, 118], [35, 139, 69], [0, 68, 27]] };
   const palAt = (name, t) => { const A = PAL[name] || PAL.blues; t = Math.max(0, Math.min(1, t)) * (A.length - 1); const i = Math.min(A.length - 2, Math.floor(t)), f = t - i; return A[i].map((c, q) => Math.round(c + (A[i + 1][q] - c) * f)); };
 
-  // ------------------------------------------------------------------ 1. variable-rate irrigation
-  function simBase() {
-    try { return E.json("(function(){var S=seasonSim(),N=window.__DSSNOW||null,m=state.method,Ea=null;try{Ea=m==='M01_Overhead'?spRun().Ea:/Drip/.test(m)?drRun().Ea:sidRun().Ea}catch(e){}var awc=AWC[state.soil]||1.5;return {Zn:awc*S.Rmax*S.fTrig,awc:awc,rd:S.Rmax,fT:S.fTrig,Ea:Ea||(m==='M01_Overhead'?0.75:/Drip/.test(m)?0.9:0.6),method:(METHODS.find(function(q){return q.k===m})||{}).label||m,crop:(CROPS[state.crop]||{}).label||state.crop,next:N&&N.next,net:N&&N.net,soil:DATA.soil_labels[state.soil]}})()"); } catch (e) { return null; }
+  // ------------------------------------------------------------------ 1. variable-rate irrigation, simulated zone by zone
+  // The zones are the monitoring zones of the Sentinel-2 season (or, with one date only, classes of the index of that date). Each
+  // zone is run through the FAO-56 daily root-zone balance from 45 days before the start of the decision to 60 days after, with
+  // its own soil (SoilGrids at the zone, nearest SWAFL soil and its available water), its own crop cover (the crop development of
+  // the SWAFL daily model scaled by the zone's observed cover, density coefficient of Allen and Pereira, 2009), the roots and the
+  // trigger of the SWAFL model, the past irrigations of the model, and the reference ET and rain of the weather in use, with its
+  // forecast. As in the SWAFL daily model, a zone is irrigated when its crop covers more than a fifth of the ground and its
+  // depletion reaches the trigger; the irrigation refills the root zone. Each zone gets its own irrigation dates and depths.
+  const fcOf = ndvi => Math.max(0, Math.min(1, (ndvi - 0.15) / 0.7));
+  function nearestSoil(B, so) { let b = null, bd = Infinity; B.soils.forEach(r => { if (r[2] == null) return; const d = Math.hypot(r[2] - so.sand, r[3] - so.clay); if (d < bd) { bd = d; b = r; } }); return b; }
+  async function vri(st) {
+    const Fm = F(), h = H(), ts = FieldMon.ts; let B; try { B = E.json('vriBase(60,45)'); } catch (e) {} if (!B) throw new Error('the simulation is not ready');
+    let G, zl, Z, how;
+    if (ts) { G = ts.G; zl = ts.zone; Z = ts.Z.map(z => ({ r: z.r, ha: z.ha, pct: z.pct, ndvi: z.last.ndvi, ndmi: z.last.ndmi, ctr: z.ctr, cells: z.n })); how = 'monitoring zones of ' + ts.S.length + ' Sentinel-2 scenes (' + ts.S[0].date + ' to ' + ts.S[ts.S.length - 1].date + ')'; }
+    else if (Fm.res) { const R = Fm.res, k = R.keys.includes('NDVI') ? 'NDVI' : R.keys.includes('VARI') ? 'VARI' : R.keys[0], v = R.vals[R.keys.indexOf(k)], w = R.keys.includes('NDWI') ? R.vals[R.keys.indexOf('NDWI')] : null; G = R.G;
+      const toN = x => k === 'VARI' ? 0.15 + (x + 0.1) / 0.6 * 0.7 : x, srt = Array.from(v).filter(isFinite).sort((a, b) => a - b), nz = P.nz, br = []; for (let q = 1; q < nz; q++) br.push(srt[Math.floor(q / nz * (srt.length - 1))]);
+      zl = new Int8Array(v.length).fill(-1); const acc = Array.from({ length: nz }, () => ({ n: 0, s: 0, w: 0, nw: 0, cx: 0, cy: 0 }));
+      for (let i = 0; i < v.length; i++) { if (!isFinite(v[i])) continue; let z = 0; while (z < br.length && v[i] > br[z]) z++; zl[i] = z; const a = acc[z]; a.n++; a.s += toN(v[i]); if (w && isFinite(w[i])) { a.w += w[i]; a.nw++; } a.cx += i % G.nx; a.cy += Math.floor(i / G.nx); }
+      const tot = acc.reduce((a, b) => a + b.n, 0), A = h.areaM2(Fm.pts) / 1e4; Z = acc.map((a, r) => ({ r, ha: a.n / tot * A, pct: a.n / tot * 100, ndvi: a.n ? a.s / a.n : NaN, ndmi: a.nw ? a.w / a.nw : NaN, ctr: a.n ? G.ll(a.cx / a.n, a.cy / a.n) : null, cells: a.n }));
+      how = 'classes of ' + k + ' of ' + R.date + ' (one date: read the season for monitoring zones)'; }
+    else throw new Error('compute the indices of the field or read the season first');
+    // the soil of each zone
+    for (const z of Z) { z.awc = B.awc; z.soil = B.soil + ' (project)'; z.soilSrc = 'project';
+      if (z.ctr) { try { st && (st.textContent = 'Soil of zone ' + (z.r + 1) + ' (SoilGrids)...'); const so = await FieldSite.soilAt(z.ctr), nb = nearestSoil(B, so); if (nb) { z.awc = nb[4]; z.soil = so.cls + ' → ' + nb[1]; z.soilSrc = 'SoilGrids'; z.sand = so.sand; z.clay = so.clay; } } catch (e) {} } }
+    // the observed cover of each zone against the field (area-weighted), to scale the crop development of the model
+    const fcF = Z.reduce((a, z) => a + fcOf(z.ndvi) * z.ha, 0) / Math.max(1e-6, Z.reduce((a, z) => a + z.ha, 0));
+    const n = B.dates.length, s0 = B.spin, Ea = Math.max(0.3, B.Ea || 0.75);
+    Z.forEach(z => { const rz = fcF > 0.02 ? fcOf(z.ndvi) / fcF : 1; z.ratio = rz;
+      let Dr = Math.max(0, B.depSpin) * z.awc * B.rd[0]; const ev = [], kcs = []; let Dr0 = null;
+      for (let q = 0; q < n; q++) { const TAW = z.awc * B.rd[q], fc = Math.min(1, B.cover[q] * rz), Kd = Math.min(1, 1.5 * fc, Math.sqrt(fc)), Kc = B.live[q] ? B.kcIni + (B.kcMid - B.kcIni) * Kd : 0.25, p = B.p0;
+        if (Dr > TAW) Dr = TAW; const ks = Dr > p * TAW ? Math.max(0, (TAW - Dr) / ((1 - p) * TAW)) : 1, P2 = B.rain[q], ro = P2 > 35 ? (P2 - 35) * 0.3 : 0;
+        Dr = Dr + Kc * B.et0[q] * ks - (P2 - ro); if (Dr < 0) Dr = 0;
+        if (q < s0) { if (B.irr[q] > 0) Dr = Math.max(0, Dr - B.irr[q]); } else { if (q === s0) { Dr0 = Dr; z.kcNow = Kc; } if (B.live[q] && fc > 0.2 && Dr >= B.fT * TAW && TAW > 1) { ev.push({ q: q - s0, date: B.dates[q], net: Dr }); Dr = 0; } }
+        kcs.push(Kc); }
+      z.dep0 = Dr0 / Math.max(1, z.awc * B.rd[s0]); z.events = ev; z.next = ev[0] || null; z.netSum = ev.reduce((a, e) => a + e.net, 0); });
+    // zone depths: the depth of the next irrigation of each zone (editable)
+    Z.forEach(z => { const key = Z.length + ':' + z.r; z.depth = P.adj[key] != null ? P.adj[key] : z.next ? Math.round(z.next.net * 2) / 2 : 0; });
+    const A = h.areaM2(Fm.pts) / 1e4, net = Z.reduce((a, z) => a + z.depth * z.ha * 10, 0), season = Z.reduce((a, z) => a + z.netSum * z.ha * 10, 0);
+    const uniDepth = B.simNext.length ? B.simNext[0][1] : 0, uni = uniDepth * A * 10;
+    return { G, zl, Z, nz: Z.length, B, how, Ea, net, gross: net / Ea, uni, uniGross: uni / Ea, seasonNet: season, A, fcF };
   }
-  function vri(opt) {
-    const Fm = F(), R = Fm.res; if (!R) throw new Error('compute the indices of the field first');
-    const B = simBase(); if (!B) throw new Error('the simulation is not ready');
-    opt = Object.assign({ base: B.net || B.Zn, lo: 0.5, hi: 1.5, nz: P.nz }, opt || {});
-    const G = R.G, N = G.nx * G.ny, keys = R.keys, vegK = keys.includes('NDVI') ? 'NDVI' : keys.includes('VARI') ? 'VARI' : keys[0], watK = keys.includes('NDWI') ? 'NDWI' : null;
-    const veg = R.vals[keys.indexOf(vegK)], wat = watK ? R.vals[keys.indexOf(watK)] : null;
-    const ndvi = v => vegK === 'NDVI' ? v : vegK === 'VARI' ? 0.15 + (v + 0.1) / 0.6 * 0.7 : v;      // VARI to an NDVI scale
-    const kcb = v => Math.max(0.15, Math.min(1.2, 0.15 + (ndvi(v) - 0.15) / 0.7 * 1.0));             // basal crop coefficient from NDVI
-    let sK = 0, n = 0, sW = 0, nW = 0; const wl = []; for (let i = 0; i < N; i++) if (isFinite(veg[i])) { sK += kcb(veg[i]); n++; if (wat && isFinite(wat[i])) { sW += wat[i]; nW++; wl.push(wat[i]); } }
-    if (!n) throw new Error('no value of the index inside the field');
-    const kM = sK / n, wM = nW ? sW / nW : 0, wSd = nW ? Math.sqrt(wl.reduce((a, v) => a + (v - wM) ** 2, 0) / nW) || 0.05 : 0.05;
-    const cover = coverMask(G), dep = new Float32Array(N).fill(NaN);
-    for (let i = 0; i < N; i++) { if (!isFinite(veg[i])) continue; if (cover && cover[i]) { dep[i] = 0; continue; }
-      let f = kcb(veg[i]) / kM; if (wat && isFinite(wat[i])) f *= 1 + 0.35 * Math.max(-1.5, Math.min(1.5, (wM - wat[i]) / (2 * wSd)));
-      dep[i] = opt.base * Math.max(opt.lo, Math.min(opt.hi, f)); }
-    // zones: equal-count classes of the depth, then each zone gets its mean depth rounded to 0.5 mm (editable)
-    const v = Array.from(dep).filter(x => isFinite(x) && x > 0).sort((a, b) => a - b), nz = Math.max(2, Math.min(7, opt.nz)), br = []; for (let z = 1; z < nz; z++) br.push(v[Math.floor(z / nz * (v.length - 1))]);
-    const zone = new Int8Array(N).fill(-1), Z = Array.from({ length: nz }, () => ({ n: 0, s: 0 })); let off = 0;
-    for (let i = 0; i < N; i++) { const d = dep[i]; if (!isFinite(d)) continue; if (d === 0) { zone[i] = nz; off++; continue; } let z = 0; while (z < br.length && d > br[z]) z++; zone[i] = z; Z[z].n++; Z[z].s += d; }
-    const A = H().areaM2(Fm.pts), cells = v.length + off, zs = Z.map((q, z) => { const key = nz + ':' + z, mean = q.n ? q.s / q.n : 0, depth = P.adj[key] != null ? P.adj[key] : Math.round(mean * 2) / 2, ha = q.n / cells * A / 1e4; return { z, n: q.n, mean, depth, ha, pct: q.n / cells * 100 }; });
-    const offHa = off / cells * A / 1e4, Ea = Math.max(0.3, B.Ea || 0.75), net = zs.reduce((a, q) => a + q.depth * q.ha * 10, 0), uni = opt.base * (A / 1e4 - offHa) * 10;
-    return { G, dep, zone, zs, nz, offHa, base: opt.base, B, opt, vegK, watK, net, gross: net / Ea, uni, uniGross: uni / Ea, Ea, A };
-  }
-  function coverMask(G) {   // cells that are water, buildings or roads in the land cover read from the photo
-    const cv = F().cv; if (!cv || !cv.cls) return null; const m = new Uint8Array(G.nx * G.ny);
-    for (let j = 0; j < G.ny; j++) for (let i = 0; i < G.nx; i++) { const ll = G.ll(i, j), k = cv.clsAt(ll[0], ll[1]); if (k === 3 || k === 4) m[j * G.nx + i] = 1; }
-    return m;
-  }
-  const zoneCol = (V, z) => z >= V.nz ? [190, 190, 190] : palAt(P.pal, V.nz > 1 ? z / (V.nz - 1) : 0.5);
+  const zoneCol = (V, z) => palAt(P.pal, V.nz > 1 ? z / (V.nz - 1) : 0.5);
 
   // ------------------------------------------------------------------ 2 and 3. terrain, gullies and soil loss
   const TT = 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/';
@@ -100,41 +107,55 @@ const FieldPrec = (() => {
     return out;
   }
   async function erosion(st) {
-    const Fm = F(), h = H(); if (Fm.pts.length < 3) throw new Error('demarcate the field first');
+    const Fm = F(), h = H(), ts = FieldMon.ts; if (Fm.pts.length < 3) throw new Error('demarcate the field first');
     const lats = Fm.pts.map(p => p[0]), lons = Fm.pts.map(p => p[1]), c0 = h.centroid(Fm.pts), bufLat = 250 / 110540, bufLon = 250 / (111320 * Math.cos(c0[0] * rad));
     st && (st.textContent = 'Reading the terrain (open elevation tiles)...');
     const D = await dem(Math.min(...lats) - bufLat, Math.min(...lons) - bufLon, Math.max(...lats) + bufLat, Math.max(...lons) + bufLon), cell = D.mpp;
     st && (st.textContent = 'Terrain analysis: smoothing, filling sinks, flow directions and upslope area of ' + (D.W * D.H).toLocaleString('en-US') + ' cells...'); await new Promise(r => setTimeout(r, 20));
     const Zs = smooth(D.Z, D.W, D.H), Zf = fill(Zs, D.W, D.H), FL = flow(Zf, D.W, D.H, cell), N = D.W * D.H, ins = new Uint8Array(N);
     for (let y = 0; y < D.H; y++) for (let x = 0; x < D.W; x++) { const ll = D.ll(x + 0.5, y + 0.5); if (h.inside(ll[0], ll[1], Fm.pts)) ins[y * D.W + x] = 1; }
-    // the topographic threshold of ephemeral gullies in cultivated fields: S >= 0.025 A^-0.4 (A in ha)
     const gi = new Float32Array(N); for (let i = 0; i < N; i++) gi[i] = FL.S[i] * Math.pow(FL.A[i] / 1e4, 0.4) / 0.025;
-    // channels: from every cell where the threshold is passed (with at least 0.1 ha upslope), down the flow lines, inside the field
     const onG = new Uint8Array(N); for (let i = 0; i < N; i++) if (ins[i] && gi[i] >= 1 && FL.A[i] >= 1000) { let j = i, k = 0; while (j >= 0 && k++ < 2000 && ins[j] && !onG[j]) { onG[j] = 1; j = FL.dir[j]; } }
-    // gullies: connected runs of channel cells, followed from their heads
-    const lines = [], used = new Uint8Array(N);
-    const heads = []; for (let i = 0; i < N; i++) if (onG[i]) { let up = false; const x = i % D.W, y = (i / D.W) | 0; for (let dy = -1; dy <= 1 && !up; dy++) for (let dx = -1; dx <= 1; dx++) { const xx = x + dx, yy = y + dy; if (xx < 0 || yy < 0 || xx >= D.W || yy >= D.H) continue; const j = yy * D.W + xx; if (onG[j] && FL.dir[j] === i) { up = true; break; } } if (!up) heads.push(i); }
-    heads.forEach(hd => { const pts = []; let j = hd, len = 0, k = 0; while (j >= 0 && onG[j] && k++ < 3000) { pts.push(j); if (used[j]) break; used[j] = 1; const nj = FL.dir[j]; if (nj >= 0) len += cell * Math.hypot((nj % D.W) - (j % D.W), ((nj / D.W) | 0) - ((j / D.W) | 0)); j = nj; } if (len >= 3 * cell) lines.push({ cells: pts, len, A: FL.A[pts[pts.length - 1]], S: pts.reduce((a, q) => a + FL.S[q], 0) / pts.length }); });
-    // the photo: linear features along the predicted gullies
-    let photo = null; try { st && (st.textContent = 'Searching the satellite photo for linear erosion features (Hessian ridge and valley filter)...'); const M = await FieldSite.mosaic(D.bounds[0][0], D.bounds[0][1], D.bounds[1][0], D.bounds[1][1], 1400, 18); const Lm = lineness(M.img, M.W, M.H);
+    const lines = [], used = new Uint8Array(N), heads = [];
+    for (let i = 0; i < N; i++) if (onG[i]) { let up = false; const x = i % D.W, y = (i / D.W) | 0; for (let dy = -1; dy <= 1 && !up; dy++) for (let dx = -1; dx <= 1; dx++) { const xx = x + dx, yy = y + dy; if (xx < 0 || yy < 0 || xx >= D.W || yy >= D.H) continue; const j = yy * D.W + xx; if (onG[j] && FL.dir[j] === i) { up = true; break; } } if (!up) heads.push(i); }
+    heads.forEach(hd => { const pts = []; let j = hd, len = 0, k = 0; while (j >= 0 && onG[j] && k++ < 3000) { pts.push(j); if (used[j]) break; used[j] = 1; const nj = FL.dir[j]; if (nj >= 0) len += cell * Math.hypot((nj % D.W) - (j % D.W), ((nj / D.W) | 0) - ((j / D.W) | 0)); j = nj; } if (len >= 3 * cell) lines.push({ cells: pts, len, A: FL.A[pts[pts.length - 1]], Ahead: FL.A[pts[0]], S: pts.reduce((a, q) => a + FL.S[q], 0) / pts.length }); });
+    // the soil: SoilGrids at the field (texture and organic carbon), else the SWAFL soil
+    let soil = Fm.site && Fm.site.soil ? Fm.site.soil : null, soilSrc = soil ? 'SoilGrids' : '';
+    if (!soil) { try { st && (st.textContent = 'Soil of the field (SoilGrids)...'); soil = await FieldSite.soilAt(c0); soilSrc = 'SoilGrids'; } catch (e) { try { const t = E.json('DATA.texture[state.soil]'); soil = { sand: t.sand, silt: t.silt, clay: t.clay, soc: NaN, cls: E.json('DATA.soil_labels[state.soil]').toLowerCase() }; soilSrc = 'SWAFL soil (SoilGrids not reached)'; } catch (e2) {} } }
+    // the rain: the daily series of the weather in use (20 years); the erosivity of each month from the daily rains of 12.7 mm and more
+    const RS = E.json('rainSeries()'), PR = RS.P, ny = RS.years, Pa = PR.reduce((a, b) => a + b, 0) / ny, mOf = k => Math.min(11, Math.floor((k % RS.dpy) / 30.42));
+    const Rf = Pa <= 850 ? 0.0483 * Math.pow(Pa, 1.61) : 587.8 - 1.219 * Pa + 0.004105 * Pa * Pa, em = new Array(12).fill(0); PR.forEach((v, k) => { if (v >= 12.7) em[mOf(k)] += Math.pow(v, 1.81); }); const emS = em.reduce((a, b) => a + b, 0) || 1, Rm = em.map(v => Rf * v / emS);
+    // the cover of each month: the Sentinel-2 scene nearest the middle of the month, cell by cell; else the crop cover of the SWAFL model
+    let B = null; try { B = E.json('vriBase(1,0)'); } catch (e) {}
+    const monthNDVI = (lat, lon) => { const out = new Array(12).fill(NaN);
+      if (ts) { const G = ts.G, l = h.local([lat, lon], G.o), i = Math.floor((l[0] - G.x0) / G.cell), j = Math.floor((G.y1 - l[1]) / G.cell); if (i >= 0 && j >= 0 && i < G.nx && j < G.ny) { const q = j * G.nx + i; for (let m = 0; m < 12; m++) { let best = null, bd = 99; ts.S.forEach(s => { const d = new Date(s.date), dm = Math.abs(((d.getUTCMonth() + d.getUTCDate() / 31) - (m + 0.5) + 18) % 12 - 6); if (isFinite(s.ndvi[q]) && dm < bd) { bd = dm; best = s.ndvi[q]; } }); out[m] = bd <= 1.6 ? best : NaN; } } }
+      if (B) for (let m = 0; m < 12; m++) if (!isFinite(out[m])) { let rel = 1; if (Fm.res && Fm.res.keys.includes('NDVI')) { const v = h.valueAt('NDVI', lat, lon), mean = Fm.res.S.NDVI ? Fm.res.S.NDVI.mean : NaN; if (isFinite(v) && mean > 0.05) rel = v / mean; } out[m] = Math.max(0.05, Math.min(0.9, (0.15 + 0.7 * B.coverMonth[m]) * rel)); }
+      return out; };
+    const Cof = nd => Math.max(0.001, Math.min(1, Math.exp(-2 * nd / Math.max(0.05, 1 - nd))));
+    const K = soil ? epicK(soil.sand, soil.silt, soil.clay, isFinite(soil.soc) ? soil.soc / 10 * 0.1 : 1.2) : 0.03, Pf = P.practice || 1, loss = new Float32Array(N).fill(NaN), Cf = new Float32Array(N).fill(NaN);
+    const fieldM = new Array(12).fill(0); let nIn = 0;
+    for (let i = 0; i < N; i++) { if (!ins[i]) continue; const ll = D.ll((i % D.W) + 0.5, ((i / D.W) | 0) + 0.5), nm = monthNDVI(ll[0], ll[1]); let Ce = 0; for (let m = 0; m < 12; m++) { Ce += Rm[m] * Cof(nm[m]) / Rf; fieldM[m] += nm[m]; } nIn++;
+      const As = FL.A[i] / cell, sb = Math.sin(Math.atan(FL.S[i])), LS = Math.pow(As / 22.13, 0.4) * Math.pow(sb / 0.0896, 1.3); Cf[i] = Ce; loss[i] = Rf * K * LS * Ce * Pf; }
+    const ndviM = fieldM.map(v => v / Math.max(1, nIn));
+    // runoff of every day of the rain series on this soil and this cover (SCS curve number, TR-55 row crops in good condition, bare soil when NDVI < 0.3)
+    const hsg = !soil ? 'B' : soil.sand > 70 ? 'A' : soil.clay > 40 ? 'D' : soil.clay > 27 || soil.sand < 20 ? 'C' : 'B', CNc = { A: 67, B: 78, C: 85, D: 89 }[hsg], CNb = { A: 77, B: 86, C: 91, D: 94 }[hsg];
+    const Q = (Pd, CN) => { const Sr = 25400 / CN - 254; return Pd > 0.2 * Sr ? (Pd - 0.2 * Sr) ** 2 / (Pd + 0.8 * Sr) : 0; };
+    const qm = new Array(12).fill(0), ev10 = new Array(12).fill(0); let Qmax = 0, Pmax = 0, kmax = 0; PR.forEach((v, k) => { const m = mOf(k), q = Q(v, ndviM[m] < 0.3 ? CNb : CNc); qm[m] += q / ny; if (q >= 10) ev10[m] += 1 / ny; if (v > Pmax) { Pmax = v; kmax = k; Qmax = q; } });
+    const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], win = MON.map((n, m) => ({ m, n, R: Rm[m], ndvi: ndviM[m], q: qm[m], ev: ev10[m] })).filter(x => x.ndvi < 0.35 && x.R > Rf / 24).sort((a, b) => b.R - a.R);
+    lines.forEach(l => { l.vmax = Qmax / 1000 * l.Ahead; l.vEnd = Qmax / 1000 * l.A; });
+    // the evidence of the crop along each gully: Sentinel-2 cells along the line, against the field over the season
+    if (ts) lines.forEach(l => { let a = 0, n = 0; l.cells.forEach(q => { const ll = D.ll((q % D.W) + 0.5, ((q / D.W) | 0) + 0.5), G = ts.G, lc = h.local(ll, G.o), i = Math.floor((lc[0] - G.x0) / G.cell), j = Math.floor((G.y1 - lc[1]) / G.cell); if (i < 0 || j < 0 || i >= G.nx || j >= G.ny) return; const v = ts.stab[j * G.nx + i]; if (isFinite(v)) { a += v; n++; } }); l.s2 = n ? a / n : NaN; l.s2seen = n && a / n < -0.5; });
+    // the photo: linear features along the predicted gullies (Hessian ridge and valley filter)
+    let photo = null; try { st && (st.textContent = 'Searching the satellite photo for linear erosion features (Hessian ridge and valley filter)...'); const Mo = await FieldSite.mosaic(D.bounds[0][0], D.bounds[0][1], D.bounds[1][0], D.bounds[1][1], 1400, 18); const Lm = lineness(Mo.img, Mo.W, Mo.H);
       let mean = 0, n = 0; for (let i = 0; i < Lm.length; i += 7) { mean += Lm[i]; n++; } mean /= n || 1; let sd = 0; for (let i = 0; i < Lm.length; i += 7) sd += (Lm[i] - mean) ** 2; sd = Math.sqrt(sd / (n || 1)) || 1e-6;
-      lines.forEach(l => { let hit = 0; l.cells.forEach(q => { const ll = D.ll((q % D.W) + 0.5, ((q / D.W) | 0) + 0.5), p = M.px(ll[0], ll[1]), r2 = Math.max(2, Math.round(cell / M.mpp)); let best = 0; for (let dy = -r2; dy <= r2; dy++) for (let dx = -r2; dx <= r2; dx++) { const xx = Math.round(p[0]) + dx, yy = Math.round(p[1]) + dy; if (xx < 0 || yy < 0 || xx >= M.W || yy >= M.H) continue; best = Math.max(best, Lm[yy * M.W + xx]); } if ((best - mean) / sd > 2) hit++; }); l.photo = hit / l.cells.length; l.seen = l.photo >= 0.4; });
-      photo = { mpp: M.mpp, z: M.z }; } catch (e) { photo = { err: e.message }; }
-    // RUSLE soil loss
-    let rain = 600, soil = null, ndviOK = false; try { rain = E.json("(function(){var w=window.WXD&&WXD.on?WXD:null;return w?w.Pmean:model(VFF_VALUES[state.vffIdx],RAIN_VALUES[state.rainIdx]).rain})()") || rain; } catch (e) {}
-    if (Fm.site && Fm.site.soil) soil = Fm.site.soil; else { try { const t = E.json('DATA.texture[state.soil]'); soil = { sand: t.sand, silt: t.silt, clay: t.clay, soc: 12, cls: E.json('DATA.soil_labels[state.soil]').toLowerCase() }; } catch (e) {} }
-    const Rf = rain <= 850 ? 0.0483 * Math.pow(rain, 1.61) : 587.8 - 1.219 * rain + 0.004105 * rain * rain;
-    const K = soil ? epicK(soil.sand, soil.silt, soil.clay, (soil.soc || 12) / 10 * 0.1) : 0.03;
-    const Pf = P.practice || 1, loss = new Float32Array(N).fill(NaN), Cf = new Float32Array(N).fill(NaN);
-    for (let i = 0; i < N; i++) { if (!ins[i]) continue; const ll = D.ll((i % D.W) + 0.5, ((i / D.W) | 0) + 0.5); let nd = NaN; if (Fm.res) { const k2 = Fm.res.keys.includes('NDVI') ? 'NDVI' : Fm.res.keys.includes('VARI') ? 'VARI' : null; if (k2) { nd = h.valueAt(k2, ll[0], ll[1]); if (k2 === 'VARI' && isFinite(nd)) nd = 0.15 + (nd + 0.1) / 0.6 * 0.7; } }
-      const C = isFinite(nd) ? Math.max(0.001, Math.min(1, Math.exp(-2 * nd / Math.max(0.05, 1 - nd)))) : 0.35; if (isFinite(nd)) ndviOK = true;
-      const As = FL.A[i] / cell, sb = Math.sin(Math.atan(FL.S[i])), LS = Math.pow(As / 22.13, 0.4) * Math.pow(sb / 0.0896, 1.3); Cf[i] = C; loss[i] = Rf * K * LS * C * Pf; }
+      lines.forEach(l => { let hit = 0; l.cells.forEach(q => { const ll = D.ll((q % D.W) + 0.5, ((q / D.W) | 0) + 0.5), p = Mo.px(ll[0], ll[1]), r2 = Math.max(2, Math.round(cell / Mo.mpp)); let best = 0; for (let dy = -r2; dy <= r2; dy++) for (let dx = -r2; dx <= r2; dx++) { const xx = Math.round(p[0]) + dx, yy = Math.round(p[1]) + dy; if (xx < 0 || yy < 0 || xx >= Mo.W || yy >= Mo.H) continue; best = Math.max(best, Lm[yy * Mo.W + xx]); } if ((best - mean) / sd > 2) hit++; }); l.photo = hit / l.cells.length; l.seen = l.photo >= 0.4; });
+      photo = { mpp: Mo.mpp, z: Mo.z }; } catch (e) { photo = { err: e.message }; }
     const inside = []; for (let i = 0; i < N; i++) if (ins[i]) inside.push(i);
-    const lv = inside.map(i => loss[i]).filter(isFinite).sort((a, b) => a - b), A = h.areaM2(Fm.pts) / 1e4, meanLoss = lv.reduce((a, b) => a + b, 0) / (lv.length || 1);
-    const hi = inside.filter(i => gi[i] >= 1).length, mod = inside.filter(i => gi[i] >= 0.5 && gi[i] < 1).length;
-    const zIn = inside.map(i => D.Z[i]), slopes = inside.map(i => FL.S[i] * 100).sort((a, b) => a - b);
-    P.ero = { D, FL, gi, ins, lines, loss, Cf, photo, rain, Rf, K, soil, Pf, ndviOK, A, meanLoss, total: meanLoss * A, p90: lv[Math.floor(lv.length * 0.9)] || 0, hiPct: hi / inside.length * 100, modPct: mod / inside.length * 100,
-      relief: Math.max(...zIn) - Math.min(...zIn), slopeMean: slopes.reduce((a, b) => a + b, 0) / (slopes.length || 1), slopeMax: slopes[slopes.length - 1] || 0, cell, gLen: lines.reduce((a, l) => a + l.len, 0), seen: lines.filter(l => l.seen).length };
+    const lv = inside.map(i => loss[i]).filter(isFinite).sort((a, b) => a - b), A = h.areaM2(Fm.pts) / 1e4, meanLoss = lv.reduce((a, b) => a + b, 0) / (lv.length || 1), zIn = inside.map(i => D.Z[i]), slopes = inside.map(i => FL.S[i] * 100).sort((a, b) => a - b);
+    const kDate = k => { const y = RS.y0 + Math.floor(k / RS.dpy), d = new Date(Date.UTC(y, 0, 1 + (k % RS.dpy))); return d.toISOString().slice(0, 10); };
+    P.ero = { D, FL, gi, ins, lines, loss, Cf, photo, rain: Pa, rainSrc: RS.src, Rf, Rm, K, soil, soilSrc, Pf, A, meanLoss, total: meanLoss * A, p90: lv[Math.floor(lv.length * 0.9)] || 0, hiPct: inside.filter(i => gi[i] >= 1).length / inside.length * 100, modPct: inside.filter(i => gi[i] >= 0.5 && gi[i] < 1).length / inside.length * 100,
+      relief: Math.max(...zIn) - Math.min(...zIn), slopeMean: slopes.reduce((a, b) => a + b, 0) / (slopes.length || 1), slopeMax: slopes[slopes.length - 1] || 0, cell, gLen: lines.reduce((a, l) => a + l.len, 0), seen: lines.filter(l => l.seen).length, s2seen: lines.filter(l => l.s2seen).length,
+      hsg, CNc, CNb, qm, ev10, Qyear: qm.reduce((a, b) => a + b, 0), events: ev10.reduce((a, b) => a + b, 0), Pmax, Qmax, maxDate: kDate(kmax), win, ndviM, coverSrc: ts ? 'the Sentinel-2 scenes of ' + ts.S[0].date + ' to ' + ts.S[ts.S.length - 1].date + ' (crop model where a month has no scene)' : 'the crop cover of the SWAFL daily model' + (Fm.res && Fm.res.keys.includes('NDVI') ? ' scaled by the NDVI of ' + Fm.res.date : '') };
     return P.ero;
   }
   function epicK(sa, si, cl, oc) {   // EPIC soil erodibility (Sharpley and Williams, 1990), t ha h / (ha MJ mm)
@@ -142,29 +163,36 @@ const FieldPrec = (() => {
     return fs * fcs * fo * fh * 0.1317;
   }
 
+
   // ------------------------------------------------------------------ pictures of the maps (canvas in the grid of each map, cut to the field)
-  function canvasVRI(V) { const G = V.G, cv = document.createElement('canvas'), sc = Math.max(1, Math.min(24, 1400 / Math.max(G.nx, G.ny))); cv.width = Math.round(G.nx * sc); cv.height = Math.round(G.ny * sc); const c = cv.getContext('2d');
-    for (let j = 0; j < G.ny; j++) for (let i = 0; i < G.nx; i++) { const z = V.zone[j * G.nx + i]; if (z < 0) continue; const col = zoneCol(V, z); c.fillStyle = 'rgb(' + col.join(',') + ')'; c.fillRect(Math.floor(i * sc), Math.floor(j * sc), Math.ceil(sc) + 1, Math.ceil(sc) + 1); }
+  function canvasVRI(V, byDate) { const G = V.G, cv = document.createElement('canvas'), sc = Math.max(1, Math.min(24, 1400 / Math.max(G.nx, G.ny))); cv.width = Math.round(G.nx * sc); cv.height = Math.round(G.ny * sc); const c = cv.getContext('2d');
+    const dmax = Math.max(1, ...V.Z.map(z => z.next ? z.next.q : 0));
+    for (let j = 0; j < G.ny; j++) for (let i = 0; i < G.nx; i++) { const r = V.zl[j * G.nx + i]; if (r < 0) continue; const z = V.Z[r]; const col = byDate ? (z.next ? palAt('ryb', z.next.q / dmax) : [200, 200, 200]) : !z.next ? [200, 200, 200] : zoneCol(V, depthRank(V, r)); c.fillStyle = 'rgb(' + col.join(',') + ')'; c.fillRect(Math.floor(i * sc), Math.floor(j * sc), Math.ceil(sc) + 1, Math.ceil(sc) + 1); }
     clipTo(c, p => { const l = H().local(p, G.o); return [(l[0] - G.x0) / G.cell * sc, (G.y1 - l[1]) / G.cell * sc]; }); return { cv, bounds: [[G.sw[0], G.sw[1]], [G.ne[0], G.ne[1]]] }; }
+  const depthRank = (V, r) => { const o = V.Z.map(z => z.depth).slice().sort((a, b) => a - b); return Math.max(0, o.indexOf(V.Z[r].depth)) + (o.filter(x => x === V.Z[r].depth).length > 1 ? 0 : 0); };
   function canvasDEM(kind) { const E2 = P.ero, D = E2.D, cv = document.createElement('canvas'), sc = Math.max(1, Math.min(6, 1400 / Math.max(D.W, D.H))); cv.width = D.W * sc; cv.height = D.H * sc; const c = cv.getContext('2d'), im = c.createImageData(D.W, D.H);
     for (let i = 0; i < D.W * D.H; i++) { if (!E2.ins[i]) continue; let col; if (kind === 'gully') { const g = E2.gi[i]; col = g >= 1 ? [215, 48, 39] : g >= 0.5 ? [252, 141, 89] : g >= 0.25 ? [254, 224, 139] : [26, 152, 80]; } else { const v = E2.loss[i]; col = !isFinite(v) ? [200, 200, 200] : v < 2 ? [26, 152, 80] : v < 5 ? [166, 217, 106] : v < 10 ? [254, 224, 139] : v < 20 ? [252, 141, 89] : [215, 48, 39]; } im.data.set([col[0], col[1], col[2], 215], i * 4); }
     const t = document.createElement('canvas'); t.width = D.W; t.height = D.H; t.getContext('2d').putImageData(im, 0, 0); c.imageSmoothingEnabled = true; c.drawImage(t, 0, 0, D.W * sc, D.H * sc);
-    if (kind === 'gully') E2.lines.forEach(l => { c.strokeStyle = 'rgba(255,255,255,0.9)'; c.lineWidth = Math.max(4, sc * 1.6); c.setLineDash([]); c.beginPath(); l.cells.forEach((q, k) => { const x = ((q % D.W) + 0.5) * sc, y = (((q / D.W) | 0) + 0.5) * sc; k ? c.lineTo(x, y) : c.moveTo(x, y); }); c.stroke();
-      c.strokeStyle = l.seen ? '#4A0072' : '#8B0000'; c.lineWidth = Math.max(2, sc * 0.9); c.setLineDash(l.seen ? [] : [6, 3]); c.beginPath(); l.cells.forEach((q, k) => { const x = ((q % D.W) + 0.5) * sc, y = (((q / D.W) | 0) + 0.5) * sc; k ? c.lineTo(x, y) : c.moveTo(x, y); }); c.stroke(); c.setLineDash([]); });
-    clipTo(c, p => { const q = D.px(p[0], p[1]); return [q[0] * sc, q[1] * sc]; }, kind === 'gully'); return { cv, bounds: D.bounds }; }
-  function clipTo(c, P2, keepLines) { c.globalCompositeOperation = 'destination-in'; c.beginPath(); F().pts.forEach((p, i) => { const q = P2(p); i ? c.lineTo(q[0], q[1]) : c.moveTo(q[0], q[1]); }); c.closePath(); c.fill(); c.globalCompositeOperation = 'source-over'; }
-  function picture(view) { if (view === 'vri' && P.vri) return canvasVRI(P.vri); if ((view === 'gully' || view === 'rusle') && P.ero) return canvasDEM(view); return null; }
+    if (kind === 'gully') E2.lines.forEach(l => { const path = () => { c.beginPath(); l.cells.forEach((q, k) => { const x = ((q % D.W) + 0.5) * sc, y = (((q / D.W) | 0) + 0.5) * sc; k ? c.lineTo(x, y) : c.moveTo(x, y); }); }; c.strokeStyle = 'rgba(255,255,255,0.9)'; c.lineWidth = Math.max(4, sc * 1.6); c.setLineDash([]); path(); c.stroke();
+      c.strokeStyle = l.seen || l.s2seen ? '#4A0072' : '#8B0000'; c.lineWidth = Math.max(2, sc * 0.9); c.setLineDash(l.seen || l.s2seen ? [] : [6, 3]); path(); c.stroke(); c.setLineDash([]); });
+    clipTo(c, p => { const q = D.px(p[0], p[1]); return [q[0] * sc, q[1] * sc]; }); return { cv, bounds: D.bounds }; }
+  function clipTo(c, P2) { c.globalCompositeOperation = 'destination-in'; c.beginPath(); F().pts.forEach((p, i) => { const q = P2(p); i ? c.lineTo(q[0], q[1]) : c.moveTo(q[0], q[1]); }); c.closePath(); c.fill(); c.globalCompositeOperation = 'source-over'; }
+  const MONV = { mchange: 1, mtrend: 1, mstab: 1, mzone: 1 };
+  function picture(view) { if (MONV[view]) return FieldMon.picture(view); if ((view === 'vri' || view === 'vridate') && P.vri) return canvasVRI(P.vri, view === 'vridate'); if ((view === 'gully' || view === 'rusle') && P.ero) return canvasDEM(view); return null; }
   function layer(view) { const pic = picture(view); return pic ? L.imageOverlay(pic.cv.toDataURL(), pic.bounds, { opacity: 0.85, interactive: false }) : null; }
-  function has(view) { return view === 'vri' ? !!P.vri : (view === 'gully' || view === 'rusle') ? !!P.ero : false; }
+  function has(view) { if (MONV[view]) return FieldMon.has(view); return view === 'vri' || view === 'vridate' ? !!P.vri : (view === 'gully' || view === 'rusle') ? !!P.ero : false; }
   function at(view, lat, lon) {
-    if (view === 'vri' && P.vri) { const V = P.vri, G = V.G, l = H().local([lat, lon], G.o), i = Math.floor((l[0] - G.x0) / G.cell), j = Math.floor((G.y1 - l[1]) / G.cell); if (i < 0 || j < 0 || i >= G.nx || j >= G.ny) return ''; const z = V.zone[j * G.nx + i]; if (z < 0) return ''; return z >= V.nz ? 'no irrigation (water, building or road)' : 'VRI zone ' + (z + 1) + ': ' + V.zs[z].depth.toFixed(1) + ' mm net'; }
+    if (MONV[view]) return FieldMon.at(view, lat, lon);
+    if ((view === 'vri' || view === 'vridate') && P.vri) { const V = P.vri, G = V.G, l = H().local([lat, lon], G.o), i = Math.floor((l[0] - G.x0) / G.cell), j = Math.floor((G.y1 - l[1]) / G.cell); if (i < 0 || j < 0 || i >= G.nx || j >= G.ny) return ''; const r = V.zl[j * G.nx + i]; if (r < 0) return ''; const z = V.Z[r]; return 'zone ' + (r + 1) + ': next irrigation ' + (z.next ? z.next.date + ', ' + z.depth.toFixed(1) + ' mm net' : 'none in 60 days') + ' · ' + z.soil + ' · NDVI ' + (+z.ndvi).toFixed(2); }
     if (P.ero) { const D = P.ero.D, p = D.px(lat, lon), i = Math.floor(p[1]) * D.W + Math.floor(p[0]); if (p[0] < 0 || p[1] < 0 || p[0] >= D.W || p[1] >= D.H || !P.ero.ins[i]) return ''; const E2 = P.ero;
-      return 'elevation ' + D.Z[i].toFixed(1) + ' m · slope ' + (E2.FL.S[i] * 100).toFixed(1) + ' % · upslope area ' + (E2.FL.A[i] / 1e4).toFixed(2) + ' ha · gully index ' + E2.gi[i].toFixed(2) + (E2.gi[i] >= 1 ? ' (gully likely)' : '') + ' · soil loss ' + (isFinite(E2.loss[i]) ? E2.loss[i].toFixed(1) : '-') + ' t/ha/yr'; }
+      return 'elevation ' + D.Z[i].toFixed(1) + ' m · slope ' + (E2.FL.S[i] * 100).toFixed(1) + ' % · upslope area ' + (E2.FL.A[i] / 1e4).toFixed(2) + ' ha · gully index ' + E2.gi[i].toFixed(2) + (E2.gi[i] >= 1 ? ' (gully likely)' : '') + ' · C ' + (isFinite(E2.Cf[i]) ? E2.Cf[i].toFixed(3) : '-') + ' · soil loss ' + (isFinite(E2.loss[i]) ? E2.loss[i].toFixed(1) : '-') + ' t/ha/yr'; }
     return '';
   }
   function legend(view) {
-    if (view === 'vri' && P.vri) { const V = P.vri; return '<div class="fmchip">Variable-rate irrigation · ' + V.nz + ' zones · net mm</div><table>' + V.zs.map((z, i) => '<tr><td><i style="background:rgb(' + zoneCol(V, i).join(',') + ')"></i></td><td>zone ' + (i + 1) + '</td><td><b>' + z.depth.toFixed(1) + ' mm</b></td><td>' + z.ha.toFixed(2) + ' ha</td></tr>').join('') + (V.offHa > 0.001 ? '<tr><td><i style="background:#BEBEBE"></i></td><td>off</td><td>0 mm</td><td>' + V.offHa.toFixed(2) + ' ha</td></tr>' : '') + '</table><div class="fmmean">' + Math.round(V.gross * 1).toLocaleString('en-US') + ' m³ pumped against ' + Math.round(V.uniGross).toLocaleString('en-US') + ' m³ uniform</div>'; }
-    if (view === 'gully' && P.ero) return '<div class="fmchip">Ephemeral gully risk · S·A<sup>0.4</sup> / 0.025</div><table>' + [['#D73027', '≥ 1: gully likely'], ['#FC8D59', '0.5 to 1: moderate'], ['#FEE08B', '0.25 to 0.5: low'], ['#1A9850', '< 0.25: very low']].map(q => '<tr><td><i style="background:' + q[0] + '"></i></td><td>' + q[1] + '</td></tr>').join('') + '<tr><td><i style="background:#8B0000;height:3px"></i></td><td>predicted gully</td></tr><tr><td><i style="background:#4A0072;height:3px"></i></td><td>predicted and seen in the photo</td></tr></table>';
+    if (MONV[view]) return FieldMon.legend(view);
+    if (view === 'vri' && P.vri) { const V = P.vri; return '<div class="fmchip">Next irrigation of each zone · net mm</div><table>' + V.Z.map((z, i) => '<tr><td><i style="background:rgb(' + (z.next ? zoneCol(V, depthRank(V, i)) : [200, 200, 200]).join(',') + ')"></i></td><td>zone ' + (i + 1) + '</td><td><b>' + (z.next ? z.depth.toFixed(1) + ' mm' : 'none') + '</b></td><td>' + (z.next ? z.next.date.replace(/ \d{4}$/, '') : '–') + '</td><td>' + z.ha.toFixed(2) + ' ha</td></tr>').join('') + '</table><div class="fmmean">' + Math.round(V.gross).toLocaleString('en-US') + ' m³ pumped at the next irrigations</div>'; }
+    if (view === 'vridate' && P.vri) { const V = P.vri; return '<div class="fmchip">Date of the next irrigation of each zone</div><table>' + V.Z.map((z, i) => '<tr><td><i style="background:rgb(' + (z.next ? palAt('ryb', z.next.q / Math.max(1, ...V.Z.map(x => x.next ? x.next.q : 0))) : [200, 200, 200]).join(',') + ')"></i></td><td>zone ' + (i + 1) + '</td><td><b>' + (z.next ? z.next.date : 'none in 60 days') + '</b></td><td>' + (z.next ? 'day ' + z.next.q : '') + '</td></tr>').join('') + '</table>'; }
+    if (view === 'gully' && P.ero) return '<div class="fmchip">Ephemeral gully risk · S·A<sup>0.4</sup> / 0.025</div><table>' + [['#D73027', '≥ 1: gully likely'], ['#FC8D59', '0.5 to 1: moderate'], ['#FEE08B', '0.25 to 0.5: low'], ['#1A9850', '< 0.25: very low']].map(q => '<tr><td><i style="background:' + q[0] + '"></i></td><td>' + q[1] + '</td></tr>').join('') + '<tr><td><i style="background:#8B0000;height:3px"></i></td><td>predicted gully</td></tr><tr><td><i style="background:#4A0072;height:3px"></i></td><td>predicted and seen (photo or crop)</td></tr></table>';
     if (view === 'rusle' && P.ero) return '<div class="fmchip">Soil loss (RUSLE) · t/ha/yr</div><table>' + [['#1A9850', '< 2 (tolerable)'], ['#A6D96A', '2 to 5'], ['#FEE08B', '5 to 10'], ['#FC8D59', '10 to 20'], ['#D73027', '> 20']].map(q => '<tr><td><i style="background:' + q[0] + '"></i></td><td>' + q[1] + '</td></tr>').join('') + '</table><div class="fmmean">field mean ' + P.ero.meanLoss.toFixed(1) + ' t/ha/yr</div>';
     return '';
   }
@@ -172,49 +200,56 @@ const FieldPrec = (() => {
   // ------------------------------------------------------------------ the panel
   function panel() {
     const el = document.getElementById('fmPrecRes'); if (!el) return; let h = '';
-    if (P.vri) { const V = P.vri, B = V.B, sav = V.uniGross - V.gross;
-      h += '<div class="fmzt"><b>Variable-rate irrigation map</b> <small>(from ' + esc(V.vegK) + (V.watK ? ' and ' + esc(V.watK) : '') + ' of ' + esc(F().res.date) + ' and the SWAFL simulation)</small>' +
-        '<div class="fmrow"><label>Zones <select id="fpNz">' + [3, 4, 5, 6, 7].map(n => '<option' + (n === V.nz ? ' selected' : '') + '>' + n + '</option>').join('') + '</select></label><label>Colours <select id="fpPal">' + [['blues', 'Blues'], ['viridis', 'Viridis'], ['ryb', 'Red to blue'], ['greens', 'Greens']].map(q => '<option value="' + q[0] + '"' + (q[0] === P.pal ? ' selected' : '') + '>' + q[1] + '</option>').join('') + '</select></label>' +
-        '</div><div class="fprow">Base net depth <input id="fpBase" type="number" step="0.5" min="1" value="' + V.base.toFixed(1) + '"> mm · range <input id="fpLo" type="number" step="5" value="' + Math.round(V.opt.lo * 100) + '"> to <input id="fpHi" type="number" step="5" value="' + Math.round(V.opt.hi * 100) + '"> % of it</div>' +
-        '<table class="tbl fmtab"><tr><th></th><th>Zone</th><th>Area</th><th>Net depth</th><th>Volume</th><th></th></tr>' + V.zs.map((z, i) => '<tr><td><i style="display:inline-block;width:14px;height:10px;border:1px solid #666;background:rgb(' + zoneCol(V, i).join(',') + ')"></i></td><td>' + (i + 1) + (i === 0 ? ' least' : i === V.nz - 1 ? ' most' : '') + '</td><td>' + z.ha.toFixed(2) + ' ha (' + z.pct.toFixed(0) + ' %)</td><td><b>' + z.depth.toFixed(1) + ' mm</b></td><td>' + Math.round(z.depth * z.ha * 10).toLocaleString('en-US') + ' m³</td><td><button class="btn" data-dz="' + i + ':-0.5">−</button><button class="btn" data-dz="' + i + ':0.5">+</button></td></tr>').join('') +
-        (V.offHa > 0.001 ? '<tr><td><i style="display:inline-block;width:14px;height:10px;background:#BEBEBE"></i></td><td>off</td><td>' + V.offHa.toFixed(2) + ' ha</td><td>0 mm</td><td>water, buildings, roads</td><td></td></tr>' : '') + '</table>' +
-        '<div class="fmadv">Base: ' + V.base.toFixed(1) + ' mm net per irrigation (' + (B.net ? 'the design in use, ' + esc(B.method) : 'roots ' + Math.round(B.rd) + ' cm × ' + B.awc.toFixed(1) + ' mm/cm × trigger ' + B.fT.toFixed(2)) + '), application efficiency ' + Math.round(V.Ea * 100) + ' %' + (B.next ? ', next irrigation ' + esc(B.next) : '') + '. Per irrigation the map pumps <b>' + Math.round(V.gross).toLocaleString('en-US') + ' m³</b> against ' + Math.round(V.uniGross).toLocaleString('en-US') + ' m³ with one uniform depth: ' + (sav >= 0 ? 'saving ' : 'adding ') + Math.round(Math.abs(sav)).toLocaleString('en-US') + ' m³ (' + Math.abs(sav / Math.max(1, V.uniGross) * 100).toFixed(0) + ' %).</div>' +
-        '<div class="fmrow"><button class="btn" id="fpGJ">Prescription GeoJSON</button><button class="btn" id="fpCSV">Zones CSV</button><button class="btn" id="fpShow">Show on the map</button></div></div>'; }
-    if (P.ero) { const E2 = P.ero;
-      h += '<div class="fmzt"><b>Ephemeral gullies and soil loss</b> <small>(terrain ' + E2.cell.toFixed(1) + ' m cells, zoom ' + E2.D.z + ')</small><table class="tbl fmtab">' +
+    if (P.vri) { const V = P.vri, B = V.B, MON = d => d;
+      h += '<div class="fmzt"><b>Variable-rate irrigation, simulated zone by zone</b><div class="pnote">Zones: ' + esc(V.how) + '. Each zone runs the FAO-56 daily balance with its own soil and observed cover, the roots, trigger, crop and past irrigations of the SWAFL model (' + esc(B.crop) + ', ' + esc(B.method) + '), and the ' + esc(B.src) + ' from ' + esc(B.date0) + '.' + (B.note ? ' ' + esc(B.note) : '') + '</div>' +
+        '<div class="fmrow"><label>Zones ' + (FieldMon.ts ? '(set in the season above)' : '<select id="fpNz">' + [3, 4, 5, 6, 7].map(n => '<option' + (n === P.nz ? ' selected' : '') + '>' + n + '</option>').join('') + '</select>') + '</label><label>Colours <select id="fpPal">' + [['blues', 'Blues'], ['viridis', 'Viridis'], ['ryb', 'Red to blue'], ['greens', 'Greens']].map(q => '<option value="' + q[0] + '"' + (q[0] === P.pal ? ' selected' : '') + '>' + q[1] + '</option>').join('') + '</select></label><label>Map <select id="fpVw"><option value="vri">depth of the next irrigation</option><option value="vridate">date of the next irrigation</option></select></label></div>' +
+        '<table class="tbl fmtab"><tr><th></th><th>Zone</th><th>Soil (AWC)</th><th>Cover now</th><th>Water now</th><th>Next irrigation</th><th>In 60 days</th><th></th></tr>' + V.Z.map((z, i) => '<tr><td><i style="display:inline-block;width:14px;height:10px;border:1px solid #666;background:rgb(' + (z.next ? zoneCol(V, depthRank(V, i)) : [200, 200, 200]).join(',') + ')"></i></td><td>' + (i + 1) + '<br><small>' + z.ha.toFixed(2) + ' ha</small></td><td><small>' + esc(z.soil) + '<br>' + z.awc.toFixed(1) + ' mm/cm</small></td><td>NDVI ' + (+z.ndvi).toFixed(2) + (isFinite(z.ndmi) ? '<br><small>NDMI ' + (+z.ndmi).toFixed(2) + '</small>' : '') + '<br><small>Kc ' + (z.kcNow != null ? z.kcNow.toFixed(2) : '–') + '</small></td><td>' + Math.round((1 - z.dep0) * 100) + ' % left</td><td><b>' + (z.next ? z.next.date + '</b><br>' + z.depth.toFixed(1) + ' mm net, ' + (z.depth / V.Ea).toFixed(1) + ' gross' : 'none</b><br><small>crop cover under a fifth of the ground in the next 60 days</small>') + '</td><td>' + z.events.length + ' × · ' + Math.round(z.netSum) + ' mm</td><td><button class="btn" data-dz="' + i + ':-0.5">−</button><button class="btn" data-dz="' + i + ':0.5">+</button></td></tr>').join('') + '</table>' +
+        '<div class="fmadv">' + esc(vriAdvice(V)) + '</div><div class="fmrow"><button class="btn" id="fpGJ">Prescription GeoJSON</button><button class="btn" id="fpCSV">Zones and dates CSV</button></div></div>'; }
+    if (P.ero) { const E2 = P.ero, MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      h += '<div class="fmzt"><b>Ephemeral gullies and soil loss</b> <small>(terrain ' + E2.cell.toFixed(1) + ' m cells, zoom ' + E2.D.z + '; rain: ' + esc(E2.rainSrc) + '; soil: ' + esc(E2.soilSrc) + ')</small><table class="tbl fmtab">' +
         '<tr><td>Terrain of the field</td><td>relief ' + E2.relief.toFixed(1) + ' m · slope mean ' + E2.slopeMean.toFixed(1) + ' %, max ' + E2.slopeMax.toFixed(1) + ' %</td></tr>' +
+        '<tr><td>Runoff of the rain</td><td>' + Math.round(E2.Qyear) + ' mm a year (curve number ' + E2.CNc + ' cropped, ' + E2.CNb + ' bare, soil group ' + E2.hsg + '); <b>' + E2.events.toFixed(1) + '</b> runoff events of 10 mm or more a year; largest rain ' + Math.round(E2.Pmax) + ' mm on ' + E2.maxDate + ' → ' + Math.round(E2.Qmax) + ' mm runoff</td></tr>' +
         '<tr><td>Gully risk</td><td><b>' + E2.hiPct.toFixed(1) + ' %</b> of the field above the threshold, ' + E2.modPct.toFixed(1) + ' % moderate</td></tr>' +
-        '<tr><td>Predicted gullies</td><td><b>' + E2.lines.length + '</b>, ' + Math.round(E2.gLen) + ' m in all' + (E2.photo && !E2.photo.err ? '; <b>' + E2.seen + '</b> with a linear feature in the photo' : E2.photo && E2.photo.err ? '; photo not read (' + esc(E2.photo.err) + ')' : '') + '</td></tr>' +
+        '<tr><td>Predicted gullies</td><td><b>' + E2.lines.length + '</b>, ' + Math.round(E2.gLen) + ' m in all' + (E2.photo && !E2.photo.err ? '; ' + E2.seen + ' with a linear feature in the photo' : '') + (FieldMon.ts ? '; ' + E2.s2seen + ' with a weaker crop along them in Sentinel-2' : '') + '</td></tr>' +
         '<tr><td>Soil loss (RUSLE)</td><td><b>' + E2.meanLoss.toFixed(1) + ' t/ha/yr</b> mean, 10 % of the field above ' + E2.p90.toFixed(1) + ' · ' + Math.round(E2.total).toLocaleString('en-US') + ' t/yr from the field</td></tr>' +
-        '<tr><td>Factors</td><td>R ' + Math.round(E2.Rf) + ' (rain ' + Math.round(E2.rain) + ' mm) · K ' + E2.K.toFixed(3) + (E2.soil ? ' (' + esc(E2.soil.cls) + ')' : '') + ' · C from ' + (E2.ndviOK ? 'the vegetation index' : 'a default 0.35') + ' · P <select id="fpP"><option value="1">1 (none)</option><option value="0.6">0.6 contour tillage</option><option value="0.3">0.3 contour strips</option><option value="0.15">0.15 terraces</option></select></td></tr></table>' +
+        '<tr><td>Factors</td><td>R ' + Math.round(E2.Rf) + ' (rain ' + Math.round(E2.rain) + ' mm/yr) · K ' + E2.K.toFixed(3) + (E2.soil ? ' (' + esc(E2.soil.cls) + ')' : '') + ' · C month by month from ' + esc(E2.coverSrc) + ' · P <select id="fpP"><option value="1">1 (none)</option><option value="0.6">0.6 contour tillage</option><option value="0.3">0.3 contour strips</option><option value="0.15">0.15 terraces</option></select></td></tr></table>' +
+        '<table class="tbl fmtab v7g"><tr><th>Month</th>' + MON.map(m => '<th>' + m + '</th>').join('') + '</tr><tr><td>Erosivity %</td>' + E2.Rm.map(v => '<td>' + Math.round(v / E2.Rf * 100) + '</td>').join('') + '</tr><tr><td>NDVI</td>' + E2.ndviM.map(v => '<td' + (v < 0.3 ? ' class="me"' : '') + '>' + v.toFixed(2) + '</td>').join('') + '</tr><tr><td>Runoff mm</td>' + E2.qm.map(v => '<td>' + v.toFixed(0) + '</td>').join('') + '</tr></table>' +
         '<div class="fmadv">' + esc(eroAdvice(E2)) + '</div><div class="fmrow"><button class="btn" id="fpG">Show gullies</button><button class="btn" id="fpR">Show soil loss</button><button class="btn" id="fpGJG">Gullies GeoJSON</button></div></div>'; }
     el.innerHTML = h;
-    const $ = id => document.getElementById(id), redo = () => { try { P.vri = vri({ base: +$('fpBase').value || P.vri.base, lo: (+$('fpLo').value || 50) / 100, hi: (+$('fpHi').value || 150) / 100, nz: P.nz }); } catch (e) { UI.toast(e.message); } panel(); FieldMap._h.refresh('vri'); };
-    if (P.vri) { $('fpNz').onchange = e => { P.nz = +e.target.value; P.adj = {}; redo(); }; $('fpPal').onchange = e => { P.pal = e.target.value; panel(); FieldMap._h.refresh('vri'); }; ['fpBase', 'fpLo', 'fpHi'].forEach(id => $(id).onchange = () => { P.adj = {}; redo(); });
-      el.querySelectorAll('[data-dz]').forEach(b => b.onclick = () => { const [z, d] = b.dataset.dz.split(':'), k = P.vri.nz + ':' + z; P.adj[k] = Math.max(0, +(P.vri.zs[+z].depth + +d).toFixed(1)); redo(); });
-      $('fpGJ').onclick = exportVRI; $('fpCSV').onclick = exportVRIcsv; $('fpShow').onclick = () => FieldMap._h.refresh('vri'); }
-    if (P.ero) { $('fpP').value = String(P.practice || 1); $('fpP').onchange = async e => { P.practice = +e.target.value; const sc = P.ero.Rf * P.ero.K; for (let i = 0; i < P.ero.loss.length; i++) if (isFinite(P.ero.loss[i])) P.ero.loss[i] = P.ero.loss[i] / P.ero.Pf * P.practice; P.ero.meanLoss = P.ero.meanLoss / P.ero.Pf * P.practice; P.ero.total = P.ero.meanLoss * P.ero.A; P.ero.p90 = P.ero.p90 / P.ero.Pf * P.practice; P.ero.Pf = P.practice; panel(); FieldMap._h.refresh('rusle'); };
-      $('fpG').onclick = () => FieldMap._h.refresh('gully'); $('fpR').onclick = () => FieldMap._h.refresh('rusle'); $('fpGJG').onclick = exportGullies; }
+    const $ = id => document.getElementById(id), redo = async () => { try { P.vri = await vri(); } catch (e) { UI.toast(e.message); } panel(); H().refresh(H().F.view === 'vridate' ? 'vridate' : 'vri'); };
+    if (P.vri) { if ($('fpNz')) $('fpNz').onchange = e => { P.nz = +e.target.value; P.adj = {}; redo(); }; $('fpPal').onchange = e => { P.pal = e.target.value; panel(); H().refresh('vri'); }; $('fpVw').value = H().F.view === 'vridate' ? 'vridate' : 'vri'; $('fpVw').onchange = e => H().refresh(e.target.value);
+      el.querySelectorAll('[data-dz]').forEach(b => b.onclick = () => { const [z, d] = b.dataset.dz.split(':'), k = P.vri.nz + ':' + z; P.adj[k] = Math.max(0, +(P.vri.Z[+z].depth + +d).toFixed(1)); redo(); });
+      $('fpGJ').onclick = exportVRI; $('fpCSV').onclick = exportVRIcsv; }
+    if (P.ero) { $('fpP').value = String(P.practice || 1); $('fpP').onchange = e => { P.practice = +e.target.value; for (let i = 0; i < P.ero.loss.length; i++) if (isFinite(P.ero.loss[i])) P.ero.loss[i] = P.ero.loss[i] / P.ero.Pf * P.practice; P.ero.meanLoss = P.ero.meanLoss / P.ero.Pf * P.practice; P.ero.total = P.ero.meanLoss * P.ero.A; P.ero.p90 = P.ero.p90 / P.ero.Pf * P.practice; P.ero.Pf = P.practice; panel(); H().refresh('rusle'); };
+      $('fpG').onclick = () => H().refresh('gully'); $('fpR').onclick = () => H().refresh('rusle'); $('fpGJG').onclick = exportGullies; }
+  }
+  function vriAdvice(V) {
+    const Z = V.Z.filter(z => z.next).sort((a, b) => a.next.q - b.next.q), t = [];
+    if (!Z.length) return 'No zone reaches its trigger in the next 60 days with this weather.';
+    const f = Z[0], l = Z[Z.length - 1]; t.push('Zone ' + (f.r + 1) + ' (' + f.soil.split(' → ').pop() + ', NDVI ' + (+f.ndvi).toFixed(2) + ') needs water first, on ' + f.next.date + ' (' + f.depth.toFixed(1) + ' mm net)' + (l !== f ? '; zone ' + (l.r + 1) + ' last, on ' + l.next.date + ' (' + l.depth.toFixed(1) + ' mm)' : '') + '.');
+    if (V.B.simNext.length) t.push('The SWAFL model of the whole field irrigates ' + V.B.simNext[0][1] + ' mm on ' + V.B.simNext[0][0] + ': one uniform depth would pump ' + Math.round(V.uniGross).toLocaleString('en-US') + ' m³ against ' + Math.round(V.gross).toLocaleString('en-US') + ' m³ zone by zone.');
+    t.push('Over the next 60 days the zones need ' + Math.round(V.seasonNet).toLocaleString('en-US') + ' m³ net in all.');
+    return t.join(' ');
   }
   function eroAdvice(E2) {
-    const t = [];
-    if (E2.lines.length) t.push(E2.lines.length + ' ephemeral gull' + (E2.lines.length === 1 ? 'y is' : 'ies are') + ' likely along the drawn flow lines (' + Math.round(E2.gLen) + ' m): keep these thalwegs under a grassed waterway, leave crop residue on them, and do not run furrows or tramlines down the slope there.');
+    const t = [], MON = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    if (E2.win.length) t.push('The risk window is ' + E2.win.slice(0, 3).map(w => MON[w.m] + ' (' + Math.round(w.R / E2.Rf * 100) + ' % of the erosive rain on NDVI ' + w.ndvi.toFixed(2) + ')').join(', ') + ': the soil is bare when the heavy rains come; a cover crop or residue then cuts the loss most.');
+    if (E2.lines.length) t.push(E2.lines.length + ' ephemeral gull' + (E2.lines.length === 1 ? 'y' : 'ies') + ' (' + Math.round(E2.gLen) + ' m): the largest rain of the record (' + Math.round(E2.Pmax) + ' mm, ' + E2.maxDate + ') sends about ' + Math.round(Math.max(...E2.lines.map(l => l.vEnd))).toLocaleString('en-US') + ' m³ of runoff down the biggest one. Grass these thalwegs as waterways, and do not run furrows or tramlines down them.');
     else t.push('No flow line passes the gully threshold inside the field.');
-    if (E2.meanLoss > 10) t.push('The soil loss is high (' + E2.meanLoss.toFixed(1) + ' t/ha/yr): keep the soil covered (mulch, cover crop), till across the slope, and avoid irrigating by surface systems on the steep parts.');
-    else if (E2.meanLoss > 2) t.push('The soil loss is above the tolerable 2 t/ha/yr on part of the field: residue and contour tillage bring it down.');
-    else t.push('The soil loss is within the tolerable 2 t/ha/yr.');
-    if (E2.slopeMax > 3) t.push('Slopes reach ' + E2.slopeMax.toFixed(1) + ' %: prefer drip or low-rate sprinklers to furrows on the steeper parts.');
+    t.push(E2.meanLoss > 10 ? 'The soil loss is high (' + E2.meanLoss.toFixed(1) + ' t/ha/yr): keep the soil covered in the risk window, till across the slope, and avoid surface irrigation on the steep parts.' : E2.meanLoss > 2 ? 'The soil loss is above the tolerable 2 t/ha/yr on part of the field: residue and contour tillage bring it down.' : 'The soil loss is within the tolerable 2 t/ha/yr.');
+    if (E2.events >= 1) t.push(E2.events.toFixed(1) + ' runoff events of 10 mm or more a year: ' + (E2.hsg === 'C' || E2.hsg === 'D' ? 'this slowly draining soil sheds water quickly.' : 'keep the infiltration up with organic matter and no compaction.'));
     return t.join(' ');
   }
   // ------------------------------------------------------------------ exports
   function exportVRI() { const V = P.vri; if (!V) return; const G = V.G, feats = [];
-    for (let j = 0; j < G.ny; j++) for (let i = 0; i < G.nx; i++) { const z = V.zone[j * G.nx + i]; if (z < 0) continue; const o = G.o, x0 = G.x0 + i * G.cell, y1 = G.y1 - j * G.cell, ring = [[x0, y1], [x0 + G.cell, y1], [x0 + G.cell, y1 - G.cell], [x0, y1 - G.cell], [x0, y1]].map(q => { const ll = H().unlocal(q, o); return [+ll[1].toFixed(7), +ll[0].toFixed(7)]; });
-      const d = z >= V.nz ? 0 : V.zs[z].depth; feats.push({ type: 'Feature', properties: { zone: z >= V.nz ? 0 : z + 1, rate_mm: +d.toFixed(1), rate_m3_ha: +(d * 10).toFixed(1), gross_mm: +(d / V.Ea).toFixed(1) }, geometry: { type: 'Polygon', coordinates: [ring] } }); }
-    UI.saveFile('SWAFL_VRI_prescription_' + new Date().toISOString().slice(0, 10) + '.geojson', JSON.stringify({ type: 'FeatureCollection', name: 'SWAFL variable-rate irrigation', crs: { type: 'name', properties: { name: 'urn:ogc:def:crs:OGC:1.3:CRS84' } }, properties: { author: F().author, base_mm: V.base, efficiency: V.Ea, cell_m: G.cell }, features: feats }), false, 'application/geo+json'); }
-  function exportVRIcsv() { const V = P.vri; if (!V) return; let t = 'zone,area_ha,share_pct,net_mm,gross_mm,volume_m3\n' + V.zs.map((z, i) => [i + 1, z.ha.toFixed(3), z.pct.toFixed(1), z.depth.toFixed(1), (z.depth / V.Ea).toFixed(1), Math.round(z.depth * z.ha * 10)].join(',')).join('\n') + '\n'; if (V.offHa > 0.001) t += 'off,' + V.offHa.toFixed(3) + ',,0,0,0\n'; t += '\nbase_net_mm,' + V.base.toFixed(1) + '\nefficiency,' + V.Ea.toFixed(2) + '\ntotal_gross_m3,' + Math.round(V.gross) + '\nuniform_gross_m3,' + Math.round(V.uniGross) + '\n'; UI.saveFile('SWAFL_VRI_zones_' + new Date().toISOString().slice(0, 10) + '.csv', t, false, 'text/csv'); }
-  function exportGullies() { const E2 = P.ero; if (!E2) return; const D = E2.D; UI.saveFile('SWAFL_gullies_' + new Date().toISOString().slice(0, 10) + '.geojson', JSON.stringify({ type: 'FeatureCollection', features: E2.lines.map((l, k) => ({ type: 'Feature', properties: { id: k + 1, length_m: Math.round(l.len), upslope_ha: +(l.A / 1e4).toFixed(2), mean_slope_pct: +(l.S * 100).toFixed(1), seen_in_photo: !!l.seen }, geometry: { type: 'LineString', coordinates: l.cells.map(q => { const ll = D.ll((q % D.W) + 0.5, ((q / D.W) | 0) + 0.5); return [+ll[1].toFixed(7), +ll[0].toFixed(7)]; }) } })) }), false, 'application/geo+json'); }
+    for (let j = 0; j < G.ny; j++) for (let i = 0; i < G.nx; i++) { const r = V.zl[j * G.nx + i]; if (r < 0) continue; const z = V.Z[r], o = G.o, x0 = G.x0 + i * G.cell, y1 = G.y1 - j * G.cell, ring = [[x0, y1], [x0 + G.cell, y1], [x0 + G.cell, y1 - G.cell], [x0, y1 - G.cell], [x0, y1]].map(q => { const ll = H().unlocal(q, o); return [+ll[1].toFixed(7), +ll[0].toFixed(7)]; });
+      feats.push({ type: 'Feature', properties: { zone: r + 1, date: z.next ? z.next.date : null, rate_mm: +z.depth.toFixed(1), gross_mm: +(z.depth / V.Ea).toFixed(1), rate_m3_ha: +(z.depth * 10).toFixed(1), awc_mm_cm: z.awc, ndvi: +(+z.ndvi).toFixed(3) }, geometry: { type: 'Polygon', coordinates: [ring] } }); }
+    UI.saveFile('SWAFL_VRI_prescription_' + new Date().toISOString().slice(0, 10) + '.geojson', JSON.stringify({ type: 'FeatureCollection', name: 'SWAFL variable-rate irrigation', crs: { type: 'name', properties: { name: 'urn:ogc:def:crs:OGC:1.3:CRS84' } }, properties: { author: F().author, zones: V.how, weather: V.B.src, efficiency: V.Ea, cell_m: G.cell }, features: feats }), false, 'application/geo+json'); }
+  function exportVRIcsv() { const V = P.vri; if (!V) return; let t = 'zone,area_ha,soil,awc_mm_cm,ndvi,ndmi,kc_now,water_left_pct,next_date,net_mm,gross_mm,irrigations_60d,net_60d_mm\n' + V.Z.map((z, i) => [i + 1, z.ha.toFixed(3), '"' + z.soil + '"', z.awc, (+z.ndvi).toFixed(3), isFinite(z.ndmi) ? (+z.ndmi).toFixed(3) : '', z.kcNow != null ? z.kcNow.toFixed(2) : '', Math.round((1 - z.dep0) * 100), z.next ? z.next.date : '', z.depth.toFixed(1), (z.depth / V.Ea).toFixed(1), z.events.length, Math.round(z.netSum)].join(',')).join('\n') + '\n\nzone,date,net_mm\n';
+    V.Z.forEach((z, i) => z.events.forEach(e => { t += (i + 1) + ',' + e.date + ',' + e.net.toFixed(1) + '\n'; })); UI.saveFile('SWAFL_VRI_zones_' + new Date().toISOString().slice(0, 10) + '.csv', t, false, 'text/csv'); }
+  function exportGullies() { const E2 = P.ero; if (!E2) return; const D = E2.D; UI.saveFile('SWAFL_gullies_' + new Date().toISOString().slice(0, 10) + '.geojson', JSON.stringify({ type: 'FeatureCollection', features: E2.lines.map((l, k) => ({ type: 'Feature', properties: { id: k + 1, length_m: Math.round(l.len), upslope_ha: +(l.A / 1e4).toFixed(2), mean_slope_pct: +(l.S * 100).toFixed(1), runoff_largest_rain_m3: Math.round(l.vEnd), seen_in_photo: !!l.seen, weaker_crop_sentinel2: !!l.s2seen }, geometry: { type: 'LineString', coordinates: l.cells.map(q => { const ll = D.ll((q % D.W) + 0.5, ((q / D.W) | 0) + 0.5); return [+ll[1].toFixed(7), +ll[0].toFixed(7)]; }) } })) }), false, 'application/geo+json'); }
 
-  async function runVRI() { const st = document.getElementById('fmPrecSt'); try { P.adj = {}; P.vri = vri({ nz: P.nz }); st.textContent = 'Variable-rate map made from ' + P.vri.vegK + (P.vri.watK ? ' and ' + P.vri.watK : '') + ' and the simulated depth.'; panel(); FieldMap._h.refresh('vri'); } catch (e) { st.innerHTML = '<b style="color:#B01E14">' + esc(e.message) + '</b>'; } }
-  async function runEro() { const st = document.getElementById('fmPrecSt'); try { await erosion(st); st.textContent = 'Terrain, gullies and soil loss computed.'; panel(); FieldMap._h.refresh('gully'); } catch (e) { st.innerHTML = '<b style="color:#B01E14">' + esc(/Failed to fetch|NetworkError/i.test(e.message) ? 'no internet connection' : e.message) + '</b>'; } }
+  async function runVRI() { const st = document.getElementById('fmPrecSt'); try { P.adj = {}; P.vri = await vri(st); st.textContent = 'Variable-rate irrigation simulated for ' + P.vri.nz + ' zones.'; panel(); H().refresh('vri'); } catch (e) { st.innerHTML = '<b style="color:#B01E14">' + esc(e.message) + '</b>'; } }
+  async function runEro() { const st = document.getElementById('fmPrecSt'); try { await erosion(st); st.textContent = 'Terrain, runoff, gullies and soil loss computed.'; panel(); H().refresh('gully'); } catch (e) { st.innerHTML = '<b style="color:#B01E14">' + esc(/Failed to fetch|NetworkError/i.test(e.message) ? 'no internet connection' : e.message) + '</b>'; } }
   return { runVRI, runEro, panel, layer, picture, has, at, legend, reset: () => { P.vri = null; P.ero = null; P.adj = {}; }, _P: P, _vri: vri, _ero: erosion };
 })();

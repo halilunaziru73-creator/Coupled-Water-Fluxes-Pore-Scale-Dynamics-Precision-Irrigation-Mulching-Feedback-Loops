@@ -102,6 +102,15 @@
     return { et0: et0.map(v => v * (1 + 0.035 * dT)), pr: pr.map(v => v * g), real: !!P };
   }
   const _cwb = {};
+  // the daily forcing of the farm for a run of days: reference ET and rain of the weather in use (online or file with its forecast,
+  // or the recorded weather of the simulations), the same series the daily model and the crop balance use
+  window.dailyForcing = function (k0, n) {
+    const f = yearlyForcing(), WX = (window.WXD && WXD.on) ? WXD : null, sim = seasonSim(), wxP = WX ? RAIN_VALUES[state.rainIdx] / (WX.rainRef || 1) : 1, wxE = WX ? 1 + 0.035 * (TEMP_VALUES[state.tempIdx] - (WX.dTref || 0)) : 1;
+    const et0 = [], rain = []; for (let q = 0; q < n; q++) { const k = Math.min(ND - 1, k0 + q), y = Math.min(NYR - 1, Math.floor(k / DPY)), doy = k - y * DPY; et0.push(WX ? WX.ET0[k] * wxE : f.et0[y] * wE(doy) / wEs); rain.push(WX ? WX.P[k] * wxP : (sim.rain[k] || 0)); }
+    return { et0, rain, src: WX ? (WX.src === 'online' ? 'online weather of ' + WX.name : 'weather file ' + WX.name) : 'recorded weather of the simulations', fcStart: WX && WX.fcStart || null };
+  };
+  // the whole daily rain series in use (20 years): for the erosivity of the rain
+  window.rainSeries = function () { const WX = (window.WXD && WXD.on) ? WXD : null, sim = seasonSim(), wxP = WX ? RAIN_VALUES[state.rainIdx] / (WX.rainRef || 1) : 1, P = new Float32Array(ND); for (let k = 0; k < ND; k++) P[k] = WX ? WX.P[k] * wxP : (sim.rain[k] || 0); return { P: Array.from(P), years: NYR, dpy: DPY, src: WX ? (WX.src === 'online' ? 'online weather of ' + WX.name : 'weather file ' + WX.name) : 'recorded weather of the simulations', y0: WX ? WX.y0 : 1980 }; };
   window.CWB = function (cropKey, opt) {
     opt = opt || {};
     const pp = cropKey === '__ref' ? null : LIB.params(cropKey, opt.densIdx != null ? opt.densIdx : state.densIdx, opt.plantDoy != null ? opt.plantDoy : state.plantDoy);

@@ -214,5 +214,5 @@ const FieldSite = (() => {
     sys.sort((a, b) => b.score - a.score); if (!isFinite(sl) || !S.soil) sys.forEach(x => x.why.push('(' + [!isFinite(sl) ? 'the slope' : '', !S.soil ? 'the soil of the site' : ''].filter(Boolean).join(' and ') + ' could not be read: the score is incomplete)'));
     return { list: sys, area: A, comp, slope: sl, relief, sand, clay, crop, surfaceWater };
   }
-  return { init: h => { H = h; }, readField, analyse, CLS, mosaic };
+  return { init: h => { H = h; }, readField, analyse, CLS, mosaic, soilAt: c => soilGrids(c) };
 })();

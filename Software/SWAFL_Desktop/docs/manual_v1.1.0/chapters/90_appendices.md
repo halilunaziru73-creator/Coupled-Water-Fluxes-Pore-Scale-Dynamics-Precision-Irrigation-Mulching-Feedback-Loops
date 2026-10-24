@@ -208,6 +208,8 @@ All 134 numbered equations are labelled in the text and listed here: 38 **[Liter
 
 Abrahamsen, P., and Hansen, S. (2000). Daisy: an open soil-crop-atmosphere system model. *Environmental Modelling & Software* 15(3), 313–330.
 
+Allen, R. G., and Pereira, L. S. (2009). Estimating crop coefficients from fraction of ground cover and height. *Irrigation Science* 28, 17–34.
+
 Allen, R. G., Pereira, L. S., Raes, D., and Smith, M. (1998). *Crop evapotranspiration: guidelines for computing crop water requirements*. FAO Irrigation and Drainage Paper 56. FAO, Rome.
 
 Barnes, E. M., Clarke, T. R., Richards, S. E., et al. (2000). Coincident detection of crop water stress, nitrogen status and canopy density using ground-based multispectral data. *Proceedings of the 5th International Conference on Precision Agriculture*, Bloomington, MN.
@@ -274,6 +276,8 @@ Poggio, L., de Sousa, L. M., Batjes, N. H., et al. (2021). SoilGrids 2.0: produc
 
 Renard, K. G., and Freimund, J. R. (1994). Using monthly precipitation data to estimate the R-factor in the revised USLE. *Journal of Hydrology* 157, 287–306.
 
+Richardson, C. W., Foster, G. R., and Wright, D. A. (1983). Estimation of erosion index from daily rainfall amount. *Transactions of the ASAE* 26, 153–156.
+
 Ritchie, J. T. (1972). Model for predicting evaporation from a row crop with incomplete cover. *Water Resources Research* 8(5), 1204–1213.
 
 Rouse, J. W., Haas, R. H., Schell, J. A., and Deering, D. W. (1974). Monitoring vegetation systems in the Great Plains with ERTS. *Third ERTS Symposium*, NASA SP-351, 309–317.
@@ -283,6 +287,8 @@ Saxton, K. E., and Rawls, W. J. (2006). Soil water characteristic estimates by t
 Sharpley, A. N., and Williams, J. R. (1990). *EPIC, Erosion/Productivity Impact Calculator: 1. Model documentation*. USDA Technical Bulletin 1768.
 
 Tucker, C. J. (1979). Red and photographic infrared linear combinations for monitoring vegetation. *Remote Sensing of Environment* 8, 127–150.
+
+USDA-NRCS (1986). *Urban hydrology for small watersheds*. Technical Release 55 (TR-55), Washington, DC.
 
 van den Honert, T. H. (1948). Water transport in plants as a catenary process. *Discussions of the Faraday Society* 3, 146–153.
 

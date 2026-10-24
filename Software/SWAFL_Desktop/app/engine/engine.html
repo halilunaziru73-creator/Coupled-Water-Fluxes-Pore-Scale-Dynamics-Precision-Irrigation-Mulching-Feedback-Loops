@@ -4101,6 +4101,18 @@ function TW(str, x, y, maxW, o) {
 }
 // the dashboard of the soil hydraulic drivers: the soil in use, its drainage under the three tillage systems and the five
 // consolidation rates, the effect of each driver in the ten soils, the leading driver and what it means on the farm
+// the state of the farm for a zone-by-zone irrigation simulation: the season of the decision (Chapter 18), today's water in the
+// root zone of the daily model, the roots, crop cover and trigger of every day ahead, the crop coefficients, the design in use
+window.vriBase = function (n, spin) {
+  const sim = seasonSim(), kW = fclock.kd(), S0 = irStart(sim, kW), k0 = S0.k, sh = S0.sh; n = Math.min(n || 60, ND - k0); spin = Math.min(spin || 0, k0);
+  const awc = AWC[state.soil] || 1.5, left = d => { const rz = clampN(sim.rd[d] || 30, 10, 100), m = Math.max(1, Math.round(rz / DZ)); let a = 0; for (let i = 0; i < m; i++) a += clampN(sim.s[d][i], 0, 1); return a / m; };
+  const F = dailyForcing(k0 - spin, n + spin), rd = [], cover = [], dates = [], live = [], irr = []; for (let q = -spin; q < n; q++) { const d = k0 + q; rd.push(clampN(sim.rd[d] || 10, 5, 100)); cover.push(sim.cover[d] || 0); live.push(sim.widx[d] >= 0); dates.push(fmtDate(dateOfK(d + sh))); irr.push(q < 0 ? (sim.irr[d] || 0) : 0); }
+  const simNext = []; for (let d = k0; d < k0 + n && simNext.length < 8; d++) if ((sim.irr[d] || 0) > 0.5) simNext.push([fmtDate(dateOfK(d + sh)), +sim.irr[d].toFixed(1)]);
+  const mc = new Array(12).fill(0), mn = new Array(12).fill(0); for (let k = 0; k < ND; k++) { const mo = Math.min(11, Math.floor((k % DPY) / 30.42)); mc[mo] += sim.cover[k] || 0; mn[mo]++; }
+  const m = state.method; let Ea = null, Zd = null; try { const R = m === 'M01_Overhead' ? spRun() : /Drip/.test(m) ? drRun() : sidRun(); Ea = R.Ea; } catch (e) {}
+  let kcMid = 1.15, kcIni = 0.3, p0 = 0.55; try { const pp = window.CROPLIB && CROPLIB.crops[state.crop] ? CROPLIB.params(state.crop, state.densIdx, state.plantDoy) : null; if (pp) { kcMid = pp.kcMid; kcIni = pp.kcIni; p0 = pp.p; } } catch (e) {}
+  return { k0, sh, spin, irr, simNext, coverMonth: mc.map((v, i) => v / Math.max(1, mn[i])), depSpin: 1 - left(k0 - spin), note: S0.note, date0: fmtDate(dateOfK(k0 + sh)), dates, et0: F.et0, rain: F.rain, src: F.src, rd, cover, live, dep0: 1 - left(k0), awc, fT: sim.fTrig, Ea: Ea || (m === 'M01_Overhead' ? 0.75 : /Drip/.test(m) ? 0.9 : 0.6), method: (METHODS.find(q => q.k === m) || {}).label || m, crop: (CROPS[state.crop] || {}).label || state.crop, kcMid, kcIni, p0, soil: DATA.soil_labels[state.soil], soils: DATA.soils.map(k => [k, DATA.soil_labels[k], (DATA.texture[k] || {}).sand, (DATA.texture[k] || {}).clay, AWC[k]]) };
+};
 window.v7Dash = function () {
   const rows = v7Data(), me = rows.find(r => r.s === state.soil), rs = v7Reason(me), E5 = DATA.e5[state.soil], tex = DATA.texture[state.soil], tc = TC_VALUES[state.tcIdx];
   const val = (till, t, k) => { const r = E5.find(x => x.till === till && Math.abs(x.tc - t) < 1e-9); return r ? r[k] : null; };

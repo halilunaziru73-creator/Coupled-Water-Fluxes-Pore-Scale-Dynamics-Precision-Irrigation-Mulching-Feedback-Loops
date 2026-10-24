@@ -160,50 +160,85 @@ The advice names the best surface source within 1.5 km (with its distance, direc
 
 The table lists each system with its score, the reasons, and the application efficiency of the SWAFL design of that system as it stands. **Use** sets the system (and the slope of the site) in the field sketch; then *Turn the sketch into the design* and run it.
 
-## Precision maps: variable-rate irrigation, ephemeral gullies and soil loss
+## The season of the field, and the precision maps
 
-Section 4 of the panel makes three maps of the demarcated field. Each is a choice of *Show on the map*, has its legend on the map, gives its values under the cursor, and goes into the report (one page with the three maps).
+Section 4 of the panel reads the season of the real field and makes the precision maps from it and from the SWAFL simulation of the farm. Every map is a choice of *Show on the map*, has its legend on the map, gives its values under the cursor, and goes into the report (a page for the season and the irrigation, a page for the erosion).
 
-![The variable-rate irrigation map: five zones of net depth, edited with the − and + buttons, the volume against one uniform depth (test data).](images/ui/prec_vri.jpg){width=100%}
+### The season seen by Sentinel-2
 
-**Variable-rate irrigation.** **Variable-rate irrigation map** needs the indices of the field (Sentinel-2, the photo, or simulated). The base depth is the net depth of one irrigation of the SWAFL design in use (the film of Chapter 18), or else $Z_n = \mathrm{AWC}\,z_r\,f_T$. Each cell gets
+**Read the season (Sentinel-2, 12 months)** searches the Sentinel-2 L2A scenes of the last twelve months over the field (clouds below 60 % over the tile), keeps the least cloudy scene of each month, and reads its red, NIR and SWIR bands and its scene classification cell by cell (10 m), leaving out cloud, shadow and no-data cells. A scene with less than 30 % of the field clear is dropped. For every date the panel gives the share of the field that is clear, the NDVI and NDMI of the field and the NDVI of each monitoring zone, and a chart shows the curves.
+
+From the series every cell gets:
 
 $$
-d_i = d_0\ \mathrm{clip}\!\Bigl(\frac{K_{cb,i}}{\overline{K_{cb}}}\,\Bigl[1+0.35\,\mathrm{clip}\Bigl(\frac{\overline{\mathrm{NDWI}}-\mathrm{NDWI}_i}{2\,\sigma_{\mathrm{NDWI}}};\,-1.5,\,1.5\Bigr)\Bigr];\ r_{lo},\ r_{hi}\Bigr),\qquad K_{cb}=0.15+\frac{\mathrm{NDVI}-0.15}{0.7},
+z_{i,t}=\frac{\mathrm{NDVI}_{i,t}-\overline{\mathrm{NDVI}}_t}{\sigma_t},\qquad \text{stability}_i=\frac1{n_i}\sum_t z_{i,t},\qquad \Delta_i=\mathrm{NDVI}_{i,t_n}-\mathrm{NDVI}_{i,t_{n-1}},
 \tag{20.7}
 $$
 
-*Provenance (Eq. 20.7):* **[Engineered]** after the linear $K_{cb}$–NDVI relations of the FAO-56 remote-sensing literature (Bausch and Neale, 1987; Allen et al., 1998): stronger crop and drier canopy get more water; $r_{lo}$, $r_{hi}$ default to 50 and 150 % of $d_0$. With the photo, VARI is put on the NDVI scale.
+*Provenance (Eq. 20.7):* **[Literature]**: the standardised index of each date against the field, as in yield-stability and management-zone delineation from image series.
 
-Cells that the photo shows as water, buildings or roads get no water. The depths are grouped into 3 to 7 zones of equal area; each zone takes its mean depth (to 0.5 mm), which you can change with **−** and **+**. The panel gives the area, depth and volume of each zone, and the volume pumped against one uniform depth (the water saved or added). The colours can be Blues, Viridis, red to blue or Greens. **Prescription GeoJSON** (a polygon for every cell with the zone, the net and gross rate in mm and the rate in m³/ha, WGS 84) and **Zones CSV** go to the VRI controller or a GIS.
+and the trend of the last three scenes (least squares, per 30 days). The **monitoring zones** (3 to 6) group the cells whose standardised series behaved alike over the season (*k*-means on the series, ordered from the weakest to the strongest), so a zone is a part of the field that was weaker or stronger on every date, not on one. The maps: *monitoring zones*, *change since the previous scene*, *trend of the last scenes* and *stability over the season*. The text says by how much the field changed since the previous scene, the share of the field that declined, and how far the weakest and strongest zones stood from the field over the season.
 
-![Ephemeral gully risk with the predicted gullies, and the terrain values under the cursor (test data).](images/ui/prec_gully.jpg){width=100%}
+![The season read from Sentinel-2: the monitoring zones on the map, the curves of the field and of each zone, the table of the dates (test data).](images/ui/mon_zones.jpg){width=100%}
 
-**Ephemeral gullies.** **Ephemeral gullies and soil loss** reads the terrain of the field and 250 m around it from open elevation tiles (AWS Terrain Tiles; about 5 m cells at the equator, from SRTM, Copernicus and national lidar where available). The terrain is smoothed (5-cell binomial filter), its sinks are filled (priority flood, Barnes et al., 2014), and every cell gets its D8 flow direction, upslope area $A$ and slope $S$. An ephemeral gully is likely where
+### Variable-rate irrigation, simulated zone by zone
+
+**Variable-rate irrigation, zone by zone** runs each zone through the FAO-56 daily root-zone balance with:
+
+* **its soil**: SoilGrids at the centre of the zone (sand and clay), the nearest soil of SWAFL and its available water $\mathrm{AWC}_z$;
+* **its observed cover**: the crop development of the SWAFL daily model, scaled by the zone's cover from its last NDVI against the field, $f_{c,z}(t)=\min\bigl(1,\ c(t)\,f_{c}(\mathrm{NDVI}_z)/\overline{f_c}\bigr)$ with $f_c=(\mathrm{NDVI}-0.15)/0.7$, and the crop coefficient $K_c=K_{c,ini}+(K_{c,mid}-K_{c,ini})\,K_d$, $K_d=\min(1,\,1.5f_c,\,f_c^{0.5})$ (Allen and Pereira, 2009), with the coefficients of the crop in Properties;
+* **the farm of the simulation**: the roots of every day, the trigger, the depletion fraction and the past irrigations of the SWAFL model, the season of the decision of Chapter 18, and the application efficiency of the design in use;
+* **the weather in use**: the daily reference ET and rain (the online weather of the farm with its forecast, a weather file, or the recorded weather).
+
+The balance starts 45 days before the decision with the water of the SWAFL model on that day:
 
 $$
-G=\frac{S\,A^{0.4}}{0.025}\ \ge 1\qquad (A\ \text{in ha},\ S\ \text{in m/m}),
+D_{r,z}(t+1)=D_{r,z}(t)+K_{c,z}(t)\,K_{s}\,ET_0(t)-\bigl(P(t)-RO(t)\bigr)-I(t),\qquad I_z(t)=D_{r,z}(t)\ \text{when}\ f_{c,z}>0.2\ \text{and}\ D_{r,z}\ge f_T\,\mathrm{AWC}_z\,z_r(t),
 \tag{20.8}
 $$
 
-*Provenance (Eq. 20.8):* **[Literature]**: the topographic threshold of ephemeral gullies in cultivated fields, $S = 0.025\,A^{-0.4}$ (Vandaele et al., 1996).
+*Provenance (Eq. 20.8):* **[Literature]** FAO-56 root-zone balance (Allen et al., 1998) with the trigger and irrigation rule of the SWAFL daily model; $RO=0.3(P-35)$ above 35 mm as in the crop balance of Chapter 21.
 
-From every cell above the threshold with at least 0.1 ha upslope, the gully follows the flow lines down through the field. The map shows the risk ($G\ge1$ likely, 0.5–1 moderate, 0.25–0.5 low) and the predicted gullies. **Computer vision of the photo:** the satellite photo of the same area is searched for linear features with a Hessian ridge and valley filter at two scales (Frangi et al., 1998). A gully along which at least 40 % of the cells have a feature more than two standard deviations above the mean is drawn in purple, *seen in the photo*. **Gullies GeoJSON** exports the lines with their length, upslope area, mean slope and photo flag.
+So every zone gets its own **dates and depths**: the table gives its soil and AWC, its cover now (NDVI, NDMI, $K_c$), the water left in its root zone, its next irrigation (date, net and gross mm) and the irrigations of the next 60 days. The maps show the depth of the next irrigation of each zone or its date. The text names the zone that needs water first and the one that needs it last, and compares the volume with the single depth of the SWAFL model of the whole field. The depths can be changed with **−** and **+**; **Prescription GeoJSON** (every cell with its zone, date, net and gross rate, AWC and NDVI) and **Zones and dates CSV** (the zones and every irrigation date of each zone) go to the controller or a GIS. Without the season, the zones are classes of the index of one date.
 
-**Soil loss (RUSLE).**
+![Variable-rate irrigation simulated zone by zone: the depth of the next irrigation, and the table of soils, cover, water and dates (test data).](images/ui/prec_vri.jpg){width=100%}
+
+### Ephemeral gullies and soil loss
+
+**Ephemeral gullies and soil loss** reads the terrain of the field and 250 m around it from open elevation tiles (AWS Terrain Tiles; about 5 m cells at the equator, from SRTM, Copernicus and national lidar where available), smooths it, fills its sinks (priority flood, Barnes et al., 2014) and gives every cell its D8 flow direction, upslope area $A$ and slope $S$. An ephemeral gully is likely where
 
 $$
-A_s=R\,K\,LS\,C\,P,\quad R=0.0483\,P_a^{1.61}\ (P_a\le850\ \mathrm{mm}),\quad LS=\Bigl(\frac{A/w}{22.13}\Bigr)^{0.4}\Bigl(\frac{\sin\beta}{0.0896}\Bigr)^{1.3},\quad C=e^{-2\,\mathrm{NDVI}/(1-\mathrm{NDVI})},
+G=\frac{S\,A^{0.4}}{0.025}\ \ge 1\qquad (A\ \text{in ha},\ S\ \text{in m/m}),
 \tag{20.9}
 $$
 
-*Provenance (Eq. 20.9):* **[Literature]**: Renard and Freimund (1994) for $R$ from the annual rain of the weather in use ($587.8-1.219P_a+0.004105P_a^2$ above 850 mm); $K$ from sand, silt, clay and organic carbon (EPIC, Sharpley and Williams, 1990), from SoilGrids after a site analysis or from the SWAFL soil; $LS$ after Moore and Wilson (1992) with $w$ the cell width; $C$ from NDVI (van der Knijff et al., 1999), 0.35 without an index; $P$ chosen in the panel (1, 0.6 contour tillage, 0.3 contour strips, 0.15 terraces).
+*Provenance (Eq. 20.9):* **[Literature]**: the topographic threshold of ephemeral gullies in cultivated fields (Vandaele et al., 1996).
 
-The panel gives the relief and slope of the field, the share above the gully threshold, the number and length of the gullies (and how many are seen in the photo), the mean soil loss, the loss exceeded on 10 % of the field and the tonnes a year, with the advice that follows (grassed waterways on the gully lines, residue and contour tillage, drip or low-rate sprinklers on the steep parts).
+From every cell above the threshold with 0.1 ha or more upslope the gully follows the flow lines down the field. Each predicted gully is checked in two ways:
 
-![Soil loss (RUSLE) cut to the field (test data).](images/ui/prec_rusle.jpg){width=78%}
+* **in the photo**: a Hessian ridge and valley filter at two scales (Frangi et al., 1998); a gully with a linear feature on 40 % of its cells is *seen in the photo*;
+* **in the crop**: the Sentinel-2 season; a gully along which the crop stood more than half a standard deviation below the field over the season (Eq. 20.7) is *seen in the crop*.
 
-![The precision maps in the field report (test data).](images/ui/prec_report.jpg){width=82%}
+Both are drawn in purple. **The rain and the runoff** come from the daily rain of the weather in use (twenty years): the runoff of every day on this soil and this cover by the SCS curve number (TR-55: soil group from the SoilGrids texture, row crop in good condition, bare soil when the NDVI of the month is below 0.3), the runoff a year, the number of runoff events of 10 mm or more a year, and the largest rain of the record with its runoff and the volume it sends down each gully.
+
+**Soil loss (RUSLE)**, $A_s=R\,K\,LS\,C\,P$, with every factor from the farm:
+
+$$
+R=0.0483\,P_a^{1.61},\qquad R_m=R\,\frac{\sum_{d\in m,\ P_d\ge12.7}P_d^{1.81}}{\sum_{d,\ P_d\ge12.7}P_d^{1.81}},\qquad C_i=\sum_m\frac{R_m}{R}\,e^{-2\,\mathrm{NDVI}_{i,m}/(1-\mathrm{NDVI}_{i,m})},\qquad LS=\Bigl(\frac{A/w}{22.13}\Bigr)^{0.4}\Bigl(\frac{\sin\beta}{0.0896}\Bigr)^{1.3},
+\tag{20.10}
+$$
+
+*Provenance (Eq. 20.10):* **[Literature]**: $R$ from the mean annual rain of the series (Renard and Freimund, 1994; $587.8-1.219P_a+0.004105P_a^2$ above 850 mm), shared over the months by the erosive daily rains (exponent of Richardson et al., 1983); $C$ of every cell in every month from the NDVI of the Sentinel-2 scene of that month (van der Knijff et al., 1999), the crop cover of the SWAFL model where a month has no scene; $K$ from the SoilGrids sand, silt, clay and organic carbon of the field (EPIC, Sharpley and Williams, 1990); $LS$ after Moore and Wilson (1992); $P$ chosen in the panel.
+
+A month table gives the share of the erosive rain, the NDVI and the runoff of each month. The advice names the **risk window** (the months when bare soil, NDVI below 0.35, meets a large share of the erosive rain), the gullies and the runoff they carry, the soil loss against the tolerable 2 t/ha/yr, and what to do.
+
+![Ephemeral gully risk with the predicted gullies, the runoff of the rain and the month table (test data).](images/ui/prec_gully.jpg){width=100%}
+
+![Soil loss (RUSLE) with the cover of every month (test data).](images/ui/prec_rusle.jpg){width=78%}
+
+![The report: the season and the variable-rate irrigation (test data).](images/ui/prec_report.jpg){width=82%}
+
+![The report: the erosion (test data).](images/ui/prec_report2.jpg){width=82%}
 
 ## Use and export
 
