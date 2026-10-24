@@ -131,11 +131,21 @@ It also sets the mainline length, the lift, the source, the hours a day, the com
 
 ## The soil water in the days ahead
 
-Each design layer (surface, drip and sprinklers) ends with a film of the soil water: **Soil water in the days ahead (DSS)**. It plays the daily model day by day, from the working date to the next irrigation and a few days after it. Click it to pause or play.
+Each design layer (surface, drip and sprinklers) ends with a film of the soil water: **Soil water in the days ahead (DSS)**. It covers every day from the working date through the next irrigation and the rest of that season, at least 120 days. It plays day by day; click it to pause or play.
 
-* **Left: the profile of the day.** The water content of each layer of the real soil, 0 to 100 cm, with lines at the wilting point, the trigger and field capacity, the depth of the roots and the sensor.
-* **Right: the days.** The share of the available water left in the root zone, and at the sensor, against the trigger; the band marks the day the sensor reaches the trigger. A dashed red line shows what would happen **without that irrigation**: the root zone dries on, day after day, with the weather of the record, until it reaches the wilting point.
-* **Below: the day in words.** The date, the crop, the water left, the sensor against the trigger, the date and depth of the next irrigation of the design, and the date the wilting point would be reached without it.
+* **Left: the profile of the day.** The water content of each layer of the real soil, 0 to 100 cm, with lines at the wilting point, the trigger and field capacity, the depth of the roots and the sensor. The frame and the label below take the colour of the phase of the day.
+* **Right: the days, coloured by phase.** The band at the top colours every day: irrigation day (blue), rain over 5 mm (light blue), comfortable (green), nearing the trigger (yellow), beyond the trigger, i.e. stress (orange, also shaded across the chart), near the wilting point (red), and no crop (grey). The chart also shows:
+  * the share of the available water left in the root zone and at the sensor, against the trigger;
+  * rain as ticks at the top and drainage as ticks at the bottom;
+  * a dashed red line for what would happen **without the next irrigation**: the root zone dries on with the weather of the record until it reaches the wilting point.
+* **Below: the analysis.**
+  * The day in words: the date, the crop, the phase, the water left, and the sensor against the trigger.
+  * The next irrigation, with the depth of this design, and the date the wilting point would be reached without it.
+  * For the whole span: the number of irrigations, the rain, the evapotranspiration, the drainage, and the share of days in each phase.
+
+Everything follows the settings. Change the trigger, the sensor depth, the soil, the crop, the mulch, the rain or the weather and the film is computed again.
+
+The phase of a day is set in this order: an irrigation day; a day with no crop; near wilting when the root zone has lost 85 % of its available water; beyond the trigger when the depletion at the sensor reaches the trigger $f_T$; a rain day (over 5 mm); nearing the trigger when the depletion at the sensor reaches $0.8\,f_T$; otherwise comfortable.
 
 The water left in the root zone on day $d$ is the mean over the layers within the roots, $\bar s(d)$, where $s=(\theta-\theta_{wp})/(\theta_{fc}-\theta_{wp})$. Without the irrigation the depletion follows the FAO-56 root-zone balance:
 

@@ -87,12 +87,12 @@ const Dash = (() => {
     const L = 46, R = 12, T = 10 + 13 * nLeg, B = 30, xs = o.x, all = o.series.flatMap(s => s.y.filter(v => isFinite(v)));
     const nice = (lo, hi, n) => { const raw = (hi - lo) / Math.max(1, n), p = Math.pow(10, Math.floor(Math.log10(raw || 1))), m = raw / p, st = (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p; const out = []; for (let v = Math.ceil(lo / st - 1e-9) * st; v <= hi + st * 1e-6; v += st) out.push(+v.toFixed(10)); return { out, st }; };
     const tf = (v, st) => { const d = Math.abs(st - Math.round(st)) < 1e-9 && st >= 1 ? 0 : Math.abs(st * 10 - Math.round(st * 10)) < 1e-9 ? 1 : 2; return d ? v.toFixed(d) : Math.round(v).toLocaleString('en-US'); };
-    let ymx = o.ymax != null ? o.ymax : Math.max(...all, 1e-9) * 1.08, ymn = o.ymin != null ? o.ymin : Math.min(0, ...all);
+    let ymx = o.ymax != null ? o.ymax : (Math.max(...all, 0) > 0 ? Math.max(...all) * 1.08 : 1), ymn = o.ymin != null ? o.ymin : Math.min(0, ...all);
     if (o.invert) [ymn, ymx] = [ymx, ymn];
     const xmn = Math.min(...xs), xmx = Math.max(...xs), X = v => L + (w - L - R) * (v - xmn) / ((xmx - xmn) || 1), Y = v => T + (h - T - B) * (1 - (v - ymn) / ((ymx - ymn) || 1));
     c.font = '10px Tahoma,Arial'; c.strokeStyle = '#E0E0E0'; c.fillStyle = '#404040'; c.lineWidth = 1;
     { const lo = Math.min(ymn, ymx), hi = Math.max(ymn, ymx), yt = nice(lo, hi, Math.max(2, Math.floor((h - T - B) / 32))); yt.out.forEach(v => { const y = Y(v); c.beginPath(); c.moveTo(L, y); c.lineTo(w - R, y); c.stroke(); c.textAlign = 'right'; c.fillText(tf(v, yt.st), L - 4, y + 3); }); }
-    { const xt = nice(xmn, xmx, Math.max(2, Math.floor((w - L - R) / 52))); let last = -1e9; c.textAlign = 'center'; xt.out.forEach(v => { const x = X(v), t = tf(v, xt.st), tw = c.measureText(t).width; if (x - tw / 2 < last + 4) return; c.fillText(t, Math.min(w - tw / 2 - 1, x), h - B + 13); last = x + tw / 2; }); }
+    { const xt = nice(xmn, xmx, Math.max(2, Math.floor((w - L - R) / 52))); let last = -1e9; c.textAlign = 'center'; xt.out.forEach(v => { const x = X(v), t = o.xl === 'year' ? String(Math.round(v)) : tf(v, xt.st), tw = c.measureText(t).width; if (x - tw / 2 < last + 4) return; c.fillText(t, Math.min(w - tw / 2 - 1, x), h - B + 13); last = x + tw / 2; }); }
     c.fillText(o.xl || '', L + (w - L - R) / 2, h - 4); c.save(); c.translate(10, T + (h - T - B) / 2); c.rotate(-Math.PI / 2); c.fillText(o.yl || '', 0, 0); c.restore();
     c.strokeStyle = '#808080'; c.strokeRect(L, T, w - L - R, h - T - B);
     c.save(); c.beginPath(); c.rect(L, T, w - L - R, h - T - B); c.clip();
@@ -156,10 +156,21 @@ const Dash = (() => {
     }, 30);
   }
   function lineChart(cv, series, o) {
-    xyChart(cv, { x: series[0].v.map((_, i) => (o.cal0 || 0) + i), xl: 'year', yl: 'mm', series: series.map(s => ({ y: s.v, c: s.c, n: s.n, fill: o.bars ? s.c + '33' : null })) });
+    xyChart(cv, { x: series[0].v.map((_, i) => (o.cal0 || 0) + i), xl: 'year', yl: o.yl || 'mm', series: series.map(s => ({ y: s.v, c: s.c, n: s.n, dash: s.dash ? [5, 3] : null, fill: o.bars && !s.dash ? s.c + '33' : null })), marks: o.marks });
+  }
+  // the seasonal layers: one chart per widget of the layer, with how each quantity varies over the twenty seasons
+  function seasonCharts(id) {
+    const D = E.json("layerSeries('" + id + "')"); if (!D || !D.charts) { setBody('<div class="dnote">Loading the seasons...</div>'); return; }
+    const st = v => { const a = v.filter(q => q != null && isFinite(q)), n = a.length || 1, m = a.reduce((x, y) => x + y, 0) / n, s2 = a.sort((x, y) => x - y), p = f => s2[Math.min(n - 1, Math.max(0, Math.round(f * (n - 1))))], sd = Math.sqrt(a.reduce((x, y) => x + (y - m) * (y - m), 0) / n); return { m, p10: p(0.1), p90: p(0.9), cv: m ? sd / Math.abs(m) : 0, mn: s2[0], mx: s2[n - 1] }; };
+    const f = v => (Math.abs(v) >= 100 ? Math.round(v) : Math.round(v * 10) / 10).toLocaleString('en-US');
+    let h = '<div class="dnote">One chart for each part of the layer: the twenty seasons on the calendar of the working date. Dashed lines: rainfed.</div><div class="charts">';
+    D.charts.forEach((c, i) => { const a = c.ser[0] ? st(c.ser[0].v.slice()) : null; h += CB('sc' + i, UI.esc(c.t) + ' (' + UI.esc(c.u) + ')', '<canvas id="scv' + i + '"></canvas>' + (a ? '<div class="dnote">' + UI.esc(c.ser[0].n) + ': mean ' + f(a.m) + ' ' + UI.esc(c.u) + ', 10–90 % ' + f(a.p10) + ' to ' + f(a.p90) + ', lowest ' + f(a.mn) + ', highest ' + f(a.mx) + ', varies by ' + Math.round(a.cv * 100) + ' % from year to year.</div>' : '')); });
+    setBody(h + '</div>');
+    clearTimeout(chartTimer); chartTimer = setTimeout(() => D.charts.forEach((c, i) => { const cv = document.getElementById('scv' + i); if (cv && c.ser.length) lineChart(cv, c.ser.map(q => ({ v: q.v.map(x => x == null ? NaN : x), c: q.c, n: q.n, dash: q.dash })), { bars: true, cal0: D.years[0], yl: c.u, marks: D.sel != null ? [{ x: D.years[0] + D.sel, t: String(D.years[0] + D.sel), c: '#C00000' }] : null }); }), 30);
   }
   function charts() {
     const s = E.snap; if (s && DL[s.scene]) { designCharts(s.scene); return; }
+    if (s && ['yby', 'wb2', 'nb'].includes(s.scene)) { seasonCharts(s.scene); return; }
     if (!(document.getElementById('c1') && document.getElementById('c3') && body.querySelector('.charts')))   // the charts are redrawn in place: no flash
       body.innerHTML = '<div class="dnote">Twenty years around the working date (calendar years on the horizontal axis, millimetres per year).</div><div class="charts">' + CB('c1', 'Rainfall and irrigation', '<canvas id="c1"></canvas>') + '' + CB('c2', 'Drainage below the root zone', '<canvas id="c2"></canvas>') + '' + CB('c3', 'Evaporation and transpiration', '<canvas id="c3"></canvas>') + '</div>'; lastHtml = '';
     clearTimeout(chartTimer); chartTimer = setTimeout(() => {

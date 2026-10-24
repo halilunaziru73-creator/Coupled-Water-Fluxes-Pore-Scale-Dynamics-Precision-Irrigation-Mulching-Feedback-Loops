@@ -37,6 +37,17 @@
   // The Daisy run carries the year-to-year pattern of the setting it simulates. Controls that its experiment does not
   // vary (crop, rainfall, warming, nitrogen rate) are applied by the response of the annual model to each of them, so that
   // the 20-year mean of every series equals the annual result at your settings and every control moves the years.
+  // the series of each widget of the seasonal layers, for the charts of the dashboard: one chart per widget
+  window.layerSeries = function (id) {
+    const pk = pickRun(); if (!pk) return null; const r = adjRun(pk), rf = adjRun(pk, true), Y = YRS().map(Number), g = k => (r[k] || []).map(v => v == null ? null : +(+v).toFixed(3)), gf = k => rf ? (rf[k] || []).map(v => v == null ? null : +(+v).toFixed(3)) : null;
+    const S = (n, k, c) => ({ n, v: g(k), c }), F = (n, k, c) => rf ? { n, v: gf(k), c, dash: true } : null, sum = (ks) => r[ks[0]].map((_, i) => +ks.reduce((a, k) => a + (r[k] && r[k][i] || 0), 0).toFixed(3));
+    const C = (t, u, ser) => ({ t, u, ser: ser.filter(Boolean) });
+    let out = [];
+    if (id === 'yby') out = [C('Irrigation', 'mm', [S('irrigated', 'I', '#2E7DE8')]), C('Drainage below 1 m', 'mm', [S('irrigated', 'D', '#5AA0E1'), F('rainfed', 'D', '#1B1F23')]), C(r.lib ? 'Relative yield' : 'Grain yield', r.lib ? '%' : 'Mg/ha', [S('irrigated', 'Y', '#B8862E'), F('rainfed', 'Y', '#1B1F23')]), C('Nitrate leaching below 1 m', 'kg N/ha', [S('irrigated', 'NL', '#8E5A2A')]), C('Evapotranspiration', 'mm', [S('irrigated', 'ET', '#E8912D')]), C('Days of crop water stress', 'days', [S('irrigated', 'WS', '#D93025'), F('rainfed', 'WS', '#1B1F23')])];
+    else if (id === 'wb2') out = [C('Rain and irrigation', 'mm', [S('rain', 'P', '#5AA0E1'), S('irrigation', 'I', '#2E7DE8')]), C('Transpiration and soil evaporation', 'mm', [S('transpiration', 'T', '#2E8B57'), S('soil evaporation', 'Es', '#C77D1A')]), C('Other evaporation', 'mm', [{ n: 'canopy, litter, ponds, snow', v: sum(['Ec', 'El', 'Ep', 'Esn']), c: '#8A8F98' }]), C('Drainage below 1 m', 'mm', [S('all', 'D', '#3A5FCD'), S('through biopores', 'Dbio', '#7FAFD0')]), C('Surface runoff', 'mm', [S('runoff', 'RO', '#B8743A')])];
+    else if (id === 'nb') out = [C('Nitrogen supplied', 'kg N/ha', [S('fertiliser', 'Nfert', '#2E8B57'), S('mineralised', 'Nmin', '#8E5A2A')]), C('Nitrogen taken up by the crop', 'kg N/ha', [S('uptake', 'Nup', '#B8862E')]), C('Nitrogen lost', 'kg N/ha', [S('leaching', 'NL', '#3A5FCD'), S('volatilisation', 'Nvol', '#C77D1A'), S('denitrification', 'Nden', '#7A5AA8')])];
+    return { years: Y, charts: out, sel: (typeof yearNow === 'function' ? yearNow() : null) };
+  };
   window.adjRun = function (pk, rainfed) {
     const r0 = rainfed ? pk.rainfed : pk.r; if (!r0) return null;
     const vff = VFF_VALUES[state.vffIdx], rain = RAIN_VALUES[state.rainIdx], dT = TEMP_VALUES[state.tempIdx], nR = NRATE_VALUES[state.nIdx] / 100;
@@ -65,7 +76,7 @@
     const notes = []; if (Math.abs(rain - 1) > 1e-6) notes.push('rainfall ×' + rain.toFixed(1)); if (Math.abs(dT) > 1e-6) notes.push((dT > 0 ? '+' : '') + dT.toFixed(1) + ' °C'); if (Math.abs(nR - 1) > 1e-6) notes.push('nitrogen ' + Math.round(nR * 100) + ' %'); if (lib) notes.push(CROPS[state.crop].label.toLowerCase() + ' (crop coefficients)');
     o.yUnit = lib ? '% of potential' : 'Mg/ha'; o.lib = lib; o.notes = notes; return o;
   };
-  const adjText = (pk, r) => 'Simulated run ' + pk.id + ': ' + pk.why + (r.notes.length ? '; set to your ' + r.notes.join(', ') : '');
+  const adjText = (pk, r) => 'The simulated seasons of ' + pk.why.charAt(0).toLowerCase() + pk.why.slice(1) + (r.notes.length ? '; set to your ' + r.notes.join(', ') : '');
 
   // ------------------------------------------------------------------ small chart kit
   function frame(x, y, w, h, title, sub) {
@@ -82,14 +93,14 @@
   // text that shrinks to fit its width (down to 7 px), then is shortened
   const TF = (txt, x, y, maxW, o) => { if (typeof maxW === 'object') { o = maxW; maxW = null; } if (maxW == null) maxW = W - x - 12; o = Object.assign({}, o || {}); let sz = o.s || 11; ctx.font = (o.b ? 'bold ' : '') + sz + 'px sans-serif'; while (ctx.measureText(txt).width > maxW && sz > 7) { sz -= 0.5; ctx.font = (o.b ? 'bold ' : '') + sz + 'px sans-serif'; } let t = txt; while (ctx.measureText(t).width > maxW && t.length > 4) t = t.slice(0, -2); if (t !== txt) t = t.slice(0, -1) + '…'; o.s = sz; T(t, x, y, o); };
   function yearBars(x, y, w, h, vals, o) {
-    o = o || {}; const n = vals.length, vmin = Math.min(0, ...vals), lo = o.lo != null ? o.lo : (vmin > -0.06 * Math.max(...vals.map(Math.abs), 1) ? 0 : -nice(-vmin)), hi = nice(Math.max(o.hiMin || 0, ...vals.map(Math.abs), ...(o.extra || []).filter(v => v != null)) * 1.05);
+    o = o || {}; const n = vals.length, vmin = Math.min(0, ...vals, ...(o.extra || []).filter(v => v != null)), lo = o.lo != null ? o.lo : (vmin > -0.06 * Math.max(...vals.map(Math.abs), 1) ? 0 : -nice(-vmin)), hi = nice(Math.max(o.hiMin || 0, ...vals.map(Math.abs), ...(o.extra || []).filter(v => v != null)) * 1.05);
     const x0 = x + 42, y0 = y + 30, ww = w - 54, hh = h - 64; yAxis(x0, y0, ww, hh, lo, hi, o.unit);
     const bw = ww / n, sel = yearNow(), m = mean(vals), p10 = pct(vals, 0.1), p90 = pct(vals, 0.9), Y = v => y0 + hh - (v - lo) / (hi - lo) * hh;
     ctx.fillStyle = 'rgba(46,125,232,0.08)'; ctx.fillRect(x0, Y(p90), ww, Y(p10) - Y(p90));
     vals.forEach((v, i) => {
       const bx = x0 + i * bw + bw * 0.15, top = Y(Math.max(v, 0)), bot = Y(Math.min(v, 0));
       ctx.fillStyle = i === sel ? '#D93025' : (o.colors ? o.colors[i] : (o.col || '#2E7DE8')); ctx.fillRect(bx, top, bw * 0.7, Math.max(1, bot - top));
-      if (o.overlay && o.overlay[i] != null) { ctx.fillStyle = '#1B1F23'; ctx.beginPath(); ctx.arc(bx + bw * 0.35, Y(o.overlay[i]), 2.6, 0, Math.PI * 2); ctx.fill(); }
+      if (o.overlay && o.overlay[i] != null) { ctx.fillStyle = '#1B1F23'; ctx.beginPath(); ctx.arc(bx + bw * 0.35, Math.max(y0 + 3, Math.min(y0 + hh - 3, Y(o.overlay[i]))), 2.6, 0, Math.PI * 2); ctx.fill(); }
       if (o.line && o.line[i] != null) { ctx.strokeStyle = '#7B2FA8'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(bx - bw * 0.1, Y(o.line[i])); ctx.lineTo(bx + bw * 0.8, Y(o.line[i])); ctx.stroke(); }
       hot(bx, y0, bw * 0.7, hh, () => setYear(i), YRS()[i] + ': ' + fmt(v, o.dec) + ' ' + (o.unit || ''));
       if (i % 4 === 0 || i === n - 1) T(YRS()[i] || '', bx + bw * 0.35, y0 + hh + 12, { s: 8, c: MUTE, a: 'center' });
@@ -109,7 +120,7 @@
     paper(); let y = header('Year by year: how reliable is this setting?', DATA.soil_labels[state.soil] + ' · ' + (CROPS[state.crop] || {}).label + ' · 20 seasons, ' + YRS()[0] + ' to ' + YRS()[19] + ' (on the calendar of the working date)', 4);
     const pk = pickRun(); if (!pk) { noData(y); return; }
     const r = adjRun(pk), rf = adjRun(pk, true);
-    let bx = 16 + badge('YOUR DATA', 16, y, '#1E8E3E') + 8; TF(adjText(pk, r) + '; red bar = the year on the clock (tap a bar to go to that year)', bx, y + 1, { s: 9.5, c: INK }); y += 14;
+    let bx = 16 + badge('YOUR DATA', 16, y, '#1E8E3E') + 8; { const nl = sidWrap(adjText(pk, r) + '. The red bar is the year on the clock; click a bar to go to that year.', bx, y + 1, W - 16 - bx, { s: 9.5, c: INK }, 13); y += 14 + 13 * Math.max(0, (nl || 1) - 1); }
     const cw = (W - 44) / 2, ph = 214, cols = r.crop.map(c => CROPCOL[c] || '#8A8F98');
     const P = [
       ['Irrigation', 'mm per year', r.I, { col: '#2E7DE8', unit: 'mm' }],
@@ -151,7 +162,7 @@
   function drawWb2() {
     paper(); let y = header('Full water balance, year by year', DATA.soil_labels[state.soil] + ' · every term of the simulated balance, including evaporation from litter, ponded water and snow', 4);
     const pk = pickRun(); if (!pk) { noData(y); return; }
-    const r = adjRun(pk); badge('YOUR DATA', 16, y, '#1E8E3E'); TF(adjText(pk, r), 96, y + 1, { s: 9.5 }); y += 16;
+    const r = adjRun(pk); badge('YOUR DATA', 16, y, '#1E8E3E'); { const nl = sidWrap(adjText(pk, r) + '.', 96, y + 1, W - 112, { s: 9.5, c: INK }, 13); y += 16 + 13 * Math.max(0, (nl || 1) - 1); }
     const n = 20, x0 = 64, ww = W - 32 - 80, hh = 300, top = y + 34;
     frame(16, y, W - 32, hh + 108, 'Where the water comes from (up) and where it goes (down)', 'mm per year');
     let hi = 0; for (let i = 0; i < n; i++) hi = Math.max(hi, r.P[i] + r.I[i], r.T[i] + r.Es[i] + r.Ec[i] + r.El[i] + r.Ep[i] + r.Esn[i] + Math.max(0, r.D[i]) + r.RO[i]); hi = nice(hi * 1.05);
@@ -198,7 +209,7 @@
   function drawNb() {
     paper(); let y = header('Nitrogen budget, year by year', DATA.soil_labels[state.soil] + ' · fertiliser and soil supply against crop uptake and losses', 4);
     const pk = pickRun(); if (!pk) { noData(y); return; }
-    const r = adjRun(pk); badge('YOUR DATA', 16, y, '#1E8E3E'); TF(adjText(pk, r), 96, y + 1, { s: 9.5 }); y += 16;
+    const r = adjRun(pk); badge('YOUR DATA', 16, y, '#1E8E3E'); { const nl = sidWrap(adjText(pk, r) + '.', 96, y + 1, W - 112, { s: 9.5, c: INK }, 13); y += 16 + 13 * Math.max(0, (nl || 1) - 1); }
     const NC = { fert: '#5B2FA8', min: '#9B7FD6', up: '#2E9E4F', NL: '#8E5A2A', den: '#E8912D', vol: '#B9B4A6' };
     const n = 20, x0 = 64, ww = W - 32 - 80, hh = 280, top = y + 34;
     frame(16, y, W - 32, hh + 100, 'Supply (up) against uptake and losses (down)', 'kg N per ha per year');

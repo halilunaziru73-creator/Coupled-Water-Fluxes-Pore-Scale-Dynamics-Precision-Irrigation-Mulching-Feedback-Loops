@@ -22,7 +22,9 @@
 * **Find the most efficient inputs**, with your present inputs competing (Section 18.4); the surface search also tries shorter runs.
 * **Field size** as an area or as a length and a width, for drip and sprinklers (Section 18.3).
 * The **field sketch** is a guided drawing: corners you drag, side lengths you type, the source and the inlet, the pipe layout drawn as you choose, and seven steps of questions (field, water, crop, soil, system, running, summary) (Section 18.5). **Compare the irrigation systems** (Section 18.7).
-* Each design ends with a **film of the soil water** in the days ahead: the root zone drying towards the trigger and, without irrigation, the wilting point (Section 18.6). The schedule takes its depths and times from the design.
+* Each design ends with a **film of the soil water** covering the days ahead and the rest of the season. Every day is coloured by its phase (irrigation, rain, comfortable, nearing the trigger, stress, near wilting, no crop). The film shows the root zone drying towards the trigger and, without irrigation, towards the wilting point, and gives the totals and the share of days in each phase (Section 18.6). The schedule takes its depths and times from the design.
+* The seasonal layers have **one dashboard chart per part of the layer**, with how each quantity varies over the twenty seasons (Chapter 14).
+* *Trigger law* and *Mulch against bare soil* stand still until **Play**; the season plays at two days a second.
 * Values may be typed up to the **physical limits** of the system, beyond the usual range of the list (Section 18.2).
 * A surface set lasts at most 48 hours; when the inflow is too small for the soil, the design and the farm say so (Chapter 11).
 * The surface layer iterates the advance exponent in the steady-intake term (Chapter 11); the slow-advance cases of the textbook example are now within 2 %.
