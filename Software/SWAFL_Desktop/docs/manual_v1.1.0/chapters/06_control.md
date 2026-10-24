@@ -118,6 +118,8 @@ $$
 
 A sand holds about 0.6 mm per cm, so the same demand empties it in about a third of the time of a loam: at the default settings, sand reaches its trigger in about 7 days and coarse loam in about 18. When you press **Play**, the gauge follows the daily model day by day, and its response is tied to the soil: it answers at once in a sand and slowly in a clay ($\text{rate} = 0.09 \times 1.5/\mathrm{AWC}_s$ per frame, between 0.04 and 0.35).
 
+Choosing another soil, in the list or in Properties, starts the replay again from the start of the season (day 95), with the gauge set to the new soil.
+
 ### The core trade-off: f = 0.50 or f = 0.45
 
 Under the explanation, a panel answers the question each grower asks: trigger at a depletion of 0.50 or of 0.45? It has two columns, and each condition is ticked when it applies to your settings.

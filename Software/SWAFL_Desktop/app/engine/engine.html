@@ -4758,6 +4758,8 @@ const N1S = { x0: 100, x1: 284, y: 462, bx: 20, bw: 66 };
 function n1Pos() { const dayF = fclock.day, yr = Math.floor(dayF / DPY), doy = dayF - yr * DPY; return clampN((doy - 95) / 155, 0, 1); }
 function n1SetPos(t) { const yr = Math.floor(fclock.day / DPY); fclock.day = yr * DPY + 95 + clampN(t, 0, 1) * 155; fclock.pause = 0; fclock.mem = []; }
 function n1Bucket(sim) {
+  // a new soil (clicked in the list or chosen in Properties) starts the replay again from the start of the season
+  if (n1ui.lvlSoil != null && n1ui.lvlSoil !== state.soil && (currentScene.id === 'n1' || currentScene.id === 'r1')) { n1SetPos(0); n1ui.lvl = null; n1ui.lt = 0; }
   // the season plays at two days a second, whatever the frame rate, so the readings can be followed
   { const now = performance.now(), dt = n1ui.lt ? Math.min(0.1, (now - n1ui.lt) / 1000) : 0; n1ui.lt = now; if (n1ui.play) { n1SetPos((n1Pos() + dt * 2 / 155) % 1.0001); if (n1Pos() >= 0.999) n1SetPos(0); } }
   const dd = clampN(fclock.kd(), 0, ND - 1), target = sim.fs[dd], resp = clampN(0.09 * 1.5 / (AWC[state.soil] || 1.5), 0.04, 0.35);   // a sandy soil (little water held) answers at once, a clay soil slowly
