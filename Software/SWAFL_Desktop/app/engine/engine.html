@@ -4,7 +4,7 @@
 <link rel="icon" type="image/png" href="../assets/logo-64.png">
 <script src="crops.js"></script>
 <meta charset="UTF-8">
-<meta name="description" content="Interactive soil, water and atmosphere explorer built on 10,190 Daisy simulations: irrigation trigger law, mulch water balance, and evaporation-drainage regimes.">
+<meta name="description" content="Interactive soil, water and atmosphere explorer built on 10,190 simulations: irrigation trigger law, mulch water balance, and evaporation-drainage regimes.">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>SWAFL: Soil-Water-Atmosphere Feedback Loop Explorer</title>
 <style>
@@ -318,7 +318,7 @@ body.appmode canvas#profileCanvas { margin: 0 auto; }
   </div>
 </div>
 <footer>
-  10,190 Daisy simulations across 10 soils &middot;
+  10,190 simulations across 10 soils &middot;
   <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops" target="_blank">View the full repository &rarr;</a>
 </footer>
 </main>
@@ -428,7 +428,7 @@ function drawLab(A, Yr) {
   chip(540, y1, 58, 'Reset', false, () => { LAB.view = 'min'; LAB.zi = 1; LAB.where = 'rz'; LAB.follow = true; }, 'Back to the default view of the lab');
   const y2 = y1 + 30; T('Look at', 14, y2 + 15, { s: 9, b: true, c: MUTE });
   [['surf', 'Topsoil 5 cm'], ['rz', 'Root zone'], ['sens', 'Sensor ' + A.z + ' cm'], ['deep', 'Deep 90 cm']].forEach((q, i) => chip(62 + i * 92, y2, 88, q[1], LAB.where === q[0], () => { LAB.where = q[0]; LAB.follow = true; }, 'Take the suction from this place in your simulated profile'));
-  chip(436, y2, 166, LAB.follow ? 'Following your season' : 'Manual suction (tap to follow)', LAB.follow, () => { LAB.follow = true; }, 'Follow the Daisy-based season, or drag the gauge below to dry or wet the soil yourself');
+  chip(436, y2, 166, LAB.follow ? 'Following your season' : 'Manual suction (tap to follow)', LAB.follow, () => { LAB.follow = true; }, 'Follow the simulated season, or drag the gauge below to dry or wet the soil yourself');
   // suction gauge
   const y3 = y2 + 44, gx = 24, gw = W - 48; T('Drag to dry or wet the soil: suction ' + (h >= 1000 ? Math.round(h).toLocaleString('en-US') : Math.round(h)) + ' cm (pF ' + pF.toFixed(1) + ', ' + (-h * MPA_PER_CM).toFixed(3) + ' MPa)', 14, y3 - 6, { s: 10, b: true, c: INK });
   const gr = ctx.createLinearGradient(gx, 0, gx + gw, 0); gr.addColorStop(0, '#2E8FD6'); gr.addColorStop(0.45, '#7CC4A0'); gr.addColorStop(0.75, '#E8C45A'); gr.addColorStop(1, '#C0532B'); ctx.fillStyle = gr; rrect(gx, y3, gw, 12, 6); ctx.fill(); ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.stroke();
@@ -471,7 +471,7 @@ function drawSPAC() {
   T('Soil to sky: one continuous water column', 16, 26, { s: 15, b: true, c: '#1F4D2E' });
   T(sName + ' · ' + (CROPS[state.crop] || {}).label + ' · ' + fmtDate(dateOfK(kd)), 16, 42, { s: 10.5, c: MUTE });
   ctx.fillStyle = '#EAF5EC'; ctx.strokeStyle = '#1E8E3E'; ctx.lineWidth = 1.5; rrect(14, 50, W - 28, 36, 8); ctx.fill(); ctx.stroke();
-  spBadge('YOUR DATA', 22, 66, true); T('soil water, roots, evaporation, drainage, transpiration, irrigation: your 10,190 Daisy simulations', 80, 66, { s: 9.5, b: true, c: '#14532D' });
+  spBadge('YOUR DATA', 22, 66, true); T('soil water, roots, evaporation, drainage, transpiration, irrigation: 10,190 simulations', 80, 66, { s: 9.5, b: true, c: '#14532D' });
   spBadge('DERIVED', 22, 80, false); T('leaf and air potentials: Ohm’s law along the path, driven by your transpiration', 80, 80, { s: 9.5, c: '#4B5563' });
   // ---- irrigation layout buttons ----
   const LAY = spLayout(), lbw = (W - 28 - 4 * 6) / 5;
@@ -522,7 +522,7 @@ function drawSPAC() {
   // the sensor probe: drag it, or tap the soil
   const sxp = x + w * 0.12, syp = gy + A.z * PX; ctx.strokeStyle = '#222'; ctx.lineWidth = 3.2; ctx.beginPath(); ctx.moveTo(sxp, gy - 20); ctx.lineTo(sxp, syp); ctx.stroke(); ctx.fillStyle = '#F5E9B8'; ctx.strokeStyle = '#222'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(sxp, syp, 5.5, 0, 6.283); ctx.fill(); ctx.stroke();
   pill('sensor ' + A.z + ' cm: drag or tap the soil', sxp + 10, syp + 4, { b: true, s: 9.5 });
-  pill(SPL.find(q => q[0] === LAY)[1] + ' \u00b7 event of ' + dose.toFixed(0) + ' mm (your Daisy run)', x + 8, gy - 8, { b: true, s: 9.5, c: '#14532D' });
+  pill(SPL.find(q => q[0] === LAY)[1] + ' \u00b7 event of ' + dose.toFixed(0) + ' mm (simulated run)', x + 8, gy - 8, { b: true, s: 9.5, c: '#14532D' });
   ctx.restore(); ctx.strokeStyle = INK; ctx.lineWidth = 1.4; rrect(x, Y0, w, H0, 10); ctx.stroke();
   hot(x + w - 70, Y0 + 12, 54, 56, () => applyState({ tempIdx: state.tempIdx >= 8 ? 2 : 9 }), 'Tap the sun: warm the climate by 3.5 °C, tap again to undo');
   hot(x + 30, Y0 + 14, 230, 62, () => applyState({ rainIdx: state.rainIdx === 5 ? 8 : state.rainIdx === 8 ? 2 : 5 }), 'Tap the clouds: wetter year, dry year, normal rain');
@@ -590,11 +590,11 @@ function drawSPAC() {
   q('Grain / fine matrix / pore space', (g0.stats.grain * 100).toFixed(0) + ' / ' + (g0.stats.matrix * 100).toFixed(0) + ' / ' + (g0.stats.pore * 100).toFixed(0) + ' %', ly2 + 176, ['DAISY', true]);
   const Yr = ly2 + lh2 + 40; SP.ys.root = Yl - 20; SP.ys.lab = Yr - 20; ctx.strokeStyle = '#1F4D2E'; ctx.lineWidth = 1.5; T('Particle lab: your soil, live and in colour', 16, Yr, { s: 12.5, b: true, c: '#1F4D2E' }); ctx.beginPath(); ctx.moveTo(16, Yr + 6); ctx.lineTo(W - 16, Yr + 6); ctx.stroke(); spBadge('YOUR DATA', W - 20, Yr - 2, true, true);
   const endY = drawLab(A, Yr);
-  T('Your data: Daisy simulations, 10 soils, 10,190 runs', 16, ly2 + lh2 + 22, { s: 8.5, i: true, c: MUTE });
+  T('Simulation record: 10 soils, 10,190 runs', 16, ly2 + lh2 + 22, { s: 8.5, i: true, c: MUTE });
 }
 SCENES.push({ id: 'spac', label: 'S1 Soil-Plant-Air', color: '#1E8E3E', h: 1700, interactive: true, onDown: p => labDown(p) || spDown(p), onMove: p => { LAB.hv = p; if (LAB.drag) { labSet(p); return true; } if (SP.drag) { spMoveZ(p); return true; } return false; }, onUp: () => { SP.drag = false; LAB.drag = false; }, onLeave: () => { SP.drag = false; LAB.drag = false; LAB.hv = null; }, draw: () => drawSPAC(), title: 'Soil-plant-atmosphere continuum: the water column from the particles to the sky',
-  legend: [['#1E8E3E', 'From your Daisy data'], ['#8A8F98', 'Derived along the path'], ['#2E8FD6', 'Water potential (log scale)'], ['#E8912D', 'Water leaving to the air']],
-  insight: 'Water moves from wet soil to dry air along a falling potential. Your Daisy data sets the soil end; the air sets the pull; the plant is the pipe between.' });
+  legend: [['#1E8E3E', 'From the simulation record'], ['#8A8F98', 'Derived along the path'], ['#2E8FD6', 'Water potential (log scale)'], ['#E8912D', 'Water leaving to the air']],
+  insight: 'Water moves from wet soil to dry air along a falling potential. The simulated soil sets the soil end; the air sets the pull; the plant is the pipe between.' });
 
 // ===== S2 Surface Irrigation Design: model (Kargas lecture method: Kostiakov intake, volume-balance advance, storage/cutoff, indices, design) =====
 const SIDM = (function () {
@@ -1303,25 +1303,26 @@ function drPanel(x, y, w, h, R, qi, label, fr, pxcm, C) {
   return b;
 }
 function drawDRIP() {
-  irFit('drip'); paper(); SIDW = []; SIDCUR = DRP; const C = irCtx(), R = drRun(), o = R.o, K = IRM.DKIND[o.kind], tau = play.t * R.t; IRLAB = 'irrigation time ' + irF(tau, 1) + ' of ' + irF(R.t, 1) + ' h';
+  fdApply(); irFit('drip'); paper(); SIDW = []; SIDCUR = DRP; const C = irCtx(), R = drRun(), o = R.o, K = IRM.DKIND[o.kind], tau = play.t * R.t; IRLAB = 'irrigation time ' + irF(tau, 1) + ' of ' + irF(R.t, 1) + ' h';
   irHead(C, 'Drip irrigation design: emitters, wetted bulb and uniformity for your soil', 'wetted bulb, emitter hydraulics (Keller-Karmeli, Hazen-Williams) and where the water ends up');
   irCtl(96); sidRow('Emitter', 152, Object.keys(IRM.DKIND).map(k => [IRM.DKIND[k].label.replace('Pressure-compensating', 'Pressure-comp.'), DRP.kind === k, () => drKind(k), 'Typical flow, spacing and variation for this emitter type']));
   sidRow('Placement', 180, DRDEP.map(q => [q[1], drDepEff() === q[0], () => { if (!q[0]) DRP.surf = true; else { DRP.surf = false; DRP.dep = q[0]; applyState({ method: METHODS.find(m => m.mid === q[0]).k }); } }, q[0] ? 'Buried line at ' + q[0] + ' cm (also sets the explorer irrigation method)' : 'Laid on the surface (design only)']));
   sidRow('Run time', 208, [['Automatic', DRP.tauto, () => { DRP.tauto = true; }, 'Time to deliver the depth at the driest emitters'], ['Manual', !DRP.tauto, () => { DRP.tauto = false; DRP.t = +R.t.toFixed(2); }, 'Choose the run time yourself']]);
-  const cx1 = 16, cx2 = 322, cw = 282; let y = 252;
+  fieldSizeRow('drip', 236);
+  const cx1 = 16, cx2 = 322, cw = 282; let y = 280;
   sidSlider('Se', 'Emitter spacing Se (m)', cx1, y, cw, [0.1, 1.5, 0.05], DRP.Se, v => v.toFixed(2) + ' m');
   sidSlider('Sl', 'Lateral spacing Sl (m)', cx1, y + 31, cw, [0.5, 3, 0.05], DRP.Sl, v => v.toFixed(2) + ' m');
   sidSlider('q', 'Emitter flow q (L/h)', cx1, y + 62, cw, [0.5, 8, 0.1], DRP.q, v => v.toFixed(1) + ' L/h');
-  sidSlider('LL', 'Lateral length (m)', cx1, y + 93, cw, [20, 300, 5], DRP.LL, v => irF(v) + ' m');
+  sidSlider('LL', 'Lateral length (m)' + (IRX.fd.drip.on ? ' · from the field length' : ''), cx1, y + 93, cw, [20, 300, 5], DRP.LL, v => irF(v) + ' m', IRX.fd.drip.on);
   sidSlider('H0', 'Inlet pressure head (m)', cx2, y, cw, [4, 30, 0.5], DRP.H0, v => v.toFixed(1) + ' m');
   sidSlider('D', 'Lateral inside diameter (mm)', cx2, y + 31, cw, [10, 32, 1], DRP.D, v => irF(v) + ' mm');
   sidSlider('intv', 'Irrigate every (days)', cx2, y + 62, cw, [1, 10, 1], DRP.intv, v => irF(v) + ' d');
   sidSlider('t', 'Run time (h)' + (DRP.tauto ? ' · automatic' : ''), cx2, y + 93, cw, [0.25, 48, 0.25], DRP.tauto ? R.t : DRP.t, v => v.toFixed(1) + ' h', DRP.tauto);
   sidSlider('Zn', 'Depth per irrigation (mm)' + (DRP.Zn == null ? ' · from the DSS' : ' · tap to reset'), cx1, y + 124, cw, [3, 80, 1], o.Zn, v => irF(v) + ' mm'); hot(cx1, y + 114, 200, 12, () => { DRP.Zn = null; }, 'Back to crop need × interval, capped by the trigger depth');
-  sidSlider('Af', 'Area to irrigate (ha)', cx2, y + 124, cw, [0.2, 10, 0.1], DRP.Af, v => v.toFixed(1) + ' ha');
+  fieldSizeBoxes('drip', cx2, y + 124, cw, [0.01, 50, 0.01]);
   sidSlider('Qs', 'Farm supply Qs (L/s)', cx1, y + 155, cw, [2, 120, 1], DRP.Qs, v => irF(v) + ' L/s');
   SIDCUR = IRX; sidSlider('Lm', 'Mainline length (m)', cx2, y + 155, cw, [20, 600, 10], IRX.Lm, v => irF(v) + ' m'); sidSlider('lift', 'Water lift, source to field (m)', cx1, y + 186, cw, [0, 60, 1], IRX.lift, v => irF(v) + ' m'); SIDCUR = DRP;
-  y = 486;
+  y = 516;
   sidHead('Soil moisture around the emitter: the driest, the average and the wettest emitter', y, 'Run simulation: the real water content spreads from the emitter. Blue is the water in the soil, indigo is below the roots, yellow evaporates at the surface');
   const pw = (W - 28 - 16) / 3, pxcm = Math.min(pw / 130, 236 / Math.max(C.Rmax * 1.4, Math.max(...R.quant.map(q => q.zb)) / 10 + 8)), ph = Math.min(280, 36 + Math.max(C.Rmax * 1.4, Math.max(...R.quant.map(q => q.zb)) / 10 + 8) * pxcm), py = y + 34;
   [[0, 'Driest 10% of emitters'], [2, 'Average emitter'], [4, 'Wettest 10% of emitters']].forEach(([qi, lab], i) => drPanel(14 + i * (pw + 8), py, pw, ph, R, qi, lab, play.t, pxcm, C));
@@ -1409,6 +1410,7 @@ function spOptStep() {
 }
 function spApply(d) { SPR.type = d.type; SPR.d = d.d; SPR.P = d.P; SPR.Ss = d.Ss; SPR.Sl = d.Sl; SPR.tri = d.tri; if (d.T != null) { SPR.tauto = false; SPR.T = Math.round(d.T); } else SPR.tauto = true; }
 function drawSPR() {
+  fdApply();
   irFit('spr'); paper(); SIDW = []; SIDCUR = SPR; const C = irCtx(), R = spRun(), o = R.o, T0 = R.T, tau = play.t * T0; IRLAB = 'irrigation time ' + irF(tau) + ' of ' + irF(T0) + ' min';
   const ST = IRM.STYPE[o.type];
   SPY.design = 86; irHead(C, 'Sprinkler irrigation design: nozzle, spacing, wind and soil intake', 'overlap pattern (Christiansen CU), wind drift, and the soil intake (Kostiakov) that decides runoff');
@@ -1536,7 +1538,19 @@ const IRPIPES = [32, 40, 50, 63, 75, 90, 110, 125, 160, 200, 250, 315];
 const irHW = (Q, D, L) => Q <= 0 ? 0 : 10.67 * L * Math.pow(Q / 1000, 1.852) / (Math.pow(140, 1.852) * Math.pow(D / 1000, 4.871));
 const irVel = (Q, D) => Q / 1000 / (Math.PI * D * D / 4e6);
 const irSize = (Q, vmax) => { for (const D of IRPIPES) if (irVel(Q, D) <= (vmax || 1.5)) return D; return IRPIPES[IRPIPES.length - 1]; };
-const IRX = { Lm: 120, lift: 12, LLs: 150, src: 'well', touch() {} };
+const IRX = { Lm: 120, lift: 12, LLs: 150, src: 'well', touch() {}, fd: { drip: { on: false, L: 100, W: 100, touch() {} }, spr: { on: false, L: 200, W: 150, touch() {} } } };
+// the field given by its area, or by its length and width (the area and the lateral length then follow from them)
+function fdApply() {
+  const d = IRX.fd.drip, s = IRX.fd.spr;
+  if (d.on) { DRP.Af = clampN(+(d.L * d.W / 1e4).toFixed(3), 0.01, 50); DRP.LL = clampN(Math.round(d.L / Math.ceil(d.L / 300)), 20, 300); }
+  if (s.on) { SPR.Af = clampN(+(s.L * s.W / 1e4).toFixed(3), 0.05, 200); IRX.LLs = clampN(Math.round(s.L / Math.ceil(s.L / 500)), 40, 500); }
+}
+function fieldSizeRow(kind, y) { const fd = IRX.fd[kind]; sidRow('Field size', y, [['Area in hectares', !fd.on, () => { fd.on = false; }, 'Type the area to irrigate'], ['Length and width', fd.on, () => { fd.on = true; const o = kind === 'drip' ? DRP : SPR; if (!fd.set) { fd.L = Math.round(Math.sqrt(o.Af * 1e4)); fd.W = fd.L; fd.set = true; } }, 'Type the length and width of the field: the area and the lateral length follow']]); }
+function fieldSizeBoxes(kind, x, y, w, rng) {
+  const fd = IRX.fd[kind], o = kind === 'drip' ? DRP : SPR, prev = SIDCUR;
+  if (!fd.on) { SIDCUR = o; sidSlider('Af', 'Area to irrigate (ha)', x, y, w, rng, o.Af, v => v.toFixed(2) + ' ha'); SIDCUR = prev; return; }
+  const hw = (w - 12) / 2; SIDCUR = fd; sidSlider('L', 'Field length (m)', x, y, hw, [10, 2000, 5], fd.L, v => irF(v) + ' m'); sidSlider('W', 'Field width (m)', x + hw + 12, y, hw, [10, 2000, 5], fd.W, v => irF(v) + ' m'); SIDCUR = prev;
+}
 function irSystem(kind, R, o) {
   const G = { kind }, A = (kind === 'drip' ? DRP.Af : SPR.Af) * 1e4, Qs = kind === 'drip' ? DRP.Qs : SPR.Qs;
   if (kind === 'drip') { G.LL = o.LL; G.Sl = o.Sl; G.Wf = A / G.LL; G.NL = Math.max(1, Math.floor(G.Wf / G.Sl)); G.Qlat = R.lat.Q; G.zones = Math.max(1, Math.ceil(G.NL * G.Qlat / Qs)); G.lpz = Math.ceil(G.NL / G.zones); G.Qz = G.lpz * G.Qlat; G.Dlat = o.D; G.hfLat = R.lat.hf; G.H0 = o.H0; G.pts = Math.round(G.LL / o.Se) + 1; G.nEmit = G.NL * G.pts; }
@@ -1955,8 +1969,8 @@ function spInputs(C, R, o, ST, T0, y) {
   SIDCUR = SPD; sidSlider('top', 'Operating hours per day', cx1, y + st, cw, [4, 24, 1], SPD.top, v => v + ' h'); SIDCUR = SPR; y += st + 28;
   // ---- D. water supply and pipes ----
   y = spInHead(y, 'D', 'Farm, water supply and pipes', 'sets the pumps, the pipes and the sets');
-  sidSlider('Af', 'Area to irrigate (ha)', cx1, y, cw, [0.5, 40, 0.5], SPR.Af, v => v.toFixed(1) + ' ha'); sidSlider('Qs', 'Farm supply Qs (L/s)', cx2, y, cw, [5, 200, 1], SPR.Qs, v => irF(v) + ' L/s');
-  SIDCUR = IRX; sidSlider('LLs', 'Lateral length (m)', cx1, y + st, cw, [40, 500, 10], IRX.LLs, v => irF(v) + ' m'); sidSlider('Lm', 'Mainline length (m)', cx2, y + st, cw, [20, 600, 10], IRX.Lm, v => irF(v) + ' m');
+  fieldSizeRow('spr', y); y += 38; fieldSizeBoxes('spr', cx1, y, cw, [0.05, 200, 0.05]); sidSlider('Qs', 'Farm supply Qs (L/s)', cx2, y, cw, [5, 200, 1], SPR.Qs, v => irF(v) + ' L/s');
+  SIDCUR = IRX; sidSlider('LLs', 'Lateral length (m)' + (IRX.fd.spr.on ? ' · from the field length' : ''), cx1, y + st, cw, [40, 500, 10], IRX.LLs, v => irF(v) + ' m', IRX.fd.spr.on); sidSlider('Lm', 'Mainline length (m)', cx2, y + st, cw, [20, 600, 10], IRX.Lm, v => irF(v) + ' m');
   sidSlider('lift', 'Water lift, source to field (m)', cx1, y + 2 * st, cw, [0, 60, 1], IRX.lift, v => irF(v) + ' m'); SIDCUR = SPR;
   return y + 2 * st + 44;
 }
@@ -2442,7 +2456,7 @@ function refresh() {
       : dT === 0 ? 'Baseline climate.' : dT < 1.5 ? 'Warmer: higher demand triggers more irrigation and keeps the surface wetter, so evaporation rises.'
       : 'Much warmer: faster canopy growth increasingly out-competes bare soil for the same water.';
   const trigNote = document.getElementById('trigNote');
-  if (trigNote) trigNote.textContent = currentScene && currentScene.id === 'n1' ? 'In N1 every soil has its own trigger (its suction at the critical depletion); the trigger setting and the gauge change it for the selected soil only.' : trig === -300 ? 'Standard trigger: irrigate when the sensor reads beyond this suction.'
+  if (trigNote) trigNote.textContent = currentScene && currentScene.id === 'n1' ? 'In the trigger law every soil has its own trigger (its suction at the critical depletion); the trigger setting and the gauge change it for the selected soil only.' : trig === -300 ? 'Standard trigger: irrigate when the sensor reads beyond this suction.'
       : trig > -300 ? 'Wetter trigger: irrigation starts earlier and more often.' : 'Drier trigger: irrigation waits for more stress.';
   const rows = (DATA.e5[state.soil] || []).filter(r => r.till === state.till);
   const dv = rows.map(r => r.drainage), sens = dv.length ? Math.max(...dv) - Math.min(...dv) : 0;
@@ -3141,7 +3155,7 @@ function datasetNote() { const exact = (profKey() === 'loam') === (DATA.soils.in
 
 function annualLine(x, y1, y2, short) {
   const m = current; T((short ? 'Annual result: irrigation ' : 'Annual result at these settings: irrigation ') + m.irr.toFixed(0) + ' mm, yield ' + (m.yield * CROPS[state.crop].factor).toFixed(CROPS[state.crop].lib ? 0 : 2) + ' ' + CROPS[state.crop].unit.split(' ')[0] + ', drainage ' + m.drain.toFixed(0) + ' mm', x, y1, { s: 10.8, b: true });
-  T(((state.soil === 'S01_CoarseLoam' || state.soil === 'S02_CoarseSand') && STD20()) ? 'Daily traces: your Daisy output at the standard settings; change any control and they follow it.' : 'Daily traces: your Daisy record with the effect of your settings from the daily model; they and this line follow every control.', x, y2, { s: 9.5, i: true, c: MUTE });
+  T(((state.soil === 'S01_CoarseLoam' || state.soil === 'S02_CoarseSand') && STD20()) ? 'Daily traces: the simulated output at the standard settings; change any control and they follow it.' : 'Daily traces: the simulation record with the effect of your settings from the daily model; they and this line follow every control.', x, y2, { s: 9.5, i: true, c: MUTE });
 }
 // ------------------------------------------------------------------------------------------------
 // V1: tensiometer suction at several depths through the 1994 season, irrigated against rainfed
@@ -3474,7 +3488,7 @@ function ensureX20() {
   D20.x_irr = xi; D20.x_rain = xr; D20.xKey = key;
 }
 function pk20() { if ((state.soil === 'S01_CoarseLoam' || state.soil === 'S02_CoarseSand') && STD20()) return state.soil === 'S01_CoarseLoam' ? 'loam' : 'sand'; ensureX20(); return D20.x_irr ? 'x' : profKey(); }
-const nameSoil20 = () => pk20() === 'x' ? 'Your Daisy daily record (' + profName() + ') set to your settings: ' + DATA.soil_labels[state.soil].toLowerCase() + ', sensor at ' + Z_VALUES[state.zIdx] + ' cm' : 'Your Daisy daily output at the 20 cm sensor depth, ' + profName();
+const nameSoil20 = () => pk20() === 'x' ? 'The daily simulation record (' + profName() + ') set to your settings: ' + DATA.soil_labels[state.soil].toLowerCase() + ', sensor at ' + Z_VALUES[state.zIdx] + ' cm' : 'The simulated daily output at the 20 cm sensor depth, ' + profName();
 const fmtDays = (n) => n + ' of ' + SEASON;
 
 function drawV1All() {
@@ -3514,7 +3528,7 @@ function drawV1All() {
   T('Rainfed: ' + fmtDays(st.cr) + ' days beyond, mean suction ' + fmtS(st.mr) + ' cm', 90, 505, { s: 11, b: true, c: '#A8620F' });
   T('Across ' + CAL0 + ' to ' + (CAL0 + 19) + ': irrigated ' + mI.toFixed(0) + ' days, rainfed ' + mR.toFixed(0) + ' days beyond the trigger per season', 16, 530, { s: 11 });
   T(mR > 0 ? 'Irrigation removes ' + Math.round((1 - mI / mR) * 100) + '% of the days beyond this trigger.' : 'The trigger is never reached without irrigation.', 16, 548, { s: 11, b: true });
-  T(pk20() === 'x' ? 'Daily weather sequence from your Daisy record; the effect of your settings from the daily model (your settings minus the standard run).' : 'Your Daisy daily output at the standard settings (20 cm sensor); change any control to see the daily model at those settings.', 16, 600, { s: 9.5, i: true, c: MUTE });
+  T(pk20() === 'x' ? 'Daily weather sequence from the simulation record; the effect of your settings from the daily model (your settings minus the standard run).' : 'The simulated daily output at the standard settings (20 cm sensor); change any control to see the daily model at those settings.', 16, 600, { s: 9.5, i: true, c: MUTE });
   annualLine(16, 619, 633);
 }
 
@@ -3922,13 +3936,15 @@ function snapshotOf(sc, view, firstPx) {
   if (sc.id === 'v1') play.t = state.range === 'all' ? 1 : 0.72; else if (sc.id === 'v2') play.t = state.range === 'all' ? 0.725 : 0.55; else if (sc.id === 'v3') play.t = 0.5;
   if (sc.id === 'field') { state.fview = view || 'day'; fclock.pause = 0; fclock.lastKd = -1; fclock.mem = []; }
   if (sc.id === 'spr' && window.SPA) { try { SPA.warm(45); } catch (e) {} }
+  if (sc.id === 'sid' || sc.id === 'drip' || sc.id === 'spr') play.t = 1;   // the finished irrigation: every result complete
   ctx.clearRect(0, 0, W, H); if (sc.id === 'v4') { anim.v4 = null; for (let i = 0; i < 70; i++) sc.draw(); } sc.draw();
   for (let k = 0; k < 3; k++) { const h0 = canvas.height; ctx.clearRect(0, 0, W, canvas.height); sc.draw(); if (canvas.height === h0) break; }      // scenes that size themselves to their content settle after a draw or two
   const Hn = canvas.height, crops = [], full = ctx.getImageData(0, 0, W, Hn).data;
   const ink = y => { let n = 0; const o = y * W * 4, q0 = o + 8 * 4, r0 = full[q0], g0 = full[q0 + 1], b0 = full[q0 + 2]; for (let x = 8; x < W - 8; x++) { const q = o + x * 4; if (Math.abs(full[q] - r0) + Math.abs(full[q + 1] - g0) + Math.abs(full[q + 2] - b0) > 30) n++; } return n; };
-  const brk = (from, limit) => { const end = from + limit; if (end >= Hn) return Hn; let best = end, bi = 1e9; for (let y = end; y > from + limit * 0.55; y--) { let t = 0; for (let k = 0; k < 5; k++) t += ink(Math.min(Hn - 1, y - k)); if (t < bi) { bi = t; best = y; } if (t === 0) return y - 2; } return best; };
+  const secY = Object.values(((window.__SEC || {})[sc.id]) || {}).map(v => v[0] - 24).filter(v => v > 0).sort((a, b) => a - b);
+  const brk = (from, limit) => { const end = from + limit; if (end >= Hn) return Hn; { const hs = secY.filter(v => v > from + limit * 0.4 && v <= end); if (hs.length) return hs[hs.length - 1]; } let best = end, bi = 1e9; for (let y = end; y > from + limit * 0.55; y--) { let t = 0; for (let k = 0; k < 5; k++) t += ink(Math.min(Hn - 1, y - k)); if (t < bi) { bi = t; best = y; } if (t === 0) return y - 2; } return best; };
   const cut = (sy, sh) => { const c = document.createElement('canvas'); c.width = W; c.height = sh; c.getContext('2d').drawImage(canvas, 0, sy, W, sh, 0, 0, W, sh); const b = atob(c.toDataURL('image/jpeg', 0.9).split(',')[1]), a = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); crops.push({ jpeg: a, w: W, h: sh }); };
-  let y0 = 0, lim = firstPx || 640; while (y0 < Hn - 2) { const y1 = Math.max(y0 + 60, brk(y0, lim)); cut(y0, Math.min(y1, Hn) - y0); y0 = Math.min(y1, Hn); lim = 880; }
+  const kpt = W / 515, full1 = Math.floor(748 * kpt); let y0 = 0, lim = firstPx ? Math.floor(firstPx * kpt) : full1; while (y0 < Hn - 2) { const y1 = Math.max(y0 + 60, brk(y0, lim)); cut(y0, Math.min(y1, Hn) - y0); y0 = Math.min(y1, Hn); lim = full1; }
   currentScene = keep.cs; setCanvasH(keep.h); state.fview = keep.fv; state.trigMode = keepTrig.m; state.trigIdx = keepTrig.i; play.t = keep.pt; fclock.day = keep.fd; fclock.pause = keep.fp; fclock.lastKd = keep.lk; fclock.mem = keep.mem; canvas.style.cursor = keep.cur;
   return crops;
 }
@@ -3976,11 +3992,11 @@ function reportNotes(sc, view) {
   else if (sc.id === 'e1') { const em = e1Model(), t1 = e1T1(em, em.e0), t1b = e1T1(em, em.e0b), d = e1Lost(em, em.e0, 12), db = e1Lost(em, em.e0b, 12);
     L.push('Modelled drying after a wetting on ' + DATA.soil_labels[state.soil].toLowerCase() + ': stage 1 (films keep the surface wet) lasts ' + f1(t1) + ' days' + (vff < 0.95 ? ' with the mulch, ' + f1(t1b) + ' days without' : '') + ', then a dry layer grows and the loss falls to vapour diffusion.');
     L.push('Water lost in 12 days: ' + f1(d) + ' mm' + (vff < 0.95 ? ' with the mulch against ' + f1(db) + ' mm bare' : '') + '. Atmospheric demand ' + f1(em.e0b) + ' mm/day, reduced to ' + f1(em.e0) + ' by the mulch factor ' + vff.toFixed(1) + '.');
-    L.push('Your Daisy runs give ' + f0(DATA.baseline[state.soil].soil_evap) + ' mm/yr of soil evaporation for this soil at baseline. The section is modelled from texture and the fitted van Genuchten curve, not a scan.'); }
+    L.push('The simulations give ' + f0(DATA.baseline[state.soil].soil_evap) + ' mm/yr of soil evaporation for this soil at baseline. The section is modelled from texture and the fitted van Genuchten curve, not a scan.'); }
   else if (sc.id === 'r1') { const yr = r1Years(seasonSim(true)), mm = f => yr.reduce((a, q) => a + q[f], 0) / yr.length;
     L.push('Twenty-year means: roots reach ' + f0(mm('mxRd')) + ' cm; half of the water taken comes from the top ' + f0(mm('d50')) + ' cm and nine tenths from the top ' + f0(mm('d90')) + ' cm; ' + f0(mm('top30') * 100) + '% comes from the top 30 cm.');
-    L.push('Root depth and uptake by layer come from the explorer\u2019s 20-year daily engine, scaled to your annual Daisy totals and limited to the 1 m balance depth; the Daisy run for coarse loam shows roots reaching 120 cm.');
-    { const a = e15Run(0, E15UI.ai), b = e15Run(E15UI.ri, E15UI.ai); L.push('Your E15 runs (coarse loam, ' + (METHODS.find(q => q.k === e15Method()) || { label: e15Method() }).label.toLowerCase() + ', ' + E15.amts[E15UI.ai] + ' mm per application): roots of ' + E15.roots[E15UI.ri] + ' cm against 30 cm give yield ' + b[0].toFixed(2) + ' against ' + a[0].toFixed(2) + ' Mg/ha, ' + b[5].toFixed(1) + ' against ' + a[5].toFixed(1) + ' water-stress days and ' + b[4].toFixed(1) + ' against ' + a[4].toFixed(1) + ' kg N/ha leached.'); } }
+    L.push('Root depth and uptake by layer come from the explorer\u2019s 20-year daily engine, scaled to the annual simulated totals and limited to the 1 m balance depth; the simulation for coarse loam shows roots reaching 120 cm.');
+    { const a = e15Run(0, E15UI.ai), b = e15Run(E15UI.ri, E15UI.ai); L.push('Simulated runs (coarse loam, ' + (METHODS.find(q => q.k === e15Method()) || { label: e15Method() }).label.toLowerCase() + ', ' + E15.amts[E15UI.ai] + ' mm per application): roots of ' + E15.roots[E15UI.ri] + ' cm against 30 cm give yield ' + b[0].toFixed(2) + ' against ' + a[0].toFixed(2) + ' Mg/ha, ' + b[5].toFixed(1) + ' against ' + a[5].toFixed(1) + ' water-stress days and ' + b[4].toFixed(1) + ' against ' + a[4].toFixed(1) + ' kg N/ha leached.'); } }
   return L;
 }
 function buildReport(ids, title) {
@@ -3999,8 +4015,8 @@ function buildReport(ids, title) {
   p.rect(40, 392, 515, 44, '#ffffff'); p.line(40, 392, 555, 392, '#d8d4c6', 1); p.line(40, 436, 555, 436, '#d8d4c6', 1);
   p.text('Water balance, mm per year', 48, 408, 10, { b: true, c: '#4b5563' }); p.text('rain ' + m.rain.toFixed(0) + ' + irrigation ' + m.irr.toFixed(0) + ' = transpiration ' + m.transp.toFixed(0) + ' + soil evaporation ' + m.evap.toFixed(0) + ' + interception ' + m.other.toFixed(0) + ' + drainage ' + m.drain.toFixed(0) + ' + storage ' + m.store.toFixed(0), 48, 426, 9.5, { b: true });
   p.text('Included in this report: ' + chosen.length + ' part' + (chosen.length === 1 ? '' : 's'), 40, 466, 12, { b: true, c: GREEN });
-  { const half = Math.ceil(chosen.length / 2); chosen.forEach((sc, i) => { const col = i < half ? 0 : 1, row = col ? i - half : i; p.text((i + 1) + '.  ' + sc.label + ': ' + (sc.title || '').slice(0, 44), 46 + col * 262, 486 + row * 14, 8.6); }); var yy = 486 + half * 14 + 12; }
-  yy = p.wrap('How to read this: every number is an annual mean from 10,190 Daisy simulations across ten soils, combined by the explorer so that each control changes the outputs the way the simulations did. The pictures are snapshots of the live scenes at your inputs; long scenes continue over several pages.', 40, yy, 515, 9, { i: true, c: '#6b7280' });
+  { const half = Math.ceil(chosen.length / 2); chosen.forEach((sc, i) => { const col = i < half ? 0 : 1, row = col ? i - half : i; p.text((i + 1) + '.  ' + sc.label, 46 + col * 262, 486 + row * 14, 9); }); var yy = 486 + half * 14 + 12; }
+  yy = p.wrap('How to read this: every number is an annual mean from 10,190 simulations across ten soils, combined by the explorer so that each control changes the outputs the way the simulations did. The pictures are snapshots of the live scenes at your inputs; long scenes continue over several pages.', 40, yy, 515, 9, { i: true, c: '#6b7280' });
   p.text('github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops', 40, 800, 8, { c: '#6b7280' });
   let pageNo = 1; const footer = pg => { pageNo++; pg.text('Page ' + pageNo, 520, 826, 8, { c: '#6b7280' }); pg.text('SWAFL explorer report', 40, 826, 8, { c: '#6b7280' }); };
   chosen.forEach(sc => {
@@ -4009,8 +4025,9 @@ function buildReport(ids, title) {
       p = doc.page(); p.rect(0, 0, 595, 54, sc.color); p.text(sc.label + (vlabel ? ': ' + vlabel : ''), 40, 34, 18, { b: true, c: '#111111' });
       let y = p.wrap(sc.title || '', 40, 78, 515, 12, { b: true }); y = p.wrap(updateInsightText(sc, view), 40, y + 2, 515, 9.5, { i: true, c: '#4b5563' });
       {
-        let ny = y + 14; p.text('Key numbers at your inputs', 40, ny, 11, { b: true, c: GREEN }); ny += 16; reportNotes(sc, view).forEach(l => { ny = p.wrap(l, 46, ny, 505, 9.5); });
-        const room = 806 - (ny + 8), firstPx = room >= 220 ? Math.floor(room * 620 / 515) : 0, crops = snapshotOf(sc, view, firstPx || 880), total = crops.length;
+        let ny = y + 14; p.text('Key numbers at your inputs', 40, ny, 11, { b: true, c: GREEN }); ny += 16;
+        reportNotes(sc, view).forEach(l => { if (ny > 772) { footer(p); p = doc.page(); p.rect(0, 0, 595, 40, sc.color); p.text(sc.label + (vlabel ? ': ' + vlabel : '') + ', key numbers continued', 40, 27, 13, { b: true, c: '#111111' }); ny = 70; } ny = p.wrap(l, 46, ny, 505, 9.5); });
+        const room = 806 - (ny + 8), firstPx = room >= 220 ? room : 0, crops = snapshotOf(sc, view, firstPx), total = crops.length;
         let k = 0; if (firstPx) { p.image(crops[0].jpeg, crops[0].w, crops[0].h, 40, ny + 8, 515); footer(p); k = 1; } else footer(p);
         for (; k < total; k++) { const p2 = doc.page(); p2.rect(0, 0, 595, 40, sc.color); p2.text(sc.label + (vlabel ? ': ' + vlabel : '') + ', continued (' + (k + (firstPx ? 1 : 1)) + ' of ' + (firstPx ? total : total + 1) + ')', 40, 27, 13, { b: true, c: '#111111' }); p2.image(crops[k].jpeg, crops[k].w, crops[k].h, 40, 52, 515); footer(p2); }
       }
@@ -4415,7 +4432,7 @@ function drawV7Profiles(y0) {
   const ny = top + ph + 16, nd = C.S.find(s => s.k === 'notill');
   C.S.forEach((S, i) => { const x = X[i]; ctx.fillStyle = '#F4F1E6'; rrect(x, ny, PW, 86, 6); ctx.fill(); ctx.strokeStyle = '#C9C2AC'; ctx.lineWidth = 1; ctx.stroke();
     T('pore index of the tilled layer ' + S.p.toFixed(2), x + 7, ny + 15, { s: 9, c: INK }); T('voids on the face: ' + (S.Gt.voidFrac * 100).toFixed(0) + '%, ' + (S.Gt.connFrac * 100).toFixed(0) + '% open to air', x + 7, ny + 29, { s: 9, c: INK });
-    T('drainage below 1 m (Daisy): ' + (S.drain == null ? 'n/a' : S.drain.toFixed(0) + ' mm/yr'), x + 7, ny + 45, { s: 9, b: true, c: '#1B4FA0' });
+    T('drainage below 1 m (simulated): ' + (S.drain == null ? 'n/a' : S.drain.toFixed(0) + ' mm/yr'), x + 7, ny + 45, { s: 9, b: true, c: '#1B4FA0' });
     T(S.k === 'notill' || S.drain == null || !nd || nd.drain == null ? 'reference system' : (S.drain - nd.drain >= 0 ? '+' : '') + (S.drain - nd.drain).toFixed(1) + ' mm/yr against no-till', x + 7, ny + 59, { s: 9, c: MUTE });
     T(S.yield == null ? '' : 'yield ' + (S.yield * CROPS[state.crop].factor).toFixed(2) + ' ' + CROPS[state.crop].unit.split(' ')[0], x + 7, ny + 74, { s: 9, c: INK }); });
   ['What each driver does here:', 'Tillage system sets how loose the tilled layer starts (pore index 1.0, 0.72 or 0.42) and so how big the clods and cracks are.', 'Consolidation rate sets how fast that layer settles back towards 0.30, so cracks close sooner at a high rate.',
@@ -5115,7 +5132,7 @@ function drawRootsR1(sim, k, x0, w, GY, PX) {
   }
   ax.forEach(a => { ctx.fillStyle = dead ? '#CFC6B6' : '#FFF6D0'; ctx.strokeStyle = '#8A6A2A'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(a.x(a.dp), GY + a.dp, a.wd > 3 ? 3.2 : 2, 0, 6.283); ctx.fill(); ctx.stroke(); });
 }
-// ===================== R1: the E15 rooting-depth runs (coarse loam, 1,000 Daisy runs: 10 rooting depths x 10 application amounts x 10 irrigation methods) =====================
+// ===================== R1: the E15 rooting-depth runs (coarse loam, 1,000 simulations: 10 rooting depths x 10 application amounts x 10 irrigation methods) =====================
 const E15 = JSON.parse(document.getElementById('j-e15').textContent);
 const E15UI = { out: 0, ri: 6, ai: 4 };
 const E15OUT = [['Yield', 'Mg/ha', '#2E9E4F', 1], ['Irrigation', 'mm/yr', '#1F66C8', -1], ['Drainage', 'mm/yr', '#4F9FD8', -1], ['Transpiration', 'mm/yr', '#5B8E3A', 1], ['N leached', 'kg N/ha', '#B8651A', -1], ['Water-stress days', 'days', '#C0392B', -1], ['Irrigation efficiency', 'kg/m³', '#7A4FB8', 1]];
@@ -5158,14 +5175,14 @@ function drawR1All(y0, dd) {
   const ty = GY + hh + 52, rowsT = [['deepest roots', e => e.rd, '#6B4423', true], ['50% of water by', e => e.d50, '#1B6B35', false], ['90% of water by', e => e.d90, '#1F8F47', false], ['deepest in any year', e => e.mx, MUTE, false]];
   ctx.fillStyle = '#F4F1E6'; ctx.fillRect(16, ty - 12, W - 32, rowsT.length * 25 + 8);
   rowsT.forEach(([lab, f, col, bold], r) => { T(lab + ' (cm)', 20, ty + r * 25, { s: 8.5, b: true, c: col }); list.forEach((s, i) => { const E = r1All.soils[s]; if (E) T(String(Math.round(f(E))), X0 + i * cw + cw / 2, ty + r * 25 + 12, { s: bold ? 10 : 9.5, b: bold, a: 'center', c: col }); }); });
-  const es = list.map(s => r1All.soils[s]).filter(Boolean); if (es.length > 1) { const mn = Math.min(...es.map(e => e.rd)), mxx = Math.max(...es.map(e => e.rd)); T('Across the soils the deepest roots differ by ' + (mxx - mn).toFixed(0) + ' cm (' + mn.toFixed(0) + ' to ' + mxx.toFixed(0) + ' cm) at these settings.', 16, ty + rowsT.length * 25 + 10, { s: 9.5, b: true, c: ink }); T('The model stops roots at 1 m; your Daisy runs reach 120 cm.', 16, ty + rowsT.length * 25 + 23, { s: 9.2, i: true, c: MUTE }); }
+  const es = list.map(s => r1All.soils[s]).filter(Boolean); if (es.length > 1) { const mn = Math.min(...es.map(e => e.rd)), mxx = Math.max(...es.map(e => e.rd)); T('Across the soils the deepest roots differ by ' + (mxx - mn).toFixed(0) + ' cm (' + mn.toFixed(0) + ' to ' + mxx.toFixed(0) + ' cm) at these settings.', 16, ty + rowsT.length * 25 + 10, { s: 9.5, b: true, c: ink }); T('The model stops roots at 1 m; the simulations reach 120 cm.', 16, ty + rowsT.length * 25 + 23, { s: 9.2, i: true, c: MUTE }); }
   return y0 + 500;
 }
 
 function drawR1Data(y0) {
   const k = E15UI.out, od = E15OUT[k], rt = E15.roots, am = E15.amts, run = e15Run(E15UI.ri, E15UI.ai), mlab = (METHODS.find(m => m.k === e15Method()) || { label: e15Method() }).label;
   T('What your rooting-depth runs show', 16, y0, { s: 12.5, b: true, c: '#6B4423' });
-  T('E15: 1,000 Daisy runs on coarse loam. Rooting depth 30 to 180 cm, ten application amounts, ten irrigation methods. Method shown: ' + mlab + '.', 16, y0 + 15, { s: 9.5, c: MUTE });
+  T('1,000 simulations on coarse loam. Rooting depth 30 to 180 cm, ten application amounts, ten irrigation methods. Method shown: ' + mlab + '.', 16, y0 + 15, { s: 9.5, c: MUTE });
   if (state.soil !== 'S01_CoarseLoam') T('These runs exist for coarse loam only, so they do not change with the soil you picked.', 16, y0 + 28, { s: 9.5, b: true, c: '#B01E14' });
   E15OUT.forEach((o, i) => { const bx = 16 + i * 86, on = i === k, w = 82; ctx.fillStyle = on ? o[2] : '#EEE9DA'; rrect(bx, y0 + 36, w, 22, 6); ctx.fill(); ctx.strokeStyle = INK; ctx.lineWidth = on ? 2 : 1; ctx.stroke(); T(o[0], bx + w / 2, y0 + 51, { s: 8.8, b: on, a: 'center', c: on ? '#fff' : INK }); hot(bx, y0 + 36, w, 22, () => { E15UI.out = i; }, 'show ' + o[0].toLowerCase()); });
   // A: the output against rooting depth, one thin line per application amount
@@ -5496,8 +5513,8 @@ function drawE1() {
   card(y0 + 160, 'Roots (' + CROPS[state.crop].label.toLowerCase() + ')', 'take up about ' + (current.transp / 150).toFixed(1) + ' mm/day in the season', '#2E7D32');
   // data from the simulations
   const bare = DATA.baseline[state.soil].soil_evap, e7 = (DATA.e7[state.soil] || []).reduce((b, r) => { const d = Math.abs(r.vff - m.vff) + Math.abs(r.cap - CAP_VALUES[state.capIdx]) * 0.2; return !b || d < b.d ? { d, r } : b; }, null);
-  T('Your Daisy simulations, this soil', rx, y0 + 216, { s: 10, b: true }); T('bare soil: ' + bare.toFixed(0) + ' mm/yr soil evaporation (baseline)', rx, y0 + 231, { s: 9.5, c: INK });
-  if (e7 && vffOn) T('mulch strength ' + e7.r.vff + ', capacity ' + e7.r.cap + ' mm: ' + e7.r.soil_evap.toFixed(0) + ' mm/yr (E7)', rx, y0 + 245, { s: 9.5, c: '#1F66C8' });
+  T('Simulations, this soil', rx, y0 + 216, { s: 10, b: true }); T('bare soil: ' + bare.toFixed(0) + ' mm/yr soil evaporation (baseline)', rx, y0 + 231, { s: 9.5, c: INK });
+  if (e7 && vffOn) T('mulch strength ' + e7.r.vff + ', capacity ' + e7.r.cap + ' mm: ' + e7.r.soil_evap.toFixed(0) + ' mm/yr', rx, y0 + 245, { s: 9.5, c: '#1F66C8' });
   // buttons
   microViewBtns(rx, 656, 206);
   ctx.fillStyle = E1.flow ? '#D4A94A' : '#EEE9DA'; rrect(rx, 686, 206, 24, 6); ctx.fill(); ctx.strokeStyle = INK; ctx.lineWidth = E1.flow ? 2 : 1; ctx.stroke(); T(E1.flow ? 'Water paths: on' : 'Water paths: off', rx + 103, 702, { s: 10.5, b: E1.flow, a: 'center' }); hot(rx, 686, 206, 24, () => { E1.flow = !E1.flow; }, 'show or hide the vapour and liquid paths');
@@ -5689,7 +5706,7 @@ function drawE1Core(y0) {
   ['How to read it: matrix next to voids that open to the air dries from the void wall as well as from the top, so a',
    'ploughed core dries in patches around its clods (tan, dry, in the water content map) while an untilled core dries as a',
    'flat layer from the top. Water speed is highest near the top and beside open voids and falls to zero at the closed',
-   'bottom. Drying uses your soil\u2019s van Genuchten fit and the E1 rates above (mulch, temperature, rain and irrigation',
+   'bottom. Drying uses your soil\u2019s van Genuchten fit and the evaporation rates above (mulch, temperature, rain and irrigation',
    'method all act). Tillage acts through the pore geometry only.'].forEach((l, k) => T(l, 16, yy + k * 12.5, { s: 9, c: INK }));
   if (tip) coreTip(tip);
   return yy + 40;
@@ -6168,7 +6185,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
     View: () => [['Previous scene', key('['), '['], ['Next scene', key(']'), ']'], '-', ['Scenes panel', tog('hide-left'), '', !document.body.classList.contains('hide-left')], ['Results and settings panel', tog('hide-right'), '', !document.body.classList.contains('hide-right')], '-', ['Text size', clk('uxText')], ['Full screen', () => { const d = document; if (d.fullscreenElement) d.exitFullscreen(); else d.documentElement.requestFullscreen && d.documentElement.requestFullscreen(); }, 'F11']],
     Scenario: () => preset().map(p => [p.t, p.f]),
     Tools: () => [['Search views and settings', clk('uxSearch'), 'Ctrl+K'], ['Keyboard shortcuts', clk('guiHelp'), '?']],
-    Help: () => [['Guided tour', clk('uxTour')], ['Keyboard shortcuts', clk('guiHelp'), '?'], '-', ['About: 10,190 Daisy simulations, 10 soils', () => {}]]
+    Help: () => [['Guided tour', clk('uxTour')], ['Keyboard shortcuts', clk('guiHelp'), '?'], '-', ['About: 10,190 simulations, 10 soils', () => {}]]
   };
   const bar = document.createElement('nav'); bar.id = 'proMenu'; const h1 = $q('header h1'); h1.after(bar);
   const closeAll = () => bar.querySelectorAll('.mn.open').forEach(m => m.classList.remove('open'));
@@ -6191,7 +6208,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   const upd = () => { try {
     const sc = currentScene, m = current || {}, soil = (DATA.soil_labels || {})[state.soil] || state.soil;
     const f = (v, d, u) => (v === undefined || isNaN(v)) ? '' : v.toFixed(d) + u;
-    sb.innerHTML = '<span class="live">Scene<b>' + (sc.label || sc.id) + '</b></span><span>Soil<b>' + soil + '</b></span><span>Tillage<b>' + (TILL_LABELS[state.till] || state.till) + '</b></span><span>Crop<b>' + ((CROPS[state.crop] || {}).label || state.crop) + '</b></span><span>Evap<b>' + f(m.evap, 0, ' mm') + '</b></span><span>Drain<b>' + f(m.drain, 0, ' mm') + '</b></span><span>Irrig<b>' + f(m.irr, 0, ' mm') + '</b></span><span>Yield<b>' + f(m.yield * ((CROPS[state.crop] || { factor: 1 }).factor), 2, '') + '</b></span><span class="sp"></span><span>Daisy ensemble<b>10,190 runs</b></span><span>Ready</span>';
+    sb.innerHTML = '<span class="live">Scene<b>' + (sc.label || sc.id) + '</b></span><span>Soil<b>' + soil + '</b></span><span>Tillage<b>' + (TILL_LABELS[state.till] || state.till) + '</b></span><span>Crop<b>' + ((CROPS[state.crop] || {}).label || state.crop) + '</b></span><span>Evap<b>' + f(m.evap, 0, ' mm') + '</b></span><span>Drain<b>' + f(m.drain, 0, ' mm') + '</b></span><span>Irrig<b>' + f(m.irr, 0, ' mm') + '</b></span><span>Yield<b>' + f(m.yield * ((CROPS[state.crop] || { factor: 1 }).factor), 2, '') + '</b></span><span class="sp"></span><span>Simulations<b>10,190 runs</b></span><span>Ready</span>';
   } catch (e) {} };
   setInterval(upd, 500); upd();
 } catch (err) { console.warn('pro shell', err); } })();
@@ -6206,7 +6223,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
     const k = state.soil + '|' + (currentScene ? currentScene.id : ''); if (k === last) return; last = k;
     const tex = DATA.texture[state.soil], name = DATA.soil_labels[state.soil];
     cx.clearRect(0, 0, 264, 60); const off = soilParticles(264, 60, Math.abs(hashStr(state.soil)) + 2026, state.soil, () => -14, () => 0.1); cx.drawImage(off, 0, 0);
-    tx.innerHTML = '<b>' + name + '</b> (sand ' + Math.round(tex.sand) + '%, silt ' + Math.round(tex.silt) + '%, clay ' + Math.round(tex.clay) + '%)<span class="sep">|</span>every number and picture here comes from <b>10,190 Daisy simulations</b>, <b>10 soils</b>, <b>67 figures</b>';
+    tx.innerHTML = '<b>' + name + '</b> (sand ' + Math.round(tex.sand) + '%, silt ' + Math.round(tex.silt) + '%, clay ' + Math.round(tex.clay) + '%)<span class="sep">|</span>every number and picture here comes from <b>10,190 simulations</b>, <b>10 soils</b>, <b>67 figures</b>';
   } catch (e) {} };
   setInterval(upd, 400); upd();
 } catch (err) { console.warn('data strip', err); } })();
@@ -6311,7 +6328,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
     const sim = seasonSim(), { dd } = n1Bucket(sim), ay = yearOf(dd), k0 = ay * DPY, H = heat(sim, ay), xd = X0 + (dd - k0) / (DPY - 1) * (X1 - X0);
     ctx.fillStyle = PAPER; ctx.fillRect(0, 0, W, HERO + 4);
     T('Roots through the season: real model output, day by day', 16, 22, { s: 14, b: true });
-    T('Daisy root-model output for ' + profName() + ' · ' + (CROPS[state.crop] ? CROPS[state.crop].label.toLowerCase() : 'cereal/oilseed') + ', weather of ' + (1980 + ay) + '. Click or drag to move the day.', 16, 38, { s: 10.5, c: MUTE });
+    T('Simulated roots for ' + profName() + ' · ' + (CROPS[state.crop] ? CROPS[state.crop].label.toLowerCase() : 'cereal/oilseed') + ', weather of ' + (1980 + ay) + '. Click or drag to move the day.', 16, 38, { s: 10.5, c: MUTE });
     panel(H.a, A0, A1, 'Where the roots are (root density)', 'darker = more roots', sim, ay, dd);
     // rooting depth line + crop cover
     ctx.strokeStyle = '#2B1A0A'; ctx.lineWidth = 1.8; ctx.beginPath(); for (let d = 0; d < DPY; d++) { const x = X0 + d / (DPY - 1) * (X1 - X0), y = A0 + clampN(sim.rd[k0 + d], 0, 100) / 100 * (A1 - A0); d ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke();

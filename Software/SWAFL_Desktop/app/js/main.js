@@ -35,14 +35,27 @@ const Act = {
   },
   print() { E.print(); },
   // the whole report, every layer, built end to end and saved where the user chooses
+  // first the user ticks the layers to put in the report (all are ticked to start with)
   report() {
     const w = E.win; if (!w || typeof w.buildReport !== 'function') { UI.toast('The report is not available yet'); return; }
-    const ids = E.json('SCENES.map(function(s){return s.id})') || [], keep = E.snap ? E.snap.scene : 'field';
-    UI.modal({ title: 'Full report (PDF)', icon: 'print', html: '<p><b>Building the full report: ' + ids.length + ' layers, with your inputs, the results at these inputs and the key numbers and pictures of every layer.</b></p><p>This takes a few seconds. You choose where to save it when it is ready.</p>', buttons: [] });
+    const G = Layers.GROUPS.map(g => [g.name, g.items.map(it => [it[0], it[1]]).concat(g.id === 'g-design' ? [['farm', 'Virtual farm simulation']] : [])]);
+    const html = '<p>Tick the layers to save in the PDF. Each layer gets your inputs, its key numbers and its full drawing; long drawings continue on the next pages.</p>' +
+      '<label class="rpall"><input type="checkbox" id="rpAll" checked> <b>All layers</b></label><div class="rpgrid">' +
+      G.map(([gn, its], gi) => '<div class="rpg"><label><input type="checkbox" class="rpG" data-g="' + gi + '" checked> <b>' + UI.esc(gn) + '</b></label>' + its.map(([id, nm]) => '<label class="rpi"><input type="checkbox" class="rpI" data-g="' + gi + '" value="' + id + '" checked> ' + UI.esc(nm) + '</label>').join('') + '</div>').join('') + '</div><div id="rpCount" class="pnote"></div>';
+    const root = UI.modal({ title: 'Save report as PDF', icon: 'print', width: 'min(760px,96vw)', html, buttons: [{ label: 'Make the PDF', pri: true, act: () => { const ids = [...root.querySelectorAll('.rpI:checked')].map(b => b.value); if (!ids.length) { root.querySelector('#rpCount').textContent = 'Tick at least one layer.'; return false; } setTimeout(() => Act.reportBuild(ids), 30); } }, { label: 'Cancel' }] });
+    const I = () => [...root.querySelectorAll('.rpI')], cnt = () => { const n = I().filter(b => b.checked).length; root.querySelector('#rpCount').textContent = n + ' of ' + I().length + ' layers ticked'; root.querySelector('#rpAll').checked = n === I().length; root.querySelectorAll('.rpG').forEach(g => { const m = I().filter(b => b.dataset.g === g.dataset.g); g.checked = m.every(b => b.checked); g.indeterminate = !g.checked && m.some(b => b.checked); }); };
+    root.querySelector('#rpAll').addEventListener('change', e => { I().forEach(b => { b.checked = e.target.checked; }); cnt(); });
+    root.querySelectorAll('.rpG').forEach(g => g.addEventListener('change', () => { I().filter(b => b.dataset.g === g.dataset.g).forEach(b => { b.checked = g.checked; }); cnt(); }));
+    I().forEach(b => b.addEventListener('change', cnt)); cnt();
+  },
+  reportBuild(ids) {
+    const w = E.win, keep = E.snap ? E.snap.scene : 'field';
+    const all = E.json('SCENES.map(function(s){return s.id})') || []; ids = all.filter(id => ids.includes(id));
+    UI.modal({ title: 'Full report (PDF)', icon: 'print', html: '<p><b>Building the report: ' + ids.length + ' layer' + (ids.length === 1 ? '' : 's') + ', with your inputs, the results at these inputs and the key numbers and pictures of every layer.</b></p><p>This takes a few seconds. You choose where to save it when it is ready.</p>', buttons: [] });
     UI.log('Building the full report (' + ids.length + ' layers)');
     setTimeout(async () => {
       let bytes = null, err = null;
-      try { w.__REPORTING = true; const t0 = performance.now(); bytes = w.buildReport(ids, 'Full report, ' + (E.snap ? E.snap.dateLbl : '')); UI.log('Report built: ' + Math.round(bytes.length / 1024) + ' kB in ' + ((performance.now() - t0) / 1000).toFixed(1) + ' s'); }
+      try { w.__REPORTING = true; const t0 = performance.now(); bytes = w.buildReport(ids, (ids.length === all.length ? 'Full report, ' : 'Report, ') + (E.snap ? E.snap.dateLbl : '')); UI.log('Report built: ' + Math.round(bytes.length / 1024) + ' kB in ' + ((performance.now() - t0) / 1000).toFixed(1) + ' s'); }
       catch (e) { err = e; } finally { w.__REPORTING = false; try { E.scene(keep); } catch (e2) {} }
       UI.closeModal && UI.closeModal(); document.getElementById('modalRoot').innerHTML = '';
       if (err || !bytes) { UI.log('Report failed: ' + (err ? err.message : 'no data'), 'err'); UI.modal({ title: 'Full report', html: '<p>The report could not be built: ' + UI.esc(err ? err.message : 'no data') + '</p>' }); return; }
@@ -50,7 +63,7 @@ const Act = {
       try { const r = await w.saveBytes(nm, bytes, 'application/pdf'); if (r && r.ok === false) UI.log('Report not saved (cancelled)', 'warn'); else { UI.log('Full report saved' + (r && r.path ? ': ' + r.path : '')); UI.toast('Full report saved'); } } catch (e) { UI.log('Could not save the report: ' + e.message, 'err'); }
     }, 80);
   },
-  reportChoose() { try { const b = E.win.document.getElementById('reportBtn'); if (b) { b.click(); UI.log('Choose the parts of the report, then make the PDF'); return; } } catch (e) {} UI.toast('The report is not available yet'); },
+  reportChoose() { Act.report(); },
   manual() { if (window.swafl && window.swafl.openManual) { window.swafl.openManual(); return; } window.open('SWAFL_Manual.pdf', '_blank'); },
   undo() { if (Hist.i > 0) { Hist.i--; histApply(Hist.stack[Hist.i]); } },
   redo() { if (Hist.i < Hist.stack.length - 1) { Hist.i++; histApply(Hist.stack[Hist.i]); } },
@@ -82,7 +95,7 @@ const MENUS = [
   { label: 'File', items: () => { return [
     { label: 'Import weather data (CSV, Excel, DWF, DLF, DAI)...', icon: 'open', act: () => WxUI.importFile() }, { label: 'Online weather for a location...', icon: 'search', act: () => WxUI.online() }, { sep: 1 }, { label: 'New project', icon: 'new', key: 'Ctrl+N', act: Act.newProject }, { label: 'Open project...', icon: 'open', key: 'Ctrl+O', act: Act.openProject }, { label: 'Save project...', icon: 'save', key: 'Ctrl+S', act: Act.saveProject }, { sep: 1 },
     { label: 'Export', icon: 'img', sub: [{ label: 'Picture of the window (PNG)', icon: 'img', key: 'Ctrl+E', act: Act.exportPNG }, { label: 'Yearly results (CSV)', icon: 'csv', act: Act.exportSeasonCSV }, { label: 'Design results (CSV)', icon: 'csv', act: Act.exportDesignCSV }] },
-    { label: 'Save full report as PDF...', icon: 'print', key: 'Ctrl+Shift+P', act: Act.report }, { label: 'Report of chosen layers (PDF)...', icon: 'print', act: () => Act.reportChoose() }, { label: 'Print / save this view as PDF...', icon: 'print', key: 'Ctrl+P', act: Act.print }, { sep: 1 }, { label: 'Exit', icon: 'exit', key: 'Ctrl+Q', act: Act.exit }]; } },
+    { label: 'Save report as PDF (choose the layers)...', icon: 'print', key: 'Ctrl+Shift+P', act: Act.report }, { label: 'Print / save this view as PDF...', icon: 'print', key: 'Ctrl+P', act: Act.print }, { sep: 1 }, { label: 'Exit', icon: 'exit', key: 'Ctrl+Q', act: Act.exit }]; } },
   { label: 'Edit', items: [
     { label: 'Undo', icon: 'undo', key: 'Ctrl+Z', act: Act.undo, dis: () => Hist.i <= 0 }, { label: 'Redo', icon: 'redo', key: 'Ctrl+Y', act: Act.redo, dis: () => Hist.i >= Hist.stack.length - 1 }, { sep: 1 },
     { label: 'Reset all settings', icon: 'reset', act: Act.resetSettings }, { label: 'Copy settings as text', icon: 'copy', act: Act.copySettings }, { sep: 1 },
@@ -178,7 +191,7 @@ function shortcutsModal() {
   UI.modal({ title: 'Keyboard shortcuts', icon: 'key', width: 'min(520px,94vw)', html: '<table class="tbl">' + R.map(r => '<tr><td><span class="kbd">' + r[0] + '</span></td><td style="text-align:left">' + r[1] + '</td></tr>').join('') + '</table>' });
 }
 function aboutModal() {
-  UI.modal({ title: 'About SWAFL', icon: 'info', width: 'min(560px,94vw)', html: '<div class="about"><img src="assets/logo.svg" width="96" height="96" alt=""><div><h3 style="margin:0">SWAFL ' + VERSION + '</h3><p>Soil Water, Atmosphere, Feedback and Layout workbench</p><p>Coupled water fluxes, pore-scale dynamics, precision irrigation and mulching feedback loops, with surface, drip and sprinkler design.</p><p>Built on 10,190 Daisy simulations across ten soils.<br>Author: Naziru Halilu</p><p>' + link(REPO, 'github.com/halilunaziru73-creator') + '</p></div></div>' });
+  UI.modal({ title: 'About SWAFL', icon: 'info', width: 'min(560px,94vw)', html: '<div class="about"><img src="assets/logo.svg" width="96" height="96" alt=""><div><h3 style="margin:0">SWAFL ' + VERSION + '</h3><p>Soil Water, Atmosphere, Feedback and Layout workbench</p><p>Coupled water fluxes, pore-scale dynamics, precision irrigation and mulching feedback loops, with surface, drip and sprinkler design.</p><p>Built on 10,190 simulations across ten soils.<br>Author: Naziru Halilu</p><p>' + link(REPO, 'github.com/halilunaziru73-creator') + '</p></div></div>' });
 }
 
 /* ---------- keyboard ---------- */

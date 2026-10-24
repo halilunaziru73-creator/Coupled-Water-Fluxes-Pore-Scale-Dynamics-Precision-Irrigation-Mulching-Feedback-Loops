@@ -221,7 +221,7 @@
   // ------------------------------------------------------------------ provenance ribbon for transferred results
   window.cropNote = function () {
     if (!isLib(state.crop)) return null; const pp = cropParams(), c = CWB(state.crop);
-    return pp.label + ': Daisy cereal results transferred with FAO-56 crop coefficients (Kc ' + pp.kcIni.toFixed(2) + ' / ' + pp.kcMid.toFixed(2) + ' / ' + pp.kcEnd.toFixed(2) + '); yield as % of potential (Ky ' + (c.pp.ky == null ? 'assumed 1.0' : c.pp.ky.toFixed(2)) + ')';
+    return pp.label + ': Cereal results transferred with FAO-56 crop coefficients (Kc ' + pp.kcIni.toFixed(2) + ' / ' + pp.kcMid.toFixed(2) + ' / ' + pp.kcEnd.toFixed(2) + '); yield as % of potential (Ky ' + (c.pp.ky == null ? 'assumed 1.0' : c.pp.ky.toFixed(2)) + ')';
   };
   setInterval(() => { try { const n = cropNote(), el = document.getElementById('cropNoteBar'); if (n) { let e = el; if (!e) { e = document.createElement('div'); e.id = 'cropNoteBar'; const pc = document.getElementById('proCenter') || document.body; pc.insertBefore(e, pc.firstChild); } e.textContent = n; e.style.display = ''; } else if (el) el.style.display = 'none'; } catch (e) {} }, 600);
   try { refresh(); } catch (e) {}
@@ -236,7 +236,7 @@
   applyState = function (o) { if (o && o.crop && !CROPS[o.crop]) o.crop = MIG[o.crop] || 'cereal'; return oApply.apply(this, arguments); };
   if (!CROPS[state.crop]) state.crop = MIG[state.crop] || 'cereal';
   const box = document.getElementById('cropBtns'); if (!box) return;
-  const L = CROPLIB.crops, groups = [['Simulated in Daisy', ['cereal']],
+  const L = CROPLIB.crops, groups = [['Simulated', ['cereal']],
     ['Staple food crops', ['cassava', 'yam', 'rice', 'maize', 'sorghum', 'pearlmillet', 'cowpea', 'wheat', 'potato']],
     ['Cash and oil crops', ['groundnut', 'soybean', 'cotton', 'mustard', 'greengram', 'chickpea', 'oilpalm', 'cocoa']],
     ['Vegetables', ['tomato', 'onion', 'cabbage', 'pepper']],

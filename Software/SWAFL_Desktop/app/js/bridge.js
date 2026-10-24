@@ -56,7 +56,7 @@ const E = (() => {
       const prev = api.snap; api._last = str; api.snap = s;
       api.emit('snap', { s, prev });
       if (!prev || prev.scene !== s.scene) api.emit('scene', s);
-      if (!prev || JSON.stringify(prev.state) !== JSON.stringify(s.state) || prev.year !== s.year || prev.date !== s.date) api.emit('state', s);
+      if (!prev || JSON.stringify(prev.state) !== JSON.stringify(s.state) || prev.year !== s.year || prev.date !== s.date || (prev.wx && prev.wx.key) !== (s.wx && s.wx.key)) api.emit('state', s);
     },
 
     /* ---- data from the engine ---- */

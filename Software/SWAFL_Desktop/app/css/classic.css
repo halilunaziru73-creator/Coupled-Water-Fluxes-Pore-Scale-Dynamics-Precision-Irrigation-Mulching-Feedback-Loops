@@ -140,3 +140,15 @@ input[type=range]{accent-color:#0A246A}
 .vb.on,.vb.on:hover{color:#000 !important;background:#E3E0D8 !important}
 .seg button.on,.seg button.on:hover{color:#000 !important;background:#E3E0D8 !important}
 .warnbox{margin-top:6px;padding:6px 8px;background:#FFFFE1;border:1px solid #C0A000;color:#000}
+/* dashboard results laid out like the Properties panel: white panel, grey group bars, plain label/value rows */
+#dashBody,#dashBody .dsec,#dashBody .dsb{background:#FFFFFF !important}
+#dashBody .dsec{box-shadow:none !important;margin:0 0 2px 0}
+#dashBody .dsec h4{font:bold 11px Tahoma,Verdana,sans-serif}
+#dashBody .kpi{box-shadow:none !important;border:0 !important;border-bottom:1px solid #E4E2DA !important;border-radius:0 !important;padding:3px 4px !important;background:#FFFFFF !important}
+#dashBody .kpi .kl{color:#000;font-size:11px}
+#dashBody .kpi .kv{color:#0A246A;font-size:14px;font-weight:bold}
+
+.rpall{display:block;margin:6px 0;padding:3px 6px;background:linear-gradient(#ECE9D8,#D8D4C8);border-bottom:1px solid #808080}
+.rpgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:6px 14px;max-height:52vh;overflow:auto;padding:4px}
+.rpg{border:1px solid #C0C0C0;background:#FFFFFF;padding:4px 6px}.rpg>label{display:block;border-bottom:1px solid #E0E0E0;margin-bottom:3px;padding-bottom:2px}
+.rpi{display:block;padding:1px 0 1px 16px;font-size:11px}

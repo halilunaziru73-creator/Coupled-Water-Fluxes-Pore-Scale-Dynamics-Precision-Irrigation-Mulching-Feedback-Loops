@@ -169,7 +169,9 @@
   sidChip = function (x, y, w, h, label, on, fn, tip) { return oChip(x, y, w, h, label, on, function () { const r = fn.apply(this, arguments); invalidate('inputs changed'); return r; }, tip); };
 
   // ------------------------------------------------------------------ Run simulation
-  const stateKey = () => JSON.stringify(state) + '|' + (typeof dss !== 'undefined' ? dss.mode : '');
+  // the inputs that change a design result (the irrigation method of the annual model does not)
+  const stateKey = () => JSON.stringify(Object.assign({}, state, { method: 0, n1Prev: 0 })) + '|' + (typeof dss !== 'undefined' ? dss.mode : '');
+  window.designStateKey = () => stateKey();
   function runDesign(id) { id = id || curId(); if (!id) return; RUN[id].on = true; RUN[id].st = stateKey(); RUN[id].why = ''; play.t = 0; play.hold = 0; play.on = true; const pb = document.getElementById('playBtn'); if (pb) pb.textContent = 'Pause'; try { BEST[id] = bestFor(id); } catch (e) { BEST[id] = null; } }
   window.runDesign = runDesign;
   const btn3d = (x, y, w, h, label, prim) => { ctx.fillStyle = prim ? '#0A246A' : '#D4D0C8'; ctx.fillRect(x, y, w, h); ctx.fillStyle = prim ? '#3A6EA5' : '#FFFFFF'; ctx.fillRect(x, y, w, 2); ctx.fillRect(x, y, 2, h); ctx.fillStyle = prim ? '#000' : '#404040'; ctx.fillRect(x, y + h - 2, w, 2); ctx.fillRect(x + w - 2, y, 2, h); T(label, x + w / 2, y + h / 2 + 4.5, { s: 12, b: true, a: 'center', c: prim ? '#FFFFFF' : '#000' }); };
@@ -333,3 +335,5 @@
   const SKIP = { sid: 1, drip: 1, spr: 1, farm: 1 };
   SCENES.forEach(sc => { if (SKIP[sc.id] || sc._pillWrap || typeof sc.draw !== 'function') return; sc._pillWrap = true; const od = sc.draw; sc.draw = function () { Q = []; let r; try { r = od.apply(this, arguments); } finally { if (Q) flush(); } return r; }; });
 })();
+/* Layer names without their internal codes (S2, V5, C1 ...): the names alone are shown everywhere. */
+(function () { try { const fix = s => { if (s && typeof s.label === 'string') s.label = s.label.replace(/^[A-Z]\d{1,2}\s+/, ''); }; SCENES.forEach(fix); const oP = SCENES.push.bind(SCENES); SCENES.push = function () { [...arguments].forEach(fix); return oP.apply(null, arguments); }; } catch (e) {} })();

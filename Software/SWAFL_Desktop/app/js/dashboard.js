@@ -20,7 +20,7 @@ const Dash = (() => {
   const CB = (k, title, inner) => SEC('ch-' + k, title, '', '<div class="chart">' + inner + '</div>');
   let dayCache = { key: '', D: null };
   function results(s) {
-    const key = s.date + '|' + JSON.stringify(s.state) + '|' + s.year;
+    const key = s.date + '|' + JSON.stringify(s.state) + '|' + s.year + '|' + ((s.wx && s.wx.key) || '');
     if (dayCache.key !== key) { dayCache = { key, D: E.day() }; }
     const D = dayCache.D, Y = D && D.year ? D.year : null;
     let h = '<div class="dwrap">';
@@ -165,7 +165,7 @@ const Dash = (() => {
   }
   function render() {
     const s = E.snap; if (!s) return;
-    if (tab === 'results') results(s); else if (tab === 'design') design(s); else if (tab === 'charts') { const k = s.scene + '|' + JSON.stringify(s.state) + '|' + s.date + '|' + (DL[s.scene] ? runOn(s.scene) + E.ev('JSON.stringify(window.DESIGN_RUN)') + E.ev("JSON.stringify(typeof sidRun==='function'?[sidRun().Ea,drRun().Ea,spRun().Ea]:0)") : ''); if (k !== chartKey) { chartKey = k; charts(); } } else messages();
+    if (tab === 'results') results(s); else if (tab === 'design') design(s); else if (tab === 'charts') { const k = s.scene + '|' + JSON.stringify(s.state) + '|' + s.date + '|' + ((s.wx && s.wx.key) || '') + '|' + (DL[s.scene] ? runOn(s.scene) + E.ev('JSON.stringify(window.DESIGN_RUN)') + E.ev("JSON.stringify(typeof sidRun==='function'?[sidRun().Ea,drRun().Ea,spRun().Ea]:0)") : ''); if (k !== chartKey) { chartKey = k; charts(); } } else messages();
   }
   function setTab(t) { tab = t; lastHtml = ''; chartKey = ''; tabs.querySelectorAll('button[data-tab]').forEach(b => b.classList.toggle('on', b.dataset.tab === t)); render(); }
   tabs.addEventListener('click', e => {
