@@ -6455,7 +6455,7 @@ The drawing of the layer from top to bottom. It is explained in Chapter 22; its 
 **What the arrows point to.**
 
 - **1** The heading or label *Year by year: how reliable is this setting?*.
-- **2** The heading or label *Irrigation*.
+- **2** The heading or label *clock; click a bar to go to that year.*.
 - **3** The heading or label *Grain yield*.
 - **4** The heading or label *Evapotranspiration*.
 
