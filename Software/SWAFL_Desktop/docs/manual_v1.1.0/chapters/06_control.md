@@ -118,6 +118,24 @@ $$
 
 A sand holds about 0.6 mm per cm, so the same demand empties it in about a third of the time of a loam: at the default settings, sand reaches its trigger in about 7 days and coarse loam in about 18. When you press **Play**, the gauge follows the daily model day by day, and its response is tied to the soil: it answers at once in a sand and slowly in a clay ($\text{rate} = 0.09 \times 1.5/\mathrm{AWC}_s$ per frame, between 0.04 and 0.35).
 
+### The core trade-off: f = 0.50 or f = 0.45
+
+Under the explanation, a panel answers the question each grower asks: trigger at a depletion of 0.50 or of 0.45? It has two columns, and each condition is ticked when it applies to your settings.
+
+**Choose f = 0.50 if:**
+
+* you irrigate a standard field crop (maize, grains, alfalfa): a field crop of the library whose FAO-56 depletion fraction is $p \ge 0.5$;
+* your soil is loam or clay (high water-holding capacity): less than 60 % sand and more than 0.9 mm of available water per cm;
+* your system can irrigate the entire field quickly: a full round of the design of your irrigation method takes 2 days or less.
+
+**Choose f = 0.45 if:**
+
+* your irrigation system takes several days to finish a full round: more than 2 days. A round is the time per round of the design divided by the hours a day you irrigate (24 h for surface irrigation).
+* your soil is sandy or coarse and dries out very fast: 60 % sand or more, or 0.9 mm of available water per cm or less;
+* the crop is in a critical, water-sensitive growth stage such as flowering or pollination: on the date on the clock the crop is at 85 % or more of its full cover.
+
+If any condition of the f = 0.45 column applies, the advice is f = 0.45; otherwise it is f = 0.50. A sentence gives the reasons. Each column has a button that sets the trigger of the soil in focus to that depletion; the button of the trigger in use is green. The time per round is known once the design of your method has been opened; until then the panel says so.
+
 ### Reading the sensor value
 
 The dashboard tile *Sensor / trigger* reads two numbers: the **current depletion** $f$ at the sensor layer and the **trigger depletion** $f_T$. When the first reaches the second, irrigation is due. On 18 Oct 2026 the tile reads $0.02/0.38$ for the Coarse Loam: the soil is almost at field capacity (0.02), and the trigger is at depletion 0.38 ($= f$ at 300 cm).

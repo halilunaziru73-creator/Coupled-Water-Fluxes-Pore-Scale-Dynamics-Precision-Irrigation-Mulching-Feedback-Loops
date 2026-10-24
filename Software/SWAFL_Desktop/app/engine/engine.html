@@ -366,7 +366,7 @@ const SCENES = [
     legend:[['#2E7DE8','Tillage'],['#E8912D','Consolidation rate'],['#D93025','Selected soil']], insight:"Tillage drives drainage change in coarse soils; consolidation rate takes over in finer soils, and soil texture sets the baseline." },
   { id:"e1", label:"E1 Evaporation", color:"#4FC3F7", play:true, dur:16, h:1960, interactive:true, onMove: p => { E1.hv = p; return false; }, onLeave: () => { E1.hv = null; }, draw: () => drawE1(), title:"Evaporation: from the pore to the atmosphere, in a modelled section",
     legend:[['#1F66C8','Liquid water in the pores'],['#FFFFFF','Vapour moving up'],['#E8912D','Drying front'],['#8A8F98','No mulch']], insight:"Water leaves a drying soil in two stages. While films keep the surface wet, the soil loses water at the atmospheric rate; once the surface pores empty, the water has to cross a growing dry layer as vapour. Your mulch lowers the demand and so lengthens stage 1." },
-  { id:"n1", label:"N1 Trigger Law", color:"#FF4D4D", h: 690, draw: () => drawN1Chart(), interactive:true, onDown: p => n1Down(p), onMove: p => n1Move(p), onUp: () => n1Up(), onLeave: () => { n1ui.hover = -1; ptrN1.x = -99; }, title:"Root-zone depletion: soil column and the soil-independent trigger",
+  { id:"n1", label:"N1 Trigger Law", color:"#FF4D4D", h: 925, draw: () => drawN1Chart(), interactive:true, onDown: p => n1Down(p), onMove: p => n1Move(p), onUp: () => n1Up(), onLeave: () => { n1ui.hover = -1; ptrN1.x = -99; }, title:"Root-zone depletion: soil column and the soil-independent trigger",
     legend:[['#D93025','Critical f* = 0.45, same for every soil'],['#5B2FA8','This soil\'s trigger (dashed line in the column; drag the gauge)'],['#D93025','Layer past the trigger'],['#1B63C8','Water left for the crop'],['#1E8E3E','Before f*']], insight:"Re-expressing the irrigation trigger as root-zone depletion collapses all ten soils onto one curve (pooled R2 0.48 to 0.75 for irrigation, 0.23 to 0.70 for yield)." },
   { id:"n2", label:"N2 Mulch Fate", color:"#4DC9C9", h:946, draw: () => { drawN2x(); hotN2(); }, title:"Fate of the water saved by mulch across rainfall",
     legend:[['#2E9E4F','Irrigation saved'],['#2E6FD0','Extra drainage'],['#E8912D','Extra transpiration'],['#1B1F23','Evaporation saved']], insight:"Water saved from evaporation by mulching is redirected mainly into reduced irrigation in dry years, mainly into extra drainage in wet years, crossing over near rain x1.2." },
@@ -1702,6 +1702,7 @@ function dssMovie(y, sim, k0, up, sp) {
 
 // ===== Irrigation schedule and advice: closes every irrigation design (surface, drip, sprinkler) =====
 function irAdvice(y0, sp) {
+  try { (window.__CYCLE = window.__CYCLE || {})[sp.sys] = sp.timeH || null; } catch (e) {}
   const sim = simCache.val || seasonSim(), k0 = fclock.kd(), ay = clampN(yearOf(k0), 0, NYR - 1), Ea = Math.max(0.05, sp.Ea || 0.5), gross = sp.gross || sp.Zn / Ea;
   const yr = []; for (let d = ay * DPY; d < Math.min(ND, (ay + 1) * DPY); d++) if ((sim.irr[d] || 0) > 0.5) yr.push(d);
   const gaps = []; for (let i = 1; i < yr.length; i++) gaps.push(yr[i] - yr[i - 1]);
@@ -5102,6 +5103,41 @@ function drawN1Chart() {
   yq = TW('Under your settings: yield ' + (mf.yield * cf.factor).toFixed(2) + ' ' + cf.unit.split(' ')[0] + ', irrigation ' + mf.irr.toFixed(0) + ' mm, drainage ' + mf.drain.toFixed(0) + ' mm a year' + (rl == null ? '' : '; the trigger gives ' + Math.round(rl * 100) + '% of the best trigger\'s yield for this soil') + '.', 26, yq + 1, 560, { s: 10.5 });
   yq = TW('On this day the sensor reads ' + sensorCm.toLocaleString('en-US') + ' cm (depletion ' + fSensor.toFixed(2) + ') against the trigger of ' + fT.toFixed(2) + ': ' + (fSensor >= fT ? (growing ? 'irrigation is due.' : 'beyond it, but no crop is growing, so nothing is irrigated.') : 'within it.') + (fSensor >= fT && growing && sim.irrFront > 0 && z > sim.irrFront + 3 ? ' Irrigation here wets only to about ' + Math.round(sim.irrFront) + ' cm, so a sensor at ' + z + ' cm is not reached.' : '') + (z > rd + 3 && inRoot > 0 && beyond === inRoot && fSensor < fT ? ' The roots reach only ' + Math.round(rd) + ' cm, so a sensor at ' + z + ' cm does not see the dry root zone.' : '') + ' ' + beyond + ' of ' + inRoot + ' root-zone layers are beyond the trigger (red bars in the column).', 26, yq + 2, 560, { s: 10.5 });
   { const sp = n1Speed(sf), sand = (DATA.texture[sf] || {}).sand || 0; yq = TW('How fast ' + DATA.soil_labels[sf].toLowerCase() + ' dries: about ' + (sp.rate * 100).toFixed(1) + ' % of its available water a day at the peak of the season (the crop uses ' + sp.mm.toFixed(1) + ' mm a day of the ' + sp.taw.toFixed(0) + ' mm the root zone holds), so from field capacity it reaches its trigger in about ' + (sp.days != null ? Math.max(1, Math.round(sp.days)) : '-') + ' days. ' + (sand >= 60 ? 'A sandy soil holds little water: it dries fast and needs light, frequent irrigation.' : sand <= 30 ? 'A fine soil holds much water: it dries slowly and can take larger, less frequent irrigation.' : 'A medium soil: it dries at a moderate pace.') + ' The gauge follows the soil at this pace when you press Play.', 26, yq + 1, 560, { s: 10.5, c: '#12303A', b: true }); }
+
+  n1Choice(by0 + 176 + 14, sf, sim, dd);
+}
+// ------------------------------------------------------------------------------------------------
+// The core trade-off: trigger at depletion f = 0.50 or f = 0.45. Each question is answered from your settings (crop, soil, the time
+// your system takes for a full round, the growth stage on the date on the clock); a button sets the trigger of this soil.
+function n1Choice(y, sf, sim, dd) {
+  const cl = window.CROPLIB && CROPLIB.crops[state.crop], cropLbl = (CROPS[state.crop] || {}).label || state.crop, p = cl && cl.p != null ? cl.p : 0.55;
+  const fieldKinds = ['maize', 'wheat', 'sorghum', 'millet', 'rice', 'cotton', 'soybean', 'groundnut', 'legume', 'cowpea', 'mustard'], standard = !cl ? true : (cl.group === 'field' && (fieldKinds.includes(cl.kind) || /alfalfa|lucerne|grain|cereal/i.test(cl.label))) && p >= 0.5;
+  const tex = DATA.texture[sf] || {}, sandy = (tex.sand || 0) >= 60 || (AWC[sf] || 1.5) <= 0.9, fine = !sandy && (tex.sand || 0) < 60;
+  const meth = state.method === 'M01_Overhead' ? 'Sprinkler' : /Drip/.test(state.method) ? 'Drip' : 'Surface', hpd = (typeof SPD !== 'undefined' && SPD.top) || 24, cyc = window.__CYCLE && window.__CYCLE[meth];
+  const cycDays = cyc != null ? cyc / (meth === 'Surface' ? 24 : hpd) : null, slow = cycDays != null && cycDays > 2;
+  const growing = sim.widx[dd] >= 0 && sim.cover[dd] > 0.15; let cmax = 0; for (let q = Math.max(0, dd - 200); q < Math.min(ND, dd + 200); q++) if (sim.widx[q] === sim.widx[dd]) cmax = Math.max(cmax, sim.cover[q]);
+  const critical = growing && cmax > 0 && sim.cover[dd] >= 0.85 * cmax;   // full cover: flowering and grain or fruit set
+  const Q45 = [[sandy, 'Your soil is sandy or coarse (dries out very fast)', DATA.soil_labels[sf] + ', ' + (AWC[sf] || 1.5).toFixed(1) + ' mm of available water per cm'],
+    [slow, 'Your irrigation system takes several days to finish a full round', cycDays == null ? 'open the ' + meth.toLowerCase() + ' design to know its time per round' : meth.toLowerCase() + ': ' + cycDays.toFixed(1) + ' days per round (' + cyc.toFixed(1) + ' h at ' + (meth === 'Surface' ? 24 : hpd) + ' h a day)'],
+    [critical, 'The crop is in a critical, water-sensitive stage (flowering or pollination)', growing ? cropNameAt(sim, dd) + ' on ' + fmtDate(dateOfK(dd)) + (critical ? ': full cover, flowering and grain set' : ': not at full cover') : 'no crop on ' + fmtDate(dateOfK(dd))]];
+  const Q50 = [[standard, 'You irrigate a standard field crop (maize, grains, alfalfa)', cropLbl + (cl ? ', FAO-56 depletion fraction p = ' + p.toFixed(2) : '')],
+    [fine, 'Your soil is loam or clay (high water-holding capacity)', DATA.soil_labels[sf]],
+    [cycDays != null && !slow, 'Your system can irrigate the entire field quickly', cycDays == null ? 'open the design to know its time per round' : cycDays.toFixed(1) + ' days per round']];
+  const n45 = Q45.filter(q => q[0]).length, n50 = Q50.filter(q => q[0]).length, rec = n45 > 0 ? 0.45 : 0.5, cur = depletionRaw(sf, trigAbsFor(sf));
+  box(14, y, W - 28, 262, { fill: '#fff', r: 8 });
+  T('The core trade-off: trigger at f = 0.50 or f = 0.45?', 26, y + 20, { s: 12.5, b: true, c: '#12303A' });
+  T('Each question is answered from your settings; a tick means it applies to you.', 26, y + 35, { s: 9.5, i: true, c: MUTE });
+  const col = (x, title, Q, on, f) => { const w = (W - 28 - 36) / 2; ctx.fillStyle = on ? '#E8F4EA' : '#F6F5F0'; rrect(x, y + 44, w, 166, 6); ctx.fill(); ctx.strokeStyle = on ? '#2E7D32' : '#C8C4B8'; ctx.lineWidth = on ? 2 : 1; ctx.stroke();
+    T(title, x + 10, y + 62, { s: 11, b: true, c: on ? '#1E5A2A' : '#12303A' });
+    let yy = y + 80; Q.forEach(q => { ctx.fillStyle = q[0] ? '#2E9E5B' : '#C8C4B8'; ctx.beginPath(); ctx.arc(x + 16, yy - 4, 6, 0, 6.283); ctx.fill(); T(q[0] ? '✓' : '–', x + 16, yy - 0.5, { s: 9, b: true, a: 'center', c: '#fff' });
+      const n1 = sidWrap(q[1], x + 28, yy, w - 36, { s: 9.4, b: true, c: '#12303A' }, 11); const n2 = sidWrap(q[2], x + 28, yy + 11 * n1, w - 36, { s: 8.8, c: '#4B5563' }, 11); yy += 11 * (n1 + n2) + 7; });
+    const bx = x + 10, bw = w - 20, byy = y + 182; ctx.fillStyle = Math.abs(cur - f) < 0.005 ? '#1E5A2A' : '#0A246A'; rrect(bx, byy, bw, 22, 5); ctx.fill(); T(Math.abs(cur - f) < 0.005 ? 'In use: trigger at f = ' + f.toFixed(2) : 'Use f = ' + f.toFixed(2) + ' for ' + DATA.soil_labels[sf].toLowerCase(), bx + bw / 2, byy + 15, { s: 10, b: true, a: 'center', c: '#fff' });
+    hot(bx, byy, bw, 22, () => { state.trigBy[sf] = f; refresh(); }, 'set the trigger of this soil to depletion ' + f.toFixed(2)); };
+  col(26, 'Choose f = 0.50 if', Q50, rec === 0.5, 0.5); col(26 + (W - 28 - 36) / 2 + 12, 'Choose f = 0.45 if', Q45, rec === 0.45, 0.45);
+  const R45 = ['the soil is sandy and dries out fast', 'the system needs several days for a full round', 'the crop is at flowering or pollination'], R50 = ['it is a standard field crop', 'the soil holds much water', 'the system covers the whole field quickly'];
+  const join = a => a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1];
+  const why = rec === 0.45 ? 'Advice for you: f = 0.45, because ' + join(Q45.map((q, i) => q[0] ? R45[i] : null).filter(Boolean)) + '. Irrigating a little earlier keeps the crop out of stress while the round goes on.' : 'Advice for you: f = 0.50' + (n50 ? ', because ' + join(Q50.map((q, i) => q[0] ? R50[i] : null).filter(Boolean)) : '') + '. The soil can give half of its available water before the crop feels it, with fewer irrigations.';
+  sidWrap(why + ' Now: f = ' + cur.toFixed(2) + '.', 26, y + 226, W - 52, { s: 9.6, b: true, c: rec === 0.45 ? '#8A5A00' : '#1E5A2A' }, 12);
 }
 
 // ------------------------------------------------------------------------------------------------
