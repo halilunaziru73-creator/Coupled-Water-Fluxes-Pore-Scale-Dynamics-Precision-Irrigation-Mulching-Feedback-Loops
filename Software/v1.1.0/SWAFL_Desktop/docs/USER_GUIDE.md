@@ -1,6 +1,6 @@
 # SWAFL user guide
 
-> **Manual of version 1.1.0 (PDF, 530 pages):** [SWAFL_Manual_v1.1.0.pdf](manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf) — opens with F1. The manual of version 1.0: [SWAFL_Manual.pdf](../../../v1.0/SWAFL_Desktop/docs/SWAFL_Manual.pdf) (https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/blob/main/Software/v1.0/SWAFL_Desktop/docs/SWAFL_Manual.pdf) covers installation, every control and trigger, every layer and design simulation, the governing equations with citations, the dashboard, workflows and troubleshooting. The Markdown sources are in [manual/](manual/) (rebuild with `manual/build.sh`).
+> **Manual of version 1.1.0 (PDF, 530 pages):** [SWAFL_Manual_v1.1.0.pdf](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf) — opens with F1. The manual of version 1.0: [SWAFL_Manual.pdf](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.0/SWAFL_Desktop/docs/SWAFL_Manual.pdf). The 1.1.0 manual covers installation, every control and trigger, every layer and design simulation, the governing equations with citations, the dashboard, workflows and troubleshooting. The Markdown sources are in [manual_v1.1.0/chapters](manual_v1.1.0/chapters) (rebuild with `manual_v1.1.0/build.sh`).
 
 
 ## Download the software (Windows)

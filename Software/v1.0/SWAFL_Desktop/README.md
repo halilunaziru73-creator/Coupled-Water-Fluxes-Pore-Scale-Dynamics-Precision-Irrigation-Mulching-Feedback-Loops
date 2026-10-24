@@ -4,7 +4,7 @@
 
 > **This folder is version 1.0, the first release, kept as it was.** The latest version is **1.1.0**: [folder `Software/v1.1.0`](../../v1.1.0/SWAFL_Desktop), [online workbench](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html?v=1.1.0).
 >
-> **Download the SWAFL manual (PDF):** version 1.1.0, the latest: [open in the browser](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf) or [download](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf) · [version 1.0, this folder](docs/SWAFL_Manual.pdf)
+> **Download the SWAFL manual (PDF):** version 1.1.0, the latest: [open in the browser](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf) or [download](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf) · [version 1.0, this folder](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.0/SWAFL_Desktop/docs/SWAFL_Manual.pdf)
 
 A desktop application (Windows `SWAFL.exe`) for coupled water fluxes, pore-scale dynamics, precision irrigation and mulching feedback loops, with **surface, drip and sprinkler design** (layout drawings, pipe network, pump and hydraulic grade line, design checks).
 It runs the same simulation engine as the web explorer, inside a professional workbench (MIKE Zero / QGIS style):
@@ -97,7 +97,7 @@ docs/USER_GUIDE.md                   how to use SWAFL
 docs/SWAFL_Manual.pdf                complete technical manual (sources in docs/manual/)
 ```
 
-See [docs/USER_GUIDE.md](docs/USER_GUIDE.md) for the step-by-step guide and [docs/SWAFL_Manual.pdf](docs/SWAFL_Manual.pdf) for the complete technical manual (every control, layer and equation, with citations). Author: Naziru Halilu. MIT licence.
+See [docs/USER_GUIDE.md](docs/USER_GUIDE.md) for the step-by-step guide and [docs/SWAFL_Manual.pdf](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.0/SWAFL_Desktop/docs/SWAFL_Manual.pdf) for the complete technical manual (every control, layer and equation, with citations). Author: Naziru Halilu. MIT licence.
 
 ## Troubleshooting
 

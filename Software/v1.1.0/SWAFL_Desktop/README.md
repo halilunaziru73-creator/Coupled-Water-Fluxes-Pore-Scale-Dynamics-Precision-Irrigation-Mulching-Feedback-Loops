@@ -1,6 +1,6 @@
 <p align="center"><img src="app/assets/logo-wordmark.svg" alt="SWAFL" width="360"></p>
 
-<p align="center"><b>Download the SWAFL manual (PDF):</b> <a href="docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">version 1.1.0, this version (530 pages)</a> · <a href="../../v1.0/SWAFL_Desktop/docs/SWAFL_Manual.pdf">version 1.0</a> · <a href="https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html?v=1.1.0">online workbench</a></p>
+<p align="center"><b>Download the SWAFL manual (PDF):</b> <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">version 1.1.0, this version (530 pages)</a> · <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.0/SWAFL_Desktop/docs/SWAFL_Manual.pdf">version 1.0</a> · <a href="https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html?v=1.1.0">online workbench</a></p>
 
 <p align="center"><img src="docs/swafl_workbench.png" alt="SWAFL Desktop 1.1.0: the drip irrigation design with the soil water of the days ahead" width="900"></p>
 
@@ -107,7 +107,7 @@ docs/USER_GUIDE.md                   how to use SWAFL
 docs/manual_v1.1.0/                  manual of version 1.1.0 (SWAFL_Manual_v1.1.0.pdf, 530 pages)
 ```
 
-See [docs/USER_GUIDE.md](docs/USER_GUIDE.md) for the step-by-step guide and [docs/manual_v1.1.0](docs/manual_v1.1.0/README.md) for the manual of version 1.1.0 (one PDF of 530 pages, in the chapters of the 1.0 manual with every screenshot taken again from version 1.1.0 and the new chapters added; the manual of version 1.0 is in the folder of version 1.0, [../../v1.0/SWAFL_Desktop/docs/SWAFL_Manual.pdf](../../v1.0/SWAFL_Desktop/docs/SWAFL_Manual.pdf)). Author: Naziru Halilu. MIT licence.
+See [docs/USER_GUIDE.md](docs/USER_GUIDE.md) for the step-by-step guide and [docs/manual_v1.1.0](docs/manual_v1.1.0/README.md) for the manual of version 1.1.0 (one PDF of 530 pages, in the chapters of the 1.0 manual with every screenshot taken again from version 1.1.0 and the new chapters added; the manual of version 1.0 is in the folder of version 1.0, [../../v1.0/SWAFL_Desktop/docs/SWAFL_Manual.pdf](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.0/SWAFL_Desktop/docs/SWAFL_Manual.pdf)). Author: Naziru Halilu. MIT licence.
 
 ## Troubleshooting
 
