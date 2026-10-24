@@ -153,3 +153,16 @@ input[type=range]{accent-color:#0A246A}
 .rpg{border:1px solid #C0C0C0;background:#FFFFFF;padding:4px 6px}.rpg>label{display:block;border-bottom:1px solid #E0E0E0;margin-bottom:3px;padding-bottom:2px}
 .rpi{display:block;padding:1px 0 1px 16px;font-size:11px}
 .dlist{margin:4px 0 2px;padding:0 4px 0 18px;font-size:12px;line-height:1.45;color:#1b1f23}.dlist li{margin:0 0 3px}
+/* field sketch */
+.skwrap{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start}
+.skleft{flex:1 1 560px;min-width:320px}.skright{flex:1 1 300px;min-width:280px;display:flex;flex-direction:column;gap:6px}
+.skbar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:6px}.skbar label{display:flex;gap:4px;align-items:center}
+.skcv{position:relative}.skcv canvas{width:100%;height:auto;display:block;box-shadow:inset 1px 1px #808080,inset -1px -1px #fff;border:1px solid #9AA5B1;touch-action:none;cursor:crosshair}
+.skinfo{margin-top:5px;font-size:12px;color:#1b1f23}
+.skst{flex-wrap:wrap}.skst button{flex:1 0 30%;font-size:11px;height:24px}
+.skq{border:1px solid #C8C4B8;background:#FBFAF6;padding:8px 10px;min-height:300px;max-height:56vh;overflow:auto}
+.skq h4{margin:0 0 6px;font-size:13px;color:#0A246A}.skq .pr{margin:6px 0}.skq label{display:block;font-weight:bold;margin-bottom:2px}
+.skq select,.skq input[type=number]{width:100%;box-sizing:border-box}.skin{display:flex;gap:6px;align-items:center}.skin input{flex:1}.skin span{min-width:34px;color:#404040}
+.skbtns{display:flex;gap:6px;justify-content:space-between}
+.skEdit{position:absolute;z-index:5;background:#FFF8D6;border:1px solid #8A6A00;padding:4px 6px;display:flex;gap:4px;align-items:center;box-shadow:0 2px 6px rgba(0,0,0,.25)}.skEdit input{width:80px}
+.skbar .seg button{white-space:nowrap;padding:0 9px;flex:none}

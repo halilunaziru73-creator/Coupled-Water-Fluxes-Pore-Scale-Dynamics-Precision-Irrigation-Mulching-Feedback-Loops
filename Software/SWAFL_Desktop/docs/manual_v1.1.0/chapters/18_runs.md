@@ -35,7 +35,7 @@ Every input of a design is a value box. Clicking it opens a small window:
 * or pick a value from the list, which runs across the allowed range;
 * lengths can be given in m, km or ft; flows in L/s, m³/h or L/min (emitter flow in L/h or L/s); areas in ha, m² or acre; pressures in kPa, bar, m of water or psi; pressure heads in m, kPa, bar or ft; times in min or h; spacings in m or cm.
 
-The value is kept exactly as typed (2.13 stays 2.13); it is not rounded to a step of the list, and the design runs on it. A value outside the allowed range is set to the nearest limit, and the window says so. The value is converted to the unit of the model, $x_{\mathrm{model}} = x_{\mathrm{typed}}\,c_u$, with $c_u$ the factor of the chosen unit (for example 1000 for km, 1/3.6 for m³/h to L/s, 9.80665 for m of water to kPa).
+The value is kept exactly as typed (2.13 stays 2.13); it is not rounded to a step of the list, and the design runs on it. You may type any value up to the physical limits of the system: for example a run of 5 to 3000 m, an inflow up to 300 L/s per m, an emitter flow up to 100 L/h, a pressure up to 1200 kPa. The list covers only the usual range. A value beyond the physical limits is set to the nearest limit, and the window gives both ranges. The value is converted to the unit of the model, $x_{\mathrm{model}} = x_{\mathrm{typed}}\,c_u$, with $c_u$ the factor of the chosen unit (for example 1000 for km, 1/3.6 for m³/h to L/s, 9.80665 for m of water to kPa).
 
 ## Field size: an area, or a length and a width
 
@@ -80,7 +80,35 @@ Applying a combination writes its values into the value boxes, so you can see an
 
 ## The field sketch
 
-*View* or *Tools ▸ Field sketch to design…* opens a grid on which you click the corners of your field and the water source. The sketch gives
+*View* or *Tools ▸ Field sketch to design…* opens a window with a grid on the left and the questions on the right.
+
+**On the grid.** A red crosshair follows the mouse and gives its position in metres.
+
+* **Field corners:** click to place a corner. Click near a side to add a corner on it, drag a corner to move it, and double-click a corner to remove it.
+* **Side lengths:** each side shows its length just outside the field. Click a length to type it exactly; the next corner moves along the side, and the grid changes its scale if the field no longer fits.
+* **Water source:** in this mode, click where the water is and drag the blue marker to move it.
+* **Inlet:** in this mode, drag the yellow square along the edge of the field to where the pipe or the canal enters.
+* **Grid square:** sets the scale, from 1 to 100 m per square.
+
+While you draw, the window draws the layout of the system you choose:
+
+* furrows, borders or basins;
+* drip laterals at the row spacing;
+* sprinkler laterals with the sprinklers and their wetted circles;
+* the submain or head ditch along the inlet end;
+* the mainline from the source to the inlet, with its length.
+
+**The questions**, in seven steps (*Next question* and *Back* move through them; the step buttons jump):
+
+1. *Field:* length and width (*Make a rectangle of this size*), ground slope, and the direction in which the ground falls.
+2. *Water:* where the water comes from (well, borehole, canal, river, pond or tank), the lift to the field, the flow the source can give, and the hours a day you can irrigate.
+3. *Crop:* the crop, the row spacing and the plant spacing.
+4. *Soil:* the soil, and whether there is a compact layer below the topsoil.
+5. *System:* border strips, furrows, basins, drip or sprinklers; whether the laterals run along the field or across it; for drip, the depth of the laterals and the emitter; for sprinklers, the system, the sprinkler and the two spacings.
+6. *Running:* how often to irrigate (drip), and whether the farmer or an automatic controller opens the valves.
+7. *Summary:* everything that will be set.
+
+The sketch gives
 
 $$
 A=\tfrac12\Bigl|\sum_i (x_i y_{i+1}-x_{i+1}y_i)\Bigr|,\qquad L_{\mathrm{run}} = \max_{\text{along the longest side}} - \min,\qquad W = \text{extent across it},
@@ -89,9 +117,36 @@ $$
 
 *Provenance (Eq. 18.3):* **[Literature]**: shoelace formula and projection on the direction of the longest side.
 
-and the mainline length from the source to the nearest corner. **Turn the sketch into the design** fills the run length, width, area, lateral and mainline lengths and the slope of the chosen design (border strips, furrows, basins, drip or sprinklers), opens it and waits for the run.
+and the mainline length from the source to the inlet. Here $L_{\mathrm{run}}$ is measured along the direction of the laterals: along the longest side, or across it.
+
+**Turn the sketch into the design** sets the crop and the soil in Properties and fills the chosen design:
+
+* *Surface:* the system, the run length, the field width, the slope and the farm supply, and the furrow spacing (from the rows).
+* *Drip:* the lateral length, the lateral spacing (the rows), the emitter spacing (the plants), the field length and width, the supply, the interval, the placement and the emitter.
+* *Sprinklers:* the area, the slope, the supply, the two spacings, the sprinkler, the system and the lateral length.
+
+It also sets the mainline length, the lift, the source, the hours a day, the compact layer and the operator of the valves. Then it opens the design, which waits for **Run simulation**.
 
 ![The field sketch.](images/atlas11/ui_u12_sketch.jpg){width=100%}
+
+## The soil water in the days ahead
+
+Each design layer (surface, drip and sprinklers) ends with a film of the soil water: **Soil water in the days ahead (DSS)**. It plays the daily model day by day, from the working date to the next irrigation and a few days after it. Click it to pause or play.
+
+* **Left: the profile of the day.** The water content of each layer of the real soil, 0 to 100 cm, with lines at the wilting point, the trigger and field capacity, the depth of the roots and the sensor.
+* **Right: the days.** The share of the available water left in the root zone, and at the sensor, against the trigger; the band marks the day the sensor reaches the trigger. A dashed red line shows what would happen **without that irrigation**: the root zone dries on, day after day, with the weather of the record, until it reaches the wilting point.
+* **Below: the day in words.** The date, the crop, the water left, the sensor against the trigger, the date and depth of the next irrigation of the design, and the date the wilting point would be reached without it.
+
+The water left in the root zone on day $d$ is the mean over the layers within the roots, $\bar s(d)$, where $s=(\theta-\theta_{wp})/(\theta_{fc}-\theta_{wp})$. Without the irrigation the depletion follows the FAO-56 root-zone balance:
+
+$$
+D_r(d+1)=\mathrm{clip}\bigl(D_r(d)+ET(d)\,[0.35+0.65\,K_s]-0.8\,P(d);\ 0,\ \mathrm{TAW}\bigr),\qquad K_s=\min\Bigl(1,\frac{\mathrm{TAW}-D_r}{0.5\,\mathrm{TAW}}\Bigr),
+\tag{18.4}
+$$
+
+*Provenance (Eq. 18.4):* **[Literature]** with **[Engineered]** constants: FAO-56 water stress coefficient with $p=0.5$. $\mathrm{TAW}=\mathrm{AWC}\,z_r$, and $ET$ and $P$ are the evapotranspiration and rain of the daily model. The wilting point is reached when $D_r\ge 0.97\,\mathrm{TAW}$.
+
+The schedule under the film takes its dates from the daily model and its depths and times from the design.
 
 ## Comparing the three systems
 
