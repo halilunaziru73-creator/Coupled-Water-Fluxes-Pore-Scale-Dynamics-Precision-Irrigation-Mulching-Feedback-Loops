@@ -37,6 +37,7 @@ def open_scene(pg, sc, run=True):
         return
     pg.evaluate("(s)=>Layers.open(s)", sc); pg.wait_for_timeout(1400)
     if sc in DES and run: pg.evaluate("(s)=>E.ev(\"runDesign('\"+s+\"');play.on=false;play.t=1\")", sc); pg.wait_for_timeout(900)
+    pg.evaluate("()=>E.ev(\"if(SWEEPS[currentScene.id]){if(AUTO.snap){AUTO.busy=true;applyState(AUTO.snap);AUTO.busy=false;}AUTO.on=false;AUTO.snap=null;}\")"); pg.wait_for_timeout(500)
     f = frame(pg)
     try:
         if f.evaluate("document.getElementById('playBtn').textContent.trim()") == 'Pause': f.click('#playBtn'); pg.wait_for_timeout(300)
@@ -214,7 +215,7 @@ with sync_playwright() as pw:
         pg.click('#dashTabs [data-tab=results]')
         # dialogs of release 1.1
         for nm, js, finders in [('u09_weather_import', 'WxUI.importFile()', ['Weather file', 'Latitude']), ('u10_weather_online', 'WxUI.online()', ['Place', 'Or the coordinates']),
-                                ('u11_report', 'Act.report()', ['All layers', 'Irrigation design']), ('u12_sketch', 'Sketch.open()', ['Ground slope', 'Irrigation system']), ('u13_compare', 'Sketch.compare()', ['System', 'Application efficiency'])]:
+                                ('u11_report', 'Act.report()', ['All layers', 'Irrigation design']), ('u12_sketch', "(function(){Sketch.open();document.getElementById('qRect').click();document.querySelector('#skSteps button[data-s=\"4\"]').click()})()", ['Field corners', 'Which system?', 'Next question']), ('u13_compare', 'Sketch.compare()', ['System', 'Application efficiency'])]:
             pg.evaluate(js); pg.wait_for_timeout(900); ms = []
             for fnd in finders:
                 r = pg.evaluate("(a)=>window.__find(a[0],a[1])", ['#modalRoot', fnd])

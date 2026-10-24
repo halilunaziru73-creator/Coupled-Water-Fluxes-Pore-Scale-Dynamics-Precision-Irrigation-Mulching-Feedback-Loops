@@ -5242,6 +5242,7 @@ The picture below is the complete drawing of the layer Root structure, which in 
 - **16** The second section, the root structure where the roots are and where the water is taken.
 - **17** The soil, roots and water of the day.
 - **18** The relative root density by depth on the day.
+- **19** The note that the runs exist for coarse loam only.
 
 
 ![Root structure, part 2 of 4.](images/atlas11/r1_s0_p2.jpg){width=78%}
@@ -5289,16 +5290,15 @@ The picture below is the complete drawing of the layer Root structure, which in 
 
 - **1** The range of the deepest roots across the soils at these settings.
 - **2** The rooting-depth runs, 1,000 Daisy runs on coarse loam.
-- **3** The note that the runs exist for coarse loam only.
-- **4** The metric buttons, Yield, Irrigation, Drainage, Transpiration, N leached, Water-stress days and Irrigation efficiency.
-- **5** The yield against the rooting depth for ten application amounts.
-- **6** The red line, where the roots stop near 120 cm.
-- **7** The map of the rooting depth against the amount per application.
-- **8** The black square, the run selected.
-- **9** One run in the soil, with the roots drawn to scale.
-- **10** The dashed line at 1 m, the border of the balance.
-- **11** The table of the run against the reference run with roots of 30 cm.
-- **12** The water-stress days of the run and their change.
+- **3** The metric buttons, Yield, Irrigation, Drainage, Transpiration, N leached, Water-stress days and Irrigation efficiency.
+- **4** The yield against the rooting depth for ten application amounts.
+- **5** The red line, where the roots stop near 120 cm.
+- **6** The map of the rooting depth against the amount per application.
+- **7** The black square, the run selected.
+- **8** One run in the soil, with the roots drawn to scale.
+- **9** The dashed line at 1 m, the border of the balance.
+- **10** The table of the run against the reference run with roots of 30 cm.
+- **11** The water-stress days of the run and their change.
 
 
 ### The controls of the layer, one state at a time
@@ -5448,7 +5448,6 @@ The picture below is the complete drawing of the layer Mulch against bare soil, 
 - **26** The change of the irrigation.
 - **27** The change of the drainage.
 - **28** The note that explains where the saved water goes.
-- **29** The rain held by the layer before it reaches the soil.
 
 
 ### The controls of the layer, one state at a time
@@ -6308,7 +6307,7 @@ The drawing of the layer from top to bottom. It is explained in Chapter 20; its 
 
 - **1** The heading or label *Virtual farm: irrigation from the water source to the plants*.
 - **2** The heading or label *Border strip · from the surface irrigation design*.
-- **3** The heading or label *Irrigation running · t = 11249718 of 14845449 min (water off the field at 25383979 min)*.
+- **3** The heading or label *Irrigation running · t = 3.1 h of 5.2 h (water off the field at 7.0 h)*.
 - **4** The heading or label *Next irrigations: net / gross depth, time open*.
 - **5** The heading or label *canal from the reservoir*.
 - **6** The heading or label *Section along the run, inlet on the left: the wetting of this irrigation (simulated with the design)*.
@@ -6317,7 +6316,7 @@ The drawing of the layer from top to bottom. It is explained in Chapter 20; its 
 
 **What the arrows point to.**
 
-- **1** The heading or label *sensor 20 cm: 5 % depleted · trigger 84 %*.
+- **1** The heading or label *sensor 20 cm: 2 % depleted · trigger 38 %*.
 - **2** The heading or label *drainage below 1 m today 0.0 mm*.
 - **3** The heading or label *irrigation*.
 - **4** The heading or label *This irrigation in 3D: infiltration, water stored, deep percolation, runoff and evaporation*.
@@ -6329,6 +6328,7 @@ The drawing of the layer from top to bottom. It is explained in Chapter 20; its 
 - **1** The heading or label *Infiltration (water that enters the soil)*.
 - **2** The heading or label *Deep percolation below the roots*.
 - **3** The heading or label *Evaporation*.
+- **4** The heading or label *Coarse Loam (sand 45 %, clay 20 %): 1.5 mm of available water per cm. The root zone (0 to 36 cm) takes 53.3 mm, 1.47 mm per cm,*.
 
 \newpage
 
@@ -6342,7 +6342,7 @@ The drawing of the layer from top to bottom. It is explained in Chapter 20; its 
 
 - **1** The heading or label *Virtual farm: irrigation from the water source to the plants*.
 - **2** The heading or label *Surface drip · from the drip irrigation design*.
-- **3** The heading or label *Irrigation running · t = 139 of 314 min*.
+- **3** The heading or label *Irrigation running · t = 88 min of 3.3 h*.
 - **4** The heading or label *Next irrigations: net / gross depth, time open*.
 - **5** The heading or label *Cross-section through the field: the wetting of this irrigation (simulated with the design)*.
 
@@ -6350,7 +6350,7 @@ The drawing of the layer from top to bottom. It is explained in Chapter 20; its 
 
 **What the arrows point to.**
 
-- **1** The heading or label *sensor 20 cm: 10 % depleted · trigger 84 %*.
+- **1** The heading or label *sensor 20 cm: 5 % depleted · trigger 38 %*.
 - **2** The heading or label *drainage below 1 m today 0.0 mm*.
 - **3** The heading or label *irrigation*.
 - **4** The heading or label *This irrigation in 3D: infiltration, water stored, deep percolation, runoff and evaporation*.
@@ -6362,6 +6362,7 @@ The drawing of the layer from top to bottom. It is explained in Chapter 20; its 
 - **1** The heading or label *Infiltration (water that enters the soil)*.
 - **2** The heading or label *Deep percolation below the roots*.
 - **3** The heading or label *Evaporation*.
+- **4** The heading or label *Coarse Loam (sand 45 %, clay 20 %): 1.5 mm of available water per cm. The root zone (0 to 43 cm) takes 7.8 mm, 0.18 mm per cm,*.
 
 \newpage
 
@@ -6375,16 +6376,16 @@ The drawing of the layer from top to bottom. It is explained in Chapter 20; its 
 
 - **1** The heading or label *Virtual farm: irrigation from the water source to the plants*.
 - **2** The heading or label *Sprinkler · from the sprinkler design*.
-- **3** The heading or label *Applied 24.9 of 56.3 mm gross · stored in the root zone 22.3 mm · rate 5.9 mm/h*.
+- **3** The heading or label *Applied 26.4 of 59.6 mm gross · stored in the root zone 23.6 mm · rate 5.9 mm/h*.
 - **4** The heading or label *Next irrigations: net / gross depth, time open*.
-- **5** The heading or label *wind drift and evaporation 4.8 %*.
+- **5** The heading or label *wind drift and evaporation 5.2 %*.
 - **6** The heading or label *Cross-section through the field: the wetting of this irrigation (simulated with the design)*.
 
 ![Virtual farm simulation: the sprinkler design, part 2 of 3.](images/atlas11/L_farm_spr_p2.jpg){width=78%}
 
 **What the arrows point to.**
 
-- **1** The heading or label *sensor 20 cm: 5 % depleted · trigger 84 %*.
+- **1** The heading or label *sensor 20 cm: 3 % depleted · trigger 38 %*.
 - **2** The heading or label *drainage below 1 m today 0.0 mm*.
 - **3** The heading or label *irrigation*.
 - **4** The heading or label *This irrigation in 3D: infiltration, water stored, deep percolation, runoff and evaporation*.
@@ -6396,6 +6397,7 @@ The drawing of the layer from top to bottom. It is explained in Chapter 20; its 
 - **1** The heading or label *Infiltration (water that enters the soil)*.
 - **2** The heading or label *Deep percolation below the roots*.
 - **3** The heading or label *Evaporation and wind drift*.
+- **4** The heading or label *Coarse Loam (sand 45 %, clay 20 %): 1.5 mm of available water per cm. The root zone (0 to 57 cm) takes 53.2 mm, 0.94 mm per cm,*.
 
 \newpage
 
@@ -6412,7 +6414,7 @@ The drawing of the layer from top to bottom. It is explained in Chapter 21; its 
 - **1** The heading or label *Crop water requirement*.
 - **2** The heading or label *Plant 2 weeks earlier*.
 - **3** The heading or label *Kc x reference ET, whole year*.
-- **4** The heading or label *39.0 per season*.
+- **4** The heading or label *0.0 per season*.
 - **5** The heading or label *Crop coefficient through the year and the daily water need*.
 - **6** The heading or label *Kc: ini 0.40, mid 1.15, end 0.41*.
 - **7** The heading or label *mm below field capacity*.
@@ -6424,20 +6426,21 @@ The drawing of the layer from top to bottom. It is explained in Chapter 21; its 
 - **1** The heading or label *depletion of the root zone*.
 - **2** The heading or label *Every crop in the library on this soil*.
 - **3** The heading or label *Coconut (high)*.
-- **4** The heading or label *Cocoa (under high shade canopy)*.
-- **5** The heading or label *Mango (medium)*.
-- **6** The heading or label *Walnut (medium)*.
-- **7** The heading or label *Cherimoya (medium)*.
-- **8** The heading or label *Kiwi (pergola)*.
+- **4** The heading or label *Onion (dry)*.
+- **5** The heading or label *Kiwi (pergola)*.
+- **6** The heading or label *Table grapes (horizontal trellis)*.
+- **7** The heading or label *Guava (high)*.
+- **8** The heading or label *Groundnut*.
 
 ![Crop water requirement, part 3 of 3.](images/atlas11/L_crop_p3.jpg){width=78%}
 
 **What the arrows point to.**
 
-- **1** The heading or label *Chickpea*.
-- **2** The heading or label *Almond (medium)*.
-- **3** The heading or label *Cowpea (beans)*.
-- **4** The heading or label *Green gram (mung bean)*.
+- **1** The heading or label *Cherimoya (medium)*.
+- **2** The heading or label *Cowpea (beans)*.
+- **3** The heading or label *Green gram (mung bean)*.
+- **4** The heading or label *Apricot (young)*.
+- **5** The heading or label *Pomegranate (low)*.
 
 \newpage
 
@@ -6483,8 +6486,8 @@ The drawing of the layer from top to bottom. It is explained in Chapter 22; its 
 - **2** The heading or label *Where the water comes from (up) and where it goes (down)*.
 - **3** The heading or label *Precipitation*.
 - **4** The heading or label *Evapotranspiration split into all its parts (20-year mean)*.
-- **5** The heading or label *Transpiration: 184 mm (33 %)*.
-- **6** The heading or label *Sum of the parts 562 mm against simulated ET 562 mm (difference 0.1 mm). Evaporation from litter, ponded water and snow is 38 % of ET.*.
+- **5** The heading or label *Transpiration: 239 mm (33 %)*.
+- **6** The heading or label *Sum of the parts 720 mm against simulated ET 720 mm (difference 0.0 mm). Evaporation from litter, ponded water and snow is 30 % of ET.*.
 
 ![Full water balance, part 2 of 2.](images/atlas11/L_wb2_p2.jpg){width=78%}
 
@@ -6492,7 +6495,7 @@ The drawing of the layer from top to bottom. It is explained in Chapter 22; its 
 
 - **1** The heading or label *Potential transpiration*.
 - **2** The heading or label *How the water enters and leaves the soil*.
-- **3** The heading or label *Drainage below 1 m 58.6 mm, of which through biopores 0.0 mm; surface runoff 0.0 mm*.
+- **3** The heading or label *Drainage below 1 m 27.6 mm, of which through biopores 0.0 mm; surface runoff 0.0 mm*.
 
 \newpage
 
@@ -6510,7 +6513,7 @@ The drawing of the layer from top to bottom. It is explained in Chapter 22; its 
 - **2** The heading or label *Supply (up) against uptake and losses (down)*.
 - **3** The heading or label *Crop uptake*.
 - **4** The heading or label *Nitrogen use (20-year mean)*.
-- **5** The heading or label *Crop uptake 69 kg N/ha = 18 % of supply; leaching 112.9, denitrification 0.0, volatilisation 0.0 kg N/ha*.
+- **5** The heading or label *Crop uptake 363 kg N/ha = 95 % of supply; leaching 14.6, denitrification 5.5, volatilisation 0.0 kg N/ha*.
 - **6** The heading or label *Nitrate goes where the water goes*.
 
 ![Nitrogen budget, part 2 of 2.](images/atlas11/L_nb_p2.jpg){width=78%}
