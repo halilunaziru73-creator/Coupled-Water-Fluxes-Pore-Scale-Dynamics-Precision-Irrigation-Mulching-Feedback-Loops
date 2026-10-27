@@ -124,22 +124,21 @@ const Dash = (() => {
   function n1Live(force) {
     const cv = document.getElementById('n1dc'); if (!cv) { if (n1Timer && !force) { clearInterval(n1Timer); n1Timer = null; } return; }
     if (!n1Timer) n1Timer = setInterval(() => { if (Layers.current && Layers.current() !== 'n1') { clearInterval(n1Timer); n1Timer = null; return; } n1Live(); }, 350);
-    let V = null; try { V = E.json('n1Live()'); } catch (e) {} if (!V) return; const key = V.dd + '|' + V.fS.toFixed(3) + '|' + V.fT + '|' + V.soil + '|' + cv.clientWidth; if (key === n1Key && !force) return; n1Key = key;
+    let V = null; try { V = E.json('n1Live()'); } catch (e) {} if (!V) return; const key = V.dd + '|' + V.crop + '|' + V.season.N + '|' + (V.next ? V.next.q : '') + '|' + V.fS.toFixed(3) + '|' + V.fT + '|' + V.soil + '|' + cv.clientWidth; if (key === n1Key && !force) return; n1Key = key;
     const set = (id, t) => { const e = document.getElementById(id); if (e && e.innerHTML !== t) e.innerHTML = t; }, dn = n => n === 0 ? 'today' : n === 1 ? 'tomorrow' : 'in ' + n + ' days';
     set('n1dL', 'Sensor at ' + V.z + ' cm on ' + UI.esc(V.date) + (V.play ? ' <small>(replay)</small>' : ''));
     set('n1dS', V.sensorCm.toLocaleString('en-US') + ' cm · depletion ' + (V.fS * 100).toFixed(0) + ' % · ' + (V.due ? '<span style="color:#B01E14">irrigate now</span>' : 'within the trigger'));
     set('n1dN', V.next ? UI.esc(V.next.date) + ' (' + dn(V.next.days) + ', ' + V.next.mm + ' mm)' : 'none in the next 12 months');
     set('n1dT', V.due ? 'reached: ' + (V.fS * 100).toFixed(0) + ' % against ' + (V.fT * 100).toFixed(0) + ' %' : V.trig ? UI.esc(V.trig.date) + ' (' + dn(V.trig.days) + ')' : 'about ' + V.trigDry + ' days of drying');
     set('n1dW', V.wilt ? UI.esc(V.wilt.date) + ' (' + dn(V.wilt.days) + ' at ' + (V.rate * 100).toFixed(1) + ' % a day' + (V.peak ? ', the speed of the peak of the season' : '') + ')' : '-');
-    set('n1dCap', 'Depletion at the sensor (' + V.z + ' cm) through the season of ' + V.season.year + ', ' + UI.esc(V.season.start) + ' to ' + UI.esc(V.season.end) + ': 0 % is field capacity, 100 % the wilting point. Purple: the simulated sensor; dashed purple: the trigger; blue: irrigation days; red line: the replay date' + (V.inSeason ? '' : ' (outside the season: the replay date is ' + UI.esc(V.date) + ')') + '; dashed red: drying to the wilting point if no water comes.');
-    const S = V.season, n = S.x.length, proj = S.x.map(() => NaN);
-    if (V.inSeason && !V.due && V.wilt) for (let q = V.today; q < n; q++) { const v = V.fS * 100 + (q - V.today) * V.rate * 100; proj[q] = Math.min(100, v); if (v >= 100) break; }
-    const marks = S.x.filter((q, i) => S.irr[i]).map(q => ({ x: q, t: '', c: '#1565C0' })).concat([{ y: V.fT * 100, t: 'trigger ' + (V.fT * 100).toFixed(0) + ' %', c: '#3F1D80' }]);
-    if (V.inSeason) marks.push({ x: V.today, t: V.date.replace(/ \d{4}$/, ''), c: '#C00000', solid: true });
-    if (V.next && V.next.q >= 0 && V.next.q < n && V.next.days > 0) marks.push({ x: V.next.q, t: 'next irrigation', c: '#1565C0' });
-    if (V.inSeason && V.wilt && V.wilt.q < n && !V.due) marks.push({ x: V.wilt.q, t: 'wilting', c: '#B01E14' });
-    xyChart(cv, { x: S.x, xl: 'date (season of ' + S.year + ')', yl: 'depletion at the sensor (%)', ymin: 0, ymax: 100, xfmt: q => S.lab[Math.max(0, Math.min(n - 1, Math.round(q)))], xstep: 15, yfmt: v => v === 0 ? '0 FC' : v === 100 ? '100 WP' : String(v),
-      series: [{ y: S.y, c: '#8E24AA', n: 'sensor depletion', w: 2 }, { y: proj, c: '#C62828', n: 'if no water comes', w: 1.6, dash: [5, 4] }], marks });
+    set('n1dCap', 'Root-zone depletion from the chosen date, ' + UI.esc(V.season.start) + ' to ' + UI.esc(V.season.end) + ', for ' + UI.esc(V.crop) + ': 0 % is field capacity, 100 % the wilting point. Purple: the root zone with this irrigation; black dots: the day it touches the trigger and irrigation starts; blue arrows: the refill back to field capacity; dashed red: the baseline with no irrigation; red line: the chosen date.');
+    const S = V.season, n = S.x.length;
+    const marks = S.x.filter((q, i) => S.irr[i] && (i === 0 || S.x[i - 1] !== q)).map(q => ({ x: q, t: '', c: 'rgba(21,101,192,0.55)' })).concat([{ y: V.fT * 100, t: 'trigger ' + (V.fT * 100).toFixed(0) + ' %', c: '#3F1D80' }]);
+    marks.push({ x: 0, t: V.date.replace(/ \d{4}$/, ''), c: '#C00000', solid: true });
+    if (V.next && V.next.q > 0 && V.next.q <= S.N) marks.push({ x: V.next.q, t: 'next irrigation', c: '#1565C0' });
+    if (V.wilt && V.wilt.q > 0 && V.wilt.q <= S.N && !V.due) marks.push({ x: V.wilt.q, t: 'wilting', c: '#B01E14' });
+    xyChart(cv, { x: S.x, xl: 'date (from the chosen date)', yl: 'root-zone depletion (%)', ymin: 0, ymax: 100, xfmt: q => S.lab[Math.max(0, Math.min(S.N, Math.round(q)))], xstep: 15, yfmt: v => v === 0 ? '0 FC' : v === 100 ? '100 WP' : String(v),
+      series: [{ y: S.y, c: '#8E24AA', n: 'root zone with irrigation', w: 2 }, { y: S.base, c: '#C62828', n: 'baseline: no irrigation', w: 1.8, dash: [5, 4] }], marks, pts: S.pts, arrows: S.arrows });
   }
   function xyChart(cv, o) {
     const dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return; cv.width = w * dpr; cv.height = h * dpr;
@@ -168,6 +167,8 @@ const Dash = (() => {
     });
     c.restore();
     (o.marks || []).forEach(m => { c.strokeStyle = m.c || '#C00000'; c.setLineDash(m.solid ? [] : [4, 3]); c.lineWidth = m.solid ? 2 : 1.2; c.beginPath(); if (m.x != null) { c.moveTo(X(m.x), T); c.lineTo(X(m.x), h - B); } else { c.moveTo(L, Y(m.y)); c.lineTo(w - R, Y(m.y)); } c.stroke(); c.setLineDash([]); c.fillStyle = m.c || '#C00000'; if (m.t) { const tw = c.measureText(m.t).width, right = m.x != null && X(m.x) + 3 + tw > w - R; const tx = m.x != null ? (right ? X(m.x) - 3 - tw : X(m.x) + 3) : w - R - 4 - tw, ty = m.x != null ? T + 11 + (o.marks.filter(q => q.t && q.x != null).indexOf(m) % 3) * 13 : Y(m.y) - 4; c.fillStyle = 'rgba(255,255,255,0.88)'; c.fillRect(tx - 2, ty - 10, tw + 4, 13); c.fillStyle = m.c || '#C00000'; c.textAlign = 'left'; c.fillText(m.t, tx, ty); } });
+    (o.arrows || []).forEach((q, i) => { const xx = X(q.x), y0 = Y(q.y0), y1 = Y(q.y1); c.strokeStyle = '#1565C0'; c.fillStyle = '#1565C0'; c.lineWidth = 2.2; c.beginPath(); c.moveTo(xx, y0); c.lineTo(xx, y1 - 6 * Math.sign(y1 - y0)); c.stroke(); c.beginPath(); c.moveTo(xx, y1); c.lineTo(xx - 4.5, y1 - 8 * Math.sign(y1 - y0)); c.lineTo(xx + 4.5, y1 - 8 * Math.sign(y1 - y0)); c.closePath(); c.fill(); if (i === 0) { c.fillStyle = '#1565C0'; c.textAlign = 'left'; c.fillText('refill to FC', xx + 7, (y0 + y1) / 2); } });
+    (o.pts || []).forEach((q, i) => { const xx = X(q.x), yy = Y(q.y); c.fillStyle = '#111'; c.strokeStyle = '#fff'; c.lineWidth = 1.6; c.beginPath(); c.arc(xx, yy, 5, 0, 6.2832); c.fill(); c.stroke(); if (i === 0) { c.fillStyle = '#111'; c.textAlign = 'left'; c.fillText('touches the trigger: irrigate', Math.min(xx + 8, w - R - 150), yy - 8); } });
     // legend
     c.textAlign = 'left'; leg.forEach(([s, lx, ly]) => { c.fillStyle = s.c; c.fillRect(lx, 4 + ly * 13, 12, 3); c.fillStyle = '#000'; c.fillText(s.n, lx + 16, 9 + ly * 13); });
   }
