@@ -9,10 +9,11 @@ const Layers = (() => {
     { id: 'g-water', name: 'Field water balance', icon: 'field', items: [['field', 'Field balance', ''], ['spac', 'Soil, plant and air', 'S1'], ['v2', 'Profile evolution', 'V2']] },
     { id: 'g-year', name: 'Seasonal data', icon: 'refresh', items: [['yby', 'Reliability over 20 seasons', 'Y1'], ['wb2', 'Full water balance', 'W1'], ['nb', 'Nitrogen budget', 'N4']] },
     { id: 'g-crop', name: 'Crops', icon: 'drop', items: [['crop', 'Crop water requirement', 'C1']] },
+    { id: 'g-daisy', name: 'Daisy model', icon: 'soil', items: [['dz-files', 'Daisy files and library', ''], ['dz-plot', 'Plots of Daisy logs', ''], ['dz-balance', 'Mass balance', ''], ['dz-compare', 'Compare and test', ''], ['dz-editor', 'Set-up editor', ''], ['dz-library', 'Soils, crops, fertilisers', ''], ['dz-richards', 'Soil column (Richards)', ''], ['dz-calib', 'Calibration', ''], ['dz-weather', 'Daisy and DMI weather', ''], ['dz-deni', 'Denitrification', '']] },
     { id: 'g-loop', name: 'Feedback loops', icon: 'refresh', items: [['v5', 'Feedback loops', 'V5']] }
   ];
   const DESIGN = ['sid', 'drip', 'spr'];
-  let tabs = [], cur = null, started = false, collapsed = { 'g-water': true, 'g-ctrl': true, 'g-soil': true, 'g-mulch': true, 'g-loop': true, 'g-design': true, 'g-crop': true, 'g-year': true, 's-sid': true, 's-drip': true, 's-spr': true }, sectionPick = {};
+  let tabs = [], cur = null, started = false, collapsed = { 'g-water': true, 'g-ctrl': true, 'g-soil': true, 'g-mulch': true, 'g-loop': true, 'g-design': true, 'g-crop': true, 'g-year': true, 'g-daisy': true, 's-sid': true, 's-drip': true, 's-spr': true }, sectionPick = {};
   const groupOf = id => { const g = GROUPS.find(x => x.items.some(i => i[0] === id)); return g && g.id; };
   const reveal = (id, sec) => { collapsed['root'] = false; const g = groupOf(id); if (g) collapsed[g] = false; if (sec) collapsed['s-' + id] = false; };
   const tree = document.getElementById('layerTree');
@@ -53,6 +54,7 @@ const Layers = (() => {
   });
 
   function open(id, sec) {
+    if (String(id).indexOf('dz-') === 0) { try { DaisyUI.open(id.slice(3)); } catch (e) { UI.log('Daisy workbench: ' + e.message); } return; }
     if (!started) { started = true; document.body.classList.remove('nolayer'); }
     if (!tabs.includes(id)) tabs.push(id);
     sectionPick = {}; if (sec) sectionPick[id] = sec;

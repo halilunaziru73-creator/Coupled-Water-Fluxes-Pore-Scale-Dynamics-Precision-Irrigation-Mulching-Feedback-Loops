@@ -45,6 +45,29 @@ ipcMain.handle('open-file', async () => {
   if (r.canceled || !r.filePaths[0]) return { ok: false };
   return { ok: true, path: r.filePaths[0], data: fs.readFileSync(r.filePaths[0], 'utf8') };
 });
+
+// ---- Daisy: run the Daisy program on a set-up file, and fetch open data (DMI) without browser CORS limits
+let daisyExe = null;
+ipcMain.handle('daisy-run', async (_e, { name, text, logName }) => {
+  const { spawn } = require('child_process'), os = require('os');
+  if (!daisyExe || !fs.existsSync(daisyExe)) {
+    const r = await dialog.showOpenDialog(win, { title: 'Choose the Daisy program (daisy / daisy.exe)', properties: ['openFile'] });
+    if (r.canceled || !r.filePaths[0]) return { cancelled: true }; daisyExe = r.filePaths[0];
+  }
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'swafl-daisy-')), f = path.join(dir, String(name || 'setup.dai').replace(/[^\w.\-]/g, '_'));
+  fs.writeFileSync(f, text, 'utf8');
+  return await new Promise(res => {
+    let out = '', err = ''; const p = spawn(daisyExe, [f], { cwd: dir }); const to = setTimeout(() => { try { p.kill(); } catch (e) {} }, 600000);
+    p.stdout.on('data', d => { out += d; }); p.stderr.on('data', d => { err += d; });
+    p.on('error', e => { clearTimeout(to); res({ code: -1, err: String(e.message), out }); });
+    p.on('close', code => { clearTimeout(to); const files = {}; try { fs.readdirSync(dir).forEach(n => { if (/\.(dlf|dlf\.txt|csv)$/i.test(n) || n === logName) { const st = fs.statSync(path.join(dir, n)); if (st.size < 60e6) files[n] = fs.readFileSync(path.join(dir, n), 'utf8'); } }); } catch (e) {} res({ code, out: out.slice(-20000), err: err.slice(-20000), files, dir }); });
+  });
+});
+const HTTP_OK = /^https:\/\/(dmigw\.govcloud\.dk|api\.dataforsyningen\.dk|data\.geus\.dk|hip\.dataforsyningen\.dk)\//i;
+ipcMain.handle('http-get', async (_e, url) => {
+  if (!HTTP_OK.test(String(url))) return { status: 403, body: 'host not allowed' };
+  try { const r = await fetch(url); return { status: r.status, body: await r.text() }; } catch (e) { return { status: 0, body: String(e.message) }; }
+});
 ipcMain.handle('quit', () => app.quit());
 ipcMain.handle('fullscreen', () => { if (win) win.setFullScreen(!win.isFullScreen()); });
 ipcMain.handle('reload-app', () => { if (win) win.webContents.reloadIgnoringCache(); });

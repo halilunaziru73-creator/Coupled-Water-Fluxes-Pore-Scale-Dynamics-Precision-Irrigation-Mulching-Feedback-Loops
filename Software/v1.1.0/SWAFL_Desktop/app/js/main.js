@@ -127,6 +127,17 @@ const MENUS = [
   { label: 'Run', items: [
     { label: 'Run / pause the season', icon: 'play', key: 'F5', act: Act.togglePlay }, { label: 'Restart from day 1', icon: 'restart', key: 'Shift+F5', act: Act.restart }, { label: '20-year season simulation', icon: 'chart', act: Act.runSeason }, { sep: 1 },
     { label: 'Optimise surface layout', icon: 'run', act: Act.optimise }, { label: 'Ready-made cases', sub: casesMenu }] },
+  { label: 'Daisy', items: [
+    { label: 'Daisy workbench (files, plots, tests)...', icon: 'chart', act: () => DaisyUI.open('files') },
+    { label: 'Plot Daisy logs...', icon: 'chart', act: () => DaisyUI.open('plot') },
+    { label: 'Mass balance...', icon: 'chart', act: () => DaisyUI.open('balance') },
+    { label: 'Compare and test two runs...', icon: 'chart', act: () => DaisyUI.open('compare') },
+    { label: 'Set-up editor (.dai)...', icon: 'open', act: () => DaisyUI.open('editor') },
+    { label: 'Library: soils, crops, fertilisers...', icon: 'layers', act: () => DaisyUI.open('library') },
+    { label: 'Soil column (Richards equation)...', icon: 'soil', act: () => DaisyUI.open('richards') },
+    { label: 'Calibrate parameters...', icon: 'run', act: () => DaisyUI.open('calib') },
+    { label: 'Daisy and DMI weather...', icon: 'drop', act: () => DaisyUI.open('weather') },
+    { label: 'Denitrification calculator...', icon: 'refresh', act: () => DaisyUI.open('deni') } ] },
   { label: 'Help', items: [
     { label: 'Manual (PDF)', icon: 'book', key: 'F1', act: Act.manual }, { label: 'How to use SWAFL', icon: 'book', act: Act.guide }, { label: 'Troubleshooting (running the app)', icon: 'bug', act: () => guideModal('trouble') }, { label: 'Keyboard shortcuts', icon: 'key', act: Act.shortcuts }, { sep: 1 },
     { label: 'SWAFL on GitHub (repository)', icon: 'github', act: Act.github }, { label: 'Full documentation on GitHub', icon: 'book', act: Act.docs }, { label: 'Report a problem', icon: 'bug', act: Act.issues }, { sep: 1 }, { label: 'About SWAFL', icon: 'info', act: Act.about }] }
@@ -252,7 +263,7 @@ UI.hsplit(document.getElementById('splitRight'), document.getElementById('rightD
 UI.hsplit(document.getElementById('splitDash'), document.getElementById('dashDock'), 'right', 300, 900);
 UI.vsplit(document.getElementById('splitLeftV'), () => document.getElementById('toolboxDock'), 'up', 80, 560);
 document.querySelector('#dashTabs [data-act=maxDash]').onclick = e => { const d = document.getElementById('dashDock'); d.style.width = ''; d.classList.toggle('max'); e.target.textContent = d.classList.contains('max') ? 'Smaller' : 'Wider'; };
-if (window.swafl) window.swafl.version().then(v => { document.getElementById('stVer').textContent = v + ' · build 28 Oct 2026 d'; }).catch(() => {});
+if (window.swafl) window.swafl.version().then(v => { document.getElementById('stVer').textContent = v + ' · build 28 Oct 2026 e'; }).catch(() => {});
 document.getElementById('engine').addEventListener('load', () => { if (bootedOnce) boot(true); });
 boot();
 

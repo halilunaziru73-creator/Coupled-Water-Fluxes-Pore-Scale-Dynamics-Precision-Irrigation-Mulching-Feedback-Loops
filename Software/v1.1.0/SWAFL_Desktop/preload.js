@@ -8,5 +8,7 @@ contextBridge.exposeInMainWorld('swafl', {
   toggleFullscreen: () => ipcRenderer.invoke('fullscreen'),
   reload: () => ipcRenderer.invoke('reload-app'),
   version: () => ipcRenderer.invoke('version'),
-  openManual: () => ipcRenderer.invoke('open-manual')
+  openManual: () => ipcRenderer.invoke('open-manual'),
+  daisyRun: o => ipcRenderer.invoke('daisy-run', o),
+  httpGet: u => ipcRenderer.invoke('http-get', u)
 });

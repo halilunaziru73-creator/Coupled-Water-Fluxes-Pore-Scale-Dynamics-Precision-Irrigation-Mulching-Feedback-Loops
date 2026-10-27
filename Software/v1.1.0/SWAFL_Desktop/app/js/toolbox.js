@@ -9,6 +9,17 @@ const Toolbox = (() => {
       ['Run 20-year season simulation', 'chart', () => Act.runSeason(), 'years yearly dashboard charts'],
       ['Reset all settings to default', 'reset', () => Act.resetSettings(), 'default clear'] ] },
     { id: 't-case', name: 'Ready-made cases', icon: 'layers', tools: (E.metaData ? E.metaData.presets.filter(p => p[0] !== '') : []).map(p => [p[1].replace(/^Default: /, 'Default: '), 'field', () => Act.preset(p[0]), 'scenario case example preset']) },
+    { id: 't-daisy', name: 'Daisy model', icon: 'soil', tools: [
+      ['Collect Daisy files (logs, weather, set-ups)', 'open', () => DaisyUI.open('files'), 'daisy dlf dwf dai folder collect load'],
+      ['Plot Daisy logs (time, annual, depth profile)', 'chart', () => DaisyUI.open('plot'), 'daisy dlf plot profile heat'],
+      ['Mass balance of a Daisy log', 'chart', () => DaisyUI.open('balance'), 'daisy balance nitrogen water control chart'],
+      ['Compare two Daisy runs (test)', 'chart', () => DaisyUI.open('compare'), 'daisy compare test sml regression'],
+      ['Edit a Daisy set-up file (.dai)', 'open', () => DaisyUI.open('editor'), 'daisy dai setup editor highlight'],
+      ['Daisy library: soils, crops, fertilisers', 'layers', () => DaisyUI.open('library'), 'daisy horizon crop fertiliser library van genuchten'],
+      ['Soil column with the Richards equation', 'soil', () => DaisyUI.open('richards'), 'richards soil water column profile matric potential'],
+      ['Calibrate parameters (sequential, CMA-ES, Bayesian)', 'run', () => DaisyUI.open('calib'), 'calibrate optimise cma bayes parameters'],
+      ['Weather from Daisy stations and DMI', 'drop', () => DaisyUI.open('weather'), 'daisy dmi weather denmark hip groundwater'],
+      ['Denitrification calculator', 'refresh', () => DaisyUI.open('deni'), 'daisy denitrification n2o nitrate'] ] },
     { id: 't-design', name: 'Irrigation design', icon: 'pipe', tools: [
       ['Open surface irrigation design', 'pipe', () => Layers.open('sid'), 'border furrow basin surface'],
       ['Optimise surface layout (best design)', 'run', () => Act.optimise(), 'optimum best length width cutoff'],
