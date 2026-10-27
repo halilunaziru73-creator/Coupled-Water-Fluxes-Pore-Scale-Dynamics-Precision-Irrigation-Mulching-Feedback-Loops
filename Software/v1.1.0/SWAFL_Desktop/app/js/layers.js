@@ -12,7 +12,7 @@ const Layers = (() => {
     { id: 'g-loop', name: 'Feedback loops', icon: 'refresh', items: [['v5', 'Feedback loops', 'V5']] }
   ];
   const DESIGN = ['sid', 'drip', 'spr'];
-  let tabs = ['field'], cur = 'field', collapsed = { 'g-water': true, 'g-ctrl': true, 'g-soil': true, 'g-mulch': true, 'g-loop': true, 'g-design': true, 'g-crop': true, 'g-year': true, 's-sid': true, 's-drip': true, 's-spr': true }, sectionPick = {};
+  let tabs = [], cur = null, started = false, collapsed = { 'g-water': true, 'g-ctrl': true, 'g-soil': true, 'g-mulch': true, 'g-loop': true, 'g-design': true, 'g-crop': true, 'g-year': true, 's-sid': true, 's-drip': true, 's-spr': true }, sectionPick = {};
   const groupOf = id => { const g = GROUPS.find(x => x.items.some(i => i[0] === id)); return g && g.id; };
   const reveal = (id, sec) => { collapsed['root'] = false; const g = groupOf(id); if (g) collapsed[g] = false; if (sec) collapsed['s-' + id] = false; };
   const tree = document.getElementById('layerTree');
@@ -53,11 +53,12 @@ const Layers = (() => {
   });
 
   function open(id, sec) {
+    if (!started) { started = true; document.body.classList.remove('nolayer'); }
     if (!tabs.includes(id)) tabs.push(id);
     sectionPick = {}; if (sec) sectionPick[id] = sec;
     const need = !E.snap || E.snap.scene !== id; if (need) E.scene(id);
     if (sec) setTimeout(() => E.scrollTo(id, sec), need ? 260 : 20); else if (need) setTimeout(() => E.scrollTop(), 80);
-    cur = id; reveal(id, sec); renderTabs(); render(); renderViewBar();
+    cur = id; reveal(id, sec); renderTabs(); render(); renderViewBar(); try { Dash.render(); } catch (e) {}
   }
   function closeTab(id) {
     if (tabs.length <= 1) return; const i = tabs.indexOf(id); tabs = tabs.filter(t => t !== id);
@@ -81,6 +82,7 @@ const Layers = (() => {
   const short = t => { const p = t.split(':')[0]; return p.length > 64 ? p.slice(0, 61) + '...' : p; };
   function renderViewBar() {
     const el = document.getElementById('viewBar');
+    if (!started) { el.innerHTML = ''; return; }
     if (DESIGN.includes(cur)) {
       const secs = sections(cur);
       let h = '<span class="vtitle">' + UI.esc(nameOf(cur)) + '</span>';
@@ -103,9 +105,9 @@ const Layers = (() => {
   document.querySelector('#layersDock [data-act=expandAll]').onclick = expandAll;
   document.querySelector('#layersDock [data-act=collapseAll]').onclick = collapseAll;
 
-  E.on('scene', s => { cur = s.scene; if (!tabs.includes(cur)) tabs.push(cur); renderTabs(); render(); renderViewBar(); });
+  E.on('scene', s => { if (!started) return; cur = s.scene; if (!tabs.includes(cur)) tabs.push(cur); renderTabs(); render(); renderViewBar(); });
   let lastSec = '';
   E.on('snap', ({ s }) => { const k = JSON.stringify(s.sec); if (k !== lastSec) { lastSec = k; render(); renderViewBar(); } });
 
-  return { GROUPS, render, open, renderTabs, renderViewBar, expandAll, collapseAll, nameOf, current: () => cur, DESIGN };
+  return { GROUPS, render, open, renderTabs, renderViewBar, expandAll, collapseAll, nameOf, current: () => cur, started: () => started, DESIGN };
 })();

@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="css/swafl.css">
 <link rel="stylesheet" href="css/classic.css">
 </head>
-<body>
+<body class="nolayer">
 <div id="app">
 
   <!-- ===== Title / menu bar ===== -->
@@ -46,6 +46,7 @@
       <div id="centerRow">
       <div id="engineHost">
         <iframe id="engine" title="SWAFL simulation window" src="engine/engine.html?app=1#scene=field"></iframe>
+        <div id="emptyStage"><img src="assets/logo.svg" width="72" height="72" alt=""><div><b>No layer open</b><br>Click a layer in the Layers panel to open it here.</div></div>
         <div id="loading"><img src="assets/logo.svg" width="64" height="64" alt=""><div>Loading simulation engine&hellip;</div></div>
       </div>
         <div class="hsplit" id="splitDash" title="Drag to resize"></div>

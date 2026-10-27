@@ -207,7 +207,7 @@ document.addEventListener('keydown', onKey);
 /* ---------- start-up ---------- */
 function updateStatus(s) {
   const st = s.state, M = E.metaData;
-  document.getElementById('stScene').textContent = Layers.nameOf(s.scene);
+  document.getElementById('stScene').textContent = Layers.started() ? Layers.nameOf(s.scene) : 'No layer open';
   document.getElementById('stCase').textContent = [M.soilLabels[st.soil] || st.soil, M.tills[st.till], (M.mulches.find(m => m[0] === st.mulchType) || [])[1], (M.methods.find(m => m[0] === st.method) || [])[1]].filter(Boolean).join('  |  ');
   document.getElementById('stDate').textContent = s.dateLbl || '';
   const td = document.getElementById('tbDate'); if (td && s.date && document.activeElement !== td && td.value !== s.date) td.value = s.date;
