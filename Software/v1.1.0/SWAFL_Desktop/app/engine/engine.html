@@ -4139,7 +4139,16 @@ function computeSim() {
 }
 const cropNameAt = (sim, d) => sim.widx[d] >= 0 ? sim.wins[sim.widx[d]].name : 'fallow';
 // the crop as the person chose it in Properties, for every label that is read: the Daisy rotation names stay in brackets
+// the day as the irrigation decision sees it (same daily balance as the film, the schedule and the next irrigation): crop, roots and the water terms of the day and of the 14 days after it
+window.dayPlan = function (k) {
+  let PL = null; try { PL = irPlan({}); } catch (e) { PL = null; } if (!PL || !PL.crop || k < PL.s0 || k > PL.end - 15) return null;
+  const f = (arr, q) => PL.at(arr, q), cov = q => clampN((f(PL.KC, q) - PL.kcIni) / Math.max(0.05, PL.kcMid - PL.kcIni), 0, 1);
+  const one = q => { const eta = f(PL.ETa, q), c = f(PL.live, q) ? cov(q) : 0; return { rain: f(PL.P, q), irr: f(PL.I, q), dr: f(PL.DP, q), tr: eta * c, evap: eta * (1 - c) }; };
+  const d0 = one(k), nx = { rain: 0, irr: 0, dr: 0, tr: 0, evap: 0 }; for (let q = k + 1; q <= k + 14; q++) { const o = one(q); for (const key in nx) nx[key] += o[key]; }
+  return Object.assign({ rd: f(PL.ZR, k), f: clampN(f(PL.Dr, k) / Math.max(1e-6, f(PL.TAW, k)), 0, 1), crop: cropShown(null, k) }, d0, { next: nx });
+};
 const cropShown = (sim, d) => {
+  try { const PL = irPlan({}); if (PL && PL.crop && d >= PL.s0 && d <= PL.end) return PL.at(PL.live, d) ? PL.crop : PL.dormant ? PL.crop + ', dormant' : 'no ' + PL.crop.toLowerCase() + ' in the field (fallow)'; } catch (e) { }
   const wn = sim.widx[d] >= 0 ? sim.wins[sim.widx[d]].name : null, L = window.CROPLIB && CROPLIB.crops[state.crop];
   if (L) return L.group === 'perennial' ? L.label : wn ? L.label : 'no ' + L.label.toLowerCase() + ' in the field (fallow)';
   const cl = CROPS[state.crop] ? CROPS[state.crop].label : null; return wn ? (cl && cl.toLowerCase() !== wn ? cl + ' (' + wn + ')' : wn) : cl ? 'no ' + cl.toLowerCase() + ' in the field (fallow)' : 'fallow';

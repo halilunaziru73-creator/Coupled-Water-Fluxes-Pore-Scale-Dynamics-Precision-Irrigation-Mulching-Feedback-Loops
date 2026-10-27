@@ -73,9 +73,10 @@ const E = (() => {
         defaults:state,NYR:NYR,DPY:DPY})`);
     },
     day() {
-      return api.json(`(function(){var sim=seasonSim(true),rows=dssRows(sim),adv=dssAdvice(sim,rows),k=fclock.kd(),r0=rows[0],nx=rows.slice(1),yt=yearTable(sim)[yearOf(k)]||{};
-        return{date:fmtDate(dateOfK(k)),like:1980+yearOf(k),mode:dss.mode,N:dss.ahead,head:adv.head,text:adv.text,tone:adv.tone,crop:cropShown(sim,k),rd:sim.rd[k],f:r0.f,fT:sim.fTrigRaw,
-        rain:r0.rain,evap:r0.evap,irr:r0.irr,tr:r0.tr,dr:r0.dr,fc:(window.WXD&&WXD.on&&WXD.src==='online'&&WXD.fcStart!=null&&Math.abs(Date.UTC(dateOfK(k).getUTCFullYear(),dateOfK(k).getUTCMonth(),dateOfK(k).getUTCDate())-WXD.fcStart)<17*864e5)?1:0,next:{rain:sumKey(nx,'rain'),irr:sumKey(nx,'irr'),evap:sumKey(nx,'evap'),tr:sumKey(nx,'tr'),dr:sumKey(nx,'dr')},year:yt}})()`);
+      return api.json(`(function(){var sim=seasonSim(true),rows=dssRows(sim),adv=dssAdvice(sim,rows),k=fclock.kd(),r0=rows[0],nx=rows.slice(1),yt=yearTable(sim)[yearOf(k)]||{},dp=window.dayPlan?window.dayPlan(Math.floor(k)):null;
+        if(dp){r0=Object.assign({},r0,{rain:dp.rain,evap:dp.evap,irr:dp.irr,tr:dp.tr,dr:dp.dr});}
+        return{date:fmtDate(dateOfK(k)),like:1980+yearOf(k),mode:dss.mode,N:dss.ahead,head:adv.head,text:adv.text,tone:adv.tone,crop:dp?dp.crop:cropShown(sim,k),rd:dp?dp.rd:sim.rd[k],f:dp?dp.f:r0.f,fT:sim.fTrigRaw,
+        rain:r0.rain,evap:r0.evap,irr:r0.irr,tr:r0.tr,dr:r0.dr,fc:(window.WXD&&WXD.on&&WXD.src==='online'&&WXD.fcStart!=null&&Math.abs(Date.UTC(dateOfK(k).getUTCFullYear(),dateOfK(k).getUTCMonth(),dateOfK(k).getUTCDate())-WXD.fcStart)<17*864e5)?1:0,next:dp?dp.next:{rain:sumKey(nx,'rain'),irr:sumKey(nx,'irr'),evap:sumKey(nx,'evap'),tr:sumKey(nx,'tr'),dr:sumKey(nx,'dr')},year:yt}})()`);
     },
     season() {
       return api.json(`(function(){var r=seasonSim(true);var f=function(a){return a?Array.prototype.slice.call(a):[]};
