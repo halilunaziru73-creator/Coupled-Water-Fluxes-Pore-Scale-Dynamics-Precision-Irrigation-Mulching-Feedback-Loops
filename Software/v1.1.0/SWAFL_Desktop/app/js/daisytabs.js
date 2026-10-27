@@ -157,14 +157,32 @@
   }
 
   // ------------------------------------------------------------------ model and documentation
-  const box = (x, y, w, h, t, c, t2) => '<g><rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="6" fill="' + c + '" stroke="#456" stroke-width="1"/><text x="' + (x + w / 2) + '" y="' + (y + 17) + '" text-anchor="middle" font-weight="600" font-size="12">' + t + '</text>' + (t2 ? '<text x="' + (x + w / 2) + '" y="' + (y + 32) + '" text-anchor="middle" font-size="10.5" fill="#345">' + t2 + '</text>' : '') + '</g>';
-  const arr = (x1, y1, x2, y2) => '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="#456" stroke-width="1.4" marker-end="url(#ah)"/>';
+  // the Daisy model system, drawn after Fig. 2 of Holbak et al. (2026), Agricultural Systems 238, 104846
   function diagram() {
-    return '<svg viewBox="0 0 760 270" style="max-width:100%;background:#fff;border:1px solid #d5d9e0"><defs><marker id="ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#456"/></marker></defs>' +
-      box(10, 20, 140, 46, 'Driving variables', '#d7efef', 'weather, management') + box(10, 90, 140, 46, 'Parameters', '#e4e4e4', 'soil, crop, chemicals') + box(10, 160, 140, 46, 'Initial values', '#f8ecd5', 'soil water, organic matter') +
-      '<rect x="190" y="14" width="420" height="230" rx="8" fill="#fbfbfb" stroke="#678"/>' + box(205, 28, 190, 46, 'Bioclimate', '#cfe2f5', 'radiation, evapotranspiration, snow') + box(410, 28, 190, 46, 'Vegetation', '#d8efc1', 'growth, roots, N uptake') +
-      box(205, 98, 395, 46, 'Soil: water (Richards), heat, solutes', '#f2dfc2', 'matrix, biopores, drain') + box(205, 164, 190, 60, 'Organic matter', '#e9d3a8', 'added matter, microbes, humus') + box(410, 164, 190, 60, 'Nitrogen and chemicals', '#e9d3a8', 'nitrification, denitrification, sorption') +
-      box(640, 70, 110, 90, 'Results', '#d8efc1', 'yield, ET, percolation, leaching, N2O') + arr(150, 43, 205, 51) + arr(150, 113, 205, 120) + arr(150, 183, 205, 190) + arr(300, 74, 300, 98) + arr(505, 74, 505, 98) + arr(610, 115, 640, 115) + arr(395, 130, 410, 190) + '</svg>';
+    const T = (x, y, t, o) => '<text x="' + x + '" y="' + y + '" font-size="' + ((o && o.s) || 11) + '" fill="#1d2733"' + (o && o.b ? ' font-weight="700"' : '') + ' text-anchor="' + ((o && o.a) || 'middle') + '"' + (o && o.rot ? ' transform="rotate(-90 ' + x + ' ' + y + ')"' : '') + '>' + esc(t) + '</text>';
+    const R = (x, y, w, h, c, r) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + (r || 0) + '" fill="' + c + '" stroke="#34495e" stroke-width="1.2"/>';
+    const A = (x1, y1, x2, y2, both) => '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="#1d2733" stroke-width="1.3" marker-end="url(#dzah)"' + (both ? ' marker-start="url(#dzah2)"' : '') + '/>';
+    const lines = (cx, y, arr, o) => arr.map((t, i) => T(cx, y + i * 15, t, o)).join('');
+    let g = '<svg viewBox="0 0 800 470" style="max-width:100%;background:#fff;border:1px solid #d5d9e0;font-family:Segoe UI,Arial,sans-serif"><defs><marker id="dzah" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#1d2733"/></marker><marker id="dzah2" markerWidth="9" markerHeight="9" refX="1" refY="4.5" orient="auto"><path d="M9,0 L0,4.5 L9,9 z" fill="#1d2733"/></marker></defs>';
+    // inputs
+    g += R(10, 40, 175, 85, '#a9cfcf') + T(97, 68, 'Driving variables:', { b: 1, s: 14 }) + lines(97, 88, ['Weather Data &', 'Management Data'], {});
+    g += R(10, 170, 175, 85, '#d9d9d9') + T(97, 198, 'Model Parameters:', { b: 1, s: 14 }) + lines(97, 218, ['Soil Data &', 'Vegetation Data'], {});
+    g += R(10, 300, 175, 70, '#f6e8cd') + T(97, 328, 'Initial Values:', { b: 1, s: 14 }) + T(97, 348, 'Soil Data', {});
+    // main frame
+    g += '<rect x="215" y="8" width="385" height="452" fill="#fff" stroke="#1d2733" stroke-width="1.6"/>';
+    g += R(235, 22, 190, 100, '#a9c4dc') + T(330, 44, 'Bioclimate', { b: 1, s: 15 }) + lines(330, 62, ['SVAT', 'Light distribution', 'Interception', 'Snow accumulation'], { s: 11 });
+    g += R(465, 22, 115, 100, '#cfe6a5') + T(522, 44, 'Vegetation', { b: 1, s: 15 }) + lines(522, 62, ['Growth', 'Photosynthesis', 'Respiration', 'Uptake'], { s: 11 });
+    g += A(425, 72, 465, 72, 1) + A(330, 122, 330, 150, 1) + A(522, 122, 522, 150, 1);
+    // soil with the stack of layers
+    g += R(235, 150, 345, 295, '#edcf9f') + T(252, 172, 'Soil', { b: 1, s: 15, a: 'start' }) + lines(256, 200, ['Uptake', 'Turnover', 'Sorption', 'Transport'], { a: 'start', s: 11 }).replace(/<text /g, '<text ').replace(/text-anchor="middle"/g, 'text-anchor="start"');
+    const names = ['Pesticides', 'Nitrogen', 'Organic Matter', 'Heat', 'Water', 'Soil matrix', 'Macropores'];
+    names.forEach((n, i) => { const x = 330 + i * 28, y = 360 - i * 14 - 0, top = 190 - 0; const y0 = 250 - i * 12, h = 185; // sheets rise to the right, like the pages of a book
+      g += '<rect x="' + x + '" y="' + (y0) + '" width="26" height="' + h + '" fill="#fff" stroke="#34495e" stroke-width="1"/>';
+      for (let k = 1; k <= 7; k++) g += '<line x1="' + x + '" y1="' + (y0 + 20 + k * 6) + '" x2="' + (x + 26) + '" y2="' + (y0 + 20 + k * 6) + '" stroke="#8a97a5" stroke-width="' + (k % 3 === 0 ? 1 : 0.6) + '"' + (k % 3 === 0 ? '' : ' stroke-dasharray="2 2"') + '/>';
+      if (i <= 4) g += T(x + 15, y0 + h - 8, n, { rot: 1, a: 'start', s: 11 }); else g += T(x + 15, y0 + 100, n, { rot: 1, a: 'start', s: 10 }); });
+    g += A(185, 82, 233, 82) + A(185, 212, 233, 212) + A(185, 335, 233, 335) + A(580, 300, 625, 300);
+    g += R(625, 140, 165, 220, '#d3ecc0') + T(707, 168, 'Simulation', { b: 1, s: 15 }) + T(707, 186, 'Results:', { b: 1, s: 15 }) + lines(707, 214, ['Yield', 'Evapotranspiration', 'Percolation', 'Denitrification', 'Leaching', 'Etc.'], { s: 11 });
+    return g + '</svg><p class="pnote">Drawn after Fig. 2 of Holbak et al. (2026), Agricultural Systems 238, 104846: the bioclimate, vegetation and soil modules, the soil layers (pesticides, nitrogen, organic matter, heat, water in matrix and macropores), the inputs on the left and the results on the right.</p>';
   }
   const ASSETS = [['Windows installer (exe)', 'daisy-7.1.14-Windows-python3.13.exe', '21.7 MB', '035125a373a8b8ed04be37f6a3d6c0343843135edc812084b647b05a5c7e64ec', 'win'], ['Windows (zip)', 'daisy-7.1.14-Windows-python3.13.zip', '26.4 MB', 'd2bdf99b907cda45f118e9719e5aa7597bc42bfa9352db05fd0a3d0afbdf3473', 'win'], ['macOS, Apple silicon', 'daisy-7.1.14-Darwin-arm64-python3.13.zip', '28.2 MB', 'ae6ce60f608f325795c203edd51dd5e8fc0e45e1b4334c0bb81c8552ac3abfd8', 'mac'], ['macOS, Intel', 'daisy-7.1.14-Darwin-x86_64-python3.13.zip', '29 MB', 'a4a05434181954abb3ed87b53814f4ff404bbfc063178216f786cf7f45814c8c', 'mac'], ['Linux, Debian and Ubuntu (deb)', 'daisy_7.1.14_amd64.deb', '5.22 MB', '82a7a4373f83f5209eb06f18c7d1b1e6e218ece82afb0cc4cf7845098cd3ce3f', 'lin'], ['Linux, Flatpak', 'daisy-7.1.14.flatpak', '3.72 MB', '28ca2ffec387fdf47ed2ca14589724d12e0e8d66998577521f7460b166cfc6bd', 'lin']];
   const DOCS = [['reference.pdf', 'Daisy program reference manual: every component, parameter and log variable', '1.42 MB', ''], ['tutorial.pdf', 'Tutorial: the first simulations step by step', '361 KB', ''], ['exercises.pdf', 'Exercises (the course farm used by the scenarios)', '254 KB', '']];
