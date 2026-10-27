@@ -249,6 +249,8 @@ body.appmode canvas#profileCanvas { margin: 0 auto; }
     <label>Decide for <select id="dssHor" title="how far ahead the irrigation decision looks"><option value="next">next irrigation</option><option value="month" selected>next 30 days</option><option value="year">next 12 months</option><option value="season">whole crop season</option></select></label>
     <label>Crop <select id="dssMode" title="a farmer can plant at any time: plant on the date chosen, or follow the rotation calendar"><option value="plant" selected>planted on this date</option><option value="season">rotation calendar</option></select></label>
     <label>Critical depletion f <input type="range" id="dssF" min="0.2" max="0.8" step="0.05" value="0.5" style="width:80px;vertical-align:middle"> <b id="dssFv">0.50</b></label>
+    <label>Field area <input type="number" id="dssArea" min="0.01" max="10000" step="0.1" value="1" style="width:62px"> ha</label>
+    <label>Soil water on this date <select id="dssInit" title="how full the root zone is on the date of the decision"><option value="sim" selected>from the simulation</option><option value="1">full (field capacity)</option><option value="0.75">75 % of available</option><option value="0.5">50 % of available</option><option value="0.25">25 % of available</option></select></label>
     <label>Look ahead <select id="dssAhead"><option value="7">7 days</option><option value="14" selected>14 days</option><option value="30">30 days</option><option value="60">60 days</option></select></label>
   </div>
   <div class="tbline" id="todayLine"></div>
@@ -1636,7 +1638,7 @@ function irToday(y, C, R, kind) {
 const _IRP = { keys: [], val: {} };
 function irPlan(opt) {
   opt = opt || {}; const sim = seasonSim(), kW = fclock.kd(), S0 = irStart(sim, kW), k0 = S0.k, Zn = opt.Zn > 0 ? +opt.Zn : null, Ea = clampN(opt.Ea || ((state.method === 'M01_Overhead') ? 0.75 : /Drip/.test(state.method) ? 0.9 : 0.6), 0.05, 1);
-  const key = [simCache.key, kW, Zn == null ? 'refill' : Zn.toFixed(2), Ea.toFixed(3), state.vffIdx, state.mulchType, (window.WXD && WXD.on) ? WXD.key : 'rec', state.rainIdx, state.tempIdx, state.decMode, state.decHor, S0.virt ? 'v' : 'r'].join('|');
+  const key = [simCache.key, kW, Zn == null ? 'refill' : Zn.toFixed(2), Ea.toFixed(3), state.vffIdx, state.mulchType, (window.WXD && WXD.on) ? WXD.key : 'rec', state.rainIdx, state.tempIdx, state.decMode, state.decHor, state.decInit, S0.virt ? 'v' : 'r'].join('|');
   if (_IRP.val[key]) return _IRP.val[key];
   const virt = !!S0.virt, pv = virt ? CROPLIB.params(virtCrop(), state.densIdx, k0 % DPY) : null, wi = sim.widx[k0], w = virt ? { sow: k0, harv: k0 + pv.len, name: pv.label } : wi >= 0 ? sim.wins[wi] : null, per = !virt && w && w.harv - w.sow >= DPY - 2;
   const s0 = w ? Math.max(0, w.sow, k0 - 150) : Math.max(0, k0 - 30), end = Math.min(ND - 1, Math.max(per ? k0 + DPY : w ? Math.max(k0 + 120, w.harv + 30) : k0 + 150, state.decHor === 'year' ? k0 + 365 : 0)), n = end - s0 + 1, ext = 220;
@@ -1650,10 +1652,11 @@ function irPlan(opt) {
   const zrAt = k => virt ? (kcAt(k) > 0 ? clampN(15 + (pv.root - 15) * Math.min(1, (k - k0) / Math.max(1, pv.st[0] + pv.st[1])), 15, 200) : 15) : kcAt(k) > 0 ? clampN(sim.rd[Math.min(ND - 1, k)] || 15, 15, 100) : 15;
   const leftM = d => { const rz = clampN(sim.rd[d] || 30, 10, 100), m = Math.max(1, Math.round(rz / DZ)); let a = 0; for (let i = 0; i < m; i++) a += clampN(sim.s[d][i], 0, 1); return a / m; };
   const A = k => k - s0, N2 = n + ext, Dr = new Float32Array(N2), TAW = new Float32Array(N2), RAW = new Float32Array(N2), ETc = new Float32Array(N2), ETa = new Float32Array(N2), P = new Float32Array(N2), RO = new Float32Array(N2), DP = new Float32Array(N2), I = new Float32Array(N2), KC = new Float32Array(N2), ZR = new Float32Array(N2), KS = new Float32Array(N2), THR = new Float32Array(N2), live = new Uint8Array(N2);
-  const ev = []; let D = clampN((1 - leftM(s0)) * awc * zrAt(s0), 0, awc * zrAt(s0));
+  const initO = state.decInit != null && state.decInit !== 'sim' && isFinite(+state.decInit) ? +state.decInit : null;
+  const ev = []; let D = state.decInit != null && state.decInit !== 'sim' && isFinite(+state.decInit) ? clampN((1 - +state.decInit) * awc * zrAt(s0), 0, awc * zrAt(s0)) : clampN((1 - leftM(s0)) * awc * zrAt(s0), 0, awc * zrAt(s0));
   for (let i = 0; i < N2; i++) {
     const k = s0 + i, kc = kcAt(k), lv = kc > 0.01, kce = lv ? kcEffAt(k, kc) : 0.25 * (0.4 + 0.6 * vff), e0 = F.et0[Math.min(i, F.et0.length - 1)] || 0, r = F.rain[Math.min(i, F.rain.length - 1)] || 0;
-    const taw = awc * zrAt(k), p = clampN(p0 + 0.04 * (5 - kce * e0), 0.1, 0.8), raw = p * taw; if (D > taw) D = taw;
+    const taw = awc * zrAt(k), p = clampN(p0 + 0.04 * (5 - kce * e0), 0.1, 0.8), raw = p * taw; if (D > taw) D = taw; if (k === k0 && initO != null) D = clampN((1 - initO) * taw, 0, taw);
     const ro = ponded && lv ? 0 : r > 35 ? 0.3 * (r - 35) : 0, ks = lv ? (D > raw ? clampN((taw - D) / Math.max(1e-6, (1 - p) * taw), 0, 1) : 1) : 1;
     const etc = kce * e0, eta = lv ? etc * ks : etc * (D < 0.3 * taw ? 1 : clampN((taw - D) / (0.7 * taw), 0, 1));
     D = D - (r - ro) + eta; let dp = 0; if (D < 0) { dp = -D; D = 0; }
@@ -1992,9 +1995,12 @@ function irAdvice(y0, sp) {
   const nE = PL.up[0], dn = nE ? nE.k + IRSH - kW : null, big = sp.Zn > PL.fT * tawNow * 1.05;
   // the date of the irrigation, always: inside the horizon, or the first one of the daily model after it, or the dry-down without rain; with the Kc and ETc of that day
   const nAny = nE || PL.next(k0), dryK = PL.dry(k0), kcOf = k => PL.at(PL.KC, k), etcOf = k => PL.at(PL.ETc, k), hz = { next: 'before the next irrigation', month: 'in the next 30 days', year: 'in the next 12 months', season: 'in this season' }[state.decHor] || 'in this season';
+  // the arithmetic behind the date: water the root zone can still give before the trigger, against what the crop uses each day; the field area gives the volumes
+  const ha = Math.max(0.01, +state.areaHa || 1), avail = Math.max(0, PL.at(PL.THR, k0) - PL.at(PL.Dr, k0)), etcAvg = (() => { let a = 0, c = 0; for (let q = 0; q < 7; q++) { a += PL.at(PL.ETc, k0 + q); c++; } return a / c; })();
+  const arith = 'The root zone (' + irF(PL.at(PL.ZR, k0)) + ' cm of roots, ' + irF(PL.at(PL.TAW, k0), 0) + ' mm available in all) can give ' + irF(avail, 1) + ' mm before the trigger (depletion ' + PL.fT.toFixed(2) + '); the crop uses about ' + etcAvg.toFixed(1) + ' mm/day now, so ' + (etcAvg > 0.05 ? 'about ' + irF(avail / etcAvg, 0) + ' days without rain' : 'it does not dry out soon') + '. On ' + ha.toFixed(2).replace(/\.?0+$/, '') + ' ha the crop uses ' + irF(etcAvg * 10 * ha, 0) + ' m\u00b3 a day' + (nAny ? ' and one irrigation of ' + irF(nAny.net, 0) + ' mm net takes ' + irF(nAny.net * 10 * ha, 0) + ' m\u00b3 (' + irF(nAny.net * 10 * ha / Ea, 0) + ' m\u00b3 pumped at Ea ' + irF(Ea * 100) + ' %)' : '') + '. ';
   const plantedTxt = PL.virt ? 'Crop: ' + PL.pv.label.toLowerCase() + ' planted on ' + FDK(k0) + ' (Kc ' + PL.kcIni.toFixed(2) + ' at planting, ' + PL.kcMid.toFixed(2) + ' at mid-season; roots grow from 15 to ' + irF(PL.pv.root) + ' cm). ' : '';
   const dayTxt = k => FDK(k) + ' (in ' + (k + IRSH - kW) + ' days, Kc ' + kcOf(k).toFixed(2) + ' \u00d7 ET0 ' + (etcOf(k) / Math.max(0.05, kcOf(k))).toFixed(1) + ' = ETc ' + etcOf(k).toFixed(1) + ' mm/day)';
-  const msg = plantedTxt + (!nE ? 'No irrigation is due ' + hz + ' with the rain of ' + PL.src + '. ' + (nAny ? 'The next irrigation of the simulation is on ' + dayTxt(nAny.k) + ': ' + irF(nAny.net, 0) + ' mm net, ' + irF(nAny.net * gross0 / Math.max(0.1, sp.Zn), 0) + ' mm pumped with this design. ' : dryK.trig != null ? 'If no rain falls, the root zone reaches the trigger on ' + dayTxt(dryK.trig) + ' and the wilting point on ' + (dryK.wilt != null ? FDK(dryK.wilt) : 'a later date') + '. ' : 'The rain covers the crop need up to the end of its season, so no date is due. ')
+  const msg = plantedTxt + arith + (!nE ? 'No irrigation is due ' + hz + ' with the rain of ' + PL.src + '. ' + (nAny ? 'The next irrigation of the simulation is on ' + dayTxt(nAny.k) + ': ' + irF(nAny.net, 0) + ' mm net, ' + irF(nAny.net * gross0 / Math.max(0.1, sp.Zn), 0) + ' mm pumped with this design. ' : dryK.trig != null ? 'If no rain falls, the root zone reaches the trigger on ' + dayTxt(dryK.trig) + ' and the wilting point on ' + (dryK.wilt != null ? FDK(dryK.wilt) : 'a later date') + '. ' : 'The rain covers the crop need up to the end of its season, so no date is due. ')
     : 'Next irrigation: ' + FDK((nE.k)) + (dn === 0 ? ' (today)' : dn === 1 ? ' (tomorrow)' : ' (in ' + dn + ' days)') + ', Kc ' + kcOf(nE.k).toFixed(2) + ' \u00d7 ET0 ' + (etcOf(nE.k) / Math.max(0.05, kcOf(nE.k))).toFixed(1) + ' = ETc ' + etcOf(nE.k).toFixed(1) + ' mm/day, ' + irF(nE.net, 0) + ' mm net, ' + irF(nE.net * gross0 / Math.max(0.1, sp.Zn), 0) + ' mm pumped with this design. ')
     + (S.gaps.length ? 'Then irrigate about every ' + irF(S.mean, 0) + ' days (between ' + S.gmin + ' and ' + S.gmax + ' days: shorter when Kc × ET0 is high, longer after rain). ' : '')
     + (big ? 'The root zone takes only ' + irF(PL.fT * tawNow, 0) + ' mm at the trigger, less than the design depth of ' + irF(sp.Zn, 0) + ' mm: run each irrigation for ' + irF(100 * PL.fT * tawNow / sp.Zn) + ' % of the design time, or lower the trigger. ' : '')
@@ -2552,7 +2558,7 @@ const TRIGGER_AT_FSTAR = {
 };
 const FSTAR = 0.45; // soil-independent critical depletion (5% yield loss)
 
-let state = { soil: DATA.soils[4], till: "conv", tcIdx: 0, vffIdx: 9, capIdx: 1, rainIdx: 5, tempIdx: 2, trigIdx: 6, zIdx: 3, nIdx: 6, method: 'M02_Surface', range: 'all', mulchType: 'straw', fview: 'day', trigMode: 'own', trigF: 0.5, trigBy: Object.fromEntries(DATA.soils.map(function (q) { return [q, 0.5]; })), decMode: 'plant', decHor: 'month', crop: "cereal" };
+let state = { soil: DATA.soils[4], till: "conv", tcIdx: 0, vffIdx: 9, capIdx: 1, rainIdx: 5, tempIdx: 2, trigIdx: 6, zIdx: 3, nIdx: 6, method: 'M02_Surface', range: 'all', mulchType: 'straw', fview: 'day', trigMode: 'own', trigF: 0.5, trigBy: Object.fromEntries(DATA.soils.map(function (q) { return [q, 0.5]; })), decMode: 'plant', decHor: 'month', decInit: 'sim', areaHa: 1, crop: "cereal" };
 const TEMP_VALUES = [-1.0,-0.5,0.0,0.5,1.0,1.5,2.0,2.5,3.0,3.5];
 // Cereal is the real, simulated rotation (factor 1.0, no change). Legume and Vegetable factors are
 // illustrative only, loosely reflecting typical relative dry-matter yield and harvest index differences
@@ -3842,7 +3848,7 @@ function simStd20() {
   const soil = state.soil; if (_std20[soil]) return _std20[soil];
   const S0 = Object.assign({}, state), C0 = Object.assign({}, current);
   try {
-    Object.assign(state, { till: 'conv', tcIdx: 0, vffIdx: VFF_VALUES.length - 1, method: 'M02_Surface', trigMode: 'own', trigBy: Object.fromEntries(DATA.soils.map(function (q) { return [q, 0.5]; })), trigF: 0.5, decMode: 'plant', decHor: 'month', trigIdx: TRIG_VALUES.indexOf(-300), zIdx: Z_VALUES.indexOf(20), nIdx: NRATE_VALUES.indexOf(100), rainIdx: RAIN_VALUES.indexOf(1.0), tempIdx: TEMP_VALUES.indexOf(0), crop: 'cereal' });
+    Object.assign(state, { till: 'conv', tcIdx: 0, vffIdx: VFF_VALUES.length - 1, method: 'M02_Surface', trigMode: 'own', trigBy: Object.fromEntries(DATA.soils.map(function (q) { return [q, 0.5]; })), trigF: 0.5, decMode: 'plant', decHor: 'month', decInit: 'sim', areaHa: 1, trigIdx: TRIG_VALUES.indexOf(-300), zIdx: Z_VALUES.indexOf(20), nIdx: NRATE_VALUES.indexOf(100), rainIdx: RAIN_VALUES.indexOf(1.0), tempIdx: TEMP_VALUES.indexOf(0), crop: 'cereal' });
     Object.assign(current, model(VFF_VALUES[state.vffIdx], RAIN_VALUES[state.rainIdx])); _std20[soil] = computeSim();
   } finally { Object.keys(state).forEach(k => { if (!(k in S0)) delete state[k]; }); Object.assign(state, S0); Object.assign(current, C0); }
   return _std20[soil];
@@ -5239,7 +5245,7 @@ function dssRender(force) {
   const rows = dssRows(sim), r0 = rows[0], next = rows.slice(1), adv = dssAdvice(sim, rows), dt = dateOfK(k), ay = yearOf(k), need = dssNeed(sim), fT = sim.fTrigRaw, N = dss.ahead;
   document.getElementById('todayLine').innerHTML = (adv.head ? '<b style="color:' + adv.tone + '">' + adv.head + '</b><span class="tbsub"> &middot; ' : '<span class="tbsub">') + fmtDate(dt) + ' &middot; sensor ' + r0.f.toFixed(2) + ' of trigger ' + fT.toFixed(2) + ' &middot; next ' + N + ' days: ' + mmTxt(sumKey(next, 'irr')) + ' mm irrigation, ' + mmTxt(sumKey(next, 'rain')) + ' mm rain</span>';
   const inp = document.getElementById('dssDate'); if (document.activeElement !== inp) inp.value = isoDate(dt);
-  { const h = document.getElementById('dssHor'), m = document.getElementById('dssMode'), f = document.getElementById('dssF'), fv = document.getElementById('dssFv'); if (h && h.value !== state.decHor) h.value = state.decHor; if (m && m.value !== state.decMode) m.value = state.decMode; const fx = state.trigBy[state.soil] != null ? state.trigBy[state.soil] : state.trigF; if (f && document.activeElement !== f) f.value = fx; if (fv) fv.textContent = (+fx).toFixed(2); }
+  { const h = document.getElementById('dssHor'), m = document.getElementById('dssMode'), f = document.getElementById('dssF'), fv = document.getElementById('dssFv'); if (h && h.value !== state.decHor) h.value = state.decHor; if (m && m.value !== state.decMode) m.value = state.decMode; { const i2 = document.getElementById('dssInit'), a2 = document.getElementById('dssArea'); if (i2 && i2.value !== String(state.decInit)) i2.value = String(state.decInit); if (a2 && document.activeElement !== a2 && +a2.value !== state.areaHa) a2.value = state.areaHa; } const fx = state.trigBy[state.soil] != null ? state.trigBy[state.soil] : state.trigF; if (f && document.activeElement !== f) f.value = fx; if (fv) fv.textContent = (+fx).toFixed(2); }
 }
 
 function dssLines() {
@@ -5263,7 +5269,7 @@ function dssInit() {
   const stay = () => { dssHold(); fclock.pause = 0; fclock.on = false; if (currentScene.fieldBar) document.getElementById('playBtn').textContent = 'Play'; dssSyncPlay(currentScene.id); dssRender(true); };
   const go = keep => { const v = d.value; if (!v) return; const p = v.split('-').map(Number); dssGo(new Date(Date.UTC(p[0], p[1] - 1, p[2])), keep); if (dss.ready) dssHold(); dssRender(true); };
   d.onchange = () => go(true); ys.onchange = () => { dss.mode = ys.value; go(true); }; document.getElementById('dssAhead').onchange = e => { dss.ahead = +e.target.value; dssRender(true); };
-  document.getElementById('dssHor').onchange = e => applyState({ decHor: e.target.value }); document.getElementById('dssMode').onchange = e => applyState({ decMode: e.target.value });
+  document.getElementById('dssHor').onchange = e => applyState({ decHor: e.target.value }); document.getElementById('dssInit').onchange = e => applyState({ decInit: e.target.value }); document.getElementById('dssArea').onchange = e => applyState({ areaHa: Math.max(0.01, +e.target.value || 1) }); document.getElementById('dssMode').onchange = e => applyState({ decMode: e.target.value });
   document.getElementById('dssF').oninput = e => { const f = +e.target.value; state.trigF = f; DATA.soils.forEach(q => { state.trigBy[q] = f; }); refresh(); };
   document.getElementById('dssToday').onclick = () => { const t = new Date(); d.value = isoDate(new Date(Date.UTC(t.getFullYear(), t.getMonth(), t.getDate()))); go(true); };
   document.getElementById('dssPrev').onclick = () => { fclock.day = Math.max(0, fclock.kd() - 1); stay(); }; document.getElementById('dssNext').onclick = () => { fclock.day = Math.min(ND - 2, fclock.kd() + 1); stay(); };

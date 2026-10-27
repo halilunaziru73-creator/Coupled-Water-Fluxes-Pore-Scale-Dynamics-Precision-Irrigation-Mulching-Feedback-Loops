@@ -214,7 +214,12 @@ function updateStatus(s) {
   document.getElementById('stPlay').textContent = s.playOn ? 'Running' : 'Paused';
   const rb = document.querySelector('#toolbar .tb.run'); if (rb) rb.innerHTML = UI.icon(s.playOn ? 'pause' : 'play') + '<span>' + (s.playOn ? 'Pause' : 'Run') + '</span>';
 }
-let bootedOnce = false;
+let bootedOnce = false, bootedWx = false;
+// the first question of every start: which weather the decisions run on
+function weatherAsk() {
+  UI.modal({ title: 'Which weather should SWAFL use?', icon: 'info', width: 'min(640px,94vw)', html: '<p>Every irrigation decision follows the weather. Choose where it comes from:</p><ol><li><b>Benchmark weather of the software</b>: the recorded weather of the simulations (1980 to 1999), projected on to 2100.</li><li><b>Import a weather file</b> of your own field (CSV, Excel, DWF or DLF).</li><li><b>Online weather of a location</b>: type the place or its coordinates; twenty years of measured weather and the forecast are fetched.</li></ol><p class="pnote">You can change this at any time in Properties &rarr; Scenario &rarr; Weather source.</p>',
+    buttons: [{ label: 'Benchmark weather (to 2100)', act: () => { try { WxUI.use('record'); } catch (e) {} UI.log('Weather: benchmark record of the software, projected to 2100'); } }, { label: 'Import a weather file...', act: () => { setTimeout(() => WxUI.importFile(), 30); } }, { label: 'Online weather by location...', pri: true, act: () => { setTimeout(() => WxUI.online(), 30); } }] });
+}
 async function boot(again) {
   const ok = await E.start();
   if (!ok) { UI.log('The simulation engine did not start', 'err'); document.querySelector('#loading div').textContent = 'The simulation engine did not start. Use Refresh > Reload simulation engine.'; return; }
@@ -227,7 +232,7 @@ async function boot(again) {
   Dash.render();
   let deep = null; try { const m = /[#&?](?:open|layer)=([a-z0-9]+)/i.exec(location.hash + location.search); if (m) deep = m[1]; } catch (e) {}
   if (deep) setTimeout(() => { try { Layers.open(deep); } catch (e) {} }, 300);   // links like index.html#open=n1 land straight on a layer (n1 = Irrigation trigger law)
-  try { if (!deep && !localStorage.getItem('swafl.welcome')) { localStorage.setItem('swafl.welcome', '1'); welcome(); } } catch (e) {}
+  if (!bootedWx) { bootedWx = true; setTimeout(weatherAsk, 250); }
 }
 function welcome() { UI.modal({ title: 'Welcome to SWAFL', icon: 'info', width: 'min(620px,94vw)', html: '<div class="about"><img src="assets/logo.svg" width="84" height="84" alt=""><div><p><b>Start in three clicks</b></p><ol><li>Open a group in <b>Layers</b> (left) and click a layer.</li><li>Press <b>Run</b> in the toolbar.</li><li>Change the <b>Date</b> in the toolbar: the whole workbench moves to that date, today or up to 2100.</li></ol><p>Results are in the <b>Dashboard</b> at the bottom. Press <b>F1</b> for the full manual; <b>File &rarr; Save full report as PDF</b> saves the report of every layer. New: <b>Crops</b>, <b>Year by year</b> and the <b>field on the map</b> (Tools).</p></div></div>', buttons: [{ label: 'Open the guide', act: () => { setTimeout(guideModal, 50); } }, { label: 'Start', pri: true }] }); }
 E.on('snap', ({ s }) => { if (E.metaData) updateStatus(s); });
