@@ -1,0 +1,355 @@
+/* Terrain, sensors and soil retention of the demarcated field.
+   1. Contours and flow: the terrain of the field and its surroundings (open elevation tiles, smoothed, sinks filled by priority flood,
+      D8 flow directions and upslope area, as in the erosion maps) drawn with contour lines, the direction the water moves, the
+      channels and a hillshade; the same terrain as a 3D surface that turns with the mouse, with the water running down the flow lines.
+   2. Watershed: the catchment that drains to the outlet of the field (or to a point clicked on the map), the channel network
+      with Strahler orders, area, perimeter, relief, longest flow path, drainage density and time of concentration (Kirpich, 1940),
+      the way a terrain portal delineates a watershed from a DEM.
+   3. Sensors: soil water sensors are installed on the map (click) and removed (click the sensor). Readings are modelled from the
+      SWAFL water balance (the water left in the root zone of the working date, shifted by the wetness index of the terrain and by
+      the satellite index of the cell) until real readings are typed in. Sensors and satellite are fused by regression kriging:
+      the readings are regressed on the topographic wetness index and the satellite index, the residuals are kriged with a
+      spherical variogram fitted to them, and the map of soil water comes with its kriging standard deviation. The sites can be
+      optimised: k-means in the space of elevation, wetness index, available water, the satellite index and position puts the
+      sensors on the representative places; the sensors that tell least (largest rise of the mean kriging deviation when removed)
+      are ranked for removal.
+   4. Spatial retention curves: sand and clay are mapped by regression kriging (trend on the wetness index; residuals kriged from
+      the soil samples typed in), the retention curve of every cell follows from Saxton and Rawls (2006), and the maps of field
+      capacity, wilting point, available water, the trigger of the SWAFL decision (water content at the critical depletion f) and
+      the days to the trigger come from them, so the trigger is calculated cell by cell. */
+'use strict';
+const FieldGeo = (() => {
+  const rad = Math.PI / 180;
+  const G = { T: null, sens: [], nid: 1, N: 6, ws: 0.5, thr: 0.5, out: 'field', outCell: -1, shed: null, samples: '', soil: null, ret: null, fuse: null, vg: null, vexag: 2.5, az: 35, el: 40, buf: 400, opt: null, lg: null, hist: [], col3: 'elev', B: null, dg: null, depth: 20 };
+  const H = () => FieldMap._h, F = () => FieldMap._h.F;
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const st = m => { const e = document.getElementById('fgSt'); if (e) e.innerHTML = m; };
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const VIEWS = { contour: 'Contours, flow and channels', twi: 'Wetness index of the terrain', shed: 'Watershed and channel network', sens: 'Soil water: sensors and satellite fused', sensu: 'Uncertainty of the fused soil water', ret_fc: 'Field capacity (retention curves)', ret_wp: 'Wilting point (retention curves)', ret_aw: 'Available water (retention curves)', ret_trig: 'Trigger water content (SWAFL decision)', ret_days: 'Days to the trigger' };
+  const RAMP = {
+    terr: [[0, 46, 125, 50], [0.25, 139, 168, 70], [0.5, 232, 215, 120], [0.75, 168, 120, 70], [1, 245, 240, 235]],
+    wet: [[0, 247, 251, 255], [0.35, 158, 202, 225], [0.7, 33, 113, 181], [1, 8, 48, 107]],
+    vir: [[0, 253, 231, 37], [0.25, 94, 201, 98], [0.5, 33, 145, 140], [0.75, 59, 82, 139], [1, 68, 1, 84]],
+    dry: [[0, 215, 48, 39], [0.35, 252, 141, 89], [0.6, 254, 224, 144], [0.8, 145, 191, 219], [1, 49, 54, 149]],
+    unc: [[0, 255, 255, 204], [0.5, 253, 141, 60], [1, 128, 0, 38]]
+  };
+  const ramp = (n, t) => { const R = RAMP[n]; t = clamp(t, 0, 1); for (let i = 1; i < R.length; i++) if (t <= R[i][0]) { const a = R[i - 1], b = R[i], f = (t - a[0]) / (b[0] - a[0] || 1); return [a[1] + (b[1] - a[1]) * f, a[2] + (b[2] - a[2]) * f, a[3] + (b[3] - a[3]) * f]; } const l = R[R.length - 1]; return [l[1], l[2], l[3]]; };
+  let seed = 12345; const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
+
+  // ------------------------------------------------------------------ the terrain
+  function setTerrain(T) { G.T = T; G.dg = null; G.shed = null; G.ret = null; G.fuse = null; G.opt = null; G.cells = null; }
+  async function readTerrain() {
+    const Fm = F(), h = H(); if (Fm.pts.length < 3) throw new Error('demarcate the field first');
+    const k = FieldPrec._k, lats = Fm.pts.map(p => p[0]), lons = Fm.pts.map(p => p[1]), c0 = h.centroid(Fm.pts), bl = G.buf / 110540, bn = G.buf / (111320 * Math.cos(c0[0] * rad));
+    st('Reading the terrain (open elevation tiles, ' + G.buf + ' m around the field)...');
+    const D = await k.dem(Math.min(...lats) - bl, Math.min(...lons) - bn, Math.max(...lats) + bl, Math.max(...lons) + bn), cell = D.mpp;
+    st('Terrain analysis: smoothing, filling the sinks, flow directions and upslope area of ' + (D.W * D.H).toLocaleString('en-US') + ' cells...'); await new Promise(r => setTimeout(r, 20));
+    const Zs = k.smooth(D.Z, D.W, D.H), Zf = k.fill(Zs, D.W, D.H), FL = k.flow(Zf, D.W, D.H, cell), ins = new Uint8Array(D.W * D.H);
+    for (let y = 0; y < D.H; y++) for (let x = 0; x < D.W; x++) { const ll = D.ll(x + 0.5, y + 0.5); if (h.inside(ll[0], ll[1], Fm.pts)) ins[y * D.W + x] = 1; }
+    setTerrain({ D, Zf, FL, ins, cell, src: 'open elevation tiles (AWS Terrain Tiles, zoom ' + D.z + ')' }); return G.T;
+  }
+  const need = () => { if (!G.T) throw new Error('read the terrain first'); return G.T; };
+  function derived() {
+    if (G.dg && G.dg.T === G.T) return G.dg; const T = need(), D = T.D, W = D.W, Hh = D.H, N = W * Hh, Z = T.Zf, c = T.cell, hs = new Float32Array(N), twi = new Float32Array(N), slope = new Float32Array(N);
+    for (let y = 0; y < Hh; y++) for (let x = 0; x < W; x++) { const i = y * W + x, xa = Math.min(W - 1, x + 1), xb = Math.max(0, x - 1), ya = Math.min(Hh - 1, y + 1), yb = Math.max(0, y - 1);
+      const zx = (Z[y * W + xa] - Z[y * W + xb]) / (c * (xa - xb || 1)), zy = (Z[ya * W + x] - Z[yb * W + x]) / (c * (ya - yb || 1)), nl = Math.hypot(zx, zy, 1);
+      hs[i] = clamp((-zx * -0.5 + zy * 0.5 + 0.707) / nl, 0, 1); slope[i] = Math.atan(Math.hypot(zx, zy)) / rad; twi[i] = Math.log((T.FL.A[i] / c) / Math.max(0.005, T.FL.S[i])); }
+    let a = 0, n = 0; for (let i = 0; i < N; i++) if (T.ins[i]) { a += twi[i]; n++; } const m = a / (n || 1); let s2 = 0; for (let i = 0; i < N; i++) if (T.ins[i]) s2 += (twi[i] - m) ** 2; const sd = Math.sqrt(s2 / (n || 1)) || 1;
+    let zlo = Infinity, zhi = -Infinity; for (let i = 0; i < N; i++) { zlo = Math.min(zlo, Z[i]); zhi = Math.max(zhi, Z[i]); }
+    let tlo = Infinity, thi = -Infinity; for (let i = 0; i < N; i++) { tlo = Math.min(tlo, twi[i]); thi = Math.max(thi, twi[i]); }
+    return (G.dg = { T, hs, twi, slope, tm: m, tsd: sd, zlo, zhi, tlo, thi });
+  }
+  const fieldCells = () => { if (G.cells && G.cells.T === G.T) return G.cells.a; const T = need(), a = []; for (let i = 0; i < T.ins.length; i++) if (T.ins[i]) a.push(i); G.cells = { T: G.T, a }; return a; };
+  const cellXY = i => { const T = G.T, W = T.D.W; return [((i % W) + 0.5) * T.cell, (((i / W) | 0) + 0.5) * T.cell]; };
+  const cellLL = i => { const T = G.T, W = T.D.W; return T.D.ll((i % W) + 0.5, ((i / W) | 0) + 0.5); };
+  const cellAt = (lat, lon) => { const T = need(), D = T.D, p = D.px(lat, lon), x = Math.floor(p[0]), y = Math.floor(p[1]); return x < 0 || y < 0 || x >= D.W || y >= D.H ? -1 : y * D.W + x; };
+
+  // contour lines (marching squares) and channels
+  function contours(Z, W, Hh, step) {
+    const out = new Map(), lo = Math.floor(Math.min(...Z.subarray(0, Math.min(Z.length, 1e6))) / step) * step, hi = Math.max(...Z.subarray(0, Math.min(Z.length, 1e6)));
+    for (let L0 = lo + step; L0 <= hi; L0 += step) out.set(Math.round(L0 * 1000) / 1000, []);
+    for (let y = 0; y < Hh - 1; y++) for (let x = 0; x < W - 1; x++) { const i = y * W + x, a = Z[i], b = Z[i + 1], c = Z[i + W + 1], d = Z[i + W], mn = Math.min(a, b, c, d), mx = Math.max(a, b, c, d); if (mx - mn < 1e-6) continue;
+      for (let L0 = Math.ceil(mn / step) * step; L0 <= mx; L0 += step) { const lv = Math.round(L0 * 1000) / 1000, arr = out.get(lv); if (!arr) continue; const P = [];
+        const cr = (v1, v2, x1, y1, x2, y2) => { if ((v1 < L0) !== (v2 < L0)) { const t = (L0 - v1) / (v2 - v1); P.push([x1 + (x2 - x1) * t, y1 + (y2 - y1) * t]); } };
+        cr(a, b, x, y, x + 1, y); cr(b, c, x + 1, y, x + 1, y + 1); cr(d, c, x, y + 1, x + 1, y + 1); cr(a, d, x, y, x, y + 1);
+        if (P.length === 2) arr.push([P[0], P[1]]); else if (P.length === 4) { arr.push([P[0], P[1]]); arr.push([P[2], P[3]]); } }
+    } return out;
+  }
+  function streams(thrHa) {
+    const T = need(), N = T.D.W * T.D.H, thr = thrHa * 1e4, s = new Uint8Array(N); for (let i = 0; i < N; i++) if (T.FL.A[i] >= thr) s[i] = 1; return s;
+  }
+  function strahler(sm, mask) {
+    const T = need(), N = sm.length, FL = T.FL, ord = new Uint8Array(N), idx = []; for (let i = 0; i < N; i++) if (sm[i] && (!mask || mask[i])) idx.push(i); idx.sort((p, q) => T.Zf[q] - T.Zf[p]);
+    const head = new Int32Array(N).fill(-1), nxt = new Int32Array(N).fill(-1); idx.forEach(i => { const j = FL.dir[i]; if (j >= 0 && sm[j]) { nxt[i] = head[j]; head[j] = i; } });
+    idx.forEach(i => { let m = 0, k = 0; for (let c = head[i]; c >= 0; c = nxt[c]) { if (ord[c] > m) { m = ord[c]; k = 1; } else if (ord[c] === m) k++; } ord[i] = m === 0 ? 1 : k >= 2 ? m + 1 : m; });
+    return ord;
+  }
+
+  // ------------------------------------------------------------------ watershed
+  function delineate() {
+    const T = need(), D = T.D, W = D.W, N = W * D.H, FL = T.FL; let o = G.outCell;
+    if (G.out === 'field' || o < 0) { o = -1; let best = -1; for (let i = 0; i < N; i++) if (T.ins[i] && FL.A[i] > best) { best = FL.A[i]; o = i; } }
+    if (o < 0) throw new Error('no outlet found in the field');
+    const head = new Int32Array(N).fill(-1), nxt = new Int32Array(N).fill(-1); for (let i = 0; i < N; i++) { const j = FL.dir[i]; if (j >= 0) { nxt[i] = head[j]; head[j] = i; } }
+    const mask = new Uint8Array(N), len = new Float32Array(N), stack = [o], cells = []; mask[o] = 1;
+    while (stack.length) { const i = stack.pop(); cells.push(i); for (let c = head[i]; c >= 0; c = nxt[c]) { if (mask[c]) continue; mask[c] = 1; len[c] = len[i] + T.cell * Math.hypot((c % W) - (i % W), ((c / W) | 0) - ((i / W) | 0)); stack.push(c); } }
+    let zmax = -Infinity, ssum = 0, per = 0, Lmax = 0, edge = false, nin = 0; cells.forEach(i => { zmax = Math.max(zmax, T.Zf[i]); ssum += FL.S[i]; if (len[i] > Lmax) Lmax = len[i]; const x = i % W, y = (i / W) | 0; if (x === 0 || y === 0 || x === W - 1 || y === D.H - 1) edge = true; if (T.ins[i]) nin++;
+      [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(([dx, dy]) => { const xx = x + dx, yy = y + dy; if (xx < 0 || yy < 0 || xx >= W || yy >= D.H || !mask[yy * W + xx]) per += T.cell; }); });
+    const sm = streams(G.thr), sMask = new Uint8Array(N); cells.forEach(i => { if (sm[i]) sMask[i] = 1; }); const ord = strahler(sMask, null); let sl = 0, omax = 0; cells.forEach(i => { if (sMask[i]) { const j = FL.dir[i]; if (j >= 0) sl += T.cell * Math.hypot((j % W) - (i % W), ((j / W) | 0) - ((i / W) | 0)); omax = Math.max(omax, ord[i]); } });
+    const A = cells.length * T.cell * T.cell, relief = zmax - T.Zf[o], S = Lmax > 0 ? relief / Lmax : 0, tc = Lmax > 0 && relief > 0 ? 0.0195 * Math.pow(Lmax, 0.77) * Math.pow(S, -0.385) : NaN;
+    return (G.shed = { o, mask, cells, ord, sMask, A, ha: A / 1e4, per, Lmax, relief, slope: ssum / cells.length * 100, sl, dd: A > 0 ? sl / (A / 1e6) / 1000 : 0, omax, tc, edge, fieldHa: nin * T.cell * T.cell / 1e4, zo: T.Zf[o] });
+  }
+
+  // ------------------------------------------------------------------ pictures of the terrain
+  function newCanvas(sc) { const D = G.T.D, cv = document.createElement('canvas'); cv.width = Math.round(D.W * sc); cv.height = Math.round(D.H * sc); return cv; }
+  function paintGrid(fn, alpha) { const D = G.T.D, g = document.createElement('canvas'); g.width = D.W; g.height = D.H; const c = g.getContext('2d'), im = c.createImageData(D.W, D.H); for (let i = 0; i < D.W * D.H; i++) { const p = fn(i); if (!p) continue; im.data[i * 4] = p[0]; im.data[i * 4 + 1] = p[1]; im.data[i * 4 + 2] = p[2]; im.data[i * 4 + 3] = p[3] == null ? alpha : p[3]; } c.putImageData(im, 0, 0); return g; }
+  const scaleOf = () => { const D = G.T.D; return Math.max(1, Math.min(6, 1400 / Math.max(D.W, D.H))); };
+  function outline(c, sc) { const D = G.T.D; c.save(); c.strokeStyle = '#fff'; c.lineWidth = 2.5; c.beginPath(); F().pts.forEach((p, i) => { const q = D.px(p[0], p[1]); i ? c.lineTo(q[0] * sc, q[1] * sc) : c.moveTo(q[0] * sc, q[1] * sc); }); c.closePath(); c.stroke(); c.strokeStyle = '#E65100'; c.lineWidth = 1.2; c.stroke(); c.restore(); }
+  function arrow(c, x, y, ang, len, col) { c.strokeStyle = col; c.fillStyle = col; c.lineWidth = 1.3; const x2 = x + Math.cos(ang) * len, y2 = y + Math.sin(ang) * len; c.beginPath(); c.moveTo(x - Math.cos(ang) * len * 0.5, y - Math.sin(ang) * len * 0.5); c.lineTo(x2 - Math.cos(ang) * len * 0.5, y2 - Math.sin(ang) * len * 0.5); c.stroke(); const hx = x2 - Math.cos(ang) * len * 0.5, hy = y2 - Math.sin(ang) * len * 0.5; c.beginPath(); c.moveTo(hx, hy); c.lineTo(hx - Math.cos(ang - 0.5) * len * 0.45, hy - Math.sin(ang - 0.5) * len * 0.45); c.lineTo(hx - Math.cos(ang + 0.5) * len * 0.45, hy - Math.sin(ang + 0.5) * len * 0.45); c.closePath(); c.fill(); }
+  function picContour() {
+    const T = need(), dg = derived(), D = T.D, W = D.W, sc = scaleOf(), cv = newCanvas(sc), c = cv.getContext('2d'), rel = dg.zhi - dg.zlo;
+    const base = paintGrid(i => { const col = ramp('terr', (T.Zf[i] - dg.zlo) / (rel || 1)), sh = 0.55 + 0.6 * dg.hs[i]; return [clamp(col[0] * sh, 0, 255), clamp(col[1] * sh, 0, 255), clamp(col[2] * sh, 0, 255), T.ins[i] ? 235 : 150]; });
+    c.imageSmoothingEnabled = true; c.drawImage(base, 0, 0, cv.width, cv.height);
+    const step = [0.25, 0.5, 1, 2, 5, 10, 20, 50].find(s => rel / s <= 22) || 100, cl = contours(T.Zf, W, D.H, step); let n = 0;
+    cl.forEach((segs, lv) => { const idx = Math.round(lv / step) % 5 === 0; c.strokeStyle = idx ? 'rgba(70,40,10,0.95)' : 'rgba(110,75,40,0.7)'; c.lineWidth = idx ? 1.6 : 0.8; c.beginPath(); segs.forEach(s => { c.moveTo(s[0][0] * sc, s[0][1] * sc); c.lineTo(s[1][0] * sc, s[1][1] * sc); }); c.stroke(); if (idx && segs.length > 12) { const s = segs[Math.floor(segs.length / 2)]; c.fillStyle = 'rgba(255,255,255,0.85)'; c.font = 'bold ' + Math.max(9, sc * 3) + 'px sans-serif'; const tx = s[0][0] * sc, ty = s[0][1] * sc; c.fillRect(tx - 2, ty - 10, c.measureText(lv.toFixed(step < 1 ? 1 : 0)).width + 4, 12); c.fillStyle = '#4A2A06'; c.fillText(lv.toFixed(step < 1 ? 1 : 0), tx, ty); n++; } });
+    const sm = streams(G.thr); c.fillStyle = 'rgba(21,101,192,0.9)'; for (let i = 0; i < sm.length; i++) if (sm[i]) { const x = (i % W) * sc, y = ((i / W) | 0) * sc; c.fillRect(x, y, Math.max(1.5, sc * Math.min(2.2, 0.9 + Math.log10(T.FL.A[i] / 1e4 + 1))), Math.max(1.5, sc * Math.min(2.2, 0.9 + Math.log10(T.FL.A[i] / 1e4 + 1)))); }
+    const s = Math.max(3, Math.round(16 / sc)); for (let y = s; y < D.H; y += s) for (let x = s; x < W; x += s) { const i = y * W + x, j = T.FL.dir[i]; if (j < 0 || !T.ins[i]) continue; const ang = Math.atan2(((j / W) | 0) - y, (j % W) - x); arrow(c, x * sc, y * sc, ang, 9, 'rgba(255,255,255,0.95)'); }
+    outline(c, sc); G.contourStep = step; return { cv, bounds: D.bounds };
+  }
+  function picTWI() { const T = need(), dg = derived(), sc = scaleOf(), cv = newCanvas(sc), c = cv.getContext('2d'), lo = dg.tm - 2 * dg.tsd, hi = dg.tm + 2.5 * dg.tsd;
+    const g = paintGrid(i => { const col = ramp('wet', (dg.twi[i] - lo) / (hi - lo)), sh = 0.8 + 0.3 * dg.hs[i]; return [col[0] * sh, col[1] * sh, col[2] * sh, T.ins[i] ? 235 : 140]; }); c.imageSmoothingEnabled = true; c.drawImage(g, 0, 0, cv.width, cv.height); outline(c, sc); return { cv, bounds: T.D.bounds }; }
+  function picShed() {
+    const T = need(), dg = derived(), D = T.D, W = D.W, sc = scaleOf(); if (!G.shed) delineate(); const S = G.shed, cv = newCanvas(sc), c = cv.getContext('2d');
+    const base = paintGrid(i => { const v = 90 + 140 * dg.hs[i]; return S.mask[i] ? [clamp(v + 40, 0, 255), clamp(v * 0.85 + 30, 0, 255), clamp(v * 0.5, 0, 255), 225] : [v, v, v, 150]; });
+    c.imageSmoothingEnabled = true; c.drawImage(base, 0, 0, cv.width, cv.height);
+    const COL = ['#90CAF9', '#42A5F5', '#1565C0', '#0D2A6B', '#050B2E']; for (let i = 0; i < S.ord.length; i++) if (S.sMask[i]) { const o = S.ord[i]; c.fillStyle = COL[Math.min(4, o - 1)]; const wd = sc * (0.8 + 0.5 * o); c.fillRect((i % W) * sc - wd / 2 + sc / 2, ((i / W) | 0) * sc - wd / 2 + sc / 2, wd, wd); }
+    c.strokeStyle = '#B71C1C'; c.lineWidth = 2; c.beginPath(); S.cells.forEach(i => { const x = i % W, y = (i / W) | 0; [[1, 0, x + 1, y, x + 1, y + 1], [-1, 0, x, y, x, y + 1], [0, 1, x, y + 1, x + 1, y + 1], [0, -1, x, y, x + 1, y]].forEach(([dx, dy, a, b, c2, d]) => { const xx = x + dx, yy = y + dy; if (xx < 0 || yy < 0 || xx >= W || yy >= D.H || !S.mask[yy * W + xx]) { c.moveTo(a * sc, b * sc); c.lineTo(c2 * sc, d * sc); } }); }); c.stroke();
+    const ox = (S.o % W + 0.5) * sc, oy = (((S.o / W) | 0) + 0.5) * sc; c.fillStyle = '#FFEB3B'; c.strokeStyle = '#000'; c.lineWidth = 2; c.beginPath(); for (let k = 0; k < 10; k++) { const r = k % 2 ? 6 : 14, a = -Math.PI / 2 + k * Math.PI / 5; c.lineTo(ox + Math.cos(a) * r, oy + Math.sin(a) * r); } c.closePath(); c.fill(); c.stroke(); outline(c, sc); return { cv, bounds: D.bounds };
+  }
+  // maps of the cells of the field (sensors fused, retention): colour by value, hillshade underneath
+  function picField(arr, name, lo, hi, a2) {
+    const T = need(), dg = derived(), sc = scaleOf(), cv = newCanvas(sc), c = cv.getContext('2d'), g = paintGrid(i => { if (!T.ins[i] || !isFinite(arr[i])) return null; const col = ramp(name, (arr[i] - lo) / (hi - lo || 1)), sh = 0.85 + 0.25 * dg.hs[i]; return [col[0] * sh, col[1] * sh, col[2] * sh, 225]; });
+    c.imageSmoothingEnabled = true; c.drawImage(g, 0, 0, cv.width, cv.height); outline(c, sc); drawSensOn(c, sc); return { cv, bounds: T.D.bounds };
+  }
+  function drawSensOn(c, sc) { if (!G.T) return; G.sens.forEach(s => { const p = G.T.D.px(s.lat, s.lon); c.fillStyle = '#00E676'; c.strokeStyle = '#003300'; c.lineWidth = 2; c.beginPath(); c.arc(p[0] * sc, p[1] * sc, 6, 0, 6.2832); c.fill(); c.stroke(); c.fillStyle = '#003300'; c.font = 'bold 10px sans-serif'; c.fillText(String(s.id), p[0] * sc + 8, p[1] * sc + 4); }); }
+  function stat(arr) { const v = []; fieldCells().forEach(i => { if (isFinite(arr[i])) v.push(arr[i]); }); v.sort((a, b) => a - b); const n = v.length; if (!n) return { lo: 0, hi: 1, m: 0 }; return { lo: v[Math.floor(n * 0.02)], hi: v[Math.floor(n * 0.98)], m: v.reduce((a, b) => a + b, 0) / n, p10: v[Math.floor(n * 0.1)], p90: v[Math.floor(n * 0.9)] }; }
+
+  // ------------------------------------------------------------------ geostatistics
+  function inv(M) { const n = M.length, A = M.map((r, i) => r.concat(Array.from({ length: n }, (_, j) => i === j ? 1 : 0))); for (let c = 0; c < n; c++) { let p = c; for (let r = c + 1; r < n; r++) if (Math.abs(A[r][c]) > Math.abs(A[p][c])) p = r; if (Math.abs(A[p][c]) < 1e-12) { A[p][c] = 1e-9; } [A[c], A[p]] = [A[p], A[c]]; const d = A[c][c]; for (let j = 0; j < 2 * n; j++) A[c][j] /= d; for (let r = 0; r < n; r++) if (r !== c) { const f = A[r][c]; if (f) for (let j = 0; j < 2 * n; j++) A[r][j] -= f * A[c][j]; } } return A.map(r => r.slice(n)); }
+  const sph = (h, c0, c1, a) => h <= 1e-9 ? 0 : h >= a ? c0 + c1 : c0 + c1 * (1.5 * h / a - 0.5 * (h / a) ** 3);
+  function expVgm(P, v) { const n = P.length, bins = 8; let hm = 0; for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) hm = Math.max(hm, Math.hypot(P[i][0] - P[j][0], P[i][1] - P[j][1])); const lag = hm / 2 / bins, B = Array.from({ length: bins }, () => ({ s: 0, n: 0, h: 0 }));
+    for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) { const h = Math.hypot(P[i][0] - P[j][0], P[i][1] - P[j][1]), b = Math.floor(h / lag); if (b < bins) { B[b].s += 0.5 * (v[i] - v[j]) ** 2; B[b].n++; B[b].h += h; } } return B.filter(b => b.n >= 2).map(b => ({ h: b.h / b.n, g: b.s / b.n, n: b.n })); }
+  function fitVgm(P, v, prior) {
+    const n = v.length, m = v.reduce((a, b) => a + b, 0) / (n || 1), va = n > 1 ? v.reduce((a, b) => a + (b - m) ** 2, 0) / (n - 1) : prior.var; let hm = 0; P.forEach((p, i) => P.forEach((q, j) => { if (j > i) hm = Math.max(hm, Math.hypot(p[0] - q[0], p[1] - q[1])); }));
+    const fb = { c0: 0.2 * prior.var, c1: 0.8 * prior.var, a: prior.a, emp: [], fitted: false };
+    if (n < 6) return fb; const emp = expVgm(P, v); if (emp.length < 3) return fb; let best = null;
+    for (const f0 of [0, 0.1, 0.25, 0.5]) for (const f1 of [0.5, 0.75, 1, 1.5]) for (const af of [0.2, 0.35, 0.5, 0.75, 1]) { const c0 = f0 * va, c1 = f1 * va, a = Math.max(2, af * hm); let e = 0; emp.forEach(b => { e += b.n * (sph(b.h, c0, c1, a) - b.g) ** 2 / (b.g * b.g + 1e-9); }); if (!best || e < best.e) best = { e, c0, c1, a }; }
+    return { c0: best.c0, c1: best.c1, a: best.a, emp, fitted: true };
+  }
+  function krigPrep(P, vg) { const n = P.length, K = Array.from({ length: n + 1 }, () => new Array(n + 1).fill(0)); for (let i = 0; i < n; i++) { for (let j = 0; j < n; j++) K[i][j] = sph(Math.hypot(P[i][0] - P[j][0], P[i][1] - P[j][1]), vg.c0, vg.c1, vg.a); K[i][n] = K[n][i] = 1; K[i][i] = 0; } K[n][n] = 0; return { P, vg, Ki: inv(K), n }; }
+  function krig(kp, x, y, v) { const n = kp.n, g = new Array(n + 1); for (let i = 0; i < n; i++) g[i] = sph(Math.hypot(kp.P[i][0] - x, kp.P[i][1] - y), kp.vg.c0, kp.vg.c1, kp.vg.a); g[n] = 1; let est = 0, vr = 0; for (let i = 0; i < n; i++) { let w = 0; for (let j = 0; j <= n; j++) w += kp.Ki[i][j] * g[j]; est += w * (v ? v[i] : 0); vr += w * g[i]; } let mu = 0; for (let j = 0; j <= n; j++) mu += kp.Ki[n][j] * g[j]; vr += mu; return { est, sd: Math.sqrt(Math.max(0, vr)) }; }
+  function ols(X, y) { const n = y.length, p = X[0].length, A = Array.from({ length: p }, () => new Array(p).fill(0)), b = new Array(p).fill(0); for (let i = 0; i < n; i++) for (let j = 0; j < p; j++) { b[j] += X[i][j] * y[i]; for (let k = 0; k < p; k++) A[j][k] += X[i][j] * X[i][k]; } for (let j = 1; j < p; j++) A[j][j] += 1e-6; const Ai = inv(A); return Ai.map(r => r.reduce((s, v, k) => s + v * b[k], 0)); }
+
+  // ------------------------------------------------------------------ the soil of the field and its retention curves (Saxton and Rawls, 2006)
+  function saxton(sand, clay, om) {
+    const S = sand / 100, C = clay / 100, OM = om;
+    const t1500t = -0.024 * S + 0.487 * C + 0.006 * OM + 0.005 * S * OM - 0.013 * C * OM + 0.068 * S * C + 0.031, t1500 = t1500t + (0.14 * t1500t - 0.02);
+    const t33t = -0.251 * S + 0.195 * C + 0.011 * OM + 0.006 * S * OM - 0.027 * C * OM + 0.452 * S * C + 0.299, t33 = t33t + (1.283 * t33t * t33t - 0.374 * t33t - 0.015);
+    const ts33t = 0.278 * S + 0.034 * C + 0.022 * OM - 0.018 * S * OM - 0.027 * C * OM - 0.584 * S * C + 0.078, ts33 = ts33t + (0.636 * ts33t - 0.107), ts = t33 + ts33 - 0.097 * S + 0.043;
+    const B = (Math.log(1500) - Math.log(33)) / (Math.log(t33) - Math.log(t1500)), lam = 1 / B, pe = clamp(-21.67 * S - 27.93 * C - 81.97 * ts33 + 71.12 * S * ts33 + 8.29 * C * ts33 + 14.05 * S * C + 27.16, 1, 30);
+    return { fc: t33, wp: t1500, sat: ts, lam, pe };
+  }
+  const curve = (s, psi) => psi >= 33 ? s.fc * Math.pow(psi / 33, -s.lam) : psi <= s.pe ? s.sat : s.sat - (psi - s.pe) * (s.sat - s.fc) / (33 - s.pe);
+  const baseNow = () => { if (G.B) return G.B; try { G.B = E.json('geoBase()'); } catch (e) { G.B = null; } return G.B; };
+  async function soilBase() {
+    const Fm = F(), c0 = H().centroid(Fm.pts); let s = null, src = '';
+    if (Fm.site && Fm.site.soil) { s = Fm.site.soil; src = 'SoilGrids (site analysis)'; }
+    if (!s) { try { s = await FieldSite.soilAt(c0); src = 'SoilGrids at the field'; } catch (e) { } }
+    if (!s) { const b = baseNow(); if (b && b.tex) { s = { sand: b.tex.sand, clay: b.tex.clay, silt: b.tex.silt, cls: b.soilLabel }; src = 'the soil of the project (SoilGrids not reached)'; } }
+    if (!s) throw new Error('no soil data (SoilGrids not reached and no project soil)'); return Object.assign({ src }, s);
+  }
+  function parseSamples(txt) { const out = []; String(txt || '').split(/\r?\n/).forEach(l => { const p = l.split(/[;,\t ]+/).map(Number).filter(x => isFinite(x)); if (p.length >= 4 && Math.abs(p[0]) <= 90 && Math.abs(p[1]) <= 180) out.push({ lat: p[0], lon: p[1], sand: p[2], clay: p[3], om: p[4] }); }); return out; }
+  async function mapRetention() {
+    const T = need(), dg = derived(), cells = fieldCells(), base = await soilBase(), b = baseNow(), om0 = b && isFinite(b.om) ? b.om : 1.5, smp = parseSamples(G.samples).map(s => Object.assign(s, { i: cellAt(s.lat, s.lon) })).filter(s => s.i >= 0 && T.ins[s.i]);
+    const zT = i => (dg.twi[i] - dg.tm) / dg.tsd, N = T.D.W * T.D.H, SA = new Float32Array(N).fill(NaN), CL = new Float32Array(N).fill(NaN);
+    let bS = -3.5, bC = 2.5, how = 'trend on the wetness index (clay rises and sand falls where the water gathers: ' + bC + ' and ' + bS + ' points per standard deviation of the index) from the field soil ' + base.src + '; add soil samples to constrain it', vgS = null, vgC = null;
+    const diag = Math.hypot(...[cells.map(i => cellXY(i)[0]), cells.map(i => cellXY(i)[1])].map(a => Math.max(...a) - Math.min(...a)));
+    if (smp.length >= 1) {
+      const fit = (key, b0, mean0, prior) => { const y = smp.map(s => s[key]), P = smp.map(s => cellXY(s.i)); let beta = b0, m = mean0; if (smp.length >= 6) { const X = smp.map(s => [1, zT(s.i)]), co = ols(X, y); m = co[0]; beta = co[1]; } else { m = y.reduce((a, c, k) => a + c - beta * zT(smp[k].i), 0) / y.length; }
+        const res = y.map((v, k) => v - m - beta * zT(smp[k].i)), vg = fitVgm(P, res, { var: prior * prior, a: 0.5 * diag }), kp = smp.length >= 2 ? krigPrep(P, vg) : null; return { beta, m, res, vg, kp, P }; };
+      const fs = fit('sand', bS, base.sand, 8), fc2 = fit('clay', bC, base.clay, 6); vgS = fs.vg; vgC = fc2.vg;
+      cells.forEach(i => { const [x, y] = cellXY(i), z = zT(i); let rs = 0, rc = 0; if (fs.kp) { rs = krig(fs.kp, x, y, fs.res).est; rc = krig(fc2.kp, x, y, fc2.res).est; } else { rs = fs.res[0]; rc = fc2.res[0]; } SA[i] = clamp(fs.m + fs.beta * z + rs, 2, 97); CL[i] = clamp(fc2.m + fc2.beta * z + rc, 2, 80); });
+      how = smp.length + ' soil sample' + (smp.length > 1 ? 's' : '') + ': regression kriging (' + (smp.length >= 6 ? 'trend fitted to the samples' : 'trend of ' + bC + '/' + bS + ' points per SD of the wetness index, level from the samples') + ', residuals kriged with a ' + (vgS.fitted ? 'fitted' : 'default') + ' spherical variogram)';
+    } else cells.forEach(i => { SA[i] = clamp(base.sand + bS * zT(i), 2, 97); CL[i] = clamp(base.clay + bC * zT(i), 2, 80); });
+    const FC = new Float32Array(N).fill(NaN), WP = FC.slice(), SAT = FC.slice(), AW = FC.slice(), LAM = FC.slice(), PE = FC.slice(), TR = FC.slice(), DAYS = FC.slice(), TH = FC.slice();
+    const f = b ? b.f : 0.5, zr = b ? b.zr : 60, etc = b ? Math.max(0.8, b.etc) : 4;
+    cells.forEach(i => { const s = saxton(SA[i], CL[i], om0); FC[i] = s.fc; WP[i] = s.wp; SAT[i] = s.sat; LAM[i] = s.lam; PE[i] = s.pe; AW[i] = s.fc - s.wp; TR[i] = s.fc - f * (s.fc - s.wp); });
+    G.ret = { SA, CL, FC, WP, SAT, LAM, PE, AW, TR, DAYS, TH, om0, base, smp, how, vgS, vgC, f, zr, etc, samples: smp.length };
+    refreshDays(); return G.ret;
+  }
+  // water content now, cell by cell: the fused map when sensors exist, else the SWAFL water balance shifted by wetness and satellite
+  function refreshDays() {
+    const R = G.ret; if (!R) return; const cells = fieldCells(), b = baseNow(), left = b ? b.left : 0.6; const fz = fuseNow(); cells.forEach(i => { const th = fz && isFinite(fz.TH[i]) ? fz.TH[i] : modelTheta(i, left); R.TH[i] = th; R.DAYS[i] = Math.max(0, (th - R.TR[i]) * R.zr * 10 / R.etc); });
+  }
+  const satIdx = () => { if (G.satz && G.satz.T === G.T && G.satz.res === F().res) return G.satz; const Fm = F(), T = need(), N = T.D.W * T.D.H, z = new Float32Array(N), cells = fieldCells(); let key = null; if (Fm.res) key = Fm.res.keys.includes('NDWI') ? 'NDWI' : Fm.res.keys.includes('NDVI') ? 'NDVI' : Fm.res.keys[0];
+    if (key) { const v = []; cells.forEach(i => { const ll = cellLL(i), x = H().valueAt(key, ll[0], ll[1]); z[i] = x; if (isFinite(x)) v.push(x); }); const m = v.reduce((a, b) => a + b, 0) / (v.length || 1), sd = Math.sqrt(v.reduce((a, b) => a + (b - m) ** 2, 0) / (v.length || 1)) || 1; cells.forEach(i => { z[i] = isFinite(z[i]) ? (z[i] - m) / sd : 0; }); } else cells.forEach(i => { z[i] = 0; });
+    return (G.satz = { T: G.T, res: Fm.res, z, key }); };
+  const zTwi = i => (derived().twi[i] - derived().tm) / derived().tsd;
+  function modelTheta(i, left) { const R = G.ret, s = R ? { fc: R.FC[i], wp: R.WP[i] } : (() => { const b = baseNow(), t = b && b.tex ? saxton(b.tex.sand, b.tex.clay, 1.5) : saxton(40, 20, 1.5); return t; })(); const lf = clamp(left + 0.12 * zTwi(i) + 0.10 * satIdx().z[i], 0.05, 1.05); return s.wp + lf * (s.fc - s.wp); }
+
+  // ------------------------------------------------------------------ sensors and the fusion with the satellite
+  function readingOf(s) { if (s.val != null && isFinite(s.val)) return s.val / 100; const b = baseNow(); return modelTheta(s.i, b ? b.left : 0.6); }
+  function addSensor(lat, lon, val) { const T = G.T; if (!T) { UI.toast('Read the terrain first (section 4b)'); return null; } const i = cellAt(lat, lon); if (i < 0 || !T.ins[i]) { UI.toast('Install the sensor inside the demarcated field'); return null; } const s = { id: G.nid++, lat, lon, i, depth: G.depth, val: val == null ? null : val }; G.sens.push(s); G.hist.push(['add', s]); changed(); return s; }
+  function removeSensor(id) { const k = G.sens.findIndex(s => s.id === id); if (k < 0) return; const [s] = G.sens.splice(k, 1); G.hist.push(['del', s]); changed(); }
+  function undo() { const a = G.hist.pop(); if (!a) return; if (a[0] === 'add') G.sens = G.sens.filter(s => s.id !== a[1].id); else G.sens.push(a[1]); changed(); }
+  function changed() { G.fuse = null; G.opt = null; if (G.ret) refreshDays(); drawMarkers(); panel(); const v = F().view; if (VIEWS[v] && (v === 'sens' || v === 'sensu' || v === 'ret_days')) FieldMap._h.refresh(v); }
+  function fuseNow() {
+    if (!G.T || !G.sens.length) return null; if (G.fuse && G.fuse.key === sensKey()) return G.fuse;
+    const T = G.T, cells = fieldCells(), N = T.D.W * T.D.H, sat = satIdx(), n = G.sens.length, P = G.sens.map(s => cellXY(s.i)), y = G.sens.map(readingOf), Z = G.sens.map(s => [1, zTwi(s.i), sat.z[s.i]]);
+    const R = G.ret, sdp = R ? stat(R.AW).m * 0.25 : 0.03, prior = { var: Math.max(1e-5, sdp * sdp), a: 0.5 * Math.hypot(...[cells.map(i => cellXY(i)[0]), cells.map(i => cellXY(i)[1])].map(a => Math.max(...a) - Math.min(...a))) };
+    let beta; if (n >= 5) beta = ols(Z, y); else { const sl = [0, 0.12 * (R ? stat(R.AW).m : 0.12), 0.10 * (R ? stat(R.AW).m : 0.12)]; beta = [y.reduce((a, v, k) => a + v - sl[1] * Z[k][1] - sl[2] * Z[k][2], 0) / n, sl[1], sl[2]]; }
+    const res = y.map((v, k) => v - beta[0] - beta[1] * Z[k][1] - beta[2] * Z[k][2]), vg = fitVgm(P, res, prior), kp = n >= 2 ? krigPrep(P, vg) : null, TH = new Float32Array(N).fill(NaN), SD = TH.slice();
+    cells.forEach(i => { const [x, yy] = cellXY(i), tr = beta[0] + beta[1] * zTwi(i) + beta[2] * sat.z[i]; if (kp) { const k = krig(kp, x, yy, res); TH[i] = tr + k.est; SD[i] = Math.sqrt(vg.c0 + k.sd * k.sd); } else { TH[i] = tr + res[0]; SD[i] = Math.sqrt(vg.c0 + vg.c1); } });
+    G.vg = vg; return (G.fuse = { key: sensKey(), TH, SD, beta, vg, res, n, satKey: sat.key, R2: n >= 5 ? 1 - res.reduce((a, v) => a + v * v, 0) / (y.reduce((a, v) => a + (v - y.reduce((p, q) => p + q, 0) / n) ** 2, 0) || 1) : NaN });
+  }
+  const sensKey = () => G.sens.map(s => [s.id, s.i, s.val].join(':')).join(',') + '|' + (F().res ? F().res.idx || F().idx : '') + '|' + (G.ret ? 'r' : '');
+  // the mean kriging deviation of a set of sites over a sample of the field (the quality of a layout)
+  function layoutSD(sites) {
+    const cells = fieldCells(), P = sites.map(i => cellXY(i)), diag = Math.hypot(...[cells.map(i => cellXY(i)[0]), cells.map(i => cellXY(i)[1])].map(a => Math.max(...a) - Math.min(...a))), R = G.ret, v0 = Math.pow((R ? stat(R.AW).m : 0.12) * 0.25, 2), vg = G.vg && G.vg.fitted ? G.vg : { c0: 0.2 * v0, c1: 0.8 * v0, a: 0.5 * diag };
+    if (sites.length < 2) return Math.sqrt(vg.c0 + vg.c1); const kp = krigPrep(P, vg), stp = Math.max(1, Math.floor(cells.length / 700)); let s = 0, n = 0; for (let q = 0; q < cells.length; q += stp) { const [x, y] = cellXY(cells[q]); s += Math.sqrt(vg.c0 + krig(kp, x, y, null).sd ** 2); n++; } return s / n;
+  }
+  function features(cells) {
+    const dg = derived(), sat = satIdx(), R = G.ret, bx = cells.map(i => cellXY(i)); const xs = bx.map(p => p[0]), ys = bx.map(p => p[1]), xm = Math.min(...xs), ym = Math.min(...ys), dg2 = Math.max(Math.max(...xs) - xm, Math.max(...ys) - ym) || 1;
+    const cols = [i => derived().T.Zf[i], i => dg.twi[i], i => R ? R.AW[i] : 0, i => sat.z[i]], F2 = cells.map(() => []);
+    cols.forEach(fn => { const v = cells.map(fn), m = v.reduce((a, b) => a + b, 0) / v.length, sd = Math.sqrt(v.reduce((a, b) => a + (b - m) ** 2, 0) / v.length) || 1; v.forEach((x, k) => F2[k].push((x - m) / sd)); });
+    cells.forEach((i, k) => { F2[k].push(G.ws * 2 * (bx[k][0] - xm) / dg2, G.ws * 2 * (bx[k][1] - ym) / dg2); }); return F2;
+  }
+  function kmeans(X, K) {
+    const n = X.length, d = X[0].length, C = [X[Math.floor(rnd() * n)].slice()]; const d2 = (a, b) => { let s = 0; for (let j = 0; j < d; j++) s += (a[j] - b[j]) ** 2; return s; };
+    while (C.length < K) { const dist = X.map(x => Math.min(...C.map(c => d2(x, c)))), tot = dist.reduce((a, b) => a + b, 0); let r = rnd() * tot, k = 0; while (k < n - 1 && (r -= dist[k]) > 0) k++; C.push(X[k].slice()); }
+    let asg = new Int32Array(n); for (let it = 0; it < 25; it++) { let moved = 0; for (let k = 0; k < n; k++) { let b = 0, bd = Infinity; for (let c = 0; c < K; c++) { const dd = d2(X[k], C[c]); if (dd < bd) { bd = dd; b = c; } } if (asg[k] !== b) { asg[k] = b; moved++; } } const S = C.map(() => new Array(d).fill(0)), cnt = new Array(K).fill(0); for (let k = 0; k < n; k++) { cnt[asg[k]]++; for (let j = 0; j < d; j++) S[asg[k]][j] += X[k][j]; } for (let c = 0; c < K; c++) if (cnt[c]) for (let j = 0; j < d; j++) C[c][j] = S[c][j] / cnt[c]; if (!moved) break; }
+    return { C, asg, d2 };
+  }
+  function optimise() {
+    const T = need(); if (!G.ret) throw new Error('map the soil retention first (section 4b, soil): the available water is one of the features');
+    const cells = fieldCells(), K = clamp(G.N, 2, 20), stp = Math.max(1, Math.floor(cells.length / 6000)), sub = cells.filter((_, q) => q % stp === 0), X = features(sub); seed = 987654; const km = kmeans(X, K), sites = [];
+    for (let c = 0; c < K; c++) { let b = -1, bd = Infinity; X.forEach((x, k) => { if (km.asg[k] !== c) return; const dd = km.d2(x, km.C[c]); if (dd < bd) { bd = dd; b = k; } }); if (b >= 0) sites.push({ i: sub[b], n: km.asg.reduce((a, v) => a + (v === c ? 1 : 0), 0) }); }
+    const cur = G.sens.map(s => s.i), rnd5 = []; for (let r = 0; r < 4; r++) { const pick = []; while (pick.length < K) pick.push(cells[Math.floor(rnd() * cells.length)]); rnd5.push(layoutSD(pick)); }
+    const share = sites.map(s => s.n / sub.length), dg = derived();
+    G.opt = { sites, K, sdNew: layoutSD(sites.map(s => s.i)), sdNow: cur.length ? layoutSD(cur) : NaN, sdRand: rnd5.reduce((a, b) => a + b, 0) / rnd5.length, share, why: sites.map(s => 'elevation ' + T.Zf[s.i].toFixed(1) + ' m, wetness index ' + dg.twi[s.i].toFixed(1) + ', available water ' + (G.ret.AW[s.i] * 100).toFixed(1) + ' %') }; return G.opt;
+  }
+  function applyOpt() { if (!G.opt) return; G.hist.push(['batch', G.sens.slice()]); G.sens = []; G.opt.sites.forEach(s => { const ll = cellLL(s.i); G.sens.push({ id: G.nid++, lat: ll[0], lon: ll[1], i: s.i, depth: G.depth, val: null }); }); G.opt = null; changed(); }
+  function redundancy() { if (G.sens.length < 3) return []; const all = G.sens.map(s => s.i), base = layoutSD(all); return G.sens.map((s, k) => ({ id: s.id, d: layoutSD(all.filter((_, q) => q !== k)) - base })).sort((a, b) => a.d - b.d); }
+
+  // ------------------------------------------------------------------ the views on the map
+  const tab = [VIEWS];
+  function picture(view) {
+    if (!G.T) return null; try {
+      if (view === 'contour') return picContour(); if (view === 'twi') return picTWI(); if (view === 'shed') return picShed();
+      if (view === 'sens' || view === 'sensu') { const f = fuseNow(); if (!f) return null; if (view === 'sens') { const s = stat(f.TH); G.rng = [s.lo, s.hi]; return picField(f.TH, 'dry', s.lo, s.hi); } const s = stat(f.SD); G.rngu = [0, s.hi]; return picField(f.SD, 'unc', 0, s.hi); }
+      if (view.indexOf('ret_') === 0 && G.ret) { const R = G.ret, a = { ret_fc: [R.FC, 'wet'], ret_wp: [R.WP, 'dry'], ret_aw: [R.AW, 'wet'], ret_trig: [R.TR, 'wet'], ret_days: [R.DAYS, 'dry'] }[view]; const s = stat(a[0]); G.rngr = G.rngr || {}; G.rngr[view] = [s.lo, s.hi]; return picField(a[0], a[1], s.lo, s.hi); }
+    } catch (e) { UI.toast(e.message); } return null;
+  }
+  const has = view => { if (!VIEWS[view]) return false; if (view === 'contour' || view === 'twi' || view === 'shed') return !!G.T; if (view === 'sens' || view === 'sensu') return !!(G.T && G.sens.length); if (view.indexOf('ret_') === 0) return !!G.ret; return false; };
+  function at(view, lat, lon) {
+    if (!G.T) return ''; const i = cellAt(lat, lon); if (i < 0) return ''; const T = G.T, dg = derived(), p = (v, d) => isFinite(v) ? v.toFixed(d) : '-', s = 'elevation ' + T.Zf[i].toFixed(1) + ' m · slope ' + dg.slope[i].toFixed(1) + '° · upslope area ' + (T.FL.A[i] / 1e4).toFixed(2) + ' ha · wetness index ' + dg.twi[i].toFixed(1);
+    if (!T.ins[i]) return s; const R = G.ret, f = G.fuse; let t = s; if (R) t += ' · sand ' + p(R.SA[i], 0) + ' %, clay ' + p(R.CL[i], 0) + ' % · FC ' + p(R.FC[i] * 100, 1) + ' %, WP ' + p(R.WP[i] * 100, 1) + ' %, AW ' + p(R.AW[i] * 100, 1) + ' % · trigger ' + p(R.TR[i] * 100, 1) + ' %' + (isFinite(R.DAYS[i]) ? ' · ' + R.DAYS[i].toFixed(1) + ' days to the trigger' : ''); if (f) t += ' · soil water ' + p(f.TH[i] * 100, 1) + ' % ± ' + p(f.SD[i] * 100, 1); return t;
+  }
+  function legend(view) {
+    const row = (c, t) => '<tr><td><i style="background:' + c + '"></i></td><td>' + t + '</td></tr>', bar = (name, lo, hi, u, d) => { const stops = RAMP[name].map(r => 'rgb(' + r[1] + ',' + r[2] + ',' + r[3] + ') ' + (r[0] * 100) + '%').join(','); return '<div style="height:10px;border:1px solid #999;background:linear-gradient(90deg,' + stops + ')"></div><div style="display:flex;justify-content:space-between;font-size:10px"><span>' + lo.toFixed(d) + '</span><span>' + u + '</span><span>' + hi.toFixed(d) + '</span></div>'; };
+    if (!G.T) return ''; const dg = derived(); if (view === 'contour') return '<div class="fmchip">Contours every ' + (G.contourStep || '') + ' m · flow</div><table>' + row('#6B4A28', 'contour (thick: every 5th, labelled)') + row('#1565C0', 'channel: upslope area ≥ ' + G.thr + ' ha') + row('#fff', 'arrow: the way the water runs') + '</table><div class="fmmean">elevation ' + dg.zlo.toFixed(1) + ' to ' + dg.zhi.toFixed(1) + ' m</div>';
+    if (view === 'twi') return '<div class="fmchip">Topographic wetness index ln(a / tan β)</div>' + bar('wet', dg.tm - 2 * dg.tsd, dg.tm + 2.5 * dg.tsd, 'wetter →', 1);
+    if (view === 'shed' && G.shed) { const S = G.shed; return '<div class="fmchip">Watershed of the outlet ★</div><table>' + row('#E0A040', 'catchment ' + S.ha.toFixed(2) + ' ha') + row('#1565C0', 'channels by Strahler order (1 to ' + S.omax + ')') + row('#B71C1C', 'divide') + '</table><div class="fmmean">longest flow path ' + Math.round(S.Lmax) + ' m · relief ' + S.relief.toFixed(1) + ' m</div>'; }
+    if ((view === 'sens' || view === 'sensu') && G.fuse) { const r = view === 'sens' ? G.rng : G.rngu; return '<div class="fmchip">' + (view === 'sens' ? 'Soil water, sensors + satellite · % by volume' : 'Kriging standard deviation · % by volume') + '</div>' + (r ? bar(view === 'sens' ? 'dry' : 'unc', r[0] * 100, r[1] * 100, '', 1) : '') + '<div class="fmmean">' + G.sens.length + ' sensors · ' + (G.fuse.satKey ? 'satellite ' + G.fuse.satKey : 'terrain only') + '</div>'; }
+    if (view.indexOf('ret_') === 0 && G.ret && G.rngr && G.rngr[view]) { const r = G.rngr[view], nm = { ret_fc: 'Field capacity · % by volume', ret_wp: 'Wilting point · % by volume', ret_aw: 'Available water · % by volume', ret_trig: 'Trigger water content (f = ' + G.ret.f.toFixed(2) + ') · % by volume', ret_days: 'Days to the trigger' }[view], k = view === 'ret_days' ? 1 : 100; return '<div class="fmchip">' + nm + '</div>' + bar(view === 'ret_days' ? 'dry' : 'wet', r[0] * k, r[1] * k, '', 1) + '<div class="fmmean">' + esc(G.ret.how.split(';')[0]) + '</div>'; }
+    return '';
+  }
+
+  // ------------------------------------------------------------------ sensor markers on the map
+  function drawMarkers() { const mp = F().map; if (!mp || typeof L === 'undefined') return; if (G.lg && G.lgMap === mp) G.lg.clearLayers(); else { if (G.lg && G.lgMap) { try { G.lgMap.removeLayer(G.lg); } catch (e) { } } G.lg = L.layerGroup().addTo(mp); G.lgMap = mp; }
+    G.sens.forEach(s => { const m = L.circleMarker([s.lat, s.lon], { radius: 8, color: '#003300', weight: 2, fillColor: '#00E676', fillOpacity: 0.95 }).addTo(G.lg); m.bindTooltip('Sensor ' + s.id + ' · ' + s.depth + ' cm · ' + (readingOf(s) * 100).toFixed(1) + ' % ' + (s.val != null ? '(reading)' : '(modelled)') + ' · click to remove', { direction: 'top' }); m.on('click', e => { L.DomEvent.stopPropagation(e); removeSensor(s.id); UI.toast('Sensor ' + s.id + ' removed (Undo in the panel)'); }); });
+    if (G.opt) G.opt.sites.forEach((s, k) => { const ll = cellLL(s.i); L.circleMarker(ll, { radius: 9, color: '#E65100', weight: 3, fillOpacity: 0, dashArray: '4 3' }).addTo(G.lg).bindTooltip('Proposed site ' + (k + 1) + ' (' + Math.round(G.opt.share[k] * 100) + ' % of the field)', { direction: 'top' }); }); }
+  function attach() { drawMarkers(); }
+  function addAt(ll) { addSensor(ll.lat, ll.lng); }
+  function reset() { G.T = null; G.dg = null; G.shed = null; G.ret = null; G.fuse = null; G.opt = null; G.cells = null; G.sens.forEach(s => { s.i = -1; }); G.sens = []; G.B = null; G.satz = null; if (G.lg && G.lgMap) { try { G.lgMap.removeLayer(G.lg); } catch (e) { } } G.lg = null; G.lgMap = null; }
+
+  // ------------------------------------------------------------------ 3D
+  function view3d() {
+    const T = need(), dg = derived(), D = T.D, W = D.W, Hh = D.H; const Fm = F(); const px = Fm.pts.map(p => D.px(p[0], p[1])), x0 = Math.max(0, Math.floor(Math.min(...px.map(p => p[0])) - 0.6 * G.buf / T.cell)), x1 = Math.min(W - 1, Math.ceil(Math.max(...px.map(p => p[0])) + 0.6 * G.buf / T.cell)), y0 = Math.max(0, Math.floor(Math.min(...px.map(p => p[1])) - 0.6 * G.buf / T.cell)), y1 = Math.min(Hh - 1, Math.ceil(Math.max(...px.map(p => p[1])) + 0.6 * G.buf / T.cell));
+    const st3 = Math.max(1, Math.ceil(Math.max(x1 - x0, y1 - y0) / 110)), nx = Math.floor((x1 - x0) / st3) + 1, ny = Math.floor((y1 - y0) / st3) + 1, V = { az: G.az, el: G.el, zoom: 1, ve: G.vexag, col: G.col3, on: true };
+    const old = document.getElementById('geo3dWrap'); if (old) old.remove(); const wrap = document.createElement('div'); wrap.id = 'geo3dWrap'; wrap.className = 'g3wrap';
+    wrap.innerHTML = '<div class="g3h"><b>3D terrain and flow of the field</b><button class="btn" id="g3x">Close the 3D view</button></div><div class="fgctl"><label>Colour by <select id="g3c"><option value="elev">Elevation</option><option value="flow">Flow accumulation</option><option value="twi">Wetness index</option><option value="aw">Available water</option><option value="theta">Soil water now</option></select></label><label>Vertical exaggeration <input id="g3v" type="range" min="1" max="12" step="0.5" value="' + V.ve + '"></label><label><input type="checkbox" id="g3f" checked> flowing water</label><label><input type="checkbox" id="g3s" checked> sensors</label><span class="pnote">Drag to turn, wheel to zoom.</span></div><canvas id="geo3d" width="900" height="540" style="width:100%;flex:1;min-height:0;background:#CFE3F2;border:1px solid #999;cursor:grab"></canvas><div id="g3l" class="pnote"></div>';
+    document.body.appendChild(wrap); document.getElementById('g3x').onclick = () => wrap.remove();
+    setTimeout(() => {
+      const cv = document.getElementById('geo3d'); if (!cv) return; const c = cv.getContext('2d'), zm = dg.zlo, span = Math.max(1, (nx - 1) * st3 * T.cell), idx = (a, b) => (y0 + b * st3) * W + (x0 + a * st3);
+      const val = (i, k) => { if (k === 'elev') return (T.Zf[i] - dg.zlo) / ((dg.zhi - dg.zlo) || 1); if (k === 'flow') return Math.log10(T.FL.A[i] / 100) / 4; if (k === 'twi') return (dg.twi[i] - (dg.tm - 2 * dg.tsd)) / (4.5 * dg.tsd); const R = G.ret, f = G.fuse; if (k === 'aw') return R && isFinite(R.AW[i]) ? (R.AW[i] - 0.05) / 0.2 : NaN; if (k === 'theta') return R && isFinite(R.TH[i]) ? (R.TH[i] - 0.05) / 0.3 : (f && isFinite(f.TH[i]) ? (f.TH[i] - 0.05) / 0.3 : NaN); return 0; };
+      const proj = (xm, ym, z) => { const a = V.az * rad, e = V.el * rad, cx = xm - span / 2, cy = ym - span / 2, X = cx * Math.cos(a) - cy * Math.sin(a), Y = cx * Math.sin(a) + cy * Math.cos(a), s = V.zoom * 520 / span * 1.1; return [450 + X * s, 330 + (Y * Math.sin(e) - (z - zm) * V.ve * Math.cos(e)) * s - 40 * V.zoom, Y * Math.cos(e) + (z - zm) * V.ve * Math.sin(e)]; };
+      const off = document.createElement('canvas'); off.width = 900; off.height = 540; let dirty = true, parts = [];
+      const draw = () => { const o = off.getContext('2d'); o.clearRect(0, 0, 900, 540); const quads = []; for (let b = 0; b < ny - 1; b++) for (let a = 0; a < nx - 1; a++) { const i00 = idx(a, b), i10 = idx(a + 1, b), i11 = idx(a + 1, b + 1), i01 = idx(a, b + 1), zc = (T.Zf[i00] + T.Zf[i10] + T.Zf[i11] + T.Zf[i01]) / 4, P0 = proj(a * st3 * T.cell, b * st3 * T.cell, T.Zf[i00]), P1 = proj((a + 1) * st3 * T.cell, b * st3 * T.cell, T.Zf[i10]), P2 = proj((a + 1) * st3 * T.cell, (b + 1) * st3 * T.cell, T.Zf[i11]), P3 = proj(a * st3 * T.cell, (b + 1) * st3 * T.cell, T.Zf[i01]); quads.push({ P: [P0, P1, P2, P3], d: (P0[2] + P1[2] + P2[2] + P3[2]) / 4, i: i00, ins: T.ins[i00] || T.ins[i11] }); }
+        quads.sort((p, q) => q.d - p.d); quads.forEach(q => { let v = val(q.i, V.col), col; if (!isFinite(v)) v = 0.5, col = [200, 200, 200]; else col = ramp(V.col === 'elev' ? 'terr' : V.col === 'flow' || V.col === 'twi' ? 'wet' : V.col === 'aw' ? 'wet' : 'dry', v); const sh = 0.55 + 0.6 * dg.hs[q.i], k = q.ins ? 1 : 0.8; o.fillStyle = 'rgb(' + clamp(col[0] * sh * k, 0, 255) + ',' + clamp(col[1] * sh * k, 0, 255) + ',' + clamp(col[2] * sh * k, 0, 255) + ')'; o.beginPath(); q.P.forEach((p, m) => m ? o.lineTo(p[0], p[1]) : o.moveTo(p[0], p[1])); o.closePath(); o.fill(); o.strokeStyle = o.fillStyle; o.lineWidth = 0.6; o.stroke(); });
+        o.strokeStyle = '#fff'; o.lineWidth = 3; o.beginPath(); px.forEach((p, m) => { const xx = (p[0] - x0) * T.cell, yy = (p[1] - y0) * T.cell, zz = T.Zf[clamp(Math.round(p[1]), 0, Hh - 1) * W + clamp(Math.round(p[0]), 0, W - 1)], q = proj(xx, yy, zz + 0.3); m ? o.lineTo(q[0], q[1]) : o.moveTo(q[0], q[1]); }); o.closePath(); o.stroke(); o.strokeStyle = '#E65100'; o.lineWidth = 1.3; o.stroke(); dirty = false; };
+      const spawn = () => { const p = { i: -1, t: 0 }; for (let k = 0; k < 40; k++) { const x = x0 + Math.floor(Math.random() * (x1 - x0)), y = y0 + Math.floor(Math.random() * (y1 - y0)); if (T.FL.dir[y * W + x] >= 0) { p.i = y * W + x; break; } } p.life = 40 + Math.random() * 80; return p; };
+      parts = Array.from({ length: 260 }, spawn);
+      const loop = () => { if (!document.getElementById('geo3d')) return; if (dirty) draw(); c.clearRect(0, 0, 900, 540); c.drawImage(off, 0, 0);
+        if (document.getElementById('g3f').checked) { c.fillStyle = 'rgba(13,71,161,0.9)'; parts.forEach((p, k) => { if (p.i < 0 || p.life-- <= 0) { parts[k] = spawn(); return; } const j = T.FL.dir[p.i]; if (j < 0) { parts[k] = spawn(); return; } p.t += 0.18 + Math.min(0.5, T.FL.S[p.i] * 3); if (p.t >= 1) { p.t = 0; p.i = j; } const a = p.i, b = T.FL.dir[a] >= 0 ? T.FL.dir[a] : a, xa = a % W, ya = (a / W) | 0, xb = b % W, yb = (b / W) | 0, xx = (xa + (xb - xa) * p.t - x0) * T.cell, yy = (ya + (yb - ya) * p.t - y0) * T.cell, zz = T.Zf[a] + (T.Zf[b] - T.Zf[a]) * p.t, q = proj(xx, yy, zz + 0.4); c.beginPath(); c.arc(q[0], q[1], 2.4, 0, 6.2832); c.fill(); }); }
+        if (document.getElementById('g3s').checked) G.sens.forEach(s => { const p = D.px(s.lat, s.lon), xx = (p[0] - x0) * T.cell, yy = (p[1] - y0) * T.cell, zz = T.Zf[clamp(Math.round(p[1]), 0, Hh - 1) * W + clamp(Math.round(p[0]), 0, W - 1)], a = proj(xx, yy, zz), b = proj(xx, yy, zz + 6 / V.ve + 2); c.strokeStyle = '#003300'; c.lineWidth = 2; c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.stroke(); c.fillStyle = '#00E676'; c.beginPath(); c.arc(b[0], b[1], 6, 0, 6.2832); c.fill(); c.stroke(); c.fillStyle = '#003300'; c.font = 'bold 10px sans-serif'; c.fillText(String(s.id), b[0] + 8, b[1] + 4); });
+        requestAnimationFrame(loop); };
+      let drag = null; cv.onmousedown = e => { drag = [e.clientX, e.clientY, V.az, V.el]; cv.style.cursor = 'grabbing'; }; window.addEventListener('mouseup', () => { drag = null; if (cv) cv.style.cursor = 'grab'; }); cv.onmousemove = e => { if (!drag) return; V.az = drag[2] + (e.clientX - drag[0]) * 0.4; V.el = clamp(drag[3] + (e.clientY - drag[1]) * 0.3, 8, 85); G.az = V.az; G.el = V.el; dirty = true; }; cv.onwheel = e => { e.preventDefault(); V.zoom = clamp(V.zoom * (e.deltaY < 0 ? 1.12 : 0.89), 0.5, 4); dirty = true; };
+      document.getElementById('g3c').onchange = e => { V.col = e.target.value; G.col3 = V.col; dirty = true; }; document.getElementById('g3v').oninput = e => { V.ve = +e.target.value; G.vexag = V.ve; dirty = true; };
+      document.getElementById('g3l').textContent = 'Terrain ' + T.src + ', cells of ' + (T.cell * st3).toFixed(0) + ' m drawn · field in white and orange · blue dots: water running along the D8 flow lines (faster on steeper ground) · green pins: sensors';
+      loop();
+    }, 60);
+  }
+
+  // ------------------------------------------------------------------ the panel
+  function chartRet(cv) {
+    if (!cv || !G.ret) return; const R = G.ret, c = cv.getContext('2d'), w = cv.width, h = cv.height, L0 = 48, B = h - 34, Tp = 18, Rt = w - 12; c.fillStyle = '#fff'; c.fillRect(0, 0, w, h); const X = p => L0 + (Math.log10(p) - 0) / Math.log10(1500) * (Rt - L0), cells = fieldCells(), sorted = cells.slice().sort((a, b) => R.AW[a] - R.AW[b]);
+    const pick = [['driest (10 %)', sorted[Math.floor(sorted.length * 0.1)], '#D84315'], ['median', sorted[Math.floor(sorted.length * 0.5)], '#1565C0'], ['most retentive (90 %)', sorted[Math.floor(sorted.length * 0.9)], '#2E7D32']]; G.sens.slice(0, 3).forEach((s, k) => pick.push(['sensor ' + s.id, s.i, ['#6A1B9A', '#00838F', '#AD1457'][k]])); let mx = 0; pick.forEach(p => { mx = Math.max(mx, R.SAT[p[1]]); }); mx = Math.ceil(mx * 20) / 20; const Y = v => B - v / mx * (B - Tp);
+    c.strokeStyle = '#ddd'; c.fillStyle = '#556'; c.font = '10px sans-serif'; c.textAlign = 'right'; for (let v = 0; v <= mx + 1e-6; v += 0.1) { c.beginPath(); c.moveTo(L0, Y(v)); c.lineTo(Rt, Y(v)); c.stroke(); c.fillText(Math.round(v * 100), L0 - 4, Y(v) + 3); } c.textAlign = 'center'; [1, 10, 33, 100, 300, 1500].forEach(p => { c.beginPath(); c.moveTo(X(p), Tp); c.lineTo(X(p), B); c.stroke(); c.fillText(p, X(p), B + 12); });
+    c.setLineDash([4, 3]); c.strokeStyle = '#1E63D0'; c.beginPath(); c.moveTo(X(33), Tp); c.lineTo(X(33), B); c.stroke(); c.strokeStyle = '#B23A2E'; c.beginPath(); c.moveTo(X(1500), Tp); c.lineTo(X(1500), B); c.stroke(); c.setLineDash([]); c.fillStyle = '#1E63D0'; c.fillText('FC (33 kPa)', X(33), Tp - 4); c.fillStyle = '#B23A2E'; c.fillText('WP (1500)', X(1500) - 22, Tp - 4);
+    pick.forEach(([nm, i, col], k) => { const s = { fc: R.FC[i], wp: R.WP[i], sat: R.SAT[i], lam: R.LAM[i], pe: R.PE[i] }; c.strokeStyle = col; c.lineWidth = 2; c.beginPath(); for (let q = 0; q <= 60; q++) { const psi = Math.pow(1500, q / 60) * 1.0; const th = curve(s, Math.max(1, psi)); q ? c.lineTo(X(Math.max(1, psi)), Y(th)) : c.moveTo(X(1), Y(th)); } c.stroke(); c.lineWidth = 1; c.fillStyle = col; c.textAlign = 'left'; c.fillText(nm + ' · AW ' + (R.AW[i] * 100).toFixed(1) + ' %', Rt - 190, B - 14 - (pick.length - 1 - k) * 12); const tr = R.TR[i]; c.beginPath(); c.arc(X(33 * Math.pow(s.fc / tr, 1 / s.lam)), Y(tr), 3.5, 0, 6.2832); c.fill(); });
+    c.fillStyle = '#374151'; c.textAlign = 'center'; c.font = '10px sans-serif'; c.fillText('suction (kPa, log scale)', (L0 + Rt) / 2, h - 4); c.save(); c.translate(11, (Tp + B) / 2); c.rotate(-Math.PI / 2); c.fillText('water content (% by volume)', 0, 0); c.restore();
+  }
+  function chartVgm(cv, vg, title) { if (!cv) return; const c = cv.getContext('2d'), w = cv.width, h = cv.height; c.fillStyle = '#fff'; c.fillRect(0, 0, w, h); if (!vg) { c.fillStyle = '#556'; c.font = '11px sans-serif'; c.fillText('No variogram yet', 10, 20); return; } const hm = vg.a * 1.5, gm = Math.max(vg.c0 + vg.c1, ...(vg.emp || []).map(b => b.g)) * 1.15 || 1, X = v => 40 + v / hm * (w - 52), Y = v => h - 24 - v / gm * (h - 40);
+    c.strokeStyle = '#1565C0'; c.lineWidth = 2; c.beginPath(); for (let q = 0; q <= 50; q++) { const hh = hm * q / 50, g = sph(hh, vg.c0, vg.c1, vg.a); q ? c.lineTo(X(hh), Y(g)) : c.moveTo(X(hh), Y(g)); } c.stroke(); c.fillStyle = '#D84315'; (vg.emp || []).forEach(b => { c.beginPath(); c.arc(X(b.h), Y(b.g), 3.5, 0, 6.2832); c.fill(); }); c.fillStyle = '#374151'; c.font = '10px sans-serif'; c.textAlign = 'left'; c.fillText(title + ' · ' + (vg.fitted ? 'fitted' : 'default (too few points to fit)') + ' · nugget ' + vg.c0.toExponential(1) + ', sill ' + (vg.c0 + vg.c1).toExponential(1) + ', range ' + Math.round(vg.a) + ' m', 8, 12); c.fillText('distance (m)', w / 2 - 20, h - 6); }
+  function panel() {
+    const el = document.getElementById('fmGeo'); if (!el) return; const T = G.T, S = G.shed, R = G.ret, f = G.fuse, O = G.opt, b = baseNow(); let h = '';
+    h += '<div class="fmrow"><button class="btn pri" id="fgRead">Read the terrain (contours, flow, watershed)</button><label>around the field <select id="fgBuf">' + [150, 250, 400, 700, 1000].map(v => '<option' + (v === G.buf ? ' selected' : '') + '>' + v + '</option>').join('') + '</select> m</label></div><div id="fgSt" class="pnote">' + (T ? 'Terrain read: ' + (T.D.W * T.D.H).toLocaleString('en-US') + ' cells of ' + T.cell.toFixed(1) + ' m, ' + esc(T.src) + '.' : 'Reads the elevation around the field, then draws contours, flow lines, the wetness index and the watershed.') + '</div>';
+    if (T) { const dg = derived(); h += '<div class="fmrow"><button class="btn" id="fgC">Contours and flow</button><button class="btn" id="fgW">Wetness index</button><button class="btn" id="fgS">Watershed</button><button class="btn pri" id="fg3">3D view</button><label>channels from <select id="fgThr">' + [0.05, 0.1, 0.25, 0.5, 1, 2].map(v => '<option' + (v === G.thr ? ' selected' : '') + '>' + v + '</option>').join('') + '</select> ha</label></div>';
+      h += '<div class="fmzt"><b>Terrain of the field</b><div class="pnote">elevation ' + dg.zlo.toFixed(1) + ' to ' + dg.zhi.toFixed(1) + ' m in the window · contours every ' + (G.contourStep != null ? G.contourStep : 'few') + ' m · water runs along the white arrows and gathers in the blue channels.</div></div>';
+      h += '<div class="fmrow"><label>Outlet <select id="fgOut"><option value="field"' + (G.out === 'field' ? ' selected' : '') + '>lowest outlet of the field</option><option value="click"' + (G.out === 'click' ? ' selected' : '') + '>a point I click on the map</option></select></label><button class="btn" id="fgPick">Click the outlet</button><button class="btn" id="fgShed">Delineate the watershed</button></div>';
+      if (S) h += '<div class="fmzt"><b>Watershed</b><table class="tbl fmtab"><tr><td>Area</td><td><b>' + S.ha.toFixed(2) + ' ha</b> (the field is ' + S.fieldHa.toFixed(2) + ' ha; ' + Math.max(0, S.ha - S.fieldHa).toFixed(2) + ' ha drain onto it)</td></tr><tr><td>Perimeter · longest flow path</td><td>' + Math.round(S.per) + ' m · ' + Math.round(S.Lmax) + ' m</td></tr><tr><td>Relief · mean slope</td><td>' + S.relief.toFixed(1) + ' m · ' + S.slope.toFixed(1) + ' %</td></tr><tr><td>Channels</td><td>' + Math.round(S.sl) + ' m, Strahler order up to <b>' + S.omax + '</b>, drainage density ' + S.dd.toFixed(1) + ' km/km²</td></tr><tr><td>Time of concentration</td><td>' + (isFinite(S.tc) ? S.tc.toFixed(0) + ' min (Kirpich)' : 'not defined (flat)') + '</td></tr></table>' + (S.edge ? '<div class="pnote" style="color:#B01E14">The catchment reaches the edge of the terrain read: raise "around the field" to see all of it.</div>' : '') + '</div>'; }
+    h += '<h4 style="margin:10px 0 4px">Soil retention curves, mapped (geostatistics)</h4><div class="pnote">Soil samples (one per line: latitude, longitude, sand %, clay %, organic matter % optional). Without samples the field soil is varied with the wetness index.</div><textarea id="fgSmp" rows="3" style="width:100%" placeholder="9.0831, 7.4012, 62, 18">' + esc(G.samples) + '</textarea><div class="fmrow"><button class="btn pri" id="fgRet"' + (T ? '' : ' disabled') + '>Map the retention curves</button><button class="btn" id="fgDSS"' + (R ? '' : ' disabled') + ' title="Set the soil of the program to the class of the field mean and the field area">Use this field in the DSS</button></div>';
+    if (R) { const a = stat(R.AW), fcS = stat(R.FC), wpS = stat(R.WP), dS = stat(R.DAYS); h += '<div class="fmzt"><b>Retention of the field</b> <small>(' + esc(R.how) + ')</small><table class="tbl fmtab"><tr><th></th><th>mean</th><th>10 %</th><th>90 %</th></tr><tr><td>Field capacity</td><td>' + (fcS.m * 100).toFixed(1) + ' %</td><td>' + (fcS.p10 * 100).toFixed(1) + '</td><td>' + (fcS.p90 * 100).toFixed(1) + '</td></tr><tr><td>Wilting point</td><td>' + (wpS.m * 100).toFixed(1) + ' %</td><td>' + (wpS.p10 * 100).toFixed(1) + '</td><td>' + (wpS.p90 * 100).toFixed(1) + '</td></tr><tr><td>Available water</td><td><b>' + (a.m * 100).toFixed(1) + ' %</b></td><td>' + (a.p10 * 100).toFixed(1) + '</td><td>' + (a.p90 * 100).toFixed(1) + '</td></tr><tr><td>Days to the trigger (f = ' + R.f.toFixed(2) + ', roots ' + Math.round(R.zr) + ' cm, ETc ' + R.etc.toFixed(1) + ' mm/day)</td><td>' + dS.m.toFixed(1) + '</td><td>' + (dS.p10).toFixed(1) + '</td><td>' + (dS.p90).toFixed(1) + '</td></tr></table>' +
+      '<div class="pnote">The field irrigates when its driest cells reach the trigger: first cell in ' + (dS.p10 != null ? dS.p10.toFixed(1) : '-') + ' days against ' + dS.m.toFixed(1) + ' on average' + (b && b.next ? '; the DSS (one soil for the whole field) gives ' + esc(b.next) : '') + '.</div><div class="fmrow"><button class="btn" data-v="ret_fc">Field capacity</button><button class="btn" data-v="ret_wp">Wilting point</button><button class="btn" data-v="ret_aw">Available water</button><button class="btn" data-v="ret_trig">Trigger</button><button class="btn" data-v="ret_days">Days to the trigger</button></div><canvas id="fgRC" width="540" height="250" style="max-width:100%"></canvas><canvas id="fgV1" width="540" height="150" style="max-width:100%"></canvas></div>'; }
+    h += '<h4 style="margin:10px 0 4px">Sensors and the satellite</h4><div class="fmrow"><button class="btn" id="fgMode" title="Choose Sensors in the mode bar over the map, then click the field">Install by clicking on the map</button><label>depth <select id="fgDep">' + [10, 20, 30, 45, 60, 90].map(v => '<option' + (v === G.depth ? ' selected' : '') + '>' + v + '</option>').join('') + '</select> cm</label><button class="btn" id="fgUndo">Undo</button><button class="btn" id="fgClr"' + (G.sens.length ? '' : ' disabled') + '>Remove all</button></div>';
+    if (G.sens.length) h += '<table class="tbl fmtab"><tr><th>#</th><th>Position</th><th>Depth</th><th>Reading % (blank: modelled)</th><th>Modelled %</th><th></th></tr>' + G.sens.map(s => '<tr><td>' + s.id + '</td><td><small>' + s.lat.toFixed(5) + ', ' + s.lon.toFixed(5) + '</small></td><td>' + s.depth + '</td><td><input data-rd="' + s.id + '" type="number" step="0.1" style="width:70px" value="' + (s.val == null ? '' : s.val) + '"></td><td>' + (modelTheta(s.i, b ? b.left : 0.6) * 100).toFixed(1) + '</td><td><button class="btn" data-rm="' + s.id + '">Remove</button></td></tr>').join('') + '</table>'; else h += '<div class="pnote">No sensor yet. Read the terrain, pick <b>Sensors</b> in the mode bar above the map, and click inside the field, or let the program propose the sites.</div>';
+    if (f) h += '<div class="fmzt"><b>Fusion of ' + f.n + ' sensors with ' + (f.satKey ? 'the satellite index ' + esc(f.satKey) : 'the terrain (no satellite index computed yet)') + '</b><div class="pnote">Regression kriging: θ = ' + f.beta.map((v, k) => (k === 2 && !f.satKey) ? '' : (k ? (v >= 0 ? '+ ' : '− ') + Math.abs(v * 100).toFixed(2) + ' × ' + (k === 1 ? 'wetness index' : 'satellite') : (v * 100).toFixed(1))).join(' ') + ' (% by volume per standard deviation) plus kriged residuals' + (isFinite(f.R2) ? ' · R² ' + f.R2.toFixed(2) : '') + ' · variogram ' + (f.vg.fitted ? 'fitted' : 'default') + ' (range ' + Math.round(f.vg.a) + ' m).</div><div class="fmrow"><button class="btn" data-v="sens">Soil water map</button><button class="btn" data-v="sensu">Uncertainty map</button></div></div>';
+    h += '<div class="fmrow"><label>Sensors to place <input id="fgN" type="number" min="2" max="20" value="' + G.N + '" style="width:54px"></label><label>spread (0 = by characteristics, 1 = even) <input id="fgWs" type="number" min="0" max="1" step="0.1" value="' + G.ws + '" style="width:54px"></label><button class="btn pri" id="fgOpt"' + (R ? '' : ' disabled title="Map the retention curves first"') + '>Optimise the sites</button><button class="btn" id="fgRed"' + (G.sens.length > 2 ? '' : ' disabled') + '>Which sensors can go?</button></div>';
+    if (O) h += '<div class="fmzt"><b>Proposed sites (orange rings on the map)</b><table class="tbl fmtab"><tr><th>Site</th><th>Represents</th><th>Where</th></tr>' + O.sites.map((s, k) => '<tr><td>' + (k + 1) + '</td><td>' + Math.round(O.share[k] * 100) + ' % of the field</td><td><small>' + esc(O.why[k]) + '</small></td></tr>').join('') + '</table><div class="pnote">Mean kriging deviation of the soil water: <b>' + (O.sdNew * 100).toFixed(2) + ' %</b> with these sites' + (isFinite(O.sdNow) ? ', ' + (O.sdNow * 100).toFixed(2) + ' % with your ' + G.sens.length + ' sensors' : '') + ', ' + (O.sdRand * 100).toFixed(2) + ' % for the same number placed at random.</div><div class="fmrow"><button class="btn pri" id="fgApply">Install these ' + O.K + ' sensors (replace the present ones)</button></div></div>';
+    if (G._red) h += '<div class="fmzt"><b>Sensors ranked by what they add</b> <small>(least first)</small><table class="tbl fmtab"><tr><th>Sensor</th><th>Rise of the mean deviation if removed</th><th></th></tr>' + G._red.map(r => '<tr><td>' + r.id + '</td><td>' + (r.d * 100).toFixed(3) + ' %</td><td><button class="btn" data-rm="' + r.id + '">Remove</button></td></tr>').join('') + '</table></div>';
+    if (G.sens.length) h += '<div class="fmrow"><button class="btn" id="fgCSV">Sensors CSV</button></div>';
+    el.innerHTML = h; wire(el);
+    setTimeout(() => { chartRet(document.getElementById('fgRC')); chartVgm(document.getElementById('fgV1'), R && R.vgC && R.samples >= 1 ? R.vgC : f ? f.vg : null, R && R.samples >= 1 ? 'clay residuals' : 'soil water residuals'); }, 20);
+  }
+  function wire(el) {
+    const $ = id => document.getElementById(id), run = async fn => { try { await fn(); } catch (e) { st('<b style="color:#B01E14">' + esc(/Failed to fetch|NetworkError/i.test(e.message) ? 'no internet connection' : e.message) + '</b>'); } };
+    $('fgRead').onclick = () => run(async () => { await readTerrain(); panel(); H().refresh('contour'); st('Terrain read.'); });
+    $('fgBuf').onchange = e => { G.buf = +e.target.value; };
+    if ($('fgC')) { $('fgC').onclick = () => H().refresh('contour'); $('fgW').onclick = () => H().refresh('twi'); $('fgS').onclick = () => run(async () => { if (!G.shed) delineate(); panel(); H().refresh('shed'); }); $('fg3').onclick = () => run(async () => view3d()); $('fgThr').onchange = e => { G.thr = +e.target.value; G.shed = null; if (['contour', 'shed'].includes(F().view)) { if (F().view === 'shed') delineate(); H().refresh(F().view); } panel(); };
+      $('fgOut').onchange = e => { G.out = e.target.value; }; $('fgShed').onclick = () => run(async () => { delineate(); panel(); H().refresh('shed'); });
+      $('fgPick').onclick = () => { const mp = F().map; if (!mp) return; G.out = 'click'; F().mode = 'pan'; document.querySelectorAll('#fmMode button').forEach(x => x.classList.toggle('on', x.dataset.m === 'pan')); UI.toast('Click the outlet on the map'); mp.once('click', e => run(async () => { const i = cellAt(e.latlng.lat, e.latlng.lng); if (i < 0) throw new Error('outside the terrain read'); const T = G.T, W = T.D.W; let b = i, bd = -1; const x = i % W, y = (i / W) | 0; for (let dy = -3; dy <= 3; dy++) for (let dx = -3; dx <= 3; dx++) { const j = (y + dy) * W + x + dx; if (j >= 0 && j < T.FL.A.length && T.FL.A[j] > bd) { bd = T.FL.A[j]; b = j; } } G.outCell = b; delineate(); panel(); H().refresh('shed'); })); }; }
+    $('fgSmp').onchange = e => { G.samples = e.target.value; };
+    $('fgRet').onclick = () => run(async () => { G.samples = $('fgSmp').value; st('Mapping the retention curves (geostatistics)...'); await mapRetention(); panel(); H().refresh('ret_aw'); });
+    if ($('fgDSS')) $('fgDSS').onclick = () => run(async () => { const R = G.ret, cells = fieldCells(), sa = cells.reduce((a, i) => a + R.SA[i], 0) / cells.length, cl = cells.reduce((a, i) => a + R.CL[i], 0) / cells.length; const best = E.json('(function(){var b=null,d=1e9;DATA.soils.forEach(function(s){var t=DATA.texture[s],x=Math.hypot(t.sand-' + sa + ',t.clay-' + cl + ');if(x<d){d=x;b=s}});return b})()'); const ha = Math.round(H().areaM2(F().pts) / 1e3) / 10; E.set({ soil: best, areaHa: ha }); UI.toast('DSS soil: ' + best.replace(/^S\d+_/, '') + ' (sand ' + sa.toFixed(0) + ' %, clay ' + cl.toFixed(0) + ' %), area ' + ha + ' ha'); G.B = null; });
+    el.querySelectorAll('[data-v]').forEach(b => b.onclick = () => H().refresh(b.dataset.v));
+    $('fgDep').onchange = e => { G.depth = +e.target.value; }; $('fgMode').onclick = () => { F().mode = 'sensor'; document.querySelectorAll('#fmMode button').forEach(x => x.classList.toggle('on', x.dataset.m === 'sensor')); const m = document.getElementById('fmMap'); if (m) m.style.cursor = 'crosshair'; UI.toast('Click inside the field to install a sensor; click a sensor to remove it'); };
+    $('fgUndo').onclick = undo; if ($('fgClr')) $('fgClr').onclick = () => { G.hist.push(['batch', G.sens.slice()]); G.sens = []; changed(); };
+    el.querySelectorAll('[data-rd]').forEach(i => i.onchange = () => { const s = G.sens.find(q => q.id === +i.dataset.rd); if (s) { s.val = i.value === '' ? null : +i.value; changed(); } });
+    el.querySelectorAll('[data-rm]').forEach(b => b.onclick = () => { removeSensor(+b.dataset.rm); G._red = null; });
+    $('fgN').onchange = e => { G.N = clamp(+e.target.value || 6, 2, 20); }; $('fgWs').onchange = e => { G.ws = clamp(+e.target.value || 0, 0, 1); };
+    $('fgOpt').onclick = () => run(async () => { optimise(); drawMarkers(); panel(); }); if ($('fgApply')) $('fgApply').onclick = applyOpt; $('fgRed').onclick = () => run(async () => { G._red = redundancy(); panel(); });
+    if ($('fgCSV')) $('fgCSV').onclick = () => { let t = 'id,lat,lon,depth_cm,reading_pct,modelled_pct,used_pct\n'; G.sens.forEach(s => { const md = modelTheta(s.i, (baseNow() || { left: 0.6 }).left) * 100; t += [s.id, s.lat.toFixed(6), s.lon.toFixed(6), s.depth, s.val == null ? '' : s.val, md.toFixed(2), (readingOf(s) * 100).toFixed(2)].join(',') + '\n'; }); UI.saveFile('SWAFL_sensors_' + new Date().toISOString().slice(0, 10) + '.csv', t, 'text/csv'); };
+  }
+  return { VIEWS, has, picture, at, legend, panel, attach, addAt, reset, view3d, _G: G, _set: setTerrain, _map: mapRetention, _opt: optimise, _fuse: fuseNow, _del: delineate, _add: addSensor, _red: redundancy };
+})();
