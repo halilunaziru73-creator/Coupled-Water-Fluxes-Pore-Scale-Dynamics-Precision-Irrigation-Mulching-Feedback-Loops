@@ -1752,7 +1752,7 @@ function irRows2(x, y, rows) { rows.forEach((q, i) => { T(q[0], x, y + i * 20, {
 // today's soil water and the things that tie the design to the explorer's settings
 function irToday(y, C, R, kind) {
   irProfile(40, y + 8, 120, 96, C, 'Soil water today (DSS)');
-  const k = fclock.kd(), nm = cropNameAt(C.sim, k), vff = VFF_VALUES[state.vffIdx], mu = vff >= 0.95 ? 'none' : mulchBy(state.mulchType).label.toLowerCase(), meth = (METHODS.find(m => m.k === state.method) || METHODS[0]).label.toLowerCase();
+  const k = fclock.kd(), nm = cropShown(C.sim, k), vff = VFF_VALUES[state.vffIdx], mu = vff >= 0.95 ? 'none' : mulchBy(state.mulchType).label.toLowerCase(), meth = (METHODS.find(m => m.k === state.method) || METHODS[0]).label.toLowerCase();
   const L = ['Date ' + fmtDate(dateOfK(k)), 'Crop today: ' + nm + ', roots ' + irF(C.sim.rd[k]) + ' cm of ' + irF(C.Rmax) + ' cm', 'Explorer method: ' + meth + ' \u00b7 mulch: ' + mu + ' \u00b7 tillage: ' + ({ conv: 'conventional', red: 'reduced', notill: 'no-till' }[state.till] || state.till), 'Trigger: refill when ' + irF(C.fT * 100) + '% depleted (water ' + irF(irTh(C).t0 * 100, 1) + '% by volume)'];
   L.forEach((t, i) => T(t, 200, y + 112 + i * 14 + 0, { s: 8.8, c: '#374151' }));
 }
@@ -1987,6 +1987,7 @@ function plantAdvice() {
 }
 window.plantAdvice = plantAdvice;
 function plantAdviceDraw(y, sim) {
+  window.__PLANT = null;
   let A = null; try { A = plantAdvice(); } catch (e) { A = null; } if (!A) return y;
   const doyStr = p => { const dt = new Date(Date.UTC(2001, 0, 1 + p)); return dt.getUTCDate() + ' ' + MON[dt.getUTCMonth()]; }, WX = (window.WXD && WXD.on) ? WXD : null;
   sidHead('When to plant ' + A.label.toLowerCase() + ': the irrigation need for every sowing date of the year', y, 'FAO-56 root-zone balance of the crop over the 20 years of the weather in use (' + (WX ? (WX.src === 'online' ? 'online weather of ' : 'weather file ') + WX.name : 'recorded weather of the simulations') + '), with your soil, trigger and method');
@@ -3597,7 +3598,7 @@ function drawField() {
   sunIcon(572, 70, 11 + heat * 5, heat);
   T('Yield ' + (m.yield * CROPS[state.crop].factor).toFixed(CROPS[state.crop].lib ? 0 : 2) + ' ' + CROPS[state.crop].unit + ', ' + CROPS[state.crop].label.toLowerCase(), W - 16, 22, { s: 11.5, b: true, a: 'right', c: '#2F7F3E' });
   for (let i = 0; i < 1 + Math.round(cloudy * 3); i++) cloud(((i * 150 + t * 6) % (W + 80)) - 40, 88 + (i % 2) * 14, 0.8 + cloudy * 0.3, 0.55 + cloudy * 0.3);
-  T('Field water balance, ' + (CAL0 + yearOf(kd)) + ' (' + cropNameAt(sim, kd) + ')', 16, 22, { s: 14, b: true });
+  T('Field water balance, ' + (CAL0 + yearOf(kd)) + ' (' + cropShown(sim, kd) + ')', 16, 22, { s: 14, b: true });
   T(DATA.soil_labels[state.soil] + ', ' + TILL_LABELS[state.till].toLowerCase() + ' tillage, ' + (vff < 0.95 ? 'mulched' : 'bare') + ', rain \u00d7' + rain.toFixed(1) + ', ' + (dT >= 0 ? '+' : '') + dT.toFixed(1) + '\u00b0C', 16, 38, { s: 10.5, c: MUTE });
   // fluxes in the air
   const tipY = 100, baseY = GY - 12;
@@ -4260,6 +4261,12 @@ function computeSim() {
     yI: S.yI, yD: S.yD, yRain: S.yRain, yRd: S.yRd, yR: S.yR, yInt: S.yInt, yE: S.yE, yT: S.yT, dE: S.dE, dT: S.dT, gy, trace, kt, dose, fTrig, fTrigRaw: depletionRaw(soil, trigAbs), Rmax, fsRf, sense, dose, meanIrr: fin.totI / NYR, meanDrain: fin.totD / NYR };
 }
 const cropNameAt = (sim, d) => sim.widx[d] >= 0 ? sim.wins[sim.widx[d]].name : 'fallow';
+// the crop as the person chose it in Properties, for every label that is read: the Daisy rotation names stay in brackets
+const cropShown = (sim, d) => {
+  const wn = sim.widx[d] >= 0 ? sim.wins[sim.widx[d]].name : null, L = window.CROPLIB && CROPLIB.crops[state.crop];
+  if (L) return L.group === 'perennial' ? L.label : wn ? L.label : 'no ' + L.label.toLowerCase() + ' in the field (fallow)';
+  const cl = CROPS[state.crop] ? CROPS[state.crop].label : null; return wn ? (cl && cl.toLowerCase() !== wn ? cl + ' (' + wn + ')' : wn) : cl ? 'no ' + cl.toLowerCase() + ' in the field (fallow)' : 'fallow';
+};
 
 // the field clock: runs through twenty years and dwells slowly on each major wetting event
 const fclock = { day: 140, on: true, speed: 2, pause: 0, pauseTot: 1, lastT: 0, mem: [], lastKd: -1 };
@@ -4275,7 +4282,7 @@ function stepField() {
   const nk = Math.floor(fclock.day);
   if (nk !== prev) for (let q = prev + 1; q <= nk; q++) if (isMajor(sim, q)) { fclock.day = q; fclock.pauseTot = fclock.pause = 3.2 / Math.sqrt(fclock.speed); break; }
 }
-const fieldLabel = () => { const sim = simCache.val, k = fclock.kd(); return fmtDate(dateOfK(k)) + (sim ? ' \u00b7 ' + cropNameAt(sim, k) : ''); };
+const fieldLabel = () => { const sim = simCache.val, k = fclock.kd(); return fmtDate(dateOfK(k)) + (sim ? ' \u00b7 ' + cropShown(sim, k) : ''); };
 
 function drawSoilWater(sim, k, SX, SW, GY, PX) {
   const s = sim.s[k];
@@ -4551,7 +4558,7 @@ function reportNotes(sc, view) {
     L.push('Annual water balance (mm): rain ' + f0(m.rain) + ' + irrigation ' + f0(m.irr) + ' = evapotranspiration ' + f0(m.et) + ' + drainage ' + f0(m.drain) + ' + storage and small terms ' + f0(m.store) + '.');
     L.push('Transpiration ' + f0(m.transp) + ' mm, soil evaporation ' + f0(m.evap) + ' mm, interception and mulch layer ' + f0(m.other) + ' mm; nitrogen leaching ' + f1(m.nl) + ' kg/ha.');
     L.push('Twenty-year run: mean irrigation ' + f0(sim.meanIrr) + ' mm per year, mean drainage ' + f0(sim.meanDrain) + ' mm per year; roots reached ' + f0(mx) + ' cm at the deepest, in ' + (CAL0 + my) + '.');
-    L.push('The picture is the field on ' + fmtDate(dateOfK(fclock.kd())) + ' (' + cropNameAt(sim, fclock.kd()) + '): wetted layers are blue, roots follow the water.'); dssLines().forEach(l => L.push(l)); }
+    L.push('The picture is the field on ' + fmtDate(dateOfK(fclock.kd())) + ' (' + cropShown(sim, fclock.kd()) + '): wetted layers are blue, roots follow the water.'); dssLines().forEach(l => L.push(l)); }
   else if (sc.id === 'spr') { try { const R = spRun(), o = R.o, B = R.B || spBook(R, o, irCtx(), IRX.LLs, SPR.Af, SPR.Qs, IRX.lift, IRX.Lm), ok = B.chk.filter(q => q[1]).length;
     L.push('Sprinkler: ' + IRM.STYPE[o.type].label.toLowerCase() + ', nozzle ' + o.d.toFixed(1) + ' mm at ' + f0(o.P) + ' kPa, ' + (o.tri ? 'triangular' : 'rectangular') + ' spacing ' + f1(o.Ss) + ' x ' + f1(o.Sl) + ' m, jet angle ' + f0(o.alpha) + ' degrees, wind ' + f1(o.u) + ' m/s, slope ' + f1(o.S) + ' %.');
     L.push('Throw radius ' + f1(R.nz.R) + ' m, flow ' + f1(R.nz.q) + ' L/min, application rate ' + f1(R.AR) + ' mm/h against the ' + B.umax + ' mm/h this soil and slope allow. Christiansen uniformity ' + f0(R.CU * 100) + ' %.');
@@ -5603,7 +5610,7 @@ function drawN1Chart() {
 window.n1Dash = function () {
   const soil = state.soil, sim = seasonSim(), dd = clampN(fclock.kd(), 0, ND - 1), z = Z_VALUES[state.zIdx], si = clampN(Math.round(z / DZ), 0, NLAY - 1), fS = 1 - clampN(sim.s[dd][si], 0, 1);
   const tf = trigAbsFor(soil), fT = n1F(), mv = n1ModelFor(soil), rl = n1Rel(soil), sp = n1Speed(soil), cf = CROPS[state.crop] || { factor: 1, unit: 'Mg/ha' }; if (!(window.__N1ADV && window.__N1ADV.soil === soil) && currentScene && currentScene.id === 'n1') { try { currentScene.draw(); } catch (e) {} } const adv = window.__N1ADV && window.__N1ADV.soil === soil ? window.__N1ADV : null;
-  return { soil: DATA.soil_labels[soil], date: fmtDate(dateOfK(dd)), crop: cropNameAt(sim, dd), trigCm: Math.round(tf), fT, fstar: 0.45, critCm: TRIGGER_AT_FSTAR[soil], z, sensorCm: Math.round(invDepletion(soil, fS)), fS,
+  return { soil: DATA.soil_labels[soil], date: fmtDate(dateOfK(dd)), crop: cropShown(sim, dd), trigCm: Math.round(tf), fT, fstar: 0.45, critCm: TRIGGER_AT_FSTAR[soil], z, sensorCm: Math.round(invDepletion(soil, fS)), fS,
     due: fS >= fT, days: sp.days, rate: sp.rate, mm: sp.mm, taw: sp.taw, awc: AWC[soil], yield: mv.yield * cf.factor, yUnit: (cf.unit || 'Mg/ha').split(' ')[0], irr: mv.irr, drain: mv.drain, rel: rl, rec: adv ? adv.rec : null, why: adv ? adv.why : null,
     q50: adv ? adv.q50 : [], q45: adv ? adv.q45 : [], sand: (DATA.texture[soil] || {}).sand, clay: (DATA.texture[soil] || {}).clay, roots: Math.round(sim.Rmax || 0),
     season: (function () { const ay = clampN(yearOf(dd), 0, NYR - 1), d0 = ay * DPY + 95, x = [], dep = [], irr = []; for (let q = 0; q <= 155 && d0 + q < ND; q++) { x.push(q); dep.push(+(1 - clampN(sim.s[d0 + q][si], 0, 1)).toFixed(3)); irr.push(sim.irr[d0 + q] > 0.5 ? 1 : 0); } return { x, dep, irr, start: fmtDate(dateOfK(d0)), today: dd - d0 }; })() };
@@ -5622,7 +5629,7 @@ window.n1Live = function () {
   const x = [], y = [], irr = [], lab = []; for (let d = d0; d <= dEnd; d++) { x.push(d - d0); y.push(+(100 * dep(d)).toFixed(1)); irr.push(sim.irr[d] > 0.5 ? 1 : 0); }
   const L = q => { const t = dateOfK(d0 + q); return t.getDate() + ' ' + ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][t.getMonth()]; };
   for (let q = 0; q < x.length; q++) lab.push(L(q));
-  return { soil: DATA.soil_labels[soil], dd, date: fmtDate(dateOfK(dd)), crop: cropNameAt(sim, dd), z, fS, fT, sensorCm: Math.round(invDepletion(soil, fS)), due: fS >= fT, inSeason: dd >= d0 && dd <= dEnd,
+  return { soil: DATA.soil_labels[soil], dd, date: fmtDate(dateOfK(dd)), crop: cropShown(sim, dd), z, fS, fT, sensorCm: Math.round(invDepletion(soil, fS)), due: fS >= fT, inSeason: dd >= d0 && dd <= dEnd,
     today: dd - d0, next: next != null ? { date: fmtDate(dateOfK(next)), days: next - dd, q: next - d0, mm: +sim.irr[next].toFixed(0) } : null,
     trig: trig != null ? { date: fmtDate(dateOfK(trig)), days: trig - dd, q: trig - d0 } : null, trigDry: Math.ceil(toTrigDry),
     wilt: wilt != null ? { date: fmtDate(dateOfK(Math.min(ND - 1, wilt))), days: Math.ceil(toWilt), q: wilt - d0 } : null, rate, peak, taw: Math.round(taw), rd: Math.round(rd),
@@ -5638,7 +5645,7 @@ function n1Choice(y, sf, sim, dd) {
   const critical = growing && cmax > 0 && sim.cover[dd] >= 0.85 * cmax;   // full cover: flowering and grain or fruit set
   const Q45 = [[sandy, 'Your soil is sandy or coarse (dries out very fast)', DATA.soil_labels[sf] + ', ' + (AWC[sf] || 1.5).toFixed(1) + ' mm of available water per cm'],
     [slow, 'Your irrigation system takes several days to finish a full round', cycDays == null ? 'open the ' + meth.toLowerCase() + ' design to know its time per round' : meth.toLowerCase() + ': ' + cycDays.toFixed(1) + ' days per round (' + cyc.toFixed(1) + ' h at ' + (meth === 'Surface' ? 24 : hpd) + ' h a day)'],
-    [critical, 'The crop is in a critical, water-sensitive stage (flowering or pollination)', growing ? cropNameAt(sim, dd) + ' on ' + fmtDate(dateOfK(dd)) + (critical ? ': full cover, flowering and grain set' : ': not at full cover') : 'no crop on ' + fmtDate(dateOfK(dd))]];
+    [critical, 'The crop is in a critical, water-sensitive stage (flowering or pollination)', growing ? cropShown(sim, dd) + ' on ' + fmtDate(dateOfK(dd)) + (critical ? ': full cover, flowering and grain set' : ': not at full cover') : 'no crop on ' + fmtDate(dateOfK(dd))]];
   const Q50 = [[standard, 'You irrigate a standard field crop (maize, grains, alfalfa)', cropLbl + (cl ? ', FAO-56 depletion fraction p = ' + p.toFixed(2) : '')],
     [fine, 'Your soil is loam or clay (high water-holding capacity)', DATA.soil_labels[sf]],
     [cycDays != null && !slow, 'Your system can irrigate the entire field quickly', cycDays == null ? 'open the design to know its time per round' : cycDays.toFixed(1) + ' days per round']];

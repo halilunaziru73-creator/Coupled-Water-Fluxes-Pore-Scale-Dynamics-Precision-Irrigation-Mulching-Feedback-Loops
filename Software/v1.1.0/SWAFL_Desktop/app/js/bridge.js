@@ -74,7 +74,7 @@ const E = (() => {
     },
     day() {
       return api.json(`(function(){var sim=seasonSim(true),rows=dssRows(sim),adv=dssAdvice(sim,rows),k=fclock.kd(),r0=rows[0],nx=rows.slice(1),yt=yearTable(sim)[yearOf(k)]||{};
-        return{date:fmtDate(dateOfK(k)),like:1980+yearOf(k),mode:dss.mode,N:dss.ahead,head:adv.head,text:adv.text,tone:adv.tone,crop:cropNameAt(sim,k),rd:sim.rd[k],f:r0.f,fT:sim.fTrigRaw,
+        return{date:fmtDate(dateOfK(k)),like:1980+yearOf(k),mode:dss.mode,N:dss.ahead,head:adv.head,text:adv.text,tone:adv.tone,crop:cropShown(sim,k),rd:sim.rd[k],f:r0.f,fT:sim.fTrigRaw,
         rain:r0.rain,evap:r0.evap,irr:r0.irr,tr:r0.tr,dr:r0.dr,fc:(window.WXD&&WXD.on&&WXD.src==='online'&&WXD.fcStart!=null&&Math.abs(Date.UTC(dateOfK(k).getUTCFullYear(),dateOfK(k).getUTCMonth(),dateOfK(k).getUTCDate())-WXD.fcStart)<17*864e5)?1:0,next:{rain:sumKey(nx,'rain'),irr:sumKey(nx,'irr'),evap:sumKey(nx,'evap'),tr:sumKey(nx,'tr'),dr:sumKey(nx,'dr')},year:yt}})()`);
     },
     season() {
