@@ -1633,8 +1633,8 @@ function irToday(y, C, R, kind) {
 // day (four-stage curve of the crop in Properties, its sowing date and density; the Daisy rotation by its cover), the reference
 // ET and rain of the weather in use (online with its forecast, a weather file or the recorded weather; rain and temperature
 // controls), the roots of the daily model, the available water of the soil, the trigger, the mulch, and the net depth and
-// efficiency of the design. Irrigate when the root-zone deficit reaches the trigger depth or the design depth, whichever is
-// smaller; each irrigation refills the root zone up to the design depth (a shorter run when the trigger comes first). =====
+// efficiency of the design. Irrigate when the root-zone deficit reaches the trigger depth (never at field capacity); each irrigation
+// applies the water used, up to the design depth. =====
 const _IRP = { keys: [], val: {} };
 // soil hydraulic limits of a day (shared by the daily plan and the 20-season balance): organic matter drifts toward the level of the
 // tillage and mulch (first order, 25 y), loosened soil re-consolidates at the consolidation rate after the tillage day, and the salt
@@ -1678,7 +1678,7 @@ function irPlan(opt) {
     const ro = ponded && lv ? 0 : r > 35 ? 0.3 * (r - 35) : 0, ks = lv ? (D > raw ? clampN((taw - D) / Math.max(1e-6, (1 - p) * taw), 0, 1) : 1) : 1;
     const etc = kce * e0, eta = lv ? etc * ks : etc * (D < 0.3 * taw ? 1 : clampN((taw - D) / (0.7 * taw), 0, 1));
     D = D - (r - ro) + eta; let dp = 0; if (D < 0) { dp = -D; D = 0; }
-    const thr = Zn != null ? Math.min(fT * taw, Zn) : fT * taw; let net = 0;
+    const thr = fT * taw; let net = 0;   // irrigate when the water used from the root zone reaches the trigger (never at field capacity); Zn only sets how much is applied
     if (lv && i < n && fT < 0.995 && D >= thr - 1e-6 && D > 0.5) { net = Zn != null ? Math.min(Zn, D) : D; const st = Math.min(net, D); D -= st; dp += net - st; ev.push({ k, net, gross: net / Ea, before: taw - (D + st), deficit: D + st, taw, lost: net - st, ec: EC }); }
     EC = clampN(EC + (ECw * (net / Ea + 0.1 * r) - EC * dp) / Math.max(40, hy.sat * zrAt(k) * 10), 0, 25);
     Dr[i] = D; TAW[i] = taw; RAW[i] = raw; ETc[i] = etc; ETa[i] = eta; P[i] = r; RO[i] = ro; DP[i] = dp; I[i] = net; KC[i] = lv ? kce : 0; KS[i] = ks; THR[i] = thr; ZR[i] = zrAt(k); live[i] = lv ? 1 : 0;
@@ -2027,7 +2027,7 @@ function irAdvice(y0, sp) {
     row.forEach((v, c) => T(v, cols[c][1], y + 2, { s: 9.1, b: c === 1, c: i === 0 ? IRC.ac : '#374151' })); y += 20; });
   y = dssLecturePanel(y + 10, PL) + 4; y += 14; sidHead('The season in numbers, and the advice in short', y, 'The season of the decision (' + FDK(S.a) + ' to ' + FDK(S.b) + '), with ' + sp.sys.toLowerCase() + ' irrigation');
   const thrNow = PL.at(PL.THR, k0), tawNow = PL.at(PL.TAW, k0);
-  y = irRows(y + 34, [['Irrigate when', 'the root zone has lost ' + irF(thrNow, 0) + ' of ' + irF(tawNow, 0) + ' mm (' + (sp.Zn > 0 && sp.Zn < PL.fT * tawNow ? 'the design depth' : 'the trigger, depletion ' + PL.fT.toFixed(2)) + '; sensor at ' + zs + ' cm)'],
+  y = irRows(y + 34, [['Irrigate when', 'the root zone has lost ' + irF(thrNow, 0) + ' of ' + irF(tawNow, 0) + ' mm (' + ('the trigger, depletion ' + PL.fT.toFixed(2)) + '; sensor at ' + zs + ' cm)'],
     ['Crop water use ETc = Kc × ET0', irF(S.ETc) + ' mm in the season (peak ' + S.ETpk.toFixed(1) + ' mm/day; Kc ' + PL.kcIni.toFixed(2) + ' to ' + PL.kcMid.toFixed(2) + ')'],
     ['Rain', irF(S.P) + ' mm (' + irF(S.RO) + ' mm runs off)'],
     ['Irrigations in the season', yr.length ? yr.length + ' (' + FDK((yr[0])) + ' to ' + FDK((yr[yr.length - 1])) + '), ' + irF(S.In) + ' mm net, ' + irF(S.In * gross0 / Math.max(0.1, sp.Zn)) + ' mm pumped' : 'none'],
