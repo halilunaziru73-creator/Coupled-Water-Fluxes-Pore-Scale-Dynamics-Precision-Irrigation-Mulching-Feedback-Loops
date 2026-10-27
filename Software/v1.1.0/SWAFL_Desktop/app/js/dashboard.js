@@ -283,6 +283,7 @@ const Dash = (() => {
     const html = '<div class="dssday"><i style="background:' + N.col + '"></i><b>' + UI.esc(N.date) + '</b> · day ' + N.day + ' of ' + N.span + (N.paused ? ' · paused' : '') + '</div><table class="n1t">' +
       r('Crop', UI.esc(N.crop)) + r('Phase', UI.esc(N.phase)) +
       r('Water in the root zone', N.mm.toFixed(0) + ' of ' + N.taw.toFixed(0) + ' mm (' + N.pct + ' %)', '#0D47A1') +
+      (N.psi != null ? r('Matric potential now', N.psi.toFixed(N.psi < 100 ? 1 : 0) + ' kPa suction' + (N.psi <= 33 ? ' (wetter than field capacity, 33 kPa)' : N.psi < 1500 ? ' (field capacity 33, wilting point 1500)' : ' (beyond the wilting point, 1500)'), N.psi >= 1500 ? '#C62828' : N.psi > 100 ? '#E65100' : '#1565C0') : '') +
       (N.kc != null ? r('Crop water use', 'Kc ' + N.kc.toFixed(2) + ' × ET0 ' + N.et0.toFixed(1) + ' = ' + (N.etc != null ? N.etc : N.kc * N.et0).toFixed(1) + ' mm/day') : '') +
       r('Root-zone depletion', (1 - N.pct / 100).toFixed(2) + (N.irrAt != null ? ' (irrigate at ' + N.irrAt.toFixed(2) + (N.byDepth ? ': the design depth; trigger ' + N.fT.toFixed(2) : ': the trigger') + ')' : ' (trigger ' + N.fT.toFixed(2) + ')'), 1 - N.pct / 100 >= (N.irrAt != null ? N.irrAt : N.fT) ? '#C62828' : '#1B5E20') +
       r('Next irrigation', N.next ? UI.esc(N.next) + (N.nextIn === 0 ? ' (today)' : ' (in ' + N.nextIn + ' day' + (N.nextIn === 1 ? '' : 's') + ')') + '<br><small>' + N.net.toFixed(0) + ' mm net, ' + N.gross.toFixed(0) + ' mm pumped</small>' : 'none due in this season', '#1565C0') +
