@@ -12,8 +12,16 @@ const Sketch = (() => {
     crop: null, row: 0.75, plant: 0.3,
     soil: null, pan: false,
     sys: 'drip', sub: 'border', dep: 0, kind: 'inline', sprSys: 'solid', sprType: 'impact', dir: 'length',
-    intv: 2, sprSs: 12, sprSl: 18, auto: false
+    intv: 2, sprSs: 12, sprSl: 18, auto: false,
+    objs: [], cur: null, rect: null                              // greenhouses, plant beds, areas to irrigate, no-irrigation zones, plants and traps
   };
+  const OBJ = { gh: ['Greenhouse / polytunnel', '#1E88E5', 'rect'], bed: ['Plant bed', '#8D6E63', 'rect'], irr: ['Area to irrigate', '#00897B', 'poly'], noirr: ['No-irrigation zone', '#C62828', 'poly'], plant: ['Plant / tree', '#2E7D32', 'pt'], trap: ['Monitoring trap', '#6A1B9A', 'pt'] };
+  const HIST = { u: [], r: [] };                                 // undo and redo (Ctrl+Z, Ctrl+Y)
+  const snapS = () => JSON.stringify({ pts: S.pts, src: S.src, inlet: S.inlet, objs: S.objs });
+  function pushH() { HIST.u.push(snapS()); if (HIST.u.length > 80) HIST.u.shift(); HIST.r = []; }
+  function loadH(j) { const o = JSON.parse(j); S.pts = o.pts; S.src = o.src; S.inlet = o.inlet; S.objs = o.objs; S.cur = null; S.rect = null; }
+  function undo() { if (S.cur && S.cur.pts.length) { S.cur.pts.pop(); if (!S.cur.pts.length) S.cur = null; draw(); return; } if (!HIST.u.length) return; HIST.r.push(snapS()); loadH(HIST.u.pop()); draw(); info(); }
+  function redo() { if (!HIST.r.length) return; HIST.u.push(snapS()); loadH(HIST.r.pop()); draw(); info(); }
   let cv = null, drag = null, hover = null, cursor = null, edit = null, LIST = null, panning = null;
   const V = { z: 1, x: 0, y: 0 };                                // the view: zoom and the sketch point at the top left corner
   const toScr = p => ({ x: (p.x - V.x) * V.z, y: (p.y - V.y) * V.z });
@@ -48,7 +56,8 @@ const Sketch = (() => {
   }
 
   // ------------------------------------------------------------------ drawing
-  function draw() {
+  function draw() { draw0(); drawObjs(); }
+  function draw0() {
     if (!cv) return; const c = cv.getContext('2d'), k0 = cv.width / CW, vw = CW / V.z, vh = CH / V.z, w = V.x + vw, h = V.y + vh, x0 = V.x, y0 = V.y;
     c.setTransform(k0, 0, 0, k0, 0, 0); c.fillStyle = '#FBFBF8'; c.fillRect(0, 0, CW, CH);
     c.setTransform(k0 * V.z, 0, 0, k0 * V.z, -V.x * k0 * V.z, -V.y * k0 * V.z); c.strokeStyle = '#E6E4DC'; c.lineWidth = 1 / V.z;
@@ -107,9 +116,52 @@ const Sketch = (() => {
   function info() {
     const el = document.getElementById('skInfo'); if (!el) return; const g = geom();
     el.innerHTML = g ? '<b>' + fmt(g.area / 10000, 2) + ' ha</b> (' + Math.round(g.area).toLocaleString('en-US') + ' m²) · run ' + fmt(g.run) + ' m · width ' + fmt(g.wid) + ' m · perimeter ' + fmt(g.perim) + ' m' + (S.src ? ' · mainline ' + fmt(g.main) + ' m' : ' · place the water source') : 'Draw at least three corners.';
+    if (el && S.objs.length) el.innerHTML += '<br>' + objSummary();
     const sm = document.getElementById('skSum'); if (sm) sm.innerHTML = summary();
   }
 
+
+  // ------------------------------------------------------------------ greenhouses, beds, irrigated areas, plants and traps
+  const polyA = P => { let A = 0; for (let i = 0; i < P.length; i++) { const a = P[i], b = P[(i + 1) % P.length]; A += a.x * b.y - b.x * a.y; } return m(m(Math.abs(A) / 2)); };
+  const rectPts = (a, b) => [{ x: a.x, y: a.y }, { x: b.x, y: a.y }, { x: b.x, y: b.y }, { x: a.x, y: b.y }];
+  const inPoly = (P, x, y) => { let c = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const a = P[i], b = P[j]; if ((a.y > y) !== (b.y > y) && x < (b.x - a.x) * (y - a.y) / (b.y - a.y) + a.x) c = !c; } return c; };
+  function objStats() {
+    const o = { gh: 0, bed: 0, irr: 0, noirr: 0, plant: 0, trap: 0, nGh: 0, nBed: 0, nIrr: 0, nNo: 0 };
+    S.objs.forEach(q => { if (q.t === 'plant' || q.t === 'trap') o[q.t]++; else { const a = polyA(q.pts); o[q.t] += a; o['n' + { gh: 'Gh', bed: 'Bed', irr: 'Irr', noirr: 'No' }[q.t]]++; } });
+    return o;
+  }
+  // the area the design should irrigate: the drawn irrigation areas, else the field less the no-irrigation zones
+  function irrArea() { const g = geom(), o = objStats(); if (o.irr > 0) return Math.max(1, o.irr - o.noirr * 0); if (g) return Math.max(1, g.area - o.noirr); return 0; }
+  function drawObjs() {
+    if (!cv) return; const c = cv.getContext('2d'), k0 = cv.width / CW; c.setTransform(k0 * V.z, 0, 0, k0 * V.z, -V.x * k0 * V.z, -V.y * k0 * V.z);
+    const one = (q, cur) => {
+      const d = OBJ[q.t]; c.strokeStyle = d[1]; c.lineWidth = 2 / V.z; c.fillStyle = d[1] + (q.t === 'noirr' ? '30' : q.t === 'gh' ? '33' : '26');
+      if (q.t === 'plant' || q.t === 'trap') { const r = (q.t === 'plant' ? 5 : 6) / V.z; c.beginPath(); if (q.t === 'plant') c.arc(q.pts[0].x, q.pts[0].y, r, 0, 7); else { c.moveTo(q.pts[0].x, q.pts[0].y - r); c.lineTo(q.pts[0].x + r, q.pts[0].y + r); c.lineTo(q.pts[0].x - r, q.pts[0].y + r); c.closePath(); } c.fillStyle = d[1]; c.fill(); return; }
+      const P = q.pts; if (!P.length) return; c.beginPath(); P.forEach((p, i) => i ? c.lineTo(p.x, p.y) : c.moveTo(p.x, p.y)); if (!cur && P.length > 2) { c.closePath(); c.fill(); } if (q.t === 'noirr' || cur) c.setLineDash([6 / V.z, 4 / V.z]); c.stroke(); c.setLineDash([]);
+      if (q.t === 'gh' && !cur && P.length > 2) { c.lineWidth = 1 / V.z; for (let i = 1; i < 6; i++) { const f = i / 6; c.beginPath(); c.moveTo(P[0].x + (P[1].x - P[0].x) * f, P[0].y + (P[1].y - P[0].y) * f); c.lineTo(P[3].x + (P[2].x - P[3].x) * f, P[3].y + (P[2].y - P[3].y) * f); c.stroke(); } }
+      if (q.t === 'bed' && !cur && P.length > 2) { c.lineWidth = 1 / V.z; const w = Math.abs(P[1].x - P[0].x), h = Math.abs(P[2].y - P[0].y); for (let i = 1; i < 5; i++) { const f = i / 5; c.beginPath(); if (w >= h) { c.moveTo(P[0].x, P[0].y + (P[3].y - P[0].y) * f); c.lineTo(P[1].x, P[0].y + (P[3].y - P[0].y) * f); } else { c.moveTo(P[0].x + (P[1].x - P[0].x) * f, P[0].y); c.lineTo(P[0].x + (P[1].x - P[0].x) * f, P[3].y); } c.stroke(); } }
+      if (!cur && P.length > 2) { const cx = P.reduce((a, p) => a + p.x, 0) / P.length, cy = P.reduce((a, p) => a + p.y, 0) / P.length; c.fillStyle = d[1]; c.font = 'bold ' + (11 / V.z) + 'px sans-serif'; c.textAlign = 'center'; c.fillText(d[0].split(' /')[0] + ' ' + fmt(polyA(P)) + ' m²', cx, cy); }
+    };
+    S.objs.forEach(q => one(q, false)); if (S.cur) one(S.cur, true);
+    if (S.cur && cursor && S.cur.pts.length) { const l = S.cur.pts[S.cur.pts.length - 1]; c.strokeStyle = OBJ[S.cur.t][1]; c.lineWidth = 1 / V.z; c.setLineDash([3 / V.z, 3 / V.z]); c.beginPath(); c.moveTo(l.x, l.y); c.lineTo(cursor.x, cursor.y); c.stroke(); c.setLineDash([]); }
+    if (S.rect && cursor) { const P = rectPts(S.rect.a, { x: snap(cursor.x), y: snap(cursor.y) }), d = OBJ[S.rect.t]; c.strokeStyle = d[1]; c.lineWidth = 1.5 / V.z; c.setLineDash([5 / V.z, 3 / V.z]); c.beginPath(); P.forEach((p, i) => i ? c.lineTo(p.x, p.y) : c.moveTo(p.x, p.y)); c.closePath(); c.stroke(); c.setLineDash([]); c.fillStyle = d[1]; c.font = (11 / V.z) + 'px sans-serif'; c.textAlign = 'left'; c.fillText(fmt(m(Math.abs(P[1].x - P[0].x)), 1) + ' × ' + fmt(m(Math.abs(P[2].y - P[0].y)), 1) + ' m', P[2].x + 6 / V.z, P[2].y); }
+  }
+  // a click while one of the object tools is chosen; true when the click was used
+  function objClick(q) {
+    const d = OBJ[S.mode]; if (!d) return false; pushH();
+    if (d[2] === 'pt') S.objs.push({ t: S.mode, pts: [q] });
+    else if (d[2] === 'rect') { if (!S.rect) S.rect = { t: S.mode, a: q }; else { if (Math.abs(q.x - S.rect.a.x) > 2 && Math.abs(q.y - S.rect.a.y) > 2) S.objs.push({ t: S.mode, pts: rectPts(S.rect.a, q) }); else HIST.u.pop(); S.rect = null; } }
+    else { if (!S.cur) S.cur = { t: S.mode, pts: [] }; if (S.cur.pts.length > 2 && len(S.cur.pts[0], q) < 9 / V.z) { finishCur(); return true; } S.cur.pts.push(q); }
+    info(); return true;
+  }
+  function finishCur() { if (S.cur && S.cur.pts.length > 2) S.objs.push(S.cur); else if (S.cur) HIST.u.pop(); S.cur = null; draw(); info(); }
+  function objAt(p) { for (let i = S.objs.length - 1; i >= 0; i--) { const q = S.objs[i]; if (q.pts.length === 1) { if (len(q.pts[0], p) < 9 / V.z) return i; } else if (inPoly(q.pts, p.x, p.y)) return i; } return -1; }
+  function objSummary() {
+    const o = objStats(), a = [];
+    if (o.nIrr) a.push('irrigate ' + fmt(o.irr / 10000, 3) + ' ha in ' + o.nIrr + ' area' + (o.nIrr > 1 ? 's' : '')); if (o.nNo) a.push('excluded ' + fmt(o.noirr) + ' m²');
+    if (o.nGh) a.push(o.nGh + ' greenhouse' + (o.nGh > 1 ? 's' : '') + ' ' + fmt(o.gh) + ' m²'); if (o.nBed) a.push(o.nBed + ' bed' + (o.nBed > 1 ? 's' : '') + ' ' + fmt(o.bed) + ' m²');
+    if (o.plant) a.push(o.plant + ' plants'); if (o.trap) a.push(o.trap + ' traps'); return a.join(' · ');
+  }
   // ------------------------------------------------------------------ the mouse: add, drag and type
   function scr(e) { const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) * CW / r.width, y: (e.clientY - r.top) * CH / r.height }; }
   function at(e) { const q = scr(e); return { x: V.x + q.x / V.z, y: V.y + q.y / V.z }; }
@@ -135,8 +187,10 @@ const Sketch = (() => {
       if (S.mode === 'pan' || e.button === 1 || e.button === 2 || e.shiftKey) { const q = scr(e); panning = { x: q.x, y: q.y, vx: V.x, vy: V.y }; cv.setPointerCapture(e.pointerId); cv.style.cursor = 'grabbing'; e.preventDefault(); return; }
       const p = at(e), h = hit(p); closeEdit();
       if (h && h.t === 'side') { openEdit(h.i); return; }
-      if (h && h.t !== 'side') { drag = h; cv.setPointerCapture(e.pointerId); return; }
+      if (h && h.t !== 'side') { pushH(); drag = h; cv.setPointerCapture(e.pointerId); return; }
       const q = { x: snap(p.x), y: snap(p.y) };
+      if (OBJ[S.mode]) { objClick(q); draw(); return; }
+      pushH();
       if (S.mode === 'src') { S.src = q; S.inlet = null; }
       else if (S.mode === 'inlet') { if (S.pts.length > 2) S.inlet = nearestOnEdge(p).p; }
       else { if (S.pts.length > 2) { const ne = nearestOnEdge(p); if (ne.d < 10) { S.pts.splice(ne.i + 1, 0, q); draw(); return; } } S.pts.push(q); S.inlet = null; }
@@ -145,7 +199,7 @@ const Sketch = (() => {
     cv.addEventListener('pointerup', () => { drag = null; if (panning) { panning = null; cv.style.cursor = S.mode === 'pan' ? 'grab' : 'crosshair'; } draw(); });
     cv.addEventListener('wheel', e => { e.preventDefault(); const q = scr(e); zoomAt(e.deltaY < 0 ? 1.2 : 1 / 1.2, q.x, q.y); }, { passive: false });
     cv.addEventListener('contextmenu', e => e.preventDefault());
-    cv.addEventListener('dblclick', e => { const h = hit(at(e)); if (h && h.t === 'pt' && S.pts.length > 3) { S.pts.splice(h.i, 1); S.inlet = null; draw(); } });
+    cv.addEventListener('dblclick', e => { if (S.cur) { S.cur.pts.pop(); finishCur(); return; } if (OBJ[S.mode] == null) { /* corner removal below */ } else { const k = objAt(at(e)); if (k >= 0) { pushH(); S.objs.splice(k, 1); draw(); info(); } return; } const h = hit(at(e)); if (h && h.t === 'pt' && S.pts.length > 3) { S.pts.splice(h.i, 1); S.inlet = null; draw(); } });
   }
   // type the exact length of a side: the second corner moves along the side
   function openEdit(i) {
@@ -192,6 +246,7 @@ const Sketch = (() => {
     const sysN = S.sys === 'sid' ? 'Surface irrigation: ' + ({ border: 'border strips', furrow: 'furrows', basin: 'basins' }[S.sub]) : S.sys === 'drip' ? 'Drip, laterals ' + (S.dep ? 'buried ' + S.dep + ' cm' : 'on the surface') : 'Sprinklers (' + S.sprSys + ', ' + S.sprType + ')';
     const nLat = S.sys === 'drip' ? Math.max(1, Math.floor(g.wid / S.row)) : S.sys === 'spr' ? Math.max(1, Math.floor(g.wid / S.sprSl)) : 0;
     const rows = [['Field', fmt(g.area / 10000, 2) + ' ha, run ' + fmt(g.run) + ' m × width ' + fmt(g.wid) + ' m, slope ' + fmt(S.slopeDir === 'level' ? 0 : S.slope, 2) + ' %'], ['Water', S.srcType + ', lift ' + fmt(S.lift, 1) + ' m, ' + fmt(S.supply, 1) + ' L/s, ' + fmt(S.hours, 1) + ' h a day'], ['Mainline', S.src ? fmt(g.main) + ' m from the source to the inlet' : 'place the water source'], ['Crop', cn + ', rows ' + fmt(S.row, 2) + ' m, plants ' + fmt(S.plant, 2) + ' m'], ['Soil', sn + (S.pan ? ', compact layer below' : '')], ['System', sysN], ['Layout', (S.sys === 'sid' ? 'run' : 'laterals') + ' ' + fmt(g.run) + ' m ' + (S.dir === 'length' ? 'along the length' : 'across the field') + (nLat ? ', about ' + nLat + ' laterals' : '')]];
+    if (S.objs.length) rows.push(['Drawn on the field', objSummary()]);
     return '<table class="tbl" style="width:100%">' + rows.map(r => '<tr><td>' + r[0] + '</td><td><b>' + esc(r[1]) + '</b></td></tr>').join('') + '</table><p class="pnote">Press <b>Turn the sketch into the design</b>: the design layer opens with these inputs; check them and press Run simulation.</p>';
   }
   function readStep() {
@@ -227,9 +282,11 @@ const Sketch = (() => {
     cv = document.getElementById('skCv'); wire(); setTimeout(() => { const P2 = S.pts.concat(S.src ? [S.src] : []); if (P2.some(p => p.x < 0 || p.y < 0 || p.x > CW || p.y > CH)) fitView(); }, 0);
     document.getElementById('skZin').onclick = () => zoomAt(1.25); document.getElementById('skZout').onclick = () => zoomAt(1 / 1.25); document.getElementById('skFit').onclick = fitView;
     document.getElementById('skMap').onclick = () => { if (typeof FieldMap !== 'undefined') FieldMap.open(); };
-    document.getElementById('skMode').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S.mode = b.dataset.m; document.querySelectorAll('#skMode button').forEach(x => x.classList.toggle('on', x === b)); });
-    document.getElementById('skUndo').onclick = () => { S.pts.pop(); S.inlet = null; draw(); };
-    document.getElementById('skClear').onclick = () => { S.pts = []; S.src = null; S.inlet = null; S.geo = null; V.z = 1; V.x = V.y = 0; draw(); };
+    { const bar = document.getElementById('skMode'); Object.keys(OBJ).forEach(k => { const b = document.createElement('button'); b.dataset.m = k; b.textContent = OBJ[k][0].split(' /')[0]; b.title = OBJ[k][0] + (OBJ[k][2] === 'rect' ? ': click two opposite corners' : OBJ[k][2] === 'poly' ? ': click the corners, double-click or click the first corner to finish' : ': click to place'); b.style.borderBottom = '3px solid ' + OBJ[k][1]; if (S.mode === k) b.className = 'on'; bar.appendChild(b); }); bar.style.flexWrap = 'wrap'; }
+    if (!window.__skKeys) { window.__skKeys = true; document.addEventListener('keydown', e => { if (!document.getElementById('skCv')) return; if (/INPUT|SELECT|TEXTAREA/.test((e.target || {}).tagName || '')) return; if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'z') { e.preventDefault(); Sketch.undo(); } else if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'y' || (e.shiftKey && e.key.toLowerCase() === 'z'))) { e.preventDefault(); Sketch.redo(); } else if (e.key === 'Enter') Sketch.finish(); else if (e.key === 'Escape') Sketch.cancel(); }); }
+    document.getElementById('skMode').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S.mode = b.dataset.m; S.rect = null; if (S.cur) finishCur(); document.querySelectorAll('#skMode button').forEach(x => x.classList.toggle('on', x === b)); });
+    document.getElementById('skUndo').onclick = undo; { const b = document.createElement('button'); b.className = 'btn'; b.id = 'skRedo'; b.textContent = 'Redo'; b.title = 'Ctrl+Y'; document.getElementById('skUndo').after(b); b.onclick = redo; document.getElementById('skUndo').textContent = 'Undo'; document.getElementById('skUndo').title = 'Ctrl+Z'; }
+    document.getElementById('skClear').onclick = () => { pushH(); S.objs = []; S.cur = null; S.rect = null; S.pts = []; S.src = null; S.inlet = null; S.geo = null; V.z = 1; V.x = V.y = 0; draw(); };
     document.getElementById('skScale').onchange = e => { const ns = +e.target.value, f = S.scale / ns; S.scale = ns; S.pts = S.pts.map(p => ({ x: p.x * f, y: p.y * f })); if (S.src) S.src = { x: S.src.x * f, y: S.src.y * f }; S.inlet = null; draw(); };
     document.getElementById('skSteps').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; readStep(); S.step = +b.dataset.s; showStep(); });
     document.getElementById('skBack').onclick = () => { readStep(); S.step = Math.max(0, S.step - 1); showStep(); };
@@ -238,7 +295,7 @@ const Sketch = (() => {
   }
   function apply() {
     readStep(); const g = geom(); if (!g) { UI.toast('Draw the field first (at least three corners)'); return false; }
-    const cl = (v, a, b) => Math.max(a, Math.min(b, v)), ha = Math.max(0.0001, g.area / 10000), slope = S.slopeDir === 'level' ? 0 : S.slope, run = Math.round(g.run), wid = Math.round(g.wid), main = Math.round(S.src ? g.main : 120);
+    const cl = (v, a, b) => Math.max(a, Math.min(b, v)), ha = Math.max(0.0001, (S.objs.length ? irrArea() : g.area) / 10000), slope = S.slopeDir === 'level' ? 0 : S.slope, run = Math.round(g.run), wid = Math.round(g.wid), main = Math.round(S.src ? g.main : 120);
     const st = {}; if (S.crop && S.crop !== LIST.crop) st.crop = S.crop; if (S.soil && S.soil !== LIST.soil) st.soil = S.soil;
     const id = S.sys, common = 'IRX.lift=' + cl(S.lift, 0, 500) + ';IRX.Lm=' + cl(main, 0, 10000) + ';IRX.src=' + JSON.stringify(S.srcType === 'canal' || S.srcType === 'river' ? 'canal' : S.srcType === 'tank' ? 'tank' : 'well') + ';SPD.top=' + cl(S.hours, 1, 24) + ';SPD.pan=' + (S.pan ? 'true' : 'false') + ';if(window.__FARM)__FARM.auto=' + (S.auto ? 'true' : 'false') + ';';
     let js;
@@ -246,6 +303,7 @@ const Sketch = (() => {
     else if (id === 'drip') { const mm = { 15: 'M04_Drip10-20cm', 25: 'M06_Drip20-30cm', 45: 'M09_Drip40-50cm', 55: 'M10_Drip50-60cm' }[S.dep]; if (mm) st.method = mm;
       js = "(function(){DRP.LL=" + cl(run, 1, 1000) + ";DRP.Sl=" + cl(S.row, 0.1, 10) + ";DRP.Se=" + cl(S.plant, 0.05, 5) + ";DRP.Af=" + cl(+ha.toFixed(4), 0.0001, 10000) + ";DRP.Qs=" + cl(S.supply, 0.1, 2000) + ";DRP.intv=" + cl(S.intv, 1, 60) + ";DRP.kind=" + JSON.stringify(S.kind) + ";" + (S.dep ? "DRP.surf=false;DRP.dep=" + S.dep : "DRP.surf=true") + ";IRX.fd.drip={on:true,L:" + run + ",W:" + wid + "};" + common + "})()"; }
     else { st.method = 'M01_Overhead'; js = "(function(){SPR.Af=" + cl(+ha.toFixed(4), 0.001, 10000) + ";SPR.S=" + cl(slope, 0, 60) + ";SPR.Qs=" + cl(S.supply, 0.1, 5000) + ";SPR.Ss=" + cl(S.sprSs, 1, 120) + ";SPR.Sl=" + cl(S.sprSl, 1, 120) + ";SPR.type=" + JSON.stringify(S.sprType) + ";SPD.sys=" + JSON.stringify(S.sprSys) + ";IRX.LLs=" + cl(run, 5, 2000) + ";IRX.fd.spr={on:true,L:" + run + ",W:" + wid + "};" + common + "})()"; }
+    st.areaHa = +ha.toFixed(4);
     if (Object.keys(st).length) E.set(st);
     // the crop and soil settle first (they set their own defaults), then the answers of the sketch are written over them
     const put = () => { E.ev(js); E.ev("window.DESIGN_RUN&&(DESIGN_RUN['" + id + "'].on=false,DESIGN_RUN['" + id + "'].why='field sketch applied')"); };
@@ -307,5 +365,5 @@ const Sketch = (() => {
     out.label = (S.sys === 'sid' ? (S.sub === 'furrow' ? 'Furrows' : S.sub === 'basin' ? 'Basins' : 'Border strips') : sysS === 'drip' ? 'Drip laterals' : 'Sprinklers') + ' every ' + (spM * k).toFixed(spM * k < 10 ? 2 : 0) + ' m' + (k > 1 ? ' (one line of every ' + k + ' drawn)' : '');
     return out;
   }
-  return { open, compare, getMetres, setMetres, setGeo, setSrcMetres, setAnswers, layoutM, _S: S, _V: V };
+  return { open, compare, undo, redo, finish: () => { if (S.cur) finishCur(); }, cancel: () => { S.cur = null; S.rect = null; draw(); }, objStats, irrArea, getMetres, setMetres, setGeo, setSrcMetres, setAnswers, layoutM, _S: S, _V: V };
 })();
