@@ -24,8 +24,11 @@ const FieldGeo = (() => {
   const H = () => FieldMap._h, F = () => FieldMap._h.F;
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const rlogH = () => (G.rlog && G.rlog.length ? '<div style="font-size:11px;line-height:1.5">' + G.rlog.map(x => '&#10003; ' + x).join('<br>') + '</div>' : '');
-  const stp = x => { if (G.here !== 'ret') return; (G.rlog = G.rlog || []).push(x); const r = document.getElementById('fgRSt'); if (r && G.here === 'ret') r.innerHTML = rlogH() + '<i>Reading...</i>'; };
-  const st = m => { G.msg = m; const e = document.getElementById('fgSt'); if (e) e.innerHTML = m; const r = document.getElementById('fgRSt'); if (G.here === 'ret') { G.rmsg = m; if (r) { r.innerHTML = rlogH() + m; try { r.scrollIntoView({ block: 'nearest' }); } catch (x) { } } } else if (e) { try { e.scrollIntoView({ block: 'nearest' }); } catch (x) { } } };
+  const stp = x => { if (G.here !== 'ret') return; (G.rlog = G.rlog || []).push(x); const r = document.getElementById('fgRSt'); G.rmsg = G.rmsg || '<i>Reading</i>'; G.live = true; if (!G.t0) G.t0 = Date.now(); paint(); };
+  document.addEventListener('click', e => { const b = e.target && e.target.closest && e.target.closest('#fmGeo button'); if (b) { G.lastBtn = b; G.lastBtnT = Date.now(); } }, true);
+  const st = m => { G.msg = m; G.live = /(<\/i>|\.\.\.|\u2026)\s*$/.test(m); if (G.live) { if (!G.t0 || G.t0Msg !== m) { if (!G.t0 || !G.liveRun) G.t0 = Date.now(); } G.liveRun = true; } else { G.liveRun = false; G.t0 = 0; } if (G.here === 'ret') G.rmsg = m; paint(); const r = document.getElementById('fgRSt'), e = document.getElementById('fgSt'); if (G.here === 'ret') { G.rmsg = m; if (r) { try { r.scrollIntoView({ block: 'nearest' }); } catch (x) { } } } else if (e) { try { e.scrollIntoView({ block: 'nearest' }); } catch (x) { } } };
+  const paint = () => { const sp = G.live ? ' <b style="color:#1565C0">' + '\u25D0\u25D3\u25D1\u25D2'[Math.floor(Date.now() / 250) % 4] + ' ' + Math.floor((Date.now() - (G.t0 || Date.now())) / 1000) + ' s</b>' : '', e = document.getElementById('fgSt'), r = document.getElementById('fgRSt'); if (e && G.msg != null && (G.msg || G.live)) e.innerHTML = G.msg + sp; if (r && G.here === 'ret' && G.rmsg != null && G.rmsg !== '') r.innerHTML = rlogH() + G.rmsg + sp; };
+  setInterval(() => { if (G.live) paint(); }, 250);
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const VIEWS = { contour: 'Contours, flow and channels', twi: 'Wetness index of the terrain', shed: 'Watershed and channel network', sens: 'Soil water: sensors and satellite fused', sensu: 'Uncertainty of the fused soil water', ret_fc: 'Field capacity (retention curves)', ret_wp: 'Wilting point (retention curves)', ret_aw: 'Available water (retention curves)', ret_trig: 'Trigger water content (SWAFL decision)', ret_psi: 'Matric potential now (suction, kPa)', ret_days: 'Days to the trigger' };
   const RAMP = {
@@ -172,7 +175,7 @@ const FieldGeo = (() => {
   async function soilBase() {
     const Fm = F(), c0 = H().centroid(Fm.pts); let s = null, src = '';
     if (Fm.site && Fm.site.soil) { s = Fm.site.soil; src = 'SoilGrids (site analysis)'; }
-    if (!s) { try { s = await FieldSite.soilAt(c0); src = 'SoilGrids at the field'; } catch (e) { } }
+    if (!s) { try { s = await Promise.race([FieldSite.soilAt(c0), new Promise((_, no) => setTimeout(() => no(new Error('timeout')), 15000))]); src = 'SoilGrids at the field'; } catch (e) { } }
     if (!s) { const b = baseNow(); if (b && b.tex) { s = { sand: b.tex.sand, clay: b.tex.clay, silt: b.tex.silt, cls: b.soilLabel }; src = 'the soil of the project (SoilGrids not reached)'; } }
     if (!s) throw new Error('no soil data (SoilGrids not reached and no project soil)'); return Object.assign({ src }, s);
   }
@@ -371,7 +374,7 @@ const FieldGeo = (() => {
     setTimeout(() => { chartRet(document.getElementById('fgRC')); chartVgm(document.getElementById('fgV1'), R && R.vgC && R.samples >= 1 ? R.vgC : f ? f.vg : null, R && R.samples >= 1 ? 'clay residuals' : 'soil water residuals'); }, 20);
   }
   function wire(el) {
-    const $ = id => document.getElementById(id), run = async (fn, lab) => { const bt = document.activeElement && document.activeElement.tagName === 'BUTTON' ? document.activeElement : null, t0 = bt ? bt.textContent : ''; if (bt) { bt.disabled = true; bt.textContent = 'Working...'; } st('<i>' + (lab || 'Working') + '...</i>'); await new Promise(r => setTimeout(r, 30)); try { await fn(); if (bt && bt.isConnected) { bt.disabled = false; bt.textContent = t0; } } catch (e) { if (bt && bt.isConnected) { bt.disabled = false; bt.textContent = t0; } st('<b style="color:#B01E14">' + esc(/Failed to fetch|NetworkError/i.test(e.message) ? 'no internet connection' : e.message) + '</b>'); } };
+    const $ = id => document.getElementById(id), run = async (fn, lab) => { const bt = G.lastBtn && G.lastBtn.isConnected && Date.now() - G.lastBtnT < 1500 ? G.lastBtn : (document.activeElement && document.activeElement.tagName === 'BUTTON' ? document.activeElement : null), t0 = bt ? bt.textContent : ''; if (bt) { bt.disabled = true; bt.textContent = 'Working...'; } st('<i>' + (lab || 'Working') + '...</i>'); await new Promise(r => setTimeout(r, 30)); try { await fn(); if (bt && bt.isConnected) { bt.disabled = false; bt.textContent = t0; } } catch (e) { if (bt && bt.isConnected) { bt.disabled = false; bt.textContent = t0; } st('<b style="color:#B01E14">' + esc(/Failed to fetch|NetworkError/i.test(e.message) ? 'no internet connection' : e.message) + '</b>'); } };
     $('fgRead').onclick = () => run(async () => { await readTerrain(); G.msg = ''; panel(); H().refresh('contour'); st('<b>Terrain read.</b> Contours, flow and wetness index are on the map; use the buttons below to switch the map.'); }, 'Reading the elevation tiles');
     $('fgAuto').onchange = e => { G.autoOn = e.target.checked; if (G.autoOn) G.akey = null; };
     $('fgBuf').onchange = e => { G.buf = +e.target.value; };
