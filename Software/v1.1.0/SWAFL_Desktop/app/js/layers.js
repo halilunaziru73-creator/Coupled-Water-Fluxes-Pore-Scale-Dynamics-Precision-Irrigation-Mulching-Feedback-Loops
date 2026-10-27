@@ -9,11 +9,17 @@ const Layers = (() => {
     { id: 'g-water', name: 'Field water balance', icon: 'field', items: [['field', 'Field balance', ''], ['spac', 'Soil, plant and air', 'S1'], ['v2', 'Profile evolution', 'V2']] },
     { id: 'g-year', name: 'Seasonal data', icon: 'refresh', items: [['yby', 'Reliability over 20 seasons', 'Y1'], ['wb2', 'Full water balance', 'W1'], ['nb', 'Nitrogen budget', 'N4']] },
     { id: 'g-crop', name: 'Crops', icon: 'drop', items: [['crop', 'Crop water requirement', 'C1']] },
-    { id: 'g-daisy', name: 'Daisy model', icon: 'soil', items: [['dz-files', 'Daisy files and library', ''], ['dz-plot', 'Plots of Daisy logs', ''], ['dz-balance', 'Mass balance', ''], ['dz-compare', 'Compare and test', ''], ['dz-editor', 'Set-up editor', ''], ['dz-library', 'Soils, crops, fertilisers', ''], ['dz-richards', 'Soil column (Richards)', ''], ['dz-calib', 'Calibration', ''], ['dz-weather', 'Daisy and DMI weather', ''], ['dz-deni', 'Denitrification', '']] },
     { id: 'g-loop', name: 'Feedback loops', icon: 'refresh', items: [['v5', 'Feedback loops', 'V5']] }
   ];
+  // the Daisy model is a project of its own, beside the SWAFL project
+  const DAISY = [
+    { id: 'g-dscen', name: 'Scenarios (choose what to find out)', icon: 'drop', items: [['dz-scen', 'Choose a scenario', ''], ['dz-scen:irrigation', 'Irrigation: does it pay off?', ''], ['dz-scen:nitrogen', 'Nitrogen: fertiliser and leaching', ''], ['dz-scen:climate', 'Climate: warmer, drier, wetter', ''], ['dz-scen:chemical', 'Pesticide or tracer fate', ''], ['dz-scen:soil', 'Sand against loam', ''], ['dz-scen:own', 'My own Daisy set-up', '']] },
+    { id: 'g-dana', name: 'Files and analysis', icon: 'chart', items: [['dz-files', 'Collect Daisy files', ''], ['dz-plot', 'Plots of Daisy logs', ''], ['dz-balance', 'Mass balance', ''], ['dz-compare', 'Compare and test runs', ''], ['dz-editor', 'Set-up editor (.dai)', '']] },
+    { id: 'g-dbuilt', name: 'Models that run here', icon: 'soil', items: [['dz-richards', 'Soil column (Richards equation)', ''], ['dz-deni', 'Denitrification and N2O', ''], ['dz-calib', 'Calibration', ''], ['dz-weather', 'Daisy and DMI weather', ''], ['dz-library', 'Library: soils, crops, fertilisers', '']] },
+    { id: 'g-ddoc', name: 'The Daisy model', icon: 'book', items: [['dz-docs', 'Model, documentation and installation', '']] }
+  ];
   const DESIGN = ['sid', 'drip', 'spr'];
-  let tabs = [], cur = null, started = false, collapsed = { 'g-water': true, 'g-ctrl': true, 'g-soil': true, 'g-mulch': true, 'g-loop': true, 'g-design': true, 'g-crop': true, 'g-year': true, 'g-daisy': true, 's-sid': true, 's-drip': true, 's-spr': true }, sectionPick = {};
+  let dzCur = null, tabs = [], cur = null, started = false, collapsed = { 'g-water': true, 'g-ctrl': true, 'g-soil': true, 'g-mulch': true, 'g-loop': true, 'g-design': true, 'g-crop': true, 'g-year': true, 'g-dscen': false, 'g-dana': true, 'g-dbuilt': true, 'g-ddoc': true, 'g-daisy': true, 's-sid': true, 's-drip': true, 's-spr': true }, sectionPick = {};
   const groupOf = id => { const g = GROUPS.find(x => x.items.some(i => i[0] === id)); return g && g.id; };
   const reveal = (id, sec) => { collapsed['root'] = false; const g = groupOf(id); if (g) collapsed[g] = false; if (sec) collapsed['s-' + id] = false; };
   const tree = document.getElementById('layerTree');
@@ -38,6 +44,13 @@ const Layers = (() => {
       h += '</div>';
     });
     h += '</div>';
+    h += '<div class="tn grp" data-id="droot"><span class="tw">' + (open('droot') ? '&#9660;' : '&#9654;') + '</span>' + UI.icon('soil') + '<span class="lbl">Daisy model</span></div><div class="tkids" ' + (open('droot') ? '' : 'hidden') + '>';
+    DAISY.forEach(g => {
+      h += '<div class="tn grp" style="padding-left:14px" data-id="' + g.id + '"><span class="tw">' + (open(g.id) ? '&#9660;' : '&#9654;') + '</span>' + UI.icon(g.icon) + '<span class="lbl">' + g.name + '</span></div><div class="tkids" ' + (open(g.id) ? '' : 'hidden') + '>';
+      g.items.forEach(it => { h += '<div class="tn' + (dzCur === it[0] ? ' sel' : '') + '" style="padding-left:30px" data-scene="' + it[0] + '"><span class="tw"></span>' + UI.icon('doc') + '<span class="lbl">' + UI.esc(it[1]) + '</span></div>'; });
+      h += '</div>';
+    });
+    h += '</div>';
     tree.innerHTML = h;
   }
 
@@ -54,7 +67,7 @@ const Layers = (() => {
   });
 
   function open(id, sec) {
-    if (String(id).indexOf('dz-') === 0) { try { DaisyUI.open(id.slice(3)); } catch (e) { UI.log('Daisy workbench: ' + e.message); } return; }
+    if (String(id).indexOf('dz-') === 0) { dzCur = id; try { DaisyUI.open(id.slice(3)); } catch (e) { UI.log('Daisy workbench: ' + e.message); } render(); return; }
     if (!started) { started = true; document.body.classList.remove('nolayer'); }
     if (!tabs.includes(id)) tabs.push(id);
     sectionPick = {}; if (sec) sectionPick[id] = sec;

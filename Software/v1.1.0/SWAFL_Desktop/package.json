@@ -28,6 +28,7 @@
     "files": [
       "main.js",
       "preload.js",
+      "daisy-runner.js",
       "serve.js",
       "app/**/*",
       "build/icon.png",

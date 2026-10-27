@@ -9,6 +9,8 @@ contextBridge.exposeInMainWorld('swafl', {
   reload: () => ipcRenderer.invoke('reload-app'),
   version: () => ipcRenderer.invoke('version'),
   openManual: () => ipcRenderer.invoke('open-manual'),
-  daisyRun: o => ipcRenderer.invoke('daisy-run', o),
+  daisyInfo: () => ipcRenderer.invoke('daisy-info'),
+  daisyChoose: () => ipcRenderer.invoke('daisy-choose'),
+  daisyJob: j => ipcRenderer.invoke('daisy-job', j),
   httpGet: u => ipcRenderer.invoke('http-get', u)
 });

@@ -19,8 +19,8 @@
     const cols = (lines[i++] || '').replace(/\n$/, '').split('\t').map(s => s.trim()), uraw = (lines[i++] || '').split('\t').map(s => s.trim()), units = {};
     // the units line can be shorter than the names line when the first columns have no unit: right-align it
     const off = cols.length - uraw.length; cols.forEach((c, j) => { units[c] = j - off >= 0 ? uraw[j - off] || '' : ''; });
-    const data = cols.map(() => []); for (; i < lines.length; i++) { const ln = lines[i]; if (!ln.trim()) continue; const p = ln.split('\t'); cols.forEach((c, j) => { const v = parseFloat(p[j]); data[j].push(isFinite(v) ? v : (p[j] != null && /^(nan|na|\.)$/i.test(p[j].trim()) ? NaN : (p[j] === '' || p[j] == null ? NaN : v))); }); }
-    const d = { name: name || header.LOGFILE || 'log', header, units, cols, data, n: data[0] ? data[0].length : 0 }; DaisyIO.addTime(d); return d;
+    const data = cols.map(() => []), rawc = cols.map(() => []); for (; i < lines.length; i++) { const ln = lines[i]; if (!ln.trim()) continue; const p = ln.split('\t'); cols.forEach((c, j) => { rawc[j].push((p[j] || '').trim()); const v = parseFloat(p[j]); data[j].push(isFinite(v) ? v : (p[j] != null && /^(nan|na|\.)$/i.test(p[j].trim()) ? NaN : (p[j] === '' || p[j] == null ? NaN : v))); }); }
+    const d = { name: name || header.LOGFILE || 'log', header, units, cols, data, n: data[0] ? data[0].length : 0, str: {} }; cols.forEach((c, j) => { if (data[j].some(isNaN) && rawc[j].some(x => x !== '' && !/^(nan|na|\.)$/i.test(x) && isNaN(parseFloat(x)))) d.str[c] = rawc[j]; }); DaisyIO.addTime(d); return d;
   };
   const nz = c => String(c).toLowerCase().replace(/[\s_-]+/g, '');
   DaisyIO.colIndex = (d, c) => { let j = d.cols.indexOf(c); if (j < 0) j = d.cols.findIndex(x => nz(x) === nz(c)); return j; };

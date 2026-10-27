@@ -1,0 +1,100 @@
+;; Including external library-files
+(input file "tillage.dai")
+(input file "crop.dai")
+(input file "fertilizer.dai")
+
+(defchemical "Tracer" default
+  (canopy_dissipation_rate 0.00 [h^-1])       ; Dissipation of chemical intercepted in the canopy
+  (canopy_washoff_coefficient 1.0)            ; Washoff of intercepted chemical, coefficient in the interval [0;1]
+  (crop_uptake_reflection_factor 0)           ; Crop uptake: coefficient in the interval [0;1]; 1 -> no uptake; 0 -> full uptake
+  (decompose_rate 0 [h^-1])                   ; Parameter in 1. order decomposition model; rate coefficient
+  (diffusion_coefficient 4.6e-6 [cm^2/s])     ; Diffusion coefficient
+  (adsorption linear (K_OC 0.00 [L/kg])))     ; Parameter in linear sorption model
+  
+; List of chemicals that can be traced
+(defchemistry "Trace List" default
+  (trace "Tracer"))
+
+;; Spring Barley setup.
+(defaction "sbarley_A_F_R" activity
+  (wait_mm_dd 3 20)(plowing)
+  (wait_mm_dd 4 05)(fertilize (N25S (weight 160 [kg N/ha])))
+    (spray "Tracer"   160 [kg/ha])
+  (seed_bed_preparation)(sow "Spring Barley")
+  (wait (or (crop_ds_after "Spring Barley" 2.0)(mm_dd 09 1)))
+    (harvest "Spring Barley" (stub 8 [cm]))
+)
+;; Winter Barley setup.
+(defaction "wbarley_A_F_R" activity
+  (wait_mm_dd 9 10)(plowing)
+  (wait_mm_dd 9 25)(seed_bed_preparation)(sow "Winter Barley")
+  (wait_mm_dd 3 25)(fertilize (N25S (weight 160 [kg N/ha])))
+    (spray "Tracer"   160 [kg/ha])
+  (wait_mm_dd 4 25)(fertilize (N25S (weight 80 [kg N/ha])))
+    (spray "Tracer"   80 [kg/ha])
+  (wait (or (crop_ds_after "Winter Barley" 2.0)(mm_dd 8 9)))
+    (harvest "Winter Barley" (stub 8 [cm]))
+)
+;; Winter Rape setup.
+(defaction "wrape_A_F_R" activity
+  (wait_mm_dd 8 15)(plowing)
+  (wait_mm_dd 8 20)(fertilize (N25S (weight 125 [kg N/ha])))
+    (spray "Tracer"   125 [kg/ha])
+  (seed_bed_preparation)(sow "Winter Rape")
+  (wait_mm_dd 3 05)(fertilize (N25S (weight 130 [kg N/ha])))
+    (spray "Tracer"   130 [kg/ha])
+  (wait (or (crop_ds_after "Winter Rape" 2.0)(mm_dd 8 9)))
+    (harvest "Winter Rape" (stub 8 [cm])(stem 0.0)(leaf 0.0))
+)
+;; Winter Wheat setup.
+(defaction "wwheat_A_F_R_1" activity
+  (wait_mm_dd 9 10)(plowing)
+  (wait_mm_dd 9 25)(seed_bed_preparation)(sow "Winter Wheat")
+  (wait_mm_dd 4 05)(fertilize (N25S (weight 155 [kg N/ha])))
+    (spray "Tracer"   155 [kg/ha]) 
+  (wait_mm_dd 5 05)(fertilize (N25S (weight 74 [kg N/ha]))) 
+    (spray "Tracer"   74 [kg/ha])
+  (wait (or (crop_ds_after "Winter Wheat" 2.0)(mm_dd 9 1)))
+    (harvest "Winter Wheat" (stub 8 [cm])(stem 0.0)(leaf 0.0))
+)
+;; Winter Wheat setup.
+(defaction "wwheat_A_F_R_2" activity
+  (wait_mm_dd 9 10)(plowing)
+  (wait_mm_dd 9 25)(seed_bed_preparation)(sow "Winter Wheat")
+  (wait_mm_dd 4 05)(fertilize (N25S (weight  160 [kg N/ha])))
+    (spray "Tracer"   160 [kg/ha])
+  (wait_mm_dd 5 05)(fertilize (N25S (weight 101 [kg N/ha])))
+    (spray "Tracer"   101 [kg/ha])
+  (wait (or (crop_ds_after "Winter Wheat" 2.0)(mm_dd 9 1)))
+    (harvest "Winter Wheat" (stub 8 [cm])(stem 0.0)(leaf 0.0))
+)
+
+(defaction irrigate_30_tensiometer_overhead activity
+  ;; An irrigation strategy based on a tensiometer.
+  ;; If the soil water pressure at 20 cm depth gets below -300 cm in the
+  ;; period between the first of May and the first of September, apply 10
+  ;; mm/h overhead irrigation for 3 hours, for a total of 30 mm.  Then wait
+  ;; two days to give the irrigated water a chance to reach the
+  ;; tensiometer.
+  ;;
+  ;; We wait until all these conditions are true:
+  ;(wait (and (after_mm_dd 4 1)          ;After April the first.
+  ;           (before_mm_dd 10 1)         ;Before October the first.
+             ;; Potential below -300 cm at 20 cm depth.
+  ;           (not (soil_water_pressure_above (height -20.0 [cm])
+     ;                                        (potential -300 [cm])))))
+  ;; Overhead irrigation of 10 mm/h for 3 hours.
+  ;(irrigate_overhead 10 [mm/h] (hours 3))
+  ;; Wait two days to allow water to reach the tensiometer.
+  ;(wait_days 2)
+  )
+
+
+;; Arable Farm Rotation
+(defaction "A_F_R" activity
+  (while ("sbarley_A_F_R")(irrigate_30_tensiometer_overhead))
+  (while ("wbarley_A_F_R")(irrigate_30_tensiometer_overhead))
+  (while ("wrape_A_F_R")(irrigate_30_tensiometer_overhead))
+  (while ("wwheat_A_F_R_1")(irrigate_30_tensiometer_overhead))
+  (while ("wwheat_A_F_R_2")(irrigate_30_tensiometer_overhead))
+)

@@ -46,22 +46,21 @@ ipcMain.handle('open-file', async () => {
   return { ok: true, path: r.filePaths[0], data: fs.readFileSync(r.filePaths[0], 'utf8') };
 });
 
-// ---- Daisy: run the Daisy program on a set-up file, and fetch open data (DMI) without browser CORS limits
-let daisyExe = null;
-ipcMain.handle('daisy-run', async (_e, { name, text, logName }) => {
-  const { spawn } = require('child_process'), os = require('os');
-  if (!daisyExe || !fs.existsSync(daisyExe)) {
-    const r = await dialog.showOpenDialog(win, { title: 'Choose the Daisy program (daisy / daisy.exe)', properties: ['openFile'] });
-    if (r.canceled || !r.filePaths[0]) return { cancelled: true }; daisyExe = r.filePaths[0];
-  }
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'swafl-daisy-')), f = path.join(dir, String(name || 'setup.dai').replace(/[^\w.\-]/g, '_'));
-  fs.writeFileSync(f, text, 'utf8');
-  return await new Promise(res => {
-    let out = '', err = ''; const p = spawn(daisyExe, [f], { cwd: dir }); const to = setTimeout(() => { try { p.kill(); } catch (e) {} }, 600000);
-    p.stdout.on('data', d => { out += d; }); p.stderr.on('data', d => { err += d; });
-    p.on('error', e => { clearTimeout(to); res({ code: -1, err: String(e.message), out }); });
-    p.on('close', code => { clearTimeout(to); const files = {}; try { fs.readdirSync(dir).forEach(n => { if (/\.(dlf|dlf\.txt|csv)$/i.test(n) || n === logName) { const st = fs.statSync(path.join(dir, n)); if (st.size < 60e6) files[n] = fs.readFileSync(path.join(dir, n), 'utf8'); } }); } catch (e) {} res({ code, out: out.slice(-20000), err: err.slice(-20000), files, dir }); });
-  });
+// ---- Daisy: find and run the Daisy program (daisy-runner.js); the chosen program is remembered
+const DR = require('./daisy-runner');
+const daisyCfg = () => path.join(app.getPath('userData'), 'daisy.json');
+const readCfg = () => { try { return JSON.parse(fs.readFileSync(daisyCfg(), 'utf8')); } catch (e) { return {}; } };
+const exeNow = () => DR.findExe(readCfg().exe);
+ipcMain.handle('daisy-info', () => { const e = exeNow(); return e ? { found: true, exe: e, home: DR.homeFor(e), version: DR.version(e) } : { found: false }; });
+ipcMain.handle('daisy-choose', async () => {
+  const r = await dialog.showOpenDialog(win, { title: 'Choose the Daisy program (' + DR.EXE + ')', properties: ['openFile'], filters: process.platform === 'win32' ? [{ name: 'Daisy', extensions: ['exe'] }] : [] });
+  if (r.canceled || !r.filePaths[0]) return { found: false, cancelled: true };
+  fs.mkdirSync(path.dirname(daisyCfg()), { recursive: true }); fs.writeFileSync(daisyCfg(), JSON.stringify({ exe: r.filePaths[0] })); const e = r.filePaths[0]; return { found: true, exe: e, home: DR.homeFor(e), version: DR.version(e) };
+});
+ipcMain.handle('daisy-job', async (_e, job) => {
+  const exe = exeNow(); if (!exe) return { code: -2, err: 'The Daisy program was not found. Install Daisy or choose the program.', logs: {}, out: '' };
+  if (job && job.copyBundle) job.copyDir = path.join(__dirname, 'app', 'data', 'daisy', 'scenarios', 'common');
+  try { const r = await DR.runJob(job, { exe, timeoutMs: (job && job.timeoutMs) || 1800000 }); DR.clean(r.dir); delete r.dir; return r; } catch (e) { return { code: -1, err: String(e.message), logs: {}, out: '' }; }
 });
 const HTTP_OK = /^https:\/\/(dmigw\.govcloud\.dk|api\.dataforsyningen\.dk|data\.geus\.dk|hip\.dataforsyningen\.dk)\//i;
 ipcMain.handle('http-get', async (_e, url) => {

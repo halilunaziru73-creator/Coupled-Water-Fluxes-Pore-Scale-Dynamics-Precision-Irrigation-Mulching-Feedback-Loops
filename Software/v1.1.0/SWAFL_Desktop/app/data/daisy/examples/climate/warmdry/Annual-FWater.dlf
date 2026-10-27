@@ -1,0 +1,49 @@
+dlf-0.0 -- Field water (defined in 'log-std.dai').
+
+VERSION: 7.1.14
+LOGFILE: Annual-FWater.dlf
+RUN: Wed Oct 28 01:16:45 2026
+
+COLUMN: *
+INTERVAL: box none
+
+LOG: Information about water input, output and content for the system.
+LOG: 
+LOG: The intended use of this log is large scale water balance, for
+LOG: example reservoir management. It provide information about how
+LOG: much water is in the field (down to a specified depth), where it
+LOG: is located in the field (surface, soil matrix or in biopores), as
+LOG: well as the sources, sinks and amounts of water entering or
+LOG: leaving the system.  It does not provide information about
+LOG: internal translocation of water between surface, soil matrix and
+LOG: biopores, use see the 'Soil water' log instead for that.
+LOG: 
+LOG: For the balances of this log to work, you must include the entire
+LOG: root zone, as well as the biopore zone.
+
+SIMFILE: Runfile.dai
+SIM: Climate: warmer, drier or wetter - Warmer and drier
+
+--------------------
+year	month	mday	hour	Precipitation	Irrigation	Potential evapotranspiration	Actual evapotranspiration	Matrix percolation	Biopore percolation	Matrix drain flow	Biopore drain flow	Runoff	Biopore water	Soil matrix water	Surface water
+				mm	mm	mm	mm	mm	mm	mm	mm	mm	mm	mm	mm
+1981	4	1	0	00.00	00.00	00.00	00.00	00.00	00.00	00.00	00.00	00.00	0	289.444	0
+1982	4	1	0	440.65	0	647.109	411.414	2.7671	-0	0	0	0	0	315.913	0
+1983	4	1	0	533.26	0	653.207	584.484	0.780197	-0	0	0	0	0	263.565	0.344244
+1984	4	1	0	332.85	0	743.341	411.582	0.439345	-0	0	0	0	0	184.737	0
+1985	4	1	0	478.45	0	662.732	350.638	0.195028	-0	0	0	0	0	312.354	3.46945e-18
+1986	4	1	0	523.25	0	743.376	561.156	0.156668	-0	0	0	0	0	274.291	0
+1987	4	1	0	610.96	0	798.63	690.55	0.160705	-0	0	0	0	0	193.609	0.931589
+1988	4	1	0	349.3	0	683.602	407.378	0.104266	-0	0	0	0	0	136.349	0.00923961
+1989	4	1	0	538.93	0	681.785	491.598	0.0688244	-0	0	0	0	0	183.621	3.46945e-18
+1990	4	1	0	406.91	0	687.119	386.315	0.0596473	-0	0	0	0	0	204.156	6.93889e-18
+1991	4	1	0	447.09	0	608.482	416.876	0.0684087	-0	0	0	0	0	233.33	0.971713
+1992	4	1	0	480.27	0	712.256	555.231	0.125476	-0	0	0	0	0	156.973	2.24223
+1993	4	1	0	543.83	0	678.287	467.631	0.0847835	-0	0	0	0	0	235.203	0.12657
+1994	4	1	0	457.94	0	705.322	481.738	0.066812	-0	0	0	0	0	211.46	0.00427078
+1995	4	1	0	298.9	0	589.346	373.831	0.0572994	-0	0	0	0	0	136.477	0
+1996	4	1	0	450.1	0	583.076	410.665	0.0503678	-0	0	0	0	0	175.435	0.426305
+1997	4	1	0	488.6	0	684.972	440.123	0.0660061	-0	0	0	0	0	223.872	0.400336
+1998	4	1	0	442.33	0	703.026	515.726	0.0655163	-0	0	0	0	0	150.811	1.73472e-18
+1999	4	1	0	348.67	0	657.345	328.828	0.0553574	-0	0	0	0	0	170.597	0
+2000	4	1	0	674.24	0	671.917	478.305	0.046232	-0	0	0	0	0	366.487	0
