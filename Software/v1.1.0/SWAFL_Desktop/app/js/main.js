@@ -270,7 +270,7 @@ UI.hsplit(document.getElementById('splitRight'), document.getElementById('rightD
 UI.hsplit(document.getElementById('splitDash'), document.getElementById('dashDock'), 'right', 300, 900);
 UI.vsplit(document.getElementById('splitLeftV'), () => document.getElementById('toolboxDock'), 'up', 80, 560);
 document.querySelector('#dashTabs [data-act=maxDash]').onclick = e => { const d = document.getElementById('dashDock'); d.style.width = ''; d.classList.toggle('max'); e.target.textContent = d.classList.contains('max') ? 'Smaller' : 'Wider'; };
-if (window.swafl) window.swafl.version().then(v => { document.getElementById('stVer').textContent = v + ' · build 29 Oct 2026 a'; }).catch(() => {});
+if (window.swafl) window.swafl.version().then(v => { document.getElementById('stVer').textContent = v + ' · build 29 Oct 2026 b'; }).catch(() => {});
 document.getElementById('engine').addEventListener('load', () => { if (bootedOnce) boot(true); });
 boot();
 

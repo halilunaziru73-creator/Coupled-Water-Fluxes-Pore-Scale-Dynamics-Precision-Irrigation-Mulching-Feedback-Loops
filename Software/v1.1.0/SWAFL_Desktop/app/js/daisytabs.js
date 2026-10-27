@@ -3,9 +3,65 @@
 (() => {
   const D = DaisyUI, IO = window.DaisyIO, SC = window.DaisyScen, esc = D.esc, S = D.S;
   const $ = id => document.getElementById('dz' + id);
-  const st = { sel: null, opts: null, runs: [], sc: null, pick: 0 };
+  const st = { sel: null, opts: null, runs: [], sc: null, pick: 0, my: { wxMode: 'course', wx: null, soilOn: false, soil: { horizons: [{ bottom: 30, sand: 55, silt: 30, clay: 15, humus: 2.5, bd: 1.45 }, { bottom: 80, sand: 50, silt: 30, clay: 20, humus: 0.8, bd: 1.55 }, { bottom: 200, sand: 60, silt: 25, clay: 15, humus: 0.3, bd: 1.6 }] }, lat: '', lon: '', elev: '' } };
   const REL = 'https://github.com/daisy-model/daisy/releases/download/v7.1.14/';
   const BUILTIN = [['richards', 'Soil column without Daisy', 'Richards equation on any Daisy soil horizon, with your weather.'], ['deni', 'Denitrification and N2O', 'The Daisy denitrification function as a calculator, and its calibration.']];
+
+
+  // ------------------------------------------------------------------ my own data: weather and soil, converted for Daisy
+  const projWx = () => { try { const w = (typeof E !== 'undefined' && E.win) ? E.win.WXD : null; return w && w.on && w.rows && w.rows.length ? w : null; } catch (e) { return null; } };
+  function myBox() {
+    const m = st.my, pw = projWx(), inp = (k, v, w, ph) => '<input type="number" step="any" data-my="' + k + '" value="' + (v == null ? '' : v) + '" style="width:' + w + 'px"' + (ph ? ' placeholder="' + ph + '"' : '') + '>';
+    let h = '<div class="dzpan" style="background:#f4f8fc"><div class="dzrow"><b>My data</b><span class="pnote">Daisy runs on your weather and your soil when you give them here. They are converted to a Daisy weather file (.dwf) and Daisy soil horizons (.dai).</span></div>';
+    h += '<div class="dzrow"><label>Weather</label><select id="dzMyWx"><option value="course"' + (m.wxMode === 'course' ? ' selected' : '') + '>Daisy course weather (Taastrup 1965-2000)</option>' + (pw ? '<option value="project"' + (m.wxMode === 'project' ? ' selected' : '') + '>The weather loaded in SWAFL: ' + esc(pw.name || pw.src) + '</option>' : '') + '<option value="file"' + (m.wxMode === 'file' ? ' selected' : '') + '>My weather file (CSV, TXT or DWF)</option></select>' +
+      '<span id="dzMyWxF" style="' + (m.wxMode === 'file' ? '' : 'display:none') + '"><input type="file" id="dzMyFile" accept=".csv,.txt,.dwf,.dat,.tsv"> <label>radiation in</label><select id="dzMyRad"><option value="">find out</option><option value="MJ">MJ/m2/d</option><option value="kWh">kWh/m2/d</option><option value="W">W/m2 (daily mean)</option></select></span></div>';
+    h += '<div class="dzrow" id="dzMyLoc" style="' + (m.wxMode === 'course' ? 'display:none' : '') + '"><label>Site: latitude</label>' + inp('lat', m.lat, 80, 'deg N') + '<label>longitude</label>' + inp('lon', m.lon, 80, 'deg E') + '<label>elevation (m)</label>' + inp('elev', m.elev, 70, 'm') + '<span class="pnote">The latitude is needed when radiation or reference evapotranspiration are not in your data: they are then derived from the temperatures (Hargreaves).</span></div>';
+    h += '<div id="dzMyWxInfo" class="pnote">' + wxInfo() + '</div>';
+    h += '<div class="dzrow"><label><input type="checkbox" id="dzMySoilOn"' + (m.soilOn ? ' checked' : '') + '> <b>My soil</b></label><span class="pnote">horizons from the surface down to at least 100 cm (sand, silt and clay in %, humus in %, dry bulk density in g/cm3). The water retention and conductivity are taken from the HYPRES pedotransfer function in Daisy.</span></div>';
+    h += '<div id="dzMySoil" style="' + (m.soilOn ? '' : 'display:none') + '">' + soilTable() + '</div></div>';
+    return h;
+  }
+  function wxInfo() {
+    const w = st.my.wx; if (st.my.wxMode === 'course' || !w) return st.my.wxMode === 'course' ? 'The weather of the Daisy course farm is used.' : 'Choose the file or press the button once the site is given.';
+    const u = w.use || {}, cols = Object.keys(u).filter(k => u[k]).map(k => k + ': ' + esc(u[k])).join('; ');
+    return '<b>' + esc(w.name) + '</b>: ' + w.first + ' to ' + w.last + ' (' + w.years + ' complete years, mean rain ' + Math.round(w.Pmean) + ' mm/year, mean temperature ' + w.Tmean.toFixed(1) + ' C). Runs start in ' + (w.first + 1) + ' at the earliest. <span class="pnote">Columns used: ' + cols + '</span>' + (w.notes.length ? '<ul style="margin:3px 0 0 16px">' + w.notes.map(n => '<li>' + esc(n) + '</li>').join('') + '</ul>' : '');
+  }
+  function soilTable() {
+    const hz = st.my.soil.horizons, c = (i, k, w) => '<td><input type="number" step="any" data-sh="' + i + ':' + k + '" value="' + (hz[i][k] == null ? '' : hz[i][k]) + '" style="width:' + w + 'px"></td>';
+    return '<table class="dztab"><tr><th>Lower limit (cm)</th><th>Sand %</th><th>Silt %</th><th>Clay %</th><th>Humus %</th><th>Dry bulk density (g/cm3)</th><th></th></tr>' + hz.map((h, i) => '<tr>' + c(i, 'bottom', 70) + c(i, 'sand', 55) + c(i, 'silt', 55) + c(i, 'clay', 55) + c(i, 'humus', 55) + c(i, 'bd', 80) + '<td><button class="btn" data-shdel="' + i + '">remove</button></td></tr>').join('') + '</table>' +
+      '<div class="dzrow"><button class="btn" id="dzMyAddH">Add a horizon</button><label class="btn" style="cursor:pointer">Import a soil table (CSV)<input type="file" id="dzMySoilF" accept=".csv,.txt" hidden></label><span id="dzMySoilMsg" class="pnote">A CSV needs the columns depth (lower limit, cm), sand, silt, clay, and if possible humus and bulk density.</span></div>';
+  }
+  function readMyInputs() { const m = st.my; document.querySelectorAll('#dzSPanel [data-my]').forEach(i => { m[i.dataset.my] = i.value; }); document.querySelectorAll('#dzSPanel [data-sh]').forEach(i => { const [a, k] = i.dataset.sh.split(':'); if (m.soil.horizons[+a]) m.soil.horizons[+a][k] = i.value === '' ? NaN : parseFloat(i.value); }); }
+  function convertWx(src, name) {
+    readMyInputs(); const m = st.my; const w = SC.makeDwf(src, { name, lat: m.lat === '' ? NaN : +m.lat, lon: m.lon === '' ? 10 : +m.lon, elev: m.elev === '' ? 50 : +m.elev }); m.wx = w; m.wx.src = name;
+    const info = $('MyWxInfo'); if (info) info.innerHTML = wxInfo(); setYears(w);
+  }
+  function setYears(w) { const a = document.querySelector('#dzSPanel [data-o="start"]'), b = document.querySelector('#dzSPanel [data-o="stop"]'); if (a) { a.min = w.first + 1; a.max = w.last - 2; a.value = Math.max(w.first + 1, Math.min(+a.value || 0, w.last - 2)); if (+a.value < w.first + 1 || +a.value > w.last - 2) a.value = w.first + 1; } if (b) { b.min = w.first + 3; b.max = w.last; b.value = w.last; } }
+  function bindMy() {
+    const m = st.my, sel = $('MyWx'); if (!sel) return;
+    const fromProject = () => { const pw = projWx(); if (!pw) throw new Error('no weather is loaded in SWAFL'); if (!m.lat && pw.lat != null) { m.lat = pw.lat; const i = document.querySelector('[data-my="lat"]'); if (i) i.value = pw.lat; if (pw.lon != null) { m.lon = pw.lon; const j = document.querySelector('[data-my="lon"]'); if (j) j.value = pw.lon; } } convertWx(SC.rowsFromProject(pw.rows), pw.name || 'SWAFL weather'); };
+    const fromText = (name, text) => { let t; if (/\.dwf$/i.test(name)) { t = IO.readDwf(text, name); const H = t.header || {}; if (!m.lat && H.Latitude) { m.lat = parseFloat(H.Latitude) * (/South/i.test(H.Latitude) ? -1 : 1); } if (!m.lon && H.Longitude) { m.lon = parseFloat(H.Longitude) * (/West/i.test(H.Longitude) ? -1 : 1); } if (!m.elev && H.Elevation) m.elev = parseFloat(H.Elevation); document.querySelectorAll('[data-my]').forEach(i => { if (m[i.dataset.my] !== undefined) i.value = m[i.dataset.my]; }); } else t = IO.readCsv(text, name); convertWx(SC.rowsFromTable(t, { radUnit: $('MyRad').value || undefined }), name.replace(/\.[^.]+$/, '')); };
+    const fail = e => { st.my.wx = null; const i = $('MyWxInfo'); if (i) i.innerHTML = '<span style="color:#b3261e"><b>Not used:</b> ' + esc(e.message) + '</span>'; };
+    sel.onchange = () => { m.wxMode = sel.value; $('MyWxF').style.display = m.wxMode === 'file' ? '' : 'none'; $('MyLoc').style.display = m.wxMode === 'course' ? 'none' : ''; m.wx = null; $('MyWxInfo').innerHTML = wxInfo(); if (m.wxMode === 'project') { try { fromProject(); } catch (e) { fail(e); } } };
+    $('MyFile').onchange = ev => { const f = ev.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => { try { fromText(f.name, String(r.result)); } catch (e) { fail(e); } }; r.readAsText(f); };
+    document.querySelectorAll('#dzSPanel [data-my]').forEach(i => i.onchange = () => { readMyInputs(); if (m.wxMode === 'project') { try { fromProject(); } catch (e) { fail(e); } } else if (m.wxMode === 'file' && $('MyFile').files[0]) $('MyFile').onchange({ target: $('MyFile') }); });
+    $('MySoilOn').onchange = ev => { readMyInputs(); m.soilOn = ev.target.checked; const vu = $('VUser'); if (vu) vu.style.display = m.soilOn ? '' : 'none'; $('MySoil').style.display = m.soilOn ? '' : 'none'; const s = document.querySelector('#dzSPanel [data-o="soil"]'); if (s) s.disabled = m.soilOn; };
+    const rebindSoil = () => { $('MySoil').innerHTML = soilTable(); bindSoil(); };
+    const bindSoil = () => {
+      document.querySelectorAll('[data-shdel]').forEach(b => b.onclick = () => { readMyInputs(); if (m.soil.horizons.length > 1) m.soil.horizons.splice(+b.dataset.shdel, 1); rebindSoil(); });
+      $('MyAddH').onclick = () => { readMyInputs(); const l = m.soil.horizons[m.soil.horizons.length - 1] || {}; m.soil.horizons.push({ bottom: (l.bottom || 0) + 50, sand: l.sand, silt: l.silt, clay: l.clay, humus: l.humus, bd: l.bd }); rebindSoil(); };
+      $('MySoilF').onchange = ev => { const f = ev.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => { try { const s = SC.soilFromTable(IO.readCsv(String(r.result), f.name)); if (!s.horizons.length) throw new Error('no rows'); m.soil = s; rebindSoil(); $('MySoilMsg').textContent = s.horizons.length + ' horizons read from ' + f.name + '.'; } catch (e) { $('MySoilMsg').innerHTML = '<span style="color:#b3261e">' + esc(e.message) + '</span>'; } }; r.readAsText(f); };
+    };
+    bindSoil(); if (m.wxMode === 'project' && !m.wx) { try { fromProject(); } catch (e) { fail(e); } }
+    const s0 = document.querySelector('#dzSPanel [data-o="soil"]'); if (s0) s0.disabled = m.soilOn; if (m.wx && m.wxMode !== 'course') setYears(m.wx);
+  }
+  // the options of the run with my data in them (throws a clear message when the data cannot be used)
+  function withMyData(sc, o) {
+    readMyInputs(); const m = st.my, r = Object.assign({}, o); let vars = null;
+    if (m.wxMode !== 'course') { if (!m.wx) throw new Error('your weather is not ready: ' + (m.wxMode === 'file' ? 'choose a weather file' : 'no weather is loaded in SWAFL') + ' (see the note under My data)'); r.userWx = m.wx; }
+    if (m.soilOn) { SC.soilDai(m.soil); r.userSoil = m.soil; r.soil = 'user'; if (sc.id === 'soil') vars = [{ id: 'user', label: 'My soil', set: { soil: 'user' } }, { id: 'loam', label: 'Course loam', set: { soil: 'loam' } }, { id: 'sand', label: 'Course sand', set: { soil: 'sand' } }]; }
+    return { o: r, vars };
+  }
 
   // ------------------------------------------------------------------ scenarios
   function html(arg) {
@@ -21,8 +77,8 @@
     if (!st.opts || st.opts.__sc !== sc.id) st.opts = Object.assign({ __sc: sc.id }, SC.defaultsFor(sc));
     const o = st.opts, describe = v => Object.keys(v.set).map(k => { const f = SC.OPTIONS[k]; if (!f) return ''; const val = f.type === 'select' ? (f.opts.find(x => x[0] === String(v.set[k])) || [0, v.set[k]])[1] : v.set[k]; return f.label.replace(/ \(.*/, '') + ' ' + val; }).join(', ');
     return '<div class="dzpan"><h3 style="margin:0">' + esc(sc.title) + '</h3><p class="pnote">' + esc(sc.question) + '</p><div id="dzSDaisy" class="pnote">Looking for the Daisy program...</div>' +
-      '<div class="dzrow">' + sc.opts.map(k => field(k, o[k])).join('') + '</div><div><b>Runs compared</b> <span class="pnote">(each is one Daisy simulation; tick the ones you want)</span><div class="dzvars">' + sc.variants.map(v => '<label><input type="checkbox" data-v="' + v.id + '" checked> <b>' + esc(v.label) + '</b> <span class="pnote">' + esc(describe(v)) + '</span></label>').join('') + '</div></div>' +
-      '<div class="dzrow"><button class="btn pri" id="dzSRun">Run Daisy and draw the figures</button><button class="btn" id="dzSEx">Show the results already computed with the standard options</button><button class="btn" id="dzSRst">Standard options</button><span id="dzSst" class="pnote"></span></div><div id="dzSRuns"></div></div><div id="dzSRes"></div>';
+      '<div class="dzrow">' + sc.opts.map(k => field(k, o[k])).join('') + '</div>' + myBox() + '<div><b>Runs compared</b> <span class="pnote">(each is one Daisy simulation; tick the ones you want)</span><div class="dzvars">' + sc.variants.map(v => '<label><input type="checkbox" data-v="' + v.id + '" checked> <b>' + esc(v.label) + '</b> <span class="pnote">' + esc(describe(v)) + '</span></label>').join('') + (sc.id === 'soil' ? '<label id="dzVUser" style="' + (st.my.soilOn ? '' : 'display:none') + '"><input type="checkbox" data-v="user" checked> <b>My soil</b> <span class="pnote">the horizons entered under My data</span></label>' : '') + '</div></div>' +
+      '<div class="dzrow"><button class="btn pri" id="dzSRun">Run Daisy and draw the figures</button><button class="btn" id="dzSEx">Show the results already computed with the standard options</button><button class="btn" id="dzSRst">Standard options</button><button class="btn" id="dzSSave">Save the Daisy files of my set-up</button><span id="dzSst" class="pnote"></span></div><div id="dzSRuns"></div></div><div id="dzSRes"></div>';
   }
   function ownPanel() {
     return '<div class="dzpan"><h3 style="margin:0">My own Daisy set-up or my own logs</h3><p class="pnote">Two ways in. (1) Open a .dai file in the set-up editor and run it with Daisy (desktop app). (2) Load logs written by a Daisy run in Files (a whole folder works). Then draw the standard figures from the logs: yield, water, nitrogen, soil profile and chemical, whatever the logs hold.</p><div id="dzSDaisy" class="pnote"></div><div class="dzrow"><button class="btn pri" id="dzOwnRun">Run the set-up of the editor with Daisy</button><button class="btn" id="dzOwnDraw">Draw figures from the logs in Files</button><button class="btn" id="dzOwnEd">Open the set-up editor</button><span id="dzSst" class="pnote"></span></div><div id="dzSRuns"></div></div><div id="dzSRes"></div>';
@@ -71,7 +127,7 @@
   }
   function report(sc, runs, plan, fh) {
     const imgs = Array.from(fh.querySelectorAll('.dzfig')).map((el, i) => '<h2>' + esc(plan[i].title) + '</h2><p>' + esc(plan[i].note) + '</p>' + Array.from(el.querySelectorAll('canvas')).map(c => '<img src="' + c.toDataURL('image/png') + '" style="max-width:100%">').join('')).join('');
-    const o = runs[0].options || {}; const opt = Object.keys(o).filter(k => k[0] !== '_' && SC.OPTIONS[k]).map(k => SC.OPTIONS[k].label + ': ' + o[k]).join('; ');
+    const o = runs[0].options || {}; const opt = Object.keys(o).filter(k => k[0] !== '_' && SC.OPTIONS[k]).map(k => SC.OPTIONS[k].label + ': ' + o[k]).join('; ') + (o.userWx ? '; Weather: your data "' + o.userWx.name + '", ' + o.userWx.first + '-' + o.userWx.last : '') + (o.userSoil ? '; Soil: your own table of ' + o.userSoil.horizons.length + ' horizons (' + o.userSoil.horizons.map(h => h.bottom + ' cm: sand ' + h.sand + ', silt ' + h.silt + ', clay ' + h.clay + ' %').join('; ') + ')' : '');
     const page = '<!doctype html><meta charset="utf-8"><title>' + esc(sc.title || 'Daisy') + '</title><style>body{font:14px Segoe UI,Arial;max-width:1000px;margin:20px auto;padding:0 14px}table{border-collapse:collapse;font-size:12px}td,th{border:1px solid #ccc;padding:2px 7px}th{background:#eef1f5}h2{margin-top:26px}</style><h1>' + esc(sc.title || 'Daisy analysis') + '</h1><p>' + esc(sc.question || '') + '</p><p>Daisy 7.1.14, rotation of the Daisy course farm. Options: ' + esc(opt) + '</p>' + DaisyFig.summaryTable(runs, sc.id === 'chemical' || sc.id === 'own') + imgs + '<p style="color:#666;margin-top:30px">Made with SWAFL, Daisy workbench.</p>';
     D.download((sc.id || 'daisy') + '-report.html', page, 'text/html');
   }
@@ -88,10 +144,13 @@
     if (!sc) return;
     $('SRst').onclick = () => { st.opts = null; D.show('scen'); };
     $('SEx').onclick = async () => { try { showResults(sc, await loadExamples(sc), 'Real Daisy 7.1.14 runs with the standard options; daily values are every 7th day.'); D.note('Sst', ''); } catch (e) { D.note('Sst', esc(e.message), 1); } };
+    bindMy();
+    const prepare = () => { const base = SC.norm(readOpts(sc)); const md = withMyData(sc, base), o = SC.norm(Object.assign({}, md.o, md.vars ? { _variants: md.vars } : {})); const list = md.vars || sc.variants, vs = list.filter(v => { const i = document.querySelector('#dzSPanel [data-v="' + v.id + '"]'); return !i || i.checked; }); return { o, vs, own: !!(o.userWx || o.userSoil) }; };
+    $('SSave').onclick = async () => { try { const { o, vs } = prepare(); if (!vs.length) throw new Error('tick at least one run'); const files = {}; for (const n of SC.COMMON) files[n] = await D.getText('scenarios/common/' + n); const job = SC.buildJob(sc.id, o, vs[0].id, files); ['Run/Runfile.dai', 'Common/UserWeather.dwf', 'Common/UserSoil.dai', 'Common/ArableFarmRotation.dai', 'Common/ResFarm.dai'].forEach(n => { if (job.files[n]) D.download(n.split('/').pop(), job.files[n], 'text/plain'); }); D.note('Sst', 'Saved the set-up of "' + vs[0].label + '". Put the files in Run/ and Common/ folders as in the Runfile, then run: daisy Runfile.dai (the course OutputLog.dai and Daily-1965-2000.dwf come with the desktop app).'); } catch (e) { D.note('Sst', esc(e.message), 1); } };
     $('SRun').onclick = async () => {
-      const o = SC.norm(readOpts(sc)), vs = sc.variants.filter(v => { const i = document.querySelector('#dzSPanel [data-v="' + v.id + '"]'); return i && i.checked; }); if (!vs.length) { D.note('Sst', 'Tick at least one run.', 1); return; }
-      if (!D.isDesk() || !window.swafl.daisyJob) { D.note('Sst', 'Daisy itself runs in the desktop app. Here the bundled results are shown.', 1); try { showResults(sc, (await loadExamples(sc)).filter(r => vs.some(v => v.id === r.id)), 'Bundled results of real Daisy runs (standard options).'); } catch (e) { } return; }
-      D.note('Sst', 'About ' + Math.round((o.stop - o.start) * 3.2) + ' s per run, runs go in parallel.'); try { const runs = await runDaisy(sc, o, vs); showResults(sc, runs, 'Daisy ran ' + runs.length + ' simulation(s) of ' + (o.stop - o.start) + ' years.'); D.note('Sst', ''); } catch (e) { D.note('Sst', 'Daisy did not run: ' + esc(e.message), 1); }
+      let P; try { P = prepare(); } catch (e) { D.note('Sst', esc(e.message), 1); return; } const { o, vs, own } = P; if (!vs.length) { D.note('Sst', 'Tick at least one run.', 1); return; }
+      if (!D.isDesk() || !window.swafl.daisyJob) { if (own) { D.note('Sst', 'Your data is converted and ready, but Daisy itself runs only in the desktop app. Press "Save the Daisy files of my set-up" to run it with Daisy anywhere.', 1); return; } D.note('Sst', 'Daisy itself runs in the desktop app. Here the bundled results are shown.', 1); try { showResults(sc, (await loadExamples(sc)).filter(r => vs.some(v => v.id === r.id)), 'Bundled results of real Daisy runs (standard options).'); } catch (e) { } return; }
+      D.note('Sst', 'About ' + Math.round((o.stop - o.start) * 3.2) + ' s per run, runs go in parallel.'); try { const runs = await runDaisy(sc, o, vs); showResults(sc, runs, 'Daisy ran ' + runs.length + ' simulation(s) of ' + (o.stop - o.start) + ' years' + (o.userWx ? ' on your weather (' + o.userWx.name + ')' : '') + (o.userSoil ? ' and your soil' : '') + '.'); D.note('Sst', ''); } catch (e) { D.note('Sst', 'Daisy did not run: ' + esc(e.message), 1); }
     };
     if (st.runs.length && st.sc && st.sc.id === sc.id) showResults(sc, st.runs);
     else if (arg) $('SEx').click();

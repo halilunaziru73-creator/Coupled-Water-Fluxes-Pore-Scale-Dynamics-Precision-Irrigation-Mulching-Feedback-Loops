@@ -119,7 +119,7 @@
     return { P, ET0, e0n, Pmean, Emean, y0, years: pick, notes, hasE, Tclim, Tnclim };
   }
   function apply(rows, meta) {
-    const B = build(rows, meta), Pd = daisyP(), Ed = daisyET0();
+    const B = build(rows, meta), Pd = daisyP(), Ed = daisyET0(); B.rows = rows; B.lat = meta.lat; B.lon = meta.lon;
     const rf = B.Pmean / Pd, dT = (B.Emean / Ed - 1) / 0.035, ri = nearestIdx(RAIN_VALUES, Math.max(RAIN_VALUES[0], Math.min(RAIN_VALUES[RAIN_VALUES.length - 1], rf))), ti = nearestIdx(TEMP_VALUES, Math.max(TEMP_VALUES[0], Math.min(TEMP_VALUES[TEMP_VALUES.length - 1], dT)));
     if (rf < RAIN_VALUES[0] - 0.05 || rf > RAIN_VALUES[RAIN_VALUES.length - 1] + 0.05) B.notes.push('the annual rainfall is ' + rf.toFixed(2) + ' times that of the simulations: the annual results use the nearest simulated step (×' + RAIN_VALUES[ri].toFixed(1) + ')');
     if (dT > TEMP_VALUES[TEMP_VALUES.length - 1] + 0.25 || dT < TEMP_VALUES[0] - 0.25) B.notes.push('the evaporative demand equals a warming of ' + dT.toFixed(1) + ' °C against the simulations: the annual results use the nearest simulated step (' + TEMP_VALUES[ti].toFixed(1) + ' °C)');
