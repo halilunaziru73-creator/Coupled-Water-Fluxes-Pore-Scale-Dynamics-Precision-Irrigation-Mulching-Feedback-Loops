@@ -112,6 +112,14 @@ const FieldMap = (() => {
     $('fmLay').onchange = e => { F.lay = e.target.checked; drawLayout(); if (F.lay && !layoutData()) UI.toast(needLayout()); };
     $('fmView').value = F.view; $('fmView').onchange = e => { F.view = e.target.value; showRes(); }; $('fmSmooth').value = F.smooth ? '1' : '0'; $('fmSmooth').onchange = e => { F.smooth = e.target.value === '1'; showRes(); };
     $('fmCmp').value = F.cmp; $('fmCmp').onchange = e => { F.cmp = e.target.value; showCompare(); showRes(); };
+    // every click inside the map window shows "Reading..." at once, until the work behind the button is finished
+    { const w = document.querySelector('.fmwrap'), host = w && w.closest('.modal') || document.body; let pill = document.getElementById('fmRead'); if (pill) pill.remove(); pill = document.createElement('div'); pill.id = 'fmRead'; pill.style.display = 'none'; host.appendChild(pill);
+      const SKIP = /^(fmTools|fmZoomIn|fmZoomOut)$/, dis = () => new Set([...w.querySelectorAll('button:disabled')]); let tk = null;
+      w.addEventListener('click', e => { const b = e.target.closest && e.target.closest('button, .btn'); if (!b || SKIP.test(b.id) || /^(Hand|Demarcate|Sensors|\+|\u2212|Undo|Clear)/i.test(b.textContent.trim()) || b.closest('#fmLayers')) return;
+        const t0 = Date.now(), before = dis(), lab = b.textContent.trim().replace(/\s+/g, ' ').slice(0, 50); clearInterval(tk); pill.style.display = 'block';
+        tk = setInterval(() => { const sec = Math.floor((Date.now() - t0) / 1000), dots = '.'.repeat(1 + Math.floor((Date.now() - t0) / 350) % 6); pill.innerHTML = '<b>Reading' + dots + '</b> <span>' + lab.replace(/</g, '&lt;') + ' &middot; ' + sec + ' s</span>';
+          const busy = (typeof FieldGeo !== 'undefined' && FieldGeo.working && FieldGeo.working()) || [...dis()].some(x => !before.has(x)) || /Working|Reading|Mapping/i.test(b.textContent) && b.isConnected && b.textContent.trim() !== lab;
+          if ((Date.now() - t0 > 1500 && !busy) || Date.now() - t0 > 120000) { clearInterval(tk); pill.style.display = 'none'; } }, 150); }, true); }
     { const w = document.querySelector('.fmwrap'), t = $('fmTools'), sync = () => { t.classList.toggle('on', !w.classList.contains('fmhide')); setTimeout(() => { try { F.map.invalidateSize(); if (F.map2) F.map2.invalidateSize(); } catch (e) {} }, 60); }; w.classList.add('fmhide'); t.onclick = () => { w.classList.toggle('fmhide'); sync(); }; sync(); }
     $('fmGo').onclick = search; $('fmQ').addEventListener('keydown', e => { if (e.key === 'Enter') search(); });
     $('fmLL').onclick = () => { const a = parseFloat($('fmLat').value), b = parseFloat($('fmLon').value); if (isFinite(a) && isFinite(b)) F.map.setView([a, b], 16); };
