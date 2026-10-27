@@ -113,7 +113,7 @@ const Dash = (() => {
     let best = ''; const B = bestCache[id];
     if (B) best = '<div class="best"><div><b>' + (B.same ? 'Already the most efficient:' : 'Most efficient inputs found:') + '</b> ' + UI.esc(B.txt) + '</div><div>Application efficiency ' + (B.Ea * 100).toFixed(1) + ' %, root zone filled ' + (B.Es * 100).toFixed(0) + ' %' + (B.dp != null ? ', deep percolation ' + (B.dp * 100).toFixed(1) + ' %' : '') + (B.ro != null ? ', runoff ' + (B.ro * 100).toFixed(1) + ' %' : '') + '</div>' + (B.same ? '' : '<button class="btn prim" data-apply="' + id + '">Apply these inputs and run</button>') + '</div>';
     else best = '<div class="best"><button class="btn" data-best="' + id + '">Find the most efficient inputs</button></div>';
-    setBody('<div class="dwrap">' + SEC('dr-' + id, UI.esc(Layers.nameOf(id)), 'results of the last run', h) + SEC('db-' + id, 'Best combination for the highest efficiency', 'searched over the inputs that matter most', best) + SEC('dx-' + id, 'Run again', '', runBtns(id)) + '</div>');
+    setBody('<div class="dwrap"><div class="stickyrun">' + runBtns(id) + '</div>' + SEC('dr-' + id, UI.esc(Layers.nameOf(id)), 'results of the last run', h) + SEC('db-' + id, 'Best combination for the highest efficiency', 'searched over the inputs that matter most', best) + SEC('dx-' + id, 'Run again', '', runBtns(id)) + '</div>');
   }
   const bestCache = {};
 

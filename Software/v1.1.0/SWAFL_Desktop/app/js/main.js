@@ -209,8 +209,8 @@ function wxBanner(s) {
   const el = document.getElementById('wxBar'); if (!el) return; const w = s.wx || {}, n = v => v == null || !isFinite(v) ? '-' : Math.round(v).toLocaleString('en-US');
   const on = w.src && w.src !== 'record';
   el.className = on ? 'on' : '';
-  el.innerHTML = '<b>Weather</b> ' + (on ? UI.esc(w.name || (w.src === 'file' ? 'Imported file' : 'Online')) + ' <span>(' + (w.src === 'file' ? 'imported file' : 'online') + ', ' + UI.esc(w.years || '') + ')</span> &middot; mean rain ' + n(w.Pmean) + ' mm/year &middot; reference ET ' + n(w.ET0mean) + ' mm/year' : 'Benchmark record of the software <span>(1980 to 1999, projected to 2100)</span>') + ' &middot; every layer, the crop water need, the irrigation dates and the dashboard follow it <button class="mini" id="wxChange">Change weather</button>';
-  const b = document.getElementById('wxChange'); if (b) b.onclick = () => weatherAsk();
+  el.innerHTML = '<b>Weather</b> ' + (on ? UI.esc(w.name || (w.src === 'file' ? 'Imported file' : 'Online')) + ' <span>(' + (w.src === 'file' ? 'imported file' : 'online') + ', ' + UI.esc(w.years || '') + ')</span> &middot; mean rain ' + n(w.Pmean) + ' mm/year &middot; reference ET ' + n(w.ET0mean) + ' mm/year' : 'Benchmark record of the software <span>(1980 to 1999, projected to 2100)</span>') + ' &middot; every layer, the crop water need, the irrigation dates and the dashboard follow it <button class="mini" id="wxShow">Climate chart</button> <button class="mini" id="wxChange">Change weather</button>';
+  const b = document.getElementById('wxChange'); if (b) b.onclick = () => weatherAsk(); const b2 = document.getElementById('wxShow'); if (b2) b2.onclick = () => WxUI.climate();
 }
 function updateStatus(s) {
   try { wxBanner(s); } catch (e) {}

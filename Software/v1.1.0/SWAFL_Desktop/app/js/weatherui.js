@@ -4,6 +4,22 @@
 const WxUI = (() => {
   const st = () => { try { return E.json('wxStatus()') || {}; } catch (e) { return {}; } };
   const fmt = v => (v == null || !isFinite(v)) ? '-' : Math.round(v).toLocaleString('en-US');
+  // monthly rain, reference ET and temperature of the weather in use, drawn from the daily data the engine runs on
+  function drawClim(id) {
+    const cv = document.getElementById(id); if (!cv) return; const W0 = E.win && E.win.WXD, c = cv.getContext('2d'), w = cv.width, h = cv.height;
+    c.fillStyle = '#fff'; c.fillRect(0, 0, w, h); const MO = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], dm = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    let P = new Array(12).fill(0), Ev = new Array(12).fill(0), T = null, src = 'Benchmark record of the software';
+    if (W0 && W0.on && W0.P) { const ny = W0.P.length / 365; for (let y = 0; y < ny; y++) { let k = y * 365; for (let m = 0; m < 12; m++) for (let d = 0; d < dm[m]; d++, k++) { P[m] += W0.P[k] / ny; Ev[m] += W0.ET0[k] / ny; } } src = (W0.name || 'Weather in use') + ' (' + (W0.src === 'file' ? 'imported file' : 'online') + ')';
+      const tc = W0.Tclim; if (tc && tc.length >= 365) { T = new Array(12).fill(NaN); let k = 0; for (let m = 0; m < 12; m++) { let s = 0, n = 0; for (let d = 0; d < dm[m]; d++, k++) if (isFinite(tc[k])) { s += tc[k]; n++; } if (n) T[m] = s / n; } } }
+    else { try { const wx = E.json('(function(){var r=[],e=[];var sim=seasonSim();for(var m=0;m<12;m++){r.push(0);e.push(0)}var ny=Math.floor(sim.rain.length/365);for(var y=0;y<ny;y++){var k=y*365;for(var m=0;m<12;m++){var dm=[31,28,31,30,31,30,31,31,30,31,30,31][m];for(var d=0;d<dm;d++,k++){r[m]+=sim.rain[k]/ny;e[m]+=(sim.dE?sim.dE[k]+sim.dT[k]:0)/ny}}}return {r:r,e:e}})()'); if (wx) { P = wx.r; Ev = wx.e; } } catch (e) {} }
+    const L = 54, R = w - 46, Tp = 34, B = h - 34, mx = Math.max(10, ...P, ...Ev) * 1.1, X = m => L + (m + 0.5) / 12 * (R - L), Y = v => B - v / mx * (B - Tp), bw = (R - L) / 12 * 0.32;
+    c.font = 'bold 12px sans-serif'; c.fillStyle = '#12303A'; c.fillText('Monthly climate of the weather in use: ' + src, 10, 18);
+    c.strokeStyle = '#C9D1D9'; c.fillStyle = '#556'; c.font = '10px sans-serif'; for (let i = 0; i <= 4; i++) { const v = mx / 1.1 * i / 4, yy = Y(v); c.beginPath(); c.moveTo(L, yy); c.lineTo(R, yy); c.stroke(); c.textAlign = 'right'; c.fillText(Math.round(v), L - 4, yy + 3); }
+    c.textAlign = 'center'; for (let m = 0; m < 12; m++) { c.fillStyle = '#29B6F6'; c.fillRect(X(m) - bw - 1, Y(P[m]), bw, B - Y(P[m])); c.fillStyle = '#FB8C00'; c.fillRect(X(m) + 1, Y(Ev[m]), bw, B - Y(Ev[m])); c.fillStyle = '#556'; c.fillText(MO[m], X(m), B + 14); }
+    if (T) { const tmx = Math.max(...T.filter(isFinite), 10) * 1.1, tmn = Math.min(0, ...T.filter(isFinite)), Yt = v => B - (v - tmn) / (tmx - tmn) * (B - Tp); c.strokeStyle = '#C62828'; c.lineWidth = 2; c.beginPath(); T.forEach((v, m) => { if (!isFinite(v)) return; m ? c.lineTo(X(m), Yt(v)) : c.moveTo(X(m), Yt(v)); }); c.stroke(); c.lineWidth = 1; c.fillStyle = '#C62828'; c.textAlign = 'left'; c.fillText('temperature \u00b0C: ' + Math.round(Math.min(...T.filter(isFinite))) + ' to ' + Math.round(Math.max(...T.filter(isFinite))), R - 150, Tp - 4); }
+    c.textAlign = 'left'; c.fillStyle = '#29B6F6'; c.fillRect(L, h - 12, 10, 8); c.fillStyle = '#12303A'; c.fillText('rain (mm/month)', L + 14, h - 4); c.fillStyle = '#FB8C00'; c.fillRect(L + 120, h - 12, 10, 8); c.fillStyle = '#12303A'; c.fillText('reference ET (mm/month)', L + 134, h - 4);
+  }
+  function climate() { UI.modal({ title: 'Climate of the weather in use', icon: 'info', width: 'min(640px,94vw)', html: '<canvas id="wxClim" width="600" height="250" style="max-width:100%"></canvas><p class="pnote">The irrigation dates, the crop water need, the soil water, the dashboard and every layer are calculated from this weather. Change it in Properties, Scenario, Weather source.</p>' }); setTimeout(() => drawClim('wxClim'), 30); }
   function report(s, title) {
     const notes = (s.notes || []).map(n => '<li>' + UI.esc(n) + '</li>').join('');
     UI.modal({ title, icon: 'info', width: 'min(600px,94vw)', html:
@@ -14,7 +30,7 @@ const WxUI = (() => {
       '<tr><td>Mean annual rainfall</td><td><b>' + fmt(s.Pmean) + ' mm</b></td></tr><tr><td>Mean annual reference ET</td><td><b>' + fmt(s.ET0mean) + ' mm</b> (' + UI.esc(s.how || '') + ')</td></tr>' +
       '<tr><td>Annual model set to</td><td>rainfall ×' + (+s.rain).toFixed(1) + ', temperature ' + (s.dT >= 0 ? '+' : '') + (+s.dT).toFixed(1) + ' °C</td></tr>' +
       (s.cols ? '<tr><td>Columns read</td><td>' + UI.esc(s.cols.join(', ')) + '</td></tr>' : '') + '</table>' + (notes ? '<p style="margin-top:8px"><b>Notes</b></p><ul>' + notes + '</ul>' : '') +
-      '<p>Switch back at any time in Properties, Scenario, <b>Weather source</b>.</p>' });
+      '<canvas id="wxClimR" width="560" height="240" style="max-width:100%"></canvas><p>Switch back at any time in Properties, Scenario, <b>Weather source</b>.</p>' }); setTimeout(() => drawClim('wxClimR'), 30);
   }
   function importFile() {
     const r = UI.modal({ title: 'Import weather data', icon: 'open', width: 'min(620px,94vw)', html:
@@ -68,6 +84,6 @@ const WxUI = (() => {
     setTimeout(() => UI.modal({ title: 'Weather data', icon: 'info', width: 'min(560px,94vw)', html: '<p>For the best results, run the program on the weather of your own field: import a daily weather file (CSV, Excel, DWF or DLF), or get the daily weather of your location online.</p><p>Without it the program uses the recorded weather of the simulations.</p>',
       buttons: [{ label: 'Import a weather file...', pri: true, act: () => { setTimeout(importFile, 30); } }, { label: 'Online weather...', act: () => { setTimeout(online, 30); } }, { label: 'Use the current weather' }] }), 120);
   }
-  return { importFile, online, use, status: st, offerOnce };
+  return { importFile, online, use, status: st, offerOnce, climate };
 })();
 window.WxUI = WxUI;

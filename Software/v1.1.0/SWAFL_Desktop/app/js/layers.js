@@ -88,6 +88,7 @@ const Layers = (() => {
       let h = '<span class="vtitle">' + UI.esc(nameOf(cur)) + '</span>';
       h += '<button class="vb' + (!sectionPick[cur] ? ' on' : '') + '" data-top>Whole design</button>';
       (VIEWS[cur] || []).forEach(v => { const t = secs.find(x => v[1].test(x)); if (t) h += '<button class="vb' + (sectionPick[cur] === t ? ' on' : '') + '" data-sec="' + UI.esc(t) + '" title="' + UI.esc(t) + '">' + v[0] + '</button>'; });
+      h += '<button class="vb run" data-vrun title="Run the design simulation, or run it again, without scrolling">&#9654; Run / re-run simulation</button>';
       el.innerHTML = h;
   } else {
       const sc = E.meta && E.metaData ? E.metaData.scenes.find(s => s[0] === cur) : null;
@@ -97,6 +98,7 @@ const Layers = (() => {
   document.getElementById('viewBar').addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return;
     if (b.hasAttribute('data-top')) { sectionPick = {}; E.scrollTop(); renderViewBar(); render(); return; }
+    if (b.hasAttribute('data-vrun')) { E.ev("runDesign('" + cur + "')"); E.poll(true); const t = document.querySelector('#dashTabs [data-tab=design]'); if (t) t.click(); try { Dash.render(); } catch (e) {} return; }
     if (b.dataset.sec) open(cur, b.dataset.sec);
   });
 
