@@ -24,6 +24,9 @@ const Props = (() => {
       { id: 'p-wx', name: 'Weather and climate', rows: [ SL('rainIdx', 'Rainfall scale (x baseline)', 9, 'rain'), SL('tempIdx', 'Temperature shift', 9, 'temp') ] },
       { id: 'p-irr', name: 'Irrigation', rows: [
         { t: 'select', label: 'Method', id: 'method', opts: M.methods, get: s => s.state.method, on: v => E.set({ method: v }) },
+        { t: 'select', label: 'Decide for', id: 'dechor', opts: [['next', 'The next irrigation'], ['month', 'The next 30 days'], ['year', 'The next 12 months'], ['season', 'The whole crop season']], get: s => s.state.decHor || 'month', on: v => E.set({ decHor: v }) },
+        { t: 'select', label: 'Crop in the decision', id: 'decmode', opts: [['plant', 'Planted on the date chosen (plant at any time)'], ['season', 'As in the rotation calendar']], get: s => s.state.decMode || 'plant', on: v => E.set({ decMode: v }) },
+        { t: 'select', label: 'Critical depletion f (irrigate when depletion reaches f)', id: 'fcrit', opts: [0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8].map(v => [v.toFixed(2), v.toFixed(2)]), get: s => { const b = (s.state.trigBy || {})[s.state.soil], f = b != null ? b : 0.5; return (Math.round(f * 20) / 20).toFixed(2); }, on: v => E.ev('(function(){var f=' + (+v) + ';state.trigF=f;DATA.soils.forEach(function(q){state.trigBy[q]=f});refresh()})()') },
         SL('trigIdx', 'Trigger (sensor suction)', 19, 'trig'), SL('zIdx', 'Sensor depth', 19, 'z') ] },
       { id: 'p-n', name: 'Nutrients', rows: [ SL('nIdx', 'Nitrogen rate (% of standard)', 9, 'n') ] },
       { id: 'p-act', name: 'Design shortcuts', rows: [ { t: 'btns', btns: [
