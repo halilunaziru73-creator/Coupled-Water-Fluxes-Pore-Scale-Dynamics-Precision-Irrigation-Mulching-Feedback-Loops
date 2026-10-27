@@ -21,6 +21,7 @@ const Dash = (() => {
   let dayCache = { key: '', D: null }, layerCache = { key: '', L: null }, n1Chart = null, N1T = null, v7Chart = null;
   function results(s) {
     const key = s.date + '|' + JSON.stringify(s.state) + '|' + s.year + '|' + ((s.wx && s.wx.key) || '');
+    if (Layers.DESIGN.includes(s.scene) && !runOn(s.scene)) { setBody(SEC('dr-pre', UI.esc(Layers.nameOf(s.scene)), 'inputs', '<div class="dnote">Nothing has been simulated yet. Set the inputs in the drawing (click a value box to type its exact value), then press <b>Run simulation</b>: the results of this design appear here.</div>' + runBtns(s.scene))); return; }
     if (dayCache.key !== key) { dayCache = { key, D: E.day() }; }
     const D = dayCache.D, Y = D && D.year ? D.year : null;
     let h = '<div class="dwrap">';

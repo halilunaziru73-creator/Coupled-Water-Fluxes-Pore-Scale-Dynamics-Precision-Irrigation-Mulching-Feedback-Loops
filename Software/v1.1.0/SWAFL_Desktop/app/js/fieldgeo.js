@@ -172,15 +172,16 @@ const FieldGeo = (() => {
   async function mapRetention() {
     const T = need(), dg = derived(), cells = fieldCells(), base = await soilBase(), b = baseNow(), om0 = b && isFinite(b.om) ? b.om : 1.5, smp = parseSamples(G.samples).map(s => Object.assign(s, { i: cellAt(s.lat, s.lon) })).filter(s => s.i >= 0 && T.ins[s.i]);
     const zT = i => (dg.twi[i] - dg.tm) / dg.tsd, N = T.D.W * T.D.H, SA = new Float32Array(N).fill(NaN), CL = new Float32Array(N).fill(NaN);
-    let bS = -3.5, bC = 2.5, how = 'trend on the wetness index (clay rises and sand falls where the water gathers: ' + bC + ' and ' + bS + ' points per standard deviation of the index) from the field soil ' + base.src + '; add soil samples to constrain it', vgS = null, vgC = null;
+    const sat = satIdx(), cov = i => sat.key ? [zT(i), sat.z[i]] : [zT(i)], nc = sat.key ? 2 : 1;
+    let how = 'no soil samples: the SoilGrids value of the field is used as it is, with no assumed trend (' + base.src + '); type soil samples to map the variation' , vgS = null, vgC = null;
     const diag = Math.hypot(...[cells.map(i => cellXY(i)[0]), cells.map(i => cellXY(i)[1])].map(a => Math.max(...a) - Math.min(...a)));
     if (smp.length >= 1) {
-      const fit = (key, b0, mean0, prior) => { const y = smp.map(s => s[key]), P = smp.map(s => cellXY(s.i)); let beta = b0, m = mean0; if (smp.length >= 6) { const X = smp.map(s => [1, zT(s.i)]), co = ols(X, y); m = co[0]; beta = co[1]; } else { m = y.reduce((a, c, k) => a + c - beta * zT(smp[k].i), 0) / y.length; }
-        const res = y.map((v, k) => v - m - beta * zT(smp[k].i)), vg = fitVgm(P, res, { var: prior * prior, a: 0.5 * diag }), kp = smp.length >= 2 ? krigPrep(P, vg) : null; return { beta, m, res, vg, kp, P }; };
-      const fs = fit('sand', bS, base.sand, 8), fc2 = fit('clay', bC, base.clay, 6); vgS = fs.vg; vgC = fc2.vg;
-      cells.forEach(i => { const [x, y] = cellXY(i), z = zT(i); let rs = 0, rc = 0; if (fs.kp) { rs = krig(fs.kp, x, y, fs.res).est; rc = krig(fc2.kp, x, y, fc2.res).est; } else { rs = fs.res[0]; rc = fc2.res[0]; } SA[i] = clamp(fs.m + fs.beta * z + rs, 2, 97); CL[i] = clamp(fc2.m + fc2.beta * z + rc, 2, 80); });
-      how = smp.length + ' soil sample' + (smp.length > 1 ? 's' : '') + ': regression kriging (' + (smp.length >= 6 ? 'trend fitted to the samples' : 'trend of ' + bC + '/' + bS + ' points per SD of the wetness index, level from the samples') + ', residuals kriged with a ' + (vgS.fitted ? 'fitted' : 'default') + ' spherical variogram)';
-    } else cells.forEach(i => { SA[i] = clamp(base.sand + bS * zT(i), 2, 97); CL[i] = clamp(base.clay + bC * zT(i), 2, 80); });
+      const fit = (key, prior) => { const y = smp.map(s => s[key]), P = smp.map(s => cellXY(s.i)); let m, bt = new Array(nc).fill(0); if (smp.length >= nc + 4) { const co = ols(smp.map(s => [1].concat(cov(s.i))), y); m = co[0]; bt = co.slice(1); } else m = y.reduce((a, c) => a + c, 0) / y.length;
+        const res = y.map((v, k) => v - m - cov(smp[k].i).reduce((a, c, q) => a + bt[q] * c, 0)), vg = fitVgm(P, res, { var: prior * prior, a: 0.5 * diag }), kp = smp.length >= 2 ? krigPrep(P, vg) : null; return { bt, m, res, vg, kp, P }; };
+      const fs = fit('sand', 8), fc2 = fit('clay', 6); vgS = fs.vg; vgC = fc2.vg;
+      cells.forEach(i => { const [x, y] = cellXY(i), cv = cov(i); let rs = 0, rc = 0; if (fs.kp) { rs = krig(fs.kp, x, y, fs.res).est; rc = krig(fc2.kp, x, y, fc2.res).est; } else { rs = fs.res[0]; rc = fc2.res[0]; } SA[i] = clamp(fs.m + cv.reduce((a, c, q) => a + fs.bt[q] * c, 0) + rs, 2, 97); CL[i] = clamp(fc2.m + cv.reduce((a, c, q) => a + fc2.bt[q] * c, 0) + rc, 2, 80); });
+      how = smp.length + ' soil sample' + (smp.length > 1 ? 's' : '') + ': ' + (smp.length >= nc + 4 ? 'regression kriging, trend fitted to the samples on the wetness index' + (sat.key ? ' and the satellite index ' + sat.key : '') : 'ordinary kriging of the samples (too few for a trend)') + ', residuals kriged with a ' + (vgS.fitted ? 'fitted' : 'default') + ' spherical variogram';
+    } else cells.forEach(i => { SA[i] = clamp(base.sand, 2, 97); CL[i] = clamp(base.clay, 2, 80); });
     const FC = new Float32Array(N).fill(NaN), WP = FC.slice(), SAT = FC.slice(), AW = FC.slice(), LAM = FC.slice(), PE = FC.slice(), TR = FC.slice(), DAYS = FC.slice(), TH = FC.slice();
     const f = b ? b.f : 0.5, zr = b ? b.zr : 60, etc = b ? Math.max(0.8, b.etc) : 4;
     cells.forEach(i => { const s = saxton(SA[i], CL[i], om0); FC[i] = s.fc; WP[i] = s.wp; SAT[i] = s.sat; LAM[i] = s.lam; PE[i] = s.pe; AW[i] = s.fc - s.wp; TR[i] = s.fc - f * (s.fc - s.wp); });
