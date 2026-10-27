@@ -91,11 +91,13 @@ const FieldMap = (() => {
   function baseLayers(k) { const o = { maxZoom: 20, maxNativeZoom: 19, crossOrigin: 'anonymous' };
     if (k === 'osm') { const S = OSMS[F.osmI || 0], ly = L.tileLayer(S.u, Object.assign({ attribution: S.a, subdomains: S.s || 'abc' }, o)); let bad = 0;
       ly.on('tileerror', () => { if (++bad === 4 && (F.osmI || 0) < OSMS.length - 1) { F.osmI = (F.osmI || 0) + 1; const st = document.getElementById('fmInfo'); if (st) st.textContent = 'The map server did not answer: switched to ' + OSMS[F.osmI].n + '.'; setBase('osm'); } });
-      ly.on('tileload', () => { bad = 0; }); return [ly]; }
+      ly.on('tileload', () => { bad = 0; }); return [ly, L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png', { pane: 'fmLabels', subdomains: 'abcd', maxZoom: 20, maxNativeZoom: 19, crossOrigin: 'anonymous', attribution: '© CARTO' })]; }
     const a = [L.tileLayer(ESRI + 'World_Imagery/MapServer/tile/{z}/{y}/{x}', Object.assign({ attribution: 'Imagery © Esri, Maxar, Earthstar Geographics' }, o))];
-    if (k === 'hyb') a.push(L.tileLayer(ESRI + 'Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}', Object.assign({ opacity: 0.9 }, o)));
-    a.push(L.tileLayer(ESRI + 'Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', Object.assign({ opacity: 0.85 }, o))); return a; }
-  function setBase(k) { F.base = k; [F.map, F.map2].forEach(mp => { if (!mp) return; (mp.__base || []).forEach(l => mp.removeLayer(l)); mp.__base = baseLayers(k); mp.__base.forEach(l => { l.addTo(mp); l.bringToBack(); }); }); }
+    if (k === 'hyb') a.push(L.tileLayer(ESRI + 'Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}', Object.assign({ opacity: 0.9, pane: 'fmLabels' }, o)));
+    a.push(L.tileLayer(ESRI + 'Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', Object.assign({ opacity: 1, pane: 'fmLabels' }, o))); return a; }
+  // place names, roads and borders live in a pane above every overlay, so the coloured layers never hide them
+  function labelPane(mp) { if (!mp.getPane('fmLabels')) { const p = mp.createPane('fmLabels'); p.style.zIndex = 650; p.style.pointerEvents = 'none'; } }
+  function setBase(k) { F.base = k; [F.map, F.map2].forEach(mp => { if (!mp) return; labelPane(mp); (mp.__base || []).forEach(l => mp.removeLayer(l)); mp.__base = baseLayers(k); mp.__base.forEach(l => { l.addTo(mp); if (!(l.options && l.options.pane === 'fmLabels')) l.bringToBack(); }); }); }
   function initMap() {
     const el = document.getElementById('fmMap'); if (!el) return;
     if (F.map) { try { F.map.remove(); } catch (e) {} F.map = null; }
