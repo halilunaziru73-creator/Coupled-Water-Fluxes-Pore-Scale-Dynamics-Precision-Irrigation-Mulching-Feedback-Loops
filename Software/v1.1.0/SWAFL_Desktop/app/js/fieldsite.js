@@ -104,7 +104,11 @@ const FieldSite = (() => {
   async function osmWater(c, R) {
     const a = '(around:' + R + ',' + c[0].toFixed(6) + ',' + c[1].toFixed(6) + ')';
     const q = '[out:json][timeout:25];(way["waterway"~"^(river|stream|canal|ditch|drain|brook)$"]' + a + ';way["natural"="water"]' + a + ';relation["natural"="water"]' + a + ';way["landuse"="reservoir"]' + a + ';way["water"]' + a + ';node["man_made"~"^(water_well|borehole|water_tower|reservoir_covered)$"]' + a + ';node["natural"="spring"]' + a + ';node["amenity"="water_point"]' + a + ';node["pump"]' + a + ';);out tags geom 400;';
-    const j = await getJSON('https://overpass-api.de/api/interpreter', { method: 'POST', body: 'data=' + encodeURIComponent(q), headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }, 40000);
+    // the public Overpass servers are often slow or busy: ask four at once and take the first answer
+    const MIRR = ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter', 'https://overpass.private.coffee/api/interpreter', 'https://maps.mail.ru/osm/tools/overpass/api/interpreter'], ctl = new AbortController();
+    const ask = u => fetch(u, { method: 'POST', body: 'data=' + encodeURIComponent(q), headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, signal: ctl.signal }).then(r => { if (!r.ok) throw new Error('answer ' + r.status); return r.json(); });
+    const tm = setTimeout(() => ctl.abort(), 30000);
+    let j; try { j = await Promise.any(MIRR.map(ask)); } catch (e) { throw new Error('no OpenStreetMap server answered in time (tried ' + MIRR.length + '); try again in a minute'); } finally { clearTimeout(tm); ctl.abort(); }
     return j.elements || [];
   }
   function srcType(t) {
