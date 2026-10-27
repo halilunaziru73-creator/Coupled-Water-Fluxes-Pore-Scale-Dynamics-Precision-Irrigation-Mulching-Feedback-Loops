@@ -205,7 +205,15 @@ function onKey(e) {
 document.addEventListener('keydown', onKey);
 
 /* ---------- start-up ---------- */
+function wxBanner(s) {
+  const el = document.getElementById('wxBar'); if (!el) return; const w = s.wx || {}, n = v => v == null || !isFinite(v) ? '-' : Math.round(v).toLocaleString('en-US');
+  const on = w.src && w.src !== 'record';
+  el.className = on ? 'on' : '';
+  el.innerHTML = '<b>Weather</b> ' + (on ? UI.esc(w.name || (w.src === 'file' ? 'Imported file' : 'Online')) + ' <span>(' + (w.src === 'file' ? 'imported file' : 'online') + ', ' + UI.esc(w.years || '') + ')</span> &middot; mean rain ' + n(w.Pmean) + ' mm/year &middot; reference ET ' + n(w.ET0mean) + ' mm/year' : 'Benchmark record of the software <span>(1980 to 1999, projected to 2100)</span>') + ' &middot; every layer, the crop water need, the irrigation dates and the dashboard follow it <button class="mini" id="wxChange">Change weather</button>';
+  const b = document.getElementById('wxChange'); if (b) b.onclick = () => weatherAsk();
+}
 function updateStatus(s) {
+  try { wxBanner(s); } catch (e) {}
   const st = s.state, M = E.metaData;
   document.getElementById('stScene').textContent = Layers.started() ? Layers.nameOf(s.scene) : 'No layer open';
   document.getElementById('stCase').textContent = [M.soilLabels[st.soil] || st.soil, M.tills[st.till], (M.mulches.find(m => m[0] === st.mulchType) || [])[1], (M.methods.find(m => m[0] === st.method) || [])[1]].filter(Boolean).join('  |  ');
@@ -232,7 +240,7 @@ async function boot(again) {
   Dash.render();
   let deep = null; try { const m = /[#&?](?:open|layer)=([a-z0-9]+)/i.exec(location.hash + location.search); if (m) deep = m[1]; } catch (e) {}
   if (deep) setTimeout(() => { try { Layers.open(deep); } catch (e) {} }, 300);   // links like index.html#open=n1 land straight on a layer (n1 = Irrigation trigger law)
-  if (!bootedWx) { bootedWx = true; setTimeout(weatherAsk, 250); }
+  if (!bootedWx) { bootedWx = true; setTimeout(() => { if (!deep) { welcome(); const t = setInterval(() => { if (!document.querySelector('#modalRoot .modal')) { clearInterval(t); weatherAsk(); } }, 250); } else weatherAsk(); }, 250); }
 }
 function welcome() { UI.modal({ title: 'Welcome to SWAFL', icon: 'info', width: 'min(620px,94vw)', html: '<div class="about"><img src="assets/logo.svg" width="84" height="84" alt=""><div><p><b>Start in three clicks</b></p><ol><li>Open a group in <b>Layers</b> (left) and click a layer.</li><li>Press <b>Run</b> in the toolbar.</li><li>Change the <b>Date</b> in the toolbar: the whole workbench moves to that date, today or up to 2100.</li></ol><p>Results are in the <b>Dashboard</b> at the bottom. Press <b>F1</b> for the full manual; <b>File &rarr; Save full report as PDF</b> saves the report of every layer. New: <b>Crops</b>, <b>Year by year</b> and the <b>field on the map</b> (Tools).</p></div></div>', buttons: [{ label: 'Open the guide', act: () => { setTimeout(guideModal, 50); } }, { label: 'Start', pri: true }] }); }
 E.on('snap', ({ s }) => { if (E.metaData) updateStatus(s); });

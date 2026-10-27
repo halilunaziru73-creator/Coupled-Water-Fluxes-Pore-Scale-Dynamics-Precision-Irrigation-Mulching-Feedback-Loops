@@ -141,7 +141,7 @@
     if (which === 'record') { if (W.WXD) W.WXD.on = false; W.WXD = null; const pv = W.__wxPrev || { r: RAIN_VALUES.indexOf(1.0), t: TEMP_VALUES.indexOf(0) }; W.__wxPrev = null; applyState({ rainIdx: pv.r, tempIdx: pv.t }); try { document.getElementById('dssDate').dispatchEvent(new Event('change')); } catch (e) {} return true; }
     const d = W.WXSRC[which]; if (!d) return false; if (!W.WXD) W.__wxPrev = { r: state.rainIdx, t: state.tempIdx }; d.on = true; W.WXD = d; applyState({ rainIdx: RAIN_VALUES.indexOf(d.rainRef), tempIdx: TEMP_VALUES.indexOf(d.dTref) }); try { document.getElementById('dssDate').dispatchEvent(new Event('change')); } catch (e) {} return true;
   };
-  W.wxStatus = () => ({ src: W.WXD && W.WXD.on ? W.WXD.src : 'record', name: W.WXD && W.WXD.on ? W.WXD.name : '', file: !!W.WXSRC.file, online: !!W.WXSRC.online, years: W.WXD && W.WXD.on ? W.WXD.y0 + ' to ' + (W.WXD.y0 + NYRx - 1) : '', Pmean: W.WXD && W.WXD.on ? W.WXD.Pmean : null, key: W.WXD && W.WXD.on ? W.WXD.key : 'record' });
+  W.wxStatus = () => ({ src: W.WXD && W.WXD.on ? W.WXD.src : 'record', name: W.WXD && W.WXD.on ? W.WXD.name : '', file: !!W.WXSRC.file, online: !!W.WXSRC.online, years: W.WXD && W.WXD.on ? W.WXD.y0 + ' to ' + (W.WXD.y0 + NYRx - 1) : '', Pmean: W.WXD && W.WXD.on ? W.WXD.Pmean : null, ET0mean: W.WXD && W.WXD.on ? W.WXD.Emean : null, key: W.WXD && W.WXD.on ? W.WXD.key : 'record' });
 
   // ------------------------------------------------------------------ online daily weather of a location (history and forecast)
   const ISO = d => d.toISOString().slice(0, 10);

@@ -10,7 +10,7 @@ svg.ico{width:16px;height:16px;flex:none}
 html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font:12.5px/1.35 var(--font);overflow:hidden;user-select:none}
 button,input,select{font:inherit;color:inherit}
 .grow{flex:1}
-#app{display:grid;grid-template-rows:auto auto 1fr auto;height:100vh}
+#app{display:grid;grid-template-rows:auto auto auto 1fr auto;height:100vh}
 
 /* menu bar */
 #menubar{display:flex;align-items:center;gap:6px;height:30px;padding:0 8px;background:linear-gradient(#EEF3F9,#DCE6F1);border-bottom:1px solid var(--border)}
@@ -202,3 +202,8 @@ body.focus #leftDock,body.focus #rightDock,body.focus #dashDock,body.focus .hspl
 body.nolayer #emptyStage{display:flex}
 body.nolayer #engine{visibility:hidden}
 #viewBar:empty{display:none}
+
+#wxBar{padding:3px 10px;font-size:12px;background:#E7EEF6;border-bottom:1px solid #B8C4D2;color:#1B2A3A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#wxBar.on{background:#E3F3E6;border-bottom-color:#9CC7A4}
+#wxBar span{color:#556}
+#wxBar button{margin-left:8px}
