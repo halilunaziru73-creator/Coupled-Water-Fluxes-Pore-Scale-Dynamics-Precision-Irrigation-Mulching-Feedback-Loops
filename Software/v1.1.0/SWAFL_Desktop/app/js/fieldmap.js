@@ -83,9 +83,14 @@ const FieldMap = (() => {
       buttons: [{ label: 'Back to the field sketch', pri: true, act: () => { setTimeout(() => Sketch.open(), 0); } }, { label: 'Close' }] });
     setTimeout(initMap, 30);
   }
+  // OpenStreetMap map servers, tried in turn: the main one refuses requests that arrive without a web page address (an app window or a local file),
+  // so the same OpenStreetMap data is also read from servers that accept them
+  const OSMS = [{ n: 'OpenStreetMap', u: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', a: '© OpenStreetMap contributors', s: 'a' }, { n: 'OpenStreetMap by CARTO', u: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png', a: '© OpenStreetMap contributors © CARTO', s: 'abcd' }, { n: 'OpenStreetMap France', u: 'https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', a: '© OpenStreetMap contributors, tiles by OSM France', s: 'abc' }];
   const ESRI = 'https://server.arcgisonline.com/ArcGIS/rest/services/';
   function baseLayers(k) { const o = { maxZoom: 20, maxNativeZoom: 19, crossOrigin: 'anonymous' };
-    if (k === 'osm') return [L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', Object.assign({ attribution: '© OpenStreetMap contributors' }, o))];
+    if (k === 'osm') { const S = OSMS[F.osmI || 0], ly = L.tileLayer(S.u, Object.assign({ attribution: S.a, subdomains: S.s || 'abc' }, o)); let bad = 0;
+      ly.on('tileerror', () => { if (++bad === 4 && (F.osmI || 0) < OSMS.length - 1) { F.osmI = (F.osmI || 0) + 1; const st = document.getElementById('fmInfo'); if (st) st.textContent = 'The map server did not answer: switched to ' + OSMS[F.osmI].n + '.'; setBase('osm'); } });
+      ly.on('tileload', () => { bad = 0; }); return [ly]; }
     const a = [L.tileLayer(ESRI + 'World_Imagery/MapServer/tile/{z}/{y}/{x}', Object.assign({ attribution: 'Imagery © Esri, Maxar, Earthstar Geographics' }, o))];
     if (k === 'hyb') a.push(L.tileLayer(ESRI + 'Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}', Object.assign({ opacity: 0.9 }, o)));
     a.push(L.tileLayer(ESRI + 'Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', Object.assign({ opacity: 0.85 }, o))); return a; }
@@ -117,11 +122,16 @@ const FieldMap = (() => {
     $('fmDays').onchange = e => { F.days = Math.max(5, +e.target.value || 90); }; $('fmCloud').onchange = e => { F.cloud = Math.max(1, Math.min(100, +e.target.value || 30)); };
     setTimeout(() => { F.map.invalidateSize(); redraw(); if (F.pts.length > 2) fit(); if (F.cmp) showCompare(); if (F.res) showRes(); else if (FieldPrec.has(F.view)) F.refresh(F.view); if (F.site) showSite(); drawLayout(); steps(); F.lyc = layersCtl(F.map); mapLayers(); if (!F._lyT) F._lyT = setInterval(() => { if (document.getElementById('fmMap') && F.lyc) { try { mapLayers(); } catch (e) {} } }, 1500); }, 60);
   }
+  async function jget(u, ms) { const ac = new AbortController(), id = setTimeout(() => ac.abort(), ms || 12000); try { const r = await fetch(u, { signal: ac.signal }); if (!r.ok) throw new Error('answer ' + r.status); return await r.json(); } finally { clearTimeout(id); } }
   async function search() {
-    const q = document.getElementById('fmQ').value.trim(); if (!q) return; const st = document.getElementById('fmInfo');
-    try { st.textContent = 'Searching...'; const r = await fetch('https://geocoding-api.open-meteo.com/v1/search?count=1&language=en&format=json&name=' + encodeURIComponent(q)); const j = await r.json(); const g = j.results && j.results[0];
-      if (!g) { st.textContent = 'No place found for "' + q + '"'; return; } F.place = [g.name, g.admin1, g.country].filter(Boolean).join(', '); F.map.setView([g.latitude, g.longitude], 15); st.textContent = F.place + ' · ' + g.latitude.toFixed(5) + ', ' + g.longitude.toFixed(5); }
-    catch (e) { st.textContent = 'The place search needs the internet: ' + e.message; }
+    const q = document.getElementById('fmQ').value.trim(); if (!q) return; const st = document.getElementById('fmInfo'), why = [];
+    const tries = [
+      async () => { const j = await jget('https://geocoding-api.open-meteo.com/v1/search?count=1&language=en&format=json&name=' + encodeURIComponent(q)); const g = j.results && j.results[0]; return g ? { name: [g.name, g.admin1, g.country].filter(Boolean).join(', '), lat: g.latitude, lon: g.longitude } : null; },
+      async () => { const j = await jget('https://photon.komoot.io/api/?limit=1&q=' + encodeURIComponent(q)); const f = j.features && j.features[0]; return f ? { name: [f.properties.name, f.properties.state, f.properties.country].filter(Boolean).join(', '), lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0] } : null; },
+      async () => { const j = await jget('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=' + encodeURIComponent(q)); const g = j && j[0]; return g ? { name: g.display_name, lat: +g.lat, lon: +g.lon } : null; }];
+    st.textContent = 'Searching...'; let seen = false;
+    for (const f of tries) { try { const g = await f(); seen = true; if (g) { F.place = g.name; F.map.setView([g.lat, g.lon], 15); st.textContent = F.place + ' \u00b7 ' + g.lat.toFixed(5) + ', ' + g.lon.toFixed(5); return; } } catch (e) { why.push(e.name === 'AbortError' ? 'no answer in time' : e.message); } }
+    st.textContent = seen ? 'No place found for "' + q + '". Try a nearby town, or type the latitude and longitude below.' : 'The place search could not reach the internet (' + why[0] + '). The map keeps working: type the latitude and longitude below, or draw the field where you are.';
   }
   function fit() { if (F.pts.length > 1) F.map.fitBounds(L.latLngBounds(F.pts.map(p => L.latLng(p[0], p[1]))).pad(0.25)); }
   function redraw() {
@@ -420,7 +430,7 @@ const FieldMap = (() => {
     const cxp = (mx(lo0, z) + mx(lo1, z)) / 2, cyp = (my(la0, z) + my(la1, z)) / 2, sc = Math.min(w / (mx(lo1, z) - mx(lo0, z)), h / (my(la0, z) - my(la1, z)));
     const X = lon => w / 2 + (mx(lon, z) - cxp) * sc, Y = lat => h / 2 + (my(lat, z) - cyp) * sc;
     const tx0 = Math.floor((cxp - w / 2 / sc) / 256), tx1 = Math.floor((cxp + w / 2 / sc) / 256), ty0 = Math.floor((cyp - h / 2 / sc) / 256), ty1 = Math.floor((cyp + h / 2 / sc) / 256);
-    const url = (x, y) => F.base === 'osm' ? 'https://tile.openstreetmap.org/' + z + '/' + x + '/' + y + '.png' : 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/' + z + '/' + y + '/' + x;
+    const url = (x, y) => F.base === 'osm' ? OSMS[F.osmI || 0].u.replace('{s}', (OSMS[F.osmI || 0].s || 'a')[0]).replace('{z}', z).replace('{x}', x).replace('{y}', y) : 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/' + z + '/' + y + '/' + x;
     const jobs = []; let ok = 0; for (let tx = tx0; tx <= tx1; tx++) for (let ty = ty0; ty <= ty1; ty++) jobs.push(new Promise(res => { const im = new Image(); im.crossOrigin = 'anonymous'; im.onload = () => { try { c.drawImage(im, w / 2 + (tx * 256 - cxp) * sc, h / 2 + (ty * 256 - cyp) * sc, 256 * sc + 1, 256 * sc + 1); ok++; } catch (e) {} res(); }; im.onerror = () => res(); im.src = url(tx, ty); setTimeout(res, 12000); }));
     await Promise.all(jobs);
     try { c.getImageData(0, 0, 1, 1); } catch (e) { c.fillStyle = '#E9E6DE'; c.fillRect(0, 0, w, h); ok = 0; }   // a tile without permission would block the export: draw without tiles

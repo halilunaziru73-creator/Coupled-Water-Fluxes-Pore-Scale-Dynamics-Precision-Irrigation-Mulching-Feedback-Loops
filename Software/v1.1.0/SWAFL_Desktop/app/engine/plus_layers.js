@@ -29,9 +29,13 @@
     if (!pick) return null;
     pick.why = why; pick.rainfed = R['E0_' + s + '_Rainfed'] || null; return pick;
   };
+  // the crop of the twenty seasons: the crop of interest (the crop chosen for the project) or the long crop (a tree, vine or palm that stays
+  // in the field all year); every control of the project (soil, structure, salt, weather, trigger, method, mulch) feeds the same daily balance
+  window.yrKey = function () { const L = window.CROPLIB; if (state.yrCrop === 'long' && L) return L.crops[state.longCrop] ? state.longCrop : 'olive'; return state.crop; };
+  window.yrLabel = function () { const k = yrKey(), c = CROPS[k]; return (c && c.label || k) + (state.yrCrop === 'long' ? ' (long crop)' : ' (crop of interest)'); };
   window.cropYearFactor = function () {          // year-by-year irrigation factor of the chosen library crop against the cereal rotation (FAO-56)
-    if (!window.CROPLIB || !CROPLIB.crops[state.crop]) return null;
-    const c = CWB(state.crop), r = CWB('__ref'); return c.I.map((v, y) => r.I[y] > 5 ? v / r.I[y] : null);
+    if (!window.CROPLIB || !CROPLIB.crops[yrKey()]) return null;
+    const c = CWB(yrKey()), r = CWB('__ref'); return c.I.map((v, y) => r.I[y] > 5 ? v / r.I[y] : null);
   };
 
   // The Daisy run carries the year-to-year pattern of the setting it simulates. Controls that its experiment does not
@@ -43,12 +47,12 @@
     const S = (n, k, c) => ({ n, v: g(k), c }), F = (n, k, c) => rf ? { n, v: gf(k), c, dash: true } : null, sum = (ks) => r[ks[0]].map((_, i) => +ks.reduce((a, k) => a + (r[k] && r[k][i] || 0), 0).toFixed(3));
     const C = (t, u, ser) => ({ t, u, ser: ser.filter(Boolean) });
     let out = [];
-    if (id === 'yby') out = [C('Irrigation', 'mm', [S('irrigated', 'I', '#2E7DE8')]), C('Drainage below 1 m', 'mm', [S('irrigated', 'D', '#5AA0E1'), F('rainfed', 'D', '#1B1F23')]), C(r.lib ? 'Relative yield' : 'Grain yield', r.lib ? '%' : 'Mg/ha', [S('irrigated', 'Y', '#B8862E'), F('rainfed', 'Y', '#1B1F23')]), C('Nitrate leaching below 1 m', 'kg N/ha', [S('irrigated', 'NL', '#8E5A2A')]), C('Evapotranspiration', 'mm', [S('irrigated', 'ET', '#E8912D')]), C('Days of crop water stress', 'days', [S('irrigated', 'WS', '#D93025'), F('rainfed', 'WS', '#1B1F23')])];
+    if (id === 'yby') out = [C('Irrigation', 'mm', [S('irrigated', 'I', '#2E7DE8')]), C('Drainage below 1 m', 'mm', [S('irrigated', 'D', '#5AA0E1'), F('rainfed', 'D', '#1B1F23')]), C(r.lib ? 'Relative yield' : 'Grain yield', r.lib ? '%' : 'Mg/ha', [S('irrigated', 'Y', '#B8862E'), F('rainfed', 'Y', '#1B1F23')]), C('Nitrate leaching below 1 m', 'kg N/ha', [S('irrigated', 'NL', '#8E5A2A')]), C('Evapotranspiration', 'mm', [S('irrigated', 'ET', '#E8912D')]), C('Days of crop water stress', 'days', [S('irrigated', 'WS', '#D93025'), F('rainfed', 'WS', '#1B1F23')]), C('Salt in the root zone (ECe)', 'dS/m', [{ n: 'season mean', v: r.EC.map(v => +v.toFixed(2)), c: '#8E7A2A' }]), C('Wilting point of the season', '% by volume', [{ n: 'season mean', v: r.WPm.map(v => +v.toFixed(2)), c: '#B23A2E' }])];
     else if (id === 'wb2') out = [C('Rain and irrigation', 'mm', [S('rain', 'P', '#5AA0E1'), S('irrigation', 'I', '#2E7DE8')]), C('Transpiration and soil evaporation', 'mm', [S('transpiration', 'T', '#2E8B57'), S('soil evaporation', 'Es', '#C77D1A')]), C('Other evaporation', 'mm', [{ n: 'canopy, litter, ponds, snow', v: sum(['Ec', 'El', 'Ep', 'Esn']), c: '#8A8F98' }]), C('Drainage below 1 m', 'mm', [S('all', 'D', '#3A5FCD'), S('through biopores', 'Dbio', '#7FAFD0')]), C('Surface runoff', 'mm', [S('runoff', 'RO', '#B8743A')])];
     else if (id === 'nb') out = [C('Nitrogen supplied', 'kg N/ha', [S('fertiliser', 'Nfert', '#2E8B57'), S('mineralised', 'Nmin', '#8E5A2A')]), C('Nitrogen taken up by the crop', 'kg N/ha', [S('uptake', 'Nup', '#B8862E')]), C('Nitrogen lost', 'kg N/ha', [S('leaching', 'NL', '#3A5FCD'), S('volatilisation', 'Nvol', '#C77D1A'), S('denitrification', 'Nden', '#7A5AA8')])];
     return { years: Y, charts: out, sel: (typeof yearNow === 'function' ? yearNow() : null) };
   };
-  window.adjRun = function (pk, rainfed) {
+  const adjRun0 = function (pk, rainfed) {
     const r0 = rainfed ? pk.rainfed : pk.r; if (!r0) return null;
     const vff = VFF_VALUES[state.vffIdx], rain = RAIN_VALUES[state.rainIdx], dT = TEMP_VALUES[state.tempIdx], nR = NRATE_VALUES[state.nIdx] / 100;
     const ref = model(vff, 1.0, { noCrop: true, tempIdx: TEMP_VALUES.indexOf(0), nIdx: NRATE_VALUES.indexOf(100) }), cur = model(vff, rain);
@@ -70,12 +74,19 @@
     mp('RO', v => v * rain * rain);
     mp('Imat', (v, i) => { const a = r0.P[i] + r0.I[i]; return a > 0 ? v * (o.P[i] + o.I[i]) / a : v; }); mp('Imac', (v, i) => { const a = r0.P[i] + r0.I[i]; return a > 0 ? v * (o.P[i] + o.I[i]) / a : v; });
     mp('NL', v => v * fNL); mp('Nfert', v => v * nR); mp('Nvol', v => v * nR); mp('Nden', v => v * Math.sqrt(nR)); mp('Nmin', v => v); mp('Nup', v => v * fY);
+    o.EC = lib ? c.EC.slice() : new Array(20).fill(+state.salt0 || 0); o.WPm = lib ? c.WP.map(v => v * 100) : new Array(20).fill(0); o.FCm = lib ? c.FC.map(v => v * 100) : new Array(20).fill(0); o.tol = lib ? c.tol : null;
     if (lib) { const ry = c.RY, k = cur.yield / Math.max(1e-6, 100 * c.mean.RY); mp('Y', (v, i) => 100 * ry[i] * k); mp('WS', (v, i) => c.stress[i]); }
     else { mp('Y', v => v * fY); mp('WS', v => v); }
     ['stem', 'leaf'].forEach(k => mp(k, v => v * fY)); mp('HI', v => v);
+    if (lib) {          // the crop of the twenty seasons: the daily FAO-56 balance of that crop on this soil, structure, salt, weather, trigger, method and mulch, season by season
+      for (let i = 0; i < 20; i++) { o.I[i] = c.I[i]; o.P[i] = c.P[i]; o.D[i] = c.DP[i]; o.RO[i] = c.RO[i]; const ks = ['T', 'Es', 'Ec', 'El', 'Ep', 'Esn'], tot = ks.reduce((s, k) => s + o[k][i], 0) || 1, f = c.ETa[i] / tot; ks.forEach(k => { o[k][i] *= f; }); o.ET[i] = c.ETa[i]; o.Y[i] = 100 * c.RY[i]; o.WS[i] = c.stress[i]; }
+      mp('Dbio', (v, i) => r0.D[i] > 1e-6 ? v * o.D[i] / r0.D[i] : v);
+    }
     const notes = []; if (Math.abs(rain - 1) > 1e-6) notes.push('rainfall ×' + rain.toFixed(1)); if (Math.abs(dT) > 1e-6) notes.push((dT > 0 ? '+' : '') + dT.toFixed(1) + ' °C'); if (Math.abs(nR - 1) > 1e-6) notes.push('nitrogen ' + Math.round(nR * 100) + ' %'); if (lib) notes.push(CROPS[state.crop].label.toLowerCase() + ' (crop coefficients)');
     o.yUnit = lib ? '% of potential' : 'Mg/ha'; o.lib = lib; o.notes = notes; return o;
   };
+  // the adjustments run with the crop of the twenty seasons in place of the project crop, so the whole model answers for that crop
+  window.adjRun = function (pk, rainfed) { const k = yrKey(); if (k === state.crop) return adjRun0(pk, rainfed); const s = state.crop; state.crop = k; try { return adjRun0(pk, rainfed); } finally { state.crop = s; } };
   const adjText = (pk, r) => 'The simulated seasons of ' + pk.why.charAt(0).toLowerCase() + pk.why.slice(1) + (r.notes.length ? '; set to your ' + r.notes.join(', ') : '');
 
   // ------------------------------------------------------------------ small chart kit
@@ -117,11 +128,11 @@
 
   // ================================================================== Y1 Year by year
   function drawYby() {
-    paper(); let y = header('Year by year: how reliable is this setting?', DATA.soil_labels[state.soil] + ' · ' + (CROPS[state.crop] || {}).label + ' · 20 seasons, ' + YRS()[0] + ' to ' + YRS()[19] + ' (on the calendar of the working date)', 4);
+    paper(); let y = header('Year by year: how reliable is this setting?', DATA.soil_labels[state.soil] + ' · ' + yrLabel() + ' · 20 seasons, ' + YRS()[0] + ' to ' + YRS()[19] + ' (on the calendar of the working date)', 4);
     const pk = pickRun(); if (!pk) { noData(y); return; }
     const r = adjRun(pk), rf = adjRun(pk, true);
     let bx = 16 + badge('YOUR DATA', 16, y, '#1E8E3E') + 8; { const nl = sidWrap(adjText(pk, r) + '. The red bar is the year on the clock; click a bar to go to that year.', bx, y + 1, W - 16 - bx, { s: 9.5, c: INK }, 13); y += 14 + 13 * Math.max(0, (nl || 1) - 1); }
-    const cw = (W - 44) / 2, ph = 214, cols = r.crop.map(c => CROPCOL[c] || '#8A8F98');
+    const cw = (W - 44) / 2, ph = 214, cols = r.lib ? r.crop.map(() => '#B8862E') : r.crop.map(c => CROPCOL[c] || '#8A8F98');
     const P = [
       ['Irrigation', 'mm per year', r.I, { col: '#2E7DE8', unit: 'mm' }],
       ['Drainage below 1 m', 'mm per year · black dots: rainfed', r.D, { col: '#5AA0E1', unit: 'mm', overlay: rf ? rf.D : null, extra: rf ? rf.D : [] }],
@@ -129,11 +140,13 @@
       ['Nitrate leaching below 1 m', 'kg N per ha per year', r.NL, { col: '#8E5A2A', unit: 'kg N', dec: 1 }],
       ['Evapotranspiration', 'mm per year', r.ET, { col: '#E8912D', unit: 'mm' }],
       ['Days of crop water stress', 'days per season', r.WS, { col: '#D93025', unit: 'days', dec: 1, overlay: rf ? rf.WS : null, extra: rf ? rf.WS : [] }],
+      ['Salt in the root zone (ECe)', r.tol ? 'dS/m, season mean · yield falls above ' + r.tol.th + ' dS/m' : 'dS/m, season mean', r.EC, { col: '#8E7A2A', unit: 'dS/m', dec: 1 }],
+      ['Wilting point of the season', '% by volume, season mean: rises with the salt', r.WPm, { col: '#B23A2E', unit: '%', dec: 1 }],
     ];
     const st = {};
     P.forEach((p, i) => { const x = 16 + (i % 2) * (cw + 12), yy = y + 6 + Math.floor(i / 2) * (ph + 10); frame(x, yy, cw, ph, p[0], p[1]); st[p[0]] = yearBars(x, yy, cw, ph, p[2].map(v => v == null ? 0 : v), p[3]); });
-    y += 6 + 3 * (ph + 10);
-    legend(Object.entries(CROPCOL).map(([k, c]) => [c, k]), 16, y + 8); y += 22;
+    y += 6 + 4 * (ph + 10);
+    legend(r.lib ? [['#B8862E', yrLabel()]] : Object.entries(CROPCOL).map(([k, c]) => [c, k]), 16, y + 8); y += 22;
     // reliability summary
     frame(16, y, W - 32, 150, 'Reliability of this setting over the 20 seasons', 'from the yearly values above');
     const I = r.I, D = r.D, Yv = r.Y, NL = r.NL, mI = mean(I), mY = mean(Yv);

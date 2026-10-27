@@ -1636,6 +1636,17 @@ function irToday(y, C, R, kind) {
 // efficiency of the design. Irrigate when the root-zone deficit reaches the trigger depth or the design depth, whichever is
 // smaller; each irrigation refills the root zone up to the design depth (a shorter run when the trigger comes first). =====
 const _IRP = { keys: [], val: {} };
+// soil hydraulic limits of a day (shared by the daily plan and the 20-season balance): organic matter drifts toward the level of the
+// tillage and mulch (first order, 25 y), loosened soil re-consolidates at the consolidation rate after the tillage day, and the salt
+// of the root zone (ECe, dS/m) adds an osmotic head of 36 kPa per dS/m, so the wilting point rises (Brooks-Corey from Saxton & Rawls 2006)
+const _HYD = {};
+window.hydLimits = function (k, ec, tillK) {
+  const soil = state.soil, tex = DATA.texture[soil], om0 = SID.om, vff = VFF_VALUES[state.vffIdx], awc = AWC[soil] || 1.5, sx = (om) => { const key = soil + '|' + om.toFixed(2); return _HYD[key] || (_HYD[key] = SIDM.saxton(tex.sand / 100, tex.clay / 100, om)); };
+  const B0 = sx(om0), AW0 = Math.max(0.02, B0.fc - B0.wp), omEq = ({ conv: 0.85, reduced: 1.0, notill: 1.2 }[state.till] || 1) * (vff < 0.95 ? 1.08 : 1), phi0 = ({ conv: 0.06, reduced: 0.03, notill: 0 }[state.till] || 0), tcR = TC_VALUES[state.tcIdx] || 0.005;
+  const om = om0 * (omEq + (1 - omEq) * Math.exp(-(k / DPY) / 25)), s = sx(om), dphi = tillK != null && k >= tillK ? phi0 * Math.exp(-tcR * (k - tillK)) : 0, psm = Math.max(150, 1500 - 36 * (ec || 0)), wpE = s.wp * Math.pow(1500 / psm, s.lam || 0.2);
+  const awK = clampN(awc * (Math.max(0.01, s.fc + 0.2 * dphi - wpE)) / AW0, 0.25 * awc, 1.6 * awc);
+  return { wp: wpE, fc: wpE + awK / 10, sat: Math.max(s.sat + dphi, wpE + awK / 10 + 0.03), awK, ec: ec || 0 };
+};
 function irPlan(opt) {
   opt = opt || {}; const sim = seasonSim(), kW = fclock.kd(), S0 = irStart(sim, kW), k0 = S0.k, Zn = opt.Zn > 0 ? +opt.Zn : null, Ea = clampN(opt.Ea || ((state.method === 'M01_Overhead') ? 0.75 : /Drip/.test(state.method) ? 0.9 : 0.6), 0.05, 1);
   const key = [simCache.key, kW, Zn == null ? 'refill' : Zn.toFixed(2), Ea.toFixed(3), state.vffIdx, state.mulchType, (window.WXD && WXD.on) ? WXD.key : 'rec', state.rainIdx, state.tempIdx, state.decMode, state.decHor, state.decInit, S0.virt ? 'v' : 'r', state.till, state.tcIdx, SID.om, state.salt0, state.ecw].join('|');
@@ -1654,10 +1665,7 @@ function irPlan(opt) {
   // soil hydraulic limits through time (the retention curve is not fixed): organic matter drifts toward the level of the tillage and mulch
   // (first order, 25 y), loosened soil re-consolidates at the consolidation rate, and salt that accumulates with the irrigation water
   // adds an osmotic head, so the wilting point rises (osmotic head 36 kPa per dS/m of ECe, Brooks-Corey from Saxton & Rawls 2006)
-  const tex0 = DATA.texture[state.soil], om0 = SID.om, B0 = SIDM.saxton(tex0.sand / 100, tex0.clay / 100, om0), AW0 = Math.max(0.02, B0.fc - B0.wp);
-  const omEq = ({ conv: 0.85, reduced: 1.0, notill: 1.2 }[state.till] || 1) * (vff < 0.95 ? 1.08 : 1), phi0 = ({ conv: 0.06, reduced: 0.03, notill: 0 }[state.till] || 0), tcR = TC_VALUES[state.tcIdx] || 0.005, tillK = (w ? w.sow : k0) - 7;
-  const hydAt = (k, ec) => { const om = om0 * (omEq + (1 - omEq) * Math.exp(-(k / DPY) / 25)), s = SIDM.saxton(tex0.sand / 100, tex0.clay / 100, om), dphi = k >= tillK ? phi0 * Math.exp(-tcR * (k - tillK)) : 0, psm = Math.max(150, 1500 - 36 * ec), wpE = s.wp * Math.pow(1500 / psm, s.lam || 0.2);
-    const awK = clampN(awc * (Math.max(0.01, s.fc + 0.2 * dphi - wpE)) / AW0, 0.25 * awc, 1.6 * awc); return { wp: wpE, fc: wpE + awK / 10, sat: Math.max(s.sat + dphi, wpE + awK / 10 + 0.03), awK, ec }; };
+  const tillK = (w ? w.sow : k0) - 7, hydAt = (k, ec) => hydLimits(k, ec, tillK);
   let EC = clampN(+state.salt0 || 0, 0, 25); const ECw = clampN(+state.ecw || 0, 0, 12);
   const A = k => k - s0, N2 = n + ext, WPA = new Float32Array(N2), FCA = new Float32Array(N2), SATA = new Float32Array(N2), ECA = new Float32Array(N2), Dr = new Float32Array(N2), TAW = new Float32Array(N2), RAW = new Float32Array(N2), ETc = new Float32Array(N2), ETa = new Float32Array(N2), P = new Float32Array(N2), RO = new Float32Array(N2), DP = new Float32Array(N2), I = new Float32Array(N2), KC = new Float32Array(N2), ZR = new Float32Array(N2), KS = new Float32Array(N2), THR = new Float32Array(N2), live = new Uint8Array(N2);
   const initO = state.decInit != null && state.decInit !== 'sim' && isFinite(+state.decInit) ? +state.decInit : null;
@@ -2591,7 +2599,7 @@ const TRIGGER_AT_FSTAR = {
 };
 const FSTAR = 0.45; // soil-independent critical depletion (5% yield loss)
 
-let state = { soil: DATA.soils[4], till: "conv", tcIdx: 0, vffIdx: 9, capIdx: 1, rainIdx: 5, tempIdx: 2, trigIdx: 6, zIdx: 3, nIdx: 6, method: 'M02_Surface', range: 'all', mulchType: 'straw', fview: 'day', trigMode: 'own', trigF: 0.5, salt0: 0.5, ecw: 0.6, trigBy: Object.fromEntries(DATA.soils.map(function (q) { return [q, 0.5]; })), decMode: 'plant', decHor: 'month', decInit: 'sim', areaHa: 1, crop: "cereal" };
+let state = { soil: DATA.soils[4], till: "conv", tcIdx: 0, vffIdx: 9, capIdx: 1, rainIdx: 5, tempIdx: 2, trigIdx: 6, zIdx: 3, nIdx: 6, method: 'M02_Surface', range: 'all', mulchType: 'straw', fview: 'day', trigMode: 'own', trigF: 0.5, salt0: 0.5, ecw: 0.6, yrCrop: 'interest', longCrop: 'olive', trigBy: Object.fromEntries(DATA.soils.map(function (q) { return [q, 0.5]; })), decMode: 'plant', decHor: 'month', decInit: 'sim', areaHa: 1, crop: "cereal" };
 const TEMP_VALUES = [-1.0,-0.5,0.0,0.5,1.0,1.5,2.0,2.5,3.0,3.5];
 // Cereal is the real, simulated rotation (factor 1.0, no change). Legume and Vegetable factors are
 // illustrative only, loosely reflecting typical relative dry-matter yield and harvest index differences
@@ -3881,7 +3889,7 @@ function simStd20() {
   const soil = state.soil; if (_std20[soil]) return _std20[soil];
   const S0 = Object.assign({}, state), C0 = Object.assign({}, current);
   try {
-    Object.assign(state, { till: 'conv', tcIdx: 0, vffIdx: VFF_VALUES.length - 1, method: 'M02_Surface', trigMode: 'own', trigBy: Object.fromEntries(DATA.soils.map(function (q) { return [q, 0.5]; })), trigF: 0.5, salt0: 0.5, ecw: 0.6, decMode: 'plant', decHor: 'month', decInit: 'sim', areaHa: 1, trigIdx: TRIG_VALUES.indexOf(-300), zIdx: Z_VALUES.indexOf(20), nIdx: NRATE_VALUES.indexOf(100), rainIdx: RAIN_VALUES.indexOf(1.0), tempIdx: TEMP_VALUES.indexOf(0), crop: 'cereal' });
+    Object.assign(state, { till: 'conv', tcIdx: 0, vffIdx: VFF_VALUES.length - 1, method: 'M02_Surface', trigMode: 'own', trigBy: Object.fromEntries(DATA.soils.map(function (q) { return [q, 0.5]; })), trigF: 0.5, salt0: 0.5, ecw: 0.6, yrCrop: 'interest', longCrop: 'olive', decMode: 'plant', decHor: 'month', decInit: 'sim', areaHa: 1, trigIdx: TRIG_VALUES.indexOf(-300), zIdx: Z_VALUES.indexOf(20), nIdx: NRATE_VALUES.indexOf(100), rainIdx: RAIN_VALUES.indexOf(1.0), tempIdx: TEMP_VALUES.indexOf(0), crop: 'cereal' });
     Object.assign(current, model(VFF_VALUES[state.vffIdx], RAIN_VALUES[state.rainIdx])); _std20[soil] = computeSim();
   } finally { Object.keys(state).forEach(k => { if (!(k in S0)) delete state[k]; }); Object.assign(state, S0); Object.assign(current, C0); }
   return _std20[soil];

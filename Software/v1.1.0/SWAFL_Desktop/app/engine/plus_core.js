@@ -111,12 +111,16 @@
   };
   // the whole daily rain series in use (20 years): for the erosivity of the rain
   window.rainSeries = function () { const WX = (window.WXD && WXD.on) ? WXD : null, sim = seasonSim(), wxP = WX ? RAIN_VALUES[state.rainIdx] / (WX.rainRef || 1) : 1, P = new Float32Array(ND); for (let k = 0; k < ND; k++) P[k] = WX ? WX.P[k] * wxP : (sim.rain[k] || 0); return { P: Array.from(P), years: NYR, dpy: DPY, src: WX ? (WX.src === 'online' ? 'online weather of ' + WX.name : 'weather file ' + WX.name) : 'recorded weather of the simulations', y0: WX ? WX.y0 : 1980 }; };
+  // salinity tolerance (threshold ECe in dS/m, % yield lost per dS/m above it): Maas and Hoffman (1977), FAO Irrigation and Drainage Paper 29;
+  // crops not tabulated take 2.0 and 10 (field crops) or 1.5 and 15 (trees, vines and palms)
+  const SALT = { wheat: [6.0, 7.1], maize: [1.7, 12], rice: [3.0, 12], sorghum: [6.8, 16], cotton: [7.7, 5.2], soybean: [5.0, 20], potato: [1.7, 12], tomato: [2.5, 9.9], onion: [1.2, 16], cabbage: [1.8, 9.7], pepper: [1.5, 14], groundnut: [3.2, 29], cowpea: [4.9, 12], citrus: [1.7, 16], apple: [1.7, 19], pear: [1.7, 19], peach: [1.7, 21], apricot: [1.6, 24], almond: [1.5, 19], winegrape: [1.5, 9.6], tablegrape: [1.5, 9.6], datepalm: [4.0, 3.6], cereal: [6.0, 7.1] };
+  window.saltTol = function (k) { const L = window.CROPLIB, c = L && L.crops[k], s = SALT[k]; return s ? { th: s[0], sl: s[1], tab: true } : c && c.group === 'perennial' ? { th: 1.5, sl: 15, tab: false } : { th: 2.0, sl: 10, tab: false }; };
   window.CWB = function (cropKey, opt) {
     opt = opt || {};
     const pp = cropKey === '__ref' ? null : LIB.params(cropKey, opt.densIdx != null ? opt.densIdx : state.densIdx, opt.plantDoy != null ? opt.plantDoy : state.plantDoy);
     const meth = opt.method || state.method, effApp = meth === 'M01_Overhead' ? 0.75 : /Drip/.test(meth) ? 0.90 : 0.60;
     const f = yearlyForcing(), soil = state.soil, trig = trigAbsFor(soil), fT = opt.fT != null ? opt.fT : clampN(depletionAt(soil, trig), 0.05, 0.95);
-    const key = [cropKey, opt.densIdx, opt.plantDoy, state.densIdx, state.plantDoy, soil, meth, fT.toFixed(3), state.rainIdx, state.tempIdx, f.real, !!opt.daily, !!opt.rainfed, (window.WXD && WXD.on) ? WXD.key : 'rec'].join('|');
+    const key = [cropKey, opt.densIdx, opt.plantDoy, state.densIdx, state.plantDoy, soil, meth, fT.toFixed(3), state.rainIdx, state.tempIdx, state.till, state.tcIdx, SID.om, state.salt0, state.ecw, state.vffIdx, f.real, !!opt.daily, !!opt.rainfed, (window.WXD && WXD.on) ? WXD.key : 'rec'].join('|');
     if (_cwb[key]) return _cwb[key];
     let kc, rootMax, p0, ky, fcS;
     if (pp) { kc = LIB.kcCurve(pp); rootMax = Math.min(pp.root, 100); p0 = pp.p; ky = pp.ky; fcS = pp.fc; }
@@ -124,19 +128,19 @@
       const w = oWindows('cereal'); kc = new Float32Array(ND); rootMax = 95; p0 = 0.55; ky = 1.05; fcS = 0.9;
       for (const x of w) for (let d = Math.max(0, x.sow); d <= Math.min(ND - 1, x.harv); d++) kc[d] = 0.3 + 0.85 * oCover(d, x);
     }
-    const awc = AWC[soil], rand = seededRandom(hashStr(soil) + 4242), out = { I: [], In: [], ETc: [], ETa: [], DP: [], RO: [], P: [], ev: [], stress: [], RY: [] };
+    const awc = AWC[soil], rand = seededRandom(hashStr(soil) + 4242), out = { I: [], In: [], ETc: [], ETa: [], DP: [], RO: [], P: [], ev: [], stress: [], RY: [], EC: [], WP: [], FC: [] }, tol = saltTol(cropKey === '__ref' ? 'cereal' : cropKey);
     const daily = opt.daily ? { Dr: new Float32Array(ND), TAW: new Float32Array(ND), RAW: new Float32Array(ND), I: new Float32Array(ND), P: new Float32Array(ND), ETc: new Float32Array(ND), ETa: new Float32Array(ND), kc: new Float32Array(ND), DP: new Float32Array(ND) } : null;
-    let Dr = 0;
+    let Dr = 0, EC = clampN(+state.salt0 || 0, 0, 25); const ECw = clampN(+state.ecw || 0, 0, 12), sowD = pp ? (pp.sow || 0) : 120;
     for (let y = 0; y < NYR; y++) {
       const rainDays = []; let tot = 0; for (let d = 0; d < DPY; d++) { const r = rand() < 0.28 ? -Math.log(Math.max(1e-6, rand())) : 0; rainDays.push(r); tot += r; }
       const sc = tot > 0 ? f.pr[y] / tot : 0, WX = (window.WXD && WXD.on) ? WXD : null, wxP = WX ? RAIN_VALUES[state.rainIdx] / (WX.rainRef || 1) : 1, wxE = WX ? 1 + 0.035 * (TEMP_VALUES[state.tempIdx] - (WX.dTref || 0)) : 1;
-      let I = 0, In = 0, ETc = 0, ETa = 0, DP = 0, RO = 0, Pt = 0, ev = 0, st = 0, sETc = 0, sETa = 0;
+      let I = 0, In = 0, ETc = 0, ETa = 0, DP = 0, RO = 0, Pt = 0, ev = 0, st = 0, sETc = 0, sETa = 0, sEC = 0, sN = 0, sWP = 0, sFC = 0;
       for (let d = 0; d < DPY; d++) {
         const k = y * DPY + d, doy = d, e0 = WX ? WX.ET0[k] * wxE : f.et0[y] * wE(doy) / wEs;
         const kcd = pp ? kc[doy] : kc[k], inSeason = kcd > 0.01;
         const kcEff = inSeason ? kcd : 0.25;                                     // bare soil outside the season
         const zr = inSeason ? (pp && pp.group === 'perennial' ? rootMax : clampN(15 + (rootMax - 15) * Math.min(1, kcd / Math.max(0.3, (pp ? pp.kcMid : 1.15)) * 1.15), 15, rootMax)) : 15;
-        const TAW = awc * zr, p = clampN(p0 + 0.04 * (5 - kcEff * e0), 0.1, 0.8), RAW = p * TAW;
+        const hy = hydLimits(k, EC, y * DPY + sowD - 7), TAW = hy.awK * zr, p = clampN(p0 + 0.04 * (5 - kcEff * e0), 0.1, 0.8), RAW = p * TAW;
         if (Dr > TAW) Dr = TAW;
         const P = WX ? WX.P[k] * wxP : rainDays[d] * sc; let ro = 0;
         if (pp && pp.c && pp.c.ponded && inSeason) ro = 0;                       // rice is bunded: no runoff
@@ -146,16 +150,21 @@
         Dr = Dr - (P - ro) + eta; let dp = 0; if (Dr < 0) { dp = -Dr; Dr = 0; }
         let irr = 0;
         if (inSeason && Dr >= fT * TAW && !opt.rainfed) { irr = Dr; Dr = 0; ev++; }   // refill the root zone to field capacity
-        I += irr / effApp; In += irr; ETc += etc; ETa += eta; DP += dp + (irr / effApp - irr) * (/Drip/.test(meth) ? 0.4 : 0.55); RO += ro + (irr / effApp - irr) * (/Drip/.test(meth) ? 0.1 : meth === 'M01_Overhead' ? 0.2 : 0.3); Pt += P;
-        if (inSeason) { sETc += etc; sETa += eta; if (ks < 0.999) st++; }
+        // leaching requirement (Ayers and Westcot, 1985): when the salt of the root zone nears the tolerance of the crop, the irrigation carries
+        // the extra water LR = ECw / (5 ECth - ECw) that drains below the roots and takes the salt with it
+        const lr = irr > 0 && ECw > 0.1 && EC > 0.7 * tol.th ? clampN(ECw / Math.max(1e-3, 5 * tol.th - ECw), 0, 0.3) : 0, ex = irr > 0 ? irr * lr / (1 - lr) : 0; dp += ex;
+        EC = clampN(EC + (ECw * ((irr + ex) / effApp + 0.1 * P) - EC * dp) / Math.max(40, hy.sat * zr * 10), 0, 25);
+        I += (irr + ex) / effApp; In += irr; ETc += etc; ETa += eta; DP += dp + (irr / effApp - irr) * (/Drip/.test(meth) ? 0.4 : 0.55); RO += ro + (irr / effApp - irr) * (/Drip/.test(meth) ? 0.1 : meth === 'M01_Overhead' ? 0.2 : 0.3); Pt += P;
+        if (inSeason) { sETc += etc; sETa += eta; if (ks < 0.999) st++; sEC += EC; sWP += hy.wp; sFC += hy.fc; sN++; }
         if (daily) { daily.Dr[k] = Dr; daily.TAW[k] = TAW; daily.RAW[k] = RAW; daily.I[k] = irr / effApp; daily.P[k] = P; daily.ETc[k] = etc; daily.ETa[k] = eta; daily.kc[k] = kcd; daily.DP[k] = dp; }
       }
       out.I.push(I); out.In.push(In); out.ETc.push(ETc); out.ETa.push(ETa); out.DP.push(DP); out.RO.push(RO); out.P.push(Pt); out.ev.push(ev); out.stress.push(st);
-      out.RY.push(sETc > 0 ? clampN(1 - (ky == null ? 1 : ky) * (1 - sETa / sETc), 0, 1) : 1);
+      const ecm = sN ? sEC / sN : EC; out.EC.push(ecm); out.WP.push(sN ? sWP / sN : 0); out.FC.push(sN ? sFC / sN : 0);
+      out.RY.push((sETc > 0 ? clampN(1 - (ky == null ? 1 : ky) * (1 - sETa / sETc), 0, 1) : 1) * clampN(1 - tol.sl / 100 * Math.max(0, ecm - tol.th), 0, 1));
     }
     const mean = a => a.reduce((x, y) => x + y, 0) / a.length;
-    out.mean = { I: mean(out.I), In: mean(out.In), ETc: mean(out.ETc), ETa: mean(out.ETa), DP: mean(out.DP), RO: mean(out.RO), P: mean(out.P), ev: mean(out.ev), stress: mean(out.stress), RY: mean(out.RY) };
-    out.pp = pp; out.fc = fcS; out.daily = daily; out.effApp = effApp; out.fT = fT; out.real = f.real; out.kySrc = pp ? (pp.ky == null ? 'assumed 1.0 (not tabulated)' : 'tabulated') : 'tabulated';
+    out.mean = { I: mean(out.I), In: mean(out.In), ETc: mean(out.ETc), ETa: mean(out.ETa), DP: mean(out.DP), RO: mean(out.RO), P: mean(out.P), ev: mean(out.ev), stress: mean(out.stress), RY: mean(out.RY), EC: mean(out.EC), WP: mean(out.WP), FC: mean(out.FC) };
+    out.tol = tol; out.pp = pp; out.fc = fcS; out.daily = daily; out.effApp = effApp; out.fT = fT; out.real = f.real; out.kySrc = pp ? (pp.ky == null ? 'assumed 1.0 (not tabulated)' : 'tabulated') : 'tabulated';
     _cwb[key] = out; return out;
   };
 
