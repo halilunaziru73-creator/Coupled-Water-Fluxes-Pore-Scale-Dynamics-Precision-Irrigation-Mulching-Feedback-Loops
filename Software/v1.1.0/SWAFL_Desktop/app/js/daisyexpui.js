@@ -172,13 +172,14 @@
   }
 
   // ------------------------------------------------------------------ weather: built-in stations, online weather of the user's area, or the weather of My data
+  function curPick() { const U = window.DaisyScenUI, m = U ? U.my() : {}; return st.wxPick || (m.wxMode === 'course' || !m.wx ? 'built' : m.wxMode === 'project' ? '__proj' : m.wxMode === 'online' ? '__online' : '__my'); }
   function wxSelect() {
-    const m = window.DaisyScenUI ? window.DaisyScenUI.my() : {}, pick = st.wxPick || (st.useMy && m.wx ? '__my' : 'built'), dis = st.factors.some(f => f.id === 'station') ? ' disabled' : '';
-    return '<select data-b="station"' + dis + '><optgroup label="Online, for my area"><option value="__online"' + (pick === '__online' ? ' selected' : '') + '>Online weather of my area (Open-Meteo, any place)</option>' + (m.wx ? '<option value="__my"' + (pick === '__my' ? ' selected' : '') + '>My weather: ' + esc(m.wx.src || m.wx.name || 'from My data') + '</option>' : '') + '</optgroup><optgroup label="Built-in stations">' +
+    const U = window.DaisyScenUI, m = U ? U.my() : {}; if (U) U.defaultWx(); const pn = U && U.projectName(), pick = curPick(), dis = st.factors.some(f => f.id === 'station') ? ' disabled' : '';
+    return '<select data-b="station"' + dis + '><optgroup label="Online, for my area"><option value="__online"' + (pick === '__online' ? ' selected' : '') + '>Online weather of my area (Open-Meteo, any place)</option>' + (pn ? '<option value="__proj"' + (pick === '__proj' ? ' selected' : '') + '>The weather of my SWAFL project: ' + esc(pn) + '</option>' : '') + (m.wx && m.wxMode !== 'project' && m.wxMode !== 'online' ? '<option value="__my"' + (pick === '__my' ? ' selected' : '') + '>My weather: ' + esc(m.wx.src || m.wx.name || 'from My data') + '</option>' : '') + '</optgroup><optgroup label="Built-in stations">' +
       SC.STATIONS.map(s => '<option value="' + s.id + '"' + (pick === 'built' && (st.base.station || 'course') === s.id ? ' selected' : '') + '>' + esc(s.label) + '</option>').join('') + '</optgroup></select>';
   }
   function wxRow() {
-    if ((st.wxPick || '') !== '__online') return ''; const m = window.DaisyScenUI.my(), yE = new Date().getUTCFullYear() - 1;
+    if (curPick() !== '__online') return ''; const m = window.DaisyScenUI.my(), yE = new Date().getUTCFullYear() - 1;
     return '<span id="dzXWxOn"><label>Place</label><input type="text" id="dzXPlace" value="' + esc(m.place || st.place || '') + '" placeholder="a town, village or farm" style="width:170px"><label>years</label><input type="number" id="dzXY0" value="' + (m.y0 || yE - 11) + '" style="width:64px"> to <input type="number" id="dzXY1" value="' + (m.y1 || yE) + '" style="width:64px"><button class="btn pri" id="dzXWxGet">Get the weather</button><span class="pnote" id="dzXWxMsg">' + (m.wx && m.wxMode === 'online' ? esc(m.wx.src || '') + ' is ready' : 'needs the internet once') + '</span></span>';
   }
   function bindWx() {
@@ -305,7 +306,7 @@
     const box = $('Plan'); box.querySelectorAll('[data-q]').forEach(b => b.onclick = () => answer(b.dataset.q));
     box.querySelectorAll('[data-fdel]').forEach(b => b.onclick = () => { readPlanInputs(); st.factors.splice(+b.dataset.fdel, 1); renderPlan(); });
     const add = $('Add'); if (add) add.onchange = () => { readPlanInputs(); if (add.value) { const f = X.factor(add.value); st.factors.push({ id: f.id, levels: f.levels.map(v => typeof v === 'object' ? v.label : v).slice() }); renderPlan(); } };
-    box.querySelectorAll('input,select').forEach(i => { if (i.id !== 'dzXAdd') i.onchange = () => { const wasOn = st.wxPick; readPlanInputs(); if (i.dataset.b === 'station' && (/^__/.test(i.value) || wasOn === '__online' || wasOn === '__my')) { if (i.value === '__my') st.useMy = true; if (i.value === 'built' || !/^__/.test(i.value)) st.useMy = false; renderPlan(); return; } count(); }; });
+    box.querySelectorAll('input,select').forEach(i => { if (i.id !== 'dzXAdd') i.onchange = () => { readPlanInputs(); if (i.dataset.b === 'station') { const v = i.value, U = window.DaisyScenUI; if (v === '__proj') { try { U.project(); st.useMy = true; st.wxPick = null; } catch (e) { D.note('Xst', esc(e.message), 1); } } else if (v === '__my') { st.useMy = true; } else if (v === '__online') { st.useMy = true; } else { st.useMy = false; } renderPlan(); return; } count(); }; });
     const ap = $('AddPlan'); if (ap) ap.onclick = () => { if (!st.factors.length) return; addToSet(snap()); };
     const b = $('Batch'); if (b) b.onclick = () => run(false); const s = $('Seq'); if (s) s.onclick = () => run(true); const z = $('Zip'); if (z) z.onclick = saveZip; const p = $('PlanSave'); if (p) p.onclick = () => { readPlanInputs(); D.download('daisy-experiment-plan.json', JSON.stringify({ request: st.text, plan: currentPlan(), responses: st.responses }, null, 1), 'application/json'); };
     const e = $('Ens'); if (e) e.onclick = () => showEnsemble();
@@ -444,6 +445,7 @@
     D.download('daisy-experiment-report.html', '<!doctype html><meta charset="utf-8"><title>Daisy experiment</title><style>body{font:14px Segoe UI,Arial;max-width:1000px;margin:20px auto;padding:0 14px}table{border-collapse:collapse;font-size:12px}td,th{border:1px solid #ccc;padding:2px 6px}th{background:#eef1f5}h2{margin-top:26px}</style><h1>' + esc((st.res && st.res.plan.title) || 'Daisy experiment') + '</h1><p>' + esc(st.text) + '</p><p>' + rows.length + ' runs of Daisy 7.1.14' + (st.source === 'ens' ? ' (the published runs of the study)' : '') + '.</p>' + imgs + '<h2>All runs</h2>' + tab, 'text/html');
   }
   function bind() {
+    if (window.DaisyScenUI && !st.hooked) { st.hooked = true; window.DaisyScenUI.onWx(() => { st.wxPick = null; st.useMy = true; if (st.res) renderPlan(); }); }
     $('Go').onclick = () => understand(); renderSet(); showSuggestions(); showChapters(); $('TabSug').onclick = () => tab('sug'); $('TabChap').onclick = () => tab('chap'); $('TabImp').onclick = () => tab('imp'); showImport(); tab(st.tab || 'sug'); if (window.DaisyScenUI) window.DaisyScenUI.bindStrip();
     $('Ai').onchange = e => { $('Key').style.display = e.target.checked ? '' : 'none'; };
     document.querySelectorAll('[data-ex]').forEach(a => a.onclick = ev => { ev.preventDefault(); $('Text').value = EXAMPLES[+a.dataset.ex]; understand(); });

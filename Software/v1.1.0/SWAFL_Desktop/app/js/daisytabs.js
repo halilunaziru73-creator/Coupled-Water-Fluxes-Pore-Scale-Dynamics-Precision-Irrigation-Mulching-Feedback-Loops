@@ -66,8 +66,30 @@
   // the data in use, shown on every tab that runs Daisy; it is set once in the My data tab
   const wxLabel = () => { const m = st.my; return m.wxMode === 'course' ? 'Taastrup, Denmark, 1965-2000 (built-in)' : m.wx ? m.wx.name + ' (' + m.wx.first + '-' + m.wx.last + ')' : '<span style="color:#b3261e">not ready</span>'; };
   const soilLabel = () => st.my.soilOn ? 'my soil, ' + st.my.soil.horizons.length + ' horizons' : 'the built-in soils (loam and sand)';
-  function strip() { return '<div class="dzpan dzstrip" style="background:#f4f8fc;padding:6px 10px"><span class="pnote">Data in use: weather <b>' + wxLabel() + '</b>; soil <b>' + esc(soilLabel()) + '</b>.</span> <a href="#" data-goto="data">Change (My data)</a></div>'; }
-  function bindStrip() { document.querySelectorAll('[data-goto]').forEach(a => a.onclick = ev => { ev.preventDefault(); D.show(a.dataset.goto); }); }
+  // the weather used by every Daisy simulation: chosen here at the top of each tab, so Scenarios, Experiments and the rest always use the same one
+  const wxHooks = [];
+  function useProject() {
+    const pw = projWx(); if (!pw) throw new Error('no weather is loaded in SWAFL'); const m = st.my; m.wxMode = 'project'; if ((m.lat === '' || m.lat == null) && pw.lat != null) { m.lat = pw.lat; if (pw.lon != null) m.lon = pw.lon; }
+    convertWx(SC.rowsFromProject(pw.rows), pw.name || 'SWAFL weather'); m.wx.cite = 'weather: the weather loaded in the SWAFL project (' + (pw.name || pw.src || 'project') + ')';
+  }
+  function wxChanged() { wxHooks.forEach(h => { try { h(); } catch (e) { } }); }
+  function wxOptions() {
+    const m = st.my, pw = projWx(); let h = '<option value="course"' + (m.wxMode === 'course' ? ' selected' : '') + '>Built-in weather: Taastrup, Denmark 1965-2000</option>';
+    if (pw) h += '<option value="project"' + (m.wxMode === 'project' ? ' selected' : '') + '>The weather of my SWAFL project: ' + esc(pw.name || pw.src || 'loaded') + '</option>';
+    if (m.wx && (m.wxMode === 'online' || m.wxMode === 'file')) h += '<option value="' + m.wxMode + '" selected>' + (m.wxMode === 'online' ? 'Online weather: ' : 'My file: ') + esc(m.wx.name) + '</option>';
+    h += '<option value="__online">Online weather of another place...</option><option value="__file">A weather file of my own...</option>'; return h;
+  }
+  // when the SWAFL project has weather and nothing was chosen yet, that weather is the one Daisy uses
+  function defaultWx() { if (st.wxChosen || st.my.wxMode !== 'course' || !projWx()) return; st.wxChosen = true; try { useProject(); } catch (e) { st.my.wxMode = 'course'; st.my.wx = null; } }
+  function strip() { defaultWx(); return '<div class="dzpan dzstrip" style="background:#f4f8fc;padding:6px 10px"><span class="pnote">Weather for all Daisy runs</span> <select id="dzStripWx" style="max-width:360px">' + wxOptions() + '</select> <span class="pnote" id="dzStripMsg">' + (st.my.wx && st.my.wxMode !== 'course' ? esc(st.my.wx.first + ' to ' + st.my.wx.last) : '') + '</span> <span class="pnote">&middot; soil <b>' + esc(soilLabel()) + '</b></span> <a href="#" data-goto="data">All my data</a></div>'; }
+  function bindStrip() {
+    document.querySelectorAll('[data-goto]').forEach(a => a.onclick = ev => { ev.preventDefault(); D.show(a.dataset.goto); });
+    const sel = document.getElementById('dzStripWx'); if (!sel) return;
+    sel.onchange = () => { const v = sel.value, m = st.my; st.wxChosen = true;
+      if (v === 'course') { m.wxMode = 'course'; m.wx = null; } else if (v === 'project') { try { useProject(); } catch (e) { const g = document.getElementById('dzStripMsg'); if (g) g.innerHTML = '<span style="color:#b3261e">' + esc(e.message) + '</span>'; return; } }
+      else if (v === '__online' || v === '__file') { m.wxMode = v === '__online' ? 'online' : 'file'; m.wx = null; wxChanged(); D.show('data'); return; }
+      wxChanged(); D.show(D.state.tab || 'scen'); };
+  }
   function applyMy() { const m = st.my, s0 = document.querySelector('#dzSPanel [data-o="soil"]'); if (s0) s0.disabled = m.soilOn; if (m.wx && m.wxMode !== 'course') setYears(m.wx); bindStrip(); }
   // the options of the run with my data in them (throws a clear message when the data cannot be used)
   function withMyData(sc, o) {
@@ -236,7 +258,7 @@
     let src; try { src = await DaisyOnline.fetchDaily(+m.lat, +m.lon, y0, y1); } catch (e) { throw new Error(/Failed to fetch|NetworkError|Load failed|network/i.test(e.message) ? 'no connection to the weather service (' + e.message + '). Use a weather file in My data instead, or try again online.' : e.message); }
     if (src.elevation != null && (m.elev === '' || m.elev == null)) m.elev = Math.round(src.elevation); convertWx(src, (m.place || 'Online weather') + ' ' + (+m.lat).toFixed(2) + 'N ' + (+m.lon).toFixed(2) + 'E'); m.wx.quality = src.stats; m.wx.cite = 'weather: Open-Meteo archive, ERA5 reanalysis (Zippenfenig, 2023; Hersbach et al., 2020), ' + (+m.lat).toFixed(2) + 'N ' + (+m.lon).toFixed(2) + 'E'; return m.wx;
   }
-  window.DaisyScenUI = { online: onlineWx, useFile: (act, name, text) => { st.pending = { act, name, text }; D.show('data'); }, runStandard, my: () => st.my, strip, bindStrip, runs: () => st.runs, sc: () => st.sc, dataLabel: () => ({ weather: wxLabel().replace(/<[^>]+>/g, ''), soil: soilLabel() }) };
+  window.DaisyScenUI = { online: onlineWx, project: useProject, projectName: () => { const w = projWx(); return w ? (w.name || w.src || 'loaded') : null; }, onWx: h => wxHooks.push(h), defaultWx, useFile: (act, name, text) => { st.pending = { act, name, text }; D.show('data'); }, runStandard, my: () => st.my, strip, bindStrip, runs: () => st.runs, sc: () => st.sc, dataLabel: () => ({ weather: wxLabel().replace(/<[^>]+>/g, ''), soil: soilLabel() }) };
   D.register('data', { html: () => '<h3 style="margin:2px 0 6px">My data: weather and soil</h3><p class="pnote">Set the weather and the soil of your site once. Scenarios, experiments and the process figures all use them. Weather can come from the internet for your area, from a file, or from SWAFL.</p>' + myBox(), bind: () => { bindMy(); bindStrip(); } });
   D.register('scen', { html, bind });
   D.register('docs', { html: docsHtml, bind: docsBind });
