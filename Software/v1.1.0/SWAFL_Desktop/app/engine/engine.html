@@ -6350,7 +6350,7 @@ function loop() {
     stepPlay(wide ? 26 : sc.dur);
     const pr = document.getElementById('playRange'), pl = document.getElementById('playLabel');
     if (document.activeElement !== pr) pr.value = Math.round(play.t * 1000);
-    pl.textContent = calTxt(sc.id === 'v3' ? 'day ' + Math.round(play.t * 365) : sc.id === 'e1' ? 'day ' + (play.t * E1.days).toFixed(1) : wide ? (sc.id === 'v1' ? d20Label(play.t) : v2AllLabel()) : dayLabel(play.t * (PDAYS - 1)));
+    pl.textContent = calTxt(sc.id === 'dph' ? 'day ' + Math.round(play.t * 139) + ' after emergence' + (window.PHUI ? ' (' + window.PHUI.dateOf(Math.round(play.t * 139)) + ')' : '') : sc.id === 'v3' ? 'day ' + Math.round(play.t * 365) : sc.id === 'e1' ? 'day ' + (play.t * E1.days).toFixed(1) : wide ? (sc.id === 'v1' ? d20Label(play.t) : v2AllLabel()) : dayLabel(play.t * (PDAYS - 1)));
     if (dss.held && sc.id === 'v1' && wide && Math.abs(play.t - (function(){ const k = fclock.kd(), ay = yearOf(k), dt = dateOfK(k); return clampN((Math.round((Date.UTC(1980 + ay, dt.getUTCMonth(), dt.getUTCDate()) - D20START) / DAYMS)) / (D20.n - 1), 0, 1); })()) < 0.0005) pl.textContent = calTxt(fmtDate(dateOfK(fclock.kd())));
     if (sc.id === 'drip' || sc.id === 'spr') pl.textContent = calTxt(IRLAB);
     if (dss.held && (sc.id === 'v2' || sc.id === 'v3') && dss.lastId === sc.id && Math.abs(play.t - dss.lastT) < 0.0008) pl.textContent = calTxt(fmtDate(dateOfK(fclock.kd())));
@@ -7066,6 +7066,9 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
 <script src="plus_core.js?v=20261027d"></script>
 <script src="plus_layers.js?v=20261029b"></script>
 <script src="plus_daisy.js?v=20261029d"></script>
+<script src="plus_phenomodel.js?v=20261030d"></script>
+<script src="plus_phenotyping.js?v=20261030d"></script>
+<script src="plus_phenotyping2.js?v=20261030d"></script>
 <script src="inputs.js?v=20261027d"></script>
 <script src="weather.js?v=20261027d"></script>
 <link rel="stylesheet" href="classic.css">

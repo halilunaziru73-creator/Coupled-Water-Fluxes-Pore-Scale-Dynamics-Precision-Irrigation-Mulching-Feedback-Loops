@@ -6479,7 +6479,7 @@ function loop() {
     stepPlay(wide ? 26 : sc.dur);
     const pr = document.getElementById('playRange'), pl = document.getElementById('playLabel');
     if (document.activeElement !== pr) pr.value = Math.round(play.t * 1000);
-    pl.textContent = calTxt(sc.id === 'v3' ? 'day ' + Math.round(play.t * 365) : sc.id === 'e1' ? 'day ' + (play.t * E1.days).toFixed(1) : wide ? (sc.id === 'v1' ? d20Label(play.t) : v2AllLabel()) : dayLabel(play.t * (PDAYS - 1)));
+    pl.textContent = calTxt(sc.id === 'dph' ? 'day ' + Math.round(play.t * 139) + ' after emergence' + (window.PHUI ? ' (' + window.PHUI.dateOf(Math.round(play.t * 139)) + ')' : '') : sc.id === 'v3' ? 'day ' + Math.round(play.t * 365) : sc.id === 'e1' ? 'day ' + (play.t * E1.days).toFixed(1) : wide ? (sc.id === 'v1' ? d20Label(play.t) : v2AllLabel()) : dayLabel(play.t * (PDAYS - 1)));
     if (dss.held && sc.id === 'v1' && wide && Math.abs(play.t - (function(){ const k = fclock.kd(), ay = yearOf(k), dt = dateOfK(k); return clampN((Math.round((Date.UTC(1980 + ay, dt.getUTCMonth(), dt.getUTCDate()) - D20START) / DAYMS)) / (D20.n - 1), 0, 1); })()) < 0.0005) pl.textContent = calTxt(fmtDate(dateOfK(fclock.kd())));
     if (sc.id === 'drip' || sc.id === 'spr') pl.textContent = calTxt(IRLAB);
     if (dss.held && (sc.id === 'v2' || sc.id === 'v3') && dss.lastId === sc.id && Math.abs(play.t - dss.lastT) < 0.0008) pl.textContent = calTxt(fmtDate(dateOfK(fclock.kd())));
@@ -7954,6 +7954,800 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
 })();
 
 </script>
+<script>/* plus_phenomodel.js */
+/* SWAFL 1.1 Deterministic phenotyping: the model (no drawing, no random numbers).
+   One run grows a plant for N days after emergence in a soil column, day by day, and returns every trait of the day.
+   Same inputs always give the same plant (deterministic). The forms of the equations come from the literature:
+     light interception  Monsi and Saeki (1953), biomass  Monteith (1977), transpiration limit  Tanner and Sinclair (1983),
+     reference ET  FAO-56 Penman-Monteith (Allen et al., 1998), soil water  van Genuchten (1980), root water uptake  Feddes et al. (1978) and Gardner (1960),
+     leaf water  van den Honert (1948), pressure-volume curve, expansion  Lockhart (1965), stomata  Jarvis (1976),
+     canopy temperature and CWSI  Jackson et al. (1981), root growth  rule-based after ArchiSimple (Pages et al., 2014), carbon  functional equilibrium (Brouwer, 1963; Davidson, 1969).
+   The books on phenotyping (Lorence and Medina-Jimenez, 2022; Panguluri and Kumar, 2013) define the traits that are read out:
+   projected shoot area, convex hull and compactness (solidity), stay-green and senescence, canopy temperature depression, relative water content, root angle, depth and length. */
+'use strict';
+(function (root) {
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const PI = Math.PI, D2R = PI / 180;
+  const es = T => 0.6108 * Math.exp(17.27 * T / (T + 237.3));
+  const dEs = T => 4098 * es(T) / ((T + 237.3) * (T + 237.3));
+
+  // ---------------------------------------------------------------- species (typical literature values; the layer shows them)
+  const SP = {
+    maize: { name: 'Maize', c4: true, Tb: 8, Tc: [8, 30, 42], gddLeaf: 42, nLeaf: 16, anth: 750, mat: 1250, RUE: 3.4, k: 0.62, kte: 10, Hmax: 230, rH: 0.085, SLA: 0.021, Kcb: 1.15, SRL: 1200, LAImax: 5.5, A: 700, psi50: -1.3, psiPi: -1.1, rtlp: 0.80, ar: 0.11, fr0: 0.45, frA: 0.07, sow: 130, hull: 165,
+      ax: { n0: 2, nMax: 12, gdd: 50, e0: 3.0, th: 42, g: 0.08, ang1: 75, rho1: 0.9, e1: 1.0, max1: 14, rho2: 0.45, e2: 0.5, max2: 2.5, tap: false } },
+    sorghum: { name: 'Sorghum', c4: true, Tb: 8, Tc: [8, 30, 42], gddLeaf: 46, nLeaf: 18, anth: 800, mat: 1350, RUE: 3.2, k: 0.55, kte: 9.5, Hmax: 170, rH: 0.08, SLA: 0.020, Kcb: 1.0, SRL: 1300, LAImax: 5, A: 500, psi50: -1.7, psiPi: -1.3, rtlp: 0.78, ar: 0.10, fr0: 0.46, frA: 0.08, sow: 135, hull: 165,
+      ax: { n0: 2, nMax: 10, gdd: 55, e0: 3.0, th: 35, g: 0.09, ang1: 75, rho1: 1.1, e1: 1.1, max1: 15, rho2: 0.5, e2: 0.5, max2: 2.5, tap: false } },
+    wheat: { name: 'Wheat', c4: false, Tb: 0, Tc: [0, 20, 35], gddLeaf: 95, nLeaf: 8, anth: 800, mat: 1350, RUE: 2.8, k: 0.5, kte: 6, Hmax: 90, rH: 0.075, SLA: 0.024, Kcb: 1.1, SRL: 1600, LAImax: 6, A: 150, psi50: -1.6, psiPi: -1.3, rtlp: 0.80, ar: 0.045, fr0: 0.42, frA: 0.07, sow: 95, hull: 160,
+      ax: { n0: 3, nMax: 9, gdd: 80, e0: 2.6, th: 40, g: 0.07, ang1: 75, rho1: 1.6, e1: 0.9, max1: 10, rho2: 0.6, e2: 0.4, max2: 2.0, tap: false } },
+    bean: { name: 'Common bean', c4: false, Tb: 10, Tc: [10, 25, 38], gddLeaf: 60, nLeaf: 12, anth: 500, mat: 950, RUE: 2.2, k: 0.65, kte: 5.5, Hmax: 55, rH: 0.09, SLA: 0.030, Kcb: 1.05, SRL: 1400, LAImax: 4, A: 300, psi50: -1.0, psiPi: -1.0, rtlp: 0.82, ar: 0.65, fr0: 0.38, frA: 0.07, sow: 130, hull: 137.5,
+      ax: { n0: 1, nMax: 5, gdd: 60, e0: 2.5, th: 8, g: 0.12, ang1: 70, rho1: 2.0, e1: 1.3, max1: 22, rho2: 0.8, e2: 0.6, max2: 3.0, tap: true } }
+  };
+  // ---------------------------------------------------------------- genotypes: the traits a phenotyping platform reads (angle, branching, stay-green, stomata, osmotic adjustment, carbon to roots)
+  const GENO = [
+    { id: 'ref', name: 'Reference', angle: 42, lat: 1, axr: 1, SG: 0.2, dpsi: 0, OA: 0.2, rpl: 0.22, rootC: 1, rue: 1, hyd: 0.5, roll: 0.5 },
+    { id: 'deep', name: 'Deep rooting', angle: 24, lat: 0.7, axr: 1.25, SG: 0.2, dpsi: 0, OA: 0.2, rpl: 0.22, rootC: 1.15, rue: 1, hyd: 0.8, roll: 0.5 },
+    { id: 'shallow', name: 'Shallow, dense', angle: 64, lat: 1.5, axr: 0.85, SG: 0.2, dpsi: 0, OA: 0.2, rpl: 0.22, rootC: 1, rue: 1, hyd: 0.3, roll: 0.5 },
+    { id: 'stay', name: 'Stay-green', angle: 42, lat: 1, axr: 1, SG: 0.75, dpsi: 0, OA: 0.2, rpl: 0.22, rootC: 1, rue: 1, hyd: 0.5, roll: 0.5 },
+    { id: 'saver', name: 'Water saver', angle: 42, lat: 1, axr: 1, SG: 0.2, dpsi: 0.5, OA: 0.1, rpl: 0.30, rootC: 1, rue: 0.97, hyd: 0.5, roll: 0.8 },
+    { id: 'spender', name: 'Water spender', angle: 42, lat: 1, axr: 1, SG: 0.2, dpsi: -0.5, OA: 0, rpl: 0.18, rootC: 1, rue: 1.03, hyd: 0.5, roll: 0.2 },
+    { id: 'osm', name: 'Osmotic adjuster', angle: 42, lat: 1, axr: 1, SG: 0.2, dpsi: 0, OA: 0.75, rpl: 0.22, rootC: 1, rue: 1, hyd: 0.5, roll: 0.5 }
+  ];
+
+  // ---------------------------------------------------------------- weather: a deterministic season of the project climate (sums of sines for the weather of the days)
+  function ra(doy, lat) {
+    const phi = lat * D2R, dr = 1 + 0.033 * Math.cos(2 * PI * doy / 365), dl = 0.409 * Math.sin(2 * PI * doy / 365 - 1.39), ws = Math.acos(clamp(-Math.tan(phi) * Math.tan(dl), -1, 1));
+    return { Ra: 24 * 60 / PI * 0.0820 * dr * (ws * Math.sin(phi) * Math.sin(dl) + Math.cos(phi) * Math.cos(dl) * Math.sin(ws)), N: 24 * ws / PI };
+  }
+  function weather(env, N) {
+    const out = []; const lat = env.lat == null ? 55.7 : env.lat, Tm = env.Tm == null ? 8.5 : env.Tm, Ta = env.Tamp == null ? 8.2 : env.Tamp, dT = env.dT || 0;
+    const rawRain = [], rm = [];
+    for (let d = 0; d < N; d++) { const s = Math.sin(2 * PI * d / 4.3 + 0.2) + 0.8 * Math.sin(2 * PI * d / 7.7 + 1.9) + 0.6 * Math.sin(2 * PI * d / 12.1 + 3.3); rawRain.push(Math.max(0, s - 1.15)); }
+    let sumRaw = rawRain.reduce((a, b) => a + b, 0) || 1, sumMean = 0;
+    for (let d = 0; d < N; d++) { const doy = (env.sow + d) % 365; rm.push((env.rain || 464) / 365 * (1 + 0.35 * Math.sin(2 * PI * (doy - 140) / 365))); sumMean += rm[d]; }
+    for (let d = 0; d < N; d++) {
+      const doy = (env.sow + d) % 365, nn = clamp(0.5 + 0.3 * Math.sin(2 * PI * d / 5.3 + 1.1) + 0.2 * Math.sin(2 * PI * d / 9.1 + 0.3) + 0.08 * Math.sin(2 * PI * d / 2.9 + 2), 0.05, 0.95);
+      const syn = 2.6 * Math.sin(2 * PI * d / 6.1 + 0.7) + 1.8 * Math.sin(2 * PI * d / 11.3 + 2.1) + 1.2 * Math.sin(2 * PI * d / 19.7 + 4.0);
+      const Tmean = Tm + Ta * Math.sin(2 * PI * (doy - 110) / 365) + syn + dT, dtr = 3 + 8 * nn, Tmax = Tmean + 0.5 * dtr, Tmin = Tmean - 0.5 * dtr;
+      const R = ra(doy, lat), Rs = R.Ra * (0.25 + 0.5 * nn), Tdew = Tmin - 3.0 + 0.4 * dT, ea = es(Tdew), esm = 0.5 * (es(Tmax) + es(Tmin)), u2 = 2.6 + 0.8 * Math.sin(2 * PI * d / 4.7 + 0.5);
+      const Rns = 0.77 * Rs, Rso = 0.75 * R.Ra, Rnl = 4.903e-9 * 0.5 * (Math.pow(Tmax + 273.16, 4) + Math.pow(Tmin + 273.16, 4)) * (0.34 - 0.14 * Math.sqrt(ea)) * (1.35 * Math.min(Rs / Rso, 1) - 0.35), Rn = Rns - Rnl;
+      const del = dEs(Tmean), gam = 0.000665 * 101.3, et0 = Math.max(0, (0.408 * del * Rn + gam * 900 / (Tmean + 273) * u2 * (esm - ea)) / (del + gam * (1 + 0.34 * u2)));
+      const Td = 0.65 * Tmax + 0.35 * Tmin, vpd = Math.max(0.1, es(Td) - ea);
+      let P = 0; if (env.rainMode !== 'none') { P = env.realRain ? (env.realRain[d] || 0) * (env.rainMult || 1) : rawRain[d] / sumRaw * sumMean * (env.rainMult || 1); }
+      out.push({ Tmean, Tmax, Tmin, Rs, ea, vpd, u2, et0, P, N: R.N, nn, Rn });
+    }
+    return out;
+  }
+
+  // ---------------------------------------------------------------- soil: van Genuchten retention and Mualem conductivity on a table of depletion (0 field capacity, 1 wilting point), and the structure of the tilled soil
+  const NL = 8, DZ = 15, ZMAX = NL * DZ;
+  function soilTable(vg) {
+    const a = vg[0], n = vg[1], m = 1 - 1 / n, S = h => Math.pow(1 + Math.pow(a * Math.max(h, 1), n), -m), s100 = S(100), s15 = S(15849), M = 200, h = [], kr = [];
+    for (let i = 0; i <= M; i++) { const f = i / M; let lo = 0, hi = 4.6; for (let j = 0; j < 50; j++) { const mid = (lo + hi) / 2, ff = (s100 - S(Math.pow(10, mid))) / (s100 - s15); if (ff < f) lo = mid; else hi = mid; } const hh = Math.pow(10, (lo + hi) / 2); h.push(hh); const se = S(hh); kr.push(Math.sqrt(se) * Math.pow(1 - Math.pow(1 - Math.pow(se, 1 / m), m), 2)); }
+    const k0 = kr[0] || 1; for (let i = 0; i <= M; i++) kr[i] = Math.min(1, kr[i] / k0);   // relative to the conductivity at field capacity
+    return { M, h, kr };
+  }
+  const lut = (tab, arr, f) => { const x = clamp(f, 0, 1) * tab.M, i = Math.min(tab.M - 1, Math.floor(x)), t = x - i; return arr[i] * (1 - t) + arr[i + 1] * t; };
+  // bulk density of every layer on the day: the tilled topsoil settles with the consolidation rate (V3), a pan sits under conventional tillage
+  function bulkDensity(soil, d) {
+    const clay = soil.clay, top = 1.50 - 0.004 * clay, tilled = { conv: 1.10, reduced: 1.22, notill: 1.38 }[soil.till] || 1.10, tc = soil.tc || 0.005, out = [];
+    const pan = { conv: 0.07, reduced: 0.035, notill: 0 }[soil.till] || 0;
+    for (let i = 0; i < NL; i++) {
+      const z = (i + 0.5) * DZ;
+      if (z <= 25) out.push(top - (top - tilled) * Math.exp(-tc * (d + (soil.age || 0))) * (z <= 15 ? 1 : 0.6));
+      else if (z <= 40) out.push(top + 0.08 + pan);
+      else out.push(top + 0.08 + 0.02 * (z - 40) / 80);
+    }
+    return out;
+  }
+  // penetration resistance (MPa) from bulk density and dryness, and the relative elongation of a root tip that meets it
+  const strength = (bd, srel) => 0.5 * Math.exp(4.5 * (bd - 1.3)) * (1 + 1.0 * (1 - clamp(srel, 0, 1)));
+  const relElong = Q => 1 / (1 + Math.pow(Q / 2.5, 3));
+
+  // ---------------------------------------------------------------- the daily run
+  function run(cfg) {
+    const sp = SP[cfg.species], G = cfg.geno, env = cfg.env, N = cfg.N || 140, store = !!cfg.store, tr = cfg.treatment, dr = cfg.drought || { type: 'none' };
+    const soil = cfg.soil, tab = soil.tab, awcL = soil.awc * DZ, A = cfg.area || sp.A, Rpot = Math.sqrt(A / PI), W = cfg.weather || weather(env, N);
+    const R = { N, sp, G, A, Rpot, day: [], W };
+    const ser = k => (R[k] = new Float32Array(N));
+    ['Tc', 'Ta', 'CTD', 'CWSI', 'gs', 'psiL', 'RWC', 'turg', 'Tp', 'T', 'Es', 'I', 'P', 'drain', 'store', 'dW', 'dWr', 'dL', 'fl', 'fs', 'fr', 'fg', 'Wl', 'Ws', 'Wr', 'Wg', 'Wres', 'LAIg', 'LAIs', 'SI', 'H', 'PSA', 'hullA', 'solid', 'cal', 'nLeaf', 'Lroot', 'Rdepth', 'D50', 'D95', 'rs', 'phi', 'Ks', 'stage', 'gdd', 'tgt', 'RLmax', 'Fint', 'AE', 'roll', 'fE', 'Ts'].forEach(ser);
+    R.w = new Float32Array(N * NL); R.up = new Float32Array(N * NL); R.Lz = new Float32Array(N * NL); R.Q = new Float32Array(N * NL); R.bd = new Float32Array(N * NL);
+    const w = new Float32Array(NL).fill(awcL * 0.95), Lz = new Float64Array(NL);
+    let inbound = 0, lostG = 0, gdd = 0, gEff = 0, ldd = 0, Wl = 1.2, Ws = 0.5, Wr = 0.8, Wg = 0, Wres = 28, LAIg = 0.05, LAIs = 0, H = 3, Hs = 0, Ts = W[0].Tmean, Ue = 0, t2 = 0, st1 = true, pool = 0, gsPrev = 1, Lall = 0, OAs = 0, stressMem = 0, matured = false;
+    const senRate = G.SG;
+    // root system: tips, with the vertices of the path so that laterals sit where the parent has grown
+    const tips = []; let nid = 0; const segs = store ? { x0: [], y0: [], z0: [], x1: [], y1: [], z1: [], d: [], o: [] } : null;
+    const axA = sp.ax, nAxMax = Math.max(1, Math.round(axA.nMax * (G.nAx || 1))), thAx = G.angle;
+    function newTip(ord, par, x, y, z, dx, dy, dz, azim, gsa, e0, maxLen, born) {
+      const n = Math.hypot(dx, dy, dz) || 1; const t = { id: nid++, ord, par, x, y, z, dx: dx / n, dy: dy / n, dz: dz / n, az: azim, gsa, e0, maxLen, born, len: 0, active: true, nextLat: 0, vx: [x], vy: [y], vz: [z], vc: [0] };
+      t.nextLat = ord === 0 ? 2.5 : (ord === 1 ? 1.0 : 1e9); tips.push(t); return t;
+    }
+    // first axes: the seed root
+    const axStart = j => { const az = j * 137.5 * D2R, th = j === 0 ? (axA.tap ? 6 : 10) * D2R : (thAx + 3 * Math.floor(j / 2)) * D2R; return { az, th }; };
+    const first = axStart(0); newTip(0, -1, 0, 0, 0, Math.sin(first.th) * Math.cos(first.az), Math.cos(first.th), Math.sin(first.th) * Math.sin(first.az), first.az, first.th, axA.e0 * (G.axr || 1), 1e9, 0);
+    let axBorn = 1; Lz[0] = 40; Lz[1] = 14; Lall = 54;
+    const wCol = f => f; // placeholder for readability
+    const feddes = (h, tp) => { const h3 = tp >= 5 ? 300 : (tp <= 1 ? 600 : 600 - (tp - 1) / 4 * 300), h4 = 15849; return h <= 100 ? 1 : (h <= h3 ? 1 : (h >= h4 ? 0 : (h4 - h) / (h4 - h3))); };
+    const psiPV = (RWC, pi0, rtlp) => { const P = RWC > rtlp ? -pi0 * (RWC - rtlp) / (1 - rtlp) : 0; return pi0 / RWC + P; };
+    const rwcFrom = (psi, pi0, rtlp) => { if (psi >= 0) return 1; let lo = 0.35, hi = 1; for (let i = 0; i < 40; i++) { const m = 0.5 * (lo + hi); if (psiPV(m, pi0, rtlp) < psi) lo = m; else hi = m; } return 0.5 * (lo + hi); };
+    const target = d => { // water supplied by the experiment as a fraction of the plant-available water of the whole column
+      if (tr === 'ww' || dr.type === 'none') return 1; const o = dr.onset, L = dr.len, L1 = Math.round(L / 2), phi = dr.sev / 100;
+      if (dr.type === 'pulse') return d < o ? 1 : d < o + L1 ? phi : d < o + L ? phi * 0.67 : 1;
+      if (dr.type === 'terminal') return d < o ? 1 : 0;
+      if (dr.type === 'inter') { if (d < o) return 1; const per = Math.max(3, Math.round(L / 2)); return ((d - o) % (2 * per)) < per ? phi : 1; }
+      return 1;
+    };
+    const sheltered = d => tr === 'dr' && dr.type !== 'none' && (dr.rainOut !== false) && d >= dr.onset && (dr.type !== 'pulse' || d < dr.onset + dr.len) && (dr.type !== 'inter' || true);
+    const infil = (j, amt) => { let a = amt, dr0 = 0; w[j] += a; for (let i = j; i < NL; i++) { if (w[i] > awcL) { const ex = w[i] - awcL; w[i] = awcL; if (i === NL - 1) dr0 += ex; else w[i + 1] += ex; } else break; } return dr0; };
+    let tot = { P: 0, I: 0, T: 0, Es: 0, dr: 0 };
+    for (let d = 0; d < N; d++) {
+      const wx = W[d]; R.Ta[d] = wx.Tmean; Ts += (wx.Tmean - Ts) / 4; R.Ts[d] = Ts;
+      // temperature responses: development (degree days), growth (beta function), roots (Q10)
+      const dg = Math.max(0, Math.min(wx.Tmean, sp.Tc[1] + 6) - sp.Tb); gdd += dg; R.gdd[d] = gdd;
+      const Td = 0.65 * wx.Tmax + 0.35 * wx.Tmin, [T0, T1, T2] = sp.Tc, fT = Td <= T0 || Td >= T2 ? 0 : Math.pow((T2 - Td) / (T2 - T1), (T2 - T1) / (T2 - T1)) * Math.pow((Td - T0) / (T1 - T0), (T1 - T0) / (T2 - T1));
+      const fTr = clamp(Math.pow(2, (Ts - 20) / 10), 0.05, 1.8);
+      const stage = gdd < sp.anth ? gdd / sp.anth : 1 + (gdd - sp.anth) / (sp.mat - sp.anth); R.stage[d] = stage; if (stage >= 2) matured = true;
+      // water supply of the day (experiment, rain), soil evaporation, drainage
+      let I = 0, P = 0, drain = 0; const sumW = () => { let s = 0; for (let i = 0; i < NL; i++) s += w[i]; return s; };
+      if (!sheltered(d) && wx.P > 0) { P = wx.P; drain += infil(0, P); }
+      const tg = target(d); R.tgt[d] = tg; const awcT = awcL * NL; let rw = 0, rwa = 0; for (let i = 0; i < NL; i++) { const q = Lz[i] + 0.02 * Lz[0] + 1; rw += q * w[i]; rwa += q * awcL; }   // the experiment holds the water of the root zone (weighted by the roots) at the set-point, like weighing the pot
+      if (tg > rw / rwa + 0.01) { I = Math.min(tg * awcT - sumW(), (tg - rw / rwa) * awcT); if (I > 0.05) drain += infil(0, I); else I = 0; }
+      const fi = 1 - Math.exp(-sp.k * (LAIg + 0.3 * LAIs)), Kcb = Math.min(sp.Kcb, 1.0 * sp.Kcb * fi + 0.0);
+      const Tp = wx.et0 * Math.min(1.25, sp.Kcb * fi * 1.0), Ep = wx.et0 * (1 - fi) * 0.9;
+      // evaporation of the soil (Ritchie, two stages)
+      const U0 = 6 + 0.05 * soil.clay * 1.2, alp = 3.5 + 0.02 * soil.clay;
+      if (P + I > 0) { const inp = P + I; Ue = Math.max(0, Ue - inp); if (Ue < U0) { st1 = true; t2 = 0; } }
+      let Es = 0; if (st1) { Es = Ep; if (Ue + Es >= U0) { st1 = false; t2 = 1; Es = Math.max(0, U0 - Ue); } Ue += Es; } else { t2++; Es = Math.min(Ep, alp * (Math.sqrt(t2) - Math.sqrt(t2 - 1))); Ue += Es; }
+      { let left = Es, got = 0; for (const [i, wt] of [[0, 0.7], [1, 0.3]]) { const take = Math.min(left * wt + 1e-9, Math.max(0, w[i] - 0.02 * awcL)); w[i] -= take; got += take; } Es = got; }
+      // roots: length per cm2 of ground in every layer, penetration resistance, uptake with the Feddes reduction and the conductivity of the soil (Gardner, Mualem)
+      const bd = bulkDensity(soil, d), Rl = new Float64Array(NL); let Lsum = 0; for (let i = 0; i < NL; i++) { Rl[i] = Lz[i] / A; Lsum += Rl[i]; }
+      const frel = new Float64Array(NL), hh = new Float64Array(NL), kr = new Float64Array(NL), psiS = new Float64Array(NL);
+      for (let i = 0; i < NL; i++) { frel[i] = clamp(1 - w[i] / awcL, 0, 1); hh[i] = lut(tab, tab.h, frel[i]); kr[i] = lut(tab, tab.kr, frel[i]); psiS[i] = -hh[i] * 9.80665e-5; R.Q[d * NL + i] = strength(bd[i], w[i] / awcL); R.bd[d * NL + i] = bd[i]; }
+      // uptake: every layer is a conductance (root length x fine roots x conductivity of the soil, Gardner, Mualem); the root collar potential is the one that gives the transpiration that the stomata ask for
+      const FINE = soil.fine || 4, qG = soil.qG || 0.05, Gi = new Float64Array(NL), S = new Float64Array(NL); let Gs = 0, Gp = 0; for (let i = 0; i < NL; i++) { Gi[i] = Rl[i] * FINE * qG * 10 * kr[i]; Gs += Gi[i]; Gp += Gi[i] * psiS[i]; }
+      const psiPre = Gs > 1e-9 ? Gp / Gs : psiS[0], PSIMIN = -2.5;
+      const flux = pr => { let t = 0; for (let i = 0; i < NL; i++) t += Math.min(w[i], Math.max(0, Gi[i] * (psiS[i] - pr))); return t; };
+      let gs = gsPrev, psiL = 0, Tact = 0, psiR = psiPre;
+      const LAIu = Math.max(0.3, LAIg), pi0 = sp.psiPi - G.OA * Math.min(1, OAs), psi50 = sp.psi50 + G.dpsi;
+      const g0 = psi => 1 / (1 + Math.exp(-4.5 * (psi - psi50)));
+      for (let it = 0; it < 6; it++) {
+        const Td_ = Tp * gs; let lo = PSIMIN, hi = 0;
+        if (flux(PSIMIN) <= Td_) psiR = PSIMIN; else { for (let k = 0; k < 40; k++) { const m = 0.5 * (lo + hi); if (flux(m) > Td_) lo = m; else hi = m; } psiR = 0.5 * (lo + hi); }
+        Tact = 0; for (let i = 0; i < NL; i++) { S[i] = Math.min(w[i], Math.max(0, Gi[i] * (psiS[i] - psiR))); Tact += S[i]; }
+        psiL = psiR - G.rpl * (Tact / LAIu); if (Tact < 1e-6) psiL = psiPre;
+        const gn = clamp(g0(psiL) / g0(-0.2), 0, 1); gs = 0.5 * gs + 0.5 * gn;
+      }
+      const psiSe = psiPre;
+      gsPrev = gs; for (let i = 0; i < NL; i++) { w[i] = Math.max(0, w[i] - S[i]); R.up[d * NL + i] = S[i]; }
+      // plant water status: relative water content and turgor from the pressure-volume curve of the leaf
+      const RWC = rwcFrom(psiL, pi0, sp.rtlp), RWCn = rwcFrom(psiSe, pi0, sp.rtlp), turg = RWC > sp.rtlp ? (RWC - sp.rtlp) / (1 - sp.rtlp) : 0, turgN = RWCn > sp.rtlp ? (RWCn - sp.rtlp) / (1 - sp.rtlp) : 0, Y = 0.25, fE = clamp((turgN - Y) / (1 - Y), 0, 1);   // cells grow at night, at the predawn water potential of the soil
+      OAs += (0.05 * (1 - Math.min(1, Tact / Math.max(0.05, Tp))) - 0.01 * OAs); OAs = clamp(OAs, 0, 1);
+      // canopy temperature (Jackson et al., 1981): energy balance with the canopy resistance of the stomata
+      const Ta = wx.Tmean + 0.35 * (wx.Tmax - wx.Tmean) * 2, Rmid = Math.PI / 2 * wx.Rs * 1e6 / (wx.N * 3600), Rn = Math.max(0, 0.77 * Rmid - 70) * 0.9, ra_ = 30 * Math.sqrt(2.6 / Math.max(0.5, wx.u2)), rcMin = 80, laiE = 1;   // a leaf in the image: boundary layer and stomata of the leaf
+      const del = dEs(Ta), gam = 0.066, rhoCp = 1200, vpd = Math.max(0.1, es(Ta) - wx.ea), rc = rcMin / (Math.max(0.03, gs) * laiE), rcp = rcMin / laiE;
+      const dTf = rcc => { const gst = gam * (1 + rcc / ra_); return (ra_ * Rn / rhoCp) * gst / (del + gst) - vpd / (del + gst); };
+      const dTc = dTf(rc), dTll = dTf(rcp), dTul = ra_ * Rn / rhoCp, cw = clamp((dTc - dTll) / Math.max(0.2, dTul - dTll), 0, 1);
+      // biomass: light (Monteith) against the water it can transpire (Tanner and Sinclair); seed reserve at the start
+      const PAR = 0.48 * wx.Rs, Apot = sp.RUE * G.rue * fT * PAR * fi, vpdD = wx.vpd, TEcap = sp.kte / Math.max(0.3, vpdD) * Tact;
+      let dW = Math.min(Apot, TEcap), seed = Wres * 0.07; Wres -= seed; dW += seed; if (stage >= 2) dW = 0;
+      // partition: leaves and stems share what is left after the roots (functional equilibrium: more to the roots when water is short) and the grain
+      const frd = sp.fr0 + (sp.frA - sp.fr0) * clamp(stage, 0, 1), wStress = clamp(1 - Tact / Math.max(0.05, Tp), 0, 1), fr = clamp(frd * G.rootC * (1 + 0.9 * wStress), 0.03, 0.7);
+      const fg = stage < 1 ? 0 : clamp(0.85 * (stage - 1) / 0.12, 0, 0.85) * (stage < 2 ? 1 : 0), shoot = Math.max(0, 1 - fr - fg), lshare = clamp(0.72 - 0.62 * clamp(stage, 0, 1.0), 0.08, 0.72);
+      let fl = shoot * lshare, fs = shoot - fl;
+      // leaf area: carbon makes area at the specific leaf area, the turgor of the cells (Lockhart) limits the expansion; the extra carbon is kept in the stem
+      const dLc = sp.SLA * fl * dW, rg = 0.0117 * dg, dLp = stage < 1 ? Math.max(0.0003, rg * LAIg * (1 - LAIg / sp.LAImax)) * fE : 0, dLAI = Math.min(dLc, dLp * 1.0 + 0.0002);
+      const used = sp.SLA > 0 ? dLAI / sp.SLA : 0, extra = Math.max(0, fl * dW - used); fl = dW > 0 ? used / dW : 0; fs = dW > 0 ? Math.max(0, 1 - fl - fr - fg) : 0;
+      Wl += used; Ws += fs * dW; Wr += fr * dW; Wg += fg * dW;
+      // senescence: development (delayed by stay-green) plus water stress; the dead area is kept
+      const dev = stage < 1 ? 0.0015 : 0.004 + 0.05 * Math.pow(clamp(stage - 1, 0, 1), 1.5), strR = 0.035 * Math.pow(wStress, 1.2) + 0.12 * clamp((0.78 - RWC) / 0.15, 0, 1);
+      const sen = LAIg * clamp((dev * (1 - senRate) + strR * (1 - 0.6 * senRate)) * (stage < 1 ? 1 : 1), 0, 0.25);
+      LAIg = Math.max(0.01, LAIg + dLAI - sen); LAIs = Math.max(0, LAIs + sen * 0.97 - 0.004 * LAIs);
+      if (stage >= 2) { Wl *= 0.999; }
+      // height: logistic elongation by temperature and turgor
+      if (stage < 1.05) { gEff += dg * fE; lostG += dg * (1 - fE); } const rHg = Math.log(sp.Hmax / 3 - 1) / (0.6 * sp.anth), Hm = sp.Hmax * clamp(1 - 0.9 * lostG / (0.75 * sp.anth), 0.45, 1); H = clamp(Hm / (1 + (Hm / 3 - 1) * Math.exp(-rHg * gEff)), 3, sp.Hmax);   // shorter stems when the cells did not expand   // stem length by the thermal time that the turgor allowed
+      // leaf development clock slows with the turgor
+      ldd += Math.max(0, Math.min(wx.Tmean, sp.Tc[1] + 6) - sp.Tb) * (0.35 + 0.65 * Math.sqrt(fE)); const nL = clamp(Math.floor(ldd / sp.gddLeaf) + 2, 2, Math.round(sp.nLeaf * 1.0));
+      // roots: the carbon of the roots (with a delay of one day) sets how much new root can be made
+      const dWr = fr * dW; pool += inbound; inbound = dWr * (A / 1e4) * sp.SRL; const supply = pool;   // the carbon of the roots arrives one day after it is made
+      while (axBorn < nAxMax && (axBorn - 1) * axA.gdd * 0.7 + axA.gdd <= gdd) {
+        const s = axStart(axBorn); newTip(0, -1, 0, 0, 0, Math.sin(s.th) * Math.cos(s.az), Math.cos(s.th), Math.sin(s.th) * Math.sin(s.az), s.az, s.th, axA.e0 * (G.axr || 1) * (1 - 0.03 * axBorn), 1e9, d); axBorn++;
+      }
+      // potential growth of every tip
+      const fW = i => clamp((w[i] / awcL - 0.06) / 0.5, 0.05, 1), act = [], pot = []; let demand = 0;
+      const stopAx = stage > 1.45, ageF = stage > 1 ? Math.max(0.2, 1 - (stage - 1) * 1.6) : 1; const layerOf = y => clamp(Math.floor(y / DZ), 0, NL - 1);
+      for (const t of tips) {
+        if (!t.active) continue; if (t.ord === 0 && stopAx) { t.active = false; continue; }
+        const li = layerOf(t.y), fQ = relElong(R.Q[d * NL + li]), mult = t.ord === 0 ? 1 : (t.ord === 1 ? 1 : 1), sp_ = t.e0 * fTr * fQ * fW(li) * ageF;
+        act.push(t); pot.push(sp_); demand += sp_;
+      }
+      const have = Math.min(supply, demand * 1.0), c = demand > 0 ? clamp(supply / demand, 0, 1) : 1; pool = Math.max(0, supply - demand) * 0.75;
+      R.rs[d] = c; let newL = 0;
+      for (let k = 0; k < act.length; k++) {
+        const t = act[k], step = pot[k] * c; if (step <= 1e-4) continue;
+        // direction: gravitropism towards the set-point angle, water-seeking, a small wobble of the soil
+        const gk = t.ord === 0 ? axA.g : 0.045, th = t.gsa; let tx = Math.sin(th) * Math.cos(t.az), ty = Math.cos(th), tz = Math.sin(th) * Math.sin(t.az);
+        if (t.ord > 0) { const f = clamp(t.len / 12, 0, 1); tx = tx * (1 - 0.4 * f); ty = ty * (1 + 0.5 * f); }
+        let dx = t.dx + gk * step * (tx - t.dx), dy = t.dy + gk * step * (ty - t.dy), dz = t.dz + gk * step * (tz - t.dz);
+        const li = layerOf(t.y), lj = Math.min(NL - 1, li + 1), dW_ = (w[lj] / awcL - w[li] / awcL); dy += G.hyd * 0.6 * dW_ * step * 0.2;
+        const wb = 0.06 * Math.sin(0.43 * t.len + t.id * 1.7); dx += wb * step * Math.cos(t.az + 1.3); dz += wb * step * Math.sin(t.az + 1.3);
+        let n = Math.hypot(dx, dy, dz) || 1; dx /= n; dy /= n; dz /= n;
+        let nx = t.x + dx * step, ny = t.y + dy * step, nz = t.z + dz * step; const rr = Math.hypot(nx, nz);
+        if (rr > Rpot * 0.97) { const f = Rpot * 0.97 / rr, ux = nx / rr, uz = nz / rr; nx *= f; nz *= f; const rad = dx * ux + dz * uz; if (rad > 0) { dx -= rad * ux; dz -= rad * uz; dy += 0.25; n = Math.hypot(dx, dy, dz) || 1; dx /= n; dy /= n; dz /= n; } }
+        if (ny >= ZMAX - 0.5) { ny = ZMAX - 0.5; t.active = false; }
+        const L = Math.hypot(nx - t.x, ny - t.y, nz - t.z); if (store) { segs.x0.push(t.x); segs.y0.push(t.y); segs.z0.push(t.z); segs.x1.push(nx); segs.y1.push(ny); segs.z1.push(nz); segs.d.push(d); segs.o.push(t.ord); }
+        Lz[layerOf(0.5 * (t.y + ny))] += L; newL += L; t.x = nx; t.y = ny; t.z = nz; t.dx = dx; t.dy = dy; t.dz = dz; t.len += L; t.vx.push(nx); t.vy.push(ny); t.vz.push(nz); t.vc.push(t.len);
+        if (t.ord > 0 && t.len >= t.maxLen) t.active = false;
+        // laterals: at the density of the genotype, a few days behind the tip
+        if (t.ord < 2) {
+          const rho = (t.ord === 0 ? axA.rho1 : axA.rho2) * (G.lat || 1) * (0.3 + 0.7 * Math.exp(-t.y / 55)), gap = 1 / Math.max(0.05, rho), zone = t.e0 * 2.0;   // fewer laterals deeper
+          while (t.len - zone >= t.nextLat && tips.length < 5200) {
+            const pos = t.nextLat; t.nextLat += gap; let q = 1; while (q < t.vc.length - 1 && t.vc[q] < pos) q++; const f0 = (pos - t.vc[q - 1]) / Math.max(1e-6, t.vc[q] - t.vc[q - 1]);
+            const px = t.vx[q - 1] + f0 * (t.vx[q] - t.vx[q - 1]), py = t.vy[q - 1] + f0 * (t.vy[q] - t.vy[q - 1]), pz = t.vz[q - 1] + f0 * (t.vz[q] - t.vz[q - 1]);
+            const phi = (t.id * 1.9 + Math.round(pos / gap) * 2.4), be = (axA.ang1 + (t.ord === 1 ? 5 : 0)) * D2R, ux = Math.cos(phi), uz = Math.sin(phi);
+            // a unit vector perpendicular to the parent
+            let ax_ = -t.dz, az_ = t.dx; const nn = Math.hypot(ax_, az_) || 1; ax_ /= nn; az_ /= nn; const bx = t.dy * az_, bz = -t.dy * ax_, by = t.dz * ax_ - t.dx * az_;
+            const px2 = Math.cos(be) * t.dx + Math.sin(be) * (Math.cos(phi) * ax_ + Math.sin(phi) * bx), py2 = Math.cos(be) * t.dy + Math.sin(be) * (Math.sin(phi) * by), pz2 = Math.cos(be) * t.dz + Math.sin(be) * (Math.cos(phi) * az_ + Math.sin(phi) * bz);
+            const az2 = Math.atan2(pz2, px2), e2 = t.ord === 0 ? axA.e1 : axA.e2, mx = t.ord === 0 ? axA.max1 : axA.max2; if (py < ZMAX - 3) newTip(t.ord + 1, t.id, px, py, pz, px2, Math.abs(py2) < 0.1 ? 0.25 : py2, pz2, az2, (t.ord === 0 ? 62 : 70) * D2R, e2, mx * (0.7 + 0.3 * Math.sin(1.3 * t.id + pos)), d);
+          }
+        }
+      }
+      Lall += newL;
+      // root depth, depth of 50 and 95 percent of the root length
+      let zr = 0; for (const t of tips) if (t.y > zr) zr = t.y; let cum = 0, d50 = 0, d95 = 0; const Ltot = Lz.reduce((a, b) => a + b, 0) || 1; for (let i = 0; i < NL; i++) { cum += Lz[i]; if (!d50 && cum >= 0.5 * Ltot) d50 = (i + 1) * DZ - DZ * (cum - 0.5 * Ltot) / Math.max(1e-9, Lz[i]); if (!d95 && cum >= 0.95 * Ltot) d95 = (i + 1) * DZ - DZ * (cum - 0.95 * Ltot) / Math.max(1e-9, Lz[i]); }
+      // record
+      R.Tp[d] = Tp; R.T[d] = Tact; R.Es[d] = Es; R.I[d] = I; R.P[d] = P; R.drain[d] = drain; R.store[d] = sumW(); R.dW[d] = dW; R.dWr[d] = dWr; R.dL[d] = newL; R.fl[d] = fl; R.fs[d] = fs; R.fr[d] = fr; R.fg[d] = fg;
+      R.Wl[d] = Wl; R.Ws[d] = Ws; R.Wr[d] = Wr; R.Wg[d] = Wg; R.Wres[d] = Wres; R.LAIg[d] = LAIg; R.LAIs[d] = LAIs; R.SI[d] = 100 * LAIs / Math.max(1e-6, LAIg + LAIs); R.H[d] = H; R.nLeaf[d] = nL;
+      R.gs[d] = gs; R.psiL[d] = psiL; R.RWC[d] = RWC; R.turg[d] = turg; R.fE[d] = fE; R.Tc[d] = Ta + dTc; R.CTD[d] = -dTc; R.CWSI[d] = cw; R.Ks[d] = Tp > 1e-4 ? Tact / Tp : 1; R.Lroot[d] = Ltot; R.Rdepth[d] = zr; R.D50[d] = d50; R.D95[d] = d95; R.Fint[d] = fi; R.AE[d] = Apot; R.phi[d] = Ta + dTul;
+      R.roll[d] = clamp((0.9 - RWC) / 0.2, 0, 1) * (0.4 + G.roll);
+      for (let i = 0; i < NL; i++) { R.w[d * NL + i] = w[i] / awcL; R.Lz[d * NL + i] = Lz[i]; }
+      tot.P += P; tot.I += I; tot.T += Tact; tot.Es += Es; tot.dr += drain;
+    }
+    // shoot geometry of every day (leaves, projected area, convex hull, solidity): what an image of the plant would give
+    for (let d = 0; d < N; d++) { const g = leaves(R, d); R.PSA[d] = g.psa; R.hullA[d] = g.hull; R.solid[d] = g.solid; R.cal[d] = g.caliper; }
+    R.totals = tot; R.store0 = awcL * NL * 0.95; R.segs = segs ? { n: segs.d.length, x0: Float32Array.from(segs.x0), y0: Float32Array.from(segs.y0), z0: Float32Array.from(segs.z0), x1: Float32Array.from(segs.x1), y1: Float32Array.from(segs.y1), z1: Float32Array.from(segs.z1), d: Int16Array.from(segs.d), o: Uint8Array.from(segs.o) } : null;
+    R.nTips = tips.length; R.Ltotal = Lall; R.awcT = awcL * NL;
+    return R;
+  }
+
+  // ---------------------------------------------------------------- the leaves of the plant on one day
+  function hullArea(pts) {
+    if (pts.length < 3) return 0; const p = pts.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]); const cr = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+    const lo = []; for (const q of p) { while (lo.length >= 2 && cr(lo[lo.length - 2], lo[lo.length - 1], q) <= 0) lo.pop(); lo.push(q); }
+    const up = []; for (let i = p.length - 1; i >= 0; i--) { const q = p[i]; while (up.length >= 2 && cr(up[up.length - 2], up[up.length - 1], q) <= 0) up.pop(); up.push(q); }
+    const h = lo.slice(0, -1).concat(up.slice(0, -1)); let a = 0; for (let i = 0; i < h.length; i++) { const j = (i + 1) % h.length; a += h[i][0] * h[j][1] - h[j][0] * h[i][1]; } return { area: Math.abs(a) / 2, pts: h };
+  }
+  function leaves(R, d, rot) {
+    const sp = R.sp, n = Math.max(2, Math.round(R.nLeaf[d])), A = R.A, tot = (R.LAIg[d] + R.LAIs[d]) * A, ldd = d; rot = rot || 0;
+    const wts = []; let sw = 0; for (let j = 0; j < n; j++) { const age = Math.min(1, (n - j) / 3.2), shape = Math.pow(Math.sin(PI * (0.12 + 0.78 * (j + 0.5) / sp.nLeaf)), 1.4), wj = shape * (j === n - 1 ? 0.35 : (j === n - 2 ? 0.75 : 1)) * (0.35 + 0.65 * age); wts.push(wj); sw += wj; }
+    const L = []; let senLeft = R.LAIs[d] * A; const roll = R.roll[d]; const pts = [[0, 0]]; let proj = 0, cal = 0;
+    for (let j = 0; j < n; j++) {
+      const a = tot * wts[j] / sw, len = Math.sqrt(a / (0.72 * sp.ar)), sj = Math.min(a, senLeft); senLeft -= sj; const gf = a > 0 ? 1 - sj / a : 1;
+      const elev = clamp((72 - 38 * j / sp.nLeaf - 14 * (1 - gf) + 9 * roll) * D2R, 0.15, 1.45), az = j * sp.hull * D2R + rot, reach = len * Math.cos(elev) * (0.85 - 0.12 * (j / sp.nLeaf)), hgt = R.H[d] * (0.14 + 0.78 * (j + 0.5) / n);
+      const wr = 1 - 0.5 * roll; proj += a * Math.cos(elev) * wr; L.push({ j, a, len, gf, elev, az, reach, hgt, wr });
+      const x = reach * Math.cos(az), y = reach * Math.sin(az), hw = 0.5 * len * sp.ar * wr * 0.9, nx = -Math.sin(az) * hw, ny = Math.cos(az) * hw; pts.push([x, y]); pts.push([0.55 * x + nx, 0.55 * y + ny]); pts.push([0.55 * x - nx, 0.55 * y - ny]); pts.push([0.5 * nx, 0.5 * ny]); pts.push([-0.5 * nx, -0.5 * ny]); cal = Math.max(cal, 2 * reach);
+    }
+    const hl = hullArea(pts), ha = hl ? hl.area : 0, solid = ha > 5 ? 1 - Math.exp(-proj / ha) : NaN, psa = ha > 5 ? ha * solid : proj;
+    return { leaves: L, psa, hull: ha, solid, caliper: cal, hullPts: hl ? hl.pts : [] };
+  }
+
+  const api = { SP, GENO, NL, DZ, ZMAX, weather, soilTable, bulkDensity, strength, relElong, run, leaves, es, dEs };
+  root.PHENO = api; if (typeof module !== 'undefined' && module.exports) module.exports = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>/* plus_phenotyping.js */
+/* SWAFL 1.1 layer P1 Deterministic phenotyping (part 1): state, controls, the twin view of plants and roots, root scans, time series.
+   The model is plus_phenomodel.js; part 2 (plus_phenotyping2.js) adds water, carbon, soil, prediction, traits and data.
+   Everything drawn here is computed by the model from the settings of the layer and of the project (soil, tillage, weather, crop). */
+'use strict';
+(function () {
+  if (typeof SCENES === 'undefined' || !window.PLUSKIT || !window.PHENO) return;
+  const K = window.PLUSKIT, P = window.PHENO, HEAD = '#1B1F23', GRID = '#E6E2D6', NAVY = '#1B3A6B';
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v)), fmt = K.fmt, TF = K.TF, N = 140, NL = P.NL, DZ = P.DZ, ZMAX = P.ZMAX;
+  const CMAP = { maize: 'maize', sorghum: 'sorghum', pearlmillet: 'sorghum', wheat: 'wheat', rice: 'wheat', cereal: 'wheat', soybean: 'bean', cowpea: 'bean', greengram: 'bean', chickpea: 'bean', groundnut: 'bean', tomato: 'bean', mustard: 'bean' };
+  const CLIM = { project: { Tm: 8.5, Tamp: 8.2, sow: 0, t: 'Project climate (cool, humid)' }, warm: { Tm: 15.5, Tamp: 9.5, sow: -10, t: 'Warm season' }, hot: { Tm: 23, Tamp: 8.5, sow: -35, t: 'Hot, dry season' } };
+  const PH = {
+    sp: CMAP[typeof state !== 'undefined' ? state.crop : 'cereal'] || 'wheat', follow: true, gid: 'ref', g: Object.assign({}, P.GENO[0]), clim: 'project', rain: 'none', dr: { type: 'pulse', onset: 40, len: 28, sev: 30, rainOut: true },
+    view: 'rgb', set: 'shoot', trt: 'dr', rot: 0.45, xw: 0, area: null, yv: 'D95', ovr: { rue: 1, dpsi: 0, sg: 0 }, obs: null, run: null, key: '', lastRun: 0, drag: null, dragging: false, last: 0, panel: { key: '', items: [], busy: false }, job: null, msg: ''
+  };
+  const SL = [], ROT = { x: 0, y: 0, w: 0, h: 0 }, TS = { x: 0, y: 0, w: 0, h: 0 };
+  const mix = (a, b, t) => { const p = h => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)], x = p(a), y = p(b); t = clamp(t, 0, 1); return 'rgb(' + x.map((v, i) => Math.round(v + (y[i] - v) * t)).join(',') + ')'; };
+  const PAL = ['#2c3e9e', '#2f78c9', '#3fb0c4', '#6cc57e', '#c8d94b', '#f2b134', '#e8602c', '#b3171f', '#ffffff'];
+  const pal = t => { t = clamp(t, 0, 1) * (PAL.length - 2); const i = Math.min(PAL.length - 3, Math.floor(t)); return mix(PAL[i], PAL[i + 1], t - i); };
+  const wcol = f => mix('#C9A65E', '#2E6FBF', clamp(f, 0, 1));
+  const day = () => clamp(Math.round(play.t * (N - 1)), 0, N - 1);
+  const sowDoy = () => Math.max(60, P.SP[PH.sp].sow + CLIM[PH.clim].sow);
+  const dateOf = d => { const dt = new Date(Date.UTC(2001, 0, 1 + sowDoy() + d)); return dt.getUTCDate() + ' ' + MON[dt.getUTCMonth()]; };
+  const projSpecies = () => CMAP[state.crop] || 'wheat';
+  const applyPreset = id => { const g = P.GENO.find(x => x.id === id) || P.GENO[0]; PH.gid = g.id; PH.g = Object.assign({}, g, { psi50: P.SP[PH.sp].psi50 + g.dpsi }); };
+  PH.g.psi50 = P.SP[PH.sp].psi50;
+
+  // ---------------------------------------------------------------- inputs of the run: the project (soil, tillage, weather) and the layer
+  const soilTabs = {};
+  function soilObj() {
+    const s = state.soil, tx = DATA.texture[s]; if (!soilTabs[s]) soilTabs[s] = P.soilTable(VGE[s]);
+    return { tab: soilTabs[s], awc: AWC[s], clay: tx.clay, sand: tx.sand, till: state.till, tc: TC_VALUES[state.tcIdx], key: s };
+  }
+  function effGeno() { const g = Object.assign({}, PH.g); g.rue = (g.rue || 1) * PH.ovr.rue; g.psi50 = (g.psi50 == null ? P.SP[PH.sp].psi50 : g.psi50) + PH.ovr.dpsi; g.dpsi = g.psi50 - P.SP[PH.sp].psi50; g.SG = clamp(g.SG + PH.ovr.sg, 0, 0.95); return g; }
+  function envObj() {
+    const cl = CLIM[PH.clim], dT = TEMP_VALUES[state.tempIdx] + PH.xw, rm = RAIN_VALUES[state.rainIdx]; let real = null;
+    if (PH.rain === 'project' && window.WXD && window.WXD.on && window.WXD.P) { try { const y = (typeof yearNow === 'function' ? yearNow() : 0), sw = sowDoy(); real = Array.from({ length: N }, (_, k) => window.WXD.P[y * 365 + (sw + k) % 365] || 0); } catch (e) { real = null; } }
+    return { sow: sowDoy(), Tm: cl.Tm, Tamp: cl.Tamp, dT, rain: DATA.rain_base * (PH.clim === 'hot' ? 0.45 : PH.clim === 'warm' ? 0.7 : 1), rainMult: real ? 1 : rm, rainMode: PH.rain, realRain: real, lat: 55.7 };
+  }
+  const keyOf = () => JSON.stringify([state.soil, state.till, state.tcIdx, state.tempIdx, state.rainIdx, PH.sp, PH.g, PH.clim, PH.rain, PH.dr, PH.xw, PH.area, PH.ovr, !!(window.WXD && window.WXD.on)]);
+  function cfgFor(tr, store, geno) { const env = envObj(); return { species: PH.sp, geno: geno || effGeno(), env, soil: soilObj(), N, treatment: tr, drought: PH.dr, store, area: PH.area || undefined, weather: PH.W }; }
+  function ensureRun() {
+    const k = keyOf(); if (PH.key === k && PH.run) return; const now = performance.now(); if (PH.run && PH.dragging && now - PH.lastRun < 160) return;
+    try { const env = envObj(); PH.W = P.weather(env, N); PH.run = { ww: P.run(cfgFor('ww', true)), dr: P.run(cfgFor('dr', true)) }; PH.key = k; PH.msg = ''; } catch (e) { PH.msg = String(e); console.error('phenotyping', e); }
+    PH.lastRun = performance.now(); PH.cache = null;
+  }
+  const R = t => PH.run && PH.run[t];
+  const regimeShade = () => { const o = PH.dr.onset, L = PH.dr.len, h = Math.round(L / 2); if (PH.dr.type === 'none') return []; if (PH.dr.type === 'pulse') return [[o, o + h, '#F6D9A8', '1st stress'], [o + h, o + L, '#EDB36A', '2nd stress'], [o + L, N - 1, '#D3DDF3', 'recovery']]; if (PH.dr.type === 'terminal') return [[o, N - 1, '#EDB36A', 'no water']]; const per = Math.max(3, Math.round(L / 2)), out = []; for (let s = o; s < N - 1; s += 2 * per) { out.push([s, Math.min(N - 1, s + per), '#F6D9A8', 'stress']); out.push([Math.min(N - 1, s + per), Math.min(N - 1, s + 2 * per), '#D3DDF3', 'recovery']); } return out; };
+
+  // ---------------------------------------------------------------- controls
+  const chip = (x, y, text, on, fn, tip) => { ctx.font = '10.5px sans-serif'; const w = ctx.measureText(text).width + 16; ctx.fillStyle = on ? NAVY : '#EFEDE5'; rrect(x, y, w, 22, 11); ctx.fill(); ctx.strokeStyle = on ? NAVY : '#B9B4A6'; ctx.lineWidth = 1; ctx.stroke(); T(text, x + w / 2, y + 15, { s: 10.5, c: on ? '#fff' : INK, a: 'center' }); hot(x, y, w, 22, fn, tip); return w + 6; };
+  function chipRow(label, items, cur, set, x, y, wMax) {
+    T(label, x, y + 15, { s: 9.5, b: true, c: MUTE }); let xx = x + 74; ctx.font = '10.5px sans-serif';
+    items.forEach(it => { const w = ctx.measureText(it.t).width + 22; if (xx + w > x + wMax) { xx = x + 74; y += 26; } xx += chip(xx, y, it.t, cur === it.k, () => set(it.k), it.tip || it.t); });
+    return y + 28;
+  }
+  function slider(x, y, w, label, min, max, val, txt, set) {
+    T(label, x, y + 9, { s: 9.5, c: MUTE }); T(txt, x + w, y + 9, { s: 9.5, b: true, a: 'right' }); const ty = y + 20, f = clamp((val - min) / (max - min), 0, 1);
+    ctx.fillStyle = '#DCD8CC'; ctx.fillRect(x, ty, w, 4); ctx.fillStyle = NAVY; ctx.fillRect(x, ty, w * f, 4); ctx.fillStyle = '#fff'; ctx.strokeStyle = NAVY; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(x + w * f, ty + 2, 6, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    SL.push({ x: x - 7, y: y + 6, w: w + 14, h: 28, min, max, set, x0: x, w0: w }); hot(x - 7, y + 6, w + 14, 28, () => { }, 'drag to change');
+  }
+  const slVal = (s, px) => s.min + clamp((px - s.x0) / s.w0, 0, 1) * (s.max - s.min);
+  function customize() { PH.gid = 'custom'; }
+
+  function drawControls(y) {
+    const w = W - 32, sp = P.SP[PH.sp], g = PH.g, cx = 16, y00 = y; K.frame(cx, y, w, 24, 'Set up the experiment', 'every control re-runs the model; the project supplies soil, tillage, weather and the crop'); y += 30;
+    const x0 = cx + 8, ww = w - 16;
+    T('Project: ' + DATA.soil_labels[state.soil] + ', ' + TILL_LABELS[state.till].toLowerCase() + ' tillage (consolidation ' + TC_VALUES[state.tcIdx] + ' per day), crop ' + ((CROPS[state.crop] || {}).label || state.crop) + ', warming ' + (TEMP_VALUES[state.tempIdx] >= 0 ? '+' : '') + TEMP_VALUES[state.tempIdx] + ' °C, rain ×' + RAIN_VALUES[state.rainIdx], x0, y + 8, { s: 9.5, c: MUTE });
+    y += 18;
+    y = chipRow('Crop', Object.keys(P.SP).map(k => ({ k, t: P.SP[k].name, tip: 'model ' + P.SP[k].name.toLowerCase() + (k === projSpecies() ? ' (the crop of the project)' : '') })), PH.sp, k => { PH.sp = k; PH.follow = false; PH.area = null; applyPreset(PH.gid === 'custom' ? 'ref' : PH.gid); }, x0, y, ww);
+    y = chipRow('Genotype', P.GENO.map(g => ({ k: g.id, t: g.name })).concat(PH.gid === 'custom' ? [{ k: 'custom', t: 'Custom' }] : []), PH.gid, k => { if (k !== 'custom') applyPreset(k); }, x0, y, ww);
+    y = chipRow('Drought', [{ k: 'pulse', t: 'Pulse and recovery', tip: 'set-point of the water in the root zone: 1st stress, 2nd stress (two thirds of it), then rewatering, as in the pot experiments' }, { k: 'terminal', t: 'Terminal', tip: 'no water from the onset to the end' }, { k: 'inter', t: 'Intermittent', tip: 'cycles of stress and rewatering' }, { k: 'none', t: 'No stress (control only)' }], PH.dr.type, k => { PH.dr.type = k; }, x0, y, ww);
+    y = chipRow('Climate', Object.keys(CLIM).map(k => ({ k, t: CLIM[k].t })), PH.clim, k => { PH.clim = k; }, x0, y, ww);
+    y = chipRow('Rain', [{ k: 'none', t: 'Excluded (rain-out shelter)' }, { k: 'project', t: 'Project rain' + (window.WXD && window.WXD.on ? ' (imported days)' : '') }], PH.rain, k => { PH.rain = k; }, x0, y, ww);
+    // sliders in two columns
+    const two = ww > 520, cw2 = two ? (ww - 24) / 2 : ww, col = i => two ? x0 + (i % 2) * (cw2 + 24) : x0, row = i => y + (two ? Math.floor(i / 2) : i) * 36; let i = 0;
+    const S = (lab, mn, mx, v, txt, set) => { slider(col(i), row(i), cw2, lab, mn, mx, v, txt, set); i++; };
+    S('Drought starts (day after emergence)', 10, 110, PH.dr.onset, 'day ' + PH.dr.onset + ' (' + dateOf(PH.dr.onset) + ')', v => { PH.dr.onset = Math.round(v); });
+    S('Length of the stress (days)', 6, 60, PH.dr.len, PH.dr.len + ' days', v => { PH.dr.len = Math.round(v); });
+    S('Water held in the stress (% of plant-available)', 5, 70, PH.dr.sev, PH.dr.sev + ' %', v => { PH.dr.sev = Math.round(v); });
+    S('Extra warming (°C, on top of the project)', -2, 6, PH.xw, (PH.xw >= 0 ? '+' : '') + PH.xw.toFixed(1) + ' °C', v => { PH.xw = Math.round(v * 2) / 2; });
+    S('Root angle of the axes (° from vertical)', 12, 80, g.angle, Math.round(g.angle) + '°', v => { g.angle = Math.round(v); customize(); });
+    S('Lateral root density (× genotype)', 0.2, 2.5, g.lat, '×' + g.lat.toFixed(2), v => { g.lat = Math.round(v * 20) / 20; customize(); });
+    S('Root vigour (growth rate of the axes)', 0.5, 1.6, g.axr, '×' + g.axr.toFixed(2), v => { g.axr = Math.round(v * 20) / 20; customize(); });
+    S('Carbon share to roots (× normal)', 0.5, 1.8, g.rootC, '×' + g.rootC.toFixed(2), v => { g.rootC = Math.round(v * 20) / 20; customize(); });
+    S('Stay-green (delay of senescence)', 0, 0.9, g.SG, g.SG.toFixed(2), v => { g.SG = Math.round(v * 20) / 20; customize(); });
+    S('Stomata close at leaf potential (MPa)', -2.4, -0.5, g.psi50 == null ? sp.psi50 : g.psi50, (g.psi50 == null ? sp.psi50 : g.psi50).toFixed(2), v => { g.psi50 = Math.round(v * 20) / 20; customize(); });
+    S('Osmotic adjustment (MPa)', 0, 1, g.OA, g.OA.toFixed(2), v => { g.OA = Math.round(v * 20) / 20; customize(); });
+    S('Growing area per plant (cm²)', 80, 1500, PH.area || sp.A, Math.round(PH.area || sp.A) + ' cm²', v => { PH.area = Math.round(v / 10) * 10; });
+    y += Math.ceil(i / (two ? 2 : 1)) * 36 + 8; ctx.strokeStyle = '#B9B4A6'; ctx.lineWidth = 1; ctx.strokeRect(cx + 0.5, y00 + 0.5, w - 1, y - y00);
+    return y + 10;
+  }
+
+  // ---------------------------------------------------------------- the shoot of one plant: side view, true geometry of the leaves of the model
+  function tcolor(dT) { return pal((dT + 4) / 14); }
+  function leafColor(L, view, res, d) {
+    if (view === 'thermal') { const Ta = res.Ta[d], Tg = res.Tc[d], Td = res.phi[d]; return pal((((L.gf * Tg + (1 - L.gf) * Td) - Ta) + 4) / 14); }
+    if (view === 'xray' || view === 'soil') return view === 'xray' ? 'rgba(210,214,220,0.55)' : mix('#3E8E41', '#B79A3E', 1 - L.gf);
+    return L.gf > 0.98 ? '#3F9A44' : mix('#8C6B2C', '#3F9A44', Math.pow(L.gf, 0.7) * 0.9 + (L.gf > 0.5 ? 0.1 : 0));
+  }
+  function drawShoot(res, d, xc, yg, s, view, rot) {
+    const g = P.leaves(res, d, rot), H = res.H[d] * s; ctx.save();
+    ctx.strokeStyle = view === 'xray' ? 'rgba(220,224,230,0.7)' : '#5E8F3C'; ctx.lineWidth = Math.max(1.5, Math.min(5, res.H[d] * s * 0.03)); ctx.beginPath(); ctx.moveTo(xc, yg); ctx.lineTo(xc, yg - H); ctx.stroke();
+    const order = g.leaves.slice().sort((a, b) => Math.sin(a.az) - Math.sin(b.az));
+    order.forEach(L => {
+      const ya = yg - L.hgt * s, dx = L.reach * Math.cos(L.az) * s * 1.0, rise = L.len * Math.sin(L.elev) * s * 0.8, wmax = Math.max(1, L.len * (res.sp.ar) * s * 0.5 * L.wr), tipx = xc + dx, tipy = ya - rise * 0.55 + L.len * s * 0.18 * (1 - 0.5 * L.gf);
+      const cxp = xc + dx * 0.4, cyp = ya - rise; const pts = [], N0 = 9;
+      for (let i = 0; i <= N0; i++) { const t = i / N0, mt = 1 - t, px = mt * mt * xc + 2 * mt * t * cxp + t * t * tipx, py = mt * mt * ya + 2 * mt * t * cyp + t * t * tipy, hw = wmax * Math.sin(Math.PI * Math.pow(Math.max(t, 0.02), 0.7)); pts.push([px, py, hw]); }
+      ctx.fillStyle = leafColor(L, view, res, d); ctx.beginPath(); pts.forEach((q, i) => { i ? ctx.lineTo(q[0], q[1] - q[2]) : ctx.moveTo(q[0], q[1] - q[2]); }); for (let i = N0; i >= 0; i--) ctx.lineTo(pts[i][0], pts[i][1] + pts[i][2]); ctx.closePath(); ctx.fill();
+      if (view !== 'thermal') { ctx.strokeStyle = view === 'xray' ? 'rgba(255,255,255,0.35)' : 'rgba(30,70,30,0.35)'; ctx.lineWidth = 0.7; ctx.beginPath(); pts.forEach((q, i) => { i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]); }); ctx.stroke(); }
+    });
+    ctx.restore(); return g;
+  }
+  // ---------------------------------------------------------------- the roots of one plant in the column: segments grown up to the day, turned by the rotation of the view
+  function drawRoots(res, d, xc, yTop, sx, sy, rot, mode, ctx2) {
+    const sg = res.segs; if (!sg) return; const c = ctx2 || ctx; if (!res._cnt) { const cnt = new Int32Array(N + 1); for (let i = 0; i < sg.n; i++) cnt[sg.d[i] + 1]++; for (let k = 1; k <= N; k++) cnt[k] += cnt[k - 1]; res._cnt = cnt; }
+    const n = res._cnt[Math.min(N, d + 1)], cr = Math.cos(rot), sr = Math.sin(rot), paths = [new Path2D(), new Path2D(), new Path2D()];
+    for (let i = 0; i < n; i++) { const o = sg.o[i], p = paths[o], xa = (sg.x0[i] * cr + sg.z0[i] * sr) * sx + xc, xb = (sg.x1[i] * cr + sg.z1[i] * sr) * sx + xc; p.moveTo(xa, yTop + sg.y0[i] * sy); p.lineTo(xb, yTop + sg.y1[i] * sy); }
+    c.lineCap = 'round'; c.lineJoin = 'round';
+    const sty = { rgb: [['#F4E6C0', 1.7], ['#E8D3A2', 0.9], ['#DCC48E', 0.55]], xray: [['rgba(255,255,255,0.95)', 1.5], ['rgba(235,235,240,0.7)', 0.8], ['rgba(220,220,230,0.5)', 0.5]], orange: [['#E8832A', 1.9], ['#F0A04A', 1.0], ['#F4B66B', 0.6]], soil: [['#2B2B2B', 1.6], ['#3A3A3A', 0.9], ['#4A4A4A', 0.55]], thermal: [['rgba(40,40,40,0.5)', 1.3], ['rgba(40,40,40,0.35)', 0.7], ['rgba(40,40,40,0.25)', 0.5]] }[mode] || [];
+    for (let o = 2; o >= 0; o--) { c.strokeStyle = sty[o][0]; c.lineWidth = sty[o][1]; c.stroke(paths[o]); }
+  }
+  function column(x, y, cw, ch, bg, rimTop) { // a cylinder seen from the side
+    ctx.fillStyle = bg; ctx.fillRect(x, y, cw, ch); ctx.strokeStyle = 'rgba(0,0,0,0.35)'; ctx.lineWidth = 1; ctx.strokeRect(x + 0.5, y + 0.5, cw - 1, ch - 1);
+    if (rimTop) { ctx.beginPath(); ctx.ellipse(x + cw / 2, y, cw / 2, 5, 0, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,255,255,0.12)'; ctx.fill(); ctx.stroke(); }
+  }
+  function soilFill(res, d, x, y, cw, ch, view) {
+    const dz = ch / NL; const tx = DATA.texture[state.soil], base = tx.color || '#C9A76B';
+    for (let i = 0; i < NL; i++) {
+      const f = res.w[d * NL + i];
+      ctx.fillStyle = view === 'soil' ? wcol(f) : view === 'xray' ? mix('#2A2D33', '#4A515C', f) : view === 'thermal' ? mix('#5B4A38', '#4A5C6E', f) : mix(mix(base, '#6A4B2C', 0.5), '#4A3520', f * 0.55);
+      ctx.fillRect(x, y + i * dz, cw, dz + 0.5);
+    }
+    ctx.strokeStyle = 'rgba(255,255,255,0.10)'; ctx.lineWidth = 1; for (let i = 1; i < NL; i++) { ctx.beginPath(); ctx.moveTo(x, y + i * dz + 0.5); ctx.lineTo(x + cw, y + i * dz + 0.5); ctx.stroke(); }
+    ctx.strokeStyle = 'rgba(0,0,0,0.35)'; ctx.strokeRect(x + 0.5, y + 0.5, cw - 1, ch - 1);
+  }
+  const VIEWS = [{ k: 'rgb', t: 'Camera (RGB)', tip: 'what a visible-light camera and a rhizotron window see' }, { k: 'thermal', t: 'Thermal camera', tip: 'canopy temperature from the energy balance of each leaf' }, { k: 'xray', t: 'X-ray tomography', tip: 'roots as a scanner shows them' }, { k: 'soil', t: 'Soil water', tip: 'relative plant-available water of each layer' }];
+  function thermalBar(x, y, w) { for (let i = 0; i < w; i++) { ctx.fillStyle = pal(i / w); ctx.fillRect(x + i, y, 1, 7); } T('−4 K', x, y + 18, { s: 8.5, c: MUTE }); T('+10 K above air', x + w, y + 18, { s: 8.5, c: MUTE, a: 'right' }); }
+
+  function drawTwin(y) {
+    const w = W - 32, cx = 16, d = day(), sp = P.SP[PH.sp]; const SH = 250, ZH = 200, hh = 76 + SH + ZH + 36; K.frame(cx, y, w, hh, 'Plant and roots, side by side', 'day ' + d + ' after emergence (' + dateOf(d) + ') · drag to turn · ' + (play.on ? 'playing' : 'paused'));
+    let yy = y + 28, xx = cx + 8; VIEWS.forEach(v => { xx += chip(xx, yy, v.t, PH.view === v.k, () => { PH.view = v.k; }, v.tip); });
+    yy += 30; const colw = (w - 24) / 2, view = PH.view, rot = PH.rot; ROT.x = cx; ROT.y = yy; ROT.w = w; ROT.h = SH + ZH + 36;
+    ['ww', 'dr'].forEach((tr, ci) => {
+      const res = R(tr); if (!res) return; const x0 = cx + 8 + ci * (colw + 8), xc = x0 + colw / 2; ctx.fillStyle = view === 'xray' ? '#15181D' : '#F6F4EE'; ctx.fillRect(x0, yy, colw, SH + ZH + 34); ctx.strokeStyle = '#D2CEC2'; ctx.strokeRect(x0 + 0.5, yy + 0.5, colw - 1, SH + ZH + 33);
+      const lab = tr === 'ww' ? 'Well-watered' : 'Drought', col = tr === 'ww' ? '#1B1F23' : '#D93025'; ctx.fillStyle = col; ctx.fillRect(x0, yy, 4, 22); T(lab, x0 + 10, yy + 15, { s: 11, b: true, c: view === 'xray' ? '#E8EAEE' : col });
+      const tg = res.tgt[d]; T('water ' + fmt(res.tgt[d] * 100) + ' % set · soil ' + fmt(100 * res.store[d] / res.awcT) + ' %', x0 + colw - 8, yy + 15, { s: 9, c: view === 'xray' ? '#AEB4BD' : MUTE, a: 'right' });
+      const gy = yy + 26 + SH - 18, s = (SH - 84) / (sp.Hmax * 1.0);
+      // the shoot and, in the thermal view, its temperature
+      if (view === 'thermal') { ctx.fillStyle = '#F0F2F6'; ctx.fillRect(x0 + 1, yy + 23, colw - 2, SH - 17); }
+      const geo = drawShoot(res, d, xc, gy, s, view, rot);
+      // ground and soil column
+      const CW = Math.min(colw - 36, 150), zx = xc - CW / 2, zy = gy + 6, sy = (ZH - 8) / ZMAX, sx = (CW / 2 - 4) / res.Rpot; column(zx, zy, CW, ZH - 8, '#333', false); soilFill(res, d, zx, zy, CW, ZH - 8, view);
+      drawRoots(res, d, xc, zy, sx, sy, rot, view === 'xray' ? 'xray' : view === 'soil' ? 'soil' : view === 'thermal' ? 'thermal' : 'rgb');
+      ctx.strokeStyle = view === 'xray' ? '#6A717C' : '#6B5B3E'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x0 + 6, gy + 6); ctx.lineTo(x0 + colw - 6, gy + 6); ctx.stroke();
+      for (let k = 1; k < 4; k++) T(k * 30 + ' cm', zx - 4, zy + k * 30 * sy + 3, { s: 8, c: view === 'xray' ? '#8A919B' : MUTE, a: 'right' });
+      const sh_ = view === 'xray' ? '#C9CED6' : '#33414F';
+      const txt = ['height ' + fmt(res.H[d]) + ' cm · shoot area ' + fmt(res.PSA[d]) + ' cm²', 'solidity ' + fmt(res.solid[d] * 100) + ' % · senescent ' + fmt(res.SI[d]) + ' % · LAI ' + fmt(res.LAIg[d], 1), 'canopy ' + fmt(Math.abs(res.CTD[d]), 1) + ' K ' + (res.CTD[d] >= 0 ? 'cooler' : 'warmer') + ' than air · RWC ' + fmt(res.RWC[d] * 100) + ' %', 'roots ' + fmt(res.Lroot[d] / 100, 1) + ' m · depth ' + fmt(res.Rdepth[d]) + ' cm · D95 ' + fmt(res.D95[d]) + ' cm'];
+      for (let i = 0; i < 4; i++) TF(txt[i], x0 + 8, yy + 38 + i * 12.5, colw - 16, { s: 9.5, c: sh_ });
+    });
+    if (view === 'thermal') thermalBar(cx + w - 190, y + 33, 120);
+    T('the width of the soil column is enlarged', cx + 12, y + hh - 6, { s: 8.5, c: MUTE });
+    const p0 = ROT; hot(p0.x, p0.y, p0.w, p0.h, () => { }, 'drag sideways to turn the plants and the roots');
+    return y + hh + 10;
+  }
+
+  // ---------------------------------------------------------------- scans of the roots at four dates (as in the root tomography figures), cached
+  function drawStrip(y) {
+    const w = W - 32, cx = 16, hh = 350; K.frame(cx, y, w, hh, 'Root scans through the season', (PH.trt === 'ww' ? 'well-watered' : 'drought') + ' plant · top: scanner image · bottom: reconstruction · turn with the mouse above');
+    let xx = cx + 8; xx += chip(xx, y + 28, 'Well-watered', PH.trt === 'ww', () => { PH.trt = 'ww'; }, 'show the well-watered plant'); chip(xx, y + 28, 'Drought', PH.trt === 'dr', () => { PH.trt = 'dr'; }, 'show the plant under drought');
+    const res = R(PH.trt); if (!res) return y + hh + 10; const days = [0.25, 0.5, 0.75, 1].map(f => Math.round(f * (N - 1))), cw = (w - 16) / 4, ZH = 120, rq = Math.round(PH.rot / 0.26);
+    const key = PH.key + PH.trt + rq; if (!PH.cache || PH.cache.key !== key) { PH.cache = { key, cv: [] }; }
+    days.forEach((dd, i) => {
+      const x0 = cx + 8 + i * cw, wid = cw - 10, CW = Math.min(wid - 20, 78); let pair = PH.cache.cv[i];
+      if (!pair) {
+        pair = []; for (let m = 0; m < 2; m++) { const cv = document.createElement('canvas'); cv.width = Math.ceil(wid); cv.height = ZH + 14; const c = cv.getContext('2d'); c.fillStyle = m ? '#B9BCC2' : '#0A0B0D'; c.fillRect(0, 0, cv.width, cv.height);
+          const zx = (wid - CW) / 2; if (m) { c.fillStyle = '#9EA2A9'; c.fillRect(zx, 8, CW, ZH - 4); c.strokeStyle = '#6F737A'; c.strokeRect(zx + 0.5, 8.5, CW - 1, ZH - 5); }
+          drawRoots(res, dd, wid / 2, 8, (CW / 2 - 3) / res.Rpot, (ZH - 4) / ZMAX, PH.rot, m ? 'orange' : 'xray', c); pair.push(cv); }
+        PH.cache.cv[i] = pair;
+      }
+      const oy = y + 78; ctx.drawImage(pair[0], x0, oy); ctx.drawImage(pair[1], x0, oy + ZH + 18); ctx.strokeStyle = '#6A6E75'; ctx.strokeRect(x0 + 0.5, oy + 0.5, wid - 1, ZH + 13); ctx.strokeRect(x0 + 0.5, oy + ZH + 18.5, wid - 1, ZH + 13);
+      T('day ' + dd + ' (' + dateOf(dd) + ')', x0 + 2, oy - 5, { s: 9.5, b: true }); TF(fmt(res.Lroot[dd] / 100, 1) + ' m of root, depth ' + fmt(res.Rdepth[dd]) + ' cm', x0 + 2, oy + 2 * ZH + 46, wid, { s: 9, c: MUTE });
+      hot(x0, oy, wid, 2 * ZH + 30, () => { play.t = dd / (N - 1); play.on = false; }, 'jump to day ' + dd);
+    });
+    return y + hh + 10;
+  }
+
+  // ---------------------------------------------------------------- time series like the figures of the phenotyping platforms: one row per trait, well-watered against drought
+  const SETS = {
+    shoot: [{ t: 'Plant height', u: 'cm', f: r => r.H }, { t: 'Projected shoot area', u: 'cm²', f: r => r.PSA }, { t: 'Shoot solidity (area / convex hull)', u: '%', f: r => r.solid, s: 100 }, { t: 'Senescence index', u: '%', f: r => r.SI }],
+    water: [{ t: 'Leaf relative water content', u: '%', f: r => r.RWC, s: 100 }, { t: 'Leaf water potential, midday', u: 'MPa', f: r => r.psiL }, { t: 'Canopy temperature depression (air minus canopy)', u: 'K', f: r => r.CTD }, { t: 'Crop water stress index', u: '0 to 1', f: r => r.CWSI }],
+    carbon: [{ t: 'Net assimilation (biomass gained per day)', u: 'g/m²/d', f: r => r.dW }, { t: 'Share of the carbon sent to the roots', u: '%', f: r => r.fr, s: 100 }, { t: 'Root : shoot ratio (dry mass)', u: '', f: r => Array.from(r.Wr, (v, i) => v / Math.max(0.01, r.Wl[i] + r.Ws[i] + r.Wg[i])) }, { t: 'Green leaf area index', u: 'm²/m²', f: r => r.LAIg }],
+    roots: [{ t: 'Root depth (deepest tip)', u: 'cm', f: r => r.Rdepth }, { t: 'Root length of the plant', u: 'm', f: r => r.Lroot, s: 0.01 }, { t: 'Root growth per day', u: 'cm/d', f: r => r.dL }, { t: 'Depth of 95 % of the root length', u: 'cm', f: r => r.D95 }]
+  };
+  const SETN = [{ k: 'shoot', t: 'Shoot (as in the imaging platforms)' }, { k: 'water', t: 'Water status' }, { k: 'carbon', t: 'Carbon' }, { k: 'roots', t: 'Roots' }];
+  const OBSK = { 'Plant height': 'height', 'Projected shoot area': 'area', 'Shoot solidity (area / convex hull)': 'solidity', 'Senescence index': 'senescence', 'Leaf relative water content': 'rwc', 'Canopy temperature depression (air minus canopy)': 'ctd' };
+  function seriesVals(row, res) { const v = row.f(res), s = row.s == null ? 1 : row.s, out = new Array(N); for (let i = 0; i < N; i++) out[i] = v[i] * s; return out; }
+  function drawSeries(y) {
+    const w = W - 32, cx = 16, rows = SETS[PH.set], rh = 92, hh = 84 + rows.length * rh; K.frame(cx, y, w, hh, 'Traits through time: well-watered against drought', 'click or drag on a chart to move the day');
+    let xx = cx + 8; SETN.forEach(s => { xx += chip(xx, y + 28, s.t, PH.set === s.k, () => { PH.set = s.k; }, 'show ' + s.t.toLowerCase()); });
+    const x0 = cx + 62, ww = w - 62 - 14, d = day(); TS.x = x0; TS.w = ww; TS.y = y + 58; TS.h = rows.length * rh;
+    const shade = regimeShade();
+    rows.forEach((row, ri) => {
+      const top = y + 62 + ri * rh, hgt = rh - 26, a = seriesVals(row, R('ww')), b = seriesVals(row, R('dr'));
+      let mn = Infinity, mx = -Infinity; [a, b].forEach(q => q.forEach(v => { if (isFinite(v)) { mn = Math.min(mn, v); mx = Math.max(mx, v); } }));
+      const obsK = OBSK[row.t], obs = PH.obs && obsK && PH.obs.cols.includes(obsK) ? PH.obs.rows.filter(o => isFinite(o[obsK])) : [];
+      obs.forEach(o => { mn = Math.min(mn, o[obsK]); mx = Math.max(mx, o[obsK]); });
+      if (!isFinite(mn)) { mn = 0; mx = 1; } const pad = (mx - mn) * 0.08 + 1e-9, nonneg = mn >= 0; mn -= pad; mx += pad; if (nonneg && mn < 0) mn = 0;
+      const X = i => x0 + ww * i / (N - 1), Y = v => top + hgt - (v - mn) / (mx - mn) * hgt;
+      shade.forEach(s => { ctx.fillStyle = s[2]; ctx.fillRect(X(s[0]), top, X(s[1]) - X(s[0]), hgt); });
+      ctx.strokeStyle = GRID; ctx.lineWidth = 1; for (let g = 0; g <= 3; g++) { const yy = top + hgt * g / 3; ctx.beginPath(); ctx.moveTo(x0, yy + 0.5); ctx.lineTo(x0 + ww, yy + 0.5); ctx.stroke(); T(fmt(mx - (mx - mn) * g / 3, mx - mn < 5 ? 2 : (mx - mn < 50 ? 1 : 0)), x0 - 4, yy + 3, { s: 8.5, c: MUTE, a: 'right' }); }
+      TF(row.t + (row.u ? ' (' + row.u + ')' : ''), x0 + 4, top + 10, ww - 10, { s: 9.5, b: true });
+      [[a, '#1B1F23'], [b, '#D93025']].forEach(([q, c]) => { ctx.strokeStyle = c; ctx.lineWidth = 2; ctx.beginPath(); let st = false; for (let i = 0; i < N; i++) { if (!isFinite(q[i])) { st = false; continue; } st ? ctx.lineTo(X(i), Y(q[i])) : ctx.moveTo(X(i), Y(q[i])); st = true; } ctx.stroke(); ctx.fillStyle = c; ctx.beginPath(); ctx.arc(X(d), Y(q[d]), 3.4, 0, Math.PI * 2); ctx.fill(); });
+      obs.forEach(o => { ctx.fillStyle = o.trt === 'dr' ? '#D93025' : '#1B1F23'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.beginPath(); ctx.rect(X(o.day) - 3, Y(o[obsK]) - 3, 6, 6); ctx.fill(); ctx.stroke(); });
+      ctx.strokeStyle = '#2E7DE8'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(X(d) + 0.5, top); ctx.lineTo(X(d) + 0.5, top + hgt); ctx.stroke(); ctx.setLineDash([]);
+      if (ri === rows.length - 1) { for (let t = 0; t <= N - 1; t += 20) T(String(t), X(t), top + hgt + 12, { s: 8.5, c: MUTE, a: 'center' }); T('days after emergence', x0 + ww, top + hgt + 24, { s: 8.5, c: MUTE, a: 'right' }); }
+      { const lt = fmt(a[d], mx - mn < 5 ? 2 : 1) + ' / ' + fmt(b[d], mx - mn < 5 ? 2 : 1); ctx.font = 'bold 9px sans-serif'; const lw = ctx.measureText(lt).width + 8; ctx.fillStyle = 'rgba(255,255,255,0.88)'; ctx.fillRect(x0 + ww - lw - 2, top + 1, lw, 13); T(lt, x0 + ww - 6, top + 11, { s: 9, b: true, c: '#33414F', a: 'right' }); }
+    });
+    K.legend([['#1B1F23', 'well-watered'], ['#D93025', 'drought']].concat(shade.length ? [['#F6D9A8', 'stress'], ['#D3DDF3', 'recovery']] : []).concat(PH.obs ? [['#888', 'square: your observations']] : []), cx + 10, y + hh - 10);
+    hot(TS.x, TS.y, TS.w, TS.h, () => { }, 'click or drag to move the day');
+    return y + hh + 10;
+  }
+
+  // ---------------------------------------------------------------- draw of the whole layer
+  const SECTIONS = [];
+  function drawPh() {
+    paper(); const now = performance.now(); if (now - PH.last > 700) { play.t = 0.5; play.on = true; PH.firstTouch = now; } PH.last = now; SL.length = 0;
+    if (PH.follow && PH.sp !== projSpecies()) { PH.sp = projSpecies(); applyPreset(PH.gid === 'custom' ? 'ref' : PH.gid); PH.area = null; }
+    ensureRun(); let y = K.header('Deterministic phenotyping', 'Equation-based simulation of plant structure and function under drought · same inputs always give the same plant · soil, tillage, weather and crop from the project', 4);
+    if (!PH.run) { T(PH.msg ? 'The model could not run: ' + PH.msg : 'Preparing the first run...', 16, y + 24, { s: 12, c: MUTE }); return; }
+    K.badge('MODEL RUN', 16, y, '#1E8E3E'); T('Soil hydraulics of the project soil (van Genuchten), ' + CLIM[PH.clim].t.toLowerCase() + ', ' + P.SP[PH.sp].name.toLowerCase() + ', genotype ' + (PH.gid === 'custom' ? 'custom' : (P.GENO.find(g => g.id === PH.gid) || {}).name) + '.', 100, y + 1, { s: 9.5, c: INK }); y += 14;
+    y = drawControls(y); y = drawTwin(y); y = drawStrip(y); y = drawSeries(y);
+    SECTIONS.forEach(fn => { try { y = fn(y); } catch (e) { console.error('dph section', e); T('A section could not be drawn: ' + e.message, 16, y + 16, { s: 10, c: '#D93025' }); y += 30; } });
+    try { if (Math.abs(currentScene.h - (y + 20)) > 4) { currentScene.h = Math.ceil(y + 20); setCanvasH(currentScene.h); } } catch (e) { }
+    jobStep(); panelStep();
+  }
+  // ---------------------------------------------------------------- pointer: sliders, turning, scrubbing
+  function onDown(p) {
+    for (const s of SL) if (p.x >= s.x && p.x <= s.x + s.w && p.y >= s.y && p.y <= s.y + s.h) { PH.drag = { t: 'sl', s }; PH.dragging = true; s.set(slVal(s, p.x)); return true; }
+    if (p.x >= TS.x && p.x <= TS.x + TS.w && p.y >= TS.y && p.y <= TS.y + TS.h) { PH.drag = { t: 'ts' }; play.t = clamp((p.x - TS.x) / TS.w, 0, 1); play.on = false; return true; }
+    const hs = hotAt(p); if (hs && hs.tip !== 'drag sideways to turn the plants and the roots') { hs.fn(p); return true; }
+    if (p.x >= ROT.x && p.x <= ROT.x + ROT.w && p.y >= ROT.y && p.y <= ROT.y + ROT.h) { PH.drag = { t: 'rot', x0: p.x, r0: PH.rot }; return true; }
+    return false;
+  }
+  function onMove(p) {
+    const dg = PH.drag; if (!dg) { hotMove(p); return false; }
+    if (dg.t === 'sl') { dg.s.set(slVal(dg.s, p.x)); return true; } if (dg.t === 'ts') { play.t = clamp((p.x - TS.x) / TS.w, 0, 1); return true; } if (dg.t === 'rot') { PH.rot = dg.r0 + (p.x - dg.x0) * 0.012; return true; } return false;
+  }
+  function onUp() { PH.drag = null; PH.dragging = false; }
+  // background jobs (genotype panel, calibration) run one step per frame; part 2 fills these
+  let jobStep = () => { }, panelStep = () => { };
+  window.PHUI = { PH, P, K, SECTIONS, chip, chipRow, slider, SL, mix, pal, wcol, day, dateOf, R, N, NL, DZ, ZMAX, CLIM, effGeno, cfgFor, ensureRun, keyOf, seriesVals, SETS, OBSK, regimeShade, sowDoy, envObj, soilObj, setJob: f => { jobStep = f; }, setPanel: f => { panelStep = f; }, redraw: () => { PH.key = ''; } };
+  K.add('dph', 'P1 Deterministic phenotyping', '#2F7F3E', drawPh, 'Deterministic phenotyping: plants, roots, water and carbon under drought, from equations', 'Roots, leaves, water and carbon are linked: a change in root angle, stay-green, stomata or soil structure moves every trait at once, and the traits seen above ground reveal what the roots do below.');
+  const sc = SCENES.find(s => s.id === 'dph'); if (sc) { sc.play = true; sc.dur = 40; sc.h = 3600; sc.onDown = onDown; sc.onMove = onMove; sc.onUp = onUp; sc.onLeave = () => { hotUi.hover = null; }; }
+  // the button of the web explorer, in the group of the soil
+  (function place() {
+    const s = SCENES.find(x => x.id === 'dph'), bar = document.getElementById('sceneBar'); if (!s || !bar || bar.querySelector('[data-scene="dph"]')) return;
+    const b = document.createElement('div'); b.className = 'scenebtn'; b.innerHTML = '<span class="no">P1</span><span>Deterministic phenotyping</span>'; b.style.setProperty('--sc', s.color); b.dataset.scene = 'dph'; b.title = s.title; b.onclick = () => switchScene(s);
+    const h = Array.from(bar.querySelectorAll('.scenegrp')).find(x => x.textContent === 'Water in the soil'); if (!h) { bar.appendChild(b); return; } let n = h.nextSibling; while (n && !(n.classList && n.classList.contains('scenegrp'))) n = n.nextSibling; bar.insertBefore(b, n);
+  })();
+})();
+
+</script>
+<script>/* plus_phenotyping2.js */
+/* SWAFL 1.1 layer P1 Deterministic phenotyping (part 2): water and uptake, carbon and roots, what the roots meet in the soil,
+   roots predicted from the plant above ground, the traits of the run, observations with calibration, and the equations. */
+'use strict';
+(function () {
+  const U = window.PHUI; if (!U) return;
+  const { PH, P, K, SECTIONS, chip, chipRow, mix, pal, wcol, day, dateOf, R, N, NL, DZ, ZMAX, effGeno, cfgFor, keyOf, seriesVals, SETS, OBSK, regimeShade } = U;
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v)), fmt = K.fmt, TF = K.TF, HEAD = '#1B1F23', GRID = '#E6E2D6', NAVY = '#1B3A6B';
+  const sum = (a, i0, i1) => { let s = 0; for (let i = i0; i <= i1; i++) s += a[i]; return s; };
+  const mean = (a, i0, i1) => sum(a, i0, i1) / Math.max(1, i1 - i0 + 1);
+  const pear = (x, y) => { const n = x.length; if (n < 3) return NaN; const mx = x.reduce((a, b) => a + b, 0) / n, my = y.reduce((a, b) => a + b, 0) / n; let sxy = 0, sxx = 0, syy = 0; for (let i = 0; i < n; i++) { sxy += (x[i] - mx) * (y[i] - my); sxx += (x[i] - mx) ** 2; syy += (y[i] - my) ** 2; } return sxx > 0 && syy > 0 ? sxy / Math.sqrt(sxx * syy) : NaN; };
+  const linfit = (x, y) => { const n = x.length, mx = x.reduce((a, b) => a + b, 0) / n, my = y.reduce((a, b) => a + b, 0) / n; let sxy = 0, sxx = 0; for (let i = 0; i < n; i++) { sxy += (x[i] - mx) * (y[i] - my); sxx += (x[i] - mx) ** 2; } const b = sxx > 0 ? sxy / sxx : 0, r = pear(x, y); return { a: my - b * mx, b, r2: isFinite(r) ? r * r : 0 }; };
+  const note = (txt, x, y, w, o) => sidWrap(txt, x, y, w, Object.assign({ s: 9.5, c: MUTE }, o || {}), 12.5);
+  const frameH = (x, y, w, title, sub) => K.frame(x, y, w, 24, title, sub);
+  const endFrame = (x, y0, y, w) => { ctx.strokeStyle = '#B9B4A6'; ctx.lineWidth = 1; ctx.strokeRect(x + 0.5, y0 + 0.5, w - 1, y - y0); };
+
+  // ================================================================== water of the column and the uptake of the roots
+  function drawWater(y) {
+    const w = W - 32, cx = 16, a = R('ww'), b = R('dr'), d = day(), y0 = y; frameH(cx, y, w, 'Water: demand, supply and where the roots take it', 'transpiration of the plant against the soil water of every layer');
+    y += 32; const x0 = cx + 46, ww = w - 62, hh = 112, top = y + 6;
+    // daily water use
+    const mx = K.nice(Math.max(...a.Tp, ...b.Tp, 1) * 1.1), X = i => x0 + ww * i / (N - 1), Y = v => top + hh - v / mx * hh;
+    regimeShade().forEach(s => { ctx.fillStyle = s[2]; ctx.fillRect(X(s[0]), top, X(s[1]) - X(s[0]), hh); });
+    K.yAxis(x0, top, ww, hh, 0, mx, 'mm/day', 4);
+    for (let i = 0; i < N; i++) { if (b.I[i] > 0.3) { ctx.fillStyle = 'rgba(46,125,232,0.55)'; ctx.fillRect(X(i) - 1, top, 2.4, Math.min(30, b.I[i] / mx * hh * 0.5)); } if (b.P[i] > 0.3) { ctx.fillStyle = 'rgba(120,130,145,0.55)'; ctx.fillRect(X(i) - 1, top + hh - Math.min(26, b.P[i] / mx * hh), 2.4, Math.min(26, b.P[i] / mx * hh)); } }
+    const line = (arr, c, wd, dash) => { ctx.strokeStyle = c; ctx.lineWidth = wd; ctx.setLineDash(dash || []); ctx.beginPath(); for (let i = 0; i < N; i++) { const yy = Y(arr[i]); i ? ctx.lineTo(X(i), yy) : ctx.moveTo(X(i), yy); } ctx.stroke(); ctx.setLineDash([]); };
+    line(a.Tp, '#8A94A3', 1.3, [4, 3]); line(a.T, '#1B1F23', 2); line(b.T, '#D93025', 2); line(b.Es, '#A8742E', 1.2);
+    ctx.strokeStyle = '#2E7DE8'; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(X(d), top); ctx.lineTo(X(d), top + hh); ctx.stroke(); ctx.setLineDash([]);
+    for (let t = 0; t <= N - 1; t += 20) T(String(t), X(t), top + hh + 12, { s: 8.5, c: MUTE, a: 'center' });
+    K.legend([['#8A94A3', 'what the canopy asks (potential)'], ['#1B1F23', 'transpired, well-watered'], ['#D93025', 'transpired, drought'], ['#A8742E', 'soil evaporation, drought'], ['rgba(46,125,232,0.7)', 'water applied'], ['rgba(120,130,145,0.7)', 'rain']], x0, top + hh + 30);
+    y = top + hh + 52;
+    // heat maps of the relative plant-available water, with the front of the roots
+    const hw = (w - 24) / 2 - 76, ch = 14 * NL;
+    [['ww', 'Well-watered', a], ['dr', 'Drought', b]].forEach(([tr, lab, res], ci) => {
+      const hx = cx + 12 + ci * (hw + 76 + 8) + 30, hy = y + 16; T(lab + ': plant-available water of every layer', hx - 30, y + 8, { s: 9.5, b: true, c: tr === 'dr' ? '#D93025' : '#1B1F23' });
+      for (let i = 0; i < N; i++) for (let k = 0; k < NL; k++) { ctx.fillStyle = wcol(res.w[i * NL + k]); ctx.fillRect(hx + hw * i / N, hy + k * 14, hw / N + 0.6, 14.3); }
+      ctx.strokeStyle = 'rgba(255,255,255,0.9)'; ctx.lineWidth = 1.6; ctx.beginPath(); for (let i = 0; i < N; i++) { const yy = hy + res.Rdepth[i] / ZMAX * ch; i ? ctx.lineTo(hx + hw * i / N, yy) : ctx.moveTo(hx, yy); } ctx.stroke();
+      ctx.strokeStyle = '#111'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(hx + hw * d / N, hy); ctx.lineTo(hx + hw * d / N, hy + ch); ctx.stroke(); ctx.strokeStyle = '#B9B4A6'; ctx.strokeRect(hx + 0.5, hy + 0.5, hw - 1, ch - 1);
+      for (let k = 0; k <= 4; k++) T(String(k * 30), hx - 4, hy + k * 30 / ZMAX * ch + 3, { s: 8, c: MUTE, a: 'right' }); T('cm', hx - 4, hy - 3, { s: 8, c: MUTE, a: 'right' });
+      // uptake of the day by layer
+      let um = 0.01; for (let k = 0; k < NL; k++) um = Math.max(um, res.up[d * NL + k]); const ux = hx + hw + 4; for (let k = 0; k < NL; k++) { const v = res.up[d * NL + k]; ctx.fillStyle = '#2E9E4F'; ctx.fillRect(ux, hy + k * 14 + 2, Math.max(0.5, v / um * 26), 10); } T('uptake', ux, hy + ch + 11, { s: 8, c: MUTE });
+      hot(hx, hy, hw, ch, p => { play.t = clamp((p.x - hx) / hw, 0, 1); play.on = false; }, 'click to move the day');
+    });
+    y += 16 + ch + 26; K.legend([['#C9A65E', 'dry (no available water)'], ['#2E6FBF', 'at field capacity'], ['#FFFFFF', 'deepest root']], cx + 12, y); y += 14;
+    // totals
+    const row = (lab, f) => { T(lab, cx + 12, y, { s: 9.5, c: MUTE }); T(f(a), cx + 270, y, { s: 9.5, b: true, a: 'right' }); T(f(b), cx + 370, y, { s: 9.5, b: true, c: '#D93025', a: 'right' }); y += 13; };
+    T('Season total (mm)', cx + 12, y, { s: 9.5, b: true }); T('well-watered', cx + 270, y, { s: 9, c: MUTE, a: 'right' }); T('drought', cx + 370, y, { s: 9, c: MUTE, a: 'right' }); y += 13;
+    row('transpiration', r => fmt(r.totals.T)); row('soil evaporation', r => fmt(r.totals.Es)); row('water applied and rain', r => fmt(r.totals.I + r.totals.P)); row('drained below 1.2 m', r => fmt(r.totals.dr));
+    const nt = note('Uptake of a layer is its conductance (root length, fine roots, conductivity of the soil) times the potential difference to the root collar (Gardner; Feddes). When the soil dries the conductivity falls, the leaf potential falls, the stomata close and the canopy warms: the same chain that the thermal camera and the leaf water content record.', cx + 12, y + 6, w - 24); y += 6 + nt * 12.5 + 8;
+    endFrame(cx, y0, y, w); return y + 10;
+  }
+
+  // ================================================================== carbon: assimilation, allocation and the response of the roots
+  function lagCorr(res) { const out = [], a = res.dW, r = res.dL, ma = (q, t) => { let s = 0, c = 0; for (let k = Math.max(0, t - 3); k <= Math.min(N - 1, t + 3); k++) { s += q[k]; c++; } return s / c; }; for (let lag = 0; lag <= 8; lag++) { const xs = [], ys = []; for (let t = 12 + lag; t < N - 5; t++) { if (res.stage[t] >= 1.4) break; xs.push(a[t - lag] - ma(a, t - lag)); ys.push(r[t] - ma(r, t)); } out.push(pear(xs, ys)); } return out; }   // day-to-day fluctuations around a seven-day mean, so the common trend does not hide the delay
+  function drawCarbon(y) {
+    const w = W - 32, cx = 16, a = R('ww'), b = R('dr'), d = day(), y0 = y; frameH(cx, y, w, 'Carbon: assimilation, allocation, root and shoot growth', 'what the leaves make, where it goes, and how the roots answer');
+    y += 32; const cw = (w - 32) / 2, hh = 112; const COL = { Wl: '#4FA64F', Ws: '#A8B04A', Wr: '#8E5A2A', Wg: '#E2B53A' };
+    [['ww', 'Well-watered', a], ['dr', 'Drought', b]].forEach(([tr, lab, res], ci) => {
+      const x0 = cx + 40 + ci * (cw + 16), top = y + 16; T(lab + ': dry mass of the plant parts (g/m²)', x0 - 30, y + 8, { s: 9.5, b: true, c: tr === 'dr' ? '#D93025' : '#1B1F23' });
+      let mx = 10; for (let i = 0; i < N; i++) mx = Math.max(mx, res.Wl[i] + res.Ws[i] + res.Wr[i] + res.Wg[i]); mx = K.nice(mx * 1.05); K.yAxis(x0, top, cw - 24, hh, 0, mx, '', [4, 5, 2, 3].find(t => (mx / t) % 25 === 0 || (mx / t) % 10 === 0) || 4);
+      const X = i => x0 + (cw - 24) * i / (N - 1), Y = v => top + hh - v / mx * hh, parts = ['Wr', 'Wl', 'Ws', 'Wg']; const base = new Float64Array(N);
+      parts.forEach(k => { ctx.fillStyle = COL[k]; ctx.beginPath(); for (let i = 0; i < N; i++) { const yy = Y(base[i] + res[k][i]); i ? ctx.lineTo(X(i), yy) : ctx.moveTo(X(i), yy); } for (let i = N - 1; i >= 0; i--) ctx.lineTo(X(i), Y(base[i])); ctx.closePath(); ctx.fill(); for (let i = 0; i < N; i++) base[i] += res[k][i]; });
+      ctx.strokeStyle = '#2E7DE8'; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(X(d), top); ctx.lineTo(X(d), top + hh); ctx.stroke(); ctx.setLineDash([]);
+      for (let t = 0; t <= N - 1; t += 20) T(String(t), X(t), top + hh + 12, { s: 8.5, c: MUTE, a: 'center' });
+      const sh = res.Wl[d] + res.Ws[d] + res.Wg[d]; TF('day ' + d + ': roots ' + fmt(res.Wr[d]) + ', leaves ' + fmt(res.Wl[d]) + ', stems ' + fmt(res.Ws[d]) + ', grain ' + fmt(res.Wg[d]) + ' · root : shoot ' + fmt(res.Wr[d] / Math.max(0.01, sh), 2), x0 - 30, top + hh + 28, cw - 8, { s: 9, c: '#33414F' });
+    });
+    y += 16 + hh + 38; K.legend([[COL.Wr, 'roots'], [COL.Wl, 'leaves'], [COL.Ws, 'stems and reserves'], [COL.Wg, 'grain']], cx + 12, y); y += 22;
+    // assimilation against the growth of the roots, and the delay between them
+    const x0 = cx + 40, hw = cw - 24, top = y + 18; T('Assimilation (bars) and root growth (line), drought plant', cx + 10, y + 4, { s: 9.5, b: true });
+    let am = 1, rm = 1; for (let i = 0; i < N; i++) { am = Math.max(am, b.dW[i], a.dW[i]); rm = Math.max(rm, b.dL[i], a.dL[i]); } am = K.nice(am * 1.05); rm = K.nice(rm * 1.05); K.yAxis(x0, top, hw, hh, 0, am, 'g/m²/d', [4, 5, 2, 3].find(t => (am / t) % 25 === 0 || (am / t) % 10 === 0 || (am / t) % 5 === 0) || 4);
+    for (let i = 0; i < N; i++) { const hgt = b.dW[i] / am * hh; ctx.fillStyle = 'rgba(79,166,79,0.55)'; ctx.fillRect(x0 + hw * i / N, top + hh - hgt, Math.max(1, hw / N - 0.5), hgt); }
+    ctx.strokeStyle = '#8E5A2A'; ctx.lineWidth = 1.8; ctx.beginPath(); for (let i = 0; i < N; i++) { const yy = top + hh - b.dL[i] / rm * hh; i ? ctx.lineTo(x0 + hw * i / (N - 1), yy) : ctx.moveTo(x0, yy); } ctx.stroke();
+    T('root growth line: 0 to ' + fmt(rm) + ' cm/d', x0 + hw, top - 5, { s: 8.5, c: '#8E5A2A', a: 'right' }); ctx.strokeStyle = '#2E7DE8'; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(x0 + hw * d / (N - 1), top); ctx.lineTo(x0 + hw * d / (N - 1), top + hh); ctx.stroke(); ctx.setLineDash([]);
+    const x1 = x0 + hw + 56, bw = Math.max(80, w - (x1 - cx) - 24); T('Delay between assimilation and root growth', x1 - 4, y + 4, { s: 9.5, b: true });
+    const ca = lagCorr(a), cb = lagCorr(b); K.yAxis(x1, top, bw, hh, -0.2, 1, '', 3);
+    [[ca, '#1B1F23', 0], [cb, '#D93025', 1]].forEach(([cc, col, k]) => cc.forEach((v, i) => { if (!isFinite(v)) return; const bx = x1 + bw * (i + 0.12 + 0.38 * k) / 9, hgt = (clamp(v, -0.2, 1) + 0.2) / 1.2 * hh, z0 = top + hh - 0.2 / 1.2 * hh; ctx.fillStyle = col; ctx.fillRect(bx, Math.min(z0, top + hh - hgt), bw * 0.36 / 9 * 1.0 + 1, Math.abs(z0 - (top + hh - hgt))); }));
+    for (let i = 0; i <= 8; i++) T(String(i), x1 + bw * (i + 0.5) / 9, top + hh + 12, { s: 8.5, c: MUTE, a: 'center' }); T('delay in days', x1 + bw, top + hh + 24, { s: 8.5, c: MUTE, a: 'right' });
+    const best = cc => { let bi = 0; cc.forEach((v, i) => { if (isFinite(v) && (!isFinite(cc[bi]) || v > cc[bi])) bi = i; }); return bi; }, ba = best(ca), bb = best(cb);
+    y = top + hh + 34; const nb = note('Bars: correlation of the daily fluctuation of root growth with the assimilation of the day that many days earlier. Best delay ' + ba + ' d (r = ' + fmt(ca[ba], 2) + ') well-watered and ' + bb + ' d (r = ' + fmt(cb[bb], 2) + ') under drought: the carbon of the roots arrives one day after it is made, so the root system follows the leaves.', cx + 12, y, w - 24, { c: '#33414F' }); y += nb * 12.5 + 4;
+    const nt = note('Allocation follows functional equilibrium: the root share rises when the water is short (Brouwer; Davidson), the stems keep what the leaf area cannot use, and grain filling takes the carbon after flowering. Leaf area is limited by the turgor of the growing cells (Lockhart) as well as by carbon.', cx + 12, y, w - 24); y += nt * 12.5 + 8;
+    endFrame(cx, y0, y, w); return y + 10;
+  }
+
+  // ================================================================== soil structure and tillage: what the root tips meet
+  function drawSoil(y) {
+    const w = W - 32, cx = 16, a = R('ww'), b = R('dr'), d = day(), y0 = y, sp = P.SP[PH.sp]; frameH(cx, y, w, 'Soil structure and tillage: what the root tips meet', 'bulk density and penetration resistance by depth, and the root length that results');
+    y += 32; const cw = (w - 32) / 3, hh = 8 * 20, top = y + 20; const bd = [], Qa = [], Qb = [], rea = [], reb = [];
+    for (let k = 0; k < NL; k++) { bd.push(b.bd[d * NL + k]); Qa.push(a.Q[d * NL + k]); Qb.push(b.Q[d * NL + k]); rea.push(P.relElong(Qa[k])); reb.push(P.relElong(Qb[k])); }
+    const panel = (i, title, f, lo, hi, unit, cols) => { const x0 = cx + 40 + i * (cw + 8), pw = cw - 54; T(title, x0 - 28, y + 10, { s: 9.5, b: true }); for (let k = 0; k <= 4; k++) { const yy = top + k * 30 / ZMAX * hh; ctx.strokeStyle = GRID; ctx.beginPath(); ctx.moveTo(x0, yy + 0.5); ctx.lineTo(x0 + pw, yy + 0.5); ctx.stroke(); T(String(k * 30), x0 - 4, yy + 3, { s: 8, c: MUTE, a: 'right' }); } T('cm', x0 - 4, top - 4, { s: 8, c: MUTE, a: 'right' }); T(fmt(lo, 1) + unit, x0, top + hh + 12, { s: 8, c: MUTE }); T(fmt(hi, 1) + unit, x0 + pw, top + hh + 12, { s: 8, c: MUTE, a: 'right' }); f(x0, pw, lo, hi); };
+    panel(0, 'Bulk density (g/cm³)', (x0, pw, lo, hi) => { ctx.fillStyle = '#B08A5A'; bd.forEach((v, k) => { ctx.fillRect(x0, top + k * hh / NL + 2, (v - lo) / (hi - lo) * pw, hh / NL - 4); }); }, 1.0, 1.8, '');
+    const qm = Math.max(3, ...Qa, ...Qb); panel(1, 'Penetration resistance (MPa)', (x0, pw, lo, hi) => { Qa.forEach((v, k) => { ctx.fillStyle = '#1B1F23'; ctx.fillRect(x0, top + k * hh / NL + 2, v / hi * pw, 7); }); Qb.forEach((v, k) => { ctx.fillStyle = '#D93025'; ctx.fillRect(x0, top + k * hh / NL + 10, v / hi * pw, 7); }); ctx.strokeStyle = '#555'; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(x0 + 2 / hi * pw, top); ctx.lineTo(x0 + 2 / hi * pw, top + hh); ctx.stroke(); ctx.setLineDash([]); T('2 MPa', x0 + 2 / hi * pw + 3, top + 10, { s: 8, c: MUTE }); }, 0, K.nice(qm), '');
+    panel(2, 'Root length density (cm per cm³)', (x0, pw, lo, hi) => { for (let k = 0; k < NL; k++) { const va = a.Lz[d * NL + k] / (a.A * DZ), vb = b.Lz[d * NL + k] / (b.A * DZ); ctx.fillStyle = '#1B1F23'; ctx.fillRect(x0, top + k * hh / NL + 2, va / hi * pw, 7); ctx.fillStyle = '#D93025'; ctx.fillRect(x0, top + k * hh / NL + 10, vb / hi * pw, 7); } [[a, '#1B1F23'], [b, '#D93025']].forEach(([res, c]) => { ctx.strokeStyle = c; ctx.setLineDash([4, 3]); const yy = top + res.D95[d] / ZMAX * hh; ctx.beginPath(); ctx.moveTo(x0, yy); ctx.lineTo(x0 + pw, yy); ctx.stroke(); ctx.setLineDash([]); }); }, 0, (() => { let m = 0.2; for (let k = 0; k < NL; k++) m = Math.max(m, a.Lz[d * NL + k] / (a.A * DZ), b.Lz[d * NL + k] / (b.A * DZ)); return K.nice(m); })(), '');
+    y = top + hh + 22; K.legend([['#B08A5A', 'bulk density'], ['#1B1F23', 'well-watered'], ['#D93025', 'drought']], cx + 12, y); T('dashed: depth of 95 % of the root length', cx + 230, y + 1, { s: 9, c: MUTE }); y += 16;
+    const tl = { conv: 'conventional tillage loosens the topsoil and leaves a plough pan below it', reduced: 'reduced tillage loosens the topsoil less and the pan is weaker', notill: 'no-till keeps the topsoil dense, with no pan made by tillage' }[state.till];
+    const reTop = (rea[0] + rea[1]) / 2, rePan = rea[2], reDeep = rea[5];
+    const nt = note('Tillage setting of the project: ' + tl + '. Settling uses the consolidation rate of the project (' + TC_VALUES[state.tcIdx] + ' per day). Relative root elongation today (well-watered): ' + fmt(reTop * 100) + ' % in the topsoil, ' + fmt(rePan * 100) + ' % at 25 to 40 cm, ' + fmt(reDeep * 100) + ' % at 75 to 90 cm. Dry soil is harder, so the drought plant meets more resistance at the same density.', cx + 12, y + 4, w - 24); y += 4 + nt * 12.5 + 8;
+    endFrame(cx, y0, y, w); return y + 10;
+  }
+
+  // ================================================================== roots from what is seen above ground: a panel of genotypes run under the same drought
+  const GRIDG = []; [26, 44, 62].forEach(an => [0.8, 1.2].forEach(ax => [0.1, 0.7].forEach(sg => GRIDG.push({ angle: an, axr: ax, SG: sg }))));
+  const YV = { D95: { t: 'depth of 95 % of the roots (cm)', f: r => r.D95[N - 1] }, L: { t: 'root length of the plant (m)', f: r => r.Lroot[N - 1] / 100 }, deep: { t: 'share of the roots below 60 cm (%)', f: r => { let s = 0, t = 0; for (let k = 0; k < NL; k++) { const v = r.Lz[(N - 1) * NL + k]; t += v; if (k >= 4) s += v; } return 100 * s / Math.max(1e-9, t); } }, grain: { t: 'grain or seed mass (g/m²)', f: r => r.Wg[N - 1] } };
+  const PRED = [{ k: 'CTD', t: 'Canopy temperature depression (K)', f: r => r.CTD, c: '#C0392B' }, { k: 'SI', t: 'Senescence index (%)', f: r => r.SI, c: '#8E6B2A' }, { k: 'RWC', t: 'Leaf relative water content (%)', f: r => r.RWC, s: 100, c: '#2E7DE8' }, { k: 'PSA', t: 'Projected shoot area (cm²)', f: r => r.PSA, c: '#2E9E4F' }, { k: 'CWSI', t: 'Crop water stress index', f: r => r.CWSI, c: '#7B2FA8' }];
+  function panelStep() {
+    if (!PH.run || PH.dragging) return; const k = keyOf(), now = performance.now(); const p = PH.panel;
+    if (p.key !== k && !p.busy) { if (now - PH.lastRun < 600) return; PH.panel = { key: k, items: GRIDG.map(g => Object.assign({}, g)), busy: true, i: 0, ph: 0, calc: null }; return; }
+    if (!p.busy) return; const it = p.items[p.i]; if (!it) { p.busy = false; return; }
+    const g0 = effGeno(); const g = Object.assign({}, g0, { angle: it.angle, axr: it.axr, SG: it.SG });
+    try { if (p.ph === 0) { it.ww = P.run(Object.assign(cfgFor('ww', false), { geno: g })); p.ph = 1; } else { it.dr = P.run(Object.assign(cfgFor('dr', false), { geno: g })); p.ph = 0; p.i++; if (p.i >= p.items.length) p.busy = false; } } catch (e) { p.busy = false; console.error(e); }
+  }
+  U.setPanel(panelStep);
+  function regressionAt(dd, pk, yk) { const items = PH.panel.items.filter(i => i.dr), pr = PRED.find(q => q.k === pk), xs = [], ys = []; items.forEach(i => { const v = pr.f(i.dr), s = pr.s || 1; let m = 0, c = 0; for (let t = Math.max(0, dd - 2); t <= Math.min(N - 1, dd + 2); t++) { m += v[t] * s; c++; } xs.push(m / c); ys.push(YV[yk].f(i.dr)); }); return { xs, ys, fit: linfit(xs, ys) }; }
+  function drawAbove(y) {
+    const w = W - 32, cx = 16, d = day(), y0 = y, p = PH.panel; frameH(cx, y, w, 'Roots from the plant above ground', 'twelve genotypes run under the same drought: how well do shoot traits tell what the roots did?');
+    y += 30; let xx = cx + 10; T('Predict', xx, y + 15, { s: 9.5, b: true, c: MUTE }); xx += 52; Object.keys(YV).forEach(k => { xx += chip(xx, y, YV[k].t.split(' (')[0], PH.yv === k, () => { PH.yv = k; }, 'predict the ' + YV[k].t); }); y += 30;
+    const done = p.items.filter(i => i.dr).length; if (!p.items.length || p.busy || done < p.items.length) { ctx.fillStyle = '#EFEDE5'; ctx.fillRect(cx + 10, y, w - 20, 16); ctx.fillStyle = '#2E9E4F'; ctx.fillRect(cx + 10, y, (w - 20) * done / Math.max(1, p.items.length), 16); T('running the genotypes ' + done + ' of ' + (p.items.length || GRIDG.length) + ' (angle of the roots, vigour, stay-green)...', cx + 16, y + 12, { s: 9.5, c: '#1B1F23' }); endFrame(cx, y0, y + 26, w); return y + 36; }
+    const cw = (w - 36) / 2, hh = 120, sel = PRED.slice(0, 4); let rr = [];
+    sel.forEach((pr, i) => {
+      const gx = cx + 52 + (i % 2) * (cw + 12), gy = y + Math.floor(i / 2) * (hh + 46) + 18, pw = cw - 48, reg = regressionAt(d, pr.k, PH.yv), xs = reg.xs, ys = reg.ys;
+      const xmn = Math.min(...xs), xmx = Math.max(...xs), ymn = Math.min(...ys), ymx = Math.max(...ys), px = (xmx - xmn) * 0.1 + 1e-6, py = (ymx - ymn) * 0.12 + 1e-6, X = v => gx + (v - (xmn - px)) / (xmx - xmn + 2 * px) * pw, Y = v => gy + hh - (v - (ymn - py)) / (ymx - ymn + 2 * py) * hh;
+      T(pr.t, gx - 40, gy - 6, { s: 9.5, b: true }); ctx.strokeStyle = GRID; for (let k = 0; k <= 3; k++) { ctx.beginPath(); ctx.moveTo(gx, gy + hh * k / 3 + 0.5); ctx.lineTo(gx + pw, gy + hh * k / 3 + 0.5); ctx.stroke(); T(fmt((ymn - py) + (ymx - ymn + 2 * py) * (1 - k / 3), ymx - ymn < 20 ? 1 : 0), gx - 4, gy + hh * k / 3 + 3, { s: 8, c: MUTE, a: 'right' }); }
+      const xd = xmx - xmn < 0.5 ? 2 : xmx - xmn < 5 ? 1 : 0; T(fmt(xmn, xd), gx, gy + hh + 11, { s: 8, c: MUTE }); T(fmt(xmx, xd), gx + pw, gy + hh + 11, { s: 8, c: MUTE, a: 'right' });
+      ctx.strokeStyle = pr.c; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(X(xmn - px), Y(reg.fit.a + reg.fit.b * (xmn - px))); ctx.lineTo(X(xmx + px), Y(reg.fit.a + reg.fit.b * (xmx + px))); ctx.stroke();
+      xs.forEach((v, k) => { ctx.fillStyle = mix('#9AA3AE', pr.c, 0.6); ctx.strokeStyle = '#fff'; ctx.beginPath(); ctx.arc(X(v), Y(ys[k]), 3.6, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
+      // the plant of the layer, estimated from its own shoot trait
+      const cur = R('dr'), v = pr.f(cur), sc = pr.s || 1; let m = 0, c = 0; for (let t = Math.max(0, d - 2); t <= Math.min(N - 1, d + 2); t++) { m += v[t] * sc; c++; } const xv = m / c, yt = YV[PH.yv].f(cur), ye = reg.fit.a + reg.fit.b * xv;
+      ctx.fillStyle = '#D93025'; ctx.beginPath(); ctx.moveTo(X(xv), Y(yt) - 6); ctx.lineTo(X(xv) + 5, Y(yt)); ctx.lineTo(X(xv), Y(yt) + 6); ctx.lineTo(X(xv) - 5, Y(yt)); ctx.closePath(); ctx.fill();
+      T('r² = ' + fmt(reg.fit.r2, 2) + ' · slope ' + fmt(reg.fit.b, Math.abs(reg.fit.b) < 1 ? 2 : 1), gx + pw, gy - 6, { s: 9.5, b: true, c: pr.c, a: 'right' }); TF('your plant: estimated ' + fmt(ye, ymx < 20 ? 1 : 0) + ', model ' + fmt(yt, ymx < 20 ? 1 : 0), gx - 40, gy + hh + 24, cw, { s: 8.5, c: '#33414F' });
+    });
+    y += 2 * (hh + 46) + 6;
+    // how the predictive power changes through the season
+    const x0 = cx + 40, pw = w - 56, top = y + 18, h2 = 100; T('Share of the variation in the roots explained by each shoot trait, day by day (r²)', cx + 10, y + 8, { s: 9.5, b: true }); K.yAxis(x0, top, pw, h2, 0, 1, '', 4);
+    const r2 = PRED.map(pr => Array.from({ length: N }, (_, t) => regressionAt(t, pr.k, PH.yv).fit.r2)); regimeShade().forEach(s => { ctx.fillStyle = s[2]; ctx.globalAlpha = 0.45; ctx.fillRect(x0 + pw * s[0] / (N - 1), top, pw * (s[1] - s[0]) / (N - 1), h2); ctx.globalAlpha = 1; });
+    r2.forEach((arr, k) => { ctx.strokeStyle = PRED[k].c; ctx.lineWidth = 1.8; ctx.beginPath(); arr.forEach((v, t) => { const yy = top + h2 - v * h2; t ? ctx.lineTo(x0 + pw * t / (N - 1), yy) : ctx.moveTo(x0, yy); }); ctx.stroke(); });
+    ctx.strokeStyle = '#2E7DE8'; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(x0 + pw * d / (N - 1), top); ctx.lineTo(x0 + pw * d / (N - 1), top + h2); ctx.stroke(); ctx.setLineDash([]);
+    for (let t = 0; t <= N - 1; t += 20) T(String(t), x0 + pw * t / (N - 1), top + h2 + 12, { s: 8.5, c: MUTE, a: 'center' }); hot(x0, top, pw, h2, pp => { play.t = clamp((pp.x - x0) / pw, 0, 1); play.on = false; }, 'click to move the day');
+    y = top + h2 + 28; K.legend(PRED.map(q => [q.c, q.k]), cx + 12, y); y += 18;
+    let bestK = 0; PRED.forEach((q, k) => { if (r2[k][d] > r2[bestK][d]) bestK = k; }); const nt = note('On day ' + d + ' the best shoot trait for the ' + YV[PH.yv].t + ' is ' + PRED[bestK].t.toLowerCase() + ' (r² = ' + fmt(r2[bestK][d], 2) + '). The measure is read from a window of five days around the day, as a camera or a thermal scan would be, and the lines show when in the drought each trait becomes informative. Twelve genotypes: angle of the root axes 26, 44, 62°, vigour ×0.8 or ×1.2, stay-green 0.1 or 0.7; all other traits as set above.', cx + 12, y, w - 24); y += nt * 12.5 + 10;
+    // tolerance indices of the same panel
+    const items = p.items.filter(i => i.dr && i.ww), Yw = items.map(i => i.ww.Wg[N - 1]), Yd = items.map(i => i.dr.Wg[N - 1]), mw = Yw.reduce((a, b) => a + b, 0) / Math.max(1, Yw.length), md = Yd.reduce((a, b) => a + b, 0) / Math.max(1, Yd.length);
+    const rows = items.map((i, k) => ({ i, Yw: Yw[k], Yd: Yd[k], dsi: mw > 0 && md < mw ? (1 - Yd[k] / Math.max(1e-6, Yw[k])) / (1 - md / mw) : NaN, sti: Yw[k] * Yd[k] / Math.max(1e-6, mw * mw) })).sort((a, b) => b.sti - a.sti);
+    T('Drought tolerance of the twelve genotypes (grain or seed mass)', cx + 10, y + 8, { s: 9.5, b: true }); y += 16; const cols = [cx + 12, cx + 200, cx + 280, cx + 360, cx + 440, cx + 520];
+    ['genotype', 'well-watered', 'drought', 'susceptibility', 'tolerance', ''].forEach((h, k) => T(h, cols[k] + (k ? 0 : 0), y + 8, { s: 8.5, b: true, c: MUTE })); y += 13;
+    rows.slice(0, 6).forEach((r, k) => { if (k % 2) { ctx.fillStyle = '#F6F4EE'; ctx.fillRect(cx + 6, y - 1, w - 12, 13); } T('angle ' + r.i.angle + '°, vigour ×' + r.i.axr + ', stay-green ' + r.i.SG, cols[0], y + 9, { s: 9 }); T(fmt(r.Yw) + ' g/m²', cols[1], y + 9, { s: 9 }); T(fmt(r.Yd) + ' g/m²', cols[2], y + 9, { s: 9 }); T(isFinite(r.dsi) ? fmt(r.dsi, 2) : 'n/a', cols[3], y + 9, { s: 9 }); T(fmt(r.sti, 2), cols[4], y + 9, { s: 9, b: true }); y += 13; });
+    y += 10; const nt2 = note('Susceptibility index (Fischer and Maurer, 1978) above 1 means a loss larger than the average; tolerance index (Fernandez, 1992) combines yield with and without stress. Both come from the runs of the panel, not from a table.', cx + 12, y, w - 24); y += nt2 * 12.5 + 8;
+    endFrame(cx, y0, y, w); return y + 10;
+  }
+
+  // ================================================================== the traits of the run: quantified temporal changes
+  function traits(res) {
+    const o = {}, last = N - 1; o.H = res.H[last]; let pm = 0, pd = 0; for (let i = 0; i < N; i++) if (res.PSA[i] > pm) pm = res.PSA[i]; o.PSAmax = pm; for (let i = 0; i < N; i++) if (res.PSA[i] >= 0.5 * pm) { pd = i; break; } o.dPSA50 = pd;
+    let rg = 0; for (let t = 4; t < N - 4; t++) { const g = (Math.log(Math.max(1, res.PSA[t + 3])) - Math.log(Math.max(1, res.PSA[t - 3]))) / 6; if (g > rg) rg = g; } o.RGR = rg;
+    let am = 0; for (let i = 0; i < N; i++) am = Math.max(am, res.dW[i]); o.AGR = am; let lm = 0; for (let i = 0; i < N; i++) lm = Math.max(lm, res.LAIg[i]); o.LAI = lm;
+    o.dSI50 = NaN; for (let i = 0; i < N; i++) if (res.SI[i] >= 50) { o.dSI50 = i; break; } o.AUCg = sum(res.LAIg, 0, N - 1);
+    const dr = PH.dr; const a0 = dr.type === 'none' ? 0 : dr.onset, a1 = dr.type === 'none' || dr.type === 'terminal' ? N - 1 : Math.min(N - 1, dr.onset + dr.len); const wmin = (v, k) => { let m = Infinity; for (let i = Math.max(0, a0); i <= a1; i++) m = Math.min(m, v[i]); return m * k; }; o.RWCmin = wmin(res.RWC, 100); o.psiMin = wmin(res.psiL, 1); o.CWSImax = (() => { let m = 0; for (let i = Math.max(0, a0); i <= a1; i++) m = Math.max(m, res.CWSI[i]); return m; })(); o.CTDs = mean(res.CTD, a0, a1);
+    o.T = res.totals.T; o.Es = res.totals.Es; o.In = res.totals.I + res.totals.P; o.Dr = res.totals.dr;
+    const sh = res.Wl[last] + res.Ws[last] + res.Wg[last]; o.bio = sh + res.Wr[last]; o.grain = res.Wg[last]; o.HI = sh > 0 ? res.Wg[last] / sh : 0; o.TE = res.totals.T > 0 ? (o.bio - 0) / res.totals.T : 0; o.WUE = res.totals.T + res.totals.Es > 0 ? o.grain / (res.totals.T + res.totals.Es) : 0;
+    o.Rd = res.Rdepth[last]; o.RL = res.Lroot[last] / 100; o.D50 = res.D50[last]; o.D95 = res.D95[last]; let s = 0, t = 0; for (let k = 0; k < NL; k++) { const v = res.Lz[last * NL + k]; t += v; if (k >= 4) s += v; } o.deep = 100 * s / Math.max(1e-9, t); o.RS = res.Wr[last] / Math.max(0.01, sh);
+    return o;
+  }
+  U.traits = traits;
+  const TROWS = [['Plant height at the end (cm)', 'H', 0], ['Largest projected shoot area (cm²)', 'PSAmax', 0], ['Day the shoot area reaches half of its largest', 'dPSA50', 0], ['Fastest relative growth of the shoot area (per day)', 'RGR', 3], ['Fastest biomass gain (g/m²/d)', 'AGR', 1], ['Largest green leaf area index', 'LAI', 2], ['Day half of the leaf area is senescent (stay-green)', 'dSI50', 0], ['Green leaf area over the season (m² d per m²)', 'AUCg', 0], ['Lowest leaf water content in the stress period (%)', 'RWCmin', 0], ['Lowest leaf water potential in the stress period (MPa)', 'psiMin', 2], ['Mean canopy temperature depression in the stress (K)', 'CTDs', 1], ['Highest crop water stress index in the stress period', 'CWSImax', 2], ['Transpiration (mm)', 'T', 0], ['Soil evaporation (mm)', 'Es', 0], ['Water applied and rain (mm)', 'In', 0], ['Total dry mass (g/m²)', 'bio', 0], ['Grain or seed mass (g/m²)', 'grain', 0], ['Harvest index', 'HI', 2], ['Transpiration efficiency (g dry mass per kg water)', 'TE', 1], ['Water use efficiency of the grain (g per kg)', 'WUE', 2], ['Root depth (cm)', 'Rd', 0], ['Root length (m per plant)', 'RL', 0], ['Depth of 50 % of the root length (cm)', 'D50', 0], ['Depth of 95 % of the root length (cm)', 'D95', 0], ['Roots below 60 cm (% of the length)', 'deep', 0], ['Root : shoot ratio at the end', 'RS', 2]];
+  function drawTraits(y) {
+    const w = W - 32, cx = 16, y0 = y, a = traits(R('ww')), b = traits(R('dr')); frameH(cx, y, w, 'Quantified traits of the run', 'the readouts that a phenotyping experiment reports, for the two treatments'); y += 30;
+    const cols = [cx + 12, cx + w - 250, cx + w - 150, cx + w - 40]; ['trait', 'well-watered', 'drought', 'change'].forEach((h, k) => T(h, cols[k], y + 8, { s: 8.5, b: true, c: MUTE, a: k ? 'right' : 'left' })); y += 13;
+    TROWS.forEach((r, i) => { if (i % 2) { ctx.fillStyle = '#F6F4EE'; ctx.fillRect(cx + 6, y - 1, w - 12, 14); } const va = a[r[1]], vb = b[r[1]]; TF(r[0], cols[0], y + 10, cols[1] - cols[0] - 70, { s: 9.5 }); T(isFinite(va) ? fmt(va, r[2]) : 'none', cols[1], y + 10, { s: 9.5, a: 'right' }); T(isFinite(vb) ? fmt(vb, r[2]) : 'none', cols[2], y + 10, { s: 9.5, b: true, c: '#D93025', a: 'right' }); if (isFinite(va) && isFinite(vb)) { const big = Math.abs(va) > 0.25 * Math.abs(vb) && Math.abs(va) > 1e-6, ch = big ? (vb - va) / Math.abs(va) * 100 : vb - va, txt = big ? (Math.abs(ch) < 0.5 ? '0 %' : (ch >= 0 ? '+' : '') + fmt(ch) + ' %') : (ch >= 0 ? '+' : '') + fmt(ch, Math.max(r[2], 1)); T(txt, cols[3], y + 10, { s: 9.5, c: Math.abs(vb - va) < 0.03 * Math.max(Math.abs(va), 1e-9) ? MUTE : (vb < va ? '#C0392B' : '#1E7E34'), a: 'right' }); } y += 14; });
+    y += 6; endFrame(cx, y0, y, w); return y + 10;
+  }
+
+  // ================================================================== your observations: load, compare, calibrate, export
+  const OBSMAP = { height: ['H', 1], area: ['PSA', 1], solidity: ['solid', 100], senescence: ['SI', 1], rwc: ['RWC', 100], ctd: ['CTD', 1] };
+  function parseCsv(txt) {
+    const lines = txt.replace(/^﻿/, '').trim().split(/\r?\n/).filter(l => l.trim()); if (lines.length < 2) throw new Error('the file has no rows'); const sep = lines[0].includes(';') ? ';' : (lines[0].includes('\t') ? '\t' : ','), head = lines[0].split(sep).map(s => s.trim().toLowerCase().replace(/[^a-z0-9_]/g, ''));
+    const ix = n => head.findIndex(h => n.includes(h)), di = ix(['day', 'days', 'dae', 'dpt', 'dap']), ti = ix(['treatment', 'trt', 'treat']); if (di < 0) throw new Error('a column "day" is needed');
+    const ALI = { height: ['height', 'plantheight', 'heightcm'], area: ['area', 'psa', 'projectedarea', 'shootarea'], solidity: ['solidity', 'compactness'], senescence: ['senescence', 'si', 'senescenceindex'], rwc: ['rwc', 'relativewatercontent'], ctd: ['ctd', 'canopytemperaturedepression'] }, cols = []; const ci = {};
+    Object.keys(ALI).forEach(k => { const j = head.findIndex(h => ALI[k].includes(h)); if (j >= 0) { ci[k] = j; cols.push(k); } }); if (!cols.length) throw new Error('no trait column found (height, area, solidity, senescence, rwc, ctd)');
+    const rows = []; lines.slice(1).forEach(l => { const c = l.split(sep), o = { day: parseFloat(c[di]) }; const tv = ti >= 0 ? (c[ti] || '').trim().toLowerCase() : 'dr'; o.trt = /^(ww|control|well|wellwatered|c)$/.test(tv.replace(/[^a-z]/g, '')) ? 'ww' : 'dr'; cols.forEach(k => { let v = parseFloat(String(c[ci[k]]).replace(',', '.')); if ((k === 'solidity' || k === 'rwc') && v <= 1.5) v *= 100; o[k] = v; }); if (isFinite(o.day) && o.day >= 0 && o.day < N) rows.push(o); });
+    return { cols, rows, n: rows.length };
+  }
+  function predOf(res, k, d) { const m = OBSMAP[k]; return res[m[0]][d] * (m[0] === 'solid' || m[0] === 'RWC' ? 100 : 1); }
+  function metrics(runs) {
+    if (!PH.obs) return []; const out = [];
+    ['ww', 'dr'].forEach(tr => PH.obs.cols.forEach(k => { const pts = PH.obs.rows.filter(o => o.trt === tr && isFinite(o[k])); if (pts.length < 2) return; const ob = pts.map(o => o[k]), pr = pts.map(o => predOf(runs[tr], k, Math.round(o.day))), n = ob.length, mo = ob.reduce((a, b) => a + b, 0) / n; let se = 0, so = 0, bi = 0; for (let i = 0; i < n; i++) { se += (pr[i] - ob[i]) ** 2; so += (ob[i] - mo) ** 2; bi += pr[i] - ob[i]; } const r = pear(pr, ob); out.push({ tr, k, n, rmse: Math.sqrt(se / n), bias: bi / n, nse: so > 0 ? 1 - se / so : NaN, r2: isFinite(r) ? r * r : NaN }); }));
+    return out;
+  }
+  function genoWith(th) { const g = Object.assign({}, PH.g), sp = P.SP[PH.sp]; g.rue = (g.rue || 1) * th.rue; g.psi50 = (g.psi50 == null ? sp.psi50 : g.psi50) + th.dpsi; g.dpsi = g.psi50 - sp.psi50; g.SG = clamp(g.SG + th.sg, 0, 0.95); return g; }
+  function costOf(th) { const g = genoWith(th), runs = { ww: P.run(Object.assign(cfgFor('ww', false), { geno: g })), dr: P.run(Object.assign(cfgFor('dr', false), { geno: g })) }; let J = 0; PH.obs.cols.forEach(k => { const all = PH.obs.rows.map(o => o[k]).filter(isFinite), m = all.reduce((a, b) => a + b, 0) / Math.max(1, all.length), v = Math.max(all.reduce((a, b) => a + (b - m) ** 2, 0) / Math.max(1, all.length), (0.05 * Math.abs(m)) ** 2, 1e-6); PH.obs.rows.forEach(o => { if (!isFinite(o[k])) return; J += (predOf(runs[o.trt], k, Math.round(o.day)) - o[k]) ** 2 / v; }); }); return J; }
+  function startCalib() {
+    if (!PH.obs || PH.job) return; const th = { rue: PH.ovr.rue, dpsi: PH.ovr.dpsi, sg: PH.ovr.sg }; PH.job = { t: 'calib', th, best: Object.assign({}, th), J: null, J0: null, steps: { rue: 0.15, dpsi: 0.3, sg: 0.15 }, keys: ['rue', 'dpsi', 'sg'], pass: 0, pi: 0, dir: 1, tried: 0, evals: 0, max: 40, lim: { rue: [0.6, 1.5], dpsi: [-1.0, 1.0], sg: [-0.2, 0.7] } }; PH.msg = '';
+  }
+  function jobStep() {
+    const j = PH.job; if (!j) return; if (j.J === null) { j.J = costOf(j.best); j.J0 = j.J; j.evals++; return; }
+    const k = j.keys[j.pi], trial = Object.assign({}, j.best); trial[k] = clamp(trial[k] + j.dir * j.steps[k], j.lim[k][0], j.lim[k][1]); const Jt = costOf(trial); j.evals++;
+    if (Jt < j.J - 1e-9) { j.J = Jt; j.best = trial; j.tried = 0; } else { j.dir = -j.dir; j.tried++; if (j.tried >= 2) { j.tried = 0; j.pi++; j.dir = 1; if (j.pi >= j.keys.length) { j.pi = 0; j.pass++; j.keys.forEach(q => { j.steps[q] *= 0.5; }); } } }
+    if (j.pass >= 3 || j.evals >= j.max) { PH.ovr = { rue: j.best.rue, dpsi: j.best.dpsi, sg: j.best.sg }; PH.msg = 'Calibrated: the error fell from ' + fmt(j.J0, 1) + ' to ' + fmt(j.J, 1) + ' (sum of squared errors in units of the variance of each trait). Radiation use efficiency ×' + j.best.rue.toFixed(2) + ', stomatal threshold ' + (j.best.dpsi >= 0 ? '+' : '') + j.best.dpsi.toFixed(2) + ' MPa, stay-green ' + (j.best.sg >= 0 ? '+' : '') + j.best.sg.toFixed(2) + '.'; PH.job = null; }
+  }
+  U.setJob(jobStep);
+  function loadFile() {
+    const inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.csv,.txt,.tsv'; inp.onchange = () => { const f = inp.files && inp.files[0]; if (!f) return; const rd = new FileReader(); rd.onload = () => { try { PH.obs = parseCsv(String(rd.result)); PH.obs.name = f.name; PH.msg = 'Loaded ' + PH.obs.n + ' observations from ' + f.name + '.'; } catch (e) { PH.obs = null; PH.msg = 'Could not read the file: ' + e.message; } }; rd.readAsText(f); }; inp.click();
+  }
+  function download(name, txt, type) { try { const b = new Blob([txt], { type: type || 'text/csv' }), a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); } catch (e) { PH.msg = 'The download is not available here: ' + e.message; } }
+  function exportCsv() {
+    const rows = ['treatment,day,date,height_cm,shoot_area_cm2,solidity_pct,senescence_pct,rwc_pct,leaf_potential_MPa,ctd_K,cwsi,lai_green,assimilation_g_m2_d,root_share_pct,root_depth_cm,root_length_m,D95_cm,transpiration_mm,soil_evaporation_mm']; ['ww', 'dr'].forEach(tr => { const r = R(tr); for (let i = 0; i < N; i++) rows.push([tr, i, U.dateOf(i), r.H[i], r.PSA[i], r.solid[i] * 100, r.SI[i], r.RWC[i] * 100, r.psiL[i], r.CTD[i], r.CWSI[i], r.LAIg[i], r.dW[i], r.fr[i] * 100, r.Rdepth[i], r.Lroot[i] / 100, r.D95[i], r.T[i], r.Es[i]].map((v, k) => k < 3 ? v : (typeof v === 'number' ? +v.toFixed(4) : v)).join(',')); });
+    download('deterministic_phenotyping_' + PH.sp + '_' + state.soil + '.csv', rows.join('\n'));
+  }
+  function template() { download('observations_template.csv', 'day,treatment,height,area,solidity,senescence,rwc,ctd\n20,ww,,,,,,\n20,dr,,,,,,\n'); }
+  function drawData(y) {
+    const w = W - 32, cx = 16, y0 = y; frameH(cx, y, w, 'Your measurements: compare, calibrate and export', 'bring experimental data to the model to parameterise and test it'); y += 30; let xx = cx + 10;
+    xx += chip(xx, y, 'Load observations (CSV)', false, loadFile, 'columns: day, treatment (ww or dr), and any of height, area, solidity, senescence, rwc, ctd'); xx += chip(xx, y, PH.job ? 'Calibrating...' : 'Calibrate the model', !!PH.job, () => { startCalib(); }, 'adjust radiation use efficiency, the stomatal threshold and stay-green to your data');
+    xx += chip(xx, y, 'Reset calibration', false, () => { PH.ovr = { rue: 1, dpsi: 0, sg: 0 }; PH.msg = 'The calibration was reset.'; }, 'back to the values of the genotype'); xx += chip(xx, y, 'Remove observations', false, () => { PH.obs = null; PH.msg = ''; }, 'clear the loaded data'); y += 28; xx = cx + 10;
+    xx += chip(xx, y, 'Export the results (CSV)', false, exportCsv, 'daily traits of both treatments'); xx += chip(xx, y, 'Download a template', false, template, 'an empty file with the columns that are read'); y += 30;
+    if (PH.job) { const j = PH.job; ctx.fillStyle = '#EFEDE5'; ctx.fillRect(cx + 10, y, w - 20, 14); ctx.fillStyle = '#2E9E4F'; ctx.fillRect(cx + 10, y, (w - 20) * Math.min(1, j.evals / j.max), 14); T('calibrating: run ' + j.evals + ' of at most ' + j.max, cx + 16, y + 11, { s: 9.5 }); y += 22; }
+    if (PH.msg) { const n = note(PH.msg, cx + 12, y + 8, w - 24, { c: '#1B3A6B' }); y += n * 12.5 + 10; }
+    if (!PH.obs) { const n = note('No observations are loaded, so the charts show the model alone. A file needs the column "day" (days after emergence), a column "treatment" with ww or dr, and any of height (cm), area (cm²), solidity, senescence (%), rwc, ctd (K). Your points then appear as squares in the time series, the table below gives the error, and the calibration finds the radiation use efficiency, stomatal threshold and stay-green that fit.', cx + 12, y + 8, w - 24); y += n * 12.5 + 12; }
+    else {
+      const M = metrics(PH.run), cols = [cx + 12, cx + 130, cx + 190, cx + 260, cx + 330, cx + 400]; T('Loaded: ' + PH.obs.name + ' (' + PH.obs.n + ' rows)', cx + 12, y + 8, { s: 9.5, b: true }); y += 16; ['trait', 'treatment', 'points', 'error (RMSE)', 'bias', 'efficiency (NSE)'].forEach((h, k) => T(h, cols[k], y + 8, { s: 8.5, b: true, c: MUTE })); y += 13;
+      M.forEach((m, i) => { if (i % 2) { ctx.fillStyle = '#F6F4EE'; ctx.fillRect(cx + 6, y - 1, w - 12, 13); } T(m.k, cols[0], y + 9, { s: 9 }); T(m.tr === 'ww' ? 'well-watered' : 'drought', cols[1], y + 9, { s: 9, c: m.tr === 'dr' ? '#D93025' : INK }); T(String(m.n), cols[2], y + 9, { s: 9 }); T(fmt(m.rmse, 2), cols[3], y + 9, { s: 9 }); T(fmt(m.bias, 2), cols[4], y + 9, { s: 9 }); T(isFinite(m.nse) ? fmt(m.nse, 2) : 'n/a', cols[5], y + 9, { s: 9, b: true }); y += 13; });
+      y += 8;
+    }
+    T('Calibration now: radiation use ×' + PH.ovr.rue.toFixed(2) + ', stomatal threshold ' + (PH.ovr.dpsi >= 0 ? '+' : '') + PH.ovr.dpsi.toFixed(2) + ' MPa, stay-green ' + (PH.ovr.sg >= 0 ? '+' : '') + PH.ovr.sg.toFixed(2), cx + 12, y + 4, { s: 9, c: MUTE }); y += 16;
+    endFrame(cx, y0, y, w); return y + 10;
+  }
+
+  // ================================================================== the equations
+  const EQ = [
+    ['Thermal time', 'dg = max(0, min(T, Topt + 6) − Tbase); the stage of development is the sum of dg over the thermal time of flowering and of maturity.'],
+    ['Weather of the day', 'FAO-56 reference evapotranspiration (Penman-Monteith) from temperature, radiation, wind and vapour pressure of the project climate (Allen et al., 1998).'],
+    ['Light interception', 'fi = 1 − exp(−k LAI)  (Monsi and Saeki, 1953).'],
+    ['Biomass from light', 'dW = RUE · fT · PAR · fi  with the beta temperature function of Yin (Monteith, 1977).'],
+    ['Biomass from water', 'dW ≤ k / VPD × T  (Tanner and Sinclair, 1983); growth is the smaller of the two.'],
+    ['Soil water', 'van Genuchten retention and Mualem conductivity of the soil of the project; layers of 15 cm to 120 cm; Ritchie two-stage evaporation.'],
+    ['Root water uptake', 'S(z) = G(z) · (ψsoil(z) − ψroot), G = root length × fine roots × K(h) (Gardner, 1960; Feddes et al., 1978); ψroot is solved so that Σ S = demand.'],
+    ['Leaf water', 'ψleaf = ψroot − r · T / LAI  (van den Honert, 1948); leaf content from the pressure-volume curve ψ = π0 / RWC + P(RWC).'],
+    ['Stomata', 'g = 1 / (1 + exp(−b (ψleaf − ψ50)))  (Jarvis, 1976); transpiration demand × g.'],
+    ['Expansion', 'growth ∝ (P − Y) of the turgor at predawn (Lockhart, 1965), so area and height slow before photosynthesis does.'],
+    ['Canopy temperature', 'Tc − Ta = ra Rn / (ρ cp) · γ* / (Δ + γ*) − VPD / (Δ + γ*), γ* = γ (1 + rc / ra); CWSI = (dT − dTlow) / (dTup − dTlow)  (Jackson et al., 1981).'],
+    ['Carbon allocation', 'roots get a share that rises when water is short (functional equilibrium: Brouwer, 1963; Davidson, 1969); the leaf share follows the stage; grain after flowering.'],
+    ['Root architecture', 'axes at the set angle with gravitropism, laterals of the first and second order at a density per cm, growth set by temperature, soil strength, soil water and the carbon received (after ArchiSimple: Pages et al., 2014).'],
+    ['Soil strength', 'bulk density from texture and tillage, settling with the consolidation rate of V3; resistance Q = 0.5 exp(4.5 (BD − 1.3)) (1 + (1 − S)); elongation 1 / (1 + (Q / 2.5)^3).'],
+    ['Traits read out', 'projected shoot area, convex hull, solidity = area / hull, senescence index, relative water content, canopy temperature depression, root depth and length, as defined in the books on plant phenotyping.']
+  ];
+  function drawEq(y) {
+    const w = W - 32, cx = 16, y0 = y; frameH(cx, y, w, 'Equations of the layer', 'what is computed, in the order of the day'); y += 30;
+    EQ.forEach((e, i) => { T(e[0], cx + 12, y + 8, { s: 9.5, b: true }); const n = note(e[1], cx + 130, y + 8, w - 146, { c: '#33414F' }); y += Math.max(1, n) * 12.5 + 4; });
+    y += 4; const n = note('Sources of the traits and methods: Lorence and Medina-Jimenez (eds), High-Throughput Plant Phenotyping, Methods in Molecular Biology 2539, Springer 2022; Panguluri and Kumar (eds), Phenotyping for Plant Breeding, Springer 2013. The values of the species and genotypes are typical defaults of this layer that you can change or calibrate; they are not data of an experiment.', cx + 12, y, w - 24); y += n * 12.5 + 8;
+    endFrame(cx, y0, y, w); return y + 10;
+  }
+  SECTIONS.push(drawWater, drawCarbon, drawSoil, drawAbove, drawTraits, drawData, drawEq);
+})();
+
+</script>
 <script>/* inputs.js */
 /* SWAFL 1.1 design inputs and runs.
    1. Every numeric input of the three irrigation designs is a value box: a click opens a picker with the exact value, its unit
@@ -8316,7 +9110,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   SCENES.forEach(sc => { if (SKIP[sc.id] || sc._pillWrap || typeof sc.draw !== 'function') return; sc._pillWrap = true; const od = sc.draw; sc.draw = function () { Q = []; let r; try { r = od.apply(this, arguments); } finally { if (Q) flush(); } return r; }; });
 })();
 /* Layer names without their internal codes (S2, V5, C1 ...): the names alone are shown everywhere. */
-(function () { try { const NM = { sid: 'Surface irrigation design', drip: 'Drip irrigation design', spr: 'Sprinkler design and pipes', farm: 'Virtual farm simulation', v1: 'Sensor and trigger', n1: 'Trigger law', v4: 'Mulch against bare soil', v6: 'Mulch control', e1: 'Evaporation physics', n2: 'Fate of saved water', n3: 'Regime map', v3: 'Tillage and structure', v7: 'Soil hydraulic drivers', r1: 'Root structure', field: 'Field balance', spac: 'Soil, plant and air', v2: 'Profile evolution', yby: 'Reliability over 20 seasons', wb2: 'Full water balance', nb: 'Nitrogen budget', chem: 'Chemical fate', dsum: 'Daisy decision table', crop: 'Crop water requirement', v5: 'Feedback loops' };
+(function () { try { const NM = { sid: 'Surface irrigation design', drip: 'Drip irrigation design', spr: 'Sprinkler design and pipes', farm: 'Virtual farm simulation', v1: 'Sensor and trigger', n1: 'Trigger law', v4: 'Mulch against bare soil', v6: 'Mulch control', e1: 'Evaporation physics', n2: 'Fate of saved water', n3: 'Regime map', v3: 'Tillage and structure', v7: 'Soil hydraulic drivers', r1: 'Root structure', dph: 'Deterministic phenotyping', field: 'Field balance', spac: 'Soil, plant and air', v2: 'Profile evolution', yby: 'Reliability over 20 seasons', wb2: 'Full water balance', nb: 'Nitrogen budget', chem: 'Chemical fate', dsum: 'Daisy decision table', crop: 'Crop water requirement', v5: 'Feedback loops' };
     const fix = s => { if (s && typeof s.label === 'string') s.label = NM[s.id] || s.label.replace(/^[A-Z]\d{1,2}\s+/, ''); }; SCENES.forEach(fix); const oP = SCENES.push.bind(SCENES); SCENES.push = function () { [...arguments].forEach(fix); return oP.apply(null, arguments); }; } catch (e) {} })();
 
 </script>

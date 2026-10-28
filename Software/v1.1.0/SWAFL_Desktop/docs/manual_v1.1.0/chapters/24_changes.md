@@ -58,6 +58,7 @@
 * The field map keeps every computed map as a layer (*Maps of this field*) to show again without computing; the site keeps its results when the window is opened again; the map moves to a water source only on **Show**.
 * The Soil hydraulic drivers layer shows its whole height, down to the notes under the soil profiles.
 * The web explorer of the repository is built from the engine of version 1.1.0 (tools/build_explorer.py).
+* The new layer **Deterministic phenotyping** (group Soil structure and tillage, Chapter 8) is a virtual phenotyping experiment: one plant of maize, sorghum, wheat or common bean grown twice (well-watered and drought) in the soil, tillage, weather and rain of the project, with a camera, thermal, X-ray and soil water view that can be turned, traits through time, the water and carbon paths, the soil that the root tips meet, twelve genotypes that relate root traits to shoot traits, a table of 26 traits, and the loading, comparison, calibration and export of your own measurements.
 
 ## The Daisy workbench
 
