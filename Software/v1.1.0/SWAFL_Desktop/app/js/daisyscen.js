@@ -42,7 +42,7 @@
     pmonths: { label: 'Rain scale per month (12 numbers, Jan to Dec; blank = none)', type: 'text' }
   };
   S.OPTIONS.station.opts = S.STATIONS.map(x => [x.id, x.label]);
-  S.DEFAULTS = { soil: 'loam', station: 'course', start: 1980, stop: 2000, precip: 1, temp: 0, nfac: 1, irrig: '0', method: 'overhead', trig: -300, z: 20, mm: 30, hours: 3, dfrom: 10, dto: 20, limit: 0, w1: '04-01', w2: '10-01', root: 0, koc: 0, half: 0, flux: 0, waitd: 2, spin: 1, till: 'plowing', ntype: 'N25S', ntime: 0, bio: 'auto', radscale: 1, pmonths: '' };
+  S.DEFAULTS = { soil: 'loam', station: 'course', start: 1980, stop: 2000, precip: 1, temp: 0, nfac: 1, irrig: '0', method: 'overhead', trig: -300, z: 20, mm: 30, hours: 3, dfrom: 10, dto: 20, limit: 0, w1: '04-01', w2: '10-01', root: 0, koc: 0, half: 0, flux: 0, patch: '', waitd: 2, spin: 1, till: 'plowing', ntype: 'N25S', ntime: 0, bio: 'auto', radscale: 1, pmonths: '' };
 
   S.LIST = [
     { id: 'irrigation', theme: 'Water', title: 'Irrigation: does it pay off, and what does it cost the soil?',
@@ -95,10 +95,11 @@
       const lim = S.num(o.limit, 0); if (lim > 0) { const k = Math.max(1, Math.round(lim / mm)); rot = rot.replace(/\(repeat irrigate_30_tensiometer_overhead\)/g, '(activity' + ' irrigate_30_tensiometer_overhead'.repeat(k) + ')'); }
     }
     let soilTxt = files["ResFarm.dai"]; if (String(o.soil).indexOf('usda:') === 0) o.userSoil = S.usdaSoil(String(o.soil).slice(5)); const useSoil = (o.soil === 'user' || String(o.soil).indexOf('usda:') === 0) && o.userSoil; if (S.num(o.root, 0) > 0) soilTxt = soilTxt.replace(/\(MaxRootingDepth\s+\d+(?:\.\d+)?\s*\[cm\]\)/g, '(MaxRootingDepth ' + Math.round(S.num(o.root, 0)) + ' [cm])'); const stn = (!o.userWx && o.station && o.station !== 'course') ? o.station : null; const col = useSoil ? 'SWAFL user column' : o.soil === "sand" ? "ResFarm_sand column" : "ResFarm 1D; Free drainage", wxFile = o.userWx ? '../Common/UserWeather.dwf' : stn ? '../Common/Station.dwf' : '../Common/Daily-1965-2000.dwf';
+    const pp = S.patchParts(o), bioIn = pp.bio, patchRest = pp.rest;
     const run = ';; SWAFL scenario "' + (sc.title || scId) + '", variant "' + (vr.label || variantId) + '"\n(input file "../Common/ArableFarmRotation.dai")\n(input file "../Common/ResFarm.dai")\n(input file "../Common/OutputLog.dai")\n' + (useSoil ? '(input file "../Common/UserSoil.dai")\n' : '') + '\n' +
       '(defunit [kWh/d/m^2] SIfactor (mass 1)(time -3)(factor 41.67))\n(weather default "' + wxFile + '"\n  (PrecipCorrect ' + S.num(o.precip, 1) + ')\n  (TempOffset ' + S.num(o.temp, 0) + ')' + (S.num(o.radscale, 1) !== 1 ? '\n  (GlobRadScale ' + S.num(o.radscale, 1) + ')' : '') + (/^\s*(-?[\d.]+[\s,]+){11}-?[\d.]+\s*$/.test(String(o.pmonths || '')) ? '\n  (PrecipScale ' + String(o.pmonths).trim().split(/[\s,]+/).join(' ') + ')' : '') + ')\n' +
       '(description "' + (sc.title || scId).replace(/"/g, "'") + ' - ' + (vr.label || variantId).replace(/"/g, "'") + '")\n(log_prefix "' + pre + '")\n\n(manager activity\n  (repeat "A_F_R"))\n\n' +
-      '(defcolumn "SWAFL column" "' + col + '"\n  (Bioclimate ' + ((stn && S.station(stn).noWind) || o.bio === 'default' ? 'default' : 'FAO56_daily') + '))\n(column "SWAFL column")\n\n(time ' + o.start + ' 01 01)\n(stop ' + o.stop + ' 04 1)\n(activate_output (after ' + (Math.min(o.stop - 1, o.start + Math.max(1, Math.round(S.num(o.spin, 1))))) + ' 03 31 23))\n';
+      '(defcolumn "SWAFL column" "' + col + '"\n  (Bioclimate ' + ((stn && S.station(stn).noWind) || o.bio === 'default' ? 'default' : 'FAO56_daily') + bioIn + ')' + (patchRest ? '\n  ;; parameters from the Daisy reference\n  ' + patchRest.split(/\n/).join('\n  ') : '') + ')\n(column "SWAFL column")\n\n(time ' + o.start + ' 01 01)\n(stop ' + o.stop + ' 04 1)\n(activate_output (after ' + (Math.min(o.stop - 1, o.start + Math.max(1, Math.round(S.num(o.spin, 1))))) + ' 03 31 23))\n';
     return { scenario: scId, variant: variantId, label: vr.label || variantId, options: o, prefix: pre, main: 'Run/Runfile.dai', files: Object.assign({ 'Common/ArableFarmRotation.dai': rot, 'Common/ResFarm.dai': soilTxt, 'Run/Runfile.dai': run }, o.log && S.logFilter ? { 'Common/OutputLog.dai': S.logFilter(files['OutputLog.dai'], o.log) } : {}, o.userWx ? { 'Common/UserWeather.dwf': o.userWx.text } : {}, stn ? { 'Common/Station.dwf': (function () { const t = files['weather/' + stn + '.dwf']; if (t == null) throw new Error('the weather file of ' + stn + ' was not loaded'); return t; })() } : {}, useSoil ? { 'Common/UserSoil.dai': S.soilDai(o.userSoil, S.num(o.root, 0)).text } : {}), years: o.stop - o.start };
   };
 
@@ -135,6 +136,18 @@
   };
   function guessRad(v, has) { if (!has) return 'kWh'; const a = v.filter(isFinite); if (!a.length) return 'kWh'; const mx = Math.max.apply(null, a.slice(0, 100000)); return mx > 70 ? 'W' : mx > 14 ? 'MJ' : 'kWh'; }
   // rows of the SWAFL project weather ({d, P, ET0, tmax, tmin})
+
+  /* parameters of the Daisy reference put into the run: the text of o.patch plus every option p_<Attribute>__<name> (set by the experiment engine).
+     A Bioclimate entry is merged into the Bioclimate block the run already has, the other entries are added to the column. */
+  S.patchParts = function (o) {
+    const groups = {}, lines = [];
+    Object.keys(o).forEach(k => { const m = k.match(/^p_([A-Za-z]+)~([^~]*)~(.+)$/); if (m && o[k] !== '' && o[k] != null && isFinite(o[k])) { const key = m[1] + ' ' + m[2], g = groups[key] = groups[key] || []; g.push('(' + m[3] + ' ' + o[k] + ')'); } });
+    Object.keys(groups).forEach(key => { const a = key.split(' ')[0], md = key.slice(a.length + 1); lines.push('(' + a + (md ? ' ' + md : '') + ' ' + groups[key].join(' ') + ')'); });
+    String(o.patch || '').split(/\n/).forEach(l => { if (l.trim()) lines.push(l.trim()); });
+    let bio = ''; const rest = [];
+    lines.forEach(l => { const m = l.match(/^\(Bioclimate\s+(?:[A-Za-z0-9_]+\s+)?(\(.*\))\)$/); if (m) bio += ' ' + m[1]; else rest.push(l); });
+    return { bio, rest: rest.join('\n') };
+  };
   S.rowsFromProject = function (w) { return { rows: (w || []).map(r => ({ t: r.d instanceof Date ? Date.UTC(r.d.getUTCFullYear(), r.d.getUTCMonth(), r.d.getUTCDate()) : +r.d, P: r.P, tn: r.tmin, tx: r.tmax, rad: NaN, et0: r.ET0, wind: NaN, vp: NaN })), use: { date: 'SWAFL project weather', precip: 'rain', tmin: 'T_min', tmax: 'T_max', et0: 'reference ET' }, notes: [] }; };
   // rows -> the Daisy weather file. meta: { name, lat, lon, elev }. Gaps: only whole calendar years that are complete are written; temperature gaps up to 3 days are bridged.
   S.makeDwf = function (src, meta) {

@@ -34,6 +34,13 @@
     { id: 'koc', key: 'koc', label: 'Sorption of the chemical, K_OC', unit: 'L/kg', kind: 'num', levels: [0, 50, 100, 500], range: [0, 5000], words: ['sorption', 'koc', 'pesticide', 'chemical', 'tracer', 'herbicide'] },
     { id: 'half', key: 'half', label: 'Half-life of the chemical', unit: 'days', kind: 'num', levels: [0, 15, 30, 90], range: [0, 2000], words: ['half-life', 'half life', 'degradation', 'decay', 'persistence'] }
   ];
+  /* every parameter of the Daisy reference that was tested in Daisy (daisyparams.js) is a factor: its levels are fractions of the value the farm uses */
+  const PARAMS = root.DaisyParams || (typeof require !== 'undefined' ? (() => { try { return require('./daisyparams.js'); } catch (e) { return []; } })() : []) || [];
+  E.PARAMS = PARAMS;
+  const pBase = q => q.farm != null ? q.farm : q.def, pRound = (q, v) => q.type === 'integer' ? Math.max(1, Math.round(v)) : +(+v).toPrecision(4);
+  PARAMS.forEach(q => { const b = pBase(q), nm = q.name.toLowerCase(); if (!(b > 0)) return;
+    F.push({ id: q.opt, key: q.opt, param: q, label: q.attr + (q.use ? ' ' + q.use : '') + ': ' + q.name + ' (Daisy reference, chapter ' + q.ch + ')', unit: q.unit, kind: 'num', levels: [0.5, 0.75, 1, 1.5, 2].map(f => pRound(q, b * f)).filter((v, i, a) => a.indexOf(v) === i), range: [0, pRound(q, b * 10)],
+      words: [q.attr.toLowerCase() + ' ' + nm, q.key.toLowerCase() + ' of ' + q.attr.toLowerCase()].concat([nm, q.key.toLowerCase(), q.key.toLowerCase().replace(/_/g, ' ')].filter((w, i, a) => w.length >= 4 && a.indexOf(w) === i)) }); });
   E.FACTORS = F; E.factor = id => F.find(x => x.id === id);
   const IRR_ONLY = new Set(F.filter(f => f.irr).map(f => f.id));
   const nameOf = (f, v) => f.kind === 'set' ? v.label : f.names && f.names[v] ? f.names[v] : f.id === 'soil' ? (v === 'loam' ? 'Course loam' : v === 'sand' ? 'Course sand' : String(v).indexOf('usda:') === 0 ? S.USDA[String(v).slice(5)][0] + ' (USDA)' : v === 'user' ? 'My soil' : v) : f.id === 'station' ? (S.OPTIONS[f.key].opts.find(o => o[0] === v) || [0, v])[1].replace(/ \(.*/, '') : f.kind === 'num' ? v + (f.unit ? ' ' + f.unit : '') : String(v);
