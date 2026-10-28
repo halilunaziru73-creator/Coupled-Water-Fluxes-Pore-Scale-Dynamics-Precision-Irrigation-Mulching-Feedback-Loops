@@ -94,6 +94,35 @@
     out.push({ id: 'chemical', title: 'Sorption and half-life of a chemical', ref: '23', score: 4,
       why: 'A chemical has a sorption coefficient (K_OC, L/kg) and a decomposition rate; the two decide whether it stays in the topsoil or reaches the depth where it is counted as leached.',
       plan: { design: 'factorial', factors: [{ id: 'koc', levels: [0, 50, 500] }, { id: 'half', levels: [15, 90] }].concat(soils), base: {} } });
+    // interactions between the management choices of chapter 15 and the weather and soil
+    out.push({ id: 'deficit', title: 'Deficit irrigation: a water limit against the trigger', ref: '15.5, 28.39', score: dry ? 8 : 4, group: 'Irrigation',
+      why: 'A crop can be given a limited amount of water in the season, and irrigation starts only when the soil water pressure is below the trigger. A strict trigger with a small limit, against a lax trigger with a large limit, shows whether the same water gives more yield when it is saved for the dry spell.' + wxNote,
+      plan: { design: 'factorial', factors: [{ id: 'trig', levels: trigs.slice(0, 3) }, { id: 'limit', levels: [60, 120, 240] }].concat(soils), base: { irrig: '1' } } });
+    out.push({ id: 'sensorbal', title: 'Sensor depth against rooting depth', ref: '28.39, 29.1, 72', score: 5, group: 'Irrigation',
+      why: 'The tensiometer that triggers irrigation sits at one depth, while the roots take water from the whole root zone. A sensor above or below most of the roots triggers too early or too late; crossing the sensor depth with the rooting depth shows where it matters.',
+      plan: { design: 'factorial', factors: [{ id: 'z', levels: [10, 30, 50] }, { id: 'root', levels: [40, 80, 120] }].concat(soils), base: { irrig: '1' } } });
+    out.push({ id: 'irrnitrogen', title: 'Irrigation and nitrogen together', ref: '15.5, 15.12', score: wet ? 6 : 7, group: 'Nitrogen',
+      why: 'Water moves nitrate and decides how much of the fertiliser the crop can use. Irrigation against rainfed, at three fertiliser doses, shows whether more water raises the yield only when the nitrogen is there, and what it costs in nitrate below the roots.' + wxNote,
+      plan: { design: 'factorial', factors: [{ id: 'irrig', levels: ['0', '1'] }, { id: 'nfac', levels: [0.5, 1, 1.25] }].concat(soils), base: {} } });
+    out.push({ id: 'ntiming', title: 'When the fertiliser is applied and how much', ref: '15.12, 15.3', score: wet ? 7 : 5, group: 'Nitrogen',
+      why: 'The fertilize action is placed on a date. Moving it two weeks earlier or later, at three doses, shows how much nitrate is exposed to the rain before the crop takes it up.' + wxNote,
+      plan: { design: 'factorial', factors: [{ id: 'ntime', levels: [-14, 0, 14] }, { id: 'nfac', levels: [0.7, 1, 1.3] }].concat(soils), base: {} } });
+    out.push({ id: 'warming', title: 'Warming with and without irrigation', ref: '25.7, 15.5', score: 5, group: 'Climate',
+      why: 'A warmer year raises the evapotranspiration and shortens the crop cycle. Warming of 0 to 3 degrees, rainfed and irrigated, shows how much of the loss irrigation can give back.' + wxNote,
+      plan: { design: 'factorial', factors: [{ id: 'temp', levels: [0, 1.5, 3] }, { id: 'irrig', levels: ['0', '1'] }].concat(soils), base: {} } });
+    out.push({ id: 'tillnit', title: 'Tillage against fertiliser form', ref: '15.3, 15.12, 17', score: 3, group: 'Nitrogen',
+      why: 'The tillage action mixes residues and topsoil; the fertilizer library holds several forms of mineral nitrogen. Crossing the two shows whether the form of the nitrogen matters more under one tillage than another.' + wxNote,
+      plan: { design: 'factorial', factors: [{ id: 'till', levels: ['plowing', 'rotavation', 'none'] }, { id: 'ntype', levels: ['N25S', 'AmmoniumNitrate', 'Ammonia'] }].concat(soils), base: {} } });
+    // one experiment for each group of parameters that was tested in Daisy: the two or three that moved the results most, around the value the farm uses
+    const PR = (typeof window !== 'undefined' ? window.DaisyParams : (typeof globalThis !== 'undefined' ? globalThis.DaisyParams : null)) || [];
+    const byAttr = {}; PR.forEach(q => { (byAttr[q.attr + '|' + q.use] = byAttr[q.attr + '|' + q.use] || []).push(q); });
+    const TOP = { Surface: 'Water at the soil surface: runoff and evaporation', Groundwater: 'The groundwater and the aquitard below the profile', OrganicMatter: 'Turnover of organic matter and the mineral nitrogen it releases', Bioclimate: 'The numerical settings of the bioclimate model', Chemistry: 'The limits on the chemistry sink terms', Drain: 'Pipe drainage' };
+    Object.keys(byAttr).forEach(k => { const L = byAttr[k].filter(q => q.sens).concat(byAttr[k].filter(q => !q.sens)).filter(q => (q.farm != null ? q.farm : q.def) > 0).slice(0, 3); if (!L.length) return; const q0 = L[0], base = q => q.farm != null ? q.farm : q.def, rd = (q, v) => q.type === 'integer' ? Math.max(1, Math.round(v)) : +(+v).toPrecision(4);
+      out.push({ id: 'p_' + q0.attr + '_' + (q0.use || 'std'), group: 'Parameters', title: (TOP[q0.attr] || q0.attr) + ' (chapter ' + q0.ch + ')', ref: String(q0.ch), score: 2 + (L.some(q => q.sens) ? 1 : 0),
+        why: L.map(q => q.name + (q.unit ? ' [' + q.unit + ']' : '') + ': ' + (q.desc || '').replace(/\.$/, '')).join('; ') + '. Each is varied from half to double the value the farm uses' + (L.some(q => q.sens) ? '; ' + L.filter(q => q.sens).map(q => q.name).join(', ') + ' moved the yield, water or nitrogen in the test.' : '; none of them moved yield, water or nitrogen in the test, so the effect shows in the process itself.'),
+        plan: { design: L.length > 2 ? 'oat' : 'factorial', factors: L.map(q => ({ id: q.opt, levels: [0.5, 1, 2].map(f => rd(q, base(q) * f)).filter((v, i, a) => a.indexOf(v) === i) })), base: {} } }); });
+    const GR = { method: 'Irrigation', trigger: 'Irrigation', dose: 'Irrigation', window: 'Irrigation', flux: 'Irrigation', nitrogen: 'Nitrogen', tillage: 'Nitrogen', climate: 'Climate', season: 'Climate', stations: 'Climate', etmodel: 'Climate', soils: 'Soil and crop', rooting: 'Soil and crop', chemical: 'Chemicals' };
+    out.forEach(g => { if (!g.group) g.group = GR[g.id] || 'Other combinations'; });
     return out.sort((a, b) => b.score - a.score);
   };
 

@@ -34,12 +34,13 @@
     c.root = +(st.base && st.base.root) || undefined; return c;
   }
   function showSuggestions() {
-    const box = $('Sug'); if (!box) return; const list = R.suggest(refCtx());
-    box.innerHTML = '<div class="dzpan"><b>Best combinations to start with</b> <span class="pnote">worked out from the ' + esc(R.SOURCE) + ' and from the weather and soil given (' + (refCtx().Pmean != null ? 'your weather, ' + Math.round(refCtx().Pmean) + ' mm of rain a year' : 'the course weather') + '); the first is the most useful here. Nothing is taken from earlier experiments.</span>' +
-      list.slice(0, 6).map((g, i) => '<div class="dzrow" style="align-items:flex-start;margin-top:6px"><button class="btn' + (i === 0 ? ' pri' : '') + '" data-sug="' + g.id + '" style="min-width:210px;text-align:left">' + esc(g.title) + '</button><span class="pnote" style="flex:1">' + esc(g.why) + ' <i>Manual section ' + esc(g.ref) + '.</i></span></div>').join('') + '</div>';
+    const box = $('Sug'); if (!box) return; const list = R.suggest(refCtx()), item = (g, i) => '<div class="dzrow" style="align-items:flex-start;margin-top:6px"><button class="btn' + (i === 0 ? ' pri' : '') + '" data-sug="' + g.id + '" style="min-width:210px;text-align:left">' + esc(g.title) + '</button><span class="pnote" style="flex:1">' + esc(g.why) + ' <i>Manual section ' + esc(g.ref) + '.</i></span></div>', main = list.slice(0, 6), more = list.slice(6), groups = {};
+    more.forEach(g => { const k = g.group || 'Other combinations'; (groups[k] = groups[k] || []).push(g); });
+    box.innerHTML = '<div class="dzpan"><b>Best combinations to start with</b> <span class="pnote">worked out from the ' + esc(R.SOURCE) + ' and from the weather and soil given (' + (refCtx().Pmean != null ? 'your weather, ' + Math.round(refCtx().Pmean) + ' mm of rain a year' : 'the course weather') + '); the first is the most useful here. Nothing is taken from earlier experiments.</span>' + main.map(item).join('') +
+      (more.length ? '<details style="margin-top:8px"' + (st.sugOpen ? ' open' : '') + '><summary><b>' + more.length + ' more combinations from the reference</b> <span class="pnote">by topic; each one loads as a plan you can change</span></summary>' + Object.keys(groups).map(k => '<div style="margin-top:6px"><b>' + esc(k) + '</b>' + groups[k].map(item).join('') + '</div>').join('') + '</details>' : '') + '</div>';
+    const d = box.querySelector('details'); if (d) d.ontoggle = () => { st.sugOpen = d.open; };
     box.querySelectorAll('[data-sug]').forEach(b => b.onclick = () => useSuggestion(list.find(x => x.id === b.dataset.sug)));
   }
-
   // ------------------------------------------------------------------ chapter by chapter of the Daisy reference manual
   const PART = n => n <= 6 ? 'Part I, the framework' : n <= 106 ? 'Part II, the components' : 'Appendix';
   function showChapters() {
