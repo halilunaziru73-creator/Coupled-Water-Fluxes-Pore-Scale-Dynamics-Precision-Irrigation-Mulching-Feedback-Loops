@@ -5,7 +5,7 @@
   const $ = id => document.getElementById('dz' + id);
   const st = { sel: null, opts: null, runs: [], sc: null, pick: 0, my: { wxMode: 'course', wx: null, soilOn: false, soil: { horizons: [{ bottom: 30, sand: 55, silt: 30, clay: 15, humus: 2.5, bd: 1.45 }, { bottom: 80, sand: 50, silt: 30, clay: 20, humus: 0.8, bd: 1.55 }, { bottom: 200, sand: 60, silt: 25, clay: 15, humus: 0.3, bd: 1.6 }] }, lat: '', lon: '', elev: '' } };
   const REL = 'https://github.com/daisy-model/daisy/releases/download/v7.1.14/';
-  const BUILTIN = [['richards', 'Soil column without Daisy', 'Richards equation on any Daisy soil horizon, with your weather.'], ['deni', 'Denitrification and N2O', 'The Daisy denitrification function as a calculator, and its calibration.']];
+  const BUILTIN = [['richards', 'Soil column without Daisy', 'Richards equation on any Daisy soil horizon, with your weather.'], ['deni', 'Process curves', 'Any Daisy function as a curve: PLF, soil water retention and conductivity, denitrification, response shapes.']];
 
 
   // ------------------------------------------------------------------ my own data: weather and soil, converted for Daisy
@@ -59,6 +59,7 @@
       $('MySoilF').onchange = ev => { const f = ev.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => { try { const s = SC.soilFromTable(IO.readCsv(String(r.result), f.name)); if (!s.horizons.length) throw new Error('no rows'); m.soil = s; rebindSoil(); $('MySoilMsg').textContent = s.horizons.length + ' horizons read from ' + f.name + '.'; } catch (e) { $('MySoilMsg').innerHTML = '<span style="color:#b3261e">' + esc(e.message) + '</span>'; } }; r.readAsText(f); };
     };
     bindSoil(); if (m.wxMode === 'project' && !m.wx) { try { fromProject(); } catch (e) { fail(e); } }
+    if (st.pending) { const q = st.pending; st.pending = null; try { if (q.act === 'wx') { sel.value = 'file'; sel.onchange(); fromText(q.name, q.text); } else { const sl = SC.soilFromTable(IO.readCsv(q.text, q.name)); if (!sl.horizons.length) throw new Error('no soil horizons were found in ' + q.name); m.soil = sl; m.soilOn = true; $('MySoilOn').checked = true; $('MySoilOn').onchange({ target: $('MySoilOn') }); rebindSoil(); $('MySoilMsg').textContent = sl.horizons.length + ' horizons read from ' + q.name + '.'; } } catch (e) { fail(e); } }
     const s0 = document.querySelector('#dzSPanel [data-o="soil"]'); if (s0) s0.disabled = m.soilOn; if (m.wx && m.wxMode !== 'course') setYears(m.wx);
   }
 
@@ -228,7 +229,7 @@
 
   const css = '.dzcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;margin:8px 0}.dzcard{border:1px solid #c3cad6;border-radius:8px;padding:9px 11px;cursor:pointer;background:#fff;display:flex;flex-direction:column;gap:4px}.dzcard:hover{border-color:#0072B2;box-shadow:0 1px 6px rgba(0,114,178,.25)}.dzcard.on{border:2px solid #0072B2;background:#eef6fc}.dzchip{align-self:flex-start;font-size:10.5px;background:#0072B2;color:#fff;border-radius:9px;padding:1px 8px}.dzchip2{background:#6b7a8c}.dzpan{border:1px solid #d5d9e0;border-radius:8px;background:#fff;padding:10px 12px;margin:8px 0}.dzvars{display:flex;flex-direction:column;gap:3px;margin-top:3px}.dzrun{padding:2px 0}.dzspin{display:inline-block;width:11px;height:11px;border:2px solid #0072B2;border-top-color:transparent;border-radius:50%;animation:dzs 0.8s linear infinite;vertical-align:-1px}@keyframes dzs{to{transform:rotate(360deg)}}';
   const st2 = document.createElement('style'); st2.textContent = css; document.head.appendChild(st2);
-  window.DaisyScenUI = { runStandard, my: () => st.my, strip, bindStrip, runs: () => st.runs, sc: () => st.sc, dataLabel: () => ({ weather: wxLabel().replace(/<[^>]+>/g, ''), soil: soilLabel() }) };
+  window.DaisyScenUI = { useFile: (act, name, text) => { st.pending = { act, name, text }; D.show('data'); }, runStandard, my: () => st.my, strip, bindStrip, runs: () => st.runs, sc: () => st.sc, dataLabel: () => ({ weather: wxLabel().replace(/<[^>]+>/g, ''), soil: soilLabel() }) };
   D.register('data', { html: () => '<h3 style="margin:2px 0 6px">My data: weather and soil</h3><p class="pnote">Set the weather and the soil of your site once. Scenarios, experiments and the process figures all use them. Weather can come from the internet for your area, from a file, or from SWAFL.</p>' + myBox(), bind: () => { bindMy(); bindStrip(); } });
   D.register('scen', { html, bind });
   D.register('docs', { html: docsHtml, bind: docsBind });

@@ -20,7 +20,7 @@
       '<p class="pnote">Write it in your own words: what to vary, on which soil and weather, what to look at. The planner turns it into a set of Daisy runs, asks what is still open, runs them in a batch or one by one, and draws the figures. ' + (desk ? '' : 'This is the web version: Daisy itself runs in the desktop app; here you can plan, save the experiment folder, and explore the 10 190 published runs of the study.') + '</p>' +
       '<textarea id="dzXText" rows="3" style="width:100%;box-sizing:border-box" placeholder="For example: how do the irrigation trigger and the sensor depth change yield and water use on sand and loam?">' + esc(st.text) + '</textarea>' +
       '<div class="dzrow"><button class="btn pri" id="dzXGo">Understand my request</button><label title="Without a key the built-in planner works fully offline. With a key, an online AI reads the request first, and each plan it gives is checked against what Daisy can vary."><input type="checkbox" id="dzXAi"' + (st.ai ? ' checked' : '') + '> online AI (machine learning)</label><input type="password" id="dzXKey" placeholder="access key" value="' + esc(st.key) + '" style="width:150px;' + (st.ai ? '' : 'display:none') + '"></div>' +
-      '<div class="dzpan" id="dzXRef"><div class="dzrow" style="margin:0"><b>Start from the Daisy reference</b><button class="btn" id="dzXTabSug">Best combinations</button><button class="btn" id="dzXTabChap">By chapter (107)</button></div><div id="dzXSug"></div><div id="dzXChap" style="display:none"></div></div>' +
+      '<div class="dzpan" id="dzXRef"><div class="dzrow" style="margin:0"><b>Start from the Daisy reference</b><button class="btn" id="dzXTabSug">Best combinations</button><button class="btn" id="dzXTabChap">By chapter (107)</button><button class="btn" id="dzXTabImp">Import data and set-ups</button></div><div id="dzXSug"></div><div id="dzXChap" style="display:none"></div><div id="dzXImp" style="display:none"></div></div>' +
       '<div class="pnote">Examples: ' + EXAMPLES.map((e, i) => '<a href="#" data-ex="' + i + '">' + esc(e.length > 58 ? e.slice(0, 56) + '...' : e) + '</a>').join(' &middot; ') + '</div></div>' +
       '<div id="dzXPlan"></div><div id="dzXRunBox"></div><div id="dzXRes"></div>';
   }
@@ -35,7 +35,7 @@
   }
   const LIST = 'max-height:340px;overflow-y:auto;border:1px solid #d5dae1;border-radius:6px;background:#fff';
   const rowCss = on => 'display:block;width:100%;text-align:left;border:0;border-bottom:1px solid #eef0f3;padding:6px 8px;cursor:pointer;font:inherit;background:' + (on ? '#e3f0fb' : 'transparent');
-  function tab(which) { st.tab = which; const a = $('Sug'), c = $('Chap'); if (!a || !c) return; a.style.display = which === 'sug' ? '' : 'none'; c.style.display = which === 'chap' ? '' : 'none'; const ta = $('TabSug'), tc = $('TabChap'); ta.className = 'btn' + (which === 'sug' ? ' pri' : ''); tc.className = 'btn' + (which === 'chap' ? ' pri' : ''); }
+  function tab(which) { st.tab = which; const a = $('Sug'), c = $('Chap'), im = $('Imp'); if (!a || !c || !im) return; a.style.display = which === 'sug' ? '' : 'none'; c.style.display = which === 'chap' ? '' : 'none'; im.style.display = which === 'imp' ? '' : 'none'; [['TabSug', 'sug'], ['TabChap', 'chap'], ['TabImp', 'imp']].forEach(x => { $(x[0]).className = 'btn' + (which === x[1] ? ' pri' : ''); }); }
   function showSuggestions() {
     const box = $('Sug'); if (!box) return; const list = R.suggest(refCtx()), groups = {}; list.forEach(g => { const k = g.group || 'Other combinations'; (groups[k] = groups[k] || []).push(g); });
     if (!st.sugSel || !list.some(g => g.id === st.sugSel)) st.sugSel = list[0].id; const sel = list.find(g => g.id === st.sugSel), O = st.chOpt || { max: 24, design: 'factorial', nl: 3 };
@@ -45,6 +45,85 @@
       '<div style="flex:2 1 320px;min-width:260px;max-height:340px;overflow-y:auto"><b>' + esc(sel.title) + '</b><p class="pnote" style="margin:4px 0">' + esc(sel.why) + ' <i>Manual section ' + esc(sel.ref) + '.</i></p><div class="dzrow"><button class="btn pri" data-sug="' + esc(sel.id) + '">Load this experiment' + (nrun ? ' (' + nrun + ' runs)' : '') + '</button><span class="pnote">The size, the levels and the combinations can be changed after loading.</span></div></div></div>';
     box.querySelectorAll('[data-pick]').forEach(b => b.onclick = () => { st.sugSel = b.dataset.pick; const y = box.querySelector('div[style*="overflow-y"]').scrollTop; showSuggestions(); const l = box.querySelector('div[style*="overflow-y"]'); if (l) l.scrollTop = y; });
     box.querySelectorAll('[data-sug]').forEach(b => b.onclick = () => useSuggestion(list.find(x => x.id === b.dataset.sug)));
+  }
+
+  // ------------------------------------------------------------------ import: every kind of Daisy file goes to the place that uses it
+  const dec = new TextDecoder('utf-8');
+  const stripC = t => String(t).split('\n').map(l => l.replace(/;.*$/, '')).join('\n');
+  const dirOf = p => p.indexOf('/') < 0 ? '' : p.replace(/\/[^/]*$/, ''), baseOf = p => p.replace(/^.*\//, '');
+  const norm = p => { const o = []; String(p).split('/').forEach(x => { if (x === '..') o.pop(); else if (x && x !== '.') o.push(x); }); return o.join('/'); };
+  function classify(path, text) {
+    const n = baseOf(path), low = n.toLowerCase();
+    if (/^readme/i.test(n) && /\.txt$|\.md$/i.test(n)) return 'readme';
+    if (/\.dai$/i.test(n)) { const c = stripC(text); return /^\s*\(time\s/m.test(c) && /^\s*\(stop\s/m.test(c) && /\(column\s/.test(c) ? 'run' : 'lib'; }
+    if (/\.dwf$/i.test(n)) return 'weather';
+    if (/\.dlf$/i.test(n)) return 'log';
+    if (/\.(csv|txt|tsv|dat|ddf)$/i.test(n)) { const head = String(text).split('\n').slice(0, 30).join('\n').toLowerCase(); if (/\.ddf$/i.test(n)) return 'log'; if (/sand/.test(head) && /clay/.test(head) && /silt|humus|bulk|bd/.test(head)) return 'soil'; if (/precip|rain|\bp\b|nedb/.test(head) && /(tmin|tmax|t_min|t_max|temp|tair)/.test(head)) return 'weather'; return 'table'; }
+    return 'other';
+  }
+  async function readEntries(fileList) {
+    const files = {};
+    for (const f of fileList) {
+      const nm = f.webkitRelativePath || f.name;
+      if (/\.zip$/i.test(f.name)) { const z = await X.unzip(await f.arrayBuffer()); Object.keys(z).forEach(k => { if (/\.(dai|dwf|dlf|ddf|csv|txt|tsv|dat|md)$/i.test(k)) files[k] = dec.decode(z[k]); }); }
+      else if (/\.(dai|dwf|dlf|ddf|csv|txt|tsv|dat|md)$/i.test(f.name)) files[nm] = await f.text();
+    }
+    const keys = Object.keys(files), tops = new Set(keys.map(k => k.split('/')[0])); if (tops.size === 1 && keys.every(k => k.indexOf('/') > 0)) { const t = [...tops][0] + '/'; keys.forEach(k => { files[k.slice(t.length)] = files[k]; delete files[k]; }); }
+    return files;
+  }
+  /* the files one set-up needs: the ones it names (input file, weather file), searched from its own folder */
+  function neededFiles(path, files) {
+    const need = {}, todo = [path]; need[path] = files[path];
+    while (todo.length) { const p = todo.pop(), c = stripC(files[p]), d = dirOf(p); let m; const re = /(?:input\s+file|\bfile)\s+"([^"]+)"/g;
+      while ((m = re.exec(c))) { const q = norm((d ? d + '/' : '') + m[1].replace(/\\/g, '/')); if (files[q] != null && !need[q]) { need[q] = files[q]; if (/\.dai$/i.test(q)) todo.push(q); } } }
+    return need;
+  }
+  function showImport() {
+    const box = $('Imp'); if (!box) return; const I = st.imp, desk = D.isDesk();
+    let h = '<p class="pnote" style="margin:4px 0">Bring in what you already have, of any kind: an experiment folder as a .zip (one saved here, or a set of runs you made yourself), Daisy set-up files (.dai), weather (.dwf or a table), a soil table, or logs (.dlf). Each goes where it is used: set-ups are run as experiments, weather and soil go to My data, logs go to Files.</p>' +
+      '<div class="dzrow"><button class="btn pri" id="dzXImpBtn">Choose files or a .zip</button><input type="file" id="dzXImpIn" multiple accept=".zip,.dai,.dwf,.dlf,.ddf,.csv,.txt,.tsv,.dat" style="display:none"><span class="pnote" id="dzXImpMsg">' + (I ? '' : 'Nothing imported yet.') + '</span></div>';
+    if (I) {
+      const by = k => Object.keys(I.kind).filter(p => I.kind[p] === k).sort(), runs = by('run'), wx = by('weather'), soil = by('soil'), logs = by('log'), tabs = by('table'), rd = by('readme'), lib = by('lib');
+      h += '<div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:6px"><div style="flex:2 1 320px;min-width:260px">';
+      h += '<b>Set-ups to run (' + runs.length + ')</b>' + (runs.length ? '<div style="max-height:200px;overflow-y:auto;border:1px solid #d5dae1;border-radius:6px;padding:4px 8px;background:#fff;margin:4px 0">' + runs.map((p, i) => '<label style="display:block"><input type="checkbox" data-imprun="' + esc(p) + '" ' + (I.pick[p] !== false ? 'checked' : '') + '> ' + esc(p) + '</label>').join('') + '</div><div class="dzrow"><button class="btn pri" id="dzXImpRun">Run the ticked set-ups</button><span class="pnote">' + (desk ? 'Each set-up is run with Daisy as it is; the results are drawn like those of any experiment.' : 'Daisy runs in the desktop app; here you can read the set-ups and send weather, soil and logs on.') + '</span></div>' : '<div class="pnote">No complete set-up (a .dai with time, stop and a column) was found.</div>');
+      if (lib.length) h += '<div class="pnote">Library files read: ' + lib.length + ' (' + esc(lib.slice(0, 6).map(baseOf).join(', ')) + (lib.length > 6 ? ', ...' : '') + ')</div>';
+      if (rd.length) h += '<details style="margin-top:6px"><summary class="pnote">' + esc(baseOf(rd[0])) + '</summary><pre style="white-space:pre-wrap;max-height:240px;overflow:auto;font-size:12px">' + esc(I.files[rd[0]]) + '</pre></details>';
+      h += '</div><div style="flex:1 1 240px;min-width:220px">';
+      const lst = (title, arr, act, label) => arr.length ? '<b>' + title + ' (' + arr.length + ')</b><div style="max-height:120px;overflow-y:auto;border:1px solid #d5dae1;border-radius:6px;background:#fff;margin:4px 0 8px">' + arr.map(p => '<div style="padding:3px 8px;border-bottom:1px solid #eef0f3">' + esc(p) + ' <a href="#" data-impact="' + act + '" data-p="' + esc(p) + '">' + label + '</a></div>').join('') + '</div>' : '';
+      h += lst('Weather', wx, 'wx', 'use in My data') + lst('Soil tables', soil, 'soil', 'use in My data') + lst('Logs and data tables', logs.concat(tabs), 'log', 'open in Files');
+      if (!wx.length && !soil.length && !logs.length && !tabs.length) h += '<div class="pnote">No weather, soil or log files in what was imported.</div>';
+      h += '</div></div>';
+    }
+    box.innerHTML = h + '<div id="dzXImpOut"></div>';
+    $('ImpBtn').onclick = () => $('ImpIn').click();
+    $('ImpIn').onchange = async ev => { const msg = $('ImpMsg'); try { msg.textContent = 'Reading...'; const files = await readEntries(Array.from(ev.target.files)); const kind = {}; Object.keys(files).forEach(p => { kind[p] = classify(p, files[p]); }); if (!Object.keys(files).length) throw new Error('no Daisy file was found in what you chose'); st.imp = { files, kind, pick: {} }; showImport(); $('ImpMsg').textContent = Object.keys(files).length + ' files read: ' + Object.keys(kind).filter(k => kind[k] === 'run').length + ' set-up(s), ' + Object.keys(kind).filter(k => kind[k] === 'weather').length + ' weather file(s), ' + Object.keys(kind).filter(k => kind[k] === 'log').length + ' log(s).'; } catch (e) { msg.innerHTML = '<span style="color:#b3261e">' + esc(e.message) + '</span>'; } };
+    box.querySelectorAll('[data-imprun]').forEach(c => c.onchange = () => { st.imp.pick[c.dataset.imprun] = c.checked; });
+    box.querySelectorAll('[data-impact]').forEach(a => a.onclick = ev => { ev.preventDefault(); const p = a.dataset.p, t = st.imp.files[p], act = a.dataset.impact;
+      try { if (act === 'log') { const d = D.parseAny(baseOf(p), t); if (!d.n) throw new Error('no table found in ' + baseOf(p)); D.addLog(d, baseOf(p)); D.regList(); D.refreshSelects(); $('ImpOut').innerHTML = '<span class="pnote">' + esc(baseOf(p)) + ' is now in the Files tab (' + d.n + ' rows).</span>'; }
+        else if (window.DaisyScenUI && window.DaisyScenUI.useFile) { window.DaisyScenUI.useFile(act, baseOf(p), t); } } catch (e) { $('ImpOut').innerHTML = '<span style="color:#b3261e">' + esc(e.message) + '</span>'; } });
+    const rb = $('ImpRun'); if (rb) rb.onclick = () => runImported();
+  }
+  async function runImported() {
+    const I = st.imp; if (!I) return; if (st.running) { st.stop = true; return; }
+    const paths = Object.keys(I.kind).filter(p => I.kind[p] === 'run' && I.pick[p] !== false); if (!paths.length) { $('ImpOut').innerHTML = '<span style="color:#b3261e">Tick at least one set-up.</span>'; return; }
+    if (!D.isDesk() || !window.swafl || !window.swafl.daisyJob) { $('ImpOut').innerHTML = '<span style="color:#b3261e">Daisy itself runs in the desktop app. Here the set-ups can be read, and the weather, the soil and the logs sent on.</span>'; return; }
+    try {
+      let info = await window.swafl.daisyInfo(); if (!info.found) info = await window.swafl.daisyChoose(); if (!info.found) throw new Error('No Daisy program chosen. Install Daisy 7.1.14 (Model and documentation tab).');
+      let F = X.factor('run'); if (!F) { F = { id: 'run', key: 'run', label: 'Set-up', unit: '', kind: 'cat', levels: [] }; X.FACTORS.push(F); }
+      const jobs = paths.map((p, i) => ({ run: { id: 'i' + String(i + 1).padStart(2, '0'), label: baseOf(p).replace(/\.dai$/i, ''), val: { run: baseOf(p).replace(/\.dai$/i, '') } }, job: { main: p, files: neededFiles(p, I.files), options: {}, scenario: 'import' } }));
+      const nm = jobs.map(j => j.run.val.run); if (new Set(nm).size < nm.length) jobs.forEach(j => { j.run.val.run = j.run.label = j.job.main.replace(/\.dai$/i, ''); });
+      st.rows = []; st.runs = []; st.fids = ['run']; st.source = 'daisy'; st.design0 = { runs: jobs.map(j => ({ id: j.run.id, label: j.run.label, set: {}, val: j.run.val })), factors: [{ id: 'run', levels: nm }] }; st.running = true; st.stop = false;
+      const out = $('ImpOut'); out.innerHTML = '<div class="dzpan"><b id="dzXImpProg">0 of ' + jobs.length + ' set-ups</b><div id="dzXImpList" class="pnote" style="max-height:120px;overflow:auto"></div></div>'; $('ImpRun').textContent = 'Stop';
+      let next = 0, done = 0; const t0 = Date.now(), nPar = Math.max(1, Math.min(st.jobs || 2, jobs.length));
+      const work = async () => { while (next < jobs.length && !st.stop) { const { run: rn, job } = jobs[next++]; let r; try { r = await window.swafl.daisyJob(job); } catch (e) { r = { code: -1, err: e.message, logs: {} }; }
+        const logs = {}; Object.keys(r.logs || {}).forEach(n => { const k = SC.logKey(n); if (k) { try { const d = IO.readDlf(r.logs[n], n); if (d.n) logs[k] = d; } catch (e) { } } });
+        done++; if (!logs['Annual-Harvest']) $('ImpList').innerHTML += '<div style="color:#b3261e">' + esc(rn.label) + ': Daisy gave no annual harvest log (code ' + r.code + '): ' + esc(((r.err || r.out || '') + '').split('\n').filter(l => /error/i.test(l)).slice(0, 1).join(' ') || 'the set-up writes no Annual-Harvest.dlf') + '</div>';
+        else { const sx = DaisyFig.stats({ logs }); st.rows.push({ id: rn.id, label: rn.label, val: rn.val, f: rn.val, r: X.respOf(sx) }); st.runs.push({ id: rn.id, label: rn.label, logs, options: {} }); }
+        $('ImpProg').textContent = done + ' of ' + jobs.length + ' set-ups (' + Math.round((Date.now() - t0) / 1000) + ' s)'; } };
+      await Promise.all(Array.from({ length: nPar }, work)); st.running = false; $('ImpRun').textContent = 'Run the ticked set-ups';
+      if (!st.rows.length) throw new Error('none of the set-ups gave results; see the messages above'); drawResults(); $('ImpProg').textContent = 'Finished ' + st.rows.length + ' of ' + jobs.length + ' set-ups in ' + Math.round((Date.now() - t0) / 1000) + ' s. The results are below.';
+      const r = $('Res'); if (r && r.scrollIntoView) r.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (e) { st.running = false; const b = $('ImpRun'); if (b) b.textContent = 'Run the ticked set-ups'; $('ImpOut').innerHTML = '<span style="color:#b3261e">' + esc(e.message) + '</span>'; }
   }
   // ------------------------------------------------------------------ chapter by chapter of the Daisy reference manual
   const PART = n => n <= 6 ? 'Part I, the framework' : n <= 106 ? 'Part II, the components' : 'Appendix';
@@ -166,7 +245,7 @@
   async function stationFiles(files, ids) { for (const id of ids) if (id && id !== 'course') files['weather/' + id + '.dwf'] = await D.getText('weather/' + id + '.dwf'); }
   async function buildJobs(design, files) { const stIds = Array.from(new Set(design.runs.map(r => (r.set.station || st.base.station || 'course')))); await stationFiles(files, stIds); return design.runs.map(run => ({ run, job: SC.buildJob('exp', optionsFor(run), run.id, files) })); }
   async function saveZip() {
-    try { readPlanInputs(); const design = X.design(currentPlan()), files = await commonFiles(), jobs = await buildJobs(design, files); const tree = X.folder(jobs, files, { request: st.text, plan: currentPlan(), design: design.factors }); const z = X.zip(tree); const b = new Blob([z], { type: 'application/zip' }), a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'daisy-experiment.zip'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); D.note('Xst', 'Saved ' + Object.keys(tree).length + ' files: ' + design.runs.length + ' runs with crops, soils, weather and OutputLog files.'); }
+    try { readPlanInputs(); const design = X.design(currentPlan()), files = await commonFiles(), jobs = await buildJobs(design, files); const tree = X.folder(jobs, files, { request: st.text || (st.res && st.res.plan && st.res.plan.title) || '', title: (st.res && st.res.plan && st.res.plan.title) || st.text, plan: currentPlan(), design: design.factors }); const z = X.zip(tree); const b = new Blob([z], { type: 'application/zip' }), a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'daisy-experiment.zip'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); D.note('Xst', 'Saved the experiment folder: ' + design.runs.length + ' numbered run folders, a Common folder with the shared inputs, a README with the design and where to find the indexes, and run_all scripts (' + Object.keys(tree).length + ' files).'); }
     catch (e) { D.note('Xst', esc(e.message), 1); }
   }
   // ------------------------------------------------------------------ running
@@ -284,12 +363,12 @@
     D.download('daisy-experiment-report.html', '<!doctype html><meta charset="utf-8"><title>Daisy experiment</title><style>body{font:14px Segoe UI,Arial;max-width:1000px;margin:20px auto;padding:0 14px}table{border-collapse:collapse;font-size:12px}td,th{border:1px solid #ccc;padding:2px 6px}th{background:#eef1f5}h2{margin-top:26px}</style><h1>' + esc((st.res && st.res.plan.title) || 'Daisy experiment') + '</h1><p>' + esc(st.text) + '</p><p>' + rows.length + ' runs of Daisy 7.1.14' + (st.source === 'ens' ? ' (the published runs of the study)' : '') + '.</p>' + imgs + '<h2>All runs</h2>' + tab, 'text/html');
   }
   function bind() {
-    $('Go').onclick = () => understand(); showSuggestions(); showChapters(); $('TabSug').onclick = () => tab('sug'); $('TabChap').onclick = () => tab('chap'); tab(st.tab || 'sug'); if (window.DaisyScenUI) window.DaisyScenUI.bindStrip();
+    $('Go').onclick = () => understand(); showSuggestions(); showChapters(); $('TabSug').onclick = () => tab('sug'); $('TabChap').onclick = () => tab('chap'); $('TabImp').onclick = () => tab('imp'); showImport(); tab(st.tab || 'sug'); if (window.DaisyScenUI) window.DaisyScenUI.bindStrip();
     $('Ai').onchange = e => { $('Key').style.display = e.target.checked ? '' : 'none'; };
     document.querySelectorAll('[data-ex]').forEach(a => a.onclick = ev => { ev.preventDefault(); $('Text').value = EXAMPLES[+a.dataset.ex]; understand(); });
     $('Text').onkeydown = e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) understand(); };
     if (st.res) renderPlan(); if (st.rows.length) drawResults();
   }
-  window.DaisyExpUI = { runs: () => st.runs };
+  window.DaisyExpUI = { runs: () => st.runs, imported: () => (st.imp ? st.imp.files : {}) };
   D.register('exp', { html, bind });
 })();

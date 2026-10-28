@@ -141,7 +141,7 @@ const MENUS = [
     { label: 'Soil column (Richards equation)...', icon: 'soil', act: () => DaisyUI.open('richards') },
     { label: 'Calibrate parameters...', icon: 'run', act: () => DaisyUI.open('calib') },
     { label: 'Daisy and DMI weather...', icon: 'drop', act: () => DaisyUI.open('weather') },
-    { label: 'Denitrification calculator...', icon: 'refresh', act: () => DaisyUI.open('deni') },
+    { label: 'Process curves...', icon: 'refresh', act: () => DaisyUI.open('deni') },
     { label: 'Model, documentation and installation...', icon: 'book', act: () => DaisyUI.open('docs') } ] },
   { label: 'Help', items: [
     { label: 'Manual (PDF)', icon: 'book', key: 'F1', act: Act.manual }, { label: 'How to use SWAFL', icon: 'book', act: Act.guide }, { label: 'Troubleshooting (running the app)', icon: 'bug', act: () => guideModal('trouble') }, { label: 'Keyboard shortcuts', icon: 'key', act: Act.shortcuts }, { sep: 1 },

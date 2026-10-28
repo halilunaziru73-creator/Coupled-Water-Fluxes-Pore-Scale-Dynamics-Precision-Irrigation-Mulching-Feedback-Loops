@@ -7,7 +7,7 @@ const DaisyUI = (() => {
   const OKI = ['#0072B2', '#D55E00', '#009E73', '#CC79A7', '#E69F00', '#56B4E9', '#7a6f00', '#444444'];
   const SPEC = ['#2b83ba', '#5aa6b4', '#8fcfa6', '#c4e6a8', '#ffffbf', '#fee08b', '#fdae61', '#f46d43', '#d53e4f'];
   // the tabs follow what a person does: ask a question, give the data, look at the results, build and calibrate, learn
-  const GROUPS = [['Ask', [['scen', 'Scenarios'], ['exp', 'Experiments']]], ['Data', [['data', 'My data'], ['weather', 'Weather stations'], ['library', 'Library'], ['files', 'Files']]], ['Look', [['proc', 'Processes'], ['plot', 'Plot'], ['balance', 'Mass balance'], ['compare', 'Compare and test']]], ['Build', [['editor', 'Set-up editor'], ['richards', 'Soil column'], ['deni', 'Denitrification'], ['calib', 'Calibrate']]], ['Learn', [['docs', 'Model and documentation']]]];
+  const GROUPS = [['Ask', [['scen', 'Scenarios'], ['exp', 'Experiments']]], ['Data', [['data', 'My data'], ['weather', 'Weather stations'], ['library', 'Library'], ['files', 'Files']]], ['Look', [['proc', 'Processes'], ['plot', 'Plot'], ['balance', 'Mass balance'], ['compare', 'Compare and test']]], ['Build', [['editor', 'Set-up editor'], ['richards', 'Soil column'], ['deni', 'Process curves'], ['calib', 'Calibrate']]], ['Learn', [['docs', 'Model and documentation']]]];
   const TABS = GROUPS.reduce((a, g) => a.concat(g[1]), []);
   const S = { logs: {}, tab: 'files', lib: null, idx: null, rich: null, anim: null, cal: null, dai: '', kind: 'horizons', txt: {} };
   const $ = id => document.getElementById('dz' + id);

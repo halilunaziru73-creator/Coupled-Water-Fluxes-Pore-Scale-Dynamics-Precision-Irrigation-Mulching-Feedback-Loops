@@ -141,24 +141,85 @@
     return clean.slice(0, 0) + clean.slice(0, o).replace(/\s+$/, '') + '\n(output\n' + entries.filter(e => keep.test(e)).map(e => '  ' + e.replace(/\s*\n\s*/g, ' ')).join('\n') + '\n)\n';
   };
   /* jobs: [{ run, job }] from DaisyScen.buildJob. Returns { 'path': text } laid out as crops/, soils/, weather/, OutputLog_*.dai, runs/<id>/Runfile.dai, run_all.sh */
-  E.folder = function (jobs, commonFiles, plan) {
-    const out = {}, seen = {}; const put = (dir, base, text) => { const k = dir + '|' + text.length + '|' + hash(text); if (seen[k]) return seen[k]; let n = base, i = 1; while (out[dir + '/' + n] != null) { n = base.replace(/(\.[^.]+)$/, '_' + (++i) + '$1'); } out[dir + '/' + n] = text; seen[k] = n; return n; };
+  /* the experiment folder, laid out like a Daisy exercise: one numbered folder for each run with its own .dai file, a Common folder with
+     the shared inputs, and a README that gives the design, what is kept the same, how to run, and where each index is found */
+  const slug = (t, n) => String(t || '').replace(/[^A-Za-z0-9]+/g, '_').replace(/^_+|_+$/g, '').slice(0, n || 40) || 'run';
+  const SHORT = { precip: 'P', temp: 'T', nfac: 'N', mm: 'mm', hours: 'h', trig: 'trig', z: 'z', limit: 'lim', root: 'root', koc: 'Koc', half: 'half', ntime: 'ndate', radscale: 'rad', flux: 'flux' };
+  /* a short name for a run, from the values of the factors: Loam_Overhead_N1.25 */
+  E.shortName = function (run) {
+    if (run.reference) return 'Rainfed_reference'; const parts = [];
+    Object.keys(run.val || {}).forEach(id => { const F = E.factor(id), v = run.val[id]; if (!F) return; if (F.kind === 'num') parts.push((SHORT[id] || (F.param ? F.param.key : id)) + v); else if (F.kind === 'set') parts.push(String((v && v.label) || v)); else if (id === 'irrig') parts.push(v === '1' || v === 1 ? 'irrigated' : 'rainfed'); else parts.push(String(E.levelName(F, v)).replace(/\s*\(.*\)/, '')); });
+    return parts.join('_') || run.label || run.id; };
+  E.folder = function (jobs, commonFiles, info) {
+    info = info || {}; const plan = info.plan || {}, out = {}, seen = {}, root = 'Experiment_' + slug(info.title || info.request || 'Daisy', 36);
     function hash(s) { let h = 5381; for (let i = 0; i < s.length; i++) h = (h * 33 ^ s.charCodeAt(i)) >>> 0; return h.toString(36); }
-    ['annual', 'season', 'light', 'full'].forEach(l => { out['OutputLog_' + l + '.dai'] = S.logFilter(commonFiles['OutputLog.dai'], l); });
-    const ids = [];
-    jobs.forEach(({ run, job }) => {
+    const put = (name, text, tag) => { const k = name + '|' + text.length + '|' + hash(text); if (seen[k]) return seen[k]; let n = name; if (out[root + '/Common/' + n] != null) n = name.replace(/(\.[^.]+)$/, '_' + tag + '$1'); out[root + '/Common/' + n] = text; seen[k] = n; return n; };
+    const dirs = [], files = {};
+    jobs.forEach(({ run, job }, i) => {
+      const no = String(i + (jobs.length > 99 ? 1000 : 100)).slice(1), nm = slug(E.shortName(run), 44), dir = no + '_' + nm; dirs.push({ dir, run, nm, job });
       let rf = job.files['Run/Runfile.dai'];
-      const map = (re, dir, name) => { rf = rf.replace(re, (m, p1) => { const t = job.files['Common/' + p1]; if (t == null) return m; const nm = put(dir, p1, t); return m.replace('../Common/' + p1, '../../' + dir + '/' + nm); }); };
-      map(/\.\.\/Common\/(ArableFarmRotation\.dai)/, 'crops'); map(/\.\.\/Common\/(ResFarm\.dai)/, 'soils'); map(/\.\.\/Common\/(UserSoil\.dai)/, 'soils');
-      rf = rf.replace(/\.\.\/Common\/(Station\.dwf|UserWeather\.dwf)/, (m, p1) => { const t = job.files['Common/' + p1], nm = put('weather', (job.options.station && p1 === 'Station.dwf' ? job.options.station : 'UserWeather') + '.dwf', t); return '../../weather/' + nm; });
-      rf = rf.replace(/\.\.\/Common\/Daily-1965-2000\.dwf/, () => { const nm = put('weather', 'Daily-1965-2000.dwf', commonFiles['Daily-1965-2000.dwf'] || ''); return '../../weather/' + nm; });
-      const lg = (job.options && job.options.log) || 'light'; rf = rf.replace('../Common/OutputLog.dai', '../../OutputLog_' + lg + '.dai');
-      out['runs/' + run.id + '/Runfile.dai'] = rf; ids.push(run.id);
+      rf = rf.replace(/\.\.\/Common\/([^"]+)/g, (m, f) => {
+        let text = job.files['Common/' + f]; if (text == null) text = commonFiles[f]; if (text == null) return m;
+        let name = f; if (f === 'OutputLog.dai' && job.options && job.options.log) name = 'OutputLog_' + job.options.log + '.dai'; else if (f === 'Station.dwf' && job.options && job.options.station) name = job.options.station + '.dwf'; else if (f === 'ResFarm.dai') name = 'ResFarm.dai';
+        return '../Common/' + put(name, text, run.id); });
+      rf = rf.replace(/^;; SWAFL scenario[^\n]*\n/, ';; Experiment run ' + no + ': ' + run.label + '\n').replace(/\(description "[^"]*"\)/, '(description "' + String((info.request || 'Experiment') + ' - ' + run.label).replace(/"/g, "'") + '")').replace(/\(log_prefix "[^"]*"\)/, '(log_prefix "' + nm + '-")');
+      out[root + '/' + dir + '/' + nm + '.dai'] = rf;
     });
-    out['run_all.sh'] = '#!/bin/sh\n# runs every simulation of this experiment with the Daisy program (daisy must be on the PATH)\nfor d in runs/*/; do (cd "$d" && daisy Runfile.dai); done\n';
-    out['run_all.bat'] = '@echo off\r\nrem runs every simulation of this experiment with the Daisy program (daisy.exe must be on the PATH)\r\nfor /d %%d in (runs\\*) do (pushd "%%d" && daisy Runfile.dai && popd)\r\n';
-    out['plan.json'] = JSON.stringify(plan || {}, null, 1);
-    out['README.txt'] = 'SWAFL experiment folder. ' + ids.length + ' simulations of Daisy 7.1.14.\r\ncrops/  crop and management files   soils/  soil horizons   weather/  daily weather   OutputLog_*.dai  which logs are written (annual, season, light, full)\r\nruns/<id>/Runfile.dai  one simulation each; run_all.sh or run_all.bat runs them all.\r\nThe logs (.dlf) are written next to each Runfile and can be loaded into the SWAFL Daisy workbench (Files) for the figures.\r\n';
+    const fl = (plan.plan && plan.plan.factors) || (plan.factors || []), base = (plan.plan && plan.plan.base) || plan.base || {}, ds = (plan.plan && plan.plan.design) || plan.design || 'factorial';
+    const fname = f => { const F = E.factor(f.id); return F ? F.label : f.id; };
+    const lvl = f => (f.levels || []).map(v => { const F = E.factor(f.id); return F ? E.levelName(F, v && v.label ? v.label : v) : v; }).join(', ');
+    const ref = jobs.filter(j => j.run.reference).length, nRuns = jobs.length;
+    const varied = {}; fl.forEach(f => { const F = E.factor(f.id); if (F) { varied[F.key] = 1; (F.kind === 'set' && F.levels[0] && F.levels[0].set ? Object.keys(F.levels[0].set) : []).forEach(k => { varied[k] = 1; }); } });
+    const optLabel = (k, v) => { const O = S.OPTIONS && S.OPTIONS[k]; if (!O) return String(v); const hit = (O.opts || []).find(o => String(o[0]) === String(v)); return hit ? hit[1] : String(v); };
+    const kept = Object.keys(base).filter(k => base[k] !== '' && base[k] != null && !varied[k] && k !== 'start' && k !== 'stop').map(k => '  ' + ((S.OPTIONS && S.OPTIONS[k] && S.OPTIONS[k].label) || k) + ': ' + optLabel(k, base[k])).join('\r\n');
+    const keptAll = (kept ? kept + '\r\n' : '') + '  Simulation years: ' + (base.start || (S.DEFAULTS && S.DEFAULTS.start) || 1980) + ' to ' + (base.stop || (S.DEFAULTS && S.DEFAULTS.stop) || 2000);
+    const dsn = { factorial: 'all combinations of the levels', oat: 'one factor at a time, the others at their middle level', paired: 'the levels side by side' }[ds] || ds;
+    const L = [];
+    L.push('EXPERIMENT - ' + (info.request || 'Daisy experiment'), '='.repeat(60), '',
+      'Design: ' + (fl.length ? fl.map(f => fname(f) + ' (' + (f.levels || []).length + ' levels)').join(' x ') : 'one run') + ' = ' + (nRuns - ref) + ' runs' + (ref ? ' + ' + ref + ' rainfed reference = ' + nRuns + ' runs' : '') + '.', 'Combinations: ' + dsn + '.', 'Made by the SWAFL Daisy workbench for Daisy 7.1.14. Open the .dai of a run in its own folder with Daisy to run it.', '',
+      'FOLDERS', '  Common/                  shared inputs (weather, soils, rotations, output)');
+    dirs.forEach(d => L.push('  ' + d.dir.padEnd(34).slice(0, Math.max(34, d.dir.length + 1)) + ' ' + d.run.label + (d.run.reference ? '  (rainfed reference)' : '')));
+    L.push('', 'WHAT IS VARIED');
+    fl.forEach(f => L.push('  ' + fname(f) + ': ' + lvl(f)));
+    L.push('', 'WHAT IS KEPT THE SAME IN ALL RUNS', keptAll, '  Crops, fertiliser, weather, soil and output are identical unless listed above.', '',
+      'HOW TO RUN', '  Keep the folder structure (the run files point to ../Common/).', '  Open each .dai in its own folder with Daisy and run, or run run_all.sh (Linux, macOS) or run_all.bat (Windows) here.', '  The output files (.dlf) are written into the folder of the run, prefixed with the run name.', '  Rename daisy.log if you want to keep the run-time information of a run.', '',
+      'WHERE TO FIND DATA FOR THE INDEXES',
+      '  Yield        : *Annual-Harvest.dlf, column sorg_DM [Mg DM/ha]',
+      '  Water stress : *Annual-Harvest.dlf, column WStress [d]; nitrogen stress: NStress [d]',
+      '  Irrigation   : *Annual-FWater_100cm.dlf, column Irrigation [mm]',
+      '  Rainfall     : *Annual-FWater_100cm.dlf, column Precipitation [mm]',
+      '  Drainage 1 m : *Annual-FWater_100cm.dlf, columns Matrix percolation and Biopore percolation [mm]',
+      '  N leached 1m : *Annual-FN_100cm.dlf, columns Matrix-Leaching and Biopore-Leaching [kg N/ha]',
+      '  N applied    : *Annual-FN.dlf, column Min-Surface-Fertilizer [kg N/ha] (and the rotation file)',
+      '  Annual files are written each 1 April, so each row covers April to March.', '',
+      '  Unit conversions:', '    yield kg/ha   = sorg_DM x 1000', '    water m3/ha   = mm x 10',
+      '  Irrigation efficiency  = yield_kg/ha / (irrigation_mm x 10)        [kg/m3]',
+      '  Irrigation WUE         = (yield_irr - yield_rainfed) / (irr_mm x 10) [kg/m3]',
+      '  Deep percolation frac. = drainage_1m / (irrigation + rainfall)',
+      '  PFPn                   = yield_kg/ha / N_applied',
+      '  N leaching fraction    = N_leached_1m / N_applied',
+      '', 'The SWAFL Daisy workbench (Files tab) reads these .dlf files and draws the figures and these indexes for you.');
+    out[root + '/README_' + slug(info.title || info.request || 'experiment', 24) + '.txt'] = L.join('\r\n') + '\r\n';
+    out[root + '/run_all.sh'] = '#!/bin/sh\n# runs every simulation of this experiment (daisy must be on the PATH)\nfor d in [0-9]*/; do (cd "$d" && for f in *.dai; do daisy "$f"; done); done\n';
+    out[root + '/run_all.bat'] = '@echo off\r\nrem runs every simulation of this experiment (daisy.exe must be on the PATH)\r\nfor /d %%d in ([0-9]*) do (pushd "%%d" && for %%f in (*.dai) do daisy "%%f" & popd)\r\n';
+    out[root + '/plan.json'] = JSON.stringify(info, null, 1);
+    return out;
+  };
+
+  /* reads a zip file (stored or deflated) into { path: Uint8Array }; needs DecompressionStream (browsers, Electron, Node 18+) */
+  E.unzip = async function (buf) {
+    const u8 = buf instanceof Uint8Array ? buf : new Uint8Array(buf), dv = new DataView(u8.buffer, u8.byteOffset, u8.byteLength), out = {};
+    let e = u8.length - 22; while (e >= 0 && dv.getUint32(e, true) !== 0x06054b50) e--; if (e < 0) throw new Error('this is not a zip file');
+    const n = dv.getUint16(e + 10, true); let p = dv.getUint32(e + 16, true), dec = new TextDecoder();
+    for (let i = 0; i < n; i++) {
+      if (dv.getUint32(p, true) !== 0x02014b50) throw new Error('the zip file is damaged');
+      const meth = dv.getUint16(p + 10, true), csz = dv.getUint32(p + 20, true), nl = dv.getUint16(p + 28, true), xl = dv.getUint16(p + 30, true), cl = dv.getUint16(p + 32, true), off = dv.getUint32(p + 42, true), name = dec.decode(u8.subarray(p + 46, p + 46 + nl));
+      p += 46 + nl + xl + cl; if (/\/$/.test(name) || /^__MACOSX\//.test(name)) continue;
+      const lnl = dv.getUint16(off + 26, true), lxl = dv.getUint16(off + 28, true), st = off + 30 + lnl + lxl, raw = u8.subarray(st, st + csz);
+      if (meth === 0) out[name] = raw.slice();
+      else if (meth === 8) { if (typeof DecompressionStream === 'undefined') throw new Error('this browser cannot unpack zip files; use the desktop app'); out[name] = new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).arrayBuffer()); }
+      else throw new Error('the zip file uses a compression this reader does not know (' + meth + ')');
+    }
     return out;
   };
   // zip, stored without compression (works everywhere, no library)

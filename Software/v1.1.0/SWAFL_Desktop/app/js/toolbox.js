@@ -23,7 +23,7 @@ const Toolbox = (() => {
       ['Calibrate parameters (sequential, CMA-ES, Bayesian)', 'run', () => DaisyUI.open('calib'), 'calibrate optimise cma bayes parameters'],
       ['My data: online weather of my area, file or soil', 'drop', () => DaisyUI.open('data'), 'daisy weather online open-meteo my data soil file era5'],
       ['Weather from Daisy stations and DMI', 'drop', () => DaisyUI.open('weather'), 'daisy dmi weather denmark hip groundwater'],
-      ['Denitrification calculator', 'refresh', () => DaisyUI.open('deni'), 'daisy denitrification n2o nitrate'],
+      ['Process curves (PLF, soil hydraulics, denitrification)', 'refresh', () => DaisyUI.open('deni'), 'daisy process curves plf function retention conductivity van genuchten denitrification n2o nitrate'],
       ['Daisy model, documentation, installation', 'book', () => DaisyUI.open('docs'), 'daisy install download reference tutorial'] ] },
     { id: 't-design', name: 'Irrigation design', icon: 'pipe', tools: [
       ['Open surface irrigation design', 'pipe', () => Layers.open('sid'), 'border furrow basin surface'],
