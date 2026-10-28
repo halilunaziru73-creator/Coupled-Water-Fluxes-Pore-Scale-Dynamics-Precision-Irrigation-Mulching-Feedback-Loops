@@ -34,6 +34,18 @@
   // the combinations to run first; each is {id, title, why, ref, plan:{design, factors:[{id, levels}], base}, score}
   /* which chapters of the reference have something that can be varied and run in this app */
   R.CHAPTER_MAP = { 15: ['method', 'trigger', 'dose', 'window', 'flux', 'tillage', 'nitrogen'], 16: ['chemical'], 19: ['etmodel', 'climate'], 23: ['chemical'], 28: ['trigger'], 29: ['rooting'], 47: ['soils'], 48: ['soils'], 62: ['etmodel'], 103: ['climate', 'season', 'stations'] };
+
+  /* chapters whose models cannot be changed directly yet lead to the process they belong to: the experiments of that process are offered, marked as related */
+  const GROUPS = [
+    { topic: 'water and heat movement in the soil', ids: ['soils', 'climate'], ch: [20, 27, 37, 38, 45, 46, 47, 48, 53, 54, 55, 56, 65, 71, 82, 87, 89, 90, 92, 97, 98, 99, 31, 9, 12] },
+    { topic: 'the crop: growth, roots and water use', ids: ['rooting', 'climate', 'nitrogen'], ch: [11, 29, 30, 63, 64, 72, 73, 74, 75, 79, 81, 84, 88, 100, 101, 104] },
+    { topic: 'nitrogen, carbon and organic matter', ids: ['nitrogen', 'tillage'], ch: [7, 8, 10, 13, 14, 17, 32, 33, 36, 58, 60, 70, 91, 69, 39, 51, 78] },
+    { topic: 'chemicals and their sorption', ids: ['chemical'], ch: [16, 23, 24] },
+    { topic: 'weather, radiation and evapotranspiration', ids: ['etmodel', 'climate', 'season', 'stations'], ch: [19, 25, 35, 43, 57, 62, 67, 68, 103] },
+    { topic: 'management', ids: ['method', 'trigger', 'dose', 'window', 'flux', 'tillage', 'nitrogen'], ch: [15, 28] }
+  ];
+  R.CHAPTER_RELATED = {}; GROUPS.forEach(g => g.ch.forEach(n => { R.CHAPTER_RELATED[n] = { topic: g.topic, ids: g.ids }; }));
+  R.GENERAL = ['method', 'trigger', 'nitrogen', 'climate', 'soils'];
   R.suggest = function (ctx) {
     ctx = ctx || {}; const P = ctx.Pmean, dry = P != null && P < 600, wet = P != null && P > 800, out = [];
     const soils = ctx.userSoil ? [] : [{ id: 'soil', levels: ['usda:sand', 'loam'] }];
