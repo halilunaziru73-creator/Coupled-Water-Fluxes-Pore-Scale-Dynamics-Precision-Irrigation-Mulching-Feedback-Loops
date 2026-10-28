@@ -248,13 +248,60 @@ A month table gives the share of the erosive rain, the NDVI and the runoff of ea
 
 ![The report: the erosion (test data).](images/ui/prec_report2.jpg){width=82%}
 
+## Terrain, flow, watershed, soil retention and sensors (section 4b)
+
+Section 4b of the panel reads the terrain of the demarcated field and builds four things from it: the contours and flow lines, the watershed, the maps of the soil retention curves, and the soil water sensors. Everything is computed on the cells of the terrain inside the field, and every map is a layer of *Maps of this field* with its legend on the map.
+
+![The panel of the real field: the indices, the site, the season, and section 4b with the terrain and the soil retention curves (the controls as they appear in the program).](images/ui/field_fg1.jpg){width=46%}
+
+**Automatic.** When the box *Automatic* is ticked, the satellite indices, the terrain, the watershed, the retention maps and the sensor sites are all made once the field is drawn, one after the other, so that a field only has to be demarcated.
+
+**Read the terrain (contours, flow, watershed).** The button reads the elevation of the field and of its surroundings from open elevation tiles; *around the field* (150, 250, 400, 700 or 1000 m) sets how much of the surroundings is read, and a larger window is needed when the catchment of the field reaches the edge. The terrain is smoothed, its sinks are filled by priority flood, and the flow directions and the upslope area are found by the D8 method, the same as in the erosion maps. The line under the button tells how many cells of what size were read and from which source. Then five buttons choose what the map shows:
+
+* *Contours and flow*: contour lines, the direction in which the water moves (white arrows), the channels (blue) and a hillshade. The line *Terrain of the field* gives the lowest and the highest elevation of the window and the interval of the contours.
+* *Wetness index*: the topographic wetness index, which is high where water gathers (hollows, the foot of slopes) and low on crests.
+* *Watershed*: the catchment and its channel network.
+* *3D view*: the terrain as a surface that turns with the mouse (drag to turn, wheel to zoom), coloured by elevation, flow accumulation, wetness index, available water, soil water now or matric potential now, with a slider for the vertical exaggeration (1 to 12), the water running down the flow lines, and the sensors. *Close the 3D view* returns to the map.
+* *channels from* (0.05 to 2 ha): the smallest upslope area at which a cell is drawn as a channel.
+
+**The watershed.** *Outlet* is the lowest outlet of the field, or a point that you click on the map (*Click the outlet*). *Delineate the watershed* then finds the catchment draining to it, as a terrain portal does from an elevation model. The table gives
+
+* the area, with the area of the field and the part that drains onto it;
+* the perimeter and the longest flow path;
+* the relief and the mean slope;
+* the length of the channels, the highest Strahler order and the drainage density, in km per km²;
+* the time of concentration by the formula of Kirpich (1940).
+
+When the catchment reaches the edge of the terrain that was read, a red note asks for a larger window in *around the field*.
+
+**Soil retention curves, mapped (geostatistics).** The button *Map the retention curves* maps the sand and the clay of the field, and from them the water retention of every cell. The soil comes from SoilGrids; it is varied across the field with the wetness index of the terrain, and the satellite index is used as well when it has been computed. You may type your own soil samples in the box, one per line: latitude, longitude, sand per cent, clay per cent and, if known, organic matter per cent (for example *9.0831, 7.4012, 62, 18*).
+
+* Without samples, the soil is varied with the wetness index as an indicative trend; the two numbers *clay* and *sand*, in points per standard deviation of the wetness index, set how strongly (the box *indicative terrain trend* switches it on or off).
+* With samples, sand and clay are mapped by regression kriging: the trend on the wetness index and the satellite index is fitted to the samples when there are enough of them, and the residuals are kriged with a spherical variogram fitted to them.
+* The retention curve of every cell follows from the equations of Saxton and Rawls (2006).
+
+The list under the button records every step as it is read and mapped. When it is done, the table *Retention of the field* gives the mean, the 10 per cent and the 90 per cent values of the field capacity, the wilting point, the available water and the days to the trigger (with the depletion fraction, the root depth and the crop evapotranspiration used). A line says when the driest cells reach the trigger and compares it with the average cell and with the DSS, which uses one soil for the whole field. Six buttons put the maps on the field: *Field capacity*, *Wilting point*, *Available water*, *Trigger* (the water content at the critical depletion of the SWAFL decision), *Matric potential now* and *Days to the trigger*. Two charts follow: the retention curves of the cell at the 10 per cent (driest), the median and the 90 per cent (most retentive) of the available water, and of the first three sensors (water content against suction on a log scale, with the point of now marked), and the variogram of the residuals, with its nugget, sill and range, marked as fitted or, when there are too few points to fit, as default.
+
+**Use this field in the DSS.** The button sets the soil of the program to the class whose sand and clay are closest to the field means, and the area of the program to the area of the field. Every irrigation design, the trigger and the schedule then follow this field.
+
+![The rest of the panel: the sensors, the optimisation of their sites, and the export of the field report.](images/ui/field_fg2.jpg){width=46%}
+
+**Sensors and the satellite.** Soil water sensors are installed with the mode *Sensors* of the bar above the map, or with the button *Install by clicking on the map*: click inside the field, at the depth chosen in *depth* (10, 20, 30, 45, 60 or 90 cm); click a sensor to remove it. *Undo* takes back the last one and *Remove all* clears them. The terrain must have been read first. The table lists each sensor with its position, depth and the reading in per cent by volume; leave the reading blank and the program models it from the SWAFL water balance (the water left in the root zone on the working date, shifted by the wetness index and by the satellite index of the cell), or type the real reading.
+
+* *Fusion*: the sensors and the satellite are fused by regression kriging. The readings are regressed on the wetness index and the satellite index, the residuals are kriged, and the line under the title gives the regression (in per cent by volume per standard deviation), its R squared and the variogram. The buttons *Soil water map* and *Uncertainty map* show the map of the soil water and its kriging standard deviation.
+* *Sensors to place* (2 to 20) and *spread* (0 puts the sensors by the characteristics of the cells, 1 spreads them evenly) set the number and the character of the proposed sites. *Optimise the sites* (after the retention curves have been mapped) groups the cells by k-means in the space of elevation, wetness index, available water, the satellite index and position, and proposes one site for each group, drawn as an orange ring. The table gives the share of the field that each site represents and why it was chosen, and compares the mean kriging deviation with these sites, with your sensors and with the same number placed at random. *Install these sensors* replaces the present ones by the proposed ones.
+* *Which sensors can go?* ranks the sensors by the rise of the mean kriging deviation if each is removed, the least useful first, with a *Remove* button for each.
+* *Sensors CSV* saves the sensors with their position, depth, reading and modelled value.
+
 ## Use and export
 
-*Use this field in the sketch and the designs* makes the demarcated field the sketch (true lengths, centre coordinates kept), and *Irrigation layout* draws its system on the map. *Online weather of this field* downloads the daily weather of the centre of the field and runs the program on it. The report has a **title, an author and an organisation**, a **resolution of 96, 150, 300 or 600 dpi** and a format:
+Section 5 of the panel is *Use and export*. *Use this field in the sketch and the designs* makes the demarcated field the sketch (true lengths, centre coordinates kept), and *Irrigation layout* draws its system on the map. *Online weather of this field* downloads the daily weather of the centre of the field and runs the program on it. The report has a **title, an author and an organisation**, a **resolution of 96, 150, 300 or 600 dpi** and a format:
 
 * **PDF (A4)**: page 1, the map of the chosen index (continuous, zones or land cover) on the satellite photo, cut to the field, with the irrigation layout, a grid of latitude and longitude in degrees, minutes and seconds, north arrow and scale bar, the area, perimeter, centre and corner coordinates, the table of the indices and the zones; page 2, the indices side by side with their spread and what they say together; page 3 (after an image analysis or a site analysis), the land cover, the soil, the slope, the water sources on the map with the advice, and the ranking of the systems. The title, author, coordinates and keywords are also in the properties of the PDF.
 * **PNG (A4)**, one image per page, with the resolution written in the file so that it prints at the chosen dpi.
 * **GeoJSON** (the field polygon in WGS 84 with the area, the author and the means of the indices) and **CSV** (the corners and every statistic), for a GIS or a spreadsheet.
+
+The report is made with the boxes *Title*, *Author* and *Organisation* (written on the pages), *Resolution* (the dpi of the pages) and *Format* (PDF A4 or PNG A4); **Export the report** writes it, **GeoJSON** and **CSV** write the field for a GIS or a spreadsheet. *Back to the field sketch* returns to the sketch with the field drawn, and *Close* closes the window.
 
 Every page carries its sources: photo © Esri, Maxar, Earthstar Geographics; map and water features © OpenStreetMap contributors; contains modified Copernicus Sentinel data; Copernicus DEM; ISRIC SoilGrids.
 

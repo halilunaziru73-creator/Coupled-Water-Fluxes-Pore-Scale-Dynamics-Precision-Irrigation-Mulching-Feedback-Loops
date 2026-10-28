@@ -46,6 +46,7 @@
 
 * The field sketch has a hand to move the drawing, zoom in and out (buttons and mouse wheel), *Fit*, and a north arrow and scale bar that follow the zoom.
 * The field sketch draws greenhouses and polytunnels, plant beds, areas to irrigate, no-irrigation zones, single plants and monitoring traps; the area to irrigate feeds the design; *Undo* and *Redo* (Ctrl+Z, Ctrl+Y) cover every change (Chapter 18).
+* The real field has a section 4b: terrain (contours, flow, wetness index, 3D view), watershed with Strahler orders and time of concentration, soil retention curves mapped by geostatistics with the days to the trigger cell by cell, soil water sensors fused with the satellite by regression kriging, optimised sites, and *Use this field in the DSS* (Chapter 20).
 * *Tools ▸ Field on the map…* finds the farm (place search, coordinates, satellite image, Google Earth), demarcates it on the image, computes NDVI, EVI, SAVI, NDRE and NDWI of the demarcated field from Sentinel-2 or simulated by SWAFL, and exports the report (PDF or PNG at 96 to 600 dpi, with coordinates and authorship), GeoJSON and CSV (Chapter 20).
 * The virtual farm simulation has been removed; the real field on the map (Chapter 20) takes its place.
 * The Trigger law block of the Dashboard shows the current soil as a table, its season chart and the advice with each condition ticked.
