@@ -6,7 +6,7 @@
 
 The layer is **deterministic**. It has no random numbers: the same controls always give the same plant, so a change in a chart is always caused by the control that was moved. The weather of the season is built from the climate of the project (cool and humid), a warm season, or a hot and dry season, with the project rain or a rain-out shelter.
 
-The layer is **connected to the Properties panel**: the crop and its library values (height, basal coefficient, rooting depth, sowing day), the soil, the weather and the date, the mulch (vapour-flux factor and interception), the irrigation (method, trigger suction, sensor depth, dose and efficiency), the nitrogen rate and the salt of the water all reach the plant. The note under the controls lists what was read. Nothing is shown before it is computed: the layer opens with **Run simulation**, and it shows no default figure.
+The layer is **connected to the Properties panel**: the crop and its library values (height, basal coefficient, rooting depth, sowing day), the soil, the weather and the date, the mulch (vapour-flux factor and interception), the irrigation (method, trigger suction, sensor depth, dose and efficiency), the nitrogen rate and the salt of the water all reach the plant. The note under the controls lists what was read, and the date of the toolbar sets the day shown and the season of the **drought outlook**. Nothing is shown before it is computed: the layer opens with **Run simulation**, and it shows no default figure.
 
 The layer is made for four tasks of a phenotyping programme:
 
@@ -114,19 +114,39 @@ For the chosen day the section draws the **root length density by depth** of the
 
 ![The predicted phenotype of each genotype under the drought, and the genotype called from the plant above ground. Wheat, project climate, reference genotype.](images/pheno/p8b_genome.png){width=85%}
 
-The section has two parts. **1. Predicted phenotype**: every genotype of the library is run under the same weather, soil and drought; the table gives height, shoot area, grain, D95, root length, water use efficiency and the tolerance (grain under drought divided by grain of the left plant). **2. Genotype called from the plant above ground**: the genotype of the plant is hidden, five traits of the shoot (height, area, senescence, leaf water content and canopy temperature depression through the days) are compared with the same traits of each genotype, and the bars give the weight of each genotype (Eq. P.16). The genetic constants of the called genotype (root angle, lateral density, stay-green, stomatal threshold, osmotic adjustment, carbon to roots) and the roots predicted below ground follow. When measurements are loaded (section *Your measurements*), they replace the model plant as the thing that is called. The call is a ranking of the library, not a genome sequence: the layer predicts the **genotype of the library** (the set of trait constants) and its phenotype.
+The section has two parts. **1. Predicted phenotype**: every genotype of the library is run under the same weather, soil and drought; the table gives height, shoot area, grain, D95, root length, water use efficiency and the tolerance (grain under drought divided by grain of the left plant). **2. Genotype called from the plant above ground**: the genotype of the plant is hidden, five traits of the shoot (height, area, senescence, leaf water content and canopy temperature depression through the days) are compared with the same traits of each genotype, and the bars give the weight of each genotype (Eq. P.21). The genetic constants of the called genotype (root angle, lateral density, stay-green, stomatal threshold, osmotic adjustment, carbon to roots) and the roots predicted below ground follow. When measurements are loaded (section *Your measurements*), they replace the model plant as the thing that is called. The call is a ranking of the library, not a genome sequence: the layer predicts the **genotype of the library** (the set of trait constants) and its phenotype.
 
 ### SWAFL data: the Daisy runs of the project against this plant
 
 ![The plant against the Daisy runs of the soil and controls of the project, after the fit. Wheat, project climate.](images/pheno/p10_swafl.png){width=85%}
 
-The repository holds 10,190 Daisy simulations (*Data/Comprehensive_Summary*). The section compares the plant with the runs of the soil and the controls of the project, in terms that do not depend on the length of the season: the **relative yield** (share of the best yield of the soil, from the trigger experiment E2), the **transpiration share** of the evapotranspiration, and the **effect of the mulch on soil evaporation** (E7 and E14, 1000 runs of mulch, rain and capacity). The three charts are the nitrogen response (E13, which gives the nitrogen factor of the plant), the trigger response (E2, with the plant as green dots) and the mulch and rain runs (E14). **Fit the plant to the SWAFL data** searches the radiation use efficiency, the water use coefficient and the root conductance (a coordinate search of at most 45 runs, within 0.6 to 1.6, 0.5 to 2.2 and 0.25 to 4 times the species values) that minimise the squared difference to the three numbers and to the E2 curve (Eq. P.17). **Reset the fit** returns to the species constants. The fit is a calibration to the Daisy tables: the plant is a different model, and for a climate far from that of the Daisy runs (the warm season, for example) the agreement is weaker; the comparison is most meaningful in the project climate with the archetype nearest to the crop. When a limit of the search is reached the message says so.
+The repository holds 10,190 Daisy simulations (*Data/Comprehensive_Summary*). The section compares the plant with the runs of the soil and the controls of the project, in terms that do not depend on the length of the season: the **relative yield** (share of the best yield of the soil, from the trigger experiment E2), the **transpiration share** of the evapotranspiration, and the **effect of the mulch on soil evaporation** (E7 and E14, 1000 runs of mulch, rain and capacity). The three charts are the nitrogen response (E13, which gives the nitrogen factor of the plant), the trigger response (E2, with the plant as green dots) and the mulch and rain runs (E14). **Fit the plant to the SWAFL data** searches the radiation use efficiency, the water use coefficient and the root conductance (a coordinate search of at most 45 runs, within 0.6 to 1.6, 0.5 to 2.2 and 0.25 to 4 times the species values) that minimise the squared difference to the three numbers and to the E2 curve (Eq. P.20). **Reset the fit** returns to the species constants. The fit is a calibration to the Daisy tables: the plant is a different model, and for a climate far from that of the Daisy runs (the warm season, for example) the agreement is weaker; the comparison is most meaningful in the project climate with the archetype nearest to the crop. When a limit of the search is reached the message says so.
 
 ### Quantified traits of the run
 
 ![The readouts of a phenotyping experiment for the two treatments, with the change under drought.](images/pheno/p9_traits.png){width=85%}
 
 The table lists 26 traits: the final height, the largest projected shoot area, the day the shoot area reaches half of its largest, the fastest relative growth of the shoot area, the fastest biomass gain, the largest green leaf area index, the stay-green day, the green leaf area over the season, the lowest leaf water content and potential and the highest crop water stress index in the stress period, the canopy temperature depression of the stress period, the water used (transpiration, soil evaporation, water in), dry mass, grain, harvest index, transpiration efficiency, water use efficiency, root depth and length, the depths of 50 % and 95 % of the root length, the share of roots below 60 cm and the root to shoot ratio. The column *change* is the relative change under drought, or the difference when the value of the well-watered plant is small.
+
+### Drought outlook from the date of the toolbar
+
+![The drought outlook on 15 June 2026, day 45 after emergence. Wheat, project climate, model weather (no weather file imported), after the fit to the SWAFL data.](images/pheno/p11_outlook.png){width=85%}
+
+This section is a second drought experiment, tied to the calendar. The first (*Traits through time*) holds the right plant at a set level of water for a set time. The outlook instead lets the plant take the rain that falls: it grows the plant from sowing to **the date in the toolbar** (the *Date* control, with *Today*), and then to maturity on three futures. Change the date and the section is computed again.
+
+**What the screen shows.**
+
+1. The header gives the date, the day after emergence, and the weather used: how many days of the season are recorded, how many are the days of the forecast, and how many are a future. For the future, it names the three years of the record that were used.
+2. Three charts run over the whole season, each with a dashed line on the date. The black line is the season up to the date; the red, blue and green lines are the dry, typical and wet futures. The light blue band marks the days of the forecast. The first chart is the **water of the root zone** (per cent of the plant-available water of the layers that the roots have reached) with the stress level $1-p$ of FAO-56; the second is the **plant response** $T_{act}/T_p$ averaged over seven days; the third is the **rain from the date**, added up.
+3. A table for the rainfed plant gives, for each future, the rain to maturity, the rain of the next 14 days, the days with the root zone below the stress level, the lowest root zone water, the grain, the share of the grain of the irrigated plant, and the **drought risk** (low, moderate, high or severe; Eq. P.26).
+4. A second table gives the plant irrigated by the rule of the project (method, trigger, sensor depth, dose and efficiency of the Properties panel) under the same weather: the date and depth of the next watering, the number of waterings and the water to maturity, the grain, and its share of the grain of a plant held well watered.
+5. A paragraph in words reads the result for the date, including the first day on which the root zone of the dry future falls below the stress level, and the next watering.
+
+**The two buttons.** *Show this date in the plant* moves the day of every other section (the plant and roots, the roots day by day, the traits) to the date of the toolbar. *Start the drought pulse on this date* makes the held-water drought of the first experiment begin on the date of the toolbar. Opening the layer also shows the day of the date when the date falls inside the season, so that the plant and its roots are those of the day.
+
+**Where the weather comes from.** With an imported weather (*Tools*, a file or the online weather of the farm) the days up to the date are the recorded rain, evapotranspiration and temperature; the days that follow are the forecast rows when they exist (the online weather brings 16 days), and then the future years (Eq. P.24 and P.25). Without an imported weather the layer uses the model weather of the project climate, with no record and no forecast, and the three futures differ by the rain only (0.4, 1 and 1.6 times). The text of the header says which case applies.
+
+**What it is and is not.** The three futures are real years of the weather record placed after the date, so each keeps the dry spells and the evaporative demand of that year. They show what a dry, an ordinary and a wet rest of the season would do to this plant; they are not a forecast of the weather. The risk class depends on the root conductance of the model: run **Fit the plant to the SWAFL data** first (section *SWAFL data*), because with the default constants the model plant is limited by the flow of water into the root more than by the water of the soil, and the grain of the rainfed plant then changes little with the rain. In the figure the fit was run before the capture.
 
 ### Your measurements: compare, calibrate and export
 
@@ -139,137 +159,277 @@ The last section brings experimental data to the model:
 
 ### Equations
 
-The equations are solved every day for each treatment, in this order. Symbols: $T$ temperature, $\mathrm{LAI}$ leaf area index, $\psi$ water potential, $T_p$ potential transpiration.
+![The section Equations of the layer on the screen: the 26 equations with their numbers.](images/pheno/p12_equations.png){width=85%}
 
-**Thermal time and weather.** The development stage is the sum of $d_g=\max(0,\min(T,T_{opt}+6)-T_{base})$ over the thermal time of flowering and of maturity. The reference evapotranspiration is FAO-56 Penman and Monteith (Allen et al., 1998) from the temperature, radiation, wind and vapour pressure of the climate in use.
+The section *Equations of the layer* of the screen (figure above) lists the same 26 equations, with the same numbers, in the order in which the model uses them on each day. This section explains each one: what it computes, the symbols and their units, where its result appears in the layer, and where it comes from. The model is deterministic: it contains no random numbers. A table at the end of the section gives the index. Symbols: $d$ day after emergence, $T$ air temperature (°C), $\mathrm{LAI}$ leaf area index (m² m⁻²), $\psi$ water potential (MPa or cm of suction as stated), $T_p$ potential transpiration (mm d⁻¹), $z$ depth (cm), $\Delta z=15$ cm the thickness of a soil layer, $N=140$ days.
 
-**Light and biomass.** Light interception follows Monsi and Saeki (1953), biomass Monteith (1977) with the beta temperature function of Yin, and the water limit Tanner and Sinclair (1983); growth is the smaller of the two:
+#### Development, weather and light (P.1 to P.5)
+
+**P.1 Thermal time.** The development of the plant is measured in degree days, not in calendar days:
 
 $$
-f_i = 1-e^{-k\,\mathrm{LAI}},\qquad dW_{rad}=\mathrm{RUE}\,f_T\,\mathrm{PAR}\,f_i,\qquad dW_{wat}=\frac{k_{te}}{\mathrm{VPD}}\,T .
+d_g=\max\bigl(0,\;\min(T,\;T_{opt}+6)-T_{base}\bigr),\qquad \mathrm{GDD}(d)=\sum_{i\le d}d_g(i).
 \tag{P.1}
 $$
 
-**Soil water.** The retention curve and the conductivity of the soil are the van Genuchten (1980) and Mualem functions of the soil of the project, in layers of 15 cm to 120 cm; soil evaporation follows the two stages of Ritchie.
+$T_{base}$ and $T_{opt}$ are the base and optimum temperatures of the species (maize 8 and 30, wheat 0 and 20, bean 10 and 25 °C). The stage is $\mathrm{GDD}/\mathrm{GDD}_{flowering}$ before flowering and $\mathrm{GDD}/\mathrm{GDD}_{maturity}$ after it. It sets the leaf number, the start of grain filling and the end of the season. *Appears in:* the stage and the leaf count of every chart. *Source:* the degree-day method in common use in crop models (Ritchie and NeSmith, 1991).
 
-**Root water uptake.** Each layer gives (Gardner, 1960; Feddes et al., 1978)
+**P.2 Weather of the day.** The reference evapotranspiration of the day is that of FAO-56 (Allen et al., 1998):
 
 $$
-S(z)=G(z)\,\bigl(\psi_{soil}(z)-\psi_{root}\bigr),\qquad G(z)=L_{root}(z)\,f_{fine}\,K\!\left(h\right),\qquad \textstyle\sum S = T_p\,g_s ,
+\mathrm{ET}_0=\frac{0.408\,\Delta\,(R_n-G)+\gamma\,\dfrac{900}{T+273}\,u_2\,(e_s-e_a)}{\Delta+\gamma\,(1+0.34\,u_2)} .
 \tag{P.2}
 $$
 
-and $\psi_{root}$ is solved every day by bisection so that the sum of the uptake equals the demand.
+$\Delta$ is the slope of the saturation vapour pressure curve (kPa °C⁻¹), $R_n$ the net radiation (MJ m⁻² d⁻¹), $G$ the soil heat flux (taken as zero on a daily step), $\gamma$ the psychrometric constant (kPa °C⁻¹), $u_2$ the wind at 2 m (m s⁻¹), and $e_s-e_a$ the vapour pressure deficit (kPa). The temperature, radiation and rain of the day come from the climate chosen in the layer (a sum of sines on the climate of the project) or from the imported weather (days of a file or of the online weather). With imported days, $\mathrm{ET}_0$ and the mean temperature are those of the file, plus the extra warming set in the layer. *Appears in:* every water chart, the demand curve, the canopy temperature and the outlook.
 
-**Leaf water and stomata.** The leaf potential follows van den Honert (1948), the leaf water content the pressure and volume curve, and the stomata the logistic of Jarvis (1976):
+**P.3 Light interception.** The share of the light that the canopy catches follows Monsi and Saeki (1953):
 
 $$
-\psi_{leaf}=\psi_{root}-r\,\frac{T}{\mathrm{LAI}},\qquad \psi=\frac{\pi_0}{\mathrm{RWC}}+P(\mathrm{RWC}),\qquad g_s=\frac{1}{1+e^{-b(\psi_{leaf}-\psi_{50})}} .
+f_i=1-e^{-k\,\mathrm{LAI}}.
 \tag{P.3}
 $$
 
-**Expansion.** The growth of the leaf area and of the height is proportional to the turgor above the yield threshold (Lockhart, 1965), so that the area and the height slow before photosynthesis does:
+$k$ is the light extinction coefficient of the species (0.5 to 0.65). *Appears in:* the carbon section and the leaf area charts.
+
+**P.4 Biomass from light.** The dry matter made on a day is limited by the light caught (Monteith, 1977):
 
 $$
-\frac{1}{V}\frac{dV}{dt}=\phi\,\max(0,P-Y).
+dW_{rad}=\mathrm{RUE}\;f_T\;f_N\;f_{sal}\;\mathrm{PAR}\;f_i .
 \tag{P.4}
 $$
 
-**Canopy temperature.** From the energy balance of the leaf (Jackson et al., 1981):
+$\mathrm{RUE}$ is the radiation use efficiency (g MJ⁻¹ of PAR), $f_T$ the beta temperature function of Yin et al. (1995) of the species, $f_N$ the nitrogen factor (P.18), $f_{sal}$ the salt factor (P.19), and $\mathrm{PAR}$ the photosynthetically active radiation of the day (MJ m⁻²). The fit to the SWAFL data (P.20) multiplies $\mathrm{RUE}$ by a factor between 0.6 and 1.6.
+
+**P.5 Biomass from water.** The dry matter is also limited by the water that the plant transpires (Tanner and Sinclair, 1983):
 
 $$
-T_c-T_a=\frac{r_a R_n}{\rho c_p}\frac{\gamma^*}{\Delta+\gamma^*}-\frac{\mathrm{VPD}}{\Delta+\gamma^*},\quad \gamma^*=\gamma\left(1+\frac{r_c}{r_a}\right),\quad \mathrm{CWSI}=\frac{dT-dT_{low}}{dT_{up}-dT_{low}} .
+dW_{wat}=\frac{k_{te}}{\mathrm{VPD}}\,T_{act},\qquad dW=\min\bigl(dW_{rad},\,dW_{wat}\bigr).
 \tag{P.5}
 $$
 
-**Allocation.** The share of the carbon that goes to the roots rises when the water is short and falls with the stage (functional equilibrium: Brouwer, 1963; Davidson, 1969); the shoot takes the rest, and the grain is filled after flowering.
+$k_{te}$ is the transpiration efficiency coefficient of the species (Pa, 5.5 to 10), $\mathrm{VPD}$ the mean vapour pressure deficit of the day and $T_{act}$ the transpiration of the day (mm). Growth is the smaller of the two. *Appears in:* the carbon section and the traits (dry mass, transpiration efficiency).
 
-**Root architecture.** The root system is built with the rules of ArchiSimple (Pagès et al., 2014): axes at the set angle with gravitropism, laterals of the first and second order at a density per cm, growth set by temperature, soil strength, soil water and the carbon received.
+#### Soil, water and the root (P.6 to P.10)
 
-**Soil strength.** The resistance and the relative elongation of a root tip are
+**P.6 Soil water.** The soil of the project is divided into eight layers of 15 cm (120 cm in all). The retention curve and the conductivity are the van Genuchten (1980) and Mualem functions:
 
 $$
-Q=0.5\,e^{4.5\,(\rho_b-1.3)}\,\bigl(1+(1-S)\bigr),\qquad \frac{e}{e_0}=\frac{1}{1+(Q/2.5)^3},
+\theta(h)=\theta_r+\frac{\theta_s-\theta_r}{\bigl[1+(\alpha h)^n\bigr]^{m}},\qquad K(\theta)=K_s\,S_e^{\,l}\Bigl[1-\bigl(1-S_e^{1/m}\bigr)^m\Bigr]^2,\qquad m=1-\frac1n .
 \tag{P.6}
 $$
 
-with $\rho_b$ the bulk density in g cm$^{-3}$, $S$ the relative water content of the layer and $Q$ in MPa.
+$\theta_r,\theta_s$ are the residual and saturated water contents, $\alpha$ and $n$ the shape parameters of the soil of the project, $K_s$ the saturated conductivity, $S_e$ the relative saturation and $l=0.5$. Soil evaporation has two stages after Ritchie (1972): at the potential rate while the surface is wet, then in proportion to the square root of time. Water that infiltrates fills a layer to field capacity and passes the excess to the next one; the excess of the last layer is the drainage. *Appears in:* the water heat maps and the water balance.
 
-**Traits read out.** The projected shoot area is the area of the leaves seen from the side, the convex hull is the smallest convex polygon around them, and the solidity is their ratio (as defined by Lorence and Medina-Jimenez, 2022). The senescence index is the senescent share of the leaf area, the canopy temperature depression is $T_a-T_c$ (a negative value means a canopy warmer than the air), and the drought susceptibility and tolerance indices are those of Fischer and Maurer (1978) and Fernandez (1992).
-
-
-**Project irrigation (Eq. P.7).** Every day the suction $h_s$ of the sensor layer is read; if $h_s\ge h_{trig}$ and the days since the last event are at least the minimum interval of the method (2, 3 and 1 days for sprinkler, surface and drip), the root zone is refilled to field capacity, at most the dose $D_{max}$ (35, 60 and 10 mm), and the water applied is the gross depth:
+**P.7 Root water uptake.** Each layer gives water in proportion to the root length it holds and to the difference between its water potential and that of the root (Gardner, 1960; Feddes et al., 1978):
 
 $$
-d_{net}=\min\Bigl(\sum_z(\theta_{fc}-\theta_z)\Delta z,\;D_{max}\Bigr),\qquad I=\frac{d_{net}}{E_a},\quad E_a=0.75,\;0.60,\;0.90 .
+S(z)=G(z)\,\bigl(\psi_{soil}(z)-\psi_{root}\bigr),\qquad G(z)=L_{root}(z)\,f_{fine}\,K(h)\,q_G,\qquad \sum_z S(z)=T_p\,g_s .
 \tag{P.7}
 $$
 
-A drip line waters only when the layer at the drip depth is at least 12 % depleted.
+$L_{root}$ is the root length of the layer (cm), $f_{fine}$ the share of fine roots, $K(h)$ the conductivity of the soil at its suction, and $q_G$ the conductance of the root surface (default 0.1; the fit to the SWAFL data may change it by 0.25 to 4 times). The root potential $\psi_{root}$ is found every day by bisection so that the uptake equals the demand $T_p\,g_s$. The reduction of uptake by wet and dry soil follows the stress function of Feddes. *Appears in:* the bars at the right of the water section and the root water of the layers.
 
-**Mulch (Eq. P.8).** The potential soil evaporation is multiplied by the vapour-flux factor $f_m$ of the mulch, and the first $C_m$ mm of each rain (the interception capacity) do not reach the soil:
+**P.8 Leaf water.** The leaf potential follows from the flow through the plant (van den Honert, 1948), and the leaf water content from the pressure and volume curve:
 
 $$
-E_p'=f_m E_p,\qquad P'=\max(0,P-C_m).
+\psi_{leaf}=\psi_{root}-r\,\frac{T_{act}}{\mathrm{LAI}},\qquad \psi=\frac{\pi_0}{\mathrm{RWC}}+P(\mathrm{RWC}),\qquad P(\mathrm{RWC})=-\pi_0\,\frac{\mathrm{RWC}-\mathrm{RWC}_{tlp}}{1-\mathrm{RWC}_{tlp}} .
 \tag{P.8}
 $$
 
-**Nitrogen (Eq. P.9).** The radiation use is multiplied by the nitrogen factor taken from the Daisy runs E13 of the soil of the project:
+$r$ is the hydraulic resistance of the plant (set by the genotype), $\pi_0$ the osmotic potential at full turgor (lowered by the osmotic adjustment), $\mathrm{RWC}$ the relative water content and $\mathrm{RWC}_{tlp}$ the content at which turgor is lost. The second equation is solved for $\mathrm{RWC}$ from $\psi_{leaf}$. *Appears in:* the water status traits (leaf potential, water content, turgor).
+
+**P.9 Stomata.** The stomatal opening is a logistic function of the leaf potential (Jarvis, 1976):
 
 $$
-f_N=\frac{Y(N)}{Y(100\ \mathrm{kg\ N\ ha^{-1}})} .
+g_s=\frac{1}{1+e^{-b\,(\psi_{leaf}-\psi_{50})}} .
 \tag{P.9}
 $$
 
-**Salt (Eq. P.10).** The solution of the root zone, of volume $V$ (twice the plant-available water of the column), takes the salt of the irrigation and of the rain and loses it in the drainage $D$:
+$\psi_{50}$ is the leaf potential at which half of the opening is lost (the control *Stomata close at*) and $b$ the steepness. The transpiration demand is multiplied by $g_s$. A genotype that closes its stomata early (the *water saver*) has a $\psi_{50}$ closer to zero.
+
+**P.10 Expansion.** The growth of the leaf area and of the height is proportional to the turgor above a yield threshold (Lockhart, 1965):
 
 $$
-V\,\frac{dC}{dt}=I\,EC_w+0.05\,P-D\,C,\qquad EC_e=\frac{C}{2} .
+\frac{1}{V}\frac{dV}{dt}=\phi\,\max(0,\,P-Y).
 \tag{P.10}
 $$
 
-**Salt on growth and on water (Eq. P.11).** Growth is reduced by the threshold and slope of Maas and Hoffman (1977), and the soil potential gets an osmotic term:
+$V$ is the area (or the height), $P$ the turgor pressure (MPa), $Y$ the yield threshold and $\phi$ the extensibility. Because $P$ falls before photosynthesis does, expansion slows first, which is why the shoot area and the height slow before the carbon gain does.
+
+#### Temperature, carbon and the root system (P.11 to P.14)
+
+**P.11 Canopy temperature.** From the energy balance of the leaf (Jackson et al., 1981):
 
 $$
-f_{sal}=1-\frac{s}{100}\max\bigl(0,EC_e-EC_{th}\bigr),\qquad \psi_{soil}'=\psi_{soil}-0.036\,EC_e\ \ (\mathrm{MPa}).
+T_c-T_a=\frac{r_a R_n}{\rho c_p}\,\frac{\gamma^*}{\Delta+\gamma^*}-\frac{\mathrm{VPD}}{\Delta+\gamma^*},\qquad \gamma^*=\gamma\Bigl(1+\frac{r_c}{r_a}\Bigr),\qquad \mathrm{CWSI}=\frac{dT-dT_{low}}{dT_{up}-dT_{low}} .
 \tag{P.11}
 $$
 
-**Project crop (Eq. P.12).** The height, the basal coefficient $K_{cb}=K_{c,mid}-0.05$ and the rooting depth are those of the crop library of the Properties panel (FAO-56); the species of the model (maize, sorghum, wheat or common bean) is the archetype nearest in kind, and the day of sowing is the planting day of the project. The date of the Properties panel sets the day of the chart that is shown.
+$T_c$ is the canopy and $T_a$ the air temperature, $r_a$ and $r_c$ the aerodynamic and canopy resistances (s m⁻¹; $r_c$ rises when the stomata close), $\rho c_p$ the volumetric heat capacity of air, and $dT=T_c-T_a$. The lower limit $dT_{low}$ is that of a fully transpiring canopy and the upper limit $dT_{up}$ that of a non-transpiring one. The canopy temperature depression is $T_a-T_c$. *Appears in:* the thermal view, the canopy temperature depression and the crop water stress index.
 
-**Water deficit and relative yield (Eq. P.13).** The comparison with the Daisy runs uses the relative yield and the transpiration share:
+**P.12 Carbon allocation.** The carbon made is shared between leaf, stem, root and grain. The share to the roots rises when water is short and falls with the stage (functional equilibrium: Brouwer, 1963; Davidson, 1969):
 
 $$
-Y_{rel}=\frac{Y_{plant}}{Y_{well\text{-}watered}},\qquad \tau=\frac{T}{T+E_s} .
+f_r=\mathrm{clip}\Bigl[\bigl(f_{r0}+(f_{rA}-f_{r0})\,\mathrm{stage}\bigr)\,c_{root}\,\bigl(1+0.9\,w_s\bigr),\;0.03,\;0.7\Bigr],\qquad w_s=1-\frac{T_{act}}{T_p}.
+\tag{P.12}
+$$
+
+$f_{r0}$ and $f_{rA}$ are the share of the species at emergence and at flowering (wheat 0.42 and 0.07), $w_s$ the water stress of the day (0 when the plant transpires what it demands), and $c_{root}$ the control *Carbon share to roots* times the genotype. The shoot takes the rest; after flowering the grain is filled from the new carbon and from the reserves of the stem. *Appears in:* the carbon section and the root to shoot ratio.
+
+**P.13 Root architecture.** The roots are built with the rules of ArchiSimple (Pagès et al., 2014): axes leave at the set angle with gravitropism; laterals of the first and of the second order leave at a density per cm; each tip grows at a rate set by soil temperature, soil strength (P.14) and soil water, and the carbon share (P.12) sets how much root there is to build:
+
+$$
+\frac{dl}{dt}=e_0\;2^{(T_s-20)/10}\;\frac{e}{e_0}(Q)\;f_w\;f_{age},\qquad f_w=\mathrm{clip}\Bigl(\frac{\theta_{rel}-0.06}{0.5},\,0.05,\,1\Bigr).
 \tag{P.13}
 $$
 
-**Root day (Eq. P.14).** The depth of 95 % of the root length $D_{95}$ is the depth $z$ at which $\int_0^{z}L(z')dz'=0.95\int_0^{\infty}L(z')dz'$; the root growth of the day is $dL_{root}/dt$ and the root to shoot ratio is $W_{root}/W_{shoot}$.
+where $e_0$ is the elongation rate of the axis or lateral (cm d⁻¹, from the species and the genotype), $T_s$ the soil temperature (°C, factor limited to 0.05 to 1.8), $e/e_0$ the relative elongation of P.14 at the layer of the tip, $\theta_{rel}$ the relative plant-available water of the layer, and $f_{age}$ a slowing with the age of the tip. The result is the root length, the depth, the depths of 50 % and 95 % of the length, and the three-dimensional picture of the scan. *Appears in:* the root scans and the roots day by day.
 
-**Tolerance indices (Eq. P.15).** For a genotype with grain $Y_s$ under stress and $Y_p$ without:
+**P.14 Soil strength.** The resistance that a root tip meets, and the relative elongation that remains, are
 
 $$
-\mathrm{DSI}=\frac{1-Y_s/Y_p}{1-\bar Y_s/\bar Y_p},\qquad \mathrm{STI}=\frac{Y_s\,Y_p}{\bar Y_p^{\,2}} .
+Q=0.5\,e^{4.5\,(\rho_b-1.3)}\,\bigl(1+(1-S)\bigr),\qquad \frac{e}{e_0}=\frac{1}{1+(Q/2.5)^3} .
+\tag{P.14}
+$$
+
+$\rho_b$ is the bulk density (g cm⁻³) of the layer, set by the texture, the tillage and the consolidation rate of the V3 layer; $S$ is the relative water content of the layer and $Q$ the resistance in MPa. At $Q=2.5$ MPa the elongation is halved. *Appears in:* the section on soil structure and tillage.
+
+#### The Properties panel reaches the plant (P.15 to P.19)
+
+**P.15 Project crop.** The height, the basal crop coefficient and the rooting depth of the plant are those of the crop library of the Properties panel:
+
+$$
+K_{cb}=K_{c,mid}-0.05,\qquad z_{root}=z_{root}^{library},\qquad d_{sow}=d_{plant}.
 \tag{P.15}
 $$
 
-**Genotype call (Eq. P.16).** For each genotype $g$ of the library, the distance to the observed traits $o$ is the mean squared difference in units of the spread $\sigma$ of each trait over the days $t$, and the weight is a softmax with a temperature that grows with the best distance:
+The species of the model (maize, sorghum, wheat or common bean) is the one nearest in kind to the crop of the project, and the day of sowing is the planting day of the project, so that the date on the screen is the calendar date of the season. *Appears in:* the note under the controls and all dates.
+
+**P.16 Project irrigation.** Every day the suction $h_s$ of the layer at the sensor depth is read. If $h_s\ge h_{trig}$ and the days since the last event are at least the minimum interval of the method, the root zone is refilled to field capacity, at most the dose of the method, and the water applied is the gross depth:
 
 $$
-d_g=\frac{1}{nT}\sum_{i,t}\Bigl(\frac{x_{g,i,t}-o_{i,t}}{\sigma_i}\Bigr)^2,\qquad p_g\propto\exp\Bigl(-\frac{d_g-d_{min}}{0.03+0.25\,d_{min}}\Bigr).
+d_{net}=\min\Bigl(\sum_z(\theta_{fc}-\theta_z)\,\Delta z,\;D_{max}\Bigr),\qquad I=\frac{d_{net}}{E_a} .
 \tag{P.16}
 $$
 
-**Fit to the SWAFL data (Eq. P.17).** The multipliers $\theta=(f_{RUE},f_{kte},f_{qG})$ of the radiation use, the water use coefficient and the root conductance minimise
+The minimum intervals are 2, 3 and 1 days, the largest doses $D_{max}$ 35, 60 and 10 mm, and the efficiencies $E_a$ 0.75, 0.60 and 0.90 for the sprinkler, the surface and the drip methods. A drip line waters only when the layer at the drip depth is at least 12 % depleted. The trigger and the sensor depth are those of the Properties panel. *Appears in:* the left plant (*Project irrigation*) and every irrigation event of the outlook.
+
+**P.17 Mulch.** The mulch lowers soil evaporation and keeps the first millimetres of a rain from the soil:
 
 $$
-J(\theta)=\sum_k\Bigl(\frac{m_k(\theta)-r_k}{\tau_k}\Bigr)^2,
+E_p'=f_m\,E_p,\qquad P'=\max(0,\,P-C_m).
 \tag{P.17}
 $$
 
-with $m_k$ the model and $r_k$ the Daisy value of the relative yield, the transpiration share, the mulch effect and the five points of the E2 curve, and $\tau_k$ the tolerance of each; the search moves one multiplier at a time and halves the step when no move helps.
+$f_m$ is the vapour-flux factor of the mulch of the Properties panel and $C_m$ its interception capacity (mm per event). The effect on soil evaporation is compared with the Daisy runs in the SWAFL data section.
 
-*Provenance (Eq. P.1 to P.17):* **[Literature]**: the forms are from the works cited; **[Engineered]**: the constants of the species and genotypes, the efficiencies, dose limits and minimum intervals of the irrigation methods, the salt volume and the tolerances of the fit are typical defaults of this layer; **[Data]**: the nitrogen factor, the trigger curve and the mulch effect are read from the SWAFL Daisy runs.
+**P.18 Nitrogen.** The radiation use is multiplied by the nitrogen factor taken from the Daisy runs E13 of the soil of the project:
+
+$$
+f_N=\frac{Y(N)}{Y(100\ \mathrm{kg\ N\ ha^{-1}})} .
+\tag{P.18}
+$$
+
+$Y(N)$ is the mean yield of the Daisy runs at the nitrogen rate $N$ of the Properties panel (interpolated between the rates simulated).
+
+**P.19 Salt.** The solution of the root zone, of volume $V$ (twice the plant-available water of the column), takes the salt of the irrigation water $EC_w$ and of the rain, and loses it in the drainage $D$; growth is reduced above the threshold of Maas and Hoffman (1977), and the soil potential gets an osmotic term:
+
+$$
+V\frac{dC}{dt}=I\,EC_w+0.05\,P-D\,C,\quad EC_e=\frac C2,\quad f_{sal}=1-\frac{s}{100}\max\bigl(0,EC_e-EC_{th}\bigr),\quad \psi_{soil}'=\psi_{soil}-0.036\,EC_e .
+\tag{P.19}
+$$
+
+$C$ is the salt concentration (dS m⁻¹), $EC_e$ the electrical conductivity of the saturation extract, $EC_{th}$ and $s$ the threshold (dS m⁻¹) and the slope (% per dS m⁻¹) of the crop (from the salt tolerance table of the project), and $\psi$ in MPa.
+
+#### The SWAFL data (P.20 and P.21)
+
+**P.20 Against the SWAFL data.** The plant is compared with the Daisy runs of the soil and the controls (E2, E7, E13 and E14, Chapter 27) in numbers that do not depend on the length of the season:
+
+$$
+Y_{rel}=\frac{Y_{plant}}{Y_{well\text{-}watered}},\qquad \tau=\frac{T}{T+E_s},\qquad J(\theta)=\sum_k\Bigl(\frac{m_k(\theta)-r_k}{\tau_k}\Bigr)^2 .
+\tag{P.20}
+$$
+
+$Y_{rel}$ is the relative yield, $\tau$ the share of the evapotranspiration that is transpiration, $m_k$ the model and $r_k$ the Daisy value of the relative yield, the transpiration share, the mulch effect and the five points of the E2 curve, and $\tau_k$ their tolerances. The multipliers $\theta=(f_{RUE},f_{kte},f_{qG})$ of the radiation use, the water use coefficient and the root conductance are searched one at a time, with a step that is halved when no move helps, within 0.6 to 1.6, 0.5 to 2.2 and 0.25 to 4 times the species values, in at most 45 runs.
+
+**P.21 Genotype call.** For each genotype $g$ of the library, the distance to the observed traits $o$ is the mean squared difference in units of the spread $\sigma_i$ of each trait over the days $t$, and the weight is a softmax whose temperature grows with the best distance:
+
+$$
+d_g=\frac{1}{nT}\sum_{i,t}\Bigl(\frac{x_{g,i,t}-o_{i,t}}{\sigma_i}\Bigr)^2,\qquad p_g\propto\exp\Bigl(-\frac{d_g-d_{min}}{0.03+0.25\,d_{min}}\Bigr).
+\tag{P.21}
+$$
+
+Five traits (shoot area, senescence, leaf water content, canopy temperature depression, height) are used. The observed traits are those of your measurements when they are loaded, else those of the drought plant of the layer with its genotype hidden. The weights add to 1.
+
+#### Traits and roots read out (P.22 and P.23)
+
+**P.22 Traits read out.** The projected shoot area is the area of the leaves seen from the side, the convex hull is the smallest convex polygon around them, and the solidity is their ratio (Lorence and Medina-Jimenez, 2022). The senescence index is the senescent share of the leaf area, and the canopy temperature depression is $T_a-T_c$. The drought susceptibility index of Fischer and Maurer (1978) and the stress tolerance index of Fernandez (1992) compare the grain with stress $Y_s$ and without $Y_p$ of each genotype with the means of the set:
+
+$$
+\mathrm{solidity}=\frac{A_{proj}}{A_{hull}},\qquad \mathrm{DSI}=\frac{1-Y_s/Y_p}{1-\bar Y_s/\bar Y_p},\qquad \mathrm{STI}=\frac{Y_s\,Y_p}{\bar Y_p^{\,2}} .
+\tag{P.22}
+$$
+
+**P.23 Root day.** The depth of 95 % of the root length is the depth where the cumulative length reaches 95 % of the total, the root growth of the day is the new root length, and the root to shoot ratio uses the dry mass of the day:
+
+$$
+\int_0^{D_{95}}L(z)\,dz=0.95\int_0^{\infty}L(z)\,dz,\qquad \frac{dL_{root}}{dt},\qquad \frac{W_{root}}{W_{shoot}},\qquad \mathrm{RLD}(z)=\frac{L(z)}{A\,\Delta z} .
+\tag{P.23}
+$$
+
+$\mathrm{RLD}$ is the root length density (cm cm⁻³) of the bars of the section *Roots day by day*; $A$ is the ground area of one plant.
+
+#### The drought outlook from the date (P.24 to P.26)
+
+**P.24 Weather of the outlook.** Day $k$ of the season has the date $t_k=t_{start}+k$ days, where $t_{start}$ is the date of sowing in the year in which the date of the toolbar $t_0$ falls in the season. Each day takes its rain $P$, reference evapotranspiration $\mathrm{ET}_0$ and temperature $T$ from the first of these that exists:
+
+$$
+(P,\mathrm{ET}_0,T)_k=\begin{cases}\text{record of the day} & t_k\le t_0\ \text{(recorded)}\\ \text{row of the forecast} & t_k>t_0\ \text{and a row exists}\\ \text{analogue year } i_s,\ \text{same day of the year} & \text{otherwise (future } s)\end{cases}
+\tag{P.24}
+$$
+
+The analogue year gives $P$ and $\mathrm{ET}_0$; the temperature is the mean of the record for that day of the year. Days up to $t_0$ with no record are filled from the typical year. Without an imported weather the model weather is used, and the rain of the days after $t_0$ is multiplied by 0.4, 1 and 1.6 (and $\mathrm{ET}_0$ by 1.08, 1 and 0.95) for the dry, typical and wet future.
+
+**P.25 Analogue years.** For each year $i$ of the 20 years of the weather in use, the rain of the days that have no forecast is added:
+
+$$
+S_i=\sum_{k\in\text{future}}P_{i}(k),\qquad i_{dry}=\arg\min_i S_i,\quad i_{wet}=\arg\max_i S_i,\quad i_{typ}=\mathrm{median}.
+\tag{P.25}
+$$
+
+The three futures are real years of the record, so each has the rain and the evaporative demand of one year, with their dry spells in the order in which they happened. They are not a forecast of the weather beyond the days of the forecast.
+
+**P.26 Root zone water and drought risk.** The water of the root zone is the mean of the relative plant-available water $\theta_i$ of the layers that the roots have reached, each weighted by the part $f_i$ of the layer above the deepest root. A day is a day of stress when it falls below the readily available water of FAO-56 (Allen et al., 1998):
+
+$$
+a=\frac{\sum_i f_i\,\theta_i}{\sum_i f_i},\qquad K_s^{FAO}=\min\Bigl(1,\frac{a}{1-p}\Bigr),\qquad \text{stress day if } a<1-p,\qquad R=\frac{Y_{rainfed}}{Y_{irrigated}} .
+\tag{P.26}
+$$
+
+$p$ is the depletion fraction below which transpiration is reduced (0.55 for maize, sorghum and wheat, 0.45 for common bean). The risk of drought is classed by $R$, the grain of the rainfed plant divided by the grain of the plant irrigated by the rule of the project, under the same future: low when $R\ge0.90$, moderate when $0.75\le R<0.90$, high when $0.50\le R<0.75$, severe below 0.50. The plant response of the outlook (the ratio $T_{act}/T_p$ averaged over seven days) is the second chart and shows what the model plant does with the water that the soil holds.
+
+#### Index of the equations
+
+| No. | Computes | In the layer | Source |
+|---|---|---|---|
+| P.1 | thermal time, stage | all charts | degree days (Ritchie and NeSmith, 1991) |
+| P.2 | reference evapotranspiration | water, outlook | Allen et al. (1998) |
+| P.3 | light interception | carbon | Monsi and Saeki (1953) |
+| P.4, P.5 | biomass from light, from water | carbon, traits | Monteith (1977); Tanner and Sinclair (1983) |
+| P.6 | soil water, evaporation | water | van Genuchten (1980); Mualem (1976); Ritchie (1972) |
+| P.7 | root water uptake | water, roots | Gardner (1960); Feddes et al. (1978) |
+| P.8 to P.10 | leaf water, stomata, expansion | water status | van den Honert (1948); Jarvis (1976); Lockhart (1965) |
+| P.11 | canopy temperature, CWSI | thermal view | Jackson et al. (1981) |
+| P.12 | carbon allocation | carbon, roots | Brouwer (1963); Davidson (1969) |
+| P.13, P.14 | root architecture, soil strength | root scans, soil | Pagès et al. (2014); Eq. 8.1 |
+| P.15 to P.19 | crop, irrigation, mulch, nitrogen, salt | set up, traits | FAO-56; SWAFL E13; Maas and Hoffman (1977) |
+| P.20 | comparison and fit to SWAFL data | SWAFL data | Daisy runs of the repository |
+| P.21 | genotype call | genotype prediction | this layer |
+| P.22, P.23 | traits, tolerance indices, root day | traits, roots day by day | Lorence and Medina-Jimenez (2022); Fischer and Maurer (1978); Fernandez (1992) |
+| P.24 to P.26 | weather of the outlook, analogue years, root zone water and risk | drought outlook | Allen et al. (1998); this layer |
+
+*Provenance (Eq. P.1 to P.26):* **[Literature]**: the forms are from the works cited; **[Engineered]**: the constants of the species and genotypes, the efficiencies, dose limits and minimum intervals of the irrigation methods, the salt volume, the tolerances of the fit, the 12 % depletion of the drip layer, the 0.4, 1 and 1.6 rain factors and the risk classes are typical defaults of this layer; **[Data]**: the nitrogen factor, the trigger curve and the mulch effect are read from the SWAFL Daisy runs.
 
 ### Limits
 
@@ -279,4 +439,4 @@ with $m_k$ the model and $r_k$ the Daisy value of the relative yield, the transp
 * The weather is deterministic (a sum of sines on the climate of the project), so a run is a typical season, not a year of records, except that the project rain can be used.
 * The roots are drawn as the projection of the three dimensional system on the plane of the view; the root length, depth and density are those of the three dimensional system.
 
-*References of the layer:* Allen et al. (1998), FAO Irrigation and Drainage Paper 56; Brouwer (1963); Davidson (1969); Feddes et al. (1978); Fernandez (1992); Fischer and Maurer (1978); Gardner (1960); Jackson et al. (1981); Jarvis (1976); Lockhart (1965); Lorence and Medina-Jimenez (eds, 2022), *High-Throughput Plant Phenotyping*, Methods in Molecular Biology 2539, Springer; Monsi and Saeki (1953); Monteith (1977); Pagès et al. (2014); Panguluri and Kumar (eds, 2013), *Phenotyping for Plant Breeding*, Springer; Tanner and Sinclair (1983); van den Honert (1948); van Genuchten (1980); Yin et al. (1995).
+*References of the layer:* Allen et al. (1998), FAO Irrigation and Drainage Paper 56; Maas and Hoffman (1977); Mualem (1976); Ritchie (1972); Ritchie and NeSmith (1991); Brouwer (1963); Davidson (1969); Feddes et al. (1978); Fernandez (1992); Fischer and Maurer (1978); Gardner (1960); Jackson et al. (1981); Jarvis (1976); Lockhart (1965); Lorence and Medina-Jimenez (eds, 2022), *High-Throughput Plant Phenotyping*, Methods in Molecular Biology 2539, Springer; Monsi and Saeki (1953); Monteith (1977); Pagès et al. (2014); Panguluri and Kumar (eds, 2013), *Phenotyping for Plant Breeding*, Springer; Tanner and Sinclair (1983); van den Honert (1948); van Genuchten (1980); Yin et al. (1995).

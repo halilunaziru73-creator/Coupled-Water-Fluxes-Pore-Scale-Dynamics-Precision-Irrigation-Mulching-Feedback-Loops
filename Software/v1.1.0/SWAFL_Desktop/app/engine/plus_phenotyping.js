@@ -257,11 +257,13 @@
     if (ranNow) { xx += chip(xx, y + 2, 'Collapse all', false, () => { SECTIONS_ALL().forEach(q => { PH.open[q.id] = false; }); }, 'close every section to its title'); xx += chip(xx, y + 2, 'Expand all', false, () => { PH.open = {}; }, 'open every section'); }
     return y + 34;
   }
-  function runNow() { PH.ran = true; PH.why = ''; PH.key = ''; PH.ranKey = ''; ensureRun(); PH.ranKey = keyOf(); play.t = 0.5; play.on = false; }
+  // the day shown when the layer opens: the date of the toolbar when it falls in the season, else the middle of the season
+  function startT() { try { const q = window.PHUI.outlook.season(window.PHUI.outlook.toolbarDate()); if (q.idx >= 0 && q.idx < N) return q.idx / (N - 1); } catch (e) { } return 0.5; }
+  function runNow() { PH.ran = true; PH.why = ''; PH.key = ''; PH.ranKey = ''; ensureRun(); PH.ranKey = keyOf(); play.t = startT(); play.on = false; }
   const SECTIONS_ALL = () => BASE.concat(SECTIONS);
   const BASE = [{ id: 'ctl', t: 'Set up the experiment', s: 'every control re-runs the model; the project supplies soil, tillage, weather and the crop', fn: drawControls }, { id: 'twin', t: 'Plant and roots, side by side', s: 'drag to turn', fn: drawTwin }, { id: 'scans', t: 'Root scans through the season', s: 'scanner image and reconstruction', fn: drawStrip }, { id: 'series', t: 'Traits through time', s: 'click or drag on a chart to move the day', fn: drawSeries }];
   function drawPh() {
-    paper(); const now = performance.now(); if (now - PH.last > 700) { play.t = 0.5; play.on = false; PH.firstTouch = now; } PH.last = now; SL.length = 0; SCR.length = 0;
+    paper(); const now = performance.now(); if (now - PH.last > 700) { play.t = startT(); play.on = false; PH.firstTouch = now; } PH.last = now; SL.length = 0; SCR.length = 0;
     if (PH.follow && PH.sp !== projSpecies()) { PH.sp = projSpecies(); applyPreset(PH.gid === 'custom' ? 'ref' : PH.gid); PH.area = null; }
     const gate = !window.__REPORTING && !window.__NORUNGATE; if (!gate && !PH.ran) { PH.ran = true; PH.ranKey = ''; }
     if (PH.keepRan) { PH.keepRan = false; if (PH.ran) PH.ranKey = keyOf(); }
