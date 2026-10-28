@@ -305,16 +305,16 @@
   }
   // the day shown when the layer opens: the date of the toolbar when it falls in the season, else the middle of the season
   function startT() { try { const q = window.PHUI.outlook.season(window.PHUI.outlook.toolbarDate()); if (q.idx >= 0 && q.idx < N) return q.idx / (N - 1); } catch (e) { } return 0.5; }
-  function runNow() { PH.ran = true; PH.why = ''; PH.key = ''; PH.ranKey = ''; PH.lastDate = dKey(); ensureRun(); PH.ranKey = keyOf(false); play.t = startT(); play.on = false; }
+  function runNow() { PH.ran = true; PH.why = ''; PH.key = ''; PH.ranKey = ''; PH.lastDate = dKey(); ensureRun(); PH.ranKey = keyOf(false); play.t = startT(); PH.anim.on = true; PH.anim.t0 = performance.now(); PH.anim.hold = 0; play.on = true; }
   const SECTIONS_ALL = () => BASE.concat(SECTIONS);
   const BASE = [{ id: 'ctl', t: 'Set up the experiment', s: 'every control re-runs the model; the project supplies soil, tillage, weather and the crop', fn: drawControls }, { id: 'twin', t: 'Plant and roots, side by side', s: 'drag to turn', fn: drawTwin }, { id: 'scans', t: 'Root scans through the season', s: 'scanner image and reconstruction', fn: drawStrip }, { id: 'series', t: 'Traits through time', s: 'click or drag on a chart to move the day', fn: drawSeries }];
   function drawPh() {
-    paper(); const now = performance.now(); if (PH.anim && PH.anim.on) { const dt = Math.min(0.12, (now - PH.anim.t0) / 1000); PH.anim.t0 = now; play.on = false; play.t = Math.min(1, play.t + dt / PH.anim.dur); if (play.t >= 1) PH.anim.on = false; PH.last = now; } if (now - PH.last > 700) { play.t = startT(); play.on = false; PH.firstTouch = now; } PH.last = now; SL.length = 0; SCR.length = 0;
+    paper(); const now = performance.now(); if (PH.pOn != null && play.on !== PH.pOn) { PH.anim.on = !!play.on; PH.anim.t0 = now; PH.anim.hold = 0; if (play.on && play.t >= 1) play.t = 0; } if (PH.anim && PH.anim.on) { const dt = Math.min(0.12, (now - PH.anim.t0) / 1000); PH.anim.t0 = now; play.t = Math.min(1, play.t + dt / PH.anim.dur); if (play.t >= 1) { PH.anim.hold = (PH.anim.hold || 0) + 1; if (PH.anim.hold > 70) { PH.anim.hold = 0; play.t = 0; } } PH.last = now; } if (now - PH.last > 700) { play.t = startT(); PH.anim.on = false; PH.firstTouch = now; } PH.last = now; play.on = !!PH.anim.on; PH.pOn = play.on; SL.length = 0; SCR.length = 0;
     if (PH.follow && PH.sp !== projSpecies()) { PH.sp = projSpecies(); applyPreset(PH.gid === 'custom' ? 'ref' : PH.gid); PH.area = null; }
     const gate = !window.__REPORTING && !window.__NORUNGATE; if (!gate && !PH.ran) { PH.ran = true; PH.ranKey = ''; }
     if (PH.keepRan) { PH.keepRan = false; if (PH.ran) PH.ranKey = keyOf(false); }
     if (gate && PH.ran && PH.ranKey && PH.ranKey !== keyOf(false)) { PH.ran = false; PH.why = 'controls changed'; }
-    { const dk = dKey(); if (PH.lastDate == null) PH.lastDate = dk; if (PH.lastDate !== dk) { PH.lastDate = dk; if (PH.ran) { play.t = startT(); PH.anim.on = false; } } }
+    { const dk = dKey(); if (PH.lastDate == null) PH.lastDate = dk; if (PH.lastDate !== dk) { PH.lastDate = dk; if (PH.ran) { play.t = startT(); PH.anim.hold = 0; } } }
     if (PH.ran) ensureRun();
     let y = K.header('Deterministic phenotyping', 'Equation-based simulation of plant structure and function under drought · same inputs always give the same plant · soil, tillage, weather and crop from the project', 4);
     const lc = libCrop(), cl = window.CROPLIB && CROPLIB.crops[state.crop];

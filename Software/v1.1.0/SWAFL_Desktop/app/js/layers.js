@@ -22,7 +22,7 @@ const Layers = (() => {
     { id: 'g-ddoc', name: 'Learn: the Daisy model', icon: 'book', items: [['dz-docs', 'Model, documentation and installation', '']] }
   ];
   const DESIGN = ['sid', 'drip', 'spr'];
-  let dzCur = null, tabs = [], cur = null, started = false, collapsed = { 'g-water': true, 'g-ctrl': true, 'g-soil': true, 'g-mulch': true, 'g-loop': true, 'g-design': true, 'g-crop': true, 'g-year': true, 'g-chem': true, 'g-dss': true, 'g-dscen': false, 'g-ddata': true, 'g-dproc': true, 'g-dana': true, 'g-dbuilt': true, 'g-ddoc': true, 'g-daisy': true, 's-sid': true, 's-drip': true, 's-spr': true }, sectionPick = {};
+  let dzCur = null, tabs = [], cur = null, started = false, collapsed = { 'g-water': true, 'g-ctrl': true, 'g-soil': true, 'g-mulch': true, 'g-loop': true, 'g-design': true, 'g-crop': true, 'g-year': true, 'g-chem': true, 'g-dss': true, 'g-dscen': true, 'g-ddss': true, 'droot': true, 'g-ddata': true, 'g-dproc': true, 'g-dana': true, 'g-dbuilt': true, 'g-ddoc': true, 'g-daisy': true, 's-sid': true, 's-drip': true, 's-spr': true }, sectionPick = {};
   const groupOf = id => { const g = GROUPS.find(x => x.items.some(i => i[0] === id)); return g && g.id; };
   const reveal = (id, sec) => { collapsed['root'] = false; const g = groupOf(id); if (g) collapsed[g] = false; if (sec) collapsed['s-' + id] = false; };
   const tree = document.getElementById('layerTree');
@@ -121,7 +121,7 @@ const Layers = (() => {
   });
 
   function expandAll() { collapsed = {}; render(); }
-  function collapseAll() { GROUPS.forEach(g => { collapsed[g.id] = true; }); collapsed['root'] = false; DESIGN.forEach(d => { collapsed['s-' + d] = true; }); render(); }
+  function collapseAll() { GROUPS.forEach(g => { collapsed[g.id] = true; }); DAISY.forEach(g => { collapsed[g.id] = true; }); collapsed['droot'] = true; collapsed['root'] = false; DESIGN.forEach(d => { collapsed['s-' + d] = true; }); render(); }
   document.querySelector('#layersDock [data-act=expandAll]').onclick = expandAll;
   document.querySelector('#layersDock [data-act=collapseAll]').onclick = collapseAll;
 

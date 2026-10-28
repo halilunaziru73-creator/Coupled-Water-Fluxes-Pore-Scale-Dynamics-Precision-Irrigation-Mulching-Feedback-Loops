@@ -206,7 +206,7 @@
     const tot = eps.reduce((a, e) => a + e.n, 0), worst = eps.slice().sort((p, q) => p.low - q.low)[0], ahead = eps.filter(e => e.b >= ti), nextE = ahead[0], pl = PH.stPlant === 'rf' ? 'rainfed plant' : 'plant irrigated by the project rule', sc = SCN.find(q => q.k === PH.stScn).t.toLowerCase();
     let txt = 'Reading: on the ' + sc + ' the ' + pl + ' has ' + tot + ' days of drought stress in ' + eps.length + ' period' + (eps.length === 1 ? '' : 's') + ' of the season (' + fmt(100 * tot / N) + ' % of its ' + N + ' days). ';
     if (nextE) txt += (nextE.when === 'now' ? 'A period of stress is under way on the date of the toolbar and lasts until ' + fdate(S.start + nextE.b * DAY) + '. ' : 'The next period begins on ' + fdate(S.start + nextE.a * DAY) + ' (' + Math.max(0, nextE.a - ti) + ' days from the date of the toolbar) and lasts ' + nextE.n + ' days, in the stage of ' + nextE.stage + '. '); else txt += 'No period of stress is left after the date of the toolbar. ';
-    if (worst) txt += 'The worst period (' + fdate(S.start + worst.a * DAY) + ' to ' + fdate(S.start + worst.b * DAY) + ') brings the root zone down to ' + fmt(worst.low * 100) + ' % of its available water; the roots ' + (isFinite(worst.gr) ? 'grow ' + fmt(100 - worst.gr) + ' % less than those of a watered plant' : 'make little growth in that period, with or without water') + ', end ' + fmt(Math.abs(worst.lag)) + ' cm ' + (worst.lag >= 0 ? 'shallower' : 'deeper') + ' and ' + fmt(worst.dryShare) + ' % of the root length sits in layers that hold less than half of their available water. ';
+    if (worst) txt += 'The worst period (' + fdate(S.start + worst.a * DAY) + ' to ' + fdate(S.start + worst.b * DAY) + ') brings the root zone down to ' + fmt(worst.low * 100) + ' % of its available water; the roots ' + (isFinite(worst.gr) ? 'grow ' + fmt(worst.gr) + ' % of the growth of the roots of a watered plant' : 'make little growth in that period, with or without water') + ', end ' + fmt(Math.abs(worst.lag)) + ' cm ' + (worst.lag >= 0 ? 'shallower' : 'deeper') + ' and ' + fmt(worst.dryShare) + ' % of the root length sits in layers that hold less than half of their available water. ';
     txt += 'A day of stress is a day on which the water of the root zone (the layers the roots have reached) is below the readily available water of FAO-56 (Eq. P.26); the roots are compared with those of a plant held well watered under the same weather (Eq. P.27). Grey rows are in the past of the date of the toolbar, orange is the period now, red are ahead. The days ahead are those of the forecast and then of the years of the record in the chosen future.';
     y += note(txt, cx + 12, y, w - 24) * 12.5 + 8; endFrame(cx, y0, y, w); return y + 10;
   }
@@ -263,8 +263,49 @@
     y += note('These are the days that the model of the layer reads. The weather file or the online weather is loaded in Tools; if a day is missing, the typical year of the record fills it, so no figure ever shows a day without weather.', cx + 12, y, w - 24) * 12.5 + 8; endFrame(cx, y0, y, w); return y + 10;
   }
 
+
+  // ---------------------------------------------------------------- the drought and the roots at a glance: one time series with the exact dates
+  function drawGlance(y) {
+    const w = W - 32, cx = 16, y0 = y; K.frame(cx, y, w, 24, 'Drought and the roots at a glance', 'exact dates of drought stress and how the roots suffer'); y += 30;
+    let R; try { R = compute(); } catch (e) { T('The series could not be computed: ' + e, cx + 12, y + 10, { s: 9.5, c: '#B3261E' }); console.error(e); endFrame(cx, y0, y + 24, w); return y + 34; }
+    const S = R.S, ti = S.idx; PH.stScn = PH.stScn || 'typ'; PH.stPlant = PH.stPlant || 'rf';
+    let xx = cx + 10; T('Plant', xx, y + 15, { s: 9.5, b: true, c: MUTE }); xx += 36;
+    [['rf', 'Rainfed'], ['pj', 'Project irrigation']].forEach(q => { xx += chip(xx, y, q[1], PH.stPlant === q[0], () => { PH.stPlant = q[0]; }, q[0] === 'rf' ? 'the plant that gets only the rain' : 'the plant watered by the rule of the project'); });
+    xx += 10; T('Future', xx, y + 15, { s: 9.5, b: true, c: MUTE }); xx += 38; SCN.forEach(q => { xx += chip(xx, y, q.t, PH.stScn === q.k, () => { PH.stScn = q.k; }, 'the rest of the season after the date of the toolbar'); }); y += 30;
+    const r = R.runs[PH.stScn], X0 = r[PH.stPlant], B = r.bench, eps = episodes(R, PH.stScn, PH.stPlant), sc = SCN.find(q => q.k === PH.stScn);
+    const x0 = cx + 50, ww = w - 66, X = U.xmap(x0, ww), p = pFrac();
+    const panels = [
+      { t: 'Water of the root zone (% of the available water)', hh: 80, lo: 0, hi: 100, a: k => rootZone(X0, k) * 100, b: null, ref: (1 - p) * 100, rl: 'stress below ' + Math.round((1 - p) * 100) + ' %', dp: 0 },
+      { t: 'Root growth per day (cm/day): this plant against a watered plant', hh: 70, a: k => X0.dL[k], b: k => B.dL[k], dp: 1 },
+      { t: 'Depth of the deepest root (cm)', hh: 60, a: k => X0.Rdepth[k], b: k => B.Rdepth[k], dp: 0 }
+    ];
+    y += 18;
+    panels.forEach((d, pi) => {
+      let lo = d.lo != null ? d.lo : 0, hi = d.hi; if (hi == null) { hi = 1e-9; for (let k = 0; k < N; k++) { hi = Math.max(hi, d.a(k), d.b ? d.b(k) : 0); } hi = K.nice(hi * 1.08); }
+      const top = y, Y = v => top + d.hh - (v - lo) / (hi - lo) * d.hh;
+      ctx.fillStyle = '#FBFAF6'; ctx.fillRect(x0, top, ww, d.hh); ctx.strokeStyle = GRID; ctx.lineWidth = 1; ctx.strokeRect(x0 + 0.5, top + 0.5, ww - 1, d.hh - 1);
+      eps.forEach(e => { ctx.fillStyle = e.b < ti ? 'rgba(150,146,136,0.28)' : 'rgba(217,48,37,0.2)'; ctx.fillRect(X(e.a), top, Math.max(2, X(e.b + 1) - X(e.a)), d.hh); });
+      T(d.t, x0 + 4, top - 5, { s: 9, b: true }); T(fmt(hi, d.dp), x0 - 4, top + 8, { s: 8, c: MUTE, a: 'right' }); T(fmt(lo, d.dp), x0 - 4, top + d.hh, { s: 8, c: MUTE, a: 'right' });
+      if (d.ref != null) { ctx.strokeStyle = '#B3261E'; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(x0, Y(d.ref) + 0.5); ctx.lineTo(x0 + ww, Y(d.ref) + 0.5); ctx.stroke(); ctx.setLineDash([]); T(d.rl, x0 + ww - 4, Y(d.ref) - 3, { s: 8, c: '#B3261E', a: 'right' }); }
+      const ln = (f, c, wd) => { ctx.strokeStyle = c; ctx.lineWidth = wd; ctx.beginPath(); for (let k = 0; k < N; k++) { k ? ctx.lineTo(X(k), Y(f(k))) : ctx.moveTo(X(k), Y(f(k))); } ctx.stroke(); };
+      if (d.b) ln(d.b, '#1B1F23', 1.4); ln(d.a, PH.stPlant === 'rf' ? '#D93025' : '#2E7DE8', 2);
+      if (pi === 0) eps.forEach((e, i) => { const lab = fdate(S.start + e.a * DAY); ctx.strokeStyle = e.b < ti ? '#6B7280' : '#B3261E'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(X(e.a) + 0.5, top); ctx.lineTo(X(e.a) + 0.5, top - 3 - (i % 2) * 0); ctx.stroke(); });
+      U.todayMark(X, top, d.hh); y += d.hh + 30;
+    });
+    // the dates of the drought written on the first chart
+    { const top0 = y - (panels[0].hh + 30) - (panels[1].hh + 30) - (panels[2].hh + 30); ctx.font = 'bold 8.5px sans-serif'; let last = -1e9, row = 0; eps.slice(0, 14).forEach((e, i) => { const lab = fdate(S.start + e.a * DAY), xx = X(e.a); const wv = ctx.measureText(lab).width; if (xx < last + wv + 4) row = (row + 1) % 3; else row = 0; last = xx; { const rt = xx + wv + 4 > x0 + ww; T(lab, rt ? xx - 2 : xx + 2, top0 + 10 + row * 10, { s: 8.5, b: true, c: e.b < ti ? '#6B7280' : '#B3261E', a: rt ? 'right' : 'left' }); } }); }
+    U.axisDates(X, y - 30 + 0, x0, ww);
+    y += 8;
+    K.legend([[PH.stPlant === 'rf' ? '#D93025' : '#2E7DE8', (PH.stPlant === 'rf' ? 'rainfed plant' : 'plant irrigated by the project') + ', ' + sc.t.toLowerCase()], ['#1B1F23', 'watered plant under the same weather'], ['rgba(217,48,37,0.45)', 'days of drought stress ahead'], ['rgba(150,146,136,0.6)', 'days of stress that have passed'], ['#0A246A', 'date of the toolbar']], x0, y); y += 36;
+    const tot = eps.reduce((a, e) => a + e.n, 0), first = eps.find(e => e.b >= ti);
+    let txt = !eps.length ? 'No day of drought stress for this plant on this future.' : 'Drought stress on ' + tot + ' days in ' + eps.length + ' period' + (eps.length === 1 ? '' : 's') + ': ' + eps.slice(0, 8).map(e => fdate(S.start + e.a * DAY) + (e.n > 1 ? ' to ' + fdate(S.start + e.b * DAY) : '')).join('; ') + (eps.length > 8 ? '; and ' + (eps.length - 8) + ' more' : '') + '. ';
+    if (first) txt += (first.a <= ti ? 'A period of stress is under way on the date of the toolbar. ' : 'The first one ahead begins on ' + fdate(S.start + first.a * DAY) + ', ' + (first.a - ti) + ' days from the date of the toolbar. ') + 'In it the root zone falls to ' + fmt(first.low * 100) + ' % of its available water and the roots ' + (isFinite(first.gr) ? 'grow ' + fmt(first.gr) + ' % of the growth of a watered plant' : 'make little growth') + ' (table in the section Drought stress calendar).';
+    y += note(txt, cx + 12, y, w - 24) * 12.5 + 8; endFrame(cx, y0, y, w); return y + 10;
+  }
+
   const io = SECTIONS.findIndex(q => q.id === 'outlook');
   const ie = SECTIONS.findIndex(q => q.id === 'data'); SECTIONS.splice(ie < 0 ? SECTIONS.length : ie, 0, { id: 'outlook', t: 'Drought outlook from the date of the toolbar', s: 'the season to the date, then a dry, a typical and a wet future', fn: drawOutlook });
+  { const ic = BASE.findIndex(q => q.id === 'ctl'); BASE.splice(ic + 1, 0, { id: 'glance', t: 'Drought and the roots at a glance', s: 'exact dates of drought stress and how the roots suffer', fn: drawGlance }); }
   { const iw = SECTIONS.findIndex(q => q.id === 'outlook'); SECTIONS.splice(iw, 0, { id: 'wx', t: 'Weather in use, a year from the date of the toolbar', s: 'the weather behind every figure of the layer', fn: drawWeather }); }
   { const ix = SECTIONS.findIndex(q => q.id === 'outlook'); SECTIONS.splice(ix + 1, 0, { id: 'stress', t: 'Drought stress calendar: dates and what it does to the roots', s: 'periods of stress from the date of the toolbar, with the future', fn: drawStress }); }
   U.outlook = { compute, toolbarDate, season, arrays, assemble };

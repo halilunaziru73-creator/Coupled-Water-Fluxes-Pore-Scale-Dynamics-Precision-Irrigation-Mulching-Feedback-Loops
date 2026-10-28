@@ -205,7 +205,7 @@
       if (R.on && R.st !== stateKey()) { R.on = false; R.why = 'the settings in Properties changed'; }
       if (!R.on && !reporting()) { play.on = false; play.t = 0; play.hold = 0; }
       const out = od.apply(this, arguments);
-      if (R.on && play.on && play.t >= 1) { play.on = false; const pb = document.getElementById('playBtn'); if (pb) pb.textContent = 'Run simulation'; }
+      // after a run the simulation keeps playing, and starts again at the end of the season, until Pause is pressed
       if (!R.on && !reporting()) {
         const inEnd = inputsEnd(id);
         hotspots.splice(0, hotspots.length, ...hotspots.filter(h => h.y + h.h <= inEnd));

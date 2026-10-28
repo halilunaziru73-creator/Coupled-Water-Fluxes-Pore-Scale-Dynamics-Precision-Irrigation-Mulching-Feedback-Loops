@@ -8,7 +8,7 @@ When a design layer opens, its inputs are drawn as usual and, below them, the re
 
 ![The surface design before a run: the inputs are set, the results wait for the run.](images/atlas11/ui_u14_design_before_run.jpg){width=100%}
 
-* **Run simulation** computes the design with the inputs above it. The run animates the irrigation from its start to its end (the time is shown on the playback bar, for example *irrigation time 0 of 314 min*), and then holds the finished state.
+* **Run simulation** computes the design with the inputs above it. The run animates the irrigation from its start to its end (the time is shown on the playback bar, for example *irrigation time 0 of 314 min*), and then starts again from the beginning, so it keeps running until you press Pause.
 * **Find the most efficient inputs** searches the inputs for the highest application efficiency (Section 18.4), puts the best combination into the value boxes and runs it.
 * The play button under the drawing is labelled **Run simulation** in the design layers and does the same.
 

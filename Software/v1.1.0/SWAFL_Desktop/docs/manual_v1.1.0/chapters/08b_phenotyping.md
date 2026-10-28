@@ -21,7 +21,7 @@ The layer is made for four tasks of a phenotyping programme:
 
 ![Set up the experiment. Maize, warm season, rain-out shelter, pulse of drought from day 40 for 28 days at 30 % of the plant-available water, reference genotype, Coarse Loam, conventional tillage.](images/pheno/p1_setup.png){width=85%}
 
-**Run simulation.** The button is **under the inputs**, after the last control of the section *Set up the experiment* (the other layers of the window, whose inputs are in the Properties panel, have their own **Run simulation** bar at the top, Chapter 18). A layer shows its figures only after the button is pressed for the present controls; when a control changes, the bar asks to run again. The Play button of the toolbar does the same. **Every section of the layer has a triangle on its title: click it to collapse or expand the section**, so that a long page can be read part by part.
+**Run simulation.** The button is **under the inputs**, after the last control of the section *Set up the experiment* (the other layers of the window, whose inputs are in the Properties panel, have their own **Run simulation** bar at the top, Chapter 18). A layer shows its figures only after the button is pressed for the present controls; when a control changes, the bar asks to run again. The Play button of the toolbar does the same. **Every section of the layer has a triangle on its title: click it to collapse or expand the section**, so that a long page can be read part by part. After the run, the season **plays by itself**, from the first day to the last and again from the first, until **Pause** is pressed (the button of the toolbar, or the button *Pause* of the section *Season film*); clicking or dragging on any chart pauses it at that day.
 
 Once run, every control re-runs the model, and every chart answers it.
 
@@ -42,6 +42,12 @@ Once run, every control re-runs the model, and every chart answers it.
 | Growing area per plant | the ground area of one plant, which sets the leaf area index, the light caught and the water of the column |
 
 The **soil, the tillage and the consolidation rate** are those of the project (the V3 layer): the bulk density, the strength of the soil and therefore the growth of the roots follow the soil texture, the tillage system and the structural consolidation rate (Eq. 8.1).
+
+### Drought and the roots at a glance
+
+![Drought and the roots at a glance: the rainfed wheat plant on the dry future, from 28 October 2026. Red bands are the days of drought stress, with the date on which each begins.](images/pheno/p15_glance.png){width=85%}
+
+This section, which follows *Set up the experiment*, is the high-level view of the drought. Three charts share one time axis with dates. The first is the **water of the root zone** of the chosen plant as a percentage of the available water, with the stress level of Eq. P.26 as a dashed line. The second is the **root growth per day** of the plant (red, or blue for the plant irrigated by the project) against the roots of a well watered plant under the same weather (black). The third is the **depth of the deepest root** of the two. Every period of drought stress is a shaded band across all three charts, red when it is ahead of the date of the toolbar and grey when it has passed, and the **exact date on which it begins is written on the first chart**. A dark line marks the date of the toolbar. The chips choose the plant (rainfed or irrigated by the project) and the future (dry, typical or wet), and are shared with the section *Drought stress calendar*. A paragraph under the charts lists every period with its dates, the days to the next one, and what it does to the roots. When no band is drawn, the plant has no day of drought stress on that future.
 
 ### Plant and roots, side by side
 
@@ -169,7 +175,7 @@ This section is a second drought experiment, tied to the calendar. The first (*T
 
 ### Drought stress calendar: dates and what it does to the roots
 
-![The drought stress calendar of the rainfed wheat plant on the typical future, from 28 October 2026. The dark line is the date of the toolbar.](images/pheno/p12_stress.png){width=85%}
+![The drought stress calendar of the rainfed wheat plant on the dry future, from 28 October 2026. The dark line is the date of the toolbar.](images/pheno/p12_stress.png){width=85%}
 
 This section turns the outlook into a calendar. It answers two questions for the plant of the project: **on which dates is it in drought stress**, and **what does that do to its roots**. It uses the same season, weather, soil and Properties inputs as the rest of the layer, so it changes when the date of the toolbar, the weather, the soil, the crop or the irrigation of the project changes.
 
@@ -184,7 +190,7 @@ This section turns the outlook into a calendar. It answers two questions for the
 
 **Where the dates come from.** The date in the toolbar is the key date of the whole layer, one to one: any date from 1980 to 2100 can be set (the date of today, tomorrow, or a day in 2030), the box starts on the day of the computer, and nothing in the layer is fixed to a month; the first day of every figure is that date, the day shown in the plant, the film and the charts is that date, and when the date is changed every figure starts again from the new date. The control *Season starts* in the section *Set up the experiment* has three choices. *On the date of the toolbar* (the choice at the start) sows on the date of the toolbar. *Planting day of the project* uses the planting day of the Properties panel, so the season can lie wholly in the past or wholly ahead of the date, and the date is then a day inside it. *Automatic* uses the planting day of the project when the date falls inside that season and otherwise sows on the date. The control *Time axis* chooses what the horizontal axes show: *The season* (the 140 days of the plant, with dates) or *A year from the date*: twelve months that begin on the first day of the season, so the plant occupies the first months and a dark line marks the date of the toolbar. No date older than the first day is shown. The date itself is read as the *Today* button of the toolbar reads it: the day of the computer, written into the date box of the toolbar, which you can change at any time. Every chart of the layer has its dates on the horizontal axis and the line of the date of the toolbar.
 
-**Reading the roots.** In the figure the roots of the rainfed plant grow as much as or more than the watered roots during the first periods, because a plant in dry soil sends a larger share of its carbon to the roots and so keeps growing downwards, but in the last periods, after grain filling has begun, they make no growth at all with or without water. The share of the root length in dry layers is high from the first period, because the top layers dry first and most of the roots are there. These are the results of the model with the constants of the species; they are not measurements.
+**Reading the roots.** In the figure (wheat sown on 28 October 2026, dry future, model weather) the rainfed plant has three periods of stress, all in the last weeks of the season: 3 and 4 January, 10 to 12 February, and 16 February to 16 March. In the first two the roots grow as much as those of the watered plant (101 and 100 % of its growth) because the periods are short, and in the last one, which is 29 days long, the roots reach 4 cm less depth than the roots of the watered plant, and all of the root length lies in layers that hold less than half of their available water, because the top layers dry first and most of the roots are there. These are the results of the model with the constants of the species; they are not measurements. The text under the table writes the same result in words, and the section *Drought and the roots at a glance* draws it as time series.
 
 ### Your measurements: compare, calibrate and export
 

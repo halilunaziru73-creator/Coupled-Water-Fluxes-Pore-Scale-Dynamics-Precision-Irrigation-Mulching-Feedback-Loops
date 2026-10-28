@@ -2,7 +2,7 @@
 'use strict';
 (function () {
   const cv = document.getElementById('profileCanvas'), wrap0 = document.querySelector('.canvaswrap'); if (!cv || !wrap0) return;
-  const LAB = { ctl: 'Set up', twin: 'Plants', film: 'Season film', rootday: 'Roots by day', scans: 'Root scans', series: 'Traits', water: 'Water', carbon: 'Carbon', soil: 'Soil', above: 'Roots and shoot', genome: 'Genotype', traits: 'Trait table', swafl: 'SWAFL data', wx: 'Weather', outlook: 'Outlook', stress: 'Stress calendar', data: 'My data' };
+  const LAB = { ctl: 'Set up', glance: 'At a glance', twin: 'Plants', film: 'Season film', rootday: 'Roots by day', scans: 'Root scans', series: 'Traits', water: 'Water', carbon: 'Carbon', soil: 'Soil', above: 'Roots and shoot', genome: 'Genotype', traits: 'Trait table', swafl: 'SWAFL data', wx: 'Weather', outlook: 'Outlook', stress: 'Stress calendar', data: 'My data' };
   const nav = document.createElement('nav'); nav.id = 'phNav'; nav.style.display = 'none';
   nav.innerHTML = '<style>#phNav{position:sticky;top:0;z-index:30;display:flex;gap:3px;overflow-x:auto;padding:4px 6px;margin:0 0 6px;background:#D4D0C8;border:1px solid #404040;border-top-color:#fff;border-left-color:#fff;scrollbar-width:thin}' +
     '#phNav button{flex:0 0 auto;height:24px;padding:0 10px;background:#D4D0C8;color:#000;font:12px Tahoma,Arial,sans-serif;border:1px solid #404040;border-top-color:#fff;border-left-color:#fff;cursor:pointer;white-space:nowrap}' +
