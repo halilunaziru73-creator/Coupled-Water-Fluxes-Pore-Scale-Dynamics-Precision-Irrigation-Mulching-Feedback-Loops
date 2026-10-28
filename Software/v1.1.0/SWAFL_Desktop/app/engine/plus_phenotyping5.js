@@ -34,15 +34,15 @@
     rows.forEach((row, i) => {
       const gx = x + (i % cols) * (gw + 22), gy = y + 18 + Math.floor(i / cols) * (gh + 34), va = seriesVals(row, a), vb = seriesVals(row, b);
       let lo = Infinity, hi = -Infinity; [va, vb].forEach(q => q.forEach(v => { if (isFinite(v)) { lo = Math.min(lo, v); hi = Math.max(hi, v); } })); if (!isFinite(lo)) { lo = 0; hi = 1; } lo = Math.min(0, lo); hi = hi + (hi - lo) * 0.06 + 1e-9;
-      const X = k => gx + gw * k / (N - 1), Y = v => gy + gh - (v - lo) / (hi - lo) * gh;
+      const X = U.xmap(gx, gw), Y = v => gy + gh - (v - lo) / (hi - lo) * gh;
       regimeShade().forEach(s => { ctx.fillStyle = s[2]; ctx.globalAlpha = 0.5; ctx.fillRect(X(s[0]), gy, X(s[1]) - X(s[0]), gh); ctx.globalAlpha = 1; });
       ctx.strokeStyle = GRID; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(gx, gy + gh + 0.5); ctx.lineTo(gx + gw, gy + gh + 0.5); ctx.moveTo(gx, gy + 0.5); ctx.lineTo(gx + gw, gy + 0.5); ctx.stroke();
       [[va, '#1B1F23'], [vb, '#D93025']].forEach(([q, c]) => { ctx.strokeStyle = c; ctx.lineWidth = 1.8; ctx.beginPath(); for (let k = 0; k <= d; k++) { k ? ctx.lineTo(X(k), Y(q[k])) : ctx.moveTo(X(k), Y(q[k])); } ctx.stroke(); ctx.globalAlpha = 0.28; ctx.beginPath(); for (let k = d; k < N; k++) { k > d ? ctx.lineTo(X(k), Y(q[k])) : ctx.moveTo(X(k), Y(q[k])); } ctx.stroke(); ctx.globalAlpha = 1; ctx.fillStyle = c; ctx.beginPath(); ctx.arc(X(d), Y(q[d]), 3, 0, 7); ctx.fill(); });
       ctx.strokeStyle = '#2E7DE8'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(X(d) + 0.5, gy); ctx.lineTo(X(d) + 0.5, gy + gh); ctx.stroke(); ctx.setLineDash([]);
       const dp = hi - lo < 5 ? 2 : (hi - lo < 50 ? 1 : 0); T(row.t + ' (' + row.u + ')', gx, gy - 5, { s: 9, b: true }); T(fmt(va[d], dp) + ' / ' + fmt(vb[d], dp), gx + gw, gy - 5, { s: 9, b: true, a: 'right' });
       T(fmt(hi, dp), gx - 3, gy + 8, { s: 7.5, c: MUTE, a: 'right' }); T(fmt(lo, dp), gx - 3, gy + gh, { s: 7.5, c: MUTE, a: 'right' });
-      T(dateOf(0), gx, gy + gh + 11, { s: 7.5, c: MUTE }); T(dateOf(N - 1), gx + gw, gy + gh + 11, { s: 7.5, c: MUTE, a: 'right' });
-      todayMark(X, gy, gh); scrub(gx, gy, gw, gh, gx, gw);
+      if (U.yearAxis()) U.axisDates(X, gy + gh, gx, gw); else { T(dateOf(0), gx, gy + gh + 11, { s: 7.5, c: MUTE }); T(dateOf(N - 1), gx + gw, gy + gh + 11, { s: 7.5, c: MUTE, a: 'right' }); }
+      todayMark(X, gy, gh); scrub(gx, gy, gw, gh, X.sx, X.sw);
     });
     return y + 18 + Math.ceil(rows.length / cols) * (gh + 34);
   }

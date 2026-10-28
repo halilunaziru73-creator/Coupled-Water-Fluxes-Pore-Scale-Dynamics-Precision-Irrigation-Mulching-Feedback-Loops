@@ -18,7 +18,7 @@
     const w = W - 32, cx = 16, a = R('ww'), b = R('dr'), d = day(), y0 = y; frameH(cx, y, w, 'Water: demand, supply and where the roots take it', 'transpiration of the plant against the soil water of every layer');
     y += 32; const x0 = cx + 46, ww = w - 62, hh = 112, BH = 22, top = y + 6 + BH;
     // daily water use; rain and irrigation sit in their own band above the curves so that nothing is drawn over anything else
-    const mx = K.nice(Math.max(...a.Tp, ...b.Tp, ...b.Es, ...a.T, ...b.T, 1) * 1.1), X = i => x0 + ww * i / (N - 1), Y = v => top + hh - v / mx * hh;
+    const mx = K.nice(Math.max(...a.Tp, ...b.Tp, ...b.Es, ...a.T, ...b.T, 1) * 1.1), X = U.xmap(x0, ww), Y = v => top + hh - v / mx * hh;
     regimeShade().forEach(s => { ctx.fillStyle = s[2]; ctx.fillRect(X(s[0]), top - BH, X(s[1]) - X(s[0]), hh + BH); });
     const bm = Math.max(5, ...b.I, ...b.P);
     T('rain and water applied (mm/day, up to ' + fmt(bm, 0) + ')', x0 + 4, top - BH + 9, { s: 8, c: MUTE });
@@ -60,7 +60,7 @@
     [['ww', RNc(), a], ['dr', 'Drought', b]].forEach(([tr, lab, res], ci) => {
       const x0 = cx + 40 + ci * (cw + 16), top = y + 16; T(lab + ': dry mass of the plant parts (g/m²)', x0 - 30, y + 8, { s: 9.5, b: true, c: tr === 'dr' ? '#D93025' : '#1B1F23' });
       let mx = 10; for (let i = 0; i < N; i++) mx = Math.max(mx, res.Wl[i] + res.Ws[i] + res.Wr[i] + res.Wg[i]); mx = K.nice(mx * 1.05); K.yAxis(x0, top, cw - 24, hh, 0, mx, '', [4, 5, 2, 3].find(t => (mx / t) % 25 === 0 || (mx / t) % 10 === 0) || 4);
-      const X = i => x0 + (cw - 24) * i / (N - 1), Y = v => top + hh - v / mx * hh, parts = ['Wr', 'Wl', 'Ws', 'Wg']; const base = new Float64Array(N);
+      const X = U.xmap(x0, cw - 24), Y = v => top + hh - v / mx * hh, parts = ['Wr', 'Wl', 'Ws', 'Wg']; const base = new Float64Array(N);
       parts.forEach(k => { ctx.fillStyle = COL[k]; ctx.beginPath(); for (let i = 0; i < N; i++) { const yy = Y(base[i] + res[k][i]); i ? ctx.lineTo(X(i), yy) : ctx.moveTo(X(i), yy); } for (let i = N - 1; i >= 0; i--) ctx.lineTo(X(i), Y(base[i])); ctx.closePath(); ctx.fill(); for (let i = 0; i < N; i++) base[i] += res[k][i]; });
       ctx.strokeStyle = '#2E7DE8'; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(X(d), top); ctx.lineTo(X(d), top + hh); ctx.stroke(); ctx.setLineDash([]);
       U.todayMark(X, top, hh); U.axisDates(X, top + hh, x0, cw - 24, { n: 3 });
@@ -70,9 +70,10 @@
     // assimilation against the growth of the roots, and the delay between them
     const x0 = cx + 40, hw = cw - 24, top = y + 18; T('Assimilation (bars) and root growth (line), drought plant', cx + 10, y + 4, { s: 9.5, b: true });
     let am = 1, rm = 1; for (let i = 0; i < N; i++) { am = Math.max(am, b.dW[i], a.dW[i]); rm = Math.max(rm, b.dL[i], a.dL[i]); } am = K.nice(am * 1.05); rm = K.nice(rm * 1.05); K.yAxis(x0, top, hw, hh, 0, am, 'g/m²/d', [4, 5, 2, 3].find(t => (am / t) % 25 === 0 || (am / t) % 10 === 0 || (am / t) % 5 === 0) || 4);
-    for (let i = 0; i < N; i++) { const hgt = b.dW[i] / am * hh; ctx.fillStyle = 'rgba(79,166,79,0.55)'; ctx.fillRect(x0 + hw * i / N, top + hh - hgt, Math.max(1, hw / N - 0.5), hgt); }
-    ctx.strokeStyle = '#8E5A2A'; ctx.lineWidth = 1.8; ctx.beginPath(); for (let i = 0; i < N; i++) { const yy = top + hh - b.dL[i] / rm * hh; i ? ctx.lineTo(x0 + hw * i / (N - 1), yy) : ctx.moveTo(x0, yy); } ctx.stroke();
-    T('root growth line: 0 to ' + fmt(rm) + ' cm/d', x0 + hw, top - 5, { s: 8.5, c: '#8E5A2A', a: 'right' }); ctx.strokeStyle = '#2E7DE8'; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(x0 + hw * d / (N - 1), top); ctx.lineTo(x0 + hw * d / (N - 1), top + hh); ctx.stroke(); ctx.setLineDash([]);
+    const XR = U.xmap(x0, hw); U.todayMark(XR, top, hh);
+    for (let i = 0; i < N; i++) { const hgt = b.dW[i] / am * hh; ctx.fillStyle = 'rgba(79,166,79,0.55)'; ctx.fillRect(XR(i) - 0.5, top + hh - hgt, Math.max(1, XR.sw / N + 0.5), hgt); }
+    ctx.strokeStyle = '#8E5A2A'; ctx.lineWidth = 1.8; ctx.beginPath(); for (let i = 0; i < N; i++) { const yy = top + hh - b.dL[i] / rm * hh; i ? ctx.lineTo(XR(i), yy) : ctx.moveTo(XR(0), yy); } ctx.stroke();
+    T('root growth line: 0 to ' + fmt(rm) + ' cm/d', x0 + hw, top - 5, { s: 8.5, c: '#8E5A2A', a: 'right' }); ctx.strokeStyle = '#2E7DE8'; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(XR(d), top); ctx.lineTo(XR(d), top + hh); ctx.stroke(); ctx.setLineDash([]);
     const x1 = x0 + hw + 56, bw = Math.max(80, w - (x1 - cx) - 24); T('Delay between assimilation and root growth', x1 - 4, y + 4, { s: 9.5, b: true });
     const ca = lagCorr(a), cb = lagCorr(b); K.yAxis(x1, top, bw, hh, -0.2, 1, '', 3);
     [[ca, '#1B1F23', 0], [cb, '#D93025', 1]].forEach(([cc, col, k]) => cc.forEach((v, i) => { if (!isFinite(v)) return; const bx = x1 + bw * (i + 0.12 + 0.38 * k) / 9, hgt = (clamp(v, -0.2, 1) + 0.2) / 1.2 * hh, z0 = top + hh - 0.2 / 1.2 * hh; ctx.fillStyle = col; ctx.fillRect(bx, Math.min(z0, top + hh - hgt), bw * 0.36 / 9 * 1.0 + 1, Math.abs(z0 - (top + hh - hgt))); }));
@@ -132,10 +133,10 @@
     y += 2 * (hh + 46) + 6;
     // how the predictive power changes through the season
     const x0 = cx + 40, pw = w - 56, top = y + 18, h2 = 100; T('Share of the variation in the roots explained by each shoot trait, day by day (r²)', cx + 10, y + 8, { s: 9.5, b: true }); K.yAxis(x0, top, pw, h2, 0, 1, '', 4);
-    const r2 = PRED.map(pr => Array.from({ length: N }, (_, t) => regressionAt(t, pr.k, PH.yv).fit.r2)); regimeShade().forEach(s => { ctx.fillStyle = s[2]; ctx.globalAlpha = 0.45; ctx.fillRect(x0 + pw * s[0] / (N - 1), top, pw * (s[1] - s[0]) / (N - 1), h2); ctx.globalAlpha = 1; });
-    r2.forEach((arr, k) => { ctx.strokeStyle = PRED[k].c; ctx.lineWidth = 1.8; ctx.beginPath(); arr.forEach((v, t) => { const yy = top + h2 - v * h2; t ? ctx.lineTo(x0 + pw * t / (N - 1), yy) : ctx.moveTo(x0, yy); }); ctx.stroke(); });
-    ctx.strokeStyle = '#2E7DE8'; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(x0 + pw * d / (N - 1), top); ctx.lineTo(x0 + pw * d / (N - 1), top + h2); ctx.stroke(); ctx.setLineDash([]);
-    { const XX = t => x0 + pw * t / (N - 1); U.todayMark(XX, top, h2); U.axisDates(XX, top + h2, x0, pw, { n: 4 }); } hot(x0, top, pw, h2, pp => { play.t = clamp((pp.x - x0) / pw, 0, 1); play.on = false; }, 'click to move the day');
+    const XP = U.xmap(x0, pw), r2 = PRED.map(pr => Array.from({ length: N }, (_, t) => regressionAt(t, pr.k, PH.yv).fit.r2)); regimeShade().forEach(s => { ctx.fillStyle = s[2]; ctx.globalAlpha = 0.45; ctx.fillRect(XP(s[0]), top, XP(s[1]) - XP(s[0]), h2); ctx.globalAlpha = 1; });
+    r2.forEach((arr, k) => { ctx.strokeStyle = PRED[k].c; ctx.lineWidth = 1.8; ctx.beginPath(); arr.forEach((v, t) => { const yy = top + h2 - v * h2; t ? ctx.lineTo(XP(t), yy) : ctx.moveTo(XP(0), yy); }); ctx.stroke(); });
+    ctx.strokeStyle = '#2E7DE8'; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(XP(d), top); ctx.lineTo(XP(d), top + h2); ctx.stroke(); ctx.setLineDash([]);
+    { U.todayMark(XP, top, h2); U.axisDates(XP, top + h2, x0, pw, { n: 4 }); } hot(x0, top, pw, h2, pp => { play.t = clamp((pp.x - XP.sx) / XP.sw, 0, 1); play.on = false; }, 'click to move the day');
     y = top + h2 + 28; K.legend(PRED.map(q => [q.c, q.k]), cx + 12, y); y += 18;
     let bestK = 0; PRED.forEach((q, k) => { if (r2[k][d] > r2[bestK][d]) bestK = k; }); const nt = note('On day ' + d + ' the best shoot trait for the ' + YV[PH.yv].t + ' is ' + PRED[bestK].t.toLowerCase() + ' (r² = ' + fmt(r2[bestK][d], 2) + '). The measure is read from a window of five days around the day, as a camera or a thermal scan would be, and the lines show when in the drought each trait becomes informative. Twelve genotypes: angle of the root axes 26, 44, 62°, vigour ×0.8 or ×1.2, stay-green 0.1 or 0.7; all other traits as set above.', cx + 12, y, w - 24); y += nt * 12.5 + 10;
     // tolerance indices of the same panel

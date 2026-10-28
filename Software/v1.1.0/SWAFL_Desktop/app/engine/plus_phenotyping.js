@@ -24,15 +24,26 @@
   // the first day of the season, in ms: the planting day of the project (the season that holds the date of the toolbar), or the date of the toolbar itself
   function startMs() {
     const D = dKey(), y = new Date(D).getUTCFullYear(), sw = projSow(), st = yy => Date.UTC(yy, 0, 1) + sw * DAYMS; let Y = y; if (D < st(y) && D >= st(y - 1) && D - st(y - 1) < N * DAYMS) Y = y - 1;
-    const inSeason = D >= st(Y) && D < st(Y) + N * DAYMS, m = PH.sowMode || 'auto';
+    const inSeason = D >= st(Y) && D < st(Y) + N * DAYMS, m = PH.sowMode || 'date';
     if (m === 'date' || (m === 'auto' && !inSeason)) return D; return st(Y);
   }
   const sowDoy = () => { const d = new Date(startMs()), y = d.getUTCFullYear(); let k = Math.round((startMs() - Date.UTC(y, 0, 1)) / DAYMS); const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0; if (leap && k >= 59) k = k === 59 ? 58 : k - 1; return Math.min(364, Math.max(0, k)); };
   const dateOf = d => { const dt = new Date(startMs() + d * DAYMS); return dt.getUTCDate() + ' ' + MON[dt.getUTCMonth()]; };
   const dateOfY = d => { const dt = new Date(startMs() + d * DAYMS); return dt.getUTCDate() + ' ' + MON[dt.getUTCMonth()] + ' ' + dt.getUTCFullYear(); };
   // the labels of a time axis are dates; the date of the toolbar is marked on every chart
-  function axisDates(X, yAxis, x0, ww, o) { o = o || {}; const n = o.n || 5, yr = new Date(startMs()).getUTCFullYear(); for (let i = 0; i <= n; i++) { const t = Math.round(i * (N - 1) / n), dt = new Date(startMs() + t * DAYMS); T(dt.getUTCDate() + ' ' + MON[dt.getUTCMonth()] + (i === 0 || dt.getUTCFullYear() !== yr && i === n ? ' ' + String(dt.getUTCFullYear()).slice(2) : ''), X(t), yAxis + 12, { s: 8.5, c: MUTE, a: i === 0 ? 'left' : i === n ? 'right' : 'center' }); } }
-  function todayMark(X, top, hh) { try { const q = window.PHUI.outlook.season(dKey()); if (q.idx < 0 || q.idx >= N) return; ctx.strokeStyle = '#0A246A'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(X(q.idx) + 0.5, top); ctx.lineTo(X(q.idx) + 0.5, top + hh); ctx.stroke(); ctx.fillStyle = '#0A246A'; ctx.beginPath(); ctx.moveTo(X(q.idx) - 4, top - 1); ctx.lineTo(X(q.idx) + 5, top - 1); ctx.lineTo(X(q.idx) + 0.5, top + 5); ctx.closePath(); ctx.fill(); } catch (e) { } }
+  const yearAxis = () => PH.axis === 'year';
+  // the map from a day of the season to the x of a chart: the season itself, or the whole calendar year from January to December
+  function xmap(x0, ww) {
+    let f; if (!yearAxis()) f = k => x0 + ww * k / (N - 1); else { const s = startMs(), y0 = Date.UTC(new Date(s).getUTCFullYear(), 0, 1), off = Math.round((s - y0) / DAYMS), span = Math.max(365, off + N); f = k => x0 + ww * (off + k) / (span - 1); }
+    f.x0 = x0; f.x1 = x0 + ww; f.sx = f(0); f.sw = f(N - 1) - f(0); return f;
+  }
+  function axisDates(X, yAxis, x0, ww, o) {
+    o = o || {};
+    if (yearAxis()) { const s = startMs(), y = new Date(s).getUTCFullYear(), step = ww < 220 ? 3 : ww < 400 ? 2 : 1, wide = ww >= 400; let lastX = -1e9;
+      for (let m = 0; m < 24; m += step) { const ms = Date.UTC(y, m, 1), k = (ms - s) / DAYMS, xx = X(k); if (xx < x0 - 1 || xx > x0 + ww - 14) continue; ctx.strokeStyle = '#D8D3C6'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(xx + 0.5, yAxis); ctx.lineTo(xx + 0.5, yAxis + 4); ctx.stroke(); T(MON[m % 12] + (m === 0 || m === 12 ? ' ' + (wide ? (y + Math.floor(m / 12)) : String(y + Math.floor(m / 12)).slice(2)) : ''), xx + 2, yAxis + 12, { s: 8, c: MUTE }); }
+      return; }
+    const n = o.n || 5, yr = new Date(startMs()).getUTCFullYear(); for (let i = 0; i <= n; i++) { const t = Math.round(i * (N - 1) / n), dt = new Date(startMs() + t * DAYMS); T(dt.getUTCDate() + ' ' + MON[dt.getUTCMonth()] + (i === 0 || dt.getUTCFullYear() !== yr && i === n ? ' ' + String(dt.getUTCFullYear()).slice(2) : ''), X(t), yAxis + 12, { s: 8.5, c: MUTE, a: i === 0 ? 'left' : i === n ? 'right' : 'center' }); } }
+  function todayMark(X, top, hh) { try { const q = window.PHUI.outlook.season(dKey()); const xx = X(q.idx); if (yearAxis() ? (xx < X.x0 - 1 || xx > X.x1 + 1) : (q.idx < 0 || q.idx >= N)) return; ctx.strokeStyle = '#0A246A'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(xx + 0.5, top); ctx.lineTo(xx + 0.5, top + hh); ctx.stroke(); ctx.fillStyle = '#0A246A'; ctx.beginPath(); ctx.moveTo(xx - 4, top - 1); ctx.lineTo(xx + 5, top - 1); ctx.lineTo(xx + 0.5, top + 5); ctx.closePath(); ctx.fill(); } catch (e) { } }
   const KIND = { maize: 'maize', millet: 'sorghum', sorghum: 'sorghum', rice: 'wheat', wheat: 'wheat', cassava: 'bean', yam: 'bean', cowpea: 'bean', legume: 'bean', soybean: 'bean', groundnut: 'bean', cotton: 'bean', mustard: 'bean', vegetable: 'bean' };   // the archetype of the model that is nearest to the crop of the library
   const projSpecies = () => { if (CMAP[state.crop]) return CMAP[state.crop]; const c = window.CROPLIB && CROPLIB.crops && CROPLIB.crops[state.crop]; if (c) return KIND[c.kind] || (c.group === 'perennial' ? 'bean' : 'wheat'); return 'wheat'; };
   const applyPreset = id => { const g = P.GENO.find(x => x.id === id) || P.GENO[0]; PH.gid = g.id; PH.g = Object.assign({}, g, { psi50: P.SP[PH.sp].psi50 + g.dpsi }); };
@@ -124,7 +135,8 @@
     y = chipRow('Modelled as', Object.keys(P.SP).map(k => ({ k, t: P.SP[k].name, tip: 'model ' + P.SP[k].name.toLowerCase() + (k === projSpecies() ? ' (the nearest to the crop of the project)' : '') })), PH.sp, k => { PH.sp = k; PH.follow = false; PH.area = null; applyPreset(PH.gid === 'custom' ? 'ref' : PH.gid); }, x0, y, ww);
     y = chipRow('Genotype', P.GENO.map(g => ({ k: g.id, t: g.name })).concat(PH.gid === 'custom' ? [{ k: 'custom', t: 'Custom' }] : []), PH.gid, k => { if (k !== 'custom') applyPreset(k); }, x0, y, ww);
     y = chipRow('Drought', [{ k: 'pulse', t: 'Pulse and recovery', tip: 'set-point of the water in the root zone: 1st stress, 2nd stress (two thirds of it), then rewatering, as in the pot experiments' }, { k: 'terminal', t: 'Terminal', tip: 'no water from the onset to the end' }, { k: 'inter', t: 'Intermittent', tip: 'cycles of stress and rewatering' }, { k: 'none', t: 'No stress (control only)' }], PH.dr.type, k => { PH.dr.type = k; }, x0, y, ww);
-    y = chipRow('Season starts', [{ k: 'auto', t: 'Automatic', tip: 'the planting day of the project when the date of the toolbar falls in that season, otherwise the date of the toolbar' }, { k: 'project', t: 'Planting day of the project', tip: 'the day of the year set in the Properties panel' }, { k: 'date', t: 'On the date of the toolbar', tip: 'sow on the day shown in the toolbar' }], PH.sowMode || 'auto', k => { PH.sowMode = k; }, x0, y, ww);
+    y = chipRow('Season starts', [{ k: 'date', t: 'On the date of the toolbar', tip: 'day 0 of every figure is the date shown in the toolbar; change the date and every figure starts again from it' }, { k: 'project', t: 'Planting day of the project', tip: 'the day of the year set in the Properties panel' }, { k: 'auto', t: 'Automatic', tip: 'the planting day of the project when the date of the toolbar falls in that season, otherwise the date of the toolbar' }], PH.sowMode || 'date', k => { PH.sowMode = k; }, x0, y, ww);
+    y = chipRow('Time axis', [{ k: 'season', t: 'The season', tip: 'the 140 days of the plant' }, { k: 'year', t: 'The whole year, January to December', tip: 'the calendar year of the season, with the date of the toolbar marked' }], PH.axis || 'season', k => { PH.axis = k; }, x0, y, ww);
     y = chipRow('Climate', Object.keys(CLIM).map(k => ({ k, t: CLIM[k].t })), PH.clim, k => { PH.clim = k; }, x0, y, ww);
     y = chipRow('Rain', [{ k: 'none', t: 'Excluded (rain-out shelter)' }, { k: 'project', t: 'Project rain' + (window.WXD && window.WXD.on ? ' (imported days)' : '') }], PH.rain, k => { PH.rain = k; }, x0, y, ww);
     y = chipRow('Left plant', [{ k: 'pj', t: 'Project irrigation', tip: 'watered by the sensor, trigger and method of the Properties panel, with its mulch, nitrogen and salt' }, { k: 'ww', t: 'Well-watered bench', tip: 'water held at the field capacity, as in a pot experiment' }, { k: 'rf', t: 'Rainfed', tip: 'only the rain of the project' }], PH.ref, k => { PH.ref = k; }, x0, y, ww);
@@ -265,7 +277,7 @@
       const obsK = OBSK[row.t], obs = PH.obs && obsK && PH.obs.cols.includes(obsK) ? PH.obs.rows.filter(o => isFinite(o[obsK])) : [];
       obs.forEach(o => { mn = Math.min(mn, o[obsK]); mx = Math.max(mx, o[obsK]); });
       if (!isFinite(mn)) { mn = 0; mx = 1; } const pad = (mx - mn) * 0.08 + 1e-9, nonneg = mn >= 0; mn -= pad; mx += pad; if (nonneg && mn < 0) mn = 0;
-      const X = i => x0 + ww * i / (N - 1), Y = v => top + hgt - (v - mn) / (mx - mn) * hgt;
+      const X = xmap(x0, ww), Y = v => top + hgt - (v - mn) / (mx - mn) * hgt;
       shade.forEach(s => { ctx.fillStyle = s[2]; ctx.fillRect(X(s[0]), top, X(s[1]) - X(s[0]), hgt); });
       ctx.strokeStyle = GRID; ctx.lineWidth = 1; for (let g = 0; g <= 3; g++) { const yy = top + hgt * g / 3; ctx.beginPath(); ctx.moveTo(x0, yy + 0.5); ctx.lineTo(x0 + ww, yy + 0.5); ctx.stroke(); T(fmt(mx - (mx - mn) * g / 3, mx - mn < 5 ? 2 : (mx - mn < 50 ? 1 : 0)), x0 - 4, yy + 3, { s: 8.5, c: MUTE, a: 'right' }); }
       TF(row.t + (row.u ? ' (' + row.u + ')' : ''), x0 + 4, top + 10, ww - 10, { s: 9.5, b: true });
@@ -345,7 +357,7 @@
   function onUp() { PH.drag = null; PH.dragging = false; }
   // background jobs (genotype panel, calibration) run one step per frame; part 2 fills these
   let jobStep = () => { }, panelStep = () => { };
-  window.PHUI = { dateOfY, axisDates, todayMark, startMs, clockTxt, leafColor, drawRoots, drawShoot, BASE, SCR, scrub, runNow, RN, RNc, projObj, nResponse, libCrop, PH, P, K, SECTIONS, chip, chipRow, slider, SL, mix, pal, wcol, day, dateOf, R, N, NL, DZ, ZMAX, CLIM, effGeno, cfgFor, ensureRun, keyOf, seriesVals, SETS, OBSK, regimeShade, sowDoy, envObj, soilObj, setJob: f => { jobStep = f; }, setPanel: f => { panelStep = f; }, redraw: () => { PH.key = ''; } };
+  window.PHUI = { xmap, yearAxis, dateOfY, axisDates, todayMark, startMs, clockTxt, leafColor, drawRoots, drawShoot, BASE, SCR, scrub, runNow, RN, RNc, projObj, nResponse, libCrop, PH, P, K, SECTIONS, chip, chipRow, slider, SL, mix, pal, wcol, day, dateOf, R, N, NL, DZ, ZMAX, CLIM, effGeno, cfgFor, ensureRun, keyOf, seriesVals, SETS, OBSK, regimeShade, sowDoy, envObj, soilObj, setJob: f => { jobStep = f; }, setPanel: f => { panelStep = f; }, redraw: () => { PH.key = ''; } };
   K.add('dph', 'P1 Deterministic phenotyping', '#2F7F3E', drawPh, 'Deterministic phenotyping: plants, roots, water and carbon under drought, from equations', 'Roots, leaves, water and carbon are linked: a change in root angle, stay-green, stomata or soil structure moves every trait at once, and the traits seen above ground reveal what the roots do below.');
   const sc = SCENES.find(s => s.id === 'dph'); if (sc) { sc.play = true; sc.dur = 40; sc.h = 3600; sc.onDown = onDown; sc.onMove = onMove; sc.onUp = onUp; sc.onLeave = () => { hotUi.hover = null; }; }
   // the button of the web explorer, in the group of the soil

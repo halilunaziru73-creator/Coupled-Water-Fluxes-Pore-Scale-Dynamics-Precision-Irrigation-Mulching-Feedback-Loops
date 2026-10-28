@@ -31,7 +31,8 @@ Once run, every control re-runs the model, and every chart answers it.
 | Modelled as (maize, sorghum, wheat, common bean) | thermal time, leaf number, radiation use, light extinction, height, root axes, stomatal and turgor constants |
 | Genotype (reference, deep rooting, shallow and dense, stay-green, water saver, water spender, osmotic adjuster) | angle of the axes, lateral density, stay-green, stomatal threshold, osmotic adjustment, hydraulic resistance, carbon to roots |
 | Drought (pulse and recovery, terminal, intermittent, none) | the water that the drought treatment is held at, in time |
-| Season starts | the first day of the season: automatic, the planting day of the project, or the date of the toolbar (the section *Drought stress calendar* explains each) |
+| Season starts | the first day of the season: the date of the toolbar (the start), the planting day of the project, or automatic (the section *Drought stress calendar* explains each) |
+| Time axis | the season with dates, or the whole year from January to December with the date of the toolbar marked |
 | Climate and rain | temperature, radiation, vapour pressure deficit, reference evapotranspiration, rain |
 | Left plant (project irrigation, well-watered bench, rainfed) | the treatment of the left plant: the irrigation of the project made by the sensor rule, a bench held wet, or the rain only; the right plant is always the drought |
 | Drought starts, length, water held | day of onset, duration and the level of the stress, in per cent of the plant-available water (defaults 45 days, 35 days, 15 %) |
@@ -84,6 +85,8 @@ The observations that you load are drawn on the same charts as squares.
 
 ### Water: demand, supply and where the roots take it
 
+![The water chart with the time axis set to the whole year, January to December, and the date of the toolbar marked.](images/pheno/p14_wateryear.png){width=85%}
+
 ![Water: transpiration, soil evaporation, rain and water applied, the plant-available water of every layer with the front of the roots, and the water taken by each layer.](images/pheno/p5_water.png){width=85%}
 
 The top chart shows what the canopy asks for (the potential transpiration), what it transpires in each treatment and what the soil surface loses. The two heat maps show the plant-available water of each layer through the season with the root front as a white line; the bars at the right show how much each layer gave on the day. The table gives the season totals of transpiration, soil evaporation, water in and drainage below 1.2 m, so that the water balance of every treatment is closed. In this run the well-watered plant transpired 334 mm and the drought plant 237 mm.
@@ -114,7 +117,9 @@ The table gives the **drought susceptibility index** of Fischer and Maurer (1978
 
 ### Roots day by day
 
-![The profile of the chosen day and the roots through the season. Wheat, project climate, day 70.](images/pheno/p3b_rootday.png){width=85%}
+![The profile of the chosen day and the roots through the season. Wheat, project climate, planting day of the project, day 45 (15 June).](images/pheno/p3b_rootday.png){width=85%}
+
+![The same section with the time axis set to the whole year, January to December.](images/pheno/p3c_rootdayyear.png){width=85%}
 
 For the chosen day the section draws the **root length density by depth** of the two plants (bars), the water of each layer (blue strip) and the depth of 95 % of the roots (dashed line). Six series follow the roots through the season, each with a cursor on the day: the root length of the plant, the deepest root tip, the depth of 95 % of the root length (D95), the growth of the roots per day, the share of the carbon that goes to the roots, and the root to shoot ratio. Click or drag on any chart to move the day; the numbers on the right of each title are the two plants on that day. The sentence under the charts reads the day: the root length, depth and growth of both plants, the new carbon they received, and the shoot measurements of the same day.
 
@@ -135,6 +140,12 @@ The repository holds 10,190 Daisy simulations (*Data/Comprehensive_Summary*). Th
 ![The readouts of a phenotyping experiment for the two treatments, with the change under drought.](images/pheno/p9_traits.png){width=85%}
 
 The table lists 26 traits: the final height, the largest projected shoot area, the day the shoot area reaches half of its largest, the fastest relative growth of the shoot area, the fastest biomass gain, the largest green leaf area index, the stay-green day, the green leaf area over the season, the lowest leaf water content and potential and the highest crop water stress index in the stress period, the canopy temperature depression of the stress period, the water used (transpiration, soil evaporation, water in), dry mass, grain, harvest index, transpiration efficiency, water use efficiency, root depth and length, the depths of 50 % and 95 % of the root length, the share of roots below 60 cm and the root to shoot ratio. The column *change* is the relative change under drought, or the difference when the value of the well-watered plant is small.
+
+### Weather in use, January to December
+
+![The weather in use for the year of the date of the toolbar (15 June 2026). No weather file is loaded, so the model weather of the project climate is shown.](images/pheno/p13_weather.png){width=85%}
+
+This section shows the weather that every figure of the layer reads, for the whole calendar year of the date of the toolbar, with a dark line on that date. The header names the **source**: the weather file or the online weather of the farm when one is loaded (*Tools*), or the model weather of the project climate when none is. It states how many days of the year the record holds and which dates they cover, how many of them are the forecast after the date of the toolbar, and that the other days are the typical year of the record (the year with the median rain), and it gives the rain, the reference evapotranspiration and the mean temperature of the date of the toolbar. Two charts follow: the daily rain (bars) with the reference evapotranspiration (line), and the mean temperature. The bars are dark blue for recorded days, light blue for the forecast and grey for the days taken from the typical year or from the model. A green band marks the days of the season of the plant. When the date of the toolbar is changed the chart is drawn again for the year of the new date, so the weather in use always matches the date.
 
 ### Drought outlook from the date of the toolbar
 
@@ -171,7 +182,7 @@ This section turns the outlook into a calendar. It answers two questions for the
 
 **How a period is found.** A day is a day of stress when the water of the root zone is below the level at which transpiration starts to fall (Eq. P.26). Days of stress that are no more than two days apart form one period, and a period shorter than two days is dropped (Eq. P.27). Each period is compared with a **well watered bench plant** that is grown on the same weather, so the difference in the roots is the effect of the water and not of the weather (Eq. P.28).
 
-**Where the dates come from.** The first day of the season is set by the control *Season starts* in the section *Set up the experiment*. *Automatic* uses the planting day of the Properties panel when the date of the toolbar falls inside that season, and otherwise sows on the date of the toolbar, so that the calendar always starts on a real date and reaches maturity after it. *Planting day of the project* always uses the planting day of the Properties panel, so the season can lie wholly in the past or wholly ahead. *On the date of the toolbar* sows on that date. Every chart of the layer has its dates on the horizontal axis and a dark line on the date of the toolbar, and the dates of the table are those of the same calendar. The days up to the date of the toolbar use the recorded weather when a weather file or the online weather is loaded (*Tools*); the days after it use the forecast and then the three futures of the outlook.
+**Where the dates come from.** The date in the toolbar is the key date of the whole layer, one to one: the first day of every figure is that date, the day shown in the plant, the film and the charts is that date, and when the date is changed every figure starts again from the new date. The control *Season starts* in the section *Set up the experiment* has three choices. *On the date of the toolbar* (the choice at the start) sows on the date of the toolbar. *Planting day of the project* uses the planting day of the Properties panel, so the season can lie wholly in the past or wholly ahead of the date, and the date is then a day inside it. *Automatic* uses the planting day of the project when the date falls inside that season and otherwise sows on the date. The control *Time axis* chooses what the horizontal axes show: *The season* (the 140 days of the plant, with dates) or *The whole year, January to December*, in which the plant occupies the part of the year in which it grows and a dark line marks the date of the toolbar. Every chart of the layer has its dates on the horizontal axis and the line of the date of the toolbar.
 
 **Reading the roots.** In the figure the roots of the rainfed plant grow as much as or more than the watered roots during the first periods, because a plant in dry soil sends a larger share of its carbon to the roots and so keeps growing downwards, but in the last periods, after grain filling has begun, they make no growth at all with or without water. The share of the root length in dry layers is high from the first period, because the top layers dry first and most of the roots are there. These are the results of the model with the constants of the species; they are not measurements.
 
@@ -186,7 +197,7 @@ The last section brings experimental data to the model:
 
 ### Moving about the layer
 
-A bar of buttons stays at the top of the window while the page is scrolled (*Set up*, *Plants*, *Season film*, *Roots by day*, *Root scans*, *Traits*, *Water*, *Carbon*, *Soil*, *Roots and shoot*, *Genotype*, *Trait table*, *SWAFL data*, *Outlook*, *Stress calendar*, and *My data*). A button jumps to its section, and the section at the top of the window is marked. The title of every section has a triangle: click it to collapse or expand the section, or use *Collapse all* and *Expand all* at the top. The text of a hint never runs off the edge of the window: a long hint is cut into lines.
+A bar of buttons stays at the top of the window while the page is scrolled (*Set up*, *Plants*, *Season film*, *Roots by day*, *Root scans*, *Traits*, *Water*, *Carbon*, *Soil*, *Roots and shoot*, *Genotype*, *Trait table*, *SWAFL data*, *Weather*, *Outlook*, *Stress calendar*, and *My data*). A button jumps to its section, and the section at the top of the window is marked. The title of every section has a triangle: click it to collapse or expand the section, or use *Collapse all* and *Expand all* at the top. The text of a hint never runs off the edge of the window: a long hint is cut into lines.
 
 ### Equations
 
