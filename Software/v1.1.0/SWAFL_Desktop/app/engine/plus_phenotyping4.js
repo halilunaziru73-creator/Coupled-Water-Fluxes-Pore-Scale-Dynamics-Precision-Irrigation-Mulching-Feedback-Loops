@@ -117,7 +117,7 @@
     const S = R.S, A = R.A, ti = clamp(S.idx, 0, N - 1), when = fdate(R.D);
     const stTxt = S.state === 'before' ? 'The crop is not yet sown on this date; the whole season is a forecast.' : S.state === 'after' ? 'The season of this crop is over on this date; the whole season is a record.' : 'Day ' + S.idx + ' after emergence.';
     T('Date of the toolbar: ' + U.clockTxt() + '. ' + stTxt, cx + 12, y + 8, { s: 9.5, b: true }); y += 22;
-    const srcTxt = !sources() ? 'Weather: the model weather of the project climate (no weather file or online weather is imported, so there are no recorded days and no forecast): ' + (S.idx + 1 > 0 ? Math.min(N, S.idx + 1) : 0) + ' days to the date, then the three futures with 0.4, 1 and 1.6 times the rain. Import a weather file or the online weather of the farm (Tools) to use the record and the forecast. Sown ' + dateOf(0) + '.' :
+    const srcTxt = !sources() ? 'Weather: the model weather of the project climate (no weather file or online weather is imported, so there are no recorded days and no forecast): ' + (S.idx + 1 > 0 ? Math.min(N, S.idx + 1) : 0) + ((S.idx + 1) === 1 ? ' day' : ' days') + ' to the date, then the three futures with 0.4, 1 and 1.6 times the rain. Import a weather file or the online weather of the farm (Tools) to use the record and the forecast. Sown ' + dateOf(0) + '.' :
       'Weather: ' + A.src + '. Days of the season: ' + A.nObs + ' recorded' + (A.nFill ? ' (' + A.nFill + ' filled from a typical year)' : '') + ', ' + A.nFc + ' of forecast, ' + A.nScn + ' of the three futures' + (A.rank ? ' (years ' + A.rank.years[A.rank.dry] + ', ' + A.rank.years[A.rank.typ] + ' and ' + A.rank.years[A.rank.wet] + ' of the record: the driest, the median and the wettest rain of those days).' : '.') + ' Sown ' + dateOf(0) + '.';
     y += note(srcTxt, cx + 12, y, w - 24) * 12.5 + 4;
     let xx = cx + 12; xx += chip(xx, y, 'Show this date in the plant', false, () => { play.t = ti / (N - 1); play.on = false; }, 'moves the day of every section to the date of the toolbar'); xx += chip(xx, y, 'Start the drought pulse on this date', false, () => { PH.dr.onset = clamp(Math.max(10, ti), 10, 110); PH.dr.type = 'pulse'; }, 'the held-water drought of the layer begins on the date of the toolbar'); y += 28;
@@ -138,28 +138,30 @@
         SCN.forEach(s => { ctx.strokeStyle = s.c; ctx.lineWidth = 1.8; ctx.beginPath(); for (let k = Math.max(0, ti); k < N; k++) { const v = d.f(R.runs[s.k], k); k === Math.max(0, ti) ? ctx.moveTo(X(k), Y(v)) : ctx.lineTo(X(k), Y(v)); } ctx.stroke(); });
       } else { SCN.forEach((s, i2) => { ctx.strokeStyle = s.c; ctx.lineWidth = 1.8; ctx.beginPath(); for (let k = Math.max(0, ti); k < N; k++) { k === Math.max(0, ti) ? ctx.moveTo(X(k), Y(rs[i2][k])) : ctx.lineTo(X(k), Y(rs[i2][k])); } ctx.stroke(); }); }
       ctx.strokeStyle = '#1B1F23'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(X(ti) + 0.5, gy); ctx.lineTo(X(ti) + 0.5, gy + gh); ctx.stroke(); ctx.setLineDash([]);
-      T(d.t, gx, gy - 6, { s: 9, b: true }); T(fmt(hi, d.dp), gx - 3, gy + 8, { s: 7.5, c: MUTE, a: 'right' }); T(fmt(lo, d.dp), gx - 3, gy + gh, { s: 7.5, c: MUTE, a: 'right' });
-      if (U.yearAxis()) U.axisDates(X, gy + gh, gx, gw); else { T(dateOf(0), gx, gy + gh + 11, { s: 7.5, c: MUTE }); T(dateOf(N - 1), gx + gw, gy + gh + 11, { s: 7.5, c: MUTE, a: 'right' }); } T('today', X(ti) + 3, gy + gh + 11, { s: 7.5, b: true });
+      T(d.t, gx, gy - 6, { s: 9, b: true }); T(fmt(hi, d.dp), gx + 3, gy + 9, { s: 7.5, c: MUTE }); T(fmt(lo, d.dp), gx + 3, gy + gh - 3, { s: 7.5, c: MUTE });
+      if (U.yearAxis()) U.axisDates(X, gy + gh, gx, gw); else { T(dateOf(0), gx, gy + gh + 11, { s: 7.5, c: MUTE }); T(dateOf(N - 1), gx + gw, gy + gh + 11, { s: 7.5, c: MUTE, a: 'right' }); } U.todayMark(X, gy, gh);
       U.scrub(gx, gy, gw, gh, X.sx, X.sw);
     });
-    y = gy + gh + 22; K.legend([['#1B1F23', 'the season to the date'], ['#D93025', 'dry future'], ['#2E7DE8', 'typical future'], ['#2E8B57', 'wet future'], ['#DDE7F3', 'days of the forecast']], cx + 12, y); y += 12;
+    y = gy + gh + 30; K.legend([['#1B1F23', 'the season to the date'], ['#D93025', 'dry future'], ['#2E7DE8', 'typical future'], ['#2E8B57', 'wet future'], ['#DDE7F3', 'days of the forecast'], ['#0A246A', 'date of the toolbar']], cx + 12, y); y += 26;
     // table
     const cols = [0, 0.2, 0.33, 0.45, 0.57, 0.68, 0.8, 0.9].map(f => cx + 12 + (w - 24) * f);
     ['future', 'rain mm', 'next 14 d', 'stress days', 'lowest %', 'grain g/m²', 'vs irrig.', 'risk'].forEach((h, k) => T(h, cols[k] + (k ? 0 : 0), y + 8, { s: 8.5, b: true }));
     y += 14; ctx.strokeStyle = GRID; ctx.beginPath(); ctx.moveTo(cx + 12, y + 0.5); ctx.lineTo(cx + w - 12, y + 0.5); ctx.stroke(); y += 4;
+    const noG = R.bench.Wg[N - 1] < 1;
     const rc = { low: '#1E8E3E', moderate: '#B8860B', high: '#D9622B', severe: '#B3261E' };
     SCN.forEach(s => { const m = R.sum[s.k]; ctx.fillStyle = s.c; ctx.fillRect(cols[0], y + 2, 8, 8); T(s.t, cols[0] + 13, y + 10, { s: 9.5, b: true });
-      [fmt(m.rain), fmt(m.p14), String(m.stressDays), fmt(m.lowest * 100), fmt(m.yRf), fmt(m.yrel, 2)].forEach((v, k) => T(v, cols[k + 1], y + 10, { s: 9.5 })); T(m.risk, cols[7], y + 10, { s: 9.5, b: true, c: rc[m.risk] }); y += 15; });
+      [fmt(m.rain), fmt(m.p14), String(m.stressDays), fmt(m.lowest * 100), fmt(m.yRf), fmt(m.yrel, 2)].forEach((v, k) => T(v, cols[k + 1], y + 10, { s: 9.5 })); T(noG ? 'no grain' : m.risk, cols[7], y + 10, { s: 9.5, b: true, c: noG ? MUTE : rc[m.risk] }); y += 15; });
     y += 4; y += note('Rainfed plant: rain to maturity, rain in the next 14 days, days with the root zone below the stress level, lowest root zone water, grain, share of the grain of the irrigated plant, risk.', cx + 12, y + 4, w - 24, { s: 8.5 }) * 12.5 + 10; T('Project irrigation under the same weather', cx + 12, y + 8, { s: 9.5, b: true }); y += 14;
     ['future', 'next watering', 'mm', 'waterings', 'water mm', 'grain g/m²', 'vs watered'].forEach((h, k) => T(h, cols[k], y + 8, { s: 8.5, b: true })); y += 14; ctx.beginPath(); ctx.moveTo(cx + 12, y + 0.5); ctx.lineTo(cx + w - 12, y + 0.5); ctx.stroke(); y += 4;
     SCN.forEach(s => { const m = R.sum[s.k]; ctx.fillStyle = s.c; ctx.fillRect(cols[0], y + 2, 8, 8); T(s.t, cols[0] + 13, y + 10, { s: 9.5, b: true });
       [m.ne >= 0 ? fdate(S.start + m.ne * DAY) : 'none', m.ne >= 0 ? fmt(m.nm) : '', String(m.nev), fmt(m.nw), fmt(m.yPj), fmt(m.yPj / Math.max(1e-6, R.bench.Wg[N - 1]), 2)].forEach((v, k) => T(v, cols[k + 1], y + 10, { s: 9.5 })); y += 15; });
-    y += 6;
+    y += 14;
     const d = R.sum.dry, t = R.sum.typ, wt = R.sum.wet, bg = R.bench.Wg[N - 1];
-    const txt = 'Reading: a plant held well watered would make ' + fmt(bg) + ' g/m² of grain on the typical weather, and the plant irrigated by the rule of the project ' + fmt(t.yPj) + ' g/m². Left to the rain, the plant makes ' + fmt(t.yRf) + ' g/m² (' + fmt(t.yrel * 100) + ' % of the irrigated plant of the same weather) on the typical future, ' + fmt(d.yRf) + ' g/m² (' + fmt(d.yrel * 100) + ' %) on the dry one and ' + fmt(wt.yRf) + ' g/m² (' + fmt(wt.yrel * 100) + ' %) on the wet one. ' +
+    let txt = 'Reading: a plant held well watered would make ' + fmt(bg) + ' g/m² of grain on the typical weather, and the plant irrigated by the rule of the project ' + fmt(t.yPj) + ' g/m². Left to the rain, the plant makes ' + fmt(t.yRf) + ' g/m² (' + fmt(t.yrel * 100) + ' % of the irrigated plant of the same weather) on the typical future, ' + fmt(d.yRf) + ' g/m² (' + fmt(d.yrel * 100) + ' %) on the dry one and ' + fmt(wt.yRf) + ' g/m² (' + fmt(wt.yrel * 100) + ' %) on the wet one. ' +
       (S.state === 'after' ? 'The season is over, so the three futures are the same.' : (d.firstStress >= 0 ? 'On the dry future the root zone first falls below the stress level of ' + Math.round((1 - pFrac()) * 100) + ' % of its available water on ' + fdate(S.start + d.firstStress * DAY) + ' (readily available water of FAO-56). ' : 'The root zone stays above the stress level on the dry future. ') + 'In the next 14 days the weather in use brings ' + fmt(t.p14) + ' mm of rain against ' + fmt(t.e14) + ' mm of reference evapotranspiration. ') +
       (t.ne >= 0 ? 'The sensor rule of the project (' + (projTxt()) + ') would water next on ' + fdate(S.start + t.ne * DAY) + ' with ' + fmt(t.nm) + ' mm on the typical future.' : 'The sensor rule of the project would not water on the typical future.') +
       ' Risk classes by the share of the irrigated grain that the rain alone gives: low 90 % or more, moderate 75 to 90 %, high 50 to 75 %, severe below 50 %. The futures are real years of the record, not a forecast of the season beyond the days of the forecast. The grain depends on the root conductance of the model: use the fit to the SWAFL data first.';
+    if (noG) txt += ' The well watered plant itself makes no grain in the ' + N + ' days that start on this date, so the grain and the risk columns cannot rank the futures. The dates of the drought stress and what it does to the roots (the sections At a glance and Drought stress calendar) still hold; to grow the plant to grain, set Season starts to the planting day of the project.';
     y += note(txt, cx + 12, y, w - 24) * 12.5 + 8; endFrame(cx, y0, y, w); return y + 10;
   }
   function projTxt() { try { const q = U.projObj(); return q.irr.method + ', trigger ' + Math.round(q.irr.trig) + ' cm, sensor ' + q.irr.z + ' cm'; } catch (e) { return 'the Properties panel'; } }
@@ -279,21 +281,21 @@
       { t: 'Root growth per day (cm/day): this plant against a watered plant', hh: 70, a: k => X0.dL[k], b: k => B.dL[k], dp: 1 },
       { t: 'Depth of the deepest root (cm)', hh: 60, a: k => X0.Rdepth[k], b: k => B.Rdepth[k], dp: 0 }
     ];
-    y += 18;
+    y += 18; let PT = 0;
     panels.forEach((d, pi) => {
       let lo = d.lo != null ? d.lo : 0, hi = d.hi; if (hi == null) { hi = 1e-9; for (let k = 0; k < N; k++) { hi = Math.max(hi, d.a(k), d.b ? d.b(k) : 0); } hi = K.nice(hi * 1.08); }
-      const top = y, Y = v => top + d.hh - (v - lo) / (hi - lo) * d.hh;
+      const off = pi === 0 ? 36 : 0, top = y + off, Y = v => top + d.hh - (v - lo) / (hi - lo) * d.hh; if (pi === 0) PT = top;
       ctx.fillStyle = '#FBFAF6'; ctx.fillRect(x0, top, ww, d.hh); ctx.strokeStyle = GRID; ctx.lineWidth = 1; ctx.strokeRect(x0 + 0.5, top + 0.5, ww - 1, d.hh - 1);
       eps.forEach(e => { ctx.fillStyle = e.b < ti ? 'rgba(150,146,136,0.28)' : 'rgba(217,48,37,0.2)'; ctx.fillRect(X(e.a), top, Math.max(2, X(e.b + 1) - X(e.a)), d.hh); });
-      T(d.t, x0 + 4, top - 5, { s: 9, b: true }); T(fmt(hi, d.dp), x0 - 4, top + 8, { s: 8, c: MUTE, a: 'right' }); T(fmt(lo, d.dp), x0 - 4, top + d.hh, { s: 8, c: MUTE, a: 'right' });
-      if (d.ref != null) { ctx.strokeStyle = '#B3261E'; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(x0, Y(d.ref) + 0.5); ctx.lineTo(x0 + ww, Y(d.ref) + 0.5); ctx.stroke(); ctx.setLineDash([]); T(d.rl, x0 + ww - 4, Y(d.ref) - 3, { s: 8, c: '#B3261E', a: 'right' }); }
+      T(d.t, x0 + 4, top - 5 - off, { s: 9, b: true }); T(fmt(hi, d.dp), x0 - 4, top + 8, { s: 8, c: MUTE, a: 'right' }); T(fmt(lo, d.dp), x0 - 4, top + d.hh, { s: 8, c: MUTE, a: 'right' });
+      if (d.ref != null) { ctx.strokeStyle = '#B3261E'; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(x0, Y(d.ref) + 0.5); ctx.lineTo(x0 + ww, Y(d.ref) + 0.5); ctx.stroke(); ctx.setLineDash([]); T(d.rl, x0 + 4, Y(d.ref) + 10, { s: 8, c: '#B3261E' }); }
       const ln = (f, c, wd) => { ctx.strokeStyle = c; ctx.lineWidth = wd; ctx.beginPath(); for (let k = 0; k < N; k++) { k ? ctx.lineTo(X(k), Y(f(k))) : ctx.moveTo(X(k), Y(f(k))); } ctx.stroke(); };
       if (d.b) ln(d.b, '#1B1F23', 1.4); ln(d.a, PH.stPlant === 'rf' ? '#D93025' : '#2E7DE8', 2);
-      if (pi === 0) eps.forEach((e, i) => { const lab = fdate(S.start + e.a * DAY); ctx.strokeStyle = e.b < ti ? '#6B7280' : '#B3261E'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(X(e.a) + 0.5, top); ctx.lineTo(X(e.a) + 0.5, top - 3 - (i % 2) * 0); ctx.stroke(); });
-      U.todayMark(X, top, d.hh); y += d.hh + 30;
+      U.todayMark(X, top, d.hh); y = top + d.hh + 30;
     });
-    // the dates of the drought written on the first chart
-    { const top0 = y - (panels[0].hh + 30) - (panels[1].hh + 30) - (panels[2].hh + 30); ctx.font = 'bold 8.5px sans-serif'; let last = -1e9, row = 0; eps.slice(0, 14).forEach((e, i) => { const lab = fdate(S.start + e.a * DAY), xx = X(e.a); const wv = ctx.measureText(lab).width; if (xx < last + wv + 4) row = (row + 1) % 3; else row = 0; last = xx; { const rt = xx + wv + 4 > x0 + ww; T(lab, rt ? xx - 2 : xx + 2, top0 + 10 + row * 10, { s: 8.5, b: true, c: e.b < ti ? '#6B7280' : '#B3261E', a: rt ? 'right' : 'left' }); } }); }
+    // the dates of the drought are written in a band above the first chart, one row lower when two labels would touch, each with a line to its band
+    { ctx.font = 'bold 8.5px sans-serif'; const rowsEnd = [-1e9, -1e9, -1e9]; eps.slice(0, 14).forEach(e => { const lab = fdate(S.start + e.a * DAY), xx = X(e.a), wv = ctx.measureText(lab).width, rt = xx + wv + 4 > x0 + ww, x1 = rt ? xx - wv - 4 : xx, x2 = x1 + wv + 4; let row = rowsEnd.findIndex(q => q < x1); if (row < 0) row = 2; rowsEnd[row] = x2; const col = e.b < ti ? '#6B7280' : '#B3261E';
+      ctx.strokeStyle = col; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(xx + 0.5, PT - 36 + row * 11 + 12); ctx.lineTo(xx + 0.5, PT); ctx.stroke(); T(lab, rt ? xx - 2 : xx + 2, PT - 36 + row * 11 + 10, { s: 8.5, b: true, c: col, a: rt ? 'right' : 'left' }); }); }
     U.axisDates(X, y - 30 + 0, x0, ww);
     y += 8;
     K.legend([[PH.stPlant === 'rf' ? '#D93025' : '#2E7DE8', (PH.stPlant === 'rf' ? 'rainfed plant' : 'plant irrigated by the project') + ', ' + sc.t.toLowerCase()], ['#1B1F23', 'watered plant under the same weather'], ['rgba(217,48,37,0.45)', 'days of drought stress ahead'], ['rgba(150,146,136,0.6)', 'days of stress that have passed'], ['#0A246A', 'date of the toolbar']], x0, y); y += 36;
