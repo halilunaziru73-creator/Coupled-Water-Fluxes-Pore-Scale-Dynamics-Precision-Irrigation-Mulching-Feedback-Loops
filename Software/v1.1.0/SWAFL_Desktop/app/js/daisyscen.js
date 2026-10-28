@@ -30,10 +30,19 @@
     w2: { label: 'Irrigation window closes (month-day)', type: 'text' },
     root: { label: 'Maximum rooting depth (cm, 0 = soil default)', type: 'number', min: 0, max: 200, step: 5 },
     koc: { label: 'Sorption of the chemical, K_OC (L/kg)', type: 'number', min: 0, max: 5000, step: 10 },
-    half: { label: 'Half-life of the chemical in soil (days, 0 = none)', type: 'number', min: 0, max: 2000, step: 5 }
+    half: { label: 'Half-life of the chemical in soil (days, 0 = none)', type: 'number', min: 0, max: 2000, step: 5 },
+    flux: { label: 'Application rate of irrigation (mm/h, 0 = from dose and duration)', type: 'number', min: 0, max: 20, step: 0.05 },
+    waitd: { label: 'Days between irrigations', type: 'number', min: 1, max: 7, step: 1 },
+    spin: { label: 'Warm-up years before the results are counted', type: 'number', min: 1, max: 15, step: 1 },
+    till: { label: 'Tillage before sowing', type: 'select', opts: [['plowing', 'plowing'], ['rotavation', 'rotavation (mix to 15 cm)'], ['disk_harrowing', 'disk harrowing (mix to 10 cm)'], ['stubble_cultivation', 'stubble cultivation (mix to 8 cm)'], ['none', 'no tillage']] },
+    ntype: { label: 'Fertiliser', type: 'select', opts: [['N25S', 'N25S (course default)'], ['AmmoniumNitrate', 'ammonium nitrate'], ['CalciumNitrate', 'calcium nitrate'], ['Nitrate', 'nitrate'], ['Ammonia', 'ammonia']] },
+    ntime: { label: 'Fertiliser dates moved by (days)', type: 'number', min: -21, max: 28, step: 7 },
+    bio: { label: 'Evapotranspiration model (Bioclimate)', type: 'select', opts: [['auto', 'FAO56 reference evapotranspiration'], ['default', 'Daisy default (energy balance; needs wind and vapour pressure)']] },
+    radscale: { label: 'Global radiation, scale', type: 'number', min: 0.5, max: 1.5, step: 0.05 },
+    pmonths: { label: 'Rain scale per month (12 numbers, Jan to Dec; blank = none)', type: 'text' }
   };
   S.OPTIONS.station.opts = S.STATIONS.map(x => [x.id, x.label]);
-  S.DEFAULTS = { soil: 'loam', station: 'course', start: 1980, stop: 2000, precip: 1, temp: 0, nfac: 1, irrig: '0', method: 'overhead', trig: -300, z: 20, mm: 30, hours: 3, dfrom: 10, dto: 20, limit: 0, w1: '04-01', w2: '10-01', root: 0, koc: 0, half: 0 };
+  S.DEFAULTS = { soil: 'loam', station: 'course', start: 1980, stop: 2000, precip: 1, temp: 0, nfac: 1, irrig: '0', method: 'overhead', trig: -300, z: 20, mm: 30, hours: 3, dfrom: 10, dto: 20, limit: 0, w1: '04-01', w2: '10-01', root: 0, koc: 0, half: 0, flux: 0, waitd: 2, spin: 1, till: 'plowing', ntype: 'N25S', ntime: 0, bio: 'auto', radscale: 1, pmonths: '' };
 
   S.LIST = [
     { id: 'irrigation', theme: 'Water', title: 'Irrigation: does it pay off, and what does it cost the soil?',
@@ -73,20 +82,23 @@
     let rot = o.irrig === '1' ? files['ArableFarmRotation_withirrigation.dai'] : files['ArableFarmRotation.dai'];
     if (rot == null) throw new Error('the rotation file is missing');
     if (o.nfac !== 1) rot = rot.replace(/\(weight\s+(\d+(?:\.\d+)?)\s*\[kg N\/ha\]\)/g, (m, w) => '(weight ' + (+(parseFloat(w) * o.nfac).toFixed(1)) + ' [kg N/ha])');
+    if (o.till && o.till !== 'plowing') rot = rot.replace(/\(plowing\)/g, o.till === 'none' ? '' : '(' + o.till + ')');
+    if (o.ntype && o.ntype !== 'N25S') rot = rot.replace(/\(N25S\s+/g, '(' + o.ntype + ' ');
+    if (S.num(o.ntime, 0)) { const dn = Math.round(S.num(o.ntime, 0)); rot = rot.replace(/\(wait_mm_dd\s+(\d{1,2})\s+(\d{1,2})\)\s*\(fertilize/g, (m, a, b) => { const d = new Date(Date.UTC(2001, +a - 1, +b) + dn * 864e5); return '(wait_mm_dd ' + (d.getUTCMonth() + 1) + ' ' + d.getUTCDate() + ')(fertilize'; }); }
     rot = rot.replace(/K_OC\s+[\d.]+\s*\[L\/kg\]/, 'K_OC ' + S.num(o.koc, 0) + ' [L/kg]').replace(/decompose_rate\s+[\d.eE+-]+\s*\[h\^-1\]/, 'decompose_rate ' + (S.num(o.half, 0) > 0 ? (Math.LN2 / (24 * S.num(o.half, 0))).toExponential(5) : '0') + ' [h^-1]');
     if (o.irrig === '1') {
-      const mm = Math.max(1, S.num(o.mm, 30)); let hrs = Math.max(1, Math.round(S.num(o.hours, 3))); if (mm / hrs > 20) hrs = Math.ceil(mm / 20);   // Daisy solves the water flow better with a moderate rate
+      const mm = Math.max(1, S.num(o.mm, 30)); let hrs = Math.max(1, Math.round(S.num(o.hours, 3))); if (S.num(o.flux, 0) > 0) hrs = Math.max(1, Math.round(mm / S.num(o.flux, 0))); if (mm / hrs > 20) hrs = Math.ceil(mm / 20);   // Daisy solves the water flow better with a moderate rate
       const rate = +(mm / hrs).toFixed(3), z = Math.max(1, Math.round(S.num(o.z, 20))), md = v => { const m = String(v || '').match(/^(\d{1,2})[-\/.](\d{1,2})$/); return m ? [+m[1], +m[2]] : null; }, a1 = md(o.w1) || [4, 1], a2 = md(o.w2) || [10, 1];
       const how = o.method === 'surface' ? '(irrigate_surface ' + rate + ' [mm/h] (hours ' + hrs + '))' : o.method === 'drip' ? '(irrigate_subsoil ' + rate + ' [mm/h] (hours ' + hrs + ') (from -' + Math.min(S.num(o.dfrom, 10), S.num(o.dto, 20)) + ' [cm]) (to -' + Math.max(S.num(o.dfrom, 10) + 1, S.num(o.dto, 20)) + ' [cm]))' : '(irrigate_overhead ' + rate + ' [mm/h] (hours ' + hrs + '))';
-      const act = '(defaction irrigate_30_tensiometer_overhead activity\n  ;; SWAFL: tensiometer-triggered irrigation, ' + o.method + ', ' + mm + ' mm per event\n  (wait (and (after_mm_dd ' + a1[0] + ' ' + a1[1] + ')\n             (before_mm_dd ' + a2[0] + ' ' + a2[1] + ')\n             (not (soil_water_pressure_above (height -' + z + ' [cm]) (potential ' + Math.round(S.num(o.trig, -300)) + ' [cm])))))\n  ' + how + '\n  (wait_days 2))';
+      const act = '(defaction irrigate_30_tensiometer_overhead activity\n  ;; SWAFL: tensiometer-triggered irrigation, ' + o.method + ', ' + mm + ' mm per event\n  (wait (and (after_mm_dd ' + a1[0] + ' ' + a1[1] + ')\n             (before_mm_dd ' + a2[0] + ' ' + a2[1] + ')\n             (not (soil_water_pressure_above (height -' + z + ' [cm]) (potential ' + Math.round(S.num(o.trig, -300)) + ' [cm])))))\n  ' + how + '\n  (wait_days ' + Math.max(1, Math.round(S.num(o.waitd, 2))) + '))';
       const re = /\(defaction irrigate_30_tensiometer_overhead activity[\s\S]*?\(wait_days\s+\d+\)\s*\)/; if (!re.test(rot)) throw new Error('the irrigation action was not found in the rotation file'); rot = rot.replace(re, () => act);
       const lim = S.num(o.limit, 0); if (lim > 0) { const k = Math.max(1, Math.round(lim / mm)); rot = rot.replace(/\(repeat irrigate_30_tensiometer_overhead\)/g, '(activity' + ' irrigate_30_tensiometer_overhead'.repeat(k) + ')'); }
     }
     let soilTxt = files["ResFarm.dai"]; if (String(o.soil).indexOf('usda:') === 0) o.userSoil = S.usdaSoil(String(o.soil).slice(5)); const useSoil = (o.soil === 'user' || String(o.soil).indexOf('usda:') === 0) && o.userSoil; if (S.num(o.root, 0) > 0) soilTxt = soilTxt.replace(/\(MaxRootingDepth\s+\d+(?:\.\d+)?\s*\[cm\]\)/g, '(MaxRootingDepth ' + Math.round(S.num(o.root, 0)) + ' [cm])'); const stn = (!o.userWx && o.station && o.station !== 'course') ? o.station : null; const col = useSoil ? 'SWAFL user column' : o.soil === "sand" ? "ResFarm_sand column" : "ResFarm 1D; Free drainage", wxFile = o.userWx ? '../Common/UserWeather.dwf' : stn ? '../Common/Station.dwf' : '../Common/Daily-1965-2000.dwf';
     const run = ';; SWAFL scenario "' + (sc.title || scId) + '", variant "' + (vr.label || variantId) + '"\n(input file "../Common/ArableFarmRotation.dai")\n(input file "../Common/ResFarm.dai")\n(input file "../Common/OutputLog.dai")\n' + (useSoil ? '(input file "../Common/UserSoil.dai")\n' : '') + '\n' +
-      '(defunit [kWh/d/m^2] SIfactor (mass 1)(time -3)(factor 41.67))\n(weather default "' + wxFile + '"\n  (PrecipCorrect ' + S.num(o.precip, 1) + ')\n  (TempOffset ' + S.num(o.temp, 0) + '))\n' +
+      '(defunit [kWh/d/m^2] SIfactor (mass 1)(time -3)(factor 41.67))\n(weather default "' + wxFile + '"\n  (PrecipCorrect ' + S.num(o.precip, 1) + ')\n  (TempOffset ' + S.num(o.temp, 0) + ')' + (S.num(o.radscale, 1) !== 1 ? '\n  (GlobRadScale ' + S.num(o.radscale, 1) + ')' : '') + (/^\s*(-?[\d.]+[\s,]+){11}-?[\d.]+\s*$/.test(String(o.pmonths || '')) ? '\n  (PrecipScale ' + String(o.pmonths).trim().split(/[\s,]+/).join(' ') + ')' : '') + ')\n' +
       '(description "' + (sc.title || scId).replace(/"/g, "'") + ' - ' + (vr.label || variantId).replace(/"/g, "'") + '")\n(log_prefix "' + pre + '")\n\n(manager activity\n  (repeat "A_F_R"))\n\n' +
-      '(defcolumn "SWAFL column" "' + col + '"\n  (Bioclimate ' + (stn && S.station(stn).noWind ? 'default' : 'FAO56_daily') + '))\n(column "SWAFL column")\n\n(time ' + o.start + ' 01 01)\n(stop ' + o.stop + ' 04 1)\n(activate_output (after ' + (o.start + 1) + ' 03 31 23))\n';
+      '(defcolumn "SWAFL column" "' + col + '"\n  (Bioclimate ' + ((stn && S.station(stn).noWind) || o.bio === 'default' ? 'default' : 'FAO56_daily') + '))\n(column "SWAFL column")\n\n(time ' + o.start + ' 01 01)\n(stop ' + o.stop + ' 04 1)\n(activate_output (after ' + (Math.min(o.stop - 1, o.start + Math.max(1, Math.round(S.num(o.spin, 1))))) + ' 03 31 23))\n';
     return { scenario: scId, variant: variantId, label: vr.label || variantId, options: o, prefix: pre, main: 'Run/Runfile.dai', files: Object.assign({ 'Common/ArableFarmRotation.dai': rot, 'Common/ResFarm.dai': soilTxt, 'Run/Runfile.dai': run }, o.log && S.logFilter ? { 'Common/OutputLog.dai': S.logFilter(files['OutputLog.dai'], o.log) } : {}, o.userWx ? { 'Common/UserWeather.dwf': o.userWx.text } : {}, stn ? { 'Common/Station.dwf': (function () { const t = files['weather/' + stn + '.dwf']; if (t == null) throw new Error('the weather file of ' + stn + ' was not loaded'); return t; })() } : {}, useSoil ? { 'Common/UserSoil.dai': S.soilDai(o.userSoil, S.num(o.root, 0)).text } : {}), years: o.stop - o.start };
   };
 

@@ -59,6 +59,15 @@
     if (!ctx.userSoil) out.push({ id: 'soils', title: 'Which soil needs the most water', ref: '47, 48.16', score: 5,
       why: 'A horizon gets its hydraulic properties from the hypres model by default, from the sand, silt, clay, humus and bulk density. Rainfed and irrigated runs on several textures show where irrigation pays.',
       plan: { design: 'factorial', factors: [{ id: 'soil', levels: ['usda:sand', 'usda:sandyloam', 'loam', 'usda:siltloam', 'usda:clayloam'] }, { id: 'irrig', levels: ['0', '1'] }], base: {} } });
+    out.push({ id: 'flux', title: 'Slow or fast irrigation: a constant water flux', ref: '15.5, 15.18', score: dry ? 6 : 5,
+      why: 'Daisy applies irrigation at a rate in mm/h, so a slow rate keeps the water in the topsoil and a fast one can run off or percolate. The rates below keep the same dose per irrigation, so only the speed of application differs.',
+      plan: { design: 'factorial', factors: [{ id: 'flux', levels: [0.1, 0.5, 2] }].concat(soils), base: { irrig: '1' } } });
+    out.push({ id: 'tillage', title: 'Tillage and the time and form of the fertiliser', ref: '15.3, 15.12', score: wet ? 7 : 4,
+      why: 'The tillage action (plowing, rotavation, or none) mixes the residues and the topsoil; the fertiliser is taken from the fertilizer library by name, and the date can be moved. These three decide how much nitrate is exposed to leaching.' + wxNote,
+      plan: { design: 'factorial', factors: [{ id: 'till', levels: ['plowing', 'rotavation', 'none'] }, { id: 'ntime', levels: [-14, 0, 14] }, { id: 'ntype', levels: ['N25S', 'AmmoniumNitrate', 'Ammonia'] }].concat(soils), base: {} } });
+    out.push({ id: 'etmodel', title: 'Evapotranspiration model and radiation', ref: '25.7, 107.26', score: 4,
+      why: 'Daisy can take the reference evapotranspiration from the weather file (FAO56) or compute it from the energy balance, and the radiation can be scaled. The runs show how much of the answer depends on that choice.',
+      plan: { design: 'factorial', factors: [{ id: 'bio', levels: ['auto', 'default'] }, { id: 'radscale', levels: [0.9, 1, 1.1] }].concat(soils), base: {} } });
     out.push({ id: 'chemical', title: 'Sorption and half-life of a chemical', ref: '23', score: 4,
       why: 'A chemical has a sorption coefficient (K_OC, L/kg) and a decomposition rate; the two decide whether it stays in the topsoil or reaches the depth where it is counted as leached.',
       plan: { design: 'factorial', factors: [{ id: 'koc', levels: [0, 50, 500] }, { id: 'half', levels: [15, 90] }].concat(soils), base: {} } });

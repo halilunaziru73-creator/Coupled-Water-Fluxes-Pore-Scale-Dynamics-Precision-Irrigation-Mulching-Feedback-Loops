@@ -24,6 +24,12 @@
     { id: 'root', key: 'root', label: 'Maximum rooting depth', unit: 'cm', kind: 'num', levels: [30, 60, 90, 120, 150], range: [20, 200], words: ['root', 'rooting depth', 'roots'] },
     { id: 'soil', key: 'soil', label: 'Soil', unit: '', kind: 'cat', levels: ['usda:sand', 'usda:sandyloam', 'loam', 'usda:siltloam', 'usda:clayloam'], words: ['soil', 'soils', 'texture', 'sand', 'loam', 'clay', 'silt'] },
     { id: 'station', key: 'station', label: 'Weather station', unit: '', kind: 'cat', levels: ['course', 'it-bologna', 'dk-foulum'], words: ['station', 'site', 'location', 'climate of', 'bologna', 'foulum', 'jyndevad', 'valecov', 'jadwisin', 'bratislava', 'taastrup', 'mediterranean'] },
+    { id: 'till', key: 'till', label: 'Tillage', unit: '', kind: 'cat', levels: ['plowing', 'rotavation', 'none'], words: ['tillage', 'plough', 'plow', 'plowing', 'ploughing', 'rotavat', 'no-till', 'no till', 'cultivation'] },
+    { id: 'ntype', key: 'ntype', label: 'Type of mineral fertiliser', unit: '', kind: 'cat', levels: ['N25S', 'AmmoniumNitrate', 'Ammonia', 'Nitrate'], words: ['fertiliser type', 'fertilizer type', 'ammonium nitrate', 'ammonia', 'urea', 'form of nitrogen'] },
+    { id: 'ntime', key: 'ntime', label: 'Fertiliser date, shift in days', unit: 'days', kind: 'num', levels: [-14, 0, 14, 28], range: [-60, 60], words: ['fertiliser timing', 'fertilizer timing', 'when to fertili', 'split application', 'delay the fertili'] },
+    { id: 'bio', key: 'bio', label: 'Evapotranspiration model', unit: '', kind: 'cat', levels: ['auto', 'default'], names: { auto: 'FAO56', default: 'Daisy energy balance' }, words: ['evapotranspiration model', 'penman', 'fao56', 'bioclimate', 'energy balance'] },
+    { id: 'radscale', key: 'radscale', label: 'Radiation, factor on the weather', unit: '', kind: 'num', levels: [0.9, 1, 1.1], range: [0.5, 1.5], words: ['radiation', 'cloud', 'sunshine', 'solar'] },
+    { id: 'flux', key: 'flux', label: 'Irrigation intensity (constant flux)', unit: 'mm/h', kind: 'num', levels: [0.05, 0.1, 0.5, 2], range: [0.01, 20], irr: 1, words: ['flux', 'intensity', 'mm per hour', 'mm/h', 'constant depth'] },
     { id: 'koc', key: 'koc', label: 'Sorption of the chemical, K_OC', unit: 'L/kg', kind: 'num', levels: [0, 50, 100, 500], range: [0, 5000], words: ['sorption', 'koc', 'pesticide', 'chemical', 'tracer', 'herbicide'] },
     { id: 'half', key: 'half', label: 'Half-life of the chemical', unit: 'days', kind: 'num', levels: [0, 15, 30, 90], range: [0, 2000], words: ['half-life', 'half life', 'degradation', 'decay', 'persistence'] }
   ];
@@ -80,9 +86,18 @@
   E.RESP = [
     { id: 'yield', label: 'Yield', unit: 'Mg DM/ha', good: 1 }, { id: 'irr', label: 'Irrigation', unit: 'mm/season', good: -1 }, { id: 'aet', label: 'Evapotranspiration', unit: 'mm/season', good: 0 },
     { id: 'perc', label: 'Percolation below 100 cm', unit: 'mm/season', good: -1 }, { id: 'leach', label: 'Nitrate leached below 100 cm', unit: 'kg N/ha/season', good: -1 }, { id: 'den', label: 'Denitrification', unit: 'kg N/ha/season', good: -1 },
-    { id: 'IE', label: 'Irrigation efficiency', unit: 'kg grain per m3', good: 1 }, { id: 'rain', label: 'Rain', unit: 'mm/season', good: 0 }
+    { id: 'IE', label: 'Irrigation efficiency', unit: 'kg grain per m3', good: 1 }, { id: 'rain', label: 'Rain', unit: 'mm/season', good: 0 },
+    { id: 'wstress', label: 'Water-stress days at harvest', unit: 'days', good: -1 }, { id: 'nstress', label: 'Nitrogen-stress days at harvest', unit: 'days', good: -1 },
+    { id: 'IWUE', label: 'Irrigation water-use efficiency (yield gain over the rainfed reference per mm)', unit: 'kg DM per ha per mm', good: 1 }, { id: 'DPF', label: 'Deep-percolation fraction of rain + irrigation', unit: '%', good: -1 },
+    { id: 'PFPn', label: 'Partial factor productivity of nitrogen', unit: 'kg DM per kg N', good: 1 }, { id: 'NLF', label: 'Nitrate leached as a share of N applied', unit: '%', good: -1 }
   ];
-  E.respOf = function (st) { const r = { yield: st.yield, irr: st.irr, aet: st.aet, perc: st.perc, leach: st.leach, den: st.den, rain: st.rain }; r.IE = st.irr > 5 ? st.yield * 1000 / (st.irr * 10) : NaN; return r; };
+  E.respOf = function (st) { const r = { yield: st.yield, irr: st.irr, aet: st.aet, perc: st.perc, leach: st.leach, den: st.den, rain: st.rain }; r.IE = st.irr > 5 ? st.yield * 1000 / (st.irr * 10) : NaN; r.wstress = st.wstress; r.nstress = st.nstress;
+    const inp = (st.rain || 0) + (st.irr || 0); r.DPF = inp > 0 && isFinite(st.perc) ? 100 * st.perc / inp : NaN; r.PFPn = st.fert > 1 ? st.yield * 1000 / st.fert : NaN; r.NLF = st.fert > 1 && isFinite(st.leach) ? 100 * st.leach / st.fert : NaN; r.IWUE = NaN; return r; };
+  /* the indices that need a rainfed run of the same soil and weather: the yield gain per mm of irrigation water */
+  E.indices = function (rows) {
+    const refs = rows.filter(x => x.reference && isFinite(x.r.yield)); if (!refs.length) return;
+    rows.forEach(x => { if (x.reference) return; const ref = refs.find(q => q.f.soil === x.f.soil && q.f.precip === x.f.precip && q.f.temp === x.f.temp) || refs[0], irr = x.r.irr; x.r.IWUE = irr > 5 ? (x.r.yield - ref.r.yield) * 1000 / irr : NaN; });
+  };
   // the table of the published runs, in the same shape
   E.ENS_FACTORS = { P: ['precip', 'Rain scale'], dT: ['temp', 'Temperature shift (C)'], Ep: ['ep', 'Soil evaporation factor'], trig: ['trig', 'Trigger suction (cm)'], z: ['z', 'Sensor depth (cm)'], amt_mm: ['mm', 'Water per irrigation (mm)'], vff: ['vff', 'Mulch vapour flux factor'], cap: ['cap', 'Mulch interception capacity (mm)'], Nrate: ['nrate', 'Nitrogen rate (kg N/ha)'], wstrat: ['wstrat', 'Water strategy'], root: ['root', 'Rooting depth (cm)'], soil: ['soil', 'Soil'] };
   E.ENS_RESP = { yield_Mg_ha: 'yield', irrigation_mm: 'irr', ET_mm: 'aet', drainage_1m_mm: 'perc', N_leached_kg_ha: 'leach', IE_kg_m3: 'IE', rain_mm: 'rain', transpiration_mm: 'transp', soil_evap_mm: 'sevap', water_stress_d: 'stress' };
