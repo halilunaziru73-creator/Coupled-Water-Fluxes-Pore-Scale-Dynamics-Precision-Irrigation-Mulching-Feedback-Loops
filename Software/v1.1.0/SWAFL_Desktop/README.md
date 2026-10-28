@@ -21,7 +21,7 @@ It runs the same simulation engine as the web explorer, inside a classic enginee
 
 ## Download the software (Windows)
 
-**[Download SWAFL.exe for Windows](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases/latest/download/SWAFL.exe)** (180 MB, no installation: double-click to run) · [all releases](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases/latest)
+**Windows app:** the packaged SWAFL.exe belongs to the old version 1.0 (see Software/Old_Version_1.0). Version 1.1.0 is run from source with the steps below, or online.
 
 > Windows may show a SmartScreen warning because the app is not code-signed: click **More info**, then **Run anyway**.
 

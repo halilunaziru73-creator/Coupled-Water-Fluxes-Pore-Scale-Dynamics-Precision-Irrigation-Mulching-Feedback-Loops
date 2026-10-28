@@ -5,9 +5,6 @@
 **Author:** Naziru Halilu
 
 <p align="center">
-  <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases/latest/download/SWAFL.exe">
-    <img src="https://img.shields.io/badge/%E2%86%93%20DOWNLOAD-SWAFL.exe%20for%20Windows-1F6FB2?style=for-the-badge&logo=windows&logoColor=white" alt="Download SWAFL.exe">
-  </a>
   <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">
     <img src="https://img.shields.io/badge/%E2%86%93%20DOWNLOAD-the%20SWAFL%20manual%20(PDF%2C%20v1.1.0)-B8432F?style=for-the-badge&logo=adobeacrobatreader&logoColor=white" alt="Download the SWAFL manual (PDF), version 1.1.0">
   </a>
@@ -16,7 +13,7 @@
   </a>
 </p>
 
-<p align="center"><b>Download the SWAFL manual (PDF):</b> version 1.1.0, the latest (1011 pages, 41 MB): <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">open in the browser</a> or <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">download</a></p>
+<p align="center"><b>Download the SWAFL manual (PDF):</b> version 1.1.0, the latest (1011 pages, 41 MB): <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">open in the browser</a> or <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">download</a> · <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/Old_Version_1.0/SWAFL_Desktop/docs/SWAFL_Manual.pdf">version 1.0</a></p>
 
 <p align="center">
   <a href="https://doi.org/10.5281/zenodo.23043626">
@@ -29,7 +26,7 @@
 
 ## Download the software (Windows)
 
-**[Download SWAFL.exe for Windows](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases/latest/download/SWAFL.exe)** (180 MB, no installation: double-click to run) · [all releases](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases/latest)
+**Windows app:** the 1.1.0 app is run from source or from the online workbench (see below). The packaged SWAFL.exe belongs to the [old version 1.0](Software/Old_Version_1.0/README_OLD_VERSION.md).
 
 > Windows may show a SmartScreen warning because the app is not code-signed: click **More info**, then **Run anyway**.
 
@@ -72,13 +69,12 @@ The current version, 1.1.0, is in [`Software/v1.1.0`](Software/v1.1.0) with its 
 
 | Way | Link |
 |---|---|
-| Windows app, no installation | [SWAFL.exe](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases/latest/download/SWAFL.exe) (double-click; if SmartScreen warns, choose More info, then Run anyway) |
 | In any browser, nothing to install | [Online workbench](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html?v=1.1.0) |
 | Build it yourself | [SWAFL_Desktop.zip](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop.zip) or the folder [`Software/v1.1.0/SWAFL_Desktop`](Software/v1.1.0/SWAFL_Desktop) |
 
 **Start in three clicks:** open a group in Layers (Irrigation design is first) and click a layer, press Run, then change the Date in the toolbar. Help (F1) has every step and a troubleshooting list.
 
-**Requirements:** Windows 10 or later for `SWAFL.exe`; any current browser for the online workbench; Node.js 18 or later only if you build the app yourself. Source, user guide and known issues: [`Software/v1.1.0/SWAFL_Desktop`](Software/v1.1.0/SWAFL_Desktop) and the [Issues](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/issues) page.
+**Requirements:** any current browser for the online workbench; Node.js 18 or later only if you build the app yourself. Source, user guide and known issues: [`Software/v1.1.0/SWAFL_Desktop`](Software/v1.1.0/SWAFL_Desktop) and the [Issues](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/issues) page.
 
 ## Problem, Methodology, and Results
 
