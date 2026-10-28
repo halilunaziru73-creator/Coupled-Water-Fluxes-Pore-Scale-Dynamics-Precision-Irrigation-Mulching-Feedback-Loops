@@ -98,5 +98,5 @@ Drag the thin splitters between the docks to resize them. The program remembers 
 
 * **Hot spots.** Many drawings are clickable. Hovering shows a tooltip; clicking applies a setting (for example, clicking a year bar jumps to that year, clicking a soil on a chart selects that soil).
 * **Value boxes.** Every input of the three design layers is a value box. Click it: a small window opens in which you type the exact value, choose its unit (for example m, km or ft; L/s, m³/h or L/min; ha, m² or acre; kPa, bar, m of water or psi) or pick a value from the list of the allowed range. A value outside the range is brought back to its nearest limit.
-* **Nothing runs while you type.** The design layers compute only when you press **Run simulation** (Chapter 18); the other layers follow every control at once.
+* **Nothing runs while you type.** Every layer, not only the three designs, has a **Run simulation** bar and shows its figures only after the button (or the Play button of the toolbar) is pressed for the present controls (Chapter 18); when a control changes, the bar asks to run again.
 * **Colours.** Water blues, soil browns, crop greens; text is dark on a white sheet; labels sit in white boxes drawn after the pictures, so no arrow covers a label.

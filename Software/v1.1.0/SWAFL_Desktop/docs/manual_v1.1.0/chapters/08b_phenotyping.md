@@ -6,6 +6,8 @@
 
 The layer is **deterministic**. It has no random numbers: the same controls always give the same plant, so a change in a chart is always caused by the control that was moved. The weather of the season is built from the climate of the project (cool and humid), a warm season, or a hot and dry season, with the project rain or a rain-out shelter.
 
+The layer is **connected to the Properties panel**: the crop and its library values (height, basal coefficient, rooting depth, sowing day), the soil, the weather and the date, the mulch (vapour-flux factor and interception), the irrigation (method, trigger suction, sensor depth, dose and efficiency), the nitrogen rate and the salt of the water all reach the plant. The note under the controls lists what was read. Nothing is shown before it is computed: the layer opens with **Run simulation**, and it shows no default figure.
+
 The layer is made for four tasks of a phenotyping programme:
 
 1. **Quantify temporal changes in plant structure and function**: height, projected shoot area, convex hull, solidity, senescence, leaf water content, leaf potential, canopy temperature and root traits, each as a curve through the season and as a table of readouts.
@@ -19,7 +21,9 @@ The layer is made for four tasks of a phenotyping programme:
 
 ![Set up the experiment. Maize, warm season, rain-out shelter, pulse of drought from day 40 for 28 days at 30 % of the plant-available water, reference genotype, Coarse Loam, conventional tillage.](images/pheno/p1_setup.png){width=85%}
 
-Every control re-runs the model, and every chart answers it.
+**Run simulation.** Every layer of the window, not only the three designs, has a **Run simulation** bar at the top (Chapter 18). A layer shows its figures only after the button is pressed for the present controls; when a control changes, the bar asks to run again. The Play button of the toolbar does the same. **Every section of the layer has a triangle on its title: click it to collapse or expand the section**, so that a long page can be read part by part.
+
+Once run, every control re-runs the model, and every chart answers it.
 
 | Control | What it changes in the model |
 |---|---|
@@ -27,7 +31,8 @@ Every control re-runs the model, and every chart answers it.
 | Genotype (reference, deep rooting, shallow and dense, stay-green, water saver, water spender, osmotic adjuster) | angle of the axes, lateral density, stay-green, stomatal threshold, osmotic adjustment, hydraulic resistance, carbon to roots |
 | Drought (pulse and recovery, terminal, intermittent, none) | the water that the drought treatment is held at, in time |
 | Climate and rain | temperature, radiation, vapour pressure deficit, reference evapotranspiration, rain |
-| Drought starts, length, water held | day of onset, duration and the level of the stress, in per cent of the plant-available water |
+| Left plant (project irrigation, well-watered bench, rainfed) | the treatment of the left plant: the irrigation of the project made by the sensor rule, a bench held wet, or the rain only; the right plant is always the drought |
+| Drought starts, length, water held | day of onset, duration and the level of the stress, in per cent of the plant-available water (defaults 45 days, 35 days, 15 %) |
 | Extra warming | temperature added to the whole season |
 | Root angle, lateral root density, root vigour, carbon share to roots | root system architecture and the carbon it receives |
 | Stay-green, stomata close at, osmotic adjustment | senescence delay, the leaf potential at which half of the stomatal opening is lost, the turgor kept in dry soil |
@@ -98,6 +103,24 @@ The soil of the layer is the soil of the project. The **bulk density** of each 1
 The panel runs twelve genotypes (angle of the axes 26, 44 and 62 degrees, vigour 0.8 and 1.2, stay-green 0.1 and 0.7; all other traits as in the reference) under the drought that is set, and relates **a root trait** (depth of 95 % of the roots, root length, share of the roots below 60 cm, or grain mass) to **four shoot traits** that a camera sees: canopy temperature depression, senescence index, relative water content and projected shoot area. The red diamond is the plant of the layer, estimated from its own shoot trait with the regression of the panel and compared with the model. The lower chart is the share of the variation explained by each shoot trait on each day ($r^2$): it shows **when** a measurement taken above ground carries information about the roots. In this run, on day 70, the projected shoot area is the best trait for the depth of the roots ($r^2$ = 0.86), measured as the mean of a window of five days around the day.
 
 The table gives the **drought susceptibility index** of Fischer and Maurer (1978) and the **stress tolerance index** of Fernandez (1992) of the twelve genotypes, computed from their grain mass with and without stress.
+
+### Roots day by day
+
+![The profile of the chosen day and the roots through the season. Wheat, project climate, day 70.](images/pheno/p3b_rootday.png){width=85%}
+
+For the chosen day the section draws the **root length density by depth** of the two plants (bars), the water of each layer (blue strip) and the depth of 95 % of the roots (dashed line). Six series follow the roots through the season, each with a cursor on the day: the root length of the plant, the deepest root tip, the depth of 95 % of the root length (D95), the growth of the roots per day, the share of the carbon that goes to the roots, and the root to shoot ratio. Click or drag on any chart to move the day; the numbers on the right of each title are the two plants on that day. The sentence under the charts reads the day: the root length, depth and growth of both plants, the new carbon they received, and the shoot measurements of the same day.
+
+### Phenotype and genotype: prediction
+
+![The predicted phenotype of each genotype under the drought, and the genotype called from the plant above ground. Wheat, project climate, reference genotype.](images/pheno/p8b_genome.png){width=85%}
+
+The section has two parts. **1. Predicted phenotype**: every genotype of the library is run under the same weather, soil and drought; the table gives height, shoot area, grain, D95, root length, water use efficiency and the tolerance (grain under drought divided by grain of the left plant). **2. Genotype called from the plant above ground**: the genotype of the plant is hidden, five traits of the shoot (height, area, senescence, leaf water content and canopy temperature depression through the days) are compared with the same traits of each genotype, and the bars give the weight of each genotype (Eq. P.16). The genetic constants of the called genotype (root angle, lateral density, stay-green, stomatal threshold, osmotic adjustment, carbon to roots) and the roots predicted below ground follow. When measurements are loaded (section *Your measurements*), they replace the model plant as the thing that is called. The call is a ranking of the library, not a genome sequence: the layer predicts the **genotype of the library** (the set of trait constants) and its phenotype.
+
+### SWAFL data: the Daisy runs of the project against this plant
+
+![The plant against the Daisy runs of the soil and controls of the project, after the fit. Wheat, project climate.](images/pheno/p10_swafl.png){width=85%}
+
+The repository holds 10,190 Daisy simulations (*Data/Comprehensive_Summary*). The section compares the plant with the runs of the soil and the controls of the project, in terms that do not depend on the length of the season: the **relative yield** (share of the best yield of the soil, from the trigger experiment E2), the **transpiration share** of the evapotranspiration, and the **effect of the mulch on soil evaporation** (E7 and E14, 1000 runs of mulch, rain and capacity). The three charts are the nitrogen response (E13, which gives the nitrogen factor of the plant), the trigger response (E2, with the plant as green dots) and the mulch and rain runs (E14). **Fit the plant to the SWAFL data** searches the radiation use efficiency, the water use coefficient and the root conductance (a coordinate search of at most 45 runs, within 0.6 to 1.6, 0.5 to 2.2 and 0.25 to 4 times the species values) that minimise the squared difference to the three numbers and to the E2 curve (Eq. P.17). **Reset the fit** returns to the species constants. The fit is a calibration to the Daisy tables: the plant is a different model, and for a climate far from that of the Daisy runs (the warm season, for example) the agreement is weaker; the comparison is most meaningful in the project climate with the archetype nearest to the crop. When a limit of the search is reached the message says so.
 
 ### Quantified traits of the run
 
@@ -174,12 +197,85 @@ with $\rho_b$ the bulk density in g cm$^{-3}$, $S$ the relative water content of
 
 **Traits read out.** The projected shoot area is the area of the leaves seen from the side, the convex hull is the smallest convex polygon around them, and the solidity is their ratio (as defined by Lorence and Medina-Jimenez, 2022). The senescence index is the senescent share of the leaf area, the canopy temperature depression is $T_a-T_c$ (a negative value means a canopy warmer than the air), and the drought susceptibility and tolerance indices are those of Fischer and Maurer (1978) and Fernandez (1992).
 
-*Provenance (Eq. P.1 to P.6):* **[Literature]**: the forms are from the works cited; **[Engineered]**: the constants of the species and genotypes are typical defaults of this layer.
+
+**Project irrigation (Eq. P.7).** Every day the suction $h_s$ of the sensor layer is read; if $h_s\ge h_{trig}$ and the days since the last event are at least the minimum interval of the method (2, 3 and 1 days for sprinkler, surface and drip), the root zone is refilled to field capacity, at most the dose $D_{max}$ (35, 60 and 10 mm), and the water applied is the gross depth:
+
+$$
+d_{net}=\min\Bigl(\sum_z(\theta_{fc}-\theta_z)\Delta z,\;D_{max}\Bigr),\qquad I=\frac{d_{net}}{E_a},\quad E_a=0.75,\;0.60,\;0.90 .
+\tag{P.7}
+$$
+
+A drip line waters only when the layer at the drip depth is at least 12 % depleted.
+
+**Mulch (Eq. P.8).** The potential soil evaporation is multiplied by the vapour-flux factor $f_m$ of the mulch, and the first $C_m$ mm of each rain (the interception capacity) do not reach the soil:
+
+$$
+E_p'=f_m E_p,\qquad P'=\max(0,P-C_m).
+\tag{P.8}
+$$
+
+**Nitrogen (Eq. P.9).** The radiation use is multiplied by the nitrogen factor taken from the Daisy runs E13 of the soil of the project:
+
+$$
+f_N=\frac{Y(N)}{Y(100\ \mathrm{kg\ N\ ha^{-1}})} .
+\tag{P.9}
+$$
+
+**Salt (Eq. P.10).** The solution of the root zone, of volume $V$ (twice the plant-available water of the column), takes the salt of the irrigation and of the rain and loses it in the drainage $D$:
+
+$$
+V\,\frac{dC}{dt}=I\,EC_w+0.05\,P-D\,C,\qquad EC_e=\frac{C}{2} .
+\tag{P.10}
+$$
+
+**Salt on growth and on water (Eq. P.11).** Growth is reduced by the threshold and slope of Maas and Hoffman (1977), and the soil potential gets an osmotic term:
+
+$$
+f_{sal}=1-\frac{s}{100}\max\bigl(0,EC_e-EC_{th}\bigr),\qquad \psi_{soil}'=\psi_{soil}-0.036\,EC_e\ \ (\mathrm{MPa}).
+\tag{P.11}
+$$
+
+**Project crop (Eq. P.12).** The height, the basal coefficient $K_{cb}=K_{c,mid}-0.05$ and the rooting depth are those of the crop library of the Properties panel (FAO-56); the species of the model (maize, sorghum, wheat or common bean) is the archetype nearest in kind, and the day of sowing is the planting day of the project. The date of the Properties panel sets the day of the chart that is shown.
+
+**Water deficit and relative yield (Eq. P.13).** The comparison with the Daisy runs uses the relative yield and the transpiration share:
+
+$$
+Y_{rel}=\frac{Y_{plant}}{Y_{well\text{-}watered}},\qquad \tau=\frac{T}{T+E_s} .
+\tag{P.13}
+$$
+
+**Root day (Eq. P.14).** The depth of 95 % of the root length $D_{95}$ is the depth $z$ at which $\int_0^{z}L(z')dz'=0.95\int_0^{\infty}L(z')dz'$; the root growth of the day is $dL_{root}/dt$ and the root to shoot ratio is $W_{root}/W_{shoot}$.
+
+**Tolerance indices (Eq. P.15).** For a genotype with grain $Y_s$ under stress and $Y_p$ without:
+
+$$
+\mathrm{DSI}=\frac{1-Y_s/Y_p}{1-\bar Y_s/\bar Y_p},\qquad \mathrm{STI}=\frac{Y_s\,Y_p}{\bar Y_p^{\,2}} .
+\tag{P.15}
+$$
+
+**Genotype call (Eq. P.16).** For each genotype $g$ of the library, the distance to the observed traits $o$ is the mean squared difference in units of the spread $\sigma$ of each trait over the days $t$, and the weight is a softmax with a temperature that grows with the best distance:
+
+$$
+d_g=\frac{1}{nT}\sum_{i,t}\Bigl(\frac{x_{g,i,t}-o_{i,t}}{\sigma_i}\Bigr)^2,\qquad p_g\propto\exp\Bigl(-\frac{d_g-d_{min}}{0.03+0.25\,d_{min}}\Bigr).
+\tag{P.16}
+$$
+
+**Fit to the SWAFL data (Eq. P.17).** The multipliers $\theta=(f_{RUE},f_{kte},f_{qG})$ of the radiation use, the water use coefficient and the root conductance minimise
+
+$$
+J(\theta)=\sum_k\Bigl(\frac{m_k(\theta)-r_k}{\tau_k}\Bigr)^2,
+\tag{P.17}
+$$
+
+with $m_k$ the model and $r_k$ the Daisy value of the relative yield, the transpiration share, the mulch effect and the five points of the E2 curve, and $\tau_k$ the tolerance of each; the search moves one multiplier at a time and halves the step when no move helps.
+
+*Provenance (Eq. P.1 to P.17):* **[Literature]**: the forms are from the works cited; **[Engineered]**: the constants of the species and genotypes, the efficiencies, dose limits and minimum intervals of the irrigation methods, the salt volume and the tolerances of the fit are typical defaults of this layer; **[Data]**: the nitrogen factor, the trigger curve and the mulch effect are read from the SWAFL Daisy runs.
 
 ### Limits
 
 * The model is a **daily, one plant** model. It does not simulate individual photons, the diurnal course of the leaf or the structure of the canopy beyond the leaves of one plant.
-* The constants of the species and genotypes are typical values and not the data of a trial. For a real experiment, load the observations and calibrate; the calibration changes three parameters only (radiation use efficiency, stomatal threshold, stay-green).
+* The constants of the species and genotypes are typical values and not the data of a trial. For a real experiment, load the observations and calibrate; the calibration changes three parameters only (radiation use efficiency, stomatal threshold, stay-green). The fit to the SWAFL data changes the radiation use, the water use coefficient and the root conductance, and it can reach the limits of the search.
+* The genotype call ranks the genotypes of the library; it is not a sequence of a genome. Only this layer is connected deeply to the crop, soil, weather and irrigation of the Properties panel; the other layers are computed by the engine on the same controls and are shown after **Run simulation**.
 * The weather is deterministic (a sum of sines on the climate of the project), so a run is a typical season, not a year of records, except that the project rain can be used.
 * The roots are drawn as the projection of the three dimensional system on the plane of the view; the root length, depth and density are those of the three dimensional system.
 

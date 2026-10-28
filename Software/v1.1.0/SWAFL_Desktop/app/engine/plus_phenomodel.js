@@ -50,13 +50,13 @@
     for (let d = 0; d < N; d++) {
       const doy = (env.sow + d) % 365, nn = clamp(0.5 + 0.3 * Math.sin(2 * PI * d / 5.3 + 1.1) + 0.2 * Math.sin(2 * PI * d / 9.1 + 0.3) + 0.08 * Math.sin(2 * PI * d / 2.9 + 2), 0.05, 0.95);
       const syn = 2.6 * Math.sin(2 * PI * d / 6.1 + 0.7) + 1.8 * Math.sin(2 * PI * d / 11.3 + 2.1) + 1.2 * Math.sin(2 * PI * d / 19.7 + 4.0);
-      const Tmean = Tm + Ta * Math.sin(2 * PI * (doy - 110) / 365) + syn + dT, dtr = 3 + 8 * nn, Tmax = Tmean + 0.5 * dtr, Tmin = Tmean - 0.5 * dtr;
+      let Tmean = Tm + Ta * Math.sin(2 * PI * (doy - 110) / 365) + syn + dT; if (env.realT && isFinite(env.realT[d])) Tmean = env.realT[d] + dT + 0.25 * syn; const dtr = 3 + 8 * nn, Tmax = Tmean + 0.5 * dtr, Tmin = Tmean - 0.5 * dtr;
       const R = ra(doy, lat), Rs = R.Ra * (0.25 + 0.5 * nn), Tdew = Tmin - 3.0 + 0.4 * dT, ea = es(Tdew), esm = 0.5 * (es(Tmax) + es(Tmin)), u2 = 2.6 + 0.8 * Math.sin(2 * PI * d / 4.7 + 0.5);
       const Rns = 0.77 * Rs, Rso = 0.75 * R.Ra, Rnl = 4.903e-9 * 0.5 * (Math.pow(Tmax + 273.16, 4) + Math.pow(Tmin + 273.16, 4)) * (0.34 - 0.14 * Math.sqrt(ea)) * (1.35 * Math.min(Rs / Rso, 1) - 0.35), Rn = Rns - Rnl;
-      const del = dEs(Tmean), gam = 0.000665 * 101.3, et0 = Math.max(0, (0.408 * del * Rn + gam * 900 / (Tmean + 273) * u2 * (esm - ea)) / (del + gam * (1 + 0.34 * u2)));
+      const del = dEs(Tmean), gam = 0.000665 * 101.3, et0 = Math.max(0, (0.408 * del * Rn + gam * 900 / (Tmean + 273) * u2 * (esm - ea)) / (del + gam * (1 + 0.34 * u2))); const et0f = env.realET0 && isFinite(env.realET0[d]) ? env.realET0[d] * (1 + 0.035 * dT) : et0;
       const Td = 0.65 * Tmax + 0.35 * Tmin, vpd = Math.max(0.1, es(Td) - ea);
       let P = 0; if (env.rainMode !== 'none') { P = env.realRain ? (env.realRain[d] || 0) * (env.rainMult || 1) : rawRain[d] / sumRaw * sumMean * (env.rainMult || 1); }
-      out.push({ Tmean, Tmax, Tmin, Rs, ea, vpd, u2, et0, P, N: R.N, nn, Rn });
+      out.push({ Tmean, Tmax, Tmin, Rs, ea, vpd, u2, et0: et0f, P, N: R.N, nn, Rn });
     }
     return out;
   }
@@ -88,14 +88,14 @@
 
   // ---------------------------------------------------------------- the daily run
   function run(cfg) {
-    const sp = SP[cfg.species], G = cfg.geno, env = cfg.env, N = cfg.N || 140, store = !!cfg.store, tr = cfg.treatment, dr = cfg.drought || { type: 'none' };
+    const sp = cfg.cropP ? Object.assign({}, SP[cfg.species], cfg.cropP) : SP[cfg.species], PJ = cfg.proj || null, VFF = PJ && PJ.vff != null ? PJ.vff : 1, CAP = PJ && PJ.cap != null ? PJ.cap : 0, G = cfg.geno, env = cfg.env, N = cfg.N || 140, store = !!cfg.store, tr = cfg.treatment, dr = cfg.drought || { type: 'none' };
     const soil = cfg.soil, tab = soil.tab, awcL = soil.awc * DZ, A = cfg.area || sp.A, Rpot = Math.sqrt(A / PI), W = cfg.weather || weather(env, N);
-    const R = { N, sp, G, A, Rpot, day: [], W };
+    const R = { N, sp, G, A, Rpot, day: [], W, tr, PJ };
     const ser = k => (R[k] = new Float32Array(N));
-    ['Tc', 'Ta', 'CTD', 'CWSI', 'gs', 'psiL', 'RWC', 'turg', 'Tp', 'T', 'Es', 'I', 'P', 'drain', 'store', 'dW', 'dWr', 'dL', 'fl', 'fs', 'fr', 'fg', 'Wl', 'Ws', 'Wr', 'Wg', 'Wres', 'LAIg', 'LAIs', 'SI', 'H', 'PSA', 'hullA', 'solid', 'cal', 'nLeaf', 'Lroot', 'Rdepth', 'D50', 'D95', 'rs', 'phi', 'Ks', 'stage', 'gdd', 'tgt', 'RLmax', 'Fint', 'AE', 'roll', 'fE', 'Ts'].forEach(ser);
+    ['Tc', 'Ta', 'CTD', 'CWSI', 'gs', 'psiL', 'RWC', 'turg', 'Tp', 'T', 'Es', 'I', 'P', 'drain', 'store', 'dW', 'dWr', 'dL', 'fl', 'fs', 'fr', 'fg', 'Wl', 'Ws', 'Wr', 'Wg', 'Wres', 'LAIg', 'LAIs', 'SI', 'H', 'PSA', 'hullA', 'solid', 'cal', 'nLeaf', 'Lroot', 'Rdepth', 'D50', 'D95', 'rs', 'phi', 'Ks', 'stage', 'gdd', 'tgt', 'RLmax', 'Fint', 'AE', 'roll', 'fE', 'Ts', 'Ig', 'Ei', 'ECe', 'fSal'].forEach(ser);
     R.w = new Float32Array(N * NL); R.up = new Float32Array(N * NL); R.Lz = new Float32Array(N * NL); R.Q = new Float32Array(N * NL); R.bd = new Float32Array(N * NL);
     const w = new Float32Array(NL).fill(awcL * 0.95), Lz = new Float64Array(NL);
-    let inbound = 0, lostG = 0, gdd = 0, gEff = 0, ldd = 0, Wl = 1.2, Ws = 0.5, Wr = 0.8, Wg = 0, Wres = 28, LAIg = 0.05, LAIs = 0, H = 3, Hs = 0, Ts = W[0].Tmean, Ue = 0, t2 = 0, st1 = true, pool = 0, gsPrev = 1, Lall = 0, OAs = 0, stressMem = 0, matured = false;
+    let lastI = -99, nIrr = 0, saltC = PJ && PJ.salt ? 2 * PJ.salt.ec0 : 0.5, ECe = saltC / 2; const Vw = awcL * NL * 2.0; let saltM = saltC * Vw; let inbound = 0, lostG = 0, gdd = 0, gEff = 0, ldd = 0, Wl = 1.2, Ws = 0.5, Wr = 0.8, Wg = 0, Wres = 28, LAIg = 0.05, LAIs = 0, H = 3, Hs = 0, Ts = W[0].Tmean, Ue = 0, t2 = 0, st1 = true, pool = 0, gsPrev = 1, Lall = 0, OAs = 0, stressMem = 0, matured = false;
     const senRate = G.SG;
     // root system: tips, with the vertices of the path so that laterals sit where the parent has grown
     const tips = []; let nid = 0; const segs = store ? { x0: [], y0: [], z0: [], x1: [], y1: [], z1: [], d: [], o: [] } : null;
@@ -113,7 +113,7 @@
     const psiPV = (RWC, pi0, rtlp) => { const P = RWC > rtlp ? -pi0 * (RWC - rtlp) / (1 - rtlp) : 0; return pi0 / RWC + P; };
     const rwcFrom = (psi, pi0, rtlp) => { if (psi >= 0) return 1; let lo = 0.35, hi = 1; for (let i = 0; i < 40; i++) { const m = 0.5 * (lo + hi); if (psiPV(m, pi0, rtlp) < psi) lo = m; else hi = m; } return 0.5 * (lo + hi); };
     const target = d => { // water supplied by the experiment as a fraction of the plant-available water of the whole column
-      if (tr === 'ww' || dr.type === 'none') return 1; const o = dr.onset, L = dr.len, L1 = Math.round(L / 2), phi = dr.sev / 100;
+      if (tr === 'pj' || tr === 'rf') return 0; if (tr === 'ww' || dr.type === 'none') return 1; const o = dr.onset, L = dr.len, L1 = Math.round(L / 2), phi = dr.sev / 100;
       if (dr.type === 'pulse') return d < o ? 1 : d < o + L1 ? phi : d < o + L ? phi * 0.67 : 1;
       if (dr.type === 'terminal') return d < o ? 1 : 0;
       if (dr.type === 'inter') { if (d < o) return 1; const per = Math.max(3, Math.round(L / 2)); return ((d - o) % (2 * per)) < per ? phi : 1; }
@@ -121,7 +121,8 @@
     };
     const sheltered = d => tr === 'dr' && dr.type !== 'none' && (dr.rainOut !== false) && d >= dr.onset && (dr.type !== 'pulse' || d < dr.onset + dr.len) && (dr.type !== 'inter' || true);
     const infil = (j, amt) => { let a = amt, dr0 = 0; w[j] += a; for (let i = j; i < NL; i++) { if (w[i] > awcL) { const ex = w[i] - awcL; w[i] = awcL; if (i === NL - 1) dr0 += ex; else w[i + 1] += ex; } else break; } return dr0; };
-    let tot = { P: 0, I: 0, T: 0, Es: 0, dr: 0 };
+    const infilSpread = (j, amt, span) => { const lo = Math.max(0, j - span), hi = Math.min(NL - 1, j + span), n = hi - lo + 1; let dr0 = 0; for (let i = lo; i <= hi; i++) w[i] += amt / n; for (let i = lo; i < NL; i++) { if (w[i] > awcL) { const ex = w[i] - awcL; w[i] = awcL; if (i === NL - 1) dr0 += ex; else w[i + 1] += ex; } else if (i >= hi) break; } return dr0; };
+    let tot = { P: 0, I: 0, T: 0, Es: 0, dr: 0, Ig: 0, Ei: 0 };
     for (let d = 0; d < N; d++) {
       const wx = W[d]; R.Ta[d] = wx.Tmean; Ts += (wx.Tmean - Ts) / 4; R.Ts[d] = Ts;
       // temperature responses: development (degree days), growth (beta function), roots (Q10)
@@ -131,11 +132,20 @@
       const stage = gdd < sp.anth ? gdd / sp.anth : 1 + (gdd - sp.anth) / (sp.mat - sp.anth); R.stage[d] = stage; if (stage >= 2) matured = true;
       // water supply of the day (experiment, rain), soil evaporation, drainage
       let I = 0, P = 0, drain = 0; const sumW = () => { let s = 0; for (let i = 0; i < NL; i++) s += w[i]; return s; };
-      if (!sheltered(d) && wx.P > 0) { P = wx.P; drain += infil(0, P); }
+      let Ig = 0, EiD = 0; if (!sheltered(d) && wx.P > 0) { P = wx.P; if (VFF < 0.95 && CAP > 0) { EiD = Math.min(P, CAP); P -= EiD; } if (P > 0) drain += infil(0, P); }
       const tg = target(d); R.tgt[d] = tg; const awcT = awcL * NL; let rw = 0, rwa = 0; for (let i = 0; i < NL; i++) { const q = Lz[i] + 0.02 * Lz[0] + 1; rw += q * w[i]; rwa += q * awcL; }   // the experiment holds the water of the root zone (weighted by the roots) at the set-point, like weighing the pot
       if (tg > rw / rwa + 0.01) { I = Math.min(tg * awcT - sumW(), (tg - rw / rwa) * awcT); if (I > 0.05) drain += infil(0, I); else I = 0; }
+      // the irrigation of the project: the sensor at its depth reaches the trigger suction, then the root zone is refilled by the method (surface, overhead or drip at its depth)
+      if (tr === 'pj' && PJ && PJ.irr && d - lastI >= PJ.irr.minInt) {
+        const q = PJ.irr, js = Math.min(NL - 1, Math.floor(q.z / DZ)), hs = lut(tab, tab.h, clamp(1 - w[js] / awcL, 0, 1));
+        if (hs >= q.trig && (!q.drip || 1 - w[clamp(Math.floor(q.drip / DZ), 0, NL - 1)] / awcL >= 0.12)) {   // a drip line only waters when the soil at its depth has dried
+          const zrD = Math.max(15, d > 0 ? R.Rdepth[d - 1] : 15), nz = Math.min(NL, Math.max(1, Math.ceil(zrD / DZ))); let def = 0; for (let i = 0; i < nz; i++) def += awcL - w[i];
+          const net = Math.min(def, q.dmax);
+          if (net > 1.5) { const jd = q.drip ? clamp(Math.floor(q.drip / DZ), 0, NL - 1) : 0; drain += q.drip ? infilSpread(jd, net, 1) : infil(0, net); I += net; Ig = net / q.eff; lastI = d; nIrr++; }
+        }
+      }
       const fi = 1 - Math.exp(-sp.k * (LAIg + 0.3 * LAIs)), Kcb = Math.min(sp.Kcb, 1.0 * sp.Kcb * fi + 0.0);
-      const Tp = wx.et0 * Math.min(1.25, sp.Kcb * fi * 1.0), Ep = wx.et0 * (1 - fi) * 0.9;
+      const Tp = wx.et0 * Math.min(1.25, sp.Kcb * fi * 1.0), Ep = wx.et0 * (1 - fi) * 0.9 * VFF;
       // evaporation of the soil (Ritchie, two stages)
       const U0 = 6 + 0.05 * soil.clay * 1.2, alp = 3.5 + 0.02 * soil.clay;
       if (P + I > 0) { const inp = P + I; Ue = Math.max(0, Ue - inp); if (Ue < U0) { st1 = true; t2 = 0; } }
@@ -144,9 +154,9 @@
       // roots: length per cm2 of ground in every layer, penetration resistance, uptake with the Feddes reduction and the conductivity of the soil (Gardner, Mualem)
       const bd = bulkDensity(soil, d), Rl = new Float64Array(NL); let Lsum = 0; for (let i = 0; i < NL; i++) { Rl[i] = Lz[i] / A; Lsum += Rl[i]; }
       const frel = new Float64Array(NL), hh = new Float64Array(NL), kr = new Float64Array(NL), psiS = new Float64Array(NL);
-      for (let i = 0; i < NL; i++) { frel[i] = clamp(1 - w[i] / awcL, 0, 1); hh[i] = lut(tab, tab.h, frel[i]); kr[i] = lut(tab, tab.kr, frel[i]); psiS[i] = -hh[i] * 9.80665e-5; R.Q[d * NL + i] = strength(bd[i], w[i] / awcL); R.bd[d * NL + i] = bd[i]; }
+      for (let i = 0; i < NL; i++) { frel[i] = clamp(1 - w[i] / awcL, 0, 1); hh[i] = lut(tab, tab.h, frel[i]); kr[i] = lut(tab, tab.kr, frel[i]); psiS[i] = -hh[i] * 9.80665e-5 - 0.036 * ECe; R.Q[d * NL + i] = strength(bd[i], w[i] / awcL); R.bd[d * NL + i] = bd[i]; }
       // uptake: every layer is a conductance (root length x fine roots x conductivity of the soil, Gardner, Mualem); the root collar potential is the one that gives the transpiration that the stomata ask for
-      const FINE = soil.fine || 4, qG = soil.qG || 0.05, Gi = new Float64Array(NL), S = new Float64Array(NL); let Gs = 0, Gp = 0; for (let i = 0; i < NL; i++) { Gi[i] = Rl[i] * FINE * qG * 10 * kr[i]; Gs += Gi[i]; Gp += Gi[i] * psiS[i]; }
+      const FINE = soil.fine || 4, qG = soil.qG || 0.1, Gi = new Float64Array(NL), S = new Float64Array(NL); let Gs = 0, Gp = 0; for (let i = 0; i < NL; i++) { Gi[i] = Rl[i] * FINE * qG * 10 * kr[i]; Gs += Gi[i]; Gp += Gi[i] * psiS[i]; }
       const psiPre = Gs > 1e-9 ? Gp / Gs : psiS[0], PSIMIN = -2.5;
       const flux = pr => { let t = 0; for (let i = 0; i < NL; i++) t += Math.min(w[i], Math.max(0, Gi[i] * (psiS[i] - pr))); return t; };
       let gs = gsPrev, psiL = 0, Tact = 0, psiR = psiPre;
@@ -170,7 +180,7 @@
       const dTf = rcc => { const gst = gam * (1 + rcc / ra_); return (ra_ * Rn / rhoCp) * gst / (del + gst) - vpd / (del + gst); };
       const dTc = dTf(rc), dTll = dTf(rcp), dTul = ra_ * Rn / rhoCp, cw = clamp((dTc - dTll) / Math.max(0.2, dTul - dTll), 0, 1);
       // biomass: light (Monteith) against the water it can transpire (Tanner and Sinclair); seed reserve at the start
-      const PAR = 0.48 * wx.Rs, Apot = sp.RUE * G.rue * fT * PAR * fi, vpdD = wx.vpd, TEcap = sp.kte / Math.max(0.3, vpdD) * Tact;
+      const PAR = 0.48 * wx.Rs, fSalD = PJ && PJ.salt ? clamp(1 - PJ.salt.sl / 100 * Math.max(0, ECe - PJ.salt.th), 0.05, 1) : 1, Apot = sp.RUE * G.rue * fT * PAR * fi * (PJ && PJ.fN != null ? PJ.fN : 1) * fSalD, vpdD = wx.vpd, TEcap = sp.kte / Math.max(0.3, vpdD) * Tact;
       let dW = Math.min(Apot, TEcap), seed = Wres * 0.07; Wres -= seed; dW += seed; if (stage >= 2) dW = 0;
       // partition: leaves and stems share what is left after the roots (functional equilibrium: more to the roots when water is short) and the grain
       const frd = sp.fr0 + (sp.frA - sp.fr0) * clamp(stage, 0, 1), wStress = clamp(1 - Tact / Math.max(0.05, Tp), 0, 1), fr = clamp(frd * G.rootC * (1 + 0.9 * wStress), 0.03, 0.7);
@@ -215,7 +225,7 @@
         let n = Math.hypot(dx, dy, dz) || 1; dx /= n; dy /= n; dz /= n;
         let nx = t.x + dx * step, ny = t.y + dy * step, nz = t.z + dz * step; const rr = Math.hypot(nx, nz);
         if (rr > Rpot * 0.97) { const f = Rpot * 0.97 / rr, ux = nx / rr, uz = nz / rr; nx *= f; nz *= f; const rad = dx * ux + dz * uz; if (rad > 0) { dx -= rad * ux; dz -= rad * uz; dy += 0.25; n = Math.hypot(dx, dy, dz) || 1; dx /= n; dy /= n; dz /= n; } }
-        if (ny >= ZMAX - 0.5) { ny = ZMAX - 0.5; t.active = false; }
+        const zcap = Math.min(ZMAX - 0.5, sp.zRoot || ZMAX); if (ny >= zcap) { ny = zcap; t.active = false; }
         const L = Math.hypot(nx - t.x, ny - t.y, nz - t.z); if (store) { segs.x0.push(t.x); segs.y0.push(t.y); segs.z0.push(t.z); segs.x1.push(nx); segs.y1.push(ny); segs.z1.push(nz); segs.d.push(d); segs.o.push(t.ord); }
         Lz[layerOf(0.5 * (t.y + ny))] += L; newL += L; t.x = nx; t.y = ny; t.z = nz; t.dx = dx; t.dy = dy; t.dz = dz; t.len += L; t.vx.push(nx); t.vy.push(ny); t.vz.push(nz); t.vc.push(t.len);
         if (t.ord > 0 && t.len >= t.maxLen) t.active = false;
@@ -242,12 +252,13 @@
       R.gs[d] = gs; R.psiL[d] = psiL; R.RWC[d] = RWC; R.turg[d] = turg; R.fE[d] = fE; R.Tc[d] = Ta + dTc; R.CTD[d] = -dTc; R.CWSI[d] = cw; R.Ks[d] = Tp > 1e-4 ? Tact / Tp : 1; R.Lroot[d] = Ltot; R.Rdepth[d] = zr; R.D50[d] = d50; R.D95[d] = d95; R.Fint[d] = fi; R.AE[d] = Apot; R.phi[d] = Ta + dTul;
       R.roll[d] = clamp((0.9 - RWC) / 0.2, 0, 1) * (0.4 + G.roll);
       for (let i = 0; i < NL; i++) { R.w[d * NL + i] = w[i] / awcL; R.Lz[d * NL + i] = Lz[i]; }
-      tot.P += P; tot.I += I; tot.T += Tact; tot.Es += Es; tot.dr += drain;
+      if (PJ && PJ.salt) { saltM += Ig * PJ.salt.ecw + P * 0.05 - drain * saltC; saltM = Math.max(0.01 * Vw, saltM); saltC = clamp(saltM / Vw, 0.05, 60); ECe = saltC / 2; }   // salt balance of the root zone: the salt of the water applied stays, the drainage takes the solution with it
+      R.Ig[d] = Ig; R.Ei[d] = EiD; R.ECe[d] = ECe; R.fSal[d] = fSalD; tot.Ig += Ig; tot.Ei += EiD; tot.P += P; tot.I += I; tot.T += Tact; tot.Es += Es; tot.dr += drain;
     }
     // shoot geometry of every day (leaves, projected area, convex hull, solidity): what an image of the plant would give
     for (let d = 0; d < N; d++) { const g = leaves(R, d); R.PSA[d] = g.psa; R.hullA[d] = g.hull; R.solid[d] = g.solid; R.cal[d] = g.caliper; }
     R.totals = tot; R.store0 = awcL * NL * 0.95; R.segs = segs ? { n: segs.d.length, x0: Float32Array.from(segs.x0), y0: Float32Array.from(segs.y0), z0: Float32Array.from(segs.z0), x1: Float32Array.from(segs.x1), y1: Float32Array.from(segs.y1), z1: Float32Array.from(segs.z1), d: Int16Array.from(segs.d), o: Uint8Array.from(segs.o) } : null;
-    R.nTips = tips.length; R.Ltotal = Lall; R.awcT = awcL * NL;
+    R.nIrr = nIrr; R.nTips = tips.length; R.Ltotal = Lall; R.awcT = awcL * NL;
     return R;
   }
 
