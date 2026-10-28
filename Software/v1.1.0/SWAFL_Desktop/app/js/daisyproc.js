@@ -108,19 +108,26 @@
   async function detail() {
     const p = byId(st.sel), box = document.getElementById('dzPdet'); if (!box) return;
     box.innerHTML = '<div class="dzcard"><h3 style="margin:0 0 6px;color:' + GC[p.g] + '">' + esc(p.n) + '</h3><div>' + esc(p.d) + '</div><div style="margin-top:6px;color:#555;font-size:12px">Daisy: ' + esc(p.par) + '</div><div id="dzPst" style="margin-top:6px;font-size:12px;color:#555">Reading the bundled results...</div></div><div id="dzPfigs"></div>';
-    const figs = document.getElementById('dzPfigs'), msg = document.getElementById('dzPst'); let ok = 0, bad = 0;
+    const figs = document.getElementById('dzPfigs'), msg = document.getElementById('dzPst');
+    const r = await drawFigs(p, figs, load, () => st.sel !== p.id, 'the bundled standard run (the course loam, 100 percent nitrogen, every 7th day)');
+    if (r) msg.textContent = r.ok + ' figure' + (r.ok === 1 ? '' : 's') + ' from the bundled standard run (the course loam, 100 percent nitrogen, every 7th day)' + (r.bad ? ', ' + r.bad + ' could not be drawn' : '') + '. Run your own set-up with the topics ticked under "What I am interested in" in the Scenarios tab, or the process logs in the Experiments tab, to see them for your data.';
+  }
+  // draw the figure cards of one process into a host; getLog(key) gives the parsed log; stale() tells when to stop
+  async function drawFigs(p, figs, getLog, stale, what) {
+    let ok = 0, bad = 0;
     for (const f of p.figs) {
-      if (st.sel !== p.id) return; const card = document.createElement('div'); card.className = 'dzcard'; card.innerHTML = '<b>' + esc(f.t) + '</b> <button class="dzPng" style="float:right">Save PNG</button><canvas style="display:block;width:100%;margin-top:6px"></canvas><div class="dzPn" style="font-size:12px;color:#555"></div>'; figs.appendChild(card);
+      if (stale()) return null; const card = document.createElement('div'); card.className = 'dzcard dzfig'; card.innerHTML = '<b>' + esc(f.t) + '</b> <button class="dzPng btn" style="float:right;width:auto;display:inline-block">Save PNG</button><canvas style="display:block;width:100%;margin-top:6px"></canvas><div class="dzPn" style="font-size:12px;color:#555"></div>'; figs.appendChild(card);
       const cv = card.querySelector('canvas'), note = card.querySelector('.dzPn'); card.querySelector('.dzPng').onclick = () => K().savePng(cv, 'daisy-' + p.id + '-' + f.log + '.png');
       try {
-        const d = await load(f.log); if (st.sel !== p.id) return;
+        const d = await getLog(f.log); if (stale()) return null; if (!d) throw new Error(f.log + ' was not written by this run');
         if (f.annual) { annual(cv, d, note); ok++; continue; }
-        if (f.heat) { const dc = IO.depthColumns(d), v = Object.keys(dc)[0]; const L = IO.depthLong(d, v); if (!L) throw new Error('no depth columns in ' + f.log); K().heat(cv, L.t, L.z, L.v, { time: true, unit: v + (L.unit ? ' [' + L.unit + ']' : ''), yt: 'depth (cm)', h: 280 }); note.textContent = 'Every 7th day of ' + new Date(d.time[0]).getUTCFullYear() + ' to ' + new Date(d.time[d.n - 1]).getUTCFullYear() + '; ' + v + ' in ' + (L.unit || 'model units') + '.'; ok++; continue; }
+        const span = new Date(d.time[0]).getUTCFullYear() + ' to ' + new Date(d.time[d.n - 1]).getUTCFullYear();
+        if (f.heat) { const dc = IO.depthColumns(d), v = Object.keys(dc)[0]; const L = IO.depthLong(d, v); if (!L) throw new Error('no depth columns in ' + f.log); K().heat(cv, L.t, L.z, L.v, { time: true, unit: v + (L.unit ? ' [' + L.unit + ']' : ''), yt: 'depth (cm)', h: 280 }); note.textContent = span + '; ' + v + ' in ' + (L.unit || 'model units') + '.'; ok++; continue; }
         const series = f.c.map(c => { const j = d.cols.indexOf(c); return j < 0 ? null : { name: c + (d.units && d.units[c] ? ' [' + d.units[c] + ']' : ''), x: d.time, y: d.data[j] }; }).filter(Boolean); if (!series.length) throw new Error('columns not in ' + f.log);
-        K().line(cv, series, { time: true, h: 240 }); note.textContent = 'Every 7th day of the standard run, ' + new Date(d.time[0]).getUTCFullYear() + ' to ' + new Date(d.time[d.n - 1]).getUTCFullYear() + '.'; ok++;
+        K().line(cv, series, { time: true, h: 240 }); note.textContent = span + '.'; ok++;
       } catch (e) { bad++; card.querySelector('canvas').remove(); note.textContent = 'Not drawn: ' + e.message; }
     }
-    msg.textContent = ok + ' figure' + (ok === 1 ? '' : 's') + ' from the bundled standard run (the course loam, 100 percent nitrogen, every 7th day)' + (bad ? ', ' + bad + ' could not be drawn' : '') + '. Run your own set-up in the desktop app with process logs from the Experiments tab to see them for your data.';
+    return { ok, bad };
   }
   function annual(cv, d, note) {
     const cols = d.cols.slice(4).map((c, i) => [c, i + 4]).filter(c => d.data[c[1]].some(v => isFinite(v) && v !== 0)).slice(0, 8), yrs = d.data[0].map(Number);
@@ -131,6 +138,6 @@
     const wire = () => { document.querySelectorAll('.dzPc').forEach(b => b.onclick = () => act(b.dataset.p)); map.querySelectorAll('.dzPb[data-p]').forEach(g => { g.onclick = () => act(g.dataset.p); g.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); act(g.dataset.p); } }; }); };
     wire(); detail();
   }
-  window.DaisyProc = { PROCESSES: P };
+  window.DaisyProc = { PROCESSES: P, drawFigs, GC };
   D.register('proc', { html, bind });
 })();
