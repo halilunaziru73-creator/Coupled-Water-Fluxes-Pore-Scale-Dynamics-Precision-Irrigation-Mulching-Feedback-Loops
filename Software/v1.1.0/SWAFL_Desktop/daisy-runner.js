@@ -5,6 +5,10 @@ const fs = require('fs'), path = require('path'), os = require('os'), { spawn, s
 
 const isWin = process.platform === 'win32';
 const EXE = isWin ? 'daisy.exe' : 'daisy';
+// the program of Daisy 7.1.x for Windows is bin\daisy-bin.exe (daisy.cmd only starts it); the one in SWAFL (folder daisy next to the app) is that file
+const EXES = isWin ? ['daisy-bin.exe', 'daisy.exe'] : ['daisy'];
+// the file that the Daisy site offers for download, daisy-7.1.14-Windows-python3.13.exe, is the INSTALLER: it asks for administrator rights and cannot be run as the program
+const isInstaller = f => { const b = path.basename(String(f || '')).toLowerCase(); return /^daisy-[\d.]+-(windows|win)/.test(b) || /setup|install/.test(b) && /daisy/.test(b); };
 
 function candidates() {
   const c = [];
@@ -22,7 +26,10 @@ function candidates() {
   }
   return c;
 }
-function findExe(saved) { const list = (saved ? [saved] : []).concat(candidates()); for (const f of list) { try { if (f && fs.statSync(f).isFile()) return f; } catch (e) { } } return null; }
+function allCandidates() { const out = []; candidates().forEach(c => { out.push(c); if (isWin && path.basename(c).toLowerCase() === EXE) EXES.forEach(n => { if (n !== EXE) out.push(path.join(path.dirname(c), n)); }); }); return out; }
+// the bundled program first, then the one saved from an earlier choice (never an installer), then the usual places
+function bundled() { const out = []; [__dirname, path.dirname(process.execPath), process.resourcesPath, path.join(__dirname, '..')].filter(Boolean).forEach(b => ['daisy', 'Daisy'].forEach(n => EXES.forEach(x => { out.push(path.join(b, n, 'bin', x)); out.push(path.join(b, n, x)); }))); return out; }
+function findExe(saved) { const list = bundled().concat(saved ? [saved] : []).concat(allCandidates()); for (const f of list) { try { if (f && !isInstaller(f) && fs.statSync(f).isFile()) return f; } catch (e) { } } return null; }
 // the folder that holds lib/ and sample/ (DAISYHOME)
 function homeFor(exe) {
   const d = path.dirname(exe), c = [path.join(d, '..', 'share', 'daisy'), path.join(d, '..'), path.join(d, '..', 'lib', 'daisy'), d, '/usr/share/daisy'];
@@ -30,7 +37,7 @@ function homeFor(exe) {
   return null;
 }
 function version(exe) { try { const r = spawnSync(exe, ['-v'], { env: envFor(exe), timeout: 15000, encoding: 'utf8' }); return ((r.stdout || '') + (r.stderr || '')).split('\n').find(l => /version/i.test(l)) || ''; } catch (e) { return ''; } }
-function envFor(exe) { const e = Object.assign({}, process.env), h = homeFor(exe); if (h) e.DAISYHOME = h; return e; }
+function envFor(exe) { const e = Object.assign({}, process.env), h = homeFor(exe); if (h) e.DAISYHOME = h; if (isWin && /daisy-bin\.exe$/i.test(exe)) { const d = path.dirname(exe); e.PYTHONHOME = d; e.PYTHONNOUSERSITE = '1'; delete e.PYTHONPATH; e.PATH = d + path.delimiter + (e.PATH || e.Path || ''); } return e; }
 
 function walk(dir, base, out) { fs.readdirSync(dir, { withFileTypes: true }).forEach(e => { const p = path.join(dir, e.name); if (e.isDirectory()) walk(p, base + e.name + '/', out); else out.push(base + e.name); }); return out; }
 
@@ -49,7 +56,7 @@ function runJob(job, opt) {
     const p = spawn(exe, [path.basename(main)], { cwd: wd, env: envFor(exe) });
     const to = setTimeout(() => { try { p.kill(); } catch (e) { } }, opt.timeoutMs || 1800000);
     p.stdout.on('data', d => { out += d; if (opt.onOut) opt.onOut(String(d)); }); p.stderr.on('data', d => { err += d; if (opt.onOut) opt.onOut(String(d)); });
-    p.on('error', e => { clearTimeout(to); reject(e); });
+    p.on('error', e => { clearTimeout(to); if (e && e.code === 'EACCES') e.message = 'Windows would not run ' + exe + ' (EACCES). This is what happens when the file is the Daisy installer (daisy-7.1.x-Windows-...exe), which needs administrator rights. SWAFL has Daisy built in, so choose nothing, or choose bin\\daisy-bin.exe of an installed Daisy.'; reject(e); });
     p.on('close', code => {
       clearTimeout(to); const logs = {};
       try { fs.readdirSync(wd).forEach(n => { if (/\.(dlf|csv)$/i.test(n) || /^daisy\.log$/.test(n)) { const s = fs.statSync(path.join(wd, n)); if (s.size < 80e6) logs[n] = fs.readFileSync(path.join(wd, n), 'utf8'); } }); } catch (e) { }
@@ -58,4 +65,4 @@ function runJob(job, opt) {
   });
 }
 function clean(dir) { try { if (dir && dir.indexOf('swafl-daisy-') >= 0) fs.rmSync(dir, { recursive: true, force: true }); } catch (e) { } }
-module.exports = { findExe, homeFor, version, runJob, clean, EXE, candidates };
+module.exports = { isInstaller, findExe, homeFor, version, runJob, clean, EXE, candidates };

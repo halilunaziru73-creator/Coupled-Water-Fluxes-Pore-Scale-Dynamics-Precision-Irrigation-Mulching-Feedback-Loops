@@ -55,6 +55,7 @@ ipcMain.handle('daisy-info', () => { const e = exeNow(); return e ? { found: tru
 ipcMain.handle('daisy-choose', async () => {
   const r = await dialog.showOpenDialog(win, { title: 'Choose the Daisy program (' + DR.EXE + ')', properties: ['openFile'], filters: process.platform === 'win32' ? [{ name: 'Daisy', extensions: ['exe'] }] : [] });
   if (r.canceled || !r.filePaths[0]) return { found: false, cancelled: true };
+  if (DR.isInstaller(r.filePaths[0])) return { found: false, installer: true, error: 'That file is the Daisy installer (it asks for administrator rights and cannot be run as the program). SWAFL has Daisy built in, so you do not need to choose a file. To use your own installation, run the installer once and then choose bin\\daisy-bin.exe in the folder where it installed Daisy.' };
   fs.mkdirSync(path.dirname(daisyCfg()), { recursive: true }); fs.writeFileSync(daisyCfg(), JSON.stringify({ exe: r.filePaths[0] })); const e = r.filePaths[0]; return { found: true, exe: e, home: DR.homeFor(e), version: DR.version(e) };
 });
 ipcMain.handle('daisy-job', async (_e, job) => {

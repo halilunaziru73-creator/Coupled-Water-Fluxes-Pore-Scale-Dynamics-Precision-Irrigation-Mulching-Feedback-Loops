@@ -113,7 +113,7 @@
     const paths = Object.keys(I.kind).filter(p => I.kind[p] === 'run' && I.pick[p] !== false); if (!paths.length) { $('ImpOut').innerHTML = '<span style="color:#b3261e">Tick at least one set-up.</span>'; return; }
     if (!D.isDesk() || !window.swafl || !window.swafl.daisyJob) { $('ImpOut').innerHTML = '<span style="color:#b3261e">Daisy itself runs in the desktop app. Here the set-ups can be read, and the weather, the soil and the logs sent on.</span>'; return; }
     try {
-      let info = await window.swafl.daisyInfo(); if (!info.found) info = await window.swafl.daisyChoose(); if (!info.found) throw new Error('No Daisy program chosen. Install Daisy 7.1.14 (Model and documentation tab).');
+      let info = await window.swafl.daisyInfo(); if (!info.found) info = await window.swafl.daisyChoose(); if (!info.found) throw new Error('The Daisy program of SWAFL was not found (it is the folder daisy next to the program). Unzip the whole SWAFL zip again, or choose bin\\daisy-bin.exe of an installed Daisy 7.1.14 (never the installer file daisy-7.1.14-Windows-...exe).');
       let F = X.factor('run'); if (!F) { F = { id: 'run', key: 'run', label: 'Set-up', unit: '', kind: 'cat', levels: [] }; X.FACTORS.push(F); }
       const jobs = paths.map((p, i) => ({ run: { id: 'i' + String(i + 1).padStart(2, '0'), label: baseOf(p).replace(/\.dai$/i, ''), val: { run: baseOf(p).replace(/\.dai$/i, '') } }, job: { main: p, files: neededFiles(p, I.files), options: {}, scenario: 'import' } }));
       const nm = jobs.map(j => j.run.val.run); if (new Set(nm).size < nm.length) jobs.forEach(j => { j.run.val.run = j.run.label = j.job.main.replace(/\.dai$/i, ''); });
@@ -336,7 +336,7 @@
     if (st.running) { st.stop = true; D.note('Xst', 'Stopping after the runs that have started...'); return; }
     try {
       readPlanInputs(); if (!D.isDesk() || !window.swafl || !window.swafl.daisyJob) { D.note('Xst', 'Daisy itself runs in the desktop app. Here you can save the experiment folder (.zip) and run it anywhere, or explore the published runs.', 1); return; }
-      let info = await window.swafl.daisyInfo(); if (!info.found) info = await window.swafl.daisyChoose(); if (!info.found) throw new Error('No Daisy program chosen. Install Daisy 7.1.14 (Model and documentation tab).');
+      let info = await window.swafl.daisyInfo(); if (!info.found) info = await window.swafl.daisyChoose(); if (!info.found) throw new Error('The Daisy program of SWAFL was not found (it is the folder daisy next to the program). Unzip the whole SWAFL zip again, or choose bin\\daisy-bin.exe of an installed Daisy 7.1.14 (never the installer file daisy-7.1.14-Windows-...exe).');
       const design = override || X.design(currentPlan()), files = await commonFiles(), jobs = await buildJobs(design, files), fids = override ? st.fids : design.factors.map(f => f.id);
       if (!override) { st.rows = []; st.runs = []; st.design0 = design; } else st.design0 = { runs: st.design0.runs.concat(design.runs), factors: st.design0.factors }; st.fids = fids; st.source = 'daisy'; st.running = true; st.stop = false; $('Batch').textContent = 'Stop'; const box = $('RunBox');
       box.innerHTML = '<div class="dzpan"><b id="dzXProg">0 of ' + jobs.length + ' runs</b> <div id="dzXBar" style="height:8px;background:#e4e7ec;border-radius:4px;margin:6px 0"><div id="dzXBarIn" style="height:8px;width:0;background:#2b83ba;border-radius:4px"></div></div><div id="dzXList" class="pnote" style="max-height:120px;overflow:auto"></div></div>';

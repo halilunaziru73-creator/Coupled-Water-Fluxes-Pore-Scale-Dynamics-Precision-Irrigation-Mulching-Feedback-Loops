@@ -116,6 +116,7 @@ See [docs/USER_GUIDE.md](docs/USER_GUIDE.md) for the step-by-step guide and [doc
 | "running scripts is disabled" (PowerShell) | Use a **Command Prompt** terminal, or `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned`, or `cmd /c npm install` |
 | `npm` not recognised | Install Node.js LTS, then restart VS Code |
 | `ENOENT ... package.json` | Wrong folder: the zip makes a folder inside a folder; `cd` into the one showing `package.json` |
+| `spawn ...daisy-7.1.xx-Windows-python3.13.exe EACCES`, or *Daisy gave no results (code -1)* | The Daisy **installer** was chosen as the program. Daisy is built into SWAFL (folder `daisy`): choose nothing. To use your own installation pick `bin\daisy-bin.exe`, never the installer |
 | Slow/failed install in OneDrive | Copy the project to `C:\SWAFL_Desktop` and run there |
 | "Windows protected your PC" | More info → Run anyway (app is not code-signed) |
 | `Missing script: "get_app"` | Fixed in this version: `npm run get-app`, `npm run get_app` and `npm run getapp` all work. If you still see the message, the folder holds an older `package.json`: unzip the new zip into a new folder |

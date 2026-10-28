@@ -53,6 +53,8 @@ npm run get-app    # build SWAFL.exe, copy it to the Desktop and start it
 
 **Other messages.** *Running scripts is disabled* (PowerShell): use a Command Prompt, or run `cmd /c npm install`. *npm is not recognised*: install Node.js (LTS) and open a new terminal. *ENOENT, package.json*: the zip makes a folder inside a folder, so go into the inner one. *Electron download fails*: check the connection or VPN, delete `node_modules` and run `npm install` again.
 
+**Daisy.** The Daisy 7.1.14 program for Windows is inside the zip (the folder `daisy`), is built into the program by the build and starts by itself when a Daisy run is asked for. Do not download or choose the Daisy installer (`daisy-7.1.14-Windows-python3.13.exe`): it is not the program, it asks for administrator rights, and choosing it as the program gives the message *spawn ... EACCES* and runs that end with *Daisy gave no results (code -1)*.
+
 ## Requirements
 
 * Windows 10 or 11 (64-bit) for the built program; any current Chrome, Edge or Firefox for the browser route.

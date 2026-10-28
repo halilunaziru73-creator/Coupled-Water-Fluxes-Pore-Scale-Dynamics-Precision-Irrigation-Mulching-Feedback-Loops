@@ -63,6 +63,13 @@
         "filter": [
           "SWAFL_Manual_v1.1.0.pdf"
         ]
+      },
+      {
+        "from": "daisy",
+        "to": "daisy",
+        "filter": [
+          "**/*"
+        ]
       }
     ]
   }

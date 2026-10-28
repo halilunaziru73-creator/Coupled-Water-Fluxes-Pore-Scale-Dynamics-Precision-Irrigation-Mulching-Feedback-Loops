@@ -25,5 +25,5 @@ The chapters that follow take the groups in this order. Every screen is shown wi
 
 **How the weather is chosen.** The weather of a run is chosen once in the strip at the top of the Scenarios, Experiments and Processes tabs, and its source is set in My data. The choices are the weather of the SWAFL project, the built-in Taastrup weather, one of the bundled stations, online weather of a place and a file of your own. All simulations then use that weather, so a figure and the project always agree.
 
-**What runs where.** The scenarios, experiments, set-up editor and calibration against the Daisy program need the desktop app with Daisy installed. The soil column, the process curves and the denitrification calibration run in the web version too. The figures of results that are drawn here come from real Daisy runs of the built-in farm for the years 1990 to 1993.
+**What runs where.** The scenarios, experiments, set-up editor and calibration against the Daisy program need the desktop app. Daisy 7.1.14 for Windows comes with SWAFL (the folder `daisy` next to the program) and starts by itself, so nothing has to be installed or downloaded. The soil column, the process curves and the denitrification calibration run in the web version too. The figures of results that are drawn here come from real Daisy runs of the built-in farm for the years 1990 to 1993.
 

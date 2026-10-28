@@ -10,6 +10,7 @@ try {
   console.log('Building SWAFL ' + ver);
   // remove the previous build so an old SWAFL.exe can never be copied by mistake
   try { fs.rmSync(path.join(__dirname, 'dist'), { recursive: true, force: true }); } catch (e) {}
+  if (!fs.existsSync(path.join(__dirname, 'daisy', 'bin', 'daisy-bin.exe'))) console.log('\nNote: the folder daisy (the Daisy program that comes with SWAFL) is missing, so the built SWAFL will not run Daisy by itself. Unzip the whole SWAFL zip again.\n');
   if (!fs.existsSync(path.join(__dirname, 'node_modules', 'electron-builder'))) run('npm install');
   try { run('npm run dist'); }
   catch (e1) {
