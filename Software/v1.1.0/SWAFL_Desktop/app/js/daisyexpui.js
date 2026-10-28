@@ -20,7 +20,7 @@
       '<p class="pnote">Write it in your own words: what to vary, on which soil and weather, what to look at. The planner turns it into a set of Daisy runs, asks what is still open, runs them in a batch or one by one, and draws the figures. ' + (desk ? '' : 'This is the web version: Daisy itself runs in the desktop app; here you can plan, save the experiment folder, and explore the 10 190 published runs of the study.') + '</p>' +
       '<textarea id="dzXText" rows="3" style="width:100%;box-sizing:border-box" placeholder="For example: how do the irrigation trigger and the sensor depth change yield and water use on sand and loam?">' + esc(st.text) + '</textarea>' +
       '<div class="dzrow"><button class="btn pri" id="dzXGo">Understand my request</button><label title="Without a key the built-in planner works fully offline. With a key, an online AI reads the request first, and each plan it gives is checked against what Daisy can vary."><input type="checkbox" id="dzXAi"' + (st.ai ? ' checked' : '') + '> online AI (machine learning)</label><input type="password" id="dzXKey" placeholder="access key" value="' + esc(st.key) + '" style="width:150px;' + (st.ai ? '' : 'display:none') + '"></div>' +
-      '<div id="dzXSug"></div>' +
+      '<div id="dzXSug"></div><div id="dzXChap"></div>' +
       '<div class="pnote">Examples: ' + EXAMPLES.map((e, i) => '<a href="#" data-ex="' + i + '">' + esc(e.length > 58 ? e.slice(0, 56) + '...' : e) + '</a>').join(' &middot; ') + '</div></div>' +
       '<div id="dzXPlan"></div><div id="dzXRunBox"></div><div id="dzXRes"></div>';
   }
@@ -38,6 +38,24 @@
     box.innerHTML = '<div class="dzpan"><b>Best combinations to start with</b> <span class="pnote">worked out from the ' + esc(R.SOURCE) + ' and from the weather and soil given (' + (refCtx().Pmean != null ? 'your weather, ' + Math.round(refCtx().Pmean) + ' mm of rain a year' : 'the course weather') + '); the first is the most useful here. Nothing is taken from earlier experiments.</span>' +
       list.slice(0, 6).map((g, i) => '<div class="dzrow" style="align-items:flex-start;margin-top:6px"><button class="btn' + (i === 0 ? ' pri' : '') + '" data-sug="' + g.id + '" style="min-width:210px;text-align:left">' + esc(g.title) + '</button><span class="pnote" style="flex:1">' + esc(g.why) + ' <i>Manual section ' + esc(g.ref) + '.</i></span></div>').join('') + '</div>';
     box.querySelectorAll('[data-sug]').forEach(b => b.onclick = () => useSuggestion(list.find(x => x.id === b.dataset.sug)));
+  }
+
+  // ------------------------------------------------------------------ chapter by chapter of the Daisy reference manual
+  const PART = n => n <= 6 ? 'Part I, the framework' : n <= 106 ? 'Part II, the components' : 'Appendix';
+  function showChapters() {
+    const box = $('Chap'); const CH = window.DaisyChapters; if (!box || !CH) return; if (st.chap == null) st.chap = 1;
+    const map = R.CHAPTER_MAP, all = R.suggest(Object.assign(refCtx(), { userSoil: false })), n = st.chap, c = CH.find(x => x.n === n) || CH[0], ids = (map[c.n] || []), items = ids.map(i => all.find(x => x.id === i)).filter(Boolean), nRun = Object.keys(map).length;
+    let h = '<details class="dzpan"' + (st.chapOpen ? ' open' : '') + '><summary><b>Chapter by chapter of the Daisy reference</b> <span class="pnote">' + CH.length + ' chapters of the manual (31 August 2026); ' + nRun + ' of them have something that can be varied and run here. Choose a chapter, read what it covers, and load its experiments.</span></summary>';
+    h += '<div class="dzrow"><button class="btn" id="dzXChPrev">&laquo; previous</button><select id="dzXChSel" style="max-width:340px">' + CH.map(x => '<option value="' + x.n + '"' + (x.n === n ? ' selected' : '') + '>' + x.n + '. ' + esc(x.title) + (map[x.n] ? ' *' : '') + '</option>').join('') + '</select><button class="btn" id="dzXChNext">next &raquo;</button><span class="pnote">* has experiments here &middot; ' + esc(PART(n)) + '</span></div>';
+    h += '<div style="margin-top:6px"><b>Chapter ' + c.n + ': ' + esc(c.title) + '</b> <span class="pnote">' + c.sections.length + ' model' + (c.sections.length === 1 ? '' : 's') + ' listed</span><p class="pnote" style="margin:4px 0">' + esc(c.intro) + '</p></div>';
+    if (items.length) h += '<div><b>Experiments from this chapter</b>' + items.map(g => '<div class="dzrow" style="align-items:flex-start;margin-top:6px"><button class="btn pri" data-chsug="' + g.id + '" style="min-width:210px;text-align:left">Load: ' + esc(g.title) + '</button><span class="pnote" style="flex:1">' + esc(g.why) + ' <i>Manual section ' + esc(g.ref) + '.</i></span></div>').join('') + '</div>';
+    else if (ids.length) h += '<div class="pnote">The experiment for this chapter needs a soil of the course or a soil that is not your own; it is not offered while "My soil" is in use.</div>';
+    else h += '<div class="pnote"><b>No experiment from this chapter yet.</b> ' + (c.n <= 6 ? 'This chapter describes how the manual, the setup files and the logs work; it has no process to vary.' : 'Daisy accepts the parameters listed below in a setup file, but this app does not change them in a run, so there is nothing to load. Nothing is made up for it.') + '</div>';
+    if (c.sections.length) h += '<details style="margin-top:6px"><summary class="pnote">The models of this chapter and their parameters</summary><div style="max-height:260px;overflow:auto;font-size:12px">' + c.sections.map(x => '<div style="margin:3px 0"><b>' + esc(x.id) + ' ' + esc(x.name) + '</b> ' + esc(x.desc) + (x.params.length ? ' <span class="pnote">(' + esc(x.params.join(', ')) + ')</span>' : '') + '</div>').join('') + '</div></details>';
+    box.innerHTML = h + '</details>';
+    const go = k => { st.chap = Math.max(1, Math.min(CH[CH.length - 1].n, k)); st.chapOpen = true; showChapters(); };
+    $('ChSel').onchange = ev => go(+ev.target.value); $('ChPrev').onclick = () => go(n - 1); $('ChNext').onclick = () => go(n + 1); box.querySelector('details').ontoggle = ev => { st.chapOpen = ev.target.open; };
+    box.querySelectorAll('[data-chsug]').forEach(b => b.onclick = () => { const g = items.find(x => x.id === b.dataset.chsug); st.chapOpen = true; useSuggestion(g); });
   }
   function useSuggestion(g) {
     if (!g) return; st.text = g.title; const t = $('Text'); if (t) t.value = g.title; const plan = { factors: g.plan.factors.map(f => ({ id: f.id, levels: f.levels.slice() })), base: Object.assign({}, g.plan.base), design: g.plan.design };
@@ -241,7 +259,7 @@
     D.download('daisy-experiment-report.html', '<!doctype html><meta charset="utf-8"><title>Daisy experiment</title><style>body{font:14px Segoe UI,Arial;max-width:1000px;margin:20px auto;padding:0 14px}table{border-collapse:collapse;font-size:12px}td,th{border:1px solid #ccc;padding:2px 6px}th{background:#eef1f5}h2{margin-top:26px}</style><h1>' + esc((st.res && st.res.plan.title) || 'Daisy experiment') + '</h1><p>' + esc(st.text) + '</p><p>' + rows.length + ' runs of Daisy 7.1.14' + (st.source === 'ens' ? ' (the published runs of the study)' : '') + '.</p>' + imgs + '<h2>All runs</h2>' + tab, 'text/html');
   }
   function bind() {
-    $('Go').onclick = () => understand(); showSuggestions(); if (window.DaisyScenUI) window.DaisyScenUI.bindStrip();
+    $('Go').onclick = () => understand(); showSuggestions(); showChapters(); if (window.DaisyScenUI) window.DaisyScenUI.bindStrip();
     $('Ai').onchange = e => { $('Key').style.display = e.target.checked ? '' : 'none'; };
     document.querySelectorAll('[data-ex]').forEach(a => a.onclick = ev => { ev.preventDefault(); $('Text').value = EXAMPLES[+a.dataset.ex]; understand(); });
     $('Text').onkeydown = e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) understand(); };

@@ -32,6 +32,8 @@
   const rootDepth = ctx => ctx.root || 100;
 
   // the combinations to run first; each is {id, title, why, ref, plan:{design, factors:[{id, levels}], base}, score}
+  /* which chapters of the reference have something that can be varied and run in this app */
+  R.CHAPTER_MAP = { 15: ['method', 'trigger', 'dose', 'window', 'flux', 'tillage', 'nitrogen'], 16: ['chemical'], 19: ['etmodel', 'climate'], 23: ['chemical'], 28: ['trigger'], 29: ['rooting'], 47: ['soils'], 48: ['soils'], 62: ['etmodel'], 103: ['climate', 'season', 'stations'] };
   R.suggest = function (ctx) {
     ctx = ctx || {}; const P = ctx.Pmean, dry = P != null && P < 600, wet = P != null && P > 800, out = [];
     const soils = ctx.userSoil ? [] : [{ id: 'soil', levels: ['usda:sand', 'loam'] }];
@@ -68,6 +70,15 @@
     out.push({ id: 'etmodel', title: 'Evapotranspiration model and radiation', ref: '25.7, 107.26', score: 4,
       why: 'Daisy can take the reference evapotranspiration from the weather file (FAO56) or compute it from the energy balance, and the radiation can be scaled. The runs show how much of the answer depends on that choice.',
       plan: { design: 'factorial', factors: [{ id: 'bio', levels: ['auto', 'default'] }, { id: 'radscale', levels: [0.9, 1, 1.1] }].concat(soils), base: {} } });
+    out.push({ id: 'rooting', title: 'Rooting depth of the crop', ref: '29.1, 72', score: 3,
+      why: 'The crop model has a maximum rooting depth, which decides how much of the soil water and nitrate the roots can reach. Shallow to deep roots, rainfed and irrigated, show how much of a water shortage a deeper root zone absorbs.',
+      plan: { design: 'factorial', factors: [{ id: 'root', levels: [30, 60, 90, 120] }, { id: 'irrig', levels: ['0', '1'] }].concat(soils), base: {} } });
+    out.push({ id: 'season', title: 'A dry summer, a dry spring or a wet winter', ref: '103, 25.7', score: dry ? 6 : 4,
+      why: 'The weather component can scale the precipitation month by month (twelve factors). Taking 30 percent of the rain from the summer or the spring, or adding 30 percent in the winter, shows which part of the year matters for yield and for leaching.' + wxNote,
+      plan: { design: 'factorial', factors: [{ id: 'season', levels: [{ label: 'dry summer (rain x0.7 Jun-Aug)', set: { pmonths: '1 1 1 1 1 0.7 0.7 0.7 1 1 1 1' } }, { label: 'dry spring (rain x0.7 Mar-May)', set: { pmonths: '1 1 0.7 0.7 0.7 1 1 1 1 1 1 1' } }, { label: 'wet winter (rain x1.3 Dec-Feb)', set: { pmonths: '1.3 1.3 1 1 1 1 1 1 1 1 1 1.3' } }] }, { id: 'irrig', levels: ['0', '1'] }].concat(soils), base: {} } });
+    out.push({ id: 'stations', title: 'The same farm under other climates', ref: '103', score: 3,
+      why: 'The weather component reads a file for one place. Running the same soil, crops and management with the weather of several places shows how much of the result belongs to the climate.',
+      plan: { design: 'factorial', factors: [{ id: 'station', levels: ['course', 'it-bologna', 'dk-foulum'] }, { id: 'irrig', levels: ['0', '1'] }].concat(soils), base: {} } });
     out.push({ id: 'chemical', title: 'Sorption and half-life of a chemical', ref: '23', score: 4,
       why: 'A chemical has a sorption coefficient (K_OC, L/kg) and a decomposition rate; the two decide whether it stays in the topsoil or reaches the depth where it is counted as leached.',
       plan: { design: 'factorial', factors: [{ id: 'koc', levels: [0, 50, 500] }, { id: 'half', levels: [15, 90] }].concat(soils), base: {} } });
