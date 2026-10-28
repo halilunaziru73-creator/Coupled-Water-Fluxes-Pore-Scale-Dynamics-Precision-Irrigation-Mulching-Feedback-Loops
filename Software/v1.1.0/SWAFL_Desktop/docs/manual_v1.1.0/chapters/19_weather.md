@@ -67,7 +67,7 @@ P^{\mathrm{model}}_k = P_k\,\frac{\rho}{\rho_{\mathrm{ref}}},\qquad e_k = \frac{
 \tag{19.3}
 $$
 
-*Provenance (Eq. 19.3):* **[Engineered]**: the daily sequence of your weather replaces the generated rainfall (Eqs. 5.15–5.16) and the seasonal demand weight.
+*Provenance (Eq. 19.3):* **[Engineered]**: the daily sequence of your weather replaces the generated rainfall (Eqs. 5.15 to 5.16) and the seasonal demand weight.
 
 with $\rho$ the rainfall scale of Properties and $\rho_{\mathrm{ref}}$ the step chosen for your weather by Eq. (19.4). The annual model (Engine 1) works on the simulated steps of rainfall and warming; it is set to the steps nearest your weather,
 
@@ -99,7 +99,7 @@ The crop water requirement (Chapter 21) uses your daily rain and ET0 directly.
 
 Type the name of a town, village or district and press **Find**, then choose the place from the list; or type its latitude and longitude. **Get the weather** fetches:
 
-* the measured daily rain, reference evapotranspiration (FAO Penman–Monteith) and maximum and minimum temperature of the place from 1 January twenty years ago to two days ago;
+* the measured daily rain, reference evapotranspiration (FAO Penman and Monteith) and maximum and minimum temperature of the place from 1 January twenty years ago to two days ago;
 * the forecast for the next 16 days;
 * for the rest of the current year after the forecast, the same days of the most typical year of the record (median rain).
 

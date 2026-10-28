@@ -1,0 +1,53 @@
+{
+ "id": "dz_proc_11",
+ "group": "60_proc",
+ "ch": "results",
+ "sec": "Processes",
+ "title": "Processes: Organic matter pools (AOM, SMB, SOM)",
+ "intro": "Added organic matter (AOM1-3: crop residues, roots, manure) is decomposed by the soil microbial biomass (SMB1-2), which builds soil organic matter (SOM1-3) from slow to inert; each pool has a carbon and a nitrogen content with its own turnover and efficiency, and the C:N ratio decides whether nitrogen is mineralised or immobilised.",
+ "note": "",
+ "marks": [
+  {
+   "x": 944,
+   "y": 1057.9,
+   "t": "Process map",
+   "d": "The process that is open has a red frame."
+  },
+  {
+   "x": 83.2,
+   "y": 1764.9250000000002,
+   "t": "Process",
+   "d": "Name of the process and what Daisy does there."
+  },
+  {
+   "x": 195.275,
+   "y": 1930.7250000000001,
+   "t": "Source of the figures",
+   "d": "The run whose logs are drawn."
+  },
+  {
+   "x": 535.075,
+   "y": 1931.525,
+   "t": "Run Daisy with all process logs",
+   "d": "Runs the model with every process log on."
+  },
+  {
+   "x": 944,
+   "y": 2266.725,
+   "t": "First figure",
+   "d": "The figure of the process."
+  },
+  {
+   "x": 944,
+   "y": 2881.925,
+   "t": "Second figure",
+   "d": "The next figure of the process."
+  },
+  {
+   "x": 944,
+   "y": 3497.125,
+   "t": "Third figure",
+   "d": "The next figure of the process."
+  }
+ ]
+}

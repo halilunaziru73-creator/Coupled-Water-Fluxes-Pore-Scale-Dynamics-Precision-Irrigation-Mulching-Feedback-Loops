@@ -1,0 +1,53 @@
+{
+ "id": "dz_combo_22",
+ "group": "30_exp",
+ "ch": "combos",
+ "sec": "Parameters",
+ "title": "The groundwater and the aquitard below the profile: aquitard",
+ "intro": "K aquitard [cm/h]: Conductivity of the aquitard; Z aquitard [cm]: Thickness of the aquitard. The aquitard begins below the bottommost soil horizon. Each is varied from half to double the value the farm uses; K aquitard, Z aquitard moved the yield, water or nitrogen in the test.",
+ "note": "",
+ "marks": [
+  {
+   "x": 88,
+   "y": 743.725,
+   "t": "Groundwater aquitard: K aquitard (Daisy reference, chapter 45)",
+   "d": "Varied over 0.0005, 0.001, 0.002."
+  },
+  {
+   "x": 88,
+   "y": 791.725,
+   "t": "Groundwater aquitard: Z aquitard (Daisy reference, chapter 45)",
+   "d": "Varied over 100, 200, 400."
+  },
+  {
+   "x": 330.65000000000003,
+   "y": 843.725,
+   "t": "Add something to change",
+   "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+  },
+  {
+   "x": 1283.25,
+   "y": 843.725,
+   "t": "How to combine",
+   "d": "Every combination, one thing at a time, or the values paired in order."
+  },
+  {
+   "x": 1668.875,
+   "y": 843.325,
+   "t": "At most",
+   "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 1012.9250000000001,
+   "t": "Size of the experiment",
+   "d": "The number of runs and the time they take on this computer."
+  },
+  {
+   "x": 102.95,
+   "y": 1082.925,
+   "t": "Run all",
+   "d": "Runs every combination, several at a time."
+  }
+ ]
+}

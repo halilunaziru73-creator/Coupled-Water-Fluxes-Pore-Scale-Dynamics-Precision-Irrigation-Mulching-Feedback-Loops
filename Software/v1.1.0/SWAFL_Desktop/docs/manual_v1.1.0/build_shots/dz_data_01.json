@@ -1,0 +1,29 @@
+{
+ "id": "dz_data_01",
+ "group": "10_data",
+ "ch": "data",
+ "sec": "My data",
+ "title": "My data: the starting screen",
+ "intro": "My data is the first tab of the group Your data. It is where the weather and the soil of the site are set once; Scenarios, Experiments and Processes all read them from here. With nothing changed, the built-in weather of Taastrup and the built-in loam and sand are used.",
+ "note": "",
+ "marks": [
+  {
+   "x": 173.775,
+   "y": 405.32500000000005,
+   "t": "Weather choice",
+   "d": "Where the weather comes from: the built-in weather, the weather of the SWAFL project, online weather of a place, or a file of your own."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 444.125,
+   "t": "Weather in use",
+   "d": "A summary of the weather that will be used: its name, years, mean rain and mean temperature, and the checks that were made."
+  },
+  {
+   "x": 72.8,
+   "y": 482.125,
+   "t": "My soil",
+   "d": "Tick to describe your own soil horizons instead of the two built-in soils."
+  }
+ ]
+}

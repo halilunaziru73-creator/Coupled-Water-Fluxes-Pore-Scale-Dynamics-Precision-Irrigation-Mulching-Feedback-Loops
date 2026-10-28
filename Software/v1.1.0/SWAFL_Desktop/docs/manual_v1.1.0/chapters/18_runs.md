@@ -41,8 +41,8 @@ The value is kept exactly as typed (2.13 stays 2.13); it is not rounded to a ste
 
 The drip and sprinkler designs need the area to irrigate and the length of the laterals. The row **Field size** offers two ways of giving them:
 
-* **Area in hectares** — type the area; the lateral length is its own value box.
-* **Length and width** — type the length and the width of the field in metres. The area and the lateral length then follow, and the lateral-length box is greyed out with the note *from the field length*:
+* **Area in hectares**, type the area; the lateral length is its own value box.
+* **Length and width**, type the length and the width of the field in metres. The area and the lateral length then follow, and the lateral-length box is greyed out with the note *from the field length*:
 
 $$
 A_f=\frac{L\,W}{10^4}\ \ [\mathrm{ha}],\qquad L_{\mathrm{lat}}=\mathrm{clip}\Bigl(\frac{L}{\lceil L/L_{\max}\rceil};\ L_{\min},\ L_{\max}\Bigr),
@@ -74,7 +74,7 @@ $$
 | Drip | emitter flow 1, 1.6, 2, 3, 4 or 8 L/h; emitter spacing 0.3, 0.5, 0.75 or 1 m; interval 1 to 4 days. |
 | Sprinkler | five nozzle diameters and four pressures across the range of the sprinkler type; for each, a square spacing of $0.4$ to $0.65$ times the wetted diameter. |
 
-**Your present inputs take part in the search.** A combination is recommended only when its score is higher than the score of your present inputs; otherwise the Design tab says *Already the most efficient: your present inputs* and offers nothing to apply. The search takes about 0.1–3.5 s and stops after that time.
+**Your present inputs take part in the search.** A combination is recommended only when its score is higher than the score of your present inputs; otherwise the Design tab says *Already the most efficient: your present inputs* and offers nothing to apply. The search takes about 0.1 to 3.5 s and stops after that time.
 
 Applying a combination writes its values into the value boxes, so you can see and change each of them, and runs the design.
 

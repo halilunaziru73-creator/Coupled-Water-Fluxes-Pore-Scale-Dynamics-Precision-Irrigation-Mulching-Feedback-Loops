@@ -1,0 +1,59 @@
+{
+ "id": "dz_combo_12",
+ "group": "30_exp",
+ "ch": "combos",
+ "sec": "Climate",
+ "title": "Warming with and without irrigation",
+ "intro": "A warmer year raises the evapotranspiration and shortens the crop cycle. Warming of 0 to 3 degrees, rainfed and irrigated, shows how much of the loss irrigation can give back.",
+ "note": "",
+ "marks": [
+  {
+   "x": 88,
+   "y": 558.125,
+   "t": "Temperature shift",
+   "d": "Varied over 0, 1.5, 3."
+  },
+  {
+   "x": 88,
+   "y": 606.125,
+   "t": "Irrigation",
+   "d": "Varied over 0, 1."
+  },
+  {
+   "x": 88,
+   "y": 722.9250000000001,
+   "t": "Soil",
+   "d": "Varied over usda:sand, loam."
+  },
+  {
+   "x": 330.65000000000003,
+   "y": 843.725,
+   "t": "Add something to change",
+   "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+  },
+  {
+   "x": 1283.25,
+   "y": 843.725,
+   "t": "How to combine",
+   "d": "Every combination, one thing at a time, or the values paired in order."
+  },
+  {
+   "x": 1668.875,
+   "y": 843.325,
+   "t": "At most",
+   "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 1012.9250000000001,
+   "t": "Size of the experiment",
+   "d": "The number of runs and the time they take on this computer."
+  },
+  {
+   "x": 102.95,
+   "y": 1082.925,
+   "t": "Run all",
+   "d": "Runs every combination, several at a time."
+  }
+ ]
+}

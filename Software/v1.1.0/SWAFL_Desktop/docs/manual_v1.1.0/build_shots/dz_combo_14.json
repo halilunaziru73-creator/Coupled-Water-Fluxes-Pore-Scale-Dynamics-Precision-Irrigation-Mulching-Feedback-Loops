@@ -1,0 +1,59 @@
+{
+ "id": "dz_combo_14",
+ "group": "30_exp",
+ "ch": "combos",
+ "sec": "Climate",
+ "title": "Evapotranspiration model and radiation",
+ "intro": "Daisy can take the reference evapotranspiration from the weather file (FAO56) or compute it from the energy balance, and the radiation can be scaled. The runs show how much of the answer depends on that choice.",
+ "note": "",
+ "marks": [
+  {
+   "x": 88,
+   "y": 558.125,
+   "t": "Evapotranspiration model",
+   "d": "Varied over auto, default."
+  },
+  {
+   "x": 88,
+   "y": 606.125,
+   "t": "Radiation, factor on the weather",
+   "d": "Varied over 0.9, 1, 1.1."
+  },
+  {
+   "x": 88,
+   "y": 722.9250000000001,
+   "t": "Soil",
+   "d": "Varied over usda:sand, loam."
+  },
+  {
+   "x": 330.65000000000003,
+   "y": 843.725,
+   "t": "Add something to change",
+   "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+  },
+  {
+   "x": 1283.25,
+   "y": 843.725,
+   "t": "How to combine",
+   "d": "Every combination, one thing at a time, or the values paired in order."
+  },
+  {
+   "x": 1668.875,
+   "y": 843.325,
+   "t": "At most",
+   "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 1012.9250000000001,
+   "t": "Size of the experiment",
+   "d": "The number of runs and the time they take on this computer."
+  },
+  {
+   "x": 102.95,
+   "y": 1082.925,
+   "t": "Run all",
+   "d": "Runs every combination, several at a time."
+  }
+ ]
+}

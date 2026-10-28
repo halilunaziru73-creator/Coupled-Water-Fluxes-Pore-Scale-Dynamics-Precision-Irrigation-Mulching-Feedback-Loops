@@ -1,0 +1,59 @@
+{
+ "id": "dz_combo_04",
+ "group": "30_exp",
+ "ch": "combos",
+ "sec": "Irrigation",
+ "title": "How much and how fast: dose and duration",
+ "intro": "The water application speed is a parameter in mm/h (default 2 mm/h) and the irrigation lasts a number of hours. The pairs below keep the speed of the manual (2 mm/h) while the dose grows, so the answer is the effect of the dose and not of the speed.",
+ "note": "",
+ "marks": [
+  {
+   "x": 88,
+   "y": 541.325,
+   "t": "Water per irrigation",
+   "d": "Varied over 10, 20, 30, 40."
+  },
+  {
+   "x": 88,
+   "y": 600.525,
+   "t": "Duration of one irrigation",
+   "d": "Varied over 5, 10, 15, 20."
+  },
+  {
+   "x": 88,
+   "y": 722.9250000000001,
+   "t": "Soil",
+   "d": "Varied over usda:sand, loam."
+  },
+  {
+   "x": 330.65000000000003,
+   "y": 843.725,
+   "t": "Add something to change",
+   "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+  },
+  {
+   "x": 1283.25,
+   "y": 843.725,
+   "t": "How to combine",
+   "d": "Every combination, one thing at a time, or the values paired in order."
+  },
+  {
+   "x": 1668.875,
+   "y": 843.325,
+   "t": "At most",
+   "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 1012.9250000000001,
+   "t": "Size of the experiment",
+   "d": "The number of runs and the time they take on this computer."
+  },
+  {
+   "x": 102.95,
+   "y": 1082.925,
+   "t": "Run all",
+   "d": "Runs every combination, several at a time."
+  }
+ ]
+}

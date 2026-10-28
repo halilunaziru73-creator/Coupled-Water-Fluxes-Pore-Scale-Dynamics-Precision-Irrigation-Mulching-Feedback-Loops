@@ -4,7 +4,7 @@
 
 * The program, its title bar, the status bar and the About window show **1.1.0**. The build removes any older program before building, and the program clears its cache on start, so an old version cannot be shown by mistake.
 * The **Layers panel** has a new order: Irrigation design, Irrigation control, Mulch and evaporation, Soil structure and tillage, Field water balance, Seasonal data, Crops, Feedback loops. The short codes of the layers (S2, V1, N4, …) are gone; layers are named by their names only.
-* The **year strip** and the date bar under the drawings are gone; the year (1980–2100) and the date are set in Properties and on the toolbar.
+* The **year strip** and the date bar under the drawings are gone; the year (1980 to 2100) and the date are set in Properties and on the toolbar.
 * The **dashboard** is laid out like the Properties panel and every block folds on its own; the Charts tab draws the hydrograph, the times of the irrigation and where the water goes for each design (Chapter 14).
 * **Properties**: the *Weather of years after 1999* selector and the explanatory notes under it, under the consolidation rate and under the design shortcuts have gone; their content is in this manual. *Weather source* chooses the built-in record, an imported file or the online weather.
 * The name of the simulation model is no longer shown anywhere in the program; badges that said so now say *Simulated*.
@@ -56,3 +56,13 @@
 * The field map keeps every computed map as a layer (*Maps of this field*) to show again without computing; the site keeps its results when the window is opened again; the map moves to a water source only on **Show**.
 * The Soil hydraulic drivers layer shows its whole height, down to the notes under the soil profiles.
 * The web explorer of the repository is built from the engine of version 1.1.0 (tools/build_explorer.py).
+
+## The Daisy workbench
+
+* The tabs of the Daisy workbench are arranged in five groups by what a person does: Your data, Ask a question, Look at results, Build and test, and Learn.
+* The weather of every Daisy simulation is chosen once in one strip: the SWAFL project, the built-in weather, a bundled station, online weather of a place, or a file. The latitude needed for radiation is found from the place name.
+* The Experiments tab can load several designs at once. Each is designed on its own and its runs are listed in order of preference; the folders are written as Experiments_N with one folder E1, E2 and so on for each design.
+* Start from the Daisy reference offers 27 best combinations and 107 reference topics, in words that need no knowledge of modelling.
+* The Processes tab is a map of the model with the figures of each process, drawn from a Daisy run with all process logs.
+* The Process curves tab draws any function of the Daisy library.
+* Chapters 26 to 36 show all of these screens with numbered arrows and the data behind them.

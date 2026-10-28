@@ -18,28 +18,28 @@ Table 12.1. Emitter types (defaults are set when the chip is chosen; $c_v$ manuf
 
 | Emitter | $q$ (L h$^{-1}$) | $S_e$ (m) | $D$ (mm) | $H_0$ (m) | $c_v$ | $x$ | $n_e$ | $H_{\min}$ (m) |
 |:--|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| Online emitter | 4 | 0.75 | 16 | 10 | 0.07 | 0.5 | 1 | — |
-| Inline emitter | 2 | 0.50 | 16 | 10 | 0.04 | 0.5 | 1 | — |
-| Drip tape | 1 | 0.20 | 16 | 10 | 0.08 | 0.6 | 2 | — |
+| Online emitter | 4 | 0.75 | 16 | 10 | 0.07 | 0.5 | 1 | n/a |
+| Inline emitter | 2 | 0.50 | 16 | 10 | 0.04 | 0.5 | 1 | n/a |
+| Drip tape | 1 | 0.20 | 16 | 10 | 0.08 | 0.6 | 2 | n/a |
 | Pressure-compensating | 2 | 0.60 | 16 | 15 | 0.03 | 0.05 | 1 | 8 |
 
 Table 12.2. Drip inputs (value boxes) (range, step, default).
 
 | Control | Range, step | Default | Meaning |
 |:--|:-:|:-:|:--|
-| Emitter spacing $S_e$ (m) | 0.1–1.5, 0.05 | by emitter | Along the lateral |
-| Lateral spacing $S_l$ (m) | 0.5–3, 0.05 | 1.5 (1.0 for cereal, legume; 1.5 for vegetable, reset when the crop changes) | Between laterals |
-| Emitter flow $q$ (L h$^{-1}$) | 0.5–8, 0.1 | by emitter | Nominal flow at $H_0$ |
-| Lateral length $L_L$ (m) | 20–300, 5 | 100 | |
-| Inlet pressure head $H_0$ (m) | 4–30, 0.5 | 10 (15 for PC) | |
-| Lateral inside diameter $D$ (mm) | 10–32, 1 | 16 | |
-| Irrigate every (days) | 1–10, 1 | 2 | Sets the default depth |
-| Run time (h) | 0.25–48, 0.25 | automatic | Greyed while *Automatic* |
-| Depth per irrigation $Z_n$ (mm) | 3–80, 1 | from the DSS | Tap the label to reset |
-| Area to irrigate $A_f$ (ha) | 0.2–10, 0.1 | 1 | |
-| Farm supply $Q_s$ (L s$^{-1}$) | 2–120, 1 | 30 | |
-| Mainline length $L_m$ (m) | 20–600, 10 | 120 | |
-| Water lift, source to field (m) | 0–60, 1 | 12 | |
+| Emitter spacing $S_e$ (m) | 0.1 to 1.5, 0.05 | by emitter | Along the lateral |
+| Lateral spacing $S_l$ (m) | 0.5 to 3, 0.05 | 1.5 (1.0 for cereal, legume; 1.5 for vegetable, reset when the crop changes) | Between laterals |
+| Emitter flow $q$ (L h$^{-1}$) | 0.5 to 8, 0.1 | by emitter | Nominal flow at $H_0$ |
+| Lateral length $L_L$ (m) | 20 to 300, 5 | 100 | |
+| Inlet pressure head $H_0$ (m) | 4 to 30, 0.5 | 10 (15 for PC) | |
+| Lateral inside diameter $D$ (mm) | 10 to 32, 1 | 16 | |
+| Irrigate every (days) | 1 to 10, 1 | 2 | Sets the default depth |
+| Run time (h) | 0.25 to 48, 0.25 | automatic | Greyed while *Automatic* |
+| Depth per irrigation $Z_n$ (mm) | 3 to 80, 1 | from the DSS | Tap the label to reset |
+| Area to irrigate $A_f$ (ha) | 0.2 to 10, 0.1 | 1 | |
+| Farm supply $Q_s$ (L s$^{-1}$) | 2 to 120, 1 | 30 | |
+| Mainline length $L_m$ (m) | 20 to 600, 10 | 120 | |
+| Water lift, source to field (m) | 0 to 60, 1 | 12 | |
 
 **Depth per irrigation.** By default the depth is the crop need over the interval, capped by what the root zone can hold at the trigger,
 
@@ -50,7 +50,7 @@ $$
 
 *Provenance (Eq. 12.1):* **[Engineered]**: depth and demand rules chosen for the workbench.
 
-where $\Delta t$ is the chosen interval, $Z_{n}^{\mathrm{DSS}}=\mathrm{clip}(f_T\,\mathrm{AWC}\,R_{\max};25,150)$ is Eq. (5.27), and $\mathrm{ET}_{\mathrm{pk}}$ is the peak five-day moving mean of simulated evaporation plus transpiration over the year, bounded to 2.5–9 mm d$^{-1}$,
+where $\Delta t$ is the chosen interval, $Z_{n}^{\mathrm{DSS}}=\mathrm{clip}(f_T\,\mathrm{AWC}\,R_{\max};25,150)$ is Eq. (5.27), and $\mathrm{ET}_{\mathrm{pk}}$ is the peak five-day moving mean of simulated evaporation plus transpiration over the year, bounded to 2.5 to 9 mm d$^{-1}$,
 
 $$
 \mathrm{ET}_{\mathrm{pk}} = \mathrm{clip}\Bigl\{\max_d \tfrac15\sum_{j=0}^{4}\bigl(E_{d+j}+T_{d+j}\bigr);\ 2.5,\ 9\Bigr\}.
@@ -59,11 +59,11 @@ $$
 
 *Provenance (Eq. 12.2):* **[Engineered]**: depth and demand rules chosen for the workbench.
 
-The mean evaporative demand used for surface drying, $E_0$, is the mean of the simulated daily evaporation on days 141–250 of the year (when positive), clipped to 1–5 mm d$^{-1}$.
+The mean evaporative demand used for surface drying, $E_0$, is the mean of the simulated daily evaporation on days 141 to 250 of the year (when positive), clipped to 1 to 5 mm d$^{-1}$.
 
 ## Lateral hydraulics: head loss and flow along the lateral
 
-An emitter lateral of length $L_L$ carries $N=\mathrm{round}(L_L/S_e)$ intervals and $N+1$ emitters, indexed $j=0\dots N$ from the inlet. The friction head loss in the segment feeding emitter $j$ is the Hazen–Williams equation (Hazen and Williams, 1905), in SI form with a roughness coefficient $C=140$ for plastic pipe,
+An emitter lateral of length $L_L$ carries $N=\mathrm{round}(L_L/S_e)$ intervals and $N+1$ emitters, indexed $j=0\dots N$ from the inlet. The friction head loss in the segment feeding emitter $j$ is the Hazen and Williams equation (Hazen and Williams, 1905), in SI form with a roughness coefficient $C=140$ for plastic pipe,
 
 $$
 h_{f,j} = \frac{10.67\,S_e\,Q_j^{1.852}}{C^{1.852}\,D^{4.871}},\qquad Q_j=\sum_{i\ge j+1} q_i\ \ (\mathrm{m^3\,s^{-1}}),\quad D\ \text{in m}.
@@ -90,7 +90,7 @@ $$
 
 *Provenance (Eq. 12.5):* **[Engineered]**: pressure-compensating emitter model with chosen constants.
 
-i.e. a nearly flat discharge above $H_{\min}=8$ m (a 4 % change in flow per 100 % change in head) and the orifice law below it. The flows depend on the heads and the heads on the flows, so the pair (12.3)–(12.4) is **iterated to convergence** from the uniform start $q_j=q$, $h_j=H_0$ (the first three passes are plain substitution, then the flows are averaged with the previous pass; the iteration stops when the largest relative change in any emitter flow is below $10^{-7}$, at most 500 passes). Version 1 used four passes, which is sufficient only when the head loss is small; the converged solver agrees with an independent solution to $3\times10^{-7}$ for head losses up to 60 % of the inlet head. When the friction loss exceeds 20 % of the inlet head, or the iteration fails to converge, the layer prints a red warning, because uniformity then falls and the design is outside the usual rule of thumb. The mean and minimum discharge are then
+i.e. a nearly flat discharge above $H_{\min}=8$ m (a 4 % change in flow per 100 % change in head) and the orifice law below it. The flows depend on the heads and the heads on the flows, so the pair (12.3) to (12.4) is **iterated to convergence** from the uniform start $q_j=q$, $h_j=H_0$ (the first three passes are plain substitution, then the flows are averaged with the previous pass; the iteration stops when the largest relative change in any emitter flow is below $10^{-7}$, at most 500 passes). Version 1 used four passes, which is sufficient only when the head loss is small; the converged solver agrees with an independent solution to $3\times10^{-7}$ for head losses up to 60 % of the inlet head. When the friction loss exceeds 20 % of the inlet head, or the iteration fails to converge, the layer prints a red warning, because uniformity then falls and the design is outside the usual rule of thumb. The mean and minimum discharge are then
 
 $$
 \bar q = \frac{1}{N+1}\sum_{j=0}^{N} q_j,\qquad q_{\min}=\min_j q_j,\qquad
@@ -210,7 +210,7 @@ $$
 
 *Provenance (Eq. 12.16):* **[Engineered]**: five-quantile delivery and run-time rules chosen for the workbench.
 
-where $t$ is the run time (h). For each, the bulb, deep percolation and evaporation are computed with Eqs. (12.10)–(12.15). The water that the root zone can accept is limited by the need,
+where $t$ is the run time (h). For each, the bulb, deep percolation and evaporation are computed with Eqs. (12.10) to (12.15). The water that the root zone can accept is limited by the need,
 
 $$
 V_{\mathrm{req}} = Z_n\,S_e\,S_l\ \ (\mathrm L),\qquad
@@ -242,7 +242,7 @@ $$
 
 *Provenance (Eq. 12.19):* **[Engineered]**: five-quantile delivery and run-time rules chosen for the workbench.
 
-so that $E_a+\mathrm{DP}+\mathrm{EV}=1$. Reading them: $E_a$ is how much of the pumped water ends up stored in the root zone; $E_s$ is how well the root zone is refilled (a value below 85 % turns the "Root zone refilled" line red and says *short*); $E_u$ is the lateral uniformity; $Z_{\mathrm{gross}}$ is the depth to pump per irrigation. The layer colours $E_a\ge85$ % green, 65–85 % amber and below 65 % red; $E_u\ge90$ % is green and 80–90 % amber.
+so that $E_a+\mathrm{DP}+\mathrm{EV}=1$. Reading them: $E_a$ is how much of the pumped water ends up stored in the root zone; $E_s$ is how well the root zone is refilled (a value below 85 % turns the "Root zone refilled" line red and says *short*); $E_u$ is the lateral uniformity; $Z_{\mathrm{gross}}$ is the depth to pump per irrigation. The layer colours $E_a\ge85$ % green, 65 to 85 % amber and below 65 % red; $E_u\ge90$ % is green and 80 to 90 % amber.
 
 ## Layout and infrastructure
 
@@ -270,7 +270,7 @@ $$
 
 *Provenance (Eq. 12.21):* **[Engineered]**: layout, sizing and scoring rules; the 1.5 m/s velocity limit is a common practice.
 
-for which the mean velocity $v=4Q_z/(\pi D^{2})\le1.5$ m s$^{-1}$ (a common design limit that keeps friction and water-hammer moderate; see Keller and Bliesner, 1990, for pipe design practice). The submain loss is $0.4$ of the full-length Hazen–Williams loss, Eq. (12.3) with $Q_j=Q_z$ (the Christiansen (1942) reduction factor $F$ for a pipe with many equally spaced outlets is $F\to1/2.852=0.35$ for $m=1.852$, so $0.4$ is slightly conservative), and the mainline loss is the full value:
+for which the mean velocity $v=4Q_z/(\pi D^{2})\le1.5$ m s$^{-1}$ (a common design limit that keeps friction and water-hammer moderate; see Keller and Bliesner, 1990, for pipe design practice). The submain loss is $0.4$ of the full-length Hazen and Williams loss, Eq. (12.3) with $Q_j=Q_z$ (the Christiansen (1942) reduction factor $F$ for a pipe with many equally spaced outlets is $F\to1/2.852=0.35$ for $m=1.852$, so $0.4$ is slightly conservative), and the mainline loss is the full value:
 
 $$
 h_{f,sm}=0.4\,\frac{10.67\,L_{sm}\,Q_z^{1.852}}{C^{1.852}D_{sm}^{4.871}},\qquad

@@ -1,0 +1,41 @@
+{
+ "id": "dz_proc_10",
+ "group": "60_proc",
+ "ch": "results",
+ "sec": "Processes",
+ "title": "Processes: Ammonium (sorbed and dissolved)",
+ "intro": "Ammonium comes from mineralisation and fertiliser; it is sorbed on the soil, nitrified to nitrate (the rate depends on the temperature, the water content and the pH) and taken up by plants.",
+ "note": "",
+ "marks": [
+  {
+   "x": 944,
+   "y": 1061.2250000000001,
+   "t": "Process map",
+   "d": "The process that is open has a red frame."
+  },
+  {
+   "x": 83.2,
+   "y": 1768.25,
+   "t": "Process",
+   "d": "Name of the process and what Daisy does there."
+  },
+  {
+   "x": 195.275,
+   "y": 1907.65,
+   "t": "Source of the figures",
+   "d": "The run whose logs are drawn."
+  },
+  {
+   "x": 535.075,
+   "y": 1908.45,
+   "t": "Run Daisy with all process logs",
+   "d": "Runs the model with every process log on."
+  },
+  {
+   "x": 944,
+   "y": 2275.65,
+   "t": "First figure",
+   "d": "The figure of the process."
+  }
+ ]
+}

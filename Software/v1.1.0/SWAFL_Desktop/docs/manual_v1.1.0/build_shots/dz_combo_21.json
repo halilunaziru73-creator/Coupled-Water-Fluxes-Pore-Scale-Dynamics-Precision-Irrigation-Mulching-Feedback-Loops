@@ -1,0 +1,59 @@
+{
+ "id": "dz_combo_21",
+ "group": "30_exp",
+ "ch": "combos",
+ "sec": "Parameters",
+ "title": "The numerical settings of the bioclimate model",
+ "intro": "NoOfIntervals: Number of vertical intervals in which we partition the canopy; max svat iterations: Max number of svat iterations before giving up on cobvergence; max svat absolute difference [mm/h]: Maximum absolute difference in svat ea values for convergence. Each is varied from half to double the value the farm uses; NoOfIntervals moved the yield, water or nitrogen in the test.",
+ "note": "",
+ "marks": [
+  {
+   "x": 88,
+   "y": 696.5250000000001,
+   "t": "Bioclimate: NoOfIntervals (Daisy reference, chapter 19)",
+   "d": "Varied over 15, 30, 60."
+  },
+  {
+   "x": 88,
+   "y": 744.5250000000001,
+   "t": "Bioclimate: max svat iterations (Daisy reference, chapter 19)",
+   "d": "Varied over 50, 100, 200."
+  },
+  {
+   "x": 88,
+   "y": 792.5250000000001,
+   "t": "Bioclimate: max svat absolute difference (Daisy reference, chapter 19)",
+   "d": "Varied over 0.005, 0.01, 0.02."
+  },
+  {
+   "x": 330.65000000000003,
+   "y": 844.5250000000001,
+   "t": "Add something to change",
+   "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+  },
+  {
+   "x": 1283.25,
+   "y": 844.5250000000001,
+   "t": "How to combine",
+   "d": "Every combination, one thing at a time, or the values paired in order."
+  },
+  {
+   "x": 1668.875,
+   "y": 844.125,
+   "t": "At most",
+   "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 1013.725,
+   "t": "Size of the experiment",
+   "d": "The number of runs and the time they take on this computer."
+  },
+  {
+   "x": 102.95,
+   "y": 1083.7250000000001,
+   "t": "Run all",
+   "d": "Runs every combination, several at a time."
+  }
+ ]
+}

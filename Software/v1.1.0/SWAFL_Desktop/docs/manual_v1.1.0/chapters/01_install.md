@@ -11,7 +11,7 @@ SWAFL Desktop is a self-contained Electron program. The simulation engine is one
 | **C. From source** | Developers | `npm install`, then `npm start` (desktop) or `npm run web` (browser). |
 | **D. Online, nothing to install** | Anyone with a browser | Open the online workbench (link below). |
 
-## Route A — build and install, step by step
+## Route A: build and install, step by step
 
 1. Install **Node.js** (the LTS version) from nodejs.org if it is not already installed. Close and reopen any terminal afterwards.
 2. Unzip `SWAFL_Desktop.zip` to a short path outside cloud-synchronised folders, for example `C:\SWAFL_Desktop`. The zip contains a folder `SWAFL_Desktop`; the folder you work in is the one that contains `package.json`.
@@ -20,7 +20,7 @@ SWAFL Desktop is a self-contained Electron program. The simulation engine is one
 
 `START_SWAFL.bat` starts the program from the source folder without building it, and `START_SWAFL_WEB.bat` opens the same program in your browser from your own computer.
 
-## Route D — the online workbench
+## Route D: the online workbench
 
 The same program runs online in any current browser, with nothing to install and no server or Node.js:
 
@@ -28,7 +28,7 @@ The same program runs online in any current browser, with nothing to install and
 
 <https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html?v=1.1.0>
 
-## Route C — from source
+## Route C: from source
 
 ```
 git clone https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops.git

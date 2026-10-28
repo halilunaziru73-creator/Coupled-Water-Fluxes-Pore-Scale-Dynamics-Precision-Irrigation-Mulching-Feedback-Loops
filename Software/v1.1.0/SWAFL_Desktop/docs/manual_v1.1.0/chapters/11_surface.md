@@ -37,7 +37,7 @@ The layer is a long scrolling drawing. The sub-section bar above it (*Whole desi
 The four worked examples reproduce the course exercises so that the program can be checked against hand calculation; choosing one switches the intake to *Type k and A*.
 
 3. **System**: *Border strip*, *Furrow* or *Basin*. This resets $L$, $S$, $q$, $n$ to the system defaults of Table 11.1.
-4. **Intake**: *From my soil* (Green–Ampt from the soil's texture, fitted to Kostiakov, Section 11.2) or *Type k and A* (your own Kostiakov constants).
+4. **Intake**: *From my soil* (Green and Ampt from the soil's texture, fitted to Kostiakov, Section 11.2) or *Type k and A* (your own Kostiakov constants).
 5. **Cutoff**: *Es = 1* (cut off when the tail has just received $Z_n$), *85 % of L* (cut off when the front reaches 85 % of the length plus the storage time), *Manual* (set the time), and the toggle *Exact curve* (draw the exact Kostiakov $Z(x)$ instead of the straight-line profile of the lecture notes).
 6. Set the value boxes (Table 11.1): click a box, type the exact value or pick it from the list, choose the unit. Then press **Run simulation**; the results below are computed for these inputs (Chapter 18).
 
@@ -45,22 +45,22 @@ Table 11.1. Surface-design inputs (value boxes): ranges (min, max, step) and sys
 
 | Control | Border | Furrow | Basin | Notes |
 |:--|:--|:--|:--|:--|
-| Field length $L$ (m) | 50–400, 5 (default 150) | 60–400, 5 (180) | 20–200, 5 (80) | |
-| Slope $S$ (%) | 0.02–1, 0.01 (0.20) | 0.05–1.5, 0.01 (0.30) | 0.02–0.2, 0.01 (0.05) | |
-| Inflow $q$ (L s$^{-1}$) | 0.2–20 per m width, 0.05 (6) | 0.2–4 per furrow, 0.05 (1.2) | 5–60 per m width, 0.5 (25) | In *Your soil* mode $q$ is set automatically (Section 11.9) until you move it |
-| Manning $n$ | 0.02–0.25, 0.005 (0.15) | (0.04) | (0.15) | |
-| Furrow spacing $w$ (m) | — | 0.5–1.5, 0.05 (0.75 in *Your soil*) | — | $w=1$ m is used for border and basin (a strip 1 m wide is analysed) |
-| Cutback after the front arrives | 0.2–1.0, 0.05 (1 = none) | same | same | Fraction of $q$ after $t_L$ |
-| Required depth $Z_n$ (mm) | 20–150, 1 | same | same | Default *from the DSS* (Eq. 5.27); tap the label to reset |
-| Farm supply $Q_s$ (L s$^{-1}$) | 5–120, 1 (30) | same | same | Farm-level flow |
-| Field width $W_f$ (m) | 30–400, 5 (120) | same | same | |
-| Organic matter (%) | 0.5–5, 0.1 (1.5) | same | same | Enters Saxton–Rawls |
-| Kostiakov $k$ (mm min$^{-A}$) | 0.2–10, 0.05 | same | same | Visible in *Type k and A* mode |
-| Kostiakov $A$ | 0.2–0.95, 0.01 | same | same | Visible in *Type k and A* mode |
+| Field length $L$ (m) | 50 to 400, 5 (default 150) | 60 to 400, 5 (180) | 20 to 200, 5 (80) | |
+| Slope $S$ (%) | 0.02 to 1, 0.01 (0.20) | 0.05 to 1.5, 0.01 (0.30) | 0.02 to 0.2, 0.01 (0.05) | |
+| Inflow $q$ (L s$^{-1}$) | 0.2 to 20 per m width, 0.05 (6) | 0.2 to 4 per furrow, 0.05 (1.2) | 5 to 60 per m width, 0.5 (25) | In *Your soil* mode $q$ is set automatically (Section 11.9) until you move it |
+| Manning $n$ | 0.02 to 0.25, 0.005 (0.15) | (0.04) | (0.15) | |
+| Furrow spacing $w$ (m) | n/a | 0.5 to 1.5, 0.05 (0.75 in *Your soil*) | n/a | $w=1$ m is used for border and basin (a strip 1 m wide is analysed) |
+| Cutback after the front arrives | 0.2 to 1.0, 0.05 (1 = none) | same | same | Fraction of $q$ after $t_L$ |
+| Required depth $Z_n$ (mm) | 20 to 150, 1 | same | same | Default *from the DSS* (Eq. 5.27); tap the label to reset |
+| Farm supply $Q_s$ (L s$^{-1}$) | 5 to 120, 1 (30) | same | same | Farm-level flow |
+| Field width $W_f$ (m) | 30 to 400, 5 (120) | same | same | |
+| Organic matter (%) | 0.5 to 5, 0.1 (1.5) | same | same | Enters Saxton and Rawls |
+| Kostiakov $k$ (mm min$^{-A}$) | 0.2 to 10, 0.05 | same | same | Visible in *Type k and A* mode |
+| Kostiakov $A$ | 0.2 to 0.95, 0.01 | same | same | Visible in *Type k and A* mode |
 
-## Intake from your soil (Saxton–Rawls $\to$ Green–Ampt $\to$ Kostiakov)
+## Intake from your soil (Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov)
 
-**Step 1: soil water properties (Saxton and Rawls, 2006).** With sand fraction $S$, clay fraction $C$ (both 0–1) and organic matter $\mathrm{OM}$ (%), the 1500-kPa and 33-kPa water contents are
+**Step 1: soil water properties (Saxton and Rawls, 2006).** With sand fraction $S$, clay fraction $C$ (both 0 to 1) and organic matter $\mathrm{OM}$ (%), the 1500-kPa and 33-kPa water contents are
 
 $$
 \begin{aligned}
@@ -112,7 +112,7 @@ $$
 
 *Provenance (Eq. 11.4):* **[Engineered]**: initial and wetted water contents chosen for the workbench.
 
-**Step 4: Green–Ampt infiltration** (Green and Ampt, 1911). Cumulative infiltration $F(t)$ (mm) solves
+**Step 4: Green and Ampt infiltration** (Green and Ampt, 1911). Cumulative infiltration $F(t)$ (mm) solves
 
 $$
 F - \psi_f\,\Delta\theta\,\ln\!\Bigl(1 + \frac{F}{\psi_f\,\Delta\theta}\Bigr) = K_s\,\frac{t}{60}\quad(t\ \text{in min}),
@@ -132,7 +132,7 @@ $$
 
 *Provenance (Eq. 11.6):* **[Literature]**: Kostiakov (1932).
 
-and $k$, $A$ are found by least squares on the log–log plot of $F(\tau)/1000$ at 25 times spaced geometrically between 10 and 600 min:
+and $k$, $A$ are found by least squares on the log and log plot of $F(\tau)/1000$ at 25 times spaced geometrically between 10 and 600 min:
 
 $$
 A = \frac{\sum (x_i - \bar x)(y_i - \bar y)}{\sum (x_i - \bar x)^2},\quad
@@ -173,7 +173,7 @@ $$
 
 *Provenance (Eq. 11.9):* **[Literature]**: volume balance of Walker and Skogerboe (1987) and Elliott and Walker (1982); tested against FAO-45 examples (Paper 3).
 
-The code also accepts an optional steady-intake term, $Z=k\tau^{A}+f_0\tau$ (Kostiakov–Lewis), in which Eq. (11.9) gains the term $f_0\,t\,w/(1+r)$ in the denominator, with $r$ the iterated advance exponent (release 1.1; release 1.0 used a fixed $r=0.55$); the interface does not expose $f_0$ (it is zero), and it exists so that the FAO Irrigation Paper 45 examples, which use it, can be reproduced. Here $\sigma_y=0.8$ is the surface-storage shape factor, $w$ the width analysed (furrow spacing, or 1 m for borders and basins), and $\sigma_z$ the subsurface-storage shape factor
+The code also accepts an optional steady-intake term, $Z=k\tau^{A}+f_0\tau$ (Kostiakov and Lewis), in which Eq. (11.9) gains the term $f_0\,t\,w/(1+r)$ in the denominator, with $r$ the iterated advance exponent (release 1.1; release 1.0 used a fixed $r=0.55$); the interface does not expose $f_0$ (it is zero), and it exists so that the FAO Irrigation Paper 45 examples, which use it, can be reproduced. Here $\sigma_y=0.8$ is the surface-storage shape factor, $w$ the width analysed (furrow spacing, or 1 m for borders and basins), and $\sigma_z$ the subsurface-storage shape factor
 
 $$
 \sigma_z = \frac{A + r\,(1 - A) + 1}{(1 + A)(1 + r)},
@@ -311,7 +311,7 @@ The recession shape is **[Engineered]** (the course does not specify it); it con
 
 ## Cross-section and intake curve
 
-The *Cross-section at the inlet* section draws, at the inlet, the wetted shape in a soil section generated from the soil's texture, and the intake curve $Z(\tau)$ of Eq. (11.6) beside the Green–Ampt curve $F(\tau)$ of Eq. (11.5), so that the fit can be inspected by eye.
+The *Cross-section at the inlet* section draws, at the inlet, the wetted shape in a soil section generated from the soil's texture, and the intake curve $Z(\tau)$ of Eq. (11.6) beside the Green and Ampt curve $F(\tau)$ of Eq. (11.5), so that the fit can be inspected by eye.
 
 ## Best inflow ("Your soil" mode)
 
@@ -337,7 +337,7 @@ $$
 
 *Provenance (Eq. 11.23):* **[Engineered]**: optimisation score and seasonal bookkeeping chosen for the workbench.
 
-The search tries, in this order, ten single-variable moves — **cut-off, inflow, cutback, length, cut-off, cutback, inflow, length, cut-off, cutback** — and, for each move, evaluates a candidate list and keeps the best candidate **only if the score improves by more than 0.003**:
+The search tries, in this order, ten single-variable moves, **cut-off, inflow, cutback, length, cut-off, cutback, inflow, length, cut-off, cutback**, and, for each move, evaluates a candidate list and keeps the best candidate **only if the score improves by more than 0.003**:
 
 | Move | Candidates |
 |:--|:--|
@@ -398,4 +398,4 @@ The last two sections are common to all three design layers, so they are describ
 
 ![The irrigation schedule and the "When to irrigate" message at the end of the surface design. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/11_sid_irrigation_schedule_draw.jpg){width=80%}
 
-**Reading it.** The first row is today's decision. If the *Gap to next* is short (2–4 days) the trigger is wet or the soil store is small; if it is long (10+ days) the soil store is large or the weather cool. Move the **Date** to see how the schedule changes with the season, and move the **Trigger** or **Sensor depth** to see the dates shift.
+**Reading it.** The first row is today's decision. If the *Gap to next* is short (2 to 4 days) the trigger is wet or the soil store is small; if it is long (10+ days) the soil store is large or the weather cool. Move the **Date** to see how the schedule changes with the season, and move the **Trigger** or **Sensor depth** to see the dates shift.

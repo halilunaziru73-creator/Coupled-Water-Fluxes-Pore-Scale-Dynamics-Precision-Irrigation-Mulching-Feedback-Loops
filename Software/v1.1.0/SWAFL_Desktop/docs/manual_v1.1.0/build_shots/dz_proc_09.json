@@ -1,0 +1,47 @@
+{
+ "id": "dz_proc_09",
+ "group": "60_proc",
+ "ch": "results",
+ "sec": "Processes",
+ "title": "Processes: Nitrate (solute transport)",
+ "intro": "Nitrate moves with the water by convection and dispersion and is taken up by roots; it is produced by nitrification and lost by denitrification, drains and leaching below the root zone.",
+ "note": "",
+ "marks": [
+  {
+   "x": 944,
+   "y": 1061.2250000000001,
+   "t": "Process map",
+   "d": "The process that is open has a red frame."
+  },
+  {
+   "x": 83.2,
+   "y": 1768.25,
+   "t": "Process",
+   "d": "Name of the process and what Daisy does there."
+  },
+  {
+   "x": 195.275,
+   "y": 1907.65,
+   "t": "Source of the figures",
+   "d": "The run whose logs are drawn."
+  },
+  {
+   "x": 535.075,
+   "y": 1908.45,
+   "t": "Run Daisy with all process logs",
+   "d": "Runs the model with every process log on."
+  },
+  {
+   "x": 944,
+   "y": 2275.65,
+   "t": "First figure",
+   "d": "The figure of the process."
+  },
+  {
+   "x": 944,
+   "y": 2938.8500000000004,
+   "t": "Second figure",
+   "d": "The next figure of the process."
+  }
+ ]
+}

@@ -1,0 +1,29 @@
+{
+ "id": "dz_proc_01",
+ "group": "50_tools",
+ "ch": "results",
+ "sec": "Processes",
+ "title": "Processes: the map",
+ "intro": "Processes is a map of the model after Fig. 1 of the Daisy paper. Each box is a process; clicking it explains it and draws its figures.",
+ "note": "",
+ "marks": [
+  {
+   "x": 64,
+   "y": 1061.2250000000001,
+   "t": "Process map",
+   "d": "One box for each process, coloured by group."
+  },
+  {
+   "x": 64,
+   "y": 1707.25,
+   "t": "Other processes",
+   "d": "Processes not drawn in the paper figure."
+  },
+  {
+   "x": 64,
+   "y": 1868.25,
+   "t": "Details",
+   "d": "Text and figures of the chosen process."
+  }
+ ]
+}

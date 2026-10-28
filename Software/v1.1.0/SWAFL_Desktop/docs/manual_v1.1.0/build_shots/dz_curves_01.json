@@ -1,0 +1,35 @@
+{
+ "id": "dz_curves_01",
+ "group": "50_tools",
+ "ch": "build",
+ "sec": "Process curves",
+ "title": "Process curves: the start",
+ "intro": "Process curves draws any function of the Daisy library, such as a retention curve, a response to temperature or a stress function.",
+ "note": "",
+ "marks": [
+  {
+   "x": 64,
+   "y": 656,
+   "t": "Function list",
+   "d": "The functions that can be drawn."
+  },
+  {
+   "x": 618.4000000000001,
+   "y": 704.8000000000001,
+   "t": "Drawing",
+   "d": "The chosen curve."
+  },
+  {
+   "x": 665.6750000000001,
+   "y": 1067.2,
+   "t": "Picture (PNG)",
+   "d": "Saves the figure."
+  },
+  {
+   "x": 823.4250000000001,
+   "y": 1067.2,
+   "t": "Table (CSV)",
+   "d": "Saves the numbers."
+  }
+ ]
+}

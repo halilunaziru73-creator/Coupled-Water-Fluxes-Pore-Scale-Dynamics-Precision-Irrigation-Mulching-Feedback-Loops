@@ -1,0 +1,53 @@
+{
+ "id": "dz_proc_05",
+ "group": "60_proc",
+ "ch": "results",
+ "sec": "Processes",
+ "title": "Processes: Soil water (Richards equation)",
+ "intro": "Water in the matrix moves by the one-dimensional Richards equation, with hydraulic properties from the horizons (retention curve and conductivity). Root uptake is the sink and evaporation the surface boundary; the bottom boundary can be free drainage, a groundwater table or a lysimeter.",
+ "note": "",
+ "marks": [
+  {
+   "x": 944,
+   "y": 1061.2250000000001,
+   "t": "Process map",
+   "d": "The process that is open has a red frame."
+  },
+  {
+   "x": 83.2,
+   "y": 1768.25,
+   "t": "Process",
+   "d": "Name of the process and what Daisy does there."
+  },
+  {
+   "x": 195.275,
+   "y": 1934.0500000000002,
+   "t": "Source of the figures",
+   "d": "The run whose logs are drawn."
+  },
+  {
+   "x": 535.075,
+   "y": 1934.8500000000001,
+   "t": "Run Daisy with all process logs",
+   "d": "Runs the model with every process log on."
+  },
+  {
+   "x": 944,
+   "y": 2302.05,
+   "t": "First figure",
+   "d": "The figure of the process."
+  },
+  {
+   "x": 944,
+   "y": 2981.25,
+   "t": "Second figure",
+   "d": "The next figure of the process."
+  },
+  {
+   "x": 944,
+   "y": 3660.4500000000003,
+   "t": "Third figure",
+   "d": "The next figure of the process."
+  }
+ ]
+}

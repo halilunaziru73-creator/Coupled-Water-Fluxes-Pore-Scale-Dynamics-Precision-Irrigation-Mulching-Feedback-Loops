@@ -1,0 +1,29 @@
+{
+ "id": "dz_plot_03",
+ "group": "50_tools",
+ "ch": "results",
+ "sec": "Plot",
+ "title": "Plot: depth profile through time",
+ "intro": "Logs with a depth column are drawn as a map of depth against time in spectral colours.",
+ "note": "",
+ "marks": [
+  {
+   "x": 183.75,
+   "y": 276,
+   "t": "Log",
+   "d": "A log with depth, here the matrix water flux."
+  },
+  {
+   "x": 384.225,
+   "y": 276,
+   "t": "View",
+   "d": "Depth profile through time."
+  },
+  {
+   "x": 64,
+   "y": 752.8000000000001,
+   "t": "Map",
+   "d": "Colour shows the value; the scale is beside the map."
+  }
+ ]
+}

@@ -1,0 +1,29 @@
+{
+ "id": "dz_plot_04",
+ "group": "50_tools",
+ "ch": "results",
+ "sec": "Plot",
+ "title": "Plot: profile at a date, animated",
+ "intro": "The slider moves through the dates; Play runs the profile like a film.",
+ "note": "",
+ "marks": [
+  {
+   "x": 699.75,
+   "y": 390.40000000000003,
+   "t": "Date slider",
+   "d": "Chooses the date of the profile."
+  },
+  {
+   "x": 704.4625000000001,
+   "y": 431.20000000000005,
+   "t": "Play",
+   "d": "Steps through the dates."
+  },
+  {
+   "x": 64,
+   "y": 736.8000000000001,
+   "t": "Profile",
+   "d": "Value against depth on that date."
+  }
+ ]
+}

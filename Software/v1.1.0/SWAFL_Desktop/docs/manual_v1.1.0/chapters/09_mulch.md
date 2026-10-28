@@ -25,7 +25,7 @@ are the evaporation saved, the irrigation saved and the extra drainage, in mm yr
 
 ## Mulch control
 
-**What it shows.** Two matrices. The first is **soil evaporation against mulch factor (ten rows, 0.1–1.0) by interception capacity (four columns, 0.5–4 mm)**. The second is **drainage against tillage system (three) by consolidation rate (five)**. Colour darkens with the value; a red outline marks your current setting. The text states what fraction of bare-soil evaporation your mulch removes and whether the soil responds to tillage.
+**What it shows.** Two matrices. The first is **soil evaporation against mulch factor (ten rows, 0.1 to 1.0) by interception capacity (four columns, 0.5 to 4 mm)**. The second is **drainage against tillage system (three) by consolidation rate (five)**. Colour darkens with the value; a red outline marks your current setting. The text states what fraction of bare-soil evaporation your mulch removes and whether the soil responds to tillage.
 
 **Generation.** Each cell of the first matrix is $E(\varphi, c)$ and each cell of the second $D(\mathrm{till},\tau_c)$, both from Engine 1 at the current soil, rainfall and temperature (Eqs. 5.4 and 5.9). The sentence "*No response here: this soil does not react to tillage or consolidation*" appears when the spread $\max D - \min D$ of the second matrix is below 0.5 mm yr$^{-1}$. The percentage in the text is $100\,(1 - E_{\varphi,c}/E_{1.0})$.
 
@@ -66,7 +66,7 @@ $$
 | $q_0$ | loss already experienced when the water was placed below the surface (drip) | $q_0 = (1 - w_f)\,0.95\,Q_1$, $w_f = \mathrm{clip}(1 - z_d/50;\,0.05,\,1)$, $z_d$ the drip depth in cm; 0 for surface methods |
 | $\Delta\theta$ | water lost across the dry layer | $\Delta\theta = \mathrm{clip}\bigl(\theta(h_i) - \theta(10^{4});\,0.05,\,0.4\bigr)$ |
 
-$\theta(h)$ is Eq. (8.3) and $\alpha$ the van Genuchten parameter of Table 5.3; $\rho$ is the rainfall scale. **[Engineered]** — every constant in the table (0.25, 1.5, 0.5, 4, 40 mm, 0.6, 0.4, 0.006, 0.03, 0.95, 50 cm, 0.05–1) is a presentation parameter chosen so that stage 1 lasts a few days in a loam and stage 2 gives the characteristic $\sqrt t$ fall; they are **not** calibrated to a laboratory evaporation experiment and the drawing says so ("*the daily rates are a two-stage drying model scaled by your mulch factor*"). The simulated annual evaporation of the workbench (Eq. 5.4) is *Daisy*, not this curve.
+$\theta(h)$ is Eq. (8.3) and $\alpha$ the van Genuchten parameter of Table 5.3; $\rho$ is the rainfall scale. **[Engineered]**, every constant in the table (0.25, 1.5, 0.5, 4, 40 mm, 0.6, 0.4, 0.006, 0.03, 0.95, 50 cm, 0.05 to 1) is a presentation parameter chosen so that stage 1 lasts a few days in a loam and stage 2 gives the characteristic $\sqrt t$ fall; they are **not** calibrated to a laboratory evaporation experiment and the drawing says so ("*the daily rates are a two-stage drying model scaled by your mulch factor*"). The simulated annual evaporation of the workbench (Eq. 5.4) is *Daisy*, not this curve.
 
 **The drying front.** The depth of the dry layer after stage 1 is
 
@@ -92,7 +92,7 @@ $$
 
 ## Fate of saved water
 
-**What it shows.** For the soil and mulch you set (a preview of $\varphi=0.5$ is used if you have not set mulch), four curves against rainfall scale $\times0.5$–$\times1.4$: evaporation saved, irrigation saved, extra drainage, extra transpiration. A shaded band marks the rainfall above which drainage exceeds the irrigation saved ("*drainage takes over near $\times1.2$*"). Below, a bar divides each mm of evaporation saved among less irrigation, more drainage, more transpiration and "storage and other".
+**What it shows.** For the soil and mulch you set (a preview of $\varphi=0.5$ is used if you have not set mulch), four curves against rainfall scale $\times0.5$ to $\times1.4$: evaporation saved, irrigation saved, extra drainage, extra transpiration. A shaded band marks the rainfall above which drainage exceeds the irrigation saved ("*drainage takes over near $\times1.2$*"). Below, a bar divides each mm of evaporation saved among less irrigation, more drainage, more transpiration and "storage and other".
 
 **Generation.** For each rainfall $\rho$ in the ten-value list, with $\varphi^\ast$ the mulch factor,
 

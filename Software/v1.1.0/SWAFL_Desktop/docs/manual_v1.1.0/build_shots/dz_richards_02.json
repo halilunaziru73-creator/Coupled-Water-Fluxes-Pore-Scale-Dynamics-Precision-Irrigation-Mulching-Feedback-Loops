@@ -1,0 +1,41 @@
+{
+ "id": "dz_richards_02",
+ "group": "50_tools",
+ "ch": "build",
+ "sec": "Soil column",
+ "title": "Soil column: results",
+ "intro": "The figures show water content through depth and time, the series at a chosen depth and the water balance.",
+ "note": "",
+ "marks": [
+  {
+   "x": 64,
+   "y": 756.8000000000001,
+   "t": "Water content map",
+   "d": "Depth against time."
+  },
+  {
+   "x": 285.8,
+   "y": 1056.4,
+   "t": "Depth of the series",
+   "d": "Depth in cm of the lower figure."
+  },
+  {
+   "x": 64,
+   "y": 1260,
+   "t": "Series at a depth",
+   "d": "Water content and suction at that depth."
+  },
+  {
+   "x": 64,
+   "y": 2088.8,
+   "t": "Summary",
+   "d": "Water balance of the run."
+  },
+  {
+   "x": 334.20000000000005,
+   "y": 467.20000000000005,
+   "t": "Keep as a log",
+   "d": "Puts the water contents in the Files list."
+  }
+ ]
+}

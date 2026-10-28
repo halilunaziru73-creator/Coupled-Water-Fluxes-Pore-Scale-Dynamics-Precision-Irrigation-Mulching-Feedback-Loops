@@ -1,0 +1,59 @@
+{
+ "id": "dz_combo_02",
+ "group": "30_exp",
+ "ch": "combos",
+ "sec": "Nitrogen",
+ "title": "Irrigation and nitrogen together",
+ "intro": "Water moves nitrate and decides how much of the fertiliser the crop can use. Irrigation against rainfed, at three fertiliser doses, shows whether more water raises the yield only when the nitrogen is there, and what it costs in nitrate below the roots.",
+ "note": "",
+ "marks": [
+  {
+   "x": 88,
+   "y": 558.125,
+   "t": "Irrigation",
+   "d": "Varied over 0, 1."
+  },
+  {
+   "x": 88,
+   "y": 606.125,
+   "t": "Nitrogen fertiliser, factor on the rotation",
+   "d": "Varied over 0.5, 1, 1.25."
+  },
+  {
+   "x": 88,
+   "y": 722.9250000000001,
+   "t": "Soil",
+   "d": "Varied over usda:sand, loam."
+  },
+  {
+   "x": 330.65000000000003,
+   "y": 843.725,
+   "t": "Add something to change",
+   "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+  },
+  {
+   "x": 1283.25,
+   "y": 843.725,
+   "t": "How to combine",
+   "d": "Every combination, one thing at a time, or the values paired in order."
+  },
+  {
+   "x": 1668.875,
+   "y": 843.325,
+   "t": "At most",
+   "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 1012.9250000000001,
+   "t": "Size of the experiment",
+   "d": "The number of runs and the time they take on this computer."
+  },
+  {
+   "x": 102.95,
+   "y": 1082.925,
+   "t": "Run all",
+   "d": "Runs every combination, several at a time."
+  }
+ ]
+}

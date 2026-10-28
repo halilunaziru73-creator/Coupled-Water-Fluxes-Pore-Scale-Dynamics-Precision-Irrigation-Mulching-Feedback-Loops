@@ -1,0 +1,41 @@
+{
+ "id": "dz_weather_02",
+ "group": "10_data",
+ "ch": "data",
+ "sec": "Weather stations",
+ "title": "Weather stations: another station and the open data of the Danish Meteorological Institute",
+ "intro": "The lower part of the tab reads open weather data of the Danish Meteorological Institute (a free key of your own is needed) and a groundwater series for the lower boundary of the soil column.",
+ "note": "",
+ "marks": [
+  {
+   "x": 110.55000000000001,
+   "y": 846.125,
+   "t": "Interface key",
+   "d": "The free interface key of the Danish open data service."
+  },
+  {
+   "x": 645.325,
+   "y": 846.125,
+   "t": "Latitude",
+   "d": "Latitude of the place."
+  },
+  {
+   "x": 1118.075,
+   "y": 846.125,
+   "t": "From",
+   "d": "First day to read."
+  },
+  {
+   "x": 1527.7625,
+   "y": 843.325,
+   "t": "Fetch and use",
+   "d": "Reads the daily series and makes it the weather in use."
+  },
+  {
+   "x": 64,
+   "y": 951.725,
+   "t": "Groundwater file",
+   "d": "A table with a date column and a depth to water column in metres, or a NetCDF file, used as the lower boundary of the soil column."
+  }
+ ]
+}

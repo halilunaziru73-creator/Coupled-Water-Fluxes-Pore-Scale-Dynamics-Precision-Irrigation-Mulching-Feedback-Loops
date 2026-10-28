@@ -1,0 +1,47 @@
+{
+ "id": "dz_exp_07",
+ "group": "30_exp",
+ "ch": "ask",
+ "sec": "Experiments",
+ "title": "Experiments: weather, soil and years of the experiment",
+ "intro": "The weather list of an experiment follows the choice at the top of the tab and offers the built-in stations as well. The soil, the years and what is saved are set beside it.",
+ "note": "",
+ "marks": [
+  {
+   "x": 173.775,
+   "y": 885.325,
+   "t": "Weather",
+   "d": "Online weather of my area, the weather of the SWAFL project, my weather, or a built-in station."
+  },
+  {
+   "x": 734.0500000000001,
+   "y": 880.5250000000001,
+   "t": "Place",
+   "d": "The place whose weather is read from the internet."
+  },
+  {
+   "x": 1343.7250000000001,
+   "y": 880.5250000000001,
+   "t": "Get the weather",
+   "d": "Reads and checks the weather of the place."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 930.9250000000001,
+   "t": "Soil",
+   "d": "The soil of the experiment when it is not a factor."
+  },
+  {
+   "x": 564.7,
+   "y": 930.5250000000001,
+   "t": "Years",
+   "d": "First and last year of every run."
+  },
+  {
+   "x": 72.8,
+   "y": 971.725,
+   "t": "Use my data",
+   "d": "Uses the weather and soil given in My data when they are set."
+  }
+ ]
+}

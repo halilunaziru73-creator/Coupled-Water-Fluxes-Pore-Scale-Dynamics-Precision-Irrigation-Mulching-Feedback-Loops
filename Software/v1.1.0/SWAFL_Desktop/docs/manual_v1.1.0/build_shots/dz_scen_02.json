@@ -1,0 +1,83 @@
+{
+ "id": "dz_scen_02",
+ "group": "20_scen",
+ "ch": "ask",
+ "sec": "Scenarios",
+ "title": "Scenarios: irrigation",
+ "intro": "The irrigation question compares rainfed and irrigated crops of the built-in rotation. The trigger is the potential at 20 cm below which the overhead irrigation starts; the water per irrigation is fixed.",
+ "note": "",
+ "marks": [
+  {
+   "x": 84.80000000000001,
+   "y": 937.6,
+   "t": "Soil",
+   "d": "The soil profile of the run: the built-in loam or sand, or your own soil when it is set in My data."
+  },
+  {
+   "x": 532.8000000000001,
+   "y": 937.2,
+   "t": "Trigger",
+   "d": "Irrigation starts when the soil water potential at 20 cm drops below this value (cm)."
+  },
+  {
+   "x": 1032.4,
+   "y": 937.2,
+   "t": "Water per irrigation",
+   "d": "Depth of water applied each time (mm)."
+  },
+  {
+   "x": 1273.1750000000002,
+   "y": 937.2,
+   "t": "Rain factor",
+   "d": "Multiplies the rain of the weather file (1 leaves it as recorded)."
+  },
+  {
+   "x": 1563.825,
+   "y": 937.2,
+   "t": "Temperature offset",
+   "d": "Added to every daily temperature (degrees Celsius)."
+  },
+  {
+   "x": 144,
+   "y": 1011.6,
+   "t": "First year",
+   "d": "First year of the simulation; it must lie at least one year after the start of the weather."
+  },
+  {
+   "x": 321.3,
+   "y": 1068,
+   "t": "Weather for all runs",
+   "d": "The one weather choice of every Daisy simulation: the weather of the SWAFL project when one is loaded, the built-in Taastrup weather, a built-in station, online weather or a file."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 1174.4,
+   "t": "Runs compared",
+   "d": "Each ticked run is one Daisy simulation; the figures compare them."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 1355.6000000000001,
+   "t": "What I am interested in",
+   "d": "Tick the processes of Fig. 1 whose figures should be drawn as well, or write them in words."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 1522.4,
+   "t": "Run Daisy",
+   "d": "Runs every ticked simulation and draws the figures."
+  },
+  {
+   "x": 457.225,
+   "y": 1522.4,
+   "t": "Standard options",
+   "d": "Puts every option back to its standard value."
+  },
+  {
+   "x": 588.9,
+   "y": 1522.4,
+   "t": "Save the Daisy files",
+   "d": "Saves the set-up files of the first ticked run, to run Daisy anywhere."
+  }
+ ]
+}

@@ -1,0 +1,59 @@
+{
+ "id": "dz_scen_05",
+ "group": "20_scen",
+ "ch": "ask",
+ "sec": "Scenarios",
+ "title": "Scenarios: a pesticide or tracer",
+ "intro": "The chemical question follows a chemical applied to the soil: a mobile tracer, a strongly sorbed chemical and a quickly decaying one. It shows how much leaves the root zone and how much stays in the soil.",
+ "note": "",
+ "marks": [
+  {
+   "x": 84.80000000000001,
+   "y": 934.4000000000001,
+   "t": "Soil",
+   "d": "The soil profile of the run: the built-in loam or sand, or your own soil when it is set in My data."
+  },
+  {
+   "x": 532.8000000000001,
+   "y": 934,
+   "t": "Rain factor",
+   "d": "Multiplies the rain of the weather file."
+  },
+  {
+   "x": 321.3,
+   "y": 990.4000000000001,
+   "t": "Weather for all runs",
+   "d": "The one weather choice of every Daisy simulation: the weather of the SWAFL project when one is loaded, the built-in Taastrup weather, a built-in station, online weather or a file."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 1115.6000000000001,
+   "t": "Runs compared",
+   "d": "Each ticked run is one Daisy simulation; the figures compare them."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 1315.6000000000001,
+   "t": "What I am interested in",
+   "d": "Tick the processes of Fig. 1 whose figures should be drawn as well, or write them in words."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 1482.4,
+   "t": "Run Daisy",
+   "d": "Runs every ticked simulation and draws the figures."
+  },
+  {
+   "x": 457.225,
+   "y": 1482.4,
+   "t": "Standard options",
+   "d": "Puts every option back to its standard value."
+  },
+  {
+   "x": 588.9,
+   "y": 1482.4,
+   "t": "Save the Daisy files",
+   "d": "Saves the set-up files of the first ticked run, to run Daisy anywhere."
+  }
+ ]
+}

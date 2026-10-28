@@ -1,0 +1,59 @@
+{
+ "id": "dz_combo_24",
+ "group": "30_exp",
+ "ch": "combos",
+ "sec": "Parameters",
+ "title": "Water at the soil surface: runoff and evaporation",
+ "intro": "temperature change rate [h-1 ]: Relative change of surface temperature. If you set this to a negative value, surface temperature will reflect temperature of incomming water or ponded; EpFactor [dimensionless]: The autumn value can be lower, due to muching. With a crop factor of 1.2 a combined Kc of 1.15 is reached at LAI=5. See also [Kjaersgaard et al., 2008]; ReservoirConstant [h-1 ]: Fraction of ponding above DetentionCapacity that runoffs each hour. Each is varied from half to double the value the farm uses; temperature change rate, EpFactor, ReservoirConstant moved the yield, water or nitrogen in the test.",
+ "note": "",
+ "marks": [
+  {
+   "x": 88,
+   "y": 695.725,
+   "t": "Surface: temperature change rate (Daisy reference, chapter 87)",
+   "d": "Varied over 0.25, 0.5, 1."
+  },
+  {
+   "x": 88,
+   "y": 743.725,
+   "t": "Surface: EpFactor (Daisy reference, chapter 87)",
+   "d": "Varied over 0.3, 0.6, 1.2."
+  },
+  {
+   "x": 88,
+   "y": 791.725,
+   "t": "Surface: ReservoirConstant (Daisy reference, chapter 87)",
+   "d": "Varied over 30, 60, 120."
+  },
+  {
+   "x": 330.65000000000003,
+   "y": 843.725,
+   "t": "Add something to change",
+   "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+  },
+  {
+   "x": 1283.25,
+   "y": 843.725,
+   "t": "How to combine",
+   "d": "Every combination, one thing at a time, or the values paired in order."
+  },
+  {
+   "x": 1668.875,
+   "y": 843.325,
+   "t": "At most",
+   "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 1012.9250000000001,
+   "t": "Size of the experiment",
+   "d": "The number of runs and the time they take on this computer."
+  },
+  {
+   "x": 102.95,
+   "y": 1082.925,
+   "t": "Run all",
+   "d": "Runs every combination, several at a time."
+  }
+ ]
+}

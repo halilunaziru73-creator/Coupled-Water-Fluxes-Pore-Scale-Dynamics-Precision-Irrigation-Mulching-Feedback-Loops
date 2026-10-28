@@ -1,0 +1,59 @@
+{
+ "id": "dz_exp_01",
+ "group": "30_exp",
+ "ch": "ask",
+ "sec": "Experiments",
+ "title": "Experiments: the starting screen",
+ "intro": "The Experiments tab turns a question into a set of Daisy runs. You can write the question, start from a ready made combination of the Daisy reference, choose a topic of the reference or bring set-ups of your own.",
+ "note": "",
+ "marks": [
+  {
+   "x": 300.5,
+   "y": 286.40000000000003,
+   "t": "Weather for all runs",
+   "d": "The weather of every simulation, shared with Scenarios and Processes."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 479.6,
+   "t": "Your question",
+   "d": "Write what you want to find out in your own words."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 558,
+   "t": "Make a plan",
+   "d": "Reads the question and proposes the factors, the levels and the design."
+  },
+  {
+   "x": 366.225,
+   "y": 560.4,
+   "t": "Online AI",
+   "d": "Optional: an online AI reads the question first; each plan it gives is checked against what Daisy can vary."
+  },
+  {
+   "x": 444.45000000000005,
+   "y": 630,
+   "t": "Best combinations",
+   "d": "Ready made experiments worked out from the Daisy reference."
+  },
+  {
+   "x": 606.15,
+   "y": 630,
+   "t": "By topic",
+   "d": "The 107 topics of the Daisy reference, each leading to experiments."
+  },
+  {
+   "x": 791.1375,
+   "y": 630,
+   "t": "Import",
+   "d": "Bring an experiment folder, set-ups, weather, soil tables or logs."
+  },
+  {
+   "x": 64,
+   "y": 1438.2,
+   "t": "My experiments",
+   "d": "The list of experiments that are run or saved together."
+  }
+ ]
+}

@@ -1,0 +1,59 @@
+{
+ "id": "dz_combo_25",
+ "group": "30_exp",
+ "ch": "combos",
+ "sec": "Parameters",
+ "title": "The limits on the chemistry sink terms",
+ "intro": "max sink total [dimensionless]: Maximum allowed sink term as a fraction of total content. If variable timesteps are enabled, Daisy will try to scale down the timestep in; max sink solute [dimensionless]: Maximum allowed sink term as a fraction of solute content. If variable timesteps are enabled, Daisy will try to scale down the timestep; max sink secondary [dimensionless]: Maximum allowed sink term as a fraction of secondary domain content. If variable timesteps are enabled, Daisy will try to scale down the timestep. Each is varied from half to double the value the farm uses; none of them moved yield, water or nitrogen in the test, so the effect shows in the process itself.",
+ "note": "",
+ "marks": [
+  {
+   "x": 88,
+   "y": 695.725,
+   "t": "Chemistry original: max sink total (Daisy reference, chapter 24)",
+   "d": "Varied over 0.25, 0.5, 1."
+  },
+  {
+   "x": 88,
+   "y": 743.725,
+   "t": "Chemistry original: max sink solute (Daisy reference, chapter 24)",
+   "d": "Varied over 0.45, 0.9, 1.8."
+  },
+  {
+   "x": 88,
+   "y": 791.725,
+   "t": "Chemistry original: max sink secondary (Daisy reference, chapter 24)",
+   "d": "Varied over 0.75, 1.5, 3."
+  },
+  {
+   "x": 330.65000000000003,
+   "y": 843.725,
+   "t": "Add something to change",
+   "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+  },
+  {
+   "x": 1225.65,
+   "y": 843.725,
+   "t": "How to combine",
+   "d": "Every combination, one thing at a time, or the values paired in order."
+  },
+  {
+   "x": 1611.275,
+   "y": 843.325,
+   "t": "At most",
+   "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 1012.9250000000001,
+   "t": "Size of the experiment",
+   "d": "The number of runs and the time they take on this computer."
+  },
+  {
+   "x": 102.95,
+   "y": 1082.925,
+   "t": "Run all",
+   "d": "Runs every combination, several at a time."
+  }
+ ]
+}

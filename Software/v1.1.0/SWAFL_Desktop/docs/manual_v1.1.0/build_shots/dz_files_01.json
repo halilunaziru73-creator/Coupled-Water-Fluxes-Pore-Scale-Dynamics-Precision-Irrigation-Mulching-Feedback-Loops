@@ -1,0 +1,47 @@
+{
+ "id": "dz_files_01",
+ "group": "10_data",
+ "ch": "data",
+ "sec": "Files",
+ "title": "Files: collecting Daisy output and set-up files",
+ "intro": "Files collects everything Daisy writes or reads: output logs (.dlf), weather files (.dwf), tables (.csv) and set-up files (.dai). Whatever is loaded here is available to the plots, the mass balance, the comparison, the calibration and the soil column.",
+ "note": "",
+ "marks": [
+  {
+   "x": 98.625,
+   "y": 303.325,
+   "t": "Add files",
+   "d": "Chooses one or several files."
+  },
+  {
+   "x": 252.0875,
+   "y": 303.325,
+   "t": "Add a folder",
+   "d": "Reads every Daisy file of a folder, for example a whole experiment folder."
+  },
+  {
+   "x": 370.925,
+   "y": 303.325,
+   "t": "Load all bundled examples",
+   "d": "Loads every example log that comes with the program."
+  },
+  {
+   "x": 64,
+   "y": 372.52500000000003,
+   "t": "Drop area",
+   "d": "Files and folders can also be dropped here."
+  },
+  {
+   "x": 64,
+   "y": 669.325,
+   "t": "Bundled examples",
+   "d": "The example logs from the repositories of the Daisy model; load them one by one."
+  },
+  {
+   "x": 64,
+   "y": 940.5250000000001,
+   "t": "Loaded logs",
+   "d": "The logs that are loaded now, with their columns."
+  }
+ ]
+}

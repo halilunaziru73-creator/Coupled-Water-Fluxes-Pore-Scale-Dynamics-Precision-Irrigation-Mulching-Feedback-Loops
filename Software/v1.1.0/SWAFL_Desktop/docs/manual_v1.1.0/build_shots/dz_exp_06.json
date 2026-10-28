@@ -1,0 +1,59 @@
+{
+ "id": "dz_exp_06",
+ "group": "30_exp",
+ "ch": "ask",
+ "sec": "Experiments",
+ "title": "Experiments: the plan before running",
+ "intro": "Loading a combination fills the plan: what changes, the values tested, how they are combined, the weather and soil, the years and the results saved. The size of the experiment is shown before anything is run.",
+ "note": "",
+ "marks": [
+  {
+   "x": 143.45000000000002,
+   "y": 281.52500000000003,
+   "t": "Source of the plan",
+   "d": "Where the plan comes from: the reference manual, your request or the built-in planner."
+  },
+  {
+   "x": 396.85,
+   "y": 541.325,
+   "t": "Values tested",
+   "d": "The values can be typed over; the allowed range is shown beside them."
+  },
+  {
+   "x": 1661.2,
+   "y": 541.325,
+   "t": "Remove",
+   "d": "Takes the row out of the experiment."
+  },
+  {
+   "x": 330.65000000000003,
+   "y": 843.725,
+   "t": "Add something to change",
+   "d": "Adds a further factor."
+  },
+  {
+   "x": 1283.25,
+   "y": 843.725,
+   "t": "How to combine",
+   "d": "Every combination, one thing at a time, or paired."
+  },
+  {
+   "x": 1668.875,
+   "y": 843.325,
+   "t": "At most",
+   "d": "The largest number of runs."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 930.9250000000001,
+   "t": "Results saved",
+   "d": "How much Daisy writes: yearly totals only, with harvest, with daily values, or everything."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 1012.9250000000001,
+   "t": "Size",
+   "d": "Number of runs and the time they take."
+  }
+ ]
+}

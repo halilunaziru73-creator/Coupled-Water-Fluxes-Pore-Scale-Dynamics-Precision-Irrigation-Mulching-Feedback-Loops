@@ -1,0 +1,35 @@
+{
+ "id": "dz_data_05",
+ "group": "10_data",
+ "ch": "data",
+ "sec": "My data",
+ "title": "My data: my own soil",
+ "intro": "My soil takes the horizons from the surface down to at least 100 cm: lower limit, sand, silt and clay in per cent, humus in per cent and dry bulk density. Water retention and conductivity are then taken from the HYPRES pedotransfer function in Daisy.",
+ "note": "",
+ "marks": [
+  {
+   "x": 72.8,
+   "y": 563.725,
+   "t": "My soil",
+   "d": "Switches the table of horizons on; the soil choice of Scenarios and Experiments is then replaced by this soil."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 720.9250000000001,
+   "t": "Horizons",
+   "d": "One row for each horizon: lower limit, sand, silt, clay, humus and bulk density."
+  },
+  {
+   "x": 133.2125,
+   "y": 841.325,
+   "t": "Add a horizon",
+   "d": "Adds a row at the bottom."
+  },
+  {
+   "x": 523.975,
+   "y": 848.9250000000001,
+   "t": "Soil table import",
+   "d": "A CSV with the columns depth, sand, silt, clay and, if possible, humus and bulk density can be imported instead."
+  }
+ ]
+}

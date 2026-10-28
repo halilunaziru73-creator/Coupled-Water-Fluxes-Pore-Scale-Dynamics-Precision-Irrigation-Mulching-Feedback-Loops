@@ -8,22 +8,22 @@ The layer reads top to bottom: **A** site, **B** sprinkler and layout, **C** ope
 
 ## Inputs, step by step
 
-**A. Your site.** Crop, mulch and irrigation method are the same controls as in the Properties panel. The soil row shows each soil with the largest application rate it accepts at the present slope (Table 13.3). Sliders: ground slope $S$ (0–16 %, step 0.5, default 1), wind speed $u$ (0–12 m s$^{-1}$, step 0.5, default 3), surface storage $S_d$ (0–20 mm, step 0.5; default from tillage, below) and a toggle *Compact layer below the soil* (which lowers the allowed rate, Table 13.3). A banner states the maximum allowable application rate for the soil and slope and whether the present sprinkler is within it.
+**A. Your site.** Crop, mulch and irrigation method are the same controls as in the Properties panel. The soil row shows each soil with the largest application rate it accepts at the present slope (Table 13.3). Sliders: ground slope $S$ (0 to 16 %, step 0.5, default 1), wind speed $u$ (0 to 12 m s$^{-1}$, step 0.5, default 3), surface storage $S_d$ (0 to 20 mm, step 0.5; default from tillage, below) and a toggle *Compact layer below the soil* (which lowers the allowed rate, Table 13.3). A banner states the maximum allowable application rate for the soil and slope and whether the present sprinkler is within it.
 
-**B. The sprinkler and its layout.** *System* (five chips, see *Kinds of sprinkler system* below), *Sprinkler* (four types, Table 13.1), *Layout* (square or triangular), then value boxes for the nozzle diameter $d$, operating pressure $P$, trajectory angle $\alpha$ (8–45°, default 25°), spacing along the lateral $S_s$ and between laterals $S_l$. Choosing a type resets $d,P,S_s,S_l$ to its defaults and run time to automatic.
+**B. The sprinkler and its layout.** *System* (five chips, see *Kinds of sprinkler system* below), *Sprinkler* (four types, Table 13.1), *Layout* (square or triangular), then value boxes for the nozzle diameter $d$, operating pressure $P$, trajectory angle $\alpha$ (8 to 45°, default 25°), spacing along the lateral $S_s$ and between laterals $S_l$. Choosing a type resets $d,P,S_s,S_l$ to its defaults and run time to automatic.
 
-Table 13.1. Sprinkler types: ranges (min–max, step) and defaults; $c_R$ range coefficient, $m$ profile exponent, $F$ drift factor. The impact value $c_R=1.35$ is the Keller and Bliesner (1990) coefficient for impact sprinklers (changed from 1.15 in version 1; the earlier value under-predicted the wetted diameter of their worked example by 14 %). The values for the other three types are **[Engineered]** and have not been verified against published data.
+Table 13.1. Sprinkler types: ranges (min and max, step) and defaults; $c_R$ range coefficient, $m$ profile exponent, $F$ drift factor. The impact value $c_R=1.35$ is the Keller and Bliesner (1990) coefficient for impact sprinklers (changed from 1.15 in version 1; the earlier value under-predicted the wetted diameter of their worked example by 14 %). The values for the other three types are **[Engineered]** and have not been verified against published data.
 
 | Type | $d$ (mm) | $P$ (kPa) | $S_s$ (m) | $S_l$ (m) | $c_R$ | Profile | $F$ |
 |:--|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| Impact | 2.4–8, 0.1 (4.4) | 200–500, 10 (300) | 6–30, 1 (12) | 6–36, 1 (18) | 1.35 | $1-x^{1.3}$ | 1.0 |
-| Rotating spray | 1.5–5, 0.1 (3.2) | 70–250, 5 (170) | 3–15, 0.5 (6) | 3–15, 0.5 (6) | 0.80 | ring | 1.6 |
-| Micro-sprinkler | 0.8–2.5, 0.05 (1.3) | 100–250, 5 (180) | 1.5–8, 0.25 (3) | 1.5–8, 0.25 (3) | 0.70 | ring-2 | 0.7 |
-| Big gun | 10–25, 0.5 (16) | 350–700, 10 (500) | 20–80, 1 (30) | 20–90, 1 (36) | 0.95 | $1-x$ | 1.3 |
+| Impact | 2.4 to 8, 0.1 (4.4) | 200 to 500, 10 (300) | 6 to 30, 1 (12) | 6 to 36, 1 (18) | 1.35 | $1-x^{1.3}$ | 1.0 |
+| Rotating spray | 1.5 to 5, 0.1 (3.2) | 70 to 250, 5 (170) | 3 to 15, 0.5 (6) | 3 to 15, 0.5 (6) | 0.80 | ring | 1.6 |
+| Micro-sprinkler | 0.8 to 2.5, 0.05 (1.3) | 100 to 250, 5 (180) | 1.5 to 8, 0.25 (3) | 1.5 to 8, 0.25 (3) | 0.70 | ring-2 | 0.7 |
+| Big gun | 10 to 25, 0.5 (16) | 350 to 700, 10 (500) | 20 to 80, 1 (30) | 20 to 90, 1 (36) | 0.95 | $1-x$ | 1.3 |
 
-**C. How you run it.** *Run time* automatic or manual; depth per irrigation $Z_n$ (5–100 mm; default Eq. 5.27, tap to reset); run time $T$ (10–1200 min, step 5); operating hours per day (4–24, default 16).
+**C. How you run it.** *Run time* automatic or manual; depth per irrigation $Z_n$ (5 to 100 mm; default Eq. 5.27, tap to reset); run time $T$ (10 to 1200 min, step 5); operating hours per day (4 to 24, default 16).
 
-**D. Farm, water supply and pipes.** Area $A_f$ (0.5–40 ha, step 0.5, default 5), farm supply $Q_s$ (5–200 L s$^{-1}$, default 40), lateral length $L_L$ (40–500 m, step 10, default 150), mainline length $L_m$ (20–600 m, default 120) and lift (0–60 m, default 12).
+**D. Farm, water supply and pipes.** Area $A_f$ (0.5 to 40 ha, step 0.5, default 5), farm supply $Q_s$ (5 to 200 L s$^{-1}$, default 40), lateral length $L_L$ (40 to 500 m, step 10, default 150), mainline length $L_m$ (20 to 600 m, default 120) and lift (0 to 60 m, default 12).
 
 **Tillage and surface storage.** Unless set by hand, the depression storage $S_d$ follows the tillage of the Properties panel: 5 mm conventional, 3.5 mm reduced, 2 mm none. On a slope the effective storage is reduced,
 
@@ -119,7 +119,7 @@ $$
 
 *Provenance (Eq. 13.8):* **[Engineered]**: loss and ponding rules chosen for the workbench.
 
-where $F$ is the type factor of Table 13.1, $P$ is in kPa, $u$ in m s$^{-1}$ and the air temperature $T_a=24\,^\circ\mathrm C+\Delta T$, with $\Delta T$ the warming of the Properties panel. The form follows the known trends — loss rises with wind, with pressure (finer droplets), with temperature, and falls with a flatter trajectory — in line with the ranges of 5–15 % usually quoted in textbooks (Keller and Bliesner, 1990); the numerical coefficients are **[Engineered]**. $w_d$ is clipped to 0.5–45 %.
+where $F$ is the type factor of Table 13.1, $P$ is in kPa, $u$ in m s$^{-1}$ and the air temperature $T_a=24\,^\circ\mathrm C+\Delta T$, with $\Delta T$ the warming of the Properties panel. The form follows the known trends, loss rises with wind, with pressure (finer droplets), with temperature, and falls with a flatter trajectory, in line with the ranges of 5 to 15 % usually quoted in textbooks (Keller and Bliesner, 1990); the numerical coefficients are **[Engineered]**. $w_d$ is clipped to 0.5 to 45 %.
 
 ## The soil intake, ponding and runoff
 
@@ -182,7 +182,7 @@ The allowable rate by soil and slope follows the standard table of sprinkler man
 
 Table 13.3. Maximum application rate (mm h$^{-1}$) by soil type and slope.
 
-| Soil group | 0–5 % | 5–8 % | 8–12 % | 12–16 % |
+| Soil group | 0 to 5 % | 5 to 8 % | 8 to 12 % | 12 to 16 % |
 |:--|:-:|:-:|:-:|:-:|
 | Deep coarse sandy soils | 50 | 38 | 25 | 13 |
 | Coarse sandy, compact layer below | 38 | 25 | 19 | 10 |
@@ -270,7 +270,7 @@ $$
 
 *Provenance (Eq. 13.20):* **[Literature]**: hydraulic power definition.
 
-with $L_{\mathrm{conv}}$ the conveyance length (the mainline length box) and $0.75\,h_{f,\mathrm{lat}}$ the head at the lateral inlet above $h_s$ (the textbook inlet-head rule). The ten checks (spacing along the lateral, spacing between laterals, wind below 16 km h$^{-1}$, rate below the allowed value, rate below $K_s$, CU $\ge85$ %, lateral loss $\le20$ % of $h_s$, mainline gradient, the whole field within the interval, flow within the farm supply) are shown with a tick or an exclamation point and the numbers; "N of 10 checks pass" closes the panel. The textbook sequence in the layer also plots the class of sprinkler (low, medium or high pressure) from $h_s$: $<20$ m, 20–45 m, $>45$ m.
+with $L_{\mathrm{conv}}$ the conveyance length (the mainline length box) and $0.75\,h_{f,\mathrm{lat}}$ the head at the lateral inlet above $h_s$ (the textbook inlet-head rule). The ten checks (spacing along the lateral, spacing between laterals, wind below 16 km h$^{-1}$, rate below the allowed value, rate below $K_s$, CU $\ge85$ %, lateral loss $\le20$ % of $h_s$, mainline gradient, the whole field within the interval, flow within the farm supply) are shown with a tick or an exclamation point and the numbers; "N of 10 checks pass" closes the panel. The textbook sequence in the layer also plots the class of sprinkler (low, medium or high pressure) from $h_s$: $<20$ m, 20 to 45 m, $>45$ m.
 
 ![Sprinkler design: the ten textbook checks and the kinds of sprinkler system. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/29_spr_does_your_design_pass_the_course_checks_draw.jpg){width=80%}
 
@@ -280,11 +280,11 @@ Five systems are offered, each with its efficiency range (Keller and Bliesner, 1
 
 | System | Principle | Typical $E_a$ |
 |:--|:--|:-:|
-| Solid-set | Fixed buried laterals; valves open some at a time | 70–75 % |
-| Hand-move | The lateral is moved by hand after every set (1–4 sets a day) | 70–75 % |
-| Center pivot | A rotating lateral on towers about 30 m apart; the corners stay dry | 65–70 % |
-| Linear-move | A lateral travelling in a straight line | 65–70 % |
-| Traveling gun | One gun on a hose reel covers a 220° sector, strip by strip | 65–70 % |
+| Solid-set | Fixed buried laterals; valves open some at a time | 70 to 75 % |
+| Hand-move | The lateral is moved by hand after every set (1 to 4 sets a day) | 70 to 75 % |
+| Center pivot | A rotating lateral on towers about 30 m apart; the corners stay dry | 65 to 70 % |
+| Linear-move | A lateral travelling in a straight line | 65 to 70 % |
+| Traveling gun | One gun on a hose reel covers a 220° sector, strip by strip | 65 to 70 % |
 
 The plan of the selected system is drawn to scale for the present field; the run moves it (the active lateral, the pivot arm, the travelling lateral or the gun strip). A bar shows where the design's $E_a$ lies against the range for the system.
 
@@ -301,7 +301,7 @@ $$
 
 *Provenance (Eq. 13.21):* **[Engineered]**: head and sets bookkeeping.
 
-The lateral loss uses the Hazen–Williams equation (Eq. 12.3, $C=140$) with the Christiansen factor for $N_s$ outlets and the exponent $m=1.852$,
+The lateral loss uses the Hazen and Williams equation (Eq. 12.3, $C=140$) with the Christiansen factor for $N_s$ outlets and the exponent $m=1.852$,
 
 $$
 F_m=\frac1{2.852}+\frac1{2N_s}+\frac{\sqrt{0.852}}{6N_s^{2}},\qquad h_{f,\mathrm{lat}}=F_m\,h_{HW}(Q_{\mathrm{lat}},D,L_L),
@@ -310,9 +310,9 @@ $$
 
 *Provenance (Eq. 13.22):* **[Literature]**: Christiansen reduction factor with Hazen--Williams exponent.
 
-and the lateral pipe is the smallest of the series (12.21) with $h_{f,\mathrm{lat}}\le0.2\,h$ and $v\le2.0$ m s$^{-1}$. The lateral inlet head is $H_0=h+1.5+h_{f,\mathrm{lat}}$ m (1.5 m of riser). The submain, mainline and pump then follow Eqs. (12.22)–(12.23) exactly as for drip, with $H_0$ from this paragraph. The block's table gives the sets ($\times$ laterals), laterals and sprinklers, TDH, power, lateral loss ($\le20$ %) and pipe laid per hectare.
+and the lateral pipe is the smallest of the series (12.21) with $h_{f,\mathrm{lat}}\le0.2\,h$ and $v\le2.0$ m s$^{-1}$. The lateral inlet head is $H_0=h+1.5+h_{f,\mathrm{lat}}$ m (1.5 m of riser). The submain, mainline and pump then follow Eqs. (12.22) to (12.23) exactly as for drip, with $H_0$ from this paragraph. The block's table gives the sets ($\times$ laterals), laterals and sprinklers, TDH, power, lateral loss ($\le20$ %) and pipe laid per hectare.
 
-(Two parallel calculations therefore appear in this layer: the **simulation block** sizes the pipe by Hazen–Williams with $C=140$, while the **textbook block** uses the Blasius equation and the commercial plastic-pipe sizes of the course. They are separate presentations of the same design question; the numbers will differ by a few per cent, and the textbook block is the one to compare with hand calculations from the course.)
+(Two parallel calculations therefore appear in this layer: the **simulation block** sizes the pipe by Hazen and Williams with $C=140$, while the **textbook block** uses the Blasius equation and the commercial plastic-pipe sizes of the course. They are separate presentations of the same design question; the numbers will differ by a few per cent, and the textbook block is the one to compare with hand calculations from the course.)
 
 ## The design table and sensitivity
 

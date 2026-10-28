@@ -599,7 +599,7 @@ $$
 *Provenance (Eq. 5.27):* **[Literature]**: readily available water as in FAO-56 practice, with an engineered clip.
 
 
-*Eq. 11.1. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton–Rawls $\to$ Green–Ampt $\to$ Kostiakov)".*
+*Eq. 11.1. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov)".*
 
 $$
 \begin{aligned}
@@ -614,7 +614,7 @@ $$
 *Provenance (Eq. 11.1):* **[Literature]**: Saxton and Rawls (2006), implemented as written.
 
 
-*Eq. 11.2. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton–Rawls $\to$ Green–Ampt $\to$ Kostiakov)".*
+*Eq. 11.2. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov)".*
 
 $$
 \begin{aligned}
@@ -630,7 +630,7 @@ $$
 *Provenance (Eq. 11.2):* **[Literature]**: Saxton and Rawls (2006), implemented as written.
 
 
-*Eq. 11.3. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton–Rawls $\to$ Green–Ampt $\to$ Kostiakov)".*
+*Eq. 11.3. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov)".*
 
 $$
 \psi_f = \frac{10}{\alpha}\,\frac{0.046\,m + 2.07\,m^{2} + 19.5\,m^{3}}{1 + 4.7\,m + 16\,m^{2}}.
@@ -640,7 +640,7 @@ $$
 *Provenance (Eq. 11.3):* **[Engineered]**: rational-polynomial approximation of a Rawls-type suction.
 
 
-*Eq. 11.4. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton–Rawls $\to$ Green–Ampt $\to$ Kostiakov)".*
+*Eq. 11.4. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov)".*
 
 $$
 \theta_0 = \theta_{fc} - f_T\,(\theta_{fc} - \theta_{wp}),\qquad
@@ -651,7 +651,7 @@ $$
 *Provenance (Eq. 11.4):* **[Engineered]**: initial and wetted water contents chosen for the workbench.
 
 
-*Eq. 11.5. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton–Rawls $\to$ Green–Ampt $\to$ Kostiakov)".*
+*Eq. 11.5. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov)".*
 
 $$
 F - \psi_f\,\Delta\theta\,\ln\!\Bigl(1 + \frac{F}{\psi_f\,\Delta\theta}\Bigr) = K_s\,\frac{t}{60}\quad(t\ \text{in min}),
@@ -661,7 +661,7 @@ $$
 *Provenance (Eq. 11.5):* **[Literature]**: Green and Ampt (1911).
 
 
-*Eq. 11.6. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton–Rawls $\to$ Green–Ampt $\to$ Kostiakov)".*
+*Eq. 11.6. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov)".*
 
 $$
 Z(\tau) = k\,\tau^{A}\qquad (Z\ \text{in m},\ \tau\ \text{in min}),
@@ -671,7 +671,7 @@ $$
 *Provenance (Eq. 11.6):* **[Literature]**: Kostiakov (1932).
 
 
-*Eq. 11.7. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton–Rawls $\to$ Green–Ampt $\to$ Kostiakov)".*
+*Eq. 11.7. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov)".*
 
 $$
 A = \frac{\sum (x_i - \bar x)(y_i - \bar y)}{\sum (x_i - \bar x)^2},\quad
@@ -859,7 +859,7 @@ $$
 **Equations behind this screen.** Eq. 11.6, Eq. 11.9, Eq. 11.10, Eq. 11.11, Eq. 11.12, Eq. 11.13, Eq. 11.15, Eq. 11.16, Eq. 11.17.
 
 
-*Eq. 11.6. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton–Rawls $\to$ Green–Ampt $\to$ Kostiakov)".*
+*Eq. 11.6. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov)".*
 
 $$
 Z(\tau) = k\,\tau^{A}\qquad (Z\ \text{in m},\ \tau\ \text{in min}),
@@ -1045,7 +1045,7 @@ $$
 *Provenance (Eq. 5.27):* **[Literature]**: readily available water as in FAO-56 practice, with an engineered clip.
 
 
-*Eq. 11.1. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton–Rawls $\to$ Green–Ampt $\to$ Kostiakov)".*
+*Eq. 11.1. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov)".*
 
 $$
 \begin{aligned}
@@ -1060,7 +1060,7 @@ $$
 *Provenance (Eq. 11.1):* **[Literature]**: Saxton and Rawls (2006), implemented as written.
 
 
-*Eq. 11.2. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton–Rawls $\to$ Green–Ampt $\to$ Kostiakov)".*
+*Eq. 11.2. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov)".*
 
 $$
 \begin{aligned}
@@ -1076,7 +1076,7 @@ $$
 *Provenance (Eq. 11.2):* **[Literature]**: Saxton and Rawls (2006), implemented as written.
 
 
-*Eq. 11.3. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton–Rawls $\to$ Green–Ampt $\to$ Kostiakov)".*
+*Eq. 11.3. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov)".*
 
 $$
 \psi_f = \frac{10}{\alpha}\,\frac{0.046\,m + 2.07\,m^{2} + 19.5\,m^{3}}{1 + 4.7\,m + 16\,m^{2}}.
@@ -1086,7 +1086,7 @@ $$
 *Provenance (Eq. 11.3):* **[Engineered]**: rational-polynomial approximation of a Rawls-type suction.
 
 
-*Eq. 11.4. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton–Rawls $\to$ Green–Ampt $\to$ Kostiakov)".*
+*Eq. 11.4. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov)".*
 
 $$
 \theta_0 = \theta_{fc} - f_T\,(\theta_{fc} - \theta_{wp}),\qquad
@@ -1097,7 +1097,7 @@ $$
 *Provenance (Eq. 11.4):* **[Engineered]**: initial and wetted water contents chosen for the workbench.
 
 
-*Eq. 11.5. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton–Rawls $\to$ Green–Ampt $\to$ Kostiakov)".*
+*Eq. 11.5. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov)".*
 
 $$
 F - \psi_f\,\Delta\theta\,\ln\!\Bigl(1 + \frac{F}{\psi_f\,\Delta\theta}\Bigr) = K_s\,\frac{t}{60}\quad(t\ \text{in min}),
@@ -1107,7 +1107,7 @@ $$
 *Provenance (Eq. 11.5):* **[Literature]**: Green and Ampt (1911).
 
 
-*Eq. 11.6. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton–Rawls $\to$ Green–Ampt $\to$ Kostiakov)".*
+*Eq. 11.6. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov)".*
 
 $$
 Z(\tau) = k\,\tau^{A}\qquad (Z\ \text{in m},\ \tau\ \text{in min}),
@@ -1117,7 +1117,7 @@ $$
 *Provenance (Eq. 11.6):* **[Literature]**: Kostiakov (1932).
 
 
-*Eq. 11.7. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton–Rawls $\to$ Green–Ampt $\to$ Kostiakov)".*
+*Eq. 11.7. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov)".*
 
 $$
 A = \frac{\sum (x_i - \bar x)(y_i - \bar y)}{\sum (x_i - \bar x)^2},\quad
@@ -1140,7 +1140,7 @@ $$
 
 **What the arrows point to.** The dashed outlines in the whole-workbench picture mark the layer chosen in the Layers panel (**L**), the drawing (**D**), the Dashboard (**R**) and the controls in Properties (**C**). In the drawing, each numbered arrow ends on the item it names.
 
-- **1** Opportunity time tau = t_co - t_x: Eq. 11.17.
+- **1** Opportunity time tau = t_co minus t_x: Eq. 11.17.
 - **2** Advance curve x(t) from the volume balance: Eq. 11.9.
 - **3** t_L: time for the front to reach the tail.
 - **4** Cut-off 314 min = t_st + t_L: Eqs. 11.15 and 11.16.
@@ -1149,7 +1149,7 @@ $$
 **Equations behind this screen.** Eq. 11.6, Eq. 11.9, Eq. 11.10, Eq. 11.11, Eq. 11.12, Eq. 11.13, Eq. 11.15, Eq. 11.16, Eq. 11.17.
 
 
-*Eq. 11.6. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton–Rawls $\to$ Green–Ampt $\to$ Kostiakov)".*
+*Eq. 11.6. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov)".*
 
 $$
 Z(\tau) = k\,\tau^{A}\qquad (Z\ \text{in m},\ \tau\ \text{in min}),
@@ -1267,7 +1267,7 @@ $$
 **Equations behind this screen.** Eq. 11.6, Eq. 11.15, Eq. 11.16, Eq. 11.17.
 
 
-*Eq. 11.6. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton–Rawls $\to$ Green–Ampt $\to$ Kostiakov)".*
+*Eq. 11.6. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov)".*
 
 $$
 Z(\tau) = k\,\tau^{A}\qquad (Z\ \text{in m},\ \tau\ \text{in min}),
@@ -1548,7 +1548,7 @@ $$
 *Provenance (Eq. 5.27):* **[Literature]**: readily available water as in FAO-56 practice, with an engineered clip.
 
 
-*Eq. 11.3. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton–Rawls $\to$ Green–Ampt $\to$ Kostiakov)".*
+*Eq. 11.3. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov)".*
 
 $$
 \psi_f = \frac{10}{\alpha}\,\frac{0.046\,m + 2.07\,m^{2} + 19.5\,m^{3}}{1 + 4.7\,m + 16\,m^{2}}.
@@ -1778,7 +1778,7 @@ $$
 **Equations behind this screen.** Eq. 11.3, Eq. 12.9, Eq. 12.10, Eq. 12.11, Eq. 12.12, Eq. 12.13, Eq. 12.14, Eq. 12.15.
 
 
-*Eq. 11.3. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton–Rawls $\to$ Green–Ampt $\to$ Kostiakov)".*
+*Eq. 11.3. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov)".*
 
 $$
 \psi_f = \frac{10}{\alpha}\,\frac{0.046\,m + 2.07\,m^{2} + 19.5\,m^{3}}{1 + 4.7\,m + 16\,m^{2}}.
@@ -2028,7 +2028,7 @@ $$
 **Equations behind this screen.** Eq. 11.3, Eq. 12.9, Eq. 12.10, Eq. 12.11, Eq. 12.12, Eq. 12.13, Eq. 12.14, Eq. 12.15.
 
 
-*Eq. 11.3. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton–Rawls $\to$ Green–Ampt $\to$ Kostiakov)".*
+*Eq. 11.3. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov)".*
 
 $$
 \psi_f = \frac{10}{\alpha}\,\frac{0.046\,m + 2.07\,m^{2} + 19.5\,m^{3}}{1 + 4.7\,m + 16\,m^{2}}.
@@ -2288,7 +2288,7 @@ $$
 
 - **1** Row 0: your current design; its score is Eq. 12.26.
 - **2** Column E_a: Eq. 12.19.
-- **3** Target reached: score = min(E_a, 1) - 2.5 max(0, 0.9 - E_s), Eq. 12.26.
+- **3** Target reached: score = min(E_a, 1) minus 2.5 max(0, 0.9 minus E_s), Eq. 12.26.
 
 
 **Equations behind this screen.** Eq. 12.26.
@@ -2496,7 +2496,7 @@ $$
 *Provenance (Eq. 5.27):* **[Literature]**: readily available water as in FAO-56 practice, with an engineered clip.
 
 
-*Eq. 11.6. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton–Rawls $\to$ Green–Ampt $\to$ Kostiakov)".*
+*Eq. 11.6. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov)".*
 
 $$
 Z(\tau) = k\,\tau^{A}\qquad (Z\ \text{in m},\ \tau\ \text{in min}),
@@ -2693,7 +2693,7 @@ $$
 **Equations behind this screen.** Eq. 11.6, Eq. 13.9, Eq. 13.10, Eq. 13.11, Eq. 13.12.
 
 
-*Eq. 11.6. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton–Rawls $\to$ Green–Ampt $\to$ Kostiakov)".*
+*Eq. 11.6. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov)".*
 
 $$
 Z(\tau) = k\,\tau^{A}\qquad (Z\ \text{in m},\ \tau\ \text{in min}),
@@ -2770,7 +2770,7 @@ $$
 **Equations behind this screen.** Eq. 11.6, Eq. 13.9, Eq. 13.10.
 
 
-*Eq. 11.6. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton–Rawls $\to$ Green–Ampt $\to$ Kostiakov)".*
+*Eq. 11.6. Where explained: chapter "Surface irrigation design", section "Intake from your soil (Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov)".*
 
 $$
 Z(\tau) = k\,\tau^{A}\qquad (Z\ \text{in m},\ \tau\ \text{in min}),
@@ -3242,7 +3242,7 @@ $$
 **What the arrows point to.** The dashed outlines in the whole-workbench picture mark the layer chosen in the Layers panel (**L**), the drawing (**D**), the Dashboard (**R**) and the controls in Properties (**C**). In the drawing, each numbered arrow ends on the item it names.
 
 - **1** Catch cans: depth a_k in each can from the pattern of Eq. 13.6.
-- **2** CU from the cans = 1 - sum |a_k - mean| / (n mean): Eq. 13.7.
+- **2** CU from the cans = 1 minus sum |a_k minus mean| / (n mean): Eq. 13.7.
 - **3** Cans sorted from driest to wettest, with the mean depth.
 
 
@@ -4341,11 +4341,11 @@ The picture below is the complete drawing of the layer Profile evolution, which 
 
 The playback bar runs the layer through time. The pictures below show the parts of the drawing that change, at a third of the run, at two thirds and at the end, with the same arrows and numbers as in the corresponding part above.
 
-![Profile evolution, part 1, playback a third of the way (31 Dec 2038 (outside the plotted Apr–Sep window)).](images/atlas11/P_v2_1_p1.jpg){width=70%}
+![Profile evolution, part 1, playback a third of the way (31 Dec 2038 (outside the plotted Apr and Sep window)).](images/atlas11/P_v2_1_p1.jpg){width=70%}
 
-![Profile evolution, part 1, playback two thirds of the way (31 Dec 2038 (outside the plotted Apr–Sep window)).](images/atlas11/P_v2_2_p1.jpg){width=70%}
+![Profile evolution, part 1, playback two thirds of the way (31 Dec 2038 (outside the plotted Apr and Sep window)).](images/atlas11/P_v2_2_p1.jpg){width=70%}
 
-![Profile evolution, part 1, playback the end (31 Dec 2038 (outside the plotted Apr–Sep window)).](images/atlas11/P_v2_3_p1.jpg){width=70%}
+![Profile evolution, part 1, playback the end (31 Dec 2038 (outside the plotted Apr and Sep window)).](images/atlas11/P_v2_3_p1.jpg){width=70%}
 
 
 ### The controls of the layer, one state at a time
@@ -4372,7 +4372,7 @@ Each picture below shows the layer after one control has been pressed or dragged
 - **1** Daily suction at 20 cm, irrigated (blue) and rainfed (orange): stored Daisy series (data-driven).
 - **2** Trigger h_T (red dashed line), set in Properties; days beyond it are counted by Eq. 6.1.
 - **3** Growing-season days beyond the trigger for each year, N_y(h_T): Eq. 6.1.
-- **4** "Irrigation removes 39 % of the days": X = 100(1 - N_irr / N_rainfed), Eq. 6.2.
+- **4** "Irrigation removes 39 % of the days": X = 100(1 minus N_irr / N_rainfed), Eq. 6.2.
 - **5** Annual result at these settings (irrigation, yield, drainage): Engine 1, Eqs. 5.4 to 5.12.
 
 
@@ -4723,7 +4723,7 @@ Each picture below shows the layer after one control has been pressed or dragged
 - **1** Modelled thin section of the topsoil; the share of open pores follows the pore index p(t), Eq. 8.1.
 - **2** Pore-size classes from the retention curve, theta(h): Eqs. 8.3 and 8.4 (capillary radius).
 - **3** The same place under the three tillage systems; pore space 0.82, 0.61 and 0.42 from Eq. 8.1.
-- **4** Relative pore space after tillage, p(t) = p_c + (p_0 - p_c) exp(-tau_c t): Eq. 8.1.
+- **4** Relative pore space after tillage, p(t) = p_c + (p_0 minus p_c) exp(-tau_c t): Eq. 8.1.
 
 
 **Equations behind this screen.** Eq. 5.1, Eq. 8.1, Eq. 8.2, Eq. 8.3, Eq. 8.4.
@@ -4861,7 +4861,7 @@ Each picture below shows the layer after one control has been pressed or dragged
 
 **What the arrows point to.** The dashed outlines in the whole-workbench picture mark the layer chosen in the Layers panel (**L**), the drawing (**D**), the Dashboard (**R**) and the controls in Properties (**C**). In the drawing, each numbered arrow ends on the item it names.
 
-- **1** Blue bar: effect of tillage on drainage, Delta_till = D(conventional) - D(no-till): Eq. 8.5.
+- **1** Blue bar: effect of tillage on drainage, Delta_till = D(conventional) minus D(no-till): Eq. 8.5.
 - **2** Orange bar: effect of the consolidation rate on drainage, Delta_cons: Eq. 8.5.
 - **3** Scatter of each effect against clay content with the least-squares fit: Eq. 8.6.
 - **4** "Leading driver": the larger of Delta_till and Delta_cons for the selected soil, Eq. 8.5.
@@ -5589,7 +5589,7 @@ Each picture below shows the layer after one control has been pressed or dragged
 
 **What the arrows point to.** The dashed outlines in the whole-workbench picture mark the layer chosen in the Layers panel (**L**), the drawing (**D**), the Dashboard (**R**) and the controls in Properties (**C**). In the drawing, each numbered arrow ends on the item it names.
 
-- **1** Atmospheric demand under mulch and canopy, e_0 = e_0,b phi (1 - 0.4 c): Eq. 5.26.
+- **1** Atmospheric demand under mulch and canopy, e_0 = e_0,b phi (1 minus 0.4 c): Eq. 5.26.
 - **2** Evaporation rate against time since wetting, stage 1 then stage 2: Eq. 9.2.
 - **3** Cumulative water lost since wetting, Q(t): Eq. 9.3.
 - **4** Section of soil: dry layer depth (Eq. 9.4) and water-filled pores from the capillary rule (Eq. 8.4) with the suction profile of Eq. 9.5.
@@ -5911,7 +5911,7 @@ The picture below is the complete drawing of the layer Fate of saved water, whic
 **What the arrows point to.** The dashed outlines in the whole-workbench picture mark the layer chosen in the Layers panel (**L**), the drawing (**D**), the Dashboard (**R**) and the controls in Properties (**C**). In the drawing, each numbered arrow ends on the item it names.
 
 - **1** Rainfall columns: evaporation and drainage of Engine 1 at each rainfall scale, Eqs. 5.4 and 5.9.
-- **2** Colour bar under each column: regime index I = (E - D) / max(1, E + D): Eq. 9.8.
+- **2** Colour bar under each column: regime index I = (E minus D) / max(1, E + D): Eq. 9.8.
 - **3** Regime map over rainfall scale and mulch factor: Eq. 9.8 in every cell.
 - **4** Red box: your current setting on the map.
 

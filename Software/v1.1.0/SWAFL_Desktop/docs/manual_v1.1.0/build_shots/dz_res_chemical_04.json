@@ -1,0 +1,29 @@
+{
+ "id": "dz_res_chemical_04",
+ "group": "40_results",
+ "ch": "results",
+ "sec": "chemical",
+ "title": "Chemical fate: runs compared (chemical)",
+ "intro": "The fate of the chemical in the runs side by side: mobile tracer, sorbed and quickly decaying chemical.",
+ "note": "",
+ "marks": [
+  {
+   "x": 1755.9250000000002,
+   "y": 133.725,
+   "t": "Picture (PNG)",
+   "d": "Saves this figure as a picture with its source line."
+  },
+  {
+   "x": 940.8000000000001,
+   "y": 424.125,
+   "t": "Figure",
+   "d": "The fate of the chemical in the runs side by side: mobile tracer, sorbed and quickly decaying chemical."
+  },
+  {
+   "x": 1803.2,
+   "y": 424.125,
+   "t": "Source line",
+   "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+  }
+ ]
+}

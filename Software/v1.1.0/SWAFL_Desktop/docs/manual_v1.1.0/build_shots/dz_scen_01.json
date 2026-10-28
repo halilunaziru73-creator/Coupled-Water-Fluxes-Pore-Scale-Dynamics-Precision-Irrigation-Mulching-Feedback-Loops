@@ -1,0 +1,59 @@
+{
+ "id": "dz_scen_01",
+ "group": "20_scen",
+ "ch": "ask",
+ "sec": "Scenarios",
+ "title": "Scenarios: choose the question",
+ "intro": "The Scenarios tab starts with the questions that the built-in farm can answer: water, nitrogen, climate, a chemical and soil. Two more cards lead to your own set-up and to two tools that need no Daisy program.",
+ "note": "",
+ "marks": [
+  {
+   "x": 64,
+   "y": 459.8,
+   "t": "Irrigation question",
+   "d": "Does irrigation pay off, and what does it cost the soil."
+  },
+  {
+   "x": 521.6,
+   "y": 459.8,
+   "t": "Nitrogen question",
+   "d": "How much fertiliser, how much leaching."
+  },
+  {
+   "x": 979.2,
+   "y": 459.8,
+   "t": "Climate question",
+   "d": "A warmer, drier or wetter climate."
+  },
+  {
+   "x": 1436.8000000000002,
+   "y": 459.8,
+   "t": "Chemical question",
+   "d": "Sorption and degradation of a pesticide or tracer."
+  },
+  {
+   "x": 64,
+   "y": 664.6,
+   "t": "Soil question",
+   "d": "How much does texture matter."
+  },
+  {
+   "x": 521.6,
+   "y": 664.6,
+   "t": "Your own work",
+   "d": "Run a set-up of your own or draw the figures of logs you loaded."
+  },
+  {
+   "x": 979.2,
+   "y": 664.6,
+   "t": "Soil column",
+   "d": "A built-in tool that needs no Daisy program."
+  },
+  {
+   "x": 1436.8000000000002,
+   "y": 664.6,
+   "t": "Process curves",
+   "d": "A built-in tool that draws any Daisy function."
+  }
+ ]
+}

@@ -1,0 +1,59 @@
+{
+ "id": "dz_combo_06",
+ "group": "30_exp",
+ "ch": "combos",
+ "sec": "Climate",
+ "title": "A drier, wetter or warmer year",
+ "intro": "The weather file gives precipitation and air temperature to every model of the column. Scaling the rain and adding a warming to the same record shows how much the yield and the water use move with the weather, with the soil and the management unchanged.",
+ "note": "",
+ "marks": [
+  {
+   "x": 88,
+   "y": 558.125,
+   "t": "Rain, factor on the weather",
+   "d": "Varied over 0.8, 1, 1.2."
+  },
+  {
+   "x": 88,
+   "y": 606.125,
+   "t": "Temperature shift",
+   "d": "Varied over 0, 2."
+  },
+  {
+   "x": 88,
+   "y": 722.9250000000001,
+   "t": "Soil",
+   "d": "Varied over usda:sand, loam."
+  },
+  {
+   "x": 330.65000000000003,
+   "y": 843.725,
+   "t": "Add something to change",
+   "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+  },
+  {
+   "x": 1283.25,
+   "y": 843.725,
+   "t": "How to combine",
+   "d": "Every combination, one thing at a time, or the values paired in order."
+  },
+  {
+   "x": 1668.875,
+   "y": 843.325,
+   "t": "At most",
+   "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 1012.9250000000001,
+   "t": "Size of the experiment",
+   "d": "The number of runs and the time they take on this computer."
+  },
+  {
+   "x": 102.95,
+   "y": 1082.925,
+   "t": "Run all",
+   "d": "Runs every combination, several at a time."
+  }
+ ]
+}

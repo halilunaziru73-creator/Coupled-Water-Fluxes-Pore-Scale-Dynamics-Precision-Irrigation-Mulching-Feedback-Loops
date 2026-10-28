@@ -1,0 +1,59 @@
+{
+ "id": "dz_exp_08",
+ "group": "30_exp",
+ "ch": "ask",
+ "sec": "Experiments",
+ "title": "Experiments: my experiments, ordered and ticked",
+ "intro": "Experiments are added to a list in the order of preference. Each has its own name, design and largest number of runs; only the ticked ones are run, from the top down, or saved together in one folder.",
+ "note": "",
+ "marks": [
+  {
+   "x": 79.2,
+   "y": 208.525,
+   "t": "Run",
+   "d": "Ticks the experiments that are run or saved."
+  },
+  {
+   "x": 223.55,
+   "y": 196.525,
+   "t": "Name",
+   "d": "The name of the experiment; it becomes the name of its folder."
+  },
+  {
+   "x": 850.95,
+   "y": 209.72500000000002,
+   "t": "Combinations",
+   "d": "The design of this experiment on its own."
+  },
+  {
+   "x": 1255.75,
+   "y": 209.72500000000002,
+   "t": "At most",
+   "d": "The largest number of runs of this experiment."
+  },
+  {
+   "x": 1523.3000000000002,
+   "y": 209.72500000000002,
+   "t": "Move up",
+   "d": "Moves the experiment earlier in the list."
+  },
+  {
+   "x": 404.25,
+   "y": 433.725,
+   "t": "Run the ticked",
+   "d": "Runs the ticked experiments one after another."
+  },
+  {
+   "x": 524.475,
+   "y": 433.725,
+   "t": "Save as one folder",
+   "d": "Saves the ticked experiments as E1, E2 and so on in one zip."
+  },
+  {
+   "x": 947.0500000000001,
+   "y": 433.725,
+   "t": "Save as plan",
+   "d": "Saves the ticked plans as one JSON file."
+  }
+ ]
+}

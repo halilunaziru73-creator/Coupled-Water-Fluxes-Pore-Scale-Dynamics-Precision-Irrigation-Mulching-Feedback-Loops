@@ -1,0 +1,53 @@
+{
+ "id": "dz_proc_14",
+ "group": "60_proc",
+ "ch": "results",
+ "sec": "Processes",
+ "title": "Processes: Photosynthesis and respiration",
+ "intro": "Canopy assimilation comes from the leaf area, the light, the temperature and the water and nitrogen stress; assimilate fills the pool, from which maintenance and growth respiration are paid and the rest is partitioned to the organs.",
+ "note": "",
+ "marks": [
+  {
+   "x": 944,
+   "y": 1061.2250000000001,
+   "t": "Process map",
+   "d": "The process that is open has a red frame."
+  },
+  {
+   "x": 83.2,
+   "y": 1768.25,
+   "t": "Process",
+   "d": "Name of the process and what Daisy does there."
+  },
+  {
+   "x": 195.275,
+   "y": 1934.0500000000002,
+   "t": "Source of the figures",
+   "d": "The run whose logs are drawn."
+  },
+  {
+   "x": 535.075,
+   "y": 1934.8500000000001,
+   "t": "Run Daisy with all process logs",
+   "d": "Runs the model with every process log on."
+  },
+  {
+   "x": 944,
+   "y": 2270.05,
+   "t": "First figure",
+   "d": "The figure of the process."
+  },
+  {
+   "x": 944,
+   "y": 2885.25,
+   "t": "Second figure",
+   "d": "The next figure of the process."
+  },
+  {
+   "x": 944,
+   "y": 3500.4500000000003,
+   "t": "Third figure",
+   "d": "The next figure of the process."
+  }
+ ]
+}

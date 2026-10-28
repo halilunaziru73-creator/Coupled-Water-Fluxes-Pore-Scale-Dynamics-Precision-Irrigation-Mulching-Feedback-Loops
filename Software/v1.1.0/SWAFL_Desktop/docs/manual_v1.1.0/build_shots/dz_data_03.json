@@ -1,0 +1,29 @@
+{
+ "id": "dz_data_03",
+ "group": "10_data",
+ "ch": "data",
+ "sec": "My data",
+ "title": "My data: a weather file of your own",
+ "intro": "A weather file may be a Daisy weather file (.dwf) or a table (CSV, TXT) with a date column and the columns rain and temperature. The radiation unit is chosen or found out from the values.",
+ "note": "",
+ "marks": [
+  {
+   "x": 173.775,
+   "y": 405.32500000000005,
+   "t": "My weather file",
+   "d": "The choice that shows the file chooser."
+  },
+  {
+   "x": 639.375,
+   "y": 406.925,
+   "t": "File chooser",
+   "d": "Choose a .dwf, .csv, .txt, .dat or .tsv file."
+  },
+  {
+   "x": 1195.125,
+   "y": 405.32500000000005,
+   "t": "Radiation unit",
+   "d": "MJ per square metre and day, kWh per square metre and day, or W per square metre; leave on find out when unsure."
+  }
+ ]
+}

@@ -1,0 +1,53 @@
+{
+ "id": "dz_combo_08",
+ "group": "30_exp",
+ "ch": "combos",
+ "sec": "Soil and crop",
+ "title": "Which soil needs the most water",
+ "intro": "A horizon gets its hydraulic properties from the hypres model by default, from the sand, silt, clay, humus and bulk density. Rainfed and irrigated runs on several textures show where irrigation pays.",
+ "note": "",
+ "marks": [
+  {
+   "x": 88,
+   "y": 674.9250000000001,
+   "t": "Soil",
+   "d": "Varied over usda:sand, usda:sandyloam, loam, usda:siltloam, usda:clayloam."
+  },
+  {
+   "x": 88,
+   "y": 791.725,
+   "t": "Irrigation",
+   "d": "Varied over 0, 1."
+  },
+  {
+   "x": 330.65000000000003,
+   "y": 843.725,
+   "t": "Add something to change",
+   "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+  },
+  {
+   "x": 1283.25,
+   "y": 843.725,
+   "t": "How to combine",
+   "d": "Every combination, one thing at a time, or the values paired in order."
+  },
+  {
+   "x": 1668.875,
+   "y": 843.325,
+   "t": "At most",
+   "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 1012.9250000000001,
+   "t": "Size of the experiment",
+   "d": "The number of runs and the time they take on this computer."
+  },
+  {
+   "x": 102.95,
+   "y": 1082.925,
+   "t": "Run all",
+   "d": "Runs every combination, several at a time."
+  }
+ ]
+}

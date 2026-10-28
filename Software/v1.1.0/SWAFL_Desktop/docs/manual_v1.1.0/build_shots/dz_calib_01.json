@@ -1,0 +1,47 @@
+{
+ "id": "dz_calib_01",
+ "group": "50_tools",
+ "ch": "build",
+ "sec": "Calibrate",
+ "title": "Calibrate: the form",
+ "intro": "Parameters are searched with sequential, CMA-ES or Bayesian optimisation; each trial is one run.",
+ "note": "",
+ "marks": [
+  {
+   "x": 151.925,
+   "y": 333.6,
+   "t": "Problem",
+   "d": "What is calibrated."
+  },
+  {
+   "x": 799.7750000000001,
+   "y": 333.6,
+   "t": "Method",
+   "d": "The search method."
+  },
+  {
+   "x": 1040.825,
+   "y": 333.6,
+   "t": "Loss",
+   "d": "The error to minimise."
+  },
+  {
+   "x": 1266.025,
+   "y": 331.6,
+   "t": "Runs",
+   "d": "Number of trials."
+  },
+  {
+   "x": 74.25,
+   "y": 442.40000000000003,
+   "t": "Start",
+   "d": "Starts the search."
+  },
+  {
+   "x": 164.41250000000002,
+   "y": 442.40000000000003,
+   "t": "Stop",
+   "d": "Stops it."
+  }
+ ]
+}

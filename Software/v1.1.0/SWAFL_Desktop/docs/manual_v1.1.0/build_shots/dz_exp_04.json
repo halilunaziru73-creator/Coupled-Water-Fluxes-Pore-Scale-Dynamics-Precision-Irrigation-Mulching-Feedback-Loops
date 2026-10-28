@@ -1,0 +1,23 @@
+{
+ "id": "dz_exp_04",
+ "group": "30_exp",
+ "ch": "ask",
+ "sec": "Experiments",
+ "title": "Experiments: a topic with parameters you can vary",
+ "intro": "Topics whose parameters Daisy accepts show them with a tick box. Each parameter was tested in Daisy; the levels are fractions of the value the farm uses.",
+ "note": "",
+ "marks": [
+  {
+   "x": 667.2,
+   "y": 1013.325,
+   "t": "Parameter",
+   "d": "Tick one or several parameters to vary."
+  },
+  {
+   "x": 679.2,
+   "y": 1174.125,
+   "t": "Topic details",
+   "d": "The introduction of the topic, its parameters and the models it lists."
+  }
+ ]
+}

@@ -1,0 +1,53 @@
+{
+ "id": "dz_proc_02",
+ "group": "60_proc",
+ "ch": "results",
+ "sec": "Processes",
+ "title": "Processes: Weather and bioclimate",
+ "intro": "Daisy reads daily or hourly weather (air temperature, global radiation, precipitation, reference evapotranspiration and, if available, wind and vapour pressure) and the Bioclimate module splits the energy and water between canopy, litter, snow, pond and soil. The potential evapotranspiration is shared out by the cover of each layer.",
+ "note": "",
+ "marks": [
+  {
+   "x": 944,
+   "y": 1061.2250000000001,
+   "t": "Process map",
+   "d": "The process that is open has a red frame."
+  },
+  {
+   "x": 83.2,
+   "y": 1768.25,
+   "t": "Process",
+   "d": "Name of the process and what Daisy does there."
+  },
+  {
+   "x": 195.275,
+   "y": 1934.0500000000002,
+   "t": "Source of the figures",
+   "d": "The run whose logs are drawn."
+  },
+  {
+   "x": 535.075,
+   "y": 1934.8500000000001,
+   "t": "Run Daisy with all process logs",
+   "d": "Runs the model with every process log on."
+  },
+  {
+   "x": 944,
+   "y": 2270.05,
+   "t": "First figure",
+   "d": "The figure of the process."
+  },
+  {
+   "x": 944,
+   "y": 2862.8500000000004,
+   "t": "Second figure",
+   "d": "The next figure of the process."
+  },
+  {
+   "x": 944,
+   "y": 3478.05,
+   "t": "Third figure",
+   "d": "The next figure of the process."
+  }
+ ]
+}

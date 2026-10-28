@@ -1,0 +1,41 @@
+{
+ "id": "dz_exp_02",
+ "group": "30_exp",
+ "ch": "ask",
+ "sec": "Experiments",
+ "title": "Experiments: best combinations to start with",
+ "intro": "The list holds 27 combinations in groups: Irrigation, Nitrogen, Climate, Soil and crop, Chemicals and Parameters. Each shows the topics of the reference it draws on. Choosing one shows why it is worth running; the tick boxes select several to add at once.",
+ "note": "",
+ "marks": [
+  {
+   "x": 101.60000000000001,
+   "y": 774.5250000000001,
+   "t": "Tick box",
+   "d": "Ticks the combination so that several can be added together."
+  },
+  {
+   "x": 147.20000000000002,
+   "y": 774.5250000000001,
+   "t": "Combination",
+   "d": "A combination with the topics of the Daisy reference it draws on."
+  },
+  {
+   "x": 900.0375,
+   "y": 854.125,
+   "t": "Load this experiment",
+   "d": "Loads the plan of the chosen combination for checking and running."
+  },
+  {
+   "x": 1134.6625000000001,
+   "y": 854.125,
+   "t": "Add to my experiments",
+   "d": "Adds the chosen combination to the list of experiments without loading it."
+  },
+  {
+   "x": 822.4000000000001,
+   "y": 905.325,
+   "t": "Add the ticked",
+   "d": "Adds every ticked combination, each as an experiment of its own."
+  }
+ ]
+}

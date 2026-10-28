@@ -1,0 +1,53 @@
+{
+ "id": "dz_exp_03",
+ "group": "30_exp",
+ "ch": "ask",
+ "sec": "Experiments",
+ "title": "Experiments: the topics of the Daisy reference",
+ "intro": "The second tab lists the 107 topics of the Daisy reference manual in three parts. A topic shows its models, the parameters that Daisy accepts for experiments and the related experiments. The size of the experiment is set before loading.",
+ "note": "",
+ "marks": [
+  {
+   "x": 537.25,
+   "y": 741.325,
+   "t": "Levels per parameter",
+   "d": "How many values of each parameter are tested."
+  },
+  {
+   "x": 742.225,
+   "y": 741.325,
+   "t": "How to combine",
+   "d": "Every combination, one thing at a time, or paired."
+  },
+  {
+   "x": 1123.05,
+   "y": 740.9250000000001,
+   "t": "At most",
+   "d": "The largest number of runs."
+  },
+  {
+   "x": 105.60000000000001,
+   "y": 1090.925,
+   "t": "List of topics",
+   "d": "Scroll the list; a star marks a topic that has its own experiments."
+  },
+  {
+   "x": 712.9250000000001,
+   "y": 839.725,
+   "t": "Previous and next",
+   "d": "Moves through the topics in order."
+  },
+  {
+   "x": 1071.425,
+   "y": 1045.325,
+   "t": "Add",
+   "d": "Adds the experiment to my experiments."
+  },
+  {
+   "x": 679.2,
+   "y": 1045.325,
+   "t": "Load",
+   "d": "Loads the experiment for checking and running."
+  }
+ ]
+}

@@ -2,7 +2,7 @@
 
 ## The crops
 
-Version 1.1 carries **48 crops** besides the simulated cereal/oilseed rotation. They are chosen in Properties ▸ Soil and field ▸ **Crop**, in four groups: *Staple food crops*, *Cash and oil crops*, *Vegetables*, and *Trees, vines and palms*. For each crop the library holds the crop coefficients $K_{c,\mathrm{ini}}$, $K_{c,\mathrm{mid}}$ and $K_{c,\mathrm{end}}$, the lengths of the four growth stages (initial, development, mid-season, late season), the plant height, the maximum rooting depth, the depletion fraction $p$, the yield response factor $K_y$, the ground cover and, for trees and vines, the planting densities or training systems. Field crops take their coefficients and stages from a field study that computed the daily crop water requirement with the FAO Penman–Monteith reference evapotranspiration; trees, vines and berries from the updated FAO-56 coefficients of fruit trees and vines. Rooting depth, $p$ and $K_y$ are the FAO-56 and FAO-33 tabulated values; where a crop is not tabulated the group value is used and the table says *group default*.
+Version 1.1 carries **48 crops** besides the simulated cereal/oilseed rotation. They are chosen in Properties ▸ Soil and field ▸ **Crop**, in four groups: *Staple food crops*, *Cash and oil crops*, *Vegetables*, and *Trees, vines and palms*. For each crop the library holds the crop coefficients $K_{c,\mathrm{ini}}$, $K_{c,\mathrm{mid}}$ and $K_{c,\mathrm{end}}$, the lengths of the four growth stages (initial, development, mid-season, late season), the plant height, the maximum rooting depth, the depletion fraction $p$, the yield response factor $K_y$, the ground cover and, for trees and vines, the planting densities or training systems. Field crops take their coefficients and stages from a field study that computed the daily crop water requirement with the FAO Penman and Monteith reference evapotranspiration; trees, vines and berries from the updated FAO-56 coefficients of fruit trees and vines. Rooting depth, $p$ and $K_y$ are the FAO-56 and FAO-33 tabulated values; where a crop is not tabulated the group value is used and the table says *group default*.
 
 The staple and cash crops asked for in this release carry these coefficients:
 
@@ -73,7 +73,7 @@ D_{r,d}&=D_{r,d-1}-(P_d-RO_d)+ET_{a,d},\qquad RO_d=0.3\,\max(0,P_d-35),
 \tag{21.4}
 $$
 
-*Provenance (Eq. 21.4):* **[Literature]**: FAO-56 Eqs. 82–85 (water stress coefficient, adjustment of $p$ with the demand) and the root-zone balance Eq. 85; the runoff of heavy rain is **[Engineered]**.
+*Provenance (Eq. 21.4):* **[Literature]**: FAO-56 Eqs. 82 to 85 (water stress coefficient, adjustment of $p$ with the demand) and the root-zone balance Eq. 85; the runoff of heavy rain is **[Engineered]**.
 
 with any negative $D_r$ draining below the roots. Irrigation refills the root zone to field capacity on the day the depletion reaches the trigger of the project, $D_r\ge f_T\,\mathrm{TAW}$, with $f_T$ the depletion at the trigger suction (Eq. 5.3): the net depth is $I_n=D_r$ and the gross depth $I=I_n/E_{a,m}$, with the method efficiency $E_{a,m}$ = 0.60 (surface), 0.75 (overhead) or 0.90 (drip). The relative yield of a year is
 
@@ -111,7 +111,7 @@ $$
 \tag{21.9}
 $$
 
-*Provenance (Eqs. 21.6–21.9):* **[Engineered]**: transfer by the ratio of two FAO-56 balances; the clips keep the transfer within the range in which the cereal result is informative; the remainder of the balance is shared between soil evaporation and the other evaporation terms in proportion to their targets, so that the balance closes without inflating either.
+*Provenance (Eqs. 21.6 to 21.9):* **[Engineered]**: transfer by the ratio of two FAO-56 balances; the clips keep the transfer within the range in which the cereal result is informative; the remainder of the balance is shared between soil evaporation and the other evaporation terms in proportion to their targets, so that the balance closes without inflating either.
 
 with $f_c$ the ground cover, $E^{\ast}_{\mathrm{other}}=E_{\mathrm{other},m}\,ET/ET_m$ and $\Delta S_m$ the storage change of the cereal result. The yield of a library crop is therefore shown as the relative yield in per cent, and the differences of yield in the sensitivity and feedback layers are in *% points*.
 

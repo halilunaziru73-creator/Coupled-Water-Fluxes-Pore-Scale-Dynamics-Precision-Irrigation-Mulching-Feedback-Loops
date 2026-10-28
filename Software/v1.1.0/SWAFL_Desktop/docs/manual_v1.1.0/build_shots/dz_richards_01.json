@@ -1,0 +1,47 @@
+{
+ "id": "dz_richards_01",
+ "group": "50_tools",
+ "ch": "build",
+ "sec": "Soil column",
+ "title": "Soil column: the form",
+ "intro": "A soil column of up to three layers is solved with the Richards equation on the weather chosen below.",
+ "note": "",
+ "marks": [
+  {
+   "x": 134.475,
+   "y": 331.20000000000005,
+   "t": "Layer 1",
+   "d": "Horizon of the first layer and its lower depth."
+  },
+  {
+   "x": 152.975,
+   "y": 375.20000000000005,
+   "t": "Weather",
+   "d": "SWAFL season, Daisy station, own values or file."
+  },
+  {
+   "x": 146.9,
+   "y": 418.8,
+   "t": "Days",
+   "d": "Length of the simulation."
+  },
+  {
+   "x": 618.6,
+   "y": 418.8,
+   "t": "Start wetness",
+   "d": "Initial relative saturation."
+  },
+  {
+   "x": 874.6500000000001,
+   "y": 420.8,
+   "t": "Lower boundary",
+   "d": "Free drainage, closed or groundwater table."
+  },
+  {
+   "x": 119.1875,
+   "y": 467.20000000000005,
+   "t": "Run the column",
+   "d": "Starts the calculation."
+  }
+ ]
+}

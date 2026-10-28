@@ -1,0 +1,41 @@
+{
+ "id": "dz_proc_06",
+ "group": "60_proc",
+ "ch": "results",
+ "sec": "Processes",
+ "title": "Processes: Biopores (preferential flow)",
+ "intro": "Part of the water and solutes moves through biopores that bypass the matrix, filled from the surface pond and exchanging with the matrix along the way. This is the source of fast leaching of nitrate and pesticide.",
+ "note": "",
+ "marks": [
+  {
+   "x": 944,
+   "y": 1061.2250000000001,
+   "t": "Process map",
+   "d": "The process that is open has a red frame."
+  },
+  {
+   "x": 83.2,
+   "y": 1768.25,
+   "t": "Process",
+   "d": "Name of the process and what Daisy does there."
+  },
+  {
+   "x": 195.275,
+   "y": 1907.65,
+   "t": "Source of the figures",
+   "d": "The run whose logs are drawn."
+  },
+  {
+   "x": 535.075,
+   "y": 1908.45,
+   "t": "Run Daisy with all process logs",
+   "d": "Runs the model with every process log on."
+  },
+  {
+   "x": 944,
+   "y": 2275.65,
+   "t": "First figure",
+   "d": "The figure of the process."
+  }
+ ]
+}

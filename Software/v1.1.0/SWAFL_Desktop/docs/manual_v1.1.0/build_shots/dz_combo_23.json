@@ -1,0 +1,59 @@
+{
+ "id": "dz_combo_23",
+ "group": "30_exp",
+ "ch": "combos",
+ "sec": "Parameters",
+ "title": "Turnover of organic matter and the mineral nitrogen it releases",
+ "intro": "K NH4 [h-1 ]: Maximal immobilization rate for ammonium; K NO3 [h-1 ]: Maximal immobilization rate for nitrate; CO2 threshold [h-1 ]: Turnover rate above which pools will contribute to 'CO2 fast'. Each is varied from half to double the value the farm uses; K NH4, K NO3, CO2 threshold moved the yield, water or nitrogen in the test.",
+ "note": "",
+ "marks": [
+  {
+   "x": 88,
+   "y": 696.5250000000001,
+   "t": "OrganicMatter original: K NH4 (Daisy reference, chapter 60)",
+   "d": "Varied over 0.01042, 0.02083, 0.04167."
+  },
+  {
+   "x": 88,
+   "y": 744.5250000000001,
+   "t": "OrganicMatter original: K NO3 (Daisy reference, chapter 60)",
+   "d": "Varied over 0.01042, 0.02083, 0.04167."
+  },
+  {
+   "x": 88,
+   "y": 792.5250000000001,
+   "t": "OrganicMatter original: CO2 threshold (Daisy reference, chapter 60)",
+   "d": "Varied over 0.00005, 0.0001, 0.0002."
+  },
+  {
+   "x": 330.65000000000003,
+   "y": 844.5250000000001,
+   "t": "Add something to change",
+   "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+  },
+  {
+   "x": 1283.25,
+   "y": 844.5250000000001,
+   "t": "How to combine",
+   "d": "Every combination, one thing at a time, or the values paired in order."
+  },
+  {
+   "x": 1668.875,
+   "y": 844.125,
+   "t": "At most",
+   "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 1013.725,
+   "t": "Size of the experiment",
+   "d": "The number of runs and the time they take on this computer."
+  },
+  {
+   "x": 102.95,
+   "y": 1083.7250000000001,
+   "t": "Run all",
+   "d": "Runs every combination, several at a time."
+  }
+ ]
+}

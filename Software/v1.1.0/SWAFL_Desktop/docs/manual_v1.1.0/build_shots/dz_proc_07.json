@@ -1,0 +1,41 @@
+{
+ "id": "dz_proc_07",
+ "group": "60_proc",
+ "ch": "results",
+ "sec": "Processes",
+ "title": "Processes: Drains and groundwater",
+ "intro": "Tile drains are a sink in the layers at the drain depth, when the soil there is saturated; drained water takes nitrate with it. A groundwater table or a lysimeter bottom boundary closes the water balance at the bottom.",
+ "note": "",
+ "marks": [
+  {
+   "x": 944,
+   "y": 1061.2250000000001,
+   "t": "Process map",
+   "d": "The process that is open has a red frame."
+  },
+  {
+   "x": 83.2,
+   "y": 1768.25,
+   "t": "Process",
+   "d": "Name of the process and what Daisy does there."
+  },
+  {
+   "x": 195.275,
+   "y": 1907.65,
+   "t": "Source of the figures",
+   "d": "The run whose logs are drawn."
+  },
+  {
+   "x": 535.075,
+   "y": 1908.45,
+   "t": "Run Daisy with all process logs",
+   "d": "Runs the model with every process log on."
+  },
+  {
+   "x": 944,
+   "y": 2275.65,
+   "t": "First figure",
+   "d": "The figure of the process."
+  }
+ ]
+}

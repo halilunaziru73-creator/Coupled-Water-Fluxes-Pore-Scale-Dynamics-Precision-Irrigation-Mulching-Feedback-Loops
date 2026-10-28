@@ -1,0 +1,65 @@
+{
+ "id": "dz_plot_01",
+ "group": "50_tools",
+ "ch": "results",
+ "sec": "Plot",
+ "title": "Plot: a time series",
+ "intro": "Plot draws any column of a loaded log. The log, the view and the period are chosen in the first row, the columns in the list below it.",
+ "note": "",
+ "marks": [
+  {
+   "x": 110.95,
+   "y": 276,
+   "t": "Log",
+   "d": "The loaded log to draw."
+  },
+  {
+   "x": 459.425,
+   "y": 276,
+   "t": "View",
+   "d": "Time series, annual values, depth profile through time, or profile at a date."
+  },
+  {
+   "x": 856.6500000000001,
+   "y": 274,
+   "t": "From",
+   "d": "First date drawn."
+  },
+  {
+   "x": 1085.4750000000001,
+   "y": 274,
+   "t": "To",
+   "d": "Last date drawn."
+  },
+  {
+   "x": 156.65,
+   "y": 376.8,
+   "t": "Columns",
+   "d": "Hold Ctrl or Shift to draw several columns together."
+  },
+  {
+   "x": 76.2125,
+   "y": 482.40000000000003,
+   "t": "Draw",
+   "d": "Draws the chosen columns."
+  },
+  {
+   "x": 64,
+   "y": 736.8000000000001,
+   "t": "Chart",
+   "d": "Move over the chart to read the values."
+  },
+  {
+   "x": 206.10000000000002,
+   "y": 482.40000000000003,
+   "t": "Picture (PNG)",
+   "d": "Saves the figure as a picture with its source line."
+  },
+  {
+   "x": 363.85,
+   "y": 482.40000000000003,
+   "t": "Table (CSV)",
+   "d": "Saves the plotted numbers as a table."
+  }
+ ]
+}

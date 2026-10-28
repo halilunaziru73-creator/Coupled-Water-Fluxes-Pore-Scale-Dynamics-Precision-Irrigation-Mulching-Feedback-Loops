@@ -1,0 +1,29 @@
+{
+ "id": "dz_res_irrigation_02",
+ "group": "40_results",
+ "ch": "results",
+ "sec": "irrigation",
+ "title": "Annual water balance (irrigation)",
+ "intro": "Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year.",
+ "note": "",
+ "marks": [
+  {
+   "x": 1755.9250000000002,
+   "y": 134.525,
+   "t": "Picture (PNG)",
+   "d": "Saves this figure as a picture with its source line."
+  },
+  {
+   "x": 940.8000000000001,
+   "y": 440.925,
+   "t": "Figure",
+   "d": "Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year."
+  },
+  {
+   "x": 1803.2,
+   "y": 440.925,
+   "t": "Source line",
+   "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+  }
+ ]
+}

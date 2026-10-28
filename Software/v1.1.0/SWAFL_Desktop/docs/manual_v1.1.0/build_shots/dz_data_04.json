@@ -1,0 +1,29 @@
+{
+ "id": "dz_data_04",
+ "group": "10_data",
+ "ch": "data",
+ "sec": "My data",
+ "title": "My data: a Daisy weather station file read and checked",
+ "intro": "Here the Foulum station file of the bundled data was chosen as a file of your own. The line under the choice reports the years, the mean rain and temperature, the columns that were used and the notes of the checks.",
+ "note": "",
+ "marks": [
+  {
+   "x": 639.375,
+   "y": 406.925,
+   "t": "File read",
+   "d": "The file that was chosen."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 525.725,
+   "t": "Result of the reading",
+   "d": "Name, first and last year, complete years, mean annual rain, mean temperature and the columns used."
+  },
+  {
+   "x": 244.95000000000002,
+   "y": 447.32500000000005,
+   "t": "Site",
+   "d": "The latitude, longitude and elevation read from the header of the file."
+  }
+ ]
+}

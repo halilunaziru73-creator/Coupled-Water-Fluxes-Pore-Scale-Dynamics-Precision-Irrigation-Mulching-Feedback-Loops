@@ -1,0 +1,29 @@
+{
+ "id": "dz_res_nitrogen_08",
+ "group": "40_results",
+ "ch": "results",
+ "sec": "nitrogen",
+ "title": "Yield through the years: runs compared (nitrogen)",
+ "intro": "The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year.",
+ "note": "",
+ "marks": [
+  {
+   "x": 1755.9250000000002,
+   "y": 599.325,
+   "t": "Picture (PNG)",
+   "d": "Saves this figure as a picture with its source line."
+  },
+  {
+   "x": 940.8000000000001,
+   "y": 873.725,
+   "t": "Figure",
+   "d": "The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year."
+  },
+  {
+   "x": 1803.2,
+   "y": 873.725,
+   "t": "Source line",
+   "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+  }
+ ]
+}

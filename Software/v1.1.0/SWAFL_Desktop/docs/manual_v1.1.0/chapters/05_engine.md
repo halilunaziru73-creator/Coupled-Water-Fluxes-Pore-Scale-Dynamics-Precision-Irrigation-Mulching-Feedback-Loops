@@ -5,24 +5,24 @@ Every number in SWAFL comes from one of two engines, which are tied together so 
 * **Engine 1, the annual meta-model.** It reads 20-year-mean results of the 10,190 Daisy simulations and scales them for the controls. It produces the Dashboard "20-year averages" and every bar, line and arrow in the annual layers. **[Data-driven]**
 * **Engine 2, the daily bucket model.** A 40-layer soil-water model run for twenty years of daily weather. It produces dates, depths, schedules, root growth, water flow arrows and the animated field. It is **calibrated** so that its mean irrigation equals Engine 1's, and its fluxes are **scaled** to Engine 1's annual means (Eq. 5.24). **[Engineered, with literature components]**
 
-The design layers (Chapters 11–13) are a third, separate set of *closed-form hydraulic models*; they take their soil, crop, trigger and depth from Engines 1 and 2 (Section 5.3).
+The design layers (Chapters 11 to 13) are a third, separate set of *closed-form hydraulic models*; they take their soil, crop, trigger and depth from Engines 1 and 2 (Section 5.3).
 
-## Engine 1 — the Daisy simulations and the meta-model
+## Engine 1: the Daisy simulations and the meta-model
 
 ### The simulation campaign
 
-The repository's study ran Daisy 7.1 (Abrahamsen and Hansen, 2000; University of Copenhagen), a one-dimensional soil–plant–atmosphere model that solves Richards' equation with van Genuchten–Mualem hydraulics, coupled to the WEPP dynamic structure model for the effect of tillage and consolidation on pore structure with time. Ten soils (USDA textures from sand to silty clay loam, Ap and Bt horizons) were simulated in **10,190 runs across 17 experiments (E0–E16)**. The families that the workbench reads are:
+The repository's study ran Daisy 7.1 (Abrahamsen and Hansen, 2000; University of Copenhagen), a one-dimensional soil, plant and atmosphere model that solves Richards' equation with van Genuchten and Mualem hydraulics, coupled to the WEPP dynamic structure model for the effect of tillage and consolidation on pore structure with time. Ten soils (USDA textures from sand to silty clay loam, Ap and Bt horizons) were simulated in **10,190 runs across 17 experiments (E0 to E16)**. The families that the workbench reads are:
 
 | Experiment | Runs | Varied | Used for |
 |:--|--:|:--|:--|
 | E2 | 200 | Trigger suction | Trigger correction, Eq. (5.11) |
 | E3 | 200 | Sensor depth | Sensor-depth correction, Eq. (5.11) |
 | E4 | 100 | Method (overhead, surface, drip at three depths) | Method correction, Eq. (5.11) |
-| E5 | 300 | Tillage $\times$ structural consolidation rate | Baseline $\mathbf b$, Eqs. (5.4)–(5.10) |
+| E5 | 300 | Tillage $\times$ structural consolidation rate | Baseline $\mathbf b$, Eqs. (5.4) to (5.10) |
 | E7 | 200 | Mulch vapour-flux factor $\times$ interception capacity | Soil evaporation $\bar E$, Eq. (5.4) |
-| E11 | 1,000 | Temperature shift $\times$ evaporation factor $\times$ rain scale | Warming ratios, Eqs. (5.4)–(5.10) |
+| E11 | 1,000 | Temperature shift $\times$ evaporation factor $\times$ rain scale | Warming ratios, Eqs. (5.4) to (5.10) |
 | E13 | 1,000 | Nitrogen rate $\times$ water strategy $\times$ soil | Nitrogen correction, Eq. (5.11) |
-| E14 | 1,000 | Mulch factor $\times$ capacity $\times$ rain scale | Mulch ratios, Eqs. (5.4)–(5.10) |
+| E14 | 1,000 | Mulch factor $\times$ capacity $\times$ rain scale | Mulch ratios, Eqs. (5.4) to (5.10) |
 
 (The other experiments are used by the repository figures and described in the repository README. The *Regime map* and *Fate of saved water* layers are computed from the E14 and E11 grids listed above.) 
 
@@ -139,13 +139,13 @@ $$
 
 $E_{\mathrm{other}}$ is interception plus evaporation from the mulch layer, and $\Delta S$ collects the change in storage and small terms. IE converts Mg ha$^{-1}$ per mm of irrigation to kg of grain per m$^3$ of irrigation water ($1\ \mathrm{mm}=10\ \mathrm{m^3\,ha^{-1}}$).
 
-**Crops.** The simulated crop is the cereal/oilseed rotation; its yield is shown in Mg ha$^{-1}$. The 48 crops of the library are transferred from it by the ratio of two FAO-56 daily soil-water balances, one for the library crop and one for the cereal reference, run on the same soil, weather and trigger (Section 21.4, Eqs. 21.5–21.9). Their yield is shown as the relative yield, in per cent of the potential.
+**Crops.** The simulated crop is the cereal/oilseed rotation; its yield is shown in Mg ha$^{-1}$. The 48 crops of the library are transferred from it by the ratio of two FAO-56 daily soil-water balances, one for the library crop and one for the cereal reference, run on the same soil, weather and trigger (Section 21.4, Eqs. 21.5 to 21.9). Their yield is shown as the relative yield, in per cent of the potential.
 
 ### What "20-year average at these settings" means
 
-Every Dashboard tile in the last block of the Results tab is the output of Eqs. (5.4)–(5.12) for the current controls. Every slider of Properties is an index into a list of simulated values, so no value ever lies between runs; but two controls changed together (for example, mulch and warming) use the product of ratios above, which assumes the effects are **independent**. The yield ceiling and the closure window (Eq. 5.12) stop independent effects from compounding beyond what the water and the crop allow.
+Every Dashboard tile in the last block of the Results tab is the output of Eqs. (5.4) to (5.12) for the current controls. Every slider of Properties is an index into a list of simulated values, so no value ever lies between runs; but two controls changed together (for example, mulch and warming) use the product of ratios above, which assumes the effects are **independent**. The yield ceiling and the closure window (Eq. 5.12) stop independent effects from compounding beyond what the water and the crop allow.
 
-## Engine 2 — the daily bucket model
+## Engine 2: the daily bucket model
 
 ### Layout and state
 
@@ -314,7 +314,7 @@ $$
 
 *Provenance (Eq. 5.26):* **[Engineered]**: atmosphere factor with chosen constants.
 
-where 4.2 mm d$^{-1}$ is the engine's season-mean bare-soil demand (the seasonal weight is divided by its mean, 0.675), the factor $1+0.07\Delta T$ is a 7 % per °C increase (close to the Clausius–Clapeyron rate of the saturation vapour pressure; **[Engineered]** parameter), the cloud factor reduces demand in wetter years, and $\sqrt{\gamma_y}$ links demand to the dryness of the year.
+where 4.2 mm d$^{-1}$ is the engine's season-mean bare-soil demand (the seasonal weight is divided by its mean, 0.675), the factor $1+0.07\Delta T$ is a 7 % per °C increase (close to the Clausius and Clapeyron rate of the saturation vapour pressure; **[Engineered]** parameter), the cloud factor reduces demand in wetter years, and $\sqrt{\gamma_y}$ links demand to the dryness of the year.
 
 ## The design layers and their link to the engines
 
@@ -322,7 +322,7 @@ The three design layers take from the engines:
 
 | Quantity | Source | Used by |
 |:--|:--|:--|
-| Soil texture (sand, silt, clay %) | `DATA.texture` (measured for the 10 soils) | Saxton–Rawls intake (Section 11.2) |
+| Soil texture (sand, silt, clay %) | `DATA.texture` (measured for the 10 soils) | Saxton and Rawls intake (Section 11.2) |
 | Trigger depletion $f_T$ | Eq. (5.3) at $h_T$ | Required depth $Z_n$ |
 | Maximum rooting depth $R_{\max}$ | Eq. (5.18) | $Z_n$ |
 | Plant-available water per cm AWC | Table 5.3 | $Z_n$ |

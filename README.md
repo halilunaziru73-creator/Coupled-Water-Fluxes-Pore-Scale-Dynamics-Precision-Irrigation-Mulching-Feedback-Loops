@@ -6,20 +6,17 @@
 
 <p align="center">
   <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases/latest/download/SWAFL.exe">
-    <img src="https://img.shields.io/badge/%E2%86%93%20DOWNLOAD-SWAFL.exe%201.0%20for%20Windows-1F6FB2?style=for-the-badge&logo=windows&logoColor=white" alt="Download SWAFL.exe 1.0">
+    <img src="https://img.shields.io/badge/%E2%86%93%20DOWNLOAD-SWAFL.exe%20for%20Windows-1F6FB2?style=for-the-badge&logo=windows&logoColor=white" alt="Download SWAFL.exe">
   </a>
   <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">
     <img src="https://img.shields.io/badge/%E2%86%93%20DOWNLOAD-the%20SWAFL%20manual%20(PDF%2C%20v1.1.0)-B8432F?style=for-the-badge&logo=adobeacrobatreader&logoColor=white" alt="Download the SWAFL manual (PDF), version 1.1.0">
-  </a>
-  <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.0/SWAFL_Desktop/docs/SWAFL_Manual.pdf">
-    <img src="https://img.shields.io/badge/%E2%86%93%20DOWNLOAD-the%20SWAFL%20manual%20(PDF%2C%20v1.0)-7A5A3A?style=for-the-badge&logo=adobeacrobatreader&logoColor=white" alt="Download the SWAFL manual (PDF), version 1.0">
   </a>
   <a href="https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html?v=1.1.0">
     <img src="https://img.shields.io/badge/%E2%86%92%20ONLINE-SWAFL%201.1.0%20workbench-0A246A?style=for-the-badge&logo=googlechrome&logoColor=white" alt="SWAFL 1.1.0 online workbench">
   </a>
 </p>
 
-<p align="center"><b>Download the SWAFL manual (PDF):</b> version 1.1.0, the latest (530 pages, 31 MB): <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">open in the browser</a> or <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">download</a> · <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.0/SWAFL_Desktop/docs/SWAFL_Manual.pdf">version 1.0</a></p>
+<p align="center"><b>Download the SWAFL manual (PDF):</b> version 1.1.0, the latest (1011 pages, 41 MB): <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">open in the browser</a> or <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">download</a></p>
 
 <p align="center">
   <a href="https://doi.org/10.5281/zenodo.23043626">
@@ -32,7 +29,7 @@
 
 ## Download the software (Windows)
 
-**[Download SWAFL.exe 1.0 for Windows](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases/latest/download/SWAFL.exe)** (180 MB, no installation: double-click to run) · [all releases](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases/latest)
+**[Download SWAFL.exe for Windows](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases/latest/download/SWAFL.exe)** (180 MB, no installation: double-click to run) · [all releases](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases/latest)
 
 > Windows may show a SmartScreen warning because the app is not code-signed: click **More info**, then **Run anyway**.
 
@@ -55,7 +52,7 @@ It downloads the app, builds `SWAFL.exe`, puts it on your Desktop and starts it.
 
 ## About the software: SWAFL Desktop
 
-The software is grouped by version in [`Software`](Software): [`Software/v1.1.0`](Software/v1.1.0) is the current version and [`Software/v1.0`](Software/v1.0) is the first release, kept as it was. Each folder holds its own source, manual and zip.
+The current version, 1.1.0, is in [`Software/v1.1.0`](Software/v1.1.0) with its source, manual and zip.
 
 **SWAFL** (Soil Water, Atmosphere, Feedback and Layout) turns the 10,190-simulation Daisy results of this repository into a working decision-support tool. It runs the same simulation engine as the [web explorer](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/04_Interactive_Charts/10_SWAFL_Fused_Explorer.html) inside a desktop workbench (Layers on the left, Properties on the right, a Dashboard of results beside the drawing).
 
@@ -78,8 +75,6 @@ The software is grouped by version in [`Software`](Software): [`Software/v1.1.0`
 | Windows app, no installation | [SWAFL.exe](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases/latest/download/SWAFL.exe) (double-click; if SmartScreen warns, choose More info, then Run anyway) |
 | In any browser, nothing to install | [Online workbench](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html?v=1.1.0) |
 | Build it yourself | [SWAFL_Desktop.zip](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop.zip) or the folder [`Software/v1.1.0/SWAFL_Desktop`](Software/v1.1.0/SWAFL_Desktop) |
-| Version 1.0 | Folder [`Software/v1.0`](Software/v1.0), [SWAFL_Desktop.zip](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.0/SWAFL_Desktop.zip), [online workbench 1.0](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.0/SWAFL_Desktop/app/index.html), [manual 1.0](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.0/SWAFL_Desktop/docs/SWAFL_Manual.pdf) |
-| All versions | [`Software`](Software) (one folder per version) and [Releases](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases) |
 
 **Start in three clicks:** open a group in Layers (Irrigation design is first) and click a layer, press Run, then change the Date in the toolbar. Help (F1) has every step and a troubleshooting list.
 
@@ -192,7 +187,6 @@ beyond it.
 | `Results/07_Derived_Data_Tables` | Effect sizes, elasticities, Pareto-optimal runs, production functions, controllability and trigger tables, with a README that lists the raw outputs and shows how each table is derived from them, and `derive_tables.py`, which re-derives every table from the raw data |
 | `Results/08_Scripts` | Python code that produced every figure |
 | `Software/v1.1.0` | SWAFL Desktop 1.1.0, the current version: source (Electron app, simulation engine, user guide, manual) in `SWAFL_Desktop` and `SWAFL_Desktop.zip` |
-| `Software/v1.0` | SWAFL Desktop 1.0.0, the first release, kept as it was: source, manual and `SWAFL_Desktop.zip` |
 | `Results/Figure_Catalogue.csv` | Title, caption and data source of every figure |
 | [**DATA → Data_coupled_water_fluxes_pore_scale_dynamics.zip**](https://doi.org/10.5281/zenodo.23043626) | Full archived dataset (all 10,190 runs, raw and derived), permanently hosted on Zenodo. Click the file name to open. |
 

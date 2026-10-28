@@ -1,0 +1,29 @@
+{
+ "id": "dz_plot_02",
+ "group": "50_tools",
+ "ch": "results",
+ "sec": "Plot",
+ "title": "Plot: annual values",
+ "intro": "The annual view adds up, averages or takes the largest or smallest value of each year.",
+ "note": "",
+ "marks": [
+  {
+   "x": 459.425,
+   "y": 276,
+   "t": "Annual values",
+   "d": "The view that was chosen."
+  },
+  {
+   "x": 575.0500000000001,
+   "y": 419.20000000000005,
+   "t": "Annual summary",
+   "d": "Sum, mean, maximum or minimum of each year."
+  },
+  {
+   "x": 64,
+   "y": 736.8000000000001,
+   "t": "Chart",
+   "d": "One bar or point for each year."
+  }
+ ]
+}

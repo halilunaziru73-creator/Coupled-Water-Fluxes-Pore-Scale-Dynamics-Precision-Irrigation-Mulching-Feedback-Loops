@@ -1,0 +1,23 @@
+{
+ "id": "dz_scen_07",
+ "group": "20_scen",
+ "ch": "ask",
+ "sec": "Scenarios",
+ "title": "Scenarios: your own work",
+ "intro": "This card leads to the set-up editor, where a .dai file of your own is run, and to the figures that are drawn from logs you have loaded.",
+ "note": "",
+ "marks": [
+  {
+   "x": 64,
+   "y": 265.8,
+   "t": "Heading",
+   "d": "The work you bring: a set-up of your own or logs of earlier runs."
+  },
+  {
+   "x": 81.61250000000001,
+   "y": 119.60000000000001,
+   "t": "First action",
+   "d": "Opens the matching tab."
+  }
+ ]
+}

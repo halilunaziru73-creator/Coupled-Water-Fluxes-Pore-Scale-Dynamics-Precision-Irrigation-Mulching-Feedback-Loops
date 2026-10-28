@@ -21,7 +21,7 @@ A simulated tensiometer at the **sensor depth** (default 20 cm) records soil-wat
 
 ### How the numbers are generated
 
-* The two suction traces start from the Daisy-simulated daily suction at 20 cm (irrigated with the study's trigger, and rainfed) for the 1980–1999 record, stored in the engine (`D20`) for the Coarse Loam and the Coarse Sand. At the standard settings of those two soils they are drawn as stored. For any other soil, sensor depth or setting the record is moved by the **delta method**: the daily model (Engine 2) is run twice, at your settings and at the standard settings of the same soil and weather, and the difference of the depletion of the sensor layer (smoothed over seven days) is added to the depletion of the stored record, which is then converted to suction in your soil:
+* The two suction traces start from the Daisy-simulated daily suction at 20 cm (irrigated with the study's trigger, and rainfed) for the 1980 to 1999 record, stored in the engine (`D20`) for the Coarse Loam and the Coarse Sand. At the standard settings of those two soils they are drawn as stored. For any other soil, sensor depth or setting the record is moved by the **delta method**: the daily model (Engine 2) is run twice, at your settings and at the standard settings of the same soil and weather, and the difference of the depletion of the sensor layer (smoothed over seven days) is added to the depletion of the stored record, which is then converted to suction in your soil:
 
 $$
 h^{\mathrm{x}}_d = h_{\mathrm{soil}}\!\Bigl(f_{\mathrm{ref}}\bigl(h^{\mathrm{rec}}_d\bigr) + \tfrac17\sum_{q=-3}^{3}\bigl[f^{\mathrm{set}}_{d+q}-f^{\mathrm{std}}_{d+q}\bigr]\Bigr),
@@ -49,7 +49,7 @@ $$
 
 *Provenance (Eq. 6.2):* **[Data-driven]**: counts over the simulated daily series.
 
-* The annual line at the foot ("irrigation 282 mm, yield 6.63 Mg ha$^{-1}$, drainage 28 mm") is Engine 1 (Eqs. 5.4–5.12) at the current settings.
+* The annual line at the foot ("irrigation 282 mm, yield 6.63 Mg ha$^{-1}$, drainage 28 mm") is Engine 1 (Eqs. 5.4 to 5.12) at the current settings.
 
 ### Reading it
 

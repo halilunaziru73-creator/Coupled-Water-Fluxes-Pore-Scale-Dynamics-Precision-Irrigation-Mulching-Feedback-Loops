@@ -1,0 +1,29 @@
+{
+ "id": "dz_library_03",
+ "group": "10_data",
+ "ch": "data",
+ "sec": "Library",
+ "title": "Library: the crops of the Daisy library",
+ "intro": "The same screen with the crops chosen in the first list.",
+ "note": "",
+ "marks": [
+  {
+   "x": 144.8,
+   "y": 328.925,
+   "t": "Kind of entry",
+   "d": "Now set to crops."
+  },
+  {
+   "x": 626.1500000000001,
+   "y": 331.725,
+   "t": "Count",
+   "d": "Number of crops in the library."
+  },
+  {
+   "x": 64,
+   "y": 722.5250000000001,
+   "t": "Crops",
+   "d": "Each crop with the model that describes it."
+  }
+ ]
+}

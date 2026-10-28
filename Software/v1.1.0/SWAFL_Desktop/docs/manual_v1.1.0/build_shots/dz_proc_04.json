@@ -1,0 +1,53 @@
+{
+ "id": "dz_proc_04",
+ "group": "60_proc",
+ "ch": "results",
+ "sec": "Processes",
+ "title": "Processes: Canopy, litter and ponded water",
+ "intro": "Rain and irrigation are intercepted by the canopy and the litter layer and evaporate from them; what passes goes to the surface pond. The pond infiltrates into the matrix, the biopores (tertiary infiltration) or runs off. Tillage resets the surface.",
+ "note": "",
+ "marks": [
+  {
+   "x": 944,
+   "y": 1057.9,
+   "t": "Process map",
+   "d": "The process that is open has a red frame."
+  },
+  {
+   "x": 83.2,
+   "y": 1764.9250000000002,
+   "t": "Process",
+   "d": "Name of the process and what Daisy does there."
+  },
+  {
+   "x": 195.275,
+   "y": 1930.7250000000001,
+   "t": "Source of the figures",
+   "d": "The run whose logs are drawn."
+  },
+  {
+   "x": 535.075,
+   "y": 1931.525,
+   "t": "Run Daisy with all process logs",
+   "d": "Runs the model with every process log on."
+  },
+  {
+   "x": 944,
+   "y": 2266.725,
+   "t": "First figure",
+   "d": "The figure of the process."
+  },
+  {
+   "x": 944,
+   "y": 2881.925,
+   "t": "Second figure",
+   "d": "The next figure of the process."
+  },
+  {
+   "x": 944,
+   "y": 3497.125,
+   "t": "Third figure",
+   "d": "The next figure of the process."
+  }
+ ]
+}

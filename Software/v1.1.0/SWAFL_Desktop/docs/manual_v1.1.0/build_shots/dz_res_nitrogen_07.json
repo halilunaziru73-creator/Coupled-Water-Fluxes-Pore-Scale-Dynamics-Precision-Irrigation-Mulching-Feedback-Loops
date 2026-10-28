@@ -1,0 +1,29 @@
+{
+ "id": "dz_res_nitrogen_07",
+ "group": "40_results",
+ "ch": "results",
+ "sec": "nitrogen",
+ "title": "Response to the nitrogen rate (nitrogen)",
+ "intro": "Yield and nitrate leaching against the fertiliser rate across the runs.",
+ "note": "",
+ "marks": [
+  {
+   "x": 1755.9250000000002,
+   "y": 134.525,
+   "t": "Picture (PNG)",
+   "d": "Saves this figure as a picture with its source line."
+  },
+  {
+   "x": 940.8000000000001,
+   "y": 376.925,
+   "t": "Figure",
+   "d": "Yield and nitrate leaching against the fertiliser rate across the runs."
+  },
+  {
+   "x": 1803.2,
+   "y": 376.925,
+   "t": "Source line",
+   "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+  }
+ ]
+}

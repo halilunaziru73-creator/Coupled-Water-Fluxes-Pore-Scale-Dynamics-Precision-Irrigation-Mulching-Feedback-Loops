@@ -4,14 +4,14 @@
 
 The window has eight regions, named here as they are named in the program.
 
-1. **Menu bar** — File, Edit, View, Tools, Refresh, Review, Run, Help.
-2. **Toolbar** — icon buttons for New, Open, Save, Undo, Redo, Play/Pause, Restart, 20-year simulation, the three design layers, fit-to-window, search, the report, and the **Date** control with a **Today** button.
-3. **Layers** panel (top left) — the project tree. Each layer is one drawing of the model; each design layer lists its sections.
-4. **Processing Toolbox** (bottom left) — a searchable list of ready-to-run actions.
-5. **Document tabs and view bar** (above the drawing) — one tab per open layer; the view bar names the layer and gives the buttons of its sections.
-6. **Drawing** (centre) — the active layer, with the playback bar and the legend under it.
-7. **Dashboard** (right of the drawing) — four tabs: *Results, Design, Charts, Messages*. Every block can be folded and unfolded by clicking its header.
-8. **Properties** (far right) — every model input, in collapsible groups.
+1. **Menu bar**, File, Edit, View, Tools, Refresh, Review, Run, Help.
+2. **Toolbar**, icon buttons for New, Open, Save, Undo, Redo, Play/Pause, Restart, 20-year simulation, the three design layers, fit-to-window, search, the report, and the **Date** control with a **Today** button.
+3. **Layers** panel (top left), the project tree. Each layer is one drawing of the model; each design layer lists its sections.
+4. **Processing Toolbox** (bottom left), a searchable list of ready-to-run actions.
+5. **Document tabs and view bar** (above the drawing), one tab per open layer; the view bar names the layer and gives the buttons of its sections.
+6. **Drawing** (centre), the active layer, with the playback bar and the legend under it.
+7. **Dashboard** (right of the drawing), four tabs: *Results, Design, Charts, Messages*. Every block can be folded and unfolded by clicking its header.
+8. **Properties** (far right), every model input, in collapsible groups.
 
 The **status bar** shows, from left to right: the state (*Ready*), the active layer, the working date, the soil, tillage, mulch and irrigation method, *Paused* or *Running*, and the version (*SWAFL 1.1.0*).
 
@@ -61,7 +61,7 @@ The tree has the project root *SWAFL project* and eight groups, in the order in 
 
 | Group | Layers |
 |:--|:--|
-| **Irrigation design** | Surface irrigation design; Drip irrigation design; Sprinkler design and pipes — each with its sections |
+| **Irrigation design** | Surface irrigation design; Drip irrigation design; Sprinkler design and pipes, each with its sections |
 | **Irrigation control** | Sensor and trigger; Trigger law |
 | **Mulch and evaporation** | Mulch against bare soil; Mulch control; Evaporation physics; Fate of saved water; Regime map |
 | **Soil structure and tillage** | Tillage and structure; Soil hydraulic drivers; Root structure |

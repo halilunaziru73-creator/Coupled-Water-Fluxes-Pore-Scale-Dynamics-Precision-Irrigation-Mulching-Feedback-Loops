@@ -1,0 +1,29 @@
+{
+ "id": "dz_scen_08",
+ "group": "20_scen",
+ "ch": "ask",
+ "sec": "Scenarios",
+ "title": "Scenarios: processes to draw as well",
+ "intro": "Under the runs a list of the processes of Fig. 1 of the Daisy paper can be ticked, or described in words. Daisy then writes the logs these figures need.",
+ "note": "",
+ "marks": [
+  {
+   "x": 84.80000000000001,
+   "y": 1355.6000000000001,
+   "t": "Processes of Fig. 1",
+   "d": "Weather, snow, canopy, soil water, biopores, drains, heat and ice, nitrate, ammonium, organic matter, carbon, denitrification, photosynthesis and crop growth."
+  },
+  {
+   "x": 105.60000000000001,
+   "y": 1454.8000000000002,
+   "t": "In words",
+   "d": "Write for example snow and soil temperature in winter; the matching processes are ticked."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 1522.4,
+   "t": "Run Daisy",
+   "d": "Runs the simulations and draws the standard figures and these."
+  }
+ ]
+}

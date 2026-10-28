@@ -9,34 +9,34 @@ Table A.1. Symbols used in this manual, grouped by chapter of first use. Units a
 | $\theta$, $\theta_r$, $\theta_s$ | Volumetric water content; residual; saturated | m$^3$ m$^{-3}$ |
 | $\theta_{fc}$, $\theta_{wp}$ | Water content at field capacity; at wilting point | m$^3$ m$^{-3}$ |
 | $h$, $\psi$ | Soil-water suction (positive); matric potential | cm; kPa |
-| $\alpha$, $n$, $m$ | van Genuchten parameters ($m=1-1/n$) | cm$^{-1}$, [–], [–] |
+| $\alpha$, $n$, $m$ | van Genuchten parameters ($m=1-1/n$) | cm$^{-1}$, [1], [1] |
 | $K_s$, $K(h)$ | Saturated and unsaturated hydraulic conductivity | mm h$^{-1}$ |
 | $\mathrm{AWC}$ | Plant-available water capacity | mm cm$^{-1}$ |
-| $f$, $f_T$ | Relative depletion of the sensor layer; trigger depletion | [–] |
+| $f$, $f_T$ | Relative depletion of the sensor layer; trigger depletion | [1] |
 | $R_{\max}$, $R_d$ | Maximum and present rooting depth | cm |
 | $P$, $I$, $E$, $T$, $D$ | Rain, irrigation, soil evaporation, transpiration, drainage | mm d$^{-1}$ or mm a$^{-1}$ |
 | $E_0$ | Atmospheric evaporative demand | mm d$^{-1}$ |
 | $\mathrm{ET}_{\mathrm{pk}}$ | Peak 5-day mean of $E+T$ | mm d$^{-1}$ |
-| $k_t$ | Calibrated transpiration coefficient of Engine 2 | [–] |
+| $k_t$ | Calibrated transpiration coefficient of Engine 2 | [1] |
 | $Z_n$ | Required (net) depth per irrigation | mm |
-| $Z(\tau)$, $F(t)$ | Cumulative infiltration (Kostiakov; Green–Ampt) | mm |
-| $k$, $A$ | Kostiakov intake constants | mm min$^{-A}$; [–] |
+| $Z(\tau)$, $F(t)$ | Cumulative infiltration (Kostiakov; Green and Ampt) | mm |
+| $k$, $A$ | Kostiakov intake constants | mm min$^{-A}$; [1] |
 | $\psi_f$ | Wetting-front suction | mm |
 | $L$, $S$, $w$, $n$ | Field length; slope; spacing or width; Manning roughness | m; %; m; s m$^{-1/3}$ |
 | $q$, $Q$ | Unit and total inflow | L s$^{-1}$ m$^{-1}$, L s$^{-1}$ |
 | $t_x$, $t_L$, $t_{co}$, $\tau$ | Advance time; time to end; cut-off time; opportunity time | min |
-| $\sigma_y$, $\sigma_z$ | Surface and subsurface shape factors | [–] |
-| $E_a$, $E_s$ | Application and storage efficiency | [–] or % |
-| $\mathrm{DP}$, $\mathrm{RO}$, $\mathrm{WD}$ | Deep percolation, runoff, wind drift and interception fractions | [–] |
-| $\mathrm{CU}$, $\mathrm{DU}$, $E_u$ | Christiansen uniformity; distribution uniformity; emission uniformity | [–] or % |
+| $\sigma_y$, $\sigma_z$ | Surface and subsurface shape factors | [1] |
+| $E_a$, $E_s$ | Application and storage efficiency | [1] or % |
+| $\mathrm{DP}$, $\mathrm{RO}$, $\mathrm{WD}$ | Deep percolation, runoff, wind drift and interception fractions | [1] |
+| $\mathrm{CU}$, $\mathrm{DU}$, $E_u$ | Christiansen uniformity; distribution uniformity; emission uniformity | [1] or % |
 | $S_e$, $S_l$, $L_L$, $H_0$, $D$ | Emitter spacing; lateral spacing; lateral length; inlet head; inside diameter | m, m, m, m, mm |
-| $c_v$, $x$ | Emitter coefficient of variation; flow exponent | [–] |
-| $r$, $a$, $u$ | Bulb radius; aspect ratio; upper semi-axis ratio | mm, [–], [–] |
+| $c_v$, $x$ | Emitter coefficient of variation; flow exponent | [1] |
+| $r$, $a$, $u$ | Bulb radius; aspect ratio; upper semi-axis ratio | mm, [1], [1] |
 | $d$, $P$, $h_s$, $R$ | Nozzle diameter; pressure; pressure head; wetted radius | mm, kPa, m, m |
 | $S_s$, $S_l$ | Sprinkler spacing along and between laterals | m |
 | $u$ | Wind speed | m s$^{-1}$ |
 | $\mathrm{AR}$ | Mean gross application rate | mm h$^{-1}$ |
-| $C$ | Hazen–Williams roughness coefficient | [–] |
+| $C$ | Hazen and Williams roughness coefficient | [1] |
 | $J$ | Hydraulic gradient | m m$^{-1}$ |
 | $\mathrm{TDH}$, $H_{\mathrm{man}}$ | Total dynamic head; manometric head | m |
 | $A_f$, $Q_s$ | Irrigated area; farm supply | ha; L s$^{-1}$ |
@@ -61,7 +61,7 @@ Table B.2. Mulch materials (thermal weight / storage capacity in mm): husk 0.5 /
 
 # Simulation data sets {-}
 
-The annual meta-model (Engine 1) is built on the following Daisy 7.1 run sets of the study (Chapter 5, Table 5.1): E2, E3, E4, E5 (300 runs), E7, E11, E13 and E14. The study as a whole comprises 10,190 simulation runs in 17 experiments, available from the project repository (`Results/` and `Software/` folders). The 20-year weather record (1980–1999) is the baseline of the study; the projections to 2100 are analogue-year scenarios (Chapter 4).
+The annual meta-model (Engine 1) is built on the following Daisy 7.1 run sets of the study (Chapter 5, Table 5.1): E2, E3, E4, E5 (300 runs), E7, E11, E13 and E14. The study as a whole comprises 10,190 simulation runs in 17 experiments, available from the project repository (`Results/` and `Software/` folders). The 20-year weather record (1980 to 1999) is the baseline of the study; the projections to 2100 are analogue-year scenarios (Chapter 4).
 
 # Provenance ledger of the numbered equations {-}
 
@@ -206,25 +206,25 @@ All 134 numbered equations are labelled in the text and listed here: 38 **[Liter
 
 # References {-}
 
-Abrahamsen, P., and Hansen, S. (2000). Daisy: an open soil-crop-atmosphere system model. *Environmental Modelling & Software* 15(3), 313–330.
+Abrahamsen, P., and Hansen, S. (2000). Daisy: an open soil-crop-atmosphere system model. *Environmental Modelling & Software* 15(3), 313 to 330.
 
-Allen, R. G., and Pereira, L. S. (2009). Estimating crop coefficients from fraction of ground cover and height. *Irrigation Science* 28, 17–34.
+Allen, R. G., and Pereira, L. S. (2009). Estimating crop coefficients from fraction of ground cover and height. *Irrigation Science* 28, 17 to 34.
 
 Allen, R. G., Pereira, L. S., Raes, D., and Smith, M. (1998). *Crop evapotranspiration: guidelines for computing crop water requirements*. FAO Irrigation and Drainage Paper 56. FAO, Rome.
 
 Barnes, E. M., Clarke, T. R., Richards, S. E., et al. (2000). Coincident detection of crop water stress, nitrogen status and canopy density using ground-based multispectral data. *Proceedings of the 5th International Conference on Precision Agriculture*, Bloomington, MN.
 
-Barnes, R., Lehman, C., and Mulla, D. (2014). Priority-flood: an optimal depression-filling and watershed-labeling algorithm for digital elevation models. *Computers & Geosciences* 62, 117–127.
+Barnes, R., Lehman, C., and Mulla, D. (2014). Priority-flood: an optimal depression-filling and watershed-labeling algorithm for digital elevation models. *Computers & Geosciences* 62, 117 to 127.
 
-Bausch, W. C., and Neale, C. M. U. (1987). Crop coefficients derived from reflected canopy radiation: a concept. *Transactions of the ASAE* 30, 703–709.
+Bausch, W. C., and Neale, C. M. U. (1987). Crop coefficients derived from reflected canopy radiation: a concept. *Transactions of the ASAE* 30, 703 to 709.
 
 Blasius, H. (1913). Das Ähnlichkeitsgesetz bei Reibungsvorgängen in Flüssigkeiten. *Forschungsarbeiten auf dem Gebiete des Ingenieurwesens* 131.
 
 Brouwer, C., Prins, K., Kay, M., and Heibloem, M. (1988). *Irrigation water management: irrigation methods*. FAO Training Manual 9. FAO, Rome.
 
-Burt, C. M., Clemmens, A. J., Strelkoff, T. S., Solomon, K. H., Bliesner, R. D., Hardy, L. A., Howell, T. A., and Eisenhauer, D. E. (1997). Irrigation performance measures: efficiency and uniformity. *Journal of Irrigation and Drainage Engineering* 123(6), 423–442.
+Burt, C. M., Clemmens, A. J., Strelkoff, T. S., Solomon, K. H., Bliesner, R. D., Hardy, L. A., Howell, T. A., and Eisenhauer, D. E. (1997). Irrigation performance measures: efficiency and uniformity. *Journal of Irrigation and Drainage Engineering* 123(6), 423 to 442.
 
-Carsel, R. F., and Parrish, R. S. (1988). Developing joint probability distributions of soil water retention characteristics. *Water Resources Research* 24(5), 755–769.
+Carsel, R. F., and Parrish, R. S. (1988). Developing joint probability distributions of soil water retention characteristics. *Water Resources Research* 24(5), 755 to 769.
 
 Chamberlain, R. G., and Duquette, W. H. (2007). *Some algorithms for polygons on a sphere*. JPL Publication 07-03, Jet Propulsion Laboratory, Pasadena.
 
@@ -232,79 +232,79 @@ Christiansen, J. E. (1942). *Irrigation by sprinkling*. University of California
 
 Criddle, W. D., Davis, S., Pair, C. H., and Shockley, D. G. (1956). *Methods for evaluating irrigation systems*. USDA Soil Conservation Service, Agriculture Handbook 82.
 
-Elliott, R. L., and Walker, W. R. (1982). Field evaluation of furrow infiltration and advance functions. *Transactions of the ASAE* 25(2), 396–400.
+Elliott, R. L., and Walker, W. R. (1982). Field evaluation of furrow infiltration and advance functions. *Transactions of the ASAE* 25(2), 396 to 400.
 
-Frangi, A. F., Niessen, W. J., Vincken, K. L., and Viergever, M. A. (1998). Multiscale vessel enhancement filtering. *MICCAI'98*, Lecture Notes in Computer Science 1496, 130–137.
+Frangi, A. F., Niessen, W. J., Vincken, K. L., and Viergever, M. A. (1998). Multiscale vessel enhancement filtering. *MICCAI'98*, Lecture Notes in Computer Science 1496, 130 to 137.
 
-Gao, B.-C. (1996). NDWI: a normalized difference water index for remote sensing of vegetation liquid water from space. *Remote Sensing of Environment* 58, 257–266.
+Gao, B.-C. (1996). NDWI: a normalized difference water index for remote sensing of vegetation liquid water from space. *Remote Sensing of Environment* 58, 257 to 266.
 
-Gitelson, A. A., Kaufman, Y. J., Stark, R., and Rundquist, D. (2002). Novel algorithms for remote estimation of vegetation fraction. *Remote Sensing of Environment* 80, 76–87.
+Gitelson, A. A., Kaufman, Y. J., Stark, R., and Rundquist, D. (2002). Novel algorithms for remote estimation of vegetation fraction. *Remote Sensing of Environment* 80, 76 to 87.
 
-Green, W. H., and Ampt, G. A. (1911). Studies on soil physics: 1. The flow of air and water through soils. *Journal of Agricultural Science* 4(1), 1–24.
+Green, W. H., and Ampt, G. A. (1911). Studies on soil physics: 1. The flow of air and water through soils. *Journal of Agricultural Science* 4(1), 1 to 24.
 
 Hazen, A., and Williams, G. S. (1905). *Hydraulic tables*. John Wiley & Sons, New York.
 
 Hillel, D. (1998). *Environmental soil physics*. Academic Press, San Diego.
 
-Huete, A. R. (1988). A soil-adjusted vegetation index (SAVI). *Remote Sensing of Environment* 25, 295–309.
+Huete, A. R. (1988). A soil-adjusted vegetation index (SAVI). *Remote Sensing of Environment* 25, 295 to 309.
 
-Huete, A., Didan, K., Miura, T., Rodriguez, E. P., Gao, X., and Ferreira, L. G. (2002). Overview of the radiometric and biophysical performance of the MODIS vegetation indices. *Remote Sensing of Environment* 83, 195–213.
+Huete, A., Didan, K., Miura, T., Rodriguez, E. P., Gao, X., and Ferreira, L. G. (2002). Overview of the radiometric and biophysical performance of the MODIS vegetation indices. *Remote Sensing of Environment* 83, 195 to 213.
 
-Jurin, J. (1718). An account of some experiments shown before the Royal Society; with an enquiry into the cause of the ascent and suspension of water in capillary tubes. *Philosophical Transactions* 30(355), 739–747.
+Jurin, J. (1718). An account of some experiments shown before the Royal Society; with an enquiry into the cause of the ascent and suspension of water in capillary tubes. *Philosophical Transactions* 30(355), 739 to 747.
 
 Keller, J., and Bliesner, R. D. (1990). *Sprinkle and trickle irrigation*. Van Nostrand Reinhold, New York.
 
-Keller, J., and Karmeli, D. (1974). Trickle irrigation design parameters. *Transactions of the ASAE* 17(4), 678–684.
+Keller, J., and Karmeli, D. (1974). Trickle irrigation design parameters. *Transactions of the ASAE* 17(4), 678 to 684.
 
-Kostiakov, A. N. (1932). On the dynamics of the coefficient of water-percolation in soils and on the necessity of studying it from a dynamic point of view for purposes of amelioration. *Transactions of the 6th Committee of the International Society of Soil Science*, Part A, 17–21.
+Kostiakov, A. N. (1932). On the dynamics of the coefficient of water-percolation in soils and on the necessity of studying it from a dynamic point of view for purposes of amelioration. *Transactions of the 6th Committee of the International Society of Soil Science*, Part A, 17 to 21.
 
-Louhaichi, M., Borman, M. M., and Johnson, D. E. (2001). Spatially located platform and aerial photography for documentation of grazing impacts on wheat. *Geocarto International* 16, 65–70.
+Louhaichi, M., Borman, M. M., and Johnson, D. E. (2001). Spatially located platform and aerial photography for documentation of grazing impacts on wheat. *Geocarto International* 16, 65 to 70.
 
-Manning, R. (1891). On the flow of water in open channels and pipes. *Transactions of the Institution of Civil Engineers of Ireland* 20, 161–207.
+Manning, R. (1891). On the flow of water in open channels and pipes. *Transactions of the Institution of Civil Engineers of Ireland* 20, 161 to 207.
 
 Merriam, J. L., and Keller, J. (1978). *Farm irrigation system evaluation: a guide for management*. Utah State University, Logan.
 
-Moore, I. D., and Wilson, J. P. (1992). Length-slope factors for the Revised Universal Soil Loss Equation: simplified method of estimation. *Journal of Soil and Water Conservation* 47, 423–428.
+Moore, I. D., and Wilson, J. P. (1992). Length-slope factors for the Revised Universal Soil Loss Equation: simplified method of estimation. *Journal of Soil and Water Conservation* 47, 423 to 428.
 
-Mualem, Y. (1976). A new model for predicting the hydraulic conductivity of unsaturated porous media. *Water Resources Research* 12(3), 513–522.
+Mualem, Y. (1976). A new model for predicting the hydraulic conductivity of unsaturated porous media. *Water Resources Research* 12(3), 513 to 522.
 
 Nobel, P. S. (2009). *Physicochemical and environmental plant physiology*, 4th ed. Academic Press, Amsterdam.
 
-Philip, J. R. (1957). Evaporation, and moisture and heat fields in the soil. *Journal of Meteorology* 14(4), 354–366.
+Philip, J. R. (1957). Evaporation, and moisture and heat fields in the soil. *Journal of Meteorology* 14(4), 354 to 366.
 
-Poggio, L., de Sousa, L. M., Batjes, N. H., et al. (2021). SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty. *SOIL* 7, 217–240.
+Poggio, L., de Sousa, L. M., Batjes, N. H., et al. (2021). SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty. *SOIL* 7, 217 to 240.
 
-Renard, K. G., and Freimund, J. R. (1994). Using monthly precipitation data to estimate the R-factor in the revised USLE. *Journal of Hydrology* 157, 287–306.
+Renard, K. G., and Freimund, J. R. (1994). Using monthly precipitation data to estimate the R-factor in the revised USLE. *Journal of Hydrology* 157, 287 to 306.
 
-Richardson, C. W., Foster, G. R., and Wright, D. A. (1983). Estimation of erosion index from daily rainfall amount. *Transactions of the ASAE* 26, 153–156.
+Richardson, C. W., Foster, G. R., and Wright, D. A. (1983). Estimation of erosion index from daily rainfall amount. *Transactions of the ASAE* 26, 153 to 156.
 
-Ritchie, J. T. (1972). Model for predicting evaporation from a row crop with incomplete cover. *Water Resources Research* 8(5), 1204–1213.
+Ritchie, J. T. (1972). Model for predicting evaporation from a row crop with incomplete cover. *Water Resources Research* 8(5), 1204 to 1213.
 
-Rouse, J. W., Haas, R. H., Schell, J. A., and Deering, D. W. (1974). Monitoring vegetation systems in the Great Plains with ERTS. *Third ERTS Symposium*, NASA SP-351, 309–317.
+Rouse, J. W., Haas, R. H., Schell, J. A., and Deering, D. W. (1974). Monitoring vegetation systems in the Great Plains with ERTS. *Third ERTS Symposium*, NASA SP-351, 309 to 317.
 
-Saxton, K. E., and Rawls, W. J. (2006). Soil water characteristic estimates by texture and organic matter for hydrologic solutions. *Soil Science Society of America Journal* 70(5), 1569–1578.
+Saxton, K. E., and Rawls, W. J. (2006). Soil water characteristic estimates by texture and organic matter for hydrologic solutions. *Soil Science Society of America Journal* 70(5), 1569 to 1578.
 
 Sharpley, A. N., and Williams, J. R. (1990). *EPIC, Erosion/Productivity Impact Calculator: 1. Model documentation*. USDA Technical Bulletin 1768.
 
-Tucker, C. J. (1979). Red and photographic infrared linear combinations for monitoring vegetation. *Remote Sensing of Environment* 8, 127–150.
+Tucker, C. J. (1979). Red and photographic infrared linear combinations for monitoring vegetation. *Remote Sensing of Environment* 8, 127 to 150.
 
 USDA-NRCS (1986). *Urban hydrology for small watersheds*. Technical Release 55 (TR-55), Washington, DC.
 
-van den Honert, T. H. (1948). Water transport in plants as a catenary process. *Discussions of the Faraday Society* 3, 146–153.
+van den Honert, T. H. (1948). Water transport in plants as a catenary process. *Discussions of the Faraday Society* 3, 146 to 153.
 
 van der Knijff, J. M., Jones, R. J. A., and Montanarella, L. (1999). *Soil erosion risk assessment in Italy*. European Soil Bureau, JRC Ispra.
 
-van Genuchten, M. Th. (1980). A closed-form equation for predicting the hydraulic conductivity of unsaturated soils. *Soil Science Society of America Journal* 44(5), 892–898.
+van Genuchten, M. Th. (1980). A closed-form equation for predicting the hydraulic conductivity of unsaturated soils. *Soil Science Society of America Journal* 44(5), 892 to 898.
 
-Vandaele, K., Poesen, J., Govers, G., and van Wesemael, B. (1996). Geomorphic threshold conditions for ephemeral gully incision. *Geomorphology* 16, 161–173.
+Vandaele, K., Poesen, J., Govers, G., and van Wesemael, B. (1996). Geomorphic threshold conditions for ephemeral gully incision. *Geomorphology* 16, 161 to 173.
 
 Walker, W. R., and Skogerboe, G. V. (1987). *Surface irrigation: theory and practice*. Prentice-Hall, Englewood Cliffs, NJ.
 
-Woebbecke, D. M., Meyer, G. E., Von Bargen, K., and Mortensen, D. A. (1995). Color indices for weed identification under various soil, residue, and lighting conditions. *Transactions of the ASAE* 38, 259–269.
+Woebbecke, D. M., Meyer, G. E., Von Bargen, K., and Mortensen, D. A. (1995). Color indices for weed identification under various soil, residue, and lighting conditions. *Transactions of the ASAE* 38, 259 to 269.
 
 
 # Equation reference {-}
 
-This appendix prints every numbered equation of the program in full, in the order of the chapters, with its provenance and the layers of the program that draw on it. The equations added in version 1.1 (Eqs. 5.12a, 6.4a and those of Chapters 14, 18–23) are printed in their chapters.
+This appendix prints every numbered equation of the program in full, in the order of the chapters, with its provenance and the layers of the program that draw on it. The equations added in version 1.1 (Eqs. 5.12a, 6.4a and those of Chapters 14, 18 to 23) are printed in their chapters.
 
 {{EQREF}}

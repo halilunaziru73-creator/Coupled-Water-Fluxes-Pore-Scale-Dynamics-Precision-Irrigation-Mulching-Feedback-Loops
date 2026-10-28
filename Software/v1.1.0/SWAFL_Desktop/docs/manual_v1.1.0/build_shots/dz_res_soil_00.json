@@ -1,0 +1,41 @@
+{
+ "id": "dz_res_soil_00",
+ "group": "40_results",
+ "ch": "results",
+ "sec": "soil",
+ "title": "Results of the soil question: the table of means",
+ "intro": "The soil question was run on the built-in farm for the years 1990 to 1993 with the built-in Taastrup weather. After the run the results appear under the options: a list that chooses the run to look at, three buttons, a table of the mean per season and the figures.",
+ "note": "",
+ "marks": [
+  {
+   "x": 1007.4000000000001,
+   "y": 98.525,
+   "t": "Run to look at",
+   "d": "Chooses the run whose single run figures are drawn."
+  },
+  {
+   "x": 1167.175,
+   "y": 93.72500000000001,
+   "t": "Save report",
+   "d": "Saves all results and figures as one HTML report."
+  },
+  {
+   "x": 1310.15,
+   "y": 93.72500000000001,
+   "t": "Put the logs in the Files list",
+   "d": "Keeps the Daisy logs of the runs in the Files tab for the plot and balance tabs."
+  },
+  {
+   "x": 1582.9250000000002,
+   "y": 93.72500000000001,
+   "t": "Open the set-up in the editor",
+   "d": "Opens the Daisy set-up of the run in the Set-up editor."
+  },
+  {
+   "x": 84.80000000000001,
+   "y": 345.725,
+   "t": "Mean per season",
+   "d": "The mean of each result over the seasons, one column for each run."
+  }
+ ]
+}

@@ -75,7 +75,7 @@ With a design layer open, the tab shows the results of its **last run**. Before 
 | Warning | For a surface design whose stream does not reach the end of the field in a practical time. |
 | Most efficient inputs | The best combination found by the search of Section 18.4, with its $E_a$, $E_s$, deep percolation and runoff, and **Apply these inputs and run**; or *Already the most efficient* when no combination tried beats your inputs. |
 
-The definitions are Eqs. (11.18)–(11.19), (12.19) and (13.11). The Design tab and the *Design results (CSV)* export read the same object, so the numbers agree digit for digit.
+The definitions are Eqs. (11.18) to (11.19), (12.19) and (13.11). The Design tab and the *Design results (CSV)* export read the same object, so the numbers agree digit for digit.
 
 ![The Dashboard, Design tab, after a run of the surface design.](images/atlas11/ui_u05_dash_design.jpg){width=100%}
 
@@ -111,7 +111,7 @@ Q_{\mathrm{pump}}(t)=Q_z\quad\text{for}\ t\in[\,0,\ n_z\,t_{\mathrm{run}}\,),\qq
 \tag{14.6}
 $$
 
-*Provenance (Eq. 14.6):* **[Engineered]**: zones of the layout (Eqs. 12.20–12.23 and the sprinkler analogue) run in turn.
+*Provenance (Eq. 14.6):* **[Engineered]**: zones of the layout (Eqs. 12.20 to 12.23 and the sprinkler analogue) run in turn.
 
 with $Q_z$ the flow of one zone or set, $n_z$ the number of zones or sets and $t_{\mathrm{run}}$ the run time of one zone (drip) or the set time (sprinklers).
 

@@ -1,0 +1,23 @@
+{
+ "id": "dz_library_02",
+ "group": "10_data",
+ "ch": "data",
+ "sec": "Library",
+ "title": "Library: a soil horizon opened",
+ "intro": "Choosing a horizon shows its texture class and, below the list, the retention and conductivity curves drawn from its parameters.",
+ "note": "",
+ "marks": [
+  {
+   "x": 64,
+   "y": 722.5250000000001,
+   "t": "Selected horizon",
+   "d": "The horizon whose parameters are shown."
+  },
+  {
+   "x": 560,
+   "y": 963.125,
+   "t": "Parameters and curves",
+   "d": "Parameters of the horizon and the curves of water content and conductivity against suction."
+  }
+ ]
+}

@@ -1,0 +1,17 @@
+{
+ "id": "dz_exp_05",
+ "group": "30_exp",
+ "ch": "ask",
+ "sec": "Experiments",
+ "title": "Experiments: import data and set-ups",
+ "intro": "The third tab brings in what you already have: an experiment folder as a zip, Daisy set-up files, weather, soil tables or logs. Each goes where it is used; set-ups are run as experiments.",
+ "note": "",
+ "marks": [
+  {
+   "x": 183.6125,
+   "y": 735.725,
+   "t": "Choose a folder",
+   "d": "Reads every Daisy file of a folder."
+  }
+ ]
+}

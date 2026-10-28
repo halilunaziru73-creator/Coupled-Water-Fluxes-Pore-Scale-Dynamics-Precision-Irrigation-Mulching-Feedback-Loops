@@ -1,0 +1,35 @@
+{
+ "id": "dz_calib_02",
+ "group": "50_tools",
+ "ch": "build",
+ "sec": "Calibrate",
+ "title": "Calibrate: a search followed live",
+ "intro": "The loss and the best parameter set are drawn trial by trial.",
+ "note": "",
+ "marks": [
+  {
+   "x": 64,
+   "y": 648.8000000000001,
+   "t": "Loss against trial",
+   "d": "Falls as the search improves."
+  },
+  {
+   "x": 64,
+   "y": 1058.4,
+   "t": "Parameters",
+   "d": "Parameter values tried."
+  },
+  {
+   "x": 64,
+   "y": 1421.6000000000001,
+   "t": "Best values",
+   "d": "Table of the best set."
+  },
+  {
+   "x": 322.15000000000003,
+   "y": 450,
+   "t": "Status",
+   "d": "Progress."
+  }
+ ]
+}

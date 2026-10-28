@@ -1,0 +1,53 @@
+{
+ "id": "dz_editor_01",
+ "group": "50_tools",
+ "ch": "build",
+ "sec": "Set-up editor",
+ "title": "Set-up editor: the empty editor",
+ "intro": "The editor opens a Daisy set-up file (.dai), shows its outline and checks the brackets as you type.",
+ "note": "",
+ "marks": [
+  {
+   "x": 125.775,
+   "y": 281.6,
+   "t": "Bundled set-up",
+   "d": "Opens a set-up that comes with the program."
+  },
+  {
+   "x": 985.3625000000001,
+   "y": 276.8,
+   "t": "Open file",
+   "d": "Opens a .dai file from your computer."
+  },
+  {
+   "x": 1127.5,
+   "y": 276.8,
+   "t": "Tidy layout",
+   "d": "Indents the file."
+  },
+  {
+   "x": 1266.15,
+   "y": 276.8,
+   "t": "Download",
+   "d": "Saves the file."
+  },
+  {
+   "x": 1400.6125000000002,
+   "y": 276.8,
+   "t": "Run Daisy",
+   "d": "Runs the set-up on the desktop app."
+  },
+  {
+   "x": 65.60000000000001,
+   "y": 579.2,
+   "t": "Text",
+   "d": "The set-up text with colours."
+  },
+  {
+   "x": 1431.2,
+   "y": 349.6,
+   "t": "Outline",
+   "d": "The sections of the file."
+  }
+ ]
+}

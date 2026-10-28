@@ -31,7 +31,7 @@ Each workflow is a complete sequence of clicks, what to expect, and the equation
 1. Choose the crop, the soil and the emitter (inline).
 2. *Field size*: **Length and width**; type the length and width of the field. The area and the lateral length follow (Eq. 18.1).
 3. *Placement*: compare *Surface*, *25 cm* and *45 cm*: each change cancels the run; run each and compare $E_a$ and the losses.
-4. Set the farm supply $Q_s$; read zones, pump head and power in the layout block (Eqs. 12.20–12.23), and the pump hydrograph on the Charts tab.
+4. Set the farm supply $Q_s$; read zones, pump head and power in the layout block (Eqs. 12.20 to 12.23), and the pump hydrograph on the Charts tab.
 5. Open *Tools ▸ Field on the map…* to read the real field: its indices, its land cover, the water sources around it and the system that suits it (Chapter 20).
 
 ## Workflow 5: Check a sprinkler against the course rules

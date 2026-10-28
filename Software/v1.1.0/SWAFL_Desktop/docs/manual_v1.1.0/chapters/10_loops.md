@@ -2,7 +2,7 @@
 
 ## What it shows
 
-One large picture of a field, from sky to groundwater, on which red arrows join the parts that act on each other: temperature and the crop; rain and soil water; mulch and evaporation; the sensor trigger and irrigation; drainage and nitrogen leaching; nitrogen and the roots; tillage structure and drainage. Each arrow is numbered 1–7, and its **width grows with the size of the effect of one step** of the control behind it. Under the picture a panel lists "*What one step of each control does*"; click a row or an arrow to highlight it.
+One large picture of a field, from sky to groundwater, on which red arrows join the parts that act on each other: temperature and the crop; rain and soil water; mulch and evaporation; the sensor trigger and irrigation; drainage and nitrogen leaching; nitrogen and the roots; tillage structure and drainage. Each arrow is numbered 1 to 7, and its **width grows with the size of the effect of one step** of the control behind it. Under the picture a panel lists "*What one step of each control does*"; click a row or an arrow to highlight it.
 
 ![Feedback loops. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/v5_s0_p1.jpg){width=80%}
 
@@ -10,7 +10,7 @@ The picture is also a set of controls: clicking the clouds cycles the rainfall, 
 
 ## How the seven effects are computed
 
-For each control the engine moves **one step** on its list (in the direction that stays inside the list: if the control is at its maximum it steps down) and re-evaluates Engine 1 (Eqs. 5.4–5.12). The change relative to the present result is printed. With $m$ the present result and $m^{(\pm)}$ the result after one step, and $f_{\mathrm{crop}}$ the crop factor:
+For each control the engine moves **one step** on its list (in the direction that stays inside the list: if the control is at its maximum it steps down) and re-evaluates Engine 1 (Eqs. 5.4 to 5.12). The change relative to the present result is printed. With $m$ the present result and $m^{(\pm)}$ the result after one step, and $f_{\mathrm{crop}}$ the crop factor:
 
 | # | Control step | Printed effect | Arrow-width input $\mu$ |
 |:-:|:--|:--|:--|

@@ -1,0 +1,35 @@
+{
+ "id": "dz_library_01",
+ "group": "10_data",
+ "ch": "data",
+ "sec": "Library",
+ "title": "Library: soil horizons",
+ "intro": "The Library holds the soil horizons, crops, fertilisers, chemicals and management actions of the Daisy library files, read in full. A soil horizon can be opened to see its water retention and conductivity curves.",
+ "note": "",
+ "marks": [
+  {
+   "x": 144.8,
+   "y": 328.925,
+   "t": "Kind of entry",
+   "d": "Soil horizons, crops, fertilisers, chemicals and management actions."
+  },
+  {
+   "x": 296,
+   "y": 326.925,
+   "t": "Search",
+   "d": "Filters the list by name."
+  },
+  {
+   "x": 625.6750000000001,
+   "y": 331.725,
+   "t": "Count",
+   "d": "The number of entries shown out of all."
+  },
+  {
+   "x": 64,
+   "y": 722.5250000000001,
+   "t": "List",
+   "d": "The entries; click one to see its parameters."
+  }
+ ]
+}

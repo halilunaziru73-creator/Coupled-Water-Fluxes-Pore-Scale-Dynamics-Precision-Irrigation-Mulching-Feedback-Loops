@@ -2,7 +2,7 @@
 
 ## Why the date matters
 
-SWAFL runs on **twenty years of daily weather** arranged on a 365-day calendar without leap days. With the built-in weather these are the twenty recorded years 1980–1999 of the study site (Chapter 5); with imported or online weather they are the last twenty complete years of your own record (Chapter 19). The program maps *any calendar date* you choose onto one of those twenty years. The working date therefore decides (i) which day is drawn, (ii) which of the twenty years acts as the *analogue* for that date, and (iii) the first line of every irrigation schedule.
+SWAFL runs on **twenty years of daily weather** arranged on a 365-day calendar without leap days. With the built-in weather these are the twenty recorded years 1980 to 1999 of the study site (Chapter 5); with imported or online weather they are the last twenty complete years of your own record (Chapter 19). The program maps *any calendar date* you choose onto one of those twenty years. The working date therefore decides (i) which day is drawn, (ii) which of the twenty years acts as the *analogue* for that date, and (iii) the first line of every irrigation schedule.
 
 ## The date control
 
@@ -51,4 +51,4 @@ The "Next 14 days" block on the Results tab sums the same simulated daily fluxes
 
 ## Detail year and sensor record
 
-The *Sensor and trigger* and *Profile evolution* layers can show either all twenty years or one year in detail. The suction traces shown there are the study's **daily suction at 20 cm for 1980–1999**, stored for the Coarse Loam and the Coarse Sand; for every other soil, and for every setting other than the standard one, the trace is moved by the difference between two runs of the daily model, the run at your settings and the run at the standard settings (Eq. 6.4a). The growing season of these records is the 183 days starting 1 April.
+The *Sensor and trigger* and *Profile evolution* layers can show either all twenty years or one year in detail. The suction traces shown there are the study's **daily suction at 20 cm for 1980 to 1999**, stored for the Coarse Loam and the Coarse Sand; for every other soil, and for every setting other than the standard one, the trace is moved by the difference between two runs of the daily model, the run at your settings and the run at the standard settings (Eq. 6.4a). The growing season of these records is the 183 days starting 1 April.

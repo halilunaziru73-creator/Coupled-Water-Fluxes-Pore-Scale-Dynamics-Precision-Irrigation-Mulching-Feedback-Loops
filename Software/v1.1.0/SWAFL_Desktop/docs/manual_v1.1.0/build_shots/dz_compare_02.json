@@ -1,0 +1,17 @@
+{
+ "id": "dz_compare_02",
+ "group": "50_tools",
+ "ch": "results",
+ "sec": "Compare and test",
+ "title": "Compare and test: the result",
+ "intro": "Each column is reported as identical, different within the level, or different.",
+ "note": "",
+ "marks": [
+  {
+   "x": 64,
+   "y": 703.6,
+   "t": "Result table",
+   "d": "One row for each column with the largest difference and the verdict."
+  }
+ ]
+}

@@ -12,7 +12,7 @@
 | Field report | *Export the report* in *Tools ▸ Field on the map…* | `SWAFL_field_<place>_<date>.pdf` or `.png` | The field on the map, its indices, zones, land cover, water sources and the suitable system, at 96 to 600 dpi, with the coordinates and the author (Chapter 20); also GeoJSON and CSV |
 | Print | *File ▸ Print / save this view as PDF*, Ctrl+P | PDF | The open layer through the system print dialog |
 
-In the yearly CSV, *Year* is the index 1–20 of the 20-year run starting at the calendar year shown on the Charts tab; the values are the annual sums of Eq. (14.5), rounded to 0.01 mm. In the design CSV the quantity names are the internal names of the model (for example `Ea`, `Es`, `dp`, `ro` for the surface layer; `Eu`, `gross`, `t` for drip; `CU`, `DU`, `AR`, `T` for sprinkler); the efficiencies are fractions (0–1).
+In the yearly CSV, *Year* is the index 1 to 20 of the 20-year run starting at the calendar year shown on the Charts tab; the values are the annual sums of Eq. (14.5), rounded to 0.01 mm. In the design CSV the quantity names are the internal names of the model (for example `Ea`, `Es`, `dp`, `ro` for the surface layer; `Eu`, `gross`, `t` for drip; `CU`, `DU`, `AR`, `T` for sprinkler); the efficiencies are fractions (0 to 1).
 
 The imported weather is not stored in the project file; import it again after opening a project, or keep the file beside the project.
 

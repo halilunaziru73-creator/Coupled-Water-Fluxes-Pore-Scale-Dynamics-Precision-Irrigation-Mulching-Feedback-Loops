@@ -1,0 +1,53 @@
+{
+ "id": "dz_proc_12",
+ "group": "60_proc",
+ "ch": "results",
+ "sec": "Processes",
+ "title": "Processes: Carbon balance and residues",
+ "intro": "Carbon enters with the crop residues (shoot, root and stubble), fertiliser and manure and leaves as CO2 from the microbial pools and the plants; the balance shows how the soil carbon changes with the rotation and tillage.",
+ "note": "",
+ "marks": [
+  {
+   "x": 944,
+   "y": 1058.05,
+   "t": "Process map",
+   "d": "The process that is open has a red frame."
+  },
+  {
+   "x": 83.2,
+   "y": 1765.075,
+   "t": "Process",
+   "d": "Name of the process and what Daisy does there."
+  },
+  {
+   "x": 195.275,
+   "y": 1930.875,
+   "t": "Source of the figures",
+   "d": "The run whose logs are drawn."
+  },
+  {
+   "x": 535.075,
+   "y": 1931.6750000000002,
+   "t": "Run Daisy with all process logs",
+   "d": "Runs the model with every process log on."
+  },
+  {
+   "x": 944,
+   "y": 2266.875,
+   "t": "First figure",
+   "d": "The figure of the process."
+  },
+  {
+   "x": 944,
+   "y": 2859.675,
+   "t": "Second figure",
+   "d": "The next figure of the process."
+  },
+  {
+   "x": 944,
+   "y": 3474.875,
+   "t": "Third figure",
+   "d": "The next figure of the process."
+  }
+ ]
+}

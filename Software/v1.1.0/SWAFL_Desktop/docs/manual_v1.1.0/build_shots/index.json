@@ -1,0 +1,5441 @@
+{
+ "dz_balance_01": {
+  "id": "dz_balance_01",
+  "group": "50_tools",
+  "ch": "results",
+  "sec": "Mass balance",
+  "title": "Mass balance: the form",
+  "intro": "The balance adds the inputs, the outputs and the content columns of a log. Choose columns proposes a set from the column names.",
+  "note": "",
+  "marks": [
+   {
+    "x": 110.95,
+    "y": 312.8,
+    "t": "Log",
+    "d": "The log whose balance is checked."
+   },
+   {
+    "x": 462.1875,
+    "y": 308,
+    "t": "Choose columns",
+    "d": "Proposes inputs, outputs and content."
+   },
+   {
+    "x": 580.625,
+    "y": 310.40000000000003,
+    "t": "Subtract initial content",
+    "d": "Counts only the change in content."
+   },
+   {
+    "x": 136.57500000000002,
+    "y": 454.40000000000003,
+    "t": "Inputs",
+    "d": "Columns that add to the soil."
+   },
+   {
+    "x": 352.125,
+    "y": 454.40000000000003,
+    "t": "Outputs",
+    "d": "Columns that leave the soil."
+   },
+   {
+    "x": 567.6750000000001,
+    "y": 454.40000000000003,
+    "t": "Content",
+    "d": "Columns that hold the amount stored."
+   },
+   {
+    "x": 87.53750000000001,
+    "y": 574.4,
+    "t": "Balance",
+    "d": "Calculates the balance."
+   }
+  ]
+ },
+ "dz_balance_02": {
+  "id": "dz_balance_02",
+  "group": "50_tools",
+  "ch": "results",
+  "sec": "Mass balance",
+  "title": "Mass balance: the control chart",
+  "intro": "After Balance the error of each step is drawn with the mean and the limits of two and three standard deviations.",
+  "note": "",
+  "marks": [
+   {
+    "x": 64,
+    "y": 828.8000000000001,
+    "t": "Balance through time",
+    "d": "Content plus outputs minus inputs; it should stay at zero."
+   },
+   {
+    "x": 64,
+    "y": 1318.4,
+    "t": "Control chart",
+    "d": "Mean and limits of two and three standard deviations."
+   },
+   {
+    "x": 64,
+    "y": 2228.8,
+    "t": "Summary",
+    "d": "Mean, spread and the number of steps outside the limits."
+   }
+  ]
+ },
+ "dz_calib_01": {
+  "id": "dz_calib_01",
+  "group": "50_tools",
+  "ch": "build",
+  "sec": "Calibrate",
+  "title": "Calibrate: the form",
+  "intro": "Parameters are searched with sequential, CMA-ES or Bayesian optimisation; each trial is one run.",
+  "note": "",
+  "marks": [
+   {
+    "x": 151.925,
+    "y": 333.6,
+    "t": "Problem",
+    "d": "What is calibrated."
+   },
+   {
+    "x": 799.7750000000001,
+    "y": 333.6,
+    "t": "Method",
+    "d": "The search method."
+   },
+   {
+    "x": 1040.825,
+    "y": 333.6,
+    "t": "Loss",
+    "d": "The error to minimise."
+   },
+   {
+    "x": 1266.025,
+    "y": 331.6,
+    "t": "Runs",
+    "d": "Number of trials."
+   },
+   {
+    "x": 74.25,
+    "y": 442.40000000000003,
+    "t": "Start",
+    "d": "Starts the search."
+   },
+   {
+    "x": 164.41250000000002,
+    "y": 442.40000000000003,
+    "t": "Stop",
+    "d": "Stops it."
+   }
+  ]
+ },
+ "dz_calib_02": {
+  "id": "dz_calib_02",
+  "group": "50_tools",
+  "ch": "build",
+  "sec": "Calibrate",
+  "title": "Calibrate: a search followed live",
+  "intro": "The loss and the best parameter set are drawn trial by trial.",
+  "note": "",
+  "marks": [
+   {
+    "x": 64,
+    "y": 648.8000000000001,
+    "t": "Loss against trial",
+    "d": "Falls as the search improves."
+   },
+   {
+    "x": 64,
+    "y": 1058.4,
+    "t": "Parameters",
+    "d": "Parameter values tried."
+   },
+   {
+    "x": 64,
+    "y": 1421.6000000000001,
+    "t": "Best values",
+    "d": "Table of the best set."
+   },
+   {
+    "x": 322.15000000000003,
+    "y": 450,
+    "t": "Status",
+    "d": "Progress."
+   }
+  ]
+ },
+ "dz_combo_01": {
+  "id": "dz_combo_01",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Irrigation",
+  "title": "Overhead, surface or drip irrigation",
+  "intro": "The manual has three ways to apply water: over the canopy, on the soil surface, and into a soil volume. Run the three with the same trigger and dose, so only the way of applying water differs.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 590.9250000000001,
+    "t": "Irrigation method",
+    "d": "Varied over overhead, surface, drip."
+   },
+   {
+    "x": 88,
+    "y": 713.325,
+    "t": "Soil",
+    "d": "Varied over usda:sand, loam."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 834.125,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 834.125,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 833.725,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_02": {
+  "id": "dz_combo_02",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Nitrogen",
+  "title": "Irrigation and nitrogen together",
+  "intro": "Water moves nitrate and decides how much of the fertiliser the crop can use. Irrigation against rainfed, at three fertiliser doses, shows whether more water raises the yield only when the nitrogen is there, and what it costs in nitrate below the roots.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 558.125,
+    "t": "Irrigation",
+    "d": "Varied over 0, 1."
+   },
+   {
+    "x": 88,
+    "y": 606.125,
+    "t": "Nitrogen fertiliser, factor on the rotation",
+    "d": "Varied over 0.5, 1, 1.25."
+   },
+   {
+    "x": 88,
+    "y": 722.9250000000001,
+    "t": "Soil",
+    "d": "Varied over usda:sand, loam."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_03": {
+  "id": "dz_combo_03",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Irrigation",
+  "title": "When to irrigate: the trigger and the depth of the sensor",
+  "intro": "Irrigation starts when \"soil water pressure above\" is not true: the potential (cm) and the height (cm) are its two parameters. The potentials run from near field capacity to well before wilting for this soil texture; the depths stay inside the rooting depth of 100 cm.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 541.325,
+    "t": "Irrigation trigger (soil suction)",
+    "d": "Varied over -150, -300, -600."
+   },
+   {
+    "x": 88,
+    "y": 600.525,
+    "t": "Sensor depth",
+    "d": "Varied over 10, 30, 60."
+   },
+   {
+    "x": 88,
+    "y": 722.9250000000001,
+    "t": "Soil",
+    "d": "Varied over usda:sand, loam."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_04": {
+  "id": "dz_combo_04",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Irrigation",
+  "title": "How much and how fast: dose and duration",
+  "intro": "The water application speed is a parameter in mm/h (default 2 mm/h) and the irrigation lasts a number of hours. The pairs below keep the speed of the manual (2 mm/h) while the dose grows, so the answer is the effect of the dose and not of the speed.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 541.325,
+    "t": "Water per irrigation",
+    "d": "Varied over 10, 20, 30, 40."
+   },
+   {
+    "x": 88,
+    "y": 600.525,
+    "t": "Duration of one irrigation",
+    "d": "Varied over 5, 10, 15, 20."
+   },
+   {
+    "x": 88,
+    "y": 722.9250000000001,
+    "t": "Soil",
+    "d": "Varied over usda:sand, loam."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_05": {
+  "id": "dz_combo_05",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Nitrogen",
+  "title": "Nitrogen fertiliser, irrigated and rainfed",
+  "intro": "Fertiliser is applied as an amount in kg N/ha. Scaling the rotation between half and one and a quarter of its dose, with and without irrigation, shows the dose where yield stops rising and the nitrate leached below the roots starts to climb.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 558.125,
+    "t": "Nitrogen fertiliser, factor on the rotation",
+    "d": "Varied over 0.5, 0.75, 1, 1.25."
+   },
+   {
+    "x": 88,
+    "y": 606.125,
+    "t": "Irrigation",
+    "d": "Varied over 0, 1."
+   },
+   {
+    "x": 88,
+    "y": 722.9250000000001,
+    "t": "Soil",
+    "d": "Varied over usda:sand, loam."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_06": {
+  "id": "dz_combo_06",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Climate",
+  "title": "A drier, wetter or warmer year",
+  "intro": "The weather file gives precipitation and air temperature to every model of the column. Scaling the rain and adding a warming to the same record shows how much the yield and the water use move with the weather, with the soil and the management unchanged.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 558.125,
+    "t": "Rain, factor on the weather",
+    "d": "Varied over 0.8, 1, 1.2."
+   },
+   {
+    "x": 88,
+    "y": 606.125,
+    "t": "Temperature shift",
+    "d": "Varied over 0, 2."
+   },
+   {
+    "x": 88,
+    "y": 722.9250000000001,
+    "t": "Soil",
+    "d": "Varied over usda:sand, loam."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_07": {
+  "id": "dz_combo_07",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Irrigation",
+  "title": "The irrigation season and a limit on water",
+  "intro": "The irrigation of a crop is tested between a from date and a to date and can be given an amount. Start dates and a seasonal limit show how much of the yield is bought by the first and the last irrigations.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 541.325,
+    "t": "Irrigation window",
+    "d": "Varied over Apr 1 - Oct 1, May 1 - Oct 1, Jun 1 - Sep 1."
+   },
+   {
+    "x": 88,
+    "y": 600.525,
+    "t": "Water limit per crop season",
+    "d": "Varied over 60, 120, 240."
+   },
+   {
+    "x": 88,
+    "y": 722.9250000000001,
+    "t": "Soil",
+    "d": "Varied over usda:sand, loam."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_08": {
+  "id": "dz_combo_08",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Soil and crop",
+  "title": "Which soil needs the most water",
+  "intro": "A horizon gets its hydraulic properties from the hypres model by default, from the sand, silt, clay, humus and bulk density. Rainfed and irrigated runs on several textures show where irrigation pays.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 674.9250000000001,
+    "t": "Soil",
+    "d": "Varied over usda:sand, usda:sandyloam, loam, usda:siltloam, usda:clayloam."
+   },
+   {
+    "x": 88,
+    "y": 791.725,
+    "t": "Irrigation",
+    "d": "Varied over 0, 1."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_09": {
+  "id": "dz_combo_09",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Irrigation",
+  "title": "Slow or fast irrigation: a constant water flux",
+  "intro": "Daisy applies irrigation at a rate in mm/h, so a slow rate keeps the water in the topsoil and a fast one can run off or percolate. The rates below keep the same dose per irrigation, so only the speed of application differs.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 600.525,
+    "t": "Irrigation intensity (constant flux)",
+    "d": "Varied over 0.1, 0.5, 2."
+   },
+   {
+    "x": 88,
+    "y": 722.9250000000001,
+    "t": "Soil",
+    "d": "Varied over usda:sand, loam."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_10": {
+  "id": "dz_combo_10",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Irrigation",
+  "title": "Sensor depth against rooting depth",
+  "intro": "The tensiometer that triggers irrigation sits at one depth, while the roots take water from the whole root zone. A sensor above or below most of the roots triggers too early or too late; crossing the sensor depth with the rooting depth shows where it matters.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 552.525,
+    "t": "Sensor depth",
+    "d": "Varied over 10, 30, 50."
+   },
+   {
+    "x": 88,
+    "y": 606.125,
+    "t": "Maximum rooting depth",
+    "d": "Varied over 40, 80, 120."
+   },
+   {
+    "x": 88,
+    "y": 722.9250000000001,
+    "t": "Soil",
+    "d": "Varied over usda:sand, loam."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_11": {
+  "id": "dz_combo_11",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Nitrogen",
+  "title": "When the fertiliser is applied and how much",
+  "intro": "The fertilize action is placed on a date. Moving it two weeks earlier or later, at three doses, shows how much nitrate is exposed to the rain before the crop takes it up.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 558.125,
+    "t": "Fertiliser date, shift in days",
+    "d": "Varied over -14, 0, 14."
+   },
+   {
+    "x": 88,
+    "y": 606.125,
+    "t": "Nitrogen fertiliser, factor on the rotation",
+    "d": "Varied over 0.7, 1, 1.3."
+   },
+   {
+    "x": 88,
+    "y": 722.9250000000001,
+    "t": "Soil",
+    "d": "Varied over usda:sand, loam."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_12": {
+  "id": "dz_combo_12",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Climate",
+  "title": "Warming with and without irrigation",
+  "intro": "A warmer year raises the evapotranspiration and shortens the crop cycle. Warming of 0 to 3 degrees, rainfed and irrigated, shows how much of the loss irrigation can give back.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 558.125,
+    "t": "Temperature shift",
+    "d": "Varied over 0, 1.5, 3."
+   },
+   {
+    "x": 88,
+    "y": 606.125,
+    "t": "Irrigation",
+    "d": "Varied over 0, 1."
+   },
+   {
+    "x": 88,
+    "y": 722.9250000000001,
+    "t": "Soil",
+    "d": "Varied over usda:sand, loam."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_13": {
+  "id": "dz_combo_13",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Nitrogen",
+  "title": "Tillage and the time and form of the fertiliser",
+  "intro": "The tillage action (plowing, rotavation, or none) mixes the residues and the topsoil; the fertiliser is taken from the fertilizer library by name, and the date can be moved. These three decide how much nitrate is exposed to leaching.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 510.125,
+    "t": "Tillage",
+    "d": "Varied over plowing, rotavation, none."
+   },
+   {
+    "x": 88,
+    "y": 558.125,
+    "t": "Fertiliser date, shift in days",
+    "d": "Varied over -14, 0, 14."
+   },
+   {
+    "x": 88,
+    "y": 606.125,
+    "t": "Type of mineral fertiliser",
+    "d": "Varied over N25S, AmmoniumNitrate, Ammonia."
+   },
+   {
+    "x": 88,
+    "y": 722.9250000000001,
+    "t": "Soil",
+    "d": "Varied over usda:sand, loam."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_14": {
+  "id": "dz_combo_14",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Climate",
+  "title": "Evapotranspiration model and radiation",
+  "intro": "Daisy can take the reference evapotranspiration from the weather file (FAO56) or compute it from the energy balance, and the radiation can be scaled. The runs show how much of the answer depends on that choice.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 558.125,
+    "t": "Evapotranspiration model",
+    "d": "Varied over auto, default."
+   },
+   {
+    "x": 88,
+    "y": 606.125,
+    "t": "Radiation, factor on the weather",
+    "d": "Varied over 0.9, 1, 1.1."
+   },
+   {
+    "x": 88,
+    "y": 722.9250000000001,
+    "t": "Soil",
+    "d": "Varied over usda:sand, loam."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_15": {
+  "id": "dz_combo_15",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Climate",
+  "title": "A dry summer, a dry spring or a wet winter",
+  "intro": "The weather component can scale the precipitation month by month (twelve factors). Taking 30 percent of the rain from the summer or the spring, or adding 30 percent in the winter, shows which part of the year matters for yield and for leaching.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 558.125,
+    "t": "Seasonal rain pattern",
+    "d": "Varied over dry summer (rain x0.7 Jun-Aug), dry spring (rain x0.7 Mar-May), wet winter (rain x1.3 Dec-Feb)."
+   },
+   {
+    "x": 88,
+    "y": 606.125,
+    "t": "Irrigation",
+    "d": "Varied over 0, 1."
+   },
+   {
+    "x": 88,
+    "y": 722.9250000000001,
+    "t": "Soil",
+    "d": "Varied over usda:sand, loam."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_16": {
+  "id": "dz_combo_16",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Chemicals",
+  "title": "Sorption and half-life of a chemical",
+  "intro": "A chemical has a sorption coefficient (K_OC, L/kg) and a decomposition rate; the two decide whether it stays in the topsoil or reaches the depth where it is counted as leached.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 558.125,
+    "t": "Sorption of the chemical, K_OC",
+    "d": "Varied over 0, 50, 500."
+   },
+   {
+    "x": 88,
+    "y": 606.125,
+    "t": "Half-life of the chemical",
+    "d": "Varied over 15, 90."
+   },
+   {
+    "x": 88,
+    "y": 722.9250000000001,
+    "t": "Soil",
+    "d": "Varied over usda:sand, loam."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_17": {
+  "id": "dz_combo_17",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Irrigation",
+  "title": "Deficit irrigation: a water limit against the trigger",
+  "intro": "A crop can be given a limited amount of water in the season, and irrigation starts only when the soil water pressure is below the trigger. A strict trigger with a small limit, against a lax trigger with a large limit, shows whether the same water gives more yield when it is saved for the dry spell.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 541.325,
+    "t": "Irrigation trigger (soil suction)",
+    "d": "Varied over -150, -300, -600."
+   },
+   {
+    "x": 88,
+    "y": 600.525,
+    "t": "Water limit per crop season",
+    "d": "Varied over 60, 120, 240."
+   },
+   {
+    "x": 88,
+    "y": 722.9250000000001,
+    "t": "Soil",
+    "d": "Varied over usda:sand, loam."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_18": {
+  "id": "dz_combo_18",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Soil and crop",
+  "title": "Rooting depth of the crop",
+  "intro": "The crop model has a maximum rooting depth, which decides how much of the soil water and nitrate the roots can reach. Shallow to deep roots, rainfed and irrigated, show how much of a water shortage a deeper root zone absorbs.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 558.125,
+    "t": "Maximum rooting depth",
+    "d": "Varied over 30, 60, 90, 120."
+   },
+   {
+    "x": 88,
+    "y": 606.125,
+    "t": "Irrigation",
+    "d": "Varied over 0, 1."
+   },
+   {
+    "x": 88,
+    "y": 722.9250000000001,
+    "t": "Soil",
+    "d": "Varied over usda:sand, loam."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_19": {
+  "id": "dz_combo_19",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Climate",
+  "title": "The same farm under other climates",
+  "intro": "The weather component reads a file for one place. Running the same soil, crops and management with the weather of several places shows how much of the result belongs to the climate.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 489.32500000000005,
+    "t": "Weather station",
+    "d": "Varied over course, it-bologna, dk-foulum."
+   },
+   {
+    "x": 88,
+    "y": 606.125,
+    "t": "Irrigation",
+    "d": "Varied over 0, 1."
+   },
+   {
+    "x": 88,
+    "y": 722.9250000000001,
+    "t": "Soil",
+    "d": "Varied over usda:sand, loam."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_20": {
+  "id": "dz_combo_20",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Nitrogen",
+  "title": "Tillage against fertiliser form",
+  "intro": "The tillage action mixes residues and topsoil; the fertilizer library holds several forms of mineral nitrogen. Crossing the two shows whether the form of the nitrogen matters more under one tillage than another.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 558.125,
+    "t": "Tillage",
+    "d": "Varied over plowing, rotavation, none."
+   },
+   {
+    "x": 88,
+    "y": 606.125,
+    "t": "Type of mineral fertiliser",
+    "d": "Varied over N25S, AmmoniumNitrate, Ammonia."
+   },
+   {
+    "x": 88,
+    "y": 722.9250000000001,
+    "t": "Soil",
+    "d": "Varied over usda:sand, loam."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_21": {
+  "id": "dz_combo_21",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Parameters",
+  "title": "The numerical settings of the bioclimate model",
+  "intro": "NoOfIntervals: Number of vertical intervals in which we partition the canopy; max svat iterations: Max number of svat iterations before giving up on cobvergence; max svat absolute difference [mm/h]: Maximum absolute difference in svat ea values for convergence. Each is varied from half to double the value the farm uses; NoOfIntervals moved the yield, water or nitrogen in the test.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 696.5250000000001,
+    "t": "Bioclimate: NoOfIntervals (Daisy reference, chapter 19)",
+    "d": "Varied over 15, 30, 60."
+   },
+   {
+    "x": 88,
+    "y": 744.5250000000001,
+    "t": "Bioclimate: max svat iterations (Daisy reference, chapter 19)",
+    "d": "Varied over 50, 100, 200."
+   },
+   {
+    "x": 88,
+    "y": 792.5250000000001,
+    "t": "Bioclimate: max svat absolute difference (Daisy reference, chapter 19)",
+    "d": "Varied over 0.005, 0.01, 0.02."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 844.5250000000001,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 844.5250000000001,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 844.125,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1013.725,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1083.7250000000001,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_22": {
+  "id": "dz_combo_22",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Parameters",
+  "title": "The groundwater and the aquitard below the profile: aquitard",
+  "intro": "K aquitard [cm/h]: Conductivity of the aquitard; Z aquitard [cm]: Thickness of the aquitard. The aquitard begins below the bottommost soil horizon. Each is varied from half to double the value the farm uses; K aquitard, Z aquitard moved the yield, water or nitrogen in the test.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 743.725,
+    "t": "Groundwater aquitard: K aquitard (Daisy reference, chapter 45)",
+    "d": "Varied over 0.0005, 0.001, 0.002."
+   },
+   {
+    "x": 88,
+    "y": 791.725,
+    "t": "Groundwater aquitard: Z aquitard (Daisy reference, chapter 45)",
+    "d": "Varied over 100, 200, 400."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_23": {
+  "id": "dz_combo_23",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Parameters",
+  "title": "Turnover of organic matter and the mineral nitrogen it releases",
+  "intro": "K NH4 [h-1 ]: Maximal immobilization rate for ammonium; K NO3 [h-1 ]: Maximal immobilization rate for nitrate; CO2 threshold [h-1 ]: Turnover rate above which pools will contribute to 'CO2 fast'. Each is varied from half to double the value the farm uses; K NH4, K NO3, CO2 threshold moved the yield, water or nitrogen in the test.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 696.5250000000001,
+    "t": "OrganicMatter original: K NH4 (Daisy reference, chapter 60)",
+    "d": "Varied over 0.01042, 0.02083, 0.04167."
+   },
+   {
+    "x": 88,
+    "y": 744.5250000000001,
+    "t": "OrganicMatter original: K NO3 (Daisy reference, chapter 60)",
+    "d": "Varied over 0.01042, 0.02083, 0.04167."
+   },
+   {
+    "x": 88,
+    "y": 792.5250000000001,
+    "t": "OrganicMatter original: CO2 threshold (Daisy reference, chapter 60)",
+    "d": "Varied over 0.00005, 0.0001, 0.0002."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 844.5250000000001,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 844.5250000000001,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 844.125,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1013.725,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1083.7250000000001,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_24": {
+  "id": "dz_combo_24",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Parameters",
+  "title": "Water at the soil surface: runoff and evaporation",
+  "intro": "temperature change rate [h-1 ]: Relative change of surface temperature. If you set this to a negative value, surface temperature will reflect temperature of incomming water or ponded; EpFactor [dimensionless]: The autumn value can be lower, due to muching. With a crop factor of 1.2 a combined Kc of 1.15 is reached at LAI=5. See also [Kjaersgaard et al., 2008]; ReservoirConstant [h-1 ]: Fraction of ponding above DetentionCapacity that runoffs each hour. Each is varied from half to double the value the farm uses; temperature change rate, EpFactor, ReservoirConstant moved the yield, water or nitrogen in the test.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 695.725,
+    "t": "Surface: temperature change rate (Daisy reference, chapter 87)",
+    "d": "Varied over 0.25, 0.5, 1."
+   },
+   {
+    "x": 88,
+    "y": 743.725,
+    "t": "Surface: EpFactor (Daisy reference, chapter 87)",
+    "d": "Varied over 0.3, 0.6, 1.2."
+   },
+   {
+    "x": 88,
+    "y": 791.725,
+    "t": "Surface: ReservoirConstant (Daisy reference, chapter 87)",
+    "d": "Varied over 30, 60, 120."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_25": {
+  "id": "dz_combo_25",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Parameters",
+  "title": "The limits on the chemistry sink terms",
+  "intro": "max sink total [dimensionless]: Maximum allowed sink term as a fraction of total content. If variable timesteps are enabled, Daisy will try to scale down the timestep in; max sink solute [dimensionless]: Maximum allowed sink term as a fraction of solute content. If variable timesteps are enabled, Daisy will try to scale down the timestep; max sink secondary [dimensionless]: Maximum allowed sink term as a fraction of secondary domain content. If variable timesteps are enabled, Daisy will try to scale down the timestep. Each is varied from half to double the value the farm uses; none of them moved yield, water or nitrogen in the test, so the effect shows in the process itself.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 695.725,
+    "t": "Chemistry original: max sink total (Daisy reference, chapter 24)",
+    "d": "Varied over 0.25, 0.5, 1."
+   },
+   {
+    "x": 88,
+    "y": 743.725,
+    "t": "Chemistry original: max sink solute (Daisy reference, chapter 24)",
+    "d": "Varied over 0.45, 0.9, 1.8."
+   },
+   {
+    "x": 88,
+    "y": 791.725,
+    "t": "Chemistry original: max sink secondary (Daisy reference, chapter 24)",
+    "d": "Varied over 0.75, 1.5, 3."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1225.65,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1611.275,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_26": {
+  "id": "dz_combo_26",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Parameters",
+  "title": "Pipe drainage",
+  "intro": "L [cm]: Distance between pipes; rad [cm]: Inner radius of drain pipes. Each is varied from half to double the value the farm uses; none of them moved yield, water or nitrogen in the test, so the effect shows in the process itself.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 743.725,
+    "t": "Drain lateral: L (Daisy reference, chapter 37)",
+    "d": "Varied over 900, 1800, 3600."
+   },
+   {
+    "x": 88,
+    "y": 791.725,
+    "t": "Drain lateral: rad (Daisy reference, chapter 37)",
+    "d": "Varied over 1.75, 3.5, 7."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_combo_27": {
+  "id": "dz_combo_27",
+  "group": "30_exp",
+  "ch": "combos",
+  "sec": "Parameters",
+  "title": "The groundwater and the aquitard below the profile: static",
+  "intro": "table [cm]: Groundwater level. Positive numbers indicate free drainage. Each is varied from half to double the value the farm uses; none of them moved yield, water or nitrogen in the test, so the effect shows in the process itself.",
+  "note": "",
+  "marks": [
+   {
+    "x": 88,
+    "y": 791.725,
+    "t": "Groundwater static: table (Daisy reference, chapter 45)",
+    "d": "Varied over 0.5, 1, 2."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
+   },
+   {
+    "x": 1283.25,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or the values paired in order."
+   },
+   {
+    "x": 1668.875,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size of the experiment",
+    "d": "The number of runs and the time they take on this computer."
+   },
+   {
+    "x": 102.95,
+    "y": 1082.925,
+    "t": "Run all",
+    "d": "Runs every combination, several at a time."
+   }
+  ]
+ },
+ "dz_compare_01": {
+  "id": "dz_compare_01",
+  "group": "50_tools",
+  "ch": "results",
+  "sec": "Compare and test",
+  "title": "Compare and test: the form",
+  "intro": "Two logs are compared column by column against the smallest meaningful level of each quantity.",
+  "note": "",
+  "marks": [
+   {
+    "x": 129.6,
+    "y": 312.8,
+    "t": "Log A",
+    "d": "The reference log."
+   },
+   {
+    "x": 485.725,
+    "y": 312.8,
+    "t": "Log B",
+    "d": "The log compared with it."
+   },
+   {
+    "x": 914.95,
+    "y": 310.8,
+    "t": "Precision",
+    "d": "Smallest difference taken into account."
+   },
+   {
+    "x": 1212.6000000000001,
+    "y": 310.8,
+    "t": "Identical below",
+    "d": "Differences under this level count as identical."
+   },
+   {
+    "x": 1347.5375000000001,
+    "y": 308,
+    "t": "Compare",
+    "d": "Runs the comparison."
+   },
+   {
+    "x": 64,
+    "y": 359.20000000000005,
+    "t": "Batch",
+    "d": "Compares same-named logs from two folders."
+   }
+  ]
+ },
+ "dz_compare_02": {
+  "id": "dz_compare_02",
+  "group": "50_tools",
+  "ch": "results",
+  "sec": "Compare and test",
+  "title": "Compare and test: the result",
+  "intro": "Each column is reported as identical, different within the level, or different.",
+  "note": "",
+  "marks": [
+   {
+    "x": 64,
+    "y": 703.6,
+    "t": "Result table",
+    "d": "One row for each column with the largest difference and the verdict."
+   }
+  ]
+ },
+ "dz_curves_01": {
+  "id": "dz_curves_01",
+  "group": "50_tools",
+  "ch": "build",
+  "sec": "Process curves",
+  "title": "Process curves: the start",
+  "intro": "Process curves draws any function of the Daisy library, such as a retention curve, a response to temperature or a stress function.",
+  "note": "",
+  "marks": [
+   {
+    "x": 64,
+    "y": 656,
+    "t": "Function list",
+    "d": "The functions that can be drawn."
+   },
+   {
+    "x": 618.4000000000001,
+    "y": 704.8000000000001,
+    "t": "Drawing",
+    "d": "The chosen curve."
+   },
+   {
+    "x": 665.6750000000001,
+    "y": 1067.2,
+    "t": "Picture (PNG)",
+    "d": "Saves the figure."
+   },
+   {
+    "x": 823.4250000000001,
+    "y": 1067.2,
+    "t": "Table (CSV)",
+    "d": "Saves the numbers."
+   }
+  ]
+ },
+ "dz_data_01": {
+  "id": "dz_data_01",
+  "group": "10_data",
+  "ch": "data",
+  "sec": "My data",
+  "title": "My data: the starting screen",
+  "intro": "My data is the first tab of the group Your data. It is where the weather and the soil of the site are set once; Scenarios, Experiments and Processes all read them from here. With nothing changed, the built-in weather of Taastrup and the built-in loam and sand are used.",
+  "note": "",
+  "marks": [
+   {
+    "x": 173.775,
+    "y": 405.32500000000005,
+    "t": "Weather choice",
+    "d": "Where the weather comes from: the built-in weather, the weather of the SWAFL project, online weather of a place, or a file of your own."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 444.125,
+    "t": "Weather in use",
+    "d": "A summary of the weather that will be used: its name, years, mean rain and mean temperature, and the checks that were made."
+   },
+   {
+    "x": 72.8,
+    "y": 482.125,
+    "t": "My soil",
+    "d": "Tick to describe your own soil horizons instead of the two built-in soils."
+   }
+  ]
+ },
+ "dz_data_02": {
+  "id": "dz_data_02",
+  "group": "10_data",
+  "ch": "data",
+  "sec": "My data",
+  "title": "My data: online weather of a place",
+  "intro": "With Online weather of my area the place is typed once; Find looks it up and fills the site boxes, and Get the weather reads the daily data of the chosen years from the internet. Only complete years up to last year are asked for.",
+  "note": "",
+  "marks": [
+   {
+    "x": 173.775,
+    "y": 405.32500000000005,
+    "t": "Online weather",
+    "d": "The choice that shows the place controls below."
+   },
+   {
+    "x": 147.475,
+    "y": 456.125,
+    "t": "Place",
+    "d": "A town, a village or a farm name."
+   },
+   {
+    "x": 504.6,
+    "y": 451.725,
+    "t": "Find",
+    "d": "Looks the place up and fills the latitude, longitude and elevation."
+   },
+   {
+    "x": 673.2750000000001,
+    "y": 456.125,
+    "t": "First year",
+    "d": "First year of the weather record to read."
+   },
+   {
+    "x": 827.0250000000001,
+    "y": 456.125,
+    "t": "Last year",
+    "d": "Last complete year of the record; the current year is not available yet."
+   },
+   {
+    "x": 981.5,
+    "y": 451.725,
+    "t": "Get the weather",
+    "d": "Reads the daily rain, temperatures, radiation and reference evapotranspiration and checks them before use."
+   },
+   {
+    "x": 244.95000000000002,
+    "y": 537.725,
+    "t": "Latitude",
+    "d": "Needed to work out radiation when it is not in the data; found automatically from the place name when possible."
+   }
+  ]
+ },
+ "dz_data_03": {
+  "id": "dz_data_03",
+  "group": "10_data",
+  "ch": "data",
+  "sec": "My data",
+  "title": "My data: a weather file of your own",
+  "intro": "A weather file may be a Daisy weather file (.dwf) or a table (CSV, TXT) with a date column and the columns rain and temperature. The radiation unit is chosen or found out from the values.",
+  "note": "",
+  "marks": [
+   {
+    "x": 173.775,
+    "y": 405.32500000000005,
+    "t": "My weather file",
+    "d": "The choice that shows the file chooser."
+   },
+   {
+    "x": 639.375,
+    "y": 406.925,
+    "t": "File chooser",
+    "d": "Choose a .dwf, .csv, .txt, .dat or .tsv file."
+   },
+   {
+    "x": 1195.125,
+    "y": 405.32500000000005,
+    "t": "Radiation unit",
+    "d": "MJ per square metre and day, kWh per square metre and day, or W per square metre; leave on find out when unsure."
+   }
+  ]
+ },
+ "dz_data_04": {
+  "id": "dz_data_04",
+  "group": "10_data",
+  "ch": "data",
+  "sec": "My data",
+  "title": "My data: a Daisy weather station file read and checked",
+  "intro": "Here the Foulum station file of the bundled data was chosen as a file of your own. The line under the choice reports the years, the mean rain and temperature, the columns that were used and the notes of the checks.",
+  "note": "",
+  "marks": [
+   {
+    "x": 639.375,
+    "y": 406.925,
+    "t": "File read",
+    "d": "The file that was chosen."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 525.725,
+    "t": "Result of the reading",
+    "d": "Name, first and last year, complete years, mean annual rain, mean temperature and the columns used."
+   },
+   {
+    "x": 244.95000000000002,
+    "y": 447.32500000000005,
+    "t": "Site",
+    "d": "The latitude, longitude and elevation read from the header of the file."
+   }
+  ]
+ },
+ "dz_data_05": {
+  "id": "dz_data_05",
+  "group": "10_data",
+  "ch": "data",
+  "sec": "My data",
+  "title": "My data: my own soil",
+  "intro": "My soil takes the horizons from the surface down to at least 100 cm: lower limit, sand, silt and clay in per cent, humus in per cent and dry bulk density. Water retention and conductivity are then taken from the HYPRES pedotransfer function in Daisy.",
+  "note": "",
+  "marks": [
+   {
+    "x": 72.8,
+    "y": 563.725,
+    "t": "My soil",
+    "d": "Switches the table of horizons on; the soil choice of Scenarios and Experiments is then replaced by this soil."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 720.9250000000001,
+    "t": "Horizons",
+    "d": "One row for each horizon: lower limit, sand, silt, clay, humus and bulk density."
+   },
+   {
+    "x": 133.2125,
+    "y": 841.325,
+    "t": "Add a horizon",
+    "d": "Adds a row at the bottom."
+   },
+   {
+    "x": 523.975,
+    "y": 848.9250000000001,
+    "t": "Soil table import",
+    "d": "A CSV with the columns depth, sand, silt, clay and, if possible, humus and bulk density can be imported instead."
+   }
+  ]
+ },
+ "dz_docs_01": {
+  "id": "dz_docs_01",
+  "group": "50_tools",
+  "ch": "learn",
+  "sec": "Model and documentation",
+  "title": "Model and documentation",
+  "intro": "The Learn group describes the Daisy model, where each question is answered, how to get Daisy and how a time step is calculated.",
+  "note": "",
+  "marks": [
+   {
+    "x": 64,
+    "y": 894.5500000000001,
+    "t": "The Daisy model",
+    "d": "What the model is and what it simulates."
+   },
+   {
+    "x": 64,
+    "y": 1687.7,
+    "t": "Which question is answered where",
+    "d": "Themes of the Daisy studies and the tab for each."
+   },
+   {
+    "x": 64,
+    "y": 2110.9,
+    "t": "Get Daisy",
+    "d": "Downloads and checksums."
+   }
+  ]
+ },
+ "dz_editor_01": {
+  "id": "dz_editor_01",
+  "group": "50_tools",
+  "ch": "build",
+  "sec": "Set-up editor",
+  "title": "Set-up editor: the empty editor",
+  "intro": "The editor opens a Daisy set-up file (.dai), shows its outline and checks the brackets as you type.",
+  "note": "",
+  "marks": [
+   {
+    "x": 125.775,
+    "y": 281.6,
+    "t": "Bundled set-up",
+    "d": "Opens a set-up that comes with the program."
+   },
+   {
+    "x": 985.3625000000001,
+    "y": 276.8,
+    "t": "Open file",
+    "d": "Opens a .dai file from your computer."
+   },
+   {
+    "x": 1127.5,
+    "y": 276.8,
+    "t": "Tidy layout",
+    "d": "Indents the file."
+   },
+   {
+    "x": 1266.15,
+    "y": 276.8,
+    "t": "Download",
+    "d": "Saves the file."
+   },
+   {
+    "x": 1400.6125000000002,
+    "y": 276.8,
+    "t": "Run Daisy",
+    "d": "Runs the set-up on the desktop app."
+   },
+   {
+    "x": 65.60000000000001,
+    "y": 579.2,
+    "t": "Text",
+    "d": "The set-up text with colours."
+   },
+   {
+    "x": 1431.2,
+    "y": 349.6,
+    "t": "Outline",
+    "d": "The sections of the file."
+   }
+  ]
+ },
+ "dz_editor_02": {
+  "id": "dz_editor_02",
+  "group": "50_tools",
+  "ch": "build",
+  "sec": "Set-up editor",
+  "title": "Set-up editor: irrigation.dai open",
+  "intro": "With the irrigation set-up open the outline lists its sections and the definitions it uses.",
+  "note": "",
+  "marks": [
+   {
+    "x": 125.775,
+    "y": 281.6,
+    "t": "Set-up chosen",
+    "d": "The file that is open."
+   },
+   {
+    "x": 65.60000000000001,
+    "y": 579.2,
+    "t": "Text",
+    "d": "Keywords, values and comments in colours."
+   },
+   {
+    "x": 1431.2,
+    "y": 400.8,
+    "t": "Outline",
+    "d": "Click a section to jump to it."
+   },
+   {
+    "x": 1562.6875,
+    "y": 284.40000000000003,
+    "t": "Status",
+    "d": "File name and number of lines."
+   }
+  ]
+ },
+ "dz_exp_01": {
+  "id": "dz_exp_01",
+  "group": "30_exp",
+  "ch": "ask",
+  "sec": "Experiments",
+  "title": "Experiments: the starting screen",
+  "intro": "The Experiments tab turns a question into a set of Daisy runs. You can write the question, start from a ready made combination of the Daisy reference, choose a topic of the reference or bring set-ups of your own.",
+  "note": "",
+  "marks": [
+   {
+    "x": 300.5,
+    "y": 286.40000000000003,
+    "t": "Weather for all runs",
+    "d": "The weather of every simulation, shared with Scenarios and Processes."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 479.6,
+    "t": "Your question",
+    "d": "Write what you want to find out in your own words."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 558,
+    "t": "Make a plan",
+    "d": "Reads the question and proposes the factors, the levels and the design."
+   },
+   {
+    "x": 366.225,
+    "y": 560.4,
+    "t": "Online AI",
+    "d": "Optional: an online AI reads the question first; each plan it gives is checked against what Daisy can vary."
+   },
+   {
+    "x": 444.45000000000005,
+    "y": 630,
+    "t": "Best combinations",
+    "d": "Ready made experiments worked out from the Daisy reference."
+   },
+   {
+    "x": 606.15,
+    "y": 630,
+    "t": "By topic",
+    "d": "The 107 topics of the Daisy reference, each leading to experiments."
+   },
+   {
+    "x": 791.1375,
+    "y": 630,
+    "t": "Import",
+    "d": "Bring an experiment folder, set-ups, weather, soil tables or logs."
+   },
+   {
+    "x": 64,
+    "y": 1438.2,
+    "t": "My experiments",
+    "d": "The list of experiments that are run or saved together."
+   }
+  ]
+ },
+ "dz_exp_02": {
+  "id": "dz_exp_02",
+  "group": "30_exp",
+  "ch": "ask",
+  "sec": "Experiments",
+  "title": "Experiments: best combinations to start with",
+  "intro": "The list holds 27 combinations in groups: Irrigation, Nitrogen, Climate, Soil and crop, Chemicals and Parameters. Each shows the topics of the reference it draws on. Choosing one shows why it is worth running; the tick boxes select several to add at once.",
+  "note": "",
+  "marks": [
+   {
+    "x": 101.60000000000001,
+    "y": 774.5250000000001,
+    "t": "Tick box",
+    "d": "Ticks the combination so that several can be added together."
+   },
+   {
+    "x": 147.20000000000002,
+    "y": 774.5250000000001,
+    "t": "Combination",
+    "d": "A combination with the topics of the Daisy reference it draws on."
+   },
+   {
+    "x": 900.0375,
+    "y": 854.125,
+    "t": "Load this experiment",
+    "d": "Loads the plan of the chosen combination for checking and running."
+   },
+   {
+    "x": 1134.6625000000001,
+    "y": 854.125,
+    "t": "Add to my experiments",
+    "d": "Adds the chosen combination to the list of experiments without loading it."
+   },
+   {
+    "x": 822.4000000000001,
+    "y": 905.325,
+    "t": "Add the ticked",
+    "d": "Adds every ticked combination, each as an experiment of its own."
+   }
+  ]
+ },
+ "dz_exp_03": {
+  "id": "dz_exp_03",
+  "group": "30_exp",
+  "ch": "ask",
+  "sec": "Experiments",
+  "title": "Experiments: the topics of the Daisy reference",
+  "intro": "The second tab lists the 107 topics of the Daisy reference manual in three parts. A topic shows its models, the parameters that Daisy accepts for experiments and the related experiments. The size of the experiment is set before loading.",
+  "note": "",
+  "marks": [
+   {
+    "x": 537.25,
+    "y": 741.325,
+    "t": "Levels per parameter",
+    "d": "How many values of each parameter are tested."
+   },
+   {
+    "x": 742.225,
+    "y": 741.325,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or paired."
+   },
+   {
+    "x": 1123.05,
+    "y": 740.9250000000001,
+    "t": "At most",
+    "d": "The largest number of runs."
+   },
+   {
+    "x": 105.60000000000001,
+    "y": 1090.925,
+    "t": "List of topics",
+    "d": "Scroll the list; a star marks a topic that has its own experiments."
+   },
+   {
+    "x": 712.9250000000001,
+    "y": 839.725,
+    "t": "Previous and next",
+    "d": "Moves through the topics in order."
+   },
+   {
+    "x": 1071.425,
+    "y": 1045.325,
+    "t": "Add",
+    "d": "Adds the experiment to my experiments."
+   },
+   {
+    "x": 679.2,
+    "y": 1045.325,
+    "t": "Load",
+    "d": "Loads the experiment for checking and running."
+   }
+  ]
+ },
+ "dz_exp_04": {
+  "id": "dz_exp_04",
+  "group": "30_exp",
+  "ch": "ask",
+  "sec": "Experiments",
+  "title": "Experiments: a topic with parameters you can vary",
+  "intro": "Topics whose parameters Daisy accepts show them with a tick box. Each parameter was tested in Daisy; the levels are fractions of the value the farm uses.",
+  "note": "",
+  "marks": [
+   {
+    "x": 667.2,
+    "y": 1013.325,
+    "t": "Parameter",
+    "d": "Tick one or several parameters to vary."
+   },
+   {
+    "x": 679.2,
+    "y": 1174.125,
+    "t": "Topic details",
+    "d": "The introduction of the topic, its parameters and the models it lists."
+   }
+  ]
+ },
+ "dz_exp_05": {
+  "id": "dz_exp_05",
+  "group": "30_exp",
+  "ch": "ask",
+  "sec": "Experiments",
+  "title": "Experiments: import data and set-ups",
+  "intro": "The third tab brings in what you already have: an experiment folder as a zip, Daisy set-up files, weather, soil tables or logs. Each goes where it is used; set-ups are run as experiments.",
+  "note": "",
+  "marks": [
+   {
+    "x": 183.6125,
+    "y": 735.725,
+    "t": "Choose a folder",
+    "d": "Reads every Daisy file of a folder."
+   }
+  ]
+ },
+ "dz_exp_06": {
+  "id": "dz_exp_06",
+  "group": "30_exp",
+  "ch": "ask",
+  "sec": "Experiments",
+  "title": "Experiments: the plan before running",
+  "intro": "Loading a combination fills the plan: what changes, the values tested, how they are combined, the weather and soil, the years and the results saved. The size of the experiment is shown before anything is run.",
+  "note": "",
+  "marks": [
+   {
+    "x": 143.45000000000002,
+    "y": 281.52500000000003,
+    "t": "Source of the plan",
+    "d": "Where the plan comes from: the reference manual, your request or the built-in planner."
+   },
+   {
+    "x": 396.85,
+    "y": 541.325,
+    "t": "Values tested",
+    "d": "The values can be typed over; the allowed range is shown beside them."
+   },
+   {
+    "x": 1661.2,
+    "y": 541.325,
+    "t": "Remove",
+    "d": "Takes the row out of the experiment."
+   },
+   {
+    "x": 330.65000000000003,
+    "y": 843.725,
+    "t": "Add something to change",
+    "d": "Adds a further factor."
+   },
+   {
+    "x": 1283.25,
+    "y": 843.725,
+    "t": "How to combine",
+    "d": "Every combination, one thing at a time, or paired."
+   },
+   {
+    "x": 1668.875,
+    "y": 843.325,
+    "t": "At most",
+    "d": "The largest number of runs."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 930.9250000000001,
+    "t": "Results saved",
+    "d": "How much Daisy writes: yearly totals only, with harvest, with daily values, or everything."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1012.9250000000001,
+    "t": "Size",
+    "d": "Number of runs and the time they take."
+   }
+  ]
+ },
+ "dz_exp_07": {
+  "id": "dz_exp_07",
+  "group": "30_exp",
+  "ch": "ask",
+  "sec": "Experiments",
+  "title": "Experiments: weather, soil and years of the experiment",
+  "intro": "The weather list of an experiment follows the choice at the top of the tab and offers the built-in stations as well. The soil, the years and what is saved are set beside it.",
+  "note": "",
+  "marks": [
+   {
+    "x": 173.775,
+    "y": 885.325,
+    "t": "Weather",
+    "d": "Online weather of my area, the weather of the SWAFL project, my weather, or a built-in station."
+   },
+   {
+    "x": 734.0500000000001,
+    "y": 880.5250000000001,
+    "t": "Place",
+    "d": "The place whose weather is read from the internet."
+   },
+   {
+    "x": 1343.7250000000001,
+    "y": 880.5250000000001,
+    "t": "Get the weather",
+    "d": "Reads and checks the weather of the place."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 930.9250000000001,
+    "t": "Soil",
+    "d": "The soil of the experiment when it is not a factor."
+   },
+   {
+    "x": 564.7,
+    "y": 930.5250000000001,
+    "t": "Years",
+    "d": "First and last year of every run."
+   },
+   {
+    "x": 72.8,
+    "y": 971.725,
+    "t": "Use my data",
+    "d": "Uses the weather and soil given in My data when they are set."
+   }
+  ]
+ },
+ "dz_exp_08": {
+  "id": "dz_exp_08",
+  "group": "30_exp",
+  "ch": "ask",
+  "sec": "Experiments",
+  "title": "Experiments: my experiments, ordered and ticked",
+  "intro": "Experiments are added to a list in the order of preference. Each has its own name, design and largest number of runs; only the ticked ones are run, from the top down, or saved together in one folder.",
+  "note": "",
+  "marks": [
+   {
+    "x": 79.2,
+    "y": 208.525,
+    "t": "Run",
+    "d": "Ticks the experiments that are run or saved."
+   },
+   {
+    "x": 223.55,
+    "y": 196.525,
+    "t": "Name",
+    "d": "The name of the experiment; it becomes the name of its folder."
+   },
+   {
+    "x": 850.95,
+    "y": 209.72500000000002,
+    "t": "Combinations",
+    "d": "The design of this experiment on its own."
+   },
+   {
+    "x": 1255.75,
+    "y": 209.72500000000002,
+    "t": "At most",
+    "d": "The largest number of runs of this experiment."
+   },
+   {
+    "x": 1523.3000000000002,
+    "y": 209.72500000000002,
+    "t": "Move up",
+    "d": "Moves the experiment earlier in the list."
+   },
+   {
+    "x": 404.25,
+    "y": 433.725,
+    "t": "Run the ticked",
+    "d": "Runs the ticked experiments one after another."
+   },
+   {
+    "x": 524.475,
+    "y": 433.725,
+    "t": "Save as one folder",
+    "d": "Saves the ticked experiments as E1, E2 and so on in one zip."
+   },
+   {
+    "x": 947.0500000000001,
+    "y": 433.725,
+    "t": "Save as plan",
+    "d": "Saves the ticked plans as one JSON file."
+   }
+  ]
+ },
+ "dz_files_01": {
+  "id": "dz_files_01",
+  "group": "10_data",
+  "ch": "data",
+  "sec": "Files",
+  "title": "Files: collecting Daisy output and set-up files",
+  "intro": "Files collects everything Daisy writes or reads: output logs (.dlf), weather files (.dwf), tables (.csv) and set-up files (.dai). Whatever is loaded here is available to the plots, the mass balance, the comparison, the calibration and the soil column.",
+  "note": "",
+  "marks": [
+   {
+    "x": 98.625,
+    "y": 303.325,
+    "t": "Add files",
+    "d": "Chooses one or several files."
+   },
+   {
+    "x": 252.0875,
+    "y": 303.325,
+    "t": "Add a folder",
+    "d": "Reads every Daisy file of a folder, for example a whole experiment folder."
+   },
+   {
+    "x": 370.925,
+    "y": 303.325,
+    "t": "Load all bundled examples",
+    "d": "Loads every example log that comes with the program."
+   },
+   {
+    "x": 64,
+    "y": 372.52500000000003,
+    "t": "Drop area",
+    "d": "Files and folders can also be dropped here."
+   },
+   {
+    "x": 64,
+    "y": 669.325,
+    "t": "Bundled examples",
+    "d": "The example logs from the repositories of the Daisy model; load them one by one."
+   },
+   {
+    "x": 64,
+    "y": 940.5250000000001,
+    "t": "Loaded logs",
+    "d": "The logs that are loaded now, with their columns."
+   }
+  ]
+ },
+ "dz_files_02": {
+  "id": "dz_files_02",
+  "group": "10_data",
+  "ch": "data",
+  "sec": "Files",
+  "title": "Files: the bundled logs loaded",
+  "intro": "After Load all bundled examples every log appears in the list of loaded logs with its number of rows and columns.",
+  "note": "",
+  "marks": [
+   {
+    "x": 370.925,
+    "y": 303.325,
+    "t": "Load all",
+    "d": "The button that was pressed."
+   },
+   {
+    "x": 64,
+    "y": 1130.525,
+    "t": "Loaded logs",
+    "d": "Each loaded log with its size; click a name to see its columns."
+   },
+   {
+    "x": 704.0375,
+    "y": 310.925,
+    "t": "Status",
+    "d": "A message that says what was read."
+   }
+  ]
+ },
+ "dz_library_01": {
+  "id": "dz_library_01",
+  "group": "10_data",
+  "ch": "data",
+  "sec": "Library",
+  "title": "Library: soil horizons",
+  "intro": "The Library holds the soil horizons, crops, fertilisers, chemicals and management actions of the Daisy library files, read in full. A soil horizon can be opened to see its water retention and conductivity curves.",
+  "note": "",
+  "marks": [
+   {
+    "x": 144.8,
+    "y": 328.925,
+    "t": "Kind of entry",
+    "d": "Soil horizons, crops, fertilisers, chemicals and management actions."
+   },
+   {
+    "x": 296,
+    "y": 326.925,
+    "t": "Search",
+    "d": "Filters the list by name."
+   },
+   {
+    "x": 625.6750000000001,
+    "y": 331.725,
+    "t": "Count",
+    "d": "The number of entries shown out of all."
+   },
+   {
+    "x": 64,
+    "y": 722.5250000000001,
+    "t": "List",
+    "d": "The entries; click one to see its parameters."
+   }
+  ]
+ },
+ "dz_library_02": {
+  "id": "dz_library_02",
+  "group": "10_data",
+  "ch": "data",
+  "sec": "Library",
+  "title": "Library: a soil horizon opened",
+  "intro": "Choosing a horizon shows its texture class and, below the list, the retention and conductivity curves drawn from its parameters.",
+  "note": "",
+  "marks": [
+   {
+    "x": 64,
+    "y": 722.5250000000001,
+    "t": "Selected horizon",
+    "d": "The horizon whose parameters are shown."
+   },
+   {
+    "x": 560,
+    "y": 963.125,
+    "t": "Parameters and curves",
+    "d": "Parameters of the horizon and the curves of water content and conductivity against suction."
+   }
+  ]
+ },
+ "dz_library_03": {
+  "id": "dz_library_03",
+  "group": "10_data",
+  "ch": "data",
+  "sec": "Library",
+  "title": "Library: the crops of the Daisy library",
+  "intro": "The same screen with the crops chosen in the first list.",
+  "note": "",
+  "marks": [
+   {
+    "x": 144.8,
+    "y": 328.925,
+    "t": "Kind of entry",
+    "d": "Now set to crops."
+   },
+   {
+    "x": 626.1500000000001,
+    "y": 331.725,
+    "t": "Count",
+    "d": "Number of crops in the library."
+   },
+   {
+    "x": 64,
+    "y": 722.5250000000001,
+    "t": "Crops",
+    "d": "Each crop with the model that describes it."
+   }
+  ]
+ },
+ "dz_plot_01": {
+  "id": "dz_plot_01",
+  "group": "50_tools",
+  "ch": "results",
+  "sec": "Plot",
+  "title": "Plot: a time series",
+  "intro": "Plot draws any column of a loaded log. The log, the view and the period are chosen in the first row, the columns in the list below it.",
+  "note": "",
+  "marks": [
+   {
+    "x": 110.95,
+    "y": 276,
+    "t": "Log",
+    "d": "The loaded log to draw."
+   },
+   {
+    "x": 459.425,
+    "y": 276,
+    "t": "View",
+    "d": "Time series, annual values, depth profile through time, or profile at a date."
+   },
+   {
+    "x": 856.6500000000001,
+    "y": 274,
+    "t": "From",
+    "d": "First date drawn."
+   },
+   {
+    "x": 1085.4750000000001,
+    "y": 274,
+    "t": "To",
+    "d": "Last date drawn."
+   },
+   {
+    "x": 156.65,
+    "y": 376.8,
+    "t": "Columns",
+    "d": "Hold Ctrl or Shift to draw several columns together."
+   },
+   {
+    "x": 76.2125,
+    "y": 482.40000000000003,
+    "t": "Draw",
+    "d": "Draws the chosen columns."
+   },
+   {
+    "x": 64,
+    "y": 736.8000000000001,
+    "t": "Chart",
+    "d": "Move over the chart to read the values."
+   },
+   {
+    "x": 206.10000000000002,
+    "y": 482.40000000000003,
+    "t": "Picture (PNG)",
+    "d": "Saves the figure as a picture with its source line."
+   },
+   {
+    "x": 363.85,
+    "y": 482.40000000000003,
+    "t": "Table (CSV)",
+    "d": "Saves the plotted numbers as a table."
+   }
+  ]
+ },
+ "dz_plot_02": {
+  "id": "dz_plot_02",
+  "group": "50_tools",
+  "ch": "results",
+  "sec": "Plot",
+  "title": "Plot: annual values",
+  "intro": "The annual view adds up, averages or takes the largest or smallest value of each year.",
+  "note": "",
+  "marks": [
+   {
+    "x": 459.425,
+    "y": 276,
+    "t": "Annual values",
+    "d": "The view that was chosen."
+   },
+   {
+    "x": 575.0500000000001,
+    "y": 419.20000000000005,
+    "t": "Annual summary",
+    "d": "Sum, mean, maximum or minimum of each year."
+   },
+   {
+    "x": 64,
+    "y": 736.8000000000001,
+    "t": "Chart",
+    "d": "One bar or point for each year."
+   }
+  ]
+ },
+ "dz_plot_03": {
+  "id": "dz_plot_03",
+  "group": "50_tools",
+  "ch": "results",
+  "sec": "Plot",
+  "title": "Plot: depth profile through time",
+  "intro": "Logs with a depth column are drawn as a map of depth against time in spectral colours.",
+  "note": "",
+  "marks": [
+   {
+    "x": 183.75,
+    "y": 276,
+    "t": "Log",
+    "d": "A log with depth, here the matrix water flux."
+   },
+   {
+    "x": 384.225,
+    "y": 276,
+    "t": "View",
+    "d": "Depth profile through time."
+   },
+   {
+    "x": 64,
+    "y": 752.8000000000001,
+    "t": "Map",
+    "d": "Colour shows the value; the scale is beside the map."
+   }
+  ]
+ },
+ "dz_plot_04": {
+  "id": "dz_plot_04",
+  "group": "50_tools",
+  "ch": "results",
+  "sec": "Plot",
+  "title": "Plot: profile at a date, animated",
+  "intro": "The slider moves through the dates; Play runs the profile like a film.",
+  "note": "",
+  "marks": [
+   {
+    "x": 699.75,
+    "y": 390.40000000000003,
+    "t": "Date slider",
+    "d": "Chooses the date of the profile."
+   },
+   {
+    "x": 704.4625000000001,
+    "y": 431.20000000000005,
+    "t": "Play",
+    "d": "Steps through the dates."
+   },
+   {
+    "x": 64,
+    "y": 736.8000000000001,
+    "t": "Profile",
+    "d": "Value against depth on that date."
+   }
+  ]
+ },
+ "dz_proc_01": {
+  "id": "dz_proc_01",
+  "group": "50_tools",
+  "ch": "results",
+  "sec": "Processes",
+  "title": "Processes: the map",
+  "intro": "Processes is a map of the model after Fig. 1 of the Daisy paper. Each box is a process; clicking it explains it and draws its figures.",
+  "note": "",
+  "marks": [
+   {
+    "x": 64,
+    "y": 1061.2250000000001,
+    "t": "Process map",
+    "d": "One box for each process, coloured by group."
+   },
+   {
+    "x": 64,
+    "y": 1707.25,
+    "t": "Other processes",
+    "d": "Processes not drawn in the paper figure."
+   },
+   {
+    "x": 64,
+    "y": 1868.25,
+    "t": "Details",
+    "d": "Text and figures of the chosen process."
+   }
+  ]
+ },
+ "dz_proc_02": {
+  "id": "dz_proc_02",
+  "group": "60_proc",
+  "ch": "results",
+  "sec": "Processes",
+  "title": "Processes: Weather and bioclimate",
+  "intro": "Daisy reads daily or hourly weather (air temperature, global radiation, precipitation, reference evapotranspiration and, if available, wind and vapour pressure) and the Bioclimate module splits the energy and water between canopy, litter, snow, pond and soil. The potential evapotranspiration is shared out by the cover of each layer.",
+  "note": "",
+  "marks": [
+   {
+    "x": 944,
+    "y": 1061.2250000000001,
+    "t": "Process map",
+    "d": "The process that is open has a red frame."
+   },
+   {
+    "x": 83.2,
+    "y": 1768.25,
+    "t": "Process",
+    "d": "Name of the process and what Daisy does there."
+   },
+   {
+    "x": 195.275,
+    "y": 1934.0500000000002,
+    "t": "Source of the figures",
+    "d": "The run whose logs are drawn."
+   },
+   {
+    "x": 535.075,
+    "y": 1934.8500000000001,
+    "t": "Run Daisy with all process logs",
+    "d": "Runs the model with every process log on."
+   },
+   {
+    "x": 944,
+    "y": 2270.05,
+    "t": "First figure",
+    "d": "The figure of the process."
+   },
+   {
+    "x": 944,
+    "y": 2862.8500000000004,
+    "t": "Second figure",
+    "d": "The next figure of the process."
+   },
+   {
+    "x": 944,
+    "y": 3478.05,
+    "t": "Third figure",
+    "d": "The next figure of the process."
+   }
+  ]
+ },
+ "dz_proc_03": {
+  "id": "dz_proc_03",
+  "group": "60_proc",
+  "ch": "results",
+  "sec": "Processes",
+  "title": "Processes: Snowpack",
+  "intro": "Precipitation falls as snow below the threshold temperature and builds a snowpack that holds liquid water, ages, compacts and melts; melt water percolates and, when the soil below is frozen, can run off or pond.",
+  "note": "",
+  "marks": [
+   {
+    "x": 944,
+    "y": 1061.2250000000001,
+    "t": "Process map",
+    "d": "The process that is open has a red frame."
+   },
+   {
+    "x": 83.2,
+    "y": 1768.25,
+    "t": "Process",
+    "d": "Name of the process and what Daisy does there."
+   },
+   {
+    "x": 195.275,
+    "y": 1907.65,
+    "t": "Source of the figures",
+    "d": "The run whose logs are drawn."
+   },
+   {
+    "x": 535.075,
+    "y": 1908.45,
+    "t": "Run Daisy with all process logs",
+    "d": "Runs the model with every process log on."
+   },
+   {
+    "x": 944,
+    "y": 2243.65,
+    "t": "First figure",
+    "d": "The figure of the process."
+   },
+   {
+    "x": 944,
+    "y": 2858.8500000000004,
+    "t": "Second figure",
+    "d": "The next figure of the process."
+   },
+   {
+    "x": 944,
+    "y": 3451.65,
+    "t": "Third figure",
+    "d": "The next figure of the process."
+   }
+  ]
+ },
+ "dz_proc_04": {
+  "id": "dz_proc_04",
+  "group": "60_proc",
+  "ch": "results",
+  "sec": "Processes",
+  "title": "Processes: Canopy, litter and ponded water",
+  "intro": "Rain and irrigation are intercepted by the canopy and the litter layer and evaporate from them; what passes goes to the surface pond. The pond infiltrates into the matrix, the biopores (tertiary infiltration) or runs off. Tillage resets the surface.",
+  "note": "",
+  "marks": [
+   {
+    "x": 944,
+    "y": 1057.9,
+    "t": "Process map",
+    "d": "The process that is open has a red frame."
+   },
+   {
+    "x": 83.2,
+    "y": 1764.9250000000002,
+    "t": "Process",
+    "d": "Name of the process and what Daisy does there."
+   },
+   {
+    "x": 195.275,
+    "y": 1930.7250000000001,
+    "t": "Source of the figures",
+    "d": "The run whose logs are drawn."
+   },
+   {
+    "x": 535.075,
+    "y": 1931.525,
+    "t": "Run Daisy with all process logs",
+    "d": "Runs the model with every process log on."
+   },
+   {
+    "x": 944,
+    "y": 2266.725,
+    "t": "First figure",
+    "d": "The figure of the process."
+   },
+   {
+    "x": 944,
+    "y": 2881.925,
+    "t": "Second figure",
+    "d": "The next figure of the process."
+   },
+   {
+    "x": 944,
+    "y": 3497.125,
+    "t": "Third figure",
+    "d": "The next figure of the process."
+   }
+  ]
+ },
+ "dz_proc_05": {
+  "id": "dz_proc_05",
+  "group": "60_proc",
+  "ch": "results",
+  "sec": "Processes",
+  "title": "Processes: Soil water (Richards equation)",
+  "intro": "Water in the matrix moves by the one-dimensional Richards equation, with hydraulic properties from the horizons (retention curve and conductivity). Root uptake is the sink and evaporation the surface boundary; the bottom boundary can be free drainage, a groundwater table or a lysimeter.",
+  "note": "",
+  "marks": [
+   {
+    "x": 944,
+    "y": 1061.2250000000001,
+    "t": "Process map",
+    "d": "The process that is open has a red frame."
+   },
+   {
+    "x": 83.2,
+    "y": 1768.25,
+    "t": "Process",
+    "d": "Name of the process and what Daisy does there."
+   },
+   {
+    "x": 195.275,
+    "y": 1934.0500000000002,
+    "t": "Source of the figures",
+    "d": "The run whose logs are drawn."
+   },
+   {
+    "x": 535.075,
+    "y": 1934.8500000000001,
+    "t": "Run Daisy with all process logs",
+    "d": "Runs the model with every process log on."
+   },
+   {
+    "x": 944,
+    "y": 2302.05,
+    "t": "First figure",
+    "d": "The figure of the process."
+   },
+   {
+    "x": 944,
+    "y": 2981.25,
+    "t": "Second figure",
+    "d": "The next figure of the process."
+   },
+   {
+    "x": 944,
+    "y": 3660.4500000000003,
+    "t": "Third figure",
+    "d": "The next figure of the process."
+   }
+  ]
+ },
+ "dz_proc_06": {
+  "id": "dz_proc_06",
+  "group": "60_proc",
+  "ch": "results",
+  "sec": "Processes",
+  "title": "Processes: Biopores (preferential flow)",
+  "intro": "Part of the water and solutes moves through biopores that bypass the matrix, filled from the surface pond and exchanging with the matrix along the way. This is the source of fast leaching of nitrate and pesticide.",
+  "note": "",
+  "marks": [
+   {
+    "x": 944,
+    "y": 1061.2250000000001,
+    "t": "Process map",
+    "d": "The process that is open has a red frame."
+   },
+   {
+    "x": 83.2,
+    "y": 1768.25,
+    "t": "Process",
+    "d": "Name of the process and what Daisy does there."
+   },
+   {
+    "x": 195.275,
+    "y": 1907.65,
+    "t": "Source of the figures",
+    "d": "The run whose logs are drawn."
+   },
+   {
+    "x": 535.075,
+    "y": 1908.45,
+    "t": "Run Daisy with all process logs",
+    "d": "Runs the model with every process log on."
+   },
+   {
+    "x": 944,
+    "y": 2275.65,
+    "t": "First figure",
+    "d": "The figure of the process."
+   }
+  ]
+ },
+ "dz_proc_07": {
+  "id": "dz_proc_07",
+  "group": "60_proc",
+  "ch": "results",
+  "sec": "Processes",
+  "title": "Processes: Drains and groundwater",
+  "intro": "Tile drains are a sink in the layers at the drain depth, when the soil there is saturated; drained water takes nitrate with it. A groundwater table or a lysimeter bottom boundary closes the water balance at the bottom.",
+  "note": "",
+  "marks": [
+   {
+    "x": 944,
+    "y": 1061.2250000000001,
+    "t": "Process map",
+    "d": "The process that is open has a red frame."
+   },
+   {
+    "x": 83.2,
+    "y": 1768.25,
+    "t": "Process",
+    "d": "Name of the process and what Daisy does there."
+   },
+   {
+    "x": 195.275,
+    "y": 1907.65,
+    "t": "Source of the figures",
+    "d": "The run whose logs are drawn."
+   },
+   {
+    "x": 535.075,
+    "y": 1908.45,
+    "t": "Run Daisy with all process logs",
+    "d": "Runs the model with every process log on."
+   },
+   {
+    "x": 944,
+    "y": 2275.65,
+    "t": "First figure",
+    "d": "The figure of the process."
+   }
+  ]
+ },
+ "dz_proc_08": {
+  "id": "dz_proc_08",
+  "group": "60_proc",
+  "ch": "results",
+  "sec": "Processes",
+  "title": "Processes: Soil heat and ice",
+  "intro": "Heat moves by conduction and with the water flux; the surface boundary comes from the energy balance of the bioclimate. When the temperature falls below the freezing point part of the water turns to ice, which blocks the flow and releases latent heat.",
+  "note": "",
+  "marks": [
+   {
+    "x": 944,
+    "y": 1061.2250000000001,
+    "t": "Process map",
+    "d": "The process that is open has a red frame."
+   },
+   {
+    "x": 83.2,
+    "y": 1768.25,
+    "t": "Process",
+    "d": "Name of the process and what Daisy does there."
+   },
+   {
+    "x": 195.275,
+    "y": 1934.0500000000002,
+    "t": "Source of the figures",
+    "d": "The run whose logs are drawn."
+   },
+   {
+    "x": 535.075,
+    "y": 1934.8500000000001,
+    "t": "Run Daisy with all process logs",
+    "d": "Runs the model with every process log on."
+   },
+   {
+    "x": 944,
+    "y": 2302.05,
+    "t": "First figure",
+    "d": "The figure of the process."
+   },
+   {
+    "x": 944,
+    "y": 2981.25,
+    "t": "Second figure",
+    "d": "The next figure of the process."
+   }
+  ]
+ },
+ "dz_proc_09": {
+  "id": "dz_proc_09",
+  "group": "60_proc",
+  "ch": "results",
+  "sec": "Processes",
+  "title": "Processes: Nitrate (solute transport)",
+  "intro": "Nitrate moves with the water by convection and dispersion and is taken up by roots; it is produced by nitrification and lost by denitrification, drains and leaching below the root zone.",
+  "note": "",
+  "marks": [
+   {
+    "x": 944,
+    "y": 1061.2250000000001,
+    "t": "Process map",
+    "d": "The process that is open has a red frame."
+   },
+   {
+    "x": 83.2,
+    "y": 1768.25,
+    "t": "Process",
+    "d": "Name of the process and what Daisy does there."
+   },
+   {
+    "x": 195.275,
+    "y": 1907.65,
+    "t": "Source of the figures",
+    "d": "The run whose logs are drawn."
+   },
+   {
+    "x": 535.075,
+    "y": 1908.45,
+    "t": "Run Daisy with all process logs",
+    "d": "Runs the model with every process log on."
+   },
+   {
+    "x": 944,
+    "y": 2275.65,
+    "t": "First figure",
+    "d": "The figure of the process."
+   },
+   {
+    "x": 944,
+    "y": 2938.8500000000004,
+    "t": "Second figure",
+    "d": "The next figure of the process."
+   }
+  ]
+ },
+ "dz_proc_10": {
+  "id": "dz_proc_10",
+  "group": "60_proc",
+  "ch": "results",
+  "sec": "Processes",
+  "title": "Processes: Ammonium (sorbed and dissolved)",
+  "intro": "Ammonium comes from mineralisation and fertiliser; it is sorbed on the soil, nitrified to nitrate (the rate depends on the temperature, the water content and the pH) and taken up by plants.",
+  "note": "",
+  "marks": [
+   {
+    "x": 944,
+    "y": 1061.2250000000001,
+    "t": "Process map",
+    "d": "The process that is open has a red frame."
+   },
+   {
+    "x": 83.2,
+    "y": 1768.25,
+    "t": "Process",
+    "d": "Name of the process and what Daisy does there."
+   },
+   {
+    "x": 195.275,
+    "y": 1907.65,
+    "t": "Source of the figures",
+    "d": "The run whose logs are drawn."
+   },
+   {
+    "x": 535.075,
+    "y": 1908.45,
+    "t": "Run Daisy with all process logs",
+    "d": "Runs the model with every process log on."
+   },
+   {
+    "x": 944,
+    "y": 2275.65,
+    "t": "First figure",
+    "d": "The figure of the process."
+   }
+  ]
+ },
+ "dz_proc_11": {
+  "id": "dz_proc_11",
+  "group": "60_proc",
+  "ch": "results",
+  "sec": "Processes",
+  "title": "Processes: Organic matter pools (AOM, SMB, SOM)",
+  "intro": "Added organic matter (AOM1-3: crop residues, roots, manure) is decomposed by the soil microbial biomass (SMB1-2), which builds soil organic matter (SOM1-3) from slow to inert; each pool has a carbon and a nitrogen content with its own turnover and efficiency, and the C:N ratio decides whether nitrogen is mineralised or immobilised.",
+  "note": "",
+  "marks": [
+   {
+    "x": 944,
+    "y": 1057.9,
+    "t": "Process map",
+    "d": "The process that is open has a red frame."
+   },
+   {
+    "x": 83.2,
+    "y": 1764.9250000000002,
+    "t": "Process",
+    "d": "Name of the process and what Daisy does there."
+   },
+   {
+    "x": 195.275,
+    "y": 1930.7250000000001,
+    "t": "Source of the figures",
+    "d": "The run whose logs are drawn."
+   },
+   {
+    "x": 535.075,
+    "y": 1931.525,
+    "t": "Run Daisy with all process logs",
+    "d": "Runs the model with every process log on."
+   },
+   {
+    "x": 944,
+    "y": 2266.725,
+    "t": "First figure",
+    "d": "The figure of the process."
+   },
+   {
+    "x": 944,
+    "y": 2881.925,
+    "t": "Second figure",
+    "d": "The next figure of the process."
+   },
+   {
+    "x": 944,
+    "y": 3497.125,
+    "t": "Third figure",
+    "d": "The next figure of the process."
+   }
+  ]
+ },
+ "dz_proc_12": {
+  "id": "dz_proc_12",
+  "group": "60_proc",
+  "ch": "results",
+  "sec": "Processes",
+  "title": "Processes: Carbon balance and residues",
+  "intro": "Carbon enters with the crop residues (shoot, root and stubble), fertiliser and manure and leaves as CO2 from the microbial pools and the plants; the balance shows how the soil carbon changes with the rotation and tillage.",
+  "note": "",
+  "marks": [
+   {
+    "x": 944,
+    "y": 1058.05,
+    "t": "Process map",
+    "d": "The process that is open has a red frame."
+   },
+   {
+    "x": 83.2,
+    "y": 1765.075,
+    "t": "Process",
+    "d": "Name of the process and what Daisy does there."
+   },
+   {
+    "x": 195.275,
+    "y": 1930.875,
+    "t": "Source of the figures",
+    "d": "The run whose logs are drawn."
+   },
+   {
+    "x": 535.075,
+    "y": 1931.6750000000002,
+    "t": "Run Daisy with all process logs",
+    "d": "Runs the model with every process log on."
+   },
+   {
+    "x": 944,
+    "y": 2266.875,
+    "t": "First figure",
+    "d": "The figure of the process."
+   },
+   {
+    "x": 944,
+    "y": 2859.675,
+    "t": "Second figure",
+    "d": "The next figure of the process."
+   },
+   {
+    "x": 944,
+    "y": 3474.875,
+    "t": "Third figure",
+    "d": "The next figure of the process."
+   }
+  ]
+ },
+ "dz_proc_13": {
+  "id": "dz_proc_13",
+  "group": "60_proc",
+  "ch": "results",
+  "sec": "Processes",
+  "title": "Processes: Denitrification and N2O",
+  "intro": "In wet, carbon-rich soil nitrate is reduced to N2 and N2O; the rate follows the CO2 production, the water content and the temperature, with a potential rate and a redox part, and N2O also comes from nitrification.",
+  "note": "",
+  "marks": [
+   {
+    "x": 944,
+    "y": 1061.2250000000001,
+    "t": "Process map",
+    "d": "The process that is open has a red frame."
+   },
+   {
+    "x": 83.2,
+    "y": 1768.25,
+    "t": "Process",
+    "d": "Name of the process and what Daisy does there."
+   },
+   {
+    "x": 195.275,
+    "y": 1907.65,
+    "t": "Source of the figures",
+    "d": "The run whose logs are drawn."
+   },
+   {
+    "x": 535.075,
+    "y": 1908.45,
+    "t": "Run Daisy with all process logs",
+    "d": "Runs the model with every process log on."
+   },
+   {
+    "x": 944,
+    "y": 2243.65,
+    "t": "First figure",
+    "d": "The figure of the process."
+   },
+   {
+    "x": 944,
+    "y": 2858.8500000000004,
+    "t": "Second figure",
+    "d": "The next figure of the process."
+   },
+   {
+    "x": 944,
+    "y": 3451.65,
+    "t": "Third figure",
+    "d": "The next figure of the process."
+   }
+  ]
+ },
+ "dz_proc_14": {
+  "id": "dz_proc_14",
+  "group": "60_proc",
+  "ch": "results",
+  "sec": "Processes",
+  "title": "Processes: Photosynthesis and respiration",
+  "intro": "Canopy assimilation comes from the leaf area, the light, the temperature and the water and nitrogen stress; assimilate fills the pool, from which maintenance and growth respiration are paid and the rest is partitioned to the organs.",
+  "note": "",
+  "marks": [
+   {
+    "x": 944,
+    "y": 1061.2250000000001,
+    "t": "Process map",
+    "d": "The process that is open has a red frame."
+   },
+   {
+    "x": 83.2,
+    "y": 1768.25,
+    "t": "Process",
+    "d": "Name of the process and what Daisy does there."
+   },
+   {
+    "x": 195.275,
+    "y": 1934.0500000000002,
+    "t": "Source of the figures",
+    "d": "The run whose logs are drawn."
+   },
+   {
+    "x": 535.075,
+    "y": 1934.8500000000001,
+    "t": "Run Daisy with all process logs",
+    "d": "Runs the model with every process log on."
+   },
+   {
+    "x": 944,
+    "y": 2270.05,
+    "t": "First figure",
+    "d": "The figure of the process."
+   },
+   {
+    "x": 944,
+    "y": 2885.25,
+    "t": "Second figure",
+    "d": "The next figure of the process."
+   },
+   {
+    "x": 944,
+    "y": 3500.4500000000003,
+    "t": "Third figure",
+    "d": "The next figure of the process."
+   }
+  ]
+ },
+ "dz_proc_15": {
+  "id": "dz_proc_15",
+  "group": "60_proc",
+  "ch": "results",
+  "sec": "Processes",
+  "title": "Processes: Crop growth: leaf, stem, root, storage organ",
+  "intro": "The crop develops with the development stage (DS), leaf area index (LAI), height and rooting depth; dry matter and nitrogen are partitioned to leaf, stem, storage organ and root, under water and nitrogen stress; at harvest the storage organ leaves the field and the rest becomes residue.",
+  "note": "",
+  "marks": [
+   {
+    "x": 944,
+    "y": 1053.925,
+    "t": "Process map",
+    "d": "The process that is open has a red frame."
+   },
+   {
+    "x": 83.2,
+    "y": 1760.95,
+    "t": "Process",
+    "d": "Name of the process and what Daisy does there."
+   },
+   {
+    "x": 195.275,
+    "y": 1926.75,
+    "t": "Source of the figures",
+    "d": "The run whose logs are drawn."
+   },
+   {
+    "x": 535.075,
+    "y": 1927.5500000000002,
+    "t": "Run Daisy with all process logs",
+    "d": "Runs the model with every process log on."
+   },
+   {
+    "x": 944,
+    "y": 2262.75,
+    "t": "First figure",
+    "d": "The figure of the process."
+   },
+   {
+    "x": 944,
+    "y": 2855.55,
+    "t": "Second figure",
+    "d": "The next figure of the process."
+   },
+   {
+    "x": 944,
+    "y": 3470.75,
+    "t": "Third figure",
+    "d": "The next figure of the process."
+   }
+  ]
+ },
+ "dz_res_chemical_00": {
+  "id": "dz_res_chemical_00",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "chemical",
+  "title": "Results of the chemical question: the table of means",
+  "intro": "The chemical question was run on the built-in farm for the years 1990 to 1993 with the built-in Taastrup weather. After the run the results appear under the options: a list that chooses the run to look at, three buttons, a table of the mean per season and the figures.",
+  "note": "",
+  "marks": [
+   {
+    "x": 922.875,
+    "y": 97.72500000000001,
+    "t": "Run to look at",
+    "d": "Chooses the run whose single run figures are drawn."
+   },
+   {
+    "x": 1457.8500000000001,
+    "y": 92.92500000000001,
+    "t": "Save report",
+    "d": "Saves all results and figures as one HTML report."
+   },
+   {
+    "x": 1600.825,
+    "y": 92.92500000000001,
+    "t": "Put the logs in the Files list",
+    "d": "Keeps the Daisy logs of the runs in the Files tab for the plot and balance tabs."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 147.32500000000002,
+    "t": "Open the set-up in the editor",
+    "d": "Opens the Daisy set-up of the run in the Set-up editor."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 436.125,
+    "t": "Mean per season",
+    "d": "The mean of each result over the seasons, one column for each run."
+   }
+  ]
+ },
+ "dz_res_chemical_01": {
+  "id": "dz_res_chemical_01",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "chemical",
+  "title": "Fate of the chemical, season by season (chemical)",
+  "intro": "How much of the chemical is in the soil, decayed, leached or taken up in each season.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 134.525,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 424.925,
+    "t": "Figure",
+    "d": "How much of the chemical is in the soil, decayed, leached or taken up in each season."
+   },
+   {
+    "x": 1803.2,
+    "y": 424.925,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_chemical_02": {
+  "id": "dz_res_chemical_02",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "chemical",
+  "title": "Chemical concentration through the soil profile (chemical)",
+  "intro": "The concentration of the chemical against depth and time.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 133.725,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 440.125,
+    "t": "Figure",
+    "d": "The concentration of the chemical against depth and time."
+   },
+   {
+    "x": 1803.2,
+    "y": 440.125,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_chemical_03": {
+  "id": "dz_res_chemical_03",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "chemical",
+  "title": "Annual water balance (chemical)",
+  "intro": "Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 134.525,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 440.925,
+    "t": "Figure",
+    "d": "Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year."
+   },
+   {
+    "x": 1803.2,
+    "y": 440.925,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_chemical_04": {
+  "id": "dz_res_chemical_04",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "chemical",
+  "title": "Chemical fate: runs compared (chemical)",
+  "intro": "The fate of the chemical in the runs side by side: mobile tracer, sorbed and quickly decaying chemical.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 133.725,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 424.125,
+    "t": "Figure",
+    "d": "The fate of the chemical in the runs side by side: mobile tracer, sorbed and quickly decaying chemical."
+   },
+   {
+    "x": 1803.2,
+    "y": 424.125,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_chemical_05": {
+  "id": "dz_res_chemical_05",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "chemical",
+  "title": "Yield through the years: runs compared (chemical)",
+  "intro": "The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 598.525,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 872.9250000000001,
+    "t": "Figure",
+    "d": "The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year."
+   },
+   {
+    "x": 1803.2,
+    "y": 872.9250000000001,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_climate_00": {
+  "id": "dz_res_climate_00",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "climate",
+  "title": "Results of the climate question: the table of means",
+  "intro": "The climate question was run on the built-in farm for the years 1990 to 1993 with the built-in Taastrup weather. After the run the results appear under the options: a list that chooses the run to look at, three buttons, a table of the mean per season and the figures.",
+  "note": "",
+  "marks": [
+   {
+    "x": 951.4000000000001,
+    "y": 97.72500000000001,
+    "t": "Run to look at",
+    "d": "Chooses the run whose single run figures are drawn."
+   },
+   {
+    "x": 1167.175,
+    "y": 92.92500000000001,
+    "t": "Save report",
+    "d": "Saves all results and figures as one HTML report."
+   },
+   {
+    "x": 1310.15,
+    "y": 92.92500000000001,
+    "t": "Put the logs in the Files list",
+    "d": "Keeps the Daisy logs of the runs in the Files tab for the plot and balance tabs."
+   },
+   {
+    "x": 1582.9250000000002,
+    "y": 92.92500000000001,
+    "t": "Open the set-up in the editor",
+    "d": "Opens the Daisy set-up of the run in the Set-up editor."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 344.925,
+    "t": "Mean per season",
+    "d": "The mean of each result over the seasons, one column for each run."
+   }
+  ]
+ },
+ "dz_res_climate_01": {
+  "id": "dz_res_climate_01",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "climate",
+  "title": "Yield of each crop, season by season (climate)",
+  "intro": "Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 134.525,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 424.925,
+    "t": "Figure",
+    "d": "Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare."
+   },
+   {
+    "x": 1803.2,
+    "y": 424.925,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_climate_02": {
+  "id": "dz_res_climate_02",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "climate",
+  "title": "Annual water balance (climate)",
+  "intro": "Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 133.725,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 440.125,
+    "t": "Figure",
+    "d": "Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year."
+   },
+   {
+    "x": 1803.2,
+    "y": 440.125,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_climate_03": {
+  "id": "dz_res_climate_03",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "climate",
+  "title": "Crop growth: leaf area and stress (climate)",
+  "intro": "Leaf area index with the water and nitrogen stress of the crop through the seasons.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 134.525,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 376.925,
+    "t": "Figure",
+    "d": "Leaf area index with the water and nitrogen stress of the crop through the seasons."
+   },
+   {
+    "x": 1803.2,
+    "y": 376.925,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_climate_04": {
+  "id": "dz_res_climate_04",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "climate",
+  "title": "Water content through the soil profile (climate)",
+  "intro": "Soil water content against depth and time, from the daily log of Daisy.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 133.725,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 440.125,
+    "t": "Figure",
+    "d": "Soil water content against depth and time, from the daily log of Daisy."
+   },
+   {
+    "x": 1803.2,
+    "y": 440.125,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_climate_05": {
+  "id": "dz_res_climate_05",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "climate",
+  "title": "Yield by crop: runs compared (climate)",
+  "intro": "The mean yield of each crop in every ticked run, side by side.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 134.525,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 424.925,
+    "t": "Figure",
+    "d": "The mean yield of each crop in every ticked run, side by side."
+   },
+   {
+    "x": 1803.2,
+    "y": 424.925,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_climate_06": {
+  "id": "dz_res_climate_06",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "climate",
+  "title": "Water balance: runs compared (climate)",
+  "intro": "Irrigation, evapotranspiration and drainage of the runs side by side.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 133.725,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 424.125,
+    "t": "Figure",
+    "d": "Irrigation, evapotranspiration and drainage of the runs side by side."
+   },
+   {
+    "x": 1803.2,
+    "y": 424.125,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_climate_07": {
+  "id": "dz_res_climate_07",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "climate",
+  "title": "Nitrogen: runs compared (climate)",
+  "intro": "Nitrate leached, denitrification and nitrogen uptake of the runs side by side.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 134.525,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 424.925,
+    "t": "Figure",
+    "d": "Nitrate leached, denitrification and nitrogen uptake of the runs side by side."
+   },
+   {
+    "x": 1803.2,
+    "y": 424.925,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_climate_08": {
+  "id": "dz_res_climate_08",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "climate",
+  "title": "Yield through the years: runs compared (climate)",
+  "intro": "The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 599.325,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 873.725,
+    "t": "Figure",
+    "d": "The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year."
+   },
+   {
+    "x": 1803.2,
+    "y": 873.725,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_irrigation_00": {
+  "id": "dz_res_irrigation_00",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "irrigation",
+  "title": "Results of the irrigation question: the table of means",
+  "intro": "The irrigation question was run on the built-in farm for the years 1990 to 1993 with the built-in Taastrup weather. After the run the results appear under the options: a list that chooses the run to look at, three buttons, a table of the mean per season and the figures.",
+  "note": "",
+  "marks": [
+   {
+    "x": 995.4000000000001,
+    "y": 98.525,
+    "t": "Run to look at",
+    "d": "Chooses the run whose single run figures are drawn."
+   },
+   {
+    "x": 1167.175,
+    "y": 93.72500000000001,
+    "t": "Save report",
+    "d": "Saves all results and figures as one HTML report."
+   },
+   {
+    "x": 1310.15,
+    "y": 93.72500000000001,
+    "t": "Put the logs in the Files list",
+    "d": "Keeps the Daisy logs of the runs in the Files tab for the plot and balance tabs."
+   },
+   {
+    "x": 1582.9250000000002,
+    "y": 93.72500000000001,
+    "t": "Open the set-up in the editor",
+    "d": "Opens the Daisy set-up of the run in the Set-up editor."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 345.725,
+    "t": "Mean per season",
+    "d": "The mean of each result over the seasons, one column for each run."
+   }
+  ]
+ },
+ "dz_res_irrigation_01": {
+  "id": "dz_res_irrigation_01",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "irrigation",
+  "title": "Yield of each crop, season by season (irrigation)",
+  "intro": "Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 133.725,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 424.125,
+    "t": "Figure",
+    "d": "Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare."
+   },
+   {
+    "x": 1803.2,
+    "y": 424.125,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_irrigation_02": {
+  "id": "dz_res_irrigation_02",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "irrigation",
+  "title": "Annual water balance (irrigation)",
+  "intro": "Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 134.525,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 440.925,
+    "t": "Figure",
+    "d": "Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year."
+   },
+   {
+    "x": 1803.2,
+    "y": 440.925,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_irrigation_03": {
+  "id": "dz_res_irrigation_03",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "irrigation",
+  "title": "Water content through the soil profile (irrigation)",
+  "intro": "Soil water content against depth and time, from the daily log of Daisy.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 133.725,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 440.125,
+    "t": "Figure",
+    "d": "Soil water content against depth and time, from the daily log of Daisy."
+   },
+   {
+    "x": 1803.2,
+    "y": 440.125,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_irrigation_04": {
+  "id": "dz_res_irrigation_04",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "irrigation",
+  "title": "Soil water suction (pF) (irrigation)",
+  "intro": "Soil water suction on the pF scale against depth and time; irrigation triggers act on this quantity.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 134.525,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 440.925,
+    "t": "Figure",
+    "d": "Soil water suction on the pF scale against depth and time; irrigation triggers act on this quantity."
+   },
+   {
+    "x": 1803.2,
+    "y": 440.925,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_irrigation_05": {
+  "id": "dz_res_irrigation_05",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "irrigation",
+  "title": "Crop growth: leaf area and stress (irrigation)",
+  "intro": "Leaf area index with the water and nitrogen stress of the crop through the seasons.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 133.725,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 376.125,
+    "t": "Figure",
+    "d": "Leaf area index with the water and nitrogen stress of the crop through the seasons."
+   },
+   {
+    "x": 1803.2,
+    "y": 376.125,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_irrigation_06": {
+  "id": "dz_res_irrigation_06",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "irrigation",
+  "title": "Yield by crop: runs compared (irrigation)",
+  "intro": "The mean yield of each crop in every ticked run, side by side.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 134.525,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 424.925,
+    "t": "Figure",
+    "d": "The mean yield of each crop in every ticked run, side by side."
+   },
+   {
+    "x": 1803.2,
+    "y": 424.925,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_irrigation_07": {
+  "id": "dz_res_irrigation_07",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "irrigation",
+  "title": "Water balance: runs compared (irrigation)",
+  "intro": "Irrigation, evapotranspiration and drainage of the runs side by side.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 133.725,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 424.125,
+    "t": "Figure",
+    "d": "Irrigation, evapotranspiration and drainage of the runs side by side."
+   },
+   {
+    "x": 1803.2,
+    "y": 424.125,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_irrigation_08": {
+  "id": "dz_res_irrigation_08",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "irrigation",
+  "title": "Yield through the years: runs compared (irrigation)",
+  "intro": "The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 598.525,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 872.9250000000001,
+    "t": "Figure",
+    "d": "The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year."
+   },
+   {
+    "x": 1803.2,
+    "y": 872.9250000000001,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_nitrogen_00": {
+  "id": "dz_res_nitrogen_00",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "nitrogen",
+  "title": "Results of the nitrogen question: the table of means",
+  "intro": "The nitrogen question was run on the built-in farm for the years 1990 to 1993 with the built-in Taastrup weather. After the run the results appear under the options: a list that chooses the run to look at, three buttons, a table of the mean per season and the figures.",
+  "note": "",
+  "marks": [
+   {
+    "x": 948.2,
+    "y": 97.72500000000001,
+    "t": "Run to look at",
+    "d": "Chooses the run whose single run figures are drawn."
+   },
+   {
+    "x": 1167.175,
+    "y": 92.92500000000001,
+    "t": "Save report",
+    "d": "Saves all results and figures as one HTML report."
+   },
+   {
+    "x": 1310.15,
+    "y": 92.92500000000001,
+    "t": "Put the logs in the Files list",
+    "d": "Keeps the Daisy logs of the runs in the Files tab for the plot and balance tabs."
+   },
+   {
+    "x": 1582.9250000000002,
+    "y": 92.92500000000001,
+    "t": "Open the set-up in the editor",
+    "d": "Opens the Daisy set-up of the run in the Set-up editor."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 344.925,
+    "t": "Mean per season",
+    "d": "The mean of each result over the seasons, one column for each run."
+   }
+  ]
+ },
+ "dz_res_nitrogen_01": {
+  "id": "dz_res_nitrogen_01",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "nitrogen",
+  "title": "Yield of each crop, season by season (nitrogen)",
+  "intro": "Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 134.525,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 424.925,
+    "t": "Figure",
+    "d": "Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare."
+   },
+   {
+    "x": 1803.2,
+    "y": 424.925,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_nitrogen_02": {
+  "id": "dz_res_nitrogen_02",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "nitrogen",
+  "title": "Where does the nitrogen go? (nitrogen)",
+  "intro": "The nitrogen balance of the run: what is applied, taken up by the crop, leached, denitrified and left in the soil.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 133.725,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 424.125,
+    "t": "Figure",
+    "d": "The nitrogen balance of the run: what is applied, taken up by the crop, leached, denitrified and left in the soil."
+   },
+   {
+    "x": 1803.2,
+    "y": 424.125,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_nitrogen_03": {
+  "id": "dz_res_nitrogen_03",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "nitrogen",
+  "title": "Nitrate in the soil solution (nitrogen)",
+  "intro": "Nitrate concentration of the soil solution against depth and time.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 134.525,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 440.925,
+    "t": "Figure",
+    "d": "Nitrate concentration of the soil solution against depth and time."
+   },
+   {
+    "x": 1803.2,
+    "y": 440.925,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_nitrogen_04": {
+  "id": "dz_res_nitrogen_04",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "nitrogen",
+  "title": "Annual water balance (nitrogen)",
+  "intro": "Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 133.725,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 440.125,
+    "t": "Figure",
+    "d": "Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year."
+   },
+   {
+    "x": 1803.2,
+    "y": 440.125,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_nitrogen_05": {
+  "id": "dz_res_nitrogen_05",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "nitrogen",
+  "title": "Yield by crop: runs compared (nitrogen)",
+  "intro": "The mean yield of each crop in every ticked run, side by side.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 134.525,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 424.925,
+    "t": "Figure",
+    "d": "The mean yield of each crop in every ticked run, side by side."
+   },
+   {
+    "x": 1803.2,
+    "y": 424.925,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_nitrogen_06": {
+  "id": "dz_res_nitrogen_06",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "nitrogen",
+  "title": "Nitrogen: runs compared (nitrogen)",
+  "intro": "Nitrate leached, denitrification and nitrogen uptake of the runs side by side.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 133.725,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 424.125,
+    "t": "Figure",
+    "d": "Nitrate leached, denitrification and nitrogen uptake of the runs side by side."
+   },
+   {
+    "x": 1803.2,
+    "y": 424.125,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_nitrogen_07": {
+  "id": "dz_res_nitrogen_07",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "nitrogen",
+  "title": "Response to the nitrogen rate (nitrogen)",
+  "intro": "Yield and nitrate leaching against the fertiliser rate across the runs.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 134.525,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 376.925,
+    "t": "Figure",
+    "d": "Yield and nitrate leaching against the fertiliser rate across the runs."
+   },
+   {
+    "x": 1803.2,
+    "y": 376.925,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_nitrogen_08": {
+  "id": "dz_res_nitrogen_08",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "nitrogen",
+  "title": "Yield through the years: runs compared (nitrogen)",
+  "intro": "The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 599.325,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 873.725,
+    "t": "Figure",
+    "d": "The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year."
+   },
+   {
+    "x": 1803.2,
+    "y": 873.725,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_soil_00": {
+  "id": "dz_res_soil_00",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "soil",
+  "title": "Results of the soil question: the table of means",
+  "intro": "The soil question was run on the built-in farm for the years 1990 to 1993 with the built-in Taastrup weather. After the run the results appear under the options: a list that chooses the run to look at, three buttons, a table of the mean per season and the figures.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1007.4000000000001,
+    "y": 98.525,
+    "t": "Run to look at",
+    "d": "Chooses the run whose single run figures are drawn."
+   },
+   {
+    "x": 1167.175,
+    "y": 93.72500000000001,
+    "t": "Save report",
+    "d": "Saves all results and figures as one HTML report."
+   },
+   {
+    "x": 1310.15,
+    "y": 93.72500000000001,
+    "t": "Put the logs in the Files list",
+    "d": "Keeps the Daisy logs of the runs in the Files tab for the plot and balance tabs."
+   },
+   {
+    "x": 1582.9250000000002,
+    "y": 93.72500000000001,
+    "t": "Open the set-up in the editor",
+    "d": "Opens the Daisy set-up of the run in the Set-up editor."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 345.725,
+    "t": "Mean per season",
+    "d": "The mean of each result over the seasons, one column for each run."
+   }
+  ]
+ },
+ "dz_res_soil_01": {
+  "id": "dz_res_soil_01",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "soil",
+  "title": "Yield of each crop, season by season (soil)",
+  "intro": "Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 133.725,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 424.125,
+    "t": "Figure",
+    "d": "Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare."
+   },
+   {
+    "x": 1803.2,
+    "y": 424.125,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_soil_02": {
+  "id": "dz_res_soil_02",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "soil",
+  "title": "Annual water balance (soil)",
+  "intro": "Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 134.525,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 440.925,
+    "t": "Figure",
+    "d": "Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year."
+   },
+   {
+    "x": 1803.2,
+    "y": 440.925,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_soil_03": {
+  "id": "dz_res_soil_03",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "soil",
+  "title": "Water content through the soil profile (soil)",
+  "intro": "Soil water content against depth and time, from the daily log of Daisy.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 133.725,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 440.125,
+    "t": "Figure",
+    "d": "Soil water content against depth and time, from the daily log of Daisy."
+   },
+   {
+    "x": 1803.2,
+    "y": 440.125,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_soil_04": {
+  "id": "dz_res_soil_04",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "soil",
+  "title": "Soil water suction (pF) (soil)",
+  "intro": "Soil water suction on the pF scale against depth and time; irrigation triggers act on this quantity.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 134.525,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 440.925,
+    "t": "Figure",
+    "d": "Soil water suction on the pF scale against depth and time; irrigation triggers act on this quantity."
+   },
+   {
+    "x": 1803.2,
+    "y": 440.925,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_soil_05": {
+  "id": "dz_res_soil_05",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "soil",
+  "title": "Nitrate in the soil solution (soil)",
+  "intro": "Nitrate concentration of the soil solution against depth and time.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 133.725,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 440.125,
+    "t": "Figure",
+    "d": "Nitrate concentration of the soil solution against depth and time."
+   },
+   {
+    "x": 1803.2,
+    "y": 440.125,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_soil_06": {
+  "id": "dz_res_soil_06",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "soil",
+  "title": "Yield by crop: runs compared (soil)",
+  "intro": "The mean yield of each crop in every ticked run, side by side.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 134.525,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 424.925,
+    "t": "Figure",
+    "d": "The mean yield of each crop in every ticked run, side by side."
+   },
+   {
+    "x": 1803.2,
+    "y": 424.925,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_soil_07": {
+  "id": "dz_res_soil_07",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "soil",
+  "title": "Water balance: runs compared (soil)",
+  "intro": "Irrigation, evapotranspiration and drainage of the runs side by side.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 133.725,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 424.125,
+    "t": "Figure",
+    "d": "Irrigation, evapotranspiration and drainage of the runs side by side."
+   },
+   {
+    "x": 1803.2,
+    "y": 424.125,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_soil_08": {
+  "id": "dz_res_soil_08",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "soil",
+  "title": "Nitrogen: runs compared (soil)",
+  "intro": "Nitrate leached, denitrification and nitrogen uptake of the runs side by side.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 134.525,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 424.925,
+    "t": "Figure",
+    "d": "Nitrate leached, denitrification and nitrogen uptake of the runs side by side."
+   },
+   {
+    "x": 1803.2,
+    "y": 424.925,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_res_soil_09": {
+  "id": "dz_res_soil_09",
+  "group": "40_results",
+  "ch": "results",
+  "sec": "soil",
+  "title": "Yield through the years: runs compared (soil)",
+  "intro": "The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year.",
+  "note": "",
+  "marks": [
+   {
+    "x": 1755.9250000000002,
+    "y": 599.325,
+    "t": "Picture (PNG)",
+    "d": "Saves this figure as a picture with its source line."
+   },
+   {
+    "x": 940.8000000000001,
+    "y": 873.725,
+    "t": "Figure",
+    "d": "The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year."
+   },
+   {
+    "x": 1803.2,
+    "y": 873.725,
+    "t": "Source line",
+    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
+   }
+  ]
+ },
+ "dz_richards_01": {
+  "id": "dz_richards_01",
+  "group": "50_tools",
+  "ch": "build",
+  "sec": "Soil column",
+  "title": "Soil column: the form",
+  "intro": "A soil column of up to three layers is solved with the Richards equation on the weather chosen below.",
+  "note": "",
+  "marks": [
+   {
+    "x": 134.475,
+    "y": 331.20000000000005,
+    "t": "Layer 1",
+    "d": "Horizon of the first layer and its lower depth."
+   },
+   {
+    "x": 152.975,
+    "y": 375.20000000000005,
+    "t": "Weather",
+    "d": "SWAFL season, Daisy station, own values or file."
+   },
+   {
+    "x": 146.9,
+    "y": 418.8,
+    "t": "Days",
+    "d": "Length of the simulation."
+   },
+   {
+    "x": 618.6,
+    "y": 418.8,
+    "t": "Start wetness",
+    "d": "Initial relative saturation."
+   },
+   {
+    "x": 874.6500000000001,
+    "y": 420.8,
+    "t": "Lower boundary",
+    "d": "Free drainage, closed or groundwater table."
+   },
+   {
+    "x": 119.1875,
+    "y": 467.20000000000005,
+    "t": "Run the column",
+    "d": "Starts the calculation."
+   }
+  ]
+ },
+ "dz_richards_02": {
+  "id": "dz_richards_02",
+  "group": "50_tools",
+  "ch": "build",
+  "sec": "Soil column",
+  "title": "Soil column: results",
+  "intro": "The figures show water content through depth and time, the series at a chosen depth and the water balance.",
+  "note": "",
+  "marks": [
+   {
+    "x": 64,
+    "y": 756.8000000000001,
+    "t": "Water content map",
+    "d": "Depth against time."
+   },
+   {
+    "x": 285.8,
+    "y": 1056.4,
+    "t": "Depth of the series",
+    "d": "Depth in cm of the lower figure."
+   },
+   {
+    "x": 64,
+    "y": 1260,
+    "t": "Series at a depth",
+    "d": "Water content and suction at that depth."
+   },
+   {
+    "x": 64,
+    "y": 2088.8,
+    "t": "Summary",
+    "d": "Water balance of the run."
+   },
+   {
+    "x": 334.20000000000005,
+    "y": 467.20000000000005,
+    "t": "Keep as a log",
+    "d": "Puts the water contents in the Files list."
+   }
+  ]
+ },
+ "dz_scen_01": {
+  "id": "dz_scen_01",
+  "group": "20_scen",
+  "ch": "ask",
+  "sec": "Scenarios",
+  "title": "Scenarios: choose the question",
+  "intro": "The Scenarios tab starts with the questions that the built-in farm can answer: water, nitrogen, climate, a chemical and soil. Two more cards lead to your own set-up and to two tools that need no Daisy program.",
+  "note": "",
+  "marks": [
+   {
+    "x": 64,
+    "y": 459.8,
+    "t": "Irrigation question",
+    "d": "Does irrigation pay off, and what does it cost the soil."
+   },
+   {
+    "x": 521.6,
+    "y": 459.8,
+    "t": "Nitrogen question",
+    "d": "How much fertiliser, how much leaching."
+   },
+   {
+    "x": 979.2,
+    "y": 459.8,
+    "t": "Climate question",
+    "d": "A warmer, drier or wetter climate."
+   },
+   {
+    "x": 1436.8000000000002,
+    "y": 459.8,
+    "t": "Chemical question",
+    "d": "Sorption and degradation of a pesticide or tracer."
+   },
+   {
+    "x": 64,
+    "y": 664.6,
+    "t": "Soil question",
+    "d": "How much does texture matter."
+   },
+   {
+    "x": 521.6,
+    "y": 664.6,
+    "t": "Your own work",
+    "d": "Run a set-up of your own or draw the figures of logs you loaded."
+   },
+   {
+    "x": 979.2,
+    "y": 664.6,
+    "t": "Soil column",
+    "d": "A built-in tool that needs no Daisy program."
+   },
+   {
+    "x": 1436.8000000000002,
+    "y": 664.6,
+    "t": "Process curves",
+    "d": "A built-in tool that draws any Daisy function."
+   }
+  ]
+ },
+ "dz_scen_02": {
+  "id": "dz_scen_02",
+  "group": "20_scen",
+  "ch": "ask",
+  "sec": "Scenarios",
+  "title": "Scenarios: irrigation",
+  "intro": "The irrigation question compares rainfed and irrigated crops of the built-in rotation. The trigger is the potential at 20 cm below which the overhead irrigation starts; the water per irrigation is fixed.",
+  "note": "",
+  "marks": [
+   {
+    "x": 84.80000000000001,
+    "y": 937.6,
+    "t": "Soil",
+    "d": "The soil profile of the run: the built-in loam or sand, or your own soil when it is set in My data."
+   },
+   {
+    "x": 532.8000000000001,
+    "y": 937.2,
+    "t": "Trigger",
+    "d": "Irrigation starts when the soil water potential at 20 cm drops below this value (cm)."
+   },
+   {
+    "x": 1032.4,
+    "y": 937.2,
+    "t": "Water per irrigation",
+    "d": "Depth of water applied each time (mm)."
+   },
+   {
+    "x": 1273.1750000000002,
+    "y": 937.2,
+    "t": "Rain factor",
+    "d": "Multiplies the rain of the weather file (1 leaves it as recorded)."
+   },
+   {
+    "x": 1563.825,
+    "y": 937.2,
+    "t": "Temperature offset",
+    "d": "Added to every daily temperature (degrees Celsius)."
+   },
+   {
+    "x": 144,
+    "y": 1011.6,
+    "t": "First year",
+    "d": "First year of the simulation; it must lie at least one year after the start of the weather."
+   },
+   {
+    "x": 321.3,
+    "y": 1068,
+    "t": "Weather for all runs",
+    "d": "The one weather choice of every Daisy simulation: the weather of the SWAFL project when one is loaded, the built-in Taastrup weather, a built-in station, online weather or a file."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1174.4,
+    "t": "Runs compared",
+    "d": "Each ticked run is one Daisy simulation; the figures compare them."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1355.6000000000001,
+    "t": "What I am interested in",
+    "d": "Tick the processes of Fig. 1 whose figures should be drawn as well, or write them in words."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1522.4,
+    "t": "Run Daisy",
+    "d": "Runs every ticked simulation and draws the figures."
+   },
+   {
+    "x": 457.225,
+    "y": 1522.4,
+    "t": "Standard options",
+    "d": "Puts every option back to its standard value."
+   },
+   {
+    "x": 588.9,
+    "y": 1522.4,
+    "t": "Save the Daisy files",
+    "d": "Saves the set-up files of the first ticked run, to run Daisy anywhere."
+   }
+  ]
+ },
+ "dz_scen_03": {
+  "id": "dz_scen_03",
+  "group": "20_scen",
+  "ch": "ask",
+  "sec": "Scenarios",
+  "title": "Scenarios: nitrogen",
+  "intro": "The nitrogen question compares three fertiliser levels, with or without irrigation, on the built-in rotation. It reports yield, nitrate leached, denitrification and the nitrogen balance.",
+  "note": "",
+  "marks": [
+   {
+    "x": 84.80000000000001,
+    "y": 937.6,
+    "t": "Soil",
+    "d": "The soil profile of the run: the built-in loam or sand, or your own soil when it is set in My data."
+   },
+   {
+    "x": 473.6,
+    "y": 937.6,
+    "t": "Irrigation",
+    "d": "Rainfed or irrigated."
+   },
+   {
+    "x": 856,
+    "y": 937.2,
+    "t": "Rain factor",
+    "d": "Multiplies the rain of the weather file."
+   },
+   {
+    "x": 1146.65,
+    "y": 937.2,
+    "t": "Temperature offset",
+    "d": "Added to the daily temperatures."
+   },
+   {
+    "x": 321.3,
+    "y": 993.6,
+    "t": "Weather for all runs",
+    "d": "The one weather choice of every Daisy simulation: the weather of the SWAFL project when one is loaded, the built-in Taastrup weather, a built-in station, online weather or a file."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1118.8,
+    "t": "Runs compared",
+    "d": "Each ticked run is one Daisy simulation; the figures compare them."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1318.8000000000002,
+    "t": "What I am interested in",
+    "d": "Tick the processes of Fig. 1 whose figures should be drawn as well, or write them in words."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1485.6000000000001,
+    "t": "Run Daisy",
+    "d": "Runs every ticked simulation and draws the figures."
+   },
+   {
+    "x": 457.225,
+    "y": 1485.6000000000001,
+    "t": "Standard options",
+    "d": "Puts every option back to its standard value."
+   },
+   {
+    "x": 588.9,
+    "y": 1485.6000000000001,
+    "t": "Save the Daisy files",
+    "d": "Saves the set-up files of the first ticked run, to run Daisy anywhere."
+   }
+  ]
+ },
+ "dz_scen_04": {
+  "id": "dz_scen_04",
+  "group": "20_scen",
+  "ch": "ask",
+  "sec": "Scenarios",
+  "title": "Scenarios: climate",
+  "intro": "The climate question runs the same farm under the weather as it is and under a warmer, a drier, a warmer and drier and a wetter weather.",
+  "note": "",
+  "marks": [
+   {
+    "x": 84.80000000000001,
+    "y": 934.4000000000001,
+    "t": "Soil",
+    "d": "The soil profile of the run: the built-in loam or sand, or your own soil when it is set in My data."
+   },
+   {
+    "x": 473.6,
+    "y": 934.4000000000001,
+    "t": "Irrigation",
+    "d": "Rainfed or irrigated."
+   },
+   {
+    "x": 856,
+    "y": 934,
+    "t": "First year",
+    "d": "First year of the runs."
+   },
+   {
+    "x": 321.3,
+    "y": 990.4000000000001,
+    "t": "Weather for all runs",
+    "d": "The one weather choice of every Daisy simulation: the weather of the SWAFL project when one is loaded, the built-in Taastrup weather, a built-in station, online weather or a file."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1153.2,
+    "t": "Runs compared",
+    "d": "Each ticked run is one Daisy simulation; the figures compare them."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1390.8000000000002,
+    "t": "What I am interested in",
+    "d": "Tick the processes of Fig. 1 whose figures should be drawn as well, or write them in words."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1557.6000000000001,
+    "t": "Run Daisy",
+    "d": "Runs every ticked simulation and draws the figures."
+   },
+   {
+    "x": 457.225,
+    "y": 1557.6000000000001,
+    "t": "Standard options",
+    "d": "Puts every option back to its standard value."
+   },
+   {
+    "x": 588.9,
+    "y": 1557.6000000000001,
+    "t": "Save the Daisy files",
+    "d": "Saves the set-up files of the first ticked run, to run Daisy anywhere."
+   }
+  ]
+ },
+ "dz_scen_05": {
+  "id": "dz_scen_05",
+  "group": "20_scen",
+  "ch": "ask",
+  "sec": "Scenarios",
+  "title": "Scenarios: a pesticide or tracer",
+  "intro": "The chemical question follows a chemical applied to the soil: a mobile tracer, a strongly sorbed chemical and a quickly decaying one. It shows how much leaves the root zone and how much stays in the soil.",
+  "note": "",
+  "marks": [
+   {
+    "x": 84.80000000000001,
+    "y": 934.4000000000001,
+    "t": "Soil",
+    "d": "The soil profile of the run: the built-in loam or sand, or your own soil when it is set in My data."
+   },
+   {
+    "x": 532.8000000000001,
+    "y": 934,
+    "t": "Rain factor",
+    "d": "Multiplies the rain of the weather file."
+   },
+   {
+    "x": 321.3,
+    "y": 990.4000000000001,
+    "t": "Weather for all runs",
+    "d": "The one weather choice of every Daisy simulation: the weather of the SWAFL project when one is loaded, the built-in Taastrup weather, a built-in station, online weather or a file."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1115.6000000000001,
+    "t": "Runs compared",
+    "d": "Each ticked run is one Daisy simulation; the figures compare them."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1315.6000000000001,
+    "t": "What I am interested in",
+    "d": "Tick the processes of Fig. 1 whose figures should be drawn as well, or write them in words."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1482.4,
+    "t": "Run Daisy",
+    "d": "Runs every ticked simulation and draws the figures."
+   },
+   {
+    "x": 457.225,
+    "y": 1482.4,
+    "t": "Standard options",
+    "d": "Puts every option back to its standard value."
+   },
+   {
+    "x": 588.9,
+    "y": 1482.4,
+    "t": "Save the Daisy files",
+    "d": "Saves the set-up files of the first ticked run, to run Daisy anywhere."
+   }
+  ]
+ },
+ "dz_scen_06": {
+  "id": "dz_scen_06",
+  "group": "20_scen",
+  "ch": "ask",
+  "sec": "Scenarios",
+  "title": "Scenarios: soil texture",
+  "intro": "The soil question runs the same crops, weather and management on the built-in sand and loam, and shows water holding, drainage, yield and nitrate.",
+  "note": "",
+  "marks": [
+   {
+    "x": 84.80000000000001,
+    "y": 934.4000000000001,
+    "t": "Irrigation",
+    "d": "Rainfed or irrigated."
+   },
+   {
+    "x": 467.20000000000005,
+    "y": 934,
+    "t": "Trigger",
+    "d": "Potential at 20 cm that starts irrigation."
+   },
+   {
+    "x": 1207.575,
+    "y": 934,
+    "t": "Fertiliser factor",
+    "d": "Multiplies the fertiliser of the rotation."
+   },
+   {
+    "x": 321.3,
+    "y": 1064.8,
+    "t": "Weather for all runs",
+    "d": "The one weather choice of every Daisy simulation: the weather of the SWAFL project when one is loaded, the built-in Taastrup weather, a built-in station, online weather or a file."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1171.2,
+    "t": "Runs compared",
+    "d": "Each ticked run is one Daisy simulation; the figures compare them."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1352.4,
+    "t": "What I am interested in",
+    "d": "Tick the processes of Fig. 1 whose figures should be drawn as well, or write them in words."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1519.2,
+    "t": "Run Daisy",
+    "d": "Runs every ticked simulation and draws the figures."
+   },
+   {
+    "x": 457.225,
+    "y": 1519.2,
+    "t": "Standard options",
+    "d": "Puts every option back to its standard value."
+   },
+   {
+    "x": 588.9,
+    "y": 1519.2,
+    "t": "Save the Daisy files",
+    "d": "Saves the set-up files of the first ticked run, to run Daisy anywhere."
+   }
+  ]
+ },
+ "dz_scen_07": {
+  "id": "dz_scen_07",
+  "group": "20_scen",
+  "ch": "ask",
+  "sec": "Scenarios",
+  "title": "Scenarios: your own work",
+  "intro": "This card leads to the set-up editor, where a .dai file of your own is run, and to the figures that are drawn from logs you have loaded.",
+  "note": "",
+  "marks": [
+   {
+    "x": 64,
+    "y": 265.8,
+    "t": "Heading",
+    "d": "The work you bring: a set-up of your own or logs of earlier runs."
+   },
+   {
+    "x": 81.61250000000001,
+    "y": 119.60000000000001,
+    "t": "First action",
+    "d": "Opens the matching tab."
+   }
+  ]
+ },
+ "dz_scen_08": {
+  "id": "dz_scen_08",
+  "group": "20_scen",
+  "ch": "ask",
+  "sec": "Scenarios",
+  "title": "Scenarios: processes to draw as well",
+  "intro": "Under the runs a list of the processes of Fig. 1 of the Daisy paper can be ticked, or described in words. Daisy then writes the logs these figures need.",
+  "note": "",
+  "marks": [
+   {
+    "x": 84.80000000000001,
+    "y": 1355.6000000000001,
+    "t": "Processes of Fig. 1",
+    "d": "Weather, snow, canopy, soil water, biopores, drains, heat and ice, nitrate, ammonium, organic matter, carbon, denitrification, photosynthesis and crop growth."
+   },
+   {
+    "x": 105.60000000000001,
+    "y": 1454.8000000000002,
+    "t": "In words",
+    "d": "Write for example snow and soil temperature in winter; the matching processes are ticked."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1522.4,
+    "t": "Run Daisy",
+    "d": "Runs the simulations and draws the standard figures and these."
+   }
+  ]
+ },
+ "dz_weather_01": {
+  "id": "dz_weather_01",
+  "group": "10_data",
+  "ch": "data",
+  "sec": "Weather stations",
+  "title": "Weather stations: the bundled stations and the annual rain",
+  "intro": "Weather stations lists the stations that come with Daisy. Choosing one draws its annual rain; the station can be used as the SWAFL weather or added to the list of logs for the plots.",
+  "note": "",
+  "marks": [
+   {
+    "x": 64,
+    "y": 371.725,
+    "t": "Station",
+    "d": "The bundled stations, each with its years and number of days."
+   },
+   {
+    "x": 562.775,
+    "y": 369.725,
+    "t": "Latitude",
+    "d": "Latitude of the station, used to work out reference evapotranspiration when it is not recorded."
+   },
+   {
+    "x": 751.1,
+    "y": 366.925,
+    "t": "Use as SWAFL weather",
+    "d": "Sends the station to the main workbench as its weather."
+   },
+   {
+    "x": 972.0500000000001,
+    "y": 366.925,
+    "t": "Add to the log list",
+    "d": "Puts the station among the logs that the plot tabs can draw."
+   },
+   {
+    "x": 64,
+    "y": 557.325,
+    "t": "Annual rain",
+    "d": "Sum of the daily rain of each year of the record."
+   }
+  ]
+ },
+ "dz_weather_02": {
+  "id": "dz_weather_02",
+  "group": "10_data",
+  "ch": "data",
+  "sec": "Weather stations",
+  "title": "Weather stations: another station and the open data of the Danish Meteorological Institute",
+  "intro": "The lower part of the tab reads open weather data of the Danish Meteorological Institute (a free key of your own is needed) and a groundwater series for the lower boundary of the soil column.",
+  "note": "",
+  "marks": [
+   {
+    "x": 110.55000000000001,
+    "y": 846.125,
+    "t": "Interface key",
+    "d": "The free interface key of the Danish open data service."
+   },
+   {
+    "x": 645.325,
+    "y": 846.125,
+    "t": "Latitude",
+    "d": "Latitude of the place."
+   },
+   {
+    "x": 1118.075,
+    "y": 846.125,
+    "t": "From",
+    "d": "First day to read."
+   },
+   {
+    "x": 1527.7625,
+    "y": 843.325,
+    "t": "Fetch and use",
+    "d": "Reads the daily series and makes it the weather in use."
+   },
+   {
+    "x": 64,
+    "y": 951.725,
+    "t": "Groundwater file",
+    "d": "A table with a date column and a depth to water column in metres, or a NetCDF file, used as the lower boundary of the soil column."
+   }
+  ]
+ }
+}

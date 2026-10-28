@@ -11,3 +11,5 @@ Manuscripts/tex/*.log
 Manuscripts/tex/*.out
 Manuscripts/tex/*.pdf
 Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/build/
+build/
+build_shots/*.png

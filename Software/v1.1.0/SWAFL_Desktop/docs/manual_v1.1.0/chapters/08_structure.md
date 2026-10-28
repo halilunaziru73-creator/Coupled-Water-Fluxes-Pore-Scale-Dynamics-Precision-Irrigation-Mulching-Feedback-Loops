@@ -17,7 +17,7 @@ $$
 
 *Provenance (Eq. 8.1):* **[Engineered]**: exponential relaxation with chosen constants.
 
-with $t$ in days since tillage and $\tau_c$ the **Structural consolidation rate** control (Table 3, 0.001–0.02 d$^{-1}$). **No-till** keeps a constant $p=0.42$ (undisturbed pores). The half-life of loose pores is $\ln 2/\tau_c$: 693 d at 0.001 d$^{-1}$, 35 d at 0.02 d$^{-1}$. **[Engineered]**: the exponential form is the standard first-order consolidation relation also used in structure sub-models such as WEPP's, on which Daisy's tillage effect is based, but $p_0$, $p_c$ and the no-till value are *presentation* constants for the drawing; the *hydrological effect* of tillage shown in the bars is read from the Daisy runs (E5), not from Eq. (8.1).
+with $t$ in days since tillage and $\tau_c$ the **Structural consolidation rate** control (Table 3, 0.001 to 0.02 d$^{-1}$). **No-till** keeps a constant $p=0.42$ (undisturbed pores). The half-life of loose pores is $\ln 2/\tau_c$: 693 d at 0.001 d$^{-1}$, 35 d at 0.02 d$^{-1}$. **[Engineered]**: the exponential form is the standard first-order consolidation relation also used in structure sub-models such as WEPP's, on which Daisy's tillage effect is based, but $p_0$, $p_c$ and the no-till value are *presentation* constants for the drawing; the *hydrological effect* of tillage shown in the bars is read from the Daisy runs (E5), not from Eq. (8.1).
 
 ### How the section is generated
 
@@ -44,7 +44,7 @@ $$
 *Provenance (Eq. 8.3):* **[Literature]**: van Genuchten (1980).
 
 * **Cracks and aggregates.** The number of cracks is $n_b=\mathrm{round}(2 + 6(1 - f_{\mathrm{till}}))$ with $f_{\mathrm{till}} = 1,\,0.7,\,0.4$ for conventional, reduced, no-till; the crack width (mm) is $0.3\,\max\{0,\,p - 0.3\}^{1.3}$.
-* **Which pores hold water.** A pore of radius $r$ fills with water at suction $h$ if $r\le r_c(h)$, where the capillary radius follows the Young–Laplace (Jurin) law,
+* **Which pores hold water.** A pore of radius $r$ fills with water at suction $h$ if $r\le r_c(h)$, where the capillary radius follows the Young and Laplace (Jurin) law,
 
 $$
 r_c = \frac{2\,\sigma\cos\gamma}{\rho_w\, g\, h} \;\approx\; \frac{0.149\ \mathrm{cm^2}}{h}\quad(\mathrm{or}\ r_c[\mathrm{mm}] \approx 1.49/h[\mathrm{cm}]),
@@ -60,7 +60,7 @@ with surface tension $\sigma = 0.0728$ N m$^{-1}$, contact angle $\gamma\approx0
 ### Controls and steps
 
 1. Open *Soil structure and tillage ▸ Tillage and structure*. Press **Play** to run a year of consolidation (the day appears under the picture).
-2. Drag the **suction slider** (pF 0–4.2) on the microscope: at low suction the pores are water-filled; as suction rises the large pores empty first.
+2. Drag the **suction slider** (pF 0 to 4.2) on the microscope: at low suction the pores are water-filled; as suction rises the large pores empty first.
 3. Switch the view: *Natural* (minerals), *Particle sizes* (sand/silt/clay classes), *Water and air*.
 4. Change **Tillage** or the **Structural consolidation rate** and watch the curves of $p(t)$ (Eq. 8.1) and the section change.
 5. Read the bars *Change in drainage at the current settings* (conventional, reduced and no-till against no-till) and the yields. These come from the Daisy runs for the selected soil: $\Delta D_{\mathrm{conv}} = D_{\mathrm{conv}} - D_{\mathrm{notill}}$, $\Delta D_{\mathrm{red}} = D_{\mathrm{red}} - D_{\mathrm{notill}}$, at the current $\tau_c$.
@@ -97,7 +97,7 @@ $$
 
 *Provenance (Eq. 8.6):* **[Data-driven]**: ordinary least squares applied to Daisy results.
 
-The headline "Leading driver: tillage" or "consolidation rate" compares $\Delta_{\mathrm{till}}$ with $\Delta_{\mathrm{cons}}$ for the selected soil, and the percentage after each bar is $100\,\Delta/D_{\mathrm{now}}$, the share of the present drainage. The last line adds, for conventional against no-till at the current mulch and rain, the changes in irrigation, evaporation, yield and N leaching, obtained by running the meta-model (Eqs. 5.4–5.12) twice (conventional at $\tau$ index 2 and no-till) and subtracting.
+The headline "Leading driver: tillage" or "consolidation rate" compares $\Delta_{\mathrm{till}}$ with $\Delta_{\mathrm{cons}}$ for the selected soil, and the percentage after each bar is $100\,\Delta/D_{\mathrm{now}}$, the share of the present drainage. The last line adds, for conventional against no-till at the current mulch and rain, the changes in irrigation, evaporation, yield and N leaching, obtained by running the meta-model (Eqs. 5.4 to 5.12) twice (conventional at $\tau$ index 2 and no-till) and subtracting.
 
 The lower part of the layer draws, for the three tillage systems, a 48 cm wide, 1 m deep face of the selected soil. The upper 24 cm (the tilled layer) is generated with the pore index $p$ of Eq. (8.1) at day 120 (adjustable), clod and crack density from $f_{\mathrm{till}}$, and the wetness factor $\mathrm{clip}\bigl((p-0.30)/0.14;\,0.3,\,1.4\bigr)\cdot\mathrm{clip}(0.75 + 0.012\,\mathrm{clay};\,0.8,\,1.4)$; below it the subsoil is untouched by tillage. The drainage figures printed under each column are Daisy results (E5).
 
@@ -111,11 +111,11 @@ The lower part of the layer draws, for the three tillage systems, a 48 cm wide, 
 
 ### What it shows
 
-**Rooting depth in all ten soils** at the same day and weather: for each soil a column with the deepest roots (20-year mean, brown dashed), and ticks at the depth that holds 50 % and 90 % of the water taken up (green ticks). Below it, a time view of rooting depth through the 20 years and the daily uptake, and a set of heat maps from the repository's **E15** runs: 1,000 Daisy runs on the Coarse Loam, rooting depth 30–180 cm $\times$ ten application amounts $\times$ ten irrigation methods, mapped to yield, irrigation, drainage, transpiration, N leached and water-stress days.
+**Rooting depth in all ten soils** at the same day and weather: for each soil a column with the deepest roots (20-year mean, brown dashed), and ticks at the depth that holds 50 % and 90 % of the water taken up (green ticks). Below it, a time view of rooting depth through the 20 years and the daily uptake, and a set of heat maps from the repository's **E15** runs: 1,000 Daisy runs on the Coarse Loam, rooting depth 30 to 180 cm $\times$ ten application amounts $\times$ ten irrigation methods, mapped to yield, irrigation, drainage, transpiration, N leached and water-stress days.
 
 ### Generation
 
-Roots and uptake come from Engine 2 (Eqs. 5.18–5.23). For each soil the engine is run in turn with that soil's parameters (and, in own mode, its own trigger). With per-layer uptake $u_i(d)$ on day $d$ the **depth holding a fraction $p$ of the uptake** is
+Roots and uptake come from Engine 2 (Eqs. 5.18 to 5.23). For each soil the engine is run in turn with that soil's parameters (and, in own mode, its own trigger). With per-layer uptake $u_i(d)$ on day $d$ the **depth holding a fraction $p$ of the uptake** is
 
 $$
 z_p = k_p\,\Delta z,\qquad k_p = \min\Bigl\{k :\ \frac{\sum_{i\le k} U_i}{\sum_{i} U_i} \ge p\Bigr\},\qquad U_i=\sum_{d\in\text{year}}u_i(d),\quad p = 0.5,\ 0.9,

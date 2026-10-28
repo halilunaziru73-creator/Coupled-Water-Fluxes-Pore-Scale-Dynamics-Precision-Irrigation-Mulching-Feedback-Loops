@@ -1,6 +1,6 @@
 # Every control, value by value
 
-All model inputs live in the **Properties** panel (far right). Each group can be collapsed; **+** and **−** in the panel header expand or collapse all. The sliders are *indices* into lists of discrete values, because every value in the lists corresponds to a set of simulations (Chapter 5). The number shown beside a slider is the value the index stands for. The inputs of the three irrigation designs are not in Properties: they are the value boxes inside each design layer (Chapters 11–13 and 18).
+All model inputs live in the **Properties** panel (far right). Each group can be collapsed; **+** and **−** in the panel header expand or collapse all. The sliders are *indices* into lists of discrete values, because every value in the lists corresponds to a set of simulations (Chapter 5). The number shown beside a slider is the value the index stands for. The inputs of the three irrigation designs are not in Properties: they are the value boxes inside each design layer (Chapters 11 to 13 and 18).
 
 ![The Properties panel, with every group open (the arrows point to the groups; Chapter 25).](images/atlas11/ui_u06_properties_page.jpg){width=45%}
 
@@ -8,8 +8,8 @@ All model inputs live in the **Properties** panel (far right). Each group can be
 
 | Control | Values | Default | What it does |
 |:--|:--|:--|:--|
-| **Ready-made case** | seven cases (Section 3.8) | — | Replaces many controls at once, as one undoable step. |
-| **Year** | 1980 … 2100 | the current year | The calendar year of the working date. Years 1980–1999 use the recorded weather of that year; later years use the typical year of the record, or your own weather when it covers the year (Chapter 4 and Chapter 19). |
+| **Ready-made case** | seven cases (Section 3.8) | n/a | Replaces many controls at once, as one undoable step. |
+| **Year** | 1980 … 2100 | the current year | The calendar year of the working date. Years 1980 to 1999 use the recorded weather of that year; later years use the typical year of the record, or your own weather when it covers the year (Chapter 4 and Chapter 19). |
 | **Date in the season** | any calendar date | today | The working date: the day drawn, the "On …" block of the dashboard and the first day of every irrigation schedule. |
 | **Weather source** | Built-in weather record; Imported weather file; Online weather of a location | built-in | Which daily weather every layer uses. The second and third choices become active only after you have imported a file or fetched the weather of a place (Chapter 19). |
 | **Import weather… / Online weather…** | buttons | | Open the two weather dialogs. |
@@ -55,7 +55,7 @@ The material only *sets* the sliders. Moving a slider afterwards keeps the mater
 
 | Control | Values | Default | Effect |
 |:--|:--|:--|:--|
-| **Method** | Surface; Overhead; Drip 10–20 cm; Drip 20–30 cm; Drip 40–50 cm; Drip 50–60 cm | Surface | Selects the irrigation run set and, in the day-by-day engine, where each dose is placed (Section 5.2). |
+| **Method** | Surface; Overhead; Drip 10 to 20 cm; Drip 20 to 30 cm; Drip 40 to 50 cm; Drip 50 to 60 cm | Surface | Selects the irrigation run set and, in the day-by-day engine, where each dose is placed (Section 5.2). |
 | **Trigger (sensor suction)** | −50, −75, −100, −150, −200, −250, **−300**, −350, −400, −500, −600, −700, −800, −1000, −1200, −1500, −2000, −3000, −5000, −10000 cm | −300 cm | Irrigation starts when the soil at the sensor depth is as dry as this suction. A *less negative* number means wetter, more frequent irrigation. |
 | **Sensor depth** | 5, 10, 15, … 100 cm (20 values) | 20 cm | Depth of the simulated tensiometer that is compared with the trigger. |
 
@@ -75,10 +75,10 @@ The material only *sets* the sliders. Moving a slider afterwards keeps the mater
 |:-:|:--|:--|
 | 0 | Default: Coarse Loam, bare, normal climate | all defaults |
 | 1 | Dry year on Sand, no mulch | Sand; rain $\times$0.6; +1 °C |
-| 2 | Wheat straw mulch on Loam, drip 10 to 20 cm | Loam; straw; drip 10–20 |
+| 2 | Wheat straw mulch on Loam, drip 10 to 20 cm | Loam; straw; drip 10 to 20 |
 | 3 | Wet year on Silty Clay Loam, no-till | Silty Clay Loam; no-till; rain $\times$1.3 |
 | 4 | Hot year (+3 °C), tomato on Sandy Loam | Sandy Loam; tomato; +3 °C |
-| 5 | Plastic film, deep drip 40 to 50 cm, Clay Loam | Clay Loam; plastic; drip 40–50 |
+| 5 | Plastic film, deep drip 40 to 50 cm, Clay Loam | Clay Loam; plastic; drip 40 to 50 |
 | 6 | Low nitrogen (40 %), cowpea on Silt Loam | Silt Loam; cowpea; N 40 % |
 
 Every case first resets the controls to their defaults and then applies its changes, so cases never accumulate.
@@ -93,15 +93,15 @@ The last group of Properties opens the three designs (*Surface design, Drip desi
 
 | Control changed | Annual outputs (20-year means) | Day-by-day layers and schedules | Design layers |
 |:--|:--|:--|:--|
-| Soil | all (baseline run for that soil) | $\mathrm{AWC}$, $(\alpha,n)$, trigger anchor $\Rightarrow$ dates, depths | intake ($k$, $A$) via Saxton–Rawls and Green–Ampt; $Z_n$; the sprinkler maximum rate |
+| Soil | all (baseline run for that soil) | $\mathrm{AWC}$, $(\alpha,n)$, trigger anchor $\Rightarrow$ dates, depths | intake ($k$, $A$) via Saxton and Rawls and Green and Ampt; $Z_n$; the sprinkler maximum rate |
 | Tillage, consolidation | drainage, evaporation, yield | pore index in the structure layers | surface storage $S_d$ of the sprinkler design |
 | Crop | yield, transpiration, evaporation (Section 21.4) | crop calendar, $K_c$, $R_{\max}$, cover | peak $ET_c$, $Z_n$, row spacing |
 | Mulch $\varphi$, capacity | evaporation, irrigation, drainage, yield | evaporation term | interception loss of the sprinklers |
-| Rain scale | all | rain amount per event | — |
+| Rain scale | all | rain amount per event | n/a |
 | Temperature | evaporation, transpiration, irrigation, yield | $E_0$ and seasonal weight | air temperature in the wind drift (Eq. 13.9) |
 | Method | irrigation, drainage, yield | dose placement | the design that belongs to the method |
 | Trigger | irrigation, yield, drainage | **dates of irrigation** | $Z_n$ (as $f_T\cdot \mathrm{AWC}\cdot R_{\max}$) |
-| Sensor depth | irrigation, yield | **dates of irrigation** | — |
-| Nitrogen | yield, N leaching | $R_{\max}$ | — |
+| Sensor depth | irrigation, yield | **dates of irrigation** | n/a |
+| Nitrogen | yield, N leaching | $R_{\max}$ | n/a |
 | Weather source | through the nearest rain and temperature steps | **every daily value** | the crop water requirement and the schedules |
 | Date and year | none | **which day is shown; first date in the schedule** | the schedule table |

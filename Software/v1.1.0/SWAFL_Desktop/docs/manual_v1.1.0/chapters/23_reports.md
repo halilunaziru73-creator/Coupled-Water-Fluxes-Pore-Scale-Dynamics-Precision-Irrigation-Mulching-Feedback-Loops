@@ -13,7 +13,7 @@
 * **The design layers** are drawn at the end of the irrigation, so every result is complete.
 * **The field balance** appears three times: day by day, all twenty years, and the average year.
 
-A report of every layer has about 60–70 pages and takes a few seconds to build.
+A report of every layer has about 60 to 70 pages and takes a few seconds to build.
 
 ## The page and its numbers
 
