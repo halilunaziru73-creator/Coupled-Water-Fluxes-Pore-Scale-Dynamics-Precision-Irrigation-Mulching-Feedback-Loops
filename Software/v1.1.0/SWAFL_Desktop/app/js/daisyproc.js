@@ -39,23 +39,71 @@
     { id: 'crop', g: 'crop', n: 'Crop growth: leaf, stem, root, storage organ', x: 300, y: 400, w: 300, h: 60, d: 'The crop develops with the development stage (DS), leaf area index (LAI), height and rooting depth; dry matter and nitrogen are partitioned to leaf, stem, storage organ and root, under water and nitrogen stress; at harvest the storage organ leaves the field and the rest becomes residue.', par: 'Crop | development, partitioning, stress, root depth, harvest',
       figs: [{ log: 'Daily-CropProduction', t: 'Leaf area index', c: ['LAI'] }, { log: 'Daily-CropProduction', t: 'Crop height and rooting depth', c: ['Height', 'Depth'] }, { log: 'Daily-CropProduction', t: 'Dry matter of the organs', c: ['WLeaf', 'WStem', 'WSOrg', 'WRoot', 'WDead'] }, { log: 'Daily-CropProduction', t: 'Nitrogen in the organs', c: ['NLeaf', 'NStem', 'NSOrg', 'NRoot', 'NDead'] }, { log: 'Daily-CropProduction', t: 'Water and nitrogen stress (1 is no stress)', c: ['water_stress', 'nitrogen_stress'] }] }
   ];
-  // arrows of the main flows: from box to box
-  const ARR = [['bio', 'surf'], ['bio', 'snow'], ['bio', 'water'], ['snow', 'surf'], ['surf', 'water'], ['surf', 'pore'], ['water', 'drain'], ['pore', 'drain'], ['temp', 'water'], ['water', 'no3'], ['no3', 'nh4'], ['nh4', 'om'], ['om', 'carbon'], ['no3', 'deni'], ['photo', 'crop'], ['crop', 'carbon'], ['om', 'photo']];
   const byId = id => P.find(p => p.id === id);
-  const ctr = p => [p.x + p.w / 2, p.y + p.h / 2];
+  // Fig. 1 of the Daisy paper redrawn element by element: boxes are storages, solid lines flows, dashed lines flows out of the system, dotted lines information.
+  // Blue is water, green and brown carbon, beige nitrogen. Boxes with a process id open that process; coordinates follow the figure.
+  const BL = '#a8c4e0', LB = '#c4d8ee', GR = '#8cc35a', BE = '#e6dec6', LG = '#c9e08c', BR = '#c8861c', PG = '#b9e3a3';
   function svg() {
-    const W = 900, H = 480; let s = '<svg viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;max-width:960px;height:auto;display:block;background:#fff;border:1px solid #d6dae0;border-radius:6px" role="img" aria-label="Processes of the Daisy model"><defs><marker id="dzAr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#8a919c"/></marker></defs>';
-    ARR.forEach(a => { const p = byId(a[0]), q = byId(a[1]), c1 = ctr(p), c2 = ctr(q), cl = (b, f, t) => { const dx = t[0] - f[0], dy = t[1] - f[1], k = Math.min(Math.abs(dx) > 0 ? (b.w / 2 + 3) / Math.abs(dx) : 9, Math.abs(dy) > 0 ? (b.h / 2 + 3) / Math.abs(dy) : 9); return [f[0] + dx * k, f[1] + dy * k]; }; const a1 = cl(p, c1, c2), a2 = cl(q, c2, c1); s += '<line x1="' + a1[0].toFixed(1) + '" y1="' + a1[1].toFixed(1) + '" x2="' + a2[0].toFixed(1) + '" y2="' + a2[1].toFixed(1) + '" stroke="#8a919c" stroke-width="1.3" marker-end="url(#dzAr)"/>'; });
-    P.forEach(p => { const on = p.id === st.sel, c = GC[p.g]; s += '<g class="dzPb" data-p="' + p.id + '" style="cursor:pointer" tabindex="0" role="button" aria-label="' + esc(p.n) + '"><rect x="' + p.x + '" y="' + p.y + '" width="' + p.w + '" height="' + p.h + '" rx="7" fill="' + c + '" fill-opacity="' + (on ? .95 : .22) + '" stroke="' + c + '" stroke-width="' + (on ? 3 : 1.5) + '"/>' + wrap(p.n, p.w - 14).map((l, i, A) => '<text x="' + (p.x + p.w / 2) + '" y="' + (p.y + p.h / 2 + 4 + (i - (A.length - 1) / 2) * 14) + '" text-anchor="middle" font-size="12" font-weight="600" fill="' + (on ? '#fff' : '#1b2430') + '" font-family="system-ui,sans-serif">' + esc(l) + '</text>').join('') + '</g>'; });
-    let lx = 20; Object.keys(GC).forEach(k => { s += '<rect x="' + lx + '" y="' + (H - 14) + '" width="12" height="10" fill="' + GC[k] + '"/><text x="' + (lx + 16) + '" y="' + (H - 5) + '" font-size="11" fill="#444" font-family="system-ui,sans-serif">' + GN[k] + '</text>'; lx += 28 + GN[k].length * 6; });
-    return s + '</svg>';
+    const o = [], T = (x, y, t, a, sz, c, w, rot) => o.push('<text x="' + x + '" y="' + y + '" text-anchor="' + (a || 'middle') + '" font-size="' + (sz || 9.5) + '" fill="' + (c || '#111') + '"' + (w ? ' font-weight="' + w + '"' : '') + (rot ? ' transform="rotate(' + rot + ' ' + x + ' ' + y + ')"' : '') + ' font-family="Cambria,Georgia,serif" style="pointer-events:none">' + esc(t) + '</text>');
+    const L = (pts, k) => { const dash = k === 'out' ? ' stroke-dasharray="5 3"' : k === 'info' ? ' stroke-dasharray="1.5 2.5"' : k === 'mod' ? ' stroke-dasharray="6 3 1.5 3"' : ''; o.push('<polyline points="' + pts.map(q => q.join(',')).join(' ') + '" fill="none" stroke="' + (k === 'blue' ? '#3b6fa5' : '#222') + '" stroke-width="' + (k === 'blue' ? 2.2 : 1.1) + '"' + dash + (k === 'none' ? '' : ' marker-end="url(#dzAr)"') + '/>'); };
+    const sel = id => id === st.sel;
+    const box = (id, x, y, w, h, t, f, extra) => { extra = extra || {}; o.push('<g class="dzPb" data-p="' + (id || '') + '"' + (id ? ' style="cursor:pointer" tabindex="0" role="button" aria-label="' + esc(t) + '"' : '') + '><rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + (extra.rx == null ? 3 : extra.rx) + '" fill="' + f + '" stroke="' + (sel(id) ? '#d7191c' : '#555') + '" stroke-width="' + (sel(id) ? 2.6 : 0.8) + '"' + (extra.dash ? ' stroke-dasharray="4 3"' : '') + '/>' + (extra.half ? '<rect x="' + (x + w / 2) + '" y="' + y + '" width="' + w / 2 + '" height="' + h + '" rx="3" fill="' + extra.half + '"/><rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" fill="none" stroke="' + (sel(id) ? '#d7191c' : '#555') + '" stroke-width="' + (sel(id) ? 2.6 : 0.8) + '"/>' : '') + '</g>'); if (t) T(x + w / 2, y + h / 2 + 3.5, t, 'middle', extra.sz || 10, '#111', 600); };
+    o.push('<defs><marker id="dzAr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#222"/></marker><pattern id="dzDot" width="5" height="5" patternUnits="userSpaceOnUse"><rect width="5" height="5" fill="#e3edf8"/><circle cx="1.5" cy="1.5" r=".7" fill="#9db8d6"/><circle cx="4" cy="4" r=".7" fill="#9db8d6"/></pattern><pattern id="dzHat" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#fff"/><line x1="0" y1="0" x2="0" y2="6" stroke="#6a8fb8" stroke-width="2"/></pattern></defs>');
+    // the ground and the bottom of the profile
+    o.push('<line x1="150" y1="352" x2="900" y2="352" stroke="#c9a46a" stroke-width="1.2" stroke-dasharray="2 2"/><rect x="150" y="640" width="750" height="9" fill="url(#dzHat)"/>');
+    // driving variables
+    box('bio', 628, 30, 224, 32, '', '#fff', { dash: 1, rx: 6 }); T(740, 43, 'Driving variables', 'middle', 9.5); T(672, 56, 'Precipitation & Irrigation', 'middle', 9, '#111', 600); T(765, 56, 'Temperature', 'middle', 9, '#111', 600); T(820, 56, 'Light', 'middle', 9, '#111', 600);
+    L([[628, 46], [300, 46], [300, 62]], 'none'); o.push('<circle cx="300" cy="67" r="5" fill="#7ea6d2" stroke="#333"/>'); T(262, 50, 'Snowfall', 'middle', 9); T(340, 50, 'Rainfall', 'middle', 9);
+    L([[296, 70], [232, 70], [232, 120]]); L([[304, 70], [388, 70], [388, 120]]);
+    // snow and intercepted water
+    box('snow', 186, 122, 92, 26, 'Snowpack', BL); box('surf', 328, 122, 120, 26, 'Intercepted water', BL);
+    L([[205, 120], [205, 82]], 'out'); T(178, 78, 'Evaporation', 'middle', 9); L([[418, 120], [418, 82]], 'out'); T(446, 86, 'Evaporation', 'middle', 9);
+    L([[232, 148], [232, 298]]); T(190, 195, 'Percolation', 'middle', 9); L([[330, 135], [268, 135], [268, 298]]); T(300, 168, 'Throughfall', 'middle', 9); L([[388, 148], [388, 262], [290, 262], [290, 298]]); T(358, 222, 'Drip off', 'middle', 9); L([[216, 298], [216, 232]], 'out'); T(168, 236, 'Evaporation', 'middle', 9);
+    // litter, pond and soil
+    box('surf', 198, 300, 98, 13, 'Litter water', LB, { sz: 8.5 }); box('surf', 170, 334, 84, 13, 'Ponded water', LB, { sz: 8.5 }); L([[186, 334], [186, 288]], 'out'); T(142, 272, 'Evaporation', 'middle', 9);
+    L([[225, 313], [225, 334]]); T(250, 326, 'Percolation', 'start', 9); L([[170, 340], [132, 340]], 'out'); T(116, 335, 'Runoff', 'middle', 9); L([[212, 347], [212, 368]]); T(166, 361, 'Infiltration', 'middle', 9);
+    box('water', 168, 368, 104, 260, '', 'url(#dzDot)', { rx: 2 }); T(220, 408, 'Soil water', 'middle', 10, '#111', 700); T(220, 421, '(Richards Eq.)', 'middle', 9.5); T(220, 446, 'Solute transport', 'middle', 10, '#111', 700); T(220, 459, '(Advection-dispersion Eq.)', 'middle', 8.5);
+    L([[262, 368], [262, 348]], 'out'); T(256, 362, 'Soil Evaporation', 'start', 8.5);
+    box('pore', 284, 318, 5, 262, '', '#6fa0d0', { rx: 1 }); box('pore', 296, 318, 5, 262, '', '#6fa0d0', { rx: 1 }); T(312, 346, 'Biopore', 'start', 9); T(312, 357, 'flow', 'start', 9);
+    o.push('<g class="dzPb" data-p="drain" style="cursor:pointer" tabindex="0" role="button" aria-label="Drain"><circle cx="268" cy="520" r="14" fill="' + BL + '" stroke="' + (sel('drain') ? '#d7191c' : '#555') + '" stroke-width="' + (sel('drain') ? 2.6 : 0.8) + '"/></g>'); T(268, 523, 'Drain', 'middle', 9.5, '#111', 600);
+    L([[184, 642], [184, 628]]); T(116, 606, 'Capillary rise', 'middle', 9); L([[250, 628], [250, 642]], 'out'); T(238, 620, 'Percolation', 'end', 9);
+    // nitrogen
+    box('no3', 372, 420, 40, 26, 'NO₃⁻', BE); box('nh4', 344, 478, 60, 26, 'NH₄⁺', BE); box('nh4', 332, 516, 52, 26, 'NH₄⁺ sorbed', BE, { sz: 8 }); box('crop', 444, 342, 60, 26, 'Plant-N', BE); box('carbon', 592, 436, 60, 26, 'Org-N', BE);
+    L([[372, 300], [372, 420]], 'none'); L([[376, 300], [376, 340]]); T(335, 288, 'Fertilization+', 'middle', 9); T(335, 299, 'Atm. Deposition', 'middle', 9); L([[340, 478], [340, 300]], 'out'); T(318, 262, 'Volatilization', 'middle', 9);
+    L([[392, 420], [392, 392]], 'out'); T(364, 376, 'N₂O', 'middle', 9); L([[352, 400], [352, 380]], 'out'); T(336, 390, 'N₂O', 'middle', 9); L([[396, 420], [396, 370]]); T(392, 366, 'Denitri-', 'middle', 8.5); T(392, 376, 'fication', 'middle', 8.5);
+    L([[388, 478], [388, 446]]); T(403, 464, 'Nitrification', 'start', 9); L([[413, 429], [443, 362]]); T(418, 396, 'Uptake', 'start', 9); L([[404, 484], [444, 366]], 'none');
+    L([[592, 444], [413, 436]]); T(520, 450, 'Immobilization', 'middle', 9); L([[592, 462], [404, 490]]); T(500, 484, 'Mineralization', 'middle', 9); L([[384, 505], [384, 520]], 'none'); L([[388, 504], [388, 642]], 'out'); T(396, 560, 'Leaching', 'start', 9);
+    L([[268, 534], [268, 548]], 'none'); L([[374, 520], [286, 520]], 'none');
+    // plant
+    L([[460, 342], [460, 258]]); L([[475, 342], [475, 200]]); L([[490, 342], [490, 116]]); L([[474, 368], [474, 398]]); T(482, 290, 'Harvest', 'middle', 9); L([[470, 284], [470, 250]], 'out'); T(432, 318, 'Symbiotic', 'start', 9); T(432, 328, 'Fixation', 'start', 9);
+    box('crop', 444, 88, 60, 26, 'Storage Organ', LG, { half: BE, sz: 8.5 }); box('crop', 444, 172, 60, 26, 'Leaf', LG, { half: BE }); box('crop', 444, 232, 60, 26, 'Stem', LG, { half: BE }); box('crop', 444, 398, 60, 26, 'Root', LG, { half: BE });
+    L([[458, 88], [458, 46]], 'out'); T(440, 40, 'Transpiration', 'middle', 9); L([[490, 88], [490, 46]], 'out'); T(497, 40, 'Harvest', 'middle', 9); L([[528, 88], [528, 70]], 'out'); T(528, 64, 'CO₂', 'middle', 9);
+    box('photo', 548, 100, 24, 190, '', PG, { rx: 3 }); T(560, 195, 'Partitioning', 'middle', 10, '#111', 600, -90);
+    L([[548, 108], [504, 101]]); L([[548, 190], [504, 186]]); L([[548, 250], [504, 246]]); L([[548, 288], [548, 298], [511, 298], [511, 408], [504, 408]]);
+    box('photo', 590, 124, 100, 28, '', PG); T(640, 135, 'Maintenance', 'middle', 8.5, '#111', 600); T(640, 146, 'Respiration', 'middle', 8.5, '#111', 600); box('photo', 588, 186, 98, 24, 'Assimilate Pool', PG); box('photo', 712, 186, 92, 24, 'Photosynthesis', PG);
+    L([[712, 198], [686, 198]]); L([[588, 198], [572, 198]]); L([[636, 186], [636, 154]]); L([[640, 128], [640, 100]], 'out'); T(640, 94, 'CO₂', 'middle', 9); L([[528, 150], [528, 130]], 'out'); T(528, 124, 'CO₂', 'middle', 9); L([[528, 232], [528, 212]], 'out'); T(528, 206, 'CO₂', 'middle', 9);
+    L([[724, 62], [724, 186]], 'info'); T(716, 80, 'CO₂', 'end', 9); L([[770, 62], [770, 186]], 'info'); L([[816, 62], [796, 186]], 'info');
+    box('photo', 842, 144, 76, 30, 'Canopy Structure', PG, { sz: 8, rx: 10 }); box('photo', 842, 186, 76, 30, 'Stress Factors', PG, { sz: 8, rx: 10 }); box('photo', 842, 228, 76, 30, 'Senescence', PG, { sz: 8, rx: 10 });
+    L([[842, 160], [804, 190]], 'info'); L([[842, 201], [804, 199]], 'info'); L([[842, 243], [804, 208]], 'info');
+    // residues
+    box('carbon', 518, 342, 60, 26, 'Shoot Residues', LG, { sz: 8 }); box('carbon', 518, 408, 60, 26, 'Root Residues', LG, { sz: 8 });
+    L([[504, 210], [530, 210], [530, 340]], 'none'); L([[504, 420], [518, 420]]); L([[578, 355], [614, 355], [614, 434]]); L([[578, 421], [610, 421], [610, 434]]); T(588, 392, 'Residuals +', 'middle', 8.5); T(588, 402, 'Rhizodeposition', 'middle', 8.5);
+    // organic matter
+    T(640, 296, 'Fertilization', 'middle', 9); T(640, 307, '(Org. Matter)', 'middle', 9); L([[650, 312], [716, 354]]); L([[650, 312], [830, 354]]); L([[650, 312], [650, 436]], 'none'); T(740, 322, 'Structural', 'middle', 9); T(740, 333, 'Organic input', 'middle', 9); T(850, 322, 'Metabolic', 'middle', 9); T(850, 333, 'Organic input', 'middle', 9); T(900, 346, 'Recalcitrant', 'middle', 9);
+    box('om', 680, 357, 88, 26, 'AOM1', BR, { half: BE }); box('om', 790, 357, 88, 26, 'AOM1', BR, { half: BE }); box('om', 672, 440, 74, 24, 'SMB1', BR, { half: BE }); box('om', 774, 440, 74, 24, 'SMB2', BR, { half: BE }); box('om', 664, 492, 90, 46, 'SOM1', BR, { half: BE }); box('om', 774, 492, 90, 46, 'SOM2', BR, { half: BE }); box('om', 808, 552, 92, 28, 'SOM3 (inert)', BR, { half: BE, sz: 9 });
+    L([[724, 383], [724, 440]]); L([[834, 383], [834, 440]]); L([[724, 383], [724, 410], [810, 410], [810, 440]]); L([[746, 452], [774, 452]]); L([[709, 464], [709, 492]]); L([[811, 464], [811, 492]]); L([[754, 515], [774, 515]]); L([[754, 505], [774, 505]]); L([[818, 538], [818, 552]]); L([[672, 452], [652, 452]]); L([[864, 452], [888, 452], [888, 520], [864, 520]], 'none');
+    L([[690, 357], [690, 330]], 'out'); T(690, 324, 'CO₂', 'middle', 9); L([[792, 440], [792, 400]], 'out'); L([[760, 440], [760, 405]], 'out'); T(660, 480, 'CO₂', 'middle', 9); L([[690, 492], [690, 470]], 'out'); T(790, 485, 'CO₂', 'middle', 9); T(790, 304, 'CO₂', 'middle', 9); L([[790, 332], [790, 312]], 'out');
+    // legend
+    const lg = [['none', 'Inputs and movement of matter within modules.'], ['out', 'Outputs of matter.'], ['info', 'Exchange of information within modules.'], ['none2', 'Movement of matter between modules.'], ['mod', 'Exchange of information between modules.']];
+    lg.forEach((l, i) => { const y = 590 + i * 11; o.push('<line x1="640" y1="' + y + '" x2="676" y2="' + y + '" stroke="#222" stroke-width="' + (l[0] === 'none2' ? 2 : 1) + '"' + (l[0] === 'out' ? ' stroke-dasharray="5 3"' : l[0] === 'info' ? ' stroke-dasharray="1.5 2.5"' : l[0] === 'mod' ? ' stroke-dasharray="6 3 1.5 3"' : '') + '/>'); T(682, y + 3, l[1], 'start', 8.5); }); T(640, 650, '(Not all flow of matter and information between modules are shown)', 'start', 8, '#444');
+    return '<svg viewBox="100 20 830 640" style="width:100%;max-width:1000px;height:auto;display:block;background:#fff;border:1px solid #d6dae0;border-radius:6px" role="img" aria-label="Fig. 1: schematic overview of the main processes in Daisy">' + o.join('') + '</svg>';
   }
-  function wrap(t, w) { const mx = Math.max(10, Math.floor(w / 6.6)), words = t.split(' '), L = []; let cur = ''; words.forEach(x => { if ((cur + ' ' + x).trim().length > mx && cur) { L.push(cur); cur = x; } else cur = (cur + ' ' + x).trim(); }); if (cur) L.push(cur); return L; }
+  function chips() { return '<div style="margin:6px 0;font-size:12px;color:#444">Also in Daisy, not drawn in Fig. 1: ' + ['temp', 'bio', 'deni'].map(id => '<button class="dzPc" data-p="' + id + '" style="margin-right:6px' + (st.sel === id ? ';font-weight:700;outline:2px solid #d7191c' : '') + '">' + esc(byId(id).n) + '</button>').join('') + '</div>'; }
   async function load(key) { if (st.data[key]) return st.data[key]; const d = IO.readDlf(await D.getText('examples/process/' + key + '.dlf'), key); return (st.data[key] = d); }
   function html(arg) {
     if (arg && byId(arg)) st.sel = arg;
-    return '<div class="dzcard"><b>The processes of the Daisy model</b> (after Fig. 1 of the Daisy paper). Click a box to read what Daisy does there and to draw its figures from the logs of a standard run of the rotation.</div>' +
-      '<div id="dzPmap">' + svg() + '</div><div id="dzPdet"></div>';
+    return '<div class="dzcard"><b>The processes of the Daisy model</b> redrawn from Fig. 1 of the Daisy paper. Click a box (snowpack, intercepted water, litter, pond, soil water, biopores, drain, NO3, NH4, Plant-N, organs, residues, photosynthesis, AOM, SMB, SOM) to read what Daisy does there and to draw its figures from the logs of a standard run of the rotation.</div>' +
+      '<div id="dzPmap">' + svg() + '</div><div id="dzPchips">' + chips() + '</div><div id="dzPdet"></div>';
   }
   async function detail() {
     const p = byId(st.sel), box = document.getElementById('dzPdet'); if (!box) return;
@@ -79,8 +127,8 @@
     K().line(cv, cols.map(c => ({ name: c[0], x: yrs.length === d.n ? yrs : d.data[0], y: d.data[c[1]] })), { h: 260 }); note.textContent = 'Annual totals per year of the standard run.';
   }
   function bind() {
-    const map = document.getElementById('dzPmap'); const act = id => { st.sel = id; map.innerHTML = svg(); wire(); detail(); };
-    const wire = () => map.querySelectorAll('.dzPb').forEach(g => { g.onclick = () => act(g.dataset.p); g.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); act(g.dataset.p); } }; });
+    const map = document.getElementById('dzPmap'); const act = id => { if (!id || !byId(id)) return; st.sel = id; map.innerHTML = svg(); document.getElementById('dzPchips').innerHTML = chips(); wire(); detail(); };
+    const wire = () => { document.querySelectorAll('.dzPc').forEach(b => b.onclick = () => act(b.dataset.p)); map.querySelectorAll('.dzPb[data-p]').forEach(g => { g.onclick = () => act(g.dataset.p); g.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); act(g.dataset.p); } }; }); };
     wire(); detail();
   }
   window.DaisyProc = { PROCESSES: P };

@@ -2,10 +2,10 @@
    (desktop app with Daisy) or explore the 10 190 published runs of the study (works offline anywhere); figures are drawn from the results. */
 'use strict';
 (() => {
-  const D = DaisyUI, IO = window.DaisyIO, SC = window.DaisyScen, X = window.DaisyExp, AI = window.DaisyAI, esc = D.esc, K = () => D.kit;
+  const R = window.DaisyRef, D = DaisyUI, IO = window.DaisyIO, SC = window.DaisyScen, X = window.DaisyExp, AI = window.DaisyAI, esc = D.esc, K = () => D.kit;
   const $ = id => document.getElementById('dzX' + id);
-  const st = { text: '', res: null, factors: [], base: {}, design: 'factorial', max: 40, log: 'annual', useMy: true, rows: [], runs: [], source: 'daisy', preset: null, ens: null, resp: 'yield', jobs: 4, stop: false, running: false, key: '', model: 'claude-sonnet-5-5', ai: false, responses: [] };
-  try { st.key = localStorage.getItem('swafl.ai.key') || ''; st.model = localStorage.getItem('swafl.ai.model') || st.model; st.ai = !!st.key; } catch (e) { }
+  const st = { text: '', res: null, factors: [], base: {}, design: 'factorial', max: 40, log: 'annual', useMy: true, rows: [], runs: [], source: 'daisy', preset: null, ens: null, resp: 'yield', jobs: 4, stop: false, running: false, key: '', model: '', ai: false, responses: [] };
+  try { st.key = localStorage.getItem('swafl.ai.key') || ''; st.ai = !!st.key; } catch (e) { }
   const EXAMPLES = ['How do the trigger suction (-100 to -800 cm) and the sensor depth (10, 30 and 60 cm) change irrigation and yield on sand and loam?', 'Compare overhead, surface and drip irrigation on a sandy loam with Bologna weather for 10 years', 'What if the rain is 20% less and it is 2 degrees warmer? Does irrigation pay off?', 'How much nitrogen should I apply? Nitrate leaching on all soils, from 40 to 100 percent', 'A water limit of 100, 200 and 300 mm per season: effect on yield and water use efficiency', 'Effect of mulch on evaporation'];
   const flabel = id => { const f = X.factor(id); if (f) return f.label.replace(/, factor.*/, '') + (f.unit ? ' (' + f.unit + ')' : ''); const e = Object.keys(X.ENS_FACTORS).find(k => X.ENS_FACTORS[k][0] === id); return e ? X.ENS_FACTORS[e][1] : id; };
   const rlabel = id => { const r = X.RESP.find(x => x.id === id); return r ? r.label + ' (' + r.unit + ')' : id; };
@@ -14,15 +14,34 @@
 
   // ------------------------------------------------------------------ page
   function html(arg) {
-    if (arg && arg !== st.arg) { st.arg = arg; setTimeout(() => { const p = X.PRESETS.find(x => x.id === arg); if (p) usePreset(p); }, 30); }
+    if (arg && arg !== st.arg) { st.arg = arg; setTimeout(() => { const g = R.suggest(refCtx()).find(x => x.id === arg); if (g) useSuggestion(g); }, 30); }
     const desk = D.isDesk();
     return '<div class="dzpan"><h3 style="margin:0">Experiments: say what you want to find out</h3>' +
       '<p class="pnote">Write it in your own words: what to vary, on which soil and weather, what to look at. The planner turns it into a set of Daisy runs, asks what is still open, runs them in a batch or one by one, and draws the figures. ' + (desk ? '' : 'This is the web version: Daisy itself runs in the desktop app; here you can plan, save the experiment folder, and explore the 10 190 published runs of the study.') + '</p>' +
       '<textarea id="dzXText" rows="3" style="width:100%;box-sizing:border-box" placeholder="For example: how do the irrigation trigger and the sensor depth change yield and water use on sand and loam?">' + esc(st.text) + '</textarea>' +
-      '<div class="dzrow"><button class="btn pri" id="dzXGo">Understand my request</button><label>or an experiment of the study</label><select id="dzXPreset"><option value="">choose...</option>' + X.PRESETS.map(p => '<option value="' + p.id + '">' + p.id + ' ' + esc(p.name) + (p.unsupported ? ' (published runs only)' : '') + '</option>').join('') + '</select>' +
-      '<label title="The built-in planner always works offline. With a key, an online AI (Claude) reads the request first and its plan is checked against what Daisy can vary."><input type="checkbox" id="dzXAi"' + (st.ai ? ' checked' : '') + '> online AI</label><input type="password" id="dzXKey" placeholder="API key" value="' + esc(st.key) + '" style="width:140px;' + (st.ai ? '' : 'display:none') + '"><input type="text" id="dzXModel" value="' + esc(st.model) + '" style="width:150px;' + (st.ai ? '' : 'display:none') + '"></div>' +
+      '<div class="dzrow"><button class="btn pri" id="dzXGo">Understand my request</button><label title="Without a key the built-in planner works fully offline. With a key, an online AI reads the request first, and each plan it gives is checked against what Daisy can vary."><input type="checkbox" id="dzXAi"' + (st.ai ? ' checked' : '') + '> online AI (machine learning)</label><input type="password" id="dzXKey" placeholder="access key" value="' + esc(st.key) + '" style="width:150px;' + (st.ai ? '' : 'display:none') + '"></div>' +
+      '<div id="dzXSug"></div>' +
       '<div class="pnote">Examples: ' + EXAMPLES.map((e, i) => '<a href="#" data-ex="' + i + '">' + esc(e.length > 58 ? e.slice(0, 56) + '...' : e) + '</a>').join(' &middot; ') + '</div></div>' +
       '<div id="dzXPlan"></div><div id="dzXRunBox"></div><div id="dzXRes"></div>';
+  }
+
+
+  // ------------------------------------------------------------------ combinations from the Daisy reference
+  function refCtx() {
+    const m = window.DaisyScenUI ? window.DaisyScenUI.my() : {}, c = { userSoil: !!(m && m.soilOn) };
+    if (m && m.wxMode !== 'course' && m.wx) { c.Pmean = m.wx.Pmean; c.Tmean = m.wx.Tmean; }
+    if (c.userSoil && m.soil && m.soil.horizons && m.soil.horizons[0]) { const h = m.soil.horizons[0]; c.sand = +h.sand; c.clay = +h.clay; }
+    c.root = +(st.base && st.base.root) || undefined; return c;
+  }
+  function showSuggestions() {
+    const box = $('Sug'); if (!box) return; const list = R.suggest(refCtx());
+    box.innerHTML = '<div class="dzpan"><b>Best combinations to start with</b> <span class="pnote">worked out from the ' + esc(R.SOURCE) + ' and from the weather and soil given (' + (refCtx().Pmean != null ? 'your weather, ' + Math.round(refCtx().Pmean) + ' mm of rain a year' : 'the course weather') + '); the first is the most useful here. Nothing is taken from earlier experiments.</span>' +
+      list.slice(0, 6).map((g, i) => '<div class="dzrow" style="align-items:flex-start;margin-top:6px"><button class="btn' + (i === 0 ? ' pri' : '') + '" data-sug="' + g.id + '" style="min-width:210px;text-align:left">' + esc(g.title) + '</button><span class="pnote" style="flex:1">' + esc(g.why) + ' <i>Manual section ' + esc(g.ref) + '.</i></span></div>').join('') + '</div>';
+    box.querySelectorAll('[data-sug]').forEach(b => b.onclick = () => useSuggestion(list.find(x => x.id === b.dataset.sug)));
+  }
+  function useSuggestion(g) {
+    if (!g) return; st.text = g.title; const t = $('Text'); if (t) t.value = g.title; const plan = { factors: g.plan.factors.map(f => ({ id: f.id, levels: f.levels.slice() })), base: Object.assign({}, g.plan.base), design: g.plan.design };
+    adopt({ plan, understood: [g.title + '. ' + g.why + ' (manual section ' + g.ref + ')'], questions: [], engine: 'reference' });
   }
 
   // ------------------------------------------------------------------ plan
@@ -31,8 +50,8 @@
   }
   async function understand() {
     st.text = $('Text').value; const box = $('Plan'); box.innerHTML = '<div class="dzpan pnote">Reading your request...</div>';
-    st.key = $('Key').value.trim(); st.model = $('Model').value.trim() || st.model; st.ai = $('Ai').checked; try { localStorage.setItem('swafl.ai.key', st.ai ? st.key : ''); localStorage.setItem('swafl.ai.model', st.model); } catch (e) { }
-    const r = await AI.plan(st.text, ctx(), { key: st.ai ? st.key : '', model: st.model, online: navigator.onLine !== false }); adopt(r);
+    st.key = $('Key').value.trim(); st.ai = $('Ai').checked; try { localStorage.setItem('swafl.ai.key', st.ai ? st.key : ''); } catch (e) { }
+    const r = await AI.plan(st.text, ctx(), { key: st.ai ? st.key : '', online: navigator.onLine !== false }); adopt(r);
   }
   function usePreset(p) {
     st.text = p.id + ': ' + p.ask; const t = $('Text'); if (t) t.value = st.text; st.res = { plan: p.plan || { factors: [], base: {} }, understood: ['experiment ' + p.id + ' (' + p.name + ') of the study: ' + p.ask + (p.note ? ' (' + p.note + ')' : '')], questions: p.unsupported ? [{ id: 'unsup', text: p.id + ' ' + p.name + ': ' + p.unsupported + '.', options: [], preset: p.id }] : [], engine: 'study' };
@@ -58,7 +77,7 @@
   }
   function renderPlan() {
     const r = st.res, box = $('Plan'); if (!box || !r) return; const ens = st.preset && st.preset.ens;
-    let h = '<div class="dzpan"><div class="dzrow"><h3 style="margin:0">' + esc(r.plan.title || 'Plan') + '</h3><span class="dzchip">' + (r.engine === 'AI' ? 'planned by the online AI, checked against the catalogue' : r.engine === 'study' ? 'experiment of the study' : 'built-in planner') + '</span></div>';
+    let h = '<div class="dzpan"><div class="dzrow"><h3 style="margin:0">' + esc(r.plan.title || 'Plan') + '</h3><span class="dzchip">' + (r.engine === 'AI' ? 'planned by the online AI, checked against the catalogue' : r.engine === 'reference' ? 'from the Daisy reference manual and your data' : r.engine === 'study' ? 'experiment of the study' : 'built-in planner') + '</span></div>';
     if (r.aiError || (r.fallback && false)) h += '<p class="pnote">The online AI could not be used (' + esc(r.aiError) + '); the built-in planner answered.</p>';
     if (r.understood.length) h += '<p><b>What I understood</b></p><ul style="margin:0 0 6px 18px">' + r.understood.map(u => '<li>' + esc(u) + '</li>').join('') + '</ul>';
     if (r.notes && r.notes.length) h += '<p class="pnote">' + r.notes.map(esc).join('; ') + '</p>';
@@ -108,13 +127,13 @@
     catch (e) { D.note('Xst', esc(e.message), 1); }
   }
   // ------------------------------------------------------------------ running
-  async function run(seq) {
+  async function run(seq, override) {
     if (st.running) { st.stop = true; D.note('Xst', 'Stopping after the runs that have started...'); return; }
     try {
       readPlanInputs(); if (!D.isDesk() || !window.swafl || !window.swafl.daisyJob) { D.note('Xst', 'Daisy itself runs in the desktop app. Here you can save the experiment folder (.zip) and run it anywhere, or explore the published runs.', 1); return; }
       let info = await window.swafl.daisyInfo(); if (!info.found) info = await window.swafl.daisyChoose(); if (!info.found) throw new Error('No Daisy program chosen. Install Daisy 7.1.14 (Model and documentation tab).');
-      const design = X.design(currentPlan()), files = await commonFiles(), jobs = await buildJobs(design, files), fids = design.factors.map(f => f.id);
-      st.rows = []; st.runs = []; st.fids = fids; st.source = 'daisy'; st.running = true; st.stop = false; $('Batch').textContent = 'Stop'; const box = $('RunBox');
+      const design = override || X.design(currentPlan()), files = await commonFiles(), jobs = await buildJobs(design, files), fids = override ? st.fids : design.factors.map(f => f.id);
+      if (!override) { st.rows = []; st.runs = []; st.design0 = design; } else st.design0 = { runs: st.design0.runs.concat(design.runs), factors: st.design0.factors }; st.fids = fids; st.source = 'daisy'; st.running = true; st.stop = false; $('Batch').textContent = 'Stop'; const box = $('RunBox');
       box.innerHTML = '<div class="dzpan"><b id="dzXProg">0 of ' + jobs.length + ' runs</b> <div id="dzXBar" style="height:8px;background:#e4e7ec;border-radius:4px;margin:6px 0"><div id="dzXBarIn" style="height:8px;width:0;background:#2b83ba;border-radius:4px"></div></div><div id="dzXList" class="pnote" style="max-height:120px;overflow:auto"></div></div>';
       let next = 0, done = 0, fail = 0; const t0 = Date.now(), nPar = seq ? 1 : st.jobs, lastDraw = { t: 0 };
       const work = async () => { while (next < jobs.length && !st.stop) { const { run: rn, job } = jobs[next++]; job.copyBundle = true; let r; try { r = await window.swafl.daisyJob(job); } catch (e) { r = { code: -1, err: e.message, logs: {} }; }
@@ -153,12 +172,36 @@
     if (rows.some(r => isFinite(r.r.irr)) && rows.some(r => isFinite(r.r.yield))) h += fig('trade', 'Trade-off: yield against irrigation water', 'Each point is one run. The line joins the runs that no other run beats on both counts (least water, most yield).');
     if (rows.some(r => isFinite(r.r.leach)) && rows.some(r => isFinite(r.r.yield))) h += fig('trade2', 'Trade-off: yield against nitrate leached', 'Each point is one run; the line joins the best runs (least leaching, most yield).');
     if (st.runs.length) h += '<div class="dzpan"><div class="dzrow"><b>One run in detail</b><select id="dzXOne">' + st.runs.map((r, i) => '<option value="' + i + '">' + esc(r.id + ' ' + r.label) + '</option>').join('') + '</select><span class="pnote">the standard Daisy figures of that run (the daily ones need the logs set to "annual and daily...")</span></div><div id="dzXOneFigs"></div></div>';
-    host.innerHTML = h; $('Resp').onchange = e => { st.resp = e.target.value; drawResults(); }; $('Csv').onclick = () => D.download('daisy-experiment.csv', X.csv(rows, fids, X.RESP.map(r => r.id).filter(r => resps.indexOf(r) >= 0)), 'text/csv'); $('Rep').onclick = () => report(resp);
+    h += learnCard(rows, fids, resp);
+    host.innerHTML = h; bindLearn(rows, fids, resp); $('Resp').onchange = e => { st.resp = e.target.value; drawResults(); }; $('Csv').onclick = () => D.download('daisy-experiment.csv', X.csv(rows, fids, X.RESP.map(r => r.id).filter(r => resps.indexOf(r) >= 0)), 'text/csv'); $('Rep').onclick = () => report(resp);
     host.querySelectorAll('[data-xpng]').forEach(b => b.onclick = () => { const c = host.querySelector('[data-xc="' + b.dataset.xpng + '_0"]'); if (c) K().savePng(c, 'daisy-' + b.dataset.xpng + '.png'); });
     const cv = id => host.querySelector('[data-xc="' + id + '_0"]'); const tryDraw = (id, fn) => { try { const c = cv(id); if (c) fn(c); } catch (e) { const p = host.querySelector('[data-xf="' + id + '"]'); if (p) p.insertAdjacentHTML('beforeend', '<span style="color:#b3261e">could not be drawn: ' + esc(e.message) + '</span>'); console.warn(id, e); } };
     tryDraw('tor', c => tornado(c, rows, multi, resp)); multi.forEach((f, i) => tryDraw('me' + i, c => mainEffect(c, rows, f, resp))); tryDraw('heat', c => heat(c, rows, multi[0], multi[1], resp)); tryDraw('trade', c => trade(c, rows, 'irr', 'yield', multi[0])); tryDraw('trade2', c => trade(c, rows, 'leach', 'yield', multi[0]));
     const one = $('One'); if (one) { const dr = () => oneRun(st.runs[+one.value]); one.onchange = dr; dr(); }
   }
+
+  // ------------------------------------------------------------------ iteration: learn from the runs so far and propose the next ones
+  function learnCard(rows, fids, resp) {
+    const nums = fids.filter(f => X.factor(f) && X.factor(f).kind === 'num' && X.levels(rows, f).length > 1 && rows.every(r => r.reference || typeof r.f[f] === 'number'));
+    if (!nums.length || !st.design0 || st.source !== 'daisy') return '';
+    return '<div class="dzpan"><div class="dzrow"><b>Iterate: learn from these runs</b><span class="pnote" style="flex:1">A regression model is fitted on the finished runs (squares and products of ' + nums.map(f => esc(flabel(f).replace(/ \(.*/, ''))).join(', ') + '), and the next runs are placed between the levels already run where the model expects the best ' + esc(rlabel(resp).replace(/ \(.*/, '').toLowerCase()) + ' and where no run exists yet. Run them, and repeat.</span><button class="btn" id="dzXLearn">Learn and propose the next runs</button></div><div id="dzXLearnOut"></div></div>';
+  }
+  function bindLearn(rows, fids, resp) {
+    const b = $('Learn'); if (!b) return; const nums = fids.filter(f => X.factor(f) && X.factor(f).kind === 'num' && X.levels(rows, f).length > 1 && rows.every(r => r.reference || typeof r.f[f] === 'number'));
+    b.onclick = () => {
+      const out = $('LearnOut'), good = (X.RESP.find(r => r.id === resp) || {}).good || 1, data = rows.filter(r => !r.reference && isFinite(r.r[resp])), cats = fids.filter(f => nums.indexOf(f) < 0);
+      const groups = {}; data.forEach(r => { const k = cats.map(f => String(r.f[f])).join('|'); (groups[k] = groups[k] || []).push(r); });
+      let key = null, best = -Infinity; Object.keys(groups).forEach(k => { const g = groups[k]; if (g.length < nums.length + 2) return; const m = g.reduce((a, r) => a + r.r[resp], 0) / g.length * (good === 0 ? 1 : good); if (m > best) { best = m; key = k; } });
+      if (key == null) { out.innerHTML = '<p class="pnote" style="color:#b3261e">There are too few runs for each combination of ' + (cats.length ? cats.map(f => esc(flabel(f).replace(/ \(.*/, ''))).join(' and ') : 'the factors') + ' to learn from: ' + (nums.length + 2) + ' or more are needed in one combination.</p>'; return; }
+      const g = groups[key], L = R.learn(g, nums, resp, { good: good === 0 ? 1 : good, count: 4 }); if (!L.ok) { out.innerHTML = '<p class="pnote" style="color:#b3261e">' + esc(L.why) + '</p>'; return; }
+      const tpl = st.design0.runs.find(r => r.id === g[0].id) || st.design0.runs[0], rd = (f, v) => { const k = X.factor(f).key; return k === 'nfac' || k === 'precip' || k === 'temp' ? Math.round(v * 100) / 100 : Math.round(v); };
+      const mk = (val, i) => { const set = Object.assign({}, tpl.set), v = Object.assign({}, g[0].f); nums.forEach(f => { const x = rd(f, val[f]); set[X.factor(f).key] = x; v[f] = x; }); return { id: 'L' + (st.iter = (st.iter || 0) + 1), label: 'Learned: ' + nums.map(f => flabel(f).replace(/ \(.*/, '') + ' ' + v[f]).join(', '), set, level: {}, val: v }; };
+      const cand = L.next.map(n => ({ n, run: mk(n.val) }));
+      out.innerHTML = '<p>The model explains <b>' + Math.round(L.r2 * 100) + '%</b> of the variation of ' + esc(rlabel(resp)) + ' in ' + L.n + ' runs' + (cats.length ? ' (' + cats.map(f => esc(lname(f, g[0].f[f]))).join(', ') + ')' : '') + '. It expects the best value near ' + nums.map(f => esc(flabel(f).replace(/ \(.*/, '')) + ' <b>' + rd(f, L.best.val[f]) + '</b>').join(', ') + ' (' + K().fmt(L.best.predicted, 3) + '). Next runs:</p><table class="dzt"><tr>' + nums.map(f => '<th>' + esc(flabel(f)) + '</th>').join('') + '<th>expected ' + esc(rlabel(resp).replace(/ \(.*/, '').toLowerCase()) + '</th></tr>' + cand.map(c => '<tr>' + nums.map(f => '<td>' + c.run.val[f] + '</td>').join('') + '<td>' + K().fmt(c.n.predicted, 3) + '</td></tr>').join('') + '</table><div class="dzrow"><button class="btn pri" id="dzXLearnRun">Run these ' + cand.length + ' runs and add them</button>' + (L.r2 < 0.6 ? '<span class="pnote" style="color:#b3261e">the fit is weak: more runs spread over the range will help more than these.</span>' : '') + '</div>';
+      $('LearnRun').onclick = () => run(false, { runs: cand.map(c => c.run), factors: st.design0.factors, total: cand.length });
+    };
+  }
+
   function keyNumbers(rows, resp) {
     const v = rows.map(r => r.r[resp]).filter(isFinite); if (!v.length) return ''; const mean = v.reduce((a, b) => a + b, 0) / v.length, lo = rows.reduce((a, r) => isFinite(r.r[resp]) && (!a || r.r[resp] < a.r[resp]) ? r : a, null), hi = rows.reduce((a, r) => isFinite(r.r[resp]) && (!a || r.r[resp] > a.r[resp]) ? r : a, null);
     return '<p>' + esc(rlabel(resp)) + ': mean <b>' + K().fmt(mean, 3) + '</b>; lowest <b>' + K().fmt(lo.r[resp], 3) + '</b> (' + esc(lo.label) + '); highest <b>' + K().fmt(hi.r[resp], 3) + '</b> (' + esc(hi.label) + ').</p>';
@@ -197,8 +240,8 @@
     D.download('daisy-experiment-report.html', '<!doctype html><meta charset="utf-8"><title>Daisy experiment</title><style>body{font:14px Segoe UI,Arial;max-width:1000px;margin:20px auto;padding:0 14px}table{border-collapse:collapse;font-size:12px}td,th{border:1px solid #ccc;padding:2px 6px}th{background:#eef1f5}h2{margin-top:26px}</style><h1>' + esc((st.res && st.res.plan.title) || 'Daisy experiment') + '</h1><p>' + esc(st.text) + '</p><p>' + rows.length + ' runs of Daisy 7.1.14' + (st.source === 'ens' ? ' (the published runs of the study)' : '') + '.</p>' + imgs + '<h2>All runs</h2>' + tab, 'text/html');
   }
   function bind() {
-    $('Go').onclick = () => understand(); $('Preset').onchange = e => { const p = X.PRESETS.find(x => x.id === e.target.value); if (p) usePreset(p); };
-    $('Ai').onchange = e => { $('Key').style.display = $('Model').style.display = e.target.checked ? '' : 'none'; };
+    $('Go').onclick = () => understand(); showSuggestions();
+    $('Ai').onchange = e => { $('Key').style.display = e.target.checked ? '' : 'none'; };
     document.querySelectorAll('[data-ex]').forEach(a => a.onclick = ev => { ev.preventDefault(); $('Text').value = EXAMPLES[+a.dataset.ex]; understand(); });
     $('Text').onkeydown = e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) understand(); };
     if (st.res) renderPlan(); if (st.rows.length) drawResults();
