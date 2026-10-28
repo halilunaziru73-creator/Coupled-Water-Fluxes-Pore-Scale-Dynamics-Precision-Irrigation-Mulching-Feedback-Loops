@@ -27,7 +27,8 @@ Once run, every control re-runs the model, and every chart answers it.
 
 | Control | What it changes in the model |
 |---|---|
-| Crop (maize, sorghum, wheat, common bean) | thermal time, leaf number, radiation use, light extinction, height, root axes, stomatal and turgor constants |
+| Crop (a box with all the crops of the library, scrolled with the wheel or the bar; it sets the crop of the project) | height, basal crop coefficient and rooting depth of the crop of the library (Eq. P.15); the crop is run as the model species nearest in kind |
+| Modelled as (maize, sorghum, wheat, common bean) | thermal time, leaf number, radiation use, light extinction, height, root axes, stomatal and turgor constants |
 | Genotype (reference, deep rooting, shallow and dense, stay-green, water saver, water spender, osmotic adjuster) | angle of the axes, lateral density, stay-green, stomatal threshold, osmotic adjustment, hydraulic resistance, carbon to roots |
 | Drought (pulse and recovery, terminal, intermittent, none) | the water that the drought treatment is held at, in time |
 | Climate and rain | temperature, radiation, vapour pressure deficit, reference evapotranspiration, rain |

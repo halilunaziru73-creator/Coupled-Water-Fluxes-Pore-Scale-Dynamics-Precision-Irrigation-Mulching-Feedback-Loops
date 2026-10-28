@@ -88,12 +88,27 @@
   function customize() { PH.gid = 'custom'; }
 
   const MULCH_NAMES = () => { const o = {}; try { MULCHES.forEach(m => { o[m.k] = m.label; }); } catch (e) { } return o; };
+  // the crops of the library, in a box that scrolls (mouse wheel, bar at the right, or the buttons): the crop chosen is the crop of the project
+  const CBOX = { x: 0, y: 0, w: 0, h: 0, rows: 0, vis: 3 };
+  function cropList(x, y, ww) {
+    const keys = Object.keys(CROPS), RH = 26, VIS = 3, bx = x + 74, bw = ww - 74; T('Crop', x, y + 15, { s: 9.5, b: true, c: MUTE });
+    ctx.font = '10.5px sans-serif'; const rows = []; let cur = [], xx = 0; keys.forEach(k => { const t = (CROPS[k].label || k), w = ctx.measureText(t).width + 22; if (xx + w > bw - 24) { rows.push(cur); cur = []; xx = 0; } cur.push({ k, t, w }); xx += w + 6; }); if (cur.length) rows.push(cur);
+    const vis = Math.min(VIS, rows.length), maxR = Math.max(0, rows.length - vis); PH.cropRow = clamp(PH.cropRow || 0, 0, maxR);
+    const sel = rows.findIndex(r => r.some(q => q.k === state.crop)); if (PH.cropSeen !== state.crop) { PH.cropSeen = state.crop; if (sel >= 0 && (sel < PH.cropRow || sel >= PH.cropRow + vis)) PH.cropRow = clamp(sel, 0, maxR); }
+    Object.assign(CBOX, { x: bx, y, w: bw, h: vis * RH, rows: rows.length, vis, maxR });
+    ctx.fillStyle = '#FFFFFF'; ctx.fillRect(bx - 3, y - 2, bw + 3, vis * RH + 4); ctx.strokeStyle = '#7A7A7A'; ctx.lineWidth = 1; ctx.strokeRect(bx - 2.5, y - 1.5, bw + 2, vis * RH + 3);
+    for (let r = 0; r < vis; r++) { let cx2 = bx; (rows[PH.cropRow + r] || []).forEach(q => { cx2 += chip(cx2, y + r * RH + 1, q.t, state.crop === q.k, () => { applyState({ crop: q.k }); }, 'the crop of the project (' + P.SP[(CMAP[q.k] || (() => { const c = window.CROPLIB && CROPLIB.crops[q.k]; return c ? (KIND[c.kind] || (c.group === 'perennial' ? 'bean' : 'wheat')) : 'wheat'; })())].name.toLowerCase() + ' model)'); }); }
+    if (maxR > 0) { const tx = bx + bw - 14, th = vis * RH, thumb = Math.max(18, th * vis / rows.length), ty = y + (th - thumb) * PH.cropRow / maxR; ctx.fillStyle = '#D4D0C8'; ctx.fillRect(tx, y, 14, th); ctx.fillStyle = '#F4F2EC'; ctx.fillRect(tx + 1, ty, 12, thumb); ctx.strokeStyle = '#404040'; ctx.strokeRect(tx + 0.5, ty + 0.5, 12, thumb - 1); CBOX.bar = { x: tx, y, w: 14, h: th, thumb }; hot(tx, y, 14, th, () => { }, 'scroll the crops'); } else CBOX.bar = null;
+    T(keys.length + ' crops of the library · scroll with the wheel or the bar · modelled as ' + P.SP[projSpecies()].name.toLowerCase(), bx, y + vis * RH + 14, { s: 8.5, c: MUTE });
+    return y + vis * RH + 24;
+  }
   function drawControls(y) {
     const w = W - 32, sp = P.SP[PH.sp], g = PH.g, cx = 16, y00 = y; K.frame(cx, y, w, 24, 'Set up the experiment', 'every control re-runs the model; the project supplies soil, tillage, weather and the crop'); y += 30;
     const x0 = cx + 8, ww = w - 16;
     T('Project: ' + DATA.soil_labels[state.soil] + ', ' + TILL_LABELS[state.till].toLowerCase() + ' tillage (consolidation ' + TC_VALUES[state.tcIdx] + ' per day), crop ' + ((CROPS[state.crop] || {}).label || state.crop) + ', warming ' + (TEMP_VALUES[state.tempIdx] >= 0 ? '+' : '') + TEMP_VALUES[state.tempIdx] + ' °C, rain ×' + RAIN_VALUES[state.rainIdx], x0, y + 8, { s: 9.5, c: MUTE });
     y += 18;
-    y = chipRow('Crop', Object.keys(P.SP).map(k => ({ k, t: P.SP[k].name, tip: 'model ' + P.SP[k].name.toLowerCase() + (k === projSpecies() ? ' (the crop of the project)' : '') })), PH.sp, k => { PH.sp = k; PH.follow = false; PH.area = null; applyPreset(PH.gid === 'custom' ? 'ref' : PH.gid); }, x0, y, ww);
+    y = cropList(x0, y, ww);
+    y = chipRow('Modelled as', Object.keys(P.SP).map(k => ({ k, t: P.SP[k].name, tip: 'model ' + P.SP[k].name.toLowerCase() + (k === projSpecies() ? ' (the nearest to the crop of the project)' : '') })), PH.sp, k => { PH.sp = k; PH.follow = false; PH.area = null; applyPreset(PH.gid === 'custom' ? 'ref' : PH.gid); }, x0, y, ww);
     y = chipRow('Genotype', P.GENO.map(g => ({ k: g.id, t: g.name })).concat(PH.gid === 'custom' ? [{ k: 'custom', t: 'Custom' }] : []), PH.gid, k => { if (k !== 'custom') applyPreset(k); }, x0, y, ww);
     y = chipRow('Drought', [{ k: 'pulse', t: 'Pulse and recovery', tip: 'set-point of the water in the root zone: 1st stress, 2nd stress (two thirds of it), then rewatering, as in the pot experiments' }, { k: 'terminal', t: 'Terminal', tip: 'no water from the onset to the end' }, { k: 'inter', t: 'Intermittent', tip: 'cycles of stress and rewatering' }, { k: 'none', t: 'No stress (control only)' }], PH.dr.type, k => { PH.dr.type = k; }, x0, y, ww);
     y = chipRow('Climate', Object.keys(CLIM).map(k => ({ k, t: CLIM[k].t })), PH.clim, k => { PH.clim = k; }, x0, y, ww);
@@ -298,7 +313,9 @@
     jobStep(); panelStep();
   }
   // ---------------------------------------------------------------- pointer: sliders, turning, scrubbing
+  canvas.addEventListener('wheel', e => { try { if (currentScene.id !== 'dph' || !CBOX.rows || CBOX.maxR < 1) return; const r = canvas.getBoundingClientRect(), px = (e.clientX - r.left) * canvas.width / r.width, py = (e.clientY - r.top) * canvas.height / r.height; if (px >= CBOX.x - 3 && px <= CBOX.x + CBOX.w && py >= CBOX.y - 2 && py <= CBOX.y + CBOX.h + 2) { const n = clamp((PH.cropRow || 0) + (e.deltaY > 0 ? 1 : -1), 0, CBOX.maxR); if (n !== PH.cropRow) { PH.cropRow = n; e.preventDefault(); } else if (n > 0 && n < CBOX.maxR) e.preventDefault(); } } catch (x) { } }, { passive: false });
   function onDown(p) {
+    if (CBOX.bar && p.x >= CBOX.bar.x && p.x <= CBOX.bar.x + CBOX.bar.w && p.y >= CBOX.bar.y && p.y <= CBOX.bar.y + CBOX.bar.h) { PH.drag = { t: 'cb' }; PH.cropRow = clamp(Math.round((p.y - CBOX.bar.y) / CBOX.bar.h * (CBOX.maxR + 1) - 0.5), 0, CBOX.maxR); return true; }
     for (const s of SL) if (p.x >= s.x && p.x <= s.x + s.w && p.y >= s.y && p.y <= s.y + s.h) { PH.drag = { t: 'sl', s }; PH.dragging = true; s.set(slVal(s, p.x)); return true; }
     for (const q of SCR) if (p.x >= q.x && p.x <= q.x + q.w && p.y >= q.y && p.y <= q.y + q.h) { PH.drag = { t: 'sc', q }; play.t = clamp((p.x - q.x0) / q.w0, 0, 1); play.on = false; return true; }
     if (p.x >= TS.x && p.x <= TS.x + TS.w && p.y >= TS.y && p.y <= TS.y + TS.h) { PH.drag = { t: 'ts' }; play.t = clamp((p.x - TS.x) / TS.w, 0, 1); play.on = false; return true; }
@@ -308,6 +325,7 @@
   }
   function onMove(p) {
     const dg = PH.drag; if (!dg) { hotMove(p); return false; }
+    if (dg.t === 'cb') { PH.cropRow = clamp(Math.round((p.y - CBOX.bar.y) / CBOX.bar.h * (CBOX.maxR + 1) - 0.5), 0, CBOX.maxR); return true; }
     if (dg.t === 'sl') { dg.s.set(slVal(dg.s, p.x)); return true; } if (dg.t === 'ts') { play.t = clamp((p.x - TS.x) / TS.w, 0, 1); return true; } if (dg.t === 'sc') { play.t = clamp((p.x - dg.q.x0) / dg.q.w0, 0, 1); return true; } if (dg.t === 'rot') { PH.rot = dg.r0 + (p.x - dg.x0) * 0.012; return true; } return false;
   }
   function onUp() { PH.drag = null; PH.dragging = false; }
