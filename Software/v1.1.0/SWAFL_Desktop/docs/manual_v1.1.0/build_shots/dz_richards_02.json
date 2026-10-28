@@ -9,31 +9,31 @@
  "marks": [
   {
    "x": 64,
-   "y": 756.8000000000001,
+   "y": 828.8000000000001,
    "t": "Water content map",
    "d": "Depth against time."
   },
   {
    "x": 285.8,
-   "y": 1056.4,
+   "y": 1128.4,
    "t": "Depth of the series",
    "d": "Depth in cm of the lower figure."
   },
   {
    "x": 64,
-   "y": 1260,
+   "y": 1332,
    "t": "Series at a depth",
    "d": "Water content and suction at that depth."
   },
   {
    "x": 64,
-   "y": 2088.8,
+   "y": 2160.8,
    "t": "Summary",
    "d": "Water balance of the run."
   },
   {
    "x": 334.20000000000005,
-   "y": 467.20000000000005,
+   "y": 539.2,
    "t": "Keep as a log",
    "d": "Puts the water contents in the Files list."
   }

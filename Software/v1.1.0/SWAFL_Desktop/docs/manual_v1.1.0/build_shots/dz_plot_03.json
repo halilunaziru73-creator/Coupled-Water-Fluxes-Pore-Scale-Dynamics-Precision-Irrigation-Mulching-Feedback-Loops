@@ -9,19 +9,19 @@
  "marks": [
   {
    "x": 183.75,
-   "y": 276,
+   "y": 343.20000000000005,
    "t": "Log",
    "d": "A log with depth, here the matrix water flux."
   },
   {
    "x": 384.225,
-   "y": 276,
+   "y": 343.20000000000005,
    "t": "View",
    "d": "Depth profile through time."
   },
   {
    "x": 64,
-   "y": 752.8000000000001,
+   "y": 820,
    "t": "Map",
    "d": "Colour shows the value; the scale is beside the map."
   }

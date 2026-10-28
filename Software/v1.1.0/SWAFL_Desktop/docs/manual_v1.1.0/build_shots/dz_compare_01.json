@@ -9,37 +9,37 @@
  "marks": [
   {
    "x": 129.6,
-   "y": 312.8,
+   "y": 384.8,
    "t": "Log A",
    "d": "The reference log."
   },
   {
    "x": 485.725,
-   "y": 312.8,
+   "y": 384.8,
    "t": "Log B",
    "d": "The log compared with it."
   },
   {
    "x": 914.95,
-   "y": 310.8,
+   "y": 382.8,
    "t": "Precision",
    "d": "Smallest difference taken into account."
   },
   {
    "x": 1212.6000000000001,
-   "y": 310.8,
+   "y": 382.8,
    "t": "Identical below",
    "d": "Differences under this level count as identical."
   },
   {
    "x": 1347.5375000000001,
-   "y": 308,
+   "y": 380,
    "t": "Compare",
    "d": "Runs the comparison."
   },
   {
    "x": 64,
-   "y": 359.20000000000005,
+   "y": 431.20000000000005,
    "t": "Batch",
    "d": "Compares same-named logs from two folders."
   }

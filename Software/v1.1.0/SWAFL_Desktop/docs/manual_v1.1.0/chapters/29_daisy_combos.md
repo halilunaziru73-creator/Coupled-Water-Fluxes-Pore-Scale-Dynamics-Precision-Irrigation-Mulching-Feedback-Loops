@@ -6,7 +6,7 @@ Start from the Daisy reference offers 27 combinations of factors that the Daisy 
 
 The manual has three ways to apply water: over the canopy, on the soil surface, and into a soil volume. Run the three with the same trigger and dose, so only the way of applying water differs.
 
-![Overhead, surface or drip irrigation. Screen 29 of the Daisy workbench.](images/daisy11/dz_combo_01.jpg){width=100% height=17cm}
+![Overhead, surface or drip irrigation. Screen 30 of the Daisy workbench.](images/daisy11/dz_combo_01.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -24,7 +24,7 @@ The manual has three ways to apply water: over the canopy, on the soil surface, 
 
 Water moves nitrate and decides how much of the fertiliser the crop can use. Irrigation against rainfed, at three fertiliser doses, shows whether more water raises the yield only when the nitrogen is there, and what it costs in nitrate below the roots.
 
-![Irrigation and nitrogen together. Screen 30 of the Daisy workbench.](images/daisy11/dz_combo_02.jpg){width=100% height=17cm}
+![Irrigation and nitrogen together. Screen 31 of the Daisy workbench.](images/daisy11/dz_combo_02.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -43,7 +43,7 @@ Water moves nitrate and decides how much of the fertiliser the crop can use. Irr
 
 Irrigation starts when "soil water pressure above" is not true: the potential (cm) and the height (cm) are its two parameters. The potentials run from near field capacity to well before wilting for this soil texture; the depths stay inside the rooting depth of 100 cm.
 
-![When to irrigate: the trigger and the depth of the sensor. Screen 31 of the Daisy workbench.](images/daisy11/dz_combo_03.jpg){width=100% height=17cm}
+![When to irrigate: the trigger and the depth of the sensor. Screen 32 of the Daisy workbench.](images/daisy11/dz_combo_03.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -62,7 +62,7 @@ Irrigation starts when "soil water pressure above" is not true: the potential (c
 
 The water application speed is a parameter in mm/h (default 2 mm/h) and the irrigation lasts a number of hours. The pairs below keep the speed of the manual (2 mm/h) while the dose grows, so the answer is the effect of the dose and not of the speed.
 
-![How much and how fast: dose and duration. Screen 32 of the Daisy workbench.](images/daisy11/dz_combo_04.jpg){width=100% height=17cm}
+![How much and how fast: dose and duration. Screen 33 of the Daisy workbench.](images/daisy11/dz_combo_04.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -81,7 +81,7 @@ The water application speed is a parameter in mm/h (default 2 mm/h) and the irri
 
 Fertiliser is applied as an amount in kg N/ha. Scaling the rotation between half and one and a quarter of its dose, with and without irrigation, shows the dose where yield stops rising and the nitrate leached below the roots starts to climb.
 
-![Nitrogen fertiliser, irrigated and rainfed. Screen 33 of the Daisy workbench.](images/daisy11/dz_combo_05.jpg){width=100% height=17cm}
+![Nitrogen fertiliser, irrigated and rainfed. Screen 34 of the Daisy workbench.](images/daisy11/dz_combo_05.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -100,7 +100,7 @@ Fertiliser is applied as an amount in kg N/ha. Scaling the rotation between half
 
 The weather file gives precipitation and air temperature to every model of the column. Scaling the rain and adding a warming to the same record shows how much the yield and the water use move with the weather, with the soil and the management unchanged.
 
-![A drier, wetter or warmer year. Screen 34 of the Daisy workbench.](images/daisy11/dz_combo_06.jpg){width=100% height=17cm}
+![A drier, wetter or warmer year. Screen 35 of the Daisy workbench.](images/daisy11/dz_combo_06.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -119,7 +119,7 @@ The weather file gives precipitation and air temperature to every model of the c
 
 The irrigation of a crop is tested between a from date and a to date and can be given an amount. Start dates and a seasonal limit show how much of the yield is bought by the first and the last irrigations.
 
-![The irrigation season and a limit on water. Screen 35 of the Daisy workbench.](images/daisy11/dz_combo_07.jpg){width=100% height=17cm}
+![The irrigation season and a limit on water. Screen 36 of the Daisy workbench.](images/daisy11/dz_combo_07.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -138,7 +138,7 @@ The irrigation of a crop is tested between a from date and a to date and can be 
 
 A horizon gets its hydraulic properties from the hypres model by default, from the sand, silt, clay, humus and bulk density. Rainfed and irrigated runs on several textures show where irrigation pays.
 
-![Which soil needs the most water. Screen 36 of the Daisy workbench.](images/daisy11/dz_combo_08.jpg){width=100% height=17cm}
+![Which soil needs the most water. Screen 37 of the Daisy workbench.](images/daisy11/dz_combo_08.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -156,7 +156,7 @@ A horizon gets its hydraulic properties from the hypres model by default, from t
 
 Daisy applies irrigation at a rate in mm/h, so a slow rate keeps the water in the topsoil and a fast one can run off or percolate. The rates below keep the same dose per irrigation, so only the speed of application differs.
 
-![Slow or fast irrigation: a constant water flux. Screen 37 of the Daisy workbench.](images/daisy11/dz_combo_09.jpg){width=100% height=17cm}
+![Slow or fast irrigation: a constant water flux. Screen 38 of the Daisy workbench.](images/daisy11/dz_combo_09.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -174,7 +174,7 @@ Daisy applies irrigation at a rate in mm/h, so a slow rate keeps the water in th
 
 The tensiometer that triggers irrigation sits at one depth, while the roots take water from the whole root zone. A sensor above or below most of the roots triggers too early or too late; crossing the sensor depth with the rooting depth shows where it matters.
 
-![Sensor depth against rooting depth. Screen 38 of the Daisy workbench.](images/daisy11/dz_combo_10.jpg){width=100% height=17cm}
+![Sensor depth against rooting depth. Screen 39 of the Daisy workbench.](images/daisy11/dz_combo_10.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -193,7 +193,7 @@ The tensiometer that triggers irrigation sits at one depth, while the roots take
 
 The fertilize action is placed on a date. Moving it two weeks earlier or later, at three doses, shows how much nitrate is exposed to the rain before the crop takes it up.
 
-![When the fertiliser is applied and how much. Screen 39 of the Daisy workbench.](images/daisy11/dz_combo_11.jpg){width=100% height=17cm}
+![When the fertiliser is applied and how much. Screen 40 of the Daisy workbench.](images/daisy11/dz_combo_11.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -212,7 +212,7 @@ The fertilize action is placed on a date. Moving it two weeks earlier or later, 
 
 A warmer year raises the evapotranspiration and shortens the crop cycle. Warming of 0 to 3 degrees, rainfed and irrigated, shows how much of the loss irrigation can give back.
 
-![Warming with and without irrigation. Screen 40 of the Daisy workbench.](images/daisy11/dz_combo_12.jpg){width=100% height=17cm}
+![Warming with and without irrigation. Screen 41 of the Daisy workbench.](images/daisy11/dz_combo_12.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -231,7 +231,7 @@ A warmer year raises the evapotranspiration and shortens the crop cycle. Warming
 
 The tillage action (plowing, rotavation, or none) mixes the residues and the topsoil; the fertiliser is taken from the fertilizer library by name, and the date can be moved. These three decide how much nitrate is exposed to leaching.
 
-![Tillage and the time and form of the fertiliser. Screen 41 of the Daisy workbench.](images/daisy11/dz_combo_13.jpg){width=100% height=17cm}
+![Tillage and the time and form of the fertiliser. Screen 42 of the Daisy workbench.](images/daisy11/dz_combo_13.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -251,7 +251,7 @@ The tillage action (plowing, rotavation, or none) mixes the residues and the top
 
 Daisy can take the reference evapotranspiration from the weather file (FAO56) or compute it from the energy balance, and the radiation can be scaled. The runs show how much of the answer depends on that choice.
 
-![Evapotranspiration model and radiation. Screen 42 of the Daisy workbench.](images/daisy11/dz_combo_14.jpg){width=100% height=17cm}
+![Evapotranspiration model and radiation. Screen 43 of the Daisy workbench.](images/daisy11/dz_combo_14.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -270,7 +270,7 @@ Daisy can take the reference evapotranspiration from the weather file (FAO56) or
 
 The weather component can scale the precipitation month by month (twelve factors). Taking 30 percent of the rain from the summer or the spring, or adding 30 percent in the winter, shows which part of the year matters for yield and for leaching.
 
-![A dry summer, a dry spring or a wet winter. Screen 43 of the Daisy workbench.](images/daisy11/dz_combo_15.jpg){width=100% height=17cm}
+![A dry summer, a dry spring or a wet winter. Screen 44 of the Daisy workbench.](images/daisy11/dz_combo_15.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -289,7 +289,7 @@ The weather component can scale the precipitation month by month (twelve factors
 
 A chemical has a sorption coefficient (K_OC, L/kg) and a decomposition rate; the two decide whether it stays in the topsoil or reaches the depth where it is counted as leached.
 
-![Sorption and half-life of a chemical. Screen 44 of the Daisy workbench.](images/daisy11/dz_combo_16.jpg){width=100% height=17cm}
+![Sorption and half-life of a chemical. Screen 45 of the Daisy workbench.](images/daisy11/dz_combo_16.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -308,7 +308,7 @@ A chemical has a sorption coefficient (K_OC, L/kg) and a decomposition rate; the
 
 A crop can be given a limited amount of water in the season, and irrigation starts only when the soil water pressure is below the trigger. A strict trigger with a small limit, against a lax trigger with a large limit, shows whether the same water gives more yield when it is saved for the dry spell.
 
-![Deficit irrigation: a water limit against the trigger. Screen 45 of the Daisy workbench.](images/daisy11/dz_combo_17.jpg){width=100% height=17cm}
+![Deficit irrigation: a water limit against the trigger. Screen 46 of the Daisy workbench.](images/daisy11/dz_combo_17.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -327,7 +327,7 @@ A crop can be given a limited amount of water in the season, and irrigation star
 
 The crop model has a maximum rooting depth, which decides how much of the soil water and nitrate the roots can reach. Shallow to deep roots, rainfed and irrigated, show how much of a water shortage a deeper root zone absorbs.
 
-![Rooting depth of the crop. Screen 46 of the Daisy workbench.](images/daisy11/dz_combo_18.jpg){width=100% height=17cm}
+![Rooting depth of the crop. Screen 47 of the Daisy workbench.](images/daisy11/dz_combo_18.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -346,7 +346,7 @@ The crop model has a maximum rooting depth, which decides how much of the soil w
 
 The weather component reads a file for one place. Running the same soil, crops and management with the weather of several places shows how much of the result belongs to the climate.
 
-![The same farm under other climates. Screen 47 of the Daisy workbench.](images/daisy11/dz_combo_19.jpg){width=100% height=17cm}
+![The same farm under other climates. Screen 48 of the Daisy workbench.](images/daisy11/dz_combo_19.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -365,7 +365,7 @@ The weather component reads a file for one place. Running the same soil, crops a
 
 The tillage action mixes residues and topsoil; the fertilizer library holds several forms of mineral nitrogen. Crossing the two shows whether the form of the nitrogen matters more under one tillage than another.
 
-![Tillage against fertiliser form. Screen 48 of the Daisy workbench.](images/daisy11/dz_combo_20.jpg){width=100% height=17cm}
+![Tillage against fertiliser form. Screen 49 of the Daisy workbench.](images/daisy11/dz_combo_20.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -384,7 +384,7 @@ The tillage action mixes residues and topsoil; the fertilizer library holds seve
 
 NoOfIntervals: Number of vertical intervals in which we partition the canopy; max svat iterations: Max number of svat iterations before giving up on cobvergence; max svat absolute difference [mm/h]: Maximum absolute difference in svat ea values for convergence. Each is varied from half to double the value the farm uses; NoOfIntervals moved the yield, water or nitrogen in the test.
 
-![The numerical settings of the bioclimate model. Screen 49 of the Daisy workbench.](images/daisy11/dz_combo_21.jpg){width=100% height=17cm}
+![The numerical settings of the bioclimate model. Screen 50 of the Daisy workbench.](images/daisy11/dz_combo_21.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -403,7 +403,7 @@ NoOfIntervals: Number of vertical intervals in which we partition the canopy; ma
 
 K aquitard [cm/h]: Conductivity of the aquitard; Z aquitard [cm]: Thickness of the aquitard. The aquitard begins below the bottommost soil horizon. Each is varied from half to double the value the farm uses; K aquitard, Z aquitard moved the yield, water or nitrogen in the test.
 
-![The groundwater and the aquitard below the profile: aquitard. Screen 50 of the Daisy workbench.](images/daisy11/dz_combo_22.jpg){width=100% height=17cm}
+![The groundwater and the aquitard below the profile: aquitard. Screen 51 of the Daisy workbench.](images/daisy11/dz_combo_22.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -421,7 +421,7 @@ K aquitard [cm/h]: Conductivity of the aquitard; Z aquitard [cm]: Thickness of t
 
 K NH4 [h-1 ]: Maximal immobilization rate for ammonium; K NO3 [h-1 ]: Maximal immobilization rate for nitrate; CO2 threshold [h-1 ]: Turnover rate above which pools will contribute to 'CO2 fast'. Each is varied from half to double the value the farm uses; K NH4, K NO3, CO2 threshold moved the yield, water or nitrogen in the test.
 
-![Turnover of organic matter and the mineral nitrogen it releases. Screen 51 of the Daisy workbench.](images/daisy11/dz_combo_23.jpg){width=100% height=17cm}
+![Turnover of organic matter and the mineral nitrogen it releases. Screen 52 of the Daisy workbench.](images/daisy11/dz_combo_23.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -440,7 +440,7 @@ K NH4 [h-1 ]: Maximal immobilization rate for ammonium; K NO3 [h-1 ]: Maximal im
 
 temperature change rate [h-1 ]: Relative change of surface temperature. If you set this to a negative value, surface temperature will reflect temperature of incomming water or ponded; EpFactor [dimensionless]: The autumn value can be lower, due to muching. With a crop factor of 1.2 a combined Kc of 1.15 is reached at LAI=5. See also [Kjaersgaard et al., 2008]; ReservoirConstant [h-1 ]: Fraction of ponding above DetentionCapacity that runoffs each hour. Each is varied from half to double the value the farm uses; temperature change rate, EpFactor, ReservoirConstant moved the yield, water or nitrogen in the test.
 
-![Water at the soil surface: runoff and evaporation. Screen 52 of the Daisy workbench.](images/daisy11/dz_combo_24.jpg){width=100% height=17cm}
+![Water at the soil surface: runoff and evaporation. Screen 53 of the Daisy workbench.](images/daisy11/dz_combo_24.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -459,7 +459,7 @@ temperature change rate [h-1 ]: Relative change of surface temperature. If you s
 
 max sink total [dimensionless]: Maximum allowed sink term as a fraction of total content. If variable timesteps are enabled, Daisy will try to scale down the timestep in; max sink solute [dimensionless]: Maximum allowed sink term as a fraction of solute content. If variable timesteps are enabled, Daisy will try to scale down the timestep; max sink secondary [dimensionless]: Maximum allowed sink term as a fraction of secondary domain content. If variable timesteps are enabled, Daisy will try to scale down the timestep. Each is varied from half to double the value the farm uses; none of them moved yield, water or nitrogen in the test, so the effect shows in the process itself.
 
-![The limits on the chemistry sink terms. Screen 53 of the Daisy workbench.](images/daisy11/dz_combo_25.jpg){width=100% height=17cm}
+![The limits on the chemistry sink terms. Screen 54 of the Daisy workbench.](images/daisy11/dz_combo_25.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -478,7 +478,7 @@ max sink total [dimensionless]: Maximum allowed sink term as a fraction of total
 
 L [cm]: Distance between pipes; rad [cm]: Inner radius of drain pipes. Each is varied from half to double the value the farm uses; none of them moved yield, water or nitrogen in the test, so the effect shows in the process itself.
 
-![Pipe drainage. Screen 54 of the Daisy workbench.](images/daisy11/dz_combo_26.jpg){width=100% height=17cm}
+![Pipe drainage. Screen 55 of the Daisy workbench.](images/daisy11/dz_combo_26.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -496,7 +496,7 @@ L [cm]: Distance between pipes; rad [cm]: Inner radius of drain pipes. Each is v
 
 table [cm]: Groundwater level. Positive numbers indicate free drainage. Each is varied from half to double the value the farm uses; none of them moved yield, water or nitrogen in the test, so the effect shows in the process itself.
 
-![The groundwater and the aquitard below the profile: static. Screen 55 of the Daisy workbench.](images/daisy11/dz_combo_27.jpg){width=100% height=17cm}
+![The groundwater and the aquitard below the profile: static. Screen 56 of the Daisy workbench.](images/daisy11/dz_combo_27.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 

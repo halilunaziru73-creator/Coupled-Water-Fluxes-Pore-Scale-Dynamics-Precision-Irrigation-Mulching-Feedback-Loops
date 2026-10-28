@@ -9,31 +9,31 @@
  "marks": [
   {
    "x": 88,
-   "y": 743.725,
+   "y": 734.125,
    "t": "Groundwater aquitard: K aquitard (Daisy reference, chapter 45)",
    "d": "Varied over 0.0005, 0.001, 0.002."
   },
   {
    "x": 88,
-   "y": 791.725,
+   "y": 782.125,
    "t": "Groundwater aquitard: Z aquitard (Daisy reference, chapter 45)",
    "d": "Varied over 100, 200, 400."
   },
   {
    "x": 330.65000000000003,
-   "y": 843.725,
+   "y": 834.125,
    "t": "Add something to change",
    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
   },
   {
    "x": 1283.25,
-   "y": 843.725,
+   "y": 834.125,
    "t": "How to combine",
    "d": "Every combination, one thing at a time, or the values paired in order."
   },
   {
    "x": 1668.875,
-   "y": 843.325,
+   "y": 833.725,
    "t": "At most",
    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
   },

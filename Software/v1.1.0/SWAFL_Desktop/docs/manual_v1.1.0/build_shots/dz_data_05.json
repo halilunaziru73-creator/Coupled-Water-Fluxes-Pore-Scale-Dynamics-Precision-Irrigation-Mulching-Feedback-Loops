@@ -9,25 +9,25 @@
  "marks": [
   {
    "x": 72.8,
-   "y": 563.725,
+   "y": 642,
    "t": "My soil",
    "d": "Switches the table of horizons on; the soil choice of Scenarios and Experiments is then replaced by this soil."
   },
   {
    "x": 84.80000000000001,
-   "y": 720.9250000000001,
+   "y": 799.2,
    "t": "Horizons",
    "d": "One row for each horizon: lower limit, sand, silt, clay, humus and bulk density."
   },
   {
    "x": 133.2125,
-   "y": 841.325,
+   "y": 919.6,
    "t": "Add a horizon",
    "d": "Adds a row at the bottom."
   },
   {
    "x": 523.975,
-   "y": 848.9250000000001,
+   "y": 927.2,
    "t": "Soil table import",
    "d": "A CSV with the columns depth, sand, silt, clay and, if possible, humus and bulk density can be imported instead."
   }

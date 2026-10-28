@@ -12,14 +12,14 @@ Components, models and parameterizations: a component is a group of exchangeable
 
 ## Topic 3: Nomenclature
 
-Having covered the concepts, it is now possible to explain the nomenclature used in part II of the manual. As already explained, each library component has its own chapter, while all the fixed components are collected in chapter 107. All the library component chapters start with a short explanation of the purpose of that component. Each model (including those models that are part of a fixed component) has its own section. Here, we will explain how to read the content of these sections. This is best done with an exa
+Having covered the concepts, it is now possible to explain the nomenclature used in part II of the manual. As already explained, each library component has its own chapter, while all the fixed components are collected in chapter 107. All the library component chapters start with a short explanation of the purpose of that component. Each model (including those models that are part of a fixed component) has its own section. Here, we will explain how to read the content of these sections. This is best done with an example. Now, keep a finger here, and find section 15.12 (that's on page 80).
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 3.1 | Name and Description | The name of the section is 'fertilize', which is the name you have to specify in the | n/a |
-| 3.2 | Sample | The next element in the section is a sample, which shows the format recognized by | n/a |
+| 3.1 | Name and Description | The name of the section is 'fertilize', which is the name you have to specify in the setup file when you want to refer to the model. | n/a |
+| 3.2 | Sample | The next element in the section is a sample, which shows the format recognized by the file parser model when it reads the setup files. | n/a |
 | 3.3 | The Attribute List | After the sample comes a list with information about each attribute in the model. | n/a |
-| 3.4 | Submodels | Sometimes it is useful to combine attributes in a model into groups. One example | n/a |
+| 3.4 | Submodels | Sometimes it is useful to combine attributes in a model into groups. One example of this is the ‘cond’ management action model (section 15.4), where we use the ‘clauses’ group to emphasize the strong association between each condition, and the list of actions to perform when the condition is true. | n/a |
 
 ## Topic 4: The file parser model
 
@@ -28,13 +28,13 @@ This section describes Daisy setup files. A Daisy setup file is read by the 'fil
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
 | 4.1 | Types and Formatting | There are a few general rules for the formatting accepted by the 'file' parser. | n/a |
-| 4.2 | Declaring new parameters | You can declare new parameters most places where you can specify parameter val- | n/a |
+| 4.2 | Declaring new parameters | You can declare new parameters most places where you can specify parameter values. | n/a |
 | 4.3 | Referring to parameters | Instead of a parameter value, you can specify the name of another parameter. | n/a |
-| 4.4 | Toplevel | A Daisy setup file consist of definitions of parameterizations and a small number of | n/a |
+| 4.4 | Toplevel | A Daisy setup file consist of definitions of parameterizations and a small number of commands. | n/a |
 
 ## Topic 5: Log File Generation
 
-The value of the 'output' attribute should be a sequence of log component parame- terizations. Each parameterization should specify some state or log variables to be output during the simulation. The 'log.dai' file contains a number of standard log parameterizations, for example 'Crop Production', which will write information about the development and production of any crops in the field to a file named 'crop prod.dlf' located in the directory specified by the 'directory' attribute, or, by default, the directory wh
+The value of the 'output' attribute should be a sequence of log component parameterizations. Each parameterization should specify some state or log variables to be output during the simulation. The 'log.dai' file contains a number of standard log parameterizations, for example 'Crop Production', which will write information about the development and production of any crops in the field to a file named 'crop prod.dlf' located in the directory specified by the 'directory' attribute, or, by default, the directory where daisy was started.
 
 ## Topic 6: Error Messages
 
@@ -42,12 +42,12 @@ Sometimes the simulation will fail to run for some reason or another. In these c
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 6.1 | Parser errors | If the format of the setup files is wrong, for example if there are missing parentheses | n/a |
-| 6.2 | Completeness checks | After parsing the setup files, Daisy will check that all the required parameters and | n/a |
-| 6.3 | Consistency checks | After checking that all the required attributes are there, Daisy will create the sim- | n/a |
-| 6.4 | Runtime exceptions | Now Daisy is ready to run the simulation. However, some errors are too hard to find | Exception |
-| 6.5 | Assertion failures | During debugging, a lot of 'assert' statements have been added to the code. Each | n/a |
-| 6.6 | Program errors | Sometimes we can get errors that aren't even caught by the assertions, they can | n/a |
+| 6.1 | Parser errors | If the format of the setup files is wrong, for example if there are missing parentheses or unknown attributes, Daisy will give you information about which file the error was found, the line number, the column number, and what the problem was. | n/a |
+| 6.2 | Completeness checks | After parsing the setup files, Daisy will check that all the required parameters and state variables are defined, and make some very simple consistency checks. | n/a |
+| 6.3 | Consistency checks | After checking that all the required attributes are there, Daisy will create the simulation objects, and then perform a more throughout consistency check. | n/a |
+| 6.4 | Runtime exceptions | Now Daisy is ready to run the simulation. However, some errors are too hard to find before the simulation has started. | Exception |
+| 6.5 | Assertion failures | During debugging, a lot of 'assert' statements have been added to the code. Each of these statements will check if a certain condition is true, and if not, exit the program with a message like field.C:71: failed assertion 'false' A failed assertion message will always print the file name, the line number, and the assertion that failed, but the format may vary between different. | n/a |
+| 6.6 | Program errors | Sometimes we can get errors that aren't even caught by the assertions, they can manifest themselves as "Bus error" or "Segmentation violation" errors, or weird pop-up windows under win32. | n/a |
 
 ## Topic 7: ABAproduction
 
@@ -64,14 +64,14 @@ The 'ABAproduction' component calculates the prod of ABA in soil.
 
 ## Topic 8: AOM
 
-A single Added Organic Matter pool. Used by Harvesting @ Root (see 107.7, page 595) , and Bioincorporation @ AOM (see 107.11, page 605) . < component (N N ...) (C C ...) (heat factor heat factor ) (water factor water factor ) (turnover turnover ) (efficiency efficiency ...) (C per N C per N ...) (fractions fractions ...) (initial C per N initial C per N ) (initial fraction initial fraction ) (top C 0 [g C/cm2 ]) (top N 0 [g N/cm2 ]) >  N : number [g N/cm3 ] soil cells Optional state variable Nitrogen in each soil
+A single Added Organic Matter pool. Used by Harvesting @ Root (see 107.7, page 595) , and Bioincorporation @ AOM (see 107.11, page 605) .
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
 | 8.1 | AOM-DIRECT | Third AOM pool of already decomposed material. | n/a |
-| 8.2 | AOM-FAST | Fast AOM pool parameterization by Sander Bruun. See also [Bruun et al., 2003] | n/a |
+| 8.2 | AOM-FAST | Fast AOM pool parameterization by Sander Bruun. See also [Bruun et al., 2003] Used by crop simple root am (see 29.47, page 178) , am root om (see 17.4, page 105) , vegetation permanent litter am (see 100.3, page 547) , vegetation afforestation root am (see 100.1, page 544) , Harvesting @ Root (see 107.7, page 595) , and Bioincorporation @ AOM (see 107.11, page 605) . | n/a |
 | 8.3 | CROP-FAST | A 'AOM-FAST' model (see 8.2, page 54) build into Daisy. | n/a |
-| 8.4 | AOM-SLOW | Slow AOM pool parameterization by Sander Bruun. See also [Bruun et al., 2003] | n/a |
+| 8.4 | AOM-SLOW | Slow AOM pool parameterization by Sander Bruun. See also [Bruun et al., 2003] Used by crop simple root am (see 29.47, page 178) , am root om (see 17.4, page 105) , vegetation permanent litter am (see 100.3, page 547) , vegetation afforestation root am (see 100.1, page 544) , and Harvesting @ Root (see 107.7, page 595) . | n/a |
 | 8.5 | AOM-SLOW-BIOINCORPORATION | A 'AOM-SLOW' model (see 8.4, page 55) build into Daisy. | n/a |
 | 8.6 | AOM-SLOW-OLD | A 'AOM-SLOW' model (see 8.4, page 55) build into Daisy. | n/a |
 | 8.7 | CROP-SLOW | A 'AOM-SLOW' model (see 8.4, page 55) build into Daisy. | n/a |
@@ -82,12 +82,12 @@ A single Added Organic Matter pool. Used by Harvesting @ Root (see 107.7, page 5
 
 ## Topic 9: AWI
 
-Estimate area of air-water interface. < component       > Log Variables  area: number [cm2 /cm3 ] soil cells Air-Water interface area.
+Estimate area of air-water interface.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 9.1 | Brusseau2023 | Estimate AWI area from water and median particle size (Equation 5). See also | n/a |
-| 9.2 | Costanza2008x | Estimate AWI area from water and median particle size (Equation 1 and 2). See | n/a |
+| 9.1 | Brusseau2023 | Estimate AWI area from water and median particle size (Equation 5). See also [Brusseau, 2023] Used by column default AWI (see 26.1, page 153) . 9.2 Costanza2008x Estimate AWI area from water and median particle size (Equation 1 and 2). | n/a |
+| 9.2 | Costanza2008x | Estimate AWI area from water and median particle size (Equation 5). See also [Brusseau, 2023] Used by column default AWI (see 26.1, page 153) . 9.2 Costanza2008x Estimate AWI area from water and median particle size (Equation 1 and 2). | n/a |
 
 **Related theme.** water and heat movement in the soil.
 
@@ -97,7 +97,7 @@ Find the effect of clay on organic matter processing.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 10.1 | biomod | Clay influence on organic matter from BIOMOD project. All SMB pools are af- | a |
+| 10.1 | biomod | Clay influence on organic matter from BIOMOD project. All SMB pools are affected, but not the SOM pools. | a |
 | 10.2 | old | Traditional clay influence on organic matter. | n/a |
 
 **Related theme.** nitrogen, carbon and organic matter.
@@ -124,7 +124,7 @@ Description of a soil for use by the MARKVAND model.
 
 ## Topic 13: SMB
 
-A single Soil MicroBiological pool. < component (N N ...) (C C ...) (heat factor heat factor ) (water factor water factor ) (turnover turnover ) (efficiency efficiency ...) (C per N C per N ...) (fractions fractions ...) (initial C per N initial C per N ) (maintenance maintenance ) >  N : number [g N/cm3 ] soil cells Optional state variable Nitrogen in each soil interval.  C : number [g C/cm3 ] soil cells Optional state variable Carbon in each soil interval.  heat factor : plf [dg C → <none>] Optional parameter
+A single Soil MicroBiological pool.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
@@ -136,14 +136,14 @@ A single Soil MicroBiological pool. < component (N N ...) (C C ...) (heat factor
 
 ## Topic 14: SOM
 
-A single Soil Organic Matter pool. < component (N N ...) (C C ...) (heat factor heat factor ) (water factor water factor ) (turnover turnover ) (efficiency efficiency ...) (C per N C per N ...) (fractions fractions ...) (initial C per N initial C per N ) >  N : number [g N/cm3 ] soil cells Optional state variable Nitrogen in each soil interval.  C : number [g C/cm3 ] soil cells Optional state variable Carbon in each soil interval.  heat factor : plf [dg C → <none>] Optional parameter Heat factor. If empty, use d
+A single Soil Organic Matter pool.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 14.1 | SOM-FAST | Fast SOM pool parameterization by Sander Bruun. See also [Bruun et al., 2003] | n/a |
+| 14.1 | SOM-FAST | Fast SOM pool parameterization by Sander Bruun. See also [Bruun et al., 2003] Used by organic default som (see 60.1, page 327) . | n/a |
 | 14.2 | SOM-FAST-OLD | A 'SOM-FAST' model (see 14.1, page 68) build into Daisy. | n/a |
 | 14.3 | SOM-INERT | Inert SOM pool parameterization. | n/a |
-| 14.4 | SOM-SLOW | Slow SOM pool parameterization by Sander Bruun. See also [Bruun et al., 2003] | n/a |
+| 14.4 | SOM-SLOW | Slow SOM pool parameterization by Sander Bruun. See also [Bruun et al., 2003] Used by organic default som (see 60.1, page 327) . | n/a |
 | 14.5 | SOM-SLOW-OLD | A 'SOM-SLOW' model (see 14.4, page 68) build into Daisy. | n/a |
 
 **Related theme.** nitrogen, carbon and organic matter.
@@ -170,29 +170,29 @@ The 'action' component represents management on different abstraction levels, fr
 | 15.14 | harvest base | Common parameters for harvest operations. | crop, combine, stub, stem, sorg |
 | 15.15 | cut | A 'harvest base' model (see 15.14, page 81) build into Daisy. | n/a |
 | 15.16 | harvest | A 'harvest base' model (see 15.14, page 81) build into Daisy. | n/a |
-| 15.17 | if | If the condition is true, perform the first action, otherwise perform the second | then, else |
+| 15.17 | if | If the condition is true, perform the first action, otherwise perform the second action. | then, else |
 | 15.18 | irrigate base | Shared parameter for irrigate actions. | solute, name, value, hours, days, remaining time, temperature |
 | 15.19 | irrigate overhead | A 'irrigate base' model (see 15.18, page 82) build into Daisy. | n/a |
 | 15.20 | irrigate subsoil | A 'irrigate base' model (see 15.18, page 82) build into Daisy. | volume, from, SOLETE, to |
 | 15.21 | irrigate surface | A 'irrigate base' model (see 15.18, page 82) build into Daisy. | n/a |
 | 15.22 | markvand | Irrigate the field according to MARKVAND scheduling. | solute, name, value, dt, T sum, map, Daisy, MARKVAND |
 | 15.23 | message | Write a message to the user. | message |
-| 15.24 | mix | Mix soil content down to the specified depth. The effect is that nitrogen, water, | depth, random roughness, penetration, surface loose |
+| 15.24 | mix | Mix soil content down to the specified depth. The effect is that nitrogen, water, temperature and such are averaged in the interval. | depth, random roughness, penetration, surface loose |
 | 15.25 | disk harrowing | A 'mix' model (see 15.24, page 86) defined in 'tillage.dai'. | n/a |
 | 15.26 | rotavation | A 'mix' model (see 15.24, page 86) defined in 'tillage.dai'. | n/a |
 | 15.27 | seed bed preparation | A 'mix' model (see 15.24, page 86) defined in 'tillage.dai'. | n/a |
 | 15.28 | stubble cultivation | A 'mix' model (see 15.24, page 86) defined in 'tillage.dai'. | n/a |
 | 15.29 | nil | This action does nothing, always done. | n/a |
 | 15.30 | panic | Write a error message to the user and stop the simulation. | message |
-| 15.31 | pluck | Pluck a crop. Unlike the 'harvest' operation, this allows you to pluck selected parts | crop, stem, sorg |
-| 15.32 | progn | Perform all the specified actions in the sequence listed. All the actions will be | actions |
+| 15.31 | pluck | Pluck a crop. Unlike the 'harvest' operation, this allows you to pluck selected parts of the above ground dry matter without killing the crop. | crop, stem, sorg |
+| 15.32 | progn | Perform all the specified actions in the sequence listed. All the actions will be performed in the same time step. | actions |
 | 15.33 | remove litter | Remove organic matter from soil surface. | n/a |
 | 15.34 | remove solute | Remove a specific chemical from the field. | n/a |
-| 15.35 | repeat | Perform all of the specified action. When done, repeat the action. The action may | repeat, do |
+| 15.35 | repeat | Perform all of the specified action. When done, repeat the action. The action may take several timesteps. | repeat, do |
 | 15.36 | restore SOM | Restore the content of the soil organic matter pools. | n/a |
-| 15.37 | sequence | Perform all the specified actions in the sequence listed. Each action is performed | do |
+| 15.37 | sequence | Perform all the specified actions in the sequence listed. All the actions will be performed in the same time step. | do |
 | 15.38 | activity | A 'sequence' model (see 15.37, page 88) build into Daisy. | n/a |
-| 15.39 | set porosity | Set the porosity of the horizon at the specified depth. To get useful results, you | depth, porosity |
+| 15.39 | set porosity | Set the porosity of the horizon at the specified depth. To get useful results, you need to use a hydraulic model that supports this. | depth, porosity |
 | 15.40 | set surface detention capacity | Set amount of ponding the surface can retain. | height |
 | 15.41 | sorption table | Print a sorption table for all chemicals. | Theta, start, intervals |
 | 15.42 | sow base | Shared sowing parameters. | row position, row width, plant distance, plant position |
@@ -204,7 +204,7 @@ The 'action' component represents management on different abstraction levels, fr
 | 15.48 | spray surface | Spray a chemical (typically a pesticide) on the field below the canopy. | amount |
 | 15.49 | stop | Stop the simulation. | n/a |
 | 15.50 | store SOM | Store the content of the soil organic matter pools. | n/a |
-| 15.51 | swap | Swap two soil layers. The top layer start at the surface and goes down to 'middle', | depth, random roughness, middle |
+| 15.51 | swap | Swap two soil layers. The top layer start at the surface and goes down to ’middle’, and the second layer starts with ’middle’ and goes down to ’depth’. After the operation, the content (such as heat, water, and organic matter) will be averaged in each layer, and the bottom layer will be placed on top of what used to be the top layer. | depth, random roughness, middle |
 | 15.52 | plowing | A 'swap' model (see 15.51, page 92) defined in 'tillage.dai'. | n/a |
 | 15.53 | t | This action does nothing, never done. | n/a |
 | 15.54 | table | Read management actions from a Daisy data file. | file, emerge, harvest, volume, missing, tag, dim line, enable irrigation |
@@ -227,20 +227,20 @@ This component describes the adsorption of a chemical to the soil, which among o
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 16.1 | Freundlich | M = rho K C ref (C / C ref)m + Theta C. Formula from FOCUS page 93. See also | m, K clay |
-| 16.2 | Guo2020 | Linear sorption with K awi estimated from Equation 11. See also [Guo et al., 2020] | K clay, a, b |
-| 16.3 | Langmuir | M = rho (my max C) / ((1/K) + C) + Theta C | n/a |
+| 16.1 | Freundlich | M = rho K C ref (C / C ref)m + Theta C. Formula from FOCUS page 93. See also [Freundlich and Heller, 1939, FOCUS, 2000] | m, K clay |
+| 16.2 | Guo2020 | Linear sorption with K awi estimated from Equation 11. See also [Guo et al., 2020] Used by chemical PFOS Guo adsorption (see 23.25, page 142) , and chemical PFOA Guo adsorption (see 23.23, page 142) . 97 98 CHAPTER 16. | K clay, a, b |
+| 16.3 | Langmuir | M = rho (my max C) / ((1/K) + C) + Theta C. | n/a |
 | 16.4 | Python | Adsorption defined in user specified Python module. | module, extra |
 | 16.5 | air | Henry's law, fixed ratio between concentration in air and water. See also [?] | K wa |
 | 16.6 | full | Full adsorption. Used for non-solutes, fully adsorped in the soil. | n/a |
-| 16.7 | linear | M = rho K C + Theta C | K clay |
+| 16.7 | linear | M = rho K C + Theta C Used by chemical Atrazine adsorption (see 23.8, page 138) , chemical Bentazon adsorption (see 23.9, page 138) , chemical IPU adsorption (see 23.10, page 138) , chemical MCPP adsorption (see 23.12, page 138) , chemical Pendimethalin adsorption (see 23.13, page 138) , chemical Ioxynil adsorption (see 23.11, page 138) , chemical 2,4-D adsorption (see 23.7. | K clay |
 | 16.8 | NH4 | A 'linear' model (see 16.7, page 100) build into Daisy. | n/a |
 | 16.9 | NH4 Hansen | A 'linear' model (see 16.7, page 100) build into Daisy. | n/a |
 | 16.10 | none | No adsorption. Used for solutes that are not adsorped to the soil. | n/a |
 | 16.11 | vS S | Double langmuir description of NH4-N sorption to clay. See also [Van Schouwenburg and Schuffelen, 1963] | S edge, K edge |
 | 16.12 | vS S Hansen | A 'vS S' model (see 16.11, page 101) build into Daisy. | n/a |
 | 16.13 | vS S Styczen | A 'vS S' model (see 16.11, page 101) build into Daisy. | n/a |
-| 16.14 | vS S old | Buggy implementation included as vS S before Daisy 6.47. Included here as refer- | n/a |
+| 16.14 | vS S old | Buggy implementation included as vS S before Daisy 6.47. Included here as reference. | n/a |
 
 **Related theme.** chemicals and their sorption.
 
@@ -287,7 +287,7 @@ The 'bioclimate' component is responsible for distributing the water and energy 
 
 ## Topic 20: biopore
 
-A single class of biopores. < component (density density ) (height start height start ) (height end height end ) (diameter diameter ) >  density: number component (see chapter 59) Biopore density [cm−2 ] as a function of 'x' [cm].  height start: number [cm] Parameter Biopores starts at this depth (a negative number).  height end : number [cm] Parameter Biopores ends at this depth (a negative number).  diameter : number [cm] Parameter Biopore diameter. Log Variables  S : number [cm3 /cm3 /h] soil cells Total st
+A single class of biopores.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
@@ -402,7 +402,7 @@ Calculate cloudiness from meterological data.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 25.1 | clear sky | Calculate based on clear sky radiation: a * Si / Si0 + 1 minus a where Si is global | cloudiness, a, Value description |
+| 25.1 | clear sky | Calculate based on clear sky radiation: a * Si / Si0 + 1 minus a where Si is global radiation and Si0 is clear sky radiation. | cloudiness, a, Value description |
 | 25.2 | ASCE | A 'clear sky' model (see 25.1, page 149) build into Daisy. | Kt |
 | 25.3 | Taastrup | A 'ASCE' model (see 25.2, page 150) build into Daisy. | n/a |
 | 25.4 | FAO56 | A 'clear sky' model (see 25.1, page 149) build into Daisy. | n/a |
@@ -416,7 +416,7 @@ Calculate cloudiness from meterological data.
 
 ## Topic 26: column
 
-A 'column' is an one-dimensional vertical description of the soil/crop/atmosphere system. The column component contains most of the other processes in Daisy as submodels. < component (area 1 [m2 ]) (location) >  area: number [m2 ] State variable (default 1) Area covered by this column. When logging multiple columns, the values are weighted by relative area.  location: submodel (see section 4.1.7) sequence Submodel (default: an empty sequence) Location of this column. The meaning depends on the number of point in
+A 'column' is an one-dimensional vertical description of the soil/crop/atmosphere system. The column component contains most of the other processes in Daisy as submodels.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
@@ -430,8 +430,8 @@ Find the hydraulic conductivity between two cells.
 |:--|:--|:--|:--|
 | 27.1 | arithmetic | Use the arithmetic average of the conductivity in the two cells. | n/a |
 | 27.2 | geometric | Geometric average 'sqrt(a*b)'. | n/a |
-| 27.3 | harmonic | Use harmonic average of the conductivity of the two cells. This corresponds to using | n/a |
-| 27.4 | pressure | Pressure dependent average of the two cells. Use harmonic average of the conductiv- | allow sideways, h lim |
+| 27.3 | harmonic | Use harmonic average of the conductivity of the two cells. This corresponds to using the average hydraulic resistence. | n/a |
+| 27.4 | pressure | Pressure dependent average of the two cells. Use harmonic average of the conductivity of unsaturated cells. | allow sideways, h lim |
 
 **Related theme.** water and heat movement in the soil.
 
@@ -442,8 +442,8 @@ A 'condition' component tests the state of the simulation, like whether the wate
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
 | 28.1 | BBCH after | True after specified BBCH. | crop, file, start, bbch |
-| 28.2 | TSum above | Test if the temperature sum is above the specified value The temperature sum is | TSum limit, reset mday, reset month |
-| 28.3 | and | True iff all the listed conditions are true. The conditions are tested in the sequence | operands |
+| 28.2 | TSum above | Test if the temperature sum is above the specified value The temperature sum is the sum of the daily average air temperature since last reset. | TSum limit, reset mday, reset month |
+| 28.3 | and | True iff all the listed conditions are true. The conditions are tested in the sequence listed, until a false is found, or the end of the list is reached. | operands |
 | 28.4 | trafficable | A 'and' model (see 28.3, page 160) defined in 'tillage.dai'. | n/a |
 | 28.5 | check | Test if a boolean expression is true. | n/a |
 | 28.6 | crop dm over | True iff the crop has reached the specified amount of dry matter. | crop, weight, height |
@@ -459,7 +459,7 @@ A 'condition' component tests the state of the simulation, like whether the wate
 | 28.16 | finished | True iff the simulation has finished. | n/a |
 | 28.17 | hour | True, at the specified hour. | at |
 | 28.18 | hourly | True at the end of each hour. | n/a |
-| 28.19 | if | If the first condition is true, return the value of the second condition, else return | then, else |
+| 28.19 | if | If the first condition is true, return the value of the second condition, else return the value of the third condition. | then, else |
 | 28.20 | mday | True, at the specified day in the month. | at |
 | 28.21 | microsecond | True, at the specified microsecond. | at |
 | 28.22 | minute | True, at the specified minute. | at |
@@ -471,7 +471,7 @@ A 'condition' component tests the state of the simulation, like whether the wate
 | 28.28 | month | True, at the specified month. | at |
 | 28.29 | monthly | True at the end of each month. | n/a |
 | 28.30 | not | True iff the operand is not true. | n/a |
-| 28.31 | or | True iff any of the listed conditions are true. The conditions are tested in the | operands |
+| 28.31 | or | True iff any of the listed conditions are true. The conditions are tested in the sequence listed, until a true is found, or the end of the list is reached. | operands |
 | 28.32 | periodic | True if move than a specified walltime has passed since last time it was true. | n/a |
 | 28.33 | running | True iff the simulation is still running. | n/a |
 | 28.34 | second | True, at the specified second. | at |
@@ -484,7 +484,7 @@ A 'condition' component tests the state of the simulation, like whether the wate
 | 28.41 | after | A 'time' model (see 28.40, page 167) build into Daisy. | n/a |
 | 28.42 | at | A 'time' model (see 28.40, page 167) build into Daisy. | n/a |
 | 28.43 | before | A 'time' model (see 28.40, page 167) build into Daisy. | n/a |
-| 28.44 | timestep | Add a timestep to a condition. It is true whenever 'operand' is true, but will let | timestep |
+| 28.44 | timestep | Add a timestep to a condition. It is true whenever 'operand' is true, but will let Daisy know what 'timestep' it represents. | timestep |
 | 28.45 | true | Always true. | n/a |
 | 28.46 | walltime | True if move than a specified walltime has passed since last time it was true. | seconds, minutes, hours, days, microseconds |
 | 28.47 | weekly | True at the end of each week. | n/a |
@@ -541,7 +541,7 @@ The 'crop' component simulates a specific crop on the field, typically averaged 
 | 29.36 | Wclover | A 'default' model (see 29.1, page 171) defined in 'wclover.dai'. | n/a |
 | 29.37 | White cabbage | A 'default' model (see 29.1, page 171) defined in 'whitecabbage.dai'. | n/a |
 | 29.38 | White cabbage minus transplanted | A 'White cabbage' model (see 29.37, page 177) defined in 'whitecabbage.dai'. | n/a |
-| 29.39 | Early white cabbage minus transplanted | A 'White cabbage minus transplanted' model (see 29.38, page 177) defined in 'early- | n/a |
+| 29.39 | Early white cabbage minus transplanted | A 'White cabbage minus transplanted' model (see 29.38, page 177) defined in 'earlywhitecabbage.dai'. | n/a |
 | 29.40 | Winter Barley | A 'default' model (see 29.1, page 171) defined in 'wbarley.dai'. | n/a |
 | 29.41 | Winter Barley; Foulum | A 'Winter Barley' model (see 29.40, page 177) defined in 'wbarley.dai'. | n/a |
 | 29.42 | Winter Barley; Koge | A 'default' model (see 29.1, page 171) defined in 'wbarley.dai'. | n/a |
@@ -569,7 +569,7 @@ Crop phenological stage. The 'default' crop model uses a continius development s
 
 ## Topic 31: daisy/soil/soil.h
 
-pH of soil. < component       > Log Variables  pH : number [pH] soil cells Current pH of soil.
+pH of soil.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
@@ -590,7 +590,7 @@ Find products (gasses) produced by denitrification.
 
 ## Topic 33: deposition
 
-Deposition of inorganic material from atmosphere. < component       > Log Variables  deposit: submodel (see section 4.1.7) sequence Total atmospheric deposition. <    name value    >    Log Variables, value: number [g/cm2 /h] Value for chemical., name: string (see section 4.1.5) Name of chemical.
+Deposition of inorganic material from atmosphere.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
@@ -619,8 +619,8 @@ The 'difrad' component should calculate the diffuse radiation from meterological
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 35.1 | BRL | Diffuse radiation calculation based on the model of Ridley et al., 2010. Last pre- | n/a |
-| 35.2 | DPF | Diffuse radiation calculated using the model of De Pury and Farquhar, 1997. See | a, Value description, fa |
+| 35.1 | BRL | Diffuse radiation calculation based on the model of Ridley et al., 2010. Last predictor (persistence) is not taken into account. | n/a |
+| 35.2 | DPF | Diffuse radiation calculated using the model of De Pury and Farquhar, 1997. See also [de Pury and Farquhar, 1997] | a, Value description, fa |
 | 35.3 | weather | Diffuse radiation using weather data. | n/a |
 
 **Related theme.** weather, radiation and evapotranspiration.
@@ -654,10 +654,10 @@ Find the equilibrium drain depth for the Hooghoudt drainage model.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 38.1 | MolenWesseling | Equivalent depth calculated with model by van der Molen and Wesseling. See also | n/a |
-| 38.2 | Moody | Equivalent depth calculated with model by Moody. See also [Moody, 1966] | n/a |
-| 38.3 | Wesseling | Equivalent depth calculated with model by Wesseling. See also [Wesseling, 1973] | n/a |
-| 38.4 | none | No modifications. See also [Hooghoudt, 1940] | n/a |
+| 38.1 | MolenWesseling | Equivalent depth calculated with model by van der Molen and Wesseling. See also [der Molen and Wesseling, 1991] Used by drain lateral eq depth (see 37.1, page 197) . 38.2 Moody Equivalent depth calculated with model by Moody. | n/a |
+| 38.2 | Moody | Equivalent depth calculated with model by Moody. See also [Moody, 1966] 38.3 Wesseling Equivalent depth calculated with model by Wesseling. | n/a |
+| 38.3 | Wesseling | Equivalent depth calculated with model by Wesseling. See also [Wesseling, 1973] 38.4 none No modifications. | n/a |
+| 38.4 | none | No modifications. See also [Hooghoudt, 1940] 199 200 CHAPTER 38. | n/a |
 
 **Related theme.** water and heat movement in the soil.
 
@@ -669,13 +669,13 @@ Find equilibrium between two soil chemicals.
 |:--|:--|:--|:--|
 | 39.1 | Langmuir | A = (my max B) / (K + B) | n/a |
 | 39.2 | goal A | Attempt to maintain A at at fixed level. | goal A, A solute, B solute |
-| 39.3 | linear | A=KB | n/a |
+| 39.3 | linear | A=KB. | n/a |
 
 **Related theme.** nitrogen, carbon and organic matter.
 
 ## Topic 40: exchange
 
-A named value to exchange with external models. < component (name name ) >  name: string (see section 4.1.5) Parameter Name of value to exchange.
+A named value to exchange with external models.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
@@ -713,10 +713,10 @@ Ground heat flux.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 43.1 | FAO56 | Equation 45 and 46. Ground heat flux is 10 % of Rn during day, and 50 % of Rn | n/a |
+| 43.1 | FAO56 | Equation 45 and 46. Ground heat flux is 10 % of Rn during day, and 50 % of Rn during night. | n/a |
 | 43.2 | const | The ground heat flux never changes. | G |
 | 43.3 | none | A 'const' model (see 43.2, page 213) build into Daisy. | n/a |
-| 43.4 | old | Based soil numeric cell 0 and 1. The model used in Daisy 6.08 and earlier, should | n/a |
+| 43.4 | old | Based soil numeric cell 0 and 1. The model used in Daisy 6.08 and earlier, should not be used. | n/a |
 | 43.5 | surface | Based on flux through soil surface. Calculated from previous timestep. | n/a |
 | 43.6 | weather | Use value from weather file. | n/a |
 
@@ -766,13 +766,13 @@ Heat transport in rectangular grid.
 | 46.1 | Mollerup | Finite volume solution to heat transfer by Mikkel Mollerup. | debug |
 | 46.2 | linear | Linear temperature interpolation between top and bottom. | n/a |
 | 46.3 | none | No heat transport. | n/a |
-| 46.4 | top | Soil temperature is equal to upper boundary. This can be used for a poorly isolated | n/a |
+| 46.4 | top | Soil temperature is equal to upper boundary. This can be used for a poorly isolated soil column. | n/a |
 
 **Related theme.** water and heat movement in the soil.
 
 ## Topic 47: horizon
 
-A 'horizon' is a soil type with specific physical properties. It is the responsibility of the 'horizon' component to specify these properties. Used by SoilLayer @ horizon (see 107.19, page 612) , and SoilRegion @ horizon (see 107.20, page 613) . < component (HorHeat HorHeat )                                    ; Has default value. (hydraulic hydraulic )                          ; Default hypres value. (tortuosity tortuosity )                        ; Default linear value. (C per N C per N ) (anisotropy 1 []) (dry b
+A 'horizon' is a soil type with specific physical properties. It is the responsibility of the 'horizon' component to specify these properties. Used by SoilLayer @ horizon (see 107.19, page 612) , and SoilRegion @ horizon (see 107.20, page 613) .
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
@@ -802,27 +802,27 @@ This component is responsible for specifying the soils hydraulic properties. Use
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
 | 48.1 | B BaC | Brooks and Corey retention curve model with Burdine theory. | Theta sat, lambda, K sat, h, Theta res, h b, p |
-| 48.2 | B BaC Bimodal | Brooks and Corey retention curve model with Burdine theory. Bimodal hydraulic | Theta sat, lambda, K sat, Theta res, h b, Theta b, K b |
-| 48.3 | B C | Campbell retention curve model with Burdine theory. See also [Campbell, 1974, | b, Theta sat, K sat, h, h b, p |
+| 48.2 | B BaC Bimodal | Brooks and Corey retention curve model with Burdine theory. | Theta sat, lambda, K sat, Theta res, h b, Theta b, K b |
+| 48.3 | B C | Campbell retention curve model with Burdine theory. See also [Campbell, 1974, Burdine, 1953] | b, Theta sat, K sat, h, h b, p |
 | 48.4 | B C inverse | Campbell retention curve model with Burdine theory. | Theta sat, K sat, h, Theta fc, Theta wp |
 | 48.5 | B vG | van Genuchten retention curve model with Burdine theory. | alpha, Theta sat, K sat, h, Theta res, n |
-| 48.6 | Cosby et al | Modified Campbell retention curve model with Burdine theory. Parameters esti- | n/a |
-| 48.7 | MACRO | van Genuchten retention curve model with Mualem theory. The near saturated | alpha, Theta sat, K sat, Theta res, h b, Theta b, K b, n |
+| 48.6 | Cosby et al | Modified Campbell retention curve model with Burdine theory. Parameters estimated from soil texture as specified by Cosby et at. | n/a |
+| 48.7 | MACRO | van Genuchten retention curve model with Mualem theory. The near saturated retention and hydraulic properties have been adjusted to take macropores into account. | alpha, Theta sat, K sat, Theta res, h b, Theta b, K b, n |
 | 48.8 | M BaC | Brooks and Corey retention curve model with Mualem theory. | Theta sat, lambda, K sat, h, Theta res, h b, p |
-| 48.9 | M BaC Bimodal | Brooks and Corey retention curve model with Mualem theory. Bimodal hydraulic | Theta sat, lambda, K sat, Theta res, h b, Theta b, K b |
+| 48.9 | M BaC Bimodal | Brooks and Corey retention curve model with Mualem theory. | Theta sat, lambda, K sat, Theta res, h b, Theta b, K b |
 | 48.10 | M BivG | Bimodal van Genuchten retention curve model with Mualem theory (Durner, 1994). | Theta sat, K sat, h, Theta res |
-| 48.11 | M C | Campbell retention curve model with Mualem theory. See also [Campbell, 1974, | b, Theta sat, K sat, h, h b, p |
+| 48.11 | M C | Campbell retention curve model with Mualem theory. See also [Campbell, 1974, Mualem, 1976] | b, Theta sat, K sat, h, h b, p |
 | 48.12 | M vG | van Genuchten retention curve model with Mualem theory. | alpha, Theta sat, K sat, h, Theta res, n |
 | 48.13 | M vG compact | van Genuchten retention curve model with Mualem theory and compaction. | Theta sat, Theta res, ref alpha, ref n, mod alpha, mod n |
 | 48.14 | M vGip | Modified van Genuchten retention curve model with Mualem theory. | alpha, Theta sat, K sat, h, Theta res, n, he |
-| 48.15 | M vGp | van Genuchten retention curve model with Mualem theory. A p m (h) function is | alpha, Theta sat, K sat, Theta res, n, h m |
-| 48.16 | hypres | van Genuchten retention curve model with Mualem theory. Parameters specified | K sat, h, Theta res |
-| 48.17 | hyprop | HYPROP-FIT parameters for bimodal van Genuchten retention curve. It includes | alpha, m, ha, a, Value description, Theta sat, K sat, h |
+| 48.15 | M vGp | van Genuchten retention curve model with Mualem theory. The near saturated retention and hydraulic properties have been adjusted to take macropores into account. | alpha, Theta sat, K sat, Theta res, n, h m |
+| 48.16 | hypres | van Genuchten retention curve model with Mualem theory. The near saturated retention and hydraulic properties have been adjusted to take macropores into account. | K sat, h, Theta res |
+| 48.17 | hyprop | HYPROP-FIT parameters for bimodal van Genuchten retention curve. It includes adsorptive water retention and scaling (code 1211). | alpha, m, ha, a, Value description, Theta sat, K sat, h |
 | 48.18 | linear | Hysteresis using linear transformation. | a, b, debug, wet, dry, is wetting, c |
 | 48.19 | mod C | Modified Campbell retention curve model with Burdine theory. | b, Theta sat, K sat, h, h b |
-| 48.20 | old2 | Reads a file of lines in the format < pF Theta Cw2 K >, where pF is the water | file, M intervals, inc |
+| 48.20 | old2 | Reads a file of lines in the format. | file, M intervals, inc |
 | 48.21 | table | Reads a ddf file with column pF Theta Cw2 K. | file, Theta sat, missing, tag, dim line, K sat, Theta res, M intervals |
-| 48.22 | wepp | van Genuchten retention curve model with Mualem theory. Parameters specified by | Theta res, time consolidation, average depth, p t, delta pc, crust thickness, day count, R c |
+| 48.22 | wepp | van Genuchten retention curve model with Mualem theory. The near saturated retention and hydraulic properties have been adjusted to take macropores into account. | Theta res, time consolidation, average depth, p t, delta pc, crust thickness, day count, R c |
 | 48.23 | Styczen | A 'wepp' model (see 48.22, page 267) build into Daisy. | n/a |
 | 48.24 | yolo | Yolo soil. Haverkamp et.al., 1977. | M intervals |
 
@@ -838,7 +838,7 @@ Generic representation of integers.
 |:--|:--|:--|:--|
 | 49.1 | * | Use the product of its operands. | operands |
 | 49.2 | + | Use the sum of its operands. | operands |
-| 49.3 | minus | Negate integer or subtract integers. With one operand, negates it. With more than | operands |
+| 49.3 | minus | Negate integer or subtract integers. With one operand, negates it. With more than one operand, subtracts all but the first from the first. | operands |
 | 49.4 | cond | Return the value of the first clause whose condition is true. | clauses |
 | 49.5 | const | Always give the specified value. | value |
 | 49.6 | div | Divide the first operand by the rest. | operands |
@@ -861,7 +861,7 @@ Condense a list of numbers to a single number.
 
 ## Topic 51: litter
 
-Litter, surface residuals, or mulch below canopy. < component        > Log Variables  cover : number [<fraction>] Fraction of surface area covered by litter.
+Litter, surface residuals, or mulch below canopy.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
@@ -903,7 +903,7 @@ Preferention flow in soil macro pores.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 53.1 | default | The area between 'height start' and 'height end' contains macropores, which are | distribution, height start, pressure initiate, S p |
+| 53.1 | default | The area between 'height start' and 'height end' contains macropores, which are initiated when the water potential reach 'pressure initiate', and then immediately emptied down to 'pressure end'. | distribution, height start, pressure initiate, S p |
 | 53.2 | none | No macropores. | n/a |
 
 **Related theme.** water and heat movement in the soil.
@@ -933,7 +933,7 @@ Soil limited maximum exfiltration.
 
 ## Topic 56: movement
 
-This component handles the movement in the soil. < component (Tertiary Tertiary ) >  Tertiary: tertiary component (see chapter 89) Tertiary (that is, non-matrix) transport method. Log Variables  water failure level : integer The number of the last water transport model to fail. It is -1 if the first model succeded, and 0 if the first model failed but the second succeded.  solute failure level : integer The number of the last solute transport model to fail. It is -1 if the first model succeded, and 0 if the first
+This component handles the movement in the soil.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
@@ -949,23 +949,23 @@ Calculate net radiation from meteorological data.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 57.1 | brunt | Brunt, 1932. Default parameterization by Jensen et.al., 1990. FAO recommenda- | A |
-| 57.2 | brutsaert | Brutsaert, 1975 | n/a |
-| 57.3 | idso jackson | Idso and Jackson, 1969 | n/a |
-| 57.4 | prata | Prata, 1996 | n/a |
-| 57.5 | satterlund | Satterlund, 1979 | n/a |
-| 57.6 | swinbank | Swinbank, 1963 | n/a |
+| 57.1 | brunt | Brunt, 1932. Default parameterization by Jensen et.al., 1990. FAO recommendation. | A |
+| 57.2 | brutsaert | Brutsaert, 1975 57.3 idso jackson Idso and Jackson, 1969 57.4 prata Prata, 1996 57.5 satterlund Satterlund, 1979 57.6 swinbank Swinbank, 1963 311 312 CHAPTER 57. | n/a |
+| 57.3 | idso jackson | Idso and Jackson, 1969 57.4 prata Prata, 1996 57.5 satterlund Satterlund, 1979 57.6 swinbank Swinbank, 1963 311 312 CHAPTER 57. | n/a |
+| 57.4 | prata | Prata, 1996 57.5 satterlund Satterlund, 1979 57.6 swinbank Swinbank, 1963 311 312 CHAPTER 57. | n/a |
+| 57.5 | satterlund | Satterlund, 1979 57.6 swinbank Swinbank, 1963 311 312 CHAPTER 57. | n/a |
+| 57.6 | swinbank | Swinbank, 1963 311 312 CHAPTER 57. | n/a |
 
 **Related theme.** weather, radiation and evapotranspiration.
 
 ## Topic 58: nitrification
 
-The nitrification process, transforming ammonium into nitrate and nitrous oxide. Used by horizon component Nitrification (see 47, page 231) . < component (N2O fraction 0.02 [<fraction>]) >  N2O fraction: number [<fraction>] Parameter (default 0.02) Fraction of ammonium lost as N2O.
+The nitrification process, transforming ammonium into nitrate and nitrous oxide. Used by horizon component Nitrification (see 47, page 231) .
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 58.1 | soil | k 10 * M / (k + M). Michaelis-Menten kinetics, with nitrification based on total | n/a |
-| 58.2 | solute | k 10 * C / (k + C). Michaelis-Menten kinetics, with nitrification based on ammo- | n/a |
+| 58.1 | soil | k 10 * M / (k + M). Michaelis-Menten kinetics, with nitrification based on total ammonium content. | n/a |
+| 58.2 | solute | k 10 * C / (k + C). Michaelis-Menten kinetics, with nitrification based on ammonium solute. | n/a |
 
 **Related theme.** nitrogen, carbon and organic matter.
 
@@ -977,7 +977,7 @@ Generic representation of numbers. Used by select component expr (see 80, page 4
 |:--|:--|:--|:--|
 | 59.1 | * | Use the product of its operands. | operands |
 | 59.2 | + | Use the sum of its operands. | operands |
-| 59.3 | minus | Negate number or subtract numbers. With one operand, negates it. With more | operands |
+| 59.3 | minus | Negate number or subtract numbers. With one operand, negates it. With more than one operand, subtracts all but the first from the first. | operands |
 | 59.4 | / | Divide the first operand by the rest. | operands |
 | 59.5 | apply | Apply function to operand. | function |
 | 59.6 | child | Numbers based on another number. | value |
@@ -1046,14 +1046,14 @@ To start the simulation, many parameters must be specified and state variables m
 
 ## Topic 62: pet
 
-The 'pet' component should calculate the potential evapotranspiration from mete- orological data, as well as the crop and soil state. < component        > Log Variables  wet: number [mm/h] Potential evapotranspiration for a wet system.  dry: number [mm/h] Potential evapotranspiration for a dry system.  reference evapotranspiration: number [mm/h] Reference evapotranspiration for a dry system.
+The 'pet' component should calculate the potential evapotranspiration from mete- orological data, as well as the crop and soil state.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 62.1 | FAO PM | Potential evopotranspiration using Penman-Monteith. See also [Allen et al., 1998] | use wet, rb |
-| 62.2 | FAO PM hourly | Potential evopotranspiration using Penman-Monteith. Modified to work with hourly | use wet, rb |
-| 62.3 | Hargreaves | Potential evopotranspiration based on temperature. See also [Hargreaves and Samani, 1985] | n/a |
-| 62.4 | Makkink | Potential evopotranspiration using Makkink's Equation. E M = beta M0 + beta M1 | n/a |
+| 62.1 | FAO PM | Potential evopotranspiration using Penman-Monteith. See also [Allen et al., 1998] Used by bioclimate FAO56 daily pet (see 19.3, page 115) . | use wet, rb |
+| 62.2 | FAO PM hourly | Potential evopotranspiration using Penman-Monteith. Modified to work with hourly data. | use wet, rb |
+| 62.3 | Hargreaves | Potential evopotranspiration based on temperature. See also [Hargreaves and Samani, 1985] 62.4 Makkink Potential evopotranspiration using Makkink’s Equation. | n/a |
+| 62.4 | Makkink | Potential evopotranspiration using Makkink's Equation. E M = beta M0 + beta M1 * (s * Si) / (lambda (s + gamma)) . E M is the reference evapotranspiration [mm/d]. beta M0 [mm] and beta M1 [] are empirical parameters. | n/a |
 | 62.5 | AslyngHansen82 | A 'Makkink' model (see 62.4, page 338) build into Daisy. | n/a |
 | 62.6 | Makkink57 | A 'Makkink' model (see 62.4, page 338) build into Daisy. | n/a |
 | 62.7 | deBruin87 | A 'Makkink' model (see 62.4, page 338) build into Daisy. | n/a |
@@ -1065,18 +1065,18 @@ The 'pet' component should calculate the potential evapotranspiration from mete-
 
 ## Topic 63: phenology
 
-The development process. < component (DS -1 [DS]) (DAP 0 [d]) (partial day length 0 [h]) (day length 0 [h]) >  DS : number [DS] State variable (default -1) Development stage [-1:2], 0 is emergence, 1 is flowering.  DAP : number [d] State variable (default 0) Days after planting.  partial day length: number [h] State variable (default 0) Number of light hours this day, so far.  day length: number [h] State variable (default 0) Number of light hours yesterday.
+The development process.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 63.1 | TSum | Crop phenology model purely based on temperature sums. The length of emer- | EmrTSum, EmrThrs, VegTSum, VegThrs, RepTSum, RepThrs |
+| 63.1 | TSum | Crop phenology model purely based on temperature sums. The length of emergence, and the vegetative and reproductive fase are all based on the specified temperature sums. | EmrTSum, EmrThrs, VegTSum, VegThrs, RepTSum, RepThrs |
 | 63.2 | default | Default crop phenology model. | EmrTSum, DSMature, DSRepeat |
 
 **Related theme.** the crop: growth, roots and water use.
 
 ## Topic 64: photosynthesis
 
-Leaf photosynthesis. < component (min PAR 0.1 [W/m2 ]) >  min PAR: number [W/m2 ] Parameter (default 0.1) Minimum PAR at top of canopy for photosynthesis. If radiation is below this amount, photosynthesis will be disabled.
+Leaf photosynthesis.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
@@ -1094,9 +1094,9 @@ Dampening affect of ponding on soil erosion from rain.
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
 | 65.1 | EUROSEM | KH = exp (-b h) See also [Morgan et al., 1998] | b |
-| 65.2 | Hairsine91 | KH = (h / dds)−0 .8 See also [Hairsine and Rose, 1991] | n/a |
-| 65.3 | Park82 | KH = 2.7183 * exp (-h / dds) See also [Park et al., 1982] | n/a |
-| 65.4 | none | KH = 1.0 | n/a |
+| 65.2 | Hairsine91 | KH = (h / dds)−0 .8 See also [Hairsine and Rose, 1991] 65.3 Park82 KH = 2.7183 * exp (-h / dds) See also [Park et al., 1982] 65.4 none KH = 1.0 Used by reaction colgen Jarvis99 ponddamp (see 70.6, page 387) . 351 352 CHAPTER 65. | n/a |
+| 65.3 | Park82 | KH = 2.7183 * exp (-h / dds) See also [Park et al., 1982] 65.4 none KH = 1.0 Used by reaction colgen Jarvis99 ponddamp (see 70.6, page 387) . 351 352 CHAPTER 65. | n/a |
+| 65.4 | none | KH = 1.0 Used by reaction colgen Jarvis99 ponddamp (see 70.6, page 387) . 351 352 CHAPTER 65. | n/a |
 
 **Related theme.** water and heat movement in the soil.
 
@@ -1107,10 +1107,10 @@ Run a program. Used by Toplevel @ run (see 107.30, page 626) .
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
 | 66.1 | AM table | Generate a table of fertilizers. | n/a |
-| 66.2 | Daisy | The Daisy crop/soil/atmosphere model. See also [Hansen et al., 1990, Hansen, 2002, | harvest, stop, time, column, timestep, exchange, scope, output |
-| 66.3 | GP2D | Write root density table using 2D extension to Gerwitz and Page | row position, WRoot, row width, Geometry, soil depth, crop depth, crop width |
+| 66.2 | Daisy | The Daisy crop/soil/atmosphere model. See also [Hansen et al., 1990, Hansen, 2002, Hansen et al., 1991] | harvest, stop, time, column, timestep, exchange, scope, output |
+| 66.3 | GP2D | Write root density table using 2D extension to Gerwitz and Page. | row position, WRoot, row width, Geometry, soil depth, crop depth, crop width |
 | 66.4 | KM2 | Read KM2 precipitation data. | file |
-| 66.5 | Osvaldo | Find the modelling error. This is done between one set of measured data and | pars, par width, measured file |
+| 66.5 | Osvaldo | Find the modelling error. This is done between one set of measured data and multiple sets of simulated data. | pars, par width, measured file |
 | 66.6 | RS2WG | Prepare data from RainSim to the weather generator. | rshourly origin, wgcycle begin, wgcycle length, rshourly file, rsdaily file, dwfhourly file, hint file, hlim |
 | 66.7 | WG2DWF | Prepare data from the weather generator for Daisy. | rshourly origin, wgcycle begin, wgcycle length, wg file, dwfdaily file, monthly file, yearly file, dint file |
 | 66.8 | astdump | Generate a dump of the abstract syntax tree. | where |
@@ -1149,8 +1149,8 @@ Energy in rain.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 68.1 | Brown87 | Energy as a semi-empirical function of rain intensity. The energy content in the | n/a |
-| 68.2 | EUROSEM | Kinetic energy model taking vegetation into account. See also [Morgan et al., 1998] | n/a |
+| 68.1 | Brown87 | Energy as a semi-empirical function of rain intensity. The energy content in the fraction that hits the canopy is ignored. | n/a |
+| 68.2 | EUROSEM | Kinetic energy model taking vegetation into account. See also [Morgan et al., 1998] Used by reaction colgen Morgan98 rainergy (see 70.8, page 389) . 379 380 CHAPTER 68. | n/a |
 
 **Related theme.** weather, radiation and evapotranspiration.
 
@@ -1172,7 +1172,7 @@ Generic transformations between soil chemicals.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 70.1 | DOM turnover | Turnover of dissolved organic matter. See also [Garnier et al., 2003] | DOC name, DON name, where, efficiency, Value description |
+| 70.1 | DOM turnover | Turnover of dissolved organic matter. See also [Garnier et al., 2003] Used by chemistry DOM reaction (see 24.2, page 145) . | DOC name, DON name, where, efficiency, Value description |
 | 70.2 | Python | Python interface for chemical reactions above and below ground. | top, module, extra, in, handle, tag, texture, size |
 | 70.3 | adsorption | Maintain equilibrium between solute and sorbed from. | equilibrium, solute, adsorption rate, desorption rate, adsorption source |
 | 70.4 | bound release | Release of chemicals bound to colloids from surface soil. | immobile, release |
@@ -1186,10 +1186,10 @@ Generic transformations between soil chemicals.
 | 70.12 | equilibrium | Equilibrium between two soil chemicals. | equilibrium, secondary, surface, A, k BA, primary |
 | 70.13 | filter velocity | Filtration of soil colloids. | immobile, mobile, fc primary, fc secondary, F primary, F secondary |
 | 70.14 | colloid-filter | A 'filter velocity' model (see 70.13, page 393) defined in 'chemistry-base.dai'. | n/a |
-| 70.15 | nitrification | Nitrification. The actual nitrification specification is part of the horizon models, | N2O |
-| 70.16 | shoot | Pool based on shoot DM. Generate chemical (M) on canopy up to maximum | crop |
-| 70.17 | shoot2 | Pool based on shoot DM. Generate chemical (M) on canopy up to maximum | crop, M pot |
-| 70.18 | sorption | Kinetic linear sorption equilibrium. Faster than the 'equilibrium' reaction model, | solute, K clay, Equillibrium parameter, k sorption, k desorption, surface sorption, S sorption |
+| 70.15 | nitrification | Nitrification. The actual nitrification specification is part of the horizon models, this reaction just applies the models and logs the result. | N2O |
+| 70.16 | shoot | Pool based on shoot DM. Generate chemical (M) on canopy up to maximum (M max). | crop |
+| 70.17 | shoot2 | Pool based on shoot DM. Generate chemical (M) on canopy up to maximum (M max). | crop, M pot |
+| 70.18 | sorption | Kinetic linear sorption equilibrium. Faster than the 'equilibrium' reaction model, more flexible than the 'adsorption' reaction model. | solute, K clay, Equillibrium parameter, k sorption, k desorption, surface sorption, S sorption |
 
 **Related theme.** nitrogen, carbon and organic matter.
 
@@ -1199,8 +1199,8 @@ Specify a retention or a halftime.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 71.1 | PASTIS | Retention curve of Mulch used in PASTIS. h (Theta) = -(-h min)ˆ(1-((Theta minus | n/a |
-| 71.2 | exp | Retention curve of Mulch used in Exponential. Theta (h) = exp (k h) (Theta sat | Theta sat, Theta res, h min |
+| 71.1 | PASTIS | Retention curve of Mulch used in PASTIS. h (Theta) = -(-h min)ˆ(1-((Theta minus Theta res) / (2/3 Theta sat minus Theta res))) Used by litter mulch retention (see 51.6, page 276) . 71.2 exp Retention curve of Mulch used in Exponential. | n/a |
+| 71.2 | exp | Retention curve of Mulch used in Exponential. Theta (h) = exp (k h) (Theta sat minus Theta res) + Theta res h (Theta) = ln ((Theta minus Theta res) / (Theta sat minus Theta res)) / k. | Theta sat, Theta res, h min |
 
 **Related theme.** water and heat movement in the soil.
 
@@ -1218,11 +1218,11 @@ Root processes.
 
 ## Topic 73: rootdens
 
-Root density calculations. < component (SpRtLength 100 [m/g]) >  SpRtLength: number [m/g] Parameter (default 100) Specific root length
+Root density calculations.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 73.1 | Anders Pedersen | Use exponential function for root density. In this variant of Gerwitz and Page, 'a' | q, a |
+| 73.1 | Anders Pedersen | Use exponential function for root density. In this variant of Gerwitz and Page, ’a’ is specified as a function of development stage. | q, a |
 | 73.2 | DS Depth | Specify root density as a function of development stage. | entries, density |
 | 73.3 | DS Rel | Specify root density as a function of development stage. | entries, density |
 | 73.4 | Depth Depth | Specify root density as a function of development stage. | entries, density |
@@ -1277,7 +1277,7 @@ A method to choose a scope in a Daisy simulation.
 
 ## Topic 78: secondary
 
-Specify secondary domain. The secondary domain consist typically of soil fractures or other inter-aggregate pores small enough to be dominated by capillarity, yet so large that water moves fast enough that the solute equilibrium with the primary domain (typically intra- aggregate pores) can not be maintained. This allows a pulse of water to be move through saturated or near saturated soil without solutes in the new water being mixed with solutes in the old water. The effects are twofold: It allows solutes applied t
+Specify secondary domain. The secondary domain consist typically of soil fractures or other inter-aggregate pores small enough to be dominated by capillarity, yet so large that water moves fast enough that the solute equilibrium with the primary domain (typically intraaggregate pores) can not be maintained. This allows a pulse of water to be move through saturated or near saturated soil without solutes in the new water being mixed with solutes in the old water. The effects are twofold: It allows solutes applied to the surface to reach deeper soil layers much faster than it would otherwise, and it protects solutes in the soil matrix from being washed out with fast moving new water.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
@@ -1301,7 +1301,7 @@ Initial growth after emergence. The initial growth process governs the growth of
 
 ## Topic 80: select
 
-Select part of state. < component (multi sum) (expr expr ) (flux flux ) (dimension dimension ) (factor 1 [?]) (offset 0 [?]) (accumulate false) (handle handle ) (tag tag ) (when when ) (documentation documentation ) (path path ...) (spec spec ) (interesting content interesting content ) (negate false) >  multi : string (see section 4.1.5) Optional parameter (default 'sum') This option determine how to handle mutiple matches within a timestep. This could be two crops on the same column, or one crop on two columns.
+Select part of state.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
@@ -1358,10 +1358,10 @@ Time series, with possible error bars and formatting information.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 83.1 | arithmetic | Read a daisy log, weather or data file. Calculate a single value for each time step, | file, with, timestep, missing, tag, dim line, style, title |
+| 83.1 | arithmetic | Read a daisy log, weather or data file. Calculate a single value for each time step, based on the value in the various columns. | file, with, timestep, missing, tag, dim line, style, title |
 | 83.2 | column | Read a a single column from a Daisy log, weather or data file. | file, with, timestep, dimension, offset, missing, tag, dim line |
 | 83.3 | combine | Combine data from multiple sources with a single expression. | source, with, style, title, accumulate |
-| 83.4 | merge | Merge multiple timeseries into one. Any errorbars on the original timeseries are | source, with, dimension, style, title, accumulate |
+| 83.4 | merge | Merge multiple timeseries into one. Any errorbars on the original timeseries are ignored, but the merged timeseries may have errorbars if there are multiple values for the same time. | source, with, dimension, style, title, accumulate |
 
 ## Topic 84: stomatacon
 
@@ -1393,7 +1393,7 @@ Generic representation of strings.
 
 ## Topic 86: summary
 
-Summary reports for log parameterizations. < component (title title ) >  title: string (see section 4.1.5) Optional parameter Title of this summary. By default, use the name of the parameterization.
+Summary reports for log parameterizations.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
@@ -1445,7 +1445,7 @@ The task of the 'svat' component is to calculate the production stress, given th
 |:--|:--|:--|:--|
 | 88.1 | PMSW | Peter van der Keur's SVAT model. See also [van der Keur et al., 2001] | albedo, z 0s, alpha u, arac, theta c, rcmin const, zeta, f3const |
 | 88.2 | SSOC | Sun-Shade Open Canopy. See also [Plauborg et al., 2010] | hypostomatous, max iteration, z 0b, s, lambda, rho a, gamma, T s |
-| 88.3 | none | Decoupling surface energy and water balance. Done using reference values and crop | n/a |
+| 88.3 | none | Decoupling surface energy and water balance. Done using reference values and crop factors. | n/a |
 
 **Related theme.** the crop: growth, roots and water use.
 
@@ -1457,7 +1457,7 @@ Transport of water and solute outside the matrix. Used by movement component Ter
 |:--|:--|:--|:--|
 | 89.1 | biopores | Tertiary domain divided into biopore classes. | active, pressure initiate, classes, pressure limit, active msg, Possible values, none, old dt |
 | 89.2 | none | No tertiary transport. | n/a |
-| 89.3 | old | Tertiary water and solute movement based on the obsolete 'macro' and 'mactrans' | macro, mactrans |
+| 89.3 | old | Tertiary water and solute movement based on the obsolete ’macro’ and ’mactrans’ components. | macro, mactrans |
 
 **Related theme.** water and heat movement in the soil.
 
@@ -1468,7 +1468,7 @@ Solutes in the soil can't move the shortest way between two points. The tortuosi
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
 | 90.1 | M Q | Millington-Quirk. Thetaˆ(7/3) / Theta sat2 . | n/a |
-| 90.2 | linear | Linear Impedance factor. a + b Theta. See also [Nye and Tinker, 1977] | a, b |
+| 90.2 | linear | Linear Impedance factor. a + b Theta. See also [Nye and Tinker, 1977] Used by horizon component tortuosity (see 47, page 231) . | a, b |
 
 **Related theme.** water and heat movement in the soil.
 
@@ -1490,7 +1490,7 @@ Solute transport in primary domain.
 |:--|:--|:--|:--|
 | 92.1 | Hansen | Solute transport using convection-dispersion. | n/a |
 | 92.2 | Mollerup | Coupled vertical and horizontal transport. See Mollerup 2007 for details. | debug, None, Timestep reduction, Streamline diffusion, upstream weight |
-| 92.3 | convection | Pure forward calculation of flow except through upper boundary. J[edge] = q[edge] | n/a |
+| 92.3 | convection | Pure forward calculation of flow except through upper boundary. J[edge] = q[edge] * C old[upstream] Used by movement vertical matrix solute (see 56.3, page 308) , and movement rectangle matrix solute (see 56.2, page 307) . 92.4 none Disable all transport except through boundaries. | n/a |
 | 92.4 | none | Disable all transport except through boundaries. | n/a |
 
 **Related theme.** water and heat movement in the soil.
@@ -1516,7 +1516,7 @@ Presentation of data in the user interface.
 
 ## Topic 95: uiitem
 
-User interface information about a item. < component (name name ) >  name: string (see section 4.1.5) Parameter Name of user interface unit.
+User interface information about a item.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
@@ -1749,7 +1749,7 @@ The 'uz1d' component handles the horizontal water movement in the unsaturated zo
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 97.1 | none | Disable transport | n/a |
+| 97.1 | none | Disable transport Used by uzrect v+h horizontal (see 99.3, page 541) . 97.2 richards A numerical solution to Richard’s Equation. | n/a |
 | 97.2 | richards | A numerical solution to Richard's Equation. | max iterations, K average |
 
 **Related theme.** water and heat movement in the soil.
@@ -1760,7 +1760,7 @@ The 'uzmodel' component handles the vertical water movement in the unsaturated z
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 98.1 | lr | Use gravitational water movement for wet soil, where h > h fc. There are no water | overflow warn, h fc, z top |
+| 98.1 | lr | Use gravitational water movement for wet soil, where h. | overflow warn, h fc, z top |
 | 98.2 | none | No water movement, and no sink. | n/a |
 | 98.3 | richards | A numerical solution to Richard's Equation. | debug, max iterations, K average |
 | 98.4 | richards2 | A numerical solution to Richard's Equation. | debug, max iterations, K average, min timestep, low iterations, high iterations |
@@ -1781,7 +1781,7 @@ The 'uzmodel' component handles the vertical water movement in the unsaturated z
 
 ## Topic 100: vegetation
 
-That green stuff. < component (EpInterchange 0.6 [<fraction>]) >  EpInterchange: number [<fraction>] Parameter (default 0.6) Canopy adsorbtion fraction of unreached potential soil evaporation. Log Variables  N : number [kg N/ha] Current nitrogen content of vegetation.  LAI : number [m2 /m2 ] Total LAI of all crops on this column  LAIvsH : plf [m2 /m2 → cm] Total canopy LAI below given height  height: number [cm] Max crop height in canopy  albedo: number (dimensionless) Another reflection factor  cover : numb
+That green stuff.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
@@ -1812,7 +1812,7 @@ A subset of 3D space. Used by Irrigation @ event volume (see 107.10, page 604) .
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 102.1 | box | A volume defined by intervals on each axis. By default, the intervals fill the entire | top, bottom, left, right, front |
+| 102.1 | box | A volume defined by intervals on each axis. By default, the intervals fill the entire axis. | top, bottom, left, right, front |
 
 ## Topic 103: weather
 
@@ -1839,7 +1839,7 @@ The water stress effect on crop growth.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 104.1 | full | Water stress has full effect on crop growth. This means that if there is 50% water | n/a |
+| 104.1 | full | Water stress has full effect on crop growth. This means that if there is 50% water stress, assimilate production will be cut into half. | n/a |
 | 104.2 | none | Water stress has no effect on plant growth. | n/a |
 | 104.3 | partial | Water stress has partial effect on crop growth. | n/a |
 
@@ -1851,15 +1851,15 @@ XY data series.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 105.1 | arithmetic | Read a daisy log, weather or data file. Calculate an x and an y value for each time | file, with, missing, tag, dim line, style, title, y |
-| 105.2 | combine | Combine data from multiple time series with a single expression. Data from times | source, with, style, title, y |
-| 105.3 | flux | Read a daisy 2d log file, extract flux through line. Values between 'begin' and 'end' | file, with, dimension, begin, missing, tag, dim line, style |
+| 105.1 | arithmetic | Read a daisy log, weather or data file. Calculate an x and an y value for each time step, based on the value in the various columns. | file, with, missing, tag, dim line, style, title, y |
+| 105.2 | combine | Combine data from multiple time series with a single expression. Data from times series are matched by date. | source, with, style, title, y |
+| 105.3 | flux | Read a daisy 2d log file, extract flux through line. Values between ’begin’ and ’end’ will be accumulated, unless ’when’ is set. | file, with, dimension, begin, missing, tag, dim line, style |
 | 105.4 | frequency | Read a daisy log, weather or data file. Plot the frequency of a specific column. | file, with, missing, tag, dim line, style, title, sort |
 | 105.5 | inline | A list of x, y pairs. | with, points, style, title, x dimension, y dimension |
 | 105.6 | loop | Calculate x and y pairs based on a single variable. | with, begin, style, title, tag, y, step |
 | 105.7 | merge | Merge multiple xy data series into one. | source, with, style, title, x dimension, y dimension |
 | 105.8 | profile | Plot soil profile. | file, with, dimension, missing, tag, dim line, style, title |
-| 105.9 | xycombine | Combine data from multiple time series with a single expression. Data from times | source, with, style, title |
+| 105.9 | xycombine | Combine data from multiple time series with a single expression. Data from times series are matched by date. | source, with, style, title |
 
 ## Topic 106: zone
 
@@ -1867,8 +1867,8 @@ A subset of 3D space. Used by SoilRegion @ volume (see 107.20, page 613) .
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 106.1 | box | A zone defined by intervals on each axis. By default, the intervals fill the entire | top, bottom, left, right, front |
-| 106.2 | polygon | A 2D region defined by points connected by lines. The object is assumed to be | n/a |
+| 106.1 | box | A zone defined by intervals on each axis. By default, the intervals fill the entire axis. | top, bottom, left, right, front |
+| 106.2 | polygon | A 2D region defined by points connected by lines. The object is assumed to be infinite in the third dimension. | n/a |
 
 ## Topic 107: Fixed Components
 
@@ -1883,9 +1883,9 @@ Fixed components are similar to ordinary component, with the exceptions that the
 | 107.5 | CanopyStandard | Standard canopy model. | PARext, NIRext, EPext, IntcpCap, EpFac, Value description, EpFacWet, rs min |
 | 107.6 | CrpN | Default crop nitrogen parameters. | PtLeafCnc, CrLeafCnc, NfLeafCnc, PtStemCnc, CrStemCnc, NfStemCnc, PtSOrgCnc, CrSOrgCnc |
 | 107.7 | Harvesting | Information about what happens to the crop at harvest and cut. | Root, Stem, SOrg, last cut, production delay, cut delay, sorg height, cut stress |
-| 107.8 | Partition | Assimilate partitioning in the default crop model. The 'Root' parameter determine | Root, Stem, RSR, max WRoot, NNI crit, NNI inc |
+| 107.8 | Partition | Assimilate partitioning in the default crop model. The ’Root’ parameter determine what fraction of the assimilate for growth goes to roots at a given development stage. | Root, Stem, RSR, max WRoot, NNI crit, NNI inc |
 | 107.9 | Production | Crop production in the default crop model. | WRoot, ReMobilRt, StemRes, CH2OReleaseRate, E Root, E Stem, E SOrg, r Root |
-| 107.10 | Irrigation | Keep track of active irrigation events. Usually not set explicitly, but may be found | event, solute, name, value, volume, temperature, time left, target |
+| 107.10 | Irrigation | Keep track of active irrigation events. Usually not set explicitly, but may be found in a checkpint. | event, solute, name, value, volume, temperature, time left, target |
 | 107.11 | Bioincorporation | Biological incorporation of organic matter in soil. | respiration, distribution |
 | 107.12 | DOM-Element | A single element in a Dissolved Organic Matter pool. | J tertiary, S p, S drain |
 | 107.13 | Fetch | A summary file line. | tag |
@@ -1894,8 +1894,8 @@ Fixed components are similar to ordinary component, with the exceptions that the
 | 107.16 | Geometry1D | A one dimensional discretization of the soil. | zplus |
 | 107.17 | GeometryRect | A rectangular discretization of the soil. | zplus, xplus |
 | 107.18 | HorHeat | Heat capacity and conductivity per horizon. | intervals, K ice |
-| 107.19 | SoilLayer | A location and content of a soil layer. The layers apply to the soil section not | horizon |
-| 107.20 | SoilRegion | A location and content of a soil zone. If several zones cover the same soil, the first | volume, horizon |
+| 107.19 | SoilLayer | A location and content of a soil layer. The layers apply to the soil section not covered by the ’zones’ parameter. | horizon |
+| 107.20 | SoilRegion | A location and content of a soil zone. If several zones cover the same soil, the first one listed is used. | volume, horizon |
 | 107.21 | Soil | The soil submodel provides the numeric and physical properties of the soil. | horizons, zones, Hydraulic, MaxRootingDepth, dispersivity |
 | 107.22 | SoilHeat | Temperature and heat flux in soil. | q lim, value, h frozen, enable ice, ice dt, state, q, conductivity |
 | 107.23 | SoilWater | Keep track of water and pressure in the soil matrix. | h, Theta, S permanent, default h, use last, initial h, value, initial Theta |

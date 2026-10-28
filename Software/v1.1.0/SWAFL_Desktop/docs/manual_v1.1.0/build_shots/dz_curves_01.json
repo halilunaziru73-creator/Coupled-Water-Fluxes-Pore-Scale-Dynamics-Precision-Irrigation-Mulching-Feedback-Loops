@@ -9,25 +9,25 @@
  "marks": [
   {
    "x": 64,
-   "y": 656,
+   "y": 726.4000000000001,
    "t": "Function list",
    "d": "The functions that can be drawn."
   },
   {
    "x": 618.4000000000001,
-   "y": 704.8000000000001,
+   "y": 775.2,
    "t": "Drawing",
    "d": "The chosen curve."
   },
   {
    "x": 665.6750000000001,
-   "y": 1067.2,
+   "y": 1137.6000000000001,
    "t": "Picture (PNG)",
    "d": "Saves the figure."
   },
   {
    "x": 823.4250000000001,
-   "y": 1067.2,
+   "y": 1137.6000000000001,
    "t": "Table (CSV)",
    "d": "Saves the numbers."
   }

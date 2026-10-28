@@ -320,6 +320,14 @@
   }
 
   // ------------------------------------------------------------------ register the four views
+  // the list of views of the web explorer is built before these layers are added, so each layer gets its button in its group
+  const GRPN = { yby: 'Year by year', wb2: 'Year by year', nb: 'Year by year', crop: 'Crops', chem: 'Chemicals', dsum: 'Daisy decision support' };
+  function sceneButton(sc) {
+    const bar = document.getElementById('sceneBar'); if (!bar || bar.querySelector('[data-scene="' + sc.id + '"]')) return;
+    const b = document.createElement('div'), mm = sc.label.match(/^([A-Z]\d)\s+(.*)$/); b.className = 'scenebtn'; b.innerHTML = '<span class="no">' + (mm ? mm[1] : '') + '</span><span>' + (mm ? mm[2] : sc.label) + '</span>'; b.style.setProperty('--sc', sc.color); b.dataset.scene = sc.id; b.title = sc.title || ''; b.onclick = () => switchScene(sc);
+    const h = Array.from(bar.querySelectorAll('.scenegrp')).find(x => x.textContent === GRPN[sc.id]); if (!h) { bar.appendChild(b); return; }
+    let n = h.nextSibling; while (n && !(n.classList && n.classList.contains('scenegrp'))) n = n.nextSibling; bar.insertBefore(b, n);
+  }
   const add = (id, label, color, draw, title, insight) => { if (SCENES.some(s => s.id === id)) return; SCENES.push({ id, label, color, h: 1200, interactive: true, onDown: p => hotDown(p), onMove: p => { hotMove(p); return false; }, onLeave: () => { hotUi.hover = null; }, draw, title, legend: [], insight }); };
   add('yby', 'Y1 Year by year', '#2E7DE8', drawYby, 'Year by year: reliability of the current setting over 20 seasons', 'Twenty seasons of real weather: the spread between years is as important as the average for planning water, labour and nitrogen.');
   add('wb2', 'W1 Full water balance', '#1F66C8', drawWb2, 'Every term of the simulated water balance, year by year', 'With evaporation from litter, ponded water and snow included, the parts of evapotranspiration add up to the simulated total.');
@@ -328,4 +336,6 @@
   { const c1 = SCENES.find(s => s.id === 'crop'); if (c1) c1.h = 1760; }   // its full height from the first frame (the schedule fills in as the daily model runs)
   // peryear.js is large: load it after the engine has started
   if (!window.PERYEAR) { const sc = document.createElement('script'); sc.src = 'peryear.js'; sc.onload = () => { try { refresh(); } catch (e) {} }; document.body.appendChild(sc); }
+  SCENES.forEach(sc => { if (GRPN[sc.id]) { try { sceneButton(sc); } catch (e) { } } });
+  window.PLUSKIT = { frame, yAxis, nice, TF, legend, header, badge, fmt, mean, sd, add, YRS, sceneButton };   // the chart kit, used by plus_daisy.js
 })();

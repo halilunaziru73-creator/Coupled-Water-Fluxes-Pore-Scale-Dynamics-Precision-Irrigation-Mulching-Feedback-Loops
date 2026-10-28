@@ -9,37 +9,37 @@
  "marks": [
   {
    "x": 88,
-   "y": 558.125,
+   "y": 548.525,
    "t": "Maximum rooting depth",
    "d": "Varied over 30, 60, 90, 120."
   },
   {
    "x": 88,
-   "y": 606.125,
+   "y": 596.525,
    "t": "Irrigation",
    "d": "Varied over 0, 1."
   },
   {
    "x": 88,
-   "y": 722.9250000000001,
+   "y": 713.325,
    "t": "Soil",
    "d": "Varied over usda:sand, loam."
   },
   {
    "x": 330.65000000000003,
-   "y": 843.725,
+   "y": 834.125,
    "t": "Add something to change",
    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
   },
   {
    "x": 1283.25,
-   "y": 843.725,
+   "y": 834.125,
    "t": "How to combine",
    "d": "Every combination, one thing at a time, or the values paired in order."
   },
   {
    "x": 1668.875,
-   "y": 843.325,
+   "y": 833.725,
    "t": "At most",
    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
   },

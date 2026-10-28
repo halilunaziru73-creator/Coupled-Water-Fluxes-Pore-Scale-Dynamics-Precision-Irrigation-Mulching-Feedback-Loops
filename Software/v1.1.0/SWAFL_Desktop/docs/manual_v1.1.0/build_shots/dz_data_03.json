@@ -9,19 +9,19 @@
  "marks": [
   {
    "x": 173.775,
-   "y": 405.32500000000005,
+   "y": 483.6,
    "t": "My weather file",
    "d": "The choice that shows the file chooser."
   },
   {
    "x": 639.375,
-   "y": 406.925,
+   "y": 485.20000000000005,
    "t": "File chooser",
    "d": "Choose a .dwf, .csv, .txt, .dat or .tsv file."
   },
   {
    "x": 1195.125,
-   "y": 405.32500000000005,
+   "y": 483.6,
    "t": "Radiation unit",
    "d": "MJ per square metre and day, kWh per square metre and day, or W per square metre; leave on find out when unsure."
   }

@@ -10,7 +10,7 @@ s = open(os.path.join(ENG, 'engine.html'), encoding='utf-8').read()
 def inline_js(m):
     src = m.group(1); txt = open(os.path.join(ENG, src), encoding='utf-8').read()
     txt = txt.replace("'../../docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf'", "'" + REL + "/../../docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf'")
-    txt = txt.replace("sc.src = 'peryear.js'", "sc.src = '" + REL + "/peryear.js'").replace("loadScript('vendor/xlsx.full.min.js')", "loadScript('" + REL + "/vendor/xlsx.full.min.js')")
+    txt = txt.replace("sc.src = 'daisydss.js'", "sc.src = '" + REL + "/daisydss.js'").replace("sc.src = 'peryear.js'", "sc.src = '" + REL + "/peryear.js'").replace("loadScript('vendor/xlsx.full.min.js')", "loadScript('" + REL + "/vendor/xlsx.full.min.js')")
     return '<script>/* ' + src + ' */\n' + txt.replace('</script', '<\\/script') + '\n</script>'
 s = re.sub(r'<script src="([a-z_]+\.js)(?:\?v=[0-9a-z]+)?"></script>', inline_js, s)
 s = re.sub(r'<link rel="stylesheet" href="(classic\.css)">', lambda m: '<style>/* ' + m.group(1) + ' */\n' + open(os.path.join(ENG, m.group(1)), encoding='utf-8').read() + '\n</style>', s)

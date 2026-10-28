@@ -9,21 +9,15 @@
  "marks": [
   {
    "x": 1755.9250000000002,
-   "y": 134.525,
+   "y": 134.925,
    "t": "Picture (PNG)",
    "d": "Saves this figure as a picture with its source line."
   },
   {
    "x": 940.8000000000001,
-   "y": 424.925,
+   "y": 425.32500000000005,
    "t": "Figure",
    "d": "Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare."
-  },
-  {
-   "x": 1803.2,
-   "y": 424.925,
-   "t": "Source line",
-   "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
   }
  ]
 }

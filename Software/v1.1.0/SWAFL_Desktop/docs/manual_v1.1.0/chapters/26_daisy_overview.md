@@ -1,6 +1,6 @@
 # The Daisy workbench: overview {#daisy-overview}
 
-The Daisy workbench is the part of SWAFL that runs the Daisy 7.1.14 model, draws its results and tests it. It opens from the button Daisy model of the toolbar. The tabs are in five groups that follow what a person does: give the data, ask a question, look at the results, build and test, and learn.
+The Daisy workbench is the part of SWAFL that runs the Daisy 7.1.14 model, draws its results and tests it. It opens from the button Daisy model of the toolbar. The tabs are in groups that follow what a person does: give the data, ask a question, look at the results, decide in the SWAFL project, and, apart from that path, build and test and learn. A bar above every tab on the path, with the buttons Back and Next, leads through the steps in this order (Chapter 31).
 
 | Group | Tab | What it is for |
 |:--|:--|:--|
@@ -14,11 +14,12 @@ The Daisy workbench is the part of SWAFL that runs the Daisy 7.1.14 model, draws
 | 3 Look at results | Plot | Draw any column of a log. |
 | 3 Look at results | Mass balance | Check that inputs, outputs and content agree. |
 | 3 Look at results | Compare and test | Compare two logs against the smallest meaningful level. |
-| 4 Build and test | Set-up editor | Edit and run a Daisy set-up file. |
-| 4 Build and test | Soil column | Solve the Richards equation for a soil column. |
-| 4 Build and test | Process curves | Draw any function of the Daisy library. |
-| 4 Build and test | Calibrate | Search parameters with three optimisers. |
-| 5 Learn | Model and documentation | The model, the questions and where each is answered, the downloads. |
+| 4 Decide in the SWAFL project | To the SWAFL project | Take the results to the layers of the SWAFL project that turn them into decisions. |
+| Tools: build and test | Set-up editor | Edit and run a Daisy set-up file. |
+| Tools: build and test | Soil column | Solve the Richards equation for a soil column. |
+| Tools: build and test | Process curves | Draw any function of the Daisy library. |
+| Tools: build and test | Calibrate | Search parameters with three optimisers. |
+| Tools: learn | Model and documentation | The model, the questions and where each is answered, the downloads. |
 
 The chapters that follow take the groups in this order. Every screen is shown with numbered arrows; the list under it says what each arrow points to.
 

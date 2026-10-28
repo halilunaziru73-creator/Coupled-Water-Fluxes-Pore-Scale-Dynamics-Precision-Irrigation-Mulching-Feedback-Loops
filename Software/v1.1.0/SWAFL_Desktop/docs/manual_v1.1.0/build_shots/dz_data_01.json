@@ -9,19 +9,19 @@
  "marks": [
   {
    "x": 173.775,
-   "y": 405.32500000000005,
+   "y": 483.6,
    "t": "Weather choice",
    "d": "Where the weather comes from: the built-in weather, the weather of the SWAFL project, online weather of a place, or a file of your own."
   },
   {
    "x": 84.80000000000001,
-   "y": 444.125,
+   "y": 522.4,
    "t": "Weather in use",
    "d": "A summary of the weather that will be used: its name, years, mean rain and mean temperature, and the checks that were made."
   },
   {
    "x": 72.8,
-   "y": 482.125,
+   "y": 560.4,
    "t": "My soil",
    "d": "Tick to describe your own soil horizons instead of the two built-in soils."
   }

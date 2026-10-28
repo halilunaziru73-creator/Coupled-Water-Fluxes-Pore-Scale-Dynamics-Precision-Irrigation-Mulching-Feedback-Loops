@@ -9,13 +9,13 @@
  "marks": [
   {
    "x": 64,
-   "y": 722.5250000000001,
+   "y": 820,
    "t": "Selected horizon",
    "d": "The horizon whose parameters are shown."
   },
   {
    "x": 560,
-   "y": 963.125,
+   "y": 1060.6000000000001,
    "t": "Parameters and curves",
    "d": "Parameters of the horizon and the curves of water content and conductivity against suction."
   }

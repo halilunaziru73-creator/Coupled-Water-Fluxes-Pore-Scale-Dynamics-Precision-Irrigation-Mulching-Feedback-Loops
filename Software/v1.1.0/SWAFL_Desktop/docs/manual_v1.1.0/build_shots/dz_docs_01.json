@@ -9,19 +9,19 @@
  "marks": [
   {
    "x": 64,
-   "y": 894.5500000000001,
+   "y": 958.5500000000001,
    "t": "The Daisy model",
    "d": "What the model is and what it simulates."
   },
   {
    "x": 64,
-   "y": 1687.7,
+   "y": 1751.7,
    "t": "Which question is answered where",
    "d": "Themes of the Daisy studies and the tab for each."
   },
   {
    "x": 64,
-   "y": 2110.9,
+   "y": 2174.9,
    "t": "Get Daisy",
    "d": "Downloads and checksums."
   }

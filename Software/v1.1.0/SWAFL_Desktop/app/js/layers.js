@@ -8,6 +8,8 @@ const Layers = (() => {
     { id: 'g-soil', name: 'Soil structure and tillage', icon: 'soil', items: [['v3', 'Tillage and structure', 'V3'], ['v7', 'Soil hydraulic drivers', 'V7'], ['r1', 'Root structure', 'R1']] },
     { id: 'g-water', name: 'Field water balance', icon: 'field', items: [['field', 'Field balance', ''], ['spac', 'Soil, plant and air', 'S1'], ['v2', 'Profile evolution', 'V2']] },
     { id: 'g-year', name: 'Seasonal data', icon: 'refresh', items: [['yby', 'Reliability over 20 seasons', 'Y1'], ['wb2', 'Full water balance', 'W1'], ['nb', 'Nitrogen budget', 'N4']] },
+    { id: 'g-chem', name: 'Chemicals', icon: 'drop', items: [['chem', 'Chemical fate (Daisy runs)', 'C2']] },
+    { id: 'g-dss', name: 'Daisy decision support', icon: 'chart', items: [['dsum', 'Daisy decision table', 'D1']] },
     { id: 'g-crop', name: 'Crops', icon: 'drop', items: [['crop', 'Crop water requirement', 'C1']] },
     { id: 'g-loop', name: 'Feedback loops', icon: 'refresh', items: [['v5', 'Feedback loops', 'V5']] }
   ];
@@ -21,7 +23,7 @@ const Layers = (() => {
     { id: 'g-ddoc', name: 'Learn: the Daisy model', icon: 'book', items: [['dz-docs', 'Model, documentation and installation', '']] }
   ];
   const DESIGN = ['sid', 'drip', 'spr'];
-  let dzCur = null, tabs = [], cur = null, started = false, collapsed = { 'g-water': true, 'g-ctrl': true, 'g-soil': true, 'g-mulch': true, 'g-loop': true, 'g-design': true, 'g-crop': true, 'g-year': true, 'g-dscen': false, 'g-ddata': true, 'g-dproc': true, 'g-dana': true, 'g-dbuilt': true, 'g-ddoc': true, 'g-daisy': true, 's-sid': true, 's-drip': true, 's-spr': true }, sectionPick = {};
+  let dzCur = null, tabs = [], cur = null, started = false, collapsed = { 'g-water': true, 'g-ctrl': true, 'g-soil': true, 'g-mulch': true, 'g-loop': true, 'g-design': true, 'g-crop': true, 'g-year': true, 'g-chem': true, 'g-dss': true, 'g-dscen': false, 'g-ddata': true, 'g-dproc': true, 'g-dana': true, 'g-dbuilt': true, 'g-ddoc': true, 'g-daisy': true, 's-sid': true, 's-drip': true, 's-spr': true }, sectionPick = {};
   const groupOf = id => { const g = GROUPS.find(x => x.items.some(i => i[0] === id)); return g && g.id; };
   const reveal = (id, sec) => { collapsed['root'] = false; const g = groupOf(id); if (g) collapsed[g] = false; if (sec) collapsed['s-' + id] = false; };
   const tree = document.getElementById('layerTree');

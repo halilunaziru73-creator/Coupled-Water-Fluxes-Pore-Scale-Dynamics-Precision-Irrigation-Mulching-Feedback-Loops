@@ -9,21 +9,15 @@
  "marks": [
   {
    "x": 1755.9250000000002,
-   "y": 134.525,
+   "y": 134.925,
    "t": "Picture (PNG)",
    "d": "Saves this figure as a picture with its source line."
   },
   {
    "x": 940.8000000000001,
-   "y": 376.925,
+   "y": 377.32500000000005,
    "t": "Figure",
    "d": "Leaf area index with the water and nitrogen stress of the crop through the seasons."
-  },
-  {
-   "x": 1803.2,
-   "y": 376.925,
-   "t": "Source line",
-   "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
   }
  ]
 }

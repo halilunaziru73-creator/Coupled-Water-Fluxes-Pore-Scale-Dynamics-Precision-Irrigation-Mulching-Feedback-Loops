@@ -9,19 +9,19 @@
  "marks": [
   {
    "x": 370.925,
-   "y": 303.325,
+   "y": 380,
    "t": "Load all",
    "d": "The button that was pressed."
   },
   {
    "x": 64,
-   "y": 1130.525,
+   "y": 1207.2,
    "t": "Loaded logs",
    "d": "Each loaded log with its size; click a name to see its columns."
   },
   {
    "x": 704.0375,
-   "y": 310.925,
+   "y": 387.6,
    "t": "Status",
    "d": "A message that says what was read."
   }

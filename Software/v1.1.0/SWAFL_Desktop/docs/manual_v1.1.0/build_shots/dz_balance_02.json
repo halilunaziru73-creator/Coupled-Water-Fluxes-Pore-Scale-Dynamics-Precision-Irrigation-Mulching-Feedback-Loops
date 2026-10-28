@@ -9,19 +9,19 @@
  "marks": [
   {
    "x": 64,
-   "y": 828.8000000000001,
+   "y": 900.8000000000001,
    "t": "Balance through time",
    "d": "Content plus outputs minus inputs; it should stay at zero."
   },
   {
    "x": 64,
-   "y": 1318.4,
+   "y": 1390.4,
    "t": "Control chart",
    "d": "Mean and limits of two and three standard deviations."
   },
   {
    "x": 64,
-   "y": 2228.8,
+   "y": 2300.8,
    "t": "Summary",
    "d": "Mean, spread and the number of steps outside the limits."
   }

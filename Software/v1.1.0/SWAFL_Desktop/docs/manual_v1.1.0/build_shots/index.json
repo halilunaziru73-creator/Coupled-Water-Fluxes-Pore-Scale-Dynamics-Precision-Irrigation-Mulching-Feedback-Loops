@@ -10,43 +10,43 @@
   "marks": [
    {
     "x": 110.95,
-    "y": 312.8,
+    "y": 384.8,
     "t": "Log",
     "d": "The log whose balance is checked."
    },
    {
     "x": 462.1875,
-    "y": 308,
+    "y": 380,
     "t": "Choose columns",
     "d": "Proposes inputs, outputs and content."
    },
    {
     "x": 580.625,
-    "y": 310.40000000000003,
+    "y": 382.40000000000003,
     "t": "Subtract initial content",
     "d": "Counts only the change in content."
    },
    {
     "x": 136.57500000000002,
-    "y": 454.40000000000003,
+    "y": 526.4,
     "t": "Inputs",
     "d": "Columns that add to the soil."
    },
    {
     "x": 352.125,
-    "y": 454.40000000000003,
+    "y": 526.4,
     "t": "Outputs",
     "d": "Columns that leave the soil."
    },
    {
     "x": 567.6750000000001,
-    "y": 454.40000000000003,
+    "y": 526.4,
     "t": "Content",
     "d": "Columns that hold the amount stored."
    },
    {
     "x": 87.53750000000001,
-    "y": 574.4,
+    "y": 646.4000000000001,
     "t": "Balance",
     "d": "Calculates the balance."
    }
@@ -63,19 +63,19 @@
   "marks": [
    {
     "x": 64,
-    "y": 828.8000000000001,
+    "y": 900.8000000000001,
     "t": "Balance through time",
     "d": "Content plus outputs minus inputs; it should stay at zero."
    },
    {
     "x": 64,
-    "y": 1318.4,
+    "y": 1390.4,
     "t": "Control chart",
     "d": "Mean and limits of two and three standard deviations."
    },
    {
     "x": 64,
-    "y": 2228.8,
+    "y": 2300.8,
     "t": "Summary",
     "d": "Mean, spread and the number of steps outside the limits."
    }
@@ -92,37 +92,37 @@
   "marks": [
    {
     "x": 151.925,
-    "y": 333.6,
+    "y": 405.6,
     "t": "Problem",
     "d": "What is calibrated."
    },
    {
     "x": 799.7750000000001,
-    "y": 333.6,
+    "y": 405.6,
     "t": "Method",
     "d": "The search method."
    },
    {
     "x": 1040.825,
-    "y": 333.6,
+    "y": 405.6,
     "t": "Loss",
     "d": "The error to minimise."
    },
    {
     "x": 1266.025,
-    "y": 331.6,
+    "y": 403.6,
     "t": "Runs",
     "d": "Number of trials."
    },
    {
     "x": 74.25,
-    "y": 442.40000000000003,
+    "y": 514.4,
     "t": "Start",
     "d": "Starts the search."
    },
    {
     "x": 164.41250000000002,
-    "y": 442.40000000000003,
+    "y": 514.4,
     "t": "Stop",
     "d": "Stops it."
    }
@@ -139,25 +139,25 @@
   "marks": [
    {
     "x": 64,
-    "y": 648.8000000000001,
+    "y": 720.8000000000001,
     "t": "Loss against trial",
     "d": "Falls as the search improves."
    },
    {
     "x": 64,
-    "y": 1058.4,
+    "y": 1130.4,
     "t": "Parameters",
     "d": "Parameter values tried."
    },
    {
     "x": 64,
-    "y": 1421.6000000000001,
+    "y": 1493.6000000000001,
     "t": "Best values",
     "d": "Table of the best set."
    },
    {
     "x": 322.15000000000003,
-    "y": 450,
+    "y": 522,
     "t": "Status",
     "d": "Progress."
    }
@@ -227,37 +227,37 @@
   "marks": [
    {
     "x": 88,
-    "y": 558.125,
+    "y": 548.525,
     "t": "Irrigation",
     "d": "Varied over 0, 1."
    },
    {
     "x": 88,
-    "y": 606.125,
+    "y": 596.525,
     "t": "Nitrogen fertiliser, factor on the rotation",
     "d": "Varied over 0.5, 1, 1.25."
    },
    {
     "x": 88,
-    "y": 722.9250000000001,
+    "y": 713.325,
     "t": "Soil",
     "d": "Varied over usda:sand, loam."
    },
    {
     "x": 330.65000000000003,
-    "y": 843.725,
+    "y": 834.125,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 843.725,
+    "y": 834.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 843.325,
+    "y": 833.725,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -286,37 +286,37 @@
   "marks": [
    {
     "x": 88,
-    "y": 541.325,
+    "y": 531.725,
     "t": "Irrigation trigger (soil suction)",
     "d": "Varied over -150, -300, -600."
    },
    {
     "x": 88,
-    "y": 600.525,
+    "y": 590.9250000000001,
     "t": "Sensor depth",
     "d": "Varied over 10, 30, 60."
    },
    {
     "x": 88,
-    "y": 722.9250000000001,
+    "y": 713.325,
     "t": "Soil",
     "d": "Varied over usda:sand, loam."
    },
    {
     "x": 330.65000000000003,
-    "y": 843.725,
+    "y": 834.125,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 843.725,
+    "y": 834.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 843.325,
+    "y": 833.725,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -345,37 +345,37 @@
   "marks": [
    {
     "x": 88,
-    "y": 541.325,
+    "y": 531.725,
     "t": "Water per irrigation",
     "d": "Varied over 10, 20, 30, 40."
    },
    {
     "x": 88,
-    "y": 600.525,
+    "y": 590.9250000000001,
     "t": "Duration of one irrigation",
     "d": "Varied over 5, 10, 15, 20."
    },
    {
     "x": 88,
-    "y": 722.9250000000001,
+    "y": 713.325,
     "t": "Soil",
     "d": "Varied over usda:sand, loam."
    },
    {
     "x": 330.65000000000003,
-    "y": 843.725,
+    "y": 834.125,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 843.725,
+    "y": 834.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 843.325,
+    "y": 833.725,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -404,37 +404,37 @@
   "marks": [
    {
     "x": 88,
-    "y": 558.125,
+    "y": 548.525,
     "t": "Nitrogen fertiliser, factor on the rotation",
     "d": "Varied over 0.5, 0.75, 1, 1.25."
    },
    {
     "x": 88,
-    "y": 606.125,
+    "y": 596.525,
     "t": "Irrigation",
     "d": "Varied over 0, 1."
    },
    {
     "x": 88,
-    "y": 722.9250000000001,
+    "y": 713.325,
     "t": "Soil",
     "d": "Varied over usda:sand, loam."
    },
    {
     "x": 330.65000000000003,
-    "y": 843.725,
+    "y": 834.125,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 843.725,
+    "y": 834.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 843.325,
+    "y": 833.725,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -463,37 +463,37 @@
   "marks": [
    {
     "x": 88,
-    "y": 558.125,
+    "y": 548.525,
     "t": "Rain, factor on the weather",
     "d": "Varied over 0.8, 1, 1.2."
    },
    {
     "x": 88,
-    "y": 606.125,
+    "y": 596.525,
     "t": "Temperature shift",
     "d": "Varied over 0, 2."
    },
    {
     "x": 88,
-    "y": 722.9250000000001,
+    "y": 713.325,
     "t": "Soil",
     "d": "Varied over usda:sand, loam."
    },
    {
     "x": 330.65000000000003,
-    "y": 843.725,
+    "y": 834.125,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 843.725,
+    "y": 834.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 843.325,
+    "y": 833.725,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -522,37 +522,37 @@
   "marks": [
    {
     "x": 88,
-    "y": 541.325,
+    "y": 531.725,
     "t": "Irrigation window",
     "d": "Varied over Apr 1 - Oct 1, May 1 - Oct 1, Jun 1 - Sep 1."
    },
    {
     "x": 88,
-    "y": 600.525,
+    "y": 590.9250000000001,
     "t": "Water limit per crop season",
     "d": "Varied over 60, 120, 240."
    },
    {
     "x": 88,
-    "y": 722.9250000000001,
+    "y": 713.325,
     "t": "Soil",
     "d": "Varied over usda:sand, loam."
    },
    {
     "x": 330.65000000000003,
-    "y": 843.725,
+    "y": 834.125,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 843.725,
+    "y": 834.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 843.325,
+    "y": 833.725,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -581,31 +581,31 @@
   "marks": [
    {
     "x": 88,
-    "y": 674.9250000000001,
+    "y": 665.325,
     "t": "Soil",
     "d": "Varied over usda:sand, usda:sandyloam, loam, usda:siltloam, usda:clayloam."
    },
    {
     "x": 88,
-    "y": 791.725,
+    "y": 782.125,
     "t": "Irrigation",
     "d": "Varied over 0, 1."
    },
    {
     "x": 330.65000000000003,
-    "y": 843.725,
+    "y": 834.125,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 843.725,
+    "y": 834.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 843.325,
+    "y": 833.725,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -634,31 +634,31 @@
   "marks": [
    {
     "x": 88,
-    "y": 600.525,
+    "y": 590.9250000000001,
     "t": "Irrigation intensity (constant flux)",
     "d": "Varied over 0.1, 0.5, 2."
    },
    {
     "x": 88,
-    "y": 722.9250000000001,
+    "y": 713.325,
     "t": "Soil",
     "d": "Varied over usda:sand, loam."
    },
    {
     "x": 330.65000000000003,
-    "y": 843.725,
+    "y": 834.125,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 843.725,
+    "y": 834.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 843.325,
+    "y": 833.725,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -687,37 +687,37 @@
   "marks": [
    {
     "x": 88,
-    "y": 552.525,
+    "y": 542.9250000000001,
     "t": "Sensor depth",
     "d": "Varied over 10, 30, 50."
    },
    {
     "x": 88,
-    "y": 606.125,
+    "y": 596.525,
     "t": "Maximum rooting depth",
     "d": "Varied over 40, 80, 120."
    },
    {
     "x": 88,
-    "y": 722.9250000000001,
+    "y": 713.325,
     "t": "Soil",
     "d": "Varied over usda:sand, loam."
    },
    {
     "x": 330.65000000000003,
-    "y": 843.725,
+    "y": 834.125,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 843.725,
+    "y": 834.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 843.325,
+    "y": 833.725,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -746,37 +746,37 @@
   "marks": [
    {
     "x": 88,
-    "y": 558.125,
+    "y": 548.525,
     "t": "Fertiliser date, shift in days",
     "d": "Varied over -14, 0, 14."
    },
    {
     "x": 88,
-    "y": 606.125,
+    "y": 596.525,
     "t": "Nitrogen fertiliser, factor on the rotation",
     "d": "Varied over 0.7, 1, 1.3."
    },
    {
     "x": 88,
-    "y": 722.9250000000001,
+    "y": 713.325,
     "t": "Soil",
     "d": "Varied over usda:sand, loam."
    },
    {
     "x": 330.65000000000003,
-    "y": 843.725,
+    "y": 834.125,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 843.725,
+    "y": 834.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 843.325,
+    "y": 833.725,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -805,37 +805,37 @@
   "marks": [
    {
     "x": 88,
-    "y": 558.125,
+    "y": 548.525,
     "t": "Temperature shift",
     "d": "Varied over 0, 1.5, 3."
    },
    {
     "x": 88,
-    "y": 606.125,
+    "y": 596.525,
     "t": "Irrigation",
     "d": "Varied over 0, 1."
    },
    {
     "x": 88,
-    "y": 722.9250000000001,
+    "y": 713.325,
     "t": "Soil",
     "d": "Varied over usda:sand, loam."
    },
    {
     "x": 330.65000000000003,
-    "y": 843.725,
+    "y": 834.125,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 843.725,
+    "y": 834.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 843.325,
+    "y": 833.725,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -864,43 +864,43 @@
   "marks": [
    {
     "x": 88,
-    "y": 510.125,
+    "y": 500.52500000000003,
     "t": "Tillage",
     "d": "Varied over plowing, rotavation, none."
    },
    {
     "x": 88,
-    "y": 558.125,
+    "y": 548.525,
     "t": "Fertiliser date, shift in days",
     "d": "Varied over -14, 0, 14."
    },
    {
     "x": 88,
-    "y": 606.125,
+    "y": 596.525,
     "t": "Type of mineral fertiliser",
     "d": "Varied over N25S, AmmoniumNitrate, Ammonia."
    },
    {
     "x": 88,
-    "y": 722.9250000000001,
+    "y": 713.325,
     "t": "Soil",
     "d": "Varied over usda:sand, loam."
    },
    {
     "x": 330.65000000000003,
-    "y": 843.725,
+    "y": 834.125,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 843.725,
+    "y": 834.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 843.325,
+    "y": 833.725,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -929,37 +929,37 @@
   "marks": [
    {
     "x": 88,
-    "y": 558.125,
+    "y": 548.525,
     "t": "Evapotranspiration model",
     "d": "Varied over auto, default."
    },
    {
     "x": 88,
-    "y": 606.125,
+    "y": 596.525,
     "t": "Radiation, factor on the weather",
     "d": "Varied over 0.9, 1, 1.1."
    },
    {
     "x": 88,
-    "y": 722.9250000000001,
+    "y": 713.325,
     "t": "Soil",
     "d": "Varied over usda:sand, loam."
    },
    {
     "x": 330.65000000000003,
-    "y": 843.725,
+    "y": 834.125,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 843.725,
+    "y": 834.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 843.325,
+    "y": 833.725,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -988,37 +988,37 @@
   "marks": [
    {
     "x": 88,
-    "y": 558.125,
+    "y": 548.525,
     "t": "Seasonal rain pattern",
     "d": "Varied over dry summer (rain x0.7 Jun-Aug), dry spring (rain x0.7 Mar-May), wet winter (rain x1.3 Dec-Feb)."
    },
    {
     "x": 88,
-    "y": 606.125,
+    "y": 596.525,
     "t": "Irrigation",
     "d": "Varied over 0, 1."
    },
    {
     "x": 88,
-    "y": 722.9250000000001,
+    "y": 713.325,
     "t": "Soil",
     "d": "Varied over usda:sand, loam."
    },
    {
     "x": 330.65000000000003,
-    "y": 843.725,
+    "y": 834.125,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 843.725,
+    "y": 834.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 843.325,
+    "y": 833.725,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -1047,37 +1047,37 @@
   "marks": [
    {
     "x": 88,
-    "y": 558.125,
+    "y": 548.525,
     "t": "Sorption of the chemical, K_OC",
     "d": "Varied over 0, 50, 500."
    },
    {
     "x": 88,
-    "y": 606.125,
+    "y": 596.525,
     "t": "Half-life of the chemical",
     "d": "Varied over 15, 90."
    },
    {
     "x": 88,
-    "y": 722.9250000000001,
+    "y": 713.325,
     "t": "Soil",
     "d": "Varied over usda:sand, loam."
    },
    {
     "x": 330.65000000000003,
-    "y": 843.725,
+    "y": 834.125,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 843.725,
+    "y": 834.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 843.325,
+    "y": 833.725,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -1106,37 +1106,37 @@
   "marks": [
    {
     "x": 88,
-    "y": 541.325,
+    "y": 531.725,
     "t": "Irrigation trigger (soil suction)",
     "d": "Varied over -150, -300, -600."
    },
    {
     "x": 88,
-    "y": 600.525,
+    "y": 590.9250000000001,
     "t": "Water limit per crop season",
     "d": "Varied over 60, 120, 240."
    },
    {
     "x": 88,
-    "y": 722.9250000000001,
+    "y": 713.325,
     "t": "Soil",
     "d": "Varied over usda:sand, loam."
    },
    {
     "x": 330.65000000000003,
-    "y": 843.725,
+    "y": 834.125,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 843.725,
+    "y": 834.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 843.325,
+    "y": 833.725,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -1165,37 +1165,37 @@
   "marks": [
    {
     "x": 88,
-    "y": 558.125,
+    "y": 548.525,
     "t": "Maximum rooting depth",
     "d": "Varied over 30, 60, 90, 120."
    },
    {
     "x": 88,
-    "y": 606.125,
+    "y": 596.525,
     "t": "Irrigation",
     "d": "Varied over 0, 1."
    },
    {
     "x": 88,
-    "y": 722.9250000000001,
+    "y": 713.325,
     "t": "Soil",
     "d": "Varied over usda:sand, loam."
    },
    {
     "x": 330.65000000000003,
-    "y": 843.725,
+    "y": 834.125,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 843.725,
+    "y": 834.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 843.325,
+    "y": 833.725,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -1224,37 +1224,37 @@
   "marks": [
    {
     "x": 88,
-    "y": 489.32500000000005,
+    "y": 479.725,
     "t": "Weather station",
     "d": "Varied over course, it-bologna, dk-foulum."
    },
    {
     "x": 88,
-    "y": 606.125,
+    "y": 596.525,
     "t": "Irrigation",
     "d": "Varied over 0, 1."
    },
    {
     "x": 88,
-    "y": 722.9250000000001,
+    "y": 713.325,
     "t": "Soil",
     "d": "Varied over usda:sand, loam."
    },
    {
     "x": 330.65000000000003,
-    "y": 843.725,
+    "y": 834.125,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 843.725,
+    "y": 834.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 843.325,
+    "y": 833.725,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -1283,37 +1283,37 @@
   "marks": [
    {
     "x": 88,
-    "y": 558.125,
+    "y": 548.525,
     "t": "Tillage",
     "d": "Varied over plowing, rotavation, none."
    },
    {
     "x": 88,
-    "y": 606.125,
+    "y": 596.525,
     "t": "Type of mineral fertiliser",
     "d": "Varied over N25S, AmmoniumNitrate, Ammonia."
    },
    {
     "x": 88,
-    "y": 722.9250000000001,
+    "y": 713.325,
     "t": "Soil",
     "d": "Varied over usda:sand, loam."
    },
    {
     "x": 330.65000000000003,
-    "y": 843.725,
+    "y": 834.125,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 843.725,
+    "y": 834.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 843.325,
+    "y": 833.725,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -1342,37 +1342,37 @@
   "marks": [
    {
     "x": 88,
-    "y": 696.5250000000001,
+    "y": 686.9250000000001,
     "t": "Bioclimate: NoOfIntervals (Daisy reference, chapter 19)",
     "d": "Varied over 15, 30, 60."
    },
    {
     "x": 88,
-    "y": 744.5250000000001,
+    "y": 734.9250000000001,
     "t": "Bioclimate: max svat iterations (Daisy reference, chapter 19)",
     "d": "Varied over 50, 100, 200."
    },
    {
     "x": 88,
-    "y": 792.5250000000001,
+    "y": 782.9250000000001,
     "t": "Bioclimate: max svat absolute difference (Daisy reference, chapter 19)",
     "d": "Varied over 0.005, 0.01, 0.02."
    },
    {
     "x": 330.65000000000003,
-    "y": 844.5250000000001,
+    "y": 834.9250000000001,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 844.5250000000001,
+    "y": 834.9250000000001,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 844.125,
+    "y": 834.5250000000001,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -1401,31 +1401,31 @@
   "marks": [
    {
     "x": 88,
-    "y": 743.725,
+    "y": 734.125,
     "t": "Groundwater aquitard: K aquitard (Daisy reference, chapter 45)",
     "d": "Varied over 0.0005, 0.001, 0.002."
    },
    {
     "x": 88,
-    "y": 791.725,
+    "y": 782.125,
     "t": "Groundwater aquitard: Z aquitard (Daisy reference, chapter 45)",
     "d": "Varied over 100, 200, 400."
    },
    {
     "x": 330.65000000000003,
-    "y": 843.725,
+    "y": 834.125,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 843.725,
+    "y": 834.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 843.325,
+    "y": 833.725,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -1454,37 +1454,37 @@
   "marks": [
    {
     "x": 88,
-    "y": 696.5250000000001,
+    "y": 686.9250000000001,
     "t": "OrganicMatter original: K NH4 (Daisy reference, chapter 60)",
     "d": "Varied over 0.01042, 0.02083, 0.04167."
    },
    {
     "x": 88,
-    "y": 744.5250000000001,
+    "y": 734.9250000000001,
     "t": "OrganicMatter original: K NO3 (Daisy reference, chapter 60)",
     "d": "Varied over 0.01042, 0.02083, 0.04167."
    },
    {
     "x": 88,
-    "y": 792.5250000000001,
+    "y": 782.9250000000001,
     "t": "OrganicMatter original: CO2 threshold (Daisy reference, chapter 60)",
     "d": "Varied over 0.00005, 0.0001, 0.0002."
    },
    {
     "x": 330.65000000000003,
-    "y": 844.5250000000001,
+    "y": 834.9250000000001,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 844.5250000000001,
+    "y": 834.9250000000001,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 844.125,
+    "y": 834.5250000000001,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -1513,37 +1513,37 @@
   "marks": [
    {
     "x": 88,
-    "y": 695.725,
+    "y": 686.125,
     "t": "Surface: temperature change rate (Daisy reference, chapter 87)",
     "d": "Varied over 0.25, 0.5, 1."
    },
    {
     "x": 88,
-    "y": 743.725,
+    "y": 734.125,
     "t": "Surface: EpFactor (Daisy reference, chapter 87)",
     "d": "Varied over 0.3, 0.6, 1.2."
    },
    {
     "x": 88,
-    "y": 791.725,
+    "y": 782.125,
     "t": "Surface: ReservoirConstant (Daisy reference, chapter 87)",
     "d": "Varied over 30, 60, 120."
    },
    {
     "x": 330.65000000000003,
-    "y": 843.725,
+    "y": 834.125,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 843.725,
+    "y": 834.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 843.325,
+    "y": 833.725,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -1572,37 +1572,37 @@
   "marks": [
    {
     "x": 88,
-    "y": 695.725,
+    "y": 686.125,
     "t": "Chemistry original: max sink total (Daisy reference, chapter 24)",
     "d": "Varied over 0.25, 0.5, 1."
    },
    {
     "x": 88,
-    "y": 743.725,
+    "y": 734.125,
     "t": "Chemistry original: max sink solute (Daisy reference, chapter 24)",
     "d": "Varied over 0.45, 0.9, 1.8."
    },
    {
     "x": 88,
-    "y": 791.725,
+    "y": 782.125,
     "t": "Chemistry original: max sink secondary (Daisy reference, chapter 24)",
     "d": "Varied over 0.75, 1.5, 3."
    },
    {
     "x": 330.65000000000003,
-    "y": 843.725,
+    "y": 834.125,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1225.65,
-    "y": 843.725,
+    "y": 834.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1611.275,
-    "y": 843.325,
+    "y": 833.725,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -1631,31 +1631,31 @@
   "marks": [
    {
     "x": 88,
-    "y": 743.725,
+    "y": 734.125,
     "t": "Drain lateral: L (Daisy reference, chapter 37)",
     "d": "Varied over 900, 1800, 3600."
    },
    {
     "x": 88,
-    "y": 791.725,
+    "y": 782.125,
     "t": "Drain lateral: rad (Daisy reference, chapter 37)",
     "d": "Varied over 1.75, 3.5, 7."
    },
    {
     "x": 330.65000000000003,
-    "y": 843.725,
+    "y": 834.125,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 843.725,
+    "y": 834.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 843.325,
+    "y": 833.725,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -1684,25 +1684,25 @@
   "marks": [
    {
     "x": 88,
-    "y": 791.725,
+    "y": 782.125,
     "t": "Groundwater static: table (Daisy reference, chapter 45)",
     "d": "Varied over 0.5, 1, 2."
    },
    {
     "x": 330.65000000000003,
-    "y": 843.725,
+    "y": 834.125,
     "t": "Add something to change",
     "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
    },
    {
     "x": 1283.25,
-    "y": 843.725,
+    "y": 834.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or the values paired in order."
    },
    {
     "x": 1668.875,
-    "y": 843.325,
+    "y": 833.725,
     "t": "At most",
     "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
    },
@@ -1731,37 +1731,37 @@
   "marks": [
    {
     "x": 129.6,
-    "y": 312.8,
+    "y": 384.8,
     "t": "Log A",
     "d": "The reference log."
    },
    {
     "x": 485.725,
-    "y": 312.8,
+    "y": 384.8,
     "t": "Log B",
     "d": "The log compared with it."
    },
    {
     "x": 914.95,
-    "y": 310.8,
+    "y": 382.8,
     "t": "Precision",
     "d": "Smallest difference taken into account."
    },
    {
     "x": 1212.6000000000001,
-    "y": 310.8,
+    "y": 382.8,
     "t": "Identical below",
     "d": "Differences under this level count as identical."
    },
    {
     "x": 1347.5375000000001,
-    "y": 308,
+    "y": 380,
     "t": "Compare",
     "d": "Runs the comparison."
    },
    {
     "x": 64,
-    "y": 359.20000000000005,
+    "y": 431.20000000000005,
     "t": "Batch",
     "d": "Compares same-named logs from two folders."
    }
@@ -1778,7 +1778,7 @@
   "marks": [
    {
     "x": 64,
-    "y": 703.6,
+    "y": 775.6,
     "t": "Result table",
     "d": "One row for each column with the largest difference and the verdict."
    }
@@ -1795,25 +1795,25 @@
   "marks": [
    {
     "x": 64,
-    "y": 656,
+    "y": 726.4000000000001,
     "t": "Function list",
     "d": "The functions that can be drawn."
    },
    {
     "x": 618.4000000000001,
-    "y": 704.8000000000001,
+    "y": 775.2,
     "t": "Drawing",
     "d": "The chosen curve."
    },
    {
     "x": 665.6750000000001,
-    "y": 1067.2,
+    "y": 1137.6000000000001,
     "t": "Picture (PNG)",
     "d": "Saves the figure."
    },
    {
     "x": 823.4250000000001,
-    "y": 1067.2,
+    "y": 1137.6000000000001,
     "t": "Table (CSV)",
     "d": "Saves the numbers."
    }
@@ -1830,19 +1830,19 @@
   "marks": [
    {
     "x": 173.775,
-    "y": 405.32500000000005,
+    "y": 483.6,
     "t": "Weather choice",
     "d": "Where the weather comes from: the built-in weather, the weather of the SWAFL project, online weather of a place, or a file of your own."
    },
    {
     "x": 84.80000000000001,
-    "y": 444.125,
+    "y": 522.4,
     "t": "Weather in use",
     "d": "A summary of the weather that will be used: its name, years, mean rain and mean temperature, and the checks that were made."
    },
    {
     "x": 72.8,
-    "y": 482.125,
+    "y": 560.4,
     "t": "My soil",
     "d": "Tick to describe your own soil horizons instead of the two built-in soils."
    }
@@ -1859,43 +1859,43 @@
   "marks": [
    {
     "x": 173.775,
-    "y": 405.32500000000005,
+    "y": 483.6,
     "t": "Online weather",
     "d": "The choice that shows the place controls below."
    },
    {
     "x": 147.475,
-    "y": 456.125,
+    "y": 534.4,
     "t": "Place",
     "d": "A town, a village or a farm name."
    },
    {
     "x": 504.6,
-    "y": 451.725,
+    "y": 530,
     "t": "Find",
     "d": "Looks the place up and fills the latitude, longitude and elevation."
    },
    {
     "x": 673.2750000000001,
-    "y": 456.125,
+    "y": 534.4,
     "t": "First year",
     "d": "First year of the weather record to read."
    },
    {
     "x": 827.0250000000001,
-    "y": 456.125,
+    "y": 534.4,
     "t": "Last year",
     "d": "Last complete year of the record; the current year is not available yet."
    },
    {
     "x": 981.5,
-    "y": 451.725,
+    "y": 530,
     "t": "Get the weather",
     "d": "Reads the daily rain, temperatures, radiation and reference evapotranspiration and checks them before use."
    },
    {
     "x": 244.95000000000002,
-    "y": 537.725,
+    "y": 616,
     "t": "Latitude",
     "d": "Needed to work out radiation when it is not in the data; found automatically from the place name when possible."
    }
@@ -1912,19 +1912,19 @@
   "marks": [
    {
     "x": 173.775,
-    "y": 405.32500000000005,
+    "y": 483.6,
     "t": "My weather file",
     "d": "The choice that shows the file chooser."
    },
    {
     "x": 639.375,
-    "y": 406.925,
+    "y": 485.20000000000005,
     "t": "File chooser",
     "d": "Choose a .dwf, .csv, .txt, .dat or .tsv file."
    },
    {
     "x": 1195.125,
-    "y": 405.32500000000005,
+    "y": 483.6,
     "t": "Radiation unit",
     "d": "MJ per square metre and day, kWh per square metre and day, or W per square metre; leave on find out when unsure."
    }
@@ -1941,19 +1941,19 @@
   "marks": [
    {
     "x": 639.375,
-    "y": 406.925,
+    "y": 485.20000000000005,
     "t": "File read",
     "d": "The file that was chosen."
    },
    {
     "x": 84.80000000000001,
-    "y": 525.725,
+    "y": 604,
     "t": "Result of the reading",
     "d": "Name, first and last year, complete years, mean annual rain, mean temperature and the columns used."
    },
    {
     "x": 244.95000000000002,
-    "y": 447.32500000000005,
+    "y": 525.6,
     "t": "Site",
     "d": "The latitude, longitude and elevation read from the header of the file."
    }
@@ -1970,25 +1970,25 @@
   "marks": [
    {
     "x": 72.8,
-    "y": 563.725,
+    "y": 642,
     "t": "My soil",
     "d": "Switches the table of horizons on; the soil choice of Scenarios and Experiments is then replaced by this soil."
    },
    {
     "x": 84.80000000000001,
-    "y": 720.9250000000001,
+    "y": 799.2,
     "t": "Horizons",
     "d": "One row for each horizon: lower limit, sand, silt, clay, humus and bulk density."
    },
    {
     "x": 133.2125,
-    "y": 841.325,
+    "y": 919.6,
     "t": "Add a horizon",
     "d": "Adds a row at the bottom."
    },
    {
     "x": 523.975,
-    "y": 848.9250000000001,
+    "y": 927.2,
     "t": "Soil table import",
     "d": "A CSV with the columns depth, sand, silt, clay and, if possible, humus and bulk density can be imported instead."
    }
@@ -2005,19 +2005,19 @@
   "marks": [
    {
     "x": 64,
-    "y": 894.5500000000001,
+    "y": 958.5500000000001,
     "t": "The Daisy model",
     "d": "What the model is and what it simulates."
    },
    {
     "x": 64,
-    "y": 1687.7,
+    "y": 1751.7,
     "t": "Which question is answered where",
     "d": "Themes of the Daisy studies and the tab for each."
    },
    {
     "x": 64,
-    "y": 2110.9,
+    "y": 2174.9,
     "t": "Get Daisy",
     "d": "Downloads and checksums."
    }
@@ -2034,43 +2034,43 @@
   "marks": [
    {
     "x": 125.775,
-    "y": 281.6,
+    "y": 348.8,
     "t": "Bundled set-up",
     "d": "Opens a set-up that comes with the program."
    },
    {
     "x": 985.3625000000001,
-    "y": 276.8,
+    "y": 344,
     "t": "Open file",
     "d": "Opens a .dai file from your computer."
    },
    {
     "x": 1127.5,
-    "y": 276.8,
+    "y": 344,
     "t": "Tidy layout",
     "d": "Indents the file."
    },
    {
     "x": 1266.15,
-    "y": 276.8,
+    "y": 344,
     "t": "Download",
     "d": "Saves the file."
    },
    {
     "x": 1400.6125000000002,
-    "y": 276.8,
+    "y": 344,
     "t": "Run Daisy",
     "d": "Runs the set-up on the desktop app."
    },
    {
     "x": 65.60000000000001,
-    "y": 579.2,
+    "y": 646.4000000000001,
     "t": "Text",
     "d": "The set-up text with colours."
    },
    {
     "x": 1431.2,
-    "y": 349.6,
+    "y": 416.8,
     "t": "Outline",
     "d": "The sections of the file."
    }
@@ -2087,25 +2087,25 @@
   "marks": [
    {
     "x": 125.775,
-    "y": 281.6,
+    "y": 348.8,
     "t": "Set-up chosen",
     "d": "The file that is open."
    },
    {
     "x": 65.60000000000001,
-    "y": 579.2,
+    "y": 646.4000000000001,
     "t": "Text",
     "d": "Keywords, values and comments in colours."
    },
    {
     "x": 1431.2,
-    "y": 400.8,
+    "y": 468,
     "t": "Outline",
     "d": "Click a section to jump to it."
    },
    {
     "x": 1562.6875,
-    "y": 284.40000000000003,
+    "y": 351.6,
     "t": "Status",
     "d": "File name and number of lines."
    }
@@ -2122,49 +2122,49 @@
   "marks": [
    {
     "x": 300.5,
-    "y": 286.40000000000003,
+    "y": 350.40000000000003,
     "t": "Weather for all runs",
     "d": "The weather of every simulation, shared with Scenarios and Processes."
    },
    {
     "x": 84.80000000000001,
-    "y": 479.6,
+    "y": 543.6,
     "t": "Your question",
     "d": "Write what you want to find out in your own words."
    },
    {
     "x": 84.80000000000001,
-    "y": 558,
+    "y": 622,
     "t": "Make a plan",
     "d": "Reads the question and proposes the factors, the levels and the design."
    },
    {
     "x": 366.225,
-    "y": 560.4,
+    "y": 624.4000000000001,
     "t": "Online AI",
     "d": "Optional: an online AI reads the question first; each plan it gives is checked against what Daisy can vary."
    },
    {
     "x": 444.45000000000005,
-    "y": 630,
+    "y": 694,
     "t": "Best combinations",
     "d": "Ready made experiments worked out from the Daisy reference."
    },
    {
     "x": 606.15,
-    "y": 630,
+    "y": 694,
     "t": "By topic",
     "d": "The 107 topics of the Daisy reference, each leading to experiments."
    },
    {
     "x": 791.1375,
-    "y": 630,
+    "y": 694,
     "t": "Import",
     "d": "Bring an experiment folder, set-ups, weather, soil tables or logs."
    },
    {
     "x": 64,
-    "y": 1438.2,
+    "y": 1502.2,
     "t": "My experiments",
     "d": "The list of experiments that are run or saved together."
    }
@@ -2181,31 +2181,31 @@
   "marks": [
    {
     "x": 101.60000000000001,
-    "y": 774.5250000000001,
+    "y": 838.5250000000001,
     "t": "Tick box",
     "d": "Ticks the combination so that several can be added together."
    },
    {
     "x": 147.20000000000002,
-    "y": 774.5250000000001,
+    "y": 838.5250000000001,
     "t": "Combination",
     "d": "A combination with the topics of the Daisy reference it draws on."
    },
    {
     "x": 900.0375,
-    "y": 854.125,
+    "y": 918.125,
     "t": "Load this experiment",
     "d": "Loads the plan of the chosen combination for checking and running."
    },
    {
     "x": 1134.6625000000001,
-    "y": 854.125,
+    "y": 918.125,
     "t": "Add to my experiments",
     "d": "Adds the chosen combination to the list of experiments without loading it."
    },
    {
     "x": 822.4000000000001,
-    "y": 905.325,
+    "y": 969.325,
     "t": "Add the ticked",
     "d": "Adds every ticked combination, each as an experiment of its own."
    }
@@ -2222,43 +2222,43 @@
   "marks": [
    {
     "x": 537.25,
-    "y": 741.325,
+    "y": 797.325,
     "t": "Levels per parameter",
     "d": "How many values of each parameter are tested."
    },
    {
     "x": 742.225,
-    "y": 741.325,
+    "y": 797.325,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or paired."
    },
    {
     "x": 1123.05,
-    "y": 740.9250000000001,
+    "y": 796.9250000000001,
     "t": "At most",
     "d": "The largest number of runs."
    },
    {
     "x": 105.60000000000001,
-    "y": 1090.925,
+    "y": 1146.925,
     "t": "List of topics",
     "d": "Scroll the list; a star marks a topic that has its own experiments."
    },
    {
     "x": 712.9250000000001,
-    "y": 839.725,
+    "y": 895.725,
     "t": "Previous and next",
     "d": "Moves through the topics in order."
    },
    {
     "x": 1071.425,
-    "y": 1045.325,
+    "y": 1101.325,
     "t": "Add",
     "d": "Adds the experiment to my experiments."
    },
    {
     "x": 679.2,
-    "y": 1045.325,
+    "y": 1101.325,
     "t": "Load",
     "d": "Loads the experiment for checking and running."
    }
@@ -2275,13 +2275,13 @@
   "marks": [
    {
     "x": 667.2,
-    "y": 1013.325,
+    "y": 1069.325,
     "t": "Parameter",
     "d": "Tick one or several parameters to vary."
    },
    {
     "x": 679.2,
-    "y": 1174.125,
+    "y": 1230.125,
     "t": "Topic details",
     "d": "The introduction of the topic, its parameters and the models it lists."
    }
@@ -2298,7 +2298,7 @@
   "marks": [
    {
     "x": 183.6125,
-    "y": 735.725,
+    "y": 799.725,
     "t": "Choose a folder",
     "d": "Reads every Daisy file of a folder."
    }
@@ -2480,37 +2480,37 @@
   "marks": [
    {
     "x": 98.625,
-    "y": 303.325,
+    "y": 380,
     "t": "Add files",
     "d": "Chooses one or several files."
    },
    {
     "x": 252.0875,
-    "y": 303.325,
+    "y": 380,
     "t": "Add a folder",
     "d": "Reads every Daisy file of a folder, for example a whole experiment folder."
    },
    {
     "x": 370.925,
-    "y": 303.325,
+    "y": 380,
     "t": "Load all bundled examples",
     "d": "Loads every example log that comes with the program."
    },
    {
     "x": 64,
-    "y": 372.52500000000003,
+    "y": 449.20000000000005,
     "t": "Drop area",
     "d": "Files and folders can also be dropped here."
    },
    {
     "x": 64,
-    "y": 669.325,
+    "y": 746,
     "t": "Bundled examples",
     "d": "The example logs from the repositories of the Daisy model; load them one by one."
    },
    {
     "x": 64,
-    "y": 940.5250000000001,
+    "y": 1017.2,
     "t": "Loaded logs",
     "d": "The logs that are loaded now, with their columns."
    }
@@ -2527,21 +2527,167 @@
   "marks": [
    {
     "x": 370.925,
-    "y": 303.325,
+    "y": 380,
     "t": "Load all",
     "d": "The button that was pressed."
    },
    {
     "x": 64,
-    "y": 1130.525,
+    "y": 1207.2,
     "t": "Loaded logs",
     "d": "Each loaded log with its size; click a name to see its columns."
    },
    {
     "x": 704.0375,
-    "y": 310.925,
+    "y": 387.6,
     "t": "Status",
     "d": "A message that says what was read."
+   }
+  ]
+ },
+ "dz_flow_01": {
+  "id": "dz_flow_01",
+  "group": "70_flow",
+  "ch": "flow",
+  "sec": "The guided path",
+  "title": "The guided path: step 1, My data",
+  "intro": "The path begins with the data of the site. Each tab shows a bar above its content with the step, its purpose, and the buttons Back and Next. The tabs can still be opened in any order from the row of tabs; the bar only shows where the tab lies on the path.",
+  "note": "",
+  "marks": [
+   {
+    "x": 118.61250000000001,
+    "y": 278.40000000000003,
+    "t": "Where you are",
+    "d": "Step 1 of 11. The first step has no Back button."
+   },
+   {
+    "x": 229.22500000000002,
+    "y": 278.40000000000003,
+    "t": "What to do here",
+    "d": "Set the weather and the soil of your site once."
+   },
+   {
+    "x": 1711.025,
+    "y": 278.40000000000003,
+    "t": "Next",
+    "d": "Goes to Weather stations."
+   }
+  ]
+ },
+ "dz_flow_02": {
+  "id": "dz_flow_02",
+  "group": "70_flow",
+  "ch": "flow",
+  "sec": "The guided path",
+  "title": "The guided path: step 5, Scenarios",
+  "intro": "Step 5 is where a question is chosen and run. After the run the results are drawn under the question, and Next leads on to Experiments, Processes and the other ways of looking at the results.",
+  "note": "",
+  "marks": [
+   {
+    "x": 120.53750000000001,
+    "y": 278.40000000000003,
+    "t": "Where you are",
+    "d": "The number of the step on the guided path and the number of steps."
+   },
+   {
+    "x": 233.07500000000002,
+    "y": 278.40000000000003,
+    "t": "What to do here",
+    "d": "The name of the step and one sentence on what it is for."
+   },
+   {
+    "x": 1532.9750000000001,
+    "y": 278.40000000000003,
+    "t": "Back",
+    "d": "Returns to the step before, with the name of that step."
+   },
+   {
+    "x": 1729.375,
+    "y": 278.40000000000003,
+    "t": "Next",
+    "d": "Goes on to the step after, with the name of that step."
+   }
+  ]
+ },
+ "dz_flow_03": {
+  "id": "dz_flow_03",
+  "group": "70_flow",
+  "ch": "flow",
+  "sec": "The guided path",
+  "title": "The guided path: step 8, Plot",
+  "intro": "Plot draws any quantity of a run. The bar shows that three steps remain on the path: Mass balance, Compare and test, and the hand-over to the SWAFL project.",
+  "note": "",
+  "marks": [
+   {
+    "x": 120.65,
+    "y": 278.40000000000003,
+    "t": "Where you are",
+    "d": "The number of the step on the guided path and the number of steps."
+   },
+   {
+    "x": 233.3,
+    "y": 278.40000000000003,
+    "t": "What to do here",
+    "d": "The name of the step and one sentence on what it is for."
+   },
+   {
+    "x": 1497.25,
+    "y": 278.40000000000003,
+    "t": "Back",
+    "d": "Returns to the step before, with the name of that step."
+   },
+   {
+    "x": 1723.525,
+    "y": 278.40000000000003,
+    "t": "Next",
+    "d": "Goes on to the step after, with the name of that step."
+   }
+  ]
+ },
+ "dz_flow_04": {
+  "id": "dz_flow_04",
+  "group": "70_flow",
+  "ch": "flow",
+  "sec": "To the SWAFL project",
+  "title": "To the SWAFL project: the last step of the path",
+  "intro": "The last step takes the results to the layers of the SWAFL project. Daisy calculates; the SWAFL project turns the results into decisions. For each of the five questions the tab offers the layers that answer it, and the button of the question you ran last is highlighted. The runs you made in the session are passed to the layers, so they show your weather and your soil.",
+  "note": "",
+  "marks": [
+   {
+    "x": 122.5125,
+    "y": 288.8,
+    "t": "Step 11 of 11",
+    "d": "The last step of the path."
+   },
+   {
+    "x": 1580.6000000000001,
+    "y": 288.8,
+    "t": "Open in the SWAFL project",
+    "d": "Opens the layer that matches the question you ran last."
+   },
+   {
+    "x": 169.15,
+    "y": 558.8000000000001,
+    "t": "Daisy decision table",
+    "d": "Yield, water and nitrate of every run, answer by answer."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 1040.4,
+    "t": "Chemical fate",
+    "d": "Decay, crop uptake, leaching, runoff and what stays in the soil."
+   },
+   {
+    "x": 763.5375,
+    "y": 664.4000000000001,
+    "t": "Nitrogen budget",
+    "d": "Supply, uptake and losses of nitrogen, season by season."
+   },
+   {
+    "x": 84.80000000000001,
+    "y": 664.4000000000001,
+    "t": "Reliability over 20 seasons",
+    "d": "How steady the result is from year to year."
    }
   ]
  },
@@ -2556,25 +2702,25 @@
   "marks": [
    {
     "x": 144.8,
-    "y": 328.925,
+    "y": 426.40000000000003,
     "t": "Kind of entry",
     "d": "Soil horizons, crops, fertilisers, chemicals and management actions."
    },
    {
     "x": 296,
-    "y": 326.925,
+    "y": 424.40000000000003,
     "t": "Search",
     "d": "Filters the list by name."
    },
    {
     "x": 625.6750000000001,
-    "y": 331.725,
+    "y": 429.20000000000005,
     "t": "Count",
     "d": "The number of entries shown out of all."
    },
    {
     "x": 64,
-    "y": 722.5250000000001,
+    "y": 820,
     "t": "List",
     "d": "The entries; click one to see its parameters."
    }
@@ -2591,13 +2737,13 @@
   "marks": [
    {
     "x": 64,
-    "y": 722.5250000000001,
+    "y": 820,
     "t": "Selected horizon",
     "d": "The horizon whose parameters are shown."
    },
    {
     "x": 560,
-    "y": 963.125,
+    "y": 1060.6000000000001,
     "t": "Parameters and curves",
     "d": "Parameters of the horizon and the curves of water content and conductivity against suction."
    }
@@ -2614,19 +2760,19 @@
   "marks": [
    {
     "x": 144.8,
-    "y": 328.925,
+    "y": 426.40000000000003,
     "t": "Kind of entry",
     "d": "Now set to crops."
    },
    {
     "x": 626.1500000000001,
-    "y": 331.725,
+    "y": 429.20000000000005,
     "t": "Count",
     "d": "Number of crops in the library."
    },
    {
     "x": 64,
-    "y": 722.5250000000001,
+    "y": 820,
     "t": "Crops",
     "d": "Each crop with the model that describes it."
    }
@@ -2643,55 +2789,55 @@
   "marks": [
    {
     "x": 110.95,
-    "y": 276,
+    "y": 343.20000000000005,
     "t": "Log",
     "d": "The loaded log to draw."
    },
    {
     "x": 459.425,
-    "y": 276,
+    "y": 343.20000000000005,
     "t": "View",
     "d": "Time series, annual values, depth profile through time, or profile at a date."
    },
    {
     "x": 856.6500000000001,
-    "y": 274,
+    "y": 341.20000000000005,
     "t": "From",
     "d": "First date drawn."
    },
    {
     "x": 1085.4750000000001,
-    "y": 274,
+    "y": 341.20000000000005,
     "t": "To",
     "d": "Last date drawn."
    },
    {
     "x": 156.65,
-    "y": 376.8,
+    "y": 444,
     "t": "Columns",
     "d": "Hold Ctrl or Shift to draw several columns together."
    },
    {
     "x": 76.2125,
-    "y": 482.40000000000003,
+    "y": 549.6,
     "t": "Draw",
     "d": "Draws the chosen columns."
    },
    {
     "x": 64,
-    "y": 736.8000000000001,
+    "y": 804,
     "t": "Chart",
     "d": "Move over the chart to read the values."
    },
    {
     "x": 206.10000000000002,
-    "y": 482.40000000000003,
+    "y": 549.6,
     "t": "Picture (PNG)",
     "d": "Saves the figure as a picture with its source line."
    },
    {
     "x": 363.85,
-    "y": 482.40000000000003,
+    "y": 549.6,
     "t": "Table (CSV)",
     "d": "Saves the plotted numbers as a table."
    }
@@ -2708,19 +2854,19 @@
   "marks": [
    {
     "x": 459.425,
-    "y": 276,
+    "y": 343.20000000000005,
     "t": "Annual values",
     "d": "The view that was chosen."
    },
    {
     "x": 575.0500000000001,
-    "y": 419.20000000000005,
+    "y": 486.40000000000003,
     "t": "Annual summary",
     "d": "Sum, mean, maximum or minimum of each year."
    },
    {
     "x": 64,
-    "y": 736.8000000000001,
+    "y": 804,
     "t": "Chart",
     "d": "One bar or point for each year."
    }
@@ -2737,19 +2883,19 @@
   "marks": [
    {
     "x": 183.75,
-    "y": 276,
+    "y": 343.20000000000005,
     "t": "Log",
     "d": "A log with depth, here the matrix water flux."
    },
    {
     "x": 384.225,
-    "y": 276,
+    "y": 343.20000000000005,
     "t": "View",
     "d": "Depth profile through time."
    },
    {
     "x": 64,
-    "y": 752.8000000000001,
+    "y": 820,
     "t": "Map",
     "d": "Colour shows the value; the scale is beside the map."
    }
@@ -2766,19 +2912,19 @@
   "marks": [
    {
     "x": 699.75,
-    "y": 390.40000000000003,
+    "y": 457.6,
     "t": "Date slider",
     "d": "Chooses the date of the profile."
    },
    {
     "x": 704.4625000000001,
-    "y": 431.20000000000005,
+    "y": 498.40000000000003,
     "t": "Play",
     "d": "Steps through the dates."
    },
    {
     "x": 64,
-    "y": 736.8000000000001,
+    "y": 804,
     "t": "Profile",
     "d": "Value against depth on that date."
    }
@@ -2795,19 +2941,19 @@
   "marks": [
    {
     "x": 64,
-    "y": 1061.2250000000001,
+    "y": 1138.025,
     "t": "Process map",
     "d": "One box for each process, coloured by group."
    },
    {
     "x": 64,
-    "y": 1707.25,
+    "y": 1784.0500000000002,
     "t": "Other processes",
     "d": "Processes not drawn in the paper figure."
    },
    {
     "x": 64,
-    "y": 1868.25,
+    "y": 1945.0500000000002,
     "t": "Details",
     "d": "Text and figures of the chosen process."
    }
@@ -2824,43 +2970,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1061.2250000000001,
+    "y": 1138.025,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1768.25,
+    "y": 1845.0500000000002,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 1934.0500000000002,
+    "y": 2010.8500000000001,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 1934.8500000000001,
+    "y": 2011.65,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2270.05,
+    "y": 2346.85,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 2862.8500000000004,
+    "y": 2939.65,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3478.05,
+    "y": 3554.8500000000004,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -2877,43 +3023,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1061.2250000000001,
+    "y": 1138.025,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1768.25,
+    "y": 1845.0500000000002,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 1907.65,
+    "y": 1984.45,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 1908.45,
+    "y": 1985.25,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2243.65,
+    "y": 2320.4500000000003,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 2858.8500000000004,
+    "y": 2935.65,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3451.65,
+    "y": 3528.4500000000003,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -2930,43 +3076,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1057.9,
+    "y": 1134.125,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1764.9250000000002,
+    "y": 1841.15,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 1930.7250000000001,
+    "y": 2006.95,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 1931.525,
+    "y": 2007.75,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2266.725,
+    "y": 2342.9500000000003,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 2881.925,
+    "y": 2958.15,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3497.125,
+    "y": 3573.3500000000004,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -2983,43 +3129,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1061.2250000000001,
+    "y": 1137.55,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1768.25,
+    "y": 1844.575,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 1934.0500000000002,
+    "y": 2010.375,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 1934.8500000000001,
+    "y": 2011.1750000000002,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2302.05,
+    "y": 2378.375,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 2981.25,
+    "y": 3057.5750000000003,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3660.4500000000003,
+    "y": 3736.775,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -3036,31 +3182,31 @@
   "marks": [
    {
     "x": 944,
-    "y": 1061.2250000000001,
+    "y": 1138.025,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1768.25,
+    "y": 1845.0500000000002,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 1907.65,
+    "y": 1984.45,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 1908.45,
+    "y": 1985.25,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2275.65,
+    "y": 2352.4500000000003,
     "t": "First figure",
     "d": "The figure of the process."
    }
@@ -3077,31 +3223,31 @@
   "marks": [
    {
     "x": 944,
-    "y": 1061.2250000000001,
+    "y": 1138.025,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1768.25,
+    "y": 1845.0500000000002,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 1907.65,
+    "y": 1984.45,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 1908.45,
+    "y": 1985.25,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2275.65,
+    "y": 2352.4500000000003,
     "t": "First figure",
     "d": "The figure of the process."
    }
@@ -3118,37 +3264,37 @@
   "marks": [
    {
     "x": 944,
-    "y": 1061.2250000000001,
+    "y": 1138.025,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1768.25,
+    "y": 1845.0500000000002,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 1934.0500000000002,
+    "y": 2010.8500000000001,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 1934.8500000000001,
+    "y": 2011.65,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2302.05,
+    "y": 2378.85,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 2981.25,
+    "y": 3058.05,
     "t": "Second figure",
     "d": "The next figure of the process."
    }
@@ -3165,37 +3311,37 @@
   "marks": [
    {
     "x": 944,
-    "y": 1061.2250000000001,
+    "y": 1138.025,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1768.25,
+    "y": 1845.0500000000002,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 1907.65,
+    "y": 1984.45,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 1908.45,
+    "y": 1985.25,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2275.65,
+    "y": 2352.4500000000003,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 2938.8500000000004,
+    "y": 3015.65,
     "t": "Second figure",
     "d": "The next figure of the process."
    }
@@ -3212,31 +3358,31 @@
   "marks": [
    {
     "x": 944,
-    "y": 1061.2250000000001,
+    "y": 1138.025,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1768.25,
+    "y": 1845.0500000000002,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 1907.65,
+    "y": 1984.45,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 1908.45,
+    "y": 1985.25,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2275.65,
+    "y": 2352.4500000000003,
     "t": "First figure",
     "d": "The figure of the process."
    }
@@ -3253,43 +3399,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1057.9,
+    "y": 1134.125,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1764.9250000000002,
+    "y": 1841.15,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 1930.7250000000001,
+    "y": 2006.95,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 1931.525,
+    "y": 2007.75,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2266.725,
+    "y": 2342.9500000000003,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 2881.925,
+    "y": 2958.15,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3497.125,
+    "y": 3573.3500000000004,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -3306,43 +3452,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1058.05,
+    "y": 1134.275,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1765.075,
+    "y": 1841.3000000000002,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 1930.875,
+    "y": 2007.1000000000001,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 1931.6750000000002,
+    "y": 2007.9,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2266.875,
+    "y": 2343.1,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 2859.675,
+    "y": 2935.9,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3474.875,
+    "y": 3551.1000000000004,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -3359,43 +3505,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1061.2250000000001,
+    "y": 1138.025,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1768.25,
+    "y": 1845.0500000000002,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 1907.65,
+    "y": 1984.45,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 1908.45,
+    "y": 1985.25,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2243.65,
+    "y": 2320.4500000000003,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 2858.8500000000004,
+    "y": 2935.65,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3451.65,
+    "y": 3528.4500000000003,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -3412,43 +3558,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1061.2250000000001,
+    "y": 1138.025,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1768.25,
+    "y": 1845.0500000000002,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 1934.0500000000002,
+    "y": 2010.8500000000001,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 1934.8500000000001,
+    "y": 2011.65,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2270.05,
+    "y": 2346.85,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 2885.25,
+    "y": 2962.05,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3500.4500000000003,
+    "y": 3577.25,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -3465,43 +3611,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1053.925,
+    "y": 1130.275,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1760.95,
+    "y": 1837.3000000000002,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 1926.75,
+    "y": 2003.1000000000001,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 1927.5500000000002,
+    "y": 2003.9,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2262.75,
+    "y": 2339.1,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 2855.55,
+    "y": 2931.9,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3470.75,
+    "y": 3547.1000000000004,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -3518,31 +3664,31 @@
   "marks": [
    {
     "x": 922.875,
-    "y": 97.72500000000001,
+    "y": 98.125,
     "t": "Run to look at",
     "d": "Chooses the run whose single run figures are drawn."
    },
    {
     "x": 1457.8500000000001,
-    "y": 92.92500000000001,
+    "y": 93.325,
     "t": "Save report",
     "d": "Saves all results and figures as one HTML report."
    },
    {
     "x": 1600.825,
-    "y": 92.92500000000001,
+    "y": 93.325,
     "t": "Put the logs in the Files list",
     "d": "Keeps the Daisy logs of the runs in the Files tab for the plot and balance tabs."
    },
    {
     "x": 84.80000000000001,
-    "y": 147.32500000000002,
+    "y": 147.725,
     "t": "Open the set-up in the editor",
     "d": "Opens the Daisy set-up of the run in the Set-up editor."
    },
    {
     "x": 84.80000000000001,
-    "y": 436.125,
+    "y": 436.52500000000003,
     "t": "Mean per season",
     "d": "The mean of each result over the seasons, one column for each run."
    }
@@ -3559,21 +3705,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 134.525,
+    "y": 134.925,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 424.925,
+    "y": 425.32500000000005,
     "t": "Figure",
     "d": "How much of the chemical is in the soil, decayed, leached or taken up in each season."
-   },
-   {
-    "x": 1803.2,
-    "y": 424.925,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -3588,21 +3728,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 133.725,
+    "y": 134.125,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 440.125,
+    "y": 440.52500000000003,
     "t": "Figure",
     "d": "The concentration of the chemical against depth and time."
-   },
-   {
-    "x": 1803.2,
-    "y": 440.125,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -3617,21 +3751,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 134.525,
+    "y": 134.925,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 440.925,
+    "y": 441.32500000000005,
     "t": "Figure",
     "d": "Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year."
-   },
-   {
-    "x": 1803.2,
-    "y": 440.925,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -3646,21 +3774,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 133.725,
+    "y": 134.125,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 424.125,
+    "y": 424.52500000000003,
     "t": "Figure",
     "d": "The fate of the chemical in the runs side by side: mobile tracer, sorbed and quickly decaying chemical."
-   },
-   {
-    "x": 1803.2,
-    "y": 424.125,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -3675,21 +3797,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 598.525,
+    "y": 598.9250000000001,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 872.9250000000001,
+    "y": 873.325,
     "t": "Figure",
     "d": "The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year."
-   },
-   {
-    "x": 1803.2,
-    "y": 872.9250000000001,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -3704,31 +3820,31 @@
   "marks": [
    {
     "x": 951.4000000000001,
-    "y": 97.72500000000001,
+    "y": 98.125,
     "t": "Run to look at",
     "d": "Chooses the run whose single run figures are drawn."
    },
    {
     "x": 1167.175,
-    "y": 92.92500000000001,
+    "y": 93.325,
     "t": "Save report",
     "d": "Saves all results and figures as one HTML report."
    },
    {
     "x": 1310.15,
-    "y": 92.92500000000001,
+    "y": 93.325,
     "t": "Put the logs in the Files list",
     "d": "Keeps the Daisy logs of the runs in the Files tab for the plot and balance tabs."
    },
    {
     "x": 1582.9250000000002,
-    "y": 92.92500000000001,
+    "y": 93.325,
     "t": "Open the set-up in the editor",
     "d": "Opens the Daisy set-up of the run in the Set-up editor."
    },
    {
     "x": 84.80000000000001,
-    "y": 344.925,
+    "y": 345.32500000000005,
     "t": "Mean per season",
     "d": "The mean of each result over the seasons, one column for each run."
    }
@@ -3745,21 +3861,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 134.525,
+    "y": 134.925,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 424.925,
+    "y": 425.32500000000005,
     "t": "Figure",
     "d": "Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare."
-   },
-   {
-    "x": 1803.2,
-    "y": 424.925,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -3774,21 +3884,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 133.725,
+    "y": 134.125,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 440.125,
+    "y": 440.52500000000003,
     "t": "Figure",
     "d": "Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year."
-   },
-   {
-    "x": 1803.2,
-    "y": 440.125,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -3803,21 +3907,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 134.525,
+    "y": 134.925,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 376.925,
+    "y": 377.32500000000005,
     "t": "Figure",
     "d": "Leaf area index with the water and nitrogen stress of the crop through the seasons."
-   },
-   {
-    "x": 1803.2,
-    "y": 376.925,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -3832,21 +3930,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 133.725,
+    "y": 134.125,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 440.125,
+    "y": 440.52500000000003,
     "t": "Figure",
     "d": "Soil water content against depth and time, from the daily log of Daisy."
-   },
-   {
-    "x": 1803.2,
-    "y": 440.125,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -3861,21 +3953,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 134.525,
+    "y": 134.925,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 424.925,
+    "y": 425.32500000000005,
     "t": "Figure",
     "d": "The mean yield of each crop in every ticked run, side by side."
-   },
-   {
-    "x": 1803.2,
-    "y": 424.925,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -3890,21 +3976,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 133.725,
+    "y": 134.125,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 424.125,
+    "y": 424.52500000000003,
     "t": "Figure",
     "d": "Irrigation, evapotranspiration and drainage of the runs side by side."
-   },
-   {
-    "x": 1803.2,
-    "y": 424.125,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -3919,21 +3999,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 134.525,
+    "y": 134.925,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 424.925,
+    "y": 425.32500000000005,
     "t": "Figure",
     "d": "Nitrate leached, denitrification and nitrogen uptake of the runs side by side."
-   },
-   {
-    "x": 1803.2,
-    "y": 424.925,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -3948,21 +4022,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 599.325,
+    "y": 599.725,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 873.725,
+    "y": 874.125,
     "t": "Figure",
     "d": "The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year."
-   },
-   {
-    "x": 1803.2,
-    "y": 873.725,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -3977,31 +4045,31 @@
   "marks": [
    {
     "x": 995.4000000000001,
-    "y": 98.525,
+    "y": 97.325,
     "t": "Run to look at",
     "d": "Chooses the run whose single run figures are drawn."
    },
    {
     "x": 1167.175,
-    "y": 93.72500000000001,
+    "y": 92.525,
     "t": "Save report",
     "d": "Saves all results and figures as one HTML report."
    },
    {
     "x": 1310.15,
-    "y": 93.72500000000001,
+    "y": 92.525,
     "t": "Put the logs in the Files list",
     "d": "Keeps the Daisy logs of the runs in the Files tab for the plot and balance tabs."
    },
    {
     "x": 1582.9250000000002,
-    "y": 93.72500000000001,
+    "y": 92.525,
     "t": "Open the set-up in the editor",
     "d": "Opens the Daisy set-up of the run in the Set-up editor."
    },
    {
     "x": 84.80000000000001,
-    "y": 345.725,
+    "y": 344.52500000000003,
     "t": "Mean per season",
     "d": "The mean of each result over the seasons, one column for each run."
    }
@@ -4018,21 +4086,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 133.725,
+    "y": 134.125,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 424.125,
+    "y": 424.52500000000003,
     "t": "Figure",
     "d": "Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare."
-   },
-   {
-    "x": 1803.2,
-    "y": 424.125,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4047,21 +4109,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 134.525,
+    "y": 134.925,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 440.925,
+    "y": 441.32500000000005,
     "t": "Figure",
     "d": "Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year."
-   },
-   {
-    "x": 1803.2,
-    "y": 440.925,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4076,21 +4132,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 133.725,
+    "y": 134.125,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 440.125,
+    "y": 440.52500000000003,
     "t": "Figure",
     "d": "Soil water content against depth and time, from the daily log of Daisy."
-   },
-   {
-    "x": 1803.2,
-    "y": 440.125,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4105,21 +4155,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 134.525,
+    "y": 134.925,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 440.925,
+    "y": 441.32500000000005,
     "t": "Figure",
     "d": "Soil water suction on the pF scale against depth and time; irrigation triggers act on this quantity."
-   },
-   {
-    "x": 1803.2,
-    "y": 440.925,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4134,21 +4178,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 133.725,
+    "y": 134.125,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 376.125,
+    "y": 376.52500000000003,
     "t": "Figure",
     "d": "Leaf area index with the water and nitrogen stress of the crop through the seasons."
-   },
-   {
-    "x": 1803.2,
-    "y": 376.125,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4163,21 +4201,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 134.525,
+    "y": 134.925,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 424.925,
+    "y": 425.32500000000005,
     "t": "Figure",
     "d": "The mean yield of each crop in every ticked run, side by side."
-   },
-   {
-    "x": 1803.2,
-    "y": 424.925,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4192,21 +4224,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 133.725,
+    "y": 134.125,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 424.125,
+    "y": 424.52500000000003,
     "t": "Figure",
     "d": "Irrigation, evapotranspiration and drainage of the runs side by side."
-   },
-   {
-    "x": 1803.2,
-    "y": 424.125,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4221,21 +4247,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 598.525,
+    "y": 598.9250000000001,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 872.9250000000001,
+    "y": 873.325,
     "t": "Figure",
     "d": "The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year."
-   },
-   {
-    "x": 1803.2,
-    "y": 872.9250000000001,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4250,31 +4270,31 @@
   "marks": [
    {
     "x": 948.2,
-    "y": 97.72500000000001,
+    "y": 98.125,
     "t": "Run to look at",
     "d": "Chooses the run whose single run figures are drawn."
    },
    {
     "x": 1167.175,
-    "y": 92.92500000000001,
+    "y": 93.325,
     "t": "Save report",
     "d": "Saves all results and figures as one HTML report."
    },
    {
     "x": 1310.15,
-    "y": 92.92500000000001,
+    "y": 93.325,
     "t": "Put the logs in the Files list",
     "d": "Keeps the Daisy logs of the runs in the Files tab for the plot and balance tabs."
    },
    {
     "x": 1582.9250000000002,
-    "y": 92.92500000000001,
+    "y": 93.325,
     "t": "Open the set-up in the editor",
     "d": "Opens the Daisy set-up of the run in the Set-up editor."
    },
    {
     "x": 84.80000000000001,
-    "y": 344.925,
+    "y": 345.32500000000005,
     "t": "Mean per season",
     "d": "The mean of each result over the seasons, one column for each run."
    }
@@ -4291,21 +4311,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 134.525,
+    "y": 134.925,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 424.925,
+    "y": 425.32500000000005,
     "t": "Figure",
     "d": "Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare."
-   },
-   {
-    "x": 1803.2,
-    "y": 424.925,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4320,21 +4334,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 133.725,
+    "y": 134.125,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 424.125,
+    "y": 424.52500000000003,
     "t": "Figure",
     "d": "The nitrogen balance of the run: what is applied, taken up by the crop, leached, denitrified and left in the soil."
-   },
-   {
-    "x": 1803.2,
-    "y": 424.125,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4349,21 +4357,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 134.525,
+    "y": 134.925,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 440.925,
+    "y": 441.32500000000005,
     "t": "Figure",
     "d": "Nitrate concentration of the soil solution against depth and time."
-   },
-   {
-    "x": 1803.2,
-    "y": 440.925,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4378,21 +4380,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 133.725,
+    "y": 134.125,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 440.125,
+    "y": 440.52500000000003,
     "t": "Figure",
     "d": "Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year."
-   },
-   {
-    "x": 1803.2,
-    "y": 440.125,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4407,21 +4403,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 134.525,
+    "y": 134.925,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 424.925,
+    "y": 425.32500000000005,
     "t": "Figure",
     "d": "The mean yield of each crop in every ticked run, side by side."
-   },
-   {
-    "x": 1803.2,
-    "y": 424.925,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4436,21 +4426,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 133.725,
+    "y": 134.125,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 424.125,
+    "y": 424.52500000000003,
     "t": "Figure",
     "d": "Nitrate leached, denitrification and nitrogen uptake of the runs side by side."
-   },
-   {
-    "x": 1803.2,
-    "y": 424.125,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4465,21 +4449,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 134.525,
+    "y": 134.925,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 376.925,
+    "y": 377.32500000000005,
     "t": "Figure",
     "d": "Yield and nitrate leaching against the fertiliser rate across the runs."
-   },
-   {
-    "x": 1803.2,
-    "y": 376.925,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4494,21 +4472,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 599.325,
+    "y": 599.725,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 873.725,
+    "y": 874.125,
     "t": "Figure",
     "d": "The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year."
-   },
-   {
-    "x": 1803.2,
-    "y": 873.725,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4523,31 +4495,31 @@
   "marks": [
    {
     "x": 1007.4000000000001,
-    "y": 98.525,
+    "y": 97.325,
     "t": "Run to look at",
     "d": "Chooses the run whose single run figures are drawn."
    },
    {
     "x": 1167.175,
-    "y": 93.72500000000001,
+    "y": 92.525,
     "t": "Save report",
     "d": "Saves all results and figures as one HTML report."
    },
    {
     "x": 1310.15,
-    "y": 93.72500000000001,
+    "y": 92.525,
     "t": "Put the logs in the Files list",
     "d": "Keeps the Daisy logs of the runs in the Files tab for the plot and balance tabs."
    },
    {
     "x": 1582.9250000000002,
-    "y": 93.72500000000001,
+    "y": 92.525,
     "t": "Open the set-up in the editor",
     "d": "Opens the Daisy set-up of the run in the Set-up editor."
    },
    {
     "x": 84.80000000000001,
-    "y": 345.725,
+    "y": 344.52500000000003,
     "t": "Mean per season",
     "d": "The mean of each result over the seasons, one column for each run."
    }
@@ -4564,21 +4536,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 133.725,
+    "y": 134.125,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 424.125,
+    "y": 424.52500000000003,
     "t": "Figure",
     "d": "Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare."
-   },
-   {
-    "x": 1803.2,
-    "y": 424.125,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4593,21 +4559,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 134.525,
+    "y": 134.925,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 440.925,
+    "y": 441.32500000000005,
     "t": "Figure",
     "d": "Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year."
-   },
-   {
-    "x": 1803.2,
-    "y": 440.925,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4622,21 +4582,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 133.725,
+    "y": 134.125,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 440.125,
+    "y": 440.52500000000003,
     "t": "Figure",
     "d": "Soil water content against depth and time, from the daily log of Daisy."
-   },
-   {
-    "x": 1803.2,
-    "y": 440.125,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4651,21 +4605,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 134.525,
+    "y": 134.925,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 440.925,
+    "y": 441.32500000000005,
     "t": "Figure",
     "d": "Soil water suction on the pF scale against depth and time; irrigation triggers act on this quantity."
-   },
-   {
-    "x": 1803.2,
-    "y": 440.925,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4680,21 +4628,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 133.725,
+    "y": 134.125,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 440.125,
+    "y": 440.52500000000003,
     "t": "Figure",
     "d": "Nitrate concentration of the soil solution against depth and time."
-   },
-   {
-    "x": 1803.2,
-    "y": 440.125,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4709,21 +4651,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 134.525,
+    "y": 134.925,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 424.925,
+    "y": 425.32500000000005,
     "t": "Figure",
     "d": "The mean yield of each crop in every ticked run, side by side."
-   },
-   {
-    "x": 1803.2,
-    "y": 424.925,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4738,21 +4674,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 133.725,
+    "y": 134.125,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 424.125,
+    "y": 424.52500000000003,
     "t": "Figure",
     "d": "Irrigation, evapotranspiration and drainage of the runs side by side."
-   },
-   {
-    "x": 1803.2,
-    "y": 424.125,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4767,21 +4697,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 134.525,
+    "y": 134.925,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 424.925,
+    "y": 425.32500000000005,
     "t": "Figure",
     "d": "Nitrate leached, denitrification and nitrogen uptake of the runs side by side."
-   },
-   {
-    "x": 1803.2,
-    "y": 424.925,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4796,21 +4720,15 @@
   "marks": [
    {
     "x": 1755.9250000000002,
-    "y": 599.325,
+    "y": 599.725,
     "t": "Picture (PNG)",
     "d": "Saves this figure as a picture with its source line."
    },
    {
     "x": 940.8000000000001,
-    "y": 873.725,
+    "y": 874.125,
     "t": "Figure",
     "d": "The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year."
-   },
-   {
-    "x": 1803.2,
-    "y": 873.725,
-    "t": "Source line",
-    "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
    }
   ]
  },
@@ -4825,37 +4743,37 @@
   "marks": [
    {
     "x": 134.475,
-    "y": 331.20000000000005,
+    "y": 403.20000000000005,
     "t": "Layer 1",
     "d": "Horizon of the first layer and its lower depth."
    },
    {
     "x": 152.975,
-    "y": 375.20000000000005,
+    "y": 447.20000000000005,
     "t": "Weather",
     "d": "SWAFL season, Daisy station, own values or file."
    },
    {
     "x": 146.9,
-    "y": 418.8,
+    "y": 490.8,
     "t": "Days",
     "d": "Length of the simulation."
    },
    {
     "x": 618.6,
-    "y": 418.8,
+    "y": 490.8,
     "t": "Start wetness",
     "d": "Initial relative saturation."
    },
    {
     "x": 874.6500000000001,
-    "y": 420.8,
+    "y": 492.8,
     "t": "Lower boundary",
     "d": "Free drainage, closed or groundwater table."
    },
    {
     "x": 119.1875,
-    "y": 467.20000000000005,
+    "y": 539.2,
     "t": "Run the column",
     "d": "Starts the calculation."
    }
@@ -4872,31 +4790,31 @@
   "marks": [
    {
     "x": 64,
-    "y": 756.8000000000001,
+    "y": 828.8000000000001,
     "t": "Water content map",
     "d": "Depth against time."
    },
    {
     "x": 285.8,
-    "y": 1056.4,
+    "y": 1128.4,
     "t": "Depth of the series",
     "d": "Depth in cm of the lower figure."
    },
    {
     "x": 64,
-    "y": 1260,
+    "y": 1332,
     "t": "Series at a depth",
     "d": "Water content and suction at that depth."
    },
    {
     "x": 64,
-    "y": 2088.8,
+    "y": 2160.8,
     "t": "Summary",
     "d": "Water balance of the run."
    },
    {
     "x": 334.20000000000005,
-    "y": 467.20000000000005,
+    "y": 539.2,
     "t": "Keep as a log",
     "d": "Puts the water contents in the Files list."
    }
@@ -4913,49 +4831,49 @@
   "marks": [
    {
     "x": 64,
-    "y": 459.8,
+    "y": 520.2,
     "t": "Irrigation question",
     "d": "Does irrigation pay off, and what does it cost the soil."
    },
    {
-    "x": 521.6,
-    "y": 459.8,
+    "x": 674.125,
+    "y": 520.2,
     "t": "Nitrogen question",
     "d": "How much fertiliser, how much leaching."
    },
    {
-    "x": 979.2,
-    "y": 459.8,
+    "x": 1284.25,
+    "y": 520.2,
     "t": "Climate question",
     "d": "A warmer, drier or wetter climate."
    },
    {
-    "x": 1436.8000000000002,
-    "y": 459.8,
+    "x": 64,
+    "y": 698.6,
     "t": "Chemical question",
     "d": "Sorption and degradation of a pesticide or tracer."
    },
    {
-    "x": 64,
-    "y": 664.6,
+    "x": 674.125,
+    "y": 698.6,
     "t": "Soil question",
     "d": "How much does texture matter."
    },
    {
-    "x": 521.6,
-    "y": 664.6,
+    "x": 1284.25,
+    "y": 698.6,
     "t": "Your own work",
     "d": "Run a set-up of your own or draw the figures of logs you loaded."
    },
    {
-    "x": 979.2,
-    "y": 664.6,
+    "x": 64,
+    "y": 863.8000000000001,
     "t": "Soil column",
     "d": "A built-in tool that needs no Daisy program."
    },
    {
-    "x": 1436.8000000000002,
-    "y": 664.6,
+    "x": 674.125,
+    "y": 863.8000000000001,
     "t": "Process curves",
     "d": "A built-in tool that draws any Daisy function."
    }
@@ -4972,73 +4890,73 @@
   "marks": [
    {
     "x": 84.80000000000001,
-    "y": 937.6,
+    "y": 1120.4,
     "t": "Soil",
     "d": "The soil profile of the run: the built-in loam or sand, or your own soil when it is set in My data."
    },
    {
     "x": 532.8000000000001,
-    "y": 937.2,
+    "y": 1120,
     "t": "Trigger",
     "d": "Irrigation starts when the soil water potential at 20 cm drops below this value (cm)."
    },
    {
     "x": 1032.4,
-    "y": 937.2,
+    "y": 1120,
     "t": "Water per irrigation",
     "d": "Depth of water applied each time (mm)."
    },
    {
     "x": 1273.1750000000002,
-    "y": 937.2,
+    "y": 1120,
     "t": "Rain factor",
     "d": "Multiplies the rain of the weather file (1 leaves it as recorded)."
    },
    {
     "x": 1563.825,
-    "y": 937.2,
+    "y": 1120,
     "t": "Temperature offset",
     "d": "Added to every daily temperature (degrees Celsius)."
    },
    {
     "x": 144,
-    "y": 1011.6,
+    "y": 1194.4,
     "t": "First year",
     "d": "First year of the simulation; it must lie at least one year after the start of the weather."
    },
    {
     "x": 321.3,
-    "y": 1068,
+    "y": 1250.8000000000002,
     "t": "Weather for all runs",
     "d": "The one weather choice of every Daisy simulation: the weather of the SWAFL project when one is loaded, the built-in Taastrup weather, a built-in station, online weather or a file."
    },
    {
     "x": 84.80000000000001,
-    "y": 1174.4,
+    "y": 1357.2,
     "t": "Runs compared",
     "d": "Each ticked run is one Daisy simulation; the figures compare them."
    },
    {
     "x": 84.80000000000001,
-    "y": 1355.6000000000001,
+    "y": 1538.4,
     "t": "What I am interested in",
     "d": "Tick the processes of Fig. 1 whose figures should be drawn as well, or write them in words."
    },
    {
     "x": 84.80000000000001,
-    "y": 1522.4,
+    "y": 1705.2,
     "t": "Run Daisy",
     "d": "Runs every ticked simulation and draws the figures."
    },
    {
     "x": 457.225,
-    "y": 1522.4,
+    "y": 1705.2,
     "t": "Standard options",
     "d": "Puts every option back to its standard value."
    },
    {
     "x": 588.9,
-    "y": 1522.4,
+    "y": 1705.2,
     "t": "Save the Daisy files",
     "d": "Saves the set-up files of the first ticked run, to run Daisy anywhere."
    }
@@ -5055,61 +4973,61 @@
   "marks": [
    {
     "x": 84.80000000000001,
-    "y": 937.6,
+    "y": 1123.6000000000001,
     "t": "Soil",
     "d": "The soil profile of the run: the built-in loam or sand, or your own soil when it is set in My data."
    },
    {
     "x": 473.6,
-    "y": 937.6,
+    "y": 1123.6000000000001,
     "t": "Irrigation",
     "d": "Rainfed or irrigated."
    },
    {
     "x": 856,
-    "y": 937.2,
+    "y": 1123.2,
     "t": "Rain factor",
     "d": "Multiplies the rain of the weather file."
    },
    {
     "x": 1146.65,
-    "y": 937.2,
+    "y": 1123.2,
     "t": "Temperature offset",
     "d": "Added to the daily temperatures."
    },
    {
     "x": 321.3,
-    "y": 993.6,
+    "y": 1179.6000000000001,
     "t": "Weather for all runs",
     "d": "The one weather choice of every Daisy simulation: the weather of the SWAFL project when one is loaded, the built-in Taastrup weather, a built-in station, online weather or a file."
    },
    {
     "x": 84.80000000000001,
-    "y": 1118.8,
+    "y": 1304.8000000000002,
     "t": "Runs compared",
     "d": "Each ticked run is one Daisy simulation; the figures compare them."
    },
    {
     "x": 84.80000000000001,
-    "y": 1318.8000000000002,
+    "y": 1504.8000000000002,
     "t": "What I am interested in",
     "d": "Tick the processes of Fig. 1 whose figures should be drawn as well, or write them in words."
    },
    {
     "x": 84.80000000000001,
-    "y": 1485.6000000000001,
+    "y": 1671.6000000000001,
     "t": "Run Daisy",
     "d": "Runs every ticked simulation and draws the figures."
    },
    {
     "x": 457.225,
-    "y": 1485.6000000000001,
+    "y": 1671.6000000000001,
     "t": "Standard options",
     "d": "Puts every option back to its standard value."
    },
    {
     "x": 588.9,
-    "y": 1485.6000000000001,
+    "y": 1671.6000000000001,
     "t": "Save the Daisy files",
     "d": "Saves the set-up files of the first ticked run, to run Daisy anywhere."
    }
@@ -5126,55 +5044,55 @@
   "marks": [
    {
     "x": 84.80000000000001,
-    "y": 934.4000000000001,
+    "y": 1120.4,
     "t": "Soil",
     "d": "The soil profile of the run: the built-in loam or sand, or your own soil when it is set in My data."
    },
    {
     "x": 473.6,
-    "y": 934.4000000000001,
+    "y": 1120.4,
     "t": "Irrigation",
     "d": "Rainfed or irrigated."
    },
    {
     "x": 856,
-    "y": 934,
+    "y": 1120,
     "t": "First year",
     "d": "First year of the runs."
    },
    {
     "x": 321.3,
-    "y": 990.4000000000001,
+    "y": 1176.4,
     "t": "Weather for all runs",
     "d": "The one weather choice of every Daisy simulation: the weather of the SWAFL project when one is loaded, the built-in Taastrup weather, a built-in station, online weather or a file."
    },
    {
     "x": 84.80000000000001,
-    "y": 1153.2,
+    "y": 1339.2,
     "t": "Runs compared",
     "d": "Each ticked run is one Daisy simulation; the figures compare them."
    },
    {
     "x": 84.80000000000001,
-    "y": 1390.8000000000002,
+    "y": 1576.8000000000002,
     "t": "What I am interested in",
     "d": "Tick the processes of Fig. 1 whose figures should be drawn as well, or write them in words."
    },
    {
     "x": 84.80000000000001,
-    "y": 1557.6000000000001,
+    "y": 1743.6000000000001,
     "t": "Run Daisy",
     "d": "Runs every ticked simulation and draws the figures."
    },
    {
     "x": 457.225,
-    "y": 1557.6000000000001,
+    "y": 1743.6000000000001,
     "t": "Standard options",
     "d": "Puts every option back to its standard value."
    },
    {
     "x": 588.9,
-    "y": 1557.6000000000001,
+    "y": 1743.6000000000001,
     "t": "Save the Daisy files",
     "d": "Saves the set-up files of the first ticked run, to run Daisy anywhere."
    }
@@ -5191,49 +5109,49 @@
   "marks": [
    {
     "x": 84.80000000000001,
-    "y": 934.4000000000001,
+    "y": 1123.6000000000001,
     "t": "Soil",
     "d": "The soil profile of the run: the built-in loam or sand, or your own soil when it is set in My data."
    },
    {
     "x": 532.8000000000001,
-    "y": 934,
+    "y": 1123.2,
     "t": "Rain factor",
     "d": "Multiplies the rain of the weather file."
    },
    {
     "x": 321.3,
-    "y": 990.4000000000001,
+    "y": 1179.6000000000001,
     "t": "Weather for all runs",
     "d": "The one weather choice of every Daisy simulation: the weather of the SWAFL project when one is loaded, the built-in Taastrup weather, a built-in station, online weather or a file."
    },
    {
     "x": 84.80000000000001,
-    "y": 1115.6000000000001,
+    "y": 1304.8000000000002,
     "t": "Runs compared",
     "d": "Each ticked run is one Daisy simulation; the figures compare them."
    },
    {
     "x": 84.80000000000001,
-    "y": 1315.6000000000001,
+    "y": 1504.8000000000002,
     "t": "What I am interested in",
     "d": "Tick the processes of Fig. 1 whose figures should be drawn as well, or write them in words."
    },
    {
     "x": 84.80000000000001,
-    "y": 1482.4,
+    "y": 1671.6000000000001,
     "t": "Run Daisy",
     "d": "Runs every ticked simulation and draws the figures."
    },
    {
     "x": 457.225,
-    "y": 1482.4,
+    "y": 1671.6000000000001,
     "t": "Standard options",
     "d": "Puts every option back to its standard value."
    },
    {
     "x": 588.9,
-    "y": 1482.4,
+    "y": 1671.6000000000001,
     "t": "Save the Daisy files",
     "d": "Saves the set-up files of the first ticked run, to run Daisy anywhere."
    }
@@ -5250,55 +5168,55 @@
   "marks": [
    {
     "x": 84.80000000000001,
-    "y": 934.4000000000001,
+    "y": 1123.6000000000001,
     "t": "Irrigation",
     "d": "Rainfed or irrigated."
    },
    {
     "x": 467.20000000000005,
-    "y": 934,
+    "y": 1123.2,
     "t": "Trigger",
     "d": "Potential at 20 cm that starts irrigation."
    },
    {
     "x": 1207.575,
-    "y": 934,
+    "y": 1123.2,
     "t": "Fertiliser factor",
     "d": "Multiplies the fertiliser of the rotation."
    },
    {
     "x": 321.3,
-    "y": 1064.8,
+    "y": 1254,
     "t": "Weather for all runs",
     "d": "The one weather choice of every Daisy simulation: the weather of the SWAFL project when one is loaded, the built-in Taastrup weather, a built-in station, online weather or a file."
    },
    {
     "x": 84.80000000000001,
-    "y": 1171.2,
+    "y": 1360.4,
     "t": "Runs compared",
     "d": "Each ticked run is one Daisy simulation; the figures compare them."
    },
    {
     "x": 84.80000000000001,
-    "y": 1352.4,
+    "y": 1541.6000000000001,
     "t": "What I am interested in",
     "d": "Tick the processes of Fig. 1 whose figures should be drawn as well, or write them in words."
    },
    {
     "x": 84.80000000000001,
-    "y": 1519.2,
+    "y": 1708.4,
     "t": "Run Daisy",
     "d": "Runs every ticked simulation and draws the figures."
    },
    {
     "x": 457.225,
-    "y": 1519.2,
+    "y": 1708.4,
     "t": "Standard options",
     "d": "Puts every option back to its standard value."
    },
    {
     "x": 588.9,
-    "y": 1519.2,
+    "y": 1708.4,
     "t": "Save the Daisy files",
     "d": "Saves the set-up files of the first ticked run, to run Daisy anywhere."
    }
@@ -5315,7 +5233,7 @@
   "marks": [
    {
     "x": 64,
-    "y": 265.8,
+    "y": 339.40000000000003,
     "t": "Heading",
     "d": "The work you bring: a set-up of your own or logs of earlier runs."
    },
@@ -5338,19 +5256,19 @@
   "marks": [
    {
     "x": 84.80000000000001,
-    "y": 1355.6000000000001,
+    "y": 1538.4,
     "t": "Processes of Fig. 1",
     "d": "Weather, snow, canopy, soil water, biopores, drains, heat and ice, nitrate, ammonium, organic matter, carbon, denitrification, photosynthesis and crop growth."
    },
    {
     "x": 105.60000000000001,
-    "y": 1454.8000000000002,
+    "y": 1637.6000000000001,
     "t": "In words",
     "d": "Write for example snow and soil temperature in winter; the matching processes are ticked."
    },
    {
     "x": 84.80000000000001,
-    "y": 1522.4,
+    "y": 1705.2,
     "t": "Run Daisy",
     "d": "Runs the simulations and draws the standard figures and these."
    }
@@ -5367,31 +5285,31 @@
   "marks": [
    {
     "x": 64,
-    "y": 371.725,
+    "y": 448.40000000000003,
     "t": "Station",
     "d": "The bundled stations, each with its years and number of days."
    },
    {
     "x": 562.775,
-    "y": 369.725,
+    "y": 446.40000000000003,
     "t": "Latitude",
     "d": "Latitude of the station, used to work out reference evapotranspiration when it is not recorded."
    },
    {
     "x": 751.1,
-    "y": 366.925,
+    "y": 443.6,
     "t": "Use as SWAFL weather",
     "d": "Sends the station to the main workbench as its weather."
    },
    {
     "x": 972.0500000000001,
-    "y": 366.925,
+    "y": 443.6,
     "t": "Add to the log list",
     "d": "Puts the station among the logs that the plot tabs can draw."
    },
    {
     "x": 64,
-    "y": 557.325,
+    "y": 634,
     "t": "Annual rain",
     "d": "Sum of the daily rain of each year of the record."
    }
@@ -5408,33 +5326,92 @@
   "marks": [
    {
     "x": 110.55000000000001,
-    "y": 846.125,
+    "y": 1214.4,
     "t": "Interface key",
     "d": "The free interface key of the Danish open data service."
    },
    {
     "x": 645.325,
-    "y": 846.125,
+    "y": 1214.4,
     "t": "Latitude",
     "d": "Latitude of the place."
    },
    {
     "x": 1118.075,
-    "y": 846.125,
+    "y": 1214.4,
     "t": "From",
     "d": "First day to read."
    },
    {
     "x": 1527.7625,
-    "y": 843.325,
+    "y": 1211.6000000000001,
     "t": "Fetch and use",
     "d": "Reads the daily series and makes it the weather in use."
    },
    {
     "x": 64,
-    "y": 951.725,
+    "y": 1320,
     "t": "Groundwater file",
     "d": "A table with a date column and a depth to water column in metres, or a NetCDF file, used as the lower boundary of the soil column."
+   }
+  ]
+ },
+ "dz_weather_03": {
+  "id": "dz_weather_03",
+  "group": "10_data",
+  "ch": "data",
+  "sec": "Weather stations",
+  "title": "Weather stations: online weather of any place, for the analysis and the runs",
+  "intro": "The section Online weather of a place, at the foot of Weather stations, finds a place by name, reads its daily weather of the years you choose from the internet (Open-Meteo, ERA5 reanalysis) and then offers three uses: the weather of the SWAFL project, the weather of every Daisy run, and a log in the list of the plots. The same record is therefore used in the analysis of the project, in the Daisy runs and in the figures.",
+  "note": "",
+  "marks": [
+   {
+    "x": 126.67500000000001,
+    "y": 1048.4,
+    "t": "Place",
+    "d": "A town, a village or a farm name; the name is searched on the internet."
+   },
+   {
+    "x": 458.20000000000005,
+    "y": 1045.6000000000001,
+    "t": "Find",
+    "d": "Lists the places of that name; choose one and the latitude and longitude are filled."
+   },
+   {
+    "x": 1134.8500000000001,
+    "y": 1050,
+    "t": "First year",
+    "d": "First year of the record to read."
+   },
+   {
+    "x": 1324.875,
+    "y": 1050,
+    "t": "Last year",
+    "d": "Last complete year; the current year is not complete yet."
+   },
+   {
+    "x": 64,
+    "y": 1096.8,
+    "t": "Get the weather",
+    "d": "Reads the daily rain, temperature and radiation and checks them."
+   },
+   {
+    "x": 435.925,
+    "y": 1096.8,
+    "t": "Use as the SWAFL weather",
+    "d": "Sets the record as the weather of the SWAFL project, so every layer of the project uses it."
+   },
+   {
+    "x": 672.4000000000001,
+    "y": 1096.8,
+    "t": "Use in the Daisy runs",
+    "d": "Sets the record as the weather of every simulation of Scenarios, Experiments and Processes."
+   },
+   {
+    "x": 884.375,
+    "y": 1096.8,
+    "t": "Add to the list of logs",
+    "d": "Adds the record to the logs, so that it can be drawn in Plot."
    }
   ]
  }

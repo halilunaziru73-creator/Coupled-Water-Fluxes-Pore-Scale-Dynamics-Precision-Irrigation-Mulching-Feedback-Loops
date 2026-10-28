@@ -9,25 +9,25 @@
  "marks": [
   {
    "x": 144.8,
-   "y": 328.925,
+   "y": 426.40000000000003,
    "t": "Kind of entry",
    "d": "Soil horizons, crops, fertilisers, chemicals and management actions."
   },
   {
    "x": 296,
-   "y": 326.925,
+   "y": 424.40000000000003,
    "t": "Search",
    "d": "Filters the list by name."
   },
   {
    "x": 625.6750000000001,
-   "y": 331.725,
+   "y": 429.20000000000005,
    "t": "Count",
    "d": "The number of entries shown out of all."
   },
   {
    "x": 64,
-   "y": 722.5250000000001,
+   "y": 820,
    "t": "List",
    "d": "The entries; click one to see its parameters."
   }

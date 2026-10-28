@@ -9,43 +9,43 @@
  "marks": [
   {
    "x": 537.25,
-   "y": 741.325,
+   "y": 797.325,
    "t": "Levels per parameter",
    "d": "How many values of each parameter are tested."
   },
   {
    "x": 742.225,
-   "y": 741.325,
+   "y": 797.325,
    "t": "How to combine",
    "d": "Every combination, one thing at a time, or paired."
   },
   {
    "x": 1123.05,
-   "y": 740.9250000000001,
+   "y": 796.9250000000001,
    "t": "At most",
    "d": "The largest number of runs."
   },
   {
    "x": 105.60000000000001,
-   "y": 1090.925,
+   "y": 1146.925,
    "t": "List of topics",
    "d": "Scroll the list; a star marks a topic that has its own experiments."
   },
   {
    "x": 712.9250000000001,
-   "y": 839.725,
+   "y": 895.725,
    "t": "Previous and next",
    "d": "Moves through the topics in order."
   },
   {
    "x": 1071.425,
-   "y": 1045.325,
+   "y": 1101.325,
    "t": "Add",
    "d": "Adds the experiment to my experiments."
   },
   {
    "x": 679.2,
-   "y": 1045.325,
+   "y": 1101.325,
    "t": "Load",
    "d": "Loads the experiment for checking and running."
   }

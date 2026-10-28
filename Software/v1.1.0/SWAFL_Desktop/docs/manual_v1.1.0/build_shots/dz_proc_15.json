@@ -9,43 +9,43 @@
  "marks": [
   {
    "x": 944,
-   "y": 1053.925,
+   "y": 1130.275,
    "t": "Process map",
    "d": "The process that is open has a red frame."
   },
   {
    "x": 83.2,
-   "y": 1760.95,
+   "y": 1837.3000000000002,
    "t": "Process",
    "d": "Name of the process and what Daisy does there."
   },
   {
    "x": 195.275,
-   "y": 1926.75,
+   "y": 2003.1000000000001,
    "t": "Source of the figures",
    "d": "The run whose logs are drawn."
   },
   {
    "x": 535.075,
-   "y": 1927.5500000000002,
+   "y": 2003.9,
    "t": "Run Daisy with all process logs",
    "d": "Runs the model with every process log on."
   },
   {
    "x": 944,
-   "y": 2262.75,
+   "y": 2339.1,
    "t": "First figure",
    "d": "The figure of the process."
   },
   {
    "x": 944,
-   "y": 2855.55,
+   "y": 2931.9,
    "t": "Second figure",
    "d": "The next figure of the process."
   },
   {
    "x": 944,
-   "y": 3470.75,
+   "y": 3547.1000000000004,
    "t": "Third figure",
    "d": "The next figure of the process."
   }

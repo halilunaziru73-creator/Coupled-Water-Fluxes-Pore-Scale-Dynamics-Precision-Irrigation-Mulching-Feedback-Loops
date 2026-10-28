@@ -9,55 +9,55 @@
  "marks": [
   {
    "x": 110.95,
-   "y": 276,
+   "y": 343.20000000000005,
    "t": "Log",
    "d": "The loaded log to draw."
   },
   {
    "x": 459.425,
-   "y": 276,
+   "y": 343.20000000000005,
    "t": "View",
    "d": "Time series, annual values, depth profile through time, or profile at a date."
   },
   {
    "x": 856.6500000000001,
-   "y": 274,
+   "y": 341.20000000000005,
    "t": "From",
    "d": "First date drawn."
   },
   {
    "x": 1085.4750000000001,
-   "y": 274,
+   "y": 341.20000000000005,
    "t": "To",
    "d": "Last date drawn."
   },
   {
    "x": 156.65,
-   "y": 376.8,
+   "y": 444,
    "t": "Columns",
    "d": "Hold Ctrl or Shift to draw several columns together."
   },
   {
    "x": 76.2125,
-   "y": 482.40000000000003,
+   "y": 549.6,
    "t": "Draw",
    "d": "Draws the chosen columns."
   },
   {
    "x": 64,
-   "y": 736.8000000000001,
+   "y": 804,
    "t": "Chart",
    "d": "Move over the chart to read the values."
   },
   {
    "x": 206.10000000000002,
-   "y": 482.40000000000003,
+   "y": 549.6,
    "t": "Picture (PNG)",
    "d": "Saves the figure as a picture with its source line."
   },
   {
    "x": 363.85,
-   "y": 482.40000000000003,
+   "y": 549.6,
    "t": "Table (CSV)",
    "d": "Saves the plotted numbers as a table."
   }

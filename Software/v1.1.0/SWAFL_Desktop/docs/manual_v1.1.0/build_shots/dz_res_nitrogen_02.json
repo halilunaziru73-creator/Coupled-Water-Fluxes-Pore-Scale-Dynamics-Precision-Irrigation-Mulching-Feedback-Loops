@@ -9,21 +9,15 @@
  "marks": [
   {
    "x": 1755.9250000000002,
-   "y": 133.725,
+   "y": 134.125,
    "t": "Picture (PNG)",
    "d": "Saves this figure as a picture with its source line."
   },
   {
    "x": 940.8000000000001,
-   "y": 424.125,
+   "y": 424.52500000000003,
    "t": "Figure",
    "d": "The nitrogen balance of the run: what is applied, taken up by the crop, leached, denitrified and left in the soil."
-  },
-  {
-   "x": 1803.2,
-   "y": 424.125,
-   "t": "Source line",
-   "d": "The line that the picture carries when saved: model, weather, soil and years, as in a figure caption."
   }
  ]
 }

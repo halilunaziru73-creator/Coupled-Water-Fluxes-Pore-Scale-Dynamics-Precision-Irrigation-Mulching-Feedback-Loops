@@ -9,19 +9,19 @@
  "marks": [
   {
    "x": 84.80000000000001,
-   "y": 1355.6000000000001,
+   "y": 1538.4,
    "t": "Processes of Fig. 1",
    "d": "Weather, snow, canopy, soil water, biopores, drains, heat and ice, nitrate, ammonium, organic matter, carbon, denitrification, photosynthesis and crop growth."
   },
   {
    "x": 105.60000000000001,
-   "y": 1454.8000000000002,
+   "y": 1637.6000000000001,
    "t": "In words",
    "d": "Write for example snow and soil temperature in winter; the matching processes are ticked."
   },
   {
    "x": 84.80000000000001,
-   "y": 1522.4,
+   "y": 1705.2,
    "t": "Run Daisy",
    "d": "Runs the simulations and draws the standard figures and these."
   }

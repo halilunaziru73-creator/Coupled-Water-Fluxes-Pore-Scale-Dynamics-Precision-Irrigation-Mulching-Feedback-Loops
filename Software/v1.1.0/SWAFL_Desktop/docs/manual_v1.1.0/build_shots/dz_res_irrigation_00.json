@@ -9,31 +9,31 @@
  "marks": [
   {
    "x": 995.4000000000001,
-   "y": 98.525,
+   "y": 97.325,
    "t": "Run to look at",
    "d": "Chooses the run whose single run figures are drawn."
   },
   {
    "x": 1167.175,
-   "y": 93.72500000000001,
+   "y": 92.525,
    "t": "Save report",
    "d": "Saves all results and figures as one HTML report."
   },
   {
    "x": 1310.15,
-   "y": 93.72500000000001,
+   "y": 92.525,
    "t": "Put the logs in the Files list",
    "d": "Keeps the Daisy logs of the runs in the Files tab for the plot and balance tabs."
   },
   {
    "x": 1582.9250000000002,
-   "y": 93.72500000000001,
+   "y": 92.525,
    "t": "Open the set-up in the editor",
    "d": "Opens the Daisy set-up of the run in the Set-up editor."
   },
   {
    "x": 84.80000000000001,
-   "y": 345.725,
+   "y": 344.52500000000003,
    "t": "Mean per season",
    "d": "The mean of each result over the seasons, one column for each run."
   }

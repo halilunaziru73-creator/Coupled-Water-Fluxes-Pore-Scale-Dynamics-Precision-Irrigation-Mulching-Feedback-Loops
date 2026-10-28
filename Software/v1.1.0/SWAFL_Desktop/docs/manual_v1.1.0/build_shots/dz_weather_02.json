@@ -9,31 +9,31 @@
  "marks": [
   {
    "x": 110.55000000000001,
-   "y": 846.125,
+   "y": 1214.4,
    "t": "Interface key",
    "d": "The free interface key of the Danish open data service."
   },
   {
    "x": 645.325,
-   "y": 846.125,
+   "y": 1214.4,
    "t": "Latitude",
    "d": "Latitude of the place."
   },
   {
    "x": 1118.075,
-   "y": 846.125,
+   "y": 1214.4,
    "t": "From",
    "d": "First day to read."
   },
   {
    "x": 1527.7625,
-   "y": 843.325,
+   "y": 1211.6000000000001,
    "t": "Fetch and use",
    "d": "Reads the daily series and makes it the weather in use."
   },
   {
    "x": 64,
-   "y": 951.725,
+   "y": 1320,
    "t": "Groundwater file",
    "d": "A table with a date column and a depth to water column in metres, or a NetCDF file, used as the lower boundary of the soil column."
   }

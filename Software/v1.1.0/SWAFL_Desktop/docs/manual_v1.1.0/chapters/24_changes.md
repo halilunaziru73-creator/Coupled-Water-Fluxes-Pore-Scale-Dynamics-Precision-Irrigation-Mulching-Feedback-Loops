@@ -45,6 +45,7 @@
 ## The field on the map
 
 * The field sketch has a hand to move the drawing, zoom in and out (buttons and mouse wheel), *Fit*, and a north arrow and scale bar that follow the zoom.
+* The field sketch draws greenhouses and polytunnels, plant beds, areas to irrigate, no-irrigation zones, single plants and monitoring traps; the area to irrigate feeds the design; *Undo* and *Redo* (Ctrl+Z, Ctrl+Y) cover every change (Chapter 18).
 * *Tools ▸ Field on the map…* finds the farm (place search, coordinates, satellite image, Google Earth), demarcates it on the image, computes NDVI, EVI, SAVI, NDRE and NDWI of the demarcated field from Sentinel-2 or simulated by SWAFL, and exports the report (PDF or PNG at 96 to 600 dpi, with coordinates and authorship), GeoJSON and CSV (Chapter 20).
 * The virtual farm simulation has been removed; the real field on the map (Chapter 20) takes its place.
 * The Trigger law block of the Dashboard shows the current soil as a table, its season chart and the advice with each condition ticked.
@@ -65,4 +66,5 @@
 * Start from the Daisy reference offers 27 best combinations and 107 reference topics, in words that need no knowledge of modelling.
 * The Processes tab is a map of the model with the figures of each process, drawn from a Daisy run with all process logs.
 * The Process curves tab draws any function of the Daisy library.
-* Chapters 26 to 36 show all of these screens with numbered arrows and the data behind them.
+* The Daisy workbench is arranged as a guided path with Back and Next, from the data of the site to the layers of the SWAFL project, which read the Daisy runs: the layers *Chemical fate (Daisy runs)* and *Daisy decision table* (Chapter 31). Online weather of any place can be used for the analysis, the Daisy runs and the figures, and every weather figure carries its citation.
+* Chapters 26 to 39 show all of these screens with numbered arrows and the data behind them.

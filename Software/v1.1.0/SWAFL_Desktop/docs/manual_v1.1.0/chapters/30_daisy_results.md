@@ -12,7 +12,7 @@ The screens that follow were taken after a real Daisy run of each scenario on th
 
 The irrigation question was run on the built-in farm for the years 1990 to 1993 with the built-in Taastrup weather. After the run the results appear under the options: a list that chooses the run to look at, three buttons, a table of the mean per season and the figures.
 
-![Results of the irrigation question: the table of means. Screen 56 of the Daisy workbench.](images/daisy11/dz_res_irrigation_00.jpg){width=100% height=17cm}
+![Results of the irrigation question: the table of means. Screen 57 of the Daisy workbench.](images/daisy11/dz_res_irrigation_00.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -28,13 +28,12 @@ The irrigation question was run on the built-in farm for the years 1990 to 1993 
 
 Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare.
 
-![Yield of each crop, season by season (irrigation). Screen 57 of the Daisy workbench.](images/daisy11/dz_res_irrigation_01.jpg){width=100% height=17cm}
+![Yield of each crop, season by season (irrigation). Screen 58 of the Daisy workbench.](images/daisy11/dz_res_irrigation_01.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -42,13 +41,12 @@ Grain or storage organ yield of each crop of the rotation in each year for the r
 
 Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year.
 
-![Annual water balance (irrigation). Screen 58 of the Daisy workbench.](images/daisy11/dz_res_irrigation_02.jpg){width=100% height=17cm}
+![Annual water balance (irrigation). Screen 59 of the Daisy workbench.](images/daisy11/dz_res_irrigation_02.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -56,13 +54,12 @@ Rain, irrigation, evapotranspiration, drainage below the root zone and the chang
 
 Soil water content against depth and time, from the daily log of Daisy.
 
-![Water content through the soil profile (irrigation). Screen 59 of the Daisy workbench.](images/daisy11/dz_res_irrigation_03.jpg){width=100% height=17cm}
+![Water content through the soil profile (irrigation). Screen 60 of the Daisy workbench.](images/daisy11/dz_res_irrigation_03.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Soil water content against depth and time, from the daily log of Daisy.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -70,13 +67,12 @@ Soil water content against depth and time, from the daily log of Daisy.
 
 Soil water suction on the pF scale against depth and time; irrigation triggers act on this quantity.
 
-![Soil water suction (pF) (irrigation). Screen 60 of the Daisy workbench.](images/daisy11/dz_res_irrigation_04.jpg){width=100% height=17cm}
+![Soil water suction (pF) (irrigation). Screen 61 of the Daisy workbench.](images/daisy11/dz_res_irrigation_04.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Soil water suction on the pF scale against depth and time; irrigation triggers act on this quantity.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -84,13 +80,12 @@ Soil water suction on the pF scale against depth and time; irrigation triggers a
 
 Leaf area index with the water and nitrogen stress of the crop through the seasons.
 
-![Crop growth: leaf area and stress (irrigation). Screen 61 of the Daisy workbench.](images/daisy11/dz_res_irrigation_05.jpg){width=100% height=17cm}
+![Crop growth: leaf area and stress (irrigation). Screen 62 of the Daisy workbench.](images/daisy11/dz_res_irrigation_05.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Leaf area index with the water and nitrogen stress of the crop through the seasons.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -98,13 +93,12 @@ Leaf area index with the water and nitrogen stress of the crop through the seaso
 
 The mean yield of each crop in every ticked run, side by side.
 
-![Yield by crop: runs compared (irrigation). Screen 62 of the Daisy workbench.](images/daisy11/dz_res_irrigation_06.jpg){width=100% height=17cm}
+![Yield by crop: runs compared (irrigation). Screen 63 of the Daisy workbench.](images/daisy11/dz_res_irrigation_06.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** The mean yield of each crop in every ticked run, side by side.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -112,13 +106,12 @@ The mean yield of each crop in every ticked run, side by side.
 
 Irrigation, evapotranspiration and drainage of the runs side by side.
 
-![Water balance: runs compared (irrigation). Screen 63 of the Daisy workbench.](images/daisy11/dz_res_irrigation_07.jpg){width=100% height=17cm}
+![Water balance: runs compared (irrigation). Screen 64 of the Daisy workbench.](images/daisy11/dz_res_irrigation_07.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Irrigation, evapotranspiration and drainage of the runs side by side.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -126,13 +119,12 @@ Irrigation, evapotranspiration and drainage of the runs side by side.
 
 The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year.
 
-![Yield through the years: runs compared (irrigation). Screen 64 of the Daisy workbench.](images/daisy11/dz_res_irrigation_08.jpg){width=100% height=17cm}
+![Yield through the years: runs compared (irrigation). Screen 65 of the Daisy workbench.](images/daisy11/dz_res_irrigation_08.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -142,7 +134,7 @@ The yield of each year in every run, to show how much of a difference is steady 
 
 The nitrogen question was run on the built-in farm for the years 1990 to 1993 with the built-in Taastrup weather. After the run the results appear under the options: a list that chooses the run to look at, three buttons, a table of the mean per season and the figures.
 
-![Results of the nitrogen question: the table of means. Screen 65 of the Daisy workbench.](images/daisy11/dz_res_nitrogen_00.jpg){width=100% height=17cm}
+![Results of the nitrogen question: the table of means. Screen 66 of the Daisy workbench.](images/daisy11/dz_res_nitrogen_00.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -158,13 +150,12 @@ The nitrogen question was run on the built-in farm for the years 1990 to 1993 wi
 
 Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare.
 
-![Yield of each crop, season by season (nitrogen). Screen 66 of the Daisy workbench.](images/daisy11/dz_res_nitrogen_01.jpg){width=100% height=17cm}
+![Yield of each crop, season by season (nitrogen). Screen 67 of the Daisy workbench.](images/daisy11/dz_res_nitrogen_01.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -172,13 +163,12 @@ Grain or storage organ yield of each crop of the rotation in each year for the r
 
 The nitrogen balance of the run: what is applied, taken up by the crop, leached, denitrified and left in the soil.
 
-![Where does the nitrogen go? (nitrogen). Screen 67 of the Daisy workbench.](images/daisy11/dz_res_nitrogen_02.jpg){width=100% height=17cm}
+![Where does the nitrogen go? (nitrogen). Screen 68 of the Daisy workbench.](images/daisy11/dz_res_nitrogen_02.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** The nitrogen balance of the run: what is applied, taken up by the crop, leached, denitrified and left in the soil.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -186,13 +176,12 @@ The nitrogen balance of the run: what is applied, taken up by the crop, leached,
 
 Nitrate concentration of the soil solution against depth and time.
 
-![Nitrate in the soil solution (nitrogen). Screen 68 of the Daisy workbench.](images/daisy11/dz_res_nitrogen_03.jpg){width=100% height=17cm}
+![Nitrate in the soil solution (nitrogen). Screen 69 of the Daisy workbench.](images/daisy11/dz_res_nitrogen_03.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Nitrate concentration of the soil solution against depth and time.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -200,13 +189,12 @@ Nitrate concentration of the soil solution against depth and time.
 
 Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year.
 
-![Annual water balance (nitrogen). Screen 69 of the Daisy workbench.](images/daisy11/dz_res_nitrogen_04.jpg){width=100% height=17cm}
+![Annual water balance (nitrogen). Screen 70 of the Daisy workbench.](images/daisy11/dz_res_nitrogen_04.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -214,13 +202,12 @@ Rain, irrigation, evapotranspiration, drainage below the root zone and the chang
 
 The mean yield of each crop in every ticked run, side by side.
 
-![Yield by crop: runs compared (nitrogen). Screen 70 of the Daisy workbench.](images/daisy11/dz_res_nitrogen_05.jpg){width=100% height=17cm}
+![Yield by crop: runs compared (nitrogen). Screen 71 of the Daisy workbench.](images/daisy11/dz_res_nitrogen_05.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** The mean yield of each crop in every ticked run, side by side.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -228,13 +215,12 @@ The mean yield of each crop in every ticked run, side by side.
 
 Nitrate leached, denitrification and nitrogen uptake of the runs side by side.
 
-![Nitrogen: runs compared (nitrogen). Screen 71 of the Daisy workbench.](images/daisy11/dz_res_nitrogen_06.jpg){width=100% height=17cm}
+![Nitrogen: runs compared (nitrogen). Screen 72 of the Daisy workbench.](images/daisy11/dz_res_nitrogen_06.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Nitrate leached, denitrification and nitrogen uptake of the runs side by side.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -242,13 +228,12 @@ Nitrate leached, denitrification and nitrogen uptake of the runs side by side.
 
 Yield and nitrate leaching against the fertiliser rate across the runs.
 
-![Response to the nitrogen rate (nitrogen). Screen 72 of the Daisy workbench.](images/daisy11/dz_res_nitrogen_07.jpg){width=100% height=17cm}
+![Response to the nitrogen rate (nitrogen). Screen 73 of the Daisy workbench.](images/daisy11/dz_res_nitrogen_07.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Yield and nitrate leaching against the fertiliser rate across the runs.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -256,13 +241,12 @@ Yield and nitrate leaching against the fertiliser rate across the runs.
 
 The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year.
 
-![Yield through the years: runs compared (nitrogen). Screen 73 of the Daisy workbench.](images/daisy11/dz_res_nitrogen_08.jpg){width=100% height=17cm}
+![Yield through the years: runs compared (nitrogen). Screen 74 of the Daisy workbench.](images/daisy11/dz_res_nitrogen_08.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -272,7 +256,7 @@ The yield of each year in every run, to show how much of a difference is steady 
 
 The climate question was run on the built-in farm for the years 1990 to 1993 with the built-in Taastrup weather. After the run the results appear under the options: a list that chooses the run to look at, three buttons, a table of the mean per season and the figures.
 
-![Results of the climate question: the table of means. Screen 74 of the Daisy workbench.](images/daisy11/dz_res_climate_00.jpg){width=100% height=17cm}
+![Results of the climate question: the table of means. Screen 75 of the Daisy workbench.](images/daisy11/dz_res_climate_00.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -288,13 +272,12 @@ The climate question was run on the built-in farm for the years 1990 to 1993 wit
 
 Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare.
 
-![Yield of each crop, season by season (climate). Screen 75 of the Daisy workbench.](images/daisy11/dz_res_climate_01.jpg){width=100% height=17cm}
+![Yield of each crop, season by season (climate). Screen 76 of the Daisy workbench.](images/daisy11/dz_res_climate_01.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -302,13 +285,12 @@ Grain or storage organ yield of each crop of the rotation in each year for the r
 
 Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year.
 
-![Annual water balance (climate). Screen 76 of the Daisy workbench.](images/daisy11/dz_res_climate_02.jpg){width=100% height=17cm}
+![Annual water balance (climate). Screen 77 of the Daisy workbench.](images/daisy11/dz_res_climate_02.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -316,13 +298,12 @@ Rain, irrigation, evapotranspiration, drainage below the root zone and the chang
 
 Leaf area index with the water and nitrogen stress of the crop through the seasons.
 
-![Crop growth: leaf area and stress (climate). Screen 77 of the Daisy workbench.](images/daisy11/dz_res_climate_03.jpg){width=100% height=17cm}
+![Crop growth: leaf area and stress (climate). Screen 78 of the Daisy workbench.](images/daisy11/dz_res_climate_03.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Leaf area index with the water and nitrogen stress of the crop through the seasons.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -330,13 +311,12 @@ Leaf area index with the water and nitrogen stress of the crop through the seaso
 
 Soil water content against depth and time, from the daily log of Daisy.
 
-![Water content through the soil profile (climate). Screen 78 of the Daisy workbench.](images/daisy11/dz_res_climate_04.jpg){width=100% height=17cm}
+![Water content through the soil profile (climate). Screen 79 of the Daisy workbench.](images/daisy11/dz_res_climate_04.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Soil water content against depth and time, from the daily log of Daisy.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -344,13 +324,12 @@ Soil water content against depth and time, from the daily log of Daisy.
 
 The mean yield of each crop in every ticked run, side by side.
 
-![Yield by crop: runs compared (climate). Screen 79 of the Daisy workbench.](images/daisy11/dz_res_climate_05.jpg){width=100% height=17cm}
+![Yield by crop: runs compared (climate). Screen 80 of the Daisy workbench.](images/daisy11/dz_res_climate_05.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** The mean yield of each crop in every ticked run, side by side.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -358,13 +337,12 @@ The mean yield of each crop in every ticked run, side by side.
 
 Irrigation, evapotranspiration and drainage of the runs side by side.
 
-![Water balance: runs compared (climate). Screen 80 of the Daisy workbench.](images/daisy11/dz_res_climate_06.jpg){width=100% height=17cm}
+![Water balance: runs compared (climate). Screen 81 of the Daisy workbench.](images/daisy11/dz_res_climate_06.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Irrigation, evapotranspiration and drainage of the runs side by side.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -372,13 +350,12 @@ Irrigation, evapotranspiration and drainage of the runs side by side.
 
 Nitrate leached, denitrification and nitrogen uptake of the runs side by side.
 
-![Nitrogen: runs compared (climate). Screen 81 of the Daisy workbench.](images/daisy11/dz_res_climate_07.jpg){width=100% height=17cm}
+![Nitrogen: runs compared (climate). Screen 82 of the Daisy workbench.](images/daisy11/dz_res_climate_07.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Nitrate leached, denitrification and nitrogen uptake of the runs side by side.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -386,13 +363,12 @@ Nitrate leached, denitrification and nitrogen uptake of the runs side by side.
 
 The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year.
 
-![Yield through the years: runs compared (climate). Screen 82 of the Daisy workbench.](images/daisy11/dz_res_climate_08.jpg){width=100% height=17cm}
+![Yield through the years: runs compared (climate). Screen 83 of the Daisy workbench.](images/daisy11/dz_res_climate_08.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -402,7 +378,7 @@ The yield of each year in every run, to show how much of a difference is steady 
 
 The chemical question was run on the built-in farm for the years 1990 to 1993 with the built-in Taastrup weather. After the run the results appear under the options: a list that chooses the run to look at, three buttons, a table of the mean per season and the figures.
 
-![Results of the chemical question: the table of means. Screen 83 of the Daisy workbench.](images/daisy11/dz_res_chemical_00.jpg){width=100% height=17cm}
+![Results of the chemical question: the table of means. Screen 84 of the Daisy workbench.](images/daisy11/dz_res_chemical_00.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -418,13 +394,12 @@ The chemical question was run on the built-in farm for the years 1990 to 1993 wi
 
 How much of the chemical is in the soil, decayed, leached or taken up in each season.
 
-![Fate of the chemical, season by season (chemical). Screen 84 of the Daisy workbench.](images/daisy11/dz_res_chemical_01.jpg){width=100% height=17cm}
+![Fate of the chemical, season by season (chemical). Screen 85 of the Daisy workbench.](images/daisy11/dz_res_chemical_01.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** How much of the chemical is in the soil, decayed, leached or taken up in each season.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -432,13 +407,12 @@ How much of the chemical is in the soil, decayed, leached or taken up in each se
 
 The concentration of the chemical against depth and time.
 
-![Chemical concentration through the soil profile (chemical). Screen 85 of the Daisy workbench.](images/daisy11/dz_res_chemical_02.jpg){width=100% height=17cm}
+![Chemical concentration through the soil profile (chemical). Screen 86 of the Daisy workbench.](images/daisy11/dz_res_chemical_02.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** The concentration of the chemical against depth and time.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -446,13 +420,12 @@ The concentration of the chemical against depth and time.
 
 Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year.
 
-![Annual water balance (chemical). Screen 86 of the Daisy workbench.](images/daisy11/dz_res_chemical_03.jpg){width=100% height=17cm}
+![Annual water balance (chemical). Screen 87 of the Daisy workbench.](images/daisy11/dz_res_chemical_03.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -460,13 +433,12 @@ Rain, irrigation, evapotranspiration, drainage below the root zone and the chang
 
 The fate of the chemical in the runs side by side: mobile tracer, sorbed and quickly decaying chemical.
 
-![Chemical fate: runs compared (chemical). Screen 87 of the Daisy workbench.](images/daisy11/dz_res_chemical_04.jpg){width=100% height=17cm}
+![Chemical fate: runs compared (chemical). Screen 88 of the Daisy workbench.](images/daisy11/dz_res_chemical_04.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** The fate of the chemical in the runs side by side: mobile tracer, sorbed and quickly decaying chemical.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -474,13 +446,12 @@ The fate of the chemical in the runs side by side: mobile tracer, sorbed and qui
 
 The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year.
 
-![Yield through the years: runs compared (chemical). Screen 88 of the Daisy workbench.](images/daisy11/dz_res_chemical_05.jpg){width=100% height=17cm}
+![Yield through the years: runs compared (chemical). Screen 89 of the Daisy workbench.](images/daisy11/dz_res_chemical_05.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -490,7 +461,7 @@ The yield of each year in every run, to show how much of a difference is steady 
 
 The soil question was run on the built-in farm for the years 1990 to 1993 with the built-in Taastrup weather. After the run the results appear under the options: a list that chooses the run to look at, three buttons, a table of the mean per season and the figures.
 
-![Results of the soil question: the table of means. Screen 89 of the Daisy workbench.](images/daisy11/dz_res_soil_00.jpg){width=100% height=17cm}
+![Results of the soil question: the table of means. Screen 90 of the Daisy workbench.](images/daisy11/dz_res_soil_00.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -506,13 +477,12 @@ The soil question was run on the built-in farm for the years 1990 to 1993 with t
 
 Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare.
 
-![Yield of each crop, season by season (soil). Screen 90 of the Daisy workbench.](images/daisy11/dz_res_soil_01.jpg){width=100% height=17cm}
+![Yield of each crop, season by season (soil). Screen 91 of the Daisy workbench.](images/daisy11/dz_res_soil_01.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -520,13 +490,12 @@ Grain or storage organ yield of each crop of the rotation in each year for the r
 
 Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year.
 
-![Annual water balance (soil). Screen 91 of the Daisy workbench.](images/daisy11/dz_res_soil_02.jpg){width=100% height=17cm}
+![Annual water balance (soil). Screen 92 of the Daisy workbench.](images/daisy11/dz_res_soil_02.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -534,13 +503,12 @@ Rain, irrigation, evapotranspiration, drainage below the root zone and the chang
 
 Soil water content against depth and time, from the daily log of Daisy.
 
-![Water content through the soil profile (soil). Screen 92 of the Daisy workbench.](images/daisy11/dz_res_soil_03.jpg){width=100% height=17cm}
+![Water content through the soil profile (soil). Screen 93 of the Daisy workbench.](images/daisy11/dz_res_soil_03.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Soil water content against depth and time, from the daily log of Daisy.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -548,13 +516,12 @@ Soil water content against depth and time, from the daily log of Daisy.
 
 Soil water suction on the pF scale against depth and time; irrigation triggers act on this quantity.
 
-![Soil water suction (pF) (soil). Screen 93 of the Daisy workbench.](images/daisy11/dz_res_soil_04.jpg){width=100% height=17cm}
+![Soil water suction (pF) (soil). Screen 94 of the Daisy workbench.](images/daisy11/dz_res_soil_04.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Soil water suction on the pF scale against depth and time; irrigation triggers act on this quantity.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -562,13 +529,12 @@ Soil water suction on the pF scale against depth and time; irrigation triggers a
 
 Nitrate concentration of the soil solution against depth and time.
 
-![Nitrate in the soil solution (soil). Screen 94 of the Daisy workbench.](images/daisy11/dz_res_soil_05.jpg){width=100% height=17cm}
+![Nitrate in the soil solution (soil). Screen 95 of the Daisy workbench.](images/daisy11/dz_res_soil_05.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Nitrate concentration of the soil solution against depth and time.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -576,13 +542,12 @@ Nitrate concentration of the soil solution against depth and time.
 
 The mean yield of each crop in every ticked run, side by side.
 
-![Yield by crop: runs compared (soil). Screen 95 of the Daisy workbench.](images/daisy11/dz_res_soil_06.jpg){width=100% height=17cm}
+![Yield by crop: runs compared (soil). Screen 96 of the Daisy workbench.](images/daisy11/dz_res_soil_06.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** The mean yield of each crop in every ticked run, side by side.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -590,13 +555,12 @@ The mean yield of each crop in every ticked run, side by side.
 
 Irrigation, evapotranspiration and drainage of the runs side by side.
 
-![Water balance: runs compared (soil). Screen 96 of the Daisy workbench.](images/daisy11/dz_res_soil_07.jpg){width=100% height=17cm}
+![Water balance: runs compared (soil). Screen 97 of the Daisy workbench.](images/daisy11/dz_res_soil_07.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Irrigation, evapotranspiration and drainage of the runs side by side.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -604,13 +568,12 @@ Irrigation, evapotranspiration and drainage of the runs side by side.
 
 Nitrate leached, denitrification and nitrogen uptake of the runs side by side.
 
-![Nitrogen: runs compared (soil). Screen 97 of the Daisy workbench.](images/daisy11/dz_res_soil_08.jpg){width=100% height=17cm}
+![Nitrogen: runs compared (soil). Screen 98 of the Daisy workbench.](images/daisy11/dz_res_soil_08.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** Nitrate leached, denitrification and nitrogen uptake of the runs side by side.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -618,13 +581,12 @@ Nitrate leached, denitrification and nitrogen uptake of the runs side by side.
 
 The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year.
 
-![Yield through the years: runs compared (soil). Screen 98 of the Daisy workbench.](images/daisy11/dz_res_soil_09.jpg){width=100% height=17cm}
+![Yield through the years: runs compared (soil). Screen 99 of the Daisy workbench.](images/daisy11/dz_res_soil_09.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Picture (PNG).** Saves this figure as a picture with its source line.
 2. **Figure.** The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year.
-3. **Source line.** The line that the picture carries when saved: model, weather, soil and years, as in a figure caption.
 
 \newpage
 
@@ -634,7 +596,7 @@ The yield of each year in every run, to show how much of a difference is steady 
 
 Processes is a map of the model after Fig. 1 of the Daisy paper. Each box is a process; clicking it explains it and draws its figures.
 
-![Processes: the map. Screen 99 of the Daisy workbench.](images/daisy11/dz_proc_01.jpg){width=100% height=17cm}
+![Processes: the map. Screen 100 of the Daisy workbench.](images/daisy11/dz_proc_01.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -648,7 +610,7 @@ Processes is a map of the model after Fig. 1 of the Daisy paper. Each box is a p
 
 Daisy reads daily or hourly weather (air temperature, global radiation, precipitation, reference evapotranspiration and, if available, wind and vapour pressure) and the Bioclimate module splits the energy and water between canopy, litter, snow, pond and soil. The potential evapotranspiration is shared out by the cover of each layer.
 
-![Processes: Weather and bioclimate. Screen 100 of the Daisy workbench.](images/daisy11/dz_proc_02.jpg){width=100% height=17cm}
+![Processes: Weather and bioclimate. Screen 101 of the Daisy workbench.](images/daisy11/dz_proc_02.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -666,7 +628,7 @@ Daisy reads daily or hourly weather (air temperature, global radiation, precipit
 
 Precipitation falls as snow below the threshold temperature and builds a snowpack that holds liquid water, ages, compacts and melts; melt water percolates and, when the soil below is frozen, can run off or pond.
 
-![Processes: Snowpack. Screen 101 of the Daisy workbench.](images/daisy11/dz_proc_03.jpg){width=100% height=17cm}
+![Processes: Snowpack. Screen 102 of the Daisy workbench.](images/daisy11/dz_proc_03.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -684,7 +646,7 @@ Precipitation falls as snow below the threshold temperature and builds a snowpac
 
 Rain and irrigation are intercepted by the canopy and the litter layer and evaporate from them; what passes goes to the surface pond. The pond infiltrates into the matrix, the biopores (tertiary infiltration) or runs off. Tillage resets the surface.
 
-![Processes: Canopy, litter and ponded water. Screen 102 of the Daisy workbench.](images/daisy11/dz_proc_04.jpg){width=100% height=17cm}
+![Processes: Canopy, litter and ponded water. Screen 103 of the Daisy workbench.](images/daisy11/dz_proc_04.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -702,7 +664,7 @@ Rain and irrigation are intercepted by the canopy and the litter layer and evapo
 
 Water in the matrix moves by the one-dimensional Richards equation, with hydraulic properties from the horizons (retention curve and conductivity). Root uptake is the sink and evaporation the surface boundary; the bottom boundary can be free drainage, a groundwater table or a lysimeter.
 
-![Processes: Soil water (Richards equation). Screen 103 of the Daisy workbench.](images/daisy11/dz_proc_05.jpg){width=100% height=17cm}
+![Processes: Soil water (Richards equation). Screen 104 of the Daisy workbench.](images/daisy11/dz_proc_05.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -720,7 +682,7 @@ Water in the matrix moves by the one-dimensional Richards equation, with hydraul
 
 Part of the water and solutes moves through biopores that bypass the matrix, filled from the surface pond and exchanging with the matrix along the way. This is the source of fast leaching of nitrate and pesticide.
 
-![Processes: Biopores (preferential flow). Screen 104 of the Daisy workbench.](images/daisy11/dz_proc_06.jpg){width=100% height=17cm}
+![Processes: Biopores (preferential flow). Screen 105 of the Daisy workbench.](images/daisy11/dz_proc_06.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -736,7 +698,7 @@ Part of the water and solutes moves through biopores that bypass the matrix, fil
 
 Tile drains are a sink in the layers at the drain depth, when the soil there is saturated; drained water takes nitrate with it. A groundwater table or a lysimeter bottom boundary closes the water balance at the bottom.
 
-![Processes: Drains and groundwater. Screen 105 of the Daisy workbench.](images/daisy11/dz_proc_07.jpg){width=100% height=17cm}
+![Processes: Drains and groundwater. Screen 106 of the Daisy workbench.](images/daisy11/dz_proc_07.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -752,7 +714,7 @@ Tile drains are a sink in the layers at the drain depth, when the soil there is 
 
 Heat moves by conduction and with the water flux; the surface boundary comes from the energy balance of the bioclimate. When the temperature falls below the freezing point part of the water turns to ice, which blocks the flow and releases latent heat.
 
-![Processes: Soil heat and ice. Screen 106 of the Daisy workbench.](images/daisy11/dz_proc_08.jpg){width=100% height=17cm}
+![Processes: Soil heat and ice. Screen 107 of the Daisy workbench.](images/daisy11/dz_proc_08.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -769,7 +731,7 @@ Heat moves by conduction and with the water flux; the surface boundary comes fro
 
 Nitrate moves with the water by convection and dispersion and is taken up by roots; it is produced by nitrification and lost by denitrification, drains and leaching below the root zone.
 
-![Processes: Nitrate (solute transport). Screen 107 of the Daisy workbench.](images/daisy11/dz_proc_09.jpg){width=100% height=17cm}
+![Processes: Nitrate (solute transport). Screen 108 of the Daisy workbench.](images/daisy11/dz_proc_09.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -786,7 +748,7 @@ Nitrate moves with the water by convection and dispersion and is taken up by roo
 
 Ammonium comes from mineralisation and fertiliser; it is sorbed on the soil, nitrified to nitrate (the rate depends on the temperature, the water content and the pH) and taken up by plants.
 
-![Processes: Ammonium (sorbed and dissolved). Screen 108 of the Daisy workbench.](images/daisy11/dz_proc_10.jpg){width=100% height=17cm}
+![Processes: Ammonium (sorbed and dissolved). Screen 109 of the Daisy workbench.](images/daisy11/dz_proc_10.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -802,7 +764,7 @@ Ammonium comes from mineralisation and fertiliser; it is sorbed on the soil, nit
 
 Added organic matter (AOM1-3: crop residues, roots, manure) is decomposed by the soil microbial biomass (SMB1-2), which builds soil organic matter (SOM1-3) from slow to inert; each pool has a carbon and a nitrogen content with its own turnover and efficiency, and the C:N ratio decides whether nitrogen is mineralised or immobilised.
 
-![Processes: Organic matter pools (AOM, SMB, SOM). Screen 109 of the Daisy workbench.](images/daisy11/dz_proc_11.jpg){width=100% height=17cm}
+![Processes: Organic matter pools (AOM, SMB, SOM). Screen 110 of the Daisy workbench.](images/daisy11/dz_proc_11.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -820,7 +782,7 @@ Added organic matter (AOM1-3: crop residues, roots, manure) is decomposed by the
 
 Carbon enters with the crop residues (shoot, root and stubble), fertiliser and manure and leaves as CO2 from the microbial pools and the plants; the balance shows how the soil carbon changes with the rotation and tillage.
 
-![Processes: Carbon balance and residues. Screen 110 of the Daisy workbench.](images/daisy11/dz_proc_12.jpg){width=100% height=17cm}
+![Processes: Carbon balance and residues. Screen 111 of the Daisy workbench.](images/daisy11/dz_proc_12.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -838,7 +800,7 @@ Carbon enters with the crop residues (shoot, root and stubble), fertiliser and m
 
 In wet, carbon-rich soil nitrate is reduced to N2 and N2O; the rate follows the CO2 production, the water content and the temperature, with a potential rate and a redox part, and N2O also comes from nitrification.
 
-![Processes: Denitrification and N2O. Screen 111 of the Daisy workbench.](images/daisy11/dz_proc_13.jpg){width=100% height=17cm}
+![Processes: Denitrification and N2O. Screen 112 of the Daisy workbench.](images/daisy11/dz_proc_13.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -856,7 +818,7 @@ In wet, carbon-rich soil nitrate is reduced to N2 and N2O; the rate follows the 
 
 Canopy assimilation comes from the leaf area, the light, the temperature and the water and nitrogen stress; assimilate fills the pool, from which maintenance and growth respiration are paid and the rest is partitioned to the organs.
 
-![Processes: Photosynthesis and respiration. Screen 112 of the Daisy workbench.](images/daisy11/dz_proc_14.jpg){width=100% height=17cm}
+![Processes: Photosynthesis and respiration. Screen 113 of the Daisy workbench.](images/daisy11/dz_proc_14.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -874,7 +836,7 @@ Canopy assimilation comes from the leaf area, the light, the temperature and the
 
 The crop develops with the development stage (DS), leaf area index (LAI), height and rooting depth; dry matter and nitrogen are partitioned to leaf, stem, storage organ and root, under water and nitrogen stress; at harvest the storage organ leaves the field and the rest becomes residue.
 
-![Processes: Crop growth: leaf, stem, root, storage organ. Screen 113 of the Daisy workbench.](images/daisy11/dz_proc_15.jpg){width=100% height=17cm}
+![Processes: Crop growth: leaf, stem, root, storage organ. Screen 114 of the Daisy workbench.](images/daisy11/dz_proc_15.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -892,7 +854,7 @@ The crop develops with the development stage (DS), leaf area index (LAI), height
 
 Plot draws any column of a loaded log. The log, the view and the period are chosen in the first row, the columns in the list below it.
 
-![Plot: a time series. Screen 114 of the Daisy workbench.](images/daisy11/dz_plot_01.jpg){width=100% height=17cm}
+![Plot: a time series. Screen 115 of the Daisy workbench.](images/daisy11/dz_plot_01.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -912,7 +874,7 @@ Plot draws any column of a loaded log. The log, the view and the period are chos
 
 The annual view adds up, averages or takes the largest or smallest value of each year.
 
-![Plot: annual values. Screen 115 of the Daisy workbench.](images/daisy11/dz_plot_02.jpg){width=100% height=17cm}
+![Plot: annual values. Screen 116 of the Daisy workbench.](images/daisy11/dz_plot_02.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -926,7 +888,7 @@ The annual view adds up, averages or takes the largest or smallest value of each
 
 Logs with a depth column are drawn as a map of depth against time in spectral colours.
 
-![Plot: depth profile through time. Screen 116 of the Daisy workbench.](images/daisy11/dz_plot_03.jpg){width=100% height=17cm}
+![Plot: depth profile through time. Screen 117 of the Daisy workbench.](images/daisy11/dz_plot_03.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -940,7 +902,7 @@ Logs with a depth column are drawn as a map of depth against time in spectral co
 
 The slider moves through the dates; Play runs the profile like a film.
 
-![Plot: profile at a date, animated. Screen 117 of the Daisy workbench.](images/daisy11/dz_plot_04.jpg){width=100% height=17cm}
+![Plot: profile at a date, animated. Screen 118 of the Daisy workbench.](images/daisy11/dz_plot_04.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -954,7 +916,7 @@ The slider moves through the dates; Play runs the profile like a film.
 
 The balance adds the inputs, the outputs and the content columns of a log. Choose columns proposes a set from the column names.
 
-![Mass balance: the form. Screen 118 of the Daisy workbench.](images/daisy11/dz_balance_01.jpg){width=100% height=17cm}
+![Mass balance: the form. Screen 119 of the Daisy workbench.](images/daisy11/dz_balance_01.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -972,7 +934,7 @@ The balance adds the inputs, the outputs and the content columns of a log. Choos
 
 After Balance the error of each step is drawn with the mean and the limits of two and three standard deviations.
 
-![Mass balance: the control chart. Screen 119 of the Daisy workbench.](images/daisy11/dz_balance_02.jpg){width=100% height=17cm}
+![Mass balance: the control chart. Screen 120 of the Daisy workbench.](images/daisy11/dz_balance_02.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -986,7 +948,7 @@ After Balance the error of each step is drawn with the mean and the limits of tw
 
 Two logs are compared column by column against the smallest meaningful level of each quantity.
 
-![Compare and test: the form. Screen 120 of the Daisy workbench.](images/daisy11/dz_compare_01.jpg){width=100% height=17cm}
+![Compare and test: the form. Screen 121 of the Daisy workbench.](images/daisy11/dz_compare_01.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -1003,7 +965,7 @@ Two logs are compared column by column against the smallest meaningful level of 
 
 Each column is reported as identical, different within the level, or different.
 
-![Compare and test: the result. Screen 121 of the Daisy workbench.](images/daisy11/dz_compare_02.jpg){width=100% height=17cm}
+![Compare and test: the result. Screen 122 of the Daisy workbench.](images/daisy11/dz_compare_02.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 

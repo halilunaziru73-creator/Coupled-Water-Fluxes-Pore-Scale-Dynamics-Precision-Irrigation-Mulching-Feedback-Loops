@@ -1,0 +1,35 @@
+{
+ "id": "dz_flow_02",
+ "group": "70_flow",
+ "ch": "flow",
+ "sec": "The guided path",
+ "title": "The guided path: step 5, Scenarios",
+ "intro": "Step 5 is where a question is chosen and run. After the run the results are drawn under the question, and Next leads on to Experiments, Processes and the other ways of looking at the results.",
+ "note": "",
+ "marks": [
+  {
+   "x": 120.53750000000001,
+   "y": 278.40000000000003,
+   "t": "Where you are",
+   "d": "The number of the step on the guided path and the number of steps."
+  },
+  {
+   "x": 233.07500000000002,
+   "y": 278.40000000000003,
+   "t": "What to do here",
+   "d": "The name of the step and one sentence on what it is for."
+  },
+  {
+   "x": 1532.9750000000001,
+   "y": 278.40000000000003,
+   "t": "Back",
+   "d": "Returns to the step before, with the name of that step."
+  },
+  {
+   "x": 1729.375,
+   "y": 278.40000000000003,
+   "t": "Next",
+   "d": "Goes on to the step after, with the name of that step."
+  }
+ ]
+}

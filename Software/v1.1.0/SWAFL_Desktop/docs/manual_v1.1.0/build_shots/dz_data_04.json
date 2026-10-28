@@ -9,19 +9,19 @@
  "marks": [
   {
    "x": 639.375,
-   "y": 406.925,
+   "y": 485.20000000000005,
    "t": "File read",
    "d": "The file that was chosen."
   },
   {
    "x": 84.80000000000001,
-   "y": 525.725,
+   "y": 604,
    "t": "Result of the reading",
    "d": "Name, first and last year, complete years, mean annual rain, mean temperature and the columns used."
   },
   {
    "x": 244.95000000000002,
-   "y": 447.32500000000005,
+   "y": 525.6,
    "t": "Site",
    "d": "The latitude, longitude and elevation read from the header of the file."
   }

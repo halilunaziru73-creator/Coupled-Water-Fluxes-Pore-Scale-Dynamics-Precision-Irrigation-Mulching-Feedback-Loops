@@ -16,12 +16,12 @@ out = {}; N = [0]
 def S(sid):
     N[0] += 1; return scr(sid, N[0])
 # 26 overview
-t = '# The Daisy workbench: overview {#daisy-overview}\n\nThe Daisy workbench is the part of SWAFL that runs the Daisy 7.1.14 model, draws its results and tests it. It opens from the button Daisy model of the toolbar. The tabs are in five groups that follow what a person does: give the data, ask a question, look at the results, build and test, and learn.\n\n'
+t = '# The Daisy workbench: overview {#daisy-overview}\n\nThe Daisy workbench is the part of SWAFL that runs the Daisy 7.1.14 model, draws its results and tests it. It opens from the button Daisy model of the toolbar. The tabs are in groups that follow what a person does: give the data, ask a question, look at the results, decide in the SWAFL project, and, apart from that path, build and test and learn. A bar above every tab on the path, with the buttons Back and Next, leads through the steps in this order (Chapter 31).\n\n'
 t += '| Group | Tab | What it is for |\n|:--|:--|:--|\n'
 G = [('1 Your data', 'My data', 'Set the weather and the soil of the site once; every simulation uses them.'), ('1 Your data', 'Weather stations', 'Look at the stations bundled with Daisy and bring one into the data.'), ('1 Your data', 'Library', 'Read the horizons, crops, fertilisers and other entries of the Daisy library.'), ('1 Your data', 'Files', 'Collect logs, weather and set-up files from Daisy runs.'),
  ('2 Ask a question', 'Scenarios', 'Five ready questions about water, nitrogen, climate, a chemical and soil.'), ('2 Ask a question', 'Experiments', 'Design your own set of runs from 53 factors, or start from 27 best combinations.'),
  ('3 Look at results', 'Processes', 'A map of the model processes with the figures of each one.'), ('3 Look at results', 'Plot', 'Draw any column of a log.'), ('3 Look at results', 'Mass balance', 'Check that inputs, outputs and content agree.'), ('3 Look at results', 'Compare and test', 'Compare two logs against the smallest meaningful level.'),
- ('4 Build and test', 'Set-up editor', 'Edit and run a Daisy set-up file.'), ('4 Build and test', 'Soil column', 'Solve the Richards equation for a soil column.'), ('4 Build and test', 'Process curves', 'Draw any function of the Daisy library.'), ('4 Build and test', 'Calibrate', 'Search parameters with three optimisers.'), ('5 Learn', 'Model and documentation', 'The model, the questions and where each is answered, the downloads.')]
+ ('4 Decide in the SWAFL project', 'To the SWAFL project', 'Take the results to the layers of the SWAFL project that turn them into decisions.'), ('Tools: build and test', 'Set-up editor', 'Edit and run a Daisy set-up file.'), ('Tools: build and test', 'Soil column', 'Solve the Richards equation for a soil column.'), ('Tools: build and test', 'Process curves', 'Draw any function of the Daisy library.'), ('Tools: build and test', 'Calibrate', 'Search parameters with three optimisers.'), ('Tools: learn', 'Model and documentation', 'The model, the questions and where each is answered, the downloads.')]
 t += ''.join('| %s | %s | %s |\n' % g for g in G) + '\nThe chapters that follow take the groups in this order. Every screen is shown with numbered arrows; the list under it says what each arrow points to.\n\n**How the weather is chosen.** The weather of a run is chosen once in the strip at the top of the Scenarios, Experiments and Processes tabs, and its source is set in My data. The choices are the weather of the SWAFL project, the built-in Taastrup weather, one of the bundled stations, online weather of a place and a file of your own. All simulations then use that weather, so a figure and the project always agree.\n\n**What runs where.** The scenarios, experiments, set-up editor and calibration against the Daisy program need the desktop app with Daisy installed. The soil column, the process curves and the denitrification calibration run in the web version too. The figures of results that are drawn here come from real Daisy runs of the built-in farm for the years 1990 to 1993.\n\n'
 out['26_daisy_overview.md'] = t
 # 27 your data
@@ -57,6 +57,48 @@ t += '## Processes, plots, balance and tests\n\n'
 for sec in ['Processes', 'Plot', 'Mass balance', 'Compare and test']:
     for sid in ids('results', sec): t += S(sid)
 out['30_daisy_results.md'] = t
+# 30z the guided path and the hand-over to the SWAFL project
+t = '# From Daisy to the SWAFL project {#daisy-flow}\n\nDaisy calculates; the SWAFL project decides. The Daisy workbench is therefore arranged as one path that begins with the data of the site and ends in the layers of the SWAFL project, and every step of it is connected to the next. This chapter shows the path, the hand-over of the results, and the two layers of the SWAFL project that read real Daisy runs.\n\n'
+t += '## The guided path\n\nA bar above each tab on the path shows the step (for example *Step 5 of 11*), what the step is for, and two buttons: **Back** goes to the step before and **Next** to the step after, each named on the button. The tabs can still be opened in any order from the row of tabs; the bar only shows where a tab lies on the path. Tabs outside the path (Set-up editor, Soil column, Process curves, Calibrate, and Model and documentation) show the bar *Tool*, with a button that returns to the last step of the path that was open.\n\n'
+t += '| Step | Tab | What is done there |\n|--:|:--|:--|\n' + ''.join('| %d | %s | %s |\n' % (i + 1, a, b) for i, (a, b) in enumerate([('My data', 'Set the weather and the soil of your site once. Every simulation uses them.'), ('Weather stations', 'Look at a weather record, or bring online weather of any place.'), ('Library', 'Browse the soils, crops, fertilisers and chemicals of Daisy (this step can be skipped).'), ('Files', 'Load the logs of earlier Daisy runs (this step can be skipped).'), ('Scenarios', 'Choose a question and run it.'), ('Experiments', 'Or design your own set of runs from the factors of the model.'), ('Processes', 'See the processes behind the results.'), ('Plot', 'Plot any quantity of a run.'), ('Mass balance', 'Check that inputs, outputs and content agree.'), ('Compare and test', 'Compare two runs against the smallest meaningful level.'), ('To the SWAFL project', 'Take the results to the layers of the SWAFL project, which turn them into decisions.')])) + '\n'
+for sid in ids('flow'): t += S(sid)
+t += r"""## What is passed to the SWAFL project
+
+When a scenario has been run in Scenarios, the workbench reads the logs of its runs (the annual harvest, the annual water and nitrogen fluxes at the surface and at 100 cm, and for the chemical scenario the annual and daily tracer logs) and passes a summary of each run to the layers of the SWAFL project: the yield, the water drained below the root zone, the nitrate leached, and for a chemical the decay, the crop uptake, the leaching, the runoff and the amount that stays in the soil, season by season. The layers then show **your** runs, with the weather and the soil you set, and say so in a line under the title (*your run* or *bundled run*). Without a run of your own they show the Daisy runs that come with the program: every scenario of the workbench, run with Daisy 7.1.14 on each of the ten soils of the project for the 22 seasons 1979 to 2000 with the Taastrup weather.
+
+The soil of the run is matched to the soil of the project when the names agree (for example, the sand and the loam of the scenarios are the sand and the loam of the project), and the project is set to that soil when you press a button of the last step.
+
+## The two layers that read Daisy runs
+
+The layer group **Chemicals** has the layer *C2 Chemical fate (Daisy runs)* and the group **Daisy decision support** has *D1 Daisy decision table*. Both are in the Layers panel of the SWAFL window, are drawn like every other layer, are on the Dashboard, and open from the last step of the path. Each shows in its first lines whether it is drawn from *your run* or from the *bundled runs*.
+
+**C2 Chemical fate.** Three buttons at the top choose the chemical: a mobile tracer (no sorption, no decay), a sorbing chemical, and a sorbing chemical that decays with a half-life of 30 days. For the soil in use the layer shows, from top to bottom:
+
+1. *Where the chemical goes in each season*: stacked bars of the applied amount (decayed, taken up by the crop, leached below 2 m, lost by runoff, left in the soil), season by season, with a marker for what was applied plus what was already in the soil.
+2. *What happened to the chemical over the seasons*: the totals and a plain statement of the risk (for example that more than 2 per cent of what was applied has passed below 2 m).
+3. *A chemical goes where the water goes*: one dot per season, the drainage below 1 m against the amount leached.
+4. *Where the chemical sits in the soil*: the concentration of the soil solution against depth, as the mean of all days and as the largest value.
+5. *The three chemicals on this soil*: the leached, decayed and crop-taken shares of the applied amount and the amount left at the end, for the three runs side by side.
+6. *Which soils leak the chemical most*: the ten soils of the project ranked by the share of the applied amount that leaches, with the soil in use marked; a click on a soil makes it the soil of the project.
+
+**D1 Daisy decision table.** For the soil in use the layer shows:
+
+1. *Every question, one row for each answer*: rainfed and irrigated; half the fertiliser, the standard rate and 30 per cent more; the weather as it is, warmer by 2 degrees, drier (rain times 0.7), warmer and drier, and wetter (rain times 1.3). The columns are the yield, its change, the irrigation, the evapotranspiration, the drainage, the nitrate lost and the nitrogen taken up by the crop, as means of the seasons. The colour of a cell is green when the answer is better than the standard run and red when it is worse.
+2. *What the table says*: three short statements, one for irrigation, one for nitrogen and one for climate, written from the numbers of the table.
+3. *Yield season by season* and *Water season by season*: rainfed against irrigated, and rain, drainage and irrigation, for every season.
+4. *Which soils gain most from irrigation*: the ten soils of the project, with the rainfed yield, the gain from irrigation, the water, the drainage and the nitrate lost; a click on a soil makes it the soil of the project.
+
+![The layer C2 Chemical fate of the SWAFL project (Daisy runs, silt loam).](images/daisy11/swafl_chem.jpg){height=22cm}
+
+![The layer D1 Daisy decision table of the SWAFL project (Daisy runs, loam).](images/daisy11/swafl_dsum.jpg){height=22cm}
+
+## What to expect and what not
+
+The layers are summaries of real Daisy runs, not new calculations: a number in a layer is a number of a Daisy log, or a sum or a mean of such numbers, and the line under the title says which runs it comes from. The bundled runs use the Taastrup weather, so for a different climate run the question again in Scenarios with the weather of the project or online weather of the place; the layers then show those runs.
+
+"""
+out['30z_daisy_flow.md'] = t
+
 # 31 build + learn
 t = '# Build and test, and learn {#daisy-build}\n\nThe fourth group holds the tools that need no scenario, and the fifth explains the model.\n\n'
 for sid in ids('build') + ids('learn'): t += S(sid)

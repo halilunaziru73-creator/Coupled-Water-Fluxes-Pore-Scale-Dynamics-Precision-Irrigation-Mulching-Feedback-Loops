@@ -9,19 +9,19 @@
  "marks": [
   {
    "x": 459.425,
-   "y": 276,
+   "y": 343.20000000000005,
    "t": "Annual values",
    "d": "The view that was chosen."
   },
   {
    "x": 575.0500000000001,
-   "y": 419.20000000000005,
+   "y": 486.40000000000003,
    "t": "Annual summary",
    "d": "Sum, mean, maximum or minimum of each year."
   },
   {
    "x": 64,
-   "y": 736.8000000000001,
+   "y": 804,
    "t": "Chart",
    "d": "One bar or point for each year."
   }

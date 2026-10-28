@@ -236,7 +236,7 @@ const Dash = (() => {
   }
   function charts() {
     const s = E.snap; if (s && DL[s.scene]) { designCharts(s.scene); return; }
-    if (s && ['yby', 'wb2', 'nb'].includes(s.scene)) { seasonCharts(s.scene); return; }
+    if (s && ['yby', 'wb2', 'nb', 'chem', 'dsum'].includes(s.scene)) { seasonCharts(s.scene); return; }
     if (!(document.getElementById('c1') && document.getElementById('c3') && body.querySelector('.charts')))   // the charts are redrawn in place: no flash
       body.innerHTML = '<div class="dnote">Twenty years around the working date (calendar years on the horizontal axis, millimetres per year).</div><div class="charts">' + CB('c1', 'Rainfall and irrigation', '<canvas id="c1"></canvas>') + '' + CB('c2', 'Drainage below the root zone', '<canvas id="c2"></canvas>') + '' + CB('c3', 'Evaporation and transpiration', '<canvas id="c3"></canvas>') + '</div>'; lastHtml = '';
     clearTimeout(chartTimer); chartTimer = setTimeout(() => {

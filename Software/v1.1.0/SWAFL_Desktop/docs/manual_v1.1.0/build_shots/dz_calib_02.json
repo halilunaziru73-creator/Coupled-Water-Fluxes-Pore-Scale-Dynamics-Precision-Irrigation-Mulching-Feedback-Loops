@@ -9,25 +9,25 @@
  "marks": [
   {
    "x": 64,
-   "y": 648.8000000000001,
+   "y": 720.8000000000001,
    "t": "Loss against trial",
    "d": "Falls as the search improves."
   },
   {
    "x": 64,
-   "y": 1058.4,
+   "y": 1130.4,
    "t": "Parameters",
    "d": "Parameter values tried."
   },
   {
    "x": 64,
-   "y": 1421.6000000000001,
+   "y": 1493.6000000000001,
    "t": "Best values",
    "d": "Table of the best set."
   },
   {
    "x": 322.15000000000003,
-   "y": 450,
+   "y": 522,
    "t": "Status",
    "d": "Progress."
   }

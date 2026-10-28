@@ -9,37 +9,37 @@
  "marks": [
   {
    "x": 88,
-   "y": 541.325,
+   "y": 531.725,
    "t": "Water per irrigation",
    "d": "Varied over 10, 20, 30, 40."
   },
   {
    "x": 88,
-   "y": 600.525,
+   "y": 590.9250000000001,
    "t": "Duration of one irrigation",
    "d": "Varied over 5, 10, 15, 20."
   },
   {
    "x": 88,
-   "y": 722.9250000000001,
+   "y": 713.325,
    "t": "Soil",
    "d": "Varied over usda:sand, loam."
   },
   {
    "x": 330.65000000000003,
-   "y": 843.725,
+   "y": 834.125,
    "t": "Add something to change",
    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
   },
   {
    "x": 1283.25,
-   "y": 843.725,
+   "y": 834.125,
    "t": "How to combine",
    "d": "Every combination, one thing at a time, or the values paired in order."
   },
   {
    "x": 1668.875,
-   "y": 843.325,
+   "y": 833.725,
    "t": "At most",
    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
   },

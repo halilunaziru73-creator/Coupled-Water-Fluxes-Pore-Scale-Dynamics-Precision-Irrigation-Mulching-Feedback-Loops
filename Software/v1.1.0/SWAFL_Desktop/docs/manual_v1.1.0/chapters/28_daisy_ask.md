@@ -55,7 +55,7 @@ Each scenario is a question about the built-in farm. Its runs differ only in the
 
 The Scenarios tab starts with the questions that the built-in farm can answer: water, nitrogen, climate, a chemical and soil. Two more cards lead to your own set-up and to two tools that need no Daisy program.
 
-![Scenarios: choose the question. Screen 13 of the Daisy workbench.](images/daisy11/dz_scen_01.jpg){width=100% height=17cm}
+![Scenarios: choose the question. Screen 14 of the Daisy workbench.](images/daisy11/dz_scen_01.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -74,7 +74,7 @@ The Scenarios tab starts with the questions that the built-in farm can answer: w
 
 The irrigation question compares rainfed and irrigated crops of the built-in rotation. The trigger is the potential at 20 cm below which the overhead irrigation starts; the water per irrigation is fixed.
 
-![Scenarios: irrigation. Screen 14 of the Daisy workbench.](images/daisy11/dz_scen_02.jpg){width=100% height=17cm}
+![Scenarios: irrigation. Screen 15 of the Daisy workbench.](images/daisy11/dz_scen_02.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -97,7 +97,7 @@ The irrigation question compares rainfed and irrigated crops of the built-in rot
 
 The nitrogen question compares three fertiliser levels, with or without irrigation, on the built-in rotation. It reports yield, nitrate leached, denitrification and the nitrogen balance.
 
-![Scenarios: nitrogen. Screen 15 of the Daisy workbench.](images/daisy11/dz_scen_03.jpg){width=100% height=17cm}
+![Scenarios: nitrogen. Screen 16 of the Daisy workbench.](images/daisy11/dz_scen_03.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -118,7 +118,7 @@ The nitrogen question compares three fertiliser levels, with or without irrigati
 
 The climate question runs the same farm under the weather as it is and under a warmer, a drier, a warmer and drier and a wetter weather.
 
-![Scenarios: climate. Screen 16 of the Daisy workbench.](images/daisy11/dz_scen_04.jpg){width=100% height=17cm}
+![Scenarios: climate. Screen 17 of the Daisy workbench.](images/daisy11/dz_scen_04.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -138,7 +138,7 @@ The climate question runs the same farm under the weather as it is and under a w
 
 The chemical question follows a chemical applied to the soil: a mobile tracer, a strongly sorbed chemical and a quickly decaying one. It shows how much leaves the root zone and how much stays in the soil.
 
-![Scenarios: a pesticide or tracer. Screen 17 of the Daisy workbench.](images/daisy11/dz_scen_05.jpg){width=100% height=17cm}
+![Scenarios: a pesticide or tracer. Screen 18 of the Daisy workbench.](images/daisy11/dz_scen_05.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -157,7 +157,7 @@ The chemical question follows a chemical applied to the soil: a mobile tracer, a
 
 The soil question runs the same crops, weather and management on the built-in sand and loam, and shows water holding, drainage, yield and nitrate.
 
-![Scenarios: soil texture. Screen 18 of the Daisy workbench.](images/daisy11/dz_scen_06.jpg){width=100% height=17cm}
+![Scenarios: soil texture. Screen 19 of the Daisy workbench.](images/daisy11/dz_scen_06.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -177,7 +177,7 @@ The soil question runs the same crops, weather and management on the built-in sa
 
 This card leads to the set-up editor, where a .dai file of your own is run, and to the figures that are drawn from logs you have loaded.
 
-![Scenarios: your own work. Screen 19 of the Daisy workbench.](images/daisy11/dz_scen_07.jpg){width=100% height=17cm}
+![Scenarios: your own work. Screen 20 of the Daisy workbench.](images/daisy11/dz_scen_07.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -190,7 +190,7 @@ This card leads to the set-up editor, where a .dai file of your own is run, and 
 
 Under the runs a list of the processes of Fig. 1 of the Daisy paper can be ticked, or described in words. Daisy then writes the logs these figures need.
 
-![Scenarios: processes to draw as well. Screen 20 of the Daisy workbench.](images/daisy11/dz_scen_08.jpg){width=100% height=17cm}
+![Scenarios: processes to draw as well. Screen 21 of the Daisy workbench.](images/daisy11/dz_scen_08.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -208,7 +208,7 @@ Experiments is the free design. Runs are chosen from the factors, the plan is ma
 
 The Experiments tab turns a question into a set of Daisy runs. You can write the question, start from a ready made combination of the Daisy reference, choose a topic of the reference or bring set-ups of your own.
 
-![Experiments: the starting screen. Screen 21 of the Daisy workbench.](images/daisy11/dz_exp_01.jpg){width=100% height=17cm}
+![Experiments: the starting screen. Screen 22 of the Daisy workbench.](images/daisy11/dz_exp_01.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -227,7 +227,7 @@ The Experiments tab turns a question into a set of Daisy runs. You can write the
 
 The list holds 27 combinations in groups: Irrigation, Nitrogen, Climate, Soil and crop, Chemicals and Parameters. Each shows the topics of the reference it draws on. Choosing one shows why it is worth running; the tick boxes select several to add at once.
 
-![Experiments: best combinations to start with. Screen 22 of the Daisy workbench.](images/daisy11/dz_exp_02.jpg){width=100% height=17cm}
+![Experiments: best combinations to start with. Screen 23 of the Daisy workbench.](images/daisy11/dz_exp_02.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -243,7 +243,7 @@ The list holds 27 combinations in groups: Irrigation, Nitrogen, Climate, Soil an
 
 The second tab lists the 107 topics of the Daisy reference manual in three parts. A topic shows its models, the parameters that Daisy accepts for experiments and the related experiments. The size of the experiment is set before loading.
 
-![Experiments: the topics of the Daisy reference. Screen 23 of the Daisy workbench.](images/daisy11/dz_exp_03.jpg){width=100% height=17cm}
+![Experiments: the topics of the Daisy reference. Screen 24 of the Daisy workbench.](images/daisy11/dz_exp_03.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -261,7 +261,7 @@ The second tab lists the 107 topics of the Daisy reference manual in three parts
 
 Topics whose parameters Daisy accepts show them with a tick box. Each parameter was tested in Daisy; the levels are fractions of the value the farm uses.
 
-![Experiments: a topic with parameters you can vary. Screen 24 of the Daisy workbench.](images/daisy11/dz_exp_04.jpg){width=100% height=17cm}
+![Experiments: a topic with parameters you can vary. Screen 25 of the Daisy workbench.](images/daisy11/dz_exp_04.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -274,7 +274,7 @@ Topics whose parameters Daisy accepts show them with a tick box. Each parameter 
 
 The third tab brings in what you already have: an experiment folder as a zip, Daisy set-up files, weather, soil tables or logs. Each goes where it is used; set-ups are run as experiments.
 
-![Experiments: import data and set-ups. Screen 25 of the Daisy workbench.](images/daisy11/dz_exp_05.jpg){width=100% height=17cm}
+![Experiments: import data and set-ups. Screen 26 of the Daisy workbench.](images/daisy11/dz_exp_05.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -286,7 +286,7 @@ The third tab brings in what you already have: an experiment folder as a zip, Da
 
 Loading a combination fills the plan: what changes, the values tested, how they are combined, the weather and soil, the years and the results saved. The size of the experiment is shown before anything is run.
 
-![Experiments: the plan before running. Screen 26 of the Daisy workbench.](images/daisy11/dz_exp_06.jpg){width=100% height=17cm}
+![Experiments: the plan before running. Screen 27 of the Daisy workbench.](images/daisy11/dz_exp_06.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -305,7 +305,7 @@ Loading a combination fills the plan: what changes, the values tested, how they 
 
 The weather list of an experiment follows the choice at the top of the tab and offers the built-in stations as well. The soil, the years and what is saved are set beside it.
 
-![Experiments: weather, soil and years of the experiment. Screen 27 of the Daisy workbench.](images/daisy11/dz_exp_07.jpg){width=100% height=17cm}
+![Experiments: weather, soil and years of the experiment. Screen 28 of the Daisy workbench.](images/daisy11/dz_exp_07.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -322,7 +322,7 @@ The weather list of an experiment follows the choice at the top of the tab and o
 
 Experiments are added to a list in the order of preference. Each has its own name, design and largest number of runs; only the ticked ones are run, from the top down, or saved together in one folder.
 
-![Experiments: my experiments, ordered and ticked. Screen 28 of the Daisy workbench.](images/daisy11/dz_exp_08.jpg){width=100% height=17cm}
+![Experiments: my experiments, ordered and ticked. Screen 29 of the Daisy workbench.](images/daisy11/dz_exp_08.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 

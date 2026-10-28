@@ -182,6 +182,25 @@ The lower part of the tab reads open weather data of the Danish Meteorological I
 
 \newpage
 
+### Weather stations: online weather of any place, for the analysis and the runs
+
+The section Online weather of a place, at the foot of Weather stations, finds a place by name, reads its daily weather of the years you choose from the internet (Open-Meteo, ERA5 reanalysis) and then offers three uses: the weather of the SWAFL project, the weather of every Daisy run, and a log in the list of the plots. The same record is therefore used in the analysis of the project, in the Daisy runs and in the figures.
+
+![Weather stations: online weather of any place, for the analysis and the runs. Screen 13 of the Daisy workbench.](images/daisy11/dz_weather_03.jpg){width=100% height=17cm}
+
+**What the arrows point to.**
+
+1. **Place.** A town, a village or a farm name; the name is searched on the internet.
+2. **Find.** Lists the places of that name; choose one and the latitude and longitude are filled.
+3. **First year.** First year of the record to read.
+4. **Last year.** Last complete year; the current year is not complete yet.
+5. **Get the weather.** Reads the daily rain, temperature and radiation and checks them.
+6. **Use as the SWAFL weather.** Sets the record as the weather of the SWAFL project, so every layer of the project uses it.
+7. **Use in the Daisy runs.** Sets the record as the weather of every simulation of Scenarios, Experiments and Processes.
+8. **Add to the list of logs.** Adds the record to the logs, so that it can be drawn in Plot.
+
+\newpage
+
 ## The weather stations of Daisy
 
 The stations that come with Daisy are listed here with the years that they cover. The first one is the built-in weather used when nothing else is chosen.

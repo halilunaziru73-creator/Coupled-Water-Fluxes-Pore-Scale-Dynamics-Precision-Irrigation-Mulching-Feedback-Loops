@@ -13,7 +13,7 @@
   </a>
 </p>
 
-<p align="center"><b>Download the SWAFL manual (PDF):</b> version 1.1.0, the latest (1011 pages, 41 MB): <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">open in the browser</a> or <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">download</a> · <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/Old_Version_1.0/SWAFL_Desktop/docs/SWAFL_Manual.pdf">version 1.0</a></p>
+<p align="center"><b>Download the SWAFL manual (PDF):</b> version 1.1.0, the latest (1024 pages, 42 MB): <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">open in the browser</a> or <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">download</a></p>
 
 <p align="center">
   <a href="https://doi.org/10.5281/zenodo.23043626">
@@ -26,7 +26,7 @@
 
 ## Download the software (Windows)
 
-**Windows app:** the 1.1.0 app is run from source or from the online workbench (see below). The packaged SWAFL.exe belongs to the [old version 1.0](Software/Old_Version_1.0/README_OLD_VERSION.md).
+**Windows app:** the 1.1.0 app is run from source or from the online workbench (see below).
 
 > Windows may show a SmartScreen warning because the app is not code-signed: click **More info**, then **Run anyway**.
 
@@ -55,7 +55,7 @@ The current version, 1.1.0, is in [`Software/v1.1.0`](Software/v1.1.0) with its 
 
 <p align="center"><img src="Software/v1.1.0/SWAFL_Desktop/docs/swafl_workbench.png" alt="SWAFL Desktop 1.1.0: the drip irrigation design with the soil water of the days ahead (FAO-56 schedule from the crop Kc, the weather and the design)" width="900"></p>
 
-**Documentation:** the [complete technical manual of version 1.1.0 (PDF)](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf) (the [manual of version 1.0](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.0/SWAFL_Desktop/docs/SWAFL_Manual.pdf) stays with version 1.0) explains every control, trigger, layer and design simulation step by step, with the governing equations and citations.
+**Documentation:** the [complete technical manual of version 1.1.0 (PDF)](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf) explains every control, trigger, layer and design simulation step by step, with the governing equations and citations.
 
 **What it does**
 - **Irrigation design:** surface (border, furrow, basin), drip and sprinkler designs with layout drawings, pipe network, pump and hydraulic grade line, design checks, and an optimiser for the surface layout.

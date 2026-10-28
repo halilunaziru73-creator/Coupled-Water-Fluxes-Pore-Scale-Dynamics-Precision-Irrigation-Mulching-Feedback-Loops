@@ -94,6 +94,25 @@ Applying a combination writes its values into the value boxes, so you can see an
 
 ![The sketch zoomed in, with the hand, zoom and map buttons.](images/ui/sketch_zoom.jpg){width=100%}
 
+**Greenhouses, beds, areas to irrigate, exclusions, plants and traps.** Beside the modes above, the sketch has six more tools for drawing what is on the field. Choose the tool, then click on the grid (the buttons are in the row above the grid):
+
+| Tool | How to draw it | What it is used for |
+|:---------------|:------------------------------|:------------------------------------------|
+| Greenhouse | Click two opposite corners | A greenhouse or polytunnel, drawn as a blue rectangle with its ribs; its area is written inside. |
+| Plant bed | Click two opposite corners | A raised or ploughed bed, drawn as a brown rectangle with its rows; its area is written inside. |
+| Area to irrigate | Click the corners; double-click, or click the first corner again, to close | The part of the field that the design must irrigate (green). |
+| No-irrigation zone | Click the corners; double-click, or click the first corner again, to close | A part that is left dry, such as a track, a building, a pond or a rock outcrop (red, dashed). |
+| Plant | Click the place | One plant or tree (a green circle). |
+| Monitoring trap | Click the place | One trap or monitoring post (a purple triangle). |
+
+Double-click on a drawn object, with its tool chosen, to remove it. *Undo* (Ctrl+Z) and *Redo* (Ctrl+Y) go back and forward through every change of the drawing, one step at a time: a corner placed, a corner moved, an object added or removed, and *Clear*. Press *Escape* or choose another tool to stop an area you have not closed.
+
+![The sketch with an area to irrigate, a no-irrigation zone, a greenhouse, a plant bed, plants and traps.](images/ui/sketch_objects.jpg){width=100%}
+
+The line under the grid sums what is drawn: the hectares to irrigate and the number of areas, the square metres excluded, the number and area of greenhouses and beds, and the numbers of plants and traps. The same line appears in the summary of the seventh question as *Drawn on the field*.
+
+**The area that is irrigated.** When the design is filled from the sketch, the area it uses is the sum of the areas to irrigate. If none is drawn, it is the area of the field less the no-irrigation zones. This area sets the area of the surface, drip and sprinkler designs, and therefore the volume, the pumping time and the cost of the run.
+
 While you draw, the window draws the layout of the system you choose:
 
 * furrows, borders or basins;
