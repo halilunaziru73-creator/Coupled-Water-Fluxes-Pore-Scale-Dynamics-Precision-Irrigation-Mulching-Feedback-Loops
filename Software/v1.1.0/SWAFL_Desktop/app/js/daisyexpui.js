@@ -16,7 +16,7 @@
   function html(arg) {
     if (arg && arg !== st.arg) { st.arg = arg; setTimeout(() => { const g = R.suggest(refCtx()).find(x => x.id === arg); if (g) useSuggestion(g); }, 30); }
     const desk = D.isDesk();
-    return '<div class="dzpan"><h3 style="margin:0">Experiments: say what you want to find out</h3>' +
+    return (window.DaisyScenUI ? window.DaisyScenUI.strip() : '') + '<div class="dzpan"><h3 style="margin:0">Experiments: say what you want to find out</h3>' +
       '<p class="pnote">Write it in your own words: what to vary, on which soil and weather, what to look at. The planner turns it into a set of Daisy runs, asks what is still open, runs them in a batch or one by one, and draws the figures. ' + (desk ? '' : 'This is the web version: Daisy itself runs in the desktop app; here you can plan, save the experiment folder, and explore the 10 190 published runs of the study.') + '</p>' +
       '<textarea id="dzXText" rows="3" style="width:100%;box-sizing:border-box" placeholder="For example: how do the irrigation trigger and the sensor depth change yield and water use on sand and loam?">' + esc(st.text) + '</textarea>' +
       '<div class="dzrow"><button class="btn pri" id="dzXGo">Understand my request</button><label title="Without a key the built-in planner works fully offline. With a key, an online AI reads the request first, and each plan it gives is checked against what Daisy can vary."><input type="checkbox" id="dzXAi"' + (st.ai ? ' checked' : '') + '> online AI (machine learning)</label><input type="password" id="dzXKey" placeholder="access key" value="' + esc(st.key) + '" style="width:150px;' + (st.ai ? '' : 'display:none') + '"></div>' +
@@ -162,7 +162,7 @@
   // ------------------------------------------------------------------ figures
   const SPEC = () => K().SPEC, OKI = () => K().OKI;
   function drawResults() {
-    const host = $('Res'); if (!host) return; const rows = st.rows, fids = st.fids || []; if (!rows.length) { host.innerHTML = ''; return; }
+    const host = $('Res'); if (!host) return; if (st.runs[0] && st.runs[0].options) DaisyCite.ctx = DaisyCite.describe(st.runs[0].options, SC); const rows = st.rows, fids = st.fids || []; if (!rows.length) { host.innerHTML = ''; return; }
     const resps = X.RESP.filter(r => rows.some(x => isFinite(x.r[r.id]))).map(r => r.id), resp = resps.indexOf(st.resp) >= 0 ? st.resp : resps[0], numF = fids.filter(f => rows.every(r => typeof r.f[f] === 'number' || r.reference || r.f[f] === undefined) && X.levels(rows, f).length > 1), multi = fids.filter(f => X.levels(rows, f).length > 1);
     let h = '<div class="dzpan"><div class="dzrow"><h3 style="margin:0">Results</h3><span class="pnote">' + rows.length + ' runs' + (st.source === 'ens' ? ' (published)' : '') + '</span><span style="flex:1"></span><label>Look at</label><select id="dzXResp">' + resps.map(r => '<option value="' + r + '"' + (r === resp ? ' selected' : '') + '>' + esc(rlabel(r)) + '</option>').join('') + '</select><button class="btn" id="dzXCsv">Table (CSV)</button><button class="btn" id="dzXRep">Report (HTML)</button></div>' + keyNumbers(rows, resp) + '</div>';
     const fig = (id, title, note, n) => '<div class="dzpan dzfig" data-xf="' + id + '"><div class="dzrow"><b>' + esc(title) + '</b><span style="flex:1"></span><button class="btn" data-xpng="' + id + '">Picture (PNG)</button></div><p class="pnote">' + esc(note) + '</p>' + Array.from({ length: n || 1 }, (_, k) => '<div><canvas data-xc="' + id + '_' + k + '"></canvas></div>').join('') + '</div>';
@@ -174,7 +174,7 @@
     if (st.runs.length) h += '<div class="dzpan"><div class="dzrow"><b>One run in detail</b><select id="dzXOne">' + st.runs.map((r, i) => '<option value="' + i + '">' + esc(r.id + ' ' + r.label) + '</option>').join('') + '</select><span class="pnote">the standard Daisy figures of that run (the daily ones need the logs set to "annual and daily...")</span></div><div id="dzXOneFigs"></div></div>';
     h += learnCard(rows, fids, resp);
     host.innerHTML = h; bindLearn(rows, fids, resp); $('Resp').onchange = e => { st.resp = e.target.value; drawResults(); }; $('Csv').onclick = () => D.download('daisy-experiment.csv', X.csv(rows, fids, X.RESP.map(r => r.id).filter(r => resps.indexOf(r) >= 0)), 'text/csv'); $('Rep').onclick = () => report(resp);
-    host.querySelectorAll('[data-xpng]').forEach(b => b.onclick = () => { const c = host.querySelector('[data-xc="' + b.dataset.xpng + '_0"]'); if (c) K().savePng(c, 'daisy-' + b.dataset.xpng + '.png'); });
+    host.querySelectorAll('[data-xpng]').forEach(b => b.onclick = () => { const c = host.querySelector('[data-xc="' + b.dataset.xpng + '_0"]'); if (c) DaisyCite.png(c, 'daisy-' + b.dataset.xpng + '.png'); });
     const cv = id => host.querySelector('[data-xc="' + id + '_0"]'); const tryDraw = (id, fn) => { try { const c = cv(id); if (c) fn(c); } catch (e) { const p = host.querySelector('[data-xf="' + id + '"]'); if (p) p.insertAdjacentHTML('beforeend', '<span style="color:#b3261e">could not be drawn: ' + esc(e.message) + '</span>'); console.warn(id, e); } };
     tryDraw('tor', c => tornado(c, rows, multi, resp)); multi.forEach((f, i) => tryDraw('me' + i, c => mainEffect(c, rows, f, resp))); tryDraw('heat', c => heat(c, rows, multi[0], multi[1], resp)); tryDraw('trade', c => trade(c, rows, 'irr', 'yield', multi[0])); tryDraw('trade2', c => trade(c, rows, 'leach', 'yield', multi[0]));
     const one = $('One'); if (one) { const dr = () => oneRun(st.runs[+one.value]); one.onchange = dr; dr(); }
@@ -235,16 +235,17 @@
     if (!plan.length) host.innerHTML = '<span class="pnote">This run kept no logs the standard figures use. Choose "annual and daily ..." under Logs kept.</span>';
   }
   function report(resp) {
-    const host = $('Res'), imgs = Array.from(host.querySelectorAll('.dzfig[data-xf]')).map(el => '<h2>' + el.querySelector('b').textContent + '</h2><p>' + el.querySelector('p').textContent + '</p>' + Array.from(el.querySelectorAll('canvas')).map(c => '<img src="' + c.toDataURL('image/png') + '" style="max-width:100%">').join('')).join('');
+    const host = $('Res'), imgs = Array.from(host.querySelectorAll('.dzfig[data-xf]')).map(el => '<h2>' + el.querySelector('b').textContent + '</h2><p>' + el.querySelector('p').textContent + '</p>' + Array.from(el.querySelectorAll('canvas')).map(c => '<img src="' + c.toDataURL('image/png') + '" style="max-width:100%"><p style="font-size:12px;color:#555"><i>' + esc(c.dataset.cite || DaisyCite.caption('')) + '</i></p>').join('')).join('') + DaisyCite.refsHtml();
     const fids = st.fids || [], rows = st.rows, tab = '<table><tr><th>run</th>' + fids.map(f => '<th>' + esc(flabel(f)) + '</th>').join('') + X.RESP.map(r => '<th>' + esc(r.label) + '</th>').join('') + '</tr>' + rows.slice(0, 300).map(r => '<tr><td>' + esc(r.id) + '</td>' + fids.map(f => '<td>' + esc(r.f[f] === undefined ? '' : r.f[f]) + '</td>').join('') + X.RESP.map(q => '<td>' + (isFinite(r.r[q.id]) ? K().fmt(r.r[q.id], 3) : '') + '</td>').join('') + '</tr>').join('') + '</table>';
     D.download('daisy-experiment-report.html', '<!doctype html><meta charset="utf-8"><title>Daisy experiment</title><style>body{font:14px Segoe UI,Arial;max-width:1000px;margin:20px auto;padding:0 14px}table{border-collapse:collapse;font-size:12px}td,th{border:1px solid #ccc;padding:2px 6px}th{background:#eef1f5}h2{margin-top:26px}</style><h1>' + esc((st.res && st.res.plan.title) || 'Daisy experiment') + '</h1><p>' + esc(st.text) + '</p><p>' + rows.length + ' runs of Daisy 7.1.14' + (st.source === 'ens' ? ' (the published runs of the study)' : '') + '.</p>' + imgs + '<h2>All runs</h2>' + tab, 'text/html');
   }
   function bind() {
-    $('Go').onclick = () => understand(); showSuggestions();
+    $('Go').onclick = () => understand(); showSuggestions(); if (window.DaisyScenUI) window.DaisyScenUI.bindStrip();
     $('Ai').onchange = e => { $('Key').style.display = e.target.checked ? '' : 'none'; };
     document.querySelectorAll('[data-ex]').forEach(a => a.onclick = ev => { ev.preventDefault(); $('Text').value = EXAMPLES[+a.dataset.ex]; understand(); });
     $('Text').onkeydown = e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) understand(); };
     if (st.res) renderPlan(); if (st.rows.length) drawResults();
   }
+  window.DaisyExpUI = { runs: () => st.runs };
   D.register('exp', { html, bind });
 })();

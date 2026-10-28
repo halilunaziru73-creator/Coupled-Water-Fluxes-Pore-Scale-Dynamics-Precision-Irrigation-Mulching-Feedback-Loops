@@ -1,10 +1,10 @@
 /* Daisy workbench, Processes tab: a clickable map of the processes of the Daisy model (after Fig. 1 of the Daisy paper): water on the surface, in the soil matrix,
    biopores and drains, heat and ice, nitrogen and carbon pools, photosynthesis and crop growth. Click a box to read what Daisy does there and to draw the figures
-   of that process from the logs of a standard run of the rotation (bundled, so it works offline), every 7th day. */
+   of that process from the logs of your own run (a scenario, an experiment, a run with all process logs, or logs loaded in the Files tab). */
 'use strict';
 (() => {
   const D = DaisyUI, IO = window.DaisyIO, esc = D.esc, K = () => D.kit;
-  const st = { sel: 'water', data: {} };
+  const st = { sel: 'water', src: null };
   // colours of the groups, a spectral set
   const GC = { drive: '#5e4fa2', water: '#3288bd', heat: '#66c2a5', nitrogen: '#e6c200', carbon: '#f46d43', crop: '#4d9221' };
   const GN = { drive: 'Drivers', water: 'Water', heat: 'Heat', nitrogen: 'Nitrogen', carbon: 'Carbon and organic matter', crop: 'Crop' };
@@ -44,7 +44,7 @@
   // Blue is water, green and brown carbon, beige nitrogen. Boxes with a process id open that process; coordinates follow the figure.
   const BL = '#a8c4e0', LB = '#c4d8ee', GR = '#8cc35a', BE = '#e6dec6', LG = '#c9e08c', BR = '#c8861c', PG = '#b9e3a3';
   function svg() {
-    const o = [], T = (x, y, t, a, sz, c, w, rot) => o.push('<text x="' + x + '" y="' + y + '" text-anchor="' + (a || 'middle') + '" font-size="' + (sz || 9.5) + '" fill="' + (c || '#111') + '"' + (w ? ' font-weight="' + w + '"' : '') + (rot ? ' transform="rotate(' + rot + ' ' + x + ' ' + y + ')"' : '') + ' font-family="Cambria,Georgia,serif" style="pointer-events:none">' + esc(t) + '</text>');
+    const o = [], T = (x, y, t, a, sz, c, w, rot) => o.push('<text x="' + x + '" y="' + y + '" text-anchor="' + (a || 'middle') + '" font-size="' + (sz || 9.5) + '" fill="' + (c || '#111') + '"' + (w ? ' font-weight="' + w + '"' : '') + (rot ? ' transform="rotate(' + rot + ' ' + x + ' ' + y + ')"' : '') + ' font-family="Cambria,Georgia,serif" stroke="#fff" stroke-width="2.6" paint-order="stroke" stroke-linejoin="round" style="pointer-events:none">' + esc(t) + '</text>');
     const L = (pts, k) => { const dash = k === 'out' ? ' stroke-dasharray="5 3"' : k === 'info' ? ' stroke-dasharray="1.5 2.5"' : k === 'mod' ? ' stroke-dasharray="6 3 1.5 3"' : ''; o.push('<polyline points="' + pts.map(q => q.join(',')).join(' ') + '" fill="none" stroke="' + (k === 'blue' ? '#3b6fa5' : '#222') + '" stroke-width="' + (k === 'blue' ? 2.2 : 1.1) + '"' + dash + (k === 'none' ? '' : ' marker-end="url(#dzAr)"') + '/>'); };
     const sel = id => id === st.sel;
     const box = (id, x, y, w, h, t, f, extra) => { extra = extra || {}; o.push('<g class="dzPb" data-p="' + (id || '') + '"' + (id ? ' style="cursor:pointer" tabindex="0" role="button" aria-label="' + esc(t) + '"' : '') + '><rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + (extra.rx == null ? 3 : extra.rx) + '" fill="' + f + '" stroke="' + (sel(id) ? '#d7191c' : '#555') + '" stroke-width="' + (sel(id) ? 2.6 : 0.8) + '"' + (extra.dash ? ' stroke-dasharray="4 3"' : '') + '/>' + (extra.half ? '<rect x="' + (x + w / 2) + '" y="' + y + '" width="' + w / 2 + '" height="' + h + '" rx="3" fill="' + extra.half + '"/><rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" fill="none" stroke="' + (sel(id) ? '#d7191c' : '#555') + '" stroke-width="' + (sel(id) ? 2.6 : 0.8) + '"/>' : '') + '</g>'); if (t) T(x + w / 2, y + h / 2 + 3.5, t, 'middle', extra.sz || 10, '#111', 600); };
@@ -99,25 +99,41 @@
     return '<svg viewBox="100 20 830 640" style="width:100%;max-width:1000px;height:auto;display:block;background:#fff;border:1px solid #d6dae0;border-radius:6px" role="img" aria-label="Fig. 1: schematic overview of the main processes in Daisy">' + o.join('') + '</svg>';
   }
   function chips() { return '<div style="margin:6px 0;font-size:12px;color:#444">Also in Daisy, not drawn in Fig. 1: ' + ['temp', 'bio', 'deni'].map(id => '<button class="dzPc" data-p="' + id + '" style="margin-right:6px' + (st.sel === id ? ';font-weight:700;outline:2px solid #d7191c' : '') + '">' + esc(byId(id).n) + '</button>').join('') + '</div>'; }
-  async function load(key) { if (st.data[key]) return st.data[key]; const d = IO.readDlf(await D.getText('examples/process/' + key + '.dlf'), key); return (st.data[key] = d); }
+  // the data the figures are drawn from: the last scenario run, the runs of the Experiments tab, or the logs in the Files list; nothing is drawn without them
+  function sources() {
+    const out = [], SU = window.DaisyScenUI, XU = window.DaisyExpUI;
+    if (SU) SU.runs().forEach(r => out.push({ id: 'scen:' + r.id, label: 'Scenario run: ' + r.label, run: r }));
+    if (XU) XU.runs().forEach(r => out.push({ id: 'exp:' + r.id, label: 'Experiment run: ' + r.id + ' ' + r.label, run: r }));
+    const logs = {}; D.names().forEach(n => { const k = window.DaisyScen.logKey(n); if (k) logs[k] = D.S.logs[n]; }); if (Object.keys(logs).length) out.push({ id: 'files', label: 'Logs loaded in Files (' + Object.keys(logs).length + ' with Daisy names)', run: { id: 'files', label: 'Loaded logs', logs } });
+    return out;
+  }
+  const cur = () => { const L = sources(); return L.find(x => x.id === st.src) || L[0] || null; };
+  async function runNow(msg) {
+    const SU = window.DaisyScenUI; if (!D.isDesk() || !window.swafl || !window.swafl.daisyJob) { msg.innerHTML = '<span style="color:#b3261e">Daisy itself runs in the desktop app. Here, load the logs of a Daisy run in the Files tab (or run the experiment folder anywhere, then load its logs), and the figures are drawn from them.</span>'; return; }
+    msg.textContent = 'Daisy is running with your weather and soil and all the process logs...'; try { await SU.runStandard(); st.src = null; await detail(); } catch (e) { msg.innerHTML = '<span style="color:#b3261e">' + esc(e.message) + '</span>'; }
+  }
   function html(arg) {
     if (arg && byId(arg)) st.sel = arg;
     return '<div class="dzcard"><b>The processes of the Daisy model</b> redrawn from Fig. 1 of the Daisy paper. Click a box (snowpack, intercepted water, litter, pond, soil water, biopores, drain, NO3, NH4, Plant-N, organs, residues, photosynthesis, AOM, SMB, SOM) to read what Daisy does there and to draw its figures from the logs of a standard run of the rotation.</div>' +
-      '<div id="dzPmap">' + svg() + '</div><div id="dzPchips">' + chips() + '</div><div id="dzPdet"></div>';
+      (window.DaisyScenUI ? window.DaisyScenUI.strip() : '') + '<div id="dzPmap">' + svg() + '</div><div id="dzPchips">' + chips() + '</div><div id="dzPdet"></div>';
   }
   async function detail() {
     const p = byId(st.sel), box = document.getElementById('dzPdet'); if (!box) return;
     box.innerHTML = '<div class="dzcard"><h3 style="margin:0 0 6px;color:' + GC[p.g] + '">' + esc(p.n) + '</h3><div>' + esc(p.d) + '</div><div style="margin-top:6px;color:#555;font-size:12px">Daisy: ' + esc(p.par) + '</div><div id="dzPst" style="margin-top:6px;font-size:12px;color:#555">Reading the bundled results...</div></div><div id="dzPfigs"></div>';
-    const figs = document.getElementById('dzPfigs'), msg = document.getElementById('dzPst');
-    const r = await drawFigs(p, figs, load, () => st.sel !== p.id, 'the bundled standard run (the course loam, 100 percent nitrogen, every 7th day)');
-    if (r) msg.textContent = r.ok + ' figure' + (r.ok === 1 ? '' : 's') + ' from the bundled standard run (the course loam, 100 percent nitrogen, every 7th day)' + (r.bad ? ', ' + r.bad + ' could not be drawn' : '') + '. Run your own set-up with the topics ticked under "What I am interested in" in the Scenarios tab, or the process logs in the Experiments tab, to see them for your data.';
+    const figs = document.getElementById('dzPfigs'), msg = document.getElementById('dzPst'), L = sources(), me = cur();
+    if (!me) { msg.innerHTML = 'No data to draw from yet. The figures of this process come from your own run: <button class="btn pri" id="dzPRun">Run Daisy with my data now</button> or load the logs of a Daisy run in the <a href="#" data-goto="files">Files</a> tab, or run a <a href="#" data-goto="scen">scenario</a> or an <a href="#" data-goto="exp">experiment</a> (tick this process under "What I am interested in").'; const b = document.getElementById('dzPRun'); if (b) b.onclick = () => runNow(msg); if (window.DaisyScenUI) window.DaisyScenUI.bindStrip(); document.querySelectorAll('#dzPst [data-goto]').forEach(a => a.onclick = ev => { ev.preventDefault(); D.show(a.dataset.goto); }); return; }
+    const o = me.run.options; if (o && window.DaisyCite) window.DaisyCite.ctx = window.DaisyCite.describe(o, window.DaisyScen);
+    msg.innerHTML = 'Drawn from <select id="dzPSrc">' + L.map(x => '<option value="' + esc(x.id) + '"' + (x.id === me.id ? ' selected' : '') + '>' + esc(x.label) + '</option>').join('') + '</select> <button class="btn" id="dzPRun">Run Daisy with my data and all process logs</button> <span id="dzPsum" class="pnote"></span>';
+    document.getElementById('dzPSrc').onchange = e => { st.src = e.target.value; detail(); }; document.getElementById('dzPRun').onclick = () => runNow(document.getElementById('dzPsum'));
+    const r = await drawFigs(p, figs, async k => me.run.logs[k] || null, () => st.sel !== p.id);
+    if (r) document.getElementById('dzPsum').textContent = r.ok + ' figure' + (r.ok === 1 ? '' : 's') + (r.bad ? ', ' + r.bad + ' not drawn (this run did not write those logs: run again with the button, or tick the process under "What I am interested in" in Scenarios)' : '') + '.';
   }
   // draw the figure cards of one process into a host; getLog(key) gives the parsed log; stale() tells when to stop
   async function drawFigs(p, figs, getLog, stale, what) {
     let ok = 0, bad = 0;
     for (const f of p.figs) {
       if (stale()) return null; const card = document.createElement('div'); card.className = 'dzcard dzfig'; card.innerHTML = '<b>' + esc(f.t) + '</b> <button class="dzPng btn" style="float:right;width:auto;display:inline-block">Save PNG</button><canvas style="display:block;width:100%;margin-top:6px"></canvas><div class="dzPn" style="font-size:12px;color:#555"></div>'; figs.appendChild(card);
-      const cv = card.querySelector('canvas'), note = card.querySelector('.dzPn'); card.querySelector('.dzPng').onclick = () => K().savePng(cv, 'daisy-' + p.id + '-' + f.log + '.png');
+      const cv = card.querySelector('canvas'), note = card.querySelector('.dzPn'); card.querySelector('.dzPng').onclick = () => window.DaisyCite.png(cv, 'daisy-' + p.id + '-' + f.log + '.png');
       try {
         const d = await getLog(f.log); if (stale()) return null; if (!d) throw new Error(f.log + ' was not written by this run');
         if (f.annual) { annual(cv, d, note); ok++; continue; }
@@ -136,7 +152,7 @@
   function bind() {
     const map = document.getElementById('dzPmap'); const act = id => { if (!id || !byId(id)) return; st.sel = id; map.innerHTML = svg(); document.getElementById('dzPchips').innerHTML = chips(); wire(); detail(); };
     const wire = () => { document.querySelectorAll('.dzPc').forEach(b => b.onclick = () => act(b.dataset.p)); map.querySelectorAll('.dzPb[data-p]').forEach(g => { g.onclick = () => act(g.dataset.p); g.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); act(g.dataset.p); } }; }); };
-    wire(); detail();
+    wire(); detail(); if (window.DaisyScenUI) window.DaisyScenUI.bindStrip();
   }
   window.DaisyProc = { PROCESSES: P, drawFigs, GC };
   D.register('proc', { html, bind });
