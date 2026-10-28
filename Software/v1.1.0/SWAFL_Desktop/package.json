@@ -11,7 +11,9 @@
     "web": "node serve.js",
     "dist": "electron-builder --win portable nsis",
     "dist:dir": "electron-builder --dir",
-    "get-app": "node get-app.js"
+    "get-app": "node get-app.js",
+    "get_app": "node get-app.js",
+    "getapp": "node get-app.js"
   },
   "devDependencies": {
     "electron": "^31.0.0",

@@ -41,7 +41,7 @@ npm run get-app    # build SWAFL.exe, copy it to the Desktop and start it
 
 ## If the build stops
 
-**The command is not found.** The script is called `get-app`, with a hyphen: `npm run get-app`. Typing `npm run get_app` gives the message *Missing script: "get_app"* and npm suggests the right name.
+**The command is not found.** The script is called `get-app`, with a hyphen, and `npm run get_app` and `npm run getapp` do the same. If npm answers *Missing script: "get_app"*, the folder holds an older `package.json`: unzip the new zip into a new folder and run the command there.
 
 **The message "Cannot create symbolic link : A required privilege is not held by the client".** It appears during the step *packaging* of the build, after the line that downloads `winCodeSign`, and it names the files `libcrypto.dylib` and `libssl.dylib`. The build tool unpacks a code-signing package that contains two symbolic links, and Windows allows a normal user to create symbolic links only when Developer Mode is on or the terminal runs as Administrator. The program does not need code signing, so there are three ways out, in this order:
 
