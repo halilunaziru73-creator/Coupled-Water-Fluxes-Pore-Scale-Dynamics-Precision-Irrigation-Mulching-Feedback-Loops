@@ -7591,7 +7591,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
     TF('mean ' + fmt(m, o.dec) + ' · 10–90 %: ' + fmt(p10, o.dec) + ' to ' + fmt(p90, o.dec) + ' · variation ' + fmt(cv * 100) + ' %', x + 8, y + h - 10, w - 16, { s: 9.5, c: INK });
     return { m, p10, p90, cv };
   }
-  function legend(items, x, y) { let xx = x; items.forEach(([c, t]) => { ctx.font = '9.5px sans-serif'; if (xx > x && xx + ctx.measureText(t).width + 16 > W - 10) { xx = x; y += 14; } ctx.fillStyle = c; ctx.fillRect(xx, y - 8, 10, 10); ctx.strokeStyle = 'rgba(0,0,0,0.3)'; ctx.strokeRect(xx + 0.5, y - 7.5, 9, 9); T(t, xx + 14, y + 1, { s: 9.5 }); ctx.font = '9.5px sans-serif'; xx += ctx.measureText(t).width + 30; }); return y; }
+  function legend(items, x, y) { let xx = x; items.forEach(([c, t]) => { ctx.font = '9.5px sans-serif'; if (xx > x && xx + ctx.measureText(t).width + 16 > W - 40) { xx = x; y += 14; } ctx.fillStyle = c; ctx.fillRect(xx, y - 8, 10, 10); ctx.strokeStyle = 'rgba(0,0,0,0.3)'; ctx.strokeRect(xx + 0.5, y - 7.5, 9, 9); T(t, xx + 14, y + 1, { s: 9.5 }); ctx.font = '9.5px sans-serif'; xx += ctx.measureText(t).width + 30; }); return y; }
   function header(title, sub, y) { TF(title, 16, y + 18, W - 32, { s: 16, b: true, c: HEAD }); if (sub) TF(sub, 16, y + 36, W - 32, { s: 10.5, c: MUTE }); return y + 48; }
   function badge(txt, x, y, col) { ctx.font = 'bold 9px sans-serif'; const w = ctx.measureText(txt).width + 10; ctx.fillStyle = col || '#1E8E3E'; rrect(x, y - 10, w, 14, 7); ctx.fill(); T(txt, x + 5, y + 1, { s: 9, b: true, c: '#fff' }); return w; }
   const noData = (y) => { T('Loading the year-by-year results...', 16, y + 30, { s: 12, c: MUTE }); return y + 60; };
@@ -8270,8 +8270,20 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   const pal = t => { t = clamp(t, 0, 1) * (PAL.length - 2); const i = Math.min(PAL.length - 3, Math.floor(t)); return mix(PAL[i], PAL[i + 1], t - i); };
   const wcol = f => mix('#C9A65E', '#2E6FBF', clamp(f, 0, 1));
   const day = () => clamp(Math.round(play.t * (N - 1)), 0, N - 1);
-  const sowDoy = () => Math.max(60, (typeof state !== 'undefined' && isFinite(state.plantDoy) && state.plantDoy != null ? state.plantDoy : P.SP[PH.sp].sow) + CLIM[PH.clim].sow);
-  const dateOf = d => { const dt = new Date(Date.UTC(2001, 0, 1 + sowDoy() + d)); return dt.getUTCDate() + ' ' + MON[dt.getUTCMonth()]; };
+  const DAYMS = 864e5;
+  const projSow = () => Math.max(60, (typeof state !== 'undefined' && isFinite(state.plantDoy) && state.plantDoy != null ? state.plantDoy : P.SP[PH.sp].sow) + CLIM[PH.clim].sow);
+  // the first day of the season, in ms: the planting day of the project (the season that holds the date of the toolbar), or the date of the toolbar itself
+  function startMs() {
+    const D = dKey(), y = new Date(D).getUTCFullYear(), sw = projSow(), st = yy => Date.UTC(yy, 0, 1) + sw * DAYMS; let Y = y; if (D < st(y) && D >= st(y - 1) && D - st(y - 1) < N * DAYMS) Y = y - 1;
+    const inSeason = D >= st(Y) && D < st(Y) + N * DAYMS, m = PH.sowMode || 'auto';
+    if (m === 'date' || (m === 'auto' && !inSeason)) return D; return st(Y);
+  }
+  const sowDoy = () => { const d = new Date(startMs()), y = d.getUTCFullYear(); let k = Math.round((startMs() - Date.UTC(y, 0, 1)) / DAYMS); const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0; if (leap && k >= 59) k = k === 59 ? 58 : k - 1; return Math.min(364, Math.max(0, k)); };
+  const dateOf = d => { const dt = new Date(startMs() + d * DAYMS); return dt.getUTCDate() + ' ' + MON[dt.getUTCMonth()]; };
+  const dateOfY = d => { const dt = new Date(startMs() + d * DAYMS); return dt.getUTCDate() + ' ' + MON[dt.getUTCMonth()] + ' ' + dt.getUTCFullYear(); };
+  // the labels of a time axis are dates; the date of the toolbar is marked on every chart
+  function axisDates(X, yAxis, x0, ww, o) { o = o || {}; const n = o.n || 5, yr = new Date(startMs()).getUTCFullYear(); for (let i = 0; i <= n; i++) { const t = Math.round(i * (N - 1) / n), dt = new Date(startMs() + t * DAYMS); T(dt.getUTCDate() + ' ' + MON[dt.getUTCMonth()] + (i === 0 || dt.getUTCFullYear() !== yr && i === n ? ' ' + String(dt.getUTCFullYear()).slice(2) : ''), X(t), yAxis + 12, { s: 8.5, c: MUTE, a: i === 0 ? 'left' : i === n ? 'right' : 'center' }); } }
+  function todayMark(X, top, hh) { try { const q = window.PHUI.outlook.season(dKey()); if (q.idx < 0 || q.idx >= N) return; ctx.strokeStyle = '#0A246A'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(X(q.idx) + 0.5, top); ctx.lineTo(X(q.idx) + 0.5, top + hh); ctx.stroke(); ctx.fillStyle = '#0A246A'; ctx.beginPath(); ctx.moveTo(X(q.idx) - 4, top - 1); ctx.lineTo(X(q.idx) + 5, top - 1); ctx.lineTo(X(q.idx) + 0.5, top + 5); ctx.closePath(); ctx.fill(); } catch (e) { } }
   const KIND = { maize: 'maize', millet: 'sorghum', sorghum: 'sorghum', rice: 'wheat', wheat: 'wheat', cassava: 'bean', yam: 'bean', cowpea: 'bean', legume: 'bean', soybean: 'bean', groundnut: 'bean', cotton: 'bean', mustard: 'bean', vegetable: 'bean' };   // the archetype of the model that is nearest to the crop of the library
   const projSpecies = () => { if (CMAP[state.crop]) return CMAP[state.crop]; const c = window.CROPLIB && CROPLIB.crops && CROPLIB.crops[state.crop]; if (c) return KIND[c.kind] || (c.group === 'perennial' ? 'bean' : 'wheat'); return 'wheat'; };
   const applyPreset = id => { const g = P.GENO.find(x => x.id === id) || P.GENO[0]; PH.gid = g.id; PH.g = Object.assign({}, g, { psi50: P.SP[PH.sp].psi50 + g.dpsi }); };
@@ -8301,14 +8313,15 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   const clockTxt = () => { const D = dKey(), t = new Date(), td = Date.UTC(t.getFullYear(), t.getMonth(), t.getDate()), d = new Date(D), p2 = v => (v < 10 ? '0' : '') + v; return d.getUTCDate() + ' ' + MON[d.getUTCMonth()] + ' ' + d.getUTCFullYear() + (D === td ? ', ' + p2(t.getHours()) + ':' + p2(t.getMinutes()) : ''); };
   // the year of the weather that holds the season of the date of the toolbar (else the year of the clock of the engine)
   function ySeason(W0) { try { const q = window.PHUI.outlook.season(dKey()); const i = W0 && W0.years ? W0.years.indexOf(q.Y) : -1; if (i >= 0) return i; } catch (e) { } return typeof yearNow === 'function' ? yearNow() : 0; }
-  function envObj(rainOn) {
+  function envObj(rainOn, noCal) {
     const cl = CLIM[PH.clim], dT = TEMP_VALUES[state.tempIdx] + PH.xw, rm = RAIN_VALUES[state.rainIdx], mode = rainOn ? 'project' : PH.rain, W0 = window.WXD && window.WXD.on ? window.WXD : null; let real = null, realT = null, realE = null;
+    if (W0 && W0.rows && !noCal) { try { const A = window.PHUI.outlook.arrays(); if (A) { if (mode === 'project') real = A.P; if (A.T.every(v => v != null)) realT = A.T; if (A.E.every(v => v != null)) realE = A.E; return { sow: sowDoy(), Tm: cl.Tm, Tamp: cl.Tamp, dT: PH.xw, rain: DATA.rain_base, rainMult: 1, rainMode: mode, realRain: real, realT, realET0: realE, lat: 55.7 }; } } catch (e) { console.error(e); } }
     if (mode === 'project' && W0 && W0.P) { try { const y = ySeason(W0), sw = sowDoy(); real = Array.from({ length: N }, (_, k) => W0.P[y * 365 + (sw + k) % 365] || 0); } catch (e) { real = null; } }
     if (W0) { try { const y = ySeason(W0), sw = sowDoy(); if (W0.Tclim) realT = Array.from({ length: N }, (_, k) => W0.Tclim[(sw + k) % 365]); if (W0.hasE && W0.ET0) realE = Array.from({ length: N }, (_, k) => W0.ET0[y * 365 + (sw + k) % 365]); } catch (e) { } }
     return { sow: sowDoy(), Tm: cl.Tm, Tamp: cl.Tamp, dT, rain: DATA.rain_base * (PH.clim === 'hot' ? 0.45 : PH.clim === 'warm' ? 0.7 : 1), rainMult: real ? 1 : rm, rainMode: mode, realRain: real, realT, realET0: realE, lat: 55.7 };
   }
   const dKey = () => { try { return window.PHUI.outlook.toolbarDate(); } catch (e) { return 0; } };
-  const keyOf = wd => JSON.stringify([wd === false ? 0 : dKey(), state.soil, state.till, state.tcIdx, state.tempIdx, state.rainIdx, PH.sp, PH.g, PH.clim, PH.rain, PH.dr, PH.xw, PH.area, PH.ovr, PH.ref, PH.sw, state.crop, state.densIdx, state.plantDoy, state.vffIdx, state.capIdx, state.nIdx, state.method, state.zIdx, state.trigIdx, state.trigMode, state.trigF, state.salt0, state.ecw, state.areaHa, window.WXD && window.WXD.on ? window.WXD.key : 'rec', (function () { try { return Math.round(trigAbsFor(state.soil)); } catch (e) { return 0; } })()]);
+  const keyOf = wd => JSON.stringify([wd === false ? 0 : dKey(), PH.sowMode, state.soil, state.till, state.tcIdx, state.tempIdx, state.rainIdx, PH.sp, PH.g, PH.clim, PH.rain, PH.dr, PH.xw, PH.area, PH.ovr, PH.ref, PH.sw, state.crop, state.densIdx, state.plantDoy, state.vffIdx, state.capIdx, state.nIdx, state.method, state.zIdx, state.trigIdx, state.trigMode, state.trigF, state.salt0, state.ecw, state.areaHa, window.WXD && window.WXD.on ? window.WXD.key : 'rec', (function () { try { return Math.round(trigAbsFor(state.soil)); } catch (e) { return 0; } })()]);
   function cfgFor(tr, store, geno) {
     const tt = tr === 'ww' ? PH.ref : (tr === 'bench' ? 'ww' : tr), wet = tt === 'pj' || tt === 'rf', env = envObj(wet), lc = libCrop(), sw = PH.sw || { rue: 1, kte: 1 };
     const cp = Object.assign({}, lc ? lc.o : {}); if (sw.rue !== 1 || sw.kte !== 1) { const sp0 = P.SP[PH.sp]; cp.RUE = sp0.RUE * sw.rue; cp.kte = sp0.kte * sw.kte; }
@@ -8362,6 +8375,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
     y = chipRow('Modelled as', Object.keys(P.SP).map(k => ({ k, t: P.SP[k].name, tip: 'model ' + P.SP[k].name.toLowerCase() + (k === projSpecies() ? ' (the nearest to the crop of the project)' : '') })), PH.sp, k => { PH.sp = k; PH.follow = false; PH.area = null; applyPreset(PH.gid === 'custom' ? 'ref' : PH.gid); }, x0, y, ww);
     y = chipRow('Genotype', P.GENO.map(g => ({ k: g.id, t: g.name })).concat(PH.gid === 'custom' ? [{ k: 'custom', t: 'Custom' }] : []), PH.gid, k => { if (k !== 'custom') applyPreset(k); }, x0, y, ww);
     y = chipRow('Drought', [{ k: 'pulse', t: 'Pulse and recovery', tip: 'set-point of the water in the root zone: 1st stress, 2nd stress (two thirds of it), then rewatering, as in the pot experiments' }, { k: 'terminal', t: 'Terminal', tip: 'no water from the onset to the end' }, { k: 'inter', t: 'Intermittent', tip: 'cycles of stress and rewatering' }, { k: 'none', t: 'No stress (control only)' }], PH.dr.type, k => { PH.dr.type = k; }, x0, y, ww);
+    y = chipRow('Season starts', [{ k: 'auto', t: 'Automatic', tip: 'the planting day of the project when the date of the toolbar falls in that season, otherwise the date of the toolbar' }, { k: 'project', t: 'Planting day of the project', tip: 'the day of the year set in the Properties panel' }, { k: 'date', t: 'On the date of the toolbar', tip: 'sow on the day shown in the toolbar' }], PH.sowMode || 'auto', k => { PH.sowMode = k; }, x0, y, ww);
     y = chipRow('Climate', Object.keys(CLIM).map(k => ({ k, t: CLIM[k].t })), PH.clim, k => { PH.clim = k; }, x0, y, ww);
     y = chipRow('Rain', [{ k: 'none', t: 'Excluded (rain-out shelter)' }, { k: 'project', t: 'Project rain' + (window.WXD && window.WXD.on ? ' (imported days)' : '') }], PH.rain, k => { PH.rain = k; }, x0, y, ww);
     y = chipRow('Left plant', [{ k: 'pj', t: 'Project irrigation', tip: 'watered by the sensor, trigger and method of the Properties panel, with its mulch, nitrogen and salt' }, { k: 'ww', t: 'Well-watered bench', tip: 'water held at the field capacity, as in a pot experiment' }, { k: 'rf', t: 'Rainfed', tip: 'only the rain of the project' }], PH.ref, k => { PH.ref = k; }, x0, y, ww);
@@ -8508,8 +8522,8 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
       TF(row.t + (row.u ? ' (' + row.u + ')' : ''), x0 + 4, top + 10, ww - 10, { s: 9.5, b: true });
       [[a, '#1B1F23'], [b, '#D93025']].forEach(([q, c]) => { ctx.strokeStyle = c; ctx.lineWidth = 2; ctx.beginPath(); let st = false; for (let i = 0; i < N; i++) { if (!isFinite(q[i])) { st = false; continue; } st ? ctx.lineTo(X(i), Y(q[i])) : ctx.moveTo(X(i), Y(q[i])); st = true; } ctx.stroke(); ctx.fillStyle = c; ctx.beginPath(); ctx.arc(X(d), Y(q[d]), 3.4, 0, Math.PI * 2); ctx.fill(); });
       obs.forEach(o => { ctx.fillStyle = o.trt === 'dr' ? '#D93025' : '#1B1F23'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.beginPath(); ctx.rect(X(o.day) - 3, Y(o[obsK]) - 3, 6, 6); ctx.fill(); ctx.stroke(); });
-      ctx.strokeStyle = '#2E7DE8'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(X(d) + 0.5, top); ctx.lineTo(X(d) + 0.5, top + hgt); ctx.stroke(); ctx.setLineDash([]);
-      if (ri === rows.length - 1) { for (let t = 0; t <= N - 1; t += 20) T(String(t), X(t), top + hgt + 12, { s: 8.5, c: MUTE, a: 'center' }); T('days after emergence', x0 + ww, top + hgt + 24, { s: 8.5, c: MUTE, a: 'right' }); }
+      ctx.strokeStyle = '#2E7DE8'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(X(d) + 0.5, top); ctx.lineTo(X(d) + 0.5, top + hgt); ctx.stroke(); ctx.setLineDash([]); todayMark(X, top, hgt);
+      if (ri === rows.length - 1) { axisDates(X, top + hgt, x0, ww); }
       { const lt = fmt(a[d], mx - mn < 5 ? 2 : 1) + ' / ' + fmt(b[d], mx - mn < 5 ? 2 : 1); ctx.font = 'bold 9px sans-serif'; const lw = ctx.measureText(lt).width + 8; ctx.fillStyle = 'rgba(255,255,255,0.88)'; ctx.fillRect(x0 + ww - lw - 2, top + 1, lw, 13); T(lt, x0 + ww - 6, top + 11, { s: 9, b: true, c: '#33414F', a: 'right' }); }
     });
     K.legend([['#1B1F23', RN()], ['#D93025', 'drought']].concat(shade.length ? [['#F6D9A8', 'stress'], ['#D3DDF3', 'recovery']] : []).concat(PH.obs ? [['#888', 'square: your observations']] : []), cx + 10, y + hh - 10);
@@ -8582,7 +8596,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   function onUp() { PH.drag = null; PH.dragging = false; }
   // background jobs (genotype panel, calibration) run one step per frame; part 2 fills these
   let jobStep = () => { }, panelStep = () => { };
-  window.PHUI = { clockTxt, leafColor, drawRoots, drawShoot, BASE, SCR, scrub, runNow, RN, RNc, projObj, nResponse, libCrop, PH, P, K, SECTIONS, chip, chipRow, slider, SL, mix, pal, wcol, day, dateOf, R, N, NL, DZ, ZMAX, CLIM, effGeno, cfgFor, ensureRun, keyOf, seriesVals, SETS, OBSK, regimeShade, sowDoy, envObj, soilObj, setJob: f => { jobStep = f; }, setPanel: f => { panelStep = f; }, redraw: () => { PH.key = ''; } };
+  window.PHUI = { dateOfY, axisDates, todayMark, startMs, clockTxt, leafColor, drawRoots, drawShoot, BASE, SCR, scrub, runNow, RN, RNc, projObj, nResponse, libCrop, PH, P, K, SECTIONS, chip, chipRow, slider, SL, mix, pal, wcol, day, dateOf, R, N, NL, DZ, ZMAX, CLIM, effGeno, cfgFor, ensureRun, keyOf, seriesVals, SETS, OBSK, regimeShade, sowDoy, envObj, soilObj, setJob: f => { jobStep = f; }, setPanel: f => { panelStep = f; }, redraw: () => { PH.key = ''; } };
   K.add('dph', 'P1 Deterministic phenotyping', '#2F7F3E', drawPh, 'Deterministic phenotyping: plants, roots, water and carbon under drought, from equations', 'Roots, leaves, water and carbon are linked: a change in root angle, stay-green, stomata or soil structure moves every trait at once, and the traits seen above ground reveal what the roots do below.');
   const sc = SCENES.find(s => s.id === 'dph'); if (sc) { sc.play = true; sc.dur = 40; sc.h = 3600; sc.onDown = onDown; sc.onMove = onMove; sc.onUp = onUp; sc.onLeave = () => { hotUi.hover = null; }; }
   // the button of the web explorer, in the group of the soil
@@ -8613,18 +8627,21 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   // ================================================================== water of the column and the uptake of the roots
   function drawWater(y) {
     const w = W - 32, cx = 16, a = R('ww'), b = R('dr'), d = day(), y0 = y; frameH(cx, y, w, 'Water: demand, supply and where the roots take it', 'transpiration of the plant against the soil water of every layer');
-    y += 32; const x0 = cx + 46, ww = w - 62, hh = 112, top = y + 6;
-    // daily water use
-    const mx = K.nice(Math.max(...a.Tp, ...b.Tp, 1) * 1.1), X = i => x0 + ww * i / (N - 1), Y = v => top + hh - v / mx * hh;
-    regimeShade().forEach(s => { ctx.fillStyle = s[2]; ctx.fillRect(X(s[0]), top, X(s[1]) - X(s[0]), hh); });
+    y += 32; const x0 = cx + 46, ww = w - 62, hh = 112, BH = 22, top = y + 6 + BH;
+    // daily water use; rain and irrigation sit in their own band above the curves so that nothing is drawn over anything else
+    const mx = K.nice(Math.max(...a.Tp, ...b.Tp, ...b.Es, ...a.T, ...b.T, 1) * 1.1), X = i => x0 + ww * i / (N - 1), Y = v => top + hh - v / mx * hh;
+    regimeShade().forEach(s => { ctx.fillStyle = s[2]; ctx.fillRect(X(s[0]), top - BH, X(s[1]) - X(s[0]), hh + BH); });
+    const bm = Math.max(5, ...b.I, ...b.P);
+    T('rain and water applied (mm/day, up to ' + fmt(bm, 0) + ')', x0 + 4, top - BH + 9, { s: 8, c: MUTE });
+    for (let i = 0; i < N; i++) { if (b.P[i] > 0.3) { ctx.fillStyle = 'rgba(120,130,145,0.65)'; const q = b.P[i] / bm * (BH - 12); ctx.fillRect(X(i) - 1, top - q, 2.4, q); } if (b.I[i] > 0.3) { ctx.fillStyle = 'rgba(46,125,232,0.75)'; const q = b.I[i] / bm * (BH - 12); ctx.fillRect(X(i) - 1 + 2.4, top - q, 2.4, q); } }
+    ctx.strokeStyle = '#B9B4A6'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x0, top + 0.5); ctx.lineTo(x0 + ww, top + 0.5); ctx.stroke();
     K.yAxis(x0, top, ww, hh, 0, mx, 'mm/day', 4);
-    for (let i = 0; i < N; i++) { if (b.I[i] > 0.3) { ctx.fillStyle = 'rgba(46,125,232,0.55)'; ctx.fillRect(X(i) - 1, top, 2.4, Math.min(30, b.I[i] / mx * hh * 0.5)); } if (b.P[i] > 0.3) { ctx.fillStyle = 'rgba(120,130,145,0.55)'; ctx.fillRect(X(i) - 1, top + hh - Math.min(26, b.P[i] / mx * hh), 2.4, Math.min(26, b.P[i] / mx * hh)); } }
     const line = (arr, c, wd, dash) => { ctx.strokeStyle = c; ctx.lineWidth = wd; ctx.setLineDash(dash || []); ctx.beginPath(); for (let i = 0; i < N; i++) { const yy = Y(arr[i]); i ? ctx.lineTo(X(i), yy) : ctx.moveTo(X(i), yy); } ctx.stroke(); ctx.setLineDash([]); };
     line(a.Tp, '#8A94A3', 1.3, [4, 3]); line(a.T, '#1B1F23', 2); line(b.T, '#D93025', 2); line(b.Es, '#A8742E', 1.2);
-    ctx.strokeStyle = '#2E7DE8'; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(X(d), top); ctx.lineTo(X(d), top + hh); ctx.stroke(); ctx.setLineDash([]);
-    for (let t = 0; t <= N - 1; t += 20) T(String(t), X(t), top + hh + 12, { s: 8.5, c: MUTE, a: 'center' });
-    K.legend([['#8A94A3', 'what the canopy asks (potential)'], ['#1B1F23', 'transpired, ' + RN()], ['#D93025', 'transpired, drought'], ['#A8742E', 'soil evaporation, drought'], ['rgba(46,125,232,0.7)', 'water applied'], ['rgba(120,130,145,0.7)', 'rain']], x0, top + hh + 30);
-    y = top + hh + 52;
+    ctx.strokeStyle = '#2E7DE8'; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(X(d), top - BH); ctx.lineTo(X(d), top + hh); ctx.stroke(); ctx.setLineDash([]);
+    U.todayMark(X, top - BH, hh + BH); U.axisDates(X, top + hh, x0, ww);
+    K.legend([['#8A94A3', 'what the canopy asks (potential)'], ['#1B1F23', 'transpired, ' + RN()], ['#D93025', 'transpired, drought'], ['#A8742E', 'soil evaporation, drought'], ['rgba(46,125,232,0.7)', 'water applied'], ['rgba(120,130,145,0.7)', 'rain']], x0, top + hh + 34);
+    y = top + hh + 60;
     // heat maps of the relative plant-available water, with the front of the roots
     const hw = (w - 24) / 2 - 76, ch = 14 * NL;
     [['ww', RNc(), a], ['dr', 'Drought', b]].forEach(([tr, lab, res], ci) => {
@@ -8657,7 +8674,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
       const X = i => x0 + (cw - 24) * i / (N - 1), Y = v => top + hh - v / mx * hh, parts = ['Wr', 'Wl', 'Ws', 'Wg']; const base = new Float64Array(N);
       parts.forEach(k => { ctx.fillStyle = COL[k]; ctx.beginPath(); for (let i = 0; i < N; i++) { const yy = Y(base[i] + res[k][i]); i ? ctx.lineTo(X(i), yy) : ctx.moveTo(X(i), yy); } for (let i = N - 1; i >= 0; i--) ctx.lineTo(X(i), Y(base[i])); ctx.closePath(); ctx.fill(); for (let i = 0; i < N; i++) base[i] += res[k][i]; });
       ctx.strokeStyle = '#2E7DE8'; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(X(d), top); ctx.lineTo(X(d), top + hh); ctx.stroke(); ctx.setLineDash([]);
-      for (let t = 0; t <= N - 1; t += 20) T(String(t), X(t), top + hh + 12, { s: 8.5, c: MUTE, a: 'center' });
+      U.todayMark(X, top, hh); U.axisDates(X, top + hh, x0, cw - 24, { n: 3 });
       const sh = res.Wl[d] + res.Ws[d] + res.Wg[d]; TF('day ' + d + ': roots ' + fmt(res.Wr[d]) + ', leaves ' + fmt(res.Wl[d]) + ', stems ' + fmt(res.Ws[d]) + ', grain ' + fmt(res.Wg[d]) + ' · root : shoot ' + fmt(res.Wr[d] / Math.max(0.01, sh), 2), x0 - 30, top + hh + 28, cw - 8, { s: 9, c: '#33414F' });
     });
     y += 16 + hh + 38; K.legend([[COL.Wr, 'roots'], [COL.Wl, 'leaves'], [COL.Ws, 'stems and reserves'], [COL.Wg, 'grain']], cx + 12, y); y += 22;
@@ -8729,7 +8746,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
     const r2 = PRED.map(pr => Array.from({ length: N }, (_, t) => regressionAt(t, pr.k, PH.yv).fit.r2)); regimeShade().forEach(s => { ctx.fillStyle = s[2]; ctx.globalAlpha = 0.45; ctx.fillRect(x0 + pw * s[0] / (N - 1), top, pw * (s[1] - s[0]) / (N - 1), h2); ctx.globalAlpha = 1; });
     r2.forEach((arr, k) => { ctx.strokeStyle = PRED[k].c; ctx.lineWidth = 1.8; ctx.beginPath(); arr.forEach((v, t) => { const yy = top + h2 - v * h2; t ? ctx.lineTo(x0 + pw * t / (N - 1), yy) : ctx.moveTo(x0, yy); }); ctx.stroke(); });
     ctx.strokeStyle = '#2E7DE8'; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(x0 + pw * d / (N - 1), top); ctx.lineTo(x0 + pw * d / (N - 1), top + h2); ctx.stroke(); ctx.setLineDash([]);
-    for (let t = 0; t <= N - 1; t += 20) T(String(t), x0 + pw * t / (N - 1), top + h2 + 12, { s: 8.5, c: MUTE, a: 'center' }); hot(x0, top, pw, h2, pp => { play.t = clamp((pp.x - x0) / pw, 0, 1); play.on = false; }, 'click to move the day');
+    { const XX = t => x0 + pw * t / (N - 1); U.todayMark(XX, top, h2); U.axisDates(XX, top + h2, x0, pw, { n: 4 }); } hot(x0, top, pw, h2, pp => { play.t = clamp((pp.x - x0) / pw, 0, 1); play.on = false; }, 'click to move the day');
     y = top + h2 + 28; K.legend(PRED.map(q => [q.c, q.k]), cx + 12, y); y += 18;
     let bestK = 0; PRED.forEach((q, k) => { if (r2[k][d] > r2[bestK][d]) bestK = k; }); const nt = note('On day ' + d + ' the best shoot trait for the ' + YV[PH.yv].t + ' is ' + PRED[bestK].t.toLowerCase() + ' (r² = ' + fmt(r2[bestK][d], 2) + '). The measure is read from a window of five days around the day, as a camera or a thermal scan would be, and the lines show when in the drought each trait becomes informative. Twelve genotypes: angle of the root axes 26, 44, 62°, vigour ×0.8 or ×1.2, stay-green 0.1 or 0.7; all other traits as set above.', cx + 12, y, w - 24); y += nt * 12.5 + 10;
     // tolerance indices of the same panel
@@ -8938,9 +8955,10 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
       ctx.strokeStyle = '#2E7DE8'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(X(d) + 0.5, gy); ctx.lineTo(X(d) + 0.5, gy + gh); ctx.stroke(); ctx.setLineDash([]);
       const dp = hi - lo < 5 ? 2 : (hi - lo < 50 ? 1 : 0); T(row.t + (row.u ? ' (' + row.u + ')' : ''), gx, gy - 5, { s: 9, b: true }); T(fmt(va[d], dp) + ' / ' + fmt(vb[d], dp), gx + gw, gy - 5, { s: 9, b: true, a: 'right' });
       T(fmt(hi, dp), gx - 3, gy + 8, { s: 7.5, c: MUTE, a: 'right' }); T(fmt(lo, dp), gx - 3, gy + gh, { s: 7.5, c: MUTE, a: 'right' });
+      U.todayMark(X, gy, gh); T(dateOf(0), gx, gy + gh + 11, { s: 7.5, c: MUTE }); T(dateOf(N - 1), gx + gw, gy + gh + 11, { s: 7.5, c: MUTE, a: 'right' });
       scrub(gx, gy, gw, gh, gx, gw);
     });
-    const yb = y + 20 + 3 * (gh + 26) + 4; T('days after emergence: 0 to ' + (N - 1) + ' · click or drag on any chart to move the day', gx0, yb, { s: 8.5, c: MUTE });
+    const yb = y + 20 + 3 * (gh + 26) + 4; T('dates from ' + dateOf(0) + ' to ' + dateOf(N - 1) + ' · click or drag on any chart to move the day', gx0, yb, { s: 8.5, c: MUTE });
     y = Math.max(top + hh + 82, yb + 10);
     const rootsNow = 'On day ' + d + ' the ' + RN() + ' plant has ' + fmt(a.Lroot[d] / 100, 1) + ' m of root to ' + fmt(a.Rdepth[d]) + ' cm and the drought plant ' + fmt(b.Lroot[d] / 100, 1) + ' m to ' + fmt(b.Rdepth[d]) + ' cm. The root grows by ' + fmt(a.dL[d]) + ' and ' + fmt(b.dL[d]) + ' cm per day, with ' + fmt(a.fr[d] * 100) + ' and ' + fmt(b.fr[d] * 100) + ' % of the new carbon, so the shoot measurements of the same day (shoot area ' + fmt(a.PSA[d]) + ' and ' + fmt(b.PSA[d]) + ' cm², canopy temperature depression ' + fmt(a.CTD[d], 1) + ' and ' + fmt(b.CTD[d], 1) + ' K) can be read against the roots of that day.';
     const n = note(rootsNow, cx + 12, y, w - 24); y += n * 12.5 + 10; endFrame(cx, y0, y, w); return y + 10;
@@ -9115,7 +9133,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
 'use strict';
 (function () {
   const U = window.PHUI; if (!U) return;
-  const { BASE, PH, P, K, chip, mix, dateOf, N, cfgFor, envObj, keyOf, SECTIONS, sowDoy } = U;
+  const { BASE, PH, P, K, chip, mix, dateOf, N, cfgFor, envObj, keyOf, SECTIONS, sowDoy, startMs } = U;
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v)), fmt = K.fmt, TF = K.TF, GRID = '#E6E2D6';
   const note = (txt, x, y, w, o) => sidWrap(txt, x, y, w, Object.assign({ s: 9.5, c: MUTE }, o || {}), 12.5);
   const endFrame = (x, y0, y, w) => { ctx.strokeStyle = '#B9B4A6'; ctx.lineWidth = 1; ctx.strokeRect(x + 0.5, y0 + 0.5, w - 1, y - y0); };
@@ -9132,10 +9150,8 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
     const t = new Date(); return Date.UTC(t.getFullYear(), t.getMonth(), t.getDate());
   }
   function season(D) {
-    const sow = sowDoy(), y = new Date(D).getUTCFullYear(), st = yy => Date.UTC(yy, 0, 1) + sow * DAY;
-    let Y = y; if (D < st(y) && D - st(y - 1) < N * DAY && D >= st(y - 1)) Y = y - 1;
-    const start = st(Y), idx = Math.floor((D - start) / DAY);
-    return { Y, start, idx, state: idx < 0 ? 'before' : (idx >= N ? 'after' : 'during') };
+    const start = startMs(), idx = Math.floor((D - start) / DAY);
+    return { Y: new Date(start).getUTCFullYear(), start, idx, state: idx < 0 ? 'before' : (idx >= N ? 'after' : 'during') };
   }
   const jOf = ms => { const d = new Date(ms), y = d.getUTCFullYear(); let k = Math.round((ms - Date.UTC(y, 0, 1)) / DAY); const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0; if (leap && k >= 59) k = k === 59 ? 58 : k - 1; return clamp(k, 0, 364); };
 
@@ -9147,7 +9163,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   function assemble(S, D) {
     const W0 = sources(), kinds = new Array(N).fill('model'), P_ = new Array(N), E_ = new Array(N), T_ = new Array(N);
     const out = { src: W0 ? (W0.src === 'online' ? 'online weather of ' + W0.name : 'weather file ' + W0.name) : 'the model weather of the project climate', nObs: 0, nFc: 0, nScn: 0, years: [], base: null };
-    const baseW = P.weather(envObj(true), N); out.base = baseW;
+    let baseW = null; const bw = () => baseW || (baseW = P.weather(envObj(true, true), N));
     const byDay = new Map(); if (W0) W0.rows.forEach(r => byDay.set(r.d.getTime(), r));
     const lastRow = W0 ? W0.rows[W0.rows.length - 1].d.getTime() : 0;
     const given = new Array(N).fill(null);
@@ -9168,7 +9184,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
         if (r) { p = r.P; e = r.ET0; t = isFinite(r.tmean) ? r.tmean : (isFinite(r.tmax) && isFinite(r.tmin) ? (r.tmax + r.tmin) / 2 : NaN); kind = pastDay ? 'obs' : 'fc'; }
         if (!isFinite(p) || !isFinite(e) || !isFinite(t)) {
           if (W0 && rank) { const i = pastDay ? rank.typ : rank[key]; if (!isFinite(p)) p = W0.P[i * 365 + j] || 0; if (!isFinite(e)) e = W0.ET0 ? W0.ET0[i * 365 + j] : NaN; if (!isFinite(t)) t = W0.Tclim ? W0.Tclim[j] : NaN; if (kind === 'scn' && pastDay) kind = 'fill'; }
-          else { const q = baseW[k]; if (!isFinite(p)) p = q.P * (pastDay ? 1 : f); if (!isFinite(e)) e = q.et0 * (pastDay ? 1 : fe); if (!isFinite(t)) t = q.Tmean; if (kind === 'scn' && pastDay) kind = 'fill'; }
+          else { const q = bw()[k]; if (!isFinite(p)) p = q.P * (pastDay ? 1 : f); if (!isFinite(e)) e = q.et0 * (pastDay ? 1 : fe); if (!isFinite(t)) t = q.Tmean; if (kind === 'scn' && pastDay) kind = 'fill'; }
         }
         rP[k] = isFinite(p) ? p : 0; rE[k] = isFinite(e) ? e : null; rT[k] = isFinite(t) ? t : null; kd[k] = kind;
       }
@@ -9178,8 +9194,11 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
     const kd = out.scn.typ.kind; out.nObs = kd.filter(x => x === 'obs').length; out.nFc = kd.filter(x => x === 'fc').length; out.nScn = kd.filter(x => x === 'scn').length; out.nFill = kd.filter(x => x === 'fill').length;
     return out;
   }
+  // the weather of the season for the plants of the layer: the record and the forecast up to the date, then the typical future
+  let ARR = null;
+  function arrays() { const D = toolbarDate(), S = season(D), W0 = sources(); if (!W0) return null; const key = W0.key + '|' + W0.rows.length + '|' + D + '|' + S.start; if (ARR && ARR.key === key) return ARR.v; const A = assemble(S, D), sc = A.scn.typ; ARR = { key, v: { P: sc.P, E: sc.E, T: sc.T, kind: sc.kind } }; return ARR.v; }
   function envFor(sc, S) {
-    const e = Object.assign({}, envObj(true)), hasE = sc.E.every(v => v != null);
+    const e = Object.assign({}, envObj(true, true)), hasE = sc.E.every(v => v != null);
     e.realRain = sc.P; e.rainMode = 'project'; e.rainMult = 1; e.realT = sc.T.every(v => v != null) ? sc.T : null; e.realET0 = hasE ? sc.E : null; e.sow = sowDoy();
     if (window.WXD && window.WXD.on) e.dT = PH.xw;       // the imported days are the weather: only the warming set in the layer is added
     return e;
@@ -9203,7 +9222,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
     SCN.forEach(s => {
       const sc = A.scn[s.k], env = envFor(sc, S), Wt = P.weather(env, N);
       const rf = P.run(Object.assign(cfgFor('rf', false), { env, weather: Wt })), pj = P.run(Object.assign(cfgFor('pj', false), { env, weather: Wt }));
-      const bench = s.k === 'typ' ? P.run(Object.assign(cfgFor('bench', false), { env, weather: Wt })) : null;
+      const bench = P.run(Object.assign(cfgFor('bench', false), { env, weather: Wt }));
       res.runs[s.k] = { rf, pj, bench, Wt };
     });
     res.bench = res.runs.typ.bench;
@@ -9274,8 +9293,57 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   }
   function projTxt() { try { const q = U.projObj(); return q.irr.method + ', trigger ' + Math.round(q.irr.trig) + ' cm, sensor ' + q.irr.z + ' cm'; } catch (e) { return 'the Properties panel'; } }
 
+
+  // ---------------------------------------------------------------- the calendar of drought stress and what it does to the roots
+  function episodes(R, key, plant) {
+    const r = R.runs[key], X = r[plant], B = r.bench, sp = X.sp, p = pFrac(), S = R.S, ti = S.idx, gap = 2, minLen = 2, flag = [];
+    for (let k = 0; k < N; k++) flag.push(rootZone(X, k) < 1 - p);
+    const eps = []; let a = -1, last = -1;
+    for (let k = 0; k < N; k++) { if (flag[k]) { if (a < 0) a = k; last = k; } else if (a >= 0 && k - last > gap) { eps.push([a, last]); a = -1; } }
+    if (a >= 0) eps.push([a, last]);
+    return eps.filter(e => e[1] - e[0] + 1 >= minLen).map(([a, b]) => {
+      let low = 1, lowK = a, tr = 0, dL = 0, dLb = 0; for (let k = a; k <= b; k++) { const v = rootZone(X, k); if (v < low) { low = v; lowK = k; } tr += X.Ks[k]; dL += X.dL[k]; dLb += B.dL[k]; }
+      let dry = 0, tot = 0; for (let i = 0; i < U.NL; i++) { const l = X.Lz[lowK * U.NL + i]; tot += l; if (X.w[lowK * U.NL + i] < 0.5) dry += l; }
+      const stage = X.Wg[a] > 0.3 ? 'grain filling' : (X.nLeaf[a] >= sp.nLeaf * 0.93 ? 'flowering' : 'vegetative');
+      const when = b < ti ? 'past' : (a <= ti ? 'now' : 'ahead');
+      return { a, b, n: b - a + 1, low, trm: tr / (b - a + 1), gr: dLb > 0.004 * (B.Lz.slice(-U.NL).reduce((p, q) => p + q, 0) || 1) ? 100 * dL / dLb : NaN, lag: B.Rdepth[b] - X.Rdepth[b], dryShare: tot > 0 ? 100 * dry / tot : 0, stage, when, lowK };
+    });
+  }
+  function drawStress(y) {
+    const w = W - 32, cx = 16, y0 = y; K.frame(cx, y, w, 24, 'Drought stress calendar: dates and what it does to the roots', 'from the date of the toolbar, with the future'); y += 30;
+    let R; try { R = compute(); } catch (e) { T('The calendar could not be computed: ' + e, cx + 12, y + 10, { s: 9.5, c: '#B3261E' }); console.error(e); endFrame(cx, y0, y + 24, w); return y + 34; }
+    const S = R.S, ti = S.idx; PH.stScn = PH.stScn || 'typ'; PH.stPlant = PH.stPlant || 'rf';
+    let xx = cx + 10; T('Plant', xx, y + 15, { s: 9.5, b: true, c: MUTE }); xx += 36;
+    [['rf', 'Rainfed'], ['pj', 'Project irrigation']].forEach(q => { xx += chip(xx, y, q[1], PH.stPlant === q[0], () => { PH.stPlant = q[0]; }, q[0] === 'rf' ? 'the plant that gets only the rain' : 'the plant watered by the sensor rule of the Properties panel'); });
+    xx += 10; T('Future', xx, y + 15, { s: 9.5, b: true, c: MUTE }); xx += 38; SCN.forEach(q => { xx += chip(xx, y, q.t, PH.stScn === q.k, () => { PH.stScn = q.k; }, 'the rest of the season after the date of the toolbar'); }); y += 30;
+    // the season as three bars: red days are days of drought stress, the line is the date of the toolbar
+    const bx = cx + 76, bw = w - 76 - 16, X = k => bx + bw * k / (N - 1); y += 4;
+    SCN.forEach((q, i) => { const eps = episodes(R, q.k, PH.stPlant), yy = y + i * 18; T(q.t.replace(' future', ''), cx + 12, yy + 11, { s: 9.5, b: true, c: q.c }); ctx.fillStyle = '#E9F1E4'; ctx.fillRect(bx, yy, bw, 13); eps.forEach(e => { ctx.fillStyle = e.b < ti ? '#B8B2A6' : '#D93025'; ctx.fillRect(X(e.a), yy, Math.max(2, X(e.b + 1) - X(e.a)), 13); }); ctx.strokeStyle = '#B9B4A6'; ctx.strokeRect(bx + 0.5, yy + 0.5, bw - 1, 12); if (PH.stScn === q.k) { ctx.strokeStyle = '#0A246A'; ctx.lineWidth = 2; ctx.strokeRect(bx - 1, yy - 1, bw + 2, 15); ctx.lineWidth = 1; } });
+    U.todayMark(X, y - 4, 3 * 18); U.axisDates(X, y + 3 * 18 - 2, bx, bw); y += 3 * 18 + 32;
+    T('red: days of drought stress ahead · grey: days of stress that have passed · dark line: the date of the toolbar', bx, y, { s: 8.5, c: MUTE }); y += 16;
+    // the table of the chosen future
+    const eps = episodes(R, PH.stScn, PH.stPlant), cols = [0, 0.04, 0.17, 0.30, 0.37, 0.49, 0.60, 0.70, 0.80, 0.90].map(f => cx + 12 + (w - 24) * f);
+    ['', 'from', 'to', 'days', 'growth stage', 'lowest water', 'T / Tp', 'root growth', 'root depth', 'roots in dry'].forEach((h, k) => T(h, cols[k], y + 8, { s: 8.5, b: true }));
+    y += 11; ['', '', '', '', '', 'of the root zone %', 'mean', 'vs watered %', 'vs watered cm', 'layers %'].forEach((h, k) => T(h, cols[k], y + 8, { s: 7.5, c: MUTE })); y += 11;
+    ctx.strokeStyle = GRID; ctx.beginPath(); ctx.moveTo(cx + 12, y + 0.5); ctx.lineTo(cx + w - 12, y + 0.5); ctx.stroke(); y += 4;
+    const WC = { past: '#6B7280', now: '#B8743A', ahead: '#B3261E' };
+    if (!eps.length) { T('No day of drought stress for the ' + PH.stPlant.replace('rf', 'rainfed').replace('pj', 'irrigated') + ' plant on this future.', cx + 12, y + 10, { s: 9.5, c: '#1E8E3E', b: true }); y += 20; }
+    eps.slice(0, 12).forEach((e, i) => { ctx.fillStyle = WC[e.when]; ctx.fillRect(cols[0], y + 1, 4, 12); T(String(i + 1), cols[0] + 8, y + 10, { s: 9.5, b: true });
+      [fdate(S.start + e.a * DAY) + (e.when === 'now' ? ' (now)' : ''), fdate(S.start + e.b * DAY), String(e.n), e.stage, fmt(e.low * 100), fmt(e.trm, 2), isFinite(e.gr) ? fmt(e.gr) : 'no growth', (e.lag > 0 ? '-' : '+') + fmt(Math.abs(e.lag)), fmt(e.dryShare)].forEach((v, k) => T(v, cols[k + 1], y + 10, { s: 9, c: k === 0 ? WC[e.when] : '#1B1F23', b: k === 0 })); y += 16; });
+    if (eps.length > 12) { T('and ' + (eps.length - 12) + ' more', cx + 12, y + 10, { s: 9, c: MUTE }); y += 16; }
+    y += 12;
+    const tot = eps.reduce((a, e) => a + e.n, 0), worst = eps.slice().sort((p, q) => p.low - q.low)[0], ahead = eps.filter(e => e.b >= ti), nextE = ahead[0], pl = PH.stPlant === 'rf' ? 'rainfed plant' : 'plant irrigated by the project rule', sc = SCN.find(q => q.k === PH.stScn).t.toLowerCase();
+    let txt = 'Reading: on the ' + sc + ' the ' + pl + ' has ' + tot + ' days of drought stress in ' + eps.length + ' period' + (eps.length === 1 ? '' : 's') + ' of the season (' + fmt(100 * tot / N) + ' % of its ' + N + ' days). ';
+    if (nextE) txt += (nextE.when === 'now' ? 'A period of stress is under way on the date of the toolbar and lasts until ' + fdate(S.start + nextE.b * DAY) + '. ' : 'The next period begins on ' + fdate(S.start + nextE.a * DAY) + ' (' + Math.max(0, nextE.a - ti) + ' days from the date of the toolbar) and lasts ' + nextE.n + ' days, in the stage of ' + nextE.stage + '. '); else txt += 'No period of stress is left after the date of the toolbar. ';
+    if (worst) txt += 'The worst period (' + fdate(S.start + worst.a * DAY) + ' to ' + fdate(S.start + worst.b * DAY) + ') brings the root zone down to ' + fmt(worst.low * 100) + ' % of its available water; the roots ' + (isFinite(worst.gr) ? 'grow ' + fmt(100 - worst.gr) + ' % less than those of a watered plant' : 'make little growth in that period, with or without water') + ', end ' + fmt(Math.abs(worst.lag)) + ' cm ' + (worst.lag >= 0 ? 'shallower' : 'deeper') + ' and ' + fmt(worst.dryShare) + ' % of the root length sits in layers that hold less than half of their available water. ';
+    txt += 'A day of stress is a day on which the water of the root zone (the layers the roots have reached) is below the readily available water of FAO-56 (Eq. P.26); the roots are compared with those of a plant held well watered under the same weather (Eq. P.27). Grey rows are in the past of the date of the toolbar, orange is the period now, red are ahead. The days ahead are those of the forecast and then of the years of the record in the chosen future.';
+    y += note(txt, cx + 12, y, w - 24) * 12.5 + 8; endFrame(cx, y0, y, w); return y + 10;
+  }
+
+  const io = SECTIONS.findIndex(q => q.id === 'outlook');
   const ie = SECTIONS.findIndex(q => q.id === 'data'); SECTIONS.splice(ie < 0 ? SECTIONS.length : ie, 0, { id: 'outlook', t: 'Drought outlook from the date of the toolbar', s: 'the season to the date, then a dry, a typical and a wet future', fn: drawOutlook });
-  U.outlook = { compute, toolbarDate, season };
+  { const ix = SECTIONS.findIndex(q => q.id === 'outlook'); SECTIONS.splice(ix + 1, 0, { id: 'stress', t: 'Drought stress calendar: dates and what it does to the roots', s: 'periods of stress from the date of the toolbar, with the future', fn: drawStress }); }
+  U.outlook = { compute, toolbarDate, season, arrays, assemble };
 })();
 
 </script>
@@ -9286,7 +9354,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
 'use strict';
 (function () {
   const U = window.PHUI; if (!U) return;
-  const { BASE, PH, P, K, chip, day, dateOf, R, N, NL, ZMAX, RN, RNc, scrub, seriesVals, regimeShade, drawRoots, drawShoot, leafColor } = U;
+  const { BASE, PH, P, K, chip, day, dateOf, todayMark, R, N, NL, ZMAX, RN, RNc, scrub, seriesVals, regimeShade, drawRoots, drawShoot, leafColor } = U;
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v)), fmt = K.fmt, GRID = '#E6E2D6';
   const note = (txt, x, y, w, o) => sidWrap(txt, x, y, w, Object.assign({ s: 9.5, c: MUTE }, o || {}), 12.5);
   const endFrame = (x, y0, y, w) => { ctx.strokeStyle = '#B9B4A6'; ctx.lineWidth = 1; ctx.strokeRect(x + 0.5, y0 + 0.5, w - 1, y - y0); };
@@ -9324,7 +9392,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
       const dp = hi - lo < 5 ? 2 : (hi - lo < 50 ? 1 : 0); T(row.t + ' (' + row.u + ')', gx, gy - 5, { s: 9, b: true }); T(fmt(va[d], dp) + ' / ' + fmt(vb[d], dp), gx + gw, gy - 5, { s: 9, b: true, a: 'right' });
       T(fmt(hi, dp), gx - 3, gy + 8, { s: 7.5, c: MUTE, a: 'right' }); T(fmt(lo, dp), gx - 3, gy + gh, { s: 7.5, c: MUTE, a: 'right' });
       T(dateOf(0), gx, gy + gh + 11, { s: 7.5, c: MUTE }); T(dateOf(N - 1), gx + gw, gy + gh + 11, { s: 7.5, c: MUTE, a: 'right' });
-      scrub(gx, gy, gw, gh, gx, gw);
+      todayMark(X, gy, gh); scrub(gx, gy, gw, gh, gx, gw);
     });
     return y + 18 + Math.ceil(rows.length / cols) * (gh + 34);
   }
@@ -9358,7 +9426,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
 'use strict';
 (function () {
   const cv = document.getElementById('profileCanvas'), wrap0 = document.querySelector('.canvaswrap'); if (!cv || !wrap0) return;
-  const LAB = { ctl: 'Set up', twin: 'Plants', film: 'Season film', rootday: 'Roots by day', scans: 'Root scans', series: 'Traits', water: 'Water', carbon: 'Carbon', soil: 'Soil', above: 'Roots and shoot', genome: 'Genotype', traits: 'Trait table', swafl: 'SWAFL data', outlook: 'Outlook', data: 'My data' };
+  const LAB = { ctl: 'Set up', twin: 'Plants', film: 'Season film', rootday: 'Roots by day', scans: 'Root scans', series: 'Traits', water: 'Water', carbon: 'Carbon', soil: 'Soil', above: 'Roots and shoot', genome: 'Genotype', traits: 'Trait table', swafl: 'SWAFL data', outlook: 'Outlook', stress: 'Stress calendar', data: 'My data' };
   const nav = document.createElement('nav'); nav.id = 'phNav'; nav.style.display = 'none';
   nav.innerHTML = '<style>#phNav{position:sticky;top:0;z-index:30;display:flex;gap:3px;overflow-x:auto;padding:4px 6px;margin:0 0 6px;background:#D4D0C8;border:1px solid #404040;border-top-color:#fff;border-left-color:#fff;scrollbar-width:thin}' +
     '#phNav button{flex:0 0 auto;height:24px;padding:0 10px;background:#D4D0C8;color:#000;font:12px Tahoma,Arial,sans-serif;border:1px solid #404040;border-top-color:#fff;border-left-color:#fff;cursor:pointer;white-space:nowrap}' +

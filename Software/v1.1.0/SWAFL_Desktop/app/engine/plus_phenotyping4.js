@@ -4,7 +4,7 @@
 'use strict';
 (function () {
   const U = window.PHUI; if (!U) return;
-  const { BASE, PH, P, K, chip, mix, dateOf, N, cfgFor, envObj, keyOf, SECTIONS, sowDoy } = U;
+  const { BASE, PH, P, K, chip, mix, dateOf, N, cfgFor, envObj, keyOf, SECTIONS, sowDoy, startMs } = U;
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v)), fmt = K.fmt, TF = K.TF, GRID = '#E6E2D6';
   const note = (txt, x, y, w, o) => sidWrap(txt, x, y, w, Object.assign({ s: 9.5, c: MUTE }, o || {}), 12.5);
   const endFrame = (x, y0, y, w) => { ctx.strokeStyle = '#B9B4A6'; ctx.lineWidth = 1; ctx.strokeRect(x + 0.5, y0 + 0.5, w - 1, y - y0); };
@@ -21,10 +21,8 @@
     const t = new Date(); return Date.UTC(t.getFullYear(), t.getMonth(), t.getDate());
   }
   function season(D) {
-    const sow = sowDoy(), y = new Date(D).getUTCFullYear(), st = yy => Date.UTC(yy, 0, 1) + sow * DAY;
-    let Y = y; if (D < st(y) && D - st(y - 1) < N * DAY && D >= st(y - 1)) Y = y - 1;
-    const start = st(Y), idx = Math.floor((D - start) / DAY);
-    return { Y, start, idx, state: idx < 0 ? 'before' : (idx >= N ? 'after' : 'during') };
+    const start = startMs(), idx = Math.floor((D - start) / DAY);
+    return { Y: new Date(start).getUTCFullYear(), start, idx, state: idx < 0 ? 'before' : (idx >= N ? 'after' : 'during') };
   }
   const jOf = ms => { const d = new Date(ms), y = d.getUTCFullYear(); let k = Math.round((ms - Date.UTC(y, 0, 1)) / DAY); const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0; if (leap && k >= 59) k = k === 59 ? 58 : k - 1; return clamp(k, 0, 364); };
 
@@ -36,7 +34,7 @@
   function assemble(S, D) {
     const W0 = sources(), kinds = new Array(N).fill('model'), P_ = new Array(N), E_ = new Array(N), T_ = new Array(N);
     const out = { src: W0 ? (W0.src === 'online' ? 'online weather of ' + W0.name : 'weather file ' + W0.name) : 'the model weather of the project climate', nObs: 0, nFc: 0, nScn: 0, years: [], base: null };
-    const baseW = P.weather(envObj(true), N); out.base = baseW;
+    let baseW = null; const bw = () => baseW || (baseW = P.weather(envObj(true, true), N));
     const byDay = new Map(); if (W0) W0.rows.forEach(r => byDay.set(r.d.getTime(), r));
     const lastRow = W0 ? W0.rows[W0.rows.length - 1].d.getTime() : 0;
     const given = new Array(N).fill(null);
@@ -57,7 +55,7 @@
         if (r) { p = r.P; e = r.ET0; t = isFinite(r.tmean) ? r.tmean : (isFinite(r.tmax) && isFinite(r.tmin) ? (r.tmax + r.tmin) / 2 : NaN); kind = pastDay ? 'obs' : 'fc'; }
         if (!isFinite(p) || !isFinite(e) || !isFinite(t)) {
           if (W0 && rank) { const i = pastDay ? rank.typ : rank[key]; if (!isFinite(p)) p = W0.P[i * 365 + j] || 0; if (!isFinite(e)) e = W0.ET0 ? W0.ET0[i * 365 + j] : NaN; if (!isFinite(t)) t = W0.Tclim ? W0.Tclim[j] : NaN; if (kind === 'scn' && pastDay) kind = 'fill'; }
-          else { const q = baseW[k]; if (!isFinite(p)) p = q.P * (pastDay ? 1 : f); if (!isFinite(e)) e = q.et0 * (pastDay ? 1 : fe); if (!isFinite(t)) t = q.Tmean; if (kind === 'scn' && pastDay) kind = 'fill'; }
+          else { const q = bw()[k]; if (!isFinite(p)) p = q.P * (pastDay ? 1 : f); if (!isFinite(e)) e = q.et0 * (pastDay ? 1 : fe); if (!isFinite(t)) t = q.Tmean; if (kind === 'scn' && pastDay) kind = 'fill'; }
         }
         rP[k] = isFinite(p) ? p : 0; rE[k] = isFinite(e) ? e : null; rT[k] = isFinite(t) ? t : null; kd[k] = kind;
       }
@@ -67,8 +65,11 @@
     const kd = out.scn.typ.kind; out.nObs = kd.filter(x => x === 'obs').length; out.nFc = kd.filter(x => x === 'fc').length; out.nScn = kd.filter(x => x === 'scn').length; out.nFill = kd.filter(x => x === 'fill').length;
     return out;
   }
+  // the weather of the season for the plants of the layer: the record and the forecast up to the date, then the typical future
+  let ARR = null;
+  function arrays() { const D = toolbarDate(), S = season(D), W0 = sources(); if (!W0) return null; const key = W0.key + '|' + W0.rows.length + '|' + D + '|' + S.start; if (ARR && ARR.key === key) return ARR.v; const A = assemble(S, D), sc = A.scn.typ; ARR = { key, v: { P: sc.P, E: sc.E, T: sc.T, kind: sc.kind } }; return ARR.v; }
   function envFor(sc, S) {
-    const e = Object.assign({}, envObj(true)), hasE = sc.E.every(v => v != null);
+    const e = Object.assign({}, envObj(true, true)), hasE = sc.E.every(v => v != null);
     e.realRain = sc.P; e.rainMode = 'project'; e.rainMult = 1; e.realT = sc.T.every(v => v != null) ? sc.T : null; e.realET0 = hasE ? sc.E : null; e.sow = sowDoy();
     if (window.WXD && window.WXD.on) e.dT = PH.xw;       // the imported days are the weather: only the warming set in the layer is added
     return e;
@@ -92,7 +93,7 @@
     SCN.forEach(s => {
       const sc = A.scn[s.k], env = envFor(sc, S), Wt = P.weather(env, N);
       const rf = P.run(Object.assign(cfgFor('rf', false), { env, weather: Wt })), pj = P.run(Object.assign(cfgFor('pj', false), { env, weather: Wt }));
-      const bench = s.k === 'typ' ? P.run(Object.assign(cfgFor('bench', false), { env, weather: Wt })) : null;
+      const bench = P.run(Object.assign(cfgFor('bench', false), { env, weather: Wt }));
       res.runs[s.k] = { rf, pj, bench, Wt };
     });
     res.bench = res.runs.typ.bench;
@@ -163,6 +164,55 @@
   }
   function projTxt() { try { const q = U.projObj(); return q.irr.method + ', trigger ' + Math.round(q.irr.trig) + ' cm, sensor ' + q.irr.z + ' cm'; } catch (e) { return 'the Properties panel'; } }
 
+
+  // ---------------------------------------------------------------- the calendar of drought stress and what it does to the roots
+  function episodes(R, key, plant) {
+    const r = R.runs[key], X = r[plant], B = r.bench, sp = X.sp, p = pFrac(), S = R.S, ti = S.idx, gap = 2, minLen = 2, flag = [];
+    for (let k = 0; k < N; k++) flag.push(rootZone(X, k) < 1 - p);
+    const eps = []; let a = -1, last = -1;
+    for (let k = 0; k < N; k++) { if (flag[k]) { if (a < 0) a = k; last = k; } else if (a >= 0 && k - last > gap) { eps.push([a, last]); a = -1; } }
+    if (a >= 0) eps.push([a, last]);
+    return eps.filter(e => e[1] - e[0] + 1 >= minLen).map(([a, b]) => {
+      let low = 1, lowK = a, tr = 0, dL = 0, dLb = 0; for (let k = a; k <= b; k++) { const v = rootZone(X, k); if (v < low) { low = v; lowK = k; } tr += X.Ks[k]; dL += X.dL[k]; dLb += B.dL[k]; }
+      let dry = 0, tot = 0; for (let i = 0; i < U.NL; i++) { const l = X.Lz[lowK * U.NL + i]; tot += l; if (X.w[lowK * U.NL + i] < 0.5) dry += l; }
+      const stage = X.Wg[a] > 0.3 ? 'grain filling' : (X.nLeaf[a] >= sp.nLeaf * 0.93 ? 'flowering' : 'vegetative');
+      const when = b < ti ? 'past' : (a <= ti ? 'now' : 'ahead');
+      return { a, b, n: b - a + 1, low, trm: tr / (b - a + 1), gr: dLb > 0.004 * (B.Lz.slice(-U.NL).reduce((p, q) => p + q, 0) || 1) ? 100 * dL / dLb : NaN, lag: B.Rdepth[b] - X.Rdepth[b], dryShare: tot > 0 ? 100 * dry / tot : 0, stage, when, lowK };
+    });
+  }
+  function drawStress(y) {
+    const w = W - 32, cx = 16, y0 = y; K.frame(cx, y, w, 24, 'Drought stress calendar: dates and what it does to the roots', 'from the date of the toolbar, with the future'); y += 30;
+    let R; try { R = compute(); } catch (e) { T('The calendar could not be computed: ' + e, cx + 12, y + 10, { s: 9.5, c: '#B3261E' }); console.error(e); endFrame(cx, y0, y + 24, w); return y + 34; }
+    const S = R.S, ti = S.idx; PH.stScn = PH.stScn || 'typ'; PH.stPlant = PH.stPlant || 'rf';
+    let xx = cx + 10; T('Plant', xx, y + 15, { s: 9.5, b: true, c: MUTE }); xx += 36;
+    [['rf', 'Rainfed'], ['pj', 'Project irrigation']].forEach(q => { xx += chip(xx, y, q[1], PH.stPlant === q[0], () => { PH.stPlant = q[0]; }, q[0] === 'rf' ? 'the plant that gets only the rain' : 'the plant watered by the sensor rule of the Properties panel'); });
+    xx += 10; T('Future', xx, y + 15, { s: 9.5, b: true, c: MUTE }); xx += 38; SCN.forEach(q => { xx += chip(xx, y, q.t, PH.stScn === q.k, () => { PH.stScn = q.k; }, 'the rest of the season after the date of the toolbar'); }); y += 30;
+    // the season as three bars: red days are days of drought stress, the line is the date of the toolbar
+    const bx = cx + 76, bw = w - 76 - 16, X = k => bx + bw * k / (N - 1); y += 4;
+    SCN.forEach((q, i) => { const eps = episodes(R, q.k, PH.stPlant), yy = y + i * 18; T(q.t.replace(' future', ''), cx + 12, yy + 11, { s: 9.5, b: true, c: q.c }); ctx.fillStyle = '#E9F1E4'; ctx.fillRect(bx, yy, bw, 13); eps.forEach(e => { ctx.fillStyle = e.b < ti ? '#B8B2A6' : '#D93025'; ctx.fillRect(X(e.a), yy, Math.max(2, X(e.b + 1) - X(e.a)), 13); }); ctx.strokeStyle = '#B9B4A6'; ctx.strokeRect(bx + 0.5, yy + 0.5, bw - 1, 12); if (PH.stScn === q.k) { ctx.strokeStyle = '#0A246A'; ctx.lineWidth = 2; ctx.strokeRect(bx - 1, yy - 1, bw + 2, 15); ctx.lineWidth = 1; } });
+    U.todayMark(X, y - 4, 3 * 18); U.axisDates(X, y + 3 * 18 - 2, bx, bw); y += 3 * 18 + 32;
+    T('red: days of drought stress ahead · grey: days of stress that have passed · dark line: the date of the toolbar', bx, y, { s: 8.5, c: MUTE }); y += 16;
+    // the table of the chosen future
+    const eps = episodes(R, PH.stScn, PH.stPlant), cols = [0, 0.04, 0.17, 0.30, 0.37, 0.49, 0.60, 0.70, 0.80, 0.90].map(f => cx + 12 + (w - 24) * f);
+    ['', 'from', 'to', 'days', 'growth stage', 'lowest water', 'T / Tp', 'root growth', 'root depth', 'roots in dry'].forEach((h, k) => T(h, cols[k], y + 8, { s: 8.5, b: true }));
+    y += 11; ['', '', '', '', '', 'of the root zone %', 'mean', 'vs watered %', 'vs watered cm', 'layers %'].forEach((h, k) => T(h, cols[k], y + 8, { s: 7.5, c: MUTE })); y += 11;
+    ctx.strokeStyle = GRID; ctx.beginPath(); ctx.moveTo(cx + 12, y + 0.5); ctx.lineTo(cx + w - 12, y + 0.5); ctx.stroke(); y += 4;
+    const WC = { past: '#6B7280', now: '#B8743A', ahead: '#B3261E' };
+    if (!eps.length) { T('No day of drought stress for the ' + PH.stPlant.replace('rf', 'rainfed').replace('pj', 'irrigated') + ' plant on this future.', cx + 12, y + 10, { s: 9.5, c: '#1E8E3E', b: true }); y += 20; }
+    eps.slice(0, 12).forEach((e, i) => { ctx.fillStyle = WC[e.when]; ctx.fillRect(cols[0], y + 1, 4, 12); T(String(i + 1), cols[0] + 8, y + 10, { s: 9.5, b: true });
+      [fdate(S.start + e.a * DAY) + (e.when === 'now' ? ' (now)' : ''), fdate(S.start + e.b * DAY), String(e.n), e.stage, fmt(e.low * 100), fmt(e.trm, 2), isFinite(e.gr) ? fmt(e.gr) : 'no growth', (e.lag > 0 ? '-' : '+') + fmt(Math.abs(e.lag)), fmt(e.dryShare)].forEach((v, k) => T(v, cols[k + 1], y + 10, { s: 9, c: k === 0 ? WC[e.when] : '#1B1F23', b: k === 0 })); y += 16; });
+    if (eps.length > 12) { T('and ' + (eps.length - 12) + ' more', cx + 12, y + 10, { s: 9, c: MUTE }); y += 16; }
+    y += 12;
+    const tot = eps.reduce((a, e) => a + e.n, 0), worst = eps.slice().sort((p, q) => p.low - q.low)[0], ahead = eps.filter(e => e.b >= ti), nextE = ahead[0], pl = PH.stPlant === 'rf' ? 'rainfed plant' : 'plant irrigated by the project rule', sc = SCN.find(q => q.k === PH.stScn).t.toLowerCase();
+    let txt = 'Reading: on the ' + sc + ' the ' + pl + ' has ' + tot + ' days of drought stress in ' + eps.length + ' period' + (eps.length === 1 ? '' : 's') + ' of the season (' + fmt(100 * tot / N) + ' % of its ' + N + ' days). ';
+    if (nextE) txt += (nextE.when === 'now' ? 'A period of stress is under way on the date of the toolbar and lasts until ' + fdate(S.start + nextE.b * DAY) + '. ' : 'The next period begins on ' + fdate(S.start + nextE.a * DAY) + ' (' + Math.max(0, nextE.a - ti) + ' days from the date of the toolbar) and lasts ' + nextE.n + ' days, in the stage of ' + nextE.stage + '. '); else txt += 'No period of stress is left after the date of the toolbar. ';
+    if (worst) txt += 'The worst period (' + fdate(S.start + worst.a * DAY) + ' to ' + fdate(S.start + worst.b * DAY) + ') brings the root zone down to ' + fmt(worst.low * 100) + ' % of its available water; the roots ' + (isFinite(worst.gr) ? 'grow ' + fmt(100 - worst.gr) + ' % less than those of a watered plant' : 'make little growth in that period, with or without water') + ', end ' + fmt(Math.abs(worst.lag)) + ' cm ' + (worst.lag >= 0 ? 'shallower' : 'deeper') + ' and ' + fmt(worst.dryShare) + ' % of the root length sits in layers that hold less than half of their available water. ';
+    txt += 'A day of stress is a day on which the water of the root zone (the layers the roots have reached) is below the readily available water of FAO-56 (Eq. P.26); the roots are compared with those of a plant held well watered under the same weather (Eq. P.27). Grey rows are in the past of the date of the toolbar, orange is the period now, red are ahead. The days ahead are those of the forecast and then of the years of the record in the chosen future.';
+    y += note(txt, cx + 12, y, w - 24) * 12.5 + 8; endFrame(cx, y0, y, w); return y + 10;
+  }
+
+  const io = SECTIONS.findIndex(q => q.id === 'outlook');
   const ie = SECTIONS.findIndex(q => q.id === 'data'); SECTIONS.splice(ie < 0 ? SECTIONS.length : ie, 0, { id: 'outlook', t: 'Drought outlook from the date of the toolbar', s: 'the season to the date, then a dry, a typical and a wet future', fn: drawOutlook });
-  U.outlook = { compute, toolbarDate, season };
+  { const ix = SECTIONS.findIndex(q => q.id === 'outlook'); SECTIONS.splice(ix + 1, 0, { id: 'stress', t: 'Drought stress calendar: dates and what it does to the roots', s: 'periods of stress from the date of the toolbar, with the future', fn: drawStress }); }
+  U.outlook = { compute, toolbarDate, season, arrays, assemble };
 })();

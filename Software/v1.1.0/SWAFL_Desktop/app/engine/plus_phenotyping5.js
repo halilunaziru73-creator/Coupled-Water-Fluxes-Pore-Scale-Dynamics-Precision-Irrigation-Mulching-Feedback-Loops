@@ -4,7 +4,7 @@
 'use strict';
 (function () {
   const U = window.PHUI; if (!U) return;
-  const { BASE, PH, P, K, chip, day, dateOf, R, N, NL, ZMAX, RN, RNc, scrub, seriesVals, regimeShade, drawRoots, drawShoot, leafColor } = U;
+  const { BASE, PH, P, K, chip, day, dateOf, todayMark, R, N, NL, ZMAX, RN, RNc, scrub, seriesVals, regimeShade, drawRoots, drawShoot, leafColor } = U;
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v)), fmt = K.fmt, GRID = '#E6E2D6';
   const note = (txt, x, y, w, o) => sidWrap(txt, x, y, w, Object.assign({ s: 9.5, c: MUTE }, o || {}), 12.5);
   const endFrame = (x, y0, y, w) => { ctx.strokeStyle = '#B9B4A6'; ctx.lineWidth = 1; ctx.strokeRect(x + 0.5, y0 + 0.5, w - 1, y - y0); };
@@ -42,7 +42,7 @@
       const dp = hi - lo < 5 ? 2 : (hi - lo < 50 ? 1 : 0); T(row.t + ' (' + row.u + ')', gx, gy - 5, { s: 9, b: true }); T(fmt(va[d], dp) + ' / ' + fmt(vb[d], dp), gx + gw, gy - 5, { s: 9, b: true, a: 'right' });
       T(fmt(hi, dp), gx - 3, gy + 8, { s: 7.5, c: MUTE, a: 'right' }); T(fmt(lo, dp), gx - 3, gy + gh, { s: 7.5, c: MUTE, a: 'right' });
       T(dateOf(0), gx, gy + gh + 11, { s: 7.5, c: MUTE }); T(dateOf(N - 1), gx + gw, gy + gh + 11, { s: 7.5, c: MUTE, a: 'right' });
-      scrub(gx, gy, gw, gh, gx, gw);
+      todayMark(X, gy, gh); scrub(gx, gy, gw, gh, gx, gw);
     });
     return y + 18 + Math.ceil(rows.length / cols) * (gh + 34);
   }

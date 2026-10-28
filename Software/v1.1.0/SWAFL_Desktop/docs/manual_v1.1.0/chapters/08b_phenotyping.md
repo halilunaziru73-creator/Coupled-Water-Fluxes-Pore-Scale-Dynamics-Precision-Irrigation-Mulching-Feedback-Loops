@@ -31,6 +31,7 @@ Once run, every control re-runs the model, and every chart answers it.
 | Modelled as (maize, sorghum, wheat, common bean) | thermal time, leaf number, radiation use, light extinction, height, root axes, stomatal and turgor constants |
 | Genotype (reference, deep rooting, shallow and dense, stay-green, water saver, water spender, osmotic adjuster) | angle of the axes, lateral density, stay-green, stomatal threshold, osmotic adjustment, hydraulic resistance, carbon to roots |
 | Drought (pulse and recovery, terminal, intermittent, none) | the water that the drought treatment is held at, in time |
+| Season starts | the first day of the season: automatic, the planting day of the project, or the date of the toolbar (the section *Drought stress calendar* explains each) |
 | Climate and rain | temperature, radiation, vapour pressure deficit, reference evapotranspiration, rain |
 | Left plant (project irrigation, well-watered bench, rainfed) | the treatment of the left plant: the irrigation of the project made by the sensor rule, a bench held wet, or the rain only; the right plant is always the drought |
 | Drought starts, length, water held | day of onset, duration and the level of the stress, in per cent of the plant-available water (defaults 45 days, 35 days, 15 %) |
@@ -155,6 +156,25 @@ This section is a second drought experiment, tied to the calendar. The first (*T
 
 **What it is and is not.** The three futures are real years of the weather record placed after the date, so each keeps the dry spells and the evaporative demand of that year. They show what a dry, an ordinary and a wet rest of the season would do to this plant; they are not a forecast of the weather. The risk class depends on the root conductance of the model: run **Fit the plant to the SWAFL data** first (section *SWAFL data*), because with the default constants the model plant is limited by the flow of water into the root more than by the water of the soil, and the grain of the rainfed plant then changes little with the rain. In the figure the fit was run before the capture.
 
+### Drought stress calendar: dates and what it does to the roots
+
+![The drought stress calendar of the rainfed wheat plant on the typical future, from 1 May 2026. The dark line is the date of the toolbar.](images/pheno/p12_stress.png){width=85%}
+
+This section turns the outlook into a calendar. It answers two questions for the plant of the project: **on which dates is it in drought stress**, and **what does that do to its roots**. It uses the same season, weather, soil and Properties inputs as the rest of the layer, so it changes when the date of the toolbar, the weather, the soil, the crop or the irrigation of the project changes.
+
+**What the screen shows.**
+
+1. Two rows of chips choose the plant (the rainfed plant, or the plant irrigated by the rule of the project) and the future after the date of the toolbar (dry, typical or wet).
+2. Three bars, one for each future, run over the whole season and carry the dates on their axis. A red part is a period of drought stress that is still ahead, a grey part is a period that has passed, and the dark line is the date of the toolbar. The bar of the chosen future has a dark frame.
+3. A table lists every period of drought stress of the chosen future with its **dates** (from and to, and "now" when the period is under way on the date of the toolbar), its length in days, the **growth stage** (vegetative, flowering or grain filling), the lowest water of the root zone, the mean ratio of transpiration to demand ($T/T_p$), and four readings of what the roots suffer: the root length they grow in the period against the roots of a well watered plant under the same weather, the depth of the roots at the end of the period against that plant (a minus sign is shallower, a plus sign deeper), and the share of the root length that sits in layers holding less than half of their plant-available water on the driest day of the period. The colour of the first column tells past (grey), now (orange) and ahead (red).
+4. A paragraph in words reads the result: the number of days and of periods, the next period and how many days away it is, and the worst period with its dates and its effect on the roots.
+
+**How a period is found.** A day is a day of stress when the water of the root zone is below the level at which transpiration starts to fall (Eq. P.26). Days of stress that are no more than two days apart form one period, and a period shorter than two days is dropped (Eq. P.27). Each period is compared with a **well watered bench plant** that is grown on the same weather, so the difference in the roots is the effect of the water and not of the weather (Eq. P.28).
+
+**Where the dates come from.** The first day of the season is set by the control *Season starts* in the section *Set up the experiment*. *Automatic* uses the planting day of the Properties panel when the date of the toolbar falls inside that season, and otherwise sows on the date of the toolbar, so that the calendar always starts on a real date and reaches maturity after it. *Planting day of the project* always uses the planting day of the Properties panel, so the season can lie wholly in the past or wholly ahead. *On the date of the toolbar* sows on that date. Every chart of the layer has its dates on the horizontal axis and a dark line on the date of the toolbar, and the dates of the table are those of the same calendar. The days up to the date of the toolbar use the recorded weather when a weather file or the online weather is loaded (*Tools*); the days after it use the forecast and then the three futures of the outlook.
+
+**Reading the roots.** In the figure the roots of the rainfed plant grow as much as or more than the watered roots during the first periods, because a plant in dry soil sends a larger share of its carbon to the roots and so keeps growing downwards, but in the last periods, after grain filling has begun, they make no growth at all with or without water. The share of the root length in dry layers is high from the first period, because the top layers dry first and most of the roots are there. These are the results of the model with the constants of the species; they are not measurements.
+
 ### Your measurements: compare, calibrate and export
 
 The last section brings experimental data to the model:
@@ -166,11 +186,11 @@ The last section brings experimental data to the model:
 
 ### Moving about the layer
 
-A bar of buttons stays at the top of the window while the page is scrolled (*Set up*, *Plants*, *Season film*, *Roots by day*, *Root scans*, *Traits*, *Water*, *Carbon*, *Soil*, *Roots and shoot*, *Genotype*, *Trait table*, *SWAFL data*, *Outlook*, and *My data*). A button jumps to its section, and the section at the top of the window is marked. The title of every section has a triangle: click it to collapse or expand the section, or use *Collapse all* and *Expand all* at the top. The text of a hint never runs off the edge of the window: a long hint is cut into lines.
+A bar of buttons stays at the top of the window while the page is scrolled (*Set up*, *Plants*, *Season film*, *Roots by day*, *Root scans*, *Traits*, *Water*, *Carbon*, *Soil*, *Roots and shoot*, *Genotype*, *Trait table*, *SWAFL data*, *Outlook*, *Stress calendar*, and *My data*). A button jumps to its section, and the section at the top of the window is marked. The title of every section has a triangle: click it to collapse or expand the section, or use *Collapse all* and *Expand all* at the top. The text of a hint never runs off the edge of the window: a long hint is cut into lines.
 
 ### Equations
 
-The section The layer shows no equations on the screen: they are all in this manual, numbered P.1 to P.26 in the order in which the model uses them on each day. This section explains each one: what it computes, the symbols and their units, where its result appears in the layer, and where it comes from. The model is deterministic: it contains no random numbers. A table at the end of the section gives the index. Symbols: $d$ day after emergence, $T$ air temperature (°C), $\mathrm{LAI}$ leaf area index (m² m⁻²), $\psi$ water potential (MPa or cm of suction as stated), $T_p$ potential transpiration (mm d⁻¹), $z$ depth (cm), $\Delta z=15$ cm the thickness of a soil layer, $N=140$ days.
+The section The layer shows no equations on the screen: they are all in this manual, numbered P.1 to P.28 in the order in which the model uses them on each day. This section explains each one: what it computes, the symbols and their units, where its result appears in the layer, and where it comes from. The model is deterministic: it contains no random numbers. A table at the end of the section gives the index. Symbols: $d$ day after emergence, $T$ air temperature (°C), $\mathrm{LAI}$ leaf area index (m² m⁻²), $\psi$ water potential (MPa or cm of suction as stated), $T_p$ potential transpiration (mm d⁻¹), $z$ depth (cm), $\Delta z=15$ cm the thickness of a soil layer, $N=140$ days.
 
 #### Development, weather and light (P.1 to P.5)
 
@@ -389,7 +409,7 @@ $$
 
 $\mathrm{RLD}$ is the root length density (cm cm⁻³) of the bars of the section *Roots day by day*; $A$ is the ground area of one plant.
 
-#### The drought outlook from the date (P.24 to P.26)
+#### The drought outlook and the stress calendar (P.24 to P.28)
 
 **P.24 Weather of the outlook.** Day $k$ of the season has the date $t_k=t_{start}+k$ days, where $t_{start}$ is the date of sowing in the year in which the date of the toolbar $t_0$ falls in the season. Each day takes its rain $P$, reference evapotranspiration $\mathrm{ET}_0$ and temperature $T$ from the first of these that exists:
 
@@ -418,6 +438,24 @@ $$
 
 $p$ is the depletion fraction below which transpiration is reduced (0.55 for maize, sorghum and wheat, 0.45 for common bean). The risk of drought is classed by $R$, the grain of the rainfed plant divided by the grain of the plant irrigated by the rule of the project, under the same future: low when $R\ge0.90$, moderate when $0.75\le R<0.90$, high when $0.50\le R<0.75$, severe below 0.50. The plant response of the outlook (the ratio $T_{act}/T_p$ averaged over seven days) is the second chart and shows what the model plant does with the water that the soil holds.
 
+**P.27 Periods of drought stress.** Let $s_k=1$ when the root zone water $a_k<1-p$ (Eq. P.26) and $s_k=0$ otherwise. A period is a run of days $[k_a,k_b]$ with $s_k=1$ on its first and last day, in which runs of $s_k=0$ shorter than or equal to $g=2$ days are filled, and it is kept when $k_b-k_a+1\ge 2$:
+
+$$
+\text{period }j=[k_a,k_b],\qquad n_j=k_b-k_a+1,\qquad a_j^{min}=\min_{k_a\le k\le k_b}a_k,\qquad \overline{T/T_p}_j=\frac{1}{n_j}\sum_{k=k_a}^{k_b}K_{s,k}.
+\tag{P.27}
+$$
+
+$K_{s,k}$ is the ratio of the transpiration to the demand of the day. The date of day $k$ is $t_{start}+k$ days. A period is *past* when $k_b$ is before the day of the date of the toolbar, *now* when it holds that day and *ahead* otherwise.
+
+**P.28 What the roots suffer.** Let $\Delta L_k$ be the root length that the plant grows on day $k$, $\Delta L_k^{w}$ that of the well watered bench plant under the same weather, $D_k$ the depth of the deepest root and $L_{i}$, $\theta_i$ the root length and relative plant-available water of layer $i$ on the driest day $k^*$ of the period:
+
+$$
+G_j=100\,\frac{\sum_{k_a}^{k_b}\Delta L_k}{\sum_{k_a}^{k_b}\Delta L_k^{w}},\qquad \Delta D_j=D^{w}_{k_b}-D_{k_b},\qquad F_j=100\,\frac{\sum_{i:\ \theta_i<0.5}L_i}{\sum_i L_i}.
+\tag{P.28}
+$$
+
+$G_j$ is the root growth of the period against the watered plant (below 100 means the roots grew less), $\Delta D_j$ is how much shallower the roots are at the end of the period (negative if they are deeper), and $F_j$ is the share of the root length that lies in layers holding less than half of their plant-available water. $G_j$ is not given when the bench plant itself grows less than 0.4 % of its final root length in the period, because the ratio would mean nothing.
+
 #### Index of the equations
 
 | No. | Computes | In the layer | Source |
@@ -437,8 +475,9 @@ $p$ is the depletion fraction below which transpiration is reduced (0.55 for mai
 | P.21 | genotype call | genotype prediction | this layer |
 | P.22, P.23 | traits, tolerance indices, root day | traits, roots day by day | Lorence and Medina-Jimenez (2022); Fischer and Maurer (1978); Fernandez (1992) |
 | P.24 to P.26 | weather of the outlook, analogue years, root zone water and risk | drought outlook | Allen et al. (1998); this layer |
+| P.27 and P.28 | periods of drought stress, root growth, depth and dry share in each period | stress calendar | this layer |
 
-*Provenance (Eq. P.1 to P.26):* **[Literature]**: the forms are from the works cited; **[Engineered]**: the constants of the species and genotypes, the efficiencies, dose limits and minimum intervals of the irrigation methods, the salt volume, the tolerances of the fit, the 12 % depletion of the drip layer, the 0.4, 1 and 1.6 rain factors and the risk classes are typical defaults of this layer; **[Data]**: the nitrogen factor, the trigger curve and the mulch effect are read from the SWAFL Daisy runs.
+*Provenance (Eq. P.1 to P.28):* **[Literature]**: the forms are from the works cited; **[Engineered]**: the constants of the species and genotypes, the efficiencies, dose limits and minimum intervals of the irrigation methods, the salt volume, the tolerances of the fit, the 12 % depletion of the drip layer, the 0.4, 1 and 1.6 rain factors and the risk classes are typical defaults of this layer; **[Data]**: the nitrogen factor, the trigger curve and the mulch effect are read from the SWAFL Daisy runs.
 
 ### Limits
 

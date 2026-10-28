@@ -121,7 +121,7 @@
     TF('mean ' + fmt(m, o.dec) + ' · 10–90 %: ' + fmt(p10, o.dec) + ' to ' + fmt(p90, o.dec) + ' · variation ' + fmt(cv * 100) + ' %', x + 8, y + h - 10, w - 16, { s: 9.5, c: INK });
     return { m, p10, p90, cv };
   }
-  function legend(items, x, y) { let xx = x; items.forEach(([c, t]) => { ctx.font = '9.5px sans-serif'; if (xx > x && xx + ctx.measureText(t).width + 16 > W - 10) { xx = x; y += 14; } ctx.fillStyle = c; ctx.fillRect(xx, y - 8, 10, 10); ctx.strokeStyle = 'rgba(0,0,0,0.3)'; ctx.strokeRect(xx + 0.5, y - 7.5, 9, 9); T(t, xx + 14, y + 1, { s: 9.5 }); ctx.font = '9.5px sans-serif'; xx += ctx.measureText(t).width + 30; }); return y; }
+  function legend(items, x, y) { let xx = x; items.forEach(([c, t]) => { ctx.font = '9.5px sans-serif'; if (xx > x && xx + ctx.measureText(t).width + 16 > W - 40) { xx = x; y += 14; } ctx.fillStyle = c; ctx.fillRect(xx, y - 8, 10, 10); ctx.strokeStyle = 'rgba(0,0,0,0.3)'; ctx.strokeRect(xx + 0.5, y - 7.5, 9, 9); T(t, xx + 14, y + 1, { s: 9.5 }); ctx.font = '9.5px sans-serif'; xx += ctx.measureText(t).width + 30; }); return y; }
   function header(title, sub, y) { TF(title, 16, y + 18, W - 32, { s: 16, b: true, c: HEAD }); if (sub) TF(sub, 16, y + 36, W - 32, { s: 10.5, c: MUTE }); return y + 48; }
   function badge(txt, x, y, col) { ctx.font = 'bold 9px sans-serif'; const w = ctx.measureText(txt).width + 10; ctx.fillStyle = col || '#1E8E3E'; rrect(x, y - 10, w, 14, 7); ctx.fill(); T(txt, x + 5, y + 1, { s: 9, b: true, c: '#fff' }); return w; }
   const noData = (y) => { T('Loading the year-by-year results...', 16, y + 30, { s: 12, c: MUTE }); return y + 60; };
