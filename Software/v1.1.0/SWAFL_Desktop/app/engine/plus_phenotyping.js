@@ -9,7 +9,7 @@
   const CMAP = { maize: 'maize', sorghum: 'sorghum', pearlmillet: 'sorghum', wheat: 'wheat', rice: 'wheat', cereal: 'wheat', soybean: 'bean', cowpea: 'bean', greengram: 'bean', chickpea: 'bean', groundnut: 'bean', tomato: 'bean', mustard: 'bean' };
   const CLIM = { project: { Tm: 8.5, Tamp: 8.2, sow: 0, t: 'Project climate (cool, humid)' }, warm: { Tm: 15.5, Tamp: 9.5, sow: -10, t: 'Warm season' }, hot: { Tm: 23, Tamp: 8.5, sow: -35, t: 'Hot, dry season' } };
   const PH = {
-    sp: CMAP[typeof state !== 'undefined' ? state.crop : 'cereal'] || 'wheat', follow: true, ref: 'pj', gid: 'ref', g: Object.assign({}, P.GENO[0]), clim: 'project', rain: 'none', dr: { type: 'pulse', onset: 45, len: 35, sev: 15, rainOut: true },
+    anim: { on: false, t0: 0, dur: 14 }, secY: {}, sp: CMAP[typeof state !== 'undefined' ? state.crop : 'cereal'] || 'wheat', follow: true, ref: 'pj', gid: 'ref', g: Object.assign({}, P.GENO[0]), clim: 'project', rain: 'none', dr: { type: 'pulse', onset: 45, len: 35, sev: 15, rainOut: true },
     view: 'rgb', set: 'shoot', trt: 'dr', rot: 0.45, xw: 0, area: null, yv: 'D95', ovr: { rue: 1, dpsi: 0, sg: 0 }, sw: { rue: 1, kte: 1, qG: 1 }, cmp: null, fitMsg: '', open: {}, ran: false, ranKey: '', why: '', obs: null, run: null, key: '', lastRun: 0, drag: null, dragging: false, last: 0, panel: { key: '', items: [], busy: false }, job: null, msg: ''
   };
   const SL = [], SCR = [], ROT = { x: 0, y: 0, w: 0, h: 0 }, TS = { x: 0, y: 0, w: 0, h: 0 };
@@ -47,13 +47,17 @@
     let trig = 300; try { trig = Math.abs(trigAbsFor(state.soil)); } catch (e) { }
     return { vff: VFF_VALUES[state.vffIdx], cap: CAP_VALUES[state.capIdx], fN: nr.f, nRate: nr.rate, salt: { ec0: clamp(+state.salt0 || 0, 0, 25), ecw: clamp(+state.ecw || 0, 0, 12), th: st.th, sl: st.sl }, irr: { trig, z: Z_VALUES[state.zIdx], minInt: base.minInt, dmax: base.dmax, eff: base.eff, drip: m.mid || 0, method: m.label } };
   }
+  const clockTxt = () => { const D = dKey(), t = new Date(), td = Date.UTC(t.getFullYear(), t.getMonth(), t.getDate()), d = new Date(D), p2 = v => (v < 10 ? '0' : '') + v; return d.getUTCDate() + ' ' + MON[d.getUTCMonth()] + ' ' + d.getUTCFullYear() + (D === td ? ', ' + p2(t.getHours()) + ':' + p2(t.getMinutes()) : ''); };
+  // the year of the weather that holds the season of the date of the toolbar (else the year of the clock of the engine)
+  function ySeason(W0) { try { const q = window.PHUI.outlook.season(dKey()); const i = W0 && W0.years ? W0.years.indexOf(q.Y) : -1; if (i >= 0) return i; } catch (e) { } return typeof yearNow === 'function' ? yearNow() : 0; }
   function envObj(rainOn) {
     const cl = CLIM[PH.clim], dT = TEMP_VALUES[state.tempIdx] + PH.xw, rm = RAIN_VALUES[state.rainIdx], mode = rainOn ? 'project' : PH.rain, W0 = window.WXD && window.WXD.on ? window.WXD : null; let real = null, realT = null, realE = null;
-    if (mode === 'project' && W0 && W0.P) { try { const y = (typeof yearNow === 'function' ? yearNow() : 0), sw = sowDoy(); real = Array.from({ length: N }, (_, k) => W0.P[y * 365 + (sw + k) % 365] || 0); } catch (e) { real = null; } }
-    if (W0) { try { const y = (typeof yearNow === 'function' ? yearNow() : 0), sw = sowDoy(); if (W0.Tclim) realT = Array.from({ length: N }, (_, k) => W0.Tclim[(sw + k) % 365]); if (W0.hasE && W0.ET0) realE = Array.from({ length: N }, (_, k) => W0.ET0[y * 365 + (sw + k) % 365]); } catch (e) { } }
+    if (mode === 'project' && W0 && W0.P) { try { const y = ySeason(W0), sw = sowDoy(); real = Array.from({ length: N }, (_, k) => W0.P[y * 365 + (sw + k) % 365] || 0); } catch (e) { real = null; } }
+    if (W0) { try { const y = ySeason(W0), sw = sowDoy(); if (W0.Tclim) realT = Array.from({ length: N }, (_, k) => W0.Tclim[(sw + k) % 365]); if (W0.hasE && W0.ET0) realE = Array.from({ length: N }, (_, k) => W0.ET0[y * 365 + (sw + k) % 365]); } catch (e) { } }
     return { sow: sowDoy(), Tm: cl.Tm, Tamp: cl.Tamp, dT, rain: DATA.rain_base * (PH.clim === 'hot' ? 0.45 : PH.clim === 'warm' ? 0.7 : 1), rainMult: real ? 1 : rm, rainMode: mode, realRain: real, realT, realET0: realE, lat: 55.7 };
   }
-  const keyOf = () => JSON.stringify([state.soil, state.till, state.tcIdx, state.tempIdx, state.rainIdx, PH.sp, PH.g, PH.clim, PH.rain, PH.dr, PH.xw, PH.area, PH.ovr, PH.ref, PH.sw, state.crop, state.densIdx, state.plantDoy, state.vffIdx, state.capIdx, state.nIdx, state.method, state.zIdx, state.trigIdx, state.trigMode, state.trigF, state.salt0, state.ecw, state.areaHa, window.WXD && window.WXD.on ? window.WXD.key : 'rec', (function () { try { return Math.round(trigAbsFor(state.soil)); } catch (e) { return 0; } })()]);
+  const dKey = () => { try { return window.PHUI.outlook.toolbarDate(); } catch (e) { return 0; } };
+  const keyOf = wd => JSON.stringify([wd === false ? 0 : dKey(), state.soil, state.till, state.tcIdx, state.tempIdx, state.rainIdx, PH.sp, PH.g, PH.clim, PH.rain, PH.dr, PH.xw, PH.area, PH.ovr, PH.ref, PH.sw, state.crop, state.densIdx, state.plantDoy, state.vffIdx, state.capIdx, state.nIdx, state.method, state.zIdx, state.trigIdx, state.trigMode, state.trigF, state.salt0, state.ecw, state.areaHa, window.WXD && window.WXD.on ? window.WXD.key : 'rec', (function () { try { return Math.round(trigAbsFor(state.soil)); } catch (e) { return 0; } })()]);
   function cfgFor(tr, store, geno) {
     const tt = tr === 'ww' ? PH.ref : (tr === 'bench' ? 'ww' : tr), wet = tt === 'pj' || tt === 'rf', env = envObj(wet), lc = libCrop(), sw = PH.sw || { rue: 1, kte: 1 };
     const cp = Object.assign({}, lc ? lc.o : {}); if (sw.rue !== 1 || sw.kte !== 1) { const sp0 = P.SP[PH.sp]; cp.RUE = sp0.RUE * sw.rue; cp.kte = sp0.kte * sw.kte; }
@@ -95,9 +99,6 @@
     y = chipRow('Climate', Object.keys(CLIM).map(k => ({ k, t: CLIM[k].t })), PH.clim, k => { PH.clim = k; }, x0, y, ww);
     y = chipRow('Rain', [{ k: 'none', t: 'Excluded (rain-out shelter)' }, { k: 'project', t: 'Project rain' + (window.WXD && window.WXD.on ? ' (imported days)' : '') }], PH.rain, k => { PH.rain = k; }, x0, y, ww);
     y = chipRow('Left plant', [{ k: 'pj', t: 'Project irrigation', tip: 'watered by the sensor, trigger and method of the Properties panel, with its mulch, nitrogen and salt' }, { k: 'ww', t: 'Well-watered bench', tip: 'water held at the field capacity, as in a pot experiment' }, { k: 'rf', t: 'Rainfed', tip: 'only the rain of the project' }], PH.ref, k => { PH.ref = k; }, x0, y, ww);
-    { const pj = projObj(), lc = libCrop(), L = window.CROPLIB && CROPLIB.crops[state.crop], mm = (MULCH_NAMES()[state.mulchType] || state.mulchType), nr = nResponse(), W0 = window.WXD && window.WXD.on ? window.WXD : null;
-      const txt = 'Connected to the Properties panel: crop ' + ((CROPS[state.crop] || L || {}).label || state.crop) + ' run as ' + P.SP[PH.sp].name.toLowerCase() + (lc ? ' with the height ' + (lc.o.Hmax || '') + ' cm, basal coefficient ' + (lc.o.Kcb || '') + ' and rooting depth ' + (lc.o.zRoot || '') + ' cm of the crop library' : '') + ' · sowing day ' + sowDoy() + ' · mulch ' + (pj.vff >= 0.95 ? 'none' : mm + ' (vapour-flux factor ' + pj.vff.toFixed(1) + ', intercepts ' + pj.cap + ' mm)') + ' · irrigation ' + pj.irr.method.toLowerCase() + ', sensor at ' + pj.irr.z + ' cm, trigger at ' + Math.round(pj.irr.trig) + ' cm suction, at most ' + pj.irr.dmax + ' mm per event, efficiency ' + Math.round(pj.irr.eff * 100) + ' %' + ' · nitrogen ' + nr.rate + ' kg N per ha (response of the Daisy runs ×' + nr.f.toFixed(2) + ') · salt in the root zone ' + pj.salt.ec0 + ' dS/m, water ' + pj.salt.ecw + ' dS/m (this crop loses ' + pj.salt.sl + ' % per dS/m above ' + pj.salt.th + ') · weather ' + (W0 ? (W0.src === 'file' ? 'imported file' : 'online') + ': rain, evapotranspiration' + (W0.Tclim ? ' and temperature' : '') + ' of the days' : 'built-in record') + ' · field ' + (state.areaHa || 1) + ' ha';
-      const n = sidWrap(txt, x0 + 2, y + 8, ww - 4, { s: 9, c: '#1B3A6B' }, 12); y += n * 12 + 10; }
     // sliders in two columns
     const two = ww > 520, cw2 = two ? (ww - 24) / 2 : ww, col = i => two ? x0 + (i % 2) * (cw2 + 24) : x0, row = i => y + (two ? Math.floor(i / 2) : i) * 36; let i = 0;
     const S = (lab, mn, mx, v, txt, set) => { slider(col(i), row(i), cw2, lab, mn, mx, v, txt, set); i++; };
@@ -124,7 +125,8 @@
     if (view === 'xray' || view === 'soil') return view === 'xray' ? 'rgba(210,214,220,0.55)' : mix('#3E8E41', '#B79A3E', 1 - L.gf);
     return L.gf > 0.98 ? '#3F9A44' : mix('#8C6B2C', '#3F9A44', Math.pow(L.gf, 0.7) * 0.9 + (L.gf > 0.5 ? 0.1 : 0));
   }
-  function drawShoot(res, d, xc, yg, s, view, rot) {
+  function drawShoot(res, d, xc, yg, s, view, rot, c2) {
+    if (window.PHREAL && view !== 'xray' && view !== 'soil') return PHREAL.shoot(c2 || ctx, P, res, d, xc, yg, s, view, rot, leafColor);
     const g = P.leaves(res, d, rot), H = res.H[d] * s; ctx.save();
     ctx.strokeStyle = view === 'xray' ? 'rgba(220,224,230,0.7)' : '#5E8F3C'; ctx.lineWidth = Math.max(1.5, Math.min(5, res.H[d] * s * 0.03)); ctx.beginPath(); ctx.moveTo(xc, yg); ctx.lineTo(xc, yg - H); ctx.stroke();
     const order = g.leaves.slice().sort((a, b) => Math.sin(a.az) - Math.sin(b.az));
@@ -164,17 +166,19 @@
   function thermalBar(x, y, w) { for (let i = 0; i < w; i++) { ctx.fillStyle = pal(i / w); ctx.fillRect(x + i, y, 1, 7); } T('−4 K', x, y + 18, { s: 8.5, c: MUTE }); T('+10 K above air', x + w, y + 18, { s: 8.5, c: MUTE, a: 'right' }); }
 
   function drawTwin(y) {
-    const w = W - 32, cx = 16, d = day(), sp = P.SP[PH.sp]; const SH = 250, ZH = 200, hh = 76 + SH + ZH + 36; K.frame(cx, y, w, hh, 'Plant and roots, side by side', 'day ' + d + ' after emergence (' + dateOf(d) + ') · drag to turn · ' + (play.on ? 'playing' : 'paused'));
+    const w = W - 32, cx = 16, d = day(), sp = P.SP[PH.sp]; const SH = 318, ZH = 200, hh = 76 + SH + ZH + 36; K.frame(cx, y, w, hh, 'Plant and roots, side by side', 'day ' + d + ' after emergence (' + dateOf(d) + ') · drag to turn · ' + (play.on ? 'playing' : 'paused'));
     let yy = y + 28, xx = cx + 8; VIEWS.forEach(v => { xx += chip(xx, yy, v.t, PH.view === v.k, () => { PH.view = v.k; }, v.tip); });
     yy += 30; const colw = (w - 24) / 2, view = PH.view, rot = PH.rot; ROT.x = cx; ROT.y = yy; ROT.w = w; ROT.h = SH + ZH + 36;
     ['ww', 'dr'].forEach((tr, ci) => {
-      const res = R(tr); if (!res) return; const x0 = cx + 8 + ci * (colw + 8), xc = x0 + colw / 2; ctx.fillStyle = view === 'xray' ? '#15181D' : '#F6F4EE'; ctx.fillRect(x0, yy, colw, SH + ZH + 34); ctx.strokeStyle = '#D2CEC2'; ctx.strokeRect(x0 + 0.5, yy + 0.5, colw - 1, SH + ZH + 33);
+      const res = R(tr); if (!res) return; const x0 = cx + 8 + ci * (colw + 8), xc = x0 + colw / 2; ctx.fillStyle = view === 'xray' ? '#15181D' : '#F6F4EE'; ctx.fillRect(x0, yy, colw, SH + ZH + 34); ctx.strokeStyle = '#D2CEC2'; ctx.strokeRect(x0 + 0.5, yy + 0.5, colw - 1, SH + ZH + 33); ctx.fillStyle = view === 'xray' ? '#15181D' : '#FFFFFF'; ctx.fillRect(x0 + 1, yy + 22, colw - 2, 60);
       const lab = tr === 'ww' ? RNc() : 'Drought', col = tr === 'ww' ? '#1B1F23' : '#D93025'; ctx.fillStyle = col; ctx.fillRect(x0, yy, 4, 22); T(lab, x0 + 10, yy + 15, { s: 11, b: true, c: view === 'xray' ? '#E8EAEE' : col });
       const tg = res.tgt[d]; T((res.tr === 'pj' ? 'irrigated ' + fmt(res.totals.Ig) + ' mm (' + res.nIrr + ' events)' : res.tr === 'rf' ? 'rain only' : 'water ' + fmt(res.tgt[d] * 100) + ' % set') + ' · soil ' + fmt(100 * res.store[d] / res.awcT) + ' %', x0 + colw - 8, yy + 15, { s: 9, c: view === 'xray' ? '#AEB4BD' : MUTE, a: 'right' });
-      const gy = yy + 26 + SH - 18, s = (SH - 84) / (sp.Hmax * 1.0);
+      const BAND = 82, gy = yy + 26 + SH - 18, s = (gy - (yy + BAND + 6)) / (Math.max(R('ww').H[N - 1], R('dr').H[N - 1], 10) * 1.12);
       // the shoot and, in the thermal view, its temperature
       if (view === 'thermal') { ctx.fillStyle = '#F0F2F6'; ctx.fillRect(x0 + 1, yy + 23, colw - 2, SH - 17); }
-      const geo = drawShoot(res, d, xc, gy, s, view, rot);
+      else if (view !== 'xray') { const sk = ctx.createLinearGradient(0, yy + BAND, 0, gy + 6); sk.addColorStop(0, '#F3F6EE'); sk.addColorStop(1, '#E4EBD9'); ctx.fillStyle = sk; ctx.fillRect(x0 + 1, yy + BAND, colw - 2, gy + 6 - (yy + BAND)); }
+      ctx.save(); ctx.beginPath(); ctx.rect(x0 + 1, yy + BAND, colw - 2, gy + 10 - (yy + BAND)); ctx.clip();
+      const geo = drawShoot(res, d, xc, gy, s, view, rot); ctx.restore();
       // ground and soil column
       const CW = Math.min(colw - 36, 150), zx = xc - CW / 2, zy = gy + 6, sy = (ZH - 8) / ZMAX, sx = (CW / 2 - 4) / res.Rpot; column(zx, zy, CW, ZH - 8, '#333', false); soilFill(res, d, zx, zy, CW, ZH - 8, view);
       drawRoots(res, d, xc, zy, sx, sy, rot, view === 'xray' ? 'xray' : view === 'soil' ? 'soil' : view === 'thermal' ? 'thermal' : 'rgb');
@@ -186,7 +190,7 @@
     });
     if (view === 'thermal') thermalBar(cx + w - 190, y + 33, 120);
     T('the width of the soil column is enlarged', cx + 12, y + hh - 6, { s: 8.5, c: MUTE });
-    const p0 = ROT; hot(p0.x, p0.y, p0.w, p0.h, () => { }, 'drag sideways to turn the plants and the roots');
+    const p0 = ROT; hot(p0.x, p0.y, p0.w, p0.h, () => { }, 'drag to turn the plants');
     return y + hh + 10;
   }
 
@@ -259,22 +263,22 @@
   }
   // the day shown when the layer opens: the date of the toolbar when it falls in the season, else the middle of the season
   function startT() { try { const q = window.PHUI.outlook.season(window.PHUI.outlook.toolbarDate()); if (q.idx >= 0 && q.idx < N) return q.idx / (N - 1); } catch (e) { } return 0.5; }
-  function runNow() { PH.ran = true; PH.why = ''; PH.key = ''; PH.ranKey = ''; ensureRun(); PH.ranKey = keyOf(); play.t = startT(); play.on = false; }
+  function runNow() { PH.ran = true; PH.why = ''; PH.key = ''; PH.ranKey = ''; PH.lastDate = dKey(); ensureRun(); PH.ranKey = keyOf(false); play.t = startT(); play.on = false; }
   const SECTIONS_ALL = () => BASE.concat(SECTIONS);
   const BASE = [{ id: 'ctl', t: 'Set up the experiment', s: 'every control re-runs the model; the project supplies soil, tillage, weather and the crop', fn: drawControls }, { id: 'twin', t: 'Plant and roots, side by side', s: 'drag to turn', fn: drawTwin }, { id: 'scans', t: 'Root scans through the season', s: 'scanner image and reconstruction', fn: drawStrip }, { id: 'series', t: 'Traits through time', s: 'click or drag on a chart to move the day', fn: drawSeries }];
   function drawPh() {
-    paper(); const now = performance.now(); if (now - PH.last > 700) { play.t = startT(); play.on = false; PH.firstTouch = now; } PH.last = now; SL.length = 0; SCR.length = 0;
+    paper(); const now = performance.now(); if (PH.anim && PH.anim.on) { const dt = Math.min(0.12, (now - PH.anim.t0) / 1000); PH.anim.t0 = now; play.on = false; play.t = Math.min(1, play.t + dt / PH.anim.dur); if (play.t >= 1) PH.anim.on = false; PH.last = now; } if (now - PH.last > 700) { play.t = startT(); play.on = false; PH.firstTouch = now; } PH.last = now; SL.length = 0; SCR.length = 0;
     if (PH.follow && PH.sp !== projSpecies()) { PH.sp = projSpecies(); applyPreset(PH.gid === 'custom' ? 'ref' : PH.gid); PH.area = null; }
     const gate = !window.__REPORTING && !window.__NORUNGATE; if (!gate && !PH.ran) { PH.ran = true; PH.ranKey = ''; }
-    if (PH.keepRan) { PH.keepRan = false; if (PH.ran) PH.ranKey = keyOf(); }
-    if (gate && PH.ran && PH.ranKey && PH.ranKey !== keyOf()) { PH.ran = false; PH.why = 'controls changed'; }
+    if (PH.keepRan) { PH.keepRan = false; if (PH.ran) PH.ranKey = keyOf(false); }
+    if (gate && PH.ran && PH.ranKey && PH.ranKey !== keyOf(false)) { PH.ran = false; PH.why = 'controls changed'; }
+    { const dk = dKey(); if (PH.lastDate == null) PH.lastDate = dk; if (PH.lastDate !== dk) { PH.lastDate = dk; if (PH.ran) { play.t = startT(); PH.anim.on = false; } } }
     if (PH.ran) ensureRun();
     let y = K.header('Deterministic phenotyping', 'Equation-based simulation of plant structure and function under drought · same inputs always give the same plant · soil, tillage, weather and crop from the project', 4);
     const lc = libCrop(), cl = window.CROPLIB && CROPLIB.crops[state.crop];
-    K.badge(PH.ran ? 'MODEL RUN' : 'NOT RUN', 16, y, PH.ran ? '#1E8E3E' : '#B8743A'); T('Crop ' + ((CROPS[state.crop] || cl || {}).label || state.crop) + ' (modelled as ' + P.SP[PH.sp].name.toLowerCase() + ') sown ' + dateOf(0) + ', ' + CLIM[PH.clim].t.toLowerCase() + ', genotype ' + (PH.gid === 'custom' ? 'custom' : (P.GENO.find(g => g.id === PH.gid) || {}).name) + ' · soil ' + (DATA.soil_labels[state.soil] || state.soil) + ', ' + (TILL_LABELS[state.till] || state.till).toLowerCase() + ' tillage', 92, y + 11, { s: 9.5, c: MUTE }); y += 22;
-    y = runBar(y, PH.ran);
+    K.badge(PH.ran ? 'MODEL RUN' : 'NOT RUN', 16, y, PH.ran ? '#1E8E3E' : '#B8743A'); { const hn = sidWrap('Date ' + clockTxt() + ' (the model steps by whole days) · crop ' + ((CROPS[state.crop] || cl || {}).label || state.crop) + ' (modelled as ' + P.SP[PH.sp].name.toLowerCase() + ') sown ' + dateOf(0) + ', ' + CLIM[PH.clim].t.toLowerCase() + ', genotype ' + (PH.gid === 'custom' ? 'custom' : (P.GENO.find(g => g.id === PH.gid) || {}).name) + ' · soil ' + (DATA.soil_labels[state.soil] || state.soil) + ', ' + (TILL_LABELS[state.till] || state.till).toLowerCase() + ' tillage', 92, y + 11, W - 108, { s: 9.5, c: MUTE }, 12.5); y += Math.max(1, hn) * 12.5 + 10; }
     if (!PH.ran) {
-      y = drawControls(y);
+      y = drawControls(y); y = runBar(y + 2, false);
       const bw = Math.min(W - 32, 560), bx = 16, by = y + 4, bh = 118; ctx.fillStyle = '#D4D0C8'; ctx.fillRect(bx, by, bw, bh); ctx.fillStyle = '#FFFFFF'; ctx.fillRect(bx, by, bw, 1); ctx.fillRect(bx, by, 1, bh); ctx.fillStyle = '#404040'; ctx.fillRect(bx, by + bh - 1, bw, 1); ctx.fillRect(bx + bw - 1, by, 1, bh);
       const g = ctx.createLinearGradient(bx, 0, bx + bw, 0); g.addColorStop(0, '#0A246A'); g.addColorStop(0.7, '#3A6EA5'); g.addColorStop(1, '#A6CAF0'); ctx.fillStyle = g; ctx.fillRect(bx + 3, by + 3, bw - 6, 20); T('Run the simulation', bx + 10, by + 17, { s: 11, b: true, c: '#FFFFFF' });
       sidWrap(PH.why ? 'The ' + PH.why + ': the plants, roots, water, carbon and traits wait for a new run.' : 'Set the crop, genotype, drought and the controls of the Properties panel, then press Run simulation above. The plants, roots, water, carbon, traits and the comparison with the SWAFL data are computed only from your settings.', bx + 14, by + 42, bw - 28, { s: 10, c: '#000' }, 13);
@@ -282,12 +286,13 @@
       return;
     }
     if (!PH.run) { T(PH.msg ? 'The model could not run: ' + PH.msg : 'Preparing the run...', 16, y + 24, { s: 12, c: MUTE }); return; }
-    SECTIONS_ALL().forEach(sec => {
-      const y0 = y, open = PH.open[sec.id] !== false, tog = () => { PH.open[sec.id] = !open; };
+    PH.secY = {}; SECTIONS_ALL().forEach(sec => {
+      PH.secY[sec.id] = y; const y0 = y, open = PH.open[sec.id] !== false, tog = () => { PH.open[sec.id] = !open; };
       if (!open) { K.frame(16, y, W - 32, 24, PREF + sec.t, sec.s || ''); chevron(24, y, false); hot(16, y, W - 32, 24, tog, 'open this section'); y += 34; return; }
       const of = K.frame; let first = true; K.frame = function () { const a = Array.prototype.slice.call(arguments); if (first && a[1] === y0) { a[4] = PREF + a[4]; first = false; } return of.apply(this, a); };
       try { y = sec.fn(y); } catch (e) { console.error('dph section', sec.id, e); T('A section could not be drawn: ' + e.message, 16, y + 16, { s: 10, c: '#D93025' }); y += 30; } finally { K.frame = of; }
       chevron(24, y0, true); hot(16, y0, W - 32, 24, tog, 'close this section');
+      if (sec.id === 'ctl') y = runBar(y, true);
     });
     try { if (Math.abs(currentScene.h - (y + 20)) > 4) { currentScene.h = Math.ceil(y + 20); setCanvasH(currentScene.h); } } catch (e) { }
     jobStep(); panelStep();
@@ -297,7 +302,7 @@
     for (const s of SL) if (p.x >= s.x && p.x <= s.x + s.w && p.y >= s.y && p.y <= s.y + s.h) { PH.drag = { t: 'sl', s }; PH.dragging = true; s.set(slVal(s, p.x)); return true; }
     for (const q of SCR) if (p.x >= q.x && p.x <= q.x + q.w && p.y >= q.y && p.y <= q.y + q.h) { PH.drag = { t: 'sc', q }; play.t = clamp((p.x - q.x0) / q.w0, 0, 1); play.on = false; return true; }
     if (p.x >= TS.x && p.x <= TS.x + TS.w && p.y >= TS.y && p.y <= TS.y + TS.h) { PH.drag = { t: 'ts' }; play.t = clamp((p.x - TS.x) / TS.w, 0, 1); play.on = false; return true; }
-    const hs = hotAt(p); if (hs && hs.tip !== 'drag sideways to turn the plants and the roots') { hs.fn(p); return true; }
+    const hs = hotAt(p); if (hs && hs.tip !== 'drag to turn the plants') { hs.fn(p); return true; }
     if (p.x >= ROT.x && p.x <= ROT.x + ROT.w && p.y >= ROT.y && p.y <= ROT.y + ROT.h) { PH.drag = { t: 'rot', x0: p.x, r0: PH.rot }; return true; }
     return false;
   }
@@ -308,13 +313,13 @@
   function onUp() { PH.drag = null; PH.dragging = false; }
   // background jobs (genotype panel, calibration) run one step per frame; part 2 fills these
   let jobStep = () => { }, panelStep = () => { };
-  window.PHUI = { BASE, SCR, scrub, runNow, RN, RNc, projObj, nResponse, libCrop, PH, P, K, SECTIONS, chip, chipRow, slider, SL, mix, pal, wcol, day, dateOf, R, N, NL, DZ, ZMAX, CLIM, effGeno, cfgFor, ensureRun, keyOf, seriesVals, SETS, OBSK, regimeShade, sowDoy, envObj, soilObj, setJob: f => { jobStep = f; }, setPanel: f => { panelStep = f; }, redraw: () => { PH.key = ''; } };
+  window.PHUI = { clockTxt, leafColor, drawRoots, drawShoot, BASE, SCR, scrub, runNow, RN, RNc, projObj, nResponse, libCrop, PH, P, K, SECTIONS, chip, chipRow, slider, SL, mix, pal, wcol, day, dateOf, R, N, NL, DZ, ZMAX, CLIM, effGeno, cfgFor, ensureRun, keyOf, seriesVals, SETS, OBSK, regimeShade, sowDoy, envObj, soilObj, setJob: f => { jobStep = f; }, setPanel: f => { panelStep = f; }, redraw: () => { PH.key = ''; } };
   K.add('dph', 'P1 Deterministic phenotyping', '#2F7F3E', drawPh, 'Deterministic phenotyping: plants, roots, water and carbon under drought, from equations', 'Roots, leaves, water and carbon are linked: a change in root angle, stay-green, stomata or soil structure moves every trait at once, and the traits seen above ground reveal what the roots do below.');
   const sc = SCENES.find(s => s.id === 'dph'); if (sc) { sc.play = true; sc.dur = 40; sc.h = 3600; sc.onDown = onDown; sc.onMove = onMove; sc.onUp = onUp; sc.onLeave = () => { hotUi.hover = null; }; }
   // the button of the web explorer, in the group of the soil
   (function place() {
     const s = SCENES.find(x => x.id === 'dph'), bar = document.getElementById('sceneBar'); if (!s || !bar || bar.querySelector('[data-scene="dph"]')) return;
     const b = document.createElement('div'); b.className = 'scenebtn'; b.innerHTML = '<span class="no">P1</span><span>Deterministic phenotyping</span>'; b.style.setProperty('--sc', s.color); b.dataset.scene = 'dph'; b.title = s.title; b.onclick = () => switchScene(s);
-    const h = Array.from(bar.querySelectorAll('.scenegrp')).find(x => x.textContent === 'Water in the soil'); if (!h) { bar.appendChild(b); return; } let n = h.nextSibling; while (n && !(n.classList && n.classList.contains('scenegrp'))) n = n.nextSibling; bar.insertBefore(b, n);
+    const h = document.createElement('div'); h.className = 'scenegrp'; h.textContent = 'Phenotyping'; bar.appendChild(h); bar.appendChild(b);
   })();
 })();

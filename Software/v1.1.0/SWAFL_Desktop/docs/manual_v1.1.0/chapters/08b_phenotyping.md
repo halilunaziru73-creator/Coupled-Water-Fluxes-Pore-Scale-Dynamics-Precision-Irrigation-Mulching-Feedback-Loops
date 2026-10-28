@@ -2,11 +2,11 @@
 
 ### What the layer is
 
-**P1 Deterministic phenotyping** (group *Soil structure and tillage*, button *Deterministic phenotyping*) is a virtual phenotyping experiment. One plant of the chosen crop grows day by day for 140 days after emergence in the soil, tillage, weather and rain of the project, twice, side by side: **well-watered** and **drought**. Everything the books on phenotyping let a person measure with a camera, a thermal camera, an X-ray scanner or a rhizotron is read from the simulated plant, and it can be moved: the day is chosen with the play bar or by clicking or dragging on any chart, and the plant and its roots are turned with the mouse.
+**P1 Deterministic phenotyping** (its own group *Phenotyping*, the last in the list of layers, button *Deterministic phenotyping*) is a virtual phenotyping experiment. One plant of the chosen crop grows day by day for 140 days after emergence in the soil, tillage, weather and rain of the project, twice, side by side: **well-watered** and **drought**. Everything the books on phenotyping let a person measure with a camera, a thermal camera, an X-ray scanner or a rhizotron is read from the simulated plant, and it can be moved: the day is chosen with the play bar or by clicking or dragging on any chart, and the plant and its roots are turned with the mouse.
 
 The layer is **deterministic**. It has no random numbers: the same controls always give the same plant, so a change in a chart is always caused by the control that was moved. The weather of the season is built from the climate of the project (cool and humid), a warm season, or a hot and dry season, with the project rain or a rain-out shelter.
 
-The layer is **connected to the Properties panel**: the crop and its library values (height, basal coefficient, rooting depth, sowing day), the soil, the weather and the date, the mulch (vapour-flux factor and interception), the irrigation (method, trigger suction, sensor depth, dose and efficiency), the nitrogen rate and the salt of the water all reach the plant. The note under the controls lists what was read, and the date of the toolbar sets the day shown and the season of the **drought outlook**. Nothing is shown before it is computed: the layer opens with **Run simulation**, and it shows no default figure.
+The layer is **connected to the Properties panel**: the crop and its library values (height, basal coefficient, rooting depth, sowing day), the soil, the weather and the date, the mulch (vapour-flux factor and interception), the irrigation (method, trigger suction, sensor depth, dose and efficiency), the nitrogen rate and the salt of the water all reach the plant. The **date of the toolbar** (the date control that also drives the soil trigger, set to today when the program opens) sets the season: the plant, the weather of that season, the day shown and the **drought outlook** all follow it, and changing the date computes the layer again without pressing the button. The header shows the date, and the time of day when the date is today (the model itself steps by whole days). Nothing is shown before it is computed: the layer opens with **Run simulation**, and it shows no default figure.
 
 The layer is made for four tasks of a phenotyping programme:
 
@@ -15,13 +15,13 @@ The layer is made for four tasks of a phenotyping programme:
 3. **Relate root development and stress responses to what is seen above ground**: the section *Roots from the plant above ground*, with twelve genotypes run under the same drought.
 4. **Contribute experimental data to the parameterisation and validation of functional-structural plant models**: your own measurements can be loaded, compared, used to calibrate the model and exported.
 
-*Provenance of the layer:* the forms of the equations are from the literature listed in the section *Equations*. The two books that were the starting point define the **traits** (what is measured and how it is calculated); they do not give growth equations. The constants of the four species and the seven genotypes are typical, editable defaults of this layer. They are not data of an experiment, and no figure of this chapter is a measurement: each figure is the screen of the layer for the run named in its caption.
+*Provenance of the layer:* the forms of the equations are from the literature listed in the section *Equations* of this chapter. The two books that were the starting point define the **traits** (what is measured and how it is calculated); they do not give growth equations. The constants of the four species and the seven genotypes are typical, editable defaults of this layer. They are not data of an experiment, and no figure of this chapter is a measurement: each figure is the screen of the layer for the run named in its caption.
 
 ### The controls
 
 ![Set up the experiment. Maize, warm season, rain-out shelter, pulse of drought from day 40 for 28 days at 30 % of the plant-available water, reference genotype, Coarse Loam, conventional tillage.](images/pheno/p1_setup.png){width=85%}
 
-**Run simulation.** Every layer of the window, not only the three designs, has a **Run simulation** bar at the top (Chapter 18). A layer shows its figures only after the button is pressed for the present controls; when a control changes, the bar asks to run again. The Play button of the toolbar does the same. **Every section of the layer has a triangle on its title: click it to collapse or expand the section**, so that a long page can be read part by part.
+**Run simulation.** The button is **under the inputs**, after the last control of the section *Set up the experiment* (the other layers of the window, whose inputs are in the Properties panel, have their own **Run simulation** bar at the top, Chapter 18). A layer shows its figures only after the button is pressed for the present controls; when a control changes, the bar asks to run again. The Play button of the toolbar does the same. **Every section of the layer has a triangle on its title: click it to collapse or expand the section**, so that a long page can be read part by part.
 
 Once run, every control re-runs the model, and every chart answers it.
 
@@ -42,9 +42,9 @@ The **soil, the tillage and the consolidation rate** are those of the project (t
 
 ### Plant and roots, side by side
 
-![Plant and roots on day 70 (10 July) in the camera view: the shoot with the leaves of the model, the soil column with the root system of the same day. Left well-watered, right drought.](images/pheno/p2_twin_rgb.png){width=85%}
+![Plant and roots on day 62 (2 July) in the camera view: the shoot with the leaves of the model, the soil column with the root system of the same day. Left well-watered, right drought.](images/pheno/p2_twin_rgb.png){width=85%}
 
-The shoot is drawn from the leaf geometry of the model: each leaf has an insertion height, an azimuth, an elevation, a length, a width and a stay-green fraction, so the **projected shoot area**, the **convex hull** and the **solidity** that are printed above the plants are those of what is drawn. The roots are the segments of the root architecture model grown up to the day, turned by the rotation of the view. Four views show the same plant:
+The shoot is a life-like rendering of the simulation, not a photograph: blades with a shaded surface, midrib and veins, leaf sheaths and nodes on the stem, wheat with its tillers, and the ear of maize, the spike of wheat, the panicle of sorghum or the pods of the bean, which fill as the grain mass of the model grows. Leaves that wilt (low water content) droop and pale, and the senescent part of a blade turns yellow and then brown from the tip. The arch of the leaves of maize and sorghum is drawn a little wider than the model's own geometry so that the blades can be seen; the numbers do not change. The picture is drawn from the leaf geometry of the model: each leaf has an insertion height, an azimuth, an elevation, a length, a width and a stay-green fraction, so the **projected shoot area**, the **convex hull** and the **solidity** that are printed above the plants are those of what is drawn. The roots are the segments of the root architecture model grown up to the day, turned by the rotation of the view. Four views show the same plant:
 
 * **Camera (RGB)**: green leaves that turn brown with senescence, roots as a rhizotron sees them.
 * **Thermal camera**: each leaf has the temperature of its energy balance, from 4 K below to 10 K above the air.
@@ -60,6 +60,12 @@ The shoot is drawn from the leaf geometry of the model: each leaf has an inserti
 The **root scans through the season** show the drought plant (or the well-watered plant, by the two chips) on four days: at the top the scanner image of the root system, at the bottom the reconstruction with the first order axes, the second order laterals and the soil volume.
 
 ![Root scans of the drought plant on days 35, 70, 104 and 139.](images/pheno/p3_scans.png){width=85%}
+
+### Season film, from sowing to maturity
+
+![The season film: both plants and their roots on eight dates from sowing to maturity, with the time series below. Wheat, project climate, day 62 marked.](images/pheno/p2b_film.png){width=85%}
+
+The section shows the whole life of the two plants at once. Two rows of eight pictures (the project plant above, the drought plant below) show the shoot and the roots on days 0, 20, 40, 60, 79, 99, 119 and 139 after emergence, each with its date, at one common scale, so that the growth can be compared from picture to picture. The picture nearest to the day shown has a blue frame; click a picture to go to that day. **Play the season** grows both plants from the first day to the last (the speeds are *Slow*, *Normal* and *Fast*: 28, 14 and 6 seconds for the season); **Pause** stops, and **Start** returns to the first day. Below the pictures, six time series (plant height, projected shoot area, green leaf area index, root depth, leaf water content and the water of the root zone) run through the whole season for both plants. Each line is solid up to the day shown and faint after it, with the stress and recovery bands behind them; click or drag on any chart to move the day.
 
 ### Traits through time
 
@@ -157,11 +163,13 @@ The last section brings experimental data to the model:
 * **Calibrate the model** searches the radiation use efficiency, the stomatal threshold and the stay-green delay that reduce the squared error of all loaded traits (a coordinate search, one model run per frame, at most 40 runs). **Reset calibration** returns to the values of the genotype.
 * **Export the results (CSV)** writes the daily traits of both treatments (height, area, solidity, senescence, water content and potential, canopy temperature depression, crop water stress index, leaf area, assimilation, root share, root depth and length, D95, transpiration and soil evaporation), as input for a functional-structural plant model or for a statistical package.
 
+### Moving about the layer
+
+A bar of buttons stays at the top of the window while the page is scrolled (*Set up*, *Plants*, *Season film*, *Roots by day*, *Root scans*, *Traits*, *Water*, *Carbon*, *Soil*, *Roots and shoot*, *Genotype*, *Trait table*, *SWAFL data*, *Outlook*, and *My data*). A button jumps to its section, and the section at the top of the window is marked. The title of every section has a triangle: click it to collapse or expand the section, or use *Collapse all* and *Expand all* at the top. The text of a hint never runs off the edge of the window: a long hint is cut into lines.
+
 ### Equations
 
-![The section Equations of the layer on the screen: the 26 equations with their numbers.](images/pheno/p12_equations.png){width=85%}
-
-The section *Equations of the layer* of the screen (figure above) lists the same 26 equations, with the same numbers, in the order in which the model uses them on each day. This section explains each one: what it computes, the symbols and their units, where its result appears in the layer, and where it comes from. The model is deterministic: it contains no random numbers. A table at the end of the section gives the index. Symbols: $d$ day after emergence, $T$ air temperature (°C), $\mathrm{LAI}$ leaf area index (m² m⁻²), $\psi$ water potential (MPa or cm of suction as stated), $T_p$ potential transpiration (mm d⁻¹), $z$ depth (cm), $\Delta z=15$ cm the thickness of a soil layer, $N=140$ days.
+The section The layer shows no equations on the screen: they are all in this manual, numbered P.1 to P.26 in the order in which the model uses them on each day. This section explains each one: what it computes, the symbols and their units, where its result appears in the layer, and where it comes from. The model is deterministic: it contains no random numbers. A table at the end of the section gives the index. Symbols: $d$ day after emergence, $T$ air temperature (°C), $\mathrm{LAI}$ leaf area index (m² m⁻²), $\psi$ water potential (MPa or cm of suction as stated), $T_p$ potential transpiration (mm d⁻¹), $z$ depth (cm), $\Delta z=15$ cm the thickness of a soil layer, $N=140$ days.
 
 #### Development, weather and light (P.1 to P.5)
 

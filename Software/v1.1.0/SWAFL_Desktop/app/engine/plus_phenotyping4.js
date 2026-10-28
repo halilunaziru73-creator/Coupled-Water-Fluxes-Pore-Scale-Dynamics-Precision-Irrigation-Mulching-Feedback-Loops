@@ -115,7 +115,7 @@
     let R; try { R = compute(); } catch (e) { T('The outlook could not be computed: ' + e, cx + 12, y + 10, { s: 9.5, c: '#B3261E' }); console.error(e); endFrame(cx, y0, y + 24, w); return y + 34; }
     const S = R.S, A = R.A, ti = clamp(S.idx, 0, N - 1), when = fdate(R.D);
     const stTxt = S.state === 'before' ? 'The crop is not yet sown on this date; the whole season is a forecast.' : S.state === 'after' ? 'The season of this crop is over on this date; the whole season is a record.' : 'Day ' + S.idx + ' after emergence.';
-    T('Date of the toolbar: ' + when + ' ' + new Date(R.D).getUTCFullYear() + '. ' + stTxt, cx + 12, y + 8, { s: 9.5, b: true }); y += 22;
+    T('Date of the toolbar: ' + U.clockTxt() + '. ' + stTxt, cx + 12, y + 8, { s: 9.5, b: true }); y += 22;
     const srcTxt = !sources() ? 'Weather: the model weather of the project climate (no weather file or online weather is imported, so there are no recorded days and no forecast): ' + (S.idx + 1 > 0 ? Math.min(N, S.idx + 1) : 0) + ' days to the date, then the three futures with 0.4, 1 and 1.6 times the rain. Import a weather file or the online weather of the farm (Tools) to use the record and the forecast. Sown ' + dateOf(0) + '.' :
       'Weather: ' + A.src + '. Days of the season: ' + A.nObs + ' recorded' + (A.nFill ? ' (' + A.nFill + ' filled from a typical year)' : '') + ', ' + A.nFc + ' of forecast, ' + A.nScn + ' of the three futures' + (A.rank ? ' (years ' + A.rank.years[A.rank.dry] + ', ' + A.rank.years[A.rank.typ] + ' and ' + A.rank.years[A.rank.wet] + ' of the record: the driest, the median and the wettest rain of those days).' : '.') + ' Sown ' + dateOf(0) + '.';
     y += note(srcTxt, cx + 12, y, w - 24) * 12.5 + 4;

@@ -5118,8 +5118,11 @@ function hotAt(p) { for (let i = hotspots.length - 1; i >= 0; i--) { const q = h
 function hotDown(p) { const q = hotAt(p); if (q) { q.fn(p); return true; } return false; }
 function hotMove(p) { hotUi.x = p.x; hotUi.y = p.y; hotUi.hover = hotAt(p); if (hotUi.hover) canvas.style.cursor = 'pointer'; }
 function drawHotTip() {
-  const q = hotUi.hover; if (!q || !q.tip || hotUi.x < 0) return; ctx.font = 'bold 10px sans-serif'; const w = ctx.measureText(q.tip).width + 10;
-  pill(q.tip, clampN(hotUi.x + 12, 4, W - w - 4), clampN(hotUi.y + 26, 16, H - 8), { s: 10, b: true, bg: 'rgba(255,252,225,0.98)', stroke: '#1B1F23' });
+  const q = hotUi.hover; if (!q || !q.tip || hotUi.x < 0) return; ctx.font = 'bold 10px sans-serif';
+  // a long tip is cut into lines that fit the width of the window, so that none of it falls off the edge
+  const maxW = Math.min(W - 24, 360), words = String(q.tip).split(' '), lines = []; let cur = ''; words.forEach(wd => { const t = cur ? cur + ' ' + wd : wd; if (cur && ctx.measureText(t).width + 16 > maxW) { lines.push(cur); cur = wd; } else cur = t; }); if (cur) lines.push(cur);
+  const w = Math.max(...lines.map(l => ctx.measureText(l).width)) + 16, x0 = clampN(hotUi.x + 12, 4, W - w - 8);
+  lines.forEach((l, i) => pill(l, x0, clampN(hotUi.y + 26, 16, H - 8 - lines.length * 18) + i * 17, { s: 10, b: true, bg: 'rgba(255,252,225,0.98)', stroke: '#1B1F23' }));
 }
 function applyState(o) {
   Object.assign(state, o); sliders.tc.value = state.tcIdx; sliders.vff.value = state.vffIdx; sliders.cap.value = state.capIdx; sliders.rain.value = state.rainIdx;
@@ -8257,7 +8260,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   const CMAP = { maize: 'maize', sorghum: 'sorghum', pearlmillet: 'sorghum', wheat: 'wheat', rice: 'wheat', cereal: 'wheat', soybean: 'bean', cowpea: 'bean', greengram: 'bean', chickpea: 'bean', groundnut: 'bean', tomato: 'bean', mustard: 'bean' };
   const CLIM = { project: { Tm: 8.5, Tamp: 8.2, sow: 0, t: 'Project climate (cool, humid)' }, warm: { Tm: 15.5, Tamp: 9.5, sow: -10, t: 'Warm season' }, hot: { Tm: 23, Tamp: 8.5, sow: -35, t: 'Hot, dry season' } };
   const PH = {
-    sp: CMAP[typeof state !== 'undefined' ? state.crop : 'cereal'] || 'wheat', follow: true, ref: 'pj', gid: 'ref', g: Object.assign({}, P.GENO[0]), clim: 'project', rain: 'none', dr: { type: 'pulse', onset: 45, len: 35, sev: 15, rainOut: true },
+    anim: { on: false, t0: 0, dur: 14 }, secY: {}, sp: CMAP[typeof state !== 'undefined' ? state.crop : 'cereal'] || 'wheat', follow: true, ref: 'pj', gid: 'ref', g: Object.assign({}, P.GENO[0]), clim: 'project', rain: 'none', dr: { type: 'pulse', onset: 45, len: 35, sev: 15, rainOut: true },
     view: 'rgb', set: 'shoot', trt: 'dr', rot: 0.45, xw: 0, area: null, yv: 'D95', ovr: { rue: 1, dpsi: 0, sg: 0 }, sw: { rue: 1, kte: 1, qG: 1 }, cmp: null, fitMsg: '', open: {}, ran: false, ranKey: '', why: '', obs: null, run: null, key: '', lastRun: 0, drag: null, dragging: false, last: 0, panel: { key: '', items: [], busy: false }, job: null, msg: ''
   };
   const SL = [], SCR = [], ROT = { x: 0, y: 0, w: 0, h: 0 }, TS = { x: 0, y: 0, w: 0, h: 0 };
@@ -8295,13 +8298,17 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
     let trig = 300; try { trig = Math.abs(trigAbsFor(state.soil)); } catch (e) { }
     return { vff: VFF_VALUES[state.vffIdx], cap: CAP_VALUES[state.capIdx], fN: nr.f, nRate: nr.rate, salt: { ec0: clamp(+state.salt0 || 0, 0, 25), ecw: clamp(+state.ecw || 0, 0, 12), th: st.th, sl: st.sl }, irr: { trig, z: Z_VALUES[state.zIdx], minInt: base.minInt, dmax: base.dmax, eff: base.eff, drip: m.mid || 0, method: m.label } };
   }
+  const clockTxt = () => { const D = dKey(), t = new Date(), td = Date.UTC(t.getFullYear(), t.getMonth(), t.getDate()), d = new Date(D), p2 = v => (v < 10 ? '0' : '') + v; return d.getUTCDate() + ' ' + MON[d.getUTCMonth()] + ' ' + d.getUTCFullYear() + (D === td ? ', ' + p2(t.getHours()) + ':' + p2(t.getMinutes()) : ''); };
+  // the year of the weather that holds the season of the date of the toolbar (else the year of the clock of the engine)
+  function ySeason(W0) { try { const q = window.PHUI.outlook.season(dKey()); const i = W0 && W0.years ? W0.years.indexOf(q.Y) : -1; if (i >= 0) return i; } catch (e) { } return typeof yearNow === 'function' ? yearNow() : 0; }
   function envObj(rainOn) {
     const cl = CLIM[PH.clim], dT = TEMP_VALUES[state.tempIdx] + PH.xw, rm = RAIN_VALUES[state.rainIdx], mode = rainOn ? 'project' : PH.rain, W0 = window.WXD && window.WXD.on ? window.WXD : null; let real = null, realT = null, realE = null;
-    if (mode === 'project' && W0 && W0.P) { try { const y = (typeof yearNow === 'function' ? yearNow() : 0), sw = sowDoy(); real = Array.from({ length: N }, (_, k) => W0.P[y * 365 + (sw + k) % 365] || 0); } catch (e) { real = null; } }
-    if (W0) { try { const y = (typeof yearNow === 'function' ? yearNow() : 0), sw = sowDoy(); if (W0.Tclim) realT = Array.from({ length: N }, (_, k) => W0.Tclim[(sw + k) % 365]); if (W0.hasE && W0.ET0) realE = Array.from({ length: N }, (_, k) => W0.ET0[y * 365 + (sw + k) % 365]); } catch (e) { } }
+    if (mode === 'project' && W0 && W0.P) { try { const y = ySeason(W0), sw = sowDoy(); real = Array.from({ length: N }, (_, k) => W0.P[y * 365 + (sw + k) % 365] || 0); } catch (e) { real = null; } }
+    if (W0) { try { const y = ySeason(W0), sw = sowDoy(); if (W0.Tclim) realT = Array.from({ length: N }, (_, k) => W0.Tclim[(sw + k) % 365]); if (W0.hasE && W0.ET0) realE = Array.from({ length: N }, (_, k) => W0.ET0[y * 365 + (sw + k) % 365]); } catch (e) { } }
     return { sow: sowDoy(), Tm: cl.Tm, Tamp: cl.Tamp, dT, rain: DATA.rain_base * (PH.clim === 'hot' ? 0.45 : PH.clim === 'warm' ? 0.7 : 1), rainMult: real ? 1 : rm, rainMode: mode, realRain: real, realT, realET0: realE, lat: 55.7 };
   }
-  const keyOf = () => JSON.stringify([state.soil, state.till, state.tcIdx, state.tempIdx, state.rainIdx, PH.sp, PH.g, PH.clim, PH.rain, PH.dr, PH.xw, PH.area, PH.ovr, PH.ref, PH.sw, state.crop, state.densIdx, state.plantDoy, state.vffIdx, state.capIdx, state.nIdx, state.method, state.zIdx, state.trigIdx, state.trigMode, state.trigF, state.salt0, state.ecw, state.areaHa, window.WXD && window.WXD.on ? window.WXD.key : 'rec', (function () { try { return Math.round(trigAbsFor(state.soil)); } catch (e) { return 0; } })()]);
+  const dKey = () => { try { return window.PHUI.outlook.toolbarDate(); } catch (e) { return 0; } };
+  const keyOf = wd => JSON.stringify([wd === false ? 0 : dKey(), state.soil, state.till, state.tcIdx, state.tempIdx, state.rainIdx, PH.sp, PH.g, PH.clim, PH.rain, PH.dr, PH.xw, PH.area, PH.ovr, PH.ref, PH.sw, state.crop, state.densIdx, state.plantDoy, state.vffIdx, state.capIdx, state.nIdx, state.method, state.zIdx, state.trigIdx, state.trigMode, state.trigF, state.salt0, state.ecw, state.areaHa, window.WXD && window.WXD.on ? window.WXD.key : 'rec', (function () { try { return Math.round(trigAbsFor(state.soil)); } catch (e) { return 0; } })()]);
   function cfgFor(tr, store, geno) {
     const tt = tr === 'ww' ? PH.ref : (tr === 'bench' ? 'ww' : tr), wet = tt === 'pj' || tt === 'rf', env = envObj(wet), lc = libCrop(), sw = PH.sw || { rue: 1, kte: 1 };
     const cp = Object.assign({}, lc ? lc.o : {}); if (sw.rue !== 1 || sw.kte !== 1) { const sp0 = P.SP[PH.sp]; cp.RUE = sp0.RUE * sw.rue; cp.kte = sp0.kte * sw.kte; }
@@ -8343,9 +8350,6 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
     y = chipRow('Climate', Object.keys(CLIM).map(k => ({ k, t: CLIM[k].t })), PH.clim, k => { PH.clim = k; }, x0, y, ww);
     y = chipRow('Rain', [{ k: 'none', t: 'Excluded (rain-out shelter)' }, { k: 'project', t: 'Project rain' + (window.WXD && window.WXD.on ? ' (imported days)' : '') }], PH.rain, k => { PH.rain = k; }, x0, y, ww);
     y = chipRow('Left plant', [{ k: 'pj', t: 'Project irrigation', tip: 'watered by the sensor, trigger and method of the Properties panel, with its mulch, nitrogen and salt' }, { k: 'ww', t: 'Well-watered bench', tip: 'water held at the field capacity, as in a pot experiment' }, { k: 'rf', t: 'Rainfed', tip: 'only the rain of the project' }], PH.ref, k => { PH.ref = k; }, x0, y, ww);
-    { const pj = projObj(), lc = libCrop(), L = window.CROPLIB && CROPLIB.crops[state.crop], mm = (MULCH_NAMES()[state.mulchType] || state.mulchType), nr = nResponse(), W0 = window.WXD && window.WXD.on ? window.WXD : null;
-      const txt = 'Connected to the Properties panel: crop ' + ((CROPS[state.crop] || L || {}).label || state.crop) + ' run as ' + P.SP[PH.sp].name.toLowerCase() + (lc ? ' with the height ' + (lc.o.Hmax || '') + ' cm, basal coefficient ' + (lc.o.Kcb || '') + ' and rooting depth ' + (lc.o.zRoot || '') + ' cm of the crop library' : '') + ' · sowing day ' + sowDoy() + ' · mulch ' + (pj.vff >= 0.95 ? 'none' : mm + ' (vapour-flux factor ' + pj.vff.toFixed(1) + ', intercepts ' + pj.cap + ' mm)') + ' · irrigation ' + pj.irr.method.toLowerCase() + ', sensor at ' + pj.irr.z + ' cm, trigger at ' + Math.round(pj.irr.trig) + ' cm suction, at most ' + pj.irr.dmax + ' mm per event, efficiency ' + Math.round(pj.irr.eff * 100) + ' %' + ' · nitrogen ' + nr.rate + ' kg N per ha (response of the Daisy runs ×' + nr.f.toFixed(2) + ') · salt in the root zone ' + pj.salt.ec0 + ' dS/m, water ' + pj.salt.ecw + ' dS/m (this crop loses ' + pj.salt.sl + ' % per dS/m above ' + pj.salt.th + ') · weather ' + (W0 ? (W0.src === 'file' ? 'imported file' : 'online') + ': rain, evapotranspiration' + (W0.Tclim ? ' and temperature' : '') + ' of the days' : 'built-in record') + ' · field ' + (state.areaHa || 1) + ' ha';
-      const n = sidWrap(txt, x0 + 2, y + 8, ww - 4, { s: 9, c: '#1B3A6B' }, 12); y += n * 12 + 10; }
     // sliders in two columns
     const two = ww > 520, cw2 = two ? (ww - 24) / 2 : ww, col = i => two ? x0 + (i % 2) * (cw2 + 24) : x0, row = i => y + (two ? Math.floor(i / 2) : i) * 36; let i = 0;
     const S = (lab, mn, mx, v, txt, set) => { slider(col(i), row(i), cw2, lab, mn, mx, v, txt, set); i++; };
@@ -8372,7 +8376,8 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
     if (view === 'xray' || view === 'soil') return view === 'xray' ? 'rgba(210,214,220,0.55)' : mix('#3E8E41', '#B79A3E', 1 - L.gf);
     return L.gf > 0.98 ? '#3F9A44' : mix('#8C6B2C', '#3F9A44', Math.pow(L.gf, 0.7) * 0.9 + (L.gf > 0.5 ? 0.1 : 0));
   }
-  function drawShoot(res, d, xc, yg, s, view, rot) {
+  function drawShoot(res, d, xc, yg, s, view, rot, c2) {
+    if (window.PHREAL && view !== 'xray' && view !== 'soil') return PHREAL.shoot(c2 || ctx, P, res, d, xc, yg, s, view, rot, leafColor);
     const g = P.leaves(res, d, rot), H = res.H[d] * s; ctx.save();
     ctx.strokeStyle = view === 'xray' ? 'rgba(220,224,230,0.7)' : '#5E8F3C'; ctx.lineWidth = Math.max(1.5, Math.min(5, res.H[d] * s * 0.03)); ctx.beginPath(); ctx.moveTo(xc, yg); ctx.lineTo(xc, yg - H); ctx.stroke();
     const order = g.leaves.slice().sort((a, b) => Math.sin(a.az) - Math.sin(b.az));
@@ -8412,17 +8417,19 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   function thermalBar(x, y, w) { for (let i = 0; i < w; i++) { ctx.fillStyle = pal(i / w); ctx.fillRect(x + i, y, 1, 7); } T('−4 K', x, y + 18, { s: 8.5, c: MUTE }); T('+10 K above air', x + w, y + 18, { s: 8.5, c: MUTE, a: 'right' }); }
 
   function drawTwin(y) {
-    const w = W - 32, cx = 16, d = day(), sp = P.SP[PH.sp]; const SH = 250, ZH = 200, hh = 76 + SH + ZH + 36; K.frame(cx, y, w, hh, 'Plant and roots, side by side', 'day ' + d + ' after emergence (' + dateOf(d) + ') · drag to turn · ' + (play.on ? 'playing' : 'paused'));
+    const w = W - 32, cx = 16, d = day(), sp = P.SP[PH.sp]; const SH = 318, ZH = 200, hh = 76 + SH + ZH + 36; K.frame(cx, y, w, hh, 'Plant and roots, side by side', 'day ' + d + ' after emergence (' + dateOf(d) + ') · drag to turn · ' + (play.on ? 'playing' : 'paused'));
     let yy = y + 28, xx = cx + 8; VIEWS.forEach(v => { xx += chip(xx, yy, v.t, PH.view === v.k, () => { PH.view = v.k; }, v.tip); });
     yy += 30; const colw = (w - 24) / 2, view = PH.view, rot = PH.rot; ROT.x = cx; ROT.y = yy; ROT.w = w; ROT.h = SH + ZH + 36;
     ['ww', 'dr'].forEach((tr, ci) => {
-      const res = R(tr); if (!res) return; const x0 = cx + 8 + ci * (colw + 8), xc = x0 + colw / 2; ctx.fillStyle = view === 'xray' ? '#15181D' : '#F6F4EE'; ctx.fillRect(x0, yy, colw, SH + ZH + 34); ctx.strokeStyle = '#D2CEC2'; ctx.strokeRect(x0 + 0.5, yy + 0.5, colw - 1, SH + ZH + 33);
+      const res = R(tr); if (!res) return; const x0 = cx + 8 + ci * (colw + 8), xc = x0 + colw / 2; ctx.fillStyle = view === 'xray' ? '#15181D' : '#F6F4EE'; ctx.fillRect(x0, yy, colw, SH + ZH + 34); ctx.strokeStyle = '#D2CEC2'; ctx.strokeRect(x0 + 0.5, yy + 0.5, colw - 1, SH + ZH + 33); ctx.fillStyle = view === 'xray' ? '#15181D' : '#FFFFFF'; ctx.fillRect(x0 + 1, yy + 22, colw - 2, 60);
       const lab = tr === 'ww' ? RNc() : 'Drought', col = tr === 'ww' ? '#1B1F23' : '#D93025'; ctx.fillStyle = col; ctx.fillRect(x0, yy, 4, 22); T(lab, x0 + 10, yy + 15, { s: 11, b: true, c: view === 'xray' ? '#E8EAEE' : col });
       const tg = res.tgt[d]; T((res.tr === 'pj' ? 'irrigated ' + fmt(res.totals.Ig) + ' mm (' + res.nIrr + ' events)' : res.tr === 'rf' ? 'rain only' : 'water ' + fmt(res.tgt[d] * 100) + ' % set') + ' · soil ' + fmt(100 * res.store[d] / res.awcT) + ' %', x0 + colw - 8, yy + 15, { s: 9, c: view === 'xray' ? '#AEB4BD' : MUTE, a: 'right' });
-      const gy = yy + 26 + SH - 18, s = (SH - 84) / (sp.Hmax * 1.0);
+      const BAND = 82, gy = yy + 26 + SH - 18, s = (gy - (yy + BAND + 6)) / (Math.max(R('ww').H[N - 1], R('dr').H[N - 1], 10) * 1.12);
       // the shoot and, in the thermal view, its temperature
       if (view === 'thermal') { ctx.fillStyle = '#F0F2F6'; ctx.fillRect(x0 + 1, yy + 23, colw - 2, SH - 17); }
-      const geo = drawShoot(res, d, xc, gy, s, view, rot);
+      else if (view !== 'xray') { const sk = ctx.createLinearGradient(0, yy + BAND, 0, gy + 6); sk.addColorStop(0, '#F3F6EE'); sk.addColorStop(1, '#E4EBD9'); ctx.fillStyle = sk; ctx.fillRect(x0 + 1, yy + BAND, colw - 2, gy + 6 - (yy + BAND)); }
+      ctx.save(); ctx.beginPath(); ctx.rect(x0 + 1, yy + BAND, colw - 2, gy + 10 - (yy + BAND)); ctx.clip();
+      const geo = drawShoot(res, d, xc, gy, s, view, rot); ctx.restore();
       // ground and soil column
       const CW = Math.min(colw - 36, 150), zx = xc - CW / 2, zy = gy + 6, sy = (ZH - 8) / ZMAX, sx = (CW / 2 - 4) / res.Rpot; column(zx, zy, CW, ZH - 8, '#333', false); soilFill(res, d, zx, zy, CW, ZH - 8, view);
       drawRoots(res, d, xc, zy, sx, sy, rot, view === 'xray' ? 'xray' : view === 'soil' ? 'soil' : view === 'thermal' ? 'thermal' : 'rgb');
@@ -8434,7 +8441,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
     });
     if (view === 'thermal') thermalBar(cx + w - 190, y + 33, 120);
     T('the width of the soil column is enlarged', cx + 12, y + hh - 6, { s: 8.5, c: MUTE });
-    const p0 = ROT; hot(p0.x, p0.y, p0.w, p0.h, () => { }, 'drag sideways to turn the plants and the roots');
+    const p0 = ROT; hot(p0.x, p0.y, p0.w, p0.h, () => { }, 'drag to turn the plants');
     return y + hh + 10;
   }
 
@@ -8507,22 +8514,22 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   }
   // the day shown when the layer opens: the date of the toolbar when it falls in the season, else the middle of the season
   function startT() { try { const q = window.PHUI.outlook.season(window.PHUI.outlook.toolbarDate()); if (q.idx >= 0 && q.idx < N) return q.idx / (N - 1); } catch (e) { } return 0.5; }
-  function runNow() { PH.ran = true; PH.why = ''; PH.key = ''; PH.ranKey = ''; ensureRun(); PH.ranKey = keyOf(); play.t = startT(); play.on = false; }
+  function runNow() { PH.ran = true; PH.why = ''; PH.key = ''; PH.ranKey = ''; PH.lastDate = dKey(); ensureRun(); PH.ranKey = keyOf(false); play.t = startT(); play.on = false; }
   const SECTIONS_ALL = () => BASE.concat(SECTIONS);
   const BASE = [{ id: 'ctl', t: 'Set up the experiment', s: 'every control re-runs the model; the project supplies soil, tillage, weather and the crop', fn: drawControls }, { id: 'twin', t: 'Plant and roots, side by side', s: 'drag to turn', fn: drawTwin }, { id: 'scans', t: 'Root scans through the season', s: 'scanner image and reconstruction', fn: drawStrip }, { id: 'series', t: 'Traits through time', s: 'click or drag on a chart to move the day', fn: drawSeries }];
   function drawPh() {
-    paper(); const now = performance.now(); if (now - PH.last > 700) { play.t = startT(); play.on = false; PH.firstTouch = now; } PH.last = now; SL.length = 0; SCR.length = 0;
+    paper(); const now = performance.now(); if (PH.anim && PH.anim.on) { const dt = Math.min(0.12, (now - PH.anim.t0) / 1000); PH.anim.t0 = now; play.on = false; play.t = Math.min(1, play.t + dt / PH.anim.dur); if (play.t >= 1) PH.anim.on = false; PH.last = now; } if (now - PH.last > 700) { play.t = startT(); play.on = false; PH.firstTouch = now; } PH.last = now; SL.length = 0; SCR.length = 0;
     if (PH.follow && PH.sp !== projSpecies()) { PH.sp = projSpecies(); applyPreset(PH.gid === 'custom' ? 'ref' : PH.gid); PH.area = null; }
     const gate = !window.__REPORTING && !window.__NORUNGATE; if (!gate && !PH.ran) { PH.ran = true; PH.ranKey = ''; }
-    if (PH.keepRan) { PH.keepRan = false; if (PH.ran) PH.ranKey = keyOf(); }
-    if (gate && PH.ran && PH.ranKey && PH.ranKey !== keyOf()) { PH.ran = false; PH.why = 'controls changed'; }
+    if (PH.keepRan) { PH.keepRan = false; if (PH.ran) PH.ranKey = keyOf(false); }
+    if (gate && PH.ran && PH.ranKey && PH.ranKey !== keyOf(false)) { PH.ran = false; PH.why = 'controls changed'; }
+    { const dk = dKey(); if (PH.lastDate == null) PH.lastDate = dk; if (PH.lastDate !== dk) { PH.lastDate = dk; if (PH.ran) { play.t = startT(); PH.anim.on = false; } } }
     if (PH.ran) ensureRun();
     let y = K.header('Deterministic phenotyping', 'Equation-based simulation of plant structure and function under drought · same inputs always give the same plant · soil, tillage, weather and crop from the project', 4);
     const lc = libCrop(), cl = window.CROPLIB && CROPLIB.crops[state.crop];
-    K.badge(PH.ran ? 'MODEL RUN' : 'NOT RUN', 16, y, PH.ran ? '#1E8E3E' : '#B8743A'); T('Crop ' + ((CROPS[state.crop] || cl || {}).label || state.crop) + ' (modelled as ' + P.SP[PH.sp].name.toLowerCase() + ') sown ' + dateOf(0) + ', ' + CLIM[PH.clim].t.toLowerCase() + ', genotype ' + (PH.gid === 'custom' ? 'custom' : (P.GENO.find(g => g.id === PH.gid) || {}).name) + ' · soil ' + (DATA.soil_labels[state.soil] || state.soil) + ', ' + (TILL_LABELS[state.till] || state.till).toLowerCase() + ' tillage', 92, y + 11, { s: 9.5, c: MUTE }); y += 22;
-    y = runBar(y, PH.ran);
+    K.badge(PH.ran ? 'MODEL RUN' : 'NOT RUN', 16, y, PH.ran ? '#1E8E3E' : '#B8743A'); { const hn = sidWrap('Date ' + clockTxt() + ' (the model steps by whole days) · crop ' + ((CROPS[state.crop] || cl || {}).label || state.crop) + ' (modelled as ' + P.SP[PH.sp].name.toLowerCase() + ') sown ' + dateOf(0) + ', ' + CLIM[PH.clim].t.toLowerCase() + ', genotype ' + (PH.gid === 'custom' ? 'custom' : (P.GENO.find(g => g.id === PH.gid) || {}).name) + ' · soil ' + (DATA.soil_labels[state.soil] || state.soil) + ', ' + (TILL_LABELS[state.till] || state.till).toLowerCase() + ' tillage', 92, y + 11, W - 108, { s: 9.5, c: MUTE }, 12.5); y += Math.max(1, hn) * 12.5 + 10; }
     if (!PH.ran) {
-      y = drawControls(y);
+      y = drawControls(y); y = runBar(y + 2, false);
       const bw = Math.min(W - 32, 560), bx = 16, by = y + 4, bh = 118; ctx.fillStyle = '#D4D0C8'; ctx.fillRect(bx, by, bw, bh); ctx.fillStyle = '#FFFFFF'; ctx.fillRect(bx, by, bw, 1); ctx.fillRect(bx, by, 1, bh); ctx.fillStyle = '#404040'; ctx.fillRect(bx, by + bh - 1, bw, 1); ctx.fillRect(bx + bw - 1, by, 1, bh);
       const g = ctx.createLinearGradient(bx, 0, bx + bw, 0); g.addColorStop(0, '#0A246A'); g.addColorStop(0.7, '#3A6EA5'); g.addColorStop(1, '#A6CAF0'); ctx.fillStyle = g; ctx.fillRect(bx + 3, by + 3, bw - 6, 20); T('Run the simulation', bx + 10, by + 17, { s: 11, b: true, c: '#FFFFFF' });
       sidWrap(PH.why ? 'The ' + PH.why + ': the plants, roots, water, carbon and traits wait for a new run.' : 'Set the crop, genotype, drought and the controls of the Properties panel, then press Run simulation above. The plants, roots, water, carbon, traits and the comparison with the SWAFL data are computed only from your settings.', bx + 14, by + 42, bw - 28, { s: 10, c: '#000' }, 13);
@@ -8530,12 +8537,13 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
       return;
     }
     if (!PH.run) { T(PH.msg ? 'The model could not run: ' + PH.msg : 'Preparing the run...', 16, y + 24, { s: 12, c: MUTE }); return; }
-    SECTIONS_ALL().forEach(sec => {
-      const y0 = y, open = PH.open[sec.id] !== false, tog = () => { PH.open[sec.id] = !open; };
+    PH.secY = {}; SECTIONS_ALL().forEach(sec => {
+      PH.secY[sec.id] = y; const y0 = y, open = PH.open[sec.id] !== false, tog = () => { PH.open[sec.id] = !open; };
       if (!open) { K.frame(16, y, W - 32, 24, PREF + sec.t, sec.s || ''); chevron(24, y, false); hot(16, y, W - 32, 24, tog, 'open this section'); y += 34; return; }
       const of = K.frame; let first = true; K.frame = function () { const a = Array.prototype.slice.call(arguments); if (first && a[1] === y0) { a[4] = PREF + a[4]; first = false; } return of.apply(this, a); };
       try { y = sec.fn(y); } catch (e) { console.error('dph section', sec.id, e); T('A section could not be drawn: ' + e.message, 16, y + 16, { s: 10, c: '#D93025' }); y += 30; } finally { K.frame = of; }
       chevron(24, y0, true); hot(16, y0, W - 32, 24, tog, 'close this section');
+      if (sec.id === 'ctl') y = runBar(y, true);
     });
     try { if (Math.abs(currentScene.h - (y + 20)) > 4) { currentScene.h = Math.ceil(y + 20); setCanvasH(currentScene.h); } } catch (e) { }
     jobStep(); panelStep();
@@ -8545,7 +8553,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
     for (const s of SL) if (p.x >= s.x && p.x <= s.x + s.w && p.y >= s.y && p.y <= s.y + s.h) { PH.drag = { t: 'sl', s }; PH.dragging = true; s.set(slVal(s, p.x)); return true; }
     for (const q of SCR) if (p.x >= q.x && p.x <= q.x + q.w && p.y >= q.y && p.y <= q.y + q.h) { PH.drag = { t: 'sc', q }; play.t = clamp((p.x - q.x0) / q.w0, 0, 1); play.on = false; return true; }
     if (p.x >= TS.x && p.x <= TS.x + TS.w && p.y >= TS.y && p.y <= TS.y + TS.h) { PH.drag = { t: 'ts' }; play.t = clamp((p.x - TS.x) / TS.w, 0, 1); play.on = false; return true; }
-    const hs = hotAt(p); if (hs && hs.tip !== 'drag sideways to turn the plants and the roots') { hs.fn(p); return true; }
+    const hs = hotAt(p); if (hs && hs.tip !== 'drag to turn the plants') { hs.fn(p); return true; }
     if (p.x >= ROT.x && p.x <= ROT.x + ROT.w && p.y >= ROT.y && p.y <= ROT.y + ROT.h) { PH.drag = { t: 'rot', x0: p.x, r0: PH.rot }; return true; }
     return false;
   }
@@ -8556,14 +8564,14 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   function onUp() { PH.drag = null; PH.dragging = false; }
   // background jobs (genotype panel, calibration) run one step per frame; part 2 fills these
   let jobStep = () => { }, panelStep = () => { };
-  window.PHUI = { BASE, SCR, scrub, runNow, RN, RNc, projObj, nResponse, libCrop, PH, P, K, SECTIONS, chip, chipRow, slider, SL, mix, pal, wcol, day, dateOf, R, N, NL, DZ, ZMAX, CLIM, effGeno, cfgFor, ensureRun, keyOf, seriesVals, SETS, OBSK, regimeShade, sowDoy, envObj, soilObj, setJob: f => { jobStep = f; }, setPanel: f => { panelStep = f; }, redraw: () => { PH.key = ''; } };
+  window.PHUI = { clockTxt, leafColor, drawRoots, drawShoot, BASE, SCR, scrub, runNow, RN, RNc, projObj, nResponse, libCrop, PH, P, K, SECTIONS, chip, chipRow, slider, SL, mix, pal, wcol, day, dateOf, R, N, NL, DZ, ZMAX, CLIM, effGeno, cfgFor, ensureRun, keyOf, seriesVals, SETS, OBSK, regimeShade, sowDoy, envObj, soilObj, setJob: f => { jobStep = f; }, setPanel: f => { panelStep = f; }, redraw: () => { PH.key = ''; } };
   K.add('dph', 'P1 Deterministic phenotyping', '#2F7F3E', drawPh, 'Deterministic phenotyping: plants, roots, water and carbon under drought, from equations', 'Roots, leaves, water and carbon are linked: a change in root angle, stay-green, stomata or soil structure moves every trait at once, and the traits seen above ground reveal what the roots do below.');
   const sc = SCENES.find(s => s.id === 'dph'); if (sc) { sc.play = true; sc.dur = 40; sc.h = 3600; sc.onDown = onDown; sc.onMove = onMove; sc.onUp = onUp; sc.onLeave = () => { hotUi.hover = null; }; }
   // the button of the web explorer, in the group of the soil
   (function place() {
     const s = SCENES.find(x => x.id === 'dph'), bar = document.getElementById('sceneBar'); if (!s || !bar || bar.querySelector('[data-scene="dph"]')) return;
     const b = document.createElement('div'); b.className = 'scenebtn'; b.innerHTML = '<span class="no">P1</span><span>Deterministic phenotyping</span>'; b.style.setProperty('--sc', s.color); b.dataset.scene = 'dph'; b.title = s.title; b.onclick = () => switchScene(s);
-    const h = Array.from(bar.querySelectorAll('.scenegrp')).find(x => x.textContent === 'Water in the soil'); if (!h) { bar.appendChild(b); return; } let n = h.nextSibling; while (n && !(n.classList && n.classList.contains('scenegrp'))) n = n.nextSibling; bar.insertBefore(b, n);
+    const h = document.createElement('div'); h.className = 'scenegrp'; h.textContent = 'Phenotyping'; bar.appendChild(h); bar.appendChild(b);
   })();
 })();
 
@@ -8861,41 +8869,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   }
 
   // ================================================================== the equations
-  const EQ = [
-    ['Thermal time', 'dg = max(0, min(T, Topt + 6) − Tbase); the stage of development is the sum of dg over the thermal time of flowering and of maturity.'],
-    ['Weather of the day', 'FAO-56 reference evapotranspiration (Penman-Monteith) from temperature, radiation, wind and vapour pressure of the project climate (Allen et al., 1998).'],
-    ['Light interception', 'fi = 1 − exp(−k LAI)  (Monsi and Saeki, 1953).'],
-    ['Biomass from light', 'dW = RUE · fT · PAR · fi  with the beta temperature function of Yin (Monteith, 1977).'],
-    ['Biomass from water', 'dW ≤ k / VPD × T  (Tanner and Sinclair, 1983); growth is the smaller of the two.'],
-    ['Soil water', 'van Genuchten retention and Mualem conductivity of the soil of the project; layers of 15 cm to 120 cm; Ritchie two-stage evaporation.'],
-    ['Root water uptake', 'S(z) = G(z) · (ψsoil(z) − ψroot), G = root length × fine roots × K(h) (Gardner, 1960; Feddes et al., 1978); ψroot is solved so that Σ S = demand.'],
-    ['Leaf water', 'ψleaf = ψroot − r · T / LAI  (van den Honert, 1948); leaf content from the pressure-volume curve ψ = π0 / RWC + P(RWC).'],
-    ['Stomata', 'g = 1 / (1 + exp(−b (ψleaf − ψ50)))  (Jarvis, 1976); transpiration demand × g.'],
-    ['Expansion', 'growth ∝ (P − Y) of the turgor at predawn (Lockhart, 1965), so area and height slow before photosynthesis does.'],
-    ['Canopy temperature', 'Tc − Ta = ra Rn / (ρ cp) · γ* / (Δ + γ*) − VPD / (Δ + γ*), γ* = γ (1 + rc / ra); CWSI = (dT − dTlow) / (dTup − dTlow)  (Jackson et al., 1981).'],
-    ['Carbon allocation', 'fr = clip[(fr0 + (frA − fr0) stage) × c × (1 + 0.9 ws), 0.03, 0.7], ws = 1 − T / Tp: the share to the roots rises when water is short (functional equilibrium: Brouwer, 1963; Davidson, 1969); the leaf share follows the stage; grain after flowering.'],
-    ['Root architecture', 'axes at the set angle with gravitropism, laterals of the first and second order at a density per cm, growth dl/dt = e0 · 2^((Ts − 20) / 10) · e/e0(Q) · fW (temperature, soil strength, soil water; after ArchiSimple: Pages et al., 2014).'],
-    ['Soil strength', 'bulk density from texture and tillage, settling with the consolidation rate of V3; resistance Q = 0.5 exp(4.5 (BD − 1.3)) (1 + (1 − S)); elongation 1 / (1 + (Q / 2.5)^3).'],
-    ['Project crop', 'height, basal crop coefficient Kcb = Kc mid − 0.05 and rooting depth are taken from the crop library of the Properties panel (FAO-56); the archetype of the model (maize, sorghum, wheat or bean) is the nearest in kind; sowing day = planting day of the project.'],
-    ['Project irrigation', 'the sensor layer at the sensor depth is read every day; if its suction h ≥ the trigger and the interval since the last event has passed, the deficit Σ (θfc − θ) of the root zone is refilled (at most the dose of the method), applied at the surface or around the drip depth; gross water = net / efficiency (overhead 0.75, surface 0.60, drip 0.90). A drip line waters only when its layer is 12 % depleted.'],
-    ['Mulch', 'potential soil evaporation Ep × vapour-flux factor; the first C mm of each rain (interception capacity of the mulch) never reach the soil.'],
-    ['Nitrogen', 'RUE × fN, fN = yield(N rate) / yield(100 kg N per ha) of the SWAFL Daisy runs of the soil of the project (E13).'],
-    ['Salt', 'root-zone solution C: V dC = I ECw + 0.05 P − D C (V = twice the plant-available water of the column), ECe = C / 2; growth × (1 − s/100 (ECe − ECth)) (Maas and Hoffman, 1977); the soil potential gets the osmotic term −0.036 ECe MPa.'],
-    ['Against the SWAFL data', 'relative yield, transpiration share and the effect of the mulch on soil evaporation of the plant are compared with the Daisy runs of the soil and controls (E2, E7, E13, E14); the fit searches the radiation use and water use coefficients that minimise Σ ((model − Daisy) / tolerance)².'],
-    ['Genotype call', 'for each genotype of the library: d = mean ((trait model − trait observed) / spread)² over five traits and the days; weight p ∝ exp(−(d − dmin) / (0.03 + 0.25 dmin)).'],
-    ['Traits read out', 'projected shoot area, convex hull, solidity = area / hull, senescence index, relative water content, canopy temperature depression, root depth and length, as defined in the books on plant phenotyping; tolerance indices DSI = (1 − Ys/Yp) / (1 − mean Ys / mean Yp), STI = Ys Yp / (mean Yp)² (Fischer and Maurer, 1978; Fernandez, 1992).'],
-    ['Root day', 'D95 is the depth z where the cumulative root length reaches 95 % of the total; root growth of the day dL = new root length; root to shoot ratio = Wroot / Wshoot; the profile of the day is the root length density L(z) / (A Δz) of every layer.'],
-    ['Weather of the outlook', 'day k of the season has the date start + k; days up to the date of the toolbar take the recorded P, ET0 and T; later days take the forecast rows when they exist; the other days take an analogue year of the weather record (P, ET0 of that year, T of the mean year); without a record the model weather is used with 0.4, 1 and 1.6 times the rain.'],
-    ['Analogue years', 'for each year i of the record, S_i = sum of the rain of that year over the days that have no forecast; the dry future is the year with the smallest S_i, the wet future the largest, the typical future the median of the years.'],
-    ['Root zone water and drought risk', 'a = Σ f_i θ_i / Σ f_i over the layers the roots reached (f_i the part of layer i above the root depth), Ks = a / (1 − p) (FAO-56 depletion fraction p, 0.55 or 0.45 for bean), stress day when a < 1 − p; drought risk by the grain of the rainfed plant divided by the grain of the irrigated plant of the same weather: low ≥ 0.90, moderate ≥ 0.75, high ≥ 0.50, severe below.']
-  ];
-  function drawEq(y) {
-    const w = W - 32, cx = 16, y0 = y; frameH(cx, y, w, 'Equations of the layer', 'what is computed, in the order of the day'); y += 30;
-    EQ.forEach((e, i) => { T('P.' + (i + 1) + '  ' + e[0], cx + 12, y + 8, { s: 9.5, b: true }); const n = note(e[1], cx + 190, y + 8, w - 206, { c: '#33414F' }); y += Math.max(1, n) * 12.5 + 4; });
-    y += 4; const n = note('Sources of the traits and methods: Lorence and Medina-Jimenez (eds), High-Throughput Plant Phenotyping, Methods in Molecular Biology 2539, Springer 2022; Panguluri and Kumar (eds), Phenotyping for Plant Breeding, Springer 2013. The values of the species and genotypes are typical defaults of this layer that you can change or calibrate; they are not data of an experiment.', cx + 12, y, w - 24); y += n * 12.5 + 8;
-    endFrame(cx, y0, y, w); return y + 10;
-  }
-  SECTIONS.push({ id: 'water', t: 'Water: demand, supply and where the roots take it', s: 'transpiration of the plant against the soil water of every layer', fn: drawWater }, { id: 'carbon', t: 'Carbon: assimilation, allocation, root and shoot growth', s: 'what the leaves make, where it goes, and how the roots answer', fn: drawCarbon }, { id: 'soil', t: 'Soil structure and tillage: what the root tips meet', s: 'bulk density and penetration resistance by depth, and the root length that results', fn: drawSoil }, { id: 'above', t: 'Roots from the plant above ground', s: 'twelve genotypes under the same drought', fn: drawAbove }, { id: 'traits', t: 'Quantified traits of the run', s: 'the readouts of a phenotyping experiment', fn: drawTraits }, { id: 'swafl', t: 'SWAFL data: the Daisy runs of the project against this plant', s: 'the 10,190 Daisy simulations of the repository', fn: drawSwafl }, { id: 'data', t: 'Your measurements: compare, calibrate and export', s: 'bring experimental data to the model', fn: drawData }, { id: 'eq', t: 'Equations of the layer', s: 'what is computed, in the order of the day', fn: drawEq });
+  SECTIONS.push({ id: 'water', t: 'Water: demand, supply and where the roots take it', s: 'transpiration of the plant against the soil water of every layer', fn: drawWater }, { id: 'carbon', t: 'Carbon: assimilation, allocation, root and shoot growth', s: 'what the leaves make, where it goes, and how the roots answer', fn: drawCarbon }, { id: 'soil', t: 'Soil structure and tillage: what the root tips meet', s: 'bulk density and penetration resistance by depth, and the root length that results', fn: drawSoil }, { id: 'above', t: 'Roots from the plant above ground', s: 'twelve genotypes under the same drought', fn: drawAbove }, { id: 'traits', t: 'Quantified traits of the run', s: 'the readouts of a phenotyping experiment', fn: drawTraits }, { id: 'swafl', t: 'SWAFL data: the Daisy runs of the project against this plant', s: 'the 10,190 Daisy simulations of the repository', fn: drawSwafl }, { id: 'data', t: 'Your measurements: compare, calibrate and export', s: 'bring experimental data to the model', fn: drawData });
 })();
 
 </script>
@@ -9006,6 +8980,113 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   // sections: the roots of the day after the twin view, the prediction after the genotype panel
   const it = BASE.findIndex(q => q.id === 'twin'); BASE.splice(it + 1, 0, { id: 'rootday', t: 'Roots day by day', s: 'the profile of the day and the roots through the season', fn: drawRootDay });
   const ia = SECTIONS.findIndex(q => q.id === 'above'); SECTIONS.splice(ia + 1, 0, { id: 'genome', t: 'Phenotype and genotype: prediction', s: 'each genotype of the library in this experiment, and the genotype called from the plant', fn: drawGenome });
+})();
+
+</script>
+<script>/* plus_phenoplants.js */
+/* SWAFL 1.1 layer P1 Deterministic phenotyping: life-like drawing of the shoot of the model plant.
+   The plant is drawn from the same numbers the model gives (leaf areas, leaf angles, height, senescence, leaf rolling, grain mass),
+   with shaded blades, a midrib and veins, leaf sheaths and nodes on the stem, and the ear, spike, panicle or pods of the species.
+   It is a rendering of the simulation, not a photograph. */
+'use strict';
+(function () {
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const hex = h => { if (h[0] === 'r') { const m = h.match(/[\d.]+/g); return [+m[0], +m[1], +m[2]]; } const n = parseInt(h.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
+  const rgb = a => 'rgb(' + Math.round(clamp(a[0], 0, 255)) + ',' + Math.round(clamp(a[1], 0, 255)) + ',' + Math.round(clamp(a[2], 0, 255)) + ')';
+  const mixc = (a, b, t) => { const x = hex(a), y = hex(b); return rgb([x[0] + (y[0] - x[0]) * t, x[1] + (y[1] - x[1]) * t, x[2] + (y[2] - x[2]) * t]); };
+  const lit = (a, k) => { const x = hex(a); return rgb(k >= 0 ? [x[0] + (255 - x[0]) * k, x[1] + (255 - x[1]) * k, x[2] + (255 - x[2]) * k] : [x[0] * (1 + k), x[1] * (1 + k), x[2] * (1 + k)]); };
+  const GREEN = { maize: '#3E8A2C', sorghum: '#4B9034', wheat: '#6E9F3A', bean: '#3F8C3A' };
+  const bez = (t, a, c, b) => { const m = 1 - t; return m * m * a + 2 * m * t * c + t * t * b; };
+
+  // one blade: the centre line is a quadratic curve from the stem to the tip; the width is a function of the distance along it
+  function blade(c, sp, kind, L, geo, o) {
+    const { xc, ya, tipx, tipy, cxp, cyp, wmax } = geo, N0 = 18, pts = [];
+    for (let i = 0; i <= N0; i++) {
+      const t = i / N0, px = bez(t, xc, cxp, tipx), py = bez(t, ya, cyp, tipy); let w;
+      if (kind === 'bean') w = wmax * 1.7 * Math.pow(Math.sin(Math.PI * clamp(t, 0.02, 1)), 0.62) * (t < 0.3 ? 0.35 : 1);
+      else { w = wmax * Math.pow(Math.sin(Math.PI * Math.pow(Math.max(t, 0.015), 0.5)), 0.9) * (1 - 0.35 * t); if (kind === 'maize') w *= 1 + 0.07 * Math.sin(t * 26 + L.j * 1.7) * t; }
+      pts.push([px, py, w]);
+    }
+    // normals of the centre line, so that the width is taken across the blade, not up the page
+    const nrm = pts.map((p, i) => { const a = pts[Math.max(0, i - 1)], b = pts[Math.min(N0, i + 1)], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1; return [-dy / l, dx / l]; });
+    const edge = (sg) => pts.map((p, i) => [p[0] + sg * nrm[i][0] * p[2], p[1] + sg * nrm[i][1] * p[2]]);
+    const e1 = edge(1), e2 = edge(-1);
+    const g = c.createLinearGradient(xc, ya, tipx, tipy), base = o.leaf, gf = clamp(L.gf, 0, 1);
+    if (o.flat) { c.fillStyle = o.flat; } else {
+      g.addColorStop(0, lit(base, -0.30)); g.addColorStop(Math.min(0.45, gf * 0.5), base); g.addColorStop(Math.max(0.05, gf * 0.92), lit(base, 0.14));
+      if (gf < 0.98) { g.addColorStop(Math.min(0.97, gf), '#C9BA4C'); g.addColorStop(1, '#8A6A34'); }
+      c.fillStyle = g;
+    }
+    if (o.shadow) { c.shadowColor = 'rgba(25,45,15,0.35)'; c.shadowBlur = 3; c.shadowOffsetX = 1.2; c.shadowOffsetY = 1.8; }
+    c.beginPath(); e1.forEach((q, i) => { i ? c.lineTo(q[0], q[1]) : c.moveTo(q[0], q[1]); }); for (let i = N0; i >= 0; i--) c.lineTo(e2[i][0], e2[i][1]); c.closePath(); c.fill();
+    c.shadowColor = 'transparent'; c.shadowBlur = 0; c.shadowOffsetX = 0; c.shadowOffsetY = 0;
+    if (o.flat) return;
+    // the half of the blade on the far side of the midrib is lighter (light comes from the upper left)
+    c.fillStyle = 'rgba(255,255,255,0.10)'; c.beginPath(); pts.forEach((p, i) => { i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1]); }); for (let i = N0; i >= 0; i--) c.lineTo(e1[i][0], e1[i][1]); c.closePath(); c.fill();
+    c.strokeStyle = 'rgba(20,50,15,0.38)'; c.lineWidth = 0.6; c.beginPath(); e1.forEach((q, i) => { i ? c.lineTo(q[0], q[1]) : c.moveTo(q[0], q[1]); }); c.stroke(); c.beginPath(); e2.forEach((q, i) => { i ? c.lineTo(q[0], q[1]) : c.moveTo(q[0], q[1]); }); c.stroke();
+    // midrib and veins
+    c.strokeStyle = mixc(base, '#F3F7D8', 0.55); c.lineWidth = Math.max(0.6, wmax * 0.16); c.beginPath(); for (let i = 0; i <= N0 - 2; i++) { const p = pts[i]; i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1]); } c.stroke();
+    if (wmax > 2.2) { c.strokeStyle = 'rgba(25,60,20,0.22)'; c.lineWidth = 0.5; for (const f of [-0.55, 0.55]) { c.beginPath(); for (let i = 1; i <= N0 - 3; i++) { const p = pts[i], q = [p[0] + f * nrm[i][0] * p[2], p[1] + f * nrm[i][1] * p[2]]; i > 1 ? c.lineTo(q[0], q[1]) : c.moveTo(q[0], q[1]); } c.stroke(); } }
+  }
+  // bean: a petiole and three leaflets
+  function trifoliate(c, L, geo, o) {
+    const { xc, ya, tipx, tipy, cxp, cyp, wmax } = geo, jx = bez(0.5, xc, cxp, tipx), jy = bez(0.5, ya, cyp, tipy);
+    c.strokeStyle = mixc(o.leaf, '#E8F0B8', 0.25); c.lineWidth = 1.1; c.beginPath(); c.moveTo(xc, ya); c.quadraticCurveTo(cxp, cyp, jx, jy); c.stroke();
+    const ang = Math.atan2(tipy - jy, tipx - jx), len = Math.hypot(tipx - jx, tipy - jy) * 1.05 + 4, wd = Math.max(2.5, wmax * 1.5);
+    [[0, 1, 1], [-0.85, 0.78, 0.9], [0.85, 0.78, 0.9]].forEach(q => {
+      c.save(); c.translate(jx, jy); c.rotate(ang + q[0]); const ln = len * q[1], w2 = wd * q[2];
+      const g = c.createLinearGradient(0, 0, ln, 0), gf = clamp(L.gf, 0, 1); if (o.flat) c.fillStyle = o.flat; else { g.addColorStop(0, lit(o.leaf, -0.28)); g.addColorStop(Math.max(0.1, gf * 0.9), lit(o.leaf, 0.1)); if (gf < 0.98) { g.addColorStop(Math.min(0.97, gf), '#C9BA4C'); g.addColorStop(1, '#8A6A34'); } c.fillStyle = g; }
+      if (o.shadow) { c.shadowColor = 'rgba(25,45,15,0.35)'; c.shadowBlur = 3; c.shadowOffsetX = 1; c.shadowOffsetY = 1.6; }
+      c.beginPath(); c.moveTo(0, 0); c.bezierCurveTo(ln * 0.2, -w2 * 1.1, ln * 0.75, -w2 * 0.95, ln, 0); c.bezierCurveTo(ln * 0.75, w2 * 0.95, ln * 0.2, w2 * 1.1, 0, 0); c.closePath(); c.fill(); c.shadowColor = 'transparent'; c.shadowBlur = 0; c.shadowOffsetX = 0; c.shadowOffsetY = 0;
+      if (!o.flat) { c.strokeStyle = mixc(o.leaf, '#F3F7D8', 0.5); c.lineWidth = 0.7; c.beginPath(); c.moveTo(0, 0); c.lineTo(ln * 0.95, 0); c.stroke(); c.strokeStyle = 'rgba(25,60,20,0.25)'; c.lineWidth = 0.5; for (let k = 1; k <= 3; k++) { const x = ln * k / 4.2; c.beginPath(); c.moveTo(x, 0); c.lineTo(x + ln * 0.12, -w2 * 0.7 * (1 - k / 5)); c.moveTo(x, 0); c.lineTo(x + ln * 0.12, w2 * 0.7 * (1 - k / 5)); c.stroke(); } }
+      c.restore();
+    });
+  }
+  // the organ of the grain
+  function organ(c, kind, res, d, xc, yg, s, o) {
+    const sp = res.sp, Hs = res.H[d] * s, Wgm = Math.max(1, res.Wg[N_() - 1] || 1), gfrac = clamp(res.Wg[d] / Wgm, 0, 1), has = res.Wg[d] > 0.3, full = res.nLeaf[d] >= sp.nLeaf * 0.93;
+    if (kind === 'maize') {
+      if (full) { c.strokeStyle = '#D6C676'; c.lineWidth = Math.max(0.8, Hs * 0.004); for (let k = -3; k <= 3; k++) { c.beginPath(); c.moveTo(xc, yg - Hs); c.quadraticCurveTo(xc + k * Hs * 0.03, yg - Hs - Hs * 0.07, xc + k * Hs * 0.055, yg - Hs - Hs * 0.04 + Math.abs(k) * Hs * 0.012); c.stroke(); } }
+      if (has) { const ey = yg - Hs * 0.55, el = Hs * (0.07 + 0.11 * gfrac), ew = Hs * (0.022 + 0.03 * gfrac); c.save(); c.translate(xc + Hs * 0.02, ey); c.rotate(0.55); const g = c.createLinearGradient(-ew, 0, ew, 0); g.addColorStop(0, lit(mixc('#9DBF5A', '#D9C98A', gfrac), -0.12)); g.addColorStop(1, lit(mixc('#9DBF5A', '#D9C98A', gfrac), 0.15)); c.fillStyle = g; c.beginPath(); c.ellipse(0, -el / 2, ew, el / 2, 0, 0, 6.3); c.fill(); c.strokeStyle = 'rgba(80,60,20,0.35)'; c.lineWidth = 0.6; c.beginPath(); c.moveTo(0, -el); c.lineTo(0, 0); c.stroke(); c.restore(); }
+    } else if (kind === 'wheat' || kind === 'sorghum') {
+      if (!full) return; const hx = xc, hy = yg - Hs;
+      if (kind === 'wheat') { const sl = Hs * 0.17, sw = Math.max(1.6, Hs * 0.022), col = mixc('#8DB24A', '#D9B85A', gfrac); c.fillStyle = col; c.strokeStyle = 'rgba(90,70,20,0.45)'; c.lineWidth = 0.5; for (let k = 0; k < 9; k++) { const yy = hy - sl * (k / 8.5), side = k % 2 ? 1 : -1; c.beginPath(); c.ellipse(hx + side * sw * 0.45, yy, sw * 0.5, sl / 17, side * 0.3, 0, 6.3); c.fill(); c.stroke(); c.strokeStyle = mixc('#A8C070', '#D8C070', gfrac); c.lineWidth = 0.5; c.beginPath(); c.moveTo(hx + side * sw * 0.7, yy); c.lineTo(hx + side * sw * 0.7 + side * sl * 0.12, yy - sl * 0.32); c.stroke(); c.strokeStyle = 'rgba(90,70,20,0.45)'; } }
+      else { const pl = Hs * 0.15, pw = Hs * 0.045, col = mixc('#7FA343', '#A4502D', gfrac); const g = c.createRadialGradient(hx - pw * 0.3, hy - pl * 0.6, 1, hx, hy - pl * 0.5, pl); g.addColorStop(0, lit(col, 0.2)); g.addColorStop(1, lit(col, -0.25)); c.fillStyle = g; c.beginPath(); c.ellipse(hx, hy - pl / 2, pw, pl / 2, 0, 0, 6.3); c.fill(); c.fillStyle = 'rgba(0,0,0,0.12)'; for (let k = 0; k < 26; k++) { const a = k * 2.399, r = Math.sqrt(k / 26); c.beginPath(); c.arc(hx + Math.cos(a) * pw * r * 0.85, hy - pl / 2 + Math.sin(a) * pl * 0.46 * r, Math.max(0.5, pw * 0.1), 0, 6.3); c.fill(); } }
+    } else if (kind === 'bean' && has) {
+      const col = mixc('#7DB64C', '#D7C58A', gfrac); for (let k = 0; k < 4; k++) { const hy = yg - Hs * (0.45 + 0.1 * k), side = k % 2 ? 1 : -1, pl = Hs * (0.08 + 0.12 * gfrac); c.save(); c.translate(xc, hy); c.rotate(side * (0.5 + 0.1 * k)); c.strokeStyle = lit(col, -0.2); c.lineWidth = Math.max(1.4, Hs * 0.014); c.lineCap = 'round'; c.beginPath(); c.moveTo(0, 0); c.quadraticCurveTo(side * pl * 0.1, pl * 0.5, side * pl * 0.05, pl); c.stroke(); c.strokeStyle = col; c.lineWidth = Math.max(0.8, Hs * 0.009); c.beginPath(); c.moveTo(0, 0); c.quadraticCurveTo(side * pl * 0.1, pl * 0.5, side * pl * 0.05, pl); c.stroke(); c.restore(); }
+    }
+  }
+  const N_ = () => 140;
+
+  // the whole shoot. opts: { shadow, flat }.  Returns the geometry of the leaves (as the model's own), for the caller.
+  function shoot(c, P, res, d, xc, yg, s, view, rot, leafColor) {
+    if (res.sp.name === 'Wheat') { [[-0.075, 0.8, 0.9], [0.08, 0.86, -0.7]].forEach(q => { c.save(); c.translate(xc + q[0] * res.H[d] * s, yg); c.scale(q[1], q[1]); c.translate(-xc, -yg); one(c, P, res, d, xc, yg, s, view, rot + q[2], leafColor); c.restore(); }); }
+    return one(c, P, res, d, xc, yg, s, view, rot, leafColor);
+  }
+  function one(c, P, res, d, xc, yg, s, view, rot, leafColor) {
+    const sp = res.sp, g = P.leaves(res, d, rot), H = res.H[d] * s, kind = res.sp.name === 'Common bean' ? 'bean' : res.sp.name === 'Wheat' ? 'wheat' : res.sp.name === 'Sorghum' ? 'sorghum' : 'maize';
+    const thermal = view === 'thermal', leaf0 = GREEN[kind], wilt = clamp((0.88 - res.RWC[d]) / 0.25, 0, 1), leaf = mixc(leaf0, '#9AA45A', wilt * 0.6), shadow = !thermal;
+    c.save(); c.lineCap = 'round'; c.lineJoin = 'round';
+    // a little shadow on the ground
+    if (!thermal) { const rg = c.createRadialGradient(xc, yg + 2, 1, xc, yg + 2, Math.max(8, H * 0.2)); rg.addColorStop(0, 'rgba(30,20,10,0.35)'); rg.addColorStop(1, 'rgba(30,20,10,0)'); c.fillStyle = rg; c.beginPath(); c.ellipse(xc, yg + 2, Math.max(8, H * 0.2), Math.max(2.5, H * 0.03), 0, 0, 6.3); c.fill(); }
+    // stem
+    const sw0 = Math.max(1.2, Math.min(kind === 'wheat' ? 2.2 : 4.2, H * (kind === 'wheat' ? 0.012 : 0.02))), sw1 = sw0 * 0.5;
+    const sg = c.createLinearGradient(xc - sw0, 0, xc + sw0, 0); const sc0 = thermal ? '#6A8A5A' : mixc(leaf, '#C8D88A', 0.25); sg.addColorStop(0, lit(sc0, -0.28)); sg.addColorStop(0.45, lit(sc0, 0.18)); sg.addColorStop(1, lit(sc0, -0.2));
+    c.fillStyle = thermal ? 'rgba(90,110,90,0.8)' : sg; c.beginPath(); c.moveTo(xc - sw0, yg); c.lineTo(xc - sw1, yg - H); c.lineTo(xc + sw1, yg - H); c.lineTo(xc + sw0, yg); c.closePath(); c.fill();
+    if (!thermal && H > 30) { c.strokeStyle = 'rgba(30,60,20,0.35)'; c.lineWidth = 0.7; const nn = Math.max(3, Math.round(sp.nLeaf * 0.4)); for (let k = 1; k <= nn; k++) { const t = k / (nn + 1), yy = yg - H * t, ww = sw0 + (sw1 - sw0) * t; c.beginPath(); c.moveTo(xc - ww, yy); c.lineTo(xc + ww, yy); c.stroke(); } }
+    const order = g.leaves.slice().sort((a, b) => Math.sin(a.az) - Math.sin(b.az));
+    order.forEach(L => {
+      const ya = yg - L.hgt * s, dx = L.reach * Math.cos(L.az) * s * (kind === 'maize' || kind === 'sorghum' ? 1.45 : 1), rise = L.len * Math.sin(L.elev) * s * 0.8, wmax = Math.max(1.3, L.len * sp.ar * s * 0.5 * L.wr);
+      const wiltDrop = wilt * L.len * s * 0.14, tipx = xc + dx, tipy = ya - rise * 0.55 + L.len * s * 0.18 * (1 - 0.5 * L.gf) + wiltDrop, cxp = xc + dx * 0.4, cyp = ya - rise;
+      const back = Math.sin(L.az) < 0, col = back ? lit(leaf, -0.14) : leaf, geo = { xc, ya, tipx, tipy, cxp, cyp, wmax };
+      if (kind !== 'bean' && !thermal) { const sh = Math.min(H * 0.06, 3 + L.len * s * 0.05); c.fillStyle = lit(col, -0.05); c.beginPath(); c.moveTo(xc - sw0 * 0.9, ya + 1); c.lineTo(xc - sw0 * 0.8, ya - sh); c.lineTo(xc + sw0 * 0.8, ya - sh); c.lineTo(xc + sw0 * 0.9, ya + 1); c.closePath(); c.fill(); }
+      const o = { leaf: col, shadow, flat: thermal ? leafColor(L, view, res, d) : null };
+      if (kind === 'bean') trifoliate(c, L, geo, o); else blade(c, sp, kind, L, geo, o);
+    });
+    if (!thermal) organ(c, kind, res, d, xc, yg, s, {});
+    c.restore(); return g;
+  }
+  window.PHREAL = { shoot };
 })();
 
 </script>
@@ -9127,7 +9208,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
     let R; try { R = compute(); } catch (e) { T('The outlook could not be computed: ' + e, cx + 12, y + 10, { s: 9.5, c: '#B3261E' }); console.error(e); endFrame(cx, y0, y + 24, w); return y + 34; }
     const S = R.S, A = R.A, ti = clamp(S.idx, 0, N - 1), when = fdate(R.D);
     const stTxt = S.state === 'before' ? 'The crop is not yet sown on this date; the whole season is a forecast.' : S.state === 'after' ? 'The season of this crop is over on this date; the whole season is a record.' : 'Day ' + S.idx + ' after emergence.';
-    T('Date of the toolbar: ' + when + ' ' + new Date(R.D).getUTCFullYear() + '. ' + stTxt, cx + 12, y + 8, { s: 9.5, b: true }); y += 22;
+    T('Date of the toolbar: ' + U.clockTxt() + '. ' + stTxt, cx + 12, y + 8, { s: 9.5, b: true }); y += 22;
     const srcTxt = !sources() ? 'Weather: the model weather of the project climate (no weather file or online weather is imported, so there are no recorded days and no forecast): ' + (S.idx + 1 > 0 ? Math.min(N, S.idx + 1) : 0) + ' days to the date, then the three futures with 0.4, 1 and 1.6 times the rain. Import a weather file or the online weather of the farm (Tools) to use the record and the forecast. Sown ' + dateOf(0) + '.' :
       'Weather: ' + A.src + '. Days of the season: ' + A.nObs + ' recorded' + (A.nFill ? ' (' + A.nFill + ' filled from a typical year)' : '') + ', ' + A.nFc + ' of forecast, ' + A.nScn + ' of the three futures' + (A.rank ? ' (years ' + A.rank.years[A.rank.dry] + ', ' + A.rank.years[A.rank.typ] + ' and ' + A.rank.years[A.rank.wet] + ' of the record: the driest, the median and the wettest rain of those days).' : '.') + ' Sown ' + dateOf(0) + '.';
     y += note(srcTxt, cx + 12, y, w - 24) * 12.5 + 4;
@@ -9177,6 +9258,104 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
 
   const ie = SECTIONS.findIndex(q => q.id === 'data'); SECTIONS.splice(ie < 0 ? SECTIONS.length : ie, 0, { id: 'outlook', t: 'Drought outlook from the date of the toolbar', s: 'the season to the date, then a dry, a typical and a wet future', fn: drawOutlook });
   U.outlook = { compute, toolbarDate, season };
+})();
+
+</script>
+<script>/* plus_phenotyping5.js */
+/* SWAFL 1.1 layer P1 Deterministic phenotyping (part 5): the season film.
+   Both plants and their roots at eight dates from sowing to maturity, with the time series of the plant below them, and a play button
+   that grows the plant from the first day to the last. Everything is read from the model run of the layer. */
+'use strict';
+(function () {
+  const U = window.PHUI; if (!U) return;
+  const { BASE, PH, P, K, chip, day, dateOf, R, N, NL, ZMAX, RN, RNc, scrub, seriesVals, regimeShade, drawRoots, drawShoot, leafColor } = U;
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v)), fmt = K.fmt, GRID = '#E6E2D6';
+  const note = (txt, x, y, w, o) => sidWrap(txt, x, y, w, Object.assign({ s: 9.5, c: MUTE }, o || {}), 12.5);
+  const endFrame = (x, y0, y, w) => { ctx.strokeStyle = '#B9B4A6'; ctx.lineWidth = 1; ctx.strokeRect(x + 0.5, y0 + 0.5, w - 1, y - y0); };
+  const STAGES = 8, SHH = 150, ROH = 74;
+  const ROWS = [
+    { t: 'Plant height', u: 'cm', f: r => r.H }, { t: 'Projected shoot area', u: 'cm²', f: r => r.PSA },
+    { t: 'Green leaf area index', u: 'm²/m²', f: r => r.LAIg }, { t: 'Root depth', u: 'cm', f: r => r.Rdepth },
+    { t: 'Leaf water content', u: '%', f: r => r.RWC, s: 100 }, { t: 'Soil water of the root zone', u: '%', f: r => Array.from(r.store, v => 100 * v / r.awcT) }
+  ];
+  function thumbs(res, tr, wid, view) {
+    const sp = P.SP[PH.sp], key = [PH.key, tr, view, Math.round(PH.rot / 0.26), Math.round(wid)].join('|'); PH.film = PH.film || {};
+    if (PH.film[tr] && PH.film[tr].key === key) return PH.film[tr].cv;
+    const cv = [], s = (SHH - 12) / (Math.max(R('ww').H[N - 1], R('dr').H[N - 1], 10) * 1.08);
+    for (let i = 0; i < STAGES; i++) {
+      const dd = Math.round(i * (N - 1) / (STAGES - 1)), el = document.createElement('canvas'); el.width = Math.ceil(wid); el.height = SHH + ROH; const c = el.getContext('2d');
+      const sk = c.createLinearGradient(0, 0, 0, SHH); sk.addColorStop(0, '#F3F6EE'); sk.addColorStop(1, '#E0E8D3'); c.fillStyle = view === 'thermal' ? '#F0F2F6' : sk; c.fillRect(0, 0, el.width, SHH);
+      const sg = c.createLinearGradient(0, SHH, 0, SHH + ROH); sg.addColorStop(0, '#5A4630'); sg.addColorStop(1, '#3B2E21'); c.fillStyle = sg; c.fillRect(0, SHH, el.width, ROH);
+      const xc = el.width / 2; drawShoot(res, dd, xc, SHH, s, view, PH.rot, c);
+      const CW = Math.min(el.width - 6, 70); drawRoots(res, dd, xc, SHH + 1, (CW / 2 - 2) / res.Rpot, (ROH - 4) / ZMAX, PH.rot, 'rgb', c);
+      c.strokeStyle = '#6B5B3E'; c.lineWidth = 1.5; c.beginPath(); c.moveTo(0, SHH + 0.5); c.lineTo(el.width, SHH + 0.5); c.stroke();
+      cv.push({ el, dd });
+    }
+    PH.film[tr] = { key, cv }; return cv;
+  }
+  function grid(rows, x, y, w, cols, gh) {
+    const gw = (w - (cols - 1) * 22) / cols, a = R('ww'), b = R('dr'), d = day();
+    rows.forEach((row, i) => {
+      const gx = x + (i % cols) * (gw + 22), gy = y + 18 + Math.floor(i / cols) * (gh + 34), va = seriesVals(row, a), vb = seriesVals(row, b);
+      let lo = Infinity, hi = -Infinity; [va, vb].forEach(q => q.forEach(v => { if (isFinite(v)) { lo = Math.min(lo, v); hi = Math.max(hi, v); } })); if (!isFinite(lo)) { lo = 0; hi = 1; } lo = Math.min(0, lo); hi = hi + (hi - lo) * 0.06 + 1e-9;
+      const X = k => gx + gw * k / (N - 1), Y = v => gy + gh - (v - lo) / (hi - lo) * gh;
+      regimeShade().forEach(s => { ctx.fillStyle = s[2]; ctx.globalAlpha = 0.5; ctx.fillRect(X(s[0]), gy, X(s[1]) - X(s[0]), gh); ctx.globalAlpha = 1; });
+      ctx.strokeStyle = GRID; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(gx, gy + gh + 0.5); ctx.lineTo(gx + gw, gy + gh + 0.5); ctx.moveTo(gx, gy + 0.5); ctx.lineTo(gx + gw, gy + 0.5); ctx.stroke();
+      [[va, '#1B1F23'], [vb, '#D93025']].forEach(([q, c]) => { ctx.strokeStyle = c; ctx.lineWidth = 1.8; ctx.beginPath(); for (let k = 0; k <= d; k++) { k ? ctx.lineTo(X(k), Y(q[k])) : ctx.moveTo(X(k), Y(q[k])); } ctx.stroke(); ctx.globalAlpha = 0.28; ctx.beginPath(); for (let k = d; k < N; k++) { k > d ? ctx.lineTo(X(k), Y(q[k])) : ctx.moveTo(X(k), Y(q[k])); } ctx.stroke(); ctx.globalAlpha = 1; ctx.fillStyle = c; ctx.beginPath(); ctx.arc(X(d), Y(q[d]), 3, 0, 7); ctx.fill(); });
+      ctx.strokeStyle = '#2E7DE8'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(X(d) + 0.5, gy); ctx.lineTo(X(d) + 0.5, gy + gh); ctx.stroke(); ctx.setLineDash([]);
+      const dp = hi - lo < 5 ? 2 : (hi - lo < 50 ? 1 : 0); T(row.t + ' (' + row.u + ')', gx, gy - 5, { s: 9, b: true }); T(fmt(va[d], dp) + ' / ' + fmt(vb[d], dp), gx + gw, gy - 5, { s: 9, b: true, a: 'right' });
+      T(fmt(hi, dp), gx - 3, gy + 8, { s: 7.5, c: MUTE, a: 'right' }); T(fmt(lo, dp), gx - 3, gy + gh, { s: 7.5, c: MUTE, a: 'right' });
+      T(dateOf(0), gx, gy + gh + 11, { s: 7.5, c: MUTE }); T(dateOf(N - 1), gx + gw, gy + gh + 11, { s: 7.5, c: MUTE, a: 'right' });
+      scrub(gx, gy, gw, gh, gx, gw);
+    });
+    return y + 18 + Math.ceil(rows.length / cols) * (gh + 34);
+  }
+  function drawFilm(y) {
+    const w = W - 32, cx = 16, y0 = y, d = day(), a = R('ww'), b = R('dr'); K.frame(cx, y, w, 24, 'Season film, from sowing to maturity', 'day ' + d + ' after emergence (' + dateOf(d) + ')'); y += 30;
+    if (!a || !b) return y + 10;
+    let xx = cx + 10;
+    xx += chip(xx, y, 'Start', false, () => { PH.anim.on = false; play.on = false; play.t = 0; }, 'back to the first day');
+    xx += chip(xx, y, PH.anim.on ? 'Pause' : (play.t >= 0.999 ? 'Play again' : 'Play the season'), PH.anim.on, () => { if (PH.anim.on) PH.anim.on = false; else { if (play.t >= 0.999) play.t = 0; PH.anim.on = true; PH.anim.t0 = performance.now(); play.on = false; } }, 'grow the plants from the first day to the last');
+    [['Slow', 28], ['Normal', 14], ['Fast', 6]].forEach(q => { xx += chip(xx, y, q[0], PH.anim.dur === q[1], () => { PH.anim.dur = q[1]; }, 'the whole season in ' + q[1] + ' seconds'); });
+    y += 30; const gap = 4, wid = (w - 20 - (STAGES - 1) * gap) / STAGES, view = PH.view === 'thermal' ? 'thermal' : 'rgb', near = Math.round(d / (N - 1) * (STAGES - 1));
+    ['ww', 'dr'].forEach(tr => {
+      const res = R(tr), col = tr === 'ww' ? '#1B1F23' : '#D93025'; ctx.fillStyle = col; ctx.fillRect(cx + 10, y, 4, 15); T(tr === 'ww' ? RNc() : 'Drought', cx + 20, y + 12, { s: 10.5, b: true, c: col });
+      T(tr === 'ww' ? (res.tr === 'pj' ? 'irrigated ' + fmt(res.totals.Ig) + ' mm' : res.tr === 'rf' ? 'rain only' : 'held wet') : 'water held at ' + PH.dr.sev + ' % of the plant-available water for ' + PH.dr.len + ' days from day ' + PH.dr.onset, cx + w - 10, y + 12, { s: 9, c: MUTE, a: 'right' });
+      y += 20; const cvs = thumbs(res, tr, wid, view);
+      cvs.forEach((q, i) => { const x0 = cx + 10 + i * (wid + gap); ctx.drawImage(q.el, x0, y); ctx.strokeStyle = i === near ? '#2E7DE8' : '#B9B4A6'; ctx.lineWidth = i === near ? 2 : 1; ctx.strokeRect(x0 + 0.5, y + 0.5, wid - 1, SHH + ROH - 1);
+        T('day ' + q.dd, x0 + 2, y + SHH + ROH + 11, { s: 8.5, b: i === near }); T(dateOf(q.dd), x0 + wid - 2, y + SHH + ROH + 11, { s: 8, c: MUTE, a: 'right' });
+        hot(x0, y, wid, SHH + ROH, () => { PH.anim.on = false; play.on = false; play.t = q.dd / (N - 1); }, 'go to day ' + q.dd + ' (' + dateOf(q.dd) + ')'); });
+      y += SHH + ROH + 22;
+    });
+    T('Time series of the same plants (black ' + RN() + ', red drought; the line is solid up to the day shown). Click or drag on any chart to move the day.', cx + 10, y + 4, { s: 9, c: MUTE }); y += 14;
+    y = grid(ROWS, cx + 36, y + 4, w - 52, 2, 56);
+    y += 6; endFrame(cx, y0, y, w); return y + 10;
+  }
+  const it = BASE.findIndex(q => q.id === 'twin'); BASE.splice(it + 1, 0, { id: 'film', t: 'Season film, from sowing to maturity', s: 'the plants and roots at eight dates, with the time series below', fn: drawFilm });
+})();
+
+</script>
+<script>/* phnav.js */
+/* SWAFL 1.1 layer P1 Deterministic phenotyping: a bar of buttons that stays at the top of the window and jumps to each section of the page. */
+'use strict';
+(function () {
+  const cv = document.getElementById('profileCanvas'), wrap0 = document.querySelector('.canvaswrap'); if (!cv || !wrap0) return;
+  const LAB = { ctl: 'Set up', twin: 'Plants', film: 'Season film', rootday: 'Roots by day', scans: 'Root scans', series: 'Traits', water: 'Water', carbon: 'Carbon', soil: 'Soil', above: 'Roots and shoot', genome: 'Genotype', traits: 'Trait table', swafl: 'SWAFL data', outlook: 'Outlook', data: 'My data' };
+  const nav = document.createElement('nav'); nav.id = 'phNav'; nav.style.display = 'none';
+  nav.innerHTML = '<style>#phNav{position:sticky;top:0;z-index:30;display:flex;gap:3px;overflow-x:auto;padding:4px 6px;margin:0 0 6px;background:#D4D0C8;border:1px solid #404040;border-top-color:#fff;border-left-color:#fff;scrollbar-width:thin}' +
+    '#phNav button{flex:0 0 auto;height:24px;padding:0 10px;background:#D4D0C8;color:#000;font:12px Tahoma,Arial,sans-serif;border:1px solid #404040;border-top-color:#fff;border-left-color:#fff;cursor:pointer;white-space:nowrap}' +
+    '#phNav button:hover{background:#E4E1DA}#phNav button.on{background:#0A246A;color:#fff}</style>';
+  { const pc0 = document.getElementById('proCenter'), w0 = pc0 && pc0.querySelector(':scope > .wrap'); if (w0) pc0.insertBefore(nav, w0); else wrap0.parentNode.insertBefore(nav, wrap0); }
+  const scroller = () => { let e = cv; while ((e = e.parentElement)) { const o = getComputedStyle(e).overflowY; if ((o === 'auto' || o === 'scroll') && e.scrollHeight > e.clientHeight + 4) return e; } return null; };
+  const posOf = id => { const y = window.PHUI && PHUI.PH.secY && PHUI.PH.secY[id]; if (y == null) return null; const r = cv.getBoundingClientRect(), sc = scroller(); return r.top + y * r.height / cv.height + (sc ? sc.scrollTop - sc.getBoundingClientRect().top : scrollY); };
+  const goTo = id => { const y = posOf(id); if (y == null) return; const sc = scroller(), off = nav.offsetHeight + 6; if (sc) sc.scrollTo({ top: Math.max(0, y - off), behavior: 'smooth' }); else scrollTo({ top: Math.max(0, y - off), behavior: 'smooth' }); };
+  let built = '';
+  function build(ids) { const k = ids.join(','); if (k === built) return; built = k; [...nav.querySelectorAll('button')].forEach(b => b.remove()); ids.forEach(id => { const b = document.createElement('button'); b.textContent = LAB[id] || id; b.dataset.k = id; b.onclick = () => goTo(id); nav.appendChild(b); }); }
+  setInterval(() => {
+    const vis = typeof currentScene !== 'undefined' && currentScene && currentScene.id === 'dph' && window.PHUI && PHUI.PH.ran && PHUI.PH.secY && Object.keys(PHUI.PH.secY).length > 0; nav.style.display = vis ? 'flex' : 'none'; if (!vis) return;
+    build(Object.keys(PHUI.PH.secY)); const sc = scroller(), cur = (sc ? sc.scrollTop : scrollY) + nav.offsetHeight + 30; let best = null;
+    Object.keys(PHUI.PH.secY).forEach(id => { const y = posOf(id); if (y != null && y <= cur) best = id; }); [...nav.querySelectorAll('button')].forEach(b => b.classList.toggle('on', b.dataset.k === best));
+  }, 350);
 })();
 
 </script>

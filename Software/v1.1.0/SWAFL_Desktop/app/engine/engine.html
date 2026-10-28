@@ -4989,8 +4989,11 @@ function hotAt(p) { for (let i = hotspots.length - 1; i >= 0; i--) { const q = h
 function hotDown(p) { const q = hotAt(p); if (q) { q.fn(p); return true; } return false; }
 function hotMove(p) { hotUi.x = p.x; hotUi.y = p.y; hotUi.hover = hotAt(p); if (hotUi.hover) canvas.style.cursor = 'pointer'; }
 function drawHotTip() {
-  const q = hotUi.hover; if (!q || !q.tip || hotUi.x < 0) return; ctx.font = 'bold 10px sans-serif'; const w = ctx.measureText(q.tip).width + 10;
-  pill(q.tip, clampN(hotUi.x + 12, 4, W - w - 4), clampN(hotUi.y + 26, 16, H - 8), { s: 10, b: true, bg: 'rgba(255,252,225,0.98)', stroke: '#1B1F23' });
+  const q = hotUi.hover; if (!q || !q.tip || hotUi.x < 0) return; ctx.font = 'bold 10px sans-serif';
+  // a long tip is cut into lines that fit the width of the window, so that none of it falls off the edge
+  const maxW = Math.min(W - 24, 360), words = String(q.tip).split(' '), lines = []; let cur = ''; words.forEach(wd => { const t = cur ? cur + ' ' + wd : wd; if (cur && ctx.measureText(t).width + 16 > maxW) { lines.push(cur); cur = wd; } else cur = t; }); if (cur) lines.push(cur);
+  const w = Math.max(...lines.map(l => ctx.measureText(l).width)) + 16, x0 = clampN(hotUi.x + 12, 4, W - w - 8);
+  lines.forEach((l, i) => pill(l, x0, clampN(hotUi.y + 26, 16, H - 8 - lines.length * 18) + i * 17, { s: 10, b: true, bg: 'rgba(255,252,225,0.98)', stroke: '#1B1F23' }));
 }
 function applyState(o) {
   Object.assign(state, o); sliders.tc.value = state.tcIdx; sliders.vff.value = state.vffIdx; sliders.cap.value = state.capIdx; sliders.rain.value = state.rainIdx;
@@ -7066,14 +7069,17 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
 <script src="plus_core.js?v=20261027d"></script>
 <script src="plus_layers.js?v=20261029b"></script>
 <script src="plus_daisy.js?v=20261029d"></script>
-<script src="plus_phenomodel.js?v=20261030p"></script>
-<script src="plus_phenotyping.js?v=20261030p"></script>
-<script src="plus_phenotyping2.js?v=20261030p"></script>
-<script src="plus_phenotyping3.js?v=20261030p"></script>
-<script src="plus_phenotyping4.js?v=20261030p"></script>
+<script src="plus_phenomodel.js?v=20261030v"></script>
+<script src="plus_phenotyping.js?v=20261030v"></script>
+<script src="plus_phenotyping2.js?v=20261030v"></script>
+<script src="plus_phenotyping3.js?v=20261030v"></script>
+<script src="plus_phenoplants.js?v=20261030v"></script>
+<script src="plus_phenotyping4.js?v=20261030v"></script>
+<script src="plus_phenotyping5.js?v=20261030v"></script>
+<script src="phnav.js?v=20261030v"></script>
 <script src="inputs.js?v=20261027d"></script>
 <script src="weather.js?v=20261027d"></script>
-<script src="runbar.js?v=20261030p"></script>
+<script src="runbar.js?v=20261030v"></script>
 <link rel="stylesheet" href="classic.css">
 </body>
 </html>
