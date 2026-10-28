@@ -107,7 +107,7 @@ docs/USER_GUIDE.md                   how to use SWAFL
 docs/manual_v1.1.0/                  manual of version 1.1.0 (SWAFL_Manual_v1.1.0.pdf, 1028 pages)
 ```
 
-See [docs/USER_GUIDE.md](docs/USER_GUIDE.md) for the step-by-step guide and [docs/manual_v1.1.0](docs/manual_v1.1.0/README.md) for the manual of version 1.1.0 (one PDF of 1028 pages, in the chapters of the 1.0 manual with every screenshot taken again from version 1.1.0 and the new chapters added). Author: Naziru Halilu. MIT licence.
+The program zip does not contain the manual PDF (42 MB); download it from the link at the top and put it in a folder called `Manual` next to the program, and F1 opens it from there. Without it, F1 opens the copy on GitHub. See [docs/USER_GUIDE.md](docs/USER_GUIDE.md) for the step-by-step guide and [docs/manual_v1.1.0](docs/manual_v1.1.0/README.md) for the manual of version 1.1.0 (one PDF of 1028 pages, in the chapters of the 1.0 manual with every screenshot taken again from version 1.1.0 and the new chapters added). Author: Naziru Halilu. MIT licence.
 
 ## Troubleshooting
 

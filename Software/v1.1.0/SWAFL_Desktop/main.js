@@ -86,7 +86,7 @@ ipcMain.handle('version', () => app.getVersion());
 // F1: the manual of this version , shipped with the program or, when run from the source, in docs/manual_v1.1.0
 const MAN11 = 'SWAFL_Manual_v1.1.0.pdf';
 ipcMain.handle('open-manual', async () => {
-  const cands = [path.join(process.resourcesPath || '', MAN11), path.join(__dirname, 'docs', 'manual_v1.1.0', MAN11), path.join(process.resourcesPath || '', 'SWAFL_Manual.pdf'), path.join(__dirname, 'docs', 'SWAFL_Manual.pdf')];
+  const exeDir = path.dirname(process.execPath || ''), cands = [path.join(process.resourcesPath || '', MAN11), path.join(__dirname, 'Manual', MAN11), path.join(__dirname, '..', 'Manual', MAN11), path.join(__dirname, MAN11), path.join(exeDir, 'Manual', MAN11), path.join(exeDir, MAN11), path.join(__dirname, 'docs', 'manual_v1.1.0', MAN11), path.join(process.resourcesPath || '', 'SWAFL_Manual.pdf'), path.join(__dirname, 'docs', 'SWAFL_Manual.pdf')];
   const f = cands.find(p => { try { return fs.existsSync(p); } catch (e) { return false; } });
   if (f) { const err = await shell.openPath(f); return !err; }
   shell.openExternal('https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/blob/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/' + MAN11); return true;
