@@ -23,11 +23,18 @@ const DaisyFig = (() => {
   }
   // gaseous nitrogen losses: denitrification (the column of Daisy 7 is called Denitrification) and the N2O of nitrification
   const gasN = d => (col(d, 'Denitrification') ? ['Denitrification'] : ['NO3-Denitrification', 'N2O-Denitrification']).concat(['N2O-Nitrification']);
+  // the efficiency indices: yield and irrigation in mm, nitrogen in kg N/ha, 1 mm = 10 m3/ha
+  function indices(runs) {
+    const S = runs.map(stats), ref = S.find(s => isFinite(s.yield) && !(s.irr > 1));
+    return runs.map((r, i) => { const s = S[i], inp = (s.rain || 0) + (s.irr || 0);
+      return { IE: s.irr > 5 ? s.yield * 1000 / (s.irr * 10) : NaN, IWUE: ref && s !== ref && s.irr > 5 ? (s.yield - ref.yield) * 1000 / (s.irr * 10) : NaN, DPF: inp > 0 && isFinite(s.perc) ? 100 * s.perc / inp : NaN, PFPn: s.fert > 1 ? s.yield * 1000 / s.fert : NaN, NLF: s.fert > 1 && isFinite(s.leach) ? 100 * s.leach / s.fert : NaN }; });
+  }
+  const INDEX = [['IE', 'Irrigation efficiency: yield per irrigation applied', 'kg m-3'], ['IWUE', 'Irrigation water use efficiency: yield gain over rainfed per irrigation', 'kg m-3'], ['DPF', 'Deep percolation fraction: drainage below 1 m per (irrigation + rain)', '%'], ['PFPn', 'Nitrogen efficiency (PFPn): yield per nitrogen applied', 'kg DM per kg N'], ['NLF', 'Nitrogen leaching fraction: nitrate leached below 1 m per nitrogen applied', '%']];
   const f1 = (v, d) => isFinite(v) ? (+v).toFixed(d == null ? 1 : d) : '-';
   function summaryTable(runs, tracer) {
-    const S = runs.map(r => ({ r, s: stats(r) })), row = (lab, fn, d) => '<tr><td>' + lab + '</td>' + S.map(x => '<td>' + f1(fn(x.s), d) + '</td>').join('') + '</tr>';
+    const IX = indices(runs), S = runs.map((r, i) => ({ r, s: Object.assign(stats(r), IX[i]) })), row = (lab, fn, d) => '<tr><td>' + lab + '</td>' + S.map(x => '<td>' + f1(fn(x.s), d) + '</td>').join('') + '</tr>';
     return '<table class="dzt"><tr><th>Mean per season</th>' + S.map(x => '<th>' + x.r.label + '</th>').join('') + '</tr>' + row('Grain / storage organ yield (Mg DM/ha)', s => s.yield, 2) + row('Water-stress days at harvest (d)', s => s.wstress, 1) + row('Nitrogen-stress days at harvest (d)', s => s.nstress, 1) + row('Rain (mm)', s => s.rain, 0) + row('Irrigation (mm)', s => s.irr, 0) + row('Actual evapotranspiration (mm)', s => s.aet, 0) + row('Percolation below 100 cm (mm)', s => s.perc, 0) +
-      row('Nitrogen fertiliser (kg N/ha)', s => s.fert, 0) + row('Crop nitrogen uptake (kg N/ha)', s => s.upt, 0) + row('Nitrate leached below 100 cm (kg N/ha)', s => s.leach, 1) + row('Gaseous N loss: denitrification and N2O (kg N/ha)', s => s.den, 1) + (tracer && S.some(x => isFinite(x.s.tSpray)) ? row('Chemical sprayed (g/ha)', s => s.tSpray, 0) + row('Chemical leached below 200 cm (g/ha)', s => s.tLeach, 2) : '') + '</table>';
+      row('Nitrogen fertiliser (kg N/ha)', s => s.fert, 0) + row('Crop nitrogen uptake (kg N/ha)', s => s.upt, 0) + row('Nitrate leached below 100 cm (kg N/ha)', s => s.leach, 1) + row('Gaseous N loss: denitrification and N2O (kg N/ha)', s => s.den, 1) + INDEX.filter(q => IX.some(v => isFinite(v[q[0]]))).map(q => row(q[1].split(':')[0] + ' (' + q[2] + ')', s => s[q[0]], 2)).join('') + (tracer && S.some(x => isFinite(x.s.tSpray)) ? row('Chemical sprayed (g/ha)', s => s.tSpray, 0) + row('Chemical leached below 200 cm (g/ha)', s => s.tLeach, 2) : '') + '</table>';
   }
 
   // grouped and stacked bars: drawn by the plotting engine (daisyplot.js)
@@ -43,7 +50,7 @@ const DaisyFig = (() => {
   function lib(runs, sc) {
     const F = [], one = i => runs[i] || runs[0];
     const single = (id, title, keys, note, draw, n) => F.push({ id, title, keys, note, n: typeof n === 'function' ? n(one(0)) : (n || 1), single: true, draw });
-    const multi = (id, title, keys, note, draw, n) => F.push({ id, title, keys, note, n: n || 1, single: false, draw });
+    const multi = (id, title, keys, note, draw, n) => F.push({ id, title, keys, note, n: typeof n === 'function' ? n() : (n || 1), single: false, draw });
     const label = r => r.label || r.id;
     single('yield', 'Yield of each crop, season by season', ['Annual-Harvest'], 'Storage-organ dry matter at harvest (grain, rape seed), coloured by crop; below, the storage organ against the stem, harvest by harvest (Annual-Harvest.dlf).', (cvs, run) => {
       const d = run.logs['Annual-Harvest'], s = col(d, 'sorg_DM') || [], st = col(d, 'stem_DM'), cr = (d.str && d.str.crop) || [], xs = [], vals = [], stem = [];
@@ -87,6 +94,8 @@ const DaisyFig = (() => {
       const P = runs.map(r => ({ r, s: stats(r) })).filter(p => isFinite(p.s.fert)).sort((a, b) => a.s.fert - b.s.fert); const x = P.map(p => p.s.fert);
       U().line(cvs[0], [{ name: 'Yield', x, y: P.map(p => p.s.yield), pts: true, line: true, color: '#009E73', r: 4 }], { title: 'Yield against the nitrogen applied', xt: 'Nitrogen applied (kg N ha-1 per season)', yt: 'Dry matter (Mg ha-1)', h: 260, zero: true, noLegend: true });
       U().line(cvs[1], [{ name: 'Nitrate leached', x, y: P.map(p => p.s.leach), pts: true, line: true, color: '#0072B2', r: 4 }, { name: 'Denitrification', x, y: P.map(p => p.s.den), pts: true, line: true, color: '#D55E00', r: 4 }], { title: 'Losses against the nitrogen applied', xt: 'Nitrogen applied (kg N ha-1 per season)', yt: 'Nitrogen (kg N ha-1)', h: 280, zero: true }); }, 2);
+    multi('indices', 'Efficiency indices: runs compared', ['Annual-FWater'], 'Irrigation efficiency and irrigation water use efficiency (kg of yield per m3 of irrigation water), the deep percolation fraction, the nitrogen efficiency PFPn (kg DM per kg N applied) and the nitrate leaching fraction. An index is shown only when the runs have what it needs (irrigation, a rainfed run, fertiliser).', cvs => {
+      const IX = indices(runs), act = INDEX.filter(q => IX.some(v => isFinite(v[q[0]]))); act.forEach((q, k) => { if (cvs[k]) groupBars(cvs[k], runs.map(label), [{ name: q[1], vals: IX.map(v => v[q[0]]), color: window.DaisyPlot.OKI[k % 8] }], { title: q[1], yt: q[2], panel: 'abcdef'[k], h: 250 }); }); }, () => Math.max(1, INDEX.filter(q => indices(runs).some(v => isFinite(v[q[0]]))).length));
     multi('cmpTracer', 'Chemical fate: runs compared', ['Annual-Tracer'], 'Mean per season.', cvs => {
       const S = runs.map(stats), cats = ['Sprayed', 'Leached below 200 cm', 'Degraded', 'Plant uptake']; groupBars(cvs[0], cats, runs.map((r, i) => ({ name: label(r), vals: [S[i].tSpray, S[i].tLeach, S[i].tDec, S[i].tUpt] })), { title: 'Chemical fate', yt: 'Chemical (g ha-1 per season)', legend: true, h: 320 }); });
     multi('cmpYieldSeries', 'Yield through the years: runs compared', ['Annual-Harvest'], 'Storage-organ dry matter at each harvest.', cvs => {

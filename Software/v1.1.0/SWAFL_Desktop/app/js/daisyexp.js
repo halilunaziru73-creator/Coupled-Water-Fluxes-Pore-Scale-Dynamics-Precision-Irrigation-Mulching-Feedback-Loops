@@ -106,7 +106,7 @@
     { id: 'perc', label: 'Percolation below 100 cm', unit: 'mm/season', good: -1 }, { id: 'leach', label: 'Nitrate leached below 100 cm', unit: 'kg N/ha/season', good: -1 }, { id: 'den', label: 'Denitrification', unit: 'kg N/ha/season', good: -1 },
     { id: 'IE', label: 'Irrigation efficiency', unit: 'kg grain per m3', good: 1 }, { id: 'rain', label: 'Rain', unit: 'mm/season', good: 0 },
     { id: 'wstress', label: 'Water-stress days at harvest', unit: 'days', good: -1 }, { id: 'nstress', label: 'Nitrogen-stress days at harvest', unit: 'days', good: -1 },
-    { id: 'IWUE', label: 'Irrigation water-use efficiency (yield gain over the rainfed reference per mm)', unit: 'kg DM per ha per mm', good: 1 }, { id: 'DPF', label: 'Deep-percolation fraction of rain + irrigation', unit: '%', good: -1 },
+    { id: 'IWUE', label: 'Irrigation water-use efficiency (yield gain over the rainfed reference per m3 of irrigation)', unit: 'kg per m3', good: 1 }, { id: 'DPF', label: 'Deep-percolation fraction of rain + irrigation', unit: '%', good: -1 },
     { id: 'PFPn', label: 'Partial factor productivity of nitrogen', unit: 'kg DM per kg N', good: 1 }, { id: 'NLF', label: 'Nitrate leached as a share of N applied', unit: '%', good: -1 }
   ];
   E.respOf = function (st) { const r = { yield: st.yield, irr: st.irr, aet: st.aet, perc: st.perc, leach: st.leach, den: st.den, rain: st.rain }; r.IE = st.irr > 5 ? st.yield * 1000 / (st.irr * 10) : NaN; r.wstress = st.wstress; r.nstress = st.nstress;
@@ -114,7 +114,7 @@
   /* the indices that need a rainfed run of the same soil and weather: the yield gain per mm of irrigation water */
   E.indices = function (rows) {
     const refs = rows.filter(x => x.reference && isFinite(x.r.yield)); if (!refs.length) return;
-    rows.forEach(x => { if (x.reference) return; const ref = refs.find(q => Object.keys(q.f).every(k => q.f[k] === x.f[k])) || refs[0], irr = x.r.irr; x.r.IWUE = irr > 5 ? (x.r.yield - ref.r.yield) * 1000 / irr : NaN; });
+    rows.forEach(x => { if (x.reference) return; const ref = refs.find(q => Object.keys(q.f).every(k => q.f[k] === x.f[k])) || refs[0], irr = x.r.irr; x.r.IWUE = irr > 5 ? (x.r.yield - ref.r.yield) * 1000 / (irr * 10) : NaN; });
   };
   // the table of the published runs, in the same shape
   E.ENS_FACTORS = { P: ['precip', 'Rain scale'], dT: ['temp', 'Temperature shift (C)'], Ep: ['ep', 'Soil evaporation factor'], trig: ['trig', 'Trigger suction (cm)'], z: ['z', 'Sensor depth (cm)'], amt_mm: ['mm', 'Water per irrigation (mm)'], vff: ['vff', 'Mulch vapour flux factor'], cap: ['cap', 'Mulch interception capacity (mm)'], Nrate: ['nrate', 'Nitrogen rate (kg N/ha)'], wstrat: ['wstrat', 'Water strategy'], root: ['root', 'Rooting depth (cm)'], soil: ['soil', 'Soil'] };

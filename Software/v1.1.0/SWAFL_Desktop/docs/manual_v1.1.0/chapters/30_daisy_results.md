@@ -998,3 +998,9 @@ Under the figures of a scenario, and under *One run in detail* of an experiment,
 
 A .dlf file is a text table: header lines (VERSION, LOGFILE, RUN, SIM...), a line of dashes, the column names, the units and then the numbers, separated by tabs. It opens in Excel or in any text editor, in R with the function read_dlf of the package daisyrVis, in Python with daisypy-io, and in SWAFL itself in the tab Files. The figures are drawn from these files only, so a figure can always be checked against its file.
 
+
+## The efficiency indices
+
+Every scenario that has what an index needs shows it in the summary table and in the figure "Efficiency indices". Irrigation efficiency (IE) is the yield divided by the irrigation applied, in kg of yield per m3 of water (1 mm is 10 m3 per ha). Irrigation water use efficiency (IWUE) is the yield of the irrigated run minus the yield of the rainfed run, divided by the irrigation applied, in kg per m3; it needs a rainfed run, which the experiments add for every combination of the other factors. The deep percolation fraction (DPF) is the drainage below 100 cm divided by the irrigation plus the rainfall, in percent. The nitrogen efficiency is the partial factor productivity of nitrogen (PFPn), the yield divided by the nitrogen applied, in kg DM per kg N. The nitrogen leaching fraction (NLF) is the nitrogen leached below 100 cm divided by the nitrogen applied, in percent. An index that cannot be computed, for example IE without irrigation, is left out and not shown as zero.
+
+Panel letters (a, b, c) mark the panels of the figures that have several.

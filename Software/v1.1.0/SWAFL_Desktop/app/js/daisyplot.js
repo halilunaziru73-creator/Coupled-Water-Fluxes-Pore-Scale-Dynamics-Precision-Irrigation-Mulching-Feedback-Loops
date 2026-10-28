@@ -27,8 +27,9 @@ window.DaisyPlot = (() => {
     const par = cv.parentNode, w = Math.max(360, (par ? par.clientWidth : 800) - 4), h = o.h || hDefault || 300, r = Math.max(1, window.devicePixelRatio || 1);
     cv.width = Math.round(w * r); cv.height = Math.round(h * r); cv.style.width = w + 'px'; cv.style.height = h + 'px';
     const g = cv.getContext('2d'); g.setTransform(r, 0, 0, r, 0, 0); g.fillStyle = '#fff'; g.fillRect(0, 0, w, h); g.textBaseline = 'alphabetic';
-    let top = 10; const title = o.title || cv.dataset.title || '';
-    if (title) { g.font = 'bold 14px ' + FONT; g.fillStyle = NAVY; g.textAlign = 'left'; g.fillText(title, 12, 22); top = 32; }
+    let top = 10; const title = o.title || cv.dataset.title || '', pl = o.panel || cv.dataset.panel || '', tx = pl ? 34 : 12;
+    if (pl) { g.font = 'bold 22px ' + FONT; g.fillStyle = '#111'; g.textAlign = 'left'; g.fillText(pl, 8, 26); top = 32; }
+    if (title) { g.font = 'bold 14px ' + FONT; g.fillStyle = NAVY; g.textAlign = 'left'; g.fillText(title, tx, 22); top = 32; }
     if (o.sub) { g.font = '11.5px ' + FONT; g.fillStyle = '#666'; g.fillText(o.sub, 12, top + 8); top += 16; }
     g.font = '12px ' + FONT; return { g, w, h, top, r };
   }

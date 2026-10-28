@@ -49,17 +49,17 @@
       question: 'How much water must be added, how much yield does it bring, and how much of it drains away?',
       opts: ['soil', 'trig', 'mm', 'precip', 'temp', 'start', 'stop'],
       variants: [{ id: 'rainfed', label: 'Rainfed', set: { irrig: '0' } }, { id: 'irrigated', label: 'Irrigated', set: { irrig: '1' } }],
-      figs: ['yield', 'water', 'dailyWater', 'theta', 'pf', 'crop', 'cmpYield', 'cmpWater'] },
+      figs: ['yield', 'water', 'dailyWater', 'theta', 'pf', 'crop', 'cmpYield', 'cmpWater', 'indices'] },
     { id: 'nitrogen', theme: 'Nitrogen', title: 'Nitrogen: how much fertiliser, how much leaching?',
       question: 'Where does the nitrogen go (crop, leaching, denitrification, soil) when the fertiliser rate changes, and what yield does each rate give?',
       opts: ['soil', 'irrig', 'precip', 'temp', 'start', 'stop'],
       variants: [{ id: 'n0', label: 'No fertiliser (control)', set: { nfac: 0 } }, { id: 'n50', label: 'Half the fertiliser', set: { nfac: 0.5 } }, { id: 'n100', label: 'Standard fertiliser', set: { nfac: 1 } }, { id: 'n130', label: '30 % more fertiliser', set: { nfac: 1.3 } }, { id: 'n150', label: '50 % more fertiliser', set: { nfac: 1.5 } }],
-      figs: ['yield', 'nbudget', 'no3', 'water', 'cmpYield', 'cmpN', 'nresp'] },
+      figs: ['yield', 'nbudget', 'no3', 'water', 'cmpYield', 'cmpN', 'indices', 'nresp'] },
     { id: 'climate', theme: 'Crop and climate', title: 'Climate: warmer, drier or wetter',
       question: 'How do yield, evapotranspiration and drainage respond to a changed climate?',
       opts: ['soil', 'irrig', 'start', 'stop'],
       variants: [{ id: 'now', label: 'Weather file as it is', set: { precip: 1, temp: 0 } }, { id: 'warm', label: 'Warmer by 2 C', set: { precip: 1, temp: 2 } }, { id: 'dry', label: 'Drier (rain x 0.7)', set: { precip: 0.7, temp: 0 } }, { id: 'warmdry', label: 'Warmer and drier', set: { precip: 0.7, temp: 2 } }, { id: 'wet', label: 'Wetter (rain x 1.3)', set: { precip: 1.3, temp: 0 } }],
-      figs: ['yield', 'water', 'dailyWater', 'crop', 'theta', 'cmpYield', 'cmpWater', 'cmpN'] },
+      figs: ['yield', 'water', 'dailyWater', 'crop', 'theta', 'cmpYield', 'cmpWater', 'cmpN', 'indices'] },
     { id: 'chemical', theme: 'Chemicals', title: 'A pesticide or tracer: sorption and degradation',
       question: 'Does the chemical leave the root zone, how much stays in the soil, and how much does sorption and degradation change that?',
       opts: ['soil', 'precip', 'temp', 'start', 'stop'],
@@ -69,7 +69,7 @@
       question: 'The same crops and weather on sand and on loam: water holding, drainage, yield and nitrate.',
       opts: ['irrig', 'trig', 'mm', 'nfac', 'precip', 'temp', 'start', 'stop'],
       variants: [{ id: 'sand', label: 'Sand', set: { soil: 'sand' } }, { id: 'loam', label: 'Loam', set: { soil: 'loam' } }],
-      figs: ['yield', 'water', 'dailyWater', 'theta', 'pf', 'no3', 'cmpYield', 'cmpWater', 'cmpN'] }
+      figs: ['yield', 'water', 'dailyWater', 'theta', 'pf', 'no3', 'cmpYield', 'cmpWater', 'cmpN', 'indices'] }
   ];
 
   // the lines of the Daisy set-up
