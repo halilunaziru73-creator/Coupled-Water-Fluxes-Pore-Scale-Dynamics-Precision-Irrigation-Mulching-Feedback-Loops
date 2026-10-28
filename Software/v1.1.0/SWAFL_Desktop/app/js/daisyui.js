@@ -6,7 +6,7 @@ const DaisyUI = (() => {
   const IO = window.DaisyIO, CA = window.DaisyCalc, esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const OKI = ['#0072B2', '#D55E00', '#009E73', '#CC79A7', '#E69F00', '#56B4E9', '#7a6f00', '#444444'];
   const SPEC = ['#2b83ba', '#5aa6b4', '#8fcfa6', '#c4e6a8', '#ffffbf', '#fee08b', '#fdae61', '#f46d43', '#d53e4f'];
-  const TABS = [['scen', 'Scenarios'], ['files', 'Files'], ['plot', 'Plot'], ['balance', 'Mass balance'], ['compare', 'Compare and test'], ['editor', 'Set-up editor'], ['library', 'Library'], ['richards', 'Soil column'], ['calib', 'Calibrate'], ['weather', 'Weather'], ['deni', 'Denitrification'], ['docs', 'Model and documentation']];
+  const TABS = [['scen', 'Scenarios'], ['exp', 'Experiments'], ['proc', 'Processes'], ['files', 'Files'], ['plot', 'Plot'], ['balance', 'Mass balance'], ['compare', 'Compare and test'], ['editor', 'Set-up editor'], ['library', 'Library'], ['richards', 'Soil column'], ['calib', 'Calibrate'], ['weather', 'Weather'], ['deni', 'Denitrification'], ['docs', 'Model and documentation']];
   const S = { logs: {}, tab: 'files', lib: null, idx: null, rich: null, anim: null, cal: null, dai: '', kind: 'horizons', txt: {} };
   const $ = id => document.getElementById('dz' + id);
   const isDesk = () => !!(window.swafl && window.swafl.isDesktop);

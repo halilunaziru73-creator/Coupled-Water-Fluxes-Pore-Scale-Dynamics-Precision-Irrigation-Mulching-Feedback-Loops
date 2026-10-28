@@ -129,6 +129,8 @@ const MENUS = [
     { label: 'Optimise surface layout', icon: 'run', act: Act.optimise }, { label: 'Ready-made cases', sub: casesMenu }] },
   { label: 'Daisy', items: [
     { label: 'Choose a scenario (what do you want to find out?)...', icon: 'chart', act: () => DaisyUI.open('scen') },
+    { label: 'Describe an experiment in your own words (plan, batch, figures)...', icon: 'run', act: () => DaisyUI.open('exp') },
+    { label: 'Map of the Daisy processes (Fig. 1)...', icon: 'layers', act: () => DaisyUI.open('proc') },
     { label: 'Irrigation scenario...', icon: 'drop', act: () => DaisyUI.open('scen:irrigation') },
     { label: 'Nitrogen scenario...', icon: 'soil', act: () => DaisyUI.open('scen:nitrogen') },
     { label: 'Climate scenario...', icon: 'chart', act: () => DaisyUI.open('scen:climate') },

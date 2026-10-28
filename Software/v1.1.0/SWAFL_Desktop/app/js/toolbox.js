@@ -11,6 +11,8 @@ const Toolbox = (() => {
     { id: 't-case', name: 'Ready-made cases', icon: 'layers', tools: (E.metaData ? E.metaData.presets.filter(p => p[0] !== '') : []).map(p => [p[1].replace(/^Default: /, 'Default: '), 'field', () => Act.preset(p[0]), 'scenario case example preset']) },
     { id: 't-daisy', name: 'Daisy model', icon: 'soil', tools: [
       ['Choose a Daisy scenario and get the figures', 'chart', () => DaisyUI.open('scen'), 'daisy scenario figures irrigation nitrogen climate pesticide'],
+      ['Describe a Daisy experiment in your own words (AI planner, batch runs, figures)', 'run', () => DaisyUI.open('exp'), 'daisy experiment ai plan batch factorial text words E0 E16 sensitivity'],
+      ['Map of the Daisy processes (Fig. 1) with figures', 'layers', () => DaisyUI.open('proc'), 'daisy processes snow biopore drain heat ice organic matter carbon photosynthesis denitrification layers'],
       ['Daisy irrigation scenario', 'drop', () => DaisyUI.open('scen:irrigation'), 'daisy irrigation yield water'],
       ['Daisy nitrogen scenario', 'soil', () => DaisyUI.open('scen:nitrogen'), 'daisy nitrogen leaching fertiliser'],
       ['Daisy climate scenario', 'chart', () => DaisyUI.open('scen:climate'), 'daisy climate warming drought'],

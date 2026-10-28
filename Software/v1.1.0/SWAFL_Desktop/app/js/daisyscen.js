@@ -4,7 +4,11 @@
 (function (root) {
   'use strict';
   const S = {};
-  const SOILS = [['loam', 'Loam (ResFarm loam)'], ['sand', 'Sand (ResFarm sand)']];
+  const USDA = { sand: ['Sand', 92, 5, 3, 1.55], loamysand: ['Loamy sand', 82, 12, 6, 1.5], sandyloam: ['Sandy loam', 65, 25, 10, 1.45], loam: ['Loam', 40, 40, 20, 1.4], siltloam: ['Silt loam', 20, 65, 15, 1.35], sandyclayloam: ['Sandy clay loam', 60, 13, 27, 1.45], clayloam: ['Clay loam', 33, 34, 33, 1.35], siltyclayloam: ['Silty clay loam', 10, 56, 34, 1.3] };
+  S.USDA = USDA;   // class representative sand, silt and clay (%) of the USDA texture classes
+  const SOILS = [['loam', 'Loam (ResFarm loam, Daisy course)'], ['sand', 'Sand (ResFarm sand, Daisy course)']].concat(Object.keys(USDA).map(k => ['usda:' + k, USDA[k][0] + ' (USDA class, HYPRES)']));
+  S.STATIONS = [{ id: 'course', label: 'Taastrup, Denmark (Daisy course, 1965-2000)', first: 1965, last: 2000 }, { id: 'dk-taastrup', noWind: true, label: 'Taastrup, Denmark (Daisy sample, 1963-2007)', first: 1963, last: 2007 }, { id: 'dk-foulum', noWind: true, label: 'Foulum, Denmark (1990-2003)', first: 1990, last: 2003 }, { id: 'dk-jyndevad', label: 'Jyndevad, Denmark (1997-2004)', first: 1997, last: 2004 }, { id: 'it-bologna', noWind: true, label: 'Bologna, Italy (1994-2004)', first: 1994, last: 2004 }, { id: 'cz-valecov', label: 'Valecov, Czechia (1991-2004)', first: 1991, last: 2004 }, { id: 'pl-jadwisin', label: 'Jadwisin, Poland (1992-2005)', first: 1992, last: 2005 }, { id: 'sk-bratislava', label: 'Bratislava, Slovakia (1990-2005)', first: 1990, last: 2005 }];
+  S.station = id => S.STATIONS.find(x => x.id === id) || S.STATIONS[0];
   S.OPTIONS = {
     soil: { label: 'Soil', type: 'select', opts: SOILS },
     start: { label: 'First year', type: 'number', min: 1965, max: 1995, step: 1 },
@@ -15,10 +19,21 @@
     irrig: { label: 'Irrigation', type: 'select', opts: [['0', 'none (rainfed)'], ['1', 'tensiometer-triggered overhead']] },
     trig: { label: 'Irrigate when the potential at 20 cm drops below (cm)', type: 'number', min: -1000, max: -100, step: 25 },
     mm: { label: 'Water per irrigation (mm)', type: 'number', min: 5, max: 60, step: 5 },
+    station: { label: 'Weather of', type: 'select', opts: [] },
+    method: { label: 'Irrigation method', type: 'select', opts: [['overhead', 'overhead sprinkler'], ['surface', 'surface (flood or furrow)'], ['drip', 'drip, below the surface']] },
+    z: { label: 'Sensor depth (cm)', type: 'number', min: 5, max: 100, step: 5 },
+    hours: { label: 'Duration of one irrigation (hours)', type: 'number', min: 1, max: 48, step: 1 },
+    dfrom: { label: 'Drip from depth (cm)', type: 'number', min: 2, max: 60, step: 1 },
+    dto: { label: 'Drip to depth (cm)', type: 'number', min: 4, max: 80, step: 1 },
+    limit: { label: 'Water limit per crop season (mm, 0 = none)', type: 'number', min: 0, max: 1000, step: 25 },
+    w1: { label: 'Irrigation window opens (month-day)', type: 'text' },
+    w2: { label: 'Irrigation window closes (month-day)', type: 'text' },
+    root: { label: 'Maximum rooting depth (cm, 0 = soil default)', type: 'number', min: 0, max: 200, step: 5 },
     koc: { label: 'Sorption of the chemical, K_OC (L/kg)', type: 'number', min: 0, max: 5000, step: 10 },
     half: { label: 'Half-life of the chemical in soil (days, 0 = none)', type: 'number', min: 0, max: 2000, step: 5 }
   };
-  S.DEFAULTS = { soil: 'loam', start: 1980, stop: 2000, precip: 1, temp: 0, nfac: 1, irrig: '0', trig: -300, mm: 30, koc: 0, half: 0 };
+  S.OPTIONS.station.opts = S.STATIONS.map(x => [x.id, x.label]);
+  S.DEFAULTS = { soil: 'loam', station: 'course', start: 1980, stop: 2000, precip: 1, temp: 0, nfac: 1, irrig: '0', method: 'overhead', trig: -300, z: 20, mm: 30, hours: 3, dfrom: 10, dto: 20, limit: 0, w1: '04-01', w2: '10-01', root: 0, koc: 0, half: 0 };
 
   S.LIST = [
     { id: 'irrigation', theme: 'Water', title: 'Irrigation: does it pay off, and what does it cost the soil?',
@@ -51,7 +66,7 @@
   // the lines of the Daisy set-up
   S.defaultsFor = sc => Object.assign({}, S.DEFAULTS, (sc && sc.defaults) || {});
   S.num = (v, d) => { const x = parseFloat(v); return isFinite(x) ? x : d; };
-  S.norm = function (o) { const r = Object.assign({}, S.DEFAULTS, o || {}), lo = r.userWx ? r.userWx.first + 1 : 1965, hi = r.userWx ? r.userWx.last : 2000; r.start = Math.round(S.num(r.start, 1980)); r.stop = Math.round(S.num(r.stop, 2000)); if (r.stop < r.start + 2) r.stop = r.start + 2; if (r.stop > hi) r.stop = hi; if (r.start < lo) r.start = lo; if (r.stop < r.start + 1) r.start = Math.max(lo, r.stop - 2); r.irrig = String(r.irrig === true ? '1' : r.irrig === false ? '0' : r.irrig); return r; };
+  S.norm = function (o) { const r = Object.assign({}, S.DEFAULTS, o || {}), st0 = S.station(r.station), lo = r.userWx ? r.userWx.first + 1 : st0.first + 1, hi = r.userWx ? r.userWx.last : st0.last; r.start = Math.round(S.num(r.start, 1980)); r.stop = Math.round(S.num(r.stop, 2000)); if (r.start < lo) r.start = lo; if (r.stop > hi) r.stop = hi; if (r.stop < r.start + 2) r.start = Math.max(lo, r.stop - 2); if (r.stop < r.start + 2) r.stop = r.start + 2; if (r.stop < r.start + 1) r.start = Math.max(lo, r.stop - 2); r.irrig = String(r.irrig === true ? '1' : r.irrig === false ? '0' : r.irrig); return r; };
   // files: { 'ArableFarmRotation.dai', 'ArableFarmRotation_withirrigation.dai', 'ResFarm.dai', 'OutputLog.dai' } texts of the bundled common folder
   S.buildJob = function (scId, options, variantId, files) {
     const sc = S.LIST.find(x => x.id === scId) || {}, vr = (((options && options._variants) || sc.variants || []).find(v => v.id === variantId) || { set: {} }), o = S.norm(Object.assign({}, options, vr.set)), pre = (variantId || 'run') + '-';
@@ -59,13 +74,20 @@
     if (rot == null) throw new Error('the rotation file is missing');
     if (o.nfac !== 1) rot = rot.replace(/\(weight\s+(\d+(?:\.\d+)?)\s*\[kg N\/ha\]\)/g, (m, w) => '(weight ' + (+(parseFloat(w) * o.nfac).toFixed(1)) + ' [kg N/ha])');
     rot = rot.replace(/K_OC\s+[\d.]+\s*\[L\/kg\]/, 'K_OC ' + S.num(o.koc, 0) + ' [L/kg]').replace(/decompose_rate\s+[\d.eE+-]+\s*\[h\^-1\]/, 'decompose_rate ' + (S.num(o.half, 0) > 0 ? (Math.LN2 / (24 * S.num(o.half, 0))).toExponential(5) : '0') + ' [h^-1]');
-    if (o.irrig === '1') { const hrs = Math.max(1, Math.round(S.num(o.mm, 30) / 10)); rot = rot.replace(/\(potential\s+-?\d+\s*\[cm\]\)/, '(potential ' + Math.round(S.num(o.trig, -300)) + ' [cm])').replace(/\(irrigate_overhead[^\n]*\)/, '(irrigate_overhead 10 [mm/h] (hours ' + hrs + '))').replace(/\(wait_days\s+1\)/, '(wait_days 2)'); }
-    const soilTxt = files["ResFarm.dai"], useSoil = o.soil === 'user' && o.userSoil, col = useSoil ? 'SWAFL user column' : o.soil === "sand" ? "ResFarm_sand column" : "ResFarm 1D; Free drainage", wxFile = o.userWx ? '../Common/UserWeather.dwf' : '../Common/Daily-1965-2000.dwf';
+    if (o.irrig === '1') {
+      const mm = Math.max(1, S.num(o.mm, 30)); let hrs = Math.max(1, Math.round(S.num(o.hours, 3))); if (mm / hrs > 20) hrs = Math.ceil(mm / 20);   // Daisy solves the water flow better with a moderate rate
+      const rate = +(mm / hrs).toFixed(3), z = Math.max(1, Math.round(S.num(o.z, 20))), md = v => { const m = String(v || '').match(/^(\d{1,2})[-\/.](\d{1,2})$/); return m ? [+m[1], +m[2]] : null; }, a1 = md(o.w1) || [4, 1], a2 = md(o.w2) || [10, 1];
+      const how = o.method === 'surface' ? '(irrigate_surface ' + rate + ' [mm/h] (hours ' + hrs + '))' : o.method === 'drip' ? '(irrigate_subsoil ' + rate + ' [mm/h] (hours ' + hrs + ') (from -' + Math.min(S.num(o.dfrom, 10), S.num(o.dto, 20)) + ' [cm]) (to -' + Math.max(S.num(o.dfrom, 10) + 1, S.num(o.dto, 20)) + ' [cm]))' : '(irrigate_overhead ' + rate + ' [mm/h] (hours ' + hrs + '))';
+      const act = '(defaction irrigate_30_tensiometer_overhead activity\n  ;; SWAFL: tensiometer-triggered irrigation, ' + o.method + ', ' + mm + ' mm per event\n  (wait (and (after_mm_dd ' + a1[0] + ' ' + a1[1] + ')\n             (before_mm_dd ' + a2[0] + ' ' + a2[1] + ')\n             (not (soil_water_pressure_above (height -' + z + ' [cm]) (potential ' + Math.round(S.num(o.trig, -300)) + ' [cm])))))\n  ' + how + '\n  (wait_days 2))';
+      const re = /\(defaction irrigate_30_tensiometer_overhead activity[\s\S]*?\(wait_days\s+\d+\)\s*\)/; if (!re.test(rot)) throw new Error('the irrigation action was not found in the rotation file'); rot = rot.replace(re, () => act);
+      const lim = S.num(o.limit, 0); if (lim > 0) { const k = Math.max(1, Math.round(lim / mm)); rot = rot.replace(/\(repeat irrigate_30_tensiometer_overhead\)/g, '(activity' + ' irrigate_30_tensiometer_overhead'.repeat(k) + ')'); }
+    }
+    let soilTxt = files["ResFarm.dai"]; if (String(o.soil).indexOf('usda:') === 0) o.userSoil = S.usdaSoil(String(o.soil).slice(5)); const useSoil = (o.soil === 'user' || String(o.soil).indexOf('usda:') === 0) && o.userSoil; if (S.num(o.root, 0) > 0) soilTxt = soilTxt.replace(/\(MaxRootingDepth\s+\d+(?:\.\d+)?\s*\[cm\]\)/g, '(MaxRootingDepth ' + Math.round(S.num(o.root, 0)) + ' [cm])'); const stn = (!o.userWx && o.station && o.station !== 'course') ? o.station : null; const col = useSoil ? 'SWAFL user column' : o.soil === "sand" ? "ResFarm_sand column" : "ResFarm 1D; Free drainage", wxFile = o.userWx ? '../Common/UserWeather.dwf' : stn ? '../Common/Station.dwf' : '../Common/Daily-1965-2000.dwf';
     const run = ';; SWAFL scenario "' + (sc.title || scId) + '", variant "' + (vr.label || variantId) + '"\n(input file "../Common/ArableFarmRotation.dai")\n(input file "../Common/ResFarm.dai")\n(input file "../Common/OutputLog.dai")\n' + (useSoil ? '(input file "../Common/UserSoil.dai")\n' : '') + '\n' +
       '(defunit [kWh/d/m^2] SIfactor (mass 1)(time -3)(factor 41.67))\n(weather default "' + wxFile + '"\n  (PrecipCorrect ' + S.num(o.precip, 1) + ')\n  (TempOffset ' + S.num(o.temp, 0) + '))\n' +
       '(description "' + (sc.title || scId).replace(/"/g, "'") + ' - ' + (vr.label || variantId).replace(/"/g, "'") + '")\n(log_prefix "' + pre + '")\n\n(manager activity\n  (repeat "A_F_R"))\n\n' +
-      '(defcolumn "SWAFL column" "' + col + '"\n  (Bioclimate FAO56_daily))\n(column "SWAFL column")\n\n(time ' + o.start + ' 01 01)\n(stop ' + o.stop + ' 04 1)\n(activate_output (after ' + (o.start + 1) + ' 03 31 23))\n';
-    return { scenario: scId, variant: variantId, label: vr.label || variantId, options: o, prefix: pre, main: 'Run/Runfile.dai', files: Object.assign({ 'Common/ArableFarmRotation.dai': rot, 'Common/ResFarm.dai': soilTxt, 'Run/Runfile.dai': run }, o.userWx ? { 'Common/UserWeather.dwf': o.userWx.text } : {}, useSoil ? { 'Common/UserSoil.dai': S.soilDai(o.userSoil).text } : {}), years: o.stop - o.start };
+      '(defcolumn "SWAFL column" "' + col + '"\n  (Bioclimate ' + (stn && S.station(stn).noWind ? 'default' : 'FAO56_daily') + '))\n(column "SWAFL column")\n\n(time ' + o.start + ' 01 01)\n(stop ' + o.stop + ' 04 1)\n(activate_output (after ' + (o.start + 1) + ' 03 31 23))\n';
+    return { scenario: scId, variant: variantId, label: vr.label || variantId, options: o, prefix: pre, main: 'Run/Runfile.dai', files: Object.assign({ 'Common/ArableFarmRotation.dai': rot, 'Common/ResFarm.dai': soilTxt, 'Run/Runfile.dai': run }, o.log && S.logFilter ? { 'Common/OutputLog.dai': S.logFilter(files['OutputLog.dai'], o.log) } : {}, o.userWx ? { 'Common/UserWeather.dwf': o.userWx.text } : {}, stn ? { 'Common/Station.dwf': (function () { const t = files['weather/' + stn + '.dwf']; if (t == null) throw new Error('the weather file of ' + stn + ' was not loaded'); return t; })() } : {}, useSoil ? { 'Common/UserSoil.dai': S.soilDai(o.userSoil, S.num(o.root, 0)).text } : {}), years: o.stop - o.start };
   };
 
   // ------------------------------------------------------------------ the user's own data, converted for Daisy
@@ -134,7 +156,7 @@
   };
 
   // soil horizons: [{ bottom (cm, positive), sand, silt, clay (%), humus (%), bd (g/cm3) }]. Hydraulic properties by the HYPRES pedotransfer function of Daisy (topsoil flag for the first horizon).
-  S.soilDai = function (u) {
+  S.soilDai = function (u, rootCm) {
     const hz = (u && u.horizons || []).filter(h => isFinite(h.bottom)); if (!hz.length) throw new Error('give at least one soil horizon');
     let prev = 0; const out = [], names = [];
     hz.forEach((h, i) => { if (!(h.bottom > prev)) throw new Error('horizon ' + (i + 1) + ': the lower depth must be deeper than the one above'); prev = h.bottom;
@@ -143,9 +165,11 @@
       const nm = 'SWAFL user H' + (i + 1); names.push([nm, h.bottom]);
       out.push('(defhorizon "' + nm + '" USDA3\n  (description "to ' + h.bottom + ' cm")\n  (clay ' + cl.toFixed(4) + ' [])(silt ' + si.toFixed(4) + ' [])(sand ' + sa.toFixed(4) + ' [])(humus ' + hu.toFixed(4) + ' [])\n  (dry_bulk_density ' + bd + ' [g/cm^3])\n  (C_per_N 11.0 [g C/g N])\n  (hydraulic hypres (topsoil ' + (i === 0 ? 'true' : 'false') + ')))\n'); });
     const last = hz[hz.length - 1].bottom; if (last < 100) throw new Error('the lowest horizon must reach at least 100 cm; extend the last row');
-    const col = '(defcolumn "SWAFL user column" default\n  (Soil (MaxRootingDepth ' + Math.min(150, last) + ' [cm])\n        (border -100 [cm])\n        (horizons ' + names.map(n => '(-' + n[1] + ' [cm] "' + n[0] + '")').join('\n                  ') + '))\n  (Movement vertical (Tertiary none))\n  (Groundwater deep)\n  (OrganicMatter original (init (input 3000 [kg C/ha/y]) (end -25 [cm])))\n  (Chemistry original\n    (combine (N (reaction nitrification (denitrification (water_factor (0.8 0.0) (0.9 0.2) (1.0 1.0))))) ("Trace List"))))\n';
+    const col = '(defcolumn "SWAFL user column" default\n  (Soil (MaxRootingDepth ' + (rootCm > 0 ? Math.round(rootCm) : Math.min(150, last)) + ' [cm])\n        (border -100 [cm])\n        (horizons ' + names.map(n => '(-' + n[1] + ' [cm] "' + n[0] + '")').join('\n                  ') + '))\n  (Movement vertical (Tertiary none))\n  (Groundwater deep)\n  (OrganicMatter original (init (input 3000 [kg C/ha/y]) (end -25 [cm])))\n  (Chemistry original\n    (combine (N (reaction nitrification (denitrification (water_factor (0.8 0.0) (0.9 0.2) (1.0 1.0))))) ("Trace List"))))\n';
     return { text: ';; SWAFL: soil horizons entered by the user; hydraulic properties from the HYPRES pedotransfer function\n' + out.join('\n') + '\n' + col, n: hz.length };
   };
+  // a soil of one USDA texture class down the profile (humus falls with depth); Daisy takes the water properties from HYPRES
+  S.usdaSoil = function (id) { const c = S.USDA[id]; if (!c) throw new Error('unknown soil class ' + id); return { horizons: [{ bottom: 30, sand: c[1], silt: c[2], clay: c[3], humus: 2, bd: c[4] }, { bottom: 80, sand: c[1], silt: c[2], clay: c[3], humus: 0.8, bd: +(c[4] + 0.05).toFixed(2) }, { bottom: 200, sand: c[1], silt: c[2], clay: c[3], humus: 0.3, bd: +(c[4] + 0.1).toFixed(2) }], texture: c[0] }; };
   // a soil table in text (csv): columns depth (lower limit, cm), sand, silt, clay, humus (%), bd (g/cm3)
   S.soilFromTable = function (t) {
     const c = t.cols.map(x => String(x).toLowerCase()), f = re => c.findIndex(x => re.test(x)), iD = f(/depth|bottom|lower|to|dybde/), iS = f(/^sand/), iSi = f(/^silt/), iC = f(/^clay|^ler/), iH = f(/humus|organic|^om|^soc|^oc/), iB = f(/bulk|^bd|density|rho/);
@@ -154,6 +178,6 @@
   };
   S.COMMON = ['ArableFarmRotation.dai', 'ArableFarmRotation_withirrigation.dai', 'ResFarm.dai', 'OutputLog.dai'];
   // the logs the figures use, and how to name them whatever the prefix
-  S.logKey = n => { const m = String(n).match(/(Annual-Harvest|Annual-FWater_100cm|Annual-FWater|Annual-SWater|Annual-FN_100cm|Annual-FN|Annual-Tracer|Daily-CropProduction|Daily-FWater|Daily-SWater|Daily-FN|Daily-Theta|Daily-pF|Daily-h|Daily-SNO3|Daily-Tracer_conc|Daily-Tracer|Daily-WaterFlux|Daily-SoilWater|Soil-Tracer)\.dlf/i); return m ? m[1] : null; };
+  S.logKey = n => { const m = String(n).match(/(Annual-Harvest|Annual-FWater_100cm|Annual-FWater|Annual-SWater|Annual-FN_100cm|Annual-FN|Annual-Tracer|Daily-CropProduction|Daily-FWater|Daily-SWater|Daily-FN|Daily-Theta|Daily-pF|Daily-h|Daily-SNO3|Daily-Tracer_conc|Daily-Tracer|Daily-WaterFlux|Daily-SoilWater|Daily-SurfaceWater|Daily-SoilTemp|Daily-SoilIce|Daily-OM|Daily-CarbonBalance|Daily-Denitrification|Daily-NH4|Daily-BioporeFlux|Daily-MatrixFlux|Daily-Bioclimate|Daily-Photosynthesis|Daily-DrainSink|Daily-Snow|Soil-Tracer)\.dlf/i); return m ? m[1] : null; };
   if (typeof module !== 'undefined' && module.exports) module.exports = S; else root.DaisyScen = S;
 })(typeof window !== 'undefined' ? window : globalThis);

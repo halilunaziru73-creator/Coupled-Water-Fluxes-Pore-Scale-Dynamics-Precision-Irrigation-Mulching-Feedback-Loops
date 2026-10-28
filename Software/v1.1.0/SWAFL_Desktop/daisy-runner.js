@@ -9,6 +9,8 @@ const EXE = isWin ? 'daisy.exe' : 'daisy';
 function candidates() {
   const c = [];
   if (process.env.DAISY_EXE) c.push(process.env.DAISY_EXE);
+  // a Daisy program put next to the app (works with no installation and no network): daisy/bin/daisy[.exe] or daisy/daisy[.exe], beside the app or in its resources
+  [__dirname, path.dirname(process.execPath), process.resourcesPath, path.join(__dirname, '..')].filter(Boolean).forEach(b => ['daisy', 'Daisy'].forEach(n => { c.push(path.join(b, n, 'bin', EXE)); c.push(path.join(b, n, EXE)); }));
   (process.env.PATH || '').split(path.delimiter).forEach(d => { if (d) c.push(path.join(d, EXE)); });
   if (isWin) {
     const pf = [process.env['ProgramFiles'], process.env['ProgramFiles(x86)'], process.env['LOCALAPPDATA'], 'C:\\'].filter(Boolean);
