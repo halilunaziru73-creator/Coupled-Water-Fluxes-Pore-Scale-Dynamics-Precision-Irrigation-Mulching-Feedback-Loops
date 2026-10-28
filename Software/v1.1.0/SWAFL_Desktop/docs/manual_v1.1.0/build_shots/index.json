@@ -2128,43 +2128,43 @@
    },
    {
     "x": 84.80000000000001,
-    "y": 543.6,
+    "y": 533.2,
     "t": "Your question",
     "d": "Write what you want to find out in your own words."
    },
    {
     "x": 84.80000000000001,
-    "y": 622,
+    "y": 601.2,
     "t": "Make a plan",
     "d": "Reads the question and proposes the factors, the levels and the design."
    },
    {
     "x": 366.225,
-    "y": 624.4000000000001,
+    "y": 603.6,
     "t": "Online AI",
     "d": "Optional: an online AI reads the question first; each plan it gives is checked against what Daisy can vary."
    },
    {
-    "x": 444.45000000000005,
-    "y": 694,
+    "x": 454.05,
+    "y": 673.2,
     "t": "Best combinations",
     "d": "Ready made experiments worked out from the Daisy reference."
    },
    {
-    "x": 606.15,
-    "y": 694,
+    "x": 615.75,
+    "y": 673.2,
     "t": "By topic",
     "d": "The 107 topics of the Daisy reference, each leading to experiments."
    },
    {
-    "x": 791.1375,
-    "y": 694,
+    "x": 800.7375000000001,
+    "y": 673.2,
     "t": "Import",
     "d": "Bring an experiment folder, set-ups, weather, soil tables or logs."
    },
    {
     "x": 64,
-    "y": 1502.2,
+    "y": 1435,
     "t": "My experiments",
     "d": "The list of experiments that are run or saved together."
    }
@@ -2180,32 +2180,32 @@
   "note": "",
   "marks": [
    {
-    "x": 101.60000000000001,
-    "y": 838.5250000000001,
+    "x": 100,
+    "y": 790.9250000000001,
     "t": "Tick box",
     "d": "Ticks the combination so that several can be added together."
    },
    {
-    "x": 147.20000000000002,
-    "y": 838.5250000000001,
+    "x": 145.6,
+    "y": 790.9250000000001,
     "t": "Combination",
     "d": "A combination with the topics of the Daisy reference it draws on."
    },
    {
     "x": 900.0375,
-    "y": 918.125,
+    "y": 870.9250000000001,
     "t": "Load this experiment",
     "d": "Loads the plan of the chosen combination for checking and running."
    },
    {
     "x": 1134.6625000000001,
-    "y": 918.125,
+    "y": 870.9250000000001,
     "t": "Add to my experiments",
     "d": "Adds the chosen combination to the list of experiments without loading it."
    },
    {
     "x": 822.4000000000001,
-    "y": 969.325,
+    "y": 922.125,
     "t": "Add the ticked",
     "d": "Adds every ticked combination, each as an experiment of its own."
    }
@@ -2222,43 +2222,43 @@
   "marks": [
    {
     "x": 537.25,
-    "y": 797.325,
+    "y": 758.125,
     "t": "Levels per parameter",
     "d": "How many values of each parameter are tested."
    },
    {
     "x": 742.225,
-    "y": 797.325,
+    "y": 758.125,
     "t": "How to combine",
     "d": "Every combination, one thing at a time, or paired."
    },
    {
     "x": 1123.05,
-    "y": 796.9250000000001,
+    "y": 757.725,
     "t": "At most",
     "d": "The largest number of runs."
    },
    {
     "x": 105.60000000000001,
-    "y": 1146.925,
+    "y": 1068.525,
     "t": "List of topics",
     "d": "Scroll the list; a star marks a topic that has its own experiments."
    },
    {
     "x": 712.9250000000001,
-    "y": 895.725,
+    "y": 817.325,
     "t": "Previous and next",
     "d": "Moves through the topics in order."
    },
    {
     "x": 1071.425,
-    "y": 1101.325,
+    "y": 1022.9250000000001,
     "t": "Add",
     "d": "Adds the experiment to my experiments."
    },
    {
     "x": 679.2,
-    "y": 1101.325,
+    "y": 1022.9250000000001,
     "t": "Load",
     "d": "Loads the experiment for checking and running."
    }
@@ -2275,13 +2275,13 @@
   "marks": [
    {
     "x": 667.2,
-    "y": 1069.325,
+    "y": 990.9250000000001,
     "t": "Parameter",
     "d": "Tick one or several parameters to vary."
    },
    {
     "x": 679.2,
-    "y": 1230.125,
+    "y": 1151.7250000000001,
     "t": "Topic details",
     "d": "The introduction of the topic, its parameters and the models it lists."
    }
@@ -2298,7 +2298,7 @@
   "marks": [
    {
     "x": 183.6125,
-    "y": 799.725,
+    "y": 778.9250000000001,
     "t": "Choose a folder",
     "d": "Reads every Daisy file of a folder."
    }
@@ -2941,19 +2941,19 @@
   "marks": [
    {
     "x": 64,
-    "y": 1138.025,
+    "y": 1153.625,
     "t": "Process map",
     "d": "One box for each process, coloured by group."
    },
    {
     "x": 64,
-    "y": 1784.0500000000002,
+    "y": 1815.25,
     "t": "Other processes",
     "d": "Processes not drawn in the paper figure."
    },
    {
     "x": 64,
-    "y": 1945.0500000000002,
+    "y": 1976.25,
     "t": "Details",
     "d": "Text and figures of the chosen process."
    }
@@ -2970,43 +2970,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1180.025,
+    "y": 1153.625,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1929.0500000000002,
+    "y": 1876.25,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 2094.85,
+    "y": 2042.0500000000002,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 2095.65,
+    "y": 2042.8500000000001,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2430.85,
+    "y": 2378.05,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 3023.65,
+    "y": 2970.8500000000004,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3638.8500000000004,
+    "y": 3586.05,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -3023,43 +3023,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1180.025,
+    "y": 1153.625,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1929.0500000000002,
+    "y": 1876.25,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 2068.4500000000003,
+    "y": 2015.65,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 2069.25,
+    "y": 2016.45,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2404.4500000000003,
+    "y": 2351.65,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 3019.65,
+    "y": 2966.8500000000004,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3612.4500000000003,
+    "y": 3559.65,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -3076,43 +3076,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1175.5,
+    "y": 1149.5,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1924.525,
+    "y": 1872.125,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 2090.3250000000003,
+    "y": 2037.9250000000002,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 2091.125,
+    "y": 2038.7250000000001,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2426.3250000000003,
+    "y": 2373.925,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 3041.525,
+    "y": 2989.125,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3656.7250000000004,
+    "y": 3604.3250000000003,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -3129,43 +3129,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1178.8,
+    "y": 1152.875,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1927.825,
+    "y": 1875.5,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 2093.625,
+    "y": 2041.3000000000002,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 2094.425,
+    "y": 2042.1000000000001,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2461.625,
+    "y": 2409.3,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 3140.8250000000003,
+    "y": 3088.5,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3820.025,
+    "y": 3767.7000000000003,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -3182,31 +3182,31 @@
   "marks": [
    {
     "x": 944,
-    "y": 1180.025,
+    "y": 1153.625,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1929.0500000000002,
+    "y": 1876.25,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 2068.4500000000003,
+    "y": 2015.65,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 2069.25,
+    "y": 2016.45,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2436.4500000000003,
+    "y": 2383.65,
     "t": "First figure",
     "d": "The figure of the process."
    }
@@ -3223,31 +3223,31 @@
   "marks": [
    {
     "x": 944,
-    "y": 1180.025,
+    "y": 1153.625,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1929.0500000000002,
+    "y": 1876.25,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 2068.4500000000003,
+    "y": 2015.65,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 2069.25,
+    "y": 2016.45,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2436.4500000000003,
+    "y": 2383.65,
     "t": "First figure",
     "d": "The figure of the process."
    }
@@ -3264,37 +3264,37 @@
   "marks": [
    {
     "x": 944,
-    "y": 1180.025,
+    "y": 1153.625,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1929.0500000000002,
+    "y": 1876.25,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 2094.85,
+    "y": 2042.0500000000002,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 2095.65,
+    "y": 2042.8500000000001,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2462.8500000000004,
+    "y": 2410.05,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 3142.05,
+    "y": 3089.25,
     "t": "Second figure",
     "d": "The next figure of the process."
    }
@@ -3311,37 +3311,37 @@
   "marks": [
    {
     "x": 944,
-    "y": 1180.025,
+    "y": 1153.625,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1929.0500000000002,
+    "y": 1876.25,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 2068.4500000000003,
+    "y": 2015.65,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 2069.25,
+    "y": 2016.45,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2436.4500000000003,
+    "y": 2383.65,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 3099.65,
+    "y": 3046.8500000000004,
     "t": "Second figure",
     "d": "The next figure of the process."
    }
@@ -3358,31 +3358,31 @@
   "marks": [
    {
     "x": 944,
-    "y": 1180.025,
+    "y": 1153.625,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1929.0500000000002,
+    "y": 1876.25,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 2068.4500000000003,
+    "y": 2015.65,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 2069.25,
+    "y": 2016.45,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2436.4500000000003,
+    "y": 2383.65,
     "t": "First figure",
     "d": "The figure of the process."
    }
@@ -3399,43 +3399,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1175.5,
+    "y": 1149.5,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1924.525,
+    "y": 1872.125,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 2090.3250000000003,
+    "y": 2037.9250000000002,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 2091.125,
+    "y": 2038.7250000000001,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2426.3250000000003,
+    "y": 2373.925,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 3041.525,
+    "y": 2989.125,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3656.7250000000004,
+    "y": 3604.3250000000003,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -3452,43 +3452,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1175.675,
+    "y": 1149.65,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1924.7,
+    "y": 1872.275,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 2090.5,
+    "y": 2038.075,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 2091.3,
+    "y": 2038.875,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2426.5,
+    "y": 2374.0750000000003,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 3019.3,
+    "y": 2966.875,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3634.5,
+    "y": 3582.0750000000003,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -3505,43 +3505,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1180.025,
+    "y": 1153.625,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1929.0500000000002,
+    "y": 1876.25,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 2068.4500000000003,
+    "y": 2015.65,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 2069.25,
+    "y": 2016.45,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2404.4500000000003,
+    "y": 2351.65,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 3019.65,
+    "y": 2966.8500000000004,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3612.4500000000003,
+    "y": 3559.65,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -3558,43 +3558,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1180.025,
+    "y": 1153.625,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1929.0500000000002,
+    "y": 1876.25,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 2094.85,
+    "y": 2042.0500000000002,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 2095.65,
+    "y": 2042.8500000000001,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2430.85,
+    "y": 2378.05,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 3046.05,
+    "y": 2993.25,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3661.25,
+    "y": 3608.4500000000003,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -3611,43 +3611,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1172.025,
+    "y": 1145.7,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1921.0500000000002,
+    "y": 1868.325,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 2086.85,
+    "y": 2034.125,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 2087.65,
+    "y": 2034.9250000000002,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2422.85,
+    "y": 2370.125,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 3015.65,
+    "y": 2962.925,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3630.8500000000004,
+    "y": 3578.125,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -5326,31 +5326,31 @@
   "marks": [
    {
     "x": 110.55000000000001,
-    "y": 1214.4,
+    "y": 1147.2,
     "t": "Interface key",
     "d": "The free interface key of the Danish open data service."
    },
    {
     "x": 645.325,
-    "y": 1214.4,
+    "y": 1147.2,
     "t": "Latitude",
     "d": "Latitude of the place."
    },
    {
     "x": 1118.075,
-    "y": 1214.4,
+    "y": 1147.2,
     "t": "From",
     "d": "First day to read."
    },
    {
     "x": 1527.7625,
-    "y": 1211.6000000000001,
+    "y": 1144.4,
     "t": "Fetch and use",
     "d": "Reads the daily series and makes it the weather in use."
    },
    {
     "x": 64,
-    "y": 1320,
+    "y": 1252.8000000000002,
     "t": "Groundwater file",
     "d": "A table with a date column and a depth to water column in metres, or a NetCDF file, used as the lower boundary of the soil column."
    }
@@ -5367,49 +5367,49 @@
   "marks": [
    {
     "x": 126.67500000000001,
-    "y": 1048.4,
+    "y": 981.2,
     "t": "Place",
     "d": "A town, a village or a farm name; the name is searched on the internet."
    },
    {
     "x": 458.20000000000005,
-    "y": 1045.6000000000001,
+    "y": 978.4000000000001,
     "t": "Find",
     "d": "Lists the places of that name; choose one and the latitude and longitude are filled."
    },
    {
     "x": 1134.8500000000001,
-    "y": 1050,
+    "y": 982.8000000000001,
     "t": "First year",
     "d": "First year of the record to read."
    },
    {
     "x": 1324.875,
-    "y": 1050,
+    "y": 982.8000000000001,
     "t": "Last year",
     "d": "Last complete year; the current year is not complete yet."
    },
    {
     "x": 64,
-    "y": 1096.8,
+    "y": 1029.6000000000001,
     "t": "Get the weather",
     "d": "Reads the daily rain, temperature and radiation and checks them."
    },
    {
     "x": 435.925,
-    "y": 1096.8,
+    "y": 1029.6000000000001,
     "t": "Use as the SWAFL weather",
     "d": "Sets the record as the weather of the SWAFL project, so every layer of the project uses it."
    },
    {
     "x": 672.4000000000001,
-    "y": 1096.8,
+    "y": 1029.6000000000001,
     "t": "Use in the Daisy runs",
     "d": "Sets the record as the weather of every simulation of Scenarios, Experiments and Processes."
    },
    {
     "x": 884.375,
-    "y": 1096.8,
+    "y": 1029.6000000000001,
     "t": "Add to the list of logs",
     "d": "Adds the record to the logs, so that it can be drawn in Plot."
    }

@@ -354,9 +354,9 @@ const DaisyUI = (() => {
 
   // Figure 1 of the weather tab: numbered title, the source and the references under it, and the same text burnt into the saved picture
   function figWx(title, source, keys) {
-    const cv = $('Wcv'), cap = $('Wcap'); if (!cv || !cap) return; const C = window.DaisyCite, refs = C ? keys.map(k => C.REFS[k]) : [];
+    const cv = $('Wcv'), cap = $('Wcap'); if (!cv || !cap) return; 
     const text = 'Figure 1. ' + title + ' ' + source + ' Drawn with SWAFL on ' + new Date().toISOString().slice(0, 10) + '.';
-    cv.dataset.cite = text; cap.innerHTML = '<b>Figure 1.</b> ' + esc(title) + ' ' + esc(source) + ' Drawn with SWAFL on ' + new Date().toISOString().slice(0, 10) + '.' + (refs.length ? '<br><span style="font-style:normal">References: ' + refs.map(esc).join(' &nbsp;|&nbsp; ') + '</span>' : '');
+    cv.dataset.cite = text; cap.innerHTML = '<b>Figure 1.</b> ' + esc(title) + ' ' + esc(source) + ' Drawn with SWAFL on ' + new Date().toISOString().slice(0, 10) + '.';
   }
   async function bWeatherOnline() {
     const hits = []; let last = null; const lat = () => parseFloat($('WOLat').value), lon = () => parseFloat($('WOLon').value);
@@ -425,6 +425,7 @@ const DaisyUI = (() => {
     let arg = ''; if (String(tab).indexOf(':') > 0) { arg = tab.split(':')[1]; tab = tab.split(':')[0]; }
     if (!document.getElementById('dzCss')) { const st = document.createElement('style'); st.id = 'dzCss'; st.textContent = CSS; document.head.appendChild(st); }
     UI.modal({ title: 'Daisy model: scenarios, runs, figures, tests and calibration', icon: 'chart', width: 'min(1180px,96vw)', html: '<div class="dztabs">' + GROUPS.map(g => '<div class="dztg"><span>' + g[0] + '</span><div>' + g[1].map(t => '<button data-t="' + t[0] + '">' + t[1] + '</button>').join('') + '</div></div>').join('') + '</div><div class="dzw" id="dzBody"></div>' });
+    try { const mm = document.querySelector('#modalRoot .modal'); if (mm) mm.classList.add('dzmodal'); } catch (e) { }
     document.querySelectorAll('.dztabs button').forEach(b => b.onclick = () => show(b.dataset.t)); if (window.DaisyCite) { if (S.mo) S.mo.disconnect(); S.mo = window.DaisyCite.attach(document.getElementById('dzBody')); } show(HTML[tab] || EXT[tab] ? tab : S.tab, arg);
   }
   const kit = { setup, nice, OKI, SPEC, fmt, heat: heatChart, line: lineChart, savePng };

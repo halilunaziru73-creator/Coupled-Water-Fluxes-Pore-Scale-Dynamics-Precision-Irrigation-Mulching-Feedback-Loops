@@ -2,15 +2,7 @@
 'use strict';
 (() => {
   const C = {};
-  C.REFS = {
-    daisy: 'Hansen, S., Abrahamsen, P., Petersen, C.T., Styczen, M., 2012. Daisy: model use, calibration, and validation. Transactions of the ASABE 55, 1315-1333.',
-    holbak: 'Holbak, M., Abrahamsen, P., Grønning, C.R., Klöffel, T., Schwartzkopff, M.V., Styczen, M.E., Svane, S.F., Diamantopoulos, E., 2026. The Daisy model: a tool for simulating agricultural systems - recent (2012-2025) developments, calibrations and validations. Agricultural Systems 238, 104846. https://doi.org/10.1016/j.agsy.2026.104846',
-    abrahamsen: 'Abrahamsen, P., Hansen, S., 2000. Daisy: an open soil-crop-atmosphere system model. Environmental Modelling & Software 15, 313-330. https://doi.org/10.1016/S1364-8152(00)00003-7',
-    manual: 'Daisy reference manual, version 7.1.14. https://github.com/daisy-model/daisy/releases/download/v7.1.14/reference.pdf',
-    openmeteo: 'Zippenfenig, P., 2023. Open-Meteo.com Weather API. Zenodo. https://doi.org/10.5281/zenodo.7970649',
-    era5: 'Hersbach, H., et al., 2020. The ERA5 global reanalysis. Quarterly Journal of the Royal Meteorological Society 146, 1999-2049. https://doi.org/10.1002/qj.3803',
-    hypres: 'Wösten, J.H.M., Lilly, A., Nemes, A., Le Bas, C., 1999. Development and use of a database of hydraulic properties of European soils. Geoderma 90, 169-185.'
-  };
+
   C.ctx = { weather: '', soil: '', extra: '' };
   const SHORT = 'Daisy 7.1.14 (Hansen et al., 2012; Holbak et al., 2026)';
   // the weather and soil of a run, from its options
@@ -26,8 +18,7 @@
     const x = C.ctx, d = new Date().toISOString().slice(0, 10), bits = [x.weather, x.soil, x.extra].filter(Boolean);
     return (title ? title.replace(/\s+/g, ' ').trim().replace(/[.:]?$/, '') + '. ' : '') + 'Model: ' + SHORT + (bits.length ? '; ' + bits.join('; ') : '') + '. Drawn with SWAFL on ' + d + '.';
   };
-  C.refList = function (keys) { keys = keys || ['daisy', 'holbak']; if (C.ctx.weather && /Open-Meteo/.test(C.ctx.weather)) keys = keys.concat(['openmeteo', 'era5']); if (C.ctx.soil && /HYPRES/.test(C.ctx.soil)) keys = keys.concat(['hypres']); return Array.from(new Set(keys)).map(k => C.REFS[k]); };
-  C.refsHtml = function (keys) { const esc = s => String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c])); return '<h2>References</h2><ol>' + C.refList(keys).map(r => '<li>' + esc(r) + '</li>').join('') + '</ol>'; };
+  C.refsHtml = function () { return ''; };
   const titleOf = cv => { const box = cv.closest('.dzfig, .dzcard, .dzpan'); let t = ''; if (box) { const b = box.querySelector('b, h3, h4'); if (b) t = b.textContent; } return t.trim(); };
   const wrap = (g, text, w) => { const words = text.split(' '), lines = []; let cur = ''; words.forEach(x => { const t = cur ? cur + ' ' + x : x; if (g.measureText(t).width > w && cur) { lines.push(cur); cur = x; } else cur = t; }); if (cur) lines.push(cur); return lines; };
   // a picture with the citation under it

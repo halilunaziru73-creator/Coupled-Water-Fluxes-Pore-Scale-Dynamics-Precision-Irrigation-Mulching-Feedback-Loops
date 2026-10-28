@@ -9,13 +9,13 @@
  "marks": [
   {
    "x": 667.2,
-   "y": 1069.325,
+   "y": 990.9250000000001,
    "t": "Parameter",
    "d": "Tick one or several parameters to vary."
   },
   {
    "x": 679.2,
-   "y": 1230.125,
+   "y": 1151.7250000000001,
    "t": "Topic details",
    "d": "The introduction of the topic, its parameters and the models it lists."
   }

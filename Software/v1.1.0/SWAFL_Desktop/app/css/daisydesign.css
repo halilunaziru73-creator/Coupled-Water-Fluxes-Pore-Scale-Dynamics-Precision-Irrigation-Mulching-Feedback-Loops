@@ -1,0 +1,19 @@
+/* Experiments: in the colours and the texture of the SWAFL workbench (classic grey, navy title band, raised buttons, sunken lists). */
+.xhero{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:0 0 8px;padding:6px 10px;background:linear-gradient(90deg,#0A246A,#A6CAF0);color:#fff}
+.xhero h3{margin:0;font-size:14px;color:#fff}
+.xhero small{display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#E8EEF8}
+.xsteps{display:flex;gap:6px;flex-wrap:wrap}
+.xsteps span{display:flex;align-items:center;gap:6px;background:#D4D0C8;color:#000;box-shadow:inset -1px -1px #404040,inset 1px 1px #fff;padding:2px 10px 2px 3px;font-size:11px}
+.xsteps span b{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;background:#0A246A;color:#fff;font-size:10px}
+.xweb{margin:0 0 4px;font-size:10.5px}
+.xchips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.xchips a{background:#D4D0C8;color:#000;box-shadow:inset -1px -1px #404040,inset 1px 1px #fff;padding:2px 10px;font-size:11px;text-decoration:none}
+.xchips a:hover{background:#E3E0D8;color:#0A246A}
+#dzXText{border:0;box-shadow:inset 1px 1px #808080,inset -1px -1px #fff,inset 2px 2px #404040;background:#fff;font-size:12px;padding:5px 7px}
+#dzXRef{background:#ECE9D8}
+#dzXRef>.dzrow:first-child>b{color:#0A246A;margin-right:6px}
+.xhero h3{color:#fff !important}
+.dzpan:has(>.xhero){background:#ECE9D8}
+#dzXRef button[data-pick]{color:inherit}
+#dzXRef [data-pick] .pnote{color:inherit;opacity:.75}
+#dzXSet .dzpan{background:#ECE9D8}

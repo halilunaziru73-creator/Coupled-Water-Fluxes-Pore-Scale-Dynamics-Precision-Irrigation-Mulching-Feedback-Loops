@@ -68,4 +68,5 @@
 * The Processes tab is a map of the model with the figures of each process, drawn from a Daisy run with all process logs.
 * The Process curves tab draws any function of the Daisy library.
 * The Daisy workbench is arranged as a guided path with Back and Next, from the data of the site to the layers of the SWAFL project, which read the Daisy runs: the layers *Chemical fate (Daisy runs)* and *Daisy decision table* (Chapter 31). Online weather of any place can be used for the analysis, the Daisy runs and the figures, and every weather figure carries its citation.
+* The Daisy workbench has a new look: a slate and ink window with a spectral accent line, rounded cards, pill tabs and a calmer Experiments tab with three steps (Ask, Check the plan, Run and read), short text and example questions as chips. Figure captions carry a short source line only; the long reference lines are gone.
 * Chapters 26 to 39 show all of these screens with numbered arrows and the data behind them.
