@@ -879,14 +879,14 @@ Every component named in the sections of the 107 topics, in alphabetical order, 
 | operands | 28 | 28.31 | or |
 | operands | 49 | 49.1 | * |
 | operands | 49 | 49.2 | + |
-| operands | 49 | 49.3 | - |
+| operands | 49 | 49.3 | minus |
 | operands | 49 | 49.6 | div |
 | operands | 49 | 49.7 | max |
 | operands | 49 | 49.8 | min |
 | operands | 49 | 49.9 | mod |
 | operands | 59 | 59.1 | * |
 | operands | 59 | 59.2 | + |
-| operands | 59 | 59.3 | - |
+| operands | 59 | 59.3 | minus |
 | operands | 59 | 59.4 | / |
 | operands | 59 | 59.32 | max |
 | operands | 59 | 59.33 | min |

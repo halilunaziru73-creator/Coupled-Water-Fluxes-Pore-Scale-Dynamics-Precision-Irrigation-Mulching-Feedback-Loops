@@ -2970,43 +2970,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1138.025,
+    "y": 1180.025,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1845.0500000000002,
+    "y": 1929.0500000000002,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 2010.8500000000001,
+    "y": 2094.85,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 2011.65,
+    "y": 2095.65,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2346.85,
+    "y": 2430.85,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 2939.65,
+    "y": 3023.65,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3554.8500000000004,
+    "y": 3638.8500000000004,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -3023,43 +3023,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1138.025,
+    "y": 1180.025,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1845.0500000000002,
+    "y": 1929.0500000000002,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 1984.45,
+    "y": 2068.4500000000003,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 1985.25,
+    "y": 2069.25,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2320.4500000000003,
+    "y": 2404.4500000000003,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 2935.65,
+    "y": 3019.65,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3528.4500000000003,
+    "y": 3612.4500000000003,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -3076,43 +3076,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1134.125,
+    "y": 1175.5,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1841.15,
+    "y": 1924.525,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 2006.95,
+    "y": 2090.3250000000003,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 2007.75,
+    "y": 2091.125,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2342.9500000000003,
+    "y": 2426.3250000000003,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 2958.15,
+    "y": 3041.525,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3573.3500000000004,
+    "y": 3656.7250000000004,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -3129,43 +3129,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1137.55,
+    "y": 1178.8,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1844.575,
+    "y": 1927.825,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 2010.375,
+    "y": 2093.625,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 2011.1750000000002,
+    "y": 2094.425,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2378.375,
+    "y": 2461.625,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 3057.5750000000003,
+    "y": 3140.8250000000003,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3736.775,
+    "y": 3820.025,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -3182,31 +3182,31 @@
   "marks": [
    {
     "x": 944,
-    "y": 1138.025,
+    "y": 1180.025,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1845.0500000000002,
+    "y": 1929.0500000000002,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 1984.45,
+    "y": 2068.4500000000003,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 1985.25,
+    "y": 2069.25,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2352.4500000000003,
+    "y": 2436.4500000000003,
     "t": "First figure",
     "d": "The figure of the process."
    }
@@ -3223,31 +3223,31 @@
   "marks": [
    {
     "x": 944,
-    "y": 1138.025,
+    "y": 1180.025,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1845.0500000000002,
+    "y": 1929.0500000000002,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 1984.45,
+    "y": 2068.4500000000003,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 1985.25,
+    "y": 2069.25,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2352.4500000000003,
+    "y": 2436.4500000000003,
     "t": "First figure",
     "d": "The figure of the process."
    }
@@ -3264,37 +3264,37 @@
   "marks": [
    {
     "x": 944,
-    "y": 1138.025,
+    "y": 1180.025,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1845.0500000000002,
+    "y": 1929.0500000000002,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 2010.8500000000001,
+    "y": 2094.85,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 2011.65,
+    "y": 2095.65,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2378.85,
+    "y": 2462.8500000000004,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 3058.05,
+    "y": 3142.05,
     "t": "Second figure",
     "d": "The next figure of the process."
    }
@@ -3311,37 +3311,37 @@
   "marks": [
    {
     "x": 944,
-    "y": 1138.025,
+    "y": 1180.025,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1845.0500000000002,
+    "y": 1929.0500000000002,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 1984.45,
+    "y": 2068.4500000000003,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 1985.25,
+    "y": 2069.25,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2352.4500000000003,
+    "y": 2436.4500000000003,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 3015.65,
+    "y": 3099.65,
     "t": "Second figure",
     "d": "The next figure of the process."
    }
@@ -3358,31 +3358,31 @@
   "marks": [
    {
     "x": 944,
-    "y": 1138.025,
+    "y": 1180.025,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1845.0500000000002,
+    "y": 1929.0500000000002,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 1984.45,
+    "y": 2068.4500000000003,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 1985.25,
+    "y": 2069.25,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2352.4500000000003,
+    "y": 2436.4500000000003,
     "t": "First figure",
     "d": "The figure of the process."
    }
@@ -3399,43 +3399,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1134.125,
+    "y": 1175.5,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1841.15,
+    "y": 1924.525,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 2006.95,
+    "y": 2090.3250000000003,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 2007.75,
+    "y": 2091.125,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2342.9500000000003,
+    "y": 2426.3250000000003,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 2958.15,
+    "y": 3041.525,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3573.3500000000004,
+    "y": 3656.7250000000004,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -3452,43 +3452,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1134.275,
+    "y": 1175.675,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1841.3000000000002,
+    "y": 1924.7,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 2007.1000000000001,
+    "y": 2090.5,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 2007.9,
+    "y": 2091.3,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2343.1,
+    "y": 2426.5,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 2935.9,
+    "y": 3019.3,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3551.1000000000004,
+    "y": 3634.5,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -3505,43 +3505,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1138.025,
+    "y": 1180.025,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1845.0500000000002,
+    "y": 1929.0500000000002,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 1984.45,
+    "y": 2068.4500000000003,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 1985.25,
+    "y": 2069.25,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2320.4500000000003,
+    "y": 2404.4500000000003,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 2935.65,
+    "y": 3019.65,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3528.4500000000003,
+    "y": 3612.4500000000003,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -3558,43 +3558,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1138.025,
+    "y": 1180.025,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1845.0500000000002,
+    "y": 1929.0500000000002,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 2010.8500000000001,
+    "y": 2094.85,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 2011.65,
+    "y": 2095.65,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2346.85,
+    "y": 2430.85,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 2962.05,
+    "y": 3046.05,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3577.25,
+    "y": 3661.25,
     "t": "Third figure",
     "d": "The next figure of the process."
    }
@@ -3611,43 +3611,43 @@
   "marks": [
    {
     "x": 944,
-    "y": 1130.275,
+    "y": 1172.025,
     "t": "Process map",
     "d": "The process that is open has a red frame."
    },
    {
     "x": 83.2,
-    "y": 1837.3000000000002,
+    "y": 1921.0500000000002,
     "t": "Process",
     "d": "Name of the process and what Daisy does there."
    },
    {
     "x": 195.275,
-    "y": 2003.1000000000001,
+    "y": 2086.85,
     "t": "Source of the figures",
     "d": "The run whose logs are drawn."
    },
    {
     "x": 535.075,
-    "y": 2003.9,
+    "y": 2087.65,
     "t": "Run Daisy with all process logs",
     "d": "Runs the model with every process log on."
    },
    {
     "x": 944,
-    "y": 2339.1,
+    "y": 2422.85,
     "t": "First figure",
     "d": "The figure of the process."
    },
    {
     "x": 944,
-    "y": 2931.9,
+    "y": 3015.65,
     "t": "Second figure",
     "d": "The next figure of the process."
    },
    {
     "x": 944,
-    "y": 3547.1000000000004,
+    "y": 3630.8500000000004,
     "t": "Third figure",
     "d": "The next figure of the process."
    }

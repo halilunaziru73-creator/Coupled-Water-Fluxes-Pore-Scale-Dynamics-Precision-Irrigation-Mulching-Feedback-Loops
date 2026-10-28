@@ -402,7 +402,7 @@ Calculate cloudiness from meterological data.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 25.1 | clear sky | Calculate based on clear sky radiation: a * Si / Si0 + 1 - a where Si is global radiation and Si0 is clear sky radiation. | cloudiness, a, Value description |
+| 25.1 | clear sky | Calculate based on clear sky radiation: a * Si / Si0 + 1 minus a where Si is global radiation and Si0 is clear sky radiation. | cloudiness, a, Value description |
 | 25.2 | ASCE | A 'clear sky' model (see 25.1, page 149) build into Daisy. | Kt |
 | 25.3 | Taastrup | A 'ASCE' model (see 25.2, page 150) build into Daisy. | n/a |
 | 25.4 | FAO56 | A 'clear sky' model (see 25.1, page 149) build into Daisy. | n/a |
@@ -506,11 +506,11 @@ The 'crop' component simulates a specific crop on the field, typically averaged 
 | 29.1 | default | Standard Daisy crop model. Hansen, 1999. | Harvest, Root, Canopy, last time, sow time, emerge time, flowering time, ripe time |
 | 29.2 | Beetroot | A 'default' model (see 29.1, page 171) defined in 'beetroot.dai'. | n/a |
 | 29.3 | Broccoli | A 'default' model (see 29.1, page 171) defined in 'broccoli.dai'. | n/a |
-| 29.4 | Broccoli - transplanted | A 'Broccoli' model (see 29.3, page 173) defined in 'broccoli.dai'. | n/a |
+| 29.4 | Broccoli minus transplanted | A 'Broccoli' model (see 29.3, page 173) defined in 'broccoli.dai'. | n/a |
 | 29.5 | Brussels sprouts | A 'default' model (see 29.1, page 171) defined in 'brusselssprouts.dai'. | n/a |
-| 29.6 | Brussels sprouts - transplanted | A 'Brussels sprouts' model (see 29.5, page 173) defined in 'brusselssprouts.dai'. | n/a |
+| 29.6 | Brussels sprouts minus transplanted | A 'Brussels sprouts' model (see 29.5, page 173) defined in 'brusselssprouts.dai'. | n/a |
 | 29.7 | Celeriac | A 'default' model (see 29.1, page 171) defined in 'celeriac.dai'. | n/a |
-| 29.8 | Celeriac - transplanted | A 'Celeriac' model (see 29.7, page 174) defined in 'celeriac.dai'. | n/a |
+| 29.8 | Celeriac minus transplanted | A 'Celeriac' model (see 29.7, page 174) defined in 'celeriac.dai'. | n/a |
 | 29.9 | Fodder Beet | A 'default' model (see 29.1, page 171) defined in 'fodderbeet.dai'. | n/a |
 | 29.10 | Grass to grain | A 'default' model (see 29.1, page 171) defined in 'grass.dai'. | n/a |
 | 29.11 | Grass | A 'Grass to grain' model (see 29.10, page 174) defined in 'grass.dai'. | n/a |
@@ -518,7 +518,7 @@ The 'crop' component simulates a specific crop on the field, typically averaged 
 | 29.13 | Ikuwala Maize | A 'Maize' model (see 29.12, page 174) defined in 'maize.dai'. | n/a |
 | 29.14 | Silage Maize | A 'Maize' model (see 29.12, page 174) defined in 'maize.dai'. | n/a |
 | 29.15 | Onion | A 'default' model (see 29.1, page 171) defined in 'onion.dai'. | n/a |
-| 29.16 | Onion - planting of sets | A 'Onion' model (see 29.15, page 174) defined in 'onion plantingofsets.dai'. | n/a |
+| 29.16 | Onion minus planting of sets | A 'Onion' model (see 29.15, page 174) defined in 'onion plantingofsets.dai'. | n/a |
 | 29.17 | Pea | A 'default' model (see 29.1, page 171) defined in 'pea.dai'. | n/a |
 | 29.18 | Green Pea | A 'Pea' model (see 29.17, page 174) defined in 'pea.dai'. | n/a |
 | 29.19 | Pioneer Maize | A 'default' model (see 29.1, page 171) defined in 'maize.dai'. | n/a |
@@ -529,8 +529,8 @@ The 'crop' component simulates a specific crop on the field, typically averaged 
 | 29.24 | Potato; Folva | A 'Potato; FertOrgaNic' model (see 29.22, page 175) defined in 'potato.dai'. | n/a |
 | 29.25 | Potato | A 'Potato; Folva' model (see 29.24, page 175) defined in 'potato.dai'. | n/a |
 | 29.26 | Potato; Triada | A 'Potato; FertOrgaNic' model (see 29.22, page 175) defined in 'potato.dai'. | n/a |
-| 29.27 | Potato; SCRI - AArhus | A 'default' model (see 29.1, page 171) defined in 'earlypotato.dai'. | n/a |
-| 29.28 | Early potato | A 'Potato; SCRI - AArhus' model (see 29.27, page 176) defined in 'earlypotato.dai'. | n/a |
+| 29.27 | Potato; SCRI minus AArhus | A 'default' model (see 29.1, page 171) defined in 'earlypotato.dai'. | n/a |
+| 29.28 | Early potato | A 'Potato; SCRI minus AArhus' model (see 29.27, page 176) defined in 'earlypotato.dai'. | n/a |
 | 29.29 | Rye | A 'default' model (see 29.1, page 171) defined in 'rye.dai'. | n/a |
 | 29.30 | Ryegrass | A 'default' model (see 29.1, page 171) defined in 'ryegrass.dai'. | n/a |
 | 29.31 | Spring Barley | A 'default' model (see 29.1, page 171) defined in 'sbarley.dai'. | n/a |
@@ -540,8 +540,8 @@ The 'crop' component simulates a specific crop on the field, typically averaged 
 | 29.35 | Sugar Beet | A 'default' model (see 29.1, page 171) defined in 'sugarbeet.dai'. | n/a |
 | 29.36 | Wclover | A 'default' model (see 29.1, page 171) defined in 'wclover.dai'. | n/a |
 | 29.37 | White cabbage | A 'default' model (see 29.1, page 171) defined in 'whitecabbage.dai'. | n/a |
-| 29.38 | White cabbage - transplanted | A 'White cabbage' model (see 29.37, page 177) defined in 'whitecabbage.dai'. | n/a |
-| 29.39 | Early white cabbage - transplanted | A 'White cabbage - transplanted' model (see 29.38, page 177) defined in 'earlywhitecabbage.dai'. | n/a |
+| 29.38 | White cabbage minus transplanted | A 'White cabbage' model (see 29.37, page 177) defined in 'whitecabbage.dai'. | n/a |
+| 29.39 | Early white cabbage minus transplanted | A 'White cabbage minus transplanted' model (see 29.38, page 177) defined in 'earlywhitecabbage.dai'. | n/a |
 | 29.40 | Winter Barley | A 'default' model (see 29.1, page 171) defined in 'wbarley.dai'. | n/a |
 | 29.41 | Winter Barley; Foulum | A 'Winter Barley' model (see 29.40, page 177) defined in 'wbarley.dai'. | n/a |
 | 29.42 | Winter Barley; Koge | A 'default' model (see 29.1, page 171) defined in 'wbarley.dai'. | n/a |
@@ -838,7 +838,7 @@ Generic representation of integers.
 |:--|:--|:--|:--|
 | 49.1 | * | Use the product of its operands. | operands |
 | 49.2 | + | Use the sum of its operands. | operands |
-| 49.3 | - | Negate integer or subtract integers. With one operand, negates it. With more than one operand, subtracts all but the first from the first. | operands |
+| 49.3 | minus | Negate integer or subtract integers. With one operand, negates it. With more than one operand, subtracts all but the first from the first. | operands |
 | 49.4 | cond | Return the value of the first clause whose condition is true. | clauses |
 | 49.5 | const | Always give the specified value. | value |
 | 49.6 | div | Divide the first operand by the rest. | operands |
@@ -977,7 +977,7 @@ Generic representation of numbers. Used by select component expr (see 80, page 4
 |:--|:--|:--|:--|
 | 59.1 | * | Use the product of its operands. | operands |
 | 59.2 | + | Use the sum of its operands. | operands |
-| 59.3 | - | Negate number or subtract numbers. With one operand, negates it. With more than one operand, subtracts all but the first from the first. | operands |
+| 59.3 | minus | Negate number or subtract numbers. With one operand, negates it. With more than one operand, subtracts all but the first from the first. | operands |
 | 59.4 | / | Divide the first operand by the rest. | operands |
 | 59.5 | apply | Apply function to operand. | function |
 | 59.6 | child | Numbers based on another number. | value |
@@ -1199,8 +1199,8 @@ Specify a retention or a halftime.
 
 | Section | Name | What it covers | Components |
 |:--|:--|:--|:--|
-| 71.1 | PASTIS | Retention curve of Mulch used in PASTIS. h (Theta) = -(-h min)ˆ(1-((Theta - Theta res) / (2/3 Theta sat - Theta res))) Used by litter mulch retention (see 51.6, page 276) . 71.2 exp Retention curve of Mulch used in Exponential. | n/a |
-| 71.2 | exp | Retention curve of Mulch used in Exponential. Theta (h) = exp (k h) (Theta sat - Theta res) + Theta res h (Theta) = ln ((Theta - Theta res) / (Theta sat - Theta res)) / k. | Theta sat, Theta res, h min |
+| 71.1 | PASTIS | Retention curve of Mulch used in PASTIS. h (Theta) = -(-h min)ˆ(1-((Theta minus Theta res) / (2/3 Theta sat minus Theta res))) Used by litter mulch retention (see 51.6, page 276) . 71.2 exp Retention curve of Mulch used in Exponential. | n/a |
+| 71.2 | exp | Retention curve of Mulch used in Exponential. Theta (h) = exp (k h) (Theta sat minus Theta res) + Theta res h (Theta) = ln ((Theta minus Theta res) / (Theta sat minus Theta res)) / k. | Theta sat, Theta res, h min |
 
 **Related theme.** water and heat movement in the soil.
 
