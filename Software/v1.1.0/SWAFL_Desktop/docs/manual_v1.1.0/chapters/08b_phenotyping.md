@@ -117,7 +117,7 @@ The table gives the **drought susceptibility index** of Fischer and Maurer (1978
 
 ### Roots day by day
 
-![The profile of the chosen day and the roots through the season. Wheat, project climate, planting day of the project, day 45 (15 June).](images/pheno/p3b_rootday.png){width=85%}
+![The profile of the chosen day and the roots through the season. Wheat, project climate, date of the toolbar 28 October 2026, day 0.](images/pheno/p3b_rootday.png){width=85%}
 
 ![The same section with the time axis set to a year from the date.](images/pheno/p3c_rootdayyear.png){width=85%}
 
@@ -149,7 +149,7 @@ This section shows the weather that every figure of the layer reads, for a windo
 
 ### Drought outlook from the date of the toolbar
 
-![The drought outlook on 15 June 2026, day 45 after emergence. Wheat, project climate, model weather (no weather file imported), after the fit to the SWAFL data.](images/pheno/p11_outlook.png){width=85%}
+![The drought outlook on 28 October 2026, the date of the toolbar and day 0 of the season. Wheat, project climate, model weather (no weather file imported), after the fit to the SWAFL data.](images/pheno/p11_outlook.png){width=85%}
 
 This section is a second drought experiment, tied to the calendar. The first (*Traits through time*) holds the right plant at a set level of water for a set time. The outlook instead lets the plant take the rain that falls: it grows the plant from sowing to **the date in the toolbar** (the *Date* control, with *Today*), and then to maturity on three futures. Change the date and the section is computed again.
 
@@ -169,7 +169,7 @@ This section is a second drought experiment, tied to the calendar. The first (*T
 
 ### Drought stress calendar: dates and what it does to the roots
 
-![The drought stress calendar of the rainfed wheat plant on the typical future, from 1 May 2026. The dark line is the date of the toolbar.](images/pheno/p12_stress.png){width=85%}
+![The drought stress calendar of the rainfed wheat plant on the typical future, from 28 October 2026. The dark line is the date of the toolbar.](images/pheno/p12_stress.png){width=85%}
 
 This section turns the outlook into a calendar. It answers two questions for the plant of the project: **on which dates is it in drought stress**, and **what does that do to its roots**. It uses the same season, weather, soil and Properties inputs as the rest of the layer, so it changes when the date of the toolbar, the weather, the soil, the crop or the irrigation of the project changes.
 
@@ -182,7 +182,7 @@ This section turns the outlook into a calendar. It answers two questions for the
 
 **How a period is found.** A day is a day of stress when the water of the root zone is below the level at which transpiration starts to fall (Eq. P.26). Days of stress that are no more than two days apart form one period, and a period shorter than two days is dropped (Eq. P.27). Each period is compared with a **well watered bench plant** that is grown on the same weather, so the difference in the roots is the effect of the water and not of the weather (Eq. P.28).
 
-**Where the dates come from.** The date in the toolbar is the key date of the whole layer, one to one: the first day of every figure is that date, the day shown in the plant, the film and the charts is that date, and when the date is changed every figure starts again from the new date. The control *Season starts* in the section *Set up the experiment* has three choices. *On the date of the toolbar* (the choice at the start) sows on the date of the toolbar. *Planting day of the project* uses the planting day of the Properties panel, so the season can lie wholly in the past or wholly ahead of the date, and the date is then a day inside it. *Automatic* uses the planting day of the project when the date falls inside that season and otherwise sows on the date. The control *Time axis* chooses what the horizontal axes show: *The season* (the 140 days of the plant, with dates) or *A year from the date*: twelve months that begin on the first day of the season, so the plant occupies the first months and a dark line marks the date of the toolbar. No date older than the first day is shown. The date itself is read as the *Today* button of the toolbar reads it: the day of the computer, written into the date box of the toolbar, which you can change at any time. Every chart of the layer has its dates on the horizontal axis and the line of the date of the toolbar.
+**Where the dates come from.** The date in the toolbar is the key date of the whole layer, one to one: any date from 1980 to 2100 can be set (the date of today, tomorrow, or a day in 2030), the box starts on the day of the computer, and nothing in the layer is fixed to a month; the first day of every figure is that date, the day shown in the plant, the film and the charts is that date, and when the date is changed every figure starts again from the new date. The control *Season starts* in the section *Set up the experiment* has three choices. *On the date of the toolbar* (the choice at the start) sows on the date of the toolbar. *Planting day of the project* uses the planting day of the Properties panel, so the season can lie wholly in the past or wholly ahead of the date, and the date is then a day inside it. *Automatic* uses the planting day of the project when the date falls inside that season and otherwise sows on the date. The control *Time axis* chooses what the horizontal axes show: *The season* (the 140 days of the plant, with dates) or *A year from the date*: twelve months that begin on the first day of the season, so the plant occupies the first months and a dark line marks the date of the toolbar. No date older than the first day is shown. The date itself is read as the *Today* button of the toolbar reads it: the day of the computer, written into the date box of the toolbar, which you can change at any time. Every chart of the layer has its dates on the horizontal axis and the line of the date of the toolbar.
 
 **Reading the roots.** In the figure the roots of the rainfed plant grow as much as or more than the watered roots during the first periods, because a plant in dry soil sends a larger share of its carbon to the roots and so keeps growing downwards, but in the last periods, after grain filling has begun, they make no growth at all with or without water. The share of the root length in dry layers is high from the first period, because the top layers dry first and most of the roots are there. These are the results of the model with the constants of the species; they are not measurements.
 
