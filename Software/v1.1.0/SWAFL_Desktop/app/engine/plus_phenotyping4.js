@@ -217,11 +217,11 @@
   function yearWeather() {
     const D = toolbarDate(), Y = new Date(D).getUTCFullYear(), W0 = sources(), key = [W0 ? W0.key + '|' + W0.rows.length : 'model', D, PH.clim, PH.xw].join('|');
     if (WCACHE && WCACHE.key === key) return WCACHE.v;
-    const y0 = Date.UTC(Y, 0, 1), n = ((Y % 4 === 0 && Y % 100 !== 0) || Y % 400 === 0) ? 366 : 365, byDay = new Map(); if (W0) W0.rows.forEach(r => byDay.set(r.d.getTime(), r));
+    const y0 = D - 30 * DAY, n = 365, byDay = new Map(); if (W0) W0.rows.forEach(r => byDay.set(r.d.getTime(), r));
     let ti = null, mw = null;
     if (W0 && W0.P && W0.years) { const NY = W0.years.length, sums = []; for (let i = 0; i < NY; i++) { let q = 0; for (let j = 0; j < 365; j++) q += W0.P[i * 365 + j] || 0; sums.push(q); } ti = sums.map((v, i) => i).sort((a, b) => sums[a] - sums[b])[Math.floor(NY / 2)]; }
     else { try { mw = P.weather(Object.assign({}, envObj(true, true), { sow: 0 }), 365); } catch (e) { mw = null; } }
-    const v = { Y, D, n, P: [], E: [], T: [], kind: [], rows: 0, first: null, last: null, fcN: 0, medYear: ti != null ? W0.years[ti] : null };
+    const v = { Y, D, y0, n, P: [], E: [], T: [], kind: [], rows: 0, first: null, last: null, fcN: 0, medYear: ti != null ? W0.years[ti] : null };
     for (let d = 0; d < n; d++) {
       const ms = y0 + d * DAY, r = byDay.get(ms), j = Math.min(364, jOf(ms)); let p = NaN, e = NaN, t = NaN, kind = 'model';
       if (r) { p = r.P; e = r.ET0; t = isFinite(r.tmean) ? r.tmean : (isFinite(r.tmax) && isFinite(r.tmin) ? (r.tmax + r.tmin) / 2 : NaN); kind = ms <= D ? 'obs' : 'fc'; v.rows++; if (v.first == null) v.first = ms; v.last = ms; if (kind === 'fc') v.fcN++; }
@@ -233,17 +233,17 @@
     WCACHE = { key, v }; return v;
   }
   function drawWeather(y) {
-    const w = W - 32, cx = 16, y0 = y, W0 = sources(); K.frame(cx, y, w, 24, 'Weather in use, January to December', 'the weather behind every figure of the layer'); y += 30;
+    const w = W - 32, cx = 16, y0 = y, W0 = sources(); K.frame(cx, y, w, 24, 'Weather in use, a year from the date of the toolbar', 'one month back, eleven months ahead'); y += 30;
     let v; try { v = yearWeather(); } catch (e) { T('The weather could not be read: ' + e, cx + 12, y + 10, { s: 9.5, c: '#B3261E' }); console.error(e); endFrame(cx, y0, y + 24, w); return y + 34; }
-    const ti = Math.floor((v.D - Date.UTC(v.Y, 0, 1)) / DAY), S = season(v.D), sIdx = Math.floor((S.start - Date.UTC(v.Y, 0, 1)) / DAY);
+    const ti = Math.floor((v.D - v.y0) / DAY), S = season(v.D), sIdx = Math.floor((S.start - v.y0) / DAY);
     const src = W0 ? (W0.src === 'online' ? 'online weather of ' + W0.name : 'weather file ' + W0.name) : 'the model weather of the project climate (no weather file or online weather is loaded)';
     let txt = 'Source: ' + src + '. ';
-    if (W0 && v.rows) txt += 'The record holds ' + v.rows + ' days of ' + v.Y + ' (' + fdate(v.first) + ' to ' + fdate(v.last) + ')' + (v.fcN ? ', of which ' + v.fcN + ' are the forecast after the date of the toolbar' : '') + '. The other days are the typical year of the record' + (v.medYear != null ? ' (' + v.medYear + ')' : '') + '. ';
-    else if (W0) txt += 'It has no day of ' + v.Y + ', so every day is the typical year of the record' + (v.medYear != null ? ' (' + v.medYear + ')' : '') + '. ';
+    if (W0 && v.rows) txt += 'The record holds ' + v.rows + ' days of the window ('  + fdate(v.first) + ' to ' + fdate(v.last) + ')' + (v.fcN ? ', of which ' + v.fcN + ' are the forecast after the date of the toolbar' : '') + '. The other days are the typical year of the record' + (v.medYear != null ? ' (' + v.medYear + ')' : '') + '. ';
+    else if (W0) txt += 'It has no day of this window, so every day is the typical year of the record' + (v.medYear != null ? ' (' + v.medYear + ')' : '') + '. ';
     const i0 = clamp(ti, 0, v.n - 1); txt += 'On ' + fdate(v.D) + ': rain ' + fmt(v.P[i0], 1) + ' mm, reference evapotranspiration ' + (v.E[i0] != null ? fmt(v.E[i0], 1) : 'n/a') + ' mm, mean temperature ' + (v.T[i0] != null ? fmt(v.T[i0], 1) : 'n/a') + ' °C.';
     y += 6; y += note(txt, cx + 12, y, w - 24) * 12.5 + 8;
     const x0 = cx + 46, ww = w - 62, X = (() => { const f = d => x0 + ww * d / (v.n - 1); f.x0 = x0; f.x1 = x0 + ww; return f; })(), hh = 96, col = { obs: '#1F5FA8', fc: '#6BA6E8', clim: '#A8B0BC', model: '#A8B0BC' };
-    const fm = (lo, hi, n) => { const out = []; for (let m = 0; m < 12; m++) { const d = Math.round((Date.UTC(v.Y, m, 1) - Date.UTC(v.Y, 0, 1)) / DAY); out.push([d, MONn[m]]); } return out; };
+    const fm = () => { const out = [], d0 = new Date(v.y0); for (let m = 0; m < 14; m++) { const ms = Date.UTC(d0.getUTCFullYear(), d0.getUTCMonth() + m, 1), d = Math.round((ms - v.y0) / DAY); if (d >= 4 && d < v.n - 14) out.push([d, MONn[new Date(ms).getUTCMonth()] + (new Date(ms).getUTCMonth() === 0 ? ' ' + new Date(ms).getUTCFullYear() : '')]); } return out; };
     const panel = (label, top, f, c, unit, bars, extra) => {
       const vals = f.filter(a => a != null).concat(extra || []); const mx = K.nice(Math.max(1, ...vals) * 1.08), mn = bars ? 0 : Math.min(0, Math.floor(Math.min(...vals)));
       ctx.fillStyle = '#EEF3E8'; ctx.fillRect(X(Math.max(0, sIdx)), top, X(Math.min(v.n - 1, sIdx + N - 1)) - X(Math.max(0, sIdx)), hh);
@@ -265,7 +265,7 @@
 
   const io = SECTIONS.findIndex(q => q.id === 'outlook');
   const ie = SECTIONS.findIndex(q => q.id === 'data'); SECTIONS.splice(ie < 0 ? SECTIONS.length : ie, 0, { id: 'outlook', t: 'Drought outlook from the date of the toolbar', s: 'the season to the date, then a dry, a typical and a wet future', fn: drawOutlook });
-  { const iw = SECTIONS.findIndex(q => q.id === 'outlook'); SECTIONS.splice(iw, 0, { id: 'wx', t: 'Weather in use, January to December', s: 'the weather behind every figure of the layer', fn: drawWeather }); }
+  { const iw = SECTIONS.findIndex(q => q.id === 'outlook'); SECTIONS.splice(iw, 0, { id: 'wx', t: 'Weather in use, a year from the date of the toolbar', s: 'the weather behind every figure of the layer', fn: drawWeather }); }
   { const ix = SECTIONS.findIndex(q => q.id === 'outlook'); SECTIONS.splice(ix + 1, 0, { id: 'stress', t: 'Drought stress calendar: dates and what it does to the roots', s: 'periods of stress from the date of the toolbar, with the future', fn: drawStress }); }
   U.outlook = { compute, toolbarDate, season, arrays, assemble };
 })();

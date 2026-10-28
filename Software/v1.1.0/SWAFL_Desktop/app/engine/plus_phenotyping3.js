@@ -47,7 +47,7 @@
       U.todayMark(X, gy, gh); if (U.yearAxis()) U.axisDates(X, gy + gh, gx, gw); else { T(dateOf(0), gx, gy + gh + 11, { s: 7.5, c: MUTE }); T(dateOf(N - 1), gx + gw, gy + gh + 11, { s: 7.5, c: MUTE, a: 'right' }); }
       scrub(gx, gy, gw, gh, X.sx, X.sw);
     });
-    const yb = y + 20 + 3 * (gh + 26) + 4; T((U.yearAxis() ? 'the calendar year, January to December' : 'dates from ' + dateOf(0) + ' to ' + dateOf(N - 1)) + ' · click or drag on any chart to move the day', gx0, yb, { s: 8.5, c: MUTE });
+    const yb = y + 20 + 3 * (gh + 26) + 4; T((U.yearAxis() ? 'a year from the first day' : 'dates from ' + dateOf(0) + ' to ' + dateOf(N - 1)) + ' · click or drag on any chart to move the day', gx0, yb, { s: 8.5, c: MUTE });
     y = Math.max(top + hh + 82, yb + 10);
     const rootsNow = 'On day ' + d + ' the ' + RN() + ' plant has ' + fmt(a.Lroot[d] / 100, 1) + ' m of root to ' + fmt(a.Rdepth[d]) + ' cm and the drought plant ' + fmt(b.Lroot[d] / 100, 1) + ' m to ' + fmt(b.Rdepth[d]) + ' cm. The root grows by ' + fmt(a.dL[d]) + ' and ' + fmt(b.dL[d]) + ' cm per day, with ' + fmt(a.fr[d] * 100) + ' and ' + fmt(b.fr[d] * 100) + ' % of the new carbon, so the shoot measurements of the same day (shoot area ' + fmt(a.PSA[d]) + ' and ' + fmt(b.PSA[d]) + ' cm², canopy temperature depression ' + fmt(a.CTD[d], 1) + ' and ' + fmt(b.CTD[d], 1) + ' K) can be read against the roots of that day.';
     const n = note(rootsNow, cx + 12, y, w - 24); y += n * 12.5 + 10; endFrame(cx, y0, y, w); return y + 10;

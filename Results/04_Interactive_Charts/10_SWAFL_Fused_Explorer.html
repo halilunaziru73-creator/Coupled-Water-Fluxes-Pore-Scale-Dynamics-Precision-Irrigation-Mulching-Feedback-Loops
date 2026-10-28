@@ -8285,13 +8285,14 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   const yearAxis = () => PH.axis === 'year';
   // the map from a day of the season to the x of a chart: the season itself, or the whole calendar year from January to December
   function xmap(x0, ww) {
-    let f; if (!yearAxis()) f = k => x0 + ww * k / (N - 1); else { const s = startMs(), y0 = Date.UTC(new Date(s).getUTCFullYear(), 0, 1), off = Math.round((s - y0) / DAYMS), span = Math.max(365, off + N); f = k => x0 + ww * (off + k) / (span - 1); }
+    let f; if (!yearAxis()) f = k => x0 + ww * k / (N - 1); else f = k => x0 + ww * k / 364;     // the window of a year: day 0 is the first day of the season (the date of the toolbar) and the axis runs 364 days on
     f.x0 = x0; f.x1 = x0 + ww; f.sx = f(0); f.sw = f(N - 1) - f(0); return f;
   }
   function axisDates(X, yAxis, x0, ww, o) {
     o = o || {};
-    if (yearAxis()) { const s = startMs(), y = new Date(s).getUTCFullYear(), step = ww < 220 ? 3 : ww < 400 ? 2 : 1, wide = ww >= 400; let lastX = -1e9;
-      for (let m = 0; m < 24; m += step) { const ms = Date.UTC(y, m, 1), k = (ms - s) / DAYMS, xx = X(k); if (xx < x0 - 1 || xx > x0 + ww - 14) continue; ctx.strokeStyle = '#D8D3C6'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(xx + 0.5, yAxis); ctx.lineTo(xx + 0.5, yAxis + 4); ctx.stroke(); T(MON[m % 12] + (m === 0 || m === 12 ? ' ' + (wide ? (y + Math.floor(m / 12)) : String(y + Math.floor(m / 12)).slice(2)) : ''), xx + 2, yAxis + 12, { s: 8, c: MUTE }); }
+    if (yearAxis()) { const s = startMs(), d0 = new Date(s), wide = ww >= 400, step = ww < 220 ? 3 : ww < 400 ? 2 : 1;
+      T(d0.getUTCDate() + ' ' + MON[d0.getUTCMonth()] + (wide ? ' ' + d0.getUTCFullYear() : ''), x0, yAxis + 12, { s: 8, c: MUTE, a: 'left' });
+      for (let m = 1; m < 14; m += step) { const ms = Date.UTC(d0.getUTCFullYear(), d0.getUTCMonth() + m, 1), k = (ms - s) / DAYMS, xx = X(k); if (k < 364 * (wide ? 0.07 : 0.2) || xx > x0 + ww - 14) continue; const dm = new Date(ms); ctx.strokeStyle = '#D8D3C6'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(xx + 0.5, yAxis); ctx.lineTo(xx + 0.5, yAxis + 4); ctx.stroke(); T(MON[dm.getUTCMonth()] + (dm.getUTCMonth() === 0 ? ' ' + (wide ? dm.getUTCFullYear() : String(dm.getUTCFullYear()).slice(2)) : ''), xx + 2, yAxis + 12, { s: 8, c: MUTE }); }
       return; }
     const n = o.n || 5, yr = new Date(startMs()).getUTCFullYear(); for (let i = 0; i <= n; i++) { const t = Math.round(i * (N - 1) / n), dt = new Date(startMs() + t * DAYMS); T(dt.getUTCDate() + ' ' + MON[dt.getUTCMonth()] + (i === 0 || dt.getUTCFullYear() !== yr && i === n ? ' ' + String(dt.getUTCFullYear()).slice(2) : ''), X(t), yAxis + 12, { s: 8.5, c: MUTE, a: i === 0 ? 'left' : i === n ? 'right' : 'center' }); } }
   function todayMark(X, top, hh) { try { const q = window.PHUI.outlook.season(dKey()); const xx = X(q.idx); if (yearAxis() ? (xx < X.x0 - 1 || xx > X.x1 + 1) : (q.idx < 0 || q.idx >= N)) return; ctx.strokeStyle = '#0A246A'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(xx + 0.5, top); ctx.lineTo(xx + 0.5, top + hh); ctx.stroke(); ctx.fillStyle = '#0A246A'; ctx.beginPath(); ctx.moveTo(xx - 4, top - 1); ctx.lineTo(xx + 5, top - 1); ctx.lineTo(xx + 0.5, top + 5); ctx.closePath(); ctx.fill(); } catch (e) { } }
@@ -8387,7 +8388,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
     y = chipRow('Genotype', P.GENO.map(g => ({ k: g.id, t: g.name })).concat(PH.gid === 'custom' ? [{ k: 'custom', t: 'Custom' }] : []), PH.gid, k => { if (k !== 'custom') applyPreset(k); }, x0, y, ww);
     y = chipRow('Drought', [{ k: 'pulse', t: 'Pulse and recovery', tip: 'set-point of the water in the root zone: 1st stress, 2nd stress (two thirds of it), then rewatering, as in the pot experiments' }, { k: 'terminal', t: 'Terminal', tip: 'no water from the onset to the end' }, { k: 'inter', t: 'Intermittent', tip: 'cycles of stress and rewatering' }, { k: 'none', t: 'No stress (control only)' }], PH.dr.type, k => { PH.dr.type = k; }, x0, y, ww);
     y = chipRow('Season starts', [{ k: 'date', t: 'On the date of the toolbar', tip: 'day 0 of every figure is the date shown in the toolbar; change the date and every figure starts again from it' }, { k: 'project', t: 'Planting day of the project', tip: 'the day of the year set in the Properties panel' }, { k: 'auto', t: 'Automatic', tip: 'the planting day of the project when the date of the toolbar falls in that season, otherwise the date of the toolbar' }], PH.sowMode || 'date', k => { PH.sowMode = k; }, x0, y, ww);
-    y = chipRow('Time axis', [{ k: 'season', t: 'The season', tip: 'the 140 days of the plant' }, { k: 'year', t: 'The whole year, January to December', tip: 'the calendar year of the season, with the date of the toolbar marked' }], PH.axis || 'season', k => { PH.axis = k; }, x0, y, ww);
+    y = chipRow('Time axis', [{ k: 'season', t: 'The season', tip: 'the 140 days of the plant' }, { k: 'year', t: 'A year from the date', tip: 'twelve months from the first day of the season, with the date of the toolbar marked' }], PH.axis || 'season', k => { PH.axis = k; }, x0, y, ww);
     y = chipRow('Climate', Object.keys(CLIM).map(k => ({ k, t: CLIM[k].t })), PH.clim, k => { PH.clim = k; }, x0, y, ww);
     y = chipRow('Rain', [{ k: 'none', t: 'Excluded (rain-out shelter)' }, { k: 'project', t: 'Project rain' + (window.WXD && window.WXD.on ? ' (imported days)' : '') }], PH.rain, k => { PH.rain = k; }, x0, y, ww);
     y = chipRow('Left plant', [{ k: 'pj', t: 'Project irrigation', tip: 'watered by the sensor, trigger and method of the Properties panel, with its mulch, nitrogen and salt' }, { k: 'ww', t: 'Well-watered bench', tip: 'water held at the field capacity, as in a pot experiment' }, { k: 'rf', t: 'Rainfed', tip: 'only the rain of the project' }], PH.ref, k => { PH.ref = k; }, x0, y, ww);
@@ -8971,7 +8972,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
       U.todayMark(X, gy, gh); if (U.yearAxis()) U.axisDates(X, gy + gh, gx, gw); else { T(dateOf(0), gx, gy + gh + 11, { s: 7.5, c: MUTE }); T(dateOf(N - 1), gx + gw, gy + gh + 11, { s: 7.5, c: MUTE, a: 'right' }); }
       scrub(gx, gy, gw, gh, X.sx, X.sw);
     });
-    const yb = y + 20 + 3 * (gh + 26) + 4; T((U.yearAxis() ? 'the calendar year, January to December' : 'dates from ' + dateOf(0) + ' to ' + dateOf(N - 1)) + ' · click or drag on any chart to move the day', gx0, yb, { s: 8.5, c: MUTE });
+    const yb = y + 20 + 3 * (gh + 26) + 4; T((U.yearAxis() ? 'a year from the first day' : 'dates from ' + dateOf(0) + ' to ' + dateOf(N - 1)) + ' · click or drag on any chart to move the day', gx0, yb, { s: 8.5, c: MUTE });
     y = Math.max(top + hh + 82, yb + 10);
     const rootsNow = 'On day ' + d + ' the ' + RN() + ' plant has ' + fmt(a.Lroot[d] / 100, 1) + ' m of root to ' + fmt(a.Rdepth[d]) + ' cm and the drought plant ' + fmt(b.Lroot[d] / 100, 1) + ' m to ' + fmt(b.Rdepth[d]) + ' cm. The root grows by ' + fmt(a.dL[d]) + ' and ' + fmt(b.dL[d]) + ' cm per day, with ' + fmt(a.fr[d] * 100) + ' and ' + fmt(b.fr[d] * 100) + ' % of the new carbon, so the shoot measurements of the same day (shoot area ' + fmt(a.PSA[d]) + ' and ' + fmt(b.PSA[d]) + ' cm², canopy temperature depression ' + fmt(a.CTD[d], 1) + ' and ' + fmt(b.CTD[d], 1) + ' K) can be read against the roots of that day.';
     const n = note(rootsNow, cx + 12, y, w - 24); y += n * 12.5 + 10; endFrame(cx, y0, y, w); return y + 10;
@@ -9359,11 +9360,11 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   function yearWeather() {
     const D = toolbarDate(), Y = new Date(D).getUTCFullYear(), W0 = sources(), key = [W0 ? W0.key + '|' + W0.rows.length : 'model', D, PH.clim, PH.xw].join('|');
     if (WCACHE && WCACHE.key === key) return WCACHE.v;
-    const y0 = Date.UTC(Y, 0, 1), n = ((Y % 4 === 0 && Y % 100 !== 0) || Y % 400 === 0) ? 366 : 365, byDay = new Map(); if (W0) W0.rows.forEach(r => byDay.set(r.d.getTime(), r));
+    const y0 = D - 30 * DAY, n = 365, byDay = new Map(); if (W0) W0.rows.forEach(r => byDay.set(r.d.getTime(), r));
     let ti = null, mw = null;
     if (W0 && W0.P && W0.years) { const NY = W0.years.length, sums = []; for (let i = 0; i < NY; i++) { let q = 0; for (let j = 0; j < 365; j++) q += W0.P[i * 365 + j] || 0; sums.push(q); } ti = sums.map((v, i) => i).sort((a, b) => sums[a] - sums[b])[Math.floor(NY / 2)]; }
     else { try { mw = P.weather(Object.assign({}, envObj(true, true), { sow: 0 }), 365); } catch (e) { mw = null; } }
-    const v = { Y, D, n, P: [], E: [], T: [], kind: [], rows: 0, first: null, last: null, fcN: 0, medYear: ti != null ? W0.years[ti] : null };
+    const v = { Y, D, y0, n, P: [], E: [], T: [], kind: [], rows: 0, first: null, last: null, fcN: 0, medYear: ti != null ? W0.years[ti] : null };
     for (let d = 0; d < n; d++) {
       const ms = y0 + d * DAY, r = byDay.get(ms), j = Math.min(364, jOf(ms)); let p = NaN, e = NaN, t = NaN, kind = 'model';
       if (r) { p = r.P; e = r.ET0; t = isFinite(r.tmean) ? r.tmean : (isFinite(r.tmax) && isFinite(r.tmin) ? (r.tmax + r.tmin) / 2 : NaN); kind = ms <= D ? 'obs' : 'fc'; v.rows++; if (v.first == null) v.first = ms; v.last = ms; if (kind === 'fc') v.fcN++; }
@@ -9375,17 +9376,17 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
     WCACHE = { key, v }; return v;
   }
   function drawWeather(y) {
-    const w = W - 32, cx = 16, y0 = y, W0 = sources(); K.frame(cx, y, w, 24, 'Weather in use, January to December', 'the weather behind every figure of the layer'); y += 30;
+    const w = W - 32, cx = 16, y0 = y, W0 = sources(); K.frame(cx, y, w, 24, 'Weather in use, a year from the date of the toolbar', 'one month back, eleven months ahead'); y += 30;
     let v; try { v = yearWeather(); } catch (e) { T('The weather could not be read: ' + e, cx + 12, y + 10, { s: 9.5, c: '#B3261E' }); console.error(e); endFrame(cx, y0, y + 24, w); return y + 34; }
-    const ti = Math.floor((v.D - Date.UTC(v.Y, 0, 1)) / DAY), S = season(v.D), sIdx = Math.floor((S.start - Date.UTC(v.Y, 0, 1)) / DAY);
+    const ti = Math.floor((v.D - v.y0) / DAY), S = season(v.D), sIdx = Math.floor((S.start - v.y0) / DAY);
     const src = W0 ? (W0.src === 'online' ? 'online weather of ' + W0.name : 'weather file ' + W0.name) : 'the model weather of the project climate (no weather file or online weather is loaded)';
     let txt = 'Source: ' + src + '. ';
-    if (W0 && v.rows) txt += 'The record holds ' + v.rows + ' days of ' + v.Y + ' (' + fdate(v.first) + ' to ' + fdate(v.last) + ')' + (v.fcN ? ', of which ' + v.fcN + ' are the forecast after the date of the toolbar' : '') + '. The other days are the typical year of the record' + (v.medYear != null ? ' (' + v.medYear + ')' : '') + '. ';
-    else if (W0) txt += 'It has no day of ' + v.Y + ', so every day is the typical year of the record' + (v.medYear != null ? ' (' + v.medYear + ')' : '') + '. ';
+    if (W0 && v.rows) txt += 'The record holds ' + v.rows + ' days of the window ('  + fdate(v.first) + ' to ' + fdate(v.last) + ')' + (v.fcN ? ', of which ' + v.fcN + ' are the forecast after the date of the toolbar' : '') + '. The other days are the typical year of the record' + (v.medYear != null ? ' (' + v.medYear + ')' : '') + '. ';
+    else if (W0) txt += 'It has no day of this window, so every day is the typical year of the record' + (v.medYear != null ? ' (' + v.medYear + ')' : '') + '. ';
     const i0 = clamp(ti, 0, v.n - 1); txt += 'On ' + fdate(v.D) + ': rain ' + fmt(v.P[i0], 1) + ' mm, reference evapotranspiration ' + (v.E[i0] != null ? fmt(v.E[i0], 1) : 'n/a') + ' mm, mean temperature ' + (v.T[i0] != null ? fmt(v.T[i0], 1) : 'n/a') + ' °C.';
     y += 6; y += note(txt, cx + 12, y, w - 24) * 12.5 + 8;
     const x0 = cx + 46, ww = w - 62, X = (() => { const f = d => x0 + ww * d / (v.n - 1); f.x0 = x0; f.x1 = x0 + ww; return f; })(), hh = 96, col = { obs: '#1F5FA8', fc: '#6BA6E8', clim: '#A8B0BC', model: '#A8B0BC' };
-    const fm = (lo, hi, n) => { const out = []; for (let m = 0; m < 12; m++) { const d = Math.round((Date.UTC(v.Y, m, 1) - Date.UTC(v.Y, 0, 1)) / DAY); out.push([d, MONn[m]]); } return out; };
+    const fm = () => { const out = [], d0 = new Date(v.y0); for (let m = 0; m < 14; m++) { const ms = Date.UTC(d0.getUTCFullYear(), d0.getUTCMonth() + m, 1), d = Math.round((ms - v.y0) / DAY); if (d >= 4 && d < v.n - 14) out.push([d, MONn[new Date(ms).getUTCMonth()] + (new Date(ms).getUTCMonth() === 0 ? ' ' + new Date(ms).getUTCFullYear() : '')]); } return out; };
     const panel = (label, top, f, c, unit, bars, extra) => {
       const vals = f.filter(a => a != null).concat(extra || []); const mx = K.nice(Math.max(1, ...vals) * 1.08), mn = bars ? 0 : Math.min(0, Math.floor(Math.min(...vals)));
       ctx.fillStyle = '#EEF3E8'; ctx.fillRect(X(Math.max(0, sIdx)), top, X(Math.min(v.n - 1, sIdx + N - 1)) - X(Math.max(0, sIdx)), hh);
@@ -9407,7 +9408,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
 
   const io = SECTIONS.findIndex(q => q.id === 'outlook');
   const ie = SECTIONS.findIndex(q => q.id === 'data'); SECTIONS.splice(ie < 0 ? SECTIONS.length : ie, 0, { id: 'outlook', t: 'Drought outlook from the date of the toolbar', s: 'the season to the date, then a dry, a typical and a wet future', fn: drawOutlook });
-  { const iw = SECTIONS.findIndex(q => q.id === 'outlook'); SECTIONS.splice(iw, 0, { id: 'wx', t: 'Weather in use, January to December', s: 'the weather behind every figure of the layer', fn: drawWeather }); }
+  { const iw = SECTIONS.findIndex(q => q.id === 'outlook'); SECTIONS.splice(iw, 0, { id: 'wx', t: 'Weather in use, a year from the date of the toolbar', s: 'the weather behind every figure of the layer', fn: drawWeather }); }
   { const ix = SECTIONS.findIndex(q => q.id === 'outlook'); SECTIONS.splice(ix + 1, 0, { id: 'stress', t: 'Drought stress calendar: dates and what it does to the roots', s: 'periods of stress from the date of the toolbar, with the future', fn: drawStress }); }
   U.outlook = { compute, toolbarDate, season, arrays, assemble };
 })();
