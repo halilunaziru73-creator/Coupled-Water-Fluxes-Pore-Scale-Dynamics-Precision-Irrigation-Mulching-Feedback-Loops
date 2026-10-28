@@ -4,7 +4,7 @@ The third group draws what a run produced.
 
 ## The five scenarios, with their results
 
-The screens that follow were taken after a real Daisy run of each scenario on the built-in farm with the built-in Taastrup weather for the years 1990 to 1993. The figures are spectral: blue is low or wet and red is high or dry.
+The screens that follow were taken after a real Daisy run of each scenario on the built-in farm with the built-in Taastrup weather for the years 1990 to 1993. The screens in this chapter show the figures as they were first drawn; the figures are now drawn in the style described at the end of this chapter (a title at the top left, light grid, colour blind safe colours, the legend below the figure, a colour bar for the maps of depth against time), and the numbers in them are the same.
 
 ## Results of the irrigation scenario
 
@@ -32,7 +32,7 @@ Grain or storage organ yield of each crop of the rotation in each year for the r
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare.
 
 \newpage
@@ -45,7 +45,7 @@ Rain, irrigation, evapotranspiration, drainage below the root zone and the chang
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year.
 
 \newpage
@@ -58,7 +58,7 @@ Soil water content against depth and time, from the daily log of Daisy.
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Soil water content against depth and time, from the daily log of Daisy.
 
 \newpage
@@ -71,7 +71,7 @@ Soil water suction on the pF scale against depth and time; irrigation triggers a
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Soil water suction on the pF scale against depth and time; irrigation triggers act on this quantity.
 
 \newpage
@@ -84,7 +84,7 @@ Leaf area index with the water and nitrogen stress of the crop through the seaso
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Leaf area index with the water and nitrogen stress of the crop through the seasons.
 
 \newpage
@@ -97,7 +97,7 @@ The mean yield of each crop in every ticked run, side by side.
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** The mean yield of each crop in every ticked run, side by side.
 
 \newpage
@@ -110,7 +110,7 @@ Irrigation, evapotranspiration and drainage of the runs side by side.
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Irrigation, evapotranspiration and drainage of the runs side by side.
 
 \newpage
@@ -123,7 +123,7 @@ The yield of each year in every run, to show how much of a difference is steady 
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year.
 
 \newpage
@@ -154,7 +154,7 @@ Grain or storage organ yield of each crop of the rotation in each year for the r
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare.
 
 \newpage
@@ -167,7 +167,7 @@ The nitrogen balance of the run: what is applied, taken up by the crop, leached,
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** The nitrogen balance of the run: what is applied, taken up by the crop, leached, denitrified and left in the soil.
 
 \newpage
@@ -180,7 +180,7 @@ Nitrate concentration of the soil solution against depth and time.
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Nitrate concentration of the soil solution against depth and time.
 
 \newpage
@@ -193,7 +193,7 @@ Rain, irrigation, evapotranspiration, drainage below the root zone and the chang
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year.
 
 \newpage
@@ -206,7 +206,7 @@ The mean yield of each crop in every ticked run, side by side.
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** The mean yield of each crop in every ticked run, side by side.
 
 \newpage
@@ -219,7 +219,7 @@ Nitrate leached, denitrification and nitrogen uptake of the runs side by side.
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Nitrate leached, denitrification and nitrogen uptake of the runs side by side.
 
 \newpage
@@ -232,7 +232,7 @@ Yield and nitrate leaching against the fertiliser rate across the runs.
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Yield and nitrate leaching against the fertiliser rate across the runs.
 
 \newpage
@@ -245,7 +245,7 @@ The yield of each year in every run, to show how much of a difference is steady 
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year.
 
 \newpage
@@ -276,7 +276,7 @@ Grain or storage organ yield of each crop of the rotation in each year for the r
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare.
 
 \newpage
@@ -289,7 +289,7 @@ Rain, irrigation, evapotranspiration, drainage below the root zone and the chang
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year.
 
 \newpage
@@ -302,7 +302,7 @@ Leaf area index with the water and nitrogen stress of the crop through the seaso
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Leaf area index with the water and nitrogen stress of the crop through the seasons.
 
 \newpage
@@ -315,7 +315,7 @@ Soil water content against depth and time, from the daily log of Daisy.
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Soil water content against depth and time, from the daily log of Daisy.
 
 \newpage
@@ -328,7 +328,7 @@ The mean yield of each crop in every ticked run, side by side.
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** The mean yield of each crop in every ticked run, side by side.
 
 \newpage
@@ -341,7 +341,7 @@ Irrigation, evapotranspiration and drainage of the runs side by side.
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Irrigation, evapotranspiration and drainage of the runs side by side.
 
 \newpage
@@ -354,7 +354,7 @@ Nitrate leached, denitrification and nitrogen uptake of the runs side by side.
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Nitrate leached, denitrification and nitrogen uptake of the runs side by side.
 
 \newpage
@@ -367,7 +367,7 @@ The yield of each year in every run, to show how much of a difference is steady 
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year.
 
 \newpage
@@ -398,7 +398,7 @@ How much of the chemical is in the soil, decayed, leached or taken up in each se
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** How much of the chemical is in the soil, decayed, leached or taken up in each season.
 
 \newpage
@@ -411,7 +411,7 @@ The concentration of the chemical against depth and time.
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** The concentration of the chemical against depth and time.
 
 \newpage
@@ -424,7 +424,7 @@ Rain, irrigation, evapotranspiration, drainage below the root zone and the chang
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year.
 
 \newpage
@@ -437,7 +437,7 @@ The fate of the chemical in the runs side by side: mobile tracer, sorbed and qui
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** The fate of the chemical in the runs side by side: mobile tracer, sorbed and quickly decaying chemical.
 
 \newpage
@@ -450,7 +450,7 @@ The yield of each year in every run, to show how much of a difference is steady 
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year.
 
 \newpage
@@ -481,7 +481,7 @@ Grain or storage organ yield of each crop of the rotation in each year for the r
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Grain or storage organ yield of each crop of the rotation in each year for the run chosen in the list above, in Mg dry matter per hectare.
 
 \newpage
@@ -494,7 +494,7 @@ Rain, irrigation, evapotranspiration, drainage below the root zone and the chang
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Rain, irrigation, evapotranspiration, drainage below the root zone and the change in soil water, summed for each year.
 
 \newpage
@@ -507,7 +507,7 @@ Soil water content against depth and time, from the daily log of Daisy.
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Soil water content against depth and time, from the daily log of Daisy.
 
 \newpage
@@ -520,7 +520,7 @@ Soil water suction on the pF scale against depth and time; irrigation triggers a
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Soil water suction on the pF scale against depth and time; irrigation triggers act on this quantity.
 
 \newpage
@@ -533,7 +533,7 @@ Nitrate concentration of the soil solution against depth and time.
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Nitrate concentration of the soil solution against depth and time.
 
 \newpage
@@ -546,7 +546,7 @@ The mean yield of each crop in every ticked run, side by side.
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** The mean yield of each crop in every ticked run, side by side.
 
 \newpage
@@ -559,7 +559,7 @@ Irrigation, evapotranspiration and drainage of the runs side by side.
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Irrigation, evapotranspiration and drainage of the runs side by side.
 
 \newpage
@@ -572,7 +572,7 @@ Nitrate leached, denitrification and nitrogen uptake of the runs side by side.
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** Nitrate leached, denitrification and nitrogen uptake of the runs side by side.
 
 \newpage
@@ -585,7 +585,7 @@ The yield of each year in every run, to show how much of a difference is steady 
 
 **What the arrows point to.**
 
-1. **Picture (PNG).** Saves this figure as a picture with its source line.
+1. **Picture (PNG).** Saves this figure as a picture, with its title and axes and nothing else: no citation and no caption is added.
 2. **Figure.** The yield of each year in every run, to show how much of a difference is steady and how much depends on the weather of the year.
 
 \newpage
@@ -972,4 +972,29 @@ Each column is reported as identical, different within the level, or different.
 1. **Result table.** One row for each column with the largest difference and the verdict.
 
 \newpage
+
+## How the figures are drawn
+
+Every figure of the workbench, in the scenarios, the processes, the experiments and the tabs Plot and Soil column, is drawn in the style of a journal figure and in the style of the figures of the SWAFL repository. The title is at the top left in bold. The panel is white with a light grid and the axes at the left and at the bottom only. A time axis has a tick for every year, and a run of less than a year has ticks for the months. The colours are the colour blind safe set (blue, orange, green, pink, yellow, sky blue), the legend is below the figure, and a map of depth against time has a colour bar with the unit written in the log file itself. Nothing but the title, the axes, the legend and the data is drawn: no citation and no caption is added to a figure, to a saved picture or to a saved report.
+
+What each figure shows is written under its name, with the Daisy log it is drawn from, so that every figure can be traced to a file. A figure that has several panels is saved as one picture with all of its panels.
+
+* The yield figure shows the storage organ at each harvest, coloured by crop, and below it the storage organ against the stem in the way of the daisyrVis exercise of the Daisy course.
+* The water figures show the annual balance (rain and irrigation as bars, evapotranspiration and drainage as lines) and the running totals through the whole run.
+* The water content and the suction are maps of depth against time. In the suction map the black marks FC and WP are field capacity (pF 2) and the wilting point (pF 4.2).
+* The crop figure shows the leaf area index, the water and nitrogen stress and the dry matter of the plant parts. The stress of Daisy is 0 when there is none and 1 when the crop cannot grow.
+* The nitrogen figure shows where the fertiliser goes (crop uptake, leaching below 100 cm, gaseous loss by denitrification and N2O, volatilisation) against the fertiliser applied and the mineralisation.
+
+A column of a log that is zero throughout is left out of a process figure, and the note under the figure says which. A figure is never left empty without a sentence that says why.
+
+## The raw output of Daisy
+
+Under the figures of a scenario, and under *One run in detail* of an experiment, the panel **The raw output of Daisy** gives the files exactly as Daisy wrote them, before any figure or summary of SWAFL.
+
+1. **Kept on this computer.** The desktop app keeps the whole folder of every run in *Documents / SWAFL Daisy runs*. A scenario makes one folder named after the scenario and the time, with one sub-folder for each run. An experiment makes one folder with one sub-folder for each run, named by its number and its factors. The sub-folder *Run* holds the logs (.dlf), the .csv files and daisy.log, and the set-up that made them (Runfile.dai and the files it includes). The button *Open the folder* opens it in the file explorer. The folders stay until you delete them.
+2. **Download all raw outputs (.zip).** One zip with the logs of all the runs of the scenario, untouched, and a README.
+3. **Download outputs and set-up (.zip).** The same, with the files that were given to Daisy, so that the run can be repeated on any computer with Daisy 7.1.
+4. **The list of files.** One row for each file with what it holds, the number of rows and columns, the size and a Download button.
+
+A .dlf file is a text table: header lines (VERSION, LOGFILE, RUN, SIM...), a line of dashes, the column names, the units and then the numbers, separated by tabs. It opens in Excel or in any text editor, in R with the function read_dlf of the package daisyrVis, in Python with daisypy-io, and in SWAFL itself in the tab Files. The figures are drawn from these files only, so a figure can always be checked against its file.
 

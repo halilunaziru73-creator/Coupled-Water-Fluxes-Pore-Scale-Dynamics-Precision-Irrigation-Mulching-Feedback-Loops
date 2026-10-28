@@ -61,8 +61,19 @@ ipcMain.handle('daisy-choose', async () => {
 ipcMain.handle('daisy-job', async (_e, job) => {
   const exe = exeNow(); if (!exe) return { code: -2, err: 'The Daisy program was not found. Install Daisy or choose the program.', logs: {}, out: '' };
   if (job && job.copyBundle) job.copyDir = path.join(__dirname, 'app', 'data', 'daisy', 'scenarios', 'common');
-  try { const r = await DR.runJob(job, { exe, timeoutMs: (job && job.timeoutMs) || 1800000 }); DR.clean(r.dir); delete r.dir; return r; } catch (e) { return { code: -1, err: String(e.message), logs: {}, out: '' }; }
+  try {
+    const r = await DR.runJob(job, { exe, timeoutMs: (job && job.timeoutMs) || 1800000 });
+    // keep the whole run folder (set-up files and the raw Daisy logs, untouched) so that it can be checked and reused outside SWAFL
+    try { const root = runsRoot(); fs.mkdirSync(root, { recursive: true }); const stamp = new Date().toISOString().replace(/[:T]/g, '-').slice(0, 19), clean = t => String(t || '').replace(/[^A-Za-z0-9._-]+/g, '_').slice(0, 60), nm = clean((job && job.scenario ? job.scenario + '_' : '') + ((job && job.label) || 'run')), grp = clean(job && job.group), rid = clean(job && job.runId); let base = grp ? path.join(root, grp) : root, dest = path.join(base, grp ? (rid ? rid + '_' : '') + nm : stamp + '_' + nm), k = 1; fs.mkdirSync(base, { recursive: true }); while (fs.existsSync(dest)) dest = dest.replace(/_\d+$/, '') + '_' + (++k); fs.cpSync(r.dir, dest, { recursive: true }); r.saved = dest; } catch (e) { r.savedError = String(e.message); }
+    DR.clean(r.dir); delete r.dir; return r;
+  } catch (e) { return { code: -1, err: String(e.message), logs: {}, out: '' }; }
 });
+const runsRoot = () => path.join(app.getPath('documents'), 'SWAFL Daisy runs');
+ipcMain.handle('daisy-runs-dir', () => { const r = runsRoot(); try { fs.mkdirSync(r, { recursive: true }); } catch (e) { } return r; });
+// reads one file of a saved run (only inside the runs folder)
+ipcMain.handle('daisy-read-file', async (_e, p) => { const root = path.resolve(runsRoot()), t = path.resolve(String(p || '')); if (t.indexOf(root) !== 0) return null; try { const st = fs.statSync(t); if (!st.isFile() || st.size > 300e6) return null; return fs.readFileSync(t, 'utf8'); } catch (e) { return null; } });
+// opens a folder of saved Daisy runs in the file explorer (only inside the runs folder)
+ipcMain.handle('daisy-open-folder', async (_e, p) => { const root = path.resolve(runsRoot()), t = path.resolve(String(p || root)); if (t.indexOf(root) !== 0) return false; try { fs.mkdirSync(t, { recursive: true }); } catch (e) { } const er = await shell.openPath(t); return !er; });
 const HTTP_OK = /^https:\/\/(dmigw\.govcloud\.dk|api\.dataforsyningen\.dk|data\.geus\.dk|hip\.dataforsyningen\.dk)\//i;
 ipcMain.handle('http-get', async (_e, url) => {
   if (!HTTP_OK.test(String(url))) return { status: 403, body: 'host not allowed' };

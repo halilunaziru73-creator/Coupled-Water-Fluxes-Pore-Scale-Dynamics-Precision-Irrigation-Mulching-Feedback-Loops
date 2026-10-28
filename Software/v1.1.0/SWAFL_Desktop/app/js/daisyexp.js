@@ -56,14 +56,24 @@
     const fs = E.norm(plan.factors), design = plan.design || 'factorial', max = plan.max || 200; let combos = [];
     const mk = (pick) => { const set = {}, level = {}, val = {}; pick.forEach((lv, i) => { const f = fs[i].f; if (lv === undefined) return; if (f.kind === 'set') Object.assign(set, lv.set); else set[f.key] = lv; level[f.id] = nameOf(f, lv); val[f.id] = f.kind === 'set' ? lv.label : lv; }); return { set, level, val }; };
     if (!fs.length) combos = [mk([])];
-    else if (design === 'oat') { const baseIdx = fs.map(x => 0); fs.forEach((x, i) => x.levels.forEach((lv, j) => { const p = fs.map(() => undefined); p[i] = lv; combos.push(mk(p)); })); }
+    else if (design === 'oat') { combos.push(mk(fs.map(() => undefined))); fs.forEach((x, i) => x.levels.forEach((lv, j) => { const p = fs.map(() => undefined); p[i] = lv; combos.push(mk(p)); })); }
     else if (design === 'paired') { const n = Math.max.apply(null, fs.map(x => x.levels.length)); for (let j = 0; j < n; j++) combos.push(mk(fs.map(x => x.levels[Math.min(j, x.levels.length - 1)]))); }
     else { combos = [[]]; fs.forEach(x => { const nx = []; combos.forEach(c => x.levels.forEach(lv => nx.push(c.concat([lv])))); combos = nx; }); combos = combos.map(mk); }
     const total = combos.length; let thinned = false;
     if (total > max) { const r = rng(plan.seed || 7), idx = combos.map((_, i) => i); for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; } const keep = idx.slice(0, max).sort((a, b) => a - b); combos = keep.map(i => combos[i]); thinned = true; }
     const needsIrr = fs.some(x => IRR_ONLY.has(x.id)), hasIrr = fs.some(x => x.id === 'irrig'), base = plan.base || {};
-    const runs = combos.map((c, i) => { const set = Object.assign({}, c.set); if (needsIrr && !hasIrr && base.irrig !== '0') set.irrig = '1'; const lab = Object.keys(c.level).map(k => E.factor(k).label.replace(/ \(.*/, '').replace(/, factor.*/, '') + ' ' + c.level[k]).join(', ') || 'Baseline'; return { id: 'r' + String(i + 1).padStart(3, '0'), label: lab, set, level: c.level, val: c.val }; });
-    if (plan.reference !== false && needsIrr && !hasIrr) runs.unshift({ id: 'r000', label: 'Rainfed reference', set: { irrig: '0' }, level: {}, val: {}, reference: true });
+    const irrKeys = new Set(), irrIds = fs.filter(x => IRR_ONLY.has(x.id)).map(x => x.id); fs.forEach(x => { if (IRR_ONLY.has(x.id)) { irrKeys.add(x.f.key); if (x.f.kind === 'set') x.levels.forEach(l => Object.keys((l && l.set) || {}).forEach(k => irrKeys.add(k))); } });
+    // a rainfed run does not depend on any irrigation setting: those settings are taken out of it, so the same rainfed run is never made twice
+    // and a rainfed run is never counted as a level of an irrigation factor (it would dilute the effect of that factor)
+    if (hasIrr && irrIds.length) { const seenR = {}; combos = combos.filter(c => { if (String(c.set.irrig) !== '0') return true; irrKeys.forEach(k => { delete c.set[k]; }); irrIds.forEach(id => { delete c.level[id]; delete c.val[id]; }); const key = JSON.stringify([c.set, c.val]); if (seenR[key]) return false; seenR[key] = 1; return true; }); }
+    const lab0 = lv => Object.keys(lv).map(k => E.factor(k).label.replace(/ \(.*/, '').replace(/, factor.*/, '') + ' ' + lv[k]).join(', ');
+    const runs = combos.map((c, i) => { const set = Object.assign({}, c.set); if (needsIrr && !hasIrr && base.irrig !== '0') set.irrig = '1'; return { id: 'r' + String(i + 1).padStart(3, '0'), label: lab0(c.level) || 'Baseline', set, level: c.level, val: c.val }; });
+    // one rainfed reference for every combination of the other factors (soil, rain, temperature...), so that the gain from irrigation is always set against the same soil and weather
+    if (plan.reference !== false && needsIrr && !hasIrr) {
+      const ctx = fs.filter(x => !IRR_ONLY.has(x.id)).map(x => x.id), seenR = {}, refs = [];
+      combos.forEach(c => { const val = {}, level = {}; ctx.forEach(id => { if (c.val[id] !== undefined) { val[id] = c.val[id]; level[id] = c.level[id]; } }); const key = JSON.stringify(val); if (seenR[key]) return; seenR[key] = 1; const set = {}; Object.keys(c.set).forEach(k => { if (!irrKeys.has(k)) set[k] = c.set[k]; }); set.irrig = '0'; refs.push({ id: 'r' + String(refs.length).padStart(3, '0'), label: 'Rainfed reference' + (Object.keys(level).length ? ': ' + lab0(level) : ''), set, level, val, reference: true }); });
+      runs.forEach(r => { r.id = 'r' + String(refs.length - 1 + parseInt(r.id.slice(1), 10)).padStart(3, '0'); }); runs.unshift.apply(runs, refs);
+    }
     return { runs, total, thinned, factors: fs.map(x => ({ id: x.id, label: x.f.label, unit: x.f.unit, kind: x.f.kind, levels: x.levels.map(v => x.f.kind === 'set' ? v.label : v) })) };
   };
 
@@ -104,7 +114,7 @@
   /* the indices that need a rainfed run of the same soil and weather: the yield gain per mm of irrigation water */
   E.indices = function (rows) {
     const refs = rows.filter(x => x.reference && isFinite(x.r.yield)); if (!refs.length) return;
-    rows.forEach(x => { if (x.reference) return; const ref = refs.find(q => q.f.soil === x.f.soil && q.f.precip === x.f.precip && q.f.temp === x.f.temp) || refs[0], irr = x.r.irr; x.r.IWUE = irr > 5 ? (x.r.yield - ref.r.yield) * 1000 / irr : NaN; });
+    rows.forEach(x => { if (x.reference) return; const ref = refs.find(q => Object.keys(q.f).every(k => q.f[k] === x.f[k])) || refs[0], irr = x.r.irr; x.r.IWUE = irr > 5 ? (x.r.yield - ref.r.yield) * 1000 / irr : NaN; });
   };
   // the table of the published runs, in the same shape
   E.ENS_FACTORS = { P: ['precip', 'Rain scale'], dT: ['temp', 'Temperature shift (C)'], Ep: ['ep', 'Soil evaporation factor'], trig: ['trig', 'Trigger suction (cm)'], z: ['z', 'Sensor depth (cm)'], amt_mm: ['mm', 'Water per irrigation (mm)'], vff: ['vff', 'Mulch vapour flux factor'], cap: ['cap', 'Mulch interception capacity (mm)'], Nrate: ['nrate', 'Nitrogen rate (kg N/ha)'], wstrat: ['wstrat', 'Water strategy'], root: ['root', 'Rooting depth (cm)'], soil: ['soil', 'Soil'] };
@@ -122,8 +132,8 @@
   const mean = a => { const v = a.filter(isFinite); return v.length ? v.reduce((s, x) => s + x, 0) / v.length : NaN; };
   const keyCmp = (a, b) => { const x = num(a), y = num(b); return isFinite(x) && isFinite(y) ? x - y : String(a).localeCompare(String(b)); };
   E.levels = (rows, fid) => Array.from(new Set(rows.map(r => fv(r)[fid]).filter(v => v !== undefined && v !== ''))).sort(keyCmp);
-  E.marginal = function (rows, fid, resp) { return E.levels(rows, fid).map(l => { const v = rows.filter(r => fv(r)[fid] === l).map(r => r.r[resp]).filter(isFinite); return { level: l, mean: mean(v), n: v.length, min: v.length ? Math.min.apply(null, v) : NaN, max: v.length ? Math.max.apply(null, v) : NaN }; }); };
-  E.grid = function (rows, f1, f2, resp) { const xs = E.levels(rows, f1), ys = E.levels(rows, f2), z = ys.map(y => xs.map(x => mean(rows.filter(r => fv(r)[f1] === x && fv(r)[f2] === y).map(r => r.r[resp])))); return { xs, ys, z }; };
+  E.marginal = function (rows, fid, resp) { rows = rows.filter(r => !r.reference); return E.levels(rows, fid).map(l => { const v = rows.filter(r => fv(r)[fid] === l).map(r => r.r[resp]).filter(isFinite); return { level: l, mean: mean(v), n: v.length, min: v.length ? Math.min.apply(null, v) : NaN, max: v.length ? Math.max.apply(null, v) : NaN }; }); };
+  E.grid = function (rows, f1, f2, resp) { rows = rows.filter(r => !r.reference); const xs = E.levels(rows, f1), ys = E.levels(rows, f2), z = ys.map(y => xs.map(x => mean(rows.filter(r => fv(r)[f1] === x && fv(r)[f2] === y).map(r => r.r[resp])))); return { xs, ys, z }; };
   E.sensitivity = function (rows, fids, resp) { const out = fids.map(f => { const m = E.marginal(rows, f, resp).filter(x => isFinite(x.mean)); const vals = m.map(x => x.mean); return { id: f, range: vals.length > 1 ? Math.max.apply(null, vals) - Math.min.apply(null, vals) : 0, lo: vals.length ? Math.min.apply(null, vals) : NaN, hi: vals.length ? Math.max.apply(null, vals) : NaN, levels: m.length }; }); const tot = mean(rows.map(r => r.r[resp])); out.forEach(o => o.rel = isFinite(tot) && tot !== 0 ? o.range / Math.abs(tot) : NaN); return out.sort((a, b) => b.range - a.range); };
   E.pareto = function (rows, ax, ay) { // minimise ax, maximise ay
     const P = rows.filter(r => isFinite(r.r[ax]) && isFinite(r.r[ay])); return P.filter(a => !P.some(b => b !== a && b.r[ax] <= a.r[ax] && b.r[ay] >= a.r[ay] && (b.r[ax] < a.r[ax] || b.r[ay] > a.r[ay]))); };

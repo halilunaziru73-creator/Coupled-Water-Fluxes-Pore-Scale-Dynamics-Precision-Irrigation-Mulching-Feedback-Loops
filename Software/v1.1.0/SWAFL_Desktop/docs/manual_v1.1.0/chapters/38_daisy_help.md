@@ -60,6 +60,8 @@
 
 **Richards equation.** The equation of water movement in unsaturated soil, solved by the soil column and by Daisy.
 
+**Raw output.** The files Daisy wrote in a run, exactly as written: the logs (.dlf), the .csv files and daisy.log. SWAFL keeps them in Documents / SWAFL Daisy runs and gives them for download under the figures.
+
 **Scenario.** A ready question about the built-in farm with the runs that answer it.
 
 **Set-up.** The file, with the extension dai, that describes a whole simulation.

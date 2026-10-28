@@ -31,7 +31,8 @@ const DaisyUI = (() => {
   // ---------------------------------------------------------------- canvas charts
   function setup(cv, h) { const w = Math.max(320, cv.parentNode.clientWidth - 4), r = window.devicePixelRatio || 1; cv.width = w * r; cv.height = h * r; cv.style.width = w + 'px'; cv.style.height = h + 'px'; const g = cv.getContext('2d'); g.setTransform(r, 0, 0, r, 0, 0); g.clearRect(0, 0, w, h); g.fillStyle = '#fff'; g.fillRect(0, 0, w, h); g.font = '11px Segoe UI, Arial, sans-serif'; return { g, w, h }; }
   function nice(lo, hi, n) { if (!(hi > lo)) { hi = lo + 1; } const s = (hi - lo) / (n || 5), m = Math.pow(10, Math.floor(Math.log10(s))), f = s / m, st = (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * m, a = Math.floor(lo / st) * st, t = []; for (let v = a, k = 0; k < 60; v += st, k++) { t.push(+v.toPrecision(12)); if (v >= hi - st * 1e-9) break; } return { lo: t[0], hi: t[t.length - 1], t }; }
-  function lineChart(cv, series, o) {
+  function lineChart(cv, series, o) { if (window.DaisyPlot) return window.DaisyPlot.line(cv, series, o); return lineChart0(cv, series, o); }
+  function lineChart0(cv, series, o) {
     o = o || {}; const { g, w, h } = setup(cv, o.h || 280), L = 58, R = 12, T = o.noLegend ? 12 : 26, B = 36, pw = w - L - R, ph = h - T - B;
     let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
     series.forEach(s => s.x.forEach((x, i) => { const y = s.y[i]; if (isFinite(x) && isFinite(y)) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; } }));
@@ -61,7 +62,8 @@ const DaisyUI = (() => {
     return geo;
   }
   const rampAt = (v, lo, hi, n) => { n = n || 8; const k = Math.max(0, Math.min(n - 1, Math.floor((v - lo) / (hi - lo || 1) * n))); return SPEC[Math.round(k / (n - 1) * (SPEC.length - 1))]; };
-  function heatChart(cv, tt, zz, vv, o) {
+  function heatChart(cv, tt, zz, vv, o) { if (window.DaisyPlot) return window.DaisyPlot.heat(cv, tt, zz, vv, o); return heatChart0(cv, tt, zz, vv, o); }
+  function heatChart0(cv, tt, zz, vv, o) {
     o = o || {}; const { g, w, h } = setup(cv, o.h || 300), L = 58, R = 130, T = 12, B = 34, pw = w - L - R, ph = h - T - B;
     const ts = Array.from(new Set(tt)).sort((a, b) => a - b), zs = Array.from(new Set(zz)).sort((a, b) => b - a), ti = new Map(ts.map((t, i) => [t, i])), zi = new Map(zs.map((z, i) => [z, i]));
     if (!ts.length || !zs.length) { g.fillText('Nothing to draw.', L, 30); return; }
@@ -128,20 +130,21 @@ const DaisyUI = (() => {
       const d = S.logs[$('PLog').value]; if (!d) { note('Pst', 'Load a log in Files first.', 1); return; } const m = $('PMode').value, cols = Array.from($('PCols').selectedOptions).map(o => o.value), cv = $('Pcv'); S.plotCsv = null; if (!cols.length) { note('Pst', 'Choose a column.', 1); return; }
       const ix = rng(d); if (m === 'ts') {
         const x = ix.map(i => d.time ? d.time[i] : i), ser = cols.map((c, k) => ({ name: c + (d.units[c] ? ' [' + d.units[c] + ']' : ''), x, y: ix.map(i => IO.col(d, c)[i]), step: $('PStep').checked }));
-        lineChart(cv, ser, { time: !!d.time, zero: $('PZero').checked, xt: d.time ? '' : 'row' }); S.plotCsv = csvOf([d.time ? 'date' : 'row'].concat(cols), ix.map(i => [d.time ? dstr(d.time[i]) : i].concat(cols.map(c => IO.col(d, c)[i])))); note('Pst', ix.length + ' rows.');
+        const us = Array.from(new Set(cols.map(c => d.units[c] || ''))); lineChart(cv, ser, { title: (cols.length === 1 ? cols[0] : 'Time series') + ' of ' + (d.name || 'the log'), time: !!d.time, zero: $('PZero').checked, xt: d.time ? 'Date' : 'Row', yt: us.length === 1 ? (us[0] || '') : '' }); S.plotCsv = csvOf([d.time ? 'date' : 'row'].concat(cols), ix.map(i => [d.time ? dstr(d.time[i]) : i].concat(cols.map(c => IO.col(d, c)[i])))); note('Pst', ix.length + ' rows.');
       } else if (m === 'ann') {
         if (!d.time) { note('Pst', 'This log has no dates, so annual values cannot be formed.', 1); return; }
         const ag = $('PAgg').value, ser = cols.map((c, k) => { const a = IO.annual(d, c), ys = Object.keys(a).map(Number).sort(); const sub = ys.filter(y => y >= new Date(d.time[ix[0]]).getUTCFullYear() && y <= new Date(d.time[ix[ix.length - 1]]).getUTCFullYear()); const val = y => { const o = a[y]; return ag === 's' ? o.s : ag === 'm' ? o.s / o.n : ag === 'mx' ? o.mx : o.mn; }; return { name: c, x: sub, y: sub.map(val), bars: cols.length === 1, pts: cols.length > 1, line: cols.length > 1 }; });
-        lineChart(cv, ser, { zero: true, xt: 'year', yt: { s: 'annual sum', m: 'annual mean', mx: 'annual maximum', mn: 'annual minimum' }[ag] }); S.plotCsv = csvOf(['year'].concat(cols), ser[0].x.map((y, i) => [y].concat(ser.map(s => s.y[i])))); note('Pst', ser[0].x.length + ' years.');
+        lineChart(cv, ser, { title: 'Annual values of ' + (d.name || 'the log'), xint: true, zero: true, xt: 'Year', yt: { s: 'annual sum', m: 'annual mean', mx: 'annual maximum', mn: 'annual minimum' }[ag] }); S.plotCsv = csvOf(['year'].concat(cols), ser[0].x.map((y, i) => [y].concat(ser.map(s => s.y[i])))); note('Pst', ser[0].x.length + ' years.');
       } else {
         const v = cols[0], L = IO.depthLong(d, v); if (!L) { note('Pst', 'This log has no depth columns (names like "q @ -5.5").', 1); return; }
-        if (m === 'heat') { const keep = []; L.t.forEach((t, k) => { if (!d.time || (t >= (d.time[ix[0]] || -Infinity) && t <= (d.time[ix[ix.length - 1]] || Infinity))) keep.push(k); }); heatChart(cv, keep.map(k => L.t[k]), keep.map(k => L.z[k]), keep.map(k => L.v[k]), { time: !!d.time, unit: v + (L.unit ? ' [' + L.unit + ']' : ''), yt: 'depth (cm)' }); note('Pst', keep.length + ' cells.'); }
+        if (m === 'heat') { const keep = []; L.t.forEach((t, k) => { if (!d.time || (t >= (d.time[ix[0]] || -Infinity) && t <= (d.time[ix[ix.length - 1]] || Infinity))) keep.push(k); }); heatChart(cv, keep.map(k => L.t[k]), keep.map(k => L.z[k]), keep.map(k => L.v[k]), { title: v + ' of ' + (d.name || 'the log'), time: !!d.time, unit: v + (L.unit ? ' [' + L.unit + ']' : '') }); note('Pst', keep.length + ' cells.'); }
         else { const dc = IO.depthColumns(d)[v], sl = $('PSlide'); sl.max = ix.length - 1; if (+sl.value > ix.length - 1) sl.value = 0; const k = ix[+sl.value] || 0; $('PSd').textContent = d.time ? dstr(d.time[k]) : 'row ' + k; const zs = dc.map(c => c.z), vs = dc.map(c => d.data[c.j][k]); let lo = Infinity, hi = -Infinity; dc.forEach(c => d.data[c.j].forEach(x => { if (isFinite(x)) { lo = Math.min(lo, x); hi = Math.max(hi, x); } })); lineChart(cv, [{ name: v + ' at ' + $('PSd').textContent, x: vs, y: zs, pts: true, line: true }], { ylo: Math.min.apply(null, zs), yhi: 0, xt: v + (L.unit ? ' [' + L.unit + ']' : ''), yt: 'depth (cm)', noLegend: false }); S.plotCsv = csvOf(['depth_cm', v], zs.map((z, i) => [z, vs[i]])); }
       }
     }
     $('PDraw').onclick = draw; $('PSlide').oninput = draw; $('PPng').onclick = () => savePng($('Pcv'), 'daisy-plot.png'); $('PCsv').onclick = () => { if (!S.plotCsv) draw(); if (S.plotCsv) download('daisy-plot.csv', S.plotCsv, 'text/csv'); };
     $('PPlay').onclick = () => { if (S.anim) { clearInterval(S.anim); S.anim = null; $('PPlay').textContent = 'Play'; return; } $('PPlay').textContent = 'Stop'; S.anim = setInterval(() => { const sl = $('PSlide'); if (!sl) { clearInterval(S.anim); S.anim = null; return; } sl.value = (+sl.value + 1) % (+sl.max + 1); draw(); }, 120); };
     if (names().length) draw();
+    else { note('Pst', 'No log is loaded yet, so the bundled example log of the water flux is loaded for you. Run a scenario or an experiment, or load your own logs in Files, to plot those.'); loadBundled('daily-water-flux.dlf').then(() => { refreshSelects(); fill(); const c = $('PCols'); if (c && c.options.length > 1) { Array.from(c.options).forEach((o, i) => { o.selected = i < 3; }); } draw(); }).catch(e => note('Pst', esc(e.message), 1)); }
   }
 
   // ---------------------------------------------------------------- tab: mass balance
@@ -288,14 +291,15 @@ const DaisyUI = (() => {
     };
     function done(R, F, layers) {
       S.rich = { R, F, layers }; $('Rpr').firstChild.style.width = '100%'; const N = R.days; const tt = [], zz = [], vv = []; R.theta.forEach((row, d) => row.forEach((v, i) => { tt.push(d); zz.push(R.x[i]); vv.push(v); }));
-      heatChart($('Rcv1'), tt, zz.map(z => -z), vv, { unit: 'water content', yt: 'depth below the surface (cm)', h: 300 }); series();
+      heatChart($('Rcv1'), tt, zz.map(z => -z), vv, { title: 'Water content of the soil column', unit: 'water content', pal: 'blues', xt: 'Day of the run', h: 320 }); series();
       const sum = a => a.reduce((s, v) => s + v, 0), dS = R.store[R.store.length - 1] - R.store[0], rainT = sum(F.rain), bal = rainT - sum(R.runoff) - sum(R.evap) - sum(R.transp) - sum(R.drain) - dS;
       $('Rsum').innerHTML = '<table class="dzt" style="max-width:520px"><tr><th colspan="2">Water balance of the column, ' + esc(F.label) + '</th></tr>' + [['Rain', rainT], ['Infiltration', sum(R.infil)], ['Runoff', sum(R.runoff)], ['Soil evaporation', sum(R.evap)], ['Transpiration', sum(R.transp)], ['Drainage at the bottom', sum(R.drain)], ['Change in stored water', dS], ['Balance error', bal], ['Largest daily error', Math.max.apply(null, R.err.map(Math.abs))], ['Picard iterations per day', sum(R.iters) / N]].map(r => '<tr><td>' + r[0] + '</td><td>' + fmt(r[1], 2) + (r[0].indexOf('iter') < 0 ? ' mm' : '') + '</td></tr>').join('') + '</table>'; note('Rst', 'Done: ' + N + ' days, ' + R.x.length + ' nodes.');
     }
     function series() { const q = S.rich; if (!q) return; const R = q.R, z = parseFloat($('RZ').value) || 20; let ni = 0, bd = Infinity; R.x.forEach((x, i) => { if (Math.abs(x - z) < bd) { bd = Math.abs(x - z); ni = i; } }); const lay = q.layers.find(L => R.x[ni] <= L.depth) || q.layers[q.layers.length - 1], H = CA.hydraulics(lay.hy), f = CA.fcwp(lay.hy), d = R.theta.map((r, i) => i), th = R.theta.map(r => r[ni]);
-      lineChart($('Rcv2'), [{ name: 'water content at ' + R.x[ni] + ' cm', x: d, y: th }], { xt: 'day', yt: 'water content', h: 220, hlines: [{ y: f.fc, color: '#009E73' }, { y: f.wp, color: '#D55E00' }, { y: f.sat, color: '#0072B2' }] });
-      lineChart($('Rcv3'), [{ name: 'water flows (mm/day)', x: d, y: R.drain, color: '#0072B2' }, { name: 'transpiration', x: d, y: R.transp, color: '#009E73' }, { name: 'soil evaporation', x: d, y: R.evap, color: '#E69F00' }, { name: 'rain', x: d, y: q.F.rain, color: '#888', bars: false, step: true }], { xt: 'day', yt: 'mm/day', h: 220, zero: true }); }
-    $('RZ').onchange = series; $('RPng').onclick = () => savePng($('Rcv1'), 'daisy-column.png');
+      lineChart($('Rcv2'), [{ name: 'water content at ' + R.x[ni] + ' cm', x: d, y: th }], { title: 'Water content at ' + R.x[ni] + ' cm, with field capacity, wilting point and saturation', xt: 'Day of the run', yt: 'Water content (cm3 cm-3)', noLegend: true, h: 260, hlines: [{ y: f.fc, color: '#009E73', label: 'field capacity' }, { y: f.wp, color: '#D55E00', label: 'wilting point' }, { y: f.sat, color: '#0072B2', label: 'saturation' }] });
+      lineChart($('Rcv3'), [{ name: 'water flows (mm/day)', x: d, y: R.drain, color: '#0072B2' }, { name: 'transpiration', x: d, y: R.transp, color: '#009E73' }, { name: 'soil evaporation', x: d, y: R.evap, color: '#E69F00' }, { name: 'rain', x: d, y: q.F.rain, color: '#888', bars: false, step: true }], { title: 'Water flows of the column', xt: 'Day of the run', yt: 'Water (mm per day)', h: 280, zero: true }); }
+    $('RZ').onchange = series; $('RPng').onclick = () => savePng([$('Rcv1'), $('Rcv2'), $('Rcv3')], 'daisy-column.png');
+    if (!S.rich) setTimeout(() => { const b = $('RRun'); if (b && !S.rich) b.click(); }, 400);   // the column is drawn at once, never an empty page
     $('RReg').onclick = () => { const q = S.rich; if (!q) { note('Rst', 'Run the column first.', 1); return; } const R = q.R, cols = ['day'].concat(R.x.map(x => 'theta @ -' + x)), d = { name: 'column-theta', header: {}, units: {}, cols, data: cols.map(() => []), n: R.days, time: null }; cols.forEach(c => d.units[c] = c === 'day' ? '' : 'cm3/cm3'); R.theta.forEach((row, i) => { d.data[0].push(i); row.forEach((v, j) => d.data[j + 1].push(v)); }); addLog(d, 'column-theta'); note('Rst', 'Kept as the log "column-theta": plot it or use it in the calibration.'); refreshSelects(); };
   }
 
@@ -355,8 +359,7 @@ const DaisyUI = (() => {
   // Figure 1 of the weather tab: numbered title, the source and the references under it, and the same text burnt into the saved picture
   function figWx(title, source, keys) {
     const cv = $('Wcv'), cap = $('Wcap'); if (!cv || !cap) return; 
-    const text = 'Figure 1. ' + title + ' ' + source + ' Drawn with SWAFL on ' + new Date().toISOString().slice(0, 10) + '.';
-    cv.dataset.cite = text; cap.innerHTML = '<b>Figure 1.</b> ' + esc(title) + ' ' + esc(source) + ' Drawn with SWAFL on ' + new Date().toISOString().slice(0, 10) + '.';
+    cap.innerHTML = '';
   }
   async function bWeatherOnline() {
     const hits = []; let last = null; const lat = () => parseFloat($('WOLat').value), lon = () => parseFloat($('WOLon').value);

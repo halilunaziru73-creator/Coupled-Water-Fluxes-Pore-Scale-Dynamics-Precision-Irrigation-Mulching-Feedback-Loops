@@ -9,7 +9,7 @@ Each scenario is a question about the built-in farm. Its runs differ only in the
 | Scenario | Question | Runs compared |
 |:--|:--|:--|
 | irrigation | Irrigation: does it pay off, and what does it cost the soil? | Rainfed; Irrigated |
-| nitrogen | Nitrogen: how much fertiliser, how much leaching? | Half the fertiliser; Standard fertiliser; 30 % more fertiliser |
+| nitrogen | Nitrogen: how much fertiliser, how much leaching? | No fertiliser (control); Half the fertiliser; Standard fertiliser; 30 % more fertiliser; 50 % more fertiliser |
 | climate | Climate: warmer, drier or wetter | Weather file as it is; Warmer by 2 C; Drier (rain x 0.7); Warmer and drier; Wetter (rain x 1.3) |
 | chemical | A pesticide or tracer: sorption and degradation | Mobile tracer (no sorption, no decay); Sorbing (K_OC 100); Sorbing and degrading (K_OC 100, half-life 30 d) |
 | soil | Soil: how much does texture matter? | Sand; Loam |

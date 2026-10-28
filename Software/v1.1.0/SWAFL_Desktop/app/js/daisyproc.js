@@ -132,22 +132,28 @@
   async function drawFigs(p, figs, getLog, stale, what) {
     let ok = 0, bad = 0;
     for (const f of p.figs) {
-      if (stale()) return null; const card = document.createElement('div'); card.className = 'dzcard dzfig'; card.innerHTML = '<b>' + esc(f.t) + '</b> <button class="dzPng btn" style="float:right;width:auto;display:inline-block">Save PNG</button><canvas style="display:block;width:100%;margin-top:6px"></canvas><div class="dzPn" style="font-size:12px;color:#555"></div>'; figs.appendChild(card);
-      const cv = card.querySelector('canvas'), note = card.querySelector('.dzPn'); card.querySelector('.dzPng').onclick = () => window.DaisyCite.png(cv, 'daisy-' + p.id + '-' + f.log + '.png');
+      if (stale()) return null; const card = document.createElement('div'); card.className = 'dzcard dzfig'; card.innerHTML = '<b>' + esc(f.t) + '</b> <button class="dzPng btn" style="float:right;width:auto;display:inline-block">Save PNG</button><div><canvas style="display:block;width:100%;margin-top:6px"></canvas></div><div class="dzPn" style="font-size:12px;color:#555"></div>'; figs.appendChild(card);
+      const cv = card.querySelector('canvas'), note = card.querySelector('.dzPn'); card.querySelector('.dzPng').onclick = () => window.DaisyCite.png(Array.from(card.querySelectorAll('canvas')), 'daisy-' + p.id + '-' + f.log + '.png');
       try {
         const d = await getLog(f.log); if (stale()) return null; if (!d) throw new Error(f.log + ' was not written by this run');
-        if (f.annual) { annual(cv, d, note); ok++; continue; }
+        if (f.annual) { annual(cv, card, d, note, f.t); ok++; continue; }
         const span = new Date(d.time[0]).getUTCFullYear() + ' to ' + new Date(d.time[d.n - 1]).getUTCFullYear();
-        if (f.heat) { const dc = IO.depthColumns(d), v = Object.keys(dc)[0]; const L = IO.depthLong(d, v); if (!L) throw new Error('no depth columns in ' + f.log); K().heat(cv, L.t, L.z, L.v, { time: true, unit: v + (L.unit ? ' [' + L.unit + ']' : ''), yt: 'depth (cm)', h: 280 }); note.textContent = span + '; ' + v + ' in ' + (L.unit || 'model units') + '.'; ok++; continue; }
-        const series = f.c.map(c => { const j = d.cols.indexOf(c); return j < 0 ? null : { name: c + (d.units && d.units[c] ? ' [' + d.units[c] + ']' : ''), x: d.time, y: d.data[j] }; }).filter(Boolean); if (!series.length) throw new Error('columns not in ' + f.log);
-        K().line(cv, series, { time: true, h: 240 }); note.textContent = span + '.'; ok++;
-      } catch (e) { bad++; card.querySelector('canvas').remove(); note.textContent = 'Not drawn: ' + e.message; }
+        if (f.heat) { const dc = IO.depthColumns(d), vs = Object.keys(dc); if (!vs.length) throw new Error('no depth columns in ' + f.log); const pal = { Theta: 'blues', h: 'pf', C: 'ylgn' };
+          vs.slice(0, 2).forEach((v, k) => { const L = IO.depthLong(d, v); let c = cv; if (k) { c = document.createElement('canvas'); c.style.cssText = cv.style.cssText; { const dv = document.createElement('div'); dv.appendChild(c); card.insertBefore(dv, note); } } K().heat(c, L.t, L.z, L.v, { title: f.t + (vs.length > 1 ? ': ' + v : ''), time: true, unit: L.unit || v, pal: pal[v] || 'viridis', h: 300 }); }); note.textContent = span + '; ' + vs.slice(0, 2).join(', ') + '. Colour bar in ' + (d.units[dc[vs[0]][0].c] || 'model units') + '.'; ok++; continue; }
+        const n = panels(cv, card, d, f.c, f.t, note, true); if (!n.drawn) throw new Error(n.zeros.length ? 'every selected column of ' + f.log + ' is zero in this run (' + n.zeros.join(', ') + '), so there is nothing to draw' : 'columns not in ' + f.log); note.textContent = span + '.' + (n.zeros.length ? ' Left out because they are zero throughout: ' + n.zeros.join(', ') + '.' : ''); ok++;
+      } catch (e) { bad++; card.querySelectorAll('canvas').forEach(c => c.remove()); note.textContent = 'Not drawn: ' + e.message; }
     }
     return { ok, bad };
   }
-  function annual(cv, d, note) {
-    const cols = d.cols.slice(4).map((c, i) => [c, i + 4]).filter(c => d.data[c[1]].some(v => isFinite(v) && v !== 0)).slice(0, 8), yrs = d.data[0].map(Number);
-    K().line(cv, cols.map(c => ({ name: c[0], x: yrs.length === d.n ? yrs : d.data[0], y: d.data[c[1]] })), { h: 260 }); note.textContent = 'Annual totals per year of the standard run.';
+  // one panel for each unit that the columns have, so that a rate in mm and a content in kg N are never on one axis
+  function panels(cv, card, d, cols, title, note, time) {
+    const groups = {}, zeros = []; let any = false, xs = time ? d.time : d.data[0].map(Number);
+    cols.forEach(c => { const j = IO.colIndex(d, c); if (j < 0) return; const y = d.data[j]; if (!y.some(isFinite)) return; if (!y.some(v => isFinite(v) && v !== 0)) { zeros.push(d.cols[j]); return; } const u = d.units[d.cols[j]] || ''; (groups[u] = groups[u] || []).push({ name: d.cols[j], x: xs, y, pts: !time, line: true }); });
+    const keys = Object.keys(groups).slice(0, 4); keys.forEach((u, k) => { let c = cv; if (k) { c = document.createElement('canvas'); c.style.cssText = cv.style.cssText; { const dv = document.createElement('div'); dv.appendChild(c); card.insertBefore(dv, note); } } K().line(c, groups[u], { title: title + (keys.length > 1 ? (u ? ' (' + u + ')' : '') : ''), time, xint: !time, xt: time ? 'Year' : 'Year', yt: u || 'model units', h: time ? 250 : 270, zero: !time }); any = true; });
+    return { drawn: any, zeros };
+  }
+  function annual(cv, card, d, note, title) {
+    const cols = d.cols.slice(4); const n = panels(cv, card, d, cols, title, note, false); if (!n.drawn) throw new Error('every column is zero in this run'); note.textContent = 'Annual totals per season of the standard run (a season starts on 1 April; the label is the year in which it starts).' + (n.zeros.length ? ' Left out because they are zero throughout: ' + n.zeros.join(', ') + '.' : '');
   }
   function bind() {
     const map = document.getElementById('dzPmap'); const act = id => { if (!id || !byId(id)) return; st.sel = id; map.innerHTML = svg(); document.getElementById('dzPchips').innerHTML = chips(); wire(); detail(); };
