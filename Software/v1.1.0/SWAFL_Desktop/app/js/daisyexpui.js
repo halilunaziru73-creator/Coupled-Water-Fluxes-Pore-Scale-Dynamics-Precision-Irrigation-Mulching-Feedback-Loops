@@ -176,7 +176,7 @@
   function wxSelect() {
     const U = window.DaisyScenUI, m = U ? U.my() : {}; if (U) U.defaultWx(); const pn = U && U.projectName(), pick = curPick(), dis = st.factors.some(f => f.id === 'station') ? ' disabled' : '';
     return '<select data-b="station"' + dis + '><optgroup label="Online, for my area"><option value="__online"' + (pick === '__online' ? ' selected' : '') + '>Online weather of my area (Open-Meteo, any place)</option>' + (pn ? '<option value="__proj"' + (pick === '__proj' ? ' selected' : '') + '>The weather of my SWAFL project: ' + esc(pn) + '</option>' : '') + (m.wx && m.wxMode !== 'project' && m.wxMode !== 'online' ? '<option value="__my"' + (pick === '__my' ? ' selected' : '') + '>My weather: ' + esc(m.wx.src || m.wx.name || 'from My data') + '</option>' : '') + '</optgroup><optgroup label="Built-in stations">' +
-      SC.STATIONS.map(s => '<option value="' + s.id + '"' + (pick === 'built' && (st.base.station || 'course') === s.id ? ' selected' : '') + '>' + esc(s.label) + '</option>').join('') + '</optgroup></select>';
+      SC.STATIONS.map(s => '<option value="' + s.id + '"' + (pick === 'built' && (st.base.station || (m.wxMode === 'course' && m.station) || 'course') === s.id ? ' selected' : '') + '>' + esc(s.label) + '</option>').join('') + '</optgroup></select>';
   }
   function wxRow() {
     if (curPick() !== '__online') return ''; const m = window.DaisyScenUI.my(), yE = new Date().getUTCFullYear() - 1;
@@ -274,7 +274,8 @@
   function currentPlan() { return { factors: st.factors.map(f => ({ id: f.id, levels: f.levels })), design: st.design, base: st.base, max: st.max, seed: 7 }; }
   function optionsFor(run) {
     const yrs = AI.years(st.base), o = Object.assign({}, st.base, { start: yrs.start, stop: yrs.stop, log: st.log }, run.set); delete o.nyears;
-    if (st.useMy && window.DaisyScenUI) { const m = window.DaisyScenUI.my(); if (m.wxMode !== 'course' && m.wx && st.wxPick !== 'built') { o.userWx = m.wx; const lo = m.wx.first + 1; o.start = Math.max(o.start, lo); o.stop = Math.min(Math.max(o.stop, o.start + 2), m.wx.last); } if (m.soilOn && !st.factors.some(f => f.id === 'soil') && !run.set.soil) { o.userSoil = m.soil; o.soil = 'user'; } }
+    if (st.useMy && window.DaisyScenUI) { const m = window.DaisyScenUI.my(); if (m.wxMode === 'course' && m.station && m.station !== 'course' && !o.station) o.station = m.station;
+    if (m.wxMode !== 'course' && m.wx && st.wxPick !== 'built') { o.userWx = m.wx; const lo = m.wx.first + 1; o.start = Math.max(o.start, lo); o.stop = Math.min(Math.max(o.stop, o.start + 2), m.wx.last); } if (m.soilOn && !st.factors.some(f => f.id === 'soil') && !run.set.soil) { o.userSoil = m.soil; o.soil = 'user'; } }
     return o;
   }
   function renderPlan() {
@@ -324,7 +325,7 @@
   // ------------------------------------------------------------------ the experiment folder
   async function commonFiles() { const f = {}; for (const n of SC.COMMON) f[n] = await D.getText('scenarios/common/' + n); f['Daily-1965-2000.dwf'] = await D.getText('scenarios/common/Daily-1965-2000.dwf'); return f; }
   async function stationFiles(files, ids) { for (const id of ids) if (id && id !== 'course') files['weather/' + id + '.dwf'] = await D.getText('weather/' + id + '.dwf'); }
-  async function buildJobs(design, files) { const stIds = Array.from(new Set(design.runs.map(r => (r.set.station || st.base.station || 'course')))); await stationFiles(files, stIds); return design.runs.map(run => ({ run, job: SC.buildJob('exp', optionsFor(run), run.id, files) })); }
+  async function buildJobs(design, files) { const stIds = Array.from(new Set(design.runs.map(r => (r.set.station || st.base.station || (window.DaisyScenUI.my().wxMode === 'course' && window.DaisyScenUI.my().station) || 'course')))); await stationFiles(files, stIds); return design.runs.map(run => ({ run, job: SC.buildJob('exp', optionsFor(run), run.id, files) })); }
   async function saveZip() {
     try { readPlanInputs(); const design = X.design(currentPlan()), files = await commonFiles(), jobs = await buildJobs(design, files); const tree = X.folder(jobs, files, { request: st.text || (st.res && st.res.plan && st.res.plan.title) || '', title: (st.res && st.res.plan && st.res.plan.title) || st.text, plan: currentPlan(), design: design.factors }); const z = X.zip(tree); const b = new Blob([z], { type: 'application/zip' }), a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'daisy-experiment.zip'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); D.note('Xst', 'Saved the experiment folder: ' + design.runs.length + ' numbered run folders, a Common folder with the shared inputs, a README with the design and where to find the indexes, and run_all scripts (' + Object.keys(tree).length + ' files).'); }
     catch (e) { D.note('Xst', esc(e.message), 1); }

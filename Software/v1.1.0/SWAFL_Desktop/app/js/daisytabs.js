@@ -64,7 +64,7 @@
   }
 
   // the data in use, shown on every tab that runs Daisy; it is set once in the My data tab
-  const wxLabel = () => { const m = st.my; return m.wxMode === 'course' ? 'Taastrup, Denmark, 1965-2000 (built-in)' : m.wx ? m.wx.name + ' (' + m.wx.first + '-' + m.wx.last + ')' : '<span style="color:#b3261e">not ready</span>'; };
+  const wxLabel = () => { const m = st.my; return m.wxMode === 'course' ? (m.station && m.station !== 'course' ? esc(SC.station(m.station).label) : 'Taastrup, Denmark, 1965-2000 (built-in)') : m.wx ? m.wx.name + ' (' + m.wx.first + '-' + m.wx.last + ')' : '<span style="color:#b3261e">not ready</span>'; };
   const soilLabel = () => st.my.soilOn ? 'my soil, ' + st.my.soil.horizons.length + ' horizons' : 'the built-in soils (loam and sand)';
   // the weather used by every Daisy simulation: chosen here at the top of each tab, so Scenarios, Experiments and the rest always use the same one
   const wxHooks = [];
@@ -74,10 +74,10 @@
   }
   function wxChanged() { wxHooks.forEach(h => { try { h(); } catch (e) { } }); }
   function wxOptions() {
-    const m = st.my, pw = projWx(); let h = '<option value="course"' + (m.wxMode === 'course' ? ' selected' : '') + '>Built-in weather: Taastrup, Denmark 1965-2000</option>';
+    const m = st.my, pw = projWx(); let h = '<option value="course"' + (m.wxMode === 'course' && (!m.station || m.station === 'course') ? ' selected' : '') + '>Built-in weather: Taastrup, Denmark 1965-2000</option>';
     if (pw) h += '<option value="project"' + (m.wxMode === 'project' ? ' selected' : '') + '>The weather of my SWAFL project: ' + esc(pw.name || pw.src || 'loaded') + '</option>';
     if (m.wx && (m.wxMode === 'online' || m.wxMode === 'file')) h += '<option value="' + m.wxMode + '" selected>' + (m.wxMode === 'online' ? 'Online weather: ' : 'My file: ') + esc(m.wx.name) + '</option>';
-    h += '<option value="__online">Online weather of another place...</option><option value="__file">A weather file of my own...</option>'; return h;
+    h += '<optgroup label="Built-in stations">' + SC.STATIONS.map(x => '<option value="st:' + x.id + '"' + (m.wxMode === 'course' && (m.station || 'course') === x.id && x.id !== 'course' ? ' selected' : '') + '>' + esc(x.label) + '</option>').join('') + '</optgroup><option value="__online">Online weather of another place...</option><option value="__file">A weather file of my own...</option>'; return h;
   }
   // when the SWAFL project has weather and nothing was chosen yet, that weather is the one Daisy uses
   function defaultWx() { if (st.wxChosen || st.my.wxMode !== 'course' || !projWx()) return; st.wxChosen = true; try { useProject(); } catch (e) { st.my.wxMode = 'course'; st.my.wx = null; } }
@@ -86,7 +86,7 @@
     document.querySelectorAll('[data-goto]').forEach(a => a.onclick = ev => { ev.preventDefault(); D.show(a.dataset.goto); });
     const sel = document.getElementById('dzStripWx'); if (!sel) return;
     sel.onchange = () => { const v = sel.value, m = st.my; st.wxChosen = true;
-      if (v === 'course') { m.wxMode = 'course'; m.wx = null; } else if (v === 'project') { try { useProject(); } catch (e) { const g = document.getElementById('dzStripMsg'); if (g) g.innerHTML = '<span style="color:#b3261e">' + esc(e.message) + '</span>'; return; } }
+      if (v === 'course') { m.wxMode = 'course'; m.station = 'course'; m.wx = null; } else if (/^st:/.test(v)) { m.wxMode = 'course'; m.station = v.slice(3); m.wx = null; } else if (v === 'project') { try { useProject(); } catch (e) { const g = document.getElementById('dzStripMsg'); if (g) g.innerHTML = '<span style="color:#b3261e">' + esc(e.message) + '</span>'; return; } }
       else if (v === '__online' || v === '__file') { m.wxMode = v === '__online' ? 'online' : 'file'; m.wx = null; wxChanged(); D.show('data'); return; }
       wxChanged(); D.show(D.state.tab || 'scen'); };
   }
@@ -94,6 +94,7 @@
   // the options of the run with my data in them (throws a clear message when the data cannot be used)
   function withMyData(sc, o) {
     readMyInputs(); const m = st.my, r = Object.assign({}, o); let vars = null;
+    if (m.wxMode === 'course' && m.station && m.station !== 'course') r.station = m.station;
     if (m.wxMode !== 'course') { if (!m.wx) throw new Error('your weather is not ready: ' + (m.wxMode === 'file' ? 'choose a weather file' : m.wxMode === 'online' ? 'press "Get the weather" for your area' : 'no weather is loaded in SWAFL') + ' (see the note under My data)'); r.userWx = m.wx; }
     if (m.soilOn) { SC.soilDai(m.soil); r.userSoil = m.soil; r.soil = 'user'; if (sc.id === 'soil') vars = [{ id: 'user', label: 'My soil', set: { soil: 'user' } }, { id: 'loam', label: 'Built-in loam', set: { soil: 'loam' } }, { id: 'sand', label: 'Built-in sand', set: { soil: 'sand' } }]; }
     return { o: r, vars };
@@ -132,7 +133,7 @@
 
   async function runDaisy(sc, o, variants) {
     const info = await window.swafl.daisyInfo(); if (!info.found) { const c = await window.swafl.daisyChoose(); if (!c.found) throw new Error('No Daisy program chosen. Install Daisy first (Model and documentation tab).'); daisyStatus(); }
-    const files = {}; for (const n of SC.COMMON) files[n] = await D.getText('scenarios/common/' + n);
+    const files = {}; for (const n of SC.COMMON) files[n] = await D.getText('scenarios/common/' + n); if (o.station && o.station !== 'course') files['weather/' + o.station + '.dwf'] = await D.getText('weather/' + o.station + '.dwf');
     const box = $('SRuns') || document.createElement('div'), rows = {}; box.innerHTML = variants.map(v => '<div class="dzrun" id="dzRun_' + v.id + '"><span class="dzspin"></span> <b>' + esc(v.label) + '</b> <span class="pnote">waiting</span></div>').join('');
     const t0 = Date.now(), tick = setInterval(() => { variants.forEach(v => { const r = box.querySelector('#dzRun_' + v.id); if (r && r.dataset.state === 'run') r.lastChild.textContent = ' Daisy is running, ' + Math.round((Date.now() - t0) / 1000) + ' s'; }); }, 1000);
     const out = [], errs = []; let next = 0;
@@ -198,7 +199,7 @@
     $('SRst').onclick = () => { st.opts = null; D.show('scen'); };
     applyMy();
     const prepare = () => { const base = SC.norm(readOpts(sc)); const md = withMyData(sc, base), o = SC.norm(Object.assign({}, md.o, md.vars ? { _variants: md.vars } : {})); const list = md.vars || sc.variants, vs = list.filter(v => { const i = document.querySelector('#dzSPanel [data-v="' + v.id + '"]'); return !i || i.checked; }); return { o, vs, own: !!(o.userWx || o.userSoil) }; };
-    $('SSave').onclick = async () => { try { const { o, vs } = prepare(); if (!vs.length) throw new Error('tick at least one run'); const files = {}; for (const n of SC.COMMON) files[n] = await D.getText('scenarios/common/' + n); const job = SC.buildJob(sc.id, o, vs[0].id, files); ['Run/Runfile.dai', 'Common/UserWeather.dwf', 'Common/UserSoil.dai', 'Common/ArableFarmRotation.dai', 'Common/ResFarm.dai'].forEach(n => { if (job.files[n]) D.download(n.split('/').pop(), job.files[n], 'text/plain'); }); D.note('Sst', 'Saved the set-up of "' + vs[0].label + '". Put the files in Run/ and Common/ folders as in the Runfile, then run: daisy Runfile.dai (the OutputLog.dai and Daily-1965-2000.dwf of the built-in farm come with the desktop app).'); } catch (e) { D.note('Sst', esc(e.message), 1); } };
+    $('SSave').onclick = async () => { try { const { o, vs } = prepare(); if (!vs.length) throw new Error('tick at least one run'); const files = {}; for (const n of SC.COMMON) files[n] = await D.getText('scenarios/common/' + n); if (o.station && o.station !== 'course') files['weather/' + o.station + '.dwf'] = await D.getText('weather/' + o.station + '.dwf'); const job = SC.buildJob(sc.id, o, vs[0].id, files); ['Run/Runfile.dai', 'Common/UserWeather.dwf', 'Common/UserSoil.dai', 'Common/ArableFarmRotation.dai', 'Common/ResFarm.dai'].forEach(n => { if (job.files[n]) D.download(n.split('/').pop(), job.files[n], 'text/plain'); }); D.note('Sst', 'Saved the set-up of "' + vs[0].label + '". Put the files in Run/ and Common/ folders as in the Runfile, then run: daisy Runfile.dai (the OutputLog.dai and Daily-1965-2000.dwf of the built-in farm come with the desktop app).'); } catch (e) { D.note('Sst', esc(e.message), 1); } };
     $('SRun').onclick = async () => {
       let P; try { P = prepare(); } catch (e) { D.note('Sst', esc(e.message), 1); return; } const { o, vs, own } = P; st.intIds = interestIds(); if (st.intIds.length) o.log = 'process'; if (!vs.length) { D.note('Sst', 'Tick at least one run.', 1); return; }
       if (!D.isDesk() || !window.swafl.daisyJob) { if (own) { D.note('Sst', 'Your data is converted and ready, but Daisy itself runs only in the desktop app. Press "Save the Daisy files of my set-up" to run it with Daisy anywhere.', 1); return; } D.note('Sst', 'Daisy itself runs only in the desktop app, so nothing is drawn here for your options. Press "Save the Daisy files of my set-up" to run it with Daisy anywhere, or load the logs of a Daisy run in the Files tab.', 1); return; }
