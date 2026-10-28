@@ -39,6 +39,20 @@ npm run web        # the same program in a tab of your browser
 npm run get-app    # build SWAFL.exe, copy it to the Desktop and start it
 ```
 
+## If the build stops
+
+**The command is not found.** The script is called `get-app`, with a hyphen: `npm run get-app`. Typing `npm run get_app` gives the message *Missing script: "get_app"* and npm suggests the right name.
+
+**The message "Cannot create symbolic link : A required privilege is not held by the client".** It appears during the step *packaging* of the build, after the line that downloads `winCodeSign`, and it names the files `libcrypto.dylib` and `libssl.dylib`. The build tool unpacks a code-signing package that contains two symbolic links, and Windows allows a normal user to create symbolic links only when Developer Mode is on or the terminal runs as Administrator. The program does not need code signing, so there are three ways out, in this order:
+
+1. Run `npm run get-app` again. This version of the script notices the error, deletes the unfinished `dist` folder and builds again with the signing step switched off, so the build finishes without any change of settings. The program that results works in the same way; only the file properties of `SWAFL.exe` carry no icon and version signature.
+2. Turn on **Developer Mode** (Settings, System, For developers), delete the folder `%LOCALAPPDATA%\electron-builder\Cache\winCodeSign`, and run the command again.
+3. Open the terminal with **Run as administrator**, go to the folder that holds `package.json`, and run the command again.
+
+**A folder in OneDrive.** The same build is slower and sometimes fails when the folder is inside a cloud-synchronised folder (for example `C:\Users\name\OneDrive\...`), because the synchroniser locks files while the build writes them. Unzip to a short path such as `C:\SWAFL_Desktop` and build there.
+
+**Other messages.** *Running scripts is disabled* (PowerShell): use a Command Prompt, or run `cmd /c npm install`. *npm is not recognised*: install Node.js (LTS) and open a new terminal. *ENOENT, package.json*: the zip makes a folder inside a folder, so go into the inner one. *Electron download fails*: check the connection or VPN, delete `node_modules` and run `npm install` again.
+
 ## Requirements
 
 * Windows 10 or 11 (64-bit) for the built program; any current Chrome, Edge or Firefox for the browser route.

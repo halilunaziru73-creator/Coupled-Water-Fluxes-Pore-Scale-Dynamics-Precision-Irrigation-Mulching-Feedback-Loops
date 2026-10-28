@@ -118,7 +118,8 @@ See [docs/USER_GUIDE.md](docs/USER_GUIDE.md) for the step-by-step guide and [doc
 | `ENOENT ... package.json` | Wrong folder: the zip makes a folder inside a folder; `cd` into the one showing `package.json` |
 | Slow/failed install in OneDrive | Copy the project to `C:\SWAFL_Desktop` and run there |
 | "Windows protected your PC" | More info → Run anyway (app is not code-signed) |
-| Build error about symlinks/permissions | Enable Windows Developer Mode or run the terminal as Administrator |
+| `Missing script: "get_app"` | The name has a hyphen, not an underscore: `npm run get-app` |
+| `Cannot create symbolic link : A required privilege is not held by the client` (electron-builder, `winCodeSign`, `libcrypto.dylib`) | Windows does not let a normal user make symbolic links, and the build unpacks a signing tool that contains two. `npm run get-app` now retries by itself without that tool, so just run it again. Or enable **Developer Mode** (Settings, System, For developers) and delete `%LOCALAPPDATA%\electron-builder\Cache\winCodeSign`, or run the terminal as Administrator |
 | Electron download fails | Check internet/VPN, delete `node_modules`, run `npm install` again |
 | White window | Wait ~10 s, then Refresh → Reload simulation engine |
 | No results visible | Press **Larger** on the Dashboard tab bar, choose the Results tab |

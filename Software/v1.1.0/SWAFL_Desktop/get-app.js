@@ -11,8 +11,14 @@ try {
   // remove the previous build so an old SWAFL.exe can never be copied by mistake
   try { fs.rmSync(path.join(__dirname, 'dist'), { recursive: true, force: true }); } catch (e) {}
   if (!fs.existsSync(path.join(__dirname, 'node_modules', 'electron-builder'))) run('npm install');
-  run('npm run dist');
-} catch (e) { console.error('\nBuild failed. Read the message above (see README: Troubleshooting).'); process.exit(1); }
+  try { run('npm run dist'); }
+  catch (e1) {
+    // on Windows without administrator rights or Developer Mode the signing tools cannot be unpacked ("Cannot create symbolic link ... A required privilege is not held by the client"); the program does not need them
+    console.log('\nThe build stopped (often "Cannot create symbolic link", a Windows privilege). Trying again without the code-signing tools, which SWAFL does not need ...');
+    try { fs.rmSync(path.join(__dirname, 'dist'), { recursive: true, force: true }); } catch (e) {}
+    run('npx electron-builder --win portable nsis -c.win.signAndEditExecutable=false');
+  }
+} catch (e) { console.error('\nBuild failed. Read the message above (see README: Troubleshooting). If you typed npm run get_app, the name is get-app (a hyphen).'); process.exit(1); }
 
 const exe = path.join(__dirname, 'dist', 'SWAFL.exe'), setup = path.join(__dirname, 'dist', 'SWAFL-Setup.exe');
 if (!fs.existsSync(exe)) { console.error('SWAFL.exe was not created. Check the messages above.'); process.exit(1); }
