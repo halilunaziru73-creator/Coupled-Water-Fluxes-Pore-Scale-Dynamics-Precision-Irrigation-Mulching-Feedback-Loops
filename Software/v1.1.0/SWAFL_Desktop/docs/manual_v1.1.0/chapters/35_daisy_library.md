@@ -1972,9 +1972,9 @@ Parent default, defined in lib/broccoli.dai. Broccoli
 |:--|:--|
 | DSmax | 0 |
 
-### Crop Broccoli minus transplanted
+### Crop Broccoli - transplanted
 
-Parent Broccoli, defined in lib/broccoli.dai. Broccoli minus transplanted
+Parent Broccoli, defined in lib/broccoli.dai. Broccoli - transplanted
 
 **Devel**
 
@@ -2116,9 +2116,9 @@ Parent default, defined in lib/brusselssprouts.dai. Brussels sprouts
 |:--|:--|
 | DSmax | 0 |
 
-### Crop Brussels sprouts minus transplanted
+### Crop Brussels sprouts - transplanted
 
-Parent Brussels sprouts, defined in lib/brusselssprouts.dai. Brussels sprouts minus transplanted
+Parent Brussels sprouts, defined in lib/brusselssprouts.dai. Brussels sprouts - transplanted
 
 **Devel**
 
@@ -2259,9 +2259,9 @@ Parent default, defined in lib/celeriac.dai. Celeriac
 | DSmax | 0 |
 | sorg_height | -10 |
 
-### Crop Celeriac minus transplanted
+### Crop Celeriac - transplanted
 
-Parent Celeriac, defined in lib/celeriac.dai. Celeriac minus transplanted
+Parent Celeriac, defined in lib/celeriac.dai. Celeriac - transplanted
 
 **Devel**
 
@@ -3392,9 +3392,9 @@ Parent default, defined in lib/dk-wwheat.dai. Vinterhvede
 | EconomicYield_W | 0.8 |
 | EconomicYield_N | 0.94 |
 
-### Crop Potato; SCRI minus AArhus
+### Crop Potato; SCRI - AArhus
 
-Parent default, defined in lib/earlypotato.dai. Potato; SCRI minus AArhus
+Parent default, defined in lib/earlypotato.dai. Potato; SCRI - AArhus
 
 **Devel**
 
@@ -3507,7 +3507,7 @@ Parent default, defined in lib/earlypotato.dai. Potato; SCRI minus AArhus
 
 ### Crop Early potato
 
-Parent Potato; SCRI minus AArhus, defined in lib/earlypotato.dai. Early potato
+Parent Potato; SCRI - AArhus, defined in lib/earlypotato.dai. Early potato
 
 **Devel**
 
@@ -3557,9 +3557,9 @@ Parent Potato; SCRI minus AArhus, defined in lib/earlypotato.dai. Early potato
 | Stem | (0, 0.16); (0.37, 0.15); (0.83, 0.16); (1, 0.16); (1.14, 0.15); (1.35, 0.02); (1.57, 0); (2.1, 0) |
 | RSR | (0, 0.5); (0.75, 0.5); (2, 0.25) |
 
-### Crop Early white cabbage minus transplanted
+### Crop Early white cabbage - transplanted
 
-Parent White cabbage minus transplanted, defined in lib/earlywhitecabbage.dai. Early white cabbage minus transplanted
+Parent White cabbage - transplanted, defined in lib/earlywhitecabbage.dai. Early white cabbage - transplanted
 
 **Devel**
 
@@ -4475,9 +4475,9 @@ Parent default, defined in lib/onion.dai. Onion
 | DSmax | 0 |
 | sorg_height | -5 |
 
-### Crop Onion minus planting of sets
+### Crop Onion - planting of sets
 
-Parent Onion, defined in lib/onion_plantingofsets.dai. Onion minus planting of sets
+Parent Onion, defined in lib/onion_plantingofsets.dai. Onion - planting of sets
 
 **Devel**
 
@@ -7045,9 +7045,9 @@ Parent default, defined in lib/whitecabbage.dai. White cabbage
 |:--|:--|
 | DSmax | 0 |
 
-### Crop White cabbage minus transplanted
+### Crop White cabbage - transplanted
 
-Parent White cabbage, defined in lib/whitecabbage.dai. White cabbage minus transplanted
+Parent White cabbage, defined in lib/whitecabbage.dai. White cabbage - transplanted
 
 **Devel**
 
@@ -8549,7 +8549,7 @@ Parent activity, from sample/dk-management.dai.
   (harvest "Grass" (stub 8 [cm]) (stem 0.00) (leaf 0.00)))
 ```
 
-### Action Grass minus 4 cuts
+### Action Grass - 4 cuts
 
 Parent activity, from sample/dk-management.dai.
 
@@ -8575,7 +8575,7 @@ Parent activity, from sample/dk-management.dai.
   (harvest "Grass" (stub 8 [cm]) (stem 0.80) (leaf 0.80)))
 ```
 
-### Action Grass for cutting minus 2y
+### Action Grass for cutting - 2y
 
 Parent activity, from sample/dk-management.dai.
 
@@ -8682,7 +8682,7 @@ Parent activity, from sample/dk-veg-man.dai.
   (harvest "Beetroot" (stub 0.0 [cm]) (sorg 1.0) (stem 0.0) (leaf 0.0)))
 ```
 
-### Action Broccoli minus transplanted management
+### Action Broccoli - transplanted management
 
 Parent activity, from sample/dk-veg-man.dai.
 
@@ -8729,7 +8729,7 @@ Parent activity, from sample/dk-veg-man.dai.
   (harvest "Brussels sprouts" (stub 0.0 [cm]) (sorg 1.0) (stem 0.0) (leaf 0.0)))
 ```
 
-### Action Brussels sprouts minus transplanted management
+### Action Brussels sprouts - transplanted management
 
 Parent activity, from sample/dk-veg-man.dai.
 
@@ -8756,7 +8756,7 @@ Parent activity, from sample/dk-veg-man.dai.
     (leaf 0.0)))
 ```
 
-### Action Celeriac minus transplanted management
+### Action Celeriac - transplanted management
 
 Parent activity, from sample/dk-veg-man.dai.
 
@@ -8831,7 +8831,7 @@ Parent activity, from sample/dk-veg-man.dai.
   (harvest "Onion" (stub 0.0 [cm]) (sorg 1.0) (stem 0.0) (leaf 0.0)))
 ```
 
-### Action Onion minus planting of sets management
+### Action Onion - planting of sets management
 
 Parent activity, from sample/dk-veg-man.dai.
 
@@ -8857,7 +8857,7 @@ Parent activity, from sample/dk-veg-man.dai.
   (harvest "Onion - planting of sets" (stub 0.0 [cm]) (sorg 1.0) (stem 0.0) (leaf 0.0)))
 ```
 
-### Action White cabbage minus transplanted management
+### Action White cabbage - transplanted management
 
 Parent activity, from sample/dk-veg-man.dai.
 
@@ -8884,7 +8884,7 @@ Parent activity, from sample/dk-veg-man.dai.
     (leaf 0.0)))
 ```
 
-### Action Early white cabbage minus transplanted management
+### Action Early white cabbage - transplanted management
 
 Parent activity, from sample/dk-veg-man.dai.
 

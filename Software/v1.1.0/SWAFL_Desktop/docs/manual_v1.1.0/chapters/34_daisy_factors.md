@@ -162,7 +162,7 @@ The Experiments tab offers 53 factors. Each has levels that are tried, a range t
 | Key | w1 |
 | Unit | n/a |
 | Kind | set |
-| Levels tried | {'label': 'Apr 1 minus Oct 1', 'set': {'w1': '04-01', 'w2': '10-01'}}, {'label': 'May 1 minus Oct 1', 'set': {'w1': '05-01', 'w2': '10-01'}}, {'label': 'Jun 1 minus Oct 1', 'set': {'w1': '06-01', 'w2': '10-01'}}, {'label': 'Apr 1 minus Jun 1', 'set': {'w1': '04-01', 'w2': '06-01'}} |
+| Levels tried | {'label': 'Apr 1 - Oct 1', 'set': {'w1': '04-01', 'w2': '10-01'}}, {'label': 'May 1 - Oct 1', 'set': {'w1': '05-01', 'w2': '10-01'}}, {'label': 'Jun 1 - Oct 1', 'set': {'w1': '06-01', 'w2': '10-01'}}, {'label': 'Apr 1 - Jun 1', 'set': {'w1': '04-01', 'w2': '06-01'}} |
 | Accepted range | n/a |
 | Needs irrigation | yes |
 | Words | timing, window, season of irrigation, when in the season, start date |

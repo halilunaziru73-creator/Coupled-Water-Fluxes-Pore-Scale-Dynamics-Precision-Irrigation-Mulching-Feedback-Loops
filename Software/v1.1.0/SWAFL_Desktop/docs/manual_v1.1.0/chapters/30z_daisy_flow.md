@@ -83,13 +83,13 @@ The last step takes the results to the layers of the SWAFL project. Daisy calcul
 
 ## What is passed to the SWAFL project
 
-When a scenario has been run in Scenarios, the workbench reads the logs of its runs (the annual harvest, the annual water and nitrogen fluxes at the surface and at 100 cm, and for the chemical scenario the annual and daily tracer logs) and passes a summary of each run to the layers of the SWAFL project: the yield, the water drained below the root zone, the nitrate leached, and for a chemical the decay, the crop uptake, the leaching, the runoff and the amount that stays in the soil, season by season. The layers then show **your** runs, with the weather and the soil you set, and say so in a line under the title (*your run* or *bundled run*). Without a run of your own they show the Daisy runs that come with the program: every scenario of the workbench, run with Daisy 7.1.14 on each of the ten soils of the project for the 22 seasons 1979 to 2000 with the Taastrup weather.
+When a scenario has been run in Scenarios, the workbench reads the logs of its runs (the annual harvest, the annual water and nitrogen fluxes at the surface and at 100 cm, and for the chemical scenario the annual and daily tracer logs) and passes a summary of each run to the layers of the SWAFL project: the yield, the water drained below the root zone, the nitrate leached, and for a chemical the decay, the crop uptake, the leaching, the runoff and the amount that stays in the soil, season by season. The layers then show **your** runs, with the weather and the soil you set, and say so in a line under the title. There are no ready-made figures: until the question has been run, a layer says *No Daisy run yet* and shows nothing else, and a figure is left out when the run it needs has not been made.
 
 The soil of the run is matched to the soil of the project when the names agree (for example, the sand and the loam of the scenarios are the sand and the loam of the project), and the project is set to that soil when you press a button of the last step.
 
 ## The two layers that read Daisy runs
 
-The layer group **Chemicals** has the layer *C2 Chemical fate (Daisy runs)* and the group **Daisy decision support** has *D1 Daisy decision table*. Both are in the Layers panel of the SWAFL window, are drawn like every other layer, are on the Dashboard, and open from the last step of the path. Each shows in its first lines whether it is drawn from *your run* or from the *bundled runs*.
+The group **Decide: results in the SWAFL layers**, inside **Daisy model** in the Layers panel, has the layers *C2 Chemical fate* and *D1 Daisy decision table*. They are drawn like every other layer, and they open from the last step of the path. Each shows in its first lines the weather, the soil and the years of the run it is drawn from.
 
 **C2 Chemical fate.** Three buttons at the top choose the chemical: a mobile tracer (no sorption, no decay), a sorbing chemical, and a sorbing chemical that decays with a half-life of 30 days. For the soil in use the layer shows, from top to bottom:
 
@@ -98,20 +98,18 @@ The layer group **Chemicals** has the layer *C2 Chemical fate (Daisy runs)* and 
 3. *A chemical goes where the water goes*: one dot per season, the drainage below 1 m against the amount leached.
 4. *Where the chemical sits in the soil*: the concentration of the soil solution against depth, as the mean of all days and as the largest value.
 5. *The three chemicals on this soil*: the leached, decayed and crop-taken shares of the applied amount and the amount left at the end, for the three runs side by side.
-6. *Which soils leak the chemical most*: the ten soils of the project ranked by the share of the applied amount that leaches, with the soil in use marked; a click on a soil makes it the soil of the project.
 
-**D1 Daisy decision table.** For the soil in use the layer shows:
+**D1 Daisy decision table.** For the questions that have been run the layer shows:
 
 1. *Every question, one row for each answer*: rainfed and irrigated; half the fertiliser, the standard rate and 30 per cent more; the weather as it is, warmer by 2 degrees, drier (rain times 0.7), warmer and drier, and wetter (rain times 1.3). The columns are the yield, its change, the irrigation, the evapotranspiration, the drainage, the nitrate lost and the nitrogen taken up by the crop, as means of the seasons. The colour of a cell is green when the answer is better than the standard run and red when it is worse.
 2. *What the table says*: three short statements, one for irrigation, one for nitrogen and one for climate, written from the numbers of the table.
 3. *Yield season by season* and *Water season by season*: rainfed against irrigated, and rain, drainage and irrigation, for every season.
-4. *Which soils gain most from irrigation*: the ten soils of the project, with the rainfed yield, the gain from irrigation, the water, the drainage and the nitrate lost; a click on a soil makes it the soil of the project.
 
-![The layer C2 Chemical fate of the SWAFL project (Daisy runs, silt loam).](images/daisy11/swafl_chem.jpg){height=22cm}
+![The layer C2 Chemical fate of the SWAFL project (from a run of the chemical question on loam).](images/daisy11/swafl_chem.jpg){height=22cm}
 
-![The layer D1 Daisy decision table of the SWAFL project (Daisy runs, loam).](images/daisy11/swafl_dsum.jpg){height=22cm}
+![The layer D1 Daisy decision table of the SWAFL project (from the runs of the irrigation, nitrogen and climate questions on loam).](images/daisy11/swafl_dsum.jpg){height=22cm}
 
 ## What to expect and what not
 
-The layers are summaries of real Daisy runs, not new calculations: a number in a layer is a number of a Daisy log, or a sum or a mean of such numbers, and the line under the title says which runs it comes from. The bundled runs use the Taastrup weather, so for a different climate run the question again in Scenarios with the weather of the project or online weather of the place; the layers then show those runs.
+The layers are summaries of real Daisy runs, not new calculations: a number in a layer is a number of a Daisy log, or a sum or a mean of such numbers, and the line under the title says which runs it comes from. The weather and the soil are those of the run, so for another climate run the question again in Scenarios with the weather of the project or online weather of the place.
 

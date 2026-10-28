@@ -8,8 +8,6 @@ const Layers = (() => {
     { id: 'g-soil', name: 'Soil structure and tillage', icon: 'soil', items: [['v3', 'Tillage and structure', 'V3'], ['v7', 'Soil hydraulic drivers', 'V7'], ['r1', 'Root structure', 'R1']] },
     { id: 'g-water', name: 'Field water balance', icon: 'field', items: [['field', 'Field balance', ''], ['spac', 'Soil, plant and air', 'S1'], ['v2', 'Profile evolution', 'V2']] },
     { id: 'g-year', name: 'Seasonal data', icon: 'refresh', items: [['yby', 'Reliability over 20 seasons', 'Y1'], ['wb2', 'Full water balance', 'W1'], ['nb', 'Nitrogen budget', 'N4']] },
-    { id: 'g-chem', name: 'Chemicals', icon: 'drop', items: [['chem', 'Chemical fate (Daisy runs)', 'C2']] },
-    { id: 'g-dss', name: 'Daisy decision support', icon: 'chart', items: [['dsum', 'Daisy decision table', 'D1']] },
     { id: 'g-crop', name: 'Crops', icon: 'drop', items: [['crop', 'Crop water requirement', 'C1']] },
     { id: 'g-loop', name: 'Feedback loops', icon: 'refresh', items: [['v5', 'Feedback loops', 'V5']] }
   ];
@@ -20,6 +18,7 @@ const Layers = (() => {
     { id: 'g-dproc', name: 'Look: processes of Fig. 1', icon: 'layers', items: [['dz-proc', 'Map of the processes', ''], ['dz-proc:snow', 'Snowpack', ''], ['dz-proc:surf', 'Canopy, litter and pond', ''], ['dz-proc:water', 'Soil water', ''], ['dz-proc:pore', 'Biopores', ''], ['dz-proc:drain', 'Drains', ''], ['dz-proc:temp', 'Soil heat and ice', ''], ['dz-proc:no3', 'Nitrate', ''], ['dz-proc:nh4', 'Ammonium', ''], ['dz-proc:om', 'Organic matter pools', ''], ['dz-proc:carbon', 'Carbon balance', ''], ['dz-proc:deni', 'Denitrification and N2O', ''], ['dz-proc:photo', 'Photosynthesis', ''], ['dz-proc:crop', 'Crop growth', '']] },
     { id: 'g-dana', name: 'Look: analysis of logs', icon: 'chart', items: [['dz-plot', 'Plots of Daisy logs', ''], ['dz-balance', 'Mass balance', ''], ['dz-compare', 'Compare and test runs', '']] },
     { id: 'g-dbuilt', name: 'Build and calibrate', icon: 'soil', items: [['dz-editor', 'Set-up editor (.dai)', ''], ['dz-richards', 'Soil column (Richards equation)', ''], ['dz-deni', 'Denitrification and N2O', ''], ['dz-calib', 'Calibration', '']] },
+    { id: 'g-ddss', name: 'Decide: results in the SWAFL layers', icon: 'chart', items: [['chem', 'Chemical fate (from your runs)', ''], ['dsum', 'Daisy decision table (from your runs)', '']] },
     { id: 'g-ddoc', name: 'Learn: the Daisy model', icon: 'book', items: [['dz-docs', 'Model, documentation and installation', '']] }
   ];
   const DESIGN = ['sid', 'drip', 'spr'];

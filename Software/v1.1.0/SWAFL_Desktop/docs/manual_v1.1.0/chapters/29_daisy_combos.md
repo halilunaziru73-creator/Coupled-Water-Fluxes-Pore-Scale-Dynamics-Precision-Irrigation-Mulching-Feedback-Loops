@@ -123,7 +123,7 @@ The irrigation of a crop is tested between a from date and a to date and can be 
 
 **What the arrows point to.**
 
-1. **Irrigation window.** Varied over Apr 1 minus Oct 1, May 1 minus Oct 1, Jun 1 minus Sep 1.
+1. **Irrigation window.** Varied over Apr 1 - Oct 1, May 1 - Oct 1, Jun 1 - Sep 1.
 2. **Water limit per crop season.** Varied over 60, 120, 240.
 3. **Soil.** Varied over usda:sand, loam.
 4. **Add something to change.** Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals.
@@ -569,7 +569,7 @@ Design: factorial. Factors: precip with 0.8, 1, 1.2; temp with 0, 2; soil with u
 
 ### The irrigation season and a limit on water
 
-Design: factorial. Factors: window with {'label': 'Apr 1 minus Oct 1', 'set': {'w1': '04-01', 'w2': '10-01'}}, {'label': 'May 1 minus Oct 1', 'set': {'w1': '05-01', 'w2': '10-01'}}, {'label': 'Jun 1 minus Sep 1', 'set': {'w1': '06-01', 'w2': '09-01'}}; limit with 60, 120, 240; soil with usda:sand, loam.
+Design: factorial. Factors: window with {'label': 'Apr 1 - Oct 1', 'set': {'w1': '04-01', 'w2': '10-01'}}, {'label': 'May 1 - Oct 1', 'set': {'w1': '05-01', 'w2': '10-01'}}, {'label': 'Jun 1 - Sep 1', 'set': {'w1': '06-01', 'w2': '09-01'}}; limit with 60, 120, 240; soil with usda:sand, loam.
 
 ### Which soil needs the most water
 

@@ -1,7 +1,7 @@
 /* SWAFL 1.1 decision-support layers on Daisy output:
    C2 Chemical fate (what happens to a chemical applied to the field: decay, crop uptake, leaching, runoff, what stays in the soil) and
    D1 Daisy decision table (what irrigation, the nitrogen rate and the climate do to yield, water and nitrate).
-   Data: window.DAISYDSS (real Daisy 7.1.14 runs of every soil of the project, tools/build_daisy_dss.js) and window.DAISYLIVE (the runs you have just made in the Daisy workbench; they replace the bundled ones). */
+   Data: window.DAISYLIVE, the runs just made in the Daisy workbench. Nothing is drawn without a run. */
 'use strict';
 (function () {
   if (typeof SCENES === 'undefined' || !window.PLUSKIT) return;
@@ -13,7 +13,7 @@
   const SHORTV = { mobile: 'Mobile tracer', sorb: 'Sorbing, K_OC 100', decay: 'Sorbing and degrading' };
   const VARS = { mobile: 'Mobile tracer (no sorption, no decay)', sorb: 'Sorbing (K_OC 100)', decay: 'Sorbing and degrading (K_OC 100, half-life 30 days)' };
   const ALIAS = { n100: 'rainfed', now: 'rainfed' };
-  const D = () => window.DAISYDSS, L = () => window.DAISYLIVE;
+  const D = () => null, L = () => window.DAISYLIVE;   // no bundled runs: a figure is drawn only from a run made in the Daisy workbench
   // a run: the one you made in the workbench if there is one for it, else the bundled run of the soil of the project
   function getRun(v) {
     const live = L(); const k = ALIAS[v] || v;
@@ -24,7 +24,7 @@
   const seasonLabel = i => String((D() ? D().first : 1979) + i);
   const yieldSeries = r => { if (!r || !r.harvest || !r.year) return []; return r.year.map(y => { const hs = r.harvest.filter(h => h[0] === y - 1); return hs.length ? hs.reduce((s, h) => s + h[2], 0) : NaN; }); };
   const cropSeries = r => r.year.map(y => { const hs = (r.harvest || []).filter(h => h[0] === y - 1); return hs.length ? hs[0][1] : ''; });
-  const waiting = y => { K.header('Loading the Daisy results...', '', y); return y + 60; };
+  const waiting = y => { K.header('No Daisy run yet', 'It appears when its question is run: Daisy model, Scenarios, Run.', y); return y + 60; };
   function fit(y) { try { if (Math.abs(currentScene.h - (y + 24)) > 4) { currentScene.h = Math.ceil(y + 24); setCanvasH(currentScene.h); } } catch (e) { } }
   function stackBars(x, y, w, h, labels, parts, o) {   // parts: [{n, c, v:[...]}] stacked upward
     o = o || {}; const n = labels.length, tot = labels.map((_, i) => parts.reduce((s, p) => s + Math.max(0, p.v[i] || 0), 0)), hi = K.nice(Math.max(o.hiMin || 0, ...tot) * 1.05), x0 = x + 48, y0 = y + 28, ww = w - 60, hh = h - 62;
@@ -41,15 +41,16 @@
   }
   const chip = (x, y, text, on, fn, tip) => { ctx.font = '10.5px sans-serif'; const w = ctx.measureText(text).width + 18; ctx.fillStyle = on ? '#1B3A6B' : '#EFEDE5'; rrect(x, y, w, 22, 11); ctx.fill(); ctx.strokeStyle = on ? '#1B3A6B' : '#B9B4A6'; ctx.stroke(); T(text, x + 9, y + 15, { s: 10.5, c: on ? '#fff' : HEAD, b: on }); hot(x, y, w, 22, fn, tip); return w + 8; };
   function source(y, runs) {
-    const live = runs.some(r => r && r.src === 'your run'); K.badge(live ? 'YOUR DAISY RUN' : 'DAISY RUNS', 16, y, live ? '#1E8E3E' : '#1B3A6B');
-    const d = D(), txt = live ? 'Results of the run you made in the Daisy workbench (' + ((L() && L().label) || 'your weather and soil') + '); items without a run of yours come from the bundled runs.' : 'Daisy 7.1.14 run on every soil of the project, ' + (d ? d.years : '') + ', ' + (d ? d.weather : '') + '. Run your own question in the Daisy workbench and it replaces these.';
+    K.badge('YOUR DAISY RUN', 16, y, '#1E8E3E');
+    const txt = 'Daisy 7.1.14, run in the Daisy workbench: ' + ((L() && L().label) || 'your weather and soil') + '. Items for which you have not run the question are left out.';
     const nl = sidWrap(txt, 130, y + 1, W - 146, { s: 9.5, c: INK }, 13); return y + 18 + 13 * Math.max(0, (nl || 1) - 1);
   }
   // ================================================================== C2 Chemical fate
   function drawChem() {
     paper(); let y = K.header('Fate of a chemical in the field, season by season', texLabel() + ' · what happens to a pesticide or tracer applied to the crops: decay, crop uptake, leaching below 2 m, runoff and what stays in the soil', 4);
     if (!D() && !L()) { waiting(y); return; }
-    const R = getRun(CH.v); if (!R || !R.r.chem) { K.header('No Daisy run of this chemical is available for this soil', 'Run the chemical question in the Daisy workbench.', y); return; }
+    if (!getRun(CH.v)) { const k0 = Object.keys(VARS).find(k => getRun(k)); if (k0) CH.v = k0; }
+    const R = getRun(CH.v); if (!R || !R.r.chem) { waiting(y); return; }
     const r = R.r, c = r.chem, n = c.spray.length, labels = r.year.map(v => String(v - 1));
     y = source(y, [R]); y += 8;
     let cx = 16; Object.keys(VARS).forEach(k => { cx += chip(cx, y, VARS[k], CH.v === k, () => { CH.v = k; }, 'show ' + VARS[k]); }); y += 34;
@@ -100,14 +101,14 @@
   function drawDd() {
     paper(); let y = K.header('Daisy decision table', texLabel() + ' · what irrigation, the nitrogen rate and the climate do to yield, water and nitrate, from Daisy runs on the soil of this project', 4);
     if (!D() && !L()) { waiting(y); return; }
-    const base = getRun('rainfed'); if (!base) { K.header('No Daisy run is available for this soil', 'Run the questions in the Daisy workbench.', y); return; }
+    const base = getRun('rainfed') || getRun('n100') || getRun('now'); if (!base) { waiting(y); return; }
     const need = ['rainfed', 'irrigated', 'n50', 'n130', 'warm', 'dry', 'warmdry', 'wet'].map(getRun).filter(Boolean); y = source(y, need); y += 8;
     const b = stat(base.r), cols = ['Yield, Mg/ha', 'Change, %', 'Irrigation, mm', 'Evapotr., mm', 'Drainage, mm', 'Nitrate lost, kg N/ha', 'N uptake, kg N/ha'], cx = [W * 0.385, W * 0.465, W * 0.55, W * 0.65, W * 0.75, W * 0.87, W - 24];
     const rows = []; ROWS.forEach(g => { rows.push({ head: g[0] }); g[1].forEach(q => { const R = getRun(q[0]); if (R) rows.push({ k: q[0], lab: q[1], R, s: stat(R.r) }); }); });
     const rh = 22, th = 74 + rows.length * rh; frame0(y, th, 'Every question, one row for each answer', '20-season means · colour: green better, red worse than the standard run'); const hy = y + 40; cols.forEach((t, i) => TFx(t, cx[i], hy, { s: 8.5, b: true, c: MUTE, a: 'right' }));
     const chg = (v, ref, good) => { const d = (v - ref) / (Math.abs(ref) || 1); return d * good; };
     rows.forEach((q, i) => { const yy = y + 58 + (i + 1) * rh - 6; if (q.head) { ctx.fillStyle = '#ECE9E0'; ctx.fillRect(17, yy - 14, W - 34, rh); T(q.head, 30, yy, { s: 10.5, b: true, c: HEAD }); return; }
-      const s = q.s, d = 100 * (s.y - b.y) / (b.y || 1); T(q.lab, 30, yy, { s: 10 }); T(q.R.src === 'your run' ? 'your run' : '', 30 + 200, yy, { s: 8, c: '#1E8E3E', b: true });
+      const s = q.s, d = 100 * (s.y - b.y) / (b.y || 1); T(q.lab, 30, yy, { s: 10 });
       const vals = [s.y, d, s.I, s.ETa, s.D, s.NL, s.Nu], goods = [1, 1, 0, 0, 0, -1, 1], refs = [b.y, 0, b.I, b.ETa, b.D, b.NL, b.Nu];
       vals.forEach((v, j) => { const c0 = goods[j] ? chg(v, refs[j], goods[j]) : 0; if (goods[j] && Math.abs(c0) > 0.02 && q.k !== 'rainfed') { ctx.fillStyle = c0 > 0 ? 'rgba(26,152,80,' + Math.min(0.45, Math.abs(c0)) + ')' : 'rgba(215,48,39,' + Math.min(0.45, Math.abs(c0)) + ')'; ctx.fillRect(cx[j] - 54, yy - 12, 58, 17); } T(fmt(v, j === 0 ? 2 : j === 1 ? 1 : j === 5 ? 1 : 0), cx[j], yy, { s: 10, a: 'right', b: j === 0 }); }); });
     y += th + 10;
@@ -136,10 +137,7 @@
     if (id === 'chem') { const R = getRun(CH.v); if (!R || !R.r.chem) return null; const c = R.r.chem; return { years: R.r.year.map(v => String(v - 1)), sel: CH.yr, charts: [C('Chemical applied', 'kg/ha', [S('applied', c.spray, '#8E3B8E')]), C('Chemical decayed and taken up', 'kg/ha', [S('decayed', c.decay, '#8E5A2A'), S('taken up', c.uptake, '#2E9E4F')]), C('Chemical leached below 2 m', 'kg/ha', [S('leached', c.leach, '#d53e4f'), S('runoff', c.runoff, '#2b83ba')]), C('Chemical left in the soil', 'kg/ha', [S('in the soil', c.stock, '#E8C547')])] }; }
     const a = getRun('rainfed'), b = getRun('irrigated'); if (!a) return null; const r = a.r; return { years: r.year.map(v => String(v - 1)), sel: null, charts: [C('Yield', 'Mg/ha', [S('rainfed', yieldSeries(r), '#d53e4f'), b && S('irrigated', yieldSeries(b.r), '#2b83ba')]), C('Rain and irrigation', 'mm', [S('rain', r.P, '#8fcfa6'), b && S('irrigation', b.r.I, '#2b83ba')]), C('Drainage below 1 m', 'mm', [S('rainfed', r.D, '#5aa6b4'), b && S('irrigated', b.r.D, '#2b83ba')]), C('Nitrate leached below 1 m', 'kg N/ha', [S('rainfed', r.NL, '#8E5A2A'), b && S('irrigated', b.r.NL, '#E8912D')])] };
   };
-  // peryear-like lazy load of the data
-  if (!window.DAISYDSS) { const sc = document.createElement('script'); sc.src = 'daisydss.js'; sc.onload = () => { try { refresh(); } catch (e) { } }; document.body.appendChild(sc); }
   K.add('chem', 'C2 Chemical fate', '#8E3B8E', drawChem, 'Fate of a chemical in the field: decay, uptake, leaching, runoff and what stays', 'A chemical applied to the field is broken down, taken up, held by the soil or carried down by the water: sorption and decay decide how much leaves the root zone.');
   K.add('dsum', 'D1 Daisy decision table', '#1B3A6B', drawDd, 'What irrigation, nitrogen and climate do to yield, water and nitrate (Daisy)', 'Each choice moves yield, water and nitrate together: the table puts every answer of the Daisy questions side by side for the soil of the project.');
-  SCENES.forEach(sc => { if ((sc.id === 'chem' || sc.id === 'dsum') && K.sceneButton) { try { K.sceneButton(sc); } catch (e) { } } });
   window.DAISYLAYERS = { ids: ['chem', 'dsum'] };
 })();
