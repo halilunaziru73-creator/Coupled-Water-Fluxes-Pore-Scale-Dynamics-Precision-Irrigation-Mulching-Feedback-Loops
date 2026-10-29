@@ -82,6 +82,7 @@
     const sc = S.LIST.find(x => x.id === scId) || {}, vr = (((options && options._variants) || sc.variants || []).find(v => v.id === variantId) || { set: {} }), o = S.norm(Object.assign({}, options, vr.set)), pre = (variantId || 'run') + '-';
     let rot = o.irrig === '1' ? files['ArableFarmRotation_withirrigation.dai'] : files['ArableFarmRotation.dai'];
     if (rot == null) throw new Error('the rotation file is missing');
+    if (Array.isArray(o.crops) && o.crops.length) { const CR = root.DaisyCrops || (typeof require !== 'undefined' ? require('./daisycrops.js') : null); if (!CR) throw new Error('the crop chooser is not loaded'); rot = CR.rotation(rot, o.crops); }   // the crops the person chose
     if (o.nfac !== 1) rot = rot.replace(/\(weight\s+(\d+(?:\.\d+)?)\s*\[kg N\/ha\]\)/g, (m, w) => '(weight ' + (+(parseFloat(w) * o.nfac).toFixed(1)) + ' [kg N/ha])');
     if (o.till && o.till !== 'plowing') rot = rot.replace(/\(plowing\)/g, o.till === 'none' ? '' : '(' + o.till + ')');
     if (o.ntype && o.ntype !== 'N25S') rot = rot.replace(/\(N25S\s+/g, '(' + o.ntype + ' ');

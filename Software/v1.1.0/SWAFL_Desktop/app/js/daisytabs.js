@@ -113,7 +113,7 @@
   // ------------------------------------------------------------------ scenarios
   function html(arg) {
     if (arg) st.sel = arg; const sc = SC.LIST.find(x => x.id === st.sel);
-    let h = '<h3 style="margin:2px 0 6px">What do you want to find out?</h3><p class="pnote">Choose the question. Daisy then simulates the rotation of spring barley, winter barley, winter rape and winter wheat (the built-in farm) with the soil, weather and management you set, and the figures of the analysis are drawn from its logs.</p><div class="dzcards">';
+    let h = '<div class="dzpan" style="padding:4px 10px"><span class="pnote">Scenarios are a part of experiments.</span> <button class="btn" id="dzScToExp">↳ Experiments</button></div><h3 style="margin:2px 0 6px">What do you want to find out?</h3><p class="pnote">Choose the question. Daisy then simulates the rotation of spring barley, winter barley, winter rape and winter wheat (the built-in farm) with the soil, weather and management you set, and the figures of the analysis are drawn from its logs.</p><div class="dzcards">';
     SC.LIST.forEach(x => { h += '<div class="dzcard' + (st.sel === x.id ? ' on' : '') + '" data-sc="' + x.id + '"><span class="dzchip">' + esc(x.theme) + '</span><b>' + esc(x.title) + '</b><span class="pnote">' + esc(x.question) + '</span></div>'; });
     h += '<div class="dzcard' + (st.sel === 'own' ? ' on' : '') + '" data-sc="own"><span class="dzchip">Your own work</span><b>My own Daisy set-up or my own logs</b><span class="pnote">Run a .dai file from the editor, or draw the standard figures from logs you have loaded.</span></div>';
     BUILTIN.forEach(b => { h += '<div class="dzcard" data-tab="' + b[0] + '"><span class="dzchip dzchip2">Built in, no Daisy program needed</span><b>' + esc(b[1]) + '</b><span class="pnote">' + esc(b[2]) + '</span></div>'; });
@@ -124,7 +124,7 @@
     if (!st.opts || st.opts.__sc !== sc.id) st.opts = Object.assign({ __sc: sc.id }, SC.defaultsFor(sc));
     const o = st.opts, describe = v => Object.keys(v.set).map(k => { const f = SC.OPTIONS[k]; if (!f) return ''; const val = f.type === 'select' ? (f.opts.find(x => x[0] === String(v.set[k])) || [0, v.set[k]])[1] : v.set[k]; return f.label.replace(/ \(.*/, '') + ' ' + val; }).join(', ');
     return '<div class="dzpan"><h3 style="margin:0">' + esc(sc.title) + '</h3><p class="pnote">' + esc(sc.question) + '</p><div id="dzSDaisy" class="pnote">Looking for the Daisy program...</div>' +
-      '<div class="dzrow">' + sc.opts.map(k => field(k, o[k])).join('') + '</div>' + strip() + '<div><b>Runs compared</b> <span class="pnote">(each is one Daisy simulation; tick the ones you want)</span><div class="dzvars">' + sc.variants.map(v => '<label><input type="checkbox" data-v="' + v.id + '" checked> <b>' + esc(v.label) + '</b> <span class="pnote">' + esc(describe(v)) + '</span></label>').join('') + (sc.id === 'soil' ? '<label id="dzVUser" style="' + (st.my.soilOn ? '' : 'display:none') + '"><input type="checkbox" data-v="user" checked> <b>My soil</b> <span class="pnote">the horizons entered under My data</span></label>' : '') + '</div></div>' +
+      '<div class="dzrow">' + sc.opts.map(k => field(k, o[k])).join('') + '</div><div id="dzSCrops" class="dzpan" style="padding:6px 10px"></div>' + strip() + '<div><b>Runs compared</b> <span class="pnote">(each is one Daisy simulation; tick the ones you want)</span><div class="dzvars">' + sc.variants.map(v => '<label><input type="checkbox" data-v="' + v.id + '" checked> <b>' + esc(v.label) + '</b> <span class="pnote">' + esc(describe(v)) + '</span></label>').join('') + (sc.id === 'soil' ? '<label id="dzVUser" style="' + (st.my.soilOn ? '' : 'display:none') + '"><input type="checkbox" data-v="user" checked> <b>My soil</b> <span class="pnote">the horizons entered under My data</span></label>' : '') + '</div></div>' +
       interestBox() + '<div class="dzrow"><button class="btn pri" id="dzSRun">Run Daisy and draw the figures</button><button class="btn" id="dzSRst">Standard options</button><button class="btn" id="dzSSave">Save the Daisy files of my set-up</button><span id="dzSst" class="pnote"></span></div><div id="dzSRuns"></div></div><div id="dzSRes"></div>';
   }
   function ownPanel() {
@@ -137,7 +137,7 @@
     e.innerHTML = info.found ? 'Daisy found: <b>' + esc(info.version || info.exe) + '</b> <span class="pnote">(' + esc(info.exe) + ')</span> <a href="#" id="dzSCh">use another program</a>' : '<b>The Daisy program of SWAFL was not found.</b> It is the folder <code>daisy</code> next to the program: unzip the whole SWAFL zip again, or press <a href="#" id="dzSCh">Choose the Daisy program</a> and pick <code>bin\\daisy-bin.exe</code> of an installed Daisy 7.1.14 (not the installer). Until then you can show the bundled results.';
     const c = $('SCh'); if (c) c.onclick = async ev => { ev.preventDefault(); const r = await window.swafl.daisyChoose(); if (r && r.found) daisyStatus(); else if (r && r.error) e.innerHTML += '<div style="color:#B3261E;margin-top:4px">' + esc(r.error) + '</div>'; }; return info;
   }
-  function readOpts(sc) { const o = SC.defaultsFor(sc); document.querySelectorAll('#dzSPanel [data-o]').forEach(i => { o[i.dataset.o] = i.type === 'number' ? parseFloat(i.value) : i.value; }); st.opts = Object.assign({ __sc: sc.id }, o); return o; }
+  function readOpts(sc) { const prev = st.opts, o = SC.defaultsFor(sc); if (prev && prev.__sc === sc.id && Array.isArray(prev.crops)) o.crops = prev.crops; document.querySelectorAll('#dzSPanel [data-o]').forEach(i => { o[i.dataset.o] = i.type === 'number' ? parseFloat(i.value) : i.value; }); st.opts = Object.assign({ __sc: sc.id }, o); return o; }
   const keyOf = n => SC.logKey(n);
   function toRun(id, label, files, options) { const logs = {}; Object.keys(files).forEach(n => { const k = keyOf(n); if (!k) return; try { const d = IO.readDlf(files[n], n); if (d.n) logs[k] = d; } catch (e) { } }); return { id, label, logs, options }; }
 
@@ -185,6 +185,12 @@
     const drawOne = i => { const f = plan[i], cvs = Array.from(fh.querySelectorAll('[data-c^="' + i + '_"]')); try { f.draw(cvs, runs[st.pick] || runs[0]); } catch (e) { const er = fh.querySelector('[data-f="' + i + '"] .dzerr'); if (er) er.innerHTML = '<span style="color:#b3261e">This figure could not be drawn: ' + esc(e.message) + '</span>'; console.warn(f.id, e); } };
     const draw = () => plan.forEach((f, i) => drawOne(i));
     if (window.DaisyFigKit) { fh.querySelectorAll('.dzfig').forEach((card, i) => window.DaisyFigKit.attach(card, { name: (sc.id || 'daisy') + '-' + plan[i].id, redraw: () => drawOne(i) })); window.DaisyFigKit.bar(fh, { name: sc.id || 'daisy' }); }
+    if (window.DaisyProc && window.DaisyProc.svg && window.DaisyExp && window.DaisyExp.procMarks) {   // the map of Daisy redrawn for this scenario: what it changes and what it measures
+      const FM = { irrigation: ['irrig', 'trig', 'z'], nitrogen: ['nfac'], climate: ['precip', 'temp'], chemical: ['koc', 'half'], soil: ['soil'] }[sc.id] || [], RM = { irrigation: ['yield', 'irr', 'perc', 'IE'], nitrogen: ['yield', 'leach', 'NLF', 'PFPn'], climate: ['yield', 'aet', 'perc'], chemical: ['perc'], soil: ['yield', 'perc', 'leach'] }[sc.id] || ['yield'];
+      const mk = window.DaisyExp.procMarks(FM.map(id => ({ id })), [], RM), nm = {}; mk.factors.forEach(f => { const q = window.DaisyExp.factor(f.id); nm[f.id] = q ? q.label.replace(/ \(.*/, '').replace(/, factor.*/, '').toLowerCase() : f.id; }); mk.resp.forEach(r => { const q = window.DaisyExp.RESP.find(z => z.id === r); nm[r] = q ? q.label.replace(/ \(.*/, '').toLowerCase() : r; });
+      const card = document.createElement('div'); card.className = 'dzpan dzfig'; card.innerHTML = '<div class="dzrow"><b>Processes of Daisy in this scenario</b><span style="flex:1"></span></div><p class="pnote">Orange: the processes this scenario changes. Blue: the processes the results come from.</p><div>' + window.DaisyProc.svg({ marks: mk, names: nm, sel: null }) + '</div>'; fh.appendChild(card);
+      if (window.DaisyFigKit) window.DaisyFigKit.attach(card, { name: (sc.id || 'daisy') + '-process-map', redraw: () => { } });
+    }
     const rawHost = $('SRaw'); if (rawHost && window.DaisyRaw) { const grpDir = (() => { const p = (runs.find(r => r.saved) || {}).saved; return p ? p.replace(/[\\/][^\\/]+$/, '') : ''; })(); rawHost.innerHTML = window.DaisyRaw.html(runs, { folder: grpDir || undefined }); window.DaisyRaw.bind(rawHost, runs, { name: sc.id || 'daisy' }); }
     draw(); showExtra(runs); $('SPick').onchange = e => { st.pick = +e.target.value; draw(); showExtra(runs); };
     fh.querySelectorAll('[data-png]').forEach(b => b.onclick = () => { const c = Array.from(fh.querySelectorAll('[data-c^="' + b.dataset.png + '_"]')); DaisyCite.png(c, (sc.id || 'daisy') + '-' + plan[+b.dataset.png].id + '.png'); });
@@ -200,6 +206,7 @@
   }
 
   function bind(arg) {
+    { const b = $('ScToExp'); if (b) b.onclick = () => D.open('exp'); }
     document.querySelectorAll('.dzcard').forEach(c => c.onclick = () => { if (c.dataset.tab) { D.show(c.dataset.tab); return; } st.sel = c.dataset.sc; st.runs = []; D.show('scen'); });
     daisyStatus(); const sc = SC.LIST.find(x => x.id === st.sel);
     if (st.sel === 'own') {
@@ -209,6 +216,7 @@
       return;
     }
     if (!sc) return;
+{ const cb = $('SCrops'); if (cb && window.DaisyCrops) window.DaisyCrops.editor(cb, st.opts && st.opts.crops || null, v => { if (st.opts) st.opts.crops = v; }); }
     $('SRst').onclick = () => { st.opts = null; D.show('scen'); };
     applyMy();
     const prepare = () => { const base = SC.norm(readOpts(sc)); const md = withMyData(sc, base), o = SC.norm(Object.assign({}, md.o, md.vars ? { _variants: md.vars } : {})); const list = md.vars || sc.variants, vs = list.filter(v => { const i = document.querySelector('#dzSPanel [data-v="' + v.id + '"]'); return !i || i.checked; }); return { o, vs, own: !!(o.userWx || o.userSoil) }; };
