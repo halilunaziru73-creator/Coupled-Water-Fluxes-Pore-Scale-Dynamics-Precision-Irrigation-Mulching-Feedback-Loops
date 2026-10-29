@@ -8,7 +8,7 @@
   const sum = (a, i0, i1) => { let s = 0; for (let i = i0; i <= i1; i++) s += a[i]; return s; };
   const mean = (a, i0, i1) => sum(a, i0, i1) / Math.max(1, i1 - i0 + 1);
   const pear = (x, y) => { const n = x.length; if (n < 3) return NaN; const mx = x.reduce((a, b) => a + b, 0) / n, my = y.reduce((a, b) => a + b, 0) / n; let sxy = 0, sxx = 0, syy = 0; for (let i = 0; i < n; i++) { sxy += (x[i] - mx) * (y[i] - my); sxx += (x[i] - mx) ** 2; syy += (y[i] - my) ** 2; } return sxx > 0 && syy > 0 ? sxy / Math.sqrt(sxx * syy) : NaN; };
-  const linfit = (x, y) => { const n = x.length, mx = x.reduce((a, b) => a + b, 0) / n, my = y.reduce((a, b) => a + b, 0) / n; let sxy = 0, sxx = 0; for (let i = 0; i < n; i++) { sxy += (x[i] - mx) * (y[i] - my); sxx += (x[i] - mx) ** 2; } const b = sxx > 0 ? sxy / sxx : 0, r = pear(x, y); return { a: my - b * mx, b, r2: isFinite(r) ? r * r : 0 }; };
+  const linfit = (x, y) => { const n = x.length, mx = x.reduce((a, b) => a + b, 0) / n, my = y.reduce((a, b) => a + b, 0) / n; let sxy = 0, sxx = 0; for (let i = 0; i < n; i++) { sxy += (x[i] - mx) * (y[i] - my); sxx += (x[i] - mx) ** 2; } const b = sxx > 1e-9 * (1 + mx * mx) * n && isFinite(sxy / sxx) ? sxy / sxx : 0, r = pear(x, y); return { a: my - b * mx, b, r2: isFinite(r) ? r * r : 0 }; };
   const note = (txt, x, y, w, o) => sidWrap(txt, x, y, w, Object.assign({ s: 9.5, c: MUTE }, o || {}), 12.5);
   const frameH = (x, y, w, title, sub) => K.frame(x, y, w, 24, title, sub);
   const endFrame = (x, y0, y, w) => { ctx.strokeStyle = '#B9B4A6'; ctx.lineWidth = 1; ctx.strokeRect(x + 0.5, y0 + 0.5, w - 1, y - y0); };
@@ -123,11 +123,11 @@
       const xmn = Math.min(...xs), xmx = Math.max(...xs), ymn = Math.min(...ys), ymx = Math.max(...ys), px = (xmx - xmn) * 0.1 + 1e-6, py = (ymx - ymn) * 0.12 + 1e-6, X = v => gx + (v - (xmn - px)) / (xmx - xmn + 2 * px) * pw, Y = v => gy + hh - (v - (ymn - py)) / (ymx - ymn + 2 * py) * hh;
       T(pr.t, gx - 40, gy - 6, { s: 9.5, b: true }); ctx.strokeStyle = GRID; for (let k = 0; k <= 3; k++) { ctx.beginPath(); ctx.moveTo(gx, gy + hh * k / 3 + 0.5); ctx.lineTo(gx + pw, gy + hh * k / 3 + 0.5); ctx.stroke(); T(fmt((ymn - py) + (ymx - ymn + 2 * py) * (1 - k / 3), ymx - ymn < 20 ? 1 : 0), gx - 4, gy + hh * k / 3 + 3, { s: 8, c: MUTE, a: 'right' }); }
       const xd = xmx - xmn < 0.5 ? 2 : xmx - xmn < 5 ? 1 : 0; T(fmt(xmn, xd), gx, gy + hh + 11, { s: 8, c: MUTE }); T(fmt(xmx, xd), gx + pw, gy + hh + 11, { s: 8, c: MUTE, a: 'right' });
-      ctx.strokeStyle = pr.c; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(X(xmn - px), Y(reg.fit.a + reg.fit.b * (xmn - px))); ctx.lineTo(X(xmx + px), Y(reg.fit.a + reg.fit.b * (xmx + px))); ctx.stroke();
+      ctx.save(); ctx.beginPath(); ctx.rect(gx, gy - 2, pw, hh + 4); ctx.clip(); ctx.strokeStyle = pr.c; ctx.lineWidth = 1.6; ctx.beginPath(); { const cl = v => Math.max(gy - 4, Math.min(gy + hh + 4, v)), flat = !(xmx - xmn > 1e-9 * (1 + Math.abs(xmn))); const b0 = flat ? 0 : reg.fit.b, a0 = flat ? ys.reduce((q, w) => q + w, 0) / Math.max(1, ys.length) : reg.fit.a; ctx.moveTo(X(xmn - px), cl(Y(a0 + b0 * (xmn - px)))); ctx.lineTo(X(xmx + px), cl(Y(a0 + b0 * (xmx + px)))); } ctx.stroke(); ctx.restore();
       xs.forEach((v, k) => { ctx.fillStyle = mix('#9AA3AE', pr.c, 0.6); ctx.strokeStyle = '#fff'; ctx.beginPath(); ctx.arc(X(v), Y(ys[k]), 3.6, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
       // the plant of the layer, estimated from its own shoot trait
       const cur = R('dr'), v = pr.f(cur), sc = pr.s || 1; let m = 0, c = 0; for (let t = Math.max(0, d - 2); t <= Math.min(N - 1, d + 2); t++) { m += v[t] * sc; c++; } const xv = m / c, yt = YV[PH.yv].f(cur), ye = reg.fit.a + reg.fit.b * xv;
-      ctx.fillStyle = '#D93025'; ctx.beginPath(); ctx.moveTo(X(xv), Y(yt) - 6); ctx.lineTo(X(xv) + 5, Y(yt)); ctx.lineTo(X(xv), Y(yt) + 6); ctx.lineTo(X(xv) - 5, Y(yt)); ctx.closePath(); ctx.fill();
+      { const dx = Math.max(gx, Math.min(gx + pw, X(xv))), dy = Math.max(gy, Math.min(gy + hh, Y(yt))); ctx.fillStyle = '#D93025'; ctx.beginPath(); ctx.moveTo(dx, dy - 6); ctx.lineTo(dx + 5, dy); ctx.lineTo(dx, dy + 6); ctx.lineTo(dx - 5, dy); ctx.closePath(); ctx.fill(); }
       T('r² = ' + fmt(reg.fit.r2, 2) + ' · slope ' + fmt(reg.fit.b, Math.abs(reg.fit.b) < 1 ? 2 : 1), gx + pw, gy - 6, { s: 9.5, b: true, c: pr.c, a: 'right' }); TF('your plant: estimated ' + fmt(ye, ymx < 20 ? 1 : 0) + ', model ' + fmt(yt, ymx < 20 ? 1 : 0), gx - 40, gy + hh + 24, cw, { s: 8.5, c: '#33414F' });
     });
     y += 2 * (hh + 46) + 6;
