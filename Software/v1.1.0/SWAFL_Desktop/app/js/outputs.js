@@ -145,6 +145,16 @@ window.SWOut = (() => {
     dsum: 'crop:yield of each Daisy run|water:water used|no3:nitrogen lost|drain:the table of decisions',
     dph: 'bio:air and radiation|photo:leaf photosynthesis|crop:growth of the canopy|temp:canopy temperature against the air'
   };
+  const STATE = {
+    field: 'Root-zone water|theta, h, K(theta) in 40 layers;storage S;depletion D', v1: 'Soil around the sensor|suction h at depth z;retention theta(h);trigger h*', v2: 'Soil profile|pressure head h(z,t);Richards equation;wetting front', v3: 'Soil structure|consolidation tau;pore network n, Ks;retention theta(h)',
+    v4: 'Soil under mulch|soil evaporation E;mulch capacity;litter water', v5: 'Coupled system|water, crop, nitrogen;40-layer cascade;feedback loops', v6: 'Topsoil|mulch cover phi;tillage state;evaporation E', v7: 'Soil series|texture;organic matter;consolidation tau;Ks',
+    e1: 'Drying soil|liquid water theta;vapour flux;surface crust', n1: 'Root zone|available water;depletion D;trigger', n2: 'Mulched soil|saved water;drainage D;uptake', n3: 'Soil water|evaporation E;drainage D;storage dS', r1: 'Root zone|root density L(z);rooting depth;uptake S(z)',
+    spac: 'Soil-plant-air path|psi soil;psi root;psi leaf;psi air', sid: 'Furrow or border|advance x(t);infiltration I(t);runoff', drip: 'Wetted bulb|emitter flow q;bulb radius;uniformity', spr: 'Application pattern|depth by catch can;overlap;CU',
+    yby: 'Twenty seasons|yield by year;irrigation by year;reliability', wb2: 'Water balance|P + I = ET + D + dS;closure error', nb: 'Soil nitrogen|mineral N (NO3, NH4);organic N;uptake', crop: 'Crop|stage lengths;Kc;canopy cover',
+    chem: 'Soil chemical|concentration C;sorption Koc;half-life', dsum: 'Daisy ensemble|runs;yield;water;nitrogen', dph: 'Canopy|Tc minus Ta;stomatal conductance;LAI'
+  };
+  const DRV = { spac: ['air humidity', 'radiation', 'soil water'], nb: ['rain', 'fertiliser N', 'temperature'], sid: ['inflow rate', 'duration', 'soil intake'], drip: ['emitter flow', 'run time', 'soil'], spr: ['sprinkler flow', 'wind', 'soil'], yby: ['20 years of weather'], chem: ['rain', 'dose', 'soil'], dsum: ['10 soils', '17 experiments'], dph: ['air temperature', 'radiation', 'vapour deficit'], crop: ['reference ET0', 'season dates'], e1: ['evaporative demand', 'initial water'], v3: ['rain', 'irrigation'] };
+  const FB = { field: 'irrigation, yield', v1: 'irrigation lowers suction', n1: 'irrigation lowers depletion', v5: 'water, crop, nitrogen', wb2: 'irrigation, storage' };
   const flowOf = scene => (FLOW[scene] || '').split('|').map(x => { const i = x.indexOf(':'); return { p: x.slice(0, i), t: x.slice(i + 1) }; }).filter(x => x.p);
 
   // ---------------------------------------------------------------- the Figure tab: the processes of Daisy, linked to the outputs of the layer
@@ -154,7 +164,7 @@ window.SWOut = (() => {
     spac: [[], ['bio', 'crop', 'water', 'photo']], sid: [['bio', 'surf'], ['water', 'drain', 'crop']], drip: [['bio', 'surf'], ['water', 'drain', 'crop']], spr: [['bio', 'surf'], ['water', 'drain', 'crop']], yby: [[], ['crop', 'bio']], wb2: [[], ['bio', 'surf', 'water', 'drain', 'crop']],
     nb: [[], ['no3', 'nh4', 'deni', 'crop']], crop: [[], ['crop', 'photo', 'bio']], chem: [[], ['water', 'drain', 'no3']], dsum: [[], ['crop', 'water', 'no3']], dph: [[], ['crop', 'photo', 'temp']]
   };
-  const KEY = [[/snow/i, ['snow']], [/rain|precip|irrigation|applied|schedule|weather|climate|et0|reference/i, ['bio', 'surf']], [/evapor|mulch|litter|interception/i, ['surf']], [/transpir|crop|yield|growth|canopy|leaf|season|stress|life cycle|phenol|root/i, ['crop', 'photo']],
+  const KEY = [[/snow/i, ['snow']], [/weather|climate|et0|reference|radiation|air temp|demand/i, ['bio']], [/rain|precip|irrigation|applied|schedule|inflow/i, ['surf']], [/evapor|mulch|litter|interception/i, ['surf']], [/transpir|crop|yield|growth|canopy|leaf|season|stress|life cycle|phenol|root/i, ['crop', 'photo']],
     [/nitrogen|nitrate|leach|\bN\b/i, ['no3', 'nh4', 'deni']], [/carbon|organic/i, ['om', 'carbon']], [/temperature|heat|frost/i, ['temp']], [/drain|percolat|deep/i, ['drain']], [/pressure|suction|potential|soil water|moisture|depletion|wetted|bulb|infiltrat|intake|storage|profile|hydraul/i, ['water', 'pore']]];
   const procsOfTitle = (t, fallback) => { const s = new Set(); KEY.forEach(k => { if (k[0].test(t)) k[1].forEach(p => s.add(p)); }); return s.size ? Array.from(s) : fallback.slice(); };
   // what the controls of each layer are and what its results are, in the words of the layer
@@ -169,6 +179,20 @@ window.SWOut = (() => {
   const titles = {};   // outputs of each layer, remembered when the Results tab shows them
   function remember(body, scene) { const L = []; body.querySelectorAll('.dsec[data-sec]').forEach(s => { const t = ((s.querySelector('h4 b') || {}).textContent || '').trim(); if (t) L.push({ src: 'dash', id: s.dataset.sec, title: t }); }); if (L.length) titles[scene] = L; }
   let figSel = null, figKey = '';
+  let secCache = { key: '', list: null, busy: null };
+  async function sectionsOf() {
+    const sn = E.snap, key = sn.scene + '|' + JSON.stringify(sn.state) + '|' + sn.date; if (secCache.key === key && secCache.list) return secCache.list; if (secCache.busy && secCache.busyKey === key) return secCache.busy;
+    secCache.busyKey = key; secCache.busy = Dash.offscreen().then(l => { secCache = { key, list: l, busy: null }; return l; }); return secCache.busy;
+  }
+  async function fillRes(box, scene, p, m, host) {
+    const pn = (window.DaisyProc.byId(p) || {}).n || p; box.innerHTML = '<div class="pnote">Preparing the results of ' + esc(pn) + '...</div>';
+    let list = []; try { list = await sectionsOf(); } catch (e) { console.warn(e); } if (!box.isConnected || figSel !== p) return;
+    const fb = (m[1].length ? m[1] : m[0])[0], mine = list.filter(x => procsOfTitle(x.title, [fb]).indexOf(p) >= 0);
+    box.innerHTML = '<div style="border:1px solid #808080;background:#fff;padding:6px"><div class="dzrow"><b style="color:' + window.DaisyProc.GC[(window.DaisyProc.byId(p) || {}).g] + '">Results of this layer that belong to: ' + esc(pn) + '</b><span class="pnote">' + mine.length + ' of ' + list.length + ' outputs; the others are hidden</span><span style="flex:1"></span><button class="mini" data-clr>Show all processes</button></div><div data-rs></div></div>';
+    const rs = box.querySelector('[data-rs]'); mine.forEach(x => { x.el.classList.remove('shut'); const b = x.el.querySelector('.dsb'); if (b) b.hidden = false; rs.appendChild(x.el.cloneNode(true)); });
+    if (!mine.length) rs.innerHTML = '<div class="pnote">This layer has no output of its own for this process. It acts through the other processes in the chain.</div>';
+    box.querySelector('[data-clr]').onclick = () => { figSel = null; figKey = ''; figure(host, E.snap); };
+  }
   function figure(body, s) {
     const scene = s.scene, m = MAP[scene] || [[], ['bio', 'water', 'crop']], P = window.DaisyProc; if (!P || !P.svg) { body.innerHTML = '<div class="dnote">The process figure is loading.</div>'; return; }
     let engTitles = []; try { engTitles = Object.keys((s.sec && s.sec[scene]) || {}); } catch (e) { }
@@ -180,10 +204,12 @@ window.SWOut = (() => {
     body.innerHTML = '<div class="swfig"><div class="dnote">The processes of Daisy for <b>' + esc(layerName()) + '</b>. <span style="color:#e8710a"><b>Orange</b></span>: what its controls act on (' + esc(lt[0]) + '). <span style="color:#0072b2"><b>Blue</b></span>: where its results come from (' + esc(lt[1]) + '). The processes this layer does not use are shown pale; none is hidden. Click a process to see what Daisy does there, its figures from your Daisy runs, and the outputs of the layer that depend on it; click an output to see its processes.</div>' +
       '<div class="swflow" style="display:flex;flex-wrap:wrap;align-items:stretch;gap:4px;margin:6px 0">' + flowOf(scene).map((st, i) => (i ? '<span style="align-self:center">&#8594;</span>' : '') + '<button class="mini" data-fl="' + st.p + '" style="text-align:left;max-width:210px;white-space:normal;border-left:6px solid ' + ((P.byId(st.p) && P.GC[P.byId(st.p).g]) || '#888') + '"><b>' + (i + 1) + '.</b> ' + esc(st.t) + '<br><span class="pnote">' + esc((P.byId(st.p) || {}).n || '') + '</span></button>').join('') + '</div>' +
       '<div class="dzrow" style="gap:4px;margin:4px 0"><button class="mini" data-fg="full">&#9974; Full screen</button><button class="mini" data-fg="big">Enlarge</button><button class="mini" data-fg="png">Save picture (300 dpi)</button><button class="mini" data-fg="svg">Save as SVG</button></div>' +
-      '<div class="swmap">' + P.svg({ marks: { F, R, factors: m[0].map(id => ({ id })), resp: m[1] }, names: { controls: 'controls', results: 'results' }, labels: { f: 'Controls of ' + layerName(), r: 'Results of ' + layerName() }, emph, sel: figSel || null }) + '</div>' +
+      '<div class="swmap" data-own>' + LayerFig.svg({ id: scene, name: layerName(), nameOf: p => (P.byId(p) || {}).n || p, drivers: { title: 'Driving variables', items: DRV[scene] || ['rain P', 'irrigation I', 'reference ET0'] }, state: (() => { const q = (STATE[scene] || 'Soil|').split('|'); return { title: q[0], lines: (q[1] || '').split(';').filter(Boolean) }; })(), steps: flowOf(scene).map(x => ({ p: x.p, t: x.t })), outputs: lt[1].split(/,\s*/).filter(Boolean).slice(0, 5).map(t => ({ t: t.charAt(0).toUpperCase() + t.slice(1), p: procsOfTitle(t, m[1].length ? m[1] : m[0])[0] })), controls: lt[0].split(/,\s*/).filter(Boolean).slice(0, 5).map((t, i) => ({ t: t.charAt(0).toUpperCase() + t.slice(1), i })), fb: FB[scene] || '', sel: figSel || null }) + '</div><details style="margin-top:8px"' + (figSel ? '' : '') + '><summary><b>The same processes on the map of the Daisy model</b></summary><div class="swmap">' + P.svg({ marks: { F, R, factors: m[0].map(id => ({ id })), resp: m[1] }, names: { controls: 'controls', results: 'results' }, labels: { f: 'Controls of ' + layerName(), r: 'Results of ' + layerName() }, emph, sel: figSel || null }) + '</div></details><div data-res style="margin-top:8px"></div>' +
       '<div class="swlist" style="margin-top:6px"><b>Outputs of this layer</b>' + (items.length ? '' : ' <span class="pnote">(open the Results tab once to list them)</span>') + '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px">' +
       items.map((it, i) => '<button class="mini" data-it="' + i + '" style="' + (figSel && it.p.indexOf(figSel) >= 0 ? 'font-weight:700;outline:2px solid #c0392b;' : figSel ? 'opacity:.45;' : '') + '" title="' + esc(it.p.join(', ')) + '">' + esc(it.title.length > 48 ? it.title.slice(0, 46) + '...' : it.title) + '</button>').join('') + '</div></div><div data-pdet style="margin-top:6px"></div></div>';
     const det = body.querySelector('[data-pdet]'), runsOf = () => { const r = []; try { (window.DaisyScenUI ? DaisyScenUI.runs() : []).forEach(x => r.push({ label: 'Scenario: ' + (x.label || x.id), logs: x.logs })); (window.DaisyExpUI ? DaisyExpUI.runs() : []).forEach(x => r.push({ label: 'Experiment: ' + x.id + ' ' + (x.label || ''), logs: x.logs })); } catch (e) { } return r; };
+    const resBox = body.querySelector('[data-res]');
+    if (resBox) { if (figSel) fillRes(resBox, scene, figSel, m, body); else resBox.innerHTML = '<div class="pnote" style="padding:4px 0">Click a process (or an output) in the figure and only the results that belong to it are shown here, as in the process figures of Daisy.</div>'; }
     if (figSel && det) P.detailInto(det, figSel, runsOf(), 'The layer itself shows this process in the section marked in the list above.');
     const svgEl = () => body.querySelector('.swmap svg'), svgText = () => { const el = svgEl().cloneNode(true); el.setAttribute('xmlns', 'http://www.w3.org/2000/svg'); const vb = el.getAttribute('viewBox').split(/\s+/).map(Number); el.setAttribute('width', vb[2]); el.setAttribute('height', vb[3]); el.removeAttribute('style'); return new XMLSerializer().serializeToString(el); };
     body.querySelectorAll('[data-fg]').forEach(b => b.onclick = async () => { const a = b.dataset.fg;

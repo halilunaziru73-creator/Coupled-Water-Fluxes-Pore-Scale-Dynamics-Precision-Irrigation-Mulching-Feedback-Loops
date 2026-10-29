@@ -2,7 +2,7 @@
    elsewhere) and the message log. Every block has a header that collapses and expands it. */
 'use strict';
 const Dash = (() => {
-  const body = document.getElementById('dashBody'), tabs = document.getElementById('dashTabs');
+  let body = document.getElementById('dashBody'); const tabs = document.getElementById('dashTabs');
   let lastHtml = '';
   const setBody = h => { if (h !== lastHtml) { const st = body.scrollTop; body.innerHTML = h; body.scrollTop = st; lastHtml = h; } };
   let tab = 'results', baseline = null, chartTimer = null, chartKey = '';
@@ -298,5 +298,17 @@ const Dash = (() => {
   }
   setInterval(dssLive, 400);
   setInterval(() => { if ((tab === 'design' || tab === 'charts') && E.snap && Layers.DESIGN.includes(E.snap.scene)) render(); }, 1000);
-  return { tab: setTab, pin, clearPin, render, hasBaseline: () => !!baseline };
+  // the sections of all the tabs of the layer, drawn out of sight and handed over as pictures with their text: the Figure tab shows only the ones of the process that was clicked
+  async function offscreen() {
+    const s = E.snap; if (!s || !Layers.started()) return []; const sb = body, st = tab, lh = lastHtml, ck = chartKey, res = [], names = ['results'].concat(Layers.DESIGN.includes(s.scene) ? ['design'] : []).concat(['charts']);
+    for (const t of names) {
+      const host = document.createElement('div'); host.style.cssText = 'position:absolute;left:-12000px;top:0;width:' + Math.max(640, sb.clientWidth) + 'px;background:#fff'; host.className = sb.className; document.body.appendChild(host);
+      try { body = host; tab = t; lastHtml = ''; chartKey = ''; render0(); } catch (e) { console.warn(e); } finally { body = sb; tab = st; lastHtml = lh; chartKey = ck; }
+      await new Promise(r => setTimeout(r, 500));
+      host.querySelectorAll('.dsec').forEach(sec => { const cl = sec.cloneNode(true), a = sec.querySelectorAll('canvas'), b = cl.querySelectorAll('canvas'); a.forEach((c, i) => { try { const im = new Image(); im.src = c.toDataURL('image/png'); im.style.cssText = 'max-width:100%;height:auto'; b[i].replaceWith(im); } catch (e) { } }); cl.querySelectorAll('select,button').forEach(x => x.remove()); const h = cl.querySelector('h4 b'); res.push({ tab: t, id: sec.dataset.sec, title: ((h && h.textContent) || '').replace(/^[\u25B6\u25BC\s]+/, '').trim(), el: cl }); });
+      host.remove();
+    }
+    return res;
+  }
+  return { tab: setTab, pin, clearPin, render, offscreen, hasBaseline: () => !!baseline };
 })();

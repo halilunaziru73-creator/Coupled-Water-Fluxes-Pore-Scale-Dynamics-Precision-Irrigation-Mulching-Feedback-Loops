@@ -83,13 +83,16 @@ const UI = (() => {
   function closeModal() { document.getElementById('modalRoot').innerHTML = ''; }
   function modal(o) {
     const r = document.getElementById('modalRoot');
-    r.innerHTML = '<div class="ov"><div class="modal" style="' + (o.width ? 'width:' + o.width : '') + '"><div class="mh">' + icon(o.icon || 'info') + '<span>' + esc(o.title) + '</span><span class="x" data-x>&#10005;</span></div><div class="mb">' + o.html + '</div><div class="mf"></div></div></div>';
+    r.innerHTML = '<div class="ov"><div class="modal" style="' + (o.width ? 'width:' + o.width : '') + '"><div class="mh">' + icon(o.icon || 'info') + '<span>' + esc(o.title) + '</span><span class="x" data-fsm title="Full screen / back to window size" style="margin-left:auto;margin-right:4px;cursor:pointer">&#9974;</span><span class="x" data-x>&#10005;</span></div><div class="mb">' + o.html + '</div><div class="mf"></div></div></div>';
     const mf = r.querySelector('.mf');
     (o.buttons || [{ label: 'Close', pri: true }]).forEach(b => {
       const el = document.createElement('button'); el.className = 'btn' + (b.pri ? ' pri' : ''); el.textContent = b.label;
       el.addEventListener('click', () => { if (!b.act || b.act() !== false) closeModal(); }); mf.appendChild(el);
     });
     r.querySelector('[data-x]').addEventListener('click', closeModal);
+    const mdl = r.querySelector('.modal'), fsm = r.querySelector('[data-fsm]'); let sv = '';
+    const fitM = () => { const on = mdl.classList.toggle('mfull'); if (on) { sv = mdl.style.cssText; mdl.style.cssText = 'width:100vw;max-width:100vw;height:100vh;max-height:100vh;margin:0;display:flex;flex-direction:column'; const mb = mdl.querySelector('.mb'); mb.style.cssText += ';flex:1;max-height:none;overflow:auto'; } else { mdl.style.cssText = sv; const mb = mdl.querySelector('.mb'); mb.style.flex = ''; mb.style.maxHeight = ''; } window.dispatchEvent(new Event('resize')); };
+    fsm.addEventListener('click', fitM); mdl.querySelector('.mh').addEventListener('dblclick', e => { if (!e.target.closest('.x')) fitM(); });
     r.querySelector('.ov').addEventListener('mousedown', e => { if (e.target.classList.contains('ov')) closeModal(); });
     r.querySelectorAll('a[data-url]').forEach(a => a.addEventListener('click', () => openExternal(a.dataset.url)));
     return r;
