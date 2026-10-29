@@ -7,9 +7,9 @@ const DaisyUI = (() => {
   const OKI = ['#0072B2', '#D55E00', '#009E73', '#CC79A7', '#E69F00', '#56B4E9', '#7a6f00', '#444444'];
   const SPEC = ['#2b83ba', '#5aa6b4', '#8fcfa6', '#c4e6a8', '#ffffbf', '#fee08b', '#fdae61', '#f46d43', '#d53e4f'];
   // the tabs follow what a person does: ask a question, give the data, look at the results, build and calibrate, learn
-  const GROUPS = [['1 Your data', [['data', 'My data'], ['weather', 'Weather stations'], ['library', 'Library'], ['files', 'Files']]], ['2 Experiments', [['exp', 'Experiments'], ['scen', '↳ Scenarios']]], ['3 Look at results', [['proc', 'Processes'], ['plot', 'Plot'], ['balance', 'Mass balance'], ['compare', 'Compare and test']]], ['4 Decide in the SWAFL project', [['dss', 'To the SWAFL project']]], ['Tools: build and test', [['editor', 'Set-up editor'], ['richards', 'Soil column'], ['deni', 'Process curves'], ['calib', 'Calibrate']]], ['Tools: learn', [['docs', 'Model and documentation']]]];
+  const GROUPS = [['Start', [['start', 'Start here']]], ['1 Your data', [['data', 'My data'], ['weather', 'Weather stations'], ['library', 'Library'], ['files', 'Files']]], ['2 Experiments', [['exp', 'Experiments'], ['scen', '↳ Scenarios']]], ['3 Look at results', [['proc', 'Processes'], ['plot', 'Plot'], ['balance', 'Mass balance'], ['compare', 'Compare and test']]], ['4 Decide in the SWAFL project', [['dss', 'To the SWAFL project']]], ['Tools: build and test', [['editor', 'Set-up editor'], ['richards', 'Soil column'], ['deni', 'Process curves'], ['calib', 'Calibrate']]], ['Tools: learn', [['docs', 'Model and documentation']]]];
   const TABS = GROUPS.reduce((a, g) => a.concat(g[1]), []);
-  const S = { logs: {}, tab: 'files', lib: null, idx: null, rich: null, anim: null, cal: null, dai: '', kind: 'horizons', txt: {} };
+  const S = { logs: {}, tab: 'start', lib: null, idx: null, rich: null, anim: null, cal: null, dai: '', kind: 'horizons', txt: {} };
   const $ = id => document.getElementById('dz' + id);
   const isDesk = () => !!(window.swafl && window.swafl.isDesktop);
   const fmt = (v, d) => v == null || !isFinite(v) ? '-' : (Math.abs(v) >= 1e5 || (v !== 0 && Math.abs(v) < 1e-3) ? v.toExponential(2) : (+v).toFixed(d == null ? 3 : d).replace(/\.?0+$/, ''));
@@ -427,9 +427,9 @@ const DaisyUI = (() => {
   function open(tab) {
     let arg = ''; if (String(tab).indexOf(':') > 0) { arg = tab.split(':')[1]; tab = tab.split(':')[0]; }
     if (!document.getElementById('dzCss')) { const st = document.createElement('style'); st.id = 'dzCss'; st.textContent = CSS; document.head.appendChild(st); }
-    UI.modal({ title: 'Daisy model: scenarios, runs, figures, tests and calibration', icon: 'chart', width: 'min(1180px,96vw)', full: true, html: '<div class="dztabs">' + GROUPS.map(g => '<div class="dztg"><span>' + g[0] + '</span><div>' + g[1].map(t => '<button data-t="' + t[0] + '">' + t[1] + '</button>').join('') + '</div></div>').join('') + '</div><div class="dzw" id="dzBody"></div>' });
+    UI.modal({ title: 'Daisy model: scenarios, runs, figures, tests and calibration', icon: 'chart', width: 'min(1180px,96vw)', full: true, html: '<div class="dztabs">' + GROUPS.map(g => '<div class="dztg" data-g="' + esc(g[0]) + '"><span>' + g[0] + '</span><div>' + g[1].map(t => '<button data-t="' + t[0] + '">' + t[1] + '</button>').join('') + '</div></div>').join('') + '</div><div class="dzw" id="dzBody"></div>' });
     try { const mm = document.querySelector('#modalRoot .modal'); if (mm) mm.classList.add('dzmodal'); } catch (e) { }
-    document.querySelectorAll('.dztabs button').forEach(b => b.onclick = () => show(b.dataset.t)); if (window.DaisyCite) { if (S.mo) S.mo.disconnect(); S.mo = window.DaisyCite.attach(document.getElementById('dzBody')); } show(HTML[tab] || EXT[tab] ? tab : S.tab, arg);
+    document.querySelectorAll('.dztabs button').forEach(b => b.onclick = () => show(b.dataset.t)); if (window.DaisyCite) { if (S.mo) S.mo.disconnect(); S.mo = window.DaisyCite.attach(document.getElementById('dzBody')); } show(HTML[tab] || EXT[tab] ? tab : S.tab, arg); if (window.DaisyStart) window.DaisyStart.applyMode();
   }
   const kit = { setup, nice, OKI, SPEC, fmt, heat: heatChart, line: lineChart, savePng };
   return { open, TABS, state: S, loadBundled, chart: lineChart, kit, S, EXT, register: (id, x) => { EXT[id] = x; }, addLog, names, refreshSelects, regList, note, esc, getText, getIdx, isDesk, show, download, parseAny, buf, sel, logSel, csvOf, dstr };

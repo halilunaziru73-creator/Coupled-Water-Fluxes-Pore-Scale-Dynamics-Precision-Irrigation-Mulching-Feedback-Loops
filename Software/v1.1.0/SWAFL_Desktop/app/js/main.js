@@ -128,6 +128,7 @@ const MENUS = [
     { label: 'Run / pause the season', icon: 'play', key: 'F5', act: Act.togglePlay }, { label: 'Restart from day 1', icon: 'restart', key: 'Shift+F5', act: Act.restart }, { label: '20-year season simulation', icon: 'chart', act: Act.runSeason }, { sep: 1 },
     { label: 'Optimise surface layout', icon: 'run', act: Act.optimise }, { label: 'Ready-made cases', sub: casesMenu }] },
   { label: 'Daisy', items: [
+    { label: 'Start here: what do you want to do?', icon: 'chart', act: () => DaisyUI.open('start') }, { sep: 1 },
     { label: 'Choose a scenario (what do you want to find out?)...', icon: 'chart', act: () => DaisyUI.open('scen') },
     { label: 'Describe an experiment in your own words (plan, batch, figures)...', icon: 'run', act: () => DaisyUI.open('exp') },
     { label: 'Map of the Daisy processes (Fig. 1)...', icon: 'layers', act: () => DaisyUI.open('proc') },

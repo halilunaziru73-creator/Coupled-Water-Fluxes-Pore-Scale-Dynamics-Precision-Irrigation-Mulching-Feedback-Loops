@@ -26,6 +26,7 @@
   // the bar above the tab: where you are, what to do, Back and Next
   F.bar = function (tab) {
     const i = idx(tab);
+    if (tab === 'start') return '';
     if (i < 0) { const nm = TOOLS[tab] || tab; return '<div class="dzflow"><span class="dzstep">Tool</span><span class="dzwhat"><b>' + esc(nm) + '</b>: a tool outside the guided path.</span><span style="flex:1"></span><button class="btn" id="dzFBackPath">Back to the guided path</button></div>'; }
     F.last = tab; const p = PATH[i], n = PATH.length;
     return '<div class="dzflow"><span class="dzstep">Step ' + (i + 1) + ' of ' + n + '</span><span class="dzwhat"><b>' + esc(p[1]) + '</b>: ' + esc(p[2]) + '</span><span style="flex:1"></span>' + (i > 0 ? '<button class="btn" id="dzFBack">&#9664; Back: ' + esc(PATH[i - 1][1]) + '</button>' : '') + (i < n - 1 ? '<button class="btn pri" id="dzFNext">Next: ' + esc(PATH[i + 1][1]) + ' &#9654;</button>' : '<button class="btn pri" id="dzFOpen" title="Open the layer of the SWAFL project that matches your question">Open in the SWAFL project &#9654;</button>') + '</div>';
