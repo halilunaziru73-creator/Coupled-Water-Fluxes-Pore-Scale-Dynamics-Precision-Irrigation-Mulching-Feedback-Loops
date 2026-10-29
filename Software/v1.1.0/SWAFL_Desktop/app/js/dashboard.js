@@ -102,7 +102,7 @@ const Dash = (() => {
   const waiting = id => daisyOnly(id) ? !daisyRan() : ['sid', 'drip', 'spr'].indexOf(id) >= 0 ? !runOn(id) : !E.ev("(window.layerRan&&layerRan('" + id + "'))?1:0");
   let ranSig = ''; setInterval(() => { try { const s = E.snap; if (!s || !Layers.started() || tab === 'messages') return; const g = s.scene + waiting(s.scene); if (g !== ranSig) { ranSig = g; lastHtml = ''; chartKey = ''; render(); } } catch (e) { } }, 500);
   const runOn = id => !!E.ev("(window.DESIGN_RUN&&DESIGN_RUN['" + id + "']&&DESIGN_RUN['" + id + "'].on)?1:0");
-  const runBtns = id => '<div class="drun"><button class="btn" data-best="' + id + '">Find the most efficient inputs</button></div>';
+  const runBtns = id => '<div class="drun"><button class="btn prim" data-run="' + id + '">&#9654; Run simulation</button><button class="btn" data-best="' + id + '">Find the most efficient inputs</button></div>';
   function design(s) {
     const id = s.scene;
     if (!DL[id]) { setBody('<div class="dnote">The Design tab shows efficiencies, uniformity, times and volumes of the irrigation system you are designing. Open <b>Surface irrigation design</b>, <b>Drip irrigation design</b> or <b>Sprinkler design and pipes</b> in the Layers panel.</div>'); return; }
