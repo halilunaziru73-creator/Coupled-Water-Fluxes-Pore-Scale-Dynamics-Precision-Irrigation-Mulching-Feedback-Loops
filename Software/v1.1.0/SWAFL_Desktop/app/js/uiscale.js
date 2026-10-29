@@ -3,8 +3,8 @@
 'use strict';
 window.UIScale = (() => {
   let pref = 0; try { pref = +localStorage.getItem('swafl.textsize') || 0; } catch (e) { }
-  const ff = /Firefox/i.test(navigator.userAgent); // Firefox draws the arrow heads of zoomed SVG wrongly: no scaling there
-  const auto = () => ff ? 1 : Math.max(1, Math.min(2.2, Math.round(window.innerWidth / 1400 * 20) / 20));
+  const ff = false;
+  const auto = () => ff ? 1 : Math.max(1.2, Math.min(2.2, Math.round(window.innerWidth / 1200 * 20) / 20));
   const cur = () => ff ? 1 : (pref || auto());
   const apply = () => {
     const z = cur(), app = document.getElementById('app'); document.documentElement.style.zoom = z === 1 ? '' : z; document.documentElement.style.setProperty('--us', z);
