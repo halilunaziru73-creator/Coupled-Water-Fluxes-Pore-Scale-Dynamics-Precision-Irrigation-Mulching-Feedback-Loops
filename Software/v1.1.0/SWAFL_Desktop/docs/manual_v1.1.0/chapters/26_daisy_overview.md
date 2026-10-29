@@ -4,15 +4,15 @@ The Daisy workbench is the part of SWAFL that runs the Daisy 7.1.14 model, draws
 
 | Group | Tab | What it is for |
 |:--|:--|:--|
-| 1 Input data | Input data | Set the weather (online stations, a file, the stations bundled with Daisy) and the soil of the site once; every simulation uses them. |
-| 1 Input data | Parameter library | Read the horizons, crops, fertilisers and other entries of the Daisy library. |
-| 2 Experiments | Experiments | Design your own set of runs from 53 factors, or start from 27 best combinations. |
-| 2 Experiments | Scenarios | Five ready questions about water, nitrogen, climate, a chemical and soil. |
-| 3 Results and analysis | Process map | A map of the model processes with the figures of each one. |
-| 3 Results and analysis | Log plots | Load logs (or take the output of your runs) and draw any column of them. |
-| 3 Results and analysis | Mass balance | Check that inputs, outputs and content agree. |
-| 3 Results and analysis | Run comparison | Compare two logs against the smallest meaningful level. |
-| 4 Decision support | To the SWAFL layers | Take the results to the layers of the SWAFL project that turn them into decisions. |
+| Input data | Input data | Set the weather (online stations, a file, the stations bundled with Daisy) and the soil of the site once; every simulation uses them. |
+| Input data | Parameter library | Read the horizons, crops, fertilisers and other entries of the Daisy library. |
+| Experiments | Experiments | Design your own set of runs from 53 factors, or start from 27 best combinations. |
+| Experiments | Scenarios | Five ready questions about water, nitrogen, climate, a chemical and soil. |
+| Results and analysis | Process map | A map of the model processes with the figures of each one. |
+| Results and analysis | Log plots | Load logs (or take the output of your runs) and draw any column of them. |
+| Results and analysis | Mass balance | Check that inputs, outputs and content agree. |
+| Results and analysis | Run comparison | Compare two logs against the smallest meaningful level. |
+| Decision support | To the SWAFL layers | Take the results to the layers of the SWAFL project that turn them into decisions. |
 | Model development | Set-up editor | Edit and run a Daisy set-up file. |
 | Model development | Soil column | Solve the Richards equation for a soil column. |
 | Model development | Response curves | Draw any function of the Daisy library. |
