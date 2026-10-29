@@ -432,7 +432,7 @@ const FieldMap = (() => {
     if (F.res) t += '\nsource,' + q(F.res.src) + '\nindex,mean,sd,min,p10,median,p90,max,cells,reading\n' + RK().map(k => { const s = F.res.S[k]; return s ? [k, s.mean, s.sd, s.min, s.p10, s.p50, s.p90, s.max].map((v, i) => i ? (+v).toFixed(4) : v).join(',') + ',' + s.n + ',' + q(IDX[k].read(s.mean)) : k + ',,,,,,,,0,'; }).join('\n') + '\n';
     UI.saveFile(fileBase() + '.csv', t, false, 'text/csv'); }
   const q = s => '"' + String(s == null ? '' : s).replace(/"/g, '""') + '"';
-  const fileBase = () => 'SWAFL_field_' + (F.place ? F.place.split(',')[0].replace(/[^A-Za-z0-9]+/g, '_') + '_' : '') + new Date().toISOString().slice(0, 10);
+  const fileBase = () => 'SWAFL_field_' + (F.place ? F.place.split(',')[0].replace(/[^A-Za-z0-9]+/g, '_') + '_' : '') + SWAFLDate.day();
   // the map picture for the report: the tiles of the field area at a zoom that fills the frame, the field, the index, north and scale
   async function mapImage(w, h, withIdx, key, small, opt) {
     opt = opt || {};
@@ -492,7 +492,7 @@ const FieldMap = (() => {
         return { cv, c, T, wrap, head, foot, ramp }; };
       // page 1: the field, the map with the chosen index, the coordinates and the table
       const p1 = page(), { c, T, wrap } = p1; p1.head(F.res ? F.res.date : '');
-      let y = 76; T('Author: ' + (F.author || 'not given') + (F.org ? ' · ' + F.org : ''), 36, y, 10); T('Date: ' + now.toISOString().slice(0, 10), 559, y, 10, { a: 'right' }); y += 15;
+      let y = 76; T('Author: ' + (F.author || 'not given') + (F.org ? ' · ' + F.org : ''), 36, y, 10); T('Date: ' + SWAFLDate.day(now), 559, y, 10, { a: 'right' }); y += 15;
       T((F.place ? 'Place: ' + F.place + ' · ' : '') + 'Centre ' + cen[0].toFixed(6) + ', ' + cen[1].toFixed(6) + ' (' + dms(cen[0], 'N', 'S') + ' ' + dms(cen[1], 'E', 'W') + ') · WGS 84 (EPSG:4326)', 36, y, 9, { c: '#333' }); y += 12;
       const mw = 523 * k, mh = 320 * k, M = await mapImage(Math.round(mw), Math.round(mh), F.view === 'cover' && F.cv ? 'cover' : true, F.idx); c.drawImage(M.cv, 36 * k, y * k, mw, mh);
       T('N edge ' + M.edges.n.toFixed(5) + '°', 559, y - 2, 7.5, { a: 'right', c: '#555' }); T('W edge ' + M.edges.w.toFixed(5) + '°', 36, y + 320 + 9, 7.5, { c: '#555' }); T('E edge ' + M.edges.e.toFixed(5) + '°', 559, y + 320 + 9, 7.5, { a: 'right', c: '#555' }); T('S edge ' + M.edges.s.toFixed(5) + '°', 36 + 523 / 2, y + 320 + 9, 7.5, { a: 'center', c: '#555' });

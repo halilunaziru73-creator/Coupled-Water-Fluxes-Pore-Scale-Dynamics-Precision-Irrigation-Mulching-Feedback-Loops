@@ -132,24 +132,25 @@
   async function drawFigs(p, figs, getLog, stale, what) {
     let ok = 0, bad = 0;
     for (const f of p.figs) {
-      if (stale()) return null; const card = document.createElement('div'); card.className = 'dzcard dzfig'; card.innerHTML = '<b>' + esc(f.t) + '</b> <button class="dzPng btn" style="float:right;width:auto;display:inline-block">Save PNG</button><div><canvas style="display:block;width:100%;margin-top:6px"></canvas></div><div class="dzPn" style="font-size:12px;color:#555"></div>'; figs.appendChild(card);
-      const cv = card.querySelector('canvas'), note = card.querySelector('.dzPn'); card.querySelector('.dzPng').onclick = () => window.DaisyCite.png(Array.from(card.querySelectorAll('canvas')), 'daisy-' + p.id + '-' + f.log + '.png');
+      if (stale()) return null; const card = document.createElement('div'); card.className = 'dzcard dzfig'; card.innerHTML = '<b>' + esc(f.t) + '</b> <button class="dzPng btn">Save PNG</button><div><canvas style="display:block;width:100%;margin-top:6px"></canvas></div><div class="dzPn" style="font-size:12px;color:#555"></div>'; figs.appendChild(card);
+      const cv = card.querySelector('canvas'), note = card.querySelector('.dzPn'); card._jobs = []; if (window.DaisyFigKit) window.DaisyFigKit.attach(card, { name: 'daisy-' + p.id + '-' + f.log, redraw: () => card._jobs.forEach(j => j()) });
       try {
         const d = await getLog(f.log); if (stale()) return null; if (!d) throw new Error(f.log + ' was not written by this run');
         if (f.annual) { annual(cv, card, d, note, f.t); ok++; continue; }
         const span = new Date(d.time[0]).getUTCFullYear() + ' to ' + new Date(d.time[d.n - 1]).getUTCFullYear();
         if (f.heat) { const dc = IO.depthColumns(d), vs = Object.keys(dc); if (!vs.length) throw new Error('no depth columns in ' + f.log); const pal = { Theta: 'blues', h: 'pf', C: 'ylgn' };
-          vs.slice(0, 2).forEach((v, k) => { const L = IO.depthLong(d, v); let c = cv; if (k) { c = document.createElement('canvas'); c.style.cssText = cv.style.cssText; { const dv = document.createElement('div'); dv.appendChild(c); card.insertBefore(dv, note); } } K().heat(c, L.t, L.z, L.v, { title: f.t + (vs.length > 1 ? ': ' + v : ''), time: true, unit: L.unit || v, pal: pal[v] || 'viridis', h: 300 }); }); note.textContent = span + '; ' + vs.slice(0, 2).join(', ') + '. Colour bar in ' + (d.units[dc[vs[0]][0].c] || 'model units') + '.'; ok++; continue; }
+          vs.slice(0, 2).forEach((v, k) => { const L = IO.depthLong(d, v); let c = cv; if (k) { c = document.createElement('canvas'); c.style.cssText = cv.style.cssText; { const dv = document.createElement('div'); dv.appendChild(c); card.insertBefore(dv, note); } } J(card, () => K().heat(c, L.t, L.z, L.v, { title: f.t + (vs.length > 1 ? ': ' + v : ''), time: true, unit: L.unit || v, pal: pal[v] || 'viridis', h: 300 })); }); note.textContent = span + '; ' + vs.slice(0, 2).join(', ') + '. Colour bar in ' + (d.units[dc[vs[0]][0].c] || 'model units') + '.'; ok++; continue; }
         const n = panels(cv, card, d, f.c, f.t, note, true); if (!n.drawn) throw new Error(n.zeros.length ? 'every selected column of ' + f.log + ' is zero in this run (' + n.zeros.join(', ') + '), so there is nothing to draw' : 'columns not in ' + f.log); note.textContent = span + '.' + (n.zeros.length ? ' Left out because they are zero throughout: ' + n.zeros.join(', ') + '.' : ''); ok++;
       } catch (e) { bad++; card.querySelectorAll('canvas').forEach(c => c.remove()); note.textContent = 'Not drawn: ' + e.message; }
     }
     return { ok, bad };
   }
+  const J = (card, fn) => { (card._jobs = card._jobs || []).push(fn); fn(); };   // a drawing that can be repeated (editing the titles, saving at a higher resolution)
   // one panel for each unit that the columns have, so that a rate in mm and a content in kg N are never on one axis
   function panels(cv, card, d, cols, title, note, time) {
     const groups = {}, zeros = []; let any = false, xs = time ? d.time : d.data[0].map(Number);
     cols.forEach(c => { const j = IO.colIndex(d, c); if (j < 0) return; const y = d.data[j]; if (!y.some(isFinite)) return; if (!y.some(v => isFinite(v) && v !== 0)) { zeros.push(d.cols[j]); return; } const u = d.units[d.cols[j]] || ''; (groups[u] = groups[u] || []).push({ name: d.cols[j], x: xs, y, pts: !time, line: true }); });
-    const keys = Object.keys(groups).slice(0, 4); keys.forEach((u, k) => { let c = cv; if (k) { c = document.createElement('canvas'); c.style.cssText = cv.style.cssText; { const dv = document.createElement('div'); dv.appendChild(c); card.insertBefore(dv, note); } } K().line(c, groups[u], { title: title + (keys.length > 1 ? (u ? ' (' + u + ')' : '') : ''), time, xint: !time, xt: time ? 'Year' : 'Year', yt: u || 'model units', h: time ? 250 : 270, zero: !time }); any = true; });
+    const keys = Object.keys(groups).slice(0, 4); keys.forEach((u, k) => { let c = cv; if (k) { c = document.createElement('canvas'); c.style.cssText = cv.style.cssText; { const dv = document.createElement('div'); dv.appendChild(c); card.insertBefore(dv, note); } } J(card, () => K().line(c, groups[u], { title: title + (keys.length > 1 ? (u ? ' (' + u + ')' : '') : ''), time, xint: !time, xt: time ? 'Year' : 'Year', yt: u || 'model units', h: time ? 250 : 270, zero: !time })); any = true; });
     return { drawn: any, zeros };
   }
   function annual(cv, card, d, note, title) {

@@ -21,7 +21,7 @@
   C.png = function (cv, name) {
     const list = (Array.isArray(cv) ? cv : [cv]).filter(c => c && c.width), W = Math.max.apply(null, list.map(c => c.width)), H = list.reduce((a, c) => a + c.height, 0), out = document.createElement('canvas'); if (!list.length) return;
     out.width = W; out.height = H; const g = out.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, W, H); let y = 0; list.forEach(c => { g.drawImage(c, 0, y); y += c.height; });
-    out.toBlob(b => { const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); });
+    out.toBlob(b => { const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = window.SWAFLDate ? SWAFLDate.name(name) : name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); });
   };
   C.attach = function (root) {
     const run = () => { root.querySelectorAll('.dzcite').forEach(d => d.remove()); };

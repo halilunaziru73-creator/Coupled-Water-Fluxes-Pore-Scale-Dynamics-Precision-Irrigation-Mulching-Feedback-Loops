@@ -100,6 +100,7 @@ const UI = (() => {
 
   /* ---- file output (desktop dialog or browser download) ---- */
   async function saveFile(name, data, isBase64, mime) {
+    name = window.SWAFLDate ? window.SWAFLDate.name(name) : name; // every saved file carries today's date and time
     if (window.swafl) { const r = await window.swafl.saveFile(name, data, !!isBase64); if (r.ok) { toast('Saved ' + r.path); log('Saved file: ' + r.path); } return r.ok; }
     const blob = isBase64 ? new Blob([Uint8Array.from(atob(data), c => c.charCodeAt(0))], { type: mime || 'application/octet-stream' }) : new Blob([data], { type: mime || 'text/plain' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 3000);

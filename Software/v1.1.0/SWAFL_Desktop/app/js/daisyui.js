@@ -26,7 +26,7 @@ const DaisyUI = (() => {
   const names = () => Object.keys(S.logs);
   const sel = (id, arr, cur, attr) => '<select id="dz' + id + '" ' + (attr || '') + '>' + arr.map(a => { const v = Array.isArray(a) ? a[0] : a, l = Array.isArray(a) ? a[1] : a; return '<option value="' + esc(v) + '"' + (v === cur ? ' selected' : '') + '>' + esc(l) + '</option>'; }).join('') + '</select>';
   const logSel = (id, cur) => sel(id, names().length ? names() : [''], cur);
-  const download = (name, text, mime) => { const b = new Blob([text], { type: mime || 'text/plain' }), a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); };
+  const download = (name, text, mime) => { const b = new Blob([text], { type: mime || 'text/plain' }), a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = SWAFLDate.name(name); a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); };
 
   // ---------------------------------------------------------------- canvas charts
   function setup(cv, h) { const w = Math.max(320, cv.parentNode.clientWidth - 4), r = window.devicePixelRatio || 1; cv.width = w * r; cv.height = h * r; cv.style.width = w + 'px'; cv.style.height = h + 'px'; const g = cv.getContext('2d'); g.setTransform(r, 0, 0, r, 0, 0); g.clearRect(0, 0, w, h); g.fillStyle = '#fff'; g.fillRect(0, 0, w, h); g.font = '11px Segoe UI, Arial, sans-serif'; return { g, w, h }; }
@@ -76,7 +76,7 @@ const DaisyUI = (() => {
     g.save(); g.translate(12, T + ph / 2); g.rotate(-Math.PI / 2); g.fillText(o.yt || 'depth (cm)', 0, 0); g.restore();
     g.textAlign = 'left'; g.fillText(o.unit || '', w - R + 14, T + 8); for (let k = 0; k < NC; k++) { const y = T + 14 + (NC - 1 - k) * 22; g.fillStyle = SPEC[Math.round(k / (NC - 1) * (SPEC.length - 1))]; g.fillRect(w - R + 14, y, 22, 18); g.strokeStyle = '#333'; g.strokeRect(w - R + 14, y, 22, 18); g.fillStyle = '#222'; g.fillText(fmt(lo + (hi - lo) * k / NC, 3) + ' to ' + fmt(lo + (hi - lo) * (k + 1) / NC, 3), w - R + 40, y + 13); }
   }
-  const savePng = (cv, name) => window.DaisyCite ? window.DaisyCite.png(cv, name) : cv.toBlob(b => { const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = name; a.click(); });
+  const savePng = (cv, name) => window.DaisyCite ? window.DaisyCite.png(cv, name) : cv.toBlob(b => { const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = SWAFLDate.name(name); a.click(); });
   const csvOf = (cols, rows) => cols.join(',') + '\n' + rows.map(r => r.join(',')).join('\n');
 
   // ---------------------------------------------------------------- tab: files

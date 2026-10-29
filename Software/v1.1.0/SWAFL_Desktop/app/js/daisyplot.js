@@ -24,10 +24,13 @@ window.DaisyPlot = (() => {
 
   // canvas of the right size, the title and the subtitle; returns the drawing context and the free area
   function frame(cv, o, hDefault) {
-    const par = cv.parentNode, w = Math.max(360, (par ? par.clientWidth : 800) - 4), h = o.h || hDefault || 300, r = Math.max(1, window.devicePixelRatio || 1);
+    const par = cv.parentNode, w = Math.max(360, (par ? par.clientWidth : 800) - 4), h = o.h || hDefault || 300, r = Math.max(1, window.devicePixelRatio || 1) * (API.exportScale || 1);
     cv.width = Math.round(w * r); cv.height = Math.round(h * r); cv.style.width = w + 'px'; cv.style.height = h + 'px';
     const g = cv.getContext('2d'); g.setTransform(r, 0, 0, r, 0, 0); g.fillStyle = '#fff'; g.fillRect(0, 0, w, h); g.textBaseline = 'alphabetic';
-    let top = 10; const title = o.title || cv.dataset.title || '', pl = o.panel || cv.dataset.panel || '', tx = pl ? 34 : 12;
+    // texts the person edited (Titles button of the figure) replace the ones of the program; the program's own are kept to restore them
+    cv.dataset.autoTitle = o.title || cv.dataset.title || ''; cv.dataset.autoX = o.xt || ''; cv.dataset.autoY = o.yt || '';
+    if (cv.dataset.customX != null) o.xt = cv.dataset.customX; if (cv.dataset.customY != null) o.yt = cv.dataset.customY;
+    let top = 10; const title = cv.dataset.customTitle != null ? cv.dataset.customTitle : (o.title || cv.dataset.title || ''), pl = o.panel || cv.dataset.panel || '', tx = pl ? 34 : 12;
     if (pl) { g.font = 'bold 22px ' + FONT; g.fillStyle = '#111'; g.textAlign = 'left'; g.fillText(pl, 8, 26); top = 32; }
     if (title) { g.font = 'bold 14px ' + FONT; g.fillStyle = NAVY; g.textAlign = 'left'; g.fillText(title, tx, 22); top = 32; }
     if (o.sub) { g.font = '11.5px ' + FONT; g.fillStyle = '#666'; g.fillText(o.sub, 12, top + 8); top += 16; }
@@ -46,7 +49,7 @@ window.DaisyPlot = (() => {
   // the time axis: a tick for every year (every second, fifth... year when there are many), months when the span is short
   function timeTicks(x0, x1, pw) {
     const yrs = (x1 - x0) / 3.156e10, out = [], y0 = new Date(x0).getUTCFullYear(), y1 = new Date(x1).getUTCFullYear();
-    if (yrs >= 1.6) { const step = yrs > 40 ? 10 : yrs > 20 ? 5 : yrs > 11 ? 2 : 1; for (let y = Math.ceil(y0 / step) * step; y <= y1; y += step) { const t = Date.UTC(y, 0, 1); if (t >= x0 - 1 && t <= x1 + 1) out.push({ t, lab: String(y) }); } if (out.length < 2) { for (let y = y0; y <= y1 + 1; y++) { const t = Date.UTC(y, 0, 1); if (t >= x0 && t <= x1) out.push({ t, lab: String(y) }); } } return out; }
+    if (yrs >= 1.6) { const room = Math.max(2, Math.floor(pw / 46)); let step = 1; [1, 2, 5, 10, 20, 50].some(q => { step = q; return yrs / q <= room; }); for (let y = Math.ceil(y0 / step) * step; y <= y1; y += step) { const t = Date.UTC(y, 0, 1); if (t >= x0 - 1 && t <= x1 + 1) out.push({ t, lab: String(y) }); } if (out.length < 2) { for (let y = y0; y <= y1 + 1; y++) { const t = Date.UTC(y, 0, 1); if (t >= x0 && t <= x1) out.push({ t, lab: String(y) }); } } if (out.length >= 2) return out; out.length = 0; }
     const months = (x1 - x0) / 2.63e9, step = months > 9 ? 3 : months > 4 ? 2 : 1; let d = new Date(Date.UTC(new Date(x0).getUTCFullYear(), new Date(x0).getUTCMonth(), 1)); if (+d < x0) d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 1));
     for (; +d <= x1; d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + step, 1))) out.push({ t: +d, lab: MON[d.getUTCMonth()] + (d.getUTCMonth() === 0 || !out.length ? ' ' + d.getUTCFullYear() : '') });
     if (out.length < 2) { out.length = 0; const n = Math.max(2, Math.min(6, Math.floor(pw / 90))); for (let k = 0; k <= n; k++) { const t = x0 + (x1 - x0) * k / n, d = new Date(t); out.push({ t, lab: d.getUTCDate() + ' ' + MON[d.getUTCMonth()] + (k === 0 ? ' ' + d.getUTCFullYear() : '') }); } }
@@ -90,6 +93,7 @@ window.DaisyPlot = (() => {
     });
     g.restore(); g.lineWidth = 1;
     if (!o.noLegend) legend(g, items, w, T + ph + (o.xt ? 56 : 38), o);
+    cv._csv = () => { const rows = [['series', o.time ? 'date' : 'x', 'value']]; series.forEach(q => q.x.forEach((x, i) => { if (isFinite(x) && isFinite(q.y[i])) rows.push([q.name || '', o.time ? dstr(x) : x, q.y[i]]); })); return rows; };
     const geo = { X, Y, x0, x1, L, T, pw, ph, series, tm: !!o.time }; cv._geo = geo; hover(cv); return geo;
   }
   function hover(cv) {
@@ -112,14 +116,14 @@ window.DaisyPlot = (() => {
     if (o.xt) { g.fillStyle = INK; g.textAlign = 'center'; g.fillText(o.xt, L + pw / 2, T + ph + Q.labelsH + 12); } yTitle(g, o.yt, 14, T, ph);
   }
   function groupBars(cv, cats, series, o) {
-    o = o || {}; series = series.map((s, k) => Object.assign({ color: OKI[k % OKI.length] }, s)); let hi = 0, lo = 0; series.forEach(s => s.vals.concat(s.hi || [], s.lo || []).forEach(v => { if (isFinite(v)) { hi = Math.max(hi, v); lo = Math.min(lo, v); } }));
+    o = o || {}; cv._csv = () => { const rows = [['category'].concat(series.map(q => q.name || 'value'))]; cats.forEach((c, i) => rows.push([c].concat(series.map(q => q.vals[i])))); return rows; }; series = series.map((s, k) => Object.assign({ color: OKI[k % OKI.length] }, s)); let hi = 0, lo = 0; series.forEach(s => s.vals.concat(s.hi || [], s.lo || []).forEach(v => { if (isFinite(v)) { hi = Math.max(hi, v); lo = Math.min(lo, v); } }));
     const items = series.map(s => ({ name: series.length > 1 || o.legend ? s.name : '', color: s.color, kind: 'box' })), Q = barFrame(cv, o, cats, hi * 1.08, lo, items, true), { g, L, pw, Y } = Q, gw = pw / cats.length, bw = Math.min(46, gw * 0.82 / series.length);
     if (!series.some(s => s.vals.some(isFinite))) { g.fillStyle = '#666'; g.textAlign = 'left'; g.fillText('No values to draw.', L + 10, Q.T + 30); return; }
     cats.forEach((c, i) => { const x0 = L + i * gw + (gw - bw * series.length) / 2; series.forEach((s, k) => { const v = s.vals[i]; if (!isFinite(v)) return; g.fillStyle = s.color; g.fillRect(x0 + k * bw, Math.min(Y(0), Y(v)), bw - 1, Math.abs(Y(v) - Y(0))); if (s.lo && s.hi && isFinite(s.lo[i]) && isFinite(s.hi[i])) { const cx = x0 + k * bw + (bw - 1) / 2; g.strokeStyle = '#222'; g.lineWidth = 1.2; g.beginPath(); g.moveTo(cx, Y(s.lo[i])); g.lineTo(cx, Y(s.hi[i])); g.moveTo(cx - 4, Y(s.lo[i])); g.lineTo(cx + 4, Y(s.lo[i])); g.moveTo(cx - 4, Y(s.hi[i])); g.lineTo(cx + 4, Y(s.hi[i])); g.stroke(); g.lineWidth = 1; } if (series.length * cats.length <= 28 && !(s.lo && s.hi)) { g.fillStyle = INK; g.font = '11px ' + FONT; g.textAlign = 'center'; g.fillText(fmt(v, hi > 50 ? 0 : 2), x0 + k * bw + bw / 2, Y(v) + (v >= 0 ? -4 : 12)); g.font = '12px ' + FONT; } }); });
     barAxes(Q, cats, o, 1); legend(g, items, Q.w, Q.legY, o);
   }
   function stackBars(cv, xs, parts, o) {
-    o = o || {}; parts = parts.map((p, k) => Object.assign({ color: OKI[k % OKI.length] }, p)); const lines = (o.lines || []).concat(o.line ? [o.line] : []).map((l, k) => Object.assign({ color: ['#111', '#D55E00', '#0072B2'][k % 3] }, l)); let hi = 0;
+    o = o || {}; cv._csv = () => { const rows = [['x'].concat(parts.map(q => q.name))]; xs.forEach((x, i) => rows.push([x].concat(parts.map(q => q.vals[i])))); return rows; }; parts = parts.map((p, k) => Object.assign({ color: OKI[k % OKI.length] }, p)); const lines = (o.lines || []).concat(o.line ? [o.line] : []).map((l, k) => Object.assign({ color: ['#111', '#D55E00', '#0072B2'][k % 3] }, l)); let hi = 0;
     xs.forEach((x, i) => { hi = Math.max(hi, parts.reduce((s, p) => s + (isFinite(p.vals[i]) ? Math.max(0, p.vals[i]) : 0), 0)); lines.forEach(l => { if (isFinite(l.vals[i])) hi = Math.max(hi, l.vals[i]); }); });
     const items = parts.map(p => ({ name: p.name, color: p.color, kind: 'box' })).concat(lines.map(l => ({ name: l.name, color: l.color, kind: 'pts' }))), Q = barFrame(cv, o, xs, hi * 1.06, 0, items, true), { g, L, pw, Y } = Q, gw = pw / xs.length, bw = Math.max(3, Math.min(60, gw * 0.7));
     xs.forEach((x, i) => { let acc = 0; parts.forEach(p => { const v = isFinite(p.vals[i]) ? Math.max(0, p.vals[i]) : 0; g.fillStyle = p.color; g.fillRect(L + i * gw + (gw - bw) / 2, Y(acc + v), bw, Y(acc) - Y(acc + v)); acc += v; }); });
@@ -129,7 +133,7 @@ window.DaisyPlot = (() => {
 
   // ------------------------------------------------------------------------------------------------ depth against time, as an image with a colour bar
   function heat(cv, tt, zz, vv, o) {
-    o = o || {}; const F = frame(cv, o, 320), { g, w, h, r } = F, ts = Array.from(new Set(tt)).sort((a, b) => a - b), zs = Array.from(new Set(zz)).sort((a, b) => b - a);   // zs from the shallowest (about 0) to the deepest (most negative)
+    o = o || {}; cv._csv = () => { const rows = [['time', 'depth_cm', 'value']]; for (let k = 0; k < vv.length; k++) if (isFinite(vv[k])) rows.push([o.time ? dstr(tt[k]) : tt[k], zz[k], vv[k]]); return rows; }; const F = frame(cv, o, 320), { g, w, h, r } = F, ts = Array.from(new Set(tt)).sort((a, b) => a - b), zs = Array.from(new Set(zz)).sort((a, b) => b - a);   // zs from the shallowest (about 0) to the deepest (most negative)
     if (!ts.length || !zs.length) { g.fillStyle = '#666'; g.fillText('This log holds no values for this figure.', 60, F.top + 40); return; }
     let lo = Infinity, hi = -Infinity; vv.forEach(v => { if (isFinite(v)) { if (v < lo) lo = v; if (v > hi) hi = v; } }); if (!isFinite(lo)) { g.fillStyle = '#666'; g.fillText('This log holds no values for this figure.', 60, F.top + 40); return; }
     if (o.lo != null) lo = o.lo; if (o.hi != null) hi = o.hi; const nn = nice(lo, hi === lo ? lo + 1 : hi, 6); if (o.lo == null) lo = nn.lo; if (o.hi == null) hi = nn.hi;
@@ -172,5 +176,6 @@ window.DaisyPlot = (() => {
     const cx = L + pw + 20, cy = T, chh = ph, grd = g.createLinearGradient(0, cy + chh, 0, cy); for (let i = 0; i <= 8; i++) grd.addColorStop(i / 8, rgb(LU, i / 8)); g.fillStyle = grd; g.fillRect(cx, cy, 14, chh); g.strokeStyle = AXIS; g.strokeRect(cx, cy, 14, chh);
     const cb = nice(lo, hi, 5); g.fillStyle = AXIS; g.textAlign = 'left'; cb.t.forEach(v => { if (v < lo || v > hi) return; const y = cy + chh - (v - lo) / (hi - lo || 1) * chh; g.beginPath(); g.moveTo(cx + 14, y); g.lineTo(cx + 17, y); g.stroke(); g.fillText(fmt(v, dec(cb.st)), cx + 21, y + 4); }); g.fillStyle = INK; g.font = '11.5px ' + FONT; g.fillText(o.unit || '', cx - 2, cy - 6);
   }
-  return { line, heat, hbars, matrix, groupBars, stackBars, nice, fmt, OKI, PAL, frame, legend };
+  const API = { line, heat, hbars, matrix, groupBars, stackBars, nice, fmt, OKI, PAL, frame, legend, exportScale: 1 };
+  return API;
 })();

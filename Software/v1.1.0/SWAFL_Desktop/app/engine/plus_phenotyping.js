@@ -222,8 +222,9 @@
       ctx.save(); ctx.beginPath(); ctx.rect(x0 + 1, yy + BAND, colw - 2, gy + 10 - (yy + BAND)); ctx.clip();
       const geo = drawShoot(res, d, xc, gy, s, view, rot); ctx.restore();
       // ground and soil column
+      ctx.save(); ctx.beginPath(); ctx.rect(x0 + 1, yy + 1, colw - 2, SH + ZH + 32); ctx.clip(); /* nothing of the soil, the roots or the plant leaves its own cell, whatever the turn of the view */
       const CW = Math.min(colw - 36, 150), zx = xc - CW / 2, zy = gy + 6, sy = (ZH - 8) / ZMAX, sx = (CW / 2 - 4) / res.Rpot; column(zx, zy, CW, ZH - 8, '#333', false); soilFill(res, d, zx, zy, CW, ZH - 8, view);
-      drawRoots(res, d, xc, zy, sx, sy, rot, view === 'xray' ? 'xray' : view === 'soil' ? 'soil' : view === 'thermal' ? 'thermal' : 'rgb');
+      drawRoots(res, d, xc, zy, sx, sy, rot, view === 'xray' ? 'xray' : view === 'soil' ? 'soil' : view === 'thermal' ? 'thermal' : 'rgb'); ctx.restore();
       ctx.strokeStyle = view === 'xray' ? '#6A717C' : '#6B5B3E'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x0 + 6, gy + 6); ctx.lineTo(x0 + colw - 6, gy + 6); ctx.stroke();
       for (let k = 1; k < 4; k++) T(k * 30 + ' cm', zx - 4, zy + k * 30 * sy + 3, { s: 8, c: view === 'xray' ? '#8A919B' : MUTE, a: 'right' });
       const sh_ = view === 'xray' ? '#C9CED6' : '#33414F';
@@ -282,7 +283,8 @@
       shade.forEach(s => { ctx.fillStyle = s[2]; ctx.fillRect(X(s[0]), top, X(s[1]) - X(s[0]), hgt); });
       ctx.strokeStyle = GRID; ctx.lineWidth = 1; for (let g = 0; g <= 3; g++) { const yy = top + hgt * g / 3; ctx.beginPath(); ctx.moveTo(x0, yy + 0.5); ctx.lineTo(x0 + ww, yy + 0.5); ctx.stroke(); T(fmt(mx - (mx - mn) * g / 3, mx - mn < 5 ? 2 : (mx - mn < 50 ? 1 : 0)), x0 - 4, yy + 3, { s: 8.5, c: MUTE, a: 'right' }); }
       TF(row.t + (row.u ? ' (' + row.u + ')' : ''), x0 + 4, top + 10, ww - 10, { s: 9.5, b: true });
-      [[a, '#1B1F23'], [b, '#D93025']].forEach(([q, c]) => { ctx.strokeStyle = c; ctx.lineWidth = 2; ctx.beginPath(); let st = false; for (let i = 0; i < N; i++) { if (!isFinite(q[i])) { st = false; continue; } st ? ctx.lineTo(X(i), Y(q[i])) : ctx.moveTo(X(i), Y(q[i])); st = true; } ctx.stroke(); ctx.fillStyle = c; ctx.beginPath(); ctx.arc(X(d), Y(q[d]), 3.4, 0, Math.PI * 2); ctx.fill(); });
+      ctx.save(); ctx.beginPath(); ctx.rect(x0 - 1, top - 1, ww + 2, hgt + 2); ctx.clip();
+      [[a, '#1B1F23'], [b, '#D93025']].forEach(([q, c]) => { ctx.strokeStyle = c; ctx.lineWidth = 2; ctx.beginPath(); let st = false; for (let i = 0; i < N; i++) { if (!isFinite(q[i])) { st = false; continue; } st ? ctx.lineTo(X(i), Y(q[i])) : ctx.moveTo(X(i), Y(q[i])); st = true; } ctx.stroke(); ctx.fillStyle = c; ctx.beginPath(); if (isFinite(q[d])) { ctx.arc(X(d), Y(q[d]), 3.4, 0, Math.PI * 2); ctx.fill(); } }); ctx.restore();
       obs.forEach(o => { ctx.fillStyle = o.trt === 'dr' ? '#D93025' : '#1B1F23'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.beginPath(); ctx.rect(X(o.day) - 3, Y(o[obsK]) - 3, 6, 6); ctx.fill(); ctx.stroke(); });
       ctx.strokeStyle = '#2E7DE8'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(X(d) + 0.5, top); ctx.lineTo(X(d) + 0.5, top + hgt); ctx.stroke(); ctx.setLineDash([]); todayMark(X, top, hgt);
       if (ri === rows.length - 1) { axisDates(X, top + hgt, x0, ww); }

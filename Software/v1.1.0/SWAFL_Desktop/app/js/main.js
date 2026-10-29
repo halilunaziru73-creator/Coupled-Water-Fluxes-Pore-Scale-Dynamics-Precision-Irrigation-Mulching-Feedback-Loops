@@ -59,7 +59,7 @@ const Act = {
       catch (e) { err = e; } finally { w.__REPORTING = false; try { E.scene(keep); } catch (e2) {} }
       UI.closeModal && UI.closeModal(); document.getElementById('modalRoot').innerHTML = '';
       if (err || !bytes) { UI.log('Report failed: ' + (err ? err.message : 'no data'), 'err'); UI.modal({ title: 'Full report', html: '<p>The report could not be built: ' + UI.esc(err ? err.message : 'no data') + '</p>' }); return; }
-      const soil = E.snap && E.snap.state ? E.snap.state.soil.replace(/^S\d+_/, '') : 'field', nm = 'SWAFL_full_report_' + soil + '_' + new Date().toISOString().slice(0, 10) + '.pdf';
+      const soil = E.snap && E.snap.state ? E.snap.state.soil.replace(/^S\d+_/, '') : 'field', nm = 'SWAFL_full_report_' + soil + '_' + SWAFLDate.day() + '.pdf';
       try { const r = await w.saveBytes(nm, bytes, 'application/pdf'); if (r && r.ok === false) UI.log('Report not saved (cancelled)', 'warn'); else { UI.log('Full report saved' + (r && r.path ? ': ' + r.path : '')); UI.toast('Full report saved'); } } catch (e) { UI.log('Could not save the report: ' + e.message, 'err'); }
     }, 80);
   },
