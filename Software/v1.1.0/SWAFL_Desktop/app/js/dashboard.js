@@ -144,6 +144,7 @@ const Dash = (() => {
     const dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return; cv.width = w * dpr; cv.height = h * dpr;
     const c = cv.getContext('2d'); c.scale(dpr, dpr); c.clearRect(0, 0, w, h); c.fillStyle = '#FFFFFF'; c.fillRect(0, 0, w, h);
     c.font = '10px Tahoma,Arial';
+    cv._csv = () => { const rows = [[o.xl || 'x'].concat((o.series || []).map(q => q.n || 'y'))]; (o.x || []).forEach((xv, i) => rows.push([o.xfmt ? o.xfmt(xv) : xv].concat((o.series || []).map(q => q.y && isFinite(q.y[i]) ? q.y[i] : '')))); return rows; };
     // the legend wraps onto as many lines as the width needs, and the plot starts below it
     const leg = []; { let lx = 50, ly = 0; o.series.forEach(s => { if (!s.n) return; const lw = 22 + c.measureText(s.n).width; if (lx + lw > w - 6 && lx > 50) { lx = 50; ly++; } leg.push([s, lx, ly]); lx += lw; }); }
     const nLeg = leg.length ? leg[leg.length - 1][2] + 1 : 0;
@@ -179,6 +180,7 @@ const Dash = (() => {
   }
   function timeBars(cv, tt, u) {
     if (!cv) return; const dpr = window.devicePixelRatio || 1, w = cv.clientWidth, hh = cv.clientHeight; if (!w || !hh) return; cv.width = w * dpr; cv.height = hh * dpr; const c = cv.getContext('2d'); c.scale(dpr, dpr); c.fillStyle = '#fff'; c.fillRect(0, 0, w, hh);
+    cv._csv = () => [['item', u || 'value']].concat(tt.map(q => [q[0], q[1]]));
     const mx = Math.max(...tt.map(q => q[1]), 1e-9), bh = (hh - 20) / tt.length; c.font = '10.5px Tahoma,Arial'; c.textBaseline = 'alphabetic'; let lw = 0; tt.forEach(q => { lw = Math.max(lw, c.measureText(q[0]).width); }); const x0 = Math.min(lw + 12, w * 0.45);
     tt.forEach((q, i) => { const y = 10 + i * bh; c.fillStyle = '#000'; c.textAlign = 'left'; c.fillText(q[0], 4, y + bh / 2 + 3); const bw = Math.max(1, (w - x0 - 70) * q[1] / mx); c.fillStyle = ['#1F5FA8', '#2E8B57', '#C00000', '#7A5AA8', '#404040'][i % 5]; c.fillRect(x0, y + 3, bw, bh - 7); c.fillStyle = '#000'; c.fillText((q[1] >= 100 ? q[1].toFixed(0) : q[1].toFixed(1)) + ' ' + u, x0 + bw + 4, y + bh / 2 + 3); });
   }
@@ -250,10 +252,12 @@ const Dash = (() => {
     const L = UI.logs.slice().reverse(), row = l => '<div class="logline ' + (l.level === 'err' ? 'err' : l.level === 'warn' ? 'warn' : '') + '"><span class="tm">' + l.t + '</span>' + UI.esc(l.msg) + '</div>', wn = L.filter(l => l.level === 'err' || l.level === 'warn');
     body.innerHTML = (wn.length ? SEC('m-warn', 'Warnings', wn.length + ' message' + (wn.length > 1 ? 's' : ''), wn.map(row).join('')) : '') + SEC('m-all', 'All messages', L.length + ' message' + (L.length === 1 ? '' : 's'), L.map(row).join('') || '<div class="dnote">No messages yet.</div>'); lastHtml = '';
   }
-  function render() {
+  // the Save buttons of the sections, the list of outputs of the layer (for the Figure tab) and the Figure tab itself
+  function render() { render0(); try { if (window.SWOut && E.snap && Layers.started()) { if (tab === 'figure') return; if (tab !== 'messages') { SWOut.remember(body, E.snap.scene); SWOut.decorate(body); } } } catch (e) { console.warn(e); } }
+  function render0() {
     const s = E.snap; if (!s) return;
     if (tab !== 'messages' && !Layers.started()) { body.innerHTML = '<div class="dnote" style="padding:18px"><b>Nothing to show yet.</b><br>Click a layer in the Layers panel (top left). Its results appear here, and its picture in the simulation window.</div>'; lastHtml = ''; return; }
-    if (tab === 'results') results(s); else if (tab === 'design') design(s); else if (tab === 'charts') { const k = s.scene + '|' + JSON.stringify(s.state) + '|' + (DL[s.scene] ? s.date : String(s.date || '').slice(0, 4)) + '|' + ((s.wx && s.wx.key) || '') + '|' + (DL[s.scene] ? runOn(s.scene) + E.ev('JSON.stringify(window.DESIGN_RUN)') + E.ev("JSON.stringify(typeof sidRun==='function'?[sidRun().Ea,drRun().Ea,spRun().Ea]:0)") : ''); if (k !== chartKey) { chartKey = k; charts(); } } else messages();
+    if (tab === 'figure') { if (window.SWOut) SWOut.figure(body, s); } else if (tab === 'results') results(s); else if (tab === 'design') design(s); else if (tab === 'charts') { const k = s.scene + '|' + JSON.stringify(s.state) + '|' + (DL[s.scene] ? s.date : String(s.date || '').slice(0, 4)) + '|' + ((s.wx && s.wx.key) || '') + '|' + (DL[s.scene] ? runOn(s.scene) + E.ev('JSON.stringify(window.DESIGN_RUN)') + E.ev("JSON.stringify(typeof sidRun==='function'?[sidRun().Ea,drRun().Ea,spRun().Ea]:0)") : ''); if (k !== chartKey) { chartKey = k; charts(); } } else messages();
   }
   function setTab(t) { tab = t; lastHtml = ''; chartKey = ''; tabs.querySelectorAll('button[data-tab]').forEach(b => b.classList.toggle('on', b.dataset.tab === t)); render(); }
   tabs.addEventListener('click', e => {

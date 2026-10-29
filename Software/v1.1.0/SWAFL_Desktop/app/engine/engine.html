@@ -2964,7 +2964,7 @@ if (new URLSearchParams(location.search).get('app')) {
   let lw = canvas.width, lh = canvas.height, SS = 1, curS = 1, fitMode = 'window', lastKey = '', fitDims = '', fitSc = 0;
   const wrapEl = () => canvas.closest('.canvaswrap') || canvas.parentElement;
   const phys = () => {
-    SS = Math.max(1, Math.min(2, curS * (window.devicePixelRatio || 1))); if (lw * lh * SS * SS > 30e6) SS = Math.sqrt(30e6 / (lw * lh));
+    SS = window.__hiScale ? window.__hiScale : Math.max(1, Math.min(2, curS * (window.devicePixelRatio || 1))); { const cap = window.__hiScale ? 90e6 : 30e6; if (lw * lh * SS * SS > cap) SS = Math.sqrt(cap / (lw * lh)); }   // __hiScale: a picture saved at 300, 600 dpi or more
     dW.set.call(canvas, Math.round(lw * SS)); dH.set.call(canvas, Math.round(lh * SS)); ctx.setTransform(SS, 0, 0, SS, 0, 0); window.__SS = SS;
   };
   const fit = () => {
@@ -2982,6 +2982,7 @@ if (new URLSearchParams(location.search).get('app')) {
   };
   Object.defineProperty(canvas, 'width', { get: () => lw, set: v => { lw = v; phys(); lastKey = ''; fit(); }, configurable: true });
   Object.defineProperty(canvas, 'height', { get: () => lh, set: v => { lh = v; phys(); lastKey = ''; fit(); }, configurable: true });
+  window.__rephys = () => { phys(); lastKey = ''; return SS; };
   window.__setFit = m => { fitMode = m; lastKey = ''; fitSc = 0; fit(); }; window.__fit = () => { lastKey = ''; fitSc = 0; fit(); };
   phys(); try { new ResizeObserver(() => { lastKey = ''; fit(); }).observe(wrapEl()); } catch (e) { window.addEventListener('resize', () => { lastKey = ''; fit(); }); }
   const raf0 = window.requestAnimationFrame.bind(window); let lastF = 0, act = 0; ['pointermove', 'pointerdown', 'wheel', 'keydown'].forEach(ev => window.addEventListener(ev, () => { act = performance.now(); }, { passive: true, capture: true }));
@@ -6436,10 +6437,12 @@ setTimeout(() => { const sp = document.getElementById('splash'); if (sp) sp.remo
     if (Object.keys(o).length) { state.trigBy = {}; applyState(Object.assign({}, DEFAULT, o)); }
     const sc = SCENES.find(x => x.id === q.get('scene')); if (sc && sc !== currentScene) switchScene(sc); }
   // saves
-  $('guiPng').onclick = () => { const a = document.createElement('a'); a.download = 'SWAFL_' + currentScene.id + '.png'; a.href = canvas.toDataURL('image/png'); a.click(); msg('Picture saved'); };
-  $('guiCsv').onclick = () => { const rows = [['setting', 'value'], ['scene', currentScene.label], ['soil', DATA.soil_labels[state.soil]], ['tillage', TILL_LABELS[state.till]], ['crop', CROPS[state.crop].label || state.crop], ['mulch strength (vapour-flux factor)', VFF_VALUES[state.vffIdx]], ['mulch capacity (mm)', CAP_VALUES[state.capIdx]], ['rainfall scale', RAIN_VALUES[state.rainIdx]], ['temperature shift (C)', TEMP_VALUES[state.tempIdx]], ['irrigation method', state.method], ['nitrogen rate (%)', NRATE_VALUES[state.nIdx]], ['sensor depth (cm)', Z_VALUES[state.zIdx]], ['', ''], ['result', 'value']];
+  $('guiPng').onclick = () => { const a = document.createElement('a'); a.download = (typeof stampName === 'function' ? stampName : (n => n))('SWAFL_' + currentScene.id + '.png'); a.href = canvas.toDataURL('image/png'); a.click(); msg('Picture saved'); };
+  window.__csvText = () => { const rows = [['setting', 'value'], ['scene', currentScene.label], ['soil', DATA.soil_labels[state.soil]], ['tillage', TILL_LABELS[state.till]], ['crop', CROPS[state.crop].label || state.crop], ['mulch strength (vapour-flux factor)', VFF_VALUES[state.vffIdx]], ['mulch capacity (mm)', CAP_VALUES[state.capIdx]], ['rainfall scale', RAIN_VALUES[state.rainIdx]], ['temperature shift (C)', TEMP_VALUES[state.tempIdx]], ['irrigation method', state.method], ['nitrogen rate (%)', NRATE_VALUES[state.nIdx]], ['sensor depth (cm)', Z_VALUES[state.zIdx]], ['', ''], ['result', 'value']];
     [['soil evaporation (mm/yr)', 'roEvap'], ['drainage below 1 m (mm/yr)', 'roDrain'], ['irrigation (mm/yr)', 'roIrr'], ['yield', 'roYield'], ['transpiration (mm/yr)', 'roTransp'], ['evapotranspiration (mm/yr)', 'roET'], ['nitrogen leaching (kg N/ha)', 'roNL'], ['irrigation efficiency (kg/m3)', 'roIE'], ['rainfall (mm/yr)', 'roRain']].forEach(([l, id]) => rows.push([l, NUM[id]().toFixed(DEC[id] + 1)]));
-    const csv = rows.map(r => r.map(c => '"' + String(c).replace(/"/g, '""') + '"').join(',')).join('\r\n'), a = document.createElement('a'); a.download = 'SWAFL_settings_and_results.csv'; a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.click(); msg('Numbers saved'); };
+    return rows.map(r => r.map(c => '"' + String(c).replace(/"/g, '""') + '"').join(',')).join('\r\n'); };
+  const stampName = n => { try { return parent.SWAFLDate ? parent.SWAFLDate.name(n) : n; } catch (e) { return n; } };
+  $('guiCsv').onclick = () => { const a = document.createElement('a'); a.download = stampName('SWAFL_settings_and_results.csv'); a.href = URL.createObjectURL(new Blob(['\ufeff' + window.__csvText()], { type: 'text/csv' })); a.click(); msg('Numbers saved'); };
   $('guiHelp').onclick = () => { const b = $('guiHelpBox'); b.style.display = b.style.display === 'none' ? 'block' : 'none'; };
   // keys
   document.addEventListener('keydown', e => { if (e.ctrlKey || e.metaKey || e.altKey || /INPUT|SELECT|TEXTAREA/.test((e.target.tagName || '')) && e.key !== 'Escape') return;
