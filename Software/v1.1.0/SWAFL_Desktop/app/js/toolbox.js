@@ -13,7 +13,7 @@ const Toolbox = (() => {
       ['Choose a Daisy scenario and get the figures', 'chart', () => DaisyUI.open('scen'), 'daisy scenario figures irrigation nitrogen climate pesticide'],
       ['Describe a Daisy experiment in your own words (AI planner, batch runs, figures)', 'run', () => DaisyUI.open('exp'), 'daisy experiment ai plan batch factorial text words E0 E16 sensitivity'],
       ['Map of the Daisy processes (Fig. 1) with figures', 'layers', () => DaisyUI.open('proc'), 'daisy processes snow biopore drain heat ice organic matter carbon photosynthesis denitrification layers'],
-                                    ['Collect Daisy files (logs, weather, set-ups)', 'open', () => DaisyUI.open('files'), 'daisy dlf dwf dai folder collect load'],
+                                    ['Collect Daisy files (logs, weather, set-ups)', 'open', () => DaisyUI.open('plot'), 'daisy dlf dwf dai folder collect load'],
       ['Plot Daisy logs', 'chart', () => DaisyUI.open('plot'), 'daisy dlf plot profile heat'],
       ['Mass balance of a Daisy log', 'chart', () => DaisyUI.open('balance'), 'daisy balance nitrogen water control chart'],
       ['Compare two Daisy runs (test)', 'chart', () => DaisyUI.open('compare'), 'daisy compare test sml regression'],

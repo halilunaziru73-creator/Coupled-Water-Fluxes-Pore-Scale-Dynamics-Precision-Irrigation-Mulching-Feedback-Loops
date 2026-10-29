@@ -284,6 +284,7 @@
   }
   window.DaisyScenUI = { online: onlineWx, project: useProject, projectName: () => { const w = projWx(); return w ? (w.name || w.src || 'loaded') : null; }, onWx: h => wxHooks.push(h), defaultWx, useFile: (act, name, text) => { st.pending = { act, name, text }; D.show('data'); }, runStandard, my: () => st.my, strip, bindStrip, runs: () => st.runs, sc: () => st.sc, dataLabel: () => ({ weather: wxLabel().replace(/<[^>]+>/g, ''), soil: soilLabel() }) };
   D.register('data', { html: () => '<h3 style="margin:2px 0 6px">My data: weather and soil</h3><p class="pnote">Set the weather and the soil of your site once. Scenarios, experiments and the process figures all use them. Weather can come from the internet for your area, from a file, or from SWAFL.</p>' + myBox(), bind: () => { bindMy(); bindStrip(); } });
+  window.DaisyScenRuns = () => (st.runs || []).map(r => ({ id: r.id, label: (r.label || r.id || ''), logs: r.logs || {} }));
   D.register('scen', { html, bind });
   D.register('docs', { html: docsHtml, bind: docsBind });
 })();

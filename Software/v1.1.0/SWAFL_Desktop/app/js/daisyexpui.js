@@ -508,5 +508,6 @@
     if (st.res) renderPlan(); if (st.rows.length) drawResults();
   }
   window.DaisyExpUI = { runs: () => st.runs, imported: () => (st.imp ? st.imp.files : {}) };
+  window.DaisyExpRuns = () => (st.runs || []).map(r => ({ id: r.id, label: (r.id || '') + ' ' + (r.label || ''), logs: r.logs || {} }));
   D.register('exp', { html, bind });
 })();

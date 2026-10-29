@@ -9,11 +9,10 @@
   const PATH = [
     ['data', 'My data and weather', 'Set the weather and the soil of your site once, or look at a weather station or bring online weather of any place. Every simulation uses them.'],
     ['library', 'Library', 'Browse the soils, crops, fertilisers and chemicals of Daisy (you can skip this step).'],
-    ['files', 'Files', 'Load the logs of earlier Daisy runs (you can skip this step).'],
     ['scen', 'Scenarios', 'Choose a question and run it.'],
     ['exp', 'Experiments', 'Or design your own set of runs from the factors of the model.'],
     ['proc', 'Processes', 'See the processes behind the results.'],
-    ['plot', 'Plot', 'Plot any quantity of a run.'],
+    ['plot', 'Plot', 'Load your own files or use the output of your runs, then plot any quantity.'],
     ['balance', 'Mass balance', 'Check that inputs, outputs and content agree.'],
     ['compare', 'Compare and test', 'Compare two runs against the smallest meaningful level.'],
     ['dss', 'To the SWAFL project', 'Take the results to the layers of the SWAFL project, which turn them into decisions.']

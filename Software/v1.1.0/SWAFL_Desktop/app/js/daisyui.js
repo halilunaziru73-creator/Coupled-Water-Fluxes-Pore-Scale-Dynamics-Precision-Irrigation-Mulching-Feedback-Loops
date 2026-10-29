@@ -7,7 +7,7 @@ const DaisyUI = (() => {
   const OKI = ['#0072B2', '#D55E00', '#009E73', '#CC79A7', '#E69F00', '#56B4E9', '#7a6f00', '#444444'];
   const SPEC = ['#2b83ba', '#5aa6b4', '#8fcfa6', '#c4e6a8', '#ffffbf', '#fee08b', '#fdae61', '#f46d43', '#d53e4f'];
   // the tabs follow what a person does: ask a question, give the data, look at the results, build and calibrate, learn
-  const GROUPS = [['1 Your data', [['data', 'My data and weather'], ['library', 'Library'], ['files', 'Files']]], ['2 Experiments', [['exp', 'Experiments'], ['scen', '↳ Scenarios']]], ['3 Look at results', [['proc', 'Processes'], ['plot', 'Plot'], ['balance', 'Mass balance'], ['compare', 'Compare and test']]], ['4 Decide in the SWAFL project', [['dss', 'To the SWAFL project']]], ['Tools: build and test', [['editor', 'Set-up editor'], ['richards', 'Soil column'], ['deni', 'Process curves'], ['calib', 'Calibrate']]], ['Tools: learn', [['docs', 'Model and documentation']]]];
+  const GROUPS = [['1 Your data', [['data', 'My data and weather'], ['library', 'Library']]], ['2 Experiments', [['exp', 'Experiments'], ['scen', '↳ Scenarios']]], ['3 Look at results', [['proc', 'Processes'], ['plot', 'Plot'], ['balance', 'Mass balance'], ['compare', 'Compare and test']]], ['4 Decide in the SWAFL project', [['dss', 'To the SWAFL project']]], ['Tools: build and test', [['editor', 'Set-up editor'], ['richards', 'Soil column'], ['deni', 'Process curves'], ['calib', 'Calibrate']]], ['Tools: learn', [['docs', 'Model and documentation']]]];
   const TABS = GROUPS.reduce((a, g) => a.concat(g[1]), []);
   const S = { logs: {}, tab: 'data', lib: null, idx: null, rich: null, anim: null, cal: null, dai: '', kind: 'horizons', txt: {} };
   const $ = id => document.getElementById('dz' + id);
@@ -420,10 +420,21 @@ const DaisyUI = (() => {
   const BIND = { files: bFiles, plot: bPlot, balance: bBalance, compare: bCompare, editor: bEditor, library: bLibrary, richards: bRichards, calib: bCalib, weather: bWeather, deni: bDeni };
   const HTML = { files: tFiles, plot: tPlot, balance: tBalance, compare: tCompare, editor: tEditor, library: tLibrary, richards: tRichards, calib: tCalib, weather: tWeather, deni: tDeni };
   const EXT = {};
+  // the data of the plots: files of your own, the bundled examples and the output of the runs of your experiments and scenarios
+  const runsOf = () => { const e = (window.DaisyExpRuns && window.DaisyExpRuns()) || [], c = (window.DaisyScenRuns && window.DaisyScenRuns()) || []; return { e, c }; };
+  function plotData() {
+    const r = runsOf(), nl = x => x.reduce((a, q) => a + Object.keys(q.logs || {}).length, 0);
+    return '<details class="dzdata" open><summary><b>1. Data for the plot</b>: load your own files, or use the output of your runs</summary><div class="dzpan"><b>Output of my runs</b> <span class="pnote">The logs that Daisy wrote in your experiments and scenarios are added here with one press, and then they can be plotted.</span><div class="dzrow" style="margin-top:6px"><button class="btn pri" id="dzUseExp"' + (r.e.length ? '' : ' disabled') + '>Use my experiments (' + r.e.length + ' runs, ' + nl(r.e) + ' logs)</button><button class="btn pri" id="dzUseScen"' + (r.c.length ? '' : ' disabled') + '>Use my scenarios (' + r.c.length + ' runs, ' + nl(r.c) + ' logs)</button><span id="dzRunsMsg" class="pnote"></span></div>' + (r.e.length || r.c.length ? '' : '<div class="pnote">No runs yet: run an experiment or a scenario first (desktop app), or load files below.</div>') + '</div>' + HTML.files() + '</details><h3 style="margin:12px 0 4px">2. Plot</h3>';
+  }
+  function bindRuns() {
+    const add = (list, tag) => { let n = 0; list.forEach(r => Object.keys(r.logs || {}).forEach(k => { const d = r.logs[k]; if (d && d.cols) { addLog(d, tag + '/' + String(r.label || r.id).replace(/[\\/]+/g, '-') + '/' + k + '.dlf'); n++; } })); refreshSelects(); const m = $('RunsMsg'); if (m) m.textContent = n + ' logs added; they are in the list of loaded logs below and in the plot.'; };
+    const r = runsOf(); const e = $('UseExp'), c = $('UseScen'); if (e) e.onclick = () => add(r.e, 'experiments'); if (c) c.onclick = () => add(r.c, 'scenarios');
+  }
   function show(tab, arg) {
     if (tab === 'weather') tab = 'data';   // the weather stations are part of My data
+    if (tab === 'files') tab = 'plot';     // loading files is the first part of Plot
     if (S.anim) { clearInterval(S.anim); S.anim = null; } S.tab = tab; const host = document.getElementById('dzBody'); if (!host) return;
-    document.querySelectorAll('.dztabs button').forEach(b => b.classList.toggle('on', b.dataset.t === tab)); const X = EXT[tab]; host.innerHTML = (window.DaisyFlow ? window.DaisyFlow.bar(tab) : '') + (X ? X.html(arg) : HTML[tab]()) + (tab === 'data' && HTML.weather ? '<div class="dzmw"><h3 style="margin:14px 0 4px">Weather stations</h3>' + HTML.weather() + '</div>' : ''); if (window.DaisyFlow) window.DaisyFlow.bind(tab); const r = X ? X.bind(arg) : BIND[tab](); if (tab === 'data' && BIND.weather) { try { const r2 = BIND.weather(); if (r2 && r2.catch) r2.catch(e => console.warn(e)); } catch (e) { console.warn(e); } } if (r && r.catch) r.catch(e => { host.insertAdjacentHTML('afterbegin', '<div class="warnbox">' + esc(e.message) + '</div>'); console.warn(e); });
+    document.querySelectorAll('.dztabs button').forEach(b => b.classList.toggle('on', b.dataset.t === tab)); const X = EXT[tab]; host.innerHTML = (window.DaisyFlow ? window.DaisyFlow.bar(tab) : '') + (tab === 'plot' ? plotData() : '') + (X ? X.html(arg) : HTML[tab]()) + (tab === 'data' && HTML.weather ? '<div class="dzmw"><h3 style="margin:14px 0 4px">Weather stations</h3>' + HTML.weather() + '</div>' : ''); if (window.DaisyFlow) window.DaisyFlow.bind(tab); const r = X ? X.bind(arg) : BIND[tab](); if (tab === 'plot') { try { BIND.files(); bindRuns(); } catch (e) { console.warn(e); } } if (tab === 'data' && BIND.weather) { try { const r2 = BIND.weather(); if (r2 && r2.catch) r2.catch(e => console.warn(e)); } catch (e) { console.warn(e); } } if (r && r.catch) r.catch(e => { host.insertAdjacentHTML('afterbegin', '<div class="warnbox">' + esc(e.message) + '</div>'); console.warn(e); });
   }
   function open(tab) {
     let arg = ''; if (String(tab).indexOf(':') > 0) { arg = tab.split(':')[1]; tab = tab.split(':')[0]; }
