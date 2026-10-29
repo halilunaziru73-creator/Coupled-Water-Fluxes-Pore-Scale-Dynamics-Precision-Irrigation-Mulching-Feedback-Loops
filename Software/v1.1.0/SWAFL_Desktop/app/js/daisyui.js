@@ -7,7 +7,7 @@ const DaisyUI = (() => {
   const OKI = ['#0072B2', '#D55E00', '#009E73', '#CC79A7', '#E69F00', '#56B4E9', '#7a6f00', '#444444'];
   const SPEC = ['#2b83ba', '#5aa6b4', '#8fcfa6', '#c4e6a8', '#ffffbf', '#fee08b', '#fdae61', '#f46d43', '#d53e4f'];
   // the tabs follow what a person does: ask a question, give the data, look at the results, build and calibrate, learn
-  const GROUPS = [['1 Your data', [['data', 'My data'], ['weather', 'Weather stations'], ['library', 'Library'], ['files', 'Files']]], ['2 Experiments', [['exp', 'Experiments'], ['scen', '↳ Scenarios']]], ['3 Look at results', [['proc', 'Processes'], ['plot', 'Plot'], ['balance', 'Mass balance'], ['compare', 'Compare and test']]], ['4 Decide in the SWAFL project', [['dss', 'To the SWAFL project']]], ['Tools: build and test', [['editor', 'Set-up editor'], ['richards', 'Soil column'], ['deni', 'Process curves'], ['calib', 'Calibrate']]], ['Tools: learn', [['docs', 'Model and documentation']]]];
+  const GROUPS = [['1 Your data', [['data', 'My data and weather'], ['library', 'Library'], ['files', 'Files']]], ['2 Experiments', [['exp', 'Experiments'], ['scen', '↳ Scenarios']]], ['3 Look at results', [['proc', 'Processes'], ['plot', 'Plot'], ['balance', 'Mass balance'], ['compare', 'Compare and test']]], ['4 Decide in the SWAFL project', [['dss', 'To the SWAFL project']]], ['Tools: build and test', [['editor', 'Set-up editor'], ['richards', 'Soil column'], ['deni', 'Process curves'], ['calib', 'Calibrate']]], ['Tools: learn', [['docs', 'Model and documentation']]]];
   const TABS = GROUPS.reduce((a, g) => a.concat(g[1]), []);
   const S = { logs: {}, tab: 'data', lib: null, idx: null, rich: null, anim: null, cal: null, dai: '', kind: 'horizons', txt: {} };
   const $ = id => document.getElementById('dz' + id);
@@ -421,8 +421,9 @@ const DaisyUI = (() => {
   const HTML = { files: tFiles, plot: tPlot, balance: tBalance, compare: tCompare, editor: tEditor, library: tLibrary, richards: tRichards, calib: tCalib, weather: tWeather, deni: tDeni };
   const EXT = {};
   function show(tab, arg) {
+    if (tab === 'weather') tab = 'data';   // the weather stations are part of My data
     if (S.anim) { clearInterval(S.anim); S.anim = null; } S.tab = tab; const host = document.getElementById('dzBody'); if (!host) return;
-    document.querySelectorAll('.dztabs button').forEach(b => b.classList.toggle('on', b.dataset.t === tab)); const X = EXT[tab]; host.innerHTML = (window.DaisyFlow ? window.DaisyFlow.bar(tab) : '') + (X ? X.html(arg) : HTML[tab]()); if (window.DaisyFlow) window.DaisyFlow.bind(tab); const r = X ? X.bind(arg) : BIND[tab](); if (r && r.catch) r.catch(e => { host.insertAdjacentHTML('afterbegin', '<div class="warnbox">' + esc(e.message) + '</div>'); console.warn(e); });
+    document.querySelectorAll('.dztabs button').forEach(b => b.classList.toggle('on', b.dataset.t === tab)); const X = EXT[tab]; host.innerHTML = (window.DaisyFlow ? window.DaisyFlow.bar(tab) : '') + (X ? X.html(arg) : HTML[tab]()) + (tab === 'data' && HTML.weather ? '<div class="dzmw"><h3 style="margin:14px 0 4px">Weather stations</h3>' + HTML.weather() + '</div>' : ''); if (window.DaisyFlow) window.DaisyFlow.bind(tab); const r = X ? X.bind(arg) : BIND[tab](); if (tab === 'data' && BIND.weather) { try { const r2 = BIND.weather(); if (r2 && r2.catch) r2.catch(e => console.warn(e)); } catch (e) { console.warn(e); } } if (r && r.catch) r.catch(e => { host.insertAdjacentHTML('afterbegin', '<div class="warnbox">' + esc(e.message) + '</div>'); console.warn(e); });
   }
   function open(tab) {
     let arg = ''; if (String(tab).indexOf(':') > 0) { arg = tab.split(':')[1]; tab = tab.split(':')[0]; }

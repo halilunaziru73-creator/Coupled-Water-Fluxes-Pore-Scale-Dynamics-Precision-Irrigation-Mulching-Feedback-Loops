@@ -7,8 +7,7 @@
   const D = DaisyUI, esc = D.esc, SC = window.DaisyScen;
   // the steps of the path, with one plain sentence each; the tools (Build and test, Learn) are outside the path
   const PATH = [
-    ['data', 'My data', 'Set the weather and the soil of your site once. Every simulation uses them.'],
-    ['weather', 'Weather stations', 'Look at a weather record, or bring online weather of any place.'],
+    ['data', 'My data and weather', 'Set the weather and the soil of your site once, or look at a weather station or bring online weather of any place. Every simulation uses them.'],
     ['library', 'Library', 'Browse the soils, crops, fertilisers and chemicals of Daisy (you can skip this step).'],
     ['files', 'Files', 'Load the logs of earlier Daisy runs (you can skip this step).'],
     ['scen', 'Scenarios', 'Choose a question and run it.'],
