@@ -109,7 +109,7 @@ const MENUS = [
     { label: 'Layers and Processing Toolbox', check: () => vis('leftDock'), act: () => Act.toggle('leftDock', 'splitLeft') }, { label: 'Properties', check: () => vis('rightDock'), act: () => Act.toggle('rightDock', 'splitRight') },
     { label: 'Dashboard', check: () => vis('dashDock'), act: () => Act.toggle('dashDock', 'splitDash') }, { sep: 1 },
     { label: 'Fit drawing to window', check: () => Act.fitMode === 'window', act: () => Act.fit('window') }, { label: 'Drawing at full width (scroll)', check: () => Act.fitMode === 'width', act: () => Act.fit('width') }, { label: 'Focus view (hide panels)', key: 'F9', act: Act.focus }, { sep: 1 },
-    { label: 'Expand all layers', act: () => Layers.expandAll() }, { label: 'Collapse all layers', act: () => Layers.collapseAll() }, { sep: 1 }, { label: 'Full screen', key: 'F11', act: Act.fullscreen }] },
+    { label: 'Text size', icon: 'zoom', sub: () => [{ label: 'Larger text', key: 'Ctrl+=', act: () => UIScale.step(0.1) }, { label: 'Smaller text', key: 'Ctrl+-', act: () => UIScale.step(-0.1) }, { label: 'Automatic for this window (now ' + UIScale.pct() + ')', check: () => !localStorage.getItem('swafl.textsize'), act: () => UIScale.set(0) }] }, { sep: 1 }, { label: 'Expand all layers', act: () => Layers.expandAll() }, { label: 'Collapse all layers', act: () => Layers.collapseAll() }, { sep: 1 }, { label: 'Full screen', key: 'F11', act: Act.fullscreen }] },
   { label: 'Tools', items: [
     { label: 'Field sketch to design...', icon: 'field', act: () => Sketch.open() }, { label: 'Field on the map: satellite, indices, report...', icon: 'search', act: () => FieldMap.open() }, { label: 'Compare the irrigation systems on this field', icon: 'chart', act: () => Sketch.compare() },
     { label: 'Find the most efficient design inputs', icon: 'gear', act: () => { const id = Layers.DESIGN.includes(Layers.current()) ? Layers.current() : 'sid'; Layers.open(id); setTimeout(() => { E.ev("designApplyBest('" + id + "')"); E.poll(true); Dash.tab('design'); UI.log('Most efficient inputs applied and run: ' + Layers.nameOf(id)); }, 400); } },
@@ -214,6 +214,7 @@ function aboutModal() {
 function onKey(e) {
   const c = e.ctrlKey || e.metaKey, k = e.key.toLowerCase();
   const go = f => { e.preventDefault(); f(); };
+  if (c && (e.key === '=' || e.key === '+')) return go(() => UIScale.step(0.1)); if (c && e.key === '-') return go(() => UIScale.step(-0.1));
   if (e.key === 'F5') go(e.shiftKey ? Act.restart : Act.togglePlay); else if (e.key === 'F6') go(Act.refresh); else if (e.key === 'F1') go(Act.manual); else if (e.key === 'F11') go(Act.fullscreen); else if (e.key === 'F9') go(Act.focus);
   else if (c && k === 'n') go(Act.newProject); else if (c && k === 'o') go(Act.openProject); else if (c && k === 's') go(Act.saveProject); else if (c && k === 'z') go(Act.undo); else if (c && k === 'y') go(Act.redo);
   else if (c && k === 'b') go(() => Dash.pin()); else if (c && k === 'e') go(Act.exportPNG); else if (c && e.shiftKey && k === 'p') go(Act.report); else if (c && k === 'p') go(Act.print); else if (c && k === 'f') go(Act.focusSearch); else if (c && k === 'q') go(Act.exit);
