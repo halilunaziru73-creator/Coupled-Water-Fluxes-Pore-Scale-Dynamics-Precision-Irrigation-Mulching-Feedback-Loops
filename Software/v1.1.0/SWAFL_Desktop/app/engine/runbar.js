@@ -20,7 +20,7 @@
     let y = by + 46; if (sc.title) y += sidWrap(sc.title, bx + 14, y, bw - 28, { s: 10.5, c: '#000' }, 14) * 14 + 6;
     y += sidWrap(R && R.why ? 'The ' + R.why + ': the results wait for a new run.' : 'Set the soil, crop, weather, mulch, irrigation and nitrogen in Properties, then run.', bx + 14, y, bw - 28, { s: 10, c: '#404040' }, 13) * 13 + 6;
     sidWrap('The results, charts and moving pictures are computed from these settings when you press Run, so nothing changes while you set them.', bx + 14, y, bw - 28, { s: 9.5, i: true, c: '#404040' }, 12.5);
-    btn(bx + 14, by + bh - 52, 190, 34, '▶  Run simulation'); hot(bx + 14, by + bh - 52, 190, 34, () => run(sc.id), 'compute this layer with the settings of Properties');
+    T('▼  Press Run simulation in the bar below this picture.', bx + 14, by + bh - 30, { s: 11, b: true, c: '#0A246A' });
     const pb = document.getElementById('playBtn'); if (pb && pb.textContent !== 'Run simulation') pb.textContent = 'Run simulation';
   }
   function wrap(sc) {
@@ -37,7 +37,11 @@
   // the Play button of a layer that has not run is the Run button
   const pb = document.getElementById('playBtn');
   if (pb) pb.addEventListener('click', e => { const sc = currentScene; if (gated(sc) && sc.id !== 'dph' && !(RX[sc.id] && RX[sc.id].on)) { e.stopImmediatePropagation(); e.preventDefault(); run(sc.id); } }, true);
+  // the one Run button: navy and bold while it runs the layer
+  { const st = document.createElement('style'); st.textContent = 'body.appmode #playBtn.runme{background:#0A246A !important;color:#fff !important;font-weight:bold !important;border:1px solid #05154a !important;padding:0 16px !important;height:26px !important;font-size:12px !important;line-height:24px !important}'; document.head.appendChild(st); setInterval(() => { const b = document.getElementById('playBtn'); if (b) b.classList.toggle('runme', b.textContent === 'Run simulation'); }, 250); }
   // opening a layer never starts it
   const oSwitch = switchScene;
-  switchScene = function (sc) { const r = oSwitch.apply(this, arguments); try { if (sc && gated(sc) && sc.id !== 'dph' && !(RX[sc.id] && RX[sc.id].on)) { play.on = false; play.t = 0; } } catch (e) { } return r; };
+  // a layer always opens at the top of its picture, whatever the position of the layer before it
+  const toTop = () => { try { let e = (typeof cv !== 'undefined' && cv) || document.querySelector('canvas'); while (e && (e = e.parentElement)) { const o = getComputedStyle(e).overflowY; if ((o === 'auto' || o === 'scroll') && e.scrollTop) e.scrollTop = 0; } window.scrollTo(0, 0); } catch (e) { } };
+  switchScene = function (sc) { const r = oSwitch.apply(this, arguments); toTop(); setTimeout(toTop, 60); setTimeout(toTop, 350); try { if (sc && gated(sc) && sc.id !== 'dph' && !(RX[sc.id] && RX[sc.id].on)) { play.on = false; play.t = 0; } } catch (e) { } return r; };
 })();

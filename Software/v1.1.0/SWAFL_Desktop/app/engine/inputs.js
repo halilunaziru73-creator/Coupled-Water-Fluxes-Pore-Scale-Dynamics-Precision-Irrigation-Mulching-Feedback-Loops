@@ -216,8 +216,8 @@
         T('Run the design', bx + 10, by + 17, { s: 11, b: true, c: '#FFFFFF' });
         T(R.why ? 'The ' + R.why + ': the results wait for a new run.' : 'Set the inputs above (click a value box to type the exact value), then run.', bx + 14, by + 46, { s: 10.5, c: '#000' });
         T('The results, charts and design table follow the run.', bx + 14, by + 64, { s: 10, c: '#404040' });
-        btn3d(bx + 14, by + 82, 190, 34, '▶  Run simulation', true); hot(bx + 14, by + 82, 190, 34, () => runDesign(id), 'compute this design with the inputs above');
-        btn3d(bx + 216, by + 82, 250, 34, 'Find the most efficient inputs', false); hot(bx + 216, by + 82, 250, 34, () => { BEST[id] = bestFor(id); applyBest(id); runDesign(id); }, 'search the inputs for the highest application efficiency, apply them and run');
+        T('▼  Press Run simulation in the bar below this picture, or let SWAFL search the inputs first:', bx + 14, by + 84, { s: 10.5, b: true, c: '#0A246A' });
+        btn3d(bx + 14, by + 94, 250, 34, 'Find the most efficient inputs', false); hot(bx + 14, by + 94, 250, 34, () => { BEST[id] = bestFor(id); applyBest(id); runDesign(id); }, 'search the inputs for the highest application efficiency, apply them and run');
         T('Results are hidden until the run, so nothing changes while you type.', bx + 14, by + 136, { s: 9, i: true, c: '#404040' });
         const pb = document.getElementById('playBtn'); if (pb && pb.textContent !== 'Run simulation') pb.textContent = 'Run simulation';
       }
