@@ -83,7 +83,7 @@ const UI = (() => {
   function closeModal() { document.getElementById('modalRoot').innerHTML = ''; }
   function modal(o) {
     const r = document.getElementById('modalRoot');
-    r.innerHTML = '<div class="ov"><div class="modal" style="' + (o.width ? 'width:' + o.width : '') + '"><div class="mh">' + icon(o.icon || 'info') + '<span>' + esc(o.title) + '</span><span class="x" data-fsm title="Full screen / back to window size" style="margin-left:auto;margin-right:4px;cursor:pointer">&#9974;</span><span class="x" data-x>&#10005;</span></div><div class="mb">' + o.html + '</div><div class="mf"></div></div></div>';
+    r.innerHTML = '<div class="ov"><div class="modal" style="' + (o.width ? 'width:' + o.width : '') + '"><div class="mh">' + icon(o.icon || 'info') + '<span>' + esc(o.title) + '</span><span class="x" data-fsm title="Full screen (Esc or double click on the title bar to go back)" style="margin-left:auto;margin-right:4px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center"><svg viewBox="0 0 16 16" width="14" height="14" style="vertical-align:-2px"><path d="M1.5 5.5v-4h4M10.5 1.5h4v4M14.5 10.5v4h-4M5.5 14.5h-4v-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span><span class="x" data-x>&#10005;</span></div><div class="mb">' + o.html + '</div><div class="mf"></div></div></div>';
     const mf = r.querySelector('.mf');
     (o.buttons || [{ label: 'Close', pri: true }]).forEach(b => {
       const el = document.createElement('button'); el.className = 'btn' + (b.pri ? ' pri' : ''); el.textContent = b.label;

@@ -2964,7 +2964,7 @@ if (new URLSearchParams(location.search).get('app')) {
   let lw = canvas.width, lh = canvas.height, SS = 1, curS = 1, fitMode = 'window', lastKey = '', fitDims = '', fitSc = 0;
   const wrapEl = () => canvas.closest('.canvaswrap') || canvas.parentElement;
   const phys = () => {
-    SS = window.__hiScale ? window.__hiScale : Math.max(1, Math.min(2, curS * (window.devicePixelRatio || 1))); { const cap = window.__hiScale ? 90e6 : 30e6; if (lw * lh * SS * SS > cap) SS = Math.sqrt(cap / (lw * lh)); }   // __hiScale: a picture saved at 300, 600 dpi or more
+    SS = window.__hiScale ? window.__hiScale : Math.max(2, Math.min(3, curS * (window.devicePixelRatio || 1))); { const cap = window.__hiScale ? 90e6 : 30e6; if (lw * lh * SS * SS > cap) SS = Math.sqrt(cap / (lw * lh)); }   // __hiScale: a picture saved at 300, 600 dpi or more
     dW.set.call(canvas, Math.round(lw * SS)); dH.set.call(canvas, Math.round(lh * SS)); ctx.setTransform(SS, 0, 0, SS, 0, 0); window.__SS = SS;
   };
   const fit = () => {
@@ -2978,7 +2978,7 @@ if (new URLSearchParams(location.search).get('app')) {
     if (fitDims === lw + 'x' + lh && fitSc && Math.abs(sc - fitSc) / fitSc < 0.04) return; fitDims = lw + 'x' + lh; fitSc = sc;
     const key = lw + 'x' + lh + '@' + sc.toFixed(3); if (key === lastKey) return; lastKey = key;
     canvas.style.width = Math.round(lw * sc) + 'px'; canvas.style.maxWidth = 'none'; canvas.style.margin = '0 auto'; canvas.style.display = 'block';
-    const old = SS; curS = sc; const nS = Math.max(1, Math.min(2, sc * (window.devicePixelRatio || 1))); if (Math.abs(nS - old) > 0.02) phys();
+    const old = SS; curS = sc; const nS = Math.max(2, Math.min(3, sc * (window.devicePixelRatio || 1))); if (Math.abs(nS - old) > 0.02) phys();
   };
   Object.defineProperty(canvas, 'width', { get: () => lw, set: v => { lw = v; phys(); lastKey = ''; fit(); }, configurable: true });
   Object.defineProperty(canvas, 'height', { get: () => lh, set: v => { lh = v; phys(); lastKey = ''; fit(); }, configurable: true });

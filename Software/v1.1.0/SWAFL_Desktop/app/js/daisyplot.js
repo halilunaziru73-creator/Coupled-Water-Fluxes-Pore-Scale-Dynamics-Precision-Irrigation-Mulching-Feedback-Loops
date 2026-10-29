@@ -24,7 +24,7 @@ window.DaisyPlot = (() => {
 
   // canvas of the right size, the title and the subtitle; returns the drawing context and the free area
   function frame(cv, o, hDefault) {
-    const par = cv.parentNode, w = Math.max(360, (par ? par.clientWidth : 800) - 4), h = o.h || hDefault || 300, r = Math.max(1, window.devicePixelRatio || 1) * (API.exportScale || 1);
+    const par = cv.parentNode, w = Math.max(360, (par ? par.clientWidth : 800) - 4), h = o.h || hDefault || 300, r = Math.max(2, window.devicePixelRatio || 1) * (API.exportScale || 1);
     cv.width = Math.round(w * r); cv.height = Math.round(h * r); cv.style.width = w + 'px'; cv.style.height = h + 'px';
     const g = cv.getContext('2d'); g.setTransform(r, 0, 0, r, 0, 0); g.fillStyle = '#fff'; g.fillRect(0, 0, w, h); g.textBaseline = 'alphabetic';
     // texts the person edited (Titles button of the figure) replace the ones of the program; the program's own are kept to restore them

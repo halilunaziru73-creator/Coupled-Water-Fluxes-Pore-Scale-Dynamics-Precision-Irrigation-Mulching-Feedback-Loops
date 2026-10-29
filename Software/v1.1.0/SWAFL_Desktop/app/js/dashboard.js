@@ -144,7 +144,7 @@ const Dash = (() => {
       series: [{ y: S.y, c: '#8E24AA', n: 'root zone with irrigation', w: 2 }, { y: S.base, c: '#C62828', n: 'baseline: no irrigation', w: 1.8, dash: [5, 4] }], marks, pts: S.pts, arrows: S.arrows });
   }
   function xyChart(cv, o) {
-    const dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return; cv.width = w * dpr; cv.height = h * dpr;
+    const dpr = Math.max(2, window.devicePixelRatio || 1), w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return; cv.width = w * dpr; cv.height = h * dpr;
     const c = cv.getContext('2d'); c.scale(dpr, dpr); c.clearRect(0, 0, w, h); c.fillStyle = '#FFFFFF'; c.fillRect(0, 0, w, h);
     c.font = '10px Tahoma,Arial';
     cv._csv = () => { const rows = [[o.xl || 'x'].concat((o.series || []).map(q => q.n || 'y'))]; (o.x || []).forEach((xv, i) => rows.push([o.xfmt ? o.xfmt(xv) : xv].concat((o.series || []).map(q => q.y && isFinite(q.y[i]) ? q.y[i] : '')))); return rows; };
@@ -182,7 +182,7 @@ const Dash = (() => {
       F.map((q, i) => '<div class="fl"><i style="background:' + col[i] + '"></i>' + q[0] + ': <b>' + ((q[1] || 0) * 100).toFixed(1) + ' %</b></div>').join('') + '</div>';
   }
   function timeBars(cv, tt, u) {
-    if (!cv) return; const dpr = window.devicePixelRatio || 1, w = cv.clientWidth, hh = cv.clientHeight; if (!w || !hh) return; cv.width = w * dpr; cv.height = hh * dpr; const c = cv.getContext('2d'); c.scale(dpr, dpr); c.fillStyle = '#fff'; c.fillRect(0, 0, w, hh);
+    if (!cv) return; const dpr = Math.max(2, window.devicePixelRatio || 1), w = cv.clientWidth, hh = cv.clientHeight; if (!w || !hh) return; cv.width = w * dpr; cv.height = hh * dpr; const c = cv.getContext('2d'); c.scale(dpr, dpr); c.fillStyle = '#fff'; c.fillRect(0, 0, w, hh);
     cv._csv = () => [['item', u || 'value']].concat(tt.map(q => [q[0], q[1]]));
     const mx = Math.max(...tt.map(q => q[1]), 1e-9), bh = (hh - 20) / tt.length; c.font = '10.5px Tahoma,Arial'; c.textBaseline = 'alphabetic'; let lw = 0; tt.forEach(q => { lw = Math.max(lw, c.measureText(q[0]).width); }); const x0 = Math.min(lw + 12, w * 0.45);
     tt.forEach((q, i) => { const y = 10 + i * bh; c.fillStyle = '#000'; c.textAlign = 'left'; c.fillText(q[0], 4, y + bh / 2 + 3); const bw = Math.max(1, (w - x0 - 70) * q[1] / mx); c.fillStyle = ['#1F5FA8', '#2E8B57', '#C00000', '#7A5AA8', '#404040'][i % 5]; c.fillRect(x0, y + 3, bw, bh - 7); c.fillStyle = '#000'; c.fillText((q[1] >= 100 ? q[1].toFixed(0) : q[1].toFixed(1)) + ' ' + u, x0 + bw + 4, y + bh / 2 + 3); });
@@ -308,8 +308,10 @@ const Dash = (() => {
     const s = E.snap; if (!s || !Layers.started() || waiting(s.scene)) return []; const sb = body, st = tab, lh = lastHtml, ck = chartKey, res = [], names = ['results'].concat(Layers.DESIGN.includes(s.scene) ? ['design'] : []).concat(['charts']);
     for (const t of names) {
       const host = document.createElement('div'); host.style.cssText = 'position:absolute;left:-12000px;top:0;width:' + Math.max(640, sb.clientWidth) + 'px;background:#fff'; host.className = sb.className; document.body.appendChild(host);
+      const dd = Object.getOwnPropertyDescriptor(window, 'devicePixelRatio'); Object.defineProperty(window, 'devicePixelRatio', { get: () => 3, configurable: true });
       try { body = host; tab = t; lastHtml = ''; chartKey = ''; render0(); } catch (e) { console.warn(e); } finally { body = sb; tab = st; lastHtml = lh; chartKey = ck; }
-      await new Promise(r => setTimeout(r, 500));
+      await new Promise(r => setTimeout(r, 650));
+      if (dd) Object.defineProperty(window, 'devicePixelRatio', dd); else delete window.devicePixelRatio;
       host.querySelectorAll('.dsec').forEach(sec => { const cl = sec.cloneNode(true), a = sec.querySelectorAll('canvas'), b = cl.querySelectorAll('canvas'); a.forEach((c, i) => { try { const im = new Image(); im.src = c.toDataURL('image/png'); im.style.cssText = 'max-width:100%;height:auto'; b[i].replaceWith(im); } catch (e) { } }); cl.querySelectorAll('select,button').forEach(x => x.remove()); const h = cl.querySelector('h4 b'); res.push({ tab: t, id: sec.dataset.sec, title: ((h && h.textContent) || '').replace(/^[\u25B6\u25BC\s]+/, '').trim(), el: cl }); });
       host.remove();
     }

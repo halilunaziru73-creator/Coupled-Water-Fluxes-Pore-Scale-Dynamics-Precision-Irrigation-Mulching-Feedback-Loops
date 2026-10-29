@@ -48,7 +48,7 @@ window.DaisyFigKit = (() => {
     o = o || {}; if (!card || card.dataset.fk) return; card.dataset.fk = '1'; card._fkOpt = o; let row = card.querySelector('.dzrow');
     if (!row) { row = document.createElement('div'); row.className = 'dzrow'; const b = card.querySelector('b'); if (b) { card.insertBefore(row, b); row.appendChild(b); } else card.insertBefore(row, card.firstChild); }
     card.querySelectorAll('[data-png],[data-xpng],.dzPng').forEach(b => b.remove());
-    const fsb = document.createElement('button'); fsb.className = 'btn'; fsb.title = 'Show this figure on the whole screen (Esc to leave)'; fsb.textContent = '\u26F6'; fsb.style.cssText = 'width:auto;padding:1px 7px'; fsb.onclick = () => K.fullscreen(card, o);
+    const fsb = document.createElement('button'); fsb.className = 'btn'; fsb.title = 'Show this figure on the whole screen (Esc to leave)'; fsb.innerHTML = '<svg viewBox="0 0 16 16" width="14" height="14" style="vertical-align:-2px"><path d="M1.5 5.5v-4h4M10.5 1.5h4v4M14.5 10.5v4h-4M5.5 14.5h-4v-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>'; fsb.style.cssText = 'width:auto;padding:1px 7px'; fsb.onclick = () => K.fullscreen(card, o);
     const tg = document.createElement('button'); tg.className = 'btn'; tg.title = 'Collapse or expand this figure'; tg.textContent = '▾'; tg.style.cssText = 'width:auto;padding:1px 7px'; row.insertBefore(tg, row.firstChild);
     const set = open => { card.dataset.open = open ? '1' : '0'; tg.textContent = open ? '▾' : '▸'; Array.from(card.children).forEach(ch => { if (ch !== row) ch.style.display = open ? '' : 'none'; }); };
     tg.onclick = () => set(card.dataset.open === '0'); card._fkSet = set;

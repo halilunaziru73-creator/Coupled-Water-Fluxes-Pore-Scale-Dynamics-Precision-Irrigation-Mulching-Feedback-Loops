@@ -93,7 +93,7 @@ const FieldMon = (() => {
     chart(document.getElementById('fmMonC'), ts);
   }
   function chart(cv, ts) {
-    const dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight; cv.width = w * dpr; cv.height = h * dpr; const c = cv.getContext('2d'); c.scale(dpr, dpr); c.fillStyle = '#fff'; c.fillRect(0, 0, w, h);
+    const dpr = Math.max(2, window.devicePixelRatio || 1), w = cv.clientWidth, h = cv.clientHeight; cv.width = w * dpr; cv.height = h * dpr; const c = cv.getContext('2d'); c.scale(dpr, dpr); c.fillStyle = '#fff'; c.fillRect(0, 0, w, h);
     const S = ts.S, L = 38, R = 34, T = 18, B = 26, t0 = new Date(S[0].date).getTime(), t1 = new Date(S[S.length - 1].date).getTime(), X = d => L + (w - L - R) * (new Date(d).getTime() - t0) / Math.max(1, t1 - t0), Y = v => T + (h - T - B) * (1 - (v + 0.2) / 1.2);
     c.font = '10px Tahoma,Arial'; c.strokeStyle = '#E5E5E5'; c.fillStyle = '#444'; for (let v = -0.2; v <= 1.001; v += 0.2) { c.beginPath(); c.moveTo(L, Y(v)); c.lineTo(w - R, Y(v)); c.stroke(); c.textAlign = 'right'; c.fillText(v.toFixed(1), L - 4, Y(v) + 3); }
     c.textAlign = 'center'; S.forEach(s => { c.fillText(s.date.slice(5), X(s.date), h - B + 13); }); c.fillText('date of the scene', (L + w - R) / 2, h - 3);
