@@ -8,9 +8,9 @@ window.DaisyFigKit = (() => {
   const cvs = card => Array.from(card.querySelectorAll('canvas'));
   const sane = t => String(t || 'figure').replace(/[^A-Za-z0-9._-]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 70) || 'figure';
   const area = card => cvs(card).reduce((a, c) => a + c.width * c.height, 0);
-  function compose(list) {
-    list = list.filter(c => c && c.width); if (!list.length) return null; const W = Math.max.apply(null, list.map(c => c.width)), H = list.reduce((a, c) => a + c.height, 0), out = document.createElement('canvas');
-    out.width = W; out.height = H; const g = out.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, W, H); let y = 0; list.forEach(c => { g.drawImage(c, 0, y); y += c.height; }); return out;
+  function compose(list, cols) {
+    list = list.filter(c => c && c.width); if (!list.length) return null; cols = Math.max(1, Math.min(cols || 1, list.length)); const W = Math.max.apply(null, list.map(c => c.width)), CH = Math.max.apply(null, list.map(c => c.height)), rowsN = Math.ceil(list.length / cols), out = document.createElement('canvas');
+    out.width = W * cols; out.height = CH * rowsN; const g = out.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, out.width, out.height); list.forEach((c, i) => g.drawImage(c, (i % cols) * W, Math.floor(i / cols) * CH)); return out;
   }
   const blobOf = cv => new Promise(res => cv.toBlob(res, 'image/png'));
   const dl = (blob, name) => { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = window.SWAFLDate ? SWAFLDate.name(name) : name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); };
@@ -18,7 +18,7 @@ window.DaisyFigKit = (() => {
   async function picture(card, o, scale) {
     const P = window.DaisyPlot; let e = scale || 1;
     if (e > 1 && o && o.redraw && P) { const a0 = area(card) / Math.pow(P.exportScale || 1, 2); e = Math.max(1, Math.min(e, Math.sqrt(70e6 / Math.max(1, a0)))); P.exportScale = e; try { o.redraw(); } catch (x) { console.warn(x); } }
-    const out = compose(cvs(card)); const blob = out ? await blobOf(out) : null;
+    const out = compose(cvs(card), +card.dataset.cols || 1); const blob = out ? await blobOf(out) : null;
     if (P && P.exportScale !== 1) { P.exportScale = 1; try { o && o.redraw && o.redraw(); } catch (x) { } }
     return { blob, scale: e };
   }
@@ -62,6 +62,13 @@ window.DaisyFigKit = (() => {
       const r = await picture(card, o, +v); if (r.blob) dl(r.blob, base + (+v >= 3 ? '_' + (+v >= 6 ? '600' : '300') + 'dpi' : '') + '.png');
     };
     set(true);
+  };
+  // every figure of a result as files: { 'name/01_title.png': bytes, 'name/01_title.csv': text }
+  K.collect = async function (host, name, scale, onStep) {
+    const files = {}, list = Array.from(host.querySelectorAll('.dzfig')).filter(c => c.querySelector('canvas'));
+    for (let i = 0; i < list.length; i++) { const c = list[i], was = c.dataset.open; if (was === '0' && c._fkSet) c._fkSet(true); if (onStep) onStep(i + 1, list.length); const nm = String(i + 1).padStart(2, '0') + '_' + sane((c.querySelector('b') || {}).textContent);
+      const r = await picture(c, c._fkOpt, scale || 3); if (r.blob) files[name + '/' + nm + '.png'] = new Uint8Array(await r.blob.arrayBuffer()); const t = csvOf(c); if (t) files[name + '/' + nm + '.csv'] = '\ufeff' + t; if (was === '0' && c._fkSet) c._fkSet(false); }
+    return files;
   };
   // a bar for the whole result: collapse all, expand all, every picture in one zip
   K.bar = function (host, o) {

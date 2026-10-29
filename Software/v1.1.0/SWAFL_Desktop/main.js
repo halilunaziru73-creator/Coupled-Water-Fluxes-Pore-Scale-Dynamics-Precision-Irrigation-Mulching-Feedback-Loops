@@ -73,6 +73,8 @@ ipcMain.handle('daisy-runs-dir', () => { const r = runsRoot(); try { fs.mkdirSyn
 // reads one file of a saved run (only inside the runs folder)
 ipcMain.handle('daisy-read-file', async (_e, p) => { const root = path.resolve(runsRoot()), t = path.resolve(String(p || '')); if (t.indexOf(root) !== 0) return null; try { const st = fs.statSync(t); if (!st.isFile() || st.size > 300e6) return null; return fs.readFileSync(t, 'utf8'); } catch (e) { return null; } });
 // opens a folder of saved Daisy runs in the file explorer (only inside the runs folder)
+// files made by the program for one experiment (tables, plan, figures) are written next to its runs; only inside the runs folder
+ipcMain.handle('daisy-write', async (_e, dir, files) => { const root = path.resolve(runsRoot()), base = path.resolve(String(dir || '')); if (base.indexOf(root) !== 0 || base === root) return { ok: false, err: 'outside the runs folder' }; let n = 0; try { for (const k of Object.keys(files || {})) { const t = path.resolve(base, k); if (t.indexOf(base) !== 0) continue; fs.mkdirSync(path.dirname(t), { recursive: true }); const v = files[k]; fs.writeFileSync(t, typeof v === 'string' ? v : Buffer.from(v)); n++; } return { ok: true, n, dir: base }; } catch (e) { return { ok: false, err: String(e.message) }; } });
 ipcMain.handle('daisy-open-folder', async (_e, p) => { const root = path.resolve(runsRoot()), t = path.resolve(String(p || root)); if (t.indexOf(root) !== 0) return false; try { fs.mkdirSync(t, { recursive: true }); } catch (e) { } const er = await shell.openPath(t); return !er; });
 const HTTP_OK = /^https:\/\/(dmigw\.govcloud\.dk|api\.dataforsyningen\.dk|data\.geus\.dk|hip\.dataforsyningen\.dk)\//i;
 ipcMain.handle('http-get', async (_e, url) => {

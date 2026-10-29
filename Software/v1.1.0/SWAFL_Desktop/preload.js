@@ -14,6 +14,7 @@ contextBridge.exposeInMainWorld('swafl', {
   daisyJob: j => ipcRenderer.invoke('daisy-job', j),
   daisyRunsDir: () => ipcRenderer.invoke('daisy-runs-dir'),
   daisyReadFile: p => ipcRenderer.invoke('daisy-read-file', p),
+  daisyWrite: (d, f) => ipcRenderer.invoke('daisy-write', d, f),
   daisyOpenFolder: p => ipcRenderer.invoke('daisy-open-folder', p),
   httpGet: u => ipcRenderer.invoke('http-get', u)
 });

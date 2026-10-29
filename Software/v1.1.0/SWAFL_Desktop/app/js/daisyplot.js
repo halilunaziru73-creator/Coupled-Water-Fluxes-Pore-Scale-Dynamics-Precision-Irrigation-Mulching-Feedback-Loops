@@ -56,6 +56,12 @@ window.DaisyPlot = (() => {
     return out;
   }
 
+  // a vertical colour bar with its ticks; b = { title, lo, hi, pal, ticks:[{v,label}] }
+  function colourbar(g, x, y, w, h, b) {
+    const LU = lut(b.pal || 'viridis'), grd = g.createLinearGradient(0, y + h, 0, y); for (let i = 0; i <= 8; i++) grd.addColorStop(i / 8, rgb(LU, i / 8));
+    g.fillStyle = grd; g.fillRect(x, y, w, h); g.strokeStyle = AXIS; g.lineWidth = 1; g.strokeRect(x, y, w, h); g.fillStyle = INK; g.textAlign = 'left'; g.font = '11px ' + FONT; { const wd = String(b.title || '').split(' '), ls = []; let cur = ''; wd.forEach(w => { if ((cur + ' ' + w).trim().length > 15 && cur) { ls.push(cur); cur = w; } else cur = (cur + ' ' + w).trim(); }); if (cur) ls.push(cur); ls.forEach((t, i) => g.fillText(t, x - 2, y - 6 - (ls.length - 1 - i) * 12)); }
+    g.fillStyle = AXIS; (b.ticks || [{ v: b.lo, label: fmt(b.lo) }, { v: b.hi, label: fmt(b.hi) }]).forEach(t => { const yy = y + h - (t.v - b.lo) / ((b.hi - b.lo) || 1) * h; g.beginPath(); g.moveTo(x + w, yy); g.lineTo(x + w + 3, yy); g.stroke(); g.fillText(t.label, x + w + 6, yy + 4); });
+  }
   // ------------------------------------------------------------------------------------------------ line, points, step, bars, area
   function line(cv, series, o) {
     o = o || {}; series = (series || []).filter(s => s && s.x && s.y); const F = frame(cv, o, 300), { g, w, h } = F;
@@ -68,7 +74,7 @@ window.DaisyPlot = (() => {
     let ny = nice(y0, y1 === y0 ? y0 + 1 : y1, 5); if (o.ylo != null) ny = Object.assign(nice(o.ylo, o.yhi != null ? o.yhi : ny.hi, 5), { lo: o.ylo }); if (o.yhi != null) ny.hi = o.yhi; if (o.ylo != null || o.yhi != null) ny.t = nice(ny.lo, ny.hi, 5).t.filter(v => v >= ny.lo - 1e-9 && v <= ny.hi + 1e-9);
     if (!o.time && x1 > x0 && (o.xint || series.some(s => s.pts))) { const pd = (x1 - x0) * 0.04; x0 -= pd; x1 += pd; }
     if (x1 <= x0) { x0 -= 0.5; x1 += 0.5; if (o.time) { x0 -= 432e5; x1 += 432e5; } }
-    const yl = ny.t.map(v => fmt(v, dec(ny.st || (ny.t[1] - ny.t[0]) || 1))), L = Math.round(measureW(g, yl) + 44), R = 16, items = series.map((s, k) => ({ name: s.name, color: s.color || OKI[k % OKI.length], kind: s.bars ? 'box' : s.pts && !s.line ? 'pts' : s.pts ? 'pts' : 'line' }));
+    const yl = ny.t.map(v => fmt(v, dec(ny.st || (ny.t[1] - ny.t[0]) || 1))), L = Math.round(measureW(g, yl) + 44), R = o.cbar ? 100 : 16, items = series.map((s, k) => ({ name: s.name, color: s.color || OKI[k % OKI.length], kind: s.bars ? 'box' : s.pts && !s.line ? 'pts' : s.pts ? 'pts' : 'line' }));
     const legH = o.noLegend ? 0 : legend(g, items, w, 0, o, true) + 4, B = o.noLegend ? (o.xt ? 42 : 24) : (o.xt ? 56 : 38) + legH - 14, T = F.top, pw = w - L - R, ph = h - T - B;
     // when the legend needs more rows than planned the canvas is drawn again, taller
     const X = x => L + (x - x0) / (x1 - x0) * pw, Y = y => T + ph - (y - ny.lo) / (ny.hi - ny.lo) * ph;
@@ -92,6 +98,7 @@ window.DaisyPlot = (() => {
       if (s.pts) s.x.forEach((x, i) => { if (isFinite(x) && isFinite(s.y[i])) { g.beginPath(); g.arc(X(x), Y(s.y[i]), s.r || 3, 0, 7); g.fill(); } });
     });
     g.restore(); g.lineWidth = 1;
+    if (o.cbar) colourbar(g, L + pw + 20, T + 8, 13, Math.max(60, ph - 16), o.cbar);
     if (!o.noLegend) legend(g, items, w, T + ph + (o.xt ? 56 : 38), o);
     cv._csv = () => { const rows = [['series', o.time ? 'date' : 'x', 'value']]; series.forEach(q => q.x.forEach((x, i) => { if (isFinite(x) && isFinite(q.y[i])) rows.push([q.name || '', o.time ? dstr(x) : x, q.y[i]]); })); return rows; };
     const geo = { X, Y, x0, x1, L, T, pw, ph, series, tm: !!o.time }; cv._geo = geo; hover(cv); return geo;
@@ -176,6 +183,38 @@ window.DaisyPlot = (() => {
     const cx = L + pw + 20, cy = T, chh = ph, grd = g.createLinearGradient(0, cy + chh, 0, cy); for (let i = 0; i <= 8; i++) grd.addColorStop(i / 8, rgb(LU, i / 8)); g.fillStyle = grd; g.fillRect(cx, cy, 14, chh); g.strokeStyle = AXIS; g.strokeRect(cx, cy, 14, chh);
     const cb = nice(lo, hi, 5); g.fillStyle = AXIS; g.textAlign = 'left'; cb.t.forEach(v => { if (v < lo || v > hi) return; const y = cy + chh - (v - lo) / (hi - lo || 1) * chh; g.beginPath(); g.moveTo(cx + 14, y); g.lineTo(cx + 17, y); g.stroke(); g.fillText(fmt(v, dec(cb.st)), cx + 21, y + 4); }); g.fillStyle = INK; g.font = '11.5px ' + FONT; g.fillText(o.unit || '', cx - 2, cy - 6);
   }
-  const API = { line, heat, hbars, matrix, groupBars, stackBars, nice, fmt, OKI, PAL, frame, legend, exportScale: 1 };
+  // a response over two numeric factors: a smooth coloured surface, white contour lines with their values, the tested combinations as dots, and a colour bar.
+  // xs and ys ascending, Z[iy][ix]; o = { title, panel, xt, yt, unit, pal, levels, h, dots }
+  function surface(cv, xs, ys, Z, o) {
+    o = o || {}; const F = frame(cv, o, 340), { g, w, h } = F; let lo = Infinity, hi = -Infinity; Z.forEach(row => row.forEach(v => { if (isFinite(v)) { lo = Math.min(lo, v); hi = Math.max(hi, v); } }));
+    if (!isFinite(lo)) { g.fillStyle = '#666'; g.textAlign = 'left'; g.fillText('No values to draw.', 60, F.top + 40); return; }
+    const nn = nice(lo, hi === lo ? lo + 1 : hi, 6); lo = Math.min(lo, nn.lo); hi = Math.max(hi, nn.hi);
+    const L = 58, R = 96, T = F.top, B = 48, pw = w - L - R, ph = h - T - B, x0 = xs[0], x1 = xs[xs.length - 1] === x0 ? x0 + 1 : xs[xs.length - 1], y0 = ys[0], y1 = ys[ys.length - 1] === y0 ? y0 + 1 : ys[ys.length - 1];
+    const xp = v => L + (v - x0) / (x1 - x0) * pw, yp = v => T + ph - (v - y0) / (y1 - y0) * ph, LU = lut(o.pal || 'viridis');
+    const NX = 96, NY = 72, G = [], at = (ix, iy) => { const v = Z[iy] && Z[iy][ix]; return isFinite(v) ? v : NaN; };
+    for (let j = 0; j < NY; j++) { const yv = y0 + (y1 - y0) * j / (NY - 1); let jy = 0; while (jy < ys.length - 2 && yv > ys[jy + 1]) jy++; const fy = ys.length > 1 ? (yv - ys[jy]) / ((ys[jy + 1] - ys[jy]) || 1) : 0, row = [];
+      for (let i = 0; i < NX; i++) { const xv = x0 + (x1 - x0) * i / (NX - 1); let ix = 0; while (ix < xs.length - 2 && xv > xs[ix + 1]) ix++; const fx = xs.length > 1 ? (xv - xs[ix]) / ((xs[ix + 1] - xs[ix]) || 1) : 0, ix2 = Math.min(xs.length - 1, ix + 1), jy2 = Math.min(ys.length - 1, jy + 1);
+        row.push((at(ix, jy) * (1 - fx) + at(ix2, jy) * fx) * (1 - fy) + (at(ix, jy2) * (1 - fx) + at(ix2, jy2) * fx) * fy); } G.push(row); }
+    const off = document.createElement('canvas'); off.width = NX; off.height = NY; const og = off.getContext('2d'), img = og.createImageData(NX, NY);
+    for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++) { const v = G[NY - 1 - j][i], k = (j * NX + i) * 4; if (!isFinite(v)) { img.data[k] = img.data[k + 1] = img.data[k + 2] = 238; img.data[k + 3] = 255; continue; } const c = LU[Math.max(0, Math.min(255, Math.round((v - lo) / (hi - lo || 1) * 255)))]; img.data[k] = c[0]; img.data[k + 1] = c[1]; img.data[k + 2] = c[2]; img.data[k + 3] = 255; }
+    og.putImageData(img, 0, 0); g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high'; g.drawImage(off, L, T, pw, ph);
+    const lv = nice(lo, hi, o.levels || 6).t.filter(v => v > lo + (hi - lo) * 0.04 && v < hi - (hi - lo) * 0.04), px = i => L + i / (NX - 1) * pw, py = j => T + ph - j / (NY - 1) * ph;
+    g.save(); g.beginPath(); g.rect(L, T, pw, ph); g.clip(); g.lineWidth = 1.3; g.font = 'bold 11px ' + FONT; g.textAlign = 'center';
+    lv.forEach(Lv => { const segs = [];
+      for (let j = 0; j < NY - 1; j++) for (let i = 0; i < NX - 1; i++) { const a = G[j][i], b = G[j][i + 1], c = G[j + 1][i + 1], d = G[j + 1][i]; if (![a, b, c, d].every(isFinite)) continue; const idx = (a > Lv ? 8 : 0) | (b > Lv ? 4 : 0) | (c > Lv ? 2 : 0) | (d > Lv ? 1 : 0); if (idx === 0 || idx === 15) continue;
+        const t = (p, q) => (Lv - p) / ((q - p) || 1e-12), E1 = () => [i + t(a, b), j], E2 = () => [i + 1, j + t(b, c)], E3 = () => [i + t(d, c), j + 1], E4 = () => [i, j + t(a, d)];
+        const TB = { 1: [E4, E3], 2: [E3, E2], 3: [E4, E2], 4: [E1, E2], 5: [E1, E4, E3, E2], 6: [E1, E3], 7: [E1, E4], 8: [E1, E4], 9: [E1, E3], 10: [E1, E2, E4, E3], 11: [E1, E2], 12: [E4, E2], 13: [E3, E2], 14: [E4, E3] }[idx]; if (!TB) continue; for (let m = 0; m < TB.length; m += 2) segs.push([TB[m](), TB[m + 1]()]); }
+      g.strokeStyle = 'rgba(255,255,255,0.92)'; g.lineWidth = 1.3; g.beginPath(); segs.forEach(s2 => { g.moveTo(px(s2[0][0]), py(s2[0][1])); g.lineTo(px(s2[1][0]), py(s2[1][1])); }); g.stroke();
+      if (segs.length > 14) { let best = null, bd = -1; segs.forEach((s2, k) => { if (k % 5) return; const cx = px((s2[0][0] + s2[1][0]) / 2), cy = py((s2[0][1] + s2[1][1]) / 2), d = Math.min(cx - L, L + pw - cx, cy - T, T + ph - cy); if (d > bd && d > 16) { bd = d; best = [cx, cy]; } });
+        if (best) { const t = fmt(Lv, dec(nn.st || 1)); g.strokeStyle = 'rgba(255,255,255,0.95)'; g.lineWidth = 3; g.strokeText(t, best[0], best[1] + 4); g.fillStyle = 'rgba(0,0,0,0.78)'; g.fillText(t, best[0], best[1] + 4); } } });
+    if (o.dots !== false) { g.fillStyle = 'rgba(255,255,255,0.9)'; g.strokeStyle = 'rgba(0,0,0,0.45)'; g.lineWidth = 0.8; xs.forEach(xv => ys.forEach(yv => { g.beginPath(); g.arc(xp(xv), yp(yv), 2.4, 0, 7); g.fill(); g.stroke(); })); }
+    g.restore(); g.strokeStyle = AXIS; g.lineWidth = 1; g.beginPath(); g.moveTo(L, T); g.lineTo(L, T + ph); g.lineTo(L + pw, T + ph); g.stroke(); g.font = '12px ' + FONT; g.fillStyle = AXIS;
+    g.textAlign = 'center'; (xs.length <= 8 ? xs : nice(x0, x1, 6).t.filter(v => v >= x0 && v <= x1)).forEach(v => { g.beginPath(); g.moveTo(xp(v), T + ph); g.lineTo(xp(v), T + ph + 4); g.stroke(); g.fillText(fmt(v, 3), xp(v), T + ph + 17); });
+    g.textAlign = 'right'; (ys.length <= 8 ? ys : nice(y0, y1, 6).t.filter(v => v >= y0 && v <= y1)).forEach(v => { g.beginPath(); g.moveTo(L - 4, yp(v)); g.lineTo(L, yp(v)); g.stroke(); g.fillText(fmt(v, 3), L - 7, yp(v) + 4); });
+    g.fillStyle = INK; g.textAlign = 'center'; g.fillText(o.xt || '', L + pw / 2, T + ph + 38); yTitle(g, o.yt, 14, T, ph);
+    colourbar(g, L + pw + 22, T + 14, 13, Math.max(60, ph - 28), { title: o.unit || '', lo, hi, pal: o.pal || 'viridis', ticks: nice(lo, hi, 5).t.filter(v => v >= lo && v <= hi).map(v => ({ v, label: fmt(v, dec(nn.st || 1)) })) });
+    cv._csv = () => { const rows = [['x', 'y', 'value']]; ys.forEach((yv, j) => xs.forEach((xv, i) => { if (isFinite(Z[j][i])) rows.push([xv, yv, Z[j][i]]); })); return rows; };
+  }
+  const API = { line, surface, colourbar, ramp: (name, t) => rgb(lut(name), t), heat, hbars, matrix, groupBars, stackBars, nice, fmt, OKI, PAL, frame, legend, exportScale: 1 };
   return API;
 })();

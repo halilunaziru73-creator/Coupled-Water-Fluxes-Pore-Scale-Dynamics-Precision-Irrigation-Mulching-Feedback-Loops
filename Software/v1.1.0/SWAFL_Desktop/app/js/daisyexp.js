@@ -25,6 +25,7 @@
     { id: 'soil', key: 'soil', label: 'Soil', unit: '', kind: 'cat', levels: ['usda:sand', 'usda:sandyloam', 'loam', 'usda:siltloam', 'usda:clayloam'], words: ['soil', 'soils', 'texture', 'sand', 'loam', 'clay', 'silt'] },
     { id: 'station', key: 'station', label: 'Weather station', unit: '', kind: 'cat', levels: ['course', 'it-bologna', 'dk-foulum'], words: ['station', 'site', 'location', 'climate of', 'bologna', 'foulum', 'jyndevad', 'valecov', 'jadwisin', 'bratislava', 'taastrup', 'mediterranean'] },
     { id: 'till', key: 'till', label: 'Tillage', unit: '', kind: 'cat', levels: ['plowing', 'rotavation', 'none'], words: ['tillage', 'plough', 'plow', 'plowing', 'ploughing', 'rotavat', 'no-till', 'no till', 'cultivation'] },
+    { id: 'tc', key: 'tc', label: 'Soil consolidation after tillage (time consolidation)', unit: 'per day', kind: 'num', levels: [0.001, 0.01, 0.02], range: [0.0005, 0.05], words: ['consolidation', 'time consolidation', 'soil structure', 'structure dynamics', 'wepp', 'shp', 'hydraulic properties in time', 'settling'] },
     { id: 'ntype', key: 'ntype', label: 'Type of mineral fertiliser', unit: '', kind: 'cat', levels: ['N25S', 'AmmoniumNitrate', 'Ammonia', 'Nitrate'], words: ['fertiliser type', 'fertilizer type', 'ammonium nitrate', 'ammonia', 'urea', 'form of nitrogen'] },
     { id: 'ntime', key: 'ntime', label: 'Fertiliser date, shift in days', unit: 'days', kind: 'num', levels: [-14, 0, 14, 28], range: [-60, 60], words: ['fertiliser timing', 'fertilizer timing', 'when to fertili', 'split application', 'delay the fertili'] },
     { id: 'bio', key: 'bio', label: 'Evapotranspiration model', unit: '', kind: 'cat', levels: ['auto', 'default'], names: { auto: 'FAO56', default: 'Daisy energy balance' }, words: ['evapotranspiration model', 'penman', 'fao56', 'bioclimate', 'energy balance'] },
@@ -85,8 +86,8 @@
     { id: 'E2', name: 'Trigger pressure', ens: 'E2_TriggerPressure', ask: 'Irrigation trigger suction', plan: { design: 'factorial', factors: [{ id: 'trig', levels: [-100, -150, -300, -800, -1500, -3000] }, { id: 'soil', levels: ['usda:sand', 'loam', 'usda:siltloam'] }] } },
     { id: 'E3', name: 'Sensor depth', ens: 'E3_SensorDepth', ask: 'Depth of the soil moisture sensor', plan: { design: 'factorial', factors: [{ id: 'z', levels: [10, 20, 30, 40, 60, 100] }, { id: 'soil', levels: ['usda:sand', 'loam', 'usda:siltloam'] }] } },
     { id: 'E4', name: 'Methods', ens: 'E4_Methods', ask: 'Overhead, surface and drip at three depths', plan: { design: 'factorial', factors: [{ id: 'method', levels: ['overhead', 'surface'] }, { id: 'soil', levels: ['usda:sand', 'loam'] }] }, extra: [{ id: 'dripdepth' }] },
-    { id: 'E5', name: 'Soil structure dynamics (SHP)', ens: 'E5_SHP_Dynamics', ask: 'Tillage system by structural consolidation rate', unsupported: 'needs the Daisy soil-structure (SHP) files of the study; use its published runs below' },
-    { id: 'E6', name: 'Mediterranean pollution', ens: 'E6_Mediterranean_Pollution', ask: 'Nitrogen rate by water strategy, Bologna climate', plan: { design: 'factorial', factors: [{ id: 'nfac', levels: [0.4, 0.6, 0.8, 1] }, { id: 'limit', levels: [0, 120, 240] }], base: { station: 'it-bologna', start: 1996, stop: 2003 } } },
+    { id: 'E5', name: 'Soil structure dynamics (SHP)', ens: 'E5_SHP_Dynamics', ask: 'Tillage system by consolidation rate of the tilled topsoil, irrigated and rainfed', plan: { design: 'factorial', factors: [{ id: 'till', levels: ['plowing', 'rotavation', 'none'] }, { id: 'tc', levels: [0.001, 0.01, 0.02] }, { id: 'irrig', levels: ['0', '1'] }, { id: 'soil', levels: ['usda:sandyloam', 'usda:siltloam', 'usda:sandyclayloam', 'usda:clayloam'] }], base: { precip: 0.7, temp: 2, start: 1980, stop: 1999, trig: -300, z: 20, mm: 2.4, flux: 0.1, hours: 24, waitd: 1 } } },
+    { id: 'E6', name: 'Mediterranean pollution', ens: 'E6_Mediterranean_Pollution', ask: 'Nitrogen rate by soil, Bologna climate, 1994 to 2004', plan: { design: 'factorial', factors: [{ id: 'nfac', levels: [0.1, 0.4, 0.7, 1, 1.3, 1.5] }, { id: 'soil', levels: ['usda:sand', 'usda:sandyloam', 'loam', 'usda:siltloam', 'usda:clayloam'] }], base: { station: 'it-bologna', start: 1994, stop: 2004 } } },
     { id: 'E7', name: 'Mulching', ens: 'E7_Mulching', ask: 'Mulch vapour flux factor by interception capacity', unsupported: 'the mulch (litter) parameters are not in the crop files of the built-in farm; use the published runs below' },
     { id: 'E8', name: 'Rain intensity and moisture', ens: 'E8_Rain_Intensity_Moisture', ask: 'Rain intensity by initial soil moisture', unsupported: 'needs hourly rain and an initial-moisture state; use the published runs below' },
     { id: 'E9', name: 'Soil moisture and rain', ens: 'E9_Soil_Moisture_Rain', ask: 'Trigger suction by rain scale by soil', plan: { design: 'factorial', factors: [{ id: 'trig', levels: [-100, -300, -800, -1500] }, { id: 'precip', levels: [0.6, 0.8, 1, 1.2] }, { id: 'soil', levels: ['usda:sand', 'loam'] }] } },
@@ -98,8 +99,17 @@
     { id: 'E15', name: 'Method, depth, amount', ens: 'E15_Method_Depth_Amount', ask: 'Irrigation method by rooting depth by amount', plan: { design: 'factorial', factors: [{ id: 'method', levels: ['overhead', 'surface', 'drip'] }, { id: 'root', levels: [45, 90, 135] }, { id: 'mm', levels: [10, 20, 30] }] } },
     { id: 'E16', name: 'Edge cases', ens: 'E16_Edge_Cases', ask: 'Stress-tested corners of rain, temperature, trigger and nitrogen', plan: { design: 'factorial', factors: [{ id: 'precip', levels: [0.5, 1.5] }, { id: 'temp', levels: [0, 2] }, { id: 'trig', levels: [-2000, -50] }, { id: 'nfac', levels: [0.2, 1.3] }] } }
   ];
-  E.PRESETS.find(p => p.id === 'E4').plan.factors = [{ id: 'dripdepth', levels: ['drip 5-10 cm', 'drip 10-20 cm', 'drip 20-30 cm'] }, { id: 'soil', levels: ['usda:sand', 'loam'] }];
 
+  // the name of the folder of one run, as in the folders of the study (E5_S01_CoarseLoam_conv_tc0.001_Irrigated, E6_S05_SandyLoam_N100_Full)
+  const TOK = {
+    soil: v => { const s = String(v).replace(/^usda:/, ''); const m = S.USDA[s]; return m ? m[0].split(/[^A-Za-z]+/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('') : s === 'loam' ? 'Loam' : s === 'sand' ? 'Sand' : s.replace(/[^A-Za-z0-9]+/g, ''); },
+    till: v => ({ plowing: 'conv', rotavation: 'reduced', none: 'notill', disk_harrowing: 'disk', stubble_cultivation: 'stubble' })[v] || v, tc: v => 'tc' + v, irrig: v => String(v) === '1' ? 'Irrigated' : 'Rainfed', nfac: v => 'N' + Math.round(v * 100), precip: v => 'P' + v, temp: v => 'T' + (v >= 0 ? '+' : '') + v, trig: v => 'h' + Math.abs(v), z: v => 'z' + v, mm: v => 'mm' + v, hours: v => hours(v), method: v => v, root: v => 'root' + v, limit: v => 'lim' + v, flux: v => 'q' + v, station: v => String(v).replace(/^[a-z]{2}-/, ''), ntime: v => 'd' + (v >= 0 ? '+' : '') + v, ntype: v => v, bio: v => v === 'default' ? 'EB' : 'FAO56', radscale: v => 'R' + v, koc: v => 'Koc' + v, half: v => 'half' + v
+  };
+  function hours(v) { return v + 'h'; }
+  E.runName = function (presetId, run, factors) {
+    const parts = [presetId || 'X']; (factors || []).slice().sort((p, q) => (q.id === 'soil') - (p.id === 'soil')).forEach(f => { const v = run.val ? run.val[f.id] : undefined; if (v === undefined) return; const t = TOK[f.id] ? TOK[f.id](f.kind === 'set' ? v : v) : (f.id + String(v)); parts.push(String(t)); });
+    if (run.reference) parts.push('Rainfed'); return parts.join('_').replace(/[^A-Za-z0-9._+-]+/g, '-').replace(/-+/g, '-').slice(0, 90);
+  };
   // ------------------------------------------------------------------ responses
   E.RESP = [
     { id: 'yield', label: 'Yield', unit: 'Mg DM/ha', good: 1 }, { id: 'irr', label: 'Irrigation', unit: 'mm/season', good: -1 }, { id: 'aet', label: 'Evapotranspiration', unit: 'mm/season', good: 0 },
@@ -107,9 +117,10 @@
     { id: 'IE', label: 'Irrigation efficiency', unit: 'kg grain per m3', good: 1 }, { id: 'rain', label: 'Rain', unit: 'mm/season', good: 0 },
     { id: 'wstress', label: 'Water-stress days at harvest', unit: 'days', good: -1 }, { id: 'nstress', label: 'Nitrogen-stress days at harvest', unit: 'days', good: -1 },
     { id: 'IWUE', label: 'Irrigation water-use efficiency (yield gain over the rainfed reference per m3 of irrigation)', unit: 'kg per m3', good: 1 }, { id: 'DPF', label: 'Deep-percolation fraction of rain + irrigation', unit: '%', good: -1 },
-    { id: 'PFPn', label: 'Partial factor productivity of nitrogen', unit: 'kg DM per kg N', good: 1 }, { id: 'NLF', label: 'Nitrate leached as a share of N applied', unit: '%', good: -1 }
+    { id: 'PFPn', label: 'Partial factor productivity of nitrogen', unit: 'kg DM per kg N', good: 1 }, { id: 'NLF', label: 'Nitrate leached as a share of N applied', unit: '%', good: -1 },
+    { id: 'run', label: 'Runoff', unit: 'mm/season', good: -1 }, { id: 'upt', label: 'Nitrogen taken up by the crop', unit: 'kg N/ha/season', good: 1 }, { id: 'vol', label: 'Ammonia volatilised', unit: 'kg N/ha/season', good: -1 }, { id: 'fert', label: 'Nitrogen applied', unit: 'kg N/ha/season', good: 0 }
   ];
-  E.respOf = function (st) { const r = { yield: st.yield, irr: st.irr, aet: st.aet, perc: st.perc, leach: st.leach, den: st.den, rain: st.rain }; r.IE = st.irr > 5 ? st.yield * 1000 / (st.irr * 10) : NaN; r.wstress = st.wstress; r.nstress = st.nstress;
+  E.respOf = function (st) { const r = { yield: st.yield, irr: st.irr, aet: st.aet, perc: st.perc, leach: st.leach, den: st.den, rain: st.rain, run: st.run, upt: st.upt, vol: st.vol, fert: st.fert }; r.IE = st.irr > 5 ? st.yield * 1000 / (st.irr * 10) : NaN; r.wstress = st.wstress; r.nstress = st.nstress;
     const inp = (st.rain || 0) + (st.irr || 0); r.DPF = inp > 0 && isFinite(st.perc) ? 100 * st.perc / inp : NaN; r.PFPn = st.fert > 1 ? st.yield * 1000 / st.fert : NaN; r.NLF = st.fert > 1 && isFinite(st.leach) ? 100 * st.leach / st.fert : NaN; r.IWUE = NaN; return r; };
   /* the indices that need a rainfed run of the same soil and weather: the yield gain per mm of irrigation water */
   E.indices = function (rows) {
