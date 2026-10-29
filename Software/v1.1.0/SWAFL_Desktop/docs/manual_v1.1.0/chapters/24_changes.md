@@ -100,3 +100,4 @@
 - The figure of a layer now carries every result of the dashboard (Results, Design and Charts) as a box above the process it comes from, with bold colours. A click on a result shows only that result, a click on a process shows the results of that process. The long lists and notes of the earlier Figure tab were removed.
 - Every layer, the phenotyping layer and the three irrigation designs included, shows nothing in the Results, Design, Charts and Figure tabs until Run simulation is pressed. Each tab says so and offers a Run simulation button.
 - The Daisy window opens over the whole window. Full screen of a figure or a window now comes back with Esc.
+- In full screen the Daisy window enlarges its text to fit the screen and fills the height of the screen. The buttons A- and A+ in its title bar make the text smaller or larger.
