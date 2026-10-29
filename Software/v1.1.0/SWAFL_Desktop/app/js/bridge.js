@@ -82,6 +82,12 @@ const E = (() => {
       return api.json(`(function(){var r=seasonSim(true);var f=function(a){return a?Array.prototype.slice.call(a):[]};
         return{yI:f(r.yI),yD:f(r.yD),yRain:f(r.yRain),yE:f(r.yE),yT:f(r.yT),yR:f(r.yR),meanIrr:r.meanIrr,meanDrain:r.meanDrain,cal0:CAL0}})()`);
     },
+    // the day by day water of the twenty seasons, for the scientific figure of the Charts tab
+    seasonDaily() {
+      return api.json(`(function(){var r=seasonSim(true),n=NYR*DPY,a=AWC[state.soil]*DZ,k=24,o={rain:[],irr:[],drain:[],E:[],T:[],cover:[],wf:[]};var q=function(v){return Math.round(v*100)/100};
+        for(var d=0;d<n;d++){o.rain.push(q(r.rain[d]));o.irr.push(q(r.irr[d]));o.drain.push(q(r.drain[d]));o.E.push(q(r.dE[d]));o.T.push(q(r.dT[d]));o.cover.push(q(r.cover[d]));var s=r.s[d],t=0;for(var i=0;i<k;i++)t+=s[i];o.wf.push(Math.round(1000*t/(k*a))/1000)}
+        var y=(typeof dss!=='undefined'&&dss.ay0!=null)?dss.ay0:NYR-1;o.sel=Math.max(0,Math.min(NYR-1,y));o.cal0=CAL0;o.nyr=NYR;o.dpy=DPY;o.trig=r.fTrig;return o})()`);
+    },
     design(scene) {
       const fn = { sid: 'sidRun', drip: 'drRun', spr: 'spRun' }[scene]; if (!fn) return null;
       return api.json(`(function(){var R=${fn}();var o={};for(var k in R){if(typeof R[k]==='number'&&isFinite(R[k]))o[k]=R[k];else if(typeof R[k]==='string')o[k]=R[k]}return o})()`);

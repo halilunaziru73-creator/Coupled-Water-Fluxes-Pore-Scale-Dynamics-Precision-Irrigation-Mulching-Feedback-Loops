@@ -164,10 +164,12 @@ const Dash = (() => {
     c.fillText(o.xl || '', L + (w - L - R) / 2, h - 4); c.save(); c.translate(10, T + (h - T - B) / 2); c.rotate(-Math.PI / 2); c.fillText(o.yl || '', 0, 0); c.restore();
     c.strokeStyle = '#808080'; c.strokeRect(L, T, w - L - R, h - T - B);
     c.save(); c.beginPath(); c.rect(L, T, w - L - R, h - T - B); c.clip();
+    (o.hband || []).forEach(b => { c.fillStyle = b.c; c.fillRect(L, Math.min(Y(b.lo), Y(b.hi)), w - L - R, Math.abs(Y(b.lo) - Y(b.hi))); });
     o.series.forEach(s => {
       c.strokeStyle = s.c; c.lineWidth = s.w || 2; c.setLineDash(s.dash || []);
       if (s.fill) { c.fillStyle = s.fill; c.beginPath(); xs.forEach((x, i) => { const yy = Y(s.y[i]); i ? c.lineTo(X(x), yy) : c.moveTo(X(x), yy); }); c.lineTo(X(xs[xs.length - 1]), Y(Math.max(ymn, 0))); c.lineTo(X(xs[0]), Y(Math.max(ymn, 0))); c.closePath(); c.fill(); }
       c.beginPath(); let pen = false; xs.forEach((x, i) => { const v = s.y[i]; if (!isFinite(v)) { pen = false; return; } const yy = Y(v); pen ? c.lineTo(X(x), yy) : c.moveTo(X(x), yy); pen = true; }); c.stroke(); c.setLineDash([]);
+      if (s.marker && xs.length <= 60) { c.fillStyle = '#fff'; c.lineWidth = 1.6; xs.forEach((x, i) => { const v = s.y[i]; if (!isFinite(v)) return; c.beginPath(); c.arc(X(x), Y(v), 3, 0, 6.2832); c.fill(); c.stroke(); }); }
     });
     c.restore();
     (o.marks || []).forEach(m => { c.strokeStyle = m.c || '#C00000'; c.setLineDash(m.solid ? [] : [4, 3]); c.lineWidth = m.solid ? 2 : 1.2; c.beginPath(); if (m.x != null) { c.moveTo(X(m.x), T); c.lineTo(X(m.x), h - B); } else { c.moveTo(L, Y(m.y)); c.lineTo(w - R, Y(m.y)); } c.stroke(); c.setLineDash([]); c.fillStyle = m.c || '#C00000'; if (m.t) { const tw = c.measureText(m.t).width, right = m.x != null && X(m.x) + 3 + tw > w - R; const tx = m.x != null ? (right ? X(m.x) - 3 - tw : X(m.x) + 3) : w - R - 4 - tw, ty = m.x != null ? T + 11 + (o.marks.filter(q => q.t && q.x != null).indexOf(m) % 3) * 13 : Y(m.y) - 4; c.fillStyle = 'rgba(255,255,255,0.88)'; c.fillRect(tx - 2, ty - 10, tw + 4, 13); c.fillStyle = m.c || '#C00000'; c.textAlign = 'left'; c.fillText(m.t, tx, ty); } });
@@ -227,7 +229,12 @@ const Dash = (() => {
     }, 30);
   }
   function lineChart(cv, series, o) {
-    xyChart(cv, { x: series[0].v.map((_, i) => (o.cal0 || 0) + i), xl: 'year', yl: o.yl || 'mm', series: series.map(s => ({ y: s.v, c: s.c, n: s.n, dash: s.dash ? [5, 3] : null, fill: o.bars && !s.dash ? s.c + '33' : null })), marks: o.marks });
+    // a scientific look: markers on every season, the mean of each series as a dotted line and its 10 to 90 % range as a shaded band
+    const q = (a, f) => { const b = a.filter(v => isFinite(v)).sort((x, y) => x - y); return b.length ? b[Math.min(b.length - 1, Math.max(0, Math.round(f * (b.length - 1))))] : NaN; };
+    const mean = a => { const b = a.filter(v => isFinite(v)); return b.length ? b.reduce((x, y) => x + y, 0) / b.length : NaN; };
+    const hband = [], marks = (o.marks || []).slice();
+    series.forEach(s => { if (s.v.filter(v => isFinite(v)).length < 6) return; const lo = q(s.v, 0.1), hi = q(s.v, 0.9), m = mean(s.v); if (isFinite(lo) && isFinite(hi) && hi > lo) hband.push({ lo, hi, c: s.c + '1c' }); if (isFinite(m) && series.length <= 3) marks.push({ y: m, c: s.c, t: 'mean ' + (Math.abs(m) >= 100 ? Math.round(m) : m.toFixed(1)) }); });
+    xyChart(cv, { x: series[0].v.map((_, i) => (o.cal0 || 0) + i), xl: 'year', yl: o.yl || 'mm', series: series.map(s => ({ y: s.v, c: s.c, n: s.n, dash: s.dash ? [5, 3] : null, marker: true, fill: o.bars && !s.dash ? s.c + '22' : null })), marks, hband, ymin: o.zero ? 0 : undefined });
   }
   // the seasonal layers: one chart per widget of the layer, with how each quantity varies over the twenty seasons
   function seasonCharts(id) {
@@ -242,13 +249,12 @@ const Dash = (() => {
   function charts() {
     const s = E.snap; if (s && DL[s.scene]) { designCharts(s.scene); return; }
     if (s && ['yby', 'wb2', 'nb', 'chem', 'dsum'].includes(s.scene)) { seasonCharts(s.scene); return; }
-    if (!(document.getElementById('c1') && document.getElementById('c3') && body.querySelector('.charts')))   // the charts are redrawn in place: no flash
-      body.innerHTML = '<div class="dnote">Twenty years around the working date (calendar years on the horizontal axis, millimetres per year).</div><div class="charts">' + CB('c1', 'Rainfall and irrigation', '<canvas id="c1"></canvas>') + '' + CB('c2', 'Drainage below the root zone', '<canvas id="c2"></canvas>') + '' + CB('c3', 'Evaporation and transpiration', '<canvas id="c3"></canvas>') + '</div>'; lastHtml = '';
+    if (!(document.getElementById('c1') && document.getElementById('c2') && body.querySelector('.charts')))   // the charts are redrawn in place: no flash
+      body.innerHTML = '<div class="dnote">The working season day by day (a, b) and the twenty seasons around the working date (c), from the daily simulation of the layer. Rain and irrigation are bars on an inverted axis; the shaded bands are the range of the twenty seasons.</div><div class="charts" style="grid-template-columns:1fr">' + CB('c1', 'Water of the working season, day by day', '<canvas id="c1" style="height:680px;width:100%"></canvas>') + CB('c2', 'The twenty seasons, year by year', '<canvas id="c2" style="height:340px;width:100%"></canvas>') + '</div>'; lastHtml = '';
     clearTimeout(chartTimer); chartTimer = setTimeout(() => {
-      const S = E.season(); if (!S || !document.getElementById('c1')) return;
-      lineChart(document.getElementById('c1'), [{ v: S.yR, c: '#5AA0E1', n: 'Rain' }, { v: S.yI, c: '#C77D1A', n: 'Irrigation' }], { bars: true, zero: true, cal0: S.cal0 });
-      lineChart(document.getElementById('c2'), [{ v: S.yD, c: '#7A5AA8', n: 'Drainage' }], { bars: true, zero: true, cal0: S.cal0 });
-      lineChart(document.getElementById('c3'), [{ v: S.yE, c: '#00859B', n: 'Evaporation' }, { v: S.yT, c: '#2E7D4F', n: 'Transpiration' }], { zero: true, cal0: S.cal0 });
+      if (!document.getElementById('c1')) return; const Dd = E.seasonDaily && E.seasonDaily(); if (!Dd || !window.SciFig) return;
+      const draw = () => { const c1 = document.getElementById('c1'), c2 = document.getElementById('c2'); if (c1) window.SciFig.daily(c1, Dd); if (c2) window.SciFig.yearly(c2, Dd); };
+      draw(); try { if (chRO) chRO.disconnect(); let lw = 0; chRO = new ResizeObserver(() => { const c1 = document.getElementById('c1'); if (!c1) return; const w = c1.clientWidth; if (w && Math.abs(w - lw) > 4) { lw = w; clearTimeout(chRT); chRT = setTimeout(draw, 120); } }); chRO.observe(document.getElementById('c1')); } catch (e) { }
     }, 30);
   }
   function messages() {
@@ -263,8 +269,8 @@ const Dash = (() => {
     if (tab !== 'messages' && !Layers.started()) { body.innerHTML = '<div class="dnote" style="padding:18px"><b>Nothing to show yet.</b><br>Click a layer in the Layers panel (top left). Its results appear here, and its picture in the simulation window.</div>'; lastHtml = ''; return; }
     if (tab === 'figure') { if (window.SWOut) SWOut.figure(body, s); } else if (tab === 'results') results(s); else if (tab === 'design') design(s); else if (tab === 'charts') { const k = s.scene + '|' + JSON.stringify(s.state) + '|' + (DL[s.scene] ? s.date : String(s.date || '').slice(0, 4)) + '|' + ((s.wx && s.wx.key) || '') + '|' + (DL[s.scene] ? runOn(s.scene) + E.ev('JSON.stringify(window.DESIGN_RUN)') + E.ev("JSON.stringify(typeof sidRun==='function'?[sidRun().Ea,drRun().Ea,spRun().Ea]:0)") : ''); if (k !== chartKey) { chartKey = k; charts(); } } else messages();
   }
-  let autoWide = false;
-  function setTab(t) { const dk = document.getElementById('dashDock'), mb = tabs.querySelector('[data-act=maxDash]'); if (dk) { if (t === 'figure' && !dk.classList.contains('max')) { dk.style.width = ''; dk.classList.add('max'); autoWide = true; if (mb) mb.textContent = 'Smaller'; } else if (t !== 'figure' && autoWide) { dk.classList.remove('max'); autoWide = false; if (mb) mb.textContent = 'Wider'; } } tab = t; lastHtml = ''; chartKey = ''; tabs.querySelectorAll('button[data-tab]').forEach(b => b.classList.toggle('on', b.dataset.tab === t)); render(); }
+  let autoWide = false, chRO = null, chRT = 0;
+  function setTab(t) { const dk = document.getElementById('dashDock'), mb = tabs.querySelector('[data-act=maxDash]'); if (dk) { if ((t === 'figure' || t === 'charts') && !dk.classList.contains('max')) { dk.style.width = ''; dk.classList.add('max'); autoWide = true; if (mb) mb.textContent = 'Smaller'; } else if (t !== 'figure' && t !== 'charts' && autoWide) { dk.classList.remove('max'); autoWide = false; if (mb) mb.textContent = 'Wider'; } } tab = t; lastHtml = ''; chartKey = ''; tabs.querySelectorAll('button[data-tab]').forEach(b => b.classList.toggle('on', b.dataset.tab === t)); render(); }
   tabs.addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return;
     if (b.dataset.tab) setTab(b.dataset.tab); else if (b.dataset.act === 'pinBaseline') pin(); else if (b.dataset.act === 'clearBaseline') clearPin();
