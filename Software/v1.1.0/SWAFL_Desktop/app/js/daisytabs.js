@@ -151,7 +151,7 @@
       const run = toRun(v.id, v.label, r.logs || {}, Object.assign({}, o)); run.raw = r.logs || {}; run.saved = r.saved; run.savedError = r.savedError; run.setup = job ? job.files : null; r0.dataset.state = 'done';
       if (!run.logs['Annual-Harvest']) { errs.push(v.label + ': ' + ((r.err || r.out || 'no output') + '').slice(-600)); r0.innerHTML = '<span style="color:#b3261e"><b>' + esc(v.label) + '</b>: Daisy did not produce results (code ' + r.code + ')</span><pre class="dzpre">' + esc(((r.err || '') + (r.out || '')).slice(-1500)) + '</pre>'; }
       else { r0.innerHTML = '&#10003; <b>' + esc(v.label) + '</b> <span class="pnote">finished in ' + Math.round(r.seconds || 0) + ' s</span>'; run.runfile = (SC.buildJob(sc.id, o, v.id, files).files['Run/Runfile.dai']); out.push(run); } } };
-    await Promise.all([work(), work(), work()]); clearInterval(tick); out.sort((a, b) => variants.findIndex(v => v.id === a.id) - variants.findIndex(v => v.id === b.id)); if (!out.length) throw new Error(errs.join('\n')); return out;
+    await Promise.all(Array.from({ length: Math.max(2, Math.min(variants.length, 8, (navigator.hardwareConcurrency || 4) - 1)) }, work)); clearInterval(tick); out.sort((a, b) => variants.findIndex(v => v.id === a.id) - variants.findIndex(v => v.id === b.id)); if (!out.length) throw new Error(errs.join('\n')); return out;
   }
 
 

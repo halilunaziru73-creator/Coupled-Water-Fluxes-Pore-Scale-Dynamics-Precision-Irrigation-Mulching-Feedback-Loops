@@ -180,7 +180,7 @@ window.SWOut = (() => {
   };
   const titles = {};   // outputs of each layer, remembered when the Results tab shows them
   function remember(body, scene) { const L = []; body.querySelectorAll('.dsec[data-sec]').forEach(s => { const t = ((s.querySelector('h4 b') || {}).textContent || '').trim(); if (t) L.push({ src: 'dash', id: s.dataset.sec, title: t }); }); if (L.length) titles[scene] = L; }
-  let figSel = null, figKey = '';
+  let figDrawn = {}; let figSel = null, figKey = '';
   let secTried = '', secQ = Promise.resolve(); let secCache = { key: '', list: null, busy: null };
   async function sectionsOf() {
     const sn = E.snap, key = sn.scene + '|' + JSON.stringify(sn.state) + '|' + sn.date; if (secCache.key === key && secCache.list) return secCache.list; if (secCache.busy && secCache.busyKey === key) return secCache.busy;
@@ -192,7 +192,7 @@ window.SWOut = (() => {
     let list = []; try { list = await sectionsOf(); } catch (e) { console.warn(e); } if (!box.isConnected) return;
     const ran = !Dash.waiting(scene);
     if (!list.length) { box.innerHTML = '<div style="padding:8px;font-size:13px;border:2px solid #0A246A;background:#fff"><b>' + (ran ? 'This layer has no result for this choice.' : 'Run the simulation first: the results appear here after the run.') + '</b></div>'; return; }
-    const fb = (m[1].length ? m[1] : m[0])[0], mine = figOut ? list.filter(x => x.tab + ':' + x.id === figOut) : list.filter(x => procsOfTitle(x.title, [fb]).indexOf(p) >= 0);
+    const fb = (m[1].length ? m[1] : m[0])[0], dr = figDrawn[p], mine = figOut ? list.filter(x => x.tab + ':' + x.id === figOut) : (dr && dr.length ? list.filter(x => dr.indexOf(x.tab + ':' + x.id) >= 0) : Object.keys(figDrawn).length ? [] : list.filter(x => procsOfTitle(x.title, [fb]).indexOf(p) >= 0));
     const col = p && window.DaisyProc.byId(p) ? window.DaisyProc.GC[window.DaisyProc.byId(p).g] : '#0A246A';
     box.innerHTML = '<div style="border:2px solid ' + col + ';background:#fff;padding:8px"><div class="dzrow" style="margin-bottom:6px"><b style="font-size:14px;color:' + col + '">' + (figOut && mine[0] ? esc(mine[0].title) : esc(pn)) + '</b><span style="flex:1"></span>' + (inModal ? '' : '<button class="mini" data-clr>Show all</button>') + '</div><div data-rs></div></div>';
     const rs = box.querySelector('[data-rs]'); mine.forEach(x => { const c = x.el.cloneNode(true); c.classList.remove('shut'); const b = c.querySelector('.dsb'); if (b) b.hidden = false; rs.appendChild(c); });
@@ -213,7 +213,8 @@ window.SWOut = (() => {
     if (real) outs = real.map(x => { const ps = procsOfTitle(x.title, fb.slice(0, 1)); return { t: x.title, id: x.tab + ':' + x.id, p: ps[0], ps, j: assign(ps) }; });
     else outs = lt[1].split(/,\s*/).filter(Boolean).slice(0, 5).map(t => { const ps = procsOfTitle(t, fb); return { t: t.charAt(0).toUpperCase() + t.slice(1), id: null, p: ps[0], ps, j: assign(ps) }; });
     { const n = Math.max(1, flow.length), cap = Math.ceil(outs.length / n) + 1, cnt = new Array(n).fill(0);   // spread the results over the processes: no column gets all of them
-      outs.forEach(q => { let j = q.j < 0 ? Math.min(outs.indexOf(q), n - 1) : q.j; if (cnt[j] >= cap) { let best = -1, bd = 99; cnt.forEach((c, k) => { if (c < cap && Math.abs(k - j) < bd) { bd = Math.abs(k - j); best = k; } }); if (best >= 0) j = best; } q.j = j; cnt[j]++; }); }
+      outs.forEach(q => { let j = q.j < 0 ? Math.min(outs.indexOf(q), n - 1) : q.j; if (cnt[j] >= cap) { let best = -1, bd = 99; cnt.forEach((c, k) => { if (c < cap && Math.abs(k - j) < bd) { bd = Math.abs(k - j); best = k; } }); if (best >= 0) j = best; } q.j = j; cnt[j]++; });
+      figDrawn = {}; outs.forEach(q => { const f = flow[q.j]; if (f) { q.p = f.p; if (q.id) (figDrawn[f.p] = figDrawn[f.p] || []).push(q.id); } }); }   // what is drawn above a process is what its click shows
     const key = scene + '|' + figSel + '|' + figOut + '|' + outs.map(o => o.t).join('|') + '|' + (real ? 1 : 0); if (key === figKey && body.querySelector('.swfig')) return; figKey = key;
     const F = {}, R = {}; m[0].forEach(p => { F[p] = ['controls']; }); m[1].forEach(p => { R[p] = ['results']; }); const emph = Array.from(new Set(m[0].concat(m[1])));
     const q = (STATE[scene] || 'Soil|').split('|');

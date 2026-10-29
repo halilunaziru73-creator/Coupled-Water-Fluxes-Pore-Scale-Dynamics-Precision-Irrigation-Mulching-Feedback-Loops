@@ -58,14 +58,17 @@ ipcMain.handle('daisy-choose', async () => {
   if (DR.isInstaller(r.filePaths[0])) return { found: false, installer: true, error: 'That file is the Daisy installer (it asks for administrator rights and cannot be run as the program). SWAFL has Daisy built in, so you do not need to choose a file. To use your own installation, run the installer once and then choose bin\\daisy-bin.exe in the folder where it installed Daisy.' };
   fs.mkdirSync(path.dirname(daisyCfg()), { recursive: true }); fs.writeFileSync(daisyCfg(), JSON.stringify({ exe: r.filePaths[0] })); const e = r.filePaths[0]; return { found: true, exe: e, home: DR.homeFor(e), version: DR.version(e) };
 });
+// a run that is asked for again with exactly the same set-up files gives the same logs: they are kept in memory (the last 30 runs) and returned at once
+const jobCache = new Map(), jobKey = job => { try { return require('crypto').createHash('sha1').update(JSON.stringify([job.main, job.files, !!job.copyBundle, job.logPattern, job.prefix])).digest('hex'); } catch (e) { return null; } };
 ipcMain.handle('daisy-job', async (_e, job) => {
+  const ck = job && !job.noCache ? jobKey(job) : null; if (ck && jobCache.has(ck)) { const c = jobCache.get(ck); jobCache.delete(ck); jobCache.set(ck, c); return Object.assign({}, c, { seconds: 0, cached: true }); }
   const exe = exeNow(); if (!exe) return { code: -2, err: 'The Daisy program was not found. Install Daisy or choose the program.', logs: {}, out: '' };
   if (job && job.copyBundle) job.copyDir = path.join(__dirname, 'app', 'data', 'daisy', 'scenarios', 'common');
   try {
     const r = await DR.runJob(job, { exe, timeoutMs: (job && job.timeoutMs) || 1800000 });
     // keep the whole run folder (set-up files and the raw Daisy logs, untouched) so that it can be checked and reused outside SWAFL
     try { const root = runsRoot(); fs.mkdirSync(root, { recursive: true }); const stamp = new Date().toISOString().replace(/[:T]/g, '-').slice(0, 19), clean = t => String(t || '').replace(/[^A-Za-z0-9._-]+/g, '_').slice(0, 60), nm = clean((job && job.scenario ? job.scenario + '_' : '') + ((job && job.label) || 'run')), grp = clean(job && job.group), rid = clean(job && job.runId); let base = grp ? path.join(root, grp) : root, dest = path.join(base, grp ? (rid ? rid + '_' : '') + nm : stamp + '_' + nm), k = 1; fs.mkdirSync(base, { recursive: true }); while (fs.existsSync(dest)) dest = dest.replace(/_\d+$/, '') + '_' + (++k); fs.cpSync(r.dir, dest, { recursive: true }); r.saved = dest; } catch (e) { r.savedError = String(e.message); }
-    DR.clean(r.dir); delete r.dir; return r;
+    DR.clean(r.dir); delete r.dir; if (ck && r.code === 0) { jobCache.set(ck, r); while (jobCache.size > 30) jobCache.delete(jobCache.keys().next().value); } return r;
   } catch (e) { return { code: -1, err: String(e.message), logs: {}, out: '' }; }
 });
 const runsRoot = () => path.join(app.getPath('documents'), 'SWAFL Daisy runs');
