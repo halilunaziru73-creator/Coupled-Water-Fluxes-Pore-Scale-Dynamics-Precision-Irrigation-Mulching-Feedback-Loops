@@ -89,7 +89,7 @@ The soil of the run is matched to the soil of the project when the names agree (
 
 ## The two layers that read Daisy runs
 
-The group **Decide: results in the SWAFL layers**, inside **Daisy model** in the Layers panel, has the layers *C2 Chemical fate* and *D1 Daisy decision table*. They are drawn like every other layer, and they open from the last step of the path. Each shows in its first lines the weather, the soil and the years of the run it is drawn from.
+The group **5  Decision support (SWAFL layers)**, inside **Daisy model** in the Layers panel, has the layers *C2 Chemical fate* and *D1 Daisy decision table*. They are drawn like every other layer, and they open from the last step of the path. Each shows in its first lines the weather, the soil and the years of the run it is drawn from.
 
 **C2 Chemical fate.** Three buttons at the top choose the chemical: a mobile tracer (no sorption, no decay), a sorbing chemical, and a sorbing chemical that decays with a half-life of 30 days. For the soil in use the layer shows, from top to bottom:
 

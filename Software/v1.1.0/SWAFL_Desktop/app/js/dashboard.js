@@ -17,7 +17,7 @@ const Dash = (() => {
   // a block: header with a twist arrow (click to hide or show), and its content
   const SEC = (id, title, sub, inner) => '<div class="dsec' + (shut[id] ? ' shut' : '') + '" data-sec="' + id + '"><h4 data-tog="' + id + '"><b><span class="tw">' + (shut[id] ? '&#9654;' : '&#9660;') + '</span>' + title + '</b>' + (sub ? '<span>' + sub + '</span>' : '') + '</h4><div class="dsb"' + (shut[id] ? ' hidden' : '') + '>' + inner + '</div></div>';
 
-  const CB = (k, title, inner) => SEC('ch-' + k, title, '', '<div class="chart">' + inner + '</div>');
+  let cbN = 0; const CB = (k, title, inner) => { const L = '(' + String.fromCharCode(97 + (cbN++ % 26)) + ') '; return SEC('ch-' + k, L + title, '', '<div class="chart">' + inner + '</div>'); };
   let dayCache = { key: '', D: null }, layerCache = { key: '', L: null }, n1Chart = null, N1T = null, v7Chart = null;
   function results(s) {
     const key = s.date + '|' + JSON.stringify(s.state) + '|' + s.year + '|' + ((s.wx && s.wx.key) || '');
@@ -146,7 +146,7 @@ const Dash = (() => {
   function xyChart(cv, o) {
     const dpr = Math.max(2, window.devicePixelRatio || 1), w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return; cv.width = w * dpr; cv.height = h * dpr;
     const c = cv.getContext('2d'); c.scale(dpr, dpr); c.clearRect(0, 0, w, h); c.fillStyle = '#FFFFFF'; c.fillRect(0, 0, w, h);
-    c.font = '10px Tahoma,Arial';
+    c.font = '11px Arial,Helvetica,sans-serif';
     cv._csv = () => { const rows = [[o.xl || 'x'].concat((o.series || []).map(q => q.n || 'y'))]; (o.x || []).forEach((xv, i) => rows.push([o.xfmt ? o.xfmt(xv) : xv].concat((o.series || []).map(q => q.y && isFinite(q.y[i]) ? q.y[i] : '')))); return rows; };
     // the legend wraps onto as many lines as the width needs, and the plot starts below it
     const leg = []; { let lx = 50, ly = 0; o.series.forEach(s => { if (!s.n) return; const lw = 22 + c.measureText(s.n).width; if (lx + lw > w - 6 && lx > 50) { lx = 50; ly++; } leg.push([s, lx, ly]); lx += lw; }); }
@@ -158,18 +158,19 @@ const Dash = (() => {
     let ymx = o.ymax != null ? o.ymax : (Math.max(...all, 0) > 0 ? Math.max(...all) * 1.08 : 1), ymn = o.ymin != null ? o.ymin : Math.min(0, ...all);
     if (o.invert) [ymn, ymx] = [ymx, ymn];
     const xmn = Math.min(...xs), xmx = Math.max(...xs), X = v => L + (w - L - R) * (v - xmn) / ((xmx - xmn) || 1), Y = v => T + (h - T - B) * (1 - (v - ymn) / ((ymx - ymn) || 1));
-    c.font = '10px Tahoma,Arial'; c.strokeStyle = '#E0E0E0'; c.fillStyle = '#404040'; c.lineWidth = 1;
-    { const lo = Math.min(ymn, ymx), hi = Math.max(ymn, ymx), yt = nice(lo, hi, Math.max(2, Math.floor((h - T - B) / 32))); yt.out.forEach(v => { const y = Y(v); c.beginPath(); c.moveTo(L, y); c.lineTo(w - R, y); c.stroke(); c.textAlign = 'right'; c.fillText(tf(v, yt.st), L - 4, y + 3); }); }
+    c.font = '11px Arial,Helvetica,sans-serif'; c.strokeStyle = '#E4E7EB'; c.fillStyle = '#222'; c.lineWidth = 1; c.setLineDash([2, 3]);
+    { const lo = Math.min(ymn, ymx), hi = Math.max(ymn, ymx), yt = nice(lo, hi, Math.max(2, Math.floor((h - T - B) / 32))); yt.out.forEach(v => { const y = Y(v); c.setLineDash([2, 3]); c.strokeStyle = '#E4E7EB'; c.beginPath(); c.moveTo(L, y); c.lineTo(w - R, y); c.stroke(); c.setLineDash([]); c.strokeStyle = '#222'; c.beginPath(); c.moveTo(L - 4, y); c.lineTo(L, y); c.stroke(); c.textAlign = 'right'; c.fillText(tf(v, yt.st), L - 4, y + 3); }); }
     { const xt = o.xstep ? (() => { const px = (w - L - R) / ((xmx - xmn) || 1), st2 = [o.xstep, o.xstep * 2, o.xstep * 3, o.xstep * 4, o.xstep * 6].find(q => q * px >= 50) || o.xstep * 8, out = []; for (let v = xmn; v <= xmx + 1e-9; v += st2) out.push(v); return { out, st: st2 }; })() : nice(xmn, xmx, Math.max(2, Math.floor((w - L - R) / 52))); let last = -1e9; c.textAlign = 'center'; xt.out.forEach(v => { const x = X(v), t = o.xfmt ? o.xfmt(v) : o.xl === 'year' ? String(Math.round(v)) : tf0(v, xt.st), tw = c.measureText(t).width; if (x - tw / 2 < last + 4) return; c.fillText(t, Math.min(w - tw / 2 - 1, x), h - B + 13); last = x + tw / 2; }); }
     c.fillText(o.xl || '', L + (w - L - R) / 2, h - 4); c.save(); c.translate(10, T + (h - T - B) / 2); c.rotate(-Math.PI / 2); c.fillText(o.yl || '', 0, 0); c.restore();
-    c.strokeStyle = '#808080'; c.strokeRect(L, T, w - L - R, h - T - B);
+    c.setLineDash([]); c.strokeStyle = '#222'; c.lineWidth = 1.2; c.strokeRect(L, T, w - L - R, h - T - B); c.lineWidth = 1;
+    if (cv.dataset && cv.dataset.panel) { c.font = 'bold 12px Arial'; c.fillStyle = '#111'; c.textAlign = 'left'; c.fillText(cv.dataset.panel, L + 7, T + 15); c.font = '11px Arial,Helvetica,sans-serif'; }
     c.save(); c.beginPath(); c.rect(L, T, w - L - R, h - T - B); c.clip();
     (o.hband || []).forEach(b => { c.fillStyle = b.c; c.fillRect(L, Math.min(Y(b.lo), Y(b.hi)), w - L - R, Math.abs(Y(b.lo) - Y(b.hi))); });
     o.series.forEach(s => {
       c.strokeStyle = s.c; c.lineWidth = s.w || 2; c.setLineDash(s.dash || []);
       if (s.fill) { c.fillStyle = s.fill; c.beginPath(); xs.forEach((x, i) => { const yy = Y(s.y[i]); i ? c.lineTo(X(x), yy) : c.moveTo(X(x), yy); }); c.lineTo(X(xs[xs.length - 1]), Y(Math.max(ymn, 0))); c.lineTo(X(xs[0]), Y(Math.max(ymn, 0))); c.closePath(); c.fill(); }
       c.beginPath(); let pen = false; xs.forEach((x, i) => { const v = s.y[i]; if (!isFinite(v)) { pen = false; return; } const yy = Y(v); pen ? c.lineTo(X(x), yy) : c.moveTo(X(x), yy); pen = true; }); c.stroke(); c.setLineDash([]);
-      if (s.marker && xs.length <= 60) { c.fillStyle = '#fff'; c.lineWidth = 1.6; xs.forEach((x, i) => { const v = s.y[i]; if (!isFinite(v)) return; c.beginPath(); c.arc(X(x), Y(v), 3, 0, 6.2832); c.fill(); c.stroke(); }); }
+      if (s.marker !== false && (s.marker || (xs.length <= 40 && !s.fill)) && xs.length <= 60) { c.fillStyle = '#fff'; c.lineWidth = 1.5; xs.forEach((x, i) => { const v = s.y[i]; if (!isFinite(v)) return; c.beginPath(); c.arc(X(x), Y(v), 3, 0, 6.2832); c.fill(); c.stroke(); }); }
     });
     c.restore();
     (o.marks || []).forEach(m => { c.strokeStyle = m.c || '#C00000'; c.setLineDash(m.solid ? [] : [4, 3]); c.lineWidth = m.solid ? 2 : 1.2; c.beginPath(); if (m.x != null) { c.moveTo(X(m.x), T); c.lineTo(X(m.x), h - B); } else { c.moveTo(L, Y(m.y)); c.lineTo(w - R, Y(m.y)); } c.stroke(); c.setLineDash([]); c.fillStyle = m.c || '#C00000'; if (m.t) { const tw = c.measureText(m.t).width, right = m.x != null && X(m.x) + 3 + tw > w - R; const tx = m.x != null ? (right ? X(m.x) - 3 - tw : X(m.x) + 3) : w - R - 4 - tw, ty = m.x != null ? T + 11 + (o.marks.filter(q => q.t && q.x != null).indexOf(m) % 3) * 13 : Y(m.y) - 4; c.fillStyle = 'rgba(255,255,255,0.88)'; c.fillRect(tx - 2, ty - 10, tw + 4, 13); c.fillStyle = m.c || '#C00000'; c.textAlign = 'left'; c.fillText(m.t, tx, ty); } });
@@ -186,8 +187,15 @@ const Dash = (() => {
   function timeBars(cv, tt, u) {
     if (!cv) return; const dpr = Math.max(2, window.devicePixelRatio || 1), w = cv.clientWidth, hh = cv.clientHeight; if (!w || !hh) return; cv.width = w * dpr; cv.height = hh * dpr; const c = cv.getContext('2d'); c.scale(dpr, dpr); c.fillStyle = '#fff'; c.fillRect(0, 0, w, hh);
     cv._csv = () => [['item', u || 'value']].concat(tt.map(q => [q[0], q[1]]));
-    const mx = Math.max(...tt.map(q => q[1]), 1e-9), bh = (hh - 20) / tt.length; c.font = '10.5px Tahoma,Arial'; c.textBaseline = 'alphabetic'; let lw = 0; tt.forEach(q => { lw = Math.max(lw, c.measureText(q[0]).width); }); const x0 = Math.min(lw + 12, w * 0.45);
-    tt.forEach((q, i) => { const y = 10 + i * bh; c.fillStyle = '#000'; c.textAlign = 'left'; c.fillText(q[0], 4, y + bh / 2 + 3); const bw = Math.max(1, (w - x0 - 70) * q[1] / mx); c.fillStyle = ['#1F5FA8', '#2E8B57', '#C00000', '#7A5AA8', '#404040'][i % 5]; c.fillRect(x0, y + 3, bw, bh - 7); c.fillStyle = '#000'; c.fillText((q[1] >= 100 ? q[1].toFixed(0) : q[1].toFixed(1)) + ' ' + u, x0 + bw + 4, y + bh / 2 + 3); });
+    c.font = '11px Arial,Helvetica,sans-serif'; c.textBaseline = 'alphabetic'; let lw = 0; tt.forEach(q => { lw = Math.max(lw, c.measureText(q[0]).width); });
+    const x0 = Math.min(lw + 14, w * 0.45), T = 8, B = 30, R = 64, bh = (hh - T - B) / tt.length, mx = Math.max(...tt.map(q => q[1]), 1e-9) * 1.05, X = v => x0 + (w - x0 - R) * v / mx;
+    // grid and axis with outward ticks, as in a journal figure
+    const raw = mx / 5, p = Math.pow(10, Math.floor(Math.log10(raw))), m = raw / p, st = (m <= 1 ? 1 : m <= 2 ? 2 : m <= 5 ? 5 : 10) * p;
+    c.textAlign = 'center'; for (let v = 0; v <= mx + 1e-9; v += st) { const x = X(v); c.strokeStyle = '#E4E7EB'; c.setLineDash([2, 3]); c.beginPath(); c.moveTo(x, T); c.lineTo(x, hh - B); c.stroke(); c.setLineDash([]); c.strokeStyle = '#222'; c.beginPath(); c.moveTo(x, hh - B); c.lineTo(x, hh - B + 4); c.stroke(); c.fillStyle = '#222'; c.fillText(v >= 100 ? v.toFixed(0) : (+v.toFixed(2)).toString(), x, hh - B + 16); }
+    c.fillText((u ? 'time (' + u + ')' : ''), x0 + (w - x0 - R) / 2, hh - 4);
+    const col = ['#1F5FA8', '#2E7D4F', '#B8860B', '#7A5AA8', '#404040'];
+    tt.forEach((q, i) => { const y = T + i * bh; c.fillStyle = '#111'; c.textAlign = 'right'; c.fillText(q[0], x0 - 7, y + bh / 2 + 4); const bw = Math.max(1, X(q[1]) - x0), k = col[i % col.length]; c.fillStyle = k + 'CC'; c.fillRect(x0, y + bh * 0.2, bw, bh * 0.6); c.strokeStyle = k; c.lineWidth = 1; c.strokeRect(x0 + 0.5, y + bh * 0.2 + 0.5, bw, bh * 0.6); c.fillStyle = '#111'; c.textAlign = 'left'; c.fillText((q[1] >= 100 ? q[1].toFixed(0) : q[1].toFixed(1)), x0 + bw + 5, y + bh / 2 + 4); });
+    c.strokeStyle = '#222'; c.lineWidth = 1.2; c.beginPath(); c.moveTo(x0, T); c.lineTo(x0, hh - B); c.lineTo(w - R + 20, hh - B); c.stroke();
   }
   function hydZ(D) {
     const a = document.getElementById('dch'), b = document.getElementById('dct'); if (!D.ht || !D.ht.length) { if (a) a.parentNode.innerHTML = '<div class="dnote">Not available for this design.</div>'; return; }
@@ -197,7 +205,7 @@ const Dash = (() => {
   function designCharts(id) {
     if (!runOn(id)) { setBody(SEC('ch-' + id, 'Design charts', 'waiting for a run', '<div class="dnote">The hydrograph, the advance and recession times, the depth along the field and where the water goes are drawn after <b>Run simulation</b>.</div>' + runBtns(id))); return; }
     const D = E.json("designCharts('" + id + "')"); if (!D) return;
-    let h = '<div class="dwrap"><div class="charts">';
+    cbN = 0; let h = '<div class="dwrap"><div class="charts">';
     if (id === 'sid') {
       h += '' + CB('dc1', 'Hydrograph: inflow, infiltration and runoff (' + D.unitQ + ')', '<canvas id="dc1"></canvas>') + '' +
         '' + CB('dc2', 'Advance, cut-off and recession along the field', '<canvas id="dc2"></canvas>') + '' +
@@ -241,7 +249,7 @@ const Dash = (() => {
     const D = E.json("layerSeries('" + id + "')"); if (!D || !D.charts) { setBody('<div class="dnote">Loading the seasons...</div>'); return; }
     const st = v => { const a = v.filter(q => q != null && isFinite(q)), n = a.length || 1, m = a.reduce((x, y) => x + y, 0) / n, s2 = a.sort((x, y) => x - y), p = f => s2[Math.min(n - 1, Math.max(0, Math.round(f * (n - 1))))], sd = Math.sqrt(a.reduce((x, y) => x + (y - m) * (y - m), 0) / n); return { m, p10: p(0.1), p90: p(0.9), cv: m ? sd / Math.abs(m) : 0, mn: s2[0], mx: s2[n - 1] }; };
     const f = v => (Math.abs(v) >= 100 ? Math.round(v) : Math.round(v * 10) / 10).toLocaleString('en-US');
-    let h = '<div class="dnote">One chart for each part of the layer: the twenty seasons on the calendar of the working date. Dashed lines: rainfed.</div><div class="charts">';
+    cbN = 0; let h = '<div class="dnote">One chart for each part of the layer: the twenty seasons on the calendar of the working date. Dashed lines: rainfed.</div><div class="charts">';
     D.charts.forEach((c, i) => { const a = c.ser[0] ? st(c.ser[0].v.slice()) : null; h += CB('sc' + i, UI.esc(c.t) + ' (' + UI.esc(c.u) + ')', '<canvas id="scv' + i + '"></canvas>' + (a ? '<div class="dnote">' + UI.esc(c.ser[0].n) + ': mean ' + f(a.m) + ' ' + UI.esc(c.u) + ', 10–90 % ' + f(a.p10) + ' to ' + f(a.p90) + ', lowest ' + f(a.mn) + ', highest ' + f(a.mx) + ', varies by ' + Math.round(a.cv * 100) + ' % from year to year.</div>' : '')); });
     setBody(h + '</div>');
     clearTimeout(chartTimer); chartTimer = setTimeout(() => D.charts.forEach((c, i) => { const cv = document.getElementById('scv' + i); if (cv && c.ser.length) lineChart(cv, c.ser.map(q => ({ v: q.v.map(x => x == null ? NaN : x), c: q.c, n: q.n, dash: q.dash })), { bars: true, cal0: D.years[0], yl: c.u, marks: D.sel != null ? [{ x: D.years[0] + D.sel, t: String(D.years[0] + D.sel), c: '#C00000' }] : null }); }), 30);

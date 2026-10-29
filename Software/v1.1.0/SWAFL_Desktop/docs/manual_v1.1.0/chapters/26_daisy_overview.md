@@ -4,22 +4,20 @@ The Daisy workbench is the part of SWAFL that runs the Daisy 7.1.14 model, draws
 
 | Group | Tab | What it is for |
 |:--|:--|:--|
-| 1 Your data | My data | Set the weather and the soil of the site once; every simulation uses them. |
-| 1 Your data | Weather stations | Look at the stations bundled with Daisy and bring one into the data. |
-| 1 Your data | Library | Read the horizons, crops, fertilisers and other entries of the Daisy library. |
-| 1 Your data | Files | Collect logs, weather and set-up files from Daisy runs. |
-| 2 Ask a question | Scenarios | Five ready questions about water, nitrogen, climate, a chemical and soil. |
-| 2 Ask a question | Experiments | Design your own set of runs from 53 factors, or start from 27 best combinations. |
-| 3 Look at results | Processes | A map of the model processes with the figures of each one. |
-| 3 Look at results | Plot | Draw any column of a log. |
-| 3 Look at results | Mass balance | Check that inputs, outputs and content agree. |
-| 3 Look at results | Compare and test | Compare two logs against the smallest meaningful level. |
-| 4 Decide in the SWAFL project | To the SWAFL project | Take the results to the layers of the SWAFL project that turn them into decisions. |
-| Tools: build and test | Set-up editor | Edit and run a Daisy set-up file. |
-| Tools: build and test | Soil column | Solve the Richards equation for a soil column. |
-| Tools: build and test | Process curves | Draw any function of the Daisy library. |
-| Tools: build and test | Calibrate | Search parameters with three optimisers. |
-| Tools: learn | Model and documentation | The model, the questions and where each is answered, the downloads. |
+| 1 Input data | Input data | Set the weather (online stations, a file, the stations bundled with Daisy) and the soil of the site once; every simulation uses them. |
+| 1 Input data | Parameter library | Read the horizons, crops, fertilisers and other entries of the Daisy library. |
+| 2 Experiments | Experiments | Design your own set of runs from 53 factors, or start from 27 best combinations. |
+| 2 Experiments | Scenarios | Five ready questions about water, nitrogen, climate, a chemical and soil. |
+| 3 Results and analysis | Process map | A map of the model processes with the figures of each one. |
+| 3 Results and analysis | Log plots | Load logs (or take the output of your runs) and draw any column of them. |
+| 3 Results and analysis | Mass balance | Check that inputs, outputs and content agree. |
+| 3 Results and analysis | Run comparison | Compare two logs against the smallest meaningful level. |
+| 4 Decision support | To the SWAFL layers | Take the results to the layers of the SWAFL project that turn them into decisions. |
+| Model development | Set-up editor | Edit and run a Daisy set-up file. |
+| Model development | Soil column | Solve the Richards equation for a soil column. |
+| Model development | Response curves | Draw any function of the Daisy library. |
+| Model development | Calibration | Search parameters with three optimisers. |
+| Documentation | Model and documentation | The model, the questions and where each is answered, the downloads. |
 
 The chapters that follow take the groups in this order. Every screen is shown with numbered arrows; the list under it says what each arrow points to.
 
