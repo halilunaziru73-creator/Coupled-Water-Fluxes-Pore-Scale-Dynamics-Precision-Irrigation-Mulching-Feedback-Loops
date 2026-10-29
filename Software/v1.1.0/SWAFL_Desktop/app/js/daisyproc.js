@@ -73,14 +73,14 @@
     L([[296, 70], [232, 70], [232, 120]]); L([[304, 70], [388, 70], [388, 120]]);
     // snow and intercepted water
     box('snow', 186, 122, 92, 26, 'Snowpack', BL); box('surf', 328, 122, 120, 26, 'Intercepted water', BL);
-    L([[205, 120], [205, 82]], 'out'); FX(178, 78, 'Evaporation', 'middle', 9, 'Snow melt and snow evaporation'); L([[418, 120], [418, 82]], 'out'); FX(440, 76, 'Evaporation', 'middle', 9, 'Evaporation from the canopy');
-    L([[232, 148], [232, 298]]); FX(190, 195, 'Percolation', 'middle', 9, 'Snow melt and snow evaporation'); L([[330, 135], [268, 135], [268, 298]]); FX(300, 168, 'Throughfall', 'middle', 9, 'Throughfall and drip'); L([[388, 148], [388, 262], [290, 262], [290, 298]]); FX(358, 222, 'Drip off', 'middle', 9, 'Canopy interception'); L([[216, 298], [216, 232]], 'out'); FX(168, 236, 'Evaporation', 'middle', 9, 'Evaporation from litter');
+    L([[205, 120], [205, 82]], 'out'); FX(199, 104, 'Evaporation', 'end', 9, 'Snow melt and snow evaporation'); L([[418, 120], [418, 72]], 'out'); FX(393, 67, 'Evaporation', 'start', 9, 'Evaporation from the canopy');
+    L([[232, 148], [232, 298]]); FX(228, 215, 'Percolation', 'end', 9, 'Snow melt and snow evaporation'); L([[330, 135], [268, 135], [268, 298]]); FX(272, 190, 'Throughfall', 'start', 9, 'Throughfall and drip'); L([[388, 148], [388, 262], [290, 262], [290, 298]]); FX(392, 215, 'Drip off', 'start', 9, 'Canopy interception'); L([[216, 298], [216, 232]], 'out'); FX(212, 258, 'Evaporation', 'end', 9, 'Evaporation from litter');
     // litter, pond and soil
-    box('surf', 198, 300, 98, 13, 'Litter water', LB, { sz: 8.5 }); box('surf', 170, 334, 84, 13, 'Ponded water', LB, { sz: 8.5 }); L([[186, 334], [186, 288]], 'out'); FX(142, 272, 'Evaporation', 'middle', 9, 'Evaporation from ponded water');
-    L([[225, 313], [225, 334]]); FX(282, 326, 'Percolation', 'end', 9, 'Throughfall and drip'); L([[170, 340], [132, 340]], 'out'); FX(116, 335, 'Runoff', 'middle', 9, 'Runoff'); L([[212, 347], [212, 368]]); FX(160, 361, 'Infiltration', 'middle', 9, 'Infiltration');
+    box('surf', 198, 300, 98, 13, 'Litter water', LB, { sz: 8.5 }); box('surf', 170, 334, 84, 13, 'Ponded water', LB, { sz: 8.5 }); L([[186, 334], [186, 288]], 'out'); FX(182, 306, 'Evaporation', 'end', 9, 'Evaporation from ponded water');
+    L([[225, 313], [225, 334]]); FX(282, 326, 'Percolation', 'end', 9, 'Throughfall and drip'); L([[170, 340], [132, 340]], 'out'); FX(128, 344, 'Runoff', 'end', 9, 'Runoff'); L([[212, 347], [212, 368]]); FX(208, 361, 'Infiltration', 'end', 9, 'Infiltration');
     box('water', 168, 368, 104, 260, '', 'url(#dzDot)', { rx: 2 }); T(220, 408, 'Soil water', 'middle', 10, '#111', 700); T(220, 421, '(Richards Eq.)', 'middle', 9.5); T(220, 446, 'Solute transport', 'middle', 10, '#111', 700); T(220, 459, '(Advection-dispersion Eq.)', 'middle', 8.5);
-    L([[262, 368], [262, 348]], 'out'); FX(273, 364, 'Soil Evaporation', 'end', 8, 'Soil evaporation');
-    box('pore', 284, 318, 5, 262, '', '#6fa0d0', { rx: 1 }); box('pore', 296, 318, 5, 262, '', '#6fa0d0', { rx: 1 }); FX(312, 351, 'Biopore flow', 'start', 9, 'Biopore flow');
+    L([[262, 368], [262, 348]], 'out'); 
+    box('pore', 284, 318, 5, 262, '', '#6fa0d0', { rx: 1 }); box('pore', 296, 318, 5, 262, '', '#6fa0d0', { rx: 1 }); FX(265, 365, 'Soil Evaporation', 'start', 8, 'Soil evaporation'); FX(312, 340, 'Biopore flow', 'start', 9, 'Biopore flow');
     o.push('<g class="dzPb" data-p="drain" style="cursor:pointer" tabindex="0" role="button" aria-label="Drain"><circle cx="268" cy="520" r="14" fill="' + BL + '" stroke="' + (sel('drain') ? '#d7191c' : '#555') + '" stroke-width="' + (sel('drain') ? 2.6 : 0.8) + '"/></g>'); T(268, 523, 'Drain', 'middle', 9.5, '#111', 600);
     L([[184, 642], [184, 628]]); FX(116, 606, 'Capillary rise', 'middle', 9, 'Percolation and capillary rise'); L([[250, 628], [250, 642]], 'out'); FX(238, 620, 'Percolation', 'end', 9, 'Percolation and capillary rise');
     // nitrogen
