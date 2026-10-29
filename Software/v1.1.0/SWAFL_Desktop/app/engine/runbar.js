@@ -38,7 +38,7 @@
   const pb = document.getElementById('playBtn');
   if (pb) pb.addEventListener('click', e => { const sc = currentScene; if (gated(sc) && sc.id !== 'dph' && !(RX[sc.id] && RX[sc.id].on)) { e.stopImmediatePropagation(); e.preventDefault(); run(sc.id); } }, true);
   // the one Run button: navy and bold while it runs the layer
-  { const st = document.createElement('style'); st.textContent = 'body.appmode #playBtn.runme{background:#0A246A !important;color:#fff !important;font-weight:bold !important;border:1px solid #05154a !important;padding:0 16px !important;height:26px !important;font-size:12px !important;line-height:24px !important}'; document.head.appendChild(st); setInterval(() => { const b = document.getElementById('playBtn'); if (b) b.classList.toggle('runme', b.textContent === 'Run simulation'); }, 250); }
+  { const st = document.createElement('style'); st.textContent = 'body.appmode #playBtn.runme{background:#0A246A !important;color:#fff !important;font-weight:bold !important;border:1px solid #05154a !important;padding:0 16px !important;height:26px !important;font-size:12px !important;line-height:24px !important}'; document.head.appendChild(st); setInterval(() => { const b = document.getElementById('playBtn'); if (b) { const isRun = b.textContent === 'Run simulation'; b.classList.toggle('runme', isRun); b.style.display = isRun && currentScene && DES.indexOf(currentScene.id) >= 0 ? 'none' : ''; } }, 250); }
   // opening a layer never starts it
   const oSwitch = switchScene;
   // a layer always opens at the top of its picture, whatever the position of the layer before it
