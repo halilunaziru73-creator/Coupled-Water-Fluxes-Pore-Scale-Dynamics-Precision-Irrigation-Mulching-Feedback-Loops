@@ -17,7 +17,7 @@ const Dash = (() => {
   // a block: header with a twist arrow (click to hide or show), and its content
   const SEC = (id, title, sub, inner) => '<div class="dsec' + (shut[id] ? ' shut' : '') + '" data-sec="' + id + '"><h4 data-tog="' + id + '"><b><span class="tw">' + (shut[id] ? '&#9654;' : '&#9660;') + '</span>' + title + '</b>' + (sub ? '<span>' + sub + '</span>' : '') + '</h4><div class="dsb"' + (shut[id] ? ' hidden' : '') + '>' + inner + '</div></div>';
 
-  let cbN = 0; const CB = (k, title, inner) => { const L = '(' + String.fromCharCode(97 + (cbN++ % 26)) + ') '; return SEC('ch-' + k, L + title, '', '<div class="chart">' + inner + '</div>'); };
+  let cbN = 0; const CB = (k, title, inner) => SEC('ch-' + k, title, '', '<div class="chart">' + inner + '</div>');
   let dayCache = { key: '', D: null }, layerCache = { key: '', L: null }, n1Chart = null, N1T = null, v7Chart = null;
   function results(s) {
     const key = s.date + '|' + JSON.stringify(s.state) + '|' + s.year + '|' + ((s.wx && s.wx.key) || '');
@@ -97,7 +97,9 @@ const Dash = (() => {
     spr: [['Ea', 'Application efficiency', 'pct'], ['Es', 'Storage efficiency', 'pct'], ['DU', 'Distribution uniformity DU', 'pct'], ['CU', 'Christiansen uniformity CU', 'pct'], ['dp', 'Deep percolation', 'pct'], ['ro', 'Runoff', 'pct'], ['gross', 'Gross application', 'num', 'mm'], ['I', 'Net application', 'num', 'mm'], ['T', 'Set time', 'num', 'min'], ['Q', 'Sprinkler discharge', 'num', 'L/min'], ['AR', 'Application rate', 'num', 'mm/h']]
   };
   // the layers that are not designs show their results only after Run simulation (the engine keeps that state: runbar.js)
-  const waiting = id => ['sid', 'drip', 'spr'].indexOf(id) >= 0 ? !runOn(id) : !E.ev("(window.layerRan&&layerRan('" + id + "'))?1:0");
+  const daisyOnly = id => id === 'chem' || id === 'dsum';
+  const daisyRan = () => !!E.ev("(window.DAISYLIVE&&DAISYLIVE.runs&&Object.keys(DAISYLIVE.runs).length)?1:0");
+  const waiting = id => daisyOnly(id) ? !daisyRan() : ['sid', 'drip', 'spr'].indexOf(id) >= 0 ? !runOn(id) : !E.ev("(window.layerRan&&layerRan('" + id + "'))?1:0");
   let ranSig = ''; setInterval(() => { try { const s = E.snap; if (!s || !Layers.started() || tab === 'messages') return; const g = s.scene + waiting(s.scene); if (g !== ranSig) { ranSig = g; lastHtml = ''; chartKey = ''; render(); } } catch (e) { } }, 500);
   const runOn = id => !!E.ev("(window.DESIGN_RUN&&DESIGN_RUN['" + id + "']&&DESIGN_RUN['" + id + "'].on)?1:0");
   const runBtns = id => '<div class="drun"><button class="btn prim" data-run="' + id + '">&#9654; Run simulation</button><button class="btn" data-best="' + id + '">Find the most efficient inputs</button></div>';
@@ -258,7 +260,7 @@ const Dash = (() => {
     const s = E.snap; if (s && DL[s.scene]) { designCharts(s.scene); return; }
     if (s && ['yby', 'wb2', 'nb', 'chem', 'dsum'].includes(s.scene)) { seasonCharts(s.scene); return; }
     if (!(document.getElementById('c1') && document.getElementById('c2') && body.querySelector('.charts')))   // the charts are redrawn in place: no flash
-      body.innerHTML = '<div class="dnote">The working season day by day (a, b) and the twenty seasons around the working date (c), from the daily simulation of the layer. Rain and irrigation are bars on an inverted axis; the shaded bands are the range of the twenty seasons.</div><div class="charts" style="grid-template-columns:1fr">' + CB('c1', 'Water of the working season, day by day', '<canvas id="c1" style="height:680px;width:100%"></canvas>') + CB('c2', 'The twenty seasons, year by year', '<canvas id="c2" style="height:340px;width:100%"></canvas>') + '</div>'; lastHtml = '';
+      body.innerHTML = '<div class="dnote">The working season day by day, the root-zone water, and the twenty seasons around the working date, from the daily simulation of the layer. Rain and irrigation are bars on an inverted axis; the shaded bands are the range of the twenty seasons.</div><div class="charts" style="grid-template-columns:1fr">' + CB('c1', 'Water of the working season, day by day', '<canvas id="c1" style="height:680px;width:100%"></canvas>') + CB('c2', 'The twenty seasons, year by year', '<canvas id="c2" style="height:340px;width:100%"></canvas>') + '</div>'; lastHtml = '';
     clearTimeout(chartTimer); chartTimer = setTimeout(() => {
       if (!document.getElementById('c1')) return; const Dd = E.seasonDaily && E.seasonDaily(); if (!Dd || !window.SciFig) return;
       const draw = () => { const c1 = document.getElementById('c1'), c2 = document.getElementById('c2'); if (c1) window.SciFig.daily(c1, Dd); if (c2) window.SciFig.yearly(c2, Dd); };
@@ -273,6 +275,7 @@ const Dash = (() => {
   function render() { render0(); try { if (window.SWOut && E.snap && Layers.started()) { if (tab === 'figure') return; if (tab !== 'messages') { SWOut.remember(body, E.snap.scene); SWOut.decorate(body); } } } catch (e) { console.warn(e); } }
   function render0() {
     const s = E.snap; if (!s) return;
+    if (tab !== 'messages' && Layers.started() && daisyOnly(s.scene) && waiting(s.scene)) { body.innerHTML = '<div class="dnote" style="padding:18px"><b>' + UI.esc(Layers.nameOf(s.scene)) + ': no Daisy run yet.</b><br>This layer shows the results of Daisy runs. It fills as soon as a question has been run in the Daisy model (Scenarios, then Run); nothing is estimated in its place.<div class="drun" style="margin-top:12px"><button class="btn prim" data-opendz="scen">Open the Daisy scenarios</button></div></div>'; lastHtml = ''; return; }
     if (tab !== 'messages' && Layers.started() && waiting(s.scene)) { body.innerHTML = '<div class="dnote" style="padding:18px"><b>' + UI.esc(Layers.nameOf(s.scene)) + ': nothing has been simulated yet.</b><br>The results, charts and tables of a layer are computed when you press Run simulation, with the settings of Properties. If you change a setting after a run, they wait for the next run.<div class="drun" style="margin-top:12px"><button class="btn prim" data-run2="' + s.scene + '">&#9654; Run simulation</button></div></div>'; lastHtml = ''; return; }
     if (tab !== 'messages' && !Layers.started()) { body.innerHTML = '<div class="dnote" style="padding:18px"><b>Nothing to show yet.</b><br>Click a layer in the Layers panel (top left). Its results appear here, and its picture in the simulation window.</div>'; lastHtml = ''; return; }
     if (tab === 'figure') { if (window.SWOut) SWOut.figure(body, s); } else if (tab === 'results') results(s); else if (tab === 'design') design(s); else if (tab === 'charts') { const k = s.scene + '|' + JSON.stringify(s.state) + '|' + (DL[s.scene] ? s.date : String(s.date || '').slice(0, 4)) + '|' + ((s.wx && s.wx.key) || '') + '|' + (DL[s.scene] ? runOn(s.scene) + E.ev('JSON.stringify(window.DESIGN_RUN)') + E.ev("JSON.stringify(typeof sidRun==='function'?[sidRun().Ea,drRun().Ea,spRun().Ea]:0)") : ''); if (k !== chartKey) { chartKey = k; charts(); } } else messages();
@@ -285,6 +288,7 @@ const Dash = (() => {
   });
   body.addEventListener('click', e => {
     const tg = e.target.closest('[data-tog]'); if (tg) { const id = tg.dataset.tog; shut[id] = !shut[id]; lastHtml = ''; const sec = tg.parentNode; sec.classList.toggle('shut', !!shut[id]); const b = sec.querySelector('.dsb'); if (b) b.hidden = !!shut[id]; const tw = tg.querySelector('.tw'); if (tw) tw.innerHTML = shut[id] ? '&#9654;' : '&#9660;'; if (!shut[id] && /^ch-/.test(id)) { chartKey = ''; render(); } return; }
+    const od = e.target.closest('[data-opendz]'); if (od) { try { DaisyUI.open(od.dataset.opendz); } catch (er) { UI.log('Daisy: ' + er.message); } return; }
     const r2 = e.target.closest('[data-run2]'); if (r2) { E.ev(['sid', 'drip', 'spr'].indexOf(r2.dataset.run2) >= 0 ? "runDesign('" + r2.dataset.run2 + "')" : r2.dataset.run2 === 'dph' ? "(window.__phRun?__phRun():0)" : "runLayer('" + r2.dataset.run2 + "')"); E.poll(true); UI.log('Run: ' + Layers.nameOf(r2.dataset.run2)); lastHtml = ''; chartKey = ''; setTimeout(render, 150); return; }
     const r = e.target.closest('[data-run]'); if (r) { E.ev("runDesign('" + r.dataset.run + "')"); E.poll(true); UI.log('Design run: ' + Layers.nameOf(r.dataset.run)); lastHtml = ''; chartKey = ''; setTimeout(render, 60); return; }
     const bb = e.target.closest('[data-best]'); if (bb) { const id = bb.dataset.best; UI.toast('Searching the inputs for the highest efficiency...'); setTimeout(() => { bestCache[id] = E.json("designBest('" + id + "')"); if (bestCache[id]) UI.log('Most efficient inputs (' + Layers.nameOf(id) + '): ' + bestCache[id].txt); lastHtml = ''; if (tab !== 'design') setTab('design'); else render(); }, 30); return; }

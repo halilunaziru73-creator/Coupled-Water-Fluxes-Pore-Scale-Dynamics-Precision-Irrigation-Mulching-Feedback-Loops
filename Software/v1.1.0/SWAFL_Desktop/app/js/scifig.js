@@ -37,7 +37,7 @@ window.SciFig = (() => {
     line(c, etS.map((_, i) => xs(i)), etS.map(Ya), '#8a8a8a', 1.6, [5, 3]);
     line(c, E.map((_, i) => xs(i)), E.map(Ya), '#00859B', 1.8, null, 9); line(c, T.map((_, i) => xs(i)), T.map(Ya), '#2E7D4F', 1.8, null, 9); line(c, ET.map((_, i) => xs(i)), ET.map(Ya), '#111', 1.1);
     line(c, cov.map((_, i) => xs(i)), cov.map(v => A1 - (A1 - A0) * 0.0 - (A1 - A0 - 6) * v), '#3a8a3a', 2, [2, 3]);
-    frame(c, X0, A0, X1, A1, '(a) ' + yr); axisR(c, X1, A0, A1, A0, topH, pMax, 'Rain and irrigation (mm per day)', 0, '#465f78', true);
+    frame(c, X0, A0, X1, A1, ''); axisR(c, X1, A0, A1, A0, topH, pMax, 'Rain, irrigation (mm/day)', 0, '#465f78', true);
     { c.font = '11px ' + FONT; c.textAlign = 'left'; c.textBaseline = 'middle'; [0, 0.5, 1].forEach(v => { const yy = A1 - (A1 - A0 - 6) * v; c.fillStyle = '#3a8a3a'; c.fillText(v.toFixed(1), X1 + 66, yy); }); c.save(); c.translate(X1 + 104, (A0 + A1) / 2 + 30); c.rotate(Math.PI / 2); c.textAlign = 'center'; c.font = 'bold 11px ' + FONT; c.fillStyle = '#3a8a3a'; c.fillText('Canopy cover (0 to 1)', 0, 0); c.restore(); }
     // (b)
     c.font = '11px ' + FONT; const wMax = 1.05, Yb = v => B1 - (B1 - B0) * v / wMax, dMax = Math.max(3, ...dr) * 1.1, topB = (B1 - B0) * 0.3;
@@ -47,7 +47,7 @@ window.SciFig = (() => {
     line(c, medS.map((_, i) => xs(i)), medS.map(Yb), '#6a8fc0', 1.5, [5, 3]); line(c, wf.map((_, i) => xs(i)), wf.map(Yb), '#1F5FA8', 1.9, null, 9);
     { const tr = 1 - (D.trig || 0.5); c.strokeStyle = '#C00000'; c.lineWidth = 1.3; c.setLineDash([6, 3]); c.beginPath(); c.moveTo(X0, Yb(tr)); c.lineTo(X1, Yb(tr)); c.stroke(); c.setLineDash([]); c.fillStyle = '#C00000'; c.font = '11px ' + FONT; c.textAlign = 'right'; c.textBaseline = 'bottom'; c.fillText('irrigation trigger', X1 - 6, Yb(tr) - 2); }
     irr.forEach((v, i) => { if (v <= 0) return; c.fillStyle = '#E08A1E'; c.beginPath(); c.moveTo(xs(i), B1 - 2); c.lineTo(xs(i) - 4, B1 - 10); c.lineTo(xs(i) + 4, B1 - 10); c.closePath(); c.fill(); });
-    frame(c, X0, B0, X1, B1, '(b)'); axisR(c, X1, B0, B1, B0, topB, dMax, 'Drainage (mm per day)', 0, '#5b3f86', true);
+    frame(c, X0, B0, X1, B1, ''); axisR(c, X1, B0, B1, B0, topB, dMax, 'Drainage (mm/day)', 0, '#5b3f86', true);
     legend(c, [['#1F5FA8', 'root-zone water in ' + yr, 'mk'], ['#6a8fc0', 'median of 20 seasons', 'dash'], ['rgb(100,150,210)', '10 to 90 % range', 'band'], ['#C00000', 'trigger', 'dash'], ['#7A5AA8', 'drainage (inverted)', 'bar'], ['#E08A1E', 'irrigation event', 'bar']], X0, B1 + 32, w);
     cv._csv = () => { const r = [['day', 'rain mm', 'irrigation mm', 'evaporation mm', 'transpiration mm', 'drainage mm', 'canopy cover', 'root-zone water share']]; for (let i = 0; i < n; i++) r.push([i + 1, rain[i], irr[i], E[i], T[i], dr[i], cov[i], wf[i]]); return r; };
   }
@@ -65,7 +65,7 @@ window.SciFig = (() => {
     [[R, col[0]], [ET, '#2E7D4F']].forEach(([A, cc]) => { c.strokeStyle = cc; c.lineWidth = 1.2; c.setLineDash([6, 4]); c.beginPath(); c.moveTo(X0, Y(mean(A))); c.lineTo(X1, Y(mean(A))); c.stroke(); c.setLineDash([]); });
     line(c, ET.map((_, k) => X0 + slot * (k + 0.5)), ET.map(Y), '#2E7D4F', 2.2, null, 1);
     c.fillStyle = '#333'; c.font = '11px ' + FONT; c.textAlign = 'center'; c.textBaseline = 'top'; for (let k = 0; k < ny; k += 2) c.fillText(String(D.cal0 + k), X0 + slot * (k + 0.5), Y1 + 5); c.font = 'bold 11px ' + FONT; c.fillText('year (the working season is shaded)', (X0 + X1) / 2, Y1 + 22);
-    frame(c, X0, Y0, X1, Y1, '(c)');
+    frame(c, X0, Y0, X1, Y1, '');
     cv._csv = () => [['year', 'rain mm', 'irrigation mm', 'drainage mm', 'evapotranspiration mm']].concat(R.map((v, k) => [D.cal0 + k, v.toFixed(1), I[k].toFixed(1), Dr[k].toFixed(1), ET[k].toFixed(1)]));
   }
   return { daily, yearly };
