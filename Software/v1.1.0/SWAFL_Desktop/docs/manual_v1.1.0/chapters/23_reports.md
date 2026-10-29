@@ -27,3 +27,15 @@ $$
 *Provenance (Eq. 23.1):* **[Engineered]**: page geometry; $W$ is the width of the drawing in pixels, so a wide drawing is cut into taller parts than a narrow one.
 
 and the first part fills the room left under the key numbers when it is at least 220 points.
+
+## Saving the outputs of a layer
+
+The bar *Output* above the simulation window works for every layer in the same way as the figures of the Daisy workbench.
+
+1. **Title and caption.** Write the title that the picture should carry (empty: the name of the layer) and a caption. Under the picture the program adds the settings it was made with (the soil, the tillage, the crop, the date) so that the picture can be understood alone.
+2. **Save picture.** Screen resolution, 300 dpi, 600 dpi or the highest resolution the computer allows. The layer is drawn again at that size, so lines and letters stay sharp; tall layers are limited by the memory of the computer, and the size in pixels is reported when the file is saved. *Copy the picture* puts it on the clipboard.
+3. **Numbers (CSV)** saves the settings and the live results of the layer. **Save widgets** keeps the position of every control in a small file, and **Load widgets** sets them again.
+4. **Every layer (zip)** draws all the layers at 300 dpi and saves them with their numbers in one zip.
+5. The triangle at the left of the bar collapses the picture and expands it again.
+
+Every section of the dashboard (Results and Charts) has a *Save* menu at the right of its header: its picture at 300 or 600 dpi, a copy of the picture, and the numbers of its tables and charts as a CSV file. The tab **Figure** of the dashboard shows the map of the processes of Daisy with the processes the controls of the layer act on in orange and those its results come from in blue. Click a process and the outputs that depend on it are highlighted in the list under the map; click an output and its processes are shown and the layer scrolls to it. The map can be enlarged and saved as a 300 dpi picture or as an SVG.
