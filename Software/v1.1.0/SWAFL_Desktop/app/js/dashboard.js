@@ -97,7 +97,7 @@ const Dash = (() => {
     spr: [['Ea', 'Application efficiency', 'pct'], ['Es', 'Storage efficiency', 'pct'], ['DU', 'Distribution uniformity DU', 'pct'], ['CU', 'Christiansen uniformity CU', 'pct'], ['dp', 'Deep percolation', 'pct'], ['ro', 'Runoff', 'pct'], ['gross', 'Gross application', 'num', 'mm'], ['I', 'Net application', 'num', 'mm'], ['T', 'Set time', 'num', 'min'], ['Q', 'Sprinkler discharge', 'num', 'L/min'], ['AR', 'Application rate', 'num', 'mm/h']]
   };
   // the layers that are not designs show their results only after Run simulation (the engine keeps that state: runbar.js)
-  const waiting = id => ['sid', 'drip', 'spr', 'dph'].indexOf(id) < 0 && !E.ev("(window.layerRan&&layerRan('" + id + "'))?1:0");
+  const waiting = id => ['sid', 'drip', 'spr'].indexOf(id) >= 0 ? !runOn(id) : !E.ev("(window.layerRan&&layerRan('" + id + "'))?1:0");
   let ranSig = ''; setInterval(() => { try { const s = E.snap; if (!s || !Layers.started() || tab === 'messages') return; const g = s.scene + waiting(s.scene); if (g !== ranSig) { ranSig = g; lastHtml = ''; chartKey = ''; render(); } } catch (e) { } }, 500);
   const runOn = id => !!E.ev("(window.DESIGN_RUN&&DESIGN_RUN['" + id + "']&&DESIGN_RUN['" + id + "'].on)?1:0");
   const runBtns = id => '<div class="drun"><button class="btn prim" data-run="' + id + '">&#9654; Run simulation</button><button class="btn" data-best="' + id + '">Find the most efficient inputs</button></div>';
@@ -259,7 +259,7 @@ const Dash = (() => {
   function render() { render0(); try { if (window.SWOut && E.snap && Layers.started()) { if (tab === 'figure') return; if (tab !== 'messages') { SWOut.remember(body, E.snap.scene); SWOut.decorate(body); } } } catch (e) { console.warn(e); } }
   function render0() {
     const s = E.snap; if (!s) return;
-    if (tab !== 'messages' && tab !== 'figure' && Layers.started() && waiting(s.scene)) { body.innerHTML = '<div class="dnote" style="padding:18px"><b>' + UI.esc(Layers.nameOf(s.scene)) + ': nothing has been simulated yet.</b><br>The results, charts and tables of a layer are computed when you press Run simulation, with the settings of Properties. If you change a setting after a run, they wait for the next run.<div class="drun" style="margin-top:12px"><button class="btn prim" data-run2="' + s.scene + '">&#9654; Run simulation</button></div></div>'; lastHtml = ''; return; }
+    if (tab !== 'messages' && Layers.started() && waiting(s.scene)) { body.innerHTML = '<div class="dnote" style="padding:18px"><b>' + UI.esc(Layers.nameOf(s.scene)) + ': nothing has been simulated yet.</b><br>The results, charts and tables of a layer are computed when you press Run simulation, with the settings of Properties. If you change a setting after a run, they wait for the next run.<div class="drun" style="margin-top:12px"><button class="btn prim" data-run2="' + s.scene + '">&#9654; Run simulation</button></div></div>'; lastHtml = ''; return; }
     if (tab !== 'messages' && !Layers.started()) { body.innerHTML = '<div class="dnote" style="padding:18px"><b>Nothing to show yet.</b><br>Click a layer in the Layers panel (top left). Its results appear here, and its picture in the simulation window.</div>'; lastHtml = ''; return; }
     if (tab === 'figure') { if (window.SWOut) SWOut.figure(body, s); } else if (tab === 'results') results(s); else if (tab === 'design') design(s); else if (tab === 'charts') { const k = s.scene + '|' + JSON.stringify(s.state) + '|' + (DL[s.scene] ? s.date : String(s.date || '').slice(0, 4)) + '|' + ((s.wx && s.wx.key) || '') + '|' + (DL[s.scene] ? runOn(s.scene) + E.ev('JSON.stringify(window.DESIGN_RUN)') + E.ev("JSON.stringify(typeof sidRun==='function'?[sidRun().Ea,drRun().Ea,spRun().Ea]:0)") : ''); if (k !== chartKey) { chartKey = k; charts(); } } else messages();
   }
@@ -270,7 +270,7 @@ const Dash = (() => {
   });
   body.addEventListener('click', e => {
     const tg = e.target.closest('[data-tog]'); if (tg) { const id = tg.dataset.tog; shut[id] = !shut[id]; lastHtml = ''; const sec = tg.parentNode; sec.classList.toggle('shut', !!shut[id]); const b = sec.querySelector('.dsb'); if (b) b.hidden = !!shut[id]; const tw = tg.querySelector('.tw'); if (tw) tw.innerHTML = shut[id] ? '&#9654;' : '&#9660;'; if (!shut[id] && /^ch-/.test(id)) { chartKey = ''; render(); } return; }
-    const r2 = e.target.closest('[data-run2]'); if (r2) { E.ev("runLayer('" + r2.dataset.run2 + "')"); E.poll(true); UI.log('Run: ' + Layers.nameOf(r2.dataset.run2)); lastHtml = ''; chartKey = ''; setTimeout(render, 150); return; }
+    const r2 = e.target.closest('[data-run2]'); if (r2) { E.ev(['sid', 'drip', 'spr'].indexOf(r2.dataset.run2) >= 0 ? "runDesign('" + r2.dataset.run2 + "')" : r2.dataset.run2 === 'dph' ? "(window.__phRun?__phRun():0)" : "runLayer('" + r2.dataset.run2 + "')"); E.poll(true); UI.log('Run: ' + Layers.nameOf(r2.dataset.run2)); lastHtml = ''; chartKey = ''; setTimeout(render, 150); return; }
     const r = e.target.closest('[data-run]'); if (r) { E.ev("runDesign('" + r.dataset.run + "')"); E.poll(true); UI.log('Design run: ' + Layers.nameOf(r.dataset.run)); lastHtml = ''; chartKey = ''; setTimeout(render, 60); return; }
     const bb = e.target.closest('[data-best]'); if (bb) { const id = bb.dataset.best; UI.toast('Searching the inputs for the highest efficiency...'); setTimeout(() => { bestCache[id] = E.json("designBest('" + id + "')"); if (bestCache[id]) UI.log('Most efficient inputs (' + Layers.nameOf(id) + '): ' + bestCache[id].txt); lastHtml = ''; if (tab !== 'design') setTab('design'); else render(); }, 30); return; }
     const ap = e.target.closest('[data-apply]'); if (ap) { E.ev("designApplyBest('" + ap.dataset.apply + "')"); E.poll(true); UI.log('Most efficient inputs applied and run'); lastHtml = ''; chartKey = ''; setTimeout(render, 80); return; }
@@ -317,5 +317,5 @@ const Dash = (() => {
     }
     return res;
   }
-  return { tab: setTab, pin, clearPin, render, offscreen, hasBaseline: () => !!baseline };
+  return { tab: setTab, pin, clearPin, render, offscreen, waiting, hasBaseline: () => !!baseline };
 })();

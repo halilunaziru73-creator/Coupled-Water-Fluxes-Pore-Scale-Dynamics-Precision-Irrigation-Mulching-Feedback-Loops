@@ -112,11 +112,13 @@ window.SWOut = (() => {
 
   // any element on the whole screen (the screen itself when the browser allows it, otherwise the whole window); Esc leaves
   function fs(el, after) {
-    if (el.classList.contains('swfs')) { el.classList.remove('swfs'); el.style.cssText = el._fs || ''; if (document.fullscreenElement) document.exitFullscreen().catch(() => { }); setTimeout(() => after && after(), 150); return; }
+    const leave = () => { el.classList.remove('swfs'); el.style.cssText = el._fs || ''; if (el._fsh) { document.removeEventListener('fullscreenchange', el._fsh); document.removeEventListener('keydown', el._fsk); el._fsh = el._fsk = null; } if (document.fullscreenElement === el) document.exitFullscreen().catch(() => { }); setTimeout(() => after && after(), 150); };
+    if (el.classList.contains('swfs')) { leave(); return; }
     el._fs = el.style.cssText; el.classList.add('swfs'); el.style.cssText += ';position:fixed;left:0;top:0;right:0;bottom:0;width:auto;height:auto;z-index:9000;overflow:auto;background:#fff;margin:0;box-sizing:border-box';
+    el._fsh = () => { if (!document.fullscreenElement && el.classList.contains('swfs')) leave(); }; el._fsk = e => { if (e.key === 'Escape' && el.classList.contains('swfs')) leave(); };
+    document.addEventListener('fullscreenchange', el._fsh); document.addEventListener('keydown', el._fsk);
     try { if (el.requestFullscreen) el.requestFullscreen().catch(() => { }); } catch (e) { }
-    const esc = e => { if (e.key === 'Escape' && el.classList.contains('swfs')) { fs(el, after); document.removeEventListener('keydown', esc); } }; document.addEventListener('keydown', esc);
-    el.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && el.classList.contains('swfs')) fs(el, after); }, { once: true }); setTimeout(() => after && after(), 150);
+    setTimeout(() => after && after(), 150);
   }
   // the own chain of processes of each layer, in the words of that layer: process id : what happens in this layer
   const FLOW = {
@@ -188,7 +190,7 @@ window.SWOut = (() => {
     const pn = p ? ((window.DaisyProc.byId(p) || {}).n || p) : '';
     box.innerHTML = '<div style="padding:6px;font-size:13px">Preparing the results...</div>';
     let list = []; try { list = await sectionsOf(); } catch (e) { console.warn(e); } if (!box.isConnected) return;
-    const ran = E.ev("(window.layerRan&&layerRan('" + scene + "'))?1:0") || ['sid', 'drip', 'spr', 'dph'].indexOf(scene) >= 0;
+    const ran = !Dash.waiting(scene);
     if (!list.length) { box.innerHTML = '<div style="padding:8px;font-size:13px;border:2px solid #0A246A;background:#fff"><b>' + (ran ? 'This layer has no result for this choice.' : 'Run the simulation first: the results appear here after the run.') + '</b></div>'; return; }
     const fb = (m[1].length ? m[1] : m[0])[0], mine = figOut ? list.filter(x => x.tab + ':' + x.id === figOut) : list.filter(x => procsOfTitle(x.title, [fb]).indexOf(p) >= 0);
     const col = p && window.DaisyProc.byId(p) ? window.DaisyProc.GC[window.DaisyProc.byId(p).g] : '#0A246A';
@@ -201,6 +203,7 @@ window.SWOut = (() => {
   let figOut = null, figScene = '';
   function figure(body, s) {
     const scene = s.scene, m = MAP[scene] || [[], ['bio', 'water', 'crop']], P = window.DaisyProc; if (!P || !P.svg) { body.innerHTML = '<div class="dnote">The process figure is loading.</div>'; return; }
+    if (Dash.waiting(scene)) { body.innerHTML = '<div class="dnote" style="padding:18px"><b>' + esc(layerName()) + ': nothing has been simulated yet.</b><br>The figure and its results appear after you press Run simulation.</div>'; figKey = ''; return; }
     if (figScene !== scene) { figScene = scene; figSel = null; figOut = null; figKey = ''; }
     const sn = E.snap, ck = sn.scene + '|' + JSON.stringify(sn.state) + '|' + sn.date, fb = m[1].length ? m[1] : m[0], lt = LT[scene] || ['', ''];
     const real = secCache.key === ck && secCache.list && secCache.list.length ? secCache.list : null;
@@ -224,7 +227,7 @@ window.SWOut = (() => {
     if (resBox) { if (figSel || figOut) fillRes(resBox, scene, figSel, m, body); else resBox.innerHTML = ''; }
     if (figSel && det && runsOf().length) P.detailInto(det, figSel, runsOf(), '');
     // the first time: the sections of every tab of the dashboard are drawn out of sight, then the figure shows all of them
-    if (!real && !secCache.busy && secTried !== ck) { secTried = ck; const ran = !E.ev("(window.layerRan&&layerRan('" + scene + "'))?1:0") ? false : true; if (ran || ['sid', 'drip', 'spr', 'dph'].indexOf(scene) >= 0) sectionsOf().then(() => { if (body.querySelector('.swfig') && E.snap && E.snap.scene === scene) { figKey = ''; figure(body, E.snap); } }).catch(() => { }); }
+    if (!real && !secCache.busy && secTried !== ck) { secTried = ck; const ran = !Dash.waiting(scene); if (ran) sectionsOf().then(() => { if (body.querySelector('.swfig') && E.snap && E.snap.scene === scene) { figKey = ''; figure(body, E.snap); } }).catch(() => { }); }
     const svgEl = () => body.querySelector('.swmap svg'), svgText = () => { const el = svgEl().cloneNode(true); el.setAttribute('xmlns', 'http://www.w3.org/2000/svg'); const vb = el.getAttribute('viewBox').split(/\s+/).map(Number); el.setAttribute('width', vb[2]); el.setAttribute('height', vb[3]); el.removeAttribute('style'); return new XMLSerializer().serializeToString(el); };
     body.querySelectorAll('[data-fg]').forEach(b => b.onclick = async () => { const a = b.dataset.fg;
       if (a === 'full') { fs(body.querySelector('.swfig')); return; }

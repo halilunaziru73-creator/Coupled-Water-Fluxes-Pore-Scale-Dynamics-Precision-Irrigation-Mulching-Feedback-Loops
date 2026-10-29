@@ -90,10 +90,13 @@ const UI = (() => {
       el.addEventListener('click', () => { if (!b.act || b.act() !== false) closeModal(); }); mf.appendChild(el);
     });
     r.querySelector('[data-x]').addEventListener('click', closeModal);
-    const mdl = r.querySelector('.modal'), fsm = r.querySelector('[data-fsm]'); let sv = '';
-    const fitM = () => { const on = mdl.classList.toggle('mfull'); if (on) { sv = mdl.style.cssText; mdl.style.cssText = 'width:100vw;max-width:100vw;height:100vh;max-height:100vh;margin:0;display:flex;flex-direction:column'; const mb = mdl.querySelector('.mb'); mb.style.cssText += ';flex:1;max-height:none;overflow:auto'; } else { mdl.style.cssText = sv; const mb = mdl.querySelector('.mb'); mb.style.flex = ''; mb.style.maxHeight = ''; } window.dispatchEvent(new Event('resize')); };
-    fsm.addEventListener('click', fitM); mdl.querySelector('.mh').addEventListener('dblclick', e => { if (!e.target.closest('.x')) fitM(); });
-    r.querySelector('.ov').addEventListener('mousedown', e => { if (e.target.classList.contains('ov')) closeModal(); });
+    const mdl = r.querySelector('.modal'), ov = r.querySelector('.ov'), fsm = r.querySelector('[data-fsm]'); let sv = mdl.style.cssText;
+    const setM = on => { const mb = mdl.querySelector('.mb'); mdl.classList.toggle('mfull', on); if (on) { mdl.style.cssText = 'width:100vw;max-width:100vw;height:100vh;max-height:100vh;margin:0;display:flex;flex-direction:column'; mb.style.cssText += ';flex:1;max-height:none;overflow:auto'; } else { mdl.style.cssText = sv; mb.style.flex = ''; mb.style.maxHeight = ''; } window.dispatchEvent(new Event('resize')); };
+    const onFs = () => { if (!document.fullscreenElement && mdl.classList.contains('mfull') && mdl._real) { mdl._real = false; setM(false); document.removeEventListener('fullscreenchange', onFs); } };
+    const toggle = () => { const on = !mdl.classList.contains('mfull'); setM(on); if (on) { mdl._real = true; document.addEventListener('fullscreenchange', onFs); try { if (ov.requestFullscreen) ov.requestFullscreen().catch(() => { mdl._real = false; }); } catch (e) { mdl._real = false; } } else { mdl._real = false; document.removeEventListener('fullscreenchange', onFs); if (document.fullscreenElement) document.exitFullscreen().catch(() => { }); } };
+    fsm.addEventListener('click', toggle); mdl.querySelector('.mh').addEventListener('dblclick', e => { if (!e.target.closest('.x')) toggle(); });
+    mdl.querySelector('[data-x]').addEventListener('click', () => { if (document.fullscreenElement) document.exitFullscreen().catch(() => { }); });
+    if (o.full) setM(true);
     r.querySelectorAll('a[data-url]').forEach(a => a.addEventListener('click', () => openExternal(a.dataset.url)));
     return r;
   }

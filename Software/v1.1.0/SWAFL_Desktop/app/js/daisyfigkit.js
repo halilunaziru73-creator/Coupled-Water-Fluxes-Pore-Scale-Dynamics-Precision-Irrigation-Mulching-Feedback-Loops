@@ -87,12 +87,13 @@ window.DaisyFigKit = (() => {
   };
   // a figure on the whole screen: the screen itself when the browser allows it, otherwise the whole window; the figure is drawn again at the new size
   K.fullscreen = function (card, o) {
-    const on = card.classList.contains('dzfs'), done = () => { setTimeout(() => { try { o && o.redraw && o.redraw(); card.querySelectorAll('canvas').length || 0; } catch (e) { } }, 120); };
-    if (on) { card.classList.remove('dzfs'); card.style.cssText = card._fsStyle || ''; if (document.fullscreenElement) document.exitFullscreen().catch(() => { }); done(); return; }
+    const redo = () => setTimeout(() => { try { o && o.redraw && o.redraw(); } catch (e) { } }, 200);
+    const leave = () => { card.classList.remove('dzfs'); card.style.cssText = card._fsStyle || ''; if (card._fsh) { document.removeEventListener('fullscreenchange', card._fsh); document.removeEventListener('keydown', card._fsk); card._fsh = card._fsk = null; } if (document.fullscreenElement === card) document.exitFullscreen().catch(() => { }); redo(); };
+    if (card.classList.contains('dzfs')) { leave(); return; }
     card._fsStyle = card.style.cssText; card.classList.add('dzfs'); card.style.cssText += ';position:fixed;left:0;top:0;right:0;bottom:0;z-index:9000;overflow:auto;background:#fff;margin:0;padding:12px;box-sizing:border-box';
-    try { if (card.requestFullscreen) card.requestFullscreen().catch(() => { }); } catch (e) { } done();
-    const esc = e => { if (e.key === 'Escape' && card.classList.contains('dzfs')) { K.fullscreen(card, o); document.removeEventListener('keydown', esc); } }; document.addEventListener('keydown', esc);
-    card.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && card.classList.contains('dzfs')) K.fullscreen(card, o); }, { once: true });
+    card._fsh = () => { if (!document.fullscreenElement && card.classList.contains('dzfs')) leave(); }; card._fsk = e => { if (e.key === 'Escape' && card.classList.contains('dzfs')) leave(); };
+    document.addEventListener('fullscreenchange', card._fsh); document.addEventListener('keydown', card._fsk);
+    try { if (card.requestFullscreen) card.requestFullscreen().catch(() => { }); } catch (e) { } redo();
   };
   // a bar for the whole result: collapse all, expand all, every picture in one zip
   K.bar = function (host, o) {

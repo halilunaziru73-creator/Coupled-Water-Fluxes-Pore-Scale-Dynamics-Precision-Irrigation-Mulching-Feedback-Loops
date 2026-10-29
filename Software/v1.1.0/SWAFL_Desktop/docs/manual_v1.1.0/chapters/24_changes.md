@@ -98,3 +98,5 @@
 - The full screen button now uses the usual full screen sign (four corners) everywhere: popups, Daisy figures, the layer picture, the sections of the dashboard and the Figure tab.
 - Pictures are drawn at twice the screen resolution at least (the charts of the dashboard, the figures of Daisy and the picture of the layer), and the pictures of the Figure tab at three times.
 - The figure of a layer now carries every result of the dashboard (Results, Design and Charts) as a box above the process it comes from, with bold colours. A click on a result shows only that result, a click on a process shows the results of that process. The long lists and notes of the earlier Figure tab were removed.
+- Every layer, the phenotyping layer and the three irrigation designs included, shows nothing in the Results, Design, Charts and Figure tabs until Run simulation is pressed. Each tab says so and offers a Run simulation button.
+- The Daisy window opens over the whole window. Full screen of a figure or a window now comes back with Esc.
