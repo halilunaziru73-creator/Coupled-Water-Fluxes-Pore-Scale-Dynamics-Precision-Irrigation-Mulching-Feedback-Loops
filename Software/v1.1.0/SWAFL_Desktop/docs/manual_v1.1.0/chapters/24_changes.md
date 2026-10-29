@@ -102,3 +102,4 @@
 - The Daisy window opens over the whole window. Full screen of a figure or a window now comes back with Esc.
 - In full screen the Daisy window enlarges its text to fit the screen and fills the height of the screen. The buttons A- and A+ in its title bar make the text smaller or larger.
 - Deterministic phenotyping: in the panel Roots from the plant above ground, when the twelve genotypes give the same value of a shoot trait the fitted line used to turn vertical and run across the dashboard. The line is now cut at the frame of its chart, becomes flat when the values are equal, and the red diamond of your plant stays inside the chart.
+- The picture of a layer, deterministic phenotyping included, now grows to fill the whole width of its window, left and right, instead of staying in a narrow column. The process buttons of a dashboard section sit on their own line under its title.
