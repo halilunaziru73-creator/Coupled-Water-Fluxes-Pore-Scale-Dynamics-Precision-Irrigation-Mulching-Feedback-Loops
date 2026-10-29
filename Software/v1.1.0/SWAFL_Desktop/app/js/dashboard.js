@@ -263,7 +263,8 @@ const Dash = (() => {
     if (tab !== 'messages' && !Layers.started()) { body.innerHTML = '<div class="dnote" style="padding:18px"><b>Nothing to show yet.</b><br>Click a layer in the Layers panel (top left). Its results appear here, and its picture in the simulation window.</div>'; lastHtml = ''; return; }
     if (tab === 'figure') { if (window.SWOut) SWOut.figure(body, s); } else if (tab === 'results') results(s); else if (tab === 'design') design(s); else if (tab === 'charts') { const k = s.scene + '|' + JSON.stringify(s.state) + '|' + (DL[s.scene] ? s.date : String(s.date || '').slice(0, 4)) + '|' + ((s.wx && s.wx.key) || '') + '|' + (DL[s.scene] ? runOn(s.scene) + E.ev('JSON.stringify(window.DESIGN_RUN)') + E.ev("JSON.stringify(typeof sidRun==='function'?[sidRun().Ea,drRun().Ea,spRun().Ea]:0)") : ''); if (k !== chartKey) { chartKey = k; charts(); } } else messages();
   }
-  function setTab(t) { tab = t; lastHtml = ''; chartKey = ''; tabs.querySelectorAll('button[data-tab]').forEach(b => b.classList.toggle('on', b.dataset.tab === t)); render(); }
+  let autoWide = false;
+  function setTab(t) { const dk = document.getElementById('dashDock'), mb = tabs.querySelector('[data-act=maxDash]'); if (dk) { if (t === 'figure' && !dk.classList.contains('max')) { dk.style.width = ''; dk.classList.add('max'); autoWide = true; if (mb) mb.textContent = 'Smaller'; } else if (t !== 'figure' && autoWide) { dk.classList.remove('max'); autoWide = false; if (mb) mb.textContent = 'Wider'; } } tab = t; lastHtml = ''; chartKey = ''; tabs.querySelectorAll('button[data-tab]').forEach(b => b.classList.toggle('on', b.dataset.tab === t)); render(); }
   tabs.addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return;
     if (b.dataset.tab) setTab(b.dataset.tab); else if (b.dataset.act === 'pinBaseline') pin(); else if (b.dataset.act === 'clearBaseline') clearPin();

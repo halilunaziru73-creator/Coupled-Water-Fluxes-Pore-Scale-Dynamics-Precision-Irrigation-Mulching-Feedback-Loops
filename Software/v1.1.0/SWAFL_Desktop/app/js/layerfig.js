@@ -62,7 +62,7 @@ const LayerFig = (() => {
     const lg = [['solid', 'Flow of water, matter, information', 0], ['dot', 'Information between modules', 1], ['red', 'Feedback', 2], ['box', 'Control of this layer', 3]];
     lg.forEach((l, i) => { const lx = 50 + i * 280; d += l[0] === 'solid' ? '<path d="M' + lx + ' ' + (ly + 23) + 'l40 0" stroke="#222" stroke-width="2" marker-end="url(#' + id + 'A)"/>' : l[0] === 'dot' ? '<path d="M' + lx + ' ' + (ly + 23) + 'l40 0" stroke="#222" stroke-width="1.6" stroke-dasharray="2 4"/>' : l[0] === 'red' ? '<path d="M' + lx + ' ' + (ly + 23) + 'l40 0" stroke="#c0392b" stroke-width="1.8" stroke-dasharray="7 4"/>' : '<rect x="' + lx + '" y="' + (ly + 14) + '" width="40" height="18" rx="4" fill="#fff" stroke="#7B52AB" stroke-width="1.5" stroke-dasharray="5 3"/>'; d += text(lx + 50, ly + 23, [l[1]], { a: 'start', fs: 11 }); });
     d += [['water', 'water'], ['soil', 'soil state'], ['crop', 'crop'], ['info', 'process or information'], ['out', 'output']].map((c, i) => '<rect x="' + (50 + i * 150) + '" y="' + (ly + 34) + '" width="12" height="8" fill="' + FILL[c[0]] + '" stroke="#222" stroke-width=".8"/>' + text(66 + i * 150, ly + 38, [c[1]], { a: 'start', fs: 9.5 })).join('');
-    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;min-width:1000px;height:auto;max-width:1400px;background:#fff;display:block">' + d + '</svg>';
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;height:auto;background:#fff;display:block">' + d + '</svg>';
   }
   return { svg };
 })();

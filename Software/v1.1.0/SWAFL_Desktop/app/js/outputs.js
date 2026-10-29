@@ -186,7 +186,7 @@ window.SWOut = (() => {
     const sn = E.snap, key = sn.scene + '|' + JSON.stringify(sn.state) + '|' + sn.date; if (secCache.key === key && secCache.list) return secCache.list; if (secCache.busy && secCache.busyKey === key) return secCache.busy;
     secCache.busyKey = key; secQ = secQ.catch(() => { }).then(() => { const n2 = E.snap; if (!n2 || n2.scene + '|' + JSON.stringify(n2.state) + '|' + n2.date !== key) return null; return Dash.offscreen(); }); secCache.busy = secQ.then(l => { secCache = { key: l ? key : '', list: l || null, busy: null }; return l || []; }); return secCache.busy;
   }
-  async function fillRes(box, scene, p, m, host) {
+  async function fillRes(box, scene, p, m, host, inModal) {
     const pn = p ? ((window.DaisyProc.byId(p) || {}).n || p) : '';
     box.innerHTML = '<div style="padding:6px;font-size:13px">Preparing the results...</div>';
     let list = []; try { list = await sectionsOf(); } catch (e) { console.warn(e); } if (!box.isConnected) return;
@@ -194,13 +194,13 @@ window.SWOut = (() => {
     if (!list.length) { box.innerHTML = '<div style="padding:8px;font-size:13px;border:2px solid #0A246A;background:#fff"><b>' + (ran ? 'This layer has no result for this choice.' : 'Run the simulation first: the results appear here after the run.') + '</b></div>'; return; }
     const fb = (m[1].length ? m[1] : m[0])[0], mine = figOut ? list.filter(x => x.tab + ':' + x.id === figOut) : list.filter(x => procsOfTitle(x.title, [fb]).indexOf(p) >= 0);
     const col = p && window.DaisyProc.byId(p) ? window.DaisyProc.GC[window.DaisyProc.byId(p).g] : '#0A246A';
-    box.innerHTML = '<div style="border:2px solid ' + col + ';background:#fff;padding:8px"><div class="dzrow" style="margin-bottom:6px"><b style="font-size:14px;color:' + col + '">' + (figOut && mine[0] ? esc(mine[0].title) : esc(pn)) + '</b><span style="flex:1"></span><button class="mini" data-clr>Show all</button></div><div data-rs></div></div>';
+    box.innerHTML = '<div style="border:2px solid ' + col + ';background:#fff;padding:8px"><div class="dzrow" style="margin-bottom:6px"><b style="font-size:14px;color:' + col + '">' + (figOut && mine[0] ? esc(mine[0].title) : esc(pn)) + '</b><span style="flex:1"></span>' + (inModal ? '' : '<button class="mini" data-clr>Show all</button>') + '</div><div data-rs></div></div>';
     const rs = box.querySelector('[data-rs]'); mine.forEach(x => { const c = x.el.cloneNode(true); c.classList.remove('shut'); const b = c.querySelector('.dsb'); if (b) b.hidden = false; rs.appendChild(c); });
-    if (!mine.length) rs.innerHTML = '<div style="font-size:13px">No result of this layer belongs to this process. Click another process.</div>';
-    box.querySelector('[data-clr]').onclick = () => { figSel = null; figOut = null; figKey = ''; figure(host, E.snap); };
+    if (!mine.length) rs.innerHTML = '<div style="font-size:13px">This layer has no result of its own for this process. What Daisy does in it is described below.</div>';
+    if (box.querySelector('[data-clr]')) box.querySelector('[data-clr]').onclick = () => { figSel = null; figOut = null; figKey = ''; if (inModal) UI.closeModal && UI.closeModal(); else document.getElementById('modalRoot').innerHTML = ''; figure(host, E.snap); };
   }
   const FSI = '<svg viewBox="0 0 16 16" width="14" height="14" style="vertical-align:-2px"><path d="M1.5 5.5v-4h4M10.5 1.5h4v4M14.5 10.5v4h-4M5.5 14.5h-4v-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>';
-  let figOut = null, figScene = '';
+  let figOut = null, figScene = '', figOpen = false;
   function figure(body, s) {
     const scene = s.scene, m = MAP[scene] || [[], ['bio', 'water', 'crop']], P = window.DaisyProc; if (!P || !P.svg) { body.innerHTML = '<div class="dnote">The process figure is loading.</div>'; return; }
     if (Dash.waiting(scene)) { body.innerHTML = '<div class="dnote" style="padding:18px"><b>' + esc(layerName()) + ': nothing has been simulated yet.</b><br>The figure and its results appear after you press Run simulation.</div>'; figKey = ''; return; }
@@ -212,20 +212,25 @@ window.SWOut = (() => {
     let outs;
     if (real) outs = real.map(x => { const ps = procsOfTitle(x.title, fb.slice(0, 1)); return { t: x.title, id: x.tab + ':' + x.id, p: ps[0], ps, j: assign(ps) }; });
     else outs = lt[1].split(/,\s*/).filter(Boolean).slice(0, 5).map(t => { const ps = procsOfTitle(t, fb); return { t: t.charAt(0).toUpperCase() + t.slice(1), id: null, p: ps[0], ps, j: assign(ps) }; });
+    { const n = Math.max(1, flow.length), cap = Math.ceil(outs.length / n) + 1, cnt = new Array(n).fill(0);   // spread the results over the processes: no column gets all of them
+      outs.forEach(q => { let j = q.j < 0 ? Math.min(outs.indexOf(q), n - 1) : q.j; if (cnt[j] >= cap) { let best = -1, bd = 99; cnt.forEach((c, k) => { if (c < cap && Math.abs(k - j) < bd) { bd = Math.abs(k - j); best = k; } }); if (best >= 0) j = best; } q.j = j; cnt[j]++; }); }
     const key = scene + '|' + figSel + '|' + figOut + '|' + outs.map(o => o.t).join('|') + '|' + (real ? 1 : 0); if (key === figKey && body.querySelector('.swfig')) return; figKey = key;
     const F = {}, R = {}; m[0].forEach(p => { F[p] = ['controls']; }); m[1].forEach(p => { R[p] = ['results']; }); const emph = Array.from(new Set(m[0].concat(m[1])));
     const q = (STATE[scene] || 'Soil|').split('|');
     body.innerHTML = '<div class="swfig" style="background:#fff;padding:4px">' +
       '<div class="dzrow" style="gap:6px;margin:2px 0 6px"><b style="font-size:14px">' + esc(layerName()) + '</b><span style="flex:1"></span><button class="mini" data-fg="full" title="Full screen (Esc to go back)">' + FSI + ' Full screen</button><button class="mini" data-fg="png" title="Save the figure as a picture, 300 dpi">Save picture</button><button class="mini" data-fg="svg" title="Save the figure as a vector drawing">Save drawing (SVG)</button></div>' +
-      '<div style="font-size:13px;margin:0 0 6px">Click a <b>process</b> or a <b>result</b> in the figure: only its results are shown below.</div>' +
-      '<div class="swmap" data-own style="overflow-x:auto;border:1px solid #bbb">' + LayerFig.svg({ id: scene, name: layerName(), nameOf: p => (P.byId(p) || {}).n || p, drivers: { title: 'Driving variables', items: DRV[scene] || ['rain P', 'irrigation I', 'reference ET0'] }, state: { title: q[0], lines: (q[1] || '').split(';').filter(Boolean) }, steps: flow.map(x => ({ p: x.p, t: x.t })), outputs: outs, controls: lt[0].split(/,\s*/).filter(Boolean).slice(0, 5).map((t, i) => ({ t: t.charAt(0).toUpperCase() + t.slice(1), i })), fb: FB[scene] || '', sel: figSel || null, selOut: figOut }) + '</div>' +
+      '<div style="font-size:13px;margin:0 0 6px">Click a <b>process</b> or a <b>result</b> in the figure: its results open in a window.</div>' +
+      '<div class="swmap" data-own style="border:1px solid #bbb">' + LayerFig.svg({ id: scene, name: layerName(), nameOf: p => (P.byId(p) || {}).n || p, drivers: { title: 'Driving variables', items: DRV[scene] || ['rain P', 'irrigation I', 'reference ET0'] }, state: { title: q[0], lines: (q[1] || '').split(';').filter(Boolean) }, steps: flow.map(x => ({ p: x.p, t: x.t })), outputs: outs, controls: lt[0].split(/,\s*/).filter(Boolean).slice(0, 5).map((t, i) => ({ t: t.charAt(0).toUpperCase() + t.slice(1), i })), fb: FB[scene] || '', sel: figSel || null, selOut: figOut }) + '</div>' +
       '<div data-res style="margin-top:10px"></div>' +
       '<details style="margin-top:10px"><summary><b>Show the same processes on the map of the Daisy model</b></summary><div class="swmap">' + P.svg({ marks: { F, R, factors: m[0].map(id => ({ id })), resp: m[1] }, names: { controls: 'controls', results: 'results' }, labels: { f: 'Controls of ' + layerName(), r: 'Results of ' + layerName() }, emph, sel: figSel || null }) + '</div></details>' +
       '<div data-pdet style="margin-top:8px"></div></div>';
     const resBox = body.querySelector('[data-res]'), det = body.querySelector('[data-pdet]');
     const runsOf = () => { const r = []; try { (window.DaisyScenUI ? DaisyScenUI.runs() : []).forEach(x => r.push({ label: 'Scenario: ' + (x.label || x.id), logs: x.logs })); (window.DaisyExpUI ? DaisyExpUI.runs() : []).forEach(x => r.push({ label: 'Experiment: ' + x.id + ' ' + (x.label || ''), logs: x.logs })); } catch (e) { } return r; };
-    if (resBox) { if (figSel || figOut) fillRes(resBox, scene, figSel, m, body); else resBox.innerHTML = ''; }
-    if (figSel && det && runsOf().length) P.detailInto(det, figSel, runsOf(), '');
+    if (resBox) resBox.innerHTML = '';
+    if ((figSel || figOut) && figOpen) { figOpen = false; const nm = figOut ? ((outs.find(x => x.id === figOut) || {}).t || 'Result') : ((P.byId(figSel) || {}).n || 'Process');
+      UI.modal({ title: layerName() + ': ' + nm, width: 'min(1100px,96vw)', html: '<div data-wres style="max-height:78vh;overflow:auto"></div>', buttons: [{ label: 'Close', pri: true }] });
+      const wr = document.querySelector('[data-wres]'); const rb = document.createElement('div'); wr.appendChild(rb); const db = document.createElement('div'); wr.appendChild(db);
+      fillRes(rb, scene, figSel, m, body, true); if (figSel) P.detailInto(db, figSel, runsOf(), ''); }
     // the first time: the sections of every tab of the dashboard are drawn out of sight, then the figure shows all of them
     if (!real && !secCache.busy && secTried !== ck) { secTried = ck; const ran = !Dash.waiting(scene); if (ran) sectionsOf().then(() => { if (body.querySelector('.swfig') && E.snap && E.snap.scene === scene) { figKey = ''; figure(body, E.snap); } }).catch(() => { }); }
     const svgEl = () => body.querySelector('.swmap svg'), svgText = () => { const el = svgEl().cloneNode(true); el.setAttribute('xmlns', 'http://www.w3.org/2000/svg'); const vb = el.getAttribute('viewBox').split(/\s+/).map(Number); el.setAttribute('width', vb[2]); el.setAttribute('height', vb[3]); el.removeAttribute('style'); return new XMLSerializer().serializeToString(el); };
@@ -233,7 +238,7 @@ window.SWOut = (() => {
       if (a === 'full') { fs(body.querySelector('.swfig')); return; }
       if (a === 'svg') { dl(new Blob([svgText()], { type: 'image/svg+xml' }), 'SWAFL_' + sane(scene) + '_process-figure.svg'); return; }
       const vb = svgEl().getAttribute('viewBox').split(/\s+/).map(Number), k = 3.125 * 1.2, img = new Image(); img.onload = () => { const c = document.createElement('canvas'); c.width = Math.round(vb[2] * k); c.height = Math.round(vb[3] * k); const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0, c.width, c.height); c.toBlob(bl => dl(bl, 'SWAFL_' + sane(scene) + '_process-figure_300dpi.png'), 'image/png'); }; img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgText()); });
-    body.querySelectorAll('.dzPb[data-p]').forEach(g => { g.onclick = () => { const o = g.dataset.o || null; if (o) { figOut = figOut === o ? null : o; figSel = figOut ? g.dataset.p : null; } else { figSel = figSel === g.dataset.p && !figOut ? null : g.dataset.p; figOut = null; } figKey = ''; figure(body, s); }; });
+    body.querySelectorAll('.dzPb[data-p]').forEach(g => { g.onclick = () => { const o = g.dataset.o || null; if (o) { figOut = figOut === o ? null : o; figSel = figOut ? g.dataset.p : null; } else { figSel = figSel === g.dataset.p && !figOut ? null : g.dataset.p; figOut = null; } figKey = ''; figOpen = !!(figSel || figOut); figure(body, s); }; });
   }
   O.bar = bar; O.decorate = decorate; O.remember = remember; O.figure = figure; O.savePicture = savePicture; O.allLayers = allLayers; O.enginePicture = enginePicture;
   setInterval(() => { try { bar(); } catch (e) { } }, 700);
