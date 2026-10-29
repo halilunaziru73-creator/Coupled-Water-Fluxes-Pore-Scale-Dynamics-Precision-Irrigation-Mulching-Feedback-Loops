@@ -94,3 +94,4 @@
 - Every popup window, the Daisy window included, has a full screen button in its title bar (a double click on the title bar does the same).
 - The Figure tab of each layer now starts with the own figure of that layer, drawn like the figures of the manuscripts: the driving variables, the outputs above the soil surface line, the chain of processes of the layer, the state of the soil, and the controls below, with a legend. The map of the Daisy model follows it, folded.
 - A click on a process, or on an output, in that figure shows only the results of the layer that belong to that process, taken from the Results, Design and Charts tabs, and hides the rest. The button Show all processes brings them back.
+- The results, charts and tables of a layer are shown only after Run simulation, as the picture is. Before the run the Results and Charts tabs say so and offer a Run simulation button; after a change of a setting they wait for the next run.

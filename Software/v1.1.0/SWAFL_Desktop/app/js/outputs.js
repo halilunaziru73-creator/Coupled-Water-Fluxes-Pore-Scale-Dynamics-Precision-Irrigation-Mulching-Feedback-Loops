@@ -187,6 +187,7 @@ window.SWOut = (() => {
   async function fillRes(box, scene, p, m, host) {
     const pn = (window.DaisyProc.byId(p) || {}).n || p; box.innerHTML = '<div class="pnote">Preparing the results of ' + esc(pn) + '...</div>';
     let list = []; try { list = await sectionsOf(); } catch (e) { console.warn(e); } if (!box.isConnected || figSel !== p) return;
+    if (!list.length && !E.ev("(window.layerRan&&layerRan('" + scene + "'))?1:0") && ['sid','drip','spr','dph'].indexOf(scene) < 0) { box.innerHTML = '<div class="pnote" style="padding:4px 0">This layer has not been run yet. Press Run simulation (in the picture, or in the Results tab): the results of ' + esc(pn) + ' appear here after the run.</div>'; return; }
     const fb = (m[1].length ? m[1] : m[0])[0], mine = list.filter(x => procsOfTitle(x.title, [fb]).indexOf(p) >= 0);
     box.innerHTML = '<div style="border:1px solid #808080;background:#fff;padding:6px"><div class="dzrow"><b style="color:' + window.DaisyProc.GC[(window.DaisyProc.byId(p) || {}).g] + '">Results of this layer that belong to: ' + esc(pn) + '</b><span class="pnote">' + mine.length + ' of ' + list.length + ' outputs; the others are hidden</span><span style="flex:1"></span><button class="mini" data-clr>Show all processes</button></div><div data-rs></div></div>';
     const rs = box.querySelector('[data-rs]'); mine.forEach(x => { x.el.classList.remove('shut'); const b = x.el.querySelector('.dsb'); if (b) b.hidden = false; rs.appendChild(x.el.cloneNode(true)); });
