@@ -11,6 +11,7 @@
     "web": "node serve.js",
     "dist": "electron-builder --win portable nsis",
     "dist:dir": "electron-builder --dir",
+    "dist:mac": "electron-builder --mac dmg",
     "get-app": "node get-app.js",
     "get_app": "node get-app.js",
     "getapp": "node get-app.js"

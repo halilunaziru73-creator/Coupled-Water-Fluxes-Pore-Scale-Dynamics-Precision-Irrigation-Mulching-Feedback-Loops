@@ -18,7 +18,7 @@ SWAFL Desktop is a self-contained Electron program. The simulation engine is one
 3. Double-click **`BUILD_AND_INSTALL_SWAFL.bat`**. It installs the packages, builds the program and puts **SWAFL** on the Desktop. The first build downloads Electron and takes a few minutes.
 4. Start **SWAFL** from the Desktop. The title bar reads *SWAFL 1.1.0*. If Windows SmartScreen shows "Windows protected your PC", click **More info** and then **Run anyway** (the program is not code-signed).
 
-`START_SWAFL.bat` starts the program from the source folder without building it, and `START_SWAFL_WEB.bat` opens the same program in your browser from your own computer.
+`START_SWAFL.bat` starts the program from the source folder without building it, and `START_SWAFL_WEB.bat` opens the same program in your browser from your own computer. On a Mac the same two files are `START_SWAFL.command` and `START_SWAFL_WEB.command`. None of them needs Node.js or npm to be installed: each looks for Node.js on the computer (also in the usual install folders, which is where "npm is not recognised" came from) and otherwise downloads a portable copy of about 30 to 40 MB into the folder `tools/node`, which changes nothing else. On a Mac, if a file will not open, type `chmod +x *.command tools/*.sh` in Terminal in that folder and open the file once with a right click and Open. The Daisy program that comes with SWAFL is a Windows program; on a Mac everything else works, and Daisy runs when SWAFL is pointed to a Daisy built for the Mac.
 
 ## Route D: the online workbench
 

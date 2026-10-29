@@ -405,7 +405,8 @@
     if (mp && P && P.svg) {
       mp.className = 'dzpan dzfig'; mp.dataset.xf = 'procmap';
       mp.innerHTML = '<div class="dzrow"><b>Processes of Daisy in this experiment</b><span style="flex:1"></span></div><p class="pnote">The map of Daisy redrawn for this experiment: orange marks the processes the factors act on, blue the processes the results come from, and the arrows run from one to the other. Click a box to light up the figures above that depend on it; click it again to release.</p><div class="dzmapv">' + P.svg({ marks, names, sel: null }) + '</div>';
-      mp.querySelectorAll('.dzPb[data-p]').forEach(g => { g.onclick = () => { const p = g.dataset.p; focusP = st.xmapSel = (st.xmapSel === p ? null : p); F.focus(host, focusP); }; });
+      mp.insertAdjacentHTML('beforeend', '<div data-pdet></div>'); const det = mp.querySelector('[data-pdet]');
+      mp.querySelectorAll('.dzPb[data-p]').forEach(g => { g.onclick = () => { const p = g.dataset.p; focusP = st.xmapSel = (st.xmapSel === p ? null : p); F.focus(host, focusP); if (focusP) P.detailInto(det, focusP, st.runs.map(r => ({ label: r.id + ' ' + r.label, logs: r.logs })), 'The figures of this process are drawn from the runs of this experiment. They need the process logs: set the logs of the experiment to the process level, or run one run in detail from the Processes tab.'); else det.innerHTML = ''; }; });
       F.focus(host, focusP);
     }
     return m;

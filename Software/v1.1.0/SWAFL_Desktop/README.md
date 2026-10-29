@@ -42,6 +42,12 @@ It downloads the app, builds `SWAFL.exe`, puts it on your Desktop and starts it.
 
 **Nothing to install - open the full SWAFL workbench online:** [https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html?v=1.1.0](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html?v=1.1.0) (works in any browser, no server, no Node). Prefer the small explorer? [SWAFL web explorer](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/04_Interactive_Charts/10_SWAFL_Fused_Explorer.html).
 
+## No Node.js or npm on the computer? Double-click
+
+Windows: double-click `START_SWAFL.bat` (the desktop program) or `START_SWAFL_WEB.bat` (in the browser). Mac: double-click `START_SWAFL.command` or `START_SWAFL_WEB.command`. Each looks for Node.js on the computer (the usual install folders too, so "npm is not recognised" no longer stops it) and, if it finds none, downloads a portable copy of about 30 to 40 MB into `tools/node`, which changes nothing else on the computer. The first start also downloads Electron once, so it needs the internet.
+
+On a Mac, if the file will not open ("permission denied" or "unidentified developer"), open Terminal in this folder and type `chmod +x *.command tools/*.sh`, then right-click the file, choose Open, and confirm once. The Daisy program that comes with SWAFL is a Windows program: on a Mac the SWAFL layers, the scenarios setup and the experiment designs work, and Daisy itself runs only if you point SWAFL to a Daisy 7.1 built for the Mac (Daisy tab, Choose Daisy), or you save the experiment folder as a zip and run it on a Windows computer or a Linux/Mac with Daisy installed. `npm run dist:mac` builds a Mac app when run on a Mac.
+
 ## Run it in VS Code (3 commands)
 
 1. Install **Node.js 18+** from <https://nodejs.org>.
