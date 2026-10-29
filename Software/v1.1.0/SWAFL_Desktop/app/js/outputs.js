@@ -64,11 +64,11 @@ window.SWOut = (() => {
     const sig = folded + '|' + (E.snap && E.snap.scene); if (barEl.dataset.sig === sig && barEl.firstChild) return; barEl.dataset.sig = sig;
     barEl.innerHTML = '<button class="mini" data-o="fold" title="Collapse or expand the picture">' + (folded ? '&#9654;' : '&#9660;') + '</button><b>Output</b><input data-k="title" placeholder="Title of the picture (empty: the layer name)" value="' + esc(mem.title) + '" size="30"><input data-k="caption" placeholder="Caption (added under the picture)" value="' + esc(mem.caption) + '" size="30">' +
       '<select data-o="save" title="Save the picture of this layer"><option value="">Save picture...</option><option value="screen">Screen resolution (PNG)</option><option value="300">300 dpi (PNG)</option><option value="600">600 dpi (PNG)</option><option value="max">Highest resolution (PNG)</option><option value="copy">Copy the picture</option></select>' +
-      '<button class="mini" data-o="num" title="The numbers of the layer, with the settings">Numbers (CSV)</button><button class="mini" data-o="wsave" title="Keep the position of every control (soil, crop, tillage, mulch...) in a file">Save widgets</button><button class="mini" data-o="wload">Load widgets</button><input type="file" data-o="wfile" accept=".json" hidden><button class="mini" data-o="all" title="Every layer as a 300 dpi picture and its numbers, in one zip">Every layer (zip)</button>';
+      '<button class="mini" data-o="full" title="Show the picture of the layer on the whole screen (Esc to leave)">&#9974; Full screen</button><button class="mini" data-o="num" title="The numbers of the layer, with the settings">Numbers (CSV)</button><button class="mini" data-o="wsave" title="Keep the position of every control (soil, crop, tillage, mulch...) in a file">Save widgets</button><button class="mini" data-o="wload">Load widgets</button><input type="file" data-o="wfile" accept=".json" hidden><button class="mini" data-o="all" title="Every layer as a 300 dpi picture and its numbers, in one zip">Every layer (zip)</button>';
   }
   function onBar(e) {
     const b = e.target.closest('[data-o]'); if (!b || b.tagName === 'SELECT') return; const a = b.dataset.o;
-    if (a === 'fold') { folded = !folded; const f = document.getElementById('engine'); if (f) f.style.display = folded ? 'none' : ''; bar(); } else if (a === 'num') saveNumbers(); else if (a === 'wsave') saveWidget(); else if (a === 'wload') barEl.querySelector('[data-o="wfile"]').click(); else if (a === 'all') { b.disabled = true; allLayers(b).finally(() => { b.disabled = false; }); }
+    if (a === 'fold') { folded = !folded; const f = document.getElementById('engine'); if (f) f.style.display = folded ? 'none' : ''; bar(); } else if (a === 'full') { const h = document.getElementById('engineHost'); if (h) fs(h); } else if (a === 'num') saveNumbers(); else if (a === 'wsave') saveWidget(); else if (a === 'wload') barEl.querySelector('[data-o="wfile"]').click(); else if (a === 'all') { b.disabled = true; allLayers(b).finally(() => { b.disabled = false; }); }
   }
   function onBarChange(e) { const t = e.target; if (t.dataset.o === 'save' && t.value) { const v = t.value; t.value = ''; v === 'copy' ? copyPicture() : savePicture(v); } else if (t.dataset.o === 'wfile' && t.files[0]) { loadWidget(t.files[0]); t.value = ''; } }
 
@@ -97,13 +97,55 @@ window.SWOut = (() => {
       const h = sec.querySelector('h4'); if (!h || h.dataset.sw) return; h.dataset.sw = '1'; const has = sec.querySelector('canvas,table,.kpi'); if (!has) return;
       const s = document.createElement('select'); s.style.cssText = 'margin-left:auto;font-size:11px;max-width:120px'; s.title = 'Save this section'; s.innerHTML = '<option value="">Save...</option><option value="300">Picture 300 dpi</option><option value="600">Picture 600 dpi</option><option value="copy">Copy the picture</option><option value="csv">Numbers (CSV)</option>';
       ['click', 'mousedown'].forEach(ev => s.addEventListener(ev, e => e.stopPropagation()));
+      const full = document.createElement('button'); full.className = 'mini'; full.innerHTML = '&#9974;'; full.title = 'Show this section on the whole screen (Esc to leave)'; full.style.marginLeft = '6px'; ['click', 'mousedown'].forEach(ev => full.addEventListener(ev, e => e.stopPropagation())); full.onclick = () => fs(sec, () => { try { Dash.tab(curTab()); } catch (e) { } });
+      const pr = procsOfTitle(((h.querySelector('b') || {}).textContent || ''), (MAP[E.snap && E.snap.scene] || [[], []])[1].slice(0, 3)).slice(0, 4), PP = window.DaisyProc;
+      const chips = document.createElement('span'); chips.style.cssText = 'margin-left:8px;display:inline-flex;gap:3px;flex-wrap:wrap'; chips.innerHTML = pr.map(id => { const p = PP && PP.byId(id); return p ? '<button class="mini" data-cp="' + id + '" title="Daisy process: ' + esc(p.d) + '" style="border-left:5px solid ' + PP.GC[p.g] + '">' + esc(p.n) + '</button>' : ''; }).join('');
+      ['click', 'mousedown'].forEach(ev => chips.addEventListener(ev, e => e.stopPropagation()));
+      chips.onclick = e => { const b = e.target.closest('[data-cp]'); if (!b) return; figSel = b.dataset.cp; figKey = ''; const t = document.querySelector('[data-tab="figure"]'); if (t) t.click(); };
       s.onchange = async () => { const v = s.value; s.value = ''; if (!v) return; const base = 'SWAFL_' + sane(E.snap && E.snap.scene) + '_' + sane((h.querySelector('b') || {}).textContent);
         if (v === 'csv') { const r = sectionCsv(sec); if (!r.length) { UI.toast('This section has no numbers'); return; } dl(new Blob(['﻿' + csvText(r)], { type: 'text/csv' }), base + '.csv'); return; }
         const cv = await sectionCanvas(sec, v === 'copy' ? 3.125 : v === '600' ? 6.25 : 3.125); if (!cv) { UI.toast('Nothing to draw in this section'); return; } const b = await blobOf(cv);
         if (v === 'copy') { try { await navigator.clipboard.write([new ClipboardItem({ 'image/png': b })]); UI.toast('Picture copied'); } catch (e) { UI.toast('The picture could not be copied here'); } } else dl(b, base + '_' + v + 'dpi.png'); };
-      h.appendChild(s);
+      h.appendChild(chips); h.appendChild(full); h.appendChild(s);
     });
   }
+
+  // any element on the whole screen (the screen itself when the browser allows it, otherwise the whole window); Esc leaves
+  function fs(el, after) {
+    if (el.classList.contains('swfs')) { el.classList.remove('swfs'); el.style.cssText = el._fs || ''; if (document.fullscreenElement) document.exitFullscreen().catch(() => { }); setTimeout(() => after && after(), 150); return; }
+    el._fs = el.style.cssText; el.classList.add('swfs'); el.style.cssText += ';position:fixed;left:0;top:0;right:0;bottom:0;width:auto;height:auto;z-index:9000;overflow:auto;background:#fff;margin:0;box-sizing:border-box';
+    try { if (el.requestFullscreen) el.requestFullscreen().catch(() => { }); } catch (e) { }
+    const esc = e => { if (e.key === 'Escape' && el.classList.contains('swfs')) { fs(el, after); document.removeEventListener('keydown', esc); } }; document.addEventListener('keydown', esc);
+    el.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && el.classList.contains('swfs')) fs(el, after); }, { once: true }); setTimeout(() => after && after(), 150);
+  }
+  // the own chain of processes of each layer, in the words of that layer: process id : what happens in this layer
+  const FLOW = {
+    field: 'surf:rain and irrigation arrive at the soil|water:water is stored in the root zone|crop:roots take it up and the crop transpires|drain:the rest drains below the roots',
+    v1: 'water:the soil dries around the sensor|water:suction at the sensor rises to the trigger|surf:irrigation is applied|water:suction falls again',
+    v2: 'surf:rain and irrigation wet the top|water:water moves down under gravity and suction|pore:pressure head shows the wetting front|drain:water leaves the bottom',
+    v3: 'om:tillage loosens the soil and breaks aggregates|pore:pore sizes and structure change|water:the water retention curve moves|drain:drainage changes as the soil consolidates',
+    v4: 'surf:mulch covers the soil|bio:radiation and wind reach the mulch, not the soil|surf:evaporation from the soil falls|water:more water stays in the profile',
+    v5: 'bio:climate drives the demand|surf:management brings water and nitrogen|water:soil water carries both|crop:the crop takes them up|drain:what is left leaches',
+    v6: 'surf:mulch and tillage change the surface|surf:evaporation changes|water:storage changes|drain:drainage changes',
+    v7: 'om:tillage and consolidation act on the structure|pore:the soil texture decides the pores|water:retention and conductivity follow|drain:drainage differs between soils',
+    e1: 'bio:the surface is exposed to the air|surf:the top layer dries first|water:liquid water and vapour move in the drying soil|surf:evaporation slows down',
+    n1: 'water:the soil dries by uptake and evaporation|water:depletion approaches the trigger|surf:irrigation is called|crop:the crop is kept out of stress',
+    n2: 'surf:mulch intercepts rain and cuts evaporation|water:water is saved in the soil|drain:part of it drains|crop:part of it reaches the crop',
+    n3: 'surf:rain falls on the mulch|surf:soil evaporation is reduced|water:the profile stays wetter|drain:drainage increases in wet years',
+    r1: 'crop:the roots grow to the rooting depth|water:they take water where the soil is wet|crop:uptake meets the demand of the canopy|water:the soil dries from the top',
+    spac: 'water:soil water potential|crop:root and stem resistance|photo:stomata and leaf water potential|bio:the air sets the demand',
+    sid: 'surf:water is let onto the field surface|surf:it advances along the furrow or border|water:it infiltrates into the soil|drain:what passes the roots is lost',
+    drip: 'surf:the emitter delivers a flow|water:a wetted bulb forms around it|crop:the roots reach the bulb|drain:overirrigation drains below it',
+    spr: 'surf:the sprinkler throws water in a pattern|surf:neighbouring sprinklers overlap|water:the soil takes the applied depth|drain:uneven application drains in places',
+    yby: 'bio:20 seasons of weather|crop:yield each season|surf:irrigation each season|water:reliability across seasons',
+    wb2: 'surf:rain and irrigation in|water:storage changes|crop:transpiration and evaporation out|drain:drainage and run-off out',
+    nb: 'no3:nitrogen is applied|nh4:it is mineralised and nitrified|crop:the crop takes it up|deni:part is lost as gas|drain:part leaches with the drainage',
+    crop: 'bio:reference evapotranspiration|crop:crop coefficient by stage|photo:canopy cover and growth|water:crop water requirement',
+    chem: 'surf:the chemical is applied|water:it moves with the water|drain:it leaches below the root zone|om:it is held by the organic matter',
+    dsum: 'crop:yield of each Daisy run|water:water used|no3:nitrogen lost|drain:the table of decisions',
+    dph: 'bio:air and radiation|photo:leaf photosynthesis|crop:growth of the canopy|temp:canopy temperature against the air'
+  };
+  const flowOf = scene => (FLOW[scene] || '').split('|').map(x => { const i = x.indexOf(':'); return { p: x.slice(0, i), t: x.slice(i + 1) }; }).filter(x => x.p);
 
   // ---------------------------------------------------------------- the Figure tab: the processes of Daisy, linked to the outputs of the layer
   const MAP = {
@@ -136,18 +178,21 @@ window.SWOut = (() => {
     const F = {}, R = {}; m[0].forEach(p => { F[p] = ['controls']; }); m[1].forEach(p => { R[p] = ['results']; }); const emph = Array.from(new Set(m[0].concat(m[1]))), lt = LT[scene] || ['', ''];
     const on = new Set(figSel ? [figSel] : []); const hl = figSel && items.some(i => i.p.indexOf(figSel) >= 0);
     body.innerHTML = '<div class="swfig"><div class="dnote">The processes of Daisy for <b>' + esc(layerName()) + '</b>. <span style="color:#e8710a"><b>Orange</b></span>: what its controls act on (' + esc(lt[0]) + '). <span style="color:#0072b2"><b>Blue</b></span>: where its results come from (' + esc(lt[1]) + '). The processes this layer does not use are shown pale; none is hidden. Click a process to see what Daisy does there, its figures from your Daisy runs, and the outputs of the layer that depend on it; click an output to see its processes.</div>' +
-      '<div class="dzrow" style="gap:4px;margin:4px 0"><button class="mini" data-fg="big">Enlarge</button><button class="mini" data-fg="png">Save picture (300 dpi)</button><button class="mini" data-fg="svg">Save as SVG</button></div>' +
-      '<div class="swmap">' + P.svg({ marks: { F, R, factors: m[0].map(id => ({ id })), resp: m[1] }, names: { controls: 'controls', results: 'results' }, emph, sel: figSel || null }) + '</div>' +
+      '<div class="swflow" style="display:flex;flex-wrap:wrap;align-items:stretch;gap:4px;margin:6px 0">' + flowOf(scene).map((st, i) => (i ? '<span style="align-self:center">&#8594;</span>' : '') + '<button class="mini" data-fl="' + st.p + '" style="text-align:left;max-width:210px;white-space:normal;border-left:6px solid ' + ((P.byId(st.p) && P.GC[P.byId(st.p).g]) || '#888') + '"><b>' + (i + 1) + '.</b> ' + esc(st.t) + '<br><span class="pnote">' + esc((P.byId(st.p) || {}).n || '') + '</span></button>').join('') + '</div>' +
+      '<div class="dzrow" style="gap:4px;margin:4px 0"><button class="mini" data-fg="full">&#9974; Full screen</button><button class="mini" data-fg="big">Enlarge</button><button class="mini" data-fg="png">Save picture (300 dpi)</button><button class="mini" data-fg="svg">Save as SVG</button></div>' +
+      '<div class="swmap">' + P.svg({ marks: { F, R, factors: m[0].map(id => ({ id })), resp: m[1] }, names: { controls: 'controls', results: 'results' }, labels: { f: 'Controls of ' + layerName(), r: 'Results of ' + layerName() }, emph, sel: figSel || null }) + '</div>' +
       '<div class="swlist" style="margin-top:6px"><b>Outputs of this layer</b>' + (items.length ? '' : ' <span class="pnote">(open the Results tab once to list them)</span>') + '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px">' +
       items.map((it, i) => '<button class="mini" data-it="' + i + '" style="' + (figSel && it.p.indexOf(figSel) >= 0 ? 'font-weight:700;outline:2px solid #c0392b;' : figSel ? 'opacity:.45;' : '') + '" title="' + esc(it.p.join(', ')) + '">' + esc(it.title.length > 48 ? it.title.slice(0, 46) + '...' : it.title) + '</button>').join('') + '</div></div><div data-pdet style="margin-top:6px"></div></div>';
     const det = body.querySelector('[data-pdet]'), runsOf = () => { const r = []; try { (window.DaisyScenUI ? DaisyScenUI.runs() : []).forEach(x => r.push({ label: 'Scenario: ' + (x.label || x.id), logs: x.logs })); (window.DaisyExpUI ? DaisyExpUI.runs() : []).forEach(x => r.push({ label: 'Experiment: ' + x.id + ' ' + (x.label || ''), logs: x.logs })); } catch (e) { } return r; };
     if (figSel && det) P.detailInto(det, figSel, runsOf(), 'The layer itself shows this process in the section marked in the list above.');
     const svgEl = () => body.querySelector('.swmap svg'), svgText = () => { const el = svgEl().cloneNode(true); el.setAttribute('xmlns', 'http://www.w3.org/2000/svg'); const vb = el.getAttribute('viewBox').split(/\s+/).map(Number); el.setAttribute('width', vb[2]); el.setAttribute('height', vb[3]); el.removeAttribute('style'); return new XMLSerializer().serializeToString(el); };
     body.querySelectorAll('[data-fg]').forEach(b => b.onclick = async () => { const a = b.dataset.fg;
+      if (a === 'full') { fs(body.querySelector('.swfig')); return; }
       if (a === 'big') { UI.modal({ title: 'Processes of Daisy: ' + layerName(), width: '1100px', html: '<div style="max-height:75vh;overflow:auto">' + svgEl().outerHTML + '</div>' }); return; }
       if (a === 'svg') { dl(new Blob([svgText()], { type: 'image/svg+xml' }), 'SWAFL_' + sane(scene) + '_process-figure.svg'); return; }
       const vb = svgEl().getAttribute('viewBox').split(/\s+/).map(Number), k = 3.125 * 1.2, img = new Image(); img.onload = () => { const c = document.createElement('canvas'); c.width = Math.round(vb[2] * k); c.height = Math.round(vb[3] * k); const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0, c.width, c.height); c.toBlob(bl => dl(bl, 'SWAFL_' + sane(scene) + '_process-figure_300dpi.png'), 'image/png'); }; img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgText()); });
     body.querySelectorAll('.dzPb[data-p]').forEach(g => { g.onclick = () => { figSel = figSel === g.dataset.p ? null : g.dataset.p; figKey = ''; if (figSel) { const hit = items.find(i => i.src === 'eng' && i.p.indexOf(figSel) >= 0); if (hit) { try { E.scrollTo(scene, hit.id); } catch (e) { } } } figure(body, s); }; });
+    body.querySelectorAll('[data-fl]').forEach(b => b.onclick = () => { figSel = figSel === b.dataset.fl ? null : b.dataset.fl; figKey = ''; figure(body, s); });
     body.querySelectorAll('[data-it]').forEach(b => { const it = items[+b.dataset.it]; b.onmouseenter = () => { b.title = 'processes: ' + it.p.join(', '); }; b.onclick = () => { figSel = it.p[0]; figKey = ''; if (it.src === 'eng') { try { E.scrollTo(scene, it.id); } catch (e) { } } else { const t = document.querySelector('#dashTabs [data-tab="results"]') || document.querySelector('button[data-tab="results"]'); if (t) t.click(); setTimeout(() => { const el = document.querySelector('#dashBody .dsec[data-sec="' + it.id + '"]'); if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); el.style.outline = '2px solid #c0392b'; setTimeout(() => { el.style.outline = ''; }, 1800); } }, 120); } };
     });
   }

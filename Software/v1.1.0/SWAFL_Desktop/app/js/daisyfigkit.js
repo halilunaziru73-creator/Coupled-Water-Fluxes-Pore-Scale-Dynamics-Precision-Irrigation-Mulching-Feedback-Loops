@@ -48,12 +48,14 @@ window.DaisyFigKit = (() => {
     o = o || {}; if (!card || card.dataset.fk) return; card.dataset.fk = '1'; card._fkOpt = o; let row = card.querySelector('.dzrow');
     if (!row) { row = document.createElement('div'); row.className = 'dzrow'; const b = card.querySelector('b'); if (b) { card.insertBefore(row, b); row.appendChild(b); } else card.insertBefore(row, card.firstChild); }
     card.querySelectorAll('[data-png],[data-xpng],.dzPng').forEach(b => b.remove());
+    const fsb = document.createElement('button'); fsb.className = 'btn'; fsb.title = 'Show this figure on the whole screen (Esc to leave)'; fsb.textContent = '\u26F6'; fsb.style.cssText = 'width:auto;padding:1px 7px'; fsb.onclick = () => K.fullscreen(card, o);
     const tg = document.createElement('button'); tg.className = 'btn'; tg.title = 'Collapse or expand this figure'; tg.textContent = '▾'; tg.style.cssText = 'width:auto;padding:1px 7px'; row.insertBefore(tg, row.firstChild);
     const set = open => { card.dataset.open = open ? '1' : '0'; tg.textContent = open ? '▾' : '▸'; Array.from(card.children).forEach(ch => { if (ch !== row) ch.style.display = open ? '' : 'none'; }); };
     tg.onclick = () => set(card.dataset.open === '0'); card._fkSet = set;
     const spacer = row.querySelector('span[style*="flex:1"]') || (() => { const s = document.createElement('span'); s.style.flex = '1'; row.appendChild(s); return s; })();
     const wrap = document.createElement('span'); wrap.style.cssText = 'display:inline-flex;gap:4px;flex-wrap:wrap;align-items:center'; wrap.innerHTML = '<button class="btn" data-fk="titles" title="Edit the title and the axis texts">Titles</button><select data-fk="save" title="Save this figure"><option value="">Save...</option><option value="1.5">Picture, screen resolution (PNG)</option><option value="3">Picture, 300 dpi (PNG)</option><option value="6">Picture, 600 dpi (PNG)</option><option value="copy">Copy the picture</option><option value="csv">Numbers of the figure (CSV)</option></select>';
     spacer.after(wrap);
+    wrap.appendChild(fsb);
     wrap.querySelector('[data-fk="titles"]').onclick = () => editor(card, o);
     wrap.querySelector('[data-fk="save"]').onchange = async e => {
       const v = e.target.value; e.target.value = ''; if (!v) return; const base = sane(o.name || (card.querySelector('b') || {}).textContent);
@@ -69,6 +71,28 @@ window.DaisyFigKit = (() => {
     for (let i = 0; i < list.length; i++) { const c = list[i], was = c.dataset.open; if (was === '0' && c._fkSet) c._fkSet(true); if (onStep) onStep(i + 1, list.length); const nm = String(i + 1).padStart(2, '0') + '_' + sane((c.querySelector('b') || {}).textContent);
       const r = await picture(c, c._fkOpt, scale || 3); if (r.blob) files[name + '/' + nm + '.png'] = new Uint8Array(await r.blob.arrayBuffer()); const t = csvOf(c); if (t) files[name + '/' + nm + '.csv'] = '\ufeff' + t; if (was === '0' && c._fkSet) c._fkSet(false); }
     return files;
+  };
+  // the processes of one figure as chips; a click opens the figures of that process inside the card
+  K.procStrip = function (card, procs, runsFn, note) {
+    const P = window.DaisyProc; if (!P || !procs || !procs.length) return; const old = card.querySelector('.dzchips'); if (old) old.remove();
+    const d = document.createElement('div'); d.className = 'dzchips'; d.style.cssText = 'display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin:3px 0';
+    d.innerHTML = '<span class="pnote">Processes of this figure:</span>' + procs.map(id => { const p = P.byId(id); return p ? '<button class="mini" data-pc="' + id + '" title="' + p.d.replace(/"/g, '&quot;') + '" style="border-left:6px solid ' + P.GC[p.g] + '">' + p.n + '</button>' : ''; }).join('') + '<div data-pcd style="flex-basis:100%"></div>';
+    const t = card.querySelector('.dzrow'); (t || card.firstChild).after(d); let open = null;
+    d.querySelectorAll('[data-pc]').forEach(b => b.onclick = () => { const det = d.querySelector('[data-pcd]'); if (open === b.dataset.pc) { open = null; det.innerHTML = ''; return; } open = b.dataset.pc; P.detailInto(det, open, runsFn ? runsFn() : [], note); });
+  };
+  // the processes a figure is about, found from the words of its title and note
+  K.procsFromText = function (t) {
+    t = String(t || '').toLowerCase(); const R = [['bio', /air temp|bioclimate|radiation|wind|humidity|potential evap|reference evap/], ['snow', /snow/], ['surf', /surface|pond|canopy|litter|infiltrat|run-?off|irrigation|precipitation|rain/], ['water', /water|moisture|content|potential|actual evap|transpir|evapotransp|aet|stress/], ['pore', /macropore|pore|bypass/], ['drain', /drain|percolat|leach|bottom|tile|ground ?water/], ['temp', /soil temp|frost|freez|heat/], ['no3', /nitrate|leach|no3|n uptake|nitrogen|fertili/], ['nh4', /ammon|nh4|volatil/], ['om', /organic|humus|som\b|mineralis|immobilis|decompos/], ['carbon', /carbon|co2|respir|c in /], ['deni', /denitri|n2o|nitrous/], ['photo', /photosynth|assimil|light|lai|leaf area|growth/], ['crop', /yield|biomass|crop|root|dry matter|grain|harvest|nitrogen use|efficiency|\bwue\b/]];
+    const out = []; R.forEach(r => { if (r[1].test(t)) out.push(r[0]); }); return out;
+  };
+  // a figure on the whole screen: the screen itself when the browser allows it, otherwise the whole window; the figure is drawn again at the new size
+  K.fullscreen = function (card, o) {
+    const on = card.classList.contains('dzfs'), done = () => { setTimeout(() => { try { o && o.redraw && o.redraw(); card.querySelectorAll('canvas').length || 0; } catch (e) { } }, 120); };
+    if (on) { card.classList.remove('dzfs'); card.style.cssText = card._fsStyle || ''; if (document.fullscreenElement) document.exitFullscreen().catch(() => { }); done(); return; }
+    card._fsStyle = card.style.cssText; card.classList.add('dzfs'); card.style.cssText += ';position:fixed;left:0;top:0;right:0;bottom:0;z-index:9000;overflow:auto;background:#fff;margin:0;padding:12px;box-sizing:border-box';
+    try { if (card.requestFullscreen) card.requestFullscreen().catch(() => { }); } catch (e) { } done();
+    const esc = e => { if (e.key === 'Escape' && card.classList.contains('dzfs')) { K.fullscreen(card, o); document.removeEventListener('keydown', esc); } }; document.addEventListener('keydown', esc);
+    card.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && card.classList.contains('dzfs')) K.fullscreen(card, o); }, { once: true });
   };
   // a bar for the whole result: collapse all, expand all, every picture in one zip
   K.bar = function (host, o) {

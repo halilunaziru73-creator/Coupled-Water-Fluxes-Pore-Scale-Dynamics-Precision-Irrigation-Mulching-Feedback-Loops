@@ -112,8 +112,8 @@
       Object.keys(M.F || {}).forEach(id => M.F[id].forEach(f => badge(id, '#e8710a', (nm[f] || f).slice(0, 12))));
       Object.keys(M.R || {}).forEach(id => M.R[id].forEach(f => badge(id, '#0072b2', (nm[f] || f).slice(0, 12))));
       extraH = 108; const y0 = 702; o.push('<rect x="108" y="' + (y0 - 8) + '" width="814" height="' + (extraH - 4) + '" fill="#fff" stroke="#d6dae0"/>');
-      o.push('<rect x="118" y="' + y0 + '" width="20" height="11" rx="3" fill="rgba(232,113,10,0.13)" stroke="#e8710a" stroke-width="2"/>'); T(144, y0 + 9, 'Changed in this experiment: ' + ((M.factors || []).map(f => nm[f.id] || f.id).join(', ') || 'nothing'), 'start', 9.5);
-      o.push('<rect x="118" y="' + (y0 + 20) + '" width="20" height="11" rx="3" fill="rgba(0,114,178,0.13)" stroke="#0072b2" stroke-width="2"/>'); T(144, y0 + 29, 'Measured: ' + ((M.resp || []).map(f => nm[f] || f).join(', ') || 'nothing'), 'start', 9.5);
+      o.push('<rect x="118" y="' + y0 + '" width="20" height="11" rx="3" fill="rgba(232,113,10,0.13)" stroke="#e8710a" stroke-width="2"/>'); T(144, y0 + 9, ((opt.labels && opt.labels.f) || 'Changed in this experiment') + ': ' + ((M.factors || []).map(f => nm[f.id] || f.id).join(', ') || 'nothing'), 'start', 9.5);
+      o.push('<rect x="118" y="' + (y0 + 20) + '" width="20" height="11" rx="3" fill="rgba(0,114,178,0.13)" stroke="#0072b2" stroke-width="2"/>'); T(144, y0 + 29, ((opt.labels && opt.labels.r) || 'Measured') + ': ' + ((M.resp || []).map(f => nm[f] || f).join(', ') || 'nothing'), 'start', 9.5);
       o.push('<line x1="120" y1="' + (y0 + 46) + '" x2="150" y2="' + (y0 + 46) + '" stroke="#e8710a" stroke-width="1.8" stroke-dasharray="7 4" marker-end="url(#dzAo)"/>'); T(158, y0 + 49, 'from the process that is changed to the processes that answer (click a box to see the figures that depend on it)', 'start', 9);
     }
     extraH = extraH || 38;
@@ -153,7 +153,7 @@
   async function drawFigs(p, figs, getLog, stale, what) {
     let ok = 0, bad = 0;
     for (const f of p.figs) {
-      if (stale()) return null; const card = document.createElement('div'); card.className = 'dzcard dzfig'; card.innerHTML = '<b>' + esc(f.t) + '</b> <button class="dzPng btn">Save PNG</button><div><canvas style="display:block;width:100%;margin-top:6px"></canvas></div><div class="dzPn" style="font-size:12px;color:#555"></div>'; figs.appendChild(card);
+      if (stale()) return null; const card = document.createElement('div'); card.className = 'dzcard dzfig'; card.innerHTML = '<b>' + esc(f.t) + '</b> <button class="dzPng btn">Save PNG</button><div><canvas style="display:block;width:100%;margin-top:6px"></canvas></div><div class="dzPn" style="font-size:12px;color:#555"></div><div class="pnote">' + esc(p.n) + ': ' + esc(f.t) + '. Written by Daisy in the log ' + esc(f.log) + (f.c && f.c.length ? ', columns: ' + esc(f.c.join(', ')) : ', by year') + '.</div>'; figs.appendChild(card);
       const cv = card.querySelector('canvas'), note = card.querySelector('.dzPn'); card._jobs = []; if (window.DaisyFigKit) window.DaisyFigKit.attach(card, { name: 'daisy-' + p.id + '-' + f.log, redraw: () => card._jobs.forEach(j => j()) });
       try {
         const d = await getLog(f.log); if (stale()) return null; if (!d) throw new Error(f.log + ' was not written by this run');

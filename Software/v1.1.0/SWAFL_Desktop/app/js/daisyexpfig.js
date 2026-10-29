@@ -85,6 +85,18 @@ window.DaisyExpFig = (() => {
     if (f.k === 'surface') return E.levels(d, f.x).length > 1 && E.levels(d, f.y).length > 1; if (f.k === 'effects') return c.fids.filter(id => E.levels(d, id).length > 1).length > 1;
     if (f.k === 'partition') return d.some(r => isFinite(r.r.aet) && isFinite(r.r.perc)); if (f.k === 'nfate') return d.some(r => isFinite(r.r.leach) || isFinite(r.r.upt)); return E.levels(d, f.x).length > 0;
   }
+  // a note written from this figure's own factors and results
+  const noteOf = (f, c, rows) => {
+    const rl = q => c.rlabel(q), fl = id => c.flabel(id), nm = x => { const t = String(x); return t.replace(/\s*\(.*$/, ''); };
+    const vals = (q) => rows.map(r => r.r && r.r[q]).filter(v => typeof v === 'number' && isFinite(v));
+    const rng = q => { const v = vals(q); if (!v.length) return ''; const lo = Math.min.apply(null, v), hi = Math.max.apply(null, v), g = z => Math.abs(z) >= 100 ? z.toFixed(0) : z.toFixed(1); return ' It ranges from ' + g(lo) + ' to ' + g(hi) + ' among the ' + rows.length + ' runs.'; };
+    if (f.k === 'partition') return 'Where the water went in each run: transpiration and evaporation (actual evapotranspiration), percolation below the root zone and run-off, as parts of the same bar.' + rng('perc').replace('It', ' Percolation');
+    if (f.k === 'nfate') return 'Where the nitrogen went in each run: crop uptake, leaching, denitrification and volatilisation, in kg N per hectare.' + rng('leach').replace('It', ' Leaching');
+    if (f.k === 'effects') return 'Main effect of each factor on ' + nm(rl(f.r)).toLowerCase() + ': the change in the mean when the factor moves from its lowest to its highest level.' + rng(f.r);
+    if (f.k === 'surface') return nm(rl(f.r)) + ' over ' + nm(fl(f.x)).toLowerCase() + ' (x) and ' + nm(fl(f.y)).toLowerCase() + ' (y); lines join equal values, dots are the runs.' + rng(f.r);
+    if (f.k === 'bars') return nm(rl(f.r)) + ' for each level of ' + nm(fl(f.x)).toLowerCase() + (f.c ? ', split by ' + nm(fl(f.c)).toLowerCase() : '') + (f.p ? ', one panel for each level of ' + nm(fl(f.p)).toLowerCase() : '') + '.' + rng(f.r);
+    return nm(rl(f.r)) + ' against ' + nm(fl(f.x)).toLowerCase() + (f.c ? ', one line for each level of ' + nm(fl(f.c)).toLowerCase() : '') + (f.p ? ', one panel for each level of ' + nm(fl(f.p)).toLowerCase() : '') + '.' + rng(f.r);
+  };
   const procsOf = f => { const E = X(), s = new Set(); [f.x, f.y, f.c, f.p].forEach(id => id && (E.PROC_F[id] || []).forEach(p => s.add(p))); const r = f.k === 'partition' ? ['aet', 'perc', 'run'] : f.k === 'nfate' ? ['upt', 'leach', 'den', 'vol'] : [f.r]; r.forEach(q => q && (E.PROC_R[q] || []).forEach(p => s.add(p))); return Array.from(s); };
 
   // mount: c = { key, presetId, factors, rows, fids, flabel, rlabel, lname, onMap(procId) }
@@ -99,7 +111,7 @@ window.DaisyExpFig = (() => {
       '<p style="margin:6px 0 2px"><b>Which figures do you want?</b> <button class="btn" data-ef="all">All</button> <button class="btn" data-ef="none">None</button> <span class="pnote">All are drawn at first. Untick what you do not need, or add a figure below.</span></p><div style="display:flex;flex-wrap:wrap;gap:4px 16px">' +
       all.map(f => usable(f, c, rows) ? '<label style="font-size:12.5px"><input type="checkbox" data-ef-id="' + f.id + '"' + (mm.off[f.id] ? '' : ' checked') + '> ' + esc(titleOf(f, c)) + (f.p ? ' <span class="pnote">(panels: ' + esc(short(c.flabel(f.p)).toLowerCase()) + ')</span>' : '') + '</label>' : '').join('') + '</div>' +
       '<details style="margin-top:6px"><summary><b>Add a figure</b></summary><div class="dzrow" style="margin-top:4px"><select data-add="k">' + opt(KINDS, 'lines') + '</select><label>x</label><select data-add="x">' + opt(fl.map(id => [id, short(c.flabel(id))]), fl[0]) + '</select><label>colour</label><select data-add="c">' + opt(fl.map(id => [id, short(c.flabel(id))]), '', 'none') + '</select><label>panels</label><select data-add="p">' + opt(fl.map(id => [id, short(c.flabel(id))]), '', 'none') + '</select><label>y (surface)</label><select data-add="y">' + opt(fl.map(id => [id, short(c.flabel(id))]), fl[1] || '', 'none') + '</select><label>response</label><select data-add="r">' + opt(rs.map(q => [q.id, short(q.label)]), c.resp || 'yield') + '</select><button class="btn pri" data-add="go">Add</button></div></details></div>';
-    h += '<div data-ef-cards>' + figs.filter(f => !mm.off[f.id]).map(f => '<div class="dzpan dzfig" data-xf="sp_' + f.id + '" data-procs="' + procsOf(f).join(',') + '"><div class="dzrow"><b>' + esc(titleOf(f, c)) + '</b><span style="flex:1"></span></div>' + (f.note ? '<p class="pnote">' + esc(f.note) + '</p>' : '') + '<div class="dzspgrid"></div></div>').join('') + '</div>';
+    h += '<div data-ef-cards>' + figs.filter(f => !mm.off[f.id]).map(f => '<div class="dzpan dzfig" data-xf="sp_' + f.id + '" data-procs="' + procsOf(f).join(',') + '"><div class="dzrow"><b>' + esc(titleOf(f, c)) + '</b><span style="flex:1"></span></div>' + '<p class="pnote" data-note>' + esc(f.note ? f.note + ' ' + noteOf(f, c, rows) : noteOf(f, c, rows)) + '</p>' + '<div class="dzspgrid"></div></div>').join('') + '</div>';
     host.innerHTML = h; const redo = {}, cards = {};
     figs.filter(f => !mm.off[f.id]).forEach(f => {
       const card = host.querySelector('[data-xf="sp_' + f.id + '"]'), grid = card.querySelector('.dzspgrid'); let ps; try { ps = panelsOf(f, c, rows); } catch (e) { console.warn(f.id, e); card.insertAdjacentHTML('beforeend', '<span style="color:#b3261e">could not be drawn: ' + esc(e.message) + '</span>'); return; }
@@ -107,6 +119,7 @@ window.DaisyExpFig = (() => {
       grid.innerHTML = ps.map((p, k) => '<div style="min-width:0"><canvas data-xc="sp_' + f.id + '_' + k + '"></canvas></div>').join(''); cards['sp_' + f.id] = card;
       const draw = () => ps.forEach((p, k) => { const cv = grid.querySelector('[data-xc="sp_' + f.id + '_' + k + '"]'); if (cv) { try { p.draw(cv); } catch (e) { console.warn(f.id, e); } } });
       redo['sp_' + f.id] = draw; draw();
+      if (window.DaisyFigKit && DaisyFigKit.procStrip) DaisyFigKit.procStrip(card, procsOf(f), c.runs, 'Drawn from the runs of this experiment. It needs the process logs.');
     });
     host.querySelector('[data-ef="all"]').onclick = () => { mm.off = {}; c.again(); }; host.querySelector('[data-ef="none"]').onclick = () => { all.forEach(f => { mm.off[f.id] = 1; }); c.again(); };
     host.querySelectorAll('[data-ef-id]').forEach(b => b.onchange = () => { if (b.checked) delete mm.off[b.dataset.efId]; else mm.off[b.dataset.efId] = 1; c.again(); });

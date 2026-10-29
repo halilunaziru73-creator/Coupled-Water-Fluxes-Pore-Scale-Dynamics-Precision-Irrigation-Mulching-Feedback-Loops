@@ -398,7 +398,7 @@
     const F = window.DaisyExpFig, box = host.querySelector('#dzXSpec'); if (!F || !box || !rows.length) return null;
     const pid = (st.preset && st.preset.id) || st.pid || null, factors = fids.filter(f => f !== 'run').map(f => ({ id: f }));
     let focusP = st.xmapSel || null;
-    const ctx = { key: pid || 'own', presetId: pid, factors, rows, fids, resp, flabel, rlabel, lname, again: () => drawResults(), onCard: ps => F.focus(host, ps && ps.length ? ps[0] : focusP) };
+    const ctx = { key: pid || 'own', presetId: pid, factors, rows, fids, resp, flabel, rlabel, lname, runs: () => st.runs.map(r => ({ label: r.id + ' ' + r.label, logs: r.logs })), again: () => drawResults(), onCard: ps => F.focus(host, ps && ps.length ? ps[0] : focusP) };
     const m = F.mount(box, ctx); if (!m) return null;
     const mp = host.querySelector('#dzXMap'), P = window.DaisyProc, figs = X.figsFor(pid, factors), marks = X.procMarks(factors, figs, st.responses && st.responses.length ? st.responses : ['yield']);
     const names = {}; marks.factors.forEach(f => { names[f.id] = short(flabel(f.id)).toLowerCase(); }); marks.resp.forEach(r => { names[r] = short(rlabel(r)).toLowerCase(); });
