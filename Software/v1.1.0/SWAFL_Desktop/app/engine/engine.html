@@ -6868,7 +6868,9 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   const $ = s => document.querySelector(s), $$ = s => Array.from(document.querySelectorAll(s));
   const cvs = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; };
   const rnd = seededRandom;
-  const bg = (c, soilKey, tone) => { const x = c.getContext('2d'); try { x.drawImage(soilParticles(c.width, c.height, 1234, soilKey || state.soil, () => tone || -8, () => 0.1), 0, 0); } catch (e) { x.fillStyle = '#6B4A30'; x.fillRect(0, 0, c.width, c.height); } return x; };
+  // the soil texture of a small picture is drawn a moment after the page is up, behind what the icon already draws, so that the page opens sooner
+  let bgN = 0;
+  const bg = (c, soilKey, tone) => { const x = c.getContext('2d'); setTimeout(() => { x.save(); x.globalCompositeOperation = 'destination-over'; try { x.drawImage(soilParticles(c.width, c.height, 1234, soilKey || state.soil, () => tone || -8, () => 0.1), 0, 0); } catch (e) { x.fillStyle = '#6B4A30'; x.fillRect(0, 0, c.width, c.height); } x.restore(); }, 600 + 30 * (bgN++)); return x; };
   const icons = {
     soil: (b, k) => { const c = cvs(108, 68); bg(c, k, -6); b.prepend(c); },
     till: (b, k) => { const c = cvs(120, 44), x = bg(c, null, -12), r = rnd(7), n = { conv: 46, reduced: 26, notill: 10 }[k] || 20; for (let i = 0; i < n; i++) { const px = r() * 120, py = k === 'notill' ? 14 + r() * 20 : 6 + r() * 26, rr = (k === 'conv' ? 2.5 + r() * 4 : k === 'reduced' ? 2 + r() * 3 : 1.5 + r() * 2.2); x.fillStyle = 'rgba(14,9,5,0.85)'; x.beginPath(); x.ellipse(px, py, rr * 1.3, rr, r() * 3, 0, 6.28); x.fill(); }
