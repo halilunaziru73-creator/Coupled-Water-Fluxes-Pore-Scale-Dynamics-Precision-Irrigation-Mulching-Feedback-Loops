@@ -1,6 +1,6 @@
 <p align="center"><img src="app/assets/logo-wordmark.svg" alt="SWAFL" width="360"></p>
 
-<p align="center"><b>Download the SWAFL manual (PDF):</b> <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">version 1.1.0, this version (1028 pages)</a> · <a href="https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html?v=1.1.0">online workbench</a></p>
+<p align="center"><b>Download the SWAFL manual (PDF):</b> <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">version 1.1.0, this version</a> · <a href="https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html?v=1.1.0">online workbench</a></p>
 
 <p align="center"><img src="docs/swafl_workbench.png" alt="SWAFL Desktop 1.1.0: the drip irrigation design with the soil water of the days ahead" width="900"></p>
 
@@ -110,10 +110,10 @@ tools/make_peryear.py                extracts the per-year data from Data/Compre
 app/assets/                          logo (SVG/PNG)
 build/icon.ico icon.png              application icon
 docs/USER_GUIDE.md                   how to use SWAFL
-docs/manual_v1.1.0/                  manual of version 1.1.0 (SWAFL_Manual_v1.1.0.pdf, 1028 pages)
+docs/manual_v1.1.0/                  manual of version 1.1.0 (SWAFL_Manual_v1.1.0.pdf)
 ```
 
-The program zip does not contain the manual PDF (42 MB); download it from the link at the top and put it in a folder called `Manual` next to the program, and F1 opens it from there. Without it, F1 opens the copy on GitHub. See [docs/USER_GUIDE.md](docs/USER_GUIDE.md) for the step-by-step guide and [docs/manual_v1.1.0](docs/manual_v1.1.0/README.md) for the manual of version 1.1.0 (one PDF of 1028 pages, in the chapters of the 1.0 manual with every screenshot taken again from version 1.1.0 and the new chapters added). Author: Naziru Halilu. MIT licence.
+The program zip does not contain the manual PDF (42 MB); download it from the link at the top and put it in a folder called `Manual` next to the program, and F1 opens it from there. Without it, F1 opens the copy on GitHub. See [docs/USER_GUIDE.md](docs/USER_GUIDE.md) for the step-by-step guide and [docs/manual_v1.1.0](docs/manual_v1.1.0/README.md) for the manual of version 1.1.0 (one PDF, in the chapters of the 1.0 manual with every screenshot taken again from version 1.1.0 and the new chapters added). Author: Naziru Halilu. MIT licence.
 
 ## Troubleshooting
 

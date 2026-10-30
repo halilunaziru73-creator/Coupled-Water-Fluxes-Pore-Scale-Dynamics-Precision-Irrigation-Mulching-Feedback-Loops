@@ -11,7 +11,7 @@ Six manuscript drafts (xelatex + bibtex; `tex/build.sh p1|p2|p3|p4|p5|p6`):
 
 Papers 1 to 3 were revised for release 1.1.0 (data statement, regenerated numbers, companion-paper pointer; the only changed number is the Engine 2 closure maximum, 0.78 to 0.70 %, because the application now runs on the toolbar date). Checks for papers 4 to 6 are in `reproducibility/p456/`.
 
-Figures in `figures/` (`shots/` full-resolution interface captures, `shots_jpg/` the compressed copies typeset in Paper 3), analysis scripts in `reproducibility/analysis/`, numeric outputs in `results/`. The raw run table and the Zenodo link are in the top-level [`Data`](../Data) folder.
+Figures in `figures/` (`shots/` full-resolution interface captures, `shots_jpg/` the compressed copies of the version 1.1.0 interface typeset in the software paper), analysis scripts in `reproducibility/analysis/`, numeric outputs in `results/`. The raw run table and the Zenodo link are in the top-level [`Data`](../Data) folder.
 
 * `graphical_abstracts/` holds the graphical abstracts (kept out of the manuscript PDFs).
 * `reproducibility/` is a self-contained package that regenerates every number and figure from the archived Daisy ensemble (`bash run_all.sh`), with pinned versions, fixed seeds, SHA-256 checksums and automatic comparison against the reported values. Start with `reproducibility/README_REPRODUCE.md`.
