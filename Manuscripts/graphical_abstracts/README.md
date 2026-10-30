@@ -1,6 +1,6 @@
 # Graphical abstracts
 
-The graphical abstracts (the two analyses of Paper 1 and Paper 2; Papers 3 and 4 have none) are kept here, separate from the manuscript PDFs in `../pdf/`.
+The graphical abstracts (the two analyses of Paper 1 and Paper 2; Paper 3 has none) are kept here, separate from the manuscript PDFs in `../pdf/`.
 
 | File | Manuscript |
 |---|---|

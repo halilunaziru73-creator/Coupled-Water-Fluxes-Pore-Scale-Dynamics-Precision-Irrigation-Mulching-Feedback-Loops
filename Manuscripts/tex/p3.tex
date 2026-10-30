@@ -1,40 +1,124 @@
 \input{pre.tex}
-\hypersetup{pdftitle={A Graphical Workbench and a Verified Bridge for the Daisy Model from a Question in Plain Words to a Decision Layer in One Offline Application},pdfauthor={Naziru Halilu}}
+\hypersetup{pdftitle={SWAFL Desktop as an Offline and Equation-Traceable Decision-Support Suite with a Graphical Workbench and a Verified Bridge for the Daisy Model},pdfauthor={Naziru Halilu}}
 \begin{document}
 \linenumbers
 \begin{titlepage}
 \vspace*{-1.2cm}
-\begin{center}\begin{minipage}{0.92\textwidth}\centering{\Large\bfseries A Graphical Workbench and a Verified Bridge for the Daisy Model from a Question in Plain Words to a Decision Layer in One Offline Application\par}\end{minipage}\end{center}
+\begin{center}\begin{minipage}{0.92\textwidth}\centering{\Large\bfseries SWAFL Desktop as an Offline and Equation-Traceable Decision-Support Suite with a Graphical Workbench and a Verified Bridge for the Daisy Model\par}\end{minipage}\end{center}
 \vspace{0.4cm}
 \authorblock
 \vspace{0.4cm}
 {\small\setlength{\parindent}{0pt}\setlength{\parskip}{0pt}
 \begin{center}\textbf{\normalsize Abstract}\end{center}\vspace{-0.4em}
-\noindent Daisy is a process-based model of the soil--plant--atmosphere system, but its use requires text set-up files, a command-line program and plain-text logs, and its results reach a decision only through hand-made steps in which the origin of a number is lost. This article describes and tests a graphical workbench for Daisy and a bridge from its output to decision layers, both parts of the offline SWAFL Desktop. The workbench offers a guided path, a planner that turns a request in plain words into a design checked against the catalogue of what Daisy can vary, a decision base read from the Daisy manual, prepared experiments, a process map, a soil-column solver, calibration, and a citation and the raw files kept with every figure. The bridge follows one rule: a decision layer draws a Daisy result only from a Daisy run, and otherwise says that there is none. Each part was tested against an independent reference. The planner returned the expected factors, station and soil, and its check dropped unknown factors and limited out-of-range levels. Compact designs recover the marginal curves of the large ensemble at a fraction of the Daisy time. The soil column conserves mass and agrees with an independent numerical reference, and the log parsers and chemical budget agree with independent readers. The tests exposed a defect in the denitrification function, now corrected. Daisy itself was not run in these tests, the online assistant and data services were not reached, and no field data are used.
+\noindent The tools needed to plan irrigation on one field are usually separate programs, each with its own inputs and none showing where its numbers come from, and process models such as Daisy reach a decision only through hand-made steps in which the origin of a number is lost. This article describes SWAFL Desktop, an open, offline-first suite that joins a map, satellite data, crop-water calculation, hydraulic design, simulation and phenotyping in one application under one rule: every number leads to a numbered equation with a provenance label. The suite has decision layers for irrigation design, control, mulch and evaporation, soil structure, field water balance, seasonal data, crops and feedback loops, a crop library, and tools for the real field such as a field sketch, Sentinel vegetation indices, management zones and variable-rate irrigation. A graphical workbench runs the Daisy model, with a planner that turns a request in plain words into a design checked against the catalogue of what Daisy can vary, and a bridge hands the runs to the decision layers under a second rule: a layer draws a Daisy result only from a Daisy run. Each computing part was tested against an independent reference. All layers run without a script error, the planner returned the expected factors, compact designs recover the marginal curves of a large ensemble at a fraction of the Daisy time, the soil column and the log parsers agree with independent references, and a defect in the denitrification function was found and corrected. A virtual phenotyping experiment is exactly reproducible and closes its water balance, and water-saving, deep-rooting and stay-green genotypes lose least under drought. No field validation is claimed, Daisy itself was not run in these tests, and the satellite and open-data paths were exercised on generated test data only.
 
-\medskip\noindent \textbf{Keywords.} Daisy model; graphical user interface; question planner; model coupling; decision support; experiment design; Richards equation; model calibration; denitrification; verification; provenance; open science\par}
+\medskip\noindent \textbf{Keywords.} decision support; irrigation design and scheduling; Daisy model; graphical user interface; question planner; model coupling; Sentinel vegetation indices; plant phenotyping; offline software; equation traceability; verification; open science\par}
 \end{titlepage}
 
 \section{Introduction}
+Irrigation planning on a farm combines at least five kinds of work. The field has to be found, outlined and described (its area, slope, soil, water source). Its crop has to be monitored, today by satellite. The irrigation system has to be designed and checked hydraulically. The schedule (when, how much) has to be calculated from the weather, the crop and the soil. And the decision has to be put against what a process model says would happen if the soil, the weather or the management were different. Each kind of work has good tools: web maps and the Sentinel-2 archive \citep{Drusch2012}, crop-water calculators built on the FAO procedures \citep{Allen1998,Doorenbos1979}, hydraulic design methods \citep{Keller1990,Walker1989}, simulation models for crops and soil water \citep{Jones2003,Keating2003,Steduto2009,Simunek2008,Hansen2012}. They rarely share inputs, they often need a connection to the internet or a licence, and in many of them the path from an input to an output cannot be followed.
+
 Process-based models of the soil--plant--atmosphere system are the main tools for asking what would happen to the water, the crop and the nitrogen of a field if the management or the climate changed. Daisy is one of them. It couples the water and heat flow in the soil, the soil organic matter and the nitrogen, the crop and the surface, and it has been described, calibrated and tested in a long series of papers \citep{Hansen1990,Abrahamsen2000,Hansen2012,Holbak2026}. Comparable models are used for crops and irrigation \citep{Jones2003,Keating2003,Steduto2009} and for the flow of water and solutes \citep{Simunek2008,Simunek2016}. What these models have in common is that a simulation is specified in a text file, run by a program, and read from files. That is natural for a model developer. It is a barrier for the person who has a question about a field: how much of the water that a mulch saves is lost to drainage, which trigger suction suits a sandy soil, what a smaller nitrogen dose does to the nitrate that leaves the root zone.
 
 The barrier has a second part. A set of simulations that answers a question (a factorial design over the trigger, the sensor depth and the rain, say) is itself a piece of work that is rarely recorded with the answer. A published ensemble of 10\,190 Daisy runs in 17 experiments \citep{HaliluData} makes the design of the study explicit, but a reader who wants to repeat one experiment on a laptop, with another soil or another weather, has no easy way to do so.
 
-A simulation model is a function from a description of a field to a set of time series. A decision is a choice between management options for a particular field. The distance between the two is crossed by operations that are rarely described or tested: the reading of the output, its reduction to a few numbers per season, the matching of the simulated soil to the soil of the field, the choice of the output that answers the question, and the presentation of the answer next to its alternatives. When a decision tool is built on a process model, these operations are the tool.
 
-Two strategies are common. In the first, the model is run offline over a design of scenarios and a fast statistical model (a meta-model, emulator or surrogate) is fitted to the results \citep{Sacks1989,Kennedy2001,Razavi2012}; the decision tool then evaluates the emulator. This is fast and needs no model installation, but it can only answer for the conditions of the design. In the second, the tool runs the model on demand for the user's own conditions, which is general but slow and needs the model. Both have a place in a tool for irrigation planning, and the tool described here uses both: a meta-model of a published ensemble of 10\,190 Daisy runs \citep{HaliluData} is Engine~1 of the suite (Paper~2), and the graphical workbench for Daisy described here runs Daisy for the user and hands the results on.
 
-This article describes both parts together because they are one chain: the workbench produces the Daisy runs, the bridge hands them to the decision layers, and the rule of origin is what keeps the chain checkable. We describe (i) how the workbench is organised and why, (ii) how a request in words becomes a design and how every figure and run keeps its origin, (iii) how the experiments of the published ensemble are made available as prepared designs and what is lost when they are reduced to a size that a laptop can run, (iv) the tools that compute inside the workbench, (v) the components of the bridge and the rule by which the decision layers use them, and (vi) the checks that were made of each part. The checks are part of the contribution: a graphical tool that shows a number does not make the number right, and a bridge that mistranslates a log is worse than no bridge because it produces numbers that look like Daisy output.
+This article describes one application that joins these steps and the Daisy model, and the tests that were made of it for release 1.1.0. Its design goals are four. \emph{Offline first}: the core computes without a connection; open data (satellite scenes, maps, weather, soil, elevation) are used when a connection exists, and the program says what it used and what it could not reach. \emph{Traceable}: every output leads to a numbered equation, and every equation carries a label of its origin, so that a reader can tell what is taken from the literature, what was fitted to data, and what was designed for the software. \emph{One project}: the soil, crop, weather, mulch, irrigation and date are set once and every layer uses them. \emph{Open}: the source, the manual, the data and the check scripts are public (Software, data and code availability). The meta-model and daily model of the first release are described in Paper~2; this article describes the whole of release 1.1.0 and reports what was tested.
 
-\paragraph{Contributions.} (1) A guided path from site data to a decision, in which each step is one tab and each tab states what it is for. (2) A planner that turns a request in plain words into a design, with an online assistant that is held to the catalogue of what Daisy can vary. (3) A decision base read from the Daisy reference manual, with the section of the manual that each choice comes from. (4) Seventeen prepared experiments, with their compact designs, their run-time estimates and the study results next to them. (5) A soil-column solver, response curves and a three-optimiser calibration tool that run without Daisy. (6) A bridge with five small parts and a single rule that keeps the origin of every Daisy number visible, and a comparison of the three routes from Daisy to a decision. (7) A verification of every computing part against files or solvers that were not made by the workbench, with the defect of the shared denitrification function that the verification found.
+\paragraph{Contributions.} (1) The architecture of a suite in which the field, the design, the schedule, the process model and the phenotyping share one project and one rule of traceability. (2) The tools for the real field, and the way they fall back when data are not available. (3) A graphical workbench for Daisy with a planner that turns a request in plain words into a checked design, a decision base read from the Daisy manual, prepared experiments with their cost of reduction, and a soil-column solver, response curves and calibration that run without Daisy. (4) A bridge with five small parts and a rule of origin, and a comparison of the three routes from Daisy to a decision. (5) A deterministic phenotyping layer and a crop library with a stated source for every coefficient. (6) A verification of every computing part against files or solvers not made by the suite, which found the defect of the shared denitrification function, and a statement of what was not tested.
 
-\paragraph{What is new.} Daisy is a mature process model that is run from text files, and decision tools that use it normally receive its results by hand. The new element is the chain, under one rule of origin: a request in plain words is turned into a design that is checked against the catalogue of the model (offline, or with an online assistant whose answer cannot add a factor or a value that the catalogue does not contain), the design is run or taken from the prepared experiments of a published ensemble with a stated cost of reduction, every figure carries the citation of its weather, soil and run and every run keeps the files that Daisy wrote exactly as written, and the results are handed to decision layers that show a Daisy result only from a Daisy run. Around the chain are an inspectable map of the processes and components, a soil-column solver, response curves and a three-optimiser calibration tool that work before Daisy is started (no claim is made about other tools). Each computing part is tested against an independent reference, and the test of the denitrification function found a defect that had been in the shared code, which is corrected.
+\paragraph{What is new.} The new element is the chain under two rules. Under the rule of traceability, a field sketch, Sentinel-2 indices and image analysis, management zones, closed-form design of three irrigation systems, a crop library, a daily water balance and a deterministic virtual phenotyping layer share one project. Under the rule of origin, a request in plain words is turned into a design that is checked against the catalogue of Daisy (offline, or by an online assistant that cannot add a factor or a value that the catalogue does not contain), the design is run or taken from the prepared experiments of a published ensemble with a stated cost of reduction, every figure and run keeps its origin, and the results reach decision layers that show a Daisy result only from a Daisy run. Each computing part is tested against an independent reference, and the tests are reported together with the limits of what they show.
 
-\section{The workbench}
-\subsection{Design principles}
+\section{Materials and methods}
+
+\subsection{The suite}
+
+\subsubsection{Architecture}
+\Cref{fig:system} shows the architecture. The user works in one window with a tree of layers on the left, the picture or design of the layer in the middle, a dashboard on the right and a panel of project properties. The dashboard of every layer has the same five tabs (results, design, charts, figure, messages), so that a result is read in the same place whichever layer made it. A single Run button starts a layer; the results of a layer wait for a new run when a setting of the project is changed, so that nothing moves while the settings are being made. The date of the toolbar is the working date of the whole suite and can be set to any day from 1980 to 2100: the weather of 1980 to 1999 is a recorded baseline, that of 2000 to 2100 is projected from a chosen baseline year (a typical, dry, wet or specific year), and the user is told that projections are simulations and not forecasts.
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/p6/fig01_system.pdf}
+\caption{Architecture of SWAFL Desktop 1.1.0. The tools of the real field (top), the design and decision layers, the phenotyping layer and the crop library, the three computing engines and the Daisy workbench, and the outputs.}\label{fig:system}
+\end{figure}
+
+\subsubsection{The layers}
+\Cref{tab:layers} lists the 22 layers. The first three are closed-form design modules for surface (border, furrow, basin), drip and sprinkler irrigation, with a layout drawing, a pipe network, pump and hydraulic grade line, design checks, an optimiser for the surface layout and a schedule that ends in a message on when to irrigate with the interval, the application efficiency and the storage efficiency. The layers of irrigation control, mulch and evaporation, and soil structure explore the findings of the Daisy ensemble (a depletion-based trigger law, the fate of the water that a mulch saves, a regime map of evaporation against drainage; Paper~1). The water-balance layers use the daily model; the seasonal layers run it over 20 seasons. Two more layers, the Daisy decision table and the fate of a chemical, show only the results of Daisy runs made in the workbench (Paper~3).
+
+\begin{table}[H]\centering\small
+\caption{The 22 decision layers of release 1.1.0 by group, and the two layers of Daisy output.}\label{tab:layers}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.6cm}>{\raggedright\arraybackslash}p{1.1cm}X}
+\toprule Group & Id & Layers\\\midrule
+Irrigation design & 3 & surface (\texttt{sid}), drip (\texttt{drip}) and sprinkler (\texttt{spr}) design\\
+Irrigation control & 2 & sensor and trigger (\texttt{v1}); trigger law (\texttt{n1})\\
+Mulch and evaporation & 5 & mulch against bare soil (\texttt{v4}); mulch control (\texttt{v6}); evaporation physics (\texttt{e1}); fate of saved water (\texttt{n2}); regime map (\texttt{n3})\\
+Soil structure and tillage & 3 & tillage and structure (\texttt{v3}); soil hydraulic drivers (\texttt{v7}); root structure (\texttt{r1})\\
+Deterministic phenotyping & 1 & phenotyping of a plant under well-watered and drought treatments (\texttt{dph})\\
+Field water balance & 3 & field balance (\texttt{field}); soil, plant and air (\texttt{spac}); profile evolution (\texttt{v2})\\
+Seasonal data & 3 & reliability over 20 seasons (\texttt{yby}); full water balance (\texttt{wb2}); nitrogen budget (\texttt{nb})\\
+Crops & 1 & crop water requirement (\texttt{crop})\\
+Feedback loops & 1 & seven soil--atmosphere feedback loops (\texttt{v5})\\\midrule
+Daisy output & 2 & decision table (\texttt{dsum}); fate of a chemical (\texttt{chem})\\\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection{Traceability}
+The manual of the release has about 470 numbered equations and 482 statements of provenance. Counted by label, 159 are marked as literature, 69 as data-driven and 287 as engineered (some equations carry two labels). A reader of a layer is told which equation produced a number, and which of the three origins it has. The label ``engineered'' means that the form of the relation was chosen for the software and has not been fitted to data or taken from a source; it is the largest class, and it is the class for which the verification of this article and of Paper~2 matters most.
+
+
+\subsection{The real field}
+\subsubsection{Sketch}
+The field sketch is a drawing tool in which the user states the field (its corners on a grid or a rectangle by length and width, the ground slope, the direction of the laterals or furrows), places the water source, the inlet, the greenhouse, plant beds and areas that are not irrigated, and gets the area, the perimeter and the irrigated area. A five-step question list leads from the field to the crop, soil, water system and running; the sketch becomes the design of a layer with one click.
+
+\subsubsection{Satellite indices and image analysis}
+When the field is demarcated on the map (Esri World Imagery, OpenStreetMap), the suite searches the Sentinel-2 L2A catalogue (Element 84 Earth Search, with Microsoft Planetary Computer as the second source), reads the bands B02, B04, B05, B08 and B11 for the field only, removes the baseline offset and the pixels of cloud, shadow and snow with the scene classification, and computes for every 10\,m cell
+\begin{equation}\label{eq:idx}
+\begin{aligned}
+\mathrm{NDVI}&=\frac{\rho_N-\rho_R}{\rho_N+\rho_R}, & \mathrm{EVI}&=2.5\,\frac{\rho_N-\rho_R}{\rho_N+6\rho_R-7.5\rho_B+1}, & \mathrm{SAVI}&=\frac{(1+L)(\rho_N-\rho_R)}{\rho_N+\rho_R+L},\\
+\mathrm{NDRE}&=\frac{\rho_N-\rho_{RE}}{\rho_N+\rho_{RE}}, & \mathrm{NDWI}&=\frac{\rho_N-\rho_{SW}}{\rho_N+\rho_{SW}} & &(L=0.5),
+\end{aligned}
+\end{equation}
+after \citet{Rouse1974}, \citet{Huete2002}, \citet{Huete1988}, \citet{Barnes2000} and \citet{Gao1996}. From the photograph of the field the visible-band indices VARI, GLI, ExG and NGRDI are averaged \citep{Gitelson2002,Woebbecke1995}, and a land cover (dense and sparse vegetation, bare soil, water, buildings and roads, shadow) is read by $k$-means clustering of six colour and texture features followed by named rules; this is classical computer vision and not a trained network, and the label of the equation says so. The field is split into five management zones by natural breaks of the smoothed index. A series of the scenes of the last twelve months (the least cloudy of each month, with a scene accepted when at least 30\,\% of the field is clear) gives for each cell a stability, a change since the previous scene and a trend, and groups the cells into three to six monitoring zones.
+
+Open data complete the site: the water features around the field (OpenStreetMap) and their distance, the elevation and slope (Copernicus DEM), and the soil texture (SoilGrids; \citealt{Poggio2021}). The suite suggests where to take the water from and which irrigation system suits the field, with the reasons. If a service cannot be reached, the program says what it could not reach and uses the simulated indices of the suite, which mix the reflectance of crop and soil by the crop cover of the daily model.
+
+\subsubsection{Zone-by-zone irrigation, report and prescriptions}
+For each management zone the FAO-56 root-zone balance \citep{Allen1998} is run with the zone's soil (SoilGrids at its centre, the nearest soil of the suite), its observed cover (the crop development of the daily model scaled by the zone's NDVI against the field's) and the weather in use, which gives its own dates and depths of irrigation and the volume compared with that of one depth for the whole field. The result goes into a field report (PDF) and into prescription files (GeoJSON and CSV with the zone, date, net and gross depth of each cell). Further tools of the same panel are described in the next subsection.
+
+\subsubsection{Terrain, ephemeral gullies, soil loss and sensors}
+The terrain of the field and its surroundings is read from open elevation tiles (Terrarium tiles of AWS Terrain Tiles, which come from SRTM, Copernicus and national lidar where available), smoothed, and its sinks are filled by priority flood; D8 flow directions and the upslope area $A$ give the channels, the watershed of any point and a hillshade, which the program draws as contours with flow arrows and as a three-dimensional surface. Ephemeral gullies are predicted where the local slope $S$ and the contributing area pass the topographic threshold of cultivated fields, $S=0.025\,A^{-0.4}$ \citep{Vandaele1996}, and run down the flow lines; the satellite photograph is then searched along the predicted lines for linear features with a Hessian ridge and valley filter \citep{Frangi1998}, and a line that has such a feature is marked as seen in the photograph. This is classical image analysis and not a trained network. Soil loss is estimated with the revised universal soil loss equation, $A_{\mathrm{loss}}=R\,K\,LS\,C\,P$, in which the rainfall erosivity $R$ comes from the annual rain \citep{Renard1994}, the erodibility $K$ from the soil texture and organic carbon \citep{Sharpley1990}, the slope-length factor $LS$ from the upslope area and the slope \citep{Moore1992}, the cover factor $C$ from the NDVI of the field \citep{vanderKnijff1999}, and $P=1$ unless a conservation practice is chosen. These tools were run on the test image and the test answers of the data services only; they were not compared with a mapped gully or a measured loss.
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/p6/fig02_field_figures.jpg}
+\caption{Outputs for the real field (generated test image and test answers of the data services). (a) The field sketch with the inlet, the laterals, the greenhouse and an area that is not irrigated. (b) Sentinel-2 NDVI cut to the outline of the field. (c) Water sources. (d) The depth of the next irrigation of each management zone.}\label{fig:field}
+\end{figure}
+
+
+\subsection{Crops}
+The library has 48 crops, 19 field crops (cereals, roots and tubers, legumes, oil crops, cotton) with a crop coefficient for the initial, mid-season and late-season stages, four stage lengths, height, rooting depth, the depletion fraction $p$ and, where tabulated, the yield response factor $K_y$ \citep{Doorenbos1979,Allen1998}, and 29 perennial crops (tree, vine and berry crops) with several planting densities or training systems, each with its ground cover, height, mid-season and end-season coefficient. The daily crop coefficient follows the piecewise curve of FAO-56,
+\begin{equation}\label{eq:kc}
+K_c(t)=\begin{cases}K_{ini}, & t<L_1\\ K_{ini}+(K_{mid}-K_{ini})\dfrac{t-L_1}{L_2}, & L_1\le t<L_1+L_2\\ K_{mid}, & L_1+L_2\le t<L_1+L_2+L_3\\ K_{mid}+(K_{end}-K_{mid})\min\!\left(1,\dfrac{t-L_1-L_2-L_3}{L_4}\right), & \text{otherwise,}\end{cases}
+\end{equation}
+which for evergreen crops is repeated each year. Every coefficient has a source field; where the root depth or the stages are not tabulated for a crop the group default is used and marked (11 crops); the yield response factor is tabulated for 11 crops and not tabulated for 37.
+
+
+\subsection{Deterministic phenotyping}
+The phenotyping layer is a virtual experiment. One plant of a chosen crop (modelled as maize, sorghum, wheat or common bean) and genotype grows for 140 days after emergence in the soil, tillage, weather and management of the project, twice: well-watered and under a drought treatment (a pulse, a terminal, an intermittent or no drought). The model has no random numbers, so the same controls always give the same plant. Light capture and biomass follow \citet{Monteith1977}, limited by transpiration as in \citet{Tanner1983}; reference evapotranspiration is FAO-56 Penman--Monteith \citep{Monteith1965,Allen1998}; soil water uses the van Genuchten curve \citep{vanGenuchten1980} and root uptake the stress function of \citet{Feddes1978}; leaf water potential, turgor and expansion follow a pressure--volume curve and \citet{Lockhart1965}, stomata \citet{Jarvis1976}, canopy temperature and the crop water stress index \citet{Jackson1981}, and the root system grows by rules after \citet{Pages2014}, with carbon allocated by functional equilibrium. The traits that are read out (projected shoot area, convex hull, solidity, senescence, canopy temperature depression, relative water content, root angle, depth and length) are those defined in the two books on phenotyping that the layer starts from \citep{Lorence2022,Panguluri2013}, which define the traits and not the equations. The constants of four species and seven genotypes are typical and editable values of the layer, not data of an experiment. The layer reaches the project: the crop and its library values, the soil, the weather and the toolbar date (which sets the season and a drought outlook for the next days), the mulch, the irrigation and the nitrogen rate. The user can load measured traits, compare, calibrate and export them.
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/p6/fig03_pheno_figures.jpg}
+\caption{(a) Traits through time, well-watered against drought, with the phases of the stress marked. (b) Soil water in the days ahead with the irrigation decision of the design. (c) The field report (page 1).}\label{fig:pheno-screens}
+\end{figure}
+
+
+\subsection{Weather as a choice}
+The weather of a project is chosen from five sources and carries into every layer and into the Daisy runs: the built-in benchmark record (Taastrup, Denmark), seven bundled Daisy stations (Taastrup, Foulum and Jyndevad in Denmark, Bologna in Italy, Jadwisin in Poland, Bratislava in Slovakia and Valecov in the Czech Republic), a file of the user (CSV, Excel, Daisy DWF, DLF or DAI), online weather of any place on Earth from the Open-Meteo archive (ERA5 based; complete years only) and DMI open data with the user's own key. Any working date from 1980 to 2100 can be set in the toolbar: dates up to 1999 use the recorded baseline, later dates are projected from a baseline year that the user chooses (typical, dry, wet or a specific year), and projections are simulations and not forecasts. The online sources could not be reached in the environment of the tests.
+
+\subsection{The workbench}
+\subsubsection{Design principles}
 Four principles shaped the workbench. \emph{Questions before syntax}: the first thing a user does is to state a question, either by choosing a scenario or a prepared experiment or by writing a request, and the set-up file is the result and not the starting point. \emph{Everything that runs is shown first}: a design lists its runs, their settings and an estimate of the time before anything is run. \emph{One source of data}: the weather and the soil of the site are entered once and every tab uses them. \emph{No hidden steps between a result and a decision}: the last step of the path hands the results of the runs to the layers of the decision-support suite (the bridge below).
 
-\subsection{Structure}
+\subsubsection{Structure}
 The workbench is a window of the application with six groups of tabs (\cref{fig:wb}). The guided path has nine steps: weather and soil of the site; the library of soils, crops and fertilisers; scenarios; experiments; the process map; log plots; mass balance; run comparison; and the hand-over to the SWAFL layers. A second row holds the tools of model development, which are outside the path: the set-up editor for \texttt{.dai} files, the soil column, the response curves, calibration, and the documentation. The documentation tab holds 107 reference topics, 27 combinations of factors with a recommended design, and a manual of the model. The bundled sample data are seven weather records (Taastrup, Foulum, Jyndevad, Bologna, Jadwisin, Valecov, Bratislava), ten annual or daily logs of the Daisy project, and the horizon, crop, fertiliser and action library read from its \texttt{.dai} files. Daisy 7.1.14 for Windows is bundled with the application and is the program that runs the set-ups; the workbench writes the set-up and reads the logs back.
 
 \begin{figure}[H]\centering
@@ -52,24 +136,26 @@ The workbench is a window of the application with six groups of tabs (\cref{fig:
 \caption{Water content of a soil column through time, computed by the Richards solver of the workbench.}\label{fig:column}
 \end{figure}
 
-\subsection{Experiments and scenarios}
+\subsubsection{Experiments and scenarios}
 A scenario is a prepared question with a recommended set of runs: irrigation strategy, nitrogen fertilisation and leaching, climate, the fate of a chemical, and the effect of the soil. An experiment is a factorial design that the user builds from factors. The 53 factors cover the weather (rain scale, temperature shift), the soil (a library horizon or a texture class), irrigation (method, trigger suction, sensor depth, dose, window), nitrogen (rate), the crop (rooting depth), tillage and the parameters of soil structure. For a design the workbench lists every run, with its settings, before it is started, shows the number of runs against a limit and the estimated time, and writes the set-ups. For the 17 experiments of the published ensemble a prepared design is offered, each with its own figures and its own folder of results. The same factor definitions are used to read the results of an ensemble (the bundled ensemble file with the 10\,190 runs) as marginal means, grids, sensitivities and Pareto fronts.
 
-\section{Question, reference and provenance}
-\subsection{The planner}\label{sec:planner}
+
+\subsection{Question, reference and provenance}
+\subsubsection{The planner}\label{sec:planner}
 The user writes what is to be found out (``how does the irrigation trigger of $-100$ to $-800$\,cm change drainage on a sandy loam in Bologna over 10 years?'') and a plan comes back: the factors and their levels, the design (factorial, one at a time or paired), the weather station, the soil, the years, the responses to look at and the questions that remain, each with its options. Two engines produce the same plan. The built-in reader works offline and anywhere: it recognises the soils, stations, factors and responses of the catalogue by their names and meanings, reads quantities with units (``10, 30 and 60\,cm'', ``20\,\%'', ``2 degrees''), ranges with steps and numbers of years, and keeps every number inside the range of its factor. The online assistant is a language model that is given the catalogue and must answer with the plan in the same structure. Its answer is never used as it stands: a factor that is not in the catalogue is left out and noted, levels are limited to the range of the factor, a soil, station or response that is not in the catalogue is removed, and the built-in reader is used if the answer fails. The assistant therefore cannot make the workbench ask Daisy for something that Daisy cannot vary.
 
-\subsection{The decision base from the reference manual}
+\subsubsection{The decision base from the reference manual}
 The choices of an experiment are tied to the Daisy reference manual (version 7.1.14), which is embedded as its 107 chapters with the title, introduction and, for each model, the name, first line of the description and the names of the parameters (999 sections). For each factor the base records the section of the manual that the choice comes from, and it proposes the combinations worth running first for the weather and the soil of the user; no experiment of an earlier study is used to make the proposal. A table of 32 parameters of the reference records, for each, the manual default and whether a change altered the yield, water or nitrogen outputs in a test of Daisy 7.1.14 on the farm of the application (the parameter was written into a run at the manual default and at half and double that value); 12 of the 32 did. This test is recorded in the source of the workbench and was not repeated in this study, in which Daisy could not be run.
 
-\subsection{Provenance of figures and runs}
+\subsubsection{Provenance of figures and runs}
 Every figure that the workbench draws carries a citation line that names Daisy 7.1.14 \citep{Hansen2012,Holbak2026} and the weather, the soil and the options of the run that made it, below the figure and burnt into the picture when it is saved, and the list of references of the workbench is built from the same source. Every run keeps all the files that Daisy wrote (the \texttt{.dlf} logs, the \texttt{.csv} files, \texttt{daisy.log}) exactly as written and never changed by the application, each with a download button, a \texttt{.zip} of the outputs, a \texttt{.zip} that also holds the set-up, and the folder on the computer where the desktop application keeps the run. The summary of a run that the decision layers read is made by the same code for the bundled results and for the run just made, so the two are comparable.
 
-\subsection{Calculators that run without Daisy}
+\subsubsection{Calculators that run without Daisy}
 The workbench computes in the browser the van~Genuchten and Mualem hydraulics of the Daisy horizons and a one-dimensional Richards solver (the soil column below), the Daisy denitrification function, and the methods of the Daisy optimisation tools for calibration: a sequential search, a covariance-matrix evolution strategy with rank-one and rank-$\mu$ updates \citep{HansenOstermeier2001} and Bayesian optimisation \citep{Mockus1978}. It also reads the open data of the Danish Meteorological Institute (with the user's own key) and finds the closest station. The weather of the area of any place on Earth can be fetched from the Open-Meteo archive (ERA5 based) and written as a Daisy weather file, and the user's own files are read as CSV, Excel, DWF, DLF or DAI. Weather is therefore a choice made for every project and every run, and not a record fixed in the program.
 
-\section{The bridge}
-\subsection{Parts}
+
+\subsection{The bridge}
+\subsubsection{Parts}
 \Cref{fig:bridge} shows the bridge. A scenario or an experiment of the workbench is turned into a Daisy set-up and run by Daisy 7.1.14. Daisy writes its logs as tab-separated files (\texttt{.dlf}) with a header, a row of names, a row of units and one row per output interval. The bridge has five parts.
 
 \begin{description}[leftmargin=1.5em,style=nextline]
@@ -98,7 +184,7 @@ Own set-up & decision table (own runs next to the others when the names match)\\
 \end{tabularx}
 \end{table}
 
-\subsection{What the summariser computes}
+\subsubsection{What the summariser computes}
 For season $s$ the nitrogen terms are sums of columns of the annual nitrogen log (kg\,N\,ha$^{-1}$):
 \begin{equation}\label{eq:nsum}
 \begin{aligned}
@@ -112,16 +198,18 @@ together with the mineralisation, the deposition and the volatilisation. The che
 \end{equation}
 where $A$ is the spray, $U$ the crop uptake, $R$ the runoff, $X$ the decay (soil, surface and litter), and $\Delta M$ the change of the amount in the soil from one season to the next. A depth profile of the concentration is added from the daily concentration log. The weather and soil of the run are described by a one-line label, shown at the top of every Daisy layer (``Daisy 7.1.14, run in the Daisy workbench: weather Taastrup, Denmark; soil loam; years 1979 to 2000'').
 
-\subsection{The rule of origin}
+\subsubsection{The rule of origin}
 A decision layer that shows a Daisy quantity draws it from a live run or not at all. Before a run, the two layers of Daisy output (the decision table and the fate of a chemical) show the sentence ``no Daisy run yet'', say what is needed to fill them, and offer a button to the scenarios of the workbench; they do not substitute bundled or estimated numbers. The other layers of the suite, which are driven by Engine~1 and Engine~2, say in their own header that they show the meta-model and the daily model. The rule is a small feature, but it settles a question that every coupled tool has to answer: when a number is on the screen, is it from the model it is labelled with? In a test with the application opened afresh (\texttt{p5\_empty\_state.js}) both layers showed this sentence and no figure, and the engine held no live object.
 
-\section{Methods of the workbench checks}
-\subsection{Design size and fidelity}
+
+
+\subsection{Checks of the workbench}
+\subsubsection{Design size and fidelity}
 Each experiment of the study was a full-factorial grid with 10 levels per factor, which gave 200 to 1\,000 runs per experiment. A laptop cannot repeat that in a working session, so each prepared experiment is offered as a compact design with 3 to 6 levels per factor (\cref{tab:designs}). The size of every compact design was obtained from the workbench code, and the time of the study from the recorded wall-clock time of every run in the archive of the study (\texttt{run\_seconds}). The time of a compact design was estimated as its number of runs times the median run time of its experiment.
 
 To ask what the reduction costs, the marginal mean of five responses (yield, irrigation, drainage at 1\,m, irrigation efficiency, nitrate leached) was computed for each numeric factor of each experiment from the full ensemble, and then rebuilt by linear interpolation between the marginal means at the levels of the compact design (the nearest study level to each compact level; the suction of the trigger interpolated on a logarithmic scale). The root-mean-square difference between the rebuilt and the full curve, as a percentage of the range of the full curve, measures the information that the compact design cannot see by itself. It is a stricter test than the practical use, in which the user chooses levels where the response is steep, but it has no free parameter.
 
-\subsection{Soil column}
+\subsubsection{Soil column}
 The soil column solves the one-dimensional Richards equation for vertical flow in the mixed form
 \begin{equation}\label{eq:richards}
 \frac{\partial\theta}{\partial t}=-\frac{\partial q}{\partial z}-S(h,z),\qquad q=K(h)\left(1-\frac{\partial h}{\partial z}\right),
@@ -144,23 +232,24 @@ Silty clay loam & 0.010 & 1.23 & 0.07 & 0.50 & 0.089\\\bottomrule
 \end{tabular}
 \end{table}
 
-\subsection{Response curves: denitrification}
+\subsubsection{Response curves: denitrification}
 The response-curve tool draws the denitrification function that Daisy uses by default in the form given in its Python extensions. The water-filled pore space $w=\theta/\theta_s$ gives a piecewise-linear moisture factor $f_w(w)$ (zero at $w=0$, 0.01 at 0.4, 0.07 at 0.5, 0.17 at 0.57, 0.32 at 0.64, 0.51 at 0.71, 0.66 at 0.76, 0.79 at 0.81, 0.9 at 0.85 and 1 from 0.9). The potential rate is $f_T\left[\alpha_F C_F+\alpha(C-C_F)\right]$ with the fast and the total carbon dioxide production $C_F$ and $C$ and the factors $\alpha_F=0.0530$ and $\alpha=10^{-4}$. The actual rate is limited by the nitrate, $D=\min(f_w r_S,K_dN)+\min(f_w r_F,K_dN)$ with $K_d=0.0208$\,h$^{-1}$. The loss is divided between the two gases by a ratio $r$,
 \begin{equation}\label{eq:n2o}
 D_{\mathrm{N_2O}}=\frac{D}{1+r},\qquad D_{\mathrm{N_2}}=\frac{D}{1+1/r},\qquad r=\min(r_{\mathrm{NO_3}},r_{\mathrm{CO_2}})\,r_w,
 \end{equation}
 where $r_{\mathrm{NO_3}}=25\left[1-\tfrac12-\tfrac1\pi\arctan\!\big(0.01\pi(N_m-190)\big)\right]$ depends on the nitrate concentration $N_m$ (mg per kg of soil), $r_{\mathrm{CO_2}}=13+\tfrac{30.78}{\pi}\arctan\!\big(0.07\pi(C_m-13)\big)$ on the carbon dioxide production over a 30\,cm layer, $C_m$, and $r_w=1.4\times13^{-17/13^{2.2w}}$ on the water-filled pore space. The Daisy project stores 792 inputs of this function with the outputs that a Daisy run gave for them. The workbench function was compared with all 792.
 
-\subsection{Calibration}
+\subsubsection{Calibration}
 The calibration tool minimises a loss (mean squared error, mean absolute error or sum of squared deviations) between a model output and a target over up to a few parameters with bounds. Three optimisers are offered, after the choices of the Daisy optimisation project: a sequential search in which each parameter takes a few values in turn and the single best change is kept; the covariance-matrix-adaptation evolution strategy \citep{HansenOstermeier2001}; and a Bayesian search with a Gaussian-process surrogate and expected improvement \citep{Mockus1978}. To test them, the three parameters $\alpha_F$, $K_d$ and $\alpha$ of the denitrification function were estimated from the 792 stored outputs (the loss is the mean squared error of the logarithm of the N$_2$ loss), starting from values 3 times too high, with a budget of 150 evaluations and five seeds. The correct values are known, so the recovery can be measured as the error in decades.
 
-\subsection{Reproducibility}
+\subsubsection{Reproducibility}
 All checks are scripts in \texttt{Manuscripts/reproducibility/p456} (\cref{app:repro4}). The design sizes are obtained by loading the workbench code in Node.js; the ensemble analysis is in Python.
 
-\subsection{Planner test}
+\subsubsection{Planner test}
 Eight questions in plain words were written, each with the factors, the station and the soil that the plan has to contain (for example a trigger range on a sandy loam in Bologna, a nitrogen cut in Foulum, rain at plus and minus 20\,\% on a loamy sand at Jyndevad). The offline reader was run on each (\texttt{p7\_planner\_checks.js}); the guard of the online route was run on an invented answer that holds an unknown factor, a rain scale of 0.1 and 9, an unknown station and soil and an unknown response.
 
-\section{Methods of the bridge tests}
+
+\subsection{Tests of the bridge}
 \paragraph{Parsers.} The six Daisy logs bundled with the suite (annual field nitrogen, two runs; annual tracer; daily water flux; the nitrogen log of a calibration example; a soil chemical log with 11\,665 rows) were read by the parser of the bridge and, independently, by \texttt{pandas}. For every numeric column the sum was compared; the largest relative difference is reported.
 
 \paragraph{Nitrogen summaries.} The two annual nitrogen logs hold ten seasons of a rotation, with the same fertiliser and different set-ups (runs 3b and 4b). For each season the summariser was compared with the sum of the corresponding log columns of \cref{eq:nsum}, and the closure column of the log (Daisy's own error term) was read.
@@ -171,8 +260,19 @@ Eight questions in plain words were written, each with the factors, the station 
 
 \paragraph{Time and agreement of the three routes.} The Daisy time of the ensemble and of its experiments was summed from the recorded run times (\texttt{run\_seconds}); the time of Engine~1 and its agreement with Daisy on held-out runs are those of Paper~2.
 
-\section{Results of the workbench checks}
-\subsection{Prepared designs and what the reduction costs}
+
+\subsection{Tests of the suite}
+\paragraph{All layers.} The application was opened in Chromium (Playwright) and each of the 22 layers was opened, run through the Run button (or the Run simulation button of the design layers) and read: errors of the page script were recorded, the text of the results tab and the number of charts in the results and the charts tabs were counted. The layers with Daisy output were opened in a fresh application to see their empty state.
+
+\paragraph{Crop library.} For each of the 110 combinations of crop and density the library gives parameters; the constraints tested were: $K_{mid}\ge K_{ini}$, $0.3<K_{mid}<1.4$, positive stages, a season length of 60 to 365 days, $0.1<p<0.8$, $0.2<K_y<1.6$ where tabulated, a root depth of 20 to 400\,cm, a daily $K_c$ curve whose maximum equals the largest of the three coefficients, and no daily jump of more than 0.05.
+
+\paragraph{Phenotyping model.} The model was run in the application with a patched entry point that records every run the layer makes (56 runs when the layer opens), and directly for maize in a warm and in a hot, dry season with the seven genotypes, well-watered and under a drought pulse (onset day 40, 28 days at 30\,\% of the plant-available water, rain-out shelter): 28 runs, each run twice. Determinism is the maximum absolute difference between all stored daily series of the two runs. The soil water balance is $S_{end}-(S_0+P+I-T-E_s-D)$ with the totals of the run.
+
+
+\section{Results}
+
+\subsection{The workbench}
+\subsubsection{Prepared designs and what the reduction costs}
 Fourteen of the 17 experiments are reproduced as compact designs of 6 to 72 runs (\cref{tab:designs}); the three that are not (mulching, rain intensity and moisture, mulch and rain) are available through their published runs. The 368 runs of the compact designs stand for 7\,990 runs of the study, 4.6\,\%, and for 361 hours of Daisy time in the study against about 15 hours (a factor of 25). The whole study took 17.5 days of Daisy wall-clock time on the machines that ran it (mean 148\,s, median 145\,s per run), which is the reason why a prepared design cannot be the full design.
 
 \input{p4_designs.tex}
@@ -184,7 +284,7 @@ The marginal curves are recovered with a median error of 13.2\,\% of their range
 \caption{(a) Error of the marginal curves rebuilt from the levels of the compact designs (median over five responses, per experiment and factor). (b) Daisy run time of the study designs and of the compact designs, by experiment (logarithmic scale).}\label{fig:fidelity}
 \end{figure}
 
-\subsection{The soil column}
+\subsubsection{The soil column}
 In sand and loam the solver conserves mass: the largest daily error is below 0.001\,mm at every node spacing. The drainage below 1\,m after 6 days differs from the reference by 0.46\,mm in sand (152.14 against 152.60\,mm; 0.3\,\%) and by 0.50\,mm in loam (54.62 against 55.12\,mm; 0.9\,\%), and the final storage by 0.42 and 0.50\,mm, 0.45 and 0.16\,\% of the store (\cref{tab:richards}, \cref{fig:richards}a,b). The result hardly depends on the node spacing: the drainage varies by 0.03\,mm in sand and 0.05\,mm in loam between 4 and 0.5\,cm. The solver is therefore not sensitive to the default spacing of 2\,cm in these two soils, and the remaining difference to the reference is a difference of method (a time-step control against a high-order integrator) that is small against any parameter uncertainty.
 
 \input{p4_richards.tex}
@@ -196,7 +296,7 @@ The silty clay loam shows the limit. With the surface ponded, the infiltration o
 \caption{Soil column. (a) Drainage below 1\,m with the node spacing; dashed lines are the reference. (b) Final storage minus the reference. (c) Infiltration of 200\,mm of rain into a ponded silty clay loam (left axis) and run time (right axis), showing the lack of convergence.}\label{fig:richards}
 \end{figure}
 
-\subsection{The denitrification function and a defect that the check found}
+\subsubsection{The denitrification function and a defect that the check found}
 The first comparison with the 792 stored outputs showed that the function of release 1.1.0 gave 60\,\% of the stored N$_2$ and N$_2$O loss (median relative error 40\,\% for both gases; \cref{fig:deni}). The Python extension of the Daisy project, which the workbench function had been ported from, gives the same 60\,\% against the same file, so the port was faithful to the extension; the extension applies the correction for the pressure head ($\times0.6/f_h$) to the carbon dioxide production, whereas the stored Daisy outputs were produced from inputs that had already been corrected. Taking the inputs as the values that Daisy passes to the function, and using the uncorrected value $C f_h/0.6$ only in the regulation of the N$_2$O fraction (\cref{eq:n2o}), reproduces all 792 rows of N$_2$ and of N$_2$O with a largest relative difference of $2.9\times10^{-15}$ for N$_2$ and $1.7\times10^{-15}$ for N$_2$O. The corrected form is the default of release 1.1.0, and the form of the extension is kept as an option for a user who passes uncorrected production rates. The finding illustrates why the stored outputs of a model are a better test than its published equations.
 
 \begin{figure}[H]\centering
@@ -204,10 +304,10 @@ The first comparison with the 792 stored outputs showed that the function of rel
 \caption{Denitrification function against the 792 stored Daisy outputs. (a) N$_2$ loss; the 1:1 line is black. (b) Histogram of the relative error of the N$_2$O loss before and after the correction.}\label{fig:deni}
 \end{figure}
 
-\subsection{Calibration}
+\subsubsection{Calibration}
 Starting from a loss of 0.20, the three optimisers reached a median loss of $6\times10^{-4}$ (sequential, 16 evaluations), $4\times10^{-6}$ (evolution strategy, 154) and $8\times10^{-8}$ (Bayesian, 150) in the logarithm of the flux. They recovered $\alpha_F$ to 0.03, 0.001 and 0.0002 decades (median over five seeds), but they did not recover $K_d$ or $\alpha$: the median errors are 0.45 to 0.54 decades for $K_d$ and 0.48 to 0.68 decades for $\alpha$. The 792 rows span a narrow range of suction ($-112$ to $-94$\,cm) and a nearly constant nitrate content, so that probably many combinations of the two parameters give almost the same outputs. The run times are 4\,ms (sequential), 37\,ms (evolution strategy) and 1.7\,s (Bayesian). The tool therefore does what an optimiser can do and shows, in the history of the search, the combinations that are equally good; it cannot make a parameter identifiable that the outputs do not constrain.
 
-\subsection{The planner}
+\subsubsection{The planner}
 The offline reader returned the factors, station and soil that were expected for all 8 of 8 test questions (\cref{tab:planner}; the catalogue holds 54 factors, 10 soils and 8 stations). The guard of the online route removed the unknown factor and noted it, limited the rain scale from 0.1, 1 and 9 to 0.4, 1 and 1.6, the range of the factor, and removed the unknown station, soil and response. The online assistant itself was not run (no key and no network in the environment), so nothing is claimed about its answers, only about what the guard does to an answer.
 \begin{table}[H]\centering\small
 \caption{Test questions of the planner and the factors that the offline reader returned (all of the expected factors, station and soil were present in every case).}\label{tab:planner}
@@ -222,8 +322,9 @@ Pesticide half-life of 20 and 60 days and sorption koc of 50 and 200 l/kg & koc,
 What if the rooting depth is 60 and 120 cm in Bratislava? & root & yes\\
 \bottomrule\end{tabularx}\end{table}
 
-\section{Results of the bridge tests}
-\subsection{Parsing and summarising}
+
+\subsection{The bridge}
+\subsubsection{Parsing and summarising}
 The six logs were read with relative differences between the two readers of at most $3\times10^{-15}$ (largest log) and 0 for the calibration log, which is a single row. The seasonal nitrogen summaries differ from the log columns by at most 0.049\,kg\,ha$^{-1}$ in the uptake, 0.049 in the mineralisation, 0.005 in the denitrification and the leaching, and 0 in the fertiliser; these differences are the rounding of the summary to 0.1 (nitrogen) or 0.01\,kg\,ha$^{-1}$, and the Daisy error column is 0 in all 20 seasons. In the chemical budget the residual of \cref{eq:chem} is 0.12\,kg\,ha$^{-1}$ or less in each of ten seasons and 0.47 over the ten, 0.02\,\% of the 2\,290\,kg\,ha$^{-1}$ applied, which are the rounding of the log values. The terms of the budget can be trusted to the precision of the log.
 
 The two nitrogen runs show what the layers are for. Their mean fertiliser is the same (229\,kg\,N\,ha$^{-1}$ per season), the crop takes up 341 and 339\,kg\,N\,ha$^{-1}$, but the leaching below 1\,m is 4.4 in run 3b and 17.0 in run 4b, a factor of 3.9, and the denitrification is 15.8 and 14.5 (\cref{tab:nrun}). A person who compared only the uptake would see no difference. The bridge reports all terms of the budget side by side, and the nitrogen layer shows them season by season.
@@ -237,10 +338,10 @@ Run & Fertiliser & Mineralisation & Deposition & Crop uptake & Denitrification &
 \end{tabular}
 \end{table}
 
-\subsection{The denitrification defect}
+\subsubsection{The denitrification defect}
 The first comparison of the shared denitrification function with the 792 stored outputs gave a median relative error of 40\,\%, because the rescaling of the carbon dioxide production for the pressure head was applied to inputs that Daisy had already rescaled. After the correction the largest relative difference is $2.9\times10^{-15}$ (N$_2$) and $1.7\times10^{-15}$ (N$_2$O) (workbench checks). The function is used in the workbench to draw the response curves and, through the bridge, in the reading of the gaseous nitrogen losses.
 
-\subsection{Three routes from Daisy to a decision}
+\subsubsection{Three routes from Daisy to a decision}
 The study ran 10\,190 simulations in 17 experiments in 17.5 days of Daisy time (mean 148\,s, median 145\,s per run). Evaluating Engine~1 for $10^5$ scenarios takes about 2\,s (Paper~2), that is $2\times10^{-5}$\,s per scenario, a factor of $7\times10^{6}$ against the median Daisy run. The compact experiments of the workbench stand in between, 368 runs in about 15 hours (workbench checks). The three routes are not alternatives of one kind but answer different questions (\cref{tab:routes}, \cref{fig:econ}).
 
 \begin{table}[H]\centering\small
@@ -265,29 +366,48 @@ Main limit & fixed design; offset of absolute levels (Paper~2) & coarse levels (
 \caption{Results of the hand-over. (a) The Daisy decision table with the labels of the run (rainfed and irrigated, half and 30\,\% more fertiliser, warmer and drier climates). (b) The fate of a chemical for a mobile, a sorbing and a sorbing and degrading tracer.}\label{fig:flow}
 \end{figure}
 
-\subsection{Agreement of the fast route with Daisy}
+\subsubsection{Agreement of the fast route with Daisy}
 The agreement of Engine~1 with Daisy was tested on 1\,000 runs of the sensor, trigger and rain experiment (E12, coarse loam) that were not used to build its lookups: the ranking of the trigger, sensor-depth and rainfall options is preserved (Spearman 0.64 to 0.97) and the absolute level has a diagnosed offset (Paper~2). This is the evidence that the first route can be used to choose between options. It is not evidence that the second and third routes agree with the first for a soil outside the study; for those the user is told, in the header of the layer, which weather and soil were used.
 
+
+\subsection{The suite}
+\paragraph{Layers.} All 22 layers opened and ran with no error of the page script. The results tab of each layer had a text of 1\,346 to 3\,419 characters (median 1\,670; the phenotyping layer shows its results on the picture and in its own sections) and four to 16 charts; the three design layers have eight in the charts tab, the seasonal layers 16, 10 and 6 (yield reliability, full water balance, nitrogen budget). The Daisy layers showed no figure before a Daisy run, as designed (Paper~3).
+
+\paragraph{Crop library.} Of the 110 combinations, 97 satisfy all constraints. The 13 that do not are evergreen tree crops (citrus in six densities, olive in six, date palm in one young planting) for which the library gives a mid-season coefficient below the initial coefficient, which for evergreen crops is the end-of-season value; the youngest olive plantings also have a mid-season coefficient of 0.25 to 0.30, below the general range. These values follow the source (a low ground cover of young trees) and are not errors of the code, but the layer draws a curve that falls from the initial to the mid-season value, which is unusual and is stated here.
+
+\paragraph{Phenotyping.} The 56 runs of the layer and the 28 runs of the experiment were identical when repeated (maximum difference 0 in every stored series), and the soil water balance closed with a largest residual of $4\times10^{-5}$\,mm. In the warm season the drought pulse reduced the grain mass by 27 to 42\,\% and in the hot, dry season by 14 to 42\,\% (\cref{tab:pheno}, \cref{fig:pheno}). The genotype with the largest loss in both seasons is the shallow, dense one (42\,\%), whose root system reaches 109 to 84\,cm instead of 120\,cm; the water saver, which closes its stomata early, has the smallest absolute yield but one of the smallest losses (27 and 14\,\%), and the deep-rooting genotype loses the least in the hot season among those with a full yield (15\,\%). The osmotic adjuster gives the same grain mass as the reference in this setting: its adjustment changes the water potential and not the dry matter of the pulse. These are the contrasts that the model was built to show, and they follow from its equations; they are not predictions of real genotypes, whose constants are those of the layer.
+
+\input{p6_pheno.tex}
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/p6/fig04_pheno.pdf}
+\caption{Grain dry mass at maturity of seven genotypes, well-watered and under a drought pulse, in a warm (a) and a hot, dry (b) season.}\label{fig:pheno}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/p6/fig05_crops.pdf}
+\caption{Daily crop coefficient curves of the library (\cref{eq:kc}) at the default sowing date, (a) five annual crops, (b) three perennial crops (medium density).}\label{fig:crops}
+\end{figure}
+
+\paragraph{Reproduction of the earlier papers.} After the changes of release 1.1.0, the archived results of Paper~1 (both of its analyses) were regenerated and compared with the archived values; Paper~2 is discussed in its own revision (the working date is now today's date, which moved some Engine~2 outputs, not the mass closure).
+
+
 \section{Discussion}
-\paragraph{What the workbench changes.} A user can ask a question, see the runs that would answer it, run them and read the answer next to the study, without writing a file. The structure of the workbench is the structure of the work: data, question, results, decision. For the developer, the set-up editor, the process map and the calibration tool remain in reach.
+\paragraph{What the suite offers.} A person can go from a point on the map to a drawn field, to satellite indices and zones, to a design, a schedule, a simulation of the options and a report, in one window and with the same soil, crop and weather throughout, and can follow every number to an equation and its origin. For Daisy, a user can ask a question, see the runs that would answer it, run them and read the answer next to the study, without writing a file; the set-up editor, the process map and the calibration tool remain in reach for the developer.
 
-\paragraph{What the checks say about trust.} The checks are of three kinds. Those that compare the workbench with an independent computation (the Richards reference, the parsers of the logs of the bridge) give agreement to the precision of the method. The check against the stored outputs of Daisy found a real defect, which would have given 40\,\% too little denitrification to every user of the curve tool, and this was only visible because the stored outputs were used and not the equations. The check of the optimisers shows a property of the problem and not of the tool. The cheapest way to find the defects of a graphical tool is to compare each of its parts with something that was not made with it.
+\paragraph{What the checks say about trust.} The checks are of three kinds. Those that compare a part with an independent computation (the Richards reference, the parsers of the logs, the worked examples of the design modules) give agreement to the precision of the method. The check against the stored outputs of Daisy found a real defect, which would have given too little denitrification to every user of the curve tool, and this was visible only because stored outputs were used and not the equations. The sweep of the layers shows that they run, not that every number is right. The cheapest way to find the defects of a graphical tool is to compare each of its parts with something that was not made with it, and the defects found in this and the earlier release were none of them visible on the screen.
 
-\paragraph{Limits.} (i) Daisy could not be run in the environment used for the checks, so the agreement of the \emph{runs} of the workbench with the study was not tested; what was tested is the design, the parsing, the solver and the functions. (ii) The compact designs lose a median of 13\,\% of the shape of a marginal curve. (iii) Three experiments are not offered as designs. (iv) The soil column is slow and not converged for a ponded fine soil. (v) Daisy is bundled for Windows only. (vi) No field measurements are used; the workbench shows what the model says and does not say that the model is right for a field. (vii) The calibration of a model on its own outputs cannot show that the calibration works on measurements.
+\paragraph{Why two rules.} The rule of traceability costs the work of writing every equation down; its benefit is that a disagreement with the suite can be located, and that a reader who disagrees with a choice can change it. A bridge between a model and a tool has two kinds of risk. One is translation (a column read wrongly, a unit lost), which the tests above address. The other is substitution: a layer that shows a number from a different source under the name of the model. The rule that a Daisy layer shows a Daisy number or nothing removes the second kind by design, and the label of the run keeps it visible. The design is not specific to Daisy: a parser of the logs of another model, a summariser to seasonal terms, a map of soils and a map of questions to layers are the parts of any such bridge.
 
-\paragraph{Why the rule of origin matters.} A bridge between a model and a tool has two kinds of risk. One is translation (a column read wrongly, a unit lost); the tests above address it. The other is substitution: a layer that shows a number from a different source under the name of the model. The rule that a Daisy layer shows a Daisy number or nothing removes the second kind by design, and the label of the run keeps it visible.
-
-\paragraph{What the tests did not cover.} (i) Daisy was not run in this study, so the whole chain from a set-up to a filled layer was tested in parts and not as one. The parts are the places where a defect can hide, and the one defect found (the denitrification function) was in a part. An end-to-end test with a Daisy installation is the first thing to do. (ii) The bundled logs have ten seasons of one rotation; the logs of a year with a different crop, a long fallow or irrigation have columns that were not exercised. (iii) The two coarse soils of the study and own soil tables are not mapped, so the layers of the suite keep the soil of the project in those cases. (iv) The agreement of the first route with Daisy was tested against Daisy runs of the study itself, not against measurements. (v) The summariser reduces a run to seasons; a question that depends on the day (the date of the first irrigation) needs the daily logs, which the workbench plots but the layers do not read.
-
-\paragraph{Generalisation.} The design is not specific to Daisy: a parser of the logs of another model, a summariser to seasonal terms, a map of the soils, a map of questions to layers and one shared object are the parts of any such bridge. The rule of origin and the tests against the files of the model's own project are what make it checkable.
+\paragraph{Limits.} (i) No field measurement is used anywhere; the verification is against worked examples, held-out simulations, independent solvers and stored model output, so the suite is shown to be consistent and not shown to be right for a field. (ii) Daisy could not be run in the environment of the checks, so the chain from a set-up to a filled layer was tested in parts and not as one; the agreement of the runs of the workbench with the study was not tested, and the one defect found was in a part. (iii) The data services (Sentinel-2, OpenStreetMap, elevation, SoilGrids, online weather) could not be reached, and the figures of the real field were made on generated test images and test answers, so the reading of real scenes and the handling of cloud were not tested. (iv) The compact designs lose a median of 13\,\% of the shape of a marginal curve, three experiments are not offered as designs, and the soil column is slow and not converged for a ponded fine soil. (v) The phenotyping model is built from forms of the literature with typical constants and has not been fitted or tested against phenotyping data, and the crop coefficients are those of FAO-56 and of a review, so a local calibration is the user's task. (vi) The bundled logs have ten seasons of one rotation, and logs with other crops, a long fallow or irrigation were not exercised; the summariser reduces a run to seasons, so a question that depends on the day needs the daily logs, which the workbench plots but the layers do not read. (vii) The calibration of a model on its own outputs cannot show that the calibration works on measurements. (viii) The interface was tested in one browser engine; the Windows application, its installer and the bundled Daisy were not tested here, and Daisy is bundled for Windows only. (ix) The largest class of equations (287 of the labelled) is engineered and has only the tests of this and the earlier papers.
 
 \section{Conclusions}
-The workbench makes the Daisy model usable through a question-first path in which a request in plain words becomes a design that is checked against what Daisy can vary, makes the experiments of a large published ensemble repeatable in about an hour each instead of days, and lets a user check the model at the level of its processes, a soil column and a calibration. The bridge hands the runs to decision layers under one rule, that a Daisy layer shows a Daisy result only from a Daisy run, reads the logs exactly, closes the chemical budget to 0.02\,\% of the amount applied, and offers three routes from Daisy to a decision that differ by seven orders of magnitude in time. Each computing part was verified against an independent reference or against stored Daisy output, and the verification found and removed one defect, that of the shared denitrification function (median error 40\,\%). The workbench is a way to use Daisy and not a replacement for it. The next tests are an end-to-end run on a machine with Daisy, the online assistant under its guard, and a comparison of the live layers and of the runs of the workbench with field measurements.
+SWAFL Desktop 1.1.0 is a single offline application that joins the field, the satellite, the design, the schedule, the Daisy process model and the plant, with traceability of its equations. The workbench makes Daisy usable through a question-first path in which a request in plain words becomes a checked design and the experiments of a large published ensemble become repeatable in about an hour each instead of days. The bridge hands the runs to the decision layers under one rule, that a Daisy layer shows a Daisy result only from a Daisy run, reads the logs exactly, closes the chemical budget, and offers three routes from Daisy to a decision that differ by orders of magnitude in time. Each computing part was verified against an independent reference or against stored Daisy output, and the verification found and removed the defect of the shared denitrification function. What remains is an end-to-end run on a machine with Daisy, the online assistant under its guard, the test of the data services on a connected machine and of the installer on Windows, and the comparison of the layers and of the runs with measurements on real fields; each is a defined piece of work and none is claimed.
 
 \section*{Software, data and code availability}
 \suiteavail
 \section*{Author contributions}
-N.H. designed the workbench, wrote the software and the checks, analysed the data and wrote the article.
+N.H. designed the suite and the workbench, wrote the software and the checks, analysed the data and wrote the article.
 \section*{Funding}
 No funding was received for this work.
 \section*{Competing interests}
@@ -299,7 +419,7 @@ The Daisy model is developed and maintained at the University of Copenhagen. The
 \bibliography{refs}
 
 \appendix
-\section{Checks and scripts}\label{app:repro4}
+\section{Checks and scripts of the workbench}\label{app:repro4}
 \begin{table}[H]\centering\small
 \caption{Check to script map (scripts in \texttt{Manuscripts/reproducibility/p456}).}
 \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{4.4cm}>{\raggedright\arraybackslash}p{4.4cm}X}
@@ -313,7 +433,7 @@ Figures and tables & & \texttt{p456\_figs\_schematics.py}, \texttt{p456\_figs\_d
 \end{tabularx}
 \end{table}
 
-\section{Checks and scripts}\label{app:repro5}
+\section{Checks and scripts of the bridge}\label{app:repro5}
 \begin{table}[H]\centering\small
 \caption{Check to script map (scripts in \texttt{Manuscripts/reproducibility/p456}).}
 \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{4.6cm}>{\raggedright\arraybackslash}p{4.0cm}X}
@@ -330,4 +450,17 @@ Figures & & \texttt{p456\_figs\_schematics.py}, \texttt{p456\_figs\_data.py}\\\b
 \section{Checks of the planner}\label{app:repro7}
 The test of the planner is \texttt{Manuscripts/reproducibility/p456/p7\_planner\_checks.js}, with the output \texttt{out\_p7\_planner.json}.
 
+
+
+\section{Checks and scripts of the suite}\label{app:repro6}
+\begin{table}[H]\centering\small
+\caption{Check to script map (scripts in \texttt{Manuscripts/reproducibility/p456}).}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{4.2cm}>{\raggedright\arraybackslash}p{4.0cm}X}
+\toprule Check & What is compared & Script $\to$ output\\\midrule
+All layers & open, run, read & \texttt{p6\_layer\_sweep.js} $\to$ \texttt{out\_p6\_sweep.json}\\
+Crop library & constraints and $K_c$ curves & \texttt{p6\_crop\_checks.js} $\to$ \texttt{out\_p6\_crops.json}\\
+Phenotyping & determinism, closure, genotypes & \texttt{p6\_pheno\_checks.js} $\to$ \texttt{out\_p6\_pheno.json}\\
+Figures and tables & & \texttt{p456\_figs\_schematics.py}, \texttt{p456\_figs\_data.py}, \texttt{p456\_tables.py}\\\bottomrule
+\end{tabularx}
+\end{table}
 \end{document}

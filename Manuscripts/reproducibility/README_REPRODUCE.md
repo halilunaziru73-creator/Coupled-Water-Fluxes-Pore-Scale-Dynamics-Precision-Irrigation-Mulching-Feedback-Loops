@@ -4,8 +4,7 @@ Regenerates every number and figure in the four manuscripts from the archived en
 
 1. *Soil Hydraulic Memory, the Recoverability of Evaporation Savings and the Closure of the Water Balance* (Paper 1; the scripts `p1_*` give the memory analysis, `p2_*` the audit, and `p1_audit_link.py` the link between them)
 2. *Modeling Soil–Water–Atmosphere Interactions for Irrigation Scheduling and Design* (Paper 2; the scripts `p3_*`)
-3. *A Graphical Workbench and a Verified Bridge for the Daisy Model* (Paper 3; the scripts `p4_*`, `p5_*` and `p7_planner_checks.js`)
-4. *SWAFL Desktop 1.1.0: the whole suite* (Paper 4; the scripts `p6_*`)
+3. *SWAFL Desktop as an Offline and Equation-Traceable Decision-Support Suite with a Graphical Workbench and a Verified Bridge for the Daisy Model* (Paper 3; the scripts `p4_*`, `p5_*`, `p6_*` and `p7_planner_checks.js`)
 
 Script names keep the numbering of the earlier six-paper draft.
 
@@ -29,7 +28,7 @@ bash run_all.sh ./work                              # ~15-20 min; writes only in
 |---|---|
 | `data/daisy_ensemble.csv.gz` | all 10 190 Daisy runs (32 columns). 10 041 have `valid == 1`; 149 are numerical failures kept for the failure analysis in P2. Round trip to the working pickle verified exact. |
 | `analysis/` | analysis and figure scripts (Python). Paths are relative to the environment variable `SWAFL_MS` (the work directory). |
-| `p456/` | checks, analyses, figure and table scripts for Papers 4 to 6 (Node.js + Playwright, Python); outputs `out_*`. |
+| `p456/` | checks, analyses, figure and table scripts for the suite and workbench paper (Node.js + Playwright, Python); outputs `out_*`. |
 | `p3_js/` | verification scripts for SWAFL Desktop (Node.js + Playwright, driving the engine in headless Chromium). |
 | `lib/` | `wsmodel.js`, `model.js` (stand-alone surface and drip models used for the independent comparison) and `engine_v1_pre_correction.html` (the first release of the engine, needed only to regenerate the "version 1" rows of the sprinkler, drip and surface tables). |
 | `intermediates/` | three small arrays used by figure scripts whose generating code was not kept as a script (see "Limits"). |
