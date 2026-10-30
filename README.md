@@ -25,41 +25,89 @@
 </p>
 
 
-## At a glance
+## Abstract
 
-This repository holds four things that belong together: **10,190 Daisy simulations** of ten soils under irrigation, mulch and climate changes (Data and Results), the **analysis** of those runs, the open-source decision-support suite **SWAFL Desktop 1.1.0** built on them (Software), and **manuscripts** that report the findings, the software and its tests, with the scripts that regenerate every number (Manuscripts).
+Irrigation and evaporation-control mulching are usually tuned one soil at a time, and the water that a mulch or a lower evaporation rate "saves" is routinely counted as water gained. This project asks what is left of such a saving once the soil, the weather and the irrigation rule are allowed to act. It runs one process model (Daisy 7.1) over a designed ensemble of **10,190 simulations**, ten soils and 17 experiments, extracts transferable rules from it, audits the water balance those rules rest on, and turns the result into an open, offline decision-support suite, **SWAFL Desktop**, in which every number leads to a numbered equation with a stated origin. The suite also contains a graphical workbench for Daisy itself, a bridge that brings Daisy output into the decision layers, tools for the real field (field sketch, Sentinel-2 indices, zone-by-zone irrigation), a library of 48 crops and a deterministic phenotyping layer.
 
-| I want to | Go to |
-|---|---|
-| Use the software without installing anything | [Online workbench](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html?v=1.1.0) |
-| Learn every control, screen and equation | the manual (button above) |
-| See the findings | [Contributions](#contributions) and [Results](#problem-methodology-and-results) |
-| Get the data | [`Data`](Data) and [Zenodo](https://doi.org/10.5281/zenodo.23043626) |
-| Read the manuscripts | [`Manuscripts/pdf`](Manuscripts/pdf) |
-| Re-run the analysis and checks | [`Manuscripts/reproducibility`](Manuscripts/reproducibility) |
+## The problem
+
+1. **A setting that works on one soil is reported without saying how much of the result is the management and how much is the soil.** A fixed suction trigger such as minus 300 cm means 84 percent of the available water depleted in a sand and 24 percent in a silty clay loam.
+2. **An evaporation saving is not automatically a saving.** The saved water can stay in the root zone, where a crop can use it, or drain below it, where it cannot. No transferable soil property had been defined that says how much of an evaporation change is recoverable.
+3. **Models that explain such results are rarely checked for closure.** Equation-discovery and machine-learning studies of process models seldom first ask whether the partitions they are given close the water balance, or recover a known answer before anything new is believed.
+4. **Irrigation software seldom shows where its numbers come from.** The map, the satellite data, the crop-water calculator, the hydraulic design sheet and the simulation model are separate programs, none of which shows which relation produced a number or the range in which it holds.
 
 ## Contributions
 
-### A. Findings from the simulation ensemble
+| | Contribution | Evidence in this repository |
+|---|---|---|
+| **1** | **A soil independent irrigation trigger law.** Expressed as root-zone depletion instead of suction, irrigation and yield responses of ten soils collapse onto single curves (pooled R squared 0.48 to 0.75 for irrigation, 0.23 to 0.70 for yield). One depletion target (about 0.45 of the available water) becomes ten soil specific sensor suctions. | `Results/00_Novel_Contributions`, `Results/07_Derived_Data_Tables`; layer *Trigger law* |
+| **2** | **Where mulch-saved evaporation goes.** A closed four-way partition (irrigation saved, extra transpiration, extra drainage, residual) shows about 60 percent becoming less irrigation in dry years and about 63 percent becoming extra drainage in wet years, with the crossover near 1.2 times the baseline rainfall. | `Results/00_Novel_Contributions`; layer *Fate of saved water* |
+| **3** | **A regime map of evaporation against drainage** and the non-additive share of the climate and mulch interaction, up to 15 percent of irrigation at the climate extremes. | `Results/00_Novel_Contributions`; layer *Regime map* |
+| **4** | **Soil hydraulic memory.** The recoverable share of an evaporation saving is defined and measured as a soil property. The memory fate of antecedent storage, estimated from initial moisture alone, predicts the loss fate of evaporation changes across soils and experiments, and a rate-competition law with one fitted parameter (saturated conductivity against a withdrawal rate) explains the ordering for soils held out of the fit. Nitrogen supply, used as a negative control, has no effect. Every formulation tried is kept in a hypothesis register, failures included. | `Manuscripts/pdf`, `Manuscripts/results` |
+| **5** | **Closure auditing before interpretable machine learning.** A blind linear-invariant search must first recover the water balance, with a permutation null; every partition used as a target is audited for closure. The audit exposes an unattributed evaporative flux that is a substantial share of evapotranspiration and two experiments in which stored water does not close. A three-term law matches gradient boosting on withheld experiments and soils, while drainage resists both. The protocol is given as rules for other process models. | `Manuscripts/pdf`, `Manuscripts/reproducibility/analysis` |
+| **6** | **A traceable, offline decision-support suite.** 22 decision layers in nine groups, three computing engines (a meta-model of the 10,190 runs, a daily 40-layer water balance, closed-form design modules for surface, drip and sprinkler systems) and one project shared by all layers. About 470 numbered equations carry a label of origin (literature, data-driven or engineered). | `Software/v1.1.0`; the manual |
+| **7** | **A graphical workbench for Daisy.** A guided path of nine steps, 17 prepared experiments with compact designs and run-time estimates, 53 factors, a process map (14 processes, 76 components), a soil-column solver (Richards equation, van Genuchten and Mualem hydraulics, Feddes uptake), response curves and a calibration tool (sequential, CMA-ES, Bayesian), usable before Daisy is started. Daisy 7.1.14 is bundled for Windows. | menu *Daisy*; the manual |
+| **8** | **A bridge from Daisy to the decision layers with one rule of origin:** a Daisy layer shows only a Daisy run made in the workbench, and otherwise says there is none. Log parsers, a decision table, a chemical budget tested for closure, a mapping of eight of the ten soils to Daisy soils (two flagged as unmapped) and a return path for the project weather. | layers *Daisy decision table*, *Fate of a chemical* |
+| **9** | **Tools for the real field.** Field sketch, Sentinel-2 indices (NDVI, EVI, SAVI, NDRE, NDWI), image analysis of the satellite photograph, water sources, terrain and soil from open data, management zones, zone-by-zone variable-rate irrigation, gully and soil-loss risk, field report and prescription files. Each online service falls back to simulated data and the program says what it used. | field tools of the toolbar; the manual |
+| **10** | **A library of 48 crops** (110 crop and density combinations), each coefficient with a stated source, and daily crop coefficient curves. | layer *Crop water requirement* |
+| **11** | **Deterministic virtual phenotyping.** One plant of a chosen crop and genotype grows in the soil, weather and management of the project, well watered and under drought, with no random numbers. Repeated runs are identical and the soil water balance closes to 4e-5 mm. | layer *Phenotyping* |
+| **12** | **Verification that can be repeated.** Every test has a script, one command regenerates every reported number and figure, and each limit is stated. | `Manuscripts/reproducibility` |
 
-1. **A soil independent irrigation trigger law.** Re-expressed as root-zone depletion rather than suction, irrigation and yield responses of ten physically distinct soils collapse onto single curves (pooled R squared 0.48 to 0.75 for irrigation, 0.23 to 0.70 for yield). The collapse becomes a per soil sensor suction table, so one depletion target (about 0.45 of available water) is deployed as ten soil specific tension settings.
-2. **Where evaporation saved by mulch goes.** A closed four-way partition (irrigation saved, extra transpiration, extra drainage, residual) shows that in dry years about 60 percent of the saved water becomes less irrigation, in wet years about 63 percent becomes extra drainage, and the crossover lies near 1.2 times the baseline rainfall.
-3. **A regime map of evaporation against drainage**, with the share of the climate and mulch interaction that is not additive (up to 15 percent of irrigation at the climate extremes).
-4. **Soil hydraulic memory.** The recoverable share of an evaporation saving is defined and measured as a soil property: the memory fate of antecedent storage (from initial moisture alone) predicts the loss fate of evaporation changes across soils and experiments, and a one parameter rate-competition law, with out-of-sample validation and stated bounds, explains the ordering. Every formulation that was tried is kept in a hypothesis register, failures included.
-5. **Auditing water-balance closure before applying interpretable machine learning.** Partitions of the water balance are tested for closure before they are used as targets, decomposition invariants are tested against a permutation null, laws are validated across regimes (experiments, soils, climates) and not only across random folds, a flexible benchmark is reported even where it wins, and every law has a stated domain of validity. The accounting gap the audit finds is quantified and the protocol is given as rules for other process models.
+### What this adds beyond the closest prior work
 
-### B. The software suite
+| Contribution | Closest existing work | What this repository adds |
+|---|---|---|
+| Soil independent trigger law | FAO 56 depletion scheduling (Allen et al., 1998); depletion to matric potential tables; sensor studies with soil specific thresholds | The quantified cross-soil collapse in a Richards equation model and the resulting per soil sensor suction table |
+| Fate of mulch-saved evaporation | Balwinder-Singh et al. (2011), saved water mostly went to transpiration in field wheat; HYDRUS-2D mulch studies | A closed four-way partition across a continuous rainfall gradient, the redirection from irrigation saving to drainage located near rain scale 1.2, and its link to nitrate leaching |
+| Evaporation and drainage regime map | The Budyko framework; Sobol type interaction analyses | The evaporation equals drainage boundary located jointly across a climate and a management axis, with the non-additive share quantified |
+| Hydraulic memory | Soil moisture memory in land-atmosphere studies (Koster et al.) | A measurable, transferable soil property for the recoverable share of an evaporation change, with a one-parameter law and a negative control |
+| Closure-first discovery protocol | Equation discovery and symbolic regression applied to model output | Recovery of a known balance, a permutation null and a closure audit before any discovered relation is believed |
+| Traceable decision support | FAO-56 calculators, CROPWAT-type tools, hydraulic design sheets | One offline project in which each output leads to a numbered, origin-labelled equation, tested against independent references |
 
-6. **One offline application with traceable numbers.** 22 decision layers in nine groups (irrigation design for surface, drip and sprinkler systems; control; mulch and evaporation; soil structure; deterministic phenotyping; field water balance; seasonal data; crops; feedback loops), three computing engines (a meta-model of the 10,190 runs, a daily 40-layer water balance and closed-form hydraulic design modules) and one project (soil, crop, weather, mulch, irrigation and date) shared by every layer. About 470 numbered equations carry a label of origin (literature, data-driven or engineered), so each output leads to its equation and its source.
-7. **A graphical workbench for the Daisy model.** A guided path of nine steps from a question to a run, 17 prepared experiments with compact designs and run-time estimates, a process map of the model (14 processes, 76 components), 53 factors, a soil-column solver (Richards equation, van Genuchten and Mualem hydraulics, Feddes uptake), response curves and a calibration tool with sequential, CMA-ES and Bayesian optimisers, all usable before Daisy is started; Daisy 7.1.14 is bundled for Windows.
-8. **A bridge from Daisy to the decision layers** with one rule of origin: a Daisy layer shows only a Daisy run made in the workbench, and otherwise says that there is none. Parsers of the Daisy logs, a decision table, a chemical budget tested for closure, a mapping of eight of the ten soils to Daisy soils (two are flagged as unmapped) and a return path for the project weather complete it.
-9. **Tools for the real field.** A field sketch, Sentinel-2 indices (NDVI, EVI, SAVI, NDRE, NDWI), image analysis of the satellite photograph, water sources, terrain and soil from open data, management zones, zone-by-zone variable-rate irrigation, gully and soil-loss risk, and a field report with prescription files; every online service falls back to simulated data and the program says what it used.
-10. **A crop library of 48 crops** (110 crop and density combinations) with a stated source for every coefficient and daily crop coefficient curves.
-11. **Deterministic virtual phenotyping.** One plant of a chosen crop and genotype grows in the soil, weather and management of the project, well watered and under drought, without random numbers: repeated runs are identical and the soil water balance closes to 4e-5 mm; a drought pulse cuts grain mass by 14 to 42 percent across seven genotypes, and water-saving, deep-rooting and stay-green genotypes lose least.
+## Key results
 
-### C. Verification
+| Result | Value |
+|---|---|
+| Controllability of drainage by management vs plant available water | Spearman rho +0.79 to +0.95 across ten soils; soil structure the only lever that works the other way (rho minus 0.58) |
+| Same trigger, different soils | minus 300 cm = 84 percent depletion in sand, 24 percent in silty clay loam |
+| Warming and rain | +1 degree C about +46 mm/yr irrigation and +57 mm/yr evapotranspiration; +1 percent rain about minus 3.0 mm/yr irrigation |
+| Irrigation, drainage, nitrate | each mm of irrigation about 0.21 mm more drainage; each mm of drainage about 1.06 kg N/ha more nitrate leached |
+| Pareto set | 170 runs optimal for irrigation efficiency, drainage fraction and nitrogen leaching fraction |
+| Design modules | reproduce FAO-45 and textbook worked examples within 3 percent (median error 0.08 percent for the surface procedure) |
+| Meta-model | ranks held-out scenarios, Spearman 0.64 to 0.97; 10^5 scenarios in about 2 s |
+| Daily model | conserves mass to 0.1 percent of inflow (median) |
+| Software tests | all 22 layers open and run without a script error; Daisy parts tested against independent solvers and 792 stored Daisy outputs, which exposed and corrected one defect |
+| Phenotyping | repeated runs identical; drought pulse cuts grain mass by 14 to 42 percent across seven genotypes |
 
-12. **Tests that can be repeated.** The design modules reproduce the worked examples of FAO Irrigation Paper 45 and standard textbooks within 3 percent; the meta-model ranks held-out scenarios (Spearman 0.64 to 0.97); 10^5 scenarios are swept in about 2 seconds; all 22 layers open and run without a script error; the Daisy parts were tested against independent solvers and 792 stored Daisy outputs, which exposed and corrected a defect in the denitrification function. One command regenerates every reported number and figure. No field measurement is used and none is claimed; the limits are stated in the manuscripts.
+## Scope and honesty
+
+* The pore network is represented through hydraulic proxies in a one-dimensional matrix-flow model, so the findings about hydraulic memory and closure are mechanistic hypotheses; confirmation needs measured drainage under controlled evaporation.
+* **No field measurement is used and no field validation is claimed.** Verification is against worked examples, held-out simulations, independent solvers and stored model output.
+* Daisy could not be run end to end in the environment where the 1.1.0 checks were made; the satellite and open-data services were exercised on test data only; the Windows installer was not tested there.
+* The phenotyping constants are typical editable values, not data of an experiment.
+
+## Software
+
+**SWAFL** (Soil Water, Atmosphere, Feedback and Layout) is an open-source desktop and browser workbench: Layers on the left, Properties on the right, a Dashboard of results beside the drawing. It works offline; open data are used when a connection exists.
+
+<p align="center"><img src="Software/v1.1.0/SWAFL_Desktop/docs/swafl_workbench.png" alt="SWAFL Desktop 1.1.0: the drip irrigation design with the soil water of the days ahead" width="900"></p>
+
+| Group | Layers |
+|---|---|
+| Irrigation design | surface, drip and sprinkler design with layouts, pipe network, pump, hydraulic grade line, design checks and schedule |
+| Irrigation control | sensor and trigger; trigger law |
+| Mulch and evaporation | mulch against bare soil; mulch control; evaporation physics; fate of saved water; regime map |
+| Soil structure and tillage | tillage and structure; soil hydraulic drivers; root structure |
+| Deterministic phenotyping | virtual plant under well-watered and drought treatments |
+| Field water balance | field balance; soil, plant and air; profile evolution |
+| Seasonal data | reliability over 20 seasons; full water balance; nitrogen budget |
+| Crops | crop water requirement (48 crops) |
+| Feedback loops | seven soil-atmosphere feedback loops |
+| Daisy output | decision table; fate of a chemical (shown only for live Daisy runs) |
+
+**Working date.** Any date from 1980 to 2100: 1980 to 1999 is the recorded baseline weather, 2000 to 2100 is projected from a chosen baseline year. Projections are simulations, not forecasts.
+
+**Documentation.** The manual documents every control, screen and equation of the release, with labelled screenshots, and the equation ledger with its provenance labels.
 
 ## Download the software (Windows)
 
@@ -85,46 +133,10 @@ It downloads the app, builds `SWAFL.exe`, puts it on your Desktop and starts it.
 **Nothing to install - open the full SWAFL workbench online:** [https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html?v=1.1.0](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html?v=1.1.0) (works in any browser, no server, no Node). Or the [SWAFL web explorer](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/04_Interactive_Charts/10_SWAFL_Fused_Explorer.html).
 
 
-## About the software: SWAFL Desktop
 
-The current version, 1.1.0, is in [`Software/v1.1.0`](Software/v1.1.0) with its source, manual and zip.
+## Study design
 
-**SWAFL** (Soil Water, Atmosphere, Feedback and Layout) turns the 10,190-simulation Daisy results of this repository into a working decision-support tool. It runs the same simulation engine as the [web explorer](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Results/04_Interactive_Charts/10_SWAFL_Fused_Explorer.html) inside a desktop workbench (Layers on the left, Properties on the right, a Dashboard of results beside the drawing).
-
-<p align="center"><img src="Software/v1.1.0/SWAFL_Desktop/docs/swafl_workbench.png" alt="SWAFL Desktop 1.1.0: the drip irrigation design with the soil water of the days ahead (FAO-56 schedule from the crop Kc, the weather and the design)" width="900"></p>
-
-**Documentation:** the [complete technical manual of version 1.1.0 (PDF)](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf) explains every control, trigger, layer and design simulation step by step, with the governing equations and citations.
-
-**What it does**
-- **Field and remote sensing:** draw the field and the irrigation system, read Sentinel-2 indices and the satellite photograph, find water sources, terrain and soil, split the field into management zones and irrigate each zone separately (variable rate), estimate gully and soil-loss risk, and print a field report with prescription files.
-- **Irrigation design and schedule:** surface (border, furrow, basin), drip and sprinkler designs with layout drawings, pipe network, pump and hydraulic grade line, design checks and an optimiser for the surface layout; for every design the next irrigations (date, net and pumped depth, run time, gap) and a closing "When to irrigate" message with the interval, the application efficiency (Ea) and the storage efficiency (Es).
-- **Field water balance and crops:** rain, irrigation, evaporation, transpiration, interception and drainage for any soil, tillage, crop, mulch and climate setting, with 20-year results; a library of 48 crops with crop coefficient curves and planting advice.
-- **Deterministic phenotyping:** a virtual experiment that grows one plant of a chosen crop and genotype, well watered and under drought, with no random numbers.
-- **Daisy workbench:** design, run, calibrate and read Daisy experiments in a graphical environment, and bring the results back into the decision layers.
-- **Working date:** any date from 1980 to 2100. 1980 to 1999 is the real baseline weather record; 2000 to 2100 is projected from a chosen baseline year (typical, dry, wet or a specific year). The whole workbench follows the chosen date, and today is the default. Projections are simulations, not forecasts.
-- **Tools:** Ctrl+K search for any layer, tool or date; save and open `.swafl` projects; export pictures and CSV tables; undo and redo; Focus view (F9) to fit the whole drawing.
-
-**Get it** (details in [Download the software](#download-the-software-windows) above)
-
-| Way | Link |
-|---|---|
-| In any browser, nothing to install | [Online workbench](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html?v=1.1.0) |
-| Build it yourself | [SWAFL_Desktop.zip](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop.zip) or the folder [`Software/v1.1.0/SWAFL_Desktop`](Software/v1.1.0/SWAFL_Desktop) |
-
-**Start in three clicks:** open a group in Layers (Irrigation design is first) and click a layer, press Run, then change the Date in the toolbar. Help (F1) has every step and a troubleshooting list.
-
-**Requirements:** any current browser for the online workbench; Node.js 18 or later only if you build the app yourself. Source, user guide and known issues: [`Software/v1.1.0/SWAFL_Desktop`](Software/v1.1.0/SWAFL_Desktop) and the [Issues](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/issues) page.
-
-
-## Problem, Methodology, and Results
-
-### Problem
-
-Precision irrigation and evaporation control mulching are usually studied and tuned one soil at a time, so a trigger setting, sensor depth or mulch strength that works well on one soil is often reported without stating how much of that result is the management choice and how much is simply the soil's own pore structure acting underneath it. Two practical questions follow directly from this gap. First, when a fixed suction based trigger (for example, minus 300 cm) is deployed across different soils, does it protect yield equally well everywhere, or does it silently allow far more depletion on some soils than others. Second, when mulching saves soil evaporation, is that saved water reliably converted into less irrigation, or can it just as easily end up as extra drainage and nitrate loss depending on the season. This project uses one process based model, one consistent experimental design and ten physically distinct soils to answer both questions directly rather than inferring them from separate single soil studies.
-
-### Methodology
-
-All simulations were run in Daisy 7.1 (University of Copenhagen), a one dimensional, Richards equation, soil, plant, atmosphere model with van Genuchten to Mualem unsaturated hydraulics and the WEPP dynamic structure model for tillage and consolidation effects on pore structure over time. Ten soils spanning sand to silty clay loam (USDA texture, Ap and Bt horizons) were simulated under two weather records, Taastrup, Denmark, 1980 to 1999, and Bologna, Italy, 1994 to 2005, used for the Mediterranean nitrogen and water experiment.
+Daisy 7.1 (University of Copenhagen) is a one-dimensional, Richards-equation soil-plant-atmosphere model with van Genuchten and Mualem hydraulics and the WEPP dynamic structure model for tillage and consolidation. Ten soils from sand to silty clay loam (USDA texture, Ap and Bt horizons) were simulated under two weather records: Taastrup, Denmark, 1980 to 1999, and Bologna, Italy, 1994 to 2005 (the Mediterranean nitrogen and water experiment).
 
 **10,190 simulations across 17 experiments (E0 to E16):**
 
@@ -148,27 +160,24 @@ All simulations were run in Daisy 7.1 (University of Copenhagen), a one dimensio
 | E15 | Method, depth, amount | 1,000 | Irrigation method x rooting depth x amount |
 | E16 | Edge cases | 770 | 77 stress tested factorial edge cases per soil |
 
-### Results
 
-- How strongly management can steer drainage depends on soil pore structure. Controllability of drainage by the irrigation trigger, dose, method, N to water pathway and mulch rises with plant available water (Spearman rho +0.79 to +0.95 across 10 soils); soil structure is the only lever that works the other way (rho minus 0.58). On coarse sands the irrigation levers barely move drainage at all.
-- A fixed suction trigger means very different things on different soils: minus 300 cm is 84 percent of available water depleted in sand but only 24 percent depleted in silty clay loam. Expressed as root zone depletion instead of suction, irrigation and yield responses from all ten soils collapse onto single curves.
-- +1 degree C is associated with about +46 mm/yr more irrigation and +57 mm/yr more evapotranspiration; +1 percent more rain is associated with about minus 3.0 mm/yr less irrigation.
-- Mulch savings are convex in mulch strength; each additional mm of soil evaporation saved is associated with roughly 0.6 to 0.9 mm less irrigation, but the split between reduced irrigation and extra drainage depends strongly on how wet the season is.
-- Every mm of irrigation is associated with about 0.21 mm more drainage; every mm of drainage is associated with about 1.06 kg N/ha more nitrate leached.
-- 170 runs are Pareto optimal across three objectives at once: maximum irrigation efficiency, minimum drainage fraction and minimum nitrogen leaching fraction.
+## Reproducibility
 
+`Manuscripts/reproducibility` is a self-contained package: pinned software versions, fixed random seeds, SHA-256 checksums, and one command (`bash run_all.sh`) that regenerates every result and figure from the archived ensemble and compares each value with the archived result and with the headline numbers printed in the manuscripts. Each table and figure names its script. The complete outputs of all 10,190 runs are archived on [Zenodo](https://doi.org/10.5281/zenodo.23043626).
 
-### What this adds beyond the closest prior work
+## Repository map
 
-Each of the three results below builds on specific, closely related prior work and adds a quantified extension
-beyond it.
-
-| Contribution | Closest existing work | What this repository adds |
-|---|---|---|
-| Soil independent trigger law | FAO 56 depletion scheduling (Allen et al., 1998); Nebraska and Michigan State depletion to matric potential tables; sensor studies using soil specific thresholds | The quantified cross soil collapse in a Richards equation model (pooled R squared rises from 0.48 to 0.75 for irrigation and from 0.23 to 0.70 for yield) and the resulting per soil sensor suction table |
-| Fate of mulch saved evaporation | Balwinder-Singh et al. (2011), who found saved water mostly went to transpiration in field wheat; HYDRUS-2D mulch water balance studies; FAO's "follow the water" framing, that drainage is not always a loss | A four way closed partition (irrigation saved, extra transpiration, extra drainage, residual) across a continuous rainfall gradient, with the redirection from irrigation saving to drainage located near rain scale 1.2 and linked quantitatively to nitrate leaching |
-| Evaporation and drainage regime map | The Budyko framework, where aridity controls the evapotranspiration versus runoff split, and root zone storage capacity is a known control; Sobol type interaction analyses in crop models | Locating the evaporation equals drainage boundary jointly across a climate axis and a management axis, and quantifying the non additive share of the interaction directly (up to 15 percent of irrigation at the climate extremes) |
-
+| Folder | Contents |
+|---|---|
+| [`Data`](Data) | the Zenodo link, the raw run table (`daisy_ensemble.csv.gz`, 10,190 runs), the summary of every experiment and a linked list of every data file |
+| [`Software`](Software) | SWAFL Desktop 1.1.0 (source, manual, zip) and the archived version 1.0 |
+| [`Manuscripts`](Manuscripts) | six manuscripts (PDF and LaTeX source), figures, numeric results, graphical abstracts and the reproducibility package |
+| `Results/00_Key_Synthesis_Figure`, `00_Novel_Contributions` | the integrating figure and the three synthesis figures (trigger law, fate of saved evaporation, regime map) |
+| `Results/01_Charts_50`, `02_Additional_Figures` | 50 charts in eight themes and the additional figures (texture triangle, pore domains, PCA, random forest, validation) |
+| `Results/03_Excel_Analysis` | `Results_Analysis.xlsx`, all runs with analysis sheets, live formulas and native charts |
+| `Results/04_Interactive_Charts`, `05_Videos`, `06_3D_Project` | interactive pages, animations and a 3D model of the system |
+| `Results/07_Derived_Data_Tables`, `08_Scripts` | effect sizes, elasticities, Pareto runs, trigger tables and the scripts that derive them |
+| `Results/Figure_Catalogue.csv` | title, caption and data source of every figure |
 
 ## Symbol and abbreviation key
 
@@ -194,38 +203,18 @@ beyond it.
 | R squared | Coefficient of determination |
 | N1, N2, N3 | The three novel synthesis figures (trigger law, fate of saved evaporation, feedback regime map) |
 
-## Repository structure
-
-| Folder | Contents |
-|---|---|
-| [`Data`](Data) | **Data used in the project:** the Zenodo link to the complete dataset, the raw run table (`daisy_ensemble.csv.gz`, 10,190 Daisy runs) and a linked list of every data file in the repository |
-| `Results/00_Key_Synthesis_Figure` | The integrating figure above |
-| `Results/00_Novel_Contributions` | Three further synthesis figures (N1 trigger law, N2 fate of saved evaporation, N3 feedback regime map) |
-| `Results/01_Charts_50` | 50 charts in 8 themes: system & forcing, pore-scale proxies, coupled fluxes, irrigation control, mulching, non-linear feedbacks, nitrogen, synthesis |
-| `Results/02_Additional_Figures` | 13 figures: texture triangle, pore domains, seasonal envelopes, evaporation decline, model structure, PCA, random forest, validation, … |
-| `Results/03_Excel_Analysis` | `Results_Analysis.xlsx`: all runs + 8 analysis sheets with live formulas and native charts |
-| `Results/04_Interactive_Charts` | 8 interactive HTML pages (start with `index.html`) |
-| `Results/05_Videos` | 5 MP4 animations (sensor, profiles, tillage, mulch, feedback trajectories) |
-| `Results/06_3D_Project` | Moving 3D model of the system (MP4) and an interactive 3D version |
-| `Results/07_Derived_Data_Tables` | Effect sizes, elasticities, Pareto-optimal runs, production functions, controllability and trigger tables, with a README that lists the raw outputs and shows how each table is derived from them, and `derive_tables.py`, which re-derives every table from the raw data |
-| `Results/08_Scripts` | Python code that produced every figure |
-| [`Manuscripts`](Manuscripts) | Six manuscript drafts as PDF with their LaTeX source, figures, numeric results and the reproducibility package (`bash run_all.sh` regenerates every number and figure and compares them with the archived values) |
-| `Software/v1.1.0` | SWAFL Desktop 1.1.0, the current version: source (Electron app, simulation engine, user guide, manual) in `SWAFL_Desktop` and `SWAFL_Desktop.zip` |
-| `Results/Figure_Catalogue.csv` | Title, caption and data source of every figure |
-| [**DATA → Data_coupled_water_fluxes_pore_scale_dynamics.zip**](https://doi.org/10.5281/zenodo.23043626) | Full archived dataset (all 10,190 runs, raw and derived), permanently hosted on Zenodo. Click the file name to open. |
-
 
 ## Note on scale
 
-Daisy is a Darcy scale model; the "pore scale dynamics" referred to throughout this repository are represented through validated proxies derived from the van Genuchten to Mualem parameters (pore size distribution from n and alpha, unsaturated conductivity K(Se), and dynamic bulk density from the WEPP structure model), not a directly resolved pore network.
+Daisy is a Darcy-scale model. The pore-scale dynamics discussed here are represented through validated proxies derived from the van Genuchten to Mualem parameters (pore-size distribution from n and alpha, unsaturated conductivity K(Se), dynamic bulk density from the WEPP structure model), not through a resolved pore network.
 
 ## Viewing
 
-Figures are PNG (220 dpi). Interactive pages work offline; keep `plotly.min.js` in the same folder. With GitHub Pages enabled on this repository, the interactive charts can also be opened online.
+Figures are PNG (220 dpi). Interactive pages work offline; keep `plotly.min.js` in the same folder, or open them online through GitHub Pages.
 
 ## Figure-by-figure results and why they happen
 
-All 67 figures, in catalogue order, each with the mechanism behind the pattern. The four figures in **New Synthesis** and the key synthesis figure additionally give the supporting literature and argue explicitly for what is new about the approach; treat the novelty claims as offered, not as checked exhaustively against the literature (see the caveats in each entry and in the project README).
+Every figure, in catalogue order, each with the mechanism behind the pattern. The four figures in **New Synthesis** and the key synthesis figure additionally give the supporting literature and argue explicitly for what is new about the approach; treat the novelty claims as offered, not as checked exhaustively against the literature (see the caveats in each entry and in the project README).
 
 ### Key Synthesis Figure (00_Key_Synthesis_Figure)
 
