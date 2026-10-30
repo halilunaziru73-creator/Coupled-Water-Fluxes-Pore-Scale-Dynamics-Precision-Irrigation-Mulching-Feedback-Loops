@@ -39,7 +39,7 @@ This article describes one application that joins these steps and the Daisy mode
 
 \begin{figure}[H]\centering
 \includegraphics[width=\textwidth]{\figdir/p6/fig01_system.pdf}
-\caption{Architecture of SWAFL Desktop 1.1.0. The tools of the real field (top), the design and decision layers, the phenotyping layer and the crop library, the computing engines and the Daisy workbench, and the outputs. Arrow types are explained in the legend of the figure.}\label{fig:system}
+\caption{Architecture of SWAFL Desktop 1.1.0 in the style of the process map of Daisy. Every arrow is a dependency found in the code: the field tools (green) call the engines and write to the project; the project (blue bar) carries the state of the Properties panel and the weather to the five computing parts (brown); these feed the layers (blue); the layers and the workbench shell talk through one bridge; the Daisy workbench (dashed frame) hands its runs to the Daisy layers.}\label{fig:system}
 \end{figure}
 
 \subsubsection{The layers}
@@ -123,7 +123,7 @@ The workbench is a window of the application with six groups of tabs (\cref{fig:
 
 \begin{figure}[H]\centering
 \includegraphics[width=\textwidth]{\figdir/p4/fig01_workbench.pdf}
-\caption{Organisation of the Daisy workbench: six groups of tabs and the Daisy program that runs the set-ups. The guided path runs from the input data to the hand-over to decision support; the model-development group is outside the path.}\label{fig:wb}
+\caption{Modules of the Daisy workbench and the hand-over, in the style of the process map of Daisy. The chain runs from the planner and the decision base through the experiments, Daisy and the parsers to the hand-over; the modules below the dotted line are used before Daisy is started.}\label{fig:wb}
 \end{figure}
 
 \begin{figure}[H]\centering
