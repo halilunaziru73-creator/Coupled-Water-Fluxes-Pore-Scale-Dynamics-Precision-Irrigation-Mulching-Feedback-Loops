@@ -3093,13 +3093,13 @@ if (new URLSearchParams(location.search).get('app')) {
   let lw = canvas.width, lh = canvas.height, SS = 1, curS = 1, fitMode = 'window', lastKey = '', fitDims = '', fitSc = 0;
   const wrapEl = () => canvas.closest('.canvaswrap') || canvas.parentElement;
   const phys = () => {
-    SS = Math.max(1, Math.min(2, curS * (window.devicePixelRatio || 1))); if (lw * lh * SS * SS > 30e6) SS = Math.sqrt(30e6 / (lw * lh));
+    SS = window.__hiScale ? window.__hiScale : Math.max(2, Math.min(3, curS * (window.devicePixelRatio || 1))); { const cap = window.__hiScale ? 90e6 : 30e6; if (lw * lh * SS * SS > cap) SS = Math.sqrt(cap / (lw * lh)); }   // __hiScale: a picture saved at 300, 600 dpi or more
     dW.set.call(canvas, Math.round(lw * SS)); dH.set.call(canvas, Math.round(lh * SS)); ctx.setTransform(SS, 0, 0, SS, 0, 0); window.__SS = SS;
   };
   const fit = () => {
     const w = wrapEl(); if (!w) return; const aw = w.clientWidth, ah = w.clientHeight; if (aw < 50 || ah < 50) return;
     const fW = aw / lw, fH = ah / lh; let sc;
-    if (fitMode === 'window' && lh <= 1050) sc = Math.min(fW, fH, 2.2); else if (lh <= 1050) sc = Math.min(fW, 1.6); else sc = Math.min(fW, 1.3);
+    if (fitMode === 'window' && lh <= 1050) sc = Math.min(fW, fH, 2.6); else if (lh <= 1050) sc = Math.min(fW, 2.6); else sc = Math.min(fW, 2.6);   // the picture fills the width of the window, left and right
     if (fitMode === 'window' && lh <= 1050 && sc < 0.7) sc = Math.min(fW, 1.0);   // too small to read: use the full width and scroll (Focus view fits it all)
     sc = Math.max(0.35, sc);
     // no see-saw: a scroll bar that comes and goes changes the room by a few pixels; such small changes of the scale are ignored,
@@ -3107,10 +3107,11 @@ if (new URLSearchParams(location.search).get('app')) {
     if (fitDims === lw + 'x' + lh && fitSc && Math.abs(sc - fitSc) / fitSc < 0.04) return; fitDims = lw + 'x' + lh; fitSc = sc;
     const key = lw + 'x' + lh + '@' + sc.toFixed(3); if (key === lastKey) return; lastKey = key;
     canvas.style.width = Math.round(lw * sc) + 'px'; canvas.style.maxWidth = 'none'; canvas.style.margin = '0 auto'; canvas.style.display = 'block';
-    const old = SS; curS = sc; const nS = Math.max(1, Math.min(2, sc * (window.devicePixelRatio || 1))); if (Math.abs(nS - old) > 0.02) phys();
+    const old = SS; curS = sc; const nS = Math.max(2, Math.min(3, sc * (window.devicePixelRatio || 1))); if (Math.abs(nS - old) > 0.02) phys();
   };
   Object.defineProperty(canvas, 'width', { get: () => lw, set: v => { lw = v; phys(); lastKey = ''; fit(); }, configurable: true });
   Object.defineProperty(canvas, 'height', { get: () => lh, set: v => { lh = v; phys(); lastKey = ''; fit(); }, configurable: true });
+  window.__rephys = () => { phys(); lastKey = ''; return SS; };
   window.__setFit = m => { fitMode = m; lastKey = ''; fitSc = 0; fit(); }; window.__fit = () => { lastKey = ''; fitSc = 0; fit(); };
   phys(); try { new ResizeObserver(() => { lastKey = ''; fit(); }).observe(wrapEl()); } catch (e) { window.addEventListener('resize', () => { lastKey = ''; fit(); }); }
   const raf0 = window.requestAnimationFrame.bind(window); let lastF = 0, act = 0; ['pointermove', 'pointerdown', 'wheel', 'keydown'].forEach(ev => window.addEventListener(ev, () => { act = performance.now(); }, { passive: true, capture: true }));
@@ -6565,10 +6566,12 @@ setTimeout(() => { const sp = document.getElementById('splash'); if (sp) sp.remo
     if (Object.keys(o).length) { state.trigBy = {}; applyState(Object.assign({}, DEFAULT, o)); }
     const sc = SCENES.find(x => x.id === q.get('scene')); if (sc && sc !== currentScene) switchScene(sc); }
   // saves
-  $('guiPng').onclick = () => { const a = document.createElement('a'); a.download = 'SWAFL_' + currentScene.id + '.png'; a.href = canvas.toDataURL('image/png'); a.click(); msg('Picture saved'); };
-  $('guiCsv').onclick = () => { const rows = [['setting', 'value'], ['scene', currentScene.label], ['soil', DATA.soil_labels[state.soil]], ['tillage', TILL_LABELS[state.till]], ['crop', CROPS[state.crop].label || state.crop], ['mulch strength (vapour-flux factor)', VFF_VALUES[state.vffIdx]], ['mulch capacity (mm)', CAP_VALUES[state.capIdx]], ['rainfall scale', RAIN_VALUES[state.rainIdx]], ['temperature shift (C)', TEMP_VALUES[state.tempIdx]], ['irrigation method', state.method], ['nitrogen rate (%)', NRATE_VALUES[state.nIdx]], ['sensor depth (cm)', Z_VALUES[state.zIdx]], ['', ''], ['result', 'value']];
+  $('guiPng').onclick = () => { const a = document.createElement('a'); a.download = (typeof stampName === 'function' ? stampName : (n => n))('SWAFL_' + currentScene.id + '.png'); a.href = canvas.toDataURL('image/png'); a.click(); msg('Picture saved'); };
+  window.__csvText = () => { const rows = [['setting', 'value'], ['scene', currentScene.label], ['soil', DATA.soil_labels[state.soil]], ['tillage', TILL_LABELS[state.till]], ['crop', CROPS[state.crop].label || state.crop], ['mulch strength (vapour-flux factor)', VFF_VALUES[state.vffIdx]], ['mulch capacity (mm)', CAP_VALUES[state.capIdx]], ['rainfall scale', RAIN_VALUES[state.rainIdx]], ['temperature shift (C)', TEMP_VALUES[state.tempIdx]], ['irrigation method', state.method], ['nitrogen rate (%)', NRATE_VALUES[state.nIdx]], ['sensor depth (cm)', Z_VALUES[state.zIdx]], ['', ''], ['result', 'value']];
     [['soil evaporation (mm/yr)', 'roEvap'], ['drainage below 1 m (mm/yr)', 'roDrain'], ['irrigation (mm/yr)', 'roIrr'], ['yield', 'roYield'], ['transpiration (mm/yr)', 'roTransp'], ['evapotranspiration (mm/yr)', 'roET'], ['nitrogen leaching (kg N/ha)', 'roNL'], ['irrigation efficiency (kg/m3)', 'roIE'], ['rainfall (mm/yr)', 'roRain']].forEach(([l, id]) => rows.push([l, NUM[id]().toFixed(DEC[id] + 1)]));
-    const csv = rows.map(r => r.map(c => '"' + String(c).replace(/"/g, '""') + '"').join(',')).join('\r\n'), a = document.createElement('a'); a.download = 'SWAFL_settings_and_results.csv'; a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.click(); msg('Numbers saved'); };
+    return rows.map(r => r.map(c => '"' + String(c).replace(/"/g, '""') + '"').join(',')).join('\r\n'); };
+  const stampName = n => { try { return parent.SWAFLDate ? parent.SWAFLDate.name(n) : n; } catch (e) { return n; } };
+  $('guiCsv').onclick = () => { const a = document.createElement('a'); a.download = stampName('SWAFL_settings_and_results.csv'); a.href = URL.createObjectURL(new Blob(['\ufeff' + window.__csvText()], { type: 'text/csv' })); a.click(); msg('Numbers saved'); };
   $('guiHelp').onclick = () => { const b = $('guiHelpBox'); b.style.display = b.style.display === 'none' ? 'block' : 'none'; };
   // keys
   document.addEventListener('keydown', e => { if (e.ctrlKey || e.metaKey || e.altKey || /INPUT|SELECT|TEXTAREA/.test((e.target.tagName || '')) && e.key !== 'Escape') return;
@@ -8473,8 +8476,9 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
       ctx.save(); ctx.beginPath(); ctx.rect(x0 + 1, yy + BAND, colw - 2, gy + 10 - (yy + BAND)); ctx.clip();
       const geo = drawShoot(res, d, xc, gy, s, view, rot); ctx.restore();
       // ground and soil column
+      ctx.save(); ctx.beginPath(); ctx.rect(x0 + 1, yy + 1, colw - 2, SH + ZH + 32); ctx.clip(); /* nothing of the soil, the roots or the plant leaves its own cell, whatever the turn of the view */
       const CW = Math.min(colw - 36, 150), zx = xc - CW / 2, zy = gy + 6, sy = (ZH - 8) / ZMAX, sx = (CW / 2 - 4) / res.Rpot; column(zx, zy, CW, ZH - 8, '#333', false); soilFill(res, d, zx, zy, CW, ZH - 8, view);
-      drawRoots(res, d, xc, zy, sx, sy, rot, view === 'xray' ? 'xray' : view === 'soil' ? 'soil' : view === 'thermal' ? 'thermal' : 'rgb');
+      drawRoots(res, d, xc, zy, sx, sy, rot, view === 'xray' ? 'xray' : view === 'soil' ? 'soil' : view === 'thermal' ? 'thermal' : 'rgb'); ctx.restore();
       ctx.strokeStyle = view === 'xray' ? '#6A717C' : '#6B5B3E'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x0 + 6, gy + 6); ctx.lineTo(x0 + colw - 6, gy + 6); ctx.stroke();
       for (let k = 1; k < 4; k++) T(k * 30 + ' cm', zx - 4, zy + k * 30 * sy + 3, { s: 8, c: view === 'xray' ? '#8A919B' : MUTE, a: 'right' });
       const sh_ = view === 'xray' ? '#C9CED6' : '#33414F';
@@ -8533,7 +8537,8 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
       shade.forEach(s => { ctx.fillStyle = s[2]; ctx.fillRect(X(s[0]), top, X(s[1]) - X(s[0]), hgt); });
       ctx.strokeStyle = GRID; ctx.lineWidth = 1; for (let g = 0; g <= 3; g++) { const yy = top + hgt * g / 3; ctx.beginPath(); ctx.moveTo(x0, yy + 0.5); ctx.lineTo(x0 + ww, yy + 0.5); ctx.stroke(); T(fmt(mx - (mx - mn) * g / 3, mx - mn < 5 ? 2 : (mx - mn < 50 ? 1 : 0)), x0 - 4, yy + 3, { s: 8.5, c: MUTE, a: 'right' }); }
       TF(row.t + (row.u ? ' (' + row.u + ')' : ''), x0 + 4, top + 10, ww - 10, { s: 9.5, b: true });
-      [[a, '#1B1F23'], [b, '#D93025']].forEach(([q, c]) => { ctx.strokeStyle = c; ctx.lineWidth = 2; ctx.beginPath(); let st = false; for (let i = 0; i < N; i++) { if (!isFinite(q[i])) { st = false; continue; } st ? ctx.lineTo(X(i), Y(q[i])) : ctx.moveTo(X(i), Y(q[i])); st = true; } ctx.stroke(); ctx.fillStyle = c; ctx.beginPath(); ctx.arc(X(d), Y(q[d]), 3.4, 0, Math.PI * 2); ctx.fill(); });
+      ctx.save(); ctx.beginPath(); ctx.rect(x0 - 1, top - 1, ww + 2, hgt + 2); ctx.clip();
+      [[a, '#1B1F23'], [b, '#D93025']].forEach(([q, c]) => { ctx.strokeStyle = c; ctx.lineWidth = 2; ctx.beginPath(); let st = false; for (let i = 0; i < N; i++) { if (!isFinite(q[i])) { st = false; continue; } st ? ctx.lineTo(X(i), Y(q[i])) : ctx.moveTo(X(i), Y(q[i])); st = true; } ctx.stroke(); ctx.fillStyle = c; ctx.beginPath(); if (isFinite(q[d])) { ctx.arc(X(d), Y(q[d]), 3.4, 0, Math.PI * 2); ctx.fill(); } }); ctx.restore();
       obs.forEach(o => { ctx.fillStyle = o.trt === 'dr' ? '#D93025' : '#1B1F23'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.beginPath(); ctx.rect(X(o.day) - 3, Y(o[obsK]) - 3, 6, 6); ctx.fill(); ctx.stroke(); });
       ctx.strokeStyle = '#2E7DE8'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(X(d) + 0.5, top); ctx.lineTo(X(d) + 0.5, top + hgt); ctx.stroke(); ctx.setLineDash([]); todayMark(X, top, hgt);
       if (ri === rows.length - 1) { axisDates(X, top + hgt, x0, ww); }
@@ -8556,6 +8561,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   }
   // the day shown when the layer opens: the date of the toolbar when it falls in the season, else the middle of the season
   function startT() { try { const q = window.PHUI.outlook.season(window.PHUI.outlook.toolbarDate()); if (q.idx >= 0 && q.idx < N) return q.idx / (N - 1); } catch (e) { } return 0.5; }
+  window.__phRan = () => !!PH.ran; window.__phRun = () => runNow();
   function runNow() { PH.ran = true; PH.why = ''; PH.key = ''; PH.ranKey = ''; PH.lastDate = dKey(); ensureRun(); PH.ranKey = keyOf(false); play.t = startT(); PH.anim.on = true; PH.anim.t0 = performance.now(); PH.anim.hold = 0; play.on = true; }
   const SECTIONS_ALL = () => BASE.concat(SECTIONS);
   const BASE = [{ id: 'ctl', t: 'Set up the experiment', s: 'every control re-runs the model; the project supplies soil, tillage, weather and the crop', fn: drawControls }, { id: 'twin', t: 'Plant and roots, side by side', s: 'drag to turn', fn: drawTwin }, { id: 'scans', t: 'Root scans through the season', s: 'scanner image and reconstruction', fn: drawStrip }, { id: 'series', t: 'Traits through time', s: 'click or drag on a chart to move the day', fn: drawSeries }];
@@ -8632,7 +8638,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   const sum = (a, i0, i1) => { let s = 0; for (let i = i0; i <= i1; i++) s += a[i]; return s; };
   const mean = (a, i0, i1) => sum(a, i0, i1) / Math.max(1, i1 - i0 + 1);
   const pear = (x, y) => { const n = x.length; if (n < 3) return NaN; const mx = x.reduce((a, b) => a + b, 0) / n, my = y.reduce((a, b) => a + b, 0) / n; let sxy = 0, sxx = 0, syy = 0; for (let i = 0; i < n; i++) { sxy += (x[i] - mx) * (y[i] - my); sxx += (x[i] - mx) ** 2; syy += (y[i] - my) ** 2; } return sxx > 0 && syy > 0 ? sxy / Math.sqrt(sxx * syy) : NaN; };
-  const linfit = (x, y) => { const n = x.length, mx = x.reduce((a, b) => a + b, 0) / n, my = y.reduce((a, b) => a + b, 0) / n; let sxy = 0, sxx = 0; for (let i = 0; i < n; i++) { sxy += (x[i] - mx) * (y[i] - my); sxx += (x[i] - mx) ** 2; } const b = sxx > 0 ? sxy / sxx : 0, r = pear(x, y); return { a: my - b * mx, b, r2: isFinite(r) ? r * r : 0 }; };
+  const linfit = (x, y) => { const n = x.length, mx = x.reduce((a, b) => a + b, 0) / n, my = y.reduce((a, b) => a + b, 0) / n; let sxy = 0, sxx = 0; for (let i = 0; i < n; i++) { sxy += (x[i] - mx) * (y[i] - my); sxx += (x[i] - mx) ** 2; } const b = sxx > 1e-9 * (1 + mx * mx) * n && isFinite(sxy / sxx) ? sxy / sxx : 0, r = pear(x, y); return { a: my - b * mx, b, r2: isFinite(r) ? r * r : 0 }; };
   const note = (txt, x, y, w, o) => sidWrap(txt, x, y, w, Object.assign({ s: 9.5, c: MUTE }, o || {}), 12.5);
   const frameH = (x, y, w, title, sub) => K.frame(x, y, w, 24, title, sub);
   const endFrame = (x, y0, y, w) => { ctx.strokeStyle = '#B9B4A6'; ctx.lineWidth = 1; ctx.strokeRect(x + 0.5, y0 + 0.5, w - 1, y - y0); };
@@ -8747,11 +8753,11 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
       const xmn = Math.min(...xs), xmx = Math.max(...xs), ymn = Math.min(...ys), ymx = Math.max(...ys), px = (xmx - xmn) * 0.1 + 1e-6, py = (ymx - ymn) * 0.12 + 1e-6, X = v => gx + (v - (xmn - px)) / (xmx - xmn + 2 * px) * pw, Y = v => gy + hh - (v - (ymn - py)) / (ymx - ymn + 2 * py) * hh;
       T(pr.t, gx - 40, gy - 6, { s: 9.5, b: true }); ctx.strokeStyle = GRID; for (let k = 0; k <= 3; k++) { ctx.beginPath(); ctx.moveTo(gx, gy + hh * k / 3 + 0.5); ctx.lineTo(gx + pw, gy + hh * k / 3 + 0.5); ctx.stroke(); T(fmt((ymn - py) + (ymx - ymn + 2 * py) * (1 - k / 3), ymx - ymn < 20 ? 1 : 0), gx - 4, gy + hh * k / 3 + 3, { s: 8, c: MUTE, a: 'right' }); }
       const xd = xmx - xmn < 0.5 ? 2 : xmx - xmn < 5 ? 1 : 0; T(fmt(xmn, xd), gx, gy + hh + 11, { s: 8, c: MUTE }); T(fmt(xmx, xd), gx + pw, gy + hh + 11, { s: 8, c: MUTE, a: 'right' });
-      ctx.strokeStyle = pr.c; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(X(xmn - px), Y(reg.fit.a + reg.fit.b * (xmn - px))); ctx.lineTo(X(xmx + px), Y(reg.fit.a + reg.fit.b * (xmx + px))); ctx.stroke();
+      ctx.save(); ctx.beginPath(); ctx.rect(gx, gy - 2, pw, hh + 4); ctx.clip(); ctx.strokeStyle = pr.c; ctx.lineWidth = 1.6; ctx.beginPath(); { const cl = v => Math.max(gy - 4, Math.min(gy + hh + 4, v)), flat = !(xmx - xmn > 1e-9 * (1 + Math.abs(xmn))); const b0 = flat ? 0 : reg.fit.b, a0 = flat ? ys.reduce((q, w) => q + w, 0) / Math.max(1, ys.length) : reg.fit.a; ctx.moveTo(X(xmn - px), cl(Y(a0 + b0 * (xmn - px)))); ctx.lineTo(X(xmx + px), cl(Y(a0 + b0 * (xmx + px)))); } ctx.stroke(); ctx.restore();
       xs.forEach((v, k) => { ctx.fillStyle = mix('#9AA3AE', pr.c, 0.6); ctx.strokeStyle = '#fff'; ctx.beginPath(); ctx.arc(X(v), Y(ys[k]), 3.6, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
       // the plant of the layer, estimated from its own shoot trait
       const cur = R('dr'), v = pr.f(cur), sc = pr.s || 1; let m = 0, c = 0; for (let t = Math.max(0, d - 2); t <= Math.min(N - 1, d + 2); t++) { m += v[t] * sc; c++; } const xv = m / c, yt = YV[PH.yv].f(cur), ye = reg.fit.a + reg.fit.b * xv;
-      ctx.fillStyle = '#D93025'; ctx.beginPath(); ctx.moveTo(X(xv), Y(yt) - 6); ctx.lineTo(X(xv) + 5, Y(yt)); ctx.lineTo(X(xv), Y(yt) + 6); ctx.lineTo(X(xv) - 5, Y(yt)); ctx.closePath(); ctx.fill();
+      { const dx = Math.max(gx, Math.min(gx + pw, X(xv))), dy = Math.max(gy, Math.min(gy + hh, Y(yt))); ctx.fillStyle = '#D93025'; ctx.beginPath(); ctx.moveTo(dx, dy - 6); ctx.lineTo(dx + 5, dy); ctx.lineTo(dx, dy + 6); ctx.lineTo(dx - 5, dy); ctx.closePath(); ctx.fill(); }
       T('r² = ' + fmt(reg.fit.r2, 2) + ' · slope ' + fmt(reg.fit.b, Math.abs(reg.fit.b) < 1 ? 2 : 1), gx + pw, gy - 6, { s: 9.5, b: true, c: pr.c, a: 'right' }); TF('your plant: estimated ' + fmt(ye, ymx < 20 ? 1 : 0) + ', model ' + fmt(yt, ymx < 20 ? 1 : 0), gx - 40, gy + hh + 24, cw, { s: 8.5, c: '#33414F' });
     });
     y += 2 * (hh + 46) + 6;
@@ -10105,7 +10111,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   const key = () => { const s = {}; Object.keys(state).forEach(k => { if (UI_ONLY.indexOf(k) < 0) s[k] = state[k]; }); let w = ''; try { w = window.WXD && window.WXD.on ? window.WXD.key : 'rec'; } catch (e) { } let x = ''; try { x = window.RUNKEY_EXTRA ? window.RUNKEY_EXTRA(currentScene.id) : ''; } catch (e) { } return JSON.stringify(s) + '|' + w + '|' + x; };
   const gated = sc => sc && DES.indexOf(sc.id) < 0 && !window.__REPORTING && !window.__NORUNGATE && !document.body.classList.contains('embed');
   function run(id) { const sc = SCENES.find(s => s.id === id); RX[id] = { on: true, st: key(), why: '' }; if (sc && sc.h) { try { setCanvasH(sc.h); } catch (e) { } } if (sc && sc.play) { play.t = 0; play.hold = 0; play.on = true; const pb = document.getElementById('playBtn'); if (pb) pb.textContent = 'Pause'; } }
-  window.runLayer = run; window.layerRan = id => !!(RX[id] && RX[id].on);
+  window.runLayer = run; window.layerRan = id => id === 'dph' ? !!(window.__phRan && window.__phRan()) : !!(RX[id] && RX[id].on);
   const btn = (x, y, w, h, label) => { ctx.fillStyle = '#0A246A'; ctx.fillRect(x, y, w, h); ctx.fillStyle = '#3A6EA5'; ctx.fillRect(x, y, w, 2); ctx.fillRect(x, y, 2, h); ctx.fillStyle = '#000'; ctx.fillRect(x, y + h - 2, w, 2); ctx.fillRect(x + w - 2, y, 2, h); T(label, x + w / 2, y + h / 2 + 4, { s: 11, b: true, c: '#FFFFFF', a: 'center' }); };
   function card(sc, R) {
     try { setCanvasH(Math.min(sc.h || 600, 420)); } catch (e) { } paper();
@@ -10116,7 +10122,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
     let y = by + 46; if (sc.title) y += sidWrap(sc.title, bx + 14, y, bw - 28, { s: 10.5, c: '#000' }, 14) * 14 + 6;
     y += sidWrap(R && R.why ? 'The ' + R.why + ': the results wait for a new run.' : 'Set the soil, crop, weather, mulch, irrigation and nitrogen in Properties, then run.', bx + 14, y, bw - 28, { s: 10, c: '#404040' }, 13) * 13 + 6;
     sidWrap('The results, charts and moving pictures are computed from these settings when you press Run, so nothing changes while you set them.', bx + 14, y, bw - 28, { s: 9.5, i: true, c: '#404040' }, 12.5);
-    btn(bx + 14, by + bh - 52, 190, 34, '▶  Run simulation'); hot(bx + 14, by + bh - 52, 190, 34, () => run(sc.id), 'compute this layer with the settings of Properties');
+    T('▼  Press Run simulation in the bar below this picture.', bx + 14, by + bh - 30, { s: 11, b: true, c: '#0A246A' });
     const pb = document.getElementById('playBtn'); if (pb && pb.textContent !== 'Run simulation') pb.textContent = 'Run simulation';
   }
   function wrap(sc) {
@@ -10133,9 +10139,16 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   // the Play button of a layer that has not run is the Run button
   const pb = document.getElementById('playBtn');
   if (pb) pb.addEventListener('click', e => { const sc = currentScene; if (gated(sc) && sc.id !== 'dph' && !(RX[sc.id] && RX[sc.id].on)) { e.stopImmediatePropagation(); e.preventDefault(); run(sc.id); } }, true);
+  // the one Run button: navy and bold while it runs the layer
+  { const st = document.createElement('style'); st.textContent = 'body.appmode #playBtn.runme{background:#0A246A !important;color:#fff !important;font-weight:bold !important;border:1px solid #05154a !important;padding:0 16px !important;height:26px !important;font-size:12px !important;line-height:24px !important}'; document.head.appendChild(st); setInterval(() => { const b = document.getElementById('playBtn'); if (b) { const isRun = b.textContent === 'Run simulation'; b.classList.toggle('runme', isRun); b.style.display = isRun && currentScene && DES.indexOf(currentScene.id) >= 0 ? 'none' : ''; } }, 250); }
   // opening a layer never starts it
   const oSwitch = switchScene;
-  switchScene = function (sc) { const r = oSwitch.apply(this, arguments); try { if (sc && gated(sc) && sc.id !== 'dph' && !(RX[sc.id] && RX[sc.id].on)) { play.on = false; play.t = 0; } } catch (e) { } return r; };
+  // a layer always opens at the top of its picture, whatever the position of the layer before it
+  const toTop = () => { try { let e = (typeof cv !== 'undefined' && cv) || document.querySelector('canvas'); while (e && (e = e.parentElement)) { const o = getComputedStyle(e).overflowY; if ((o === 'auto' || o === 'scroll') && e.scrollTop) e.scrollTop = 0; } window.scrollTo(0, 0); } catch (e) { } };
+  // the layer stays at the top while it draws; the first wheel, touch or key of the person ends it
+  let topTok = 0, topUser = false; ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(ev => document.addEventListener(ev, () => { topUser = true; }, true));
+  const holdTop = () => { const tok = ++topTok; topUser = false; toTop(); [40, 120, 250, 500, 900, 1500, 2400].forEach(ms => setTimeout(() => { if (tok === topTok && !topUser) toTop(); }, ms)); };
+  switchScene = function (sc) { const r = oSwitch.apply(this, arguments); holdTop(); try { if (sc && gated(sc) && sc.id !== 'dph' && !(RX[sc.id] && RX[sc.id].on)) { play.on = false; play.t = 0; } } catch (e) { } return r; };
 })();
 
 </script>
