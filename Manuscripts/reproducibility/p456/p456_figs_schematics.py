@@ -15,26 +15,56 @@ def arrow(ax,p,q,ls='-',c=BLK,lw=1.3,style='-|>'):
 def lab(ax,x,y,s,fs=7,c=BLK,ha='center',st='italic'): ax.text(x,y,s,fontsize=fs,color=c,ha=ha,va='center',style=st,zorder=7)
 def title(ax,x,y,s): ax.text(x,y,s,fontsize=8.5,fontweight='bold',color=RED,ha='left',va='center')
 
-# ---------------- P4 Fig 1: the workbench
-fig,ax=canvas(160,100,(9,5.6))
-ax.add_patch(patches.FancyBboxPatch((1,1),158,98,boxstyle='round,pad=0,rounding_size=1.5',fc='none',ec='#888888',lw=1,ls='--'))
-ax.text(80,95,'Daisy workbench (SWAFL 1.1.0)',ha='center',fontsize=10,fontweight='bold',color=BLK)
-cols=[('Input data',WAT,['Weather and site','Parameter library\n(soils, crops, fertilisers)']),
-      ('Experiments and\nscenarios',GRN,['17 prepared experiments\n(compact designs)','Own factorial designs\n(53 factors)','5 scenarios + AI plan']),
-      ('Process structure',BEI,['Process map\n(14 processes,\n76 components)']),
-      ('Results and analysis',OCH,['Log plots','Mass balance','Run comparison']),
-      ('Decision support',HEX,['To the SWAFL layers\n(chem, dsum, ...)']),
-      ('Model development',LG,['Set-up editor (.dai)','Soil column (Richards)','Response curves','Calibration\n(3 optimisers)'])]
-x=3
-for name,c,items in cols:
-    box(ax,x,76,24,12,name,fc=c,fs=7.2)
-    for k,it in enumerate(items):
-        box(ax,x,64-k*14,24,11.5,it,fc='white',fs=6.2,bold=False); 
 
-    x+=26
-box(ax,3,6,154,12,'Daisy 7.1.14 (bundled, Windows)  -  runs the set-ups; its logs (.dlf) are read back by the workbench',fc='#EEEEEE',fs=7.5)
-arrow(ax,(80,18),(80,26),style='<|-|>')
-lab(ax,98,22,'set-up files (.dai) down, logs (.dlf) up',fs=6.8)
+# ---- process-map style (as the Daisy process map): serif, pastel blue/green/beige/brown, thin lines, legend
+SER='Liberation Serif'
+DB='#BFD3EA'; DBE='#4A6FA5'; DG='#BEE3A0'; DGE='#5E8F3A'; DBG='#E3DAC3'; DBGE='#8C7F5A'; DBR='#C98A1E'; DBRE='#7A5210'; DK='#222222'
+def pbox(ax,x,y,w,h,s,fc=DB,ec=DBE,fs=7,bold=True,two=None,ls='-'):
+    ax.add_patch(patches.Rectangle((x,y),w,h,fc=fc,ec=ec,lw=0.9,ls=ls,zorder=3))
+    if two: ax.add_patch(patches.Rectangle((x,y),w/2,h,fc=two,ec='none',zorder=3.5)); ax.add_patch(patches.Rectangle((x,y),w,h,fc='none',ec=ec,lw=0.9,zorder=3.6))
+    ax.text(x+w/2,y+h/2,s,ha='center',va='center',fontsize=fs,fontfamily=SER,fontweight='bold' if bold else 'normal',color=DK,zorder=6,linespacing=1.12)
+def hbox(ax,x,y,w,h,head,body,fs=6.6,hh=5.2):
+    ax.add_patch(patches.Rectangle((x,y),w,h,fc='#EBD3A1',ec=DBRE,lw=0.9,zorder=3))
+    ax.add_patch(patches.Rectangle((x,y+h-hh),w,hh,fc=DBR,ec=DBRE,lw=0.9,zorder=3.5))
+    ax.text(x+w/2,y+h-hh/2,head,ha='center',va='center',fontsize=fs+0.4,fontfamily=SER,fontweight='bold',color=DK,zorder=6)
+    ax.text(x+w/2,y+(h-hh)/2,body,ha='center',va='center',fontsize=fs-0.2,fontfamily=SER,color=DK,zorder=6,linespacing=1.15)
+def parrow(ax,p,q,kind='solid',both=False):
+    ls={'solid':'-','dash':(0,(4,2)),'dot':(0,(1,2))}[kind]
+    ax.add_patch(patches.FancyArrowPatch(p,q,arrowstyle='<|-|>' if both else '-|>',mutation_scale=7,lw=0.8,color=DK,ls=ls,zorder=5,shrinkA=0,shrinkB=0))
+def ptext(ax,x,y,s,fs=6.6,ha='center',st='italic',c=DK): ax.text(x,y,s,fontsize=fs,fontfamily=SER,color=c,ha=ha,va='center',style=st,zorder=7)
+def legend(ax,x,y):
+    items=[('solid','Data and results'),('dash','Outputs'),('dot','Information exchange')]
+    for k,(kd,t) in enumerate(items):
+        yy=y-k*4.6
+        ax.plot([x,x+12],[yy,yy],color=DK,lw=0.8,ls={'solid':'-','dash':(0,(4,2)),'dot':(0,(1,2))}[kd],zorder=5)
+        ptext(ax,x+14,yy,t,fs=6.2,ha='left',st='normal')
+def frame(ax,w,h):
+    ax.add_patch(patches.Rectangle((1,1),w-2,h-2,fc='white',ec='#B9B9B9',lw=0.8,zorder=0))
+
+# ---------------- P4 Fig 1: the workbench (process-map style)
+fig,ax=canvas(200,124,(9.4,5.8)); frame(ax,200,124)
+ptext(ax,6,119,'Organisation of the Daisy workbench',fs=8.5,ha='left',st='normal'); 
+# model development below the dotted line
+ax.plot([3,197],[34,34],color='#666666',lw=0.8,ls=(0,(1,2)),zorder=2); ptext(ax,6,36.5,'Model development (works before Daisy is started)',fs=6.4,ha='left')
+for i,t in enumerate(['Set-up editor\n(.dai)','Soil column\n(Richards)','Response curves','Calibration\n(3 optimisers)']):
+    pbox(ax,8+i*31,14,28,14,t,fc=DG,ec=DGE,fs=6.4)
+# process structure (top left)
+pbox(ax,8,92,50,16,'Process structure\nprocess map: 14 processes,\n76 components',fc=DG,ec=DGE,fs=6.8)
+# input data
+pbox(ax,8,56,50,26,'Input data\nweather and site\nparameter library (soils,\ncrops, fertilisers)',fc=DB,ec=DBE,fs=6.8)
+# experiments
+pbox(ax,70,56,52,36,'Experiments and scenarios\n17 prepared experiments\n(compact designs)\nown factorial designs\n(53 factors)\n5 scenarios + AI plan',fc=DG,ec=DGE,fs=6.8)
+# daisy
+hbox(ax,134,56,60,36,'Daisy 7.1.14','bundled for Windows\nruns the set-ups\nwrites the logs',fs=7.2,hh=7)
+# results and decision
+pbox(ax,134,98,60,14,'Results and analysis\nlog plots, mass balance,\nrun comparison',fc=DBG,ec=DBGE,fs=6.8)
+pbox(ax,134,38,60,12,'Decision support\nto the SWAFL layers (chem, dsum, ...)',fc=DB,ec=DBE,fs=6.6)
+parrow(ax,(58,69),(70,69)); parrow(ax,(122,74),(134,74)); ptext(ax,128,78,'.dai',fs=6)
+parrow(ax,(164,92),(164,98)); ptext(ax,172,95,'.dlf',fs=6)
+parrow(ax,(164,56),(164,50),'dash'); parrow(ax,(33,92),(33,82),'dot',both=True)
+parrow(ax,(96,28),(96,56),'dot',both=True); 
+ptext(ax,70,100,'set-up files (.dai) go to Daisy, logs (.dlf) are read back',fs=6.4,ha='left')
+legend(ax,136,26)
 fig.savefig(FG+'p4/fig01_workbench.pdf'); fig.savefig(FG+'p4/fig01_workbench.png',dpi=200); plt.close(fig)
 
 # ---------------- P5 Fig 1: the bridge
@@ -60,18 +90,35 @@ box(ax,2,36,36,12,'Weather of the SWAFL project\n(benchmark, file, online)',fc='
 arrow(ax,(14,48),(14,60),ls='--',c=RED); lab(ax,24,53,'return path',c=RED,fs=6.5,ha='left')
 fig.savefig(FG+'p5/fig01_bridge.pdf'); fig.savefig(FG+'p5/fig01_bridge.png',dpi=200); plt.close(fig)
 
-# ---------------- P6 Fig 1: the system
-fig,ax=canvas(170,110,(9.5,6.1))
-title(ax,2,106,'SWAFL Desktop 1.1.0')
-box(ax,2,84,166,16,'Field and site:  sketch tool  -  satellite indices (Sentinel-2)  -  image analysis  -  water sources (OSM)  -  terrain (Copernicus DEM)  -  soil (SoilGrids)  -  zones and variable-rate maps',fc=LG,fs=6.8)
-box(ax,2,50,40,28,'Irrigation design\nsurface, drip,\nsprinkler;\nschedule and\nwhen to irrigate',fc=WAT,fs=7)
-box(ax,46,50,40,28,'Decision layers (22)\ntrigger and sensor,\nmulch, soil structure,\nwater balance, seasons,\nfeedback loops',fc=WAT,fs=7)
-box(ax,90,50,36,28,'Deterministic\nphenotyping\n(plant, roots, drought\noutlook)',fc=GRN,fs=7)
-box(ax,130,50,38,28,'Crop library\n48 crops\n(Kc curves, roots,\ndepletion, Ky)',fc=BEI,fs=7)
-box(ax,2,22,82,22,'Engines:  Engine 1 (annual meta-model of 10,190 Daisy runs)\n          Engine 2 (daily 40-layer water balance)\n          closed-form surface, drip, sprinkler modules',fc=HEX,fs=6.8)
-box(ax,88,22,80,22,'Daisy workbench:  17 experiments, process map, soil column,\ncalibration, runs read back as decisions (dsum, chem)',fc=OCH,fs=6.8)
-box(ax,2,2,166,14,'Outputs:  field report (PDF)  -  CSV and pictures  -  .swafl projects  -  prescription maps (GeoJSON, CSV)  -  online weather, any date 1980 to 2100',fc='#EEEEEE',fs=6.8)
-for xx in [22,66,108,149]: arrow(ax,(xx,84),(xx,78),style='<|-|>')
-for xx in [22,66,108,149]: arrow(ax,(xx,50),(xx,44),style='<|-|>')
+# ---------------- P6 Fig 1: the system (process-map style)
+fig,ax=canvas(200,150,(9.4,7.0)); frame(ax,200,150)
+ptext(ax,6,145,'Architecture of SWAFL Desktop',fs=8.5,ha='left',st='normal')
+# inputs (dashed frame)
+ax.add_patch(patches.Rectangle((5,114),190,26,fc='none',ec=DK,lw=0.8,ls=(0,(4,2)),zorder=2)); ptext(ax,8,137,'Open data and the user\'s own data',fs=6.4,ha='left')
+ins=['Field outline\n(sketch tool)','Satellite scenes\n(Sentinel-2)','Water sources\nand roads (OSM)','Terrain\n(Copernicus DEM)','Soil\n(SoilGrids)','Weather: five sources,\nany date 1980 to 2100']
+for i,t in enumerate(ins): pbox(ax,8+i*31.3,117,29,15,t,fc=DBG,ec=DBGE,fs=6.2)
+# tools of the real field
+tools=['Field sketch\nand zones','Vegetation indices\nand image analysis','Terrain, gullies,\nsoil loss, sensors','Zone-by-zone irrigation,\nreport, prescriptions']
+for i,t in enumerate(tools): pbox(ax,8+i*47.5,91,44,15,t,fc=DG,ec=DGE,fs=6.6)
+ptext(ax,8,109.5,'Tools of the real field',fs=6.4,ha='left')
+for i in range(4): parrow(ax,(30+i*47.5,117),(30+i*47.5,106))
+# project
+pbox(ax,8,72,184,11,'One project: soil, crop, weather, mulch, irrigation and working date, shared by every layer',fc=DBG,ec=DBGE,fs=7)
+for i in range(4): parrow(ax,(30+i*47.5,91),(30+i*47.5,83),both=True)
+# layers
+pbox(ax,8,40,44,25,'Irrigation design\nsurface, drip, sprinkler;\nschedule and when\nto irrigate',fc=DB,ec=DBE,fs=6.6)
+pbox(ax,56,40,50,25,'Decision layers (22)\ntrigger and sensor, mulch,\nsoil structure, water balance,\nseasons, feedback loops',fc=DB,ec=DBE,fs=6.6)
+pbox(ax,110,40,44,25,'Deterministic phenotyping\nplant, roots, drought\noutlook',fc=DG,ec=DGE,fs=6.6)
+pbox(ax,158,40,34,25,'Crop library\n48 crops (Kc curves,\nroots, depletion, Ky)',fc=DG,ec=DGE,fs=6.4)
+for x in (30,81,132,175): parrow(ax,(x,72),(x,65),both=True)
+# engines
+hbox(ax,8,12,56,20,'Engine 1','annual meta-model of\n10,190 Daisy runs',fs=6.6)
+hbox(ax,68,12,56,20,'Engine 2 and design modules','daily 40-layer water balance;\nclosed-form surface, drip,\nsprinkler modules',fs=6.4)
+hbox(ax,128,12,64,20,'Daisy workbench','17 experiments, process map, soil column,\ncalibration; runs read back as decisions',fs=6.4)
+for x in (36,96,160): parrow(ax,(x,40),(x,32),'dot',both=True)
+ax.plot([3,197],[8,8],color='#666666',lw=0.8,ls=(0,(1,2)),zorder=2)
+ptext(ax,6,4.2,'Outputs: field report (PDF), CSV and pictures, .swafl projects, prescription maps (GeoJSON, CSV)',fs=6.2,ha='left',st='normal')
+legend(ax,150,4.6+9.2) if False else None
+
 fig.savefig(FG+'p6/fig01_system.pdf'); fig.savefig(FG+'p6/fig01_system.png',dpi=200); plt.close(fig)
 print('ok')
