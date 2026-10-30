@@ -105,7 +105,7 @@ Irrigation and evaporation-control mulching are usually tuned one soil at a time
 | Feedback loops | seven soil-atmosphere feedback loops |
 | Daisy output | decision table; fate of a chemical (shown only for live Daisy runs) |
 
-**Working date.** Any date from 1980 to 2100: 1980 to 1999 is the recorded baseline weather, 2000 to 2100 is projected from a chosen baseline year. Projections are simulations, not forecasts.
+**Working date and weather.** The user sets the date: any day from 1980 to 2100 can be typed in the toolbar, and the whole workbench (crop water need, irrigation dates, dashboard) follows it. The built-in benchmark record covers 1980 to 1999 as recorded weather; 2000 to 2100 is projected from a chosen baseline year (typical, dry, wet or a specific year). Projections are simulations, not forecasts. The user can also bring their own weather: import a file (CSV, Excel, DWF, DLF or DAI) or fetch the weather of any location online, and the choice carries into every layer and into Daisy runs. For comparison and testing there is a wide range of benchmark weather: the built-in Taastrup record (Denmark, 1965 to 2000) and Daisy sample stations in Denmark (Taastrup, Foulum, Jyndevad), Italy (Bologna), Poland (Jadwisin), Slovakia (Bratislava) and the Czech Republic (Valecov).
 
 **Documentation.** The manual documents every control, screen and equation of the release, with labelled screenshots, and the equation ledger with its provenance labels.
 
