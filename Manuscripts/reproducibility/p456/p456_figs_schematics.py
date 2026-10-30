@@ -2,10 +2,12 @@
 import os, sys
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
 from pm_style import *
+import pm_style
 H=os.path.dirname(os.path.abspath(__file__)); FG=H+'/../../figures/'
 def save(fig,name): fig.savefig(FG+name+'.pdf'); fig.savefig(FG+name+'.png',dpi=200); plt.close(fig)
 
 # ---- architecture of the suite
+pm_style.NOFILL=True
 fig,ax=canvas(200,152,(9.4,7.15))
 pl=[(8,21,'Own files,\nsketch'),(31,21,'Water, roads\n(OSM)'),(62,30,'Sentinel-2\nscenes'),(103,21,'Terrain\n(Copernicus)'),(126,21,'Soil\n(SoilGrids)'),(157,30,'Weather,\nfive sources')]
 for x,w,t in pl: pill(ax,x,140,w,8.5,t)
@@ -59,6 +61,7 @@ hatch(ax,3.2,'(The guided path runs from the input data to the hand-over; develo
 save(fig,'p4/fig01_workbench')
 
 # ---- the bridge
+pm_style.NOFILL=False
 fig,ax=canvas(200,96,(9.4,4.5))
 b=[(6,'Workbench\nscenario or\nexperiment','green'),(38,'Daisy 7.1.14\n(.dai set-up,\nweather, soil)','brown'),(70,'Logs (.dlf)\nAnnual-Harvest,\n-FWater, -FN, -Tracer','blue'),(102,'DaisyIO\nparser','green'),(134,'DaisySum\nsummarise()','green'),(166,'DAISYLIVE\n(in the engine)','brown')]
 for x,t,k in b: rbox(ax,x,70,28,19,t,k,fs=6.2,two=0.28 if k!='blue' else None)
