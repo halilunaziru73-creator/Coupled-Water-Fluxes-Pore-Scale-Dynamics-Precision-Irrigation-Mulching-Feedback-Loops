@@ -1,10 +1,13 @@
 # Reproducibility package
 
-Regenerates every number and figure in the six manuscripts from the archived ensemble of the [Daisy model](https://github.com/daisy-model) (University of Copenhagen), and checks the result automatically.
+Regenerates every number and figure in the four manuscripts from the archived ensemble of the [Daisy model](https://github.com/daisy-model) (University of Copenhagen), and checks the result automatically.
 
-1. *Soil Hydraulic Memory and the Recoverability of Evaporation Savings* (P1)
-2. *Auditing Water-Balance Closure in a Soil-Plant Model with Interpretable Machine Learning* (P2)
-3. *Modeling Soil–Water–Atmosphere Interactions for Irrigation Scheduling and Design* (P3)
+1. *Soil Hydraulic Memory, the Recoverability of Evaporation Savings and the Closure of the Water Balance* (Paper 1; the scripts `p1_*` give the memory analysis, `p2_*` the audit, and `p1_audit_link.py` the link between them)
+2. *Modeling Soil–Water–Atmosphere Interactions for Irrigation Scheduling and Design* (Paper 2; the scripts `p3_*`)
+3. *A Graphical Workbench and a Verified Bridge for the Daisy Model* (Paper 3; the scripts `p4_*`, `p5_*` and `p7_planner_checks.js`)
+4. *SWAFL Desktop 1.1.0: the whole suite* (Paper 4; the scripts `p6_*`)
+
+Script names keep the numbering of the earlier six-paper draft.
 
 ## Quick start
 
@@ -76,3 +79,5 @@ The engine under test is `Software/v1.1.0/SWAFL_Desktop/app/engine/engine.html` 
 ## Versions used
 
 Python 3.13.16; NumPy 2.5.3; SciPy 1.18.1; pandas 3.0.5; scikit-learn 1.9.1; statsmodels 0.15.0; Matplotlib 3.11.2; Pillow 12.3.0; Node.js 22.22.0; Playwright 1.56.0 with Chromium. Typesetting: XeLaTeX and BibTeX.
+
+The link between the audit and the recoverable share is regenerated with `SWAFL_MS=./work python3 analysis/p1_audit_link.py` (after `make_data.py`); it writes `../results/p1_audit_link.json`. The planner test is `node p456/p7_planner_checks.js`.

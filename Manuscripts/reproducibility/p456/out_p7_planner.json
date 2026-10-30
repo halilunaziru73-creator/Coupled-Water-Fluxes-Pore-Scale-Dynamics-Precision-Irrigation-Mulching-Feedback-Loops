@@ -1,0 +1,131 @@
+{
+ "n_questions": 8,
+ "passed": 8,
+ "rows": [
+  {
+   "q": "How does the irrigation trigger of -100 to -800 cm change drainage on a sandy loam in Bologna over 10 years?",
+   "expected": [
+    "trig"
+   ],
+   "got": [
+    "irrig",
+    "trig"
+   ],
+   "station": "it-bologna",
+   "soil": "usda:sandyloam",
+   "pass": true
+  },
+  {
+   "q": "What happens to nitrate leaching if I cut the nitrogen dose by 20 % in Foulum?",
+   "expected": [
+    "nfac"
+   ],
+   "got": [
+    "nfac",
+    "mm"
+   ],
+   "station": "dk-foulum",
+   "soil": null,
+   "pass": true
+  },
+  {
+   "q": "Compare 20 % less rain and 20 % more rain at Jyndevad on a loamy sand",
+   "expected": [
+    "precip"
+   ],
+   "got": [
+    "precip"
+   ],
+   "station": "dk-jyndevad",
+   "soil": "usda:loamysand",
+   "pass": true
+  },
+  {
+   "q": "Warming of 2 degrees and 4 degrees in Poland, Jadwisin",
+   "expected": [
+    "temp"
+   ],
+   "got": [
+    "temp"
+   ],
+   "station": "pl-jadwisin",
+   "soil": null,
+   "pass": true
+  },
+  {
+   "q": "Is drip irrigation better than rainfed on a silt loam in the Czech Republic?",
+   "expected": [
+    "irrig"
+   ],
+   "got": [
+    "irrig",
+    "method"
+   ],
+   "station": "cz-valecov",
+   "soil": "usda:siltloam",
+   "pass": true
+  },
+  {
+   "q": "Effect of the sensor depth 10, 30 and 60 cm on the irrigation trigger",
+   "expected": [
+    "z"
+   ],
+   "got": [
+    "irrig",
+    "trig",
+    "z"
+   ],
+   "station": null,
+   "soil": null,
+   "pass": true
+  },
+  {
+   "q": "Pesticide half-life of 20 and 60 days and sorption koc of 50 and 200 l/kg",
+   "expected": [
+    "half",
+    "koc"
+   ],
+   "got": [
+    "koc",
+    "half"
+   ],
+   "station": null,
+   "soil": null,
+   "pass": true
+  },
+  {
+   "q": "What if the rooting depth is 60 and 120 cm in Bratislava?",
+   "expected": [
+    "root"
+   ],
+   "got": [
+    "root"
+   ],
+   "station": "sk-bratislava",
+   "soil": null,
+   "pass": true
+  }
+ ],
+ "catalogue_factors": 54,
+ "catalogue_soils": 10,
+ "catalogue_stations": 8,
+ "validate": {
+  "factors": [
+   {
+    "id": "precip",
+    "levels": [
+     0.4,
+     1,
+     1.6
+    ]
+   }
+  ],
+  "base": {},
+  "responses": [
+   "yield"
+  ],
+  "notes": [
+   "unknown factor \"not_a_factor\" left out"
+  ]
+ }
+}

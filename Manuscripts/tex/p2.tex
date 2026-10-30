@@ -1,611 +1,577 @@
 \input{pre.tex}
-\hypersetup{pdftitle={Auditing Water-Balance Closure in a Soil-Plant Model with Interpretable Machine Learning},pdfauthor={Naziru Halilu}}
+\usepackage{longtable,array}
+\hypersetup{pdftitle={Modeling Soil-Water-Atmosphere Interactions for Irrigation Scheduling and Design},pdfauthor={Naziru Halilu}}
 \begin{document}
 \linenumbers
 \begin{titlepage}
 \vspace*{-1.2cm}
-\begin{center}{\Large\bfseries Auditing Water-Balance Closure in a Soil--Plant Model with Interpretable Machine Learning\par}\end{center}
+\begin{center}{\Large\bfseries Modeling Soil--Water--Atmosphere Interactions for Irrigation Scheduling and Design\par}\end{center}
 \vspace{0.4cm}
 \authorblock
 \vspace{0.4cm}
 
 {\small\setlength{\parindent}{0pt}\setlength{\parskip}{0pt}
 \begin{center}\textbf{\normalsize Abstract}\end{center}\vspace{-0.4em}
-\noindent Scientific machine learning promises equations discovered from data, yet few discovery pipelines are first shown to recover a known answer, and fewer ask whether the quantities they are given close in the first place. A discovered relation is only as credible as the controls it has passed. A discovery protocol is developed in which a blind linear-invariant search must return the water balance before anything else is believed, with a permutation null and resampling to calibrate its uncertainty, and in which every partition used as a target is audited for closure. The protocol is applied to a large designed ensemble of simulations from a widely used soil--plant model, across experiments and soils that are withheld in turn. The search recovers the water balance with quantified uncertainty, and the closure audit then shows what the reported components leave out: an unattributed evaporative flux that is a substantial share of evapotranspiration, and two experiments in which stored water does not close. Because this flux changes the partition fractions that are used to compare management treatments, its identification matters to users of the model and of emulators built on it. A compact law with three terms predicts evapotranspiration in withheld experiments and withheld soils as accurately as gradient boosting, whereas drainage resists both, which locates the information boundary of annual flux data. Relations that look universal, such as irrigation compensation, prove regime-specific. The contribution is not a new law of nature but a template that tells a modeller which outputs can be trusted, which need an audit, and what a discovered equation must survive before it is called one. The results concern a process model and identify the questions that measured lysimeter and eddy-covariance data can settle.
+\noindent Irrigation decisions depend on a coupled soil--water--atmosphere system in which pores, roots, surface cover and weather exchange water continuously, yet the software that advises farmers and designers seldom shows which variables it represents, which relation produced a number, or the range in which that relation holds. This article models the system in an open, offline framework and makes it explorable through seventeen result views. The modelled column has five compartments (atmosphere, soil surface and cover, soil matrix and structure, soil water, and crop), six water fluxes that close the water balance together with the storage change, and twelve controls (soil, tillage, consolidation rate, crop, mulch strength and capacity, rainfall, warming, irrigation method, trigger, sensor depth and nitrogen). Its variables range from porosity, retention, capillary pore emptying and consolidation of tilled pores, through two-stage soil evaporation, interception and mulch, to canopy cover, rooting depth, root water uptake and the water potential from soil to air, and on to drainage, nitrate leaching, the fate of conserved water and seven feedback loops. Three computing layers stand behind the views: a meta-model of a 10\,190-run simulation ensemble, a daily 40-layer model, and closed-form surface, drip and sprinkler design modules. Every relation carries a provenance label (literature, data-driven or engineered) and each layer is tested against an independent reference. Evaluated for ten soils, the system variables show that a common $-300$\,cm trigger uses 24 to 84\,\% of the plant-available water, that stage-1 evaporation lasts 1.1 to 3.0 days and longest in sand, and that drainage ranges from 28 to 164\,mm\,yr$^{-1}$ under the same rainfall. The evaluation also exposes two limitations: the leaf water potential is set by a conductivity floor rather than by the soil, and the drainage share of a mulch saving is understated in coarse soils because two experiments cover one soil. A reference implementation of the textbook surface procedure reproduces published worked examples (median error 0.08\,\%), the shipped surface layer reproduces 13 published advance times within 0.5\,\%, the meta-model preserves the ranking of the trigger, sensor-depth and rainfall options tested (Spearman 0.64--0.97) with a diagnosed baseline offset, and the daily model conserves mass to 0.1\,\%. Verification exposed three defects in the first release, in the sprinkler range coefficient, the drip iteration count and the surface layer's treatment of steady intake during advance; all three are corrected in release~1.1.0. No field validation is claimed; the framework supplies a traceable map of the coupled system, of where each output can be relied on, and of the experiments that would validate it.
 
-\medskip\noindent \textbf{Keywords.} equation discovery; water-balance closure; interpretable machine learning; evapotranspiration partitioning; process-model auditing\par}
+\medskip\noindent \textbf{Keywords.} soil--water--atmosphere modelling; soil--plant--atmosphere continuum; soil evaporation and mulch; irrigation decision support; simulation meta-model; software verification; irrigation scheduling and design; open science\par}
 \end{titlepage}
 
 \section*{List of symbols}
-\begin{table}[H]\centering\small
-\caption{List of symbols, abbreviations and units used in the text.}\label{tab:notation}
-\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.3cm}Xl}
+{\small
+\begin{longtable}{>{\raggedright\arraybackslash}p{3.3cm}>{\raggedright\arraybackslash}p{8.4cm}>{\raggedright\arraybackslash}p{3.6cm}}
+\caption{List of symbols, abbreviations and units used in the text.}\label{tab:notation}\\
 \toprule
-Symbol & Meaning & Unit\\\midrule
-$P_r,\ I,\ W$ & rainfall, irrigation, water input $P_r+I$ & mm\,yr$^{-1}$\\
-$\mathit{ET},\ T,\ E_s,\ E_c,\ R$ & evapotranspiration and components; unattributed term, \cref{eq:R} & mm\,yr$^{-1}$\\
-$D,\ \Delta S,\ Q_r$ & drainage at 1\,m, storage change, runoff & mm\,yr$^{-1}$\\
-$\varepsilon$ & closure residual, \cref{eq:closure} & $-$\\
-$\mathbf F,\ \sigma_k,\ \mathbf v_k$ & flux matrix, singular values and right singular vectors & --\\
-$\mathbf c$ & invariant coefficients, \cref{eq:law} & $-$\\
-$n,\ \alpha$ & van~Genuchten shape and scale & $-$, cm$^{-1}$\\
-$\TAW$ & total available water & mm\\
-$R^2_{\mathrm{cv}}$ & cross-validated coefficient of determination, \cref{eq:r2cv} & $-$\\
-$\kappa$ & irrigation compensation, \cref{eq:kappa} & $-$\\
-E1--E17 & numbered experiments of the Daisy ensemble & $-$\\
-LOEO, LOSO & leave-one-experiment-out and leave-one-soil-out validation & $-$\\
-SVD, PCA & singular-value decomposition; principal component analysis & $-$\\
-GBM & gradient-boosting machine used as the flexible benchmark & $-$\\
-DPF, NLF, IE & drainage fraction $D/W$; nitrogen-leaching fraction; irrigation efficiency & $-$\\\bottomrule
-\end{tabularx}
-\end{table}
+Symbol & Meaning & Unit\\\midrule\endfirsthead
+\toprule Symbol & Meaning & Unit\\\midrule\endhead
+$\mathit{ET},\ I,\ D$ & annual evapotranspiration, irrigation and drainage at 1\,m & mm\,yr$^{-1}$\\
+$\rho$ & Spearman rank correlation & $-$\\
+$R^2$, nRMSE & coefficient of determination; RMSE as a percentage of the held-out mean & $-$, \%\\
+$h^\ast$, $f^\ast$ & critical suction and soil-independent depletion at which irrigation is triggered ($f^\ast=0.45$) & cm, $-$\\
+$T_{req}$ & required infiltration (intake opportunity) time & min\\
+$Q,\ Q_{\max}$ & furrow inflow and its maximum non-erosive value & m$^3$\,min$^{-1}$\\
+$L,\ t_L,\ t_{L/2}$ & furrow length; advance times to $L$ and $L/2$ & m, min\\
+$x=p\,t^{r}$ & power-law advance curve & m\\
+$E_a$ & application efficiency & fraction or \%\\
+$h_f,\ H_0$ & friction loss along a drip lateral; inlet head & m\\
+$E_u$ & drip emission uniformity & $-$\\
+$h,\ \theta,\ S_e$ & suction head, water content, effective saturation & cm, $-$, $-$\\
+$\alpha,\ n,\ m$ & van~Genuchten shape parameters & cm$^{-1}$, $-$, $-$\\
+$f,\ f_T$ & depletion fraction; its value at the trigger & $-$\\
+$E,\ T$ & soil evaporation, transpiration & mm\,yr$^{-1}$\\
+$P$ & precipitation & mm\,yr$^{-1}$\\
+$N_L,\ Y$ & nitrogen leaching, grain yield & kg\,ha$^{-1}$, Mg\,ha$^{-1}$\\
+$\varphi,\ c,\ \gamma_P,\ \Delta T$ & mulch vapour-flux factor, mulch interception capacity, rainfall scale, warming & $-$, mm, $-$, K\\
+$\gamma_y$ & year factor of the rainfall generator & $-$\\
+$E_{\mathrm{oth}},\ \Delta S$ & other evaporation ($\mathit{ET}-T-E$), storage change & mm\,yr$^{-1}$\\
+$\theta_s=\phi,\ \theta_r$ & saturated (porosity) and residual water content & $-$\\
+$K_r$ & Mualem relative hydraulic conductivity & $-$\\
+$r_c,\ \sigma,\ \gamma_c$ & capillary radius of the largest water-filled pore, surface tension, contact angle & cm, N\,m$^{-1}$, $-$\\
+$p,\ p_0,\ p_c,\ \tau_c$ & relative pore space, its value after tillage and when consolidated, consolidation rate & $-$, $-$, $-$, d$^{-1}$\\
+$\Delta_{\mathrm{till}},\ \Delta_{\mathrm{cons}}$ & tillage and consolidation effects on drainage & mm\,yr$^{-1}$\\
+$w_i,\ s_i,\ f_i,\ W_{\max}$ & layer water, relative content, depletion; layer capacity & mm, $-$, $-$, mm\\
+$N_y$ & growing-season days on which the sensor is beyond the trigger & d\\
+$e_{0,b},\ e_0$ & bare-soil and mulched evaporative demand & mm\,d$^{-1}$\\
+$Q_1,\ Q(t),\ t_1,\ \tau_E,\ \ell$ & stage-1 storage, cumulative evaporation, stage-1 duration, stage-2 time scale, dry-layer depth & mm, mm, d, d, mm\\
+$\mathcal I$ & regime index (evaporation against drainage) & $-$\\
+$\mathrm{RH},\ \psi_{\mathrm{air}}$ & relative humidity, water potential of the air & $-$, MPa\\
+$C(d)$ & canopy cover & $-$\\
+$R_{\max},\ R_d,\ \beta_i$ & maximum and current rooting depth, root density of layer $i$ & cm, cm, $-$\\
+$T_d,\ q_i^T,\ a_i$ & daily transpiration demand, layer uptake, stress factor & mm\,d$^{-1}$, mm\,d$^{-1}$, $-$\\
+$z_{50},\ z_{90}$ & depths holding 50 and 90\,\% of root water uptake & cm\\
+$N_r$ & nitrogen rate (per cent of standard) & \%\\
+$\psi_{\mathrm{RZ}},\psi_{\mathrm{root}},\psi_{\mathrm{stem}},\psi_{\mathrm{leaf}}$ & water potential of root zone, root surface, stem and leaf & MPa\\
+$\eta_I,\ \eta_D,\ \eta_T,\ \eta_{\mathrm{rest}}$ & shares of saved evaporation going to less irrigation, more drainage, more transpiration, storage & $-$\\
+$\Delta E,\ \Delta I,\ \Delta D,\ \Delta T_{\mathrm{tr}}$ & changes of soil evaporation, irrigation, drainage and transpiration under mulch & mm\,yr$^{-1}$\\
+$\kappa_N$ & nitrate cost of drainage & kg\,N\,ha$^{-1}$\,mm$^{-1}$\\
+$Z_n$ & net irrigation depth & mm\\
+$k_t$ & transpiration calibration factor & $-$\\
+$K_s,\ \psi_f,\ \Delta\theta$ & saturated conductivity, wetting-front suction, moisture deficit (surface layer) & mm\,h$^{-1}$, mm, $-$\\
+$k,\ A$ & Kostiakov coefficient and exponent & m\,min$^{-A}$, $-$\\
+$\sigma_y,\ \sigma_z,\ r$ & surface-flow shape factors, advance exponent & $-$\\
+$E_s,\ \mathrm{DP},\ \mathrm{RO}$ & storage efficiency, deep percolation, runoff & $-$\\
+$c_v,\ x_e$ & emitter coefficient of variation, emitter exponent & $-$, $-$\\
+$q,\ d,\ h_n,\ R_w$ & sprinkler discharge, nozzle diameter, pressure head, wetted radius & L\,min$^{-1}$, mm, m, m\\
+CU & Christiansen uniformity coefficient of a sprinkler pattern & fraction or \%\\
+$\rho_1,\ \rho_2$ & coefficients of the power-law furrow geometry of \citet{Walker1987} ($A=\rho_1y^{\rho_2}$) & $-$\\
+$\Delta x_e$ & emitter spacing along a drip lateral & m\\
+SWAFL & the software framework presented here (SWAFL Desktop) & $-$\\
+Engine~1, Engine~2 & annual meta-model; daily bucket model & $-$\\\bottomrule
+\end{longtable}}
 
 %==========================================================
 \section{Introduction}
 \label{sec:intro}
-Conservation of mass is the most reliable organising principle in hydrology, and it is the foundation of every water-balance model from the bucket to the Earth system model. Yet in practice the budget of a managed soil profile rarely closes exactly in the output of a process model: the fluxes that are reported separately (transpiration, soil evaporation, canopy interception) need not add to the evapotranspiration that enters the balance; change in storage is reported or implied but its size relative to the fluxes is seldom audited; and boundary fluxes at the base of a one-dimensional column are, by construction, definitions rather than measurements \citep{Hillel1998,Refsgaard2004}. At the same time, a strand of scientific machine learning has argued that conservation laws, governing equations and low-dimensional invariants can be \emph{discovered} from data, using sparse regression over libraries of candidate terms \citep{Brunton2016,Champion2019,deSilva2020}, symbolic regression \citep{Schmidt2009,Udrescu2020}, neural networks that learn invariants \citep{Iten2020,Liu2021}, and physics-informed learning \citep{Raissi2019,Karniadakis2021}. In hydrology, deep learning has delivered impressive predictive skill \citep{Kratzert2018,Kratzert2019,Shen2018}, with an ongoing debate about what such models reveal about processes \citep{Nearing2021,Reichstein2019} and about whether interpretable models should be preferred for consequential decisions \citep{Rudin2019}. Enforcing conservation analytically in learned emulators is also an active topic \citep{Beucler2021}.
+Irrigation consumes most of the world's freshwater withdrawals, and improving its management is widely seen as a route to water security \citep{Fereres2007,Playan2006,Geerts2009}. Between a body of soil-water science and a farmer's decision about when, how much and by which method to irrigate lies a layer of software: schedulers, sensor dashboards, design calculators and crop-water models \citep{Datta2023,Garcia2020,Jones2004}. That layer is where science is either translated faithfully or lost. Three weaknesses recur. First, \emph{opacity}: a tool reports a number, but the user cannot tell which equation produced it, whether the equation is from the literature or is an in-house heuristic, and what data it was fitted to. Second, \emph{unverified fidelity}: tools are tested on cases chosen by their authors, and the test results are seldom published in a form that a third party can re-run \citep{Hutton2016,Wilkinson2016}. Third, \emph{conflation of purposes}: a screening emulator that is rank-faithful is sometimes presented, and used, as an absolute predictor \citep{Bennett2013,Moriasi2007,Oreskes1994}.
 
-Three gaps limit confidence in discovery claims in soil-water science. First, discovery methods are rarely validated against a case with a known answer before being applied to an unknown. Second, a discovered relation is typically validated within the data from which it was found, without leave-one-\emph{experiment}-out tests that ask whether the relation survives a change of regime, which is the relevant test of a ``law'' \citep{Roberts2017}. Third, negative results (where sparse laws fail to beat black-box benchmarks, or where a presumed constant is not constant) are rarely documented, so the reader cannot estimate the base rate of success \citep{Kirchner2006,Oreskes1994}.
+Process-based crop and soil models such as Daisy \citep{Hansen1991,Hansen2012,Abrahamsen2000,Holbak2026}, HYDRUS \citep{Simunek2008,Simunek2016}, DSSAT \citep{Jones2003}, APSIM \citep{Keating2003} and AquaCrop \citep{Steduto2009} are the scientific backbone, but they are not decision tools for a user who needs an answer in seconds without installing a simulation environment. Emulators (surrogates) bridge the gap \citep{Razavi2012,Asher2015,Sacks1989,Kennedy2001}, but the surrogate literature is concerned mainly with statistical accuracy; the question of \emph{traceability}, that is, whether each output can be tied back to the equations, the sources and the simulation data, receives less attention. Meanwhile classical irrigation-design theory (volume-balance advance and recession in surface irrigation \citep{Walker1987,Elliott1982}, lateral hydraulics and emission uniformity in drip systems \citep{KellerKarmeli1974,Keller1990,Scaloppi1993}, nozzle and pattern analysis in sprinkler systems \citep{Christiansen1942,Keller1990,Playan2005}) is published in textbooks as closed-form equations and worked examples. These worked examples are a free and under-used source of verification data.
 
-A large designed ensemble of process-model runs, in which the true balance is known to hold up to the model's own storage term, is taken as a laboratory for method evaluation. A four-part pipeline is built (\cref{fig:pipeline}): (1) a linear-invariant search by singular-value decomposition of the flux matrix with a permutation null, used first as a positive control; (2) a unattributed-term search by auditing partitions that should sum to a total; (3) a manifold analysis of water-fate composition by compositional PCA \citep{Aitchison1986,Egozcue2003}; and (4) interpretable sparse regression over a dimensionless library with LOSO and LOEO validation against a gradient-boosting benchmark \citep{Friedman2001,Tibshirani1996,Hastie2009}. One fixed benchmark, cross-validation grouping and stopping rule are used for all targets, and every law that failed is reported.
+This article models soil--water--atmosphere interactions for irrigation scheduling and design in SWAFL Desktop, an offline application that integrates (i) a meta-model of a large designed ensemble of process-model simulations, (ii) a daily bucket model for dates and schedules, and (iii) closed-form design layers, under three design principles: every number is equation-traceable; every equation carries a provenance label; and every claim of fidelity is backed by a re-runnable test. The software is then verified against published worked examples, held-out simulations, mass closure and independent numerical solvers, and the tests are used to locate the limits of each layer. The article is therefore both a software description and a verification study, and its emphasis is on what can and cannot be trusted.
 
-The paper asks what a blind method can and cannot recover from a flux matrix. A linear-invariant search must first return the water balance with calibrated uncertainty, which sets the credibility of everything that follows. Accounting terms that the model's own output columns leave open are then sought, and the number of independent directions governing the partition of water among fates is counted. Compact, dimensionally sensible laws are tested against a flexible machine-learning model in \emph{unseen experiments and unseen soils}. The last aim is to separate relations that hold across regimes from those that only appear universal.
+Verification is organised around the claims that the software makes. Traceability comes first: every output must lead to a numbered equation and a labelled provenance. The closed-form design layers are then checked against published worked examples, and the annual meta-model against held-out simulations, with rank and absolute fidelity assessed separately. The daily model is tested for mass conservation and for agreement with the annual model. Finally, the accuracy of the numerical solvers is mapped across their stated operating range.
+
+After a summary of the software architecture and design principles (Section~\ref{sec:arch}), the article sets out the coupled system that the framework represents: its compartments, state variables, fluxes and controls, and the relations that link them, from pore structure and retention through evaporation, interception and mulch to roots, transpiration and the water potential from soil to air, drainage, nitrogen and the feedbacks between them (Section~\ref{sec:system}). It then describes how the numbers are computed (Section~\ref{sec:methods}), evaluates the system variables for ten soils, presents the result views and the sensitivity of the outputs to the controls (Sections~\ref{sec:swa}--\ref{sec:sens}), and reports the verification of each computing layer (Sections~\ref{sec:ws}--\ref{sec:audit}).
+
+This article makes no claim of field validation, of agronomic benefit, or of user-study usability; none of these have been carried out, and no field measurements exist in the project repository to support them. The claim is limited to traceability and to the verification results reported, and to the identification of limitations.
+
+\paragraph{Levels of evidence.} Four levels of evidence are kept apart. Computational reproducibility, the regeneration of every reported number from archived code and data, is established. Verification, agreement with published worked examples, held-out simulations and independent numerical solutions, is the subject of this article. Predictive validity against measurements is not claimed. Field transferability, which requires sensor-scheduled plots, catch-can and lateral measurements and a user study, is identified as the next step, and the operating envelopes reported here define the conditions in which those measurements are most informative.
+
+%==========================================================
+\paragraph{What is new.} The application joins three kinds of engine that are normally separate (a meta-model of a 10\,190-run Daisy ensemble, a daily 40-layer water balance and closed-form hydraulic modules for surface, drip and sprinkler design) in one offline program. Its distinguishing feature is traceability: a ledger of 134 numbered equations, each with a label of origin (literature, data-driven or engineered), so that every output can be followed to its equation and its source. The design modules reproduce the worked examples of FAO-45 and standard texts within 3\,\%, the meta-model ranks held-out scenarios with Spearman 0.64 to 0.97, $10^5$ scenarios are swept in about 2\,s, and one command re-runs every check.
+
+\section{Software architecture and design principles}
+\label{sec:arch}
+SWAFL Desktop is an Electron application written in JavaScript that runs offline on Windows, macOS and Linux; the installer and source are in the repository. All computation is in the engine and design modules and carries no external service calls; the simulation tables are embedded as JSON. The \manuallink{} documents every control, panel and equation (134 numbered equations), and the code reproduces the equations as written. \Cref{fig:arch} summarises the architecture: an \emph{evidence layer} (archived simulation data), two engines, three design layers, an equation-traceable dashboard and decision outputs.
 
 \clearpage
 \newgeometry{left=0.6cm,right=0.6cm,top=0.5cm,bottom=0.5cm}
 \begin{landscape}
 \nolinenumbers
 \begin{figure}[p]\centering
-\includegraphics[width=24.6cm]{\figdir/p2/fig01_pipeline_A4.pdf}
-\caption{Pipeline for interpretable discovery. The pipeline recovers the known water balance as a positive control, audits partitions, measures the dimension of the partition manifold and fits sparse laws with LOSO/LOEO validation against gradient boosting. Controls (dashed purple boxes) are shown at the bottom and outputs at the top; purple hexagons are processing blocks, the pink stippled box is the data store, peach boxes are outputs and dotted lines are flows of information. The 149 runs excluded as numerical failures are analysed in \cref{sec:failed}.}
-\label{fig:pipeline}
+\includegraphics[width=24.6cm]{\figdir/p3/fig01_architecture_A4.pdf}
+\caption{Schematic overview of the main processes in SWAFL Desktop. Boxes indicate storages and solid lines flows; dashed black lines are flows out of the system, dotted lines are flows of information and dashed grey lines exchange of information between modules. Dashed purple boxes with a triangle are the drop-down controls and driving variables of the Properties panel, and the drivers of soil hydraulic properties (SHP). Dashed red lines and numbered circles mark the seven feedback loops. Pink indicates water, orange the crop, light brown nitrogen and rust soil structure and hydraulic state; purple hexagons are processes and information (Engines~1 and 2, trigger, design layers) and peach boxes are design layers and results. The brown line is the soil surface, with groundwater hatched at the base.}
+\label{fig:arch}
 \end{figure}
 \end{landscape}
 \restoregeometry
 
+Each dashboard tile, chart and arrow is produced by an equation printed in the Manual with a number, and the code comments cite the number. The traceability chain is \emph{tile $\to$ function $\to$ equation $\to$ source}. Appendix~\ref{app:ledger} lists the equations used in this article together with their manual numbers, provenance and source.
 
-\paragraph{Study design and levels of evidence.} The unit of observation is the annual-mean water balance of one simulated run, and the runs of an experiment are correlated because they share a design; for this reason validation withholds whole experiments and whole soils. Four levels of evidence are kept apart. Computational reproducibility, the regeneration of every reported number from archived code and data, is established. Predictive validity is assessed by leave-one-experiment-out and leave-one-soil-out scoring against a flexible benchmark, with a nested evaluation of the selection step. Mechanistic validity is limited to the process model, so that the unattributed flux is a property of the model's accounting. Field transferability is not tested, and the conclusions are stated as questions that measured data can settle.
+Each equation is labelled \textbf{[Literature]} (taken from a cited source, implemented as written), \textbf{[Data-driven]} (a constant or table derived from the Daisy ensemble), or \textbf{[Engineered]} (a heuristic or simplification fixed by the developer, e.g.\ the spray-pattern shapes). The labels allow users and reviewers to see which parts of the software rest on published science and which on judgement. An audit of the first release of the manual found the labels applied inconsistently (some equations labelled, many not); every one of the 134 numbered equations now carries its label (Section~\ref{sec:audit}).
+
+Each layer is accompanied by a test whose expected output comes from outside the software: a published worked example, a held-out simulation, a mass balance or an independent numerical solver. The scripts are in the repository (Appendix~\ref{app:repro}).
+
+Engine~1 is an \emph{annual} meta-model: it composes, by multiplication of ratios and addition of differences, 20-year-mean results of Daisy simulations to produce ET, soil evaporation, transpiration, irrigation, yield, drainage and nitrogen leaching for the chosen soil, tillage, mulch, rainfall scale, warming, trigger, sensor depth, method and nitrogen rate. Engine~2 is a \emph{daily} 40-layer bucket model over 20 years of generated weather; it produces dates, depths, the animated field and schedules, and it is calibrated and scaled so that its 20-year means equal Engine~1's. The design layers use hydraulics rather than data; they borrow soil, crop and trigger from the engines.
+
+\input{p3_system.tex}
 
 %==========================================================
-\paragraph{What is new.} Interpretable machine learning is usually applied to a model output without asking whether the output is a closed accounting. This paper makes the audit the first step: partitions of the water balance are tested for closure before they are used as targets, a permutation null is applied to every decomposition-based invariant, laws are validated across regimes (experiments, soils, climates) and not only across random folds, a flexible benchmark is reported even where it wins, a domain of validity is stated for each law, and the failures are published. The accounting gap that the audit finds is quantified, and the protocol is given as seven rules that can be applied to other process models.
-
 \section{Materials and methods}
 \label{sec:methods}
-\subsection{Data}
-The Daisy \citep{Hansen2012,Holbak2026} virtual-experiment ensemble is used, as described in the companion paper: 10\,190 runs in 17 experiments (E0--E16), ten soils (S01--S10, van~Genuchten $n=1.23$--2.68, \cref{tab:soilsP2}), 20-year Taastrup weather; 149 runs failed and are excluded (\cref{sec:failed}), and 10\,041 valid runs are analysed. Each run contributes 20-year mean annual rainfall $P_r$, irrigation $I$, evapotranspiration $\mathit{ET}$, transpiration $T$, soil evaporation $E_s$, canopy evaporation $E_c$, drainage at 1\,m $D$, and (derived) crop yield, nitrogen leaching and irrigation efficiency. Experiments differ in structure: single-soil (coarse loam) lattices (E8, E11, E12, E14, E15), all-soil factorials and lattices (E9, E16) and one-factor series (E1--E4). The distributions of the key variables are in \cref{tab:desc}.
+\subsection{Evidence layer, the simulation ensemble}
+The evidence layer is a designed ensemble of 10\,190 Daisy runs \citep{Hansen2012,Holbak2026} in 17 experiments on ten soils (sand to silty clay loam; Ap and Bt horizons) with 20 years of Taastrup weather, described in the companion papers; twelve experiments cover all ten soils and five (E8, E11, E12, E14, E15) the coarse loam only. The experiments used by Engine~1 are summarised in \cref{tab:expuse}, and the output variables of every run are listed in \cref{tab:daisyvars}. Daisy solves the Richards equation with van~Genuchten--Mualem hydraulics \citep{vanGenuchten1980,Mualem1976} coupled to a structure model for tillage effects \citep{Flanagan1995}. For Engine~1 the effective parameters $(\alpha,n)$ were set so that the soil passes through the anchors of the project's trigger table; for the standard textures they correspond to the class means of \citet{Carsel1988} (Table~\ref{tab:soilsP3}).
 
 \begin{table}[H]\centering\small
-\caption{Descriptive statistics of the 10\,041 valid runs (mm\,yr$^{-1}$; yield in Mg\,ha$^{-1}$ not shown).}
-\label{tab:desc}
-\begin{tabular}{lrrrrr}
+\caption{Experiments used by Engine~1, the number of soils they cover and the equation family that consumes them.}
+\label{tab:expuse}
+\begin{tabular}{lp{4.9cm}cp{5.2cm}}
 \toprule
-Variable & Mean & SD & 25\,\% & Median & 75\,\%\\\midrule
-Rain $P_r$ & 417 & 143 & 297 & 464 & 464\\
-Irrigation $I$ & 180 & 191 & 0 & 178 & 268\\
-Water input $W=P_r+I$ & 597 & 251 & 464 & 654 & 722\\
-Evapotranspiration $\mathit{ET}$ & 546 & 196 & 386 & 611 & 671\\
-Drainage $D$ (1\,m) & 60 & 106 & 3 & 34 & 78\\
-Unattributed $R$ (\cref{eq:R}) & 164 & 96 & 103 & 129 & 223\\\bottomrule
+Experiment & Varied factors & Soils & Used for\\\midrule
+E2 & trigger suction & 10 & trigger correction \cref{eq:corr}\\
+E3 & sensor depth & 10 & sensor-depth correction \cref{eq:corr}\\
+E4 & irrigation method (overhead, surface, drip at eight depths from 5--10 to 50--60\,cm) & 10 & method correction \cref{eq:corr}\\
+E5 & tillage $\times$ structural consolidation & 10 & baseline vector $\mathbf b$ for \cref{eq:E1E,eq:E1T,eq:E1ET,eq:E1I,eq:E1Y,eq:E1D,eq:E1N}\\
+E7 & mulch vapour-flux factor $\times$ interception capacity & 10 & soil evaporation $\bar E$\\
+E11 & warming $\times$ evaporation factor $\times$ rain & 1 (S01) & warming ratios and increments\\
+E13 & N rate $\times$ water strategy & 10 & nitrogen correction\\
+E14 & mulch $\times$ capacity $\times$ rain & 1 (S01) & mulch ratios and increments\\\bottomrule
 \end{tabular}
 \end{table}
 
 \begin{table}[H]\centering\small
-\caption{Soil parameters used as predictors (effective van~Genuchten values from the project documentation; $\TAW$ in mm to 1\,m).}
-\label{tab:soilsP2}
-\begin{tabular}{lllrr}
+\caption{Output variables of each Daisy run (20-year means, 1980--1999) that form the evidence layer. The complete run table is in the \datalink{} folder of the repository and on Zenodo.}
+\label{tab:daisyvars}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{4.3cm}lX}
 \toprule
-ID & Texture & $\alpha$ (cm$^{-1}$) & $n$ & $\TAW$\\\midrule
-S01 & Coarse loam & 0.0961 & 1.353 & 130\\
-S02 & Coarse sand & 0.0536 & 1.600 & 105\\
-S03 & Sand & 0.1450 & 2.680 & 60\\
-S04 & Loamy sand & 0.1240 & 2.280 & 75\\
-S05 & Sandy loam & 0.0750 & 1.890 & 95\\
-S06 & Loam & 0.0360 & 1.560 & 150\\
-S07 & Silt loam & 0.0200 & 1.410 & 220\\
-S08 & Sandy clay loam & 0.0590 & 1.480 & 160\\
-S09 & Clay loam & 0.0190 & 1.310 & 175\\
-S10 & Silty clay loam & 0.0100 & 1.230 & 195\\\bottomrule
-\end{tabular}
+Variable & Unit & Meaning\\\midrule
+\texttt{rain\_mm}, \texttt{irrigation\_mm} & mm\,yr$^{-1}$ & precipitation $P$ and irrigation $I$\\
+\texttt{ET\_mm} & mm\,yr$^{-1}$ & actual evapotranspiration\\
+\texttt{transpiration\_mm}, \texttt{soil\_evap\_mm}, \texttt{canopy\_evap\_mm} & mm\,yr$^{-1}$ & reported components of ET ($T$, $E$, interception)\\
+\texttt{drainage\_1m\_mm} & mm\,yr$^{-1}$ & flux across 1\,m (negative: net capillary rise)\\
+\texttt{water\_stress\_d} & d\,yr$^{-1}$ & days of crop water stress\\
+\texttt{yield\_Mg\_ha} & Mg\,ha$^{-1}$ & grain yield $Y$\\
+\texttt{N\_fertiliser\_kg\_ha}, \texttt{N\_leached\_kg\_ha} & kg\,ha$^{-1}$\,yr$^{-1}$ & nitrogen applied and leached ($N_L$)\\
+\texttt{IE\_kg\_m3}, \texttt{DPF}, \texttt{NLF} & kg\,m$^{-3}$, $-$, $-$ & irrigation efficiency, $D/(P+I)$, $N_L$/N applied\\
+daily suction at 20\,cm; 1994 profiles & cm & sensor record (V1) and profile view (V2), irrigated and rainfed (coarse loam, coarse sand, standard settings); in release~1.1.0 other settings and soils add the difference between two Engine~2 runs (settings minus standard) to the record as depletion\\\bottomrule
+\end{tabularx}
 \end{table}
-
-\subsection{Failed runs and why they are excluded}
-\label{sec:failed}
-Of the 10\,190 runs, 149 (1.5\,\%) are flagged as failed in the ensemble and are excluded from every analysis. Because exclusion that is not random can bias a discovery study, the pattern of failure was examined before the runs were dropped, and the argument is set out in four parts.
-
-\paragraph{Failures are concentrated in three soils and in specific experiments.} Of the 149 failures, 129 (87\,\%) occur in the coarse sand S02, 13 in the sand S03 and 7 in the silty clay loam S10; the other seven soils have none (\cref{fig:failed}a). In S02, 24.9\,\% of the 519 runs fail. In S03 all 13 failures belong to the initial-moisture experiment E9, and in S10 all 7 belong to the nitrogen--water and dose experiments (E13, E1). The three soils lie at the extremes or in the anomalous part of the van~Genuchten range ($n=1.60$ for S02, $n=2.68$ for S03, the steepest retention curve, and $n=1.23$ for S10, the flattest), which is where the unsaturated conductivity function changes most rapidly with suction.
-
-\paragraph{Within a failing soil, failure follows the size of the water pulse.} In S02, the fraction of failed runs rises with the irrigation depth applied per event in experiment E10: none of the 20 runs at 1 and 2\,mm fails, 10\,\% at 3\,mm, 50\,\% at 8--10\,mm and all of the 30 runs at 15, 20 and 30\,mm (\cref{fig:failed}b). It also depends on the rain scale: 69\,\% of the S02 runs at a scale of 1.5 fail (22 of 32) and 12\,\% at 0.5 (5 of 42), against none of the 90 runs at intermediate scales 0.6--1.4 (\cref{fig:failed}c). Runs that share the same weather, the same soil and the same code, and differ only in how much water arrives at once, therefore fail or succeed in a systematic order. This is the behaviour of a state-dependent numerical difficulty and not of a corrupted input, which would hit runs irrespective of their forcing.
-
-\paragraph{The outputs of failed runs are physically impossible.} In valid runs the annual drainage at 1\,m is never below $-17.5$\,mm (median in valid S02 runs, 134\,mm). In failed runs it is negative in 65\,\% of cases and falls to $-882$\,mm (\cref{fig:failed}d), and the ratio of evapotranspiration to water input ($P+I$) ranges from 0.54 to 4.34, with a median of 1.09, so that in some runs more water leaves the profile than entered it. A net upward flux of hundreds of millimetres through the lower boundary of a free-draining column, or evapotranspiration several times the water input, cannot be produced by the physics of the model; it is the signature of a solver that has not converged, in which a mass error is absorbed in the boundary or storage terms.
-
-\paragraph{The alternatives are less consistent with the pattern.} A fault in the weather or in the run definition would not depend on soil and on dose in this ordered way; a failure from over-wetting in the field, such as ponding or runoff, is a physical process that the model is built to represent and would not give negative drainage; and a random job failure would spread evenly over soils. Numerical non-convergence of the Richards-equation solver in a stiff regime (a very permeable, quickly draining column that receives a large input, or a column with an extreme retention curve) accounts for the concentration in soils, the order with water input and the impossible outputs together.
-
-\paragraph{Treatment of the excluded runs.} The failed runs are interpreted as numerical failures of the soil-water solver under stiff conditions, not as information about soil hydrology, and they are excluded for that reason; the interpretation follows from the pattern of failure described above. Two consequences follow. The exclusion removes a quarter of the runs of S02, preferentially in the wettest and driest forcing and at the largest doses, so results for this soil, and any law fitted to it, apply to the part of the factor space in which the solver succeeded. The other nine soils are essentially unaffected (at most 2.5\,\% of runs in S03), and the conclusions that rest on across-soil comparisons were tested for sensitivity to the exclusion by re-analysis. With S02 removed (9\,651 runs) the three-term ET law is re-estimated with coefficients $0.652$ for $\ln W$, $-0.297$ for $n$ and $0.029$ for $\ln(1+I)$, against $0.646$, $-0.299$ and $0.029$ for the full ensemble, with LOEO $R^2=0.897$ and LOSO $R^2=0.904$ (full ensemble 0.898 and 0.904), and the unattributed term $R$ is 30\,\% of ET (163\,mm\,yr$^{-1}$; full ensemble 30\,\% and 164\,mm\,yr$^{-1}$). With S02 and S03 both removed (9\,145 runs) the scores are 0.893 and 0.898 and $R$ is 30\,\% (165\,mm\,yr$^{-1}$). The exclusion therefore does not drive the across-soil results.
-
-\begin{figure}[H]\centering
-\includegraphics[width=\textwidth]{\figdir/p2/figS_failed.pdf}
-\caption{Pattern of the 149 failed runs. (a) Failed runs per soil, as a percentage of the 519 runs per soil (counts above bars). (b) Failed fraction in S02 against irrigation depth per event in E10. (c) Failed fraction in S02 against rain scale. (d) Annual drainage at 1\,m for valid and failed runs, normalised as densities; negative drainage of several hundred millimetres occurs only in failed runs.}
-\label{fig:failed}
-\end{figure}
-
-\subsection{Governing balance and the flux matrix}
-For each run the mean annual water balance is
-\begin{equation}
-P_r+I \;=\; \mathit{ET}+D+\Delta S+Q_r,\qquad \mathit{ET}=T+E_s+E_c+R,
-\label{eq:wb2}
-\end{equation}
-where $\Delta S$ is storage change, $Q_r$ runoff, and $R$ is defined as the remainder of ET after the three reported components,
-\begin{equation}
-R \;=\; \mathit{ET}-T-E_s-E_c .
-\label{eq:R}
-\end{equation}
-Equation~\eqref{eq:R} defines $R$ without ascribing a process. Let $\mathbf F\in\mathbb R^{N\times q}$ be the matrix whose rows are runs and whose columns are the fluxes (rain, irrigation, ET, $T$, $E_s$, $E_c$, $D$). If a linear invariant $\sum_j c_jF_{ij}=0$ holds for all runs, then $\mathbf c$ lies in the null space of $\mathbf F$. Define $W=P_r+I$ and the closure residual
-\begin{equation}
-\varepsilon \;=\; \frac{W-\mathit{ET}-D}{W}\;\approx\;\frac{\Delta S+Q_r}{W}.
-\label{eq:closure}
-\end{equation}
-
-\subsection{Linear-invariant search by SVD with a permutation null}
-The singular-value decomposition $\mathbf F=\mathbf U\boldsymbol\Sigma\mathbf V^{\top}$ with singular values $\sigma_1\ge\dots\ge\sigma_q$ identifies near-null directions as the right singular vectors $\mathbf v_k$ with small $\sigma_k$. Each column is first divided by its root-mean-square value so that no flux dominates through its units; $\mathbf v_k$ is mapped back to mm units and normalised so that the ET coefficient equals $-1$. Because singular values depend on the scale of the columns, significance is judged against a \emph{column-permutation null}: each column of $\mathbf F$ is permuted independently across runs (destroying cross-column dependence but preserving each marginal), and the smallest singular value under the null is recorded; an invariant is accepted only if $\sigma_{\min}$ lies far below the null value. Uncertainty of the coefficients is estimated by a nonparametric bootstrap over runs (resampling 10\,041 rows; 95\,\% percentile intervals). The test is repeated (a) on the four-flux subsystem $(P_r,I,\mathit{ET},D)$, which is the set that appears in the balance; (b) on the seven-column matrix; and (c) excluding E8 and E9, whose initial states are deliberately away from equilibrium. It is emphasised that this is a \emph{positive control}: the expected answer is $\mathbf c=(1,1,-1,-1)$ up to scale and the pipeline is judged by how closely it recovers it, and by whether it fails in a diagnosable way.
-
-Any decomposition that should sum to a total is audited by computing the residual. The audit covers (a) \cref{eq:R}, reporting $R$, its share $R/\mathit{ET}$ by experiment, and its dependence on drivers by regression of $\ln R$ on candidate drivers (irrigation, soil, mulch capacity, temperature, evaporation factor); and (b) the storage closure $\varepsilon$ of \cref{eq:closure} by experiment. The audit is descriptive: it identifies where the budget does not close, and tests candidate attributions by whether $R$ responds to the drivers that would be expected under each.
-
-The partition of water input into fates (transpiration, soil evaporation, canopy evaporation, unattributed $R$, drainage) is compositional: components are positive and sum to a constant, so Euclidean statistics are inappropriate \citep{Aitchison1986,Egozcue2003}. Writing the composition as $\mathbf x=(x_1,\dots,x_5)$ with $x_i=\text{flux}_i/\sum_j\text{flux}_j$, the centred log-ratio (clr) transform is applied
-\begin{equation}
-\mathrm{clr}(\mathbf x)_i=\ln x_i-\frac1{5}\sum_{j=1}^5\ln x_j ,
-\label{eq:clr}
-\end{equation}
-and PCA \citep{Wold1987} to the transformed data. Drainage is zero or negative in 14\,\% of runs, so zeros are replaced by a floor $\delta$ (in mm\,yr$^{-1}$) before the closure to unit sum; because the results depend strongly on $\delta$, results are reported for $\delta\in\{10^{-3},0.1,1,5,10\}$. Because log-transformations are inherently sensitive to near-zero values, the sensitivity to the floor is mapped across four orders of magnitude and not fixed at a single value, so that the stability of the drainage axis can be judged independently of the floor selected. The number of components needed to explain the variance is a data-driven estimate of the dimension of the partition manifold.
-
-For a target $y$ (log of a flux), a library $\boldsymbol\Theta$ is built of dimensionless or log-transformed candidates (\cref{tab:lib}). The model is
-\begin{equation}
-\ln y \;=\; \beta_0+\sum_{k\in\mathcal S}\beta_k\,\theta_k+\epsilon,\qquad \mathcal S\subseteq\{1,\dots,p\},
-\label{eq:sparse}
-\end{equation}
-with the active set $\mathcal S$ chosen by forward selection: at each iteration the candidate that maximises the leave-one-experiment-out cross-validated $R^2$ is added, and the search stops when the improvement is below 0.003. The cross-validated $R^2$ is
-\begin{equation}
-R^2_{\mathrm{cv}}=1-\frac{\sum_i(\ln y_i-\widehat{\ln y}_i^{(-g(i))})^2}{\sum_i(\ln y_i-\overline{\ln y})^2},
-\label{eq:r2cv}
-\end{equation}
-where $\widehat{\ln y}_i^{(-g(i))}$ is the prediction for run $i$ from a model fitted with all runs of its group $g(i)$ held out. Groups are experiments (LOEO, 17 folds) or soils (LOSO, 10 folds). LOEO is the demanding test: it asks whether a law fitted on 16 experimental designs predicts the 17th, which differs in which factors vary and in what range. The root-mean-square error in mm and the mean absolute percentage error after back-transformation are also reported. The benchmark is a histogram-based gradient-boosting regressor \citep{Friedman2001,Pedregosa2011} with 250 iterations on the whole library, validated under the same groupings. Caveat: because forward selection uses the LOEO score, the reported LOEO $R^2$ of the selected model is mildly optimistic (selection bias); LOSO values, which were not used for selection, provide a partly independent check, and coefficient stability across folds is reported.
 
 \begin{table}[H]\centering\small
-\caption{Candidate library $\boldsymbol\Theta$ (log-transformed or dimensionless).}
-\label{tab:lib}
-\begin{tabular}{lll}
+\caption{Effective van~Genuchten parameters used by Engine~1 and the available-water capacity (AWC, mm of water per cm of soil, an engineered texture-class constant), with the critical suction $h^\ast$ at the soil-independent depletion $f^\ast=0.45$.}
+\label{tab:soilsP3}
+\begin{tabular}{llrrrr}
 \toprule
-Symbol & Definition & Role\\\midrule
-$\ln P_r$ & log rainfall & climate input\\
-$\ln(1+I)$ & log irrigation & management input\\
-$\ln W$ & log water input $P_r+I$ & total supply\\
-$\ln E_p$ & log soil-evaporation factor & evaporative demand\\
-$\Delta T$ & temperature shift (\textdegree C) & warming\\
-$n$ & van~Genuchten shape parameter & pore-size distribution\\
-$\ln\TAW$ & log total available water & storage capacity\\
-$\ln\alpha$ & log van~Genuchten scaling & air-entry scale\\
-mulch & VFF$\times$CAP (mulch lattice) & residue layer\\
-$I/W$ & irrigation fraction & managed share\\
-$\ln(W/\TAW)$ & dimensionless supply-to-storage & wetness index\\\bottomrule
+ID & Soil & $\alpha$ (cm$^{-1}$) & $n$ & AWC & $h^\ast$ (cm)\\\midrule
+S01 & Coarse loam & 0.0961 & 1.353 & 1.5 & 387\\
+S02 & Coarse sand & 0.0536 & 1.600 & 0.5 & 262\\
+S03 & Sand & 0.1450 & 2.680 & 0.6 & 143\\
+S04 & Loamy sand & 0.1240 & 2.280 & 0.9 & 160\\
+S05 & Sandy loam & 0.0750 & 1.890 & 1.2 & 195\\
+S06 & Loam & 0.0360 & 1.560 & 1.7 & 284\\
+S07 & Silt loam & 0.0200 & 1.410 & 2.0 & 401\\
+S08 & Sandy clay loam & 0.0590 & 1.480 & 1.4 & 311\\
+S09 & Clay loam & 0.0190 & 1.310 & 1.6 & 503\\
+S10 & Silty clay loam & 0.0100 & 1.230 & 1.7 & 729\\\bottomrule
 \end{tabular}
 \end{table}
 
-\label{sec:svdtheory}
-Suppose the true model is $\mathbf F\mathbf c=\boldsymbol\eta$ with $\boldsymbol\eta$ a small run-wise residual (here $-\Delta S-Q_r$ for $\mathbf c=(1,1,-1,-1)$). The SVD gives the best rank-$(q-1)$ approximation of $\mathbf F$ (Eckart--Young), and the right singular vector $\mathbf v_q$ minimises $\|\mathbf F\mathbf v\|_2$ over unit vectors; the corresponding singular value is $\sigma_q=\|\mathbf F\mathbf v_q\|_2$. Because the columns are all measured with error (here, the model's own discretisation and storage noise), $\mathbf v_q$ is a total-least-squares solution, in which errors in all variables are treated symmetrically; this is preferable to regressing one flux on the others, whose coefficients would be attenuated and depend on the choice of dependent variable. When $\eta$ is uncorrelated with the columns, $\sigma_q^2\approx\|\boldsymbol\eta\|^2$, so $\sigma_q/\sqrt N$ is the root-mean-square residual per run in the units of the scaled columns. Before the decomposition each column is divided by its root-mean-square value (so that no flux dominates by its units), and the singular vector is mapped back to mm units afterwards; the singular values are therefore dimensionless, and for the four-flux subsystem $\sigma_q/\sqrt N=5.9/\sqrt{10041}=0.059$, i.e.\ a residual of about 6\,\% of a typical column scale. A caveat is that the matrix is not mean-centred: centring would remove the constant direction, but a conservation law $\sum c_jF_j=0$ has no intercept, so the uncentred matrix is the correct object.
+Retention and relative conductivity follow \citet{vanGenuchten1980} and \citet{Mualem1976}:
+\begin{align}
+S_e(h)&=\bigl[1+(\alpha|h|)^{n}\bigr]^{-m},\qquad m=1-1/n,\qquad \theta(h)=\theta_r+(\theta_s-\theta_r)S_e(h),\label{eq:vgP3}\\
+K_r(S_e)&=S_e^{1/2}\Bigl[1-\bigl(1-S_e^{1/m}\bigr)^{m}\Bigr]^{2}. \label{eq:mualemP3}
+\end{align}
+Plant-available water is defined between field capacity (suction 100\,cm) and wilting point (15\,849\,cm), the FAO convention \citep{Allen1998}:
+\begin{equation}
+f(h)=\frac{S_e(100)-S_e(|h|)}{S_e(100)-S_e(15\,849)},\qquad f_{\mathrm{used}}=\min\{1,\max\{0,f\}\},
+\label{eq:depl}
+\end{equation}
+where $f=0$ is field capacity and $f=1$ the wilting point. The inverse $h(f)$ is obtained by bisection on $\log_{10}|h|\in[0,4.6]$ (60 halvings). A trigger suction $h_T$ therefore corresponds to a depletion fraction $f_T=f_{\mathrm{used}}(|h_T|)$.
 
-Permuting each column independently preserves marginal distributions and destroys all linear relations between columns, so the smallest singular value under permutation, $\sigma_q^{\mathrm{perm}}$, measures how small $\sigma_q$ would be if the columns were unrelated but had the same scales. A ratio $\sigma_q/\sigma_q^{\mathrm{perm}}=5.9/33.3=0.18$ for the four-flux matrix shows that the null direction reflects genuine dependence. Because fluxes are positively skewed and share a common experiment structure (for example rainfall is identical across many runs), the permutation null is conservative in one respect (it breaks the experimental clustering) and liberal in another (it does not respect the clustering when permuting). Runs are therefore also bootstrapped and intervals reported.
+\subsection{Engine 1, the annual meta-model}
+Let $\mathbf b=(E_b,T_b,\mathit{ET}_b,I_b,Y_b,D_b,N_b)$ be the 20-year-mean Daisy results (soil evaporation, transpiration, evapotranspiration, irrigation, yield, drainage, nitrogen leaching) for the chosen soil, tillage and consolidation rate (E5), $\varphi$ the mulch strength, $c$ the mulch capacity, $\gamma_P$ the rainfall scale and $\Delta T$ the warming. Define mulch lookups $M(\varphi,\gamma_P)$ from E14, warming lookups $W(\Delta T,\gamma_P)$ from E11, and the shorthand
+\begin{equation}
+\begin{aligned}\mathrm{now}&=M(\varphi,\gamma_P),& \mathrm{ref}&=M(\varphi,1),& \mathrm{nm}&=M(1,\gamma_P),& \mathrm{bare}&=M(1,1),\\ \mathrm{tN}&=W(\Delta T,\gamma_P),& \mathrm{tB}&=W(0,\gamma_P),& \mathrm{tR}&=W(0,1).\end{aligned}
+\end{equation}
+The engine composes ratios (taken as 1 where the denominator is below $10^{-6}$), clipped to guard against extrapolation, as
+\begin{align}
+E&=\bar E(\mathrm{soil},\varphi,c)\Bigl[\tfrac{\mathrm{now}.E}{\mathrm{ref}.E}\Bigr]\Bigl[\tfrac{\mathrm{tN}.E}{\mathrm{tB}.E}\Bigr]\Bigl[\tfrac{E_b}{E_{b,\mathrm{ref}}}\Bigr],\label{eq:E1E}\\
+T&=T_b\Bigl[\tfrac{\mathrm{now}.T}{\mathrm{bare}.T}\Bigr]\mathrm{clip}\Bigl(\tfrac{\mathrm{tN}.T}{\mathrm{tB}.T};0.3,2.5\Bigr),\label{eq:E1T}\\
+\mathit{ET}&=\mathit{ET}_b\Bigl[\tfrac{\mathrm{now}.\mathit{ET}}{\mathrm{bare}.\mathit{ET}}\Bigr]\mathrm{clip}\Bigl(\tfrac{\mathrm{tN}.\mathit{ET}}{\mathrm{tB}.\mathit{ET}};0.5,2\Bigr),\label{eq:E1ET}\\
+I&=I_b\Bigl[\tfrac{\mathrm{now}.I}{\mathrm{bare}.I}\Bigr]\mathrm{clip}\Bigl(\tfrac{\mathrm{tN}.I}{\mathrm{tB}.I};0.4,2.5\Bigr),\label{eq:E1I}\\
+Y&=Y_b\Bigl[\tfrac{\mathrm{tN}.Y}{\mathrm{tR}.Y}\Bigr]\Bigl[\tfrac{\mathrm{now}.Y}{\mathrm{nm}.Y}\Bigr],\label{eq:E1Y}\\
+D&=D_b+(\mathrm{now}.D-\mathrm{bare}.D)+(\mathrm{tN}.D-\mathrm{tB}.D),\label{eq:E1D}\\
+N_L&=N_b+(\mathrm{now}.N-\mathrm{bare}.N)+(\mathrm{tN}.N-\mathrm{tB}.N).\label{eq:E1N}
+\end{align}
+Here $\bar E(\mathrm{soil},\varphi,c)$ is the linear interpolation in $\varphi$ of the simulated soil evaporation of E7 at capacity $c$, closed at $\varphi=1$ by the bare-soil value, and $E_{b,\mathrm{ref}}$ is the E5 soil evaporation of the soil under conventional tillage at a consolidation rate of 0.005\,d$^{-1}$, so that the last factor transfers the effect of the chosen tillage and consolidation rate. Fluxes are combined multiplicatively and drainage and leaching additively, because ratios of small numbers (drainage near zero) are unstable. Four set-specific corrections then act in turn; for each family $F\in\{$trigger (E2), sensor depth (E3), method (E4), nitrogen (E13; yield and $N_L$ only)$\}$ with key $\kappa$ and baseline key $\kappa_0$ (trigger $-300$\,cm, sensor depth 20\,cm, surface method, 100\,\% nitrogen),
+\begin{equation}
+\begin{gathered}Q\leftarrow Q\,\mathrm{clip}\Bigl(\tfrac{r_\kappa.Q}{r_{\kappa_0}.Q};0.05,6\Bigr)\ (Q\in\{E,T,\mathit{ET},I,Y\}),\\ D\leftarrow D+(r_\kappa.D-r_{\kappa_0}.D),\quad N_L\leftarrow N_L+(r_\kappa.N-r_{\kappa_0}.N).\end{gathered}
+\label{eq:corr}
+\end{equation}
+Finally non-negativity, a soil-dependent yield ceiling $Y\le Y_{\max}(\mathrm{soil})$ (the largest simulated yield), rain $P=P_{\mathrm{base}}\gamma_P$ and a closure window are enforced:
+\begin{equation}
+\begin{gathered}\mathit{ET}\in[P+I-D-30,\;P+I-D+15]\ (\text{otherwise clipped; }E,T\text{ scaled equally}),\\ E_{\mathrm{oth}}=\max(0,\mathit{ET}-T-E),\qquad \Delta S=P+I-\mathit{ET}-D,\end{gathered}
+\label{eq:E1close}
+\end{equation}
+and irrigation efficiency $\mathrm{IE}=100\,Y/I$ (kg\,m$^{-3}$, since 1\,mm\,$=10$\,m$^3$\,ha$^{-1}$). The combination of mulch and warming uses the \emph{product} of ratios, which assumes that their effects are independent; no experiment crosses the two factors, so this assumption is untested (Section~\ref{sec:disc}). The meta-model contains no fitted parameters of its own: it is a deterministic lookup/composition over the simulation tables, so its accuracy is limited by (a) the discretisation of the lookups, (b) the validity of the independence assumption and (c) the consistency of the baselines of the different experiments, a point that proved decisive in the verification (Section~\ref{sec:e1}).
 
-\begin{enumerate}[nosep,label=\arabic*.]
-\item Initialise $\mathcal S=\emptyset$, best score $s^\ast=-\infty$.
-\item For each candidate $k\notin\mathcal S$, fit \cref{eq:sparse} on the training groups and compute $R^2_{\mathrm{cv}}$ (\cref{eq:r2cv}) for $\mathcal S\cup\{k\}$ with 17 LOEO folds.
-\item Let $k^\ast$ be the maximiser; if $R^2_{\mathrm{cv}}(\mathcal S\cup\{k^\ast\})>s^\ast+0.003$, add $k^\ast$ and update $s^\ast$; otherwise stop.
-\item Refit on all data to report coefficients; evaluate LOSO using the same terms.
+\subsection{Engine 2, the daily bucket model}
+The soil is $N=40$ layers of thickness $\Delta z=2.5$\,cm, each holding $w_i$ (mm) up to the plant-available capacity $W_{\max}=\mathrm{AWC}\,\Delta z$, initial value $0.72\,W_{\max}$; the run is 20 years of 365 days. Canopy cover follows the logistic curves of \cref{eq:cover}; rainfall is generated with wet-day probability 0.28 and depth
+\begin{equation}
+R=\min\{70,\ \mu_0\gamma_y(-\ln U)\},\quad U\sim\mathrm{Uniform}(0,1),\quad \mu_0=\frac{P}{0.28\cdot365},
+\label{eq:rain}
+\end{equation}
+an exponential distribution capped at 70\,mm, seeded by a hash of the soil name so every run is reproducible; the year factor $\gamma_y=\mathrm{clip}\bigl((m_{\mathrm{med}}/m_y)^{0.3};0.65,1.45\bigr)$ makes years wetter or drier according to the dryness $m_y$ of the 20-year rainfed suction record. The canopy and litter catch the first $I_c$ mm of every shower,
+\begin{equation}
+I_c=\mu_0\ln\frac1r,\qquad r=\frac{\max\{40,P-P_{\mathrm{other}}\}}{P},\qquad T_f=\max\{0,R-I_c\},
+\label{eq:interc}
+\end{equation}
+where the choice of $I_c$ makes the expected interception over the exponential distribution equal to the annual interception of Engine~1. Water enters the top layer and cascades down (any layer exceeding $W_{\max}$ passes the excess down; the excess leaving layer 40 is drainage), and a slow redistribution moves water toward the drier neighbour (\cref{eq:redis}). Soil evaporation is the annual $E$ distributed seasonally and reduced by canopy shade, taken from the top four layers; transpiration demand is the annual $T$ spread by cover, times a calibration factor $k_t$, and divided among layers by availability-weighted root density,
+\begin{equation}
+T_d=k_t\,T_{\mathrm{yr}}\frac{C(d)}{\Sigma_C},\qquad q_i^{T}=T_d\frac{\beta_i a_i}{\sum_j\beta_ja_j},\qquad a_i=\mathrm{clip}\Bigl(\frac{s_i-0.15}{0.6};0,1\Bigr),
+\label{eq:transp}
+\end{equation}
+where $\beta_i$ is the root density of \cref{eq:rootdens}, $s_i=w_i/W_{\max}$ and $a_i$ is a linear stress function in the spirit of the FAO-56 coefficient \citep{Allen1998}. with $\Sigma_C$ the sum of the daily canopy cover over a year (so that $T_d$ is in mm\,d$^{-1}$). Irrigation of dose $d=\mathrm{clip}(I/10;\,15,\,35)$\,mm, with $I$ the annual irrigation of Engine~1 (about ten events a year by construction), is applied when canopy cover exceeds 0.2, in the day-of-year window 95--250, the minimum spacing is met, and the sensor-layer depletion reaches $f_T$. The factor $k_t\in[0.6,8]$ is calibrated by eight bisection steps on the first eight years so that the mean annual irrigation matches Engine~1's within 6\,\%. The daily fluxes shown on the dashboard are scaled so that their 20-year means equal Engine~1's:
+\begin{equation}
+\begin{gathered}S_P=\frac{P}{\overline{P_{\mathrm{sim}}}},\ S_E=\frac{E}{\overline{E_{\mathrm{sim}}}},\ S_T=\frac{T}{\overline{T_{\mathrm{sim}}}},\ S_D=\frac{D}{\overline{D_{\mathrm{sim}}}},\\ \Delta S_d=T_f+I-E-T-D,\end{gathered}
+\label{eq:scale}
+\end{equation}
+and $\Delta S_d$ closes the daily balance. Drainage and the wetting front are tipping-bucket results, not Richards solutions; that is why they are scaled to Engine~1.
+
+\subsection{Surface-irrigation layer}
+\label{sec:surf}
+Texture determines water contents by the pedotransfer functions of \citet{Saxton2006}; the wetting-front suction $\psi_f$ comes from the van~Genuchten parameters; and Green--Ampt infiltration \citep{GreenAmpt1911} gives cumulative infiltration $F(t)$,
+\begin{equation}
+F-\psi_f\Delta\theta\ln\Bigl(1+\frac{F}{\psi_f\Delta\theta}\Bigr)=K_s\frac{t}{60}\quad(t\text{ in min}),\qquad \Delta\theta=\max\{0.05,\,0.95\theta_s-\theta_0\},
+\label{eq:GA}
+\end{equation}
+with $K_s$ in mm\,h$^{-1}$ and $F$, $\psi_f$ in mm, solved by Newton iteration. The Kostiakov intake law \citep{Kostiakov1932}
+\begin{equation}
+Z(\tau)=k\,\tau^{A}\qquad(Z\text{ in m},\ \tau\text{ in min})
+\label{eq:kost}
+\end{equation}
+is fitted by least squares on the log--log plot of $F(\tau)/1000$ at 25 geometrically spaced times between 10 and 600\,min, and the fit quality $R^2$ is displayed. The inlet flow area follows Manning's equation \citep{Manning1891}, $Q=\frac1n AR_h^{2/3}S^{1/2}$, $R_h=A/P$.
+
+The advance of the stream follows the volume-balance method \citep{Walker1987,Elliott1982}:
+\begin{equation}
+Q\,t=\sigma_y A_0x+\sigma_z\,k\,t^{A}wx\ \Longrightarrow\ x(t)=\frac{Qt}{\sigma_yA_0+\sigma_zkt^{A}w},\qquad \sigma_z=\frac{A+r(1-A)+1}{(1+A)(1+r)},
+\label{eq:vb}
+\end{equation}
+with $\sigma_y=0.8$ the surface-storage shape factor, $w$ the width, and $r$ the exponent of the power-law advance $x=p\,t^{r}$, obtained iteratively from the times $t_L$ and $t_{L/2}$ at which the front reaches $L$ and $L/2$: $r=\ln2/\ln(t_L/t_{L/2})$. The time to infiltrate the required depth $Z_n$ is $t_{st}=(Z_n/k)^{1/A}$, the cut-off time is $t_{co}=t_L+t_{st}$ (for the $E_s=1$ rule), and the infiltrated depth along the field is $Z(x)=k[t_{co}-t_x(x)]^{A}$.
+
+By trapezoidal integration of $Z(x)$ over $N=300$ intervals,
+\begin{equation}
+\begin{gathered}V_{\mathrm{app}}=Qt_{co},\quad V_{\mathrm{req}}=Z_nLw,\quad V_{\mathrm{inf}}=w\!\!\int_0^L\!\!Z\,\mathrm dx,\\ V_{\mathrm{st}}=w\!\!\int_0^L\!\!\min(Z,Z_n)\mathrm dx,\quad V_{\mathrm{dp}}=w\!\!\int_0^L\!\!\max(Z-Z_n,0)\mathrm dx,\quad V_{\mathrm{ro}}=\max(V_{\mathrm{app}}-V_{\mathrm{inf}},0),\end{gathered}
+\label{eq:vols}
+\end{equation}
+\begin{equation}
+\begin{gathered}E_a=\frac{V_{\mathrm{st}}}{V_{\mathrm{app}}},\quad E_s=\frac{V_{\mathrm{st}}}{V_{\mathrm{req}}},\quad \mathrm{DP}=\frac{V_{\mathrm{dp}}}{V_{\mathrm{app}}},\quad \mathrm{RO}=\frac{V_{\mathrm{ro}}}{V_{\mathrm{app}}},\\ \mathrm{CU}=100\Bigl(1-\frac{\frac1{N+1}\sum_i|Z_i-\bar Z|}{\bar Z}\Bigr)\%,\end{gathered}
+\label{eq:eff}
+\end{equation}
+following \citet{Walker1987}, \citet{Burt1997} and \citet{Christiansen1942}; because $V_{\mathrm{app}}=V_{\mathrm{inf}}+V_{\mathrm{ro}}$ and $V_{\mathrm{inf}}=V_{\mathrm{st}}+V_{\mathrm{dp}}$ the identity $E_a+\mathrm{DP}+\mathrm{RO}=1$ holds exactly and is printed as a built-in closure check.
+
+\subsection{Drip-irrigation layer}
+\label{sec:drip-m}
+Friction head loss in the lateral segment feeding emitter $j$ uses the Hazen--Williams equation \citep{Hazen1905}, and discharge depends on local head through the power-law emitter equation of \citet{KellerKarmeli1974}:
+\begin{equation}
+\begin{gathered}h_{f,j}=\frac{10.67\,\Delta x_e\,Q_j^{1.852}}{C^{1.852}D^{4.871}},\quad Q_j=\sum_{i>j}q_i,\\ q_j=q\Bigl(\frac{h_j}{H_0}\Bigr)^{x_e},\quad h_j=h_{j-1}-h_{f,j-1},\ h_0=H_0,\end{gathered}
+\label{eq:HW}
+\end{equation}
+with $\Delta x_e$ the emitter spacing, $C=140$ and $x_e=0.5$ (turbulent orifice), 0.6 (tape) or 0.05 (pressure-compensating emitter, with a minimum head of 8\,m). Because flows depend on heads and heads on flows, the system is solved by fixed-point iteration from the uniform start $q_j=q$, with under-relaxation after the fourth pass, until the largest relative change in any emitter flow is below $10^{-7}$ (at most 500 passes); version~1 used four passes. Emission uniformity follows the design equation
+\begin{equation}
+E_u=\mathrm{clip}\Bigl\{\Bigl(1-\frac{1.27\,c_v}{\sqrt{n_e}}\Bigr)\frac{q_{\min}}{\bar q};0.3,1\Bigr\},\qquad \sigma_q=\sqrt{c_v^2+\sigma_P^2},
+\label{eq:Eu}
+\end{equation}
+with $c_v$ the manufacturing coefficient of variation, $n_e$ the number of emitters per plant and $\sigma_P$ the relative standard deviation of hydraulic delivery along the lateral. The wetted bulb is modelled as a half-ellipsoid whose aspect ratio is an engineered function of $K_s$ and the discharge; five representative emitters at the standard-normal quantiles $z\in\{-1.28,-0.52,0,0.52,1.28\}$ deliver $V_i=\max\{0.02\bar V,\bar V(1+\sigma_qz_i)\}$, from which deep percolation, evaporation and storage are computed, and the efficiencies satisfy $E_a+\mathrm{DP}+\mathrm{EV}=1$. The automatic run time is the time at which the driest emitters deliver the need, $t=\mathrm{clip}\{V_{\mathrm{req}}/(\bar qE_u);0.05,96\}$ h.
+
+\subsection{Sprinkler layer}
+\label{sec:sprk}
+Nozzle discharge follows the orifice (Torricelli) equation with coefficient 0.95 and the wetted radius an empirical range law \citep{Keller1990} with an angle function:
+\begin{equation}
+\begin{gathered}q=0.95\,A_n\sqrt{2gh_n}\times6\times10^4\ \mathrm{L\,min^{-1}},\\ R_w=c_R\sqrt{d\,h_n}\,f_\alpha(\alpha),\quad f_\alpha=\Bigl[\frac{\max\{0.05,\sin3.1\alpha\}}{0.9763}\Bigr]^{0.45},\end{gathered}
+\label{eq:nozzle}
+\end{equation}
+with $d$ in mm, the pressure head $h_n$ in m, $A_n=\pi(d/2000)^2$, $c_R$ a coefficient per sprinkler type, and $\alpha$ the trajectory angle in degrees. The radial pattern shape $\hat p(x)$, $x=r/R_e$, is engineered for each type (e.g.\ $1-x^{1.3}$ for impact sprinklers), wind elongates the pattern ($R_e(\theta)=R_w\,\mathrm{clip}\{1+0.022u\cos\theta;0.7,1.4\}$), overlap is the sum over neighbours on the sprinkler grid, and the Christiansen coefficient of uniformity \citep{Christiansen1942} is $\mathrm{CU}=1-\sum_k|a_k-\bar a|/(n\bar a)$. Wind drift and evaporation loss follow an engineered function of wind, pressure, temperature and trajectory angle; intake and runoff use the Kostiakov law with a ponding-time criterion; and the layout, pipes (Blasius friction \citep{Blasius1913}, with Christiansen's outlet factor) and a ten-point checklist implement the textbook decision logic \citep{Keller1990}, including the maximum allowable application rate by soil and slope and the number of laterals operated simultaneously.
+
+\subsection{Evaluation of the system variables}
+\label{sec:swamethods}
+The variables of Section~\ref{sec:system} were evaluated for each of the ten soils with the shipped engine (\texttt{swa\_vars.js}), at one reference state: conventional tillage, consolidation rate 0.005\,d$^{-1}$, bare soil ($\varphi=1$, $c=1$\,mm), unscaled rainfall, no warming, nitrogen 100\,\%, surface method, common trigger $-300$\,cm, sensor at 20\,cm and the cereal rotation (the state of the sensitivity runs, Section~\ref{sec:sens}). For each soil the script records the Engine~1 balance, the hydraulic variables, a full 20-year Engine~2 run (rooting depth, uptake by layer, events, doses, wetting depth, $k_t$), the water-potential path averaged over crop days of day-of-year 120--210 in all years, the two-stage evaporation at the season-mean demand of 4.2\,mm\,d$^{-1}$, the fate of the evaporation saved by a straw mulch ($\varphi=0.4$, $c=4$\,mm) and the nitrate cost of drainage for a $+0.1$ rainfall step.
+
+\subsection{Verification design}
+\label{sec:vermethods}
+Four verification families were run, each with an expected output from outside the software.
+\begin{enumerate}[nosep]
+\item \emph{Published worked examples.} Surface-irrigation Examples~6.1 (furrow) and 6.4 (border) of \citet{Walker1987} and a sprinkler design example from the textbook, with the soil parameters, flows, lengths and required depth of the examples, comparing the software's advance times, efficiencies, required times, maximum non-erosive flows and decision logic with the printed results (relative error $=100\,(\mathrm{software}-\mathrm{book})/\mathrm{book}$).
+\item \emph{Held-out simulations.} 1\,000 runs of E12 (coarse loam: sensor depth $\times$ trigger $\times$ rain scale) were not used to build Engine~1's lookups; the engine was queried at the same factor levels (the cell is selected by indices of the lookups, so no interpolation occurs). Metrics: $R^2$, RMSE, bias, Spearman $\rho$ and normalised RMSE (RMSE over the observed mean). ``Raw'' predictions and ``re-anchored'' predictions are reported, the latter being those in which the engine's baseline cell (rain scale 1, baseline trigger and depth) is aligned to Daisy's baseline cell, multiplicatively for fluxes and additively for drainage and nitrogen leaching, as a diagnostic of anchor inconsistency.
+\item \emph{Mass closure and agreement of the daily and annual models.} The unscaled Engine~2 core was run on 60 random states to measure the closure residual as a percentage of inflow, and its calibrated annual irrigation was compared with Engine~1 over a realistic grid of 10 soils $\times$ 5 triggers $\times$ 2 methods (cereal crop).
+\item \emph{Independent numerical solvers.} The drip-lateral solution was compared with an independent converged solver (many iterations) over 400 random configurations covering emitter type, spacing, lateral length, diameter, inlet head and coefficient of variation.
 \end{enumerate}
-\Cref{tab:path} shows the path for the ET law: $\ln W$ alone gives $R^2_{\mathrm{cv}}=0.801$, adding $n$ raises it to 0.895 and adding $\ln(1+I)$ to 0.898. The third term improves the score by only 0.003, at the stopping threshold, so a two-term law $\ln\mathit{ET}=f(\ln W,n)$ is almost as good and is the safer summary.
+In addition, run times were measured in Node.js on a cloud container (single call medians), and the manual was audited for equation count and provenance labels.
 
-The compensation coefficient $\kappa$ measures the share of a rainfall change that is offset by irrigation. For rainfall change $\Delta P_r$ with other factors fixed,
-\begin{equation}
-\kappa \;=\; -\frac{\Delta I}{\Delta P_r}.
-\label{eq:kappa}
-\end{equation}
-In single-soil lattices $\mathrm d W/\mathrm dP_r=1-\kappa$ is estimated by ordinary least squares; in E16, paired differences are formed of rain scale 0.5 and 1.5 across the 32 combinations of other factors within each soil, and bootstrap the pooled estimate (500 resamples).
-
-All analyses are scripted in Python \citep{Harris2020,Virtanen2020,Pedregosa2011,Hunter2007}; scripts and intermediate results are in the project repository (\datalink, \codelink) and mapped in Appendix~\ref{app:repro}. Model evaluation follows the recommendations of \citet{Moriasi2007} and \citet{Bennett2013}; $R^2$ is reported on the log scale unless stated. No test data were used for model selection other than through the declared cross-validation.
+\input{p3_deriv.tex}
 
 %==========================================================
 \section{Results}
 \label{sec:results}
-\subsection{The pipeline recovers the water balance (positive control)}
-The singular spectrum of the seven-flux matrix falls steeply, with a smallest singular value of 5.5 compared with about 33 under column permutation (\cref{fig:invariants}a), and the corresponding right singular vector places weight on rain, irrigation, ET and drainage with opposite signs for inputs and outputs (\cref{fig:invariants}b). For the four-flux subsystem the null direction, scaled to $c_{\mathit{ET}}=-1$, is
-\begin{equation}
-\mathbf c=(c_{P_r},c_I,c_{\mathit{ET}},c_D)=(1.037,\;0.957,\;-1,\;-1.036),
-\label{eq:law}
-\end{equation}
-with bootstrap 95\,\% intervals 1.031--1.045 for rain, 0.940--0.974 for irrigation and $-1.052$ to $-1.023$ for drainage, and a smallest singular value of 5.9 against 33.3 under permutation. The pipeline therefore recovers the conservation law $P_r+I-\mathit{ET}-D\approx0$ with every coefficient within 5\,\% of the exact value, and the permutation null shows that the null direction is not an artefact of scale. \emph{However, the bootstrap intervals do not contain the exact values}: rain $\pm$ 1 lies below the rain interval, and irrigation lies above its interval. The deviation reflects the nonzero storage term and other unreported fluxes: excluding E8 and E9, whose initial moisture is deliberately unbalanced, gives $(1.021,\,0.969,\,-1,\,-1.019)$ with a smallest singular value of 3.0, closer to the exact balance but still not exact.
+\input{p3_swa_results.tex}
+
+\input{p3_views.tex}
+
+\subsection{Sensitivity of the outputs to the input controls}
+\label{sec:sens}
+One-at-a-time sensitivity runs were made on the shipped engine from a reference state (soil S01, conventional tillage, consolidation rate 0.005\,d$^{-1}$, bare soil, surface method, trigger $-300$\,cm, sensor depth 20\,cm, unscaled rainfall, no warming, nitrogen 100\,\%), moving one control to the two settings listed in \cref{fig:sens}a,b. The reference state gives 282\,mm of irrigation and 27.6\,mm of drainage per year. Rainfall dominates: scaling rainfall by 0.7 raises irrigation to 430\,mm and lowers drainage to 10.6\,mm, and scaling by 1.3 lowers irrigation to 189\,mm and raises drainage to 87.7\,mm. The irrigation method is the next strongest control of irrigation: drip at 20--30\,cm lowers it to 201\,mm and raises drainage to 31.1\,mm, which is the E4 result for this soil (simulated irrigation 162\,mm under drip at 20--30\,cm against 228\,mm under surface irrigation, ratio 0.71), whereas overhead irrigation leaves irrigation and drainage almost unchanged ($-0.3$ and $+1.1$\,mm) but lowers transpiration from 239 to 141\,mm, because in E4 the canopy intercepts and evaporates part of the overhead application. The trigger suction follows (335\,mm at $-150$\,cm against 208\,mm at $-1000$\,cm), then warming ($-1$\,°C: 224\,mm; $+2$\,°C: 314\,mm) and the mulch vapour-flux factor (218--258\,mm for factors 0.4--0.7). Sensor depth (315 to 270\,mm for 10 to 40\,cm) and tillage have smaller effects. Nitrogen rate leaves irrigation and drainage unchanged because its correction (\cref{eq:corr}) acts on yield and nitrogen leaching only, a design property of the annual model. Soil changes the outputs as much as the strongest management controls (\cref{fig:sens}c): irrigation ranges from 278\,mm (S03) to 414\,mm (S02) and drainage from 27.6\,mm (S01) to 164\,mm (S02).
+
+For the design layers, the same procedure was applied to the sprinkler and drip solvers (\cref{fig:sens}d--f). In the sprinkler layer, the operating pressure controls uniformity (CU 0.82 at 200\,kPa, 0.96 at 300\,kPa and 0.96 at 400\,kPa, with the range coefficient corrected in Section~\ref{sec:ws}), whereas raising wind speed from 0 to 5\,m\,s$^{-1}$ changes CU by less than 0.01 but reduces application efficiency by 0.02 at 200\,kPa (0.75 to 0.73) and by 0.04 at 300 and 400\,kPa (0.92 to 0.88 and 0.89 to 0.84); the absence of a wind effect on CU is a limitation of the engineered wind term (Section~\ref{sec:drip}). In the drip layer, emission uniformity decreases with lateral length and with smaller diameter or lower inlet head, as expected from friction loss; beyond the design range ($h_f/H_0>0.2$, dashed in \cref{fig:sens}d,e) the converged solver gives a monotonic $E_u$ except for the longest, narrowest laterals (loss ratios above 0.6, where the head reaches the model's 0.5\,m floor and the layer prints its warning); these portions of the curves should not be interpreted as predictions.
 
 \begin{figure}[H]\centering
-\includegraphics[width=\textwidth]{\figdir/p2/fig02_invariants.pdf}
-\caption{Linear invariants. (a) Singular values of the seven-flux matrix for the real data and for column-permuted data. (b) Coefficients of the smallest right singular vector (scaled so $c_{\mathit{ET}}=-1$) with bootstrap intervals. (c) Storage residual $\Delta S/W$ by experiment: E8 and E9 do not close. (d) Unattributed share of ET, $R/\mathit{ET}$, by experiment.}
-\label{fig:invariants}
+\includegraphics[width=\textwidth]{\figdir/p3/fig08_sensitivity.pdf}
+\caption{One-at-a-time sensitivity of SWAFL Desktop outputs. (a) Engine~1 annual irrigation and (b) drainage change for each control moved to the two settings listed under its name (blue: first setting; orange: second setting) from the reference state; nitrogen rate, which leaves both unchanged, is not shown. (c) Irrigation and drainage by soil. (d) Drip emission uniformity against lateral length by lateral diameter and (e) by inlet head; dashed where $h_f/H_0>0.2$. (f) Sprinkler application efficiency against wind speed at 200, 300 and 400\,kPa (CU in the legend).}
+\label{fig:sens}
 \end{figure}
 
-The result illustrates both the promise and the discipline needed for law discovery. The method finds the law that is there, without being told which variables are inputs and which are outputs; but its coefficients should not be over-interpreted, because the third decimal of a coefficient reflects what the data do \emph{not} close, not what the law is.
 
-Fitting the four-flux null vector separately within each experiment (\cref{tab:svdexp}) tests whether the pooled vector \cref{eq:law} hides heterogeneity. In 11 of the 14 experiments with irrigation all coefficients are within about 5\,\% of the exact values $(1,1,-1,-1)$ (E11 is at 5.1\,\% for drainage; E16, with the extreme corners of the factorial, gives 0.901 for irrigation and $-0.919$ for drainage, E6 gives 0.961, 0.927 and $-0.869$; and E12 gives drainage $-1.116$ are the exceptions). The residual scale $\sigma_q/\sqrt N$ is 0.001--0.017 in the well-closing experiments and 0.081 in E16, 0.030 in E6, 0.166 in E8 and 0.219 in E9. E0 (no irrigation variation within the 10 baseline runs), E8 and E9 (rainfed) have a constant zero irrigation column and the invariant is formed from three fluxes; for E8 the drainage coefficient is $+15.5$, a sign of an ill-conditioned decomposition in an experiment in which storage dominates the balance, which is a cautionary example of how an unconstrained search can return a numerically valid but physically meaningless vector. The method therefore identifies its own failure by the magnitude of $\sigma_q/\sqrt N$ and by physical-plausibility checks on the coefficients, which is recommended as a rule.
+\subsection{Surface irrigation against published worked examples}
+\label{sec:ws}
+Examples~6.1 (furrow) and 6.4 (border) of \citet{Walker1987} were computed with a stand-alone reference implementation of the textbook volume-balance procedure (\texttt{lib/wsmodel.js}), which uses the book's power-law description of the furrow section and its intake functions. These two examples therefore verify the procedure and its arithmetic; the surface layer shipped in SWAFL Desktop, which describes the furrow by a trapezoidal section, is compared with Example~6.1 at the end of this subsection and with a second source in Section~\ref{sec:drip}.
+
+The example specifies a 200\,m furrow of slope $S_0=0.008$ and roughness $n=0.04$, with infiltration $Z=0.0028\tau^{0.534}+0.00022\tau$ (first irrigation) and $Z=0.0021\tau^{0.331}+0.00015\tau$ (later irrigations), furrow-geometry coefficients $\rho_1=0.325$ and $\rho_2=2.734$. \Cref{tab:ws} compares 16 quantities. The maximum error is 1.81\,\% (advance time at $Q=0.10$\,m$^3$\,min$^{-1}$ for the first irrigation: 81.65 versus 80.2\,min), the median error 0.08\,\%, and the required infiltration times (378.73 and 868.5\,min) agree to better than 0.01\,\%. For the later irrigation at $Q=0.10$ the application efficiency recomputed by the software is 33.5\,\% while the copy of the book used shows 53.0\,\%, which is inconsistent with the printed trend (the neighbouring values at $Q=0.075$ and 0.0625 are 44.2\,\% and 52.5\,\% and the efficiency increases as the flow falls); this entry was excluded from the comparison and is flagged.
 
 \begin{table}[H]\centering\small
-\caption{Four-flux null vector fitted within each experiment (scaled to $c_{\mathit{ET}}=-1$); ``--'' marks a flux with no variation in the experiment (irrigation in E0, E8, E9). $\hat\sigma=\sigma_q/\sqrt N$ is the residual scale in units of the column root-mean-square.}
-\label{tab:svdexp}
+\caption{Surface-irrigation Example 6.1 \citep{Walker1987}: published and computed quantities. $T_{req}$: required infiltration time (min); $t_L$: advance time to the end of the furrow (min) at flow $Q$ (m$^3$\,min$^{-1}$); $E_a$: application efficiency (\%). Error $=100(\text{SWAFL}-\text{book})/\text{book}$.}
+\label{tab:ws}
+\begin{tabular}{llrrr}
+\toprule
+Irrigation & Quantity & Book & SWAFL & Error (\%)\\\midrule
+first irrigation & Treq & 378.73 & 378.73 & +0.00\\
+first irrigation & tL Q=0.1 & 80.2 & 81.65 & +1.81\\
+first irrigation & Ea Q=0.1 & 65.4 & 65.16 & $-$0.36\\
+first irrigation & tL Q=0.075 & 198.6 & 198.67 & +0.04\\
+first irrigation & Ea Q=0.075 & 69.3 & 69.28 & $-$0.04\\
+first irrigation & tL Q=0.0625 & 441.6 & 442.27 & +0.15\\
+first irrigation & Ea Q=0.0625 & 58.5 & 58.46 & $-$0.06\\
+later irrigation & Treq & 868.5 & 868.52 & +0.00\\
+later irrigation & tL Q=0.1 & 26.2 & 26.16 & $-$0.16\\
+later irrigation & tL Q=0.075 & 36 & 36.05 & +0.14\\
+later irrigation & Ea Q=0.075 & 44.2 & 44.22 & +0.05\\
+later irrigation & tL Q=0.0625 & 46.3 & 46.35 & +0.11\\
+later irrigation & tL Q=0.05 & 68.2 & 68.23 & +0.04\\
+later irrigation & Ea Q=0.05 & 64.1 & 64.05 & $-$0.08\\
+later irrigation & tL Q=0.0375 & 143.5 & 143.64 & +0.10\\
+later irrigation & Ea Q=0.0375 & 79.1 & 79.04 & $-$0.08\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/p3/fig03_ws_verification.pdf}
+\caption{Verification against Example 6.1. (a) Advance time $t_L$, (b) application efficiency $E_a$ (published versus SWAFL; grey line is 1:1), (c) relative differences of the 16 quantities (blue: advance and required times; green: efficiencies).}
+\label{fig:ws}
+\end{figure}
+
+For the border-strip example the software gives $T_{req}$ (first irrigation) of 146.40 against 146.4\,min, $T_{req}$ (later) 162.23 against 162.8\,min ($-0.35$\,\%), maximum non-erosive flow $Q_{\max}=1.883$ against 1.88\,m$^3$\,min$^{-1}$m$^{-1}$ ($+0.17$\,\%), the advance time for $Q=0.14$ and $L=360$\,m of 158.68 against approximately 158\,min ($+0.43$\,\%) and the inlet area $A_0=0.03034$ against 0.0303\,m$^2$ ($+0.13$\,\%). All are within 0.5\,\%.
+
+\paragraph{The shipped surface layer and Example~6.1.} To test the shipped advance solver itself, Example~6.1 was run through it with the book's intake, length, slope and roughness and with the inlet flow area of the book's furrow geometry, so that only the solver differs from the reference implementation (\texttt{v\_surface\_shipped.js}). In release~1.0.0, where the stream advances quickly, the shipped solver agreed with the book within $-1.7$ to $+4.0$\,\% (first irrigation at $Q=0.10$; later irrigation at $Q=0.05$--0.10\,m$^3$\,min$^{-1}$), but where advance was slow it was too fast: $-9.8$\,\% for the later irrigation at $Q=0.0375$ and $-14.7$ and $-29.0$\,\% for the first irrigation at $Q=0.075$ and 0.0625. The cause is a single term. In the volume balance the infiltration of the steady-intake component $f_0$ during advance is divided by $(1+r)$, with $r$ the advance exponent; the code of release~1.0.0 used a fixed $r=0.55$, whereas the textbook procedure uses the current, iterated $r$, which is 0.32--0.45 in the slow cases (and 0.48--0.76 where advance is fast). With $r$ iterated, the shipped solver reproduces the reference implementation to 0.002\,\% and the book to between $-0.2$ and $+1.8$\,\% in all eight cases (\texttt{v\_surface\_shipped.js} runs both versions). This is the third defect found by the verification; it matters only when $f_0>0$ and advance is slow. It is corrected in release~1.1.0, which iterates $r$.
+
+The design problem (180\,m $\times$ 180\,m field, sprinklers spaced $12\times15$\,m, required net depth $Z_n=42$\,mm, application efficiency 0.7 so a gross depth of 60\,mm, an irrigation interval of 10\,d, 16\,h\,d$^{-1}$ of operation, farm supply 21\,m$^3$\,h$^{-1}$, silty loam, 10\,\% slope) tests decision logic rather than a smooth function. The maximum allowable application rate is 8\,mm\,h$^{-1}$ and the maximum discharge $q_{\max}=1.44$\,m$^3$\,h$^{-1}$, as in the book; the layout yields $N=15$ sprinklers per lateral and $N_m=12$ lateral positions. With a discharge of 0.675\,m$^3$\,h$^{-1}$ the book's logic permits one set per day, which would require $N_d=12$ days for one lateral and is rejected (12 days exceeds the 10-day interval), and the software follows. With $q=1.35$\,m$^3$\,h$^{-1}$ (two sets per day) one lateral needs $N_d=6$ days with an inflow of 20.25\,m$^3$\,h$^{-1}$, which is within the supply; with 2.03 (three sets per day) the supply constraint rejects the option. The software selects $n=1$ lateral for $q=1.35$ and $n=2$ for the lower discharge, as in the textbook. A nozzle of 4.8\,mm at a head of 24\,m yields 1.343\,m$^3$\,h$^{-1}$ against the book's 1.36 ($-1.3$\,\%). One discrepancy was found in the first version: the wetted diameter predicted for this nozzle was 24.7\,m (radius 12.3\,m) whereas the book's range table gives 28.7\,m, a deficit of 14\,\% caused by the range coefficient $c_R=1.15$ in \cref{eq:nozzle}, which had been chosen rather than taken from the source. The \citet{Keller1990} range relation for impact sprinklers has the coefficient 1.35; with it the software returns a radius of 14.49\,m and a wetted diameter of 28.98\,m ($+1$\,\%), and the coefficient was changed in the shipped code and manual (Table~13.1). The range coefficients of the other three sprinkler types (rotating spray, micro-sprinkler, big gun) remain engineered and have not been verified against published data.
+
+\begin{table}[H]\centering\small
+\caption{Border Example 6.4 (\citet{Walker1987}) and the sprinkler example: published and computed values.}
+\label{tab:border}
+\begin{tabular}{lrrr}
+\toprule
+Quantity & Book & SWAFL & Error (\%)\\\midrule
+$T_{req}$, first irrigation (min) & 146.4 & 146.399 & $-0.00$\\
+$T_{req}$, later irrigation (min) & 162.8 & 162.230 & $-0.35$\\
+$Q_{\max}$ (m$^3$\,min$^{-1}$\,m$^{-1}$) & 1.88 & 1.883 & $+0.17$\\
+$t_L$ at $Q=0.14$, $L=360$\,m (min) & $\approx$158 & 158.677 & $+0.43$\\
+$A_0$ (m$^2$) & 0.0303 & 0.03034 & $+0.13$\\
+Sprinkler: nozzle discharge, 4.8\,mm at 24\,m (m$^3$\,h$^{-1}$) & 1.36 & 1.343 & $-1.3$\\
+Sprinkler: wetted diameter (m), version 1 & 28.7 & 24.7 & $-14$\\
+Sprinkler: wetted diameter (m), corrected & 28.7 & 28.98 & $+1.0$\\
+Sprinkler: maximum rate $u_{\max}$ (mm\,h$^{-1}$) & 8 & 8 & 0\\
+Sprinkler: $q_{\max}$ (m$^3$\,h$^{-1}$) & 1.44 & 1.44 & 0\\\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Engine 1 against held-out simulations}
+\label{sec:e1}
+Engine~1 was queried at the factor levels of the 1\,000 E12 runs (coarse loam, surface method). Without alignment, the engine's baseline differs from Daisy's baseline for this experiment: the engine's baseline (derived from the E5 irrigated set) has ET of 720 and irrigation of 282\,mm\,yr$^{-1}$ whereas the E2/E3/E12 baseline is 673 and 228\,mm\,yr$^{-1}$, so raw predictions are biased by $+53$ mm for ET and $+71$ mm for irrigation (\cref{tab:e1}, \cref{fig:e1}). This is a \emph{baseline offset} between experiment families, not a random error: the engine composes ratios taken within one family on a baseline from another family. After aligning the engine's baseline cell with Daisy's (re-anchoring), the normalised RMSE for off-axis cells (all cells except the baseline row and column, which are partly used in the engine's construction) is 6.2\,\% for ET, 18.9\,\% for irrigation, 48.7\,\% for drainage (a small mean, 35\,mm), 10.1\,\% for soil evaporation, 8.7\,\% for transpiration, 34.6\,\% for nitrogen leaching and 27.9\,\% for yield. The $R^2$ values are 0.79 (irrigation), 0.82 (drainage), 0.71 (soil evaporation), 0.33 (nitrogen leaching), 0.10 (transpiration), $-0.11$ (ET) and $-2.33$ (yield); the negative values for ET and yield arise because the variance of these outputs within E12 is small (the coefficient of variation of ET across the cells is 5.9\,\%), so any constant offset dominates, and for yield the engine's discrete lookup structure and ceiling produce a stepped response that the simulation does not show (\cref{fig:e1}d). Rank correlations are higher than the $R^2$ values: Spearman $\rho$ is 0.96 for irrigation, 0.97 for soil evaporation, 0.92 for drainage, 0.84 for ET, 0.70 for yield, and 0.64 for transpiration and nitrogen leaching.
+
+\begin{table}[H]\centering\small
+\caption{Engine 1 against 1\,000 held-out E12 runs (coarse loam), off-axis cells. Raw: as shipped; re-anchored: baseline aligned. nRMSE: RMSE as \% of the observed mean; $\rho$: Spearman rank correlation.}
+\label{tab:e1}
+\begin{tabular}{lrrrrrrr}
+\toprule
+ & \multicolumn{3}{c}{Raw} & \multicolumn{3}{c}{Re-anchored} & \\\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+Variable & $R^2$ & RMSE & bias & $R^2$ & nRMSE (\%) & bias & $\rho$\\\midrule
+ET (mm) & $-2.06$ & 69.5 & $+53.1$ & $-0.11$ & 6.2 & $+5.5$ & 0.84\\
+Irrigation (mm) & 0.18 & 97.4 & $+71.4$ & 0.79 & 18.9 & $+8.3$ & 0.96\\
+Drainage (mm) & 0.72 & 21.7 & $+14.6$ & 0.82 & 48.7 & $+6.2$ & 0.92\\
+Soil evaporation (mm) & 0.71 & 15.4 & $-7.9$ & 0.71 & 10.1 & $-7.9$ & 0.97\\
+Transpiration (mm) & $-1.01$ & 29.3 & $+21.4$ & 0.10 & 8.7 & $+4.0$ & 0.64\\
+Yield (Mg\,ha$^{-1}$) & $-1.82$ & 1.51 & $-0.79$ & $-2.33$ & 27.9 & $-1.15$ & 0.70\\
+N leached (kg\,ha$^{-1}$) & $-0.84$ & 18.5 & $-14.7$ & 0.33 & 34.6 & $-0.3$ & 0.64\\\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/p3/fig05_engine1_heldout.pdf}
+\caption{Engine 1 versus Daisy for the 1\,000 held-out E12 runs. Orange: as shipped; blue: re-anchored. (a) ET, (b) irrigation, (c) drainage, (d) yield, (e) transpiration, (f) soil evaporation, (g) nitrogen leached. Grey lines are 1:1.}
+\label{fig:e1}
+\end{figure}
+
+The practical reading is that Engine~1 is a \emph{rank-faithful screening emulator}: it orders scenarios correctly (irrigation $\rho=0.96$, drainage 0.92, soil evaporation 0.97) and gets the response to trigger, depth and rainfall in the right direction, but its absolute values depend on which experiment family anchors the baseline, and its yield output should not be used quantitatively. The independence assumption for mulch and warming cannot be tested because no experiment crosses them.
+
+\subsection{Engine 2 closure and agreement with Engine 1}
+\label{sec:e2}
+The unscaled daily core closes the water balance to within 0.1\,\% of inflow (median) and at most 0.7\,\% over 60 random states (\cref{fig:e2}a). On a 100-scenario grid the calibrated irrigation closes with residual of median 0.04\,\% and maximum 0.23\,\% of inflow.
+
+On a realistic grid of 10 soils $\times$ 5 triggers $\times$ 2 methods (cereal crop), the calibrated mean annual irrigation of Engine~2 agrees with Engine~1 within 10\,\% in 90 of 100 scenarios (76 within 6\,\%). The ten disagreements are all in coarse soils at dry triggers: sand (S03) at $-500$ and $-1000$\,cm (both methods; simulated irrigation 0 versus target 278\,mm), loamy sand (S04) at $-500$ (337 versus 293\,mm) and $-1000$\,cm (0 versus 293\,mm), and sandy loam (S05) at $-1000$\,cm (8--11 versus 15\,mm). The ten cases are of three kinds. In sand at $-500$ and $-1000$\,cm and in loamy sand at $-1000$\,cm (six cases) the bucket model never reaches the trigger suction, because its layers drain below it, so no irrigation is applied; the Engine~1 value (278\,mm for sand at $-300$\,cm and drier triggers in the Daisy set) reflects the simulation's own scheduler behaviour. In loamy sand at $-500$\,cm (two cases) the trigger is reached rarely, the calibration factor rises to $k_t=3.8$ and the model over-irrigates (337 against 293\,mm). In sandy loam at $-1000$\,cm (two cases) the absolute difference is small (8--11 against 15\,mm) but exceeds 10\,\% of the target. An earlier test on randomly drawn states, including legume and vegetable crops, gave much poorer agreement (61\,\% mean error in irrigation), which is why the realistic grid is reported with its scope: cereal crop, two methods. The unscaled partition (E/T split) and drainage of Engine~2 do not match Engine~1 (\cref{fig:e2}c shows unscaled drainage scattering around the 1:1 line by factors of two to five), which is why the displayed series are scaled by \cref{eq:scale}; this makes the displayed means correct by construction and the timing within the year \emph{plausible but unverified}.
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/p3/fig06_engine2.pdf}
+\caption{Engine 2. (a) Closure residual of the unscaled daily core over 60 random states. (b) Mean annual irrigation of Engine 2 against Engine 1 for the 100 scenarios of the realistic grid (10 soils $\times$ 5 triggers $\times$ 2 methods, cereal), including the failures at zero. (c) Unscaled Engine 2 drainage against Engine 1 for the same scenarios.}
+\label{fig:e2}
+\end{figure}
+
+\subsection{Drip, sprinkler and surface layers against the literature}
+\label{sec:drip}
+The design layers are not specific to surface irrigation, and each was therefore tested against published relations or examples outside the software.
+
+\paragraph{Drip lateral.} Two published results were used. First, the lateral loss along a pipe with $N$ equally spaced outlets equals the full-length Hazen--Williams loss multiplied by the Christiansen reduction factor $F=1/(m+1)+1/(2N)+\sqrt{m-1}/(6N^2)$ with $m=1.852$ \citep{Christiansen1942,Keller1990}. For $N=5$ to 400 the software's lateral loss agrees with this factor and with the exact discrete sum to 0.01\,\% or better. Second, the lateral solver was compared with an independent vectorised solver on 400 random configurations (\cref{fig:drip}). The first version, which used four iterations, deviated from the independent solution by up to 0.13\,\% for $h_f/H_0\le0.2$, by up to 81\,\% for $0.2<h_f/H_0\le0.6$ and by up to 89\,\% above that. The solver was rebuilt to iterate to convergence; it now agrees with the independent solution to a relative error of $3.2\times10^{-7}$ in total head loss for $h_f/H_0\le0.6$ (324 configurations), and the warning described below is shown for every configuration with $h_f/H_0>0.2$ (156 of 400) and for every configuration in which the iteration does not converge (31 of 400, all with $h_f/H_0>0.6$). Above $h_f/H_0=0.6$ the maximum difference is 31\,\% and occurs where the head reaches the 0.5\,m floor of the model, a regime in which the lateral is not a usable design. The 20\,\% limit is the usual design criterion for laterals \citep{KellerKarmeli1974,Keller1990}; when it is exceeded, the drip layer now prints a red warning stating the loss as a share of the inlet head.
+
+\paragraph{Sprinkler.} Four relations were tested: orifice discharge (Torricelli, within 1.3\,\% of the book value for the textbook nozzle), the range relation (corrected as described above, $+1$\,\%), the Christiansen uniformity coefficient and the spacing rule of at most 65\,\% of the wetted diameter \citep{Keller1990}. With the corrected radius, a square layout at 65\,\% spacing gives CU $=85.7$\,\%, at 60\,\% 92.9\,\% and at 70\,\% 78.7\,\% (\cref{fig:lit}b), consistent with the rule that this spacing yields about 85\,\%. One limitation was found: the engineered wind term changes CU by less than 0.2 percentage points at a wind speed of 3\,m\,s$^{-1}$, whereas wind is known to degrade uniformity; the wind response of the sprinkler layer should not be used for design.
+
+\paragraph{Surface irrigation, second source.} The shipped surface layer was compared with the worked border examples of FAO Irrigation Paper~45 \citep{Walker1989}, which use the Kostiakov--Lewis intake $Z=k\tau^{a}+f_0\tau$ and the surface shape factor $\sigma_y=0.77$ of that source. The shipped layer had no steady-intake term, so $f_0$ was added to it as an optional parameter (zero by default, so results with the pure Kostiakov law are unchanged). For the 200\,m and 100\,m open-end borders ($Z_{req}=8$\,cm) the required intake times are 388.5 and 678.9\,min, identical to the published values, and the minimum unit flows $0.0226$ and $0.032$\,m$^3$\,min$^{-1}$\,m$^{-1}$ from $Q_{\min}=0.000357\,L\,S_0^{1/2}/n$ agree (0.0226 and 0.0319). Thirteen published advance times, for unit flows of 0.009 to 0.09\,m$^3$\,min$^{-1}$\,m$^{-1}$, are reproduced with errors from $-0.2$ to $+0.5$\,\% (mean absolute 0.13\,\%; \cref{fig:lit}a); before the correction of the steady-intake term described above the errors were $-2.2$ to $+2.9$\,\% (mean absolute 1.7\,\%). The published cut-off and recession times were not compared, because the FAO procedure uses a different cut-off rule from the software's options, so the efficiency tables of that source were not tested.
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/p3/fig07_drip.pdf}
+\caption{Drip-lateral solver versus an independent converged solver (400 random configurations). (a) Relative difference in total head loss for the four-pass solver of version~1 and the converged solver, against the loss ratio $h_f/H_0$ (dashed: design limit 0.2; dotted: 0.6); (b) number of iterations of the converged solver; crosses mark configurations that did not converge.}
+\label{fig:drip}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/p3/fig09_literature.pdf}
+\caption{Checks against published sources. (a) Thirteen advance times of the FAO Irrigation Paper~45 border examples (published against SWAFL; grey line 1:1). (b) Christiansen coefficient of uniformity of the impact-sprinkler layer against spacing as a share of the wetted diameter, without wind and at 3\,m\,s$^{-1}$; dashed: 65\,\% spacing rule, dotted: CU of 85\,\%.}
+\label{fig:lit}
+\end{figure}
+
+\begin{table}[H]\centering\small
+\caption{Drip lateral solver of version~1 (four passes) and the converged solver against an independent solver, by loss ratio $h_f/H_0$ (400 random configurations). Maximum relative error in $h_f$ and maximum absolute error in $E_u$.}
+\label{tab:drip}
 \begin{tabular}{lrrrrr}
 \toprule
-Experiment & Runs & $c_{P_r}$ & $c_{I}$ & $c_{D}$ & $\hat\sigma$\\\midrule
-E0 & 10 & 1.025 & -- & $-$1.041 & 0.004\\
-E1 & 189 & 1.009 & 0.969 & $-$0.979 & 0.017\\
-E2 & 197 & 1.022 & 0.983 & $-$1.027 & 0.004\\
-E3 & 200 & 1.016 & 0.995 & $-$1.012 & 0.004\\
-E4 & 96 & 1.006 & 0.989 & $-$0.983 & 0.003\\
-E5 & 300 & 1.016 & 0.993 & $-$1.027 & 0.002\\
-E6 & 193 & 0.961 & 0.927 & $-$0.869 & 0.030\\
-E7 & 200 & 1.008 & 0.992 & $-$0.990 & 0.003\\
-E8 & 1000 & 1.241 & -- & 15.496 & 0.166\\
-E9 & 987 & 1.182 & -- & $-$1.249 & 0.219\\
-E10 & 954 & 1.026 & 0.972 & $-$1.038 & 0.010\\
-E11 & 1000 & 0.998 & 1.024 & $-$1.051 & 0.004\\
-E12 & 1000 & 1.016 & 1.005 & $-$1.116 & 0.005\\
-E13 & 975 & 1.016 & 0.984 & $-$1.008 & 0.004\\
-E14 & 1000 & 0.982 & 1.035 & $-$0.974 & 0.001\\
-E15 & 1000 & 1.009 & 0.966 & $-$0.971 & 0.003\\
-E16 & 740 & 1.018 & 0.901 & $-$0.919 & 0.081\\
-\bottomrule
+ & & \multicolumn{2}{c}{Version 1} & \multicolumn{2}{c}{Converged}\\\cmidrule(lr){3-4}\cmidrule(lr){5-6}
+$h_f/H_0$ & Configurations & $h_f$ (\%) & $E_u$ & $h_f$ (\%) & $E_u$\\\midrule
+$\le0.2$ & 244 & 0.13 & $4.6\times10^{-5}$ & $3.2\times10^{-5}$ & $2.6\times10^{-8}$\\
+0.2--0.6 & 80 & 81.2 & 0.133 & $2.5\times10^{-5}$ & $9.2\times10^{-8}$\\
+$>0.6$ & 76 & 89.1 & 0.444 & 31 & 0.080\\\bottomrule
 \end{tabular}
 \end{table}
 
-The closure residual $\varepsilon$ (\cref{eq:closure}) has a median absolute value of 0.9\,\% of water input over all valid runs and 0.65\,\% excluding E8 and E9 (95th percentile 2.3\,\%), so for 15 of the 17 experiments the mass balance holds to within a few percent. In E8 and E9, which vary initial moisture, the median absolute residual is 16\,\% of $W$, with the residual reaching $\pm0.3$--0.6 in the tails (\cref{fig:invariants}c). This is expected, because these experiments deliberately impose a non-equilibrium initial storage that is released over the 20-year window, but it matters for discovery: a conservation law fitted without storage will appear to be violated in exactly the experiments where hydraulic memory is strongest. A global law should therefore include storage explicitly or be fitted only on near-equilibrium experiments, and the two cases give different coefficients (\cref{eq:law} and the text following it).
 
-\subsection{A unattributed term in the ET partition}
-The ET components that Daisy reports do not add up to ET. The remainder $R$ (\cref{eq:R}) averages 164\,mm\,yr$^{-1}$, with an interquartile range of 103--223\,mm\,yr$^{-1}$, and equals 30\,\% of ET (median 29\,\%; range 2--88\,\%). Its share varies between experiments from 14\,\% (E6, E8) to 41\,\% (E7, E14; \cref{fig:invariants}d, \cref{tab:R}). The dependence of $R$ on management is informative (\cref{fig:hidden}). In E4 (methods), $R$ is 105\,mm\,yr$^{-1}$ for every subsurface-drip configuration (5--60\,cm), 183 for surface and 166 for overhead irrigation, so that \emph{where} water is applied matters while the drip depth does not (\cref{fig:hidden}a). In the rainfed E9 lattice, $R=50.9+0.121\,P_r$ (\cref{fig:hidden}b), i.e.\ about 12\,\% of rainfall, and in E11 (coarse loam)
-\begin{equation}
-\ln R=5.75-0.355\ln P+0.863\ln E_p+0.136\,\Delta T,\qquad R^2=0.979,
-\label{eq:Rlaw}
-\end{equation}
-where $P$ is the rain scale, $E_p$ the soil-evaporation factor and $\Delta T$ the temperature shift, so that $R$ scales almost linearly with the soil-evaporation factor, decreases with rain scale (elasticity $-0.36$) and increases with warming. The mulch experiments E7 and E14 have the highest median shares (41\,\%) and the cross-experiment sparse model for $\ln R$ selects $\ln(1+I)$, $n$, the mulch capacity and $\Delta T$.
+\subsection{Run time and documentation audit}
+\label{sec:audit}
+Single-call medians in Node.js were 0.021\,ms for Engine~1, 0.25\,ms for the drip layer, 1.7\,ms for the sprinkler layer and 0.14\,s for a 20-year daily Engine~2 simulation. Interactive operation (slider movement) is therefore limited by rendering, not by computation, and a design-space sweep of $10^5$ Engine~1 evaluations takes about 2\,s.
 
-\begin{figure}[H]\centering
-\includegraphics[width=\textwidth]{\figdir/p2/fig03_hidden_term.pdf}
-\caption{The unattributed term $R$. (a) $R$ and canopy evaporation in E4 by irrigation method. (b) $R$ against annual rain in E9 (rainfed, light points), with the linear fit and the ten E0 baselines.}
-\label{fig:hidden}
-\end{figure}
-
-\begin{table}[H]\centering\small
-\caption{Unattributed term $R$ by experiment. median $R$ (mm\,yr$^{-1}$), median share of ET, and median storage residual $\Delta S/W$.}
-\label{tab:R}
-\begin{tabular}{lrrrr}
-\toprule
-Experiment & Runs & $R$ (mm) & $R/\mathit{ET}$ & $\Delta S/W$\\\midrule
-E0 Baselines & 10 & 107 & 0.24 & $-0.021$\\
-E1 Doses & 189 & 118 & 0.21 & $-0.001$\\
-E2 Trigger pressure & 197 & 168 & 0.30 & $-0.009$\\
-E3 Sensor depth & 200 & 202 & 0.32 & $-0.009$\\
-E4 Methods & 96 & 103 & 0.19 & $-0.003$\\
-E5 SHP dynamics & 300 & 162 & 0.29 & $-0.007$\\
-E6 Mediterranean & 193 & 70 & 0.14 & $-0.012$\\
-E7 Mulching & 200 & 226 & 0.41 & $-0.006$\\
-E8 Rain intensity$\times$moisture & 1000 & 39 & 0.14 & $-0.133$\\
-E9 Soil moisture$\times$rain & 987 & 81 & 0.37 & $-0.014$\\
-E10 Amount, timing, soil & 954 & 118 & 0.23 & $-0.011$\\
-E11 Temperature$\times E_p\times$rain & 1000 & 296 & 0.38 & $-0.009$\\
-E12 Sensor, trigger, rain & 1000 & 218 & 0.32 & $-0.008$\\
-E13 N$\times$water & 975 & 125 & 0.28 & $-0.006$\\
-E14 Mulch$\times$rain & 1000 & 262 & 0.41 & $0.001$\\
-E15 Method, depth, amount & 1000 & 103 & 0.17 & $0.003$\\
-E16 Edge cases & 740 & 157 & 0.30 & $-0.010$\\\bottomrule
-\end{tabular}
-\end{table}
-
-What is $R$? The data do not identify it, but they constrain candidates. A process that is independent of drip depth, larger under surface and overhead application, proportional to the soil-evaporation factor, increased under mulch and weakly increasing with warming is consistent with evaporation from the \emph{surface layer} (mulch or litter and ponded water) that is not reported in the soil-evaporation or canopy-evaporation columns. That reading is a hypothesis; the model code has not been inspected to confirm which Daisy state variables sum into the model's ET output, and a software-level audit of the output definitions would be required to turn the hypothesis into a statement. The practical consequence is nonetheless clear: any analysis that treats $T+E_s+E_c$ as ET (as many reduced-form ET-partitioning analyses do) omits about 30\,\% of the flux, and the partition fractions reported for the ensemble depend on how $R$ is allocated.
-
-A sparse model for $R$ across all experiments has limited out-of-sample skill. The forward-selected model $\ln R=3.35+0.194\ln(1+I)+0.492\,n+0.145\,\mathrm{cap}+0.238\,\Delta T$ has an in-sample $R^2=0.61$ on the log scale but a leave-one-experiment-out error of 0.51 in $\ln R$, equal to a level-scale $R^2$ of only 0.30 (RMSE 81\,mm) versus 0.50 (RMSE 69\,mm) for gradient boosting. Within a single experiment, \cref{eq:Rlaw} is excellent; across experiments it is not, which implies that $R$ depends on interactions among irrigation method, mulch state and demand that the library does not contain.
-
-\subsection{A dominant drainage axis, with its variance share quantified by bootstrap}
-The log-ratio transform requires strictly positive components, and drainage is zero or negative (net capillary rise) in 1\,429 of the 10\,041 runs (14\,\%) and below 1\,mm\,yr$^{-1}$ in 1\,947. The treatment of these zeros is therefore not a detail. The first analysis replaced all components below $10^{-3}$\,mm\,yr$^{-1}$ by that floor, which gave explained variances of 88.6\,\%, 7.3\,\% and 3.3\,\% for the first three components. Because $\ln(10^{-3})$ lies far from the logs of the other components, the runs with zero drainage then dominate the first axis. Repeating the analysis with floors of 0.1, 1, 5 and 10\,mm\,yr$^{-1}$ gives a first-component share of 74.3, 62.7, 56.5 and 52.3\,\% (\cref{fig:manifold}a, \cref{tab:clipsens}). The result that a single drainage axis dominates is robust, since the loading of drainage on PC1 stays between $+0.82$ and $+0.88$ for every floor and also when only runs with drainage above 5 or 20\,mm are used (PC1 share 57\,\% and 52\,\%), but its \emph{magnitude} is a function of the data-handling choice and the figure of 88.6\,\% should not be quoted as a property of the system. The number of components needed to explain 90\,\% of the variance is two to three in all cases (three components carry 92--98\,\% for floors from $10^{-3}$ to 10\,mm, with 97.3\,\% at the 1\,mm floor adopted for the loadings, \cref{fig:manifold}b,c).
-
-With the 1\,mm floor, the first component (62.7\,\%) is a drainage-versus-evaporation axis: drainage loads $+0.84$, soil evaporation $-0.37$, unattributed $R$ $-0.34$, transpiration $-0.20$ and canopy evaporation $+0.06$. Its scores correlate with the drainage fraction $D/W$ at Spearman $\rho=0.98$, with $\ln(W/\TAW)$ at 0.48 and with $n$ at 0.45. The second component (24.8\,\%) separates canopy evaporation ($+0.77$) from soil evaporation ($-0.56$), and the third (9.8\,\%) opposes $R$ ($+0.83$) to soil evaporation ($-0.43$) and transpiration ($-0.26$). The choice of the 1\,mm floor was made \emph{after} seeing the sensitivity and is justified only as a value close to the resolution of annual flux accounting; the full sensitivity is reported so that readers can judge. The practical conclusion is that the drainage fraction is, to a first approximation, the leading summary of water partitioning (its score correlation is 0.98), and that a second axis, the canopy-versus-soil evaporation split, is needed for a complete description.
-
-\begin{figure}[H]\centering
-\includegraphics[width=\textwidth]{\figdir/p2/fig04_manifold.pdf}
-\caption{Partition manifold and its sensitivity to zero handling. (a) Variance explained by the first three clr-PCA components for five zero-replacement floors. (b) Scores on the first two components (1\,mm floor) coloured by $\ln(W/\TAW)$. (c) Loadings of the five fates on the first two components.}
-\label{fig:manifold}
-\end{figure}
-
-\begin{table}[H]\centering\small
-\caption{Sensitivity of the clr-PCA to the zero-replacement floor (variance explained, \%).}
-\label{tab:clipsens}
-\begin{tabular}{lrrrr}
-\toprule
-Floor (mm\,yr$^{-1}$) & PC1 & PC2 & PC3 & PC4\\\midrule
-$10^{-3}$ & 88.6 & 7.3 & 3.3 & 0.8\\
-0.1 & 74.3 & 17.3 & 6.6 & 1.7\\
-1 & 62.7 & 24.8 & 9.8 & 2.6\\
-5 & 56.5 & 25.1 & 14.8 & 3.6\\
-10 & 52.3 & 27.1 & 16.8 & 3.8\\\bottomrule
-\end{tabular}
-\end{table}
-
-Averaged over the 15 near-equilibrium experiments, the five fates (\cref{fig:fatesoil}a) show the expected gradient: drainage takes 34.5\,\% of water input in sand (S03), 28.5\,\% in loamy sand and 5.4\,\% in coarse loam (S01), 8.5\,\% in silty clay loam, while transpiration rises from 19\,\% in sand to 31--33\,\% in the loams. The unattributed term, in contrast, is remarkably constant across soils: $R$ takes 22--26\,\% of $W$ in nine of ten soils (31\,\% in coarse loam, which has the mulch and temperature lattices) and its share of ET is 23--39\,\% (\cref{fig:fatesoil}c), the largest in sand, where there is least else to evaporate. Since $R$ is almost soil-independent in share of $W$, it behaves as a surface-driven term rather than a soil-hydraulic one, consistent with the surface-layer hypothesis. The stacked fractions sum to 0.96--1.01 of $W$ (the remainder being storage change and runoff). Panel~b is a reminder that coarse loam contributes 4\,419 of the near-equilibrium runs while each other soil contributes 290--419.
-
-\begin{figure}[H]\centering
-\includegraphics[width=\textwidth]{\figdir/p2/fig07_fates_by_soil.pdf}
-\caption{Water fates by soil in the 15 near-equilibrium experiments (E8, E9 excluded). (a) Mean fate shares of water input $W$, soils ordered by decreasing $n$. (b) Number of valid runs per soil. (c) Median share of the unattributed term in ET.}
-\label{fig:fatesoil}
-\end{figure}
-
-\subsection{A compact evapotranspiration law with out-of-sample skill}
-Forward selection over the library selects three terms for ET (\cref{tab:laws}): $\ln W$, $n$ and $\ln(1+I)$, giving
-\begin{equation}
-\ln\mathit{ET}=2.503+0.646\,\ln W-0.299\,n+0.029\,\ln(1+I),
-\label{eq:ETlaw}
-\end{equation}
-with ordinary-least-squares standard errors $0.027$, $0.0051$, $0.0045$ and $0.0011$ (which understate uncertainty because runs are not independent) and in-sample $R^2=0.908$. Leave-one-experiment-out $R^2=0.898$ and leave-one-soil-out $R^2=0.904$, against 0.876--0.879 (LOEO) and 0.881--0.894 (LOSO) for gradient boosting in two independent runs, so the three-term law matches or exceeds the benchmark under both groupings (\cref{fig:ETlaw}a,b). The RMSE in leave-one-experiment-out prediction is 68.8\,mm\,yr$^{-1}$ (MAPE 9.2\,\%). The fitted coefficients are stable across the 17 folds (\cref{fig:ETlaw}c; coefficient means 2.51, 0.645, $-0.298$, 0.029 with standard deviations of 0.077, 0.017, 0.017, 0.0023).
-
-Equation~\eqref{eq:ETlaw} has a straightforward physical reading. The exponent on $W$ (0.646) means that ET rises sublinearly with water supply, the signature of an energy- or storage-limited regime also encoded in Budyko-type curves \citep{Budyko1974,Milly1994,Zhang2001}: a 10\,\% increase in supply raises ET by 6.5\,\%, and the remainder goes to drainage, runoff and storage. The coefficient on $n$ (-0.299) implies a factor $\exp(-0.299\times1.45)=0.65$ in ET between the most uniform (S03, $n=2.68$) and the most graded (S10, $n=1.23$) soil at the same $W$: soils that drain freely retain less water for evaporation, in agreement with the hydraulic-memory results of the companion paper. The small positive coefficient on $\ln(1+I)$ (0.029) indicates that, at equal total input, a larger irrigated share raises ET slightly, plausibly through the wetting of the surface that increases $R$ and $E_s$. The law is \emph{not} a fundamental conservation law, nor a model of mechanism; it is a compact summary of how the model's ET responds across 17 designs.
-
-\begin{figure}[H]\centering
-\includegraphics[width=\textwidth]{\figdir/p2/fig05_ET_law.pdf}
-\caption{Compact ET law. (a) Leave-one-experiment-out predictions of the three-term law versus Daisy ET. (b) Gradient-boosting benchmark. (c) Fitted coefficients across the 17 LOEO folds. (d) LOEO MAPE by experiment. (e) The law at $I=200$\,mm for four soils (grey dashed: ET $=W$). (f) Drainage derived from closure, $W-\widehat{\mathit{ET}}$, versus Daisy drainage ($R^2=0.69$, RMSE 64\,mm; E8 and E9 excluded).}
-\label{fig:ETlaw}
-\end{figure}
-
-The 17 experiments were resampled with replacement (2\,000 cluster-bootstrap resamples) and the cross-validated predictions of the law were compared with those of a gradient-boosting model that uses the same three inputs ($\ln W$, $n$, $\ln(1+I)$; LOEO $R^2=0.866$). The paired difference in $R^2$ is $+0.032$ with a 95\,\% interval of 0.004--0.087, so the law is better than a flexible learner given the same information in this resampling, with the caveat that the law's terms were selected with the same folds. With the \emph{full} library the benchmark reaches 0.876--0.879, and the two are regarded as comparable rather than claiming superiority.
-
-The error is not uniform (\cref{tab:byexp}). Mean absolute percentage errors are 2.6--5.8\,\% in most one- and two-factor experiments, but 16.6\,\% in E16 (edge cases: extreme combinations), 16.7\,\% in E8 and 27.4\,\% in E9, the two experiments that violate storage closure, and 11.7\,\% in E5 (time-varying soil hydraulic properties, where a single static $n$ is wrong by construction). The law is therefore valid where the water balance is near equilibrium and soil hydraulics are static; it should not be extrapolated to initial-state perturbations or to dynamic soil structure.
-
-\begin{table}[H]\centering\small
-\caption{Leave-one-experiment-out performance of \cref{eq:ETlaw} by experiment: MAPE (\%) and mean error (predicted minus Daisy, mm\,yr$^{-1}$).}
-\label{tab:byexp}
-\begin{tabular}{lrrr}
-\toprule
-Experiment & Runs & MAPE (\%) & Mean error (mm)\\\midrule
-E0 Baselines & 10 & 5.8 & $-25.2$\\
-E1 Doses & 189 & 3.8 & 9.8\\
-E2 Trigger pressure & 197 & 3.0 & $-6.6$\\
-E3 Sensor depth & 200 & 2.6 & $-8.0$\\
-E4 Methods & 96 & 3.6 & 9.4\\
-E5 SHP dynamics & 300 & 11.7 & $-63.8$\\
-E6 Mediterranean & 193 & 8.5 & 41.5\\
-E7 Mulching & 200 & 4.7 & 10.6\\
-E8 Rain intensity & 1000 & 16.7 & $-11.3$\\
-E9 Soil moisture & 987 & 27.4 & 12.9\\
-E10 Amount, timing & 954 & 3.3 & 1.3\\
-E11 Temperature, $E_p$, rain & 1000 & 9.0 & $-62.6$\\
-E12 Sensor, trigger, rain & 1000 & 3.3 & $-15.2$\\
-E13 N, water & 975 & 3.5 & $-3.7$\\
-E14 Mulch, rain & 1000 & 4.0 & 7.5\\
-E15 Method, depth, amount & 1000 & 5.0 & 29.0\\
-E16 Edge cases & 740 & 16.6 & 34.5\\\bottomrule
-\end{tabular}
-\end{table}
-
-\Cref{tab:closure2} gives the closure residual $\varepsilon$ for every experiment. In 15 experiments the median absolute residual is below 2.1\,\% of $W$ and the 95th percentile below 4\,\% (E6, the Mediterranean-pollution scenarios, is the exception at 10.7\,\%); in E8 and E9 the median absolute residual is about 16\,\% and the 95th percentile exceeds 100\,\% of $W$. For E8 the mean (signed) residual is negative, $-13\,\%$: the profile is gaining water, that is, the run begins drier than the equilibrium state and refills. The law \cref{eq:ETlaw} was fitted on water inputs from 124 to 2\,762\,mm\,yr$^{-1}$ (ET of 95--1\,600\,mm\,yr$^{-1}$), $n$ from 1.23 to 2.68, in a temperate climate, and it should be applied only within this domain and with near-equilibrium storage.
-
-\begin{table}[H]\centering\small
-\caption{Closure residual $\varepsilon=(W-\mathit{ET}-D)/W$ by experiment (per cent of water input): median signed, median absolute and 95th percentile of absolute residual.}
-\label{tab:closure2}
-\begin{tabular}{lrrrr}
-\toprule
-Experiment & Runs & Median $\varepsilon$ & Median $|\varepsilon|$ & 95th pct.\ $|\varepsilon|$\\\midrule
-E0 & 10 & -2.06 & 2.06 & 2.9\\
-E1 & 189 & -0.12 & 0.33 & 1.2\\
-E2 & 197 & -0.87 & 0.87 & 2.3\\
-E3 & 200 & -0.87 & 0.87 & 2.0\\
-E4 & 96 & -0.33 & 0.34 & 1.2\\
-E5 & 300 & -0.74 & 0.74 & 1.9\\
-E6 & 193 & -1.19 & 1.57 & 10.7\\
-E7 & 200 & -0.57 & 0.57 & 1.2\\
-E8 & 1000 & -13.35 & 15.76 & 105.8\\
-E9 & 987 & -1.40 & 16.87 & 108.5\\
-E10 & 954 & -1.08 & 1.17 & 2.5\\
-E11 & 1000 & -0.93 & 0.94 & 1.8\\
-E12 & 1000 & -0.82 & 0.83 & 1.8\\
-E13 & 975 & -0.64 & 0.64 & 2.3\\
-E14 & 1000 & 0.09 & 0.40 & 1.5\\
-E15 & 1000 & 0.34 & 0.34 & 0.4\\
-E16 & 740 & -1.01 & 1.22 & 3.8\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The ensemble is heavily imbalanced: 5\,519 of the 10\,041 runs (55\,\%) are coarse loam (S01) because the large lattices E8, E11, E12, E14 and E15 use only that soil, so soil-level behaviour in the other nine soils rests on about 400--520 runs each. The LOEO residuals of \cref{eq:ETlaw} by soil (\cref{tab:soilres}) show that the law over-predicts ET in the fine soils (mean error $+22$, $+20$ and $+31$\,mm in S08, S09 and S10, where positive means over-prediction relative to Daisy, since errors are predicted minus Daisy) and has the largest percentage errors in sand (15.1\,\%) and loamy sand (13.7\,\%), the soils for which $n$ is most extreme. A single shape parameter therefore does not remove all soil dependence, and the MAPE of about 7.5--15\,\% by soil is consistent with the overall 9.2\,\%.
-
-\begin{table}[H]\centering\small
-\caption{LOEO residuals of the ET law by soil (predicted minus Daisy, mm\,yr$^{-1}$). MAPE: mean absolute percentage error; RMSE in mm\,yr$^{-1}$.}
-\label{tab:soilres}
-\begin{tabular}{llrrrr}
-\toprule
-Soil & Texture & Runs & Mean error & MAPE (\%) & RMSE\\\midrule
-S01 & Coarse loam & 5519 & -10.7 & 7.5 & 58.9\\
-S02 & Coarse sand & 390 & 15.8 & 8.6 & 69.8\\
-S03 & Sand & 506 & -13.6 & 15.1 & 63.8\\
-S04 & Loamy sand & 519 & -4.8 & 13.7 & 57.9\\
-S05 & Sandy loam & 519 & -3.8 & 10.9 & 56.1\\
-S06 & Loam & 519 & -0.2 & 9.9 & 77.5\\
-S07 & Silt loam & 519 & 0.4 & 10.6 & 106.2\\
-S08 & Sandy clay loam & 519 & 22.2 & 10.2 & 57.8\\
-S09 & Clay loam & 519 & 19.7 & 9.9 & 92.8\\
-S10 & Silty clay loam & 512 & 31.2 & 11.6 & 107.4\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[H]\centering\small
-\caption{Forward-selection path for the ET law. LOEO $R^2_{\mathrm{cv}}$ after each added term; and for other targets (first terms).}
-\label{tab:path}
-\begin{tabular}{llr}
-\toprule
-Target & Term added & $R^2_{\mathrm{cv}}$ (LOEO)\\\midrule
-$\ln\mathit{ET}$ & 1 ($\ln W$) & 0.801\\
- & 2 ($n$) & 0.895\\
- & 3 ($\ln(1+I)$) & 0.898\\
-$\ln T$ & 1 ($\ln W$) & 0.581\\
- & 2 ($n$) & 0.641\\
-$\ln E_s$ & 1 ($n$) & 0.070\\
- & 2 (mulch) & 0.237\\
- & 3 ($\ln P_r$) & 0.308\\
-$\ln E_c$ & 1 ($\ln W$) & 0.641\\
- & 2 ($\ln P_r$) & 0.651\\
- & 3 ($I/W$) & 0.668\\
-$\ln$ yield & 1 ($\ln W$) & 0.531\\
- & 2 ($\ln(1+I)$) & 0.549\\
- & 3 ($\ln P_r$) & 0.599\\
- & 4 (mulch) & 0.604\\
-$\ln$ DPF & 1 ($\ln(W/\TAW)$) & 0.193\\
- & 2 ($\ln\alpha$) & 0.260\\
- & 3 ($I/W$) & 0.422\\
- & 4 ($\Delta T$) & 0.433\\\bottomrule
-\end{tabular}
-\end{table}
-
-If E8 and E9, which break closure, are removed from both fitting and validation (15 experiments, 8\,054 runs), the same three terms give LOEO $R^2=0.882$, LOSO $R^2=0.881$, RMSE 65.9\,mm and MAPE 5.8\,\%, so the law is more accurate (relative error 5.8\,\% versus 9.2\,\%) in the domain for which it is intended. The marginal contribution of the terms is clearer in this subset: $\ln W$ alone gives LOEO $R^2=0.600$ (RMSE 138\,mm), adding $n$ raises it to 0.857 (RMSE 74\,mm) and adding $\ln(1+I)$ to 0.882. A gradient-boosting model restricted to the same three inputs reaches LOEO $R^2=0.778$, below the law, so the advantage of the compact form is not that it uses more information but that its functional form (power law in $W$, exponential in $n$) extrapolates across experiments better than piecewise-constant trees, which cannot extrapolate beyond the range of the training experiments. (This comparison uses three inputs and 15 folds and is not directly comparable with the full-library benchmark of \cref{tab:laws}.)
-
-\Cref{tab:example} applies \cref{eq:ETlaw} to three combinations of water input and irrigation in three soils. At equal input, ET is about 35\,\% lower in sand than in silty clay loam ($263$ versus $406$\,mm at $W=400$\,mm), because water not held in the root zone drains; the implied drainage plus storage change $W-\mathit{ET}$ is 137\,mm in sand and negative-to-small in the fine soils, in line with the memory results. The example is illustrative; its uncertainty is the RMSE of 66--69\,mm.
-
-\begin{table}[H]\centering\small
-\caption{ET (mm\,yr$^{-1}$) predicted by \cref{eq:ETlaw} for three water inputs $W$ with irrigation $I$.}
-\label{tab:example}
-\begin{tabular}{lrrr}
-\toprule
- & $W=400$, $I=0$ & $W=650$, $I=200$ & $W=1000$, $I=300$\\\midrule
-S03 sand ($n=2.68$) & 263 & 420 & 561\\
-S01 coarse loam ($n=1.353$) & 391 & 624 & 834\\
-S10 silty clay loam ($n=1.23$) & 406 & 648 & 865\\\bottomrule
-\end{tabular}
-\end{table}
-
-\label{sec:failures}
-\Cref{tab:laws} collects all sparse laws that were fitted. Transpiration is moderately predictable by a two-term law ($\ln T=-1.329+1.127\ln W-0.501\,n$; LOEO $R^2=0.641$, equal to gradient boosting 0.642). Canopy evaporation is predicted at LOEO 0.668 (gradient boosting 0.691) by $\ln E_c=-13.3-0.470\ln W+3.157\ln P_r+4.240\,I/W$, whose large coefficients reflect the narrow range of $E_c$ and should not be interpreted mechanistically. Crop yield is predicted at LOEO 0.604 (gradient boosting 0.650). In contrast, soil evaporation is poorly predicted by sparse terms ($\ln E_s=3.271-0.770\,n-0.380\,\mathrm{mulch}+0.462\ln P_r$; LOEO 0.308 versus 0.547 for gradient boosting; LOSO 0.348 versus 0.476), indicating that interactions that the library does not contain control $E_s$. The drainage fraction (DPF $=D/W$), the natural target given the PCA result, is the worst: the best sparse model with exogenous predictors has a LOEO $R^2$ of 0.43 and a LOSO $R^2$ of 0.22, against 0.50 (LOEO) for gradient boosting, and allowing partition predictors in the library raises gradient boosting to 0.59 but does not change the sparse law. The shortfall is a negative result for compact drainage laws.
-
-\begin{table}[H]\centering\small
-\caption{Sparse laws and benchmark. cross-validated $R^2$ on the log scale. Selected terms in order of selection.}
-\label{tab:laws}
-\footnotesize\setlength{\tabcolsep}{4pt}
-\begin{tabular}{llrrrr}
-\toprule
-Target & Selected terms & Sparse LOEO & Sparse LOSO & GBM LOEO & GBM LOSO\\\midrule
-$\ln\mathit{ET}$ & $\ln W$, $n$, $\ln(1+I)$ & 0.898 & 0.904 & 0.876--0.879 & 0.881--0.894\\
-$\ln T$ & $\ln W$, $n$ & 0.641 & 0.652 & 0.642 & 0.659\\
-$\ln E_s$ & $n$, mulch, $\ln P_r$ & 0.308 & 0.348 & 0.547 & 0.476\\
-$\ln E_c$ & $\ln W$, $\ln P_r$, $I/W$ & 0.668 & 0.669 & 0.691 & 0.806\\
-$\ln$ yield & $\ln W$, $\ln(1+I)$, $\ln P_r$, mulch & 0.604 & 0.617 & 0.650 & 0.743\\
-$\ln$ DPF & $\ln(W/\TAW)$, $\ln\alpha$, $I/W$, $\Delta T$ & 0.433 & 0.217 & 0.498 & --\\
-$\ln R$ & $\ln(1+I)$, $n$, cap, $\Delta T$ & 0.41$^{\dagger}$ & 0.43$^{\dagger}$ & 0.43--0.47$^{\dagger}$ & --\\\bottomrule
-\end{tabular}
-
-\smallskip\noindent\footnotesize$^{\dagger}$ $R^2$ on the log scale for $R$; level-scale $R^2$ is 0.30 (sparse) and 0.50--0.51 (gradient boosting).
-\end{table}
-
-Because the balance holds to within a few percent in 15 of 17 experiments, drainage can be derived by closure as $\hat D=W-\widehat{\mathit{ET}}$, which converts a hard prediction problem (drainage) into one with a good compact law (ET). On the 8\,054 runs outside E8 and E9 this yields $R^2=0.69$ and RMSE 64\,mm against Daisy drainage (\cref{fig:ETlaw}f), and negative predicted drainage in 4.8\,\% of runs. The accuracy is limited by the relative size of the quantities and is not uniform (\cref{tab:dbins}): the mean absolute error is smallest, 21--28\,mm, for Daisy drainage between 10 and 200\,mm (relative error 19--66\,\%), but the closure-derived value overpredicts by 32\,mm on average for drainage below 10\,mm (1\,944 runs) and \emph{underpredicts} by 69\,mm and 308\,mm for drainage of 200--500 and above 500\,mm. The ET law is smooth in $W$ and cannot represent the large drainage events, so closure-derived drainage is a useful consistency check for moderate drainage and not a predictor of extremes.
-
-\begin{table}[H]\centering\small
-\caption{Closure-derived drainage $W-\widehat{\mathit{ET}}$ (LOEO ET law) against Daisy drainage by drainage class (E8, E9 excluded). Bias = predicted minus Daisy.}
-\label{tab:dbins}
-\begin{tabular}{lrrr}
-\toprule
-Daisy drainage (mm\,yr$^{-1}$) & Runs & Bias (mm) & Mean absolute error (mm)\\\midrule
-$<10$ & 1944 & $+31.7$ & 39.7\\
-10--50 & 2631 & $+8.2$ & 21.0\\
-50--100 & 1736 & $-2.2$ & 25.6\\
-100--200 & 1284 & $-13.7$ & 28.3\\
-200--500 & 377 & $-68.8$ & 104.0\\
-$>500$ & 82 & $-308.1$ & 318.6\\\bottomrule
-\end{tabular}
-\end{table}
-
-\subsection{Irrigation compensation is regime-specific}
-A natural candidate invariant is the compensation of rainfall changes by irrigation, $\kappa$ (\cref{eq:kappa}). It is not universal (\cref{fig:comp}, \cref{tab:kappa}). In single-soil lattices the slope of $W$ on rain is $0.58\pm0.02$ in E11 ($\kappa=0.42$) and 0.33 in E12 and E14 ($\kappa=0.67$), whereas in E16 the pooled $\kappa$ across the ten soils is 0.159 (bootstrap 95\,\% interval 0.134--0.181) and the per-soil values range from $-0.014$ (sand) to 0.303 (coarse loam). Within E16, $\kappa$ falls from 0.193 to 0.123 as $E_p$ is raised from 0.3 to 1.2, from 0.188 to 0.129 with warming from $+2$ to $+6$\,\textdegree C, and from 0.211 to 0.107 with trigger suction from 50 to 2000\,cm, but rises from 0.079 to 0.241 with irrigation dose from 1.2 to 30\,mm. Compensation therefore depends on the scheduling rule and soil, and a single value of $\kappa$ should not be used in water-allocation arguments.
-
-\begin{figure}[H]\centering
-\includegraphics[width=\textwidth]{\figdir/p2/fig06_compensation.pdf}
-\caption{Irrigation compensation $\kappa$ is not universal. (a) Per-soil $\kappa$ in E16 (paired $P=0.5\to1.5$) with the pooled estimate and bootstrap interval. (b) Slope of water input on rain in single-soil lattices (95\,\% intervals). (c) Mean $\kappa$ by factor level in E16.}
-\label{fig:comp}
-\end{figure}
-
-\begin{table}[H]\centering\small
-\caption{Compensation $\kappa=-\Delta I/\Delta P_r$ and the response of ET and drainage to rain, per soil in E16.}
-\label{tab:kappa}
-\begin{tabular}{lrrrr}
-\toprule
-Soil & $\kappa$ & $\Delta\mathit{ET}/\Delta P_r$ & $\Delta D/\Delta P_r$ & Pairs\\\midrule
-S01 & 0.303 & 0.512 & 0.186 & 32\\
-S02 & 0.164 & 0.346 & 0.495 & 8\\
-S03 & $-0.014$ & 0.473 & 0.550 & 32\\
-S04 & 0.084 & 0.473 & 0.453 & 32\\
-S05 & 0.102 & 0.551 & 0.358 & 32\\
-S06 & 0.108 & 0.619 & 0.281 & 32\\
-S07 & 0.216 & 0.542 & 0.246 & 32\\
-S08 & 0.090 & 0.613 & 0.308 & 32\\
-S09 & 0.238 & 0.515 & 0.253 & 32\\
-S10 & 0.302 & 0.477 & 0.237 & 32\\\bottomrule
-\end{tabular}
-\end{table}
+The Manual contains 134 numbered equations (124 carry a tag and ten are rows of aligned groups). Each now carries its provenance label directly beneath it, and a ledger of all 134 is given in the manual's appendices: 38 are \textbf{[Literature]}, 18 are \textbf{[Data-driven]} and 78 are \textbf{[Engineered]}. The labelling was done by reading each equation against its cited source; it records where a relation comes from and does not certify that it is correct. The equations used in this article, including those of the system variables of Section~\ref{sec:system}, are classified in Appendix~\ref{app:ledger}. The engineered ones comprise the root and canopy curves, rainfall and interception generators, wetted-bulb geometry, spray patterns, wind-drift loss and similar heuristics. An independent reader can therefore see that the sprinkler pattern and drift functions have no external validation, whereas the surface layer relies on published equations.
 
 %==========================================================
 \section{Discussion}
 \label{sec:disc}
-\subsection{Contributions of a validated discovery protocol and a quantified accounting gap}
-The paper contributes a discovery protocol in which every stage is tested against a known answer, and a first application that exposes an unclosed term in a widely used process model. The pipeline is blind to variable roles; it recovers the water balance as the dominant invariant, with a permutation null (smallest singular value 5.9 against 33.3 for permuted data), and this positive control is what licenses the interpretation of every other result. Applied to the evapotranspiration partition, the same pipeline quantifies a term that the reported components do not carry, $R\approx164$\,mm\,yr$^{-1}$ or about 30\,\% of ET, and a storage non-closure in two experiments (median 16\,\%). A compact three-term law then predicts ET across withheld experiments and withheld soils (LOEO $R^2=0.898$, LOSO 0.904) as accurately as gradient boosting (0.879 and 0.894). Quantifying a closure gap has a long record as a productive step in flux science: the energy-balance closure problem at eddy-covariance sites, in which turbulent fluxes typically fall 10--30\,\% short of available energy, was characterised across a network and then drove advances in measurement and in the interpretation of flux data \citep{Wilson2002,Foken2008}. The unattributed term $R$ has the same function for model-output accounting: it converts an implicit assumption (that reported components are the total) into a measured quantity that can be traced to a pathway. Stating the recovered invariant for what it is, the known mass balance returned by a blind method, is the credential that makes the new findings credible in a field where discovery claims are often overstated \citep{Rudin2019,Nearing2021}.
+\subsection{What the system variables add}
+\label{sec:disc-swa}
+Representing the whole column, and not only the irrigation decision, changes what a user can ask of the framework. The evaluation for ten soils (Section~\ref{sec:swa}) shows the chain from pore structure to the decision in numbers: retention sets how much of the plant-available water a fixed suction consumes (24 to 84\,\% at $-300$\,cm), which is why the trigger is better expressed as a depletion; the same retention window sets how long the surface stays wet after a wetting, longest in the coarse soils \citep{Lehmann2008}; and under one rainfall the soils divide between evaporation-dominated and drainage-dominated regimes, which decides whether a mulch saving is recovered as less irrigation or lost to drainage. These are the couplings that soil-physics reviews identify as decisive for water use and that a decision tool usually hides \citep{Or2013,Vereecken2016}.
 
-Evapotranspiration partitioning is a central topic, from global studies that infer transpiration fractions \citep{Jasechko2013,Schlesinger2014} to field studies of mulch effects \citep{BalwinderSingh2011}. If a model's reported ET components omit a third of the flux, then a partition fraction computed as $T/(T+E_s+E_c)$ is larger than $T/\mathit{ET}$ by a factor $1/(1-0.30)\approx1.4$ on average, an error comparable with the differences between management treatments that are routinely reported. The size of $R$ also helps to explain why the closure-derived and component-based estimates of soil evaporation differ. For users of Daisy and similar models, the practical recommendation is to compute ET as the model's own total and to report $R$ alongside the components, and to document, in the model output specification, exactly which processes enter the total \citep{Holbak2026}.
+The same evaluation is a test of the engineered relations that no worked example covers, and it found two defects of representation. The leaf water potential of the soil-to-air view is controlled by the floor on the relative conductivity, so it is nearly the same in every soil and more negative than the resistances were chosen to produce; a conductance scaled by saturated conductivity and root length, as in sink-term models \citep{Feddes1978}, would replace the floor. The fate of a mulch saving inherits the coarse-loam drainage increments of E14, so it understates the drainage share in sandy soils, which the ten-soil mulch experiment E7 resolves directly; composing the mulch drainage response from E7 instead would remove the defect. Both are reported as limitations of the released version (Section~\ref{sec:validity}), and both illustrate why the variables of an explanatory view need the same scrutiny as the outputs used for decisions.
 
-\subsection{A map of predictability across the flux budget}
-The ET law works because ET is the large, smooth, sub-linear function of supply that the water-balance literature has described for decades, and because the model's ET is energy- and storage-limited \citep{Budyko1974,Milly1994,Zhang2001}. The drainage fraction is the small residual of two large numbers, it is strongly nonlinear in the wetness of the profile, and it depends on thresholds (field capacity, trigger) that a log-linear library cannot represent \citep{Rodriguez2004}; gradient boosting captures some of this and still only reaches $R^2\approx0.5$ in LOEO. This locates the information boundary: the content that drainage needs lies beyond the annual-flux library (e.g.\ intra-annual timing, event intensity, antecedent state). The companion paper shows that antecedent state is indeed decisive for drainage in coarse soils.
+\subsection{What the evidence supports}
+Taken together the four verification families support four statements. (i) The closed-form design layers implement the published relations: the textbook surface procedure reproduces a worked example to a median of 0.08\,\% and a maximum of 1.8\,\%, and the shipped surface layer, with the one-term correction of its steady-intake term (release~1.1.0), reproduces 13 FAO-45 advance times within $-0.2$ to $+0.5$\,\% and the slow-advance cases of Example~6.1 within $-0.2$ to $+1.8$\,\% (before the correction, up to $-29$\,\%); the drip lateral matches the Christiansen factor to 0.01\,\% and an independent solver to $3\times10^{-7}$ within $h_f/H_0\le0.6$; the sprinkler decision logic, nozzle discharge, wetted diameter ($+1$\,\%) and spacing rule match the textbook. (ii) Engine~1 is a useful screening emulator, with high rank fidelity for irrigation, soil evaporation and drainage, with absolute values that depend on the baseline family; yield and nitrogen estimates are best used for ranking. (iii) Engine~2 conserves mass and reproduces Engine~1's annual irrigation in most realistic scenarios, but not in sandy soils at dry triggers, and its partition is scaled rather than simulated. (iv) Numerical sub-solvers can be accurate in their design range and inaccurate outside it, as the first drip solver was; the failure mode should be flagged to the user, and the revised drip layer does so.
 
-The three-term law is competitive with gradient boosting under LOEO and LOSO, which supports the view that accuracy does not always require opacity \citep{Rudin2019}. The law does not extend to the regimes in which the physics it omits is first-order (initial-state experiments, dynamic hydraulic properties), and the gradient-boosting benchmark fails there too. This agreement is itself informative: it shows that the boundary is set by the information in the library and not by the model class, which tells a modeller which targets can be emulated by compact laws and which need timing and state variables.
+The evidence does not support claims that the software predicts field irrigation requirements, that it improves yields or water productivity, or that it is easier to use than alternatives. The evidence of fidelity is relative to the process model (Daisy) and to textbook examples; Daisy itself has been evaluated in the literature \citep{Hansen2012,Holbak2026} but the ten virtual soils here were not compared with field data. A field comparison (lysimeters or sensor-scheduled plots against the software's schedule and design table) and a user study would be needed to make such claims.
 
-Equation discovery in soil hydrology has so far targeted the governing partial differential equation, notably the Richards equation recovered from soil-moisture time series by group-sparse regression \citep{Song2022,Song2025}, and deep-learning studies have imposed water-balance closure as a constraint on forecasts \citep{Li2024}. The present paper is complementary and differs in its object and its emphasis: it works with annual flux budgets, tests whether a pipeline recovers a known balance before interpreting any other result, audits the closure of the partition that supplies its targets, and validates by withheld regimes. The present approach shares with SINDy-style discovery \citep{Brunton2016} the use of sparse regression over a library, but differs in two respects: it targets steady annual relations rather than dynamics, and it places the validation burden on leave-one-regime-out testing \citep{Roberts2017}. It shares with physics-informed learning \citep{Raissi2019,Karniadakis2021} the emphasis on conservation, but imposes it as a \emph{diagnostic} (closure residual) rather than as a constraint \citep{Beucler2021}; applying it as a constraint would have hidden $R$, which is the finding most relevant to model users. Related work on learning conserved quantities \citep{Liu2021,Iten2020} would be a natural extension to daily dynamics.
+Traceability lets a reviewer or a user ask the right questions: which equation produced this number, where did it come from, and how was it tested? It also made the verification possible, since the test for each layer could be written against a named equation. The cost is documentation: the Manual (with a screenshot atlas in which every screen, every state of every control and every part of every scrolled drawing carries numbered arrows and is paired with its equations, and 134 numbered equations) must be kept synchronised with the code, and, as the label audit of the first release showed, this discipline is easily lost. It is recommended that provenance labels be treated as part of the code review, enforced by a check that every numbered equation carries a label and a source, and that a published-example test accompanies every closed-form layer \citep{Jakeman2006,Refsgaard2004}.
 
-Emulators are used to make process-model knowledge available in fast decision tools \citep{Razavi2012,Asher2015}. The results here indicate which emulator targets are safe: ET and transpiration are predictable from compact laws; drainage and soil evaporation are not, and should be emulated with care or by closure.
+The annual meta-model avoids fitting any parameter by composing simulated ratios; the advantage is that it cannot produce results outside the simulated envelope without clipping, and that its behaviour is explainable by the tables. The disadvantage is revealed by the held-out test: ratios from one experiment family applied to the baseline of another transmit the inconsistency between the baselines. The inconsistency here arises because the baseline for E5 (tillage and structure) used the irrigated cereal setting with different trigger and depth from the baseline of E2, E3 and E12. Two remedies are possible: re-anchor all families to a common baseline run that is part of every experiment (a design remedy), or calibrate an anchor offset per family (a statistical remedy). The first is preferable, as it removes the cause.
 
-A software-level audit would resolve the identity of $R$ directly. Four questions, in order of cost: (i) Which state variables are summed into the output called ``evapotranspiration'' in the log file used here, and which into the three reported components? (ii) Is evaporation from surface ponds, mulch and litter reported in a separate column that was not exported in the ensemble? (iii) Does the canopy-evaporation column represent interception only, excluding evaporation of water retained on residue? (iv) Is the storage term in the model's own water balance consistent with the exported depth and boundary definitions (for example, is the 1\,m drainage column the flux at the bottom of the root zone or the soil column)? If the answer to (ii) is yes, the unattributed term would be explained and the diagnostic here would have served its purpose as an audit.
-
-Random $k$-fold cross-validation of the same models would have produced much higher scores, because runs inside an experiment are close neighbours in factor space. To illustrate the effect on the present data: a model that predicts $\ln\mathit{ET}$ from $\ln W$ alone has LOEO $R^2$ of 0.80 on the full data and 0.60 when E8 and E9 are removed. Leave-one-experiment-out removes entire designs, so the model must extrapolate to unseen combinations of factor ranges, which is exactly what a ``law'' is supposed to do \citep{Roberts2017}. The leave-one-soil-out scores answer a second question: would the law hold for a soil not used to fit it? That the two scores agree for ET (0.898 and 0.904) is evidence that the law is not driven by a single experiment or soil, but it is not evidence of validity in other climates. A nested evaluation, in which the forward selection was repeated inside each training set of 16 experiments and scored only on the held-out experiment, gives a pooled $R^2=0.895$, against 0.898 for the single-level score, and selects the same three terms in 15 of 17 outer folds (the two-term set $\ln W$, $n$ in the other two); the optimism from selecting on the evaluation score is therefore small for this law.
-
-The sub-linear exponent $\partial\ln\mathit{ET}/\partial\ln W=0.646$ can be compared with the elasticity of Budyko-type curves. For a Budyko curve $\mathit{ET}/P=F(\Phi)$ with aridity index $\Phi=\mathit{PET}/P$, the elasticity of ET to $P$ lies between 0 (energy limit) and 1 (water limit) and is about 0.5--0.8 at intermediate aridity \citep{Milly1994,Zhang2001,Budyko1974}. The fitted value is within that range. Unlike the Budyko approach, which treats catchment properties via a single parameter, the present law includes a soil term ($n$): the fitted coefficient implies that a unit increase in $n$ reduces ET by 26\,\% ($1-e^{-0.299}$) at fixed $W$, which can be read as the dependence of the effective Budyko parameter on soil hydraulic uniformity. The law is not claimed to be a Budyko curve; the mapping would require PET as a variable, and PET is constant within the weather series used.
+The combination of mulch and warming multiplies ratios taken from separate experiments. The independence assumption is plausible but the companion hydraulic-memory paper shows that the drainage response to evaporation changes depends on climate (warming and rainfall change the recoverable share of an evaporation saving), which suggests that the mulch effect is not independent of climate for the drainage and irrigation fluxes. A crossed experiment would test this.
 
 
-A sequential protocol follows from these results and is offered as a general template for discovery studies in hydrology. The first element is a positive control: the pipeline is applied to a system whose governing balance is known, and it must recover that balance with a null-referenced uncertainty, as the permutation test and bootstrap do here for the water balance \citep{Efron1993,Good2005}. The second is a closure audit of every partition used as a target, since a decomposition that omits a term will propagate that omission into every law fitted to it, as the unattributed term $R$ propagates into the transpiration and soil-evaporation fractions. The third is regime-wise validation, in which whole experiments, soils or climates are withheld, because random folds inside a designed ensemble measure interpolation between neighbouring factor combinations and not transfer to a new regime \citep{Roberts2017}. The fourth is a comparison with a flexible benchmark, reported with the cases in which the benchmark is better, so that the interpretability premium can be read directly \citep{Rudin2019,Friedman2001}. The fifth is a stated domain of validity for each law, expressed in the experiments and soils for which the leave-one-out score exceeds a stated threshold.
+Reviews of irrigation decision-support tools identify recurring needs for physics-informed and process-based components, for open and FAIR software, for uncertainty handling, and for shared benchmarks and reproducible releases, and note that accuracy is often demonstrated against calculated or simulated targets and not against operational endpoints \citep{Umutoni2024,Zhang2021ERL}. The present contribution addresses the needs for open, process-based and reproducible software at the level of the individual equation: provenance labels, a published map from displayed quantity to equation, and verification against references that exist outside the software, including a published design textbook. It does not address sustained multi-season savings or cross-site transfer, which are outside the scope of this verification, and the verification reported here should be read as a necessary step before field validation. The verification suite also clarifies the roles of the three computing components in a decision. The closed-form design layers are suited to design calculations in which the user supplies the field geometry, soil intake and supply, because their outputs are determined by the equations and were reproduced against published values. The annual meta-model is suited to comparison of management options, because it preserves their ordering with a rank correlation of 0.64 to 0.97 across the variables tested, and because each of its outputs is a composition of simulated ratios that can be inspected. The daily model is suited to the timing and size of events within a season and to the visualisation of the field water balance; its seasonal means are tied to the annual meta-model by construction, and its within-season timing is a model result that a field experiment would test.
 
-The unattributed term $R$ also defines a concrete verification programme for the process model. Three comparisons would identify it. First, an ablation in which individual surface and canopy evaporation pathways are switched off in turn would show which pathway removes $R$ from the balance. Second, a tracer-style accounting that records every term added to the evaporative flux in the model log, with its state variable of origin, would establish whether $R$ is a reporting convention or a physical pathway. Third, a comparison across structurally different models (Richards-based, capacity-based and radiation-driven) on the same designed ensemble would show whether a non-closing partition is a feature of one model family or a property of how evapotranspiration is partitioned in general \citep{Simunek2008,Jones2003,Keating2003,Steduto2009}. The experimental data that would constrain the physical interpretation are lysimeter and eddy-covariance records in which evaporation of intercepted and ponded water is measured separately from transpiration \citep{Good2015,Jasechko2013,Schlesinger2014}.
+Equation traceability is a property that can be audited in any decision tool. A reviewer can select a displayed quantity, locate its equation in the manual, check the equation against its source, and re-run the test that supports it; the procedure requires no access to the developers. The audit of the manual shows where the procedure applies most strongly (the surface and drip layers, whose equations are published), and where the provenance rests on engineered functions (spray patterns, wind drift, wetted-bulb geometry). This distinction is useful to users: a user relying on the surface layer relies on published theory that has been reproduced against its textbook; a user relying on the sprinkler pattern relies on an engineered shape and should confirm it with manufacturer data. The wetted radius, which the first version under-predicted by 14\,\% for the example nozzle until its coefficient was replaced by the published value, illustrates the point, since the range law is a coefficient on a general expression and a manufacturer's table is the proper reference for a specific nozzle \citep{Keller1990,Playan2005}.
 
-Beyond hydrology, the same sequence of controls is relevant to other settings in which a regression of a conserved quantity on its drivers is read as a discovered relation. Sparse regression over a library is attractive because the result is an equation that can be examined, dimensionally checked and compared with theory \citep{Brunton2016,Udrescu2020,Champion2019}. Its reliability, however, depends on the design of the data. In an ensemble built by crossing factors, several drivers are correlated by construction, and the selection path of a forward algorithm reflects that correlation; the leave-one-experiment-out score then serves two roles, as selection criterion and as validation, which is why the LOSO scores, which are less affected by selection, are reported alongside it. The practical consequence is that the coefficients of a discovered law should be reported with the validation regime in which they were obtained, and that a law should be described as discovered only for the regimes in which it is validated.
 
-Finally, the results bear on the design of the emulators and decision tools that draw on process-model ensembles. A tool that reports evapotranspiration components should state whether they sum to the total; one that reports drainage should state whether it is simulated or derived by closure, and the evidence here shows that closure-derived drainage is accurate in sign and rank order but under-estimates large drainage. Emulators built on such ensembles should also be tested against held-out simulations \citep{Razavi2012,Asher2015,Wilkinson2016}.
+Field evaluation is the step that converts verification into validation. A suitable design compares the software's recommended triggers and doses with sensor-scheduled plots on contrasting soils, records applied water, drainage below the root zone and yield, and evaluates the software with the efficiency and bias statistics that are standard for model evaluation \citep{Moriasi2007,Nash1970,Bennett2013}. For the design layers, field evaluations of surface advance, drip emission uniformity and sprinkler catch-can uniformity provide the corresponding data \citep{Walker1987,Burt1997,Playan2005}. The open availability of the code, the manual and the verification scripts allows such an evaluation to be carried out by any group and compared with the results reported here.
 
-\subsection{Domain of validity of the discovered laws}
-Each law is reported with the regimes in which it was validated, and each boundary defines the next test.
+Equation-traceable software has teaching and extension uses in addition to its use for decisions. A student can follow a number from the dashboard to the equation, to the source, to the test, and can modify the inputs to see how the number responds. A practitioner can obtain a transparent first estimate before commissioning a field-specific simulation. For both uses the relevant feature is that the numerical behaviour of each layer is documented together with its range of verified operation, so that the tool states what it can be relied on for \citep{Wilkinson2016,Hutton2016}.
+
+\subsection{Operating envelopes established by independent verification}
+\label{sec:discrep}
+A tool that exposes its equations earns trust only if each layer is tested against something outside itself and the test is reported with the range in which it holds. The verification programme therefore delivers, for every layer, an \emph{operating envelope}: the inputs and the decision purpose for which agreement with an external reference has been shown, with the mechanism that fixes its edge. Verification separates errors in the implementation of a relation from limitations of the relation and of the reference against which it is judged \citep{Oreskes1994,Refsgaard2004}, and a deviation bears on fitness for purpose only relative to that purpose: a bias is immaterial for ranking options and decisive for budgeting water \citep{Bennett2013,Moriasi2007}. The envelopes below are the substantive result of the work, and they are what allows each layer to be used with a stated confidence.
+
+\paragraph{Engine~1 and a diagnosed anchoring effect with a design remedy.} Before alignment Engine~1 over-predicts ET by 53\,mm and irrigation by 71\,mm\,yr$^{-1}$ in the held-out experiment (\cref{tab:e1}). The structure of the error identifies its cause. A random error averages out over 1\,000 runs; a constant offset does not, and after one baseline cell is aligned the biases fall to $+5.5$ and $+8.3$\,mm\,yr$^{-1}$ while the rank correlations are unchanged (0.84 and 0.96). The offset therefore belongs to the construction, ratios formed within one experiment family and applied to the baseline of another, and not to the ratios. In the literature on computer-model calibration this is a systematic model discrepancy, which \citet{Kennedy2001} argued should be represented explicitly and not treated as independent noise. Reviews of surrogate modelling likewise stress that a surrogate inherits the properties of the design that trained it, and that the design should cover the region of use \citep{Sacks1989,Razavi2012,Asher2015}. The proposed design remedy, one common baseline cell in every experiment family, is the direct expression of that principle. That the offset was invisible in the tables used to build the engine and appeared only in an independent experiment is the usual case for held-out testing over internal consistency checks \citep{Oreskes1994,Bennett2013}. Until the remedy is built in, absolute Engine~1 values carry the offset, and the supported use is the comparison of options within a family.
+
+\paragraph{Engine~1 and rank fidelity as the decision-relevant skill.} After re-anchoring, $R^2$ is $-0.11$ for ET and $-2.33$ for yield while $\rho$ is 0.84 and 0.70 (\cref{tab:e1}). The two statistics answer different questions and are compatible. $R^2$ here is measured against the mean of the held-out observations; the coefficient of variation of ET across the cells of E12 is only 5.9\,\%, so an RMSE of 6.2\,\% of the mean is comparable to the spread to be explained, and a small residual bias then dominates the ratio. Correlation-type measures can be insensitive to additive and proportional errors \citep{Legates1999}, which is why model-evaluation guidance asks for several complementary statistics and not one \citep{Moriasi2007,Bennett2013}. Reporting rank and absolute metrics separately is therefore not hedging. Rank agreement is the relevant statistic when the decision is a choice between options, as in screening and factor prioritisation \citep{Saltelli2008}; absolute error is the relevant statistic when a quantity is budgeted. Yield is the exception that the data support: its bias ($-1.15$\,Mg\,ha$^{-1}$), the stepped response produced by the engine's lookup structure and the weakest useful rank correlation (0.70) define the role of yield as a ranking output, which is how the software presents it.
+
+\paragraph{Engine~2 and an envelope mapped to sensor practice.} The ten scenarios in which Engine~2 and Engine~1 disagree are all coarse soils at triggers of $-500$ or $-1000$\,cm (sand, loamy sand and, at $-1000$\,cm, sandy loam); in six of them the bucket model never reaches the trigger because its layers drain below it, so no irrigation is applied, and in the other four it reaches the trigger too rarely to calibrate (over-irrigation in loamy sand at $-500$\,cm, 8--11 against 15\,mm in sandy loam at $-1000$\,cm). These triggers lie outside the range in which sensor-based scheduling is practised in coarse soils. Extension guidance for tensiometers places irrigation triggers for sandy soils at about 20--30\,kPa and for silty clay loams at 50--60\,kPa, and notes that the instrument functions reliably only to about 80\,kPa, beyond which the water column breaks \citep{Alam1997}. A trigger of $-500$\,cm ($\approx49$\,kPa) is therefore well above the usual range for sand and loamy sand, and $-1000$\,cm ($\approx98$\,kPa) is beyond the working range of the instrument whose signal the trigger law represents. The disagreement thus marks the boundary of the daily-bucket formulation in a regime that practice avoids, and the zero-irrigation outcome is an explicit failure rather than a silent error, whereas the over-irrigation in loamy sand at $-500$\,cm is not flagged and should be. It also reflects that the field-capacity convention of 100\,cm suction, adopted from \citet{Allen1998}, is a convention whose appropriateness varies with the soil \citep{Twarakavi2009,Assouline2014}. The practical consequences are to flag triggers beyond the sensor range for a given texture and to read the Engine~1 value, which is the Daisy scheduler's own result, for those cells. The unscaled partition of Engine~2 does not match Engine~1, and its unscaled drainage scatters around Engine~1 by factors of two to five. Mass closure is a necessary condition and not evidence that the partition is right, since agreement in totals does not confirm the process representation \citep{Oreskes1994}; this is why the displayed series are scaled to Engine~1 and why timing within the year is labelled plausible but unverified.
+
+\paragraph{Drip lateral and a convergence-controlled solver with a declared range.} The first solver used four fixed iterations. Its error was at most 0.13\,\% for $h_f/H_0\le0.2$, but up to 81\,\% for $0.2<h_f/H_0\le0.6$ and 89\,\% above (\cref{tab:drip}). The conventional design criterion limits lateral loss to about 20\,\% of the operating head \citep{KellerKarmeli1974,Keller1990}, so the defect lay where a lateral would normally be redesigned, but a user could still reach that region by changing inputs, and a design tool must report its own range of validity. Iterations of this kind typically converge more slowly as the loss ratio grows, so a fixed number of passes stops short; iterating to convergence removed the defect within $h_f/H_0\le0.6$ ($3.2\times10^{-7}$). The residual 31\,\% above 0.6 occurs where the head reaches the model's 0.5\,m floor, a configuration that is not a usable design and that triggers a warning. The independent solver used here is numerical, which tests the implementation of the iteration. The lateral-hydraulics literature offers analytical and alternative numerical solutions that would add evidence of a different kind \citep{Warrick1988,Scaloppi1993}.
+
+\paragraph{Sprinkler with a published range law and a calm-condition uniformity bound.} The first version gave a wetted diameter of 24.7\,m against the textbook 28.7\,m ($-14$\,\%). The range law is a general expression with an empirical coefficient, and the textbook value follows the coefficient published with it \citep{Keller1990}; adopting it gives 28.98\,m ($+1.0$\,\%). The error was therefore one of the parameter, not of the structure, and it identifies the reliance that a user can place on the layer: for a specific nozzle the manufacturer's range and pressure table is the proper reference. The wind term is a different case. It changes CU by less than 0.2 percentage points at $3$\,m\,s$^{-1}$, whereas field experiments find wind to be the dominant influence on uniformity: in a solid-set maize field wind speed explained a large share of the variation in CU, with CU of about 80\,\% for single events against 88\,\% over the season, and yield variability followed that of applied water above 2\,m\,s$^{-1}$ \citep{Dechmi2003}; wind drift and evaporation losses have been quantified in solid sets and moving laterals \citep{Playan2005}. The engineered wind response is therefore too weak, which is why it is marked as not for design: the CU the layer returns is an upper bound for calm conditions.
+
+\paragraph{Surface irrigation and agreement at the precision of the published tables.} The residuals of the reference implementation against the textbook (median 0.08\,\%, maximum 1.81\,\%) and of the shipped layer against FAO-45 (13 advance times, $-0.2$ to $+0.5$\,\% after the correction) have identifiable sources: printed values are rounded or tabulated at limited precision, and the volume-balance method with fixed shape factors is itself an approximation to the advance process \citep{Walker1987,Elliott1982}. Their size matters only against the uncertainty of the inputs. Soil variability contributes more to the variability of furrow infiltration within a single field than does intake opportunity time \citep{Childs1993}, so errors of a few per cent in advance time are small beside the uncertainty in the intake parameters that a user must supply. One printed value, the later-irrigation $E_a$ at $Q=0.10$\,m$^3$\,min$^{-1}$ (53.0\,\% in the copy used against 33.5\,\% computed), was excluded because it breaks the monotone trend of its neighbours (44.2\,\% and 52.5\,\% at lower flows). The exclusion is a judgement and is disclosed as such; had the entry been kept, the maximum error would be $-36.7$\,\%. The entry should be checked against a physical copy of the source, and the software value is the one consistent with the trend.
+
+\paragraph{Mulch and warming as a specified crossed experiment.} Combining mulch and warming multiplies ratios taken from separate experiments. No experiment crosses the two factors, and one-factor-at-a-time designs cannot detect interactions \citep{Saltelli2008}; the companion hydraulic-memory analysis indicates that the drainage response to evaporation change depends on climate. The multiplicative composition is therefore a transparent, falsifiable hypothesis for drainage and irrigation, and a crossed factorial of mulch and warming is the experiment that tests it.
+
+Read together, the envelopes sort the software's outputs by the kind of reliance they support. Closed-form design outputs (surface advance, drip lateral loss, sprinkler discharge and diameter) are reproduced against external references to within a few per cent inside stated ranges, including slow surface advance with steady intake since the correction of the third defect. Screening outputs (Engine~1 irrigation, evaporation and drainage) preserve the ranking of management options. Scheduling outputs (Engine~2) conserve mass to 0.1\,\% (median) and match the annual irrigation across the realistic part of the trigger range. Each envelope has a mechanism, a stated test and a reported edge, and no edge is hidden inside an aggregate statistic. Documenting where each layer holds is itself a methodological contribution: it converts a decision tool from a black box that is believed into an instrument whose range of use can be checked by a reader.
+
+\input{p3_workflow.tex}
+
+\subsection{Domain of validity and the field-validation programme}
+\label{sec:validity}
 \begin{enumerate}[nosep]
-\item \emph{Process-model domain.} The results describe Daisy output. $R$ is a property of the model's accounting; its counterpart in nature is measured in lysimeters and eddy-covariance records that separate intercepted and ponded water from transpiration.
-\item \emph{Failed runs.} The 149 excluded runs (87\,\% in S02) form a pattern that identifies them as solver failures (\cref{sec:failed}); re-running with tighter tolerances is the confirming step, and S02 is under-represented at large doses and extreme rain scales.
-\item \emph{Model and weather.} One model and one climate; the laws are conditional on both, and the leave-one-regime-out protocol is designed to be repeated on further models and climates.
-\item \emph{Selection.} Forward selection used the LOEO score; the nested evaluation, with selection repeated inside each training set, gives $R^2=0.895$ against 0.898 for the ET law, so the selection optimism is small. LOSO values are less affected by selection.
-\item \emph{Dependence of runs.} Coefficient standard errors assume independent runs; cross-fold variation is the reported guide to uncertainty.
-\item \emph{Soil covariates.} Ten soils; $n$ carries several correlated soil properties.
-\item \emph{Identification of $R$.} Its surface-layer origin is inferred from its driver dependence, and the four-question audit of the model code in this section settles it.
-\item \emph{Aggregation.} Twenty-year means average over seasonality and event structure; the companion work addresses antecedent state.
-\item \emph{Benchmark reproducibility.} The gradient-boosting benchmark is run with a fixed random seed. Across unseeded repeats the LOSO score varied by up to 0.013, so differences below about 0.02 between a law and the benchmark are not interpreted.
+\item Validation status. The verification has not yet been extended to field or user data, and uncertainty propagation is not included. It is against published worked examples and relations, which tests that equations are implemented as written; it does not test that they describe a given field. The published examples are few (two for surface irrigation, one for sprinkler design, relations only for drip), and no field data for drip or sprinkler systems exist in the repository.
+\item One climate (Taastrup) and one cereal rotation in the simulations behind Engine~1; the daily model and the design modules run on any weather that the user chooses (see the release paragraph above), but the meta-model does not extrapolate to it. Release~1.0.0 scaled the cereal result by fixed legume and vegetable multipliers; release~1.1.0 replaces them by 48 library crops (field crops, vegetables, trees, vines and palms) to which the cereal result is transferred by the ratio of two daily FAO-56 root-zone balances on the same weather years, so the values of these crops are transfers and not Daisy simulations.
+\item Engine~1 baseline offset between experiment families; yield is used for ranking.
+\item Engine~2 partition and drainage are scaled to Engine~1; irrigation is not matched in sand and loamy sand at dry triggers.
+\item Sprinkler range coefficient verified only for the impact type (+1\,\% in diameter); the coefficients of the rotating-spray, micro-sprinkler and big-gun types, the pattern shapes, the wind term (which barely changes CU) and the drift function are engineered and unverified.
+\item Drip laterals with loss above 60\,\% of the inlet head are not solved reliably (flagged by a warning), and the wetted-bulb geometry is engineered and untested against measured wetting patterns.
+\item Single-soil experiments. E11 (warming and rain) and E14 (mulch and rain) cover the coarse loam only, so the drainage and leaching increments of mulch and rainfall, and the nitrate cost of drainage, are the same in every soil; the drainage share of a mulch saving is understated in sandy soils.
+\item Water-potential path. The soil resistance is at its cap on most crop days, so the leaf potential is set by the conductivity floor and not by the soil; the soil-to-air view is qualitative.
+\item Partition of evaporation. $E_{\mathrm{oth}}$ (43--61\,\% of ET) is the remainder of the simulated partition and includes an unattributed term; the field view labels it interception.
+\item Documentation. Provenance labels record origin, not correctness.
+\item Surface layer. In release~1.0.0 the steady-intake term of the advance volume balance used a fixed advance exponent of 0.55, which under-predicted slow advance when $f_0>0$ (up to $-29$\,\% in Example~6.1); release~1.1.0 iterates the exponent, which removes the error. Examples~6.1 and 6.4 verify the textbook procedure through a reference implementation; the shipped layer is verified against FAO-45.
+\item Engine~2 over-irrigates without a warning in loamy sand at $-500$\,cm.
+\item Atmosphere. The evaporative demand and relative humidity of the explanatory views are engineered (no radiation, vapour-pressure-deficit or wind term), and the available-water capacity of the daily model is a texture-class constant that is not derived from the van~Genuchten retention used for depletion (e.g.\ sand 0.6\,mm\,cm$^{-1}$).
+\item Textbook Example 6.1: one printed value (later-irrigation $E_a$ at $Q=0.10$) does not follow the monotone trend of its neighbours in the printed table and was excluded from the comparison.
 \end{enumerate}
 
-(1) Begin with a positive control with a known answer. (2) Use a permutation null for any decomposition-based invariant. (3) Validate across \emph{regimes} (experiments, soils, climates), not only across random folds. (4) Audit partitions for closure before using them as targets. (5) Compare with a flexible benchmark and report where the benchmark wins. (6) State a domain of validity for each law. (7) Publish failures.
+Process-based models (HYDRUS, DSSAT, APSIM, AquaCrop, Daisy) and decision platforms emphasise physical or biological realism and require setup and data; SWAFL emphasises immediacy and transparency at the cost of fidelity. A reasonable workflow is to use a process model for site-specific prediction and an equation-traceable emulator for scenario screening, teaching and design checks, and to use verification suites such as the one presented here to document the boundary between the two \citep{Razavi2012,Asher2015}. The method of verifying against textbook worked examples is generic and could be applied to other design software.
+
+\paragraph{Recommendations for decision-support software.} (1) Label provenance per equation. (2) Test every closed-form layer against a published worked example and publish the test. (3) Test every emulator against held-out simulations and report rank and absolute metrics separately. (4) Check solver convergence and warn users when the design is outside the validated range. (5) Publish failure cases. (6) Version the data and the code together, with an archive DOI \citep{Wilkinson2016}.
 
 %==========================================================
 \section{Conclusions}
-A blind linear-invariant search recovers the water balance from a flux matrix with every coefficient within 5\,\% of the exact value, calibrated against a permutation null, and flags two accounting gaps: an unattributed evapotranspiration term averaging 164\,mm\,yr$^{-1}$ (30\,\% of ET) that depends on irrigation method, evaporation factor and mulch, and a storage non-closure of 16\,\% in the two initial-moisture experiments. Compositional PCA shows that a single drainage--evaporation axis dominates water partitioning, with a variance share (52--89\,\%) that depends strongly on how zero drainage is handled. A three-term law, $\ln\mathit{ET}=2.503+0.646\ln W-0.299\,n+0.029\ln(1+I)$, matches gradient boosting in leave-one-experiment-out ($R^2=0.898$) and leave-one-soil-out ($R^2=0.904$) validation, while sparse laws for drainage fraction, soil evaporation and the unattributed term do not, and irrigation compensation is not a universal constant. The conclusions are limited to a single process model and weather series, and the discovered ``law'' is the known balance together with a diagnosed accounting gap.
+SWAFL Desktop models the coupled soil--water--atmosphere system of a field column, with five compartments, six water fluxes and the storage change, twelve controls and the relations that link pore structure, retention, evaporation, mulch, roots, the water-potential path, drainage, nitrogen and seven feedback loops to the irrigation decision, and it shows that an offline decision tool can be built in which every output is tied to a numbered equation, a provenance label and a re-runnable check. Evaluated for ten soils, the variables show the coupling quantitatively: a common $-300$\,cm trigger uses 24--84\,\% of the plant-available water, stage-1 evaporation lasts 1.1--3.0 days, and drainage ranges from 28 to 164\,mm\,yr$^{-1}$ under the same rainfall; the same evaluation found that the leaf water potential is set by a conductivity floor and that the drainage share of a mulch saving is understated in coarse soils. The checks show that the textbook surface procedure and the shipped sprinkler layer reproduce published worked examples and that the shipped surface layer reproduces published advance times (surface: median error 0.08\,\%, maximum 1.81\,\% for the reference implementation against one source and $-0.2$ to $+0.5$\,\% for the shipped layer against a second; drip lateral loss to 0.01\,\% of the Christiansen factor; sprinkler wetted diameter $+1$\,\%), that its annual meta-model is a rank-faithful but anchor-sensitive screening emulator (Spearman 0.64--0.97; off-axis nRMSE 6.2\,\% for ET and 18.9\,\% for irrigation after re-anchoring), that its daily model conserves mass and reproduces the annual irrigation in 90\,\% of realistic scenarios but not in sand at dry triggers, and that its drip solver, now iterated to convergence, is reliable up to a head loss of 60\,\% of the inlet head and warns beyond 20\,\%. Verification exposed three defects: the sprinkler range coefficient and the drip iteration count, which were corrected in the first released code, and a fixed advance exponent in the surface layer's steady-intake term, which under-predicted slow advance (up to $-29$\,\% in Example~6.1) and is removed in release~1.1.0 by iterating the exponent; the provenance labelling is now complete for all 134 equations. The baseline offset, the unverified range coefficients of three sprinkler types, the wind term, the single-soil mulch and warming increments and the conductivity floor of the water-potential path remain open. Field validation remains the necessary next step and is not claimed here.
 
-\section*{Companion papers and release 1.1.0}
-The audit of the water balance in this paper uses the 17-experiment Daisy ensemble (10\,190 runs). Release 1.1.0 of SWAFL Desktop adds the Daisy workbench (Paper~4), the Daisy--SWAFL bridge, which includes a chemical budget closed by the same logic of closure (Paper~5), and a deterministic phenotyping layer whose soil water balance closes to $4\times10^{-5}$\,mm (Paper~6). The results of this paper were regenerated after these changes and are unchanged.
+\section*{Release 1.1.0 and companion papers}
+This paper describes the engines and design modules. Release 1.1.0 adds a graphical Daisy workbench together with the bridge from Daisy output to the decision layers (Paper~3) and, in the whole suite (Paper~3), a library of 48 crops, deterministic phenotyping, a field sketch, Sentinel-2 indices, zone-by-zone variable-rate irrigation and field reports. The weather of the application is a choice and not a fixed record: the built-in benchmark record, seven bundled Daisy stations in five countries, a file of the user (CSV, Excel, Daisy DWF, DLF or DAI), online weather of any place on Earth from the Open-Meteo archive, or DMI open data can be used, and any working date from 1980 to 2100 can be set. The 10\,190 simulations behind Engine~1 remain those of one weather record (Taastrup, 1980 to 1999). The working date of the application is now the date of the toolbar, which moved the Engine~2 closure maximum of \cref{fig:e2}a from 0.78 to 0.70\,\% of inflow (the median, 0.1\,\%, is unchanged).
 
-\section*{Data and code availability}
-\dataavail
+\section*{Software, data and code availability}
+\softavail
 
 \section*{Author contributions}
-N.H.: conceptualisation, analysis, software, visualisation, writing.
+N.H.: software, verification, writing.
 
 \section*{Funding}
 No funding was received for this work.
@@ -616,48 +582,91 @@ The author declares no competing interests.
 \bibliography{refs}
 
 \appendix
-\section{Supplementary information}
-The analysis was exploratory and was not pre-registered. The main analytical decisions were: the four controls (permutation null, bootstrap, LOSO/LOEO, gradient-boosting benchmark); the forward-selection stopping threshold (0.003); log-targets; the exclusion of E8 and E9 as a sensitivity analysis for the invariant search and for closure-derived drainage; and the treatment of $R$ as a remainder. The candidate library was assembled by the author with knowledge of the ensemble and of the companion hydraulic-memory results (for example, the choice to include $n$, $\ln\alpha$ and $\ln W/\TAW$), which increases researcher degrees of freedom; readers should treat LOEO and LOSO scores as indicative rather than as confirmatory error rates.
+\section{Equation ledger}\label{app:ledger}
+\begin{longtable}{p{1.7cm}p{1.6cm}p{4.9cm}p{2.2cm}p{3.4cm}}
+\caption{Equations of this article, their manual numbers, provenance and source.}\\
+\toprule
+Eq. & Manual & Content & Provenance & Source\\\midrule\endfirsthead
+\toprule Eq. & Manual & Content & Provenance & Source\\\midrule\endhead
+\cref{eq:vgP3} & 5.1 & van~Genuchten retention & Literature & \citet{vanGenuchten1980}\\
+\cref{eq:mualemP3} & 5.2 & Mualem relative conductivity & Literature & \citet{Mualem1976}\\
+\cref{eq:depl} & 5.3 & depletion fraction between 100 and 15\,849\,cm & Literature & \citet{Allen1998}\\
+\cref{eq:E1E}--\cref{eq:E1N} & 5.4--5.10 & ratio/lookup composition for $E,T,\mathit{ET},I,Y,D,N_L$ & Data-driven & Daisy ensemble\\
+\cref{eq:corr} & 5.11 & set-specific corrections & Data-driven & E2, E3, E4, E13\\
+\cref{eq:E1close} & 5.12 & non-negativity, ceiling, closure window & Engineered & --\\
+\cref{eq:rain} & 5.15 & rainfall generator & Engineered & --\\
+\cref{eq:interc} & 5.16 & interception & Engineered & --\\
+\cref{eq:transp} & 5.22--5.23 & transpiration and stress & Engineered (Literature form) & \citet{Allen1998}\\
+\cref{eq:scale} & 5.24--5.25 & scaling and daily closure & Engineered & --\\
+-- & 11.1--11.2 & Saxton--Rawls pedotransfer & Literature & \citet{Saxton2006}\\
+-- & 11.3 & wetting-front suction & Engineered & --\\
+\cref{eq:GA} & 11.4--11.5 & Green--Ampt & Literature & \citet{GreenAmpt1911}\\
+\cref{eq:kost} & 11.6--11.7 & Kostiakov fit & Literature & \citet{Kostiakov1932}\\
+-- & 11.8 & Manning & Literature & \citet{Manning1891}\\
+\cref{eq:vb} & 11.9--11.11 & volume balance & Literature & \citet{Walker1987,Elliott1982}\\
+-- & 11.12--11.13 & alternative advance laws & Engineered & course notes\\
+\cref{eq:vols,eq:eff} & 11.15--11.19 & depths, volumes, efficiencies, CU & Literature & \citet{Walker1987,Burt1997,Christiansen1942}\\
+-- & 11.20--11.21 & hydrograph and recession & Engineered & --\\
+\cref{eq:HW} & 12.3--12.5 & Hazen--Williams, emitter equation & Literature & \citet{Hazen1905,KellerKarmeli1974}\\
+\cref{eq:Eu} & 12.7--12.8 & emission uniformity & Literature & \citet{KellerKarmeli1974}\\
+-- & 12.9--12.15 & wetted bulb and losses & Engineered & --\\
+-- & 12.16--12.19 & emitter spread and efficiencies & Engineered & --\\
+\cref{eq:nozzle} & 13.2--13.3 & nozzle, wetted radius & Literature / Engineered & \citet{Keller1990}\\
+-- & 13.4--13.7 & pattern, wind, overlap, CU & Engineered & \citet{Christiansen1942}\\
+-- & 13.8 & wind drift and evaporation & Engineered & --\\
+-- & 13.9--13.12 & intake, ponding, efficiencies & Engineered & --\\
+-- & 13.13--13.23 & checklist, pipes, pump & Literature & \citet{Keller1990,Blasius1913}\\\midrule
+\multicolumn{5}{l}{\emph{System variables (Section~\ref{sec:system})}}\\
+\cref{eq:balance} & 5.12, 5.25 & water-balance identity & Literature & --\\
+\cref{eq:cover} & 5.13--5.14 & canopy cover & Engineered & --\\
+\cref{eq:redis} & 5.17 & layer redistribution & Engineered & --\\
+\cref{eq:rmax,eq:rd,eq:rootdens} & 5.18--5.20 & rooting depth and root density & Engineered & --\\
+\cref{eq:e0} & 5.26 & evaporative demand under warming & Engineered & --\\
+\cref{eq:Zn} & 5.27 & net irrigation depth & Literature (engineered clip) & \citet{Allen1998}\\
+\cref{eq:Ny} & 6.1--6.2 & days beyond the trigger & Data-driven & Daisy daily output\\
+\cref{eq:invdepl} & 6.3--6.4 & inverse depletion; net depth per soil & Literature & \citet{vanGenuchten1980,Allen1998}\\
+-- & 6.5 & relative yield at the trigger & Data-driven & E2\\
+\cref{eq:layer,eq:psisoil} & 7.1 & layer suction, root-zone potential & Literature (engineered floor) & \citet{vanGenuchten1980}\\
+\cref{eq:spac} & 7.2--7.4 & series resistances, root, stem, leaf potential & Engineered & \citet{vandenHonert1948}\\
+\cref{eq:psiair} & 7.5 & air water potential & Literature & \citet{Nobel2009}\\
+\cref{eq:share} & 7.6 & share of root zone beyond the trigger & Engineered & --\\
+\cref{eq:pore} & 8.1 & pore space and consolidation & Engineered & \citet{Flanagan1995}\\
+\cref{eq:poros} & 8.2 & porosity and residual content & Engineered & --\\
+-- & 8.3 & retention $\theta(h)$ & Literature & \citet{vanGenuchten1980}\\
+\cref{eq:jurin} & 8.4 & capillary radius & Literature & \citet{Hillel1998}\\
+\cref{eq:drivers} & 8.5--8.6 & tillage and consolidation effects; regression on clay & Data-driven & E5\\
+\cref{eq:zp} & 8.7 & depth holding a share of uptake & Engineered & --\\
+\cref{eq:mulchdelta} & 9.1 & mulch effects on the fluxes & Data-driven & E7, E11, E14\\
+\cref{eq:twostage} & 9.2--9.3 & two-stage evaporation & Engineered & \citet{Ritchie1972,Philip1957}\\
+\cref{eq:front} & 9.4--9.5 & drying front and suction profile & Engineered & --\\
+\cref{eq:fate} & 9.6--9.7 & fate of saved evaporation & Data-driven & E7, E11, E14\\
+\cref{eq:regime} & 9.8 & regime index & Engineered & --\\
+\cref{tab:loops} & 10.1 & feedback-loop arrow width & Engineered & --\\
+\cref{eq:kappaN} & 10.2 & nitrate cost of drainage & Data-driven & E11\\\bottomrule
+\end{longtable}
 
-The seven-flux search also returns weights on transpiration, soil evaporation and canopy evaporation in its smallest direction (rain 0.896, irrigation 0.834, ET $-1$, transpiration 0.367, soil evaporation 0.121, canopy evaporation $-0.122$, drainage $-0.933$), which is not a clean invariant: because $T+E_s+E_c+R=\mathit{ET}$ and $R$ is not a column, the seven-column matrix has an additional near-dependence that mixes components. This is why the four-flux system is the clean positive control.
-
+\section{Verification tests and reproducibility map}\label{app:repro}
 \begin{table}[H]\centering\small
-\caption{Columns of the ensemble used in this paper.}
-\begin{tabularx}{\textwidth}{llX}
+\caption{Test and result to script map. Scripts are in \texttt{Manuscripts/reproducibility/} (\texttt{p3\_js/} for the Node.js scripts that drive the shipped engine, \texttt{analysis/} for Python); outputs are archived in \texttt{Manuscripts/results/}.}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{4.2cm}>{\raggedright\arraybackslash}p{3.6cm}X}
 \toprule
-Column & Unit & Definition\\\midrule
-\texttt{experiment}, \texttt{treatment}, \texttt{run\_id} & -- & experiment code, treatment string encoding factor levels, unique run identifier\\
-\texttt{soil} & -- & S01--S10\\
-\texttt{rain\_mm}, \texttt{irrigation\_mm} & mm\,yr$^{-1}$ & 20-year mean annual rainfall and irrigation\\
-\texttt{ET\_mm} & mm\,yr$^{-1}$ & model evapotranspiration (total)\\
-\texttt{transpiration\_mm}, \texttt{soil\_evap\_mm}, \texttt{canopy\_evap\_mm} & mm\,yr$^{-1}$ & reported components of ET\\
-\texttt{drainage\_1m\_mm} & mm\,yr$^{-1}$ & flux across the 1\,m boundary (negative = net rise)\\
-\texttt{water\_stress\_d} & d\,yr$^{-1}$ & days of water stress\\
-\texttt{yield\_Mg\_ha} & Mg\,ha$^{-1}$ & grain/biomass yield\\
-\texttt{N\_fertiliser\_kg\_ha}, \texttt{N\_leached\_kg\_ha} & kg\,ha$^{-1}$ & nitrogen applied and leached\\
-\texttt{IE\_kg\_m3}, \texttt{DPF}, \texttt{NLF} & -- & irrigation efficiency, drainage fraction $D/W$, N-leaching fraction (definitional; excluded as targets)\\
-\texttt{P}, \texttt{dT}, \texttt{Ep}, \texttt{trig}, \texttt{z}, \texttt{amt\_mm}, \texttt{vff}, \texttt{cap}, \texttt{Nrate} & various & factor levels (rain scale, warming, evaporation factor, trigger, sensor depth, dose, bare fraction, mulch capacity, N rate)\\
-\bottomrule
+Test or result & What is compared or computed & Script $\to$ output\\\midrule
+System variables of ten soils (\cref{tab:swa-hyd,tab:swa-bal,tab:swa-plant}, \cref{fig:swa}) & Engine~1, Engine~2, water-potential path, evaporation, mulch fate & \texttt{swa\_vars.js} $\to$ \texttt{p3\_swa\_vars.json}; \texttt{p3\_swa\_fig.py}\\
+Furrow Example 6.1 (\cref{tab:ws}) & $T_{req}$, $t_L$, $E_a$ against the book (reference implementation \texttt{lib/wsmodel.js}) & \texttt{v\_surface.js} $\to$ \texttt{p3\_surface.json}, \texttt{p3\_ws61.csv}\\
+Example 6.1 through the shipped surface layer & $t_L$ as shipped and with the iterated advance exponent & \texttt{v\_surface\_shipped.js} $\to$ \texttt{p3\_surface\_shipped.json}\\
+Border Example 6.4 (\cref{tab:border}) & $T_{req}$, $Q_{\max}$, $t_L$, $A_0$ & \texttt{v\_border.js} $\to$ \texttt{p3\_border.json}\\
+FAO-45 border examples (\cref{fig:lit}a) & 13 advance times & \texttt{run\_fao.js} $\to$ \texttt{fao\_out.json}\\
+Sprinkler example and spacing (\cref{tab:border}, \cref{fig:lit}b) & decision logic, nozzle, diameter, CU & \texttt{v\_sprinkler.js}, \texttt{run\_spr.js} $\to$ \texttt{p3\_sprinkler.json}, \texttt{spr\_out.json}\\
+Engine~1 held-out (\cref{tab:e1}, \cref{fig:e1}) & 1\,000 E12 runs & \texttt{make\_e12.py}, \texttt{e1\_heldout.js} $\to$ \texttt{e12.json}, \texttt{e12\_pred.json}\\
+Engine~2 closure and calibration (\cref{fig:e2}) & 60 random states; 100 scenarios & \texttt{e2\_closure.js}, \texttt{e2\_grid.js} $\to$ \texttt{p3\_e2\_closure.json}, \texttt{p3\_e2\_grid.json}\\
+Drip lateral solver (\cref{tab:drip}, \cref{fig:drip}) & independent solver, 400 configurations; Christiansen factor & \texttt{v\_drip.js}, \texttt{run\_drip.js} $\to$ \texttt{p3\_drip\_swafl.json}, \texttt{drip\_out.json}\\
+Sensitivity (\cref{fig:sens}) & one-at-a-time runs & \texttt{e1\_sens.js}, \texttt{l\_sens.js} $\to$ \texttt{p3\_e1\_sens.json}, \texttt{p3\_l\_sens.json}\\
+Run time & median call time & \texttt{bench.js} $\to$ \texttt{p3\_bench.json}\\
+Depletion collapse of E2 (pooled $R^2$, \cref{tab:views}) & cubic fits against suction and depletion & \texttt{Results/08\_Scripts/novel.py} (figure N1 in \texttt{Results/00\_Novel\_Contributions})\\
+Figures & & \texttt{p3\_figs.py}, \texttt{p3\_lit\_figs.py}, \texttt{p3\_sens\_fig.py}, \texttt{p3\_swa\_fig.py}, \texttt{p3\_fig01\_workflow\_v9.py}\\
+All steps, checks and limits & & \texttt{run\_all.sh}, \texttt{compare\_results.py}, \texttt{audit\_numbers.py}, \texttt{README\_REPRODUCE.md}\\\bottomrule
 \end{tabularx}
 \end{table}
 
-DPF$=D/W$ is exact by construction and its ``prediction'' is therefore the same task as predicting $D$; NLF and IE are ratios of other columns. They are not used as independent evidence in any result.
-
-\section{Reproducibility map}\label{app:repro}
-\begin{table}[H]\centering\footnotesize
-\caption{Result-to-script map.}
-\begin{tabularx}{\textwidth}{XX}
-\toprule
-Result & Script / output\\\midrule
-Ensemble table and run counts & \texttt{make\_data.py} $\to$ \texttt{data/daisy\_ensemble.csv.gz}\\
-SVD, permutation null, closure (\cref{eq:law}, \cref{fig:invariants}) & \texttt{p2\_a.py}, \texttt{p2\_laws.py} $\to$ \texttt{p2\_a.json}, \texttt{p2\_laws.json}\\
-Unattributed term $R$ (\cref{eq:Rlaw}, \cref{fig:hidden}) & \texttt{p2\_R.py} $\to$ \texttt{p2\_R.json}\\
-clr-PCA (\cref{fig:manifold}, \cref{tab:clipsens}) & \texttt{p2\_a.py}, \texttt{p2\_figs.py}, \texttt{p2\_fig4.py} $\to$ \texttt{p2\_pca.json}, \texttt{p2\_pca\_sens.json}\\
-Sparse laws (\cref{tab:laws}, \cref{eq:ETlaw}) & \texttt{p2\_et.py}, \texttt{p2\_dpf.py}, \texttt{p2\_figs2.py}, \texttt{p2\_nested.py} $\to$ \texttt{p2\_et.json}, \texttt{p2\_dpf.json}, \texttt{p2\_etlaw.json}, \texttt{p2\_nested.json}; exclusion sensitivity \texttt{p2\_s02\_excl.py} $\to$ \texttt{p2\_s02\_excl.json}\\
-Cluster bootstrap, law without E8 and E9, descriptive statistics (Table~\ref{tab:desc}) and $R$ by experiment (\cref{tab:R}) & \texttt{p2\_robust.py} $\to$ \texttt{p2\_robust.json}\\
-Compensation (\cref{fig:comp}) & \texttt{p2\_laws2.py} $\to$ \texttt{p2\_laws2.json}\\
-Figures & \texttt{p2\_figs.py}, \texttt{p2\_figs2.py}, \texttt{p2\_fig4.py}, \texttt{p2\_fig6.py}, \texttt{p2\_fig7.py}, \texttt{p2\_figfail.py}, \texttt{p2\_fig1\_new.py}\\
-All steps, checks and limits & \texttt{run\_all.sh}, \texttt{compare\_results.py}, \texttt{audit\_numbers.py}, \texttt{README\_REPRODUCE.md}\\\bottomrule
-\end{tabularx}
-\end{table}
+\input{p3_shots.tex}
 \end{document}

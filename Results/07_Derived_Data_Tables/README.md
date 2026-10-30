@@ -290,7 +290,7 @@ coarse loam); the archived table was computed with the horizon-integrated order,
 
 ### 2.7 `N1_soil_specific_triggers.csv`: the suction trigger that reaches the same depletion in every soil
 
-*Original:* `08_Scripts/novel.py`, lines 5-60. *Used for:* novel figure N1, panel d; Paper 3, Table 7; SWAFL Desktop layer N1.
+*Original:* `08_Scripts/novel.py`, lines 5-60. *Used for:* novel figure N1, panel d; Paper 2, Table 7; SWAFL Desktop layer N1.
 
 1. Depletion of plant-available water at suction h (van Genuchten, field capacity 100 cm, wilting point 15 849 cm):
    f(h) = [Se(100) − Se(h)] / [Se(100) − Se(15 849)],  Se(h) = [1 + (α|h|)ⁿ]^−(1−1/n), with the soil's (α, n).
@@ -308,8 +308,8 @@ so f(300) = (0.4443 − 0.3042)/(0.4443 − 0.0751) = **0.3795**, and f(h) = 0.4
 
 | Input | Used by | Where it is given |
 |:--|:--|:--|
-| effective van Genuchten (α, n) of the ten soils | 2.7 | `derive_tables.py`; Paper 3, Table 7; Paper 1, Table 3 |
+| effective van Genuchten (α, n) of the ten soils | 2.7 | `derive_tables.py`; Paper 2, Table 7; Paper 1, Table 3 |
 | rank order of TAW (Ap + Bt horizons) | 2.6 | `derive_tables.py`; section 2.6 above |
-| f* = 0.45 | 2.7 | `08_Scripts/novel.py` (computed from E2), Paper 3 |
+| f* = 0.45 | 2.7 | `08_Scripts/novel.py` (computed from E2), Paper 2 |
 
 All other quantities come from the raw run table alone.

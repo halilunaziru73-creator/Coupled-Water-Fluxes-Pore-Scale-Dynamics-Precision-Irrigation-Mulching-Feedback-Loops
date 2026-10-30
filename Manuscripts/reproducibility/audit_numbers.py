@@ -24,14 +24,14 @@ C = [
  ('P1', 'LOSO log10 Ks linear (8) 0.062', rate['loso_8']['log10Ks_linear'], 3), ('P1', 'LOSO mean-only (10) 0.318', rate['loso_10']['mean_only'], 3),
  ('P1', 'LOSO TAW (10) 0.183', rate['loso_10']['TAW'], 3), ('P1', 'LOSO Se100 (10) 0.136', rate['loso_10']['Se100'], 3), ('P1', 'LOSO n (10) 0.097', rate['loso_10']['n'], 3),
  ('P1', 'memory fate min 0.02', min(fd), 2), ('P1', 'memory fate max 0.85', max(fd), 2),
- ('P2', 'LOEO R^2 0.898', etl['sparse_loeo'], 3), ('P2', 'LOSO R^2 0.904', etl['sparse_loso'], 3), ('P2', 'in-sample R^2 0.908', et['lnET']['r2'], 3),
- ('P2', 'GBM LOEO 0.879 (same three inputs)', et['lnET']['gbm_loeo'], 3),
- ('P2', 'smallest singular value 5.9', laws['svd4']['sv'][-1], 1), ('P2', 'permuted smallest singular value 33.3', laws['svd4_perm_minSV'], 1),
- ('P3', 'Spearman rho minimum 0.64', min(rho), 2), ('P3', 'Spearman rho maximum 0.97', max(rho), 2),
- ('P3', 'Engine 2 closure median 0.1 % of inflow', cl.median(), 1), ('P3', 'Engine 2 closure maximum 0.7 %', cl.max(), 1),
- ('P3', 'sprinkler wetted diameter 28.98 m (corrected)', 2 * spr['nozzle']['R'], 2),
+ ('P1', 'LOEO R^2 0.898', etl['sparse_loeo'], 3), ('P1', 'LOSO R^2 0.904', etl['sparse_loso'], 3), ('P1', 'in-sample R^2 0.908', et['lnET']['r2'], 3),
+ ('P1', 'GBM LOEO 0.879 (same three inputs)', et['lnET']['gbm_loeo'], 3),
+ ('P1', 'smallest singular value 5.9', laws['svd4']['sv'][-1], 1), ('P1', 'permuted smallest singular value 33.3', laws['svd4_perm_minSV'], 1),
+ ('P2', 'Spearman rho minimum 0.64', min(rho), 2), ('P2', 'Spearman rho maximum 0.97', max(rho), 2),
+ ('P2', 'Engine 2 closure median 0.1 % of inflow', cl.median(), 1), ('P2', 'Engine 2 closure maximum 0.7 %', cl.max(), 1),
+ ('P2', 'sprinkler wetted diameter 28.98 m (corrected)', 2 * spr['nozzle']['R'], 2),
 ]
-if w is not None: C += [('P3', 'surface: median |error| 0.08 %', w.median(), 2), ('P3', 'surface: maximum |error| 1.81 %', w.max(), 2)]
+if w is not None: C += [('P2', 'surface: median |error| 0.08 %', w.median(), 2), ('P2', 'surface: maximum |error| 1.81 %', w.max(), 2)]
 if d is not None: C += [('All', 'runs 10190', len(d), 0), ('All', 'valid runs 10041', int((d.valid == 1).sum()), 0), ('All', 'failed runs 149', int((d.valid != 1).sum()), 0)]
 bad = 0
 for paper, txt, val, nd in C:

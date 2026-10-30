@@ -11,7 +11,7 @@ Needs  : Python >= 3.10, numpy, pandas, scipy
 
 Every step mirrors the original figure scripts in Results/08_Scripts (file and line given in each block),
 but reads the archived run table instead of the original summary_all.csv. The only inputs that are not in the
-run table are the effective van Genuchten pairs (alpha, n) of the ten soils (Paper 3, Table 7) and the
+run table are the effective van Genuchten pairs (alpha, n) of the ten soils (Paper 2, Table 7) and the
 rank order of the plant-available water of each soil (TAW), both listed below.
 """
 import os, sys
@@ -24,7 +24,7 @@ ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 RAW = os.path.join(ROOT, "Data", "daisy_ensemble.csv.gz")
 SOILS = ["S01_CoarseLoam", "S02_CoarseSand", "S03_Sand", "S04_LoamySand", "S05_SandyLoam",
          "S06_Loam", "S07_SiltLoam", "S08_SandyClayLoam", "S09_ClayLoam", "S10_SiltyClayLoam"]
-# effective van Genuchten (alpha [1/cm], n [-]) used by SWAFL Desktop (Paper 3, Table 7)
+# effective van Genuchten (alpha [1/cm], n [-]) used by SWAFL Desktop (Paper 2, Table 7)
 VG = {"S01_CoarseLoam": (0.0961264, 1.35323), "S02_CoarseSand": (0.0535783, 1.59999), "S03_Sand": (0.145, 2.68),
       "S04_LoamySand": (0.124, 2.28), "S05_SandyLoam": (0.075, 1.89), "S06_Loam": (0.036, 1.56),
       "S07_SiltLoam": (0.02, 1.41), "S08_SandyClayLoam": (0.059, 1.48), "S09_ClayLoam": (0.019, 1.31),
