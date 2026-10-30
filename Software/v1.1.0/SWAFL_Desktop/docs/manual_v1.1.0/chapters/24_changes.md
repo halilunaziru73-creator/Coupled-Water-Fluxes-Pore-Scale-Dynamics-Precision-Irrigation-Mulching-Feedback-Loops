@@ -130,3 +130,5 @@
 * In the three irrigation design layers the Run simulation button of the bar under the picture is hidden until the design has run (it then becomes Pause or Play); the design layers run from the button in the picture, the dashboard or the header.
 * The prepared experiments of the study (the list with its Load this experiment button) are a tab inside Start from the Daisy reference on the Experiments page, next to Best combinations, By topic and Import data and set-ups; the separate row "Experiments of the study" and its text are gone. In the Layers panel the two entries are simply Experiments and Scenarios.
 * The map of the processes of Daisy (Process map tab) and the list of components below it are centred on the screen.
+* The dashboard of every SWAFL layer has the colours of the Daisy workbench: grey ground, cards with a thin border and beige title bars.
+* A layer holds the top of its picture while it draws (until the person scrolls or presses a key), so the inputs of the irrigation design layers are in view at once; the waiting message of the design layers points to the Run simulation button in the picture.

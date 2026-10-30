@@ -43,5 +43,8 @@
   const oSwitch = switchScene;
   // a layer always opens at the top of its picture, whatever the position of the layer before it
   const toTop = () => { try { let e = (typeof cv !== 'undefined' && cv) || document.querySelector('canvas'); while (e && (e = e.parentElement)) { const o = getComputedStyle(e).overflowY; if ((o === 'auto' || o === 'scroll') && e.scrollTop) e.scrollTop = 0; } window.scrollTo(0, 0); } catch (e) { } };
-  switchScene = function (sc) { const r = oSwitch.apply(this, arguments); toTop(); setTimeout(toTop, 60); setTimeout(toTop, 350); try { if (sc && gated(sc) && sc.id !== 'dph' && !(RX[sc.id] && RX[sc.id].on)) { play.on = false; play.t = 0; } } catch (e) { } return r; };
+  // the layer stays at the top while it draws; the first wheel, touch or key of the person ends it
+  let topTok = 0, topUser = false; ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(ev => document.addEventListener(ev, () => { topUser = true; }, true));
+  const holdTop = () => { const tok = ++topTok; topUser = false; toTop(); [40, 120, 250, 500, 900, 1500, 2400].forEach(ms => setTimeout(() => { if (tok === topTok && !topUser) toTop(); }, ms)); };
+  switchScene = function (sc) { const r = oSwitch.apply(this, arguments); holdTop(); try { if (sc && gated(sc) && sc.id !== 'dph' && !(RX[sc.id] && RX[sc.id].on)) { play.on = false; play.t = 0; } } catch (e) { } return r; };
 })();
