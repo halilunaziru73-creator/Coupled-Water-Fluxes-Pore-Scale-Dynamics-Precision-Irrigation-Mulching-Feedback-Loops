@@ -9,37 +9,37 @@
  "marks": [
   {
    "x": 98.625,
-   "y": 380,
+   "y": 628,
    "t": "Add files",
    "d": "Chooses one or several files."
   },
   {
    "x": 252.0875,
-   "y": 380,
+   "y": 628,
    "t": "Add a folder",
    "d": "Reads every Daisy file of a folder, for example a whole experiment folder."
   },
   {
    "x": 370.925,
-   "y": 380,
+   "y": 628,
    "t": "Load all bundled examples",
    "d": "Loads every example log that comes with the program."
   },
   {
    "x": 64,
-   "y": 449.20000000000005,
+   "y": 697.2,
    "t": "Drop area",
    "d": "Files and folders can also be dropped here."
   },
   {
    "x": 64,
-   "y": 746,
+   "y": 994,
    "t": "Bundled examples",
    "d": "The example logs from the repositories of the Daisy model; load them one by one."
   },
   {
    "x": 64,
-   "y": 1017.2,
+   "y": 1265.2,
    "t": "Loaded logs",
    "d": "The logs that are loaded now, with their columns."
   }

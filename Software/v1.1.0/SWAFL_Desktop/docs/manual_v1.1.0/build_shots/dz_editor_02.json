@@ -9,25 +9,25 @@
  "marks": [
   {
    "x": 125.775,
-   "y": 348.8,
+   "y": 396,
    "t": "Set-up chosen",
    "d": "The file that is open."
   },
   {
    "x": 65.60000000000001,
-   "y": 646.4000000000001,
+   "y": 693.6,
    "t": "Text",
    "d": "Keywords, values and comments in colours."
   },
   {
-   "x": 1431.2,
-   "y": 468,
+   "x": 1551.2,
+   "y": 500.8,
    "t": "Outline",
    "d": "Click a section to jump to it."
   },
   {
    "x": 1562.6875,
-   "y": 351.6,
+   "y": 398.8,
    "t": "Status",
    "d": "File name and number of lines."
   }

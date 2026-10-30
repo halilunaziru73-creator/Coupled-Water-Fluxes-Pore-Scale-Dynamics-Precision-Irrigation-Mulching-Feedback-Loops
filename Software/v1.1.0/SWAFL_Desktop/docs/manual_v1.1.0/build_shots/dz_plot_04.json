@@ -9,19 +9,19 @@
  "marks": [
   {
    "x": 699.75,
-   "y": 457.6,
+   "y": 1522.8000000000002,
    "t": "Date slider",
    "d": "Chooses the date of the profile."
   },
   {
    "x": 704.4625000000001,
-   "y": 498.40000000000003,
+   "y": 1563.6000000000001,
    "t": "Play",
    "d": "Steps through the dates."
   },
   {
    "x": 64,
-   "y": 804,
+   "y": 1885.2,
    "t": "Profile",
    "d": "Value against depth on that date."
   }

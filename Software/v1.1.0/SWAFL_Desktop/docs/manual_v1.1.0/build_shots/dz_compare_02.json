@@ -9,7 +9,7 @@
  "marks": [
   {
    "x": 64,
-   "y": 775.6,
+   "y": 659.6,
    "t": "Result table",
    "d": "One row for each column with the largest difference and the verdict."
   }

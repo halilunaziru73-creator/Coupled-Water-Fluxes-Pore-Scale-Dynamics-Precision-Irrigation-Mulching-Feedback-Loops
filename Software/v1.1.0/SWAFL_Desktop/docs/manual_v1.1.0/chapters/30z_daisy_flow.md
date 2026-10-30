@@ -8,7 +8,7 @@ A bar above each tab on the path shows the step (for example *Step 5 of 11*), wh
 
 | Step | Tab | What is done there |
 |--:|:--|:--|
-| 1 | My data | Set the weather and the soil of your site once. Every simulation uses them. |
+| 1 | Input data | Set the weather and the soil of your site once. Every simulation uses them. |
 | 2 | Weather stations | Look at a weather record, or bring online weather of any place. |
 | 3 | Library | Browse the soils, crops, fertilisers and chemicals of Daisy (this step can be skipped). |
 | 4 | Files | Load the logs of earlier Daisy runs (this step can be skipped). |
@@ -17,14 +17,14 @@ A bar above each tab on the path shows the step (for example *Step 5 of 11*), wh
 | 7 | Processes | See the processes behind the results. |
 | 8 | Plot | Plot any quantity of a run. |
 | 9 | Mass balance | Check that inputs, outputs and content agree. |
-| 10 | Compare and test | Compare two runs against the smallest meaningful level. |
-| 11 | To the SWAFL project | Take the results to the layers of the SWAFL project, which turn them into decisions. |
+| 10 | Run comparison | Compare two runs against the smallest meaningful level. |
+| 11 | To the SWAFL layers | Take the results to the layers of the SWAFL project, which turn them into decisions. |
 
-### The guided path: step 1, My data
+### The guided path: step 1, Input data
 
 The path begins with the data of the site. Each tab shows a bar above its content with the step, its purpose, and the buttons Back and Next. The tabs can still be opened in any order from the row of tabs; the bar only shows where the tab lies on the path.
 
-![The guided path: step 1, My data. Screen 123 of the Daisy workbench.](images/daisy11/dz_flow_01.jpg){width=100% height=17cm}
+![The guided path: step 1, Input data. Screen 123 of the Daisy workbench.](images/daisy11/dz_flow_01.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -51,7 +51,7 @@ Step 5 is where a question is chosen and run. After the run the results are draw
 
 ### The guided path: step 8, Plot
 
-Plot draws any quantity of a run. The bar shows that three steps remain on the path: Mass balance, Compare and test, and the hand-over to the SWAFL project.
+Plot draws any quantity of a run. The bar shows that three steps remain on the path: Mass balance, Run comparison, and the hand-over to the SWAFL project.
 
 ![The guided path: step 8, Plot. Screen 125 of the Daisy workbench.](images/daisy11/dz_flow_03.jpg){width=100% height=17cm}
 
@@ -64,11 +64,11 @@ Plot draws any quantity of a run. The bar shows that three steps remain on the p
 
 \newpage
 
-### To the SWAFL project: the last step of the path
+### To the SWAFL layers: the last step of the path
 
 The last step takes the results to the layers of the SWAFL project. Daisy calculates; the SWAFL project turns the results into decisions. For each of the five questions the tab offers the layers that answer it, and the button of the question you ran last is highlighted. The runs you made in the session are passed to the layers, so they show your weather and your soil.
 
-![To the SWAFL project: the last step of the path. Screen 126 of the Daisy workbench.](images/daisy11/dz_flow_04.jpg){width=100% height=17cm}
+![To the SWAFL layers: the last step of the path. Screen 126 of the Daisy workbench.](images/daisy11/dz_flow_04.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 

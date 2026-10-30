@@ -9,19 +9,19 @@
  "marks": [
   {
    "x": 144.8,
-   "y": 426.40000000000003,
+   "y": 447.20000000000005,
    "t": "Kind of entry",
    "d": "Now set to crops."
   },
   {
    "x": 626.1500000000001,
-   "y": 429.20000000000005,
+   "y": 450,
    "t": "Count",
    "d": "Number of crops in the library."
   },
   {
    "x": 64,
-   "y": 820,
+   "y": 840.8000000000001,
    "t": "Crops",
    "d": "Each crop with the model that describes it."
   }

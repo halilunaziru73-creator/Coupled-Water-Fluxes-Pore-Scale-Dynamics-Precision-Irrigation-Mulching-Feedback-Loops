@@ -1,12 +1,12 @@
-# Your data {#daisy-data}
+# Input data {#daisy-data}
 
 The first group holds everything that describes the site: weather, soil and the files of earlier runs.
 
-### My data: the starting screen
+### Input data: the starting screen
 
-My data is the first tab of the group Your data. It is where the weather and the soil of the site are set once; Scenarios, Experiments and Processes all read them from here. With nothing changed, the built-in weather of Taastrup and the built-in loam and sand are used.
+Input data is the first tab of the group Input data. It is where the weather and the soil of the site are set once; Scenarios, Experiments and Processes all read them from here. With nothing changed, the built-in weather of Taastrup and the built-in loam and sand are used.
 
-![My data: the starting screen. Screen 1 of the Daisy workbench.](images/daisy11/dz_data_01.jpg){width=100% height=17cm}
+![Input data: the starting screen. Screen 1 of the Daisy workbench.](images/daisy11/dz_data_01.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -16,11 +16,11 @@ My data is the first tab of the group Your data. It is where the weather and the
 
 \newpage
 
-### My data: online weather of a place
+### Input data: online weather of a place
 
 With Online weather of my area the place is typed once; Find looks it up and fills the site boxes, and Get the weather reads the daily data of the chosen years from the internet. Only complete years up to last year are asked for.
 
-![My data: online weather of a place. Screen 2 of the Daisy workbench.](images/daisy11/dz_data_02.jpg){width=100% height=17cm}
+![Input data: online weather of a place. Screen 2 of the Daisy workbench.](images/daisy11/dz_data_02.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -34,11 +34,11 @@ With Online weather of my area the place is typed once; Find looks it up and fil
 
 \newpage
 
-### My data: a weather file of your own
+### Input data: a weather file of your own
 
 A weather file may be a Daisy weather file (.dwf) or a table (CSV, TXT) with a date column and the columns rain and temperature. The radiation unit is chosen or found out from the values.
 
-![My data: a weather file of your own. Screen 3 of the Daisy workbench.](images/daisy11/dz_data_03.jpg){width=100% height=17cm}
+![Input data: a weather file of your own. Screen 3 of the Daisy workbench.](images/daisy11/dz_data_03.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -48,11 +48,11 @@ A weather file may be a Daisy weather file (.dwf) or a table (CSV, TXT) with a d
 
 \newpage
 
-### My data: a Daisy weather station file read and checked
+### Input data: a Daisy weather station file read and checked
 
 Here the Foulum station file of the bundled data was chosen as a file of your own. The line under the choice reports the years, the mean rain and temperature, the columns that were used and the notes of the checks.
 
-![My data: a Daisy weather station file read and checked. Screen 4 of the Daisy workbench.](images/daisy11/dz_data_04.jpg){width=100% height=17cm}
+![Input data: a Daisy weather station file read and checked. Screen 4 of the Daisy workbench.](images/daisy11/dz_data_04.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -62,11 +62,11 @@ Here the Foulum station file of the bundled data was chosen as a file of your ow
 
 \newpage
 
-### My data: my own soil
+### Input data: my own soil
 
 My soil takes the horizons from the surface down to at least 100 cm: lower limit, sand, silt and clay in per cent, humus in per cent and dry bulk density. Water retention and conductivity are then taken from the HYPRES pedotransfer function in Daisy.
 
-![My data: my own soil. Screen 5 of the Daisy workbench.](images/daisy11/dz_data_05.jpg){width=100% height=17cm}
+![Input data: my own soil. Screen 5 of the Daisy workbench.](images/daisy11/dz_data_05.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 

@@ -9,49 +9,49 @@
  "marks": [
   {
    "x": 126.67500000000001,
-   "y": 981.2,
+   "y": 1338.8000000000002,
    "t": "Place",
    "d": "A town, a village or a farm name; the name is searched on the internet."
   },
   {
    "x": 458.20000000000005,
-   "y": 978.4000000000001,
+   "y": 1336,
    "t": "Find",
    "d": "Lists the places of that name; choose one and the latitude and longitude are filled."
   },
   {
    "x": 1134.8500000000001,
-   "y": 982.8000000000001,
+   "y": 1340.4,
    "t": "First year",
    "d": "First year of the record to read."
   },
   {
    "x": 1324.875,
-   "y": 982.8000000000001,
+   "y": 1340.4,
    "t": "Last year",
    "d": "Last complete year; the current year is not complete yet."
   },
   {
    "x": 64,
-   "y": 1029.6000000000001,
+   "y": 1387.2,
    "t": "Get the weather",
    "d": "Reads the daily rain, temperature and radiation and checks them."
   },
   {
    "x": 435.925,
-   "y": 1029.6000000000001,
+   "y": 1387.2,
    "t": "Use as the SWAFL weather",
    "d": "Sets the record as the weather of the SWAFL project, so every layer of the project uses it."
   },
   {
    "x": 672.4000000000001,
-   "y": 1029.6000000000001,
+   "y": 1387.2,
    "t": "Use in the Daisy runs",
    "d": "Sets the record as the weather of every simulation of Scenarios, Experiments and Processes."
   },
   {
    "x": 884.375,
-   "y": 1029.6000000000001,
+   "y": 1387.2,
    "t": "Add to the list of logs",
    "d": "Adds the record to the logs, so that it can be drawn in Plot."
   }

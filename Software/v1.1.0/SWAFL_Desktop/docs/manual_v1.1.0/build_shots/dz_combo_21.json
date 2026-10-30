@@ -9,49 +9,49 @@
  "marks": [
   {
    "x": 88,
-   "y": 686.9250000000001,
+   "y": 796.4000000000001,
    "t": "Bioclimate: NoOfIntervals (Daisy reference, chapter 19)",
    "d": "Varied over 15, 30, 60."
   },
   {
    "x": 88,
-   "y": 734.9250000000001,
+   "y": 844.4000000000001,
    "t": "Bioclimate: max svat iterations (Daisy reference, chapter 19)",
    "d": "Varied over 50, 100, 200."
   },
   {
    "x": 88,
-   "y": 782.9250000000001,
+   "y": 892.4000000000001,
    "t": "Bioclimate: max svat absolute difference (Daisy reference, chapter 19)",
    "d": "Varied over 0.005, 0.01, 0.02."
   },
   {
    "x": 330.65000000000003,
-   "y": 834.9250000000001,
+   "y": 944.4000000000001,
    "t": "Add something to change",
    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
   },
   {
    "x": 1283.25,
-   "y": 834.9250000000001,
+   "y": 944.4000000000001,
    "t": "How to combine",
    "d": "Every combination, one thing at a time, or the values paired in order."
   },
   {
    "x": 1668.875,
-   "y": 834.5250000000001,
+   "y": 944,
    "t": "At most",
    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
   },
   {
    "x": 84.80000000000001,
-   "y": 1013.725,
+   "y": 1123.2,
    "t": "Size of the experiment",
    "d": "The number of runs and the time they take on this computer."
   },
   {
    "x": 102.95,
-   "y": 1083.7250000000001,
+   "y": 1284.4,
    "t": "Run all",
    "d": "Runs every combination, several at a time."
   }

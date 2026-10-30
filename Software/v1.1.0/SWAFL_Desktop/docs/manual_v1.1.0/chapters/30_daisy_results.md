@@ -1,4 +1,4 @@
-# Look at results {#daisy-results}
+# Results and analysis {#daisy-results}
 
 The third group draws what a run produced.
 
@@ -18,7 +18,7 @@ The irrigation question was run on the built-in farm for the years 1990 to 1993 
 
 1. **Run to look at.** Chooses the run whose single run figures are drawn.
 2. **Save report.** Saves all results and figures as one HTML report.
-3. **Put the logs in the Files list.** Keeps the Daisy logs of the runs in the Files tab for the plot and balance tabs.
+3. **Put the logs in the list of loaded logs of the Log plots tab.** Keeps the Daisy logs of the runs for the Log plots and Mass balance tabs.
 4. **Open the set-up in the editor.** Opens the Daisy set-up of the run in the Set-up editor.
 5. **Mean per season.** The mean of each result over the seasons, one column for each run.
 
@@ -140,7 +140,7 @@ The nitrogen question was run on the built-in farm for the years 1990 to 1993 wi
 
 1. **Run to look at.** Chooses the run whose single run figures are drawn.
 2. **Save report.** Saves all results and figures as one HTML report.
-3. **Put the logs in the Files list.** Keeps the Daisy logs of the runs in the Files tab for the plot and balance tabs.
+3. **Put the logs in the list of loaded logs of the Log plots tab.** Keeps the Daisy logs of the runs for the Log plots and Mass balance tabs.
 4. **Open the set-up in the editor.** Opens the Daisy set-up of the run in the Set-up editor.
 5. **Mean per season.** The mean of each result over the seasons, one column for each run.
 
@@ -262,7 +262,7 @@ The climate question was run on the built-in farm for the years 1990 to 1993 wit
 
 1. **Run to look at.** Chooses the run whose single run figures are drawn.
 2. **Save report.** Saves all results and figures as one HTML report.
-3. **Put the logs in the Files list.** Keeps the Daisy logs of the runs in the Files tab for the plot and balance tabs.
+3. **Put the logs in the list of loaded logs of the Log plots tab.** Keeps the Daisy logs of the runs for the Log plots and Mass balance tabs.
 4. **Open the set-up in the editor.** Opens the Daisy set-up of the run in the Set-up editor.
 5. **Mean per season.** The mean of each result over the seasons, one column for each run.
 
@@ -384,7 +384,7 @@ The chemical question was run on the built-in farm for the years 1990 to 1993 wi
 
 1. **Run to look at.** Chooses the run whose single run figures are drawn.
 2. **Save report.** Saves all results and figures as one HTML report.
-3. **Put the logs in the Files list.** Keeps the Daisy logs of the runs in the Files tab for the plot and balance tabs.
+3. **Put the logs in the list of loaded logs of the Log plots tab.** Keeps the Daisy logs of the runs for the Log plots and Mass balance tabs.
 4. **Open the set-up in the editor.** Opens the Daisy set-up of the run in the Set-up editor.
 5. **Mean per season.** The mean of each result over the seasons, one column for each run.
 
@@ -467,7 +467,7 @@ The soil question was run on the built-in farm for the years 1990 to 1993 with t
 
 1. **Run to look at.** Chooses the run whose single run figures are drawn.
 2. **Save report.** Saves all results and figures as one HTML report.
-3. **Put the logs in the Files list.** Keeps the Daisy logs of the runs in the Files tab for the plot and balance tabs.
+3. **Put the logs in the list of loaded logs of the Log plots tab.** Keeps the Daisy logs of the runs for the Log plots and Mass balance tabs.
 4. **Open the set-up in the editor.** Opens the Daisy set-up of the run in the Set-up editor.
 5. **Mean per season.** The mean of each result over the seasons, one column for each run.
 
@@ -944,11 +944,11 @@ After Balance the error of each step is drawn with the mean and the limits of tw
 
 \newpage
 
-### Compare and test: the form
+### Run comparison: the form
 
 Two logs are compared column by column against the smallest meaningful level of each quantity.
 
-![Compare and test: the form. Screen 121 of the Daisy workbench.](images/daisy11/dz_compare_01.jpg){width=100% height=17cm}
+![Run comparison: the form. Screen 121 of the Daisy workbench.](images/daisy11/dz_compare_01.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -961,11 +961,11 @@ Two logs are compared column by column against the smallest meaningful level of 
 
 \newpage
 
-### Compare and test: the result
+### Run comparison: the result
 
 Each column is reported as identical, different within the level, or different.
 
-![Compare and test: the result. Screen 122 of the Daisy workbench.](images/daisy11/dz_compare_02.jpg){width=100% height=17cm}
+![Run comparison: the result. Screen 122 of the Daisy workbench.](images/daisy11/dz_compare_02.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 

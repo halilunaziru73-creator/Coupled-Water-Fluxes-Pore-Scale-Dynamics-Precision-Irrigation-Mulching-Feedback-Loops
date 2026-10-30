@@ -9,19 +9,19 @@
  "marks": [
   {
    "x": 64,
-   "y": 1153.625,
+   "y": 1212.075,
    "t": "Process map",
    "d": "One box for each process, coloured by group."
   },
   {
    "x": 64,
-   "y": 1815.25,
+   "y": 1904.15,
    "t": "Other processes",
    "d": "Processes not drawn in the paper figure."
   },
   {
    "x": 64,
-   "y": 1976.25,
+   "y": 2081.15,
    "t": "Details",
    "d": "Text and figures of the chosen process."
   }

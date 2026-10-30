@@ -8,14 +8,20 @@
  "note": "",
  "marks": [
   {
-   "x": 667.2,
-   "y": 990.9250000000001,
+   "x": 707.2,
+   "y": 1086.8,
    "t": "Parameter",
    "d": "Tick one or several parameters to vary."
   },
   {
-   "x": 679.2,
-   "y": 1151.7250000000001,
+   "x": 719.2,
+   "y": 1306,
+   "t": "Make the experiment",
+   "d": "Builds an experiment from the ticked parameters."
+  },
+  {
+   "x": 719.2,
+   "y": 1247.6000000000001,
    "t": "Topic details",
    "d": "The introduction of the topic, its parameters and the models it lists."
   }

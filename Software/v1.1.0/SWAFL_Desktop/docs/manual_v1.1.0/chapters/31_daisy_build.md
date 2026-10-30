@@ -111,7 +111,7 @@ The figures show water content through depth and time, the series at a chosen de
 2. **Depth of the series.** Depth in cm of the lower figure.
 3. **Series at a depth.** Water content and suction at that depth.
 4. **Summary.** Water balance of the run.
-5. **Keep as a log.** Puts the water contents in the Files list.
+5. **Keep as a log.** Puts the water contents in the list of loaded logs of the Log plots tab.
 
 \newpage
 

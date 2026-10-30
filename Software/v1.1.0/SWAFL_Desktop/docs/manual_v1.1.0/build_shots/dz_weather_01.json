@@ -9,31 +9,31 @@
  "marks": [
   {
    "x": 64,
-   "y": 448.40000000000003,
+   "y": 1182.8,
    "t": "Station",
    "d": "The bundled stations, each with its years and number of days."
   },
   {
    "x": 562.775,
-   "y": 446.40000000000003,
+   "y": 1180.8,
    "t": "Latitude",
    "d": "Latitude of the station, used to work out reference evapotranspiration when it is not recorded."
   },
   {
    "x": 751.1,
-   "y": 443.6,
+   "y": 1178,
    "t": "Use as SWAFL weather",
    "d": "Sends the station to the main workbench as its weather."
   },
   {
    "x": 972.0500000000001,
-   "y": 443.6,
+   "y": 1178,
    "t": "Add to the log list",
    "d": "Puts the station among the logs that the plot tabs can draw."
   },
   {
    "x": 64,
-   "y": 634,
+   "y": 1368.4,
    "t": "Annual rain",
    "d": "Sum of the daily rain of each year of the record."
   }

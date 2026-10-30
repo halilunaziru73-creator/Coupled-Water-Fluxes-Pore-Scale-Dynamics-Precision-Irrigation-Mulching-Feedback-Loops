@@ -9,43 +9,43 @@
  "marks": [
   {
    "x": 173.775,
-   "y": 483.6,
+   "y": 551.6,
    "t": "Online weather",
    "d": "The choice that shows the place controls below."
   },
   {
    "x": 147.475,
-   "y": 534.4,
+   "y": 602.4,
    "t": "Place",
    "d": "A town, a village or a farm name."
   },
   {
    "x": 504.6,
-   "y": 530,
+   "y": 598,
    "t": "Find",
    "d": "Looks the place up and fills the latitude, longitude and elevation."
   },
   {
    "x": 673.2750000000001,
-   "y": 534.4,
+   "y": 602.4,
    "t": "First year",
    "d": "First year of the weather record to read."
   },
   {
    "x": 827.0250000000001,
-   "y": 534.4,
+   "y": 602.4,
    "t": "Last year",
    "d": "Last complete year of the record; the current year is not available yet."
   },
   {
    "x": 981.5,
-   "y": 530,
+   "y": 598,
    "t": "Get the weather",
    "d": "Reads the daily rain, temperatures, radiation and reference evapotranspiration and checks them before use."
   },
   {
    "x": 244.95000000000002,
-   "y": 616,
+   "y": 644.8000000000001,
    "t": "Latitude",
    "d": "Needed to work out radiation when it is not in the data; found automatically from the place name when possible."
   }

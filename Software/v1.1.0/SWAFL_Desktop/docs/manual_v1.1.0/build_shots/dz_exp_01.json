@@ -9,49 +9,49 @@
  "marks": [
   {
    "x": 300.5,
-   "y": 350.40000000000003,
+   "y": 468,
    "t": "Weather for all runs",
    "d": "The weather of every simulation, shared with Scenarios and Processes."
   },
   {
    "x": 84.80000000000001,
-   "y": 533.2,
+   "y": 650.8000000000001,
    "t": "Your question",
    "d": "Write what you want to find out in your own words."
   },
   {
    "x": 84.80000000000001,
-   "y": 601.2,
+   "y": 718.8000000000001,
    "t": "Make a plan",
    "d": "Reads the question and proposes the factors, the levels and the design."
   },
   {
    "x": 366.225,
-   "y": 603.6,
+   "y": 721.2,
    "t": "Online AI",
    "d": "Optional: an online AI reads the question first; each plan it gives is checked against what Daisy can vary."
   },
   {
    "x": 454.05,
-   "y": 673.2,
+   "y": 790.8000000000001,
    "t": "Best combinations",
    "d": "Ready made experiments worked out from the Daisy reference."
   },
   {
    "x": 615.75,
-   "y": 673.2,
+   "y": 790.8000000000001,
    "t": "By topic",
    "d": "The 107 topics of the Daisy reference, each leading to experiments."
   },
   {
-   "x": 800.7375000000001,
-   "y": 673.2,
+   "x": 1035.5625,
+   "y": 790.8000000000001,
    "t": "Import",
    "d": "Bring an experiment folder, set-ups, weather, soil tables or logs."
   },
   {
    "x": 64,
-   "y": 1435,
+   "y": 1552.6000000000001,
    "t": "My experiments",
    "d": "The list of experiments that are run or saved together."
   }

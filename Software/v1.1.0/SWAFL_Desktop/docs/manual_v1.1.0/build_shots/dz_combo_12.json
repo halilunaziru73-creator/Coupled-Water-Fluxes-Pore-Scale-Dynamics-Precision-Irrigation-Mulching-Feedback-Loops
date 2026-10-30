@@ -9,49 +9,49 @@
  "marks": [
   {
    "x": 88,
-   "y": 548.525,
+   "y": 658,
    "t": "Temperature shift",
    "d": "Varied over 0, 1.5, 3."
   },
   {
    "x": 88,
-   "y": 596.525,
+   "y": 706,
    "t": "Irrigation",
    "d": "Varied over 0, 1."
   },
   {
    "x": 88,
-   "y": 713.325,
+   "y": 822.8000000000001,
    "t": "Soil",
    "d": "Varied over usda:sand, loam."
   },
   {
    "x": 330.65000000000003,
-   "y": 834.125,
+   "y": 943.6,
    "t": "Add something to change",
    "d": "Adds a further factor, grouped by Irrigation, Nitrogen and tillage, Weather and climate, Soil and crop, and Chemicals."
   },
   {
    "x": 1283.25,
-   "y": 834.125,
+   "y": 943.6,
    "t": "How to combine",
    "d": "Every combination, one thing at a time, or the values paired in order."
   },
   {
    "x": 1668.875,
-   "y": 833.725,
+   "y": 943.2,
    "t": "At most",
    "d": "The largest number of runs; a spread of the combinations is chosen when there are more."
   },
   {
    "x": 84.80000000000001,
-   "y": 1012.9250000000001,
+   "y": 1122.4,
    "t": "Size of the experiment",
    "d": "The number of runs and the time they take on this computer."
   },
   {
    "x": 102.95,
-   "y": 1082.925,
+   "y": 1283.6000000000001,
    "t": "Run all",
    "d": "Runs every combination, several at a time."
   }

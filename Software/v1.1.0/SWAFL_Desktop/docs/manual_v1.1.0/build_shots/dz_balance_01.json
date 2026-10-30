@@ -9,43 +9,43 @@
  "marks": [
   {
    "x": 110.95,
-   "y": 384.8,
+   "y": 432,
    "t": "Log",
    "d": "The log whose balance is checked."
   },
   {
    "x": 462.1875,
-   "y": 380,
+   "y": 427.20000000000005,
    "t": "Choose columns",
    "d": "Proposes inputs, outputs and content."
   },
   {
    "x": 580.625,
-   "y": 382.40000000000003,
+   "y": 429.6,
    "t": "Subtract initial content",
    "d": "Counts only the change in content."
   },
   {
-   "x": 136.57500000000002,
-   "y": 526.4,
+   "x": 84.36250000000001,
+   "y": 573.6,
    "t": "Inputs",
    "d": "Columns that add to the soil."
   },
   {
-   "x": 352.125,
-   "y": 526.4,
+   "x": 195.4875,
+   "y": 573.6,
    "t": "Outputs",
    "d": "Columns that leave the soil."
   },
   {
-   "x": 567.6750000000001,
-   "y": 526.4,
+   "x": 306.6125,
+   "y": 573.6,
    "t": "Content",
    "d": "Columns that hold the amount stored."
   },
   {
    "x": 87.53750000000001,
-   "y": 646.4000000000001,
+   "y": 693.6,
    "t": "Balance",
    "d": "Calculates the balance."
   }

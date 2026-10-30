@@ -1,4 +1,4 @@
-# Ask a question {#daisy-ask}
+# Experiments and scenarios: ask a question {#daisy-ask}
 
 The second group answers a question by running Daisy: five ready scenarios and a free design of experiments.
 
@@ -78,7 +78,7 @@ The irrigation question compares rainfed and irrigated crops of the built-in rot
 
 **What the arrows point to.**
 
-1. **Soil.** The soil profile of the run: the built-in loam or sand, or your own soil when it is set in My data.
+1. **Soil.** The soil profile of the run: the built-in loam or sand, or your own soil when it is set in Input data.
 2. **Trigger.** Irrigation starts when the soil water potential at 20 cm drops below this value (cm).
 3. **Water per irrigation.** Depth of water applied each time (mm).
 4. **Rain factor.** Multiplies the rain of the weather file (1 leaves it as recorded).
@@ -101,7 +101,7 @@ The nitrogen question compares three fertiliser levels, with or without irrigati
 
 **What the arrows point to.**
 
-1. **Soil.** The soil profile of the run: the built-in loam or sand, or your own soil when it is set in My data.
+1. **Soil.** The soil profile of the run: the built-in loam or sand, or your own soil when it is set in Input data.
 2. **Irrigation.** Rainfed or irrigated.
 3. **Rain factor.** Multiplies the rain of the weather file.
 4. **Temperature offset.** Added to the daily temperatures.
@@ -122,7 +122,7 @@ The climate question runs the same farm under the weather as it is and under a w
 
 **What the arrows point to.**
 
-1. **Soil.** The soil profile of the run: the built-in loam or sand, or your own soil when it is set in My data.
+1. **Soil.** The soil profile of the run: the built-in loam or sand, or your own soil when it is set in Input data.
 2. **Irrigation.** Rainfed or irrigated.
 3. **First year.** First year of the runs.
 4. **Weather for all runs.** The one weather choice of every Daisy simulation: the weather of the SWAFL project when one is loaded, the built-in Taastrup weather, a built-in station, online weather or a file.
@@ -142,7 +142,7 @@ The chemical question follows a chemical applied to the soil: a mobile tracer, a
 
 **What the arrows point to.**
 
-1. **Soil.** The soil profile of the run: the built-in loam or sand, or your own soil when it is set in My data.
+1. **Soil.** The soil profile of the run: the built-in loam or sand, or your own soil when it is set in Input data.
 2. **Rain factor.** Multiplies the rain of the weather file.
 3. **Weather for all runs.** The one weather choice of every Daisy simulation: the weather of the SWAFL project when one is loaded, the built-in Taastrup weather, a built-in station, online weather or a file.
 4. **Runs compared.** Each ticked run is one Daisy simulation; the figures compare them.
@@ -314,7 +314,7 @@ The weather list of an experiment follows the choice at the top of the tab and o
 3. **Get the weather.** Reads and checks the weather of the place.
 4. **Soil.** The soil of the experiment when it is not a factor.
 5. **Years.** First and last year of every run.
-6. **Use my data.** Uses the weather and soil given in My data when they are set.
+6. **Use my data.** Uses the weather and soil given in Input data when they are set.
 
 \newpage
 

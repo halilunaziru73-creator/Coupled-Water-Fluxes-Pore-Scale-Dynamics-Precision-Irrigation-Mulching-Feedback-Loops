@@ -8,20 +8,20 @@
  "note": "",
  "marks": [
   {
-   "x": 118.61250000000001,
-   "y": 278.40000000000003,
+   "x": 116.75,
+   "y": 336,
    "t": "Where you are",
    "d": "Step 1 of 11. The first step has no Back button."
   },
   {
-   "x": 229.22500000000002,
-   "y": 278.40000000000003,
+   "x": 225.5,
+   "y": 336,
    "t": "What to do here",
    "d": "Set the weather and the soil of your site once."
   },
   {
-   "x": 1711.025,
-   "y": 278.40000000000003,
+   "x": 1911.875,
+   "y": 336,
    "t": "Next",
    "d": "Goes to Weather stations."
   }

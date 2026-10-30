@@ -1,6 +1,6 @@
 # The weather of the bundled stations {#daisy-stations}
 
-The stations of the Weather stations tab are described here from their files. Every number below is calculated from the daily values of the file: the sums of rain and reference evapotranspiration, the means of temperature and radiation, and the number of days.
+The stations of the weather stations on the Input data page are described here from their files. Every number below is calculated from the daily values of the file: the sums of rain and reference evapotranspiration, the means of temperature and radiation, and the number of days.
 
 ## CZRISWC03
 

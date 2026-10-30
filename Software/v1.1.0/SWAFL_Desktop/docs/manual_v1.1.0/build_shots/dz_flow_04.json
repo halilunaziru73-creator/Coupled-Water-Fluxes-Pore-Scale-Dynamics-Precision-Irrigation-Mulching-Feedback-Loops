@@ -8,38 +8,38 @@
  "note": "",
  "marks": [
   {
-   "x": 122.5125,
-   "y": 288.8,
+   "x": 118.80000000000001,
+   "y": 336,
    "t": "Step 11 of 11",
    "d": "The last step of the path."
   },
   {
-   "x": 1580.6000000000001,
-   "y": 288.8,
+   "x": 1740.625,
+   "y": 336,
    "t": "Open in the SWAFL project",
    "d": "Opens the layer that matches the question you ran last."
   },
   {
    "x": 169.15,
-   "y": 558.8000000000001,
+   "y": 606,
    "t": "Daisy decision table",
    "d": "Yield, water and nitrate of every run, answer by answer."
   },
   {
-   "x": 84.80000000000001,
-   "y": 1040.4,
+   "x": 1577.6000000000001,
+   "y": 606,
    "t": "Chemical fate",
    "d": "Decay, crop uptake, leaching, runoff and what stays in the soil."
   },
   {
-   "x": 763.5375,
-   "y": 664.4000000000001,
+   "x": 651.0125,
+   "y": 711.6,
    "t": "Nitrogen budget",
    "d": "Supply, uptake and losses of nitrogen, season by season."
   },
   {
    "x": 84.80000000000001,
-   "y": 664.4000000000001,
+   "y": 740.4000000000001,
    "t": "Reliability over 20 seasons",
    "d": "How steady the result is from year to year."
   }

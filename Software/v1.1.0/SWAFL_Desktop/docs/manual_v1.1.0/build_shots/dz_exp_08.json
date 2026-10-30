@@ -9,49 +9,49 @@
  "marks": [
   {
    "x": 79.2,
-   "y": 208.525,
+   "y": 274.8,
    "t": "Run",
    "d": "Ticks the experiments that are run or saved."
   },
   {
-   "x": 223.55,
-   "y": 196.525,
+   "x": 235.07500000000002,
+   "y": 262.8,
    "t": "Name",
    "d": "The name of the experiment; it becomes the name of its folder."
   },
   {
-   "x": 850.95,
-   "y": 209.72500000000002,
+   "x": 919.5500000000001,
+   "y": 276,
    "t": "Combinations",
    "d": "The design of this experiment on its own."
   },
   {
-   "x": 1255.75,
-   "y": 209.72500000000002,
+   "x": 1359.15,
+   "y": 276,
    "t": "At most",
    "d": "The largest number of runs of this experiment."
   },
   {
-   "x": 1523.3000000000002,
-   "y": 209.72500000000002,
+   "x": 1645.3500000000001,
+   "y": 276,
    "t": "Move up",
    "d": "Moves the experiment earlier in the list."
   },
   {
    "x": 404.25,
-   "y": 433.725,
+   "y": 500,
    "t": "Run the ticked",
    "d": "Runs the ticked experiments one after another."
   },
   {
    "x": 524.475,
-   "y": 433.725,
+   "y": 500,
    "t": "Save as one folder",
    "d": "Saves the ticked experiments as E1, E2 and so on in one zip."
   },
   {
    "x": 947.0500000000001,
-   "y": 433.725,
+   "y": 500,
    "t": "Save as plan",
    "d": "Saves the ticked plans as one JSON file."
   }

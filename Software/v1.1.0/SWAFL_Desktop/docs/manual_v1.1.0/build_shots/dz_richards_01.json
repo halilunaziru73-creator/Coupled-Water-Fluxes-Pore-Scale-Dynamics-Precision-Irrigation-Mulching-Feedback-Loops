@@ -9,37 +9,37 @@
  "marks": [
   {
    "x": 134.475,
-   "y": 403.20000000000005,
+   "y": 450.40000000000003,
    "t": "Layer 1",
    "d": "Horizon of the first layer and its lower depth."
   },
   {
    "x": 152.975,
-   "y": 447.20000000000005,
+   "y": 494.40000000000003,
    "t": "Weather",
    "d": "SWAFL season, Daisy station, own values or file."
   },
   {
    "x": 146.9,
-   "y": 490.8,
+   "y": 538,
    "t": "Days",
    "d": "Length of the simulation."
   },
   {
    "x": 618.6,
-   "y": 490.8,
+   "y": 538,
    "t": "Start wetness",
    "d": "Initial relative saturation."
   },
   {
    "x": 874.6500000000001,
-   "y": 492.8,
+   "y": 540,
    "t": "Lower boundary",
    "d": "Free drainage, closed or groundwater table."
   },
   {
    "x": 119.1875,
-   "y": 539.2,
+   "y": 586.4,
    "t": "Run the column",
    "d": "Starts the calculation."
   }

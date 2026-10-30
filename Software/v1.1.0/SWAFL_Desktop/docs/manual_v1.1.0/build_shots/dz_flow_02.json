@@ -8,26 +8,26 @@
  "note": "",
  "marks": [
   {
-   "x": 120.53750000000001,
-   "y": 278.40000000000003,
+   "x": 118.775,
+   "y": 325.6,
    "t": "Where you are",
    "d": "The number of the step on the guided path and the number of steps."
   },
   {
-   "x": 233.07500000000002,
-   "y": 278.40000000000003,
+   "x": 229.55,
+   "y": 325.6,
    "t": "What to do here",
    "d": "The name of the step and one sentence on what it is for."
   },
   {
-   "x": 1532.9750000000001,
-   "y": 278.40000000000003,
+   "x": 1683.0625,
+   "y": 325.6,
    "t": "Back",
    "d": "Returns to the step before, with the name of that step."
   },
   {
-   "x": 1729.375,
-   "y": 278.40000000000003,
+   "x": 1889.375,
+   "y": 325.6,
    "t": "Next",
    "d": "Goes on to the step after, with the name of that step."
   }

@@ -32,7 +32,7 @@ const groups = process.argv.slice(2).length ? process.argv.slice(2) : fs.readdir
       try {
         if (!p || sp.fresh) { if (p) await p.context().close(); p = await ctxPage(); }
         const rr = await sp.run(p, { open: async (t, w = 1200) => { await p.evaluate(t => DaisyUI.open(t), t); await p.waitForTimeout(w); }, wait: ms => p.waitForTimeout(ms), root: APP });
-        let tall = null; if (sp.full !== false) { await p.setViewportSize({ width: 1280, height: 3000 }); tall = await p.addStyleTag({ content: '.dzw{height:auto !important;max-height:none !important;overflow:visible !important}' }); await p.waitForTimeout(500); }
+        let tall = null; if (sp.full !== false) { await p.setViewportSize({ width: 1280, height: 3000 }); tall = await p.addStyleTag({ content: '.dzw{height:auto !important;max-height:none !important;overflow:visible !important} #modalRoot .modal{height:auto !important;max-height:none !important}' }); await p.waitForTimeout(500); }
         await p.waitForTimeout(250); const mh = await p.evaluateHandle(() => [...document.querySelectorAll('#modalRoot .modal')].pop()), bb = await mh.asElement().boundingBox();
         if (rr && rr.title) sp = Object.assign({}, sp, rr); const marks = []; for (const m of (sp.marks || [])) { const pos = await markPos(p, m); if (!pos || pos.off) { report.push(sp.id + ': mark not found or out of view: ' + m.s + (pos ? ' (below the visible part)' : '')); continue; } marks.push({ x: pos.x * SC, y: pos.y * SC, t: m.t, d: m.d || '' }); }
         await p.screenshot({ path: path.join(OUT, sp.id + '.png'), clip: { x: bb.x, y: bb.y, width: bb.width, height: bb.height } });

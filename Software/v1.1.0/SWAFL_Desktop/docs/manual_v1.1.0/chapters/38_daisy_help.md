@@ -17,10 +17,10 @@
 
 | Message | Meaning | What to do |
 |:--|:--|:--|
-| No data to draw from yet | The Processes tab has no run to read. | Press Run Daisy with my data and all process logs, run a scenario, or load logs in Files. |
-| Not used: radiation is not in the data | The weather has no radiation column, and the latitude is not known. | Give the place in My data, so that the latitude is found, or type the latitude. |
+| No data to draw from yet | The Process map tab has no run to read. | Press Run Daisy with my data and all process logs, run a scenario, or load logs in Files. |
+| Not used: radiation is not in the data | The weather has no radiation column, and the latitude is not known. | Give the place in Input data, so that the latitude is found, or type the latitude. |
 | Ask for at least six years | The weather record is too short for Daisy. | Choose a longer period of years. |
-| No connection to the weather service | The internet is not reachable. | Use a weather file in My data, or try again when online. |
+| No connection to the weather service | The internet is not reachable. | Use a weather file in Input data, or try again when online. |
 | The weather service answered HTTP 400 | The request was refused, for example because it ended after the last complete year. | Choose a last year before the current year. |
 | Daisy is not available here | The program is not found or the web version is open. | Open the desktop app and choose the Daisy program once in Scenarios. |
 
@@ -54,7 +54,7 @@
 
 **pF.** The common logarithm of the suction of soil water in cm. Field capacity is near pF 2 and the wilting point at pF 4.2.
 
-**Process.** A part of the model drawn in the map of the Processes tab, such as soil water or nitrate.
+**Process.** A part of the model drawn in the map of the Process map tab, such as soil water or nitrate.
 
 **Response.** A result measured in every run, such as yield, irrigation or nitrate leached.
 
