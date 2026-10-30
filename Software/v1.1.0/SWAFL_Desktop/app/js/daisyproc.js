@@ -157,7 +157,7 @@
   function html(arg) {
     if (arg && byId(arg)) st.sel = arg;
     return '<div class="dzcard"><b>The processes of the Daisy model</b> redrawn from Fig. 1 of the Daisy paper. Click a box (snowpack, intercepted water, litter, pond, soil water, biopores, drain, NO3, NH4, Plant-N, organs, residues, photosynthesis, AOM, SMB, SOM) to read what Daisy does there and to draw its figures from the logs of a standard run of the rotation.</div>' +
-      (window.DaisyScenUI ? window.DaisyScenUI.strip() : '') + '<div id="dzPmap">' + svg({ complete: 1 }) + '</div><div id="dzPchips">' + chips() + '</div><div id="dzPdet"></div>';
+      (window.DaisyScenUI ? window.DaisyScenUI.strip() : '') + '<div id="dzPmap" style="display:flex;justify-content:center">' + svg({ complete: 1 }) + '</div><div id="dzPchips" style="text-align:center">' + chips() + '</div><div id="dzPdet"></div>';
   }
   async function detail() {
     const p = byId(st.sel), box = document.getElementById('dzPdet'); if (!box) return;
