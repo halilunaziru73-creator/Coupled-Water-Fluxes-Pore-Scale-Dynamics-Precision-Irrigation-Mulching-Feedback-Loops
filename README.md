@@ -212,9 +212,9 @@ Daisy is a Darcy-scale model. The pore-scale dynamics discussed here are represe
 
 Figures are PNG (220 dpi). Interactive pages work offline; keep `plotly.min.js` in the same folder, or open them online through GitHub Pages.
 
-## Figure-by-figure results and why they happen
+## Results and decisions deduced from the 10,190 simulations: figure by figure
 
-Every figure, in catalogue order, each with the mechanism behind the pattern. The four figures in **New Synthesis** and the key synthesis figure additionally give the supporting literature and argue explicitly for what is new about the approach; treat the novelty claims as offered, not as checked exhaustively against the literature (see the caveats in each entry and in the project README).
+Every figure below is computed from the 10,190 Daisy simulations ([`Data`](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/tree/main/Data): the raw run table and the Zenodo archive) and stored with its script, derived tables and caption in [`Results`](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/tree/main/Results). Each entry gives what the figure shows, the mechanism behind the pattern, and the decision that can be deduced from it (a trigger setting, a mulch expectation, a regime to avoid). The four figures in **New Synthesis** and the key synthesis figure additionally give the supporting literature and argue explicitly for what is new about the approach; treat the novelty claims as offered, not as checked exhaustively against the literature (see the caveats in each entry).
 
 ### Key Synthesis Figure (00_Key_Synthesis_Figure)
 
