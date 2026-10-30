@@ -67,6 +67,8 @@ The paper asks what a blind method can and cannot recover from a flux matrix. A 
 \paragraph{Study design and levels of evidence.} The unit of observation is the annual-mean water balance of one simulated run, and the runs of an experiment are correlated because they share a design; for this reason validation withholds whole experiments and whole soils. Four levels of evidence are kept apart. Computational reproducibility, the regeneration of every reported number from archived code and data, is established. Predictive validity is assessed by leave-one-experiment-out and leave-one-soil-out scoring against a flexible benchmark, with a nested evaluation of the selection step. Mechanistic validity is limited to the process model, so that the unattributed flux is a property of the model's accounting. Field transferability is not tested, and the conclusions are stated as questions that measured data can settle.
 
 %==========================================================
+\paragraph{What is new.} Interpretable machine learning is usually applied to a model output without asking whether the output is a closed accounting. This paper makes the audit the first step: partitions of the water balance are tested for closure before they are used as targets, a permutation null is applied to every decomposition-based invariant, laws are validated across regimes (experiments, soils, climates) and not only across random folds, a flexible benchmark is reported even where it wins, a domain of validity is stated for each law, and the failures are published. The accounting gap that the audit finds is quantified, and the protocol is given as seven rules that can be applied to other process models.
+
 \section{Materials and methods}
 \label{sec:methods}
 \subsection{Data}

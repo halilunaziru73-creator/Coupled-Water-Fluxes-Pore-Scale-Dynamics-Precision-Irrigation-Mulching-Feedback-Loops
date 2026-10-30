@@ -24,6 +24,8 @@ The question of this article is how the hand-over should be built so that it can
 
 \paragraph{Contributions.} (1) A bridge with five small parts and a single rule that keeps the origin of every Daisy number visible. (2) A set of tests of each part against the files of the Daisy project (logs of nitrogen, a tracer and water, and 792 stored outputs of the denitrification function). (3) A comparison of the three routes from Daisy to a decision (ensemble, meta-model, live run) in time and in what they can answer. (4) A defect of the shared denitrification function that the tests found, and its correction.
 
+\paragraph{What is new.} A process model and a decision tool usually exchange files by hand, and the origin of a number is lost on the way. The bridge keeps one rule: a Daisy layer shows only a Daisy run made in the workbench, and otherwise says that there is none. Around this rule are the parsers of the Daisy logs, a decision table, a chemical budget that is tested for closure, a mapping of eight of the ten soils of the suite to Daisy soils (two are flagged as unmapped), and a return path for the weather of the project. The three routes from Daisy to a decision (the ensemble, the meta-model, a live run) are compared in time and in what they can answer, and the tests against 792 stored Daisy outputs found and corrected a defect of the denitrification function.
+
 \section{The bridge}
 \subsection{Parts}
 \Cref{fig:bridge} shows the bridge. A scenario or an experiment of the workbench is turned into a Daisy set-up and run by Daisy 7.1.14. Daisy writes its logs as tab-separated files (\texttt{.dlf}) with a header, a row of names, a row of units and one row per output interval. The bridge has five parts.
@@ -143,9 +145,12 @@ A bridge from a process model to decision layers can be small, rule-bound and te
 \section*{Author contributions}
 N.H. designed the bridge, wrote the software and the tests, and wrote the article.
 \section*{Funding}
-No external funding was received for this work. [To be completed by the author if applicable.]
+No funding was received for this work.
 \section*{Competing interests}
 The author declares no competing interests.
+
+\section*{Acknowledgements}
+The Daisy model is developed and maintained at the University of Copenhagen. The author thanks the maintainers of the open-source libraries cited.
 
 \bibliography{refs}
 

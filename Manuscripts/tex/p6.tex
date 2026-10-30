@@ -24,6 +24,8 @@ The software paper of the first release (Paper~3) described the meta-model, the 
 
 \paragraph{Contributions.} (1) The architecture of a suite in which the field, the design, the schedule, the process model and the phenotyping share one project and one rule of traceability. (2) The tools for the real field and the way they fall back when the data are not available. (3) A deterministic phenotyping layer and its tests. (4) A crop library with a stated source of every coefficient. (5) A test of the whole suite (all layers opened and run; the crop library; the phenotyping model) and a statement of what was not tested.
 
+\paragraph{What is new.} The new element is the combination, under one rule of traceability: a field sketch, Sentinel-2 indices and image analysis, management zones with zone-by-zone irrigation, closed-form design of three irrigation systems, a 48-crop library with a stated source for every coefficient, a daily water balance, the Daisy workbench, and a deterministic virtual phenotyping layer that grows a plant in the soil, weather and management of the project, well-watered and under drought, without random numbers. The tests that go with it (all 22 layers run, crop constraints, repeatability and mass closure of the phenotyping model) are reported together with the limits of what they show.
+
 \section{The suite}
 \subsection{Architecture}
 \Cref{fig:system} shows the architecture. The user works in one window with a tree of layers on the left, the picture or design of the layer in the middle, a dashboard on the right and a panel of project properties. The dashboard of every layer has the same five tabs (results, design, charts, figure, messages), so that a result is read in the same place whichever layer made it. A single Run button starts a layer; the results of a layer wait for a new run when a setting of the project is changed, so that nothing moves while the settings are being made. The date of the toolbar is the working date of the whole suite and can be set to any day from 1980 to 2100: the weather of 1980 to 1999 is a recorded baseline, that of 2000 to 2100 is projected from a chosen baseline year (a typical, dry, wet or specific year), and the user is told that projections are simulations and not forecasts.
@@ -141,9 +143,12 @@ SWAFL Desktop 1.1.0 is a single offline application that joins the field, the sa
 \section*{Author contributions}
 N.H. designed the suite, wrote the software and the checks, and wrote the article.
 \section*{Funding}
-No external funding was received for this work. [To be completed by the author if applicable.]
+No funding was received for this work.
 \section*{Competing interests}
 The author declares no competing interests.
+
+\section*{Acknowledgements}
+The Daisy model is developed and maintained at the University of Copenhagen. The author thanks the maintainers of the open-source libraries cited.
 
 \bibliography{refs}
 

@@ -17,6 +17,6 @@ Figures in `figures/` (`shots/` full-resolution interface captures, `shots_jpg/`
 * `reproducibility/` is a self-contained package that regenerates every number and figure from the archived Daisy ensemble (`bash run_all.sh`), with pinned versions, fixed seeds, SHA-256 checksums and automatic comparison against the reported values. Start with `reproducibility/README_REPRODUCE.md`.
 * Figure 1 of each manuscript uses a brown, orange, pink, rust and purple scheme; data figures use the Okabe-Ito palette.
 
-**Status / caveats.** Drafts. Zenodo DOI, ORCID, affiliation, funding and competing-interest fields are placeholders. References beyond the author's list were entered from memory; DOIs not independently verified. No field validation is claimed; negative results are reported in the text.
+**Status / caveats.** Drafts. No funding was received. References beyond the author's list were entered from memory; DOIs not independently verified. No field validation is claimed; negative results are reported in the text.
 
-Papers 4 to 6: Daisy could not be run in the environment used (no end-to-end Daisy test); the satellite and open-data services were not reachable (test data only); no field validation; funding is a placeholder; new references were entered from memory and their DOIs are not verified.
+Papers 4 to 6: Daisy could not be run in the environment used (no end-to-end Daisy test); the satellite and open-data services were not reachable (test data only); no field validation; new references were entered from memory and their DOIs are not verified.

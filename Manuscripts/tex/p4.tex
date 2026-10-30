@@ -24,6 +24,8 @@ This article describes a graphical workbench for Daisy that addresses both parts
 
 \paragraph{Contributions.} (1) A guided path from site data to a decision, in which each step is one tab and each tab states what it is for. (2) Seventeen prepared experiments, with their compact designs, their run-time estimates and the study results next to them. (3) A soil-column solver, response curves and a three-optimiser calibration tool that run without Daisy. (4) A verification of the computing parts: design size and fidelity, solver convergence and mass balance, agreement with the stored outputs of the Daisy denitrification function, and parameter recovery by the optimisers, with the defect that the verification found.
 
+\paragraph{What is new.} Daisy is a mature process model that is run from text files. The workbench described here joins, in one program, a guided path from site data to a run, the study design of 17 prepared experiments with compact designs and run-time estimates, an inspectable map of the model's processes and components, a soil-column solver, response curves and a three-optimiser calibration tool that work before Daisy is started (no claim is made about other tools). The compact designs are tested for how much of the full design they keep, the solver against independent reference solutions, and the optimisers by parameter recovery; the test of the denitrification function found a defect that had been in the shared code, and it is corrected.
+
 \section{The workbench}
 \subsection{Design principles}
 Four principles shaped the workbench. \emph{Questions before syntax}: the first thing a user does is to state a question, either by choosing a scenario or a prepared experiment or by writing a request, and the set-up file is the result and not the starting point. \emph{Everything that runs is shown first}: a design lists its runs, their settings and an estimate of the time before anything is run. \emph{One source of data}: the weather and the soil of the site are entered once and every tab uses them. \emph{No hidden steps between a result and a decision}: the last step of the path hands the results of the runs to the layers of the decision-support suite (Paper~5).
@@ -137,9 +139,12 @@ The workbench makes the Daisy model usable through a question-first path, makes 
 \section*{Author contributions}
 N.H. designed the workbench, wrote the software and the checks, analysed the data and wrote the article.
 \section*{Funding}
-No external funding was received for this work. [To be completed by the author if applicable.]
+No funding was received for this work.
 \section*{Competing interests}
 The author declares no competing interests.
+
+\section*{Acknowledgements}
+The Daisy model is developed and maintained at the University of Copenhagen. The author thanks the maintainers of the open-source libraries cited.
 
 \bibliography{refs}
 
