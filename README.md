@@ -27,7 +27,7 @@
 
 ## Abstract
 
-Irrigation and evaporation-control mulching are usually tuned one soil at a time, and the water that a mulch or a lower evaporation rate "saves" is routinely counted as water gained. This project asks what is left of such a saving once the soil, the weather and the irrigation rule are allowed to act. It runs one process model (Daisy 7.1) over a designed ensemble of **10,190 simulations**, ten soils and 17 experiments, extracts transferable rules from it, audits the water balance those rules rest on, and turns the result into an open, offline decision-support suite, **SWAFL Desktop**, in which every number leads to a numbered equation with a stated origin. The suite also contains a graphical workbench for Daisy itself, a bridge that brings Daisy output into the decision layers, tools for the real field (field sketch, Sentinel-2 indices, zone-by-zone irrigation), a library of 48 crops and a deterministic phenotyping layer.
+Irrigation and evaporation-control mulching are usually tuned one soil at a time, and the water that a mulch or a lower evaporation rate "saves" is routinely counted as water gained. This project asks what is left of such a saving once the soil, the weather and the irrigation rule are allowed to act. It runs one process model, the [Daisy model](https://github.com/daisy-model) (version 7.1, developed at the University of Copenhagen), over a designed ensemble of **10,190 simulations**, ten soils and 17 experiments, extracts transferable rules from it, audits the water balance those rules rest on, and turns the result into an open, offline decision-support suite, **SWAFL Desktop**, in which every number leads to a numbered equation with a stated origin. The suite also contains a graphical workbench for Daisy itself, a bridge that brings Daisy output into the decision layers, tools for the real field (field sketch, Sentinel-2 indices, zone-by-zone irrigation), a library of 48 crops and a deterministic phenotyping layer.
 
 ## The problem
 
@@ -136,7 +136,7 @@ It downloads the app, builds `SWAFL.exe`, puts it on your Desktop and starts it.
 
 ## Study design
 
-Daisy 7.1 (University of Copenhagen) is a one-dimensional, Richards-equation soil-plant-atmosphere model with van Genuchten and Mualem hydraulics and the WEPP dynamic structure model for tillage and consolidation. Ten soils from sand to silty clay loam (USDA texture, Ap and Bt horizons) were simulated under two weather records: Taastrup, Denmark, 1980 to 1999, and Bologna, Italy, 1994 to 2005 (the Mediterranean nitrogen and water experiment).
+The [Daisy model](https://github.com/daisy-model) (Daisy 7.1, developed at the University of Copenhagen) is a one-dimensional, Richards-equation soil-plant-atmosphere model with van Genuchten and Mualem hydraulics and the WEPP dynamic structure model for tillage and consolidation. Ten soils from sand to silty clay loam (USDA texture, Ap and Bt horizons) were simulated under two weather records: Taastrup, Denmark, 1980 to 1999, and Bologna, Italy, 1994 to 2005 (the Mediterranean nitrogen and water experiment).
 
 **10,190 simulations across 17 experiments (E0 to E16):**
 

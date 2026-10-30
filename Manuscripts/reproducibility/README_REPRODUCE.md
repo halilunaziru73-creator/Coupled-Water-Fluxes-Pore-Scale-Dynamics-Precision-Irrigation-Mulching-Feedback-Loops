@@ -1,6 +1,6 @@
 # Reproducibility package
 
-Regenerates every number and figure in the three manuscripts from the archived Daisy ensemble, and checks the result automatically.
+Regenerates every number and figure in the six manuscripts from the archived ensemble of the [Daisy model](https://github.com/daisy-model) (University of Copenhagen), and checks the result automatically.
 
 1. *Soil Hydraulic Memory and the Recoverability of Evaporation Savings* (P1)
 2. *Auditing Water-Balance Closure in a Soil-Plant Model with Interpretable Machine Learning* (P2)

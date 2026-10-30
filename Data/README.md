@@ -9,7 +9,7 @@
 **Complete dataset (permanent archive):** Naziru Halilu (2026). *Data_coupled_water_fluxes_pore_scale_dynamics* [Dataset]. Zenodo.
 **[https://doi.org/10.5281/zenodo.23043626](https://doi.org/10.5281/zenodo.23043626)**
 
-The Zenodo record holds all 10 190 Daisy runs, raw and derived. This folder holds the raw run table that every result
+The Zenodo record holds all 10 190 runs of the [Daisy model](https://github.com/daisy-model) (University of Copenhagen), raw and derived. This folder holds the raw run table that every result
 in the repository is computed from, and lists, with a link, every data file used in the GitHub repository.
 
 ---

@@ -1,6 +1,6 @@
 # Manuscripts
 
-Six manuscript drafts (xelatex + bibtex; `tex/build.sh p1|p2|p3|p4|p5|p6`):
+Six manuscript drafts on soil water, irrigation and the [Daisy model](https://github.com/daisy-model) (developed at the University of Copenhagen) (xelatex + bibtex; `tex/build.sh p1|p2|p3|p4|p5|p6`):
 
 1. **Soil Hydraulic Memory and the Recoverability of Evaporation Savings** (`pdf/Paper1_*`)
 2. **Auditing Water-Balance Closure in a Soil-Plant Model with Interpretable Machine Learning** (`pdf/Paper2_*`)

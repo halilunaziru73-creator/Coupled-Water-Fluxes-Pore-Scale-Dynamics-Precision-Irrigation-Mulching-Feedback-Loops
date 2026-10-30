@@ -6,6 +6,8 @@
 
 # SWAFL — Soil Water, Atmosphere, Feedback and Layout workbench
 
+SWAFL is built on 10,190 simulations of the [Daisy model](https://github.com/daisy-model), the soil-plant-atmosphere model developed at the University of Copenhagen, and includes a graphical workbench for running that model.
+
 A desktop application (Windows `SWAFL.exe`) for coupled water fluxes, pore-scale dynamics, precision irrigation and mulching feedback loops, with **surface, drip and sprinkler design** (layout drawings, pipe network, pump and hydraulic grade line, design checks).
 It runs the same simulation engine as the web explorer, inside a classic engineering workbench (grey 3-D chrome, white data tree, task tabs and status bar):
 

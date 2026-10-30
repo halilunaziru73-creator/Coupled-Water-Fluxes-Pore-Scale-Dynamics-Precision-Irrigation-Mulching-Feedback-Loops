@@ -4,7 +4,7 @@
 
 **Download the SWAFL manual (PDF):** version 1.1.0, the latest: [open in the browser](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf) or [download](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf)
 
-Each version of SWAFL Desktop has its own folder with its source, its manual and its zip. Author: Naziru Halilu. MIT licence.
+Each version of SWAFL Desktop has its own folder with its source, its manual and its zip. Author: Naziru Halilu. MIT licence. The simulations behind the software were made with the [Daisy model](https://github.com/daisy-model), developed at the University of Copenhagen.
 
 | Version | Folder | Zip | Manual | Online workbench |
 |:--|:--|:--|:--|:--|

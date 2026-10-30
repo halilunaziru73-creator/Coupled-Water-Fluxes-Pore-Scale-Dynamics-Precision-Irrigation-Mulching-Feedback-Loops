@@ -1,6 +1,6 @@
 RESULTS ANALYSIS
 Coupled water fluxes and pore-scale dynamics under joint irrigation and evaporation (mulch) control:
-mapping non-linear soil-atmosphere feedback loops with Daisy
+mapping non-linear soil-atmosphere feedback loops with Daisy (the Daisy model, developed at the University of Copenhagen: https://github.com/daisy-model)
 =====================================================================================
 
 WHAT IS IN THIS FOLDER
