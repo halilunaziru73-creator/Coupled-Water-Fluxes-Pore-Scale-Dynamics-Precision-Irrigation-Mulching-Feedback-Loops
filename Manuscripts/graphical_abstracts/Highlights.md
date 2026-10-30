@@ -26,3 +26,26 @@ Three to five bullets per manuscript, at most 85 characters each (journal limit)
 * Surface, drip and sprinkler design reproduce FAO-45 and textbook examples within 3%
 * One command re-runs every check; 10^5 scenario sweeps take about 2 s
 
+## Paper 4: A Graphical Workbench for the Daisy Model
+
+* A guided nine-step path takes a user from question to a Daisy run
+* 17 prepared experiments, 53 factors and a process map of 14 processes
+* Soil column solver tested against independent reference solutions
+* Calibration by sequential, CMA-ES and Bayesian search
+* Seven weather files and Daisy 7.1.14 are bundled for Windows
+
+## Paper 5: Connecting Daisy to SWAFL
+
+* Daisy output logs are parsed into decision tables and chemical budgets
+* Eight of ten SWAFL soils map to Daisy soils; two are flagged unmapped
+* Daisy layers show only live runs, never stored results as if new
+* The denitrification function now reproduces 792 stored Daisy outputs
+* Weather of the SWAFL project returns to Daisy through one path
+
+## Paper 6: SWAFL Desktop 1.1.0, the Whole Suite
+
+* One offline application from field sketch and Sentinel-2 to irrigation design
+* All 22 layers open and run without a script error
+* 48 crops, 110 combinations; 13 evergreen entries flagged for a low mid-season Kc
+* Deterministic phenotyping is repeatable and closes soil water to 4e-5 mm
+* Drought pulse cuts grain 14 to 42 % across seven genotypes

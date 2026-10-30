@@ -26,6 +26,7 @@ bash run_all.sh ./work                              # ~15-20 min; writes only in
 |---|---|
 | `data/daisy_ensemble.csv.gz` | all 10 190 Daisy runs (32 columns). 10 041 have `valid == 1`; 149 are numerical failures kept for the failure analysis in P2. Round trip to the working pickle verified exact. |
 | `analysis/` | analysis and figure scripts (Python). Paths are relative to the environment variable `SWAFL_MS` (the work directory). |
+| `p456/` | checks, analyses, figure and table scripts for Papers 4 to 6 (Node.js + Playwright, Python); outputs `out_*`. |
 | `p3_js/` | verification scripts for SWAFL Desktop (Node.js + Playwright, driving the engine in headless Chromium). |
 | `lib/` | `wsmodel.js`, `model.js` (stand-alone surface and drip models used for the independent comparison) and `engine_v1_pre_correction.html` (the first release of the engine, needed only to regenerate the "version 1" rows of the sprinkler, drip and surface tables). |
 | `intermediates/` | three small arrays used by figure scripts whose generating code was not kept as a script (see "Limits"). |

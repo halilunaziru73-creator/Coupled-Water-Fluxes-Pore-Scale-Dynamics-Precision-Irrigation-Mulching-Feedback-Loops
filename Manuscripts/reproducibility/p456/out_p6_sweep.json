@@ -1,0 +1,470 @@
+[
+ {
+  "id": "sid",
+  "ran": false,
+  "engineInputs": 19,
+  "ms": 6655,
+  "tabs": [
+   "Results",
+   "Design",
+   "Charts",
+   "Figure",
+   "Messages"
+  ],
+  "inputs": 0,
+  "chartsTab": 8,
+  "errors": [],
+  "kpi": 62,
+  "msgs": 0,
+  "charts": 4,
+  "textLen": 2259,
+  "canvas": null
+ },
+ {
+  "id": "drip",
+  "ran": false,
+  "engineInputs": 19,
+  "ms": 6639,
+  "tabs": [
+   "Results",
+   "Design",
+   "Charts",
+   "Figure",
+   "Messages"
+  ],
+  "inputs": 0,
+  "chartsTab": 8,
+  "errors": [],
+  "kpi": 62,
+  "msgs": 2,
+  "charts": 4,
+  "textLen": 2500,
+  "canvas": null
+ },
+ {
+  "id": "spr",
+  "ran": false,
+  "engineInputs": 19,
+  "ms": 6839,
+  "tabs": [
+   "Results",
+   "Design",
+   "Charts",
+   "Figure",
+   "Messages"
+  ],
+  "inputs": 0,
+  "chartsTab": 8,
+  "errors": [],
+  "kpi": 62,
+  "msgs": 4,
+  "charts": 4,
+  "textLen": 2860,
+  "canvas": null
+ },
+ {
+  "id": "v1",
+  "ran": true,
+  "engineInputs": 19,
+  "ms": 6431,
+  "tabs": [
+   "Results",
+   "Design",
+   "Charts",
+   "Figure",
+   "Messages"
+  ],
+  "inputs": 0,
+  "chartsTab": 4,
+  "errors": [],
+  "kpi": 62,
+  "msgs": 4,
+  "charts": 4,
+  "textLen": 1672,
+  "canvas": null
+ },
+ {
+  "id": "n1",
+  "ran": true,
+  "engineInputs": 19,
+  "ms": 6350,
+  "tabs": [
+   "Results",
+   "Design",
+   "Charts",
+   "Figure",
+   "Messages"
+  ],
+  "inputs": 0,
+  "chartsTab": 4,
+  "errors": [],
+  "kpi": 62,
+  "msgs": 6,
+  "charts": 6,
+  "textLen": 3419,
+  "canvas": [
+   606,
+   460
+  ]
+ },
+ {
+  "id": "v4",
+  "ran": true,
+  "engineInputs": 19,
+  "ms": 6388,
+  "tabs": [
+   "Results",
+   "Design",
+   "Charts",
+   "Figure",
+   "Messages"
+  ],
+  "inputs": 0,
+  "chartsTab": 4,
+  "errors": [],
+  "kpi": 62,
+  "msgs": 4,
+  "charts": 4,
+  "textLen": 1584,
+  "canvas": null
+ },
+ {
+  "id": "v6",
+  "ran": true,
+  "engineInputs": 19,
+  "ms": 6371,
+  "tabs": [
+   "Results",
+   "Design",
+   "Charts",
+   "Figure",
+   "Messages"
+  ],
+  "inputs": 0,
+  "chartsTab": 4,
+  "errors": [],
+  "kpi": 62,
+  "msgs": 2,
+  "charts": 4,
+  "textLen": 1503,
+  "canvas": null
+ },
+ {
+  "id": "e1",
+  "ran": true,
+  "engineInputs": 19,
+  "ms": 6574,
+  "tabs": [
+   "Results",
+   "Design",
+   "Charts",
+   "Figure",
+   "Messages"
+  ],
+  "inputs": 0,
+  "chartsTab": 4,
+  "errors": [],
+  "kpi": 62,
+  "msgs": 3,
+  "charts": 4,
+  "textLen": 1802,
+  "canvas": null
+ },
+ {
+  "id": "n2",
+  "ran": true,
+  "engineInputs": 19,
+  "ms": 6405,
+  "tabs": [
+   "Results",
+   "Design",
+   "Charts",
+   "Figure",
+   "Messages"
+  ],
+  "inputs": 0,
+  "chartsTab": 4,
+  "errors": [],
+  "kpi": 62,
+  "msgs": 2,
+  "charts": 4,
+  "textLen": 1674,
+  "canvas": null
+ },
+ {
+  "id": "n3",
+  "ran": true,
+  "engineInputs": 19,
+  "ms": 6370,
+  "tabs": [
+   "Results",
+   "Design",
+   "Charts",
+   "Figure",
+   "Messages"
+  ],
+  "inputs": 0,
+  "chartsTab": 4,
+  "errors": [],
+  "kpi": 62,
+  "msgs": 5,
+  "charts": 4,
+  "textLen": 1680,
+  "canvas": null
+ },
+ {
+  "id": "v3",
+  "ran": true,
+  "engineInputs": 19,
+  "ms": 6457,
+  "tabs": [
+   "Results",
+   "Design",
+   "Charts",
+   "Figure",
+   "Messages"
+  ],
+  "inputs": 0,
+  "chartsTab": 4,
+  "errors": [],
+  "kpi": 62,
+  "msgs": 3,
+  "charts": 4,
+  "textLen": 1661,
+  "canvas": null
+ },
+ {
+  "id": "v7",
+  "ran": true,
+  "engineInputs": 19,
+  "ms": 6461,
+  "tabs": [
+   "Results",
+   "Design",
+   "Charts",
+   "Figure",
+   "Messages"
+  ],
+  "inputs": 0,
+  "chartsTab": 4,
+  "errors": [],
+  "kpi": 62,
+  "msgs": 0,
+  "charts": 6,
+  "textLen": 3237,
+  "canvas": [
+   606,
+   440
+  ]
+ },
+ {
+  "id": "r1",
+  "ran": true,
+  "engineInputs": 19,
+  "ms": 6429,
+  "tabs": [
+   "Results",
+   "Design",
+   "Charts",
+   "Figure",
+   "Messages"
+  ],
+  "inputs": 0,
+  "chartsTab": 4,
+  "errors": [],
+  "kpi": 62,
+  "msgs": 3,
+  "charts": 4,
+  "textLen": 1987,
+  "canvas": null
+ },
+ {
+  "id": "dph",
+  "ran": false,
+  "engineInputs": 19,
+  "ms": 6328,
+  "tabs": [
+   "Results",
+   "Design",
+   "Charts",
+   "Figure",
+   "Messages"
+  ],
+  "inputs": 0,
+  "chartsTab": 0,
+  "errors": [],
+  "kpi": 0,
+  "msgs": 0,
+  "charts": 0,
+  "textLen": 292,
+  "canvas": null
+ },
+ {
+  "id": "field",
+  "ran": true,
+  "engineInputs": 19,
+  "ms": 6716,
+  "tabs": [
+   "Results",
+   "Design",
+   "Charts",
+   "Figure",
+   "Messages"
+  ],
+  "inputs": 0,
+  "chartsTab": 4,
+  "errors": [],
+  "kpi": 62,
+  "msgs": 5,
+  "charts": 4,
+  "textLen": 2084,
+  "canvas": null
+ },
+ {
+  "id": "spac",
+  "ran": true,
+  "engineInputs": 19,
+  "ms": 6562,
+  "tabs": [
+   "Results",
+   "Design",
+   "Charts",
+   "Figure",
+   "Messages"
+  ],
+  "inputs": 0,
+  "chartsTab": 4,
+  "errors": [],
+  "kpi": 62,
+  "msgs": 0,
+  "charts": 4,
+  "textLen": 1470,
+  "canvas": null
+ },
+ {
+  "id": "v2",
+  "ran": true,
+  "engineInputs": 19,
+  "ms": 6490,
+  "tabs": [
+   "Results",
+   "Design",
+   "Charts",
+   "Figure",
+   "Messages"
+  ],
+  "inputs": 0,
+  "chartsTab": 4,
+  "errors": [],
+  "kpi": 62,
+  "msgs": 4,
+  "charts": 4,
+  "textLen": 1695,
+  "canvas": null
+ },
+ {
+  "id": "yby",
+  "ran": true,
+  "engineInputs": 19,
+  "ms": 6418,
+  "tabs": [
+   "Results",
+   "Design",
+   "Charts",
+   "Figure",
+   "Messages"
+  ],
+  "inputs": 0,
+  "chartsTab": 16,
+  "errors": [],
+  "kpi": 62,
+  "msgs": 0,
+  "charts": 4,
+  "textLen": 1346,
+  "canvas": null
+ },
+ {
+  "id": "wb2",
+  "ran": true,
+  "engineInputs": 19,
+  "ms": 6357,
+  "tabs": [
+   "Results",
+   "Design",
+   "Charts",
+   "Figure",
+   "Messages"
+  ],
+  "inputs": 0,
+  "chartsTab": 10,
+  "errors": [],
+  "kpi": 62,
+  "msgs": 0,
+  "charts": 4,
+  "textLen": 1418,
+  "canvas": null
+ },
+ {
+  "id": "nb",
+  "ran": true,
+  "engineInputs": 19,
+  "ms": 6433,
+  "tabs": [
+   "Results",
+   "Design",
+   "Charts",
+   "Figure",
+   "Messages"
+  ],
+  "inputs": 0,
+  "chartsTab": 6,
+  "errors": [],
+  "kpi": 62,
+  "msgs": 0,
+  "charts": 4,
+  "textLen": 1406,
+  "canvas": null
+ },
+ {
+  "id": "crop",
+  "ran": true,
+  "engineInputs": 19,
+  "ms": 6433,
+  "tabs": [
+   "Results",
+   "Design",
+   "Charts",
+   "Figure",
+   "Messages"
+  ],
+  "inputs": 0,
+  "chartsTab": 4,
+  "errors": [],
+  "kpi": 62,
+  "msgs": 0,
+  "charts": 4,
+  "textLen": 1470,
+  "canvas": null
+ },
+ {
+  "id": "v5",
+  "ran": true,
+  "engineInputs": 19,
+  "ms": 6386,
+  "tabs": [
+   "Results",
+   "Design",
+   "Charts",
+   "Figure",
+   "Messages"
+  ],
+  "inputs": 0,
+  "chartsTab": 4,
+  "errors": [],
+  "kpi": 62,
+  "msgs": 4,
+  "charts": 4,
+  "textLen": 1774,
+  "canvas": null
+ }
+]

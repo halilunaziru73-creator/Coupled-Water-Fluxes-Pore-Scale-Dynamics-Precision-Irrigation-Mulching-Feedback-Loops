@@ -98,7 +98,10 @@
   C.pressureResponse = h => { if (h >= 0) return 0.6; const pF = Math.log10(-h); if (pF <= 0) return 0.6; if (pF <= 1.5) return 0.6 + 0.4 * pF / 1.5; if (pF <= 2.5) return 1; if (pF <= 6.5) return 1 - (pF - 2.5) / 4; return 0; };
   C.denitrification = function (a) {
     const wfps = a.Theta / a.Theta_sat, fw = plf([0, 0.4, 0.5, 0.57, 0.64, 0.71, 0.76, 0.81, 0.85, 0.9, 1], [0, 0.01, 0.07, 0.17, 0.32, 0.51, 0.66, 0.79, 0.9, 1, 1], wfps);
-    const CO2mass = a.CO2_C * 0.001 * 30 * 1e8 * 24; let CO2 = a.CO2_C, CO2f = a.CO2_C_fast; const hc = C.pressureResponse(a.h); if (hc !== 0) { CO2f = CO2f / hc * 0.6; CO2 = CO2 / hc * 0.6; }
+    // Daisy passes the reaction CO2 values that are already corrected for the pressure response (c' = 0.6 c / hc); the regulation by CO2 uses the uncorrected value c = c' hc / 0.6.
+    // a.rawCO2 = true: the values given are the uncorrected ones and the correction is applied here (the form of the python extension).
+    const hc = C.pressureResponse(a.h); let CO2 = a.CO2_C, CO2f = a.CO2_C_fast, CO2mass;
+    if (a.rawCO2 && hc !== 0) { CO2mass = a.CO2_C * 0.001 * 30 * 1e8 * 24; CO2f = CO2f / hc * 0.6; CO2 = CO2 / hc * 0.6; } else CO2mass = (hc !== 0 ? a.CO2_C * hc / 0.6 : a.CO2_C) * 0.001 * 30 * 1e8 * 24;
     const alpha = a.alpha != null ? a.alpha : 0.0001, alphaF = a.alphaF != null ? a.alphaF : 0.05302701196829458, Kd = a.Kd != null ? a.Kd : 0.020833, fT = a.fT != null ? a.fT : 1;
     const potF = fT * alphaF * CO2f, potS = fT * alpha * (CO2 - CO2f), pot = potF + potS, rateF = fw * potF, rateS = fw * potS;
     const act = Math.min(rateS, Kd * a.NO3) + Math.min(rateF, Kd * a.NO3), no3m = a.NO3 / a.rho_b * 1e6;

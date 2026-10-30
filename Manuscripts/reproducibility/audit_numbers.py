@@ -28,7 +28,7 @@ C = [
  ('P2', 'GBM LOEO 0.879 (same three inputs)', et['lnET']['gbm_loeo'], 3),
  ('P2', 'smallest singular value 5.9', laws['svd4']['sv'][-1], 1), ('P2', 'permuted smallest singular value 33.3', laws['svd4_perm_minSV'], 1),
  ('P3', 'Spearman rho minimum 0.64', min(rho), 2), ('P3', 'Spearman rho maximum 0.97', max(rho), 2),
- ('P3', 'Engine 2 closure median 0.1 % of inflow', cl.median(), 1), ('P3', 'Engine 2 closure maximum 0.8 %', cl.max(), 1),
+ ('P3', 'Engine 2 closure median 0.1 % of inflow', cl.median(), 1), ('P3', 'Engine 2 closure maximum 0.7 %', cl.max(), 1),
  ('P3', 'sprinkler wetted diameter 28.98 m (corrected)', 2 * spr['nozzle']['R'], 2),
 ]
 if w is not None: C += [('P3', 'surface: median |error| 0.08 %', w.median(), 2), ('P3', 'surface: maximum |error| 1.81 %', w.max(), 2)]

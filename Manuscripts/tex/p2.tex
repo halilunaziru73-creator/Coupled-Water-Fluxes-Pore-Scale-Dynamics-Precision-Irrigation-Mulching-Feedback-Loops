@@ -596,6 +596,9 @@ Each law is reported with the regimes in which it was validated, and each bounda
 \section{Conclusions}
 A blind linear-invariant search recovers the water balance from a flux matrix with every coefficient within 5\,\% of the exact value, calibrated against a permutation null, and flags two accounting gaps: an unattributed evapotranspiration term averaging 164\,mm\,yr$^{-1}$ (30\,\% of ET) that depends on irrigation method, evaporation factor and mulch, and a storage non-closure of 16\,\% in the two initial-moisture experiments. Compositional PCA shows that a single drainage--evaporation axis dominates water partitioning, with a variance share (52--89\,\%) that depends strongly on how zero drainage is handled. A three-term law, $\ln\mathit{ET}=2.503+0.646\ln W-0.299\,n+0.029\ln(1+I)$, matches gradient boosting in leave-one-experiment-out ($R^2=0.898$) and leave-one-soil-out ($R^2=0.904$) validation, while sparse laws for drainage fraction, soil evaporation and the unattributed term do not, and irrigation compensation is not a universal constant. The conclusions are limited to a single process model and weather series, and the discovered ``law'' is the known balance together with a diagnosed accounting gap.
 
+\section*{Companion papers and release 1.1.0}
+The audit of the water balance in this paper uses the 17-experiment Daisy ensemble (10\,190 runs). Release 1.1.0 of SWAFL Desktop adds the Daisy workbench (Paper~4), the Daisy--SWAFL bridge, which includes a chemical budget closed by the same logic of closure (Paper~5), and a deterministic phenotyping layer whose soil water balance closes to $4\times10^{-5}$\,mm (Paper~6). The results of this paper were regenerated after these changes and are unchanged.
+
 \section*{Data and code availability}
 \dataavail
 

@@ -1,0 +1,160 @@
+\input{pre.tex}
+\hypersetup{pdftitle={A Graphical Workbench for the Daisy Agro-Hydrological Model},pdfauthor={Naziru Halilu}}
+\begin{document}
+\linenumbers
+\begin{titlepage}
+\vspace*{-1.2cm}
+\begin{center}\begin{minipage}{0.92\textwidth}\centering{\Large\bfseries A Graphical Workbench for the Daisy Soil--Plant--Atmosphere Model: Prepared Experiments, a Process Map, a Soil-Column Solver and Calibration in One Offline Application\par}\end{minipage}\end{center}
+\vspace{0.4cm}
+\authorblock
+\vspace{0.4cm}
+{\small\setlength{\parindent}{0pt}\setlength{\parskip}{0pt}
+\begin{center}\textbf{\normalsize Abstract}\end{center}\vspace{-0.4em}
+\noindent Daisy is a process-based model of the soil--plant--atmosphere system that has been developed and validated for more than three decades, but its use still requires the editing of text set-up files, the running of a command-line program, and the reading of plain-text log files. This is a barrier for agronomists, irrigation planners and students who need its answers but not its syntax. This article describes a graphical workbench for Daisy that is part of SWAFL Desktop 1.1.0 and runs offline. It is organised as a guided path of nine steps (input data, experiments and scenarios, process structure, results, hand-over to decision support) and a group of tools for model development. Seventeen experiments of a published ensemble of 10\,190 Daisy runs are offered as prepared designs; fourteen of them are reproduced as compact designs of 6 to 72 runs, and any other factorial design can be built from 53 factors. The workbench adds a process map of 14 processes and 76 further components, log plots, a mass balance, a run comparison with a stated smallest meaningful difference, a set-up editor, a one-dimensional Richards-equation soil column, response curves of the denitrification function, and a calibration tool with three optimisers. Each part that computes is checked against an independent reference. The 368 runs of the compact designs would take about 15 hours of Daisy time instead of the 361 hours of the study designs they stand for (a factor of 25), and the marginal curves of the study are recovered from them to a median of 13\,\% of their range (51 curves; 90th percentile 30\,\%). The soil-column solver conserves mass to better than 0.001\,mm per day in sand and loam and agrees with a scipy reference to 0.3 and 0.9\,\% of the drainage, but it is slow and grid-dependent for a ponded silty clay loam. The check of the denitrification function against the 792 stored Daisy outputs exposed a defect (a median error of 40\,\%) that is corrected in release 1.1.0, after which the agreement is 3$\times10^{-15}$. The three optimisers lower the misfit by three to six orders of magnitude, but only one of the three parameters of the test is recovered, which shows the limit of calibration on outputs alone. Daisy itself was not run for these checks and no field validation is claimed.
+
+\medskip\noindent \textbf{Keywords.} Daisy model; graphical user interface; agro-hydrological modelling; experiment design; Richards equation; model calibration; denitrification; decision support; open science\par}
+\end{titlepage}
+
+\section{Introduction}
+Process-based models of the soil--plant--atmosphere system are the main tools for asking what would happen to the water, the crop and the nitrogen of a field if the management or the climate changed. Daisy is one of them. It couples the water and heat flow in the soil, the soil organic matter and the nitrogen, the crop and the surface, and it has been described, calibrated and tested in a long series of papers \citep{Hansen1990,Abrahamsen2000,Hansen2012,Holbak2026}. Comparable models are used for crops and irrigation \citep{Jones2003,Keating2003,Steduto2009} and for the flow of water and solutes \citep{Simunek2008,Simunek2016}. What these models have in common is that a simulation is specified in a text file, run by a program, and read from files. That is natural for a model developer. It is a barrier for the person who has a question about a field: how much of the water that a mulch saves is lost to drainage, which trigger suction suits a sandy soil, what a smaller nitrogen dose does to the nitrate that leaves the root zone.
+
+The barrier has a second part. A set of simulations that answers a question (a factorial design over the trigger, the sensor depth and the rain, say) is itself a piece of work that is rarely recorded with the answer. A published ensemble of 10\,190 Daisy runs in 17 experiments \citep{HaliluData} makes the design of the study explicit, but a reader who wants to repeat one experiment on a laptop, with another soil or another weather, has no easy way to do so.
+
+This article describes a graphical workbench for Daisy that addresses both parts. It is a part of SWAFL Desktop, a decision-support suite (version 1.1.0), and it is described in the companion articles on the connection between Daisy and the decision layers (Paper~5) and on the whole suite (Paper~6). The aim here is narrower. We describe (i) how the workbench is organised and why, (ii) how the experiments of the published ensemble are made available as prepared designs and what is lost when they are reduced to a size that a laptop can run, (iii) the tools that compute inside the workbench (a soil-column solver, response curves, calibration) and (iv) the checks that were made of each of them. The checks are part of the contribution: a graphical tool that shows a number does not make the number right, and a workbench for a model is only as useful as the agreement between what it computes itself and what the model it stands for computes.
+
+\paragraph{Contributions.} (1) A guided path from site data to a decision, in which each step is one tab and each tab states what it is for. (2) Seventeen prepared experiments, with their compact designs, their run-time estimates and the study results next to them. (3) A soil-column solver, response curves and a three-optimiser calibration tool that run without Daisy. (4) A verification of the computing parts: design size and fidelity, solver convergence and mass balance, agreement with the stored outputs of the Daisy denitrification function, and parameter recovery by the optimisers, with the defect that the verification found.
+
+\section{The workbench}
+\subsection{Design principles}
+Four principles shaped the workbench. \emph{Questions before syntax}: the first thing a user does is to state a question, either by choosing a scenario or a prepared experiment or by writing a request, and the set-up file is the result and not the starting point. \emph{Everything that runs is shown first}: a design lists its runs, their settings and an estimate of the time before anything is run. \emph{One source of data}: the weather and the soil of the site are entered once and every tab uses them. \emph{No hidden steps between a result and a decision}: the last step of the path hands the results of the runs to the layers of the decision-support suite (Paper~5).
+
+\subsection{Structure}
+The workbench is a window of the application with six groups of tabs (\cref{fig:wb}). The guided path has nine steps: weather and soil of the site; the library of soils, crops and fertilisers; scenarios; experiments; the process map; log plots; mass balance; run comparison; and the hand-over to the SWAFL layers. A second row holds the tools of model development, which are outside the path: the set-up editor for \texttt{.dai} files, the soil column, the response curves, calibration, and the documentation. The documentation tab holds 107 reference topics, 27 combinations of factors with a recommended design, and a manual of the model. The bundled sample data are seven weather records (Taastrup, Foulum, Jyndevad, Bologna, Jadwisin, Valecov, Bratislava), ten annual or daily logs of the Daisy project, and the horizon, crop, fertiliser and action library read from its \texttt{.dai} files. Daisy 7.1.14 for Windows is bundled with the application and is the program that runs the set-ups; the workbench writes the set-up and reads the logs back.
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/p4/fig01_workbench.pdf}
+\caption{Organisation of the Daisy workbench: six groups of tabs and the Daisy program that runs the set-ups. The guided path runs from the input data to the hand-over to decision support; the model-development group is outside the path.}\label{fig:wb}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/p4/fig02_screens.jpg}
+\caption{Four tabs of the workbench. (a) Experiments: a question in words, 27 prepared combinations or the 17 experiments of the study. (b) Process map: the processes of Daisy, each a button that opens the figures it produces from a run. (c) Soil column: the Richards solver with the water content of a column through time. (d) Calibration: a parameter, a loss, an optimiser and a budget.}\label{fig:screens}
+\end{figure}
+
+\subsection{Experiments and scenarios}
+A scenario is a prepared question with a recommended set of runs: irrigation strategy, nitrogen fertilisation and leaching, climate, the fate of a chemical, and the effect of the soil. An experiment is a factorial design that the user builds from factors. The 53 factors cover the weather (rain scale, temperature shift), the soil (a library horizon or a texture class), irrigation (method, trigger suction, sensor depth, dose, window), nitrogen (rate), the crop (rooting depth), tillage and the parameters of soil structure. For a design the workbench lists every run, with its settings, before it is started, shows the number of runs against a limit and the estimated time, and writes the set-ups. For the 17 experiments of the published ensemble a prepared design is offered, each with its own figures and its own folder of results. The same factor definitions are used to read the results of an ensemble (the bundled ensemble file with the 10\,190 runs) as marginal means, grids, sensitivities and Pareto fronts.
+
+\section{Methods}
+\subsection{Design size and fidelity}
+Each experiment of the study was a full-factorial grid with 10 levels per factor, which gave 200 to 1\,000 runs per experiment. A laptop cannot repeat that in a working session, so each prepared experiment is offered as a compact design with 3 to 6 levels per factor (\cref{tab:designs}). The size of every compact design was obtained from the workbench code, and the time of the study from the recorded wall-clock time of every run in the archive of the study (\texttt{run\_seconds}). The time of a compact design was estimated as its number of runs times the median run time of its experiment.
+
+To ask what the reduction costs, the marginal mean of five responses (yield, irrigation, drainage at 1\,m, irrigation efficiency, nitrate leached) was computed for each numeric factor of each experiment from the full ensemble, and then rebuilt by linear interpolation between the marginal means at the levels of the compact design (the nearest study level to each compact level; the suction of the trigger interpolated on a logarithmic scale). The root-mean-square difference between the rebuilt and the full curve, as a percentage of the range of the full curve, measures the information that the compact design cannot see by itself. It is a stricter test than the practical use, in which the user chooses levels where the response is steep, but it has no free parameter.
+
+\subsection{Soil column}
+The soil column solves the one-dimensional Richards equation for vertical flow in the mixed form
+\begin{equation}\label{eq:richards}
+\frac{\partial\theta}{\partial t}=-\frac{\partial q}{\partial z}-S(h,z),\qquad q=K(h)\left(1-\frac{\partial h}{\partial z}\right),
+\end{equation}
+where the depth $z$ is positive downward, $q$ is the downward flux and $S$ the root sink. The retention curve and the conductivity are those of \citet{vanGenuchten1980} and \citet{Mualem1976},
+\begin{equation}\label{eq:vgm}
+S_e=\left[1+(\alpha|h|)^n\right]^{-m},\quad m=1-\tfrac1n,\quad \theta=\theta_r+(\theta_s-\theta_r)S_e,\quad K=K_sS_e^{\ell}\left[1-\left(1-S_e^{1/m}\right)^m\right]^2,
+\end{equation}
+with $\ell=0.5$ unless the horizon gives another value. The root sink is the potential transpiration distributed over a linearly decreasing root density and reduced by the stress function of \citet{Feddes1978}, which is 1 between suctions of 25 and 500\,cm, falls linearly to 0 at 15\,000\,cm and rises linearly from 0 at the surface to 1 at 25\,cm. The equation is discretised by finite volumes on nodes with implicit time steps and Picard iteration with the mass-conserving capacity term of \citet{Celia1990}; the time step grows when the iteration converges in five iterations or fewer and shrinks when it takes more than ten. The upper boundary takes the rain less the evaporation demand as a flux until the surface node would be positive, when it becomes a ponded boundary ($h=0$) and the excess runs off; when the soil is air-dry ($h<-10^4$\,cm) the evaporation is reduced to what the soil can give. The lower boundary is free drainage, a water table at a given depth, or a closed bottom. The tool returns the daily infiltration, runoff, evaporation, transpiration, drainage and storage and the daily mass-balance error $\epsilon=\Delta S-(I-E-T-D)$ (in mm).
+
+To test it, three soils were set up from van Genuchten parameters of loam-type classes (\cref{tab:richardssoils}), as a 100\,cm column at a suction of 300\,cm, with 200\,mm of rain on day 1 and five dry days, free drainage, node spacings of 4, 2, 1 and 0.5\,cm. For sand and loam the rain rate is below the saturated conductivity, so the upper boundary is a flux; an independent reference was calculated with the method of lines (scipy BDF with a banded Jacobian, 0.5\,cm nodes, relative tolerance $10^{-6}$) and the same flux. The silty clay loam has a saturated conductivity of 0.07\,cm\,h$^{-1}$, so the surface ponds; for it only the convergence with the node spacing and the run time are reported.
+
+\begin{table}[H]\centering\small
+\caption{Soils used for the test of the soil column (van Genuchten parameters, $\ell=0.5$).}\label{tab:richardssoils}
+\begin{tabular}{lrrrrr}\toprule
+Soil & $\alpha$ (cm$^{-1}$) & $n$ & $K_s$ (cm\,h$^{-1}$) & $\theta_s$ & $\theta_r$\\\midrule
+Sand & 0.145 & 2.68 & 29.7 & 0.43 & 0.045\\
+Loam & 0.036 & 1.56 & 1.04 & 0.43 & 0.078\\
+Silty clay loam & 0.010 & 1.23 & 0.07 & 0.50 & 0.089\\\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Response curves: denitrification}
+The response-curve tool draws the denitrification function that Daisy uses by default in the form given in its Python extensions. The water-filled pore space $w=\theta/\theta_s$ gives a piecewise-linear moisture factor $f_w(w)$ (zero at $w=0$, 0.01 at 0.4, 0.07 at 0.5, 0.17 at 0.57, 0.32 at 0.64, 0.51 at 0.71, 0.66 at 0.76, 0.79 at 0.81, 0.9 at 0.85 and 1 from 0.9). The potential rate is $f_T\left[\alpha_F C_F+\alpha(C-C_F)\right]$ with the fast and the total carbon dioxide production $C_F$ and $C$ and the factors $\alpha_F=0.0530$ and $\alpha=10^{-4}$. The actual rate is limited by the nitrate, $D=\min(f_w r_S,K_dN)+\min(f_w r_F,K_dN)$ with $K_d=0.0208$\,h$^{-1}$. The loss is divided between the two gases by a ratio $r$,
+\begin{equation}\label{eq:n2o}
+D_{\mathrm{N_2O}}=\frac{D}{1+r},\qquad D_{\mathrm{N_2}}=\frac{D}{1+1/r},\qquad r=\min(r_{\mathrm{NO_3}},r_{\mathrm{CO_2}})\,r_w,
+\end{equation}
+where $r_{\mathrm{NO_3}}=25\left[1-\tfrac12-\tfrac1\pi\arctan\!\big(0.01\pi(N_m-190)\big)\right]$ depends on the nitrate concentration $N_m$ (mg per kg of soil), $r_{\mathrm{CO_2}}=13+\tfrac{30.78}{\pi}\arctan\!\big(0.07\pi(C_m-13)\big)$ on the carbon dioxide production over a 30\,cm layer, $C_m$, and $r_w=1.4\times13^{-17/13^{2.2w}}$ on the water-filled pore space. The Daisy project stores 792 inputs of this function with the outputs that a Daisy run gave for them. The workbench function was compared with all 792.
+
+\subsection{Calibration}
+The calibration tool minimises a loss (mean squared error, mean absolute error or sum of squared deviations) between a model output and a target over up to a few parameters with bounds. Three optimisers are offered, after the choices of the Daisy optimisation project: a sequential search in which each parameter takes a few values in turn and the single best change is kept; the covariance-matrix-adaptation evolution strategy \citep{HansenOstermeier2001}; and a Bayesian search with a Gaussian-process surrogate and expected improvement \citep{Mockus1978}. To test them, the three parameters $\alpha_F$, $K_d$ and $\alpha$ of the denitrification function were estimated from the 792 stored outputs (the loss is the mean squared error of the logarithm of the N$_2$ loss), starting from values 3 times too high, with a budget of 150 evaluations and five seeds. The correct values are known, so the recovery can be measured as the error in decades.
+
+\subsection{Reproducibility}
+All checks are scripts in \texttt{Manuscripts/reproducibility/p456} (\cref{app:repro4}). The design sizes are obtained by loading the workbench code in Node.js; the ensemble analysis is in Python.
+
+\section{Results}
+\subsection{Prepared designs and what the reduction costs}
+Fourteen of the 17 experiments are reproduced as compact designs of 6 to 72 runs (\cref{tab:designs}); the three that are not (mulching, rain intensity and moisture, mulch and rain) are available through their published runs. The 368 runs of the compact designs stand for 7\,990 runs of the study, 4.6\,\%, and for 361 hours of Daisy time in the study against about 15 hours (a factor of 25). The whole study took 17.5 days of Daisy wall-clock time on the machines that ran it (mean 148\,s, median 145\,s per run), which is the reason why a prepared design cannot be the full design.
+
+\input{p4_designs.tex}
+
+The marginal curves are recovered with a median error of 13.2\,\% of their range over the 51 combinations of experiment, factor and response (90th percentile 29.9\,\%, largest 36.1\,\%; \cref{fig:fidelity}a). The error is similar for the five responses (median 11.0 to 16.9\,\%). It is smallest where the compact design has as many levels as the response needs (sensor depth, E3, 4.9\,\%; trigger suction in E2, 7.3\,\%) and largest where three levels must describe a response that bends (the dose in E10, 30\,\%; the sensor depth in the three-level E12, 21\,\%). The result says that the compact designs are for orientation and for the comparison of options, and that a curve that matters for a decision should be run with more levels where it bends; the workbench makes this a matter of one setting.
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/p4/fig03_fidelity.pdf}
+\caption{(a) Error of the marginal curves rebuilt from the levels of the compact designs (median over five responses, per experiment and factor). (b) Daisy run time of the study designs and of the compact designs, by experiment (logarithmic scale).}\label{fig:fidelity}
+\end{figure}
+
+\subsection{The soil column}
+In sand and loam the solver conserves mass: the largest daily error is below 0.001\,mm at every node spacing. The drainage below 1\,m after 6 days differs from the reference by 0.46\,mm in sand (152.14 against 152.60\,mm; 0.3\,\%) and by 0.50\,mm in loam (54.62 against 55.12\,mm; 0.9\,\%), and the final storage by 0.42 and 0.50\,mm, 0.45 and 0.16\,\% of the store (\cref{tab:richards}, \cref{fig:richards}a,b). The result hardly depends on the node spacing: the drainage varies by 0.03\,mm in sand and 0.05\,mm in loam between 4 and 0.5\,cm. The solver is therefore not sensitive to the default spacing of 2\,cm in these two soils, and the remaining difference to the reference is a difference of method (a time-step control against a high-order integrator) that is small against any parameter uncertainty.
+
+\input{p4_richards.tex}
+
+The silty clay loam shows the limit. With the surface ponded, the infiltration of the 200\,mm depends on the node spacing (24.4, 22.5 and 21.8\,mm at 4, 2 and 1\,cm), the mass-balance error rises to 0.05 to 0.07\,mm per day, and the run time at 1\,cm is 182\,s against 21\,s at 2 and 4\,cm, with 1.3 million Picard iterations (\cref{fig:richards}c). The infiltration into a dry, fine-textured soil has a sharp front that the node spacing of 1 to 4\,cm cannot resolve, and the surface condition switches between flux and ponding. For such a soil the solver gives the right order of magnitude but not a converged number; the tool shows its mass-balance error and the iteration count so that this can be seen.
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/p4/fig04_richards.pdf}
+\caption{Soil column. (a) Drainage below 1\,m with the node spacing; dashed lines are the reference. (b) Final storage minus the reference. (c) Infiltration of 200\,mm of rain into a ponded silty clay loam (left axis) and run time (right axis), showing the lack of convergence.}\label{fig:richards}
+\end{figure}
+
+\subsection{The denitrification function and a defect that the check found}
+The first comparison with the 792 stored outputs showed that the function of release 1.1.0 gave 60\,\% of the stored N$_2$ and N$_2$O loss (median relative error 40\,\% for both gases; \cref{fig:deni}). The Python extension of the Daisy project, which the workbench function had been ported from, gives the same 60\,\% against the same file, so the port was faithful to the extension; the extension applies the correction for the pressure head ($\times0.6/f_h$) to the carbon dioxide production, whereas the stored Daisy outputs were produced from inputs that had already been corrected. Taking the inputs as the values that Daisy passes to the function, and using the uncorrected value $C f_h/0.6$ only in the regulation of the N$_2$O fraction (\cref{eq:n2o}), reproduces all 792 rows of N$_2$ and of N$_2$O with a largest relative difference of $2.9\times10^{-15}$ for N$_2$ and $1.7\times10^{-15}$ for N$_2$O. The corrected form is the default of release 1.1.0, and the form of the extension is kept as an option for a user who passes uncorrected production rates. The finding illustrates why the stored outputs of a model are a better test than its published equations.
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/p4/fig05_denitrification.pdf}
+\caption{Denitrification function against the 792 stored Daisy outputs. (a) N$_2$ loss; the 1:1 line is black. (b) Histogram of the relative error of the N$_2$O loss before and after the correction.}\label{fig:deni}
+\end{figure}
+
+\subsection{Calibration}
+Starting from a loss of 0.20, the three optimisers reached a median loss of $6\times10^{-4}$ (sequential, 16 evaluations), $4\times10^{-6}$ (evolution strategy, 154) and $8\times10^{-8}$ (Bayesian, 150) in the logarithm of the flux. They recovered $\alpha_F$ to 0.03, 0.001 and 0.0002 decades (median over five seeds), but they did not recover $K_d$ or $\alpha$: the median errors are 0.45 to 0.54 decades for $K_d$ and 0.48 to 0.68 decades for $\alpha$. The 792 rows span a narrow range of suction ($-112$ to $-94$\,cm) and a nearly constant nitrate content, so that probably many combinations of the two parameters give almost the same outputs. The run times are 4\,ms (sequential), 37\,ms (evolution strategy) and 1.7\,s (Bayesian). The tool therefore does what an optimiser can do and shows, in the history of the search, the combinations that are equally good; it cannot make a parameter identifiable that the outputs do not constrain.
+
+\section{Discussion}
+\paragraph{What the workbench changes.} A user can ask a question, see the runs that would answer it, run them and read the answer next to the study, without writing a file. The structure of the workbench is the structure of the work: data, question, results, decision. For the developer, the set-up editor, the process map and the calibration tool remain in reach.
+
+\paragraph{What the checks say about trust.} The checks are of three kinds. Those that compare the workbench with an independent computation (the Richards reference, the parsers of the logs in Paper~5) give agreement to the precision of the method. The check against the stored outputs of Daisy found a real defect, which would have given 40\,\% too little denitrification to every user of the curve tool, and this was only visible because the stored outputs were used and not the equations. The check of the optimisers shows a property of the problem and not of the tool. The cheapest way to find the defects of a graphical tool is to compare each of its parts with something that was not made with it.
+
+\paragraph{Limits.} (i) Daisy could not be run in the environment used for the checks, so the agreement of the \emph{runs} of the workbench with the study was not tested; what was tested is the design, the parsing, the solver and the functions. (ii) The compact designs lose a median of 13\,\% of the shape of a marginal curve. (iii) Three experiments are not offered as designs. (iv) The soil column is slow and not converged for a ponded fine soil. (v) Daisy is bundled for Windows only. (vi) No field measurements are used; the workbench shows what the model says and does not say that the model is right for a field. (vii) The calibration of a model on its own outputs cannot show that the calibration works on measurements.
+
+\section{Conclusions}
+The workbench makes the Daisy model usable through a question-first path, makes the experiments of a large published ensemble repeatable in about an hour each instead of days, and lets a user check the model at the level of its processes, a soil column and a calibration. Each computing part was verified against an independent reference or against stored Daisy output; the verification found and removed one defect. The workbench is a way to use Daisy and not a replacement for it, and the next test is the comparison of its runs with field measurements.
+
+\section*{Software, data and code availability}
+\suiteavail
+\section*{Author contributions}
+N.H. designed the workbench, wrote the software and the checks, analysed the data and wrote the article.
+\section*{Funding}
+No external funding was received for this work. [To be completed by the author if applicable.]
+\section*{Competing interests}
+The author declares no competing interests.
+
+\bibliography{refs}
+
+\appendix
+\section{Checks and scripts}\label{app:repro4}
+\begin{table}[H]\centering\small
+\caption{Check to script map (scripts in \texttt{Manuscripts/reproducibility/p456}).}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{4.4cm}>{\raggedright\arraybackslash}p{4.4cm}X}
+\toprule Check & What is compared & Script $\to$ output\\\midrule
+Design sizes (\cref{tab:designs}) & presets against the ensemble & \texttt{p4\_design\_sizes.js} $\to$ \texttt{out\_p4\_design.json}\\
+Fidelity and run time (\cref{fig:fidelity}) & interpolated against full marginals; \texttt{run\_seconds} & \texttt{p4\_design\_fidelity.py} $\to$ \texttt{out\_p4\_fidelity.csv}, \texttt{out\_p4\_runtime.csv}\\
+Soil column (\cref{tab:richards}, \cref{fig:richards}) & workbench against scipy BDF & \texttt{p4\_richards.js}, \texttt{p4\_richards\_ref.py}\\
+Denitrification (\cref{fig:deni}) & 792 stored outputs & \texttt{p5\_bridge\_checks.js}\\
+Calibration & recovery of three parameters & \texttt{p4\_calibration.js}\\
+Figures and tables & & \texttt{p456\_figs\_schematics.py}, \texttt{p456\_figs\_data.py}, \texttt{p456\_tables.py}\\\bottomrule
+\end{tabularx}
+\end{table}
+\end{document}

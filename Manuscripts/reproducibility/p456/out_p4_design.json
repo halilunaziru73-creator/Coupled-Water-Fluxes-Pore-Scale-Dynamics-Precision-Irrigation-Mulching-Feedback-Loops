@@ -1,0 +1,132 @@
+[
+ {
+  "id": "E0",
+  "name": "Baselines",
+  "gui": 9,
+  "study": 10,
+  "guiFactorCombos": 9,
+  "ensCombos": 0
+ },
+ {
+  "id": "E1",
+  "name": "Dose and duration",
+  "gui": 17,
+  "study": 200,
+  "guiFactorCombos": 16,
+  "ensCombos": 1
+ },
+ {
+  "id": "E2",
+  "name": "Trigger pressure",
+  "gui": 21,
+  "study": 200,
+  "guiFactorCombos": 18,
+  "ensCombos": 200
+ },
+ {
+  "id": "E3",
+  "name": "Sensor depth",
+  "gui": 21,
+  "study": 200,
+  "guiFactorCombos": 18,
+  "ensCombos": 200
+ },
+ {
+  "id": "E4",
+  "name": "Methods",
+  "gui": 6,
+  "study": 100,
+  "guiFactorCombos": 4,
+  "ensCombos": 10
+ },
+ {
+  "id": "E5",
+  "name": "Soil structure dynamics (SHP)",
+  "gui": 72,
+  "study": 300,
+  "guiFactorCombos": 72,
+  "ensCombos": 10
+ },
+ {
+  "id": "E6",
+  "name": "Mediterranean pollution",
+  "gui": 30,
+  "study": 210,
+  "guiFactorCombos": 30,
+  "ensCombos": 10
+ },
+ {
+  "id": "E7",
+  "name": "Mulching",
+  "unsupported": true,
+  "study": 200
+ },
+ {
+  "id": "E8",
+  "name": "Rain intensity and moisture",
+  "unsupported": true,
+  "study": 1000
+ },
+ {
+  "id": "E9",
+  "name": "Soil moisture and rain",
+  "gui": 40,
+  "study": 1000,
+  "guiFactorCombos": 32,
+  "ensCombos": 1000
+ },
+ {
+  "id": "E10",
+  "name": "Amount, timing and soil",
+  "gui": 20,
+  "study": 1000,
+  "guiFactorCombos": 18,
+  "ensCombos": 100
+ },
+ {
+  "id": "E11",
+  "name": "Temperature, evaporation, rain",
+  "gui": 16,
+  "study": 1000,
+  "guiFactorCombos": 16,
+  "ensCombos": 100
+ },
+ {
+  "id": "E12",
+  "name": "Sensor, trigger, rain",
+  "gui": 30,
+  "study": 1000,
+  "guiFactorCombos": 27,
+  "ensCombos": 1000
+ },
+ {
+  "id": "E13",
+  "name": "N, water, soil",
+  "gui": 32,
+  "study": 1000,
+  "guiFactorCombos": 24,
+  "ensCombos": 10
+ },
+ {
+  "id": "E14",
+  "name": "Mulch and rain",
+  "unsupported": true,
+  "study": 1000
+ },
+ {
+  "id": "E15",
+  "name": "Method, depth, amount",
+  "gui": 30,
+  "study": 1000,
+  "guiFactorCombos": 27,
+  "ensCombos": 100
+ },
+ {
+  "id": "E16",
+  "name": "Edge cases",
+  "gui": 24,
+  "study": 770,
+  "guiFactorCombos": 16,
+  "ensCombos": 5
+ }
+]

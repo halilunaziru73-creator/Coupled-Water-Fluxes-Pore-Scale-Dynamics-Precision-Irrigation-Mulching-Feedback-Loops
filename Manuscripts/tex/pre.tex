@@ -72,3 +72,10 @@ $^{*}$ Correspondence: \href{mailto:halilunaziru73@gmail.com}{halilunaziru73@gma
 
 \usepackage{pdflscape}
 \setlength{\emergencystretch}{3em}
+
+% Companion papers (P4 to P6) and a shared availability statement
+\newcommand{\suiteavail}{%
+\textbf{Software.} SWAFL Desktop (version 1.1.0) is open source; the \softlink{} source is in the project repository (\url{\softurl}) and the program for Windows is \downloadlink{} (\url{\exeurl}). The whole workbench also runs in a browser, with nothing to install (link in the repository README).
+\par\smallskip\textbf{Manual.} The \manuallink{} (\url{\manualurl}) documents every control, screen and equation of the release, with labelled screenshots.
+\par\smallskip\textbf{Data.} The complete Daisy ensemble outputs (all 10\,190 runs, raw and derived) are archived on Zenodo, \doihl{10.5281/zenodo.23043626}; the run table and a summary of every experiment are in the \datalink{} folder (\url{\dataurl}).
+\par\smallskip\textbf{Code.} Every check reported here has a script in \texttt{Manuscripts/reproducibility/p456} (Node.js scripts that load the shipped code or drive the shipped application, Python scripts for the analysis of the ensemble and the figures); \texttt{README\_REPRODUCE.md} lists the steps. Daisy itself could not be run in the environment used for these checks, no field measurements are used, and the screenshots are archived rather than regenerated.}
