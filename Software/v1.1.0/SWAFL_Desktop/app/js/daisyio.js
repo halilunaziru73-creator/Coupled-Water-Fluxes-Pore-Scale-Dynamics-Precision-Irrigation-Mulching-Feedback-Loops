@@ -70,10 +70,15 @@
 
   // ------------------------------------------------------------------ comparison with the smallest meaningful level (daisypy-test)
   // the smallest differences that matter, per log component and column (from the .toml definitions of daisypy-test)
-  DaisyIO.SML = { 'Field water': { Precipitation: 1, Irrigation: 1, 'Potential evapotranspiration': 1, 'Actual evapotranspiration': 1, 'Matrix percolation': 1, 'Biopore percolation': 1, 'Matrix drain flow': 1, 'Biopore drain flow': 1, Runoff: 1, 'Biopore water': 1, 'Soil matrix water': 1, 'Surface water': 1 }, Crop: { DS: 0.01, Height: 1, LAI: 0.01, Depth: 1, WLeaf: 100, WDead: 100, WStem: 100, WSOrg: 100, WRoot: 100, Fixated: 1, NLeaf: 1, NDead: 1, NStem: 1, NSOrg: 1, NRoot: 1, water_stress: 0.01, nitrogen_stress: 0.01, Phenology: 1 } };
+  // loaded at start from data/daisy/sml.json: every log component of daisypy-test with its columns as [value, unit]
+  DaisyIO.SML = {}; DaisyIO.SMLRAW = {};
+  DaisyIO.setSML = function (raw) { DaisyIO.SMLRAW = raw || {}; };
+  // the factor that turns a value in unit u into unit w (mass per area and length only; null when unknown)
+  DaisyIO.unitFactor = function (u, w) { u = String(u || '').replace(/\s/g, ''); w = String(w || '').replace(/\s/g, ''); if (u === w || !u || !w) return 1; const T = { 'g/ha': 1e-3, 'kg/ha': 1, 'Mg/ha': 1e3, 'g/m^2': 10, 'kg/m^2': 1e4, 'g/m2': 10, 'kgN/ha': 1, 'gN/ha': 1e-3, 'kgC/ha': 1, 'gC/ha': 1e-3, 'mm': 1, 'cm': 10, 'm': 1000 }; return T[u] && T[w] ? T[u] / T[w] : null; };
+  DaisyIO.smlFor = function (header, units) { const comp = (header && header['dlf-component']) || '', ch = header && header.CHEMICAL, raw = DaisyIO.SMLRAW[(/chemical/i.test(comp) && ch ? comp + ' ' + ch : comp)] || DaisyIO.SMLRAW[comp] || {}, r = {}; Object.keys(raw).forEach(k => { const f = DaisyIO.unitFactor(raw[k][1], units && units[k]); r[k] = f == null ? raw[k][0] : raw[k][0] * f; }); return r; };
   // compare two logs: differences inside the SML are "similar", below a thousandth of it "identical"
   DaisyIO.compareDlf = function (a, b, o) {
-    o = o || {}; const prec = o.precision != null ? o.precision : 1e-8, thr = o.identThr != null ? o.identThr : 0.001, comp = (a.header['dlf-component'] || ''), sml = Object.assign({}, DaisyIO.SML[comp] || {}, o.sml || {});
+    o = o || {}; const prec = o.precision != null ? o.precision : 1e-8, thr = o.identThr != null ? o.identThr : 0.001, comp = (a.header['dlf-component'] || ''), sml = Object.assign({}, DaisyIO.smlFor(a.header, a.units), o.sml || {});
     const skip = new Set(['VERSION', 'RUN', 'SIMFILE', 'SIM', 'dlf-def-location', 'info', 'LOGFILE']), out = { errors: [], notSimilar: [], notIdentical: [], columns: [], rows: Math.min(a.n, b.n), same: true };
     const hk = new Set(Object.keys(a.header).concat(Object.keys(b.header))); hk.forEach(k => { if (skip.has(k)) return; const x = JSON.stringify(a.header[k]), y = JSON.stringify(b.header[k]); if (x !== y) out.notSimilar.push('header ' + k + ': ' + x + ' against ' + y); });
     if (a.cols.join('|') !== b.cols.join('|')) out.notSimilar.push('the columns differ: ' + a.cols.length + ' against ' + b.cols.length);

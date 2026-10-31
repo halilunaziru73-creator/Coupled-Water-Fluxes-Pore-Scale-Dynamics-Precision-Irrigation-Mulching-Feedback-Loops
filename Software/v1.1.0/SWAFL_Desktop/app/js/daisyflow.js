@@ -17,7 +17,7 @@
     ['compare', 'Compare and test', 'Compare two runs against the smallest meaningful level.'],
     ['dss', 'To the SWAFL project', 'Take the results to the layers of the SWAFL project, which turn them into decisions.']
   ];
-  const TOOLS = { editor: 'Set-up editor', richards: 'Soil column', deni: 'Process curves', calib: 'Calibrate', docs: 'Model and documentation' };
+  const TOOLS = { editor: 'Set-up editor', richards: 'Soil column', deni: 'Process curves', calib: 'Calibrate', docs: 'Model and documentation', refman: 'Reference manual' };
   const F = { last: 'data' };
   window.DaisyFlow = F; F.PATH = PATH;
   const idx = t => PATH.findIndex(p => p[0] === t);

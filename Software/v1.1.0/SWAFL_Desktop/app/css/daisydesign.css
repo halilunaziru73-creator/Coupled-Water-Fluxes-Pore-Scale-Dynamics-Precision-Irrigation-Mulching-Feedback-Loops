@@ -42,3 +42,20 @@
 .dzph label{display:flex;justify-content:space-between;gap:4px;align-items:center;font-size:.9em}
 .dzph input{width:60px}
 #dzEol{max-height:300px;overflow:auto}
+
+/* reference manual */
+.dzrftoc{flex:0 0 250px;max-height:640px}
+.dzrfmain{max-height:640px;overflow:auto;background:#fff;border:2px inset #fff;padding:8px 12px}
+.dzrfp{background:#0A246A;color:#fff;padding:3px 8px;font-weight:bold;position:sticky;top:0}
+.dzrftx{white-space:pre-wrap;line-height:1.45;margin:4px 0}
+.dzrfs{border-top:1px solid #9AA6C4;margin-top:10px;padding-top:4px}
+.dzrfs.flash{background:#FFFFC8}
+.dzrfs h4{margin:2px 0}
+.dzrfn{color:#0A246A;font-weight:bold}
+.dzrfsig{max-height:260px;overflow:auto}
+.dzrft{width:100%}
+.dzrft td{vertical-align:top}
+.dzrfd{white-space:pre-wrap;min-width:220px}
+.dzrfidx{background:#EEF1F8;border:1px solid #9AA6C4;padding:6px 8px;margin:8px 0;line-height:1.6}
+.dzrfh{padding:4px 6px;border-bottom:1px solid #ddd;cursor:pointer}.dzrfh:hover{background:#EEF1F8}
+.dzrfk{background:#0A246A;color:#fff;font-size:.8em;padding:0 5px}
