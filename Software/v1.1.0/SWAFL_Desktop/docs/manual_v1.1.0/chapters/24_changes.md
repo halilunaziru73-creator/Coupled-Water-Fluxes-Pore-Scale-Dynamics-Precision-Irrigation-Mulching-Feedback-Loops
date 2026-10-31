@@ -14,6 +14,7 @@
 * The first block of the Results tab gives the key numbers of the open layer (Chapter 14).
 * Layers that play by changing a setting (each soil in turn, rainfall from dry to wet) wait for **Play** in the program, so Properties and the dashboard keep your values.
 
+* Variable-rate irrigation is also computed cell by cell (10 m): the depth and the date of the next irrigation vary continuously over the field, in smooth colours stretched to the range of the field; out of the crop season the vegetation seen by Sentinel-2 drives the water use, so the maps are no longer all grey.
 * All the maps of the field are drawn in continuous colours with smooth interpolation by default (indices, monitoring, erosion, retention, sensors); pixels and classes remain one choice away.
 
 ## The designs
