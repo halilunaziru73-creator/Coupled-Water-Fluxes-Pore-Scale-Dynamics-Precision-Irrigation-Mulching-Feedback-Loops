@@ -430,7 +430,11 @@ const FieldMap = (() => {
     const pr = [['vri', 'Irrigation depth by zone'], ['vridate', 'Irrigation date by zone'], ['gully', 'Ephemeral gullies'], ['rusle', 'Soil loss (RUSLE)']].filter(q => FieldPrec.has(q[0]));
     if (pr.length) { grp('prec', 'Precision maps'); pr.forEach(q => it(q[0], q[1], pv === q[0])); }
     const gp = Object.keys(FieldGeo.VIEWS).filter(v => FieldGeo.has(v)); if (gp.length) { const ter = gp.filter(v => /^(contour|twi|shed)$/.test(v)), sen = gp.filter(v => /^sens/.test(v)), ret = gp.filter(v => /^ret_/.test(v));
-      if (ter.length) { grp('ter', 'Terrain and flow'); ter.forEach(v => it(v, FieldGeo.VIEWS[v], pv === v)); } if (sen.length) { grp('sen', 'Sensors and satellite'); sen.forEach(v => it(v, FieldGeo.VIEWS[v], pv === v)); } if (ret.length) { grp('ret', 'Soil retention'); ret.forEach(v => it(v, FieldGeo.VIEWS[v], pv === v)); } }
+      // where each map comes from: measured (elevation model), estimated from measured data (SoilGrids texture), or the SWAFL model
+      const est = ret.filter(v => /^ret_(fc|wp|aw|trig)$/.test(v)), mod = ret.filter(v => /^ret_(psi|days)$/.test(v));
+      if (ter.length) { grp('ter', 'Terrain and flow · Copernicus elevation'); ter.forEach(v => it(v, FieldGeo.VIEWS[v], pv === v)); } if (sen.length) { grp('sen', 'Sensors and satellite'); sen.forEach(v => it(v, FieldGeo.VIEWS[v], pv === v)); }
+      if (est.length) { grp('ret', 'Soil retention · estimated from SoilGrids'); est.forEach(v => it(v, FieldGeo.VIEWS[v].replace(/ \(retention curves\)/, ''), pv === v)); }
+      if (mod.length) { grp('mod', 'SWAFL model · not measured'); if (F.lyShut.mod == null) F.lyShut.mod = true; mod.forEach(v => it(v, FieldGeo.VIEWS[v], pv === v)); } }
     const ov = []; if (F.site) ov.push('<div class="fmly' + (F.showSrc !== false ? ' on' : '') + '" data-ly="src"><i>' + (F.showSrc !== false ? '&#9745;' : '&#9744;') + '</i>Water sources</div>'); if (layoutData()) ov.push('<div class="fmly' + (F.lay ? ' on' : '') + '" data-ly="lay"><i>' + (F.lay ? '&#9745;' : '&#9744;') + '</i>Irrigation layout</div>');
     if (ov.length) { grp('top', 'On top'); cur.rows.push(...ov); }
     const n = G2.reduce((a, g) => a + g.rows.length, 0);
@@ -439,7 +443,7 @@ const FieldMap = (() => {
     if (d.__h !== html) { d.__h = html; d.innerHTML = html; }
   }
   function legendFor(k) {
-    if (PRECV[F.view] && k === F.idx) return FieldPrec.legend(F.view);
+    if (PRECV[F.view] && k === F.idx) return FieldPrec.legend(F.view) + (/^(ret_psi|ret_days)$/.test(F.view) ? '<div class="fmwarn">Estimate of the SWAFL water balance, not a measurement. Install sensors and type their readings to measure it.</div>' : /^ret_(fc|wp|aw|trig)$/.test(F.view) ? '<div class="fmwarn">Estimated from the SoilGrids texture (pedotransfer function), not measured in the field.</div>' : '');
     if (!F.res) return '';
     if (F.view === 'cover' && F.cv && k === F.idx) return '<div class="fmchip">Land cover · satellite photo · ' + (F.cv.ml ? 'machine learning on real labels' : 'image analysis') + '</div><table>' + F.cv.shares.map(c => '<tr><td><i style="background:' + c.col + '"></i></td><td>' + c.name + '</td><td>' + c.ha.toFixed(2) + ' ha</td><td>' + c.pct.toFixed(0) + ' %</td></tr>').join('') + '</table>';
     const I = IDX[k], s = F.res.S[k], head = '<div class="fmchip">' + k + ' · ' + (F.res.photo ? '' : esc(F.res.date) + ' · ') + (F.res.sim ? 'simulated' : F.res.photo ? 'satellite photo' : 'Sentinel-2') + '</div>';

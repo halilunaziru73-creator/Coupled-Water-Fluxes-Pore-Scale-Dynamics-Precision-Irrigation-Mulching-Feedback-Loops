@@ -153,4 +153,4 @@
 * Experiments: the whole Daisy library (63 soil horizons, 84 crops, 79 fertilisers, 35 chemicals, 82 managements, 55 programs and 176 logs) can be tested; Test it in an experiment in the Parameter library.
 * Indices one at a time: after Compute, NDVI opens first and Next index opens the others; Opened maps lists only the indices opened. The 20 m bands are resampled bilinearly.
 * Land cover by machine learning: a classifier (quadratic discriminant analysis) trained on the real Sentinel-2 classes of the field (or ESA WorldCover), with its accuracy, kappa and confusion matrix; no simulated values are drawn when the real data cannot be read.
-
+* Field on the map: Compute the indices makes only the indices; terrain, retention and sensors come only from their own buttons; the groups of Opened maps say whether a map is measured, estimated from measured data or a model estimate; no retention map from the soil of the project when SoilGrids is not reached.
