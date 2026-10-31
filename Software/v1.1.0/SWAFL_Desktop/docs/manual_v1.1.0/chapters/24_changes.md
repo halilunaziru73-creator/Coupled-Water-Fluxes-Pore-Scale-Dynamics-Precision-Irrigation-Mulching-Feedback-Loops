@@ -14,6 +14,8 @@
 * The first block of the Results tab gives the key numbers of the open layer (Chapter 14).
 * Layers that play by changing a setting (each soil in turn, rainfall from dry to wet) wait for **Play** in the program, so Properties and the dashboard keep your values.
 
+* All the maps of the field are drawn in continuous colours with smooth interpolation by default (indices, monitoring, erosion, retention, sensors); pixels and classes remain one choice away.
+
 ## The designs
 
 * Inputs are **value boxes** with exact values, units and a list of the allowed range (Section 18.2).

@@ -285,11 +285,14 @@ const FieldGeo = (() => {
 
   // ------------------------------------------------------------------ the views on the map
   const tab = [VIEWS];
+  // continuous colours with smooth interpolation (the default), or classes when the field window is set to pixels
+  const smoothAll = () => { try { return F().smooth !== false; } catch (e) { return true; } };
+  const clsOr = (view, arr) => { if (smoothAll()) { if (G.cls) delete G.cls[view]; return null; } return mkCls(view, arr); };
   function picture(view) {
     if (!G.T) return null; try {
       if (view === 'contour') return picContour(); if (view === 'twi') return picTWI(); if (view === 'shed') return picShed();
-      if (view === 'sens' || view === 'sensu') { const f = fuseNow(); if (!f) return null; if (view === 'sens') { const s = stat(f.TH); G.rng = [s.lo, s.hi]; return picField(f.TH, 'dry', s.lo, s.hi, null, mkCls('sens', f.TH)); } const s = stat(f.SD); G.rngu = [0, s.hi]; return picField(f.SD, 'unc', 0, s.hi, null, mkCls('sensu', f.SD)); }
-      if (view.indexOf('ret_') === 0 && G.ret) { const R = G.ret, a = { ret_fc: [R.FC, 'fcR'], ret_wp: [R.WP, 'wpR'], ret_aw: [R.AW, 'awR'], ret_trig: [R.TR, 'trR'], ret_psi: [R.LPSI, 'psiR'], ret_days: [R.DAYS, 'dayR'] }[view]; const s = stat(a[0]); G.rngr = G.rngr || {}; G.rngr[view] = [s.lo, s.hi]; return picField(view === 'ret_psi' ? R.PSI : a[0], a[1], s.lo, s.hi, null, mkCls(view, clsArr(view))); }
+      if (view === 'sens' || view === 'sensu') { const f = fuseNow(); if (!f) return null; if (view === 'sens') { const s = stat(f.TH); G.rng = [s.lo, s.hi]; return picField(f.TH, 'dry', s.lo, s.hi, null, clsOr('sens', f.TH)); } const s = stat(f.SD); G.rngu = [0, s.hi]; return picField(f.SD, 'unc', 0, s.hi, null, clsOr('sensu', f.SD)); }
+      if (view.indexOf('ret_') === 0 && G.ret) { const R = G.ret, a = { ret_fc: [R.FC, 'fcR'], ret_wp: [R.WP, 'wpR'], ret_aw: [R.AW, 'awR'], ret_trig: [R.TR, 'trR'], ret_psi: [R.LPSI, 'psiR'], ret_days: [R.DAYS, 'dayR'] }[view]; const s = stat(a[0]); G.rngr = G.rngr || {}; G.rngr[view] = [s.lo, s.hi]; const cl = clsOr(view, clsArr(view)); return picField(view === 'ret_psi' && cl ? R.PSI : a[0], a[1], s.lo, s.hi, null, cl); }
     } catch (e) { UI.toast(e.message); } return null;
   }
   const has = view => { if (!VIEWS[view]) return false; if (view === 'contour' || view === 'twi' || view === 'shed') return !!G.T; if (view === 'sens' || view === 'sensu') return !!(G.T && G.sens.length); if (view.indexOf('ret_') === 0) return !!G.ret; return false; };

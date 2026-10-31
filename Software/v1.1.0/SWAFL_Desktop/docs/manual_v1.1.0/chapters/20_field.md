@@ -106,7 +106,7 @@ The table gives, for each index, the mean, the 10 and 90 % values, the minimum a
 **What the map shows.**
 
 * *Continuous colours* or *Management zones (5 classes)*: the zones split the values of the field by natural breaks (Jenks), drawn from the field smoothed over about 9 m so that each zone is a patch you can manage. The table under the indices gives, for each zone, its range, mean, area (ha) and share of the field.
-* *Smooth* (interpolated between cells) or *Pixels* (each cell as measured, 10 m for Sentinel-2).
+* *Continuous colours, smooth interpolation* (the default) or *Pixels and classes, as measured*. With the default every map of the window (the indices, the monitoring change, trend and stability, the soil loss and gully risk, the soil water retention and the sensor maps) is drawn as one continuous colour ramp, interpolated bilinearly between the cells, with a gradient legend. The second choice draws each 10 m Sentinel-2 pixel as a square and the retention, sensor and erosion maps in their classes. The values themselves are the same in both: only the drawing changes, and the cursor readout and the pixel CSV always give the measured pixel.
 * *Compare with*: a second index side by side; the two maps move and zoom together.
 * The legend in the lower left corner of the map gives the index, the date and the source, the colour scale (or the zones with their area), the spread of the field as a histogram and the mean. Click its dark title to fold it.
 * Move the mouse over the field: the line under the map gives the coordinates and the value of the index at that point, its reading and its zone (and the value of the second index when two are shown).

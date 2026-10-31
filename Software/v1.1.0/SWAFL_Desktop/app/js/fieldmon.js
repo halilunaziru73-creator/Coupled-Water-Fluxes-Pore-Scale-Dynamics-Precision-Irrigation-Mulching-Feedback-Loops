@@ -63,7 +63,12 @@ const FieldMon = (() => {
   const hex = c => [1, 3, 5].map(i => parseInt(c.substr(i, 2), 16));
   function picture(view) {
     const ts = M.ts; if (!ts) return null; const G = ts.G, cv = document.createElement('canvas'), sc = Math.max(1, Math.min(24, 1400 / Math.max(G.nx, G.ny))); cv.width = Math.round(G.nx * sc); cv.height = Math.round(G.ny * sc); const c = cv.getContext('2d');
-    for (let j = 0; j < G.ny; j++) for (let i = 0; i < G.nx; i++) { const q = j * G.nx + i; let col = null;
+    // continuous maps (change, trend, stability) with smooth interpolation: one pixel per cell, scaled up with smoothing; the zones stay crisp
+    const smooth = view !== 'mzone' && (() => { try { return H().F.smooth !== false; } catch (e) { return true; } })();
+    if (smooth) { const g = document.createElement('canvas'); g.width = G.nx; g.height = G.ny; const gc = g.getContext('2d'), im = gc.createImageData(G.nx, G.ny);
+      for (let q = 0; q < G.nx * G.ny; q++) { const v = view === 'mchange' ? ts.chg[q] / 0.2 : view === 'mtrend' ? ts.trend[q] / 0.1 : ts.stab[q] / 1.2; if (!isFinite(v)) continue; const col = div(v); im.data.set([col[0], col[1], col[2], 255], q * 4); }
+      gc.putImageData(im, 0, 0); c.imageSmoothingEnabled = true; c.imageSmoothingQuality = 'high'; c.drawImage(g, 0, 0, cv.width, cv.height); }
+    else for (let j = 0; j < G.ny; j++) for (let i = 0; i < G.nx; i++) { const q = j * G.nx + i; let col = null;
       if (view === 'mchange') { const v = ts.chg[q]; if (isFinite(v)) col = div(v / 0.2); } else if (view === 'mtrend') { const v = ts.trend[q]; if (isFinite(v)) col = div(v / 0.1); } else if (view === 'mstab') { const v = ts.stab[q]; if (isFinite(v)) col = div(v / 1.2); } else if (view === 'mzone') { const r = ts.zone[q]; if (r >= 0) col = hex(zcol(ts.k, r)); }
       if (!col) continue; c.fillStyle = 'rgb(' + col.join(',') + ')'; c.fillRect(Math.floor(i * sc), Math.floor(j * sc), Math.ceil(sc) + 1, Math.ceil(sc) + 1); }
     c.globalCompositeOperation = 'destination-in'; c.beginPath(); H().F.pts.forEach((p, i) => { const l = H().local(p, G.o), x = (l[0] - G.x0) / G.cell * sc, y = (G.y1 - l[1]) / G.cell * sc; i ? c.lineTo(x, y) : c.moveTo(x, y); }); c.closePath(); c.fill(); c.globalCompositeOperation = 'source-over';
