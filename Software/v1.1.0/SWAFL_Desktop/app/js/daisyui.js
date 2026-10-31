@@ -19,7 +19,8 @@ const DaisyUI = (() => {
   // ---------------------------------------------------------------- data access
   async function getText(path) { if (S.txt[path]) return S.txt[path]; const r = await fetch('data/daisy/' + path); if (!r.ok) throw new Error(path + ': HTTP ' + r.status); return (S.txt[path] = await r.text()); }
   async function getIdx() { return S.idx || (S.idx = JSON.parse(await getText('index.json'))); }
-  async function getLib() { return S.lib || (S.lib = JSON.parse(await getText('library.json'))); }
+  async function getLib() { if (!S.lib) { S.lib = JSON.parse(await getText('library.json')); try { if (window.DaisyScen && window.DaisyScen.addLibrary) window.DaisyScen.addLibrary(S.lib); } catch (e) { } } return S.lib; }
+  setTimeout(() => { getLib().catch(() => { }); }, 800);
   function addLog(d, as) { const nm = as || d.name; d.name = nm; S.logs[nm] = d; return nm; }
   function parseAny(name, text) { if (/\.csv$/i.test(name)) return IO.readCsv(text, name); if (/\.dwf$/i.test(name)) { const w = IO.readDwf(text, name); return w; } return IO.readDlf(text, name); }
   const buf = t => new TextEncoder().encode(t).buffer;
@@ -458,6 +459,7 @@ const DaisyUI = (() => {
     document.querySelectorAll('.dztabs button').forEach(b => b.classList.toggle('on', b.dataset.t === tab)); const X = EXT[tab]; host.innerHTML = (window.DaisyFlow ? window.DaisyFlow.bar(tab) : '') + (tab === 'plot' ? plotData() : '') + (X ? X.html(arg) : HTML[tab]()) + (tab === 'data' && HTML.weather ? '<div class="dzmw"><h3 style="margin:14px 0 4px">Weather stations</h3>' + HTML.weather() + '</div>' : ''); if (window.DaisyFlow) window.DaisyFlow.bind(tab); const r = X ? X.bind(arg) : BIND[tab](); if (tab === 'plot') { try { BIND.files(); bindRuns(); } catch (e) { console.warn(e); } } if (tab === 'data' && BIND.weather) { try { const r2 = BIND.weather(); if (r2 && r2.catch) r2.catch(e => console.warn(e)); } catch (e) { console.warn(e); } } if (r && r.catch) r.catch(e => { host.insertAdjacentHTML('afterbegin', '<div class="warnbox">' + esc(e.message) + '</div>'); console.warn(e); });
   }
   function open(tab) {
+    getLib().catch(() => { });
     let arg = ''; if (String(tab).indexOf(':') > 0) { arg = tab.split(':')[1]; tab = tab.split(':')[0]; }
     if (!document.getElementById('dzCss')) { const st = document.createElement('style'); st.id = 'dzCss'; st.textContent = CSS; document.head.appendChild(st); }
     UI.modal({ title: 'Daisy model: scenarios, runs, figures, tests and calibration', icon: 'chart', width: 'min(1180px,96vw)', full: true, html: '<div class="dztabs"><div class="dztw">' + GROUPS.filter(g => !/^Tools/.test(g[0])).map(g => '<div class="dztg"><span>' + g[0] + '</span><div>' + g[1].map(t => '<button data-t="' + t[0] + '">' + t[1] + '</button>').join('') + '</div></div>').join('<i class="dzta">&#9654;</i>') + '</div><div class="dztt"><b>Tools</b>' + GROUPS.filter(g => /^Tools/.test(g[0])).map(g => '<div class="dztg"><span>' + g[0].replace(/^Tools: /, '') + '</span><div>' + g[1].map(t => '<button data-t="' + t[0] + '">' + t[1] + '</button>').join('') + '</div></div>').join('') + '</div></div><div class="dzw" id="dzBody"></div>' });
