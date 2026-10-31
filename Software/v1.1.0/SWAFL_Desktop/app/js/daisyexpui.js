@@ -230,6 +230,36 @@
     st.curSet = items.findIndex(it => it.res); renderSet(); const m = $('SetMsg'); if (m) m.textContent = 'Finished: ' + items.filter(it => it.res).length + ' of ' + items.length + ' experiments have results; choose which to look at above the figures.'; if (st.curSet >= 0) showSetRes(st.curSet);
   }
   function showSetRes(i) { const it = (st.set || [])[i]; if (!it || !it.res) return; st.curSet = i; st.rows = it.res.rows; st.runs = it.res.runs; st.fids = it.res.fids; st.design0 = it.res.design0; st.source = 'daisy'; st.responses = it.responses || []; drawResults(); }
+  // ------------------------------------------------------------------ the folder before it is saved: every folder and file of the zip, opened in a
+  // panel on top of the Daisy window (folders fold and unfold, a click on a file shows its text), then Save the folder (.zip)
+  function showFolder(tree, zipName, onSaved) {
+    const enc = new TextEncoder(), size = v => typeof v === 'string' ? enc.encode(v).length : (v && v.length) || 0, fmt = n => n < 1024 ? n + ' B' : n < 1048576 ? (n / 1024).toFixed(1) + ' KB' : (n / 1048576).toFixed(2) + ' MB';
+    const paths = Object.keys(tree).sort((a, b) => { const da = a.split('/').length, db = b.split('/').length; return a.split('/').slice(0, -1).join('/') === b.split('/').slice(0, -1).join('/') ? a.localeCompare(b, undefined, { numeric: true }) : a.localeCompare(b, undefined, { numeric: true }); });
+    const root = { dirs: {}, files: [], n: 0, b: 0 };
+    paths.forEach(pth => { const parts = pth.split('/'), fn = parts.pop(); let node = root; const sz = size(tree[pth]); node.n++; node.b += sz; parts.forEach(q => { node = node.dirs[q] || (node.dirs[q] = { dirs: {}, files: [], n: 0, b: 0 }); node.n++; node.b += sz; }); node.files.push([fn, pth, sz]); });
+    let id = 0; const ids = {};
+    const draw = (node, depth) => { let h = ''; Object.keys(node.dirs).sort((a, b) => a.localeCompare(b, undefined, { numeric: true })).forEach(dn => { const d = node.dirs[dn]; h += '<details' + (depth < 1 ? ' open' : '') + ' style="margin-left:' + (depth ? 14 : 0) + 'px"><summary style="cursor:pointer;padding:2px 0"><b>&#128193; ' + esc(dn) + '</b> <small style="color:#667">' + d.n + ' file' + (d.n === 1 ? '' : 's') + ', ' + fmt(d.b) + '</small></summary>' + draw(d, depth + 1) + '</details>'; });
+      node.files.forEach(([fn, pth, sz]) => { const k = 'f' + (id++); ids[k] = pth; h += '<div data-fv="' + k + '" style="margin-left:' + (depth ? 14 : 0) + 'px;padding:2px 4px;cursor:pointer;border-radius:3px;display:flex;gap:8px"><span>&#128196; ' + esc(fn) + '</span><small style="margin-left:auto;color:#667">' + fmt(sz) + '</small></div>'; }); return h; };
+    const old = document.getElementById('dzFolderView'); if (old) old.remove();
+    const ov = document.createElement('div'); ov.id = 'dzFolderView'; ov.style.cssText = 'position:fixed;inset:0;z-index:100000;background:rgba(10,20,40,.45);display:flex;align-items:center;justify-content:center';
+    ov.innerHTML = '<div style="background:#F4F3EF;width:min(1180px,96vw);height:min(760px,92vh);display:flex;flex-direction:column;border:1px solid #0A246A;box-shadow:0 8px 30px rgba(0,0,0,.4);font:12px Tahoma,Segoe UI,sans-serif;color:#1B1F23">' +
+      '<div style="background:linear-gradient(90deg,#0A246A,#3A6EA5);color:#fff;padding:6px 10px;font-weight:bold;display:flex;align-items:center">&#128193; The experiment folder before it is saved: ' + esc(zipName) + '<span data-fx="1" style="margin-left:auto;cursor:pointer;padding:0 6px" title="Close">&#10005;</span></div>' +
+      '<div style="padding:6px 10px;border-bottom:1px solid #ccc">' + root.n + ' files, ' + fmt(root.b) + '. Click a folder to open or close it, click a file to see what is in it. Then press <b>Save the folder (.zip)</b>.</div>' +
+      '<div style="flex:1;display:flex;min-height:0"><div style="width:42%;overflow:auto;padding:8px 10px;border-right:1px solid #ccc;background:#fff">' + draw(root, 0) + '</div>' +
+      '<div style="flex:1;display:flex;flex-direction:column;min-width:0"><div data-fn="1" style="padding:6px 10px;font-weight:bold;border-bottom:1px solid #ddd">Choose a file on the left</div><pre data-fc="1" style="flex:1;margin:0;overflow:auto;padding:8px 10px;background:#FBFBF8;font:11.5px Consolas,monospace;white-space:pre"></pre></div></div>' +
+      '<div style="padding:8px 10px;border-top:1px solid #ccc;display:flex;gap:8px;justify-content:flex-end;align-items:center"><span data-fm="1" style="margin-right:auto;color:#1B5E20"></span><button class="btn" data-fcopy="1">Copy this file</button><button class="btn pri" data-fsave="1">Save the folder (.zip)</button><button class="btn" data-fx="1">Close</button></div></div>';
+    document.body.appendChild(ov);
+    const close = () => { ov.remove(); document.removeEventListener('keydown', onKey, true); }, onKey = e => { if (e.key === 'Escape') { e.stopPropagation(); close(); } };
+    document.addEventListener('keydown', onKey, true);
+    let curP = null;
+    ov.addEventListener('click', e => {
+      if (e.target === ov || e.target.closest('[data-fx]')) { close(); return; }
+      const f = e.target.closest('[data-fv]'); if (f) { ov.querySelectorAll('[data-fv]').forEach(x => x.style.background = ''); f.style.background = '#D6E4F5'; curP = ids[f.dataset.fv]; const v = tree[curP], t = typeof v === 'string' ? v : (() => { try { return new TextDecoder().decode(v); } catch (er) { return '(binary file)'; } })();
+        ov.querySelector('[data-fn]').textContent = curP + ' (' + fmt(size(v)) + ')'; ov.querySelector('[data-fc]').textContent = t.length > 400000 ? t.slice(0, 400000) + '\n\n... (the first 400 000 characters are shown; the zip holds the whole file)' : t; return; }
+      if (e.target.closest('[data-fcopy]')) { if (curP) { try { navigator.clipboard.writeText(typeof tree[curP] === 'string' ? tree[curP] : ''); ov.querySelector('[data-fm]').textContent = 'Copied ' + curP.split('/').pop() + '.'; } catch (er) { } } return; }
+      if (e.target.closest('[data-fsave]')) { const z = X.zip(tree), b = new Blob([z], { type: 'application/zip' }), a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = zipName; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 4000); ov.querySelector('[data-fm]').textContent = 'Saved ' + zipName + ' (' + root.n + ' files).'; if (onSaved) onSaved(); }
+    });
+  }
   async function saveSetZip() {
     const all = st.set || [], L = all.filter(it => it.on !== false); if (!L.length) { const m = $('SetMsg'); if (m) m.textContent = 'Tick at least one experiment.'; return; } const keep = snap(); const setName = (it) => 'E' + (all.indexOf(it) + 1) + '_' + slug2(it.label);
     try {
@@ -241,8 +271,8 @@
       }
       readme.push('', 'Every folder is a complete experiment (README, Common, numbered run folders, run_all.sh, run_all.bat, plan.json). Open the README of an experiment first.');
       tree[root + '/README_experiments.txt'] = readme.join('\r\n'); tree[root + '/plan_all.json'] = JSON.stringify({ set: L.map(it => ({ name: setName(it), text: it.text, plan: { factors: it.factors, base: it.base, design: it.design, max: it.max }, responses: it.responses })) }, null, 1);
-      const z = X.zip(tree), b = new Blob([z], { type: 'application/zip' }), a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = SWAFLDate.name('daisy-experiments.zip'); a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
-      const m = $('SetMsg'); if (m) m.textContent = 'Saved ' + L.length + ' experiment folders in one zip.';
+      const m = $('SetMsg'); if (m) m.textContent = 'The folder of the ' + L.length + ' experiments is open: look at its files, then press Save the folder (.zip).';
+      showFolder(tree, SWAFLDate.name('daisy-experiments.zip'), () => { const m2 = $('SetMsg'); if (m2) m2.textContent = 'Saved ' + L.length + ' experiment folders in one zip.'; });
     } catch (e) { const m = $('SetMsg'); if (m) m.innerHTML = '<span style="color:#b3261e">' + esc(e.message) + '</span>'; }
     applyItem(keep); renderPlan();
   }
@@ -330,7 +360,7 @@
   async function stationFiles(files, ids) { for (const id of ids) if (id && id !== 'course') files['weather/' + id + '.dwf'] = await D.getText('weather/' + id + '.dwf'); }
   async function buildJobs(design, files) { const stIds = Array.from(new Set(design.runs.map(r => (r.set.station || st.base.station || (window.DaisyScenUI.my().wxMode === 'course' && window.DaisyScenUI.my().station) || 'course')))); await stationFiles(files, stIds); return design.runs.map(run => ({ run, job: SC.buildJob('exp', optionsFor(run), run.id, files) })); }
   async function saveZip() {
-    try { readPlanInputs(); const design = X.design(currentPlan()), files = await commonFiles(), jobs = await buildJobs(design, files); const tree = X.folder(jobs, files, { request: st.text || (st.res && st.res.plan && st.res.plan.title) || '', title: (st.res && st.res.plan && st.res.plan.title) || st.text, plan: currentPlan(), design: design.factors }); const z = X.zip(tree); const b = new Blob([z], { type: 'application/zip' }), a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'daisy-experiment.zip'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); D.note('Xst', 'Saved the experiment folder: ' + design.runs.length + ' numbered run folders, a Common folder with the shared inputs, a README with the design and where to find the indexes, and run_all scripts (' + Object.keys(tree).length + ' files).'); }
+    try { readPlanInputs(); const design = X.design(currentPlan()), files = await commonFiles(), jobs = await buildJobs(design, files); const tree = X.folder(jobs, files, { request: st.text || (st.res && st.res.plan && st.res.plan.title) || '', title: (st.res && st.res.plan && st.res.plan.title) || st.text, plan: currentPlan(), design: design.factors }); D.note('Xst', 'The experiment folder is open: look at its files, then press Save the folder (.zip).'); showFolder(tree, (window.SWAFLDate ? SWAFLDate.name('daisy-experiment.zip') : 'daisy-experiment.zip'), () => D.note('Xst', 'Saved the experiment folder: ' + design.runs.length + ' numbered run folders, a Common folder with the shared inputs, a README with the design and where to find the indexes, and run_all scripts (' + Object.keys(tree).length + ' files).')); }
     catch (e) { D.note('Xst', esc(e.message), 1); }
   }
   // ------------------------------------------------------------------ running
