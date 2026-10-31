@@ -36,3 +36,9 @@
 .dzw .dzchips .dzchip{background:#D4D0C8;color:#000;border-radius:0;border:2px solid;border-color:#fff #404040 #404040 #fff;box-shadow:none}
 .dzw .dzchips .dzchip i{color:#0A246A;background:#fff;border-radius:0}
 .dzw .dzchips .dzchip.on{background:#0A246A;color:#fff;border-color:#404040 #fff #fff #404040}
+.dzphd{margin-top:8px;border:1px solid #808080;background:#fff;padding:4px 8px}
+.dzphd summary{cursor:pointer}
+.dzph{max-height:260px;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:3px 8px;margin:4px 0}
+.dzph label{display:flex;justify-content:space-between;gap:4px;align-items:center;font-size:.9em}
+.dzph input{width:60px}
+#dzEol{max-height:300px;overflow:auto}

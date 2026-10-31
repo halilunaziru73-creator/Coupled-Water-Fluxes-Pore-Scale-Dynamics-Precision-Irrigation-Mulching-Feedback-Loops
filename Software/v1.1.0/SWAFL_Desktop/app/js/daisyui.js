@@ -17,7 +17,7 @@ const DaisyUI = (() => {
   const note = (id, m, bad) => { const e = $(id); if (e) { e.innerHTML = m; e.style.color = bad ? '#b3261e' : ''; } };
 
   // ---------------------------------------------------------------- data access
-  async function getText(path) { if (S.txt[path]) return S.txt[path]; const r = await fetch('data/daisy/' + path); if (!r.ok) throw new Error(path + ': HTTP ' + r.status); return (S.txt[path] = await r.text()); }
+  async function getText(path) { if (S.txt[path]) return S.txt[path]; const r = await fetch('data/daisy/' + path + '?v=20261031w'); if (!r.ok) throw new Error(path + ': HTTP ' + r.status); return (S.txt[path] = await r.text()); }
   async function getIdx() { return S.idx || (S.idx = JSON.parse(await getText('index.json'))); }
   async function getLib() { if (!S.lib) { S.lib = JSON.parse(await getText('library.json')); try { if (window.DaisyScen && window.DaisyScen.addLibrary) window.DaisyScen.addLibrary(S.lib); } catch (e) { } } return S.lib; }
   setTimeout(() => { getLib().catch(() => { }); }, 800);
@@ -205,17 +205,17 @@ const DaisyUI = (() => {
       const defs = IO.definitions(ast), rows = []; ast.top.forEach(x => { if (x.t === 'list' && x.v[0] && !/^def/.test(x.v[0].v)) rows.push({ kind: x.v[0].v, name: x.v[1] && x.v[1].t !== 'list' ? x.v[1].v : '', line: x.line }); }); defs.forEach(d => rows.push({ kind: 'def' + d.kind, name: d.name + (d.parent ? ' &larr; ' + d.parent : ''), line: d.line, raw: 1 }));
       rows.sort((a, b) => a.line - b.line); $('Eol').innerHTML = rows.map(r => '<div class="dzol-i" data-l="' + r.line + '"><span class="dzk">' + esc(r.kind) + '</span> ' + (r.raw ? r.name : esc(r.name)) + '</div>').join('') || '<span class="pnote">No definitions.</span>';
       $('Eol').querySelectorAll('[data-l]').forEach(e => e.onclick = () => { const ln = +e.dataset.l; const lines = t.value.split('\n'); let pos = 0; for (let i = 0; i < ln - 1 && i < lines.length; i++) pos += lines[i].length + 1; t.focus(); t.setSelectionRange(pos, pos + (lines[ln - 1] || '').length); t.scrollTop = Math.max(0, (ln - 4) * 15); sync(); });
-      const ph = IO.placeholders(t.value); $('Eph').innerHTML = ph.length ? '<b>Placeholders</b><div class="pnote">Give each a value and download the filled set-up.</div>' + ph.map(p => '<div class="dzrow"><label style="min-width:80px">' + esc(p) + '</label><input data-ph="' + esc(p) + '" size="9"></div>').join('') + '<button class="btn" id="dzEfill">Download filled file</button>' : '';
+      const ph = IO.placeholders(t.value); $('Eph').innerHTML = ph.length ? '<details class="dzphd"' + (ph.length <= 8 ? ' open' : '') + '><summary><b>Placeholders (' + ph.length + ')</b>: values to fill in</summary><div class="pnote">This file is a template. Give a value to each placeholder you need (empty ones stay as they are), then download the filled set-up.</div><div class="dzph">' + ph.map(p => '<label>' + esc(p) + '<input data-ph="' + esc(p) + '" size="9"></label>').join('') + '</div><button class="btn" id="dzEfill">Download filled file</button></details>' : '';
       const fb = $('Efill'); if (fb) fb.onclick = () => { const v = {}; $('Eph').querySelectorAll('[data-ph]').forEach(i => { if (i.value !== '') v[i.dataset.ph] = i.value; }); download((S.daiName || 'setup').replace(/\.dai$/, '') + '-filled.dai', IO.fillTemplate(t.value, v)); }; };
     t.addEventListener('input', analyse); t.addEventListener('scroll', sync);
-    try { const ix = await getIdx(), es = $('Es'), all = ix.dai.filter(d => d.path); let grp = '', og = null;
+    try { const ix = await getIdx(), es = $('Es'), all = ix.dai.map(d => d.path ? d : Object.assign({}, d, { path: d.file, group: '0 Files', title: d.file })); let grp = '', og = null;
       const fill = q => { const keep = es.value; es.innerHTML = '<option value="">Choose a set-up file...</option>'; og = null; grp = ''; all.filter(d => !q || (d.file + ' ' + d.title + ' ' + d.desc).toLowerCase().includes(q)).forEach(d => { if (d.group !== grp) { grp = d.group; og = document.createElement('optgroup'); og.label = d.group.replace(/^\d+\s/, ''); es.appendChild(og); } const o = document.createElement('option'); o.value = d.path; o.textContent = d.title + '  (' + d.file + ')'; og.appendChild(o); }); es.value = keep; };
       fill('');
       const open = async path => { const d = all.find(x => x.path === path); if (!d) return; t.value = await getText('dai/' + path); S.daiName = d.file; analyse(); t.scrollTop = 0; $('Einfo').innerHTML = '<b>' + esc(d.title) + '</b> <span class="pnote">' + esc(d.file) + ', ' + Math.round(d.bytes / 100) / 10 + ' KB, ' + esc(d.group.replace(/^\d+\s/, '')) + '</span><br>' + esc(d.desc); note('Est', d.file + ' opened.'); };
       es.onchange = () => { if (es.value) open(es.value); };
       $('Eq').oninput = () => { fill($('Eq').value.trim().toLowerCase()); };
       S.openDai = open;
-      if (S.pendingOpen) { const pp = S.pendingOpen; S.pendingOpen = null; es.value = pp; await open(pp); } else if (!S.dai) { es.value = 'swafl/ArableFarmRotation.dai'; await open('swafl/ArableFarmRotation.dai'); }
+      if (S.pendingOpen) { const pp = S.pendingOpen; S.pendingOpen = null; es.value = pp; await open(pp); } else if (!S.dai) { const d0 = all.find(x => x.path === 'swafl/ArableFarmRotation.dai') || all[0]; if (d0) { es.value = d0.path; await open(d0.path); } }
     } catch (e) {}
     $('Eopen').onclick = () => $('Ein').click(); $('Ein').onchange = async () => { const f = $('Ein').files[0]; if (f) { t.value = await f.text(); S.daiName = f.name; analyse(); note('Est', f.name + ' opened.'); } };
     $('Efmt').onclick = () => { const a = IO.parseDai(t.value); if (a.errors.length) { note('Est', 'Fix the bracket errors first.', 1); return; } t.value = IO.formatDai(a); analyse(); note('Est', 'Layout tidied.'); };
