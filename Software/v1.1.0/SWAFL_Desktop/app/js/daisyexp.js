@@ -169,20 +169,34 @@
   /* a short name for a run, from the values of the factors: Loam_Overhead_N1.25 */
   E.shortName = function (run) {
     if (run.reference) return 'Rainfed_reference'; const parts = [];
-    Object.keys(run.val || {}).forEach(id => { const F = E.factor(id), v = run.val[id]; if (!F) return; if (F.kind === 'num') parts.push((SHORT[id] || (F.param ? F.param.key : id)) + v); else if (F.kind === 'set') parts.push(String((v && v.label) || v)); else if (id === 'irrig') parts.push(v === '1' || v === 1 ? 'irrigated' : 'rainfed'); else parts.push(String(E.levelName(F, v)).replace(/\s*\(.*\)/, '')); });
+    Object.keys(run.val || {}).forEach(id => { const q = E.partName(id, run.val[id]); if (q) parts.push(q); });
     return parts.join('_') || run.label || run.id; };
+  E.partName = function (id, v) { const F = E.factor(id); if (!F) return ''; if (F.kind === 'num') return (SHORT[id] || (F.param ? F.param.key : id)) + v; if (F.kind === 'set') return String((v && v.label) || v); if (id === 'irrig') return v === '1' || v === 1 ? 'irrigated' : 'rainfed'; return String(E.levelName(F, v)).replace(/\s*\(.*\)/, ''); };
   E.folder = function (jobs, commonFiles, info) {
     info = info || {}; const plan = info.plan || {}, out = {}, seen = {}, root = 'Experiment_' + slug(info.title || info.request || 'Daisy', 36);
+    /* every file of Common/ gets a name that is specific to this experiment and says what makes it different:
+       <Experiment>_<file>[_<the factor values it belongs to>].ext, so two experiments never share a name and no name is a bare number */
+    const tag = slug(info.title || info.request || 'Daisy', 22), baseOf = (f, job) => f === 'OutputLog.dai' && job.options && job.options.log ? 'OutputLog_' + job.options.log + '.dai' : f === 'Station.dwf' && job.options && job.options.station ? job.options.station + '.dwf' : f;
     function hash(s) { let h = 5381; for (let i = 0; i < s.length; i++) h = (h * 33 ^ s.charCodeAt(i)) >>> 0; return h.toString(36); }
-    const put = (name, text, tag) => { const k = name + '|' + text.length + '|' + hash(text); if (seen[k]) return seen[k]; let n = name; if (out[root + '/Common/' + n] != null) n = name.replace(/(\.[^.]+)$/, '_' + tag + '$1'); out[root + '/Common/' + n] = text; seen[k] = n; return n; };
+    const uses = [], textOf = (f, job) => { let t = job.files['Common/' + f]; return t == null ? commonFiles[f] : t; };
+    jobs.forEach(({ run, job }, ji) => { (job.files['Run/Runfile.dai'].match(/\.\.\/Common\/[^"]+/g) || []).forEach(m => { const f = m.slice(10), t = textOf(f, job); if (t != null) uses.push({ f, base: baseOf(f, job), t, h: hash(t) + ':' + t.length, run, ji }); }); });
+    const names = {}, usedBy = {};
+    const groups = {}; uses.forEach(u => { (groups[u.base] = groups[u.base] || {})[u.h] = (groups[u.base][u.h] || []).concat([u]); });
+    Object.keys(groups).forEach(base => {
+      const vs = Object.keys(groups[base]), ext = (base.match(/(\.[^.]+)$/) || ['', ''])[1], stem = base.slice(0, base.length - ext.length);
+      // factors whose value is the same inside each variant and differs between variants: these are what the variant is for
+      const ids = Array.from(new Set([].concat.apply([], vs.map(h => [].concat.apply([], groups[base][h].map(u => Object.keys(u.run.val || {}))))))); const rel = vs.length > 1 ? ids.filter(id => { const seenV = new Set(); let ok = true; vs.forEach(h => { const vals = new Set(groups[base][h].map(u => JSON.stringify((u.run.val || {})[id]))); if (vals.size !== 1) ok = false; vals.forEach(x => seenV.add(x)); }); return ok && seenV.size > 1; }) : [];
+      const taken = {}; vs.forEach((h, k) => {
+        const u0 = groups[base][h][0]; let d = vs.length === 1 ? '' : rel.map(id => E.partName(id, (u0.run.val || {})[id])).filter(Boolean).join('_'); if (vs.length > 1 && !d) d = u0.run.reference ? 'rainfed_reference' : 'variant' + (k + 1);
+        let nm = tag + '_' + stem + (d ? '_' + slug(d, 40) : '') + ext; if (taken[nm]) nm = tag + '_' + stem + '_' + slug(d, 34) + '_' + (k + 1) + ext; taken[nm] = 1; names[base + '|' + h] = nm; usedBy[nm] = groups[base][h].map(u => u.ji + 1); }); });
+    const put = (base, text, f, job) => { const h = hash(text) + ':' + text.length, nm = names[base + '|' + h] || (tag + '_' + base); out[root + '/Common/' + nm] = text; return nm; };
     const dirs = [], files = {};
     jobs.forEach(({ run, job }, i) => {
       const no = String(i + (jobs.length > 99 ? 1000 : 100)).slice(1), nm = slug(E.shortName(run), 44), dir = no + '_' + nm; dirs.push({ dir, run, nm, job });
       let rf = job.files['Run/Runfile.dai'];
       rf = rf.replace(/\.\.\/Common\/([^"]+)/g, (m, f) => {
         let text = job.files['Common/' + f]; if (text == null) text = commonFiles[f]; if (text == null) return m;
-        let name = f; if (f === 'OutputLog.dai' && job.options && job.options.log) name = 'OutputLog_' + job.options.log + '.dai'; else if (f === 'Station.dwf' && job.options && job.options.station) name = job.options.station + '.dwf'; else if (f === 'ResFarm.dai') name = 'ResFarm.dai';
-        return '../Common/' + put(name, text, run.id); });
+        return '../Common/' + put(baseOf(f, job), text, f, job); });
       rf = rf.replace(/^;; SWAFL scenario[^\n]*\n/, ';; Experiment run ' + no + ': ' + run.label + '\n').replace(/\(description "[^"]*"\)/, '(description "' + String((info.request || 'Experiment') + ' - ' + run.label).replace(/"/g, "'") + '")').replace(/\(log_prefix "[^"]*"\)/, '(log_prefix "' + nm + '-")');
       out[root + '/' + dir + '/' + nm + '.dai'] = rf;
     });
@@ -198,8 +212,9 @@
     const L = [];
     L.push('EXPERIMENT - ' + (info.request || 'Daisy experiment'), '='.repeat(60), '',
       'Design: ' + (fl.length ? fl.map(f => fname(f) + ' (' + (f.levels || []).length + ' levels)').join(' x ') : 'one run') + ' = ' + (nRuns - ref) + ' runs' + (ref ? ' + ' + ref + ' rainfed reference = ' + nRuns + ' runs' : '') + '.', 'Combinations: ' + dsn + '.', 'Made by the SWAFL Daisy workbench for Daisy 7.1.14. Open the .dai of a run in its own folder with Daisy to run it.', '',
-      'FOLDERS', '  Common/                  shared inputs (weather, soils, rotations, output)');
+      'FOLDERS', '  Common/                  shared inputs (weather, soils, rotations, output); every file is named after this experiment and, where several versions exist, after the factor values it belongs to');
     dirs.forEach(d => L.push('  ' + d.dir.padEnd(34).slice(0, Math.max(34, d.dir.length + 1)) + ' ' + d.run.label + (d.run.reference ? '  (rainfed reference)' : '')));
+    L.push('', 'COMMON FILES AND THE RUNS THAT USE THEM'); Object.keys(usedBy).sort().forEach(n => L.push('  ' + n.padEnd(60) + ' runs ' + (usedBy[n].length > 12 ? usedBy[n].slice(0, 12).join(', ') + ' ... (' + usedBy[n].length + ' runs)' : usedBy[n].join(', '))));
     L.push('', 'WHAT IS VARIED');
     fl.forEach(f => L.push('  ' + fname(f) + ': ' + lvl(f)));
     L.push('', 'WHAT IS KEPT THE SAME IN ALL RUNS', keptAll, '  Crops, fertiliser, weather, soil and output are identical unless listed above.', '',
