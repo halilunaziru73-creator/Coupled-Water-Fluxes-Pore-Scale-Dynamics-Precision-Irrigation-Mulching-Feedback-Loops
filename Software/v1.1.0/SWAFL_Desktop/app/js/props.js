@@ -67,6 +67,8 @@ const Props = (() => {
   }
   function update(s) {
     if (!built || !s) return;
+    try { const src = E.json('wxSources()') || {}, sel = host.querySelector('select[data-r] option[value=online]'); if (sel) { const box = sel.parentElement, lab = { record: 'Built-in weather record', file: src.file ? 'Imported weather file: ' + src.file.name + ' (' + src.file.years + ')' : 'Imported weather file', online: src.online ? 'Online weather: ' + src.online.name + ' (' + src.online.years + ')' : 'Online weather of a location' };
+      [...box.options].forEach(o => { if (lab[o.value] && o.textContent !== lab[o.value]) o.textContent = lab[o.value]; }); if (box.title !== 'The weather in use: ' + box.options[box.selectedIndex].textContent) box.title = 'The weather in use: ' + box.options[box.selectedIndex].textContent; } } catch (e) { }
     const map = host.__map;
     host.querySelectorAll('[data-r]').forEach(el => {
       const r = map[el.dataset.r]; if (!r) return;

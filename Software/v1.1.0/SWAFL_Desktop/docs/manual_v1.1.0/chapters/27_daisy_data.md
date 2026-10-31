@@ -150,6 +150,12 @@ The same screen with the crops chosen in the first list.
 
 \newpage
 
+### Weather stations: the weather loaded in SWAFL is in the list
+
+When SWAFL has an online weather of a place or a weather file loaded, the list of the weather stations starts with it, under *Weather loaded in SWAFL* (for example *Online weather: Zaria, Kaduna, Nigeria (2007 to 2026), in use*), followed by the bundled Daisy stations. Choosing it draws its annual rain and puts its latitude in the box; **Use as SWAFL weather** makes it the weather of SWAFL again. In Properties, the weather source also names the loaded weather: *Online weather: place (years)* and *Imported weather file: name (years)*.
+
+![The weather stations: the online weather loaded in SWAFL at the top of the list, with its annual rain.](images/daisy11/dz_wxloaded_01.jpg){width=100%}
+
 ### Weather stations: the bundled stations and the annual rain
 
 Weather stations lists the stations that come with Daisy. Choosing one draws its annual rain; the station can be used as the SWAFL weather or added to the list of logs for the plots.

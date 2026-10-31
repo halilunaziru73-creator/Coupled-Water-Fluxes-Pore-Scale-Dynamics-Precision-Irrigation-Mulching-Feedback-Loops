@@ -9,20 +9,45 @@
   const PATH = [
     ['data', 'My data and weather', 'Set the weather and the soil of your site once, or look at a weather station or bring online weather of any place. Every simulation uses them.'],
     ['library', 'Library', 'Browse the soils, crops, fertilisers and chemicals of Daisy (you can skip this step).'],
-    ['scen', 'Scenarios', 'Choose a question and run it.'],
-    ['exp', 'Experiments', 'Or design your own set of runs from the factors of the model.'],
+    ['exp', 'Experiments', 'Design your own set of runs from the factors of the model, or load a ready one.'],
+    ['scen', 'Scenarios', 'Or choose a ready-made question and run it.'],
     ['proc', 'Processes', 'See the processes behind the results.'],
     ['plot', 'Plot', 'Load your own files or use the output of your runs, then plot any quantity.'],
     ['balance', 'Mass balance', 'Check that inputs, outputs and content agree.'],
     ['compare', 'Compare and test', 'Compare two runs against the smallest meaningful level.'],
     ['dss', 'To the SWAFL project', 'Take the results to the layers of the SWAFL project, which turn them into decisions.']
   ];
-  const TOOLS = { editor: 'Set-up editor', richards: 'Soil column', deni: 'Process curves', calib: 'Calibrate', docs: 'Model and documentation', refman: 'Reference manual' };
+  const TOOLS = { editor: 'Set-up editor', build: 'Model builder', richards: 'Soil column', deni: 'Process curves', calib: 'Calibrate', docs: 'Model and documentation', refman: 'Reference manual' };
   const F = { last: 'data' };
   window.DaisyFlow = F; F.PATH = PATH;
   const idx = t => PATH.findIndex(p => p[0] === t);
+  // what to do on each tab, in three short steps (shown under the bar; Hide tips folds them for every tab)
+  const HELP = {
+    data: ['Choose the weather: built-in, a Daisy station, a file, or the online weather of your place.', 'Tick My soil and type your soil layers if you know them; otherwise the built-in soils are used.', 'Press Next.'],
+    library: ['Look through the soils, crops and fertilisers Daisy knows.', 'Click one to read its values.', 'You can skip this step: press Next.'],
+    scen: ['Pick the question closest to yours (water, nitrogen, climate, chemical or soil).', 'Press Run (in the desktop app Daisy runs on your computer).', 'Read the figures that appear, then press Next.'],
+    exp: ['Write what you want to find out, or press Load this experiment on a ready one.', 'Check what changes and the values tested; remove or add rows.', 'Press Run all (desktop) or Save the experiment folder to run it anywhere.'],
+    proc: ['Click a box of the process map (rain, soil water, roots, nitrogen...).', 'Read what Daisy does there and see its figures from your run.', 'Press Next to plot any quantity.'],
+    plot: ['Load your Daisy logs or use the runs you just made.', 'Choose the quantity and the runs to plot.', 'Save the figure or the numbers.'],
+    balance: ['Choose a run.', 'Read whether inputs, outputs and the change of content agree.', 'A large error means the set-up needs a look.'],
+    compare: ['Choose two runs.', 'See where they differ by more than the smallest meaningful level.', 'Press Next to take the results to the SWAFL layers.'],
+    dss: ['Read which SWAFL layer answers your question.', 'Press its button: the layer opens with your Daisy results.', 'Decide in the layer (decision table, reliability, nitrogen budget...).'],
+    editor: ['Choose a Daisy set-up file, or open one from your computer.', 'Change the text; brackets and quotes are checked as you type.', 'Download it or run it (desktop).'],
+    build: ['Choose the component and the model.', 'Fill in the values (the ticked rows must be given) and tick the logs you want.', 'Open it in the set-up editor, add it to your file, or save it.'],
+    richards: ['Choose the soil layers and the weather.', 'Press Run the column.', 'Watch the water move down the profile day by day.'],
+    deni: ['Choose a process (denitrification, N2O...).', 'Move the inputs.', 'Read how the response curve changes.'],
+    calib: ['Load observed data and a run.', 'Choose the parameters to fit.', 'Press Calibrate and read the best values.'],
+    refman: ['Click a chapter on the left, or search a word.', 'Read the models and every parameter.', 'Press Fill in a form for this model to build it without typing.'],
+    docs: ['Read what Daisy is and how to install it.', 'Follow the links to the papers and the code.', 'Come back to the guided path when ready.']
+  };
+  const tipsOff = () => { try { return localStorage.getItem('swafl.dz.tips') === 'off'; } catch (e) { return false; } };
+  const tipLine = tab => { const h = HELP[tab]; if (!h) return ''; if (tipsOff()) return '<div class="dztips off"><a href="#" id="dzTipsOn">Show what to do here</a></div>'; return '<div class="dztips"><b>What to do here</b>' + h.map((t, i) => '<span><i>' + (i + 1) + '</i>' + esc(t) + '</span>').join('') + '<a href="#" id="dzTipsOff" title="Hide these tips on every tab">Hide tips</a></div>'; };
+  // the tab buttons: the number of the step on the tabs of the guided path, and a sentence on what each tab is for
+  const TIP = Object.assign({}, ...PATH.map(p => ({ [p[0]]: p[2] })), { editor: 'Edit any Daisy set-up file (.dai) as text.', build: 'Build any Daisy model from a form: no typing in the Daisy language.', richards: 'A soil column solved with the Richards equation, without Daisy.', deni: 'Response curves of the processes of Daisy.', calib: 'Fit parameters to observed data.', refman: 'The Daisy reference manual, every model and parameter.', docs: 'What Daisy is, installation, papers.' });
+  F.decorate = function () { document.querySelectorAll('.dztabs button[data-t]').forEach(b => { if (b.__dec) return; b.__dec = true; const t = b.dataset.t, i = idx(t); if (TIP[t]) b.title = TIP[t]; if (i >= 0) b.insertAdjacentHTML('afterbegin', '<span class="dzsn">' + (i + 1) + '</span>'); }); };
   // the bar above the tab: where you are, what to do, Back and Next
-  F.bar = function (tab) {
+  F.bar = function (tab) { setTimeout(F.decorate, 0); return F.bar0(tab) + tipLine(tab); };
+  F.bar0 = function (tab) {
     const i = idx(tab);
     if (i < 0) { const nm = TOOLS[tab] || tab; return '<div class="dzflow"><span class="dzstep">Tool</span><span class="dzwhat"><b>' + esc(nm) + '</b>: a tool outside the guided path.</span><span style="flex:1"></span><button class="btn" id="dzFBackPath">Back to the guided path</button></div>'; }
     F.last = tab; const p = PATH[i], n = PATH.length;
@@ -31,6 +56,8 @@
   F.bind = function (tab) {
     const i = idx(tab), go = id => D.show(id), el = id => document.getElementById(id);
     if (el('dzFBack')) el('dzFBack').onclick = () => go(PATH[i - 1][0]); if (el('dzFNext')) el('dzFNext').onclick = () => go(PATH[i + 1][0]);
+    const set = v => { try { localStorage.setItem('swafl.dz.tips', v); } catch (e) { } go(tab); };
+    if (el('dzTipsOff')) el('dzTipsOff').onclick = e => { e.preventDefault(); set('off'); }; if (el('dzTipsOn')) el('dzTipsOn').onclick = e => { e.preventDefault(); set('on'); };
     if (el('dzFBackPath')) el('dzFBackPath').onclick = () => go(F.last || 'data'); if (el('dzFOpen')) el('dzFOpen').onclick = () => F.toLayer(F.suggest());
   };
   // ---------------------------------------------------------------- the runs of the workbench, passed on to the layers

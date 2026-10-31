@@ -2960,11 +2960,13 @@ const ctx = canvas.getContext('2d');
 const calTxt = t => t;
 // ---- desktop (app) mode only: fit the whole drawing to the window, sharp resolution, quick response ----
 if (new URLSearchParams(location.search).get('app')) {
+  // the same text in the same font is measured thousands of times a frame: the result depends only on the two, so it is kept
+  { const C2 = CanvasRenderingContext2D.prototype, om = C2.measureText; let M = new Map(); C2.measureText = function (t) { const k = this.font + '\u0001' + t; let r = M.get(k); if (!r) { r = om.call(this, t); if (M.size > 30000) M = new Map(); M.set(k, r); } return r; }; }
   const dW = Object.getOwnPropertyDescriptor(HTMLCanvasElement.prototype, 'width'), dH = Object.getOwnPropertyDescriptor(HTMLCanvasElement.prototype, 'height');
   let lw = canvas.width, lh = canvas.height, SS = 1, curS = 1, fitMode = 'window', lastKey = '', fitDims = '', fitSc = 0;
   const wrapEl = () => canvas.closest('.canvaswrap') || canvas.parentElement;
   const phys = () => {
-    SS = window.__hiScale ? window.__hiScale : Math.max(2, Math.min(3, curS * (window.devicePixelRatio || 1))); { const cap = window.__hiScale ? 90e6 : 30e6; if (lw * lh * SS * SS > cap) SS = Math.sqrt(cap / (lw * lh)); }   // __hiScale: a picture saved at 300, 600 dpi or more
+    SS = window.__hiScale ? window.__hiScale : Math.max(1.25, Math.min(3, 1.25 * curS * (window.devicePixelRatio || 1))); { const cap = window.__hiScale ? 90e6 : 16e6;   /* the screen resolution with a 25 % margin: sharp, and no oversized picture to send to the screen every frame */ if (lw * lh * SS * SS > cap) SS = Math.sqrt(cap / (lw * lh)); }   // __hiScale: a picture saved at 300, 600 dpi or more
     dW.set.call(canvas, Math.round(lw * SS)); dH.set.call(canvas, Math.round(lh * SS)); ctx.setTransform(SS, 0, 0, SS, 0, 0); window.__SS = SS;
   };
   const fit = () => {
@@ -7082,8 +7084,8 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
 <script src="plus_phenotyping4.js?v=20261030z4"></script>
 <script src="plus_phenotyping5.js?v=20261030z4"></script>
 <script src="phnav.js?v=20261030z4"></script>
-<script src="inputs.js?v=20261027d"></script>
-<script src="weather.js?v=20261027d"></script>
+<script src="inputs.js?v=20261031a"></script>
+<script src="weather.js?v=20261031a"></script>
 <script src="runbar.js?v=20261030z6"></script>
 <link rel="stylesheet" href="classic.css">
 </body>

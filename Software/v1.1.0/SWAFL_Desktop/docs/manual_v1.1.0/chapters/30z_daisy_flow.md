@@ -4,21 +4,23 @@ Daisy calculates; the SWAFL project decides. The Daisy workbench is therefore ar
 
 ## The guided path
 
-A bar above each tab on the path shows the step (for example *Step 5 of 11*), what the step is for, and two buttons: **Back** goes to the step before and **Next** to the step after, each named on the button. The tabs can still be opened in any order from the row of tabs; the bar only shows where a tab lies on the path. Tabs outside the path (Set-up editor, Soil column, Process curves, Calibrate, and Model and documentation) show the bar *Tool*, with a button that returns to the last step of the path that was open.
+The tabs are grouped as the work goes: **Input data** (Input data, Parameter library), **Experiments** (Experiments, Scenarios), **Results and analysis** (Process map, Log plots, Mass balance, Run comparison), **Decision support** (To the SWAFL layers), **Model development** (Set-up editor, Model builder, Soil column, Response curves, Calibration) and **Documentation** (Reference manual, Model and documentation). The nine tabs of the guided path carry their step number, 1 to 9 from left to right; holding the mouse over any tab tells what it is for.
+
+A bar above each tab on the path shows the step (for example *Step 3 of 9*), what the step is for, and two buttons: **Back** goes to the step before and **Next** to the step after, each named on the button. Under it, a yellow line **What to do here** gives the three things to do on that tab, in order; **Hide tips** folds these lines on every tab, and **Show what to do here** brings them back. The tabs can still be opened in any order. Tabs outside the path show the bar *Tool*, with a button that returns to the last step of the path that was open.
 
 | Step | Tab | What is done there |
 |--:|:--|:--|
-| 1 | Input data | Set the weather and the soil of your site once. Every simulation uses them. |
-| 2 | Weather stations | Look at a weather record, or bring online weather of any place. |
-| 3 | Library | Browse the soils, crops, fertilisers and chemicals of Daisy (this step can be skipped). |
-| 4 | Files | Load the logs of earlier Daisy runs (this step can be skipped). |
-| 5 | Scenarios | Choose a question and run it. |
-| 6 | Experiments | Or design your own set of runs from the factors of the model. |
-| 7 | Processes | See the processes behind the results. |
-| 8 | Plot | Plot any quantity of a run. |
-| 9 | Mass balance | Check that inputs, outputs and content agree. |
-| 10 | Run comparison | Compare two runs against the smallest meaningful level. |
-| 11 | To the SWAFL layers | Take the results to the layers of the SWAFL project, which turn them into decisions. |
+| 1 | Input data | Set the weather and the soil of your site once, or look at a weather station or bring online weather of any place. Every simulation uses them. |
+| 2 | Parameter library | Browse the soils, crops, fertilisers and chemicals of Daisy (this step can be skipped). |
+| 3 | Experiments | Design your own set of runs from the factors of the model, or load a ready one. |
+| 4 | Scenarios | Or choose a ready-made question and run it. |
+| 5 | Process map | See the processes behind the results. |
+| 6 | Log plots | Load your own files or use the output of your runs, then plot any quantity. |
+| 7 | Mass balance | Check that inputs, outputs and content agree. |
+| 8 | Run comparison | Compare two runs against the smallest meaningful level. |
+| 9 | To the SWAFL layers | Take the results to the layers of the SWAFL project, which turn them into decisions. |
+
+![The tabs with the step numbers of the guided path, the bar of the step and the line What to do here.](images/daisy11/dz_tips_01.jpg){width=100%}
 
 ### The guided path: step 1, Input data
 
@@ -28,17 +30,17 @@ The path begins with the data of the site. Each tab shows a bar above its conten
 
 **What the arrows point to.**
 
-1. **Where you are.** Step 1 of 11. The first step has no Back button.
+1. **Where you are.** Step 1 of 9. The first step has no Back button.
 2. **What to do here.** Set the weather and the soil of your site once.
-3. **Next.** Goes to Weather stations.
+3. **Next.** Goes to the Parameter library.
 
 \newpage
 
-### The guided path: step 5, Scenarios
+### The guided path: step 4, Scenarios
 
-Step 5 is where a question is chosen and run. After the run the results are drawn under the question, and Next leads on to Experiments, Processes and the other ways of looking at the results.
+Step 4 is where a ready-made question is chosen and run. After the run the results are drawn under the question, and Next leads on to the Process map and the other ways of looking at the results.
 
-![The guided path: step 5, Scenarios. Screen 124 of the Daisy workbench.](images/daisy11/dz_flow_02.jpg){width=100% height=17cm}
+![The guided path: step 4, Scenarios. Screen 124 of the Daisy workbench.](images/daisy11/dz_flow_02.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -49,11 +51,11 @@ Step 5 is where a question is chosen and run. After the run the results are draw
 
 \newpage
 
-### The guided path: step 8, Plot
+### The guided path: step 6, Log plots
 
-Plot draws any quantity of a run. The bar shows that three steps remain on the path: Mass balance, Run comparison, and the hand-over to the SWAFL project.
+Log plots draws any quantity of a run. The bar shows that three steps remain on the path: Mass balance, Run comparison, and the hand-over to the SWAFL project.
 
-![The guided path: step 8, Plot. Screen 125 of the Daisy workbench.](images/daisy11/dz_flow_03.jpg){width=100% height=17cm}
+![The guided path: step 6, Log plots. Screen 125 of the Daisy workbench.](images/daisy11/dz_flow_03.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
@@ -72,7 +74,7 @@ The last step takes the results to the layers of the SWAFL project. Daisy calcul
 
 **What the arrows point to.**
 
-1. **Step 11 of 11.** The last step of the path.
+1. **Step 9 of 9.** The last step of the path.
 2. **Open in the SWAFL project.** Opens the layer that matches the question you ran last.
 3. **Daisy decision table.** Yield, water and nitrate of every run, answer by answer.
 4. **Chemical fate.** Decay, crop uptake, leaching, runoff and what stays in the soil.

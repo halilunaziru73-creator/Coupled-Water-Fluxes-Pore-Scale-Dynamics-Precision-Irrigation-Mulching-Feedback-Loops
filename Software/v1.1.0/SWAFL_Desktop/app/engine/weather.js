@@ -141,6 +141,9 @@
     if (which === 'record') { if (W.WXD) W.WXD.on = false; W.WXD = null; const pv = W.__wxPrev || { r: RAIN_VALUES.indexOf(1.0), t: TEMP_VALUES.indexOf(0) }; W.__wxPrev = null; applyState({ rainIdx: pv.r, tempIdx: pv.t }); try { document.getElementById('dssDate').dispatchEvent(new Event('change')); } catch (e) {} return true; }
     const d = W.WXSRC[which]; if (!d) return false; if (!W.WXD) W.__wxPrev = { r: state.rainIdx, t: state.tempIdx }; d.on = true; W.WXD = d; applyState({ rainIdx: RAIN_VALUES.indexOf(d.rainRef), tempIdx: TEMP_VALUES.indexOf(d.dTref) }); try { document.getElementById('dssDate').dispatchEvent(new Event('change')); } catch (e) {} return true;
   };
+  W.wxSources = () => { const one = d => d ? { name: d.name || '', years: d.y0 + ' to ' + (d.y0 + NYRx - 1), on: W.WXD === d, lat: d.lat != null ? d.lat : null, lon: d.lon != null ? d.lon : null } : null; return { file: one(W.WXSRC.file), online: one(W.WXSRC.online) }; };
+  // annual rain of a loaded weather (for the station chart of the Daisy window)
+  W.wxAnnualRain = which => { const d = W.WXSRC[which]; if (!d) return null; const out = []; for (let y = 0; y < NYRx; y++) { let s = 0; for (let k = y * DPYx; k < (y + 1) * DPYx && k < d.P.length; k++) s += d.P[k] || 0; out.push([d.y0 + y, Math.round(s)]); } return out; };
   W.wxStatus = () => ({ src: W.WXD && W.WXD.on ? W.WXD.src : 'record', name: W.WXD && W.WXD.on ? W.WXD.name : '', file: !!W.WXSRC.file, online: !!W.WXSRC.online, years: W.WXD && W.WXD.on ? W.WXD.y0 + ' to ' + (W.WXD.y0 + NYRx - 1) : '', Pmean: W.WXD && W.WXD.on ? W.WXD.Pmean : null, ET0mean: W.WXD && W.WXD.on ? W.WXD.Emean : null, key: W.WXD && W.WXD.on ? W.WXD.key : 'record' });
 
   // ------------------------------------------------------------------ online daily weather of a location (history and forecast)
@@ -164,6 +167,6 @@
     for (let d = new Date(lastD.getTime() + 864e5); d.getUTCFullYear() === y1; d = new Date(d.getTime() + 864e5)) { const src = map.get(Date.UTC(typ, d.getUTCMonth(), d.getUTCDate())); if (src) all.push(Object.assign({}, src, { d })); }
     const fcStart = fc ? Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) : null;
     const s = apply(all, { src: 'online', name: label || (lat.toFixed(3) + ', ' + lon.toFixed(3)), how: 'daily reference ET (FAO Penman-Monteith) of the weather service', lastYear: y1, allowPartial: true, fcStart });
-    s.hist = nHist; s.forecast = fc ? 16 : 0; return s;
+    s.hist = nHist; s.forecast = fc ? 16 : 0; s.lat = lat; s.lon = lon; if (W.WXSRC.online) { W.WXSRC.online.lat = lat; W.WXSRC.online.lon = lon; } return s;
   };
 })();

@@ -227,6 +227,9 @@
   // where the inputs end: the first result heading of the layer
   function inputsEnd(id) { const sec = (window.__SEC || {})[id] || {}; let m = 1e9; for (const k in sec) m = Math.min(m, sec[k][0]); if (m < 1e9) return Math.max(200, m - 20); let e = 0; SIDW.forEach(s => { e = Math.max(e, (s.by || s.y) + (s.bh || 10)); }); return Math.max(e + 26, 300); }
   window.designInputsEnd = inputsEnd;
+  // while a design waits for a run the drawing is only the inputs and the Run card: the canvas takes that height, so after a change of a
+  // control the view is never left on an empty white area below the card (the browser brings the card into view)
+  if (typeof irFit === 'function') { const oFit = irFit; irFit = function (id) { const R = RUN[id]; if (R && !R.on && !reporting()) { const want = Math.ceil(inputsEnd(id) + 18 + 150 + 36); if (Math.abs(currentScene.h - want) > 4) { currentScene.h = want; setCanvasH(want); } return; } return oFit.apply(this, arguments); }; }
   // the Play button of the design layers is the Run button
   const pb = document.getElementById('playBtn');
   if (pb) pb.addEventListener('click', e => { const id = curId(); if (id && !RUN[id].on) { e.stopImmediatePropagation(); e.preventDefault(); runDesign(id); } }, true);

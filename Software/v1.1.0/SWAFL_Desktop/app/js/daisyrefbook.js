@@ -19,11 +19,11 @@
   const attrRows = attrs => attrs.map(a => '<tr><td><b>' + esc(a.name) + '</b></td><td>' + link(a.type) + '</td><td>' + esc(a.kind || 'not stated in the manual') + '</td><td class="dzrfd">' + link(a.doc) + '</td></tr>').join('');
   const attrTable = (attrs) => { if (!attrs.length) return ''; const head = '<tr><th>Name</th><th>Type and unit</th><th>Kind</th><th>Meaning</th></tr>';
     return KGRP.map(([k, title, f]) => { const g = attrs.filter(f); return g.length ? '<div class="dzrfg"><b>' + title + '</b> <span class="pnote">' + g.length + '</span></div><table class="dzt dzrft">' + head + attrRows(g) + '</table>' : ''; }).join(''); };
-  function skeleton(c, s) { const comp = String(c.title).toLowerCase().replace(/\s+/g, '_'); const body = (s.sig || '').replace(/^\s*<\s*/, '').replace(/\s*>\s*$/, ''); return '(def' + comp + ' "My ' + s.name + '" ' + s.name + '\n  ;; edit the values below; see ' + s.id + ' of the reference manual\n  ' + body.replace(/\n\s*/g, '\n  ') + ')\n'; }
+  function skeleton(c, s) { const comp = String(c.title).replace(/\s+/g, '_'); /* the Daisy keyword keeps the case of the component: defcrop, defMV_Crop */ const body = (s.sig || '').replace(/^\s*<\s*/, '').replace(/\s*>\s*$/, ''); return '(def' + comp + ' "My ' + s.name + '" ' + s.name + '\n  ;; edit the values below; see ' + s.id + ' of the reference manual\n  ' + body.replace(/\n\s*/g, '\n  ') + ')\n'; }
   function secHtml(c, s) {
     const part1 = c.n < 7;
     return '<div class="dzrfs" id="dzRF_' + s.id.replace(/\./g, '_') + '"><h4><a class="dzrfn" href="#" data-go="' + s.id + '">' + esc(s.id) + '</a> ' + esc(s.name) + '</h4>' +
-      (part1 ? '<div class="dzrftx">' + link(s.text) + '</div>' : '<div class="dzrftx">' + link(s.desc) + '</div>' + (s.used ? '<div class="pnote"><b>Used by</b> ' + link(s.used) + '</div>' : '') + (s.sig ? '<pre class="dzpre dzrfsig">' + esc(s.sig) + '</pre>' + '<div class="dzrow"><button class="btn" data-sk="' + s.id + '" title="Opens a starting set-up for this model in the set-up editor">Start a set-up from this model</button></div>' : '') + attrTable(s.attrs)) + '</div>';
+      (part1 ? '<div class="dzrftx">' + link(s.text) + '</div>' : '<div class="dzrftx">' + link(s.desc) + '</div>' + (s.used ? '<div class="pnote"><b>Used by</b> ' + link(s.used) + '</div>' : '') + (s.sig ? '<pre class="dzpre dzrfsig">' + esc(s.sig) + '</pre>' + '<div class="dzrow"><button class="btn" data-sk="' + s.id + '" title="Opens a starting set-up for this model in the set-up editor">Start a set-up from this model</button><button class="btn pri" data-fm="' + s.id + '" title="Fill in every parameter of this model in a form; the definition is written for you">Fill in a form for this model</button></div>' : '') + attrTable(s.attrs)) + '</div>';
   }
   async function showChapter(n, secId) {
     const host = $('RFmain'); host.innerHTML = '<span class="pnote">Loading chapter ' + n + '...</span>';
@@ -37,6 +37,7 @@
     if (c.n === 107 || ci && ci.n === S.idx.chapters[S.idx.chapters.length - 1].n) h += '<h4>References of the manual</h4><div id="dzRFbib"></div>';
     host.innerHTML = h; host.scrollTop = 0; mark(n);
     host.querySelectorAll('[data-go]').forEach(a => a.onclick = ev => { ev.preventDefault(); go(a.dataset.go); });
+    host.querySelectorAll('[data-fm]').forEach(b => b.onclick = () => { if (window.DaisyBuild) window.DaisyBuild.open(c.n, b.dataset.fm); });
     host.querySelectorAll('[data-sk]').forEach(b => b.onclick = () => { const s = c.sections.find(x => x.id === b.dataset.sk); D.S.dai = skeleton(c, s); D.S.daiName = s.name.replace(/\W+/g, '_') + '.dai'; D.show('editor'); });
     const bb = $('RFbib'); if (bb) ld('biblio').then(b => { bb.innerHTML = b.map(r => '<p class="pnote" style="margin:2px 0">' + esc(r) + '</p>').join(''); });
     if (secId) { const e = document.getElementById('dzRF_' + secId.replace(/\./g, '_')); if (e) { e.scrollIntoView({ block: 'start' }); e.classList.add('flash'); setTimeout(() => e.classList.remove('flash'), 1800); } }
