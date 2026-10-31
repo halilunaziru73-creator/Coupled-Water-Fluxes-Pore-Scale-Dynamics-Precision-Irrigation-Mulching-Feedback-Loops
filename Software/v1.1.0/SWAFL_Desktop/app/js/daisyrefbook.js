@@ -14,7 +14,11 @@
       '<div class="dzrow"><input id="dzRFq" placeholder="search all chapters, models and parameters (for example root depth, N uptake, van Genuchten)" size="58"><span id="dzRFst" class="pnote"></span></div>' +
       '<div class="dzsplit"><div id="dzRFtoc" class="dzlist dzrftoc"><span class="pnote">Reading the contents...</span></div><div id="dzRFmain" class="dzdet dzrfmain"></div></div>';
   }
-  const attrTable = (attrs) => attrs.length ? '<table class="dzt dzrft"><tr><th>Parameter</th><th>Type and unit</th><th>Kind</th><th>Meaning</th></tr>' + attrs.map(a => '<tr><td><b>' + esc(a.name) + '</b></td><td>' + link(a.type) + '</td><td>' + esc(a.kind) + '</td><td class="dzrfd">' + link(a.doc) + '</td></tr>').join('') + '</table>' : '';
+  // the attributes in the groups of the book: what you set (parameters, components, submodels), the state the model keeps, and what it writes to the log
+  const KGRP = [['set', 'What you set: parameters, components and submodels', a => !/state variable|log variable|table column/i.test(a.kind)], ['state', 'State variables (the model keeps and updates them; a start value may be given)', a => /state variable/i.test(a.kind)], ['log', 'Log variables and log columns (what this model can write to a log file)', a => /log variable|table column/i.test(a.kind)]];
+  const attrRows = attrs => attrs.map(a => '<tr><td><b>' + esc(a.name) + '</b></td><td>' + link(a.type) + '</td><td>' + esc(a.kind || 'not stated in the manual') + '</td><td class="dzrfd">' + link(a.doc) + '</td></tr>').join('');
+  const attrTable = (attrs) => { if (!attrs.length) return ''; const head = '<tr><th>Name</th><th>Type and unit</th><th>Kind</th><th>Meaning</th></tr>';
+    return KGRP.map(([k, title, f]) => { const g = attrs.filter(f); return g.length ? '<div class="dzrfg"><b>' + title + '</b> <span class="pnote">' + g.length + '</span></div><table class="dzt dzrft">' + head + attrRows(g) + '</table>' : ''; }).join(''); };
   function skeleton(c, s) { const comp = String(c.title).toLowerCase().replace(/\s+/g, '_'); const body = (s.sig || '').replace(/^\s*<\s*/, '').replace(/\s*>\s*$/, ''); return '(def' + comp + ' "My ' + s.name + '" ' + s.name + '\n  ;; edit the values below; see ' + s.id + ' of the reference manual\n  ' + body.replace(/\n\s*/g, '\n  ') + ')\n'; }
   function secHtml(c, s) {
     const part1 = c.n < 7;

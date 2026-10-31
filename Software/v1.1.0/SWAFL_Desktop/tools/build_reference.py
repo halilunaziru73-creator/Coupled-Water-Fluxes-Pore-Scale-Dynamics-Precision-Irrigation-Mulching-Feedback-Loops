@@ -52,15 +52,19 @@ def clean_block(lines):
     return '\n'.join(r).strip()
 BUL = '\u0088'
 HDR = re.compile(r'^\s{2,9}(?:[\u0088\u2022\u00b7]\s*)?(\S[^:\n]{0,70}?)\s*:\s+((?:number|string|integer|boolean|plf|submodel|fixed|file|time)\b.*|.*\bcomponent\b.*|.*\(see chapter.*|.*\[.*\].*)$')
-KINDW = re.compile(r'^(Optional |)(parameter|state variable|log variable|const)|^(Parameter|State variable|Log variable|Const)', re.I)
+KINDW = re.compile(r'^(Optional |)(parameter|state variable|log variable|const|submodel|fixed|component)\b|^(Parameter|State variable|Log variable|Const)', re.I)
+LOGH = re.compile(r'^\s*(Log Variables|Table columns.*:)\s*$')
 def parse_attrs(lines):
-    attrs = []; k = 0; n = len(lines)
+    attrs = []; k = 0; n = len(lines); inlog = False   # after a "Log Variables" heading the variables carry no kind line of their own
     def ishdr(i):
         if i >= n: return None
         l = lines[i]
         if l.lstrip().startswith(('(', '<', ';')): return None
-        return HDR.match(l)
+        m = HDR.match(l)
+        if m and (m.group(1).strip().lstrip(BUL).strip() == 'Value description' or ']' in m.group(1) or '. ' in m.group(1)): return None   # a line of the description, not a new attribute
+        return m
     while k < n:
+        if LOGH.match(lines[k]): inlog = 'Table column (written in the log file)' if 'Table' in lines[k] else 'Log variable'; k += 1; continue
         m = ishdr(k)
         if m:
             name = m.group(1).strip().lstrip(BUL).strip(); rest = m.group(2).strip()
@@ -69,7 +73,10 @@ def parse_attrs(lines):
             while k < n and not lines[k].strip(): k += 1
             if k < n and KINDW.match(lines[k].strip()): kind = lines[k].strip(); k += 1
             d = []
-            while k < n and not ishdr(k): d.append(lines[k]); k += 1
+            while k < n and not ishdr(k) and not LOGH.match(lines[k]): d.append(lines[k]); k += 1
+            if not kind and inlog: kind = inlog
+            if not kind and re.search(r'\bcomponent\b', rest): kind = 'Component'               # arrays and single components carry no kind line in the manual
+            if not kind and re.match(r'(submodel|fixed)\b', rest): kind = 'Submodel'
             attrs.append({'name': name, 'type': rest, 'unit': unit, 'kind': kind, 'doc': re.sub(r'\n{2,}', '\n', clean_block(d)).replace(BUL, '')})
         else: k += 1
     return attrs
@@ -98,12 +105,16 @@ for c in ch:
                 if depth <= 0 or '>' in lines[k] and lines[k].rstrip().endswith('>'): break
                 k += 1
             sigend = k; sig = '\n'.join(x.rstrip() for x in lines[a:k + 1])
-        desc_lines = lines[:a] if a is not None else lines
+        # a model without a signature (summary columns, for example) still lists its variables: they start at the first attribute line
+        f0 = None if a is not None else next((k for k, l in enumerate(lines) if HDR.match(l) and not l.lstrip().startswith(('(', '<', ';'))), None)
+        desc_lines = lines[:a] if a is not None else (lines[:f0] if f0 is not None else lines)
+        if f0 is not None:   # include the "Table columns:" heading that announces them
+            h0 = next((k for k in range(f0 - 1, -1, -1) if LOGH.match(lines[k])), None)
+            if h0 is not None: desc_lines = lines[:h0]; f0 = h0
         desc = clean_block(desc_lines)
         used = ''; mu = re.search(r'Used by (.*?)(?:\n\s*\n|$)', desc, re.S)
         if mu: used = re.sub(r'\s+', ' ', mu.group(1)).strip(); desc = (desc[:mu.start()] + desc[mu.end():]).strip()
-        attrs = parse_attrs(lines[sigend + 1:] if sigend is not None else [])
-        # log variables listed under "Log Variables" headings: kind carries it
+        attrs = parse_attrs(lines[sigend + 1:] if sigend is not None else (lines[f0:] if f0 is not None else []))
         sections.append({'id': s['id'], 'name': s['name'], 'desc': re.sub(r'[ \t]+\n', '\n', desc), 'used': used, 'sig': sig, 'attrs': attrs, 'text': clean_block(lines)})
     # component-level signature/log variables of a library chapter sit in the intro
     il = intro.split('\n'); ia = next((k for k, l in enumerate(il) if l.strip().startswith('<')), None)
