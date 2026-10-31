@@ -7,7 +7,7 @@
 'use strict';
 const FieldMap = (() => {
   const F = { map: null, pts: [], mk: [], poly: null, line: null, mode: 'draw', ov: null, res: null, idx: 'NDVI', src: 'auto', cv: null, site: null, srcLay: null, days: 90, cloud: 30,
-    author: '', org: '', title: 'Field report', dpi: 300, fmt: 'pdf', base: 'sat', place: '', view: 'cont', smooth: true, cmp: '', lay: true, map2: null, ov2: null, layG: null, layG2: null, leg: null, leg2: null };
+    author: '', org: '', title: 'Field report', dpi: 300, fmt: 'pdf', base: 'sat', place: '', view: 'cont', smooth: false, cmp: '', lay: true, map2: null, ov2: null, layG: null, layG2: null, leg: null, leg2: null };
   const R = 6378137, rad = Math.PI / 180;
   const IDX = {
     NDVI: { name: 'Normalized Difference Vegetation Index', bands: 'Red, NIR', use: 'Drought tracking, baseline crop health', ramp: 'veg', lo: -0.1, hi: 0.9,
@@ -94,7 +94,7 @@ const FieldMap = (() => {
       '<div class="fmrow" id="fmS2R"><label>Look back <input id="fmDays" type="number" value="' + F.days + '" min="5" max="730" style="width:60px"> days</label><label>Clouds below <input id="fmCloud" type="number" value="' + F.cloud + '" min="1" max="100" style="width:50px"> %</label></div>' +
       '<button class="btn pri" id="fmRun">Compute the indices of the field</button><div id="fmStat" class="pnote"></div>' +
       '<div class="fmrow" id="fmViewR" style="display:none"><label>Show on the map <select id="fmView"><option value="cont">Continuous colours</option><option value="zones">Management zones (5 classes)</option><option value="cover">Land cover read from the photo</option><option value="mzone">Monitoring zones (season)</option><option value="mchange">NDVI change since the previous scene</option><option value="mtrend">NDVI trend of the last scenes</option><option value="mstab">Stability over the season</option><option value="vri">Variable-rate irrigation: depth</option><option value="vridate">Variable-rate irrigation: date</option><option value="gully">Ephemeral gully risk</option><option value="rusle">Soil loss (RUSLE)</option><option value="contour">Contours, flow and channels</option><option value="twi">Wetness index of the terrain</option><option value="shed">Watershed and channel network</option><option value="sens">Soil water: sensors and satellite</option><option value="sensu">Uncertainty of the fused soil water</option><option value="ret_fc">Field capacity (retention)</option><option value="ret_wp">Wilting point (retention)</option><option value="ret_aw">Available water (retention)</option><option value="ret_trig">Trigger water content</option><option value="ret_psi">Matric potential now (suction, kPa)</option><option value="ret_days">Days to the trigger</option></select></label>' +
-      '<label>Rendering <select id="fmSmooth"><option value="1">Smooth</option><option value="0">Pixels (as measured)</option></select></label>' +
+      '<label>Rendering <select id="fmSmooth"><option value="0">Sentinel-2 pixels, as measured</option><option value="1">Smoothed (interpolated between pixels)</option></select></label>' +
       '<label>Compare with <select id="fmCmp"><option value="">nothing (one map)</option>' + KEYS.map(k => '<option value="' + k + '">' + k + ' side by side</option>').join('') + '</select></label></div><div id="fmRes"></div>' +
       '<h4>3. The site: soil, slope, water sources and the irrigation system</h4><button class="btn pri" id="fmSite">Analyse the site (real open data)</button><div id="fmSiteSt" class="pnote">Reads the water features around the field (OpenStreetMap), water seen in the photo, the ground elevation (Copernicus DEM) and the soil (SoilGrids), then suggests where to take the water from and which irrigation system suits the field.</div><div id="fmSiteRes"></div>' +
       '<h4>4. The season and the precision maps</h4><div class="fmrow"><button class="btn pri" id="fmMon" title="The Sentinel-2 scenes of the last twelve months over the field: NDVI and NDMI of every date, changes, trend, stability and monitoring zones">Read the season (Sentinel-2, 12 months)</button></div><div id="fmMonRes"></div><div class="fmrow"><button class="btn pri" id="fmVRI" title="Irrigation depth of every part of the field, from the satellite indices and the SWAFL simulation">Variable-rate irrigation, zone by zone</button><button class="btn pri" id="fmEro" title="Terrain, ephemeral gullies (topographic threshold and the photo) and soil loss (RUSLE)">Ephemeral gullies and soil loss</button></div><div id="fmPrecSt" class="pnote">Read the season first: the monitoring zones and their observed cover drive the variable-rate irrigation (simulated zone by zone with the SWAFL model and the weather in use) and the cover of the soil-loss map. The erosion maps read the terrain from open elevation tiles and the rain of the weather in use.</div><div id="fmPrecRes"></div>' +
@@ -224,10 +224,23 @@ const FieldMap = (() => {
   }
   // the value of the index under the cursor
   function valueAt(k, lat, lon) { if (!F.res) return NaN; const G = F.res.G, l = local([lat, lon], G.o), i = Math.floor((l[0] - G.x0) / G.cell), j = Math.floor((G.y1 - l[1]) / G.cell); if (i < 0 || j < 0 || i >= G.nx || j >= G.ny || !inside(lat, lon, F.pts)) return NaN; return F.res.vals[RK().indexOf(k)][j * G.nx + i]; }
+  // every pixel of the field with its reflectance, class and indices, for checking against the source
+  function pixelCsv() {
+    const R0 = F.res, BG = R0 && R0.bandGrid; if (!BG) { UI.toast('Read a Sentinel-2 scene first'); return; } const G = BG.G, K = RK(), B = Object.keys(BG.b), zone = R0.steps && R0.steps.scene ? R0.steps.scene.epsg % 100 : 0, south = R0.steps && R0.steps.scene ? R0.steps.scene.epsg > 32700 : false;
+    let t = 'lat,lon,utm_x,utm_y,scl,' + B.map(k => BANDS[k][0].split(' ')[0] + '_reflectance').join(',') + ',' + K.join(',') + '\n'; let n = 0;
+    for (let j = 0; j < G.ny; j++) for (let i = 0; i < G.nx; i++) { const o = j * G.nx + i, p = G.ll(i, j); if (!inside(p[0], p[1], F.pts)) continue; const u = zone ? toUTM(p[0], p[1], zone, south) : [NaN, NaN];
+      t += [p[0].toFixed(7), p[1].toFixed(7), u[0].toFixed(1), u[1].toFixed(1), BG.scl[o]].concat(B.map(k => isFinite(BG.b[k][o]) ? BG.b[k][o].toFixed(4) : '')).concat(K.map((k, q) => isFinite(R0.vals[q][o]) ? R0.vals[q][o].toFixed(4) : '')).join(',') + '\n'; n++; }
+    UI.saveFile((window.SWAFLDate ? SWAFLDate.name('sentinel2_pixels_' + (R0.date || '') + '.csv') : 'sentinel2_pixels.csv'), t); UI.toast(n + ' pixels saved');
+  }
+  // the surface reflectance of the Sentinel-2 pixel under the cursor (bottom of atmosphere, 0 to 1), its scene class and UTM centre
+  function pixelAt(lat, lon) { const R0 = F.res, BG = R0 && R0.bandGrid; if (!BG || !inside(lat, lon, F.pts)) return ''; const G = BG.G, l = local([lat, lon], G.o), i = Math.floor((l[0] - G.x0) / G.cell), j = Math.floor((G.y1 - l[1]) / G.cell); if (i < 0 || j < 0 || i >= G.nx || j >= G.ny) return ''; const o = j * G.nx + i;
+    const SN = { 0: 'no data', 1: 'saturated', 2: 'dark', 3: 'cloud shadow', 4: 'vegetation', 5: 'bare soil', 6: 'water', 7: 'unclassified', 8: 'cloud', 9: 'cloud', 10: 'cirrus', 11: 'snow' };
+    const b = Object.keys(BG.b).map(k => BANDS[k][0].split(' ')[0] + ' ' + (isFinite(BG.b[k][o]) ? BG.b[k][o].toFixed(4) : '–')).join(', ');
+    return '(' + (SN[BG.scl[o]] || BG.scl[o]) + ') ' + b; }
   function cursorInfo(ll) {
     const i = document.getElementById('fmInfo'); if (!i) return; let t = 'Cursor ' + ll.lat.toFixed(6) + ', ' + ll.lng.toFixed(6) + ' (' + dms(ll.lat, 'N', 'S') + ' ' + dms(ll.lng, 'E', 'W') + ') · zoom ' + F.map.getZoom();
     if (PRECV[F.view]) { const t2 = FieldPrec.at(F.view, ll.lat, ll.lng); if (t2) t += ' · <b>' + t2 + '</b>'; }
-    else if (F.res) { const v = valueAt(F.idx, ll.lat, ll.lng); if (isFinite(v)) { const z = zoneOf(F.idx, v); t += ' · <b>' + F.idx + ' ' + v.toFixed(3) + '</b> (' + IDX[F.idx].read(v) + ', zone ' + (z + 1) + ' of 5)'; if (F.cmp) { const v2 = valueAt(F.cmp, ll.lat, ll.lng); if (isFinite(v2)) t += ' · <b>' + F.cmp + ' ' + v2.toFixed(3) + '</b>'; } } }
+    else if (F.res) { const v = valueAt(F.idx, ll.lat, ll.lng); const px = pixelAt(ll.lat, ll.lng); if (px) t += ' · <span title="surface reflectance of the Sentinel-2 pixel under the cursor">pixel ' + px + '</span>'; if (isFinite(v)) { const z = zoneOf(F.idx, v); t += ' · <b>' + F.idx + ' ' + v.toFixed(3) + '</b> (' + IDX[F.idx].read(v) + ', zone ' + (z + 1) + ' of 5)'; if (F.cmp) { const v2 = valueAt(F.cmp, ll.lat, ll.lng); if (isFinite(v2)) t += ' · <b>' + F.cmp + ' ' + v2.toFixed(3) + '</b>'; } } }
     i.innerHTML = t;
   }
   // the irrigation layout of the sketch, drawn on the map
@@ -254,6 +267,14 @@ const FieldMap = (() => {
 
   // ------------------------------------------------------------------ the indices
   const IX = (b, r, re, n, s) => { const ndvi = (n - r) / (n + r), evi = 2.5 * (n - r) / (n + 6 * r - 7.5 * b + 1), savi = 1.5 * (n - r) / (n + r + 0.5), ndre = (n - re) / (n + re), ndwi = (n - s) / (n + s); return [ndvi, evi, savi, ndre, ndwi]; };
+  // the cells of the field on the 10 m pixels of Sentinel-2 itself: the cell edges fall on the pixel edges of the UTM grid of the
+  // scene, so every cell is one real pixel of the satellite (no pixel read twice, none skipped); a very large field falls back to a coarser grid
+  function s2Grid(zone, south) {
+    const g0 = grid(10); if (g0.cell > 10.001) return g0;
+    const o = g0.o, u = toUTM(o[0], o[1], zone, south), ex = 10 * Math.floor(u[0] / 10) - u[0], ny0 = 10 * Math.ceil(u[1] / 10) - u[1];   // local position of a pixel edge west and north of the centroid
+    const x0 = ex - 10 * Math.ceil((ex - g0.x0) / 10 + 1e-9), y1 = ny0 + 10 * Math.ceil((g0.y1 - ny0) / 10 - 1e-9), nx = Math.ceil((g0.x1 - x0) / 10), ny = Math.ceil((y1 - g0.y0) / 10), cell = 10;
+    return { o, x0, y0: y1 - ny * cell, x1: x0 + nx * cell, y1, cell, nx, ny, s2: true, ll: (i, j) => unlocal([x0 + (i + 0.5) * cell, y1 - (j + 0.5) * cell], o), sw: unlocal([x0, y1 - ny * cell], o), ne: unlocal([x0 + nx * cell, y1], o), nw: unlocal([x0, y1], o) };
+  }
   function grid(mc) {   // cells over the field (Sentinel-2: 10 m; simulated: down to 2 m), at most 220 x 220
     const o = centroid(F.pts), xy = F.pts.map(p => local(p, o)), xs = xy.map(p => p[0]), ys = xy.map(p => p[1]), x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
     const cell = Math.max(mc || 10, Math.max(x1 - x0, y1 - y0) / 220), nx = Math.max(1, Math.ceil((x1 - x0) / cell)), ny = Math.max(1, Math.ceil((y1 - y0) / cell));
@@ -336,7 +357,7 @@ const FieldMap = (() => {
   }
   async function readScene(it, st) {
     const zone = it.epsg % 100, south = it.epsg > 32700, d = it.date.slice(0, 10);
-    const G = grid(10), cells = []; for (let jj = 0; jj < G.ny; jj++) for (let i = 0; i < G.nx; i++) { const p = G.ll(i, jj); if (inside(p[0], p[1], F.pts)) cells.push([i, jj, toUTM(p[0], p[1], zone, south)]); }
+    const G = s2Grid(zone, south), cells = []; for (let jj = 0; jj < G.ny; jj++) for (let i = 0; i < G.nx; i++) { const p = G.ll(i, jj); if (inside(p[0], p[1], F.pts)) cells.push([i, jj, toUTM(p[0], p[1], zone, south)]); }
     if (!cells.length) throw new Error('the field is too small (less than one 10 m pixel)');
     const ux = cells.map(c => c[2][0]), uy = cells.map(c => c[2][1]), bb = [Math.min(...ux) - 30, Math.min(...uy) - 30, Math.max(...ux) + 30, Math.max(...uy) + 30], band = {};
     for (const k of ['scl', 'blue', 'green', 'red', 'rededge1', 'nir', 'swir16', 'swir22']) { const href = it.href[k]; if (!href) { if (k === 'green' || k === 'swir22') continue; throw new Error('band ' + k + ' is missing in the scene'); } st.textContent = 'Reading the ' + k + ' band of the scene of ' + d + ' (' + it.cat + ')...';
@@ -391,7 +412,7 @@ const FieldMap = (() => {
   const zoneOf = (k, v) => { const Z = zones(k); return Z ? cls(Z.br, v) : 0; };
   // the index over the field: interpolated (smooth) or as measured (pixels), cut exactly to the demarcated outline
   function fieldCanvas(k, view, smooth, maxPx) {
-    const G = F.res.G, q = RK().indexOf(k), src = view === 'zones' ? blurred(q) : filled(q), sc = Math.max(1, Math.min(48, (maxPx || 1400) / Math.max(G.nx, G.ny))), W = Math.max(1, Math.round(G.nx * sc)), H = Math.max(1, Math.round(G.ny * sc));
+    const G = F.res.G, q = RK().indexOf(k), src = view === 'zones' ? blurred(q) : smooth ? filled(q) : F.res.vals[q], sc = Math.max(1, Math.min(48, (maxPx || 1400) / Math.max(G.nx, G.ny))), W = Math.max(1, Math.round(G.nx * sc)), H = Math.max(1, Math.round(G.ny * sc));
     const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const c = cv.getContext('2d'), im = c.createImageData(W, H), Z = view === 'zones' ? zones(k) : null, zc = Z ? [0, 1, 2, 3, 4].map(z => zoneCol(k, z)) : null;
     const at = (i, j) => src[Math.max(0, Math.min(G.ny - 1, j)) * G.nx + Math.max(0, Math.min(G.nx - 1, i))];
     for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { let v; const gx = (x + 0.5) / sc - 0.5, gy = (y + 0.5) / sc - 0.5;
@@ -493,6 +514,8 @@ const FieldMap = (() => {
     el.innerHTML = '<div class="pnote">' + esc(F.res.src) + '</div>' + st;
     bindSteps(el);
     el.querySelectorAll('[data-nextidx]').forEach(b => b.onclick = () => { F.idx = b.dataset.nextidx; F.openIdx.add(F.idx); F.view = 'cont'; F.stOpen = F.stOpen || {}; F.stOpen['Indices of the field'] = true; showRes(); });
+    el.querySelectorAll('[data-pxcsv]').forEach(b => b.onclick = () => pixelCsv());
+    el.querySelectorAll('[data-cbrowser]').forEach(b => b.onclick = () => { const R0 = F.res, c = centroid(F.pts), d = R0 && R0.date; if (!d) return; UI.openExternal('https://browser.dataspace.copernicus.eu/?zoom=16&lat=' + c[0].toFixed(5) + '&lng=' + c[1].toFixed(5) + '&themeId=DEFAULT-THEME&datasetId=S2_L2A_CDAS&fromTime=' + d + 'T00%3A00%3A00.000Z&toTime=' + d + 'T23%3A59%3A59.999Z&layerId=3_NDVI'); });
     el.querySelectorAll('[data-allidx]').forEach(a => a.onclick = () => { RK().forEach(k => F.openIdx.add(k)); showRes(); });
     el.querySelectorAll('tr[data-k]').forEach(tr => tr.onclick = () => { F.idx = tr.dataset.k; showRes(); });
     const vr = document.getElementById('fmViewR'); if (vr) vr.style.display = '';
@@ -507,7 +530,7 @@ const FieldMap = (() => {
         '<div class="pnote">The Sentinel-2 Level-2A catalogue (' + esc(T.scene.cat) + ') was searched over the outline for the last ' + (fd.days || F.days) + ' days with less than ' + (fd.cloud || F.cloud) + ' % cloud: <b>' + (fd.n || 1) + ' scene' + ((fd.n || 1) > 1 ? 's' : '') + '</b>. The newest clear one is used: <b>' + esc(T.scene.id) + '</b> (UTM zone ' + (T.scene.epsg % 100) + (T.scene.off ? '; the offset of processing baseline 4 is removed from the reflectance' : '') + ').</div>' +
         (fd.list && fd.list.length ? '<table class="tbl"><tr><th>Date</th><th>Cloud over the tile</th><th></th></tr>' + fd.list.map(x => '<tr' + (x.date === T.scene.date ? ' class="on"' : '') + '><td>' + x.date + '</td><td>' + Math.round(x.cloud) + ' %</td><td>' + (x.date === T.scene.date ? '<b>used</b>' : (fd.tried || []).some(t => t.date === x.date) ? 'tried: cloudy over the field' : '') + '</td></tr>').join('') + '</table>' : '')]);
       out.push(['Bands read', T.bands.length + ' layers of 10 and 20 m',
-        '<table class="tbl"><tr><th>Band</th><th>Centre</th><th>Pixel</th><th>What it tells</th></tr>' + T.bands.map(k => '<tr><td><b>' + BANDS[k][0] + '</b></td><td>' + (BANDS[k][1] ? BANDS[k][1] + ' nm' : '-') + '</td><td>' + BANDS[k][2] + ' m</td><td>' + BANDS[k][3] + '</td></tr>').join('') + '</table><div class="pnote">Only the window over the field is read from each band (cloud-optimised GeoTIFF). The reflectance is the digital number × 0.0001; the field is sampled on a grid of 10 m cells cut to the outline.</div>']);
+        '<div class="fmnext"><button class="btn" data-pxcsv="1">Download the value of every pixel (CSV)</button><button class="btn" data-cbrowser="1">Check this scene in the Copernicus Browser of ESA</button></div><div class="pnote">Every cell of the map is one 10 m pixel of the scene: the CSV gives its centre (latitude, longitude and UTM), its class and the surface reflectance of every band, and the indices computed from them, so any value can be checked in QGIS or in the Copernicus Browser (same date, NDVI layer). Move the mouse over the field to read the reflectance of the pixel under it.</div>' + '<table class="tbl"><tr><th>Band</th><th>Centre</th><th>Pixel</th><th>What it tells</th></tr>' + T.bands.map(k => '<tr><td><b>' + BANDS[k][0] + '</b></td><td>' + (BANDS[k][1] ? BANDS[k][1] + ' nm' : '-') + '</td><td>' + BANDS[k][2] + ' m</td><td>' + BANDS[k][3] + '</td></tr>').join('') + '</table><div class="pnote">Only the window over the field is read from each band (cloud-optimised GeoTIFF). The reflectance is the digital number × 0.0001; the field is sampled on a grid of 10 m cells cut to the outline.</div>']);
       const SCL = { 0: ['No data', '#000000'], 1: ['Saturated or defective', '#FF0000'], 2: ['Dark area', '#2F2F2F'], 3: ['Cloud shadow', '#643200'], 4: ['Vegetation', '#00A000'], 5: ['Bare soil', '#FFE65A'], 6: ['Water', '#0000FF'], 7: ['Unclassified', '#808080'], 8: ['Cloud, medium probability', '#C0C0C0'], 9: ['Cloud, high probability', '#FFFFFF'], 10: ['Thin cirrus', '#64C8FF'], 11: ['Snow or ice', '#FF96FF'] }, MASK = [0, 1, 3, 8, 9, 10, 11];
       out.push(['Clouds and shadows removed', T.clear + ' of ' + T.cells + ' cells clear (' + pct(T.clear, T.cells) + ')',
         '<div class="pnote">The scene classification (SCL) of ESA labels every 20 m pixel. Cells labelled cloud, cirrus, cloud shadow, snow, saturated or no data are left out; the others are used.</div><table class="tbl"><tr><th></th><th>Class</th><th>Cells</th><th>Share</th><th></th></tr>' + Object.keys(T.scl).sort((a, b) => T.scl[b] - T.scl[a]).map(c => { const d = SCL[c] || ['Class ' + c, '#999']; return '<tr><td><i style="display:inline-block;width:14px;height:11px;border:1px solid #666;background:' + d[1] + '"></i></td><td>' + d[0] + '</td><td>' + T.scl[c] + '</td><td>' + pct(T.scl[c], T.cells) + '</td><td>' + (MASK.includes(+c) ? 'masked' : 'used') + '</td></tr>'; }).join('') + '</table>']);
