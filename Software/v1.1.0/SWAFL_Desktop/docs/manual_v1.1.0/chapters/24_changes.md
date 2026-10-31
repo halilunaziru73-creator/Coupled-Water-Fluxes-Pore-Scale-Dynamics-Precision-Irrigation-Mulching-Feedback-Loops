@@ -141,4 +141,7 @@
 * Weather: the online weather or the weather file loaded in SWAFL is named in the weather source of Properties and is the first choice of the weather stations of the Daisy window.
 * The irrigation designs no longer leave an empty white area after a control is changed: while a design waits for a run, its picture is only the inputs and the Run card.
 * Faster drawing: the pictures are drawn at the resolution of the screen with a 25 per cent margin (pictures saved at 300 or 600 dpi are unchanged), and the measure of repeated text is kept.
+* Field on the map: opens in full screen like the Daisy window; a **Symbology** panel on the map gives every map its remote-sensing standard colours and the colour ramps of the QGIS library (with invert, opacity and the real colour of the photo), and the land cover the class colours of ESA WorldCover, Dynamic World, CORINE, NLCD or the photo.
+* Set-up editor: every placeholder has a card that says what it means and how to fill it, with a scrollable list of its possible values and an explanation of each.
+* Deterministic phenotyping: no text is drawn over a chart or over other text.
 

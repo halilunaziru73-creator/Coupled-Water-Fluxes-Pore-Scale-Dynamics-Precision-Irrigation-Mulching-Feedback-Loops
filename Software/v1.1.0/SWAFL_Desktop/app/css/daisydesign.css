@@ -65,3 +65,16 @@
 .dztips a{margin-left:auto;font-size:11px}.dztips.off{background:none;border:0;padding:0 0 4px;justify-content:flex-end}
 .dzsn{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:#3A6EA5;color:#fff;font-size:9px;font-weight:bold;margin-right:5px;vertical-align:1px}
 .dztabs button.on .dzsn{background:#0A246A}
+/* placeholders explained: one card for each, with how to fill it and a scrollable list of possible values */
+.dzph2{max-height:520px;overflow:auto;display:flex;flex-direction:column;gap:6px;margin:6px 0;padding-right:3px}
+.dzpc{border:1px solid #B9C2CC;border-left:4px solid #0A246A;background:#FAFBFD;padding:5px 7px;font-size:.92em}
+.dzpc.auto{border-left-color:#8A94A3;background:#F4F4F2}
+.dzpch{display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}.dzpch b{font-size:1.08em;color:#0A246A}.dzpc.auto .dzpch b{color:#555}
+.dzpk{font-size:.85em;color:#5B2C83;background:#F1EAF7;border-radius:8px;padding:0 6px}.dzpu{font-size:.85em;color:#667;margin-left:auto}
+.dzpcd{margin:3px 0 2px;color:#1b1f23}.dzpch2{color:#33414F;margin-bottom:3px}.dzpch2 code,.dzpex code{background:#EEF1F5;padding:0 3px;font-size:.92em}
+.dzpex{color:#667;font-size:.88em;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dzpex:hover{color:#0A246A}
+.dzpin{display:flex;gap:4px;margin-top:3px}.dzpin input{flex:1;min-width:60px}.dzpin input:disabled{background:#ECECEC;color:#777}.dzpin .btn{white-space:nowrap}
+.dzpol{margin-top:3px;max-height:200px;overflow-y:auto;border:1px solid #9AA5B1;background:#fff}
+.dzpol .dzpf{width:calc(100% - 8px);margin:4px;box-sizing:border-box}
+.dzpg{position:sticky;top:0;background:#E6EEF8;color:#0A246A;font-weight:bold;padding:2px 6px;font-size:.88em}
+.dzpo{padding:3px 6px;border-bottom:1px solid #EEF0F2;cursor:pointer;display:flex;flex-direction:column}.dzpo:hover{background:#FFF6D6}.dzpo small{color:#556}

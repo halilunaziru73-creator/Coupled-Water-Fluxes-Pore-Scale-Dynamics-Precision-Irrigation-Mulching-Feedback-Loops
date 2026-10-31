@@ -120,7 +120,7 @@
   DaisyIO.param = function (node, key) { const e = node.v.find(y => y.t === 'list' && y.v[0] && y.v[0].v === key); if (!e) return null; const a = e.v[1]; return a && a.t === 'num' ? parseFloat(a.v) : a ? a.v : null; };
   DaisyIO.paramNode = function (node, key) { return node.v.find(y => y.t === 'list' && y.v[0] && y.v[0].v === key) || null; };
   // placeholders {name} of a template file are filled with values: the way daisypy-optim writes its trial files
-  DaisyIO.fillTemplate = (text, vals) => String(text).replace(/\{([A-Za-z_][A-Za-z0-9_]*)\}/g, (m, k) => (k in vals ? vals[k] : m));
+  DaisyIO.fillTemplate = (text, vals) => String(text).replace(/\$?\{([A-Za-z_][A-Za-z0-9_]*)\}/g, (m, k) => (k in vals ? vals[k] : m));
   DaisyIO.placeholders = text => Array.from(new Set((String(text).match(/\{[A-Za-z_][A-Za-z0-9_]*\}/g) || []).map(x => x.slice(1, -1))));
   // colour classes for the editor: the same groups as the syntax of the daisy-vscode extension
   DaisyIO.DAI_KEYWORDS = ['input', 'run', 'directory', 'path', 'install_directory', 'allow_old_units', 'ui', 'def', 'file'];

@@ -53,7 +53,7 @@ const FieldMap = (() => {
   // ------------------------------------------------------------------ the window
   function open() {
     if (typeof L === 'undefined') { UI.toast('The map library did not load'); return; }
-    UI.modal({ title: 'Field on the map: locate, demarcate, vegetation and water indices', icon: 'field', width: 'min(1240px,98vw)', html:
+    UI.modal({ title: 'Field on the map: locate, demarcate, vegetation and water indices', icon: 'field', width: 'min(1240px,98vw)', full: true, html:
       '<div class="fmwrap"><div class="fmleft"><div class="fmbar">' +
       '<input id="fmQ" placeholder="Search a place (village, town, district)" style="flex:1;min-width:160px"><button class="btn" id="fmGo">Find</button>' +
       '<button class="btn pri" id="fmTools" title="Show or hide the map tools: field, indices, site analysis, terrain, soil retention, sensors and layers">&#9776; Map tools</button><label>Lat <input id="fmLat" type="number" step="any" style="width:86px"></label><label>Lon <input id="fmLon" type="number" step="any" style="width:86px"></label><button class="btn" id="fmLL">Go</button></div>' +
@@ -132,7 +132,7 @@ const FieldMap = (() => {
     $('fmDpi').onchange = e => { F.dpi = +e.target.value; }; $('fmFmt').onchange = e => { F.fmt = e.target.value; }; $('fmFmt').value = F.fmt;
     $('fmSrc').value = F.src; $('fmSrc').onchange = e => { F.src = e.target.value; $('fmWhenR').style.display = F.src === 'sim' ? '' : 'none'; $('fmS2R').style.display = F.src === 'sim' || F.src === 'rgb' ? 'none' : ''; }; $('fmWhenR').style.display = F.src === 'sim' ? '' : 'none'; $('fmS2R').style.display = F.src === 'sim' || F.src === 'rgb' ? 'none' : ''; $('fmWhen').value = F.when || 'now'; $('fmWhen').onchange = e => { F.when = e.target.value; };
     $('fmDays').onchange = e => { F.days = Math.max(5, +e.target.value || 90); }; $('fmCloud').onchange = e => { F.cloud = Math.max(1, Math.min(100, +e.target.value || 30)); };
-    setTimeout(() => { F.map.invalidateSize(); redraw(); if (F.pts.length > 2) fit(); if (F.cmp) showCompare(); if (F.res) showRes(); else if (FieldPrec.has(F.view)) F.refresh(F.view); if (F.site) showSite(); drawLayout(); steps(); F.lyc = layersCtl(F.map); mapLayers(); FieldGeo.attach(); if (!F._lyT) F._lyT = setInterval(() => { if (document.getElementById('fmMap') && F.lyc) { try { mapLayers(); } catch (e) {} } }, 1500); }, 60);
+    setTimeout(() => { F.map.invalidateSize(); redraw(); if (F.pts.length > 2) fit(); if (F.cmp) showCompare(); if (F.res) showRes(); else if (FieldPrec.has(F.view)) F.refresh(F.view); if (F.site) showSite(); drawLayout(); steps(); F.lyc = layersCtl(F.map); F.syc = FieldSym.control(F.map, { group: symGroup, names: () => FieldSite.CLS.map(c => c[0]), apply: restyle }); mapLayers(); FieldGeo.attach(); if (!F._lyT) F._lyT = setInterval(() => { if (document.getElementById('fmMap') && F.lyc) { try { mapLayers(); if (F.syc && F.syc.getContainer()) F.syc.getContainer()._redraw(); } catch (e) {} } }, 1500); }, 60);
   }
   async function jget(u, ms) { const ac = new AbortController(), id = setTimeout(() => ac.abort(), ms || 12000); try { const r = await fetch(u, { signal: ac.signal }); if (!r.ok) throw new Error('answer ' + r.status); return await r.json(); } finally { clearTimeout(id); } }
   async function search() {
@@ -316,7 +316,7 @@ const FieldMap = (() => {
   }
   function pack(G, vals, meta, keys) { keys = keys || KEYS; const S = {}; keys.forEach((k, q) => { S[k] = stats(Array.from(vals[q])); }); return Object.assign({ G, vals, S, keys, pts: F.pts.slice() }, meta); }
   const RAMP = { veg: [[0, [165, 0, 38]], [0.25, [244, 109, 67]], [0.45, [254, 224, 139]], [0.65, [166, 217, 106]], [0.85, [26, 152, 80]], [1, [0, 104, 55]]], wat: [[0, [140, 81, 10]], [0.35, [223, 194, 125]], [0.55, [199, 234, 229]], [0.8, [53, 151, 143]], [1, [1, 102, 94]]] };
-  const rampAt = (name, t) => { const R2 = RAMP[name]; t = Math.max(0, Math.min(1, t)); for (let i = 1; i < R2.length; i++) if (t <= R2[i][0]) { const a = R2[i - 1], b = R2[i], f = (t - a[0]) / (b[0] - a[0]); return a[1].map((c, q) => Math.round(c + (b[1][q] - c) * f)); } return R2[R2.length - 1][1]; };
+  const rampAt = (name, t) => { if (typeof FieldSym !== 'undefined') return FieldSym.at(name, t); const R2 = RAMP[name]; t = Math.max(0, Math.min(1, t)); for (let i = 1; i < R2.length; i++) if (t <= R2[i][0]) { const a = R2[i - 1], b = R2[i], f = (t - a[0]) / (b[0] - a[0]); return a[1].map((c, q) => Math.round(c + (b[1][q] - c) * f)); } return R2[R2.length - 1][1]; };
   function colour(k, v) { const I = IDX[k]; return rampAt(I.ramp, (v - I.lo) / (I.hi - I.lo)); }
   const ZT = [0.02, 0.27, 0.5, 0.73, 0.98], zoneCol = (k, z) => rampAt(IDX[k].ramp, ZT[z]);
   // natural breaks (Jenks) of the field's values into five management zones, with the area and the mean of each
@@ -355,7 +355,7 @@ const FieldMap = (() => {
     const m = F.res.S[RK()[q]] ? F.res.S[RK()[q]].mean : 0; for (let i = 0; i < a.length; i++) if (!isFinite(a[i])) a[i] = m; F.res._F[q] = a; return a;
   }
   function clearOverlay() { [['map', 'ov'], ['map2', 'ov2']].forEach(([m, o]) => { if (F[o] && F[m]) F[m].removeLayer(F[o]); F[o] = null; }); }
-  function overlay(mp, k) { if (PRECV[F.view] && mp === F.map) { const l = FieldPrec.layer(F.view); if (l) return l.addTo(mp); } if (F.view === 'cover' && F.cv && mp === F.map) return L.imageOverlay(F.cv.url, F.cv.bounds, { opacity: 0.85, interactive: false }).addTo(mp); const G = F.res.G; return L.imageOverlay(fieldCanvas(k, F.view, F.smooth).toDataURL(), [[G.sw[0], G.sw[1]], [G.ne[0], G.ne[1]]], { opacity: 0.9, interactive: false, className: F.smooth ? '' : 'fmov' }).addTo(mp); }
+  function overlay(mp, k) { if (PRECV[F.view] && mp === F.map) { const l = FieldPrec.layer(F.view); if (l) return l.addTo(mp); } if (F.view === 'cover' && F.cv && mp === F.map) return L.imageOverlay(F.cv.url, F.cv.bounds, { opacity: FieldSym.op(0.85), interactive: false }).addTo(mp); const G = F.res.G; return L.imageOverlay(fieldCanvas(k, F.view, F.smooth).toDataURL(), [[G.sw[0], G.sw[1]], [G.ne[0], G.ne[1]]], { opacity: FieldSym.op(0.9), interactive: false, className: F.smooth ? '' : 'fmov' }).addTo(mp); }
   function showOverlay() { if (!F.res || !F.map) return; clearOverlay(); F.ov = overlay(F.map, F.idx); if (F.map2 && F.cmp) F.ov2 = overlay(F.map2, F.cmp); if (F.poly) F.poly.setStyle({ fillOpacity: 0, color: '#FFFFFF', weight: 2.5 }); [F.layG, F.layG2].forEach(g => g && g.eachLayer(l => l.bringToFront && l.bringToFront())); }
   // the legend on the map: index, date and source, colour scale or zones, and the spread of the field (histogram)
   function legendCtl(mp) { const C = L.Control.extend({ onAdd() { const d = L.DomUtil.create('div', 'fmlegc'); d.title = 'Click the dark title to fold or unfold the legend'; d.addEventListener('click', e => { if (e.target.closest('.fmchip')) d.classList.toggle('min'); }); L.DomEvent.disableClickPropagation(d); L.DomEvent.disableScrollPropagation(d); return d; } }); const c = new C({ position: 'bottomleft' }); c.addTo(mp); return c; }
@@ -404,6 +404,9 @@ const FieldMap = (() => {
     F._sync = mk(F.map, F.map2); F.map.on('move', F._sync); F.map2.on('move', mk(F.map2, F.map)); F.map2.on('mousemove', e => cursorInfo(e.latlng)); F.map2.on('zoomend', () => drawLayout());
     redraw(); drawLayout();
   }
+  // the family of colours of the map in view, and the maps drawn again in the colours chosen in the Symbology panel
+  const symGroup = () => { const v = F.view; if (v === 'cover') return F.cv ? 'cover' : null; if (v === 'cont' || v === 'zones') return F.res && IDX[F.idx] ? IDX[F.idx].ramp : null; return FieldPrec.has(v) ? FieldSym.groupOf(v) : null; };
+  function restyle() { try { if (F.cv && F.cv.paint) F.cv.paint(); if (F.res) showRes(); else if (FieldPrec.has(F.view)) F.refresh(F.view); if (F.syc && F.syc.getContainer()) F.syc.getContainer()._redraw(); } catch (e) { console.error(e); } }
   function showRes() {
     const el = document.getElementById('fmRes'); if (!el || !F.res) return; const S = F.res.S;
     el.innerHTML = '<div class="pnote">' + esc(F.res.src) + '</div><table class="tbl fmtab"><tr><th>Index</th><th>Mean</th><th>10–90 %</th><th>Min · max</th><th>Reading of the mean</th></tr>' +

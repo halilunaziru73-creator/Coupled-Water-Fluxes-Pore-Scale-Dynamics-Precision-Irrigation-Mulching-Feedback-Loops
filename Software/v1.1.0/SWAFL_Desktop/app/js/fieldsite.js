@@ -85,17 +85,23 @@ const FieldSite = (() => {
     // the field mask in the photo
     const mk = document.createElement('canvas'); mk.width = M.W; mk.height = M.H; const mc = mk.getContext('2d'); mc.beginPath(); F.pts.forEach((p, i) => { const q = M.px(p[0], p[1]); i ? mc.lineTo(q[0], q[1]) : mc.moveTo(q[0], q[1]); }); mc.closePath(); mc.fill(); const mask = mc.getImageData(0, 0, M.W, M.H).data;
     // the land cover picture (cut to the field) and its shares
-    const out = document.createElement('canvas'); out.width = M.W; out.height = M.H; const oc = out.getContext('2d'), im = oc.createImageData(M.W, M.H), cnt = [0, 0, 0, 0, 0, 0]; let tot = 0;
-    const rgb = CLS.map(c => [1, 3, 5].map(i => parseInt(c[1].substr(i, 2), 16)));
-    for (let i = 0; i < M.W * M.H; i++) { if (mask[i * 4 + 3] < 128 || cls[i] < 0) continue; const k = cls[i]; cnt[k]++; tot++; im.data.set([rgb[k][0], rgb[k][1], rgb[k][2], 255], i * 4); }
-    oc.putImageData(im, 0, 0);
-    const A = H.areaM2(F.pts), shares = cnt.map((n, k) => ({ k, name: CLS[k][0], col: CLS[k][1], pct: tot ? n / tot * 100 : 0, ha: tot ? n / tot * A / 1e4 : 0 }));
+    const out = document.createElement('canvas'); out.width = M.W; out.height = M.H; const oc = out.getContext('2d'), cnt = [0, 0, 0, 0, 0, 0], sumC = CLS.map(() => [0, 0, 0]); let tot = 0;
+    for (let i = 0; i < M.W * M.H; i++) { if (mask[i * 4 + 3] < 128 || cls[i] < 0) continue; const k = cls[i]; cnt[k]++; tot++; for (let q = 0; q < 3; q++) sumC[k][q] += M.img.data[i * 4 + q]; }
+    const realC = sumC.map((sm, k) => cnt[k] ? '#' + sm.map(v => Math.round(v / cnt[k]).toString(16).padStart(2, '0')).join('') : CLS[k][1]);
+    const colsNow = () => typeof FieldSym !== 'undefined' ? FieldSym.coverCols(realC) : CLS.map(c => c[1]);
+    // the picture in the class colours chosen in the Symbology panel of the map (drawn again when they change)
+    const paintCover = () => { const cols = colsNow(), rgb = cols.map(c => [1, 3, 5].map(i => parseInt(c.substr(i, 2), 16))), im = oc.createImageData(M.W, M.H);
+      for (let i = 0; i < M.W * M.H; i++) { if (mask[i * 4 + 3] < 128 || cls[i] < 0) continue; const k = cls[i]; im.data.set([rgb[k][0], rgb[k][1], rgb[k][2], 255], i * 4); }
+      oc.clearRect(0, 0, M.W, M.H); oc.putImageData(im, 0, 0); return cols; };
+    const cols0 = paintCover();
+    const A = H.areaM2(F.pts), shares = cnt.map((n, k) => ({ k, name: CLS[k][0], col: cols0[k], pct: tot ? n / tot * 100 : 0, ha: tot ? n / tot * A / 1e4 : 0 }));
     // the visible-band indices on the grid of the field (mean of the photo pixels in each cell)
     const G = H.grid(Math.max(1.5, M.mpp)), keys = ['VARI', 'GLI', 'ExG', 'NGRDI'], src = [f.vari, f.gli, f.exg, f.ngrdi], sum = keys.map(() => new Float64Array(G.nx * G.ny)), n = new Uint32Array(G.nx * G.ny);
     for (let y = 0; y < M.H; y++) for (let x = 0; x < M.W; x++) { const i = y * M.W + x; if (mask[i * 4 + 3] < 128 || !f.ok[i] || cls[i] === 5) continue; const ll = M.ll(x + 0.5, y + 0.5), l = H.local(ll, G.o), gi = Math.floor((l[0] - G.x0) / G.cell), gj = Math.floor((G.y1 - l[1]) / G.cell); if (gi < 0 || gj < 0 || gi >= G.nx || gj >= G.ny) continue; const o = gj * G.nx + gi; n[o]++; src.forEach((a, q) => { sum[q][o] += a[i]; }); }
     const vals = keys.map((k, q) => { const v = new Float32Array(G.nx * G.ny).fill(NaN); for (let o = 0; o < v.length; o++) if (n[o]) v[o] = sum[q][o] / n[o]; return v; });
-    const cv = { cls, clsAt: (la, lo) => { const q = M.px(la, lo), x = Math.floor(q[0]), y = Math.floor(q[1]); return x < 0 || y < 0 || x >= M.W || y >= M.H ? -1 : cls[y * M.W + x]; }, url: out.toDataURL(), bounds: M.bounds, shares, z: M.z, mpp: M.mpp, tiles: M.ok + ' of ' + M.tried, pixels: tot, centres: km.centres.map((c, i) => Object.assign({ label: CLS[km.labels[i]][0] }, c)) };
+    const cv = { cls, clsAt: (la, lo) => { const q = M.px(la, lo), x = Math.floor(q[0]), y = Math.floor(q[1]); return x < 0 || y < 0 || x >= M.W || y >= M.H ? -1 : cls[y * M.W + x]; }, url: out.toDataURL(), realCols: realC, bounds: M.bounds, shares, z: M.z, mpp: M.mpp, tiles: M.ok + ' of ' + M.tried, pixels: tot, centres: km.centres.map((c, i) => Object.assign({ label: CLS[km.labels[i]][0] }, c)) };
     const res = H.pack(G, vals, { photo: true, src: 'Satellite photo of the field (Esri World Imagery, about ' + M.mpp.toFixed(1) + ' m per pixel, zoom ' + M.z + '; the capture date of the photo varies by place). Visible-band indices from the red, green and blue of ' + tot.toLocaleString('en-US') + ' pixels inside the outline; shadows left out.', date: 'photo', note: 'Indices read from the real satellite photo (' + tot.toLocaleString('en-US') + ' pixels). The photo has no near-infrared band: NDVI, EVI, SAVI, NDRE and NDWI need Sentinel-2.' }, keys);
+    cv.paint = () => { const cols = paintCover(); cv.url = out.toDataURL(); cv.shares.forEach(c => { c.col = cols[c.k]; }); };
     return { res, cv };
   }
 

@@ -82,6 +82,23 @@ With the irrigation set-up open the outline lists its sections and the definitio
 
 \newpage
 
+### Set-up editor: the placeholders explained
+
+Many Daisy files contain names in braces. **${name}** is a parameter that Daisy fills by itself: from the default the file gives it, or from the value given where the log or the model is used (for example `(output ("Field nitrogen" (column "Askov") (unit "g N/m^2")))`). **{name}** is a value of a template that must be given before the file can run (the trial files of a calibration are written this way).
+
+The panel **Placeholders** under *What the file defines* has a card for each one:
+
+* what it means (from the declare line of the file, or from the reference manual when the name is an attribute of a model) and how many times the file uses it;
+* how to fill it: *Leave it empty* when Daisy works it out by itself (the file name parts colfid, cropfid, chemfid and bioporefid, and the values the file computes; their box is grey and says *automatic*), *Leave it empty to keep the default* for a parameter, or *Give a value* for a template value, with the unit written after it in the file;
+* the first line where it is used (a click shows that line in the editor);
+* the button **▾ options**: a scrollable list of the values it can take, in groups, each with an explanation: *All* (\*), the default of the file, the units Daisy knows (kg N/ha, g N/m^2, kg/ha, g/ha, mm and others, in words), the columns, crops, chemicals, biopores and organic matter defined in the file and in the Daisy library, and the values given to it in the bundled set-ups. A search box narrows the long lists. A click on a value puts it in the box.
+
+**Download filled file** writes a copy of the file with the values given (empty boxes stay as they are); **Empty all** clears the boxes.
+
+![Placeholders of the standard logs: the card of column with its options open (every column, then the columns of the Daisy library), and the card of crop.](images/daisy11/dz_placeholders_01.jpg){width=70%}
+
+\newpage
+
 ### Model builder: any Daisy model as a form
 
 **Model builder** (Model development) writes the definition of any model of the Daisy reference manual without typing in the Daisy language. Choose the **Component** (a chapter of the reference manual, for example *47 horizon* or *29 crop*) and the **Model** (a section of that chapter, for example *47.1 BSI3*); the box *find a component or model* narrows the lists. Give the model a **Name**.

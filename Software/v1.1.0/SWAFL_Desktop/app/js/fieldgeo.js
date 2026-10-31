@@ -45,7 +45,7 @@ const FieldGeo = (() => {
     dayR: [[0, 213, 62, 79], [0.25, 253, 174, 97], [0.5, 254, 224, 139], [0.7, 171, 221, 164], [0.85, 50, 136, 189], [1, 94, 79, 162]],
     unc: [[0, 13, 8, 135], [0.25, 126, 3, 168], [0.5, 204, 71, 120], [0.75, 248, 149, 64], [1, 240, 249, 33]]
   };
-  const ramp = (n, t) => { const R = RAMP[n]; t = clamp(t, 0, 1); for (let i = 1; i < R.length; i++) if (t <= R[i][0]) { const a = R[i - 1], b = R[i], f = (t - a[0]) / (b[0] - a[0] || 1); return [a[1] + (b[1] - a[1]) * f, a[2] + (b[2] - a[2]) * f, a[3] + (b[3] - a[3]) * f]; } const l = R[R.length - 1]; return [l[1], l[2], l[3]]; };
+  const ramp = (n, t) => { if (typeof FieldSym !== 'undefined') return FieldSym.at(n, t); const R = RAMP[n]; t = clamp(t, 0, 1); for (let i = 1; i < R.length; i++) if (t <= R[i][0]) { const a = R[i - 1], b = R[i], f = (t - a[0]) / (b[0] - a[0] || 1); return [a[1] + (b[1] - a[1]) * f, a[2] + (b[2] - a[2]) * f, a[3] + (b[3] - a[3]) * f]; } const l = R[R.length - 1]; return [l[1], l[2], l[3]]; };
   let seed = 12345; const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
 
   // ------------------------------------------------------------------ the terrain
@@ -146,7 +146,7 @@ const FieldGeo = (() => {
   function mkCls(view, arr) {
     const d = CLSD[view]; if (!d || !arr) return null; let th = d.th;
     if (!th) { const s2 = stat(arr), lo = s2.lo, hi = s2.hi, sp = (hi - lo) || Math.abs(hi) * 0.2 || 1, step = niceStep(sp * d.k / 7) / d.k; let b = Math.floor(lo / step + 1e-9) * step; th = []; for (let n = 0; n < 12; n++) { b += step; if (b >= hi - 1e-9 * step) break; th.push(+b.toPrecision(6)); } if (!th.length) th = [+(lo + sp / 2).toPrecision(6)]; d.step = step; }
-    const m = th.length + 1, cols = []; for (let j = 0; j < m; j++) { let pos = m > 1 ? j / (m - 1) : 0.5; if (d.rev) pos = 1 - pos; const x = pos * (CLSP.length - 1), a = Math.floor(x), b2 = Math.min(CLSP.length - 1, a + 1), f = x - a; cols.push([0, 1, 2].map(q => CLSP[a][q] + (CLSP[b2][q] - CLSP[a][q]) * f)); }
+    const m = th.length + 1, cols = []; const grp = FieldSym.groupOf(view) || 'dry'; for (let j = 0; j < m; j++) { let pos = m > 1 ? j / (m - 1) : 0.5; if (d.rev) pos = 1 - pos; cols.push(FieldSym.at(view === 'theta' ? 'dry' : grp, pos)); }
     const dec = d.k === 1 && !d.th ? (d.step && d.step < 1 ? 1 : 0) : d.th ? 0 : (((d.step || 1) * d.k) < 1 ? 1 : 0); return (G.cls = G.cls || {}, G.cls[view] = { view, th, m, cols, t: d.t, k: d.k, u: d.u, dec });
   }
   const clsIdx = (c, v) => { let j = 0; while (j < c.th.length && v >= c.th[j]) j++; return j; };
@@ -293,7 +293,7 @@ const FieldGeo = (() => {
     if (!T.ins[i]) return s; const R = G.ret, f = G.fuse; let t = s; if (R) t += ' · sand ' + p(R.SA[i], 0) + ' %, clay ' + p(R.CL[i], 0) + ' % · FC ' + p(R.FC[i] * 100, 1) + ' %, WP ' + p(R.WP[i] * 100, 1) + ' %, AW ' + p(R.AW[i] * 100, 1) + ' % · trigger ' + p(R.TR[i] * 100, 1) + ' % · now ' + p(R.TH[i] * 100, 1) + ' % = ' + p(R.PSI && R.PSI[i], 0) + ' kPa suction' + (isFinite(R.DAYS[i]) ? ' · ' + R.DAYS[i].toFixed(1) + ' days to the trigger' : ''); if (f) t += ' · soil water ' + p(f.TH[i] * 100, 1) + ' % ± ' + p(f.SD[i] * 100, 1); return t;
   }
   function legend(view) {
-    const row = (c, t) => '<tr><td><i style="background:' + c + '"></i></td><td>' + t + '</td></tr>', bar = (name, lo, hi, u, d) => { const stops = RAMP[name].map(r => 'rgb(' + r[1] + ',' + r[2] + ',' + r[3] + ') ' + (r[0] * 100) + '%').join(','); return '<div style="height:10px;border:1px solid #999;background:linear-gradient(90deg,' + stops + ')"></div><div style="display:flex;justify-content:space-between;font-size:10px"><span>' + lo.toFixed(d) + '</span><span>' + u + '</span><span>' + hi.toFixed(d) + '</span></div>'; };
+    const row = (c, t) => '<tr><td><i style="background:' + c + '"></i></td><td>' + t + '</td></tr>', bar = (name, lo, hi, u, d) => { const stops = FieldSym.css(name).replace(/^linear-gradient\(90deg,|\)$/g, ''); return '<div style="height:10px;border:1px solid #999;background:linear-gradient(90deg,' + stops + ')"></div><div style="display:flex;justify-content:space-between;font-size:10px"><span>' + lo.toFixed(d) + '</span><span>' + u + '</span><span>' + hi.toFixed(d) + '</span></div>'; };
     if (!G.T) return ''; const dg = derived(); if (view === 'contour') return '<div class="fmchip">Contours every ' + (G.contourStep || '') + ' m · flow</div><table>' + row('#6B4A28', 'contour (thick: every 5th, labelled)') + row('#1565C0', 'channel: upslope area ≥ ' + G.thr + ' ha') + row('#fff', 'arrow: the way the water runs') + '</table>' + bar('spec', dg.zlo, dg.zhi, 'elevation, m', 1);
     if (view === 'twi') return '<div class="fmchip">Topographic wetness index ln(a / tan β)</div>' + bar('wet', dg.tm - 2 * dg.tsd, dg.tm + 2.5 * dg.tsd, 'wetter →', 1);
     if (view === 'shed' && G.shed) { const S = G.shed; return '<div class="fmchip">Watershed of the outlet ★</div><table>' + row('#E0A040', 'catchment ' + S.ha.toFixed(2) + ' ha') + row('#1565C0', 'channels by Strahler order (1 to ' + S.omax + ')') + row('#B71C1C', 'divide') + '</table><div class="fmmean">longest flow path ' + Math.round(S.Lmax) + ' m · relief ' + S.relief.toFixed(1) + ' m</div>'; }

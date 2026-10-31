@@ -57,9 +57,9 @@ const FieldMon = (() => {
     ts.zone = zl; ts.Z = Z; ts.k = k; return ts;
   }
   // ------------------------------------------------------------------ pictures and legends
-  const div = v => { const t = Math.max(-1, Math.min(1, v)); return t < 0 ? [215 + (255 - 215) * (1 + t), 48 + (255 - 48) * (1 + t), 39 + (255 - 39) * (1 + t)].map(Math.round) : [255 - (255 - 26) * t, 255 - (255 - 152) * t, 255 - (255 - 80) * t].map(Math.round); };
+  const div = v => { if (typeof FieldSym !== 'undefined') return FieldSym.at('chg', (Math.max(-1, Math.min(1, v)) + 1) / 2); const t = Math.max(-1, Math.min(1, v)); return t < 0 ? [215 + (255 - 215) * (1 + t), 48 + (255 - 48) * (1 + t), 39 + (255 - 39) * (1 + t)].map(Math.round) : [255 - (255 - 26) * t, 255 - (255 - 152) * t, 255 - (255 - 80) * t].map(Math.round); };
   const ZC = ['#B2182B', '#EF8A62', '#FDDBC7', '#D1E5F0', '#67A9CF', '#2166AC', '#053061'];
-  const zcol = (k, r) => { const pal = k <= 3 ? ['#D7301F', '#FEE08B', '#1A9850'] : k === 4 ? ['#D7301F', '#FC8D59', '#91CF60', '#1A9850'] : ['#D7301F', '#FC8D59', '#FEE08B', '#91CF60', '#1A9850', '#006837', '#004529']; return pal[Math.min(pal.length - 1, r)]; };
+  const zcol = (k, r) => { if (typeof FieldSym !== 'undefined') { const c = FieldSym.cls('mz', Math.min(k - 1, r), k); return '#' + c.map(v => v.toString(16).padStart(2, '0')).join(''); } const pal = k <= 3 ? ['#D7301F', '#FEE08B', '#1A9850'] : k === 4 ? ['#D7301F', '#FC8D59', '#91CF60', '#1A9850'] : ['#D7301F', '#FC8D59', '#FEE08B', '#91CF60', '#1A9850', '#006837', '#004529']; return pal[Math.min(pal.length - 1, r)]; };
   const hex = c => [1, 3, 5].map(i => parseInt(c.substr(i, 2), 16));
   function picture(view) {
     const ts = M.ts; if (!ts) return null; const G = ts.G, cv = document.createElement('canvas'), sc = Math.max(1, Math.min(24, 1400 / Math.max(G.nx, G.ny))); cv.width = Math.round(G.nx * sc); cv.height = Math.round(G.ny * sc); const c = cv.getContext('2d');

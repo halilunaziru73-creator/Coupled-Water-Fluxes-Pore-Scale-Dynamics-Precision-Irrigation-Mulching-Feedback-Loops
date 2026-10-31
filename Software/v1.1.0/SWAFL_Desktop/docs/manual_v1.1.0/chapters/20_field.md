@@ -168,6 +168,23 @@ In the list of water sources of the site, the map moves to a source only when it
 
 ![The maps of this field as layers, after the indices, the site, the season, the zone-by-zone irrigation and the erosion were computed (test data).](images/ui/fm_layers.jpg){width=88%}
 
+## Full screen, and the colours of the maps (Symbology)
+
+The window of the field opens in full screen, like the Daisy window: the map fills the window, and the tools (*Map tools*) scroll beside it. The button with the corners on the title bar, or a double click on the title bar, returns to a smaller window; **A−** and **A+** change the size of the text.
+
+The panel **Symbology** under *Opened maps* (top right of the map) sets the colours of the map in view, as the symbology tab of QGIS does:
+
+* **Coloured map** or **Real colour (photo)**: the second hides the coloured maps so that the satellite photo itself is seen under the outline; **Opacity** sets how much of the photo shows through a coloured map.
+* **Colour ramp**: a scrollable list of the colour ramps of the QGIS library, each drawn as a bar: the remote-sensing ramps (NDVI and NDMI as Sentinel Hub EO Browser shows them, NDWI of open water, hypsometric elevation, land surface temperature), the diverging ramps (RdYlGn, Spectral, RdYlBu, RdBu, BrBG, PuOr), the sequential ramps (YlGn, YlGnBu, Greens, Blues, YlOrBr, YlOrRd, Reds, Greys) and the perceptual ramps (Viridis, Magma, Inferno, Plasma, Cividis, Turbo). **Invert the ramp** turns it round.
+* Every family of maps starts in its remote-sensing standard, marked with a star, and **Remote-sensing standard** returns to it: the vegetation indices and their zones in the NDVI colours of Sentinel Hub (bare soil brown to dense canopy dark green), the water index in the NDMI colours (dry red to wet blue), the elevation in hypsometric tints, the wetness index in yellow-green-blue, soil water, available water, suction and days to the trigger from red (dry, soon) to blue (wet, later), the change, trend and stability of the season and the monitoring zones from red to green, and erosion from green (low risk) to red.
+* For the **land cover** read from the photo, the class colours of the land cover products: SWAFL natural colours, ESA WorldCover 10 m, Google Dynamic World, CORINE Land Cover, USGS NLCD, or **Real colour** (each class in the mean colour of its pixels in the photo). A click on a colour changes that class alone.
+
+The legend on the map, the tables of the zones, the 3D view and the exported report take the same colours. The choices are kept on this computer for the next time.
+
+![The field in full screen with the Symbology panel open: the ramps of the QGIS library and the remote-sensing standard of the map in view (test data).](images/ui/fm_symbology.jpg){width=100%}
+
+![The land cover of the field in the class colours of ESA WorldCover (test data).](images/ui/fm_sym_cover.jpg){width=80%}
+
 ## The season of the field, and the precision maps
 
 Section 4 of the panel reads the season of the real field and makes the precision maps from it and from the SWAFL simulation of the farm. Every map is a choice of *Show on the map* and a layer of *Maps of this field*, has its legend on the map, gives its values under the cursor, and goes into the report (a page for the season and the irrigation, a page for the erosion).

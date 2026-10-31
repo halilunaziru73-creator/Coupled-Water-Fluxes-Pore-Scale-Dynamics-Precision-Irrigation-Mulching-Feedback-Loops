@@ -219,3 +219,22 @@ input[type=range]{accent-color:#0A246A}
 #dashBody .dsec h4{background:#ECE9D8 !important;border-bottom:1px solid #B8B4A8 !important;padding:4px 7px !important;margin:0 !important}
 #dashBody .dsb{background:#FFFFFF !important;padding:4px 6px !important}
 #dashBody .dnote{background:transparent}
+/* symbology of the maps of the field (remote-sensing standard ramps, QGIS library, transparency, real colour) */
+.fmsyc{background:rgba(255,255,255,.97);border:1px solid #7a8794;border-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,.35);font:11px/1.35 Tahoma,Segoe UI,sans-serif;width:250px;max-height:66vh;overflow:auto;clear:both}
+.fmsyc .fmsyh{background:#5B2C83;color:#fff;font-weight:bold;padding:4px 8px;cursor:pointer;user-select:none}.fmsyc .fmsyh:before{content:'\25BE  '}
+.fmsyc.min{width:auto;border-radius:14px;overflow:hidden}.fmsyc.min .fmsyh{padding:4px 12px;border-radius:14px}.fmsyc.min .fmsyh:before{content:''}.fmsyc.min .fmsyb{display:none}
+.fmsyc .fmsyb{padding:6px 8px;display:flex;flex-direction:column;gap:5px}.fmsyc .fmsyb small{color:#556}
+.fmsyc .fmsyseg{display:flex}.fmsyc .fmsyseg button{flex:1;font-size:11px;padding:3px 4px}
+.fmsyc .fmsyop{display:flex;align-items:center;gap:6px}.fmsyc .fmsyop input{flex:1}
+.fmsyc .fmsyt{color:#1b1f23}.fmsyc .fmsycur{height:14px;border:1px solid #666}.fmsyc .fmsyends{display:flex;justify-content:space-between;font-size:10px;color:#445}
+.fmsyc .fmsylist{max-height:190px;overflow-y:auto;border:1px solid #b8c0c8;background:#fff}
+.fmsyc .fmsylist button{display:flex;align-items:center;gap:6px;width:100%;border:0;border-bottom:1px solid #eef0f2;background:#fff;padding:3px 5px;cursor:pointer;font:11px Tahoma,Segoe UI,sans-serif;text-align:left}
+.fmsyc .fmsylist button:hover{background:#E6EEF8}.fmsyc .fmsylist button.on{background:#D6E4F5;font-weight:bold}
+.fmsyc .fmsylist button i{flex:0 0 84px;height:12px;border:1px solid #777}.fmsyc .fmsyk{font-weight:bold;color:#5B2C83;padding:3px 5px 1px;background:#F4F1F8;text-transform:capitalize}
+.fmsyc .fmsycl{display:flex;flex-direction:column;gap:3px}.fmsyc .fmsycl label{display:flex;align-items:center;gap:6px}.fmsyc .fmsycl input[type=color]{width:34px;height:20px;padding:0;border:1px solid #777}
+.fmsyc select{width:100%}
+/* the field map in full screen: the map fills the window, the tools scroll beside it */
+.modal.mfull .fmwrap{flex-wrap:nowrap;height:calc((100vh - 120px) / var(--mz,1))}
+.modal.mfull .fmleft{display:flex;flex-direction:column;height:100%;min-height:0}
+.modal.mfull .fmmaps{flex:1;min-height:0}.modal.mfull .fmmap,.modal.mfull .fmwrap.fmhide .fmmap{height:100%!important}
+.modal.mfull .fmright{max-height:100%;height:100%}
