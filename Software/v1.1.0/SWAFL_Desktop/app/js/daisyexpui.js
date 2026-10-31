@@ -266,7 +266,7 @@
       const tree = {}, readme = ['EXPERIMENTS - ' + L.length + ' experiments in one folder', '='.repeat(60), ''], root = 'Experiments_' + L.length;
       for (let i = 0; i < L.length; i++) {
         applyItem(L[i]); const design = X.design(currentPlan()), files = await commonFiles(), jobs = await buildJobs(design, files), nm = setName(L[i]);
-        const t = X.folder(jobs, files, { request: L[i].label, title: L[i].label, plan: currentPlan(), design: design.factors });
+        const t = X.folder(jobs, files, { request: L[i].label, title: L[i].label, plan: currentPlan(), design: design.factors, years: effYears() });
         Object.keys(t).forEach(k => { tree[root + '/' + nm + k.slice(k.indexOf('/'))] = t[k]; }); readme.push(nm.padEnd(44) + ' ' + jobs.length + ' runs, ' + L[i].factors.map(f => (X.factor(f.id) || { label: f.id }).label).join(' x '));
       }
       readme.push('', 'Every folder is a complete experiment (README, Common, numbered run folders, run_all.sh, run_all.bat, plan.json). Open the README of an experiment first.');
@@ -303,10 +303,20 @@
     const d = $('Design'); if (d) st.design = d.value; const m = $('Max'); if (m) st.max = Math.max(1, parseInt(m.value) || 40); const l = $('Log'); if (l) st.log = l.value; const u = $('UseMy'); if (u) st.useMy = u.checked; const j = $('Jobs'); if (j) st.jobs = Math.max(1, parseInt(j.value) || 4);
   }
   function currentPlan() { return { factors: st.factors.map(f => ({ id: f.id, levels: f.levels })), design: st.design, base: st.base, max: st.max, seed: 7 }; }
+  // the years the runs simulate: the years typed in the form, kept inside the weather in use (Daisy starts one year after the
+  // weather file begins, and stops on 1 April of the last year, when the farm year ends)
+  function effYears() {
+    const yrs = AI.years(st.base), rs = isFinite(st.base.start) ? Math.round(st.base.start) : yrs.start, re = isFinite(st.base.stop) ? Math.round(st.base.stop) : yrs.stop;
+    const m = st.useMy && window.DaisyScenUI ? window.DaisyScenUI.my() : null;
+    if (m && m.wxMode !== 'course' && m.wx && st.wxPick !== 'built') { const lo = m.wx.first + 1, hi = m.wx.last; let a = Math.max(rs, lo), b = Math.min(re, hi); if (b < a + 2) { a = Math.max(lo, b - 2); if (b < a + 2) b = Math.min(hi, a + 2); } return { start: a, stop: b, asked: [rs, re], wx: [m.wx.first, m.wx.last], name: m.wx.name || 'your weather' }; }
+    return { start: yrs.start, stop: yrs.stop, asked: [rs, re], wx: null };
+  }
+  function yearsNote() { const y = effYears(), sp = Math.max(1, Math.round(SC.num(st.base.spin, (SC.DEFAULTS && SC.DEFAULTS.spin) || 1))), from = Math.min(y.stop - 1, y.start + sp), changed = y.asked[0] !== y.start || y.asked[1] !== y.stop;
+    return 'Each run simulates <b>1 January ' + y.start + ' to 1 April ' + y.stop + '</b>' + (y.wx ? ' with ' + esc(y.name) + ' (' + y.wx[0] + ' to ' + y.wx[1] + ')' : '') + '; the results are counted from 1 April ' + from + ' (warm-up before).' + (changed ? ' <span style="color:#8a4b00">You asked for ' + y.asked[0] + ' to ' + y.asked[1] + ': ' + (y.wx ? 'the weather covers ' + y.wx[0] + ' to ' + y.wx[1] + ', and Daisy needs its first year to start, so the runs use ' + y.start + ' to ' + y.stop + '.' : 'the weather chosen covers only ' + y.start + ' to ' + y.stop + '; get the online weather of these years, or choose a station that covers them.') + '</span>' : ''); }
   function optionsFor(run) {
-    const yrs = AI.years(st.base), o = Object.assign({}, st.base, { start: yrs.start, stop: yrs.stop, log: st.log }, run.set); delete o.nyears;
+    const yrs = effYears(), o = Object.assign({}, st.base, { start: yrs.start, stop: yrs.stop, log: st.log }, run.set); delete o.nyears;
     if (st.useMy && window.DaisyScenUI) { const m = window.DaisyScenUI.my(); if (m.wxMode === 'course' && m.station && m.station !== 'course' && !o.station) o.station = m.station;
-    if (m.wxMode !== 'course' && m.wx && st.wxPick !== 'built') { o.userWx = m.wx; const lo = m.wx.first + 1; o.start = Math.max(o.start, lo); o.stop = Math.min(Math.max(o.stop, o.start + 2), m.wx.last); } if (m.soilOn && !st.factors.some(f => f.id === 'soil') && !run.set.soil) { o.userSoil = m.soil; o.soil = 'user'; } }
+    if (m.wxMode !== 'course' && m.wx && st.wxPick !== 'built') { o.userWx = m.wx; o.start = yrs.start; o.stop = yrs.stop; } if (m.soilOn && !st.factors.some(f => f.id === 'soil') && !run.set.soil) { o.userSoil = m.soil; o.soil = 'user'; } }
     return o;
   }
   function renderPlan() {
@@ -333,7 +343,7 @@
   }
   function count() {
     const e = $('Count'); if (!e) return; readPlanInputs();
-    try { const d = X.design(currentPlan()), yrs = AI.years(st.base), sec = Math.max(1, d.runs.length) * (yrs.stop - yrs.start) * 3.2 / Math.max(1, st.jobs); e.innerHTML = '<b>' + d.runs.length + ' runs</b>' + (d.thinned ? ' (a spread of ' + d.total + ' combinations, chosen at random with a fixed seed)' : '') + ', each of ' + (yrs.stop - yrs.start) + ' years; about ' + (sec < 90 ? Math.round(sec) + ' seconds' : Math.round(sec / 60) + ' minutes') + ' on a computer running ' + st.jobs + ' at a time.' + (st.factors.some(f => X.factor(f.id).irr) && d.runs.some(r => r.reference) ? ' A rainfed reference run is added.' : ''); } catch (x) { e.innerHTML = '<span style="color:#b3261e">' + esc(x.message) + '</span>'; }
+    try { const d = X.design(currentPlan()), yrs = effYears(), sec = Math.max(1, d.runs.length) * (yrs.stop - yrs.start) * 3.2 / Math.max(1, st.jobs); e.innerHTML = '<b>' + d.runs.length + ' runs</b>' + (d.thinned ? ' (a spread of ' + d.total + ' combinations, chosen at random with a fixed seed)' : '') + ', each of ' + (yrs.stop - yrs.start) + ' years; about ' + (sec < 90 ? Math.round(sec) + ' seconds' : Math.round(sec / 60) + ' minutes') + ' on a computer running ' + st.jobs + ' at a time.' + (st.factors.some(f => X.factor(f.id).irr) && d.runs.some(r => r.reference) ? ' A rainfed reference run is added.' : '') + '<br>' + yearsNote(); } catch (x) { e.innerHTML = '<span style="color:#b3261e">' + esc(x.message) + '</span>'; }
   }
   function bindPlan() {
     const box = $('Plan'); box.querySelectorAll('[data-q]').forEach(b => b.onclick = () => answer(b.dataset.q));
@@ -360,7 +370,7 @@
   async function stationFiles(files, ids) { for (const id of ids) if (id && id !== 'course') files['weather/' + id + '.dwf'] = await D.getText('weather/' + id + '.dwf'); }
   async function buildJobs(design, files) { const stIds = Array.from(new Set(design.runs.map(r => (r.set.station || st.base.station || (window.DaisyScenUI.my().wxMode === 'course' && window.DaisyScenUI.my().station) || 'course')))); await stationFiles(files, stIds); return design.runs.map(run => ({ run, job: SC.buildJob('exp', optionsFor(run), run.id, files) })); }
   async function saveZip() {
-    try { readPlanInputs(); const design = X.design(currentPlan()), files = await commonFiles(), jobs = await buildJobs(design, files); const tree = X.folder(jobs, files, { request: st.text || (st.res && st.res.plan && st.res.plan.title) || '', title: (st.res && st.res.plan && st.res.plan.title) || st.text, plan: currentPlan(), design: design.factors }); D.note('Xst', 'The experiment folder is open: look at its files, then press Save the folder (.zip).'); showFolder(tree, (window.SWAFLDate ? SWAFLDate.name('daisy-experiment.zip') : 'daisy-experiment.zip'), () => D.note('Xst', 'Saved the experiment folder: ' + design.runs.length + ' numbered run folders, a Common folder with the shared inputs, a README with the design and where to find the indexes, and run_all scripts (' + Object.keys(tree).length + ' files).')); }
+    try { readPlanInputs(); const design = X.design(currentPlan()), files = await commonFiles(), jobs = await buildJobs(design, files); const tree = X.folder(jobs, files, { request: st.text || (st.res && st.res.plan && st.res.plan.title) || '', title: (st.res && st.res.plan && st.res.plan.title) || st.text, plan: currentPlan(), design: design.factors, years: effYears() }); D.note('Xst', 'The experiment folder is open: look at its files, then press Save the folder (.zip).'); showFolder(tree, (window.SWAFLDate ? SWAFLDate.name('daisy-experiment.zip') : 'daisy-experiment.zip'), () => D.note('Xst', 'Saved the experiment folder: ' + design.runs.length + ' numbered run folders, a Common folder with the shared inputs, a README with the design and where to find the indexes, and run_all scripts (' + Object.keys(tree).length + ' files).')); }
     catch (e) { D.note('Xst', esc(e.message), 1); }
   }
   // ------------------------------------------------------------------ running

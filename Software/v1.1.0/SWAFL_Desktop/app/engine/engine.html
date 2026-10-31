@@ -5217,11 +5217,11 @@ function n1Speed(sf) {
   return { rate, days: rate > 0 ? tf / rate : null, mm, taw };
 }
 function n1Controls(sim) {
-  const S = N1S; ctx.fillStyle = n1ui.play ? '#D4A94A' : '#EEE9DA'; rrect(S.bx, S.y - 4, S.bw, 20, 6); ctx.fill(); ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.stroke(); T(n1ui.play ? 'Hold' : 'Replay', S.bx + S.bw / 2, S.y + 10, { s: 10.5, b: true, a: 'center' });
+  const S = N1S; ctx.fillStyle = n1ui.play ? '#D4A94A' : '#EEE9DA'; rrect(S.bx, S.y - 4, S.bw, 20, 6); ctx.fill(); ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.stroke(); T(n1ui.play ? '\u25A0 Stop' : '\u25B6 Play', S.bx + S.bw / 2, S.y + 10, { s: 10.5, b: true, a: 'center' });
   ctx.fillStyle = '#E8E2D0'; ctx.fillRect(S.x0, S.y, S.x1 - S.x0, 12); ctx.strokeStyle = INK; ctx.strokeRect(S.x0, S.y, S.x1 - S.x0, 12); const px = S.x0 + n1Pos() * (S.x1 - S.x0);
   ctx.fillStyle = '#5B2FA8'; ctx.fillRect(S.x0, S.y, px - S.x0, 12); ctx.beginPath(); ctx.arc(px, S.y + 6, 7, 0, 6.283); ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
   T(fieldLabel(), S.bx, S.y + 28, { s: 9.5, b: true, c: '#1F3864' });
-  hot(S.bx, S.y - 4, S.bw, 20, () => { n1ui.play = !n1ui.play; }, n1ui.play ? 'click to hold the water level' : 'click to replay the season');
+  hot(S.bx, S.y - 4, S.bw, 20, () => { n1ui.play = !n1ui.play; n1ui.lt = 0; }, n1ui.play ? 'Stop: hold the day shown' : 'Play: the season plays again and again until you press Stop');
 }
 function n1ScrubDown(p) { const S = N1S; if (p.y >= S.y - 8 && p.y <= S.y + 20 && p.x >= S.x0 - 8 && p.x <= S.x1 + 8) { n1ui.scrub = true; n1ui.play = false; n1SetPos((p.x - S.x0) / (S.x1 - S.x0)); return true; } return false; }
 
@@ -5643,7 +5643,7 @@ function autoEnter(sc, prevId) {
   if (prevId && prevId !== sc.id && SWEEPS[prevId] && AUTO.on && AUTO.snap) { AUTO.busy = true; applyState(AUTO.snap); AUTO.busy = false; }
   // in the desktop a sweep that changes your settings (soil, rain, mulch) waits for Play, so Properties and the Dashboard keep your values
   const sw = SWEEPS[sc.id]; AUTO.on = !(document.body.classList.contains('appmode') && sw && sw.keys.length); AUTO.k = 0; AUTO.last = performance.now() - (sw ? sw.every - 900 : 0); autoSnap();
-  if (sc.fieldBar && !dss.held) fclock.on = true; if ((sc.id === 'n1' || sc.id === 'r1') && !dss.held) n1ui.play = !document.body.classList.contains('appmode'); if (sc.id !== 'v5') v5ui.sel = 0;
+  if (sc.fieldBar && !dss.held) fclock.on = true; if (sc.id === 'n1' || sc.id === 'r1') { n1ui.play = true; n1ui.lt = 0; }   // the season plays by itself when the layer opens, until Stop if (sc.id !== 'v5') v5ui.sel = 0;
 }
 function autoToggle() {
   const sc = currentScene;
@@ -5907,8 +5907,8 @@ function drawR1Chart() {
   ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.strokeRect(C.ax0, C.yy0, C.ax1 - C.ax0, Hh);
   ctx.fillStyle = '#C9B08A'; ctx.fillRect(C.ax0 + 150, C.yy1 + 17, 10, 8); T('deepest roots', C.ax0 + 164, C.yy1 + 24, { s: 9, c: MUTE }); ctx.fillStyle = '#1B6B35'; ctx.fillRect(C.ax0 + 244, C.yy1 + 17, 10, 8); T('depth of 50% of uptake', C.ax0 + 258, C.yy1 + 24, { s: 9, c: MUTE }); ctx.fillStyle = '#2E9E4F'; ctx.fillRect(C.ax0 + 376, C.yy1 + 17, 10, 8); T('90%', C.ax0 + 390, C.yy1 + 24, { s: 9, c: MUTE });
   // button and the sentence for the year
-  ctx.fillStyle = n1ui.play ? '#D4A94A' : '#EEE9DA'; rrect(16, 676, 74, 22, 6); ctx.fill(); ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.stroke(); T(n1ui.play ? 'Hold' : 'Replay', 53, 691, { s: 10.5, b: true, a: 'center' });
-  hot(16, 676, 74, 22, () => { n1ui.play = !n1ui.play; }, n1ui.play ? 'click to hold the day' : 'click to replay the season');
+  ctx.fillStyle = n1ui.play ? '#D4A94A' : '#EEE9DA'; rrect(16, 676, 74, 22, 6); ctx.fill(); ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.stroke(); T(n1ui.play ? '\u25A0 Stop' : '\u25B6 Play', 53, 691, { s: 10.5, b: true, a: 'center' });
+  hot(16, 676, 74, 22, () => { n1ui.play = !n1ui.play; n1ui.lt = 0; }, n1ui.play ? 'Stop: hold the day shown' : 'Play: the season plays again and again until you press Stop');
   const crop = cropNameAt(sim, dd), live = cv > 0.03;
   TW(Y.y + ' (' + (crop || 'fallow') + '): roots reached ' + Math.round(Y.mxRd) + ' cm. Half of the water the crop took came from the top ' + (Y.d50 || 0) + ' cm and nine tenths from the top ' + (Y.d90 || 0) + ' cm; ' + Math.round(Y.top30 * 100) + '% came from the top 30 cm. ' + (live ? 'On this day the roots reach ' + Math.round(rd) + ' cm and the crop takes ' + upt.reduce((a, b) => a + b, 0).toFixed(1) + ' mm.' : 'On this day there is no crop taking water.'), 100, 680, 500, { s: 10.5 });
   drawR1Compare(); drawR1All(1052, dd); drawR1Data(1052 + 520); if (!r1AllStep()) r1AltStep();

@@ -144,4 +144,6 @@
 * Field on the map: opens in full screen like the Daisy window; a **Symbology** panel on the map gives every map its remote-sensing standard colours and the colour ramps of the QGIS library (with invert, opacity and the real colour of the photo), and the land cover the class colours of ESA WorldCover, Dynamic World, CORINE, NLCD or the photo.
 * Set-up editor: every placeholder has a card that says what it means and how to fill it, with a scrollable list of its possible values and an explanation of each.
 * Deterministic phenotyping: no text is drawn over a chart or over other text.
+* Daisy experiments: the runs, the run files of the saved folder and its README use the years typed in the form, kept inside the weather in use (with online weather of 2014 to 2025, the runs simulate 1 January 2015 to 1 April 2025; Daisy starts one year after the weather begins). A line under the form says which years are simulated and why, and every run file starts with the same line.
+* Trigger law and root-zone depletion: the season plays by itself when the layer opens and again and again until **Stop** is pressed; **Play** starts it again.
 

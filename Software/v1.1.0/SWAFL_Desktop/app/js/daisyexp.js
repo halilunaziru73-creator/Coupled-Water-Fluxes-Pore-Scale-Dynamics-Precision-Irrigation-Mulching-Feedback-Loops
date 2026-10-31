@@ -197,7 +197,7 @@
       rf = rf.replace(/\.\.\/Common\/([^"]+)/g, (m, f) => {
         let text = job.files['Common/' + f]; if (text == null) text = commonFiles[f]; if (text == null) return m;
         return '../Common/' + put(baseOf(f, job), text, f, job); });
-      rf = rf.replace(/^;; SWAFL scenario[^\n]*\n/, ';; Experiment run ' + no + ': ' + run.label + '\n').replace(/\(description "[^"]*"\)/, '(description "' + String((info.request || 'Experiment') + ' - ' + run.label).replace(/"/g, "'") + '")').replace(/\(log_prefix "[^"]*"\)/, '(log_prefix "' + nm + '-")');
+      rf = rf.replace(/^;; SWAFL scenario[^\n]*\n/, ';; Experiment run ' + no + ': ' + run.label + '\n' + (job.options && job.options.start ? ';; Simulated from 1 January ' + job.options.start + ' to 1 April ' + job.options.stop + (job.options.userWx ? ', with ' + (job.options.userWx.name || 'your weather') + ' (' + job.options.userWx.first + ' to ' + job.options.userWx.last + ')' : '') + '\n' : '')).replace(/\(description "[^"]*"\)/, '(description "' + String((info.request || 'Experiment') + ' - ' + run.label).replace(/"/g, "'") + '")').replace(/\(log_prefix "[^"]*"\)/, '(log_prefix "' + nm + '-")');
       out[root + '/' + dir + '/' + nm + '.dai'] = rf;
     });
     const fl = (plan.plan && plan.plan.factors) || (plan.factors || []), base = (plan.plan && plan.plan.base) || plan.base || {}, ds = (plan.plan && plan.plan.design) || plan.design || 'factorial';
@@ -207,7 +207,7 @@
     const varied = {}; fl.forEach(f => { const F = E.factor(f.id); if (F) { varied[F.key] = 1; (F.kind === 'set' && F.levels[0] && F.levels[0].set ? Object.keys(F.levels[0].set) : []).forEach(k => { varied[k] = 1; }); } });
     const optLabel = (k, v) => { const O = S.OPTIONS && S.OPTIONS[k]; if (!O) return String(v); const hit = (O.opts || []).find(o => String(o[0]) === String(v)); return hit ? hit[1] : String(v); };
     const kept = Object.keys(base).filter(k => base[k] !== '' && base[k] != null && !varied[k] && k !== 'start' && k !== 'stop').map(k => '  ' + ((S.OPTIONS && S.OPTIONS[k] && S.OPTIONS[k].label) || k) + ': ' + optLabel(k, base[k])).join('\r\n');
-    const keptAll = (kept ? kept + '\r\n' : '') + '  Simulation years: ' + (base.start || (S.DEFAULTS && S.DEFAULTS.start) || 1980) + ' to ' + (base.stop || (S.DEFAULTS && S.DEFAULTS.stop) || 2000);
+    const keptAll = (kept ? kept + '\r\n' : '') + '  Simulation: 1 January ' + (info.years ? info.years.start : base.start || (S.DEFAULTS && S.DEFAULTS.start) || 1980) + ' to 1 April ' + (info.years ? info.years.stop : base.stop || (S.DEFAULTS && S.DEFAULTS.stop) || 2000) + (info.years && info.years.wx ? ' (weather: ' + info.years.name + ', ' + info.years.wx[0] + ' to ' + info.years.wx[1] + '; Daisy starts one year after the weather begins)' : '');
     const dsn = { factorial: 'all combinations of the levels', oat: 'one factor at a time, the others at their middle level', paired: 'the levels side by side' }[ds] || ds;
     const L = [];
     L.push('EXPERIMENT - ' + (info.request || 'Daisy experiment'), '='.repeat(60), '',

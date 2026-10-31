@@ -4691,7 +4691,7 @@ The picture below is the complete drawing of the layer Trigger law, which in the
 - **17** The critical depletion f* as the red line across all ten soils.
 - **18** The ring on each soil gives where its own trigger sits between f = 0 and f = 1.
 - **19** The simulated yield of each soil at its own trigger, in Mg per ha.
-- **20** The Replay button and the time value box that replay the season.
+- **20** The Play and Stop button and the time value box: the season plays by itself until Stop is pressed.
 - **21** The date shown on the clock.
 - **22** The conclusion, the stress at which the selected soil needs water.
 - **23** The sentence that links the soil's own trigger to the critical point.
@@ -5260,7 +5260,7 @@ The picture below is the complete drawing of the layer Root structure, which in 
 - **9** The depth by which nine tenths of the water was taken.
 - **10** The deepest roots of each year and the depth of half and nine tenths of the uptake.
 - **11** The legend of the deepest roots and of the two uptake depths.
-- **12** The Replay button of the season.
+- **12** The Play and Stop button of the season (it plays by itself until Stop is pressed).
 - **13** The summary of the year, the depth of the roots and where the water came from.
 - **14** What your choices do to the roots, as 20-year means; a row is clicked to switch to it.
 - **15** The bar of the deepest roots of the soil.
