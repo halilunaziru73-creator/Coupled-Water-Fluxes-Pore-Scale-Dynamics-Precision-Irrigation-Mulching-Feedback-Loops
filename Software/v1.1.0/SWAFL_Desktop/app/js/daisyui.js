@@ -191,9 +191,13 @@ const DaisyUI = (() => {
 
   // ---------------------------------------------------------------- tab: editor
   function tEditor() {
-    return '<div class="dzrow"><label>Open</label><select id="dzEs"><option value="">bundled set-up file...</option></select><button class="btn" id="dzEopen">Open file...</button><input type="file" id="dzEin" accept=".dai,.txt" hidden><button class="btn" id="dzEfmt">Tidy layout</button><button class="btn" id="dzEsave">Download</button><button class="btn" id="dzErun">Run Daisy</button><span id="dzEst" class="pnote"></span></div>' +
-      '<div style="display:flex;gap:10px;flex-wrap:wrap"><div style="flex:3;min-width:360px"><div class="dzed"><pre id="dzEhl" aria-hidden="true"></pre><textarea id="dzEt" spellcheck="false" wrap="off"></textarea></div><div id="dzEerr" style="margin-top:4px"></div></div><div style="flex:1;min-width:210px"><b>Outline</b><div id="dzEol" class="dzol"></div><div id="dzEph"></div></div></div>';
+    return '<div class="dzhelp"><b>What this is.</b> The set-up editor opens any Daisy set-up file (.dai) as text, colours it, checks the brackets and lists what it defines. <b>How to use it:</b> 1) pick a file in the box below (all ' + 'the files that come with Daisy are there, grouped by topic), 2) read the short explanation, 3) change the text if you wish, 4) press <i>Download</i>' + (isDesk() ? ' or <i>Run Daisy</i>' : '') + '. Start with <i>Start here: the SWAFL farm</i>.</div>' +
+      '<div class="dzrow"><label>1. Choose a file</label><select id="dzEs" class="dzwide"><option value="">Choose a set-up file...</option></select><input id="dzEq" placeholder="or type to search all files" size="22"></div>' +
+      '<div id="dzEinfo" class="dzinfo">No file chosen yet. The text area below is empty; you can also type a set-up or open a file from your computer.</div>' +
+      '<div class="dzrow"><label>2. Work</label><button class="btn" id="dzEopen">Open a file from my computer...</button><input type="file" id="dzEin" accept=".dai,.txt" hidden><button class="btn" id="dzEfmt" title="Re-indents the brackets so the file is easy to read">Tidy layout</button><button class="btn pri" id="dzEsave">Download</button><button class="btn" id="dzErun" title="Runs the Daisy program that comes with SWAFL (desktop app only)">Run Daisy</button><span id="dzEst" class="pnote"></span></div>' +
+      '<div style="display:flex;gap:10px;flex-wrap:wrap"><div style="flex:3;min-width:360px"><div class="dzed"><pre id="dzEhl" aria-hidden="true"></pre><textarea id="dzEt" spellcheck="false" wrap="off" placeholder="The text of the chosen set-up file appears here."></textarea></div><div id="dzEerr" style="margin-top:4px"></div></div><div style="flex:1;min-width:210px"><b>What the file defines</b><div class="pnote">Click an item to jump to it.</div><div id="dzEol" class="dzol"></div><div id="dzEph"></div></div></div>';
   }
+  const DAI_NOTE = 'Colours: comments grey, words after an opening bracket blue, numbers green, text in quotes brown.';
   async function bEditor() {
     const t = $('Et'), hl = $('Ehl'); t.value = S.dai || ''; const sync = () => { hl.innerHTML = IO.highlightDai(t.value) + '\n'; hl.scrollTop = t.scrollTop; hl.scrollLeft = t.scrollLeft; };
     const analyse = () => { S.dai = t.value; sync(); let ast; try { ast = IO.parseDai(t.value); } catch (e) { ast = { top: [], errors: [e.message] }; } $('Eerr').innerHTML = ast.errors.length ? '<div class="warnbox">' + ast.errors.slice(0, 8).map(esc).join('<br>') + '</div>' : (t.value.trim() ? '<div class="okbox" style="padding:4px 8px">Brackets and quotes are balanced.</div>' : '');
@@ -203,7 +207,15 @@ const DaisyUI = (() => {
       const ph = IO.placeholders(t.value); $('Eph').innerHTML = ph.length ? '<b>Placeholders</b><div class="pnote">Give each a value and download the filled set-up.</div>' + ph.map(p => '<div class="dzrow"><label style="min-width:80px">' + esc(p) + '</label><input data-ph="' + esc(p) + '" size="9"></div>').join('') + '<button class="btn" id="dzEfill">Download filled file</button>' : '';
       const fb = $('Efill'); if (fb) fb.onclick = () => { const v = {}; $('Eph').querySelectorAll('[data-ph]').forEach(i => { if (i.value !== '') v[i.dataset.ph] = i.value; }); download((S.daiName || 'setup').replace(/\.dai$/, '') + '-filled.dai', IO.fillTemplate(t.value, v)); }; };
     t.addEventListener('input', analyse); t.addEventListener('scroll', sync);
-    try { const ix = await getIdx(); const es = $('Es'); ix.dai.forEach(d => { const o = document.createElement('option'); o.value = d.file; o.textContent = d.file + ' - ' + d.desc; es.appendChild(o); }); es.onchange = async () => { if (!es.value) return; t.value = await getText('dai/' + es.value); S.daiName = es.value; analyse(); note('Est', es.value + ' opened.'); }; } catch (e) {}
+    try { const ix = await getIdx(), es = $('Es'), all = ix.dai.filter(d => d.path); let grp = '', og = null;
+      const fill = q => { const keep = es.value; es.innerHTML = '<option value="">Choose a set-up file...</option>'; og = null; grp = ''; all.filter(d => !q || (d.file + ' ' + d.title + ' ' + d.desc).toLowerCase().includes(q)).forEach(d => { if (d.group !== grp) { grp = d.group; og = document.createElement('optgroup'); og.label = d.group.replace(/^\d+\s/, ''); es.appendChild(og); } const o = document.createElement('option'); o.value = d.path; o.textContent = d.title + '  (' + d.file + ')'; og.appendChild(o); }); es.value = keep; };
+      fill('');
+      const open = async path => { const d = all.find(x => x.path === path); if (!d) return; t.value = await getText('dai/' + path); S.daiName = d.file; analyse(); t.scrollTop = 0; $('Einfo').innerHTML = '<b>' + esc(d.title) + '</b> <span class="pnote">' + esc(d.file) + ', ' + Math.round(d.bytes / 100) / 10 + ' KB, ' + esc(d.group.replace(/^\d+\s/, '')) + '</span><br>' + esc(d.desc); note('Est', d.file + ' opened.'); };
+      es.onchange = () => { if (es.value) open(es.value); };
+      $('Eq').oninput = () => { fill($('Eq').value.trim().toLowerCase()); };
+      S.openDai = open;
+      if (S.pendingOpen) { const pp = S.pendingOpen; S.pendingOpen = null; es.value = pp; await open(pp); } else if (!S.dai) { es.value = 'swafl/ArableFarmRotation.dai'; await open('swafl/ArableFarmRotation.dai'); }
+    } catch (e) {}
     $('Eopen').onclick = () => $('Ein').click(); $('Ein').onchange = async () => { const f = $('Ein').files[0]; if (f) { t.value = await f.text(); S.daiName = f.name; analyse(); note('Est', f.name + ' opened.'); } };
     $('Efmt').onclick = () => { const a = IO.parseDai(t.value); if (a.errors.length) { note('Est', 'Fix the bracket errors first.', 1); return; } t.value = IO.formatDai(a); analyse(); note('Est', 'Layout tidied.'); };
     $('Esave').onclick = () => download(S.daiName || 'setup.dai', t.value);
@@ -212,17 +224,24 @@ const DaisyUI = (() => {
   }
 
   // ---------------------------------------------------------------- tab: library
-  const KINDS = [['horizons', 'Soil horizons'], ['crops', 'Crops'], ['fertilizers', 'Fertilisers'], ['chemicals', 'Chemicals'], ['actions', 'Management actions'], ['programs', 'Programs'], ['logs', 'Log types']];
-  function tLibrary() { return '<p class="pnote">The Daisy library files read in full: soil horizons with their van Genuchten hydraulics, crops, fertilisers, chemicals and management actions. Pick a soil horizon to see its retention and conductivity curves and use it in the soil column.</p><div class="dzrow">' + sel('LK', KINDS, S.kind) + '<input id="dzLQ" placeholder="search by name" size="22"><span id="dzLst" class="pnote"></span></div><div style="display:flex;gap:10px;flex-wrap:wrap"><div id="dzLl" class="dzlist"></div><div id="dzLd" style="flex:1;min-width:300px"></div></div>'; }
+  const KINDS = [['horizons', 'Soil horizons', 'Layers of soil with their water-holding curves. Pick one to see how much water it holds and use it in the simulation.'], ['crops', 'Crops', 'Crop parameters: development, growth, roots, harvest.'], ['fertilizers', 'Fertilisers', 'Mineral fertilisers, slurries and manures with their nitrogen content.'], ['chemicals', 'Chemicals', 'Pesticides and other chemicals, with decay and sorption.'], ['actions', 'Management actions', 'Things a farm does: sow, plough, fertilise, irrigate, harvest.'], ['programs', 'Programs', 'Ready-made programs that tell Daisy what to simulate.'], ['logs', 'Output logs', 'Tables Daisy can write: yield, water, nitrogen, soil, weather.']];
+  function tLibrary() { return '<div class="dzhelp"><b>What this is.</b> The parameters that come with Daisy, read from its library files. <b>How to use it:</b> 1) press a topic below, 2) press an item in the list (or type in the search box), 3) read the values on the right.' + ' For soil horizons you can press <i>Use as the soil of the simulation</i>. Every item shows the file it comes from.</div>' +
+    '<div class="dzchips" id="dzLchips">' + KINDS.map(k => '<button class="dzchip" data-k="' + k[0] + '"><span>' + k[1] + '</span><i id="dzLn_' + k[0] + '"></i></button>').join('') + '</div><div id="dzLabout" class="dzinfo"></div>' +
+    '<div class="dzrow"><label>Search</label><input id="dzLQ" placeholder="type part of a name" size="26"><span id="dzLst" class="pnote"></span></div><select id="dzLK" hidden></select><div class="dzsplit"><div id="dzLl" class="dzlist"></div><div id="dzLd" class="dzdet"></div></div>'; }
+  function defOf(tx, name) { const m = new RegExp('\\(\\s*def\\w+\\s+"?' + name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '"?[\\s)]').exec(tx); if (!m) return ''; let dep = 0, i = m.index, ins = false; for (; i < tx.length; i++) { const c = tx[i]; if (ins) { if (c === '\\') i++; else if (c === '"') ins = false; } else if (c === '"') ins = true; else if (c === ';') { while (i < tx.length && tx[i] !== '\n') i++; } else if (c === '(') dep++; else if (c === ')') { dep--; if (!dep) { i++; break; } } } return tx.slice(m.index, i).slice(0, 6000) + '\n'; }
+  const show_ = n => show(n);
   const hzP = hz => CA.fromHorizon(hz);
   function texture(c, s, sa) { if (c == null) return ''; if (c >= 40) return 'clay'; if (sa >= 85 && c < 10) return 'sand'; if (sa >= 70 && c < 15) return 'loamy sand'; if (s >= 80 && c < 12) return 'silt'; if (c >= 27) return s >= 40 ? 'silty clay loam' : sa >= 45 ? 'sandy clay loam' : 'clay loam'; if (c >= 20 && sa >= 45) return 'sandy clay loam'; if (s >= 50 || (s >= 50 && c < 27)) return 'silt loam'; if (sa >= 52) return 'sandy loam'; return 'loam'; }
   async function bLibrary() {
-    const lib = await getLib(), kind = () => $('LK').value;
+    const lib = await getLib(), kind = () => S.kind || 'horizons'; $('LK').innerHTML = KINDS.map(k => '<option value="' + k[0] + '">' + k[1] + '</option>').join('');
+    KINDS.forEach(k => { const n = $('Ln_' + k[0]); if (n) n.textContent = (lib[k[0]] || []).length; });
     const list = () => {
-      S.kind = kind(); const q = $('LQ').value.toLowerCase(), arr = lib[S.kind].filter(x => !q || (x.name + ' ' + (x.parent || '')).toLowerCase().includes(q)); note('Lst', arr.length + ' of ' + lib[S.kind].length);
+      S.kind = kind(); $('LK').value = S.kind; $('Lchips').querySelectorAll('.dzchip').forEach(c => c.classList.toggle('on', c.dataset.k === S.kind)); $('Labout').textContent = KINDS.find(k => k[0] === S.kind)[2]; const q = $('LQ').value.toLowerCase(), arr = lib[S.kind].filter(x => !q || (x.name + ' ' + (x.parent || '')).toLowerCase().includes(q)); note('Lst', arr.length + ' of ' + lib[S.kind].length);
       $('Ll').innerHTML = arr.slice(0, 400).map((x, i) => '<div class="dzol-i" data-i="' + lib[S.kind].indexOf(x) + '"><b>' + esc(x.name) + '</b> <span class="pnote">' + esc(x.parent || '') + '</span>' + (S.kind === 'horizons' && x.hy ? '<span class="pnote"> ' + texture(x.clay, x.silt, x.sand) + '</span>' : '') + '</div>').join('');
       $('Ll').querySelectorAll('[data-i]').forEach(e => e.onclick = () => { $('Ll').querySelectorAll('.sel').forEach(z => z.classList.remove('sel')); e.classList.add('sel'); detail(lib[S.kind][+e.dataset.i]); });
+      const f0 = $('Ll').querySelector('[data-i]'); if (f0 && !q) f0.click(); else if (!f0) $('Ld').innerHTML = '<p class="pnote">Nothing matches. Clear the search box.</p>';
     };
+    $('Lchips').querySelectorAll('.dzchip').forEach(c => c.onclick = () => { S.kind = c.dataset.k; $('LQ').value = ''; $('Ld').innerHTML = ''; list(); });
     function detail(x) {
       const d = $('Ld'); if (S.kind === 'horizons') {
         const p = hzP(x); if (!p) { d.innerHTML = '<b>' + esc(x.name) + '</b><p class="pnote">This horizon has no van Genuchten parameters.</p>'; return; }
@@ -240,12 +259,14 @@ const DaisyUI = (() => {
         d.innerHTML = '<h4>' + esc(x.name) + ' <span class="pnote">(' + esc(x.parent || '') + ', ' + esc(x.file) + ')</span></h4><p class="pnote">' + esc(x.desc || '') + '</p><table class="dzt">' + rows.map(r => '<tr><td>' + esc(r[0]) + '</td><td>' + esc(String(r[1]).slice(0, 220)) + '</td></tr>').join('') + '</table>';
         const dv = (x.p || {}).Devel; if (dv && dv.TempEff1) { d.innerHTML += '<canvas id="dzLc1"></canvas>'; const te = dv.TempEff1; lineChart($('Lc1'), [{ name: 'temperature effect on development', x: te.map(a => a[0]), y: te.map(a => a[1]), pts: true, line: true }], { xt: 'temperature (C)', yt: 'effect', h: 200 }); }
       } else if (S.kind === 'actions' || S.kind === 'programs' || S.kind === 'logs') {
-        d.innerHTML = '<h4>' + esc(x.name) + ' <span class="pnote">(' + esc(x.parent || '') + ', ' + esc(x.file) + ')</span></h4>' + (x.src ? '<pre class="dzpre">' + IO.highlightDai(x.src) + '</pre><button class="btn" id="dzLed">Open in the set-up editor</button>' : '<p class="pnote">Defined in ' + esc(x.file) + '.</p>'); const b = $('Led'); if (b) b.onclick = () => { S.dai = x.src; S.daiName = x.name + '.dai'; show('editor'); };
+        const head = '<h4>' + esc(x.name) + ' <span class="pnote">' + (x.parent ? 'a kind of ' + esc(x.parent) + '; ' : '') + 'from ' + esc(x.file) + '</span></h4>';
+        const show = src => { d.innerHTML = head + (src ? '<p class="pnote">The definition, as written in the file:</p><pre class="dzpre">' + IO.highlightDai(src) + '</pre>' : '<p class="pnote">The definition is a block inside ' + esc(x.file) + '. Open the whole file to read it.</p>') + '<div class="dzrow"><button class="btn pri" id="dzLed">Open ' + esc(x.file.replace(/^.*\//, '')) + ' in the set-up editor</button></div>'; $('Led').onclick = async () => { try { await getText('dai/' + x.file); S.dai = ''; S.daiName = x.file.replace(/^.*\//, ''); S.pendingOpen = x.file; show_('editor'); } catch (e) { d.innerHTML += '<div class="warnbox">' + esc(e.message) + '</div>'; } }; };
+        if (x.src) show(x.src); else { d.innerHTML = head + '<p class="pnote">Reading the file...</p>'; getText('dai/' + x.file).then(tx => show(defOf(tx, x.name))).catch(() => show('')); }
       } else {
         const rows = []; const flat = (o, pre) => Object.keys(o || {}).forEach(k => { const v = o[k]; if (v && typeof v === 'object' && !Array.isArray(v)) flat(v, pre + k + '.'); else rows.push([pre + k, Array.isArray(v) ? JSON.stringify(v) : v]); }); flat(x.p, ''); d.innerHTML = '<h4>' + esc(x.name) + ' <span class="pnote">(' + esc(x.parent || '') + ', ' + esc(x.file) + ')</span></h4><table class="dzt">' + rows.map(r => '<tr><td>' + esc(r[0]) + '</td><td>' + esc(String(r[1]).slice(0, 220)) + '</td></tr>').join('') + '</table>';
       }
     }
-    $('LK').onchange = () => { list(); $('Ld').innerHTML = ''; }; $('LQ').oninput = list; list();
+    $('LQ').oninput = list; list();
   }
 
   // ---------------------------------------------------------------- tab: soil column (Richards)

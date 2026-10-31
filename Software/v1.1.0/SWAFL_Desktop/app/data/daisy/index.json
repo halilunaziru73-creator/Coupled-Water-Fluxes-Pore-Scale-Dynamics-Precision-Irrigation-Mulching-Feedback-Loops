@@ -1,1 +1,1023 @@
-{"weather":[{"file":"dk-taastrup.dwf","name":"Taastrup","lat":"56 dgNorth","lon":"12 dgEast","from":"1962-04-01","to":"2008-10-31","n":17016},{"file":"dk-foulum.dwf","name":"Foulum","lat":"56 dgNorth","lon":"9 dgEast","from":"1990-01-01","to":"2003-12-31","n":5113},{"file":"dk-jyndevad.dwf","name":"Jyndevad","lat":"54 dgNorth","lon":"9 dgEast","from":"1997-01-01","to":"2005-12-21","n":3277},{"file":"it-bologna.dwf","name":"ITCER04\t(Bologna)","lat":"41\tdgNorth","lon":"11\tdgEast","from":"1994-01-01","to":"2005-09-12","n":4273},{"file":"pl-jadwisin.dwf","name":"Jadwisin","lat":"52 dgNorth","lon":"23 dgEast","from":"1992-1-01","to":"2005-12-31","n":5114},{"file":"cz-valecov.dwf","name":"CZRISWC03","lat":"49.64\tdgNorth","lon":"14.5\tdgEast","from":"1991-1-1","to":"2005-12-19","n":5467},{"file":"sk-bratislava.dwf","name":"Bratislava","lat":"48 dgNorth","lon":"17 dgEast","from":"1990-01-01","to":"2006-05-31","n":5995}],"dlf":[{"file":"daily-water-flux.dlf","desc":"Daily matrix water flux at 24 depths (daisy-r-tools)"},{"file":"soil-chemical-110cm.dlf","desc":"Soil chemical at 110 cm: mass balance example (daisy-r-tools)"},{"file":"annual-field-nitrogen-3b.dlf","desc":"Annual field nitrogen, run 3b (daisy-r-tools)"},{"file":"annual-field-nitrogen-4b.dlf","desc":"Annual field nitrogen, run 4b (daisy-r-tools)"},{"file":"annual-tracer-3b.dlf","desc":"Annual tracer, run 3b (daisy-r-tools)"},{"file":"optim-field-nitrogen.dlf","desc":"Field nitrogen of the calibration example (daisypy-optim)"},{"file":"optim-measured-field-nitrogen.csv","desc":"Measured field nitrogen for the calibration example (daisypy-optim)"},{"file":"course-field-LAI.csv","desc":"Measured LAI of the Daisy course (daisy-r-tools)"},{"file":"denitrification-args-and-targets.csv","desc":"Inputs and Daisy results of the default denitrification, 792 rows (python-extensions)"},{"file":"denitrification-expected.csv","desc":"Expected denitrification of the Daisy test (python-extensions)"}],"dai":[{"file":"irrigation.dai","desc":"Irrigation strategies of Daisy: tensiometer and content triggers (daisy sample)"},{"file":"dk-horizon.dai","desc":"Danish soil horizons JB1 to JB7 with van Genuchten parameters (daisy lib)"},{"file":"optim-template.dai","desc":"Set-up template with {placeholders} for calibration (daisypy-optim)"},{"file":"io-sample.dai","desc":"Sample set-up file (daisypy-io)"},{"file":"tillage.dai","desc":"Tillage operations (daisy lib)"}]}
+{
+"weather": [
+{
+"file": "dk-taastrup.dwf",
+"name": "Taastrup",
+"lat": "56 dgNorth",
+"lon": "12 dgEast",
+"from": "1962-04-01",
+"to": "2008-10-31",
+"n": 17016
+},
+{
+"file": "dk-foulum.dwf",
+"name": "Foulum",
+"lat": "56 dgNorth",
+"lon": "9 dgEast",
+"from": "1990-01-01",
+"to": "2003-12-31",
+"n": 5113
+},
+{
+"file": "dk-jyndevad.dwf",
+"name": "Jyndevad",
+"lat": "54 dgNorth",
+"lon": "9 dgEast",
+"from": "1997-01-01",
+"to": "2005-12-21",
+"n": 3277
+},
+{
+"file": "it-bologna.dwf",
+"name": "ITCER04\t(Bologna)",
+"lat": "41\tdgNorth",
+"lon": "11\tdgEast",
+"from": "1994-01-01",
+"to": "2005-09-12",
+"n": 4273
+},
+{
+"file": "pl-jadwisin.dwf",
+"name": "Jadwisin",
+"lat": "52 dgNorth",
+"lon": "23 dgEast",
+"from": "1992-1-01",
+"to": "2005-12-31",
+"n": 5114
+},
+{
+"file": "cz-valecov.dwf",
+"name": "CZRISWC03",
+"lat": "49.64\tdgNorth",
+"lon": "14.5\tdgEast",
+"from": "1991-1-1",
+"to": "2005-12-19",
+"n": 5467
+},
+{
+"file": "sk-bratislava.dwf",
+"name": "Bratislava",
+"lat": "48 dgNorth",
+"lon": "17 dgEast",
+"from": "1990-01-01",
+"to": "2006-05-31",
+"n": 5995
+}
+],
+"dlf": [
+{
+"file": "daily-water-flux.dlf",
+"desc": "Daily matrix water flux at 24 depths (daisy-r-tools)"
+},
+{
+"file": "soil-chemical-110cm.dlf",
+"desc": "Soil chemical at 110 cm: mass balance example (daisy-r-tools)"
+},
+{
+"file": "annual-field-nitrogen-3b.dlf",
+"desc": "Annual field nitrogen, run 3b (daisy-r-tools)"
+},
+{
+"file": "annual-field-nitrogen-4b.dlf",
+"desc": "Annual field nitrogen, run 4b (daisy-r-tools)"
+},
+{
+"file": "annual-tracer-3b.dlf",
+"desc": "Annual tracer, run 3b (daisy-r-tools)"
+},
+{
+"file": "optim-field-nitrogen.dlf",
+"desc": "Field nitrogen of the calibration example (daisypy-optim)"
+},
+{
+"file": "optim-measured-field-nitrogen.csv",
+"desc": "Measured field nitrogen for the calibration example (daisypy-optim)"
+},
+{
+"file": "course-field-LAI.csv",
+"desc": "Measured LAI of the Daisy course (daisy-r-tools)"
+},
+{
+"file": "denitrification-args-and-targets.csv",
+"desc": "Inputs and Daisy results of the default denitrification, 792 rows (python-extensions)"
+},
+{
+"file": "denitrification-expected.csv",
+"desc": "Expected denitrification of the Daisy test (python-extensions)"
+}
+],
+"dai": [
+{
+"file": "ArableFarmRotation.dai",
+"path": "swafl/ArableFarmRotation.dai",
+"group": "1 Start here: the SWAFL farm",
+"title": "Arable farm rotation",
+"desc": "The farm of the SWAFL runs: spring and winter barley, winter rape and winter wheat, rainfed.",
+"bytes": 4451
+},
+{
+"file": "ArableFarmRotation_withirrigation.dai",
+"path": "swafl/ArableFarmRotation_withirrigation.dai",
+"group": "1 Start here: the SWAFL farm",
+"title": "Arable farm rotation with irrigation",
+"desc": "The same rotation with the irrigation of the SWAFL experiments.",
+"bytes": 4521
+},
+{
+"file": "OutputLog.dai",
+"path": "swafl/OutputLog.dai",
+"group": "1 Start here: the SWAFL farm",
+"title": "Output logs of the farm",
+"desc": "The logs that every SWAFL run writes (yield, water, nitrogen).",
+"bytes": 1932
+},
+{
+"file": "ResFarm.dai",
+"path": "swafl/ResFarm.dai",
+"group": "1 Start here: the SWAFL farm",
+"title": "Soil and column of the farm",
+"desc": "The ResFarm soil, the column, the weather link and free drainage.",
+"bytes": 5686
+},
+{
+"file": "beetroot.dai",
+"path": "lib/beetroot.dai",
+"group": "2 Crops",
+"title": "Beetroot",
+"desc": "Crop parameters: Beetroot.",
+"bytes": 3304
+},
+{
+"file": "broccoli.dai",
+"path": "lib/broccoli.dai",
+"group": "2 Crops",
+"title": "Broccoli",
+"desc": "Crop parameters: Broccoli.",
+"bytes": 4146
+},
+{
+"file": "brusselssprouts.dai",
+"path": "lib/brusselssprouts.dai",
+"group": "2 Crops",
+"title": "Brusselssprouts",
+"desc": "Crop parameters: Brussels.",
+"bytes": 4097
+},
+{
+"file": "celeriac.dai",
+"path": "lib/celeriac.dai",
+"group": "2 Crops",
+"title": "Celeriac",
+"desc": "Crop parameters: Celeriac.",
+"bytes": 4103
+},
+{
+"file": "dk-grass.dai",
+"path": "lib/dk-grass.dai",
+"group": "2 Crops",
+"title": "Dk grass",
+"desc": "Crop parameters: Froegraes, Graes, Red.",
+"bytes": 6350
+},
+{
+"file": "dk-maize.dai",
+"path": "lib/dk-maize.dai",
+"group": "2 Crops",
+"title": "Dk maize",
+"desc": "Crop parameters: Silomajs.",
+"bytes": 7974
+},
+{
+"file": "dk-pea.dai",
+"path": "lib/dk-pea.dai",
+"group": "2 Crops",
+"title": "Dk pea",
+"desc": "Crop parameters: Aert.",
+"bytes": 4924
+},
+{
+"file": "dk-rye.dai",
+"path": "lib/dk-rye.dai",
+"group": "2 Crops",
+"title": "Dk rye",
+"desc": "Crop parameters: Rug.",
+"bytes": 4894
+},
+{
+"file": "dk-sbarley.dai",
+"path": "lib/dk-sbarley.dai",
+"group": "2 Crops",
+"title": "Dk sbarley",
+"desc": "Crop parameters: Vaarbyg.",
+"bytes": 4546
+},
+{
+"file": "dk-wbarley.dai",
+"path": "lib/dk-wbarley.dai",
+"group": "2 Crops",
+"title": "Dk wbarley",
+"desc": "Crop parameters: Vinterbyg.",
+"bytes": 4788
+},
+{
+"file": "dk-wrape.dai",
+"path": "lib/dk-wrape.dai",
+"group": "2 Crops",
+"title": "Dk wrape",
+"desc": "Crop parameters: Vinterraps.",
+"bytes": 5208
+},
+{
+"file": "dk-wwheat.dai",
+"path": "lib/dk-wwheat.dai",
+"group": "2 Crops",
+"title": "Dk wwheat",
+"desc": "Crop parameters: Vinterhvede.",
+"bytes": 4847
+},
+{
+"file": "earlypotato.dai",
+"path": "lib/earlypotato.dai",
+"group": "2 Crops",
+"title": "Earlypotato",
+"desc": "Crop parameters: Potato, Early.",
+"bytes": 4445
+},
+{
+"file": "earlywhitecabbage.dai",
+"path": "lib/earlywhitecabbage.dai",
+"group": "2 Crops",
+"title": "Earlywhitecabbage",
+"desc": "Crop parameters: Early.",
+"bytes": 1287
+},
+{
+"file": "fodderbeet.dai",
+"path": "lib/fodderbeet.dai",
+"group": "2 Crops",
+"title": "Fodderbeet",
+"desc": "Crop parameters: Fodder.",
+"bytes": 2731
+},
+{
+"file": "grass.dai",
+"path": "lib/grass.dai",
+"group": "2 Crops",
+"title": "Grass",
+"desc": "Crop parameters: Grass.",
+"bytes": 3236
+},
+{
+"file": "grass2.dai",
+"path": "lib/grass2.dai",
+"group": "2 Crops",
+"title": "Grass2",
+"desc": "Crop parameters: Grass.",
+"bytes": 3879
+},
+{
+"file": "maize.dai",
+"path": "lib/maize.dai",
+"group": "2 Crops",
+"title": "Maize",
+"desc": "Crop parameters: Maize, Pioneer, Ikuwala, Silage.",
+"bytes": 7259
+},
+{
+"file": "beet-old.dai",
+"path": "lib/beet-old.dai",
+"group": "2 Crops",
+"title": "Old Beet",
+"desc": "Crop parameters: Beet.",
+"bytes": 4163
+},
+{
+"file": "grass-old.dai",
+"path": "lib/grass-old.dai",
+"group": "2 Crops",
+"title": "Old Grass",
+"desc": "Crop parameters: Grass.",
+"bytes": 3675
+},
+{
+"file": "pea-old.dai",
+"path": "lib/pea-old.dai",
+"group": "2 Crops",
+"title": "Old Pea",
+"desc": "Crop parameters: Pea.",
+"bytes": 3289
+},
+{
+"file": "potato-old.dai",
+"path": "lib/potato-old.dai",
+"group": "2 Crops",
+"title": "Old Potato",
+"desc": "Crop parameters: Potato.",
+"bytes": 4158
+},
+{
+"file": "sbarley-old.dai",
+"path": "lib/sbarley-old.dai",
+"group": "2 Crops",
+"title": "Old Sbarley",
+"desc": "Crop parameters: Spring.",
+"bytes": 3324
+},
+{
+"file": "srape-old.dai",
+"path": "lib/srape-old.dai",
+"group": "2 Crops",
+"title": "Old Srape",
+"desc": "Crop parameters: Spring.",
+"bytes": 3757
+},
+{
+"file": "wbarley-old.dai",
+"path": "lib/wbarley-old.dai",
+"group": "2 Crops",
+"title": "Old Wbarley",
+"desc": "Crop parameters: Winter.",
+"bytes": 3275
+},
+{
+"file": "wrape-old.dai",
+"path": "lib/wrape-old.dai",
+"group": "2 Crops",
+"title": "Old Wrape",
+"desc": "Crop parameters: Winter.",
+"bytes": 3396
+},
+{
+"file": "wwheat-old.dai",
+"path": "lib/wwheat-old.dai",
+"group": "2 Crops",
+"title": "Old Wwheat",
+"desc": "Crop parameters: Winter.",
+"bytes": 3765
+},
+{
+"file": "onion.dai",
+"path": "lib/onion.dai",
+"group": "2 Crops",
+"title": "Onion",
+"desc": "Crop parameters: Onion.",
+"bytes": 3392
+},
+{
+"file": "onion_plantingofsets.dai",
+"path": "lib/onion_plantingofsets.dai",
+"group": "2 Crops",
+"title": "Onion plantingofsets",
+"desc": "Crop parameters: Onion.",
+"bytes": 633
+},
+{
+"file": "pea.dai",
+"path": "lib/pea.dai",
+"group": "2 Crops",
+"title": "Pea",
+"desc": "Crop parameters: Pea, Green.",
+"bytes": 3769
+},
+{
+"file": "potato.dai",
+"path": "lib/potato.dai",
+"group": "2 Crops",
+"title": "Potato",
+"desc": "Crop parameters: Potato.",
+"bytes": 11768
+},
+{
+"file": "rye.dai",
+"path": "lib/rye.dai",
+"group": "2 Crops",
+"title": "Rye",
+"desc": "Crop parameters: Rye.",
+"bytes": 3241
+},
+{
+"file": "ryegrass.dai",
+"path": "lib/ryegrass.dai",
+"group": "2 Crops",
+"title": "Ryegrass",
+"desc": "Crop parameters: Ryegrass.",
+"bytes": 4556
+},
+{
+"file": "sbarley.dai",
+"path": "lib/sbarley.dai",
+"group": "2 Crops",
+"title": "Sbarley",
+"desc": "Crop parameters: Spring.",
+"bytes": 4597
+},
+{
+"file": "sbeet.dai",
+"path": "lib/sbeet.dai",
+"group": "2 Crops",
+"title": "Sbeet",
+"desc": "Crop parameters: Sugar.",
+"bytes": 3596
+},
+{
+"file": "srape.dai",
+"path": "lib/srape.dai",
+"group": "2 Crops",
+"title": "Srape",
+"desc": "Crop parameters: Spring.",
+"bytes": 3506
+},
+{
+"file": "sugarbeet.dai",
+"path": "lib/sugarbeet.dai",
+"group": "2 Crops",
+"title": "Sugarbeet",
+"desc": "Crop parameters: Sugar.",
+"bytes": 3019
+},
+{
+"file": "swheat.dai",
+"path": "lib/swheat.dai",
+"group": "2 Crops",
+"title": "Swheat",
+"desc": "Crop parameters: Spring.",
+"bytes": 2872
+},
+{
+"file": "wbarley.dai",
+"path": "lib/wbarley.dai",
+"group": "2 Crops",
+"title": "Wbarley",
+"desc": "Crop parameters: Winter.",
+"bytes": 7418
+},
+{
+"file": "wclover.dai",
+"path": "lib/wclover.dai",
+"group": "2 Crops",
+"title": "Wclover",
+"desc": "Crop parameters: Wclover.",
+"bytes": 4724
+},
+{
+"file": "whitecabbage.dai",
+"path": "lib/whitecabbage.dai",
+"group": "2 Crops",
+"title": "Whitecabbage",
+"desc": "Crop parameters: White.",
+"bytes": 4163
+},
+{
+"file": "wrape.dai",
+"path": "lib/wrape.dai",
+"group": "2 Crops",
+"title": "Wrape",
+"desc": "Crop parameters: Winter.",
+"bytes": 3614
+},
+{
+"file": "wwheat.dai",
+"path": "lib/wwheat.dai",
+"group": "2 Crops",
+"title": "Wwheat",
+"desc": "Crop parameters: Winter.",
+"bytes": 11533
+},
+{
+"file": "cz-soil.dai",
+"path": "sample/cz-soil.dai",
+"group": "3 Soils and soil horizons",
+"title": "Czech soil",
+"desc": "Soil profile of the Czech sample.",
+"bytes": 5140
+},
+{
+"file": "dk-horizon.dai",
+"path": "lib/dk-horizon.dai",
+"group": "3 Soils and soil horizons",
+"title": "Danish soil horizons JB1 to JB7",
+"desc": "Soil horizons with van Genuchten hydraulics, texture and humus.",
+"bytes": 7954
+},
+{
+"file": "dk-soil.dai",
+"path": "sample/dk-soil.dai",
+"group": "3 Soils and soil horizons",
+"title": "Danish soils",
+"desc": "Complete soil profiles built from the horizons (Askov, Jyndevad, Foulum and others).",
+"bytes": 6639
+},
+{
+"file": "init-soil.dai",
+"path": "sample/init-soil.dai",
+"group": "3 Soils and soil horizons",
+"title": "Initial soil water and nitrogen",
+"desc": "How to set the starting contents of the soil.",
+"bytes": 2957
+},
+{
+"file": "it-soil.dai",
+"path": "sample/it-soil.dai",
+"group": "3 Soils and soil horizons",
+"title": "Italian soils",
+"desc": "Soil profiles of the Italian sample.",
+"bytes": 1968
+},
+{
+"file": "pl-soil.dai",
+"path": "sample/pl-soil.dai",
+"group": "3 Soils and soil horizons",
+"title": "Polish soil",
+"desc": "Soil profile of the Polish sample.",
+"bytes": 2196
+},
+{
+"file": "sk-soil.dai",
+"path": "sample/sk-soil.dai",
+"group": "3 Soils and soil horizons",
+"title": "Slovak soil",
+"desc": "Soil profile of the Slovak sample.",
+"bytes": 2669
+},
+{
+"file": "pedo-soil.dai",
+"path": "sample/pedo-soil.dai",
+"group": "3 Soils and soil horizons",
+"title": "Soil from pedotransfer functions",
+"desc": "A JB1 soil whose hydraulics come from pedotransfer functions.",
+"bytes": 1468
+},
+{
+"file": "dk-fertilizer.dai",
+"path": "lib/dk-fertilizer.dai",
+"group": "4 Fertilisers and manure",
+"title": "Danish fertilisers and slurries",
+"desc": "Danish manure and slurry types.",
+"bytes": 11985
+},
+{
+"file": "fertilizer.dai",
+"path": "lib/fertilizer.dai",
+"group": "4 Fertilisers and manure",
+"title": "Fertilisers (general)",
+"desc": "Mineral fertilisers and manures with their nitrogen fractions.",
+"bytes": 2996
+},
+{
+"file": "markvand.dai",
+"path": "lib/markvand.dai",
+"group": "4 Fertilisers and manure",
+"title": "Field water and irrigation water",
+"desc": "Water types for irrigation, with their nitrate content.",
+"bytes": 7502
+},
+{
+"file": "chemistry-base.dai",
+"path": "lib/chemistry-base.dai",
+"group": "5 Chemicals and pesticides",
+"title": "Chemicals: standard definitions",
+"desc": "The basic chemical definitions that the others build on.",
+"bytes": 4105
+},
+{
+"file": "chemistry.dai",
+"path": "lib/chemistry.dai",
+"group": "5 Chemicals and pesticides",
+"title": "Pesticides",
+"desc": "Standard pesticides with decay and sorption.",
+"bytes": 1551
+},
+{
+"file": "PFAS.dai",
+"path": "lib/PFAS.dai",
+"group": "5 Chemicals and pesticides",
+"title": "PFAS compounds",
+"desc": "Ways of defining PFAS compounds.",
+"bytes": 4620
+},
+{
+"file": "PFAS-sample.dai",
+"path": "sample/PFAS-sample.dai",
+"group": "5 Chemicals and pesticides",
+"title": "PFAS transport sample",
+"desc": "A set-up that simulates PFAS transport.",
+"bytes": 4075
+},
+{
+"file": "DrainDrying.dai",
+"path": "sample/DrainDrying.dai",
+"group": "6 Tillage and irrigation",
+"title": "Drainage and drying of a soil",
+"desc": "Two set-ups that test how a soil drains and dries.",
+"bytes": 3901
+},
+{
+"file": "irrigation.dai",
+"path": "sample/irrigation.dai",
+"group": "6 Tillage and irrigation",
+"title": "Irrigation strategies",
+"desc": "Tensiometer and content triggers of irrigation.",
+"bytes": 2971
+},
+{
+"file": "tillage.dai",
+"path": "lib/tillage.dai",
+"group": "6 Tillage and irrigation",
+"title": "Tillage operations",
+"desc": "Ploughing, harrowing and other soil operations.",
+"bytes": 493
+},
+{
+"file": "log.dai",
+"path": "lib/log.dai",
+"group": "7 Output logs",
+"title": "Log files (all kinds)",
+"desc": "The log types that Daisy can write: yield, water, nitrogen, soil, weather.",
+"bytes": 158043
+},
+{
+"file": "ui-Qt.dai",
+"path": "lib/ui-Qt.dai",
+"group": "7 Output logs",
+"title": "Logs for the Qt interface",
+"desc": "Logs used by the former Daisy window program.",
+"bytes": 466
+},
+{
+"file": "log-old.dai",
+"path": "lib/log-old.dai",
+"group": "7 Output logs",
+"title": "Old log definitions",
+"desc": "Log definitions of older versions, kept for old set-ups.",
+"bytes": 9361
+},
+{
+"file": "log-sample.dai",
+"path": "sample/log-sample.dai",
+"group": "7 Output logs",
+"title": "Sample log files",
+"desc": "A small set-up that writes sample logs.",
+"bytes": 981
+},
+{
+"file": "log-std.dai",
+"path": "lib/log-std.dai",
+"group": "7 Output logs",
+"title": "Standard logs",
+"desc": "The standard daily and annual logs.",
+"bytes": 75504
+},
+{
+"file": "afforestation.dai",
+"path": "sample/afforestation.dai",
+"group": "8 Complete example set-ups",
+"title": "Afforestation",
+"desc": "A forest planted on arable land.",
+"bytes": 6952
+},
+{
+"file": "batch.dai",
+"path": "sample/batch.dai",
+"group": "8 Complete example set-ups",
+"title": "Batch runs",
+"desc": "How to run many set-ups in a batch.",
+"bytes": 1288
+},
+{
+"file": "cz-sample.dai",
+"path": "sample/cz-sample.dai",
+"group": "8 Complete example set-ups",
+"title": "Czech sample",
+"desc": "A complete Czech set-up (FertOrgaNic project).",
+"bytes": 474
+},
+{
+"file": "it-sample.dai",
+"path": "sample/it-sample.dai",
+"group": "8 Complete example set-ups",
+"title": "Italian sample",
+"desc": "A complete Italian set-up.",
+"bytes": 838
+},
+{
+"file": "pl-sample.dai",
+"path": "sample/pl-sample.dai",
+"group": "8 Complete example set-ups",
+"title": "Polish sample",
+"desc": "A complete Polish set-up (FertOrgaNic project).",
+"bytes": 652
+},
+{
+"file": "safir-common.dai",
+"path": "sample/safir-common.dai",
+"group": "8 Complete example set-ups",
+"title": "SAFIR common calibration",
+"desc": "Calibrations common to the SAFIR sites.",
+"bytes": 6286
+},
+{
+"file": "safir-site.dai",
+"path": "sample/safir-site.dai",
+"group": "8 Complete example set-ups",
+"title": "SAFIR field site",
+"desc": "A site set-up of the SAFIR project.",
+"bytes": 12202
+},
+{
+"file": "test-refman.dai",
+"path": "sample/test-refman.dai",
+"group": "8 Complete example set-ups",
+"title": "Set-up for the reference manual",
+"desc": "A short set-up that uses the Daisy libraries.",
+"bytes": 472
+},
+{
+"file": "sk-sample.dai",
+"path": "sample/sk-sample.dai",
+"group": "8 Complete example set-ups",
+"title": "Slovak sample",
+"desc": "A complete Slovak set-up.",
+"bytes": 695
+},
+{
+"file": "sample.dai",
+"path": "sample/sample.dai",
+"group": "8 Complete example set-ups",
+"title": "Small sample set-up",
+"desc": "A small complete set-up built from the sample files.",
+"bytes": 917
+},
+{
+"file": "test.dai",
+"path": "sample/test.dai",
+"group": "8 Complete example set-ups",
+"title": "Tutorial set-up",
+"desc": "The set-up used in the Daisy tutorial.",
+"bytes": 2164
+},
+{
+"file": "cz-management.dai",
+"path": "sample/cz-management.dai",
+"group": "9 Management of example farms",
+"title": "Czech management",
+"desc": "Management of the Czech sample.",
+"bytes": 21672
+},
+{
+"file": "dk-management.dai",
+"path": "sample/dk-management.dai",
+"group": "9 Management of example farms",
+"title": "Danish crop management",
+"desc": "Sowing, fertilising, irrigation and harvest of common Danish crops.",
+"bytes": 9081
+},
+{
+"file": "dk-veg-man.dai",
+"path": "sample/dk-veg-man.dai",
+"group": "9 Management of example farms",
+"title": "Danish vegetable management",
+"desc": "Management of vegetables, Aarhus County 2004/2005.",
+"bytes": 8381
+},
+{
+"file": "it-management.dai",
+"path": "sample/it-management.dai",
+"group": "9 Management of example farms",
+"title": "Italian management",
+"desc": "Management for 1996 to 2004.",
+"bytes": 4385
+},
+{
+"file": "OpenMI_management.dai",
+"path": "sample/OpenMI_management.dai",
+"group": "9 Management of example farms",
+"title": "Management through OpenMI",
+"desc": "Management imported from another model through OpenMI.",
+"bytes": 2403
+},
+{
+"file": "pl-management.dai",
+"path": "sample/pl-management.dai",
+"group": "9 Management of example farms",
+"title": "Polish management",
+"desc": "Management of the Polish sample.",
+"bytes": 3798
+},
+{
+"file": "sk-management.dai",
+"path": "sample/sk-management.dai",
+"group": "9 Management of example farms",
+"title": "Slovak management",
+"desc": "Management of the Slovak sample.",
+"bytes": 8740
+},
+{
+"file": "test-aba.dai",
+"path": "sample/test-aba.dai",
+"group": "10 Special topics and tests",
+"title": "Abscisic acid (ABA)",
+"desc": "Plant signal of drying soil.",
+"bytes": 5009
+},
+{
+"file": "test-minimize.dai",
+"path": "sample/test-minimize.dai",
+"group": "10 Special topics and tests",
+"title": "Automatic calibration",
+"desc": "Daisy minimises the error of a parameter.",
+"bytes": 2557
+},
+{
+"file": "test-cp.dai",
+"path": "sample/test-cp.dai",
+"group": "10 Special topics and tests",
+"title": "Checkpoint",
+"desc": "Writes a checkpoint of the whole state.",
+"bytes": 690
+},
+{
+"file": "test-colloids.dai",
+"path": "sample/test-colloids.dai",
+"group": "10 Special topics and tests",
+"title": "Colloids",
+"desc": "Transport of colloids in the soil.",
+"bytes": 18739
+},
+{
+"file": "checkpoint-1988-4-1+1.dai",
+"path": "sample/checkpoint-1988-4-1+1.dai",
+"group": "10 Special topics and tests",
+"title": "Example checkpoint",
+"desc": "A saved state of a simulation, for a hot start.",
+"bytes": 33772
+},
+{
+"file": "genweather.dai",
+"path": "sample/genweather.dai",
+"group": "10 Special topics and tests",
+"title": "Generated weather",
+"desc": "Automatic generation of weather files.",
+"bytes": 6318
+},
+{
+"file": "heat-properties.dai",
+"path": "sample/heat-properties.dai",
+"group": "10 Special topics and tests",
+"title": "Heat properties of the soil",
+"desc": "Thermal properties and their options.",
+"bytes": 22941
+},
+{
+"file": "test-organic.dai",
+"path": "sample/test-organic.dai",
+"group": "10 Special topics and tests",
+"title": "New organic matter template",
+"desc": "A new organic matter model.",
+"bytes": 4461
+},
+{
+"file": "test-prd.dai",
+"path": "sample/test-prd.dai",
+"group": "10 Special topics and tests",
+"title": "Partial root-zone drying",
+"desc": "Irrigation of half of the root zone at a time.",
+"bytes": 22201
+},
+{
+"file": "test-post.dai",
+"path": "sample/test-post.dai",
+"group": "10 Special topics and tests",
+"title": "Post-processing of logs",
+"desc": "Converts .dlf files after a run.",
+"bytes": 502
+},
+{
+"file": "test-python.dai",
+"path": "sample/test-python.dai",
+"group": "10 Special topics and tests",
+"title": "Python inside Daisy",
+"desc": "Calls a Python function from Daisy.",
+"bytes": 568
+},
+{
+"file": "test-GP2D.dai",
+"path": "sample/test-GP2D.dai",
+"group": "10 Special topics and tests",
+"title": "Root density in two dimensions",
+"desc": "The GP2D root density program.",
+"bytes": 1243
+},
+{
+"file": "rootmatch.dai",
+"path": "sample/rootmatch.dai",
+"group": "10 Special topics and tests",
+"title": "Root measurements",
+"desc": "Compares root measurements with Daisy.",
+"bytes": 1163
+},
+{
+"file": "io-sample.dai",
+"path": "tools/io-sample.dai",
+"group": "10 Special topics and tests",
+"title": "Sample for file reading",
+"desc": "A small set-up used to test the reading of .dai files.",
+"bytes": 964
+},
+{
+"file": "test-scn.dai",
+"path": "sample/test-scn.dai",
+"group": "10 Special topics and tests",
+"title": "Scenario from a checkpoint",
+"desc": "Starts from the checkpoint of test-cp.",
+"bytes": 1037
+},
+{
+"file": "sample-heat.dai",
+"path": "sample/sample-heat.dai",
+"group": "10 Special topics and tests",
+"title": "Soil heat sample",
+"desc": "A set-up with soil heat and ice.",
+"bytes": 11955
+},
+{
+"file": "test-spawn.dai",
+"path": "sample/test-spawn.dai",
+"group": "10 Special topics and tests",
+"title": "Spawning runs",
+"desc": "Runs scenarios from a running set-up.",
+"bytes": 3105
+},
+{
+"file": "optim-template.dai",
+"path": "tools/optim-template.dai",
+"group": "10 Special topics and tests",
+"title": "Template for calibration",
+"desc": "A set-up with {placeholders} that the optimiser fills.",
+"bytes": 1490
+},
+{
+"file": "OpenMI_simple.dai",
+"path": "sample/OpenMI_simple.dai",
+"group": "10 Special topics and tests",
+"title": "Two columns through OpenMI",
+"desc": "Two bare-soil columns coupled through OpenMI.",
+"bytes": 2434
+},
+{
+"file": "crop.dai",
+"path": "lib/crop.dai",
+"group": "11 Library index files",
+"title": "All crops (index)",
+"desc": "Includes the current crop files.",
+"bytes": 757
+},
+{
+"file": "dk-crop.dai",
+"path": "lib/dk-crop.dai",
+"group": "11 Library index files",
+"title": "Danish crops (index)",
+"desc": "Includes the Danish crop files.",
+"bytes": 296
+},
+{
+"file": "all.dai",
+"path": "lib/all.dai",
+"group": "11 Library index files",
+"title": "Everything (index)",
+"desc": "Includes all standard Daisy parameterisations.",
+"bytes": 488
+},
+{
+"file": "mini.dai",
+"path": "lib/mini.dai",
+"group": "11 Library index files",
+"title": "MiniDaisy defaults",
+"desc": "Default parameters of the small MiniDaisy.",
+"bytes": 379
+},
+{
+"file": "crop-old.dai",
+"path": "lib/crop-old.dai",
+"group": "11 Library index files",
+"title": "Old crops (index)",
+"desc": "Includes the old crop parameterisations.",
+"bytes": 560
+},
+{
+"file": "OpenMI.dai",
+"path": "lib/OpenMI.dai",
+"group": "11 Library index files",
+"title": "OpenMI exchange items",
+"desc": "Input and output items for coupling through OpenMI.",
+"bytes": 7404
+},
+{
+"file": "vegetation.dai",
+"path": "lib/vegetation.dai",
+"group": "11 Library index files",
+"title": "Permanent vegetation",
+"desc": "Parameters of permanent vegetation.",
+"bytes": 4325
+}
+]
+}

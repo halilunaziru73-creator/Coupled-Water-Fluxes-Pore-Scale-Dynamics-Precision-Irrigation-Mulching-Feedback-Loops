@@ -17,3 +17,22 @@
 #dzXRef button[data-pick]{color:inherit}
 #dzXRef [data-pick] .pnote{color:inherit;opacity:.75}
 #dzXSet .dzpan{background:#ECE9D8}
+
+/* guidance, topic chips and file info of the set-up editor and the parameter library */
+.dzhelp{background:#FFFFE1;border:1px solid #808080;padding:7px 10px;margin:0 0 8px;line-height:1.45}
+.dzinfo{background:#EEF1F8;border:1px solid #9AA6C4;border-left:4px solid #0A246A;padding:6px 10px;margin:4px 0 8px;line-height:1.4}
+.dzwide{min-width:340px;max-width:100%}
+.dzchips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 6px}
+.dzchip{font:inherit;padding:4px 10px;background:#D4D0C8;border:2px solid;border-color:#fff #404040 #404040 #fff;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.dzchip i{font-style:normal;font-size:.85em;background:#fff;border:1px solid #808080;padding:0 5px}
+.dzchip.on{background:#0A246A;color:#fff;border-color:#404040 #fff #fff #404040}
+.dzchip.on i{color:#0A246A}
+.dzsplit{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start}
+.dzsplit .dzlist{flex:0 0 300px;max-height:520px;overflow:auto;border:2px inset #fff;background:#fff}
+.dzsplit .dzdet{flex:1;min-width:300px}
+.dzlist .dzol-i{padding:3px 8px;cursor:pointer}
+.dzlist .dzol-i.sel{background:#0A246A;color:#fff}
+.dzlist .dzol-i.sel .pnote{color:#dde}
+.dzw .dzchips .dzchip{background:#D4D0C8;color:#000;border-radius:0;border:2px solid;border-color:#fff #404040 #404040 #fff;box-shadow:none}
+.dzw .dzchips .dzchip i{color:#0A246A;background:#fff;border-radius:0}
+.dzw .dzchips .dzchip.on{background:#0A246A;color:#fff;border-color:#404040 #fff #fff #404040}
