@@ -18,9 +18,7 @@ const Props = (() => {
         { t: 'seg', label: 'Tillage', id: 'till', opts: Object.entries(M.tills), get: s => s.state.till, on: v => E.set({ till: v }) },
         SL('tcIdx', 'Structural consolidation rate', 4, 'tc') ] },
       { id: 'p-crop', name: 'Crop', rows: [
-{ t: 'select', label: 'Crop', id: 'crop', opts: M.crops, groups: M.cropGroups, get: s => s.state.crop, on: v => E.set({ crop: v }) },
-{ t: 'select', label: 'Crop of the 20 seasons (reliability, water balance, nitrogen)', id: 'yrcrop', opts: [['interest', 'The crop of interest (the crop above)'], ['long', 'The long crop (tree, vine or palm in the field all year)']], get: s => s.state.yrCrop || 'interest', on: v => E.set({ yrCrop: v }) },
-{ t: 'select', label: 'Long crop', id: 'longcrop', opts: [['olive', 'Olive'], ['citrus', 'Citrus'], ['apple', 'Apple'], ['pear', 'Pear'], ['peach', 'Peach'], ['almond', 'Almond'], ['walnut', 'Walnut'], ['pistachio', 'Pistachio'], ['winegrape', 'Wine grape'], ['tablegrape', 'Table grape'], ['kiwi', 'Kiwi'], ['avocado', 'Avocado'], ['mango', 'Mango'], ['datepalm', 'Date palm'], ['oilpalm', 'Oil palm'], ['cocoa', 'Cocoa'], ['coconut', 'Coconut']], get: s => s.state.longCrop || 'olive', on: v => E.set({ longCrop: v }) } ] },
+{ t: 'select', label: 'Crop', id: 'crop', opts: M.crops, groups: M.cropGroups, get: s => s.state.crop, on: v => E.set({ crop: v }) } ] },
       { id: 'p-mul', name: 'Mulch', rows: [
         { t: 'select', label: 'Material', id: 'mulch', opts: M.mulches, get: s => s.state.mulchType, on: v => E.setMulch(v) },
         SL('vffIdx', 'Strength (vapour-flux factor)', 9, 'vff'), SL('capIdx', 'Interception capacity (mm)', 3, 'cap') ] },

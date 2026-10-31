@@ -243,7 +243,10 @@ const DaisyUI = (() => {
       const f0 = $('Ll').querySelector('[data-i]'); if (f0 && !q) f0.click(); else if (!f0) $('Ld').innerHTML = '<p class="pnote">Nothing matches. Clear the search box.</p>';
     };
     $('Lchips').querySelectorAll('.dzchip').forEach(c => c.onclick = () => { S.kind = c.dataset.k; $('LQ').value = ''; $('Ld').innerHTML = ''; list(); });
-    function detail(x) {
+    // every item of the library can be tested at once: it becomes a value of the experiment (or a log of every run)
+    const expBtn = x => { const d = $('Ld'); if (!d || d.querySelector('#dzLexp') || !window.DaisyExpUI || !window.DaisyExpUI.addLib) return; const b = document.createElement('div'); b.className = 'dzrow'; b.innerHTML = '<button class="btn pri" id="dzLexp">' + (S.kind === 'logs' ? 'Write this log in every run of my experiment' : 'Test it in an experiment') + ' &#9656;</button><span class="pnote">' + (S.kind === 'logs' ? 'It is added to the logs of the runs.' : 'It becomes a value to compare in the tab Experiments.') + '</span>'; d.appendChild(b); $('Lexp').onclick = () => { try { window.DaisyExpUI.addLib(S.kind, x); show_('exp'); } catch (e) { note('Lus', esc(e.message), 1); } }; };
+    function detail(x) { detail0(x); setTimeout(() => expBtn(x), 0); setTimeout(() => expBtn(x), 700); }
+    function detail0(x) {
       const d = $('Ld'); if (S.kind === 'horizons') {
         const p = hzP(x); if (!p) { d.innerHTML = '<b>' + esc(x.name) + '</b><p class="pnote">This horizon has no van Genuchten parameters.</p>'; return; }
         const f = CA.fcwp(p), tex = texture(x.clay, x.silt, x.sand);
@@ -470,5 +473,5 @@ const DaisyUI = (() => {
     document.querySelectorAll('.dztabs button').forEach(b => b.onclick = () => show(b.dataset.t)); if (window.DaisyCite) { if (S.mo) S.mo.disconnect(); S.mo = window.DaisyCite.attach(document.getElementById('dzBody')); } show(HTML[tab] || EXT[tab] ? tab : S.tab, arg);
   }
   const kit = { setup, nice, OKI, SPEC, fmt, heat: heatChart, line: lineChart, savePng };
-  return { open, TABS, state: S, loadBundled, chart: lineChart, kit, S, EXT, register: (id, x) => { EXT[id] = x; }, addLog, names, refreshSelects, regList, note, esc, getText, getIdx, isDesk, show, download, parseAny, buf, sel, logSel, csvOf, dstr };
+  return { open, getLib, TABS, state: S, loadBundled, chart: lineChart, kit, S, EXT, register: (id, x) => { EXT[id] = x; }, addLog, names, refreshSelects, regList, note, esc, getText, getIdx, isDesk, show, download, parseAny, buf, sel, logSel, csvOf, dstr };
 })();

@@ -26,9 +26,33 @@ const FieldMap = (() => {
       read: v => v < 0.02 ? 'no green leaves' : v < 0.08 ? 'few green leaves' : v < 0.16 ? 'moderate green cover' : 'dense green cover' },
     ExG: { name: 'Excess Green 2g − r − b (Woebbecke et al., 1995)', bands: 'chromatic Red, Green, Blue of the photo', use: 'Separates plants from soil (computer vision of crops)', ramp: 'veg', lo: -0.1, hi: 0.4,
       read: v => v < 0.03 ? 'soil or residue' : v < 0.1 ? 'mixed soil and plants' : 'plants' },
+    GNDVI: { name: 'Green Normalized Difference Vegetation Index (Gitelson et al., 1996)', bands: 'Green, NIR', use: 'Chlorophyll and nitrogen in a dense canopy, where NDVI saturates', ramp: 'veg', lo: -0.1, hi: 0.85,
+      read: v => v < 0.2 ? 'bare soil or very sparse crop' : v < 0.4 ? 'low chlorophyll' : v < 0.6 ? 'moderate chlorophyll' : 'high chlorophyll' },
+    MSAVI2: { name: 'Modified Soil-Adjusted Vegetation Index (Qi et al., 1994)', bands: 'Red, NIR (self-adjusting soil factor)', use: 'Early growth and sparse crops on bright or dark soil', ramp: 'veg', lo: -0.1, hi: 0.8,
+      read: v => v < 0.15 ? 'bare soil' : v < 0.3 ? 'emerging or sparse crop' : v < 0.5 ? 'moderate cover' : 'full cover' },
+    NBR: { name: 'Normalized Burn Ratio (Key and Benson, 2006)', bands: 'NIR, SWIR 2', use: 'Burnt fields, dry residue and the water of the canopy', ramp: 'veg', lo: -0.4, hi: 0.7,
+      read: v => v < 0 ? 'burnt, bare or very dry' : v < 0.2 ? 'dry residue or stressed crop' : v < 0.4 ? 'moderate green cover' : 'healthy green canopy' },
+    BSI: { name: 'Bare Soil Index (Rikimaru et al., 2002)', bands: 'Blue, Red, NIR, SWIR 1', use: 'Bare soil against crop cover: tillage, erosion risk, emergence', ramp: 'bsi', lo: -0.4, hi: 0.3,
+      read: v => v > 0.1 ? 'mostly bare soil' : v > -0.05 ? 'soil and plants mixed' : 'covered by vegetation' },
+    CIre: { name: 'Chlorophyll Index red edge (Gitelson et al., 2003)', bands: 'Red Edge, NIR', use: 'Leaf chlorophyll and nitrogen status; does not saturate in dense crops', ramp: 'veg', lo: 0, hi: 4,
+      read: v => v < 0.5 ? 'little chlorophyll' : v < 1.5 ? 'moderate chlorophyll' : v < 2.5 ? 'good chlorophyll' : 'high chlorophyll' },
     NGRDI: { name: 'Normalized Green Red Difference Index (Tucker, 1979)', bands: 'Red, Green of the photo', use: 'Green biomass from a colour photo', ramp: 'veg', lo: -0.2, hi: 0.3,
       read: v => v < 0 ? 'bare soil or dry vegetation' : v < 0.08 ? 'sparse green biomass' : 'green biomass' }
   };
+  // the extra indices of the Sentinel-2 bands (computed when their bands are in the scene)
+  const XKEYS = ['GNDVI', 'MSAVI2', 'NBR', 'BSI', 'CIre'], XIX = {
+    GNDVI: { need: ['green', 'nir'], f: q => (q.nir - q.green) / (q.nir + q.green) },
+    MSAVI2: { need: ['red', 'nir'], f: q => (2 * q.nir + 1 - Math.sqrt(Math.max(0, (2 * q.nir + 1) ** 2 - 8 * (q.nir - q.red)))) / 2 },
+    NBR: { need: ['nir', 'swir22'], f: q => (q.nir - q.swir22) / (q.nir + q.swir22) },
+    BSI: { need: ['blue', 'red', 'nir', 'swir16'], f: q => ((q.swir16 + q.red) - (q.nir + q.blue)) / ((q.swir16 + q.red) + (q.nir + q.blue)) },
+    CIre: { need: ['rededge1', 'nir'], f: q => q.nir / q.rededge1 - 1 } };
+  // the bands of Sentinel-2 that are read: name, centre wavelength (nm), pixel (m), what they tell
+  const BANDS = { blue: ['B02 blue', 490, 10, 'soil brightness, aerosols (EVI, BSI)'], green: ['B03 green', 560, 10, 'the green peak of chlorophyll (GNDVI)'], red: ['B04 red', 665, 10, 'absorbed by chlorophyll (NDVI, SAVI)'], rededge1: ['B05 red edge', 705, 20, 'the red edge: chlorophyll and nitrogen (NDRE, CIre)'], nir: ['B08 near infrared', 842, 10, 'reflected by the leaf cells: biomass (every index)'], swir16: ['B11 shortwave infrared 1', 1610, 20, 'absorbed by water in leaves and soil (NDWI, BSI)'], swir22: ['B12 shortwave infrared 2', 2190, 20, 'water, dry residue, burnt areas (NBR)'], scl: ['SCL scene classification', 0, 20, 'clouds, shadows, water, snow: masked'] };
+  function spectrum(BL, refl, ndv) {
+    const q = (a, p) => { const v = a.filter(isFinite).sort((x, y) => x - y); return v.length ? v[Math.min(v.length - 1, Math.floor(p * v.length))] : NaN; }, m = a => { const v = a.filter(isFinite); return v.length ? v.reduce((x, y) => x + y, 0) / v.length : NaN; };
+    const lo = q(ndv, 1 / 3), hi = q(ndv, 2 / 3);
+    return BL.map(k => { const a = refl[k]; return { k, wl: BANDS[k][1], mean: m(a), p10: q(a, 0.1), p90: q(a, 0.9), low: m(a.filter((_, i) => ndv[i] <= lo)), high: m(a.filter((_, i) => ndv[i] >= hi)) }; });
+  }
   const KEYS = ['NDVI', 'EVI', 'SAVI', 'NDRE', 'NDWI'], RGBK = ['VARI', 'GLI', 'ExG', 'NGRDI'], RK = () => (F.res && F.res.keys) || KEYS;
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const f2 = v => (v == null || !isFinite(v)) ? '-' : (+v).toFixed(3);
@@ -103,7 +127,7 @@ const FieldMap = (() => {
     if (F.map) { try { F.map.remove(); } catch (e) {} F.map = null; }
     let c0 = F.pts.length ? centroid(F.pts) : null; if (!c0 && window.__WXLOC) { c0 = [window.__WXLOC.lat, window.__WXLOC.lon]; if (!F.place) F.place = window.__WXLOC.name || ''; }
     F.map = L.map(el, { zoomControl: false, attributionControl: true, preferCanvas: false }).setView(c0 || [9.08, 7.4], c0 ? 16 : 6);
-    F.map2 = null; setBase(F.base); F.leg = legendCtl(F.map); F.map.on('click', e => { if (F.mode === 'sensor') { FieldGeo.addAt(e.latlng); return; } if (F.mode !== 'draw') return; F.pts.push([e.latlng.lat, e.latlng.lng]); changed(); });
+    F.map2 = null; setBase(F.base); F.leg = legendCtl(F.map); F.map.on('click', e => { if (F.mode === 'sensor') { FieldGeo.addAt(e.latlng); return; } if (F.mode !== 'draw') return; addCorner([e.latlng.lat, e.latlng.lng]); });
     F.map.on('mousemove', e => cursorInfo(e.latlng)); F.map.on('zoomend', () => drawLayout());
     const $ = id => document.getElementById(id);
     $('fmMode').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; F.mode = b.dataset.m; document.querySelectorAll('#fmMode button').forEach(x => x.classList.toggle('on', x === b)); el.style.cursor = F.mode === 'pan' ? 'grab' : 'crosshair'; });
@@ -132,7 +156,7 @@ const FieldMap = (() => {
     $('fmDpi').onchange = e => { F.dpi = +e.target.value; }; $('fmFmt').onchange = e => { F.fmt = e.target.value; }; $('fmFmt').value = F.fmt;
     $('fmSrc').value = F.src; $('fmSrc').onchange = e => { F.src = e.target.value; $('fmWhenR').style.display = F.src === 'sim' ? '' : 'none'; $('fmS2R').style.display = F.src === 'sim' || F.src === 'rgb' ? 'none' : ''; }; $('fmWhenR').style.display = F.src === 'sim' ? '' : 'none'; $('fmS2R').style.display = F.src === 'sim' || F.src === 'rgb' ? 'none' : ''; $('fmWhen').value = F.when || 'now'; $('fmWhen').onchange = e => { F.when = e.target.value; };
     $('fmDays').onchange = e => { F.days = Math.max(5, +e.target.value || 90); }; $('fmCloud').onchange = e => { F.cloud = Math.max(1, Math.min(100, +e.target.value || 30)); };
-    setTimeout(() => { F.map.invalidateSize(); redraw(); if (F.pts.length > 2) fit(); if (F.cmp) showCompare(); if (F.res) showRes(); else if (FieldPrec.has(F.view)) F.refresh(F.view); if (F.site) showSite(); drawLayout(); steps(); F.lyc = layersCtl(F.map); F.syc = FieldSym.control(F.map, { group: symGroup, names: () => FieldSite.CLS.map(c => c[0]), apply: restyle }); mapLayers(); FieldGeo.attach(); if (!F._lyT) F._lyT = setInterval(() => { if (document.getElementById('fmMap') && F.lyc) { try { mapLayers(); if (F.syc && F.syc.getContainer()) F.syc.getContainer()._redraw(); } catch (e) {} } }, 1500); }, 60);
+    setTimeout(() => { F.map.invalidateSize(); redraw(); if (F.pts.length > 2) fit(); if (F.cmp) showCompare(); if (F.res) showRes(); else if (FieldPrec.has(F.view)) F.refresh(F.view); if (F.site) showSite(); drawLayout(); steps(); F.lyc = layersCtl(F.map); F.syc = FieldSym.control(F.map, { group: symGroup, names: () => FieldSite.CLS.map(c => c[0]), apply: restyle }); FieldSym.movable(F.map, F.lyc.getContainer(), '.fmlyh', 'ly'); FieldSym.onChange(() => hist.rec()); hist.rec(); mapLayers(); FieldGeo.attach(); if (!F._lyT) F._lyT = setInterval(() => { if (document.getElementById('fmMap') && F.lyc) { try { mapLayers(); if (F.syc && F.syc.getContainer()) F.syc.getContainer()._redraw(); } catch (e) {} } }, 1500); }, 60);
   }
   async function jget(u, ms) { const ac = new AbortController(), id = setTimeout(() => ac.abort(), ms || 12000); try { const r = await fetch(u, { signal: ac.signal }); if (!r.ok) throw new Error('answer ' + r.status); return await r.json(); } finally { clearTimeout(id); } }
   async function search() {
@@ -145,6 +169,16 @@ const FieldMap = (() => {
     for (const f of tries) { try { const g = await f(); seen = true; if (g) { F.place = g.name; F.map.setView([g.lat, g.lon], 15); st.textContent = F.place + ' \u00b7 ' + g.lat.toFixed(5) + ', ' + g.lon.toFixed(5); return; } } catch (e) { why.push(e.name === 'AbortError' ? 'no answer in time' : e.message); } }
     st.textContent = seen ? 'No place found for "' + q + '". Try a nearby town, or type the latitude and longitude below.' : 'The place search could not reach the internet (' + why[0] + '). The map keeps working: type the latitude and longitude below, or draw the field where you are.';
   }
+  // a new corner goes at the end of the outline, unless that makes the outline cross itself: then it goes between the two
+  // corners where it lengthens the outline least without a crossing (corners can be clicked in any order)
+  function crossing(P) { const n = P.length; if (n < 4) return false; const L2 = P.map(p => local(p, P[0])), cr = (a, b, c, d) => { const o = (p, q, r) => Math.sign((q[0] - p[0]) * (r[1] - p[1]) - (q[1] - p[1]) * (r[0] - p[0])); return o(a, b, c) * o(a, b, d) < 0 && o(c, d, a) * o(c, d, b) < 0; };
+    for (let i = 0; i < n; i++) for (let j = i + 2; j < n; j++) { if (i === 0 && j === n - 1) continue; if (cr(L2[i], L2[(i + 1) % n], L2[j], L2[(j + 1) % n])) return true; } return false; }
+  function addCorner(p) {
+    const P = F.pts; if (P.length < 3 || !crossing(P.concat([p]))) { P.push(p); changed(); return; }
+    const o = P[0], q = local(p, o), d = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]); let best = -1, bc = Infinity;
+    for (let i = 0; i < P.length; i++) { const a = local(P[i], o), b = local(P[(i + 1) % P.length], o), c = d(a, q) + d(q, b) - d(a, b), T = P.slice(0, i + 1).concat([p], P.slice(i + 1)); if (c < bc && !crossing(T)) { bc = c; best = i; } }
+    if (best < 0) { P.push(p); changed(); UI.toast('The outline crosses itself: drag a corner, or Ctrl+Z to undo'); return; }
+    P.splice(best + 1, 0, p); changed(); UI.toast('The new corner became corner ' + (best + 2) + ' (between the corners on each side of it), so that the outline does not cross itself. Ctrl+Z undoes it'); }
   function fit() { if (F.pts.length > 1) F.map.fitBounds(L.latLngBounds(F.pts.map(p => L.latLng(p[0], p[1]))).pad(0.25)); }
   function redraw() {
     if (!F.map) return; F.mk.forEach(m => F.map.removeLayer(m)); F.mk = []; if (F.poly) F.map.removeLayer(F.poly); if (F.line) F.map.removeLayer(F.line); F.poly = F.line = null;
@@ -177,6 +211,7 @@ const FieldMap = (() => {
 
   // the demarcation changed: the simulated indices follow at once; satellite indices are read again on request
   function changed() {
+    hist.rec();
     if (F.linked && F.pts.length > 2) useField(true);   // the sketch and its irrigation layout follow the new outline
     F.cv = null; F.site = null; clearSite(); FieldPrec.reset(); FieldPrec.panel(); FieldMon.reset(); FieldMon.panel(); if (PRECV[F.view]) F.view = 'cont'; if (F.res && F.res.sim && F.pts.length > 2) { try { F.res = fromSim(); } catch (e) { F.res = null; } }
     else if (F.res) { F.res = null; const st = document.getElementById('fmStat'); if (st) st.textContent = 'The field changed: press Compute to read the satellite data again for the new outline.'; }
@@ -277,12 +312,12 @@ const FieldMap = (() => {
     const pick = (P, a, keys) => keys.map(k => a[k]).find(Boolean);
     try { const r = await fetch('https://earth-search.aws.element84.com/v1/search', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body }); if (!r.ok) throw new Error('answer ' + r.status); const j = await r.json();
       const it = (j.features || []).map(f => { const P = f.properties, A = f.assets; return { id: f.id, date: P.datetime, cloud: P['eo:cloud_cover'], epsg: P['proj:epsg'] || +(String(P['proj:code'] || '').split(':')[1]), off: (parseFloat(P['s2:processing_baseline'] || '0') >= 4 && !P['earthsearch:boa_offset_applied']) ? -0.1 : 0, cat: 'Element 84 Earth Search',
-        href: { blue: (pick(P, A, ['blue', 'B02']) || {}).href, red: (pick(P, A, ['red', 'B04']) || {}).href, rededge1: (pick(P, A, ['rededge1', 'B05']) || {}).href, nir: (pick(P, A, ['nir', 'B08']) || {}).href, swir16: (pick(P, A, ['swir16', 'B11']) || {}).href, scl: (pick(P, A, ['scl', 'SCL']) || {}).href } }; });
+        href: { green: (pick(P, A, ['green', 'B03']) || {}).href, swir22: (pick(P, A, ['swir22', 'B12']) || {}).href, blue: (pick(P, A, ['blue', 'B02']) || {}).href, red: (pick(P, A, ['red', 'B04']) || {}).href, rededge1: (pick(P, A, ['rededge1', 'B05']) || {}).href, nir: (pick(P, A, ['nir', 'B08']) || {}).href, swir16: (pick(P, A, ['swir16', 'B11']) || {}).href, scl: (pick(P, A, ['scl', 'SCL']) || {}).href } }; });
       if (it.length) return it; errs.push('Earth Search: no scene'); } catch (e) { errs.push('Earth Search: ' + e.message); }
     try { const r = await fetch('https://planetarycomputer.microsoft.com/api/stac/v1/search', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body }); if (!r.ok) throw new Error('answer ' + r.status); const j = await r.json();
       const tk = await (await fetch('https://planetarycomputer.microsoft.com/api/sas/v1/token/sentinel-2-l2a')).json(), sign = h => h ? h + (h.includes('?') ? '&' : '?') + tk.token : h;
       const it = (j.features || []).map(f => { const P = f.properties, A = f.assets; return { id: f.id, date: P.datetime, cloud: P['eo:cloud_cover'], epsg: P['proj:epsg'] || +(String(P['proj:code'] || '').split(':')[1]), off: parseFloat(P['s2:processing_baseline'] || '0') >= 4 ? -0.1 : 0, cat: 'Microsoft Planetary Computer',
-        href: { blue: sign((A.B02 || {}).href), red: sign((A.B04 || {}).href), rededge1: sign((A.B05 || {}).href), nir: sign((A.B08 || {}).href), swir16: sign((A.B11 || {}).href), scl: sign((A.SCL || {}).href) } }; });
+        href: { green: sign((A.B03 || {}).href), swir22: sign((A.B12 || {}).href), blue: sign((A.B02 || {}).href), red: sign((A.B04 || {}).href), rededge1: sign((A.B05 || {}).href), nir: sign((A.B08 || {}).href), swir16: sign((A.B11 || {}).href), scl: sign((A.SCL || {}).href) } }; });
       if (it.length) return it; errs.push('Planetary Computer: no scene'); } catch (e) { errs.push('Planetary Computer: ' + e.message); }
     throw new Error(errs.join('; '));
   }
@@ -292,7 +327,8 @@ const FieldMap = (() => {
     st.textContent = 'Searching Sentinel-2 scenes of the last ' + F.days + ' days with less than ' + F.cloud + ' % cloud...';
     const items = await s2Search(ring, start, end); if (!items.length) throw new Error('no Sentinel-2 scene with less than ' + F.cloud + ' % cloud in the last ' + F.days + ' days');
     const cand = items.slice().sort((a, b) => (b.date > a.date ? 1 : -1)).filter(x => x.cloud < F.cloud).slice(0, 4); let lastErr = null;
-    for (const it of cand) { try { return await readScene(it, st); } catch (e) { lastErr = e; } }
+    const tried = [];
+    for (const it of cand) { try { const r = await readScene(it, st); r.steps.found = { n: items.length, days: F.days, cloud: F.cloud, list: items.slice().sort((a, b) => (b.date > a.date ? 1 : -1)).slice(0, 8).map(x => ({ date: x.date.slice(0, 10), cloud: x.cloud, id: x.id })), tried, cat: it.cat }; return r; } catch (e) { lastErr = e; tried.push({ date: it.date.slice(0, 10), why: e.message }); } }
     throw lastErr || new Error('no clear scene');
   }
   async function readScene(it, st) {
@@ -300,19 +336,23 @@ const FieldMap = (() => {
     const G = grid(10), cells = []; for (let jj = 0; jj < G.ny; jj++) for (let i = 0; i < G.nx; i++) { const p = G.ll(i, jj); if (inside(p[0], p[1], F.pts)) cells.push([i, jj, toUTM(p[0], p[1], zone, south)]); }
     if (!cells.length) throw new Error('the field is too small (less than one 10 m pixel)');
     const ux = cells.map(c => c[2][0]), uy = cells.map(c => c[2][1]), bb = [Math.min(...ux) - 30, Math.min(...uy) - 30, Math.max(...ux) + 30, Math.max(...uy) + 30], band = {};
-    for (const k of ['scl', 'blue', 'red', 'rededge1', 'nir', 'swir16']) { const href = it.href[k]; if (!href) throw new Error('band ' + k + ' is missing in the scene'); st.textContent = 'Reading the ' + k + ' band of the scene of ' + d + ' (' + it.cat + ')...';
+    for (const k of ['scl', 'blue', 'green', 'red', 'rededge1', 'nir', 'swir16', 'swir22']) { const href = it.href[k]; if (!href) { if (k === 'green' || k === 'swir22') continue; throw new Error('band ' + k + ' is missing in the scene'); } st.textContent = 'Reading the ' + k + ' band of the scene of ' + d + ' (' + it.cat + ')...';
       const tif = await GeoTIFF.fromUrl(href, { allowFullFile: true }), img = await tif.getImage(), [ox, oy] = img.getOrigin(), [rx, ry] = img.getResolution(), W = img.getWidth(), H = img.getHeight();
       const c0 = Math.max(0, Math.floor((bb[0] - ox) / rx)), c1 = Math.min(W, Math.ceil((bb[2] - ox) / rx) + 1), r0 = Math.max(0, Math.floor((bb[3] - oy) / ry)), r1 = Math.min(H, Math.ceil((bb[1] - oy) / ry) + 1);
       if (c1 <= c0 || r1 <= r0) throw new Error('the field is outside the scene');
       const ras = await img.readRasters({ window: [c0, r0, c1, r1], samples: [0], interleave: false }); band[k] = { d: ras[0], w: c1 - c0, h: r1 - r0, ox: ox + c0 * rx, oy: oy + r0 * ry, rx, ry };
       if (k === 'scl') { const at0 = (x, y) => { const c = Math.floor((x - band.scl.ox) / rx), r = Math.floor((y - band.scl.oy) / ry); return c < 0 || r < 0 || c >= band.scl.w || r >= band.scl.h ? 0 : band.scl.d[r * band.scl.w + c]; }; const clear = cells.filter(c => ![0, 1, 3, 8, 9, 10, 11].includes(at0(c[2][0], c[2][1]))).length; if (clear < cells.length * 0.3) throw new Error('the scene of ' + d + ' is cloudy over the field'); } }
     const at = (b, x, y) => { const c = Math.floor((x - b.ox) / b.rx), rr = Math.floor((y - b.oy) / b.ry); if (c < 0 || rr < 0 || c >= b.w || rr >= b.h) return NaN; const v = b.d[rr * b.w + c]; return v === undefined ? NaN : v; };
-    const vals = KEYS.map(() => new Float32Array(G.nx * G.ny).fill(NaN)); let bad = 0;
-    cells.forEach(([i, jj, u]) => { const scl = at(band.scl, u[0], u[1]); if ([0, 1, 3, 8, 9, 10, 11].includes(scl)) { bad++; return; }
-      const rf = k => { const v = at(band[k], u[0], u[1]); return v > 0 ? v * 0.0001 + it.off : NaN; }, b = rf('blue'), rr = rf('red'), re = rf('rededge1'), n = rf('nir'), s2 = rf('swir16');
-      if (![b, rr, re, n, s2].every(isFinite)) { bad++; return; } IX(b, rr, re, n, s2).forEach((v, q) => { vals[q][jj * G.nx + i] = v; }); });
+    // the extra indices that the bands read allow, the reflectance of every clear cell (spectral signature) and the scene classes
+    const xk = XKEYS.filter(k => XIX[k].need.every(b => band[b])), keys = KEYS.concat(xk), vals = keys.map(() => new Float32Array(G.nx * G.ny).fill(NaN)); let bad = 0;
+    const BL = ['blue', 'green', 'red', 'rededge1', 'nir', 'swir16', 'swir22'].filter(k => band[k]), refl = {}; BL.forEach(k => { refl[k] = []; }); const sclN = {}, ndv = [];
+    cells.forEach(([i, jj, u]) => { const scl = at(band.scl, u[0], u[1]); sclN[scl] = (sclN[scl] || 0) + 1; if ([0, 1, 3, 8, 9, 10, 11].includes(scl)) { bad++; return; }
+      const rf = k => { if (!band[k]) return NaN; const v = at(band[k], u[0], u[1]); return v > 0 ? v * 0.0001 + it.off : NaN; }, b = rf('blue'), rr = rf('red'), re = rf('rededge1'), n = rf('nir'), s2 = rf('swir16'), g = rf('green'), s3 = rf('swir22');
+      if (![b, rr, re, n, s2].every(isFinite)) { bad++; return; } const o = jj * G.nx + i; IX(b, rr, re, n, s2).forEach((v, q) => { vals[q][o] = v; });
+      const bv = { blue: b, green: g, red: rr, rededge1: re, nir: n, swir16: s2, swir22: s3 }; xk.forEach((k, q) => { vals[KEYS.length + q][o] = XIX[k].f(bv); }); BL.forEach(k => refl[k].push(bv[k])); ndv.push((n - rr) / (n + rr)); });
     if (bad >= cells.length) throw new Error('every pixel of the field is cloud, shadow or no data in the scene of ' + d);
-    return pack(G, vals, { s2: true, src: 'Sentinel-2 L2A scene ' + it.id + ' of ' + d + ' (' + it.cat + '), cloud ' + Math.round(it.cloud) + ' % over the tile; ' + (cells.length - bad) + ' of ' + cells.length + ' cells of 10 m clear (scene classification). Contains modified Copernicus Sentinel data ' + d.slice(0, 4) + '.', date: d, note: 'Real Sentinel-2 indices of ' + d + ' (' + Math.round(it.cloud) + ' % cloud over the tile, ' + (cells.length - bad) + ' clear cells of 10 m).' });
+    const spec = spectrum(BL, refl, ndv), bandsRead = ['scl'].concat(BL);
+    return pack(G, vals, { steps: { scene: { id: it.id, date: d, cloud: it.cloud, cat: it.cat, epsg: it.epsg, off: it.off }, bands: bandsRead, scl: sclN, cells: cells.length, clear: cells.length - bad, spec, xk }, s2: true, src: 'Sentinel-2 L2A scene ' + it.id + ' of ' + d + ' (' + it.cat + '), cloud ' + Math.round(it.cloud) + ' % over the tile; ' + (cells.length - bad) + ' of ' + cells.length + ' cells of 10 m clear (scene classification). Contains modified Copernicus Sentinel data ' + d.slice(0, 4) + '.', date: d, note: 'Real Sentinel-2 indices of ' + d + ' (' + Math.round(it.cloud) + ' % cloud over the tile, ' + (cells.length - bad) + ' clear cells of 10 m).' }, keys);
   }
   function pack(G, vals, meta, keys) { keys = keys || KEYS; const S = {}; keys.forEach((k, q) => { S[k] = stats(Array.from(vals[q])); }); return Object.assign({ G, vals, S, keys, pts: F.pts.slice() }, meta); }
   const RAMP = { veg: [[0, [165, 0, 38]], [0.25, [244, 109, 67]], [0.45, [254, 224, 139]], [0.65, [166, 217, 106]], [0.85, [26, 152, 80]], [1, [0, 104, 55]]], wat: [[0, [140, 81, 10]], [0.35, [223, 194, 125]], [0.55, [199, 234, 229]], [0.8, [53, 151, 143]], [1, [1, 102, 94]]] };
@@ -362,19 +402,23 @@ const FieldMap = (() => {
   const PRECV = Object.assign({ contour: 1, twi: 1, shed: 1, sens: 1, sensu: 1, ret_fc: 1, ret_wp: 1, ret_aw: 1, ret_trig: 1, ret_psi: 1, ret_days: 1 }, { vri: 1, vridate: 1, gully: 1, rusle: 1, mzone: 1, mchange: 1, mtrend: 1, mstab: 1 });
   // the maps already computed for this field, as layers: click one to show it again (nothing is computed again); they stay until
   // the outline changes, also when the window is closed and opened again
-  function layersCtl(mp) { const C = L.Control.extend({ options: { position: 'topright' }, onAdd() { const d = L.DomUtil.create('div', 'fmlyc min'); L.DomEvent.disableClickPropagation(d); L.DomEvent.disableScrollPropagation(d); d.addEventListener('click', e => { L.DomEvent.stop(e); if (e.target.closest('.fmlyh')) { d.classList.toggle('min'); return; } const b = e.target.closest('[data-ly]'); if (!b) return; const v = b.dataset.ly; setTimeout(() => act(v), 0); }); const act = v => { if (v === 'src') { F.showSrc = F.showSrc === false; drawSources(); return; } if (v === 'lay') { F.lay = !F.lay; const c = document.getElementById('fmLay'); if (c) c.checked = F.lay; drawLayout(); mapLayers(); return; } const [view, idx] = v.split(':'); if (idx) F.idx = idx; F.view = view; if (F.res) showRes(); else F.refresh(view); mapLayers(); }; return d; } }); const c = new C(); c.addTo(mp); return c; }
+  function layersCtl(mp) { const C = L.Control.extend({ options: { position: 'topright' }, onAdd() { const d = L.DomUtil.create('div', 'fmlyc min'); L.DomEvent.disableClickPropagation(d); L.DomEvent.disableScrollPropagation(d); d.addEventListener('click', e => { L.DomEvent.stop(e); if (e.target.closest('.fmlyh')) { d.classList.toggle('min'); return; } const gk = e.target.closest('[data-lyg]'); if (gk) { F.lyShut = F.lyShut || {}; F.lyShut[gk.dataset.lyg] = !gk.parentElement.classList.contains('shut'); mapLayers(); return; } const al = e.target.closest('[data-lyall]'); if (al) { F.lyShut = {}; if (al.dataset.lyall === '0') d.querySelectorAll('[data-lyg]').forEach(x => { F.lyShut[x.dataset.lyg] = true; }); mapLayers(); return; } const b = e.target.closest('[data-ly]'); if (!b) return; const v = b.dataset.ly; setTimeout(() => act(v), 0); }); const act = v => { if (v === 'src') { F.showSrc = F.showSrc === false; drawSources(); return; } if (v === 'lay') { F.lay = !F.lay; const c = document.getElementById('fmLay'); if (c) c.checked = F.lay; drawLayout(); mapLayers(); return; } const [view, idx] = v.split(':'); if (idx) F.idx = idx; F.view = view; if (F.res) showRes(); else F.refresh(view); mapLayers(); }; return d; } }); const c = new C(); c.addTo(mp); return c; }
+  // the maps of this field in groups that fold and unfold (a click on the name of a group); Expand all and Collapse all
   function mapLayers() {
-    if (!F.lyc || !F.lyc.getContainer) return; const d = F.lyc.getContainer(), rows = [], it = (v, lab, on, sub) => rows.push('<div class="fmly' + (on ? ' on' : '') + '" data-ly="' + v + '"><i>' + (on ? '&#9673;' : '&#9675;') + '</i>' + esc(lab) + (sub ? '<small>' + esc(sub) + '</small>' : '') + '</div>');
-    const pv = F.view;
-    if (F.res) { rows.push('<div class="fmlyg">Indices · ' + esc(F.res.photo ? 'satellite photo' : F.res.sim ? 'simulated' : 'Sentinel-2 ' + (F.res.date || '')) + '</div>'); RK().forEach(k => it('cont:' + k, k, (pv === 'cont') && F.idx === k)); RK().forEach(k => { if (F.idx === k) it('zones:' + k, k + ' management zones', pv === 'zones'); }); if (F.cv) it('cover', 'Land cover (image analysis)', pv === 'cover'); }
+    if (!F.lyc || !F.lyc.getContainer) return; const d = F.lyc.getContainer(), G2 = [], pv = F.view; let cur = null; F.lyShut = F.lyShut || {};
+    const grp = (k, t) => { cur = { k, t, rows: [] }; G2.push(cur); }, it = (v, lab, on, sub) => cur.rows.push('<div class="fmly' + (on ? ' on' : '') + '" data-ly="' + v + '"><i>' + (on ? '&#9673;' : '&#9675;') + '</i>' + esc(lab) + (sub ? '<small>' + esc(sub) + '</small>' : '') + '</div>');
+    if (F.res) { grp('idx', 'Indices · ' + (F.res.photo ? 'satellite photo' : F.res.sim ? 'simulated' : 'Sentinel-2 ' + (F.res.date || ''))); RK().forEach(k => it('cont:' + k, k, (pv === 'cont') && F.idx === k)); RK().forEach(k => { if (F.idx === k) it('zones:' + k, k + ' management zones', pv === 'zones'); }); if (F.cv) it('cover', 'Land cover (image analysis)', pv === 'cover'); }
     const mon = [['mzone', 'Monitoring zones'], ['mchange', 'Change since the last scene'], ['mtrend', 'Trend of the last scenes'], ['mstab', 'Stability over the season']].filter(q => FieldPrec.has(q[0]));
-    if (mon.length) { rows.push('<div class="fmlyg">Season · Sentinel-2</div>'); mon.forEach(q => it(q[0], q[1], pv === q[0])); }
+    if (mon.length) { grp('mon', 'Season · Sentinel-2'); mon.forEach(q => it(q[0], q[1], pv === q[0])); }
     const pr = [['vri', 'Irrigation depth by zone'], ['vridate', 'Irrigation date by zone'], ['gully', 'Ephemeral gullies'], ['rusle', 'Soil loss (RUSLE)']].filter(q => FieldPrec.has(q[0]));
-    if (pr.length) { rows.push('<div class="fmlyg">Precision maps</div>'); pr.forEach(q => it(q[0], q[1], pv === q[0])); }
-    const gp = Object.keys(FieldGeo.VIEWS).filter(v => FieldGeo.has(v)); if (gp.length) { rows.push('<div class="fmlyg">Terrain, sensors and retention</div>'); gp.forEach(v => it(v, FieldGeo.VIEWS[v], pv === v)); }
+    if (pr.length) { grp('prec', 'Precision maps'); pr.forEach(q => it(q[0], q[1], pv === q[0])); }
+    const gp = Object.keys(FieldGeo.VIEWS).filter(v => FieldGeo.has(v)); if (gp.length) { const ter = gp.filter(v => /^(contour|twi|shed)$/.test(v)), sen = gp.filter(v => /^sens/.test(v)), ret = gp.filter(v => /^ret_/.test(v));
+      if (ter.length) { grp('ter', 'Terrain and flow'); ter.forEach(v => it(v, FieldGeo.VIEWS[v], pv === v)); } if (sen.length) { grp('sen', 'Sensors and satellite'); sen.forEach(v => it(v, FieldGeo.VIEWS[v], pv === v)); } if (ret.length) { grp('ret', 'Soil retention'); ret.forEach(v => it(v, FieldGeo.VIEWS[v], pv === v)); } }
     const ov = []; if (F.site) ov.push('<div class="fmly' + (F.showSrc !== false ? ' on' : '') + '" data-ly="src"><i>' + (F.showSrc !== false ? '&#9745;' : '&#9744;') + '</i>Water sources</div>'); if (layoutData()) ov.push('<div class="fmly' + (F.lay ? ' on' : '') + '" data-ly="lay"><i>' + (F.lay ? '&#9745;' : '&#9744;') + '</i>Irrigation layout</div>');
-    if (ov.length) rows.push('<div class="fmlyg">On top</div>' + ov.join(''));
-    const html = '<div class="fmlyh">&#128506; Opened maps' + (rows.length ? ' (' + (rows.filter(r => r.indexOf('data-ly') >= 0).length) + ')' : '') + '</div>' + (rows.length ? '<div class="fmlyb">' + rows.join('') + '</div>' : '<div class="fmlyb"><small>Each map you compute (indices, season, irrigation zones, erosion, site) is kept here; click it to show it again.</small></div>');
+    if (ov.length) { grp('top', 'On top'); cur.rows.push(...ov); }
+    const n = G2.reduce((a, g) => a + g.rows.length, 0);
+    const body = G2.map(g => { const on = g.rows.some(r => /class="fmly on"/.test(r)), shut = F.lyShut[g.k] && !on; return '<div class="fmlygrp' + (shut ? ' shut' : '') + '"><div class="fmlyg" data-lyg="' + g.k + '" title="Click to fold or unfold this group"><span class="fmlyar">' + (shut ? '&#9656;' : '&#9662;') + '</span>' + esc(g.t) + ' <small>(' + g.rows.length + ')</small></div><div class="fmlyi">' + g.rows.join('') + '</div></div>'; }).join('');
+    const html = '<div class="fmlyh">&#128506; Opened maps' + (n ? ' (' + n + ')' : '') + '</div>' + (n ? '<div class="fmlyb"><div class="fmlyall"><a data-lyall="1">Expand all</a> · <a data-lyall="0">Collapse all</a></div>' + body + '</div>' : '<div class="fmlyb"><small>Each map you compute (indices, season, irrigation zones, erosion, site) is kept here; click it to show it again.</small></div>');
     if (d.__h !== html) { d.__h = html; d.innerHTML = html; }
   }
   function legendFor(k) {
@@ -407,17 +451,79 @@ const FieldMap = (() => {
   // the family of colours of the map in view, and the maps drawn again in the colours chosen in the Symbology panel
   const symGroup = () => { const v = F.view; if (v === 'cover') return F.cv ? 'cover' : null; if (v === 'cont' || v === 'zones') return F.res && IDX[F.idx] ? IDX[F.idx].ramp : null; return FieldPrec.has(v) ? FieldSym.groupOf(v) : null; };
   function restyle() { try { if (F.cv && F.cv.paint) F.cv.paint(); if (F.res) showRes(); else if (FieldPrec.has(F.view)) F.refresh(F.view); if (F.syc && F.syc.getContainer()) F.syc.getContainer()._redraw(); } catch (e) { console.error(e); } }
+  // Ctrl+Z and Ctrl+Y in the field window: every change of the outline (a corner added, moved or removed, Clear) and of the
+  // colours (Symbology) can be undone and done again
+  const hist = { past: [], fut: [], busy: false, cur: null,
+    snap() { return JSON.stringify({ p: F.pts, s: FieldSym.snapshot() }); },
+    rec() { if (this.busy) return; const n = this.snap(); if (n === this.cur) return; if (this.cur != null) { this.past.push(this.cur); if (this.past.length > 200) this.past.shift(); } this.cur = n; this.fut = []; },
+    go(back) { const from = back ? this.past : this.fut, to = back ? this.fut : this.past; if (!from.length) { UI.toast(back ? 'Nothing to undo' : 'Nothing to redo'); return; } const n = from.pop(); to.push(this.cur); const a = JSON.parse(this.cur), b = JSON.parse(n); this.cur = n; this.busy = true;
+      try { if (a.s !== b.s) { FieldSym.load(b.s); restyle(); } if (JSON.stringify(a.p) !== JSON.stringify(b.p)) { F.pts = b.p; changed(); redraw(); } UI.toast((back ? 'Undone: ' : 'Done again: ') + (JSON.stringify(a.p) !== JSON.stringify(b.p) ? 'the outline of the field (' + b.p.length + ' corners)' : 'the colours of the map')); } finally { this.busy = false; } } };
+  document.addEventListener('keydown', e => { if (!document.getElementById('fmMap') || !(e.ctrlKey || e.metaKey)) return; const k = e.key.toLowerCase(), t = e.target; if (t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) && t.type !== 'range' && t.type !== 'checkbox') || (t && t.isContentEditable)) return;
+    if (k === 'z' && !e.shiftKey) { hist.go(true); } else if (k === 'y' || (k === 'z' && e.shiftKey)) { hist.go(false); } else return; e.preventDefault(); e.stopImmediatePropagation(); }, true);
   function showRes() {
     const el = document.getElementById('fmRes'); if (!el || !F.res) return; const S = F.res.S;
-    el.innerHTML = '<div class="pnote">' + esc(F.res.src) + '</div><table class="tbl fmtab"><tr><th>Index</th><th>Mean</th><th>10–90 %</th><th>Min · max</th><th>Reading of the mean</th></tr>' +
+    const idxH = '<table class="tbl fmtab"><tr><th>Index</th><th>Mean</th><th>10–90 %</th><th>Min · max</th><th>Reading of the mean</th></tr>' +
       RK().map(k => { const s = S[k]; return '<tr class="' + (k === F.idx ? 'on' : '') + '" data-k="' + k + '"><td><b>' + k + '</b><br><small>' + esc(IDX[k].bands) + '</small></td><td><b>' + f2(s && s.mean) + '</b></td><td>' + (s ? f2(s.p10) + ' to ' + f2(s.p90) : '-') + '</td><td>' + (s ? f2(s.min) + ' · ' + f2(s.max) : '-') + '</td><td>' + (s ? esc(IDX[k].read(s.mean)) : 'no clear cells') + '</td></tr>'; }).join('') + '</table>' +
-      '<div class="pnote">Click a row to show that index on the map. ' + esc(IDX[F.idx].name) + ': ' + esc(IDX[F.idx].use) + '. Move the mouse over the field to read the value at any point.</div>' + zoneTable(F.idx);
+      '<div class="pnote">Click a row to show that index on the map. ' + esc(IDX[F.idx].name) + ': ' + esc(IDX[F.idx].use) + '. Move the mouse over the field to read the value at any point.</div>';
+    // the analysis, step by step: what was read, what was masked, the spectrum, the indices, the zones, the land cover
+    const st = stepsOf(idxH, zoneTable(F.idx), F.cv ? coverTable() : '');
+    el.innerHTML = '<div class="pnote">' + esc(F.res.src) + '</div>' + st;
+    bindSteps(el);
     el.querySelectorAll('tr[data-k]').forEach(tr => tr.onclick = () => { F.idx = tr.dataset.k; showRes(); });
     const vr = document.getElementById('fmViewR'); if (vr) vr.style.display = '';
     const cs = document.getElementById('fmCmp'); if (cs) { if (!RK().includes(F.cmp)) F.cmp = ''; cs.innerHTML = '<option value="">nothing (one map)</option>' + RK().filter(k => k !== F.idx).map(k => '<option value="' + k + '"' + (k === F.cmp ? ' selected' : '') + '>' + k + ' side by side</option>').join(''); }
     const vs = document.getElementById('fmView'); if (vs) { { const oc = vs.querySelector('option[value=cover]'); if (oc) oc.disabled = !F.cv; } if (F.view === 'cover' && !F.cv) F.view = 'cont'; ['mzone', 'mchange', 'mtrend', 'mstab', 'vri', 'vridate', 'gully', 'rusle'].concat(Object.keys(FieldGeo.VIEWS)).forEach(v => { { const ov = vs.querySelector('option[value=' + v + ']'); if (ov) ov.disabled = !FieldPrec.has(v); } if (F.view === v && !FieldPrec.has(v)) F.view = 'cont'; }); vs.value = F.view; }
-    if (F.cv) el.insertAdjacentHTML('beforeend', coverTable());
     showOverlay(); redraw(); drawLayout(); mapLayers();
+  }
+  function stepsOf(idxH, zoneH, coverH) {
+    const R0 = F.res, T = R0.steps, out = [], K = RK(), m0 = R0.S[F.idx], pct = (a, b) => b ? Math.round(a / b * 100) + ' %' : '-';
+    if (T && T.scene) {
+      const fd = T.found || {}; out.push(['Scenes found', T.scene.date + ' · ' + Math.round(T.scene.cloud) + ' % cloud · ' + T.scene.cat,
+        '<div class="pnote">The Sentinel-2 Level-2A catalogue (' + esc(T.scene.cat) + ') was searched over the outline for the last ' + (fd.days || F.days) + ' days with less than ' + (fd.cloud || F.cloud) + ' % cloud: <b>' + (fd.n || 1) + ' scene' + ((fd.n || 1) > 1 ? 's' : '') + '</b>. The newest clear one is used: <b>' + esc(T.scene.id) + '</b> (UTM zone ' + (T.scene.epsg % 100) + (T.scene.off ? '; the offset of processing baseline 4 is removed from the reflectance' : '') + ').</div>' +
+        (fd.list && fd.list.length ? '<table class="tbl"><tr><th>Date</th><th>Cloud over the tile</th><th></th></tr>' + fd.list.map(x => '<tr' + (x.date === T.scene.date ? ' class="on"' : '') + '><td>' + x.date + '</td><td>' + Math.round(x.cloud) + ' %</td><td>' + (x.date === T.scene.date ? '<b>used</b>' : (fd.tried || []).some(t => t.date === x.date) ? 'tried: cloudy over the field' : '') + '</td></tr>').join('') + '</table>' : '')]);
+      out.push(['Bands read', T.bands.length + ' layers of 10 and 20 m',
+        '<table class="tbl"><tr><th>Band</th><th>Centre</th><th>Pixel</th><th>What it tells</th></tr>' + T.bands.map(k => '<tr><td><b>' + BANDS[k][0] + '</b></td><td>' + (BANDS[k][1] ? BANDS[k][1] + ' nm' : '-') + '</td><td>' + BANDS[k][2] + ' m</td><td>' + BANDS[k][3] + '</td></tr>').join('') + '</table><div class="pnote">Only the window over the field is read from each band (cloud-optimised GeoTIFF). The reflectance is the digital number × 0.0001; the field is sampled on a grid of 10 m cells cut to the outline.</div>']);
+      const SCL = { 0: ['No data', '#000000'], 1: ['Saturated or defective', '#FF0000'], 2: ['Dark area', '#2F2F2F'], 3: ['Cloud shadow', '#643200'], 4: ['Vegetation', '#00A000'], 5: ['Bare soil', '#FFE65A'], 6: ['Water', '#0000FF'], 7: ['Unclassified', '#808080'], 8: ['Cloud, medium probability', '#C0C0C0'], 9: ['Cloud, high probability', '#FFFFFF'], 10: ['Thin cirrus', '#64C8FF'], 11: ['Snow or ice', '#FF96FF'] }, MASK = [0, 1, 3, 8, 9, 10, 11];
+      out.push(['Clouds and shadows removed', T.clear + ' of ' + T.cells + ' cells clear (' + pct(T.clear, T.cells) + ')',
+        '<div class="pnote">The scene classification (SCL) of ESA labels every 20 m pixel. Cells labelled cloud, cirrus, cloud shadow, snow, saturated or no data are left out; the others are used.</div><table class="tbl"><tr><th></th><th>Class</th><th>Cells</th><th>Share</th><th></th></tr>' + Object.keys(T.scl).sort((a, b) => T.scl[b] - T.scl[a]).map(c => { const d = SCL[c] || ['Class ' + c, '#999']; return '<tr><td><i style="display:inline-block;width:14px;height:11px;border:1px solid #666;background:' + d[1] + '"></i></td><td>' + d[0] + '</td><td>' + T.scl[c] + '</td><td>' + pct(T.scl[c], T.cells) + '</td><td>' + (MASK.includes(+c) ? 'masked' : 'used') + '</td></tr>'; }).join('') + '</table>']);
+      out.push(['Spectral signature of the field', specSum(T.spec), specSvg(T.spec) + '<div class="pnote">' + specRead(T.spec) + '</div>']);
+    } else if (R0.photo) out.push(['Satellite photo read', 'visible bands only (no near infrared)', '<div class="pnote">' + esc(R0.note || '') + '</div>']);
+    else if (R0.sim) out.push(['Simulated by SWAFL', 'no satellite data', '<div class="pnote">' + esc(R0.note || R0.src || '') + '</div>']);
+    out.push(['Indices of the field', K.length + ' indices · ' + F.idx + ' mean ' + f2(m0 && m0.mean), idxH]);
+    if (zoneH) out.push(['Management zones', 'natural breaks of ' + F.idx, zoneH]);
+    if (coverH) out.push(['Land cover from the photo', F.cv.shares.filter(c => c.pct >= 1).map(c => c.name.toLowerCase() + ' ' + c.pct.toFixed(0) + ' %').slice(0, 3).join(', '), coverH]);
+    F.stOpen = F.stOpen || {}; const fresh = R0._stepShown !== true; R0._stepShown = true; const iIdx = out.findIndex(o => o[0] === 'Indices of the field');
+    return '<div class="fmsteph"><b>The analysis, step by step</b><span><a data-stall="1">Open all</a> · <a data-stall="0">Fold all</a> · <a data-stwalk="1">Walk through from step 1</a></span></div>' + out.map((o, i) => { const open = F.stOpen[o[0]] != null ? F.stOpen[o[0]] : i === iIdx;
+      return '<details class="fmstep' + (fresh ? ' fmstnew' : '') + '" data-stn="' + esc(o[0]) + '" style="animation-delay:' + (fresh ? i * 0.22 : 0) + 's"' + (open ? ' open' : '') + '><summary><span class="fmstn">' + (i + 1) + '</span><b>' + esc(o[0]) + '</b><span class="fmsts">' + esc(o[1] || '') + '</span><span class="fmstok">&#10003;</span></summary><div class="fmstb">' + o[2] + (i < out.length - 1 ? '<div class="fmstnx"><button class="btn" data-stnext="' + i + '">Next step: ' + esc(out[i + 1][0]) + ' &#9656;</button></div>' : '') + '</div></details>'; }).join('');
+  }
+  function bindSteps(el) {
+    const D = [...el.querySelectorAll('details.fmstep')];
+    D.forEach(d => d.addEventListener('toggle', () => { F.stOpen = F.stOpen || {}; F.stOpen[d.dataset.stn] = d.open; }));
+    el.querySelectorAll('[data-stnext]').forEach(b => b.onclick = () => { const i = +b.dataset.stnext; D[i].open = false; D[i + 1].open = true; D[i + 1].scrollIntoView({ block: 'nearest', behavior: 'smooth' }); });
+    el.querySelectorAll('[data-stall]').forEach(a => a.onclick = () => D.forEach(d => { d.open = a.dataset.stall === '1'; }));
+    el.querySelectorAll('[data-stwalk]').forEach(a => a.onclick = () => { D.forEach((d, i) => { d.open = i === 0; }); D[0].scrollIntoView({ block: 'nearest', behavior: 'smooth' }); });
+  }
+  // the reflectance of the field band by band: mean, 10 to 90 % of the cells, and the greenest and the least green third
+  function specSvg(sp) {
+    if (!sp || !sp.length) return ''; const W = 380, Hh = 205, l = 42, r = 12, t = 14, b = 48, ymax = Math.max(0.1, ...sp.map(q => Math.max(q.p90 || 0, q.high || 0, q.low || 0))) * 1.08, X = w => l + (Math.log(w) - Math.log(450)) / (Math.log(2300) - Math.log(450)) * (W - l - r), Y = v => t + (1 - v / ymax) * (Hh - t - b);
+    const path = k => sp.filter(q => isFinite(q[k])).map((q, i) => (i ? 'L' : 'M') + X(q.wl).toFixed(1) + ',' + Y(q[k]).toFixed(1)).join(' ');
+    const band = sp.filter(q => isFinite(q.p10)), area = band.map((q, i) => (i ? 'L' : 'M') + X(q.wl).toFixed(1) + ',' + Y(q.p90).toFixed(1)).join(' ') + ' ' + band.slice().reverse().map(q => 'L' + X(q.wl).toFixed(1) + ',' + Y(q.p10).toFixed(1)).join(' ') + 'Z';
+    let g = '<svg viewBox="0 0 ' + W + ' ' + Hh + '" width="100%" style="max-width:460px;background:#fff;border:1px solid #c8ccd2;font:10px sans-serif">';
+    [['#E8F1FB', 450, 520], ['#E9F6E9', 520, 600], ['#FBEAEA', 630, 690], ['#FFF3E0', 690, 740], ['#F3EEF9', 760, 900], ['#F2F2F2', 1500, 2300]].forEach(z => { g += '<rect x="' + X(z[1]).toFixed(1) + '" y="' + t + '" width="' + (X(z[2]) - X(z[1])).toFixed(1) + '" height="' + (Hh - t - b) + '" fill="' + z[0] + '"/>'; });
+    for (let k = 0; k <= 4; k++) { const v = ymax * k / 4, y = Y(v); g += '<line x1="' + l + '" x2="' + (W - r) + '" y1="' + y + '" y2="' + y + '" stroke="#e1e4e8"/><text x="' + (l - 4) + '" y="' + (y + 3) + '" text-anchor="end" fill="#556">' + v.toFixed(2) + '</text>'; }
+    g += '<path d="' + area + '" fill="rgba(46,125,232,0.18)" stroke="none"/><path d="' + path('low') + '" fill="none" stroke="#A0522D" stroke-width="1.6" stroke-dasharray="4 3"/><path d="' + path('high') + '" fill="none" stroke="#1A9850" stroke-width="1.6" stroke-dasharray="4 3"/><path d="' + path('mean') + '" fill="none" stroke="#1B1F23" stroke-width="2.2"/>';
+    let lastX = -99, row = 0; sp.forEach(q => { if (!isFinite(q.mean)) return; const x = X(q.wl); row = x - lastX < 26 ? 1 - row : 0; lastX = x; const yl = Hh - b + 12 + row * 19; g += '<circle cx="' + x.toFixed(1) + '" cy="' + Y(q.mean).toFixed(1) + '" r="3" fill="#1B1F23"/>' + (row ? '<line x1="' + x.toFixed(1) + '" x2="' + x.toFixed(1) + '" y1="' + (Hh - b + 2) + '" y2="' + (yl - 9) + '" stroke="#bbb"/>' : '') + '<text x="' + x.toFixed(1) + '" y="' + yl + '" text-anchor="middle" fill="#334">' + BANDS[q.k][0].split(' ')[0] + '</text><text x="' + x.toFixed(1) + '" y="' + (yl + 9) + '" text-anchor="middle" fill="#889" font-size="8">' + q.wl + '</text>'; });
+    g += '<text x="' + l + '" y="10" fill="#334">reflectance</text><text x="' + (W - r) + '" y="' + (Hh - 2) + '" text-anchor="end" fill="#889" font-size="8">wavelength, nm</text></svg>';
+    return g + '<div class="fmspleg"><span><i style="background:#1B1F23"></i>field mean</span><span><i style="background:rgba(46,125,232,0.35)"></i>10 to 90 % of the cells</span><span><i style="background:#1A9850"></i>greenest third</span><span><i style="background:#A0522D"></i>least green third</span></div>';
+  }
+  const specGet = (sp, k) => { const q = (sp || []).find(x => x.k === k); return q ? q.mean : NaN; };
+  function specSum(sp) { const r = specGet(sp, 'red'), n = specGet(sp, 'nir'); return isFinite(r) && isFinite(n) ? 'NIR / red = ' + (n / r).toFixed(1) + ' · NIR ' + (n * 100).toFixed(0) + ' %' : ''; }
+  function specRead(sp) {
+    const b = specGet(sp, 'blue'), g = specGet(sp, 'green'), r = specGet(sp, 'red'), re = specGet(sp, 'rededge1'), n = specGet(sp, 'nir'), s1 = specGet(sp, 'swir16'), s2 = specGet(sp, 'swir22'), o = [];
+    if (isFinite(g) && isFinite(r) && isFinite(b)) o.push(g > r && g > b ? '<b>Green peak</b>: green is above blue and red, the signature of chlorophyll.' : '<b>No green peak</b>: red is as high as green, typical of soil, residue or a yellowing crop.');
+    if (isFinite(n) && isFinite(r)) { const q = n / r; o.push('<b>Red edge</b>: the near infrared is ' + q.toFixed(1) + ' times the red (' + (q > 6 ? 'a dense, healthy canopy' : q > 3 ? 'a moderate canopy' : q > 1.6 ? 'a sparse or stressed crop' : 'mostly bare soil or dry residue') + ')' + (isFinite(re) ? '; the red edge band (705 nm) is at ' + ((re - r) / Math.max(1e-6, n - r) * 100).toFixed(0) + ' % of the way from red to NIR, lower values mean more chlorophyll.' : '.')); }
+    if (isFinite(n) && isFinite(s1)) o.push('<b>Shortwave infrared</b>: SWIR 1 is ' + (s1 < n ? (100 - s1 / n * 100).toFixed(0) + ' % below the near infrared, ' + (s1 / n < 0.6 ? 'water in the leaves absorbs strongly (well watered).' : s1 / n < 0.85 ? 'moderate leaf and soil water.' : 'little water absorption (dry canopy or soil).') : 'above the near infrared: dry soil or residue dominates.') + (isFinite(s2) ? ' SWIR 2 at ' + (s2 * 100).toFixed(0) + ' %.' : ''));
+    return o.join(' ') + ' Dashed: the mean spectrum of the greenest and of the least green third of the cells (by NDVI); their gap in the near infrared is the variation the zones map.';
   }
 
   function coverTable() { const C = F.cv; return '<div class="fmzt"><b>Land cover read from the satellite photo</b> (image analysis: colour and texture of every pixel, k-means clustering, named by rules; ' + C.mpp.toFixed(1) + ' m per pixel)<table class="tbl"><tr><th></th><th>Cover</th><th>Area</th><th>Share</th></tr>' +

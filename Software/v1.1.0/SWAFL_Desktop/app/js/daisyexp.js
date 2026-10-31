@@ -33,6 +33,11 @@
     { id: 'flux', key: 'flux', label: 'Irrigation intensity (constant flux)', unit: 'mm/h', kind: 'num', levels: [0.05, 0.1, 0.5, 2], range: [0.01, 20], irr: 1, words: ['flux', 'intensity', 'mm per hour', 'mm/h', 'constant depth'] },
     { id: 'season', key: 'pmonths', label: 'Seasonal rain pattern', unit: '', kind: 'set', levels: [{ label: 'dry summer (rain x0.7 Jun-Aug)', set: { pmonths: '1 1 1 1 1 0.7 0.7 0.7 1 1 1 1' } }, { label: 'dry spring (rain x0.7 Mar-May)', set: { pmonths: '1 1 0.7 0.7 0.7 1 1 1 1 1 1 1' } }, { label: 'wet winter (rain x1.3 Dec-Feb)', set: { pmonths: '1.3 1.3 1 1 1 1 1 1 1 1 1 1.3' } }], words: ['seasonal', 'dry summer', 'dry spring', 'wet winter', 'monthly rain', 'drought in summer'] },
     { id: 'koc', key: 'koc', label: 'Sorption of the chemical, K_OC', unit: 'L/kg', kind: 'num', levels: [0, 50, 100, 500], range: [0, 5000], words: ['sorption', 'koc', 'pesticide', 'chemical', 'tracer', 'herbicide'] },
+    // the Daisy library, all of it: crops, chemicals, managements and programs (soil horizons are in Soil, fertilisers in Type of fertiliser)
+    { id: 'cropone', key: 'cropone', lib: 1, label: 'Crop of the Daisy library, grown every year', unit: '', kind: 'cat', levels: [], words: ['crop of the library', 'any crop', 'grow every year', 'monoculture'] },
+    { id: 'chem', key: 'chem', lib: 1, label: 'Chemical of the Daisy library (pesticide, PFAS, tracer)', unit: '', kind: 'cat', levels: [], words: ['pesticide', 'pfas', 'atrazine', 'bentazon', 'which chemical', 'herbicide'] },
+    { id: 'mgmt', key: 'mgmt', lib: 1, label: 'Management of the Daisy library (whole managements and single operations)', unit: '', kind: 'cat', levels: [], words: ['management', 'managements', 'farm management', 'action'] },
+    { id: 'prog', key: 'prog', lib: 1, label: 'Program of the Daisy library, run as it comes with Daisy', unit: '', kind: 'cat', levels: [], words: ['program', 'sample program', 'example run'] },
     { id: 'half', key: 'half', label: 'Half-life of the chemical', unit: 'days', kind: 'num', levels: [0, 15, 30, 90], range: [0, 2000], words: ['half-life', 'half life', 'degradation', 'decay', 'persistence'] }
   ];
   /* every parameter of the Daisy reference that was tested in Daisy (daisyparams.js) is a factor: its levels are fractions of the value the farm uses */
@@ -44,7 +49,8 @@
       words: [q.attr.toLowerCase() + ' ' + nm, q.key.toLowerCase() + ' of ' + q.attr.toLowerCase()].concat([nm, q.key.toLowerCase(), q.key.toLowerCase().replace(/_/g, ' ')].filter((w, i, a) => w.length >= 4 && a.indexOf(w) === i)) }); });
   E.FACTORS = F; E.factor = id => F.find(x => x.id === id);
   const IRR_ONLY = new Set(F.filter(f => f.irr).map(f => f.id));
-  const nameOf = (f, v) => f.kind === 'set' ? v.label : f.names && f.names[v] ? f.names[v] : f.id === 'soil' ? (v === 'loam' ? 'Built-in loam' : v === 'sand' ? 'Built-in sand' : String(v).indexOf('usda:') === 0 ? S.USDA[String(v).slice(5)][0] + ' (USDA)' : String(v).indexOf('hz:') === 0 ? String(v).slice(3) + ' (Daisy horizon)' : v === 'user' ? 'My soil' : v) : f.id === 'station' ? (S.OPTIONS[f.key].opts.find(o => o[0] === v) || [0, v])[1].replace(/ \(.*/, '') : f.kind === 'num' ? v + (f.unit ? ' ' + f.unit : '') : String(v);
+  const libName = (f, v) => { const O = S.OPTIONS && S.OPTIONS[f.key], h = O && O.opts && O.opts.find(o => String(o[0]) === String(v)); return h ? h[1] : String(v).split('|')[0]; };
+  const nameOf = (f, v) => f.lib || (f.id === 'ntype' && String(v).indexOf('|') > 0) || (f.id === 'soil' && String(v).indexOf('hzn:') === 0) || (f.id === 'mgmt') ? libName(f, v) : f.kind === 'set' ? v.label : f.names && f.names[v] ? f.names[v] : f.id === 'soil' ? (v === 'loam' ? 'Built-in loam' : v === 'sand' ? 'Built-in sand' : String(v).indexOf('usda:') === 0 ? S.USDA[String(v).slice(5)][0] + ' (USDA)' : String(v).indexOf('hz:') === 0 ? String(v).slice(3) + ' (Daisy horizon)' : v === 'user' ? 'My soil' : v) : f.id === 'station' ? (S.OPTIONS[f.key].opts.find(o => o[0] === v) || [0, v])[1].replace(/ \(.*/, '') : f.kind === 'num' ? v + (f.unit ? ' ' + f.unit : '') : String(v);
   E.levelName = nameOf;
   // a factor plus the levels chosen: { id, levels:[value or {label,set}] }
   E.norm = function (fs) { return (fs || []).map(x => { const f = E.factor(x.id); if (!f) throw new Error('unknown factor ' + x.id); const lv = (x.levels && x.levels.length ? x.levels : f.levels).map(v => f.kind === 'set' && typeof v === 'string' ? f.levels.find(l => l.label === v) || f.levels[0] : v); return { id: f.id, f, levels: lv }; }); };
@@ -171,7 +177,7 @@
     if (run.reference) return 'Rainfed_reference'; const parts = [];
     Object.keys(run.val || {}).forEach(id => { const q = E.partName(id, run.val[id]); if (q) parts.push(q); });
     return parts.join('_') || run.label || run.id; };
-  E.partName = function (id, v) { const F = E.factor(id); if (!F) return ''; if (F.kind === 'num') return (SHORT[id] || (F.param ? F.param.key : id)) + v; if (F.kind === 'set') return String((v && v.label) || v); if (id === 'irrig') return v === '1' || v === 1 ? 'irrigated' : 'rainfed'; return String(E.levelName(F, v)).replace(/\s*\(.*\)/, ''); };
+  E.partName = function (id, v) { const F = E.factor(id); if (!F || v == null || v === 'undefined') return ''; if (F.lib || String(v).indexOf('|') > 0) return String(v).split('|')[0].replace(/^hzn?:/, ''); if (F.kind === 'num') return (SHORT[id] || (F.param ? F.param.key : id)) + v; if (F.kind === 'set') return String((v && v.label) || v); if (id === 'irrig') return v === '1' || v === 1 ? 'irrigated' : 'rainfed'; return String(E.levelName(F, v)).replace(/\s*\(.*\)/, ''); };
   E.folder = function (jobs, commonFiles, info) {
     info = info || {}; const plan = info.plan || {}, out = {}, seen = {}, root = 'Experiment_' + slug(info.title || info.request || 'Daisy', 36);
     /* every file of Common/ gets a name that is specific to this experiment and says what makes it different:
@@ -194,6 +200,8 @@
     jobs.forEach(({ run, job }, i) => {
       const no = String(i + (jobs.length > 99 ? 1000 : 100)).slice(1), nm = slug(E.shortName(run), 44), dir = no + '_' + nm; dirs.push({ dir, run, nm, job });
       let rf = job.files['Run/Runfile.dai'];
+      // the files of the Daisy library that the run reads by their own name (through the path ../Common): copied as they are
+      { const refd = new Set((rf.match(/\.\.\/Common\/[^"]+/g) || []).map(x => x.slice(10))); Object.keys(job.files).forEach(k => { if (k.indexOf('Common/') !== 0) return; const b = k.slice(7); if (!refd.has(b) && /\(path "\.\.\/Common" &old\)/.test(rf)) out[root + '/Common/' + b] = job.files[k]; }); }
       rf = rf.replace(/\.\.\/Common\/([^"]+)/g, (m, f) => {
         let text = job.files['Common/' + f]; if (text == null) text = commonFiles[f]; if (text == null) return m;
         return '../Common/' + put(baseOf(f, job), text, f, job); });

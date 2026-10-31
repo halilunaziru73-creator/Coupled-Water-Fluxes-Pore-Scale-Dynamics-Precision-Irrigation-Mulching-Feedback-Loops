@@ -146,4 +146,9 @@
 * Deterministic phenotyping: no text is drawn over a chart or over other text.
 * Daisy experiments: the runs, the run files of the saved folder and its README use the years typed in the form, kept inside the weather in use (with online weather of 2014 to 2025, the runs simulate 1 January 2015 to 1 April 2025; Daisy starts one year after the weather begins). A line under the form says which years are simulated and why, and every run file starts with the same line.
 * Trigger law and root-zone depletion: the season plays by itself when the layer opens and again and again until **Stop** is pressed; **Play** starts it again.
+* Crop: one Crop list for every crop, field crops, vegetables, trees, vines and palms; the separate long crop and the crop of the 20 seasons are gone.
+* Field on the map: the original colours of every map are the default again; the Symbology panel suggests the styles of the literature for each map and keeps the QGIS library; the panels can be dragged anywhere on the map; Ctrl+Z and Ctrl+Y undo and redo the colours and the outline; the groups of Opened maps fold and unfold; corners clicked in any order give an outline that does not cross itself.
+* The indices of the field, step by step: scenes found, bands read, clouds and shadows removed, spectral signature, indices (with GNDVI, MSAVI2, NBR, BSI and CIre), zones and land cover.
+* The soil of the field: SoilGrids point service tried three times, then the SoilGrids 250 m maps, which are interpolated over the field for the retention maps.
+* Experiments: the whole Daisy library (63 soil horizons, 84 crops, 79 fertilisers, 35 chemicals, 82 managements, 55 programs and 176 logs) can be tested; Test it in an experiment in the Parameter library.
 

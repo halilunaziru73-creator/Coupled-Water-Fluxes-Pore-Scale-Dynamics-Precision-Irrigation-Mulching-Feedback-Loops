@@ -79,10 +79,10 @@ ipcMain.handle('daisy-read-file', async (_e, p) => { const root = path.resolve(r
 // files made by the program for one experiment (tables, plan, figures) are written next to its runs; only inside the runs folder
 ipcMain.handle('daisy-write', async (_e, dir, files) => { const root = path.resolve(runsRoot()), base = path.resolve(String(dir || '')); if (base.indexOf(root) !== 0 || base === root) return { ok: false, err: 'outside the runs folder' }; let n = 0; try { for (const k of Object.keys(files || {})) { const t = path.resolve(base, k); if (t.indexOf(base) !== 0) continue; fs.mkdirSync(path.dirname(t), { recursive: true }); const v = files[k]; fs.writeFileSync(t, typeof v === 'string' ? v : Buffer.from(v)); n++; } return { ok: true, n, dir: base }; } catch (e) { return { ok: false, err: String(e.message) }; } });
 ipcMain.handle('daisy-open-folder', async (_e, p) => { const root = path.resolve(runsRoot()), t = path.resolve(String(p || root)); if (t.indexOf(root) !== 0) return false; try { fs.mkdirSync(t, { recursive: true }); } catch (e) { } const er = await shell.openPath(t); return !er; });
-const HTTP_OK = /^https:\/\/(dmigw\.govcloud\.dk|api\.dataforsyningen\.dk|data\.geus\.dk|hip\.dataforsyningen\.dk)\//i;
-ipcMain.handle('http-get', async (_e, url) => {
+const HTTP_OK = /^https:\/\/(dmigw\.govcloud\.dk|api\.dataforsyningen\.dk|data\.geus\.dk|hip\.dataforsyningen\.dk|rest\.isric\.org|maps\.isric\.org)\//i;
+ipcMain.handle('http-get', async (_e, url, bin) => {
   if (!HTTP_OK.test(String(url))) return { status: 403, body: 'host not allowed' };
-  try { const r = await fetch(url); return { status: r.status, body: await r.text() }; } catch (e) { return { status: 0, body: String(e.message) }; }
+  try { const r = await fetch(url); return { status: r.status, body: bin ? Buffer.from(await r.arrayBuffer()).toString('base64') : await r.text() }; } catch (e) { return { status: 0, body: String(e.message) }; }
 });
 ipcMain.handle('quit', () => app.quit());
 ipcMain.handle('fullscreen', () => { if (win) win.setFullScreen(!win.isFullScreen()); });

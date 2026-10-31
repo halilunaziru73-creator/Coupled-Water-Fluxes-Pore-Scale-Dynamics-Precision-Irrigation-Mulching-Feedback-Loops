@@ -238,3 +238,26 @@ input[type=range]{accent-color:#0A246A}
 .modal.mfull .fmleft{display:flex;flex-direction:column;height:100%;min-height:0}
 .modal.mfull .fmmaps{flex:1;min-height:0}.modal.mfull .fmmap,.modal.mfull .fmwrap.fmhide .fmmap{height:100%!important}
 .modal.mfull .fmright{max-height:100%;height:100%}
+/* panels of the field map that can be dragged anywhere by their title */
+.fmsyc .fmsyh,.fmlyc .fmlyh{cursor:move}
+.fmfloat{position:absolute!important;z-index:1000;margin:0!important;float:none!important}
+.fmdrag{opacity:.88;box-shadow:0 4px 14px rgba(0,0,0,.45)!important;cursor:grabbing}
+/* Opened maps: groups that fold and unfold */
+.fmlyc .fmlyg{cursor:pointer;user-select:none;display:flex;align-items:baseline;gap:4px}.fmlyc .fmlyg:hover{background:#EEF2F8}.fmlyc .fmlyg small{color:#778;font-weight:normal}
+.fmlyc .fmlyar{display:inline-block;width:11px;color:#0A246A}.fmlyc .fmlygrp.shut .fmlyi{display:none}
+.fmlyc .fmlyall{padding:2px 8px 3px;font-size:10px;color:#556;border-bottom:1px solid #e3e6ea}.fmlyc .fmlyall a{color:#0A246A;cursor:pointer;text-decoration:underline}
+/* the analysis of the field, step by step */
+.fmsteph{display:flex;justify-content:space-between;align-items:baseline;margin:6px 0 4px;color:#0A246A}.fmsteph span{font-size:11px}.fmsteph a{cursor:pointer;color:#0A246A;text-decoration:underline}
+.fmstep{border:1px solid #B9C2CC;border-left:4px solid #0A246A;background:#fff;margin:0 0 5px}
+.fmstep>summary{display:flex;align-items:center;gap:7px;padding:5px 8px;cursor:pointer;list-style:none;background:#F3F6FA}.fmstep>summary::-webkit-details-marker{display:none}
+.fmstep[open]>summary{background:#E3ECF7;border-bottom:1px solid #C9D3DF}
+.fmstn{flex:0 0 20px;height:20px;border-radius:10px;background:#0A246A;color:#fff;font-weight:bold;font-size:11px;display:flex;align-items:center;justify-content:center}
+.fmsts{color:#556;font-size:11px;margin-left:auto;text-align:right}.fmstok{color:#1E8E3E;font-weight:bold}
+.fmstb{padding:6px 8px}.fmstnx{text-align:right;margin-top:6px}
+.fmstnew{animation:fmstin .45s ease both}@keyframes fmstin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.fmspleg{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:10.5px;color:#334;margin:3px 0}.fmspleg i{display:inline-block;width:14px;height:4px;margin-right:4px;vertical-align:middle}
+/* a tick box and its words on one line, in every row of the field tools */
+.fmrow label:has(>input[type=checkbox]),.fmrow label:has(>input[type=radio]){flex-direction:row!important;align-items:center;flex-wrap:wrap;gap:5px}
+.fmrow label>input[type=checkbox]{margin:0 2px 0 0}
+.fmstb .tbl td,.fmstb .tbl th{text-align:left}
+.fmsyc .fmsyk{text-transform:none!important}

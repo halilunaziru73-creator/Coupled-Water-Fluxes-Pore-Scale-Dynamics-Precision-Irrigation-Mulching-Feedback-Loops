@@ -35,6 +35,10 @@
     waitd: { label: 'Days between irrigations', type: 'number', min: 1, max: 7, step: 1 },
     spin: { label: 'Warm-up years before the results are counted', type: 'number', min: 1, max: 15, step: 1 },
     till: { label: 'Tillage before sowing', type: 'select', opts: [['plowing', 'plowing'], ['rotavation', 'rotavation (mix to 15 cm)'], ['disk_harrowing', 'disk harrowing (mix to 10 cm)'], ['stubble_cultivation', 'stubble cultivation (mix to 8 cm)'], ['none', 'no tillage']] },
+    cropone: { label: 'Crop grown every year (Daisy library)', type: 'select', opts: [] },
+    chem: { label: 'Chemical followed (Daisy library)', type: 'select', opts: [] },
+    mgmt: { label: 'Management of the field (Daisy library)', type: 'select', opts: [['A_F_R', 'the SWAFL farm rotation (default)']] },
+    prog: { label: 'Program of the Daisy library, run as it is', type: 'select', opts: [] },
     ntype: { label: 'Fertiliser', type: 'select', opts: [['N25S', 'N25S (default)'], ['AmmoniumNitrate', 'ammonium nitrate'], ['CalciumNitrate', 'calcium nitrate'], ['Nitrate', 'nitrate'], ['Ammonia', 'ammonia']] },
     ntime: { label: 'Fertiliser dates moved by (days)', type: 'number', min: -21, max: 28, step: 7 },
     bio: { label: 'Evapotranspiration model (Bioclimate)', type: 'select', opts: [['auto', 'FAO56 reference evapotranspiration'], ['default', 'Daisy default (energy balance; needs wind and vapour pressure)']] },
@@ -82,12 +86,19 @@
     const sc = S.LIST.find(x => x.id === scId) || {}, vr = (((options && options._variants) || sc.variants || []).find(v => v.id === variantId) || { set: {} }), o = S.norm(Object.assign({}, options, vr.set)), pre = (variantId || 'run') + '-';
     let rot = o.irrig === '1' ? files['ArableFarmRotation_withirrigation.dai'] : files['ArableFarmRotation.dai'];
     if (rot == null) throw new Error('the rotation file is missing');
+    // the Daisy library in the design: a value 'name|file' names a crop, fertiliser, chemical, action or program and the file that defines it
+    const libIn = new Set(), useLib = v => { const q = String(v).split('|'); if (q[1]) libIn.add(q[1]); return q[0]; };
+    if (o.cropone) { const CR = root.DaisyCrops || (typeof require !== 'undefined' ? require('./daisycrops.js') : null), nm = useLib(o.cropone), cat = CR && CR.CATALOG.find(k => k.name === nm); if (CR) o.crops = [cat ? CR.entry(cat.id) : CR.generic(nm)]; }
     if (Array.isArray(o.crops) && o.crops.length) { const CR = root.DaisyCrops || (typeof require !== 'undefined' ? require('./daisycrops.js') : null); if (!CR) throw new Error('the crop chooser is not loaded'); rot = CR.rotation(rot, o.crops); }   // the crops the person chose
     if (o.nfac !== 1) rot = rot.replace(/\(weight\s+(\d+(?:\.\d+)?)\s*\[kg N\/ha\]\)/g, (m, w) => '(weight ' + (+(parseFloat(w) * o.nfac).toFixed(1)) + ' [kg N/ha])');
     if (o.till && o.till !== 'plowing') rot = rot.replace(/\(plowing\)/g, o.till === 'none' ? '' : '(' + o.till + ')');
-    if (o.ntype && o.ntype !== 'N25S') rot = rot.replace(/\(N25S\s+/g, '(' + o.ntype + ' ');
+    if (o.ntype && o.ntype !== 'N25S') { const fz = S.FERT[o.ntype], nm = useLib(o.ntype);
+      if (fz && fz.organic) rot = rot.replace(/\(N25S\s+\(weight\s+([\d.]+)\s*\[kg N\/ha\]\)\)/g, (m, w) => '("' + nm + '" (weight ' + (+w / fz.nPerMg).toFixed(2) + ' [Mg w.w./ha]))');   // organic: the same nitrogen as fresh weight
+      else rot = rot.replace(/\(N25S\s+/g, String(o.ntype).indexOf('|') > 0 ? '("' + nm + '" ' : '(' + nm + ' '); }
     if (S.num(o.ntime, 0)) { const dn = Math.round(S.num(o.ntime, 0)); rot = rot.replace(/\(wait_mm_dd\s+(\d{1,2})\s+(\d{1,2})\)\s*\(fertilize/g, (m, a, b) => { const d = new Date(Date.UTC(2001, +a - 1, +b) + dn * 864e5); return '(wait_mm_dd ' + (d.getUTCMonth() + 1) + ' ' + d.getUTCDate() + ')(fertilize'; }); }
     rot = rot.replace(/K_OC\s+[\d.]+\s*\[L\/kg\]/, 'K_OC ' + S.num(o.koc, 0) + ' [L/kg]').replace(/decompose_rate\s+[\d.eE+-]+\s*\[h\^-1\]/, 'decompose_rate ' + (S.num(o.half, 0) > 0 ? (Math.LN2 / (24 * S.num(o.half, 0))).toExponential(5) : '0') + ' [h^-1]');
+    if (o.chem) { const nm = useLib(o.chem); rot = rot.replace(/\(defchemical "Tracer" default[\s\S]*?(?=\n;\s*List of chemicals)/, '(defchemical "Tracer" "' + nm + '"\n  (description "the chemical ' + nm.replace(/"/g, "'") + ' of the Daisy library, followed under the name Tracer"))'); }
+    let manager = 'A_F_R'; if (o.mgmt && o.mgmt !== 'A_F_R') { const nm = useLib(o.mgmt), A = S.ACT[o.mgmt]; if (A && A.single) rot = rot.replace(/\(plowing\)/g, '("' + nm + '")'); else manager = nm; }
     if (o.irrig === '1') {
       const mm = Math.max(1, S.num(o.mm, 30)); let hrs = Math.max(1, Math.round(S.num(o.hours, 3))); if (S.num(o.flux, 0) > 0) hrs = Math.max(1, Math.round(mm / S.num(o.flux, 0))); if (mm / hrs > 20) hrs = Math.ceil(mm / 20);   // Daisy solves the water flow better with a moderate rate
       const rate = +(mm / hrs).toFixed(3), z = Math.max(1, Math.round(S.num(o.z, 20))), md = v => { const m = String(v || '').match(/^(\d{1,2})[-\/.](\d{1,2})$/); return m ? [+m[1], +m[2]] : null; }, a1 = md(o.w1) || [4, 1], a2 = md(o.w2) || [10, 1];
@@ -96,13 +107,23 @@
       const re = /\(defaction irrigate_30_tensiometer_overhead activity[\s\S]*?\(wait_days\s+\d+\)\s*\)/; if (!re.test(rot)) throw new Error('the irrigation action was not found in the rotation file'); rot = rot.replace(re, () => act);
       const lim = S.num(o.limit, 0); if (lim > 0) { const k = Math.max(1, Math.round(lim / mm)); rot = rot.replace(/\(repeat irrigate_30_tensiometer_overhead\)/g, '(activity' + ' irrigate_30_tensiometer_overhead'.repeat(k) + ')'); }
     }
-    let soilTxt = files["ResFarm.dai"]; if (String(o.soil).indexOf('usda:') === 0) o.userSoil = S.usdaSoil(String(o.soil).slice(5)); else if (String(o.soil).indexOf('hz:') === 0) o.userSoil = S.hzSoil(String(o.soil).slice(3)); if (o.userSoil && S.num(o.tc, 0) > 0) o.userSoil = Object.assign({}, o.userSoil, { tc: S.num(o.tc, 0) }); const useSoil = (o.soil === 'user' || /^(usda|hz):/.test(String(o.soil))) && o.userSoil; if (S.num(o.root, 0) > 0) soilTxt = soilTxt.replace(/\(MaxRootingDepth\s+\d+(?:\.\d+)?\s*\[cm\]\)/g, '(MaxRootingDepth ' + Math.round(S.num(o.root, 0)) + ' [cm])'); const stn = (!o.userWx && o.station && o.station !== 'course') ? o.station : null; const col = useSoil ? 'SWAFL user column' : o.soil === "sand" ? "ResFarm_sand column" : "ResFarm 1D; Free drainage", wxFile = o.userWx ? '../Common/UserWeather.dwf' : stn ? '../Common/Station.dwf' : '../Common/Daily-1965-2000.dwf';
+    let soilTxt = files["ResFarm.dai"]; if (String(o.soil).indexOf('usda:') === 0) o.userSoil = S.usdaSoil(String(o.soil).slice(5)); else if (String(o.soil).indexOf('hz:') === 0) o.userSoil = S.hzSoil(String(o.soil).slice(3)); else if (String(o.soil).indexOf('hzn:') === 0) { const nm = useLib(String(o.soil).slice(4)); o.userSoil = { horizons: [{ bottom: 200, lib: nm }] }; } if (o.userSoil && S.num(o.tc, 0) > 0) o.userSoil = Object.assign({}, o.userSoil, { tc: S.num(o.tc, 0) }); const useSoil = (o.soil === 'user' || /^(usda|hz|hzn):/.test(String(o.soil))) && o.userSoil; if (S.num(o.root, 0) > 0) soilTxt = soilTxt.replace(/\(MaxRootingDepth\s+\d+(?:\.\d+)?\s*\[cm\]\)/g, '(MaxRootingDepth ' + Math.round(S.num(o.root, 0)) + ' [cm])'); const stn = (!o.userWx && o.station && o.station !== 'course') ? o.station : null; const col = useSoil ? 'SWAFL user column' : o.soil === "sand" ? "ResFarm_sand column" : "ResFarm 1D; Free drainage", wxFile = o.userWx ? '../Common/UserWeather.dwf' : stn ? '../Common/Station.dwf' : '../Common/Daily-1965-2000.dwf';
     const pp = S.patchParts(o), bioIn = pp.bio, patchRest = pp.rest;
     const run = ';; SWAFL scenario "' + (sc.title || scId) + '", variant "' + (vr.label || variantId) + '"\n(input file "../Common/ArableFarmRotation.dai")\n(input file "../Common/ResFarm.dai")\n(input file "../Common/OutputLog.dai")\n' + (useSoil ? '(input file "../Common/UserSoil.dai")\n' : '') + '\n' +
       '(defunit [kWh/d/m^2] SIfactor (mass 1)(time -3)(factor 41.67))\n(weather default "' + wxFile + '"\n  (PrecipCorrect ' + S.num(o.precip, 1) + ')\n  (TempOffset ' + S.num(o.temp, 0) + ')' + (S.num(o.radscale, 1) !== 1 ? '\n  (GlobRadScale ' + S.num(o.radscale, 1) + ')' : '') + (/^\s*(-?[\d.]+[\s,]+){11}-?[\d.]+\s*$/.test(String(o.pmonths || '')) ? '\n  (PrecipScale ' + String(o.pmonths).trim().split(/[\s,]+/).join(' ') + ')' : '') + ')\n' +
       '(description "' + (sc.title || scId).replace(/"/g, "'") + ' - ' + (vr.label || variantId).replace(/"/g, "'") + '")\n(log_prefix "' + pre + '")\n\n(manager activity\n  (repeat "A_F_R"))\n\n' +
       '(defcolumn "SWAFL column" "' + col + '"\n  (Bioclimate ' + ((stn && S.station(stn).noWind) || o.bio === 'default' ? 'default' : 'FAO56_daily') + bioIn + ')' + (patchRest ? '\n  ;; parameters from the Daisy reference\n  ' + patchRest.split(/\n/).join('\n  ') : '') + ')\n(column "SWAFL column")\n\n(time ' + o.start + ' 01 01)\n(stop ' + o.stop + ' 04 1)\n(activate_output (after ' + (Math.min(o.stop - 1, o.start + Math.max(1, Math.round(S.num(o.spin, 1))))) + ' 03 31 23))\n';
-    return { scenario: scId, variant: variantId, label: vr.label || variantId, options: o, prefix: pre, main: 'Run/Runfile.dai', files: Object.assign({ 'Common/ArableFarmRotation.dai': rot, 'Common/ResFarm.dai': soilTxt, 'Run/Runfile.dai': run }, o.log && S.logFilter ? { 'Common/OutputLog.dai': S.logFilter(files['OutputLog.dai'], o.log) } : {}, o.userWx ? { 'Common/UserWeather.dwf': o.userWx.text } : {}, stn ? { 'Common/Station.dwf': (function () { const t = files['weather/' + stn + '.dwf']; if (t == null) throw new Error('the weather file of ' + stn + ' was not loaded'); return t; })() } : {}, useSoil ? { 'Common/UserSoil.dai': S.soilDai(o.userSoil, S.num(o.root, 0)).text } : {}), years: o.stop - o.start };
+    let runT = run.replace('(repeat "A_F_R")', '(repeat "' + manager + '")');
+    (o.logs || []).forEach(v => useLib(v));
+    const libF = {}, libTxt = [];
+    libIn.forEach(path => { const base = path.split('/').pop(); if (path.indexOf('lib/') === 0) { if (!S.LOADED.has(base)) libTxt.push('(input file "' + base + '")'); return; } const t = files['lib:' + path]; if (t == null) throw new Error('the file ' + path + ' of the Daisy library was not loaded'); libF['Common/' + base] = S.libClean(t, false); libTxt.push('(input file "' + base + '")'); });
+    { const seen = new Set(), walk = q => { (files['deps:' + q] || []).forEach(d => { if (seen.has(d)) return; seen.add(d); const t = files['libdep:' + d] != null ? files['libdep:' + d] : files['lib:' + d]; if (t != null && !libF['Common/' + d.split('/').pop()]) libF['Common/' + d.split('/').pop()] = S.libClean(t, false); walk(d); }); }; libIn.forEach(walk); if (o.prog) walk(String(o.prog).split('|')[1]); }   // the files the library files read in turn
+    if (libTxt.length) runT = runT.replace(/\(input file "\.\.\/Common\/OutputLog\.dai"\)\n/, m => m + ';; the Daisy library used by this run\n(path "../Common" &old)\n' + libTxt.join('\n') + '\n');
+    if ((o.logs || []).length) runT += ';; logs of the Daisy library added to this run\n' + o.logs.map(v => '(output &old ("' + String(v).split('|')[0] + '"))').join('\n') + '\n';
+    if (o.prog) { const q = String(o.prog).split('|'), base = (q[1] || '').split('/').pop(), t = files['lib:' + q[1]]; if (t == null) throw new Error('the file ' + q[1] + ' of the program was not loaded'); libF['Common/' + base] = S.libClean(t, true);
+      Object.keys(files).filter(k => k.indexOf('wx:') === 0).forEach(k => { libF['Common/' + k.slice(3)] = files[k]; });
+      runT = ';; The program "' + q[0] + '" of the Daisy library (' + q[1] + '), run as it comes with Daisy; the settings of SWAFL do not apply\n(path "../Common" &old)\n(input file "' + base + '")\n(run "' + q[0] + '")\n'; }
+    return { scenario: scId, variant: variantId, label: vr.label || variantId, options: o, prefix: pre, main: 'Run/Runfile.dai', files: Object.assign(libF, { 'Common/ArableFarmRotation.dai': rot, 'Common/ResFarm.dai': soilTxt, 'Run/Runfile.dai': runT }, o.log && S.logFilter ? { 'Common/OutputLog.dai': S.logFilter(files['OutputLog.dai'], o.log) } : {}, o.userWx ? { 'Common/UserWeather.dwf': o.userWx.text } : {}, stn ? { 'Common/Station.dwf': (function () { const t = files['weather/' + stn + '.dwf']; if (t == null) throw new Error('the weather file of ' + stn + ' was not loaded'); return t; })() } : {}, useSoil ? { 'Common/UserSoil.dai': S.soilDai(o.userSoil, S.num(o.root, 0)).text } : {}), years: o.stop - o.start };
   };
 
   // ------------------------------------------------------------------ the user's own data, converted for Daisy
@@ -187,6 +208,7 @@
     const hz = (u && u.horizons || []).filter(h => isFinite(h.bottom)); if (!hz.length) throw new Error('give at least one soil horizon');
     let prev = 0; const out = [], names = [];
     hz.forEach((h, i) => { if (!(h.bottom > prev)) throw new Error('horizon ' + (i + 1) + ': the lower depth must be deeper than the one above'); prev = h.bottom;
+      if (h.lib) { const nm = 'SWAFL user H' + (i + 1); names.push([nm, h.bottom]); out.push('(defhorizon "' + nm + '" "' + h.lib + '"\n  (description "the Daisy horizon ' + h.lib + ', as it is, to ' + h.bottom + ' cm"))\n'); return; }
       let sa = S.num(h.sand, NaN), si = S.num(h.silt, NaN), cl = S.num(h.clay, NaN); if (![sa, si, cl].every(isFinite)) throw new Error('horizon ' + (i + 1) + ': sand, silt and clay are needed (in %)'); const tot = sa + si + cl; if (tot < 95 || tot > 105) throw new Error('horizon ' + (i + 1) + ': sand + silt + clay is ' + tot.toFixed(1) + ' %, it must be about 100 %'); sa /= tot; si /= tot; cl /= tot;
       const hu = S.num(h.humus, 1) / 100, bd = S.num(h.bd, 1.5); if (!(hu >= 0 && hu < 0.5)) throw new Error('horizon ' + (i + 1) + ': humus must be between 0 and 50 %'); if (!(bd > 0.6 && bd < 2)) throw new Error('horizon ' + (i + 1) + ': dry bulk density must be between 0.6 and 2 g/cm3');
       const nm = 'SWAFL user H' + (i + 1); names.push([nm, h.bottom]);
@@ -198,13 +220,45 @@
   // a soil of one USDA texture class down the profile (humus falls with depth); Daisy takes the water properties from HYPRES
   // the Daisy parameter library: every soil horizon (its texture, humus and density), every mineral fertiliser of fertilizer.dai and the tillage actions become choices of the design
   S.HZ = {};
-  S.hzSoil = function (name) { const h = S.HZ[name]; if (!h) throw new Error('unknown Daisy horizon ' + name); const hu = h.humus > 0 ? h.humus : 1, bd = h.rho > 0 ? h.rho : 1.4; return { horizons: [{ bottom: 30, sand: h.sand, silt: h.silt, clay: h.clay, humus: hu, bd }, { bottom: 80, sand: h.sand, silt: h.silt, clay: h.clay, humus: +(hu * 0.4).toFixed(2), bd: +(bd + 0.05).toFixed(2) }, { bottom: 200, sand: h.sand, silt: h.silt, clay: h.clay, humus: +(hu * 0.15).toFixed(2), bd: +(bd + 0.1).toFixed(2) }], texture: 'Daisy horizon ' + name }; };
+  S.hzSoil = function (name) { let h = S.HZ[name]; if (!h) throw new Error('unknown Daisy horizon ' + name); if (h.sand + h.silt + h.clay <= 1.5) h = Object.assign({}, h, { sand: h.sand * 100, silt: h.silt * 100, clay: h.clay * 100, humus: h.humus != null && h.humus < 0.5 ? h.humus * 100 : h.humus });   // some files give fractions, not per cent
+    const hu = h.humus > 0 ? h.humus : 1, bd = h.rho > 0 ? h.rho : 1.4; return { horizons: [{ bottom: 30, sand: h.sand, silt: h.silt, clay: h.clay, humus: hu, bd }, { bottom: 80, sand: h.sand, silt: h.silt, clay: h.clay, humus: +(hu * 0.4).toFixed(2), bd: +(bd + 0.05).toFixed(2) }, { bottom: 200, sand: h.sand, silt: h.silt, clay: h.clay, humus: +(hu * 0.15).toFixed(2), bd: +(bd + 0.1).toFixed(2) }], texture: 'Daisy horizon ' + name }; };
+  // the files of the Daisy library that every SWAFL run already reads (through crop.dai, tillage.dai, fertilizer.dai and log.dai)
+  S.LOADED = new Set(['beetroot.dai', 'broccoli.dai', 'brusselssprouts.dai', 'celeriac.dai', 'crop.dai', 'earlypotato.dai', 'earlywhitecabbage.dai', 'fertilizer.dai', 'fodderbeet.dai', 'grass.dai', 'log-std.dai', 'log.dai', 'maize.dai', 'onion.dai', 'onion_plantingofsets.dai', 'pea.dai', 'potato.dai', 'rye.dai', 'ryegrass.dai', 'sbarley.dai', 'srape.dai', 'sugarbeet.dai', 'swheat.dai', 'tillage.dai', 'wbarley.dai', 'wclover.dai', 'whitecabbage.dai', 'wrape.dai', 'wwheat.dai']);
+  S.FERT = {}; S.ACT = {}; S.LOGS = [];
+  // a file of the Daisy samples, made safe to read in a SWAFL run: only its definitions and inputs are kept (its own time, weather,
+  // column, output and run would replace those of the run); for a program, everything but its top-level run is kept
+  S.libClean = function (t, keepAll) {
+    const out = []; let i = 0, n = t.length;
+    while (i < n) { const c = t[i];
+      if (c === ';') { const e = t.indexOf('\n', i); i = e < 0 ? n : e + 1; continue; }
+      if (c !== '(') { i++; continue; }
+      let d = 0, j = i, str = false; for (; j < n; j++) { const ch = t[j]; if (str) { if (ch === '\\') j++; else if (ch === '"') str = false; continue; } if (ch === '"') str = true; else if (ch === ';') { const e = t.indexOf('\n', j); j = e < 0 ? n : e; } else if (ch === '(') d++; else if (ch === ')') { d--; if (d === 0) break; } }
+      const form = t.slice(i, j + 1), head = (form.match(/^\(\s*([^\s()"]+)/) || [])[1] || '';
+      if (keepAll ? head !== 'run' : (/^def/.test(head) || head === 'input')) out.push(form);
+      i = j + 1; }
+    return ';; from the Daisy samples, as SWAFL reads it (' + (keepAll ? 'its top-level run left out' : 'definitions and inputs only') + ')\n' + out.join('\n\n') + '\n';
+  };
   S.addLibrary = function (lib) {
     if (!lib || S._lib) return; S._lib = 1; const add = (k, v, l) => { const o = S.OPTIONS[k].opts; if (!o.some(x => x[0] === v)) o.push([v, l]); };
-    (lib.horizons || []).forEach(h => { if (h.clay != null && h.silt != null && h.sand != null && !S.HZ[h.name]) { S.HZ[h.name] = h; add('soil', 'hz:' + h.name, h.name + ' (texture and humus of the Daisy horizon, hydraulics by HYPRES)'); } });
-    (lib.fertilizers || []).filter(f => f.file === 'lib/fertilizer.dai' && f.parent === 'mineral').forEach(f => add('ntype', f.name, f.name + ' (Daisy library, mineral)'));
-    (lib.actions || []).filter(a => a.file === 'lib/tillage.dai').forEach(a => add('till', a.name, a.name.replace(/_/g, ' ') + ' (Daisy library)'));
+    const short = f => String(f || '').replace(/^(lib|sample)\//, '');
+    // soil horizons: texture and humus (inherited from the parent horizon when the file leaves them out) with HYPRES, else the Daisy horizon itself
+    const HB = {}; (lib.horizons || []).forEach(h => { HB[h.name] = h; });
+    const full = h => { const o = Object.assign({}, h); let p = h.parent, k = 0; while (p && HB[p] && k++ < 8) { ['clay', 'silt', 'sand', 'humus', 'rho'].forEach(q => { if (o[q] == null && HB[p][q] != null) o[q] = HB[p][q]; }); p = HB[p].parent; } return o; };
+    (lib.horizons || []).forEach(h0 => { const h = full(h0); if (h.clay != null && h.silt != null && h.sand != null) { if (!S.HZ[h.name]) { S.HZ[h.name] = h; add('soil', 'hz:' + h.name, h.name + ' (Daisy horizon of ' + short(h.file) + ': texture and humus, hydraulics by HYPRES)'); } }
+      else { S.HZ[h.name] = Object.assign({ native: true }, h); add('soil', 'hzn:' + h.name + '|' + h.file, h.name + ' (Daisy horizon of ' + short(h.file) + ', used as it is)'); } });
+    (lib.crops || []).forEach(c => add('cropone', c.name + '|' + c.file, c.name + ' (' + short(c.file) + ')'));
+    (lib.fertilizers || []).forEach(f => { const P = f.p || {}, org = f.parent !== 'mineral' && !(f.file === 'lib/fertilizer.dai' && f.parent === 'mineral'), v = f.file === 'lib/fertilizer.dai' && f.parent === 'mineral' ? f.name : f.name + '|' + f.file;
+      if (org) { const dm = +P.dry_matter_fraction, tn = +P.total_N_fraction, np = dm > 0 && tn > 0 ? 1000 * dm * tn : 5; S.FERT[v] = { organic: true, nPerMg: np, guess: !(dm > 0 && tn > 0) }; }
+      add('ntype', v, f.name + ' (' + (org ? (f.parent || 'organic') + ', applied as the same nitrogen in fresh weight' + (S.FERT[v] && S.FERT[v].guess ? ', 5 kg N per tonne assumed' : '') : 'mineral') + '; ' + short(f.file) + ')'); });
+    (lib.chemicals || []).forEach(c => add('chem', c.name + '|' + c.file, c.name + ' (' + short(c.file) + ')'));
+    (lib.actions || []).forEach(a => { const src = String(a.src || ''), single = !/\(wait|\(sow|activity|\(repeat|\(while/.test(src), v = a.name + '|' + a.file; S.ACT[v] = { single };
+      if (a.file === 'lib/tillage.dai') add('till', a.name, a.name.replace(/_/g, ' ') + ' (Daisy library)');
+      add('mgmt', v, a.name + (single ? ' (one operation, done each year in place of the ploughing)' : ' (the whole management of the field)') + ' · ' + short(a.file)); });
+    (lib.programs || []).forEach(p => add('prog', p.name + '|' + p.file, p.name + ' (' + short(p.file) + ')'));
+    S.LOGS = (lib.logs || []).map(l => [l.name + '|' + l.file, l.name + ' (' + short(l.file) + ')']);
   };
+  // the files of the Daisy samples that a set of options needs (their own inputs too), and the weather of a program
+  S.libNeeds = function (o) { const out = new Set(); ['cropone', 'chem', 'mgmt', 'prog', 'ntype'].forEach(k => { const q = String(o[k] || '').split('|'); if (q[1] && q[1].indexOf('sample/') === 0) out.add(q[1]); }); const sz = String(o.soil || ''); if (sz.indexOf('hzn:') === 0) { const f = sz.split('|')[1]; if (f && f.indexOf('sample/') === 0) out.add(f); } (o.logs || []).forEach(v => { const f = String(v).split('|')[1]; if (f && f.indexOf('sample/') === 0) out.add(f); }); return Array.from(out); };
   S.usdaSoil = function (id) { const c = S.USDA[id]; if (!c) throw new Error('unknown soil class ' + id); return { horizons: [{ bottom: 30, sand: c[1], silt: c[2], clay: c[3], humus: 2, bd: c[4] }, { bottom: 80, sand: c[1], silt: c[2], clay: c[3], humus: 0.8, bd: +(c[4] + 0.05).toFixed(2) }, { bottom: 200, sand: c[1], silt: c[2], clay: c[3], humus: 0.3, bd: +(c[4] + 0.1).toFixed(2) }], texture: c[0] }; };
   // a soil table in text (csv): columns depth (lower limit, cm), sand, silt, clay, humus (%), bd (g/cm3)
   S.soilFromTable = function (t) {

@@ -31,8 +31,8 @@
   };
   // the crop of the twenty seasons: the crop of interest (the crop chosen for the project) or the long crop (a tree, vine or palm that stays
   // in the field all year); every control of the project (soil, structure, salt, weather, trigger, method, mulch) feeds the same daily balance
-  window.yrKey = function () { const L = window.CROPLIB; if (state.yrCrop === 'long' && L) return L.crops[state.longCrop] ? state.longCrop : 'olive'; return state.crop; };
-  window.yrLabel = function () { const k = yrKey(), c = CROPS[k]; return (c && c.label || k) + (state.yrCrop === 'long' ? ' (long crop)' : ' (crop of interest)'); };
+  window.yrKey = function () { return state.crop; };   // one crop for everything: field crops, vegetables, trees, vines and palms are all in the Crop list
+  window.yrLabel = function () { const k = yrKey(), c = CROPS[k]; return (c && c.label || k) + ''; };
   window.cropYearFactor = function () {          // year-by-year irrigation factor of the chosen library crop against the cereal rotation (FAO-56)
     if (!window.CROPLIB || !CROPLIB.crops[yrKey()]) return null;
     const c = CWB(yrKey()), r = CWB('__ref'); return c.I.map((v, y) => r.I[y] > 5 ? v / r.I[y] : null);

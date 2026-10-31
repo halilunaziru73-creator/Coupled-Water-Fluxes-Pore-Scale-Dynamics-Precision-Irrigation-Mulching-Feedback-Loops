@@ -172,14 +172,37 @@ In the list of water sources of the site, the map moves to a source only when it
 
 The window of the field opens in full screen, like the Daisy window: the map fills the window, and the tools (*Map tools*) scroll beside it. The button with the corners on the title bar, or a double click on the title bar, returns to a smaller window; **A−** and **A+** change the size of the text.
 
-The panel **Symbology** under *Opened maps* (top right of the map) sets the colours of the map in view, as the symbology tab of QGIS does:
+The panel **Symbology** (top left of the map; *Opened maps* is at the top right) sets the colours of the map in view, as the symbology tab of QGIS does. Both panels can be **dragged anywhere on the map by their title** (a double click on the title puts a panel back in its corner); their place is kept for the next time.
 
 * **Coloured map** or **Real colour (photo)**: the second hides the coloured maps so that the satellite photo itself is seen under the outline; **Opacity** sets how much of the photo shows through a coloured map.
-* **Colour ramp**: a scrollable list of the colour ramps of the QGIS library, each drawn as a bar: the remote-sensing ramps (NDVI and NDMI as Sentinel Hub EO Browser shows them, NDWI of open water, hypsometric elevation, land surface temperature), the diverging ramps (RdYlGn, Spectral, RdYlBu, RdBu, BrBG, PuOr), the sequential ramps (YlGn, YlGnBu, Greens, Blues, YlOrBr, YlOrRd, Reds, Greys) and the perceptual ramps (Viridis, Magma, Inferno, Plasma, Cividis, Turbo). **Invert the ramp** turns it round.
-* Every family of maps starts in its remote-sensing standard, marked with a star, and **Remote-sensing standard** returns to it: the vegetation indices and their zones in the NDVI colours of Sentinel Hub (bare soil brown to dense canopy dark green), the water index in the NDMI colours (dry red to wet blue), the elevation in hypsometric tints, the wetness index in yellow-green-blue, soil water, available water, suction and days to the trigger from red (dry, soon) to blue (wet, later), the change, trend and stability of the season and the monitoring zones from red to green, and erosion from green (low risk) to red.
+* **Every map starts in its original SWAFL colours** (marked with a star): the vegetation indices and their zones from red (little vegetation) through yellow to green (dense canopy), the water index from brown to teal, the elevation from blue to red, the wetness index from yellow to blue, soil water, retention, suction and days to the trigger in classes from red to cream to blue, the change of the season from red through white to green, the zones from red to dark green, the irrigation zones in the Spectral colours, and erosion from green (low risk) to red. **Original colours of this map** returns to them.
+* **Colour ramp**: a scrollable list of ramps, each drawn as a bar. At the top, **suggested for this map**: the styles that maps of the same kind use in the literature and in GIS (for example red-yellow-green, the NDVI of Sentinel Hub and greens for vegetation; blues, brown-blue-green and the NDMI of Sentinel Hub for water; hypsometric tints and greys for elevation; yellow-green-blue for wetness and field capacity; red-yellow-blue for available water and suction; red-yellow-green for erosion). Then the original colours of every map, and the QGIS library: remote-sensing ramps, diverging (RdYlGn, Spectral, RdYlBu, RdBu, BrBG, PuOr), sequential (YlGn, YlGnBu, Greens, Blues, YlOrBr, YlOrRd, Reds, Greys) and perceptual (Viridis, Magma, Inferno, Plasma, Cividis, Turbo). **Invert the ramp** turns it round.
 * For the **land cover** read from the photo, the class colours of the land cover products: SWAFL natural colours, ESA WorldCover 10 m, Google Dynamic World, CORINE Land Cover, USGS NLCD, or **Real colour** (each class in the mean colour of its pixels in the photo). A click on a colour changes that class alone.
+* **Ctrl+Z** undoes the last change of the colours or of the outline of the field (a corner added, moved or removed, Clear), and **Ctrl+Y** brings it back.
 
 The legend on the map, the tables of the zones, the 3D view and the exported report take the same colours. The choices are kept on this computer for the next time.
+
+**Opened maps** groups the maps of the field (indices, season, precision maps, terrain and flow, sensors and satellite, soil retention, on top). A click on the name of a group folds or unfolds it; **Expand all** and **Collapse all** do it for every group.
+
+**Corners in any order.** A new corner goes at the end of the outline, unless that would make the outline cross itself: it is then put between the two corners where it fits without a crossing, and the program says which corner it became.
+
+## The analysis of the indices, step by step
+
+**Compute the indices of the field** shows its work as numbered steps that fold and unfold (each step with a one-line summary and a tick, and a button to the next step; *Walk through from step 1*, *Open all* and *Fold all* above them):
+
+1. **Scenes found**: the Sentinel-2 Level-2A catalogue searched over the outline (the dates and clouds of the scenes, the one used, and those tried and found cloudy over the field).
+2. **Bands read**: B02 blue, B03 green, B04 red, B05 red edge, B08 near infrared, B11 and B12 shortwave infrared and the scene classification, with their wavelength, pixel size and what each tells.
+3. **Clouds and shadows removed**: the classes of the scene classification over the field (vegetation, bare soil, water, cloud, shadow, cirrus, snow) in the colours of ESA, and how many cells are used.
+4. **Spectral signature of the field**: the reflectance band by band (mean of the field, 10 to 90 % of the cells, and the greenest and least green third), with a reading: the green peak of chlorophyll, the red edge (near infrared against red), and the absorption of water in the shortwave infrared.
+5. **Indices of the field**: NDVI, EVI, SAVI, NDRE and NDWI, and, from the green and the second shortwave band, GNDVI, MSAVI2, NBR, the bare soil index BSI and the chlorophyll index CIre. Every index is a map of its own in *Opened maps*.
+6. **Management zones** of the index shown.
+7. **Land cover from the photo**.
+
+![The analysis step by step: step 4, the spectral signature of the field with its reading (test data).](images/ui/fm_steps_spectrum.jpg){width=60%}
+
+## The soil of the field, from SoilGrids
+
+The soil of the site and of the retention maps comes from SoilGrids 2.0 (ISRIC, 250 m). The point service is tried three times (it is often busy); when it does not answer, the map service of SoilGrids is read instead. Without soil samples the 250 m maps of sand and clay (mean of 0 to 60 cm) are read around the field and interpolated over its cells, so the retention maps show the real variation of the soil; your own soil samples, typed or pasted as *latitude, longitude, sand %, clay %, organic matter %*, replace them by kriging. The indicative trend on the wetness index of the terrain is off unless you tick it. In the desktop app these requests go through the app itself.
 
 ![The field in full screen with the Symbology panel open: the ramps of the QGIS library and the remote-sensing standard of the map in view (test data).](images/ui/fm_symbology.jpg){width=100%}
 

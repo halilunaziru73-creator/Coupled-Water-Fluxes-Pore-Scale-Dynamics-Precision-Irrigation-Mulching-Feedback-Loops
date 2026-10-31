@@ -659,3 +659,20 @@ The Experiments tab offers 53 factors. Each has levels that are tried, a range t
 | Needs irrigation | no |
 | Words | surface r mixing, r_mixing of surface, r mixing, r_mixing |
 
+## The Daisy library, all of it, in the experiments
+
+Everything of the Daisy library can be tested in an experiment. In *Add something to change*, the group **The Daisy library (all of it)** lists, with their numbers:
+
+| What changes | Choices | What a run does with it |
+|:--|--:|:--|
+| Soil | 63 soil horizons (and the USDA classes) | the texture and humus of the horizon down the profile with HYPRES, or the Daisy horizon itself when its file gives no texture |
+| Crop of the Daisy library, grown every year | 84 crops | the crop grown every year with the dates of its template |
+| Type of fertiliser | 79 fertilisers | mineral: in place of N25S; organic (slurry, manure): the same nitrogen, as fresh weight from its dry matter and nitrogen |
+| Chemical of the Daisy library | 35 chemicals | the chemical followed under the name Tracer, with all its own properties (sorption, decay, uptake) |
+| Management of the Daisy library | 82 actions | a whole management replaces the farm rotation; a single operation (harrowing, rolling, ridging...) is done each year in place of the ploughing |
+| Program of the Daisy library | 55 programs | the program run as it comes with Daisy, with its own files and weather; the settings of SWAFL do not apply |
+| Tillage | the tillage operations | in place of the ploughing |
+
+The long lists have a search box. **Logs of the Daisy library added to every run** (176 logs, with a search box) adds any log of the library to the output of every run. The files of the Daisy samples that a choice needs (and the files they read in turn) are copied into the Common folder of the experiment and read through the path of the run; the files of the Daisy library itself are read from Daisy. In the tab **Parameter library**, every item has the button **Test it in an experiment** (for a log: **Write this log in every run of my experiment**), which puts it in the experiment.
+
+![Experiments: a chemical of the Daisy library as the thing that changes, and a log of the library added to every run.](images/daisy11/dz_exp_library.jpg){width=100%}

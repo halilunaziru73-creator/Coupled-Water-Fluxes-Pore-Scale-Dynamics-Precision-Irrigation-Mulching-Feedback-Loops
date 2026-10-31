@@ -130,13 +130,52 @@ const FieldSite = (() => {
   }
   const bearing = (a, b) => { const y = Math.sin((b[1] - a[1]) * rad) * Math.cos(b[0] * rad), x = Math.cos(a[0] * rad) * Math.sin(b[0] * rad) - Math.sin(a[0] * rad) * Math.cos(b[0] * rad) * Math.cos((b[1] - a[1]) * rad), br = (Math.atan2(y, x) / rad + 360) % 360; return ['north', 'north-east', 'east', 'south-east', 'south', 'south-west', 'west', 'north-west'][Math.round(br / 45) % 8]; };
   async function elevations(pts) { const out = []; for (let i = 0; i < pts.length; i += 90) { const ch = pts.slice(i, i + 90), j = await getJSON('https://api.open-meteo.com/v1/elevation?latitude=' + ch.map(p => p[0].toFixed(5)).join(',') + '&longitude=' + ch.map(p => p[1].toFixed(5)).join(','), null, 20000); out.push(...(j.elevation || [])); } return out; }
-  async function soilGrids(c) {
-    const j = await getJSON('https://rest.isric.org/soilgrids/v2.0/properties/query?lon=' + c[1].toFixed(5) + '&lat=' + c[0].toFixed(5) + '&property=sand&property=clay&property=silt&property=soc&depth=0-5cm&depth=15-30cm&depth=30-60cm&value=mean', null, 30000);
+  // ---- the soil of the field, from SoilGrids 2.0 (ISRIC, 250 m): the point service first (tried three times, as it is often
+  // busy), then the map service (WCS), which also gives the 250 m map of sand, clay and silt over the field. In the desktop app
+  // the requests go through the app itself, so the browser limits do not apply.
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  async function net(url, bin, ms) {
+    const sw = window.swafl && window.swafl.httpGet;
+    if (sw) { try { const r = await Promise.race([sw(url, !!bin), sleep(ms || 40000).then(() => ({ status: 0, body: 'timeout' }))]); if (r && r.status >= 200 && r.status < 300) { if (!bin) return r.body; const b = atob(r.body), u = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return u.buffer; } if (r && r.status && r.status !== 403) throw new Error('answer ' + r.status); } catch (e) { if (!/403|allowed/.test(e.message)) throw e; } }
+    const ac = new AbortController(), t = setTimeout(() => ac.abort(), ms || 40000); try { const r = await fetch(url, { signal: ac.signal }); if (!r.ok) throw new Error('answer ' + r.status); return bin ? await r.arrayBuffer() : await r.text(); } finally { clearTimeout(t); }
+  }
+  const retry = async (f, n) => { let er; for (let i = 0; i < n; i++) { try { return await f(); } catch (e) { er = e; if (/no soil data/.test(e.message)) throw e; await sleep(1500 * (i + 1)); } } throw er; };
+  const SGD = ['0-5cm', '15-30cm', '30-60cm'];
+  async function soilPoint(c) {
+    const j = JSON.parse(await net('https://rest.isric.org/soilgrids/v2.0/properties/query?lon=' + c[1].toFixed(5) + '&lat=' + c[0].toFixed(5) + '&property=sand&property=clay&property=silt&property=soc&depth=' + SGD.join('&depth=') + '&value=mean', false, 25000));
     const L = {}; (j.properties && j.properties.layers || []).forEach(l => { L[l.name] = l.depths.map(d => d.values.mean); });
     const avg = a => { const v = (a || []).filter(x => x != null); return v.length ? v.reduce((p, q) => p + q, 0) / v.length : NaN; };
     const sand = avg(L.sand) / 10, clay = avg(L.clay) / 10, silt = avg(L.silt) / 10, soc = avg(L.soc) / 10;   // g/kg to %; soc dg/kg to g/kg
     if (!isFinite(sand) || !isFinite(clay)) throw new Error('no soil data at this point (water, town or rock?)');
-    return { sand, clay, silt, soc, cls: texClass(sand, clay, silt) };
+    return { sand, clay, silt, soc, cls: texClass(sand, clay, silt), src: 'SoilGrids 2.0 (ISRIC), 0 to 60 cm' };
+  }
+  // the Interrupted Goode Homolosine projection of the SoilGrids maps (EPSG:152160, as PROJ igh on the WGS 84 sphere)
+  function igh(lat, lon) {
+    const Rr = 6378137, r = Math.PI / 180, ph = lat * r, lim = 40.7366111 * r, l0 = (lat >= 0 ? (lon < -40 ? -100 : 30) : (lon < -100 ? -160 : lon < -20 ? -60 : lon < 80 ? 20 : 140)) * r, dl = lon * r - l0;
+    if (Math.abs(ph) <= lim) return [Rr * dl * Math.cos(ph) + Rr * l0, Rr * ph];
+    let th = ph; for (let k = 0; k < 30; k++) { const f = 2 * th + Math.sin(2 * th) - Math.PI * Math.sin(ph), d = 2 + 2 * Math.cos(2 * th); if (Math.abs(d) < 1e-12) break; th -= f / d; if (Math.abs(f) < 1e-10) break; } th = th;
+    return [Rr * (2 * Math.SQRT2 / Math.PI) * dl * Math.cos(th) + Rr * l0, Rr * (Math.SQRT2 * Math.sin(th) - Math.sign(ph) * 0.0528035274542)];
+  }
+  // the 250 m maps of sand, clay and silt (mean of 0-5, 15-30 and 30-60 cm) around a box of latitude and longitude
+  async function soilMap(lat0, lon0, lat1, lon1) {
+    if (typeof GeoTIFF === 'undefined') throw new Error('the GeoTIFF reader did not load');
+    const P = [[lat0, lon0], [lat0, lon1], [lat1, lon0], [lat1, lon1]].map(q => igh(q[0], q[1])), pad = 375, xa = Math.min(...P.map(q => q[0])) - pad, xb = Math.max(...P.map(q => q[0])) + pad, ya = Math.min(...P.map(q => q[1])) - pad, yb = Math.max(...P.map(q => q[1])) + pad;
+    const one = async (prop, dep) => { const u = 'https://maps.isric.org/mapserv?map=/map/' + prop + '.map&SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCoverage&COVERAGEID=' + prop + '_' + dep + '_mean&FORMAT=GEOTIFF_INT16&SUBSET=X(' + Math.round(xa) + ',' + Math.round(xb) + ')&SUBSET=Y(' + Math.round(ya) + ',' + Math.round(yb) + ')&SUBSETTINGCRS=http://www.opengis.net/def/crs/EPSG/0/152160&OUTPUTCRS=http://www.opengis.net/def/crs/EPSG/0/152160';
+      const buf = await retry(() => net(u, true, 40000), 2), tif = await GeoTIFF.fromArrayBuffer(buf), img = await tif.getImage(), [ox, oy] = img.getOrigin(), [rx, ry] = img.getResolution(), W = img.getWidth(), Hh = img.getHeight(), ras = (await img.readRasters())[0];
+      return { ox, oy, rx, ry, W, H: Hh, v: Array.from(ras, x => (x <= -32000 || x === 0 ? NaN : x / 10)) }; };
+    const props = ['sand', 'clay', 'silt'], M = {};
+    for (const pr of props) { const L2 = await Promise.all(SGD.map(d => one(pr, d))), g = L2[0]; M[pr] = Object.assign({}, g, { v: g.v.map((_, i) => { const a = L2.map(l => l.v[i]).filter(isFinite); return a.length ? a.reduce((p, q) => p + q, 0) / a.length : NaN; }) }); }
+    const at = (pr, lat, lon) => { const g = M[pr], q = igh(lat, lon), fx = (q[0] - g.ox) / g.rx - 0.5, fy = (q[1] - g.oy) / g.ry - 0.5, i = Math.floor(fx), j = Math.floor(fy), tx = fx - i, ty = fy - j; let s = 0, w = 0;
+      [[i, j, (1 - tx) * (1 - ty)], [i + 1, j, tx * (1 - ty)], [i, j + 1, (1 - tx) * ty], [i + 1, j + 1, tx * ty]].forEach(([a, b, k]) => { const ii = Math.max(0, Math.min(g.W - 1, a)), jj = Math.max(0, Math.min(g.H - 1, b)), v = g.v[jj * g.W + ii]; if (isFinite(v) && k > 0) { s += v * k; w += k; } }); return w ? s / w : NaN; };
+    const mean = pr => { const a = M[pr].v.filter(isFinite); return a.length ? a.reduce((p, q) => p + q, 0) / a.length : NaN; }, n = M.sand.v.filter(isFinite).length;
+    if (!n) throw new Error('no soil data in the SoilGrids map here (water, town or rock?)');
+    return { at, mean, n, cells: M.sand.W * M.sand.H, src: 'SoilGrids 2.0 (ISRIC) 250 m map, mean of 0 to 60 cm' };
+  }
+  async function soilGrids(c) {
+    let e1; try { return await retry(() => soilPoint(c), 3); } catch (e) { e1 = e; if (/no soil data/.test(e.message)) throw e; }
+    try { const d = 0.004, m = await soilMap(c[0] - d, c[1] - d, c[0] + d, c[1] + d), sand = m.at('sand', c[0], c[1]), clay = m.at('clay', c[0], c[1]), silt = m.at('silt', c[0], c[1]); if (!isFinite(sand) || !isFinite(clay)) throw new Error('no soil data at this point');
+      return { sand, clay, silt: isFinite(silt) ? silt : 100 - sand - clay, soc: NaN, cls: texClass(sand, clay, isFinite(silt) ? silt : 100 - sand - clay), src: 'SoilGrids 2.0 (ISRIC) 250 m map service' }; }
+    catch (e2) { throw new Error('SoilGrids could not be reached (point service: ' + (e1 && e1.message) + '; map service: ' + e2.message + ')'); }
   }
   function texClass(sa, cl, si) {   // USDA texture triangle
     if (si + 1.5 * cl < 15) return 'sand'; if (si + 1.5 * cl < 30) return 'loamy sand';
@@ -224,5 +263,5 @@ const FieldSite = (() => {
     sys.sort((a, b) => b.score - a.score); if (!isFinite(sl) || !S.soil) sys.forEach(x => x.why.push('(' + [!isFinite(sl) ? 'the slope' : '', !S.soil ? 'the soil of the site' : ''].filter(Boolean).join(' and ') + ' could not be read: the score is incomplete)'));
     return { list: sys, area: A, comp, slope: sl, relief, sand, clay, crop, surfaceWater };
   }
-  return { init: h => { H = h; }, readField, analyse, CLS, mosaic, soilAt: c => soilGrids(c) };
+  return { init: h => { H = h; }, readField, analyse, CLS, mosaic, soilAt: c => soilGrids(c), soilMap, igh };
 })();
