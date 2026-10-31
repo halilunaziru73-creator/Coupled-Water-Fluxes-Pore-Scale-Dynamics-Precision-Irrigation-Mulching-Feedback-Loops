@@ -132,13 +132,13 @@
       const Y = v => gy + gh - (v - lo) / (hi - lo) * gh;
       ctx.fillStyle = '#EEF3FA'; const f0 = clamp(ti + 1, 0, N - 1); let fe = f0; for (let k = f0; k < N; k++) if (A.scn.typ.kind[k] === 'fc') fe = k; if (fe > f0) { ctx.fillRect(X(f0), gy, X(fe) - X(f0), gh); }
       ctx.strokeStyle = GRID; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(gx, gy + gh + 0.5); ctx.lineTo(gx + gw, gy + gh + 0.5); ctx.moveTo(gx, gy + 0.5); ctx.lineTo(gx + gw, gy + 0.5); ctx.stroke();
-      if (d.ref) { ctx.strokeStyle = '#B8743A'; ctx.setLineDash([2, 3]); ctx.beginPath(); ctx.moveTo(gx, Y(d.ref) + 0.5); ctx.lineTo(gx + gw, Y(d.ref) + 0.5); ctx.stroke(); ctx.setLineDash([]); T(d.rl, gx + 2, Y(d.ref) + 9, { s: 7.5, c: '#B8743A' }); }
+      if (d.ref) { ctx.strokeStyle = '#B8743A'; ctx.setLineDash([2, 3]); ctx.beginPath(); ctx.moveTo(gx, Y(d.ref) + 0.5); ctx.lineTo(gx + gw, Y(d.ref) + 0.5); ctx.stroke(); ctx.setLineDash([]); }
       if (d.f) {
         ctx.strokeStyle = '#1B1F23'; ctx.lineWidth = 1.8; ctx.beginPath(); for (let k = 0; k <= Math.min(ti, N - 1); k++) { const v = d.f(R.runs.typ, k); k ? ctx.lineTo(X(k), Y(v)) : ctx.moveTo(X(k), Y(v)); } ctx.stroke();
         SCN.forEach(s => { ctx.strokeStyle = s.c; ctx.lineWidth = 1.8; ctx.beginPath(); for (let k = Math.max(0, ti); k < N; k++) { const v = d.f(R.runs[s.k], k); k === Math.max(0, ti) ? ctx.moveTo(X(k), Y(v)) : ctx.lineTo(X(k), Y(v)); } ctx.stroke(); });
       } else { SCN.forEach((s, i2) => { ctx.strokeStyle = s.c; ctx.lineWidth = 1.8; ctx.beginPath(); for (let k = Math.max(0, ti); k < N; k++) { k === Math.max(0, ti) ? ctx.moveTo(X(k), Y(rs[i2][k])) : ctx.lineTo(X(k), Y(rs[i2][k])); } ctx.stroke(); }); }
       ctx.strokeStyle = '#1B1F23'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(X(ti) + 0.5, gy); ctx.lineTo(X(ti) + 0.5, gy + gh); ctx.stroke(); ctx.setLineDash([]);
-      T(d.t, gx, gy - 6, { s: 9, b: true }); T(fmt(hi, d.dp), gx + 3, gy + 9, { s: 7.5, c: MUTE }); T(fmt(lo, d.dp), gx + 3, gy + gh - 3, { s: 7.5, c: MUTE });
+      TF(d.t, gx, gy - 6, gw, { s: 9, b: true }); const lab = (t, x, yb, c) => { ctx.font = '7.5px sans-serif'; const tw = ctx.measureText(t).width; ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.fillRect(x - 2, yb - 8, tw + 4, 10); T(t, x, yb, { s: 7.5, c }); }; lab(fmt(hi, d.dp), gx + 4, gy + 9, MUTE); lab(fmt(lo, d.dp), gx + 4, gy + gh - 3, MUTE); if (d.ref) lab(d.rl, gx + 4, Y(d.ref) + 10, '#B8743A');
       if (U.yearAxis()) U.axisDates(X, gy + gh, gx, gw); else { T(dateOf(0), gx, gy + gh + 11, { s: 7.5, c: MUTE }); T(dateOf(N - 1), gx + gw, gy + gh + 11, { s: 7.5, c: MUTE, a: 'right' }); } U.todayMark(X, gy, gh);
       U.scrub(gx, gy, gw, gh, X.sx, X.sw);
     });
@@ -197,7 +197,7 @@
     // the table of the chosen future
     const eps = episodes(R, PH.stScn, PH.stPlant), cols = [0, 0.04, 0.17, 0.30, 0.37, 0.49, 0.60, 0.70, 0.80, 0.90].map(f => cx + 12 + (w - 24) * f);
     ['', 'from', 'to', 'days', 'growth stage', 'lowest water', 'T / Tp', 'root growth', 'root depth', 'roots in dry'].forEach((h, k) => T(h, cols[k], y + 8, { s: 8.5, b: true }));
-    y += 11; ['', '', '', '', '', 'of the root zone %', 'mean', 'vs watered %', 'vs watered cm', 'layers %'].forEach((h, k) => T(h, cols[k], y + 8, { s: 7.5, c: MUTE })); y += 11;
+    y += 11; ['', '', '', '', '', 'root zone %', 'mean', 'vs watered %', 'vs watered cm', 'layers %'].forEach((h, k) => T(h, cols[k], y + 8, { s: 7.5, c: MUTE })); y += 11;
     ctx.strokeStyle = GRID; ctx.beginPath(); ctx.moveTo(cx + 12, y + 0.5); ctx.lineTo(cx + w - 12, y + 0.5); ctx.stroke(); y += 4;
     const WC = { past: '#6B7280', now: '#B8743A', ahead: '#B3261E' };
     if (!eps.length) { T('No day of drought stress for the ' + PH.stPlant.replace('rf', 'rainfed').replace('pj', 'irrigated') + ' plant on this future.', cx + 12, y + 10, { s: 9.5, c: '#1E8E3E', b: true }); y += 20; }
@@ -249,17 +249,17 @@
     const panel = (label, top, f, c, unit, bars, extra) => {
       const vals = f.filter(a => a != null).concat(extra || []); const mx = K.nice(Math.max(1, ...vals) * 1.08), mn = bars ? 0 : Math.min(0, Math.floor(Math.min(...vals)));
       ctx.fillStyle = '#EEF3E8'; ctx.fillRect(X(Math.max(0, sIdx)), top, X(Math.min(v.n - 1, sIdx + N - 1)) - X(Math.max(0, sIdx)), hh);
-      K.yAxis(x0, top, ww, hh, mn, mx, unit, 4); const Y = q => top + hh - (q - mn) / (mx - mn) * hh;
+      K.yAxis(x0, top, ww, hh, mn, mx, '', 4); const Y = q => top + hh - (q - mn) / (mx - mn) * hh;
       if (bars) { for (let d = 0; d < v.n; d++) { if (f[d] > 0.05) { ctx.fillStyle = col[v.kind[d]]; ctx.fillRect(X(d) - 0.6, Y(f[d]), 1.6, top + hh - Y(f[d])); } } }
       else { ctx.strokeStyle = c; ctx.lineWidth = 1.5; ctx.beginPath(); let st = false; for (let d = 0; d < v.n; d++) { if (f[d] == null) { st = false; continue; } st ? ctx.lineTo(X(d), Y(f[d])) : ctx.moveTo(X(d), Y(f[d])); st = true; } ctx.stroke(); }
       ctx.strokeStyle = '#D8D3C6'; ctx.lineWidth = 1; fm().forEach(([d, m]) => { ctx.beginPath(); ctx.moveTo(X(d) + 0.5, top); ctx.lineTo(X(d) + 0.5, top + hh); ctx.stroke(); });
-      T(label, x0 + 6, top + 11, { s: 9.5, b: true });
+      TF(label, x0, top - 7, ww, { s: 9.5, b: true }); T(unit, x0 - 4, top - 7, { s: 8.5, c: MUTE, a: 'right' });
       if (ti >= 0 && ti < v.n) { ctx.strokeStyle = '#0A246A'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(X(ti) + 0.5, top); ctx.lineTo(X(ti) + 0.5, top + hh); ctx.stroke(); ctx.fillStyle = '#0A246A'; ctx.beginPath(); ctx.moveTo(X(ti) - 4, top - 1); ctx.lineTo(X(ti) + 5, top - 1); ctx.lineTo(X(ti) + 0.5, top + 5); ctx.closePath(); ctx.fill(); }
       return top + hh;
     };
-    y += 4; let b1 = panel('Rain (bars) and reference evapotranspiration (line), mm/day', y + 6, v.P, '#1F5FA8', 'mm/day', true, v.E.filter(a => a != null));
+    y += 16; let b1 = panel('Rain (bars) and reference evapotranspiration (line), mm/day', y + 6, v.P, '#1F5FA8', 'mm/day', true, v.E.filter(a => a != null));
     ctx.strokeStyle = '#B8743A'; ctx.lineWidth = 1.4; { const mx = K.nice(Math.max(1, ...v.P, ...v.E.filter(a => a != null)) * 1.08); ctx.beginPath(); let st = false; for (let d = 0; d < v.n; d++) { if (v.E[d] == null) { st = false; continue; } const yy = y + 6 + hh - v.E[d] / mx * hh; st ? ctx.lineTo(X(d), yy) : ctx.moveTo(X(d), yy); st = true; } ctx.stroke(); }
-    y = b1 + 22; const b2 = panel('Mean temperature, °C', y + 6, v.T, '#C0392B', '°C', false); y = b2;
+    y = b1 + 26; const b2 = panel('Mean temperature, °C', y + 6, v.T, '#C0392B', '°C', false); y = b2;
     fm().forEach(([d, m]) => T(m, X(d) + 2, y + 12, { s: 8, c: MUTE })); y += 30;
     K.legend([['#1F5FA8', 'recorded (up to the date of the toolbar)'], ['#6BA6E8', 'forecast'], ['#A8B0BC', W0 ? 'typical year of the record' : 'model weather of the climate'], ['#B8743A', 'evapotranspiration'], ['#C0392B', 'temperature'], ['#0A246A', 'date of the toolbar'], ['#CFE0C4', 'the season of the plant']], x0, y); y += 36;
     y += note('These are the days that the model of the layer reads. The weather file or the online weather is loaded in Tools; if a day is missing, the typical year of the record fills it, so no figure ever shows a day without weather.', cx + 12, y, w - 24) * 12.5 + 8; endFrame(cx, y0, y, w); return y + 10;

@@ -269,26 +269,25 @@
   const OBSK = { 'Plant height': 'height', 'Projected shoot area': 'area', 'Shoot solidity (area / convex hull)': 'solidity', 'Senescence index': 'senescence', 'Leaf relative water content': 'rwc', 'Canopy temperature depression (air minus canopy)': 'ctd' };
   function seriesVals(row, res) { const v = row.f(res), s = row.s == null ? 1 : row.s, out = new Array(N); for (let i = 0; i < N; i++) out[i] = v[i] * s; return out; }
   function drawSeries(y) {
-    const w = W - 32, cx = 16, rows = SETS[PH.set], rh = 92, hh = 84 + rows.length * rh; K.frame(cx, y, w, hh, 'Traits through time: ' + RN() + ' against drought', 'click or drag on a chart to move the day');
+    const w = W - 32, cx = 16, rows = SETS[PH.set], rh = 108, hh = 84 + rows.length * rh; K.frame(cx, y, w, hh, 'Traits through time: ' + RN() + ' against drought', 'click or drag on a chart to move the day');
     let xx = cx + 8; SETN.forEach(s => { xx += chip(xx, y + 28, s.t, PH.set === s.k, () => { PH.set = s.k; }, 'show ' + s.t.toLowerCase()); });
-    const x0 = cx + 62, ww = w - 62 - 14, d = day(); TS.x = x0; TS.w = ww; TS.y = y + 58; TS.h = rows.length * rh;
+    const x0 = cx + 62, ww = w - 62 - 14, d = day(); TS.x = x0; TS.w = ww; TS.y = y + 74; TS.h = rows.length * rh - 16;
     const shade = regimeShade();
     rows.forEach((row, ri) => {
-      const top = y + 62 + ri * rh, hgt = rh - 26, a = seriesVals(row, R('ww')), b = seriesVals(row, R('dr'));
+      const top = y + 62 + 16 + ri * rh, hgt = rh - 42, a = seriesVals(row, R('ww')), b = seriesVals(row, R('dr'));
       let mn = Infinity, mx = -Infinity; [a, b].forEach(q => q.forEach(v => { if (isFinite(v)) { mn = Math.min(mn, v); mx = Math.max(mx, v); } }));
       const obsK = OBSK[row.t], obs = PH.obs && obsK && PH.obs.cols.includes(obsK) ? PH.obs.rows.filter(o => isFinite(o[obsK])) : [];
       obs.forEach(o => { mn = Math.min(mn, o[obsK]); mx = Math.max(mx, o[obsK]); });
       if (!isFinite(mn)) { mn = 0; mx = 1; } const pad = (mx - mn) * 0.08 + 1e-9, nonneg = mn >= 0; mn -= pad; mx += pad; if (nonneg && mn < 0) mn = 0;
       const X = xmap(x0, ww), Y = v => top + hgt - (v - mn) / (mx - mn) * hgt;
       shade.forEach(s => { ctx.fillStyle = s[2]; ctx.fillRect(X(s[0]), top, X(s[1]) - X(s[0]), hgt); });
-      ctx.strokeStyle = GRID; ctx.lineWidth = 1; for (let g = 0; g <= 3; g++) { const yy = top + hgt * g / 3; ctx.beginPath(); ctx.moveTo(x0, yy + 0.5); ctx.lineTo(x0 + ww, yy + 0.5); ctx.stroke(); T(fmt(mx - (mx - mn) * g / 3, mx - mn < 5 ? 2 : (mx - mn < 50 ? 1 : 0)), x0 - 4, yy + 3, { s: 8.5, c: MUTE, a: 'right' }); }
-      TF(row.t + (row.u ? ' (' + row.u + ')' : ''), x0 + 4, top + 10, ww - 10, { s: 9.5, b: true });
+      ctx.strokeStyle = GRID; ctx.lineWidth = 1; for (let g = 0; g <= 3; g++) { const yy = top + hgt * g / 3; ctx.beginPath(); ctx.moveTo(x0, yy + 0.5); ctx.lineTo(x0 + ww, yy + 0.5); ctx.stroke(); T(fmt(mx - (mx - mn) * g / 3, mx - mn < 5 ? 2 : (mx - mn < 50 ? 1 : 0)), x0 - 7, yy + 3, { s: 8.5, c: MUTE, a: 'right' }); }
       ctx.save(); ctx.beginPath(); ctx.rect(x0 - 1, top - 1, ww + 2, hgt + 2); ctx.clip();
       [[a, '#1B1F23'], [b, '#D93025']].forEach(([q, c]) => { ctx.strokeStyle = c; ctx.lineWidth = 2; ctx.beginPath(); let st = false; for (let i = 0; i < N; i++) { if (!isFinite(q[i])) { st = false; continue; } st ? ctx.lineTo(X(i), Y(q[i])) : ctx.moveTo(X(i), Y(q[i])); st = true; } ctx.stroke(); ctx.fillStyle = c; ctx.beginPath(); if (isFinite(q[d])) { ctx.arc(X(d), Y(q[d]), 3.4, 0, Math.PI * 2); ctx.fill(); } }); ctx.restore();
       obs.forEach(o => { ctx.fillStyle = o.trt === 'dr' ? '#D93025' : '#1B1F23'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.beginPath(); ctx.rect(X(o.day) - 3, Y(o[obsK]) - 3, 6, 6); ctx.fill(); ctx.stroke(); });
       ctx.strokeStyle = '#2E7DE8'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(X(d) + 0.5, top); ctx.lineTo(X(d) + 0.5, top + hgt); ctx.stroke(); ctx.setLineDash([]); todayMark(X, top, hgt);
       if (ri === rows.length - 1) { axisDates(X, top + hgt, x0, ww); }
-      { const lt = fmt(a[d], mx - mn < 5 ? 2 : 1) + ' / ' + fmt(b[d], mx - mn < 5 ? 2 : 1); ctx.font = 'bold 9px sans-serif'; const lw = ctx.measureText(lt).width + 8; ctx.fillStyle = 'rgba(255,255,255,0.88)'; ctx.fillRect(x0 + ww - lw - 2, top + 1, lw, 13); T(lt, x0 + ww - 6, top + 11, { s: 9, b: true, c: '#33414F', a: 'right' }); }
+      { const lt = fmt(a[d], mx - mn < 5 ? 2 : 1) + ' / ' + fmt(b[d], mx - mn < 5 ? 2 : 1); ctx.font = 'bold 9.5px sans-serif'; const lw = ctx.measureText(lt).width; T(lt, x0 + ww, top - 5, { s: 9.5, b: true, c: '#33414F', a: 'right' }); TF(row.t + (row.u ? ' (' + row.u + ')' : ''), x0 + 8, top - 5, ww - lw - 20, { s: 9.5, b: true }); }
     });
     K.legend([['#1B1F23', RN()], ['#D93025', 'drought']].concat(shade.length ? [['#F6D9A8', 'stress'], ['#D3DDF3', 'recovery']] : []).concat(PH.obs ? [['#888', 'square: your observations']] : []), cx + 10, y + hh - 10);
     hot(TS.x, TS.y, TS.w, TS.h, () => { }, 'click or drag to move the day');
