@@ -75,8 +75,49 @@ const FieldSite = (() => {
   }
   function majority(cls, W, Hh) { const out = new Int8Array(cls.length); for (let y = 0; y < Hh; y++) for (let x = 0; x < W; x++) { const o = y * W + x; if (cls[o] < 0) { out[o] = -1; continue; } const n = [0, 0, 0, 0, 0, 0]; for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const xx = x + dx, yy = y + dy; if (xx < 0 || yy < 0 || xx >= W || yy >= Hh) continue; const v = cls[yy * W + xx]; if (v >= 0) n[v]++; } let b = cls[o]; for (let k = 0; k < 6; k++) if (n[k] > n[b]) b = k; out[o] = b; } return out; }
 
+  // ------------------------------------------------------------------ supervised land cover: a classifier trained on the field itself
+  // The labels are real: the scene classification and spectral indices of the Sentinel-2 cells of the field (or the ESA WorldCover
+  // map when no scene is read). The classifier is quadratic discriminant analysis (one Gaussian per class with its own covariance)
+  // on eight features of every photo pixel; 30 % of the samples are held out to measure its accuracy before it is trained on all.
+  const FK = ['L', 'S', 'exg', 'vari', 'blu', 'tex', 'gli', 'ngrdi'];
+  function solveInv(A) { const n = A.length, M2 = A.map((r, i) => r.concat(Array.from({ length: n }, (_, j) => (i === j ? 1 : 0)))); let det = 0;
+    for (let c = 0; c < n; c++) { let p = c; for (let r = c + 1; r < n; r++) if (Math.abs(M2[r][c]) > Math.abs(M2[p][c])) p = r; [M2[c], M2[p]] = [M2[p], M2[c]]; const d = M2[c][c] || 1e-12; det += Math.log(Math.abs(d)); for (let j = 0; j < 2 * n; j++) M2[c][j] /= d; for (let r = 0; r < n; r++) if (r !== c) { const f = M2[r][c]; if (f) for (let j = 0; j < 2 * n; j++) M2[r][j] -= f * M2[c][j]; } }
+    return { inv: M2.map(r => r.slice(n)), logdet: det }; }
+  function qdaTrain(X, y, prior) { const d = X[0].length, C = {}; y.forEach((c, i) => { (C[c] = C[c] || []).push(X[i]); });
+    const model = Object.keys(C).map(Number).filter(c => C[c].length >= 8).map(c => { const A = C[c], n = A.length, m = new Array(d).fill(0); A.forEach(x => x.forEach((v, q) => { m[q] += v / n; }));
+      const S = Array.from({ length: d }, () => new Array(d).fill(0)); A.forEach(x => { for (let i = 0; i < d; i++) for (let j = i; j < d; j++) S[i][j] += (x[i] - m[i]) * (x[j] - m[j]) / Math.max(1, n - 1); }); for (let i = 0; i < d; i++) for (let j = 0; j < i; j++) S[i][j] = S[j][i];
+      const tr = S.reduce((a, r, i) => a + r[i], 0) / d; for (let i = 0; i < d; i++) S[i][i] += 0.02 * tr + 1e-6;   // shrinkage towards a sphere keeps small classes stable
+      const iv = solveInv(S); return { c, m, inv: iv.inv, k: -0.5 * iv.logdet + Math.log(Math.max(1e-6, prior[c] || 1 / 6)) }; });
+    return model; }
+  function qdaPredict(model, x) { let best = -1, bs = -Infinity; for (const g of model) { const d = x.length; let q = 0; for (let i = 0; i < d; i++) { const di = x[i] - g.m[i]; let r = 0; for (let j = 0; j < d; j++) r += g.inv[i][j] * (x[j] - g.m[j]); q += di * r; } const sc = g.k - 0.5 * q; if (sc > bs) { bs = sc; best = g.c; } } return best; }
+  function trainCover(f, M, mask, lab) {
+    const cand = [], step = Math.max(1, Math.round(Math.sqrt((M.W * M.H) / 90000)));
+    for (let y = 0; y < M.H; y += step) for (let x = 0; x < M.W; x += step) { const i = y * M.W + x; if (mask[i * 4 + 3] < 128 || !f.ok[i]) continue; const ll = M.ll(x + 0.5, y + 0.5), c = lab.at(ll[0], ll[1]); if (c >= 0) cand.push([i, c]); }
+    if (cand.length < 60) return null; const freq = [0, 0, 0, 0, 0, 0]; cand.forEach(q => freq[q[1]]++);
+    let sd0 = 7; const rnd = () => (sd0 = (sd0 * 16807) % 2147483647) / 2147483647; for (let i = cand.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [cand[i], cand[j]] = [cand[j], cand[i]]; }
+    const per = {}, smp = cand.filter(q => (per[q[1]] = (per[q[1]] || 0) + 1) <= 2500);   // at most 2500 pixels of each class
+    const raw = i => FK.map(k => f[k][i]), mu = FK.map((_, q) => smp.reduce((a, s) => a + raw(s[0])[q], 0) / smp.length), sd = FK.map((_, q) => Math.sqrt(smp.reduce((a, s) => a + (raw(s[0])[q] - mu[q]) ** 2, 0) / smp.length) || 1), vec = i => FK.map((k, q) => (f[k][i] - mu[q]) / sd[q]);
+    const tot = cand.length, prior = freq.map(n => n / tot), cls = Array.from(new Set(smp.map(s => s[1]))).sort();
+    // hold out 30 % of the samples of every class to measure the accuracy
+    const tr = [], te = []; const seen = {}; smp.forEach(s => { seen[s[1]] = (seen[s[1]] || 0) + 1; (seen[s[1]] % 10 < 3 ? te : tr).push(s); });
+    let acc = NaN, kappa = NaN, conf = null;
+    if (cls.length >= 2 && te.length >= 20) { const m0 = qdaTrain(tr.map(s => vec(s[0])), tr.map(s => s[1]), prior); conf = Array.from({ length: 6 }, () => new Array(6).fill(0)); te.forEach(s => { const p = qdaPredict(m0, vec(s[0])); if (p >= 0) conf[s[1]][p]++; });
+      const n = te.length, ok = conf.reduce((a, r, i) => a + r[i], 0), pe = conf.reduce((a, r, i) => a + r.reduce((x, y) => x + y, 0) * conf.reduce((x, rr) => x + rr[i], 0), 0) / (n * n); acc = ok / n; kappa = pe < 1 ? (acc - pe) / (1 - pe) : 1; }
+    const model = cls.length >= 2 ? qdaTrain(smp.map(s => vec(s[0])), smp.map(s => s[1]), prior) : null;
+    return { model, vec, one: cls.length === 1 ? cls[0] : -1, nTrain: tr.length, nTest: te.length, nAll: smp.length, cand: tot, acc, kappa, conf, classes: cls, freq, src: lab.src };
+  }
+  // the ESA WorldCover 2021 map (10 m), read from its cloud-optimised files when no Sentinel-2 scene could be read
+  async function worldCover(F) {
+    if (typeof GeoTIFF === 'undefined') throw new Error('the GeoTIFF reader did not load');
+    const la = F.pts.map(p => p[0]), lo = F.pts.map(p => p[1]), lat0 = Math.min(...la), lon0 = Math.min(...lo), lat1 = Math.max(...la), lon1 = Math.max(...lo), tl = Math.floor(lat0 / 3) * 3, tg = Math.floor(lon0 / 3) * 3;
+    const nm = (tl < 0 ? 'S' : 'N') + String(Math.abs(tl)).padStart(2, '0') + (tg < 0 ? 'W' : 'E') + String(Math.abs(tg)).padStart(3, '0');
+    const tif = await GeoTIFF.fromUrl('https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_' + nm + '_Map.tif'), img = await tif.getImage(), [ox, oy] = img.getOrigin(), [rx, ry] = img.getResolution();
+    const c0 = Math.floor((lon0 - 0.001 - ox) / rx), c1 = Math.ceil((lon1 + 0.001 - ox) / rx), r0 = Math.floor((lat1 + 0.001 - oy) / ry), r1 = Math.ceil((lat0 - 0.001 - oy) / ry), ras = (await img.readRasters({ window: [c0, r0, c1, r1] }))[0], w = c1 - c0;
+    const MAP = { 10: 0, 20: 1, 30: 1, 40: 1, 90: 1, 95: 0, 100: 1, 50: 4, 60: 2, 70: 2, 80: 3 };
+    return { src: 'ESA WorldCover 2021 (10 m)', at: (lat, lon) => { const c = Math.floor((lon - ox) / rx) - c0, r = Math.floor((lat - oy) / ry) - r0; if (c < 0 || r < 0 || c >= w || r >= r1 - r0) return -1; const v = MAP[ras[r * w + c]]; return v == null ? -1 : v; } };
+  }
   // ------------------------------------------------------------------ the field read from its photo
-  async function readField(F, st) {
+  async function readField(F, st, lab) {
     const lats = F.pts.map(p => p[0]), lons = F.pts.map(p => p[1]), pa = (Math.max(...lats) - Math.min(...lats)) * 0.12 + 2e-4, pb = (Math.max(...lons) - Math.min(...lons)) * 0.12 + 2e-4;
     st && (st.textContent = 'Reading the satellite photo of the field...');
     const M = await mosaic(Math.min(...lats) - pa, Math.min(...lons) - pb, Math.max(...lats) + pa, Math.max(...lons) + pb, 1700, 19);
@@ -84,6 +125,14 @@ const FieldSite = (() => {
     const f = features(M.img, M.W, M.H), km = kmeans(f, M.W * M.H, 7, 11), cls = majority(km.cls, M.W, M.H);
     // the field mask in the photo
     const mk = document.createElement('canvas'); mk.width = M.W; mk.height = M.H; const mc = mk.getContext('2d'); mc.beginPath(); F.pts.forEach((p, i) => { const q = M.px(p[0], p[1]); i ? mc.lineTo(q[0], q[1]) : mc.moveTo(q[0], q[1]); }); mc.closePath(); mc.fill(); const mask = mc.getImageData(0, 0, M.W, M.H).data;
+    // with real labels (Sentinel-2 or WorldCover), every photo pixel of the field is classified by the classifier trained on them
+    let ml = null; if (lab) { st && (st.textContent = 'Training the land cover classifier on the labels of ' + lab.src + '...'); await new Promise(r => setTimeout(r, 15)); try { ml = trainCover(f, M, mask, lab); } catch (e) { ml = null; }
+      if (ml && (ml.model || ml.one >= 0)) { st && (st.textContent = 'Classifying the pixels of the field (' + (ml.model ? 'quadratic discriminant analysis, ' + ml.classes.length + ' classes' : 'one class') + ')...'); await new Promise(r => setTimeout(r, 15)); const pr = new Int8Array(M.W * M.H).fill(-1);
+        // a classifier that separates the classes well (kappa 0.4 or more) draws the whole field at the detail of the photo; otherwise the
+        // satellite classes of the labelled cells are kept and the classifier only fills the mixed cells
+        ml.mode = ml.model && ml.kappa >= 0.4 ? 'classifier' : 'labels'; const W0 = M.W;
+        for (let i = 0; i < M.W * M.H; i++) { if (mask[i * 4 + 3] < 128) continue; if (!f.ok[i]) continue; let c = -1; if (ml.mode === 'labels') { const ll = M.ll((i % W0) + 0.5, Math.floor(i / W0) + 0.5); c = lab.at(ll[0], ll[1]); } pr[i] = c >= 0 ? c : ml.model ? qdaPredict(ml.model, ml.vec(i)) : ml.one; }
+        const sm = majority(pr, M.W, M.H); for (let i = 0; i < M.W * M.H; i++) if (sm[i] >= 0) cls[i] = sm[i]; } else ml = null; }
     // the land cover picture (cut to the field) and its shares
     const out = document.createElement('canvas'); out.width = M.W; out.height = M.H; const oc = out.getContext('2d'), cnt = [0, 0, 0, 0, 0, 0], sumC = CLS.map(() => [0, 0, 0]); let tot = 0;
     for (let i = 0; i < M.W * M.H; i++) { if (mask[i * 4 + 3] < 128 || cls[i] < 0) continue; const k = cls[i]; cnt[k]++; tot++; for (let q = 0; q < 3; q++) sumC[k][q] += M.img.data[i * 4 + q]; }
@@ -99,7 +148,7 @@ const FieldSite = (() => {
     const G = H.grid(Math.max(1.5, M.mpp)), keys = ['VARI', 'GLI', 'ExG', 'NGRDI'], src = [f.vari, f.gli, f.exg, f.ngrdi], sum = keys.map(() => new Float64Array(G.nx * G.ny)), n = new Uint32Array(G.nx * G.ny);
     for (let y = 0; y < M.H; y++) for (let x = 0; x < M.W; x++) { const i = y * M.W + x; if (mask[i * 4 + 3] < 128 || !f.ok[i] || cls[i] === 5) continue; const ll = M.ll(x + 0.5, y + 0.5), l = H.local(ll, G.o), gi = Math.floor((l[0] - G.x0) / G.cell), gj = Math.floor((G.y1 - l[1]) / G.cell); if (gi < 0 || gj < 0 || gi >= G.nx || gj >= G.ny) continue; const o = gj * G.nx + gi; n[o]++; src.forEach((a, q) => { sum[q][o] += a[i]; }); }
     const vals = keys.map((k, q) => { const v = new Float32Array(G.nx * G.ny).fill(NaN); for (let o = 0; o < v.length; o++) if (n[o]) v[o] = sum[q][o] / n[o]; return v; });
-    const cv = { cls, clsAt: (la, lo) => { const q = M.px(la, lo), x = Math.floor(q[0]), y = Math.floor(q[1]); return x < 0 || y < 0 || x >= M.W || y >= M.H ? -1 : cls[y * M.W + x]; }, url: out.toDataURL(), realCols: realC, bounds: M.bounds, shares, z: M.z, mpp: M.mpp, tiles: M.ok + ' of ' + M.tried, pixels: tot, centres: km.centres.map((c, i) => Object.assign({ label: CLS[km.labels[i]][0] }, c)) };
+    const cv = { cls, clsAt: (la, lo) => { const q = M.px(la, lo), x = Math.floor(q[0]), y = Math.floor(q[1]); return x < 0 || y < 0 || x >= M.W || y >= M.H ? -1 : cls[y * M.W + x]; }, url: out.toDataURL(), realCols: realC, ml: ml ? { mode: ml.mode, src: ml.src, nTrain: ml.nTrain, nTest: ml.nTest, nAll: ml.nAll, cand: ml.cand, acc: ml.acc, kappa: ml.kappa, conf: ml.conf, classes: ml.classes, freq: ml.freq } : null, bounds: M.bounds, shares, z: M.z, mpp: M.mpp, tiles: M.ok + ' of ' + M.tried, pixels: tot, centres: km.centres.map((c, i) => Object.assign({ label: CLS[km.labels[i]][0] }, c)) };
     const res = H.pack(G, vals, { photo: true, src: 'Satellite photo of the field (Esri World Imagery, about ' + M.mpp.toFixed(1) + ' m per pixel, zoom ' + M.z + '; the capture date of the photo varies by place). Visible-band indices from the red, green and blue of ' + tot.toLocaleString('en-US') + ' pixels inside the outline; shadows left out.', date: 'photo', note: 'Indices read from the real satellite photo (' + tot.toLocaleString('en-US') + ' pixels). The photo has no near-infrared band: NDVI, EVI, SAVI, NDRE and NDWI need Sentinel-2.' }, keys);
     cv.paint = () => { const cols = paintCover(); cv.url = out.toDataURL(); cv.shares.forEach(c => { c.col = cols[c.k]; }); };
     return { res, cv };
@@ -263,5 +312,5 @@ const FieldSite = (() => {
     sys.sort((a, b) => b.score - a.score); if (!isFinite(sl) || !S.soil) sys.forEach(x => x.why.push('(' + [!isFinite(sl) ? 'the slope' : '', !S.soil ? 'the soil of the site' : ''].filter(Boolean).join(' and ') + ' could not be read: the score is incomplete)'));
     return { list: sys, area: A, comp, slope: sl, relief, sand, clay, crop, surfaceWater };
   }
-  return { init: h => { H = h; }, readField, analyse, CLS, mosaic, soilAt: c => soilGrids(c), soilMap, igh };
+  return { init: h => { H = h; }, readField, analyse, CLS, mosaic, soilAt: c => soilGrids(c), soilMap, igh, worldCover };
 })();

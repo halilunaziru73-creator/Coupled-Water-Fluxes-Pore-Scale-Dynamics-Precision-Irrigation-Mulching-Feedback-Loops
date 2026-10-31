@@ -151,4 +151,6 @@
 * The indices of the field, step by step: scenes found, bands read, clouds and shadows removed, spectral signature, indices (with GNDVI, MSAVI2, NBR, BSI and CIre), zones and land cover.
 * The soil of the field: SoilGrids point service tried three times, then the SoilGrids 250 m maps, which are interpolated over the field for the retention maps.
 * Experiments: the whole Daisy library (63 soil horizons, 84 crops, 79 fertilisers, 35 chemicals, 82 managements, 55 programs and 176 logs) can be tested; Test it in an experiment in the Parameter library.
+* Indices one at a time: after Compute, NDVI opens first and Next index opens the others; Opened maps lists only the indices opened. The 20 m bands are resampled bilinearly.
+* Land cover by machine learning: a classifier (quadratic discriminant analysis) trained on the real Sentinel-2 classes of the field (or ESA WorldCover), with its accuracy, kappa and confusion matrix; no simulated values are drawn when the real data cannot be read.
 

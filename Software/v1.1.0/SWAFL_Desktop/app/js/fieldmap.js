@@ -263,15 +263,18 @@ const FieldMap = (() => {
     if (F.pts.length < 3) { UI.toast('Demarcate the field first (at least three corners)'); return; }
     const st = document.getElementById('fmStat'); st.textContent = 'Computing...'; const net = e => /Failed to fetch|NetworkError|Load failed|aborted/i.test(e && e.message || '') ? 'no internet connection' : (e && e.message || String(e));
     if (F.src === 'auto' || F.src === 'rgb') {
-      const msgs = []; let photo = null, s2 = null;
-      try { photo = await FieldSite.readField(F, st); F.cv = photo.cv; } catch (e) { msgs.push('Photo: ' + net(e)); F.cv = null; }
+      const msgs = []; let photo = null, s2 = null, lab = null;
+      // first the satellite (real reflectance), then the photo, classified by a classifier trained on the satellite cells of the field
       if (F.src === 'auto') { try { s2 = await fromS2(st); } catch (e) { msgs.push('Sentinel-2: ' + net(e)); } }
-      if (s2) F.res = s2; else if (photo) F.res = photo.res; else { F.res = fromSim(); msgs.push('simulated by SWAFL instead'); }
+      lab = s2 ? s2Labels(s2) : null; if (!lab) { try { st.textContent = 'Reading the ESA WorldCover map of the field (labels for the classifier)...'; lab = await FieldSite.worldCover(F); } catch (e) { msgs.push('ESA WorldCover: ' + net(e)); } }
+      try { photo = await FieldSite.readField(F, st, lab); F.cv = photo.cv; } catch (e) { msgs.push('Photo: ' + net(e)); F.cv = null; }
+      if (s2) F.res = s2; else if (photo) F.res = photo.res; else { F.res = null; st.innerHTML = '<b style="color:#B01E14">No real data of the field could be read: ' + esc(msgs.join(' · ')) + '.</b> Nothing is drawn: SWAFL shows only real measurements here. Try again when the internet is available, or choose "Simulated by SWAFL" under Data to see the estimate of the model.'; return; }
+      F.openIdx = new Set([F.res.photo ? 'VARI' : 'NDVI']);
       if (F.res.photo && !RK().includes(F.idx)) F.idx = 'VARI'; if (!F.res.photo && !F.res.sim && !KEYS.includes(F.idx)) F.idx = 'NDVI'; if (F.res.sim) F.idx = KEYS.includes(F.idx) ? F.idx : 'NDVI';
       showRes(); st.innerHTML = esc(F.res.note) + (F.cv ? ' Land cover read from the photo: ' + F.cv.shares.filter(c => c.pct >= 1).map(c => c.name.toLowerCase() + ' ' + c.pct.toFixed(0) + ' %').join(', ') + '.' : '') + (msgs.length ? '<br><b style="color:#B01E14">' + esc(msgs.join(' · ')) + '</b>' : '');
       return; }
-    try { F.res = F.src === 's2' ? await fromS2(st) : fromSim(); if (!KEYS.includes(F.idx)) F.idx = 'NDVI'; showRes(); st.textContent = F.res.note; }
-    catch (e) { if (/Failed to fetch|NetworkError|Load failed/i.test(e.message || '')) e = new Error('the satellite catalogue cannot be reached (no internet connection)'); st.innerHTML = '<b style="color:#B01E14">' + esc(e.message || e) + '</b>' + (F.src === 's2' ? ' The simulated indices are used instead.' : ''); if (F.src === 's2') { F.res = fromSim(); F.res.note = 'Satellite data not available (' + (e.message || e) + '); simulated by SWAFL instead.'; showRes(); } }
+    try { F.res = F.src === 's2' ? await fromS2(st) : fromSim(); F.idx = 'NDVI'; F.openIdx = new Set(['NDVI']); showRes(); st.textContent = F.res.note; }
+    catch (e) { if (/Failed to fetch|NetworkError|Load failed/i.test(e.message || '')) e = new Error('the satellite catalogue cannot be reached (no internet connection)'); st.innerHTML = '<b style="color:#B01E14">' + esc(e.message || e) + '</b>' + (F.src === 's2' ? ' Nothing is drawn: only real Sentinel-2 values are shown in this mode. Try again later, or widen Look back or Clouds below.' : ''); }
   }
   function stats(a) { const v = a.filter(x => isFinite(x)).sort((p, q) => p - q), n = v.length; if (!n) return null; const m = v.reduce((p, q) => p + q, 0) / n, sd = Math.sqrt(v.reduce((p, q) => p + (q - m) ** 2, 0) / n), pc = f => v[Math.min(n - 1, Math.max(0, Math.round(f * (n - 1))))]; return { n, mean: m, sd, min: v[0], max: v[n - 1], p10: pc(0.1), p50: pc(0.5), p90: pc(0.9) }; }
   const hash = (i, j) => { let h = Math.imul(i, 374761393) + Math.imul(j, 668265263) | 0; h = Math.imul(h ^ (h >>> 13), 1274126177); h ^= h >>> 16; return (h & 0xffff) / 65535 * 2 - 1; };
@@ -342,17 +345,31 @@ const FieldMap = (() => {
       if (c1 <= c0 || r1 <= r0) throw new Error('the field is outside the scene');
       const ras = await img.readRasters({ window: [c0, r0, c1, r1], samples: [0], interleave: false }); band[k] = { d: ras[0], w: c1 - c0, h: r1 - r0, ox: ox + c0 * rx, oy: oy + r0 * ry, rx, ry };
       if (k === 'scl') { const at0 = (x, y) => { const c = Math.floor((x - band.scl.ox) / rx), r = Math.floor((y - band.scl.oy) / ry); return c < 0 || r < 0 || c >= band.scl.w || r >= band.scl.h ? 0 : band.scl.d[r * band.scl.w + c]; }; const clear = cells.filter(c => ![0, 1, 3, 8, 9, 10, 11].includes(at0(c[2][0], c[2][1]))).length; if (clear < cells.length * 0.3) throw new Error('the scene of ' + d + ' is cloudy over the field'); } }
-    const at = (b, x, y) => { const c = Math.floor((x - b.ox) / b.rx), rr = Math.floor((y - b.oy) / b.ry); if (c < 0 || rr < 0 || c >= b.w || rr >= b.h) return NaN; const v = b.d[rr * b.w + c]; return v === undefined ? NaN : v; };
+    const at0 = (b, x, y) => { const c = Math.floor((x - b.ox) / b.rx), rr = Math.floor((y - b.oy) / b.ry); if (c < 0 || rr < 0 || c >= b.w || rr >= b.h) return NaN; const v = b.d[rr * b.w + c]; return v === undefined ? NaN : v; };
+    // the 20 m bands (red edge, shortwave infrared) are read on the 10 m cells by bilinear interpolation between pixel centres, as SNAP and GDAL resample them; the 10 m bands and the classification as they are
+    const at = (b, x, y) => { if (b === band.scl || Math.abs(b.rx) < 15) return at0(b, x, y); const fx = (x - b.ox) / b.rx - 0.5, fy = (y - b.oy) / b.ry - 0.5, c = Math.floor(fx), rr = Math.floor(fy), tx = fx - c, ty = fy - rr; let sm = 0, w = 0;
+      [[c, rr, (1 - tx) * (1 - ty)], [c + 1, rr, tx * (1 - ty)], [c, rr + 1, (1 - tx) * ty], [c + 1, rr + 1, tx * ty]].forEach(([i2, j2, k]) => { if (i2 < 0 || j2 < 0 || i2 >= b.w || j2 >= b.h || k <= 0) return; const v = b.d[j2 * b.w + i2]; if (v > 0) { sm += v * k; w += k; } }); return w > 0 ? sm / w : NaN; };
     // the extra indices that the bands read allow, the reflectance of every clear cell (spectral signature) and the scene classes
     const xk = XKEYS.filter(k => XIX[k].need.every(b => band[b])), keys = KEYS.concat(xk), vals = keys.map(() => new Float32Array(G.nx * G.ny).fill(NaN)); let bad = 0;
-    const BL = ['blue', 'green', 'red', 'rededge1', 'nir', 'swir16', 'swir22'].filter(k => band[k]), refl = {}; BL.forEach(k => { refl[k] = []; }); const sclN = {}, ndv = [];
-    cells.forEach(([i, jj, u]) => { const scl = at(band.scl, u[0], u[1]); sclN[scl] = (sclN[scl] || 0) + 1; if ([0, 1, 3, 8, 9, 10, 11].includes(scl)) { bad++; return; }
+    const BL = ['blue', 'green', 'red', 'rededge1', 'nir', 'swir16', 'swir22'].filter(k => band[k]), refl = {}; BL.forEach(k => { refl[k] = []; }); const sclN = {}, ndv = [], BG = { G, scl: new Uint8Array(G.nx * G.ny), b: {} }; BL.forEach(k => { BG.b[k] = new Float32Array(G.nx * G.ny).fill(NaN); });
+    cells.forEach(([i, jj, u]) => { const scl = at(band.scl, u[0], u[1]); sclN[scl] = (sclN[scl] || 0) + 1; BG.scl[jj * G.nx + i] = scl; if ([0, 1, 3, 8, 9, 10, 11].includes(scl)) { bad++; return; }
       const rf = k => { if (!band[k]) return NaN; const v = at(band[k], u[0], u[1]); return v > 0 ? v * 0.0001 + it.off : NaN; }, b = rf('blue'), rr = rf('red'), re = rf('rededge1'), n = rf('nir'), s2 = rf('swir16'), g = rf('green'), s3 = rf('swir22');
       if (![b, rr, re, n, s2].every(isFinite)) { bad++; return; } const o = jj * G.nx + i; IX(b, rr, re, n, s2).forEach((v, q) => { vals[q][o] = v; });
-      const bv = { blue: b, green: g, red: rr, rededge1: re, nir: n, swir16: s2, swir22: s3 }; xk.forEach((k, q) => { vals[KEYS.length + q][o] = XIX[k].f(bv); }); BL.forEach(k => refl[k].push(bv[k])); ndv.push((n - rr) / (n + rr)); });
+      const bv = { blue: b, green: g, red: rr, rededge1: re, nir: n, swir16: s2, swir22: s3 }; xk.forEach((k, q) => { vals[KEYS.length + q][o] = XIX[k].f(bv); }); BL.forEach(k => { refl[k].push(bv[k]); BG.b[k][o] = bv[k]; }); ndv.push((n - rr) / (n + rr)); });
     if (bad >= cells.length) throw new Error('every pixel of the field is cloud, shadow or no data in the scene of ' + d);
     const spec = spectrum(BL, refl, ndv), bandsRead = ['scl'].concat(BL);
-    return pack(G, vals, { steps: { scene: { id: it.id, date: d, cloud: it.cloud, cat: it.cat, epsg: it.epsg, off: it.off }, bands: bandsRead, scl: sclN, cells: cells.length, clear: cells.length - bad, spec, xk }, s2: true, src: 'Sentinel-2 L2A scene ' + it.id + ' of ' + d + ' (' + it.cat + '), cloud ' + Math.round(it.cloud) + ' % over the tile; ' + (cells.length - bad) + ' of ' + cells.length + ' cells of 10 m clear (scene classification). Contains modified Copernicus Sentinel data ' + d.slice(0, 4) + '.', date: d, note: 'Real Sentinel-2 indices of ' + d + ' (' + Math.round(it.cloud) + ' % cloud over the tile, ' + (cells.length - bad) + ' clear cells of 10 m).' }, keys);
+    return pack(G, vals, { bandGrid: BG, steps: { scene: { id: it.id, date: d, cloud: it.cloud, cat: it.cat, epsg: it.epsg, off: it.off }, bands: bandsRead, scl: sclN, cells: cells.length, clear: cells.length - bad, spec, xk }, s2: true, src: 'Sentinel-2 L2A scene ' + it.id + ' of ' + d + ' (' + it.cat + '), cloud ' + Math.round(it.cloud) + ' % over the tile; ' + (cells.length - bad) + ' of ' + cells.length + ' cells of 10 m clear (scene classification). Contains modified Copernicus Sentinel data ' + d.slice(0, 4) + '.', date: d, note: 'Real Sentinel-2 indices of ' + d + ' (' + Math.round(it.cloud) + ' % cloud over the tile, ' + (cells.length - bad) + ' clear cells of 10 m).' }, keys);
+  }
+  // labels for the land cover classifier, from the real Sentinel-2 cells: the scene classification of ESA (water, shadow, bare soil)
+  // and the spectral indices (NDVI for dense and sparse vegetation, MNDWI for water, NDBI for built surfaces); mixed cells are left out
+  function s2Labels(R0) {
+    const BG = R0 && R0.bandGrid; if (!BG) return null; const G = BG.G, N = G.nx * G.ny, L2 = new Int8Array(N).fill(-1), v = (k, i) => BG.b[k] ? BG.b[k][i] : NaN, n6 = [0, 0, 0, 0, 0, 0];
+    for (let i = 0; i < N; i++) { const sc = BG.scl[i]; let c = -1;
+      if (sc === 6) c = 3; else if (sc === 2 || sc === 3) c = 5; else { const b = v('blue', i), g = v('green', i), r = v('red', i), n = v('nir', i), s1 = v('swir16', i); if (isFinite(r) && isFinite(n)) { const nd = (n - r) / (n + r), mn = (g - s1) / (g + s1), nb = (s1 - n) / (s1 + n);
+        if (mn > 0.2 && nd < 0.15) c = 3; else if (nd >= 0.55) c = 0; else if (nd >= 0.3 && nd < 0.5) c = 1; else if (nd < 0.2) c = sc === 5 ? 2 : (nb > 0.1 && b > 0.1 ? 4 : 2); } }
+      L2[i] = c; if (c >= 0) n6[c]++; }
+    if (n6.reduce((a, q) => a + q, 0) < 3) return null;
+    return { src: 'the Sentinel-2 scene of ' + R0.date + ' (scene classification of ESA and spectral indices of every 10 m cell)', n: n6, at: (lat, lon) => { const l = local([lat, lon], G.o), i = Math.floor((l[0] - G.x0) / G.cell), j = Math.floor((G.y1 - l[1]) / G.cell); return i < 0 || j < 0 || i >= G.nx || j >= G.ny ? -1 : L2[j * G.nx + i]; } };
   }
   function pack(G, vals, meta, keys) { keys = keys || KEYS; const S = {}; keys.forEach((k, q) => { S[k] = stats(Array.from(vals[q])); }); return Object.assign({ G, vals, S, keys, pts: F.pts.slice() }, meta); }
   const RAMP = { veg: [[0, [165, 0, 38]], [0.25, [244, 109, 67]], [0.45, [254, 224, 139]], [0.65, [166, 217, 106]], [0.85, [26, 152, 80]], [1, [0, 104, 55]]], wat: [[0, [140, 81, 10]], [0.35, [223, 194, 125]], [0.55, [199, 234, 229]], [0.8, [53, 151, 143]], [1, [1, 102, 94]]] };
@@ -407,7 +424,7 @@ const FieldMap = (() => {
   function mapLayers() {
     if (!F.lyc || !F.lyc.getContainer) return; const d = F.lyc.getContainer(), G2 = [], pv = F.view; let cur = null; F.lyShut = F.lyShut || {};
     const grp = (k, t) => { cur = { k, t, rows: [] }; G2.push(cur); }, it = (v, lab, on, sub) => cur.rows.push('<div class="fmly' + (on ? ' on' : '') + '" data-ly="' + v + '"><i>' + (on ? '&#9673;' : '&#9675;') + '</i>' + esc(lab) + (sub ? '<small>' + esc(sub) + '</small>' : '') + '</div>');
-    if (F.res) { grp('idx', 'Indices · ' + (F.res.photo ? 'satellite photo' : F.res.sim ? 'simulated' : 'Sentinel-2 ' + (F.res.date || ''))); RK().forEach(k => it('cont:' + k, k, (pv === 'cont') && F.idx === k)); RK().forEach(k => { if (F.idx === k) it('zones:' + k, k + ' management zones', pv === 'zones'); }); if (F.cv) it('cover', 'Land cover (image analysis)', pv === 'cover'); }
+    if (F.res) { grp('idx', 'Indices · ' + (F.res.photo ? 'satellite photo' : F.res.sim ? 'simulated' : 'Sentinel-2 ' + (F.res.date || ''))); RK().filter(k => !F.openIdx || F.openIdx.has(k)).forEach(k => it('cont:' + k, k, (pv === 'cont') && F.idx === k)); RK().forEach(k => { if (F.idx === k) it('zones:' + k, k + ' management zones', pv === 'zones'); }); if (F.cv) it('cover', 'Land cover (' + (F.cv.ml ? 'machine learning' : 'image analysis') + ')', pv === 'cover'); }
     const mon = [['mzone', 'Monitoring zones'], ['mchange', 'Change since the last scene'], ['mtrend', 'Trend of the last scenes'], ['mstab', 'Stability over the season']].filter(q => FieldPrec.has(q[0]));
     if (mon.length) { grp('mon', 'Season · Sentinel-2'); mon.forEach(q => it(q[0], q[1], pv === q[0])); }
     const pr = [['vri', 'Irrigation depth by zone'], ['vridate', 'Irrigation date by zone'], ['gully', 'Ephemeral gullies'], ['rusle', 'Soil loss (RUSLE)']].filter(q => FieldPrec.has(q[0]));
@@ -424,7 +441,7 @@ const FieldMap = (() => {
   function legendFor(k) {
     if (PRECV[F.view] && k === F.idx) return FieldPrec.legend(F.view);
     if (!F.res) return '';
-    if (F.view === 'cover' && F.cv && k === F.idx) return '<div class="fmchip">Land cover · satellite photo · image analysis</div><table>' + F.cv.shares.map(c => '<tr><td><i style="background:' + c.col + '"></i></td><td>' + c.name + '</td><td>' + c.ha.toFixed(2) + ' ha</td><td>' + c.pct.toFixed(0) + ' %</td></tr>').join('') + '</table>';
+    if (F.view === 'cover' && F.cv && k === F.idx) return '<div class="fmchip">Land cover · satellite photo · ' + (F.cv.ml ? 'machine learning on real labels' : 'image analysis') + '</div><table>' + F.cv.shares.map(c => '<tr><td><i style="background:' + c.col + '"></i></td><td>' + c.name + '</td><td>' + c.ha.toFixed(2) + ' ha</td><td>' + c.pct.toFixed(0) + ' %</td></tr>').join('') + '</table>';
     const I = IDX[k], s = F.res.S[k], head = '<div class="fmchip">' + k + ' · ' + (F.res.photo ? '' : esc(F.res.date) + ' · ') + (F.res.sim ? 'simulated' : F.res.photo ? 'satellite photo' : 'Sentinel-2') + '</div>';
     let body;
     if (F.view === 'zones') { const Z = zones(k); body = Z ? '<table>' + Z.Z.map((z, i) => '<tr><td><i style="background:rgb(' + zoneCol(k, i).join(',') + ')"></i></td><td>' + (i + 1) + '</td><td>' + f2(Z.br[i]) + '–' + f2(Z.br[i + 1]) + '</td><td>' + z.ha.toFixed(2) + ' ha</td><td>' + z.pct.toFixed(0) + ' %</td></tr>').join('') + '</table>' : ''; }
@@ -462,13 +479,17 @@ const FieldMap = (() => {
     if (k === 'z' && !e.shiftKey) { hist.go(true); } else if (k === 'y' || (k === 'z' && e.shiftKey)) { hist.go(false); } else return; e.preventDefault(); e.stopImmediatePropagation(); }, true);
   function showRes() {
     const el = document.getElementById('fmRes'); if (!el || !F.res) return; const S = F.res.S;
+    if (!F.openIdx) F.openIdx = new Set([F.idx]); F.openIdx.add(F.idx); const OPEN = RK().filter(k => F.openIdx.has(k)), NEXT = RK().find(k => !F.openIdx.has(k));
     const idxH = '<table class="tbl fmtab"><tr><th>Index</th><th>Mean</th><th>10–90 %</th><th>Min · max</th><th>Reading of the mean</th></tr>' +
-      RK().map(k => { const s = S[k]; return '<tr class="' + (k === F.idx ? 'on' : '') + '" data-k="' + k + '"><td><b>' + k + '</b><br><small>' + esc(IDX[k].bands) + '</small></td><td><b>' + f2(s && s.mean) + '</b></td><td>' + (s ? f2(s.p10) + ' to ' + f2(s.p90) : '-') + '</td><td>' + (s ? f2(s.min) + ' · ' + f2(s.max) : '-') + '</td><td>' + (s ? esc(IDX[k].read(s.mean)) : 'no clear cells') + '</td></tr>'; }).join('') + '</table>' +
-      '<div class="pnote">Click a row to show that index on the map. ' + esc(IDX[F.idx].name) + ': ' + esc(IDX[F.idx].use) + '. Move the mouse over the field to read the value at any point.</div>';
+      OPEN.map(k => { const s = S[k]; return '<tr class="' + (k === F.idx ? 'on' : '') + '" data-k="' + k + '"><td><b>' + k + '</b><br><small>' + esc(IDX[k].bands) + '</small></td><td><b>' + f2(s && s.mean) + '</b></td><td>' + (s ? f2(s.p10) + ' to ' + f2(s.p90) : '-') + '</td><td>' + (s ? f2(s.min) + ' · ' + f2(s.max) : '-') + '</td><td>' + (s ? esc(IDX[k].read(s.mean)) : 'no clear cells') + '</td></tr>'; }).join('') + '</table>' +
+      '<div class="pnote">Click a row to show that index on the map. ' + esc(IDX[F.idx].name) + ': ' + esc(IDX[F.idx].use) + '. Move the mouse over the field to read the value at any point.</div>' +
+      (NEXT ? '<div class="fmnext"><button class="btn pri" data-nextidx="' + NEXT + '">Next index: ' + NEXT + ' &#9656;</button><span class="pnote">' + esc(IDX[NEXT].name) + ': ' + esc(IDX[NEXT].use) + '. ' + OPEN.length + ' of ' + RK().length + ' indices opened. <a data-allidx="1">Open all ' + RK().length + '</a></span></div>' : '<div class="pnote">All ' + RK().length + ' indices are open; each is a map in Opened maps.</div>');
     // the analysis, step by step: what was read, what was masked, the spectrum, the indices, the zones, the land cover
     const st = stepsOf(idxH, zoneTable(F.idx), F.cv ? coverTable() : '');
     el.innerHTML = '<div class="pnote">' + esc(F.res.src) + '</div>' + st;
     bindSteps(el);
+    el.querySelectorAll('[data-nextidx]').forEach(b => b.onclick = () => { F.idx = b.dataset.nextidx; F.openIdx.add(F.idx); F.view = 'cont'; F.stOpen = F.stOpen || {}; F.stOpen['Indices of the field'] = true; showRes(); });
+    el.querySelectorAll('[data-allidx]').forEach(a => a.onclick = () => { RK().forEach(k => F.openIdx.add(k)); showRes(); });
     el.querySelectorAll('tr[data-k]').forEach(tr => tr.onclick = () => { F.idx = tr.dataset.k; showRes(); });
     const vr = document.getElementById('fmViewR'); if (vr) vr.style.display = '';
     const cs = document.getElementById('fmCmp'); if (cs) { if (!RK().includes(F.cmp)) F.cmp = ''; cs.innerHTML = '<option value="">nothing (one map)</option>' + RK().filter(k => k !== F.idx).map(k => '<option value="' + k + '"' + (k === F.cmp ? ' selected' : '') + '>' + k + ' side by side</option>').join(''); }
@@ -489,12 +510,23 @@ const FieldMap = (() => {
       out.push(['Spectral signature of the field', specSum(T.spec), specSvg(T.spec) + '<div class="pnote">' + specRead(T.spec) + '</div>']);
     } else if (R0.photo) out.push(['Satellite photo read', 'visible bands only (no near infrared)', '<div class="pnote">' + esc(R0.note || '') + '</div>']);
     else if (R0.sim) out.push(['Simulated by SWAFL', 'no satellite data', '<div class="pnote">' + esc(R0.note || R0.src || '') + '</div>']);
-    out.push(['Indices of the field', K.length + ' indices · ' + F.idx + ' mean ' + f2(m0 && m0.mean), idxH]);
+    out.push(['Indices of the field', (F.openIdx ? F.openIdx.size : 1) + ' of ' + K.length + ' indices opened · ' + F.idx + ' mean ' + f2(m0 && m0.mean), idxH]);
     if (zoneH) out.push(['Management zones', 'natural breaks of ' + F.idx, zoneH]);
-    if (coverH) out.push(['Land cover from the photo', F.cv.shares.filter(c => c.pct >= 1).map(c => c.name.toLowerCase() + ' ' + c.pct.toFixed(0) + ' %').slice(0, 3).join(', '), coverH]);
+    if (coverH) out.push(['Land cover from the photo', (F.cv.ml && isFinite(F.cv.ml.acc) ? 'accuracy ' + (F.cv.ml.acc * 100).toFixed(0) + ' % · ' : '') + F.cv.shares.filter(c => c.pct >= 1).map(c => c.name.toLowerCase() + ' ' + c.pct.toFixed(0) + ' %').slice(0, 3).join(', '), coverH + mlHtml(F.cv.ml)]);
     F.stOpen = F.stOpen || {}; const fresh = R0._stepShown !== true; R0._stepShown = true; const iIdx = out.findIndex(o => o[0] === 'Indices of the field');
     return '<div class="fmsteph"><b>The analysis, step by step</b><span><a data-stall="1">Open all</a> · <a data-stall="0">Fold all</a> · <a data-stwalk="1">Walk through from step 1</a></span></div>' + out.map((o, i) => { const open = F.stOpen[o[0]] != null ? F.stOpen[o[0]] : i === iIdx;
       return '<details class="fmstep' + (fresh ? ' fmstnew' : '') + '" data-stn="' + esc(o[0]) + '" style="animation-delay:' + (fresh ? i * 0.22 : 0) + 's"' + (open ? ' open' : '') + '><summary><span class="fmstn">' + (i + 1) + '</span><b>' + esc(o[0]) + '</b><span class="fmsts">' + esc(o[1] || '') + '</span><span class="fmstok">&#10003;</span></summary><div class="fmstb">' + o[2] + (i < out.length - 1 ? '<div class="fmstnx"><button class="btn" data-stnext="' + i + '">Next step: ' + esc(out[i + 1][0]) + ' &#9656;</button></div>' : '') + '</div></details>'; }).join('');
+  }
+  // how the land cover classifier was trained and how good it is
+  function mlHtml(ml) {
+    if (!ml) return '<div class="pnote">No real labels could be read (neither a Sentinel-2 scene nor the ESA WorldCover map), so the photo was grouped by k-means and the groups named by colour rules: read it as a rough picture only.</div>';
+    const N = FieldSite.CLS.map(c => c[0]), cls = ml.classes;
+    let h = '<div class="pnote"><b>How it was made.</b> Labels: ' + esc(ml.src) + '. ' + ml.cand.toLocaleString('en-US') + ' photo pixels of the field fall in labelled cells (mixed cells are left out); ' + ml.nAll.toLocaleString('en-US') + ' of them (at most 2500 of each class) were used. Every pixel is described by eight features of the photo (brightness, saturation, excess green, VARI, blueness, texture, GLI, NGRDI). The classifier is quadratic discriminant analysis (one Gaussian of the features per class, with its own covariance, and the share of each class as its prior), trained on 70 % of the samples; the other 30 % (' + ml.nTest + ') test it, then it is trained on all. ' + (ml.mode === 'classifier' ? 'It separates the classes well, so it draws every pixel of the field at the detail of the photo' : 'The colours of the photo alone do not separate the classes well here, so the classes of the satellite cells are kept and the classifier only fills the mixed cells') + ', with a 3 × 3 majority filter.</div>';
+    if (ml.conf && isFinite(ml.acc)) { const sum = r => r.reduce((a, b) => a + b, 0);
+      h += '<div class="pnote"><b>Accuracy on the held-out samples: ' + (ml.acc * 100).toFixed(1) + ' %</b> · Cohen\'s kappa ' + ml.kappa.toFixed(2) + ' (' + (ml.kappa > 0.8 ? 'almost perfect' : ml.kappa > 0.6 ? 'substantial' : ml.kappa > 0.4 ? 'moderate' : 'fair: read the map with care') + ' agreement).</div><table class="tbl"><tr><th>True \\ classified</th>' + cls.map(c => '<th>' + esc(N[c]) + '</th>').join('') + '<th>Producer\'s accuracy</th></tr>' +
+        cls.map(r => '<tr><td><b>' + esc(N[r]) + '</b></td>' + cls.map(c => '<td' + (r === c ? ' style="font-weight:bold"' : '') + '>' + ml.conf[r][c] + '</td>').join('') + '<td>' + (sum(ml.conf[r]) ? (ml.conf[r][r] / sum(ml.conf[r]) * 100).toFixed(0) + ' %' : '-') + '</td></tr>').join('') + '</table>'; }
+    else h += '<div class="pnote">Only one class has labels in this field, so there is nothing to test the classifier against: the field is that class (shadows aside).</div>';
+    return h;
   }
   function bindSteps(el) {
     const D = [...el.querySelectorAll('details.fmstep')];
@@ -526,7 +558,7 @@ const FieldMap = (() => {
     return o.join(' ') + ' Dashed: the mean spectrum of the greenest and of the least green third of the cells (by NDVI); their gap in the near infrared is the variation the zones map.';
   }
 
-  function coverTable() { const C = F.cv; return '<div class="fmzt"><b>Land cover read from the satellite photo</b> (image analysis: colour and texture of every pixel, k-means clustering, named by rules; ' + C.mpp.toFixed(1) + ' m per pixel)<table class="tbl"><tr><th></th><th>Cover</th><th>Area</th><th>Share</th></tr>' +
+  function coverTable() { const C = F.cv; return '<div class="fmzt"><b>Land cover read from the satellite photo</b> (' + (C.ml ? 'machine learning: a classifier trained on ' + esc(C.ml.src) + ', applied to every pixel' + (isFinite(C.ml.acc) ? '; accuracy on held-out samples ' + (C.ml.acc * 100).toFixed(0) + ' %' : '') : 'image analysis without labels: colour and texture of every pixel, k-means clustering, named by rules; less certain') + '; ' + C.mpp.toFixed(1) + ' m per pixel)<table class="tbl"><tr><th></th><th>Cover</th><th>Area</th><th>Share</th></tr>' +
     C.shares.map(c => '<tr><td><i style="background:' + c.col + '"></i></td><td>' + c.name + '</td><td>' + c.ha.toFixed(3) + ' ha</td><td>' + c.pct.toFixed(1) + ' %</td></tr>').join('') + '</table><div class="pnote">Choose "Land cover read from the photo" under Show on the map to see it.</div></div>'; }
   function zoneTable(k) { const Z = zones(k); if (!Z) return ''; return '<div class="fmzt"><b>Management zones of ' + k + '</b> (natural breaks)<table class="tbl"><tr><th></th><th>Zone</th><th>Range</th><th>Mean</th><th>Area</th><th>Share</th></tr>' +
     Z.Z.map((z, i) => '<tr><td><i style="background:rgb(' + zoneCol(k, i).join(',') + ')"></i></td><td>' + (i + 1) + (i === 0 ? ' low' : i === 4 ? ' high' : '') + '</td><td>' + f2(Z.br[i]) + ' to ' + f2(Z.br[i + 1]) + '</td><td><b>' + f2(z.mean) + '</b></td><td>' + z.ha.toFixed(3) + ' ha</td><td>' + z.pct.toFixed(1) + ' %</td></tr>').join('') + '</table></div>'; }
