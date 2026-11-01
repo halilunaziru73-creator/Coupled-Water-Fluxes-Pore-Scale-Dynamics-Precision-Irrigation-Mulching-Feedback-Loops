@@ -20,61 +20,71 @@
 \section*{List of symbols}
 {\small
 \begin{longtable}{>{\raggedright\arraybackslash}p{3.3cm}>{\raggedright\arraybackslash}p{8.4cm}>{\raggedright\arraybackslash}p{3.6cm}}
-\caption{List of symbols, abbreviations and units used in the text.}\label{tab:notation}\\
+\caption{Symbols, abbreviations and units of the soil--water--atmosphere engines and of the irrigation design modules, grouped by subject.}\label{tab:notation}\\
 \toprule
 Symbol & Meaning & Unit\\\midrule\endfirsthead
 \toprule Symbol & Meaning & Unit\\\midrule\endhead
-$\mathit{ET},\ I,\ D$ & annual evapotranspiration, irrigation and drainage at 1\,m & mm\,yr$^{-1}$\\
-$\rho$ & Spearman rank correlation & $-$\\
-$R^2$, nRMSE & coefficient of determination; RMSE as a percentage of the held-out mean & $-$, \%\\
-$h^\ast$, $f^\ast$ & critical suction and soil-independent depletion at which irrigation is triggered ($f^\ast=0.45$) & cm, $-$\\
-$T_{req}$ & required infiltration (intake opportunity) time & min\\
-$Q,\ Q_{\max}$ & furrow inflow and its maximum non-erosive value & m$^3$\,min$^{-1}$\\
-$L,\ t_L,\ t_{L/2}$ & furrow length; advance times to $L$ and $L/2$ & m, min\\
-$x=p\,t^{r}$ & power-law advance curve & m\\
-$E_a$ & application efficiency & fraction or \%\\
-$h_f,\ H_0$ & friction loss along a drip lateral; inlet head & m\\
-$E_u$ & drip emission uniformity & $-$\\
+\multicolumn{3}{l}{\emph{Soil water and hydraulic properties}}\\*
 $h,\ \theta,\ S_e$ & suction head, water content, effective saturation & cm, $-$, $-$\\
-$\alpha,\ n,\ m$ & van~Genuchten shape parameters & cm$^{-1}$, $-$, $-$\\
-$f,\ f_T$ & depletion fraction; its value at the trigger & $-$\\
-$E,\ T$ & soil evaporation, transpiration & mm\,yr$^{-1}$\\
-$P$ & precipitation & mm\,yr$^{-1}$\\
-$N_L,\ Y$ & nitrogen leaching, grain yield & kg\,ha$^{-1}$, Mg\,ha$^{-1}$\\
-$\varphi,\ c,\ \gamma_P,\ \Delta T$ & mulch vapour-flux factor, mulch interception capacity, rainfall scale, warming & $-$, mm, $-$, K\\
-$\gamma_y$ & year factor of the rainfall generator & $-$\\
-$E_{\mathrm{oth}},\ \Delta S$ & other evaporation ($\mathit{ET}-T-E$), storage change & mm\,yr$^{-1}$\\
 $\theta_s=\phi,\ \theta_r$ & saturated (porosity) and residual water content & $-$\\
+$\alpha,\ n,\ m$ & van~Genuchten shape parameters & cm$^{-1}$, $-$, $-$\\
 $K_r$ & Mualem relative hydraulic conductivity & $-$\\
-$r_c,\ \sigma,\ \gamma_c$ & capillary radius of the largest water-filled pore, surface tension, contact angle & cm, N\,m$^{-1}$, $-$\\
-$p,\ p_0,\ p_c,\ \tau_c$ & relative pore space, its value after tillage and when consolidated, consolidation rate & $-$, $-$, $-$, d$^{-1}$\\
-$\Delta_{\mathrm{till}},\ \Delta_{\mathrm{cons}}$ & tillage and consolidation effects on drainage & mm\,yr$^{-1}$\\
-$w_i,\ s_i,\ f_i,\ W_{\max}$ & layer water, relative content, depletion; layer capacity & mm, $-$, $-$, mm\\
-$N_y$ & growing-season days on which the sensor is beyond the trigger & d\\
+$r_c,\ \sigma,\ \gamma_c$ & capillary radius of the largest water-filled pore, surface tension, contact angle & cm, N\,m$^{-1}$, $-$\\\midrule
+\multicolumn{3}{l}{\emph{Water balance and climate}}\\*
+$P$ & precipitation & mm\,yr$^{-1}$\\
+$\mathit{ET},\ I,\ D$ & annual evapotranspiration, irrigation and drainage at 1\,m & mm\,yr$^{-1}$\\
+$E,\ T$ & soil evaporation, transpiration & mm\,yr$^{-1}$\\
+$E_{\mathrm{oth}},\ \Delta S$ & other evaporation ($\mathit{ET}-T-E$), storage change & mm\,yr$^{-1}$\\
+$\gamma_y$ & year factor of the rainfall generator & $-$\\
+$\mathrm{RH},\ \psi_{\mathrm{air}}$ & relative humidity, water potential of the air & $-$, MPa\\\midrule
+\multicolumn{3}{l}{\emph{Evaporation and mulch}}\\*
 $e_{0,b},\ e_0$ & bare-soil and mulched evaporative demand & mm\,d$^{-1}$\\
 $Q_1,\ Q(t),\ t_1,\ \tau_E,\ \ell$ & stage-1 storage, cumulative evaporation, stage-1 duration, stage-2 time scale, dry-layer depth & mm, mm, d, d, mm\\
+$\varphi,\ c,\ \gamma_P,\ \Delta T$ & mulch vapour-flux factor, mulch interception capacity, rainfall scale, warming & $-$, mm, $-$, K\\
 $\mathcal I$ & regime index (evaporation against drainage) & $-$\\
-$\mathrm{RH},\ \psi_{\mathrm{air}}$ & relative humidity, water potential of the air & $-$, MPa\\
+$\eta_I,\ \eta_D,\ \eta_T,\ \eta_{\mathrm{rest}}$ & shares of saved evaporation going to less irrigation, more drainage, more transpiration, storage & $-$\\
+$\Delta E,\ \Delta I,\ \Delta D,\ \Delta T_{\mathrm{tr}}$ & changes of soil evaporation, irrigation, drainage and transpiration under mulch & mm\,yr$^{-1}$\\\midrule
+\multicolumn{3}{l}{\emph{Soil structure and tillage}}\\*
+$p,\ p_0,\ p_c,\ \tau_c$ & relative pore space, its value after tillage and when consolidated, consolidation rate & $-$, $-$, $-$, d$^{-1}$\\
+$\Delta_{\mathrm{till}},\ \Delta_{\mathrm{cons}}$ & tillage and consolidation effects on drainage & mm\,yr$^{-1}$\\\midrule
+\multicolumn{3}{l}{\emph{Roots, crop and plant water}}\\*
 $C(d)$ & canopy cover & $-$\\
 $R_{\max},\ R_d,\ \beta_i$ & maximum and current rooting depth, root density of layer $i$ & cm, cm, $-$\\
 $T_d,\ q_i^T,\ a_i$ & daily transpiration demand, layer uptake, stress factor & mm\,d$^{-1}$, mm\,d$^{-1}$, $-$\\
 $z_{50},\ z_{90}$ & depths holding 50 and 90\,\% of root water uptake & cm\\
-$N_r$ & nitrogen rate (per cent of standard) & \%\\
 $\psi_{\mathrm{RZ}},\psi_{\mathrm{root}},\psi_{\mathrm{stem}},\psi_{\mathrm{leaf}}$ & water potential of root zone, root surface, stem and leaf & MPa\\
-$\eta_I,\ \eta_D,\ \eta_T,\ \eta_{\mathrm{rest}}$ & shares of saved evaporation going to less irrigation, more drainage, more transpiration, storage & $-$\\
-$\Delta E,\ \Delta I,\ \Delta D,\ \Delta T_{\mathrm{tr}}$ & changes of soil evaporation, irrigation, drainage and transpiration under mulch & mm\,yr$^{-1}$\\
-$\kappa_N$ & nitrate cost of drainage & kg\,N\,ha$^{-1}$\,mm$^{-1}$\\
+$N_r$ & nitrogen rate (per cent of standard) & \%\\
+$N_L,\ Y$ & nitrogen leaching, grain yield & kg\,ha$^{-1}$, Mg\,ha$^{-1}$\\
+$\kappa_N$ & nitrate cost of drainage & kg\,N\,ha$^{-1}$\,mm$^{-1}$\\\midrule
+\multicolumn{3}{l}{\emph{Irrigation scheduling and the daily model}}\\*
+$h^\ast$, $f^\ast$ & critical suction and soil-independent depletion at which irrigation is triggered ($f^\ast=0.45$) & cm, $-$\\
+$f,\ f_T$ & depletion fraction; its value at the trigger & $-$\\
+$N_y$ & growing-season days on which the sensor is beyond the trigger & d\\
+$w_i,\ s_i,\ f_i,\ W_{\max}$ & layer water, relative content, depletion; layer capacity & mm, $-$, $-$, mm\\
 $Z_n$ & net irrigation depth & mm\\
-$k_t$ & transpiration calibration factor & $-$\\
+$k_t$ & transpiration calibration factor & $-$\\\midrule
+\multicolumn{3}{l}{\emph{Surface irrigation}}\\*
+$Q,\ Q_{\max}$ & furrow inflow and its maximum non-erosive value & m$^3$\,min$^{-1}$\\
+$L,\ t_L,\ t_{L/2}$ & furrow length; advance times to $L$ and $L/2$ & m, min\\
+$x=p\,t^{r}$ & power-law advance curve & m\\
+$T_{req}$ & required infiltration (intake opportunity) time & min\\
 $K_s,\ \psi_f,\ \Delta\theta$ & saturated conductivity, wetting-front suction, moisture deficit (surface layer) & mm\,h$^{-1}$, mm, $-$\\
 $k,\ A$ & Kostiakov coefficient and exponent & m\,min$^{-A}$, $-$\\
 $\sigma_y,\ \sigma_z,\ r$ & surface-flow shape factors, advance exponent & $-$\\
-$E_s,\ \mathrm{DP},\ \mathrm{RO}$ & storage efficiency, deep percolation, runoff & $-$\\
-$c_v,\ x_e$ & emitter coefficient of variation, emitter exponent & $-$, $-$\\
-$q,\ d,\ h_n,\ R_w$ & sprinkler discharge, nozzle diameter, pressure head, wetted radius & L\,min$^{-1}$, mm, m, m\\
-CU & Christiansen uniformity coefficient of a sprinkler pattern & fraction or \%\\
 $\rho_1,\ \rho_2$ & coefficients of the power-law furrow geometry of \citet{Walker1987} ($A=\rho_1y^{\rho_2}$) & $-$\\
+$E_a$ & application efficiency & fraction or \%\\
+$E_s,\ \mathrm{DP},\ \mathrm{RO}$ & storage efficiency, deep percolation, runoff & $-$\\\midrule
+\multicolumn{3}{l}{\emph{Drip irrigation}}\\*
+$h_f,\ H_0$ & friction loss along a drip lateral; inlet head & m\\
 $\Delta x_e$ & emitter spacing along a drip lateral & m\\
+$c_v,\ x_e$ & emitter coefficient of variation, emitter exponent & $-$, $-$\\
+$E_u$ & drip emission uniformity & $-$\\\midrule
+\multicolumn{3}{l}{\emph{Sprinkler irrigation}}\\*
+$q,\ d,\ h_n,\ R_w$ & sprinkler discharge, nozzle diameter, pressure head, wetted radius & L\,min$^{-1}$, mm, m, m\\
+CU & Christiansen uniformity coefficient of a sprinkler pattern & fraction or \%\\\midrule
+\multicolumn{3}{l}{\emph{Statistics and software}}\\*
+$\rho$ & Spearman rank correlation & $-$\\
+$R^2$, nRMSE & coefficient of determination; RMSE as a percentage of the held-out mean & $-$, \%\\
 SWAFL & the software framework presented here (SWAFL Desktop) & $-$\\
 Engine~1, Engine~2 & annual meta-model; daily bucket model & $-$\\\bottomrule
 \end{longtable}}
