@@ -1,0 +1,65 @@
+\input{pre.tex}
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\theequation}{S\arabic{equation}}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\hypersetup{pdftitle={Supplementary Material: SWAFL Desktop as an Offline and Equation-Traceable Decision-Support Suite with a Graphical Workbench and a Verified Bridge for the Daisy Model},pdfauthor={Naziru Halilu}}
+\begin{document}
+\begin{center}{\large\bfseries Supplementary Material\par}\vspace{4pt}
+{\Large\bfseries SWAFL Desktop as an Offline and Equation-Traceable Decision-Support Suite with a Graphical Workbench and a Verified Bridge for the Daisy Model\par}\vspace{6pt}
+{\normalsize Derivations of the equations, the mechanisms behind the results, the data, and the origin of every table and figure\par}\end{center}
+\authorblock
+\tableofcontents
+\clearpage
+
+\section{Derivations of the equations}
+\subsection{Normalised spectral indices}
+Green leaves absorb red light for photosynthesis and scatter near-infrared light in the leaf mesophyll. The normalised difference $\mathrm{NDVI}=(\rho_N-\rho_R)/(\rho_N+\rho_R)$ is a contrast of the two that is bounded in $[-1,1]$ and cancels a common multiplicative illumination factor $k$: $(k\rho_N-k\rho_R)/(k\rho_N+k\rho_R)$ equals NDVI. SAVI adds a soil term $L$ to the denominator to reduce the influence of bright soil, $(1+L)(\rho_N-\rho_R)/(\rho_N+\rho_R+L)$; EVI corrects for the atmosphere with the blue band and for the canopy background; the water indices use the shortwave-infrared band, which liquid water absorbs.
+
+\subsection{Crop coefficient through the season}
+The FAO-56 curve is piecewise linear in time: constant $K_{ini}$ during the initial stage $L_1$, a linear rise to $K_{mid}$ over the development stage $L_2$, constant over the mid-season $L_3$ and a linear fall to $K_{end}$ over the late stage $L_4$ \citep{Allen1998}. The crop evapotranspiration is $\ET_c=K_c\,\ET_0$.
+
+\subsection{Daily root-zone balance of each map cell}
+For each cell, the root-zone depletion follows $D_{r,i}=D_{r,i-1}-(P-\mathrm{RO})_i-I_i+\ET_{c,i}+\mathrm{DP}_i$, bounded by $0\le D_{r}\le\TAW$; deep percolation occurs only when the depletion would fall below zero. Irrigation is required when $D_r$ exceeds the readily available water $p\,\TAW$; the net depth to apply is $D_r$ \citep{Allen1998}.
+
+\subsection{The Richards equation of the soil column}
+Mass conservation of water in a layer of thickness $\dd z$ gives $\partial\theta/\partial t=-\partial q/\partial z-S$, with $S$ the root uptake. The Darcy--Buckingham flux with $z$ positive downward and $h$ the suction head is $q=K(h)(1-\partial h/\partial z)$: gravity drives water down and a suction gradient drives it towards the drier soil. With $\theta(h)$ and $K(h)$ from the van~Genuchten--Mualem functions the equation is closed and is solved implicitly with Picard iteration in the column of the workbench.
+
+\subsection{Nitrogen and chemical budgets}
+For each season, the change of the mineral nitrogen store equals inputs minus outputs: fertiliser, deposition and mineralisation in; uptake, leaching, denitrification and volatilisation out. For a chemical, $\Delta M=A-U-L-R-X$ (applied, taken up, leached by every route, run off, transformed); the bridge reads each term from the Daisy logs and the closure of this budget is its test.
+
+\subsection{Splitting denitrification into N$_2$O and N$_2$}
+Let $r$ be the ratio of N$_2$ to N$_2$O in the gaseous product of denitrification $D$. Then $D_{\mathrm{N_2O}}+D_{\mathrm{N_2}}=D$ and $D_{\mathrm{N_2}}=r\,D_{\mathrm{N_2O}}$, so $D_{\mathrm{N_2O}}(1+r)=D$, giving $D_{\mathrm{N_2O}}=D/(1+r)$ and $D_{\mathrm{N_2}}=rD/(1+r)=D/(1+1/r)$, the two expressions of the paper. The ratio is the smaller of a nitrate and a carbon-dioxide limited ratio, scaled by a water factor, so wetter, more active soils give relatively more N$_2$.
+
+\subsection{Terrain, flow and wetness}
+On a filled elevation grid each cell drains to the steepest of its eight neighbours (D8). The upslope area $A$ of a cell is the sum of the areas that drain through it, and the specific area is $a=A/w$ with $w$ the cell width. The topographic wetness index $\ln(a/\tan\beta)$ is large where much water arrives and the slope $\beta$ is small, which marks where the soil stays wet.
+
+\subsection{Soil loss}
+The revised universal soil loss equation multiplies the rain erosivity $R$, the soil erodibility $K$, the slope length and steepness $LS$, the cover $C$ and the practice $P$: $A=R\,K\,LS\,C\,P$ in t\,ha$^{-1}$\,yr$^{-1}$ \citep{Renard1994}.
+
+\subsection{Run budget of an experiment}
+For $k$ factors with $n_1,\dots,n_k$ levels the full design has $\prod n_i$ runs. When this exceeds the budget $B$ set by the user, a Latin-hypercube choice of $B$ runs is made: each factor's levels are used as evenly as possible ($B/n_i$ times each), so every level of every factor appears and the main effects remain estimable while the number of runs never exceeds $B$.
+
+\section{Why the results happen}
+\paragraph{Why every number can be traced.} Each value shown is computed by a function that carries the number of its equation and a label of origin (literature, fitted to data, engineered); the interface shows both, so the origin is a property of the code, not of the documentation.
+\paragraph{Why a Daisy layer draws nothing before a Daisy run.} The rule of origin forbids a layer to show a Daisy result from any other source; without a run there is no result, so the layer says so rather than showing an example.
+\paragraph{Why the compact designs lose some shape of a curve.} A design with fewer levels samples a curve at fewer points; the marginal curve is then drawn through those points and misses curvature between them, which is the loss measured.
+\paragraph{Why the soil column is slow for a ponded fine soil.} With ponding the top boundary is a fixed head and the fine soil has a very small conductivity and a steep head gradient at the surface; the implicit solver then needs small time steps and many iterations to converge.
+\paragraph{Why the denitrification defect was found.} The check compared the shared function with the stored Daisy results over 792 cases; one case class disagreed, which pointed to a wrong branch in the function, corrected in the release.
+\paragraph{Why runs on a horizon of the Daisy samples failed.} The sample file also defined logs that referred to a model of its original run; Daisy stopped on the unknown name. Taking only the definitions a run needs removed the error.
+\paragraph{Why the routes from Daisy to a decision differ in time by orders of magnitude.} Running Daisy solves the Richards equation and a crop for every day of every run; the meta-model looks up and combines stored outcomes, which takes microseconds.
+
+\section{The data}
+\Cref{tab:data} lists the 17 experiments of the data folder and \cref{fig:data} shows their outputs. The tables that follow are the result files of the analyses of the paper, printed in full or up to 220 rows; each is also in the workbook \nolinkurl{Data/Manuscript_Data/SWAFL_Manuscripts_Data.xlsx}, and every run is in \cslink.
+\input{data_table.tex}
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/data/fig_data_overview.pdf}
+\caption{Yield, irrigation, drainage and nitrate leaching of the valid runs, by experiment.}\label{fig:data}
+\end{figure}
+\input{s3_data.tex}
+
+\section{Where every table and figure comes from}
+\input{s3_map.tex}
+
+\bibliography{refs}
+\end{document}

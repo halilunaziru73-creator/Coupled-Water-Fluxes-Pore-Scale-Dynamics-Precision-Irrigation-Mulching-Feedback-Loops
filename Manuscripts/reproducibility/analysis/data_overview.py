@@ -17,7 +17,7 @@ for e in order:
     rows.append({'E': e.split('_')[0], 'name': e.split('_', 1)[1].replace('_', ' '), 'runs': len(d), 'valid': int(d.ok.sum()), 'fac': ', '.join(fac) if fac else 'soil only',
                  'Y': v.yield_Mg_ha.mean(), 'I': v.irrigation_mm.mean(), 'D': v.drainage_1m_mm.mean(), 'ET': v.ET_mm.mean(), 'NL': v.N_leached_kg_ha.mean(), 's': v.run_seconds.mean(), 'file': FILE[e]})
 T = pd.DataFrame(rows)
-tex = ['\\begin{table}[H]\\centering\\scriptsize', '\\caption{The data behind the papers: the 17 Daisy experiments of \\texttt{Data/Comprehensive\\_Summary} (%d runs, %d valid; 20 years, 1980--1999, of Taastrup weather). Means of the valid runs; $Y$ yield (Mg\\,ha$^{-1}$), $I$ irrigation, $D$ drainage at 1\\,m and $\\ET$ (mm\\,yr$^{-1}$), $N_L$ nitrate leached (kg\\,N\\,ha$^{-1}$\\,yr$^{-1}$), $t$ run time of Daisy (s). Every row is one file of the folder, linked.}' % (len(a), int(a.ok.sum())),
+tex = ['\\begin{table}[H]\\centering\\scriptsize', '\\caption{The data of this study: the 17 Daisy experiments of \\texttt{Data/Comprehensive\\_Summary} (%d runs, %d valid; 20 years, 1980--1999, of Taastrup weather). Means of the valid runs; $Y$ yield (Mg\\,ha$^{-1}$), $I$ irrigation, $D$ drainage at 1\\,m and $\\ET$ (mm\\,yr$^{-1}$), $N_L$ nitrate leached (kg\\,N\\,ha$^{-1}$\\,yr$^{-1}$), $t$ run time of Daisy (s). Every row is one file of the folder, linked.}' % (len(a), int(a.ok.sum())),
        '\\label{tab:data}', '\\setlength{\\tabcolsep}{3pt}', '\\begin{tabular}{@{}llrrp{3.5cm}rrrrrr@{}}', '\\toprule', 'Exp. & File & Runs & Valid & Factors varied & $Y$ & $I$ & $D$ & $\\ET$ & $N_L$ & $t$\\\\\\midrule']
 for r in rows:
     url = '\\repourl/blob/main/Data/Comprehensive_Summary/' + r['file']

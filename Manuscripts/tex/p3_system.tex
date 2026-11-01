@@ -10,7 +10,7 @@ Over any period the water entering the column equals the water leaving it plus t
 P+I=T+E+E_{\mathrm{oth}}+D+\Delta S,
 \label{eq:balance}
 \end{equation}
-where $P$ is precipitation, $I$ irrigation, $T$ transpiration, $E$ soil evaporation, $E_{\mathrm{oth}}$ the remaining evaporation (water intercepted by the canopy, evaporation from mulch and litter, and the unattributed term identified in the companion water-balance audit), $D$ the drainage across 1\,m (negative values denote net capillary rise) and $\Delta S$ the change in profile storage. On the annual scale \cref{eq:balance} is closed by Engine~1 (\cref{eq:E1close}); on the daily scale by Engine~2 (\cref{eq:scale}). Nitrate leaching $N_L$ is carried with $D$, and grain yield $Y$ with $T$. \Cref{tab:compartments} lists the state variables and fluxes of each compartment.
+where $P$ is precipitation, $I$ irrigation, $T$ transpiration, $E$ soil evaporation, $E_{\mathrm{oth}}$ the remaining evaporation (water intercepted by the canopy, evaporation from mulch and litter, and a term that the Daisy partition does not attribute), $D$ the drainage across 1\,m (negative values denote net capillary rise) and $\Delta S$ the change in profile storage. On the annual scale \cref{eq:balance} is closed by Engine~1 (\cref{eq:E1close}); on the daily scale by Engine~2 (\cref{eq:scale}). Nitrate leaching $N_L$ is carried with $D$, and grain yield $Y$ with $T$. \Cref{tab:compartments} lists the state variables and fluxes of each compartment.
 
 {\small
 \begin{longtable}{>{\raggedright\arraybackslash}p{2.0cm}>{\raggedright\arraybackslash}p{4.1cm}>{\raggedright\arraybackslash}p{1.8cm}>{\raggedright\arraybackslash}p{4.0cm}>{\raggedright\arraybackslash}p{1.9cm}}
@@ -227,7 +227,7 @@ Water that a mulch keeps in the soil can reduce irrigation, raise transpiration,
 \begin{gathered}\eta_I=\frac{\max\{\Delta I,0\}}{\max\{\Delta E,0.1\}},\quad \eta_D=\frac{\max\{\Delta D,0\}}{\max\{\Delta E,0.1\}},\\ \eta_T=\frac{\max\{\Delta T_{\mathrm{tr}},0\}}{\max\{\Delta E,0.1\}},\quad \eta_{\mathrm{rest}}=\max\{0,1-\eta_I-\eta_D-\eta_T\},\end{gathered}
 \label{eq:fate}
 \end{equation}
-with the differences of \cref{eq:mulchdelta} evaluated at each rainfall scale, which is the annual counterpart of the loss fates analysed in the companion hydraulic-memory study. Nitrate moves with drainage, and the nitrate cost of a millimetre of drainage is the one-step difference [10.2]
+with the differences of \cref{eq:mulchdelta} evaluated at each rainfall scale, which is the annual counterpart of the loss fate of an evaporation saving. Nitrate moves with drainage, and the nitrate cost of a millimetre of drainage is the one-step difference [10.2]
 \begin{equation}
 \kappa_N=\frac{N_L^{(\gamma_P+0.1)}-N_L}{D^{(\gamma_P+0.1)}-D}\quad[\mathrm{kg\,N\,ha^{-1}\,mm^{-1}}].
 \label{eq:kappaN}

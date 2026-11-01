@@ -1,0 +1,26 @@
+\contentsline {section}{\numberline {S1}Derivations of the equations}{2}{section.1}%
+\contentsline {subsection}{\numberline {S1.1}The van~Genuchten--Mualem pair from a capillary bundle}{2}{subsection.1.1}%
+\contentsline {subsection}{\numberline {S1.2}The dry-end asymptote of the conductivity}{3}{subsection.1.2}%
+\contentsline {subsection}{\numberline {S1.3}The reach of a trigger}{3}{subsection.1.3}%
+\contentsline {paragraph}{The physical condition.}{3}{paragraph*.1}%
+\contentsline {paragraph}{One constant for all soils.}{4}{paragraph*.2}%
+\contentsline {paragraph}{Properties.}{4}{paragraph*.3}%
+\contentsline {subsection}{\numberline {S1.4}The alternative laws}{4}{subsection.1.4}%
+\contentsline {paragraph}{Fixed saturation.}{4}{paragraph*.4}%
+\contentsline {paragraph}{Power law in $n-1$.}{4}{paragraph*.5}%
+\contentsline {paragraph}{Absolute conductivity.}{4}{paragraph*.6}%
+\contentsline {subsection}{\numberline {S1.5}Fitting interval-censored reaches}{4}{subsection.1.5}%
+\contentsline {subsection}{\numberline {S1.6}The marginal fate of irrigation}{5}{subsection.1.6}%
+\contentsline {subsection}{\numberline {S1.7}The dose law}{5}{subsection.1.7}%
+\contentsline {subsection}{\numberline {S1.8}Dynamic non-equilibrium and the lag of a sensor}{6}{subsection.1.8}%
+\contentsline {section}{\numberline {S2}Why the results happen}{6}{section.2}%
+\contentsline {paragraph}{Why a trigger has a reach.}{6}{paragraph*.7}%
+\contentsline {paragraph}{Why a deeper sensor does not help.}{7}{paragraph*.8}%
+\contentsline {paragraph}{Why scaling by the reach collapses the curves only in part.}{7}{paragraph*.9}%
+\contentsline {paragraph}{Why less than half of an irrigation millimetre is transpired.}{7}{paragraph*.10}%
+\contentsline {paragraph}{Why overhead irrigation adds no transpiration.}{7}{paragraph*.11}%
+\contentsline {paragraph}{Why the dose scale does not depend on the soil.}{7}{paragraph*.12}%
+\contentsline {paragraph}{Why the plateau depends on the soil.}{7}{paragraph*.13}%
+\contentsline {paragraph}{Why early-season irrigation is more productive.}{7}{paragraph*.14}%
+\contentsline {section}{\numberline {S3}The data}{8}{section.3}%
+\contentsline {section}{\numberline {S4}Where every table and figure comes from}{22}{section.4}%

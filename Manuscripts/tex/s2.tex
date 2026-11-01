@@ -1,0 +1,80 @@
+\input{pre.tex}
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\theequation}{S\arabic{equation}}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\hypersetup{pdftitle={Supplementary Material: Modeling Soil-Water-Atmosphere Interactions for Irrigation Scheduling and Design},pdfauthor={Naziru Halilu}}
+\begin{document}
+\begin{center}{\large\bfseries Supplementary Material\par}\vspace{4pt}
+{\Large\bfseries Modeling Soil--Water--Atmosphere Interactions for Irrigation Scheduling and Design\par}\vspace{6pt}
+{\normalsize Derivations of the equations, the mechanisms behind the results, the data, and the origin of every table and figure\par}\end{center}
+\authorblock
+\tableofcontents
+\clearpage
+
+\section{Derivations of the equations}
+\subsection{Water balance of the column}
+Mass conservation of the column between the surface and 1\,m gives $P+I=T+E+E_{\mathrm{oth}}+D+\Delta S$ per unit area, with all terms in mm; every engine is constructed so that this balance closes, and its residual is the test of Engine~2.
+
+\subsection{Capillary radius}
+The pressure jump across a meniscus in a cylindrical pore of radius $r$ is $\Delta p=2\sigma\cos\gamma_c/r$ (Young--Laplace). Equating with the suction head $\rho_wgh$ gives $r_c=2\sigma\cos\gamma_c/(\rho_wgh)$; with $\sigma=0.0728$\,N\,m$^{-1}$, $\gamma_c=0$, $\rho_w=1000$\,kg\,m$^{-3}$ and $g=9.81$\,m\,s$^{-2}$, $r_c=1.49\times10^{-5}\,\mathrm{m^2}/h=0.149\,\mathrm{cm^2}/h$: the pores emptied at a suction $h$ are those wider than $r_c$.
+
+\subsection{Depletion and the trigger law}
+The plant-available water lies between field capacity (100\,cm) and the wilting point (15\,849\,cm). The depletion at suction $h$ is the share of that water that has been used, $f(h)=[S_e(100)-S_e(h)]/[S_e(100)-S_e(15\,849)]$, because $\theta-\theta_r$ is proportional to $S_e$ and the factor $\theta_s-\theta_r$ cancels. The suction that corresponds to a chosen depletion $f^\ast$ is found by inverting: $S_e(h^\ast)=S_e(100)-f^\ast[S_e(100)-S_e(15\,849)]$ and $h^\ast=\alpha^{-1}(S_e^{-1/m}-1)^{1/n}$. A soil-independent depletion therefore gives a soil-specific suction, which is why one suction trigger uses different shares of the available water in different soils.
+
+\subsection{Consolidation of the tilled layer}
+If the excess pore space decays at a rate proportional to itself, $\dd p/\dd t=-\tau_c(p-p_c)$, then $p(t)=p_c+(p_0-p_c)e^{-\tau_ct}$, with $p_0$ set by the tillage and $p_c$ the consolidated state.
+
+\subsection{Two-stage evaporation}
+In stage 1 the surface is wet and evaporation runs at the demand $e_0$, so $Q=q_0+e_0t$ until the cumulative stage-1 limit $Q_1$ is reached at $t_1=(Q_1-q_0)/e_0$. In stage 2 evaporation is limited by diffusion through the dry layer; for a desorptivity-controlled flux $e=S/(2\sqrt{t})$ the cumulative loss grows as $\sqrt t$. The form of the paper, $Q=Q_1+2e_0\tau_E(\sqrt{1+(t-t_1)/\tau_E}-1)$, starts stage 2 at the stage-1 rate (its derivative at $t=t_1$ is $e_0$) and tends to the $\sqrt t$ law for $t-t_1\gg\tau_E$, which joins the two stages smoothly \citep{Ritchie1972,Philip1957}.
+
+\subsection{Water potential of the air}
+For water vapour in equilibrium with liquid water, the chemical potential difference per unit volume is $\psi=(\mathcal R T_K/V_w)\ln\mathrm{RH}$ (Kelvin). At 20\,$^\circ$C, $\mathcal RT_K/V_w=8.314\times293.15/1.8\times10^{-5}=1.353\times10^{8}$\,Pa, that is $135.3$\,MPa, so $\psi_{\mathrm{air}}\simeq135.3\ln\mathrm{RH}$\,MPa.
+
+\subsection{The soil--plant--atmosphere path}
+With steady flow $q$ through soil, root, xylem and leaf in series, each segment drops the potential by $qR_j$ (the van den Honert analogue of Ohm's law), so $\psi_{\mathrm{leaf}}=\psi_{\mathrm{RZ}}-q(R_{\mathrm{soil}}+R_{\mathrm{root}}+R_{\mathrm{xyl}}+R_{\mathrm{leaf}})$. The soil resistance grows as the conductivity falls; bounding $K_r$ from below (the floor of the paper) bounds $R_{\mathrm{soil}}$ and therefore the leaf potential, which is why that potential is set by the floor rather than by the soil when the soil is dry.
+
+\subsection{Rainfall and interception of the daily model}
+If daily rain depths are exponential with mean $\mu_0$, the expected throughfall above an interception store $I_c$ is $\mathrm E[(R-I_c)^+]=\int_{I_c}^\infty(R-I_c)\mu_0^{-1}e^{-R/\mu_0}\dd R=\mu_0e^{-I_c/\mu_0}$. The throughfall fraction is $r=e^{-I_c/\mu_0}$, hence $I_c=\mu_0\ln(1/r)$: the store is chosen so that the expected interception equals the annual interception of the annual model.
+
+\subsection{Green--Ampt infiltration}
+Behind a sharp wetting front at depth $L_f$ with uniform water-content jump $\Delta\theta$ and front suction $\psi_f$, Darcy's law gives the infiltration rate $f=K_s(L_f+\psi_f)/L_f$ (ponding head neglected). With $F=L_f\Delta\theta$, $f=\dd F/\dd t=K_s(1+\psi_f\Delta\theta/F)$. Separating variables and integrating from $F=0$ at $t=0$:
+\begin{equation}F-\psi_f\Delta\theta\ln\Bigl(1+\frac{F}{\psi_f\Delta\theta}\Bigr)=K_st.\end{equation}
+
+\subsection{Surface irrigation: volume balance and advance}
+At time $t$ after the start, the volume admitted, $Qt$, is stored on the surface (mean flow area $\sigma_yA_0$ over the advance length $x$) and in the soil (mean infiltrated depth $\sigma_zZ(t)$ over the wetted width $w$): $Qt=\sigma_yA_0x+\sigma_zkt^{A}wx$, so $x(t)=Qt/(\sigma_yA_0+\sigma_zkt^{A}w)$. If the advance follows a power law $x\propto t^{r}$ and the intake opportunity time at distance $s$ is $t-t_x(s)$, the mean of $Z$ along the advance is $Z(t)$ times
+\begin{equation}\sigma_z=\int_0^1(1-\xi^{1/r})^{A}\dd\xi\;\simeq\;\frac{A+r(1-A)+1}{(1+A)(1+r)},\end{equation}where the right-hand side is the closed approximation used in surface-irrigation practice \citep{Walker1987}; it is exact for $A=0$ and $A=1$.
+The volumes applied, required, infiltrated, stored, percolated and run off satisfy $V_{\mathrm{app}}=V_{\mathrm{inf}}+V_{\mathrm{ro}}$ and $V_{\mathrm{inf}}=V_{\mathrm{st}}+V_{\mathrm{dp}}$, so the application efficiency, deep percolation and runoff fractions add to one.
+
+\subsection{Drip laterals}
+The Hazen--Williams friction loss over a pipe segment of length $\Delta x$ carrying $Q_j$ is $h_{f,j}=10.67\Delta x\,Q_j^{1.852}/(C^{1.852}D^{4.871})$. Along a lateral with $N$ equal outlets the flow falls linearly towards the end; summing the losses of the segments, $h_f=\frac{10.67LQ_0^{1.852}}{C^{1.852}D^{4.871}}\frac1{N^{2.852}}\sum_{j=1}^{N}j^{1.852}$. The Euler--Maclaurin formula gives $\sum_{j=1}^Nj^{m}\simeq\frac{N^{m+1}}{m+1}+\frac{N^m}{2}+\dots$ with $m=1.852$, so the loss is the full-flow loss times $F_c=\frac1{m+1}+\frac1{2N}+\dots$; \citet{Christiansen1942} approximated the remaining terms by $\sqrt{m-1}/(6N^2)$, which gives the factor of the paper, $F_c=\frac1{2.852}+\frac1{2N}+\frac{\sqrt{0.852}}{6N^2}$. Each emitter discharges $q_j=q(h_j/H_0)^{x_e}$, which couples the flows to the heads and is solved by iteration.
+
+\subsection{Emission uniformity}
+For emitters with manufacturing variation $c_v$ and $n_e$ emitters per plant, the lower quarter of plant flows lies about $1.27c_v/\sqrt{n_e}$ below the mean (normal distribution), and the hydraulic variation adds the ratio $q_{\min}/\bar q$; their product is the design emission uniformity of \citet{KellerKarmeli1974}.
+
+\subsection{Sprinkler discharge}
+Bernoulli's equation across a nozzle gives the jet speed $v=\sqrt{2gh_n}$, and the discharge is $q=C_dA_n\sqrt{2gh_n}$ with $C_d\approx0.95$; the factor $6\times10^4$ converts m$^3$\,s$^{-1}$ to L\,min$^{-1}$. The Christiansen coefficient of uniformity is $CU=1-\sum|z_i-\bar z|/(n\bar z)$.
+
+\section{Why the results happen}
+\paragraph{Why the same trigger uses different shares of the available water.} A suction trigger marks a point on the retention curve. In a sand most available water is released at low suctions, so a $-300$\,cm trigger is reached late (much of the water used); in a clay the water is released over a wide range, so the same suction is reached early.
+\paragraph{Why drainage differs under the same rain.} Drainage is the water that exceeds what the profile holds and the crop uses; profiles that hold less (sands) and conduct more pass more water below 1\,m.
+\paragraph{Why stage-1 evaporation lasts longer in fine soils.} Fine soils hold more water near the surface and conduct it upward over longer distances, so the surface stays wet longer.
+\paragraph{Why the leaf water potential is set by a conductivity floor.} The series resistance of the soil grows without bound as the soil dries; the software bounds the relative conductivity from below to keep the calculation finite, and in dry soil that bound, not the soil, then decides the leaf potential.
+\paragraph{Why the drainage share of a mulch saving is understated in coarse soils.} The engines split the saving with ratios that do not contain the soil's drainage competition; in coarse soils, where most saved water drains, that split gives too little to drainage.
+\paragraph{Why the meta-model ranks well but has an offset.} It is built from ratios of simulated outcomes, which preserve the order of the scenarios, while its absolute level is anchored to one reference run, so an error in the anchor shifts all values.
+\paragraph{Why the daily model fails in sand at dry triggers.} In sand dry triggers lie beyond the suction the crop can produce in the soil, so the full simulation seldom irrigates, while the daily bucket, which has no conductivity limit, still reaches the trigger.
+
+\section{The data}
+\Cref{tab:data} lists the 17 experiments of the data folder and \cref{fig:data} shows their outputs. The tables that follow are the result files of the analyses of the paper, printed in full or up to 220 rows; each is also in the workbook \nolinkurl{Data/Manuscript_Data/SWAFL_Manuscripts_Data.xlsx}, and every run is in \cslink.
+\input{data_table.tex}
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/data/fig_data_overview.pdf}
+\caption{Yield, irrigation, drainage and nitrate leaching of the valid runs, by experiment.}\label{fig:data}
+\end{figure}
+\input{s2_data.tex}
+
+\section{Where every table and figure comes from}
+\input{s2_map.tex}
+
+\bibliography{refs}
+\end{document}

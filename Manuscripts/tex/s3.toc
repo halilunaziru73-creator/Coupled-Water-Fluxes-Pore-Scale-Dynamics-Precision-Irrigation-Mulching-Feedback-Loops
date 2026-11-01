@@ -1,0 +1,20 @@
+\contentsline {section}{\numberline {S1}Derivations of the equations}{3}{section.1}%
+\contentsline {subsection}{\numberline {S1.1}Normalised spectral indices}{3}{subsection.1.1}%
+\contentsline {subsection}{\numberline {S1.2}Crop coefficient through the season}{3}{subsection.1.2}%
+\contentsline {subsection}{\numberline {S1.3}Daily root-zone balance of each map cell}{3}{subsection.1.3}%
+\contentsline {subsection}{\numberline {S1.4}The Richards equation of the soil column}{3}{subsection.1.4}%
+\contentsline {subsection}{\numberline {S1.5}Nitrogen and chemical budgets}{4}{subsection.1.5}%
+\contentsline {subsection}{\numberline {S1.6}Splitting denitrification into N$_2$O and N$_2$}{4}{subsection.1.6}%
+\contentsline {subsection}{\numberline {S1.7}Terrain, flow and wetness}{4}{subsection.1.7}%
+\contentsline {subsection}{\numberline {S1.8}Soil loss}{4}{subsection.1.8}%
+\contentsline {subsection}{\numberline {S1.9}Run budget of an experiment}{4}{subsection.1.9}%
+\contentsline {section}{\numberline {S2}Why the results happen}{5}{section.2}%
+\contentsline {paragraph}{Why every number can be traced.}{5}{paragraph*.1}%
+\contentsline {paragraph}{Why a Daisy layer draws nothing before a Daisy run.}{5}{paragraph*.2}%
+\contentsline {paragraph}{Why the compact designs lose some shape of a curve.}{5}{paragraph*.3}%
+\contentsline {paragraph}{Why the soil column is slow for a ponded fine soil.}{5}{paragraph*.4}%
+\contentsline {paragraph}{Why the denitrification defect was found.}{5}{paragraph*.5}%
+\contentsline {paragraph}{Why runs on a horizon of the Daisy samples failed.}{5}{paragraph*.6}%
+\contentsline {paragraph}{Why the routes from Daisy to a decision differ in time by orders of magnitude.}{5}{paragraph*.7}%
+\contentsline {section}{\numberline {S3}The data}{5}{section.3}%
+\contentsline {section}{\numberline {S4}Where every table and figure comes from}{39}{section.4}%
