@@ -343,6 +343,18 @@ The list under the button records every step as it is read and mapped. When it i
 * *Which sensors can go?* ranks the sensors by the rise of the mean kriging deviation if each is removed, the least useful first, with a *Remove* button for each.
 * *Sensors CSV* saves the sensors with their position, depth, reading and modelled value.
 
+## A real field: Zaria, Nigeria {#field-zaria}
+
+The pictures of this chapter marked *test data* were made without a connection. The same panel on a real field, a 5.85 ha field (perimeter 992 m, 17 corners) near Zaria, Kaduna State, Nigeria, with a connection: the Sentinel-2 L2A catalogue held ten scenes below 30 % cloud in the last 90 days, the newest (30 October 2026) had no cloud over the tile and all 589 cells of the field were clear; NDVI averaged 0.296 and GNDVI 0.415. SoilGrids gave a sandy clay loam (sand 52 %, silt 25 %, clay 23 %), the Copernicus DEM 612 to 620 m with a slope of 1.93 % to the south-west, and the best water source was the Galma River, 288 m south with a lift of about 9 m. The soil loss averaged 8.0 t/ha a year (tolerable 2), with nine ephemeral gullies; the retention curves gave a field capacity of 25.8 %, a wilting point of 14.6 % and an available water of 11.2 % by volume. None of these maps was checked on the ground.
+
+![The real field: NDVI of the Sentinel-2 scene of 30 October 2026 cut to the outline, and the analysis step by step with the spectral signature of the field.](images/ui/zaria_ndvi.jpg){width=100%}
+
+![The terrain (contours every metre, flow and channels) and the water sources ranked by distance, lift and score.](images/ui/zaria_terrain.jpg){width=100%}
+
+![Soil loss (RUSLE) of the field and the months of risk.](images/ui/zaria_rusle.jpg){width=100%}
+
+![Available water from the soil retention curves mapped from SoilGrids, and the days to the trigger.](images/ui/zaria_available_water.jpg){width=100%}
+
 ## Use and export
 
 Section 5 of the panel is *Use and export*. *Use this field in the sketch and the designs* makes the demarcated field the sketch (true lengths, centre coordinates kept), and *Irrigation layout* draws its system on the map. *Online weather of this field* downloads the daily weather of the centre of the field and runs the program on it. The report has a **title, an author and an organisation**, a **resolution of 96, 150, 300 or 600 dpi** and a format:
