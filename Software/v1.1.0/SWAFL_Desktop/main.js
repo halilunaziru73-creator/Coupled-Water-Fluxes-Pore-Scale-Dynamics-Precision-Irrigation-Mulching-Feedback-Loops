@@ -29,7 +29,7 @@ const gotLock = app.requestSingleInstanceLock();
 if (!gotLock) app.quit();
 else {
   app.on('second-instance', () => { if (win) { if (win.isMinimized()) win.restore(); win.focus(); } });
-  app.whenReady().then(createWindow);
+  app.whenReady().then(() => { createWindow(); setTimeout(() => { try { DR.provision(); } catch (e) { } }, 4000); });
   app.on('window-all-closed', () => { if (srv) srv.close(); app.quit(); });
 }
 
@@ -51,18 +51,29 @@ const DR = require('./daisy-runner');
 const daisyCfg = () => path.join(app.getPath('userData'), 'daisy.json');
 const readCfg = () => { try { return JSON.parse(fs.readFileSync(daisyCfg(), 'utf8')); } catch (e) { return {}; } };
 const exeNow = () => DR.findExe(readCfg().exe);
-ipcMain.handle('daisy-info', () => { const e = exeNow(); return e ? { found: true, exe: e, home: DR.homeFor(e), version: DR.version(e) } : { found: false }; });
-ipcMain.handle('daisy-choose', async () => {
-  const r = await dialog.showOpenDialog(win, { title: 'Choose the Daisy program (' + DR.EXE + ')', properties: ['openFile'], filters: process.platform === 'win32' ? [{ name: 'Daisy', extensions: ['exe'] }] : [] });
-  if (r.canceled || !r.filePaths[0]) return { found: false, cancelled: true };
-  if (DR.isInstaller(r.filePaths[0])) return { found: false, installer: true, error: 'That file is the Daisy installer (it asks for administrator rights and cannot be run as the program). SWAFL has Daisy built in, so you do not need to choose a file. To use your own installation, run the installer once and then choose bin\\daisy-bin.exe in the folder where it installed Daisy.' };
-  fs.mkdirSync(path.dirname(daisyCfg()), { recursive: true }); fs.writeFileSync(daisyCfg(), JSON.stringify({ exe: r.filePaths[0] })); const e = r.filePaths[0]; return { found: true, exe: e, home: DR.homeFor(e), version: DR.version(e) };
+ipcMain.handle('daisy-info', async () => { const e = exeNow(); if (e) return { found: true, exe: e, home: DR.homeFor(e), version: DR.version(e) }; return ensureDaisy(); });
+// Daisy is found by itself: the copy that comes with SWAFL, its copy in the folder of the user, an installed Daisy, or the installer
+// the user has downloaded (run once, silently). The user never has to choose a file.
+async function ensureDaisy() {
+  let e = exeNow(); if (e) return { found: true, exe: e, home: DR.homeFor(e), version: DR.version(e), how: 'found' };
+  e = DR.provision(); if (e) return { found: true, exe: e, home: DR.homeFor(e), version: DR.version(e), how: 'copied from the Daisy that comes with SWAFL' };
+  const inst = DR.findInstaller(); if (inst) { e = await DR.runInstaller(inst); if (e) { fs.mkdirSync(path.dirname(daisyCfg()), { recursive: true }); fs.writeFileSync(daisyCfg(), JSON.stringify({ exe: e })); return { found: true, exe: e, home: DR.homeFor(e), version: DR.version(e), how: 'installed from ' + path.basename(inst) }; } }
+  return { found: false, error: 'Daisy is missing from this copy of SWAFL (the folder daisy next to the program). Unzip the whole SWAFL zip again into a folder of your own (not inside another zip), and start SWAFL from there.' + (inst ? ' The installer ' + path.basename(inst) + ' was found but did not finish: run it once yourself, then press Run again.' : ''), looked: DR.looked() };
+}
+ipcMain.handle('daisy-choose', () => ensureDaisy());
+ipcMain.handle('daisy-ensure', () => ensureDaisy());
+// for experts only (Model and documentation): use another Daisy program; an installer chosen here is run, not refused
+ipcMain.handle('daisy-pick', async () => {
+  const r = await dialog.showOpenDialog(win, { title: 'Use another Daisy program (bin\\daisy-bin.exe of an installed Daisy)', properties: ['openFile'], filters: process.platform === 'win32' ? [{ name: 'Daisy', extensions: ['exe'] }] : [] });
+  if (r.canceled || !r.filePaths[0]) return { found: false, cancelled: true }; let e = r.filePaths[0];
+  if (DR.isInstaller(e)) { e = await DR.runInstaller(e); if (!e) return { found: false, error: 'The installer did not finish.' }; }
+  fs.mkdirSync(path.dirname(daisyCfg()), { recursive: true }); fs.writeFileSync(daisyCfg(), JSON.stringify({ exe: e })); return { found: true, exe: e, home: DR.homeFor(e), version: DR.version(e) };
 });
 // a run that is asked for again with exactly the same set-up files gives the same logs: they are kept in memory (the last 30 runs) and returned at once
 const jobCache = new Map(), jobKey = job => { try { return require('crypto').createHash('sha1').update(JSON.stringify([job.main, job.files, !!job.copyBundle, job.logPattern, job.prefix])).digest('hex'); } catch (e) { return null; } };
 ipcMain.handle('daisy-job', async (_e, job) => {
   const ck = job && !job.noCache ? jobKey(job) : null; if (ck && jobCache.has(ck)) { const c = jobCache.get(ck); jobCache.delete(ck); jobCache.set(ck, c); return Object.assign({}, c, { seconds: 0, cached: true }); }
-  const exe = exeNow(); if (!exe) return { code: -2, err: 'The Daisy program was not found. Install Daisy or choose the program.', logs: {}, out: '' };
+  let exe = exeNow(); if (!exe) { const en = await ensureDaisy(); exe = en.found ? en.exe : null; } if (!exe) return { code: -2, err: 'The Daisy program was not found: unzip the whole SWAFL zip again (the folder daisy must be next to the program).', logs: {}, out: '' };
   if (job && job.copyBundle) job.copyDir = path.join(__dirname, 'app', 'data', 'daisy', 'scenarios', 'common');
   try {
     const r = await DR.runJob(job, { exe, timeoutMs: (job && job.timeoutMs) || 1800000 });
@@ -92,9 +103,11 @@ ipcMain.handle('reload-app', () => { if (win) win.webContents.reloadIgnoringCach
 ipcMain.handle('version', () => app.getVersion());
 // F1: the manual of this version , shipped with the program or, when run from the source, in docs/manual_v1.1.0
 const MAN11 = 'SWAFL_Manual_v1.1.0.pdf';
-ipcMain.handle('open-manual', async () => {
+ipcMain.handle('open-manual', async (_e, page) => {
   const exeDir = path.dirname(process.execPath || ''), cands = [path.join(process.resourcesPath || '', MAN11), path.join(__dirname, 'Manual', MAN11), path.join(__dirname, '..', 'Manual', MAN11), path.join(__dirname, MAN11), path.join(exeDir, 'Manual', MAN11), path.join(exeDir, MAN11), path.join(__dirname, 'docs', 'manual_v1.1.0', MAN11), path.join(process.resourcesPath || '', 'SWAFL_Manual.pdf'), path.join(__dirname, 'docs', 'SWAFL_Manual.pdf')];
   const f = cands.find(p => { try { return fs.existsSync(p); } catch (e) { return false; } });
+  // at a page: the manual opens in a window of SWAFL itself, at that page; without a page, in the PDF reader of the computer
+  if (f && page) { try { const mw = new BrowserWindow({ width: 1100, height: 900, title: 'SWAFL manual, page ' + page, icon: path.join(__dirname, 'build', 'icon.png'), webPreferences: { plugins: true } }); mw.setMenuBarVisibility(false); await mw.loadURL(require('url').pathToFileURL(f).href + '#page=' + (+page || 1)); return true; } catch (e) { } }
   if (f) { const err = await shell.openPath(f); return !err; }
   shell.openExternal('https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/blob/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/' + MAN11); return true;
 });

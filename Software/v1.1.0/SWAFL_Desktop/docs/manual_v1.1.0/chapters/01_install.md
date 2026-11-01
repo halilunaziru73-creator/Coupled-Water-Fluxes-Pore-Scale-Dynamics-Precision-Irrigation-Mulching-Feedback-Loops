@@ -11,6 +11,18 @@ SWAFL Desktop is a self-contained Electron program. The simulation engine is one
 | **C. From source** | Developers | `npm install`, then `npm start` (desktop) or `npm run web` (browser). |
 | **D. Online, nothing to install** | Anyone with a browser | Open the online workbench (link below). |
 
+## Daisy comes with SWAFL: nothing to choose {#daisy-built-in}
+
+The Daisy program (version 7.1.14, the folder `daisy` next to the program, about 47 MB with its library) is part of SWAFL. You never choose a file. When a run starts, SWAFL finds Daisy by itself, in this order:
+
+1. The folder `daisy` that comes with SWAFL (next to the program, or in the resources of the installed program).
+2. Its own copy in the folder of the user (`%LOCALAPPDATA%\SWAFL\Daisy-7.1.14`): SWAFL makes this copy by itself a few seconds after it starts, so Daisy is still found when the program runs from a temporary folder (the portable SWAFL.exe) or is moved.
+3. A Daisy installed on the computer: any folder of Program Files whose name has *daisy* in it.
+4. The Daisy installer, if you have downloaded it (daisy-7.1.14-Windows-python3.13.exe, in Downloads, on the Desktop or in OneDrive): SWAFL runs it once, silently. Windows asks for permission once, because the installer needs it; after that Daisy is found as in 3.
+
+Only if all four fail does a message say that Daisy is missing, with the places looked at; unzip the whole SWAFL zip again into a folder of your own. The Scenarios tab shows where Daisy was found (*Daisy is ready: ...*). *Use another Daisy program* (a small link there) is for experts who want another version; if you choose the installer there, it is run, not refused.
+
+
 ## Route A: build and install, step by step
 
 1. Install **Node.js** (the LTS version) from nodejs.org if it is not already installed. Close and reopen any terminal afterwards.

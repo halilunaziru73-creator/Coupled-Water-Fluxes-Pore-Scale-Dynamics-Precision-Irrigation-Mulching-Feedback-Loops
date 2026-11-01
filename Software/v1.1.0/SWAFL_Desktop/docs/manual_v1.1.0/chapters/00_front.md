@@ -68,6 +68,8 @@ This manual documents **SWAFL Desktop**, the Soil Water Atmosphere Field Loop de
 | Reference: changes, atlas, appendices | grey | 24, 25, appendices | `{\color{partgrey}\iconfont ★ ▥ ▦}`{=latex} |
 | The Daisy workbench | purple | 26 to 39 | `{\color{partpurple}\iconfont ⚘ ☀ ❖ ⚖ ▤ ⚑ ⚙ ✎ ☰ ⚗ ❦ ☁ ⚠}`{=latex} |
 
+**The manual inside the program.** This manual comes with SWAFL and opens from the program itself, at the page you need: **F1** or **Help > Manual** opens it whole; the button **Manual p. N** on the bar of every tab of the Daisy workbench and above every layer of the SWAFL project opens it at the section of that screen; and the tab **The SWAFL manual** of the Daisy workbench (also in the Layers panel, Daisy model, Documentation) lists all its sections with their pages, with a search. On the desktop it opens in a window of SWAFL at that page; in the web version, in a tab of the browser. The page of every section is read from this PDF each time the manual is built (tools/make_manual_index.py writes app/data/manual_index.json), so the buttons always point to the right page.
+
 **A note on honesty of the equations.** SWAFL mixes three kinds of computation, and the manual labels them so that nothing is over-claimed. Every numbered equation carries its label directly beneath it, and the provenance ledger in the appendices lists them all:
 
 | Label | Meaning |

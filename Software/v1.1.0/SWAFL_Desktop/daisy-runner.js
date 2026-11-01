@@ -29,7 +29,23 @@ function candidates() {
 function allCandidates() { const out = []; candidates().forEach(c => { out.push(c); if (isWin && path.basename(c).toLowerCase() === EXE) EXES.forEach(n => { if (n !== EXE) out.push(path.join(path.dirname(c), n)); }); }); return out; }
 // the bundled program first, then the one saved from an earlier choice (never an installer), then the usual places
 function bundled() { const out = []; [__dirname, path.dirname(process.execPath), process.resourcesPath, path.join(__dirname, '..')].filter(Boolean).forEach(b => ['daisy', 'Daisy'].forEach(n => EXES.forEach(x => { out.push(path.join(b, n, 'bin', x)); out.push(path.join(b, n, x)); }))); return out; }
-function findExe(saved) { const list = bundled().concat(saved ? [saved] : []).concat(allCandidates()); for (const f of list) { try { if (f && !isInstaller(f) && fs.statSync(f).isFile()) return f; } catch (e) { } } return null; }
+// the copy of the bundled Daisy that SWAFL keeps for itself in the folder of the user: found even when the program runs from a temporary folder
+const OWN = () => path.join(process.env.LOCALAPPDATA || path.join(os.homedir(), '.local', 'share'), 'SWAFL', 'Daisy-7.1.14');
+const ownExe = () => path.join(OWN(), 'bin', isWin ? 'daisy-bin.exe' : 'daisy');
+const isFile = f => { try { return fs.statSync(f).isFile(); } catch (e) { return false; } };
+function bundledDir() { for (const f of bundled()) if (isFile(f) && !isInstaller(f)) { const d = path.basename(path.dirname(f)).toLowerCase() === 'bin' ? path.dirname(path.dirname(f)) : path.dirname(f); if (isFile(path.join(d, 'lib', 'crop.dai')) || isFile(f)) return d; } return null; }
+// copies the bundled Daisy (the folder daisy next to the program) once into the folder of the user, so that Daisy is always there
+function provision() { try { if (isFile(ownExe()) && isFile(path.join(OWN(), 'lib', 'crop.dai'))) return ownExe(); const src = bundledDir(); if (!src) return null; fs.mkdirSync(OWN(), { recursive: true }); fs.cpSync(src, OWN(), { recursive: true, force: true }); return isFile(ownExe()) ? ownExe() : null; } catch (e) { return null; } }
+// an installed Daisy of any version: every folder of Program Files (and of the user's programs) whose name has "daisy" in it
+function installed() { const out = []; if (!isWin) return out; [process.env['ProgramFiles'], process.env['ProgramFiles(x86)'], process.env['ProgramW6432'], process.env['LOCALAPPDATA'] && path.join(process.env['LOCALAPPDATA'], 'Programs'), 'C:\\'].filter(Boolean).forEach(pf => { let es = []; try { es = fs.readdirSync(pf, { withFileTypes: true }); } catch (e) { return; } es.filter(e => e.isDirectory() && /daisy/i.test(e.name)).forEach(e => EXES.forEach(x => { out.push(path.join(pf, e.name, 'bin', x)); out.push(path.join(pf, e.name, x)); })); }); return out; }
+// the Daisy installer the user has downloaded (daisy-7.1.14-Windows-python3.13.exe): in Downloads, on the Desktop (OneDrive too), or next to SWAFL
+function findInstaller() { if (!isWin) return null; const h = os.homedir(), dirs = [path.join(h, 'Downloads'), path.join(h, 'Desktop'), path.join(h, 'Documents'), __dirname, path.dirname(process.execPath), process.resourcesPath].filter(Boolean); try { fs.readdirSync(h).filter(n => /^OneDrive/i.test(n)).forEach(n => ['Downloads', 'Desktop', 'Documents', ''].forEach(s => dirs.push(path.join(h, n, s)))); } catch (e) { }
+  const found = []; dirs.forEach(d => { try { fs.readdirSync(d).forEach(n => { if (/^daisy-[\d.]+-win(dows)?.*\.exe$/i.test(n)) { const f = path.join(d, n); try { found.push({ f, t: fs.statSync(f).mtimeMs }); } catch (e) { } } }); } catch (e) { } }); found.sort((a, b) => b.t - a.t); return found.length ? found[0].f : null; }
+// runs the installer once, silently, in its usual folder (Windows asks for permission once: the installer needs it), then finds the program it installed
+function runInstaller(f) { return new Promise(res => { if (!isWin || !f) return res(null); const ps = 'Start-Process -FilePath ' + JSON.stringify(f).replace(/"/g, "'") + ' -ArgumentList \'/S\' -Verb RunAs -Wait'; const p = spawn('powershell.exe', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', ps], { windowsHide: true }); p.on('error', () => res(null)); p.on('close', () => { const e = installed().concat(allCandidates()).find(x => isFile(x) && !isInstaller(x)); res(e || null); }); }); }
+function findExe(saved) { const list = bundled().concat([ownExe()]).concat(saved ? [saved] : []).concat(installed()).concat(allCandidates()); for (const f of list) { try { if (f && !isInstaller(f) && fs.statSync(f).isFile()) return f; } catch (e) { } } return null; }
+// every place looked at, for the message when Daisy is not found
+function looked() { return Array.from(new Set(bundled().concat([ownExe()]).concat(installed()))).slice(0, 14); }
 // the folder that holds lib/ and sample/ (DAISYHOME)
 function homeFor(exe) {
   const d = path.dirname(exe), c = [path.join(d, '..', 'share', 'daisy'), path.join(d, '..'), path.join(d, '..', 'lib', 'daisy'), d, '/usr/share/daisy'];
@@ -65,4 +81,4 @@ function runJob(job, opt) {
   });
 }
 function clean(dir) { try { if (dir && dir.indexOf('swafl-daisy-') >= 0) fs.rmSync(dir, { recursive: true, force: true }); } catch (e) { } }
-module.exports = { isInstaller, findExe, homeFor, version, runJob, clean, EXE, candidates };
+module.exports = { isInstaller, findExe, homeFor, version, runJob, clean, EXE, candidates, provision, findInstaller, runInstaller, looked, ownDir: OWN };

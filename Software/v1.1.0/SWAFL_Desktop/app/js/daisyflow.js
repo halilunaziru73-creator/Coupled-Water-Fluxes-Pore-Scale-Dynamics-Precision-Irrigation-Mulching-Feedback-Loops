@@ -17,7 +17,7 @@
     ['compare', 'Compare and test', 'Compare two logs, two whole runs or many runs (Experiments, Scenarios, folders), blind or open.'],
     ['dss', 'To the SWAFL project', 'Take the results to the layers of the SWAFL project, which turn them into decisions.']
   ];
-  const TOOLS = { editor: 'Set-up editor', build: 'Model builder', richards: 'Soil column', deni: 'Process curves', calib: 'Calibrate', docs: 'Model and documentation', refman: 'Reference manual', learn: 'Learn the Daisy files' };
+  const TOOLS = { manual: 'The SWAFL manual', editor: 'Set-up editor', build: 'Model builder', richards: 'Soil column', deni: 'Process curves', calib: 'Calibrate', docs: 'Model and documentation', refman: 'Reference manual', learn: 'Learn the Daisy files' };
   const F = { last: 'data' };
   window.DaisyFlow = F; F.PATH = PATH;
   const idx = t => PATH.findIndex(p => p[0] === t);
@@ -38,27 +38,30 @@
     deni: ['Choose a process (denitrification, N2O...).', 'Move the inputs.', 'Read how the response curve changes.'],
     calib: ['Load observed data and a run.', 'Choose the parameters to fit.', 'Press Calibrate and read the best values.'],
     refman: ['Click a chapter on the left, or search a word.', 'Read the models and every parameter.', 'Press Fill in a form for this model to build it without typing.'],
+    manual: ['Search a word, or press a chapter.', 'Press a section: the manual opens at its page.', 'Every tab has its own Manual button on this bar.'],
     learn: ['Read the lessons in order: the folder, the grammar, then each file of the sample experiment.', 'Open any file in the set-up editor, or download the whole sample as a zip.', 'Load the results of the sample and compare its two runs.'],
     docs: ['Read what Daisy is and how to install it.', 'Follow the links to the papers and the code.', 'Come back to the guided path when ready.']
   };
   const tipsOff = () => { try { return localStorage.getItem('swafl.dz.tips') === 'off'; } catch (e) { return false; } };
   const tipLine = tab => { const h = HELP[tab]; if (!h) return ''; if (tipsOff()) return '<div class="dztips off"><a href="#" id="dzTipsOn">Show what to do here</a></div>'; return '<div class="dztips"><b>What to do here</b>' + h.map((t, i) => '<span><i>' + (i + 1) + '</i>' + esc(t) + '</span>').join('') + '<a href="#" id="dzTipsOff" title="Hide these tips on every tab">Hide tips</a></div>'; };
   // the tab buttons: the number of the step on the tabs of the guided path, and a sentence on what each tab is for
-  const TIP = Object.assign({}, ...PATH.map(p => ({ [p[0]]: p[2] })), { learn: 'How a Daisy experiment is made, file by file, with a complete sample to download.', editor: 'Edit any Daisy set-up file (.dai) as text.', build: 'Build any Daisy model from a form: no typing in the Daisy language.', richards: 'A soil column solved with the Richards equation, without Daisy.', deni: 'Response curves of the processes of Daisy.', calib: 'Fit parameters to observed data.', refman: 'The Daisy reference manual, every model and parameter.', docs: 'What Daisy is, installation, papers.' });
+  const TIP = Object.assign({}, ...PATH.map(p => ({ [p[0]]: p[2] })), { manual: 'The manual of SWAFL inside the program: every section at its page.', learn: 'How a Daisy experiment is made, file by file, with a complete sample to download.', editor: 'Edit any Daisy set-up file (.dai) as text.', build: 'Build any Daisy model from a form: no typing in the Daisy language.', richards: 'A soil column solved with the Richards equation, without Daisy.', deni: 'Response curves of the processes of Daisy.', calib: 'Fit parameters to observed data.', refman: 'The Daisy reference manual, every model and parameter.', docs: 'What Daisy is, installation, papers.' });
   F.decorate = function () { document.querySelectorAll('.dztabs button[data-t]').forEach(b => { if (b.__dec) return; b.__dec = true; const t = b.dataset.t, i = idx(t); if (TIP[t]) b.title = TIP[t]; if (i >= 0) b.insertAdjacentHTML('afterbegin', '<span class="dzsn">' + (i + 1) + '</span>'); }); };
   // the bar above the tab: where you are, what to do, Back and Next
   F.bar = function (tab) { setTimeout(F.decorate, 0); return F.bar0(tab) + tipLine(tab); };
+  const manB = tab => { const M = window.SWAFLManual, sx = M && M.idx ? M.forTab(tab) : null; return '<button class="btn" id="dzFMan" data-mp="' + (sx ? sx.page : 0) + '" title="' + esc(sx ? 'The manual: ' + sx.title + ', page ' + sx.page : 'The manual') + '">&#128214; Manual' + (sx ? ' p. ' + sx.page : '') + '</button>'; };
   F.bar0 = function (tab) {
     const i = idx(tab);
-    if (i < 0) { const nm = TOOLS[tab] || tab; return '<div class="dzflow"><span class="dzstep">Tool</span><span class="dzwhat"><b>' + esc(nm) + '</b>: a tool outside the guided path.</span><span style="flex:1"></span><button class="btn" id="dzFBackPath">Back to the guided path</button></div>'; }
+    if (i < 0) { const nm = TOOLS[tab] || tab; return '<div class="dzflow"><span class="dzstep">Tool</span><span class="dzwhat"><b>' + esc(nm) + '</b>: a tool outside the guided path.</span><span style="flex:1"></span>' + manB(tab) + '<button class="btn" id="dzFBackPath">Back to the guided path</button></div>'; }
     F.last = tab; const p = PATH[i], n = PATH.length;
-    return '<div class="dzflow"><span class="dzstep">Step ' + (i + 1) + ' of ' + n + '</span><span class="dzwhat"><b>' + esc(p[1]) + '</b>: ' + esc(p[2]) + '</span><span style="flex:1"></span>' + (i > 0 ? '<button class="btn" id="dzFBack">&#9664; Back: ' + esc(PATH[i - 1][1]) + '</button>' : '') + (i < n - 1 ? '<button class="btn pri" id="dzFNext">Next: ' + esc(PATH[i + 1][1]) + ' &#9654;</button>' : '<button class="btn pri" id="dzFOpen" title="Open the layer of the SWAFL project that matches your question">Open in the SWAFL project &#9654;</button>') + '</div>';
+    return '<div class="dzflow"><span class="dzstep">Step ' + (i + 1) + ' of ' + n + '</span><span class="dzwhat"><b>' + esc(p[1]) + '</b>: ' + esc(p[2]) + '</span><span style="flex:1"></span>' + manB(tab) + (i > 0 ? '<button class="btn" id="dzFBack">&#9664; Back: ' + esc(PATH[i - 1][1]) + '</button>' : '') + (i < n - 1 ? '<button class="btn pri" id="dzFNext">Next: ' + esc(PATH[i + 1][1]) + ' &#9654;</button>' : '<button class="btn pri" id="dzFOpen" title="Open the layer of the SWAFL project that matches your question">Open in the SWAFL project &#9654;</button>') + '</div>';
   };
   F.bind = function (tab) {
     const i = idx(tab), go = id => D.show(id), el = id => document.getElementById(id);
     if (el('dzFBack')) el('dzFBack').onclick = () => go(PATH[i - 1][0]); if (el('dzFNext')) el('dzFNext').onclick = () => go(PATH[i + 1][0]);
     const set = v => { try { localStorage.setItem('swafl.dz.tips', v); } catch (e) { } go(tab); };
     if (el('dzTipsOff')) el('dzTipsOff').onclick = e => { e.preventDefault(); set('off'); }; if (el('dzTipsOn')) el('dzTipsOn').onclick = e => { e.preventDefault(); set('on'); };
+    if (el('dzFMan')) el('dzFMan').onclick = () => { if (window.SWAFLManual) window.SWAFLManual.open(+el('dzFMan').dataset.mp || 0); };
     if (el('dzFBackPath')) el('dzFBackPath').onclick = () => go(F.last || 'data'); if (el('dzFOpen')) el('dzFOpen').onclick = () => F.toLayer(F.suggest());
   };
   // ---------------------------------------------------------------- the runs of the workbench, passed on to the layers

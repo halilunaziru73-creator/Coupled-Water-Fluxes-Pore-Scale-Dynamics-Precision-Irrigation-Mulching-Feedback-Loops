@@ -10,3 +10,4 @@ if command -v gs >/dev/null 2>&1; then
   gs -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -dCompatibilityLevel=1.6 -dDownsampleColorImages=true -dColorImageResolution=170 -dColorImageDownsampleType=/Bicubic -dAutoFilterColorImages=false -dColorImageFilter=/DCTEncode -dJPEGQ=82 -dDownsampleGrayImages=true -dGrayImageResolution=170 -dDetectDuplicateImages=true -dPreserveAnnots=true -sOutputFile=build/small.pdf SWAFL_Manual_v1.1.0.pdf && mv build/small.pdf SWAFL_Manual_v1.1.0.pdf
 fi
 pdfinfo SWAFL_Manual_v1.1.0.pdf | grep Pages; ls -la SWAFL_Manual_v1.1.0.pdf
+python3 tools/make_manual_index.py
