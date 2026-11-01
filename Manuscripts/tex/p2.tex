@@ -299,7 +299,7 @@ By trapezoidal integration of $Z(x)$ over $N=300$ intervals,
 \end{equation}
 following \citet{Walker1987}, \citet{Burt1997} and \citet{Christiansen1942}; because $V_{\mathrm{app}}=V_{\mathrm{inf}}+V_{\mathrm{ro}}$ and $V_{\mathrm{inf}}=V_{\mathrm{st}}+V_{\mathrm{dp}}$ the identity $E_a+\mathrm{DP}+\mathrm{RO}=1$ holds exactly and is printed as a built-in closure check.
 
-\subsection{Drip-irrigation layer}
+\paragraph{Drip-irrigation layer.}
 \label{sec:drip-m}
 Friction head loss in the lateral segment feeding emitter $j$ uses the Hazen--Williams equation \citep{Hazen1905}, and discharge depends on local head through the power-law emitter equation of \citet{KellerKarmeli1974}:
 \begin{equation}
@@ -313,7 +313,7 @@ E_u=\mathrm{clip}\Bigl\{\Bigl(1-\frac{1.27\,c_v}{\sqrt{n_e}}\Bigr)\frac{q_{\min}
 \end{equation}
 with $c_v$ the manufacturing coefficient of variation, $n_e$ the number of emitters per plant and $\sigma_P$ the relative standard deviation of hydraulic delivery along the lateral. The wetted bulb is modelled as a half-ellipsoid whose aspect ratio is an engineered function of $K_s$ and the discharge; five representative emitters at the standard-normal quantiles $z\in\{-1.28,-0.52,0,0.52,1.28\}$ deliver $V_i=\max\{0.02\bar V,\bar V(1+\sigma_qz_i)\}$, from which deep percolation, evaporation and storage are computed, and the efficiencies satisfy $E_a+\mathrm{DP}+\mathrm{EV}=1$. The automatic run time is the time at which the driest emitters deliver the need, $t=\mathrm{clip}\{V_{\mathrm{req}}/(\bar qE_u);0.05,96\}$ h.
 
-\subsection{Sprinkler layer}
+\paragraph{Sprinkler layer.}
 \label{sec:sprk}
 Nozzle discharge follows the orifice (Torricelli) equation with coefficient 0.95 and the wetted radius an empirical range law \citep{Keller1990} with an angle function:
 \begin{equation}
@@ -322,7 +322,7 @@ Nozzle discharge follows the orifice (Torricelli) equation with coefficient 0.95
 \end{equation}
 with $d$ in mm, the pressure head $h_n$ in m, $A_n=\pi(d/2000)^2$, $c_R$ a coefficient per sprinkler type, and $\alpha$ the trajectory angle in degrees. The radial pattern shape $\hat p(x)$, $x=r/R_e$, is engineered for each type (e.g.\ $1-x^{1.3}$ for impact sprinklers), wind elongates the pattern ($R_e(\theta)=R_w\,\mathrm{clip}\{1+0.022u\cos\theta;0.7,1.4\}$), overlap is the sum over neighbours on the sprinkler grid, and the Christiansen coefficient of uniformity \citep{Christiansen1942} is $\mathrm{CU}=1-\sum_k|a_k-\bar a|/(n\bar a)$. Wind drift and evaporation loss follow an engineered function of wind, pressure, temperature and trajectory angle; intake and runoff use the Kostiakov law with a ponding-time criterion; and the layout, pipes (Blasius friction \citep{Blasius1913}, with Christiansen's outlet factor) and a ten-point checklist implement the textbook decision logic \citep{Keller1990}, including the maximum allowable application rate by soil and slope and the number of laterals operated simultaneously.
 
-\subsection{Evaluation of the system variables}
+\paragraph{Evaluation of the system variables.}
 \label{sec:swamethods}
 The variables of Section~\ref{sec:system} were evaluated for each of the ten soils with the shipped engine (\texttt{swa\_vars.js}), at one reference state: conventional tillage, consolidation rate 0.005\,d$^{-1}$, bare soil ($\varphi=1$, $c=1$\,mm), unscaled rainfall, no warming, nitrogen 100\,\%, surface method, common trigger $-300$\,cm, sensor at 20\,cm and the cereal rotation (the state of the sensitivity runs, Section~\ref{sec:sens}). For each soil the script records the Engine~1 balance, the hydraulic variables, a full 20-year Engine~2 run (rooting depth, uptake by layer, events, doses, wetting depth, $k_t$), the water-potential path averaged over crop days of day-of-year 120--210 in all years, the two-stage evaporation at the season-mean demand of 4.2\,mm\,d$^{-1}$, the fate of the evaporation saved by a straw mulch ($\varphi=0.4$, $c=4$\,mm) and the nitrate cost of drainage for a $+0.1$ rainfall step.
 
@@ -346,7 +346,7 @@ In addition, run times were measured in Node.js on a cloud container (single cal
 
 \input{p3_views.tex}
 
-\subsection{Sensitivity of the outputs to the input controls}
+\paragraph{Sensitivity of the outputs to the input controls.}
 \label{sec:sens}
 One-at-a-time sensitivity runs were made on the shipped engine from a reference state (soil S01, conventional tillage, consolidation rate 0.005\,d$^{-1}$, bare soil, surface method, trigger $-300$\,cm, sensor depth 20\,cm, unscaled rainfall, no warming, nitrogen 100\,\%), moving one control to the two settings listed in \cref{fig:sens}a,b. The reference state gives 282\,mm of irrigation and 27.6\,mm of drainage per year. Rainfall dominates: scaling rainfall by 0.7 raises irrigation to 430\,mm and lowers drainage to 10.6\,mm, and scaling by 1.3 lowers irrigation to 189\,mm and raises drainage to 87.7\,mm. The irrigation method is the next strongest control of irrigation: drip at 20--30\,cm lowers it to 201\,mm and raises drainage to 31.1\,mm, which is the E4 result for this soil (simulated irrigation 162\,mm under drip at 20--30\,cm against 228\,mm under surface irrigation, ratio 0.71), whereas overhead irrigation leaves irrigation and drainage almost unchanged ($-0.3$ and $+1.1$\,mm) but lowers transpiration from 239 to 141\,mm, because in E4 the canopy intercepts and evaporates part of the overhead application. The trigger suction follows (335\,mm at $-150$\,cm against 208\,mm at $-1000$\,cm), then warming ($-1$\,°C: 224\,mm; $+2$\,°C: 314\,mm) and the mulch vapour-flux factor (218--258\,mm for factors 0.4--0.7). Sensor depth (315 to 270\,mm for 10 to 40\,cm) and tillage have smaller effects. Nitrogen rate leaves irrigation and drainage unchanged because its correction (\cref{eq:corr}) acts on yield and nitrogen leaching only, a design property of the annual model. Soil changes the outputs as much as the strongest management controls (\cref{fig:sens}c): irrigation ranges from 278\,mm (S03) to 414\,mm (S02) and drainage from 27.6\,mm (S01) to 164\,mm (S02).
 
@@ -422,7 +422,7 @@ Sprinkler: $q_{\max}$ (m$^3$\,h$^{-1}$) & 1.44 & 1.44 & 0\\\bottomrule
 \end{tabular}
 \end{table}
 
-\subsection{Engine 1 against held-out simulations}
+\paragraph{Engine 1 against held-out simulations.}
 \label{sec:e1}
 Engine~1 was queried at the factor levels of the 1\,000 E12 runs (coarse loam, surface method). Without alignment, the engine's baseline differs from Daisy's baseline for this experiment: the engine's baseline (derived from the E5 irrigated set) has ET of 720 and irrigation of 282\,mm\,yr$^{-1}$ whereas the E2/E3/E12 baseline is 673 and 228\,mm\,yr$^{-1}$, so raw predictions are biased by $+53$ mm for ET and $+71$ mm for irrigation (\cref{tab:e1}, \cref{fig:e1}). This is a \emph{baseline offset} between experiment families, not a random error: the engine composes ratios taken within one family on a baseline from another family. After aligning the engine's baseline cell with Daisy's (re-anchoring), the normalised RMSE for off-axis cells (all cells except the baseline row and column, which are partly used in the engine's construction) is 6.2\,\% for ET, 18.9\,\% for irrigation, 48.7\,\% for drainage (a small mean, 35\,mm), 10.1\,\% for soil evaporation, 8.7\,\% for transpiration, 34.6\,\% for nitrogen leaching and 27.9\,\% for yield. The $R^2$ values are 0.79 (irrigation), 0.82 (drainage), 0.71 (soil evaporation), 0.33 (nitrogen leaching), 0.10 (transpiration), $-0.11$ (ET) and $-2.33$ (yield); the negative values for ET and yield arise because the variance of these outputs within E12 is small (the coefficient of variation of ET across the cells is 5.9\,\%), so any constant offset dominates, and for yield the engine's discrete lookup structure and ceiling produce a stepped response that the simulation does not show (\cref{fig:e1}d). Rank correlations are higher than the $R^2$ values: Spearman $\rho$ is 0.96 for irrigation, 0.97 for soil evaporation, 0.92 for drainage, 0.84 for ET, 0.70 for yield, and 0.64 for transpiration and nitrogen leaching.
 
@@ -451,7 +451,7 @@ N leached (kg\,ha$^{-1}$) & $-0.84$ & 18.5 & $-14.7$ & 0.33 & 34.6 & $-0.3$ & 0.
 
 The practical reading is that Engine~1 is a \emph{rank-faithful screening emulator}: it orders scenarios correctly (irrigation $\rho=0.96$, drainage 0.92, soil evaporation 0.97) and gets the response to trigger, depth and rainfall in the right direction, but its absolute values depend on which experiment family anchors the baseline, and its yield output should not be used quantitatively. The independence assumption for mulch and warming cannot be tested because no experiment crosses them.
 
-\subsection{Engine 2 closure and agreement with Engine 1}
+\paragraph{Engine 2 closure and agreement with Engine 1.}
 \label{sec:e2}
 The unscaled daily core closes the water balance to within 0.1\,\% of inflow (median) and at most 0.7\,\% over 60 random states (\cref{fig:e2}a). On a 100-scenario grid the calibrated irrigation closes with residual of median 0.04\,\% and maximum 0.23\,\% of inflow.
 
@@ -499,7 +499,7 @@ $>0.6$ & 76 & 89.1 & 0.444 & 31 & 0.080\\\bottomrule
 \end{table}
 
 
-\subsection{Run time and documentation audit}
+\paragraph{Run time and documentation audit.}
 \label{sec:audit}
 Single-call medians in Node.js were 0.021\,ms for Engine~1, 0.25\,ms for the drip layer, 1.7\,ms for the sprinkler layer and 0.14\,s for a 20-year daily Engine~2 simulation. Interactive operation (slider movement) is therefore limited by rendering, not by computation, and a design-space sweep of $10^5$ Engine~1 evaluations takes about 2\,s.
 
@@ -597,7 +597,7 @@ Every engine and module of this paper is a part of SWAFL Desktop 1.1.0 and is do
 \caption{Four engines of this paper as layers of SWAFL Desktop 1.1.0 (real screenshots, weather of Zaria, Nigeria, or the benchmark record): each shows its inputs, its figure and the manual page that documents it.}\label{fig:p2shots}
 \end{figure}
 
-\subsection{Novelty in one view}
+\paragraph{Novelty in one view.}
 (1) \emph{A ledger instead of a black box}: each of 134 numbered equations carries its origin (38 from the literature, 18 fitted to data, 78 designed for the software), and every number of the interface leads to one of them. (2) \emph{Three kinds of engine in one project}: a meta-model of 10\,190 Daisy runs that ranks held-out scenarios (Spearman 0.64 to 0.97), a daily model that closes its balance, and closed-form designs of surface, drip and sprinkler irrigation that reproduce published examples within 3\,\%. (3) \emph{Speed with traceability}: $10^5$ scenario sweeps in about 2~s on a laptop, each still traceable to its equations. (4) \emph{A manual made with the program} \citep{HaliluManual}: every equation, control and screen is documented at the page the program opens, so the software and its description cannot disagree.
 
 \section{Conclusions}

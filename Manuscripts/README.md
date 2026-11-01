@@ -24,3 +24,5 @@ All three papers (revised 1 November 2026) now discuss the software through its 
 
 
 All four papers (revised 2 November 2026) link the full per-experiment outputs in [`Data/Comprehensive_Summary`](../Data/Comprehensive_Summary) in their data statements and show a table of the 17 experiments and a figure of their outputs (script `reproducibility/analysis/data_overview.py`). Paper 4 is simulation-only (one weather series, one crop rotation, equilibrium Richards flow); its new references were entered from memory and have no verified DOIs.
+
+The data of every table and figure of the four papers, with the script that makes each, are in [`Data/Manuscript_Data`](../Data/Manuscript_Data) (Excel workbook and map). Revised 2 November 2026: abstracts without numbers or equations, no short subsections (short ones became run-in paragraphs), soil legends on every figure of Paper 4.

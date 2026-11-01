@@ -56,7 +56,7 @@ Management & trigger suction $h_T$; trigger depletion $f_T$; critical depletion 
  & fate of evaporation saved by mulch $\eta_I,\eta_D,\eta_T,\eta_{\mathrm{rest}}$ & $-$ & \cref{eq:fate} (9.6--9.7) & R; D\\\bottomrule
 \end{longtable}}
 
-\subsection{Driving variables and controls}
+\paragraph{Driving variables and controls.}
 \label{sec:sys-controls}
 Every control is an index into the list of values at which simulations exist, so that no displayed value lies between runs (\cref{tab:controls}). Changing a control re-evaluates every view; the last column of \cref{tab:controls} states which variables respond.
 
@@ -80,7 +80,7 @@ Sensor depth $z_s$ & 5, 10, \dots, 100\,cm & 20\,cm & $I$, $Y$ (E3); irrigation 
 Nitrogen rate & 10 to 150\,\% of standard (10 values) & 100\,\% & $Y$, $N_L$ (E13); $R_{\max}$\\\bottomrule
 \end{longtable}}
 
-\subsection{Soil matrix: texture, porosity, retention and conductivity}
+\paragraph{Soil matrix: texture, porosity, retention and conductivity.}
 \label{sec:sys-soil}
 Each soil is described by its measured texture and an effective van~Genuchten pair $(\alpha,n)$ (\cref{tab:soilsP3}). Porosity and residual water content follow an engineered texture relation [8.2],
 \begin{equation}
@@ -96,7 +96,7 @@ with surface tension $\sigma=0.0728$\,N\,m$^{-1}$ and contact angle $\gamma_c\ap
 
 Plant-available water is the water held between field capacity (100\,cm) and the wilting point (15\,849\,cm) \citep{Allen1998}, and the depletion $f$ of \cref{eq:depl} [5.3] expresses the soil-water state as the share of that water already used. The same suction therefore corresponds to different depletions in different soils: $-300$\,cm uses 24\,\% of the plant-available water of the silty clay loam and 84\,\% of that of the sand (\cref{tab:swa-hyd}).
 
-\subsection{Soil structure, tillage and consolidation}
+\paragraph{Soil structure, tillage and consolidation.}
 \label{sec:sys-structure}
 After tillage the loosened topsoil re-settles. The structure views describe the relative pore space $p$ (1 for freshly loosened soil) by a first-order relaxation towards a consolidated value $p_c=0.30$ [8.1],
 \begin{equation}
@@ -220,7 +220,7 @@ R_{\mathrm{soil}}=0.03\,\max\{K_r,0.002\}^{-0.55},\quad R_{\mathrm{root}}=0.10,\
 \end{equation}
 with resistances in MPa per mm\,d$^{-1}$, $K_r$ the relative conductivity at the root-zone suction (\cref{eq:mualemP3}) and the transpiration terms set to zero when canopy cover is below 0.05; stomata are drawn as closing when $\psi_{\mathrm{leaf}}<-1.6$\,MPa. The physical relations are \cref{eq:psiair} and the retention and conductivity functions; the resistances are engineered.
 
-\subsection{Drainage, nitrogen and the fate of conserved water}
+\paragraph{Drainage, nitrogen and the fate of conserved water.}
 \label{sec:sys-fate}
 Water that a mulch keeps in the soil can reduce irrigation, raise transpiration, drain below the root zone or remain in storage. The fate view divides each millimetre of evaporation saved among these destinations [9.6--9.7],
 \begin{equation}
@@ -233,7 +233,7 @@ with the differences of \cref{eq:mulchdelta} evaluated at each rainfall scale, w
 \label{eq:kappaN}
 \end{equation}
 
-\subsection{Coupling: the seven feedback loops}
+\paragraph{Coupling: the seven feedback loops.}
 \label{sec:sys-loops}
 The compartments act on each other through seven loops, marked by numbered circles in \cref{fig:arch}: (1) temperature and the crop, (2) rain and soil water, (3) mulch and evaporation, (4) the sensor trigger and irrigation, (5) drainage and nitrate leaching, (6) nitrogen and roots, and (7) tillage structure and drainage. The loop view quantifies each by moving its control one step on its list and re-evaluating Engine~1; the printed effect is the change of the outputs listed in \cref{tab:loops}, and the drawn arrow width is $w_k=5+\mathrm{clip}(\mu_k;0,4)$ pixels [10.1] with $\mu_k$ the arrow-width input of the table. The effects are one-step differences of simulated results, not partial derivatives, so a step at the end of a list may be smaller than a step in its middle; loops between soil moisture and the atmosphere at regional scale \citep{Entekhabi1996,Koster2004,Seneviratne2010} are outside the column and are not represented.
 
@@ -253,7 +253,7 @@ Loop & Control step & Printed effect & $\mu$\\\midrule
 \end{tabular}
 \end{table}
 
-\subsection{From the soil-water state to the irrigation decision}
+\paragraph{From the soil-water state to the irrigation decision.}
 \label{sec:sys-decision}
 The decision links the state of the soil to the action. A sensor at depth $z_s$ reads the suction of layer $j_s=\mathrm{round}(z_s/\Delta z)$, and irrigation is due when its depletion reaches the trigger depletion $f_T=f(|h_T|)$ of \cref{eq:depl}. Because the same suction means different dryness in different soils, the trigger can also be set as a soil-independent depletion $f^\ast$, whose suction in each soil is the inverse [6.3]
 \begin{equation}

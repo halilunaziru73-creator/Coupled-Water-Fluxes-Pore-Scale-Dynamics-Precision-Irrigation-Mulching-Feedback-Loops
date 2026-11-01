@@ -10,10 +10,11 @@
 \vspace{0.4cm}
 \authorblock
 \vspace{0.3cm}
-\begin{abstract}
-\noindent The van~Genuchten--Mualem functions tell how much water a soil holds and how fast it conducts at any suction, and suction triggers decide when most sensor-scheduled fields are irrigated. Between the two lies a question that, to the author's knowledge, has not been given a closed-form answer: which part of the retention curve can a crop actually reach at the sensor, so that a trigger set beyond it never fires? A second question, studied case by case in numerical work on pulsed and subsurface drip, is where each applied millimetre goes, as a function of the soil, the dose, the method and the season. Both are answered here from the asymptote of the Mualem conductivity and from 10\,041 valid runs of the Daisy model (17 experiments, ten soils, 20 years of weather), whose every output is openly archived. Setting the relative conductivity at the reach equal to one constant $\kappa$ gives $\hc=\alpha^{-1}(m^{2}/\kappa)^{1/[2n+\ell(n-1)]}$. With $\kappa=3.5\times10^{-10}$ fitted to interval-censored reaches, it predicts held-out soils within a factor of 2.3 (leave-one-soil-out error 0.18 log units), from 199\,cm in sand to $1.3\times10^{5}$\,cm in silty clay loam. A 300\,cm trigger, a common recommendation, is beyond the reach of sand and loamy sand: it never fires and the crop stays at its rainfed yield (1.13 and 1.38 against 3.04 and 4.54\,Mg\,ha$^{-1}$ attainable). Scaling the trigger by the reach removes 41\,\% of the between-soil scatter of the irrigation response. Of each irrigation millimetre, 0.38 is transpired, 0.25 evaporates from the soil, 0.19 evaporates elsewhere (canopy, ponds, litter) and 0.16 drains below 1\,m. The drained share rises with the dose as $\eta_\infty(1-e^{-d/d_D})$ with a dose scale $d_D=4.1\pm0.6$\,mm that does not depend on the soil (Spearman $\rho=0.07$ with $n$), whereas the plateau $\eta_\infty$ does (0.10 to 0.45); small doses trade drainage for evaporation, and overhead irrigation adds no transpiration at all ($-0.08$). The closed forms, the data and the software that computes them for any soil are open; the manual documents each step.
-\end{abstract}
-\noindent\textbf{Keywords:} van~Genuchten--Mualem; irrigation trigger; tensiometer; deep percolation; pulsed irrigation; marginal water productivity; Daisy model; decision support
+{\small\setlength{\parindent}{0pt}\setlength{\parskip}{0pt}
+\begin{center}\textbf{\normalsize Abstract}\end{center}\vspace{-0.4em}
+\noindent The van~Genuchten--Mualem functions describe how much water a soil holds and how fast it conducts at any suction, and suction triggers decide when most sensor-scheduled fields are irrigated. Between the two lies a question that, to the author's knowledge, has no closed-form answer: which part of the retention curve can a crop actually reach at the sensor, so that a trigger set beyond it never fires? A second question, studied case by case in numerical work on pulsed and subsurface drip irrigation, is where each applied millimetre of water goes as the soil, the dose, the method and the season change. Both questions are answered here from the dry-end asymptote of the Mualem conductivity and from a large, openly archived ensemble of Daisy simulations covering ten soils and two decades of weather. Equating the relative conductivity at the reach to a single constant shared by all soils yields a closed-form reach that depends only on the van~Genuchten shape parameters and the pore-connectivity exponent. It predicts the reach of soils left out of the fit to within about a factor of two, from sands, where the reach is short, to silty clay loams, where it lies far in the dry range. Commonly tabulated triggers lie beyond the reach of sandy soils: they never fire and the crop stays at its rainfed yield. Scaling each trigger by the reach places the irrigation responses of all soils on one axis. Less than half of each irrigation millimetre is transpired; most of the remainder evaporates and a smaller share drains below the root zone. The drained share rises with the dose towards a soil-specific plateau on a dose scale that is the same in every soil and close to one day of crop water use, so small doses trade drainage for evaporation, while overhead irrigation adds no transpiration at all. The closed form, the data, the analysis code and the software that applies them to any soil are open.
+
+\medskip\noindent \textbf{Keywords.} van~Genuchten--Mualem; irrigation trigger; matric-potential sensor; deep percolation; pulsed irrigation; marginal water productivity; Daisy model; decision support\par}
 \par\medskip
 \noindent\textbf{Highlights}
 \begin{itemize}[nosep,leftmargin=1.2em]
@@ -43,7 +44,7 @@ This paper answers both questions with one theory and one data set. The theory i
 \end{figure}
 
 \section{Theory}
-\subsection{The van~Genuchten--Mualem functions}
+\paragraph{The van~Genuchten--Mualem functions.}
 With $h$ the suction (cm), the effective saturation and the relative conductivity are \citep{vanGenuchten1980,Mualem1976}
 \begin{align}
 S_e(h) &= \bigl[1+(\alpha h)^{n}\bigr]^{-m},\qquad m=1-1/n, \label{eq:vg}\\
@@ -56,7 +57,7 @@ K_r(h)\;\simeq\;m^{2}\,(\alpha h)^{-[\,2n+\ell(n-1)\,]}, \qquad \alpha h\gg1.
 \end{equation}
 The exponent $2n+\ell(n-1)$ is 6.2 for the sand of this study and 2.6 for the silty clay loam: the conductivity of a coarse soil collapses over a narrow range of suction, that of a fine soil over many decades.
 
-\subsection{The reach of a trigger}
+\paragraph{The reach of a trigger.}
 Roots take water from a layer at a rate limited by the conductance of the soil around them, which scales with $K$ \citep{Gardner1960,Carminati2020}; Daisy computes uptake from a soil--root potential difference over such a conductance \citep{Hansen1990,Abrahamsen2000}. As a layer dries, there is a suction beyond which the soil delivers too little water for the crop to dry it further within a season. If that point is reached at a fixed relative conductivity $\kappa$, \cref{eq:asym} gives the reach of a trigger at the sensor:
 \begin{equation}
 \boxed{\;\hc \;=\; \frac{1}{\alpha}\left(\frac{m^{2}}{\kappa}\right)^{1/[\,2n+\ell(n-1)\,]}\;}
@@ -64,7 +65,7 @@ Roots take water from a layer at a rate limited by the conductance of the soil a
 \end{equation}
 A trigger $\htr<\hc$ can fire; a trigger $\htr>\hc$ is never reached and the crop is not irrigated, however dry it becomes. \Cref{eq:hc} has one constant, $\kappa$, shared by all soils. It contains no saturated conductivity: two alternatives that do (an absolute conductivity $K(\hc)=q_c$) and two that use only the retention curve (a fixed $S_e(\hc)$, or a power law in $n-1$) were fitted in the same way and are compared in \cref{tab:laws}. The reach-scaled trigger is $x=\htr/\hc$.
 
-\subsection{The marginal fate of irrigation}
+\paragraph{The marginal fate of irrigation.}
 For a run with irrigation $I$ and its rainfed twin on the same soil and weather (experiment E0), the change of each annual flux $X$ per unit of irrigation is
 \begin{equation}
 \eta_X=\frac{X-X_{0}}{I},\qquad X\in\{T,E_s,E_o,D\},\qquad \eta_T+\eta_{E_s}+\eta_{E_o}+\eta_D+\eta_S=1,
@@ -77,11 +78,11 @@ where $T$ is transpiration, $E_s$ soil evaporation, $E_o=\ET-T-E_s$ the other ev
 \end{equation}
 where $d$ is the dose per event, $\eta_\infty$ the plateau and $d_D$ the dose scale.
 
-\subsection{Dynamic non-equilibrium: a criterion, not tested here}
+\paragraph{Dynamic non-equilibrium: a criterion, not tested here.}
 Under fast wetting and drying the water content lags the equilibrium of the retention curve, $\partial\theta/\partial t=[\theta_{\mathrm{eq}}(h)-\theta]/\tau$ \citep{RossSmettem2000,Hassanizadeh2002,Diamantopoulos2012VZJ,Diamantopoulos2012WRR}. A sensor then reads a suction that is not the one of \cref{eq:vg}. For a schedule with interval $t_i$ between applications, the dimensionless lag $\Pi_\tau=\tau/t_i$ says when this matters: for daily or multi-day scheduling ($t_i\geq1$\,d) and $\tau$ of minutes to hours, $\Pi_\tau\ll1$ and the equilibrium reach of \cref{eq:hc} applies; for pulses of minutes to hours, as in pulsed drip, $\Pi_\tau\sim1$ and the sensor reading, the effective $\kappa$ and the drained share become rate-dependent. Daisy solves the equilibrium Richards equation, so this criterion is stated for later testing and not evaluated here.
 
 \section{Data and methods}
-\subsection{The simulation ensemble and its data}
+\paragraph{The simulation ensemble and its data.}
 Daisy solves the one-dimensional Richards equation with the functions of \cref{eq:vg,eq:kr}, coupled to a crop, a surface residue layer, an energy-based potential evapotranspiration and nitrogen turnover \citep{Hansen1991,Hansen2012,Holbak2026}. The ensemble has 17 experiments (E0 to E16), ten soils from sand to silty clay loam, 20 years of Taastrup weather (1980--1999) and a cereal rotation; 10\,041 of 10\,190 runs are valid and 149 are solver failures, excluded (\cref{tab:data,fig:data}). The irrigation scheduler of Daisy applies a dose whenever the suction at a sensor depth exceeds a trigger. Every run is in the repository: the one-row-per-run summary (\texttt{00\_summary\_all\_simulations.csv.gz}), every log of every run year by year (\texttt{E00\_Baselines.csv.gz} to \texttt{E16\_Edge\_Cases.csv.gz}), and the summariser that made them, in \cslink; the complete raw archive is on Zenodo \citep{HaliluData}. The soils are described by their effective van~Genuchten parameters (Paper~1, Table~2) and, for eight of them, by literature saturated conductivities \citep{Carsel1988}.
 
 \input{data_table.tex}
@@ -92,17 +93,17 @@ Daisy solves the one-dimensional Richards equation with the functions of \cref{e
 \label{fig:data}
 \end{figure}
 
-\subsection{Experiments used}
+\paragraph{Experiments used.}
 \emph{E2} (197 runs) sets the trigger at 20 values from 50 to 10\,000\,cm on each soil (sensor at 20\,cm, surface irrigation). \emph{E3} (200 runs) moves the sensor from 5 to 100\,cm at a 300\,cm trigger. \emph{E10} (954 runs) crosses the dose (1 to 30\,mm per event, each applied in 12\,h) with ten irrigation windows on each soil, at a 300\,cm trigger and a 20\,cm sensor. \emph{E4} (96 runs) compares surface, overhead and subsurface application on each soil, and \emph{E15} (1000 runs, coarse loam) crosses the method with the rate, the dose and the maximum rooting depth. \emph{E0} gives the rainfed twin of every soil.
 
-\subsection{Reach, fit and validation}
+\paragraph{Reach, fit and validation.}
 A trigger is said to fire on a soil if it brings at least 5\,mm of irrigation a year. For each soil the reach is then known as an interval: above the largest firing trigger and below the smallest non-firing one, or only bounded from below when even 10\,000\,cm fires (five soils). The laws of \cref{tab:laws} were fitted by minimising the squared distance, in $\log_{10}$, between the prediction and the interval (zero inside the interval), and validated by leaving each soil out in turn. The reach-scaled collapse is measured as the mean within-bin variance of the normalised irrigation (irrigation over its soil maximum) in ten quantile bins of $\log_{10}\htr$ or of $\log_{10}x$, relative to the total variance.
 
-\subsection{Software}
-All analyses are in one script, \texttt{Manuscripts/reproducibility/analysis/p4\_reach.py}, which reads the data folder and writes every number of this paper to \texttt{Manuscripts/results/p4\_numbers.json}; the figures of the data are made by \texttt{data\_overview.py}. The same quantities can be explored without code in SWAFL Desktop 1.1.0 (\cref{sec:software}).
+\paragraph{Software.}
+All analyses are in one script, \nolinkurl{Manuscripts/reproducibility/analysis/p4_reach.py}, which reads the data folder and writes every number of this paper to \nolinkurl{Manuscripts/results/p4_numbers.json} and every table and figure as a CSV file; the figures of the data are made by \texttt{data\_overview.py}. The same quantities can be explored without code in SWAFL Desktop 1.1.0 (\cref{sec:software}).
 
 \section{Results}
-\subsection{A suction trigger has a reach, and the reach follows the curve}
+\paragraph{A suction trigger has a reach, and the reach follows the curve.}
 On every soil the irrigation falls as the trigger moves to drier values, but the fall ends in a cliff whose position differs by three orders of magnitude between soils (\cref{fig:trigger}a). In sand no trigger drier than 100\,cm fires; in loamy sand none drier than 200\,cm; in sandy loam none drier than 800\,cm; in loam and sandy clay loam none drier than 5\,000\,cm; the five other soils still irrigate at 10\,000\,cm. A 300\,cm trigger is therefore blind on sand and loamy sand: the crop stays at its rainfed yield of 1.13 and 1.38\,Mg\,ha$^{-1}$, against 3.04 and 4.54\,Mg\,ha$^{-1}$ reached with a 50\,cm trigger (\cref{fig:trigger}d). Moving the sensor from 5 to 100\,cm does not cure the blindness: at a 300\,cm trigger, sand receives no irrigation at any sensor depth and loamy sand at most 1.3\,mm a year (E3).
 
 \begin{figure}[H]\centering
@@ -133,10 +134,10 @@ Absolute conductivity & $K(\hc)=q_c$ & -- & \multicolumn{3}{l}{not supported (sp
 \label{fig:trigger}
 \end{figure}
 
-\subsection{One axis for all soils}
+\paragraph{One axis for all soils.}
 On the reach-scaled axis the end of irrigation falls between $x=0.5$ and 1 for every soil (\cref{fig:trigger}b). The within-bin variance of the normalised irrigation drops from 54\,\% of the total on the raw trigger to 32\,\% on $x$ (Spearman $\rho=-0.83$ between $\log x$ and the normalised irrigation). What is left is the slope of the approach, which is steep in coarse soils and shallow in fine ones; the reach sets where irrigation ends, not how it fades. A practical rule follows: a trigger should lie below about $\hc/2$, and the 300\,cm of the tables satisfies this on eight of the ten soils but not on sand and loamy sand.
 
-\subsection{Where an irrigation millimetre goes}
+\paragraph{Where an irrigation millimetre goes.}
 Pooled over the 744 irrigated runs of E10, a millimetre of irrigation became 0.38\,mm of transpiration, 0.25\,mm of soil evaporation, 0.19\,mm of other evaporation, 0.16\,mm of drainage below 1\,m and 0.03\,mm of storage and runoff (\cref{fig:fate}a). The transpired share is largest in sandy loam (0.64) and smallest in coarse sand (0.23), where 0.32 drains. In the five fine-textured soils the shares are close: 0.34 to 0.46 transpired, 0.15 drained, the rest evaporated.
 
 The method changes the shares more than the soil (\cref{fig:fate}b). Under overhead irrigation the extra transpiration is nil or negative ($-0.08$ in E4, $-0.01$ in E15): the water intercepted by the canopy evaporates (0.79 and 0.56 of each millimetre) and lowers the transpiration it replaces. Subsurface application transpires most (0.51 in E4, 0.40 in E15) but also drains most (0.23 and 0.28), because it bypasses the surface and wets the profile from within. Surface application lies between. In E15 the extra drainage under subsurface application rises to 92\,mm a year when the roots are limited to 30\,cm, against 56 to 60\,mm for any rooting depth of 45\,cm or more.
@@ -147,7 +148,7 @@ The method changes the shares more than the soil (\cref{fig:fate}b). Under overh
 \label{fig:fate}
 \end{figure}
 
-\subsection{The dose: a soil-independent scale for drainage}
+\paragraph{The dose: a soil-independent scale for drainage.}
 The drained share rises with the dose and levels off (\cref{fig:dose}a). \Cref{eq:dose} fits every soil ($R^2$ 0.92 to 0.96 for seven soils, 0.66 for sandy loam) with a dose scale $d_D$ of 3.2 to 5.2\,mm, mean $4.1\pm0.6$\,mm, which is not ordered by any property of the soil (Spearman $\rho=0.07$ with $n$, $-0.24$ with the available water, $0.17$ with the water released between 100 and 300\,cm in the top 30\,cm). The plateau is soil-specific: 0.10 to 0.20 in seven soils and 0.45 in coarse sand. A dose of 1\,mm drains almost nothing (0.01 to 0.09), but 60 to 72\,\% of it evaporates (\cref{fig:dose}c); the transpired share rises with the dose up to 15 to 20\,mm in most soils (\cref{fig:dose}b). The dose that maximises transpired minus drained water is 2\,mm on six of eight soils.
 
 A dose scale of about 4\,mm, independent of the soil, is of the order of the daily water use of the crop in the irrigation season. The interpretation is that a dose smaller than one day of evapotranspiration is used before it can move below the roots, whatever the soil, while the plateau, the share of a large dose that is lost, depends on how fast the soil drains once wetted, which is what the hydraulic parameters set. This is consistent with the pulsed-drip simulations of \citet{Elmaloglou2007,Elmaloglou2008}, here generalised across ten soils and to the evaporation that small doses pay instead.
@@ -158,7 +159,7 @@ A dose scale of about 4\,mm, independent of the soil, is of the order of the dai
 \label{fig:dose}
 \end{figure}
 
-\subsection{The season}
+\paragraph{The season.}
 The irrigation window shifts the fate as strongly as the dose. Irrigating only from April to June transpires 0.64 of each millimetre and drains 0.07; irrigating the whole season (April to October) transpires 0.34 and drains 0.21; irrigating only from July to mid-September transpires 0.23. Early water is used by a growing canopy; late water arrives when the cereal is ripening or harvested and is lost to evaporation and drainage.
 
 \section{The answer in the software and in its manual}\label{sec:software}
@@ -173,19 +174,19 @@ The results can be reproduced and extended without code. In SWAFL Desktop 1.1.0 
 \end{figure}
 
 \section{Discussion}
-\subsection{What the closed form adds to the van~Genuchten curve}
+\paragraph{What the closed form adds to the van~Genuchten curve.}
 The van~Genuchten--Mualem pair describes a soil at every suction; \cref{eq:hc} says which suctions a cropped soil actually visits at the depth of a sensor. Its exponent, $2n+\ell(n-1)$, is the slope of the conductivity on a log--log scale at the dry end, so the reach is short where the conductivity collapses fast (large $n$) and long where it fades slowly (small $n$), and $\alpha$ only rescales it. This complements the wet-end criteria of field capacity derived from the same parameters \citep{Twarakavi2009,Assouline2014}: together they bracket the working range of a scheduled soil. That a relative and not an absolute conductivity sets the reach (\cref{tab:laws}) suggests that the limit is reached when the conductivity has fallen a fixed number of decades below its saturated value, which a field test can check.
 
-\subsection{What the fate of a millimetre adds to the pulsing question}
+\paragraph{What the fate of a millimetre adds to the pulsing question.}
 The pulsed and intermittent drip simulations of \citet{Elmaloglou2007,Elmaloglou2008,Elmaloglou2009b} found that the application regime changes the losses below the root zone and that the effect depends on the soil. Across ten soils, ten doses, ten windows and three methods, the present data say how: the dose sets the drained share on a scale of one day of crop water use, the soil sets the plateau, the method sets how much of the water can be transpired at all, and the season sets how much the crop can use. Small doses do suppress drainage, but in a cropped field with an evaporating surface the water they save is lost to evaporation instead; the best compromise in these runs was a dose of about 2\,mm. This is a marginal accounting and does not replace the event-scale wetting patterns of the earlier work, which a one-dimensional daily-mean analysis cannot resolve.
 
-\subsection{Practical rules}
+\paragraph{Practical rules.}
 Three rules follow for sensor-scheduled irrigation. First, compute $\hc$ from \cref{eq:hc} for the soil and keep the trigger below $\hc/2$; on sands this means triggers of 50 to 100\,cm, not the 300 to 600\,cm of tables. Second, choose the dose against the daily crop water use: doses well below it evaporate, doses well above it drain at the soil's plateau. Third, overhead irrigation should be judged by its effect on transpiration, which can be nil, and not by the water delivered.
 
-\subsection{Limits and the experiments that would test the claims}
+\paragraph{Limits and the experiments that would test the claims.}
 The results are from one process model, one weather series (Taastrup, Denmark), one cereal rotation, one-dimensional columns, equilibrium Richards flow without hysteresis or water repellency \citep{Elmaloglou2009b,Diamantopoulos2013AWR,Diamantopoulos2013JH}, and effective van~Genuchten parameters; the Mualem connectivity was not varied, the sensor was at 20\,cm in E2 and E10, and the firing threshold of 5\,mm a year is a choice (the cliffs are steep, so the intervals change little with it). Five of ten reaches are only bounded from below. The constant $\kappa$ is a property of the model's uptake and should be measured, not assumed, in the field. The fates are 20-year means and do not resolve events. A field test would place matric-potential sensors on two coarse and two fine soils, schedule plots at triggers on both sides of $\hc$ and at doses of 1, 4 and 15\,mm, and measure drainage with lysimeters \citep{Groh2020}. The dynamic non-equilibrium criterion $\Pi_\tau$ predicts when such a test must also resolve the lag of the sensor.
 
-\subsection{Novelty in one view}
+\paragraph{Novelty in one view.}
 \begin{table}[H]\centering\small
 \caption{What is new, and the evidence for it.}
 \label{tab:novelty}
@@ -229,7 +230,7 @@ The Daisy model is developed and maintained at the University of Copenhagen. The
 \appendix
 \section{Reach of every soil}\label{app:reach}
 \begin{table}[H]\centering\small
-\caption{Observed reach interval (E2) and the predictions of \cref{eq:hc} for the ten soils. Yields in Mg\,ha$^{-1}$.}
+\caption{Observed reach interval (E2) and the predictions of \cref{eq:hc} for the ten soils. Yields in Mg\,ha$^{-1}$.}\label{tab:reachall}
 \footnotesize\setlength{\tabcolsep}{4pt}
 \begin{tabular}{@{}llrrrrr@{}}
 \toprule
@@ -250,6 +251,7 @@ The two soils whose observed lower bound exceeds the prediction (coarse sand and
 
 \section{Reproducibility}\label{app:repro}
 \begin{table}[H]\centering\footnotesize
+\caption{Scripts and inputs of every item. The data of every table and figure are also in the workbook \nolinkurl{Data/Manuscript_Data/SWAFL_Manuscripts_Data.xlsx}.}\label{tab:repro4}
 \begin{tabular}{@{}lll@{}}
 \toprule
 Item & Script & Input\\\midrule

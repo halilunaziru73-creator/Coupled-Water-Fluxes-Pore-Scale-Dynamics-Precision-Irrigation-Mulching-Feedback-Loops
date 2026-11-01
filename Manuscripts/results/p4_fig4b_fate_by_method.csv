@@ -1,0 +1,7 @@
+experiment,method,transpired,soil_evaporation,other_evaporation,drained
+E4,overhead,-0.08,0.117,0.786,0.144
+E4,subsoil,0.511,0.177,0.04,0.228
+E4,surface,0.336,0.068,0.428,0.138
+E15,overhead,-0.01,0.274,0.559,0.13
+E15,subsoil,0.404,0.234,0.033,0.282
+E15,surface,0.325,0.255,0.242,0.131

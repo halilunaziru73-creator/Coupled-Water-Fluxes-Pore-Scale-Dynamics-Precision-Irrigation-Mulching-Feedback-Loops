@@ -57,6 +57,10 @@ evaporation of ponded water (21.6 % of ET), litter (7.6 %) and snow (2.7 %).
 extracts the year-by-year balances of experiments E00, E02, E03, E04, E05 and E07 (1 003 runs, 20 years each) into
 `app/engine/peryear.js`, which drives the year-by-year, full-water-balance, nitrogen-budget and crop-water layers.
 
+## 1b. The data of the four manuscripts (`Manuscript_Data/`)
+
+[`Manuscript_Data/SWAFL_Manuscripts_Data.xlsx`](Manuscript_Data/SWAFL_Manuscripts_Data.xlsx) is one Excel workbook with the data used in all four papers: the run tables, the per-experiment summary, every result file behind the tables and figures, and the sheet `Table_Figure_Map`, which names for each table and figure of each paper the script that makes it, its input and its output. The same map, paper by paper, is in [`Manuscript_Data/README.md`](Manuscript_Data/README.md); [`make_workbook.py`](Manuscript_Data/make_workbook.py) rebuilds both.
+
 ## 2. Every data file used in the repository
 
 ### 2.1 Raw simulation data
