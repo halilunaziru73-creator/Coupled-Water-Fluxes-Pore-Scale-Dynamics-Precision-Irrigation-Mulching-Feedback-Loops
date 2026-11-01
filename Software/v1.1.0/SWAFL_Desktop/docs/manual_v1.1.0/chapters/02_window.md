@@ -73,7 +73,9 @@ The tree has the project root *SWAFL project* and eight groups, in the order in 
 
 In version 1.0 every layer carried a short code (S2, V1, N4 …). The codes have gone from the program; this manual uses the layer names. Open layers stay as tabs above the drawing; closing a tab does not lose any setting, because the controls belong to the project, not to the layer.
 
-![The Layers panel with every group expanded.](images/ui/w_tree.jpg){width=100%}
+![The Layers panel of version 1.1.0 as it opens: the SWAFL project with its nine groups (Irrigation design, Irrigation control, Mulch and evaporation, Soil structure and tillage, Deterministic phenotyping, Field water balance, Seasonal data, Crops, Feedback loops) and the Daisy model with its seven groups (Input data, Experiments and scenarios, Process structure, Results and analysis, Decision support (SWAFL layers), Model development, Documentation). A click on the arrow opens a group.](images/ui/w_tree_groups.jpg){width=48%}
+
+![The window with a layer open: the Layers panel and the Processing Toolbox on the left, the drawing in the middle, the Results dock and Properties on the right.](images/ui/w_tree.jpg){width=100%}
 
 ## The view bar
 

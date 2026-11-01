@@ -302,7 +302,7 @@ A month table gives the share of the erosive rain, the NDVI and the runoff of ea
 
 Section 4b of the panel reads the terrain of the demarcated field and builds four things from it: the contours and flow lines, the watershed, the maps of the soil retention curves, and the soil water sensors. Everything is computed on the cells of the terrain inside the field, and every map is a layer of *Maps of this field* with its legend on the map.
 
-![The panel of the real field: the indices, the site, the season, and section 4b with the terrain and the soil retention curves (the controls as they appear in the program).](images/ui/field_fg1.jpg){width=46%}
+![The panel of the real field as it appears in the program: 1. the demarcated field, 2. vegetation and water indices (real Sentinel-2 data, look back and clouds), 3. the site (soil, slope, water sources, irrigation system), 4. the season and the precision maps (variable-rate irrigation, ephemeral gullies and soil loss), 4b. terrain, flow, watershed, soil retention and sensors, with the start of the soil retention curves mapped by geostatistics.](images/ui/field_fg1.jpg){width=52%}
 
 **Automatic.** When the box *Automatic* is ticked, the satellite indices, the terrain, the watershed, the retention maps and the sensor sites are all made once the field is drawn, one after the other, so that a field only has to be demarcated.
 
@@ -334,7 +334,7 @@ The list under the button records every step as it is read and mapped. When it i
 
 **Use this field in the DSS.** The button sets the soil of the program to the class whose sand and clay are closest to the field means, and the area of the program to the area of the field. Every irrigation design, the trigger and the schedule then follow this field.
 
-![The rest of the panel: the sensors, the optimisation of their sites, and the export of the field report.](images/ui/field_fg2.jpg){width=46%}
+![The rest of the panel as it appears in the program: the soil retention curves (SoilGrids 2.0 or your own samples, the optional terrain trend, Map the retention curves, Use this field in the DSS), the sensors and the satellite (install by clicking on the map, depth, the number to place, the spread, Optimise the sites, Which sensors can go?), and 5. use and export (the sketch and the designs, the online weather of the field, the title, author, organisation, resolution and format of the field report, GeoJSON and CSV).](images/ui/field_fg2.jpg){width=52%}
 
 **Sensors and the satellite.** Soil water sensors are installed with the mode *Sensors* of the bar above the map, or with the button *Install by clicking on the map*: click inside the field, at the depth chosen in *depth* (10, 20, 30, 45, 60 or 90 cm); click a sensor to remove it. *Undo* takes back the last one and *Remove all* clears them. The terrain must have been read first. The table lists each sensor with its position, depth and the reading in per cent by volume; leave the reading blank and the program models it from the SWAFL water balance (the water left in the root zone on the working date, shifted by the wetness index and by the satellite index of the cell), or type the real reading.
 

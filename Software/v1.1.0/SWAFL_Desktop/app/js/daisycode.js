@@ -34,7 +34,7 @@
     '.dzc.light{background:#fff;border-color:#c8c8c8}.dzc.light .dzc-bar{background:#f3f3f3;color:#333;border-bottom:1px solid #ddd}.dzc.light .dzc-g{background:#fff;color:#237893}.dzc.light pre{color:#000}.dzc.light textarea{caret-color:#000}.dzc.light textarea::selection{background:rgba(173,214,255,.9);color:transparent}.dzc.light .dzc-s{background:#007acc;color:#fff}' +
     '.dzc.npp{background:#fff}.dzc.npp .dzc-bar{background:#f0f0f0;color:#000;border-bottom:1px solid #c0c0c0}.dzc.npp .dzc-g{background:#e4e4e4;color:#808080;border-right:1px solid #c0c0c0}.dzc.npp pre{color:#000;font-family:Consolas,"Courier New",monospace}.dzc.npp textarea{font-family:Consolas,"Courier New",monospace}.dzc.npp textarea::selection{background:rgba(192,192,192,.9);color:transparent}.dzc.npp .dcm{color:#008000!important}.dzc.npp .dst{color:#808080!important}.dzc.npp .dnu{color:#ff8000!important}.dzc.npp .dun{color:#8000ff!important}.dzc.npp .dph{color:#0080c0!important}.dzc.npp .ddf{color:#0000ff!important;font-weight:700}.dzc.npp .dkw{color:#0000ff!important;font-weight:700}.dzc.npp .dfn{color:#000080!important;font-weight:700}' +
     '.dzc.light .dcm{color:#008000}.dzc.light .dst{color:#a31515}.dzc.light .dnu{color:#098658}.dzc.light .dun{color:#267f99}.dzc.light .dph{color:#795e26}.dzc.light .ddf{color:#af00db;font-weight:600}.dzc.light .dkw{color:#0000ff}.dzc.light .dfn{color:#001080}' +
-    '.dzc.dzc-full{position:fixed;inset:0;z-index:100005;height:100vh!important;border-radius:0}.dzc.ro textarea{cursor:default}.dzc-dirty{color:#e2c08d}';
+    '.dzc-w pre,.dzc-w textarea,.dzc-g{line-height:18px!important}.dzc-w pre.virt,.dzc-g.virt{overflow:hidden!important}.dzc-w pre.virt>div,.dzc-g.virt>div{will-change:transform}.dzc.dzc-full{position:fixed;inset:0;z-index:100005;height:100vh!important;border-radius:0}.dzc.ro textarea{cursor:default}.dzc-dirty{color:#e2c08d}';
   function css() { if (document.getElementById('dzcCss')) return; const s = document.createElement('style'); s.id = 'dzcCss'; s.textContent = CSS; document.head.appendChild(s); }
   let theme = 'dark'; try { theme = localStorage.getItem('swafl.codeTheme') || 'dark'; } catch (e) { }
   /* host: element; o: { text, name, lang, readOnly, onChange(text), onSave(text), extra: [[label, fn(text)]] } */
@@ -48,14 +48,26 @@
       '<div class="dzc-s"><span data-c="pos">Ln 1, Col 1</span><span data-c="info"></span><span data-c="lang">' + esc(C.LANGS[lang] || lang) + '</span></div></div>';
     const q = k => host.querySelector('[data-c="' + k + '"]'), box = host.firstChild, ta = q('ta'), pre = q('pre'), g = q('g');
     ta.value = text; let raf = 0;
-    const gutter = () => { const n = ta.value.split('\n').length; let s = ''; for (let i = 1; i <= n; i++) s += i + '\n'; g.textContent = s; };
-    const check = () => { const n = ta.value.split('\n').length; let msg = n + ' lines'; if (lang === 'dai' && root.DaisyIO && root.DaisyIO.parseDai && ta.value.length < 300000) { try { const a = root.DaisyIO.parseDai(ta.value); msg += a.errors.length ? ' · ' + a.errors[0] : ' · brackets and quotes balanced'; } catch (e) { msg += ' · ' + e.message; } } if (lang === 'json') { try { JSON.parse(ta.value); msg += ' · valid JSON'; } catch (e) { msg += ' · ' + e.message; } } q('info').textContent = msg; q('dirty').textContent = ta.value !== orig ? '● edited' : ''; };
-    const paint = () => { raf = 0; pre.innerHTML = C.highlight(ta.value, lang) + '\n'; gutter(); pre.scrollTop = ta.scrollTop; pre.scrollLeft = ta.scrollLeft; g.scrollTop = ta.scrollTop; check(); };
-    const later = () => { if (!raf) raf = requestAnimationFrame(paint); };
+    /* only the lines in view are coloured and numbered (and 40 lines around them), so a log of several megabytes opens and scrolls at once;
+       the text itself stays in the text box. With wrap on, a long file is shown whole only below 300 kB */
+    const LH = 18, BIG = 300000; let lines = text.split('\n'), r0 = -1, r1 = -1, virt = true;
+    const nums = (a, b) => { let s0 = ''; for (let i = a + 1; i <= b; i++) s0 += i + '\n'; return s0; };
+    const render = force => { if (!virt) return; const top = ta.scrollTop, h = ta.clientHeight || 600, v0 = Math.floor(top / LH), v1 = Math.ceil((top + h) / LH);
+      if (force || v0 < r0 || v1 > r1 || r0 < 0) { r0 = Math.max(0, v0 - 40); r1 = Math.min(lines.length, v1 + 40); pre.innerHTML = '<div>' + hl(r0, r1) + '\n</div>'; g.innerHTML = '<div>' + nums(r0, r1) + '</div>'; }
+      const y = r0 * LH - top; if (pre.firstChild) pre.firstChild.style.transform = 'translate(' + (-ta.scrollLeft) + 'px,' + y + 'px)'; if (g.firstChild) g.firstChild.style.transform = 'translateY(' + y + 'px)'; };
+    // the colours of a slice of a log: the header of the log is coloured with it (and cut off again), so the numbers keep their colours
+    const hl = (a, b) => { const chunk = lines.slice(a, b).join('\n'); if (lang !== 'dlf' || a === 0) return C.highlight(chunk, lang); let k = -1; for (let i = 0; i < Math.min(lines.length, 400); i++) if (/^-{5,}\s*$/.test(lines[i])) { k = i; break; } if (k < 0 || a <= k + 2) return C.highlight(lines.slice(0, b).join('\n'), lang).split('\n').slice(a).join('\n');
+      const pre0 = lines.slice(0, k + 3), out = C.highlight(pre0.join('\n') + '\n' + chunk, lang).split('\n'); return out.slice(pre0.length).join('\n'); };
+    const setVirt = on => { virt = on; pre.classList.toggle('virt', on); g.classList.toggle('virt', on); r0 = -1; };
+    const gutter = () => { if (virt) return; const n = lines.length; g.textContent = nums(0, n); };
+    const check = () => { const n = lines.length; let msg = n + ' lines'; if (lang === 'dai' && root.DaisyIO && root.DaisyIO.parseDai && ta.value.length < 300000) { try { const a = root.DaisyIO.parseDai(ta.value); msg += a.errors.length ? ' · ' + a.errors[0] : ' · brackets and quotes balanced'; } catch (e) { msg += ' · ' + e.message; } } if (lang === 'json') { try { JSON.parse(ta.value); msg += ' · valid JSON'; } catch (e) { msg += ' · ' + e.message; } } q('info').textContent = msg; q('dirty').textContent = ta.value !== orig ? '● edited' : ''; };
+    const paint = () => { raf = 0; lines = ta.value.split('\n'); if (virt) render(true); else { pre.innerHTML = C.highlight(ta.value, lang) + '\n'; gutter(); pre.scrollTop = ta.scrollTop; pre.scrollLeft = ta.scrollLeft; g.scrollTop = ta.scrollTop; } check(); };
+    let tmo = 0; const later = () => { if (ta.value.length > BIG) { clearTimeout(tmo); tmo = setTimeout(paint, 150); } else if (!raf) raf = requestAnimationFrame(paint); };
+    setVirt(true); if (root.ResizeObserver) { const ro = new ResizeObserver(() => { if (!ta.isConnected) { ro.disconnect(); return; } render(true); }); ro.observe(ta); }
     const pos = () => { const v = ta.value.slice(0, ta.selectionStart).split('\n'); q('pos').textContent = 'Ln ' + v.length + ', Col ' + (v[v.length - 1].length + 1) + (ta.selectionEnd > ta.selectionStart ? ' (' + (ta.selectionEnd - ta.selectionStart) + ' selected)' : ''); };
-    ta.addEventListener('scroll', () => { pre.scrollTop = ta.scrollTop; pre.scrollLeft = ta.scrollLeft; g.scrollTop = ta.scrollTop; });
+    let sraf = 0; ta.addEventListener('scroll', () => { if (virt) { if (!sraf) sraf = requestAnimationFrame(() => { sraf = 0; render(false); }); return; } pre.scrollTop = ta.scrollTop; pre.scrollLeft = ta.scrollLeft; g.scrollTop = ta.scrollTop; }, { passive: true });
     ta.addEventListener('input', () => { later(); if (o.onChange) o.onChange(ta.value); });
-    ['keyup', 'click', 'select'].forEach(ev => ta.addEventListener(ev, pos));
+    let praf = 0; ['keyup', 'click', 'select'].forEach(ev => ta.addEventListener(ev, () => { if (!praf) praf = requestAnimationFrame(() => { praf = 0; pos(); }); }));
     const find = back => { const f = q('find').value; if (!f) return; const v = ta.value.toLowerCase(), s = f.toLowerCase(); let i = v.indexOf(s, ta.selectionEnd); if (i < 0) i = v.indexOf(s); if (i < 0) { q('info').textContent = '"' + f + '" not found'; return; } ta.focus(); ta.setSelectionRange(i, i + f.length); const ln = ta.value.slice(0, i).split('\n').length; ta.scrollTop = Math.max(0, (ln - 5) * 18); pos(); };
     ta.addEventListener('keydown', e => {
       if (e.key === 'Tab' && !o.readOnly) { e.preventDefault(); const s = ta.selectionStart, en = ta.selectionEnd; ta.setRangeText('  ', s, en, 'end'); later(); if (o.onChange) o.onChange(ta.value); }
@@ -64,7 +76,7 @@
       else if (e.key === 'Enter' && !o.readOnly) { const s = ta.selectionStart, line = ta.value.slice(0, s).split('\n').pop(), ind = (line.match(/^\s*/) || [''])[0] + (/\([^()]*$/.test(line) && lang === 'dai' ? '  ' : ''); if (ind) { e.preventDefault(); ta.setRangeText('\n' + ind, s, ta.selectionEnd, 'end'); later(); if (o.onChange) o.onChange(ta.value); } }
       e.stopPropagation(); });
     q('find').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); find(); } e.stopPropagation(); });
-    q('next').onclick = () => find(); q('wrap').onclick = () => { wrap = !wrap; box.classList.toggle('wrap', wrap); ta.setAttribute('wrap', wrap ? 'soft' : 'off'); g.style.visibility = wrap ? 'hidden' : ''; paint(); };
+    q('next').onclick = () => find(); q('wrap').onclick = () => { if (!wrap && ta.value.length > BIG) { q('info').textContent = 'wrap is off for files above 300 kB, so that they stay quick'; return; } wrap = !wrap; box.classList.toggle('wrap', wrap); ta.setAttribute('wrap', wrap ? 'soft' : 'off'); g.style.visibility = wrap ? 'hidden' : ''; setVirt(!wrap); paint(); };
     const esc0 = e => { if (e.key === 'Escape' && box.classList.contains('dzc-full')) { e.preventDefault(); e.stopPropagation(); full(false); } };
     const full = on => { box.classList.toggle('dzc-full', on); q('full').innerHTML = on ? '&#x2715; leave full screen' : '&#x26F6; full screen'; if (on) document.addEventListener('keydown', esc0, true); else document.removeEventListener('keydown', esc0, true); paint(); if (on) ta.focus(); };
     q('full').onclick = () => full(!box.classList.contains('dzc-full'));
@@ -75,7 +87,7 @@
     if (q('save')) q('save').onclick = save;
     (o.extra || []).forEach((x, i) => { q('x' + i).onclick = () => x[1](ta.value); });
     paint();
-    return { get: () => ta.value, set: (t, nm) => { ta.value = orig = String(t || '').replace(/\r\n/g, '\n'); if (nm) { lang = C.lang(nm); host.querySelector('.dzc-t').firstChild.textContent = nm + ' '; q('lang').textContent = C.LANGS[lang] || lang; } ta.scrollTop = 0; paint(); },
+    return { get: () => ta.value, set: (t, nm) => { ta.value = orig = String(t || '').replace(/\r\n/g, '\n'); if (nm) { lang = C.lang(nm); host.querySelector('.dzc-t').firstChild.textContent = nm + ' '; q('lang').textContent = C.LANGS[lang] || lang; } ta.scrollTop = 0; paint(); }, destroy: () => { cancelAnimationFrame(raf); cancelAnimationFrame(sraf); clearTimeout(tmo); document.removeEventListener('keydown', esc0, true); },
       dirty: () => ta.value !== orig, focus: () => ta.focus(), goto: ln => { const L = ta.value.split('\n'); let p = 0; for (let i = 0; i < ln - 1 && i < L.length; i++) p += L[i].length + 1; ta.focus(); ta.setSelectionRange(p, p + (L[ln - 1] || '').length); ta.scrollTop = Math.max(0, (ln - 5) * 18); pos(); } };
   };
   root.DaisyCode = C;

@@ -26,6 +26,9 @@
 
 ## Figures of experiments and the Daisy layers
 
+* The **file viewer and editor** (Notepad++ colours) colours and numbers only the lines in view, so logs of several megabytes open, scroll and are edited at once without the program hanging; wrap is kept for files below 300 kB.
+* The Layers panel and the panel of the real field are shown in this manual as they appear in version 1.1.0.
+
 * **Why a run gave no results**: the root cause of every Daisy error in plain words (unknown name, numerical problem, value out of range, missing file, weather, syntax), with the line of the set-up and what to do; runs with the same cause together.
 * Horizons taken from the Daisy samples no longer bring the logs of their own run (the error Unknown 'log' model 'crop' is gone).
 * **See all the Daisy output files**, at the bottom of Experiments: every experiment, run and file in order, in the Notepad++ viewer.
