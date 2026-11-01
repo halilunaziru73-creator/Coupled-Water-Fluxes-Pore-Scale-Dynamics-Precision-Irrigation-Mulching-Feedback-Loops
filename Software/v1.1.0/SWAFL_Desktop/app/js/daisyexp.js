@@ -246,6 +246,48 @@
       say(l0, l1, x); line = l1; i = j + 1; }
     if (com.length) say(com[0], com[com.length - 1], 'comments');
     return out; };
+  // the names a file defines and the files it reads
+  const defsOf = (t, kind) => { const re = new RegExp('\\(def' + kind + '\\s+(?:"([^"]+)"|([^\\s()"]+))', 'g'), o = []; let m; while ((m = re.exec(t || ''))) o.push(m[1] || m[2]); return o; };
+  const inputsOf = t => { const o = []; String(t || '').split('\n').forEach(l => { if (/^\s*;/.test(l)) return; const m = l.match(/\(input\s+file\s+"([^"]+)"/); if (m) o.push(m[1]); }); return o; };
+  /* how one run file was made, step by step, in plain words */
+  E.howMade = function (run, fl, lm, nm) {
+    const H = root.DaisyFactorHelp, o = [];
+    o.push('  Step 1. You chose what changes and its values in the Experiments tab (saved in plan.json):');
+    (fl || []).forEach(f => { const F = E.factor(f.id); o.push('            ' + ((F && F.label) || f.id).replace(/ \(Daisy reference.*\)$/, '') + ': ' + (f.levels || []).map(v => v && v.label ? v.label : F ? E.levelName(F, v) : v).join(', ')); });
+    o.push('  Step 2. The workbench made the combinations of these values' + (lm && lm.total ? ' (' + lm.total.toLocaleString() + ')' : '') + (lm && lm.chosen < lm.total ? ' and chose ' + lm.chosen + ' of them ' + ((E.PICKS.find(q => q[0] === lm.pick) || [])[2] || '') + ' with seed ' + lm.seed : '') + '.',
+      '          This run is one of them: ' + (run.label || 'the baseline') + '.',
+      '  Step 3. It took the template of the built-in farm, the same for every run: the rotation of spring barley,',
+      '          winter barley, winter rape and winter wheat on the farm soil, with the Taastrup weather (or your own).',
+      '  Step 4. It wrote each value of this run where Daisy reads it:');
+    Object.keys(run.val || {}).forEach(id => { const F = E.factor(id), h = H && F ? H.get(F) : null; o.push('            ' + ((F && F.label) || id).replace(/ \(Daisy reference.*\)$/, '') + ' = ' + (F ? E.levelName(F, run.val[id]) : run.val[id]) + (h && h.d ? '  ->  ' + h.d : '')); });
+    if (!Object.keys(run.val || {}).length) o.push('            (no value changed: this is the baseline)');
+    o.push('  Step 5. Files that are the same for several runs (weather, soil, rotation, output) went once into Common/,',
+      '          named after the values they carry; this run file points to them with (input file "../Common/...").',
+      '  Step 6. It added the comments at the top, the description and the log prefix "' + nm + '-", and saved the file as',
+      '          ' + nm + '.dai in this folder.');
+    return o; };
+  /* how Daisy calls everything when it runs this file: a tree with the real names of this run */
+  E.callTree = function (rf, nm, read) {
+    const o = [], ins = inputsOf(rf).map(f => f.replace(/^\.\.\/Common\//, '')), last = (i, n) => i === n - 1 ? '`--' : '|--';
+    o.push('  daisy ' + nm + '.dai', '   |');
+    const steps = [];
+    ins.forEach(f => { const t = read(f) || '', sub = [], k = E.commonKind(f).split(':')[0];
+      inputsOf(t).forEach(x => sub.push('reads ' + x.split('/').pop() + ' (Daisy library)'));
+      const ch = defsOf(t, 'chemical'); if (ch.length) sub.push('defines the chemical ' + ch.map(x => '"' + x + '"').join(', '));
+      const ac = defsOf(t, 'action'); if (ac.length) sub.push('defines the actions ' + ac.map(x => '"' + x + '"').join(', '));
+      const hz = defsOf(t, 'horizon'); if (hz.length) sub.push('defines the soil horizons ' + hz.slice(0, 6).map(x => '"' + x + '"').join(', ') + (hz.length > 6 ? ' ...' : ''));
+      const co = defsOf(t, 'column'); if (co.length) sub.push('defines the columns ' + co.slice(0, 4).map(x => '"' + x + '"').join(', ') + (co.length > 4 ? ' ...' : ''));
+      const lg = (t.match(/where\s+"([^"]+\.dlf)"/g) || []).map(x => x.match(/"([^"]+)"/)[1]); if (lg.length) sub.push('defines the logs ' + lg.slice(0, 5).join(', ') + (lg.length > 5 ? ' ... (' + lg.length + ' logs)' : ''));
+      steps.push({ t: 'reads ../Common/' + f, sub }); });
+    const w = rf.match(/\(weather\s+default\s+"([^"]+)"/); if (w) steps.push({ t: '(weather default "' + w[1].split('/').pop() + '"): the weather of every day', sub: [] });
+    const dc = rf.match(/\(defcolumn\s+"([^"]+)"\s+"([^"]+)"/); if (dc) steps.push({ t: '(defcolumn "' + dc[1] + '" "' + dc[2] + '"): a column made from the column "' + dc[2] + '" defined above', sub: (rf.match(/;; parameters from the Daisy reference[\s\S]*?\n\s*\(column/) ? ['with the values this run varies (after ";; parameters from the Daisy reference")'] : []) });
+    const mg = rf.match(/\(repeat\s+"([^"]+)"\)/); if (mg) steps.push({ t: '(manager ... (repeat "' + mg[1] + '")): calls the action "' + mg[1] + '" defined in the rotation, every year', sub: ['"' + mg[1] + '" calls in turn the actions of each crop: sowing, fertiliser, tillage, irrigation, harvest'] });
+    const cl = rf.match(/\(column\s+"([^"]+)"\)/); if (cl) steps.push({ t: '(column "' + cl[1] + '"): calls the column defined above', sub: [] });
+    const t0 = rf.match(/\(time\s+(\d{3,4}[^)]*)\)/), t1 = rf.match(/\(stop\s+(\d{3,4}[^)]*)\)/), ao = rf.match(/after\s+([^)]*)\)/);
+    steps.push({ t: 'simulates hour by hour from ' + (t0 ? t0[1].trim() : '?') + ' to ' + (t1 ? t1[1].trim() : '?') + (ao ? ' (logs from ' + ao[1].trim() + ')' : ''), sub: ['writes ' + nm + '-<log>.dlf in this folder for every log defined above, and daisy.log'] });
+    steps.forEach((s0, i) => { o.push('   ' + last(i, steps.length) + ' ' + s0.t); s0.sub.forEach((x, j) => o.push('   ' + (i === steps.length - 1 ? '   ' : '|  ') + '   ' + last(j, s0.sub.length) + ' ' + x)); });
+    o.push('', '  Read it from top to bottom: a name must be defined before it is called, so the files in Common/ come first.');
+    return o; };
   E.folder = function (jobs, commonFiles, info) {
     info = info || {}; const plan = info.plan || {}, out = {}, seen = {}, root = 'Experiment_' + slug(info.title || info.request || 'Daisy', 36);
     /* every file of Common/ gets a name that is specific to this experiment and says what makes it different:
@@ -280,12 +322,15 @@
     { const fl0 = (info.plan && ((info.plan.plan && info.plan.plan.factors) || info.plan.factors)) || [], lm = info.limit || {}, ttl = info.title || info.request || 'Daisy experiment', first = {};
       const vName = (id, v) => { const F = E.factor(id); return F ? E.levelName(F, v && v.label ? v.label : v) : String(v); };
       dirs.forEach((d, i) => { const rf = out[root + '/' + d.dir + '/' + d.nm + '.dai'], R = [], run = d.run;
-        R.push('RUN ' + d.dir.split('_')[0] + ' OF THE EXPERIMENT: ' + ttl, '='.repeat(64), '', run.label + (run.reference ? '  (rainfed reference)' : ''), '');
+        R.push('RUN ' + d.dir.split('_')[0] + ' OF THE EXPERIMENT: ' + ttl, '='.repeat(64), '', run.label + (run.reference ? '  (rainfed reference)' : ''), '',
+          'IN SHORT', '  ' + d.nm + '.dai is a text file that tells Daisy what to simulate: which soil, crops, weather and management.', '  It was written by the SWAFL workbench from the template of the farm, with the values of this run put in.', '  It reads the shared files in ../Common/, and Daisy writes its results (.dlf logs) into this folder.', '  The sections below show how it was made, how its parts call each other, and what every line does.', '');
         R.push('THE VALUES OF THIS RUN'); if (fl0.length) fl0.forEach(f => { const F = E.factor(f.id), v = (run.val || {})[f.id]; R.push('  ' + ((F && F.label) || f.id).padEnd(52) + ' ' + (v == null ? (run.reference && F && F.irr ? 'none (rainfed)' : 'the value of the farm (not varied in this run)') : vName(f.id, v))); }); else R.push('  one run, no factor varied');
         R.push('', 'ITS PLACE IN THE DESIGN', '  Run ' + (i + 1) + ' of ' + dirs.length + ' runs' + (lm.total ? ', made from ' + (lm.chosen || dirs.length) + ' of the ' + lm.total.toLocaleString() + ' combinations of the values' + (lm.chosen && lm.chosen < lm.total ? ' (chosen ' + ((E.PICKS.find(q => q[0] === lm.pick) || [])[2] || '') + ', seed ' + lm.seed + ')' : '') : '') + '.');
         if (run.reference) R.push('  A rainfed reference: the same soil and weather as the irrigated runs listed in the README of the experiment, without irrigation, so the gain of irrigation is measured against it.');
         else if (dirs.some(q => q.run.reference)) { const ctxv = Object.keys(run.val || {}).filter(id => !(E.factor(id) || {}).irr).map(id => vName(id, run.val[id])).join(', '); const rr = dirs.find(q => q.run.reference && Object.keys(q.run.val || {}).every(id => JSON.stringify(q.run.val[id]) === JSON.stringify((run.val || {})[id]))); R.push('  Its rainfed reference' + (ctxv ? ' (' + ctxv + ')' : '') + ': ' + (rr ? rr.dir : 'none') + '.'); }
         R.push('', 'THE FILES OF THIS FOLDER', '  ' + d.nm + '.dai'.padEnd(10) + '  the run file: open it with Daisy in this folder.', '  README_run.txt     this file.', '  After the run      the logs ' + d.nm + '-*.dlf and daisy.log are written here.');
+        R.push('', 'HOW THIS .dai FILE WAS CREATED'); E.howMade(run, fl0, lm, d.nm).forEach(x => R.push(x));
+        R.push('', 'HOW EVERYTHING IS CALLED WHEN DAISY RUNS IT'); E.callTree(rf, d.nm, f => out[root + '/Common/' + f]).forEach(x => R.push(x));
         R.push('', 'HOW THE RUN FILE IS ARRANGED (' + d.nm + '.dai, top to bottom)'); E.explainDai(rf).forEach(x => R.push(x));
         R.push('', '  The order matters: the files in Common/ are read first, because the column and the management use what they define;', '  then the weather, the column, the management and the dates; Daisy then simulates every hour from (time) to (stop).');
         R.push('', 'THE COMMON FILES THIS RUN READS'); (rf.match(/\.\.\/Common\/[^"]+/g) || []).forEach(m => { const f = m.slice(10), base = f.replace(/^[^_]+_[^_]+_[^_]+_[^_]+_/, ''), txt = out[root + '/Common/' + f];
@@ -306,6 +351,7 @@
     const dsn = { factorial: 'all combinations of the levels', oat: 'one factor at a time, the others at their middle level', paired: 'the levels side by side' }[ds] || ds;
     const L = [];
     L.push('EXPERIMENT - ' + (info.request || 'Daisy experiment'), '='.repeat(60), '',
+      'IN SHORT', '  This folder is one Daisy experiment: ' + nRuns + ' runs of the same farm that differ only in the values you chose.', '  Each run is one .dai file (a text file that tells Daisy what to simulate) in its own numbered folder.', '  The files the runs share are written once in Common/. Run run_all.bat (Windows) or run_all.sh (Linux, macOS).', '  Below: the design, how the runs were chosen, how a .dai file is created, how Daisy calls everything, and every line.', '',
       'Design: ' + (fl.length ? fl.map(f => fname(f) + ' (' + (f.levels || []).length + ' levels)').join(' x ') : 'one run') + ' = ' + (info.total || nRuns - ref).toLocaleString() + ' combinations; ' + (nRuns - ref) + ' runs' + (ref ? ' + ' + ref + ' rainfed reference' + (ref === 1 ? '' : 's') + ' = ' + nRuns + ' runs' : '') + '.', 'Combinations: ' + dsn + '.', 'Made by the SWAFL Daisy workbench for Daisy 7.1.14. Open the .dai of a run in its own folder with Daisy to run it.', '',
       'FOLDERS', '  Common/                  shared inputs (weather, soils, rotations, output); every file is named after this experiment and, where several versions exist, after the factor values it belongs to');
     dirs.forEach(d => L.push('  ' + d.dir.padEnd(34).slice(0, Math.max(34, d.dir.length + 1)) + ' ' + d.run.label + (d.run.reference ? '  (rainfed reference)' : '')));
@@ -364,7 +410,9 @@
       L.push('', 'HOW THE FOLDER AND THE CODE ARE ARRANGED', '  ' + root + '/', '  |-- README_*.txt        this file: the design and how everything is made', '  |-- plan.json           the plan (factors, levels, number of runs, way of choosing, seed): open it in Experiments to make the same folder again',
         '  |-- runs.csv            one line per run: its folder and the value of every factor', '  |-- run_all.sh, run_all.bat   run every run, one after the other', '  |-- Common/             the files the runs share, each written once', '  |-- 00_<name>/ ... ' + dirs[dirs.length - 1].dir.split('_')[0] + '_<name>/   one folder per run: <name>.dai and README_run.txt (what the run is and how its file is arranged)', '',
         '  Every run file has the same arrangement; run ' + d0.dir + ' as the example:'); if (d0) E.explainDai(out[root + '/' + d0.dir + '/' + d0.nm + '.dai'] || '').forEach(x => L.push(x));
-      L.push('  Only the lines listed under WHERE EACH VALUE IS WRITTEN change from one run to the next.'); }
+      L.push('  Only the lines listed under WHERE EACH VALUE IS WRITTEN change from one run to the next.');
+      L.push('', 'HOW A .dai FILE IS CREATED (run ' + d0.dir + ' as the example)'); E.howMade(d0.run, fl, info.limit, d0.nm).forEach(x => L.push(x));
+      L.push('', 'HOW EVERYTHING IS CALLED WHEN DAISY RUNS A RUN FILE (run ' + d0.dir + ')'); E.callTree(out[root + '/' + d0.dir + '/' + d0.nm + '.dai'] || '', d0.nm, f => out[root + '/Common/' + f]).forEach(x => L.push(x)); }
     L.push('', 'WHAT IS KEPT THE SAME IN ALL RUNS', keptAll, '  Crops, fertiliser, weather, soil and output are identical unless listed above.', '',
       'HOW TO RUN', '  Keep the folder structure (the run files point to ../Common/).', '  Open each .dai in its own folder with Daisy and run, or run run_all.sh (Linux, macOS) or run_all.bat (Windows) here.', '  The output files (.dlf) are written into the folder of the run, prefixed with the run name.', '  Rename daisy.log if you want to keep the run-time information of a run.', '',
       'WHERE TO FIND DATA FOR THE INDEXES',

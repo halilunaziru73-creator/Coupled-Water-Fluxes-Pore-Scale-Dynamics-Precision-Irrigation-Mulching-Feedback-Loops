@@ -369,6 +369,24 @@ Under every row of *What will be tested* a sentence says what the factor is; for
 
 5. *HOW THE FOLDER AND THE CODE ARE ARRANGED*: the tree of the folder, and the run file of one run explained part by part with its line numbers: the comments, each (input file ...) and what that Common file holds, the unit of the radiation, the weather with its factors, the description and log prefix, the management, the column with the parameters the run varies, and the dates.
 
+**How a .dai file is created and how everything is called.** Every README (of the experiment and of each run) starts with *IN SHORT*, four plain sentences, and then gives two sections in easy steps. *HOW THIS .dai FILE WAS CREATED*: (1) the values you chose, (2) the combinations and the choice with its seed, (3) the template of the farm, (4) each value of the run and where Daisy reads it, (5) the shared files written once in Common/, (6) the comments, description and log prefix. *HOW EVERYTHING IS CALLED WHEN DAISY RUNS IT*: a tree with the real names of the run, read from top to bottom:
+
+```
+daisy overhead_Built_in_loam.dai
+ |-- reads ../Common/..._Rotation_..._overhead.dai
+ |     |-- reads tillage.dai, crop.dai, fertilizer.dai (Daisy library)
+ |     `-- defines the actions "sbarley_A_F_R" ... "irrigate_30_tensiometer_overhead", "A_F_R"
+ |-- reads ../Common/..._ResFarm.dai: the horizons and the column "ResFarm 1D; Free drainage"
+ |-- reads ../Common/..._OutputLog_annual.dai: the logs Annual-Harvest.dlf ...
+ |-- (weather default "...dwf"): the weather of every day
+ |-- (defcolumn "SWAFL column" "ResFarm 1D; Free drainage"): uses the column defined above
+ |-- (manager ... (repeat "A_F_R")): calls the action "A_F_R" every year
+ |-- (column "SWAFL column"): calls the column defined above
+ `-- simulates hour by hour from 1980 01 01 to 2000 04 1, writes <run>-<log>.dlf
+```
+
+A name must be defined before it is called, so the files in Common/ come first.
+
 **Every run folder has its own README_run.txt**: the values of the run (and which factors stay at the value of the farm), its place in the design (run 4 of 8, made from 6 of 6 combinations, chosen how and with which seed), its rainfed reference, the files of the folder, its run file explained line by line, the Common files it reads with what differs in them from the other runs, and how to run it alone on Linux, macOS or Windows. When several experiments are saved as one folder, *README_experiments.txt* lists every experiment with what it changes, how its values were combined and how many runs were chosen, and draws the arrangement of the whole folder. Both the folder window and the editor have a *Full screen* button (Esc leaves it).
 
 ![The README in the light colours.](images/daisy13/exp_readme.jpg){width=100%}
