@@ -3966,10 +3966,17 @@
 },
 {
 "level": 2,
+"title": "Viewing and editing the outputs before they are saved",
+"id": "daisy-view-out",
+"file": "30_daisy_results.md",
+"page": 748
+},
+{
+"level": 2,
 "title": "Saving the outputs and the raw files of Daisy together",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 748
+"page": 749
 },
 {
 "level": 2,
@@ -3983,7 +3990,7 @@
 "title": "The crops of the rotation",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 749
+"page": 750
 },
 {
 "level": 1,

@@ -65,6 +65,15 @@ window.DaisyFigKit = (() => {
     };
     set(true);
   };
+  // the same files, each made only when it is asked for: { path: async () => bytes or text } (the viewer of the outputs opens at once)
+  K.lazy = function (host, name, scale) {
+    const files = {}, list = Array.from(host.querySelectorAll('.dzfig')).filter(c => c.querySelector('canvas'));
+    const ready = c => { if (c._go) { try { c._go(); } catch (e) { } c._go = null; } };
+    list.forEach((c, i) => { const nm = name + '/' + String(i + 1).padStart(2, '0') + '_' + sane((c.querySelector('b') || {}).textContent);
+      files[nm + '.png'] = async () => { ready(c); const was = c.dataset.open; if (was === '0' && c._fkSet) c._fkSet(true); const r = await picture(c, c._fkOpt, scale || 3); if (was === '0' && c._fkSet) c._fkSet(false); return r.blob ? new Uint8Array(await r.blob.arrayBuffer()) : new Uint8Array(0); };
+      files[nm + '.csv'] = async () => { ready(c); const t = csvOf(c); return t ? '\ufeff' + t : ''; }; });
+    return files;
+  };
   // every figure of a result as files: { 'name/01_title.png': bytes, 'name/01_title.csv': text }
   K.collect = async function (host, name, scale, onStep) {
     const files = {}, list = Array.from(host.querySelectorAll('.dzfig')).filter(c => c.querySelector('canvas'));

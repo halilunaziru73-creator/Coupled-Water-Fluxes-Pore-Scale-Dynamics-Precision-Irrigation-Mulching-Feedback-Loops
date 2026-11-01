@@ -99,9 +99,14 @@ window.DaisyExpTS = (() => {
       const tail = [pan, what].filter(Boolean).join(', '); return t + (tail ? ' ' + tail.charAt(0).toUpperCase() + tail.slice(1) : '') + '.' + (rest.length ? ' Averaged over ' + rest.join(', ') + '.' : ''); }
     // depth and time: one map for each value of the panel factor, the mean of its runs (through the year: of its seasons too), one colour scale
     function heatJob(f, card, cv) {
+      if (card._maps) return drawMaps(f, card, cv, card._maps);
       const dc0 = IO().depthColumns(logs[f.log])[f.v] || [], daily = isDaily(f.log, logs[f.log]), doy = daily && st.mode === 'doy', maps = [];
       pl.slice(0, 6).forEach(pv => { const rs = grp(pv, null), acc = new Map(); rs.forEach(r => { const d = r.logs[f.log]; if (!d || !d.time) return; dc0.forEach(q => { const y = d.data[q.j]; if (!y) return; for (let i = 0; i < d.n; i++) { if (!isFinite(y[i])) continue; const t = doy ? Date.UTC(2001, 0, 1) + Math.min(364, doyOf(d.time[i])) * 864e5 : Math.round(d.time[i] / 864e5) * 864e5, k = t + '|' + q.z; let a = acc.get(k); if (!a) acc.set(k, a = [0, 0]); a[0] += y[i]; a[1]++; } }); });
         const tt = [], zz = [], vv = []; acc.forEach((a, k) => { const i = k.indexOf('|'); tt.push(+k.slice(0, i)); zz.push(+k.slice(i + 1)); vv.push(a[0] / a[1]); }); if (vv.length) maps.push({ pv, tt, zz, vv }); });
+      card._maps = maps; return drawMaps(f, card, cv, maps);
+    }
+    function drawMaps(f, card, cv, maps) {
+      const daily = isDaily(f.log, logs[f.log]), doy = daily && st.mode === 'doy';
       if (!maps.length) { card.remove(); return; } let lo = Infinity, hi = -Infinity; maps.forEach(m => m.vv.forEach(v => { if (v < lo) lo = v; if (v > hi) hi = v; }));
       const gridBox = card.querySelector('[data-ts="cvs"]'); if (maps.length > 1) { gridBox.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:6px 10px'; card.dataset.cols = 2; cv.parentNode.style.minWidth = '0'; } const cvs = [cv]; while (cvs.length < maps.length) { let c2 = card.querySelectorAll('canvas')[cvs.length]; if (!c2) { const dv = document.createElement('div'); c2 = document.createElement('canvas'); c2.style.cssText = cv.style.cssText; dv.style.minWidth = '0'; dv.appendChild(c2); gridBox.appendChild(dv); } cvs.push(c2); }
       const pal = /theta|water/i.test(f.v) ? 'blues' : /^h$|pF/i.test(f.v) ? 'pf' : /NO3|NH4|nitr|ammon/i.test(f.v) ? 'ylgn' : /^T$|temp/i.test(f.v) ? 'ylorrd' : 'viridis';
@@ -115,7 +120,7 @@ window.DaisyExpTS = (() => {
       show.forEach((f, i) => { const card = document.createElement('div'); card.className = 'dzpan dzfig'; card.dataset.xf = 'ts' + i;
         card.innerHTML = '<div class="dzrow"><b>' + esc(titleOf(f)) + unitTxt(f) + '</b><span class="pnote" style="margin-left:8px">' + esc(f.log) + '</span></div><p class="pnote" style="margin:2px 0 4px">' + esc(noteOf(f)) + '</p><div data-ts="cvs"><div><canvas style="display:block;width:100%"></canvas></div></div>';
         gbox[f.log].appendChild(card); const cv = card.querySelector('canvas');
-        const job = () => { if (f.kind === 'heat') return heatJob(f, card, cv); const panels = build(f); if (!panels.length) { card.remove(); return; } const daily = isDaily(f.log, logs[f.log]);
+        let memo = null; const job = () => { if (f.kind === 'heat') return heatJob(f, card, cv); const panels = memo || (memo = build(f));   /* the numbers are worked out once; drawing again (saving at 300 dpi) only draws */ if (!panels.length) { card.remove(); return; } const daily = isDaily(f.log, logs[f.log]);
           if (f.kind === 'prof') P().profiles(cv, panels, { title: titleOf(f), xt: nameOf(f.v) + unitTxt(f) });
           else P().ribbons(cv, panels, { title: titleOf(f), yt: (st.mode === 'cum' ? 'Cumulative ' + String(NAMES[f.col] || f.col).replace(/^./, c0 => c0.toLowerCase()) : (NAMES[f.col] || f.col)) + unitTxt(f) + (isDaily(f.log, logs[f.log]) && isFlux(f) && (st.mode === 'month' || st.mode === 'year') ? ' per ' + (st.mode === 'month' ? 'month' : 'year') : ''), xkind: daily && st.mode === 'doy' ? 'doy' : daily && (st.mode === 'time' || st.mode === 'month' || st.mode === 'cum') ? 'time' : 'num', xt: daily && st.mode === 'doy' ? 'Month of the year' : daily && st.mode !== 'year' ? 'Date' : 'Year' }); };
         card._go = () => { try { job(); } catch (e) { console.warn('time series', f.log, e); card.remove(); } };

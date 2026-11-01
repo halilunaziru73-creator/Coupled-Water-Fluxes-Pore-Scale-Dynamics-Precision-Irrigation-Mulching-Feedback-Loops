@@ -26,7 +26,7 @@
     data: ['Choose the weather: built-in, a Daisy station, a file, or the online weather of your place.', 'Tick My soil and type your soil layers if you know them; otherwise the built-in soils are used.', 'Press Next.'],
     library: ['Look through the soils, crops and fertilisers Daisy knows.', 'Click one to read its values.', 'You can skip this step: press Next.'],
     scen: ['Pick the question closest to yours (water, nitrogen, climate, chemical or soil).', 'Press Run (in the desktop app Daisy runs on your computer).', 'Read the figures that appear, then press Next.'],
-    exp: ['Write what you want to find out, or press Load this experiment on a ready one.', 'Check what changes and the values tested; remove or add rows.', 'Press Run all (desktop) or Save the experiment folder to run it anywhere.'],
+    exp: ['Choose a ready experiment: Best combinations, By topic, Prepared experiments, Import, or Load this experiment.', 'Check what changes and the values tested; remove or add rows.', 'Press Run all (desktop) or Save the experiment folder to run it anywhere.'],
     proc: ['Click a box of the process map (rain, soil water, roots, nitrogen...).', 'Read what Daisy does there and see its figures from your run.', 'Press Next to plot any quantity.'],
     plot: ['Load your Daisy logs or use the runs you just made.', 'Choose the quantity and the runs to plot.', 'Save the figure or the numbers.'],
     balance: ['Choose a run.', 'Read whether inputs, outputs and the change of content agree.', 'A large error means the set-up needs a look.'],

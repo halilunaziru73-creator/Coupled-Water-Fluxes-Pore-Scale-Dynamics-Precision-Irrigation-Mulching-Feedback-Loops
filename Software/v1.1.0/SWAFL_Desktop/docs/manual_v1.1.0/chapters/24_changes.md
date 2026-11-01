@@ -26,6 +26,9 @@
 
 ## Figures of experiments and the Daisy layers
 
+* **View and edit the outputs (full screen)**: every output and raw file of an experiment in a full-screen viewer with the colours of Notepad++, edited before it is saved.
+* The guide of Experiments starts with choosing a ready experiment (Best combinations, By topic, Prepared experiments, Import, Load this experiment).
+
 * Daisy runs are kept in **SWAFL runs next to Daisy** (the Daisy folder when it can be written, otherwise next to the Daisy of SWAFL), no longer in Documents.
 * Figures of every log: **monthly, yearly and cumulative** besides through the year and every day; the Log plots tab has monthly and cumulative values too.
 * **Compare similar runs** (Log plots): the same log of several runs in one figure and each run minus a reference.

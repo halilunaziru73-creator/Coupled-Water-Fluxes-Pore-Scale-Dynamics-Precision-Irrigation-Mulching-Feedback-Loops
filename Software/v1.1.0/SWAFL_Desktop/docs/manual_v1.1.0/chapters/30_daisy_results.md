@@ -1136,6 +1136,15 @@ The group *All the outputs of every run* lists every run of the experiment, not 
 
 ![All the outputs of every run: one folding group per run, files ticked one by one or by kind.](images/daisy11/daisy_rawall.png){width=100%}
 
+## Viewing and editing the outputs before they are saved {#daisy-view-out}
+
+**View and edit the outputs (full screen)**, in the results bar of an experiment and in *All the outputs of every run*, gathers everything the experiment produced: *Outputs/* (README, plan.json, design.csv, results.csv and every figure at 300 dpi with its numbers as CSV) and *Raw/* (for every run, the files Daisy wrote and the set-up that made them). They open in a viewer that fills the screen (*Leave full screen* or Esc makes it a window again):
+
+* On the left, the folders and files with their sizes; a click opens a file.
+* On the right, a text file opens in an editor with the colours of **Notepad++** (white page, grey line-number margin, keywords in bold blue, numbers in orange, comments in green, Consolas): line numbers, find (Ctrl+F), wrap, copy and download. *colours* switches between Notepad++, VS Code light and VS Code dark, and the choice is kept. A figure (.png) is shown as the picture that will be saved. The viewer opens at once: the figures and their tables are marked *made when opened* and are drawn at 300 dpi when one is clicked, or all of them, with a count, when the folder is saved or written.
+* Change a file and press *Save changes* (Ctrl+S): the file is marked *changed* and everything saved afterwards takes the changed text.
+* *Save the folder (.zip)* saves all of it with the changes; on the desktop, *Write the outputs next to the runs* writes the *Outputs/* folder, with the changes, into the folder of the experiment.
+
 ## Saving the outputs and the raw files of Daisy together
 
 The results bar has three ways to save: *Save the outputs of this experiment* (README, plan, design, results table and every figure, written next to the runs on the desktop), *as a zip*, and **Save both: outputs and raw Daisy files**, one .zip with two folders:
