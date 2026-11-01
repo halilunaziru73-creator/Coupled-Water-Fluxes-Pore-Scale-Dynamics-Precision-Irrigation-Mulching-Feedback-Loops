@@ -254,26 +254,18 @@ The Experiments tab turns a question into a set of Daisy runs. You can write the
 1. **Weather for all runs.** The weather of every simulation, shared with Scenarios and Processes.
 2. **Your question.** Write what you want to find out in your own words.
 3. **Make a plan.** Reads the question and proposes the factors, the levels and the design.
-4. **Online AI.** Optional: an online AI reads the question first; each plan it gives is checked against what Daisy can vary.
 
-### The online AI and its access key {#daisy-ai-key}
+<!-- end of list -->
 
-Without a key the planner built into SWAFL reads the request offline. With a key, the request first goes to Claude (Anthropic), which answers with a plan (factors, levels, design, results); SWAFL checks every factor and value against what Daisy can vary before anything runs. The key stays on the computer and is sent only to api.anthropic.com.
-
-1. Open console.anthropic.com, sign in and add a little credit under *Billing* (one plan costs well under one US cent).
-2. *API keys* › *Create key*; name it, for example SWAFL, and copy it. It looks like `sk-ant-api03-AbCd...xyz` and is shown once only.
-3. Tick *online AI*, paste the key, choose the model (Claude Sonnet 5.5 by default; Opus 5.5 for the hardest requests, Haiku 5.5 for the fastest) and press **Test the key**. The answer says whether the key works, was refused (401: copy it again), has no credit, cannot use that model (404) or whether the internet cannot be reached.
-4. Write the request and press *Make a plan from my request*. If the AI cannot be reached, the built-in planner makes the plan and a note says why.
-
-The panel *The online AI and its access key* under the request box lists requests that work well (a click puts one in the box), for example *How sensitive is drainage and nitrate leaching to the saturated conductivity and the van Genuchten alpha and n of the soil?*, and shows what comes back: for *Compare drip, sprinkler and furrow irrigation on sand and loam with three nitrogen rates* the plan `{"factors": [{"id": "method", "levels": ["drip", "overhead", "surface"]}, {"id": "soil", "levels": ["sand", "loam"]}, {"id": "nfac", "levels": [0.5, 1, 1.5]}], "design": "factorial"}`, 18 runs, each value still open to change.
-
-### Soil hydraulic sensitivity {#daisy-vg-factors}
-
-Five factors change the van Genuchten-Mualem curves of every horizon of the built-in soils (ResFarm.dai), as in the sensitivity studies of soil water retention and conductivity: **K_sat** (multiplied, for example 0.25, 1, 4), **alpha** (multiplied: 0.5, 1, 2), **n** (n - 1 multiplied, so n stays above 1: 0.7, 1, 1.3), **Theta_sat** (multiplied, kept below 0.7: 0.9, 1, 1.1) and the tortuosity **l** (added: -1, 0, 1). Only the numbers inside each (hydraulic M_vG ...) block of the soil file of the run change; the README of each run shows them. In a test with Daisy 7.1.14 on the loam, K_sat x 4, alpha x 2, n x 1.3, Theta_sat x 1.1 and l + 1 together raised matrix percolation from 177 to 222 mm and removed the runoff of the season. Combined with *Which combination is best*, they show which soil property matters most for yield, drainage and leaching.
 5. **Best combinations.** Ready made experiments worked out from the Daisy reference.
 6. **By topic.** The 107 topics of the Daisy reference, each leading to experiments.
 7. **Import.** Bring an experiment folder, set-ups, weather, soil tables or logs.
 8. **My experiments.** The list of experiments that are run or saved together.
+
+### Soil hydraulic sensitivity {#daisy-vg-factors}
+
+Five factors change the van Genuchten-Mualem curves of every horizon of the built-in soils (ResFarm.dai), as in the sensitivity studies of soil water retention and conductivity: **K_sat** (multiplied, for example 0.25, 1, 4), **alpha** (multiplied: 0.5, 1, 2), **n** (n - 1 multiplied, so n stays above 1: 0.7, 1, 1.3), **Theta_sat** (multiplied, kept below 0.7: 0.9, 1, 1.1) and the tortuosity **l** (added: -1, 0, 1). Only the numbers inside each (hydraulic M_vG ...) block of the soil file of the run change; the README of each run shows them. In a test with Daisy 7.1.14 on the loam, K_sat x 4, alpha x 2, n x 1.3, Theta_sat x 1.1 and l + 1 together raised matrix percolation from 177 to 222 mm and removed the runoff of the season. Combined with *Which combination is best*, they show which soil property matters most for yield, drainage and leaching.
+
 
 \newpage
 

@@ -1,8 +1,7 @@
 /* The planner of the Daisy workbench: a person writes in their own words what they want to find out, and a plan comes back (factors, levels,
-   design, weather, soil, years, what to look at, and the questions that remain). Two engines produce the same plan:
-   1. a built-in reader that works offline, anywhere;
-   2. an online AI (Claude) that is given the catalogue of what Daisy can vary and must answer with a plan in the same JSON; its answer is checked
-      against the catalogue (unknown factors are dropped, values are kept inside their ranges) and the built-in reader is used if it fails. */
+   design, weather, soil, years, what to look at, and the questions that remain). The plan is made by the reader built into SWAFL, offline;
+   nothing is sent over the internet. A plan read from a file is checked against the catalogue (validate): unknown factors are dropped and
+   values are kept inside their ranges. */
 (function (root) {
   'use strict';
   const A = {}, S = root.DaisyScen || (typeof require !== 'undefined' ? require('./daisyscen.js') : null), X = root.DaisyExp || (typeof require !== 'undefined' ? require('./daisyexp.js') : null);
@@ -88,7 +87,7 @@
     return { plan, understood, questions, engine: 'built-in' };
   };
 
-  // ------------------------------------------------------------------ online AI
+  // ------------------------------------------------------------------ the catalogue of what Daisy can vary, and the check of a plan
   A.catalogue = function () {
     return JSON.stringify({
       factors: X.FACTORS.map(f => ({ id: f.id, label: f.label, unit: f.unit, kind: f.kind, needs_irrigation: !!f.irr, range: f.range || null, default_levels: f.levels.map(v => typeof v === 'object' ? v.label : v), meaning: f.words.slice(0, 5).join(', ') })),
@@ -106,16 +105,9 @@
     if (!plan.responses.length) plan.responses = ['yield', 'irr', 'leach', 'perc'];
     return { plan, understood: obj.explanation ? [String(obj.explanation)] : [], notes, questions: (obj.questions || []).slice(0, 4).map((q, i) => ({ id: 'ai' + i, text: String(q.text || ''), options: (q.options || []).map(String).slice(0, 6) })).filter(q => q.text), engine: 'AI' };
   };
-  A.askClaude = async function (text, ctx, key, model) {
-    if (!key) throw new Error('no key');
-    const r = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' }, body: JSON.stringify({ model: model || 'claude-sonnet-5-5', max_tokens: 1800, system: A.systemPrompt(), messages: [{ role: 'user', content: String(text).slice(0, 4000) + '\n\n(Context: ' + JSON.stringify({ own_weather_loaded: !!(ctx && ctx.hasUserWx), own_soil_table_loaded: !!(ctx && ctx.hasUserSoil) }) + ')' }] }) });
-    if (!r.ok) throw new Error('the AI service answered ' + r.status);
-    const j = await r.json(), t = ((j.content || []).find(c => c.type === 'text') || {}).text || ''; const m = t.match(/\{[\s\S]*\}/); if (!m) throw new Error('the AI did not return a plan'); return A.validate(JSON.parse(m[0]), ctx);
-  };
-  // the way in: the AI when a key is given and the network answers, otherwise the built-in reader
+  // the way in: the planner built into SWAFL, offline
   A.plan = async function (text, ctx, opt) {
     opt = opt || {}; const base = A.parse(text, ctx);
-    if (opt.key && opt.online !== false) { try { const r = await A.askClaude(text, ctx, opt.key, opt.model); if (r.plan.factors.length || r.questions.length) { r.fallback = base; return r; } } catch (e) { base.aiError = e.message; } }
     return base;
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = A; else root.DaisyAI = A;
