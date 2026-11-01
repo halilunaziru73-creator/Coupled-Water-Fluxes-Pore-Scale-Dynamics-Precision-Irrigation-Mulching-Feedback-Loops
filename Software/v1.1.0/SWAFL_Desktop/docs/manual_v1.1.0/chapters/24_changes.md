@@ -26,6 +26,9 @@
 
 ## Figures of experiments and the Daisy layers
 
+* **Summary of an experiment**: what was varied, the range of every result, the effect of every input on every result as a coloured table and in words; saved as summary.csv.
+* **Log plots with several runs**: every run with the same log together, or two runs against each other, in any of the figures; a new *Full range over time* view.
+
 * **Log plots: twenty kinds of figure** in six groups (over time, totals and means, the seasons, distribution, relationship, over depth), each explained in one line, with only the controls it needs.
 
 * **View / edit the Daisy outputs**: every file Daisy wrote (.dlf logs, daisy.log) opens in a full-screen editor in the style of Notepad++ (tabs, line numbers, find), one file at a time or all runs together; the edited text is used in every save and the text Daisy wrote is kept beside it.

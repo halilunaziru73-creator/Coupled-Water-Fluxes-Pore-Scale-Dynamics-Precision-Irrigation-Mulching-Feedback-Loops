@@ -875,13 +875,14 @@ Plot draws any column of a loaded log. The log, the view and the period are chos
 \newpage
 
 
-### Plot: twenty kinds of figure {#daisy-plot-views}
+### Plot: twenty-one kinds of figure {#daisy-plot-views}
 
 *View* lists the figures in six groups; the line under it says what the chosen one shows, and the columns, the period, *Each period as its* (sum, mean, maximum or minimum) and *Smoothing over* appear only when the view uses them. The columns that fit the view are chosen by themselves; *Draw* draws it, *Picture (PNG)* and *Table (CSV)* save it.
 
 | Group | View | What it shows |
 |:------|:-----|:--------------|
-| Over time | Time series | every chosen column against time |
+| Over time | Full range over time | every day of the whole period: the mean of all runs, 10 to 90 % of them darker and the lowest to the highest lighter |
+| | Time series | every chosen column against time |
 | | Small multiples | one panel for each column, each with its own scale |
 | | Raw and smoothed | the daily values as a thin line, the moving average (7, 15, 30 or 90 days) on top |
 | | Cumulative over all the years | the running total from the start |
@@ -899,6 +900,8 @@ Plot draws any column of a loaded log. The log, the view and the period are chos
 | Over depth | Depth profile through time | a variable over depth and time as colours |
 | | Profiles of each month | the mean profile of every month, coloured through the seasons |
 | | Profile at a date | the profile on one date, with Play |
+
+**Runs: one log or several together.** Beside *View*, *Runs* chooses the data: *this log only*; *every run with this log, together* (the same log of every run of an experiment or a scenario, merged on their dates: each run becomes one line, box, violin, histogram or curve of the figure, for the first chosen column); or *two runs: this one and* another run, which in *Scatter* draws one run against the other with the 1:1 line, the fitted line and R². The runs of the session are loaded and the first daily log of an experiment is drawn when the tab opens, so the figures show the full period of the runs rather than the short example log.
 
 ![Eight of the views, drawn from one run of an experiment: small multiples, monthly box plots, violin plots, histogram and density, scatter with the fitted line, profiles of each month, calendar heat map and anomaly.](images/daisy11/daisy_plot_views.png){width=100%}
 
@@ -1151,6 +1154,17 @@ The daily figures need daily logs. **Results saved** under the plan is now *year
 *Time* above the figures of every log has five choices: *through the year* (the mean of the seasons, day by day), *every day of the period*, *monthly*, *yearly* and *cumulative over all the years*. Monthly and yearly values are the totals of the month or the year for quantities that flow (water in mm, nitrogen in kg N/ha: rain, evapotranspiration, percolation, leaching) and the means for states (leaf area, water content, dry matter); the y axis says which ("per month", "per year"). *Cumulative* is the running total of every run from the start of the run, so the runs part as their totals grow apart. Annual logs offer *yearly* and *cumulative*. The *Log plots* tab has the same choices for one log (*Monthly values*, *Annual values*, *Cumulative over all the years*).
 
 The figures of each log are a group of their own that folds open and shut (the first is open), and the results of an experiment are in folding groups too: *Figures of this experiment*, *Which combination is best*, *Effects, interactions and trade-offs*, *Every log of every run*, *All the outputs of every run* and *One run in detail*.
+
+## The summary of an experiment {#daisy-summary}
+
+The first group of the results, **Summary: every range and its effect**, gathers the whole experiment in four parts, and *Summary (CSV)* saves it (it is also *Outputs/summary.csv* with the outputs):
+
+1. **What was varied**: every input with the values tested.
+2. **The range of every result** over all runs: lowest, highest, mean, spread (coefficient of variation) and the best and the worst run by name.
+3. **The effect of every input on every result**: a table with one row per input and one column per result. For a number the effect is the change of the mean from its lowest to its highest value, for a choice from the choice with the lowest result to the one with the highest; the share of the mean is in brackets. Blue cells rise, red cells fall, and the stronger the colour the larger the effect; pointing at a cell shows the mean at every value.
+4. **In short**: for every result, the input that moves it most, by how much and between which values, then the next two.
+
+![The effect of every input on every result, and the summary in words.](images/daisy11/daisy_summary_effects.png){width=100%}
 
 ## Which combination is best {#daisy-best}
 
