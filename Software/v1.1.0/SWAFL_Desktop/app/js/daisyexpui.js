@@ -17,11 +17,9 @@
   function html(arg) {
     if (arg && arg !== st.arg) { st.arg = arg; setTimeout(() => { const g = R.suggest(refCtx()).find(x => x.id === arg); if (g) useSuggestion(g); }, 30); }
     const desk = D.isDesk();
-    return '<div class="dzpan" style="padding:4px 10px"><b>Experiments</b> <span class="pnote">a scenario is a ready-made small experiment: </span><button class="btn" id="dzXToScen">↳ Scenarios</button></div>' + (window.DaisyScenUI ? window.DaisyScenUI.strip() : '') + '<div class="dzpan"><div class="xhero"><div><h3>Experiments</h3><small>Plan, run and compare</small></div><div class="xsteps"><span><b>1</b>Ask</span><span><b>2</b>Check the plan</span><span><b>3</b>Run and read</span></div></div>' +
-      '<textarea id="dzXText" rows="2" style="width:100%;box-sizing:border-box" placeholder="What do you want to know? e.g. how do the trigger and the sensor depth change yield on sand and loam?">' + esc(st.text) + '</textarea>' +
-      '<div class="dzrow"><button class="btn pri" id="dzXGo">Make a plan from my request</button></div>' +
+    return '<div class="dzpan" style="padding:4px 10px"><b>Experiments</b> <span class="pnote">a scenario is a ready-made small experiment: </span><button class="btn" id="dzXToScen">↳ Scenarios</button></div>' + (window.DaisyScenUI ? window.DaisyScenUI.strip() : '') + '<div class="dzpan"><div class="xhero"><div><h3>Experiments</h3><small>Plan, run and compare</small></div><div class="xsteps"><span><b>1</b>Choose</span><span><b>2</b>Check the plan</span><span><b>3</b>Run and read</span></div></div>' +
       '<div class="dzpan" id="dzXRef"><div class="dzrow" style="margin:0"><b>Start from the Daisy reference</b><button class="btn" id="dzXTabSug">Best combinations</button><button class="btn" id="dzXTabChap">By topic</button><button class="btn" id="dzXTabStd">Prepared experiments</button><button class="btn" id="dzXTabImp">Import data and set-ups</button></div><div id="dzXSug"></div><div id="dzXChap" style="display:none"></div><div id="dzXStd" style="display:none;margin-top:8px"><div class="dzrow"><select id="dzXPreSel">' + X.PRESETS.map(p => '<option value="' + p.id + '"' + (st.preset && st.preset.id === p.id ? ' selected' : '') + '>' + esc(p.id + '  ' + p.name) + '</option>').join('') + '</select><button class="btn" id="dzXPreGo">Load this experiment</button></div></div><div id="dzXImp" style="display:none"></div></div>' +
-      '<div class="xchips">' + EXAMPLES.map((e, i) => i < 4 ? '<a href="#" data-ex="' + i + '" title="' + esc(e) + '">' + esc(EXLAB[i]) + '</a>' : '').join('') + '</div></div>' +
+      '</div>' +
       '<div id="dzXSet"></div><div id="dzXPlan"></div><div id="dzXRunBox"></div><div id="dzXRes"></div>';
   }
 
@@ -291,7 +289,7 @@
     st.res = r; st.factors = r.plan.factors.map(f => ({ id: f.id, levels: f.levels.slice() })); st.base = Object.assign({}, r.plan.base); st.design = r.plan.design || 'factorial'; st.responses = (r.plan.responses || []).slice(); st.resp = st.responses[0] || 'yield'; st.source = 'daisy'; st.preset = null; st.pid = null; renderPlan();
   }
   async function understand() {
-    st.text = $('Text').value; const box = $('Plan'); box.innerHTML = '<div class="dzpan pnote">Reading your request...</div>';
+    { const t0 = $('Text'); if (t0) st.text = t0.value; } const box = $('Plan'); box.innerHTML = '<div class="dzpan pnote">Reading your request...</div>';
     
     const r = await AI.plan(st.text, ctx(), { online: false }); adopt(r);
   }
@@ -339,7 +337,7 @@
     if (!SC._lib && D.getLib && !st._libWait) { st._libWait = 1; D.getLib().then(() => { st._libWait = 0; renderPlan(); }).catch(() => { st._libWait = 0; }); }
     const r = st.res, box = $('Plan'); if (!box || !r) return; const ens = st.preset && st.preset.ens;
     let h = '<div class="dzpan"><div class="dzrow"><h3 style="margin:0">' + esc(r.plan.title || 'Plan') + '</h3><span class="dzchip">' + (r.engine === 'reference' ? 'from the Daisy reference manual and your data' : r.engine === 'study' ? 'experiment of the study' : 'built-in planner') + '</span></div>';
-    if (r.understood.length) h += '<p><b>What I understood from your request</b></p><ul style="margin:0 0 6px 18px">' + r.understood.map(u => '<li>' + esc(u) + '</li>').join('') + '</ul>';
+    if (r.understood.length) h += '<p><b>What this plan does</b></p><ul style="margin:0 0 6px 18px">' + r.understood.map(u => '<li>' + esc(u) + '</li>').join('') + '</ul>';
     if (r.notes && r.notes.length) h += '<p class="pnote">' + r.notes.map(esc).join('; ') + '</p>';
     if (r.questions.length) { h += '<p><b>A few questions to settle</b></p>'; r.questions.forEach((q, i) => { h += '<div class="dzq"><span>' + esc(q.text) + '</span> ' + '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;' + ((q.options || []).length > 5 ? 'max-height:104px;overflow-y:auto;border:1px solid #d5dae1;border-radius:6px;padding:4px;background:#fff' : '') + '">' + (q.options || []).map((o, k) => '<button class="btn" data-q="' + i + ':' + k + '">' + esc(o) + '</button>').join(' ') + '</div>' + '</div>'; }); }
     h += '</div>';
@@ -606,9 +604,7 @@
     if (window.DaisyScenUI && !st.hooked) { st.hooked = true; window.DaisyScenUI.onWx(() => { st.wxPick = null; st.useMy = true; if (st.res) renderPlan(); }); }
     { const ts = $('ToScen'); if (ts) ts.onclick = () => D.open('scen'); }
     { const pg = $('PreGo'); if (pg) pg.onclick = () => { const p = X.PRESETS.find(x => x.id === $('PreSel').value); if (p) usePreset(p); }; }
-    $('Go').onclick = () => understand(); renderSet(); showSuggestions(); showChapters(); $('TabSug').onclick = () => tab('sug'); $('TabChap').onclick = () => tab('chap'); $('TabStd').onclick = () => tab('std'); $('TabImp').onclick = () => tab('imp'); showImport(); tab(st.tab || 'sug'); if (window.DaisyScenUI) window.DaisyScenUI.bindStrip();
-    document.querySelectorAll('[data-ex]').forEach(a => a.onclick = ev => { ev.preventDefault(); $('Text').value = EXAMPLES[+a.dataset.ex]; understand(); });
-    $('Text').onkeydown = e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) understand(); };
+    renderSet(); showSuggestions(); showChapters(); $('TabSug').onclick = () => tab('sug'); $('TabChap').onclick = () => tab('chap'); $('TabStd').onclick = () => tab('std'); $('TabImp').onclick = () => tab('imp'); showImport(); tab(st.tab || 'sug'); if (window.DaisyScenUI) window.DaisyScenUI.bindStrip();
     if (st.res) renderPlan(); if (st.rows.length) drawResults();
   }
   // an item of the Library tab becomes a value of the experiment

@@ -245,15 +245,13 @@ Experiments is the free design. Runs are chosen from the factors, the plan is ma
 
 ### Experiments: the starting screen
 
-The Experiments tab turns a question into a set of Daisy runs. You can write the question, start from a ready made combination of the Daisy reference, choose a topic of the reference or bring set-ups of your own.
+The Experiments tab turns a choice into a set of Daisy runs: start from a ready made combination of the Daisy reference, choose a topic of the reference, load an experiment of the study, or bring set-ups of your own. Every plan can then be changed row by row.
 
 ![Experiments: the starting screen. Screen 22 of the Daisy workbench.](images/daisy11/dz_exp_01.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
 
 1. **Weather for all runs.** The weather of every simulation, shared with Scenarios and Processes.
-2. **Your question.** Write what you want to find out in your own words.
-3. **Make a plan.** Reads the question and proposes the factors, the levels and the design.
 
 <!-- end of list -->
 
@@ -336,7 +334,7 @@ Loading a combination fills the plan: what changes, the values tested, how they 
 
 **What the arrows point to.**
 
-1. **Source of the plan.** Where the plan comes from: the reference manual, your request or the built-in planner.
+1. **Source of the plan.** Where the plan comes from: the reference manual, a prepared experiment or an experiment of the study.
 2. **Values tested.** The values can be typed over; the allowed range is shown beside them.
 3. **Remove.** Takes the row out of the experiment.
 4. **Add something to change.** Adds a further factor.
