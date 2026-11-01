@@ -59,17 +59,49 @@
   function rng(seed) { let a = seed >>> 0 || 1; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
   /* plan: { factors:[{id, levels}], design:'factorial'|'oat'|'paired', base:{options}, max, seed, reference:bool }
      returns { runs:[{id,label,set,level:{factorId:label},val:{factorId:value}}], total, thinned } */
+  E.PICKS = [['balanced', 'balanced: every value used about equally often', 'in a balanced way (every value used about equally often)'], ['random', 'at random (with the seed)', 'at random'], ['spread', 'evenly spaced through the list of combinations', 'evenly spaced through the list'], ['first', 'the first ones in the list, in order', 'as the first ones in the list']];
   E.design = function (plan) {
-    const fs = E.norm(plan.factors), design = plan.design || 'factorial', max = plan.max || 200; let combos = [];
+    const fs = E.norm(plan.factors), design = plan.design || 'factorial', max = Math.max(1, Math.round(plan.max || 200)), pickHow = plan.pick || 'balanced', seed = Math.round(plan.seed || 7); let combos = [];
     const mk = (pick) => { const set = {}, level = {}, val = {}; pick.forEach((lv, i) => { const f = fs[i].f; if (lv === undefined) return; if (f.kind === 'set') Object.assign(set, lv.set); else set[f.key] = lv; level[f.id] = nameOf(f, lv); val[f.id] = f.kind === 'set' ? lv.label : lv; }); return { set, level, val }; };
-    if (!fs.length) combos = [mk([])];
-    else if (design === 'oat') { combos.push(mk(fs.map(() => undefined))); fs.forEach((x, i) => x.levels.forEach((lv, j) => { const p = fs.map(() => undefined); p[i] = lv; combos.push(mk(p)); })); }
-    else if (design === 'paired') { const n = Math.max.apply(null, fs.map(x => x.levels.length)); for (let j = 0; j < n; j++) combos.push(mk(fs.map(x => x.levels[Math.min(j, x.levels.length - 1)]))); }
-    else { combos = [[]]; fs.forEach(x => { const nx = []; combos.forEach(c => x.levels.forEach(lv => nx.push(c.concat([lv])))); combos = nx; }); combos = combos.map(mk); }
-    const total = combos.length; let thinned = false;
-    if (total > max) { const r = rng(plan.seed || 7), idx = combos.map((_, i) => i); for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; } const keep = idx.slice(0, max).sort((a, b) => a - b); combos = keep.map(i => combos[i]); thinned = true; }
     const needsIrr = fs.some(x => IRR_ONLY.has(x.id)), hasIrr = fs.some(x => x.id === 'irrig'), base = plan.base || {};
     const irrKeys = new Set(), irrIds = fs.filter(x => IRR_ONLY.has(x.id)).map(x => x.id); fs.forEach(x => { if (IRR_ONLY.has(x.id)) { irrKeys.add(x.f.key); if (x.f.kind === 'set') x.levels.forEach(l => Object.keys((l && l.set) || {}).forEach(k => irrKeys.add(k))); } });
+    const refOn = plan.reference !== false && needsIrr && !hasIrr, ctxIdx = fs.map((x, i) => IRR_ONLY.has(x.id) ? -1 : i).filter(i => i >= 0);
+    // the combinations as lists of level numbers (undefined: the factor stays at the value of the farm); factorial ones are counted, not listed
+    const L = fs.map(x => x.levels.length); let total, tupleAt, tuples = null;
+    if (!fs.length) { tuples = [[]]; }
+    else if (design === 'oat') { tuples = [fs.map(() => undefined)]; fs.forEach((x, i) => x.levels.forEach((lv, j) => { const p = fs.map(() => undefined); p[i] = j; tuples.push(p); })); }
+    else if (design === 'paired') { const n = Math.max.apply(null, L); tuples = []; for (let j = 0; j < n; j++) tuples.push(L.map(l => Math.min(j, l - 1))); }
+    if (tuples) { total = tuples.length; tupleAt = i => tuples[i]; }
+    else { total = L.reduce((a, b) => a * b, 1); tupleAt = i => { const t = new Array(L.length); for (let k = L.length - 1; k >= 0; k--) { t[k] = i % L[k]; i = Math.floor(i / L[k]); } return t; }; }
+    // how many runs a choice of combinations gives: rainfed runs that repeat are merged, and a rainfed reference is added for every soil and weather
+    const runsOf = T => { const seenR = {}, ctx = {}; let n = 0; T.forEach(t => { const rainfed = hasIrr && irrIds.length && (() => { const i = fs.findIndex(x => x.id === 'irrig'); return t[i] !== undefined && String(fs[i].levels[t[i]]) === '0'; })();
+      if (rainfed) { const key = JSON.stringify(t.map((v, i) => irrIds.indexOf(fs[i].id) >= 0 ? null : v)); if (seenR[key]) return; seenR[key] = 1; } n++; if (refOn) ctx[JSON.stringify(ctxIdx.map(i => t[i]))] = 1; }); return n + (refOn ? Object.keys(ctx).length : 0); };
+    const r = rng(seed);
+    // the ways of choosing k combinations out of many
+    const choose = k => { if (k >= total) { const out = []; for (let i = 0; i < total; i++) out.push(tupleAt(i)); return out; }
+      if (pickHow === 'first') { const out = []; for (let i = 0; i < k; i++) out.push(tupleAt(i)); return out; }
+      if (pickHow === 'spread') { const out = []; for (let i = 0; i < k; i++) out.push(tupleAt(Math.round(i * (total - 1) / Math.max(1, k - 1)))); return out; }
+      if (pickHow === 'random' || tuples) { const seen = new Set(), out = []; if (total <= 200000) { const idx = []; for (let i = 0; i < total; i++) idx.push(i); for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); const t = idx[i]; idx[i] = idx[j]; idx[j] = t; }
+          if (pickHow === 'random' || !tuples) return idx.slice(0, k).sort((a, b) => a - b).map(tupleAt);
+          // oat / paired lists thinned in a balanced way: keep the order of the list, take every n-th
+          return idx.slice(0, k).sort((a, b) => a - b).map(tupleAt); }
+        while (out.length < k) { const i = Math.floor(r() * total); if (!seen.has(i)) { seen.add(i); out.push(i); } } return out.sort((a, b) => a - b).map(tupleAt); }
+      // balanced (a Latin hypercube over the levels): each value of each factor appears in k/levels runs, the pairs of values are mixed at random, no combination twice
+      const cols = L.map(l => { const c = []; for (let i = 0; i < k; i++) c.push(i % l); for (let i = c.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); const t = c[i]; c[i] = c[j]; c[j] = t; } return c; });
+      const key = t => t.join(','), seen = new Set(), out = [];
+      for (let i = 0; i < k; i++) { let t = L.map((_, f) => cols[f][i]), tries = 0;
+        while (seen.has(key(t)) && tries < 200) { const f = Math.floor(r() * L.length), j = i + 1 + Math.floor(r() * Math.max(1, k - i - 1)); if (j < k) { const a = cols[f][i]; cols[f][i] = cols[f][j]; cols[f][j] = a; } else cols[f][i] = Math.floor(r() * L[f]); t = L.map((_, g) => cols[g][i]); tries++; }
+        if (!seen.has(key(t))) { seen.add(key(t)); out.push(t); } }
+      return out.sort((a, b) => { for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return a[i] - b[i]; return 0; }); };
+    // the limit is the number of runs, the rainfed references included: fewer combinations are taken until the runs fit
+    let k = Math.min(total, max), T = choose(k), nRuns = runsOf(T), guard = 0;
+    while (nRuns > max && k > 1 && guard++ < 400) { k = Math.max(1, Math.min(k - 1, Math.floor(k * max / nRuns))); T = choose(k); nRuns = runsOf(T); }
+    // then as many as still fit, so the number of runs is the one asked for whenever the combinations allow it
+    const rnd = pickHow === 'balanced' || pickHow === 'random'; guard = 0;
+    while (nRuns < max && guard++ < 120) { const kk = Math.min(total, k + (rnd ? guard % 3 : 1)); if (kk === k && !rnd) break; const T2 = choose(kk), n2 = runsOf(T2); if (n2 <= max && (n2 > nRuns || (n2 === nRuns && kk > k))) { k = kk; T = T2; nRuns = n2; } else if (!rnd && n2 > max) break; if (kk >= total && !rnd) break; }
+    const thinned = T.length < total;
+    combos = T.map(t => mk(t.map((j, i) => j === undefined ? undefined : fs[i].levels[j])));
+    const limited = { max, chosen: combos.length, pick: pickHow, seed, total };
     // a rainfed run does not depend on any irrigation setting: those settings are taken out of it, so the same rainfed run is never made twice
     // and a rainfed run is never counted as a level of an irrigation factor (it would dilute the effect of that factor)
     if (hasIrr && irrIds.length) { const seenR = {}; combos = combos.filter(c => { if (String(c.set.irrig) !== '0') return true; irrKeys.forEach(k => { delete c.set[k]; }); irrIds.forEach(id => { delete c.level[id]; delete c.val[id]; }); const key = JSON.stringify([c.set, c.val]); if (seenR[key]) return false; seenR[key] = 1; return true; }); }
@@ -81,7 +113,7 @@
       combos.forEach(c => { const val = {}, level = {}; ctx.forEach(id => { if (c.val[id] !== undefined) { val[id] = c.val[id]; level[id] = c.level[id]; } }); const key = JSON.stringify(val); if (seenR[key]) return; seenR[key] = 1; const set = {}; Object.keys(c.set).forEach(k => { if (!irrKeys.has(k)) set[k] = c.set[k]; }); set.irrig = '0'; refs.push({ id: 'r' + String(refs.length).padStart(3, '0'), label: 'Rainfed reference' + (Object.keys(level).length ? ': ' + lab0(level) : ''), set, level, val, reference: true }); });
       runs.forEach(r => { r.id = 'r' + String(refs.length - 1 + parseInt(r.id.slice(1), 10)).padStart(3, '0'); }); runs.unshift.apply(runs, refs);
     }
-    return { runs, total, thinned, factors: fs.map(x => ({ id: x.id, label: x.f.label, unit: x.f.unit, kind: x.f.kind, levels: x.levels.map(v => x.f.kind === 'set' ? v.label : v) })) };
+    return { runs, total, thinned, limit: Object.assign(limited, { runs: runs.length, refs: runs.filter(q => q.reference).length }), factors: fs.map(x => ({ id: x.id, label: x.f.label, unit: x.f.unit, kind: x.f.kind, levels: x.levels.map(v => x.f.kind === 'set' ? v.label : v) })) };
   };
 
   // ------------------------------------------------------------------ the 17 experiments of the SWAFL study
@@ -174,8 +206,8 @@
   const SHORT = { precip: 'P', temp: 'T', nfac: 'N', mm: 'mm', hours: 'h', trig: 'trig', z: 'z', limit: 'lim', root: 'root', koc: 'Koc', half: 'half', ntime: 'ndate', radscale: 'rad', flux: 'flux' };
   /* a short name for a run, from the values of the factors: Loam_Overhead_N1.25 */
   E.shortName = function (run) {
-    if (run.reference) return 'Rainfed_reference'; const parts = [];
-    Object.keys(run.val || {}).forEach(id => { const q = E.partName(id, run.val[id]); if (q) parts.push(q); });
+    const parts = []; Object.keys(run.val || {}).forEach(id => { const q = E.partName(id, run.val[id]); if (q) parts.push(q); });
+    if (run.reference) return 'Rainfed_reference' + (parts.length ? '_' + parts.join('_') : '');   // one reference for every soil and weather: its name says which
     return parts.join('_') || run.label || run.id; };
   E.partName = function (id, v) { const F = E.factor(id); if (!F || v == null || v === 'undefined') return ''; if (F.lib || String(v).indexOf('|') > 0) return String(v).split('|')[0].replace(/^hzn?:/, ''); if (F.kind === 'num') return (SHORT[id] || (F.param ? F.param.key : id)) + v; if (F.kind === 'set') return String((v && v.label) || v); if (id === 'irrig') return v === '1' || v === 1 ? 'irrigated' : 'rainfed'; return String(E.levelName(F, v)).replace(/\s*\(.*\)/, ''); };
   E.folder = function (jobs, commonFiles, info) {
@@ -219,12 +251,60 @@
     const dsn = { factorial: 'all combinations of the levels', oat: 'one factor at a time, the others at their middle level', paired: 'the levels side by side' }[ds] || ds;
     const L = [];
     L.push('EXPERIMENT - ' + (info.request || 'Daisy experiment'), '='.repeat(60), '',
-      'Design: ' + (fl.length ? fl.map(f => fname(f) + ' (' + (f.levels || []).length + ' levels)').join(' x ') : 'one run') + ' = ' + (nRuns - ref) + ' runs' + (ref ? ' + ' + ref + ' rainfed reference = ' + nRuns + ' runs' : '') + '.', 'Combinations: ' + dsn + '.', 'Made by the SWAFL Daisy workbench for Daisy 7.1.14. Open the .dai of a run in its own folder with Daisy to run it.', '',
+      'Design: ' + (fl.length ? fl.map(f => fname(f) + ' (' + (f.levels || []).length + ' levels)').join(' x ') : 'one run') + ' = ' + (info.total || nRuns - ref).toLocaleString() + ' combinations; ' + (nRuns - ref) + ' runs' + (ref ? ' + ' + ref + ' rainfed reference' + (ref === 1 ? '' : 's') + ' = ' + nRuns + ' runs' : '') + '.', 'Combinations: ' + dsn + '.', 'Made by the SWAFL Daisy workbench for Daisy 7.1.14. Open the .dai of a run in its own folder with Daisy to run it.', '',
       'FOLDERS', '  Common/                  shared inputs (weather, soils, rotations, output); every file is named after this experiment and, where several versions exist, after the factor values it belongs to');
     dirs.forEach(d => L.push('  ' + d.dir.padEnd(34).slice(0, Math.max(34, d.dir.length + 1)) + ' ' + d.run.label + (d.run.reference ? '  (rainfed reference)' : '')));
     L.push('', 'COMMON FILES AND THE RUNS THAT USE THEM'); Object.keys(usedBy).sort().forEach(n => L.push('  ' + n.padEnd(60) + ' runs ' + (usedBy[n].length > 12 ? usedBy[n].slice(0, 12).join(', ') + ' ... (' + usedBy[n].length + ' runs)' : usedBy[n].join(', '))));
     L.push('', 'WHAT IS VARIED');
     fl.forEach(f => L.push('  ' + fname(f) + ': ' + lvl(f)));
+    // how the runs were made: the combinations, the .dai of each run, and how the data reach every run
+    { const lm = info.limit || {}, pk = (E.PICKS.find(q => q[0] === (lm.pick || plan.pick || 'balanced')) || ['', ''])[1], tot = info.total || lm.total || nRuns - ref, prod = fl.map(f => (f.levels || []).length);
+      L.push('', 'HOW THE COMBINATIONS WERE MADE');
+      if (ds === 'factorial') L.push('  Test every combination: every value of each factor with every value of the others,', '  ' + (prod.length ? prod.join(' x ') + ' = ' + tot.toLocaleString() : '1') + ' combinations.');
+      else if (ds === 'oat') L.push('  Change one thing at a time: one run with every factor at the value of the farm, then one run for each value', '  of each factor with the others at the value of the farm: 1 + ' + prod.join(' + ') + ' = ' + tot + ' combinations.');
+      else L.push('  Pair the values in order: the 1st value of every factor together, then the 2nd, and so on (' + tot + ' combinations;', '  a factor with fewer values keeps its last one).');
+      L.push('  Number of runs set: ' + (lm.max || plan.max || nRuns) + ' (the rainfed references count as runs).');
+      if (lm.chosen != null && lm.chosen < tot) L.push('  There were more combinations than runs, so ' + lm.chosen + ' of the ' + tot.toLocaleString() + ' were chosen ' + ((E.PICKS.find(q => q[0] === (lm.pick || 'balanced')) || [])[2] || '') + ', with seed ' + lm.seed + '.',
+        lm.pick === 'balanced' ? '  Balanced choice (a Latin hypercube over the values): each value of each factor appears in about the same number of runs,\r\n  the values are mixed at random between the factors, and no combination is used twice.' : lm.pick === 'random' ? '  Random choice: every combination had the same chance; the same seed always gives the same runs.' : lm.pick === 'spread' ? '  Evenly spaced: combination 1, then every (' + tot + '/' + lm.chosen + ')-th of the list in the order of the factors above.' : '  The first combinations in the order of the factors above (the last factor changes fastest).',
+        '  The same plan, seed and Daisy version always make the same folder (plan.json keeps all of it).');
+      else L.push('  Every combination is run.');
+      if (ref) L.push('  A rainfed reference (no irrigation, every other value the same) is added for every soil and weather of the irrigated runs,', '  so the gain from irrigation is always measured against the same soil and weather: ' + ref + ' reference run' + (ref === 1 ? '' : 's') + '.');
+      L.push('  A rainfed run never depends on an irrigation setting, so rainfed runs that would repeat are made once.', '  runs.csv lists every run folder with its values.');
+      L.push('', 'HOW EACH .dai FILE IS MADE',
+        '  1. The SWAFL scenario writer (DaisyScen.buildJob) writes one run file per combination from the same template:',
+        '     the weather, soil, rotation and output files are read with (input file "../Common/<name>"),',
+        '     then (defprogram ...) sets the column, the crops and the management, and (run ...) starts the simulation.',
+        '  2. Each value of a factor is written where Daisy reads it (see the lines below): a soil chooses the horizon file,',
+        '     a fertiliser or rotation changes the rotation file, a parameter is written in the column or crop definition,',
+        '     an irrigation setting changes the (irrigate ...) action of the management.',
+        '  3. Files that are the same for several runs are written once in Common/ and named after the values they carry;',
+        '     the run file points to them, so changing a Common file changes every run listed for it below.',
+        '  4. The description and log_prefix of the run file give the run name, so the logs of every run carry it.');
+      // the lines that change with each factor: two runs that differ in that factor only
+      const runText = dirs.map(d => out[root + '/' + d.dir + '/' + d.nm + '.dai'] || ''), diffs = [];
+      fl.forEach(f => { let pair = null; for (let a = 0; a < dirs.length && !pair; a++) for (let b = a + 1; b < dirs.length && !pair; b++) { const va = dirs[a].run.val || {}, vb = dirs[b].run.val || {}; if (dirs[a].run.reference || dirs[b].run.reference) continue; const ks = Array.from(new Set(Object.keys(va).concat(Object.keys(vb)))); const dif = ks.filter(k => JSON.stringify(va[k]) !== JSON.stringify(vb[k])); if (dif.length === 1 && dif[0] === f.id) pair = [a, b]; }
+        if (!pair) return; const la = runText[pair[0]].split('\n').map(x => x.trim()), lb = runText[pair[1]].split('\n').map(x => x.trim()), sa = new Set(la), sb = new Set(lb);
+        const ch = lb.filter(x => x && !sa.has(x) && !/^;;|description|log_prefix/.test(x)).slice(0, 6), was = la.filter(x => x && !sb.has(x) && !/^;;|description|log_prefix/.test(x)).slice(0, 6);
+        diffs.push('  ' + fname(f) + ': run ' + dirs[pair[0]].dir + ' against run ' + dirs[pair[1]].dir);
+        if (!ch.length && !was.length) diffs.push('     the run files are the same; the value is carried by the Common file the run points to.');
+        was.forEach(x => diffs.push('     - ' + x.slice(0, 150))); ch.forEach(x => diffs.push('     + ' + x.slice(0, 150)));
+        // a value carried by a Common file: the lines that differ inside the two files
+        const inp = x => (x.match(/\(input file "\.\.\/Common\/([^"]+)"/) || [])[1];
+        was.map(inp).filter(Boolean).forEach(fa => { const fb = ch.map(inp).filter(Boolean).find(n => n !== fa && n.split('_').slice(0, 4).join('_') === fa.split('_').slice(0, 4).join('_')) || ch.map(inp).filter(Boolean)[0]; if (!fb) return; const A = String(out[root + '/Common/' + fa] || '').split('\n').map(x => x.trim()), B = String(out[root + '/Common/' + fb] || '').split('\n').map(x => x.trim()), sA = new Set(A), sB = new Set(B);
+          const dA = A.filter(x => x && !sB.has(x) && !/^;;/.test(x)).slice(0, 5), dB = B.filter(x => x && !sA.has(x) && !/^;;/.test(x)).slice(0, 5); if (!dA.length && !dB.length) return;
+          diffs.push('     inside the Common file (' + fa.slice(0, 50) + (fa.length > 50 ? '...' : '') + ' against the other):'); dA.forEach(x => diffs.push('       - ' + x.slice(0, 140))); dB.forEach(x => diffs.push('       + ' + x.slice(0, 140))); }); });
+      if (diffs.length) L.push('', 'WHERE EACH VALUE IS WRITTEN (lines of the run file that change when only this factor changes)'), diffs.forEach(x => L.push(x));
+      L.push('', 'HOW THE DATA REACH EVERY RUN',
+        '  Weather : the station or your own weather (My data, online or the SWAFL project) is written once as a .dwf in Common/;',
+        '            every run reads it with (weather default "../Common/<name>.dwf"); a rain, temperature or radiation factor',
+        '            is written as PrecipCorrect, TempOffset or GlobRadScale in the (weather ...) of the run file, so the .dwf never changes.',
+        '  Soil    : the horizons and the column are written in Common/ (one file per soil) and read with (input file ...).',
+        '  Crops   : the rotation (sowing, fertiliser, harvest, tillage) is one file per variant in Common/.',
+        '  Output  : OutputLog_*.dai in Common/ says which logs Daisy writes; the logs are written in the folder of each run.',
+        '  Paths   : all paths are relative (../Common/), so the folder can be moved or sent as it is.');
+      const csv = ['run_folder,label,reference'.concat(fl.length ? ',' + fl.map(f => '"' + fname(f).replace(/"/g, "'") + '"').join(',') : '')];
+      dirs.forEach(d => csv.push([d.dir, '"' + String(d.run.label).replace(/"/g, "'") + '"', d.run.reference ? 1 : 0].concat(fl.map(f => { const v = (d.run.val || {})[f.id]; return v == null ? '' : '"' + String(v && v.label ? v.label : v).replace(/"/g, "'") + '"'; })).join(',')));
+      out[root + '/runs.csv'] = csv.join('\r\n') + '\r\n'; }
     L.push('', 'WHAT IS KEPT THE SAME IN ALL RUNS', keptAll, '  Crops, fertiliser, weather, soil and output are identical unless listed above.', '',
       'HOW TO RUN', '  Keep the folder structure (the run files point to ../Common/).', '  Open each .dai in its own folder with Daisy and run, or run run_all.sh (Linux, macOS) or run_all.bat (Windows) here.', '  The output files (.dlf) are written into the folder of the run, prefixed with the run name.', '  Rename daisy.log if you want to keep the run-time information of a run.', '',
       'WHERE TO FIND DATA FOR THE INDEXES',

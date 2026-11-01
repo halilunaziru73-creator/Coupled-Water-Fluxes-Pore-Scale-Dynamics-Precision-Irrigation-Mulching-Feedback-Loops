@@ -2,6 +2,12 @@
 
 This chapter lists the entries of the Daisy library that come with the program and that the Library tab reads: 63 horizons, 84 crops, 79 fertilisers, 35 chemicals, 82 actions, 55 programs and 176 log types. The values are those of the library files; nothing is estimated.
 
+## The text of every item {#daisy-lib-source}
+
+In the Parameter library tab, every item shows under its values the text Daisy reads, in the colours of VS Code, with two comment lines that say where it comes from and how to use it in a set-up of your own ((input file "dk-fertilizer.dai"), or copy the block). The text can be changed in place; *open in set-up editor* opens it (as changed) in the Set-up editor, *open the whole file* opens the library file it belongs to, and *download* saves it as a .dai file. The table of values of a fertiliser or chemical has a third column, *What it means*: for example *volatilization*, the share of the ammonium lost as ammonia when the slurry is spread on the surface; *NH4_fraction*, the share of the nitrogen that is ammonium; *K_OC*, the sorption to organic carbon.
+
+![A slurry of the library: its values, what they mean, and its text in the colours of VS Code.](images/daisy13/lib_source.jpg){width=100%}
+
 ## Soil horizons
 
 Each horizon has its texture, its organic matter and its hydraulic parameters. Hydraulics follow the van Genuchten and Mualem model: the water content is the residual content plus the range between saturated and residual content times the effective saturation, and the conductivity follows from the same parameters. The water content and the conductivity at six suctions are calculated from the parameters of the library with these equations, to show the shape of each horizon.

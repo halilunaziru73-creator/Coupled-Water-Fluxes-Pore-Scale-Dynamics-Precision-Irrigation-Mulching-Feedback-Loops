@@ -1,0 +1,73 @@
+/* A small code editor for the files of Daisy: the colours of VS Code (Dark+ and Light+ themes), line numbers, find, the
+   cursor position and a check of the brackets of .dai files. Used where files are shown: the experiment folder before it is
+   saved, the parameter library and the tutorial. The text is edited in place and given back with onChange. */
+(function (root) {
+  'use strict';
+  const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const C = {};
+  C.LANGS = { dai: 'Daisy set-up (.dai)', dwf: 'Daisy weather (.dwf)', dlf: 'Daisy log (.dlf)', json: 'JSON', csv: 'CSV table', sh: 'Shell script', bat: 'Windows batch', txt: 'Text', md: 'Markdown' };
+  C.lang = function (name) { const n = String(name || '').toLowerCase(), e = (n.match(/\.([a-z0-9]+)$/) || [])[1] || 'txt'; if (e === 'dai' || e === 'daisy') return 'dai'; if (e === 'dwf') return 'dwf'; if (e === 'dlf') return 'dlf'; if (e === 'json') return 'json'; if (e === 'csv' || e === 'tsv') return 'csv'; if (e === 'sh') return 'sh'; if (e === 'bat' || e === 'cmd') return 'bat'; if (e === 'md') return 'md'; return 'txt'; };
+  const sp = (c, t) => '<span class="' + c + '">' + esc(t) + '</span>';
+  // the colouring of each kind of file, line by line where the file has lines
+  const HL = {
+    dai: t => root.DaisyIO && root.DaisyIO.highlightDai ? root.DaisyIO.highlightDai(t) : esc(t),
+    json: t => esc(t).replace(/(&quot;|")((?:\\.|[^"\\])*)"(\s*:)?|\b(true|false|null)\b|(-?\b\d+(?:\.\d+)?(?:[eE][+-]?\d+)?\b)/g, (m, q, s, colon, kw, num) => colon ? '<span class="dfn">"' + s + '"</span>' + colon : q ? '<span class="dst">"' + s + '"</span>' : kw ? '<span class="dkw">' + kw + '</span>' : '<span class="dnu">' + num + '</span>'),
+    csv: t => { const cls = ['dfn', 'dst', 'dnu', 'ddf', 'dun', 'dkw', 'dph']; return t.split('\n').map(l => { let k = 0, o = '', cur = '', inq = false; for (let i = 0; i < l.length; i++) { const ch = l[i]; if (ch === '"') inq = !inq; if ((ch === ',' || ch === ';' || ch === '\t') && !inq) { o += sp(cls[k % cls.length], cur) + esc(ch); cur = ''; k++; } else cur += ch; } return o + (cur ? sp(cls[k % cls.length], cur) : ''); }).join('\n'); },
+    sh: t => t.split('\n').map(l => /^\s*#/.test(l) ? sp('dcm', l) : esc(l).replace(/\b(for|do|done|in|if|then|fi|cd|echo|exit)\b/g, '<span class="dkw">$1</span>').replace(/(&quot;|")([^"]*)"/g, '<span class="dst">"$2"</span>').replace(/\b(daisy)\b/g, '<span class="dfn">$1</span>')).join('\n'),
+    bat: t => t.split('\n').map(l => /^\s*(rem\b|::)/i.test(l) ? sp('dcm', l) : esc(l).replace(/\b(for|do|in|if|echo|off|pushd|popd|set|call)\b/gi, '<span class="dkw">$1</span>').replace(/(%%?\w)/g, '<span class="dun">$1</span>').replace(/\b(daisy)\b/g, '<span class="dfn">$1</span>')).join('\n'),
+    dwf: t => { let body = false, cols = 0; return t.split('\n').map(l => { if (body) { cols++; return cols <= 2 ? sp(cols === 1 ? 'dfn' : 'dun', l) : esc(l).replace(/(-?\b\d+(?:\.\d+)?(?:[eE][+-]?\d+)?\b)/g, '<span class="dnu">$1</span>'); } if (/^-{5,}/.test(l)) { body = true; return sp('dcm', l); } if (/^\s*#/.test(l)) return sp('dcm', l); const k = l.indexOf(':'); if (/^dwf-|^dlf-/i.test(l)) return sp('ddf', l); return k > 0 ? sp('dkw', l.slice(0, k)) + esc(':') + sp('dst', l.slice(k + 1)) : esc(l); }).join('\n'); },
+    txt: t => t.split('\n').map((l, i, a) => { if (/^\s*[=\-]{5,}\s*$/.test(l)) return sp('dcm', l); if (/^[A-Z0-9][A-Z0-9 ,.()'&\/-]{3,}$/.test(l.trim()) || (a[i + 1] && /^\s*={5,}/.test(a[i + 1]))) return sp('ddf', l); return esc(l).replace(/(\([a-z_]+ )/g, '<span class="dfn">$1</span>').replace(/(&quot;|")([^"]*)"/g, '<span class="dst">"$2"</span>').replace(/(\[[^\]\s]{1,24}\])/g, '<span class="dun">$1</span>').replace(/(^|[\s=(,:])(-?\d+(?:\.\d+)?)(?=[\s,).;:x%]|$)/g, '$1<span class="dnu">$2</span>').replace(/((?:\.\.\/)?(?:[A-Za-z0-9_\-]+\/)+[A-Za-z0-9_\-.*<>]+|\*?[A-Za-z0-9_\-]+\.(?:dai|dwf|dlf|csv|json|sh|bat|txt))/g, '<span class="dph">$1</span>'); }).join('\n'),
+  };
+  HL.dlf = HL.dwf; HL.md = t => t.split('\n').map(l => /^#{1,6} /.test(l) ? sp('ddf', l) : /^\s*[-*] /.test(l) ? sp('dkw', l.match(/^\s*[-*] /)[0]) + esc(l.replace(/^\s*[-*] /, '')) : /^```/.test(l) ? sp('dcm', l) : esc(l).replace(/(`[^`]+`)/g, '<span class="dst">$1</span>')).join('\n');
+  C.highlight = (text, lang) => { const t = String(text || ''); if (t.length > 600000) return esc(t); try { return (HL[lang] || HL.txt)(t); } catch (e) { return esc(t); } };
+  const CSS = '.dzc{display:flex;flex-direction:column;min-height:0;height:100%;border:1px solid #3c3c3c;border-radius:4px;overflow:hidden;font:12.5px/18px Consolas,"Cascadia Mono","Courier New",monospace}' +
+    '.dzc-bar{display:flex;gap:6px;align-items:center;padding:3px 8px;font:12px Tahoma,Segoe UI,sans-serif;flex-wrap:wrap}.dzc-bar button,.dzc-bar input{font:11.5px Tahoma,Segoe UI,sans-serif;padding:2px 8px;border-radius:3px;cursor:pointer}.dzc.dark .dzc-bar button{background:#3a3d41;color:#e7e7e7;border:1px solid #555}.dzc.dark .dzc-bar button:hover{background:#45494e}.dzc.dark .dzc-bar input{background:#3c3c3c;color:#e7e7e7;border:1px solid #555}.dzc.light .dzc-bar button{background:#fff;color:#222;border:1px solid #bbb}.dzc.light .dzc-bar button:hover{background:#e8e8e8}.dzc-bar button[data-c=save]{background:#0e639c!important;color:#fff!important;border-color:#0e639c!important}.dzc-bar .dzc-t{font-weight:600;margin-right:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:60%}' +
+    '.dzc-body{flex:1;display:flex;min-height:0;position:relative}.dzc-g{padding:6px 8px 6px 4px;text-align:right;user-select:none;overflow:hidden;white-space:pre;min-width:38px}' +
+    '.dzc-w{flex:1;position:relative;min-width:0}.dzc-w pre,.dzc-w textarea{position:absolute;inset:0;margin:0;padding:6px 10px;border:0;font:inherit;white-space:pre;overflow:auto;tab-size:2;-moz-tab-size:2;box-sizing:border-box;letter-spacing:0}' +
+    '.dzc-w pre{pointer-events:none}.dzc-w textarea{background:transparent;color:transparent;resize:none;outline:none}.dzc.wrap .dzc-w pre,.dzc.wrap .dzc-w textarea{white-space:pre-wrap;word-break:break-all}' +
+    '.dzc-s{display:flex;gap:14px;padding:2px 10px;font:11px Tahoma,Segoe UI,sans-serif}.dzc-s span:last-child{margin-left:auto}' +
+    '.dzc.dark{background:#1e1e1e}.dzc.dark .dzc-bar{background:#252526;color:#ccc;border-bottom:1px solid #3c3c3c}.dzc.dark .dzc-g{background:#1e1e1e;color:#858585}.dzc.dark pre{color:#d4d4d4}.dzc.dark textarea{caret-color:#aeafad}.dzc.dark textarea::selection{background:rgba(38,79,120,.85);color:transparent}.dzc.dark .dzc-s{background:#007acc;color:#fff}' +
+    '.dzc.dark .dcm{color:#6a9955}.dzc.dark .dst{color:#ce9178}.dzc.dark .dnu{color:#b5cea8}.dzc.dark .dun{color:#4ec9b0}.dzc.dark .dph{color:#d7ba7d}.dzc.dark .ddf{color:#c586c0;font-weight:600}.dzc.dark .dkw{color:#569cd6}.dzc.dark .dfn{color:#9cdcfe}' +
+    '.dzc.light{background:#fff;border-color:#c8c8c8}.dzc.light .dzc-bar{background:#f3f3f3;color:#333;border-bottom:1px solid #ddd}.dzc.light .dzc-g{background:#fff;color:#237893}.dzc.light pre{color:#000}.dzc.light textarea{caret-color:#000}.dzc.light textarea::selection{background:rgba(173,214,255,.9);color:transparent}.dzc.light .dzc-s{background:#007acc;color:#fff}' +
+    '.dzc.light .dcm{color:#008000}.dzc.light .dst{color:#a31515}.dzc.light .dnu{color:#098658}.dzc.light .dun{color:#267f99}.dzc.light .dph{color:#795e26}.dzc.light .ddf{color:#af00db;font-weight:600}.dzc.light .dkw{color:#0000ff}.dzc.light .dfn{color:#001080}' +
+    '.dzc.ro textarea{cursor:default}.dzc-dirty{color:#e2c08d}';
+  function css() { if (document.getElementById('dzcCss')) return; const s = document.createElement('style'); s.id = 'dzcCss'; s.textContent = CSS; document.head.appendChild(s); }
+  let theme = 'dark'; try { theme = localStorage.getItem('swafl.codeTheme') || 'dark'; } catch (e) { }
+  /* host: element; o: { text, name, lang, readOnly, onChange(text), onSave(text), extra: [[label, fn(text)]] } */
+  C.editor = function (host, o) {
+    css(); o = o || {}; let lang = o.lang || C.lang(o.name), text = String(o.text == null ? '' : o.text).replace(/\r\n/g, '\n'), orig = text, wrap = false;
+    host.innerHTML = '<div class="dzc ' + theme + (o.readOnly ? ' ro' : '') + '"><div class="dzc-bar"><span class="dzc-t">' + esc(o.name || '') + ' <span class="dzc-dirty" data-c="dirty"></span></span>' +
+      '<input data-c="find" placeholder="find (Ctrl+F)" style="width:130px"><button data-c="next" title="Next match (Enter)">&darr;</button><button data-c="wrap" title="Wrap long lines">wrap</button><button data-c="theme" title="Dark+ or Light+ colours of VS Code">' + (theme === 'dark' ? 'light' : 'dark') + '</button>' +
+      (o.readOnly ? '' : '<button data-c="undo" title="Back to the text as it was opened">undo all</button>') + (o.extra || []).map((x, i) => '<button data-c="x' + i + '">' + esc(x[0]) + '</button>').join('') + (o.onSave ? '<button data-c="save" style="font-weight:600" title="Keep the changes (Ctrl+S)">Save changes</button>' : '') + '</div>' +
+      '<div class="dzc-body"><div class="dzc-g" data-c="g"></div><div class="dzc-w"><pre data-c="pre"></pre><textarea data-c="ta" spellcheck="false" wrap="off"' + (o.readOnly ? ' readonly' : '') + '></textarea></div></div>' +
+      '<div class="dzc-s"><span data-c="pos">Ln 1, Col 1</span><span data-c="info"></span><span data-c="lang">' + esc(C.LANGS[lang] || lang) + '</span></div></div>';
+    const q = k => host.querySelector('[data-c="' + k + '"]'), box = host.firstChild, ta = q('ta'), pre = q('pre'), g = q('g');
+    ta.value = text; let raf = 0;
+    const gutter = () => { const n = ta.value.split('\n').length; let s = ''; for (let i = 1; i <= n; i++) s += i + '\n'; g.textContent = s; };
+    const check = () => { const n = ta.value.split('\n').length; let msg = n + ' lines'; if (lang === 'dai' && root.DaisyIO && root.DaisyIO.parseDai && ta.value.length < 300000) { try { const a = root.DaisyIO.parseDai(ta.value); msg += a.errors.length ? ' · ' + a.errors[0] : ' · brackets and quotes balanced'; } catch (e) { msg += ' · ' + e.message; } } if (lang === 'json') { try { JSON.parse(ta.value); msg += ' · valid JSON'; } catch (e) { msg += ' · ' + e.message; } } q('info').textContent = msg; q('dirty').textContent = ta.value !== orig ? '● edited' : ''; };
+    const paint = () => { raf = 0; pre.innerHTML = C.highlight(ta.value, lang) + '\n'; gutter(); pre.scrollTop = ta.scrollTop; pre.scrollLeft = ta.scrollLeft; g.scrollTop = ta.scrollTop; check(); };
+    const later = () => { if (!raf) raf = requestAnimationFrame(paint); };
+    const pos = () => { const v = ta.value.slice(0, ta.selectionStart).split('\n'); q('pos').textContent = 'Ln ' + v.length + ', Col ' + (v[v.length - 1].length + 1) + (ta.selectionEnd > ta.selectionStart ? ' (' + (ta.selectionEnd - ta.selectionStart) + ' selected)' : ''); };
+    ta.addEventListener('scroll', () => { pre.scrollTop = ta.scrollTop; pre.scrollLeft = ta.scrollLeft; g.scrollTop = ta.scrollTop; });
+    ta.addEventListener('input', () => { later(); if (o.onChange) o.onChange(ta.value); });
+    ['keyup', 'click', 'select'].forEach(ev => ta.addEventListener(ev, pos));
+    const find = back => { const f = q('find').value; if (!f) return; const v = ta.value.toLowerCase(), s = f.toLowerCase(); let i = v.indexOf(s, ta.selectionEnd); if (i < 0) i = v.indexOf(s); if (i < 0) { q('info').textContent = '"' + f + '" not found'; return; } ta.focus(); ta.setSelectionRange(i, i + f.length); const ln = ta.value.slice(0, i).split('\n').length; ta.scrollTop = Math.max(0, (ln - 5) * 18); pos(); };
+    ta.addEventListener('keydown', e => {
+      if (e.key === 'Tab' && !o.readOnly) { e.preventDefault(); const s = ta.selectionStart, en = ta.selectionEnd; ta.setRangeText('  ', s, en, 'end'); later(); if (o.onChange) o.onChange(ta.value); }
+      else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'f') { e.preventDefault(); q('find').focus(); q('find').select(); }
+      else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's' && o.onSave) { e.preventDefault(); save(); }
+      else if (e.key === 'Enter' && !o.readOnly) { const s = ta.selectionStart, line = ta.value.slice(0, s).split('\n').pop(), ind = (line.match(/^\s*/) || [''])[0] + (/\([^()]*$/.test(line) && lang === 'dai' ? '  ' : ''); if (ind) { e.preventDefault(); ta.setRangeText('\n' + ind, s, ta.selectionEnd, 'end'); later(); if (o.onChange) o.onChange(ta.value); } }
+      e.stopPropagation(); });
+    q('find').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); find(); } e.stopPropagation(); });
+    q('next').onclick = () => find(); q('wrap').onclick = () => { wrap = !wrap; box.classList.toggle('wrap', wrap); ta.setAttribute('wrap', wrap ? 'soft' : 'off'); g.style.visibility = wrap ? 'hidden' : ''; paint(); };
+    q('theme').onclick = () => { theme = theme === 'dark' ? 'light' : 'dark'; try { localStorage.setItem('swafl.codeTheme', theme); } catch (e) { } box.classList.remove('dark', 'light'); box.classList.add(theme); q('theme').textContent = theme === 'dark' ? 'light' : 'dark'; };
+    const save = () => { orig = ta.value; check(); if (o.onSave) o.onSave(ta.value); };
+    if (q('undo')) q('undo').onclick = () => { ta.value = orig; paint(); if (o.onChange) o.onChange(ta.value); };
+    if (q('save')) q('save').onclick = save;
+    (o.extra || []).forEach((x, i) => { q('x' + i).onclick = () => x[1](ta.value); });
+    paint();
+    return { get: () => ta.value, set: (t, nm) => { ta.value = orig = String(t || '').replace(/\r\n/g, '\n'); if (nm) { lang = C.lang(nm); host.querySelector('.dzc-t').firstChild.textContent = nm + ' '; q('lang').textContent = C.LANGS[lang] || lang; } ta.scrollTop = 0; paint(); },
+      dirty: () => ta.value !== orig, focus: () => ta.focus(), goto: ln => { const L = ta.value.split('\n'); let p = 0; for (let i = 0; i < ln - 1 && i < L.length; i++) p += L[i].length + 1; ta.focus(); ta.setSelectionRange(p, p + (L[ln - 1] || '').length); ta.scrollTop = Math.max(0, (ln - 5) * 18); pos(); } };
+  };
+  root.DaisyCode = C;
+})(typeof window !== 'undefined' ? window : globalThis);

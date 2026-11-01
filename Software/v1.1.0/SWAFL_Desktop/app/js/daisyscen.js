@@ -55,7 +55,7 @@
       opts: ['soil', 'trig', 'mm', 'precip', 'temp', 'start', 'stop'],
       variants: [{ id: 'rainfed', label: 'Rainfed', set: { irrig: '0' } }, { id: 'irrigated', label: 'Irrigated', set: { irrig: '1' } }],
       figs: ['yield', 'water', 'dailyWater', 'theta', 'pf', 'crop', 'cmpYield', 'cmpWater', 'indices'] },
-    { id: 'nitrogen', theme: 'Nitrogen', title: 'Nitrogen: how much fertiliser, how much leaching?',
+    { id: 'nitrogen', theme: 'Nitrogen', vary: 'nfac', title: 'Nitrogen: how much fertiliser, how much leaching?',
       question: 'Where does the nitrogen go (crop, leaching, denitrification, soil) when the fertiliser rate changes, and what yield does each rate give?',
       opts: ['soil', 'irrig', 'precip', 'temp', 'start', 'stop'],
       variants: [{ id: 'n0', label: 'No fertiliser (control)', set: { nfac: 0 } }, { id: 'n50', label: 'Half the fertiliser', set: { nfac: 0.5 } }, { id: 'n100', label: 'Standard fertiliser', set: { nfac: 1 } }, { id: 'n130', label: '30 % more fertiliser', set: { nfac: 1.3 } }, { id: 'n150', label: '50 % more fertiliser', set: { nfac: 1.5 } }],
@@ -65,17 +65,61 @@
       opts: ['soil', 'irrig', 'start', 'stop'],
       variants: [{ id: 'now', label: 'Weather file as it is', set: { precip: 1, temp: 0 } }, { id: 'warm', label: 'Warmer by 2 C', set: { precip: 1, temp: 2 } }, { id: 'dry', label: 'Drier (rain x 0.7)', set: { precip: 0.7, temp: 0 } }, { id: 'warmdry', label: 'Warmer and drier', set: { precip: 0.7, temp: 2 } }, { id: 'wet', label: 'Wetter (rain x 1.3)', set: { precip: 1.3, temp: 0 } }],
       figs: ['yield', 'water', 'dailyWater', 'crop', 'theta', 'cmpYield', 'cmpWater', 'cmpN', 'indices'] },
-    { id: 'chemical', theme: 'Chemicals', title: 'A pesticide or tracer: sorption and degradation',
+    { id: 'chemical', theme: 'Chemicals', vary: 'chem', title: 'A pesticide or tracer: sorption and degradation',
       question: 'Does the chemical leave the root zone, how much stays in the soil, and how much does sorption and degradation change that?',
       opts: ['soil', 'precip', 'temp', 'start', 'stop'],
       variants: [{ id: 'mobile', label: 'Mobile tracer (no sorption, no decay)', set: { koc: 0, half: 0 } }, { id: 'sorb', label: 'Sorbing (K_OC 100)', set: { koc: 100, half: 0 } }, { id: 'decay', label: 'Sorbing and degrading (K_OC 100, half-life 30 d)', set: { koc: 100, half: 30 } }],
       figs: ['tracer', 'tracerProf', 'water', 'cmpTracer'] },
-    { id: 'soil', theme: 'Soil', title: 'Soil: how much does texture matter?',
+    { id: 'soil', theme: 'Soil', vary: 'soil', title: 'Soil: how much does texture matter?',
       question: 'The same crops and weather on sand and on loam: water holding, drainage, yield and nitrate.',
       opts: ['irrig', 'trig', 'mm', 'nfac', 'precip', 'temp', 'start', 'stop'],
       variants: [{ id: 'sand', label: 'Sand', set: { soil: 'sand' } }, { id: 'loam', label: 'Loam', set: { soil: 'loam' } }],
       figs: ['yield', 'water', 'dailyWater', 'theta', 'pf', 'no3', 'cmpYield', 'cmpWater', 'cmpN', 'indices'] }
   ];
+  // more questions, each built on the parameter library of Daisy: vary is the option the runs differ in, so any other
+  // value of the library can be added as one more run in the panel of the scenario
+  const FW = ['yield', 'water', 'dailyWater', 'theta', 'pf', 'crop', 'cmpYield', 'cmpWater', 'indices'], FN = ['yield', 'nbudget', 'no3', 'water', 'cmpYield', 'cmpN', 'indices'], FC = ['tracer', 'tracerProf', 'water', 'cmpTracer'], FS = ['yield', 'water', 'dailyWater', 'theta', 'pf', 'no3', 'cmpYield', 'cmpWater', 'cmpN', 'indices'];
+  const IR = o => Object.assign({ irrig: '1' }, o), V = (id, label, set) => ({ id, label, set });
+  S.LIST.push(
+    { id: 'irrmethod', theme: 'Water', vary: 'method', title: 'Irrigation method: overhead, surface or drip?', question: 'The same trigger and dose given over the canopy, on the soil or by drip below the surface: water used, losses, yield.', opts: ['soil', 'trig', 'mm', 'precip', 'temp', 'start', 'stop'],
+      variants: [V('rainfed', 'Rainfed (reference)', { irrig: '0' }), V('overhead', 'Overhead (sprinkler)', IR({ method: 'overhead' })), V('surface', 'Surface', IR({ method: 'surface' })), V('drip', 'Drip at 10-20 cm', IR({ method: 'drip', dfrom: 10, dto: 20 }))], figs: FW },
+    { id: 'trigger', theme: 'Water', vary: 'trig', title: 'When to irrigate: the trigger suction', question: 'Irrigate when the soil at the sensor is wet, moist or dry: how much water, how much drains, how much yield.', opts: ['soil', 'mm', 'z', 'precip', 'temp', 'start', 'stop'],
+      variants: [V('t150', 'Wet: -150 cm (pF 2.2)', IR({ trig: -150 })), V('t300', 'Moist: -300 cm (pF 2.5)', IR({ trig: -300 })), V('t600', 'Drier: -600 cm (pF 2.8)', IR({ trig: -600 })), V('t1000', 'Dry: -1000 cm (pF 3)', IR({ trig: -1000 }))], figs: FW },
+    { id: 'dose', theme: 'Water', vary: 'mm', title: 'How much water per irrigation?', question: 'Small and frequent or large and rare doses: drainage below the roots, irrigation total and yield.', opts: ['soil', 'trig', 'hours', 'precip', 'temp', 'start', 'stop'],
+      variants: [V('mm10', '10 mm per event', IR({ mm: 10 })), V('mm20', '20 mm per event', IR({ mm: 20 })), V('mm30', '30 mm per event', IR({ mm: 30 })), V('mm45', '45 mm per event', IR({ mm: 45 }))], figs: FW },
+    { id: 'deficit', theme: 'Water', vary: 'limit', title: 'Deficit irrigation: a water limit per season', question: 'When water is short, how much yield does each millimetre still bring?', opts: ['soil', 'trig', 'mm', 'precip', 'temp', 'start', 'stop'],
+      variants: [V('rainfed', 'Rainfed', { irrig: '0' }), V('l60', 'At most 60 mm a season', IR({ limit: 60 })), V('l120', 'At most 120 mm a season', IR({ limit: 120 })), V('l240', 'At most 240 mm a season', IR({ limit: 240 })), V('free', 'No limit', IR({ limit: 0 }))], figs: FW },
+    { id: 'sensor', theme: 'Water', vary: 'z', title: 'Where to put the soil moisture sensor?', question: 'The same trigger read at 10, 20, 40 or 60 cm: how the irrigation and the losses change.', opts: ['soil', 'trig', 'mm', 'precip', 'temp', 'start', 'stop'],
+      variants: [V('z10', 'Sensor at 10 cm', IR({ z: 10 })), V('z20', 'Sensor at 20 cm', IR({ z: 20 })), V('z40', 'Sensor at 40 cm', IR({ z: 40 })), V('z60', 'Sensor at 60 cm', IR({ z: 60 }))], figs: FW },
+    { id: 'fertype', theme: 'Nitrogen', vary: 'ntype', title: 'Which mineral fertiliser?', question: 'The same nitrogen given as N25S, ammonium nitrate, calcium nitrate, nitrate or ammonia: losses to the air and to leaching, and the yield.', opts: ['soil', 'irrig', 'precip', 'temp', 'start', 'stop'],
+      variants: [V('n25s', 'N25S (the farm)', { ntype: 'N25S' }), V('an', 'Ammonium nitrate', { ntype: 'AmmoniumNitrate' }), V('cn', 'Calcium nitrate', { ntype: 'CalciumNitrate' }), V('no3', 'Nitrate', { ntype: 'Nitrate' }), V('nh3', 'Ammonia', { ntype: 'Ammonia' })], figs: FN },
+    { id: 'manure', theme: 'Nitrogen', vary: 'ntype', title: 'Mineral fertiliser or slurry and manure?', question: 'The same total nitrogen from mineral fertiliser, cattle or pig slurry, deep litter or poultry manure (Danish standard values of the library).', opts: ['soil', 'irrig', 'precip', 'temp', 'start', 'stop'],
+      variants: [V('min', 'Mineral (N25S)', { ntype: 'N25S' }), V('cattle', 'Cattle slurry', { ntype: 'kvaeg_gylle|lib/dk-fertilizer.dai' }), V('pig', 'Pig slurry (fattening pigs)', { ntype: 'slagtesvin_gylle|lib/dk-fertilizer.dai' }), V('litter', 'Cattle deep litter', { ntype: 'kvaeg_dybstroelse|lib/dk-fertilizer.dai' }), V('poultry', 'Poultry manure', { ntype: 'hoens_staldgoedning|lib/dk-fertilizer.dai' })], figs: FN },
+    { id: 'ntiming', theme: 'Nitrogen', vary: 'ntime', title: 'When to fertilise?', question: 'Every fertilisation of the rotation moved earlier or later: nitrogen stress, leaching and yield.', opts: ['soil', 'irrig', 'nfac', 'precip', 'temp', 'start', 'stop'],
+      variants: [V('m21', '3 weeks earlier', { ntime: -21 }), V('m7', '1 week earlier', { ntime: -7 }), V('p0', 'As the farm', { ntime: 0 }), V('p14', '2 weeks later', { ntime: 14 }), V('p28', '4 weeks later', { ntime: 28 })], figs: FN },
+    { id: 'textures', theme: 'Soil', vary: 'soil', title: 'Eight soil textures (USDA)', question: 'From sand to silty clay loam with the same crops and weather: water holding, drainage, yield and nitrate.', opts: ['irrig', 'trig', 'mm', 'nfac', 'precip', 'temp', 'start', 'stop'],
+      variants: [['sand', 'Sand'], ['loamysand', 'Loamy sand'], ['sandyloam', 'Sandy loam'], ['loam', 'Loam'], ['siltloam', 'Silt loam'], ['sandyclayloam', 'Sandy clay loam'], ['clayloam', 'Clay loam'], ['siltyclayloam', 'Silty clay loam']].map(t => V('u' + t[0], t[1], { soil: 'usda:' + t[0] })), figs: FS },
+    { id: 'jbsoils', theme: 'Soil', vary: 'soil', title: 'Danish soil classes JB1 to JB7 of the library', question: 'The topsoil horizons of the Danish soil classification, from coarse sand (JB1) to clay loam (JB7).', opts: ['irrig', 'nfac', 'precip', 'temp', 'start', 'stop'],
+      variants: [1, 2, 3, 4, 5, 6, 7].map(k => V('jb' + k, 'JB' + k + ' (Ap_JB' + k + ')', { soil: 'hz:Ap_JB' + k })), figs: FS },
+    { id: 'tillage', theme: 'Soil', vary: 'till', title: 'Tillage: plough, rotavate, harrow or none', question: 'How the tillage before sowing changes the topsoil, the water and the nitrogen.', opts: ['soil', 'irrig', 'nfac', 'precip', 'temp', 'start', 'stop'],
+      variants: [V('plow', 'Ploughing (the farm)', { till: 'plowing' }), V('rota', 'Rotavation', { till: 'rotavation' }), V('disk', 'Disk harrowing', { till: 'disk_harrowing' }), V('stub', 'Stubble cultivation', { till: 'stubble_cultivation' }), V('none', 'No tillage', { till: 'none' })], figs: FS },
+    { id: 'roots', theme: 'Soil', vary: 'root', title: 'How deep can the roots go?', question: 'A shallow soil (or a plough pan) against a deep soil: water and nitrate the roots can still reach.', opts: ['soil', 'irrig', 'nfac', 'precip', 'temp', 'start', 'stop'],
+      variants: [V('r40', 'Roots to 40 cm', { root: 40 }), V('r70', 'Roots to 70 cm', { root: 70 }), V('r100', 'Roots to 100 cm', { root: 100 }), V('r150', 'Roots to 150 cm', { root: 150 })], figs: FS },
+    { id: 'aquitard', theme: 'Soil', vary: 'p_Groundwater~aquitard~K_aquitard', title: 'The aquitard below the profile', question: 'A tight or leaky layer below the soil: how much water drains and how wet the subsoil stays.', opts: ['soil', 'irrig', 'precip', 'temp', 'start', 'stop'],
+      variants: [V('k05', 'Tight: K 0.0002 cm/h', { 'p_Groundwater~aquitard~K_aquitard': 0.0002 }), V('k1', 'The farm: K 0.001 cm/h', { 'p_Groundwater~aquitard~K_aquitard': 0.001 }), V('k5', 'Leaky: K 0.005 cm/h', { 'p_Groundwater~aquitard~K_aquitard': 0.005 })], figs: FS },
+    { id: 'crops', theme: 'Crop and climate', vary: 'cropone', title: 'Which crop? One crop of the library every year', question: 'Spring barley, winter wheat, maize, potato, sugar beet or grass on the same soil and weather: yield, water use and nitrogen.', opts: ['soil', 'irrig', 'precip', 'temp', 'start', 'stop'],
+      variants: [V('sb', 'Spring barley', { cropone: 'Spring Barley|lib/sbarley.dai' }), V('ww', 'Winter wheat', { cropone: 'Winter Wheat|lib/wwheat.dai' }), V('mz', 'Silage maize', { cropone: 'Silage Maize|lib/maize.dai' }), V('po', 'Potato', { cropone: 'Potato|lib/potato.dai' }), V('be', 'Sugar beet', { cropone: 'Sugar Beet|lib/sbeet.dai' }), V('gr', 'Grass', { cropone: 'Grass|lib/grass.dai' })], figs: ['yield', 'water', 'crop', 'cmpYield', 'cmpWater', 'cmpN', 'indices'] },
+    { id: 'stations', theme: 'Crop and climate', vary: 'station', title: 'The same farm in other climates of Europe', question: 'The weather of six stations of the Daisy library (each run uses the years its station has).', opts: ['soil', 'irrig', 'start', 'stop'],
+      variants: [V('taastrup', 'Taastrup, Denmark', { station: 'course' }), V('foulum', 'Foulum, Denmark', { station: 'dk-foulum' }), V('jadwisin', 'Jadwisin, Poland', { station: 'pl-jadwisin' }), V('valecov', 'Valecov, Czechia', { station: 'cz-valecov' }), V('bratislava', 'Bratislava, Slovakia', { station: 'sk-bratislava' }), V('bologna', 'Bologna, Italy', { station: 'it-bologna' })], figs: ['yield', 'water', 'crop', 'cmpYield', 'cmpWater', 'cmpN', 'indices'] },
+    { id: 'radiation', theme: 'Crop and climate', vary: 'radscale', title: 'Sunnier or cloudier', question: 'Radiation 15 % lower or higher: photosynthesis, evapotranspiration and yield.', opts: ['soil', 'irrig', 'precip', 'temp', 'start', 'stop'],
+      variants: [V('r85', 'Cloudier (radiation x 0.85)', { radscale: 0.85 }), V('r100', 'As it is', { radscale: 1 }), V('r115', 'Sunnier (radiation x 1.15)', { radscale: 1.15 })], figs: ['yield', 'water', 'crop', 'cmpYield', 'cmpWater', 'indices'] },
+    { id: 'pesticides', theme: 'Chemicals', vary: 'chem', title: 'Pesticides of the Daisy library', question: 'Bentazon, MCPP, atrazine, isoproturon, pendimethalin and 2,4-D with their own sorption and degradation: what leaves the root zone?', opts: ['soil', 'precip', 'temp', 'start', 'stop'],
+      variants: [['Bentazon', 'Bentazon'], ['MCPP', 'MCPP (mecoprop)'], ['Atrazine', 'Atrazine'], ['IPU', 'Isoproturon (IPU)'], ['Pendimethalin', 'Pendimethalin'], ['2,4-D', '2,4-D']].map(c => V('c' + c[0].replace(/\W/g, ''), c[1], { chem: c[0] + '|lib/chemistry.dai' })), figs: FC },
+    { id: 'pfas', theme: 'Chemicals', vary: 'chem', title: 'PFAS: the forever chemicals', question: 'PFOS, PFOA, PFHxA, PFBS and PFBA of the library, with sorption to carbon and to the air-water interface: how far they move.', opts: ['soil', 'precip', 'temp', 'start', 'stop'],
+      variants: ['PFOS', 'PFOA', 'PFHxA', 'PFBS', 'PFBA'].map(c => V('p' + c, c, { chem: c + '|lib/PFAS.dai' })), figs: FC },
+    { id: 'sorption', theme: 'Chemicals', vary: 'koc', title: 'How strongly the chemical is held (K_OC)', question: 'A tracer from mobile (K_OC 0) to strongly sorbed (K_OC 1000), with a half-life of 30 days.', opts: ['soil', 'precip', 'temp', 'start', 'stop'],
+      variants: [0, 10, 50, 200, 1000].map(k => V('k' + k, 'K_OC ' + k + ' L/kg', { koc: k, half: 30 })), figs: FC });
+  S.THEMES = ['Water', 'Nitrogen', 'Soil', 'Crop and climate', 'Chemicals'];
 
   // the lines of the Daisy set-up
   S.defaultsFor = sc => Object.assign({}, S.DEFAULTS, (sc && sc.defaults) || {});
@@ -116,9 +160,13 @@
     let runT = run.replace('(repeat "A_F_R")', '(repeat "' + manager + '")');
     (o.logs || []).forEach(v => useLib(v));
     const libF = {}, libTxt = [];
-    libIn.forEach(path => { const base = path.split('/').pop(); if (path.indexOf('lib/') === 0) { if (!S.LOADED.has(base)) libTxt.push('(input file "' + base + '")'); return; } const t = files['lib:' + path]; if (t == null) throw new Error('the file ' + path + ' of the Daisy library was not loaded'); libF['Common/' + base] = S.libClean(t, false); libTxt.push('(input file "' + base + '")'); });
-    { const seen = new Set(), walk = q => { (files['deps:' + q] || []).forEach(d => { if (seen.has(d)) return; seen.add(d); const t = files['libdep:' + d] != null ? files['libdep:' + d] : files['lib:' + d]; if (t != null && !libF['Common/' + d.split('/').pop()]) libF['Common/' + d.split('/').pop()] = S.libClean(t, false); walk(d); }); }; libIn.forEach(walk); if (o.prog) walk(String(o.prog).split('|')[1]); }   // the files the library files read in turn
-    if (libTxt.length) runT = runT.replace(/\(input file "\.\.\/Common\/OutputLog\.dai"\)\n/, m => m + ';; the Daisy library used by this run\n(path "../Common" &old)\n' + libTxt.join('\n') + '\n');
+    const DROP = new Set(S.LOADED);   // a library file never reads a second time what the run already reads (Daisy stops on a definition made twice)
+    libIn.forEach(path => { const base = path.split('/').pop(); if (path.indexOf('lib/') === 0) { if (S.LOADED.has(base)) return; const t0 = files['lib:' + path]; if (t0 != null) libF['Common/' + base] = S.libClean(t0, false, DROP); libTxt.push('(input file "' + base + '")'); return; } const t = files['lib:' + path]; if (t == null) throw new Error('the file ' + path + ' of the Daisy library was not loaded'); libF['Common/' + base] = S.libClean(t, false, DROP); libTxt.push('(input file "' + base + '")'); });
+    { const seen = new Set(), walk = q => { (files['deps:' + q] || []).forEach(d => { if (seen.has(d)) return; seen.add(d); const t = files['libdep:' + d] != null ? files['libdep:' + d] : files['lib:' + d]; if (t != null && !libF['Common/' + d.split('/').pop()]) libF['Common/' + d.split('/').pop()] = S.libClean(t, false, DROP); walk(d); }); }; libIn.forEach(walk); if (o.prog) walk(String(o.prog).split('|')[1]); }   // the files the library files read in turn
+    // the files of the library are read inside the rotation, after the files it reads itself (fertilizer.dai, crop.dai ...) and
+    // before its own definitions, which use them; the path lets Daisy find the copies in Common first
+    if (libTxt.length) { runT = runT.replace(/\(input file "\.\.\/Common\/ArableFarmRotation\.dai"\)\n/, m => ';; the Daisy library used by this run is read in the rotation file; its copies are in Common\n(path "../Common" &old)\n' + m);
+      rot = rot.replace(/^((?:[ \t]*;[^\n]*\n|[ \t]*\(input file "[^"]+"\)[ \t\r]*\n|[ \t\r]*\n)*)/, m => m + ';; the Daisy library used by this run (SWAFL)\n' + libTxt.join('\n') + '\n\n'); }
     if ((o.logs || []).length) runT += ';; logs of the Daisy library added to this run\n' + o.logs.map(v => '(output &old ("' + String(v).split('|')[0] + '"))').join('\n') + '\n';
     if (o.prog) { const q = String(o.prog).split('|'), base = (q[1] || '').split('/').pop(), t = files['lib:' + q[1]]; if (t == null) throw new Error('the file ' + q[1] + ' of the program was not loaded'); libF['Common/' + base] = S.libClean(t, true);
       Object.keys(files).filter(k => k.indexOf('wx:') === 0).forEach(k => { libF['Common/' + k.slice(3)] = files[k]; });
@@ -227,14 +275,17 @@
   S.FERT = {}; S.ACT = {}; S.LOGS = [];
   // a file of the Daisy samples, made safe to read in a SWAFL run: only its definitions and inputs are kept (its own time, weather,
   // column, output and run would replace those of the run); for a program, everything but its top-level run is kept
-  S.libClean = function (t, keepAll) {
+  // what a library file must not bring a second time: the files the run reads anyway, and the definitions the run makes itself
+  S.DROP_DEFS = new Set(['Tracer']);
+  S.libClean = function (t, keepAll, drop) {
     const out = []; let i = 0, n = t.length;
     while (i < n) { const c = t[i];
       if (c === ';') { const e = t.indexOf('\n', i); i = e < 0 ? n : e + 1; continue; }
       if (c !== '(') { i++; continue; }
       let d = 0, j = i, str = false; for (; j < n; j++) { const ch = t[j]; if (str) { if (ch === '\\') j++; else if (ch === '"') str = false; continue; } if (ch === '"') str = true; else if (ch === ';') { const e = t.indexOf('\n', j); j = e < 0 ? n : e; } else if (ch === '(') d++; else if (ch === ')') { d--; if (d === 0) break; } }
       const form = t.slice(i, j + 1), head = (form.match(/^\(\s*([^\s()"]+)/) || [])[1] || '';
-      if (keepAll ? head !== 'run' : (/^def/.test(head) || head === 'input')) out.push(form);
+      let skip = false; if (drop) { if (head === 'input') { const f = (form.match(/"([^"]+)"/) || [])[1]; if (f && drop.has(f.split('/').pop())) skip = true; } else if (/^def/.test(head)) { const mm = form.match(/^\(\s*def\w+\s+(?:"([^"]+)"|([^\s()"]+))/), nm = mm ? (mm[1] || mm[2]) : ''; if (nm && S.DROP_DEFS.has(nm.trim())) skip = true; } }
+      if (!skip && (keepAll ? head !== 'run' : (/^def/.test(head) || head === 'input'))) out.push(form);
       i = j + 1; }
     return ';; from the Daisy samples, as SWAFL reads it (' + (keepAll ? 'its top-level run left out' : 'definitions and inputs only') + ')\n' + out.join('\n\n') + '\n';
   };
@@ -258,7 +309,7 @@
     S.LOGS = (lib.logs || []).map(l => [l.name + '|' + l.file, l.name + ' (' + short(l.file) + ')']);
   };
   // the files of the Daisy samples that a set of options needs (their own inputs too), and the weather of a program
-  S.libNeeds = function (o) { const out = new Set(); ['cropone', 'chem', 'mgmt', 'prog', 'ntype'].forEach(k => { const q = String(o[k] || '').split('|'); if (q[1] && q[1].indexOf('sample/') === 0) out.add(q[1]); }); const sz = String(o.soil || ''); if (sz.indexOf('hzn:') === 0) { const f = sz.split('|')[1]; if (f && f.indexOf('sample/') === 0) out.add(f); } (o.logs || []).forEach(v => { const f = String(v).split('|')[1]; if (f && f.indexOf('sample/') === 0) out.add(f); }); return Array.from(out); };
+  S.libNeeds = function (o) { const out = new Set(); ['cropone', 'chem', 'mgmt', 'prog', 'ntype'].forEach(k => { const q = String(o[k] || '').split('|'); if (q[1] && (q[1].indexOf('sample/') === 0 || (q[1].indexOf('lib/') === 0 && !S.LOADED.has(q[1].split('/').pop())))) out.add(q[1]); }); const sz = String(o.soil || ''); if (sz.indexOf('hzn:') === 0) { const f = sz.split('|')[1]; if (f && f.indexOf('sample/') === 0) out.add(f); } (o.logs || []).forEach(v => { const f = String(v).split('|')[1]; if (f && f.indexOf('sample/') === 0) out.add(f); }); return Array.from(out); };
   S.usdaSoil = function (id) { const c = S.USDA[id]; if (!c) throw new Error('unknown soil class ' + id); return { horizons: [{ bottom: 30, sand: c[1], silt: c[2], clay: c[3], humus: 2, bd: c[4] }, { bottom: 80, sand: c[1], silt: c[2], clay: c[3], humus: 0.8, bd: +(c[4] + 0.05).toFixed(2) }, { bottom: 200, sand: c[1], silt: c[2], clay: c[3], humus: 0.3, bd: +(c[4] + 0.1).toFixed(2) }], texture: c[0] }; };
   // a soil table in text (csv): columns depth (lower limit, cm), sand, silt, clay, humus (%), bd (g/cm3)
   S.soilFromTable = function (t) {

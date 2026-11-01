@@ -1,0 +1,25 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{swaflextra}[2026/11/01 SWAFL manual: chapter icons and equations that fit the page]
+\RequirePackage{fontspec}
+\RequirePackage{graphicx}
+\RequirePackage{xcolor}
+\newfontfamily\iconfont{DejaVu Sans}
+\definecolor{partgreen}{RGB}{30,110,58}
+\definecolor{partteal}{RGB}{21,101,128}
+\definecolor{partorange}{RGB}{178,86,0}
+\definecolor{partbrown}{RGB}{120,80,30}
+\definecolor{partgrey}{RGB}{80,88,98}
+\definecolor{partpurple}{RGB}{110,50,130}
+% an icon in the colour of the part of the manual, before the title of a chapter
+\DeclareRobustCommand{\chapicon}[2]{{\color{#1}\iconfont #2}\enspace}
+% a display equation at its natural size, shrunk to the width of the page when it is wider; #1 is its number (may be empty)
+\newsavebox{\fitbox}
+\newlength{\fitw}
+\newcommand{\fitmath}[2]{\par\medskip\noindent
+  \sbox{\fitbox}{$\displaystyle #2$}%
+  \setlength{\fitw}{\linewidth}%
+  \if\relax\detokenize{#1}\relax\else\addtolength{\fitw}{-4.2em}\fi
+  \ifdim\wd\fitbox>\fitw\resizebox{\fitw}{!}{\usebox{\fitbox}}\else\makebox[\fitw]{\usebox{\fitbox}}\fi
+  \if\relax\detokenize{#1}\relax\else\makebox[4.2em][r]{(#1)}\fi
+  \par\medskip}
+\endinput

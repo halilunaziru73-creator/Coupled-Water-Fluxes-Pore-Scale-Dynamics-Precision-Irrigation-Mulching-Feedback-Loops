@@ -70,6 +70,45 @@ The Scenarios tab starts with the questions that the built-in farm can answer: w
 
 \newpage
 
+### Scenarios: the 24 questions, and one more run from the library {#daisy-scen-list}
+
+The Scenarios tab holds 24 questions in five themes: water, nitrogen, soil, crop and climate, and chemicals. *Find a question* filters the cards by a word (drip, slurry, PFAS, clay, maize). Each card says how many runs it compares and, when its runs differ in one option, how many choices of the parameter library can be added. The five questions of the earlier version are kept as they were; the others vary one option each over the values of the parameter library:
+
+| Theme | Question | Runs compared | One more run from |
+|:----|:----------|:--------------|:------|
+| Water | Irrigation: does it pay off, and what does it cost the soil? | Rainfed; Irrigated | n/a |
+| Water | Irrigation method: overhead, surface or drip? | Rainfed (reference); Overhead (sprinkler); Surface; Drip at 10-20 cm | 3 choices of the library |
+| Water | When to irrigate: the trigger suction | Wet: -150 cm (pF 2.2); Moist: -300 cm (pF 2.5); Drier: -600 cm (pF 2.8); Dry: -1000 cm (pF 3) | any value |
+| Water | How much water per irrigation? | 10 mm per event; 20 mm per event; 30 mm per event; 45 mm per event | any value |
+| Water | Deficit irrigation: a water limit per season | Rainfed; At most 60 mm a season; At most 120 mm a season; At most 240 mm a season; No limit | any value |
+| Water | Where to put the soil moisture sensor? | Sensor at 10 cm; Sensor at 20 cm; Sensor at 40 cm; Sensor at 60 cm | any value |
+| Nitrogen | Nitrogen: how much fertiliser, how much leaching? | No fertiliser (control); Half the fertiliser; Standard fertiliser; 30 % more fertiliser; 50 % more fertiliser | any value |
+| Nitrogen | Which mineral fertiliser? | N25S (the farm); Ammonium nitrate; Calcium nitrate; Nitrate; Ammonia | 79 choices of the library |
+| Nitrogen | Mineral fertiliser or slurry and manure? | Mineral (N25S); Cattle slurry; Pig slurry (fattening pigs); Cattle deep litter; Poultry manure | 79 choices of the library |
+| Nitrogen | When to fertilise? | 3 weeks earlier; 1 week earlier; As the farm; 2 weeks later; 4 weeks later | any value |
+| Soil | Soil: how much does texture matter? | Sand; Loam | 73 choices of the library |
+| Soil | Eight soil textures (USDA) | Sand; Loamy sand; Sandy loam; Loam; Silt loam; Sandy clay loam; Clay loam; Silty clay loam | 73 choices of the library |
+| Soil | Danish soil classes JB1 to JB7 of the library | JB1 (Ap_JB1); JB2 (Ap_JB2); JB3 (Ap_JB3); JB4 (Ap_JB4); JB5 (Ap_JB5); JB6 (Ap_JB6); JB7 (Ap_JB7) | 73 choices of the library |
+| Soil | Tillage: plough, rotavate, harrow or none | Ploughing (the farm); Rotavation; Disk harrowing; Stubble cultivation; No tillage | 6 choices of the library |
+| Soil | How deep can the roots go? | Roots to 40 cm; Roots to 70 cm; Roots to 100 cm; Roots to 150 cm | any value |
+| Soil | The aquitard below the profile | Tight: K 0.0002 cm/h; The farm: K 0.001 cm/h; Leaky: K 0.005 cm/h | any value |
+| Crop and climate | Climate: warmer, drier or wetter | Weather file as it is; Warmer by 2 C; Drier (rain x 0.7); Warmer and drier; Wetter (rain x 1.3) | n/a |
+| Crop and climate | Which crop? One crop of the library every year | Spring barley; Winter wheat; Silage maize; Potato; Sugar beet; Grass | 84 choices of the library |
+| Crop and climate | The same farm in other climates of Europe | Taastrup, Denmark; Foulum, Denmark; Jadwisin, Poland; Valecov, Czechia; Bratislava, Slovakia; Bologna, Italy | 8 choices of the library |
+| Crop and climate | Sunnier or cloudier | Cloudier (radiation x 0.85); As it is; Sunnier (radiation x 1.15) | any value |
+| Chemicals | A pesticide or tracer: sorption and degradation | Mobile tracer (no sorption, no decay); Sorbing (K_OC 100); Sorbing and degrading (K_OC 100, half-life 30 d) | 35 choices of the library |
+| Chemicals | Pesticides of the Daisy library | Bentazon; MCPP (mecoprop); Atrazine; Isoproturon (IPU); Pendimethalin; 2,4-D | 35 choices of the library |
+| Chemicals | PFAS: the forever chemicals | PFOS; PFOA; PFHxA; PFBS; PFBA | 35 choices of the library |
+| Chemicals | How strongly the chemical is held (K_OC) | K_OC 0 L/kg; K_OC 10 L/kg; K_OC 50 L/kg; K_OC 200 L/kg; K_OC 1000 L/kg | any value |
+
+**Add a run.** In the panel of a question with a varied option, the row *Add a run* offers every other value of that option: a list with a search box for a choice of the library (79 fertilisers and slurries, 84 crops, 35 chemicals, 73 soils, 8 weather stations), or a number box for a number option (with the range it accepts). *Add* makes one more run with that value and every other option as set above; it is ticked like the others and run with them. *Remove the added runs* takes them out again.
+
+**The library in a run.** A run that uses a slurry, a chemical or a crop of the library reads the file of the library inside its rotation file, after the files the rotation reads itself (fertilizer.dai, crop.dai, tillage.dai) and before its own definitions, which use it. The copy of the file in Common/ leaves out what the run already reads, because Daisy stops on a definition made twice. All 24 questions were run with Daisy 7.1.14 and give their logs.
+
+![The 24 questions of the Scenarios tab in their five themes.](images/daisy13/scen_cards.jpg){width=100%}
+
+\newpage
+
 ### Scenarios: irrigation
 
 The irrigation question compares rainfed and irrigated crops of the built-in rotation. The trigger is the potential at 20 cm below which the overhead irrigation starts; the water per irrigation is fixed.
@@ -298,6 +337,37 @@ Loading a combination fills the plan: what changes, the values tested, how they 
 6. **At most.** The largest number of runs.
 7. **Results saved.** How much Daisy writes: yearly totals only, with harvest, with daily values, or everything.
 8. **Size.** Number of runs and the time they take.
+
+\newpage
+
+### Experiments: what each row means, and the number of runs {#daisy-exp-rows}
+
+Under every row of *What will be tested* a sentence says what the factor is; for a parameter of the Daisy reference it also gives the Daisy default and the value of the farm. *more* opens four lines: where Daisy reads the value (the line of the run file or of the rotation), the typical values, what to type, and what changes in the results. The note after a number box, *allowed a to b*, is what the box accepts (0 to ten times the value used), not a limit of Daisy; the typical values are much narrower. Chapter \ref{daisy-factors} gives the same for every factor.
+
+![Three rows with their explanations: the minimum nitrogen of an added organic matter pool, the detention capacity of the surface and the trigger of the irrigation.](images/daisy13/exp_help.jpg){width=100%}
+
+**The number of runs.** The box *number of runs* is the number of runs Daisy makes, the rainfed references included, and it is never exceeded. When the values give more combinations, the runs are chosen in the way set in *if there are more, choose*: balanced (each value used about equally often: a Latin hypercube over the levels), at random, evenly spaced through the list, or the first ones in the list. The *seed* fixes the choice: the same plan and seed always give the same runs. *rainfed references* adds a rainfed run for every soil and weather of the irrigated runs; untick it to get exactly the number set. The line under the form says how many runs there are, how many combinations they come from and how they were chosen; *See the runs* lists them and counts how often each value is used.
+
+![The number of runs: 40 of 288 combinations, chosen in a balanced way, with the count of every value.](images/daisy13/exp_count.jpg){width=100%}
+
+\newpage
+
+### Experiments: the folder before it is saved, in colour {#daisy-exp-folder}
+
+*Save the experiment folder (.zip)* and *Save the ticked as one folder (.zip)* first show the folder: the tree on the left, the file on the right. Every file opens in an editor with the colours of VS Code (Dark+ or Light+, button *light* / *dark*): comments green, keywords blue, names of parameters light blue, numbers light green, text in quotes orange, units teal, definitions purple. Line numbers, *find* (Ctrl+F), *wrap*, the cursor position and, for a .dai file, the check of the brackets are in the bars above and below. Change the text and press *Save changes* (Ctrl+S): the zip then holds the changed file, and the file is marked *changed* in the tree. *undo all* returns to the text as it was opened, *download* saves the one file, and *open in set-up editor* opens a .dai file in the Set-up editor.
+
+![The folder of an experiment: a run file in the colours of VS Code.](images/daisy13/exp_folder.jpg){width=100%}
+
+**The README of the folder** says how the folder was made:
+
+1. *HOW THE COMBINATIONS WERE MADE*: the way of combining, the number of combinations (for example 3 x 2 x 4 x 3 x 4 = 288), the number of runs set, how many were chosen and in which way, with the seed, and the rainfed references.
+2. *HOW EACH .dai FILE IS MADE*: one run file per combination from the same template; the weather, soil, rotation and output files read with (input file "../Common/..."); each value written where Daisy reads it; files that several runs share written once in Common/ and named after the values they carry.
+3. *WHERE EACH VALUE IS WRITTEN*: for every factor, two runs that differ in that factor only, and the lines that change between them, in the run file and inside the Common file it points to (for example (irrigate_overhead 3.333 [mm/h] (hours 3)) against (irrigate_overhead 6.667 [mm/h] (hours 3)) for 10 and 20 mm).
+4. *HOW THE DATA REACH EVERY RUN*: the weather (one .dwf in Common/; rain, temperature and radiation factors as PrecipCorrect, TempOffset and GlobRadScale in the run file), the soil, the crops, the output and the relative paths.
+
+*runs.csv* lists every run folder with the value of every factor. A rainfed reference is named after the soil and weather it belongs to.
+
+![The README in the light colours.](images/daisy13/exp_readme.jpg){width=100%}
 
 \newpage
 

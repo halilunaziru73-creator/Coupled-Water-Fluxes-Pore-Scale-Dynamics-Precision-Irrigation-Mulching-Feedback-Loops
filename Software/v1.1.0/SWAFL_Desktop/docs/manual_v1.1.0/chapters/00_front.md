@@ -28,6 +28,7 @@ header-includes:
   - \setlength{\cftsubsecindent}{5.8em}
   - \setlength{\cftsubsecnumwidth}{4.4em}
   - \usepackage{fvextra}
+  - \usepackage{swaflextra}
   - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
   - \usepackage{enumitem}
   - \setlist{itemsep=1pt,topsep=2pt}
@@ -54,6 +55,18 @@ This manual documents **SWAFL Desktop**, the Soil Water Atmosphere Field Loop de
 8. Chapter 25 is the screenshot atlas. It shows every screen of the workbench (all layers, every section of the three design layers, the menus, the toolbox, the Properties panel, the Dashboard and the dialogs of version 1.1) from the program itself, and prints under each screenshot every equation that the screen draws on, with its number, source chapter and provenance. A reverse index gives, for every numbered equation, the screens that use it.
 9. Chapters 26 to 39 document the Daisy workbench: the overview of its groups of tabs, the governing equations and guiding principles (the last sections of Chapter 26), every screen with numbered arrows (Input data with online weather, Experiments and scenarios, the 27 best combinations, Results and analysis with the figures of real Daisy runs, the guided path with Back and Next and its hand-over to the layers of the SWAFL project, Model development, Documentation), the 107 reference topics, the tested parameters, the factors and responses of the experiments, the Daisy library as it comes with the program, and the weather of the bundled stations.
 10. The appendices give symbols, control value lists, data sets, the provenance ledger, the references and the reference of all numbered equations.
+
+**The map of the manual.** Every chapter carries an icon in the colour of its part, in the table of contents and on its first page:
+
+| Part | Colour | Chapters | Icons |
+|:--|:--|:--|:--|
+| Start: install, window, controls, clock, engines | blue | 1 to 5 | `{\color{swaflblue}\iconfont ⚙ ▦ ☰ ◷ ⚛}`{=latex} |
+| Layers of the field | green | 6 to 10 | `{\color{partgreen}\iconfont ☂ ⊞ ☷ ☘ ❦ ♻}`{=latex} |
+| Irrigation design | teal | 11 to 13 | `{\color{partteal}\iconfont ☔ ✚ ❄}`{=latex} |
+| Outputs: dashboard, workflows, exports, limits, runs, reports | orange | 14 to 18, 23 | `{\color{partorange}\iconfont ▤ ✔ ✎ ⚠ ⚑}`{=latex} |
+| Data: weather, the real field, crops, seasons | brown | 19 to 22 | `{\color{partbrown}\iconfont ☀ ⊞ ✿ ◷}`{=latex} |
+| Reference: changes, atlas, appendices | grey | 24, 25, appendices | `{\color{partgrey}\iconfont ★ ▥ ▦}`{=latex} |
+| The Daisy workbench | purple | 26 to 39 | `{\color{partpurple}\iconfont ⚘ ☀ ❖ ⚖ ▤ ⚑ ⚙ ✎ ☰ ⚗ ❦ ☁ ⚠}`{=latex} |
 
 **A note on honesty of the equations.** SWAFL mixes three kinds of computation, and the manual labels them so that nothing is over-claimed. Every numbered equation carries its label directly beneath it, and the provenance ledger in the appendices lists them all:
 

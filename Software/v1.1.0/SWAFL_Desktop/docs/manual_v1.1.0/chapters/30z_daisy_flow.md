@@ -91,7 +91,7 @@ The soil of the run is matched to the soil of the project when the names agree (
 
 ## The layers that read Daisy runs
 
-The group **Decision support (SWAFL layers)**, inside **Daisy model** in the Layers panel, has the layers *C2 Chemical fate*, *D1 Daisy decision table*, *D2 Daisy water balance*, *D3 Daisy nitrogen balance* and *D4 Yield risk and limiting factor*. They are drawn like every other layer, and they open from the last step of the path. Each shows in its first lines the weather, the soil and the years of the run it is drawn from.
+The group **Decision support (SWAFL layers)**, inside **Daisy model** in the Layers panel, has the layers *C2 Chemical fate*, *D1 Daisy decision table*, *D2 Daisy water balance*, *D3 Daisy nitrogen balance*, *D4 Yield risk and limiting factor*, *D5 Chemicals and drinking water*, *D6 Trade-offs and the best edge*, *D7 The return of irrigation* and *D8 Nitrous oxide and gaseous nitrogen*. They are drawn like every other layer, and they open from the last step of the path. Each shows in its first lines the weather, the soil and the years of the run it is drawn from.
 
 **C2 Chemical fate.** Three buttons at the top choose the chemical: a mobile tracer (no sorption, no decay), a sorbing chemical, and a sorbing chemical that decays with a half-life of 30 days. For the soil in use the layer shows, from top to bottom:
 
@@ -136,6 +136,55 @@ The three layers D2 to D4 read every run you made in this session. A row of butt
 ![The layer D3 Daisy nitrogen balance (test data of three runs).](images/daisy12/layer_dnb.jpg){height=18cm}
 
 ![The layer D4 Yield risk and limiting factor (test data of three runs).](images/daisy12/layer_dyr.jpg){height=18cm}
+
+### D5 to D8: chemicals, trade-offs, the return of irrigation and nitrous oxide
+
+Four more layers read every run of the session, from Scenarios and from Experiments alike: a run of an experiment is passed on as soon as the experiment has run. Each layer lists all runs it can show as buttons at the top, and a tap on any row of its tables or on any dot of its figures shows that run.
+
+**D5 Chemicals and drinking water.** For every run with a chemical (the questions of the theme Chemicals, or an experiment with a chemical of the library):
+
+1. *Dose of the product*: the results are scaled from the dose of the run to 0.1, 0.25, 0.5, 1 or 2 kg/ha a season. With linear sorption and first-order decay, as in these runs, every amount leached is proportional to the dose.
+2. *Where each chemical goes*: one bar per chemical, the shares decayed, taken up, harvested or dissipated, lost by runoff, leached and left in the soil.
+3. *Mean concentration in the water draining below the root zone*, the flow-weighted mean of all seasons on a log scale, against the limit of 0.1 µg/L for one pesticide and for the sum of 20 PFAS (Directive (EU) 2020/2184), with the number of seasons over the limit:
+
+$$
+\bar c=\frac{\sum_t L_t}{\sum_t D_t}\cdot 10^{5}\ \ \mu\mathrm{g\,L^{-1}},\qquad L_t\ \mathrm{in\ kg\,ha^{-1}},\ D_t\ \mathrm{in\ mm}
+$$
+
+   (1 mm on 1 ha is 10 000 L). Drainage water is not yet groundwater: dilution and further decay below the root zone usually lower the concentration.
+4. *Season by season* for the chosen chemical, with the line of 0.1 µg/L, and a plain statement of what the numbers say.
+
+**D6 Trade-offs and the best edge.** Every run as one point: yield against nitrate leached (the size of a dot is the irrigation), yield against irrigation plus drainage, and yield against N2O. The green line is the best edge (the Pareto front): the runs that no other run beats on both yield and loss. *What matters most* (yield first, balanced, environment first, water saving) sets the weights of a score,
+
+$$
+S=\frac{w_Y\,\hat Y+w_N\,(1-\hat N_L)+w_I\,(1-\hat I)+w_G\,(1-\hat G)}{w_Y+w_N+w_I+w_G},
+$$
+
+where each hat is the value scaled between the worst and the best run; the runs are ranked by $S$, and the runs on the edge are marked.
+
+**D7 The return of irrigation.** For the irrigated runs against the rainfed run of the same question:
+
+1. *Yield response to irrigation*: yield against the irrigation given, with a quadratic fit $Y=a+bI+cI^2$ when at least three amounts were run. *Price ratio* (the cost of 1 mm of irrigation on 1 ha in kg of crop, from free water to 20 kg) gives the amount that pays, where the slope of the curve equals the price ratio: $I^{*}=(p-b)/(2c)$ for $c<0$.
+2. *Where each millimetre of irrigation goes*: the extra evapotranspiration (used by the crop), the extra drainage, the extra runoff and the rest (stored in the soil), as shares of the irrigation, with the marginal water productivity $\Delta Y/I$ in kg per m³.
+3. *Season by season*: the gain in yield and the irrigation given each season, and a plain statement.
+
+**D8 Nitrous oxide and gaseous nitrogen.** N2O from denitrification and from nitrification and ammonia volatilised, season by season; the emission factor of every run, $\mathrm{EF}=\mathrm{N_2O\text{-}N}/F$, against the IPCC default of 1 % (IPCC 2019 Refinement); the climate cost, $\mathrm{N_2O\text{-}N}\times 44/28\times 273$ kg CO2-equivalent per ha (GWP100 of IPCC AR6), also per Mg of dry matter harvested; and the table of all runs.
+
+![D5 Chemicals and drinking water, from five runs of the questions Pesticides of the Daisy library and PFAS (Daisy 7.1.14, loam, 1990 to 1993).](images/daisy13/lay_dchx_1.jpg){height=19cm}
+
+![D6 Trade-offs and the best edge, from fourteen runs of the Water, Nitrogen, Soil and Chemicals questions.](images/daisy13/lay_dtrd_1.jpg){height=19cm}
+
+![D7 The return of irrigation, from the runs of the question Deficit irrigation.](images/daisy13/lay_dirr_1.jpg){height=19cm}
+
+![D8 Nitrous oxide and gaseous nitrogen.](images/daisy13/lay_dghg_1.jpg){height=19cm}
+
+The layer C2 Chemical fate now lists every chemical run as well, not only the three runs of the first chemical question.
+
+### To the SWAFL layers: every layer in one place
+
+The last step of the path lists, in three parts: the nine layers that read your Daisy runs, each with the number of your runs it can show and a frame around those that answer the question you ran last; which layer answers which kind of question (water, nitrogen, soil, crop and climate, chemicals, your own experiments), with the questions of each theme; and every layer of the SWAFL project, group by group, with a button to open it.
+
+![To the SWAFL layers: the layers that read your Daisy runs and which layer answers which question.](images/daisy13/dss_layers.jpg){width=100%}
 
 ## What to expect and what not
 

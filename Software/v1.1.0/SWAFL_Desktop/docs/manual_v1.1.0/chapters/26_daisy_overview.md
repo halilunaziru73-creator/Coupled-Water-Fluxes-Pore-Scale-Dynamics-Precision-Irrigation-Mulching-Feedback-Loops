@@ -7,7 +7,7 @@ The Daisy workbench is the part of SWAFL that runs the Daisy 7.1.14 model, draws
 | Input data | Input data | Set the weather (online stations, a file, the stations bundled with Daisy) and the soil of the site once; every simulation uses them. |
 | Input data | Parameter library | Read the horizons, crops, fertilisers and other entries of the Daisy library. |
 | Experiments | Experiments | Design your own set of runs from 53 factors, or start from 27 best combinations. |
-| Experiments | Scenarios | Five ready questions about water, nitrogen, climate, a chemical and soil. |
+| Experiments | Scenarios | 24 ready questions in five themes (water, nitrogen, soil, crop and climate, chemicals), each open to any other value of the parameter library. |
 | Results and analysis | Process map | A map of the model processes with the figures of each one. |
 | Results and analysis | Log plots | Load logs (or take the output of your runs) and draw any column of them. |
 | Results and analysis | Mass balance | Check that inputs, outputs and content agree. |

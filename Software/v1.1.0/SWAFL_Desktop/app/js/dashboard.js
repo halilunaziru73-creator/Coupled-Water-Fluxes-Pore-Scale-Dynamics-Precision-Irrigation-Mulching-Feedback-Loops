@@ -97,7 +97,7 @@ const Dash = (() => {
     spr: [['Ea', 'Application efficiency', 'pct'], ['Es', 'Storage efficiency', 'pct'], ['DU', 'Distribution uniformity DU', 'pct'], ['CU', 'Christiansen uniformity CU', 'pct'], ['dp', 'Deep percolation', 'pct'], ['ro', 'Runoff', 'pct'], ['gross', 'Gross application', 'num', 'mm'], ['I', 'Net application', 'num', 'mm'], ['T', 'Set time', 'num', 'min'], ['Q', 'Sprinkler discharge', 'num', 'L/min'], ['AR', 'Application rate', 'num', 'mm/h']]
   };
   // the layers that are not designs show their results only after Run simulation (the engine keeps that state: runbar.js)
-  const daisyOnly = id => ['chem', 'dsum', 'dwb', 'dnb', 'dyr'].includes(id);
+  const daisyOnly = id => ['chem', 'dsum', 'dwb', 'dnb', 'dyr', 'dchx', 'dtrd', 'dirr', 'dghg'].includes(id);
   const daisyRan = () => !!E.ev("(window.DAISYLIVE&&DAISYLIVE.runs&&Object.keys(DAISYLIVE.runs).length)?1:0");
   const waiting = id => daisyOnly(id) ? !daisyRan() : ['sid', 'drip', 'spr'].indexOf(id) >= 0 ? !runOn(id) : !E.ev("(window.layerRan&&layerRan('" + id + "'))?1:0");
   let ranSig = ''; setInterval(() => { try { const s = E.snap; if (!s || !Layers.started() || tab === 'messages') return; const g = s.scene + waiting(s.scene); if (g !== ranSig) { ranSig = g; lastHtml = ''; chartKey = ''; render(); } } catch (e) { } }, 500);
@@ -258,7 +258,7 @@ const Dash = (() => {
   }
   function charts() {
     const s = E.snap; if (s && DL[s.scene]) { designCharts(s.scene); return; }
-    if (s && ['yby', 'wb2', 'nb', 'chem', 'dsum', 'dwb', 'dnb', 'dyr'].includes(s.scene)) { seasonCharts(s.scene); return; }
+    if (s && ['yby', 'wb2', 'nb', 'chem', 'dsum', 'dwb', 'dnb', 'dyr', 'dchx', 'dtrd', 'dirr', 'dghg'].includes(s.scene)) { seasonCharts(s.scene); return; }
     if (!(document.getElementById('c1') && document.getElementById('c2') && body.querySelector('.charts')))   // the charts are redrawn in place: no flash
       body.innerHTML = '<div class="dnote">The working season day by day, the root-zone water, and the twenty seasons around the working date, from the daily simulation of the layer. Rain and irrigation are bars on an inverted axis; the shaded bands are the range of the twenty seasons.</div><div class="charts" style="grid-template-columns:1fr">' + CB('c1', 'Water of the working season, day by day', '<canvas id="c1" style="height:680px;width:100%"></canvas>') + CB('c2', 'The twenty seasons, year by year', '<canvas id="c2" style="height:340px;width:100%"></canvas>') + '</div>'; lastHtml = '';
     clearTimeout(chartTimer); chartTimer = setTimeout(() => {

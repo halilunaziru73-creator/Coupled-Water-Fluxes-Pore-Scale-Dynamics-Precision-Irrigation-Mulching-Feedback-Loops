@@ -968,7 +968,19 @@ After Balance the error of each step is drawn with the mean and the limits of tw
 
 \newpage
 
-### Run comparison: the verdict and the table {#daisy-compare}
+### Run comparison: what to compare {#daisy-compare}
+
+Run comparison puts runs side by side and says, in plain words, how they differ. Three buttons choose what is compared, and the runs can come from three places: the logs in the Files list (a folder of a Daisy run counts as one run), the runs of the Experiments tab and the runs of the Scenarios tab.
+
+| Button | What it compares | What it gives |
+|:----|:-----------|:-----------------|
+| Two logs | one log against another: two files, or a run against measurements | the verdict, the table of every quantity, three figures of a quantity |
+| Two runs, every log | all the logs two runs have in common (A and B from any of the three places) | one row per log with its verdict and largest difference; click a log for its table and figures |
+| Many runs, one quantity | any number of ticked runs on one quantity of one log, against a reference run | the ranking with mean, minimum, maximum, sum, difference to the reference (absolute and %), RMS difference, r, KGE and the verdict; all runs over time, the mean of each run with its range, the difference of each run to the reference |
+
+Two options apply to all three: *Years* (the first and last year compared) and *Values*: as written by Daisy, sum per year, mean per year, mean per month, or cumulative. Sums and means compare the totals of each year (for example the yearly drainage); the SML then no longer applies.
+
+### Run comparison: the verdict and the table
 
 Run comparison puts two runs side by side and says, in plain words, how they differ. Choose run A and run B: the logs of two runs (two scenarios, the same set-up before and after a change, two variants of an experiment), or a run and a table of measurements. The comparison starts as soon as both are chosen; the arrows between them swap A and B.
 
@@ -976,7 +988,7 @@ Run comparison puts two runs side by side and says, in plain words, how they dif
 - **The verdict.** *Identical*, *The same within the meaningful level* or *Different*, with the number of quantities of each kind and the three largest relative differences. A quantity whose mean is zero in A (irrigation of a rainfed run) is reported with its two means.
 - **The smallest meaningful level (SML).** The difference below which Daisy's own test suite (daisypy-test) counts two values as the same, for every column of every standard log (1 mm for the water balance). A difference within it is *below the meaningful level*; one under a thousandth of it is *identical* (the share is set under *Tolerances*). Quantities without an SML are compared with the absolute tolerance.
 
-The table gives, for every quantity, its unit, the verdict, the SML, the means of A and B, the mean difference $\overline{B-A}$ and the same in per cent of A, the root mean square difference, the largest difference and its date, the correlation $r$ and the Nash-Sutcliffe efficiency of B on A,
+The table gives, for every quantity, its unit, the verdict, the SML, the means of A and B, the mean difference $\overline{B-A}$ and the same in per cent of A, the root mean square difference, the largest difference and its date, the mean absolute difference, the Kling-Gupta efficiency KGE, the correlation $r$ and the Nash-Sutcliffe efficiency of B on A,
 
 $$
 \mathrm{NSE}=1-\frac{\sum_t (B_t-A_t)^2}{\sum_t (A_t-\overline{A})^2},
@@ -985,6 +997,18 @@ $$
 which is 1 when B equals A and below 0 when B is further from A than the mean of A is. *Show only the different ones* shortens the table. *Compare same-named logs of two folders* compares every log that two loaded folders have in common and gives one verdict line for each.
 
 ![Run comparison: the two annual water balances of the sample experiment. The irrigated run (B) gets 130 mm of irrigation a season on average, drains 98 % more below the root zone and evaporates 3.3 % more.](images/daisy12/cmp1.jpg){width=100%}
+
+\newpage
+
+$$
+\mathrm{KGE}=1-\sqrt{(r-1)^2+\Bigl(\frac{\sigma_B}{\sigma_A}-1\Bigr)^2+\Bigl(\frac{\overline B}{\overline A}-1\Bigr)^2}
+$$
+
+is 1 when B has the same correlation, spread and mean as A (Gupta et al., 2009). *Save this table (CSV)* writes the table.
+
+![Two runs, every log: run A (rainfed) against run B (irrigated), the verdict for the three logs and the table of the annual nitrogen log.](images/daisy13/cmp_runs.jpg){width=100%}
+
+![Many runs, one quantity: four runs of an experiment, cumulative yield, with the reference thicker and the mean of each run with its range.](images/daisy13/cmp_many.jpg){width=100%}
 
 \newpage
 
@@ -1000,7 +1024,7 @@ Click a quantity in the table to draw its three figures: A and B over time (B da
 
 A judgement of two runs is easily coloured by knowing which is which (the new set-up, the expected answer). The double-blind comparison hides it from both judges, you and the program:
 
-1. **Choose the two runs** and, if you have them, the **measurements** to judge against (a log or a table with the same column names).
+1. **Choose the two runs** (any log in Files, or any log of a run of Experiments or Scenarios, listed as *run : log*) and, if you have them, the **measurements** to judge against (a log or a table with the same column names).
 2. **Start.** The program puts the runs behind the letters X and Y by a random draw and shows a fingerprint (the first 12 hexadecimal digits of the SHA-256 hash) of the hidden key, which holds the two names and a random salt. Neither the figures nor the numbers show the names, and the quantities come in a random order. Quantities that are identical in the two runs are left out.
 3. **Judge.** For each quantity, read its three figures (X and Y, Y - X, Y against X) and press *X is better*, *Y is better* or *no real difference*. With measurements the program judges too, without the names: the run with the smaller root mean square error against the measurements is better, unless the two errors are within 2 % of each other.
 4. **Reveal.** The names behind X and Y appear, the fingerprint is computed again from the key to show that it was not changed, and a table gives each quantity with your judgement, the program's and whether they agree, with the share of agreement. *Save the judgements (CSV)* keeps the record.
