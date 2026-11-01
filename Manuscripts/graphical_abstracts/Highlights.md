@@ -21,7 +21,7 @@ Three to five bullets per manuscript, at most 85 characters each (journal limit)
 ## Paper 3: SWAFL Desktop with a Graphical Workbench and a Verified Bridge for Daisy
 
 * One offline application from field sketch and Sentinel-2 to irrigation design
-* A request in plain words becomes a design checked against what Daisy can vary
+* Daisy runs come back as effects of every input, figures of every log, root causes
 * A Daisy layer shows only a Daisy run, otherwise it says there is none
 * Parsers agree with an independent reader; a 40% denitrification defect was removed
-* Phenotyping is repeatable; drought cuts grain mass differently by genotype
+* A real 5.85 ha field near Zaria: Sentinel-2, terrain, water source and retention maps
