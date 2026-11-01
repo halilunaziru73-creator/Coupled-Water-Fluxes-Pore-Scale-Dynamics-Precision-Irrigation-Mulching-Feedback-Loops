@@ -984,7 +984,7 @@ Run comparison puts runs side by side and says, in plain words, how they differ.
 |:------|:----------------|
 | Runs of Experiments | by itself, as soon as the runs are made |
 | Runs of Scenarios | by itself, as soon as the runs are made |
-| Saved runs on this computer | every run ever made is kept in Documents/SWAFL Daisy runs; *Show the runs saved on this computer* lists them, newest first, grouped by experiment, with a filter; tick them and press *Load the ticked*. When the session has no runs of its own, the newest experiment is loaded at once |
+| Saved runs on this computer | every run ever made is kept in the folder *SWAFL runs* next to Daisy (older runs in Documents/SWAFL Daisy runs are listed too); *Show the runs saved on this computer* lists them, newest first, grouped by experiment, with a filter; tick them and press *Load the ticked*. When the session has no runs of its own, the newest experiment is loaded at once |
 | Logs in Files | *Add logs from my computer*, *Add a run folder*, or drop files and folders on the tab |
 | Samples that come with SWAFL | the sample experiment (rainfed and irrigated, seven logs each) and six logs of the daisy-model repositories; loaded by themselves when there are fewer than two runs, so there is always something to compare |
 
@@ -1065,7 +1065,7 @@ A column of a log that is zero throughout is left out of a process figure, and t
 
 Under the figures of a scenario, and under *One run in detail* of an experiment, the panel **The raw output of Daisy** gives the files exactly as Daisy wrote them, before any figure or summary of SWAFL.
 
-1. **Kept on this computer.** The desktop app keeps the whole folder of every run in *Documents / SWAFL Daisy runs*. A scenario makes one folder named after the scenario and the time, with one sub-folder for each run. An experiment makes one folder with one sub-folder for each run, named by its number and its factors. The sub-folder *Run* holds the logs (.dlf), the .csv files and daisy.log, and the set-up that made them (Runfile.dai and the files it includes). The button *Open the folder* opens it in the file explorer. The folders stay until you delete them.
+1. **Kept on this computer.** The desktop app keeps the whole folder of every run in *SWAFL runs*, next to the Daisy that runs it: in the Daisy folder itself when it can be written, otherwise next to the Daisy that SWAFL keeps for itself (*%LOCALAPPDATA%/SWAFL/Daisy-7.1.14/SWAFL runs*). Runs of earlier versions in *Documents / SWAFL Daisy runs* are still listed and read. A scenario makes one folder named after the scenario and the time, with one sub-folder for each run. An experiment makes one folder with one sub-folder for each run, named by its number and its factors. The sub-folder *Run* holds the logs (.dlf), the .csv files and daisy.log, and the set-up that made them (Runfile.dai and the files it includes). The button *Open the folder* opens it in the file explorer. The folders stay until you delete them.
 2. **Download all raw outputs (.zip).** One zip with the logs of all the runs of the scenario, untouched, and a README.
 3. **Download outputs and set-up (.zip).** The same, with the files that were given to Daisy, so that the run can be repeated on any computer with Daisy 7.1.
 4. **The list of files.** One row for each file with what it holds, the number of rows and columns, the size and a Download button.
@@ -1118,6 +1118,24 @@ The daily figures need daily logs. **Results saved** under the plan is now *year
 
 ![Water content over depth and time, one map for each water limit with one colour scale, followed by the profiles.](images/daisy11/daisy_ts_theta.png){width=100%}
 
+### Monthly, yearly and cumulative
+
+*Time* above the figures of every log has five choices: *through the year* (the mean of the seasons, day by day), *every day of the period*, *monthly*, *yearly* and *cumulative over all the years*. Monthly and yearly values are the totals of the month or the year for quantities that flow (water in mm, nitrogen in kg N/ha: rain, evapotranspiration, percolation, leaching) and the means for states (leaf area, water content, dry matter); the y axis says which ("per month", "per year"). *Cumulative* is the running total of every run from the start of the run, so the runs part as their totals grow apart. Annual logs offer *yearly* and *cumulative*. The *Log plots* tab has the same choices for one log (*Monthly values*, *Annual values*, *Cumulative over all the years*).
+
+The figures of each log are a group of their own that folds open and shut (the first is open), and the results of an experiment are in folding groups too: *Figures of this experiment*, *Which combination is best*, *Effects, interactions and trade-offs*, *Every log of every run*, *All the outputs of every run* and *One run in detail*.
+
+## Which combination is best {#daisy-best}
+
+Every run of an experiment is one combination of the inputs. The group *Which combination is best* ranks all of them: each result is scaled from the worst run (0) to the best run (1), higher being better for yield, uptake and the efficiencies and lower being better for irrigation, leaching, percolation, denitrification, runoff and stress, and the score is the weighted mean. The weights are boxes over the table (yield 1, nitrate leached 1 and irrigation 0.5 at first; 0 leaves a result out), and the ranking follows every change. The three best combinations are marked, a bar shows each score, and under the table *the best value of each input* lists the values of every input in the order of the mean score of their runs, with the number of runs, followed by the best combination in words.
+
+![Every combination ranked by its score, with the best value of each input.](images/daisy11/daisy_best.png){width=80%}
+
+## All the outputs of every run {#daisy-raw-all}
+
+The group *All the outputs of every run* lists every run of the experiment, not only one: each run folds open to its files (what each holds, rows, size, a download button). Tick files one by one, a whole run (the box in its title), or a kind of file in every run at once (*Tick this file in every run*, for example Daily-FWater.dlf), then *Save the ticked files (.zip)*; *Save everything (.zip)* saves all of them. *with the set-up of each run* adds the files that made the run, and *with the outputs of the experiment* adds the figures (300 dpi, with the numbers as CSV), tables and README of the experiment (always with *Save everything*). The .zip has *Raw/<run>/outputs*, *Raw/<run>/setup* and *Outputs/*.
+
+![All the outputs of every run: one folding group per run, files ticked one by one or by kind.](images/daisy11/daisy_rawall.png){width=100%}
+
 ## Saving the outputs and the raw files of Daisy together
 
 The results bar has three ways to save: *Save the outputs of this experiment* (README, plan, design, results table and every figure, written next to the runs on the desktop), *as a zip*, and **Save both: outputs and raw Daisy files**, one .zip with two folders:
@@ -1126,6 +1144,12 @@ The results bar has three ways to save: *Save the outputs of this experiment* (R
 * *Raw/*: one folder for every run, with *outputs/* (the .dlf logs and daisy.log exactly as Daisy wrote them) and *setup/* (Runfile.dai and the files it includes), so every run can be repeated and every figure checked against the numbers of Daisy.
 
 On the desktop the outputs are written next to the runs as well. In the table of the raw output of a run, the name of the run is written once, beside all of its files.
+
+## Compare similar runs in Log plots {#daisy-cmp-similar}
+
+Under the plot of one log, *Compare similar runs* draws the same log of several runs in one figure: the runs of an experiment, of a scenario, or loaded files that hold the same log. The runs of the session are added to the loaded logs by themselves, so the comparison is ready when the tab opens. Choose the *Log* (every kind of log that two or more runs wrote), the *Column*, the *View* (every day, through the year, monthly, yearly or cumulative, with *Sum or mean* for monthly and yearly), tick the runs, and choose a *Reference*: a second figure then shows **each run minus the reference**, the effect of what differs between the runs (the rainfed reference of an experiment is chosen by itself). Each figure saves as a picture and the numbers of all runs as one CSV table.
+
+![The cumulative matrix percolation of eight runs, and each run minus the rainfed reference.](images/daisy11/daisy_cmp_runs.png){width=100%}
 
 ## The crops of the rotation
 

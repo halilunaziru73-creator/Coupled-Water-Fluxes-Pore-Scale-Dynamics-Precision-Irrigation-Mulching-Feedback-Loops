@@ -57,7 +57,7 @@ ipcMain.handle('daisy-info', async () => { const e = exeNow(); if (e) return { f
 async function ensureDaisy() {
   let e = exeNow(); if (e) return { found: true, exe: e, home: DR.homeFor(e), version: DR.version(e), how: 'found' };
   e = DR.provision(); if (e) return { found: true, exe: e, home: DR.homeFor(e), version: DR.version(e), how: 'copied from the Daisy that comes with SWAFL' };
-  const inst = DR.findInstaller(); if (inst) { e = await DR.runInstaller(inst); if (e) { fs.mkdirSync(path.dirname(daisyCfg()), { recursive: true }); fs.writeFileSync(daisyCfg(), JSON.stringify({ exe: e })); return { found: true, exe: e, home: DR.homeFor(e), version: DR.version(e), how: 'installed from ' + path.basename(inst) }; } }
+  const inst = DR.findInstaller(); if (inst) { e = await DR.runInstaller(inst); if (e) { fs.mkdirSync(path.dirname(daisyCfg()), { recursive: true }); fs.writeFileSync(daisyCfg(), JSON.stringify({ exe: e })); RUNS_DIR = null; return { found: true, exe: e, home: DR.homeFor(e), version: DR.version(e), how: 'installed from ' + path.basename(inst) }; } }
   return { found: false, error: 'Daisy is missing from this copy of SWAFL (the folder daisy next to the program). Unzip the whole SWAFL zip again into a folder of your own (not inside another zip), and start SWAFL from there.' + (inst ? ' The installer ' + path.basename(inst) + ' was found but did not finish: run it once yourself, then press Run again.' : ''), looked: DR.looked() };
 }
 ipcMain.handle('daisy-choose', () => ensureDaisy());
@@ -67,7 +67,7 @@ ipcMain.handle('daisy-pick', async () => {
   const r = await dialog.showOpenDialog(win, { title: 'Use another Daisy program (bin\\daisy-bin.exe of an installed Daisy)', properties: ['openFile'], filters: process.platform === 'win32' ? [{ name: 'Daisy', extensions: ['exe'] }] : [] });
   if (r.canceled || !r.filePaths[0]) return { found: false, cancelled: true }; let e = r.filePaths[0];
   if (DR.isInstaller(e)) { e = await DR.runInstaller(e); if (!e) return { found: false, error: 'The installer did not finish.' }; }
-  fs.mkdirSync(path.dirname(daisyCfg()), { recursive: true }); fs.writeFileSync(daisyCfg(), JSON.stringify({ exe: e })); return { found: true, exe: e, home: DR.homeFor(e), version: DR.version(e) };
+  fs.mkdirSync(path.dirname(daisyCfg()), { recursive: true }); fs.writeFileSync(daisyCfg(), JSON.stringify({ exe: e })); RUNS_DIR = null; return { found: true, exe: e, home: DR.homeFor(e), version: DR.version(e) };
 });
 // a run that is asked for again with exactly the same set-up files gives the same logs: they are kept in memory (the last 30 runs) and returned at once
 const jobCache = new Map(), jobKey = job => { try { return require('crypto').createHash('sha1').update(JSON.stringify([job.main, job.files, !!job.copyBundle, job.logPattern, job.prefix])).digest('hex'); } catch (e) { return null; } };
@@ -82,16 +82,24 @@ ipcMain.handle('daisy-job', async (_e, job) => {
     DR.clean(r.dir); delete r.dir; if (ck && r.code === 0) { jobCache.set(ck, r); while (jobCache.size > 30) jobCache.delete(jobCache.keys().next().value); } return r;
   } catch (e) { return { code: -1, err: String(e.message), logs: {}, out: '' }; }
 });
-const runsRoot = () => path.join(app.getPath('documents'), 'SWAFL Daisy runs');
+// the runs are kept next to Daisy itself: "SWAFL runs" in the Daisy folder that runs them (when it can be written; Program Files cannot),
+// otherwise next to the Daisy that SWAFL keeps for itself (%LOCALAPPDATA%\SWAFL\Daisy-7.1.14\SWAFL runs). Runs of older versions in
+// Documents\SWAFL Daisy runs are still listed and read.
+const legacyRoot = () => path.join(app.getPath('documents'), 'SWAFL Daisy runs');
+let RUNS_DIR = null;
+const writableDir = d => { try { fs.mkdirSync(d, { recursive: true }); const t = path.join(d, '.swafl-write-test'); fs.writeFileSync(t, '1'); fs.unlinkSync(t); return true; } catch (e) { return false; } };
+const runsRoot = () => { if (RUNS_DIR) return RUNS_DIR; let e = null; try { e = exeNow(); } catch (x) { } const homes = []; if (e) { homes.push(DR.homeFor(e)); homes.push(path.dirname(path.dirname(e))); } homes.push(DR.ownDir()); for (const h of homes) { if (!h) continue; const d = path.join(h, 'SWAFL runs'); if (writableDir(d)) return (RUNS_DIR = d); } return (RUNS_DIR = legacyRoot()); };
+const allRoots = () => Array.from(new Set([runsRoot(), legacyRoot()].map(r => path.resolve(r))));
+const insideRuns = t => allRoots().some(r => t === r || t.indexOf(r + path.sep) === 0);
 ipcMain.handle('daisy-runs-dir', () => { const r = runsRoot(); try { fs.mkdirSync(r, { recursive: true }); } catch (e) { } return r; });
 // lists every saved run (a folder that holds .dlf logs) inside the runs folder, newest first: the run library of Run comparison
-ipcMain.handle('daisy-list-runs', async () => { const root = runsRoot(), out = []; const walk = (d, depth) => { if (out.length > 3000 || depth > 4) return; let ents = []; try { ents = fs.readdirSync(d, { withFileTypes: true }); } catch (e) { return; } const logs = ents.filter(e => e.isFile() && /\.dlf$/i.test(e.name)).map(e => e.name); if (logs.length) { let mt = 0; try { mt = fs.statSync(d).mtimeMs; } catch (e) { } out.push({ dir: d, rel: path.relative(root, d).split(path.sep).join('/'), logs, mtime: mt }); } ents.filter(e => e.isDirectory()).forEach(e => walk(path.join(d, e.name), depth + 1)); }; try { fs.mkdirSync(root, { recursive: true }); } catch (e) { } walk(root, 0); out.sort((a, b) => b.mtime - a.mtime); return { root, runs: out }; });
+ipcMain.handle('daisy-list-runs', async () => { const out = []; let root = runsRoot(); const walk = (d, depth) => { if (out.length > 3000 || depth > 4) return; let ents = []; try { ents = fs.readdirSync(d, { withFileTypes: true }); } catch (e) { return; } const logs = ents.filter(e => e.isFile() && /\.dlf$/i.test(e.name)).map(e => e.name); if (logs.length) { let mt = 0; try { mt = fs.statSync(d).mtimeMs; } catch (e) { } out.push({ dir: d, rel: path.relative(root, d).split(path.sep).join('/'), logs, mtime: mt }); } ents.filter(e => e.isDirectory()).forEach(e => walk(path.join(d, e.name), depth + 1)); }; try { fs.mkdirSync(root, { recursive: true }); } catch (e) { } walk(root, 0); if (path.resolve(legacyRoot()) !== path.resolve(runsRoot()) && fs.existsSync(legacyRoot())) { root = legacyRoot(); walk(root, 0); } out.sort((a, b) => b.mtime - a.mtime); return { root, runs: out }; });
 // reads one file of a saved run (only inside the runs folder)
-ipcMain.handle('daisy-read-file', async (_e, p) => { const root = path.resolve(runsRoot()), t = path.resolve(String(p || '')); if (t.indexOf(root) !== 0) return null; try { const st = fs.statSync(t); if (!st.isFile() || st.size > 300e6) return null; return fs.readFileSync(t, 'utf8'); } catch (e) { return null; } });
+ipcMain.handle('daisy-read-file', async (_e, p) => { const t = path.resolve(String(p || '')); if (!insideRuns(t)) return null; try { const st = fs.statSync(t); if (!st.isFile() || st.size > 300e6) return null; return fs.readFileSync(t, 'utf8'); } catch (e) { return null; } });
 // opens a folder of saved Daisy runs in the file explorer (only inside the runs folder)
 // files made by the program for one experiment (tables, plan, figures) are written next to its runs; only inside the runs folder
-ipcMain.handle('daisy-write', async (_e, dir, files) => { const root = path.resolve(runsRoot()), base = path.resolve(String(dir || '')); if (base.indexOf(root) !== 0 || base === root) return { ok: false, err: 'outside the runs folder' }; let n = 0; try { for (const k of Object.keys(files || {})) { const t = path.resolve(base, k); if (t.indexOf(base) !== 0) continue; fs.mkdirSync(path.dirname(t), { recursive: true }); const v = files[k]; fs.writeFileSync(t, typeof v === 'string' ? v : Buffer.from(v)); n++; } return { ok: true, n, dir: base }; } catch (e) { return { ok: false, err: String(e.message) }; } });
-ipcMain.handle('daisy-open-folder', async (_e, p) => { const root = path.resolve(runsRoot()), t = path.resolve(String(p || root)); if (t.indexOf(root) !== 0) return false; try { fs.mkdirSync(t, { recursive: true }); } catch (e) { } const er = await shell.openPath(t); return !er; });
+ipcMain.handle('daisy-write', async (_e, dir, files) => { const base = path.resolve(String(dir || '')); if (!insideRuns(base) || allRoots().indexOf(base) >= 0) return { ok: false, err: 'outside the runs folder' }; let n = 0; try { for (const k of Object.keys(files || {})) { const t = path.resolve(base, k); if (t.indexOf(base) !== 0) continue; fs.mkdirSync(path.dirname(t), { recursive: true }); const v = files[k]; fs.writeFileSync(t, typeof v === 'string' ? v : Buffer.from(v)); n++; } return { ok: true, n, dir: base }; } catch (e) { return { ok: false, err: String(e.message) }; } });
+ipcMain.handle('daisy-open-folder', async (_e, p) => { const t = path.resolve(String(p || runsRoot())); if (!insideRuns(t)) return false; try { fs.mkdirSync(t, { recursive: true }); } catch (e) { } const er = await shell.openPath(t); return !er; });
 const HTTP_OK = /^https:\/\/(dmigw\.govcloud\.dk|api\.dataforsyningen\.dk|data\.geus\.dk|hip\.dataforsyningen\.dk|rest\.isric\.org|maps\.isric\.org)\//i;
 ipcMain.handle('http-get', async (_e, url, bin) => {
   if (!HTTP_OK.test(String(url))) return { status: 403, body: 'host not allowed' };

@@ -26,6 +26,15 @@
 
 ## Figures of experiments and the Daisy layers
 
+* Daisy runs are kept in **SWAFL runs next to Daisy** (the Daisy folder when it can be written, otherwise next to the Daisy of SWAFL), no longer in Documents.
+* Figures of every log: **monthly, yearly and cumulative** besides through the year and every day; the Log plots tab has monthly and cumulative values too.
+* **Compare similar runs** (Log plots): the same log of several runs in one figure and each run minus a reference.
+* **Which combination is best**: every combination ranked with weights the person sets, and the best value of each input.
+* **All the outputs of every run**: every run in a folding group, files ticked one by one or by kind, saved together or all at once.
+* Results in **folding groups**.
+* Five new **soil hydraulic sensitivity factors**: K_sat, alpha, n, Theta_sat and l of the van Genuchten-Mualem curves of every horizon.
+* The **online AI**: the model to use, a *Test the key* button, how to get a key and example requests.
+
 * **Every log of every run**: every quantity of every log Daisy wrote becomes a journal-style figure (panels by one factor, lines by another, a band for the spread): daily logs through the year or over the whole period, annual logs year by year, depth logs as depth-time maps and profiles.
 * Experiments write daily crop, water and soil-water logs by default, so the time series are always there.
 * **Save both**: the outputs of the experiment and the raw files of Daisy (with the set-up) in one .zip.

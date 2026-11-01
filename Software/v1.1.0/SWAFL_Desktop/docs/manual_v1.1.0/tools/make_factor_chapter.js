@@ -4,7 +4,7 @@
 const fs = require('fs'), path = require('path'), JS = path.resolve(__dirname, '../../../app/js'), CH = path.resolve(__dirname, '../chapters/34_daisy_factors.md');
 global.window = global; const X = require(path.join(JS, 'daisyexp.js')), HP = require(path.join(JS, 'daisyfactorhelp.js'));
 const cell = v => String(v == null || v === '' ? 'n/a' : v).replace(/\|/g, '/').replace(/\s+/g, ' ').trim();
-const G = [['Weather and climate', ['precip', 'temp', 'radscale', 'season', 'station', 'bio']], ['Nitrogen and tillage', ['nfac', 'ntype', 'ntime', 'till', 'tc']], ['Irrigation', ['irrig', 'mm', 'hours', 'flux', 'trig', 'z', 'method', 'dripdepth', 'limit', 'window']], ['Soil and crop', ['soil', 'root', 'cropone']], ['Chemicals', ['chem', 'koc', 'half']], ['The Daisy library', ['mgmt', 'prog']]];
+const G = [['Weather and climate', ['precip', 'temp', 'radscale', 'season', 'station', 'bio']], ['Nitrogen and tillage', ['nfac', 'ntype', 'ntime', 'till', 'tc']], ['Irrigation', ['irrig', 'mm', 'hours', 'flux', 'trig', 'z', 'method', 'dripdepth', 'limit', 'window']], ['Soil and crop', ['soil', 'root', 'cropone', 'vg_ks', 'vg_alpha', 'vg_n', 'vg_ts', 'vg_l']], ['Chemicals', ['chem', 'koc', 'half']], ['The Daisy library', ['mgmt', 'prog']]];
 const used = new Set(); G.forEach(g => g[1].forEach(id => used.add(id)));
 const params = X.FACTORS.filter(f => f.param), byCh = {}; params.forEach(f => { const k = f.param.attr + (f.param.use ? ' ' + f.param.use : ''); (byCh[k] = byCh[k] || []).push(f); });
 let t = '## Factors\n\n';

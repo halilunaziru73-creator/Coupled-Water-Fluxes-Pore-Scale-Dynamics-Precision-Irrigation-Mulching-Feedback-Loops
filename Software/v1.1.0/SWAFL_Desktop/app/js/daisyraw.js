@@ -39,5 +39,34 @@ window.DaisyRaw = (() => {
   }
   // every raw file of the runs as a map { path: text }, under root/<run>/outputs and root/<run>/setup
   async function collect(runs, root, setup) { const f = {}; runs = (runs || []).filter(r => r && (r.raw || r.rawIndex || r.saved)); for (const r of runs) { const d = root + '/' + sane(r.id || r.label) + '/'; for (const n of filesOf(r)) { const t = await get(r, n); if (t != null) f[d + 'outputs/' + n] = t; } if (setup) { const s = r.setup || {}; Object.keys(s).forEach(n => { f[d + 'setup/' + n] = s[n]; }); if (!r.setup && r.runfile) f[d + 'setup/Run/Runfile.dai'] = r.runfile; } } return f; }
-  return { html, bind, describe, collect };
+  /* every run of an experiment, each a collapsible group with its files; tick what to save, or save everything, in one .zip */
+  const typeOf = n => String(n).replace(/^r\d+[-_]/, '').replace(/^.*[\\/]/, '');
+  function htmlAll(runs, opt) {
+    opt = opt || {}; runs = runs.filter(r => r && (r.raw || r.rawIndex || r.saved)); if (!runs.length) return ''; const desk = !!(window.swafl && window.swafl.isDesktop), types = []; let total = 0, nf = 0;
+    runs.forEach(r => filesOf(r).forEach(n => { const t = typeOf(n); if (types.indexOf(t) < 0) types.push(t); total += sizeOf(r, n) || 0; nf++; })); types.sort();
+    let h = '<div class="dzraw"><p class="pnote" style="margin:0 0 6px">Every file Daisy wrote, for every one of the ' + runs.length + ' runs (' + nf + ' files, ' + size(total) + '), exactly as written. Open a run to see its files; tick the files to save, or choose a kind of file for every run at once.' + (opt.folder ? ' They are kept on this computer in <code>' + esc(opt.folder) + '</code>' + (desk ? ' <button class="btn" data-ra="open">Open the folder</button>' : '') + '.' : '') + '</p>';
+    h += '<div class="dzrow" style="flex-wrap:wrap;gap:4px 10px"><button class="btn" data-ra="all">Tick all</button><button class="btn" data-ra="none">Tick none</button><label>Tick this file in every run</label><select data-ra="type"><option value="">choose a file</option>' + types.map(t => '<option>' + esc(t) + '</option>').join('') + '</select>' +
+      '<label><input type="checkbox" data-ra="setup" checked> with the set-up of each run</label>' + (opt.extra ? '<label title="Save everything always includes them"><input type="checkbox" data-ra="extra"> with the outputs of the experiment (figures at 300 dpi, tables, README)</label>' : '') + '</div>';
+    h += '<div class="dzrow"><button class="btn pri" data-ra="savesel">Save the ticked files (.zip)</button><button class="btn" data-ra="saveall">Save everything (.zip)</button><span class="pnote" data-ra="st"></span></div>';
+    runs.forEach((r, i) => { const fl = filesOf(r), sz = fl.reduce((a, n) => a + (sizeOf(r, n) || 0), 0), lb = opt.label ? opt.label(r) : r.label;
+      h += '<details class="dzgrp"><summary><input type="checkbox" data-rr="' + i + '" title="tick every file of this run"> <b>' + esc(r.id || 'run ' + (i + 1)) + '</b> ' + esc(lb || '') + ' <span class="pnote">' + fl.length + ' files, ' + size(sz) + '</span></summary><div><table class="dzt" style="font-size:12px;table-layout:auto"><tr><th></th><th>File</th><th>What it holds</th><th>Rows</th><th>Size</th><th></th></tr>' +
+        fl.map(n => { const d = r.logs && r.logs[typeOf(n).replace(/\.dlf$/i, '')]; return '<tr><td><input type="checkbox" data-rf="' + i + '|' + esc(n) + '"></td><td><code>' + esc(n) + '</code></td><td>' + esc(describe(typeOf(n))) + '</td><td>' + (d ? d.n : '') + '</td><td>' + size(sizeOf(r, n) || 0) + '</td><td><button class="btn" data-raw-file="' + i + '|' + esc(n) + '">Download</button></td></tr>'; }).join('') + '</table></div></details>'; });
+    return h + '</div>';
+  }
+  function bindAll(host, runs, opt) {
+    opt = opt || {}; runs = runs.filter(r => r && (r.raw || r.rawIndex || r.saved)); if (!host) return; const q = k => host.querySelector('[data-ra="' + k + '"]'), boxes = () => Array.from(host.querySelectorAll('[data-rf]')), stt = q('st');
+    bind(host, runs, opt);
+    if (q('open')) q('open').onclick = async () => { try { await window.swafl.daisyOpenFolder(opt.folder); } catch (e) { } };
+    q('all').onclick = () => boxes().forEach(b => { b.checked = true; }); q('none').onclick = () => { boxes().forEach(b => { b.checked = false; }); host.querySelectorAll('[data-rr]').forEach(b => { b.checked = false; }); };
+    q('type').onchange = e => { const t = e.target.value; if (!t) return; boxes().forEach(b => { const n = b.dataset.rf.slice(b.dataset.rf.indexOf('|') + 1); if (typeOf(n) === t) b.checked = true; }); stt.textContent = boxes().filter(b => b.checked).length + ' files ticked'; };
+    host.querySelectorAll('[data-rr]').forEach(b => { b.onclick = ev => ev.stopPropagation(); b.onchange = () => host.querySelectorAll('[data-rf^="' + b.dataset.rr + '|"]').forEach(x => { x.checked = b.checked; }); });
+    const save = async all => { if (!window.DaisyExp || !window.DaisyExp.zip) return; const f = {}, root = opt.name || 'experiment', pick = all ? null : new Set(boxes().filter(b => b.checked).map(b => b.dataset.rf)); if (pick && !pick.size) { stt.textContent = 'Tick at least one file.'; return; }
+      stt.textContent = 'Reading the files...'; const setup = q('setup') && q('setup').checked;
+      for (let i = 0; i < runs.length; i++) { const r = runs[i], d = root + '/Raw/' + sane(r.id || r.label) + '/'; let any = false; for (const n of filesOf(r)) { if (pick && !pick.has(i + '|' + n)) continue; const t = await get(r, n); if (t != null) { f[d + 'outputs/' + n] = t; any = true; } } if (any && setup) { const s2 = r.setup || {}; Object.keys(s2).forEach(n => { f[d + 'setup/' + n] = s2[n]; }); if (!r.setup && r.runfile) f[d + 'setup/Run/Runfile.dai'] = r.runfile; } }
+      if (opt.extra && (all || (q('extra') && q('extra').checked))) { stt.textContent = 'Drawing the figures...'; try { const x = await opt.extra(); Object.keys(x).forEach(k => { f[root + '/' + k] = x[k]; }); } catch (e) { } }
+      f[root + '/README.txt'] = 'Outputs of the Daisy experiment ' + root + '\r\n\r\nRaw/<run>/outputs/  the files exactly as Daisy 7.1.14 wrote them (.dlf logs with tab separated columns, daisy.log)\r\nRaw/<run>/setup/    Runfile.dai and the files it includes, to repeat the run\r\nOutputs/            what SWAFL made from the runs: README, plan.json, design.csv, results.csv and every figure (PNG at 300 dpi with its numbers as CSV)\r\n';
+      const z = window.DaisyExp.zip(f), a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([z], { type: 'application/zip' })); a.download = SWAFLDate.name(root + (all ? '-everything.zip' : '-chosen-files.zip')); a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); stt.textContent = Object.keys(f).length + ' files saved in one .zip.'; };
+    q('savesel').onclick = () => save(false); q('saveall').onclick = () => save(true);
+  }
+  return { html, bind, describe, collect, htmlAll, bindAll };
 })();

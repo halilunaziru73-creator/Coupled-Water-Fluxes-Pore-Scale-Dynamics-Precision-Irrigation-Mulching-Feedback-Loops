@@ -22,6 +22,8 @@ window.DaisyExpTS = (() => {
   const PRIO = [/^LAI$/, /WSOrg|yield/i, /^(DS)$/, /evapotranspiration|^Ea$|actual_evap/i, /transpiration/i, /soil.?evap/i, /percolation|matrix.?water|leach|drain/i, /NCrop|uptake/i, /NO3|nitrate/i, /stress/i, /^Theta$/i, /precip|irrigat/i];
   const prio = f => { const t = (f.col || f.v || ''); const i = PRIO.findIndex(r => r.test(t)); return (i < 0 ? 50 : i) + (f.kind === 'heat' ? 0.5 : f.kind === 'prof' ? 0.6 : 0); };
   const uni = u => String(u || '').replace(/\^-1/g, '⁻¹').replace(/\^-2/g, '⁻²').replace(/\^2/g, '²').replace(/\^3/g, '³').replace(/\bdg C\b/g, '°C');
+  // a quantity that flows (summed over a month or a year) or a state (averaged): from its log and its unit
+  const isFlux = f => /FWater|SWater|FN|Tracer\b|Balance|Flux|Harvest|N2O|Denitr|Leach|Drain|Precip|Irrig/i.test(f.log + ' ' + f.col) && /(^|\b)(mm|kg|g|Mg|t)\b/.test(f.unit || '') && !/cm\^?3|%|\/m\^?3|m\^?2\/m\^?2|content|Theta/i.test((f.unit || '') + ' ' + f.col);
   const nameOf = c => NAMES[c] ? NAMES[c] + ' (' + c + ')' : String(c).replace(/_/g, ' ');
   const logOrder = n => /^daily/i.test(n) ? 0 : /^hourly/i.test(n) ? 1 : /^annual/i.test(n) ? 2 : 3;
 
@@ -35,7 +37,7 @@ window.DaisyExpTS = (() => {
   function colours(levels) { const PL = P(), num = levels.length > 2 && levels.every(l => typeof l === 'number' || (l !== '' && !isNaN(+l)));
     return levels.map((l, i) => num ? PL.ramp('viridis', 0.08 + 0.8 * i / Math.max(1, levels.length - 1)) : PL.OKI[i % PL.OKI.length]); }
 
-  if (!document.getElementById('dztsCss')) { const t = document.createElement('style'); t.id = 'dztsCss'; t.textContent = '.dzts{gap:4px 6px;flex-wrap:wrap}.dzts label{margin-left:10px;font-weight:600}.dzts label:first-child{margin-left:0}'; document.head.appendChild(t); }
+  if (!document.getElementById('dztsCss')) { const t = document.createElement('style'); t.id = 'dztsCss'; t.textContent = '.dzts{gap:4px 6px;flex-wrap:wrap}.dzts label{margin-left:10px;font-weight:600}.dzts label:first-child{margin-left:0}details.dzgrp{border:1px solid #d5dae1;border-radius:6px;margin:6px 0;background:#fff}details.dzgrp>summary{cursor:pointer;padding:6px 10px;background:#f1f4f8;border-radius:6px}details.dzgrp[open]>summary{border-bottom:1px solid #d5dae1;border-radius:6px 6px 0 0}details.dzgrp>div{padding:4px 8px}'; document.head.appendChild(t); }
   function mount(host, c) {
     if (!host) return; const runs = (c.runs || []).filter(r => r && r.logs && Object.keys(r.logs).length); if (!runs.length) { host.innerHTML = ''; return; }
     const byId = {}; (c.rows || []).forEach(r => { byId[r.id] = r; }); const valOf = r => (byId[r.id] || {}).val || r.val || {}, refOf = r => !!(byId[r.id] || {}).reference;
@@ -51,7 +53,7 @@ window.DaisyExpTS = (() => {
       '<p class="pnote" style="margin:2px 0 6px">Every quantity that Daisy wrote in the runs of this experiment (' + names.length + ' logs), one figure each, in the style of a journal figure: one panel for each value of one factor, one line for each value of another, the other factors averaged over the runs that share these values, and a band for the spread. ' + (anyDaily ? 'Daily logs are drawn through the year (the mean of the seasons, day by day) or over the whole period; ' : '') + 'annual logs year by year; depth logs as profiles. All of them are saved with the outputs of the experiment.</p>' +
       '<div class="dzrow dzts"><label>Panels by</label><select data-ts="pf">' + opt('', 'one panel', st.pf || '') + varied.map(f => opt(f, short(c.flabel(f)), st.pf)).join('') + '</select>' +
       '<label>Lines by</label><select data-ts="cf">' + opt('', 'one line (all runs)', st.cf || '') + varied.map(f => opt(f, short(c.flabel(f)), st.cf)).join('') + opt('__run', 'every run', st.cf) + '</select>' +
-      (anyDaily ? '<label>Daily logs</label><select data-ts="mode">' + opt('doy', 'through the year (mean of the seasons)', st.mode) + opt('time', 'over the whole period', st.mode) + '</select>' : '') +
+      '<label>Time</label><select data-ts="mode">' + (anyDaily ? opt('doy', 'through the year (mean of the seasons)', st.mode) + opt('time', 'every day of the period', st.mode) + opt('month', 'monthly', st.mode) : '') + opt('year', 'yearly', st.mode) + opt('cum', 'cumulative over all the years', st.mode) + '</select>' +
       '<label>Line</label><select data-ts="stat">' + opt('mean', 'mean', st.stat) + opt('median', 'median', st.stat) + '</select>' +
       '<label>Log</label><select data-ts="log">' + opt('*', 'every log (' + names.length + ')', st.log) + names.map(n => opt(n, n, st.log)).join('') + '</select>' +
       '<input data-ts="q" placeholder="find a quantity (e.g. LAI, nitrate, evaporation)" value="' + esc(st.q) + '" style="width:230px"><button class="btn" data-ts="zip">Save these figures (.zip)</button></div><div data-ts="figs"></div></div>';
@@ -71,8 +73,16 @@ window.DaisyExpTS = (() => {
           const daily = isDaily(f.log, logs[f.log]);
           if (daily && st.mode === 'doy') { const bins = Array.from({ length: 366 }, () => []); rs.forEach(r => { const d = r.logs[f.log]; if (!d || !d.time) return; const y = colOf(d, f.col); if (!y) return; for (let i = 0; i < d.n; i++) if (isFinite(y[i])) bins[Math.min(365, doyOf(d.time[i]))].push(y[i]); });
             const x = [], m = [], lo = [], hi = []; bins.forEach((b, k) => { if (!b.length) return; x.push(k); m.push(center(b)); lo.push(pct(b, 0.1)); hi.push(pct(b, 0.9)); }); if (x.length) series.push({ name, color, x, m, lo, hi }); }
-          else { const by = new Map(); rs.forEach(r => { const d = r.logs[f.log]; if (!d) return; const y = colOf(d, f.col); if (!y) return; for (let i = 0; i < d.n; i++) { if (!isFinite(y[i])) continue; const key = daily ? Math.round((d.time ? d.time[i] : i) / 864e5) * 864e5 : d.time ? new Date(d.time[i]).getUTCFullYear() + (d.n > 40 && !daily ? new Date(d.time[i]).getUTCMonth() / 12 : 0) : i; let a = by.get(key); if (!a) by.set(key, a = []); a.push(y[i]); } });
-            let ks = [...by.keys()].sort((a, b) => a - b); const many = rs.length > 1; if (!daily && ks.length > 2 && by.get(ks[0]).every(v => v === 0) && ks.slice(1).some(k => by.get(k).some(v => v !== 0))) ks = ks.slice(1); /* the first record of an annual log is the start of the run (zero), not a season */ series.push({ name, color, x: ks, m: ks.map(k => center(by.get(k))), lo: many ? ks.map(k => Math.min.apply(null, by.get(k))) : null, hi: many ? ks.map(k => Math.max.apply(null, by.get(k))) : null, pts: !daily && ks.length <= 60, lw: daily ? 1.3 : 1.7 }); } });
+          else { const by = new Map(), fx = isFlux(f), mode = st.mode === 'doy' && !daily ? 'year' : st.mode;
+            rs.forEach(r => { const d = r.logs[f.log]; if (!d) return; const y = colOf(d, f.col); if (!y) return; const acc = new Map(); let run = 0, first = true;
+              for (let i = 0; i < d.n; i++) { if (!isFinite(y[i])) continue; const t = d.time ? d.time[i] : i, D = d.time ? new Date(t) : null;
+                if (!daily && first && y[i] === 0 && d.n > 2) { first = false; continue; } first = false;   /* the first record of an annual log is the start of the run */
+                let key; if (mode === 'cum') { run += y[i]; key = daily ? Math.round(t / 864e5) * 864e5 : (D ? D.getUTCFullYear() : i); acc.set(key, [run, 1]); continue; }
+                key = !daily ? (D ? D.getUTCFullYear() : i) : mode === 'month' ? Date.UTC(D.getUTCFullYear(), D.getUTCMonth(), 15) : mode === 'year' ? D.getUTCFullYear() : Math.round(t / 864e5) * 864e5;
+                let a = acc.get(key); if (!a) acc.set(key, a = [0, 0]); a[0] += y[i]; a[1]++; }
+              acc.forEach((a, k) => { const v = mode === 'cum' ? a[0] : (fx || !daily) && mode !== 'time' ? a[0] : a[0] / a[1]; let q = by.get(k); if (!q) by.set(k, q = []); q.push(v); }); });
+            const ks = [...by.keys()].sort((a, b) => a - b), many = rs.length > 1, timeX = daily && mode !== 'year';
+            series.push({ name, color, x: ks, m: ks.map(k => center(by.get(k))), lo: many ? ks.map(k => Math.min.apply(null, by.get(k))) : null, hi: many ? ks.map(k => Math.max.apply(null, by.get(k))) : null, pts: (!timeX || mode === 'month') && ks.length <= 80, lw: timeX && mode !== 'month' ? 1.3 : 1.7 }); } });
         if (series.length) panels.push({ title: pv === null ? '' : short(c.flabel(st.pf)) + ': ' + lname(st.pf, pv), letter: pl.length > 1 ? '(' + LET[pi % 26] + ')' : '', series }); });
       return panels;
     }
@@ -81,7 +91,10 @@ window.DaisyExpTS = (() => {
       const rest = varied.filter(x => x !== st.pf && x !== st.cf).map(x => short(c.flabel(x)).toLowerCase()), stat = st.stat === 'median' ? 'median' : 'mean';
       let t = f.kind === 'prof' ? 'The ' + stat + ' of ' + f.v + ' at each depth over the whole period, from the log ' + f.log + '; band: 10 to 90 % of the days and runs.'
         : daily && st.mode === 'doy' ? 'Day by day through the year from the log ' + f.log + ': the ' + stat + ' of all seasons and runs on that day; band: 10 to 90 % of them.'
-        : daily ? 'Every day of the period from the log ' + f.log + ': the ' + stat + ' of the runs; band: the lowest to the highest run.' : 'Year by year from the log ' + f.log + ': the ' + stat + ' of the runs; band: the lowest to the highest run.';
+        : st.mode === 'cum' ? 'Cumulative over all the years from the log ' + f.log + ': the running total of every run from the start, the ' + stat + ' of the runs; band: the lowest to the highest run.'
+        : daily && st.mode === 'month' ? 'Month by month from the log ' + f.log + ': ' + (isFlux(f) ? 'the total of each month' : 'the mean of each month') + ' in every run, the ' + stat + ' of the runs; band: the lowest to the highest run.'
+        : daily && st.mode === 'time' ? 'Every day of the period from the log ' + f.log + ': the ' + stat + ' of the runs; band: the lowest to the highest run.'
+        : 'Year by year from the log ' + f.log + ': ' + (daily ? (isFlux(f) ? 'the total of each year' : 'the mean of each year') : 'the value Daisy wrote for each season') + ' in every run, the ' + stat + ' of the runs; band: the lowest to the highest run.';
       if (f.kind === 'heat') return (daily && st.mode === 'doy' ? 'Day of the year (x) and depth (y), the mean of all seasons and runs' : 'Every day (x) and depth (y), the mean of the runs') + ', from the log ' + f.log + '; one map for each value of ' + (st.pf ? short(c.flabel(st.pf)).toLowerCase() : 'the experiment') + ', with one colour scale for all maps.';
       const tail = [pan, what].filter(Boolean).join(', '); return t + (tail ? ' ' + tail.charAt(0).toUpperCase() + tail.slice(1) : '') + '.' + (rest.length ? ' Averaged over ' + rest.join(', ') + '.' : ''); }
     // depth and time: one map for each value of the panel factor, the mean of its runs (through the year: of its seasons too), one colour scale
@@ -97,12 +110,14 @@ window.DaisyExpTS = (() => {
     function draw() {
       const L = sel(), show = L.slice(0, MAXFIG), cnt = host.querySelector('[data-ts="n"]'); if (cnt) cnt.textContent = L.length + ' figures' + (L.length > MAXFIG ? ' (the first ' + MAXFIG + '; choose one log or find a quantity for the others)' : '');
       box.innerHTML = ''; const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting && e.target._go) { e.target._go(); io.unobserve(e.target); } }), { rootMargin: '600px' }) : null;
+      const groups = {}; show.forEach(f => { (groups[f.log] = groups[f.log] || []).push(f); }); const gbox = {};
+      Object.keys(groups).forEach((lg, gi) => { const dt = document.createElement('details'); dt.className = 'dzgrp'; if (gi === 0 || st.log !== '*') dt.open = true; dt.innerHTML = '<summary><b>' + esc(lg) + '</b> <span class="pnote">' + groups[lg].length + ' figure' + (groups[lg].length === 1 ? '' : 's') + (window.DaisyRaw && window.DaisyRaw.describe ? ' · ' + esc(window.DaisyRaw.describe(lg)) : '') + '</span></summary><div></div>'; box.appendChild(dt); gbox[lg] = dt.lastChild; dt.addEventListener('toggle', () => { if (dt.open) dt.querySelectorAll('.dzfig').forEach(cd => { if (cd._go && io) { io.unobserve(cd); io.observe(cd); } }); }); });
       show.forEach((f, i) => { const card = document.createElement('div'); card.className = 'dzpan dzfig'; card.dataset.xf = 'ts' + i;
         card.innerHTML = '<div class="dzrow"><b>' + esc(titleOf(f)) + unitTxt(f) + '</b><span class="pnote" style="margin-left:8px">' + esc(f.log) + '</span></div><p class="pnote" style="margin:2px 0 4px">' + esc(noteOf(f)) + '</p><div data-ts="cvs"><div><canvas style="display:block;width:100%"></canvas></div></div>';
-        box.appendChild(card); const cv = card.querySelector('canvas');
+        gbox[f.log].appendChild(card); const cv = card.querySelector('canvas');
         const job = () => { if (f.kind === 'heat') return heatJob(f, card, cv); const panels = build(f); if (!panels.length) { card.remove(); return; } const daily = isDaily(f.log, logs[f.log]);
           if (f.kind === 'prof') P().profiles(cv, panels, { title: titleOf(f), xt: nameOf(f.v) + unitTxt(f) });
-          else P().ribbons(cv, panels, { title: titleOf(f), yt: (NAMES[f.col] || f.col) + unitTxt(f), xkind: daily ? (st.mode === 'doy' ? 'doy' : 'time') : 'num', xt: daily ? (st.mode === 'doy' ? 'Month of the year' : 'Date') : 'Year' }); };
+          else P().ribbons(cv, panels, { title: titleOf(f), yt: (st.mode === 'cum' ? 'Cumulative ' + String(NAMES[f.col] || f.col).replace(/^./, c0 => c0.toLowerCase()) : (NAMES[f.col] || f.col)) + unitTxt(f) + (isDaily(f.log, logs[f.log]) && isFlux(f) && (st.mode === 'month' || st.mode === 'year') ? ' per ' + (st.mode === 'month' ? 'month' : 'year') : ''), xkind: daily && st.mode === 'doy' ? 'doy' : daily && (st.mode === 'time' || st.mode === 'month' || st.mode === 'cum') ? 'time' : 'num', xt: daily && st.mode === 'doy' ? 'Month of the year' : daily && st.mode !== 'year' ? 'Date' : 'Year' }); };
         card._go = () => { try { job(); } catch (e) { console.warn('time series', f.log, e); card.remove(); } };
         if (FK()) FK().attach(card, { name: 'daisy-' + (f.log + '-' + (f.col || f.v)).replace(/[^A-Za-z0-9._-]+/g, '_'), redraw: () => { try { job(); } catch (e) { } } });
         if (io) io.observe(card); else card._go(); });
@@ -115,6 +130,6 @@ window.DaisyExpTS = (() => {
     draw();
   }
   // every figure drawn now (before saving the outputs, so that none is missing)
-  const drawAll = host => { if (host) host.querySelectorAll('.dzfig').forEach(cd => { if (cd._go) { cd._go(); cd._go = null; } }); };
+  const drawAll = host => { if (host) host.querySelectorAll('details.dzgrp').forEach(d => { d.open = true; }); if (host) host.querySelectorAll('.dzfig').forEach(cd => { if (cd._go) { cd._go(); cd._go = null; } }); };
   return { mount, drawAll, figsOf };
 })();

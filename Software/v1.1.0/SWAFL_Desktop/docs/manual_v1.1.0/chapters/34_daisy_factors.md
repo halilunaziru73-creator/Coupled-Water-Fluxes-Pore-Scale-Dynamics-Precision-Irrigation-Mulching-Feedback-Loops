@@ -23,7 +23,7 @@ The Experiments tab offers 58 factors. Each has levels that are tried, a range t
 
 ## Factors
 
-Each row of *What will be tested* is one factor: one thing that changes between the runs. The text under the row says what the factor is; *more* opens where Daisy reads it, the typical values, what to type and what changes in the results. This chapter gives the same for all 58 factors.
+Each row of *What will be tested* is one factor: one thing that changes between the runs. The text under the row says what the factor is; *more* opens where Daisy reads it, the typical values, what to type and what changes in the results. This chapter gives the same for all 63 factors.
 
 ### How to fill in a row
 
@@ -83,6 +83,11 @@ The balanced choice is a Latin hypercube over the levels: each level of each fac
 | Soil and crop | Soil | n/a | The 12 USDA textures, the built-in loam and sand, and 63 horizons of the Daisy library. |
 | Soil and crop | Maximum rooting depth | cm | 30 (shallow soil) to 150 cm. |
 | Soil and crop | Crop of the Daisy library, grown every year | n/a | 84 crops of the library. |
+| Soil and crop | Saturated hydraulic conductivity K_sat of every horizon (van Genuchten-Mualem), factor | times the soil value | 0.1 to 10 times; K_sat varies more than tenfold within one texture class. |
+| Soil and crop | van Genuchten alpha (inverse air-entry pressure) of every horizon, factor | times the soil value | 0.5 to 2 times. |
+| Soil and crop | van Genuchten n (pore-size distribution) of every horizon, factor on n - 1 | times the soil value | 0.7 to 1.3 times. |
+| Soil and crop | Saturated water content Theta_sat (porosity) of every horizon, factor | times the soil value | 0.9 to 1.1 times. |
+| Soil and crop | Mualem tortuosity l of every horizon, added | added to the soil value | -2 to +2 around the soil value (0.5 in Mualem 1976; fitted values are often negative). |
 | Chemicals | Chemical of the Daisy library (pesticide, PFAS, tracer) | n/a | 35 chemicals of the library. |
 | Chemicals | Sorption of the chemical, K_OC | L/kg | 0 (moves with water) to 1000 L/kg (strongly held). |
 | Chemicals | Half-life of the chemical | days | 5 to 200 days. |
@@ -474,6 +479,81 @@ One crop of the Daisy library grown every year instead of the rotation of the fa
 | What changes | Yield, water use and nitrogen uptake of each crop on the same soil and weather. |
 | Needs irrigation | no |
 | Words that propose it | crop of the library, any crop, grow every year, monoculture |
+
+#### Saturated hydraulic conductivity K_sat of every horizon (van Genuchten-Mualem), factor
+
+Multiplies the saturated hydraulic conductivity K_sat of every horizon of the built-in soil: how fast the saturated soil conducts water.
+
+| Item | Value |
+|:--------|:--------------------|
+| Where Daisy reads it | (hydraulic M_vG ... (K_sat <cm/h>)) of every horizon in ResFarm.dai (built-in loam and sand; own soils use HYPRES). |
+| Typical values | 0.1 to 10 times; K_sat varies more than tenfold within one texture class. |
+| Levels offered | 0.25, 1, 4 |
+| Box accepts | 0.01 to 100 times the soil value |
+| What to type | Factors, for example 0.25, 1, 4. |
+| What changes | Higher K_sat: faster infiltration, less runoff and ponding, more and earlier drainage and leaching; lower: wetter topsoil, more runoff and denitrification. |
+| Needs irrigation | no |
+| Words that propose it | ksat, k_sat, saturated conductivity, hydraulic conductivity, permeability, sensitivity |
+
+#### van Genuchten alpha (inverse air-entry pressure) of every horizon, factor
+
+Multiplies alpha of the van Genuchten retention curve of every horizon (1/alpha is roughly the air-entry pressure).
+
+| Item | Value |
+|:--------|:--------------------|
+| Where Daisy reads it | (hydraulic M_vG ... (alpha <cm^-1>)) of every horizon in ResFarm.dai. |
+| Typical values | 0.5 to 2 times. |
+| Levels offered | 0.5, 1, 2 |
+| Box accepts | 0.1 to 10 times the soil value |
+| What to type | Factors, for example 0.5, 1, 2. |
+| What changes | Larger alpha: the soil drains at smaller suctions, holds less water at field capacity, less plant-available water and more drainage. |
+| Needs irrigation | no |
+| Words that propose it | alpha, van genuchten, air entry, retention curve, sensitivity |
+
+#### van Genuchten n (pore-size distribution) of every horizon, factor on n - 1
+
+Scales n - 1 of the van Genuchten curve of every horizon (n stays above 1): the spread of pore sizes.
+
+| Item | Value |
+|:--------|:--------------------|
+| Where Daisy reads it | (hydraulic M_vG ... (n <>)) of every horizon in ResFarm.dai; n becomes 1 + (n - 1) x factor. |
+| Typical values | 0.7 to 1.3 times. |
+| Levels offered | 0.7, 1, 1.3 |
+| Box accepts | 0.3 to 2 times the soil value |
+| What to type | Factors, for example 0.7, 1, 1.3. |
+| What changes | Larger n: a steeper retention curve (sand-like), less water held at high suction, conductivity falling fast as the soil dries. |
+| Needs irrigation | no |
+| Words that propose it | van genuchten n, pore size distribution, retention curve, shape parameter, sensitivity |
+
+#### Saturated water content Theta_sat (porosity) of every horizon, factor
+
+Multiplies the saturated water content Theta_sat (about the porosity) of every horizon.
+
+| Item | Value |
+|:--------|:--------------------|
+| Where Daisy reads it | (hydraulic M_vG ... (Theta_sat <>)) of every horizon in ResFarm.dai; kept below 0.7. |
+| Typical values | 0.9 to 1.1 times. |
+| Levels offered | 0.9, 1, 1.1 |
+| Box accepts | 0.6 to 1.5 times the soil value |
+| What to type | Factors, for example 0.9, 1, 1.1. |
+| What changes | More pore space stores more water: more water for the crop and slower drainage. |
+| Needs irrigation | no |
+| Words that propose it | theta_sat, porosity, saturated water content, sensitivity |
+
+#### Mualem tortuosity l of every horizon, added
+
+Adds to the Mualem tortuosity-connectivity parameter l of every horizon.
+
+| Item | Value |
+|:--------|:--------------------|
+| Where Daisy reads it | (hydraulic M_vG ... (l <>)) of every horizon in ResFarm.dai. |
+| Typical values | -2 to +2 around the soil value (0.5 in Mualem 1976; fitted values are often negative). |
+| Levels offered | -1, 0, 1 |
+| Box accepts | -4 to 4 added to the soil value |
+| What to type | Values added, for example -1, 0, 1. |
+| What changes | Higher l: the unsaturated conductivity falls faster as the soil dries, less capillary rise and slower redistribution. |
+| Needs irrigation | no |
+| Words that propose it | tortuosity, mualem l, connectivity, sensitivity |
 
 ### Chemicals
 
