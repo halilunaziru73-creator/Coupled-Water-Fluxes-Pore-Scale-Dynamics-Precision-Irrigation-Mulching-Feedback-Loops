@@ -3966,7 +3966,7 @@
 },
 {
 "level": 2,
-"title": "Viewing and editing the outputs before they are saved",
+"title": "Viewing and editing the outputs of Daisy before they are saved",
 "id": "daisy-view-out",
 "file": "30_daisy_results.md",
 "page": 748
@@ -3983,7 +3983,7 @@
 "title": "Compare similar runs in Log plots",
 "id": "daisy-cmp-similar",
 "file": "30_daisy_results.md",
-"page": 749
+"page": 750
 },
 {
 "level": 2,

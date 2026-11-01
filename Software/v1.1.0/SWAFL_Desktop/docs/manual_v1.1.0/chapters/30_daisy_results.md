@@ -1136,14 +1136,14 @@ The group *All the outputs of every run* lists every run of the experiment, not 
 
 ![All the outputs of every run: one folding group per run, files ticked one by one or by kind.](images/daisy11/daisy_rawall.png){width=100%}
 
-## Viewing and editing the outputs before they are saved {#daisy-view-out}
+## Viewing and editing the outputs of Daisy before they are saved {#daisy-view-out}
 
-**View and edit the outputs (full screen)**, in the results bar of an experiment and in *All the outputs of every run*, gathers everything the experiment produced: *Outputs/* (README, plan.json, design.csv, results.csv and every figure at 300 dpi with its numbers as CSV) and *Raw/* (for every run, the files Daisy wrote and the set-up that made them). They open in a viewer that fills the screen (*Leave full screen* or Esc makes it a window again):
+The outputs here are the outputs of the Daisy simulation: the files Daisy wrote in every run (the .dlf logs such as Annual-Harvest, Daily-FWater or Daily-Theta, and daisy.log), not the figures. There are two ways to look at them and change them before they are saved.
 
-* On the left, the folders and files with their sizes; a click opens a file.
-* On the right, a text file opens in an editor with the colours of **Notepad++** (white page, grey line-number margin, keywords in bold blue, numbers in orange, comments in green, Consolas): line numbers, find (Ctrl+F), wrap, copy and download. *colours* switches between Notepad++, VS Code light and VS Code dark, and the choice is kept. A figure (.png) is shown as the picture that will be saved. The viewer opens at once: the figures and their tables are marked *made when opened* and are drawn at 300 dpi when one is clicked, or all of them, with a count, when the folder is saved or written.
-* Change a file and press *Save changes* (Ctrl+S): the file is marked *changed* and everything saved afterwards takes the changed text.
-* *Save the folder (.zip)* saves all of it with the changes; on the desktop, *Write the outputs next to the runs* writes the *Outputs/* folder, with the changes, into the folder of the experiment.
+* **One file at a time, in the style of Notepad++.** In *All the outputs of every run* (and in *One run in detail*), every file has **View / edit**. It opens the file in an editor that fills the screen: a tab for every file opened (click a tab to go back to it, × closes it), a grey margin with the line numbers, the header lines of the log in blue, the column names, the units in purple and the numbers in orange, find (Ctrl+F), wrap and *colours* (Notepad++, VS Code light or VS Code dark). Change the text and press *Save changes* (Ctrl+S): the file is marked *edited* in the list, and every save of the page (*Save the ticked files*, *Save everything*, *Download*) takes the edited text, while the text as Daisy wrote it is kept beside it in the .zip, in *outputs/_as_written_by_Daisy/*. *Back to the text of Daisy* drops the changes, *Download this file* saves the file alone, and on the desktop *Save into the run folder* writes it to *Edited/* in the folder of the run (the file Daisy wrote is left as it was). Esc or *Close* returns to the list.
+* **All of them together.** **View and edit the Daisy outputs (full screen)**, in the results bar and in *All the outputs of every run*, opens every file Daisy wrote, one folder per run, in a viewer that fills the screen: the folders and files with their sizes on the left, the file in the Notepad++ editor on the right. *Save the folder (.zip)* saves all of them with the changes; on the desktop *Write them next to the runs* writes them into *Daisy outputs* in the folder of the experiment.
+
+![A Daisy output (Daily-FWater.dlf of one run) in the full-screen editor, in the colours of Notepad++.](images/daisy11/daisy_out_editor.png){width=100%}
 
 ## Saving the outputs and the raw files of Daisy together
 

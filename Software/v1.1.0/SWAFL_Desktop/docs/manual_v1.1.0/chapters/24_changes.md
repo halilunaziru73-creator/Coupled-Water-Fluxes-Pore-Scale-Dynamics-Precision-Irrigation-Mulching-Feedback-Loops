@@ -26,7 +26,7 @@
 
 ## Figures of experiments and the Daisy layers
 
-* **View and edit the outputs (full screen)**: every output and raw file of an experiment in a full-screen viewer with the colours of Notepad++, edited before it is saved.
+* **View / edit the Daisy outputs**: every file Daisy wrote (.dlf logs, daisy.log) opens in a full-screen editor in the style of Notepad++ (tabs, line numbers, find), one file at a time or all runs together; the edited text is used in every save and the text Daisy wrote is kept beside it.
 * The guide of Experiments starts with choosing a ready experiment (Best combinations, By topic, Prepared experiments, Import, Load this experiment).
 
 * Daisy runs are kept in **SWAFL runs next to Daisy** (the Daisy folder when it can be written, otherwise next to the Daisy of SWAFL), no longer in Documents.
