@@ -1155,6 +1155,27 @@ The daily figures need daily logs. **Results saved** under the plan is now *year
 
 The figures of each log are a group of their own that folds open and shut (the first is open), and the results of an experiment are in folding groups too: *Figures of this experiment*, *Which combination is best*, *Effects, interactions and trade-offs*, *Every log of every run*, *All the outputs of every run* and *One run in detail*.
 
+## Why a run gave no results {#daisy-why-failed}
+
+When Daisy gives no results for some runs, a panel **Why N runs gave no results** opens under the progress bar, and the list of runs names the cause of each one. The runs that failed for the same reason are put together, so every cause is explained once:
+
+* **Daisy said**: the error line of Daisy, exactly.
+* **Where**: the file, the line and the column, and the lines around it from the set-up of the run, with the place marked.
+* **Root cause**, in plain words, sorted into one of these kinds: *a name Daisy does not know* (a crop, a log, a horizon used but not defined: often a file of the Daisy samples that still refers to its own run), *a numerical problem* (the solver of the Richards equation or of the solutes did not converge, or a value became not a number or negative: nearly always an extreme combination of soil hydraulic values, thin layers or a very large irrigation flux), *a value outside what Daisy accepts*, *a file that is missing*, *the weather* (years or gaps), *a name defined twice*, *a line Daisy could not read*, and *Daisy stopped without a message* (cancelled, memory, an antivirus).
+* **What to do**: the change that removes the cause, and the runs that share it.
+
+For example, *test-prd.dai:292:29: Unknown 'log' model 'crop'* came from the soil KarJyn_B, a horizon of the Daisy sample test-prd.dai used as it is: the sample file also carries the logs of its own run, which need a log model SWAFL runs do not load. SWAFL now takes only the definitions from such a sample file and leaves its logs out; a run with this soil, tested with Daisy 7.1.14, finishes and writes all its logs.
+
+![Why three runs gave no results: two causes, the line of the set-up and what to do.](images/daisy11/daisy_why_failed.png){width=100%}
+
+## Every simulated experiment {#daisy-all-experiments}
+
+At the bottom of the Experiments tab, **See all the Daisy output files** opens every experiment that was run, in order, in the full-screen viewer: the folder of each experiment (its name and the time), the folder of each run in it (r000, r001, ...), and in each run the files Daisy wrote, sorted (the annual logs, the daily logs, daisy.log), with their sizes. A click on a file opens it on the right in the colours of Notepad++ (line numbers, find, wrap); a file is read from the disk only when it is opened, so even hundreds of runs open at once. On the desktop the list is the folder *SWAFL runs* next to Daisy (and older runs in Documents, under *Older runs*); in the web version, the experiments of the session. *Save the folder (.zip)* saves them all.
+
+The figures always follow the runs: when an experiment has new runs, the Log plots tab drops the runs of the previous one and loads the new ones, and the figures of every log, the summary and the ranking are drawn from the same runs.
+
+![Every simulated experiment: experiment, run and files in order, a log open in the Notepad++ colours.](images/daisy11/daisy_all_experiments.png){width=100%}
+
 ## The summary of an experiment {#daisy-summary}
 
 The first group of the results, **Summary: every range and its effect**, gathers the whole experiment in four parts, and *Summary (CSV)* saves it (it is also *Outputs/summary.csv* with the outputs):

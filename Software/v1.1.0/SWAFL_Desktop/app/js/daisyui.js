@@ -542,6 +542,10 @@ const DaisyUI = (() => {
     const add = (list, tag) => { let n = 0; list.forEach(r => Object.keys(r.logs || {}).forEach(k => { const d = r.logs[k]; if (d && d.cols) { addLog(d, tag + '/' + String(r.short ? (r.id ? r.id + ' ' : '') + r.short : (r.label || r.id)).replace(/[\\/]+/g, '-') + '/' + k + '.dlf'); n++; } })); refreshSelects(); const m = $('RunsMsg'); if (m) m.textContent = n + ' logs added; they are in the list of loaded logs below and in the plot.'; };
     const r = runsOf(); const e = $('UseExp'), c = $('UseScen'); if (e) e.onclick = () => add(r.e, 'experiments'); if (c) c.onclick = () => add(r.c, 'scenarios');
     // the runs of this session are added by themselves the first time, so that they can be plotted and compared at once
+    // the plots follow the runs: whenever the experiment or the scenario has new runs, the old ones leave the list and the new ones come in
+    const sig = JSON.stringify([r.e.map(x => x.id + (x.label || '') + Object.keys(x.logs || {}).length), r.c.map(x => x.id + Object.keys(x.logs || {}).length)]);
+    if (S.runsSig && S.runsSig !== sig) { names().filter(n => /^(experiments|scenarios)\//.test(n)).forEach(n => { delete S.logs[n]; }); S.autoRuns = 0; }
+    S.runsSig = sig;
     if (!S.autoRuns && (r.e.length || r.c.length) && !names().some(n => /^(experiments|scenarios)\//.test(n))) { S.autoRuns = 1; if (r.e.length) add(r.e, 'experiments'); if (r.c.length) add(r.c, 'scenarios'); const L = $('PLog'), pick = names().find(n => /^(experiments|scenarios)\/.*Daily-FWater/.test(n)) || names().find(n => /^(experiments|scenarios)\//.test(n)); if (L && pick) { L.value = pick; L.dispatchEvent(new Event('change')); const dr = $('PDraw'); if (dr) dr.click(); } }
   }
   function show(tab, arg) {

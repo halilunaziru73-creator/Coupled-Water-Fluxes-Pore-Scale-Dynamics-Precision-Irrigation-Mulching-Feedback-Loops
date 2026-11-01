@@ -161,7 +161,7 @@
     (o.logs || []).forEach(v => useLib(v));
     const libF = {}, libTxt = [];
     const DROP = new Set(S.LOADED);   // a library file never reads a second time what the run already reads (Daisy stops on a definition made twice)
-    libIn.forEach(path => { const base = path.split('/').pop(); if (path.indexOf('lib/') === 0) { if (S.LOADED.has(base)) return; const t0 = files['lib:' + path]; if (t0 != null) libF['Common/' + base] = S.libClean(t0, false, DROP); libTxt.push('(input file "' + base + '")'); return; } const t = files['lib:' + path]; if (t == null) throw new Error('the file ' + path + ' of the Daisy library was not loaded'); libF['Common/' + base] = S.libClean(t, false, DROP); libTxt.push('(input file "' + base + '")'); });
+    libIn.forEach(path => { const base = path.split('/').pop(); if (path.indexOf('lib/') === 0) { if (S.LOADED.has(base)) return; const t0 = files['lib:' + path]; if (t0 != null) libF['Common/' + base] = S.libClean(t0, false, DROP); libTxt.push('(input file "' + base + '")'); return; } const t = files['lib:' + path]; if (t == null) throw new Error('the file ' + path + ' of the Daisy library was not loaded'); libF['Common/' + base] = S.libClean(t, false, DROP, !(o.logs || []).some(v => String(v).indexOf(path) >= 0)); libTxt.push('(input file "' + base + '")'); });
     { const seen = new Set(), walk = q => { (files['deps:' + q] || []).forEach(d => { if (seen.has(d)) return; seen.add(d); const t = files['libdep:' + d] != null ? files['libdep:' + d] : files['lib:' + d]; if (t != null && !libF['Common/' + d.split('/').pop()]) libF['Common/' + d.split('/').pop()] = S.libClean(t, false, DROP); walk(d); }); }; libIn.forEach(walk); if (o.prog) walk(String(o.prog).split('|')[1]); }   // the files the library files read in turn
     // the files of the library are read inside the rotation, after the files it reads itself (fertilizer.dai, crop.dai ...) and
     // before its own definitions, which use them; the path lets Daisy find the copies in Common first
@@ -284,7 +284,7 @@
   // column, output and run would replace those of the run); for a program, everything but its top-level run is kept
   // what a library file must not bring a second time: the files the run reads anyway, and the definitions the run makes itself
   S.DROP_DEFS = new Set(['Tracer']);
-  S.libClean = function (t, keepAll, drop) {
+  S.libClean = function (t, keepAll, drop, noLogs) {   // noLogs: the logs (deflog) of a sample file are left out: they need log models of the sample's own run, not of SWAFL
     const out = []; let i = 0, n = t.length;
     while (i < n) { const c = t[i];
       if (c === ';') { const e = t.indexOf('\n', i); i = e < 0 ? n : e + 1; continue; }
@@ -292,6 +292,7 @@
       let d = 0, j = i, str = false; for (; j < n; j++) { const ch = t[j]; if (str) { if (ch === '\\') j++; else if (ch === '"') str = false; continue; } if (ch === '"') str = true; else if (ch === ';') { const e = t.indexOf('\n', j); j = e < 0 ? n : e; } else if (ch === '(') d++; else if (ch === ')') { d--; if (d === 0) break; } }
       const form = t.slice(i, j + 1), head = (form.match(/^\(\s*([^\s()"]+)/) || [])[1] || '';
       let skip = false; if (drop) { if (head === 'input') { const f = (form.match(/"([^"]+)"/) || [])[1]; if (f && drop.has(f.split('/').pop())) skip = true; } else if (/^def/.test(head)) { const mm = form.match(/^\(\s*def\w+\s+(?:"([^"]+)"|([^\s()"]+))/), nm = mm ? (mm[1] || mm[2]) : ''; if (nm && S.DROP_DEFS.has(nm.trim())) skip = true; } }
+      if (noLogs && head === 'deflog') skip = true;
       if (!skip && (keepAll ? head !== 'run' : (/^def/.test(head) || head === 'input'))) out.push(form);
       i = j + 1; }
     return ';; from the Daisy samples, as SWAFL reads it (' + (keepAll ? 'its top-level run left out' : 'definitions and inputs only') + ')\n' + out.join('\n\n') + '\n';

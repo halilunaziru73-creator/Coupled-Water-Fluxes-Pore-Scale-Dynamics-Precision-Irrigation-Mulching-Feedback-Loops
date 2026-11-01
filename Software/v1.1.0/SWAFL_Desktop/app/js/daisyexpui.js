@@ -20,7 +20,8 @@
     return '<div class="dzpan" style="padding:4px 10px"><b>Experiments</b> <span class="pnote">a scenario is a ready-made small experiment: </span><button class="btn" id="dzXToScen">↳ Scenarios</button></div>' + (window.DaisyScenUI ? window.DaisyScenUI.strip() : '') + '<div class="dzpan"><div class="xhero"><div><h3>Experiments</h3><small>Plan, run and compare</small></div><div class="xsteps"><span><b>1</b>Choose</span><span><b>2</b>Check the plan</span><span><b>3</b>Run and read</span></div></div>' +
       '<div class="dzpan" id="dzXRef"><div class="dzrow" style="margin:0"><b>Start from the Daisy reference</b><button class="btn" id="dzXTabSug">Best combinations</button><button class="btn" id="dzXTabChap">By topic</button><button class="btn" id="dzXTabStd">Prepared experiments</button><button class="btn" id="dzXTabImp">Import data and set-ups</button></div><div id="dzXSug"></div><div id="dzXChap" style="display:none"></div><div id="dzXStd" style="display:none;margin-top:8px"><div class="dzrow"><select id="dzXPreSel">' + X.PRESETS.map(p => '<option value="' + p.id + '"' + (st.preset && st.preset.id === p.id ? ' selected' : '') + '>' + esc(p.id + '  ' + p.name) + '</option>').join('') + '</select><button class="btn" id="dzXPreGo">Load this experiment</button></div></div><div id="dzXImp" style="display:none"></div></div>' +
       '</div>' +
-      '<div id="dzXSet"></div><div id="dzXPlan"></div><div id="dzXRunBox"></div><div id="dzXRes"></div>';
+      '<div id="dzXSet"></div><div id="dzXPlan"></div><div id="dzXRunBox"></div><div id="dzXRes"></div>' +
+      '<div class="dzpan" style="margin-top:14px;border-top:3px solid #0A246A"><div class="dzrow" style="margin:0"><b>&#128193; Every simulated experiment</b><span class="pnote">the Daisy output files of every experiment and every run, in order: experiment, run, files</span><span style="flex:1"></span><button class="btn pri" id="dzXAllExp">See all the Daisy output files</button></div></div>';
   }
 
 
@@ -424,11 +425,11 @@
       let info = await window.swafl.daisyInfo(); if (!info.found) throw new Error(info.error || 'Daisy was not found.');
       const design = override || X.design(currentPlan()), files = await commonFiles(), jobs = await buildJobs(design, files), fids = override ? st.fids : design.factors.map(f => f.id);
       if (!override) { st.rows = []; st.runs = []; st.design0 = design; } else st.design0 = { runs: st.design0.runs.concat(design.runs), factors: st.design0.factors }; st.fids = fids; st.source = 'daisy'; st.running = true; st.stop = false; $('Batch').textContent = 'Stop'; const box = $('RunBox');
-      box.innerHTML = '<div class="dzpan"><b id="dzXProg">0 of ' + jobs.length + ' runs</b> <div id="dzXBar" style="height:8px;background:#e4e7ec;border-radius:4px;margin:6px 0"><div id="dzXBarIn" style="height:8px;width:0;background:#2b83ba;border-radius:4px"></div></div><div id="dzXList" class="pnote" style="max-height:120px;overflow:auto"></div></div>';
+      box.innerHTML = '<div class="dzpan"><b id="dzXProg">0 of ' + jobs.length + ' runs</b> <div id="dzXBar" style="height:8px;background:#e4e7ec;border-radius:4px;margin:6px 0"><div id="dzXBarIn" style="height:8px;width:0;background:#2b83ba;border-radius:4px"></div></div><div id="dzXList" class="pnote" style="max-height:120px;overflow:auto"></div></div><div id="dzXDiag"></div>'; st.fails = [];
       const grp = (((st.preset && st.preset.id) || st.pid || 'experiment') + '_' + String((st.res && st.res.plan && st.res.plan.title) || st.text || '').replace(/^E\d+\s*:?\s*/, '').replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 30) + '_' + SWAFLDate.stamp()).replace(/_+/g, '_'); st.grpDir = ''; let next = 0, done = 0, fail = 0; const t0 = Date.now(), nPar = seq ? 1 : st.jobs, lastDraw = { t: 0 };
       const work = async () => { while (next < jobs.length && !st.stop) { const { run: rn, job } = jobs[next++]; job.copyBundle = true; job.group = grp; job.runId = rn.id; let r; try { r = await window.swafl.daisyJob(job); } catch (e) { r = { code: -1, err: e.message, logs: {} }; }
         const logs = {}; Object.keys(r.logs || {}).forEach(n => { const k = SC.logKey(n) || (/\.dlf$/i.test(n) ? n.replace(/^.*[\\/]/, '').replace(/\.dlf$/i, '').replace(/^r\d+[-_]/, '').replace(/^exp[-_]/, '') : null); if (k) { try { const d = IO.readDlf(r.logs[n], n); if (d.n) logs[k] = d; } catch (e) { } } });
-        done++; if (!logs['Annual-Harvest']) { fail++; $('List').innerHTML += '<div style="color:#b3261e">' + esc(rn.id) + ' ' + esc(rn.label) + ': Daisy gave no results (code ' + r.code + '): ' + esc(((r.err || r.out || '') + '').split('\n').filter(l => /error/i.test(l)).slice(0, 1).join(' ') || 'see the set-up') + '</div>'; }
+        done++; if (!logs['Annual-Harvest']) { fail++; const e = window.DaisyDiag ? window.DaisyDiag.explain((r.err || '') + '\n' + (r.out || ''), job.files, r.code) : { title: 'Daisy gave no results', msg: String(r.err || r.out || '').split('\n').filter(l => /error/i.test(l))[0] || '' }; st.fails.push({ id: rn.id, label: rn.label, e }); $('List').innerHTML += '<div style="color:#b3261e">' + esc(rn.id) + ' ' + esc(rn.label) + ': <b>' + esc(e.title) + '</b> (' + esc(e.msg) + ')</div>'; if (window.DaisyDiag) { const dg = $('Diag'); if (dg) dg.innerHTML = window.DaisyDiag.panel(st.fails); } }
         else { const sx = DaisyFig.stats({ logs }); st.rows.push({ id: rn.id, label: rn.label, val: rn.val, f: rn.val, r: X.respOf(sx), reference: !!rn.reference }); const ri = {}; Object.keys(r.logs || {}).forEach(n => { ri[n] = (r.logs[n] || '').length; }); if (r.saved && !st.grpDir) st.grpDir = r.saved.replace(/[\\/][^\\/]+$/, ''); st.runs.push({ id: rn.id, label: rn.label, logs, options: job.options, saved: r.saved, savedError: r.savedError, rawIndex: ri, raw: r.saved ? undefined : r.logs, short: X.shortLabel ? X.shortLabel(rn.val, rn.reference) : '' }); }
         const pct = Math.round(done / jobs.length * 100); $('Prog').textContent = done + ' of ' + jobs.length + ' runs' + (fail ? ', ' + fail + ' without results' : '') + ' (' + Math.round((Date.now() - t0) / 1000) + ' s)'; $('BarIn').style.width = pct + '%';
         if (Date.now() - lastDraw.t > 2500 && st.rows.length >= 3) { lastDraw.t = Date.now(); drawResults(); } } };
@@ -471,6 +472,22 @@
   // every output of the experiment and every raw file, in the full-screen viewer and editor before they are saved
   // the outputs of the Daisy simulation (every file Daisy wrote, run by run: the .dlf logs and daisy.log), in the full-screen viewer and editor
   // before they are saved; no figures here, only what Daisy wrote. Edits made in the table of the raw files are already in place.
+  // every experiment ever run, in order (the folders of the experiments, then their runs, then the files Daisy wrote), in the full-screen
+  // viewer with the Notepad++ colours; a file is read from the disk when it is opened. Without the desktop app: the experiments of this session
+  async function browseAll() {
+    const b = $('AllExp'); if (b) { b.disabled = true; b.textContent = 'Reading the folders...'; }
+    try { const tree = {}; let n = 0, where = '';
+      if (window.swafl && window.swafl.daisyListRuns && window.swafl.daisyReadFile) { const L = await window.swafl.daisyListRuns(), runs = (L && L.runs) || (Array.isArray(L) ? L : []); where = (L && L.root) || '';
+        runs.slice().sort((a, c) => String(a.rel).localeCompare(String(c.rel), undefined, { numeric: true })).forEach(r => { const rel = String(r.rel || '').replace(/\/Run$/i, ''), files = (r.logs || []).slice().sort((a, c) => a.localeCompare(c, undefined, { numeric: true })).concat(['daisy.log']);
+          files.forEach(f => { tree[(rel || 'run') + '/' + f] = async () => { const t = await window.swafl.daisyReadFile(String(r.dir).replace(/[\\/]+$/, '') + '/' + f); return t == null ? '(this run has no ' + f + ')' : t; }; n++; }); }); }
+      const sess = [];
+      if (!n) { (st.set || []).forEach((it, i) => { if (it.res && it.res.runs) sess.push(['E' + (i + 1) + ' ' + it.label, it.res.runs]); }); if (st.runs.length && !sess.some(x => x[1] === st.runs)) sess.push([((st.preset && st.preset.id) || 'Experiment') + ' (now)', st.runs]);
+        sess.forEach(([lab, runs]) => runs.forEach(r => { const fl = Object.keys(r.raw || r.rawIndex || {}).sort((a, c) => a.localeCompare(c, undefined, { numeric: true })); fl.forEach(f => { const p0 = String(lab).replace(/[\\/:*?"<>|]+/g, '-') + '/' + (r.id || 'run') + (r.short ? ' ' + String(r.short).replace(/[\\/:*?"<>|]+/g, '-') : '') + '/' + f; tree[p0] = r.raw && r.raw[f] != null ? r.raw[f] : (r.saved && window.swafl && window.swafl.daisyReadFile ? async () => await window.swafl.daisyReadFile(r.saved.replace(/[\\/]+$/, '') + '/Run/' + f) : '(kept only on the computer that ran it)'); n++; }); })); }
+      if (!n) { D.note('Xst', 'No experiment has been run yet: run one with Run all, and its Daisy output files appear here.', 1); return; }
+      showFolder(tree, 'all_daisy_outputs_' + SWAFLDate.stamp() + '.zip', () => D.note('Xst', 'All the Daisy output files are saved as one .zip.'), { title: 'Every simulated experiment: the Daisy output files' + (where ? ' (' + where + ')' : ''), full: true, theme: 'npp' });
+    } catch (e) { D.note('Xst', 'Could not list the experiments: ' + e.message, 1); }
+    finally { if (b) { b.disabled = false; b.textContent = 'See all the Daisy output files'; } }
+  }
   async function viewOutputs(ev) {
     const b = (ev && ev.target && ev.target.closest && ev.target.closest('button')) || $('ViewOut'); if (!st.runs.length) return; if (b) b.disabled = true; const lab = b ? b.textContent : '';
     try { if (b) b.textContent = 'Reading the files of Daisy...'; const name = ((st.preset && st.preset.id) || st.pid || 'experiment') + '_' + SWAFLDate.stamp(), tree = {};
@@ -653,7 +670,7 @@
     if (window.DaisyScenUI && !st.hooked) { st.hooked = true; window.DaisyScenUI.onWx(() => { st.wxPick = null; st.useMy = true; if (st.res) renderPlan(); }); }
     { const ts = $('ToScen'); if (ts) ts.onclick = () => D.open('scen'); }
     { const pg = $('PreGo'); if (pg) pg.onclick = () => { const p = X.PRESETS.find(x => x.id === $('PreSel').value); if (p) usePreset(p); }; }
-    renderSet(); showSuggestions(); showChapters(); $('TabSug').onclick = () => tab('sug'); $('TabChap').onclick = () => tab('chap'); $('TabStd').onclick = () => tab('std'); $('TabImp').onclick = () => tab('imp'); showImport(); tab(st.tab || 'sug'); if (window.DaisyScenUI) window.DaisyScenUI.bindStrip();
+    { const ax = $('AllExp'); if (ax) ax.onclick = () => browseAll(); } renderSet(); showSuggestions(); showChapters(); $('TabSug').onclick = () => tab('sug'); $('TabChap').onclick = () => tab('chap'); $('TabStd').onclick = () => tab('std'); $('TabImp').onclick = () => tab('imp'); showImport(); tab(st.tab || 'sug'); if (window.DaisyScenUI) window.DaisyScenUI.bindStrip();
     if (st.res) renderPlan(); if (st.rows.length) drawResults();
   }
   // an item of the Library tab becomes a value of the experiment

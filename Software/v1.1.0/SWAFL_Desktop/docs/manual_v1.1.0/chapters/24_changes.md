@@ -26,6 +26,11 @@
 
 ## Figures of experiments and the Daisy layers
 
+* **Why a run gave no results**: the root cause of every Daisy error in plain words (unknown name, numerical problem, value out of range, missing file, weather, syntax), with the line of the set-up and what to do; runs with the same cause together.
+* Horizons taken from the Daisy samples no longer bring the logs of their own run (the error Unknown 'log' model 'crop' is gone).
+* **See all the Daisy output files**, at the bottom of Experiments: every experiment, run and file in order, in the Notepad++ viewer.
+* Log plots follow the runs: new runs replace those of the previous experiment.
+
 * **Summary of an experiment**: what was varied, the range of every result, the effect of every input on every result as a coloured table and in words; saved as summary.csv.
 * **Log plots with several runs**: every run with the same log together, or two runs against each other, in any of the figures; a new *Full range over time* view.
 
