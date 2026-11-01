@@ -1101,6 +1101,32 @@ Every experiment of the study (E0 to E16) has its own question, its own design a
 
 ![The processes of Daisy in one experiment: the factors (F, orange) act on the processes in the middle, drawn in the fills of Fig. 1 of Daisy, and the results (R, blue) come from them.](images/daisy11/daisy_exp_procs.png){width=100%}
 
+## Every log of every run {#daisy-every-log}
+
+Under the figures of an experiment, the panel **Every log of every run** turns everything Daisy wrote into figures: every log of the runs (the daily and the annual logs, and every log of the Daisy library that was added to the runs) and every quantity in it, one figure each. Nothing has to be chosen first; the quantities a paper usually shows come first (leaf area index, the storage organ, the development stage, evapotranspiration, transpiration, soil evaporation, percolation and leaching, crop nitrogen, nitrate, stress, water content), then all the others.
+
+* **The layout of a journal figure.** One panel for each value of one factor (*Panels by*), one line for each value of a second factor (*Lines by*, or *every run* for one line per run), the other factors averaged over the runs that share these two values. All panels have one y scale and are lettered (a), (b), (c); the grey strip over a panel names its value; the legend is written once under the panels. Lines for numbers in three or more steps follow a colour ramp (viridis), other lines the Okabe-Ito colours.
+* **Daily logs** are drawn *through the year* (the default): for every day of the year, the mean (or the median, *Line*) of all seasons and runs on that day, with 10 to 90 % of them as the shaded band, so the typical season and its spread are seen at once. *Over the whole period* draws every day of the run instead, with the lowest and the highest run as the band.
+* **Annual logs** are drawn year by year, with open circles on the seasons and the lowest to the highest run as the band. The first record of an annual log (the start of the run, zero) is left out.
+* **Depth logs** (water content, pressure, nitrate, temperature at each depth) give two figures: a map of depth (down) against time, one map for each value of the panel factor with one colour scale for all, and the profile, the mean at each depth with 10 to 90 % of the days and runs as the band.
+* *Log* shows the figures of one log, and the search box finds a quantity by its name (LAI, nitrate, evaporation). The note above every figure says what it shows: the log, the statistic, the band, and the factors that were averaged.
+* Every figure has the same toolbar as the others (titles, picture at screen resolution, 300 or 600 dpi, the numbers as a CSV table). *Save these figures (.zip)* saves all of them; they are also saved with the outputs of the experiment.
+
+The daily figures need daily logs. **Results saved** under the plan is now *yearly totals and daily crop, water and soil water* by default, so every experiment writes them; *yearly totals only* is faster but gives the annual figures alone.
+
+![Leaf area index through the year: one panel for each water limit, one line for rainfed and irrigated, the mean of the seasons with 10 to 90 % as the band.](images/daisy11/daisy_ts_lai.png){width=100%}
+
+![Water content over depth and time, one map for each water limit with one colour scale, followed by the profiles.](images/daisy11/daisy_ts_theta.png){width=100%}
+
+## Saving the outputs and the raw files of Daisy together
+
+The results bar has three ways to save: *Save the outputs of this experiment* (README, plan, design, results table and every figure, written next to the runs on the desktop), *as a zip*, and **Save both: outputs and raw Daisy files**, one .zip with two folders:
+
+* *Outputs/*: everything SWAFL made from the runs, the figures of every log included, each as a picture at 300 dpi with the numbers behind it as a CSV table.
+* *Raw/*: one folder for every run, with *outputs/* (the .dlf logs and daisy.log exactly as Daisy wrote them) and *setup/* (Runfile.dai and the files it includes), so every run can be repeated and every figure checked against the numbers of Daisy.
+
+On the desktop the outputs are written next to the runs as well. In the table of the raw output of a run, the name of the run is written once, beside all of its files.
+
 ## The crops of the rotation
 
 By default the farm grows spring barley, winter barley, winter rape and winter wheat (twice). In Scenarios and in Experiments the panel *Choose the crops of the rotation myself* replaces them: add any crop of the Daisy library, put the crops in the order of the rotation, and give each one its date of tillage, its date of sowing, its fertiliser (month and day with the kilograms of nitrogen per hectare, for example 04-05:160,05-05:70), the latest date of harvest and whether to harvest when the crop is ripe. The four crops of the built-in farm are tested; the others are templates (marked so in the list) whose dates and nitrogen should be checked against local practice. The nitrogen factor, the tillage, the fertiliser type and the irrigation of the scenario or the experiment act on the chosen crops in the same way.

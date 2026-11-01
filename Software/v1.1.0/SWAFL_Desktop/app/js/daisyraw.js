@@ -23,7 +23,7 @@ window.DaisyRaw = (() => {
     else if (desk) h += '<p class="pnote" style="margin:4px 0">The run folder could not be kept on this computer' + (runs[0].savedError ? ' (' + esc(runs[0].savedError) + ')' : '') + '; the buttons below still give every file.</p>';
     h += '<div class="dzrow"><button class="btn pri" data-raw-zip="out">Download all raw outputs (.zip)</button><button class="btn" data-raw-zip="all">Download outputs and set-up (.zip)</button></div>';
     h += '<div style="overflow:auto;max-height:340px"><table class="dzt"><tr><th>Run</th><th>File</th><th>What it holds</th><th>Rows</th><th>Columns</th><th>Size</th><th></th></tr>';
-    runs.forEach((r, i) => filesOf(r).forEach(n => { const parsed = r.logs && r.logs[(window.DaisyScen && window.DaisyScen.logKey ? window.DaisyScen.logKey(n) : '')]; h += '<tr><td>' + esc(r.label || r.id) + '</td><td><code>' + esc(n) + '</code></td><td>' + esc(describe(n)) + '</td><td>' + (parsed ? parsed.n : '') + '</td><td>' + (parsed ? parsed.cols.length : '') + '</td><td>' + size(sizeOf(r, n)) + '</td><td><button class="btn" data-raw-file="' + i + '|' + esc(n) + '">Download</button></td></tr>'; }));
+    runs.forEach((r, i) => filesOf(r).forEach((n, fi, all) => { const parsed = r.logs && r.logs[(window.DaisyScen && window.DaisyScen.logKey ? window.DaisyScen.logKey(n) : '') || n.replace(/\.dlf$/i, '').replace(/^r\d+[-_]/, '')]; h += '<tr>' + (fi === 0 ? '<td rowspan="' + all.length + '" style="vertical-align:top;max-width:280px;background:#f6f8fa"><b>' + esc(r.id || '') + '</b><br><span class="pnote">' + esc(r.label || '') + '</span></td>' : '') + '<td><code>' + esc(n) + '</code></td><td>' + esc(describe(n)) + '</td><td>' + (parsed ? parsed.n : '') + '</td><td>' + (parsed ? parsed.cols.length : '') + '</td><td>' + size(sizeOf(r, n)) + '</td><td><button class="btn" data-raw-file="' + i + '|' + esc(n) + '">Download</button></td></tr>'; }));
     return h + '</table></div></div>';
   }
   function bind(host, runs, opt) {
@@ -37,5 +37,7 @@ window.DaisyRaw = (() => {
       const z = window.DaisyExp.zip(f), blob = new Blob([z], { type: 'application/zip' }), a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = SWAFLDate.name((opt.name || 'daisy') + (all ? '-outputs-and-setup.zip' : '-raw-outputs.zip')); a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
     });
   }
-  return { html, bind, describe };
+  // every raw file of the runs as a map { path: text }, under root/<run>/outputs and root/<run>/setup
+  async function collect(runs, root, setup) { const f = {}; runs = (runs || []).filter(r => r && (r.raw || r.rawIndex || r.saved)); for (const r of runs) { const d = root + '/' + sane(r.id || r.label) + '/'; for (const n of filesOf(r)) { const t = await get(r, n); if (t != null) f[d + 'outputs/' + n] = t; } if (setup) { const s = r.setup || {}; Object.keys(s).forEach(n => { f[d + 'setup/' + n] = s[n]; }); if (!r.setup && r.runfile) f[d + 'setup/Run/Runfile.dai'] = r.runfile; } } return f; }
+  return { html, bind, describe, collect };
 })();

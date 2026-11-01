@@ -26,6 +26,11 @@
 
 ## Figures of experiments and the Daisy layers
 
+* **Every log of every run**: every quantity of every log Daisy wrote becomes a journal-style figure (panels by one factor, lines by another, a band for the spread): daily logs through the year or over the whole period, annual logs year by year, depth logs as depth-time maps and profiles.
+* Experiments write daily crop, water and soil-water logs by default, so the time series are always there.
+* **Save both**: the outputs of the experiment and the raw files of Daisy (with the set-up) in one .zip.
+* The table of raw files names each run once.
+
 * The figures of an experiment begin with **every run as one row** (each combination with its own results) and **the main effect of each factor** with its standard error and number of runs. When only some combinations were run, the figures by factor give way to the run-by-run figures.
 * Water and nitrogen balances are drawn **run by run** as stacked bars when the design is not complete.
 * The processes of an experiment or a scenario are a **three-column diagram**: factors, the processes of Daisy involved in the colours of Fig. 1, results.
