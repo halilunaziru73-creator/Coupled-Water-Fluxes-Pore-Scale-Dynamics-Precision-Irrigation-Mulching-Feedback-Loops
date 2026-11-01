@@ -23,6 +23,15 @@
 * Daisy: Run comparison gives a verdict in plain words, a table with the means, the differences, the RMS difference, the largest difference and its date, r and the Nash-Sutcliffe efficiency, three figures for every quantity, and a double-blind comparison with a sealed key.
 * New SWAFL layers from Daisy runs: D2 Daisy water balance, D3 Daisy nitrogen balance and D4 Yield risk and limiting factor.
 
+
+## Figures of experiments and the Daisy layers
+
+* The figures of an experiment begin with **every run as one row** (each combination with its own results) and **the main effect of each factor** with its standard error and number of runs. When only some combinations were run, the figures by factor give way to the run-by-run figures.
+* Water and nitrogen balances are drawn **run by run** as stacked bars when the design is not complete.
+* The processes of an experiment or a scenario are a **three-column diagram**: factors, the processes of Daisy involved in the colours of Fig. 1, results.
+* No figure says *not drawn*: figures and process chips without data are left out.
+* In the layers D1 to D8, the runs of an experiment are named by **short labels** of their values; every label is cut to its room with an ellipsis, chips wrap by their measured width, and the tags of the scatter plots are placed where they do not touch a point or another tag.
+
 ## The designs
 
 * Inputs are **value boxes** with exact values, units and a list of the allowed range (Section 18.2).

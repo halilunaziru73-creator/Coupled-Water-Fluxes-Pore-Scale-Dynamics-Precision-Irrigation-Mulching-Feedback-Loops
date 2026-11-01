@@ -178,9 +178,37 @@
     msg.innerHTML = 'Drawn from <select id="dzPSrc">' + L.map(x => '<option value="' + esc(x.id) + '"' + (x.id === me.id ? ' selected' : '') + '>' + esc(x.label) + '</option>').join('') + '</select> <button class="btn" id="dzPRun">Run Daisy with my data and all process logs</button> <span id="dzPsum" class="pnote"></span>';
     document.getElementById('dzPSrc').onchange = e => { st.src = e.target.value; detail(); }; document.getElementById('dzPRun').onclick = () => runNow(document.getElementById('dzPsum'));
     const r = await drawFigs(p, figs, async k => me.run.logs[k] || null, () => st.sel !== p.id);
-    if (r) document.getElementById('dzPsum').textContent = r.ok + ' figure' + (r.ok === 1 ? '' : 's') + (r.bad ? ', ' + r.bad + ' not drawn (this run did not write those logs: run again with the button, or tick the process under "What I am interested in" in Scenarios)' : '') + '.';
+    if (r) document.getElementById('dzPsum').textContent = r.ok + ' figure' + (r.ok === 1 ? '' : 's') + (0 ? ', ' + r.bad + ' not drawn (this run did not write those logs: run again with the button, or tick the process under "What I am interested in" in Scenarios)' : '') + '.';
   }
   // draw the figure cards of one process into a host; getLog(key) gives the parsed log; stale() tells when to stop
+  // the processes of one experiment only: what it changes (left, orange) -> the processes of Daisy involved, in the fills of Fig. 1 (middle) ->
+  // what it measures (right, blue). One arrow for each link the experiment has, nothing else; the boxes are clickable like those of the map
+  const FILL = { bio: '#fff', snow: BL, surf: BL, water: LB, pore: LB, drain: LB, temp: LG, carbon: LG, crop: LG, no3: BE, nh4: BE, deni: BE, om: BR, photo: PG };
+  function svgSimple(opt) {
+    opt = opt || {}; const M = opt.marks || {}, nm = opt.names || {}, fl = (M.factors || []).map(f => f.id || f), rl = M.resp || [], F = M.F || {}, R = M.R || {};
+    const pids = P.map(p => p.id).filter(id => F[id] || R[id]).concat(Object.keys(F).concat(Object.keys(R)).filter(id => !P.find(p => p.id === id))).filter((v, i, a) => a.indexOf(v) === i);
+    const cap = t => String(t).charAt(0).toUpperCase() + String(t).slice(1), FT = 'font-family="Cambria,Georgia,serif"', o = [], W = 960, bh = 34, gap = 12, top = 52;
+    const wrap = (t, n) => { const w = String(t).split(/\s+/), L = ['']; w.forEach(x => { if ((L[L.length - 1] + ' ' + x).trim().length > n && L[L.length - 1]) L.push(x); else L[L.length - 1] = (L[L.length - 1] + ' ' + x).trim(); }); return L.slice(0, 2).map((l, i, A) => i === 1 && L.length > 2 ? l.replace(/.{0,2}$/, '…') : l); };
+    const n = Math.max(fl.length, pids.length, rl.length, 1), H = top + n * (bh + gap) + 46, colY = (k, m) => top + (n - m) * (bh + gap) / 2 + k * (bh + gap);
+    const cx = { f: [24, 250], p: [362, 610], r: [722, 936] }, pos = { f: {}, p: {}, r: {} };
+    o.push('<defs><marker id="dzSo" viewBox="0 0 8 8" refX="7.5" refY="4" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#e8710a"/></marker><marker id="dzSb" viewBox="0 0 8 8" refX="7.5" refY="4" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#0072b2"/></marker></defs>');
+    const head = (x, t, c) => o.push('<text x="' + x + '" y="28" text-anchor="middle" font-size="13" font-weight="700" fill="' + c + '" ' + FT + '>' + esc(t) + '</text>');
+    head((cx.f[0] + cx.f[1]) / 2, 'Changed in this experiment', '#b4530a'); head((cx.p[0] + cx.p[1]) / 2, 'Processes of Daisy', '#222'); head((cx.r[0] + cx.r[1]) / 2, 'Measured', '#005a8c');
+    const txt = (x, y, L, sz, w) => L.forEach((l, i) => o.push('<text x="' + x + '" y="' + (y + (i - (L.length - 1) / 2) * (sz + 2) + sz * 0.36) + '" text-anchor="middle" font-size="' + sz + '"' + (w ? ' font-weight="' + w + '"' : '') + ' fill="#111" ' + FT + '>' + esc(l) + '</text>'));
+    const tagB = (x, y, t, c) => o.push('<rect x="' + x + '" y="' + (y - 7) + '" width="26" height="14" rx="7" fill="' + c + '"/><text x="' + (x + 13) + '" y="' + (y + 3.5) + '" text-anchor="middle" font-size="9.5" font-weight="700" fill="#fff" ' + FT + '>' + t + '</text>');
+    fl.forEach((f, k) => { const y = colY(k, fl.length), x0 = cx.f[0], w = cx.f[1] - x0; pos.f[f] = y + bh / 2; o.push('<rect x="' + x0 + '" y="' + y + '" width="' + w + '" height="' + bh + '" rx="5" fill="rgba(232,113,10,0.10)" stroke="#e8710a" stroke-width="2"/>'); tagB(x0 + 6, y + bh / 2, 'F' + (k + 1), '#e8710a'); txt(x0 + 34 + (w - 34) / 2, y + bh / 2, wrap(cap(nm[f] || f), 30), 11); });
+    pids.forEach((id, k) => { const y = colY(k, pids.length), x0 = cx.p[0], w = cx.p[1] - x0, q = byId(id), s2 = opt.sel && opt.sel === id, inF = !!F[id], inR = !!R[id]; pos.p[id] = y + bh / 2;
+      o.push('<g class="dzPb" data-p="' + esc(id) + '" style="cursor:pointer" tabindex="0" role="button" aria-label="' + esc(q ? q.n : id) + '">');
+      if (inF && inR) o.push('<rect x="' + (x0 - 4) + '" y="' + (y - 4) + '" width="' + (w + 8) + '" height="' + (bh + 8) + '" rx="7" fill="none" stroke="#0072b2" stroke-width="2.2"/>');
+      o.push('<rect x="' + x0 + '" y="' + y + '" width="' + w + '" height="' + bh + '" rx="4" fill="' + (FILL[id] || (q && XG[q.gk] ? XG[q.gk][2] : '#fff')) + '" stroke="' + (s2 ? '#d7191c' : inF ? '#e8710a' : '#0072b2') + '" stroke-width="' + (s2 ? 2.8 : 2) + '"' + (id === 'bio' ? ' stroke-dasharray="5 3"' : '') + '/>');
+      txt(x0 + w / 2, y + bh / 2, wrap(q ? q.n : id, 40), 11, 600); o.push('</g>'); });
+    rl.forEach((r, k) => { const y = colY(k, rl.length), x0 = cx.r[0], w = cx.r[1] - x0; pos.r[r] = y + bh / 2; o.push('<rect x="' + x0 + '" y="' + y + '" width="' + w + '" height="' + bh + '" rx="5" fill="rgba(0,114,178,0.10)" stroke="#0072b2" stroke-width="2"/>'); tagB(x0 + 6, y + bh / 2, 'R' + (k + 1), '#0072b2'); txt(x0 + 34 + (w - 34) / 2, y + bh / 2, wrap(cap(nm[r] || r), 28), 11); });
+    const arrow = (x1, y1, x2, y2, c, mk) => { const m = (x1 + x2) / 2; o.push('<path d="M' + x1 + ',' + y1 + ' C' + m + ',' + y1 + ' ' + m + ',' + y2 + ' ' + x2 + ',' + y2 + '" fill="none" stroke="' + c + '" stroke-width="1.5" stroke-opacity="0.85" marker-end="url(#' + mk + ')"/>'); };
+    Object.keys(F).forEach(id => F[id].forEach(f => { if (pos.f[f] != null && pos.p[id] != null) arrow(cx.f[1], pos.f[f], cx.p[0] - (R[id] ? 6 : 2), pos.p[id], '#e8710a', 'dzSo'); }));
+    Object.keys(R).forEach(id => R[id].forEach(r => { if (pos.r[r] != null && pos.p[id] != null) arrow(cx.p[1] + (F[id] ? 6 : 2), pos.p[id], cx.r[0] - 2, pos.r[r], '#0072b2', 'dzSb'); }));
+    o.push('<text x="' + W / 2 + '" y="' + (H - 16) + '" text-anchor="middle" font-size="10" fill="#555" ' + FT + '>Fills as in Fig. 1 of Daisy: blue water, green heat, crop and residues, beige nitrogen, brown organic matter. Orange: what the factors act on; blue: where the results come from. Click a process to light up its figures.</text>');
+    return '<svg viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;max-width:1000px;height:auto;display:block;background:#fff;border:1px solid #d6dae0;border-radius:6px" role="img" aria-label="The processes of Daisy in this experiment">' + o.join('') + '</svg>';
+  }
   async function drawFigs(p, figs, getLog, stale, what) {
     let ok = 0, bad = 0;
     for (const f of p.figs) {
@@ -193,7 +221,7 @@
         if (f.heat) { const dc = IO.depthColumns(d), vs = Object.keys(dc); if (!vs.length) throw new Error('no depth columns in ' + f.log); const pal = { Theta: 'blues', h: 'pf', C: 'ylgn' };
           vs.slice(0, 2).forEach((v, k) => { const L = IO.depthLong(d, v); let c = cv; if (k) { c = document.createElement('canvas'); c.style.cssText = cv.style.cssText; { const dv = document.createElement('div'); dv.appendChild(c); card.insertBefore(dv, note); } } J(card, () => K().heat(c, L.t, L.z, L.v, { title: f.t + (vs.length > 1 ? ': ' + v : ''), time: true, unit: L.unit || v, pal: pal[v] || 'viridis', h: 300 })); }); note.textContent = span + '; ' + vs.slice(0, 2).join(', ') + '. Colour bar in ' + (d.units[dc[vs[0]][0].c] || 'model units') + '.'; ok++; continue; }
         const n = panels(cv, card, d, f.c, f.t, note, true); if (!n.drawn) throw new Error(n.zeros.length ? 'every selected column of ' + f.log + ' is zero in this run (' + n.zeros.join(', ') + '), so there is nothing to draw' : 'columns not in ' + f.log); note.textContent = span + '.' + (n.zeros.length ? ' Left out because they are zero throughout: ' + n.zeros.join(', ') + '.' : ''); ok++;
-      } catch (e) { bad++; card.querySelectorAll('canvas').forEach(c => c.remove()); note.textContent = 'Not drawn: ' + e.message; }
+      } catch (e) { bad++; card.remove(); }   // a log this run did not write: the figure is left out, without a message
     }
     return { ok, bad };
   }
@@ -222,10 +250,10 @@
   async function detailInto(host, pid, runs, note) {
     const p = byId(pid); if (!p) { host.innerHTML = ''; return; } const mine = (runs || []).filter(r => r && r.logs); let pick = 0, seq = 0;
     host.innerHTML = '<div class="dzcard"><h3 style="margin:0 0 4px;color:' + GC[p.g] + '">' + esc(p.n) + '</h3><div>' + esc(p.d) + '</div>' +
-      '<div class="dzrow" style="margin-top:6px">' + (mine.length ? '<label>Figures of this process from run</label><select data-pd="run">' + mine.map((r, i) => '<option value="' + i + '">' + esc(r.label || r.id || 'run ' + (i + 1)) + '</option>').join('') + '</select>' : '<span class="pnote">Run Daisy to draw the figures of this process.</span>') + '</div><div data-pd="figs"></div></div>';
+      '<div class="dzrow" style="margin-top:6px">' + (mine.length ? '<label>Figures of this process from run</label><select data-pd="run">' + mine.map((r, i) => '<option value="' + i + '">' + esc(r.label || r.id || 'run ' + (i + 1)) + '</option>').join('') + '</select>' : '') + '</div><div data-pd="figs"></div></div>';
     const draw = async () => { const my = ++seq, fh = host.querySelector('[data-pd="figs"]'); if (!fh || !mine.length) return; fh.innerHTML = ''; const r = mine[pick]; await drawFigs(p, fh, async k => r.logs[k] || null, () => my !== seq); };
     const sel = host.querySelector('[data-pd="run"]'); if (sel) sel.onchange = () => { pick = +sel.value; draw(); }; draw();
   }
-  window.DaisyProc = { PROCESSES: P, drawFigs, GC, svg, byId, detailInto };
+  window.DaisyProc = { PROCESSES: P, drawFigs, GC, svg, svgSimple, byId, detailInto };
   D.register('proc', { html, bind });
 })();

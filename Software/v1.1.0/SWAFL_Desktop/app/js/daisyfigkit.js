@@ -75,6 +75,8 @@ window.DaisyFigKit = (() => {
   // the processes of one figure as chips; a click opens the figures of that process inside the card
   K.procStrip = function (card, procs, runsFn, note) {
     const P = window.DaisyProc; if (!P || !procs || !procs.length) return; const old = card.querySelector('.dzchips'); if (old) old.remove();
+    // only the processes the runs wrote the logs of: a chip always opens figures, never an empty box
+    const RR = (runsFn ? runsFn() : []).filter(r => r && r.logs); procs = procs.filter(id => { const p = P.byId(id); return p && RR.some(r => (p.figs || []).some(f => r.logs[f.log])); }); if (!procs.length) return;
     const d = document.createElement('div'); d.className = 'dzchips'; d.style.cssText = 'display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin:3px 0';
     d.innerHTML = '<span class="pnote">Processes of this figure:</span>' + procs.map(id => { const p = P.byId(id); return p ? '<button class="mini" data-pc="' + id + '" title="' + p.d.replace(/"/g, '&quot;') + '" style="border-left:6px solid ' + P.GC[p.g] + '">' + p.n + '</button>' : ''; }).join('') + '<div data-pcd style="flex-basis:100%"></div>';
     const t = card.querySelector('.dzrow'); (t || card.firstChild).after(d); let open = null;

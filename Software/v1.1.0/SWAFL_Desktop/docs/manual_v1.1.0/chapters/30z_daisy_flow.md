@@ -141,6 +141,8 @@ The three layers D2 to D4 read every run you made in this session. A row of butt
 
 Four more layers read every run of the session, from Scenarios and from Experiments alike: a run of an experiment is passed on as soon as the experiment has run. Each layer lists all runs it can show as buttons at the top, and a tap on any row of its tables or on any dot of its figures shows that run.
 
+**How the runs are named.** A run of an experiment is named in the layers by the short form of its values, factor after factor (for example *-14 d · N×0.7 · Sand · +2 °C · irrigated*: fertiliser 14 days earlier, 70 % of the nitrogen, the sandy soil, 2 °C warmer, irrigated), so every combination can be told from the others at a glance; the full name is shown when the pointer rests on the run. A run of a scenario keeps its name. Names that are longer than the room of their column or button end with an ellipsis, buttons wrap to a new line by their real width, and the names next to the points of a scatter plot are placed where they touch neither a point nor another name; a name that finds no free place is left out (the run is still named in the buttons and the tables).
+
 **D5 Chemicals and drinking water.** For every run with a chemical (the questions of the theme Chemicals, or an experiment with a chemical of the library):
 
 1. *Dose of the product*: the results are scaled from the dose of the run to 0.1, 0.25, 0.5, 1 or 2 kg/ha a season. With linear sorption and first-order decay, as in these runs, every amount leached is proportional to the dose.

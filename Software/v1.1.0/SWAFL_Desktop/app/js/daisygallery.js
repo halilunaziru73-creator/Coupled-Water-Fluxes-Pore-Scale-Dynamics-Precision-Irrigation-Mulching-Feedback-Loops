@@ -52,7 +52,7 @@ window.DaisyGallery = (() => {
     let x0 = null; const tOf = ev => { const g = cv._geo; if (!g) return null; const r = cv.getBoundingClientRect(), mx = (ev.clientX - r.left) * (cv.width / r.width) / (window.devicePixelRatio || 1); return g.x0 + (Math.max(g.L, Math.min(g.L + g.pw, ev.clientX - r.left)) - g.L) / g.pw * (g.x1 - g.x0); };
     if (f.kind === 'ts' && d.time) { cv.addEventListener('mousedown', e => { x0 = tOf(e); }); cv.addEventListener('mouseup', e => { const x1 = tOf(e); if (x0 != null && x1 != null && Math.abs(x1 - x0) > 864e5 * 2) { st.range = [Math.min(x0, x1), Math.max(x0, x1)]; draw(); } x0 = null; }); cv.addEventListener('dblclick', () => { st.range = null; draw(); }); }
     cv.addEventListener('mousemove', () => { const r = el.querySelector('[data-g="ro"]'); if (r) r.textContent = cv.title || ''; });
-    try { draw(); } catch (e) { el.querySelector('[data-g="cap"]').textContent = 'Not drawn: ' + e.message; }
+    try { draw(); } catch (e) { el.dataset.bad = 1; }
     if (FK()) FK().attach(el, { name: 'daisy-' + f.short + '-' + num, redraw: draw });
     return el;
   }
@@ -65,10 +65,10 @@ window.DaisyGallery = (() => {
       const out = host.querySelector('#dzGout'), st = host.querySelector('#dzGst'), list = sel.value === '*' ? D().names() : [sel.value]; out.innerHTML = ''; let n = 0, skipped = 0; const zeroNote = [];
       list.forEach(name => { const d = D().S.logs[name]; if (!d || !d.cols) return; const pl = plan(name, d); if (pl.zeros.length) zeroNote.push(name.replace(/.*\//, '') + ': ' + pl.zeros.join(', '));
         if (list.length > 1) { const h = document.createElement('h4'); h.style.cssText = 'margin:14px 0 2px;color:#154378'; h.textContent = name; out.appendChild(h); }
-        pl.figs.forEach(f => { if (n >= MAXFIG) { skipped++; return; } n++; card(out, f, d, n); }); });
+        pl.figs.forEach(f => { if (n >= MAXFIG) { skipped++; return; } n++; const e2 = card(out, f, d, n); if (e2 && e2.dataset.bad) { e2.remove(); n--; } }); });
       if (FK() && n) FK().bar(out, { name: 'daisy-results' });
       if (zeroNote.length) out.insertAdjacentHTML('beforeend', '<details class="pnote" style="margin-top:6px"><summary>Columns left out because they are zero throughout</summary>' + zeroNote.map(esc).join('<br>') + '</details>');
-      st.textContent = n + ' figure' + (n === 1 ? '' : 's') + ' made' + (skipped ? '; ' + skipped + ' more not drawn (choose one log to see them)' : '') + '.';
+      st.textContent = n + ' figure' + (n === 1 ? '' : 's') + ' made' + (skipped ? ' (the first ' + n + '; choose one log for all of its figures)' : '') + '.';
     };
   }
   return { mount, plan };

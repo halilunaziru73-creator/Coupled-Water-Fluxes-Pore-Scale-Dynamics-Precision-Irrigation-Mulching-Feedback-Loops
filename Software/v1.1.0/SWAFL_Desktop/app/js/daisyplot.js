@@ -166,10 +166,10 @@ window.DaisyPlot = (() => {
 
   // horizontal bars with the value written at the end (sensitivity, ranking)
   function hbars(cv, labels, vals, o) {
-    o = o || {}; const n = labels.length, rowH = 30, F = frame(cv, Object.assign({}, o, { h: (o.h || 0) || 70 + n * rowH }), 200), { g, w, h } = F; g.font = '12px ' + FONT;
+    o = o || {}; const n = labels.length, rowH = 30, F = frame(cv, Object.assign({}, o, { h: (o.h || 0) || 86 + n * rowH }), 200), { g, w, h } = F; g.font = '12px ' + FONT;
     const L = Math.min(260, Math.round(measureW(g, labels) + 18)), R = 150, T = F.top + 4, pw = w - L - R, mx0 = Math.max.apply(null, vals.filter(isFinite).concat([0])), flat = mx0 < 1e-9, mx = flat ? 1 : mx0, nn = nice(0, mx, 5), X = v => L + v / nn.hi * pw;
     g.strokeStyle = GRID; g.fillStyle = AXIS; g.textAlign = 'center'; nn.t.forEach(v => { g.beginPath(); g.moveTo(X(v), T); g.lineTo(X(v), T + n * rowH); g.stroke(); g.fillText(fmt(v, dec(nn.st)), X(v), T + n * rowH + 16); });
-    labels.forEach((lab, i) => { const y = T + i * rowH + 4, v = vals[i]; g.fillStyle = (o.colors && o.colors[i]) || OKI[0]; if (isFinite(v)) g.fillRect(L, y, Math.max(1.5, X(v) - L), rowH - 10); g.fillStyle = INK; g.textAlign = 'right'; g.fillText(lab, L - 8, y + 14); if (o.notes && o.notes[i]) { g.textAlign = 'left'; g.fillStyle = '#555'; g.font = '11.5px ' + FONT; g.fillText(o.notes[i], (isFinite(v) ? X(v) : L) + 6, y + 14); g.font = '12px ' + FONT; } });
+    labels.forEach((lab, i) => { const y = T + i * rowH + 4, v = vals[i]; g.fillStyle = (o.colors && o.colors[i]) || OKI[0]; if (isFinite(v)) g.fillRect(L, y, Math.max(1.5, X(v) - L), rowH - 10); g.fillStyle = INK; g.textAlign = 'right'; g.fillText(fitT(g, lab, L - 12), L - 8, y + 14); if (o.notes && o.notes[i]) { g.textAlign = 'left'; g.fillStyle = '#555'; g.font = '11.5px ' + FONT; g.fillText(o.notes[i], (isFinite(v) ? X(v) : L) + 6, y + 14); g.font = '12px ' + FONT; } });
     g.strokeStyle = AXIS; g.beginPath(); g.moveTo(L, T); g.lineTo(L, T + n * rowH); g.lineTo(L + pw, T + n * rowH); g.stroke(); if (flat) { g.fillStyle = '#b3261e'; g.textAlign = 'left'; g.fillText('The factors made no difference in these runs (all runs gave the same value).', L + 10, T + n * rowH / 2); }
     if (o.xt) { g.fillStyle = INK; g.textAlign = 'center'; g.fillText(o.xt, L + pw / 2, T + n * rowH + 34); }
   }
@@ -215,6 +215,54 @@ window.DaisyPlot = (() => {
     colourbar(g, L + pw + 22, T + 14, 13, Math.max(60, ph - 28), { title: o.unit || '', lo, hi, pal: o.pal || 'viridis', ticks: nice(lo, hi, 5).t.filter(v => v >= lo && v <= hi).map(v => ({ v, label: fmt(v, dec(nn.st || 1)) })) });
     cv._csv = () => { const rows = [['x', 'y', 'value']]; ys.forEach((yv, j) => xs.forEach((xv, i) => { if (isFinite(Z[j][i])) rows.push([xv, yv, Z[j][i]]); })); return rows; };
   }
-  const API = { line, surface, colourbar, ramp: (name, t) => rgb(lut(name), t), heat, hbars, matrix, groupBars, stackBars, nice, fmt, OKI, PAL, frame, legend, exportScale: 1 };
+  // ---------------------------------------------------------------- figures of experiments in the style of journals: facet strips, light panels, error bars
+  const STRIP = '#e9ebee', PANEL = '#fbfbfc';
+  const fitT = (g, t, w) => { t = String(t); if (g.measureText(t).width <= w) return t; while (t.length > 3 && g.measureText(t + '…').width > w) t = t.slice(0, -1); return t + '…'; };
+  const strip = (g, x, y, w, t) => { g.fillStyle = STRIP; g.fillRect(x, y, w, 20); g.fillStyle = INK; g.font = '600 12px ' + FONT; g.textAlign = 'center'; g.fillText(fitT(g, t, w - 8), x + w / 2, y + 14); g.font = '12px ' + FONT; };
+  /* every run of an experiment, one row each, with one panel per result (a dot chart): rows [{label, ref, vals:[...]}], cols [{title, unit, color}] */
+  function dotrows(cv, rows, cols, o) {
+    o = o || {}; const n = rows.length, rh = n > 40 ? 15 : 20, F = frame(cv, Object.assign({}, o, { h: (o.top0 || 40) + 64 + n * rh + (o.title ? 10 : 0) }), 300), { g, w } = F; g.font = '12px ' + FONT;
+    cv._csv = () => [['run'].concat(cols.map(c => c.title + (c.unit ? ' (' + c.unit + ')' : '')))].concat(rows.map(r => [r.label].concat(r.vals)));
+    const LW = Math.min(o.labelW || 300, Math.max(120, measureW(g, rows.map(r => r.label)) + 14)), T = F.top + 6, gap = 10, pw = (w - LW - 14 - gap * (cols.length - 1)) / cols.length, ph = n * rh + 6;
+    rows.forEach((r, i) => { const y = T + 22 + i * rh + rh / 2 + 4; g.fillStyle = r.ref ? '#777' : INK; g.textAlign = 'right'; g.font = (r.bold ? '600 ' : '') + (n > 40 ? 11 : 12) + 'px ' + FONT; g.fillText(fitT(g, r.label, LW - 8), LW - 6, y); });
+    cols.forEach((c, k) => { const x0 = LW + k * (pw + gap), v = rows.map(r => r.vals[k]).filter(isFinite); strip(g, x0, T, pw, c.title + (c.unit ? ' (' + c.unit + ')' : ''));
+      g.fillStyle = PANEL; g.fillRect(x0, T + 22, pw, ph); g.strokeStyle = '#c9ced6'; g.strokeRect(x0 + 0.5, T + 22.5, pw - 1, ph - 1); if (!v.length) return;
+      let lo = Math.min.apply(null, v), hi = Math.max.apply(null, v); if (lo >= 0 && lo < 0.4 * hi) lo = 0; if (hi === lo) { hi += Math.abs(hi) * 0.1 || 1; lo -= Math.abs(lo) * 0.1 || 0; } const nn = nice(lo >= 0 ? Math.max(0, lo - (hi - lo) * 0.04) : lo - (hi - lo) * 0.04, hi + (hi - lo) * 0.04, 4), X = q => x0 + 8 + (q - nn.lo) / (nn.hi - nn.lo) * (pw - 16);
+      g.textAlign = 'center'; g.font = '11px ' + FONT; nn.t.forEach(t => { const xx = X(t); g.strokeStyle = GRID; g.beginPath(); g.moveTo(xx + 0.5, T + 22); g.lineTo(xx + 0.5, T + 22 + ph); g.stroke(); g.fillStyle = AXIS; g.fillText(fmt(t, dec(nn.st)), xx, T + 22 + ph + 14); });
+      rows.forEach((r, i) => { const q = r.vals[k], y = T + 22 + i * rh + rh / 2 + 3; g.strokeStyle = '#dfe3e8'; g.setLineDash([1, 3]); g.beginPath(); g.moveTo(x0 + 2, y); g.lineTo(x0 + pw - 2, y); g.stroke(); g.setLineDash([]); if (!isFinite(q)) return;
+        g.beginPath(); g.arc(X(q), y, rh > 15 ? 4.6 : 3.6, 0, 7); if (r.ref) { g.fillStyle = '#fff'; g.fill(); g.strokeStyle = c.color; g.lineWidth = 1.6; g.stroke(); g.lineWidth = 1; } else { g.fillStyle = c.color; g.fill(); g.strokeStyle = '#fff'; g.stroke(); } });
+      const m = v.reduce((a, b) => a + b, 0) / v.length; g.strokeStyle = '#555'; g.setLineDash([4, 3]); g.beginPath(); g.moveTo(X(m), T + 22); g.lineTo(X(m), T + 22 + ph); g.stroke(); g.setLineDash([]); });
+    g.fillStyle = '#555'; g.font = '11px ' + FONT; g.textAlign = 'left'; g.fillText(o.foot || 'Each row is one run (one combination of the values). Dashed line: the mean of the runs.' + (rows.some(r => r.ref) ? ' Open circles: rainfed references.' : ''), 8, T + 22 + ph + 34);
+  }
+  /* the main effect of every factor: the mean of the runs at each level with its standard error and the number of runs, one panel per factor, one y scale */
+  function facets(cv, panels, o) {
+    o = o || {}; const per = Math.min(panels.length, o.cols || 3), nr = Math.ceil(panels.length / per), PH = 190, F = frame(cv, Object.assign({}, o, { h: (o.title ? 44 : 20) + nr * (PH + 76) + 30 }), 300), { g, w } = F;
+    cv._csv = () => { const out = [['factor', 'level', 'mean', 'standard error', 'runs']]; panels.forEach(p => p.xs.forEach((x, i) => out.push([p.title, x, p.m[i], p.se[i], p.n[i]]))); return out; };
+    const all = []; panels.forEach(p => p.m.forEach((m, i) => { if (isFinite(m)) { all.push(m + (isFinite(p.se[i]) ? p.se[i] : 0)); all.push(m - (isFinite(p.se[i]) ? p.se[i] : 0)); } })); if (!all.length) return;
+    let lo = Math.min.apply(null, all), hi = Math.max.apply(null, all); if (lo >= 0 && lo < 0.35 * hi) lo = 0; const nn = nice(lo >= 0 ? Math.max(0, lo - (hi - lo) * 0.06) : lo - (hi - lo) * 0.06, hi + (hi - lo) * 0.08, 4), grand = o.grand;
+    const LM = 58, gap = 14, pw = (w - LM - 12 - gap * (per - 1)) / per;
+    panels.forEach((p, k) => { const col = k % per, row = Math.floor(k / per), x0 = LM + col * (pw + gap), y0 = F.top + 6 + row * (PH + 76), Y = q => y0 + 22 + PH - (q - nn.lo) / (nn.hi - nn.lo) * PH, nx = p.xs.length, X = i => x0 + (i + 0.5) * pw / nx;
+      strip(g, x0, y0, pw, p.title); g.fillStyle = PANEL; g.fillRect(x0, y0 + 22, pw, PH); g.strokeStyle = '#c9ced6'; g.strokeRect(x0 + 0.5, y0 + 22.5, pw - 1, PH - 1);
+      g.font = '11px ' + FONT; nn.t.forEach(t => { const yy = Y(t); g.strokeStyle = GRID; g.beginPath(); g.moveTo(x0, yy + 0.5); g.lineTo(x0 + pw, yy + 0.5); g.stroke(); if (col === 0) { g.fillStyle = AXIS; g.textAlign = 'right'; g.fillText(fmt(t, dec(nn.st)), x0 - 5, yy + 4); } });
+      if (isFinite(grand)) { g.strokeStyle = '#888'; g.setLineDash([4, 3]); g.beginPath(); g.moveTo(x0, Y(grand)); g.lineTo(x0 + pw, Y(grand)); g.stroke(); g.setLineDash([]); }
+      if (p.numeric && nx > 1) { g.strokeStyle = p.color || OKI[0]; g.lineWidth = 1.6; g.beginPath(); let on = false; p.m.forEach((m, i) => { if (!isFinite(m)) return; on ? g.lineTo(X(i), Y(m)) : g.moveTo(X(i), Y(m)); on = true; }); g.stroke(); g.lineWidth = 1; }
+      p.m.forEach((m, i) => { if (!isFinite(m)) return; const e = p.se[i]; if (isFinite(e) && e > 0) { g.strokeStyle = '#333'; g.beginPath(); g.moveTo(X(i), Y(m - e)); g.lineTo(X(i), Y(m + e)); g.moveTo(X(i) - 4, Y(m - e)); g.lineTo(X(i) + 4, Y(m - e)); g.moveTo(X(i) - 4, Y(m + e)); g.lineTo(X(i) + 4, Y(m + e)); g.stroke(); }
+        g.beginPath(); g.arc(X(i), Y(m), 4.8, 0, 7); g.fillStyle = p.color || OKI[0]; g.fill(); g.strokeStyle = '#fff'; g.stroke(); g.fillStyle = '#666'; g.textAlign = 'center'; g.font = '10px ' + FONT; g.fillText('n = ' + p.n[i], X(i), y0 + 22 + PH + 27); });
+      g.fillStyle = INK; g.font = '11px ' + FONT; g.textAlign = 'center'; const step = Math.max(1, Math.ceil(nx * 46 / pw)); p.xs.forEach((x, i) => { if (i % step === 0) g.fillText(fitT(g, x, pw / nx * step - 2), X(i), y0 + 22 + PH + 14); });
+      if (p.xt) { g.fillStyle = '#555'; g.fillText(fitT(g, p.xt, pw), x0 + pw / 2, y0 + 22 + PH + 42); } });
+    yTitle(g, o.yt, 14, F.top + 28, nr * (PH + 76) - 64);
+    g.fillStyle = '#555'; g.font = '11px ' + FONT; g.textAlign = 'left'; g.fillText(o.foot || 'Points: the mean of the runs at each level, bars: one standard error, n: the number of runs. Dashed line: the mean of all runs.', 8, F.h - 8);
+  }
+  /* one stacked bar for each run: rows [{label, ref}], parts [{name, color, vals}] */
+  function runStacks(cv, labels, parts, o) {
+    o = o || {}; const n = labels.length, rh = n > 40 ? 15 : 20, F = frame(cv, Object.assign({}, o, { h: (o.title ? 44 : 20) + 70 + n * rh }), 300), { g, w } = F;
+    cv._csv = () => [['run'].concat(parts.map(p => p.name))].concat(labels.map((l, i) => [l].concat(parts.map(p => p.vals[i]))));
+    g.font = '12px ' + FONT; const LW = Math.min(300, Math.max(120, measureW(g, labels) + 14)), T = F.top + 6, pw = w - LW - 20, tot = labels.map((_, i) => parts.reduce((a, p) => a + Math.max(0, p.vals[i] || 0), 0)), nn = nice(0, Math.max.apply(null, tot.concat([1])) * 1.04, 5), X = q => LW + q / nn.hi * pw;
+    g.fillStyle = PANEL; g.fillRect(LW, T, pw, n * rh + 4); nn.t.forEach(t => { g.strokeStyle = GRID; g.beginPath(); g.moveTo(X(t) + 0.5, T); g.lineTo(X(t) + 0.5, T + n * rh + 4); g.stroke(); g.fillStyle = AXIS; g.textAlign = 'center'; g.font = '11px ' + FONT; g.fillText(fmt(t, dec(nn.st)), X(t), T + n * rh + 18); });
+    labels.forEach((l, i) => { const y = T + 2 + i * rh; g.fillStyle = INK; g.textAlign = 'right'; g.font = (n > 40 ? 11 : 12) + 'px ' + FONT; g.fillText(fitT(g, l, LW - 8), LW - 6, y + rh * 0.7); let x = LW; parts.forEach(p => { const v = Math.max(0, p.vals[i] || 0), ww = v / nn.hi * pw; g.fillStyle = p.color; g.fillRect(x, y + 2, ww, rh - 5); x += ww; }); });
+    if (o.xt) { g.fillStyle = INK; g.textAlign = 'center'; g.font = '12px ' + FONT; g.fillText(o.xt, LW + pw / 2, T + n * rh + 34); }
+    legend(g, parts.map(p => ({ name: p.name, color: p.color, kind: 'box' })), w, T + n * rh + 54, o);
+  }
+  const API = { dotrows, facets, runStacks, line, surface, colourbar, ramp: (name, t) => rgb(lut(name), t), heat, hbars, matrix, groupBars, stackBars, nice, fmt, OKI, PAL, frame, legend, exportScale: 1 };
   return API;
 })();
