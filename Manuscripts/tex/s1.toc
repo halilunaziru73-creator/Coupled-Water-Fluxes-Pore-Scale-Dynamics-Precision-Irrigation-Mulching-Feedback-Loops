@@ -1,20 +1,21 @@
-\contentsline {section}{\numberline {S1}Derivations of the equations}{3}{section.1}%
-\contentsline {subsection}{\numberline {S1.1}The retention and conductivity functions}{3}{subsection.1.1}%
-\contentsline {subsection}{\numberline {S1.2}The water balance and the storage release}{3}{subsection.1.2}%
-\contentsline {subsection}{\numberline {S1.3}The memory fate as a pooled within-group slope}{3}{subsection.1.3}%
-\contentsline {subsection}{\numberline {S1.4}Loss fates and the recoverable share}{4}{subsection.1.4}%
-\contentsline {subsection}{\numberline {S1.5}The rate-competition law}{4}{subsection.1.5}%
-\contentsline {subsection}{\numberline {S1.6}The invariant search by singular-value decomposition}{4}{subsection.1.6}%
-\contentsline {subsection}{\numberline {S1.7}The closure residual and the unattributed term}{5}{subsection.1.7}%
-\contentsline {subsection}{\numberline {S1.8}Log-ratio coordinates and the sparse law}{5}{subsection.1.8}%
-\contentsline {subsection}{\numberline {S1.9}Irrigation compensation}{5}{subsection.1.9}%
-\contentsline {section}{\numberline {S2}Why the results happen}{5}{section.2}%
-\contentsline {paragraph}{Why hydraulic memory differs between soils.}{5}{paragraph*.1}%
-\contentsline {paragraph}{Why the memory transfers to other experiments.}{5}{paragraph*.2}%
-\contentsline {paragraph}{Why warming raises and wetter climates lower the recoverable share.}{6}{paragraph*.3}%
-\contentsline {paragraph}{Why nitrogen has no effect.}{6}{paragraph*.4}%
-\contentsline {paragraph}{Why an evaporative term is unattributed.}{6}{paragraph*.5}%
-\contentsline {paragraph}{Why evapotranspiration follows a compact law and drainage does not.}{6}{paragraph*.6}%
-\contentsline {paragraph}{Why judging a saving against soil evaporation alone misleads.}{6}{paragraph*.7}%
-\contentsline {section}{\numberline {S3}The data}{6}{section.3}%
-\contentsline {section}{\numberline {S4}Where every table and figure comes from}{31}{section.4}%
+\contentsline {section}{\numberline {S1}What is new in this article}{3}{section.1}%
+\contentsline {section}{\numberline {S2}Derivations of the equations}{4}{section.2}%
+\contentsline {subsection}{\numberline {S2.1}The retention and conductivity functions}{4}{subsection.2.1}%
+\contentsline {subsection}{\numberline {S2.2}The water balance and the storage release}{5}{subsection.2.2}%
+\contentsline {subsection}{\numberline {S2.3}The memory fate as a pooled within-group slope}{5}{subsection.2.3}%
+\contentsline {subsection}{\numberline {S2.4}Loss fates and the recoverable share}{5}{subsection.2.4}%
+\contentsline {subsection}{\numberline {S2.5}The rate-competition law}{6}{subsection.2.5}%
+\contentsline {subsection}{\numberline {S2.6}The invariant search by singular-value decomposition}{6}{subsection.2.6}%
+\contentsline {subsection}{\numberline {S2.7}The closure residual and the unattributed term}{6}{subsection.2.7}%
+\contentsline {subsection}{\numberline {S2.8}Log-ratio coordinates and the sparse law}{6}{subsection.2.8}%
+\contentsline {subsection}{\numberline {S2.9}Irrigation compensation}{7}{subsection.2.9}%
+\contentsline {section}{\numberline {S3}Why the results happen}{7}{section.3}%
+\contentsline {paragraph}{Why hydraulic memory differs between soils.}{7}{paragraph*.1}%
+\contentsline {paragraph}{Why the memory transfers to other experiments.}{7}{paragraph*.2}%
+\contentsline {paragraph}{Why warming raises and wetter climates lower the recoverable share.}{7}{paragraph*.3}%
+\contentsline {paragraph}{Why nitrogen has no effect.}{7}{paragraph*.4}%
+\contentsline {paragraph}{Why an evaporative term is unattributed.}{7}{paragraph*.5}%
+\contentsline {paragraph}{Why evapotranspiration follows a compact law and drainage does not.}{7}{paragraph*.6}%
+\contentsline {paragraph}{Why judging a saving against soil evaporation alone misleads.}{8}{paragraph*.7}%
+\contentsline {section}{\numberline {S4}The data}{8}{section.4}%
+\contentsline {section}{\numberline {S5}Where every table and figure comes from}{32}{section.5}%

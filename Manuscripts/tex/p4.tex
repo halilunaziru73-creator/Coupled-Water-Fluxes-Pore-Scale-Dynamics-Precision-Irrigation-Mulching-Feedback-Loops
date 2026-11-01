@@ -15,15 +15,7 @@
 \noindent The van~Genuchten--Mualem functions describe how much water a soil holds and how fast it conducts at any suction, and suction triggers decide when most sensor-scheduled fields are irrigated. Between the two lies a question that, to the author's knowledge, has no closed-form answer: which part of the retention curve can a crop actually reach at the sensor, so that a trigger set beyond it never fires? A second question, studied case by case in numerical work on pulsed and subsurface drip irrigation, is where each applied millimetre of water goes as the soil, the dose, the method and the season change. Both questions are answered here from the dry-end asymptote of the Mualem conductivity and from a large, openly archived ensemble of Daisy simulations covering ten soils and two decades of weather. Equating the relative conductivity at the reach to a single constant shared by all soils yields a closed-form reach that depends only on the van~Genuchten shape parameters and the pore-connectivity exponent. It predicts the reach of soils left out of the fit to within about a factor of two, from sands, where the reach is short, to silty clay loams, where it lies far in the dry range. Commonly tabulated triggers lie beyond the reach of sandy soils: they never fire and the crop stays at its rainfed yield. Scaling each trigger by the reach places the irrigation responses of all soils on one axis. Less than half of each irrigation millimetre is transpired; most of the remainder evaporates and a smaller share drains below the root zone. The drained share rises with the dose towards a soil-specific plateau on a dose scale that is the same in every soil and close to one day of crop water use, so small doses trade drainage for evaporation, while overhead irrigation adds no transpiration at all. The closed form, the data, the analysis code and the software that applies them to any soil are open.
 
 \medskip\noindent \textbf{Keywords.} van~Genuchten--Mualem; irrigation trigger; matric-potential sensor; deep percolation; pulsed irrigation; marginal water productivity; Daisy model; decision support\par}
-\par\medskip
-\noindent\textbf{Highlights}
-\begin{itemize}[nosep,leftmargin=1.2em]
-\item A closed form from $\alpha$, $n$ and $\ell$ gives the largest suction a crop can impose at a sensor: the reach of a trigger.
-\item It predicts held-out soils within a factor of 2.3; triggers beyond it never fire and leave the crop rainfed.
-\item Of each irrigation millimetre, 38\,\% is transpired and 16\,\% drains; the rest evaporates.
-\item The drained share rises with the dose on a soil-independent scale of about 4\,mm.
-\item Data (every log of every run), code, software and a 1155-page manual are open.
-\end{itemize}
+
 \end{titlepage}
 
 \section{Introduction}
@@ -186,22 +178,8 @@ Three rules follow for sensor-scheduled irrigation. First, compute $\hc$ from \c
 \paragraph{Limits and the experiments that would test the claims.}
 The results are from one process model, one weather series (Taastrup, Denmark), one cereal rotation, one-dimensional columns, equilibrium Richards flow without hysteresis or water repellency \citep{Elmaloglou2009b,Diamantopoulos2013AWR,Diamantopoulos2013JH}, and effective van~Genuchten parameters; the Mualem connectivity was not varied, the sensor was at 20\,cm in E2 and E10, and the firing threshold of 5\,mm a year is a choice (the cliffs are steep, so the intervals change little with it). Five of ten reaches are only bounded from below. The constant $\kappa$ is a property of the model's uptake and should be measured, not assumed, in the field. The fates are 20-year means and do not resolve events. A field test would place matric-potential sensors on two coarse and two fine soils, schedule plots at triggers on both sides of $\hc$ and at doses of 1, 4 and 15\,mm, and measure drainage with lysimeters \citep{Groh2020}. The dynamic non-equilibrium criterion $\Pi_\tau$ predicts when such a test must also resolve the lag of the sensor.
 
-\paragraph{Novelty in one view.}
-\begin{table}[H]\centering\small
-\caption{What is new, and the evidence for it.}
-\label{tab:novelty}
-\begin{tabular}{@{}p{5.2cm}p{9.6cm}@{}}
-\toprule
-Claim & Evidence\\\midrule
-Closed form for the reach of a suction trigger from $\alpha$, $n$, $\ell$ & \cref{eq:hc}; LOSO within a factor of 2.3 over ten soils; absolute-conductivity alternative rejected (\cref{tab:laws})\\
-Common triggers are blind on coarse soils & 300\,cm never fires on sand and loamy sand; yield stays rainfed (\cref{fig:trigger}d)\\
-Reach-scaled trigger & between-soil scatter 54\,\% $\to$ 32\,\% (\cref{fig:trigger}b)\\
-Marginal fate of irrigation across soils, doses, windows, methods & 0.38 transpired, 0.25 + 0.19 evaporated, 0.16 drained (\cref{fig:fate})\\
-Soil-independent dose scale of drainage & $d_D=4.1\pm0.6$\,mm, $\rho=0.07$ with $n$ (\cref{fig:dose})\\
-Overhead irrigation adds no transpiration & $\eta_T=-0.08$ (E4), $-0.01$ (E15)\\
-Open data, code, software and manual & \cslink; Zenodo; SWAFL Desktop 1.1.0; manual pp.~56, 592\\\bottomrule
-\end{tabular}
-\end{table}
+\paragraph{What is new, item by item.} \Cref{tab:novelty} sets each contribution of this article against what was established before it, so that what is taken from the literature and what is added here can be told apart.
+\input{nov4.tex}
 
 \section{Conclusions}
 A suction trigger has a reach, the largest suction a crop can impose at the sensor, and it follows from the van~Genuchten--Mualem parameters by one closed form with one constant: $\hc=\alpha^{-1}(m^{2}/\kappa)^{1/[2n+\ell(n-1)]}$, $\kappa=3.5\times10^{-10}$, valid out of sample within a factor of 2.3 over ten soils from sand to silty clay loam. Beyond the reach a trigger never fires; the common 300\,cm trigger leaves sand and loamy sand rainfed. Each irrigation millimetre is transpired for 38\,\%, evaporated for 44\,\% and drained for 16\,\%; the drained share rises with the dose on a soil-independent scale of about 4\,mm towards a soil-specific plateau, and overhead irrigation transpires nothing extra. Every run behind these numbers is open in \cslink{}, the script reproduces them, and SWAFL Desktop lets any user apply them to a soil of their own.

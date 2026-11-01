@@ -11,8 +11,13 @@
 \authorblock
 \tableofcontents
 \clearpage
+\section{What is new in this article}
+The table sets each contribution against what was established before it. The derivations that follow mark which equations are taken from the literature and which are new.
+\input{s3_nov.tex}
 
 \section{Derivations of the equations}
+The derivations of Section~S2 are of established methods (spectral indices, FAO-56, the Richards equation, budgets, D8 flow and wetness, RUSLE, Latin-hypercube sampling), given so that each computation of the software can be followed. They are not claimed as new; the contribution of the article is the integration, the two rules of origin, and the verification that found defects (\cref{tab:novelty}).
+
 \subsection{Normalised spectral indices}
 Green leaves absorb red light for photosynthesis and scatter near-infrared light in the leaf mesophyll. The normalised difference $\mathrm{NDVI}=(\rho_N-\rho_R)/(\rho_N+\rho_R)$ is a contrast of the two that is bounded in $[-1,1]$ and cancels a common multiplicative illumination factor $k$: $(k\rho_N-k\rho_R)/(k\rho_N+k\rho_R)$ equals NDVI. SAVI adds a soil term $L$ to the denominator to reduce the influence of bright soil, $(1+L)(\rho_N-\rho_R)/(\rho_N+\rho_R+L)$; EVI corrects for the atmosphere with the blue band and for the canopy background; the water indices use the shortwave-infrared band, which liquid water absorbs.
 

@@ -1,0 +1,14 @@
+{\small\setlength{\tabcolsep}{4pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.4cm}>{\raggedright\arraybackslash}p{4.5cm}>{\raggedright\arraybackslash}p{5.4cm}>{\raggedright\arraybackslash}p{5.0cm}@{}}
+\caption{What this article adds, item by item: what was established before, what is new here, and the evidence in this article.}\label{tab:novelty}\\
+\toprule
+\# & Established before & New in this article & Evidence here\\\midrule\endfirsthead
+\toprule \# & Established before & New in this article & Evidence here\\\midrule\endhead
+1 & Daisy is run from text set-up files \citep{Hansen2012}; field, design, satellite and model tools are separate programs. & A graphical workbench that checks every design against a catalogue of what Daisy can vary, keeps an exact run budget, keeps every run and explains every failure by its root cause. & End-to-end Daisy 7.1.14 runs of the library scenarios, deficit irrigation and the soil-hydraulic factors; a defect that stopped every run on a sample horizon found and removed.\\
+2 & Decision tools show numbers without their origin. & Two auditable rules: every number leads to an equation with its origin, and a Daisy layer shows a Daisy result only from a Daisy run. & All layers opened without a page error; Daisy layers show nothing before a run (\cref{sec:e2e}).\\
+3 & Shared model functions are trusted once published. & A check of a shared function against stored Daisy results that found a defect. & The denitrification function corrected after comparison with 792 Daisy results.\\
+4 & Sentinel-2 indices, SoilGrids and elevation models are used separately \citep{Drusch2012,Poggio2021}. & One offline chain from a field outlined on a satellite image to indices, water sources, terrain, soil loss, retention maps, a design and a schedule. & Run on a real 5.85\,ha field near Zaria, Nigeria (\cref{sec:zaria}).\\
+5 & Sensitivity to hydraulic parameters is studied with dedicated codes \citep{Simunek2016}. & Factors that scale the van~Genuchten--Mualem parameters of every horizon of a Daisy run inside the workbench. & One season's matrix percolation rose from 177 to 222\,mm and runoff vanished with the scaled parameters.\\
+6 & -- & A manual made with the program and opened at the page in use \citep{HaliluManual}. & Every control, view and equation documented; page links from each screen.\\
+\bottomrule
+\end{longtable}}

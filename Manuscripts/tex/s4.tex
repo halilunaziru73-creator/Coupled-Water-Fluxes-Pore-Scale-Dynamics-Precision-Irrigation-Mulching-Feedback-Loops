@@ -13,8 +13,22 @@
 \authorblock
 \tableofcontents
 \clearpage
+\section{Highlights}
+\begin{itemize}[nosep,leftmargin=1.2em]
+\item A closed form from $\alpha$, $n$ and $\ell$ gives the largest suction a crop can impose at a sensor: the reach of a trigger.
+\item It predicts held-out soils within a factor of 2.3; triggers beyond it never fire and leave the crop rainfed.
+\item Of each irrigation millimetre, 38\,\% is transpired and 16\,\% drains; the rest evaporates.
+\item The drained share rises with the dose on a soil-independent scale of about 4\,mm.
+\item Data (every log of every run), code, software and a 1155-page manual are open.
+\end{itemize}
+
+\section{What is new in this article}
+The table sets each contribution against what was established before it. The derivations that follow mark which equations are taken from the literature and which are new.
+\input{s4_nov.tex}
 
 \section{Derivations of the equations}
+Sections~S3.1 and S3.2 re-derive the van~Genuchten--Mualem pair and its dry-end asymptote, which are established mathematics \citep{vanGenuchten1980,Mualem1976}. Everything from S3.3 on is new in this article: the reach of a trigger and its properties, the alternative laws and their test, the interval-censored fit, the marginal-fate identity applied across soils, doses, seasons and methods, the dose law, and the non-equilibrium criterion for triggers (the relaxation equation itself is established \citep{RossSmettem2000}).
+
 \subsection{The van~Genuchten--Mualem pair from a capillary bundle}
 A soil is idealised as a bundle of capillaries whose radii are distributed so that the water-filled fraction at suction $h$ is the effective saturation $S_e$. The capillary (Young--Laplace) law relates the radius $r$ of the largest filled pore to the suction, $r=2\sigma\cos\gamma/(\rho_w g h)$, so $h\propto1/r$. \citet{Mualem1976} wrote the relative conductivity of such a medium as the product of a tortuosity--connectivity term $S_e^{\ell}$ and the square of a normalised integral of the pore radius over the filled pores:
 \begin{equation}

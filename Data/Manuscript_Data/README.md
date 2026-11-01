@@ -26,7 +26,7 @@ The analysis scripts are in [`Manuscripts/reproducibility`](../../Manuscripts/re
 | Table 4 | Table written by the script (tex/data_table.tex) | Manuscripts/reproducibility/analysis/data_overview.py | Data/Comprehensive_Summary/00_summary_all_simulations.csv.gz |  |
 | Figure 4 | Figure drawn by the script from the input data | Manuscripts/reproducibility/analysis/data_overview.py | Data/daisy_ensemble.csv.gz (10 190 runs) | data/fig_data_overview.pdf |
 | Table 5 | Table typed in the manuscript from the result files of the script | p2_robust.py; p2_robust.js | Data/daisy_ensemble.csv.gz (10 190 runs) |  |
-| Table 6 | Table typed from the result file (11 of its numbers found there) | Manuscripts/reproducibility/audit_numbers.py; Manuscripts/reproducibility/analysis/p3_figs.py; Manuscripts/reproducibility/p3_js/e1_heldout.js | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/e12_pred.json |
+| Table 6 | Table typed from the result file (11 of its numbers found there) | Manuscripts/reproducibility/audit_numbers.py; Manuscripts/reproducibility/p3_js/e1_heldout.js; Manuscripts/reproducibility/analysis/p3_figs.py | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/e12_pred.json |
 | Figure 5 | Figure drawn by the script from the input data | Manuscripts/reproducibility/analysis/p2_figfail.py | Data/daisy_ensemble.csv.gz (10 190 runs) | p2/figS_failed.pdf |
 | Table 7 | Descriptive table (definitions, design, parameters or tests); no computation | - |  |  |
 | Figure 6 | Figure drawn by the script from the input data | Manuscripts/reproducibility/analysis/p1_figs_a.py | Data/daisy_ensemble.csv.gz (10 190 runs) | p1/fig03_memory_grid.pdf |
@@ -46,7 +46,7 @@ The analysis scripts are in [`Manuscripts/reproducibility`](../../Manuscripts/re
 | Table 13 | Table typed from the result file (34 of its numbers found there) | Manuscripts/reproducibility/p3_js/run_drip.js; Manuscripts/reproducibility/analysis/p3_lit_figs.py; Manuscripts/reproducibility/analysis/make_supplement_data.py | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/drip_out.json |
 | Figure 15 | Figure drawn by the script from the input data | Manuscripts/reproducibility/analysis/p2_figs.py; p2_R.py; p2_R.js | Data/daisy_ensemble.csv.gz (10 190 runs) | p2/fig03_hidden_term.pdf |
 | Table 14 | Table typed from the result file (22 of its numbers found there) | Manuscripts/reproducibility/run_all.sh; Manuscripts/reproducibility/audit_numbers.py; Manuscripts/reproducibility/analysis/p1_core.py; p2_robust.py; p2_robust.js | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/p1_core.json |
-| Figure 16 | Figure drawn by the script from the input data | Manuscripts/reproducibility/analysis/p2_fig4.py; Manuscripts/reproducibility/analysis/p2_figs.py; p2_a.py; p2_pca.js; p2_pca_sens.js | Data/daisy_ensemble.csv.gz (10 190 runs) | p2/fig04_manifold.pdf |
+| Figure 16 | Figure drawn by the script from the input data | Manuscripts/reproducibility/analysis/p2_figs.py; Manuscripts/reproducibility/analysis/p2_fig4.py; p2_a.py; p2_pca.js; p2_pca_sens.js | Data/daisy_ensemble.csv.gz (10 190 runs) | p2/fig04_manifold.pdf |
 | Table 15 | Table typed in the manuscript from the result files of the script | p2_a.py; p2_figs.py; p2_fig4.py; p2_pca.js; p2_pca_sens.js | Data/daisy_ensemble.csv.gz (10 190 runs) |  |
 | Figure 17 | Figure drawn by the script from the input data | Manuscripts/reproducibility/analysis/p2_fig7.py | Data/daisy_ensemble.csv.gz (10 190 runs) | p2/fig07_fates_by_soil.pdf |
 | Figure 18 | Figure drawn by the script from the input data | Manuscripts/reproducibility/analysis/p2_figs2.py | Data/daisy_ensemble.csv.gz (10 190 runs) | p2/fig05_ET_law.pdf |
@@ -64,12 +64,13 @@ The analysis scripts are in [`Manuscripts/reproducibility`](../../Manuscripts/re
 | Figure 21 | Figure drawn by the script from the input data | Manuscripts/reproducibility/analysis/p1_fig13_time.py | Data/daisy_ensemble.csv.gz (10 190 runs) | p1/fig13_time_management.pdf |
 | Figure 22 | Figure drawn by the script from the input data | Manuscripts/reproducibility/run_all.sh; Manuscripts/reproducibility/analysis/p1_fig12_drivers.py | Data/daisy_ensemble.csv.gz (10 190 runs) | p1/fig12_drivers.pdf |
 | Table 25 | Descriptive table (definitions, design, parameters or tests); no computation | - |  |  |
-| Table 26 | Table typed from the result file (8 of its numbers found there) | Manuscripts/reproducibility/audit_numbers.py; Manuscripts/reproducibility/analysis/p3_figs.py; Manuscripts/reproducibility/p3_js/e1_heldout.js | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/e12_pred.json |
+| Table 26 | Table typed from the result file (8 of its numbers found there) | Manuscripts/reproducibility/audit_numbers.py; Manuscripts/reproducibility/p3_js/e1_heldout.js; Manuscripts/reproducibility/analysis/p3_figs.py | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/e12_pred.json |
 | Figure 23 | Figure drawn by the script from the input data | Manuscripts/reproducibility/fig_vg_check.py | Data/daisy_ensemble.csv.gz (10 190 runs) | p1/fig15_vg_check.pdf |
 | Figure 24 | Screen capture of SWAFL Desktop 1.1.0 (not regenerated) | - |  | shots_jpg/real_evap_pore.jpg; shots_jpg/real_evap_flux_cells.jpg; shots_jpg/real_tillage_micro.jpg |
+| Table 27 | Table typed from the result file (9 of its numbers found there) | Manuscripts/reproducibility/p3_js/run_drip.js; Manuscripts/reproducibility/analysis/p3_lit_figs.py; Manuscripts/reproducibility/analysis/make_supplement_data.py | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/drip_out.json |
 | Figure 25 | Figure drawn by the script from the input data | Manuscripts/reproducibility/analysis/p1_figs_c.py | Data/daisy_ensemble.csv.gz (10 190 runs) | p1/fig09_recoverable.pdf |
-| Table 27 | Table typed in the manuscript from the result files of the script | (see the reproducibility appendix of the paper) | Data/daisy_ensemble.csv.gz (10 190 runs) |  |
-| Table 28 | Table typed from the result file (34 of its numbers found there) | Manuscripts/reproducibility/run_all.sh; Manuscripts/reproducibility/audit_numbers.py; Manuscripts/reproducibility/analysis/p1_core.py | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/p1_core.json |
+| Table 28 | Table typed in the manuscript from the result files of the script | (see the reproducibility appendix of the paper) | Data/daisy_ensemble.csv.gz (10 190 runs) |  |
+| Table 29 | Table typed from the result file (34 of its numbers found there) | Manuscripts/reproducibility/run_all.sh; Manuscripts/reproducibility/audit_numbers.py; Manuscripts/reproducibility/analysis/p1_core.py | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/p1_core.json |
 
 ## Paper 2 - Soil-water-atmosphere modelling for irrigation
 
@@ -77,22 +78,22 @@ The analysis scripts are in [`Manuscripts/reproducibility`](../../Manuscripts/re
 |:--|:--|:--|:--|:--|
 | Table 1 | Descriptive table (definitions, design, parameters or tests); no computation | - |  |  |
 | Figure 1 | Figure drawn by the script from the input data | Manuscripts/reproducibility/make_a4.py; Manuscripts/reproducibility/analysis/p3_figs.py; Manuscripts/reproducibility/analysis/p3_fig01_workflow_v9.py | Data/daisy_ensemble.csv.gz (10 190 runs) | p3/fig01_architecture_A4.pdf |
-| Table 2 | Table typed from the result file (10 of its numbers found there) | Manuscripts/reproducibility/audit_numbers.py; Manuscripts/reproducibility/analysis/p3_figs.py; Manuscripts/reproducibility/p3_js/e1_heldout.js | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/e12_pred.json |
+| Table 2 | Table typed from the result file (10 of its numbers found there) | Manuscripts/reproducibility/audit_numbers.py; Manuscripts/reproducibility/p3_js/e1_heldout.js; Manuscripts/reproducibility/analysis/p3_figs.py | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/e12_pred.json |
 | Table 3 | Table typed from the result file (5 of its numbers found there) | Manuscripts/reproducibility/p3_js/run_drip.js; Manuscripts/reproducibility/analysis/p3_lit_figs.py; Manuscripts/reproducibility/analysis/make_supplement_data.py | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/drip_out.json |
 | Table 4 | Table typed in the manuscript from the result files of the script | (see the reproducibility appendix of the paper) | Data/daisy_ensemble.csv.gz (10 190 runs) |  |
 | Table 5 | Table written by the script (tex/data_table.tex) | Manuscripts/reproducibility/analysis/data_overview.py | Data/Comprehensive_Summary/00_summary_all_simulations.csv.gz |  |
 | Figure 2 | Figure drawn by the script from the input data | Manuscripts/reproducibility/analysis/data_overview.py | Data/daisy_ensemble.csv.gz (10 190 runs) | data/fig_data_overview.pdf |
 | Table 6 | Descriptive table (definitions, design, parameters or tests); no computation | - |  |  |
 | Table 7 | Descriptive table (definitions, design, parameters or tests); no computation | - |  |  |
-| Table 8 | Table typed from the result file (11 of its numbers found there) | Manuscripts/reproducibility/audit_numbers.py; Manuscripts/reproducibility/analysis/p3_figs.py; Manuscripts/reproducibility/p3_js/e1_heldout.js | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/e12_pred.json |
+| Table 8 | Table typed from the result file (11 of its numbers found there) | Manuscripts/reproducibility/audit_numbers.py; Manuscripts/reproducibility/p3_js/e1_heldout.js; Manuscripts/reproducibility/analysis/p3_figs.py | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/e12_pred.json |
 | Table 9 | Table typed from the result file (39 of its numbers found there) | Manuscripts/reproducibility/p3_js/run_drip.js; Manuscripts/reproducibility/analysis/p3_lit_figs.py; Manuscripts/reproducibility/analysis/make_supplement_data.py; swa_vars.js; p3_swa_vars.js; p3_swa_fig.py | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/drip_out.json |
-| Table 10 | Table typed from the result file (15 of its numbers found there) | Manuscripts/reproducibility/audit_numbers.py; Manuscripts/reproducibility/analysis/p3_figs.py; Manuscripts/reproducibility/p3_js/e1_heldout.js; swa_vars.js; p3_swa_vars.js; p3_swa_fig.py | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/e12_pred.json |
+| Table 10 | Table typed from the result file (15 of its numbers found there) | Manuscripts/reproducibility/audit_numbers.py; Manuscripts/reproducibility/p3_js/e1_heldout.js; Manuscripts/reproducibility/analysis/p3_figs.py; swa_vars.js; p3_swa_vars.js; p3_swa_fig.py | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/e12_pred.json |
 | Table 11 | Table typed from the result file (36 of its numbers found there) | Manuscripts/reproducibility/p3_js/swa_vars.js; Manuscripts/reproducibility/analysis/p3_swa_fig.py; Manuscripts/reproducibility/analysis/make_supplement_data.py; p3_swa_vars.js | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/p3_swa_vars.json |
 | Figure 3 | Figure drawn by the script from the input data | Manuscripts/reproducibility/analysis/p3_swa_fig.py; swa_vars.js; p3_swa_vars.js | Data/daisy_ensemble.csv.gz (10 190 runs) | p3/fig04_swa_state.pdf |
 | Figure 4 | Screen capture of SWAFL Desktop 1.1.0 (not regenerated) | - |  | p3/fig_views_A.jpg |
 | Figure 5 | Screen capture of SWAFL Desktop 1.1.0 (not regenerated) | - |  | p3/fig_views_B.jpg |
 | Figure 6 | Screen capture of SWAFL Desktop 1.1.0 (not regenerated) | - |  | p3/fig_views_C.jpg |
-| Table 12 | Table typed from the result file (11 of its numbers found there) | Manuscripts/reproducibility/audit_numbers.py; Manuscripts/reproducibility/analysis/p3_figs.py; Manuscripts/reproducibility/p3_js/e1_heldout.js; Results/08_Scripts/novel.py | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/e12_pred.json |
+| Table 12 | Table typed from the result file (11 of its numbers found there) | Manuscripts/reproducibility/audit_numbers.py; Manuscripts/reproducibility/p3_js/e1_heldout.js; Manuscripts/reproducibility/analysis/p3_figs.py; Results/08_Scripts/novel.py | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/e12_pred.json |
 | Figure 7 | Figure drawn by the script from the input data | Manuscripts/reproducibility/analysis/p3_sens_fig.py; e1_sens.js; l_sens.js; p3_e1_sens.js; p3_l_sens.js | Data/daisy_ensemble.csv.gz (10 190 runs) | p3/fig08_sensitivity.pdf |
 | Table 13 | Table typed from the result file (22 of its numbers found there) | Manuscripts/reproducibility/audit_numbers.py; Manuscripts/reproducibility/analysis/p3_figs.py; Manuscripts/reproducibility/analysis/make_supplement_data.py; lib/wsmodel.js; v_surface.js; p3_surface.js | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/p3_ws61.csv |
 | Figure 8 | Figure drawn by the script from the input data | Manuscripts/reproducibility/analysis/p3_figs.py | Data/daisy_ensemble.csv.gz (10 190 runs) | p3/fig03_ws_verification.pdf |
@@ -105,6 +106,7 @@ The analysis scripts are in [`Manuscripts/reproducibility`](../../Manuscripts/re
 | Table 16 | Table typed from the result file (4 of its numbers found there) | Manuscripts/reproducibility/p3_js/run_drip.js; Manuscripts/reproducibility/analysis/p3_lit_figs.py; Manuscripts/reproducibility/analysis/make_supplement_data.py; v_drip.js; p3_drip_swafl.js; drip_out.js | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/drip_out.json |
 | Figure 13 | Screen capture of SWAFL Desktop 1.1.0 (not regenerated) | - |  | shots_jpg/wb_plot_views.png |
 | Figure 14 | Screen capture of SWAFL Desktop 1.1.0 (not regenerated) | - |  | shots_jpg/real_trigger_law.jpg; shots_jpg/real_mulch_bare.jpg; shots_jpg/real_root_structure.jpg; shots_jpg/real_drip_design.jpg |
+| Table 17 | Table typed from the result file (4 of its numbers found there) | Manuscripts/reproducibility/audit_numbers.py; Manuscripts/reproducibility/p3_js/e1_heldout.js; Manuscripts/reproducibility/analysis/p3_figs.py | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/e12_pred.json |
 | Figure 15 | Screen capture of SWAFL Desktop 1.1.0 (not regenerated) | - |  | shots_jpg/layer_field.jpg; shots_jpg/layer_spac.jpg |
 | Figure 16 | Screen capture of SWAFL Desktop 1.1.0 (not regenerated) | - |  | shots_jpg/layer_v1.jpg; shots_jpg/layer_v2.jpg |
 | Figure 17 | Screen capture of SWAFL Desktop 1.1.0 (not regenerated) | - |  | shots_jpg/layer_n1.jpg |
@@ -162,6 +164,7 @@ The analysis scripts are in [`Manuscripts/reproducibility`](../../Manuscripts/re
 | Table 10 | Table typed in the manuscript from the result files of the script | (see the reproducibility appendix of the paper) | Data/daisy_ensemble.csv.gz (10 190 runs) |  |
 | Figure 22 | Figure drawn by the script from the input data | Manuscripts/reproducibility/p456/p456_figs_data.py | Data/daisy_ensemble.csv.gz (10 190 runs) | p6/fig04_pheno.pdf |
 | Figure 23 | Figure drawn by the script from the input data | Manuscripts/reproducibility/p456/p456_figs_data.py | Data/daisy_ensemble.csv.gz (10 190 runs) | p6/fig05_crops.pdf |
+| Table 11 | Descriptive table (definitions, design, parameters or tests); no computation | - |  |  |
 
 ## Paper 4 - Reach of a suction trigger and fate of irrigation
 
