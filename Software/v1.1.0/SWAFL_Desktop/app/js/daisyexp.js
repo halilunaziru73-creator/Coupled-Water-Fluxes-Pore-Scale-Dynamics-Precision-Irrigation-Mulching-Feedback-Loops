@@ -210,6 +210,42 @@
     if (run.reference) return 'Rainfed_reference' + (parts.length ? '_' + parts.join('_') : '');   // one reference for every soil and weather: its name says which
     return parts.join('_') || run.label || run.id; };
   E.partName = function (id, v) { const F = E.factor(id); if (!F || v == null || v === 'undefined') return ''; if (F.lib || String(v).indexOf('|') > 0) return String(v).split('|')[0].replace(/^hzn?:/, ''); if (F.kind === 'num') return (SHORT[id] || (F.param ? F.param.key : id)) + v; if (F.kind === 'set') return String((v && v.label) || v); if (id === 'irrig') return v === '1' || v === 1 ? 'irrigated' : 'rainfed'; return String(E.levelName(F, v)).replace(/\s*\(.*\)/, ''); };
+  /* what each part of a run file does, with its line numbers: the top-level forms of the .dai, in order */
+  E.commonKind = function (f) { const b = String(f).split('/').pop();
+    if (/Rotation|ArableFarmRotation/i.test(b)) return 'the crops and their management for every year: sowing, fertiliser (type, rate, date), tillage, the irrigation rule (trigger, sensor depth, dose, method) and harvest, with the chemical sprayed (defchemical) and the actions (defaction)';
+    if (/ResFarm/i.test(b)) return 'the soil profile of the built-in farm (horizons and their hydraulics), the groundwater (aquitard) and the columns "ResFarm 1D; Free drainage" and "ResFarm_sand column"';
+    if (/UserSoil/i.test(b)) return 'the soil of this run: its horizons (defhorizon) and the column "SWAFL user column" built from them';
+    if (/OutputLog/i.test(b)) return 'the logs Daisy writes (yield, water and nitrogen balances, soil water, chemical), with their file names and how often';
+    if (/\.dwf$/i.test(b)) return 'the weather: one line a day of rain, temperature, radiation and more'; return 'a file of the Daisy library (the copy in Common/ leaves out what the run already reads)'; };
+  E.explainDai = function (t) {
+    const out = [], n = t.length; let i = 0, line = 1, com = [];
+    const lineAt = (from, to) => { let c = 0; for (let k = from; k < to; k++) if (t.charCodeAt(k) === 10) c++; return c; };
+    const say = (a, b, txt) => out.push('  ' + (a === b ? 'line  ' + a : 'lines ' + a + '-' + b).padEnd(13) + ' ' + txt);
+    while (i < n) { const c = t[i];
+      if (c === '\n') { line++; i++; continue; } if (c === ' ' || c === '\t' || c === '\r') { i++; continue; }
+      if (c === ';') { const e = t.indexOf('\n', i); com.push(line); i = e < 0 ? n : e; continue; }
+      if (c !== '(') { i++; continue; }
+      if (com.length) { say(com[0], com[com.length - 1], 'comments (Daisy skips every line that starts with ;): ' + (com[0] === 1 ? 'the run number, the values of this run and the years simulated' : 'notes')); com = []; }
+      let d = 0, j = i, str = false; for (; j < n; j++) { const ch = t[j]; if (str) { if (ch === '\\') j++; else if (ch === '"') str = false; continue; } if (ch === '"') str = true; else if (ch === ';') { const e = t.indexOf('\n', j); j = e < 0 ? n : e - 1; } else if (ch === '(') d++; else if (ch === ')') { d--; if (!d) break; } }
+      const form = t.slice(i, j + 1), head = (form.match(/^\(\s*([^\s()"]+)/) || [])[1] || '', l0 = line, l1 = line + lineAt(i, j); let x;
+      if (head === 'input') { const f = (form.match(/"([^"]+)"/) || [])[1] || ''; x = '(input file "' + f.split('/').pop() + '"): reads ' + E.commonKind(f) + '.'; }
+      else if (head === 'path') x = '(path "../Common" &old): Daisy looks for files in Common/ first, then in its own library.';
+      else if (head === 'defunit') x = '(defunit [kWh/d/m^2] ...): defines the unit of the radiation column of the weather file, so Daisy can read it.';
+      else if (head === 'weather') { const ps = (form.match(/\((PrecipCorrect|TempOffset|GlobRadScale)\s+[^)]*\)/g) || []).join(' '); x = '(weather default "...dwf"): the weather file of the run' + (ps ? ' and the factors applied to it: ' + ps + ' (rain x factor, temperature + offset, radiation x factor)' : '') + '.'; }
+      else if (head === 'description') x = '(description ...): the text Daisy writes at the top of every log of this run.';
+      else if (head === 'log_prefix') x = '(log_prefix ...): put before the name of every log, so the logs of the runs never mix.';
+      else if (head === 'manager') x = '(manager activity (repeat "' + ((form.match(/repeat\s+"([^"]+)"/) || [])[1] || '') + '")): the management, repeated every year; it is defined in the rotation file.';
+      else if (head === 'defcolumn') { const nm = form.match(/defcolumn\s+"([^"]+)"\s+"([^"]+)"/), inner = (form.match(/\n\s*\((?!Bioclimate)[A-Za-z_]+\s*\([^\n]*\)\)?/g) || []).map(q => { q = q.trim(); while ((q.match(/\)/g) || []).length > (q.match(/\(/g) || []).length) q = q.slice(0, -1); return q; }).filter(q => !/^\(Bioclimate/.test(q)); x = '(defcolumn' + (nm ? ' "' + nm[1] + '" "' + nm[2] + '"' : '') + '): the soil column of the run, made from the column ' + (nm ? '"' + nm[2] + '"' : '') + '; (Bioclimate ...) chooses the evapotranspiration model' + (/parameters from the Daisy reference/.test(form) ? '; after ";; parameters from the Daisy reference" come the values this run varies: ' + inner.join(' ') : '') + '.'; }
+      else if (head === 'column') x = '(column ...): the column the simulation uses.';
+      else if (head === 'time') x = '(time ' + ((form.match(/time\s+([^)]*)\)/) || [])[1] || '').trim() + '): the start of the simulation (year month day).';
+      else if (head === 'stop') x = '(stop ' + ((form.match(/stop\s+([^)]*)\)/) || [])[1] || '').trim() + '): the end of the simulation.';
+      else if (head === 'activate_output') x = '(activate_output (after ...)): the logs start after this date; the time before it is the warm-up of the soil.';
+      else if (head === 'output') x = '(output ...): a log of the Daisy library written as well.';
+      else if (head === 'run') x = '(run ...): runs a program of the Daisy library.';
+      else x = '(' + head + ' ...): a setting of Daisy.';
+      say(l0, l1, x); line = l1; i = j + 1; }
+    if (com.length) say(com[0], com[com.length - 1], 'comments');
+    return out; };
   E.folder = function (jobs, commonFiles, info) {
     info = info || {}; const plan = info.plan || {}, out = {}, seen = {}, root = 'Experiment_' + slug(info.title || info.request || 'Daisy', 36);
     /* every file of Common/ gets a name that is specific to this experiment and says what makes it different:
@@ -240,6 +276,25 @@
       rf = rf.replace(/^;; SWAFL scenario[^\n]*\n/, ';; Experiment run ' + no + ': ' + run.label + '\n' + (job.options && job.options.start ? ';; Simulated from 1 January ' + job.options.start + ' to 1 April ' + job.options.stop + (job.options.userWx ? ', with ' + (job.options.userWx.name || 'your weather') + ' (' + job.options.userWx.first + ' to ' + job.options.userWx.last + ')' : '') + '\n' : '')).replace(/\(description "[^"]*"\)/, '(description "' + String((info.request || 'Experiment') + ' - ' + run.label).replace(/"/g, "'") + '")').replace(/\(log_prefix "[^"]*"\)/, '(log_prefix "' + nm + '-")');
       out[root + '/' + dir + '/' + nm + '.dai'] = rf;
     });
+    // a README in every run folder: what this run is, its place in the design, how its file is arranged and what its Common files hold
+    { const fl0 = (info.plan && ((info.plan.plan && info.plan.plan.factors) || info.plan.factors)) || [], lm = info.limit || {}, ttl = info.title || info.request || 'Daisy experiment', first = {};
+      const vName = (id, v) => { const F = E.factor(id); return F ? E.levelName(F, v && v.label ? v.label : v) : String(v); };
+      dirs.forEach((d, i) => { const rf = out[root + '/' + d.dir + '/' + d.nm + '.dai'], R = [], run = d.run;
+        R.push('RUN ' + d.dir.split('_')[0] + ' OF THE EXPERIMENT: ' + ttl, '='.repeat(64), '', run.label + (run.reference ? '  (rainfed reference)' : ''), '');
+        R.push('THE VALUES OF THIS RUN'); if (fl0.length) fl0.forEach(f => { const F = E.factor(f.id), v = (run.val || {})[f.id]; R.push('  ' + ((F && F.label) || f.id).padEnd(52) + ' ' + (v == null ? (run.reference && F && F.irr ? 'none (rainfed)' : 'the value of the farm (not varied in this run)') : vName(f.id, v))); }); else R.push('  one run, no factor varied');
+        R.push('', 'ITS PLACE IN THE DESIGN', '  Run ' + (i + 1) + ' of ' + dirs.length + ' runs' + (lm.total ? ', made from ' + (lm.chosen || dirs.length) + ' of the ' + lm.total.toLocaleString() + ' combinations of the values' + (lm.chosen && lm.chosen < lm.total ? ' (chosen ' + ((E.PICKS.find(q => q[0] === lm.pick) || [])[2] || '') + ', seed ' + lm.seed + ')' : '') : '') + '.');
+        if (run.reference) R.push('  A rainfed reference: the same soil and weather as the irrigated runs listed in the README of the experiment, without irrigation, so the gain of irrigation is measured against it.');
+        else if (dirs.some(q => q.run.reference)) { const ctxv = Object.keys(run.val || {}).filter(id => !(E.factor(id) || {}).irr).map(id => vName(id, run.val[id])).join(', '); const rr = dirs.find(q => q.run.reference && Object.keys(q.run.val || {}).every(id => JSON.stringify(q.run.val[id]) === JSON.stringify((run.val || {})[id]))); R.push('  Its rainfed reference' + (ctxv ? ' (' + ctxv + ')' : '') + ': ' + (rr ? rr.dir : 'none') + '.'); }
+        R.push('', 'THE FILES OF THIS FOLDER', '  ' + d.nm + '.dai'.padEnd(10) + '  the run file: open it with Daisy in this folder.', '  README_run.txt     this file.', '  After the run      the logs ' + d.nm + '-*.dlf and daisy.log are written here.');
+        R.push('', 'HOW THE RUN FILE IS ARRANGED (' + d.nm + '.dai, top to bottom)'); E.explainDai(rf).forEach(x => R.push(x));
+        R.push('', '  The order matters: the files in Common/ are read first, because the column and the management use what they define;', '  then the weather, the column, the management and the dates; Daisy then simulates every hour from (time) to (stop).');
+        R.push('', 'THE COMMON FILES THIS RUN READS'); (rf.match(/\.\.\/Common\/[^"]+/g) || []).forEach(m => { const f = m.slice(10), base = f.replace(/^[^_]+_[^_]+_[^_]+_[^_]+_/, ''), txt = out[root + '/Common/' + f];
+          R.push('  ' + f, '      ' + E.commonKind(f) + '.'); const key = f.replace(/_(overhead|surface|drip|rainfed_reference|variant\d+)?[^/]*$/, ''); 
+          const grp = Object.keys(usedBy).filter(n => n !== f && n.split('_').slice(0, 6).join('_') === f.split('_').slice(0, 6).join('_') && /\.dai$/.test(n));
+          if (grp.length && txt != null) { const o = out[root + '/Common/' + grp[0]] || '', A = o.split('\n').map(z => z.trim()), B = txt.split('\n').map(z => z.trim()), sA = new Set(A), sB = new Set(B), dB = B.filter(z => z && !sA.has(z) && !/^;;/.test(z)).slice(0, 6), dA = A.filter(z => z && !sB.has(z) && !/^;;/.test(z)).slice(0, 6);
+            if (dA.length || dB.length) { R.push('      what differs from ' + grp[0] + ':'); dA.forEach(z => R.push('        - ' + z.slice(0, 130))); dB.forEach(z => R.push('        + ' + z.slice(0, 130))); } } });
+        R.push('', 'HOW TO RUN THIS RUN ALONE', '  Keep the folder of the experiment as it is (this run reads ../Common/).', '  Linux, macOS:  cd ' + d.dir + ' && daisy ' + d.nm + '.dai', '  Windows:       cd ' + d.dir + '  then  "C:\\Program Files\\Daisy\\bin\\daisy.cmd" ' + d.nm + '.dai', '  Or open ' + d.nm + '.dai in the Set-up editor of the SWAFL Daisy workbench and press Run Daisy.');
+        out[root + '/' + d.dir + '/README_run.txt'] = R.join('\r\n') + '\r\n'; }); }
     const fl = (plan.plan && plan.plan.factors) || (plan.factors || []), base = (plan.plan && plan.plan.base) || plan.base || {}, ds = (plan.plan && plan.plan.design) || plan.design || 'factorial';
     const fname = f => { const F = E.factor(f.id); return F ? F.label : f.id; };
     const lvl = f => (f.levels || []).map(v => { const F = E.factor(f.id); return F ? E.levelName(F, v && v.label ? v.label : v) : v; }).join(', ');
@@ -305,6 +360,11 @@
       const csv = ['run_folder,label,reference'.concat(fl.length ? ',' + fl.map(f => '"' + fname(f).replace(/"/g, "'") + '"').join(',') : '')];
       dirs.forEach(d => csv.push([d.dir, '"' + String(d.run.label).replace(/"/g, "'") + '"', d.run.reference ? 1 : 0].concat(fl.map(f => { const v = (d.run.val || {})[f.id]; return v == null ? '' : '"' + String(v && v.label ? v.label : v).replace(/"/g, "'") + '"'; })).join(',')));
       out[root + '/runs.csv'] = csv.join('\r\n') + '\r\n'; }
+        { const d0 = dirs.find(q => !q.run.reference) || dirs[0];
+      L.push('', 'HOW THE FOLDER AND THE CODE ARE ARRANGED', '  ' + root + '/', '  |-- README_*.txt        this file: the design and how everything is made', '  |-- plan.json           the plan (factors, levels, number of runs, way of choosing, seed): open it in Experiments to make the same folder again',
+        '  |-- runs.csv            one line per run: its folder and the value of every factor', '  |-- run_all.sh, run_all.bat   run every run, one after the other', '  |-- Common/             the files the runs share, each written once', '  |-- 00_<name>/ ... ' + dirs[dirs.length - 1].dir.split('_')[0] + '_<name>/   one folder per run: <name>.dai and README_run.txt (what the run is and how its file is arranged)', '',
+        '  Every run file has the same arrangement; run ' + d0.dir + ' as the example:'); if (d0) E.explainDai(out[root + '/' + d0.dir + '/' + d0.nm + '.dai'] || '').forEach(x => L.push(x));
+      L.push('  Only the lines listed under WHERE EACH VALUE IS WRITTEN change from one run to the next.'); }
     L.push('', 'WHAT IS KEPT THE SAME IN ALL RUNS', keptAll, '  Crops, fertiliser, weather, soil and output are identical unless listed above.', '',
       'HOW TO RUN', '  Keep the folder structure (the run files point to ../Common/).', '  Open each .dai in its own folder with Daisy and run, or run run_all.sh (Linux, macOS) or run_all.bat (Windows) here.', '  The output files (.dlf) are written into the folder of the run, prefixed with the run name.', '  Rename daisy.log if you want to keep the run-time information of a run.', '',
       'WHERE TO FIND DATA FOR THE INDEXES',

@@ -268,13 +268,18 @@
   async function saveSetZip() {
     const all = st.set || [], L = all.filter(it => it.on !== false); if (!L.length) { const m = $('SetMsg'); if (m) m.textContent = 'Tick at least one experiment.'; return; } const keep = snap(); const setName = (it) => 'E' + (all.indexOf(it) + 1) + '_' + slug2(it.label);
     try {
-      const tree = {}, readme = ['EXPERIMENTS - ' + L.length + ' experiments in one folder', '='.repeat(60), ''], root = 'Experiments_' + L.length;
+      const tree = {}, readme = ['EXPERIMENTS - ' + L.length + ' experiment' + (L.length === 1 ? '' : 's') + ' in one folder', '='.repeat(60), 'Made by the SWAFL Daisy workbench for Daisy 7.1.14.', '', 'THE EXPERIMENTS'], root = 'Experiments_' + L.length;
       for (let i = 0; i < L.length; i++) {
         applyItem(L[i]); const design = X.design(currentPlan()), files = await commonFiles(), jobs = await buildJobs(design, files), nm = setName(L[i]);
         const t = X.folder(jobs, files, { request: L[i].label, title: L[i].label, plan: currentPlan(), design: design.factors, years: effYears(), limit: design.limit, total: design.total });
-        Object.keys(t).forEach(k => { tree[root + '/' + nm + k.slice(k.indexOf('/'))] = t[k]; }); readme.push(nm.padEnd(44) + ' ' + jobs.length + ' runs, ' + L[i].factors.map(f => (X.factor(f.id) || { label: f.id }).label).join(' x '));
+        Object.keys(t).forEach(k => { tree[root + '/' + nm + k.slice(k.indexOf('/'))] = t[k]; }); const lm = design.limit || {};
+        readme.push(nm + '/', '  ' + L[i].label, '  What changes: ' + (L[i].factors.map(f => { const F = X.factor(f.id) || { label: f.id }; return F.label.replace(/ \(Daisy reference.*\)$/, '') + ' (' + f.levels.map(v => v && v.label ? v.label : X.factor(f.id) ? X.levelName(X.factor(f.id), v) : v).join(', ') + ')'; }).join('; ') || 'nothing (one run)'),
+          '  Combined: ' + ({ factorial: 'every combination', oat: 'one thing at a time', paired: 'the values in pairs' }[L[i].design || 'factorial']) + ': ' + (design.total || jobs.length).toLocaleString() + ' combinations; ' + jobs.length + ' runs (number set: ' + (L[i].max || 40) + (lm.chosen && lm.chosen < lm.total ? '; ' + lm.chosen + ' combinations chosen ' + ((X.PICKS.find(q => q[0] === lm.pick) || [])[2] || '') + ', seed ' + lm.seed : '') + ')' + (lm.refs ? ', of which ' + lm.refs + ' rainfed references' : '') + '.', '');
       }
-      readme.push('', 'Every folder is a complete experiment (README, Common, numbered run folders, run_all.sh, run_all.bat, plan.json). Open the README of an experiment first.');
+      readme.push('HOW THE FOLDER IS ARRANGED', '  ' + root + '/', '  |-- README_experiments.txt   this file: every experiment, what it changes and how its runs were chosen', '  |-- plan_all.json            the plans of all experiments: open it in Experiments (My experiments) to make the same folder again', '  |-- E1_<name>/, E2_<name>/ ...   one complete experiment each:',
+          '        README_<name>.txt   the design, how the combinations were made, how each .dai file is made, where each value is written, how the code of a run file is arranged',
+          '        Common/             the files its runs share (weather, soil, rotation, output)', '        00_<run>/ ...       one folder per run: <run>.dai and README_run.txt (the values of the run, its place in the design, its file line by line)', '        runs.csv, plan.json, run_all.sh, run_all.bat',
+          '', 'Every experiment is designed on its own and runs on its own; the experiments are run in the order of this list. Open the README of an experiment first, then the README_run.txt of any run.');
       tree[root + '/README_experiments.txt'] = readme.join('\r\n'); tree[root + '/plan_all.json'] = JSON.stringify({ set: L.map(it => ({ name: setName(it), text: it.text, plan: { factors: it.factors, base: it.base, design: it.design, max: it.max }, responses: it.responses })) }, null, 1);
       const m = $('SetMsg'); if (m) m.textContent = 'The folder of the ' + L.length + ' experiments is open: look at its files, then press Save the folder (.zip).';
       showFolder(tree, SWAFLDate.name('daisy-experiments.zip'), () => { const m2 = $('SetMsg'); if (m2) m2.textContent = 'Saved ' + L.length + ' experiment folders in one zip.'; });

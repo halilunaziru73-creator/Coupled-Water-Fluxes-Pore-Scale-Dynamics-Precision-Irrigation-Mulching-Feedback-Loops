@@ -367,6 +367,10 @@ Under every row of *What will be tested* a sentence says what the factor is; for
 
 *runs.csv* lists every run folder with the value of every factor. A rainfed reference is named after the soil and weather it belongs to.
 
+5. *HOW THE FOLDER AND THE CODE ARE ARRANGED*: the tree of the folder, and the run file of one run explained part by part with its line numbers: the comments, each (input file ...) and what that Common file holds, the unit of the radiation, the weather with its factors, the description and log prefix, the management, the column with the parameters the run varies, and the dates.
+
+**Every run folder has its own README_run.txt**: the values of the run (and which factors stay at the value of the farm), its place in the design (run 4 of 8, made from 6 of 6 combinations, chosen how and with which seed), its rainfed reference, the files of the folder, its run file explained line by line, the Common files it reads with what differs in them from the other runs, and how to run it alone on Linux, macOS or Windows. When several experiments are saved as one folder, *README_experiments.txt* lists every experiment with what it changes, how its values were combined and how many runs were chosen, and draws the arrangement of the whole folder. Both the folder window and the editor have a *Full screen* button (Esc leaves it).
+
 ![The README in the light colours.](images/daisy13/exp_readme.jpg){width=100%}
 
 \newpage
