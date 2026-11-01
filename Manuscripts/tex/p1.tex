@@ -18,50 +18,42 @@
 
 \section*{List of symbols}
 \begin{table}[H]\centering\small
-\caption{List of symbols, abbreviations and units used in the text.}\label{tab:notation}
+\caption{Symbols, abbreviations and units of hydraulic memory and of the accounting audit.}\label{tab:notation}
 \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.3cm}Xl}
 \toprule
 Symbol & Meaning & Unit\\\midrule
+\multicolumn{3}{l}{\emph{Soil water and hydraulic properties}}\\
 $h$, $h_0$ & suction head; initial suction in E9 & cm\\
 $\theta,\ \Se$ & volumetric water content; effective saturation & $-$\\
-$\alpha,\ n,\ m$ & van~Genuchten parameters, $m=1-1/n$ & cm$^{-1}$, $-$, $-$\\
+$\alpha,\ n,\ m$ & van~Genuchten scale and shape parameters, $m=1-1/n$ & cm$^{-1}$, $-$, $-$\\
 $K_s,\ K,\ K_r$ & saturated, unsaturated and relative conductivity & cm\,d$^{-1}$, $-$\\
 $\lambda$ & pore-connectivity exponent (0.5) & $-$\\
-$P_r,\ I,\ D,\ \mathit{ET}$ & rainfall, irrigation, drainage at 1\,m, evapotranspiration & mm\,yr$^{-1}$\\
-$T,\ E_s,\ E_c,\ \Ent$ & transpiration, soil evaporation, canopy evaporation, $\mathit{ET}-T$ & mm\,yr$^{-1}$\\
+$\TAW$ & total available water to 1\,m & mm\\\midrule
+\multicolumn{3}{l}{\emph{Water balance}}\\
+$P_r,\ I,\ W$ & rainfall, irrigation, water input $P_r+I$ & mm\,yr$^{-1}$\\
+$\mathit{ET},\ T$ & evapotranspiration, transpiration & mm\,yr$^{-1}$\\
+$E_s,\ E_c,\ \Ent$ & soil evaporation, canopy evaporation, non-transpiration term $\mathit{ET}-T$ & mm\,yr$^{-1}$\\
+$R$ & unattributed evaporative term, \cref{eq:R} & mm\,yr$^{-1}$\\
+$D,\ \Delta S,\ Q_r$ & drainage at 1\,m, storage change, runoff & mm\,yr$^{-1}$\\
+$\varepsilon$ & closure residual, \cref{eq:closure} & $-$\\\midrule
+\multicolumn{3}{l}{\emph{Hydraulic memory}}\\
 $\bar R$ & storage release, \cref{eq:release} & mm\,yr$^{-1}$\\
 $\phi_x$ & memory fate of flux $x$, \cref{eq:phi} & $-$\\
 $\psi_x$ & loss fate of flux $x$, \cref{eq:psi} & $-$\\
 $\rho_R$ & recoverable fraction, $1-\psi_D$ & $-$\\
 $q^\ast$ & effective withdrawal scale in \cref{eq:rate} & cm\,d$^{-1}$\\
-$\TAW$ & total available water to 1\,m & mm\\
-E1--E17 & numbered experiments of the Daisy ensemble (E9, E16, E7, E11 and E14 are used here) & $-$\\
-LOSO, RMSE & leave-one-soil-out validation; root-mean-square error & $-$\\\bottomrule
-\end{tabularx}
-\end{table}
-
-%==========================================================
-\medskip\noindent\textbf{Additional symbols of the accounting audit.}\par
-\begin{table}[H]\centering\small
-\caption{Symbols, abbreviations and units of the accounting audit.}\label{tab:notationB}
-\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.3cm}Xl}
-\toprule
-Symbol & Meaning & Unit\\\midrule
-$P_r,\ I,\ W$ & rainfall, irrigation, water input $P_r+I$ & mm\,yr$^{-1}$\\
-$\mathit{ET},\ T,\ E_s,\ E_c,\ R$ & evapotranspiration and components; unattributed term, \cref{eq:R} & mm\,yr$^{-1}$\\
-$D,\ \Delta S,\ Q_r$ & drainage at 1\,m, storage change, runoff & mm\,yr$^{-1}$\\
-$\varepsilon$ & closure residual, \cref{eq:closure} & $-$\\
-$\mathbf F,\ \sigma_k,\ \mathbf v_k$ & flux matrix, singular values and right singular vectors & --\\
+$\kappa$ & irrigation compensation, \cref{eq:kappa} & $-$\\\midrule
+\multicolumn{3}{l}{\emph{Accounting audit}}\\
+$\mathbf F,\ \sigma_k,\ \mathbf v_k$ & flux matrix, singular values and right singular vectors & $-$\\
 $\mathbf c$ & invariant coefficients, \cref{eq:law} & $-$\\
-$n,\ \alpha$ & van~Genuchten shape and scale & $-$, cm$^{-1}$\\
-$\TAW$ & total available water & mm\\
 $R^2_{\mathrm{cv}}$ & cross-validated coefficient of determination, \cref{eq:r2cv} & $-$\\
-$\kappa$ & irrigation compensation, \cref{eq:kappa} & $-$\\
-E1--E17 & numbered experiments of the Daisy ensemble & $-$\\
-LOEO, LOSO & leave-one-experiment-out and leave-one-soil-out validation & $-$\\
+DPF, NLF, IE & drainage fraction $D/W$; nitrogen-leaching fraction; irrigation efficiency & $-$\\\midrule
+\multicolumn{3}{l}{\emph{Experiments, validation and methods}}\\
+E1--E17 & numbered experiments of the Daisy ensemble (E9, E16, E7, E11 and E14 carry hydraulic memory) & $-$\\
+LOSO, LOEO & leave-one-soil-out and leave-one-experiment-out validation & $-$\\
+RMSE & root-mean-square error & $-$\\
 SVD, PCA & singular-value decomposition; principal component analysis & $-$\\
-GBM & gradient-boosting machine used as the flexible benchmark & $-$\\
-DPF, NLF, IE & drainage fraction $D/W$; nitrogen-leaching fraction; irrigation efficiency & $-$\\\bottomrule
+GBM & gradient-boosting machine used as the flexible benchmark & $-$\\\bottomrule
 \end{tabularx}
 \end{table}
 
