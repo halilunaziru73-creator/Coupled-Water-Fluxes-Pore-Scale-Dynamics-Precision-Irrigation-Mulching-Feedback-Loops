@@ -596,6 +596,10 @@ The yield of each year in every run, to show how much of a difference is steady 
 
 Processes is a map of the model after Fig. 1 of the Daisy paper. Each box is a process; clicking it explains it and draws its figures.
 
+**The original figure, or every component in one figure.** The *Figure* box above the map chooses between two drawings. *Fig. 1 of the Daisy paper (original)*, the default, is the map as before, with the components that Fig. 1 has no box for as buttons under it. *Fig. 1 with every component of Daisy (standalone)* is the same figure, unchanged above the ground line, with every other component of Daisy drawn under the profile as a box of the same kind as the boxes of the map (the same rectangles, colours and serif labels), in one row group for each module: water and the surface (11), heat (3), nitrogen (1), organic matter and carbon (6), crop (10), management (7), chemicals and solutes (8), and soil and numerics (9). Ten of them come from the reference manual and had no box or button before: vernalization, rubisco nitrogen in the canopy, the water stress effect on production, vegetation without a crop model, reactions and chemical equilibria, maximal exfiltration, geometry and 2D movement, programs and batch runs, summaries and measured data, and units. Every box can be clicked like the boxes of the map. *Save as SVG*, *Save as PNG, 300 dpi* and *PNG, 600 dpi* save the figure shown as one picture.
+
+![The standalone figure: Fig. 1 of the Daisy paper, unchanged, and under the profile every other component of Daisy in the same style, grouped by module (rendered from the program).](images/daisy12/proc_all.jpg){width=100%}
+
 ![Processes: the map. Screen 100 of the Daisy workbench.](images/daisy11/dz_proc_01.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
@@ -912,6 +916,26 @@ The slider moves through the dates; Play runs the profile like a film.
 
 \newpage
 
+### Plot: figures of every result
+
+Under the plot, *3. Figures of every result* makes one figure of its own for every quantity of a log, or of every loaded log. Each column with values becomes a figure (logs with more than eight columns of one unit are drawn four columns to a figure); a log of several years also gets a figure of its annual totals, and every depth variable a depth-time map. Columns that are zero throughout are listed and left out.
+
+Every figure stands alone: its number and title, the axis texts with units, the legend, a caption that says what it shows (the columns, the log and the period) and a table of its key numbers (mean, smallest and largest value with their dates, and the sum of the period). Each one has its own controls:
+
+1. **Draw as.** Lines, steps, areas, cumulative sums (the end of each line is the total of the period) or points.
+2. **Axis from zero.** Starts the value axis at zero.
+3. **Zoom.** Drag across the figure to zoom in time; double-click to see the whole period again. The caption and the key numbers follow the zoom.
+4. **Values under the cursor.** Shown under the figure as the cursor moves.
+5. **Titles, Save, full screen.** Edit the title and the axis texts, save the figure as a picture (screen, 300 dpi or 600 dpi) or as a table, or show it on the whole screen.
+
+The bar above the figures collapses or expands them all and saves every figure in one zip file.
+
+![Figures of every result: one figure for each quantity of the daily water log of the irrigated run of the sample experiment (chapter [Learn the Daisy files](#daisy-learn)).](images/daisy12/gal1.jpg){width=100%}
+
+![A depth-time map of the gallery: the water content of the irrigated run.](images/daisy12/gal2.jpg){width=100%}
+
+\newpage
+
 ### Mass balance: the form
 
 The balance adds the inputs, the outputs and the content columns of a log. Choose columns proposes a set from the column names.
@@ -944,32 +968,46 @@ After Balance the error of each step is drawn with the mean and the limits of tw
 
 \newpage
 
-### Run comparison: the form
+### Run comparison: the verdict and the table {#daisy-compare}
 
-Two logs are compared column by column against the smallest meaningful level of each quantity.
+Run comparison puts two runs side by side and says, in plain words, how they differ. Choose run A and run B: the logs of two runs (two scenarios, the same set-up before and after a change, two variants of an experiment), or a run and a table of measurements. The comparison starts as soon as both are chosen; the arrows between them swap A and B.
 
-![Run comparison: the form. Screen 121 of the Daisy workbench.](images/daisy11/dz_compare_01.jpg){width=100% height=17cm}
+- **Matching.** The rows are matched by date, so two runs of different lengths are compared on their common dates; logs without dates are matched row by row.
+- **The verdict.** *Identical*, *The same within the meaningful level* or *Different*, with the number of quantities of each kind and the three largest relative differences. A quantity whose mean is zero in A (irrigation of a rainfed run) is reported with its two means.
+- **The smallest meaningful level (SML).** The difference below which Daisy's own test suite (daisypy-test) counts two values as the same, for every column of every standard log (1 mm for the water balance). A difference within it is *below the meaningful level*; one under a thousandth of it is *identical* (the share is set under *Tolerances*). Quantities without an SML are compared with the absolute tolerance.
 
-**What the arrows point to.**
+The table gives, for every quantity, its unit, the verdict, the SML, the means of A and B, the mean difference $\overline{B-A}$ and the same in per cent of A, the root mean square difference, the largest difference and its date, the correlation $r$ and the Nash-Sutcliffe efficiency of B on A,
 
-1. **Log A.** The reference log.
-2. **Log B.** The log compared with it.
-3. **Precision.** Smallest difference taken into account.
-4. **Identical below.** Differences under this level count as identical.
-5. **Compare.** Runs the comparison.
-6. **Batch.** Compares same-named logs from two folders.
+$$
+\mathrm{NSE}=1-\frac{\sum_t (B_t-A_t)^2}{\sum_t (A_t-\overline{A})^2},
+$$
+
+which is 1 when B equals A and below 0 when B is further from A than the mean of A is. *Show only the different ones* shortens the table. *Compare same-named logs of two folders* compares every log that two loaded folders have in common and gives one verdict line for each.
+
+![Run comparison: the two annual water balances of the sample experiment. The irrigated run (B) gets 130 mm of irrigation a season on average, drains 98 % more below the root zone and evaporates 3.3 % more.](images/daisy12/cmp1.jpg){width=100%}
 
 \newpage
 
-### Run comparison: the result
+### Run comparison: the figures of a quantity
 
-Each column is reported as identical, different within the level, or different.
+Click a quantity in the table to draw its three figures: A and B over time (B dashed), the difference B - A with the SML as a green band (a difference inside the band does not matter), and B against A with the 1:1 line (every date is one point). Each figure has the same controls as the other figures of the workbench.
 
-![Run comparison: the result. Screen 122 of the Daisy workbench.](images/daisy11/dz_compare_02.jpg){width=100% height=17cm}
+![Run comparison: the figures of the chosen quantity.](images/daisy12/cmp2.jpg){width=100%}
 
-**What the arrows point to.**
+\newpage
 
-1. **Result table.** One row for each column with the largest difference and the verdict.
+### Double-blind comparison
+
+A judgement of two runs is easily coloured by knowing which is which (the new set-up, the expected answer). The double-blind comparison hides it from both judges, you and the program:
+
+1. **Choose the two runs** and, if you have them, the **measurements** to judge against (a log or a table with the same column names).
+2. **Start.** The program puts the runs behind the letters X and Y by a random draw and shows a fingerprint (the first 12 hexadecimal digits of the SHA-256 hash) of the hidden key, which holds the two names and a random salt. Neither the figures nor the numbers show the names, and the quantities come in a random order. Quantities that are identical in the two runs are left out.
+3. **Judge.** For each quantity, read its three figures (X and Y, Y - X, Y against X) and press *X is better*, *Y is better* or *no real difference*. With measurements the program judges too, without the names: the run with the smaller root mean square error against the measurements is better, unless the two errors are within 2 % of each other.
+4. **Reveal.** The names behind X and Y appear, the fingerprint is computed again from the key to show that it was not changed, and a table gives each quantity with your judgement, the program's and whether they agree, with the share of agreement. *Save the judgements (CSV)* keeps the record.
+
+![Double-blind comparison: the two daily water logs of the sample behind the letters X and Y, with the sealed key.](images/daisy12/blind1.jpg){width=100%}
+
+![Double-blind comparison revealed: who was X and Y, the check of the key, and the judgements.](images/daisy12/blind2.jpg){width=100%}
 
 \newpage
 

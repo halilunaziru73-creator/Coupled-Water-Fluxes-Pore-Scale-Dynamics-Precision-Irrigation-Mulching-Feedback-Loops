@@ -1,0 +1,27 @@
+;;; my-management.dai -- what the farmer does: the crop, the fertiliser, the tillage and the irrigation
+
+;; (1) The library files of Daisy that define the crops, the tillage operations and the fertilisers.
+(input file "tillage.dai")
+(input file "crop.dai")
+(input file "fertilizer.dai")
+
+;; (2) One season of spring barley, as a list of operations done one after the other.
+(defaction SBarley_rainfed activity
+  (wait_mm_dd 3 20) (plowing)                                  ; wait until 20 March, then plough
+  (wait_mm_dd 4 5)  (fertilize (N25S (weight 120 [kg N/ha])))  ; 5 April: 120 kg N/ha of mineral fertiliser
+  (seed_bed_preparation) (sow "Spring Barley")                 ; prepare the seed bed and sow
+  (wait (or (crop_ds_after "Spring Barley" 2.0) (mm_dd 9 1)))  ; wait for maturity (DS 2) or 1 September
+  (harvest "Spring Barley" (stub 8 [cm])))                     ; harvest, leaving 8 cm of stubble
+
+;; (3) An irrigation rule: when the soil at 20 cm is drier than -300 cm (pF 2.5)
+;;     between 1 May and 1 September, give 30 mm overhead (10 mm/h for 3 hours), then wait two days.
+(defaction Irrigate_when_dry activity
+  (wait (and (after_mm_dd 5 1)
+             (before_mm_dd 9 1)
+             (not (soil_water_pressure_above (height -20.0 [cm]) (potential -300 [cm])))))
+  (irrigate_overhead 10 [mm/h] (hours 3))
+  (wait_days 2))
+
+;; (4) The same season with irrigation: the rule repeats while the barley season runs.
+(defaction SBarley_irrigated activity
+  (while (SBarley_rainfed) (repeat Irrigate_when_dry)))

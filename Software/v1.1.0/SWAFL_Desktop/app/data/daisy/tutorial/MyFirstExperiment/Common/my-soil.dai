@@ -1,0 +1,41 @@
+;;; my-soil.dai -- the soil of the experiment: three horizons and the soil column
+;;; A horizon is one layer of soil; the column stacks the horizons and adds water,
+;;; heat, organic matter and nitrogen to them.
+
+;; (1) A horizon: def + component name, its name in quotes, the model it is built on (USDA3),
+;;     then its attributes, each as (name value [unit]).
+(defhorizon "My Ap" USDA3
+  (description "Ploughed topsoil, 0 to 30 cm")
+  (clay 0.12 [])(silt 0.25 [])(sand 0.63 [])   ; fractions, they add up to 1
+  (humus 0.025 [])                              ; 2.5 % organic matter
+  (dry_bulk_density 1.45 [g/cm^3])
+  (C_per_N 11.0 [g C/g N])
+  (hydraulic hypres (topsoil true)))            ; water retention and conductivity from the HYPRES pedotransfer function
+
+(defhorizon "My Bt" USDA3
+  (description "Subsoil with more clay, 30 to 100 cm")
+  (clay 0.22 [])(silt 0.20 [])(sand 0.58 [])
+  (humus 0.010 [])
+  (dry_bulk_density 1.60 [g/cm^3])
+  (C_per_N 11.0 [g C/g N])
+  (hydraulic hypres (topsoil false)))
+
+;; (2) A horizon can also inherit from another one and change only what differs.
+(defhorizon "My C" "My Bt"
+  (description "Parent material, 100 to 200 cm")
+  (humus 0.005 [])
+  (dry_bulk_density 1.65 [g/cm^3]))
+
+;; (3) The column: the whole soil profile of the field.
+(defcolumn "My column" default
+  (Soil (MaxRootingDepth 120 [cm])              ; roots cannot go deeper
+        (border -100 [cm])                      ; fluxes are also logged at this depth
+        (horizons (-30  [cm] "My Ap")           ; each pair: the lower boundary and the horizon above it
+                  (-100 [cm] "My Bt")
+                  (-200 [cm] "My C")))
+  (Movement vertical (Tertiary none))           ; one-dimensional water flow, no biopores
+  (Groundwater deep)                            ; free drainage at the bottom
+  (OrganicMatter original (init (input 3000 [kg C/ha/y]) (end -25 [cm])))
+  (Chemistry original
+    (combine (N (reaction nitrification
+                          (denitrification (water_factor (0.8 0.0) (0.9 0.2) (1.0 1.0))))))))

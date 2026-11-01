@@ -1,0 +1,35 @@
+dlf-0.0 -- Field water (defined in 'log-std.dai').
+
+VERSION: 7.1.14
+LOGFILE: Annual-FWater_100cm.dlf
+RUN: Sat Oct 31 23:51:48 2026
+
+COLUMN: *
+INTERVAL: box [-100; none]
+
+LOG: Information about water input, output and content for the system.
+LOG: 
+LOG: The intended use of this log is large scale water balance, for
+LOG: example reservoir management. It provide information about how
+LOG: much water is in the field (down to a specified depth), where it
+LOG: is located in the field (surface, soil matrix or in biopores), as
+LOG: well as the sources, sinks and amounts of water entering or
+LOG: leaving the system.  It does not provide information about
+LOG: internal translocation of water between surface, soil matrix and
+LOG: biopores, use see the 'Soil water' log instead for that.
+LOG: 
+LOG: For the balances of this log to work, you must include the entire
+LOG: root zone, as well as the biopore zone.
+
+SIMFILE: run.dai
+SIM: My first experiment: spring barley with irrigation when the soil is dry
+
+--------------------
+year	month	mday	hour	Precipitation	Irrigation	Potential evapotranspiration	Actual evapotranspiration	Matrix percolation	Biopore percolation	Matrix drain flow	Biopore drain flow	Runoff	Biopore water	Soil matrix water	Surface water
+				mm	mm	mm	mm	mm	mm	mm	mm	mm	mm	mm	mm
+1991	4	1	0	00.00	00.00	00.00	00.00	00.00	00.00	00.00	00.00	00.00	0	330.629	0.0959729
+1992	4	1	0	686.1	120	501.747	501.747	298.827	-0	0	0	0	0	336.251	0
+1993	4	1	0	776.9	180	551.196	551.196	413.213	-0	0	0	0	0	328.741	0
+1994	4	1	0	654.2	150	539.678	539.678	259.955	-0	0	0	0	0	333.309	-6.93889e-18
+1995	4	1	0	427	150	471.451	471.451	138.182	-0	0	0	0	0	300.676	0
+1996	4	1	0	643	180	556.215	556.215	223.076	-0	0	0	0	0	344.385	6.58935e-15

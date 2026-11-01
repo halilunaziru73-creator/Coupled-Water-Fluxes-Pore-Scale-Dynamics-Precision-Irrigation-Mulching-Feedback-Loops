@@ -7,7 +7,7 @@ const DaisyUI = (() => {
   const OKI = ['#0072B2', '#D55E00', '#009E73', '#CC79A7', '#E69F00', '#56B4E9', '#7a6f00', '#444444'];
   const SPEC = ['#2b83ba', '#5aa6b4', '#8fcfa6', '#c4e6a8', '#ffffbf', '#fee08b', '#fdae61', '#f46d43', '#d53e4f'];
   // the tabs follow what a person does: ask a question, give the data, look at the results, build and calibrate, learn
-  const GROUPS = [['Input data', [['data', 'Input data'], ['library', 'Parameter library']]], ['Experiments', [['exp', 'Experiments'], ['scen', 'Scenarios']]], ['Results and analysis', [['proc', 'Process map'], ['plot', 'Log plots'], ['balance', 'Mass balance'], ['compare', 'Run comparison']]], ['Decision support', [['dss', 'To the SWAFL layers']]], ['Model development', [['editor', 'Set-up editor'], ['build', 'Model builder'], ['richards', 'Soil column'], ['deni', 'Response curves'], ['calib', 'Calibration']]], ['Documentation', [['refman', 'Reference manual'], ['docs', 'Model and documentation']]]];
+  const GROUPS = [['Input data', [['data', 'Input data'], ['library', 'Parameter library']]], ['Experiments', [['exp', 'Experiments'], ['scen', 'Scenarios']]], ['Results and analysis', [['proc', 'Process map'], ['plot', 'Log plots'], ['balance', 'Mass balance'], ['compare', 'Run comparison']]], ['Decision support', [['dss', 'To the SWAFL layers']]], ['Model development', [['editor', 'Set-up editor'], ['build', 'Model builder'], ['richards', 'Soil column'], ['deni', 'Response curves'], ['calib', 'Calibration']]], ['Documentation', [['learn', 'Learn the Daisy files'], ['refman', 'Reference manual'], ['docs', 'Model and documentation']]]];
   const TABS = GROUPS.reduce((a, g) => a.concat(g[1]), []);
   const S = { logs: {}, tab: 'data', lib: null, idx: null, rich: null, anim: null, cal: null, dai: '', kind: 'horizons', txt: {} };
   const $ = id => document.getElementById('dz' + id);
@@ -114,7 +114,7 @@ const DaisyUI = (() => {
     try { const ix = await getIdx(); $('Bund').innerHTML = '<table class="dzt">' + ix.dlf.map(d => '<tr><td>' + esc(d.file) + '</td><td>' + esc(d.desc) + '</td><td><a href="#" data-b="' + esc(d.file) + '">load</a></td></tr>').join('') + '</table>'; $('Bund').querySelectorAll('[data-b]').forEach(a => a.onclick = async ev => { ev.preventDefault(); try { await loadBundled(a.dataset.b); note('Fst', a.dataset.b + ' read.'); regList(); refreshSelects(); } catch (e) { note('Fst', e.message, 1); } }); } catch (e) { note('Bund', 'The bundled examples could not be listed: ' + esc(e.message), 1); }
     regList();
   }
-  function refreshSelects() { ['PLog', 'BLog', 'CA', 'CB', 'CTgt'].forEach(id => { const e = $(id); if (!e) return; const cur = e.value; e.innerHTML = (names().length ? names() : ['']).map(n => '<option' + (n === cur ? ' selected' : '') + '>' + esc(n) + '</option>').join(''); e.dispatchEvent(new Event('change')); }); }
+  function refreshSelects() { if (S.galRefresh && $('Gal') && !$('Gal').querySelector('.dzgal')) { try { S.galRefresh(); } catch (e) {} } ['PLog', 'BLog', 'CA', 'CB', 'CTgt'].forEach(id => { const e = $(id); if (!e) return; const cur = e.value; e.innerHTML = (names().length ? names() : ['']).map(n => '<option' + (n === cur ? ' selected' : '') + '>' + esc(n) + '</option>').join(''); e.dispatchEvent(new Event('change')); }); }
 
   // ---------------------------------------------------------------- tab: plot
   function tPlot() {
@@ -122,7 +122,7 @@ const DaisyUI = (() => {
       '<div class="dzrow"><label>Columns</label><select id="dzPCols" multiple size="6" style="min-width:230px"></select><div><label><input type="checkbox" id="dzPStep"> steps</label><br><label><input type="checkbox" id="dzPZero"> start at zero</label><br><label id="dzPAggL" hidden>Annual<br>' + sel('PAgg', [['s', 'sum'], ['m', 'mean'], ['mx', 'maximum'], ['mn', 'minimum']]) + '</label></div>' +
       '<div id="dzPSl" hidden style="flex:1;min-width:220px"><label>Date <span id="dzPSd"></span></label><input id="dzPSlide" type="range" min="0" max="0" value="0" style="width:100%"><button class="btn" id="dzPPlay">Play</button></div></div>' +
       '<div class="dzrow"><button class="btn pri" id="dzPDraw">Draw</button><button class="btn" id="dzPPng">Picture (PNG)</button><button class="btn" id="dzPCsv">Table (CSV)</button><span id="dzPst" class="pnote"></span></div>' +
-      '<div><canvas id="dzPcv"></canvas><div class="dzro pnote">Move over the chart to read the values.</div></div>';
+      '<div><canvas id="dzPcv"></canvas><div class="dzro pnote">Move over the chart to read the values.</div></div><h3 style="margin:16px 0 4px">3. Figures of every result</h3><div id="dzGal"></div>';
   }
   function bPlot() {
     const fill = () => { const d = S.logs[$('PLog').value], m = $('PMode').value, c = $('PCols'); if (!d) { c.innerHTML = ''; return; } let list; if (m === 'heat' || m === 'prof') list = Object.keys(IO.depthColumns(d)); else list = d.cols.filter((x, j) => !/^(year|month|mday|day|hour|minute|date|time)$/i.test(x) && d.data[j].some(isFinite)); c.multiple = !(m === 'heat' || m === 'prof'); c.innerHTML = list.map((x, i) => '<option' + (i === 0 || (m === 'ts' && i < 2 && list.length < 5) ? ' selected' : '') + '>' + esc(x) + '</option>').join(''); $('PAggL').hidden = m !== 'ann'; $('PSl').hidden = m !== 'prof'; if (d.time && d.n) { $('PFrom').value = dstr(d.time[0]); $('PTo').value = dstr(d.time[d.n - 1]); } };
@@ -145,6 +145,7 @@ const DaisyUI = (() => {
     }
     $('PDraw').onclick = draw; $('PSlide').oninput = draw; $('PPng').onclick = () => savePng($('Pcv'), 'daisy-plot.png'); $('PCsv').onclick = () => { if (!S.plotCsv) draw(); if (S.plotCsv) download('daisy-plot.csv', S.plotCsv, 'text/csv'); };
     $('PPlay').onclick = () => { if (S.anim) { clearInterval(S.anim); S.anim = null; $('PPlay').textContent = 'Play'; return; } $('PPlay').textContent = 'Stop'; S.anim = setInterval(() => { const sl = $('PSlide'); if (!sl) { clearInterval(S.anim); S.anim = null; return; } sl.value = (+sl.value + 1) % (+sl.max + 1); draw(); }, 120); };
+    const gal = () => { if (window.DaisyGallery) window.DaisyGallery.mount($('Gal')); }; gal(); const rs0 = refreshSelects; S.galRefresh = gal;
     if (names().length) draw();
     else { note('Pst', 'No log is loaded yet, so the bundled example log of the water flux is loaded for you. Run a scenario or an experiment, or load your own logs in Files, to plot those.'); loadBundled('daily-water-flux.dlf').then(() => { refreshSelects(); fill(); const c = $('PCols'); if (c && c.options.length > 1) { Array.from(c.options).forEach((o, i) => { o.selected = i < 3; }); } draw(); }).catch(e => note('Pst', esc(e.message), 1)); }
   }

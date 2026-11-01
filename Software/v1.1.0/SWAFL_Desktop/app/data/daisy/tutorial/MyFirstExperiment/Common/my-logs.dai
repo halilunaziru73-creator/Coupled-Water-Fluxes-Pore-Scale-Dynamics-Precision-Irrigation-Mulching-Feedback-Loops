@@ -1,0 +1,15 @@
+;;; my-logs.dai -- which results Daisy writes, how often and into which file (.dlf)
+;;; The log names ("harvest", "Field water", "Crop" ...) are defined in Daisy's own log.dai.
+
+(input file "log.dai")
+
+(output
+  ;; once a year, on 1 April at midnight (the season runs from April to April)
+  ("harvest"       (where "Annual-Harvest.dlf"))
+  ("Field water"   (when (and (month 4) (mday 1) (hour 0))) (where "Annual-FWater.dlf"))
+  ("Field water"   (when (and (month 4) (mday 1) (hour 0))) (to -100 [cm]) (where "Annual-FWater_100cm.dlf"))
+  ("Field nitrogen" (when (and (month 4) (mday 1) (hour 0))) (to -100 [cm]) (where "Annual-FN_100cm.dlf"))
+  ;; every day
+  ("Crop"               (when daily) (where "Daily-CropProduction.dlf"))
+  ("Field water"        (when daily) (where "Daily-FWater.dlf"))
+  ("Soil Water Content" (when daily) (where "Daily-Theta.dlf")))

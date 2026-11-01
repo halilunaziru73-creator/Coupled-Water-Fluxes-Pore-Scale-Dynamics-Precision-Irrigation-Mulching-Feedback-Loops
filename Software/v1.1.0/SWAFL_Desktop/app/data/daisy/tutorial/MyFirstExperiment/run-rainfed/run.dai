@@ -1,0 +1,18 @@
+;;; run-rainfed/run.dai -- one run of the experiment: the files it reads and the settings of this run
+
+(path "../Common" &old)                 ; also look for files in ../Common (&old keeps Daisy's own library)
+(input file "my-soil.dai")              ; the soil horizons and the column
+(input file "my-management.dai")        ; the crop and the field operations
+(input file "my-logs.dai")              ; the results to write
+
+;; the weather file gives radiation in kWh/d/m^2, a unit Daisy does not know: define it (1 kWh/d/m^2 = 41.67 W/m^2)
+(defunit [kWh/d/m^2] SIfactor (mass 1) (time -3) (factor 41.67))
+(weather default "../Common/Daily-1965-2000.dwf")   ; the daily weather of Taastrup, Denmark
+
+(description "My first experiment: spring barley without irrigation")
+(column "My column")                    ; the soil column to simulate
+(manager activity (repeat SBarley_rainfed))   ; the management, repeated every year
+
+(time 1990 1 1)                         ; the start of the simulation
+(stop 1996 4 1)                         ; the end
+(activate_output (after 1991 3 31 23))  ; write the logs only after one year of warm-up

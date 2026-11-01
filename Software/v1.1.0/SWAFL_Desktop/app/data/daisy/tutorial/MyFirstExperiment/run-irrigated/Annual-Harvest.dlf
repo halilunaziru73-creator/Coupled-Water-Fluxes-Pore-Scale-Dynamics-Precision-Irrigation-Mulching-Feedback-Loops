@@ -1,0 +1,18 @@
+dlf-0.0 -- harvest
+
+VERSION: 7.1.14
+LOGFILE: Annual-Harvest.dlf
+RUN: Sat Oct 31 23:51:48 2026
+
+SIMFILE: run.dai
+SIM: My first experiment: spring barley with irrigation when the soil is dry
+
+--------------------
+year	month	day	column	crop	stem_DM	dead_DM	leaf_DM	sorg_DM	stem_N	dead_N	leaf_N	sorg_N	WStress	NStress	WP_ET	HI
+					Mg DM/ha	Mg DM/ha	Mg DM/ha	Mg DM/ha	kg N/ha	kg N/ha	kg N/ha	kg N/ha	d	d	kg/m^3	
+1990	8	13	My column	Spring Barley	5.81095	0.650287	0.238996	5.96533	39.6039	4.31439	5.26711	123.579	0	0	1.96601	0.401686
+1991	8	13	My column	Spring Barley	5.33944	0.420115	0.213965	5.30105	37.5391	2.72216	4.83054	112.497	0	0	1.96084	0.400461
+1992	8	13	My column	Spring Barley	5.82797	0.566941	0.243503	5.885	33.9158	3.67414	4.51843	109.39	0	3.05194	1.89662	0.400598
+1993	8	4	My column	Spring Barley	5.69373	0.482484	0.260223	5.95796	33.3613	3.06835	4.91154	111.025	0	1.00597	2.0776	0.409096
+1994	8	8	My column	Spring Barley	4.73209	0.432197	0.24463	5.23703	35.3732	2.81179	5.79478	116.611	0	0	2.17212	0.418285
+1995	8	9	My column	Spring Barley	6.04119	0.629165	0.247457	5.99956	37.6677	4.12425	5.0946	116.107	0	0	1.96203	0.396309

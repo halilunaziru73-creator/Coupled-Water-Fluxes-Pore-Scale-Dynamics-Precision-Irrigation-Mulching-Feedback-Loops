@@ -18,9 +18,9 @@ const Layers = (() => {
     { id: 'g-dscen', name: 'Experiments and scenarios', icon: 'drop', items: [['dz-exp', 'Experiments', ''], ['dz-scen', 'Scenarios', ''], ['dz-scen:irrigation', 'Scenario: irrigation strategy', ''], ['dz-scen:nitrogen', 'Scenario: nitrogen fertilisation and leaching', ''], ['dz-scen:climate', 'Scenario: climate change (warmer, drier, wetter)', ''], ['dz-scen:chemical', 'Scenario: pesticide and tracer fate', ''], ['dz-scen:soil', 'Scenario: soil texture (sand against loam)', ''], ['dz-scen:own', 'Scenario: own Daisy set-up', '']] },
     { id: 'g-dproc', name: 'Process structure', icon: 'layers', items: [['dz-proc', 'Process map', ''], ['dz-proc:snow', 'Snowpack', ''], ['dz-proc:surf', 'Canopy, litter and surface pond', ''], ['dz-proc:water', 'Soil water', ''], ['dz-proc:pore', 'Biopores', ''], ['dz-proc:drain', 'Subsurface drainage', ''], ['dz-proc:temp', 'Soil heat and freezing', ''], ['dz-proc:no3', 'Nitrate', ''], ['dz-proc:nh4', 'Ammonium', ''], ['dz-proc:om', 'Soil organic matter pools', ''], ['dz-proc:carbon', 'Carbon balance', ''], ['dz-proc:deni', 'Denitrification and N2O', ''], ['dz-proc:photo', 'Photosynthesis', ''], ['dz-proc:crop', 'Crop growth', '']] },
     { id: 'g-dana', name: 'Results and analysis', icon: 'chart', items: [['dz-plot', 'Log plots and run data', ''], ['dz-balance', 'Mass balance', ''], ['dz-compare', 'Run comparison and tests', '']] },
-    { id: 'g-ddss', name: 'Decision support (SWAFL layers)', icon: 'chart', items: [['chem', 'Chemical fate (from my runs)', ''], ['dsum', 'Decision table (from my runs)', '']] },
+    { id: 'g-ddss', name: 'Decision support (SWAFL layers)', icon: 'chart', items: [['chem', 'Chemical fate (from my runs)', ''], ['dsum', 'Decision table (from my runs)', ''], ['dwb', 'Water balance (from my runs)', ''], ['dnb', 'Nitrogen balance (from my runs)', ''], ['dyr', 'Yield risk and limiting factor (from my runs)', '']] },
     { id: 'g-dbuilt', name: 'Model development', icon: 'soil', items: [['dz-editor', 'Set-up editor (.dai)', ''], ['dz-richards', 'Soil column (Richards equation)', ''], ['dz-deni', 'Denitrification and N2O response curves', ''], ['dz-calib', 'Calibration', '']] },
-    { id: 'g-ddoc', name: 'Documentation', icon: 'book', items: [['dz-docs', 'Model description and installation', '']] }
+    { id: 'g-ddoc', name: 'Documentation', icon: 'book', items: [['dz-learn', 'Learn the Daisy files (.dai, Common, a sample experiment)', ''], ['dz-docs', 'Model description and installation', '']] }
   ];
   const DESIGN = ['sid', 'drip', 'spr'];
   let dzCur = null, tabs = [], cur = null, started = false, collapsed = { 'g-water': true, 'g-ctrl': true, 'g-soil': true, 'g-pheno': true, 'g-mulch': true, 'g-loop': true, 'g-design': true, 'g-crop': true, 'g-year': true, 'g-chem': true, 'g-dss': true, 'g-dscen': true, 'g-ddss': true, 'droot': true, 'g-ddata': true, 'g-dproc': true, 'g-dana': true, 'g-dbuilt': true, 'g-ddoc': true, 'g-daisy': true, 's-sid': true, 's-drip': true, 's-spr': true }, sectionPick = {};
@@ -28,7 +28,7 @@ const Layers = (() => {
   const reveal = (id, sec) => { collapsed['root'] = false; const g = groupOf(id); if (g) collapsed[g] = false; if (sec) collapsed['s-' + id] = false; };
   const tree = document.getElementById('layerTree');
 
-  const nameOf = id => { for (const g of GROUPS) for (const it of g.items) if (it[0] === id) return it[1]; return id; };
+  const nameOf = id => { for (const g of GROUPS.concat(typeof DAISY !== 'undefined' ? DAISY : [])) for (const it of g.items) if (it[0] === id) return it[1]; return id; };
   const sections = id => { const s = (E.snap && E.snap.sec && E.snap.sec[id]) || {}; return Object.entries(s).sort((a, b) => a[1][0] - b[1][0]).map(e => e[0]); };
 
   function render() {

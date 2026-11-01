@@ -17,6 +17,12 @@
 * Variable-rate irrigation is also computed cell by cell (10 m): the depth and the date of the next irrigation vary continuously over the field, in smooth colours stretched to the range of the field; out of the crop season the vegetation seen by Sentinel-2 drives the water use, so the maps are no longer all grey.
 * All the maps of the field are drawn in continuous colours with smooth interpolation by default (indices, monitoring, erosion, retention, sensors); pixels and classes remain one choice away.
 
+* Daisy: a new tab *Learn the Daisy files* (Documentation) teaches the files of a Daisy experiment one by one (the folder, the grammar, the soil, the management, the logs, the weather, the run file, running and reading the results, Daisy's messages, templates) with a complete sample experiment. Every file carries numbered labels explained in a table; the sample was run with Daisy 7.1.14 (water balance error 0.0 mm), its logs are included, and every error message shown was produced by Daisy itself (chapter [Learn the Daisy files](#daisy-learn)).
+* Daisy: the process map keeps the original Fig. 1 as its default and adds a standalone figure with every component of Daisy: Fig. 1 unchanged, and under it every other component as a box in the same style, grouped by module, with ten new ones from the reference manual. Either figure saves as SVG or PNG (300 or 600 dpi).
+* Daisy: Log plots makes one independent figure for every quantity of a log, with its own controls (kind of line, zoom by dragging, values under the cursor, titles, saving), a caption and its key numbers.
+* Daisy: Run comparison gives a verdict in plain words, a table with the means, the differences, the RMS difference, the largest difference and its date, r and the Nash-Sutcliffe efficiency, three figures for every quantity, and a double-blind comparison with a sealed key.
+* New SWAFL layers from Daisy runs: D2 Daisy water balance, D3 Daisy nitrogen balance and D4 Yield risk and limiting factor.
+
 ## The designs
 
 * Inputs are **value boxes** with exact values, units and a list of the allowed range (Section 18.2).

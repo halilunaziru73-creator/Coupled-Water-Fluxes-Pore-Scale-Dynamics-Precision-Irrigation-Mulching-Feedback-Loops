@@ -17,7 +17,7 @@
     ['compare', 'Compare and test', 'Compare two runs against the smallest meaningful level.'],
     ['dss', 'To the SWAFL project', 'Take the results to the layers of the SWAFL project, which turn them into decisions.']
   ];
-  const TOOLS = { editor: 'Set-up editor', build: 'Model builder', richards: 'Soil column', deni: 'Process curves', calib: 'Calibrate', docs: 'Model and documentation', refman: 'Reference manual' };
+  const TOOLS = { editor: 'Set-up editor', build: 'Model builder', richards: 'Soil column', deni: 'Process curves', calib: 'Calibrate', docs: 'Model and documentation', refman: 'Reference manual', learn: 'Learn the Daisy files' };
   const F = { last: 'data' };
   window.DaisyFlow = F; F.PATH = PATH;
   const idx = t => PATH.findIndex(p => p[0] === t);
@@ -38,12 +38,13 @@
     deni: ['Choose a process (denitrification, N2O...).', 'Move the inputs.', 'Read how the response curve changes.'],
     calib: ['Load observed data and a run.', 'Choose the parameters to fit.', 'Press Calibrate and read the best values.'],
     refman: ['Click a chapter on the left, or search a word.', 'Read the models and every parameter.', 'Press Fill in a form for this model to build it without typing.'],
+    learn: ['Read the lessons in order: the folder, the grammar, then each file of the sample experiment.', 'Open any file in the set-up editor, or download the whole sample as a zip.', 'Load the results of the sample and compare its two runs.'],
     docs: ['Read what Daisy is and how to install it.', 'Follow the links to the papers and the code.', 'Come back to the guided path when ready.']
   };
   const tipsOff = () => { try { return localStorage.getItem('swafl.dz.tips') === 'off'; } catch (e) { return false; } };
   const tipLine = tab => { const h = HELP[tab]; if (!h) return ''; if (tipsOff()) return '<div class="dztips off"><a href="#" id="dzTipsOn">Show what to do here</a></div>'; return '<div class="dztips"><b>What to do here</b>' + h.map((t, i) => '<span><i>' + (i + 1) + '</i>' + esc(t) + '</span>').join('') + '<a href="#" id="dzTipsOff" title="Hide these tips on every tab">Hide tips</a></div>'; };
   // the tab buttons: the number of the step on the tabs of the guided path, and a sentence on what each tab is for
-  const TIP = Object.assign({}, ...PATH.map(p => ({ [p[0]]: p[2] })), { editor: 'Edit any Daisy set-up file (.dai) as text.', build: 'Build any Daisy model from a form: no typing in the Daisy language.', richards: 'A soil column solved with the Richards equation, without Daisy.', deni: 'Response curves of the processes of Daisy.', calib: 'Fit parameters to observed data.', refman: 'The Daisy reference manual, every model and parameter.', docs: 'What Daisy is, installation, papers.' });
+  const TIP = Object.assign({}, ...PATH.map(p => ({ [p[0]]: p[2] })), { learn: 'How a Daisy experiment is made, file by file, with a complete sample to download.', editor: 'Edit any Daisy set-up file (.dai) as text.', build: 'Build any Daisy model from a form: no typing in the Daisy language.', richards: 'A soil column solved with the Richards equation, without Daisy.', deni: 'Response curves of the processes of Daisy.', calib: 'Fit parameters to observed data.', refman: 'The Daisy reference manual, every model and parameter.', docs: 'What Daisy is, installation, papers.' });
   F.decorate = function () { document.querySelectorAll('.dztabs button[data-t]').forEach(b => { if (b.__dec) return; b.__dec = true; const t = b.dataset.t, i = idx(t); if (TIP[t]) b.title = TIP[t]; if (i >= 0) b.insertAdjacentHTML('afterbegin', '<span class="dzsn">' + (i + 1) + '</span>'); }); };
   // the bar above the tab: where you are, what to do, Back and Next
   F.bar = function (tab) { setTimeout(F.decorate, 0); return F.bar0(tab) + tipLine(tab); };
@@ -75,9 +76,9 @@
   };
   F.push = function () { try { const w = (typeof E !== 'undefined') && E.win; if (w) { w.DAISYLIVE = { label: F.live.label, runs: F.live.runs, meta: F.live.meta, soil: F.live.soil }; if (typeof w.refresh === 'function') w.refresh(); } } catch (e) { } };
   // the layer that answers the question you ran last
-  const MATCH = { irrigation: [['dsum', 'Daisy decision table', 'Yield, water and nitrate of the rainfed and irrigated crops, answer by answer, with the gain of irrigation on every soil.'], ['yby', 'Reliability over 20 seasons', 'How steady the irrigation need and the yield are from year to year.'], ['wb2', 'Full water balance', 'Every term of the water balance, season by season.'], ['v1', 'Sensor and trigger', 'The trigger that starts the irrigation.']],
-    nitrogen: [['dsum', 'Daisy decision table', 'What half the fertiliser or 30 per cent more does to yield and to nitrate.'], ['nb', 'Nitrogen budget', 'Supply, uptake and losses of nitrogen, season by season.']],
-    climate: [['dsum', 'Daisy decision table', 'Warmer, drier and wetter climates side by side.'], ['yby', 'Reliability over 20 seasons', 'The spread between seasons.']],
+  const MATCH = { irrigation: [['dsum', 'Daisy decision table', 'Yield, water and nitrate of the rainfed and irrigated crops, answer by answer, with the gain of irrigation on every soil.'], ['dwb', 'Daisy water balance', 'Where the rain and the irrigation go: evapotranspiration, drainage, runoff, water productivity, every run side by side.'], ['dyr', 'Yield risk and limiting factor', 'How likely each yield is, and whether water or nitrogen limits it.'], ['yby', 'Reliability over 20 seasons', 'How steady the irrigation need and the yield are from year to year.'], ['wb2', 'Full water balance', 'Every term of the water balance, season by season.'], ['v1', 'Sensor and trigger', 'The trigger that starts the irrigation.']],
+    nitrogen: [['dsum', 'Daisy decision table', 'What half the fertiliser or 30 per cent more does to yield and to nitrate.'], ['dnb', 'Daisy nitrogen balance', 'Nitrogen in and out, use efficiency, surplus and losses, every run side by side.'], ['dyr', 'Yield risk and limiting factor', 'Water stress against nitrogen stress, season by season.'], ['nb', 'Nitrogen budget', 'Supply, uptake and losses of nitrogen, season by season.']],
+    climate: [['dsum', 'Daisy decision table', 'Warmer, drier and wetter climates side by side.'], ['dyr', 'Yield risk and limiting factor', 'How the bad seasons change with the climate.'], ['dwb', 'Daisy water balance', 'Evapotranspiration and drainage in each climate.'], ['yby', 'Reliability over 20 seasons', 'The spread between seasons.']],
     chemical: [['chem', 'Chemical fate (Daisy runs)', 'Decay, crop uptake, leaching, runoff and what stays in the soil, with the ranking of the soils.']],
     soil: [['v7', 'Soil hydraulic drivers', 'How the soil holds and moves water.'], ['v2', 'Profile evolution', 'Water through the soil profile in the season.'], ['dsum', 'Daisy decision table', 'The same questions on each soil of the project.']],
     own: [['dsum', 'Daisy decision table', 'The runs of your own set-up next to the bundled ones, when their names match.']] };

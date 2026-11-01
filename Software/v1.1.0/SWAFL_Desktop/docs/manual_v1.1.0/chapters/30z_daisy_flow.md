@@ -89,9 +89,9 @@ When a scenario has been run in Scenarios, the workbench reads the logs of its r
 
 The soil of the run is matched to the soil of the project when the names agree (for example, the sand and the loam of the scenarios are the sand and the loam of the project), and the project is set to that soil when you press a button of the last step.
 
-## The two layers that read Daisy runs
+## The layers that read Daisy runs
 
-The group **Decision support (SWAFL layers)**, inside **Daisy model** in the Layers panel, has the layers *C2 Chemical fate* and *D1 Daisy decision table*. They are drawn like every other layer, and they open from the last step of the path. Each shows in its first lines the weather, the soil and the years of the run it is drawn from.
+The group **Decision support (SWAFL layers)**, inside **Daisy model** in the Layers panel, has the layers *C2 Chemical fate*, *D1 Daisy decision table*, *D2 Daisy water balance*, *D3 Daisy nitrogen balance* and *D4 Yield risk and limiting factor*. They are drawn like every other layer, and they open from the last step of the path. Each shows in its first lines the weather, the soil and the years of the run it is drawn from.
 
 **C2 Chemical fate.** Three buttons at the top choose the chemical: a mobile tracer (no sorption, no decay), a sorbing chemical, and a sorbing chemical that decays with a half-life of 30 days. For the soil in use the layer shows, from top to bottom:
 
@@ -110,6 +110,32 @@ The group **Decision support (SWAFL layers)**, inside **Daisy model** in the Lay
 ![The layer C2 Chemical fate of the SWAFL project (from a run of the chemical question on loam).](images/daisy11/swafl_chem.jpg){height=22cm}
 
 ![The layer D1 Daisy decision table of the SWAFL project (from the runs of the irrigation, nitrogen and climate questions on loam).](images/daisy11/swafl_dsum.jpg){height=22cm}
+
+The three layers D2 to D4 read every run you made in this session. A row of buttons at the top chooses the run (rainfed, irrigated, half the fertiliser, warmer...), and a table at the bottom puts all the runs side by side; tapping a row of it chooses that run.
+
+**D2 Daisy water balance.** Where the rain and the irrigation go.
+
+1. *Water in and water out, season by season*: two bars for each season, the water that comes in (rain and irrigation) and the water that leaves (evapotranspiration, drainage below 1 m, runoff).
+2. *The water balance in numbers*: the means of the seasons and the share of the input taken by each term; the change of the water in the soil, $\Delta S=P+I-ET_a-D-R$; the share of the potential evapotranspiration the crop used, $ET_a/ET_p$; and the water productivity, the yield per cubic metre evapotranspired, $\mathrm{WP}=1000\,Y/(10\,ET_a)$ in kg/m$^3$ with $Y$ in Mg/ha and $ET_a$ in mm (and per cubic metre of rain and irrigation when there is irrigation).
+3. A plain statement: much of the water drains below the roots (drainage above 60 % of evapotranspiration), the crop is short of water ($ET_a/ET_p<0.8$), or most of the water is used by the crop.
+
+**D3 Daisy nitrogen balance.** What comes in (fertiliser, deposition, mineralisation of the soil organic matter) and where it goes.
+
+1. *Nitrogen in, season by season*, with a black mark for the crop uptake, and *Nitrogen lost, season by season*: leached below 1 m, denitrified and volatilised.
+2. *The nitrogen balance in numbers*: the means of each term; the nitrogen use efficiency, $\mathrm{NUE}=U/(F+D_p)$, the uptake against the fertiliser and the deposition; the surplus $F+D_p-U$; and the nitrate leached for each kilogram of fertiliser.
+3. A plain statement of the leaching: low (under 20 kg N/ha a year), moderate (20 to 40) or high (above 40).
+
+**D4 Yield risk and limiting factor.** The mean yield hides the bad seasons.
+
+1. *How likely is a yield?*: the exceedance curve of every run, the share of the seasons in which the yield reaches at least a value. A curve above another is better in every kind of season; crossing curves trade a better mean for more risk.
+2. *Water stress and nitrogen stress, season by season*: the stress of the harvest log (the share of the potential production lost), water against nitrogen.
+3. *The yield in numbers*: the mean; the yield reached in 9 seasons out of 10 (the 10th percentile), the median and the 90th percentile; the coefficient of variation; the share of seasons with a stress above 0.2; and which factor limits the crop more (one stress more than 1.2 times the other).
+
+![The layer D2 Daisy water balance (test data of three runs).](images/daisy12/layer_dwb.jpg){height=18cm}
+
+![The layer D3 Daisy nitrogen balance (test data of three runs).](images/daisy12/layer_dnb.jpg){height=18cm}
+
+![The layer D4 Yield risk and limiting factor (test data of three runs).](images/daisy12/layer_dyr.jpg){height=18cm}
 
 ## What to expect and what not
 

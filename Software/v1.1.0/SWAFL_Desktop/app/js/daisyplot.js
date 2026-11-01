@@ -19,7 +19,7 @@ window.DaisyPlot = (() => {
   const fmt = (v, d) => v == null || !isFinite(v) ? '-' : (Math.abs(v) >= 1e5 && Math.abs(v) < 1e9 ? String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') : Math.abs(v) >= 1e9 || (v !== 0 && Math.abs(v) < 1e-3) ? v.toExponential(1) : (t => t.indexOf('.') >= 0 ? t.replace(/\.?0+$/, '') : t)((+v).toFixed(d == null ? 3 : d)));
   const dstr = t => new Date(t).toISOString().slice(0, 10);
   const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  function nice(lo, hi, n) { if (!(hi > lo)) { hi = lo + 1; } const s = (hi - lo) / (n || 5), m = Math.pow(10, Math.floor(Math.log10(s))), f = s / m, st = (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * m, a = Math.floor(lo / st + 1e-9) * st, t = []; for (let v = a, k = 0; k < 80; v += st, k++) { t.push(+v.toPrecision(12)); if (v >= hi - st * 1e-9) break; } return { lo: t[0], hi: t[t.length - 1], t, st }; }
+  function nice(lo, hi, n) { if (!(hi > lo)) { hi = lo + 1; } const s = (hi - lo) / (n || 5), m = Math.pow(10, Math.floor(Math.log10(s))), f = s / m, st = (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * m, a = Math.floor(lo / st + 1e-9) * st, t = []; for (let v = a, k = 0; k < 80; v += st, k++) { t.push(Math.abs(v) < st * 1e-6 ? 0 : +v.toPrecision(12)); if (v >= hi - st * 1e-9) break; } return { lo: t[0], hi: t[t.length - 1], t, st }; }
   const dec = st => st >= 1 ? 0 : Math.min(4, Math.ceil(-Math.log10(st) - 1e-9));
 
   // canvas of the right size, the title and the subtitle; returns the drawing context and the free area
