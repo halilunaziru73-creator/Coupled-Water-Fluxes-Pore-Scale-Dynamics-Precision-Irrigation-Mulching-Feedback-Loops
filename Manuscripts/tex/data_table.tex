@@ -1,0 +1,27 @@
+\begin{table}[H]\centering\scriptsize
+\caption{The data behind the papers: the 17 Daisy experiments of \texttt{Data/Comprehensive\_Summary} (10190 runs, 10041 valid; 20 years, 1980--1999, of Taastrup weather). Means of the valid runs; $Y$ yield (Mg\,ha$^{-1}$), $I$ irrigation, $D$ drainage at 1\,m and $\ET$ (mm\,yr$^{-1}$), $N_L$ nitrate leached (kg\,N\,ha$^{-1}$\,yr$^{-1}$), $t$ run time of Daisy (s). Every row is one file of the folder, linked.}
+\label{tab:data}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}llrrp{3.5cm}rrrrrr@{}}
+\toprule
+Exp. & File & Runs & Valid & Factors varied & $Y$ & $I$ & $D$ & $\ET$ & $N_L$ & $t$\\\midrule
+E0 & \href{\repourl/blob/main/Data/Comprehensive_Summary/E00_Baselines.csv.gz}{\texttt{Baselines}} & 10 & 10 & soil & 2.19 & 0 & 55 & 418 & 158 & 231\\
+E1 & \href{\repourl/blob/main/Data/Comprehensive_Summary/E01_Doses.csv.gz}{\texttt{Doses}} & 200 & 189 & soil, rate, dose & 5.13 & 198 & 98 & 564 & 79 & 195\\
+E2 & \href{\repourl/blob/main/Data/Comprehensive_Summary/E02_TriggerPressure.csv.gz}{\texttt{TriggerPressure}} & 200 & 197 & soil, trigger & 4.70 & 169 & 80 & 559 & 90 & 139\\
+E3 & \href{\repourl/blob/main/Data/Comprehensive_Summary/E03_SensorDepth.csv.gz}{\texttt{SensorDepth}} & 200 & 200 & soil, sensor depth & 4.94 & 199 & 86 & 583 & 86 & 146\\
+E4 & \href{\repourl/blob/main/Data/Comprehensive_Summary/E04_Methods.csv.gz}{\texttt{Methods}} & 100 & 96 & soil, method & 5.01 & 164 & 88 & 542 & 83 & 147\\
+E5 & \href{\repourl/blob/main/Data/Comprehensive_Summary/E05_SHP_Dynamics.csv.gz}{\texttt{SHP Dynamics}} & 300 & 300 & soil, method, tillage & 4.13 & 152 & 43 & 579 & 84 & 189\\
+E6 & \href{\repourl/blob/main/Data/Comprehensive_Summary/E06_Mediterranean_Pollution.csv.gz}{\texttt{Mediterranean Pollution}} & 210 & 193 & soil, method, trigger, N rate & 3.64 & 84 & 239 & 620 & 62 & 118\\
+E7 & \href{\repourl/blob/main/Data/Comprehensive_Summary/E07_Mulching.csv.gz}{\texttt{Mulching}} & 200 & 200 & soil, mulch & 5.29 & 183 & 96 & 555 & 74 & 161\\
+E8 & \href{\repourl/blob/main/Data/Comprehensive_Summary/E08_Rain_Intensity_Moisture.csv.gz}{\texttt{Rain Intensity Moisture}} & 1000 & 1000 & initial suction, rain scale & 0.68 & 0 & -1 & 282 & -0 & 6\\
+E9 & \href{\repourl/blob/main/Data/Comprehensive_Summary/E09_Soil_Moisture_Rain.csv.gz}{\texttt{Soil Moisture Rain}} & 1000 & 987 & soil, initial suction, rain scale & 0.75 & 0 & 19 & 247 & 33 & 7\\
+E10 & \href{\repourl/blob/main/Data/Comprehensive_Summary/E10_Amount_Timing_Soil.csv.gz}{\texttt{Amount Timing Soil}} & 1000 & 954 & soil, rate, dose, window & 4.42 & 139 & 76 & 532 & 97 & 146\\
+E11 & \href{\repourl/blob/main/Data/Comprehensive_Summary/E11_Temp_Evap_Rain.csv.gz}{\texttt{Temp Evap Rain}} & 1000 & 1000 & rain scale, warming, demand & 3.81 & 324 & 18 & 754 & 66 & 151\\
+E12 & \href{\repourl/blob/main/Data/Comprehensive_Summary/E12_Sensor_Trigger_Rain.csv.gz}{\texttt{Sensor Trigger Rain}} & 1000 & 1000 & trigger, sensor depth, rain scale & 5.88 & 260 & 35 & 670 & 32 & 155\\
+E13 & \href{\repourl/blob/main/Data/Comprehensive_Summary/E13_N_Water_Soil.csv.gz}{\texttt{N Water Soil}} & 1000 & 975 & soil, method, rate, dose, trigger, N rate & 4.00 & 162 & 83 & 547 & 79 & 207\\
+E14 & \href{\repourl/blob/main/Data/Comprehensive_Summary/E14_Mulch_Rain.csv.gz}{\texttt{Mulch Rain}} & 1000 & 1000 & rain scale, mulch & 6.15 & 235 & 43 & 634 & 25 & 173\\
+E15 & \href{\repourl/blob/main/Data/Comprehensive_Summary/E15_Method_Depth_Amount.csv.gz}{\texttt{Method Depth Amount}} & 1000 & 1000 & method, rate, dose, root depth & 6.02 & 217 & 61 & 619 & 37 & 157\\
+E16 & \href{\repourl/blob/main/Data/Comprehensive_Summary/E16_Edge_Cases.csv.gz}{\texttt{Edge Cases}} & 770 & 740 & soil, method, rate, dose, trigger, sensor depth, rain scale, warming, N rate, demand & 2.17 & 344 & 185 & 600 & 93 & 224\\
+\bottomrule
+\end{tabular}
+\end{table}

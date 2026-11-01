@@ -26,6 +26,9 @@
 
 ## Figures of experiments and the Daisy layers
 
+- **To the SWAFL layers is clearer.** A status panel at the top says whether you have runs, opens the best layer for your question with one button, and every layer card is marked *ready* (green) or says in one line what it still *needs* (amber), with a button that makes those runs. The topic list and the list of all layers are folded at the bottom.
+- **The data of the four papers.** The per-experiment outputs of all 10 190 Daisy runs (folder `Data/Comprehensive_Summary` of the repository) are the data of the four papers of the project; the fourth gives a closed form for the reach of a suction trigger, which the Trigger law layer shows for every soil.
+
 * The **file viewer and editor** (Notepad++ colours) colours and numbers only the lines in view, so logs of several megabytes open, scroll and are edited at once without the program hanging; wrap is kept for files below 300 kB.
 * The Layers panel and the panel of the real field are shown in this manual as they appear in version 1.1.0.
 

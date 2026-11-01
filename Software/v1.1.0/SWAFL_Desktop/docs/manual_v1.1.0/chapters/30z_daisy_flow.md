@@ -68,18 +68,22 @@ Log plots draws any quantity of a run. The bar shows that three steps remain on 
 
 ### To the SWAFL layers: the last step of the path
 
-The last step takes the results to the layers of the SWAFL project. Daisy calculates; the SWAFL project turns the results into decisions. For each of the five questions the tab offers the layers that answer it, and the button of the question you ran last is highlighted. The runs you made in the session are passed to the layers, so they show your weather and your soil.
+The last step takes the results to the layers of the SWAFL project. Daisy calculates; the SWAFL project turns the results into decisions. The page answers three questions at a glance: have I run anything, which layer answers my question, and what does each layer still need.
 
-![To the SWAFL layers: the last step of the path. Screen 126 of the Daisy workbench.](images/daisy11/dz_flow_04.jpg){width=100% height=17cm}
+![To the SWAFL layers after two runs of the irrigation question: the status panel at the top and every layer marked ready (green) or needing runs (amber). Screen 126 of the Daisy workbench.](images/daisy11/dz_flow_04.jpg){width=100% height=15cm}
 
-**What the arrows point to.**
+**What you see, from the top.**
 
-1. **Step 9 of 9.** The last step of the path.
-2. **Open in the SWAFL project.** Opens the layer that matches the question you ran last.
-3. **Daisy decision table.** Yield, water and nitrate of every run, answer by answer.
-4. **Chemical fate.** Decay, crop uptake, leaching, runoff and what stays in the soil.
-5. **Nitrogen budget.** Supply, uptake and losses of nitrogen, season by season.
-6. **Reliability over 20 seasons.** How steady the result is from year to year.
+1. **Where you are.** Three steps with a tick when done: *Daisy runs ready* (how many, and the last question run), *Best layer for your question* (one button that opens the layer that answers the question you ran last) and *Decide in the layer*.
+2. **Layers that read your Daisy runs.** One card for each layer (D1 Decision table to D8 Nitrous oxide, and C2 Chemical fate). Each card says what the layer *answers*. A green edge and the label *ready, n runs* mean the layer can show your runs: press *Open*. An amber edge and *needs runs* say in one line what the layer still needs (for example *a run with the nitrogen balance*), with *Make these runs*, which goes to Scenarios or Experiments, and *Look anyway*, which opens the layer with the bundled example runs.
+3. **Answers your last question.** A star marks the layers that answer the theme of the question you ran last.
+4. **Which layer answers which question** and **Every layer of the SWAFL project.** Folded at the bottom; open them to choose a layer by topic (Water, Nitrogen, Soil, Crop and climate, Chemicals, Experiment) or from all the layers of the project.
+
+\newpage
+
+Before any run, every card is amber and the first step of the panel points to Scenarios and Experiments:
+
+![To the SWAFL layers before any run: every card says what it needs.](images/daisy11/dz_flow_04b.jpg){width=100% height=15cm}
 
 \newpage
 

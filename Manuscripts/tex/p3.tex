@@ -110,6 +110,12 @@ The chain was run on a field of 5.853~ha (perimeter 992~m, 17 corners) demarcate
 \caption{The same field: terrain, water source, erosion and soil water retention from open data (screen captures of release 1.1.0).}\label{fig:zaria2}
 \end{figure}
 
+\begin{figure}[H]\centering
+\begin{subfigure}{0.49\textwidth}\centering\includegraphics[width=\textwidth]{\figdir/shots_jpg/zaria_vri_depth.jpg}\caption{Depth of the next irrigation, cell by cell (FAO-56 balance of each 10\,m cell).}\end{subfigure}\hfill
+\begin{subfigure}{0.49\textwidth}\centering\includegraphics[width=\textwidth]{\figdir/shots_jpg/zaria_matric_potential.jpg}\caption{Matric potential now, from the retention curves mapped from SoilGrids.}\end{subfigure}
+\caption{Two further maps of the Zaria field (real screenshots): the variable-rate prescription and the suction, which Paper~4 uses to locate where a suction trigger can be reached.}\label{fig:zaria3}
+\end{figure}
+
 
 \subsection{Crops}
 The library has 48 crops, 19 field crops (cereals, roots and tubers, legumes, oil crops, cotton) with a crop coefficient for the initial, mid-season and late-season stages, four stage lengths, height, rooting depth, the depletion fraction $p$ and, where tabulated, the yield response factor $K_y$ \citep{Doorenbos1979,Allen1998}, and 29 perennial crops (tree, vine and berry crops) with several planting densities or training systems, each with its ground cover, height, mid-season and end-season coefficient. The daily crop coefficient follows the piecewise curve of FAO-56,
@@ -156,6 +162,23 @@ The workbench is a window of the application with six groups of tabs (\cref{fig:
 \begin{figure}[H]\centering
 \includegraphics[width=0.85\textwidth]{\figdir/p4/fig02b_soil_column.png}
 \caption{Water content of a soil column through time, computed by the Richards solver of the workbench.}\label{fig:column}
+\end{figure}
+
+\begin{figure}[p]\centering
+\begin{subfigure}{0.49\textwidth}\centering\includegraphics[width=\textwidth]{\figdir/shots_jpg/wb_step1_input.jpg}\caption{Step 1: my data and weather (manual p.~760).}\end{subfigure}\hfill
+\begin{subfigure}{0.49\textwidth}\centering\includegraphics[width=\textwidth]{\figdir/shots_jpg/wb_step2_library.jpg}\caption{Step 2: library of soils, crops and fertilisers (p.~583).}\end{subfigure}\\[3pt]
+\begin{subfigure}{0.49\textwidth}\centering\includegraphics[width=\textwidth]{\figdir/shots_jpg/wb_step4_scenarios.jpg}\caption{Step 4: scenarios, a question and its runs (p.~762).}\end{subfigure}\hfill
+\begin{subfigure}{0.49\textwidth}\centering\includegraphics[width=\textwidth]{\figdir/shots_jpg/wb_step6_logplots.jpg}\caption{Step 6: log plots of the runs (p.~763).}\end{subfigure}\\[3pt]
+\begin{subfigure}{0.49\textwidth}\centering\includegraphics[width=\textwidth]{\figdir/shots_jpg/wb_step9_layers.jpg}\caption{Step 9: to the SWAFL layers, which layer answers which question (p.~764).}\end{subfigure}\hfill
+\begin{subfigure}{0.49\textwidth}\centering\includegraphics[width=\textwidth]{\figdir/shots_jpg/wb_tool_setup_editor.jpg}\caption{Tool: set-up editor with bracket check (p.~783).}\end{subfigure}\\[3pt]
+\begin{subfigure}{0.49\textwidth}\centering\includegraphics[width=\textwidth]{\figdir/shots_jpg/wb_tool_calibrate.jpg}\caption{Tool: calibration (daisypy-optim) (p.~779).}\end{subfigure}\hfill
+\begin{subfigure}{0.49\textwidth}\centering\includegraphics[width=\textwidth]{\figdir/shots_jpg/wb_tool_learn_files.jpg}\caption{Tool: learn the Daisy files, the grammar of a .dai file (p.~792).}\end{subfigure}
+\caption{The guided path of the Daisy workbench and three of its tools (real screenshots of release 1.1.0). Each step carries its step number, a one-line ``what to do here'', the manual page and Back and Next buttons.}\label{fig:wbsteps}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/shots_jpg/zaria_main_feedback.jpg}
+\caption{The main window with the online weather of Zaria, Nigeria (2007--2026): Layers tree, the feedback-loops layer with the controls of the season, the Properties panel and the Processing toolbox (real screenshot).}\label{fig:mainzaria}
 \end{figure}
 
 \subsubsection{Experiments and scenarios}
@@ -231,6 +254,16 @@ A decision layer that shows a Daisy quantity draws it from a live run or not at 
 \emph{Summary} (\cref{fig:engine}). For every result the range over all runs is given (lowest, highest, mean, coefficient of variation, best and worst run), and for every input the effect on every result: for a number the change of the mean from its lowest to its highest level, for a choice from the level with the lowest mean to the level with the highest, also as a share of the mean, with the means at every level. Combinations are ranked by a weighted score in which every result is scaled from the worst run (0) to the best (1).
 \emph{Figures.} Every quantity of every log becomes a figure in the layout of a journal figure: one panel for each level of one factor, one line for each level of another, the other factors averaged, and a band for the spread (10 to 90\,\% of the seasons and runs for the course through the year; lowest to highest run otherwise); monthly and yearly totals for fluxes and means for states; cumulative series; depth--time maps with one colour scale and depth profiles. For a complete factorial the figures by factor are drawn; for a fraction, every run is its own row and the main effects carry their standard error and number of runs.
 \emph{Diagnosis.} A run without results is diagnosed from the message of Daisy: the line \texttt{file:line:column} is located in the set-up of the run and shown with its neighbours, and the cause is classed as a name Daisy does not know, a numerical problem of the solver (no convergence, a value that is not a number, a negative amount of water or solute), a value outside the accepted range, a missing file, the weather, a duplicate definition, a line that cannot be read, or a stop without a message; runs that fail for the same cause are reported together with the change that removes it.
+
+\paragraph{The data in the repository.} Every output of every run is open. The folder \cslink{} of the repository holds, for each of the 17 experiments, one compressed table with every value of every Daisy log of every run, year by year (the annual water balance, the nitrogen balance, the harvest and the crop state), the one-row-per-run summary of all 10\,190 runs with the settings read from each set-up file, the per-experiment summary, and the script that made them from the log files (\cref{tab:data,fig:data}); the 20-year means of these tables reproduce the run table used here within 2\,\%. The complete raw archive is on Zenodo \citep{HaliluData}.
+
+\input{data_table.tex}
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/data/fig_data_overview.pdf}
+\caption{The data of the ensemble: yield, irrigation, drainage and nitrate leaching of the 10\,041 valid runs, by experiment (violins: distribution; boxes: quartiles). Source: \texttt{00\_summary\_all\_simulations.csv.gz} in \cslink; script \texttt{reproducibility/analysis/data\_overview.py}.}
+\label{fig:data}
+\end{figure}
 
 \subsection{Checks of the workbench}
 \subsubsection{Design size and fidelity}
@@ -464,6 +497,9 @@ The suite is documented in a technical manual of 1\,154 pages in 43 chapters \ci
 
 \section{Conclusions}
 SWAFL Desktop 1.1.0 is a single offline application that joins the field, the satellite, the design, the schedule, the Daisy process model and the plant, with traceability of its equations. The workbench makes Daisy usable through a question-first path in which a checked design is run within an exact budget, every run is kept and explained (its summary of effects, its figures, the root cause of a failure), and the experiments of a large published ensemble become repeatable in about an hour each instead of days. The bridge hands the runs to the decision layers under one rule, that a Daisy layer shows a Daisy result only from a Daisy run, reads the logs exactly, closes the chemical budget, and offers three routes from Daisy to a decision that differ by orders of magnitude in time. Each computing part was verified against an independent reference or against stored Daisy output, and the verification found and removed the defect of the shared denitrification function. What remains is the repetition of the published experiments run by run, the test of the data services on a connected machine and of the installer on Windows, and the comparison of the layers and of the runs with measurements on real fields; each is a defined piece of work and none is claimed.
+
+\section*{Companion papers}
+Paper~1 analyses hydraulic memory and the closure of the water balance of the ensemble; Paper~2 describes the engines and the design modules. A fourth paper uses the per-experiment outputs of the same data folder to derive a closed form, from the van~Genuchten--Mualem parameters, for the largest suction a crop can impose at a sensor (the reach of a suction trigger, beyond which a trigger never fires) and to map the fate of each irrigation millimetre across soils, doses, seasons and methods (Paper~4).
 
 \section*{Software, data and code availability}
 \suiteavail
