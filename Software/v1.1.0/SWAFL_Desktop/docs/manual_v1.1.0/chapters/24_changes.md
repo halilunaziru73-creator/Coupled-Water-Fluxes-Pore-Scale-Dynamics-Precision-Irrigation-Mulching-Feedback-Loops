@@ -176,4 +176,9 @@
 - **Run comparison**: two logs, two whole runs (every log) or many runs on one quantity, from Files, Experiments and Scenarios; years and sums or means per year, per month or cumulative; mean absolute difference and Kling-Gupta efficiency; CSV of every table; the double-blind comparison takes the runs of Experiments and Scenarios too.
 - **Four new layers** read the Daisy runs: D5 Chemicals and drinking water, D6 Trade-offs and the best edge, D7 The return of irrigation, D8 Nitrous oxide and gaseous nitrogen; the runs of Experiments are passed on as well, and the last step lists every layer.
 - **The manual**: every chapter has an icon in the colour of its part; every display equation is set within the width of the page (a long one is shrunk to fit instead of running off the page).
+- **Daisy is found by itself**: the folder that comes with SWAFL, its copy in the folder of the user, an installed Daisy, or the downloaded installer run once; no file has to be chosen (Section \ref{daisy-built-in}).
+- **The manual inside the program**: a *Manual p. N* button on every tab of the Daisy workbench and above every layer opens this manual at its section; the tab *The SWAFL manual* lists and searches every section.
+- **Run comparison**: the run library (runs of Experiments and Scenarios, every run saved on the computer, files and folders, the samples), every log of every run in the lists of Log A and Log B.
+- **Experiment folders**: a README in every run folder, with how its .dai file was created and how Daisy calls everything, line by line.
+- **Parameter library**: a steady view of an item, drawn once, without the page jumping (Section \ref{daisy-lib-source}).
 

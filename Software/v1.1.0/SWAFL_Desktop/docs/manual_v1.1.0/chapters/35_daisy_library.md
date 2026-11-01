@@ -6,6 +6,8 @@ This chapter lists the entries of the Daisy library that come with the program a
 
 In the Parameter library tab, every item shows under its values the text Daisy reads, in the colours of VS Code, with two comment lines that say where it comes from and how to use it in a set-up of your own ((input file "dk-fertilizer.dai"), or copy the block). The text can be changed in place; *open in set-up editor* opens it (as changed) in the Set-up editor, *open the whole file* opens the library file it belongs to, and *download* saves it as a .dai file. The table of values of a fertiliser or chemical has a third column, *What it means*: for example *volatilization*, the share of the ammonium lost as ammonia when the slurry is spread on the surface; *NH4_fraction*, the share of the nitrogen that is ammonium; *K_OC*, the sorption to organic carbon.
 
+**A steady view.** A press on an item draws its values, its *Test it in an experiment* button and its text once; the box of the text keeps its size while the file is read, so nothing below it moves. The list and the values stay side by side (on a narrow screen the values go below the list), long values wrap inside the table, and the scroll bar of the tab is always shown, so the page never jumps from one layout to the other. Pressing the item that is already shown changes nothing.
+
 ![A slurry of the library: its values, what they mean, and its text in the colours of VS Code.](images/daisy13/lib_source.jpg){width=100%}
 
 ## Soil horizons
