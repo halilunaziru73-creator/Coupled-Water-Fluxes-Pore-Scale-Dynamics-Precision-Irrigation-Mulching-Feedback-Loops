@@ -978,6 +978,18 @@ Run comparison puts runs side by side and says, in plain words, how they differ.
 | Two runs, every log | all the logs two runs have in common (A and B from any of the three places) | one row per log with its verdict and largest difference; click a log for its table and figures |
 | Many runs, one quantity | any number of ticked runs on one quantity of one log, against a reference run | the ranking with mean, minimum, maximum, sum, difference to the reference (absolute and %), RMS difference, r, KGE and the verdict; all runs over time, the mean of each run with its range, the difference of each run to the reference |
 
+**The run library.** The panel at the top of the tab gathers every run there is to compare, and every log of every run appears in the lists of Log A and Log B, grouped by run:
+
+| Source | How it gets there |
+|:------|:----------------|
+| Runs of Experiments | by itself, as soon as the runs are made |
+| Runs of Scenarios | by itself, as soon as the runs are made |
+| Saved runs on this computer | every run ever made is kept in Documents/SWAFL Daisy runs; *Show the runs saved on this computer* lists them, newest first, grouped by experiment, with a filter; tick them and press *Load the ticked*. When the session has no runs of its own, the newest experiment is loaded at once |
+| Logs in Files | *Add logs from my computer*, *Add a run folder*, or drop files and folders on the tab |
+| Samples that come with SWAFL | the sample experiment (rainfed and irrigated, seven logs each) and six logs of the daisy-model repositories; loaded by themselves when there are fewer than two runs, so there is always something to compare |
+
+When Log A is chosen, Log B takes the same log of another run, so a comparison is always like with like. *Open the runs folder* opens the folder on the computer.
+
 Two options apply to all three: *Years* (the first and last year compared) and *Values*: as written by Daisy, sum per year, mean per year, mean per month, or cumulative. Sums and means compare the totals of each year (for example the yearly drainage); the SML then no longer applies.
 
 ### Run comparison: the verdict and the table

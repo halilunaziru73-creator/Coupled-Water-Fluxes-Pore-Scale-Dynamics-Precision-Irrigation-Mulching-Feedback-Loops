@@ -482,5 +482,5 @@ const DaisyUI = (() => {
     document.querySelectorAll('.dztabs button').forEach(b => b.onclick = () => show(b.dataset.t)); if (window.DaisyCite) { if (S.mo) S.mo.disconnect(); S.mo = window.DaisyCite.attach(document.getElementById('dzBody')); } show(HTML[tab] || EXT[tab] ? tab : S.tab, arg);
   }
   const kit = { setup, nice, OKI, SPEC, fmt, heat: heatChart, line: lineChart, savePng };
-  return { open, getLib, TABS, state: S, loadBundled, chart: lineChart, kit, S, EXT, register: (id, x) => { EXT[id] = x; }, addLog, names, refreshSelects, regList, note, esc, getText, getIdx, isDesk, show, download, parseAny, buf, sel, logSel, csvOf, dstr };
+  return { open, getLib, TABS, state: S, loadBundled, readFiles, chart: lineChart, kit, S, EXT, register: (id, x) => { EXT[id] = x; }, addLog, names, refreshSelects, regList, note, esc, getText, getIdx, isDesk, show, download, parseAny, buf, sel, logSel, csvOf, dstr };
 })();

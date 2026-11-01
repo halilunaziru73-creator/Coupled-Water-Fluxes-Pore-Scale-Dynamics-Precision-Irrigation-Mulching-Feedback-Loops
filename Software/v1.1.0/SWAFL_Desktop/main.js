@@ -73,6 +73,8 @@ ipcMain.handle('daisy-job', async (_e, job) => {
 });
 const runsRoot = () => path.join(app.getPath('documents'), 'SWAFL Daisy runs');
 ipcMain.handle('daisy-runs-dir', () => { const r = runsRoot(); try { fs.mkdirSync(r, { recursive: true }); } catch (e) { } return r; });
+// lists every saved run (a folder that holds .dlf logs) inside the runs folder, newest first: the run library of Run comparison
+ipcMain.handle('daisy-list-runs', async () => { const root = runsRoot(), out = []; const walk = (d, depth) => { if (out.length > 3000 || depth > 4) return; let ents = []; try { ents = fs.readdirSync(d, { withFileTypes: true }); } catch (e) { return; } const logs = ents.filter(e => e.isFile() && /\.dlf$/i.test(e.name)).map(e => e.name); if (logs.length) { let mt = 0; try { mt = fs.statSync(d).mtimeMs; } catch (e) { } out.push({ dir: d, rel: path.relative(root, d).split(path.sep).join('/'), logs, mtime: mt }); } ents.filter(e => e.isDirectory()).forEach(e => walk(path.join(d, e.name), depth + 1)); }; try { fs.mkdirSync(root, { recursive: true }); } catch (e) { } walk(root, 0); out.sort((a, b) => b.mtime - a.mtime); return { root, runs: out }; });
 // reads one file of a saved run (only inside the runs folder)
 ipcMain.handle('daisy-read-file', async (_e, p) => { const root = path.resolve(runsRoot()), t = path.resolve(String(p || '')); if (t.indexOf(root) !== 0) return null; try { const st = fs.statSync(t); if (!st.isFile() || st.size > 300e6) return null; return fs.readFileSync(t, 'utf8'); } catch (e) { return null; } });
 // opens a folder of saved Daisy runs in the file explorer (only inside the runs folder)
