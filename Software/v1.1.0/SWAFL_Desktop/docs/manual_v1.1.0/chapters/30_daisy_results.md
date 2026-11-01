@@ -874,6 +874,34 @@ Plot draws any column of a loaded log. The log, the view and the period are chos
 
 \newpage
 
+
+### Plot: twenty kinds of figure {#daisy-plot-views}
+
+*View* lists the figures in six groups; the line under it says what the chosen one shows, and the columns, the period, *Each period as its* (sum, mean, maximum or minimum) and *Smoothing over* appear only when the view uses them. The columns that fit the view are chosen by themselves; *Draw* draws it, *Picture (PNG)* and *Table (CSV)* save it.
+
+| Group | View | What it shows |
+|:------|:-----|:--------------|
+| Over time | Time series | every chosen column against time |
+| | Small multiples | one panel for each column, each with its own scale |
+| | Raw and smoothed | the daily values as a thin line, the moving average (7, 15, 30 or 90 days) on top |
+| | Cumulative over all the years | the running total from the start |
+| Totals and means | Monthly values, Annual values | each month or year as its total, mean, maximum or minimum |
+| | Anomaly | each year above (blue) or below (red) the mean of all years |
+| | Stacked areas | parts of one total (for example evapotranspiration, percolation and runoff) on top of each other |
+| The seasons | Through the year | the mean of all years for every day of the year, with 10 to 90 % of the years as the band |
+| | Every year on one calendar | one line per year from January to December, coloured from the first year to the last, with the mean in black |
+| | Monthly box plots | the spread of each calendar month (daily values, or the monthly totals of every year) |
+| | Calendar heat map | one row per year, one column per day, the value as a colour |
+| Distribution | Box plots, Violin plots | median, 25 to 75 %, 5 to 95 % and mean of each column; the violin adds the shape of the density |
+| | Histogram and density | how often each value occurs, with the density curve and the mean |
+| | Exceedance curve | the share of the time a value is reached or passed (a duration curve) |
+| Relationship | Scatter with the fitted line | the second chosen column against the first, the least-squares line, its equation, R², RMSE, n and the 1:1 line when the units agree |
+| Over depth | Depth profile through time | a variable over depth and time as colours |
+| | Profiles of each month | the mean profile of every month, coloured through the seasons |
+| | Profile at a date | the profile on one date, with Play |
+
+![Eight of the views, drawn from one run of an experiment: small multiples, monthly box plots, violin plots, histogram and density, scatter with the fitted line, profiles of each month, calendar heat map and anomaly.](images/daisy11/daisy_plot_views.png){width=100%}
+
 ### Plot: annual values
 
 The annual view adds up, averages or takes the largest or smallest value of each year.
