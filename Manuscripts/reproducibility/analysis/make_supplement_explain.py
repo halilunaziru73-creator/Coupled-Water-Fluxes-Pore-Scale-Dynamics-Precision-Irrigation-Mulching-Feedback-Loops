@@ -5,6 +5,7 @@ import pandas as pd
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 from explain_terms import TERMS
 from explain_figs import FIG, GENERIC_SHOT
+from explain_panels import PW, SHOTWHY
 ROOT = os.path.abspath(os.path.join(HERE, '../../..')); TEX = os.path.join(ROOT, 'Manuscripts/tex')
 import json
 CALL4 = json.load(open(os.path.join(ROOT, 'Manuscripts/results/p4_callouts.json')))
@@ -91,6 +92,7 @@ for p in ['p1', 'p2', 'p3', 'p4']:
         L = m.group(1); n = lab.get(L, '?'); caps = [resolve(c, lab) for c in re.findall(CAP, b)]
         main = caps[-1] if caps else ''; subs = caps[:-1]
         read, why = FIG.get(p + ':' + L, GENERIC_SHOT)
+        if p + ':' + L in SHOTWHY: why = SHOTWHY[p + ':' + L] + ' ' + (why if why != GENERIC_SHOT[1] else '')
         out.append('\\subsection*{Figure %s of the article}' % n)
         pan = panels(main)
         imgs = []
@@ -109,7 +111,7 @@ for p in ['p1', 'p2', 'p3', 'p4']:
                 items = []
                 for kind, t in labs:
                     if kind == 'call': items.append(t.replace('d_D', '$d_D$').replace('%', '\\%').replace('kappa = 3.47e-10', 'KAPPAVAL').replace('kappa', '$\\kappa$').replace('alpha', '$\\alpha$').replace('KAPPAVAL', '$\\kappa=3.47\\times10^{-10}$'))
-                    elif kind == 'panel': items.append('Panel (%s): %s.' % (t, pan[t].rstrip('.') if t in pan and pan[t].count('$') % 2 == 0 and pan[t].count('{') == pan[t].count('}') else 'see the caption above'))
+                    elif kind == 'panel': items.append('Panel (%s): %s.' % (t, pan[t].rstrip('.') if t in pan and pan[t].count('$') % 2 == 0 and pan[t].count('{') == pan[t].count('}') else 'see the caption above') + ((' \\emph{Why:} ' + PW[p + ':' + L][t]) if t in PW.get(p + ':' + L, {}) else ''))
                     else: items.append('``%s\'\': %s.' % (t.replace('%', '\\%').replace('&', '\\&').replace('#', '\\#').replace('$', '\\$').replace('_', '\\_'), meaning(t)))
                 out.append(head + '\n\\begin{enumerate}[nosep,label=\\protect\\circled{\\arabic*}]\n' + '\n'.join('\\item ' + x for x in items) + '\n\\end{enumerate}')
         out.append('\\textbf{What it shows.} ' + main + (' Panels: ' + ' '.join('(%s) %s' % (chr(97 + i), x.rstrip('.') + '.') for i, x in enumerate(subs)) if subs else ''))

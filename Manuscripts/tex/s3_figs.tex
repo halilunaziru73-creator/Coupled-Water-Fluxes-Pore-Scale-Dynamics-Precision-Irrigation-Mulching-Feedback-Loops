@@ -51,7 +51,7 @@
 
 \textbf{How to read the labels, symbols and colours.} Screens of the real field: NDVI map with its histogram and spectral signature, the scenes and bands, and the sketch of the field.
 
-\textbf{What affects it, and why it happens.} Greener cells (higher NDVI) have more active vegetation; the scene is the clearest of the last 90 days.
+\textbf{What affects it, and why it happens.} Greener cells reflect more near-infrared and less red light, so NDVI is higher where the crop is denser. Greener cells (higher NDVI) have more active vegetation; the scene is the clearest of the last 90 days.
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -101,7 +101,7 @@
 
 \textbf{How to read the labels, symbols and colours.} Screens: contours and flow, the best water source, soil loss and available water.
 
-\textbf{What affects it, and why it happens.} Water flows down the contours to channels; soil loss is highest on bare, steep, erosive cells; available water follows the texture mapped from SoilGrids.
+\textbf{What affects it, and why it happens.} Water flows down the steepest slope to the channels; soil loss is largest on steep, bare and erodible cells; available water follows soil texture. Water flows down the contours to channels; soil loss is highest on bare, steep, erosive cells; available water follows the texture mapped from SoilGrids.
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -121,7 +121,7 @@
 
 \textbf{How to read the labels, symbols and colours.} Map of the depth of the next irrigation, cell by cell, with a colour scale in mm.
 
-\textbf{What affects it, and why it happens.} Cells with more vegetation (higher demand) or less available water need deeper irrigation sooner.
+\textbf{What affects it, and why it happens.} Cells with more green cover use more water and need deeper irrigation sooner. Cells with more vegetation (higher demand) or less available water need deeper irrigation sooner.
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -143,7 +143,7 @@
 
 \textbf{How to read the labels, symbols and colours.} (a) Traits through time, well-watered against drought; (b) soil water ahead with the decision; (c) the field report.
 
-\textbf{What affects it, and why it happens.} Traits fall behind under drought because uptake and growth fall with soil water.
+\textbf{What affects it, and why it happens.} Under drought the plant takes less water, closes stomata and grows less, so traits fall behind the well-watered plant. Traits fall behind under drought because uptake and growth fall with soil water.
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -161,7 +161,7 @@
 
 \textbf{How to read the labels, symbols and colours.} The same plants every 20 days under the project's irrigation (top) and a drought (bottom).
 
-\textbf{What affects it, and why it happens.} Under drought the plants grow less and roots go deeper, as the model's water stress reduces growth.
+\textbf{What affects it, and why it happens.} Water stress reduces growth and sends roots deeper, so the drought plants are smaller with deeper roots. Under drought the plants grow less and roots go deeper, as the model's water stress reduces growth.
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -308,7 +308,7 @@
 
 \textbf{How to read the labels, symbols and colours.} Eight screens of the guided path and tools, each with its manual page.
 
-\textbf{What affects it, and why it happens.} The path leads a user from data to decision in nine steps.
+\textbf{What affects it, and why it happens.} The guided path orders the work from data to decision; each step opens the manual page that documents it. The path leads a user from data to decision in nine steps.
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -330,7 +330,7 @@
 
 \textbf{How to read the labels, symbols and colours.} Main window: Layers tree, feedback layer, Properties panel, toolbox.
 
-\textbf{What affects it, and why it happens.} Controls in the Properties panel drive every layer at once.
+\textbf{What affects it, and why it happens.} The Properties panel sets the soil, crop, mulch and weather that every layer uses, so changing it redraws the layer. Controls in the Properties panel drive every layer at once.
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -357,8 +357,8 @@
 
 \textbf{What the numbered labels point to.}
 \begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
-\item Panel (a): Error of the marginal curves rebuilt from the levels of the compact designs (median over five responses, per experiment and factor).
-\item Panel (b): Daisy run time of the study designs and of the compact designs, by experiment (logarithmic scale).
+\item Panel (a): Error of the marginal curves rebuilt from the levels of the compact designs (median over five responses, per experiment and factor). \emph{Why:} Fewer levels miss the curvature between them, so curves rebuilt from compact designs err more where the response is curved.
+\item Panel (b): Daisy run time of the study designs and of the compact designs, by experiment (logarithmic scale). \emph{Why:} Compact designs need orders of magnitude fewer runs, so far less Daisy time.
 \end{enumerate}
 
 \textbf{What it shows.} (a) Error of the marginal curves rebuilt from the levels of the compact designs (median over five responses, per experiment and factor). (b) Daisy run time of the study designs and of the compact designs, by experiment (logarithmic scale).
@@ -375,9 +375,9 @@
 
 \textbf{What the numbered labels point to.}
 \begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
-\item Panel (a): Drainage below 1\,m with the node spacing; dashed lines are the reference.
-\item Panel (b): Final storage minus the reference.
-\item Panel (c): Infiltration of 200\,mm of rain into a ponded silty clay loam (left axis) and run time (right axis), showing the lack of convergence.
+\item Panel (a): Drainage below 1\,m with the node spacing; dashed lines are the reference. \emph{Why:} Coarser node spacing smooths wetting fronts, so drainage departs from the fine-grid reference.
+\item Panel (b): Final storage minus the reference. \emph{Why:} Storage errors follow the drainage errors because water must be conserved.
+\item Panel (c): Infiltration of 200\,mm of rain into a ponded silty clay loam (left axis) and run time (right axis), showing the lack of convergence. \emph{Why:} A ponded fine soil has very steep suction gradients at the surface and tiny conductivity, so the solver needs tiny steps and does not converge in reasonable time.
 \end{enumerate}
 
 \textbf{What it shows.} Soil column. (a) Drainage below 1\,m with the node spacing; dashed lines are the reference. (b) Final storage minus the reference. (c) Infiltration of 200\,mm of rain into a ponded silty clay loam (left axis) and run time (right axis), showing the lack of convergence.
@@ -394,8 +394,8 @@
 
 \textbf{What the numbered labels point to.}
 \begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
-\item Panel (a): N$_2$ loss; the 1:1 line is black.
-\item Panel (b): Histogram of the relative error of the N$_2$O loss before and after the correction.
+\item Panel (a): N$_2$ loss; the 1:1 line is black. \emph{Why:} After the correction the function and Daisy agree, so points lie on the 1:1 line.
+\item Panel (b): Histogram of the relative error of the N$_2$O loss before and after the correction. \emph{Why:} Before the correction one class of cases had large errors; after it the errors collapse to zero.
 \end{enumerate}
 
 \textbf{What it shows.} Denitrification function against the 792 stored Daisy outputs. (a) N$_2$ loss; the 1:1 line is black. (b) Histogram of the relative error of the N$_2$O loss before and after the correction.
@@ -412,8 +412,8 @@
 
 \textbf{What the numbered labels point to.}
 \begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
-\item Panel (a): Daisy wall-clock time of the 17 experiments of the study (total 17.5 days).
-\item Panel (b): Time of the study, of the compact designs of the workbench and of Engine 1 for $10^5$ scenarios (logarithmic scale).
+\item Panel (a): Daisy wall-clock time of the 17 experiments of the study (total 17.5 days). \emph{Why:} Experiments with more runs or longer runs take longer.
+\item Panel (b): Time of the study, of the compact designs of the workbench and of Engine 1 for $10^5$ scenarios (logarithmic scale). \emph{Why:} Daisy solves every day of every run; the meta-model looks up stored results, so it is millions of times faster.
 \end{enumerate}
 
 \textbf{What it shows.} (a) Daisy wall-clock time of the 17 experiments of the study (total 17.5 days). (b) Time of the study, of the compact designs of the workbench and of Engine 1 for $10^5$ scenarios (logarithmic scale).
@@ -482,7 +482,7 @@
 
 \textbf{How to read the labels, symbols and colours.} Screens of the Layers panel and the field panel.
 
-\textbf{What affects it, and why it happens.} The groups organise the layers by question.
+\textbf{What affects it, and why it happens.} The layers are grouped by question, so the user finds the layer that answers it. The groups organise the layers by question.
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -511,7 +511,7 @@
 
 \textbf{How to read the labels, symbols and colours.} Summary of an experiment (blue rises, red falls) and a figure of one log.
 
-\textbf{What affects it, and why it happens.} Each input's effect on each result is its range across the runs, shown with sign.
+\textbf{What affects it, and why it happens.} The effect of each input is the change of each result across its levels, so the largest bars are the inputs that matter most. Each input's effect on each result is its range across the runs, shown with sign.
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -538,7 +538,7 @@
 
 \textbf{How to read the labels, symbols and colours.} Diagnosis of failed runs and the viewer of every file.
 
-\textbf{What affects it, and why it happens.} Errors are grouped by cause, so one fix addresses all runs that failed the same way.
+\textbf{What affects it, and why it happens.} Failed runs are grouped by the cause in Daisy's message, so one correction fixes every run that failed the same way. Errors are grouped by cause, so one fix addresses all runs that failed the same way.
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -548,8 +548,8 @@
 
 \textbf{What the numbered labels point to.}
 \begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
-\item Panel (a): and a hot, dry.
-\item Panel (b): season.
+\item Panel (a): and a hot, dry. \emph{Why:} Drought shortens grain filling, so grain mass falls; genotypes differ in how much.
+\item Panel (b): season. \emph{Why:} Heat and dryness add to the drought effect, so all genotypes lose more.
 \end{enumerate}
 
 \textbf{What it shows.} Grain dry mass at maturity of seven genotypes, well-watered and under a drought pulse, in a warm (a) and a hot, dry (b) season.
@@ -566,8 +566,8 @@
 
 \textbf{What the numbered labels point to.}
 \begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
-\item Panel (a): five annual crops.
-\item Panel (b): three perennial crops (medium density).
+\item Panel (a): five annual crops. \emph{Why:} Coefficients rise with canopy cover, stay at the mid-season value and fall with senescence.
+\item Panel (b): three perennial crops (medium density). \emph{Why:} Perennial crops keep a canopy most of the year, so the curves stay high longer.
 \item Panel (c): see the caption above.
 \end{enumerate}
 

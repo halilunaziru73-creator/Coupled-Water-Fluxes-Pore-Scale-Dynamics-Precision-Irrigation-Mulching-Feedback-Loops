@@ -251,3 +251,43 @@ f2 = fate.copy(); f2.index = [SH[k] for k in f2.index]; f2.columns = ['transpire
 pd.DataFrame([{'experiment': ex, 'method': k, **v} for ex in ['E4', 'E15'] for k, v in NUM['methods_' + ex].items()]).rename(columns={'dT': 'transpired', 'dE': 'soil_evaporation', 'dO': 'other_evaporation', 'dD': 'drained'}).to_csv(os.path.join(RD, 'p4_fig4b_fate_by_method.csv'), index=False)
 pd.DataFrame([{'soil': SH[k], 'dose_mm': d, 'drained': a1, 'transpired': b1, 'evaporated': c1, 'fit_plateau': r['inf'], 'fit_dose_scale_mm': r['dD'], 'fit_R2': r['r2']} for k, r in DR.items() for d, a1, b1, c1 in zip(r['dose'], r['etaD'], r['etaT'], r['etaEO'])]).to_csv(os.path.join(RD, 'p4_fig5_dose.csv'), index=False)
 pd.DataFrame([{'window': k, **v} for k, v in NUM['window'].items()]).to_csv(os.path.join(RD, 'p4_window.csv'), index=False)
+# ------------------------------------------------------------------ how the constants are obtained, and how sensitive they are
+CONST = {}
+def fit_kappa(fire, soils=None):
+    br = {}
+    for s_ in SO.index:
+        d = e2[e2.soil == s_]; f = d.ht[d.irrigation_mm >= fire]
+        if not len(f): br[s_] = (50.0 / 1.5, 50.0); continue
+        nf = d.ht[(d.irrigation_mm < fire) & (d.ht > f.max())]; br[s_] = (float(f.max()), float(nf.min()) if len(nf) else np.inf)
+    ks = soils if soils is not None else list(SO.index)
+    L = lambda th: sum(ivl(hc_mualem(10 ** th[0], SO.loc[k].al, SO.loc[k].n), *br[k]) ** 2 for k in ks)
+    return 10 ** minimize(L, [-9.5], method='Nelder-Mead', options={'xatol': 1e-6, 'fatol': 1e-10}).x[0]
+CONST['kappa_by_threshold'] = {str(t): fit_kappa(t) for t in [1, 2, 5, 10, 20, 40]}
+rng = np.random.default_rng(1); bs = []
+for _ in range(1000):
+    pick = list(rng.choice(SO.index, size=len(SO), replace=True)); bs.append(np.log10(fit_kappa(FIRE, pick)))
+CONST['kappa_boot_log10_ci95'] = [float(np.percentile(bs, 2.5)), float(np.percentile(bs, 97.5))]
+CONST['kappa_loso'] = {SH[k]: fit_kappa(FIRE, [j for j in SO.index if j != k]) for k in SO.index}
+CONST['reach_change_factor_per_decade_kappa'] = {SH[k]: float(10 ** (1 / (2 * SO.loc[k].n + 0.5 * (SO.loc[k].n - 1)))) for k in SO.index}
+# where irrigation stops on the scaled axis (the factor 1/2 of the blind rule)
+xs = {}
+for s_ in SO.index:
+    d = e2[e2.soil == s_].sort_values('ht'); f = d[d.irrigation_mm >= FIRE]
+    if len(f) and (d.irrigation_mm < FIRE).any(): xs[SH[s_]] = float(f.ht.max() / SO.loc[s_].hc)
+CONST['x_last_firing'] = xs
+# dose law: parameter uncertainty from the fit
+dl = {}
+for s_ in fate.index:
+    g = e10i[e10i.soil == s_].groupby('set_dose_mm_per_event')[['dD', 'irrigation_mm']].sum(); d = g.index.values.astype(float); y = (g.dD / g.irrigation_mm).values
+    try:
+        (a1, b1), cov = curve_fit(satf, d, y, p0=[0.2, 4], bounds=([0, 0.1], [1, 100])); se = np.sqrt(np.diag(cov))
+        dl[SH[s_]] = {'eta_inf': float(a1), 'se_eta_inf': float(se[0]), 'd_D': float(b1), 'se_d_D': float(se[1])}
+    except Exception: pass
+CONST['dose_fit'] = dl
+# the crop rotation and the sensor of E2 (what kappa is conditional on)
+CONST['E2_crop_files'] = sorted(e2.set_crop_file.dropna().astype(str).unique().tolist())
+CONST['E2_sensor_depth_cm'] = sorted(map(float, e2.set_sensor_depth_cm.dropna().unique()))
+CONST['E2_dose_mm'] = sorted(map(float, e2.set_dose_mm_per_event.dropna().unique()))
+NUM['constants'] = CONST
+json.dump(NUM, open(RES, 'w'), indent=1, default=float)
+print(json.dumps(CONST, indent=1, default=float)[:3000])

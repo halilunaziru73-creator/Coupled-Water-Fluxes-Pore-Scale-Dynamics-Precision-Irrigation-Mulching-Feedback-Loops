@@ -26,12 +26,12 @@
 
 \textbf{What the numbered labels point to.}
 \begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
-\item Panel (a): see the caption above.
-\item Panel (b): Annual balance: sinks stacked ($T$, $E$, $E_{\mathrm{oth}}$, $D$) against the input $P+I$ (black marks).
-\item Panel (c): Cumulative evaporation after a wetting at the season-mean demand (Eq.~(11) of the article); dots mark the end of stage 1.
-\item Panel (d): Mean annual root water uptake by depth from Engine~2 (unscaled); dotted lines mark $z_{90}$.
-\item Panel (e): Water potential of the root zone, the root surface and the leaf (Eq.~(21) and Eq.~(22) of the article), crop days of day-of-year 120--210; the dashed line is the stomatal-closure threshold of the view; the air is at $-56$\,MPa (not shown).
-\item Panel (f): Fate of the soil evaporation saved by a straw mulch (Eq.~(23) of the article); in sand the three positive shares sum to 1.14, so the remainder is zero.
+\item Panel (a): see the caption above. \emph{Why:} Sands release their water at low suction, clays over a wide range, so the curves cross field capacity and wilting point at different contents.
+\item Panel (b): Annual balance: sinks stacked ($T$, $E$, $E_{\mathrm{oth}}$, $D$) against the input $P+I$ (black marks). \emph{Why:} The same rain leaves as drainage in coarse soils and as evaporation and transpiration in fine soils.
+\item Panel (c): Cumulative evaporation after a wetting at the season-mean demand (Eq.~(11) of the article); dots mark the end of stage 1. \emph{Why:} Fine soils keep the surface wet longer, so stage 1 lasts longer.
+\item Panel (d): Mean annual root water uptake by depth from Engine~2 (unscaled); dotted lines mark $z_{90}$. \emph{Why:} Uptake follows root density, which falls with depth.
+\item Panel (e): Water potential of the root zone, the root surface and the leaf (Eq.~(21) and Eq.~(22) of the article), crop days of day-of-year 120--210; the dashed line is the stomatal-closure threshold of the view; the air is at $-56$\,MPa (not shown). \emph{Why:} Potential falls from root zone to leaf because water flows through resistances; dry soil adds a large soil resistance.
+\item Panel (f): Fate of the soil evaporation saved by a straw mulch (Eq.~(23) of the article); in sand the three positive shares sum to 1.14, so the remainder is zero. \emph{Why:} A mulch saving goes to transpiration, less irrigation or drainage according to the soil.
 \end{enumerate}
 
 \textbf{What it shows.} Soil--water--atmosphere variables of the ten soils at the reference state. (a) Retention curves $\theta(h)$ (Eq.~(27) and Eq.~(2) of the article); sand, coarse loam and silty clay loam highlighted; dotted lines are field capacity (FC, 100\,cm) and the wilting point (WP, 15\,849\,cm). (b) Annual balance: sinks stacked ($T$, $E$, $E_{\mathrm{oth}}$, $D$) against the input $P+I$ (black marks). (c) Cumulative evaporation after a wetting at the season-mean demand (Eq.~(11) of the article); dots mark the end of stage 1. (d) Mean annual root water uptake by depth from Engine~2 (unscaled); dotted lines mark $z_{90}$. (e) Water potential of the root zone, the root surface and the leaf (Eq.~(21) and Eq.~(22) of the article), crop days of day-of-year 120--210; the dashed line is the stomatal-closure threshold of the view; the air is at $-56$\,MPa (not shown). (f) Fate of the soil evaporation saved by a straw mulch (Eq.~(23) of the article); in sand the three positive shares sum to 1.14, so the remainder is zero.
@@ -60,7 +60,7 @@
 
 \textbf{How to read the labels, symbols and colours.} Six result views of the program (field balance, pressure-head profile, pores and tillage, hydraulic drivers, evaporation, roots).
 
-\textbf{What affects it, and why it happens.} Each view draws one relation of the engines for the chosen soil; changing the soil or a control moves all of them together.
+\textbf{What affects it, and why it happens.} Each view draws one relation of the engines for the soil chosen; a different soil changes every view at once. Each view draws one relation of the engines for the chosen soil; changing the soil or a control moves all of them together.
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -81,7 +81,7 @@
 
 \textbf{How to read the labels, symbols and colours.} Views for timing and design (sensor and trigger, the trigger rule, surface, drip, sprinkler, soil triangle).
 
-\textbf{What affects it, and why it happens.} The trigger rule collapses the soils onto one depletion curve because it uses depletion, not suction; the designs follow from the soil's intake and the water needed.
+\textbf{What affects it, and why it happens.} Expressing the trigger as depletion collapses the soils onto one curve; the designs follow the soil intake and the water needed. The trigger rule collapses the soils onto one depletion curve because it uses depletion, not suction; the designs follow from the soil's intake and the water needed.
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -103,7 +103,7 @@
 
 \textbf{How to read the labels, symbols and colours.} Views for mulch and the whole system.
 
-\textbf{What affects it, and why it happens.} A mulch reduces evaporation, intercepts rain and warms the soil; where the saving goes depends on the soil's drainage.
+\textbf{What affects it, and why it happens.} A mulch lowers evaporation and catches rain; where the saving goes depends on how fast the soil drains. A mulch reduces evaporation, intercepts rain and warms the soil; where the saving goes depends on the soil's drainage.
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -113,12 +113,12 @@
 
 \textbf{What the numbered labels point to.}
 \begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
-\item Panel (a): Engine~1 annual irrigation and.
-\item Panel (b): drainage change for each control moved to the two settings listed under its name (blue: first setting; orange: second setting) from the reference state; nitrogen rate, which leaves both unchanged, is not shown.
-\item Panel (c): Irrigation and drainage by soil.
-\item Panel (d): Drip emission uniformity against lateral length by lateral diameter and.
-\item Panel (e): by inlet head; dashed where $h_f/H_0>0.2$.
-\item Panel (f): Sprinkler application efficiency against wind speed at 200, 300 and 400\,kPa (CU in the legend).
+\item Panel (a): Engine~1 annual irrigation and. \emph{Why:} Controls that raise demand or lower supply raise irrigation.
+\item Panel (b): drainage change for each control moved to the two settings listed under its name (blue: first setting; orange: second setting) from the reference state; nitrogen rate, which leaves both unchanged, is not shown. \emph{Why:} Controls that keep the profile wet raise drainage.
+\item Panel (c): Irrigation and drainage by soil. \emph{Why:} Coarse soils need more irrigation and drain more.
+\item Panel (d): Drip emission uniformity against lateral length by lateral diameter and. \emph{Why:} Longer laterals carry more flow over more length, so friction lowers the head at the end and uniformity falls.
+\item Panel (e): by inlet head; dashed where $h_f/H_0>0.2$. \emph{Why:} A higher inlet head makes friction a smaller share of the head, so uniformity rises.
+\item Panel (f): Sprinkler application efficiency against wind speed at 200, 300 and 400\,kPa (CU in the legend). \emph{Why:} Wind distorts and blows away part of the spray, so efficiency falls; higher pressure makes smaller drops that drift more.
 \end{enumerate}
 
 \textbf{What it shows.} One-at-a-time sensitivity of SWAFL Desktop outputs. (a) Engine~1 annual irrigation and (b) drainage change for each control moved to the two settings listed under its name (blue: first setting; orange: second setting) from the reference state; nitrogen rate, which leaves both unchanged, is not shown. (c) Irrigation and drainage by soil. (d) Drip emission uniformity against lateral length by lateral diameter and (e) by inlet head; dashed where $h_f/H_0>0.2$. (f) Sprinkler application efficiency against wind speed at 200, 300 and 400\,kPa (CU in the legend).
@@ -135,9 +135,9 @@
 
 \textbf{What the numbered labels point to.}
 \begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
-\item Panel (a): Advance time $t_L$.
-\item Panel (b): application efficiency $E_a$ (published versus SWAFL; grey line is 1:1).
-\item Panel (c): relative differences of the 16 quantities (blue: advance and required times; green: efficiencies).
+\item Panel (a): Advance time $t_L$. \emph{Why:} Points on the 1:1 line: the advance computed matches the published example.
+\item Panel (b): application efficiency $E_a$ (published versus SWAFL; grey line is 1:1). \emph{Why:} Efficiencies match because they follow from the same volumes.
+\item Panel (c): relative differences of the 16 quantities (blue: advance and required times; green: efficiencies). \emph{Why:} All 16 quantities lie within a few per cent, so the procedure is reproduced.
 \end{enumerate}
 
 \textbf{What it shows.} Verification against Example 6.1. (a) Advance time $t_L$, (b) application efficiency $E_a$ (published versus SWAFL; grey line is 1:1), (c) relative differences of the 16 quantities (blue: advance and required times; green: efficiencies).
@@ -154,13 +154,13 @@
 
 \textbf{What the numbered labels point to.}
 \begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
-\item Panel (a): ET.
-\item Panel (b): irrigation.
-\item Panel (c): drainage.
-\item Panel (d): yield.
-\item Panel (e): transpiration.
-\item Panel (f): soil evaporation.
-\item Panel (g): nitrogen leached. Grey lines are 1:1.
+\item Panel (a): ET. \emph{Why:} Points follow the order of Daisy because the meta-model is built from Daisy runs; the offset before re-anchoring comes from anchoring to one reference run.
+\item Panel (b): irrigation. \emph{Why:} Points follow the order of Daisy because the meta-model is built from Daisy runs; the offset before re-anchoring comes from anchoring to one reference run.
+\item Panel (c): drainage. \emph{Why:} Points follow the order of Daisy because the meta-model is built from Daisy runs; the offset before re-anchoring comes from anchoring to one reference run.
+\item Panel (d): yield. \emph{Why:} Points follow the order of Daisy because the meta-model is built from Daisy runs; the offset before re-anchoring comes from anchoring to one reference run.
+\item Panel (e): transpiration. \emph{Why:} Points follow the order of Daisy because the meta-model is built from Daisy runs; the offset before re-anchoring comes from anchoring to one reference run.
+\item Panel (f): soil evaporation. \emph{Why:} Points follow the order of Daisy because the meta-model is built from Daisy runs; the offset before re-anchoring comes from anchoring to one reference run.
+\item Panel (g): nitrogen leached. Grey lines are 1:1. \emph{Why:} Points follow the order of Daisy because the meta-model is built from Daisy runs; the offset before re-anchoring comes from anchoring to one reference run.
 \end{enumerate}
 
 \textbf{What it shows.} Engine 1 versus Daisy for the 1\,000 held-out E12 runs. Orange: as shipped; blue: re-anchored. (a) ET, (b) irrigation, (c) drainage, (d) yield, (e) transpiration, (f) soil evaporation, (g) nitrogen leached. Grey lines are 1:1.
@@ -177,9 +177,9 @@
 
 \textbf{What the numbered labels point to.}
 \begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
-\item Panel (a): Closure residual of the unscaled daily core over 60 random states.
-\item Panel (b): Mean annual irrigation of Engine 2 against Engine 1 for the 100 scenarios of the realistic grid (10 soils $\times$ 5 triggers $\times$ 2 methods, cereal), including the failures at zero.
-\item Panel (c): Unscaled Engine 2 drainage against Engine 1 for the same scenarios.
+\item Panel (a): Closure residual of the unscaled daily core over 60 random states. \emph{Why:} The daily model conserves water by construction, so the residual is near zero.
+\item Panel (b): Mean annual irrigation of Engine 2 against Engine 1 for the 100 scenarios of the realistic grid (10 soils $\times$ 5 triggers $\times$ 2 methods, cereal), including the failures at zero. \emph{Why:} Irrigation of the two engines agrees except in sand at dry triggers, where the daily bucket reaches triggers that the full model cannot.
+\item Panel (c): Unscaled Engine 2 drainage against Engine 1 for the same scenarios. \emph{Why:} Drainage agrees in order but the bucket drains in steps, so levels differ.
 \end{enumerate}
 
 \textbf{What it shows.} Engine 2. (a) Closure residual of the unscaled daily core over 60 random states. (b) Mean annual irrigation of Engine 2 against Engine 1 for the 100 scenarios of the realistic grid (10 soils $\times$ 5 triggers $\times$ 2 methods, cereal), including the failures at zero. (c) Unscaled Engine 2 drainage against Engine 1 for the same scenarios.
@@ -196,8 +196,8 @@
 
 \textbf{What the numbered labels point to.}
 \begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
-\item Panel (a): Relative difference in total head loss for the four-pass solver of version~1 and the converged solver, against the loss ratio $h_f/H_0$ (dashed: design limit 0.2; dotted: 0.6).
-\item Panel (b): number of iterations of the converged solver; crosses mark configurations that did not converge.
+\item Panel (a): Relative difference in total head loss for the four-pass solver of version~1 and the converged solver, against the loss ratio $h_f/H_0$ (dashed: design limit 0.2; dotted: 0.6). \emph{Why:} When friction is a large share of the head, emitter flows and heads are strongly coupled, so a few passes are not enough; the converged solver removes the error.
+\item Panel (b): number of iterations of the converged solver; crosses mark configurations that did not converge. \emph{Why:} More iterations are needed as the coupling grows.
 \end{enumerate}
 
 \textbf{What it shows.} Drip-lateral solver versus an independent converged solver (400 random configurations). (a) Relative difference in total head loss for the four-pass solver of version~1 and the converged solver, against the loss ratio $h_f/H_0$ (dashed: design limit 0.2; dotted: 0.6); (b) number of iterations of the converged solver; crosses mark configurations that did not converge.
@@ -214,8 +214,8 @@
 
 \textbf{What the numbered labels point to.}
 \begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
-\item Panel (a): Thirteen advance times of the FAO Irrigation Paper~45 border examples (published against SWAFL; grey line 1:1).
-\item Panel (b): Christiansen coefficient of uniformity of the impact-sprinkler layer against spacing as a share of the wetted diameter, without wind and at 3\,m\,s$^{-1}$; dashed: 65\,\% spacing rule, dotted: CU of 85\,\%.
+\item Panel (a): Thirteen advance times of the FAO Irrigation Paper~45 border examples (published against SWAFL; grey line 1:1). \emph{Why:} Points on the 1:1 line: the shipped layer reproduces published advance times.
+\item Panel (b): Christiansen coefficient of uniformity of the impact-sprinkler layer against spacing as a share of the wetted diameter, without wind and at 3\,m\,s$^{-1}$; dashed: 65\,\% spacing rule, dotted: CU of 85\,\%. \emph{Why:} Uniformity falls when sprinklers are spaced beyond about 65\,\% of the wetted diameter because the patterns overlap too little; wind makes it worse.
 \end{enumerate}
 
 \textbf{What it shows.} Checks against published sources. (a) Thirteen advance times of the FAO Irrigation Paper~45 border examples (published against SWAFL; grey line 1:1). (b) Christiansen coefficient of uniformity of the impact-sprinkler layer against spacing as a share of the wetted diameter, without wind and at 3\,m\,s$^{-1}$; dashed: 65\,\% spacing rule, dotted: CU of 85\,\%.
@@ -242,7 +242,7 @@
 
 \textbf{How to read the labels, symbols and colours.} Eight kinds of figure drawn from the daily logs of one run (small multiples, monthly boxes, violins, histogram, scatter with fit, monthly profile, calendar map, yearly anomaly).
 
-\textbf{What affects it, and why it happens.} Each shows the same log in a different way: course in time, spread within months, distribution, relation to another quantity and departure of each year from the mean.
+\textbf{What affects it, and why it happens.} Each kind of plot shows the same daily log differently: through time, spread within months, distribution, relation to another quantity, departure of each year. Each shows the same log in a different way: course in time, spread within months, distribution, relation to another quantity and departure of each year from the mean.
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -272,7 +272,7 @@
 
 \textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
 
-\textbf{What affects it, and why it happens.} The layer computes its figure and numbers from the equations listed for it in the article; changing the soil, the crop or a control in the Properties panel redraws it.
+\textbf{What affects it, and why it happens.} The field balance adds the day's rain and irrigation and subtracts evaporation, transpiration and drainage; the path from soil to air shows the potential falling through each resistance, which is why the leaf is much drier than the soil. 
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -302,7 +302,7 @@
 
 \textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
 
-\textbf{What affects it, and why it happens.} The layer computes its figure and numbers from the equations listed for it in the article; changing the soil, the crop or a control in the Properties panel redraws it.
+\textbf{What affects it, and why it happens.} The suction at the sensor rises as the crop dries the soil and falls after each rain or irrigation; irrigation is triggered when it crosses the trigger line. 
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -322,7 +322,7 @@
 
 \textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
 
-\textbf{What affects it, and why it happens.} The layer computes its figure and numbers from the equations listed for it in the article; changing the soil, the crop or a control in the Properties panel redraws it.
+\textbf{What affects it, and why it happens.} Each soil reaches the same depletion at a different suction because of the shape of its retention curve, so each soil has its own trigger. 
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -350,7 +350,7 @@
 
 \textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
 
-\textbf{What affects it, and why it happens.} The layer computes its figure and numbers from the equations listed for it in the article; changing the soil, the crop or a control in the Properties panel redraws it.
+\textbf{What affects it, and why it happens.} Tillage opens large pores that hold little water and drain fast; consolidation closes them over time, which changes drainage. 
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -372,7 +372,7 @@
 
 \textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
 
-\textbf{What affects it, and why it happens.} The layer computes its figure and numbers from the equations listed for it in the article; changing the soil, the crop or a control in the Properties panel redraws it.
+\textbf{What affects it, and why it happens.} Roots go deeper in soils that let them and where water is deeper; uptake follows root density. 
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -402,7 +402,7 @@
 
 \textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
 
-\textbf{What affects it, and why it happens.} The layer computes its figure and numbers from the equations listed for it in the article; changing the soil, the crop or a control in the Properties panel redraws it.
+\textbf{What affects it, and why it happens.} Evaporation is fast while the surface is wet (stage 1) and slows when a dry layer forms (stage 2); a mulch reduces the vapour flux through it. 
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -432,7 +432,7 @@
 
 \textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
 
-\textbf{What affects it, and why it happens.} The layer computes its figure and numbers from the equations listed for it in the article; changing the soil, the crop or a control in the Properties panel redraws it.
+\textbf{What affects it, and why it happens.} The water a mulch saves goes to transpiration, less irrigation or drainage, in shares set by the soil. 
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -462,7 +462,7 @@
 
 \textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
 
-\textbf{What affects it, and why it happens.} The layer computes its figure and numbers from the equations listed for it in the article; changing the soil, the crop or a control in the Properties panel redraws it.
+\textbf{What affects it, and why it happens.} The regime map shows where the saved water drains (coarse soils, wet climate) and where it is used. 
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -492,7 +492,7 @@
 
 \textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
 
-\textbf{What affects it, and why it happens.} The layer computes its figure and numbers from the equations listed for it in the article; changing the soil, the crop or a control in the Properties panel redraws it.
+\textbf{What affects it, and why it happens.} Water advances down the field while it infiltrates; the far end receives less, so the cutoff time sets the balance between shortfall and deep percolation. 
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -522,7 +522,7 @@
 
 \textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
 
-\textbf{What affects it, and why it happens.} The layer computes its figure and numbers from the equations listed for it in the article; changing the soil, the crop or a control in the Properties panel redraws it.
+\textbf{What affects it, and why it happens.} The schedule repeats irrigation when the root zone is depleted to the trigger; the design table shows the volumes and efficiencies of each event. 
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -552,7 +552,7 @@
 
 \textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
 
-\textbf{What affects it, and why it happens.} The layer computes its figure and numbers from the equations listed for it in the article; changing the soil, the crop or a control in the Properties panel redraws it.
+\textbf{What affects it, and why it happens.} Water spreads from each emitter as a bulb whose size depends on the soil; friction along the lateral lowers the flow of distant emitters. 
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -582,7 +582,7 @@
 
 \textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
 
-\textbf{What affects it, and why it happens.} The layer computes its figure and numbers from the equations listed for it in the article; changing the soil, the crop or a control in the Properties panel redraws it.
+\textbf{What affects it, and why it happens.} Head falls along the lateral by friction, so emitter flow falls; the design keeps the loss within the limit. 
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -604,7 +604,7 @@
 
 \textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
 
-\textbf{What affects it, and why it happens.} The layer computes its figure and numbers from the equations listed for it in the article; changing the soil, the crop or a control in the Properties panel redraws it.
+\textbf{What affects it, and why it happens.} The design iterates spacing and run time until the application efficiency and uniformity meet their targets. 
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -634,7 +634,7 @@
 
 \textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
 
-\textbf{What affects it, and why it happens.} The layer computes its figure and numbers from the equations listed for it in the article; changing the soil, the crop or a control in the Properties panel redraws it.
+\textbf{What affects it, and why it happens.} Each sprinkler wets a circle that is wettest near the nozzle; overlap of neighbouring circles evens out the depth. 
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -664,7 +664,7 @@
 
 \textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
 
-\textbf{What affects it, and why it happens.} The layer computes its figure and numbers from the equations listed for it in the article; changing the soil, the crop or a control in the Properties panel redraws it.
+\textbf{What affects it, and why it happens.} Where the application rate exceeds the intake rate of the soil, water ponds and runs off. 
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -694,7 +694,7 @@
 
 \textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
 
-\textbf{What affects it, and why it happens.} The layer computes its figure and numbers from the equations listed for it in the article; changing the soil, the crop or a control in the Properties panel redraws it.
+\textbf{What affects it, and why it happens.} The dashboard sums the fluxes of the season; each tile comes from one equation of the engines. 
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -716,7 +716,7 @@
 
 \textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
 
-\textbf{What affects it, and why it happens.} The layer computes its figure and numbers from the equations listed for it in the article; changing the soil, the crop or a control in the Properties panel redraws it.
+\textbf{What affects it, and why it happens.} Messages fire when a number crosses a threshold (stress, drainage, efficiency), so the user sees what to change. 
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -743,7 +743,7 @@
 
 \textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
 
-\textbf{What affects it, and why it happens.} The layer computes its figure and numbers from the equations listed for it in the article; changing the soil, the crop or a control in the Properties panel redraws it.
+\textbf{What affects it, and why it happens.} Evapotranspiration follows the crop coefficient through the season; root-zone water falls between irrigations and is refilled at the trigger. 
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
 
@@ -765,6 +765,6 @@
 
 \textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
 
-\textbf{What affects it, and why it happens.} The layer computes its figure and numbers from the equations listed for it in the article; changing the soil, the crop or a control in the Properties panel redraws it.
+\textbf{What affects it, and why it happens.} Under no-till the topsoil keeps more connected pores, so water moves to the surface differently and the suction rises more slowly. 
 
 \textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).

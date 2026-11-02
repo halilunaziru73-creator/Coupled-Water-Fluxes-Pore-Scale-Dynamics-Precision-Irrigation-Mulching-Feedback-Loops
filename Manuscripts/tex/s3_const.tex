@@ -1,0 +1,12 @@
+\subsection{How every constant of the article is obtained}
+{\small\begin{longtable}{>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{2.3cm}>{\raggedright\arraybackslash}p{5.2cm}>{\raggedright\arraybackslash}p{4.7cm}}
+\toprule Constant & Value & How it was obtained & What it depends on\\\midrule\endhead
+EVI coefficients & 2.5, 6, 7.5, 1 & standard values of the enhanced vegetation index \citep{Huete2002} & the sensor; fixed for Sentinel-2\\
+SAVI soil factor $L$ & 0.5 & standard value for intermediate cover \citep{Huete1988} & the cover\\
+Crop coefficients and stage lengths & per crop & FAO-56 tables and a review & the crop, the climate and the sowing date\\
+RUSLE factors $R$, $K$, $LS$, $C$, $P$ & per cell & $R$ from monthly rainfall \citep{Renard1994}, $K$ from SoilGrids texture, $LS$ from the elevation model, $C$ from NDVI, $P=1$ & the data of the field\\
+Cloud limit of a scene & 30\,\% & chosen: scenes with more cloud over the field are not used & the season\\
+Run budget $B$ & set by the user & -- & time available\\
+Scaling factors $f_k$, $f_a$, $f_n$, $f_t$, $\delta\ell$ & set by the user & levels of the experiment & the question asked\\
+N$_2$:N$_2$O ratio & from the Daisy function & nitrate, carbon-dioxide and water factors of Daisy & the soil state\\\bottomrule
+\end{longtable}}

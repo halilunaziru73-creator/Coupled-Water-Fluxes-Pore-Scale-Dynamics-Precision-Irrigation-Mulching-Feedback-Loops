@@ -1,0 +1,21 @@
+\subsection{The constant $q^\ast$ of the rate-competition law: how it is determined}
+\begin{derivation}[title={How $q^\ast$ was determined, step by step}]
+\textbf{Step 1.} The memory fate $\phi_D$ of each soil was measured from experiment E9 (Contribution~1, Section~S2.1). \textbf{Step 2.} For eight soils, a saturated conductivity $K_s$ was taken from the class means of \citet{Carsel1988}; the two soils without a single texture class (coarse loam, coarse sand) were left out. \textbf{Step 3.} The law $\phi_D=K_s/(K_s+q^\ast)$ was fitted to the eight pairs $(K_s,\phi_D)$ by least squares: $q^\ast=71.5$\,cm\,d$^{-1}$, $R^2=0.971$.
+\end{derivation}
+\begin{keyresult}[title={How certain $q^\ast$ is and what it depends on}]
+\textbf{Uncertainty.} Bootstrap over soils (5\,000 resamples): 58 to 105\,cm\,d$^{-1}$ (95\,\%). Leaving each soil out: 66 to 80\,cm\,d$^{-1}$. The shape of the law is more certain than the exact value.
+
+\textbf{What it depends on.} $q^\ast$ is the effective rate at which roots and the surface withdraw released water, expressed in the units of a conductivity. It therefore depends on the crop (root density, transpiration) and on the climate (evaporative demand), which were one cereal rotation and one weather series here. It does not depend on the soil: one value serves all eight soils.
+
+\textbf{Caution.} $K_s$ is a literature class value, not the conductivity of the Daisy horizons; this limitation passes to $q^\ast$.
+\end{keyresult}
+\subsection{Every other constant of the article}
+{\small\begin{longtable}{>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{2.2cm}>{\raggedright\arraybackslash}p{5.2cm}>{\raggedright\arraybackslash}p{4.8cm}}
+\toprule Constant & Value & How it was obtained & What it depends on; sensitivity\\\midrule\endhead
+$\lambda$, Mualem connectivity & 0.5 & conventional value \citep{Mualem1976} & used only in the diagnostics\\
+$\alpha$, $n$, $\TAW$ & Table~3 of the article & profile-averaged values of the project documentation & the soil\\
+Forward-selection threshold & 0.003 & chosen: a term is kept only if it raises the cross-validated $R^2$ by more than 0.003 & a smaller threshold adds terms that do not generalise\\
+ET-law coefficients 2.503, 0.646, $-0.299$, 0.029 & -- & least squares on $\ln\ET$ of the valid runs & stable across the 17 leave-one-experiment-out folds (Fig.~18c)\\
+Balance coefficients 1.037, 0.957, $-1$, $-1.036$ & -- & smallest right singular vector of the centred flux matrix, scaled so $c_{\ET}=-1$ & bootstrap intervals in Fig.~14b\\
+Bootstrap resamples & 5\,000 or 10\,000 & chosen for stable 95\,\% intervals & fixed random seeds\\\bottomrule
+\end{longtable}}
