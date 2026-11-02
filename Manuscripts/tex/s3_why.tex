@@ -1,0 +1,8 @@
+\paragraph{Why every number can be traced.} Each value shown is computed by a function that carries the number of its equation and a label of origin (literature, fitted to data, engineered); the interface shows both, so the origin is a property of the code, not of the documentation.
+\paragraph{Why a Daisy layer draws nothing before a Daisy run.} The rule of origin forbids a layer to show a Daisy result from any other source; without a run there is no result, so the layer says so rather than showing an example.
+\paragraph{Why the compact designs lose some shape of a curve.} A design with fewer levels samples a curve at fewer points; the marginal curve is then drawn through those points and misses curvature between them, which is the loss measured.
+\paragraph{Why the soil column is slow for a ponded fine soil.} With ponding the top boundary is a fixed head and the fine soil has a very small conductivity and a steep head gradient at the surface; the implicit solver then needs small time steps and many iterations to converge.
+\paragraph{Why the denitrification defect was found.} The check compared the shared function with the stored Daisy results over 792 cases; one case class disagreed, which pointed to a wrong branch in the function, corrected in the release.
+\paragraph{Why runs on a horizon of the Daisy samples failed.} The sample file also defined logs that referred to a model of its original run; Daisy stopped on the unknown name. Taking only the definitions a run needs removed the error.
+\paragraph{Why the routes from Daisy to a decision differ in time by orders of magnitude.} Running Daisy solves the Richards equation and a crop for every day of every run; the meta-model looks up and combines stored outcomes, which takes microseconds.
+

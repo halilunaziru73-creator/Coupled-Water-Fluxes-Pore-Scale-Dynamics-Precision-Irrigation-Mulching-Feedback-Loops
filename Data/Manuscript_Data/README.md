@@ -5,11 +5,14 @@ This folder holds [`SWAFL_Manuscripts_Data.xlsx`](SWAFL_Manuscripts_Data.xlsx), 
 | Sheet | Content |
 |:--|:--|
 | `Equations` | index of the equations of the four papers written as live Excel formulas |
+| `Column_Equations` | every calculated column of every sheet: its equation, the Excel formula of its first row, or the script and method for statistics |
+| `Baselines_E0` | the rainfed run of each soil, read from the run table with SUMIFS; the reference of every difference |
+| `CH_P1` to `CH_P4` | native Excel charts drawn from formula columns (change an input and the chart redraws) |
 | `EQ_P1` to `EQ_P4_*` | the equations as formulas: inputs in yellow, results in green; the fate, dose and storage-release sheets read the run table with SUMIFS |
 | `Table_Figure_Map` | every table and figure of each paper: script, input, output (the tables below) |
 | `Experiments` | one row per Daisy experiment (`Data/Comprehensive_Summary/00_SUMMARY_ALL_EXPERIMENTS.csv.gz`) |
 | `Ensemble_runs` | the run table of Papers 1 to 3 (`Data/daisy_ensemble.csv.gz`, 10 190 runs) |
-| `All_runs_summary` | one row per run with the settings read from each set-up file (`00_summary_all_simulations.csv.gz`; Paper 4 and the data table of all papers) |
+| `All_runs_summary` | one row per run with the settings read from each set-up file, followed by green formula columns (other evaporation, balance residual, differences from the rainfed run, water productivity, trigger over reach) (`00_summary_all_simulations.csv.gz`; Paper 4 and the data table of all papers) |
 | `R_*` | each result file of the analysis scripts (`Manuscripts/results`); JSON flattened to key and value |
 | `D_*` | the derived tables of `Results/07_Derived_Data_Tables` |
 
@@ -48,7 +51,7 @@ The analysis scripts are in [`Manuscripts/reproducibility`](../../Manuscripts/re
 | Table 13 | Table typed from the result file (34 of its numbers found there) | Manuscripts/reproducibility/p3_js/run_drip.js; Manuscripts/reproducibility/analysis/p3_lit_figs.py; Manuscripts/reproducibility/analysis/make_supplement_data.py | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/drip_out.json |
 | Figure 15 | Figure drawn by the script from the input data | Manuscripts/reproducibility/analysis/p2_figs.py; p2_R.py; p2_R.js | Data/daisy_ensemble.csv.gz (10 190 runs) | p2/fig03_hidden_term.pdf |
 | Table 14 | Table typed from the result file (22 of its numbers found there) | Manuscripts/reproducibility/run_all.sh; Manuscripts/reproducibility/audit_numbers.py; Manuscripts/reproducibility/analysis/p1_core.py; p2_robust.py; p2_robust.js | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/p1_core.json |
-| Figure 16 | Figure drawn by the script from the input data | Manuscripts/reproducibility/analysis/p2_figs.py; Manuscripts/reproducibility/analysis/p2_fig4.py; p2_a.py; p2_pca.js; p2_pca_sens.js | Data/daisy_ensemble.csv.gz (10 190 runs) | p2/fig04_manifold.pdf |
+| Figure 16 | Figure drawn by the script from the input data | Manuscripts/reproducibility/analysis/p2_fig4.py; Manuscripts/reproducibility/analysis/p2_figs.py; p2_a.py; p2_pca.js; p2_pca_sens.js | Data/daisy_ensemble.csv.gz (10 190 runs) | p2/fig04_manifold.pdf |
 | Table 15 | Table typed in the manuscript from the result files of the script | p2_a.py; p2_figs.py; p2_fig4.py; p2_pca.js; p2_pca_sens.js | Data/daisy_ensemble.csv.gz (10 190 runs) |  |
 | Figure 17 | Figure drawn by the script from the input data | Manuscripts/reproducibility/analysis/p2_fig7.py | Data/daisy_ensemble.csv.gz (10 190 runs) | p2/fig07_fates_by_soil.pdf |
 | Figure 18 | Figure drawn by the script from the input data | Manuscripts/reproducibility/analysis/p2_figs2.py | Data/daisy_ensemble.csv.gz (10 190 runs) | p2/fig05_ET_law.pdf |
@@ -56,7 +59,7 @@ The analysis scripts are in [`Manuscripts/reproducibility`](../../Manuscripts/re
 | Table 17 | Table typed from the result file (18 of its numbers found there) | Manuscripts/reproducibility/run_all.sh; Manuscripts/reproducibility/make_e12.py; Manuscripts/reproducibility/audit_numbers.py | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/e12.json |
 | Table 18 | Table typed in the manuscript from the result files of the script | (see the reproducibility appendix of the paper) | Data/daisy_ensemble.csv.gz (10 190 runs) |  |
 | Table 19 | Table typed from the result file (12 of its numbers found there) | Manuscripts/reproducibility/p3_js/run_drip.js; Manuscripts/reproducibility/analysis/p3_lit_figs.py; Manuscripts/reproducibility/analysis/make_supplement_data.py | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/drip_out.json |
-| Table 20 | Table typed from the result file (3 of its numbers found there) | Manuscripts/reproducibility/analysis/p4_reach.py; Manuscripts/reproducibility/analysis/make_supplement_data.py | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/p4_tableA1_reach.csv |
+| Table 20 | Table typed from the result file (3 of its numbers found there) | Manuscripts/reproducibility/analysis/p4_exact.py; Manuscripts/reproducibility/analysis/p4_reach.py; Manuscripts/reproducibility/analysis/make_supplement_data.py | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/p4_tableA1_reach.csv |
 | Table 21 | Table typed from the result file (23 of its numbers found there) | Manuscripts/reproducibility/p3_js/run_drip.js; Manuscripts/reproducibility/analysis/p3_lit_figs.py; Manuscripts/reproducibility/analysis/make_supplement_data.py; p2_et.py; p2_dpf.py; p2_figs2.py; p2_nested.py; p2_et.js; p2_dpf.js; p2_etlaw.js; p2_nested.js; p2_s02_excl.py; p2_s02_excl.js | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/drip_out.json |
 | Table 22 | Table typed in the manuscript from the result files of the script | (see the reproducibility appendix of the paper) | Data/daisy_ensemble.csv.gz (10 190 runs) |  |
 | Figure 19 | Figure drawn by the script from the input data | Manuscripts/reproducibility/analysis/p2_fig6.py; p2_laws2.py; p2_laws2.js | Data/daisy_ensemble.csv.gz (10 190 runs) | p2/fig06_compensation.pdf |
@@ -77,7 +80,7 @@ The analysis scripts are in [`Manuscripts/reproducibility`](../../Manuscripts/re
 
 | Item | How it is made | Script(s) | Input | Output |
 |:--|:--|:--|:--|:--|
-| Table 1 | Descriptive table (definitions, design, parameters or tests); no computation | - |  |  |
+| Table 1 | Table typed from the result file (4 of its numbers found there) | Manuscripts/reproducibility/audit_numbers.py; Manuscripts/reproducibility/p3_js/e1_heldout.js; Manuscripts/reproducibility/analysis/p3_figs.py | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/e12_pred.json |
 | Figure 1 | Figure drawn by the script from the input data | Manuscripts/reproducibility/make_a4.py; Manuscripts/reproducibility/analysis/p3_figs.py; Manuscripts/reproducibility/analysis/p3_fig01_workflow_v9.py | Data/daisy_ensemble.csv.gz (10 190 runs) | p3/fig01_architecture_A4.pdf |
 | Table 2 | Table typed from the result file (10 of its numbers found there) | Manuscripts/reproducibility/audit_numbers.py; Manuscripts/reproducibility/p3_js/e1_heldout.js; Manuscripts/reproducibility/analysis/p3_figs.py | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/e12_pred.json |
 | Table 3 | Table typed from the result file (5 of its numbers found there) | Manuscripts/reproducibility/p3_js/run_drip.js; Manuscripts/reproducibility/analysis/p3_lit_figs.py; Manuscripts/reproducibility/analysis/make_supplement_data.py | Data/daisy_ensemble.csv.gz (10 190 runs) | Manuscripts/results/drip_out.json |

@@ -1,0 +1,48 @@
+This section explains, with numbers that can be checked on a calculator or in the workbook (sheets \texttt{EQ\_P4\_reach}, \texttt{EQ\_P4\_fate}, \texttt{EQ\_P4\_dose}), how every result of the article is obtained, with numbers. The full mathematical derivations follow in the next section.
+
+\subsection{1. what a retention curve says}
+A soil holds water in pores of many sizes. When the soil dries, the large pores empty first because water is held in them by weaker capillary forces. The \emph{suction} $h$ (in cm of water) measures how strongly the remaining water is held: 0 cm means saturated, 100 cm is about field capacity, 15\,000 cm is about the wilting point. The \emph{effective saturation} $S_e$ is the fraction of the movable water still in the soil (1 = full, 0 = empty). The van~Genuchten curve links the two:
+\[S_e=\bigl[1+(\alpha h)^n\bigr]^{-m},\qquad m=1-1/n .\]
+$\alpha$ (1/cm) tells at which suction the soil starts to drain, $n$ tells how sharply it drains: a sand has a large $n$ (it drains almost all at once), a clay a small $n$ (it drains slowly over a wide range).
+\emph{Example (sand, $\alpha=0.145$, $n=2.68$).} $m=1-1/2.68=0.627$. At $h=100$\,cm: $\alpha h=14.5$; $14.5^{2.68}=1\,293$; $1+1\,293=1\,294$; $1\,294^{-0.627}=0.011$. The sand at field capacity holds only 1.1\,\% of its movable water.
+
+\subsection{2. what the conductivity curve says}
+Water moves through filled pores. As the soil dries, fewer and thinner pores carry water, so the \emph{relative conductivity} $K_r$ (1 = saturated) falls very fast. Mualem's formula gives
+\[K_r=S_e^{1/2}\Bigl[1-\bigl(1-S_e^{1/m}\bigr)^{m}\Bigr]^{2}.\]
+\emph{Example (sand at 100\,cm).} $S_e=0.0112$, $S_e^{1/m}=0.0112^{1.595}=7.7\times10^{-4}$; $1-7.7\times10^{-4}=0.99923$; $0.99923^{0.627}=0.99952$; $1-0.99952=4.8\times10^{-4}$; squared $=2.3\times10^{-7}$; times $\sqrt{0.0112}=0.106$ gives $K_r\approx2.5\times10^{-8}$. At field capacity the sand already conducts 40 million times less than when saturated.
+
+\subsection{3. why a crop cannot dry a soil beyond a certain suction}
+Roots can only take water as fast as the soil brings it to them, and the soil brings water in proportion to its conductivity. Once $K_r$ falls below a tiny value $\kappa$, the soil around the roots stops delivering water, the crop is stressed, and the soil at the sensor does not dry any further. The suction where this happens is the \emph{reach} $\hc$ of the soil. A trigger set drier than the reach is never read by the sensor, so the field is never irrigated.
+
+\subsection{4. a simple formula for the conductivity of a dry soil}
+When the soil is dry ($\alpha h$ much larger than 1), the 1 in the retention curve can be neglected, and the conductivity becomes a straight line on a log--log plot:
+\[K_r\approx m^2(\alpha h)^{-E},\qquad E=2n+\tfrac12(n-1).\]
+\emph{Check (sand).} $E=2(2.68)+0.5(1.68)=6.2$; $m^2=0.393$; at $h=100$\,cm, $14.5^{-6.2}=6.3\times10^{-8}$; $0.393\times6.3\times10^{-8}=2.5\times10^{-8}$, the same as Part 2.
+
+\subsection{5. solve for the reach}
+Set $K_r(\hc)=\kappa$ in Part 4 and solve for $\hc$: take both sides to the power $-1/E$, then divide by $\alpha$:
+\[\hc=\frac1\alpha\Bigl(\frac{m^2}{\kappa}\Bigr)^{1/E}.\]
+The constant $\kappa$ is found once from the simulations (Part 6) and is the same for every soil: $\kappa=3.47\times10^{-10}$.
+\emph{Example (sand).} $m^2/\kappa=0.393/3.47\times10^{-10}=1.13\times10^{9}$. Its natural logarithm is 20.85; divided by $E=6.2$ gives 3.363; $e^{3.363}=28.9$; divided by $\alpha=0.145$ gives $\hc=199$\,cm.
+\emph{Example (loam, $\alpha=0.036$, $n=1.56$).} $m=0.359$, $m^2=0.129$, $E=3.4$; $\ln(0.129/3.47\times10^{-10})=19.73$; $19.73/3.4=5.80$; $e^{5.80}=331$; $331/0.036=9\,209$\,cm.
+So the sand's reach is 199\,cm and the loam's is 9\,209\,cm: a 300\,cm trigger works on loam but is never reached on sand.
+
+\subsection{6. how $\kappa$ was found and tested}
+For each soil the simulations give an interval for the reach: the driest trigger that still irrigates (at least 5\,mm a year) and the next drier trigger, which does not. For sand that is 100 to 150\,cm. A value of $\kappa$ is tried, the reach of every soil is computed with Part 5, and the distance (in powers of ten) between each prediction and its interval is squared and added; $\kappa$ is changed until this sum is smallest. To test the formula fairly, each soil is left out in turn, $\kappa$ is found from the other nine, and the left-out soil is predicted. The worst prediction was a factor of 2.3 from its interval. In the workbook, change $\kappa$ in cell B2 of \texttt{EQ\_P4\_reach} and watch every reach and error change.
+
+\subsection{7. where an irrigation millimetre goes}
+Compare an irrigated run with the same soil and weather without irrigation (the rainfed baseline). The differences in each water flux, divided by the irrigation, tell what each millimetre became.
+\emph{Example: one run on coarse loam} (dose 10\,mm, April to October). Irrigation $I=222.5$\,mm a year. Transpiration rose from 147.6 to 223.0\,mm, $+75.4$\,mm, so $\eta_T=75.4/222.5=0.34$. Drainage rose from 6.1 to 39.5\,mm, so $\eta_D=33.4/222.5=0.15$. Soil evaporation rose from 146.4 to 228.8\,mm, so $\eta_{E_s}=0.37$. Other evaporation (ET minus transpiration minus soil evaporation) rose from 172.8 to 193.3\,mm, so $\eta_{E_o}=0.09$. The four add to 0.95; the remaining 0.05 went to storage and runoff.
+\emph{Pooling the 100 irrigated runs of that soil.} Add all transpiration (21\,328\,mm), subtract 100 times the rainfed value ($100\times147.6=14\,762$), and divide by all irrigation (17\,277\,mm): $\eta_T=6\,567/17\,277=0.38$. The sheet \texttt{EQ\_P4\_fate} does exactly this with \texttt{SUMIFS} for every soil.
+
+\subsection{8. the dose law}
+A small dose is used by the crop and the surface on the same day and cannot reach the deep soil; a large dose can. The share that drains therefore starts near zero and grows towards a ceiling $\eta_\infty$:
+\[\eta_D(d)=\eta_\infty\bigl(1-e^{-d/d_D}\bigr).\]
+\emph{Example (loam, $\eta_\infty=0.197$, $d_D=3.9$\,mm).} For a 1\,mm dose: $1/3.9=0.26$, $e^{-0.26}=0.77$, $1-0.77=0.23$, times 0.197 gives 0.045. For 10\,mm: $e^{-2.6}=0.074$, so $0.197\times0.926=0.18$. For 30\,mm: almost the ceiling, 0.197. The dose scale $d_D$ was about 4\,mm on every soil, close to one day of crop water use; the ceiling differs between soils (0.10 to 0.45).
+
+\subsection{9. when the sensor's lag matters}
+In fast wetting and drying the water content can lag behind the value of the retention curve by a time $\tau$. If the schedule irrigates every $t_i$ days, the lag matters only when $\Pi_\tau=\tau/t_i$ is not small. \emph{Example:} $\tau=1$\,h and irrigation every 2 days gives $\Pi_\tau=1/48=0.02$, negligible; pulses every 30\,min give $\Pi_\tau=2$, important.
+
+\subsection{10. reproduce everything}
+Open \nolinkurl{Data/Manuscript_Data/SWAFL_Manuscripts_Data.xlsx}: the yellow cells are the inputs, the green cells the formulas of Parts 1 to 8. Or run \nolinkurl{Manuscripts/reproducibility/analysis/p4_reach.py}, which reads every run and writes every number and figure of the article.
+

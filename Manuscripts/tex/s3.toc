@@ -1,51 +1,82 @@
-\contentsline {section}{\numberline {S1}What is new in this article}{3}{section.1}%
-\contentsline {section}{\numberline {S2}The author's contributions: problem, derivation and pinpoints}{4}{section.2}%
-\contentsline {subsection}{\numberline {S2.1}Contribution 1: the rule of origin}{4}{subsection.2.1}%
-\contentsline {subsection}{\numberline {S2.2}Contribution 2: an exact run budget that still tests every level}{5}{subsection.2.2}%
-\contentsline {subsection}{\numberline {S2.3}Contribution 3: the root cause of a failed run}{6}{subsection.2.3}%
-\contentsline {subsection}{\numberline {S2.4}Contribution 4: soil-hydraulic factors for every horizon}{7}{subsection.2.4}%
-\contentsline {subsection}{\numberline {S2.5}Contribution 5: a defect found in a shared function}{8}{subsection.2.5}%
-\contentsline {section}{\numberline {S3}Every term of the author's equations}{9}{section.3}%
-\contentsline {section}{\numberline {S4}How every constant is obtained, what it depends on, and how sensitive the results are}{10}{section.4}%
-\contentsline {subsection}{\numberline {S4.1}How every constant of the article is obtained}{10}{subsection.4.1}%
-\contentsline {section}{\numberline {S5}How each table of the article is produced}{11}{section.5}%
-\contentsline {paragraph}{Table 1 of the article.}{11}{paragraph*.1}%
-\contentsline {paragraph}{Table 2 of the article.}{11}{paragraph*.2}%
-\contentsline {paragraph}{Table 3 of the article.}{11}{paragraph*.3}%
-\contentsline {paragraph}{Table 4 of the article.}{11}{paragraph*.4}%
-\contentsline {paragraph}{Table 5 of the article.}{12}{paragraph*.5}%
-\contentsline {paragraph}{Table 6 of the article.}{12}{paragraph*.6}%
-\contentsline {paragraph}{Table 7 of the article.}{12}{paragraph*.7}%
-\contentsline {paragraph}{Table 8 of the article.}{12}{paragraph*.8}%
-\contentsline {paragraph}{Table 9 of the article.}{12}{paragraph*.9}%
-\contentsline {paragraph}{Table 10 of the article.}{12}{paragraph*.10}%
-\contentsline {section}{\numberline {S6}Reading every figure of the article}{12}{section.6}%
-\contentsline {section}{\numberline {S7}A guide to the results with worked numbers}{50}{section.7}%
-\contentsline {subsection}{\numberline {S7.1}1. a vegetation index from a satellite pixel}{50}{subsection.7.1}%
-\contentsline {subsection}{\numberline {S7.2}2. the crop coefficient of the day}{50}{subsection.7.2}%
-\contentsline {subsection}{\numberline {S7.3}3. the daily water balance of a map cell}{50}{subsection.7.3}%
-\contentsline {subsection}{\numberline {S7.4}4. soil loss}{50}{subsection.7.4}%
-\contentsline {subsection}{\numberline {S7.5}5. where the soil stays wet}{50}{subsection.7.5}%
-\contentsline {subsection}{\numberline {S7.6}6. keeping an experiment within its budget}{50}{subsection.7.6}%
-\contentsline {subsection}{\numberline {S7.7}7. splitting denitrification}{51}{subsection.7.7}%
-\contentsline {subsection}{\numberline {S7.8}8. the rule of origin}{51}{subsection.7.8}%
-\contentsline {section}{\numberline {S8}Derivations of the equations}{51}{section.8}%
-\contentsline {subsection}{\numberline {S8.1}Normalised spectral indices}{51}{subsection.8.1}%
-\contentsline {subsection}{\numberline {S8.2}Crop coefficient through the season}{51}{subsection.8.2}%
-\contentsline {subsection}{\numberline {S8.3}Daily root-zone balance of each map cell}{52}{subsection.8.3}%
-\contentsline {subsection}{\numberline {S8.4}The Richards equation of the soil column}{52}{subsection.8.4}%
-\contentsline {subsection}{\numberline {S8.5}Nitrogen and chemical budgets}{52}{subsection.8.5}%
-\contentsline {subsection}{\numberline {S8.6}Splitting denitrification into N$_2$O and N$_2$}{52}{subsection.8.6}%
-\contentsline {subsection}{\numberline {S8.7}Terrain, flow and wetness}{52}{subsection.8.7}%
-\contentsline {subsection}{\numberline {S8.8}Soil loss}{53}{subsection.8.8}%
-\contentsline {subsection}{\numberline {S8.9}Run budget of an experiment}{53}{subsection.8.9}%
-\contentsline {section}{\numberline {S9}Why the results happen}{53}{section.9}%
-\contentsline {paragraph}{Why every number can be traced.}{53}{paragraph*.11}%
-\contentsline {paragraph}{Why a Daisy layer draws nothing before a Daisy run.}{53}{paragraph*.12}%
-\contentsline {paragraph}{Why the compact designs lose some shape of a curve.}{53}{paragraph*.13}%
-\contentsline {paragraph}{Why the soil column is slow for a ponded fine soil.}{53}{paragraph*.14}%
-\contentsline {paragraph}{Why the denitrification defect was found.}{53}{paragraph*.15}%
-\contentsline {paragraph}{Why runs on a horizon of the Daisy samples failed.}{54}{paragraph*.16}%
-\contentsline {paragraph}{Why the routes from Daisy to a decision differ in time by orders of magnitude.}{54}{paragraph*.17}%
-\contentsline {section}{\numberline {S10}The data}{54}{section.10}%
-\contentsline {section}{\numberline {S11}Where every table and figure comes from}{87}{section.11}%
+\contentsline {section}{\numberline {S1}What is new in this article}{4}{section.1}%
+\contentsline {section}{\numberline {S2}How this supplement is organised}{5}{section.2}%
+\contentsline {section}{\numberline {S3}The rule of origin and the bridge to Daisy}{5}{section.3}%
+\contentsline {subsection}{\numberline {S3.1}Contribution 1: the rule of origin}{5}{subsection.3.1}%
+\contentsline {subsection}{\numberline {S3.2}Worked numbers, part 8: the rule of origin}{6}{subsection.3.2}%
+\contentsline {subsection}{\numberline {S3.3}Reading Figure 1 of the article}{7}{subsection.3.3}%
+\contentsline {subsection}{\numberline {S3.4}Reading Figure 12 of the article}{8}{subsection.3.4}%
+\contentsline {subsection}{\numberline {S3.5}Reading Figure 17 of the article}{9}{subsection.3.5}%
+\contentsline {subsection}{\numberline {S3.6}Reading Figure 8 of the article}{10}{subsection.3.6}%
+\contentsline {subsection}{\numberline {S3.7}Reading Figure 18 of the article}{11}{subsection.3.7}%
+\contentsline {subsection}{\numberline {S3.8}Why it happens}{14}{subsection.3.8}%
+\contentsline {paragraph}{Why every number can be traced.}{14}{paragraph*.1}%
+\contentsline {paragraph}{Why a Daisy layer draws nothing before a Daisy run.}{14}{paragraph*.2}%
+\contentsline {paragraph}{Why the routes from Daisy to a decision differ in time by orders of magnitude.}{14}{paragraph*.3}%
+\contentsline {section}{\numberline {S4}Experiments within a run budget}{14}{section.4}%
+\contentsline {subsection}{\numberline {S4.1}Contribution 2: an exact run budget that still tests every level}{14}{subsection.4.1}%
+\contentsline {subsection}{\numberline {S4.2}Worked numbers, part 6: keeping an experiment within its budget}{15}{subsection.4.2}%
+\contentsline {subsection}{\numberline {S4.3}Reading Figure 13 of the article}{16}{subsection.4.3}%
+\contentsline {subsection}{\numberline {S4.4}Reading Figure 16 of the article}{17}{subsection.4.4}%
+\contentsline {subsection}{\numberline {S4.5}Derivation: Run budget of an experiment}{17}{subsection.4.5}%
+\contentsline {subsection}{\numberline {S4.6}Why it happens}{18}{subsection.4.6}%
+\contentsline {paragraph}{Why the compact designs lose some shape of a curve.}{18}{paragraph*.4}%
+\contentsline {section}{\numberline {S5}Root causes of failed runs}{18}{section.5}%
+\contentsline {subsection}{\numberline {S5.1}Contribution 3: the root cause of a failed run}{18}{subsection.5.1}%
+\contentsline {subsection}{\numberline {S5.2}Reading Figure 20 of the article}{19}{subsection.5.2}%
+\contentsline {subsection}{\numberline {S5.3}Reading Figure 19 of the article}{20}{subsection.5.3}%
+\contentsline {subsection}{\numberline {S5.4}Why it happens}{22}{subsection.5.4}%
+\contentsline {paragraph}{Why runs on a horizon of the Daisy samples failed.}{22}{paragraph*.5}%
+\contentsline {section}{\numberline {S6}The soil column and its hydraulic factors}{22}{section.6}%
+\contentsline {subsection}{\numberline {S6.1}Contribution 4: soil-hydraulic factors for every horizon}{22}{subsection.6.1}%
+\contentsline {subsection}{\numberline {S6.2}Reading Figure 14 of the article}{23}{subsection.6.2}%
+\contentsline {subsection}{\numberline {S6.3}Reading Figure 9 of the article}{24}{subsection.6.3}%
+\contentsline {subsection}{\numberline {S6.4}Derivation: The Richards equation of the soil column}{25}{subsection.6.4}%
+\contentsline {subsection}{\numberline {S6.5}Why it happens}{25}{subsection.6.5}%
+\contentsline {paragraph}{Why the soil column is slow for a ponded fine soil.}{25}{paragraph*.6}%
+\contentsline {section}{\numberline {S7}Nitrogen and the denitrification split}{25}{section.7}%
+\contentsline {subsection}{\numberline {S7.1}Contribution 5: a defect found in a shared function}{25}{subsection.7.1}%
+\contentsline {subsection}{\numberline {S7.2}Worked numbers, part 7: splitting denitrification}{26}{subsection.7.2}%
+\contentsline {subsection}{\numberline {S7.3}Reading Figure 15 of the article}{27}{subsection.7.3}%
+\contentsline {subsection}{\numberline {S7.4}Derivation: Nitrogen and chemical budgets}{27}{subsection.7.4}%
+\contentsline {subsection}{\numberline {S7.5}Derivation: Splitting denitrification into N$_2$O and N$_2$}{28}{subsection.7.5}%
+\contentsline {subsection}{\numberline {S7.6}Why it happens}{28}{subsection.7.6}%
+\contentsline {paragraph}{Why the denitrification defect was found.}{28}{paragraph*.7}%
+\contentsline {section}{\numberline {S8}Maps of the field}{28}{section.8}%
+\contentsline {subsection}{\numberline {S8.1}Worked numbers, part 1: a vegetation index from a satellite pixel}{28}{subsection.8.1}%
+\contentsline {subsection}{\numberline {S8.2}Worked numbers, part 2: the crop coefficient of the day}{28}{subsection.8.2}%
+\contentsline {subsection}{\numberline {S8.3}Worked numbers, part 3: the daily water balance of a map cell}{29}{subsection.8.3}%
+\contentsline {subsection}{\numberline {S8.4}Worked numbers, part 4: soil loss}{29}{subsection.8.4}%
+\contentsline {subsection}{\numberline {S8.5}Worked numbers, part 5: where the soil stays wet}{29}{subsection.8.5}%
+\contentsline {subsection}{\numberline {S8.6}Reading Figure 2 of the article}{29}{subsection.8.6}%
+\contentsline {subsection}{\numberline {S8.7}Reading Figure 3 of the article}{32}{subsection.8.7}%
+\contentsline {subsection}{\numberline {S8.8}Reading Figure 4 of the article}{36}{subsection.8.8}%
+\contentsline {subsection}{\numberline {S8.9}Reading Figure 5 of the article}{37}{subsection.8.9}%
+\contentsline {subsection}{\numberline {S8.10}Reading Figure 6 of the article}{38}{subsection.8.10}%
+\contentsline {subsection}{\numberline {S8.11}Reading Figure 7 of the article}{39}{subsection.8.11}%
+\contentsline {subsection}{\numberline {S8.12}Reading Figure 10 of the article}{40}{subsection.8.12}%
+\contentsline {subsection}{\numberline {S8.13}Reading Figure 11 of the article}{48}{subsection.8.13}%
+\contentsline {subsection}{\numberline {S8.14}Reading Figure 21 of the article}{49}{subsection.8.14}%
+\contentsline {subsection}{\numberline {S8.15}Reading Figure 22 of the article}{50}{subsection.8.15}%
+\contentsline {subsection}{\numberline {S8.16}Derivation: Normalised spectral indices}{50}{subsection.8.16}%
+\contentsline {subsection}{\numberline {S8.17}Derivation: Crop coefficient through the season}{51}{subsection.8.17}%
+\contentsline {subsection}{\numberline {S8.18}Derivation: Daily root-zone balance of each map cell}{51}{subsection.8.18}%
+\contentsline {subsection}{\numberline {S8.19}Derivation: Terrain, flow and wetness}{51}{subsection.8.19}%
+\contentsline {subsection}{\numberline {S8.20}Derivation: Soil loss}{51}{subsection.8.20}%
+\contentsline {section}{\numberline {S9}Every term of the author's equations}{52}{section.9}%
+\contentsline {section}{\numberline {S10}How every constant is obtained, what it depends on, and how sensitive the results are}{53}{section.10}%
+\contentsline {subsection}{\numberline {S10.1}How every constant of the article is obtained}{53}{subsection.10.1}%
+\contentsline {section}{\numberline {S11}How each table of the article is produced}{53}{section.11}%
+\contentsline {paragraph}{Table 1 of the article.}{53}{paragraph*.8}%
+\contentsline {paragraph}{Table 2 of the article.}{54}{paragraph*.9}%
+\contentsline {paragraph}{Table 3 of the article.}{54}{paragraph*.10}%
+\contentsline {paragraph}{Table 4 of the article.}{54}{paragraph*.11}%
+\contentsline {paragraph}{Table 5 of the article.}{54}{paragraph*.12}%
+\contentsline {paragraph}{Table 6 of the article.}{54}{paragraph*.13}%
+\contentsline {paragraph}{Table 7 of the article.}{54}{paragraph*.14}%
+\contentsline {paragraph}{Table 8 of the article.}{54}{paragraph*.15}%
+\contentsline {paragraph}{Table 9 of the article.}{55}{paragraph*.16}%
+\contentsline {paragraph}{Table 10 of the article.}{55}{paragraph*.17}%
+\contentsline {section}{\numberline {S12}From the data to every result: experiments, runs and computations}{55}{section.12}%
+\contentsline {paragraph}{Where every number starts.}{55}{paragraph*.18}%
+\contentsline {section}{\numberline {S13}The data}{56}{section.13}%
+\contentsline {section}{\numberline {S14}Where every table and figure comes from}{91}{section.14}%

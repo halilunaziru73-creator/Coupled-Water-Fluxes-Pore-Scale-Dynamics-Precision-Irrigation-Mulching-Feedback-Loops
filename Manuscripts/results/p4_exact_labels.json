@@ -1,0 +1,41 @@
+{
+ "ex_kr": [
+  "Sand: the exact curve crosses the dashed line $K_r=\\kappa$ at $h_c=199$\\,cm (dot). This is \\cref{eq:s-hc} with $\\alpha=0.145$, $n=2.68$, $\\ell=0.5$.",
+  "Loam: the crossing is at $h_c=9\\,209$\\,cm, just below $10^4$\\,cm, with $\\alpha=0.036$, $n=1.56$.",
+  "Sand at field capacity (100\\,cm): $K_r=2.5\\times10^{-8}$, a fraction of the saturated conductivity that is already tiny; the worked example of Part~2 of the guide.",
+  "Dotted lines: the dry-end straight line $m^2(\\alpha h)^{-E}$. It lies on the exact curve wherever $\\alpha h\\gg1$, which is why the closed form of the reach is accurate.",
+  "Grey band (300--600\\,cm): the usual triggers. They lie beyond the reach of sand and well inside the reach of loam.",
+  "The constant $\\kappa$: the relative conductivity below which a crop can no longer dry the soil at the sensor within a season; one value for all ten soils."
+ ],
+ "ex_kappa": [
+  "The minimum: $\\log_{10}\\kappa=-9.46$, $\\kappa=3.47\\times10^{-10}$, loss $L=0.196$\\,decades$^2$. At this value 5 soils lie outside their interval: S01 by 0.11 decade, S02 by 0.27 decade, S03 by 0.12 decade, S04 by 0.23 decade, S05 by 0.21 decade; the other 5 lie inside.",
+  "Left edge of the bootstrap interval, $\\kappa=9.8e-11$: resampling the ten soils with replacement 1\\,000 times and refitting.",
+  "Right edge, $\\kappa=2.8e-09$. The interval spans 1.5 decades, but the reach changes only by a factor 1.45 to 2.45 per decade of $\\kappa$.",
+  "Too small a $\\kappa$ puts every predicted reach too far into the dry range: the soils with a finite interval (sand, loamy sand, sandy loam) are missed and the loss rises.",
+  "Too large a $\\kappa$ predicts reaches that are too short: soils whose triggers fire up to $10^4$\\,cm are missed."
+ ],
+ "ex_e2": [
+  "Sand, the driest trigger that still fires: 100\\,cm brings 6.36\\,mm a year, above the 5\\,mm line.",
+  "Sand, the next trigger, 150\\,cm, brings 0.0\\,mm: it never fires. The observed reach lies between the two (green band, 100--150\\,cm).",
+  "The reach predicted by the closed form, 199\\,cm (dashed): a third above the band, the largest miss among the soils with a finite interval.",
+  "The 5\\,mm a year threshold that defines ``fires; with 1, 10, 20 or 40\\,mm the fitted $\\kappa$ becomes 2.7, 7.3, 13 or 25 $\\times10^{-10}$.",
+  "Loam, the driest trigger that fires: 5000\\,cm brings 5.16\\,mm a year.",
+  "Predicted reach of loam, 9\\,209\\,cm: inside the observed band 5\\,000--10\\,000\\,cm.",
+  "Loam at the usual 300\\,cm trigger: 212\\,mm a year of irrigation, the trigger works."
+ ],
+ "ex_fate": [
+  "Transpiration: 223.0 $-$ 147.6 = 75.4\\,mm; $\\eta_T=75.4/222.5=0.34$.",
+  "Soil evaporation: 82.4\\,mm more than the rainfed twin; $\\eta_{E_s}=0.37$, the largest share in this run because the surface is wetted every few days.",
+  "Other evaporation (interception, ponds, litter): 20.6\\,mm; $\\eta_{E_o}=0.09$.",
+  "Drainage below 1\\,m: 39.5 $-$ 6.1 = 33.4\\,mm; $\\eta_D=0.15$.",
+  "The rest, 10.7\\,mm, is the change of storage and runoff, obtained by difference so that the shares add to one.",
+  "The whole bar is the irrigation of the run, $I=222.5$\\,mm a year: one bar is one irrigated millimetre scaled up."
+ ],
+ "ex_dose": [
+  "$d=1$\\,mm: $1-e^{-1/3.9}=0.23$; $\\eta_D=0.045$. A small dose is used the same day and almost nothing drains.",
+  "$d=d_D=3.9$\\,mm: by definition $\\eta_D=\\eta_\\infty(1-e^{-1})=0.63\\,\\eta_\\infty=0.125$.",
+  "$d=10$\\,mm: $\\eta_D=0.182$, already 92\\,\\% of the plateau.",
+  "$d=30$\\,mm: $\\eta_D=0.197$, practically the plateau.",
+  "The plateau $\\eta_\\infty=0.197$ of loam: the share of a large dose that drains, set by the race between drainage and uptake."
+ ]
+}

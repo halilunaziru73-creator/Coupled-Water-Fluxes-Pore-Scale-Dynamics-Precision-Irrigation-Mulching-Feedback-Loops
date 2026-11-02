@@ -1,0 +1,29 @@
+The derivations of Section~S2 are of established methods (spectral indices, FAO-56, the Richards equation, budgets, D8 flow and wetness, RUSLE, Latin-hypercube sampling), given so that each computation of the software can be followed. They are not claimed as new; the contribution of the article is the integration, the two rules of origin, and the verification that found defects (\cref{tab:novelty}).
+
+\subsection{Normalised spectral indices}
+Green leaves absorb red light for photosynthesis and scatter near-infrared light in the leaf mesophyll. The normalised difference $\mathrm{NDVI}=(\rho_N-\rho_R)/(\rho_N+\rho_R)$ is a contrast of the two that is bounded in $[-1,1]$ and cancels a common multiplicative illumination factor $k$: $(k\rho_N-k\rho_R)/(k\rho_N+k\rho_R)$ equals NDVI. SAVI adds a soil term $L$ to the denominator to reduce the influence of bright soil, $(1+L)(\rho_N-\rho_R)/(\rho_N+\rho_R+L)$; EVI corrects for the atmosphere with the blue band and for the canopy background; the water indices use the shortwave-infrared band, which liquid water absorbs.
+
+\subsection{Crop coefficient through the season}
+The FAO-56 curve is piecewise linear in time: constant $K_{ini}$ during the initial stage $L_1$, a linear rise to $K_{mid}$ over the development stage $L_2$, constant over the mid-season $L_3$ and a linear fall to $K_{end}$ over the late stage $L_4$ \citep{Allen1998}. The crop evapotranspiration is $\ET_c=K_c\,\ET_0$.
+
+\subsection{Daily root-zone balance of each map cell}
+For each cell, the root-zone depletion follows $D_{r,i}=D_{r,i-1}-(P-\mathrm{RO})_i-I_i+\ET_{c,i}+\mathrm{DP}_i$, bounded by $0\le D_{r}\le\TAW$; deep percolation occurs only when the depletion would fall below zero. Irrigation is required when $D_r$ exceeds the readily available water $p\,\TAW$; the net depth to apply is $D_r$ \citep{Allen1998}.
+
+\subsection{The Richards equation of the soil column}
+Mass conservation of water in a layer of thickness $\dd z$ gives $\partial\theta/\partial t=-\partial q/\partial z-S$, with $S$ the root uptake. The Darcy--Buckingham flux with $z$ positive downward and $h$ the suction head is $q=K(h)(1-\partial h/\partial z)$: gravity drives water down and a suction gradient drives it towards the drier soil. With $\theta(h)$ and $K(h)$ from the van~Genuchten--Mualem functions the equation is closed and is solved implicitly with Picard iteration in the column of the workbench.
+
+\subsection{Nitrogen and chemical budgets}
+For each season, the change of the mineral nitrogen store equals inputs minus outputs: fertiliser, deposition and mineralisation in; uptake, leaching, denitrification and volatilisation out. For a chemical, $\Delta M=A-U-L-R-X$ (applied, taken up, leached by every route, run off, transformed); the bridge reads each term from the Daisy logs and the closure of this budget is its test.
+
+\subsection{Splitting denitrification into N$_2$O and N$_2$}
+Let $r$ be the ratio of N$_2$ to N$_2$O in the gaseous product of denitrification $D$. Then $D_{\mathrm{N_2O}}+D_{\mathrm{N_2}}=D$ and $D_{\mathrm{N_2}}=r\,D_{\mathrm{N_2O}}$, so $D_{\mathrm{N_2O}}(1+r)=D$, giving $D_{\mathrm{N_2O}}=D/(1+r)$ and $D_{\mathrm{N_2}}=rD/(1+r)=D/(1+1/r)$, the two expressions of the paper. The ratio is the smaller of a nitrate and a carbon-dioxide limited ratio, scaled by a water factor, so wetter, more active soils give relatively more N$_2$.
+
+\subsection{Terrain, flow and wetness}
+On a filled elevation grid each cell drains to the steepest of its eight neighbours (D8). The upslope area $A$ of a cell is the sum of the areas that drain through it, and the specific area is $a=A/w$ with $w$ the cell width. The topographic wetness index $\ln(a/\tan\beta)$ is large where much water arrives and the slope $\beta$ is small, which marks where the soil stays wet.
+
+\subsection{Soil loss}
+The revised universal soil loss equation multiplies the rain erosivity $R$, the soil erodibility $K$, the slope length and steepness $LS$, the cover $C$ and the practice $P$: $A=R\,K\,LS\,C\,P$ in t\,ha$^{-1}$\,yr$^{-1}$ \citep{Renard1994}.
+
+\subsection{Run budget of an experiment}
+For $k$ factors with $n_1,\dots,n_k$ levels the full design has $\prod n_i$ runs. When this exceeds the budget $B$ set by the user, a Latin-hypercube choice of $B$ runs is made: each factor's levels are used as evenly as possible ($B/n_i$ times each), so every level of every factor appears and the main effects remain estimable while the number of runs never exceeds $B$.
+

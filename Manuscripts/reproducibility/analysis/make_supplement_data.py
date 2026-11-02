@@ -26,9 +26,9 @@ def flat(o, k=''):
     else: yield k, o
 def table_tex(df, title, src, sheet):
     n = len(df); df = df.head(CAP); cols = list(df.columns)[:9]
-    spec = 'l' * len(cols)
+    spec = 'l' * len(cols) if len(cols) < 6 else ('>{\\raggedright\\arraybackslash}p{%.2fcm}' % (16.0 / len(cols))) * len(cols)
     out = ['\\subsection*{%s}' % esc(title), '\\noindent\\small Source: \\nolinkurl{%s}; %d rows%s. Workbook sheet \\texttt{%s}.\\par' % (src, n, (', first %d shown' % CAP) if n > CAP else '', esc(sheet)),
-           '{\\scriptsize\\setlength{\\tabcolsep}{3pt}\\begin{longtable}{%s}' % spec, '\\toprule', ' & '.join('\\textbf{%s}' % esc(str(c)[:22]) for c in cols) + '\\\\\\midrule\\endhead']
+           '{\\scriptsize\\setlength{\\tabcolsep}{3pt}\\begin{longtable}{%s}' % spec, '\\toprule', ' & '.join('\\textbf{%s}' % esc(str(c)[:22]).replace('\\_', '\\_\\allowbreak{}') for c in cols) + '\\\\\\midrule\\endhead']
     for _, r in df.iterrows(): out.append('{}' + ' & '.join(fmt(r[c], 46) for c in cols) + '\\\\')
     out += ['\\bottomrule', '\\end{longtable}}']
     return '\n'.join(out)
@@ -54,7 +54,12 @@ for s, files in FILES.items():
     rows = ['{\\scriptsize\\begin{longtable}{p{1.5cm}p{3.6cm}p{5.0cm}p{5.6cm}}\\toprule\\textbf{Item} & \\textbf{How it is made} & \\textbf{Script(s)} & \\textbf{Input and output}\\\\\\midrule\\endhead']
     for _, r in m.iterrows():
         io = '; '.join(x for x in [str(r['Input data']) if str(r['Input data']) != 'nan' else '', str(r['Output / figure file']) if str(r['Output / figure file']) != 'nan' else ''] if x)
-        rows.append('{}%s & %s & %s & %s\\\\' % (esc(r.Item), esc(r['How it is made']), esc(r['Script(s)']).replace(';', '; '), esc(io).replace(';', '; ')))
+        brk = lambda x: x.replace('/', '/\\allowbreak{}').replace('\\_', '\\_\\allowbreak{}').replace(';', '; ')
+        rows.append('{}%s & %s & %s & %s\\\\' % (esc(r.Item), esc(r['How it is made']), brk(esc(r['Script(s)'])), brk(esc(io))))
     rows.append('\\bottomrule\\end{longtable}}')
     open(os.path.join(TEX, s + '_map.tex'), 'w').write('\n'.join(rows) + '\n')
     print(s, len(parts), 'data blocks,', len(m), 'items mapped')
+import fit_tables, glob
+for _f in glob.glob(os.path.join(TEX, 's[1-4]_*.tex')):
+    _s = open(_f).read(); _t = fit_tables.fit(_s)
+    if _t != _s: open(_f, 'w').write(_t)

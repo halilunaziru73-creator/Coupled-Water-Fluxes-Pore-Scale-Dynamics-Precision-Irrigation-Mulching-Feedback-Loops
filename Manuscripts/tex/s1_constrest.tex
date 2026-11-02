@@ -1,0 +1,10 @@
+\subsection{Every other constant of the article}
+{\small\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr 0.1974\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.1447\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.3421\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.3158\linewidth-2\tabcolsep\relax}}
+\toprule Constant & Value & How it was obtained & What it depends on; sensitivity\\\midrule\endhead
+$\lambda$, Mualem connectivity & 0.5 & conventional value \citep{Mualem1976} & used only in the diagnostics\\
+$\alpha$, $n$, $\TAW$ & Table~3 of the article & profile-averaged values of the project documentation & the soil\\
+Forward-selection threshold & 0.003 & chosen: a term is kept only if it raises the cross-validated $R^2$ by more than 0.003 & a smaller threshold adds terms that do not generalise\\
+ET-law coefficients 2.503, 0.646, $-0.299$, 0.029 & -- & least squares on $\ln\ET$ of the valid runs & stable across the 17 leave-one-experiment-out folds (Fig.~18c)\\
+Balance coefficients 1.037, 0.957, $-1$, $-1.036$ & -- & smallest right singular vector of the centred flux matrix, scaled so $c_{\ET}=-1$ & bootstrap intervals in Fig.~14b\\
+Bootstrap resamples & 5\,000 or 10\,000 & chosen for stable 95\,\% intervals & fixed random seeds\\\bottomrule
+\end{longtable}}

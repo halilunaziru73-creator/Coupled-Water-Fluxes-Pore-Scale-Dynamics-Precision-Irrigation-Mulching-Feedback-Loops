@@ -1,0 +1,26 @@
+Each part explains one computation of the software with a worked example; the numbers are in sheet \texttt{EQ\_P3} of the workbook.
+
+\subsection{1. a vegetation index from a satellite pixel}
+Green leaves reflect near-infrared light and absorb red light. \emph{Example:} near-infrared reflectance 0.28 and red 0.11 give $\mathrm{NDVI}=(0.28-0.11)/(0.28+0.11)=0.44$, a moderately green crop.
+
+\subsection{2. the crop coefficient of the day}
+FAO-56 describes the crop's water use relative to a reference grass with four straight lines. \emph{Example:} with stages of 30, 40, 50 and 30 days and $K_c$ of 0.40, 1.15 and 0.40, day 50 lies in the development stage: $K_c=0.40+(1.15-0.40)\times(50-30)/40=0.78$; day 70 starts the mid-season, $K_c=1.15$.
+
+\subsection{3. the daily water balance of a map cell}
+Each 10\,m cell keeps a root-zone depletion: yesterday's depletion minus rain and irrigation plus crop water use; when it passes the readily available water, the cell needs irrigation of that depth.
+
+\subsection{4. soil loss}
+$A=R\,K\,LS\,C\,P$. \emph{Example:} $450\times0.03\times0.4\times0.3\times1=1.6$\,t\,ha$^{-1}$\,yr$^{-1}$, below a tolerable 2\,t.
+
+\subsection{5. where the soil stays wet}
+The wetness index is $\ln(a/\tan\beta)$. \emph{Example:} 250\,m of upslope area per metre of contour on a slope of 1.9$^\circ$ gives $\ln(250/0.0332)=8.9$, a wet position.
+
+\subsection{6. keeping an experiment within its budget}
+Three factors with 4, 10 and 5 levels make 200 combinations; with a budget of 60 runs a Latin-hypercube choice makes 60 runs in which each level of the second factor appears 6 times, so every level is still tested.
+
+\subsection{7. splitting denitrification}
+With 12\,kg\,N\,ha$^{-1}$ denitrified and an N$_2$:N$_2$O ratio of 4, N$_2$O $=12/5=2.4$ and N$_2=9.6$\,kg\,N\,ha$^{-1}$.
+
+\subsection{8. the rule of origin}
+A decision layer may show a Daisy result only if a Daisy run made it. Before a run, the layer therefore says that it needs a run and shows nothing; after a run it shows the run's numbers with their file and line.
+

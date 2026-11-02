@@ -38,7 +38,9 @@
   "Other evaporation (0.19): intercepted water, ponds and litter.",
   "Drainage below 1 m (0.16): water lost to the crop that also carries nitrate.",
   "The sensor at 20 cm: irrigation starts when the suction it reads exceeds the trigger.",
-  "The reach of sand (199 cm), where its conductivity has collapsed; the usual triggers lie beyond it.",
+  "The reach of sand (199 cm, the dashed orange line): there its conductivity has collapsed; the usual triggers (grey band) lie beyond it and never fire.",
+  "The reach of loam (9 209 cm, the dashed blue line just below 10^4 cm): its gentler curve lets a crop dry it far further, so the usual triggers lie well inside its reach and fire.",
+  "Silty clay loam: its reach (128 260 cm) lies beyond the right edge of the axis (10^5 cm), so no dashed line is drawn; every usual trigger fires.",
   "Grey band: the triggers usually tabulated (300 to 600 cm)."
  ]
 }

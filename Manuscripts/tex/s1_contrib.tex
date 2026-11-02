@@ -8,12 +8,16 @@ After a wet spring, a soil releases stored water over the season. Does that wate
 \begin{keyresult}
 \begin{pencil}
 {\small\noindent\textbf{How it is derived, line by line}
-\[\begin{array}{@{}l@{\hspace{8pt}}l@{}}
-\textbf{1. Storage release of run } c\textbf{:} & \bar R_c=\ET_c+D_c-P_{r,c}-I_c\\[2pt]
-\textbf{2. Model each flux within rainfall group } P\textbf{:} & x_c=a_P+\phi_x\bar R_c+e_c\\[2pt]
-\textbf{3. Least squares over } a_P\textbf{:} & a_P=\bar x_P-\phi_x\overline{\bar R}_P\\[2pt]
-\textbf{4. Least squares over } \phi_x\textbf{:} & \phi_x=\frac{\sum_P\sum_c(\bar R_c-\overline{\bar R}_P)(x_c-\bar x_P)}{\sum_P\sum_c(\bar R_c-\overline{\bar R}_P)^2}\\[2pt]
-\textbf{5. Fluxes add to } \bar R+\text{const}\textbf{:} & \textstyle\sum_x\phi_x=1
+\[\begin{array}{@{}l@{}}\textbf{1. Storage release of run } c\textbf{:}\\[1pt]
+\qquad \bar R_c=\ET_c+D_c-P_{r,c}-I_c\\[1pt]
+\textbf{2. Model each flux within rainfall group } P\textbf{:}\\[1pt]
+\qquad x_c=a_P+\phi_x\bar R_c+e_c\\[1pt]
+\textbf{3. Least squares over } a_P\textbf{:}\\[1pt]
+\qquad a_P=\bar x_P-\phi_x\overline{\bar R}_P\\[1pt]
+\textbf{4. Least squares over } \phi_x\textbf{:}\\[1pt]
+\qquad \phi_x=\frac{\sum_P\sum_c(\bar R_c-\overline{\bar R}_P)(x_c-\bar x_P)}{\sum_P\sum_c(\bar R_c-\overline{\bar R}_P)^2}\\[1pt]
+\textbf{5. Fluxes add to } \bar R+\text{const}\textbf{:}\\[1pt]
+\qquad \textstyle\sum_x\phi_x=1
 \end{array}\]}
 \noindent\textbf{The result, with its parts marked}
 \[
@@ -40,11 +44,14 @@ Stored water leaves by two competing first-order routes, drainage at a rate prop
 \begin{keyresult}
 \begin{pencil}
 {\small\noindent\textbf{How it is derived, line by line}
-\[\begin{array}{@{}l@{\hspace{8pt}}l@{}}
-\textbf{1. Two first-order sinks:} & \dd S/\dd t=-(k_D+k_W)S,\ k_D\propto K_s,\ k_W\propto q^\ast\\[2pt]
-\textbf{2. Solve:} & S=S_0e^{-(k_D+k_W)t}\\[2pt]
-\textbf{3. Drained water:} & \textstyle\int_0^\infty k_DS\,\dd t=S_0\,k_D/(k_D+k_W)\\[2pt]
-\textbf{4. Share drained:} & \phi_D=K_s/(K_s+q^\ast)
+\[\begin{array}{@{}l@{}}\textbf{1. Two first-order sinks:}\\[1pt]
+\qquad \dd S/\dd t=-(k_D+k_W)S,\ k_D\propto K_s,\ k_W\propto q^\ast\\[1pt]
+\textbf{2. Solve:}\\[1pt]
+\qquad S=S_0e^{-(k_D+k_W)t}\\[1pt]
+\textbf{3. Drained water:}\\[1pt]
+\qquad \textstyle\int_0^\infty k_DS\,\dd t=S_0\,k_D/(k_D+k_W)\\[1pt]
+\textbf{4. Share drained:}\\[1pt]
+\qquad \phi_D=K_s/(K_s+q^\ast)
 \end{array}\]}
 \noindent\textbf{The result, with its parts marked}
 \[\underbrace{\phi_D}_{\circled{1}}=\frac{\overbrace{K_s}^{\circled{2}}}{K_s+\underbrace{q^\ast}_{\circled{3}}}\]
@@ -70,10 +77,12 @@ Paired runs that differ only in the evaporation factor (E16) or in the mulch lev
 \begin{keyresult}
 \begin{pencil}
 {\small\noindent\textbf{How it is derived, line by line}
-\[\begin{array}{@{}l@{\hspace{8pt}}l@{}}
-\textbf{1. Balance of an evaporation change:} & \delta\Ent+\delta T+\delta D-\delta I\simeq0\\[2pt]
-\textbf{2. Divide by } \delta\Ent\textbf{:} & \psi_T+\psi_D+\psi_I\simeq1\\[2pt]
-\textbf{3. Only the drained part is not recovered:} & \rho_R=1-\psi_D
+\[\begin{array}{@{}l@{}}\textbf{1. Balance of an evaporation change:}\\[1pt]
+\qquad \delta\Ent+\delta T+\delta D-\delta I\simeq0\\[1pt]
+\textbf{2. Divide by } \delta\Ent\textbf{:}\\[1pt]
+\qquad \psi_T+\psi_D+\psi_I\simeq1\\[1pt]
+\textbf{3. Only the drained part is not recovered:}\\[1pt]
+\qquad \rho_R=1-\psi_D
 \end{array}\]}
 \noindent\textbf{The result, with its parts marked}
 \[\underbrace{\rho_R}_{\circled{1}}=1-\underbrace{\psi_D}_{\circled{2}}\]
@@ -104,11 +113,14 @@ The 20-year fluxes $P_r$, $I$, $\ET$ and $D$ of all valid runs were centred and 
 \begin{keyresult}
 \begin{pencil}
 {\small\noindent\textbf{How it is derived, line by line}
-\[\begin{array}{@{}l@{\hspace{8pt}}l@{}}
-\textbf{1. Fluxes of all runs as a centred matrix:} & \mathbf F\ (\text{rows: runs; columns: }P_r,I,\ET,D)\\[2pt]
-\textbf{2. Seek the combination closest to zero:} & \min_{\|\mathbf c\|=1}\|\mathbf F\mathbf c\|^2=\mathbf c^\top\mathbf F^\top\mathbf F\mathbf c\\[2pt]
-\textbf{3. Solution:} & \mathbf c=\text{right singular vector with the smallest singular value}\\[2pt]
-\textbf{4. Rescale so that } c_{\ET}=-1\textbf{:} & \mathbf c=(1.037,0.957,-1,-1.036)
+\[\begin{array}{@{}l@{}}\textbf{1. Fluxes of all runs as a centred matrix:}\\[1pt]
+\qquad \mathbf F\ (\text{rows: runs; columns: }P_r,I,\ET,D)\\[1pt]
+\textbf{2. Seek the combination closest to zero:}\\[1pt]
+\qquad \min_{\|\mathbf c\|=1}\|\mathbf F\mathbf c\|^2=\mathbf c^\top\mathbf F^\top\mathbf F\mathbf c\\[1pt]
+\textbf{3. Solution:}\\[1pt]
+\qquad \mathbf c=\text{right singular vector with the smallest singular value}\\[1pt]
+\textbf{4. Rescale so that } c_{\ET}=-1\textbf{:}\\[1pt]
+\qquad \mathbf c=(1.037,0.957,-1,-1.036)
 \end{array}\]}
 \noindent\textbf{The result, with its parts marked}
 \[\underbrace{\mathbf c}_{\circled{1}}=(c_{P_r},c_I,c_{\ET},c_D)=(\underbrace{1.037}_{\circled{2}},\ 0.957,\ -1,\ \underbrace{-1.036}_{\circled{3}})\]
@@ -129,10 +141,12 @@ Log and dimensionless candidate terms were added one at a time by forward select
 \begin{keyresult}
 \begin{pencil}
 {\small\noindent\textbf{How it is derived, line by line}
-\[\begin{array}{@{}l@{\hspace{8pt}}l@{}}
-\textbf{1. Candidates (log or dimensionless):} & \ln W,\ n,\ \ln(1+I),\dots\\[2pt]
-\textbf{2. Forward selection, keep a term if } R^2_{\mathrm{cv}}\textbf{ rises by }>0.003\textbf{:} & \{\ln W,\ n,\ \ln(1+I)\}\\[2pt]
-\textbf{3. Least squares on } \ln\ET\textbf{:} & \ln\ET=2.503+0.646\ln W-0.299n+0.029\ln(1+I)
+\[\begin{array}{@{}l@{}}\textbf{1. Candidates (log or dimensionless):}\\[1pt]
+\qquad \ln W,\ n,\ \ln(1+I),\dots\\[1pt]
+\textbf{2. Forward selection, keep a term if } R^2_{\mathrm{cv}}\textbf{ rises by }>0.003\textbf{:}\\[1pt]
+\qquad \{\ln W,\ n,\ \ln(1+I)\}\\[1pt]
+\textbf{3. Least squares on } \ln\ET\textbf{:}\\[1pt]
+\qquad \ln\ET=2.503+0.646\ln W-0.299n+0.029\ln(1+I)
 \end{array}\]}
 \noindent\textbf{The result, with its parts marked}
 \[\ln\ET=2.503+\underbrace{0.646\ln W}_{\circled{1}}\underbrace{-0.299\,n}_{\circled{2}}+\underbrace{0.029\ln(1+I)}_{\circled{3}}\]

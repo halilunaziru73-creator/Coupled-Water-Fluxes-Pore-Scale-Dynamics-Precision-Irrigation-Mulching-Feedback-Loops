@@ -1,0 +1,16 @@
+\subsection{How every constant of the article is obtained}
+{\small\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr 0.1974\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.1382\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.3553\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.3092\linewidth-2\tabcolsep\relax}}
+\toprule Constant & Value & How it was obtained & What it depends on; sensitivity\\\midrule\endhead
+$f^\ast$, critical depletion & 0.45 & from the simulations: the depletion beyond which the simulated yield falls by more than 5\,\% & the crop and the 5\,\% tolerance; a larger $f^\ast$ gives drier triggers\\
+Field capacity, wilting point & 100\,cm, 15\,849\,cm & FAO convention \citep{Allen1998} (pF 2 and pF 4.2) & a different field capacity shifts every depletion\\
+Rain-day fraction in $\mu_0=P/(0.28\cdot365)$ & 0.28 & engineered: about one day in four is a rain day in the benchmark weather & the climate; $I_c$ scales with $\mu_0$\\
+Throughfall $r$ & $\max(40,P-P_{\mathrm{other}})/P$ & chosen so that the daily model intercepts what the annual model intercepts & Engine 1\\
+Stage-1 depth $L_1$ & 40\,mm & engineered: the layer that dries in stage 1 & a deeper layer lengthens stage 1\\
+Surface-dry suction $h_s$ & $4/\alpha$ & engineered, scaled by $\alpha$ so it samples the steep part of every curve & the soil\\
+Stage-2 time $\tau_E$ & $0.006+0.03(\mathrm{clay}+\mathrm{silt})/100$\,d & engineered: finer soils supply the surface longer & the texture\\
+Surface tension, contact angle & 0.0728\newline N\,m$^{-1}$; 0 & physical constants of water at 20\,$^\circ$C \citep{Hillel1998} & temperature; repellent soils have a larger angle\\
+Kelvin factor & 135.3\,MPa & $\mathcal RT_K/V_w$ at 20\,$^\circ$C & temperature\\
+Nozzle coefficient & 0.95 & typical discharge coefficient of a sprinkler nozzle & the nozzle\\
+Hazen--Williams exponent & 1.852 & from the Hazen--Williams formula & the pipe; $C$ depends on the material\\
+Keller--Karmeli factor & 1.27 & from the normal distribution of emitter flows \citep{KellerKarmeli1974} & the manufacturing variation\\\bottomrule
+\end{longtable}}

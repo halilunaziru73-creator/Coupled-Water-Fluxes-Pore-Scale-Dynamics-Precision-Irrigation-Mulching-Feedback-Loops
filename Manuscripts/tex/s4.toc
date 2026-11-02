@@ -1,58 +1,74 @@
 \contentsline {section}{\numberline {S1}Highlights}{4}{section.1}%
 \contentsline {section}{\numberline {S2}What is new in this article}{4}{section.2}%
-\contentsline {section}{\numberline {S3}The author's contributions: problem, derivation and pinpoints}{5}{section.3}%
-\contentsline {subsection}{\numberline {S3.1}Contribution 1: the reach of a suction trigger}{6}{subsection.3.1}%
-\contentsline {subsection}{\numberline {S3.2}Contribution 2: a rule for blind triggers}{8}{subsection.3.2}%
-\contentsline {subsection}{\numberline {S3.3}Contribution 3: one axis for all soils}{10}{subsection.3.3}%
-\contentsline {subsection}{\numberline {S3.4}Contribution 4: the fate of an irrigation millimetre}{11}{subsection.3.4}%
-\contentsline {subsection}{\numberline {S3.5}Contribution 5: the dose law}{12}{subsection.3.5}%
-\contentsline {subsection}{\numberline {S3.6}Contribution 6: overhead irrigation adds no transpiration}{14}{subsection.3.6}%
-\contentsline {subsection}{\numberline {S3.7}Contribution 7: when a sensor's lag matters}{15}{subsection.3.7}%
-\contentsline {section}{\numberline {S4}Every term of the author's equations}{16}{section.4}%
-\contentsline {section}{\numberline {S5}How every constant is obtained, what it depends on, and how sensitive the results are}{18}{section.5}%
-\contentsline {subsection}{\numberline {S5.1}The constant $\kappa $ of the reach: how it is determined}{18}{subsection.5.1}%
-\contentsline {subsection}{\numberline {S5.2}Every other constant of the article}{20}{subsection.5.2}%
-\contentsline {section}{\numberline {S6}How each table of the article is produced}{21}{section.6}%
-\contentsline {paragraph}{Table 1 of the article.}{21}{paragraph*.1}%
-\contentsline {paragraph}{Table 2 of the article.}{22}{paragraph*.2}%
-\contentsline {paragraph}{Table 3 of the article.}{22}{paragraph*.3}%
-\contentsline {paragraph}{Table 4 of the article.}{22}{paragraph*.4}%
-\contentsline {paragraph}{Table 5 of the article.}{22}{paragraph*.5}%
-\contentsline {section}{\numberline {S7}Reading every figure of the article}{23}{section.7}%
-\contentsline {section}{\numberline {S8}A guide to the results with worked numbers}{33}{section.8}%
-\contentsline {subsection}{\numberline {S8.1}1. what a retention curve says}{33}{subsection.8.1}%
-\contentsline {subsection}{\numberline {S8.2}2. what the conductivity curve says}{33}{subsection.8.2}%
-\contentsline {subsection}{\numberline {S8.3}3. why a crop cannot dry a soil beyond a certain suction}{34}{subsection.8.3}%
-\contentsline {subsection}{\numberline {S8.4}4. a simple formula for the conductivity of a dry soil}{34}{subsection.8.4}%
-\contentsline {subsection}{\numberline {S8.5}5. solve for the reach}{34}{subsection.8.5}%
-\contentsline {subsection}{\numberline {S8.6}6. how $\kappa $ was found and tested}{35}{subsection.8.6}%
-\contentsline {subsection}{\numberline {S8.7}7. where an irrigation millimetre goes}{35}{subsection.8.7}%
-\contentsline {subsection}{\numberline {S8.8}8. the dose law}{35}{subsection.8.8}%
-\contentsline {subsection}{\numberline {S8.9}9. when the sensor's lag matters}{36}{subsection.8.9}%
-\contentsline {subsection}{\numberline {S8.10}10. reproduce everything}{36}{subsection.8.10}%
-\contentsline {section}{\numberline {S9}Derivations of the equations}{36}{section.9}%
-\contentsline {subsection}{\numberline {S9.1}The van~Genuchten--Mualem pair from a capillary bundle}{36}{subsection.9.1}%
-\contentsline {subsection}{\numberline {S9.2}The dry-end asymptote of the conductivity}{37}{subsection.9.2}%
-\contentsline {subsection}{\numberline {S9.3}The reach of a trigger}{38}{subsection.9.3}%
-\contentsline {paragraph}{The physical condition.}{38}{paragraph*.6}%
-\contentsline {paragraph}{One constant for all soils.}{38}{paragraph*.7}%
-\contentsline {paragraph}{Properties.}{38}{paragraph*.8}%
-\contentsline {subsection}{\numberline {S9.4}The alternative laws}{39}{subsection.9.4}%
-\contentsline {paragraph}{Fixed saturation.}{39}{paragraph*.9}%
-\contentsline {paragraph}{Power law in $n-1$.}{39}{paragraph*.10}%
-\contentsline {paragraph}{Absolute conductivity.}{39}{paragraph*.11}%
-\contentsline {subsection}{\numberline {S9.5}Fitting interval-censored reaches}{39}{subsection.9.5}%
-\contentsline {subsection}{\numberline {S9.6}The marginal fate of irrigation}{39}{subsection.9.6}%
-\contentsline {subsection}{\numberline {S9.7}The dose law}{40}{subsection.9.7}%
-\contentsline {subsection}{\numberline {S9.8}Dynamic non-equilibrium and the lag of a sensor}{40}{subsection.9.8}%
-\contentsline {section}{\numberline {S10}Why the results happen}{41}{section.10}%
-\contentsline {paragraph}{Why a trigger has a reach.}{41}{paragraph*.12}%
-\contentsline {paragraph}{Why a deeper sensor does not help.}{41}{paragraph*.13}%
-\contentsline {paragraph}{Why scaling by the reach collapses the curves only in part.}{41}{paragraph*.14}%
-\contentsline {paragraph}{Why less than half of an irrigation millimetre is transpired.}{41}{paragraph*.15}%
-\contentsline {paragraph}{Why overhead irrigation adds no transpiration.}{41}{paragraph*.16}%
-\contentsline {paragraph}{Why the dose scale does not depend on the soil.}{42}{paragraph*.17}%
-\contentsline {paragraph}{Why the plateau depends on the soil.}{42}{paragraph*.18}%
-\contentsline {paragraph}{Why early-season irrigation is more productive.}{42}{paragraph*.19}%
-\contentsline {section}{\numberline {S11}The data}{42}{section.11}%
-\contentsline {section}{\numberline {S12}Where every table and figure comes from}{57}{section.12}%
+\contentsline {section}{\numberline {S3}How this supplement is organised}{5}{section.3}%
+\contentsline {section}{\numberline {S4}The reach of a suction trigger}{6}{section.4}%
+\contentsline {subsection}{\numberline {S4.1}Contribution 1: the reach of a suction trigger}{6}{subsection.4.1}%
+\contentsline {subsection}{\numberline {S4.2}Contribution 2: a rule for blind triggers}{8}{subsection.4.2}%
+\contentsline {subsection}{\numberline {S4.3}Contribution 3: one axis for all soils}{10}{subsection.4.3}%
+\contentsline {subsection}{\numberline {S4.4}Worked numbers, part 1: what a retention curve says}{11}{subsection.4.4}%
+\contentsline {subsection}{\numberline {S4.5}Worked numbers, part 2: what the conductivity curve says}{11}{subsection.4.5}%
+\contentsline {subsection}{\numberline {S4.6}Worked numbers, part 3: why a crop cannot dry a soil beyond a certain suction}{12}{subsection.4.6}%
+\contentsline {subsection}{\numberline {S4.7}Worked numbers, part 4: a simple formula for the conductivity of a dry soil}{12}{subsection.4.7}%
+\contentsline {subsection}{\numberline {S4.8}Worked numbers, part 5: solve for the reach}{12}{subsection.4.8}%
+\contentsline {subsection}{\numberline {S4.9}Worked numbers, part 6: how $\kappa $ was found and tested}{13}{subsection.4.9}%
+\contentsline {subsection}{\numberline {S4.10}Exact points: where the conductivity meets $\kappa $}{13}{subsection.4.10}%
+\contentsline {subsection}{\numberline {S4.11}Exact points: how the single constant $\kappa $ is found}{14}{subsection.4.11}%
+\contentsline {subsection}{\numberline {S4.12}The constant $\kappa $ of the reach: how it is determined}{15}{subsection.4.12}%
+\contentsline {subsection}{\numberline {S4.13}Exact points: the observed reach in experiment E2}{17}{subsection.4.13}%
+\contentsline {subsection}{\numberline {S4.14}Reading Figure 1 of the article}{18}{subsection.4.14}%
+\contentsline {subsection}{\numberline {S4.15}Reading Figure 2 of the article}{20}{subsection.4.15}%
+\contentsline {subsection}{\numberline {S4.16}Reading Figure 3 of the article}{21}{subsection.4.16}%
+\contentsline {subsection}{\numberline {S4.17}Derivation: The van~Genuchten--Mualem pair from a capillary bundle}{23}{subsection.4.17}%
+\contentsline {subsection}{\numberline {S4.18}Derivation: The dry-end asymptote of the conductivity}{24}{subsection.4.18}%
+\contentsline {subsection}{\numberline {S4.19}Derivation: The reach of a trigger}{24}{subsection.4.19}%
+\contentsline {paragraph}{The physical condition.}{24}{paragraph*.1}%
+\contentsline {paragraph}{One constant for all soils.}{25}{paragraph*.2}%
+\contentsline {paragraph}{Properties.}{25}{paragraph*.3}%
+\contentsline {subsection}{\numberline {S4.20}Derivation: The alternative laws}{25}{subsection.4.20}%
+\contentsline {paragraph}{Fixed saturation.}{25}{paragraph*.4}%
+\contentsline {paragraph}{Power law in $n-1$.}{25}{paragraph*.5}%
+\contentsline {paragraph}{Absolute conductivity.}{25}{paragraph*.6}%
+\contentsline {subsection}{\numberline {S4.21}Derivation: Fitting interval-censored reaches}{25}{subsection.4.21}%
+\contentsline {subsection}{\numberline {S4.22}Why it happens}{26}{subsection.4.22}%
+\contentsline {paragraph}{Why a trigger has a reach.}{26}{paragraph*.7}%
+\contentsline {paragraph}{Why a deeper sensor does not help.}{26}{paragraph*.8}%
+\contentsline {paragraph}{Why scaling by the reach collapses the curves only in part.}{26}{paragraph*.9}%
+\contentsline {section}{\numberline {S5}The fate of an irrigation millimetre}{26}{section.5}%
+\contentsline {subsection}{\numberline {S5.1}Contribution 4: the fate of an irrigation millimetre}{27}{subsection.5.1}%
+\contentsline {subsection}{\numberline {S5.2}Contribution 6: overhead irrigation adds no transpiration}{28}{subsection.5.2}%
+\contentsline {subsection}{\numberline {S5.3}Worked numbers, part 7: where an irrigation millimetre goes}{29}{subsection.5.3}%
+\contentsline {subsection}{\numberline {S5.4}Exact points: the fate of the irrigation of one run}{30}{subsection.5.4}%
+\contentsline {subsection}{\numberline {S5.5}Reading Figure 4 of the article}{31}{subsection.5.5}%
+\contentsline {subsection}{\numberline {S5.6}Derivation: The marginal fate of irrigation}{32}{subsection.5.6}%
+\contentsline {subsection}{\numberline {S5.7}Why it happens}{33}{subsection.5.7}%
+\contentsline {paragraph}{Why less than half of an irrigation millimetre is transpired.}{33}{paragraph*.10}%
+\contentsline {paragraph}{Why overhead irrigation adds no transpiration.}{33}{paragraph*.11}%
+\contentsline {paragraph}{Why early-season irrigation is more productive.}{33}{paragraph*.12}%
+\contentsline {section}{\numberline {S6}The dose law}{33}{section.6}%
+\contentsline {subsection}{\numberline {S6.1}Contribution 5: the dose law}{33}{subsection.6.1}%
+\contentsline {subsection}{\numberline {S6.2}Worked numbers, part 8: the dose law}{35}{subsection.6.2}%
+\contentsline {subsection}{\numberline {S6.3}Exact points: the dose law of loam}{35}{subsection.6.3}%
+\contentsline {subsection}{\numberline {S6.4}Reading Figure 5 of the article}{36}{subsection.6.4}%
+\contentsline {subsection}{\numberline {S6.5}Derivation: The dose law}{37}{subsection.6.5}%
+\contentsline {subsection}{\numberline {S6.6}Why it happens}{38}{subsection.6.6}%
+\contentsline {paragraph}{Why the dose scale does not depend on the soil.}{38}{paragraph*.13}%
+\contentsline {paragraph}{Why the plateau depends on the soil.}{38}{paragraph*.14}%
+\contentsline {section}{\numberline {S7}When the lag of a sensor matters}{38}{section.7}%
+\contentsline {subsection}{\numberline {S7.1}Contribution 7: when a sensor's lag matters}{38}{subsection.7.1}%
+\contentsline {subsection}{\numberline {S7.2}Worked numbers, part 9: when the sensor's lag matters}{39}{subsection.7.2}%
+\contentsline {subsection}{\numberline {S7.3}Derivation: Dynamic non-equilibrium and the lag of a sensor}{40}{subsection.7.3}%
+\contentsline {section}{\numberline {S8}The trigger law in the software}{40}{section.8}%
+\contentsline {subsection}{\numberline {S8.1}Reading Figure 6 of the article}{41}{subsection.8.1}%
+\contentsline {section}{\numberline {S9}Every term of the author's equations}{46}{section.9}%
+\contentsline {section}{\numberline {S10}How every constant is obtained, what it depends on, and how sensitive the results are}{48}{section.10}%
+\contentsline {subsection}{\numberline {S10.1}Every other constant of the article}{48}{subsection.10.1}%
+\contentsline {section}{\numberline {S11}How each table of the article is produced}{49}{section.11}%
+\contentsline {paragraph}{Table 1 of the article.}{49}{paragraph*.15}%
+\contentsline {paragraph}{Table 2 of the article.}{50}{paragraph*.16}%
+\contentsline {paragraph}{Table 3 of the article.}{50}{paragraph*.17}%
+\contentsline {paragraph}{Table 4 of the article.}{50}{paragraph*.18}%
+\contentsline {paragraph}{Table 5 of the article.}{51}{paragraph*.19}%
+\contentsline {section}{\numberline {S12}From the data to every result: experiments, runs and computations}{51}{section.12}%
+\contentsline {paragraph}{Where every number starts.}{51}{paragraph*.20}%
+\contentsline {section}{\numberline {S13}The data}{53}{section.13}%
+\contentsline {section}{\numberline {S14}Where every table and figure comes from}{67}{section.14}%

@@ -8,6 +8,7 @@ from explain_figs import FIG, GENERIC_SHOT
 from explain_panels import PW, SHOTWHY
 ROOT = os.path.abspath(os.path.join(HERE, '../../..')); TEX = os.path.join(ROOT, 'Manuscripts/tex')
 import json
+SOFTEQ = {'p4:' + k: v for k, v in json.load(open(os.path.join(ROOT, 'Manuscripts/results/p4_soft_equations.json'))).items()}
 CALL4 = json.load(open(os.path.join(ROOT, 'Manuscripts/results/p4_callouts.json')))
 MEAN = [(r'View Run Daisy Help|^SWAFL', 'the menu bar of the program (file, view, run, Daisy, help)'), (r'Next 14 days', 'the decision for the next 14 days, from the soil water of the day'),
  (r'^Output', 'the output bar of the layer: title and caption of the picture, save the picture, full screen, numbers as CSV'), (r'Choose a case', 'the ready-made cases of the Properties panel'),
@@ -69,7 +70,7 @@ for p in ['p1', 'p2', 'p3', 'p4']:
     out = []
     for title, rows in TERMS.get(s, []):
         out.append('\\subsection*{%s}' % title)
-        out.append('{\\small\\begin{longtable}{>{\\raggedright\\arraybackslash}p{2.2cm}>{\\raggedright\\arraybackslash}p{4.8cm}>{\\raggedright\\arraybackslash}p{1.4cm}>{\\raggedright\\arraybackslash}p{3.2cm}>{\\raggedright\\arraybackslash}p{3.6cm}}\\toprule Term & What it means & Unit & Where the value comes from & When it rises\\\\\\midrule\\endhead')
+        out.append('{\\small\\begin{longtable}{>{\\raggedright\\arraybackslash}p{2.2cm}>{\\raggedright\\arraybackslash}p{4.2cm}>{\\raggedright\\arraybackslash}p{2.0cm}>{\\raggedright\\arraybackslash}p{3.2cm}>{\\raggedright\\arraybackslash}p{3.6cm}}\\toprule Term & What it means & Unit & Where the value comes from & When it rises\\\\\\midrule\\endhead')
         for r in rows: out.append(' & '.join(r) + '\\\\')
         out.append('\\bottomrule\\end{longtable}}')
     open(os.path.join(TEX, s + '_terms.tex'), 'w').write('\n'.join(out) + '\n')
@@ -110,13 +111,22 @@ for p in ['p1', 'p2', 'p3', 'p4']:
                 head = '\\textbf{What the numbered labels point to%s.}' % ((' (picture %d of %d%s)' % (k + 1, len(imgs), ': ' + subs[k] if k < len(subs) else '')) if len(imgs) > 1 else '')
                 items = []
                 for kind, t in labs:
-                    if kind == 'call': items.append(t.replace('d_D', '$d_D$').replace('%', '\\%').replace('kappa = 3.47e-10', 'KAPPAVAL').replace('kappa', '$\\kappa$').replace('alpha', '$\\alpha$').replace('KAPPAVAL', '$\\kappa=3.47\\times10^{-10}$'))
+                    if kind == 'call': items.append(t.replace('10^4', '$10^4$').replace('10^5', '$10^5$').replace('d_D', '$d_D$').replace('%', '\\%').replace('kappa = 3.47e-10', 'KAPPAVAL').replace('kappa', '$\\kappa$').replace('alpha', '$\\alpha$').replace('KAPPAVAL', '$\\kappa=3.47\\times10^{-10}$'))
                     elif kind == 'panel': items.append('Panel (%s): %s.' % (t, pan[t].rstrip('.') if t in pan and pan[t].count('$') % 2 == 0 and pan[t].count('{') == pan[t].count('}') else 'see the caption above') + ((' \\emph{Why:} ' + PW[p + ':' + L][t]) if t in PW.get(p + ':' + L, {}) else ''))
                     else: items.append('``%s\'\': %s.' % (t.replace('%', '\\%').replace('&', '\\&').replace('#', '\\#').replace('$', '\\$').replace('_', '\\_'), meaning(t)))
                 out.append(head + '\n\\begin{enumerate}[nosep,label=\\protect\\circled{\\arabic*}]\n' + '\n'.join('\\item ' + x for x in items) + '\n\\end{enumerate}')
+            eqb = SOFTEQ.get(p + ':' + L)
+            if eqb and k < len(eqb):
+                out.append('\\textbf{Equations behind this screen.} The numbers on the screen are computed as follows.\n\\begin{enumerate}[nosep,label=(\\roman*)]\n' + '\n'.join('\\item ' + x for x in eqb[k]) + '\n\\end{enumerate}')
         out.append('\\textbf{What it shows.} ' + main + (' Panels: ' + ' '.join('(%s) %s' % (chr(97 + i), x.rstrip('.') + '.') for i, x in enumerate(subs)) if subs else ''))
         out.append('\\textbf{How to read the labels, symbols and colours.} ' + resolve(read, lab))
         out.append('\\textbf{What affects it, and why it happens.} ' + resolve(why, lab))
         out.append(made(L))
     open(os.path.join(TEX, s + '_figs.tex'), 'w').write('\n\n'.join(out) + '\n')
     print(s, 'figures', len(re.findall(r'\\begin\{figure\}', src)), 'tables', len(re.findall(r'\\begin\{(?:table|longtable)\}', src)))
+import fit_tables, glob
+for _f in glob.glob(os.path.join(TEX, 's[1-4]_*.tex')):
+    _s = open(_f).read(); _t = fit_tables.fit(_s)
+    if _t != _s: open(_f, 'w').write(_t)
+import assemble_supp
+for _s in ['s1', 's2', 's3', 's4']: assemble_supp.build(_s)

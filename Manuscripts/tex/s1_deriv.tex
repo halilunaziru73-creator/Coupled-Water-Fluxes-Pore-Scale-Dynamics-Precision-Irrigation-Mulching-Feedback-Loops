@@ -1,0 +1,39 @@
+Sections~S2.1, S2.2 and S2.8 re-derive established results \citep{vanGenuchten1980,Mualem1976} and standard statistical tools for completeness. The memory fate (S2.3), the loss fates and the recoverable share (S2.4), the rate-competition law of hydraulic memory (S2.5), the invariant search applied to a process model (S2.6), the closure residual and the unattributed term (S2.7) and the compensation coefficient (S2.9) are definitions and results of this article.
+
+\subsection{The retention and conductivity functions}
+With the capillary law $r\propto1/h$, \citet{Mualem1976} expressed the relative conductivity of a bundle of connected capillaries as
+\begin{equation}K_r(S_e)=S_e^{\lambda}\left[\int_0^{S_e}h(x)^{-1}\dd x\Big/\int_0^{1}h(x)^{-1}\dd x\right]^{2}.\end{equation}
+Inserting the inverse of the van~Genuchten curve, $h(x)=\alpha^{-1}(x^{-1/m}-1)^{1/n}$, and substituting $y=x^{1/m}$ gives $\int_0^{S_e}h^{-1}\dd x=\alpha m\int_0^{S_e^{1/m}}y^{m-1+1/n}(1-y)^{-1/n}\dd y$. With $m=1-1/n$ the power of $y$ vanishes and the integral is $\alpha[1-(1-S_e^{1/m})^m]$; dividing by its value at $S_e=1$ ($\alpha$) and squaring yields the Mualem conductivity of the paper, $K=K_sS_e^{\lambda}[1-(1-S_e^{1/m})^m]^2$. For large $\alpha h$, $S_e\simeq(\alpha h)^{-(n-1)}$ and $K_r\simeq m^2(\alpha h)^{-[2n+\lambda(n-1)]}$: the conductivity of a soil with large $n$ falls faster with suction, which is the property that orders hydraulic memory.
+
+\subsection{The water balance and the storage release}
+Over a period, mass conservation of the soil column with surface runoff $Q_r$ is $P_r+I=\ET+D+\Delta S+Q_r$. Rearranging,
+\begin{equation}\bar R\equiv\ET+D-P_r-I=-(\Delta S+Q_r),\end{equation}
+so the storage release is positive when the column loses stored water (or sheds no runoff) and supplies the fluxes. In the initial-moisture experiment, a wetter initial state raises the stored water that is released over the run, which is the variation used to measure the memory fates.
+
+\subsection{The memory fate as a pooled within-group slope}
+Within a group of runs with the same rainfall scale $P$, write each flux as $x_c=a_P+\phi_x\bar R_c+e_c$. Minimising $\sum_P\sum_{c\in P}e_c^2$ over the group intercepts $a_P$ gives $a_P=\bar x_P-\phi_x\overline{\bar R}_P$, and then over $\phi_x$
+\begin{equation}\phi_x=\frac{\sum_P\sum_{c\in P}(\bar R_c-\overline{\bar R}_P)(x_c-\bar x_P)}{\sum_P\sum_{c\in P}(\bar R_c-\overline{\bar R}_P)^2}.\end{equation}
+Because the four fluxes add to $\ET+D=\bar R+P_r+I$ and $P_r+I$ is constant within a group, the deviations of the four fluxes add to the deviation of $\bar R$, and the four slopes add to one: $\phi_{E_s}+\phi_T+\phi_D+\phi_{\mathrm{oth}}=1$. Each $\phi_x$ is therefore the share of a released millimetre that leaves by flux $x$.
+
+\subsection{Loss fates and the recoverable share}
+Between two levels of the evaporation factor the change of the non-transpirational evapotranspiration $\delta\Ent$ must be balanced by the other fluxes. With storage changes negligible over 20 years, $\delta\Ent+\delta T+\delta D-\delta I\simeq0$, hence
+\begin{equation}\psi_T+\psi_D+\psi_I\simeq1,\qquad \psi_x=\mp\frac{\delta x}{\delta\Ent},\end{equation}
+the signs chosen so that each $\psi$ is positive when the flux compensates the evaporation change. Of a millimetre of evaporation saved, $\psi_D$ leaves as drainage and is not recovered by the crop or the irrigation account; the recoverable share is $\rho_R=1-\psi_D$.
+
+\subsection{The rate-competition law}
+Let stored water $S$ above field capacity leave by two parallel first-order sinks, drainage with rate constant $k_D\propto K_s/L$ and withdrawal by evaporation and uptake with $k_W\propto q^\ast/L$, where $L$ is a common length. Then $\dd S/\dd t=-(k_D+k_W)S$ and the drainage leaving over the release is
+\begin{equation}\int_0^\infty k_DS\,\dd t=\frac{k_D}{k_D+k_W}S_0\quad\Longrightarrow\quad\phi_D=\frac{K_s}{K_s+q^\ast}.\end{equation}
+The law is bounded in $[0,1]$, tends to 0 for an impermeable soil and to 1 for a free-draining one, and is the only one-parameter form with these limits that is linear in $K_s$ at small $K_s$. By the Buckingham theorem, $\phi_D=F(K_s/q^\ast,n,\alpha h^\ast)$; the law keeps the first group only.
+
+\subsection{The invariant search by singular-value decomposition}
+Arrange the 20-year mean fluxes of all runs as the rows of a matrix $\mathbf F$ (columns $P_r,I,\ET,D$, centred). A linear invariant is a vector $\mathbf c$ with $\mathbf F\mathbf c\approx\mathbf 0$. The best such vector in the least-squares sense, with $\|\mathbf c\|=1$, minimises $\|\mathbf F\mathbf c\|^2=\mathbf c^\top\mathbf F^\top\mathbf F\mathbf c$, which is the eigenvector of $\mathbf F^\top\mathbf F$ with the smallest eigenvalue, that is the right singular vector of $\mathbf F$ with the smallest singular value. Rescaled so that the $\ET$ coefficient is $-1$, it is the discovered balance; the permutation null shuffles each column independently and so destroys any true invariant, which gives the distribution of the smallest singular value under no structure.
+
+\subsection{The closure residual and the unattributed term}
+With $W=P_r+I$, the residual $\varepsilon=(W-\ET-D)/W\simeq(\Delta S+Q_r)/W$ is the share of the input not leaving by evapotranspiration or drainage. The unattributed evapotranspiration is $R=\ET-T-E_s-E_c$; in the full outputs it equals the evaporation of ponded water, litter and snow (data folder, closure within 1.1\,mm).
+
+\subsection{Log-ratio coordinates and the sparse law}
+Fluxes that share a total are compositional; the centred log-ratio $\mathrm{clr}(\mathbf x)_i=\ln x_i-\tfrac15\sum_j\ln x_j$ removes the constraint. The sparse laws regress $\ln y$ on a small set of log or dimensionless candidates chosen by forward selection; out-of-sample skill is $R^2_{\mathrm{cv}}=1-\sum(\ln y_i-\widehat{\ln y}_i^{(-g)})^2/\sum(\ln y_i-\overline{\ln y})^2$, with each prediction made by a model fitted without the group $g$ (experiment or soil) of run $i$.
+
+\subsection{Irrigation compensation}
+With the same balance, a change of rainfall $\Delta P_r$ at fixed trigger is offset partly by irrigation: $\kappa=-\Delta I/\Delta P_r$. When drainage and evapotranspiration do not change, $\kappa=1$; when part of the extra rain drains, $\kappa<1$.
+

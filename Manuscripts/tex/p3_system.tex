@@ -13,7 +13,7 @@ P+I=T+E+E_{\mathrm{oth}}+D+\Delta S,
 where $P$ is precipitation, $I$ irrigation, $T$ transpiration, $E$ soil evaporation, $E_{\mathrm{oth}}$ the remaining evaporation (water intercepted by the canopy, evaporation from mulch and litter, and a term that the Daisy partition does not attribute), $D$ the drainage across 1\,m (negative values denote net capillary rise) and $\Delta S$ the change in profile storage. On the annual scale \cref{eq:balance} is closed by Engine~1 (\cref{eq:E1close}); on the daily scale by Engine~2 (\cref{eq:scale}). Nitrate leaching $N_L$ is carried with $D$, and grain yield $Y$ with $T$. \Cref{tab:compartments} lists the state variables and fluxes of each compartment.
 
 {\small
-\begin{longtable}{>{\raggedright\arraybackslash}p{2.0cm}>{\raggedright\arraybackslash}p{4.1cm}>{\raggedright\arraybackslash}p{1.8cm}>{\raggedright\arraybackslash}p{4.0cm}>{\raggedright\arraybackslash}p{1.9cm}}
+\begin{longtable}{>{\raggedright\arraybackslash}p{2.3cm}>{\raggedright\arraybackslash}p{3.8cm}>{\raggedright\arraybackslash}p{1.8cm}>{\raggedright\arraybackslash}p{4.0cm}>{\raggedright\arraybackslash}p{1.9cm}}
 \caption{State variables and fluxes of the modelled soil--water--atmosphere system, by compartment; the soil matrix and soil structure rows form the soil compartment, and the lower boundary (drainage) and the management decision are listed separately. Source: E1 = Engine~1 (annual), E2 = Engine~2 (daily), D = Daisy output stored in the software, R = relation evaluated by the layer. Provenance: L literature, D data-driven, E engineered.}\label{tab:compartments}\\
 \toprule
 Compartment & Variable (symbol) & Unit & Relation (manual) & Source; provenance\\\midrule\endfirsthead
@@ -61,7 +61,7 @@ Management & trigger suction $h_T$; trigger depletion $f_T$; critical depletion 
 Every control is an index into the list of values at which simulations exist, so that no displayed value lies between runs (\cref{tab:controls}). Changing a control re-evaluates every view; the last column of \cref{tab:controls} states which variables respond.
 
 {\small
-\begin{longtable}{>{\raggedright\arraybackslash}p{2.6cm}>{\raggedright\arraybackslash}p{4.2cm}>{\raggedright\arraybackslash}p{1.7cm}>{\raggedright\arraybackslash}p{5.3cm}}
+\begin{longtable}{>{\raggedright\arraybackslash}p{2.6cm}>{\raggedright\arraybackslash}p{4.0cm}>{\raggedright\arraybackslash}p{2.1cm}>{\raggedright\arraybackslash}p{4.7cm}}
 \caption{The twelve controls of the framework, their values and defaults, and the variables that respond. Run set: the Daisy experiment from which the response is read.}\label{tab:controls}\\
 \toprule
 Control & Values & Default & Responding variables (run set)\\\midrule\endfirsthead

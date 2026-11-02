@@ -8,10 +8,12 @@ Agronomic guidance gives a depletion fraction at which to irrigate (FAO-56), whi
 \begin{keyresult}
 \begin{pencil}
 {\small\noindent\textbf{How it is derived, line by line}
-\[\begin{array}{@{}l@{\hspace{8pt}}l@{}}
-\textbf{1. Depletion uses only } S_e\textbf{:} & f(h)=\frac{S_e(100)-S_e(h)}{S_e(100)-S_e(15\,849)}\\[2pt]
-\textbf{2. Set } f=f^\ast\textbf{ and solve for } S_e\textbf{:} & S_e^\ast=S_e(100)-f^\ast[S_e(100)-S_e(15\,849)]\\[2pt]
-\textbf{3. Invert van Genuchten:} & h^\ast=\alpha^{-1}\bigl(S_e^{\ast\,-1/m}-1\bigr)^{1/n}
+\[\begin{array}{@{}l@{}}\textbf{1. Depletion uses only } S_e\textbf{:}\\[1pt]
+\qquad f(h)=\frac{S_e(100)-S_e(h)}{S_e(100)-S_e(15\,849)}\\[1pt]
+\textbf{2. Set } f=f^\ast\textbf{ and solve for } S_e\textbf{:}\\[1pt]
+\qquad S_e^\ast=S_e(100)-f^\ast[S_e(100)-S_e(15\,849)]\\[1pt]
+\textbf{3. Invert van Genuchten:}\\[1pt]
+\qquad h^\ast=\alpha^{-1}\bigl(S_e^{\ast\,-1/m}-1\bigr)^{1/n}
 \end{array}\]}
 \noindent\textbf{The result, with its parts marked}
 \[
@@ -46,11 +48,14 @@ Daily rain was taken as exponential with mean $\mu_0$; the throughfall above a s
 \begin{keyresult}
 \begin{pencil}
 {\small\noindent\textbf{How it is derived, line by line}
-\[\begin{array}{@{}l@{\hspace{8pt}}l@{}}
-\textbf{1. Daily rain exponential:} & p(R)=\mu_0^{-1}e^{-R/\mu_0}\\[2pt]
-\textbf{2. Expected throughfall above } I_c\textbf{:} & \textstyle\int_{I_c}^\infty(R-I_c)p(R)\,\dd R=\mu_0e^{-I_c/\mu_0}\\[2pt]
-\textbf{3. Throughfall fraction:} & r=e^{-I_c/\mu_0}\\[2pt]
-\textbf{4. Solve for } I_c\textbf{:} & I_c=\mu_0\ln(1/r)
+\[\begin{array}{@{}l@{}}\textbf{1. Daily rain exponential:}\\[1pt]
+\qquad p(R)=\mu_0^{-1}e^{-R/\mu_0}\\[1pt]
+\textbf{2. Expected throughfall above } I_c\textbf{:}\\[1pt]
+\qquad \textstyle\int_{I_c}^\infty(R-I_c)p(R)\,\dd R=\mu_0e^{-I_c/\mu_0}\\[1pt]
+\textbf{3. Throughfall fraction:}\\[1pt]
+\qquad r=e^{-I_c/\mu_0}\\[1pt]
+\textbf{4. Solve for } I_c\textbf{:}\\[1pt]
+\qquad I_c=\mu_0\ln(1/r)
 \end{array}\]}
 \noindent\textbf{The result, with its parts marked}
 \[\underbrace{\mathrm E[(R-I_c)^+]}_{\circled{1}}=\mu_0e^{-I_c/\mu_0}\;\Rightarrow\;\underbrace{r=e^{-I_c/\mu_0}}_{\circled{2}}\;\Rightarrow\;\underbrace{I_c=\mu_0\ln\frac1r}_{\circled{3}}\]
@@ -69,10 +74,12 @@ Stage 1 runs at the demand $e_0$ until the stage-1 limit $Q_1$; for stage 2 a sq
 \begin{keyresult}
 \begin{pencil}
 {\small\noindent\textbf{How it is derived, line by line}
-\[\begin{array}{@{}l@{\hspace{8pt}}l@{}}
-\textbf{1. Stage 1 at demand:} & Q=q_0+e_0t,\ t\le t_1\\[2pt]
-\textbf{2. Stage 2, square-root form:} & Q=Q_1+A(\sqrt{1+(t-t_1)/\tau_E}-1)\\[2pt]
-\textbf{3. Rate continuous at } t_1\textbf{:} & \dd Q/\dd t|_{t_1}=A/(2\tau_E)=e_0\Rightarrow A=2e_0\tau_E
+\[\begin{array}{@{}l@{}}\textbf{1. Stage 1 at demand:}\\[1pt]
+\qquad Q=q_0+e_0t,\ t\le t_1\\[1pt]
+\textbf{2. Stage 2, square-root form:}\\[1pt]
+\qquad Q=Q_1+A(\sqrt{1+(t-t_1)/\tau_E}-1)\\[1pt]
+\textbf{3. Rate continuous at } t_1\textbf{:}\\[1pt]
+\qquad \dd Q/\dd t|_{t_1}=A/(2\tau_E)=e_0\Rightarrow A=2e_0\tau_E
 \end{array}\]}
 \noindent\textbf{The result, with its parts marked}
 \[Q(t)=Q_1+\underbrace{2e_0\tau_E}_{\circled{1}}\Bigl(\sqrt{1+\underbrace{(t-t_1)/\tau_E}_{\circled{2}}}-1\Bigr)\]

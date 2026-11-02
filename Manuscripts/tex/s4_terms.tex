@@ -1,5 +1,5 @@
 \subsection*{Reach of a suction trigger, $\hc=\alpha^{-1}(m^2/\kappa)^{1/[2n+\ell(n-1)]}$}
-{\small\begin{longtable}{>{\raggedright\arraybackslash}p{2.2cm}>{\raggedright\arraybackslash}p{4.8cm}>{\raggedright\arraybackslash}p{1.4cm}>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}p{3.6cm}}\toprule Term & What it means & Unit & Where the value comes from & When it rises\\\midrule\endhead
+{\small\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr 0.1447\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.2763\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.1316\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.2105\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.2368\linewidth-2\tabcolsep\relax}}\toprule Term & What it means & Unit & Where the value comes from & When it rises\\\midrule\endhead
 $\hc$ & reach: the driest suction a crop can impose at the sensor; the output & cm & computed & --\\
 $\alpha$ & inverse of the suction at which the soil starts to drain & cm$^{-1}$ & retention curve of the soil (Table A1) & $\hc$ falls in proportion ($\hc\propto1/\alpha$)\\
 $n$ & pore-size uniformity: large in sands, small in clays & -- & retention curve of the soil & $\hc$ falls steeply (the exponent grows)\\
@@ -9,25 +9,25 @@ $\kappa$ & relative conductivity at which the crop stops drying the soil & -- & 
 $E=2n+\ell(n-1)$ & slope of $\log K_r$ against $\log h$ at the dry end & -- & from $n$ and $\ell$ & $\hc$ falls\\
 \bottomrule\end{longtable}}
 \subsection*{Reach-scaled trigger, $x=\htr/\hc$}
-{\small\begin{longtable}{>{\raggedright\arraybackslash}p{2.2cm}>{\raggedright\arraybackslash}p{4.8cm}>{\raggedright\arraybackslash}p{1.4cm}>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}p{3.6cm}}\toprule Term & What it means & Unit & Where the value comes from & When it rises\\\midrule\endhead
+{\small\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr 0.1447\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.2763\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.1316\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.2105\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.2368\linewidth-2\tabcolsep\relax}}\toprule Term & What it means & Unit & Where the value comes from & When it rises\\\midrule\endhead
 $\htr$ & trigger suction set on the controller & cm & user or table & the trigger moves toward the reach\\
 $x$ & trigger as a fraction of the reach; irrigation ends near $x=0.5$ to 1 & -- & computed & less irrigation; none for $x>1$\\
 \bottomrule\end{longtable}}
 \subsection*{Marginal fate, $\eta_X=\sum(X-X_0)/\sum I$}
-{\small\begin{longtable}{>{\raggedright\arraybackslash}p{2.2cm}>{\raggedright\arraybackslash}p{4.8cm}>{\raggedright\arraybackslash}p{1.4cm}>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}p{3.6cm}}\toprule Term & What it means & Unit & Where the value comes from & When it rises\\\midrule\endhead
+{\small\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr 0.1447\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.2763\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.1316\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.2105\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.2368\linewidth-2\tabcolsep\relax}}\toprule Term & What it means & Unit & Where the value comes from & When it rises\\\midrule\endhead
 $I$ & irrigation of a run, 20-year mean & mm\,yr$^{-1}$ & run table & --\\
 $X$ & a flux of the irrigated run: $T$, $E_s$, $E_o$ or $D$ & mm\,yr$^{-1}$ & run table & $\eta_X$ rises\\
 $X_0$ & the same flux of the rainfed twin (same soil and weather) & mm\,yr$^{-1}$ & experiment E0 & $\eta_X$ falls\\
 $\eta_X$ & share of each irrigation millimetre that becomes $X$ & -- & computed & --\\
 \bottomrule\end{longtable}}
 \subsection*{Dose law, $\eta_D=\eta_\infty(1-e^{-d/d_D})$}
-{\small\begin{longtable}{>{\raggedright\arraybackslash}p{2.2cm}>{\raggedright\arraybackslash}p{4.8cm}>{\raggedright\arraybackslash}p{1.4cm}>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}p{3.6cm}}\toprule Term & What it means & Unit & Where the value comes from & When it rises\\\midrule\endhead
+{\small\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr 0.1447\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.2763\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.1316\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.2105\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.2368\linewidth-2\tabcolsep\relax}}\toprule Term & What it means & Unit & Where the value comes from & When it rises\\\midrule\endhead
 $d$ & irrigation depth per event & mm & design of the schedule & $\eta_D$ rises toward $\eta_\infty$\\
 $\eta_\infty$ & share of a large dose that drains (plateau) & -- & fitted per soil (0.10 to 0.45) & $\eta_D$ rises at every dose\\
 $d_D$ & dose scale: 63\,\% of the plateau is reached at $d=d_D$ & mm & fitted per soil (about 4) & $\eta_D$ falls at small doses\\
 \bottomrule\end{longtable}}
 \subsection*{Sensor lag, $\Pi_\tau=\tau/t_i$ and $\delta h\simeq r\tau/C(h)$}
-{\small\begin{longtable}{>{\raggedright\arraybackslash}p{2.2cm}>{\raggedright\arraybackslash}p{4.8cm}>{\raggedright\arraybackslash}p{1.4cm}>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}p{3.6cm}}\toprule Term & What it means & Unit & Where the value comes from & When it rises\\\midrule\endhead
+{\small\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr 0.1447\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.2763\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.1316\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.2105\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.2368\linewidth-2\tabcolsep\relax}}\toprule Term & What it means & Unit & Where the value comes from & When it rises\\\midrule\endhead
 $\tau$ & relaxation time of the water content toward the retention curve & h & measured (not in Daisy) & $\Pi_\tau$ and $\delta h$ rise\\
 $t_i$ & interval between irrigations & h or d & schedule & $\Pi_\tau$ falls\\
 $r$ & drying rate of the equilibrium water content & h$^{-1}$ & crop demand & $\delta h$ rises\\

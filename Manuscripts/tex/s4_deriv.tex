@@ -1,0 +1,101 @@
+Sections~S3.1 and S3.2 re-derive the van~Genuchten--Mualem pair and its dry-end asymptote, which are established mathematics \citep{vanGenuchten1980,Mualem1976}. Everything from S3.3 on is new in this article: the reach of a trigger and its properties, the alternative laws and their test, the interval-censored fit, the marginal-fate identity applied across soils, doses, seasons and methods, the dose law, and the non-equilibrium criterion for triggers (the relaxation equation itself is established \citep{RossSmettem2000}).
+
+\subsection{The van~Genuchten--Mualem pair from a capillary bundle}
+A soil is idealised as a bundle of capillaries whose radii are distributed so that the water-filled fraction at suction $h$ is the effective saturation $S_e$. The capillary (Young--Laplace) law relates the radius $r$ of the largest filled pore to the suction, $r=2\sigma\cos\gamma/(\rho_w g h)$, so $h\propto1/r$. \citet{Mualem1976} wrote the relative conductivity of such a medium as the product of a tortuosity--connectivity term $S_e^{\ell}$ and the square of a normalised integral of the pore radius over the filled pores:
+\begin{equation}
+K_r(S_e)=S_e^{\ell}\left[\frac{\int_0^{S_e}h(x)^{-1}\,\dd x}{\int_0^{1}h(x)^{-1}\,\dd x}\right]^{2}. \label{eq:s-mualem}
+\end{equation}
+\citet{vanGenuchten1980} chose the retention function $S_e=[1+(\alpha h)^n]^{-m}$, whose inverse is
+\begin{equation}
+h(x)=\frac{1}{\alpha}\bigl(x^{-1/m}-1\bigr)^{1/n}. \label{eq:s-inv}
+\end{equation}
+Substituting \cref{eq:s-inv} and $y=x^{1/m}$ ($x=y^{m}$, $\dd x=m\,y^{m-1}\dd y$):
+\begin{equation}
+\int_0^{S_e}\frac{\dd x}{h(x)}=\alpha m\int_0^{S_e^{1/m}}\bigl(y^{-1}-1\bigr)^{-1/n}y^{m-1}\,\dd y=\alpha m\int_0^{S_e^{1/m}}y^{\,m-1+1/n}(1-y)^{-1/n}\,\dd y .
+\end{equation}
+With the restriction $m=1-1/n$ the exponent of $y$ vanishes and $(1-y)^{-1/n}=(1-y)^{m-1}$, so the integral is elementary:
+\begin{equation}
+\int_0^{S_e}\frac{\dd x}{h(x)}=\alpha m\int_0^{S_e^{1/m}}(1-y)^{m-1}\dd y=\alpha\Bigl[1-\bigl(1-S_e^{1/m}\bigr)^{m}\Bigr].
+\end{equation}
+The denominator of \cref{eq:s-mualem} is the same expression at $S_e=1$, that is $\alpha$, and the closed form of the paper follows:
+\begin{equation}
+K_r(S_e)=S_e^{\ell}\Bigl[1-\bigl(1-S_e^{1/m}\bigr)^{m}\Bigr]^{2}. \label{eq:s-kr}
+\end{equation}
+This is why the restriction $m=1-1/n$ is not a convenience: it is the condition under which the Mualem integral has a closed form.
+
+\subsection{The dry-end asymptote of the conductivity}
+For $\alpha h\gg1$, $(\alpha h)^n$ dominates the bracket of the retention function and
+\begin{equation}
+S_e=\bigl[1+(\alpha h)^n\bigr]^{-m}=(\alpha h)^{-mn}\bigl[1+(\alpha h)^{-n}\bigr]^{-m}=(\alpha h)^{-(n-1)}\Bigl[1-m(\alpha h)^{-n}+O\bigl((\alpha h)^{-2n}\bigr)\Bigr],
+\end{equation}
+since $mn=n-1$. Write $u=S_e^{1/m}$, which is small. The binomial expansion $(1-u)^{m}=1-mu-\tfrac{m(1-m)}{2}u^2+O(u^3)$ gives
+\begin{equation}
+1-(1-u)^{m}=mu\Bigl[1+\tfrac{1-m}{2}u+O(u^2)\Bigr].
+\end{equation}
+Inserting into \cref{eq:s-kr},
+\begin{equation}
+K_r=m^{2}\,S_e^{\ell+2/m}\Bigl[1+(1-m)S_e^{1/m}+\dots\Bigr].
+\end{equation}
+The exponent is $(\ell+2/m)(n-1)=\ell(n-1)+2n$, because $(n-1)/m=n$. Hence
+\begin{equation}
+K_r(h)=m^{2}(\alpha h)^{-[2n+\ell(n-1)]}\Bigl[1+\varepsilon(h)\Bigr],\qquad \varepsilon(h)=O\bigl((\alpha h)^{-n}\bigr)+O\bigl((\alpha h)^{-n}\bigr), \label{eq:s-asym}
+\end{equation}
+where both correction terms are of the order $(\alpha h)^{-n}$ (the first from the retention bracket, the second from $S_e^{1/m}=(\alpha h)^{-n}[1+\dots]$). For the soils of the paper the reach lies at $\alpha\hc$ between 29 and 1\,280, where $(\alpha\hc)^{-n}$ is below $10^{-3}$: the asymptote is exact to better than one per mille at the reach.
+
+\subsection{The reach of a trigger}
+\paragraph{The physical condition.} During a drying cycle the crop takes water from the layer that holds the sensor at a rate $u$ limited by the conductance of the soil between the bulk soil and the root surface \citep{Gardner1960}. For a cylindrical root of radius $r_0$ in a soil cylinder of radius $r_1$, steady radial flow gives
+\begin{equation}
+u\simeq\frac{2\pi L_v}{\ln(r_1/r_0)}\int_{h_{\mathrm{root}}}^{h}K(h')\,\dd h' \;\approx\; \frac{2\pi L_v}{\ln(r_1/r_0)}\,K(h)\,\Delta h,
+\end{equation}
+with $L_v$ the root length density and $\Delta h$ the head drop to the root. Because $K$ falls by many decades while $\Delta h$ is bounded by the plant (the wilting point), $u$ collapses once $K(h)$ is small enough, and the soil at the sensor stops drying within the time of a season. The suction where this happens is the reach $\hc$.
+\paragraph{One constant for all soils.} If the reach is reached at one value $\kappa$ of the relative conductivity, $K_r(\hc)=\kappa$, \cref{eq:s-asym} gives
+\begin{equation}
+\begin{gathered}m^{2}(\alpha\hc)^{-[2n+\ell(n-1)]}=\kappa\\ \Longrightarrow\quad \boxed{\;\hc=\frac{1}{\alpha}\Bigl(\frac{m^{2}}{\kappa}\Bigr)^{1/[2n+\ell(n-1)]}\;}\end{gathered} \label{eq:s-hc}
+\end{equation}
+\paragraph{Properties.} (i) $\alpha$ only rescales the reach: $\alpha\hc$ depends on $n$, $\ell$ and $\kappa$ alone. (ii) The logarithmic sensitivity to $n$ is
+\begin{equation}
+\frac{\partial\ln(\alpha\hc)}{\partial n}=\frac{2}{m\,n^{2}\,[2n+\ell(n-1)]}-\frac{(2+\ell)\ln(m^{2}/\kappa)}{[2n+\ell(n-1)]^{2}},
+\end{equation}
+whose second term dominates (with $\kappa=3.5\times10^{-10}$, $\ln(m^2/\kappa)\approx18$ to 21), so the reach shortens steeply as $n$ grows: from $\alpha\hc\approx1\,280$ at $n=1.23$ to $29$ at $n=2.68$. (iii) A larger $\ell$ shortens the reach because the conductivity collapses faster. (iv) For $n\to1$ the exponent tends to 2 and $m\to0$, so the reach tends to $\alpha^{-1}(m^{2}/\kappa)^{1/2}$, which vanishes slowly: very broad pore-size distributions are still reachable far into the dry range, as observed for the silty clay loam.
+
+\subsection{The alternative laws}
+\paragraph{Fixed saturation.} If the reach were set by a water content, $S_e(\hc)=S_c$, inverting the retention function gives $\hc=\alpha^{-1}(S_c^{-1/m}-1)^{1/n}$. It ignores the conductivity and predicts the coarse soils worst (Table~2 of the paper).
+\paragraph{Power law in $n-1$.} $\alpha\hc=A(n-1)^{-B}$ is an empirical two-parameter law; it fits slightly better but has no derivation.
+\paragraph{Absolute conductivity.} $K(\hc)=K_s K_r(\hc)=q_c$ would give $\hc=\alpha^{-1}(m^{2}K_s/q_c)^{1/[2n+\ell(n-1)]}$. With literature $K_s$ the conductivity at the observed reaches spans more than three decades, so a single $q_c$ is rejected.
+
+\subsection{Fitting interval-censored reaches}
+For each soil the data give an interval $[\,h_{\mathrm{lo}},h_{\mathrm{hi}})$: $h_{\mathrm{lo}}$ is the driest trigger that still brings at least 5\,mm of irrigation a year and $h_{\mathrm{hi}}$ the next drier trigger, or $+\infty$ when even the driest trigger fires. The loss of a prediction $\hat h$ is the squared distance in decades to the interval,
+\begin{equation}
+\mathcal L(\hat h)=\begin{cases}(\log_{10}h_{\mathrm{lo}}-\log_{10}\hat h)^2, & \hat h<h_{\mathrm{lo}},\\ 0, & h_{\mathrm{lo}}\le\hat h\le h_{\mathrm{hi}},\\ (\log_{10}\hat h-\log_{10}h_{\mathrm{hi}})^2, & \hat h>h_{\mathrm{hi}},\end{cases}
+\end{equation}
+summed over soils and minimised over $\log_{10}\kappa$ (Nelder--Mead). Leave-one-soil-out validation refits $\kappa$ without the soil and evaluates $\mathcal L$ on it; the reported error is $\sqrt{\mathcal L}$ in decades and the worst factor is $10^{\max\sqrt{\mathcal L}}$.
+
+\subsection{The marginal fate of irrigation}
+For a run with irrigation $I$ and its rainfed twin (same soil, weather and crop), the 20-year water balances are
+\begin{equation}
+P+I=T+E_s+E_o+D+\Delta S+Q,\qquad P=T_0+E_{s,0}+E_{o,0}+D_0+\Delta S_0+Q_0 .
+\end{equation}
+Subtracting and dividing by $I$ gives the identity of the paper,
+\begin{equation}
+1=\underbrace{\frac{T-T_0}{I}}_{\eta_T}+\underbrace{\frac{E_s-E_{s,0}}{I}}_{\eta_{E_s}}+\underbrace{\frac{E_o-E_{o,0}}{I}}_{\eta_{E_o}}+\underbrace{\frac{D-D_0}{I}}_{\eta_D}+\underbrace{\frac{\Delta S-\Delta S_0+Q-Q_0}{I}}_{\eta_S}.
+\end{equation}
+The shares are marginal, not average: a share can be negative (overhead irrigation lowers transpiration) or exceed the average loss fraction. Pooling a group of runs uses the ratio of sums, $\eta_X=\sum(X-X_0)/\sum I$, which weights each run by its irrigation and is therefore the share of the group's total irrigation.
+
+\subsection{The dose law}
+Let a dose $d$ be applied when the root zone has a deficit. Part of the dose is used by the crop and the surface before it can move below the roots; the rest can drain. If the water that can be used before redistribution grows with the dose and saturates, and the drained share of the remainder is a soil property $\eta_\infty$, the simplest form with the right limits is
+\begin{equation}
+\eta_D(d)=\eta_\infty\bigl(1-e^{-d/d_D}\bigr),\qquad \eta_D\to\eta_\infty\frac{d}{d_D}\ (d\ll d_D),\qquad \eta_D\to\eta_\infty\ (d\gg d_D). \label{eq:s-dose}
+\end{equation}
+The small-dose limit is linear because a vanishing dose cannot drain; the large-dose limit is the share of any extra water that the soil passes on. The dose scale $d_D$ is the dose at which $1-e^{-1}=63\,\%$ of the plateau is reached. The form is phenomenological: it was chosen for its limits and tested against the data (coefficient of determination 0.92 to 0.96 on seven soils), not derived from the Richards equation.
+
+\subsection{Dynamic non-equilibrium and the lag of a sensor}
+In the effective approach of \citet{RossSmettem2000} and \citet{Diamantopoulos2012WRR} the water content relaxes towards the equilibrium content of the retention curve with a time constant $\tau$:
+\begin{equation}
+\frac{\partial\theta}{\partial t}=\frac{\theta_{\mathrm{eq}}(h)-\theta}{\tau}.
+\end{equation}
+During a drying phase in which $\theta_{\mathrm{eq}}$ falls at a steady rate $r=-\dd\theta_{\mathrm{eq}}/\dd t$, the solution after the transient is $\theta=\theta_{\mathrm{eq}}+r\tau$, so the soil is wetter than equilibrium by $r\tau$, and a sensor that infers suction from the equilibrium curve under-reads the suction by
+\begin{equation}
+\delta h\simeq\frac{r\tau}{C(h)},\qquad C(h)=-\frac{\dd\theta_{\mathrm{eq}}}{\dd h}.
+\end{equation}
+Over a schedule interval $t_i$ the drying is $rt_i$, so the relative error in the time of firing is of order $\Pi_\tau=\tau/t_i$, the criterion of the paper. Where $C(h)$ is small (the steep dry limb of a sand), $\delta h$ is large for the same $r\tau$, so non-equilibrium matters most where the reach is shortest.
+

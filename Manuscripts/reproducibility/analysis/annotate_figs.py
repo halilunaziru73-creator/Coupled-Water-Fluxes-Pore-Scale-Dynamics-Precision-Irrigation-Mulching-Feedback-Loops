@@ -80,13 +80,13 @@ def draw(im, anchors):
         dr.ellipse([cx - r, cy - r, cx + r, cy + r], fill='white', outline=RED, width=3)
         t = str(n); bw = dr.textlength(t, font=FONT); dr.text((cx - bw / 2, cy - 9), t, fill=RED, font=FONT)
     return im
-for p in ['p1', 'p2', 'p3', 'p4']:
+for p in ['p1', 'p2', 'p3']:   # Paper 4: hand-placed callouts (p4_soft_callouts.py)
     src = expand(p + '.tex'); res = {}
     for env in re.finditer(r'\\begin\{figure\}(.*?)\\end\{figure\}', src, re.S):
         b = env.group(1); m = re.search(r'\\label\{(fig:[^}]+)\}', b)
         if not m: continue
         L = m.group(1); files = re.findall(r'\\includegraphics(?:\[[^]]*\])?\{([^}]+)\}', b)
-        if p == 'p4' and L != 'fig:soft': continue      # Paper 4 data figures carry hand-placed callouts (p4_reach.py, p4_concept.py)
+        if p == 'p4': continue      # Paper 4 figures carry hand-placed callouts (p4_reach.py, p4_concept.py, p4_soft_callouts.py)
         items = []
         for k, g in enumerate(files):
             path = g.replace('\\figdir', os.path.join(M, 'figures'))

@@ -119,7 +119,7 @@ The chain was run on a field of 5.853~ha (perimeter 992~m, 17 corners) demarcate
 \paragraph{Crops.}
 The library has 48 crops, 19 field crops (cereals, roots and tubers, legumes, oil crops, cotton) with a crop coefficient for the initial, mid-season and late-season stages, four stage lengths, height, rooting depth, the depletion fraction $p$ and, where tabulated, the yield response factor $K_y$ \citep{Doorenbos1979,Allen1998}, and 29 perennial crops (tree, vine and berry crops) with several planting densities or training systems, each with its ground cover, height, mid-season and end-season coefficient. The daily crop coefficient follows the piecewise curve of FAO-56,
 \begin{equation}\label{eq:kc}
-K_c(t)=\begin{cases}K_{ini}, & t<L_1\\ K_{ini}+(K_{mid}-K_{ini})\dfrac{t-L_1}{L_2}, & L_1\le t<L_1+L_2\\ K_{mid}, & L_1+L_2\le t<L_1+L_2+L_3\\ K_{mid}+(K_{end}-K_{mid})\min\!\left(1,\dfrac{t-L_1-L_2-L_3}{L_4}\right), & \text{otherwise,}\end{cases}
+\small K_c(t)=\begin{cases}K_{ini}, & t<L_1\\ K_{ini}+(K_{mid}-K_{ini})\dfrac{t-L_1}{L_2}, & L_1\le t<L_1+L_2\\ K_{mid}, & L_1+L_2\le t<L_1+L_2+L_3\\ K_{mid}+(K_{end}-K_{mid})\min\!\left(1,\dfrac{t-L_1-L_2-L_3}{L_4}\right), & \text{otherwise,}\end{cases}
 \end{equation}
 which for evergreen crops is repeated each year. Every coefficient has a source field; where the root depth or the stages are not tabulated for a crop the group default is used and marked (11 crops); the yield response factor is tabulated for 11 crops and not tabulated for 37.
 
@@ -298,7 +298,7 @@ where $r_{\mathrm{NO_3}}=25\left[1-\tfrac12-\tfrac1\pi\arctan\!\big(0.01\pi(N_m-
 \paragraph{Calibration.}
 The calibration tool minimises a loss (mean squared error, mean absolute error or sum of squared deviations) between a model output and a target over up to a few parameters with bounds. Three optimisers are offered, after the choices of the Daisy optimisation project: a sequential search in which each parameter takes a few values in turn and the single best change is kept; the covariance-matrix-adaptation evolution strategy \citep{HansenOstermeier2001}; and a Bayesian search with a Gaussian-process surrogate and expected improvement \citep{Mockus1978}. To test them, the three parameters $\alpha_F$, $K_d$ and $\alpha$ of the denitrification function were estimated from the 792 stored outputs (the loss is the mean squared error of the logarithm of the N$_2$ loss), starting from values 3 times too high, with a budget of 150 evaluations and five seeds. The correct values are known, so the recovery can be measured as the error in decades.
 
-\paragraph{Reproducibility.}
+\paragraph{Reproducibility.}The Supplementary Material traces every result back to the data: for each number it names the experiment and runs used, the filter applied, the computation, and the script, result file and workbook sheet that reproduce it; the workbook repeats the algebra as live Excel formulas. 
 All checks are scripts in \texttt{Manuscripts/reproducibility/p456} (\cref{app:repro4}). The design sizes are obtained by loading the workbench code in Node.js; the ensemble analysis is in Python.
 
 \paragraph{Planner test.}

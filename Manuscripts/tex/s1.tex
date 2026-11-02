@@ -13,108 +13,24 @@
 \tableofcontents
 \clearpage
 \section{What is new in this article}
-The table sets each contribution against what was established before it. The derivations that follow mark which equations are taken from the literature and which are new.
 \input{s1_nov.tex}
 
-\section{The author's contributions: problem, derivation and pinpoints}
-Each contribution of the article is set out in the same way: \emph{the problem} it answers, stated in a few lines; \emph{how the author developed it}; \emph{the result}, with the parts that matter marked by circled labels \circled{1}, \circled{2}, \dots; and \emph{the pinpoints}, which say for each circled mark what it shows and why it is so. Every equation that the author developed is circled in red pencil and labelled \emph{developed by the author}. Numbers come from the data and can be recomputed in the workbook \nolinkurl{Data/Manuscript_Data/SWAFL_Manuscripts_Data.xlsx}.
-\input{s1_contrib.tex}
+\section{How this supplement is organised}
+\input{s1_org.tex}
+
+\input{s1_topics.tex}
 
 \section{Every term of the author's equations}
-For each equation developed by the author, the table gives every term: what it means, its unit, where its value comes from, and what happens to the result when the term rises. The same equations are live formulas in the workbook (sheet \texttt{Equations}).
 \input{s1_terms.tex}
 
 \section{How every constant is obtained, what it depends on, and how sensitive the results are}
-Every constant used by the equations of the article is listed with its value, how it was obtained (measured, fitted, taken from the literature, or chosen), what it depends on (soil, crop, climate, sensor) and how much the results move when it changes.
-\input{s1_const.tex}
+\input{s1_constrest.tex}
 
 \section{How each table of the article is produced}
-For each table of the article: its caption, how its numbers are produced from the data, and the script and input that make it.
 \input{s1_tabs.tex}
 
-\section{Reading every figure of the article}
-For each figure of the article: what it shows, how to read its labels, symbols and colours, what affects it and why the pattern happens, and how it is made.
-\input{s1_figs.tex}
-
-\section{A guide to the results with worked numbers}
-The results of the article can be followed with a calculator or with the workbook (sheet \texttt{EQ\_P1}). Each part gives the idea, the formula and a worked example.
-
-\subsection{1. the water balance of a soil column}
-Over a year, water in (rain $P$ and irrigation $I$) equals water out (evapotranspiration $\ET$, drainage $D$ below 1\,m, runoff $Q$) plus the change of water stored, $\Delta S$: $P+I=\ET+D+\Delta S+Q$.
-\emph{Example.} Coarse loam without irrigation: $P=464.4$, $\ET=466.8$, $D=6.1$\,mm; $\ET+D-P=8.5$\,mm came from storage.
-
-\subsection{2. the storage release}
-$\bar R=\ET+D-P-I$ is the water the soil gave away from its store. Starting the run wetter makes $\bar R$ larger; the experiment E9 does this on purpose with ten starting suctions.
-
-\subsection{3. the memory fate}
-Plot drainage against $\bar R$ for the runs with the same rainfall: the slope is the share of each released millimetre that drained, $\phi_D$. The same slope for transpiration, soil and other evaporation gives $\phi_T$, $\phi_{E_s}$, $\phi_{\mathrm{oth}}$, and the four add to 1 because the released water must leave by one of them.
-\emph{Example (three runs).} If $\bar R=10$, 20, 30\,mm and $D=1$, 4, 7\,mm, the slope is $(7-1)/(30-10)=0.3$: 30\,\% of released water drains.
-
-\subsection{4. why drainage wins in coarse soils, the rate law}
-Released water leaves by two routes that compete: drainage, fast when the saturated conductivity $K_s$ is large, and withdrawal by roots and the surface, with a fixed rate $q^\ast$. The share that drains is $\phi_D=K_s/(K_s+q^\ast)$, with $q^\ast=71.5$\,cm\,d$^{-1}$.
-\emph{Example.} Sand, $K_s=712.8$: $712.8/(712.8+71.5)=0.91$ (observed 0.85). Silty clay loam, $K_s=1.68$: $1.68/73.18=0.023$ (observed 0.022).
-
-\subsection{5. the recoverable share of an evaporation saving}
-When a mulch or a lower evaporation demand saves evaporation, the saved water goes to transpiration, to less irrigation, or to drainage. Only the part that does not drain is recovered: $\rho_R=1-\psi_D$.
-\emph{Example.} Loamy sand, $\psi_D=0.80$ in the edge-case experiment: $\rho_R=0.20$; only a fifth of a saving is recovered.
-
-\subsection{6. checking the model's own bookkeeping}
-If the outputs of the model obey the balance of Part 1, the columns $P$, $I$, $\ET$ and $D$ of all runs are linked by one linear relation. The singular-value decomposition finds the combination of columns that is closest to zero; it gave coefficients within 5\,\% of $(1,1,-1,-1)$, so the method finds the balance without being told it.
-
-\subsection{7. the unattributed evaporation}
-$\ET$ minus transpiration, soil evaporation and canopy evaporation should be zero; in the run table it averaged 164\,mm a year (30\,\% of $\ET$). The full outputs show it is evaporation of ponded water, litter and snow, which the run table did not report separately.
-
-\subsection{8. reproduce everything}
-Sheet \texttt{EQ\_P1} computes Part 4, Part 5 and the storage release of each soil from the runs; the scripts of \nolinkurl{Manuscripts/reproducibility} regenerate every number of the article.
-
-\section{Derivations of the equations}
-Sections~S2.1, S2.2 and S2.8 re-derive established results \citep{vanGenuchten1980,Mualem1976} and standard statistical tools for completeness. The memory fate (S2.3), the loss fates and the recoverable share (S2.4), the rate-competition law of hydraulic memory (S2.5), the invariant search applied to a process model (S2.6), the closure residual and the unattributed term (S2.7) and the compensation coefficient (S2.9) are definitions and results of this article.
-
-\subsection{The retention and conductivity functions}
-With the capillary law $r\propto1/h$, \citet{Mualem1976} expressed the relative conductivity of a bundle of connected capillaries as
-\begin{equation}K_r(S_e)=S_e^{\lambda}\left[\int_0^{S_e}h(x)^{-1}\dd x\Big/\int_0^{1}h(x)^{-1}\dd x\right]^{2}.\end{equation}
-Inserting the inverse of the van~Genuchten curve, $h(x)=\alpha^{-1}(x^{-1/m}-1)^{1/n}$, and substituting $y=x^{1/m}$ gives $\int_0^{S_e}h^{-1}\dd x=\alpha m\int_0^{S_e^{1/m}}y^{m-1+1/n}(1-y)^{-1/n}\dd y$. With $m=1-1/n$ the power of $y$ vanishes and the integral is $\alpha[1-(1-S_e^{1/m})^m]$; dividing by its value at $S_e=1$ ($\alpha$) and squaring yields the Mualem conductivity of the paper, $K=K_sS_e^{\lambda}[1-(1-S_e^{1/m})^m]^2$. For large $\alpha h$, $S_e\simeq(\alpha h)^{-(n-1)}$ and $K_r\simeq m^2(\alpha h)^{-[2n+\lambda(n-1)]}$: the conductivity of a soil with large $n$ falls faster with suction, which is the property that orders hydraulic memory.
-
-\subsection{The water balance and the storage release}
-Over a period, mass conservation of the soil column with surface runoff $Q_r$ is $P_r+I=\ET+D+\Delta S+Q_r$. Rearranging,
-\begin{equation}\bar R\equiv\ET+D-P_r-I=-(\Delta S+Q_r),\end{equation}
-so the storage release is positive when the column loses stored water (or sheds no runoff) and supplies the fluxes. In the initial-moisture experiment, a wetter initial state raises the stored water that is released over the run, which is the variation used to measure the memory fates.
-
-\subsection{The memory fate as a pooled within-group slope}
-Within a group of runs with the same rainfall scale $P$, write each flux as $x_c=a_P+\phi_x\bar R_c+e_c$. Minimising $\sum_P\sum_{c\in P}e_c^2$ over the group intercepts $a_P$ gives $a_P=\bar x_P-\phi_x\overline{\bar R}_P$, and then over $\phi_x$
-\begin{equation}\phi_x=\frac{\sum_P\sum_{c\in P}(\bar R_c-\overline{\bar R}_P)(x_c-\bar x_P)}{\sum_P\sum_{c\in P}(\bar R_c-\overline{\bar R}_P)^2}.\end{equation}
-Because the four fluxes add to $\ET+D=\bar R+P_r+I$ and $P_r+I$ is constant within a group, the deviations of the four fluxes add to the deviation of $\bar R$, and the four slopes add to one: $\phi_{E_s}+\phi_T+\phi_D+\phi_{\mathrm{oth}}=1$. Each $\phi_x$ is therefore the share of a released millimetre that leaves by flux $x$.
-
-\subsection{Loss fates and the recoverable share}
-Between two levels of the evaporation factor the change of the non-transpirational evapotranspiration $\delta\Ent$ must be balanced by the other fluxes. With storage changes negligible over 20 years, $\delta\Ent+\delta T+\delta D-\delta I\simeq0$, hence
-\begin{equation}\psi_T+\psi_D+\psi_I\simeq1,\qquad \psi_x=\mp\frac{\delta x}{\delta\Ent},\end{equation}
-the signs chosen so that each $\psi$ is positive when the flux compensates the evaporation change. Of a millimetre of evaporation saved, $\psi_D$ leaves as drainage and is not recovered by the crop or the irrigation account; the recoverable share is $\rho_R=1-\psi_D$.
-
-\subsection{The rate-competition law}
-Let stored water $S$ above field capacity leave by two parallel first-order sinks, drainage with rate constant $k_D\propto K_s/L$ and withdrawal by evaporation and uptake with $k_W\propto q^\ast/L$, where $L$ is a common length. Then $\dd S/\dd t=-(k_D+k_W)S$ and the drainage leaving over the release is
-\begin{equation}\int_0^\infty k_DS\,\dd t=\frac{k_D}{k_D+k_W}S_0\quad\Longrightarrow\quad\phi_D=\frac{K_s}{K_s+q^\ast}.\end{equation}
-The law is bounded in $[0,1]$, tends to 0 for an impermeable soil and to 1 for a free-draining one, and is the only one-parameter form with these limits that is linear in $K_s$ at small $K_s$. By the Buckingham theorem, $\phi_D=F(K_s/q^\ast,n,\alpha h^\ast)$; the law keeps the first group only.
-
-\subsection{The invariant search by singular-value decomposition}
-Arrange the 20-year mean fluxes of all runs as the rows of a matrix $\mathbf F$ (columns $P_r,I,\ET,D$, centred). A linear invariant is a vector $\mathbf c$ with $\mathbf F\mathbf c\approx\mathbf 0$. The best such vector in the least-squares sense, with $\|\mathbf c\|=1$, minimises $\|\mathbf F\mathbf c\|^2=\mathbf c^\top\mathbf F^\top\mathbf F\mathbf c$, which is the eigenvector of $\mathbf F^\top\mathbf F$ with the smallest eigenvalue, that is the right singular vector of $\mathbf F$ with the smallest singular value. Rescaled so that the $\ET$ coefficient is $-1$, it is the discovered balance; the permutation null shuffles each column independently and so destroys any true invariant, which gives the distribution of the smallest singular value under no structure.
-
-\subsection{The closure residual and the unattributed term}
-With $W=P_r+I$, the residual $\varepsilon=(W-\ET-D)/W\simeq(\Delta S+Q_r)/W$ is the share of the input not leaving by evapotranspiration or drainage. The unattributed evapotranspiration is $R=\ET-T-E_s-E_c$; in the full outputs it equals the evaporation of ponded water, litter and snow (data folder, closure within 1.1\,mm).
-
-\subsection{Log-ratio coordinates and the sparse law}
-Fluxes that share a total are compositional; the centred log-ratio $\mathrm{clr}(\mathbf x)_i=\ln x_i-\tfrac15\sum_j\ln x_j$ removes the constraint. The sparse laws regress $\ln y$ on a small set of log or dimensionless candidates chosen by forward selection; out-of-sample skill is $R^2_{\mathrm{cv}}=1-\sum(\ln y_i-\widehat{\ln y}_i^{(-g)})^2/\sum(\ln y_i-\overline{\ln y})^2$, with each prediction made by a model fitted without the group $g$ (experiment or soil) of run $i$.
-
-\subsection{Irrigation compensation}
-With the same balance, a change of rainfall $\Delta P_r$ at fixed trigger is offset partly by irrigation: $\kappa=-\Delta I/\Delta P_r$. When drainage and evapotranspiration do not change, $\kappa=1$; when part of the extra rain drains, $\kappa<1$.
-
-\section{Why the results happen}
-\paragraph{Why hydraulic memory differs between soils.} Water released from storage leaves by the faster of two routes. In coarse soils (large $n$, high $K_s$) the conductivity at field capacity is high, so released water drains before roots and the surface can use it; in fine soils the conductivity is low and the same water stays near the roots and the surface, where it is transpired or evaporated.
-\paragraph{Why the memory transfers to other experiments.} The same competition decides where any extra water goes, whether it comes from initial storage, from a lower evaporation factor or from a mulch; the share is a property of the soil's conductivity, not of the source of the water.
-\paragraph{Why warming raises and wetter climates lower the recoverable share.} Warming raises the evaporative demand, so the withdrawal side of the competition is faster and less of a saved millimetre drains. A wetter climate keeps the profile closer to field capacity, where drainage is fast, so more of a saving drains.
-\paragraph{Why nitrogen has no effect.} The nitrogen rate changes the crop's growth but not the hydraulic properties, and in these runs it changes the water fluxes too little to move the shares; it therefore serves as a negative control.
-\paragraph{Why an evaporative term is unattributed.} The reported components cover transpiration, soil evaporation and canopy evaporation; evaporation of ponded water, litter and snow is part of evapotranspiration but not of those components, so it appears as a residual in the run table.
-\paragraph{Why evapotranspiration follows a compact law and drainage does not.} Evapotranspiration is limited by energy and by water and is smooth in its inputs over 20 years. Drainage is a threshold process (water drains only above field capacity) whose annual total depends on the timing of rain and irrigation events, which the long-term means do not contain.
-\paragraph{Why judging a saving against soil evaporation alone misleads.} A mulch changes soil evaporation and also the unattributed evaporation; if only the reported soil evaporation is used as the denominator, the drainage share of the change is computed against the wrong total and can change sign.
+\section{From the data to every result: experiments, runs and computations}\label{sec:prov}
+\input{s1_prov.tex}
 
 \section{The data}
 \Cref{tab:data} lists the 17 experiments of the data folder and \cref{fig:data} shows their outputs. The tables that follow are the result files of the analyses of the paper, printed in full or up to 220 rows; each is also in the workbook \nolinkurl{Data/Manuscript_Data/SWAFL_Manuscripts_Data.xlsx}, and every run is in \cslink.
@@ -124,6 +40,8 @@ With the same balance, a change of rainfall $\Delta P_r$ at fixed trigger is off
 \caption{Yield, irrigation, drainage and nitrate leaching of the valid runs, by experiment.}\label{fig:data}
 \end{figure}
 \input{s1_data.tex}
+\subsection*{Reproducing every number}
+\input{s1_repro.tex}
 
 \section{Where every table and figure comes from}
 \input{s1_map.tex}

@@ -1,0 +1,13 @@
+\input{prov_common.tex}
+\noindent This article is mostly about software; its numbers come from checks of the software against references rather than from a statistical analysis of the runs.
+{\footnotesize\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr 0.1667\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.2051\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.3974\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.2308\linewidth-2\tabcolsep\relax}}
+\toprule Result & Data & How it is computed & Script, file, workbook\\\midrule\endhead
+Rule of origin & every Daisy layer of the suite & the application is opened without runs and every layer is checked to show no number & \texttt{p5\_\allowbreak{}empty\_\allowbreak{}state.js}\\
+Run budget & any design & $N=\min(\prod_in_i,B)$, Latin hypercube & live formula \texttt{EQ\_\allowbreak{}P3}!B32; chart \texttt{CH\_\allowbreak{}P3}\\
+Run time of a Daisy run & the 10\,190 runs of the ensemble & distribution of \texttt{run\_\allowbreak{}seconds} & \texttt{p4\_\allowbreak{}design\_\allowbreak{}fidelity.py} $\to$ \texttt{out\_\allowbreak{}p4\_\allowbreak{}runtime.csv}\\
+Failed runs and their causes & the 149 runs with a solver failure & Daisy messages matched to four classes & the diagnosis layer; column \texttt{status} of \texttt{All\_\allowbreak{}runs\_\allowbreak{}summary}\\
+Hydraulic factors for every horizon & one loam run with Daisy 7.1.14, with and without the factors & percolation of the season (177 against 222\,mm) & the column tool of the suite\\
+Denitrification split & 792 stored cases of Daisy's tools & the function evaluated on the stored inputs and compared case by case with the stored outputs & \texttt{p5\_\allowbreak{}bridge\_\allowbreak{}checks.js} $\to$ \texttt{out\_\allowbreak{}p5\_\allowbreak{}bridge\_\allowbreak{}js.json}\\
+Crop coefficient, water balance and soil loss of a map cell & satellite indices and the field's soil & FAO-56 piecewise $K_c$, daily root-zone balance, RUSLE & live formulas in \texttt{EQ\_\allowbreak{}P3}; chart \texttt{CH\_\allowbreak{}P3}\\
+Surface irrigation against the textbook & Example~6.1 of the reference & the shipped solver run with the book's inputs; $|\text{SWAFL}-\text{book}|/\text{book}$ & sheet \texttt{R\_\allowbreak{}p3\_\allowbreak{}ws61} (live \texttt{err\_\allowbreak{}pct})\\\bottomrule
+\end{longtable}}

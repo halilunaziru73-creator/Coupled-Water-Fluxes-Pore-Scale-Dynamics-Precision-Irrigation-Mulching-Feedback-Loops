@@ -41,7 +41,9 @@ L = [(ax, (1.0, 5.15), (18, -14), 'One millimetre of irrigation applied to the s
      (ax, (9.0, 5.3), (-14, -26), 'Other evaporation (0.19): intercepted water, ponds and litter.'),
      (ax, (5.5, 0.7), (-26, 10), 'Drainage below 1 m (0.16): water lost to the crop that also carries nitrate.'),
      (ax, (6.4, 3.75), (-26, 14), 'The sensor at 20 cm: irrigation starts when the suction it reads exceeds the trigger.'),
-     (b, (hs['S03'], 0.5), (22, 10), 'The reach of sand (199 cm), where its conductivity has collapsed; the usual triggers lie beyond it.'),
+     (b, (hs['S03'], 0.5), (22, 10), 'The reach of sand (199 cm, the dashed orange line): there its conductivity has collapsed; the usual triggers (grey band) lie beyond it and never fire.'),
+     (b, (hs['S06'], 0.35), (-34, -10), 'The reach of loam (9 209 cm, the dashed blue line just below 10^4 cm): its gentler curve lets a crop dry it far further, so the usual triggers lie well inside its reach and fire.'),
+     (b, (3e4, (1 + (0.010 * 3e4) ** 1.23) ** (-(1 - 1 / 1.23))), (-6, 26), 'Silty clay loam: its reach (128 260 cm) lies beyond the right edge of the axis (10^5 cm), so no dashed line is drawn; every usual trigger fires.'),
      (b, (420, 0.93), (26, -12), 'Grey band: the triggers usually tabulated (300 to 600 cm).')]
 for n, (a_, xy, off, t) in enumerate(L, 1): callout(a_, n, xy, off)
 fig.savefig(os.path.join(ROOT, 'Manuscripts/figures/paper4/fig1_concept_annot.png'), dpi=170); store('fig1_concept', [t for *_, t in L], ROOT); fig.savefig(os.path.join(ROOT, 'Manuscripts/figures/paper4/fig1_concept.png'), dpi=160)

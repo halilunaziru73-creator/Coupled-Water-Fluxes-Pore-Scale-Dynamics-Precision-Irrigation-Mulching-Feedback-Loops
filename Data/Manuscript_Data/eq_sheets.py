@@ -140,9 +140,13 @@ def build(path, runs_cols, nruns):
     # ------------------------------------------------------------------ index
     ws = wb.create_sheet('Equations', 1)
     ws['A1'] = 'The equations of the four papers as live Excel formulas. Yellow cells of each EQ_ sheet are inputs, green cells are formulas; the EQ_P4_fate, EQ_P4_dose and EQ_P1 sheets read the run table directly, so they are connected to the data.'; ws['A1'].font = B
-    head(ws, 3, ['Paper', 'Equation', 'Where (sheet and cells)', 'Excel form'])
+    head(ws, 3, ['Paper', 'Equation', 'Where (sheet and cells)', 'Symbolic form', 'Excel formula of the first cell (as written in the sheet)'])
     for k, row in enumerate(IDX):
-        for j, v in enumerate(row, 1): ws.cell(4 + k, j, v)
+        for j, v in enumerate(row, 1): ws.cell(4 + k, j, (' ' + v[1:]) if (j == 4 and isinstance(v, str) and v.startswith('=')) else v)
+        try:
+            sh, rng = row[2].split('!'); first = rng.split(':')[0]; f = wb[sh][first].value
+            ws.cell(4 + k, 5, (' ' + f) if isinstance(f, str) and f.startswith('=') else f)
+        except Exception: pass
     for w in wb.worksheets:
         if w.title.startswith('EQ_') or w.title == 'Equations':
             for j in range(1, 30): w.column_dimensions[L(j)].width = 16

@@ -1,0 +1,25 @@
+{
+ "fig:soft": [
+  [
+   "Depletion of a soil at suction $h$ (0 at field capacity, 1 at the wilting point): $f(h)=\\dfrac{S_e(100)-S_e(h)}{S_e(100)-S_e(15\\,849)}$, with $S_e(h)=[1+(\\alpha h)^n]^{-(1-1/n)}$; 100\\,cm is field capacity and 15\\,849\\,cm ($pF=4.2$) the wilting point.",
+   "Critical suction of a soil for the common depletion $f^*=0.45$: $S_e^*=S_e(100)-f^*[S_e(100)-S_e(15\\,849)]$, then $h^*=\\alpha^{-1}\\bigl[(S_e^*)^{-1/m}-1\\bigr]^{1/n}$, $m=1-1/n$. For coarse loam this gives 387\\,cm, the number in the sensor box.",
+   "The trigger of a soil for depletion $f_t$ is found the same way with $f_t$ in place of $f^*$ (471\\,cm for $f_t=0.50$); the program solves $f(h)=f_t$ by bisection on $\\log_{10}h$.",
+   "Readily available water: $\\mathrm{RAW}=f_t\\cdot\\mathrm{TAW}$, with $\\mathrm{TAW}$ the available water of the root zone (144\\,mm here).",
+   "Days from field capacity to the trigger: $t=f_t\\,\\mathrm{TAW}/ET_c$; for coarse loam $0.50\\times144/3.4\\approx21$\\,days, as written in the diagnosis.",
+   "The reach of the article decides whether the trigger can ever be read: if $h_t>h_c$ (\\cref{eq:s-hc}) the crop cannot dry the soil to the trigger and the trigger is blind."
+  ],
+  [
+   "Field capacity and wilting point of each cell from its sand $S$, clay $C$ and organic matter $OM$ (fractions, SoilGrids 2.0, 0--60\\,cm) by the regressions of Saxton and Rawls (2006): $\\theta_{33}$ and $\\theta_{1500}$.",
+   "Slope of the retention curve: $\\lambda=\\dfrac{\\ln1500-\\ln33}{\\ln\\theta_{33}-\\ln\\theta_{1500}}$; for $\\psi\\ge33$\\,kPa, $\\theta(\\psi)=\\theta_{33}\\,(\\psi/33)^{-\\lambda}$.",
+   "Available water $AW=\\theta_{33}-\\theta_{1500}$, and the trigger water content $\\theta_t=\\theta_{33}-f\\,(\\theta_{33}-\\theta_{1500})$.",
+   "Matric potential now, the inverse of the curve: $\\psi=33\\,(\\theta/\\theta_{33})^{-1/\\lambda}$\\,kPa, with $\\theta$ the water content of the cell from the water balance (or from sensors when installed).",
+   "Days to the trigger: $t=\\max\\bigl(0,\\,(\\theta-\\theta_t)\\,z_r\\cdot10/ET_c\\bigr)$ with $z_r$ in cm and $ET_c$ in mm/day. With $AW=0.112$, $f=0.5$, $z_r=15$\\,cm, $ET_c=0.8$: at field capacity $t=0.5\\times0.112\\times150/0.8=10.5$\\,days; the mean 6.7 days is shorter because the cells are already below field capacity.",
+   "Units: 1\\,kPa $\\approx$ 10.2\\,cm of water, so 33\\,kPa $\\approx$ 337\\,cm and 1\\,500\\,kPa $\\approx$ 15\\,300\\,cm, the same limits as the suction scale of the article."
+  ],
+  [
+   "Number of Daisy runs of an experiment with factors of $n_1,n_2,\\dots$ levels and a budget $B$: $N=\\min\\bigl(\\prod_i n_i,\\,B\\bigr)$.",
+   "If $\\prod_in_i>B$, a Latin hypercube of $B$ runs is drawn so that each level of factor $i$ is used $\\lfloor N/n_i\\rfloor$ or $\\lceil N/n_i\\rceil$ times.",
+   "Every run is one full Daisy simulation; its annual fluxes (transpiration, soil evaporation, drainage, irrigation, yield) are what the article compares between methods with the rainfed twin, $\\eta_X=\\sum(X-X_0)/\\sum I$."
+  ]
+ ]
+}

@@ -8,9 +8,10 @@ Every value passed by the bridge carries the log file and line it was read from;
 \begin{keyresult}
 \begin{pencil}
 {\small\noindent\textbf{How it is derived, line by line}
-\[\begin{array}{@{}l@{\hspace{8pt}}l@{}}
-\textbf{1. Every value carries its origin:} & v\mapsto\text{source}(v)=(\text{run},\text{file},\text{line})\\[2pt]
-\textbf{2. Draw only values with a Daisy origin:} & \text{show}(v)\iff\text{source}(v)\in\text{Daisy runs}
+\[\begin{array}{@{}l@{}}\textbf{1. Every value carries its origin:}\\[1pt]
+\qquad v\mapsto\text{source}(v)=(\text{run},\text{file},\text{line})\\[1pt]
+\textbf{2. Draw only values with a Daisy origin:}\\[1pt]
+\qquad \text{show}(v)\iff\text{source}(v)\in\text{Daisy runs}
 \end{array}\]}
 \noindent\textbf{The result, with its parts marked}
 \[\underbrace{\text{show}(v)}_{\circled{1}}\iff\underbrace{\text{source}(v)\in\{\text{Daisy runs of this project}\}}_{\circled{2}}\]
@@ -33,10 +34,12 @@ The full factorial is counted; if it exceeds the budget $B$, a Latin hypercube o
 \begin{keyresult}
 \begin{pencil}
 {\small\noindent\textbf{How it is derived, line by line}
-\[\begin{array}{@{}l@{\hspace{8pt}}l@{}}
-\textbf{1. Full factorial:} & \textstyle\prod_in_i\\[2pt]
-\textbf{2. Never above the budget:} & N=\min(\prod_in_i,B)\\[2pt]
-\textbf{3. Latin hypercube, levels balanced:} & \text{each level used }\lfloor N/n_i\rfloor\text{ or }\lceil N/n_i\rceil\text{ times}
+\[\begin{array}{@{}l@{}}\textbf{1. Full factorial:}\\[1pt]
+\qquad \textstyle\prod_in_i\\[1pt]
+\textbf{2. Never above the budget:}\\[1pt]
+\qquad N=\min(\prod_in_i,B)\\[1pt]
+\textbf{3. Latin hypercube, levels balanced:}\\[1pt]
+\qquad \text{each level used }\lfloor N/n_i\rfloor\text{ or }\lceil N/n_i\rceil\text{ times}
 \end{array}\]}
 \noindent\textbf{The result, with its parts marked}
 \[\underbrace{N}_{\circled{1}}=\min\Bigl(\underbrace{\textstyle\prod_i n_i}_{\circled{2}},\ \underbrace{B}_{\circled{3}}\Bigr)\]
@@ -76,12 +79,14 @@ Each factor rewrites the hydraulic block of every horizon of the set-up file bef
 \begin{keyresult}
 \begin{pencil}
 {\small\noindent\textbf{How it is derived, line by line}
-\[\begin{array}{@{}l@{\hspace{8pt}}l@{}}
-\textbf{1. Keep } n>1\textbf{ for any factor by scaling } n-1\textbf{:} & n'=1+f_n(n-1)\\[2pt]
-\textbf{2. Scale the other parameters of every horizon:} & K_s'=f_kK_s,\ \alpha'=f_a\alpha,\ \theta_s'=f_t\theta_s,\ \ell'=\ell+\delta\ell
+\[\begin{array}{@{}l@{}}\textbf{1. Keep } n>1\textbf{ for any factor by scaling } n-1\textbf{:}\\[1pt]
+\qquad n'=1+f_n(n-1)\\[1pt]
+\textbf{2. Scale the other parameters of every horizon:}\\[1pt]
+\qquad K_s'=f_kK_s,\ \alpha'=f_a\alpha,\ \theta_s'=f_t\theta_s,\ \ell'=\ell+\delta\ell
 \end{array}\]}
 \noindent\textbf{The result, with its parts marked}
-\[\underbrace{K_s\to f_kK_s}_{\circled{1}},\quad \underbrace{\alpha\to f_a\alpha}_{\circled{2}},\quad \underbrace{n-1\to f_n(n-1)}_{\circled{3}},\quad \theta_s\to f_t\theta_s,\quad \ell\to\ell+\delta\ell;\qquad \underbrace{\text{percolation }177\to222\ \mathrm{mm}}_{\circled{4}}\]
+\[\underbrace{K_s\to f_kK_s}_{\circled{1}},\quad \underbrace{\alpha\to f_a\alpha}_{\circled{2}},\quad \underbrace{n-1\to f_n(n-1)}_{\circled{3}},\quad \theta_s\to f_t\theta_s,\quad \ell\to\ell+\delta\ell\]
+\[\underbrace{\text{percolation }177\to222\ \mathrm{mm}}_{\circled{4}}\]
 \end{pencil}
 \end{keyresult}
 \begin{pins}
@@ -101,9 +106,10 @@ The function was evaluated on the stored inputs of the 792 cases distributed wit
 \begin{keyresult}
 \begin{pencil}
 {\small\noindent\textbf{How it is derived, line by line}
-\[\begin{array}{@{}l@{\hspace{8pt}}l@{}}
-\textbf{1. Run the function on the stored inputs:} & D_j^{\text{SWAFL}},\ j=1..792\\[2pt]
-\textbf{2. Compare case by case:} & \max_j|D_j^{\text{SWAFL}}-D_j^{\text{Daisy}}|
+\[\begin{array}{@{}l@{}}\textbf{1. Run the function on the stored inputs:}\\[1pt]
+\qquad D_j^{\text{SWAFL}},\ j=1..792\\[1pt]
+\textbf{2. Compare case by case:}\\[1pt]
+\qquad \max_j|D_j^{\text{SWAFL}}-D_j^{\text{Daisy}}|
 \end{array}\]}
 \noindent\textbf{The result, with its parts marked}
 \[\underbrace{\max_{j=1..792}\bigl|D_j^{\text{SWAFL}}-D_j^{\text{Daisy}}\bigr|}_{\circled{1}}\quad\Rightarrow\quad\underbrace{\text{one branch wrong, corrected}}_{\circled{2}}\]

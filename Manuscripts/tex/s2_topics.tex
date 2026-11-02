@@ -1,0 +1,1022 @@
+\section{Soil-specific triggers from one depletion}
+How one critical depletion becomes a different suction trigger in every soil.
+
+\subsection{Contribution 1: one depletion, ten soil-specific triggers}\label{con:s2:1}
+\begin{problem}
+Agronomic guidance gives a depletion fraction at which to irrigate (FAO-56), while sensors read suction. A single suction trigger is therefore used on every soil. What share of the plant-available water does that trigger really represent, and which suction corresponds to the same depletion on each soil?
+\end{problem}
+\begin{derivation}
+\textbf{(a)} The plant-available water lies between field capacity (100\,cm) and the wilting point (15\,849\,cm). \textbf{(b)} Because $\theta-\theta_r\propto S_e$, the depletion at suction $h$ needs only $S_e$: $f(h)=[S_e(100)-S_e(h)]/[S_e(100)-S_e(15\,849)]$. \textbf{(c)} Set $f=f^\ast$ and solve for $S_e^\ast$. \textbf{(d)} Invert the van~Genuchten curve.
+\end{derivation}
+\begin{keyresult}
+\begin{pencil}
+{\small\noindent\textbf{How it is derived, line by line}
+\[\begin{array}{@{}l@{}}\textbf{1. Depletion uses only } S_e\textbf{:}\\[1pt]
+\qquad f(h)=\frac{S_e(100)-S_e(h)}{S_e(100)-S_e(15\,849)}\\[1pt]
+\textbf{2. Set } f=f^\ast\textbf{ and solve for } S_e\textbf{:}\\[1pt]
+\qquad S_e^\ast=S_e(100)-f^\ast[S_e(100)-S_e(15\,849)]\\[1pt]
+\textbf{3. Invert van Genuchten:}\\[1pt]
+\qquad h^\ast=\alpha^{-1}\bigl(S_e^{\ast\,-1/m}-1\bigr)^{1/n}
+\end{array}\]}
+\noindent\textbf{The result, with its parts marked}
+\[
+\underbrace{h^\ast}_{\circled{1}}=\frac1\alpha\Bigl(\underbrace{\bigl[S_e(100)-f^\ast\{S_e(100)-S_e(15\,849)\}\bigr]}_{\circled{2}}{}^{-1/m}-1\Bigr)^{1/n}\]
+\[\underbrace{f(300)=0.24\ \text{to}\ 0.84}_{\circled{3}}
+\]
+\end{pencil}
+\centering\small
+\begin{tabular}{lrr}
+\toprule
+Soil & $h^\ast$ at $f^\ast=0.45$ (cm) & water used at a 300\,cm trigger\\\midrule
+Sand & \circled{4}\ 143 & 84\,\%\\
+Loam & 284 & 47\,\%\\
+Silty clay loam & \circled{5}\ 729 & 24\,\%\\\bottomrule
+\end{tabular}
+\end{keyresult}
+\begin{pins}
+\pin{1}{The soil's own trigger: the suction at which this soil has used the chosen share of its available water.}
+\pin{2}{The effective saturation at the chosen depletion; the factor $\theta_s-\theta_r$ cancels, so only $\alpha$ and $n$ are needed.}
+\pin{3}{The same 300\,cm trigger means 24\,\% of the water used in silty clay loam but 84\,\% in sand: one trigger is not one decision.}
+\pin{4}{Sand must be irrigated at a much wetter suction because it releases most of its water at low suction.}
+\pin{5}{Fine soils release water over a wide range, so the same depletion is reached at a much drier suction.}
+\end{pins}
+
+
+\subsection{Worked numbers, part 1: from a suction trigger to a share of the available water}
+The plant-available water lies between field capacity (100\,cm) and the wilting point (15\,849\,cm). The depletion at a suction $h$ is $f(h)=[S_e(100)-S_e(h)]/[S_e(100)-S_e(15\,849)]$.
+\emph{Example (loam, $\alpha=0.036$, $n=1.56$, $m=0.359$).} $S_e(100)=0.466$, $S_e(15\,849)=0.029$, $S_e(300)=0.262$; $f(300)=(0.466-0.262)/(0.466-0.029)=0.47$: at a 300\,cm trigger the loam has used 47\,\% of its available water. In sand the same trigger means 84\,\%, in silty clay loam 24\,\%.
+
+
+\subsection{Worked numbers, part 2: from a chosen depletion to a soil's own trigger}
+Choose $f^\ast=0.45$. Then $S_e^\ast=S_e(100)-f^\ast[S_e(100)-S_e(15\,849)]$ and the trigger is $h^\ast=\alpha^{-1}(S_e^{\ast\,-1/m}-1)^{1/n}$.
+\emph{Example (loam).} $S_e^\ast=0.466-0.45\times0.437=0.269$; $0.269^{-1/0.359}=38.8$; $38.8-1=37.8$; $37.8^{1/1.56}=10.2$; $10.2/0.036=284$\,cm.
+
+
+\subsection{Reading Figure 2 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-swa_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): see the caption above. \emph{Why:} Sands release their water at low suction, clays over a wide range, so the curves cross field capacity and wilting point at different contents.
+\item Panel (b): Annual balance: sinks stacked ($T$, $E$, $E_{\mathrm{oth}}$, $D$) against the input $P+I$ (black marks). \emph{Why:} The same rain leaves as drainage in coarse soils and as evaporation and transpiration in fine soils.
+\item Panel (c): Cumulative evaporation after a wetting at the season-mean demand (Eq.~(11) of the article); dots mark the end of stage 1. \emph{Why:} Fine soils keep the surface wet longer, so stage 1 lasts longer.
+\item Panel (d): Mean annual root water uptake by depth from Engine~2 (unscaled); dotted lines mark $z_{90}$. \emph{Why:} Uptake follows root density, which falls with depth.
+\item Panel (e): Water potential of the root zone, the root surface and the leaf (Eq.~(21) and Eq.~(22) of the article), crop days of day-of-year 120--210; the dashed line is the stomatal-closure threshold of the view; the air is at $-56$\,MPa (not shown). \emph{Why:} Potential falls from root zone to leaf because water flows through resistances; dry soil adds a large soil resistance.
+\item Panel (f): Fate of the soil evaporation saved by a straw mulch (Eq.~(23) of the article); in sand the three positive shares sum to 1.14, so the remainder is zero. \emph{Why:} A mulch saving goes to transpiration, less irrigation or drainage according to the soil.
+\end{enumerate}
+
+\textbf{What it shows.} Soil--water--atmosphere variables of the ten soils at the reference state. (a) Retention curves $\theta(h)$ (Eq.~(27) and Eq.~(2) of the article); sand, coarse loam and silty clay loam highlighted; dotted lines are field capacity (FC, 100\,cm) and the wilting point (WP, 15\,849\,cm). (b) Annual balance: sinks stacked ($T$, $E$, $E_{\mathrm{oth}}$, $D$) against the input $P+I$ (black marks). (c) Cumulative evaporation after a wetting at the season-mean demand (Eq.~(11) of the article); dots mark the end of stage 1. (d) Mean annual root water uptake by depth from Engine~2 (unscaled); dotted lines mark $z_{90}$. (e) Water potential of the root zone, the root surface and the leaf (Eq.~(21) and Eq.~(22) of the article), crop days of day-of-year 120--210; the dashed line is the stomatal-closure threshold of the view; the air is at $-56$\,MPa (not shown). (f) Fate of the soil evaporation saved by a straw mulch (Eq.~(23) of the article); in sand the three positive shares sum to 1.14, so the remainder is zero.
+
+\textbf{How to read the labels, symbols and colours.} (a) Retention curves with field capacity and wilting point dotted; (b) annual sinks stacked against the input (black marks); (c) cumulative evaporation after wetting, dots at the end of stage 1; (d) root uptake by depth; (e) water potential of root zone, root surface and leaf; (f) fate of a mulch saving.
+
+\textbf{What affects it, and why it happens.} Soils differ in how much water they hold between field capacity and wilting point and how fast they pass it on; these differences propagate to evaporation, uptake, potential and the fate of a saving.
+
+\textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p3_swa_fig.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+
+\subsection{Reading Figure 4 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-viewsB_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Root-zone depletion and the trigger law'': the suction (or depletion) at which irrigation starts.
+\item ``Conventional'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Clay Loam'': the soil of the project, which every layer uses.
+\item ``Result for this design'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Soil and field'': the soil of the project, which every layer uses.
+\end{enumerate}
+
+\textbf{What it shows.} Result views for irrigation timing and design. (a) Sensor and trigger; (b) irrigation rule collapsing ten soils onto one depletion curve; (c) surface irrigation; (d) drip irrigation; (e) sprinklers; (f) soil selection on the texture triangle, which drives every view.
+
+\textbf{How to read the labels, symbols and colours.} Views for timing and design (sensor and trigger, the trigger rule, surface, drip, sprinkler, soil triangle).
+
+\textbf{What affects it, and why it happens.} Expressing the trigger as depletion collapses the soils onto one curve; the designs follow the soil intake and the water needed. The trigger rule collapses the soils onto one depletion curve because it uses depletion, not suction; the designs follow from the soil's intake and the water needed.
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+
+\subsection{Reading Figure 14 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-layer-v1_0.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 1 of 2: Sensor and trigger: 20 years of daily suction at the sensor, irrigated and rainfed, against the trigger, and the days beyond the trigger per year (Eq.~(8) of the article).).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``SWAFL View Run Daisy Help'': the menu bar of the program (file, view, run, Daisy, help).
+\item ``Sensor and trigger'': the suction (or depletion) at which irrigation starts.
+\item ``Daisy model'': the Daisy model and its workbench.
+\item ``winter'': a heading or control of this screen; the caption above says which layer it belongs to.
+\end{enumerate}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-layer-v1_1.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 2 of 2: Profile evolution: pressure-head profile through the season, irrigated and rainfed, and the share of the root zone beyond the trigger (Eq.~(9) of the article).).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``SWAFL View Run Daisy Help'': the menu bar of the program (file, view, run, Daisy, help).
+\item ``Focus Q Search'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``mm per day'': a rate in millimetres per day.
+\item ``20-year averages at these settings'': a heading or control of this screen; the caption above says which layer it belongs to.
+\end{enumerate}
+
+\textbf{What it shows.} SWAFL Desktop: soil water and irrigation timing. Panels: (a) Sensor and trigger: 20 years of daily suction at the sensor, irrigated and rainfed, against the trigger, and the days beyond the trigger per year (Eq.~(8) of the article). (b) Profile evolution: pressure-head profile through the season, irrigated and rainfed, and the share of the root zone beyond the trigger (Eq.~(9) of the article).
+
+\textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
+
+\textbf{What affects it, and why it happens.} The suction at the sensor rises as the crop dries the soil and falls after each rain or irrigation; irrigation is triggered when it crosses the trigger line. 
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+
+\subsection{Reading Figure 15 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-layer-n1_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Coarse Loam'': the soil of the project, which every layer uses.
+\item ``soil has Its own trigger'': the suction (or depletion) at which irrigation starts.
+\item ``Sandy'': the soil of the project, which every layer uses.
+\item ``starts'': a heading or control of this screen; the caption above says which layer it belongs to.
+\end{enumerate}
+
+\textbf{What it shows.} SWAFL Desktop: trigger law. Panels: (a) Trigger law: root-zone depletion of ten soils on one axis with the critical depletion $f^\ast$, each soil's own trigger suction and yield, and the gauge of the sensor through the season (Eq.~(29) and Eq.~(25) and Eq.~(26) of the article).
+
+\textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
+
+\textbf{What affects it, and why it happens.} Each soil reaches the same depletion at a different suction because of the shape of its retention curve, so each soil has its own trigger. 
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+
+\subsection{Reading Figure 30 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-real-balance_0.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 1 of 2: Field balance, charts: evaporation, transpiration and evapotranspiration of 2026 against the median of 20 seasons, with rain, irrigation and canopy cover, and the root-zone water against the trigger with the 10 to 90\,\% range and the irrigation events.).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``drainage (inverted) event'': rain, from the weather of the project.
+\end{enumerate}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-real-balance_1.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 2 of 2: Crop water requirement: crop coefficient and daily need through the year, and the root-zone depletion with the trigger, the readily and the totally available water and the irrigations of 2026.).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Water the crop uses'': the crop of the project and its stage.
+\item ``reaching the root zone'': the roots: depth, density and uptake.
+\item ``below capacity'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``trigger (50 \% of available water)'': the suction (or depletion) at which irrigation starts.
+\end{enumerate}
+
+\textbf{What it shows.} SWAFL Desktop: the field water balance and the crop water requirement through the year (screen captures of release 1.1.0). Panels: (a) Field balance, charts: evaporation, transpiration and evapotranspiration of 2026 against the median of 20 seasons, with rain, irrigation and canopy cover, and the root-zone water against the trigger with the 10 to 90\,\% range and the irrigation events. (b) Crop water requirement: crop coefficient and daily need through the year, and the root-zone depletion with the trigger, the readily and the totally available water and the irrigations of 2026.
+
+\textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
+
+\textbf{What affects it, and why it happens.} Evapotranspiration follows the crop coefficient through the season; root-zone water falls between irrigations and is refilled at the trigger. 
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+
+\subsection{Reading Figure 6 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-sens_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): Engine~1 annual irrigation and. \emph{Why:} Controls that raise demand or lower supply raise irrigation.
+\item Panel (b): drainage change for each control moved to the two settings listed under its name (blue: first setting; orange: second setting) from the reference state; nitrogen rate, which leaves both unchanged, is not shown. \emph{Why:} Controls that keep the profile wet raise drainage.
+\item Panel (c): Irrigation and drainage by soil. \emph{Why:} Coarse soils need more irrigation and drain more.
+\item Panel (d): Drip emission uniformity against lateral length by lateral diameter and. \emph{Why:} Longer laterals carry more flow over more length, so friction lowers the head at the end and uniformity falls.
+\item Panel (e): by inlet head; dashed where $h_f/H_0>0.2$. \emph{Why:} A higher inlet head makes friction a smaller share of the head, so uniformity rises.
+\item Panel (f): Sprinkler application efficiency against wind speed at 200, 300 and 400\,kPa (CU in the legend). \emph{Why:} Wind distorts and blows away part of the spray, so efficiency falls; higher pressure makes smaller drops that drift more.
+\end{enumerate}
+
+\textbf{What it shows.} One-at-a-time sensitivity of SWAFL Desktop outputs. (a) Engine~1 annual irrigation and (b) drainage change for each control moved to the two settings listed under its name (blue: first setting; orange: second setting) from the reference state; nitrogen rate, which leaves both unchanged, is not shown. (c) Irrigation and drainage by soil. (d) Drip emission uniformity against lateral length by lateral diameter and (e) by inlet head; dashed where $h_f/H_0>0.2$. (f) Sprinkler application efficiency against wind speed at 200, 300 and 400\,kPa (CU in the legend).
+
+\textbf{How to read the labels, symbols and colours.} (a, b) Change of irrigation and drainage when each control moves to two settings (blue, orange); (c) by soil; (d, e) drip uniformity against lateral length, diameter and inlet head; (f) sprinkler efficiency against wind.
+
+\textbf{What affects it, and why it happens.} Controls that change water supply or demand move irrigation and drainage most; long or narrow laterals lose head and uniformity; wind distorts the sprinkler pattern.
+
+\textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p3_sens_fig.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+
+\subsection{Derivation: Capillary radius}\label{der:s2:2}
+The pressure jump across a meniscus in a cylindrical pore of radius $r$ is $\Delta p=2\sigma\cos\gamma_c/r$ (Young--Laplace). Equating with the suction head $\rho_wgh$ gives $r_c=2\sigma\cos\gamma_c/(\rho_wgh)$; with $\sigma=0.0728$\,N\,m$^{-1}$, $\gamma_c=0$, $\rho_w=1000$\,kg\,m$^{-3}$ and $g=9.81$\,m\,s$^{-2}$, $r_c=1.49\times10^{-5}\,\mathrm{m^2}/h=0.149\,\mathrm{cm^2}/h$: the pores emptied at a suction $h$ are those wider than $r_c$.
+
+
+\subsection{Derivation: Depletion and the trigger law}\label{der:s2:3}
+The plant-available water lies between field capacity (100\,cm) and the wilting point (15\,849\,cm). The depletion at suction $h$ is the share of that water that has been used, $f(h)=[S_e(100)-S_e(h)]/[S_e(100)-S_e(15\,849)]$, because $\theta-\theta_r$ is proportional to $S_e$ and the factor $\theta_s-\theta_r$ cancels. The suction that corresponds to a chosen depletion $f^\ast$ is found by inverting: $S_e(h^\ast)=S_e(100)-f^\ast[S_e(100)-S_e(15\,849)]$ and $h^\ast=\alpha^{-1}(S_e^{-1/m}-1)^{1/n}$. A soil-independent depletion therefore gives a soil-specific suction, which is why one suction trigger uses different shares of the available water in different soils.
+
+
+\subsection{Why it happens}
+\paragraph{Why the same trigger uses different shares of the available water.} A suction trigger marks a point on the retention curve. In a sand most available water is released at low suctions, so a $-300$\,cm trigger is reached late (much of the water used); in a clay the water is released over a wide range, so the same suction is reached early.
+
+\paragraph{Why the daily model fails in sand at dry triggers.} In sand dry triggers lie beyond the suction the crop can produce in the soil, so the full simulation seldom irrigates, while the daily bucket, which has no conductivity limit, still reaches the trigger.
+
+
+\section{Rainfall and interception}
+The interception store of the daily model and the drainage that follows rain.
+
+\subsection{Contribution 2: an interception store that matches the annual model}\label{con:s2:2}
+\begin{problem}
+The daily model must lose to canopy interception the same water per year as the annual model, although its rain falls in random daily amounts. How large must the daily interception store be?
+\end{problem}
+\begin{derivation}
+Daily rain was taken as exponential with mean $\mu_0$; the throughfall above a store $I_c$ was integrated over that distribution; the result was set equal to the throughfall fraction of the annual model and solved for $I_c$.
+\end{derivation}
+\begin{keyresult}
+\begin{pencil}
+{\small\noindent\textbf{How it is derived, line by line}
+\[\begin{array}{@{}l@{}}\textbf{1. Daily rain exponential:}\\[1pt]
+\qquad p(R)=\mu_0^{-1}e^{-R/\mu_0}\\[1pt]
+\textbf{2. Expected throughfall above } I_c\textbf{:}\\[1pt]
+\qquad \textstyle\int_{I_c}^\infty(R-I_c)p(R)\,\dd R=\mu_0e^{-I_c/\mu_0}\\[1pt]
+\textbf{3. Throughfall fraction:}\\[1pt]
+\qquad r=e^{-I_c/\mu_0}\\[1pt]
+\textbf{4. Solve for } I_c\textbf{:}\\[1pt]
+\qquad I_c=\mu_0\ln(1/r)
+\end{array}\]}
+\noindent\textbf{The result, with its parts marked}
+\[\underbrace{\mathrm E[(R-I_c)^+]}_{\circled{1}}=\mu_0e^{-I_c/\mu_0}\;\Rightarrow\;\underbrace{r=e^{-I_c/\mu_0}}_{\circled{2}}\;\Rightarrow\;\underbrace{I_c=\mu_0\ln\frac1r}_{\circled{3}}\]
+\end{pencil}
+\end{keyresult}
+\begin{pins}
+\pin{1}{Expected throughfall of an exponential daily rain of mean $\mu_0$ above a store $I_c$, obtained by integrating the exponential density.}
+\pin{2}{The throughfall fraction; it is set equal to the throughfall of the annual model.}
+\pin{3}{The store follows in closed form: with $\mu_0=4.5$\,mm and $r=0.9$, $I_c=0.47$\,mm. The two engines therefore agree on interception by construction.}
+\end{pins}
+
+
+\subsection{Worked numbers, part 3: interception by the canopy}
+If daily rain is exponential with mean $\mu_0$, a store $I_c$ lets through the fraction $r=e^{-I_c/\mu_0}$, so $I_c=\mu_0\ln(1/r)$. \emph{Example:} $\mu_0=4.5$\,mm and $r=0.9$ give $I_c=4.5\times0.105=0.47$\,mm.
+
+
+\subsection{Reading Figure 9 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-e2_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): Closure residual of the unscaled daily core over 60 random states. \emph{Why:} The daily model conserves water by construction, so the residual is near zero.
+\item Panel (b): Mean annual irrigation of Engine 2 against Engine 1 for the 100 scenarios of the realistic grid (10 soils $\times$ 5 triggers $\times$ 2 methods, cereal), including the failures at zero. \emph{Why:} Irrigation of the two engines agrees except in sand at dry triggers, where the daily bucket reaches triggers that the full model cannot.
+\item Panel (c): Unscaled Engine 2 drainage against Engine 1 for the same scenarios. \emph{Why:} Drainage agrees in order but the bucket drains in steps, so levels differ.
+\end{enumerate}
+
+\textbf{What it shows.} Engine 2. (a) Closure residual of the unscaled daily core over 60 random states. (b) Mean annual irrigation of Engine 2 against Engine 1 for the 100 scenarios of the realistic grid (10 soils $\times$ 5 triggers $\times$ 2 methods, cereal), including the failures at zero. (c) Unscaled Engine 2 drainage against Engine 1 for the same scenarios.
+
+\textbf{How to read the labels, symbols and colours.} (a) Closure residual over 60 states; (b) irrigation and (c) drainage of Engine 2 against Engine 1 for 100 scenarios.
+
+\textbf{What affects it, and why it happens.} The residual is near zero because the daily model conserves water by construction; agreement with Engine 1 fails in sand at dry triggers where the daily bucket reaches triggers the full model cannot.
+
+\textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p3_figs.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+
+\subsection{Reading Figure 16 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-layer-v3_0.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 1 of 2: Tillage and structure: modelled thin section of the topsoil with the water- and air-filled pores at the chosen suction, the pore sizes, and the same place under conventional, reduced and no tillage (Eq.~(3) of the article)).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Conventional'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Reduced pore 0.68'': a heading or control of this screen; the caption above says which layer it belongs to.
+\end{enumerate}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-layer-v3_1.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 2 of 2: Soil hydraulic drivers: tillage and consolidation effects on drainage for the ten soils and their regressions on clay content (Eq.~(5) of the article).).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``SWAFL View Run Daisy Help'': the menu bar of the program (file, view, run, Daisy, help).
+\item ``Field balance'': the field water balance: inputs, outputs and storage of the root zone.
+\item ``Import weather... Online weather'': the weather of the project: built-in record, a file of the user or online weather of any place.
+\item ``design'': a heading or control of this screen; the caption above says which layer it belongs to.
+\end{enumerate}
+
+\textbf{What it shows.} SWAFL Desktop: soil structure and hydraulic drivers. Panels: (a) Tillage and structure: modelled thin section of the topsoil with the water- and air-filled pores at the chosen suction, the pore sizes, and the same place under conventional, reduced and no tillage (Eq.~(3) of the article). (b) Soil hydraulic drivers: tillage and consolidation effects on drainage for the ten soils and their regressions on clay content (Eq.~(5) of the article).
+
+\textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
+
+\textbf{What affects it, and why it happens.} Tillage opens large pores that hold little water and drain fast; consolidation closes them over time, which changes drainage. 
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+
+\subsection{Reading Figure 17 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-layer-r1_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Refresh Review Run Help'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Untitled project'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Field balance'': the field water balance: inputs, outputs and storage of the root zone.
+\item ``Coarse Loam v'': the soil of the project, which every layer uses.
+\item ``click one'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Strength (vapour-flux factor)'': a heading or control of this screen; the caption above says which layer it belongs to.
+\end{enumerate}
+
+\textbf{What it shows.} SWAFL Desktop: roots. Panels: (a) Root structure: rooting depth and the depths holding 50 and 90\,\% of uptake in the ten soils (Eq.~(17) and Eq.~(18) and Eq.~(19) and Eq.~(20) of the article), with the E15 rooting-depth heat maps.
+
+\textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
+
+\textbf{What affects it, and why it happens.} Roots go deeper in soils that let them and where water is deeper; uptake follows root density. 
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+
+\subsection{Derivation: Rainfall and interception of the daily model}\label{der:s2:8}
+If daily rain depths are exponential with mean $\mu_0$, the expected throughfall above an interception store $I_c$ is $\mathrm E[(R-I_c)^+]=\int_{I_c}^\infty(R-I_c)\mu_0^{-1}e^{-R/\mu_0}\dd R=\mu_0e^{-I_c/\mu_0}$. The throughfall fraction is $r=e^{-I_c/\mu_0}$, hence $I_c=\mu_0\ln(1/r)$: the store is chosen so that the expected interception equals the annual interception of the annual model.
+
+
+\subsection{Why it happens}
+\paragraph{Why drainage differs under the same rain.} Drainage is the water that exceeds what the profile holds and the crop uses; profiles that hold less (sands) and conduct more pass more water below 1\,m.
+
+\section{Evaporation and the soil--plant--atmosphere path}
+The two stages of soil evaporation and the water potential from the soil to the air.
+
+\subsection{Contribution 3: two evaporation stages joined without a jump}\label{con:s2:3}
+\begin{derivation}
+Stage 1 runs at the demand $e_0$ until the stage-1 limit $Q_1$; for stage 2 a square-root law of diffusion was taken, and its two constants were set so that the rate equals $e_0$ at the change of stage and the long-time behaviour is $\sqrt t$.
+\end{derivation}
+\begin{keyresult}
+\begin{pencil}
+{\small\noindent\textbf{How it is derived, line by line}
+\[\begin{array}{@{}l@{}}\textbf{1. Stage 1 at demand:}\\[1pt]
+\qquad Q=q_0+e_0t,\ t\le t_1\\[1pt]
+\textbf{2. Stage 2, square-root form:}\\[1pt]
+\qquad Q=Q_1+A(\sqrt{1+(t-t_1)/\tau_E}-1)\\[1pt]
+\textbf{3. Rate continuous at } t_1\textbf{:}\\[1pt]
+\qquad \dd Q/\dd t|_{t_1}=A/(2\tau_E)=e_0\Rightarrow A=2e_0\tau_E
+\end{array}\]}
+\noindent\textbf{The result, with its parts marked}
+\[Q(t)=Q_1+\underbrace{2e_0\tau_E}_{\circled{1}}\Bigl(\sqrt{1+\underbrace{(t-t_1)/\tau_E}_{\circled{2}}}-1\Bigr)\]
+\[\underbrace{\frac{\dd Q}{\dd t}\Big|_{t_1}=e_0}_{\circled{3}}\]
+\[\underbrace{Q\propto\sqrt{t}\ \ (t-t_1\gg\tau_E)}_{\circled{4}}\]
+\end{pencil}
+\end{keyresult}
+\begin{pins}
+\pin{1}{The amplitude of stage 2, chosen so that the rate is continuous.}
+\pin{2}{Time since the end of stage 1, in units of the transition time $\tau_E$.}
+\pin{3}{At the start of stage 2 the rate equals the stage-1 rate: no artificial jump in evaporation.}
+\pin{4}{Long after, cumulative evaporation grows as the square root of time, the diffusion-limited law of stage 2.}
+\end{pins}
+
+
+\subsection{Reading Figure 8 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-e1_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): ET. \emph{Why:} Points follow the order of Daisy because the meta-model is built from Daisy runs; the offset before re-anchoring comes from anchoring to one reference run.
+\item Panel (b): irrigation. \emph{Why:} Points follow the order of Daisy because the meta-model is built from Daisy runs; the offset before re-anchoring comes from anchoring to one reference run.
+\item Panel (c): drainage. \emph{Why:} Points follow the order of Daisy because the meta-model is built from Daisy runs; the offset before re-anchoring comes from anchoring to one reference run.
+\item Panel (d): yield. \emph{Why:} Points follow the order of Daisy because the meta-model is built from Daisy runs; the offset before re-anchoring comes from anchoring to one reference run.
+\item Panel (e): transpiration. \emph{Why:} Points follow the order of Daisy because the meta-model is built from Daisy runs; the offset before re-anchoring comes from anchoring to one reference run.
+\item Panel (f): soil evaporation. \emph{Why:} Points follow the order of Daisy because the meta-model is built from Daisy runs; the offset before re-anchoring comes from anchoring to one reference run.
+\item Panel (g): nitrogen leached. Grey lines are 1:1. \emph{Why:} Points follow the order of Daisy because the meta-model is built from Daisy runs; the offset before re-anchoring comes from anchoring to one reference run.
+\end{enumerate}
+
+\textbf{What it shows.} Engine 1 versus Daisy for the 1\,000 held-out E12 runs. Orange: as shipped; blue: re-anchored. (a) ET, (b) irrigation, (c) drainage, (d) yield, (e) transpiration, (f) soil evaporation, (g) nitrogen leached. Grey lines are 1:1.
+
+\textbf{How to read the labels, symbols and colours.} Engine 1 against Daisy for 1\,000 held-out runs, seven outputs; orange as shipped, blue re-anchored; grey 1:1.
+
+\textbf{What affects it, and why it happens.} Points follow the order of Daisy (good ranking) but are offset as shipped because the meta-model is anchored to one reference run; re-anchoring removes most of the offset.
+
+\textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p3_figs.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+
+\subsection{Reading Figure 18 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-layer-e1_0.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 1 of 2: Evaporation from the pore to the atmosphere: a modelled section of coarse loam drying after a wetting, the drying front, stage-1 and stage-2 evaporation and the water lost since wetting (Eq.~(11) and Eq.~(12) of the article)).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Evaporation rate, mm per day'': evaporation from the soil (and, where stated, from mulch or canopy).
+\item ``Water lost since wetting'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Stage 2: vapour via dry layer'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``O quartz mineral'': a heading or control of this screen; the caption above says which layer it belongs to.
+\end{enumerate}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-layer-e1_1.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 2 of 2: Mulch against bare soil: six mulch materials, and soil evaporation, transpiration, irrigation, drainage and nitrate leaching under bare soil, the chosen mulch and the strongest mulch (Eq.~(13) of the article)).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Mulched against bare soil'': the surface cover and its effect on evaporation.
+\item ``no layer'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``yours'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``evaporation -0 mm'': evaporation from the soil (and, where stated, from mulch or canopy).
+\end{enumerate}
+
+\textbf{What it shows.} SWAFL Desktop: evaporation and mulch. Panels: (a) Evaporation from the pore to the atmosphere: a modelled section of coarse loam drying after a wetting, the drying front, stage-1 and stage-2 evaporation and the water lost since wetting (Eq.~(11) and Eq.~(12) of the article). (b) Mulch against bare soil: six mulch materials, and soil evaporation, transpiration, irrigation, drainage and nitrate leaching under bare soil, the chosen mulch and the strongest mulch (Eq.~(13) of the article).
+
+\textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
+
+\textbf{What affects it, and why it happens.} Evaporation is fast while the surface is wet (stage 1) and slows when a dry layer forms (stage 2); a mulch reduces the vapour flux through it. 
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+
+\subsection{Reading Figure 31 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-real-flux_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Conventional'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``water velocity'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``4 where the water moves'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``(b) water velocity'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``content, per cm?'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``velocity, cm per day'': a rate in millimetres per day.
+\end{enumerate}
+
+\textbf{What it shows.} SWAFL Desktop: pore-scale drying of the topsoil under conventional and no tillage: the evaporation flux and the suction at 1.25 and 3.75\,cm, and the distribution, velocity and content of the water on day 5.1 (screen capture of release 1.1.0).
+
+\textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
+
+\textbf{What affects it, and why it happens.} Under no-till the topsoil keeps more connected pores, so water moves to the surface differently and the suction rises more slowly. 
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+\subsection{Reading Figure 5 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-viewsC_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Soil evaporation'': evaporation from the soil (and, where stated, from mulch or canopy).
+\item ``chips'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``storage and other 7 mm'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``soil water, roots, evaporation'': evaporation from the soil (and, where stated, from mulch or canopy).
+\item ``potential along the path'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``sensor'': the soil-water sensor: its depth and reading.
+\end{enumerate}
+
+\textbf{What it shows.} Result views for mulch and the whole system. (a) Mulch against bare soil; (b) mulch strength; (c) fate of the saved water; (d) regime map of where mulch pays; (e) soil to sky; (f) how the effects connect.
+
+\textbf{How to read the labels, symbols and colours.} Views for mulch and the whole system.
+
+\textbf{What affects it, and why it happens.} A mulch lowers evaporation and catches rain; where the saving goes depends on how fast the soil drains. A mulch reduces evaporation, intercepts rain and warms the soil; where the saving goes depends on the soil's drainage.
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+
+\subsection{Reading Figure 19 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-layer-v6_0.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 1 of 2: Mulch control: soil evaporation by mulch factor and interception capacity, and drainage by tillage and consolidation rate.).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Irrigation design'': the irrigation-design group of the Layers tree and its layers.
+\item ``coarse Loam'': the soil of the project, which every layer uses.
+\item ``Next 14 days'': the decision for the next 14 days, from the soil water of the day.
+\item ``20-year averages at these settings'': a heading or control of this screen; the caption above says which layer it belongs to.
+\end{enumerate}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-layer-v6_1.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 2 of 2: Fate of saved water: evaporation saved, irrigation saved, extra drainage and extra transpiration against the rainfall scale (Eq.~(23) of the article).).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Irrigation design'': the irrigation-design group of the Layers tree and its layers.
+\item ``17 mm storage and other 22'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Daisy'': the Daisy model and its workbench.
+\item ``wheat'': the crop of the project and its stage.
+\end{enumerate}
+
+\textbf{What it shows.} SWAFL Desktop: mulch control and the fate of saved water. Panels: (a) Mulch control: soil evaporation by mulch factor and interception capacity, and drainage by tillage and consolidation rate. (b) Fate of saved water: evaporation saved, irrigation saved, extra drainage and extra transpiration against the rainfall scale (Eq.~(23) of the article).
+
+\textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
+
+\textbf{What affects it, and why it happens.} The water a mulch saves goes to transpiration, less irrigation or drainage, in shares set by the soil. 
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+
+\subsection{Reading Figure 20 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-layer-n3_0.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 1 of 2: Regime map: mulch factor against rainfall scale coloured by the dominant loss (Eq.~(14) of the article).).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``SWAFL View Run Daisy Help'': the menu bar of the program (file, view, run, Daisy, help).
+\item ``No-till'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Where mulch and rainfall pat you'': rain, from the weather of the project.
+\item ``Next 14 days'': the decision for the next 14 days, from the soil water of the day.
+\end{enumerate}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-layer-n3_1.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 2 of 2: Feedback loops: the seven loops with arrow widths scaled by the effect of one control step (Table~4 of the article).).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Output'': the output bar of the layer: title and caption of the picture, save the picture, full screen, numbers as CSV.
+\item ``Feedback loops'': the feedback loops between climate, management, soil water, crop and nitrogen.
+\item ``sensor 20 cm'': the soil-water sensor: its depth and reading.
+\item ``No-till'': a heading or control of this screen; the caption above says which layer it belongs to.
+\end{enumerate}
+
+\textbf{What it shows.} SWAFL Desktop: regime map and feedback loops. Panels: (a) Regime map: mulch factor against rainfall scale coloured by the dominant loss (Eq.~(14) of the article). (b) Feedback loops: the seven loops with arrow widths scaled by the effect of one control step (Table~4 of the article).
+
+\textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
+
+\textbf{What affects it, and why it happens.} The regime map shows where the saved water drains (coarse soils, wet climate) and where it is used. 
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+
+\subsection{Derivation: Consolidation of the tilled layer}\label{der:s2:4}
+If the excess pore space decays at a rate proportional to itself, $\dd p/\dd t=-\tau_c(p-p_c)$, then $p(t)=p_c+(p_0-p_c)e^{-\tau_ct}$, with $p_0$ set by the tillage and $p_c$ the consolidated state.
+
+
+\subsection{Derivation: Two-stage evaporation}\label{der:s2:5}
+In stage 1 the surface is wet and evaporation runs at the demand $e_0$, so $Q=q_0+e_0t$ until the cumulative stage-1 limit $Q_1$ is reached at $t_1=(Q_1-q_0)/e_0$. In stage 2 evaporation is limited by diffusion through the dry layer; for a desorptivity-controlled flux $e=S/(2\sqrt{t})$ the cumulative loss grows as $\sqrt t$. The form of the paper, $Q=Q_1+2e_0\tau_E(\sqrt{1+(t-t_1)/\tau_E}-1)$, starts stage 2 at the stage-1 rate (its derivative at $t=t_1$ is $e_0$) and tends to the $\sqrt t$ law for $t-t_1\gg\tau_E$, which joins the two stages smoothly \citep{Ritchie1972,Philip1957}.
+
+
+\subsection{Derivation: Water potential of the air}\label{der:s2:6}
+For water vapour in equilibrium with liquid water, the chemical potential difference per unit volume is $\psi=(\mathcal R T_K/V_w)\ln\mathrm{RH}$ (Kelvin). At 20\,$^\circ$C, $\mathcal RT_K/V_w=8.314\times293.15/1.8\times10^{-5}=1.353\times10^{8}$\,Pa, that is $135.3$\,MPa, so $\psi_{\mathrm{air}}\simeq135.3\ln\mathrm{RH}$\,MPa.
+
+
+\subsection{Derivation: The soil--plant--atmosphere path}\label{der:s2:7}
+With steady flow $q$ through soil, root, xylem and leaf in series, each segment drops the potential by $qR_j$ (the van den Honert analogue of Ohm's law), so $\psi_{\mathrm{leaf}}=\psi_{\mathrm{RZ}}-q(R_{\mathrm{soil}}+R_{\mathrm{root}}+R_{\mathrm{xyl}}+R_{\mathrm{leaf}})$. The soil resistance grows as the conductivity falls; bounding $K_r$ from below (the floor of the paper) bounds $R_{\mathrm{soil}}$ and therefore the leaf potential, which is why that potential is set by the floor rather than by the soil when the soil is dry.
+
+
+\subsection{Why it happens}
+\paragraph{Why stage-1 evaporation lasts longer in fine soils.} Fine soils hold more water near the surface and conduct it upward over longer distances, so the surface stays wet longer.
+
+\paragraph{Why the leaf water potential is set by a conductivity floor.} The series resistance of the soil grows without bound as the soil dries; the software bounds the relative conductivity from below to keep the calculation finite, and in dry soil that bound, not the soil, then decides the leaf potential.
+
+\paragraph{Why the drainage share of a mulch saving is understated in coarse soils.} The engines split the saving with ratios that do not contain the soil's drainage competition; in coarse soils, where most saved water drains, that split gives too little to drainage.
+
+\section{The model, its equations and its views}
+The architecture, the ledger of equations and the result views.
+
+\subsection{Contribution 4: a ledger of every equation}\label{con:s2:4}
+\begin{keyresult}
+\centering\small
+\begin{tabular}{lrl}
+\toprule
+Origin & Equations & Meaning\\\midrule
+\circled{1}\ Literature & 38 & taken from a cited source\\
+\circled{2}\ Fitted to data & 18 & coefficients fitted to the ensemble\\
+\circled{3}\ Engineered & 78 & form chosen for the software\\\bottomrule
+\end{tabular}
+\end{keyresult}
+\begin{pins}
+\pin{1}{These carry the authority of their source and need only to be implemented correctly.}
+\pin{2}{These hold only within the data they were fitted to; their range is stated.}
+\pin{3}{These are the largest class and the ones that most need testing; labelling them tells the reader where the evidence is weakest.}
+\end{pins}
+
+
+\subsection{Reading Figure 1 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-arch_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``drainage'': rain, from the weather of the project.
+\item ``water'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``vapour deficit'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Design inputs'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``yield ET - drainage'': rain, from the weather of the project.
+\item ``Exchange of information between modules'': a heading or control of this screen; the caption above says which layer it belongs to.
+\end{enumerate}
+
+\textbf{What it shows.} Schematic overview of the main processes in SWAFL Desktop. Boxes indicate storages and solid lines flows; dashed black lines are flows out of the system, dotted lines are flows of information and dashed grey lines exchange of information between modules. Dashed purple boxes with a triangle are the drop-down controls and driving variables of the Properties panel, and the drivers of soil hydraulic properties (SHP). Dashed red lines and numbered circles mark the seven feedback loops. Pink indicates water, orange the crop, light brown nitrogen and rust soil structure and hydraulic state; purple hexagons are processes and information (Engines~1 and 2, trigger, design layers) and peach boxes are design layers and results. The brown line is the soil surface, with groundwater hatched at the base.
+
+\textbf{How to read the labels, symbols and colours.} Boxes are storages, solid lines flows, dotted lines information; dashed purple boxes the controls; red dashed lines with numbers the seven feedback loops; pink water, orange crop, brown nitrogen, rust structure.
+
+\textbf{What affects it, and why it happens.} The diagram shows how one control (for example the trigger) reaches every output through the coupled flows and feedbacks.
+
+\textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/make_a4.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+
+\subsection{Reading Figure 3 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-viewsA_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Precipitation'': rain, from the weather of the project.
+\item ``Interception'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Zoom (width of the picture)'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``drives change in soil properties'': the soil of the project, which every layer uses.
+\item ``Roots through the season: real model'': the roots: depth, density and uptake.
+\item ``stage 1: films feed the surface'': a heading or control of this screen; the caption above says which layer it belongs to.
+\end{enumerate}
+
+\textbf{What it shows.} Result views of the explorer for the soil and the field (coarse loam, conventional tillage, cereal rotation). (a) Field water balance of the root zone; (b) soil-water pressure-head profile; (c) pores and tillage; (d) soil hydraulic drivers by texture; (e) evaporation from the pore to the atmosphere; (f) root density and uptake. Governing relations are listed in Table~11 of the article.
+
+\textbf{How to read the labels, symbols and colours.} Six result views of the program (field balance, pressure-head profile, pores and tillage, hydraulic drivers, evaporation, roots).
+
+\textbf{What affects it, and why it happens.} Each view draws one relation of the engines for the soil chosen; a different soil changes every view at once. Each view draws one relation of the engines for the chosen soil; changing the soil or a control moves all of them together.
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+
+\subsection{Reading Figure 12 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-plotviews_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``overhead'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``plots: experiments/r003 overhead'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``over depth, month by month'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Precipitation every day of every year'': rain, from the weather of the project.
+\end{enumerate}
+
+\textbf{What it shows.} Eight of the twenty kinds of figure of the Log plots of release 1.1.0, drawn from the daily logs of one Daisy run: small multiples, monthly box plots, violin plots, histogram with density, scatter with the least-squares line, R$^2$ and RMSE, the mean profile of each month, a calendar heat map and the anomaly of each year (screen captures).
+
+\textbf{How to read the labels, symbols and colours.} Eight kinds of figure drawn from the daily logs of one run (small multiples, monthly boxes, violins, histogram, scatter with fit, monthly profile, calendar map, yearly anomaly).
+
+\textbf{What affects it, and why it happens.} Each kind of plot shows the same daily log differently: through time, spread within months, distribution, relation to another quantity, departure of each year. Each shows the same log in a different way: course in time, spread within months, distribution, relation to another quantity and departure of each year from the mean.
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+
+\subsection{Reading Figure 13 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-layer-field_0.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 1 of 2: Field balance, the home view: daily fluxes on the field clock, the soil profile with sensor, roots and wetting front, and the closed budget (Eq.~(1) of the article).).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Soil, and air'': the soil of the project, which every layer uses.
+\item ``Field balance'': the field water balance: inputs, outputs and storage of the root zone.
+\item ``Coarse Loam v'': the soil of the project, which every layer uses.
+\item ``Next 14 days'': the decision for the next 14 days, from the soil water of the day.
+\end{enumerate}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-layer-field_1.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 2 of 2: Soil, plant and air: layouts of the five irrigation methods and the water potential along the path from the deep soil to the air (Eq.~(21) and Eq.~(22) and Eq.~(15) of the article).).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Output'': the output bar of the layer: title and caption of the picture, save the picture, full screen, numbers as CSV.
+\item ``Coarse Loam v'': the soil of the project, which every layer uses.
+\item ``Weather and climate'': the weather of the project: built-in record, a file of the user or online weather of any place.
+\item ``Irrigation efficiency'': a heading or control of this screen; the caption above says which layer it belongs to.
+\end{enumerate}
+
+\textbf{What it shows.} SWAFL Desktop: field and the soil--plant--air path. Panels: (a) Field balance, the home view: daily fluxes on the field clock, the soil profile with sensor, roots and wetting front, and the closed budget (Eq.~(1) of the article). (b) Soil, plant and air: layouts of the five irrigation methods and the water potential along the path from the deep soil to the air (Eq.~(21) and Eq.~(22) and Eq.~(15) of the article).
+
+\textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
+
+\textbf{What affects it, and why it happens.} The field balance adds the day's rain and irrigation and subtracts evaporation, transpiration and drainage; the path from soil to air shows the potential falling through each resistance, which is why the leaf is much drier than the soil. 
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+
+\subsection{Reading Figure 28 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-dash-results_0.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 1 of 2: Dashboard, results tab: annual and daily flux tiles of the field water balance.).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Soil, and air'': the soil of the project, which every layer uses.
+\item ``Field balance'': the field water balance: inputs, outputs and storage of the root zone.
+\item ``Coarse Loam v'': the soil of the project, which every layer uses.
+\item ``Next 14 days'': the decision for the next 14 days, from the soil water of the day.
+\end{enumerate}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-dash-results_1.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 2 of 2: Dashboard, charts tab: seasonal rainfall, irrigation, drainage, evaporation and transpiration.).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``SWAFL View Run Daisy Help'': the menu bar of the program (file, view, run, Daisy, help).
+\item ``No-till'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Irrigation design'': the irrigation-design group of the Layers tree and its layers.
+\item ``Weather and climate'': the weather of the project: built-in record, a file of the user or online weather of any place.
+\end{enumerate}
+
+\textbf{What it shows.} SWAFL Desktop: dashboard. Panels: (a) Dashboard, results tab: annual and daily flux tiles of the field water balance. (b) Dashboard, charts tab: seasonal rainfall, irrigation, drainage, evaporation and transpiration.
+
+\textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
+
+\textbf{What affects it, and why it happens.} The dashboard sums the fluxes of the season; each tile comes from one equation of the engines. 
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+
+\subsection{Reading Figure 29 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-dash-messages_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Untitled project'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Profile evolution'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Precipitation'': rain, from the weather of the project.
+\item ``Soil evaporation'': evaporation from the soil (and, where stated, from mulch or canopy).
+\item ``Coarse Loam v'': the soil of the project, which every layer uses.
+\item ``Drainage below 1m'': rain, from the weather of the project.
+\end{enumerate}
+
+\textbf{What it shows.} SWAFL Desktop: dashboard messages. Panels: (a) Dashboard, messages tab: the decision messages and warnings of the current state.
+
+\textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
+
+\textbf{What affects it, and why it happens.} Messages fire when a number crosses a threshold (stress, drainage, efficiency), so the user sees what to change. 
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+
+\subsection{Derivation: Water balance of the column}\label{der:s2:1}
+Mass conservation of the column between the surface and 1\,m gives $P+I=T+E+E_{\mathrm{oth}}+D+\Delta S$ per unit area, with all terms in mm; every engine is constructed so that this balance closes, and its residual is the test of Engine~2.
+
+
+\subsection{Why it happens}
+\paragraph{Why the meta-model ranks well but has an offset.} It is built from ratios of simulated outcomes, which preserve the order of the scenarios, while its absolute level is anchored to one reference run, so an error in the anchor shifts all values.
+
+\section{Infiltration and surface irrigation}
+Green--Ampt infiltration and the advance of water in a furrow.
+
+\subsection{Contribution 5: a defect found and removed in surface irrigation}\label{con:s2:5}
+\begin{problem}
+The surface layer under-predicted slow advance (up to $-29\,\%$ in a published example). Why?
+\end{problem}
+\begin{keyresult}
+\[\underbrace{x(t)}_{\circled{1}}=\frac{Qt}{\sigma_yA_0+\underbrace{\sigma_z(r)}_{\circled{2}}kt^Aw},\qquad \sigma_z=\frac{A+\underbrace{r}_{\circled{3}}(1-A)+1}{(1+A)(1+r)}\]
+\end{keyresult}
+\begin{pins}
+\pin{1}{The advance distance at time $t$.}
+\pin{2}{The subsurface shape factor depends on the advance exponent $r$.}
+\pin{3}{The first release fixed $r$; for slow advance the true $r$ is smaller, $\sigma_z$ too small and the advance too short. Iterating $r$ with the computed advance removed the error, now within $-0.2$ to $+0.5\,\%$ of the published advance times.}
+\end{pins}
+
+\subsection{Worked numbers, part 4: infiltration (Green--Ampt)}
+Water enters behind a sharp front. With $K_s$, front suction $\psi_f$ and water-content jump $\Delta\theta$, the infiltrated depth $F$ after time $t$ solves $F-\psi_f\Delta\theta\ln(1+F/(\psi_f\Delta\theta))=K_st$, found by trying values of $F$ until both sides agree.
+
+
+\subsection{Worked numbers, part 5: surface irrigation advance}
+The water admitted ($Q\,t$) is split between the surface and the soil; dividing by the volume per metre gives the advance $x(t)=Qt/(\sigma_yA_0+\sigma_zkt^Aw)$. The efficiencies follow from the stored, percolated and runoff volumes and add to one.
+
+
+\subsection{Reading Figure 7 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-ws_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): Advance time $t_L$. \emph{Why:} Points on the 1:1 line: the advance computed matches the published example.
+\item Panel (b): application efficiency $E_a$ (published versus SWAFL; grey line is 1:1). \emph{Why:} Efficiencies match because they follow from the same volumes.
+\item Panel (c): relative differences of the 16 quantities (blue: advance and required times; green: efficiencies). \emph{Why:} All 16 quantities lie within a few per cent, so the procedure is reproduced.
+\end{enumerate}
+
+\textbf{What it shows.} Verification against Example 6.1. (a) Advance time $t_L$, (b) application efficiency $E_a$ (published versus SWAFL; grey line is 1:1), (c) relative differences of the 16 quantities (blue: advance and required times; green: efficiencies).
+
+\textbf{How to read the labels, symbols and colours.} (a) Advance time and (b) efficiency, published against SWAFL with the 1:1 line; (c) relative differences of 16 quantities.
+
+\textbf{What affects it, and why it happens.} Points on the 1:1 line show the implementation reproduces the published worked example.
+
+\textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p3_figs.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+
+\subsection{Reading Figure 11 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-lit_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): Thirteen advance times of the FAO Irrigation Paper~45 border examples (published against SWAFL; grey line 1:1). \emph{Why:} Points on the 1:1 line: the shipped layer reproduces published advance times.
+\item Panel (b): Christiansen coefficient of uniformity of the impact-sprinkler layer against spacing as a share of the wetted diameter, without wind and at 3\,m\,s$^{-1}$; dashed: 65\,\% spacing rule, dotted: CU of 85\,\%. \emph{Why:} Uniformity falls when sprinklers are spaced beyond about 65\,\% of the wetted diameter because the patterns overlap too little; wind makes it worse.
+\end{enumerate}
+
+\textbf{What it shows.} Checks against published sources. (a) Thirteen advance times of the FAO Irrigation Paper~45 border examples (published against SWAFL; grey line 1:1). (b) Christiansen coefficient of uniformity of the impact-sprinkler layer against spacing as a share of the wetted diameter, without wind and at 3\,m\,s$^{-1}$; dashed: 65\,\% spacing rule, dotted: CU of 85\,\%.
+
+\textbf{How to read the labels, symbols and colours.} (a) Thirteen published advance times against SWAFL, 1:1 line; (b) uniformity against spacing, without and with wind.
+
+\textbf{What affects it, and why it happens.} Uniformity falls as spacing exceeds about 65\,\% of the wetted diameter because the overlap of patterns becomes too small.
+
+\textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p3_lit_figs.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+
+\subsection{Reading Figure 21 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-layer-sid_0.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 1 of 2: Surface-irrigation layer: start from your soil or a textbook design (A7, A9, A11, D1), border strip, furrow or basin, intake from the soil or by $k$ and $A$, the cutoff rule, and the inputs carried from the soil, root zone and trigger of the DSS (Section~Section~4.4 of the article)).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``border'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Required depth Zn from the DSS'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``per metre'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Organic matter (\%)'': a heading or control of this screen; the caption above says which layer it belongs to.
+\end{enumerate}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-layer-sid_1.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 2 of 2: Surface irrigation: layout in plan with the advance front shaded by the depth already infiltrated, and the longitudinal section with the wetting front, the required depth $Z_n$, deep percolation and runoff (Eq.~(46) and Eq.~(47) of the article)).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Save picture'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``after the front arrives'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Organic matter'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Runoff'': a heading or control of this screen; the caption above says which layer it belongs to.
+\end{enumerate}
+
+\textbf{What it shows.} SWAFL Desktop: surface irrigation. Panels: (a) Surface-irrigation layer: start from your soil or a textbook design (A7, A9, A11, D1), border strip, furrow or basin, intake from the soil or by $k$ and $A$, the cutoff rule, and the inputs carried from the soil, root zone and trigger of the DSS (Section~Section~4.4 of the article). (b) Surface irrigation: layout in plan with the advance front shaded by the depth already infiltrated, and the longitudinal section with the wetting front, the required depth $Z_n$, deep percolation and runoff (Eq.~(46) and Eq.~(47) of the article).
+
+\textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
+
+\textbf{What affects it, and why it happens.} Water advances down the field while it infiltrates; the far end receives less, so the cutoff time sets the balance between shortfall and deep percolation. 
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+
+\subsection{Reading Figure 22 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-sid-sec-sched_0.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 1 of 2: Surface irrigation: hydrograph of inflow, infiltration and runoff through time.).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``SWAFL View Run Daisy Help'': the menu bar of the program (file, view, run, Daisy, help).
+\item ``design'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Zn depth 34m'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Next 14 days'': the decision for the next 14 days, from the soil water of the day.
+\end{enumerate}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-sid-sec-sched_1.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 2 of 2: Surface irrigation: design table of options with application and storage efficiency, deep percolation and runoff (Eq.~(48) of the article).).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``SWAFL View Run Daisy Help'': the menu bar of the program (file, view, run, Daisy, help).
+\item ``Coarse Loam'': the soil of the project, which every layer uses.
+\item ``Next 14 days'': the decision for the next 14 days, from the soil water of the day.
+\item ``Weather and climate'': the weather of the project: built-in record, a file of the user or online weather of any place.
+\end{enumerate}
+
+\textbf{What it shows.} SWAFL Desktop: surface irrigation, schedule and design table. Panels: (a) Surface irrigation: hydrograph of inflow, infiltration and runoff through time. (b) Surface irrigation: design table of options with application and storage efficiency, deep percolation and runoff (Eq.~(48) of the article).
+
+\textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
+
+\textbf{What affects it, and why it happens.} The schedule repeats irrigation when the root zone is depleted to the trigger; the design table shows the volumes and efficiencies of each event. 
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+
+\subsection{Derivation: Green--Ampt infiltration}\label{der:s2:9}
+Behind a sharp wetting front at depth $L_f$ with uniform water-content jump $\Delta\theta$ and front suction $\psi_f$, Darcy's law gives the infiltration rate $f=K_s(L_f+\psi_f)/L_f$ (ponding head neglected). With $F=L_f\Delta\theta$, $f=\dd F/\dd t=K_s(1+\psi_f\Delta\theta/F)$. Separating variables and integrating from $F=0$ at $t=0$:
+\begin{equation}F-\psi_f\Delta\theta\ln\Bigl(1+\frac{F}{\psi_f\Delta\theta}\Bigr)=K_st.\end{equation}
+
+
+\subsection{Derivation: Surface irrigation: volume balance and advance}\label{der:s2:10}
+At time $t$ after the start, the volume admitted, $Qt$, is stored on the surface (mean flow area $\sigma_yA_0$ over the advance length $x$) and in the soil (mean infiltrated depth $\sigma_zZ(t)$ over the wetted width $w$): $Qt=\sigma_yA_0x+\sigma_zkt^{A}wx$, so $x(t)=Qt/(\sigma_yA_0+\sigma_zkt^{A}w)$. If the advance follows a power law $x\propto t^{r}$ and the intake opportunity time at distance $s$ is $t-t_x(s)$, the mean of $Z$ along the advance is $Z(t)$ times
+\begin{equation}\sigma_z=\int_0^1(1-\xi^{1/r})^{A}\dd\xi\;\simeq\;\frac{A+r(1-A)+1}{(1+A)(1+r)},\end{equation}where the right-hand side is the closed approximation used in surface-irrigation practice \citep{Walker1987}; it is exact for $A=0$ and $A=1$.
+The volumes applied, required, infiltrated, stored, percolated and run off satisfy $V_{\mathrm{app}}=V_{\mathrm{inf}}+V_{\mathrm{ro}}$ and $V_{\mathrm{inf}}=V_{\mathrm{st}}+V_{\mathrm{dp}}$, so the application efficiency, deep percolation and runoff fractions add to one.
+
+
+\section{Drip and sprinkler irrigation}
+Friction in a lateral, uniformity and nozzle discharge.
+
+\subsection{Worked numbers, part 6: friction in a drip lateral}
+The Hazen--Williams loss of the full flow is reduced by the Christiansen factor because the flow falls along the lateral. \emph{Example:} 50 outlets give $F_c=1/2.852+1/100+\sqrt{0.852}/15\,000=0.361$; a 100\,m lateral of 16\,mm with 0.5\,L\,s$^{-1}$ at the inlet loses about 17.6\,m.
+
+
+\subsection{Worked numbers, part 7: a sprinkler nozzle}
+$q=0.95A_n\sqrt{2gh_n}$. \emph{Example:} a 4\,mm nozzle at 30\,m head: $A_n=1.26\times10^{-5}$\,m$^2$, $\sqrt{2\times9.81\times30}=24.3$\,m\,s$^{-1}$, $q=2.9\times10^{-4}$\,m$^3$\,s$^{-1}=17.4$\,L\,min$^{-1}$.
+
+
+\subsection{Reading Figure 10 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-drip_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): Relative difference in total head loss for the four-pass solver of version~1 and the converged solver, against the loss ratio $h_f/H_0$ (dashed: design limit 0.2; dotted: 0.6). \emph{Why:} When friction is a large share of the head, emitter flows and heads are strongly coupled, so a few passes are not enough; the converged solver removes the error.
+\item Panel (b): number of iterations of the converged solver; crosses mark configurations that did not converge. \emph{Why:} More iterations are needed as the coupling grows.
+\end{enumerate}
+
+\textbf{What it shows.} Drip-lateral solver versus an independent converged solver (400 random configurations). (a) Relative difference in total head loss for the four-pass solver of version~1 and the converged solver, against the loss ratio $h_f/H_0$ (dashed: design limit 0.2; dotted: 0.6); (b) number of iterations of the converged solver; crosses mark configurations that did not converge.
+
+\textbf{How to read the labels, symbols and colours.} (a) Relative error of the lateral loss against the loss ratio, old and converged solver; dashed design limit 0.2; (b) iterations, crosses non-converged.
+
+\textbf{What affects it, and why it happens.} Errors grow with the loss ratio because emitter flows and heads become strongly coupled; iterating to convergence removes them up to a large loss.
+
+\textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p3_figs.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+
+\subsection{Reading Figure 23 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-layer-drip_0.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 1 of 2: Drip-irrigation layer: crop, mulch, emitter type and placement, the design inputs, and the soil moisture around the driest, the average and the wettest emitter (Section~Section~4.4 of the article)).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Coarse Loam - Cereal'': the soil of the project, which every layer uses.
+\item ``Chips'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Length and width'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Farm supply Qs'': a heading or control of this screen; the caption above says which layer it belongs to.
+\end{enumerate}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-layer-drip_1.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 2 of 2: Drip irrigation: field layout and infrastructure.).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``SWAFL View Run Daisy Help'': the menu bar of the program (file, view, run, Daisy, help).
+\item ``Import weather... Online weather'': the weather of the project: built-in record, a file of the user or online weather of any place.
+\item ``Next 14 days'': the decision for the next 14 days, from the soil water of the day.
+\item ``Weather and climate'': the weather of the project: built-in record, a file of the user or online weather of any place.
+\end{enumerate}
+
+\textbf{What it shows.} SWAFL Desktop: drip irrigation. Panels: (a) Drip-irrigation layer: crop, mulch, emitter type and placement, the design inputs, and the soil moisture around the driest, the average and the wettest emitter (Section~Section~4.4 of the article). (b) Drip irrigation: field layout and infrastructure.
+
+\textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
+
+\textbf{What affects it, and why it happens.} Water spreads from each emitter as a bulb whose size depends on the soil; friction along the lateral lowers the flow of distant emitters. 
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+
+\subsection{Reading Figure 24 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-drip-sec-lateral_0.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 1 of 2: Drip irrigation: head and emitter flow along the lateral (Eq.~(49) of the article) with the 20\,\% loss warning.).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``SWAFL View Run Daisy Help'': the menu bar of the program (file, view, run, Daisy, help).
+\item ``Import weather... Online weather'': the weather of the project: built-in record, a file of the user or online weather of any place.
+\item ``design'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Next 14 days'': the decision for the next 14 days, from the soil water of the day.
+\end{enumerate}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-drip-sec-lateral_1.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 2 of 2: Drip irrigation: result summary with emission uniformity (Eq.~(50) of the article) and efficiencies.).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``SWAFL View Run Daisy Help'': the menu bar of the program (file, view, run, Daisy, help).
+\item ``Import weather... Online weather'': the weather of the project: built-in record, a file of the user or online weather of any place.
+\item ``Next 14 days'': the decision for the next 14 days, from the soil water of the day.
+\item ``Weather and climate'': the weather of the project: built-in record, a file of the user or online weather of any place.
+\end{enumerate}
+
+\textbf{What it shows.} SWAFL Desktop: drip irrigation, lateral and results. Panels: (a) Drip irrigation: head and emitter flow along the lateral (Eq.~(49) of the article) with the 20\,\% loss warning. (b) Drip irrigation: result summary with emission uniformity (Eq.~(50) of the article) and efficiencies.
+
+\textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
+
+\textbf{What affects it, and why it happens.} Head falls along the lateral by friction, so emitter flow falls; the design keeps the loss within the limit. 
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+
+\subsection{Reading Figure 25 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-drip-sec-table_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Irrigation design'': the irrigation-design group of the Layers tree and its layers.
+\item ``Choose a case'': the ready-made cases of the Properties panel.
+\item ``Your current design'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Peak crop need / interval'': the crop of the project and its stage.
+\item ``Next 14 days'': the decision for the next 14 days, from the soil water of the day.
+\item ``Weather and climate'': the weather of the project: built-in record, a file of the user or online weather of any place.
+\end{enumerate}
+
+\textbf{What it shows.} SWAFL Desktop: drip irrigation, design table. Panels: (a) Drip irrigation: design table, iterations toward an application efficiency of 85\,\% or more.
+
+\textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
+
+\textbf{What affects it, and why it happens.} The design iterates spacing and run time until the application efficiency and uniformity meet their targets. 
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+
+\subsection{Reading Figure 26 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-layer-spr_0.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 1 of 2: Sprinkler layer: nozzle, wetted radius, pattern, overlap and uniformity (Eq.~(51) of the article; Section~Section~4.4 of the article).).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Surface © Sprinklers'': the irrigation-design group of the Layers tree and its layers.
+\item ``Coarse Lo'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Reduced No-till'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Surface storage (mm) - from tillage'': a heading or control of this screen; the caption above says which layer it belongs to.
+\end{enumerate}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-layer-spr_1.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 2 of 2: Sprinkler design: textbook decision checklist (sprinkler class, spacing, application rate, sets per day).).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Output'': the output bar of the layer: title and caption of the picture, save the picture, full screen, numbers as CSV.
+\item ``Coarse Loam v'': the soil of the project, which every layer uses.
+\item ``How a sprinkler works'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Weather and climate'': the weather of the project: built-in record, a file of the user or online weather of any place.
+\end{enumerate}
+
+\textbf{What it shows.} SWAFL Desktop: sprinkler irrigation. Panels: (a) Sprinkler layer: nozzle, wetted radius, pattern, overlap and uniformity (Eq.~(51) of the article; Section~Section~4.4 of the article). (b) Sprinkler design: textbook decision checklist (sprinkler class, spacing, application rate, sets per day).
+
+\textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
+
+\textbf{What affects it, and why it happens.} Each sprinkler wets a circle that is wettest near the nozzle; overlap of neighbouring circles evens out the depth. 
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+
+\subsection{Reading Figure 27 of the article}
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-spr-sec-intake_0.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 1 of 2: Sprinkler: layout in plan, with the depth infiltrated from the overlapping spray patterns.).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Irrigation design'': the irrigation-design group of the Layers tree and its layers.
+\item ``Coarse Loam v'': the soil of the project, which every layer uses.
+\item ``Drip irrigation design'': the irrigation-design group of the Layers tree and its layers.
+\item ``Weather and climate'': the weather of the project: built-in record, a file of the user or online weather of any place.
+\end{enumerate}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p2_fig-shot-spr-sec-intake_1.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 2 of 2: Dashboard with the design tab open beside the field-balance layer.).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Figure'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Profile evolution'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Precipitation'': rain, from the weather of the project.
+\item ``Coarse Loam v'': the soil of the project, which every layer uses.
+\end{enumerate}
+
+\textbf{What it shows.} SWAFL Desktop: sprinkler intake and the dashboard. Panels: (a) Sprinkler: layout in plan, with the depth infiltrated from the overlapping spray patterns. (b) Dashboard with the design tab open beside the field-balance layer.
+
+\textbf{How to read the labels, symbols and colours.} A screen of the software as it appears to the user; the labelled areas are the inputs, the figure and the numbers of the layer named in the caption.
+
+\textbf{What affects it, and why it happens.} Where the application rate exceeds the intake rate of the soil, water ponds and runs off. 
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+
+\subsection{Derivation: Drip laterals}\label{der:s2:11}
+The Hazen--Williams friction loss over a pipe segment of length $\Delta x$ carrying $Q_j$ is $h_{f,j}=10.67\Delta x\,Q_j^{1.852}/(C^{1.852}D^{4.871})$. Along a lateral with $N$ equal outlets the flow falls linearly towards the end; summing the losses of the segments, $h_f=\frac{10.67LQ_0^{1.852}}{C^{1.852}D^{4.871}}\frac1{N^{2.852}}\sum_{j=1}^{N}j^{1.852}$. The Euler--Maclaurin formula gives $\sum_{j=1}^Nj^{m}\simeq\frac{N^{m+1}}{m+1}+\frac{N^m}{2}+\dots$ with $m=1.852$, so the loss is the full-flow loss times $F_c=\frac1{m+1}+\frac1{2N}+\dots$; \citet{Christiansen1942} approximated the remaining terms by $\sqrt{m-1}/(6N^2)$, which gives the factor of the paper, $F_c=\frac1{2.852}+\frac1{2N}+\frac{\sqrt{0.852}}{6N^2}$. Each emitter discharges $q_j=q(h_j/H_0)^{x_e}$, which couples the flows to the heads and is solved by iteration.
+
+
+\subsection{Derivation: Emission uniformity}\label{der:s2:12}
+For emitters with manufacturing variation $c_v$ and $n_e$ emitters per plant, the lower quarter of plant flows lies about $1.27c_v/\sqrt{n_e}$ below the mean (normal distribution), and the hydraulic variation adds the ratio $q_{\min}/\bar q$; their product is the design emission uniformity of \citet{KellerKarmeli1974}.
+
+
+\subsection{Derivation: Sprinkler discharge}\label{der:s2:13}
+Bernoulli's equation across a nozzle gives the jet speed $v=\sqrt{2gh_n}$, and the discharge is $q=C_dA_n\sqrt{2gh_n}$ with $C_d\approx0.95$; the factor $6\times10^4$ converts m$^3$\,s$^{-1}$ to L\,min$^{-1}$. The Christiansen coefficient of uniformity is $CU=1-\sum|z_i-\bar z|/(n\bar z)$.
+
+
