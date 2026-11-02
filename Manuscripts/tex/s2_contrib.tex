@@ -1,0 +1,84 @@
+\subsection{Contribution 1: one depletion, ten soil-specific triggers}
+\begin{problem}
+Agronomic guidance gives a depletion fraction at which to irrigate (FAO-56), while sensors read suction. A single suction trigger is therefore used on every soil. What share of the plant-available water does that trigger really represent, and which suction corresponds to the same depletion on each soil?
+\end{problem}
+\begin{derivation}
+\textbf{(a)} The plant-available water lies between field capacity (100\,cm) and the wilting point (15\,849\,cm). \textbf{(b)} Because $\theta-\theta_r\propto S_e$, the depletion at suction $h$ needs only $S_e$: $f(h)=[S_e(100)-S_e(h)]/[S_e(100)-S_e(15\,849)]$. \textbf{(c)} Set $f=f^\ast$ and solve for $S_e^\ast$. \textbf{(d)} Invert the van~Genuchten curve.
+\end{derivation}
+\begin{keyresult}
+\[
+\underbrace{h^\ast}_{\circled{1}}=\frac1\alpha\Bigl(\underbrace{\bigl[S_e(100)-f^\ast\{S_e(100)-S_e(15\,849)\}\bigr]}_{\circled{2}}{}^{-1/m}-1\Bigr)^{1/n}\]
+\[\underbrace{f(300)=0.24\ \text{to}\ 0.84}_{\circled{3}}
+\]
+\centering\small
+\begin{tabular}{lrr}
+\toprule
+Soil & $h^\ast$ at $f^\ast=0.45$ (cm) & water used at a 300\,cm trigger\\\midrule
+Sand & \circled{4}\ 143 & 84\,\%\\
+Loam & 284 & 47\,\%\\
+Silty clay loam & \circled{5}\ 729 & 24\,\%\\\bottomrule
+\end{tabular}
+\end{keyresult}
+\begin{pins}
+\pin{1}{The soil's own trigger: the suction at which this soil has used the chosen share of its available water.}
+\pin{2}{The effective saturation at the chosen depletion; the factor $\theta_s-\theta_r$ cancels, so only $\alpha$ and $n$ are needed.}
+\pin{3}{The same 300\,cm trigger means 24\,\% of the water used in silty clay loam but 84\,\% in sand: one trigger is not one decision.}
+\pin{4}{Sand must be irrigated at a much wetter suction because it releases most of its water at low suction.}
+\pin{5}{Fine soils release water over a wide range, so the same depletion is reached at a much drier suction.}
+\end{pins}
+
+\subsection{Contribution 2: an interception store that matches the annual model}
+\begin{problem}
+The daily model must lose to canopy interception the same water per year as the annual model, although its rain falls in random daily amounts. How large must the daily interception store be?
+\end{problem}
+\begin{keyresult}
+\[\underbrace{\mathrm E[(R-I_c)^+]}_{\circled{1}}=\mu_0e^{-I_c/\mu_0}\;\Rightarrow\;\underbrace{r=e^{-I_c/\mu_0}}_{\circled{2}}\;\Rightarrow\;\underbrace{I_c=\mu_0\ln\frac1r}_{\circled{3}}\]
+\end{keyresult}
+\begin{pins}
+\pin{1}{Expected throughfall of an exponential daily rain of mean $\mu_0$ above a store $I_c$, obtained by integrating the exponential density.}
+\pin{2}{The throughfall fraction; it is set equal to the throughfall of the annual model.}
+\pin{3}{The store follows in closed form: with $\mu_0=4.5$\,mm and $r=0.9$, $I_c=0.47$\,mm. The two engines therefore agree on interception by construction.}
+\end{pins}
+
+\subsection{Contribution 3: two evaporation stages joined without a jump}
+\begin{keyresult}
+\[Q(t)=Q_1+\underbrace{2e_0\tau_E}_{\circled{1}}\Bigl(\sqrt{1+\underbrace{(t-t_1)/\tau_E}_{\circled{2}}}-1\Bigr)\]
+\[\underbrace{\frac{\dd Q}{\dd t}\Big|_{t_1}=e_0}_{\circled{3}}\]
+\[\underbrace{Q\propto\sqrt{t}\ \ (t-t_1\gg\tau_E)}_{\circled{4}}\]
+\end{keyresult}
+\begin{pins}
+\pin{1}{The amplitude of stage 2, chosen so that the rate is continuous.}
+\pin{2}{Time since the end of stage 1, in units of the transition time $\tau_E$.}
+\pin{3}{At the start of stage 2 the rate equals the stage-1 rate: no artificial jump in evaporation.}
+\pin{4}{Long after, cumulative evaporation grows as the square root of time, the diffusion-limited law of stage 2.}
+\end{pins}
+
+\subsection{Contribution 4: a ledger of every equation}
+\begin{keyresult}
+\centering\small
+\begin{tabular}{lrl}
+\toprule
+Origin & Equations & Meaning\\\midrule
+\circled{1}\ Literature & 38 & taken from a cited source\\
+\circled{2}\ Fitted to data & 18 & coefficients fitted to the ensemble\\
+\circled{3}\ Engineered & 78 & form chosen for the software\\\bottomrule
+\end{tabular}
+\end{keyresult}
+\begin{pins}
+\pin{1}{These carry the authority of their source and need only to be implemented correctly.}
+\pin{2}{These hold only within the data they were fitted to; their range is stated.}
+\pin{3}{These are the largest class and the ones that most need testing; labelling them tells the reader where the evidence is weakest.}
+\end{pins}
+
+\subsection{Contribution 5: a defect found and removed in surface irrigation}
+\begin{problem}
+The surface layer under-predicted slow advance (up to $-29\,\%$ in a published example). Why?
+\end{problem}
+\begin{keyresult}
+\[\underbrace{x(t)}_{\circled{1}}=\frac{Qt}{\sigma_yA_0+\underbrace{\sigma_z(r)}_{\circled{2}}kt^Aw},\qquad \sigma_z=\frac{A+\underbrace{r}_{\circled{3}}(1-A)+1}{(1+A)(1+r)}\]
+\end{keyresult}
+\begin{pins}
+\pin{1}{The advance distance at time $t$.}
+\pin{2}{The subsurface shape factor depends on the advance exponent $r$.}
+\pin{3}{The first release fixed $r$; for slow advance the true $r$ is smaller, $\sigma_z$ too small and the advance too short. Iterating $r$ with the computed advance removed the error, now within $-0.2$ to $+0.5\,\%$ of the published advance times.}
+\end{pins}

@@ -1,0 +1,134 @@
+\subsection{Contribution 1: the reach of a suction trigger}
+\begin{problem}
+A farmer on a sandy field installs a matric-potential sensor at 20\,cm and sets the common trigger of 300\,cm. All season the controller never opens the valve, the crop wilts, and the yield equals that of a field that was never irrigated. The sensor works. Why is the trigger never reached, and how dry a trigger can be used on any soil, from its van~Genuchten parameters alone?
+\end{problem}
+\begin{derivation}
+\textbf{(a)} Roots dry a layer only as fast as the soil delivers water to them; the delivery is proportional to the conductivity $K=K_sK_r$ \citep{Gardner1960}. \textbf{(b)} Postulate: the sensor's soil stops drying when the relative conductivity has fallen to one value $\kappa$, the same for all soils, $K_r(\hc)=\kappa$. \textbf{(c)} At the dry end, $K_r\simeq m^2(\alpha h)^{-[2n+\ell(n-1)]}$ (Section~S3.2). \textbf{(d)} Insert (c) into (b): $m^2(\alpha\hc)^{-E}=\kappa$ with $E=2n+\ell(n-1)$. \textbf{(e)} Divide by $m^2$, raise to $-1/E$, divide by $\alpha$.
+\end{derivation}
+\begin{keyresult}
+\[
+\hc\;=\;\underbrace{\frac{1}{\alpha}}_{\circled{1}}\;\Bigl(\underbrace{m^{2}}_{\circled{2}}\Big/\underbrace{\kappa}_{\circled{3}}\Bigr)^{\textstyle\overbrace{1/[\,2n+\ell(n-1)\,]}^{\circled{4}}}
+\]
+\[
+\underbrace{\kappa=3.47\times10^{-10}}_{\circled{5}}\]
+\[\underbrace{\text{error on soils left out}\le\text{a factor of }2.3}_{\circled{6}}
+\]
+\end{keyresult}
+\begin{pins}
+\pin{1}{$1/\alpha$ is the suction at which the soil starts to drain. It only \emph{rescales} the reach: two soils with the same $n$ have reaches in the ratio of their $1/\alpha$. This is why, at equal $n$, a soil that starts draining later (small $\alpha$) can be dried further.}
+\pin{2}{$m^2=(1-1/n)^2$ comes from the tail of the Mualem integral. It changes slowly with $n$ (0.035 to 0.39 over the ten soils) and enters under the root of order $E$, so its effect is small; it is kept because it makes the formula exact at the dry end.}
+\pin{3}{$\kappa$ is the single constant of the law: the relative conductivity at which the crop can no longer dry the soil at the sensor within a season. It is a property of the crop and its uptake, not of the soil, which is why one value serves ten soils. It was fitted once and tested by leaving soils out.}
+\pin{4}{The exponent $1/E$ with $E=2n+\ell(n-1)$ is the heart of the result. $E$ is the slope of $\log K_r$ against $\log h$ at the dry end. In sand ($n=2.68$) $E=6.2$: the conductivity collapses within a narrow band of suction, so the reach is short (199\,cm). In silty clay loam ($n=1.23$) $E=2.6$: the conductivity fades slowly, so the reach is long ($1.3\times10^5$\,cm). The pore-size distribution, through $n$, decides how far a crop can dry a soil.}
+\pin{5}{$\kappa=3.47\times10^{-10}$ means the soil at the reach conducts about three billion times less than when saturated; with saturated conductivities of 1 to 700\,cm\,d$^{-1}$ this is far below a millimetre per day, which is why uptake stops there.}
+\pin{6}{The law was tested on soils it had not seen: each soil was removed, $\kappa$ refitted on the other nine, and the removed soil predicted. Five predictions fell inside the observed interval and none was off by more than a factor of 2.3. A threshold on absolute conductivity, the obvious alternative, failed (it spans more than three decades).}
+\end{pins}
+
+\subsection{Contribution 2: a rule for blind triggers}
+\begin{problem}
+Which of the tabulated triggers can be used on which soil, before any season is lost?
+\end{problem}
+\begin{derivation}
+The irrigation of every soil fell to zero between $\htr/\hc=0.5$ and 1 (Fig.~3b of the article). A trigger therefore fires reliably only below half the reach. Compute $\hc$ (Contribution~1), halve it, and compare with the trigger.
+\end{derivation}
+\begin{keyresult}
+\[\underbrace{\htr}_{\circled{1}}\;<\;\underbrace{\tfrac12}_{\circled{2}}\,\underbrace{\hc(\alpha,n,\ell)}_{\circled{3}}\]
+\centering\small
+\begin{tabular}{lrrl}
+\toprule
+Soil & $\hc$ (cm) & $\hc/2$ (cm) & 300\,cm trigger\\\midrule
+Sand (S03) & 199 & 100 & \circled{4} blind: never fires\\
+Loamy sand (S04) & 426 & 213 & \circled{4} blind: never fires\\
+Sandy loam (S05) & 1\,618 & 809 & fires\\
+Loam (S06) & 9\,209 & 4\,605 & fires\\
+Silty clay loam (S10) & 128\,260 & 64\,130 & fires\\\bottomrule
+\end{tabular}
+\end{keyresult}
+\begin{pins}
+\pin{1}{The trigger chosen by the user, in cm of suction at the sensor.}
+\pin{2}{The factor one half is a safety margin read from the data, not a fitted constant: below it every soil still irrigates.}
+\pin{3}{The reach from the soil's own parameters; no season of trial and error is needed.}
+\pin{4}{The two blind soils are exactly those in which the simulated 300\,cm trigger never irrigated and the yield stayed at its rainfed value (1.13 and 1.38\,Mg\,ha$^{-1}$, against 3.04 and 4.54 at 50\,cm).}
+\end{pins}
+
+\subsection{Contribution 3: one axis for all soils}
+\begin{problem}
+Irrigation-against-trigger curves of ten soils lie far apart. Can one scale bring them together, so that one rule applies to all?
+\end{problem}
+\begin{keyresult}
+\[\underbrace{x}_{\circled{1}}=\frac{\htr}{\hc},\qquad \text{scatter between soils: }\underbrace{54\,\%}_{\circled{2}}\to\underbrace{32\,\%}_{\circled{3}}\]
+\end{keyresult}
+\begin{pins}
+\pin{1}{The trigger measured in units of the soil's reach: $x=1$ means ``at the reach'' in every soil.}
+\pin{2}{Share of the variance of the normalised irrigation that lies between soils when the raw trigger is used.}
+\pin{3}{The same share on the reach scale. The reach removes where irrigation \emph{ends}; what remains is how fast it fades before the end, which depends on retention, not on conductivity.}
+\end{pins}
+
+\subsection{Contribution 4: the fate of an irrigation millimetre}
+\begin{problem}
+Of every millimetre of water pumped onto a field, how much does the crop transpire, and where does the rest go? The answer must hold for many soils, doses, seasons and methods, not for one case.
+\end{problem}
+\begin{derivation}
+Write the 20-year balance of an irrigated run and of its rainfed twin (same soil and weather), subtract them, and divide by the irrigation $I$ (Section~S3.6).
+\end{derivation}
+\begin{keyresult}
+\[
+1=\underbrace{\eta_T}_{\circled{1}\ 0.38}+\underbrace{\eta_{E_s}}_{\circled{2}\ 0.25}+\underbrace{\eta_{E_o}}_{\circled{3}\ 0.19}+\underbrace{\eta_D}_{\circled{4}\ 0.16}+\underbrace{\eta_S}_{\circled{5}\ 0.03},\qquad \eta_X=\frac{\sum(X-X_0)}{\sum I}
+\]
+\centering\small
+\begin{tabular}{lrrrr}
+\toprule
+Soil & transpired & soil evap. & other evap. & drained\\\midrule
+Sandy loam & 0.64 & 0.11 & 0.14 & 0.07\\
+Loam & 0.41 & 0.22 & 0.17 & 0.15\\
+Coarse loam & 0.38 & 0.32 & 0.19 & 0.08\\
+Coarse sand & 0.23 & 0.19 & 0.26 & \circled{6} 0.32\\\bottomrule
+\end{tabular}
+\end{keyresult}
+\begin{pins}
+\pin{1}{Only 38\,\% of irrigation becomes transpiration, the only flux that makes yield. Transpiration is capped by the energy reaching the canopy and by its cover.}
+\pin{2}{A quarter evaporates from the wetted soil surface: water applied to bare or partly covered soil uses the same energy as transpiration.}
+\pin{3}{Another fifth evaporates from ponded water, litter and intercepted water, the term usually left out of irrigation accounts.}
+\pin{4}{Sixteen per cent drains below 1\,m and is lost to the crop (and carries nitrate).}
+\pin{5}{The small remainder changes storage or runs off; it closes the balance and is a check of the calculation.}
+\pin{6}{In coarse sand drainage is the largest single loss: the soil passes extra water on before the crop can use it.}
+\end{pins}
+
+\subsection{Contribution 5: the dose law}
+\begin{problem}
+Small and frequent doses are recommended to reduce deep percolation. How small is small, and does the answer depend on the soil?
+\end{problem}
+\begin{derivation}
+For each soil the drained share was computed at ten doses (1 to 30\,mm). A form was sought that is zero for a vanishing dose and levels off for a large one; the simplest is the saturating exponential, fitted per soil ($R^2$ 0.92 to 0.96 on seven soils).
+\end{derivation}
+\begin{keyresult}
+\[\eta_D(d)=\underbrace{\eta_\infty}_{\circled{1}}\Bigl(1-e^{-d/\underbrace{d_D}_{\circled{2}}}\Bigr)\]
+\[\underbrace{\eta_D\approx\eta_\infty\,d/d_D\ \ (d\ll d_D)}_{\circled{3}}\]
+\[\underbrace{d_D=4.1\pm0.6\text{ mm},\ \rho(d_D,n)=0.07}_{\circled{4}}\]
+\end{keyresult}
+\begin{pins}
+\pin{1}{The plateau: the share of a large dose that drains. It differs between soils (0.10 to 0.20, and 0.45 in coarse sand) because it is the outcome of a race between drainage and uptake, which the soil's conductivity decides.}
+\pin{2}{The dose scale: the dose at which 63\,\% of the plateau is reached. It is about 4\,mm in every soil.}
+\pin{3}{For small doses the drained share grows in proportion to the dose: a dose much smaller than $d_D$ hardly drains, but in exchange most of it evaporates (60 to 72\,\% at 1\,mm).}
+\pin{4}{$d_D$ is not related to $n$ or to any soil property: it is set by the atmosphere and the crop. Four millimetres is about one day of crop water use, so a dose below one day's use is consumed before it can move below the roots.}
+\end{pins}
+
+\subsection{Contribution 6: overhead irrigation adds no transpiration}
+\begin{keyresult}
+\[\underbrace{\eta_T^{\text{overhead}}}_{\circled{1}}=-0.08\ \text{(all soils)}\]
+\[\underbrace{\eta_{E_o}^{\text{overhead}}}_{\circled{2}}=0.79\]
+\end{keyresult}
+\begin{pins}
+\pin{1}{A negative marginal transpiration: the crop transpires slightly \emph{less} with overhead irrigation than without.}
+\pin{2}{Most of the water is intercepted by the canopy and evaporates with the energy that would have driven transpiration; interception replaces transpiration instead of adding to it. Subsurface application avoids this (0.51 transpired) but drains more (0.23).}
+\end{pins}
+
+\subsection{Contribution 7: when a sensor's lag matters}
+\begin{keyresult}
+\[\underbrace{\Pi_\tau}_{\circled{1}}=\frac{\underbrace{\tau}_{\circled{2}}}{\underbrace{t_i}_{\circled{3}}},\qquad \delta h\simeq\frac{r\tau}{\underbrace{C(h)}_{\circled{4}}}\]
+\end{keyresult}
+\begin{pins}
+\pin{1}{A dimensionless number: if it is much smaller than one, the equilibrium reach of Contribution~1 holds.}
+\pin{2}{The relaxation time of the water content towards the retention curve (minutes to hours).}
+\pin{3}{The interval between irrigations. Daily scheduling gives $\Pi_\tau\approx0.02$; pulses every half hour give $\Pi_\tau\approx2$.}
+\pin{4}{The water capacity $C=-\dd\theta/\dd h$. It is smallest on the steep dry limb of a sand, so the same lag gives the largest error exactly where the reach is shortest. This criterion is proposed, not tested: Daisy solves equilibrium flow.}
+\end{pins}

@@ -1,0 +1,89 @@
+\subsection{Contribution 1: hydraulic memory as a measurable share}
+\begin{problem}
+After a wet spring, a soil releases stored water over the season. Does that water feed the crop, or does it drain away? Soil physics says both happen, but gives no single number per soil that can be measured, compared and predicted.
+\end{problem}
+\begin{derivation}
+\textbf{(a)} Define the storage release of a run, $\bar R=\ET+D-P_r-I$ (water given away by the store). \textbf{(b)} In experiment E9 the starting wetness is varied at fixed rainfall, so $\bar R$ varies while the weather does not. \textbf{(c)} Within each rainfall level, regress each flux on $\bar R$; pool the levels (Section~S3.3). \textbf{(d)} Because the four fluxes add to $\bar R$ plus a constant, their slopes add to one.
+\end{derivation}
+\begin{keyresult}
+\[
+\underbrace{\phi_x}_{\circled{1}}=\frac{\sum_P\sum_{c\in P}\overbrace{(\bar R_c-\overline{\bar R}_P)}^{\circled{2}}(x_c-\bar x_P)}{\sum_P\sum_{c\in P}(\bar R_c-\overline{\bar R}_P)^2}\]
+\[\underbrace{\phi_{E_s}+\phi_T+\phi_D+\phi_{\mathrm{oth}}=1}_{\circled{3}}\]
+\[\underbrace{\phi_D=0.02\ \text{to}\ 0.85}_{\circled{4}}
+\]
+\end{keyresult}
+\begin{pins}
+\pin{1}{The memory fate of flux $x$: the share of one released millimetre that leaves by $x$. It is a number between 0 and 1 for each soil, so soils can be ranked and compared.}
+\pin{2}{Deviations are taken \emph{within} each rainfall level $P$, so the effect of the weather is removed and only the effect of the stored water is measured.}
+\pin{3}{The four shares add to one exactly, because a released millimetre must leave by one of them; this is a built-in check of the calculation.}
+\pin{4}{The drained share ranges from 0.02 (silty clay loam: almost all released water is used) to 0.85 (sand: almost all drains). This forty-fold range is the soil's hydraulic memory.}
+\end{pins}
+
+\subsection{Contribution 2: a one-parameter law for hydraulic memory}
+\begin{problem}
+Can the drained share of a soil that was never simulated be predicted from one measured property?
+\end{problem}
+\begin{derivation}
+Stored water leaves by two competing first-order routes, drainage at a rate proportional to $K_s$ and withdrawal by roots and surface at a rate proportional to $q^\ast$ (Section~S3.5); the share taken by drainage is the ratio of its rate to the sum.
+\end{derivation}
+\begin{keyresult}
+\[\underbrace{\phi_D}_{\circled{1}}=\frac{\overbrace{K_s}^{\circled{2}}}{K_s+\underbrace{q^\ast}_{\circled{3}}}\]
+\[\underbrace{q^\ast=71.5\ \mathrm{cm\,d^{-1}}}_{\circled{4}}\]
+\[\underbrace{\text{LOSO RMSE}=0.058}_{\circled{5}}\]
+\end{keyresult}
+\begin{pins}
+\pin{1}{The predicted memory fate.}
+\pin{2}{The saturated conductivity is the only soil input; it sets how fast released water can drain.}
+\pin{3}{$q^\ast$ is one constant for all soils: the effective rate of withdrawal by evaporation and roots, expressed as a conductivity.}
+\pin{4}{$q^\ast$ is two orders of magnitude above the mean evapotranspiration, which shows where the competition is decided: in the wet, fast-draining phase just after the store is filled, not over the season.}
+\pin{5}{Predicting each soil from the other seven, the error was 0.058, smaller than with $n$ (0.100) or any other structural predictor.}
+\end{pins}
+
+\subsection{Contribution 3: the recoverable share of an evaporation saving}
+\begin{problem}
+A mulch saves evaporation. Is the saved water gained for the crop or the irrigation account, or is it lost to drainage?
+\end{problem}
+\begin{keyresult}
+\[\underbrace{\rho_R}_{\circled{1}}=1-\underbrace{\psi_D}_{\circled{2}}\]
+\centering\small
+\begin{tabular}{lrr}
+\toprule
+Soil & $\rho_R$ (evaporation factor, E16) & $\rho_R$ (mulch, E7)\\\midrule
+Sand & \circled{3}\ $-0.21$ (none) & 0.29\\
+Loamy sand & 0.20 & 0.31\\
+Loam & 0.53 & 0.48\\
+Silty clay loam & 0.69 & 0.59\\\bottomrule
+\end{tabular}
+\end{keyresult}
+\begin{pins}
+\pin{1}{The share of a saved millimetre of evaporation that is recovered (as transpiration or as less irrigation).}
+\pin{2}{The loss fate: the share of the saving that drains instead. It follows the same order as the memory fate of Contribution~1, which links the two experiments.}
+\pin{3}{In sand nothing is recovered: the saving drains (the negative value shows that drainage even exceeds the saving within the uncertainty of the regression). A mulch on sand saves evaporation but not water for the crop.}
+\end{pins}
+
+\subsection{Contribution 4: discovering the model's water balance without being told}
+\begin{problem}
+Can an automatic method find the conservation law hidden in a process model's outputs, and use it to detect what the outputs leave out?
+\end{problem}
+\begin{keyresult}
+\[\underbrace{\mathbf c}_{\circled{1}}=(c_{P_r},c_I,c_{\ET},c_D)=(\underbrace{1.037}_{\circled{2}},\ 0.957,\ -1,\ \underbrace{-1.036}_{\circled{3}})\]
+\[\underbrace{R=\ET-T-E_s-E_c=164\ \mathrm{mm\,yr^{-1}}}_{\circled{4}}\]
+\end{keyresult}
+\begin{pins}
+\pin{1}{The right singular vector of the flux matrix with the smallest singular value: the linear combination of fluxes that is closest to zero for all 10\,041 runs.}
+\pin{2}{Rain and irrigation enter with $+1$ and evapotranspiration and drainage with $-1$, within 5\,\%: the method recovered $P_r+I-\ET-D\approx0$, the water balance, without being given it.}
+\pin{3}{The small departures from $\pm1$ measure what the four fluxes do not contain (storage change and runoff), which is how the closure residual was found.}
+\pin{4}{Evapotranspiration minus its reported parts is 164\,mm a year, 30\,\% of ET. The full outputs show this is evaporation of ponded water (21.6\,\% of ET), litter (7.6\,\%) and snow (2.7\,\%), which the run table did not report.}
+\end{pins}
+
+\subsection{Contribution 5: a compact law for evapotranspiration}
+\begin{keyresult}
+\[\ln\ET=2.503+\underbrace{0.646\ln W}_{\circled{1}}\underbrace{-0.299\,n}_{\circled{2}}+\underbrace{0.029\ln(1+I)}_{\circled{3}}\]
+\[\underbrace{R^2=0.898\ \text{and}\ 0.904}_{\circled{4}}\]
+\end{keyresult}
+\begin{pins}
+\pin{1}{The elasticity of ET to the water input $W=P_r+I$ is 0.65, less than one: a part of every extra millimetre drains instead of evaporating.}
+\pin{2}{A larger $n$ (coarser soil) lowers ET at the same input: coarse soils lose more to drainage, the same mechanism as Contribution~1.}
+\pin{3}{Irrigation has a small effect of its own beyond its part of $W$: it is applied when the root zone is dry, at the time the crop can use it; the coefficient is small, so most of the effect of irrigation is already carried by $W$.}
+\pin{4}{Out-of-sample skill on experiments and on soils left out, equal to gradient boosting: ET can be emulated by three terms, while drainage could not be emulated by any law tried.}
+\end{pins}

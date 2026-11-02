@@ -1,0 +1,8 @@
+\usepackage{tikz}
+\usepackage[most]{tcolorbox}
+\newcommand*\circled[1]{\tikz[baseline=(c.base)]\node[circle,draw=red!70!black,text=red!70!black,line width=0.6pt,inner sep=0.7pt,minimum size=1.15em,font=\scriptsize\bfseries\sffamily](c){#1};}
+\newtcolorbox{problem}[1][]{enhanced,breakable,colback=orange!6,colframe=orange!70!black,fonttitle=\bfseries\sffamily,title=The problem,#1}
+\newtcolorbox{derivation}[1][]{enhanced,breakable,colback=white,colframe=black!55,fonttitle=\bfseries\sffamily,title=The derivation,#1}
+\newtcolorbox{keyresult}[1][]{enhanced,breakable,colback=green!5,colframe=green!40!black,fonttitle=\bfseries\sffamily,title=The result,#1}
+\newtcolorbox{pins}[1][]{enhanced,breakable,colback=blue!3,colframe=blue!50!black,fonttitle=\bfseries\sffamily,title=Pinpoints: what each circled mark shows and why,#1}
+\newcommand{\pin}[2]{\par\noindent\circled{#1}\ #2\par\smallskip}

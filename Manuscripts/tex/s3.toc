@@ -1,30 +1,36 @@
 \contentsline {section}{\numberline {S1}What is new in this article}{3}{section.1}%
-\contentsline {section}{\numberline {S2}A step-by-step guide for students}{4}{section.2}%
-\contentsline {subsection}{\numberline {S2.1}Step 1: a vegetation index from a satellite pixel}{4}{subsection.2.1}%
-\contentsline {subsection}{\numberline {S2.2}Step 2: the crop coefficient of the day}{4}{subsection.2.2}%
-\contentsline {subsection}{\numberline {S2.3}Step 3: the daily water balance of a map cell}{4}{subsection.2.3}%
-\contentsline {subsection}{\numberline {S2.4}Step 4: soil loss}{4}{subsection.2.4}%
-\contentsline {subsection}{\numberline {S2.5}Step 5: where the soil stays wet}{4}{subsection.2.5}%
-\contentsline {subsection}{\numberline {S2.6}Step 6: keeping an experiment within its budget}{4}{subsection.2.6}%
-\contentsline {subsection}{\numberline {S2.7}Step 7: splitting denitrification}{5}{subsection.2.7}%
-\contentsline {subsection}{\numberline {S2.8}Step 8: the rule of origin}{5}{subsection.2.8}%
-\contentsline {section}{\numberline {S3}Derivations of the equations}{5}{section.3}%
-\contentsline {subsection}{\numberline {S3.1}Normalised spectral indices}{5}{subsection.3.1}%
-\contentsline {subsection}{\numberline {S3.2}Crop coefficient through the season}{5}{subsection.3.2}%
-\contentsline {subsection}{\numberline {S3.3}Daily root-zone balance of each map cell}{6}{subsection.3.3}%
-\contentsline {subsection}{\numberline {S3.4}The Richards equation of the soil column}{6}{subsection.3.4}%
-\contentsline {subsection}{\numberline {S3.5}Nitrogen and chemical budgets}{6}{subsection.3.5}%
-\contentsline {subsection}{\numberline {S3.6}Splitting denitrification into N$_2$O and N$_2$}{6}{subsection.3.6}%
-\contentsline {subsection}{\numberline {S3.7}Terrain, flow and wetness}{6}{subsection.3.7}%
-\contentsline {subsection}{\numberline {S3.8}Soil loss}{7}{subsection.3.8}%
-\contentsline {subsection}{\numberline {S3.9}Run budget of an experiment}{7}{subsection.3.9}%
-\contentsline {section}{\numberline {S4}Why the results happen}{7}{section.4}%
-\contentsline {paragraph}{Why every number can be traced.}{7}{paragraph*.1}%
-\contentsline {paragraph}{Why a Daisy layer draws nothing before a Daisy run.}{7}{paragraph*.2}%
-\contentsline {paragraph}{Why the compact designs lose some shape of a curve.}{7}{paragraph*.3}%
-\contentsline {paragraph}{Why the soil column is slow for a ponded fine soil.}{7}{paragraph*.4}%
-\contentsline {paragraph}{Why the denitrification defect was found.}{7}{paragraph*.5}%
-\contentsline {paragraph}{Why runs on a horizon of the Daisy samples failed.}{8}{paragraph*.6}%
-\contentsline {paragraph}{Why the routes from Daisy to a decision differ in time by orders of magnitude.}{8}{paragraph*.7}%
-\contentsline {section}{\numberline {S5}The data}{8}{section.5}%
-\contentsline {section}{\numberline {S6}Where every table and figure comes from}{41}{section.6}%
+\contentsline {section}{\numberline {S2}The author's contributions: problem, derivation and pinpoints}{4}{section.2}%
+\contentsline {subsection}{\numberline {S2.1}Contribution 1: the rule of origin}{4}{subsection.2.1}%
+\contentsline {subsection}{\numberline {S2.2}Contribution 2: an exact run budget that still tests every level}{5}{subsection.2.2}%
+\contentsline {subsection}{\numberline {S2.3}Contribution 3: the root cause of a failed run}{5}{subsection.2.3}%
+\contentsline {subsection}{\numberline {S2.4}Contribution 4: soil-hydraulic factors for every horizon}{6}{subsection.2.4}%
+\contentsline {subsection}{\numberline {S2.5}Contribution 5: a defect found in a shared function}{7}{subsection.2.5}%
+\contentsline {section}{\numberline {S3}A step-by-step guide for students}{7}{section.3}%
+\contentsline {subsection}{\numberline {S3.1}Step 1: a vegetation index from a satellite pixel}{7}{subsection.3.1}%
+\contentsline {subsection}{\numberline {S3.2}Step 2: the crop coefficient of the day}{7}{subsection.3.2}%
+\contentsline {subsection}{\numberline {S3.3}Step 3: the daily water balance of a map cell}{8}{subsection.3.3}%
+\contentsline {subsection}{\numberline {S3.4}Step 4: soil loss}{8}{subsection.3.4}%
+\contentsline {subsection}{\numberline {S3.5}Step 5: where the soil stays wet}{8}{subsection.3.5}%
+\contentsline {subsection}{\numberline {S3.6}Step 6: keeping an experiment within its budget}{8}{subsection.3.6}%
+\contentsline {subsection}{\numberline {S3.7}Step 7: splitting denitrification}{8}{subsection.3.7}%
+\contentsline {subsection}{\numberline {S3.8}Step 8: the rule of origin}{8}{subsection.3.8}%
+\contentsline {section}{\numberline {S4}Derivations of the equations}{8}{section.4}%
+\contentsline {subsection}{\numberline {S4.1}Normalised spectral indices}{9}{subsection.4.1}%
+\contentsline {subsection}{\numberline {S4.2}Crop coefficient through the season}{9}{subsection.4.2}%
+\contentsline {subsection}{\numberline {S4.3}Daily root-zone balance of each map cell}{9}{subsection.4.3}%
+\contentsline {subsection}{\numberline {S4.4}The Richards equation of the soil column}{9}{subsection.4.4}%
+\contentsline {subsection}{\numberline {S4.5}Nitrogen and chemical budgets}{10}{subsection.4.5}%
+\contentsline {subsection}{\numberline {S4.6}Splitting denitrification into N$_2$O and N$_2$}{10}{subsection.4.6}%
+\contentsline {subsection}{\numberline {S4.7}Terrain, flow and wetness}{10}{subsection.4.7}%
+\contentsline {subsection}{\numberline {S4.8}Soil loss}{10}{subsection.4.8}%
+\contentsline {subsection}{\numberline {S4.9}Run budget of an experiment}{10}{subsection.4.9}%
+\contentsline {section}{\numberline {S5}Why the results happen}{11}{section.5}%
+\contentsline {paragraph}{Why every number can be traced.}{11}{paragraph*.1}%
+\contentsline {paragraph}{Why a Daisy layer draws nothing before a Daisy run.}{11}{paragraph*.2}%
+\contentsline {paragraph}{Why the compact designs lose some shape of a curve.}{11}{paragraph*.3}%
+\contentsline {paragraph}{Why the soil column is slow for a ponded fine soil.}{11}{paragraph*.4}%
+\contentsline {paragraph}{Why the denitrification defect was found.}{11}{paragraph*.5}%
+\contentsline {paragraph}{Why runs on a horizon of the Daisy samples failed.}{11}{paragraph*.6}%
+\contentsline {paragraph}{Why the routes from Daisy to a decision differ in time by orders of magnitude.}{11}{paragraph*.7}%
+\contentsline {section}{\numberline {S6}The data}{11}{section.6}%
+\contentsline {section}{\numberline {S7}Where every table and figure comes from}{45}{section.7}%

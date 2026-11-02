@@ -1,0 +1,70 @@
+\subsection{Contribution 1: the rule of origin}
+\begin{problem}
+Decision tools that couple a process model with fast approximations can show a number that looks like a model result but was not produced by the model. How can a user be sure that a ``Daisy'' number came from Daisy?
+\end{problem}
+\begin{keyresult}
+\[\underbrace{\text{show}(v)}_{\circled{1}}\iff\underbrace{\text{source}(v)\in\{\text{Daisy runs of this project}\}}_{\circled{2}}\]
+\[\underbrace{\text{no run}\Rightarrow\text{empty layer with the reason}}_{\circled{3}}\]
+\end{keyresult}
+\begin{pins}
+\pin{1}{A value of a Daisy layer is drawn only if the condition on the right holds.}
+\pin{2}{The source of every value is the log file and line of a run; the bridge carries it to the layer.}
+\pin{3}{Before any run the layer says what it needs and shows no example numbers, which was checked for every layer. The rule makes the origin auditable instead of trusted.}
+\end{pins}
+
+\subsection{Contribution 2: an exact run budget that still tests every level}
+\begin{problem}
+A design of a few factors can need hundreds of Daisy runs of minutes each. How can the user set a budget and still test every level of every factor?
+\end{problem}
+\begin{keyresult}
+\[\underbrace{N}_{\circled{1}}=\min\Bigl(\underbrace{\textstyle\prod_i n_i}_{\circled{2}},\ \underbrace{B}_{\circled{3}}\Bigr)\]
+\[\underbrace{\text{each level of factor } i \text{ used } \lfloor N/n_i\rfloor \text{ or } \lceil N/n_i\rceil \text{ times}}_{\circled{4}}\]
+\end{keyresult}
+\begin{pins}
+\pin{1}{The number of runs actually made, never above the budget.}
+\pin{2}{The full factorial (for 4, 10 and 5 levels: 200 runs).}
+\pin{3}{The budget set by the user (for example 60).}
+\pin{4}{The Latin-hypercube choice spreads the runs so that every level appears almost equally often (each of the 10 levels 6 times), so main effects remain estimable.}
+\end{pins}
+
+\subsection{Contribution 3: the root cause of a failed run}
+\begin{keyresult}
+\centering\small
+\begin{tabular}{lll}
+\toprule
+Daisy message contains & Class & What to do\\\midrule
+\circled{1}\ Unknown '\dots' model & a name not defined & take only the needed definitions\\
+\circled{2}\ did not converge, NaN & numerical & bring extreme values closer to typical\\
+\circled{3}\ out of range, must be & range & change the level that writes the value\\
+\circled{4}\ cannot open, not found & missing file & rerun; check the weather and soil\\\bottomrule
+\end{tabular}
+\end{keyresult}
+\begin{pins}
+\pin{1}{This class found a real defect: a file of the Daisy samples referred to logs of its own run; taking only the definitions a run needs removed it.}
+\pin{2}{Numerical failures come from extreme hydraulic values; the message names the factor and the typical range.}
+\pin{3}{The line and column of the set-up file are shown, so the user sees which input wrote the value.}
+\pin{4}{Failed runs are grouped by cause, so one explanation covers all runs that failed for the same reason.}
+\end{pins}
+
+\subsection{Contribution 4: soil-hydraulic factors for every horizon}
+\begin{keyresult}
+\[\underbrace{K_s\to f_kK_s}_{\circled{1}},\quad \underbrace{\alpha\to f_a\alpha}_{\circled{2}},\quad \underbrace{n-1\to f_n(n-1)}_{\circled{3}},\quad \theta_s\to f_t\theta_s,\quad \ell\to\ell+\delta\ell;\qquad \underbrace{\text{percolation }177\to222\ \mathrm{mm}}_{\circled{4}}\]
+\end{keyresult}
+\begin{pins}
+\pin{1}{Scaling the saturated conductivity of every horizon at once keeps the layering of the soil.}
+\pin{2}{Scaling $\alpha$ moves the air-entry suction.}
+\pin{3}{Scaling $n-1$ (not $n$) keeps $n>1$, so the van~Genuchten curve stays valid for any factor.}
+\pin{4}{A faster-draining parameter set, run end to end with Daisy, raised one season's matrix percolation from 177 to 222\,mm and removed runoff, the direction expected from the conductivity.}
+\end{pins}
+
+\subsection{Contribution 5: a defect found in a shared function}
+\begin{problem}
+The denitrification function is shared with Daisy's Python tools. Is the copy used by the software right?
+\end{problem}
+\begin{keyresult}
+\[\underbrace{\max_{j=1..792}\bigl|D_j^{\text{SWAFL}}-D_j^{\text{Daisy}}\bigr|}_{\circled{1}}\quad\Rightarrow\quad\underbrace{\text{one branch wrong, corrected}}_{\circled{2}}\]
+\end{keyresult}
+\begin{pins}
+\pin{1}{The function was evaluated on the 792 cases for which Daisy's own results are stored, and compared case by case.}
+\pin{2}{One class of cases disagreed; the branch responsible was found and corrected, after which the cases agree. A shared function was tested rather than trusted.}
+\end{pins}
