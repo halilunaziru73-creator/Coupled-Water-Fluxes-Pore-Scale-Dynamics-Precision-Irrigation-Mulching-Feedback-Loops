@@ -1,0 +1,219 @@
+\subsection*{Figure 1 of the article}
+
+\textbf{What it shows.} Architecture of SWAFL Desktop 1.1.0 in the style of the process map of Daisy. Every arrow is a dependency found in the code: the field tools (green) call the engines and write to the project; the project (blue bar) carries the state of the Properties panel and the weather to the five computing parts (brown); these feed the layers (blue); the layers and the workbench shell talk through one bridge; the Daisy workbench (dashed frame) hands its runs to the Daisy layers.
+
+\textbf{How to read the labels, symbols and colours.} Architecture: green field tools, blue project and layers, brown computing parts, dashed frame the Daisy workbench; every arrow a dependency in the code.
+
+\textbf{What affects it, and why it happens.} Everything passes through the project and one bridge, which is what makes the origin of every number traceable.
+
+\textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/p456/p456_figs_architecture.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\subsection*{Figure 2 of the article}
+
+\textbf{What it shows.} A real field near Zaria, Nigeria: demarcation and satellite indices (screen captures of release 1.1.0). Panels: (a) The demarcated field (5.85~ha) with the NDVI of the Sentinel-2 scene of 30 October 2026 cut to its outline, the legend with the histogram of the field, and the analysis step by step with the spectral signature of the field. (b) The scenes found and the bands read. (c) The field sketch that carries a field into the designs.
+
+\textbf{How to read the labels, symbols and colours.} Screens of the real field: NDVI map with its histogram and spectral signature, the scenes and bands, and the sketch of the field.
+
+\textbf{What affects it, and why it happens.} Greener cells (higher NDVI) have more active vegetation; the scene is the clearest of the last 90 days.
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+\subsection*{Figure 3 of the article}
+
+\textbf{What it shows.} The same field: terrain, water source, erosion and soil water retention from open data (screen captures of release 1.1.0). Panels: (a) Contours every metre, flow arrows and channels, and the ranked water sources. (b) GNDVI and the line to the best water source, the Galma River (288~m). (c) Soil loss (RUSLE), field mean 8.0~t\,ha$^{-1}$\,yr$^{-1}$, and the months of risk. (d) Available water from the retention curves mapped from SoilGrids (11.2\,\% by volume) and the days to the trigger.
+
+\textbf{How to read the labels, symbols and colours.} Screens: contours and flow, the best water source, soil loss and available water.
+
+\textbf{What affects it, and why it happens.} Water flows down the contours to channels; soil loss is highest on bare, steep, erosive cells; available water follows the texture mapped from SoilGrids.
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+\subsection*{Figure 4 of the article}
+
+\textbf{What it shows.} Depth of the next irrigation on the Zaria field, cell by cell, from the FAO-56 balance of each 10\,m cell (real screenshot).
+
+\textbf{How to read the labels, symbols and colours.} Map of the depth of the next irrigation, cell by cell, with a colour scale in mm.
+
+\textbf{What affects it, and why it happens.} Cells with more vegetation (higher demand) or less available water need deeper irrigation sooner.
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+\subsection*{Figure 5 of the article}
+
+\textbf{What it shows.} (a) Traits through time, well-watered against drought, with the phases of the stress marked. (b) Soil water in the days ahead with the irrigation decision of the design. (c) The field report (page 1).
+
+\textbf{How to read the labels, symbols and colours.} (a) Traits through time, well-watered against drought; (b) soil water ahead with the decision; (c) the field report.
+
+\textbf{What affects it, and why it happens.} Traits fall behind under drought because uptake and growth fall with soil water.
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+\subsection*{Figure 6 of the article}
+
+\textbf{What it shows.} The season film of the phenotyping layer: the same plants from sowing to maturity every 20 days, under the irrigation of the project (top) and under a drought that holds the water at 15\,\% of the plant-available water for 35 days from day 45 (bottom), with shoots and roots drawn from the state of the model (screen capture of release 1.1.0).
+
+\textbf{How to read the labels, symbols and colours.} The same plants every 20 days under the project's irrigation (top) and a drought (bottom).
+
+\textbf{What affects it, and why it happens.} Under drought the plants grow less and roots go deeper, as the model's water stress reduces growth.
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+\subsection*{Figure 7 of the article}
+
+\textbf{What it shows.} Modules of the Daisy workbench and the hand-over, in the style of the process map of Daisy. The chain runs from the planner and the decision base through the experiments, Daisy and the parsers to the hand-over; the modules below the dotted line are used before Daisy is started.
+
+\textbf{How to read the labels, symbols and colours.} Modules of the workbench and the hand-over; the dotted line separates what runs before Daisy.
+
+\textbf{What affects it, and why it happens.} A question becomes a checked design, Daisy runs, the logs are parsed and handed to the layers.
+
+\textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/p456/p456_figs_architecture.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\subsection*{Figure 8 of the article}
+
+\textbf{What it shows.} The process map of Daisy. Each process is a button that opens the figures it produces from a run.
+
+\textbf{How to read the labels, symbols and colours.} The process map of Daisy; each box is a button.
+
+\textbf{What affects it, and why it happens.} It shows which process produces which output, so a user finds the figure of a process.
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+\subsection*{Figure 9 of the article}
+
+\textbf{What it shows.} Water content of a soil column through time, computed by the Richards solver of the workbench.
+
+\textbf{How to read the labels, symbols and colours.} Water content through depth and time from the column solver; colour is water content.
+
+\textbf{What affects it, and why it happens.} Wetting fronts move down after rain and the profile dries from the top by evaporation and uptake.
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+\subsection*{Figure 10 of the article}
+
+\textbf{What it shows.} The guided path of the Daisy workbench and three of its tools (real screenshots of release 1.1.0). Each step carries its step number, a one-line ``what to do here'', the manual page and Back and Next buttons. Panels: (a) Step 1: my data and weather (manual p.~760). (b) Step 2: library of soils, crops and fertilisers (p.~583). (c) Step 4: scenarios, a question and its runs (p.~762). (d) Step 6: log plots of the runs (p.~763). (e) Step 9: to the SWAFL layers, which layer answers which question (p.~764). (f) Tool: set-up editor with bracket check (p.~783). (g) Tool: calibration (daisypy-optim) (p.~779). (h) Tool: learn the Daisy files, the grammar of a .dai file (p.~792).
+
+\textbf{How to read the labels, symbols and colours.} Eight screens of the guided path and tools, each with its manual page.
+
+\textbf{What affects it, and why it happens.} The path leads a user from data to decision in nine steps.
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+\subsection*{Figure 11 of the article}
+
+\textbf{What it shows.} The main window with the online weather of Zaria, Nigeria (2007--2026): Layers tree, the feedback-loops layer with the controls of the season, the Properties panel and the Processing toolbox (real screenshot).
+
+\textbf{How to read the labels, symbols and colours.} Main window: Layers tree, feedback layer, Properties panel, toolbox.
+
+\textbf{What affects it, and why it happens.} Controls in the Properties panel drive every layer at once.
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+\subsection*{Figure 12 of the article}
+
+\textbf{What it shows.} The bridge from a Daisy run to a decision. Heavy arrows are the path of a run, dashed arrows are outputs and the dashed arrow at the left is the return path of the weather of the project to Daisy.
+
+\textbf{How to read the labels, symbols and colours.} Heavy arrows: path of a run; dashed: outputs; left dashed arrow: the project's weather back to Daisy.
+
+\textbf{What affects it, and why it happens.} One bridge carries the values with their origin, which enforces the rule of origin.
+
+\textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/p456/p456_figs_schematics.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\subsection*{Figure 13 of the article}
+
+\textbf{What it shows.} (a) Error of the marginal curves rebuilt from the levels of the compact designs (median over five responses, per experiment and factor). (b) Daisy run time of the study designs and of the compact designs, by experiment (logarithmic scale).
+
+\textbf{How to read the labels, symbols and colours.} (a) Error of the marginal curves of the compact designs by experiment and factor; (b) Daisy time of the study and compact designs (log scale).
+
+\textbf{What affects it, and why it happens.} Fewer levels miss curvature between them (error) but save orders of magnitude of time.
+
+\textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/p456/p456_figs_data.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\subsection*{Figure 14 of the article}
+
+\textbf{What it shows.} Soil column. (a) Drainage below 1\,m with the node spacing; dashed lines are the reference. (b) Final storage minus the reference. (c) Infiltration of 200\,mm of rain into a ponded silty clay loam (left axis) and run time (right axis), showing the lack of convergence.
+
+\textbf{How to read the labels, symbols and colours.} (a) Drainage below 1\,m against node spacing, dashed reference; (b) storage error; (c) infiltration into a ponded fine soil and run time.
+
+\textbf{What affects it, and why it happens.} Coarser grids smooth the fronts; a ponded fine soil has steep gradients and tiny conductivity, so the solver needs small steps and does not converge in reasonable time.
+
+\textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/p456/p456_figs_data.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\subsection*{Figure 15 of the article}
+
+\textbf{What it shows.} Denitrification function against the 792 stored Daisy outputs. (a) N$_2$ loss; the 1:1 line is black. (b) Histogram of the relative error of the N$_2$O loss before and after the correction.
+
+\textbf{How to read the labels, symbols and colours.} (a) N$_2$ loss of the function against 792 stored Daisy outputs, 1:1 line; (b) histogram of the N$_2$O error before and after the correction.
+
+\textbf{What affects it, and why it happens.} Before the correction one class of cases was off; after it, the errors collapse to zero.
+
+\textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/p456/p456_figs_data.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\subsection*{Figure 16 of the article}
+
+\textbf{What it shows.} (a) Daisy wall-clock time of the 17 experiments of the study (total 17.5 days). (b) Time of the study, of the compact designs of the workbench and of Engine 1 for $10^5$ scenarios (logarithmic scale).
+
+\textbf{How to read the labels, symbols and colours.} (a) Daisy time of each experiment; (b) time of the study, compact designs and Engine 1 (log scale).
+
+\textbf{What affects it, and why it happens.} Each route trades fidelity for speed by orders of magnitude.
+
+\textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/p456/p456_figs_data.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\subsection*{Figure 17 of the article}
+
+\textbf{What it shows.} Results of the hand-over. (a) The Daisy decision table with the labels of the run (rainfed and irrigated, half and 30\,\% more fertiliser, warmer and drier climates). (b) The fate of a chemical for a mobile, a sorbing and a sorbing and degrading tracer.
+
+\textbf{How to read the labels, symbols and colours.} (a) The decision table of the hand-over with run labels; (b) fate of three tracers.
+
+\textbf{What affects it, and why it happens.} A mobile tracer leaches, a sorbing one stays, a sorbing and degrading one disappears in the soil.
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+\subsection*{Figure 18 of the article}
+
+\textbf{What it shows.} The interface of release 1.1.0 as it appears to the user (screen captures). Panels: (a) The Layers panel: the nine groups of the SWAFL project and the seven of the Daisy model. (b) The panel of the real field, sections 1 to 4b. (c) Soil retention mapped, sensors, and export.
+
+\textbf{How to read the labels, symbols and colours.} Screens of the Layers panel and the field panel.
+
+\textbf{What affects it, and why it happens.} The groups organise the layers by question.
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+\subsection*{Figure 19 of the article}
+
+\textbf{What it shows.} Outputs of the experiment engine drawn from Daisy runs (screen captures of the workbench). Panels: (a) The summary of an experiment: the effect of every input on every result (blue rises, red falls; in brackets the share of the mean) and the summary in words. (b) One of the figures of every log: leaf area index through the year, one panel per water limit, rainfed and irrigated, the mean of the seasons with 10 to 90\,\% as the band.
+
+\textbf{How to read the labels, symbols and colours.} Summary of an experiment (blue rises, red falls) and a figure of one log.
+
+\textbf{What affects it, and why it happens.} Each input's effect on each result is its range across the runs, shown with sign.
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+\subsection*{Figure 20 of the article}
+
+\textbf{What it shows.} Diagnosis and provenance of the runs (screen captures). Panels: (a) The root cause of runs that gave no results, grouped by cause, with the place in the set-up and what to do. (b) Every file Daisy wrote, experiment by experiment and run by run, in a full-screen viewer.
+
+\textbf{How to read the labels, symbols and colours.} Diagnosis of failed runs and the viewer of every file.
+
+\textbf{What affects it, and why it happens.} Errors are grouped by cause, so one fix addresses all runs that failed the same way.
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).
+
+\subsection*{Figure 21 of the article}
+
+\textbf{What it shows.} Grain dry mass at maturity of seven genotypes, well-watered and under a drought pulse, in a warm (a) and a hot, dry (b) season.
+
+\textbf{How to read the labels, symbols and colours.} Grain mass of seven genotypes, well-watered against drought, in a warm (a) and a hot, dry (b) season.
+
+\textbf{What affects it, and why it happens.} Drought and heat shorten the grain-filling period and reduce assimilation, so all genotypes lose grain, by different amounts.
+
+\textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/p456/p456_figs_data.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\subsection*{Figure 22 of the article}
+
+\textbf{What it shows.} Daily crop coefficient curves of the library (Eq.~(2) of the article) at the default sowing date, (a) five annual crops, (b) three perennial crops (medium density).
+
+\textbf{How to read the labels, symbols and colours.} Daily crop coefficient curves of the library crops at the default sowing date.
+
+\textbf{What affects it, and why it happens.} Coefficients rise with canopy development to a mid-season plateau and fall with senescence (FAO-56).
+
+\textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/p456/p456_figs_data.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.

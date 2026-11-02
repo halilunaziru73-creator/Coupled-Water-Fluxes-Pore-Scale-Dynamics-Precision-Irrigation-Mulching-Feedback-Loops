@@ -1,0 +1,27 @@
+\paragraph{Table 1 of the article.} \emph{The experiments of the analysis, from \texttt{Data/Comprehensive\_Summary} (10190 runs, 10041 valid; 20 years, 1980--1999, of Taastrup weather). Means of the valid runs; $Y$ yield (Mg\,ha$^{-1}$), $I$ irrigation, $D$ drainage at 1\,m and $\ET$ (mm\,yr$^{-1}$), $N_L$ nitrate leached (kg\,N\,ha$^{-1}$\,yr$^{-1}$), $t$ run time of Daisy (s). Every row is one file of the folder, linked.}
+
+\textbf{How the output is produced.} One row per experiment used. The script counts the runs of each experiment in the summary of all runs, keeps those with status ok, lists the factors that take more than one value, and averages yield, irrigation, drainage, ET, nitrate leaching and Daisy run time over the valid runs.
+
+\textbf{How it is made.} Table written by the script (tex/data\_table.tex). Script: \nolinkurl{Manuscripts/reproducibility/analysis/data_overview.py}. Input: \nolinkurl{Data/Comprehensive_Summary/00_summary_all_simulations.csv.gz}.
+
+\paragraph{Table 2 of the article.} \emph{Closed forms for the reach of a trigger, fitted to the interval-censored reaches of ten soils (E2) and validated leaving one soil out.}
+
+\textbf{How the output is produced.} One row per candidate law. For each law the script finds the constant(s) that minimise the squared distance (in decades) between the predicted reach and the observed interval of every soil; it then removes each soil in turn, refits, and records the error on the removed soil. ``Inside counts the soils predicted within their interval; ``worst factor is $10$ to the largest error.
+
+\textbf{How it is made.} Table written by the script. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p4_reach.py}. Input: \nolinkurl{Data/Comprehensive_Summary/00_summary_all_simulations.csv.gz}.
+
+\paragraph{Table 3 of the article.} \emph{What this article adds, item by item: what was established before, what is new here, and the evidence in this article.}
+
+\textbf{How the output is produced.} A descriptive table: each row sets a contribution against prior work and names the figure or number that supports it.
+
+\textbf{How it is made.} Descriptive table (claims and the evidence cited in the text); no computation.
+
+\paragraph{Table 4 of the article.} \emph{Observed reach interval (E2) and the predictions of Eq.~(4) of the article for the ten soils. Yields in Mg\,ha$^{-1}$.}
+
+\textbf{How the output is produced.} One row per soil: the van~Genuchten parameters, the observed interval of the reach from experiment E2 (driest trigger that still irrigates at least 5\,mm a year, and the next drier one), the reach from Eq.~(4) of the article with the fitted $\kappa$, and the yields at a 300\,cm trigger, without irrigation and with the best trigger. The same table is live in sheet \texttt{EQ\_P4\_reach}.
+
+\textbf{How it is made.} Table written by the script. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p4_reach.py}. Input: \nolinkurl{Data/Comprehensive_Summary/00_summary_all_simulations.csv.gz}.
+
+\paragraph{Table 5 of the article.} \emph{Scripts and inputs of every item. The data of every table and figure are also in the workbook \nolinkurl{Data/Manuscript_Data/SWAFL_Manuscripts_Data.xlsx}.}
+
+\textbf{How it is made.} Descriptive table (this map in short); no computation.

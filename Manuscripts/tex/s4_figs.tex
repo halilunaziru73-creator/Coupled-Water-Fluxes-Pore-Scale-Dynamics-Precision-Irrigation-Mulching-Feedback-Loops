@@ -1,0 +1,59 @@
+\subsection*{Figure 1 of the article}
+
+\textbf{What it shows.} The two questions. Q1 (right): a trigger $\htr$ fires only if the crop can dry the soil at the sensor to $\htr$; the reach $\hc$ (dashed) is 199\,cm in sand and $9\times10^{3}$\,cm in loam, so the usual triggers (grey) lie beyond the reach of sand. Q2 (left): the fate of an irrigation millimetre, averaged over the 744 irrigated runs of experiment E10 (arrow widths to scale).
+
+\textbf{How to read the labels, symbols and colours.} Left: a soil column with three crops; the blue arrow is one millimetre of irrigation and the coloured arrows leaving the column are its fates, drawn with widths in proportion to their shares (green transpiration, orange soil evaporation, yellow other evaporation, blue drainage below 1\,m). The dark dot is the sensor at 20\,cm. Right: effective saturation $S_e$ against suction $h$ (log axis) for sand, loam and silty clay loam; the dashed vertical line of each colour is that soil's reach $\hc$; the grey band is the range of triggers usually tabulated (300 to 600\,cm).
+
+\textbf{What affects it, and why it happens.} The sand curve falls to almost zero within a few tens of centimetres, so its conductivity collapses early and its reach (199\,cm) lies to the left of the usual triggers: such a trigger is never read. In the loam the reach lies far to the right, so the same triggers work. The arrow widths show that less than half of an applied millimetre is transpired because the same energy also evaporates water from the soil and from intercepted or ponded water.
+
+\textbf{How it is made.} Schematic drawn by the script with numbers from the results. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p4_concept.py}. Input: \nolinkurl{Data/Comprehensive_Summary/00_summary_all_simulations.csv.gz}.
+
+\subsection*{Figure 2 of the article}
+
+\textbf{What it shows.} (a) Retention and (b) relative conductivity of the ten soils (Eq.~(1) and Eq.~(2) of the article); circles mark the reach of Eq.~(4) of the article and the dashed line the fitted $\kappa=3.5\times10^{-10}$; grey: the range of triggers tested. (c) Reach against $n$ for the ten soils, with Eq.~(4) of the article for three values of $\alpha$.
+
+\textbf{How to read the labels, symbols and colours.} (a) $S_e$ against $h$ for the ten soils (colours in the legend, with each soil's $n$). (b) Relative conductivity $K_r$ against $h$, both on log scales; the dashed line is $\kappa$. Open circles in (a) and (b) mark each soil's reach. Grey shading: the range of triggers tested in the simulations (50 to 10\,000\,cm). (c) Reach against $n$ (log scale) for the ten soils (labelled points) and Eq.~(4) of the article for three values of $\alpha$ (dotted, dashed and solid lines).
+
+\textbf{What affects it, and why it happens.} The reach is where each conductivity curve in (b) crosses the dashed line $\kappa$. Curves of large $n$ (sands) fall steeply and cross early; curves of small $n$ (silty clay loam) fall gently and cross late. In (c) the reach therefore falls with $n$, and for equal $n$ a smaller $\alpha$ (soil that starts draining later) gives a longer reach, which is why the three lines are ordered.
+
+\textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p4_reach.py}. Input: \nolinkurl{Data/Comprehensive_Summary/00_summary_all_simulations.csv.gz}.
+
+\subsection*{Figure 3 of the article}
+
+\textbf{What it shows.} The reach of a suction trigger in experiment E2 (197 runs). (a) Irrigation against the trigger. (b) The same runs against the reach-scaled trigger $\htr/\hc$, irrigation divided by its soil maximum: every soil stops at $\htr/\hc\approx0.5$ to 1. (c) Predicted reach (Eq.~(4) of the article) against the observed interval (bars; arrows: only a lower bound); grey band: within a factor of 2. (d) Yield against the trigger: beyond the reach the crop is rainfed.
+
+\textbf{How to read the labels, symbols and colours.} (a) Annual irrigation (mm) against the trigger suction (log axis), one line per soil. (b) The same irrigation divided by each soil's maximum, against the trigger divided by the reach; the dashed line is $x=1$. (c) Predicted reach (Eq.~(4) of the article) against the observed interval: bars span the interval, arrows mean only a lower bound is known, the black line is 1:1 and the grey band a factor of two. (d) Yield against the trigger.
+
+\textbf{What affects it, and why it happens.} Irrigation falls as the trigger becomes drier and stops at a cliff whose position follows the soil's conductivity (a). On the scaled axis every soil stops between 0.5 and 1 (b), because the reach captures where uptake stops. Points near the 1:1 line in (c) show the closed form places the cliffs within a factor of about two. In (d) yields stay at the rainfed value for triggers beyond the reach (sand, loamy sand), because the field is never irrigated.
+
+\textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p4_reach.py}. Input: \nolinkurl{Data/Comprehensive_Summary/00_summary_all_simulations.csv.gz}.
+
+\subsection*{Figure 4 of the article}
+
+\textbf{What it shows.} The fate of an irrigation millimetre, Eq.~(5) of the article. (a) By soil (E10, 744 irrigated runs; sand and loamy sand are never irrigated at the 300\,cm trigger of E10), ordered by $n$. (b) By method, on all soils (E4) and on coarse loam over all rates, doses and rooting depths (E15).
+
+\textbf{How to read the labels, symbols and colours.} Stacked bars of the shares of each irrigation millimetre: green transpiration, orange soil evaporation, yellow other evaporation (canopy, ponds, litter), blue drainage below 1\,m, grey storage and runoff; numbers inside the bars are the shares. (a) By soil, ordered by $n$ (label under each bar). (b) By method, on all soils (E4) and on coarse loam (E15); bars below zero are negative shares.
+
+\textbf{What affects it, and why it happens.} Transpiration is limited by the energy reaching the canopy and by cover, so it takes less than half of the water. Coarse sand passes water on quickly, so drainage is its largest loss. Overhead irrigation wets the canopy; the intercepted water evaporates with the energy that would have driven transpiration, so the transpiration share is negative. Subsurface application avoids interception but wets the profile from within and drains more.
+
+\textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p4_reach.py}. Input: \nolinkurl{Data/Comprehensive_Summary/00_summary_all_simulations.csv.gz}.
+
+\subsection*{Figure 5 of the article}
+
+\textbf{What it shows.} The dose (E10, all ten windows pooled). (a) Drained share with Eq.~(6) of the article per soil. (b) Transpired share. (c) Evaporated share (soil and other evaporation).
+
+\textbf{How to read the labels, symbols and colours.} Horizontal axes: dose per event (mm, log scale). (a) Drained share $\eta_D$: points are the Daisy runs (E10, pooled over windows), lines the fit of Eq.~(6) of the article. (b) Transpired share. (c) Evaporated share (soil plus other evaporation). Colours: soils, named in the legend.
+
+\textbf{What affects it, and why it happens.} A dose smaller than one day of crop water use is consumed near the surface before it can drain, so $\eta_D$ is near zero at 1 to 2\,mm and the evaporated share is large. As the dose grows, more water reaches below the roots and the drained share rises to a plateau set by how fast the soil drains (highest in coarse sand). The transpired share rises with the dose because less of the water is lost from the surface.
+
+\textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p4_reach.py}. Input: \nolinkurl{Data/Comprehensive_Summary/00_summary_all_simulations.csv.gz}.
+
+\subsection*{Figure 6 of the article}
+
+\textbf{What it shows.} The analysis in SWAFL Desktop 1.1.0 (real screenshots of the release). Panels: (a) Trigger law layer: depletion, sensor and the trigger of every soil. (b) Matric potential on a 5.85\,ha field near Zaria, from mapped retention curves. (c) Daisy workbench, step 3 of 9: ready-made experiments (trigger and sensor depth, dose, method) and the user's own.
+
+\textbf{How to read the labels, symbols and colours.} (a) The trigger-law layer: on the left the soil column with the sensor (dot) and the depletion bar; on the right one row per soil with its own trigger (red marks), the yield (boxes) and a gauge of the season. (b) The matric potential of the Zaria field, cell by cell; the colour bar is in kPa (33 = field capacity, 1500 = wilting point). (c) The ready-made experiments of the Daisy workbench.
+
+\textbf{What affects it, and why it happens.} These are screens of the software, not results; they show where a user finds the reach and the triggers of each soil, how the suction varies over a real field (with the soil texture from SoilGrids), and how new trigger, dose and method experiments are run.
+
+\textbf{How it is made.} Screen capture of SWAFL Desktop 1.1.0 (not regenerated).

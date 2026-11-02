@@ -5,32 +5,64 @@
 \contentsline {subsection}{\numberline {S2.3}Contribution 3: the recoverable share of an evaporation saving}{7}{subsection.2.3}%
 \contentsline {subsection}{\numberline {S2.4}Contribution 4: discovering the model's water balance without being told}{8}{subsection.2.4}%
 \contentsline {subsection}{\numberline {S2.5}Contribution 5: a compact law for evapotranspiration}{9}{subsection.2.5}%
-\contentsline {section}{\numberline {S3}A guide to the results with worked numbers}{9}{section.3}%
-\contentsline {subsection}{\numberline {S3.1}1. the water balance of a soil column}{10}{subsection.3.1}%
-\contentsline {subsection}{\numberline {S3.2}2. the storage release}{10}{subsection.3.2}%
-\contentsline {subsection}{\numberline {S3.3}3. the memory fate}{10}{subsection.3.3}%
-\contentsline {subsection}{\numberline {S3.4}4. why drainage wins in coarse soils, the rate law}{10}{subsection.3.4}%
-\contentsline {subsection}{\numberline {S3.5}5. the recoverable share of an evaporation saving}{10}{subsection.3.5}%
-\contentsline {subsection}{\numberline {S3.6}6. checking the model's own bookkeeping}{11}{subsection.3.6}%
-\contentsline {subsection}{\numberline {S3.7}7. the unattributed evaporation}{11}{subsection.3.7}%
-\contentsline {subsection}{\numberline {S3.8}8. reproduce everything}{11}{subsection.3.8}%
-\contentsline {section}{\numberline {S4}Derivations of the equations}{11}{section.4}%
-\contentsline {subsection}{\numberline {S4.1}The retention and conductivity functions}{11}{subsection.4.1}%
-\contentsline {subsection}{\numberline {S4.2}The water balance and the storage release}{12}{subsection.4.2}%
-\contentsline {subsection}{\numberline {S4.3}The memory fate as a pooled within-group slope}{12}{subsection.4.3}%
-\contentsline {subsection}{\numberline {S4.4}Loss fates and the recoverable share}{12}{subsection.4.4}%
-\contentsline {subsection}{\numberline {S4.5}The rate-competition law}{13}{subsection.4.5}%
-\contentsline {subsection}{\numberline {S4.6}The invariant search by singular-value decomposition}{13}{subsection.4.6}%
-\contentsline {subsection}{\numberline {S4.7}The closure residual and the unattributed term}{13}{subsection.4.7}%
-\contentsline {subsection}{\numberline {S4.8}Log-ratio coordinates and the sparse law}{14}{subsection.4.8}%
-\contentsline {subsection}{\numberline {S4.9}Irrigation compensation}{14}{subsection.4.9}%
-\contentsline {section}{\numberline {S5}Why the results happen}{14}{section.5}%
-\contentsline {paragraph}{Why hydraulic memory differs between soils.}{14}{paragraph*.1}%
-\contentsline {paragraph}{Why the memory transfers to other experiments.}{14}{paragraph*.2}%
-\contentsline {paragraph}{Why warming raises and wetter climates lower the recoverable share.}{14}{paragraph*.3}%
-\contentsline {paragraph}{Why nitrogen has no effect.}{14}{paragraph*.4}%
-\contentsline {paragraph}{Why an evaporative term is unattributed.}{14}{paragraph*.5}%
-\contentsline {paragraph}{Why evapotranspiration follows a compact law and drainage does not.}{15}{paragraph*.6}%
-\contentsline {paragraph}{Why judging a saving against soil evaporation alone misleads.}{15}{paragraph*.7}%
-\contentsline {section}{\numberline {S6}The data}{15}{section.6}%
-\contentsline {section}{\numberline {S7}Where every table and figure comes from}{39}{section.7}%
+\contentsline {section}{\numberline {S3}Every term of the author's equations}{9}{section.3}%
+\contentsline {section}{\numberline {S4}How each table of the article is produced}{11}{section.4}%
+\contentsline {paragraph}{Table 1 of the article.}{11}{paragraph*.1}%
+\contentsline {paragraph}{Table 2 of the article.}{11}{paragraph*.2}%
+\contentsline {paragraph}{Table 3 of the article.}{12}{paragraph*.3}%
+\contentsline {paragraph}{Table 4 of the article.}{12}{paragraph*.4}%
+\contentsline {paragraph}{Table 5 of the article.}{12}{paragraph*.5}%
+\contentsline {paragraph}{Table 6 of the article.}{12}{paragraph*.6}%
+\contentsline {paragraph}{Table 7 of the article.}{12}{paragraph*.7}%
+\contentsline {paragraph}{Table 8 of the article.}{12}{paragraph*.8}%
+\contentsline {paragraph}{Table 9 of the article.}{13}{paragraph*.9}%
+\contentsline {paragraph}{Table 10 of the article.}{13}{paragraph*.10}%
+\contentsline {paragraph}{Table 11 of the article.}{13}{paragraph*.11}%
+\contentsline {paragraph}{Table 12 of the article.}{13}{paragraph*.12}%
+\contentsline {paragraph}{Table 13 of the article.}{13}{paragraph*.13}%
+\contentsline {paragraph}{Table 14 of the article.}{13}{paragraph*.14}%
+\contentsline {paragraph}{Table 15 of the article.}{13}{paragraph*.15}%
+\contentsline {paragraph}{Table 16 of the article.}{14}{paragraph*.16}%
+\contentsline {paragraph}{Table 17 of the article.}{14}{paragraph*.17}%
+\contentsline {paragraph}{Table 18 of the article.}{14}{paragraph*.18}%
+\contentsline {paragraph}{Table 19 of the article.}{14}{paragraph*.19}%
+\contentsline {paragraph}{Table 20 of the article.}{14}{paragraph*.20}%
+\contentsline {paragraph}{Table 21 of the article.}{14}{paragraph*.21}%
+\contentsline {paragraph}{Table 22 of the article.}{14}{paragraph*.22}%
+\contentsline {paragraph}{Table 23 of the article.}{15}{paragraph*.23}%
+\contentsline {paragraph}{Table 24 of the article.}{15}{paragraph*.24}%
+\contentsline {paragraph}{Table 25 of the article.}{15}{paragraph*.25}%
+\contentsline {paragraph}{Table 26 of the article.}{15}{paragraph*.26}%
+\contentsline {paragraph}{Table 27 of the article.}{15}{paragraph*.27}%
+\contentsline {paragraph}{Table 28 of the article.}{15}{paragraph*.28}%
+\contentsline {paragraph}{Table 29 of the article.}{15}{paragraph*.29}%
+\contentsline {section}{\numberline {S5}Reading every figure of the article}{16}{section.5}%
+\contentsline {section}{\numberline {S6}A guide to the results with worked numbers}{26}{section.6}%
+\contentsline {subsection}{\numberline {S6.1}1. the water balance of a soil column}{26}{subsection.6.1}%
+\contentsline {subsection}{\numberline {S6.2}2. the storage release}{27}{subsection.6.2}%
+\contentsline {subsection}{\numberline {S6.3}3. the memory fate}{27}{subsection.6.3}%
+\contentsline {subsection}{\numberline {S6.4}4. why drainage wins in coarse soils, the rate law}{27}{subsection.6.4}%
+\contentsline {subsection}{\numberline {S6.5}5. the recoverable share of an evaporation saving}{27}{subsection.6.5}%
+\contentsline {subsection}{\numberline {S6.6}6. checking the model's own bookkeeping}{27}{subsection.6.6}%
+\contentsline {subsection}{\numberline {S6.7}7. the unattributed evaporation}{28}{subsection.6.7}%
+\contentsline {subsection}{\numberline {S6.8}8. reproduce everything}{28}{subsection.6.8}%
+\contentsline {section}{\numberline {S7}Derivations of the equations}{28}{section.7}%
+\contentsline {subsection}{\numberline {S7.1}The retention and conductivity functions}{28}{subsection.7.1}%
+\contentsline {subsection}{\numberline {S7.2}The water balance and the storage release}{29}{subsection.7.2}%
+\contentsline {subsection}{\numberline {S7.3}The memory fate as a pooled within-group slope}{29}{subsection.7.3}%
+\contentsline {subsection}{\numberline {S7.4}Loss fates and the recoverable share}{29}{subsection.7.4}%
+\contentsline {subsection}{\numberline {S7.5}The rate-competition law}{30}{subsection.7.5}%
+\contentsline {subsection}{\numberline {S7.6}The invariant search by singular-value decomposition}{30}{subsection.7.6}%
+\contentsline {subsection}{\numberline {S7.7}The closure residual and the unattributed term}{30}{subsection.7.7}%
+\contentsline {subsection}{\numberline {S7.8}Log-ratio coordinates and the sparse law}{30}{subsection.7.8}%
+\contentsline {subsection}{\numberline {S7.9}Irrigation compensation}{31}{subsection.7.9}%
+\contentsline {section}{\numberline {S8}Why the results happen}{31}{section.8}%
+\contentsline {paragraph}{Why hydraulic memory differs between soils.}{31}{paragraph*.30}%
+\contentsline {paragraph}{Why the memory transfers to other experiments.}{31}{paragraph*.31}%
+\contentsline {paragraph}{Why warming raises and wetter climates lower the recoverable share.}{31}{paragraph*.32}%
+\contentsline {paragraph}{Why nitrogen has no effect.}{31}{paragraph*.33}%
+\contentsline {paragraph}{Why an evaporative term is unattributed.}{31}{paragraph*.34}%
+\contentsline {paragraph}{Why evapotranspiration follows a compact law and drainage does not.}{31}{paragraph*.35}%
+\contentsline {paragraph}{Why judging a saving against soil evaporation alone misleads.}{32}{paragraph*.36}%
+\contentsline {section}{\numberline {S9}The data}{32}{section.9}%
+\contentsline {section}{\numberline {S10}Where every table and figure comes from}{56}{section.10}%

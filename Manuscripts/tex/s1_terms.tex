@@ -1,0 +1,29 @@
+\subsection*{Memory fate, $\phi_x$ (pooled within-rainfall slope of flux $x$ on $\bar R$)}
+{\small\begin{longtable}{>{\raggedright\arraybackslash}p{2.2cm}>{\raggedright\arraybackslash}p{4.8cm}>{\raggedright\arraybackslash}p{1.4cm}>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}p{3.6cm}}\toprule Term & What it means & Unit & Where the value comes from & When it rises\\\midrule\endhead
+$\bar R$ & storage release $\ET+D-P_r-I$ of a run & mm\,yr$^{-1}$ & run table (E9) & --\\
+$P$ & rainfall scale that defines a group of runs & -- & design of E9 & --\\
+$x_c$ & a flux ($T$, $E_s$, $D$, other) of run $c$ & mm\,yr$^{-1}$ & run table & --\\
+$\phi_x$ & share of a released millimetre that leaves by $x$ & -- & computed; the four add to 1 & --\\
+\bottomrule\end{longtable}}
+\subsection*{Rate-competition law, $\phi_D=K_s/(K_s+q^\ast)$}
+{\small\begin{longtable}{>{\raggedright\arraybackslash}p{2.2cm}>{\raggedright\arraybackslash}p{4.8cm}>{\raggedright\arraybackslash}p{1.4cm}>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}p{3.6cm}}\toprule Term & What it means & Unit & Where the value comes from & When it rises\\\midrule\endhead
+$K_s$ & saturated conductivity of the soil & cm\,d$^{-1}$ & literature (eight soils) & $\phi_D$ rises toward 1\\
+$q^\ast$ & effective withdrawal rate by roots and surface & cm\,d$^{-1}$ & fitted once (71.5) & $\phi_D$ falls\\
+\bottomrule\end{longtable}}
+\subsection*{Recoverable share, $\rho_R=1-\psi_D$}
+{\small\begin{longtable}{>{\raggedright\arraybackslash}p{2.2cm}>{\raggedright\arraybackslash}p{4.8cm}>{\raggedright\arraybackslash}p{1.4cm}>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}p{3.6cm}}\toprule Term & What it means & Unit & Where the value comes from & When it rises\\\midrule\endhead
+$\psi_D$ & share of an evaporation saving that drains & -- & paired runs of E16 or E7 & $\rho_R$ falls\\
+$\rho_R$ & share of the saving recovered as transpiration or less irrigation & -- & computed & --\\
+\bottomrule\end{longtable}}
+\subsection*{Discovered balance, $\mathbf c=(c_{P_r},c_I,c_{\ET},c_D)$}
+{\small\begin{longtable}{>{\raggedright\arraybackslash}p{2.2cm}>{\raggedright\arraybackslash}p{4.8cm}>{\raggedright\arraybackslash}p{1.4cm}>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}p{3.6cm}}\toprule Term & What it means & Unit & Where the value comes from & When it rises\\\midrule\endhead
+$\mathbf F$ & matrix of centred 20-year fluxes, one row per run & mm\,yr$^{-1}$ & run table & --\\
+$\mathbf c$ & right singular vector with the smallest singular value & -- & singular-value decomposition & --\\
+$R$ & unattributed evapotranspiration $\ET-T-E_s-E_c$ & mm\,yr$^{-1}$ & run table & the departure of $\mathbf c$ from $\pm1$ grows\\
+\bottomrule\end{longtable}}
+\subsection*{Compact ET law, $\ln\ET=2.503+0.646\ln W-0.299n+0.029\ln(1+I)$}
+{\small\begin{longtable}{>{\raggedright\arraybackslash}p{2.2cm}>{\raggedright\arraybackslash}p{4.8cm}>{\raggedright\arraybackslash}p{1.4cm}>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}p{3.6cm}}\toprule Term & What it means & Unit & Where the value comes from & When it rises\\\midrule\endhead
+$W$ & water input $P_r+I$ & mm\,yr$^{-1}$ & run table & $\ET$ rises with elasticity 0.65\\
+$n$ & van~Genuchten shape parameter of the soil & -- & soil table & $\ET$ falls (more drainage)\\
+$I$ & irrigation & mm\,yr$^{-1}$ & run table & $\ET$ rises slightly beyond its part of $W$\\
+\bottomrule\end{longtable}}

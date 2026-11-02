@@ -78,7 +78,7 @@ for p, title in PAPERS.items():
             elif all(g.endswith(('.jpg', '.png')) for g in gfx): how = 'Screen capture of SWAFL Desktop 1.1.0 (not regenerated)'
             else: how = 'Schematic drawn for the paper (no data)'
         if kind == 'Table':
-            if 'tab:data' == L: script = ['Manuscripts/reproducibility/analysis/data_overview.py']; how = 'Table written by the script (tex/data_table.tex)'
+            if L in ('tab:data', 'tab:data4'): script = ['Manuscripts/reproducibility/analysis/data_overview.py']; how = 'Table written by the script (tex/data_table.tex)'
             elif inputs: script = script_for(inputs[0]); how = 'Table file written by the script'
             else:
                 src, nh = source_of_numbers(body)

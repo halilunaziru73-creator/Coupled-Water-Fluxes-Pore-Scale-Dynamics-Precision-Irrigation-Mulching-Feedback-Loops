@@ -5,36 +5,55 @@
 \contentsline {subsection}{\numberline {S2.3}Contribution 3: two evaporation stages joined without a jump}{6}{subsection.2.3}%
 \contentsline {subsection}{\numberline {S2.4}Contribution 4: a ledger of every equation}{7}{subsection.2.4}%
 \contentsline {subsection}{\numberline {S2.5}Contribution 5: a defect found and removed in surface irrigation}{8}{subsection.2.5}%
-\contentsline {section}{\numberline {S3}A guide to the results with worked numbers}{8}{section.3}%
-\contentsline {subsection}{\numberline {S3.1}1. from a suction trigger to a share of the available water}{8}{subsection.3.1}%
-\contentsline {subsection}{\numberline {S3.2}2. from a chosen depletion to a soil's own trigger}{9}{subsection.3.2}%
-\contentsline {subsection}{\numberline {S3.3}3. interception by the canopy}{9}{subsection.3.3}%
-\contentsline {subsection}{\numberline {S3.4}4. infiltration (Green--Ampt)}{9}{subsection.3.4}%
-\contentsline {subsection}{\numberline {S3.5}5. surface irrigation advance}{9}{subsection.3.5}%
-\contentsline {subsection}{\numberline {S3.6}6. friction in a drip lateral}{9}{subsection.3.6}%
-\contentsline {subsection}{\numberline {S3.7}7. a sprinkler nozzle}{9}{subsection.3.7}%
-\contentsline {subsection}{\numberline {S3.8}8. reproduce everything}{10}{subsection.3.8}%
-\contentsline {section}{\numberline {S4}Derivations of the equations}{10}{section.4}%
-\contentsline {subsection}{\numberline {S4.1}Water balance of the column}{10}{subsection.4.1}%
-\contentsline {subsection}{\numberline {S4.2}Capillary radius}{10}{subsection.4.2}%
-\contentsline {subsection}{\numberline {S4.3}Depletion and the trigger law}{10}{subsection.4.3}%
-\contentsline {subsection}{\numberline {S4.4}Consolidation of the tilled layer}{11}{subsection.4.4}%
-\contentsline {subsection}{\numberline {S4.5}Two-stage evaporation}{11}{subsection.4.5}%
-\contentsline {subsection}{\numberline {S4.6}Water potential of the air}{11}{subsection.4.6}%
-\contentsline {subsection}{\numberline {S4.7}The soil--plant--atmosphere path}{11}{subsection.4.7}%
-\contentsline {subsection}{\numberline {S4.8}Rainfall and interception of the daily model}{12}{subsection.4.8}%
-\contentsline {subsection}{\numberline {S4.9}Green--Ampt infiltration}{12}{subsection.4.9}%
-\contentsline {subsection}{\numberline {S4.10}Surface irrigation: volume balance and advance}{12}{subsection.4.10}%
-\contentsline {subsection}{\numberline {S4.11}Drip laterals}{12}{subsection.4.11}%
-\contentsline {subsection}{\numberline {S4.12}Emission uniformity}{13}{subsection.4.12}%
-\contentsline {subsection}{\numberline {S4.13}Sprinkler discharge}{13}{subsection.4.13}%
-\contentsline {section}{\numberline {S5}Why the results happen}{13}{section.5}%
-\contentsline {paragraph}{Why the same trigger uses different shares of the available water.}{13}{paragraph*.1}%
-\contentsline {paragraph}{Why drainage differs under the same rain.}{13}{paragraph*.2}%
-\contentsline {paragraph}{Why stage-1 evaporation lasts longer in fine soils.}{13}{paragraph*.3}%
-\contentsline {paragraph}{Why the leaf water potential is set by a conductivity floor.}{13}{paragraph*.4}%
-\contentsline {paragraph}{Why the drainage share of a mulch saving is understated in coarse soils.}{14}{paragraph*.5}%
-\contentsline {paragraph}{Why the meta-model ranks well but has an offset.}{14}{paragraph*.6}%
-\contentsline {paragraph}{Why the daily model fails in sand at dry triggers.}{14}{paragraph*.7}%
-\contentsline {section}{\numberline {S6}The data}{14}{section.6}%
-\contentsline {section}{\numberline {S7}Where every table and figure comes from}{73}{section.7}%
+\contentsline {section}{\numberline {S3}Every term of the author's equations}{8}{section.3}%
+\contentsline {section}{\numberline {S4}How each table of the article is produced}{10}{section.4}%
+\contentsline {paragraph}{Table 1 of the article.}{10}{paragraph*.1}%
+\contentsline {paragraph}{Table 2 of the article.}{10}{paragraph*.2}%
+\contentsline {paragraph}{Table 3 of the article.}{10}{paragraph*.3}%
+\contentsline {paragraph}{Table 4 of the article.}{10}{paragraph*.4}%
+\contentsline {paragraph}{Table 5 of the article.}{10}{paragraph*.5}%
+\contentsline {paragraph}{Table 6 of the article.}{11}{paragraph*.6}%
+\contentsline {paragraph}{Table 7 of the article.}{11}{paragraph*.7}%
+\contentsline {paragraph}{Table 8 of the article.}{11}{paragraph*.8}%
+\contentsline {paragraph}{Table 9 of the article.}{11}{paragraph*.9}%
+\contentsline {paragraph}{Table 10 of the article.}{11}{paragraph*.10}%
+\contentsline {paragraph}{Table 11 of the article.}{12}{paragraph*.11}%
+\contentsline {paragraph}{Table 12 of the article.}{12}{paragraph*.12}%
+\contentsline {paragraph}{Table 13 of the article.}{12}{paragraph*.13}%
+\contentsline {paragraph}{Table 14 of the article.}{12}{paragraph*.14}%
+\contentsline {paragraph}{Table 15 of the article.}{12}{paragraph*.15}%
+\contentsline {paragraph}{Table 16 of the article.}{12}{paragraph*.16}%
+\contentsline {section}{\numberline {S5}Reading every figure of the article}{13}{section.5}%
+\contentsline {section}{\numberline {S6}A guide to the results with worked numbers}{26}{section.6}%
+\contentsline {subsection}{\numberline {S6.1}1. from a suction trigger to a share of the available water}{26}{subsection.6.1}%
+\contentsline {subsection}{\numberline {S6.2}2. from a chosen depletion to a soil's own trigger}{27}{subsection.6.2}%
+\contentsline {subsection}{\numberline {S6.3}3. interception by the canopy}{27}{subsection.6.3}%
+\contentsline {subsection}{\numberline {S6.4}4. infiltration (Green--Ampt)}{27}{subsection.6.4}%
+\contentsline {subsection}{\numberline {S6.5}5. surface irrigation advance}{27}{subsection.6.5}%
+\contentsline {subsection}{\numberline {S6.6}6. friction in a drip lateral}{27}{subsection.6.6}%
+\contentsline {subsection}{\numberline {S6.7}7. a sprinkler nozzle}{27}{subsection.6.7}%
+\contentsline {subsection}{\numberline {S6.8}8. reproduce everything}{28}{subsection.6.8}%
+\contentsline {section}{\numberline {S7}Derivations of the equations}{28}{section.7}%
+\contentsline {subsection}{\numberline {S7.1}Water balance of the column}{28}{subsection.7.1}%
+\contentsline {subsection}{\numberline {S7.2}Capillary radius}{28}{subsection.7.2}%
+\contentsline {subsection}{\numberline {S7.3}Depletion and the trigger law}{28}{subsection.7.3}%
+\contentsline {subsection}{\numberline {S7.4}Consolidation of the tilled layer}{29}{subsection.7.4}%
+\contentsline {subsection}{\numberline {S7.5}Two-stage evaporation}{29}{subsection.7.5}%
+\contentsline {subsection}{\numberline {S7.6}Water potential of the air}{29}{subsection.7.6}%
+\contentsline {subsection}{\numberline {S7.7}The soil--plant--atmosphere path}{29}{subsection.7.7}%
+\contentsline {subsection}{\numberline {S7.8}Rainfall and interception of the daily model}{30}{subsection.7.8}%
+\contentsline {subsection}{\numberline {S7.9}Green--Ampt infiltration}{30}{subsection.7.9}%
+\contentsline {subsection}{\numberline {S7.10}Surface irrigation: volume balance and advance}{30}{subsection.7.10}%
+\contentsline {subsection}{\numberline {S7.11}Drip laterals}{30}{subsection.7.11}%
+\contentsline {subsection}{\numberline {S7.12}Emission uniformity}{31}{subsection.7.12}%
+\contentsline {subsection}{\numberline {S7.13}Sprinkler discharge}{31}{subsection.7.13}%
+\contentsline {section}{\numberline {S8}Why the results happen}{31}{section.8}%
+\contentsline {paragraph}{Why the same trigger uses different shares of the available water.}{31}{paragraph*.17}%
+\contentsline {paragraph}{Why drainage differs under the same rain.}{31}{paragraph*.18}%
+\contentsline {paragraph}{Why stage-1 evaporation lasts longer in fine soils.}{31}{paragraph*.19}%
+\contentsline {paragraph}{Why the leaf water potential is set by a conductivity floor.}{31}{paragraph*.20}%
+\contentsline {paragraph}{Why the drainage share of a mulch saving is understated in coarse soils.}{32}{paragraph*.21}%
+\contentsline {paragraph}{Why the meta-model ranks well but has an offset.}{32}{paragraph*.22}%
+\contentsline {paragraph}{Why the daily model fails in sand at dry triggers.}{32}{paragraph*.23}%
+\contentsline {section}{\numberline {S9}The data}{32}{section.9}%
+\contentsline {section}{\numberline {S10}Where every table and figure comes from}{91}{section.10}%

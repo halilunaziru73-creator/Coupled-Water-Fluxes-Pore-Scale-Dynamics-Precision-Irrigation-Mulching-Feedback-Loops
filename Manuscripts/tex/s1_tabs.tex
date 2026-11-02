@@ -1,0 +1,115 @@
+\paragraph{Table 1 of the article.} \emph{Symbols, abbreviations and units of hydraulic memory and of the accounting audit.}
+
+\textbf{How it is made.} Descriptive table (definitions, design, parameters or tests); no computation.
+
+\paragraph{Table 2 of the article.} \emph{Experiments of the ensemble used in this paper. ``Valid'' counts exclude runs that failed to complete. Experiments marked $\ast$ are the primary ones for the diagnostics defined here.}
+
+\textbf{How it is made.} Descriptive table (definitions, design, parameters or tests); no computation.
+
+\paragraph{Table 3 of the article.} \emph{Soil set. $n$ and $\alpha$: effective van~Genuchten parameters; $\TAW$: total available water to 1\,m used in the project documentation; $\Se(100)$: effective saturation at 100\,cm suction from Eq.~(1) of the article.}
+
+\textbf{How it is made.} Table typed from the result file (27 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/p3_js/run_drip.js}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 4 of the article.} \emph{The data of this study: the 17 Daisy experiments of \texttt{Data/Comprehensive\_Summary} (10190 runs, 10041 valid; 20 years, 1980--1999, of Taastrup weather). Means of the valid runs; $Y$ yield (Mg\,ha$^{-1}$), $I$ irrigation, $D$ drainage at 1\,m and $\ET$ (mm\,yr$^{-1}$), $N_L$ nitrate leached (kg\,N\,ha$^{-1}$\,yr$^{-1}$), $t$ run time of Daisy (s). Every row is one file of the folder, linked.}
+
+\textbf{How it is made.} Table written by the script (tex/data\_table.tex). Script: \nolinkurl{Manuscripts/reproducibility/analysis/data_overview.py}. Input: \nolinkurl{Data/Comprehensive_Summary/00_summary_all_simulations.csv.gz}.
+
+\paragraph{Table 5 of the article.} \emph{Descriptive statistics of the 10\,041 valid runs (mm\,yr$^{-1}$; yield in Mg\,ha$^{-1}$ not shown).}
+
+\textbf{How it is made.} Table typed in the manuscript from the result files of the script. Script: \nolinkurl{p2_robust.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 6 of the article.} \emph{Soil parameters used as predictors (effective van~Genuchten values from the project documentation; $\TAW$ in mm to 1\,m).}
+
+\textbf{How it is made.} Table typed from the result file (11 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/audit_numbers.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 7 of the article.} \emph{Candidate library $\boldsymbol\Theta$ (log-transformed or dimensionless).}
+
+\textbf{How it is made.} Descriptive table (definitions, design, parameters or tests); no computation.
+
+\paragraph{Table 8 of the article.} \emph{Memory fates (E9) and loss fates (E16, E7) by soil. $\phi_D,\phi_T,\phi_{E_s}$: drainage, transpiration and soil-evaporation shares of released antecedent storage; $\psi_D$, $\psi_I$: drainage and irrigation shares of an evaporation change; $\rho_R^{16}=1-\psi_D^{E16}$.}
+
+\textbf{How it is made.} Table typed from the result file (55 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/p3_js/run_drip.js}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 9 of the article.} \emph{Leave-one-soil-out (LOSO) predictive error of $\phi_D$ by predictor.}
+
+\textbf{How it is made.} Table typed from the result file (8 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/p3_js/run_drip.js}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 10 of the article.} \emph{Rank associations among soil-level diagnostics ($n=10$ soils). CI: percentile bootstrap.}
+
+\textbf{How it is made.} Table typed from the result file (14 of its numbers found there). Script: \nolinkurl{p1_stats.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 11 of the article.} \emph{Paired effects of E16 factors on the drainage share $\psi_D$ of an evaporation change. ``Up'' counts soils in which $\psi_D$ is higher at the second level. $p$: exact two-sided sign test across soils.}
+
+\textbf{How it is made.} Table typed from the result file (8 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/analysis/p1_figs_c.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 12 of the article.} \emph{Hypothesis register. the test and outcome of every formulation examined. Verdicts refer to the ten-soil simulated ensemble.}
+
+\textbf{How it is made.} Table typed from the result file (7 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/p3_js/run_drip.js}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 13 of the article.} \emph{Four-flux null vector fitted within each experiment (scaled to $c_{\mathit{ET}}=-1$); ``--'' marks a flux with no variation in the experiment (irrigation in E0, E8, E9). $\hat\sigma=\sigma_q/\sqrt N$ is the residual scale in units of the column root-mean-square.}
+
+\textbf{How it is made.} Table typed from the result file (34 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/p3_js/run_drip.js}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 14 of the article.} \emph{Unattributed term $R$ by experiment. median $R$ (mm\,yr$^{-1}$), median share of ET, and median storage residual $\Delta S/W$.}
+
+\textbf{How it is made.} Table typed from the result file (22 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/run_all.sh}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 15 of the article.} \emph{Sensitivity of the clr-PCA to the zero-replacement floor (variance explained, \%).}
+
+\textbf{How it is made.} Table typed in the manuscript from the result files of the script. Script: \nolinkurl{p2_a.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 16 of the article.} \emph{Leave-one-experiment-out performance of Eq.~(19) of the article by experiment: MAPE (\%) and mean error (predicted minus Daisy, mm\,yr$^{-1}$).}
+
+\textbf{How it is made.} Table typed in the manuscript from the result files of the script. Script: \nolinkurl{(see the reproducibility appendix of the paper)}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 17 of the article.} \emph{Closure residual $\varepsilon=(W-\mathit{ET}-D)/W$ by experiment (per cent of water input): median signed, median absolute and 95th percentile of absolute residual.}
+
+\textbf{How it is made.} Table typed from the result file (18 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/run_all.sh}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 18 of the article.} \emph{LOEO residuals of the ET law by soil (predicted minus Daisy, mm\,yr$^{-1}$). MAPE: mean absolute percentage error; RMSE in mm\,yr$^{-1}$.}
+
+\textbf{How it is made.} Table typed in the manuscript from the result files of the script. Script: \nolinkurl{(see the reproducibility appendix of the paper)}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 19 of the article.} \emph{Forward-selection path for the ET law. LOEO $R^2_{\mathrm{cv}}$ after each added term; and for other targets (first terms).}
+
+\textbf{How it is made.} Table typed from the result file (12 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/p3_js/run_drip.js}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 20 of the article.} \emph{ET (mm\,yr$^{-1}$) predicted by Eq.~(19) of the article for three water inputs $W$ with irrigation $I$.}
+
+\textbf{How it is made.} Table typed from the result file (3 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/analysis/p4_reach.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 21 of the article.} \emph{Sparse laws and benchmark. cross-validated $R^2$ on the log scale. Selected terms in order of selection.}
+
+\textbf{How it is made.} Table typed from the result file (23 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/p3_js/run_drip.js}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 22 of the article.} \emph{Closure-derived drainage $W-\widehat{\mathit{ET}}$ (LOEO ET law) against Daisy drainage by drainage class (E8, E9 excluded). Bias = predicted minus Daisy.}
+
+\textbf{How it is made.} Table typed in the manuscript from the result files of the script. Script: \nolinkurl{(see the reproducibility appendix of the paper)}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 23 of the article.} \emph{Compensation $\kappa=-\Delta I/\Delta P_r$ and the response of ET and drainage to rain, per soil in E16.}
+
+\textbf{How it is made.} Table typed from the result file (19 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/run_all.sh}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 24 of the article.} \emph{Drainage share of the change of evaporation in the mulch experiment E7 (20 combinations per soil), computed against the closed non-transpiration term $E_{nt}=\mathit{ET}-T$ (as in the memory analysis) and against the reported soil evaporation $E_s$ alone. $f_{E_s}$ is the share of the change of $E_{nt}$ that is carried by $E_s$.}
+
+\textbf{How it is made.} Table typed from the result file (24 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/run_all.sh}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 25 of the article.} \emph{Drivers of soil hydraulic properties, their expected effect on $K_s$ and on the memory fate through Eq.~(8) of the article, and their treatment in this study.}
+
+\textbf{How it is made.} Descriptive table (definitions, design, parameters or tests); no computation.
+
+\paragraph{Table 26 of the article.} \emph{Qualitative reading of the diagnostics for management. $\rho_R$ from E16 (Table~8 of the article); ``mulch'' column from E7.}
+
+\textbf{How it is made.} Table typed from the result file (8 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/audit_numbers.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 27 of the article.} \emph{What this article adds, item by item: what was established before, what is new here, and the evidence in this article.}
+
+\textbf{How it is made.} Table typed from the result file (9 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/p3_js/run_drip.js}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 28 of the article.} \emph{E9 reference values at $P=1$. storage release $\bar R$ (mm\,yr$^{-1}$), drainage $D$ and transpiration $T$ for wet ($h_0=30$ or 100\,cm) and dry ($h_0=1500$ or 3000\,cm) starts. Negative $D$ denotes net capillary rise across the 1\,m boundary; ``--'' marks a failed run (S03 at 3000\,cm).}
+
+\textbf{How it is made.} Table typed in the manuscript from the result files of the script. Script: \nolinkurl{(see the reproducibility appendix of the paper)}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 29 of the article.} \emph{Closure of the loss fates. $\Delta\Ent$: mean paired change in non-transpirational evapotranspiration for $E_p=0.3\to1.2$ (mm\,yr$^{-1}$); $\psi_D,\psi_I,\psi_T$: shares; $\Sigma$: their sum (the remainder is storage and runoff); span E7: range of $\Ent$ across the mulch lattice (mm\,yr$^{-1}$).}
+
+\textbf{How it is made.} Table typed from the result file (34 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/run_all.sh}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.

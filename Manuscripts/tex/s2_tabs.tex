@@ -1,0 +1,63 @@
+\paragraph{Table 1 of the article.} \emph{Symbols, abbreviations and units of the soil--water--atmosphere engines and of the irrigation design modules, grouped by subject.}
+
+\textbf{How it is made.} Descriptive table (definitions, design, parameters or tests); no computation.
+
+\paragraph{Table 2 of the article.} \emph{State variables and fluxes of the modelled soil--water--atmosphere system, by compartment; the soil matrix and soil structure rows form the soil compartment, and the lower boundary (drainage) and the management decision are listed separately. Source: E1 = Engine~1 (annual), E2 = Engine~2 (daily), D = Daisy output stored in the software, R = relation evaluated by the layer. Provenance: L literature, D data-driven, E engineered.}
+
+\textbf{How it is made.} Table typed from the result file (10 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/audit_numbers.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 3 of the article.} \emph{The twelve controls of the framework, their values and defaults, and the variables that respond. Run set: the Daisy experiment from which the response is read.}
+
+\textbf{How it is made.} Table typed from the result file (5 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/p3_js/run_drip.js}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 4 of the article.} \emph{The seven feedback loops: control step, printed effect and arrow-width input $\mu$.}
+
+\textbf{How it is made.} Table typed in the manuscript from the result files of the script. Script: \nolinkurl{(see the reproducibility appendix of the paper)}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 5 of the article.} \emph{Experiments used by Engine~1, the number of soils they cover and the equation family that consumes them.}
+
+\textbf{How it is made.} Descriptive table (definitions, design, parameters or tests); no computation.
+
+\paragraph{Table 6 of the article.} \emph{Output variables of each Daisy run (20-year means, 1980--1999) that form the evidence layer. The complete run table is in the \datalink{} folder of the repository and on Zenodo.}
+
+\textbf{How it is made.} Descriptive table (definitions, design, parameters or tests); no computation.
+
+\paragraph{Table 7 of the article.} \emph{Effective van~Genuchten parameters used by Engine~1 and the available-water capacity (AWC, mm of water per cm of soil, an engineered texture-class constant), with the critical suction $h^\ast$ at the soil-independent depletion $f^\ast=0.45$.}
+
+\textbf{How it is made.} Table typed from the result file (11 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/audit_numbers.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 8 of the article.} \emph{Soil and surface variables of the ten soils. Texture as sand/silt/clay (\%); $\theta_s$, $\theta_r$ from Eq.~(2) of the article; $S_e(100)$ effective saturation at field capacity; $f(300)$ depletion reached at a suction of 300\,cm (Eq.~(29) of the article); $Q_1$ stage-1 storage, $\tau_E$ stage-2 time scale, $t_1$ stage-1 duration and $Q(12)$ cumulative evaporation after 12 days at $e_0=4.2$\,mm\,d$^{-1}$ (Eq.~(11) of the article).}
+
+\textbf{How it is made.} Table typed from the result file (39 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/p3_js/run_drip.js}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 9 of the article.} \emph{Annual balance of the ten soils from Engine~1 (mm\,yr$^{-1}$, 20-year means; Eq.~(1) of the article): precipitation $P$, irrigation $I$, transpiration $T$, soil evaporation $E$, other evaporation $E_{\mathrm{oth}}$, drainage $D$ and storage change $\Delta S$; yield $Y$ (Mg\,ha$^{-1}$), nitrate leaching $N_L$ (kg\,ha$^{-1}$\,yr$^{-1}$) and the regime index $\mathcal I$ (Eq.~(14) of the article).}
+
+\textbf{How it is made.} Table typed from the result file (15 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/audit_numbers.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 10 of the article.} \emph{Crop, water-potential and mulch variables of the ten soils. Engine~2 (20 years): maximum rooting depth $R_{\max}$ (Eq.~(17) of the article), mean of the yearly deepest roots $\bar R_d$, depths holding 50 and 90\,\% of uptake (Eq.~(20) of the article), irrigation events per year, dose $d$ (mm), median wetting depth of an irrigation (cm) and calibration factor $k_t$. Water-potential path (Eq.~(21) and Eq.~(22) of the article), means over crop days of day-of-year 120--210: $\psi_{\mathrm{RZ}}$, $\psi_{\mathrm{leaf}}$ (MPa) and share of days with $\psi_{\mathrm{leaf}}<-1.6$\,MPa. Straw mulch ($\varphi=0.4$, $c=4$\,mm) against bare soil: evaporation saved $\Delta E$ (mm\,yr$^{-1}$) and its fate shares (Eq.~(23) of the article).}
+
+\textbf{How it is made.} Table typed from the result file (36 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/p3_js/swa_vars.js}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 11 of the article.} \emph{Result views, governing relations and verification. Equation numbers in brackets refer to the Manual; provenance labels are L (literature), D (data-driven), E (engineered).}
+
+\textbf{How it is made.} Table typed from the result file (11 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/audit_numbers.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 12 of the article.} \emph{Surface-irrigation Example 6.1 \citep{Walker1987}: published and computed quantities. $T_{req}$: required infiltration time (min); $t_L$: advance time to the end of the furrow (min) at flow $Q$ (m$^3$\,min$^{-1}$); $E_a$: application efficiency (\%). Error $=100(\text{SWAFL}-\text{book})/\text{book}$.}
+
+\textbf{How it is made.} Table typed from the result file (22 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/audit_numbers.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 13 of the article.} \emph{Border Example 6.4 (\citet{Walker1987}) and the sprinkler example: published and computed values.}
+
+\textbf{How it is made.} Table typed from the result file (11 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/run_all.sh}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 14 of the article.} \emph{Engine 1 against 1\,000 held-out E12 runs (coarse loam), off-axis cells. Raw: as shipped; re-anchored: baseline aligned. nRMSE: RMSE as \% of the observed mean; $\rho$: Spearman rank correlation.}
+
+\textbf{How it is made.} Table typed from the result file (15 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/run_all.sh}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 15 of the article.} \emph{Drip lateral solver of version~1 (four passes) and the converged solver against an independent solver, by loss ratio $h_f/H_0$ (400 random configurations). Maximum relative error in $h_f$ and maximum absolute error in $E_u$.}
+
+\textbf{How it is made.} Table typed from the result file (4 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/p3_js/run_drip.js}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
+
+\paragraph{Table 16 of the article.} \emph{What this article adds, item by item: what was established before, what is new here, and the evidence in this article.}
+
+\textbf{How it is made.} Table typed from the result file (4 of its numbers found there). Script: \nolinkurl{Manuscripts/reproducibility/audit_numbers.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
