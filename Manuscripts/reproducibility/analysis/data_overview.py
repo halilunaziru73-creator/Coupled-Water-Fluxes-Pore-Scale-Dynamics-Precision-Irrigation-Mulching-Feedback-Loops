@@ -1,6 +1,6 @@
 """The data behind the four papers: Data/Comprehensive_Summary (17 experiments, 10 190 Daisy runs).
 Writes Manuscripts/figures/data/fig_data_overview.pdf and Manuscripts/tex/data_table.tex."""
-import os, numpy as np, pandas as pd
+import os, re, numpy as np, pandas as pd
 import matplotlib; matplotlib.use('Agg'); import matplotlib.pyplot as plt
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..'))
 D = os.path.join(ROOT, 'Data/Comprehensive_Summary/')
@@ -24,6 +24,11 @@ for r in rows:
     tex.append('%s & \\href{%s}{\\texttt{%s}} & %d & %d & %s & %.2f & %.0f & %.0f & %.0f & %.0f & %.0f\\\\' % (r['E'], url, r['name'].replace('&', '\\&'), r['runs'], r['valid'], r['fac'], r['Y'], r['I'], r['D'], r['ET'], r['NL'], r['s']))
 tex += ['\\bottomrule', '\\end{tabular}', '\\end{table}']
 open(os.path.join(ROOT, 'Manuscripts/tex/data_table.tex'), 'w').write('\n'.join(tex) + '\n')
+# the experiments used by the reach analysis only
+keep = ('E0 ', 'E2 ', 'E3 ', 'E4 ', 'E10 ', 'E15 ')
+t4 = [l for l in tex if not re.match(r'E\d+ &', l) or l.startswith(keep)]
+t4 = [l.replace('The data of this study: the 17 Daisy experiments of', 'The experiments of the analysis, from').replace('\\label{tab:data}', '\\label{tab:data4}') for l in t4]
+open(os.path.join(ROOT, 'Manuscripts/tex/data_table_p4.tex'), 'w').write('\n'.join(t4) + '\n')
 # figure: distributions per experiment
 plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 8, 'axes.spines.top': False, 'axes.spines.right': False, 'axes.titleweight': 'bold', 'axes.titlelocation': 'left', 'axes.titlesize': 8.5})
 v = a[a.ok]; labs = [e.split('_')[0] for e in order]

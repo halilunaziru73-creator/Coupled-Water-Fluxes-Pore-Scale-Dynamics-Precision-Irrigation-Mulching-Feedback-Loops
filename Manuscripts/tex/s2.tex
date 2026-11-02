@@ -15,6 +15,35 @@
 The table sets each contribution against what was established before it. The derivations that follow mark which equations are taken from the literature and which are new.
 \input{s2_nov.tex}
 
+\section{A step-by-step guide for students}
+Each step explains one engine of the article with a worked example; the numbers can be reproduced in sheet \texttt{EQ\_P2} of the workbook.
+
+\subsection{Step 1: from a suction trigger to a share of the available water}
+The plant-available water lies between field capacity (100\,cm) and the wilting point (15\,849\,cm). The depletion at a suction $h$ is $f(h)=[S_e(100)-S_e(h)]/[S_e(100)-S_e(15\,849)]$.
+\emph{Example (loam, $\alpha=0.036$, $n=1.56$, $m=0.359$).} $S_e(100)=0.466$, $S_e(15\,849)=0.029$, $S_e(300)=0.262$; $f(300)=(0.466-0.262)/(0.466-0.029)=0.47$: at a 300\,cm trigger the loam has used 47\,\% of its available water. In sand the same trigger means 84\,\%, in silty clay loam 24\,\%.
+
+\subsection{Step 2: from a chosen depletion to a soil's own trigger}
+Choose $f^\ast=0.45$. Then $S_e^\ast=S_e(100)-f^\ast[S_e(100)-S_e(15\,849)]$ and the trigger is $h^\ast=\alpha^{-1}(S_e^{\ast\,-1/m}-1)^{1/n}$.
+\emph{Example (loam).} $S_e^\ast=0.466-0.45\times0.437=0.269$; $0.269^{-1/0.359}=38.8$; $38.8-1=37.8$; $37.8^{1/1.56}=10.2$; $10.2/0.036=284$\,cm.
+
+\subsection{Step 3: interception by the canopy}
+If daily rain is exponential with mean $\mu_0$, a store $I_c$ lets through the fraction $r=e^{-I_c/\mu_0}$, so $I_c=\mu_0\ln(1/r)$. \emph{Example:} $\mu_0=4.5$\,mm and $r=0.9$ give $I_c=4.5\times0.105=0.47$\,mm.
+
+\subsection{Step 4: infiltration (Green--Ampt)}
+Water enters behind a sharp front. With $K_s$, front suction $\psi_f$ and water-content jump $\Delta\theta$, the infiltrated depth $F$ after time $t$ solves $F-\psi_f\Delta\theta\ln(1+F/(\psi_f\Delta\theta))=K_st$, found by trying values of $F$ until both sides agree.
+
+\subsection{Step 5: surface irrigation advance}
+The water admitted ($Q\,t$) is split between the surface and the soil; dividing by the volume per metre gives the advance $x(t)=Qt/(\sigma_yA_0+\sigma_zkt^Aw)$. The efficiencies follow from the stored, percolated and runoff volumes and add to one.
+
+\subsection{Step 6: friction in a drip lateral}
+The Hazen--Williams loss of the full flow is reduced by the Christiansen factor because the flow falls along the lateral. \emph{Example:} 50 outlets give $F_c=1/2.852+1/100+\sqrt{0.852}/15\,000=0.361$; a 100\,m lateral of 16\,mm with 0.5\,L\,s$^{-1}$ at the inlet loses about 17.6\,m.
+
+\subsection{Step 7: a sprinkler nozzle}
+$q=0.95A_n\sqrt{2gh_n}$. \emph{Example:} a 4\,mm nozzle at 30\,m head: $A_n=1.26\times10^{-5}$\,m$^2$, $\sqrt{2\times9.81\times30}=24.3$\,m\,s$^{-1}$, $q=2.9\times10^{-4}$\,m$^3$\,s$^{-1}=17.4$\,L\,min$^{-1}$.
+
+\subsection{Step 8: reproduce everything}
+Sheet \texttt{EQ\_P2} holds Steps 1, 2, 3, 6 and 7 as formulas; the verification scripts of the article are listed in its last section.
+
 \section{Derivations of the equations}
 Most derivations of Section~S2 are of established relations, given so that every equation of the article can be followed from first principles: the capillary law, the Kelvin relation, Green--Ampt infiltration, the volume balance of surface irrigation, Hazen--Williams losses with the Christiansen factor, emission uniformity and nozzle discharge \citep{GreenAmpt1911,Walker1987,Christiansen1942,KellerKarmeli1974}. New in this article are the inversion of the depletion fraction through the van~Genuchten curve into a soil-specific trigger (S2.3), the smooth joining of the two evaporation stages (S2.5), and the choice of the interception store that makes the daily model reproduce the annual interception (S2.8); the contribution of the article is the system that joins these relations, its ledger and its verification (\cref{tab:novelty}).
 

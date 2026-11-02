@@ -25,7 +25,7 @@ Two questions lie between these lines of work. The first concerns the curve itse
 
 The second question concerns the water once applied. In a series of numerical studies, \citet{Elmaloglou2007,Elmaloglou2008,Elmaloglou2009a,Elmaloglou2009b,Elmaloglou2010} showed that pulsing, discharge, spacing, hysteresis and the hydraulic properties of the soil all change the wetting pattern and the losses below the root zone under drip; \citet{Diamantopoulos2012VZJ} reviewed how flow departs from equilibrium; \citet{Weber2019} and \citet{Iden2021} extended the hydraulic functions to the dry range where films and vapour carry the flux; and \citet{Kumar2022} showed that site-specific schedules need site-specific hydraulic properties. Across that body of work, the share of an applied millimetre that leaves as transpiration, as evaporation or as deep percolation has been answered case by case, for one soil, one method and one dose at a time. How the shares depend jointly on the soil, the dose, the method and the season, and whether any of them follows a simple law, has not been mapped.
 
-This paper answers both questions with one theory and one data set. The theory is the dry-end asymptote of the Mualem conductivity. The data set is an ensemble of 10\,190 Daisy simulations \citep{Hansen2012,Holbak2026} whose every output is openly archived, year by year, in the repository folder \cslink{} (\cref{tab:data}).
+This paper answers both questions with one theory and one data set. The theory is the dry-end asymptote of the Mualem conductivity. The data set is an ensemble of 10\,190 Daisy simulations \citep{Hansen2012,Holbak2026} whose every output is openly archived, year by year, in the repository folder \cslink{} (\cref{tab:data4}).
 
 \paragraph{Contributions.} (1) A closed form for the reach $\hc$ of a suction trigger from $\alpha$, $n$ and $\ell$ (\cref{eq:hc}), with one constant, tested out of sample against interval-censored reaches of ten soils. (2) A reach-scaled trigger $\htr/\hc$ that places the irrigation responses of all soils on one axis. (3) The marginal fate of an irrigation millimetre, split into transpiration, soil evaporation, other evaporation, drainage and storage, for eight soils, ten doses, ten seasons and three methods. (4) A soil-independent dose scale of the drained share and its interpretation. (5) The open data, code and software, and a manual through which each number can be reproduced.
 
@@ -75,15 +75,11 @@ Under fast wetting and drying the water content lags the equilibrium of the rete
 
 \section{Data and methods}
 \paragraph{The simulation ensemble and its data.}
-Daisy solves the one-dimensional Richards equation with the functions of \cref{eq:vg,eq:kr}, coupled to a crop, a surface residue layer, an energy-based potential evapotranspiration and nitrogen turnover \citep{Hansen1991,Hansen2012,Holbak2026}. The ensemble has 17 experiments (E0 to E16), ten soils from sand to silty clay loam, 20 years of Taastrup weather (1980--1999) and a cereal rotation; 10\,041 of 10\,190 runs are valid and 149 are solver failures, excluded (\cref{tab:data,fig:data}). The irrigation scheduler of Daisy applies a dose whenever the suction at a sensor depth exceeds a trigger. Every run is in the repository: the one-row-per-run summary (\texttt{00\_summary\_all\_simulations.csv.gz}), every log of every run year by year (\texttt{E00\_Baselines.csv.gz} to \texttt{E16\_Edge\_Cases.csv.gz}), and the summariser that made them, in \cslink; the complete raw archive is on Zenodo \citep{HaliluData}. The soils are described by their effective van~Genuchten parameters (\cref{tab:reachall}) and, for eight of them, by literature saturated conductivities \citep{Carsel1988}.
+Daisy solves the one-dimensional Richards equation with the functions of \cref{eq:vg,eq:kr}, coupled to a crop, a surface residue layer, an energy-based potential evapotranspiration and nitrogen turnover \citep{Hansen1991,Hansen2012,Holbak2026}. The ensemble has 17 experiments (E0 to E16), ten soils from sand to silty clay loam, 20 years of Taastrup weather (1980--1999) and a cereal rotation; 10\,041 of 10\,190 runs are valid and 149 are solver failures, excluded (\cref{tab:data4}). The irrigation scheduler of Daisy applies a dose whenever the suction at a sensor depth exceeds a trigger. Every run is in the repository: the one-row-per-run summary (\texttt{00\_summary\_all\_simulations.csv.gz}), every log of every run year by year (\texttt{E00\_Baselines.csv.gz} to \texttt{E16\_Edge\_Cases.csv.gz}), and the summariser that made them, in \cslink; the complete raw archive is on Zenodo \citep{HaliluData}. The soils are described by their effective van~Genuchten parameters (\cref{tab:reachall}) and, for eight of them, by literature saturated conductivities \citep{Carsel1988}.
 
-\input{data_table.tex}
+\input{data_table_p4.tex}
 
-\begin{figure}[H]\centering
-\includegraphics[width=\textwidth]{\figdir/data/fig_data_overview.pdf}
-\caption{The data: yield, irrigation, drainage and nitrate leaching of the 10\,041 valid runs, by experiment (violins: distribution; boxes: quartiles). Source: \texttt{00\_summary\_all\_simulations.csv.gz} in \cslink.}
-\label{fig:data}
-\end{figure}
+
 
 \paragraph{Experiments used.}
 \emph{E2} (197 runs) sets the trigger at 20 values from 50 to 10\,000\,cm on each soil (sensor at 20\,cm, surface irrigation). \emph{E3} (200 runs) moves the sensor from 5 to 100\,cm at a 300\,cm trigger. \emph{E10} (954 runs) crosses the dose (1 to 30\,mm per event, each applied in 12\,h) with ten irrigation windows on each soil, at a 300\,cm trigger and a 20\,cm sensor. \emph{E4} (96 runs) compares surface, overhead and subsurface application on each soil, and \emph{E15} (1000 runs, coarse loam) crosses the method with the rate, the dose and the maximum rooting depth. \emph{E0} gives the rainfed twin of every soil.
@@ -231,7 +227,7 @@ The two soils whose observed lower bound exceeds the prediction (coarse sand and
 \toprule
 Item & Script & Input\\\midrule
 \cref{fig:concept} & \texttt{p4\_concept.py} & \texttt{p4\_numbers.json}\\
-\cref{tab:data}, \cref{fig:data} & \texttt{data\_overview.py} & \texttt{00\_summary\_all\_simulations.csv.gz}\\
+\cref{tab:data4} & \texttt{data\_overview.py} & \texttt{00\_summary\_all\_simulations.csv.gz}\\
 Figs.~2--5, \cref{tab:laws}, all numbers & \texttt{p4\_reach.py} & \texttt{00\_summary\_all\_simulations.csv.gz}\\
 \cref{fig:soft} & screenshots of SWAFL Desktop 1.1.0 & --\\\bottomrule
 \end{tabular}

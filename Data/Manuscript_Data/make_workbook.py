@@ -139,9 +139,17 @@ with pd.ExcelWriter(out, engine='openpyxl') as w:
         ws = w.sheets[n]; ws.freeze_panes = 'A2'
         for col in ws.columns:
             L = max((len(str(c.value)) if c.value is not None else 0) for c in list(col)[:200]); ws.column_dimensions[col[0].column_letter].width = min(60, max(9, L + 2))
+import sys; sys.path.insert(0, HERE); import eq_sheets
+eq_sheets.build(out, list(sheets['All_runs_summary'].columns), len(sheets['All_runs_summary']))
+# store the computed values too (so that viewers that do not recalculate see the numbers): recalculate with LibreOffice when present
+import shutil, subprocess, tempfile
+if shutil.which('soffice'):
+    td = tempfile.mkdtemp(); subprocess.run(['soffice', '--headless', '--convert-to', 'xlsx', '--outdir', td, out], capture_output=True, timeout=600)
+    rc = os.path.join(td, os.path.basename(out))
+    if os.path.exists(rc): shutil.move(rc, out)
 # ---------------------------------------------------------------- README.md
 md = ['# The data of the four manuscripts', '', 'This folder holds [`SWAFL_Manuscripts_Data.xlsx`](SWAFL_Manuscripts_Data.xlsx), one Excel workbook with the data used in all four papers, and this map of how every table and figure is made. Both are written by [`make_workbook.py`](make_workbook.py).', '',
-      '| Sheet | Content |', '|:--|:--|', '| `Table_Figure_Map` | every table and figure of each paper: script, input, output (the tables below) |', '| `Experiments` | one row per Daisy experiment (`Data/Comprehensive_Summary/00_SUMMARY_ALL_EXPERIMENTS.csv.gz`) |',
+      '| Sheet | Content |', '|:--|:--|', '| `Equations` | index of the equations of the four papers written as live Excel formulas |', '| `EQ_P1` to `EQ_P4_*` | the equations as formulas: inputs in yellow, results in green; the fate, dose and storage-release sheets read the run table with SUMIFS |', '| `Table_Figure_Map` | every table and figure of each paper: script, input, output (the tables below) |', '| `Experiments` | one row per Daisy experiment (`Data/Comprehensive_Summary/00_SUMMARY_ALL_EXPERIMENTS.csv.gz`) |',
       '| `Ensemble_runs` | the run table of Papers 1 to 3 (`Data/daisy_ensemble.csv.gz`, 10 190 runs) |', '| `All_runs_summary` | one row per run with the settings read from each set-up file (`00_summary_all_simulations.csv.gz`; Paper 4 and the data table of all papers) |',
       '| `R_*` | each result file of the analysis scripts (`Manuscripts/results`); JSON flattened to key and value |', '| `D_*` | the derived tables of `Results/07_Derived_Data_Tables` |', '',
       'The analysis scripts are in [`Manuscripts/reproducibility`](../../Manuscripts/reproducibility); `run_all.sh` there regenerates the results of Papers 1 to 3, and `analysis/p4_reach.py` and `analysis/data_overview.py` those of Paper 4 and of the data table and figure shared by all four papers. Screen captures of the software are not regenerated.', '']

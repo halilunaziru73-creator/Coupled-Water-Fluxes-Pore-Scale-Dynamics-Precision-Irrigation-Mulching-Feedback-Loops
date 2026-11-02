@@ -141,15 +141,10 @@ Engine~1 is an \emph{annual} meta-model: it composes, by multiplication of ratio
 \subsection{Evidence layer, the simulation ensemble}
 The evidence layer is a designed ensemble of 10\,190 Daisy runs \citep{Hansen2012,Holbak2026} in 17 experiments on ten soils (sand to silty clay loam; Ap and Bt horizons) with 20 years of Taastrup weather; twelve experiments cover all ten soils and five (E8, E11, E12, E14, E15) the coarse loam only. The experiments used by Engine~1 are summarised in \cref{tab:expuse}, and the output variables of every run are listed in \cref{tab:daisyvars}. Daisy solves the Richards equation with van~Genuchten--Mualem hydraulics \citep{vanGenuchten1980,Mualem1976} coupled to a structure model for tillage effects \citep{Flanagan1995}. For Engine~1 the effective parameters $(\alpha,n)$ were set so that the soil passes through the anchors of the project's trigger table; for the standard textures they correspond to the class means of \citet{Carsel1988} (Table~\ref{tab:soilsP3}).
 
-\paragraph{The data in the repository.} Every output of every run is open. The folder \cslink{} of the repository holds, for each of the 17 experiments, one compressed table with every value of every Daisy log of every run, year by year (the annual water balance, the nitrogen balance, the harvest and the crop state), the one-row-per-run summary of all 10\,190 runs with the settings read from each set-up file, the per-experiment summary, and the script that made them from the log files (\cref{tab:data,fig:data}); the 20-year means of these tables reproduce the run table used here within 2\,\%. The complete raw archive is on Zenodo \citep{HaliluData}.
+\paragraph{The data in the repository.} Every output of every run is open. The folder \cslink{} of the repository holds, for each of the 17 experiments, one compressed table with every value of every Daisy log of every run, year by year (the annual water balance, the nitrogen balance, the harvest and the crop state), the one-row-per-run summary of all 10\,190 runs with the settings read from each set-up file, the per-experiment summary, and the script that made them from the log files; the 20-year means of these tables reproduce the run table used here within 2\,\%. The complete raw archive is on Zenodo \citep{HaliluData}.
 
-\input{data_table.tex}
 
-\begin{figure}[H]\centering
-\includegraphics[width=\textwidth]{\figdir/data/fig_data_overview.pdf}
-\caption{The data of the ensemble: yield, irrigation, drainage and nitrate leaching of the 10\,041 valid runs, by experiment (violins: distribution; boxes: quartiles). Source: \texttt{00\_summary\_all\_simulations.csv.gz} in \cslink; script \texttt{reproducibility/analysis/data\_overview.py}.}
-\label{fig:data}
-\end{figure}
+
 
 \begin{table}[H]\centering\small
 \caption{Experiments used by Engine~1, the number of soils they cover and the equation family that consumes them.}
@@ -589,13 +584,7 @@ Every engine and module of this paper is a part of SWAFL Desktop 1.1.0 and is do
 \caption{Eight of the twenty kinds of figure of the Log plots of release 1.1.0, drawn from the daily logs of one Daisy run: small multiples, monthly box plots, violin plots, histogram with density, scatter with the least-squares line, R$^2$ and RMSE, the mean profile of each month, a calendar heat map and the anomaly of each year (screen captures).}\label{fig:plotviews}
 \end{figure}
 
-\begin{figure}[H]\centering
-\begin{subfigure}{0.40\textwidth}\centering\includegraphics[width=\textwidth]{\figdir/shots_jpg/real_trigger_law.jpg}\caption{Trigger law: depletion, sensor and the trigger of every soil (manual p.~56).}\end{subfigure}\hfill
-\begin{subfigure}{0.40\textwidth}\centering\includegraphics[width=\textwidth]{\figdir/shots_jpg/real_mulch_bare.jpg}\caption{Mulch against bare soil: six materials and their effect on the balance (p.~106).}\end{subfigure}\\[4pt]
-\begin{subfigure}{0.49\textwidth}\centering\includegraphics[width=\textwidth]{\figdir/shots_jpg/real_root_structure.jpg}\caption{Root structure in all ten soils (p.~70).}\end{subfigure}\hfill
-\begin{subfigure}{0.49\textwidth}\centering\includegraphics[width=\textwidth]{\figdir/shots_jpg/real_drip_design.jpg}\caption{Drip design: root-zone water and the next irrigations (p.~127).}\end{subfigure}
-\caption{Four engines of this paper as layers of SWAFL Desktop 1.1.0 (real screenshots, weather of Zaria, Nigeria, or the benchmark record): each shows its inputs, its figure and the manual page that documents it.}\label{fig:p2shots}
-\end{figure}
+
 
 \paragraph{What is new, item by item.} \Cref{tab:novelty} sets each contribution of this article against what was established before it, so that what is taken from the literature and what is added here can be told apart.
 \input{nov2.tex}

@@ -1,25 +1,34 @@
 \contentsline {section}{\numberline {S1}What is new in this article}{3}{section.1}%
-\contentsline {section}{\numberline {S2}Derivations of the equations}{4}{section.2}%
-\contentsline {subsection}{\numberline {S2.1}Water balance of the column}{4}{subsection.2.1}%
-\contentsline {subsection}{\numberline {S2.2}Capillary radius}{4}{subsection.2.2}%
-\contentsline {subsection}{\numberline {S2.3}Depletion and the trigger law}{4}{subsection.2.3}%
-\contentsline {subsection}{\numberline {S2.4}Consolidation of the tilled layer}{5}{subsection.2.4}%
-\contentsline {subsection}{\numberline {S2.5}Two-stage evaporation}{5}{subsection.2.5}%
-\contentsline {subsection}{\numberline {S2.6}Water potential of the air}{5}{subsection.2.6}%
-\contentsline {subsection}{\numberline {S2.7}The soil--plant--atmosphere path}{5}{subsection.2.7}%
-\contentsline {subsection}{\numberline {S2.8}Rainfall and interception of the daily model}{6}{subsection.2.8}%
-\contentsline {subsection}{\numberline {S2.9}Green--Ampt infiltration}{6}{subsection.2.9}%
-\contentsline {subsection}{\numberline {S2.10}Surface irrigation: volume balance and advance}{6}{subsection.2.10}%
-\contentsline {subsection}{\numberline {S2.11}Drip laterals}{6}{subsection.2.11}%
-\contentsline {subsection}{\numberline {S2.12}Emission uniformity}{7}{subsection.2.12}%
-\contentsline {subsection}{\numberline {S2.13}Sprinkler discharge}{7}{subsection.2.13}%
-\contentsline {section}{\numberline {S3}Why the results happen}{7}{section.3}%
-\contentsline {paragraph}{Why the same trigger uses different shares of the available water.}{7}{paragraph*.1}%
-\contentsline {paragraph}{Why drainage differs under the same rain.}{7}{paragraph*.2}%
-\contentsline {paragraph}{Why stage-1 evaporation lasts longer in fine soils.}{7}{paragraph*.3}%
-\contentsline {paragraph}{Why the leaf water potential is set by a conductivity floor.}{7}{paragraph*.4}%
-\contentsline {paragraph}{Why the drainage share of a mulch saving is understated in coarse soils.}{8}{paragraph*.5}%
-\contentsline {paragraph}{Why the meta-model ranks well but has an offset.}{8}{paragraph*.6}%
-\contentsline {paragraph}{Why the daily model fails in sand at dry triggers.}{8}{paragraph*.7}%
-\contentsline {section}{\numberline {S4}The data}{8}{section.4}%
-\contentsline {section}{\numberline {S5}Where every table and figure comes from}{67}{section.5}%
+\contentsline {section}{\numberline {S2}A step-by-step guide for students}{4}{section.2}%
+\contentsline {subsection}{\numberline {S2.1}Step 1: from a suction trigger to a share of the available water}{4}{subsection.2.1}%
+\contentsline {subsection}{\numberline {S2.2}Step 2: from a chosen depletion to a soil's own trigger}{4}{subsection.2.2}%
+\contentsline {subsection}{\numberline {S2.3}Step 3: interception by the canopy}{4}{subsection.2.3}%
+\contentsline {subsection}{\numberline {S2.4}Step 4: infiltration (Green--Ampt)}{4}{subsection.2.4}%
+\contentsline {subsection}{\numberline {S2.5}Step 5: surface irrigation advance}{5}{subsection.2.5}%
+\contentsline {subsection}{\numberline {S2.6}Step 6: friction in a drip lateral}{5}{subsection.2.6}%
+\contentsline {subsection}{\numberline {S2.7}Step 7: a sprinkler nozzle}{5}{subsection.2.7}%
+\contentsline {subsection}{\numberline {S2.8}Step 8: reproduce everything}{5}{subsection.2.8}%
+\contentsline {section}{\numberline {S3}Derivations of the equations}{5}{section.3}%
+\contentsline {subsection}{\numberline {S3.1}Water balance of the column}{6}{subsection.3.1}%
+\contentsline {subsection}{\numberline {S3.2}Capillary radius}{6}{subsection.3.2}%
+\contentsline {subsection}{\numberline {S3.3}Depletion and the trigger law}{6}{subsection.3.3}%
+\contentsline {subsection}{\numberline {S3.4}Consolidation of the tilled layer}{6}{subsection.3.4}%
+\contentsline {subsection}{\numberline {S3.5}Two-stage evaporation}{6}{subsection.3.5}%
+\contentsline {subsection}{\numberline {S3.6}Water potential of the air}{7}{subsection.3.6}%
+\contentsline {subsection}{\numberline {S3.7}The soil--plant--atmosphere path}{7}{subsection.3.7}%
+\contentsline {subsection}{\numberline {S3.8}Rainfall and interception of the daily model}{7}{subsection.3.8}%
+\contentsline {subsection}{\numberline {S3.9}Green--Ampt infiltration}{7}{subsection.3.9}%
+\contentsline {subsection}{\numberline {S3.10}Surface irrigation: volume balance and advance}{7}{subsection.3.10}%
+\contentsline {subsection}{\numberline {S3.11}Drip laterals}{8}{subsection.3.11}%
+\contentsline {subsection}{\numberline {S3.12}Emission uniformity}{8}{subsection.3.12}%
+\contentsline {subsection}{\numberline {S3.13}Sprinkler discharge}{8}{subsection.3.13}%
+\contentsline {section}{\numberline {S4}Why the results happen}{9}{section.4}%
+\contentsline {paragraph}{Why the same trigger uses different shares of the available water.}{9}{paragraph*.1}%
+\contentsline {paragraph}{Why drainage differs under the same rain.}{9}{paragraph*.2}%
+\contentsline {paragraph}{Why stage-1 evaporation lasts longer in fine soils.}{9}{paragraph*.3}%
+\contentsline {paragraph}{Why the leaf water potential is set by a conductivity floor.}{9}{paragraph*.4}%
+\contentsline {paragraph}{Why the drainage share of a mulch saving is understated in coarse soils.}{9}{paragraph*.5}%
+\contentsline {paragraph}{Why the meta-model ranks well but has an offset.}{9}{paragraph*.6}%
+\contentsline {paragraph}{Why the daily model fails in sand at dry triggers.}{9}{paragraph*.7}%
+\contentsline {section}{\numberline {S5}The data}{9}{section.5}%
+\contentsline {section}{\numberline {S6}Where every table and figure comes from}{69}{section.6}%

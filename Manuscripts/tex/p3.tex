@@ -1,10 +1,10 @@
 \input{pre.tex}
-\hypersetup{pdftitle={SWAFL Desktop as an Offline and Equation-Traceable Decision-Support Suite with a Graphical Workbench and a Verified Bridge for the Daisy Model},pdfauthor={Naziru Halilu}}
+\hypersetup{pdftitle={Soil-Water Modelling, Decision Support and a Graphical User Interface for the Daisy Model},pdfauthor={Naziru Halilu}}
 \begin{document}
 \linenumbers
 \begin{titlepage}
 \vspace*{-1.2cm}
-\begin{center}\begin{minipage}{0.92\textwidth}\centering{\Large\bfseries SWAFL Desktop as an Offline and Equation-Traceable Decision-Support Suite with a Graphical Workbench and a Verified Bridge for the Daisy Model\par}\end{minipage}\end{center}
+\begin{center}\begin{minipage}{0.92\textwidth}\centering{\Large\bfseries Soil-Water Modelling, Decision Support and a Graphical User Interface for the Daisy Model\par}\end{minipage}\end{center}
 \vspace{0.4cm}
 \authorblock
 \vspace{0.4cm}
@@ -111,9 +111,8 @@ The chain was run on a field of 5.853~ha (perimeter 992~m, 17 corners) demarcate
 \end{figure}
 
 \begin{figure}[H]\centering
-\begin{subfigure}{0.49\textwidth}\centering\includegraphics[width=\textwidth]{\figdir/shots_jpg/zaria_vri_depth.jpg}\caption{Depth of the next irrigation, cell by cell (FAO-56 balance of each 10\,m cell).}\end{subfigure}\hfill
-\begin{subfigure}{0.49\textwidth}\centering\includegraphics[width=\textwidth]{\figdir/shots_jpg/zaria_matric_potential.jpg}\caption{Matric potential now, from the retention curves mapped from SoilGrids.}\end{subfigure}
-\caption{Two further maps of the Zaria field (real screenshots): the variable-rate prescription and the suction, which show where a suction trigger can be reached.}\label{fig:zaria3}
+\includegraphics[width=0.8\textwidth]{\figdir/shots_jpg/zaria_vri_depth.jpg}
+\caption{Depth of the next irrigation on the Zaria field, cell by cell, from the FAO-56 balance of each 10\,m cell (real screenshot).}\label{fig:zaria3}
 \end{figure}
 
 
@@ -255,15 +254,10 @@ A decision layer that shows a Daisy quantity draws it from a live run or not at 
 \emph{Figures.} Every quantity of every log becomes a figure in the layout of a journal figure: one panel for each level of one factor, one line for each level of another, the other factors averaged, and a band for the spread (10 to 90\,\% of the seasons and runs for the course through the year; lowest to highest run otherwise); monthly and yearly totals for fluxes and means for states; cumulative series; depth--time maps with one colour scale and depth profiles. For a complete factorial the figures by factor are drawn; for a fraction, every run is its own row and the main effects carry their standard error and number of runs.
 \emph{Diagnosis.} A run without results is diagnosed from the message of Daisy: the line \texttt{file:line:column} is located in the set-up of the run and shown with its neighbours, and the cause is classed as a name Daisy does not know, a numerical problem of the solver (no convergence, a value that is not a number, a negative amount of water or solute), a value outside the accepted range, a missing file, the weather, a duplicate definition, a line that cannot be read, or a stop without a message; runs that fail for the same cause are reported together with the change that removes it.
 
-\paragraph{The data in the repository.} Every output of every run is open. The folder \cslink{} of the repository holds, for each of the 17 experiments, one compressed table with every value of every Daisy log of every run, year by year (the annual water balance, the nitrogen balance, the harvest and the crop state), the one-row-per-run summary of all 10\,190 runs with the settings read from each set-up file, the per-experiment summary, and the script that made them from the log files (\cref{tab:data,fig:data}); the 20-year means of these tables reproduce the run table used here within 2\,\%. The complete raw archive is on Zenodo \citep{HaliluData}.
+\paragraph{The data in the repository.} Every output of every run is open. The folder \cslink{} of the repository holds, for each of the 17 experiments, one compressed table with every value of every Daisy log of every run, year by year (the annual water balance, the nitrogen balance, the harvest and the crop state), the one-row-per-run summary of all 10\,190 runs with the settings read from each set-up file, the per-experiment summary, and the script that made them from the log files; the 20-year means of these tables reproduce the run table used here within 2\,\%. The complete raw archive is on Zenodo \citep{HaliluData}.
 
-\input{data_table.tex}
 
-\begin{figure}[H]\centering
-\includegraphics[width=\textwidth]{\figdir/data/fig_data_overview.pdf}
-\caption{The data of the ensemble: yield, irrigation, drainage and nitrate leaching of the 10\,041 valid runs, by experiment (violins: distribution; boxes: quartiles). Source: \texttt{00\_summary\_all\_simulations.csv.gz} in \cslink; script \texttt{reproducibility/analysis/data\_overview.py}.}
-\label{fig:data}
-\end{figure}
+
 
 \subsection{Checks of the workbench}
 \paragraph{Design size and fidelity.}
