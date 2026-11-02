@@ -1,5 +1,19 @@
 \subsection*{Figure 1 of the article}
 
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/paper4/fig1_concept_annot.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item One millimetre of irrigation applied to the surface; the arrows that leave the column are its fates, with widths in proportion to their shares.
+\item Transpiration (0.38 of each millimetre): the only fate that makes yield.
+\item Soil evaporation (0.25): water evaporated from the wetted surface with the energy also available to the crop.
+\item Other evaporation (0.19): intercepted water, ponds and litter.
+\item Drainage below 1 m (0.16): water lost to the crop that also carries nitrate.
+\item The sensor at 20 cm: irrigation starts when the suction it reads exceeds the trigger.
+\item The reach of sand (199 cm), where its conductivity has collapsed; the usual triggers lie beyond it.
+\item Grey band: the triggers usually tabulated (300 to 600 cm).
+\end{enumerate}
+
 \textbf{What it shows.} The two questions. Q1 (right): a trigger $\htr$ fires only if the crop can dry the soil at the sensor to $\htr$; the reach $\hc$ (dashed) is 199\,cm in sand and $9\times10^{3}$\,cm in loam, so the usual triggers (grey) lie beyond the reach of sand. Q2 (left): the fate of an irrigation millimetre, averaged over the 744 irrigated runs of experiment E10 (arrow widths to scale).
 
 \textbf{How to read the labels, symbols and colours.} Left: a soil column with three crops; the blue arrow is one millimetre of irrigation and the coloured arrows leaving the column are its fates, drawn with widths in proportion to their shares (green transpiration, orange soil evaporation, yellow other evaporation, blue drainage below 1\,m). The dark dot is the sensor at 20\,cm. Right: effective saturation $S_e$ against suction $h$ (log axis) for sand, loam and silty clay loam; the dashed vertical line of each colour is that soil's reach $\hc$; the grey band is the range of triggers usually tabulated (300 to 600\,cm).
@@ -9,6 +23,19 @@
 \textbf{How it is made.} Schematic drawn by the script with numbers from the results. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p4_concept.py}. Input: \nolinkurl{Data/Comprehensive_Summary/00_summary_all_simulations.csv.gz}.
 
 \subsection*{Figure 2 of the article}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/paper4/fig2_curves_reach_annot.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Sand: its retention curve drops almost to zero within a few tens of centimetres of suction, because its pores are nearly all the same size (large n = 2.68).
+\item Silty clay loam: the curve falls slowly over five decades of suction, because its pores span many sizes (small n = 1.23).
+\item The dashed line is the constant $\kappa=3.47\times10^{-10}$: the relative conductivity at which a crop can no longer dry the soil at the sensor.
+\item The reach of sand (199 cm) is where its conductivity curve crosses $\kappa$; the steep curve crosses early.
+\item The reach of silty clay loam (128 260 cm): its gentle curve crosses $\kappa$ only far in the dry range.
+\item Each point is the reach of one soil from Eq. (4); the reach falls as n grows. The three lines are Eq. (4) for three values of $\alpha$: a smaller $\alpha$ gives a longer reach.
+\item Grey band: the range of triggers tested in the simulations (50 to 10 000 cm). Soils whose reach lies inside the band have a trigger beyond which irrigation stops.
+\end{enumerate}
 
 \textbf{What it shows.} (a) Retention and (b) relative conductivity of the ten soils (Eq.~(1) and Eq.~(2) of the article); circles mark the reach of Eq.~(4) of the article and the dashed line the fitted $\kappa=3.5\times10^{-10}$; grey: the range of triggers tested. (c) Reach against $n$ for the ten soils, with Eq.~(4) of the article for three values of $\alpha$.
 
@@ -20,6 +47,19 @@
 
 \subsection*{Figure 3 of the article}
 
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/paper4/fig3_trigger_reach_annot.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Sand: irrigation falls to zero at 100 to 150 cm. Every drier trigger, including the common 300 cm, is never reached.
+\item Silty clay loam still irrigates at 10 000 cm, because its conductivity fades slowly and the crop can keep drying the soil.
+\item The dashed line is the reach (trigger / reach = 1). On this scaled axis every soil stops irrigating between 0.5 and 1.
+\item Sand: the bar is the observed interval (100 to 150 cm) and the dot its lower end; the prediction of Eq. (4) (199 cm) lies within a factor of two.
+\item An arrow means that even the driest trigger tested (10 000 cm) still fired, so only a lower bound of the reach is known.
+\item Grey band: within a factor of two of the 1:1 line (black). Points in the band are predicted well.
+\item Sand beyond its reach: the yield stays at the rainfed value (1.13 Mg/ha) because the field is never irrigated.
+\end{enumerate}
+
 \textbf{What it shows.} The reach of a suction trigger in experiment E2 (197 runs). (a) Irrigation against the trigger. (b) The same runs against the reach-scaled trigger $\htr/\hc$, irrigation divided by its soil maximum: every soil stops at $\htr/\hc\approx0.5$ to 1. (c) Predicted reach (Eq.~(4) of the article) against the observed interval (bars; arrows: only a lower bound); grey band: within a factor of 2. (d) Yield against the trigger: beyond the reach the crop is rainfed.
 
 \textbf{How to read the labels, symbols and colours.} (a) Annual irrigation (mm) against the trigger suction (log axis), one line per soil. (b) The same irrigation divided by each soil's maximum, against the trigger divided by the reach; the dashed line is $x=1$. (c) Predicted reach (Eq.~(4) of the article) against the observed interval: bars span the interval, arrows mean only a lower bound is known, the black line is 1:1 and the grey band a factor of two. (d) Yield against the trigger.
@@ -29,6 +69,17 @@
 \textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p4_reach.py}. Input: \nolinkurl{Data/Comprehensive_Summary/00_summary_all_simulations.csv.gz}.
 
 \subsection*{Figure 4 of the article}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/paper4/fig4_marginal_fate_annot.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Sandy loam transpires the largest share of each irrigation millimetre (0.64): it holds the water near the roots and loses little to the surface.
+\item Coarse sand: drainage below 1 m is the largest single loss (0.32), because the soil passes extra water on before the crop can use it.
+\item Overhead irrigation: the transpired share is negative (-0.08). Water intercepted by the canopy evaporates with the energy that would have driven transpiration.
+\item Most of the overhead water (0.79) leaves as other evaporation: canopy interception, ponds and litter.
+\item Subsurface application transpires most (0.51) but also drains most (0.23), because it wets the profile from within.
+\end{enumerate}
 
 \textbf{What it shows.} The fate of an irrigation millimetre, Eq.~(5) of the article. (a) By soil (E10, 744 irrigated runs; sand and loamy sand are never irrigated at the 300\,cm trigger of E10), ordered by $n$. (b) By method, on all soils (E4) and on coarse loam over all rates, doses and rooting depths (E15).
 
@@ -40,6 +91,17 @@
 
 \subsection*{Figure 5 of the article}
 
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/paper4/fig5_dose_annot.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Plateau of coarse sand (0.45): the share of a large dose that drains. It is set by the soil, which passes water on fast.
+\item Doses of 1 to 2 mm hardly drain (0.01 to 0.09): they are used near the surface on the day they are applied.
+\item The dose scale $d_D$ (about 4 mm in every soil): at d = $d_D$ the drained share reaches 63 \% of its plateau. It is about one day of crop water use.
+\item The transpired share rises with the dose and peaks at 15 to 20 mm, because less of a larger dose is lost from the wet surface.
+\item At 1 mm, 60 to 72 \% of the dose evaporates: small doses trade drainage for evaporation.
+\end{enumerate}
+
 \textbf{What it shows.} The dose (E10, all ten windows pooled). (a) Drained share with Eq.~(6) of the article per soil. (b) Transpired share. (c) Evaporated share (soil and other evaporation).
 
 \textbf{How to read the labels, symbols and colours.} Horizontal axes: dose per event (mm, log scale). (a) Drained share $\eta_D$: points are the Daisy runs (E10, pooled over windows), lines the fit of Eq.~(6) of the article. (b) Transpired share. (c) Evaporated share (soil plus other evaporation). Colours: soils, named in the legend.
@@ -49,6 +111,36 @@
 \textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p4_reach.py}. Input: \nolinkurl{Data/Comprehensive_Summary/00_summary_all_simulations.csv.gz}.
 
 \subsection*{Figure 6 of the article}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p4_fig-soft_0.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 1 of 3: Trigger law layer: depletion, sensor and the trigger of every soil.).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Coarse Loam'': the soil of the project, which every layer uses.
+\item ``setting 0'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Sandy Clay'': the soil of the project, which every layer uses.
+\item ``starts'': a heading or control of this screen; the caption above says which layer it belongs to.
+\end{enumerate}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p4_fig-soft_1.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 2 of 3: Matric potential on a 5.85\,ha field near Zaria, from mapped retention curves.).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Lat Lon'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Irrigation layout on the map'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Available water'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Sensors to place'': the soil-water sensor: its depth and reading.
+\end{enumerate}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p4_fig-soft_2.png}\end{center}
+
+\textbf{What the numbered labels point to (picture 3 of 3: Daisy workbench, step 3 of 9: ready-made experiments (trigger and sensor depth, dose, method) and the user's own.).}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Daisy runs, figures, tests and calibration'': the Daisy model and its workbench.
+\item ``Scenarios'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``SWAFL'': the menu bar of the program (file, view, run, Daisy, help).
+\item ``Hide tos'': a heading or control of this screen; the caption above says which layer it belongs to.
+\end{enumerate}
 
 \textbf{What it shows.} The analysis in SWAFL Desktop 1.1.0 (real screenshots of the release). Panels: (a) Trigger law layer: depletion, sensor and the trigger of every soil. (b) Matric potential on a 5.85\,ha field near Zaria, from mapped retention curves. (c) Daisy workbench, step 3 of 9: ready-made experiments (trigger and sensor depth, dose, method) and the user's own.
 

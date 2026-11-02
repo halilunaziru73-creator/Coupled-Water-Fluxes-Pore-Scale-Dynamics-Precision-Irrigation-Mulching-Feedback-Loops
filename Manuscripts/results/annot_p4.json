@@ -1,0 +1,67 @@
+{
+ "fig:soft": [
+  {
+   "file": "../figures/annot/p4_fig-soft_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Coarse Loam"
+    },
+    {
+     "kind": "text",
+     "text": "setting 0"
+    },
+    {
+     "kind": "text",
+     "text": "Sandy Clay"
+    },
+    {
+     "kind": "text",
+     "text": "starts"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p4_fig-soft_1.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Lat Lon"
+    },
+    {
+     "kind": "text",
+     "text": "Irrigation layout on the map"
+    },
+    {
+     "kind": "text",
+     "text": "Available water"
+    },
+    {
+     "kind": "text",
+     "text": "Sensors to place"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p4_fig-soft_2.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Daisy runs, figures, tests and calibration"
+    },
+    {
+     "kind": "text",
+     "text": "Scenarios"
+    },
+    {
+     "kind": "text",
+     "text": "SWAFL"
+    },
+    {
+     "kind": "text",
+     "text": "Hide tos"
+    }
+   ]
+  }
+ ]
+}

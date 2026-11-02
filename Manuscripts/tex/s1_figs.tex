@@ -1,5 +1,12 @@
 \subsection*{Figure 1 of the article}
 
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p1_fig-pipeline_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): see the caption above.
+\end{enumerate}
+
 \textbf{What it shows.} Pipeline for interpretable discovery. The pipeline recovers the known water balance as a positive control, audits partitions, measures the dimension of the partition manifold and fits sparse laws with LOSO/LOEO validation against gradient boosting. Controls (dashed purple boxes) are shown at the bottom and outputs at the top; purple hexagons are processing blocks, the pink stippled box is the data store, peach boxes are outputs and dotted lines are flows of information. The 149 runs excluded as numerical failures are analysed in Section~2.2 of the article.
 
 \textbf{How to read the labels, symbols and colours.} Flow diagram: purple hexagons are processing blocks, the pink stippled box the data store, peach boxes the outputs, dashed purple boxes the controls; dotted lines are flows of information.
@@ -9,6 +16,18 @@
 \textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/make_a4.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
 
 \subsection*{Figure 2 of the article}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p1_fig-framework_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``Driving variables: imposed climate change'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``texture organic matter - tillage'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``Rate competition'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``imposed'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``(baseline E)'': a heading or control of this screen; the caption above says which layer it belongs to.
+\item ``memory fates'': a heading or control of this screen; the caption above says which layer it belongs to.
+\end{enumerate}
 
 \textbf{What it shows.} Conceptual and analytical framework. Antecedent storage released from the root zone can leave as drainage, soil evaporation, transpiration or other evaporation (memory fates $\phi$, estimated from E9). An imposed change in evaporative loss is offset by drainage, irrigation or transpiration (loss fates $\psi$, estimated from E16 and E7). The recoverable fraction of an evaporation saving is $1-\psi_D$. Boxes indicate storages and solid lines flows; dashed black lines are flows out of the system, dotted lines flows of information; dashed purple boxes are drivers of soil hydraulic properties and the imposed climate changes. Pink indicates water, orange the crop, light brown the soil and rust the pore network; the purple hexagon is the rate-competition process and peach boxes are results. The brown line is the soil surface.
 
@@ -20,6 +39,17 @@
 
 \subsection*{Figure 3 of the article}
 
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p1_fig-hydraulics_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): see the caption above.
+\item Panel (b): see the caption above.
+\item Panel (c): see the caption above.
+\item Panel (d): see the caption above.
+\item Panel (e): see the caption above.
+\end{enumerate}
+
 \textbf{What it shows.} Hydraulic properties of the ten soils from Eq.~(1) and Eq.~(2) of the article. The ordering by shape parameter $n$ is the ordering on which the main results are organised.
 
 \textbf{How to read the labels, symbols and colours.} Retention and conductivity curves of the ten soils from the van~Genuchten--Mualem functions, coloured by soil.
@@ -29,6 +59,13 @@
 \textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p1_figs_a.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
 
 \subsection*{Figure 4 of the article}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p1_fig-data_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item ``experiment and number of runs'': a heading or control of this screen; the caption above says which layer it belongs to.
+\end{enumerate}
 
 \textbf{What it shows.} The data of the ensemble: yield, irrigation, drainage and nitrate leaching of the 10\,041 valid runs, by experiment (violins: distribution; boxes: quartiles). Source: \texttt{00\_summary\_all\_simulations.csv.gz} in \cslink; script \texttt{reproducibility/analysis/data\_overview.py}.
 
@@ -40,6 +77,16 @@
 
 \subsection*{Figure 5 of the article}
 
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p1_fig-failed_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): Failed runs per soil, as a percentage of the 519 runs per soil (counts above bars).
+\item Panel (b): Failed fraction in S02 against irrigation depth per event in E10.
+\item Panel (c): Failed fraction in S02 against rain scale.
+\item Panel (d): Annual drainage at 1\,m for valid and failed runs, normalised as densities; negative drainage of several hundred millimetres occurs only in failed runs.
+\end{enumerate}
+
 \textbf{What it shows.} Pattern of the 149 failed runs. (a) Failed runs per soil, as a percentage of the 519 runs per soil (counts above bars). (b) Failed fraction in S02 against irrigation depth per event in E10. (c) Failed fraction in S02 against rain scale. (d) Annual drainage at 1\,m for valid and failed runs, normalised as densities; negative drainage of several hundred millimetres occurs only in failed runs.
 
 \textbf{How to read the labels, symbols and colours.} (a) Share of failed runs per soil; (b, c) failed share of coarse sand against dose and rain scale; (d) density of annual drainage for valid and failed runs.
@@ -49,6 +96,22 @@
 \textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p2_figfail.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
 
 \subsection*{Figure 6 of the article}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p1_fig-memory_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): see the caption above.
+\item Panel (b): see the caption above.
+\item Panel (c): see the caption above.
+\item Panel (d): see the caption above.
+\item Panel (e): see the caption above.
+\item Panel (f): see the caption above.
+\item Panel (g): see the caption above.
+\item Panel (h): see the caption above.
+\item Panel (i): see the caption above.
+\item Panel (j): see the caption above.
+\end{enumerate}
 
 \textbf{What it shows.} Storage release $\bar R$ (mm\,yr$^{-1}$) versus initial suction $h_0$ in the E9 lattice, one panel per soil (a--j, ordered by decreasing van~Genuchten $n$). Lines are rain scales $P=0.5$--1.4 (colour bar). Wetter starts (small $h_0$) release more storage; the response saturates early in coarse soils and extends over the full $h_0$ range in fine soils.
 
@@ -60,6 +123,15 @@
 
 \subsection*{Figure 7 of the article}
 
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p1_fig-fates_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): Memory fates $\phi$ of released antecedent storage (E9; error bars: bootstrap 95\,\% CI for drainage).
+\item Panel (b): Loss fates $\psi_D$ (drainage) and $\psi_I$ (irrigation) of an evaporation-factor increase (E16).
+\item Panel (c): Drainage share of the evaporation saving from mulch (E7). Soils are ordered by decreasing $\phi_D$.
+\end{enumerate}
+
 \textbf{What it shows.} (a) Memory fates $\phi$ of released antecedent storage (E9; error bars: bootstrap 95\,\% CI for drainage). (b) Loss fates $\psi_D$ (drainage) and $\psi_I$ (irrigation) of an evaporation-factor increase (E16). (c) Drainage share of the evaporation saving from mulch (E7). Soils are ordered by decreasing $\phi_D$.
 
 \textbf{How to read the labels, symbols and colours.} (a) Memory fates $\phi$ (shares of released storage) stacked by soil, with bootstrap intervals of $\phi_D$; (b) loss fates $\psi_D$ and $\psi_I$ of an evaporation-factor increase; (c) drained share of a mulch saving. Soils ordered by $\phi_D$.
@@ -69,6 +141,17 @@
 \textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p1_figs_b.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
 
 \subsection*{Figure 8 of the article}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p1_fig-predictors_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): van~Genuchten $n$.
+\item Panel (b): $\log_{10}K_s$ (eight soils).
+\item Panel (c): $\TAW$ to 1\,m.
+\item Panel (d): effective saturation at 100\,cm. Spearman $\rho$ given in each panel.
+\item Panel (e): see the caption above.
+\end{enumerate}
 
 \textbf{What it shows.} Relationship between the memory fate $\phi_D$ (E9) and four soil-level predictors: (a) van~Genuchten $n$, (b) $\log_{10}K_s$ (eight soils), (c) $\TAW$ to 1\,m, (d) effective saturation at 100\,cm. Spearman $\rho$ given in each panel.
 
@@ -80,6 +163,17 @@
 
 \subsection*{Figure 9 of the article}
 
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p1_fig-mech_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): $\phi_D$ against $K_s$ with the fitted curve $K_s/(K_s+q^\ast)$; crosses mark implied $K_s$ for S01 and S02.
+\item Panel (b): Leave-one-soil-out predictions against observations (RMSE 0.058).
+\item Panel (c): LOSO RMSE of each predictor of $\phi_D$ (asterisk: eight soils; the other predictors are shown for all ten soils, and like-for-like eight-soil values are given in Table~9 of the article).
+\item Panel (d): see the caption above.
+\item Panel (e): see the caption above.
+\end{enumerate}
+
 \textbf{What it shows.} Rate-competition law. (a) $\phi_D$ against $K_s$ with the fitted curve $K_s/(K_s+q^\ast)$; crosses mark implied $K_s$ for S01 and S02. (b) Leave-one-soil-out predictions against observations (RMSE 0.058). (c) LOSO RMSE of each predictor of $\phi_D$ (asterisk: eight soils; the other predictors are shown for all ten soils, and like-for-like eight-soil values are given in Table~9 of the article).
 
 \textbf{How to read the labels, symbols and colours.} (a) $\phi_D$ against $K_s$ (log axis) with the curve $K_s/(K_s+q^\ast)$; crosses: implied $K_s$ of two soils without literature values. (b) Left-out predictions against observations, 1:1 line. (c) Error of each predictor when soils are left out.
@@ -89,6 +183,15 @@
 \textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p1_figs_b.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
 
 \subsection*{Figure 10 of the article}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p1_fig-rep_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): $\psi_D$ from E16 against $\phi_D$ from E9.
+\item Panel (b): $\psi_D$ from the mulch lattice E7 against $\phi_D$.
+\item Panel (c): E7 against E16. Each point is a soil, coloured by $n$ (as in Fig.~8 of the article).
+\end{enumerate}
 
 \textbf{What it shows.} Cross-experiment transfer. (a) $\psi_D$ from E16 against $\phi_D$ from E9; (b) $\psi_D$ from the mulch lattice E7 against $\phi_D$; (c) E7 against E16. Each point is a soil, coloured by $n$ (as in Fig.~8 of the article).
 
@@ -100,6 +203,14 @@
 
 \subsection*{Figure 11 of the article}
 
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p1_fig-robust_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): Permutation distribution of Spearman $\rho$ between $n$ and $\phi_D$ (solid line: observed; dotted: its mirror).
+\item Panel (b): Bootstrap 95\,\% intervals of five rank associations (10\,000 resamples).
+\end{enumerate}
+
 \textbf{What it shows.} Robustness of the key associations. (a) Permutation distribution of Spearman $\rho$ between $n$ and $\phi_D$ (solid line: observed; dotted: its mirror). (b) Bootstrap 95\,\% intervals of five rank associations (10\,000 resamples).
 
 \textbf{How to read the labels, symbols and colours.} (a) Distribution of Spearman $\rho$ under random permutation (histogram) and the observed value (line); (b) bootstrap intervals of five rank associations.
@@ -109,6 +220,16 @@
 \textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p1_figs_d.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
 
 \subsection*{Figure 12 of the article}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p1_fig-mod_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): rainfall scale.
+\item Panel (b): warming.
+\item Panel (c): trigger suction.
+\item Panel (d): irrigation dose.
+\end{enumerate}
 
 \textbf{What it shows.} Modifiers of the drainage share $\psi_D$ in E16. Each line is a soil (colour: $n$); (a) rainfall scale, (b) warming, (c) trigger suction, (d) irrigation dose.
 
@@ -120,6 +241,15 @@
 
 \subsection*{Figure 13 of the article}
 
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p1_fig-e11_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): $\psi_D$ over rain scale and warming (white contours).
+\item Panel (b): $\psi_D$ against $P$ for selected warming levels.
+\item Panel (c): $\psi_D$ against warming for selected rain scales.
+\end{enumerate}
+
 \textbf{What it shows.} Climate surface of the drainage share $\psi_D$ for coarse loam (S01) from the E11 lattice. (a) $\psi_D$ over rain scale and warming (white contours), (b) $\psi_D$ against $P$ for selected warming levels, (c) $\psi_D$ against warming for selected rain scales.
 
 \textbf{How to read the labels, symbols and colours.} (a) Colour map of $\psi_D$ for coarse loam over rain scale and warming, white contours; (b, c) sections at selected levels.
@@ -129,6 +259,16 @@
 \textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p1_figs_e.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
 
 \subsection*{Figure 14 of the article}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p1_fig-invariants_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): Singular values of the seven-flux matrix for the real data and for column-permuted data.
+\item Panel (b): Coefficients of the smallest right singular vector (scaled so $c_{\mathit{ET}}=-1$) with bootstrap intervals.
+\item Panel (c): Storage residual $\Delta S/W$ by experiment: E8 and E9 do not close.
+\item Panel (d): Unattributed share of ET, $R/\mathit{ET}$, by experiment.
+\end{enumerate}
 
 \textbf{What it shows.} Linear invariants. (a) Singular values of the seven-flux matrix for the real data and for column-permuted data. (b) Coefficients of the smallest right singular vector (scaled so $c_{\mathit{ET}}=-1$) with bootstrap intervals. (c) Storage residual $\Delta S/W$ by experiment: E8 and E9 do not close. (d) Unattributed share of ET, $R/\mathit{ET}$, by experiment.
 
@@ -140,6 +280,14 @@
 
 \subsection*{Figure 15 of the article}
 
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p1_fig-hidden_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): $R$ and canopy evaporation in E4 by irrigation method.
+\item Panel (b): $R$ against annual rain in E9 (rainfed, light points), with the linear fit and the ten E0 baselines.
+\end{enumerate}
+
 \textbf{What it shows.} The unattributed term $R$. (a) $R$ and canopy evaporation in E4 by irrigation method. (b) $R$ against annual rain in E9 (rainfed, light points), with the linear fit and the ten E0 baselines.
 
 \textbf{How to read the labels, symbols and colours.} (a) Unattributed term $R$ and canopy evaporation by irrigation method; (b) $R$ against annual rain with a linear fit.
@@ -149,6 +297,15 @@
 \textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p2_figs.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
 
 \subsection*{Figure 16 of the article}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p1_fig-manifold_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): Variance explained by the first three clr-PCA components for five zero-replacement floors.
+\item Panel (b): Scores on the first two components (1\,mm floor) coloured by $\ln(W/\TAW)$.
+\item Panel (c): Loadings of the five fates on the first two components.
+\end{enumerate}
 
 \textbf{What it shows.} Partition manifold and its sensitivity to zero handling. (a) Variance explained by the first three clr-PCA components for five zero-replacement floors. (b) Scores on the first two components (1\,mm floor) coloured by $\ln(W/\TAW)$. (c) Loadings of the five fates on the first two components.
 
@@ -160,6 +317,15 @@
 
 \subsection*{Figure 17 of the article}
 
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p1_fig-fatesoil_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): Mean fate shares of water input $W$, soils ordered by decreasing $n$.
+\item Panel (b): Number of valid runs per soil.
+\item Panel (c): Median share of the unattributed term in ET.
+\end{enumerate}
+
 \textbf{What it shows.} Water fates by soil in the 15 near-equilibrium experiments (E8, E9 excluded). (a) Mean fate shares of water input $W$, soils ordered by decreasing $n$. (b) Number of valid runs per soil. (c) Median share of the unattributed term in ET.
 
 \textbf{How to read the labels, symbols and colours.} (a) Mean shares of the water input by soil (stacked), ordered by $n$; (b) runs per soil; (c) median unattributed share of ET.
@@ -169,6 +335,18 @@
 \textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p2_fig7.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
 
 \subsection*{Figure 18 of the article}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p1_fig-ETlaw_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): Leave-one-experiment-out predictions of the three-term law versus Daisy ET.
+\item Panel (b): Gradient-boosting benchmark.
+\item Panel (c): Fitted coefficients across the 17 LOEO folds.
+\item Panel (d): LOEO MAPE by experiment.
+\item Panel (e): The law at $I=200$\,mm for four soils (grey dashed: ET $=W$).
+\item Panel (f): Drainage derived from closure, $W-\widehat{\mathit{ET}}$, versus Daisy drainage ($R^2=0.69$, RMSE 64\,mm; E8 and E9 excluded).
+\end{enumerate}
 
 \textbf{What it shows.} Compact ET law. (a) Leave-one-experiment-out predictions of the three-term law versus Daisy ET. (b) Gradient-boosting benchmark. (c) Fitted coefficients across the 17 LOEO folds. (d) LOEO MAPE by experiment. (e) The law at $I=200$\,mm for four soils (grey dashed: ET $=W$). (f) Drainage derived from closure, $W-\widehat{\mathit{ET}}$, versus Daisy drainage ($R^2=0.69$, RMSE 64\,mm; E8 and E9 excluded).
 
@@ -180,6 +358,15 @@
 
 \subsection*{Figure 19 of the article}
 
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p1_fig-comp_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): Per-soil $\kappa$ in E16 (paired $P=0.5\to1.5$) with the pooled estimate and bootstrap interval.
+\item Panel (b): Slope of water input on rain in single-soil lattices (95\,\% intervals).
+\item Panel (c): Mean $\kappa$ by factor level in E16.
+\end{enumerate}
+
 \textbf{What it shows.} Irrigation compensation $\kappa$ is not universal. (a) Per-soil $\kappa$ in E16 (paired $P=0.5\to1.5$) with the pooled estimate and bootstrap interval. (b) Slope of water input on rain in single-soil lattices (95\,\% intervals). (c) Mean $\kappa$ by factor level in E16.
 
 \textbf{How to read the labels, symbols and colours.} (a) Per-soil compensation $\kappa$ with the pooled estimate; (b) slope of input on rain in single-soil lattices; (c) mean $\kappa$ by factor level.
@@ -189,6 +376,15 @@
 \textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p2_fig6.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
 
 \subsection*{Figure 20 of the article}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p1_fig-ens_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): Run set E7, strong against weak mulch (vapour-flux factor 0.3 against 0.9, capacity 2\,mm): evaporation saved, irrigation saved and extra drainage by soil.
+\item Panel (b): Run set E5, rainfed drainage of four finer soils against the consolidation rate $\tau_c$ for conventional tillage (solid) and the no-till value (dotted).
+\item Panel (c): Effect of tillage ($\tau_c=0.001$ against no-till) and of faster consolidation ($\tau_c=0.02$ against 0.001) on rainfed drainage, all ten soils.
+\end{enumerate}
 
 \textbf{What it shows.} Simulation evidence on structure, time and mulching (Daisy ensemble, mean annual values). (a) Run set E7, strong against weak mulch (vapour-flux factor 0.3 against 0.9, capacity 2\,mm): evaporation saved, irrigation saved and extra drainage by soil. (b) Run set E5, rainfed drainage of four finer soils against the consolidation rate $\tau_c$ for conventional tillage (solid) and the no-till value (dotted). (c) Effect of tillage ($\tau_c=0.001$ against no-till) and of faster consolidation ($\tau_c=0.02$ against 0.001) on rainfed drainage, all ten soils.
 
@@ -200,6 +396,16 @@
 
 \subsection*{Figure 21 of the article}
 
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p1_fig-timemgmt_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): A threefold loosening of $K_s$ relaxing exponentially to the consolidated value, for the sand S05, loam S06 and silty clay loam S10; solid lines $\tau_c=0.005$\,d$^{-1}$, dashed lines $\tau_c=0.02$\,d$^{-1}$, dotted lines the consolidated baselines.
+\item Panel (b): Memory fate for the eight soils with literature $K_s$ at one third of, equal to and three times the baseline $K_s$.
+\item Panel (c): see the caption above.
+\item Panel (d): see the caption above.
+\end{enumerate}
+
 \textbf{What it shows.} Implied change of the memory fate with soil structure over time and with management, from the fitted rate-competition law (Eq.~(8) of the article, $q^\ast=71.5$\,cm\,d$^{-1}$). These are illustrative scenarios under assumed multipliers and rates, not simulation results. (a) A threefold loosening of $K_s$ relaxing exponentially to the consolidated value, for the sand S05, loam S06 and silty clay loam S10; solid lines $\tau_c=0.005$\,d$^{-1}$, dashed lines $\tau_c=0.02$\,d$^{-1}$, dotted lines the consolidated baselines. (b) Memory fate for the eight soils with literature $K_s$ at one third of, equal to and three times the baseline $K_s$.
 
 \textbf{How to read the labels, symbols and colours.} (a) $\phi_D$ through time after a threefold loosening of $K_s$ that relaxes back, for three soils and two rates (lines); (b) $\phi_D$ at one third, equal and three times the baseline $K_s$.
@@ -209,6 +415,14 @@
 \textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/analysis/p1_fig13_time.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
 
 \subsection*{Figure 22 of the article}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p1_fig-drivers_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): Memory fate $\phi_D$ as a function of saturated conductivity $K_s$: simulated values for the eight soils with literature $K_s$ (points) and the rate-competition law (line); arrows show the implied change for a threefold increase or decrease in $K_s$ from 20\,cm\,d$^{-1}$ (law implication, not simulation).
+\item Panel (b): Conceptual feedback among drivers, hydraulic properties, water fates, soil moisture state, atmosphere and plants.
+\end{enumerate}
 
 \textbf{What it shows.} Drivers of soil hydraulic properties and their coupling to the soil--plant--atmosphere continuum. (a) Memory fate $\phi_D$ as a function of saturated conductivity $K_s$: simulated values for the eight soils with literature $K_s$ (points) and the rate-competition law (line); arrows show the implied change for a threefold increase or decrease in $K_s$ from 20\,cm\,d$^{-1}$ (law implication, not simulation). (b) Conceptual feedback among drivers, hydraulic properties, water fates, soil moisture state, atmosphere and plants.
 
@@ -220,6 +434,15 @@
 
 \subsection*{Figure 23 of the article}
 
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/annot/p1_fig-vgcheck_0.png}\end{center}
+
+\textbf{What the numbered labels point to.}
+\begin{enumerate}[nosep,label=\protect\circled{\arabic*}]
+\item Panel (a): Cumulative matrix percolation.
+\item Panel (b): cumulative actual evapotranspiration.
+\item Panel (c): totals of the two seasons with the difference. Daily logs of Daisy, unchanged; script \texttt{reproducibility/fig\_vg\_check.py}.
+\end{enumerate}
+
 \textbf{What it shows.} One Daisy 7.1.14 run of the loam written by SWAFL 1.1.0 with the van Genuchten--Mualem parameters of every horizon as given (blue) and scaled toward a faster-draining soil (orange: $K_\mathrm{sat}\times4$, $\alpha\times2$, $(n-1)\times1.3$, $\theta_s\times1.1$, $l+1$). (a) Cumulative matrix percolation, (b) cumulative actual evapotranspiration, (c) totals of the two seasons with the difference. Daily logs of Daisy, unchanged; script \texttt{reproducibility/fig\_vg\_check.py}.
 
 \textbf{How to read the labels, symbols and colours.} Blue: the loam as given; orange: scaled toward faster drainage. (a) Cumulative percolation, (b) cumulative ET, (c) totals with differences.
@@ -229,6 +452,8 @@
 \textbf{How it is made.} Figure drawn by the script from the input data. Script: \nolinkurl{Manuscripts/reproducibility/fig_vg_check.py}. Input: \nolinkurl{Data/daisy_ensemble.csv.gz}.
 
 \subsection*{Figure 24 of the article}
+
+\begin{center}\includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{../figures/p1/fig09_recoverable.pdf}\end{center}
 
 \textbf{What it shows.} Recoverable fraction $1-\psi_D$ by soil for the E16 and E7 contrasts.
 

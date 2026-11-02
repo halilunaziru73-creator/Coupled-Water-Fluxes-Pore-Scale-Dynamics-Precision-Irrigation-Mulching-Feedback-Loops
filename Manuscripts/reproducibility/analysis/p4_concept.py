@@ -31,4 +31,17 @@ b.axvspan(300, 600, color='0.85'); b.text(420, 1.03, 'usual triggers', fontsize=
 b.set_xscale('log'); b.set_xlabel('suction $h$ (cm)'); b.set_ylabel('$S_e$'); b.legend(fontsize=6.5, loc='lower left', frameon=False)
 b.set_title('Q1  Which suction can a crop\nimpose at the sensor?', fontsize=8, weight='bold', loc='left')
 for s in ['top', 'right']: b.spines[s].set_visible(False)
-fig.savefig(os.path.join(ROOT, 'Manuscripts/figures/paper4/fig1_concept.pdf')); fig.savefig(os.path.join(ROOT, 'Manuscripts/figures/paper4/fig1_concept.png'), dpi=160)
+fig.savefig(os.path.join(ROOT, 'Manuscripts/figures/paper4/fig1_concept.pdf'))
+fig.savefig(os.path.join(ROOT, 'Manuscripts/figures/paper4/fig1_concept.png'), dpi=160)
+import sys; sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); from p4_callouts import callout, store
+hs = N['reach']['mualem']['pred']
+L = [(ax, (1.0, 5.15), (18, -14), 'One millimetre of irrigation applied to the surface; the arrows that leave the column are its fates, with widths in proportion to their shares.'),
+     (ax, (3.4, 5.75), (-22, -8), 'Transpiration (0.38 of each millimetre): the only fate that makes yield.'),
+     (ax, (7.6, 5.0), (-24, -6), 'Soil evaporation (0.25): water evaporated from the wetted surface with the energy also available to the crop.'),
+     (ax, (9.0, 5.3), (-14, -26), 'Other evaporation (0.19): intercepted water, ponds and litter.'),
+     (ax, (5.5, 0.7), (-26, 10), 'Drainage below 1 m (0.16): water lost to the crop that also carries nitrate.'),
+     (ax, (6.4, 3.75), (-26, 14), 'The sensor at 20 cm: irrigation starts when the suction it reads exceeds the trigger.'),
+     (b, (hs['S03'], 0.5), (22, 10), 'The reach of sand (199 cm), where its conductivity has collapsed; the usual triggers lie beyond it.'),
+     (b, (420, 0.93), (26, -12), 'Grey band: the triggers usually tabulated (300 to 600 cm).')]
+for n, (a_, xy, off, t) in enumerate(L, 1): callout(a_, n, xy, off)
+fig.savefig(os.path.join(ROOT, 'Manuscripts/figures/paper4/fig1_concept_annot.png'), dpi=170); store('fig1_concept', [t for *_, t in L], ROOT); fig.savefig(os.path.join(ROOT, 'Manuscripts/figures/paper4/fig1_concept.png'), dpi=160)

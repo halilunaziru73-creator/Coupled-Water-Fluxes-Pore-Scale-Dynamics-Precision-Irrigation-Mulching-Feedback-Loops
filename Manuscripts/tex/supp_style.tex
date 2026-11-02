@@ -7,6 +7,7 @@
 \newtcolorbox{pins}[1][]{enhanced,breakable,colback=blue!3,colframe=blue!50!black,fonttitle=\bfseries\sffamily,title=Pinpoints: what each circled mark shows and why,#1}
 \newcommand{\pin}[2]{\par\noindent\circled{#1}\ #2\par\smallskip}
 \usetikzlibrary{decorations.pathmorphing}
+\usepackage{enumitem}
 % an equation developed by the author: circled by hand in red pencil
 \newtcolorbox{pencil}[1][]{enhanced,frame hidden,interior hidden,boxsep=6pt,left=16pt,right=16pt,top=8pt,bottom=12pt,
   overlay={\draw[red!75!black,line width=1.3pt,opacity=0.85,rounded corners=18pt]

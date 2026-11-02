@@ -7,6 +7,17 @@ A farmer on a sandy field installs a matric-potential sensor at 20\,cm and sets 
 \end{derivation}
 \begin{keyresult}
 \begin{pencil}
+{\small\noindent\textbf{How it is derived, line by line}
+\[\begin{array}{@{}l@{\hspace{8pt}}l@{}}
+\textbf{1. Postulate (uptake stops at one relative conductivity):} & K_r(\hc)=\kappa\\[2pt]
+\textbf{2. Dry-end form of Mualem (Section S3.2):} & K_r(h)\simeq m^2(\alpha h)^{-E}\\[2pt]
+\textbf{2b. Slope of the dry end:} & E=2n+\ell(n-1)\\[2pt]
+\textbf{3. Insert 2 into 1:} & m^2(\alpha\hc)^{-E}=\kappa\\[2pt]
+\textbf{4. Divide by } m^2\textbf{:} & (\alpha\hc)^{-E}=\kappa/m^2\\[2pt]
+\textbf{5. Raise both sides to } -1/E\textbf{:} & \alpha\hc=(m^2/\kappa)^{1/E}\\[2pt]
+\textbf{6. Divide by } \alpha\textbf{:} & \hc=\alpha^{-1}(m^2/\kappa)^{1/E}
+\end{array}\]}
+\noindent\textbf{The result, with its parts marked}
 \[
 \hc\;=\;\underbrace{\frac{1}{\alpha}}_{\circled{1}}\;\Bigl(\underbrace{m^{2}}_{\circled{2}}\Big/\underbrace{\kappa}_{\circled{3}}\Bigr)^{\textstyle\overbrace{1/[\,2n+\ell(n-1)\,]}^{\circled{4}}}
 \]
@@ -34,6 +45,13 @@ The irrigation of every soil fell to zero between $\htr/\hc=0.5$ and 1 (Fig.~3b 
 \end{derivation}
 \begin{keyresult}
 \begin{pencil}
+{\small\noindent\textbf{How it is derived, line by line}
+\[\begin{array}{@{}l@{\hspace{8pt}}l@{}}
+\textbf{1. Observation (Fig.~3b):} & \text{irrigation}\to0\ \text{for}\ 0.5\le\htr/\hc\le1\\[2pt]
+\textbf{2. Keep a margin below the first value:} & \htr/\hc<\tfrac12\\[2pt]
+\textbf{3. Multiply by } \hc\textbf{:} & \htr<\tfrac12\hc
+\end{array}\]}
+\noindent\textbf{The result, with its parts marked}
 \[\underbrace{\htr}_{\circled{1}}\;<\;\underbrace{\tfrac12}_{\circled{2}}\,\underbrace{\hc(\alpha,n,\ell)}_{\circled{3}}\]
 \end{pencil}
 \centering\small
@@ -63,6 +81,13 @@ The reach of each soil was computed with Contribution~1, every trigger of experi
 \end{derivation}
 \begin{keyresult}
 \begin{pencil}
+{\small\noindent\textbf{How it is derived, line by line}
+\[\begin{array}{@{}l@{\hspace{8pt}}l@{}}
+\textbf{1. The reach marks where irrigation ends:} & \text{end of irrigation at } \htr\approx\hc\\[2pt]
+\textbf{2. Measure every trigger in units of its soil's reach:} & x=\htr/\hc\\[2pt]
+\textbf{3. Then every soil ends near the same value:} & x\approx0.5\ \text{to}\ 1
+\end{array}\]}
+\noindent\textbf{The result, with its parts marked}
 \[\underbrace{x}_{\circled{1}}=\frac{\htr}{\hc},\qquad \text{scatter between soils: }\underbrace{54\,\%}_{\circled{2}}\to\underbrace{32\,\%}_{\circled{3}}\]
 \end{pencil}
 \end{keyresult}
@@ -81,6 +106,14 @@ Write the 20-year balance of an irrigated run and of its rainfed twin (same soil
 \end{derivation}
 \begin{keyresult}
 \begin{pencil}
+{\small\noindent\textbf{How it is derived, line by line}
+\[\begin{array}{@{}l@{\hspace{8pt}}l@{}}
+\textbf{1. Balance of the irrigated run:} & P+I=T+E_s+E_o+D+\Delta S+Q\\[2pt]
+\textbf{2. Balance of the rainfed twin:} & P=T_0+E_{s,0}+E_{o,0}+D_0+\Delta S_0+Q_0\\[2pt]
+\textbf{3. Subtract 2 from 1 (}P\textbf{ cancels):} & I=(T-T_0)+(E_s-E_{s,0})+(E_o-E_{o,0})\\ & \quad+(D-D_0)+(\Delta S+Q-\Delta S_0-Q_0)\\[2pt]
+\textbf{4. Divide by } I\textbf{:} & 1=\eta_T+\eta_{E_s}+\eta_{E_o}+\eta_D+\eta_S
+\end{array}\]}
+\noindent\textbf{The result, with its parts marked}
 \[
 1=\underbrace{\eta_T}_{\circled{1}\ 0.38}+\underbrace{\eta_{E_s}}_{\circled{2}\ 0.25}+\underbrace{\eta_{E_o}}_{\circled{3}\ 0.19}+\underbrace{\eta_D}_{\circled{4}\ 0.16}+\underbrace{\eta_S}_{\circled{5}\ 0.03},\qquad \eta_X=\frac{\sum(X-X_0)}{\sum I}
 \]
@@ -113,6 +146,14 @@ For each soil the drained share was computed at ten doses (1 to 30\,mm). A form 
 \end{derivation}
 \begin{keyresult}
 \begin{pencil}
+{\small\noindent\textbf{How it is derived, line by line}
+\[\begin{array}{@{}l@{\hspace{8pt}}l@{}}
+\textbf{1. A vanishing dose cannot drain:} & \eta_D(0)=0\\[2pt]
+\textbf{2. A large dose drains a soil-specific share:} & \eta_D(\infty)=\eta_\infty\\[2pt]
+\textbf{3. The extra share drained per extra mm falls in proportion to what is left:} & \frac{\dd\eta_D}{\dd d}=\frac{\eta_\infty-\eta_D}{d_D}\\[2pt]
+\textbf{4. Integrate with 1:} & \eta_D(d)=\eta_\infty\bigl(1-e^{-d/d_D}\bigr)
+\end{array}\]}
+\noindent\textbf{The result, with its parts marked}
 \[\eta_D(d)=\underbrace{\eta_\infty}_{\circled{1}}\Bigl(1-e^{-d/\underbrace{d_D}_{\circled{2}}}\Bigr)\]
 \[\underbrace{\eta_D\approx\eta_\infty\,d/d_D\ \ (d\ll d_D)}_{\circled{3}}\]
 \[\underbrace{d_D=4.1\pm0.6\text{ mm},\ \rho(d_D,n)=0.07}_{\circled{4}}\]
@@ -131,6 +172,13 @@ The identity of Contribution~4 was applied to the method experiments: E4 (surfac
 \end{derivation}
 \begin{keyresult}
 \begin{pencil}
+{\small\noindent\textbf{How it is derived, line by line}
+\[\begin{array}{@{}l@{\hspace{8pt}}l@{}}
+\textbf{1. Identity of Contribution 4 for overhead runs:} & \eta_T=\textstyle\sum(T-T_0)/\sum I\\[2pt]
+\textbf{2. Data of E4 (all soils):} & \textstyle\sum(T-T_0)<0\\[2pt]
+\textbf{3. Hence:} & \eta_T^{\text{overhead}}=-0.08
+\end{array}\]}
+\noindent\textbf{The result, with its parts marked}
 \[\underbrace{\eta_T^{\text{overhead}}}_{\circled{1}}=-0.08\ \text{(all soils)}\]
 \[\underbrace{\eta_{E_o}^{\text{overhead}}}_{\circled{2}}=0.79\]
 \end{pencil}
@@ -146,6 +194,14 @@ The relaxation law of \citet{RossSmettem2000} was solved for a steady drying rat
 \end{derivation}
 \begin{keyresult}
 \begin{pencil}
+{\small\noindent\textbf{How it is derived, line by line}
+\[\begin{array}{@{}l@{\hspace{8pt}}l@{}}
+\textbf{1. Relaxation toward equilibrium:} & \partial_t\theta=(\theta_{\mathrm{eq}}-\theta)/\tau\\[2pt]
+\textbf{2. Steady drying } \partial_t\theta_{\mathrm{eq}}=-r\textbf{:} & \theta=\theta_{\mathrm{eq}}+r\tau\\[2pt]
+\textbf{3. Convert the water-content lag to suction:} & \delta h=r\tau/C(h)\\[2pt]
+\textbf{4. Compare the lag with the interval:} & \Pi_\tau=\tau/t_i
+\end{array}\]}
+\noindent\textbf{The result, with its parts marked}
 \[\underbrace{\Pi_\tau}_{\circled{1}}=\frac{\underbrace{\tau}_{\circled{2}}}{\underbrace{t_i}_{\circled{3}}},\qquad \delta h\simeq\frac{r\tau}{\underbrace{C(h)}_{\circled{4}}}\]
 \end{pencil}
 \end{keyresult}

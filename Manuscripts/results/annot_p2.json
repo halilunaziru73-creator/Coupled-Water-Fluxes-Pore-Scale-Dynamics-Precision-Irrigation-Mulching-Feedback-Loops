@@ -1,0 +1,1053 @@
+{
+ "fig:arch": [
+  {
+   "file": "../figures/annot/p2_fig-arch_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "drainage"
+    },
+    {
+     "kind": "text",
+     "text": "water"
+    },
+    {
+     "kind": "text",
+     "text": "vapour deficit"
+    },
+    {
+     "kind": "text",
+     "text": "Design inputs"
+    },
+    {
+     "kind": "text",
+     "text": "yield ET - drainage"
+    },
+    {
+     "kind": "text",
+     "text": "Exchange of information between modules"
+    }
+   ]
+  }
+ ],
+ "fig:swa": [
+  {
+   "file": "../figures/annot/p2_fig-swa_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    },
+    {
+     "kind": "panel",
+     "text": "c"
+    },
+    {
+     "kind": "panel",
+     "text": "d"
+    },
+    {
+     "kind": "panel",
+     "text": "e"
+    },
+    {
+     "kind": "panel",
+     "text": "f"
+    }
+   ]
+  }
+ ],
+ "fig:viewsA": [
+  {
+   "file": "../figures/annot/p2_fig-viewsA_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Precipitation"
+    },
+    {
+     "kind": "text",
+     "text": "Interception"
+    },
+    {
+     "kind": "text",
+     "text": "Zoom (width of the picture)"
+    },
+    {
+     "kind": "text",
+     "text": "drives change in soil properties"
+    },
+    {
+     "kind": "text",
+     "text": "Roots through the season: real model"
+    },
+    {
+     "kind": "text",
+     "text": "stage 1: films feed the surface"
+    }
+   ]
+  }
+ ],
+ "fig:viewsB": [
+  {
+   "file": "../figures/annot/p2_fig-viewsB_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Root-zone depletion and the trigger law"
+    },
+    {
+     "kind": "text",
+     "text": "Conventional"
+    },
+    {
+     "kind": "text",
+     "text": "Clay Loam"
+    },
+    {
+     "kind": "text",
+     "text": "Result for this design"
+    },
+    {
+     "kind": "text",
+     "text": "Soil and field"
+    }
+   ]
+  }
+ ],
+ "fig:viewsC": [
+  {
+   "file": "../figures/annot/p2_fig-viewsC_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Soil evaporation"
+    },
+    {
+     "kind": "text",
+     "text": "chips"
+    },
+    {
+     "kind": "text",
+     "text": "storage and other 7 mm"
+    },
+    {
+     "kind": "text",
+     "text": "soil water, roots, evaporation"
+    },
+    {
+     "kind": "text",
+     "text": "potential along the path"
+    },
+    {
+     "kind": "text",
+     "text": "sensor"
+    }
+   ]
+  }
+ ],
+ "fig:sens": [
+  {
+   "file": "../figures/annot/p2_fig-sens_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    },
+    {
+     "kind": "panel",
+     "text": "c"
+    },
+    {
+     "kind": "panel",
+     "text": "d"
+    },
+    {
+     "kind": "panel",
+     "text": "e"
+    },
+    {
+     "kind": "panel",
+     "text": "f"
+    }
+   ]
+  }
+ ],
+ "fig:ws": [
+  {
+   "file": "../figures/annot/p2_fig-ws_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    },
+    {
+     "kind": "panel",
+     "text": "c"
+    }
+   ]
+  }
+ ],
+ "fig:e1": [
+  {
+   "file": "../figures/annot/p2_fig-e1_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    },
+    {
+     "kind": "panel",
+     "text": "c"
+    },
+    {
+     "kind": "panel",
+     "text": "d"
+    },
+    {
+     "kind": "panel",
+     "text": "e"
+    },
+    {
+     "kind": "panel",
+     "text": "f"
+    },
+    {
+     "kind": "panel",
+     "text": "g"
+    }
+   ]
+  }
+ ],
+ "fig:e2": [
+  {
+   "file": "../figures/annot/p2_fig-e2_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    },
+    {
+     "kind": "panel",
+     "text": "c"
+    }
+   ]
+  }
+ ],
+ "fig:drip": [
+  {
+   "file": "../figures/annot/p2_fig-drip_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    }
+   ]
+  }
+ ],
+ "fig:lit": [
+  {
+   "file": "../figures/annot/p2_fig-lit_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    }
+   ]
+  }
+ ],
+ "fig:plotviews": [
+  {
+   "file": "../figures/annot/p2_fig-plotviews_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "overhead"
+    },
+    {
+     "kind": "text",
+     "text": "plots: experiments/r003 overhead"
+    },
+    {
+     "kind": "text",
+     "text": "over depth, month by month"
+    },
+    {
+     "kind": "text",
+     "text": "Precipitation every day of every year"
+    }
+   ]
+  }
+ ],
+ "fig:shot-layer-field": [
+  {
+   "file": "../figures/annot/p2_fig-shot-layer-field_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Soil, and air"
+    },
+    {
+     "kind": "text",
+     "text": "Field balance"
+    },
+    {
+     "kind": "text",
+     "text": "Coarse Loam v"
+    },
+    {
+     "kind": "text",
+     "text": "Next 14 days"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p2_fig-shot-layer-field_1.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Output"
+    },
+    {
+     "kind": "text",
+     "text": "Coarse Loam v"
+    },
+    {
+     "kind": "text",
+     "text": "Weather and climate"
+    },
+    {
+     "kind": "text",
+     "text": "Irrigation efficiency"
+    }
+   ]
+  }
+ ],
+ "fig:shot-layer-v1": [
+  {
+   "file": "../figures/annot/p2_fig-shot-layer-v1_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "SWAFL View Run Daisy Help"
+    },
+    {
+     "kind": "text",
+     "text": "Sensor and trigger"
+    },
+    {
+     "kind": "text",
+     "text": "Daisy model"
+    },
+    {
+     "kind": "text",
+     "text": "winter"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p2_fig-shot-layer-v1_1.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "SWAFL View Run Daisy Help"
+    },
+    {
+     "kind": "text",
+     "text": "Focus Q Search"
+    },
+    {
+     "kind": "text",
+     "text": "mm per day"
+    },
+    {
+     "kind": "text",
+     "text": "20-year averages at these settings"
+    }
+   ]
+  }
+ ],
+ "fig:shot-layer-n1": [
+  {
+   "file": "../figures/annot/p2_fig-shot-layer-n1_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Coarse Loam"
+    },
+    {
+     "kind": "text",
+     "text": "soil has Its own trigger"
+    },
+    {
+     "kind": "text",
+     "text": "Sandy"
+    },
+    {
+     "kind": "text",
+     "text": "starts"
+    }
+   ]
+  }
+ ],
+ "fig:shot-layer-v3": [
+  {
+   "file": "../figures/annot/p2_fig-shot-layer-v3_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Conventional"
+    },
+    {
+     "kind": "text",
+     "text": "Reduced pore 0.68"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p2_fig-shot-layer-v3_1.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "SWAFL View Run Daisy Help"
+    },
+    {
+     "kind": "text",
+     "text": "Field balance"
+    },
+    {
+     "kind": "text",
+     "text": "Import weather... Online weather"
+    },
+    {
+     "kind": "text",
+     "text": "design"
+    }
+   ]
+  }
+ ],
+ "fig:shot-layer-r1": [
+  {
+   "file": "../figures/annot/p2_fig-shot-layer-r1_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Refresh Review Run Help"
+    },
+    {
+     "kind": "text",
+     "text": "Untitled project"
+    },
+    {
+     "kind": "text",
+     "text": "Field balance"
+    },
+    {
+     "kind": "text",
+     "text": "Coarse Loam v"
+    },
+    {
+     "kind": "text",
+     "text": "click one"
+    },
+    {
+     "kind": "text",
+     "text": "Strength (vapour-flux factor)"
+    }
+   ]
+  }
+ ],
+ "fig:shot-layer-e1": [
+  {
+   "file": "../figures/annot/p2_fig-shot-layer-e1_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Evaporation rate, mm per day"
+    },
+    {
+     "kind": "text",
+     "text": "Water lost since wetting"
+    },
+    {
+     "kind": "text",
+     "text": "Stage 2: vapour via dry layer"
+    },
+    {
+     "kind": "text",
+     "text": "O quartz mineral"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p2_fig-shot-layer-e1_1.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Mulched against bare soil"
+    },
+    {
+     "kind": "text",
+     "text": "no layer"
+    },
+    {
+     "kind": "text",
+     "text": "yours"
+    },
+    {
+     "kind": "text",
+     "text": "evaporation -0 mm"
+    }
+   ]
+  }
+ ],
+ "fig:shot-layer-v6": [
+  {
+   "file": "../figures/annot/p2_fig-shot-layer-v6_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Irrigation design"
+    },
+    {
+     "kind": "text",
+     "text": "coarse Loam"
+    },
+    {
+     "kind": "text",
+     "text": "Next 14 days"
+    },
+    {
+     "kind": "text",
+     "text": "20-year averages at these settings"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p2_fig-shot-layer-v6_1.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Irrigation design"
+    },
+    {
+     "kind": "text",
+     "text": "17 mm storage and other 22"
+    },
+    {
+     "kind": "text",
+     "text": "Daisy"
+    },
+    {
+     "kind": "text",
+     "text": "wheat"
+    }
+   ]
+  }
+ ],
+ "fig:shot-layer-n3": [
+  {
+   "file": "../figures/annot/p2_fig-shot-layer-n3_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "SWAFL View Run Daisy Help"
+    },
+    {
+     "kind": "text",
+     "text": "No-till"
+    },
+    {
+     "kind": "text",
+     "text": "Where mulch and rainfall pat you"
+    },
+    {
+     "kind": "text",
+     "text": "Next 14 days"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p2_fig-shot-layer-n3_1.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Output"
+    },
+    {
+     "kind": "text",
+     "text": "Feedback loops"
+    },
+    {
+     "kind": "text",
+     "text": "sensor 20 cm"
+    },
+    {
+     "kind": "text",
+     "text": "No-till"
+    }
+   ]
+  }
+ ],
+ "fig:shot-layer-sid": [
+  {
+   "file": "../figures/annot/p2_fig-shot-layer-sid_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "border"
+    },
+    {
+     "kind": "text",
+     "text": "Required depth Zn from the DSS"
+    },
+    {
+     "kind": "text",
+     "text": "per metre"
+    },
+    {
+     "kind": "text",
+     "text": "Organic matter (%)"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p2_fig-shot-layer-sid_1.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Save picture"
+    },
+    {
+     "kind": "text",
+     "text": "after the front arrives"
+    },
+    {
+     "kind": "text",
+     "text": "Organic matter"
+    },
+    {
+     "kind": "text",
+     "text": "Runoff"
+    }
+   ]
+  }
+ ],
+ "fig:shot-sid-sec-sched": [
+  {
+   "file": "../figures/annot/p2_fig-shot-sid-sec-sched_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "SWAFL View Run Daisy Help"
+    },
+    {
+     "kind": "text",
+     "text": "design"
+    },
+    {
+     "kind": "text",
+     "text": "Zn depth 34m"
+    },
+    {
+     "kind": "text",
+     "text": "Next 14 days"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p2_fig-shot-sid-sec-sched_1.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "SWAFL View Run Daisy Help"
+    },
+    {
+     "kind": "text",
+     "text": "Coarse Loam"
+    },
+    {
+     "kind": "text",
+     "text": "Next 14 days"
+    },
+    {
+     "kind": "text",
+     "text": "Weather and climate"
+    }
+   ]
+  }
+ ],
+ "fig:shot-layer-drip": [
+  {
+   "file": "../figures/annot/p2_fig-shot-layer-drip_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Coarse Loam - Cereal"
+    },
+    {
+     "kind": "text",
+     "text": "Chips"
+    },
+    {
+     "kind": "text",
+     "text": "Length and width"
+    },
+    {
+     "kind": "text",
+     "text": "Farm supply Qs"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p2_fig-shot-layer-drip_1.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "SWAFL View Run Daisy Help"
+    },
+    {
+     "kind": "text",
+     "text": "Import weather... Online weather"
+    },
+    {
+     "kind": "text",
+     "text": "Next 14 days"
+    },
+    {
+     "kind": "text",
+     "text": "Weather and climate"
+    }
+   ]
+  }
+ ],
+ "fig:shot-drip-sec-lateral": [
+  {
+   "file": "../figures/annot/p2_fig-shot-drip-sec-lateral_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "SWAFL View Run Daisy Help"
+    },
+    {
+     "kind": "text",
+     "text": "Import weather... Online weather"
+    },
+    {
+     "kind": "text",
+     "text": "design"
+    },
+    {
+     "kind": "text",
+     "text": "Next 14 days"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p2_fig-shot-drip-sec-lateral_1.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "SWAFL View Run Daisy Help"
+    },
+    {
+     "kind": "text",
+     "text": "Import weather... Online weather"
+    },
+    {
+     "kind": "text",
+     "text": "Next 14 days"
+    },
+    {
+     "kind": "text",
+     "text": "Weather and climate"
+    }
+   ]
+  }
+ ],
+ "fig:shot-drip-sec-table": [
+  {
+   "file": "../figures/annot/p2_fig-shot-drip-sec-table_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Irrigation design"
+    },
+    {
+     "kind": "text",
+     "text": "Choose a case"
+    },
+    {
+     "kind": "text",
+     "text": "Your current design"
+    },
+    {
+     "kind": "text",
+     "text": "Peak crop need / interval"
+    },
+    {
+     "kind": "text",
+     "text": "Next 14 days"
+    },
+    {
+     "kind": "text",
+     "text": "Weather and climate"
+    }
+   ]
+  }
+ ],
+ "fig:shot-layer-spr": [
+  {
+   "file": "../figures/annot/p2_fig-shot-layer-spr_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Surface \u00a9 Sprinklers"
+    },
+    {
+     "kind": "text",
+     "text": "Coarse Lo"
+    },
+    {
+     "kind": "text",
+     "text": "Reduced No-till"
+    },
+    {
+     "kind": "text",
+     "text": "Surface storage (mm) - from tillage"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p2_fig-shot-layer-spr_1.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Output"
+    },
+    {
+     "kind": "text",
+     "text": "Coarse Loam v"
+    },
+    {
+     "kind": "text",
+     "text": "How a sprinkler works"
+    },
+    {
+     "kind": "text",
+     "text": "Weather and climate"
+    }
+   ]
+  }
+ ],
+ "fig:shot-spr-sec-intake": [
+  {
+   "file": "../figures/annot/p2_fig-shot-spr-sec-intake_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Irrigation design"
+    },
+    {
+     "kind": "text",
+     "text": "Coarse Loam v"
+    },
+    {
+     "kind": "text",
+     "text": "Drip irrigation design"
+    },
+    {
+     "kind": "text",
+     "text": "Weather and climate"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p2_fig-shot-spr-sec-intake_1.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Figure"
+    },
+    {
+     "kind": "text",
+     "text": "Profile evolution"
+    },
+    {
+     "kind": "text",
+     "text": "Precipitation"
+    },
+    {
+     "kind": "text",
+     "text": "Coarse Loam v"
+    }
+   ]
+  }
+ ],
+ "fig:shot-dash-results": [
+  {
+   "file": "../figures/annot/p2_fig-shot-dash-results_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Soil, and air"
+    },
+    {
+     "kind": "text",
+     "text": "Field balance"
+    },
+    {
+     "kind": "text",
+     "text": "Coarse Loam v"
+    },
+    {
+     "kind": "text",
+     "text": "Next 14 days"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p2_fig-shot-dash-results_1.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "SWAFL View Run Daisy Help"
+    },
+    {
+     "kind": "text",
+     "text": "No-till"
+    },
+    {
+     "kind": "text",
+     "text": "Irrigation design"
+    },
+    {
+     "kind": "text",
+     "text": "Weather and climate"
+    }
+   ]
+  }
+ ],
+ "fig:shot-dash-messages": [
+  {
+   "file": "../figures/annot/p2_fig-shot-dash-messages_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Untitled project"
+    },
+    {
+     "kind": "text",
+     "text": "Profile evolution"
+    },
+    {
+     "kind": "text",
+     "text": "Precipitation"
+    },
+    {
+     "kind": "text",
+     "text": "Soil evaporation"
+    },
+    {
+     "kind": "text",
+     "text": "Coarse Loam v"
+    },
+    {
+     "kind": "text",
+     "text": "Drainage below 1m"
+    }
+   ]
+  }
+ ],
+ "fig:shot-real-balance": [
+  {
+   "file": "../figures/annot/p2_fig-shot-real-balance_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "drainage (inverted) event"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p2_fig-shot-real-balance_1.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Water the crop uses"
+    },
+    {
+     "kind": "text",
+     "text": "reaching the root zone"
+    },
+    {
+     "kind": "text",
+     "text": "below capacity"
+    },
+    {
+     "kind": "text",
+     "text": "trigger (50 % of available water)"
+    }
+   ]
+  }
+ ],
+ "fig:shot-real-flux": [
+  {
+   "file": "../figures/annot/p2_fig-shot-real-flux_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Conventional"
+    },
+    {
+     "kind": "text",
+     "text": "water velocity"
+    },
+    {
+     "kind": "text",
+     "text": "4 where the water moves"
+    },
+    {
+     "kind": "text",
+     "text": "(b) water velocity"
+    },
+    {
+     "kind": "text",
+     "text": "content, per cm?"
+    },
+    {
+     "kind": "text",
+     "text": "velocity, cm per day"
+    }
+   ]
+  }
+ ]
+}

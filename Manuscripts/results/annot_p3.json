@@ -1,0 +1,768 @@
+{
+ "fig:system": [
+  {
+   "file": "../figures/annot/p3_fig-system_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    }
+   ]
+  }
+ ],
+ "fig:zaria1": [
+  {
+   "file": "../figures/annot/p3_fig-zaria1_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Export the report"
+    },
+    {
+     "kind": "text",
+     "text": "Opened maps (2)"
+    },
+    {
+     "kind": "text",
+     "text": "Clouds below"
+    },
+    {
+     "kind": "text",
+     "text": "Bands read"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p3_fig-zaria1_1.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Scenes found"
+    },
+    {
+     "kind": "text",
+     "text": "Bands read"
+    },
+    {
+     "kind": "text",
+     "text": "Next step"
+    },
+    {
+     "kind": "text",
+     "text": "red edge"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p3_fig-zaria1_2.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "6. Running"
+    },
+    {
+     "kind": "text",
+     "text": "main 1m"
+    },
+    {
+     "kind": "text",
+     "text": "Make a rectangle of this size"
+    },
+    {
+     "kind": "text",
+     "text": "Next question"
+    }
+   ]
+  }
+ ],
+ "fig:zaria2": [
+  {
+   "file": "../figures/annot/p3_fig-zaria2_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Open in Google Earth"
+    },
+    {
+     "kind": "text",
+     "text": "zones"
+    },
+    {
+     "kind": "text",
+     "text": "m to the highest point"
+    },
+    {
+     "kind": "text",
+     "text": "Imagery \u00a9"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p3_fig-zaria2_1.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Irrigation layout on the map"
+    },
+    {
+     "kind": "text",
+     "text": "Source Score"
+    },
+    {
+     "kind": "text",
+     "text": "Watershed and channel network"
+    },
+    {
+     "kind": "text",
+     "text": "(no name)"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p3_fig-zaria2_2.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Zaria"
+    },
+    {
+     "kind": "text",
+     "text": "Irrigation layout on the map"
+    },
+    {
+     "kind": "text",
+     "text": "Do everything at once"
+    },
+    {
+     "kind": "text",
+     "text": "global map"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p3_fig-zaria2_3.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "layout on the map"
+    },
+    {
+     "kind": "text",
+     "text": "Collapse all"
+    },
+    {
+     "kind": "text",
+     "text": "Trigger water content (SWAFL decision)"
+    },
+    {
+     "kind": "text",
+     "text": "Days to the trigger"
+    }
+   ]
+  }
+ ],
+ "fig:zaria3": [
+  {
+   "file": "../figures/annot/p3_fig-zaria3_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Irrigation layout on the map"
+    },
+    {
+     "kind": "text",
+     "text": "Show on the map"
+    },
+    {
+     "kind": "text",
+     "text": "Depth of the next"
+    },
+    {
+     "kind": "text",
+     "text": "Bands read"
+    }
+   ]
+  }
+ ],
+ "fig:pheno-screens": [
+  {
+   "file": "../figures/annot/p3_fig-pheno-screens_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Water status Carbon Roots"
+    },
+    {
+     "kind": "text",
+     "text": "Field report"
+    },
+    {
+     "kind": "text",
+     "text": "recovery"
+    },
+    {
+     "kind": "text",
+     "text": "Vegetation and water indices"
+    },
+    {
+     "kind": "text",
+     "text": "Share of the field"
+    },
+    {
+     "kind": "text",
+     "text": "Coarse Loam"
+    }
+   ]
+  }
+ ],
+ "fig:season-film": [
+  {
+   "file": "../figures/annot/p3_fig-season-film_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "film, from sowing to maturity"
+    },
+    {
+     "kind": "text",
+     "text": "day 0"
+    }
+   ]
+  }
+ ],
+ "fig:wb": [
+  {
+   "file": "../figures/annot/p3_fig-wb_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    }
+   ]
+  }
+ ],
+ "fig:screens": [
+  {
+   "file": "../figures/annot/p3_fig-screens_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Snowfall"
+    },
+    {
+     "kind": "text",
+     "text": "Temperature"
+    },
+    {
+     "kind": "text",
+     "text": "Soil water"
+    },
+    {
+     "kind": "text",
+     "text": "input"
+    },
+    {
+     "kind": "text",
+     "text": "Exchange of information within modules"
+    }
+   ]
+  }
+ ],
+ "fig:column": [
+  {
+   "file": "../figures/annot/p3_fig-column_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "content of the soil column"
+    },
+    {
+     "kind": "text",
+     "text": "Day of the run"
+    },
+    {
+     "kind": "text",
+     "text": "saturation"
+    }
+   ]
+  }
+ ],
+ "fig:wbsteps": [
+  {
+   "file": "../figures/annot/p3_fig-wbsteps_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Daisy runs, figures, tests and calibration"
+    },
+    {
+     "kind": "text",
+     "text": "Daisy weather stations (bundled)"
+    },
+    {
+     "kind": "text",
+     "text": "annual rain (mm)"
+    },
+    {
+     "kind": "text",
+     "text": "Place"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p3_fig-wbsteps_1.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Parameter library"
+    },
+    {
+     "kind": "text",
+     "text": "Leg plots"
+    },
+    {
+     "kind": "text",
+     "text": "Hide tos"
+    },
+    {
+     "kind": "text",
+     "text": "alpha, n"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p3_fig-wbsteps_2.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Log plots"
+    },
+    {
+     "kind": "text",
+     "text": "SWAFL layers"
+    },
+    {
+     "kind": "text",
+     "text": "water"
+    },
+    {
+     "kind": "text",
+     "text": "Soil 6"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p3_fig-wbsteps_3.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Parameter library"
+    },
+    {
+     "kind": "text",
+     "text": "Run comparison"
+    },
+    {
+     "kind": "text",
+     "text": "Response curves"
+    },
+    {
+     "kind": "text",
+     "text": "Loaded logs"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p3_fig-wbsteps_4.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Learn the Daisy files"
+    },
+    {
+     "kind": "text",
+     "text": "Open Chemicals and drinking"
+    },
+    {
+     "kind": "text",
+     "text": "Open Chemical"
+    },
+    {
+     "kind": "text",
+     "text": "D6 and the best edge"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p3_fig-wbsteps_5.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "runs, figures, tests and cal"
+    },
+    {
+     "kind": "text",
+     "text": "Mass balance"
+    },
+    {
+     "kind": "text",
+     "text": "Back to the guided path"
+    },
+    {
+     "kind": "text",
+     "text": "Choose file farm rotation"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p3_fig-wbsteps_6.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Experiments Scenarios"
+    },
+    {
+     "kind": "text",
+     "text": "editor builder"
+    },
+    {
+     "kind": "text",
+     "text": "Back to the guided path"
+    },
+    {
+     "kind": "text",
+     "text": "14 runs, best loss"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p3_fig-wbsteps_7.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Setup editor"
+    },
+    {
+     "kind": "text",
+     "text": "Back to the guided path"
+    },
+    {
+     "kind": "text",
+     "text": "it your own"
+    },
+    {
+     "kind": "text",
+     "text": "How a Daisy out"
+    }
+   ]
+  }
+ ],
+ "fig:mainzaria": [
+  {
+   "file": "../figures/annot/p3_fig-mainzaria_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "SWAFL Tools Run Daisy Help"
+    },
+    {
+     "kind": "text",
+     "text": "Untitled project"
+    },
+    {
+     "kind": "text",
+     "text": "Irrigation stopped: soil wet enough"
+    },
+    {
+     "kind": "text",
+     "text": "Feedback loops Full screen"
+    },
+    {
+     "kind": "text",
+     "text": "Import weather... Online weather"
+    },
+    {
+     "kind": "text",
+     "text": "yield irrigation -11 mm"
+    }
+   ]
+  }
+ ],
+ "fig:bridge": [
+  {
+   "file": "../figures/annot/p3_fig-bridge_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    }
+   ]
+  }
+ ],
+ "fig:fidelity": [
+  {
+   "file": "../figures/annot/p3_fig-fidelity_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    }
+   ]
+  }
+ ],
+ "fig:richards": [
+  {
+   "file": "../figures/annot/p3_fig-richards_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    },
+    {
+     "kind": "panel",
+     "text": "c"
+    }
+   ]
+  }
+ ],
+ "fig:deni": [
+  {
+   "file": "../figures/annot/p3_fig-deni_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    }
+   ]
+  }
+ ],
+ "fig:econ": [
+  {
+   "file": "../figures/annot/p3_fig-econ_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    }
+   ]
+  }
+ ],
+ "fig:flow": [
+  {
+   "file": "../figures/annot/p3_fig-flow_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "y decision table"
+    },
+    {
+     "kind": "text",
+     "text": "Drainage"
+    },
+    {
+     "kind": "text",
+     "text": "Climate"
+    },
+    {
+     "kind": "text",
+     "text": "sum of all seasons"
+    },
+    {
+     "kind": "text",
+     "text": "Yield season by season"
+    },
+    {
+     "kind": "text",
+     "text": "Water season by season"
+    }
+   ]
+  }
+ ],
+ "fig:ui11": [
+  {
+   "file": "../figures/annot/p3_fig-ui11_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Irrigation design"
+    },
+    {
+     "kind": "text",
+     "text": "Crops"
+    },
+    {
+     "kind": "text",
+     "text": "Experiments and scenarios"
+    },
+    {
+     "kind": "text",
+     "text": "Documentation"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p3_fig-ui11_1.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "2. Vegetation and water indices"
+    },
+    {
+     "kind": "text",
+     "text": "Clouds below"
+    },
+    {
+     "kind": "text",
+     "text": "Analyse the site (real open data)"
+    },
+    {
+     "kind": "text",
+     "text": "Do everything at once"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p3_fig-ui11_2.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "global map"
+    },
+    {
+     "kind": "text",
+     "text": "Use this field in the DSS"
+    },
+    {
+     "kind": "text",
+     "text": "5. Use and export"
+    },
+    {
+     "kind": "text",
+     "text": "Organisation"
+    }
+   ]
+  }
+ ],
+ "fig:engine": [
+  {
+   "file": "../figures/annot/p3_fig-engine_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Irrigation"
+    },
+    {
+     "kind": "text",
+     "text": "efficiency"
+    },
+    {
+     "kind": "text",
+     "text": "productivity"
+    },
+    {
+     "kind": "text",
+     "text": "Nitrogen"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p3_fig-engine_1.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Leaf area index (LAI)"
+    },
+    {
+     "kind": "text",
+     "text": "Water limit per crop season: 120"
+    },
+    {
+     "kind": "text",
+     "text": "Month of the year"
+    }
+   ]
+  }
+ ],
+ "fig:diag": [
+  {
+   "file": "../figures/annot/p3_fig-diag_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Why 3 runs gave no results"
+    }
+   ]
+  },
+  {
+   "file": "../figures/annot/p3_fig-diag_1.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Every simulated"
+    },
+    {
+     "kind": "text",
+     "text": "Daily-Theta.dlf"
+    },
+    {
+     "kind": "text",
+     "text": "example reservoir"
+    },
+    {
+     "kind": "text",
+     "text": "balance"
+    }
+   ]
+  }
+ ],
+ "fig:pheno": [
+  {
+   "file": "../figures/annot/p3_fig-pheno_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    }
+   ]
+  }
+ ],
+ "fig:crops": [
+  {
+   "file": "../figures/annot/p3_fig-crops_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    },
+    {
+     "kind": "panel",
+     "text": "c"
+    }
+   ]
+  }
+ ]
+}

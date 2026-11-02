@@ -116,7 +116,16 @@ NUM['window'] = {k: {'etaT': round(float(r.dT / r.irrigation_mm), 3), 'etaD': ro
 e3 = a[a.experiment == 'E3_SensorDepth']; NUM['E3_runs'] = len(e3)
 NUM['E3_sand_irrigation'] = {SH[s]: float(e3[e3.soil == s].irrigation_mm.max()) for s in ['S03_Sand', 'S04_LoamySand']}
 # ------------------------------------------------------------------ figures
+from p4_callouts import callout, store
+CALL = {}
 def save(fig, name):
+    if name in CALL:
+        fig.savefig(os.path.join(OUT, name + '.pdf'), bbox_inches=None if name.startswith('fig4') else 'tight'); fig.savefig(os.path.join(OUT, name + '.png'), bbox_inches='tight', dpi=200)
+        labs = []
+        for n, (ax, xy, off, text) in enumerate(CALL[name], 1): callout(ax, n, xy, off); labs.append(text)
+        fig.savefig(os.path.join(OUT, name + '_annot.png'), bbox_inches='tight', dpi=170); store(name, labs, ROOT); plt.close(fig); return
+    _save(fig, name)
+def _save(fig, name):
     fig.savefig(os.path.join(OUT, name + '.pdf'), bbox_inches=None if name.startswith('fig4') else 'tight'); fig.savefig(os.path.join(OUT, name + '.png'), bbox_inches='tight', dpi=200); plt.close(fig)
 # Fig 2: the curves and the reach
 hh = np.logspace(0, 5.3, 400)
@@ -136,6 +145,15 @@ ax[2].set_yscale('log'); ax[2].set_xlabel('van Genuchten $n$'); ax[2].set_ylabel
 ax[2].axhspan(50, 10000, color='0.92', zorder=0)
 ax[1].plot([], [], 'o', mfc='white', mec='k', label='reach $h_c$'); h0, l0 = ax[0].get_legend_handles_labels(); h1, l1 = ax[1].get_legend_handles_labels()
 fig.legend(h0 + h1, l0 + l1, fontsize=6.5, ncol=4, loc='outside lower center')
+sd = SO.loc['S03_Sand']; sc = SO.loc['S10_SiltyClayLoam']; lo = SO.loc['S06_Loam']
+CALL['fig2_curves_reach'] = [
+ (ax[0], (25, float(Se(25, sd.al, sd.n))), (28, 18), 'Sand: its retention curve drops almost to zero within a few tens of centimetres of suction, because its pores are nearly all the same size (large n = 2.68).'),
+ (ax[0], (3000, float(Se(3000, sc.al, sc.n))), (14, 26), 'Silty clay loam: the curve falls slowly over five decades of suction, because its pores span many sizes (small n = 1.23).'),
+ (ax[1], (2, kap), (10, 22), 'The dashed line is the constant kappa = 3.47e-10: the relative conductivity at which a crop can no longer dry the soil at the sensor.'),
+ (ax[1], (float(sd.hc), kap), (-26, -22), 'The reach of sand (199 cm) is where its conductivity curve crosses kappa; the steep curve crosses early.'),
+ (ax[1], (float(sc.hc), kap), (-8, 30), 'The reach of silty clay loam (128 260 cm): its gentle curve crosses kappa only far in the dry range.'),
+ (ax[2], (float(lo.n), float(lo.hc)), (26, 22), 'Each point is the reach of one soil from Eq. (4); the reach falls as n grows. The three lines are Eq. (4) for three values of alpha: a smaller alpha gives a longer reach.'),
+ (ax[2], (2.5, 3000), (0, 0), 'Grey band: the range of triggers tested in the simulations (50 to 10 000 cm). Soils whose reach lies inside the band have a trigger beyond which irrigation stops.')]
 save(fig, 'fig2_curves_reach')
 # Fig 3: E2 trigger response raw and scaled, reach prediction, yield
 fig, ax = plt.subplots(2, 2, figsize=(7.2, 5.6), constrained_layout=True)
@@ -157,6 +175,15 @@ lim = [40, 3e5]; ax[1, 0].plot(lim, lim, 'k', lw=0.7); ax[1, 0].fill_between(lim
 ax[1, 0].set_xscale('log'); ax[1, 0].set_yscale('log'); ax[1, 0].set_xlim(lim); ax[1, 0].set_ylim(lim)
 ax[1, 0].set_xlabel('predicted reach $h_c$ (cm), Eq. (4)'); ax[1, 0].set_ylabel('observed reach interval (cm)'); ax[1, 0].set_title('c  Closed form against Daisy')
 ax[1, 1].set_xscale('log'); ax[1, 1].set_xlabel('trigger suction $h_t$ (cm)'); ax[1, 1].set_ylabel('yield (Mg ha$^{-1}$)'); ax[1, 1].set_title('d  Yield: a trigger beyond the reach is rainfed')
+s3 = e2[e2.soil == 'S03_Sand']; s10 = SO.loc['S10_SiltyClayLoam']
+CALL['fig3_trigger_reach'] = [
+ (ax[0, 0], (100, 6), (22, 26), 'Sand: irrigation falls to zero at 100 to 150 cm. Every drier trigger, including the common 300 cm, is never reached.'),
+ (ax[0, 0], (10000, 95), (-22, 26), 'Silty clay loam still irrigates at 10 000 cm, because its conductivity fades slowly and the crop can keep drying the soil.'),
+ (ax[0, 1], (1, 0.5), (22, 18), 'The dashed line is the reach (trigger / reach = 1). On this scaled axis every soil stops irrigating between 0.5 and 1.'),
+ (ax[1, 0], (float(SO.loc['S03_Sand'].hc), 100), (26, 6), 'Sand: the bar is the observed interval (100 to 150 cm) and the dot its lower end; the prediction of Eq. (4) (199 cm) lies within a factor of two.'),
+ (ax[1, 0], (float(s10.hc), 60000), (-28, 6), 'An arrow means that even the driest trigger tested (10 000 cm) still fired, so only a lower bound of the reach is known.'),
+ (ax[1, 0], (300, 450), (-24, 22), 'Grey band: within a factor of two of the 1:1 line (black). Points in the band are predicted well.'),
+ (ax[1, 1], (1000, 1.13), (0, 24), 'Sand beyond its reach: the yield stays at the rainfed value (1.13 Mg/ha) because the field is never irrigated.')]
 save(fig, 'fig3_trigger_reach')
 # Fig 4: marginal fate stacked bars per soil (E10) and per method (E4, E15)
 order = [k for k in SO.sort_values('n', ascending=False).index if k in fate.index]
@@ -183,6 +210,12 @@ for c, nm, cl in cats[:4]:
 ax[1].axhline(0, color='k', lw=0.6); ax[1].set_xticks(range(len(mm))); ax[1].set_xticklabels([k + '\n' + ex for k, ex in mm], fontsize=6.3); ax[1].set_title('b  Methods (E4 all soils; E15 coarse loam)')
 ax[1].axvline(2.5, color='0.6', lw=0.6, ls=':'); ax[1].set_ylim(-0.12, 1.08)
 h, l = ax[0].get_legend_handles_labels(); fig.legend(h, [x.replace('\n', ' ') for x in l], fontsize=6.6, loc='lower center', ncol=5, bbox_to_anchor=(0.5, 0.0))
+CALL['fig4_marginal_fate'] = [
+ (ax[0], (0, 0.32), (-22, -20), 'Sandy loam transpires the largest share of each irrigation millimetre (0.64): it holds the water near the roots and loses little to the surface.'),
+ (ax[0], (1, 0.84), (22, 16), 'Coarse sand: drainage below 1 m is the largest single loss (0.32), because the soil passes extra water on before the crop can use it.'),
+ (ax[1], (1, -0.04), (22, -10), 'Overhead irrigation: the transpired share is negative (-0.08). Water intercepted by the canopy evaporates with the energy that would have driven transpiration.'),
+ (ax[1], (1, 0.5), (36, 22), 'Most of the overhead water (0.79) leaves as other evaporation: canopy interception, ponds and litter.'),
+ (ax[1], (2, 0.84), (24, 30), 'Subsurface application transpires most (0.51) but also drains most (0.23), because it wets the profile from within.')]
 save(fig, 'fig4_marginal_fate')
 # Fig 5: dose response
 fig, ax = plt.subplots(1, 3, figsize=(7.2, 3.2), constrained_layout=True)
@@ -195,6 +228,13 @@ for x, t, yl in zip(ax, ['a  Drained share', 'b  Transpired share', 'c  Evaporat
 ax[0].plot([], [], 'k-', lw=0.9, label='fit, Eq. (6)'); ax[0].plot([], [], 'ko', ms=3, label='Daisy runs (E10)')
 h0, l0 = ax[2].get_legend_handles_labels(); h1, l1 = ax[0].get_legend_handles_labels(); fig.legend(h0 + h1[-2:], l0 + l1[-2:], fontsize=6.5, ncol=5, loc='outside lower center')
 for x in ax: x.set_ylim(bottom=0)
+cs = DR['S02_CoarseSand']; lm = DR['S06_Loam']
+CALL['fig5_dose'] = [
+ (ax[0], (25, cs['inf']), (-20, 14), 'Plateau of coarse sand (0.45): the share of a large dose that drains. It is set by the soil, which passes water on fast.'),
+ (ax[0], (1, 0.02), (16, 22), 'Doses of 1 to 2 mm hardly drain (0.01 to 0.09): they are used near the surface on the day they are applied.'),
+ (ax[0], (lm['dD'], float(satf(lm['dD'], lm['inf'], lm['dD']))), (-22, 22), 'The dose scale d_D (about 4 mm in every soil): at d = d_D the drained share reaches 63 % of its plateau. It is about one day of crop water use.'),
+ (ax[1], (15, 0.71), (14, -22), 'The transpired share rises with the dose and peaks at 15 to 20 mm, because less of a larger dose is lost from the wet surface.'),
+ (ax[2], (1, 0.7), (22, -16), 'At 1 mm, 60 to 72 % of the dose evaporates: small doses trade drainage for evaporation.')]
 save(fig, 'fig5_dose')
 json.dump(NUM, open(RES, 'w'), indent=1, default=float)
 print(json.dumps({k: NUM[k] for k in ['kappa', 'collapse_raw_h', 'collapse_scaled', 'spearman_scaled', 'fate_E10_all', 'methods_E4', 'methods_E15', 'blind_300']}, indent=1, default=float))

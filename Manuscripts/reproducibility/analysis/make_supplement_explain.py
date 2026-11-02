@@ -6,6 +6,27 @@ HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 from explain_terms import TERMS
 from explain_figs import FIG, GENERIC_SHOT
 ROOT = os.path.abspath(os.path.join(HERE, '../../..')); TEX = os.path.join(ROOT, 'Manuscripts/tex')
+import json
+CALL4 = json.load(open(os.path.join(ROOT, 'Manuscripts/results/p4_callouts.json')))
+MEAN = [(r'View Run Daisy Help|^SWAFL', 'the menu bar of the program (file, view, run, Daisy, help)'), (r'Next 14 days', 'the decision for the next 14 days, from the soil water of the day'),
+ (r'^Output', 'the output bar of the layer: title and caption of the picture, save the picture, full screen, numbers as CSV'), (r'Choose a case', 'the ready-made cases of the Properties panel'),
+ (r'Import weather|Online weather|Change weather|Weather and climate', 'the weather of the project: built-in record, a file of the user or online weather of any place'),
+ (r'Irrigation design|Drip irrigation design|Sprinkler', 'the irrigation-design group of the Layers tree and its layers'), (r'Field balance|water balance', 'the field water balance: inputs, outputs and storage of the root zone'),
+ (r'Every layer|zip', 'saves every layer of the project as pictures in one archive'), (r'trigger', 'the suction (or depletion) at which irrigation starts'),
+ (r'Daisy', 'the Daisy model and its workbench'), (r'Precipitation|rain', 'rain, from the weather of the project'), (r'[Dd]rainage', 'water leaving the root zone below 1 m'),
+ (r'[Ee]vaporation', 'evaporation from the soil (and, where stated, from mulch or canopy)'), (r'Mulch|mulch', 'the surface cover and its effect on evaporation'),
+ (r'NDVI|GNDVI|indices|Bands', 'satellite indices of the vegetation computed from the Sentinel-2 bands'), (r'Export|report', 'export of the field report and its maps'),
+ (r'Next step|Next question|Back', 'moves to the next or previous step of the guided path'), (r'Water sources|water from', 'the ranked sources of irrigation water near the field'),
+ (r'Soil|soil|Loam|Sand|Clay', 'the soil of the project, which every layer uses'), (r'[Cc]rop|Wheat|wheat|Cereal', 'the crop of the project and its stage'),
+ (r'Root|root', 'the roots: depth, density and uptake'), (r'Sensor|sensor', 'the soil-water sensor: its depth and reading'), (r'mm per day|per day', 'a rate in millimetres per day'),
+ (r'Regime map', 'where a mulch saves water and where the saving drains'), (r'Feedback', 'the feedback loops between climate, management, soil water, crop and nitrogen')]
+def meaning(t):
+    for pat, m in MEAN:
+        if re.search(pat, t): return m
+    return 'a heading or control of this screen; the caption above says which layer it belongs to'
+def panels(cap):
+    return {m.group(1): m.group(2).strip(' ;,.') for m in re.finditer(r'\(([a-l])\)\s*(.*?)(?=\s*\([a-l]\)|$)', cap)}
+ANN = {p: json.load(open(os.path.join(ROOT, 'Manuscripts/results/annot_%s.json' % p))) for p in ['p1', 'p2', 'p3', 'p4']}
 MAP = pd.read_excel(os.path.join(ROOT, 'Data/Manuscript_Data/SWAFL_Manuscripts_Data.xlsx'), 'Table_Figure_Map')
 PAP = {'p1': 'Paper 1', 'p2': 'Paper 2', 'p3': 'Paper 3', 'p4': 'Paper 4'}
 TABNOTE = {
@@ -30,6 +51,7 @@ def expand(f):
         n = m.group(1) if m.group(1).endswith('.tex') else m.group(1) + '.tex'
         return expand(n) if n != 'pre.tex' and os.path.exists(os.path.join(TEX, n)) else ''
     return re.sub(r'\\input\{([^}]+)\}', inc, s)
+def files_of(b): return re.findall(r'\\includegraphics(?:\[[^]]*\])?\{([^}]+)\}', b)
 CAP = r'\\caption\{((?:[^{}]|\{(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\})*)\}'
 for p in ['p1', 'p2', 'p3', 'p4']:
     s = 's' + p[1]; src = expand(p + '.tex')
@@ -70,6 +92,26 @@ for p in ['p1', 'p2', 'p3', 'p4']:
         main = caps[-1] if caps else ''; subs = caps[:-1]
         read, why = FIG.get(p + ':' + L, GENERIC_SHOT)
         out.append('\\subsection*{Figure %s of the article}' % n)
+        pan = panels(main)
+        imgs = []
+        if p == 'p4' and L != 'fig:soft':
+            for g in files_of(b):
+                stem = os.path.splitext(os.path.basename(g))[0]
+                if stem in CALL4: imgs.append(('../figures/paper4/%s_annot.png' % stem, [('call', t) for t in CALL4[stem]]))
+        else:
+            for it in ANN[p].get(L, []): imgs.append((it['file'], [(l['kind'], l['text']) for l in it['labels']]))
+        if not imgs:
+            for g in files_of(b): imgs.append((g.replace('\\figdir', '../figures'), []))
+        for k, (f, labs) in enumerate(imgs):
+            out.append('\\begin{center}\\includegraphics[width=\\textwidth,height=0.42\\textheight,keepaspectratio]{%s}\\end{center}' % f)
+            if labs:
+                head = '\\textbf{What the numbered labels point to%s.}' % ((' (picture %d of %d%s)' % (k + 1, len(imgs), ': ' + subs[k] if k < len(subs) else '')) if len(imgs) > 1 else '')
+                items = []
+                for kind, t in labs:
+                    if kind == 'call': items.append(t.replace('d_D', '$d_D$').replace('%', '\\%').replace('kappa = 3.47e-10', 'KAPPAVAL').replace('kappa', '$\\kappa$').replace('alpha', '$\\alpha$').replace('KAPPAVAL', '$\\kappa=3.47\\times10^{-10}$'))
+                    elif kind == 'panel': items.append('Panel (%s): %s.' % (t, pan[t].rstrip('.') if t in pan and pan[t].count('$') % 2 == 0 and pan[t].count('{') == pan[t].count('}') else 'see the caption above'))
+                    else: items.append('``%s\'\': %s.' % (t.replace('%', '\\%').replace('&', '\\&').replace('#', '\\#').replace('$', '\\$').replace('_', '\\_'), meaning(t)))
+                out.append(head + '\n\\begin{enumerate}[nosep,label=\\protect\\circled{\\arabic*}]\n' + '\n'.join('\\item ' + x for x in items) + '\n\\end{enumerate}')
         out.append('\\textbf{What it shows.} ' + main + (' Panels: ' + ' '.join('(%s) %s' % (chr(97 + i), x.rstrip('.') + '.') for i, x in enumerate(subs)) if subs else ''))
         out.append('\\textbf{How to read the labels, symbols and colours.} ' + resolve(read, lab))
         out.append('\\textbf{What affects it, and why it happens.} ' + resolve(why, lab))

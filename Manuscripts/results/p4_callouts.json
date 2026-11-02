@@ -1,0 +1,44 @@
+{
+ "fig2_curves_reach": [
+  "Sand: its retention curve drops almost to zero within a few tens of centimetres of suction, because its pores are nearly all the same size (large n = 2.68).",
+  "Silty clay loam: the curve falls slowly over five decades of suction, because its pores span many sizes (small n = 1.23).",
+  "The dashed line is the constant kappa = 3.47e-10: the relative conductivity at which a crop can no longer dry the soil at the sensor.",
+  "The reach of sand (199 cm) is where its conductivity curve crosses kappa; the steep curve crosses early.",
+  "The reach of silty clay loam (128 260 cm): its gentle curve crosses kappa only far in the dry range.",
+  "Each point is the reach of one soil from Eq. (4); the reach falls as n grows. The three lines are Eq. (4) for three values of alpha: a smaller alpha gives a longer reach.",
+  "Grey band: the range of triggers tested in the simulations (50 to 10 000 cm). Soils whose reach lies inside the band have a trigger beyond which irrigation stops."
+ ],
+ "fig3_trigger_reach": [
+  "Sand: irrigation falls to zero at 100 to 150 cm. Every drier trigger, including the common 300 cm, is never reached.",
+  "Silty clay loam still irrigates at 10 000 cm, because its conductivity fades slowly and the crop can keep drying the soil.",
+  "The dashed line is the reach (trigger / reach = 1). On this scaled axis every soil stops irrigating between 0.5 and 1.",
+  "Sand: the bar is the observed interval (100 to 150 cm) and the dot its lower end; the prediction of Eq. (4) (199 cm) lies within a factor of two.",
+  "An arrow means that even the driest trigger tested (10 000 cm) still fired, so only a lower bound of the reach is known.",
+  "Grey band: within a factor of two of the 1:1 line (black). Points in the band are predicted well.",
+  "Sand beyond its reach: the yield stays at the rainfed value (1.13 Mg/ha) because the field is never irrigated."
+ ],
+ "fig4_marginal_fate": [
+  "Sandy loam transpires the largest share of each irrigation millimetre (0.64): it holds the water near the roots and loses little to the surface.",
+  "Coarse sand: drainage below 1 m is the largest single loss (0.32), because the soil passes extra water on before the crop can use it.",
+  "Overhead irrigation: the transpired share is negative (-0.08). Water intercepted by the canopy evaporates with the energy that would have driven transpiration.",
+  "Most of the overhead water (0.79) leaves as other evaporation: canopy interception, ponds and litter.",
+  "Subsurface application transpires most (0.51) but also drains most (0.23), because it wets the profile from within."
+ ],
+ "fig5_dose": [
+  "Plateau of coarse sand (0.45): the share of a large dose that drains. It is set by the soil, which passes water on fast.",
+  "Doses of 1 to 2 mm hardly drain (0.01 to 0.09): they are used near the surface on the day they are applied.",
+  "The dose scale d_D (about 4 mm in every soil): at d = d_D the drained share reaches 63 % of its plateau. It is about one day of crop water use.",
+  "The transpired share rises with the dose and peaks at 15 to 20 mm, because less of a larger dose is lost from the wet surface.",
+  "At 1 mm, 60 to 72 % of the dose evaporates: small doses trade drainage for evaporation."
+ ],
+ "fig1_concept": [
+  "One millimetre of irrigation applied to the surface; the arrows that leave the column are its fates, with widths in proportion to their shares.",
+  "Transpiration (0.38 of each millimetre): the only fate that makes yield.",
+  "Soil evaporation (0.25): water evaporated from the wetted surface with the energy also available to the crop.",
+  "Other evaporation (0.19): intercepted water, ponds and litter.",
+  "Drainage below 1 m (0.16): water lost to the crop that also carries nitrate.",
+  "The sensor at 20 cm: irrigation starts when the suction it reads exceeds the trigger.",
+  "The reach of sand (199 cm), where its conductivity has collapsed; the usual triggers lie beyond it.",
+  "Grey band: the triggers usually tabulated (300 to 600 cm)."
+ ]
+}

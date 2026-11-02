@@ -1,0 +1,504 @@
+{
+ "fig:pipeline": [
+  {
+   "file": "../figures/annot/p1_fig-pipeline_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    }
+   ]
+  }
+ ],
+ "fig:framework": [
+  {
+   "file": "../figures/annot/p1_fig-framework_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "Driving variables: imposed climate change"
+    },
+    {
+     "kind": "text",
+     "text": "texture organic matter - tillage"
+    },
+    {
+     "kind": "text",
+     "text": "Rate competition"
+    },
+    {
+     "kind": "text",
+     "text": "imposed"
+    },
+    {
+     "kind": "text",
+     "text": "(baseline E)"
+    },
+    {
+     "kind": "text",
+     "text": "memory fates"
+    }
+   ]
+  }
+ ],
+ "fig:hydraulics": [
+  {
+   "file": "../figures/annot/p1_fig-hydraulics_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    },
+    {
+     "kind": "panel",
+     "text": "c"
+    },
+    {
+     "kind": "panel",
+     "text": "d"
+    },
+    {
+     "kind": "panel",
+     "text": "e"
+    }
+   ]
+  }
+ ],
+ "fig:data": [
+  {
+   "file": "../figures/annot/p1_fig-data_0.png",
+   "labels": [
+    {
+     "kind": "text",
+     "text": "experiment and number of runs"
+    }
+   ]
+  }
+ ],
+ "fig:failed": [
+  {
+   "file": "../figures/annot/p1_fig-failed_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    },
+    {
+     "kind": "panel",
+     "text": "c"
+    },
+    {
+     "kind": "panel",
+     "text": "d"
+    }
+   ]
+  }
+ ],
+ "fig:memory": [
+  {
+   "file": "../figures/annot/p1_fig-memory_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    },
+    {
+     "kind": "panel",
+     "text": "c"
+    },
+    {
+     "kind": "panel",
+     "text": "d"
+    },
+    {
+     "kind": "panel",
+     "text": "e"
+    },
+    {
+     "kind": "panel",
+     "text": "f"
+    },
+    {
+     "kind": "panel",
+     "text": "g"
+    },
+    {
+     "kind": "panel",
+     "text": "h"
+    },
+    {
+     "kind": "panel",
+     "text": "i"
+    },
+    {
+     "kind": "panel",
+     "text": "j"
+    }
+   ]
+  }
+ ],
+ "fig:fates": [
+  {
+   "file": "../figures/annot/p1_fig-fates_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    },
+    {
+     "kind": "panel",
+     "text": "c"
+    }
+   ]
+  }
+ ],
+ "fig:predictors": [
+  {
+   "file": "../figures/annot/p1_fig-predictors_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    },
+    {
+     "kind": "panel",
+     "text": "c"
+    },
+    {
+     "kind": "panel",
+     "text": "d"
+    },
+    {
+     "kind": "panel",
+     "text": "e"
+    }
+   ]
+  }
+ ],
+ "fig:mech": [
+  {
+   "file": "../figures/annot/p1_fig-mech_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    },
+    {
+     "kind": "panel",
+     "text": "c"
+    },
+    {
+     "kind": "panel",
+     "text": "d"
+    },
+    {
+     "kind": "panel",
+     "text": "e"
+    }
+   ]
+  }
+ ],
+ "fig:rep": [
+  {
+   "file": "../figures/annot/p1_fig-rep_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    },
+    {
+     "kind": "panel",
+     "text": "c"
+    }
+   ]
+  }
+ ],
+ "fig:robust": [
+  {
+   "file": "../figures/annot/p1_fig-robust_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    }
+   ]
+  }
+ ],
+ "fig:mod": [
+  {
+   "file": "../figures/annot/p1_fig-mod_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    },
+    {
+     "kind": "panel",
+     "text": "c"
+    },
+    {
+     "kind": "panel",
+     "text": "d"
+    }
+   ]
+  }
+ ],
+ "fig:e11": [
+  {
+   "file": "../figures/annot/p1_fig-e11_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    },
+    {
+     "kind": "panel",
+     "text": "c"
+    }
+   ]
+  }
+ ],
+ "fig:invariants": [
+  {
+   "file": "../figures/annot/p1_fig-invariants_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    },
+    {
+     "kind": "panel",
+     "text": "c"
+    },
+    {
+     "kind": "panel",
+     "text": "d"
+    }
+   ]
+  }
+ ],
+ "fig:hidden": [
+  {
+   "file": "../figures/annot/p1_fig-hidden_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    }
+   ]
+  }
+ ],
+ "fig:manifold": [
+  {
+   "file": "../figures/annot/p1_fig-manifold_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    },
+    {
+     "kind": "panel",
+     "text": "c"
+    }
+   ]
+  }
+ ],
+ "fig:fatesoil": [
+  {
+   "file": "../figures/annot/p1_fig-fatesoil_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    },
+    {
+     "kind": "panel",
+     "text": "c"
+    }
+   ]
+  }
+ ],
+ "fig:ETlaw": [
+  {
+   "file": "../figures/annot/p1_fig-ETlaw_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    },
+    {
+     "kind": "panel",
+     "text": "c"
+    },
+    {
+     "kind": "panel",
+     "text": "d"
+    },
+    {
+     "kind": "panel",
+     "text": "e"
+    },
+    {
+     "kind": "panel",
+     "text": "f"
+    }
+   ]
+  }
+ ],
+ "fig:comp": [
+  {
+   "file": "../figures/annot/p1_fig-comp_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    },
+    {
+     "kind": "panel",
+     "text": "c"
+    }
+   ]
+  }
+ ],
+ "fig:ens": [
+  {
+   "file": "../figures/annot/p1_fig-ens_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    },
+    {
+     "kind": "panel",
+     "text": "c"
+    }
+   ]
+  }
+ ],
+ "fig:timemgmt": [
+  {
+   "file": "../figures/annot/p1_fig-timemgmt_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    },
+    {
+     "kind": "panel",
+     "text": "c"
+    },
+    {
+     "kind": "panel",
+     "text": "d"
+    }
+   ]
+  }
+ ],
+ "fig:drivers": [
+  {
+   "file": "../figures/annot/p1_fig-drivers_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    }
+   ]
+  }
+ ],
+ "fig:vgcheck": [
+  {
+   "file": "../figures/annot/p1_fig-vgcheck_0.png",
+   "labels": [
+    {
+     "kind": "panel",
+     "text": "a"
+    },
+    {
+     "kind": "panel",
+     "text": "b"
+    },
+    {
+     "kind": "panel",
+     "text": "c"
+    }
+   ]
+  }
+ ],
+ "fig:rec": []
+}
