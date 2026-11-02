@@ -17,34 +17,34 @@ The table sets each contribution against what was established before it. The der
 \input{s3_nov.tex}
 
 \section{The author's contributions: problem, derivation and pinpoints}
-Each contribution of the article is set out in the same way: \emph{the problem} it answers, stated in a few lines; \emph{the derivation}, step by step; \emph{the result}, with the parts that matter marked by circled labels \circled{1}, \circled{2}, \dots; and \emph{the pinpoints}, which say for each circled mark what it shows and why it is so. Numbers come from the data and can be recomputed in the workbook \nolinkurl{Data/Manuscript_Data/SWAFL_Manuscripts_Data.xlsx}.
+Each contribution of the article is set out in the same way: \emph{the problem} it answers, stated in a few lines; \emph{how the author developed it}; \emph{the result}, with the parts that matter marked by circled labels \circled{1}, \circled{2}, \dots; and \emph{the pinpoints}, which say for each circled mark what it shows and why it is so. Every equation that the author developed is circled in red pencil and labelled \emph{developed by the author}. Numbers come from the data and can be recomputed in the workbook \nolinkurl{Data/Manuscript_Data/SWAFL_Manuscripts_Data.xlsx}.
 \input{s3_contrib.tex}
 
-\section{A step-by-step guide for students}
-Each step explains one computation of the software with a worked example; the numbers are in sheet \texttt{EQ\_P3} of the workbook.
+\section{A guide to the results with worked numbers}
+Each part explains one computation of the software with a worked example; the numbers are in sheet \texttt{EQ\_P3} of the workbook.
 
-\subsection{Step 1: a vegetation index from a satellite pixel}
+\subsection{1. a vegetation index from a satellite pixel}
 Green leaves reflect near-infrared light and absorb red light. \emph{Example:} near-infrared reflectance 0.28 and red 0.11 give $\mathrm{NDVI}=(0.28-0.11)/(0.28+0.11)=0.44$, a moderately green crop.
 
-\subsection{Step 2: the crop coefficient of the day}
+\subsection{2. the crop coefficient of the day}
 FAO-56 describes the crop's water use relative to a reference grass with four straight lines. \emph{Example:} with stages of 30, 40, 50 and 30 days and $K_c$ of 0.40, 1.15 and 0.40, day 50 lies in the development stage: $K_c=0.40+(1.15-0.40)\times(50-30)/40=0.78$; day 70 starts the mid-season, $K_c=1.15$.
 
-\subsection{Step 3: the daily water balance of a map cell}
+\subsection{3. the daily water balance of a map cell}
 Each 10\,m cell keeps a root-zone depletion: yesterday's depletion minus rain and irrigation plus crop water use; when it passes the readily available water, the cell needs irrigation of that depth.
 
-\subsection{Step 4: soil loss}
+\subsection{4. soil loss}
 $A=R\,K\,LS\,C\,P$. \emph{Example:} $450\times0.03\times0.4\times0.3\times1=1.6$\,t\,ha$^{-1}$\,yr$^{-1}$, below a tolerable 2\,t.
 
-\subsection{Step 5: where the soil stays wet}
+\subsection{5. where the soil stays wet}
 The wetness index is $\ln(a/\tan\beta)$. \emph{Example:} 250\,m of upslope area per metre of contour on a slope of 1.9$^\circ$ gives $\ln(250/0.0332)=8.9$, a wet position.
 
-\subsection{Step 6: keeping an experiment within its budget}
+\subsection{6. keeping an experiment within its budget}
 Three factors with 4, 10 and 5 levels make 200 combinations; with a budget of 60 runs a Latin-hypercube choice makes 60 runs in which each level of the second factor appears 6 times, so every level is still tested.
 
-\subsection{Step 7: splitting denitrification}
+\subsection{7. splitting denitrification}
 With 12\,kg\,N\,ha$^{-1}$ denitrified and an N$_2$:N$_2$O ratio of 4, N$_2$O $=12/5=2.4$ and N$_2=9.6$\,kg\,N\,ha$^{-1}$.
 
-\subsection{Step 8: the rule of origin}
+\subsection{8. the rule of origin}
 A decision layer may show a Daisy result only if a Daisy run made it. Before a run, the layer therefore says that it needs a run and shows nothing; after a run it shows the run's numbers with their file and line.
 
 \section{Derivations of the equations}

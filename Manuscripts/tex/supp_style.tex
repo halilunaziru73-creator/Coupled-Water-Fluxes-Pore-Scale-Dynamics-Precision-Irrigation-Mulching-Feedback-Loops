@@ -2,7 +2,15 @@
 \usepackage[most]{tcolorbox}
 \newcommand*\circled[1]{\tikz[baseline=(c.base)]\node[circle,draw=red!70!black,text=red!70!black,line width=0.6pt,inner sep=0.7pt,minimum size=1.15em,font=\scriptsize\bfseries\sffamily](c){#1};}
 \newtcolorbox{problem}[1][]{enhanced,breakable,colback=orange!6,colframe=orange!70!black,fonttitle=\bfseries\sffamily,title=The problem,#1}
-\newtcolorbox{derivation}[1][]{enhanced,breakable,colback=white,colframe=black!55,fonttitle=\bfseries\sffamily,title=The derivation,#1}
+\newtcolorbox{derivation}[1][]{enhanced,breakable,colback=white,colframe=black!55,fonttitle=\bfseries\sffamily,title=How the author developed it,#1}
 \newtcolorbox{keyresult}[1][]{enhanced,breakable,colback=green!5,colframe=green!40!black,fonttitle=\bfseries\sffamily,title=The result,#1}
 \newtcolorbox{pins}[1][]{enhanced,breakable,colback=blue!3,colframe=blue!50!black,fonttitle=\bfseries\sffamily,title=Pinpoints: what each circled mark shows and why,#1}
 \newcommand{\pin}[2]{\par\noindent\circled{#1}\ #2\par\smallskip}
+\usetikzlibrary{decorations.pathmorphing}
+% an equation developed by the author: circled by hand in red pencil
+\newtcolorbox{pencil}[1][]{enhanced,frame hidden,interior hidden,boxsep=6pt,left=16pt,right=16pt,top=8pt,bottom=12pt,
+  overlay={\draw[red!75!black,line width=1.3pt,opacity=0.85,rounded corners=18pt]
+      ([xshift=4pt,yshift=-2pt]frame.north west) rectangle ([xshift=-4pt,yshift=2pt]frame.south east);
+    \draw[red!75!black,line width=0.6pt,opacity=0.55,rounded corners=20pt]
+      ([xshift=2pt,yshift=-4pt]frame.north west) -- ([xshift=-7pt,yshift=0pt]frame.north east) -- ([xshift=-2pt,yshift=5pt]frame.south east) -- ([xshift=7pt,yshift=0pt]frame.south west) -- ([xshift=1pt,yshift=-12pt]frame.north west) -- ([xshift=16pt,yshift=-3pt]frame.north west);
+    \node[anchor=south east,font=\scriptsize\itshape\sffamily,text=red!75!black,inner sep=1pt] at ([xshift=-14pt,yshift=5pt]frame.south east) {developed by the author};},#1}

@@ -6,10 +6,12 @@ Agronomic guidance gives a depletion fraction at which to irrigate (FAO-56), whi
 \textbf{(a)} The plant-available water lies between field capacity (100\,cm) and the wilting point (15\,849\,cm). \textbf{(b)} Because $\theta-\theta_r\propto S_e$, the depletion at suction $h$ needs only $S_e$: $f(h)=[S_e(100)-S_e(h)]/[S_e(100)-S_e(15\,849)]$. \textbf{(c)} Set $f=f^\ast$ and solve for $S_e^\ast$. \textbf{(d)} Invert the van~Genuchten curve.
 \end{derivation}
 \begin{keyresult}
+\begin{pencil}
 \[
 \underbrace{h^\ast}_{\circled{1}}=\frac1\alpha\Bigl(\underbrace{\bigl[S_e(100)-f^\ast\{S_e(100)-S_e(15\,849)\}\bigr]}_{\circled{2}}{}^{-1/m}-1\Bigr)^{1/n}\]
 \[\underbrace{f(300)=0.24\ \text{to}\ 0.84}_{\circled{3}}
 \]
+\end{pencil}
 \centering\small
 \begin{tabular}{lrr}
 \toprule
@@ -31,8 +33,13 @@ Silty clay loam & \circled{5}\ 729 & 24\,\%\\\bottomrule
 \begin{problem}
 The daily model must lose to canopy interception the same water per year as the annual model, although its rain falls in random daily amounts. How large must the daily interception store be?
 \end{problem}
+\begin{derivation}
+Daily rain was taken as exponential with mean $\mu_0$; the throughfall above a store $I_c$ was integrated over that distribution; the result was set equal to the throughfall fraction of the annual model and solved for $I_c$.
+\end{derivation}
 \begin{keyresult}
+\begin{pencil}
 \[\underbrace{\mathrm E[(R-I_c)^+]}_{\circled{1}}=\mu_0e^{-I_c/\mu_0}\;\Rightarrow\;\underbrace{r=e^{-I_c/\mu_0}}_{\circled{2}}\;\Rightarrow\;\underbrace{I_c=\mu_0\ln\frac1r}_{\circled{3}}\]
+\end{pencil}
 \end{keyresult}
 \begin{pins}
 \pin{1}{Expected throughfall of an exponential daily rain of mean $\mu_0$ above a store $I_c$, obtained by integrating the exponential density.}
@@ -41,10 +48,15 @@ The daily model must lose to canopy interception the same water per year as the 
 \end{pins}
 
 \subsection{Contribution 3: two evaporation stages joined without a jump}
+\begin{derivation}
+Stage 1 runs at the demand $e_0$ until the stage-1 limit $Q_1$; for stage 2 a square-root law of diffusion was taken, and its two constants were set so that the rate equals $e_0$ at the change of stage and the long-time behaviour is $\sqrt t$.
+\end{derivation}
 \begin{keyresult}
+\begin{pencil}
 \[Q(t)=Q_1+\underbrace{2e_0\tau_E}_{\circled{1}}\Bigl(\sqrt{1+\underbrace{(t-t_1)/\tau_E}_{\circled{2}}}-1\Bigr)\]
 \[\underbrace{\frac{\dd Q}{\dd t}\Big|_{t_1}=e_0}_{\circled{3}}\]
 \[\underbrace{Q\propto\sqrt{t}\ \ (t-t_1\gg\tau_E)}_{\circled{4}}\]
+\end{pencil}
 \end{keyresult}
 \begin{pins}
 \pin{1}{The amplitude of stage 2, chosen so that the rate is continuous.}

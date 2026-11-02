@@ -17,39 +17,39 @@ The table sets each contribution against what was established before it. The der
 \input{s1_nov.tex}
 
 \section{The author's contributions: problem, derivation and pinpoints}
-Each contribution of the article is set out in the same way: \emph{the problem} it answers, stated in a few lines; \emph{the derivation}, step by step; \emph{the result}, with the parts that matter marked by circled labels \circled{1}, \circled{2}, \dots; and \emph{the pinpoints}, which say for each circled mark what it shows and why it is so. Numbers come from the data and can be recomputed in the workbook \nolinkurl{Data/Manuscript_Data/SWAFL_Manuscripts_Data.xlsx}.
+Each contribution of the article is set out in the same way: \emph{the problem} it answers, stated in a few lines; \emph{how the author developed it}; \emph{the result}, with the parts that matter marked by circled labels \circled{1}, \circled{2}, \dots; and \emph{the pinpoints}, which say for each circled mark what it shows and why it is so. Every equation that the author developed is circled in red pencil and labelled \emph{developed by the author}. Numbers come from the data and can be recomputed in the workbook \nolinkurl{Data/Manuscript_Data/SWAFL_Manuscripts_Data.xlsx}.
 \input{s1_contrib.tex}
 
-\section{A step-by-step guide for students}
-The results of the article can be followed with a calculator or with the workbook (sheet \texttt{EQ\_P1}). Each step gives the idea, the formula and a worked example.
+\section{A guide to the results with worked numbers}
+The results of the article can be followed with a calculator or with the workbook (sheet \texttt{EQ\_P1}). Each part gives the idea, the formula and a worked example.
 
-\subsection{Step 1: the water balance of a soil column}
+\subsection{1. the water balance of a soil column}
 Over a year, water in (rain $P$ and irrigation $I$) equals water out (evapotranspiration $\ET$, drainage $D$ below 1\,m, runoff $Q$) plus the change of water stored, $\Delta S$: $P+I=\ET+D+\Delta S+Q$.
 \emph{Example.} Coarse loam without irrigation: $P=464.4$, $\ET=466.8$, $D=6.1$\,mm; $\ET+D-P=8.5$\,mm came from storage.
 
-\subsection{Step 2: the storage release}
+\subsection{2. the storage release}
 $\bar R=\ET+D-P-I$ is the water the soil gave away from its store. Starting the run wetter makes $\bar R$ larger; the experiment E9 does this on purpose with ten starting suctions.
 
-\subsection{Step 3: the memory fate}
+\subsection{3. the memory fate}
 Plot drainage against $\bar R$ for the runs with the same rainfall: the slope is the share of each released millimetre that drained, $\phi_D$. The same slope for transpiration, soil and other evaporation gives $\phi_T$, $\phi_{E_s}$, $\phi_{\mathrm{oth}}$, and the four add to 1 because the released water must leave by one of them.
 \emph{Example (three runs).} If $\bar R=10$, 20, 30\,mm and $D=1$, 4, 7\,mm, the slope is $(7-1)/(30-10)=0.3$: 30\,\% of released water drains.
 
-\subsection{Step 4: why drainage wins in coarse soils, the rate law}
+\subsection{4. why drainage wins in coarse soils, the rate law}
 Released water leaves by two routes that compete: drainage, fast when the saturated conductivity $K_s$ is large, and withdrawal by roots and the surface, with a fixed rate $q^\ast$. The share that drains is $\phi_D=K_s/(K_s+q^\ast)$, with $q^\ast=71.5$\,cm\,d$^{-1}$.
 \emph{Example.} Sand, $K_s=712.8$: $712.8/(712.8+71.5)=0.91$ (observed 0.85). Silty clay loam, $K_s=1.68$: $1.68/73.18=0.023$ (observed 0.022).
 
-\subsection{Step 5: the recoverable share of an evaporation saving}
+\subsection{5. the recoverable share of an evaporation saving}
 When a mulch or a lower evaporation demand saves evaporation, the saved water goes to transpiration, to less irrigation, or to drainage. Only the part that does not drain is recovered: $\rho_R=1-\psi_D$.
 \emph{Example.} Loamy sand, $\psi_D=0.80$ in the edge-case experiment: $\rho_R=0.20$; only a fifth of a saving is recovered.
 
-\subsection{Step 6: checking the model's own bookkeeping}
-If the outputs of the model obey the balance of Step 1, the columns $P$, $I$, $\ET$ and $D$ of all runs are linked by one linear relation. The singular-value decomposition finds the combination of columns that is closest to zero; it gave coefficients within 5\,\% of $(1,1,-1,-1)$, so the method finds the balance without being told it.
+\subsection{6. checking the model's own bookkeeping}
+If the outputs of the model obey the balance of Part 1, the columns $P$, $I$, $\ET$ and $D$ of all runs are linked by one linear relation. The singular-value decomposition finds the combination of columns that is closest to zero; it gave coefficients within 5\,\% of $(1,1,-1,-1)$, so the method finds the balance without being told it.
 
-\subsection{Step 7: the unattributed evaporation}
+\subsection{7. the unattributed evaporation}
 $\ET$ minus transpiration, soil evaporation and canopy evaporation should be zero; in the run table it averaged 164\,mm a year (30\,\% of $\ET$). The full outputs show it is evaporation of ponded water, litter and snow, which the run table did not report separately.
 
-\subsection{Step 8: reproduce everything}
-Sheet \texttt{EQ\_P1} computes Step 4, Step 5 and the storage release of each soil from the runs; the scripts of \nolinkurl{Manuscripts/reproducibility} regenerate every number of the article.
+\subsection{8. reproduce everything}
+Sheet \texttt{EQ\_P1} computes Part 4, Part 5 and the storage release of each soil from the runs; the scripts of \nolinkurl{Manuscripts/reproducibility} regenerate every number of the article.
 
 \section{Derivations of the equations}
 Sections~S2.1, S2.2 and S2.8 re-derive established results \citep{vanGenuchten1980,Mualem1976} and standard statistical tools for completeness. The memory fate (S2.3), the loss fates and the recoverable share (S2.4), the rate-competition law of hydraulic memory (S2.5), the invariant search applied to a process model (S2.6), the closure residual and the unattributed term (S2.7) and the compensation coefficient (S2.9) are definitions and results of this article.

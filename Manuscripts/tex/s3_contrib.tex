@@ -2,9 +2,14 @@
 \begin{problem}
 Decision tools that couple a process model with fast approximations can show a number that looks like a model result but was not produced by the model. How can a user be sure that a ``Daisy'' number came from Daisy?
 \end{problem}
+\begin{derivation}
+Every value passed by the bridge carries the log file and line it was read from; before drawing, a layer tests that origin and draws nothing if there is no run, stating which run is needed.
+\end{derivation}
 \begin{keyresult}
+\begin{pencil}
 \[\underbrace{\text{show}(v)}_{\circled{1}}\iff\underbrace{\text{source}(v)\in\{\text{Daisy runs of this project}\}}_{\circled{2}}\]
 \[\underbrace{\text{no run}\Rightarrow\text{empty layer with the reason}}_{\circled{3}}\]
+\end{pencil}
 \end{keyresult}
 \begin{pins}
 \pin{1}{A value of a Daisy layer is drawn only if the condition on the right holds.}
@@ -16,9 +21,14 @@ Decision tools that couple a process model with fast approximations can show a n
 \begin{problem}
 A design of a few factors can need hundreds of Daisy runs of minutes each. How can the user set a budget and still test every level of every factor?
 \end{problem}
+\begin{derivation}
+The full factorial is counted; if it exceeds the budget $B$, a Latin hypercube of $B$ runs is drawn in which the levels of each factor are used as evenly as possible.
+\end{derivation}
 \begin{keyresult}
+\begin{pencil}
 \[\underbrace{N}_{\circled{1}}=\min\Bigl(\underbrace{\textstyle\prod_i n_i}_{\circled{2}},\ \underbrace{B}_{\circled{3}}\Bigr)\]
 \[\underbrace{\text{each level of factor } i \text{ used } \lfloor N/n_i\rfloor \text{ or } \lceil N/n_i\rceil \text{ times}}_{\circled{4}}\]
+\end{pencil}
 \end{keyresult}
 \begin{pins}
 \pin{1}{The number of runs actually made, never above the budget.}
@@ -47,8 +57,13 @@ Daisy message contains & Class & What to do\\\midrule
 \end{pins}
 
 \subsection{Contribution 4: soil-hydraulic factors for every horizon}
+\begin{derivation}
+Each factor rewrites the hydraulic block of every horizon of the set-up file before Daisy runs; $n-1$ rather than $n$ is scaled so that $n>1$ for any factor; one run of the loam was made with Daisy 7.1.14 with and without the factors.
+\end{derivation}
 \begin{keyresult}
+\begin{pencil}
 \[\underbrace{K_s\to f_kK_s}_{\circled{1}},\quad \underbrace{\alpha\to f_a\alpha}_{\circled{2}},\quad \underbrace{n-1\to f_n(n-1)}_{\circled{3}},\quad \theta_s\to f_t\theta_s,\quad \ell\to\ell+\delta\ell;\qquad \underbrace{\text{percolation }177\to222\ \mathrm{mm}}_{\circled{4}}\]
+\end{pencil}
 \end{keyresult}
 \begin{pins}
 \pin{1}{Scaling the saturated conductivity of every horizon at once keeps the layering of the soil.}
@@ -61,8 +76,13 @@ Daisy message contains & Class & What to do\\\midrule
 \begin{problem}
 The denitrification function is shared with Daisy's Python tools. Is the copy used by the software right?
 \end{problem}
+\begin{derivation}
+The function was evaluated on the stored inputs of the 792 cases distributed with Daisy's tools and its outputs compared case by case with Daisy's stored results.
+\end{derivation}
 \begin{keyresult}
+\begin{pencil}
 \[\underbrace{\max_{j=1..792}\bigl|D_j^{\text{SWAFL}}-D_j^{\text{Daisy}}\bigr|}_{\circled{1}}\quad\Rightarrow\quad\underbrace{\text{one branch wrong, corrected}}_{\circled{2}}\]
+\end{pencil}
 \end{keyresult}
 \begin{pins}
 \pin{1}{The function was evaluated on the 792 cases for which Daisy's own results are stored, and compared case by case.}

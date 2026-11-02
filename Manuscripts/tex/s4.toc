@@ -6,42 +6,42 @@
 \contentsline {subsection}{\numberline {S3.3}Contribution 3: one axis for all soils}{7}{subsection.3.3}%
 \contentsline {subsection}{\numberline {S3.4}Contribution 4: the fate of an irrigation millimetre}{8}{subsection.3.4}%
 \contentsline {subsection}{\numberline {S3.5}Contribution 5: the dose law}{9}{subsection.3.5}%
-\contentsline {subsection}{\numberline {S3.6}Contribution 6: overhead irrigation adds no transpiration}{10}{subsection.3.6}%
-\contentsline {subsection}{\numberline {S3.7}Contribution 7: when a sensor's lag matters}{10}{subsection.3.7}%
-\contentsline {section}{\numberline {S4}A step-by-step guide for students}{11}{section.4}%
-\contentsline {subsection}{\numberline {S4.1}Step 1: what a retention curve says}{11}{subsection.4.1}%
-\contentsline {subsection}{\numberline {S4.2}Step 2: what the conductivity curve says}{12}{subsection.4.2}%
-\contentsline {subsection}{\numberline {S4.3}Step 3: why a crop cannot dry a soil beyond a certain suction}{12}{subsection.4.3}%
-\contentsline {subsection}{\numberline {S4.4}Step 4: a simple formula for the conductivity of a dry soil}{12}{subsection.4.4}%
-\contentsline {subsection}{\numberline {S4.5}Step 5: solve for the reach}{12}{subsection.4.5}%
-\contentsline {subsection}{\numberline {S4.6}Step 6: how $\kappa $ was found and tested}{13}{subsection.4.6}%
-\contentsline {subsection}{\numberline {S4.7}Step 7: where an irrigation millimetre goes}{13}{subsection.4.7}%
-\contentsline {subsection}{\numberline {S4.8}Step 8: the dose law}{14}{subsection.4.8}%
-\contentsline {subsection}{\numberline {S4.9}Step 9: when the sensor's lag matters}{14}{subsection.4.9}%
-\contentsline {subsection}{\numberline {S4.10}Step 10: reproduce everything}{14}{subsection.4.10}%
-\contentsline {section}{\numberline {S5}Derivations of the equations}{14}{section.5}%
-\contentsline {subsection}{\numberline {S5.1}The van~Genuchten--Mualem pair from a capillary bundle}{15}{subsection.5.1}%
-\contentsline {subsection}{\numberline {S5.2}The dry-end asymptote of the conductivity}{16}{subsection.5.2}%
-\contentsline {subsection}{\numberline {S5.3}The reach of a trigger}{16}{subsection.5.3}%
-\contentsline {paragraph}{The physical condition.}{16}{paragraph*.1}%
-\contentsline {paragraph}{One constant for all soils.}{17}{paragraph*.2}%
-\contentsline {paragraph}{Properties.}{17}{paragraph*.3}%
-\contentsline {subsection}{\numberline {S5.4}The alternative laws}{17}{subsection.5.4}%
-\contentsline {paragraph}{Fixed saturation.}{17}{paragraph*.4}%
-\contentsline {paragraph}{Power law in $n-1$.}{17}{paragraph*.5}%
-\contentsline {paragraph}{Absolute conductivity.}{17}{paragraph*.6}%
-\contentsline {subsection}{\numberline {S5.5}Fitting interval-censored reaches}{17}{subsection.5.5}%
-\contentsline {subsection}{\numberline {S5.6}The marginal fate of irrigation}{18}{subsection.5.6}%
-\contentsline {subsection}{\numberline {S5.7}The dose law}{18}{subsection.5.7}%
-\contentsline {subsection}{\numberline {S5.8}Dynamic non-equilibrium and the lag of a sensor}{19}{subsection.5.8}%
-\contentsline {section}{\numberline {S6}Why the results happen}{19}{section.6}%
-\contentsline {paragraph}{Why a trigger has a reach.}{19}{paragraph*.7}%
-\contentsline {paragraph}{Why a deeper sensor does not help.}{20}{paragraph*.8}%
-\contentsline {paragraph}{Why scaling by the reach collapses the curves only in part.}{20}{paragraph*.9}%
-\contentsline {paragraph}{Why less than half of an irrigation millimetre is transpired.}{20}{paragraph*.10}%
-\contentsline {paragraph}{Why overhead irrigation adds no transpiration.}{20}{paragraph*.11}%
-\contentsline {paragraph}{Why the dose scale does not depend on the soil.}{20}{paragraph*.12}%
-\contentsline {paragraph}{Why the plateau depends on the soil.}{20}{paragraph*.13}%
-\contentsline {paragraph}{Why early-season irrigation is more productive.}{20}{paragraph*.14}%
-\contentsline {section}{\numberline {S7}The data}{21}{section.7}%
-\contentsline {section}{\numberline {S8}Where every table and figure comes from}{35}{section.8}%
+\contentsline {subsection}{\numberline {S3.6}Contribution 6: overhead irrigation adds no transpiration}{11}{subsection.3.6}%
+\contentsline {subsection}{\numberline {S3.7}Contribution 7: when a sensor's lag matters}{11}{subsection.3.7}%
+\contentsline {section}{\numberline {S4}A guide to the results with worked numbers}{12}{section.4}%
+\contentsline {subsection}{\numberline {S4.1}1. what a retention curve says}{12}{subsection.4.1}%
+\contentsline {subsection}{\numberline {S4.2}2. what the conductivity curve says}{13}{subsection.4.2}%
+\contentsline {subsection}{\numberline {S4.3}3. why a crop cannot dry a soil beyond a certain suction}{13}{subsection.4.3}%
+\contentsline {subsection}{\numberline {S4.4}4. a simple formula for the conductivity of a dry soil}{13}{subsection.4.4}%
+\contentsline {subsection}{\numberline {S4.5}5. solve for the reach}{14}{subsection.4.5}%
+\contentsline {subsection}{\numberline {S4.6}6. how $\kappa $ was found and tested}{14}{subsection.4.6}%
+\contentsline {subsection}{\numberline {S4.7}7. where an irrigation millimetre goes}{14}{subsection.4.7}%
+\contentsline {subsection}{\numberline {S4.8}8. the dose law}{15}{subsection.4.8}%
+\contentsline {subsection}{\numberline {S4.9}9. when the sensor's lag matters}{15}{subsection.4.9}%
+\contentsline {subsection}{\numberline {S4.10}10. reproduce everything}{15}{subsection.4.10}%
+\contentsline {section}{\numberline {S5}Derivations of the equations}{15}{section.5}%
+\contentsline {subsection}{\numberline {S5.1}The van~Genuchten--Mualem pair from a capillary bundle}{16}{subsection.5.1}%
+\contentsline {subsection}{\numberline {S5.2}The dry-end asymptote of the conductivity}{17}{subsection.5.2}%
+\contentsline {subsection}{\numberline {S5.3}The reach of a trigger}{17}{subsection.5.3}%
+\contentsline {paragraph}{The physical condition.}{17}{paragraph*.1}%
+\contentsline {paragraph}{One constant for all soils.}{18}{paragraph*.2}%
+\contentsline {paragraph}{Properties.}{18}{paragraph*.3}%
+\contentsline {subsection}{\numberline {S5.4}The alternative laws}{18}{subsection.5.4}%
+\contentsline {paragraph}{Fixed saturation.}{18}{paragraph*.4}%
+\contentsline {paragraph}{Power law in $n-1$.}{18}{paragraph*.5}%
+\contentsline {paragraph}{Absolute conductivity.}{18}{paragraph*.6}%
+\contentsline {subsection}{\numberline {S5.5}Fitting interval-censored reaches}{18}{subsection.5.5}%
+\contentsline {subsection}{\numberline {S5.6}The marginal fate of irrigation}{19}{subsection.5.6}%
+\contentsline {subsection}{\numberline {S5.7}The dose law}{19}{subsection.5.7}%
+\contentsline {subsection}{\numberline {S5.8}Dynamic non-equilibrium and the lag of a sensor}{20}{subsection.5.8}%
+\contentsline {section}{\numberline {S6}Why the results happen}{20}{section.6}%
+\contentsline {paragraph}{Why a trigger has a reach.}{20}{paragraph*.7}%
+\contentsline {paragraph}{Why a deeper sensor does not help.}{21}{paragraph*.8}%
+\contentsline {paragraph}{Why scaling by the reach collapses the curves only in part.}{21}{paragraph*.9}%
+\contentsline {paragraph}{Why less than half of an irrigation millimetre is transpired.}{21}{paragraph*.10}%
+\contentsline {paragraph}{Why overhead irrigation adds no transpiration.}{21}{paragraph*.11}%
+\contentsline {paragraph}{Why the dose scale does not depend on the soil.}{21}{paragraph*.12}%
+\contentsline {paragraph}{Why the plateau depends on the soil.}{21}{paragraph*.13}%
+\contentsline {paragraph}{Why early-season irrigation is more productive.}{21}{paragraph*.14}%
+\contentsline {section}{\numberline {S7}The data}{22}{section.7}%
+\contentsline {section}{\numberline {S8}Where every table and figure comes from}{36}{section.8}%

@@ -6,11 +6,13 @@ After a wet spring, a soil releases stored water over the season. Does that wate
 \textbf{(a)} Define the storage release of a run, $\bar R=\ET+D-P_r-I$ (water given away by the store). \textbf{(b)} In experiment E9 the starting wetness is varied at fixed rainfall, so $\bar R$ varies while the weather does not. \textbf{(c)} Within each rainfall level, regress each flux on $\bar R$; pool the levels (Section~S3.3). \textbf{(d)} Because the four fluxes add to $\bar R$ plus a constant, their slopes add to one.
 \end{derivation}
 \begin{keyresult}
+\begin{pencil}
 \[
 \underbrace{\phi_x}_{\circled{1}}=\frac{\sum_P\sum_{c\in P}\overbrace{(\bar R_c-\overline{\bar R}_P)}^{\circled{2}}(x_c-\bar x_P)}{\sum_P\sum_{c\in P}(\bar R_c-\overline{\bar R}_P)^2}\]
 \[\underbrace{\phi_{E_s}+\phi_T+\phi_D+\phi_{\mathrm{oth}}=1}_{\circled{3}}\]
 \[\underbrace{\phi_D=0.02\ \text{to}\ 0.85}_{\circled{4}}
 \]
+\end{pencil}
 \end{keyresult}
 \begin{pins}
 \pin{1}{The memory fate of flux $x$: the share of one released millimetre that leaves by $x$. It is a number between 0 and 1 for each soil, so soils can be ranked and compared.}
@@ -27,9 +29,11 @@ Can the drained share of a soil that was never simulated be predicted from one m
 Stored water leaves by two competing first-order routes, drainage at a rate proportional to $K_s$ and withdrawal by roots and surface at a rate proportional to $q^\ast$ (Section~S3.5); the share taken by drainage is the ratio of its rate to the sum.
 \end{derivation}
 \begin{keyresult}
+\begin{pencil}
 \[\underbrace{\phi_D}_{\circled{1}}=\frac{\overbrace{K_s}^{\circled{2}}}{K_s+\underbrace{q^\ast}_{\circled{3}}}\]
 \[\underbrace{q^\ast=71.5\ \mathrm{cm\,d^{-1}}}_{\circled{4}}\]
 \[\underbrace{\text{LOSO RMSE}=0.058}_{\circled{5}}\]
+\end{pencil}
 \end{keyresult}
 \begin{pins}
 \pin{1}{The predicted memory fate.}
@@ -43,8 +47,13 @@ Stored water leaves by two competing first-order routes, drainage at a rate prop
 \begin{problem}
 A mulch saves evaporation. Is the saved water gained for the crop or the irrigation account, or is it lost to drainage?
 \end{problem}
+\begin{derivation}
+Paired runs that differ only in the evaporation factor (E16) or in the mulch level (E7) were differenced; the water balance gives $\psi_T+\psi_D+\psi_I\approx1$ for the fates of the evaporation change; the recoverable share is what does not drain.
+\end{derivation}
 \begin{keyresult}
+\begin{pencil}
 \[\underbrace{\rho_R}_{\circled{1}}=1-\underbrace{\psi_D}_{\circled{2}}\]
+\end{pencil}
 \centering\small
 \begin{tabular}{lrr}
 \toprule
@@ -65,9 +74,14 @@ Silty clay loam & 0.69 & 0.59\\\bottomrule
 \begin{problem}
 Can an automatic method find the conservation law hidden in a process model's outputs, and use it to detect what the outputs leave out?
 \end{problem}
+\begin{derivation}
+The 20-year fluxes $P_r$, $I$, $\ET$ and $D$ of all valid runs were centred and stacked as a matrix; its singular-value decomposition gives the combination of columns closest to zero; a permutation of each column gives the distribution under no structure; the vector was rescaled so that ET has coefficient $-1$.
+\end{derivation}
 \begin{keyresult}
+\begin{pencil}
 \[\underbrace{\mathbf c}_{\circled{1}}=(c_{P_r},c_I,c_{\ET},c_D)=(\underbrace{1.037}_{\circled{2}},\ 0.957,\ -1,\ \underbrace{-1.036}_{\circled{3}})\]
 \[\underbrace{R=\ET-T-E_s-E_c=164\ \mathrm{mm\,yr^{-1}}}_{\circled{4}}\]
+\end{pencil}
 \end{keyresult}
 \begin{pins}
 \pin{1}{The right singular vector of the flux matrix with the smallest singular value: the linear combination of fluxes that is closest to zero for all 10\,041 runs.}
@@ -77,9 +91,14 @@ Can an automatic method find the conservation law hidden in a process model's ou
 \end{pins}
 
 \subsection{Contribution 5: a compact law for evapotranspiration}
+\begin{derivation}
+Log and dimensionless candidate terms were added one at a time by forward selection; a term was kept only if the cross-validated $R^2$ (experiments or soils left out) rose by more than 0.003; the selected law was compared with gradient boosting on the same folds.
+\end{derivation}
 \begin{keyresult}
+\begin{pencil}
 \[\ln\ET=2.503+\underbrace{0.646\ln W}_{\circled{1}}\underbrace{-0.299\,n}_{\circled{2}}+\underbrace{0.029\ln(1+I)}_{\circled{3}}\]
 \[\underbrace{R^2=0.898\ \text{and}\ 0.904}_{\circled{4}}\]
+\end{pencil}
 \end{keyresult}
 \begin{pins}
 \pin{1}{The elasticity of ET to the water input $W=P_r+I$ is 0.65, less than one: a part of every extra millimetre drains instead of evaporating.}

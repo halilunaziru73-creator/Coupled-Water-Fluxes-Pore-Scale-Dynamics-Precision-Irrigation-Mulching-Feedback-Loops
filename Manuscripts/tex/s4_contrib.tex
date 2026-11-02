@@ -6,6 +6,7 @@ A farmer on a sandy field installs a matric-potential sensor at 20\,cm and sets 
 \textbf{(a)} Roots dry a layer only as fast as the soil delivers water to them; the delivery is proportional to the conductivity $K=K_sK_r$ \citep{Gardner1960}. \textbf{(b)} Postulate: the sensor's soil stops drying when the relative conductivity has fallen to one value $\kappa$, the same for all soils, $K_r(\hc)=\kappa$. \textbf{(c)} At the dry end, $K_r\simeq m^2(\alpha h)^{-[2n+\ell(n-1)]}$ (Section~S3.2). \textbf{(d)} Insert (c) into (b): $m^2(\alpha\hc)^{-E}=\kappa$ with $E=2n+\ell(n-1)$. \textbf{(e)} Divide by $m^2$, raise to $-1/E$, divide by $\alpha$.
 \end{derivation}
 \begin{keyresult}
+\begin{pencil}
 \[
 \hc\;=\;\underbrace{\frac{1}{\alpha}}_{\circled{1}}\;\Bigl(\underbrace{m^{2}}_{\circled{2}}\Big/\underbrace{\kappa}_{\circled{3}}\Bigr)^{\textstyle\overbrace{1/[\,2n+\ell(n-1)\,]}^{\circled{4}}}
 \]
@@ -13,6 +14,7 @@ A farmer on a sandy field installs a matric-potential sensor at 20\,cm and sets 
 \underbrace{\kappa=3.47\times10^{-10}}_{\circled{5}}\]
 \[\underbrace{\text{error on soils left out}\le\text{a factor of }2.3}_{\circled{6}}
 \]
+\end{pencil}
 \end{keyresult}
 \begin{pins}
 \pin{1}{$1/\alpha$ is the suction at which the soil starts to drain. It only \emph{rescales} the reach: two soils with the same $n$ have reaches in the ratio of their $1/\alpha$. This is why, at equal $n$, a soil that starts draining later (small $\alpha$) can be dried further.}
@@ -31,7 +33,9 @@ Which of the tabulated triggers can be used on which soil, before any season is 
 The irrigation of every soil fell to zero between $\htr/\hc=0.5$ and 1 (Fig.~3b of the article). A trigger therefore fires reliably only below half the reach. Compute $\hc$ (Contribution~1), halve it, and compare with the trigger.
 \end{derivation}
 \begin{keyresult}
+\begin{pencil}
 \[\underbrace{\htr}_{\circled{1}}\;<\;\underbrace{\tfrac12}_{\circled{2}}\,\underbrace{\hc(\alpha,n,\ell)}_{\circled{3}}\]
+\end{pencil}
 \centering\small
 \begin{tabular}{lrrl}
 \toprule
@@ -54,8 +58,13 @@ Silty clay loam (S10) & 128\,260 & 64\,130 & fires\\\bottomrule
 \begin{problem}
 Irrigation-against-trigger curves of ten soils lie far apart. Can one scale bring them together, so that one rule applies to all?
 \end{problem}
+\begin{derivation}
+The reach of each soil was computed with Contribution~1, every trigger of experiment E2 was divided by it, and the irrigation was divided by its soil maximum. The collapse was measured as the share of the variance of the normalised irrigation that remains within ten bins of the scaled trigger.
+\end{derivation}
 \begin{keyresult}
+\begin{pencil}
 \[\underbrace{x}_{\circled{1}}=\frac{\htr}{\hc},\qquad \text{scatter between soils: }\underbrace{54\,\%}_{\circled{2}}\to\underbrace{32\,\%}_{\circled{3}}\]
+\end{pencil}
 \end{keyresult}
 \begin{pins}
 \pin{1}{The trigger measured in units of the soil's reach: $x=1$ means ``at the reach'' in every soil.}
@@ -71,9 +80,11 @@ Of every millimetre of water pumped onto a field, how much does the crop transpi
 Write the 20-year balance of an irrigated run and of its rainfed twin (same soil and weather), subtract them, and divide by the irrigation $I$ (Section~S3.6).
 \end{derivation}
 \begin{keyresult}
+\begin{pencil}
 \[
 1=\underbrace{\eta_T}_{\circled{1}\ 0.38}+\underbrace{\eta_{E_s}}_{\circled{2}\ 0.25}+\underbrace{\eta_{E_o}}_{\circled{3}\ 0.19}+\underbrace{\eta_D}_{\circled{4}\ 0.16}+\underbrace{\eta_S}_{\circled{5}\ 0.03},\qquad \eta_X=\frac{\sum(X-X_0)}{\sum I}
 \]
+\end{pencil}
 \centering\small
 \begin{tabular}{lrrrr}
 \toprule
@@ -101,9 +112,11 @@ Small and frequent doses are recommended to reduce deep percolation. How small i
 For each soil the drained share was computed at ten doses (1 to 30\,mm). A form was sought that is zero for a vanishing dose and levels off for a large one; the simplest is the saturating exponential, fitted per soil ($R^2$ 0.92 to 0.96 on seven soils).
 \end{derivation}
 \begin{keyresult}
+\begin{pencil}
 \[\eta_D(d)=\underbrace{\eta_\infty}_{\circled{1}}\Bigl(1-e^{-d/\underbrace{d_D}_{\circled{2}}}\Bigr)\]
 \[\underbrace{\eta_D\approx\eta_\infty\,d/d_D\ \ (d\ll d_D)}_{\circled{3}}\]
 \[\underbrace{d_D=4.1\pm0.6\text{ mm},\ \rho(d_D,n)=0.07}_{\circled{4}}\]
+\end{pencil}
 \end{keyresult}
 \begin{pins}
 \pin{1}{The plateau: the share of a large dose that drains. It differs between soils (0.10 to 0.20, and 0.45 in coarse sand) because it is the outcome of a race between drainage and uptake, which the soil's conductivity decides.}
@@ -113,9 +126,14 @@ For each soil the drained share was computed at ten doses (1 to 30\,mm). A form 
 \end{pins}
 
 \subsection{Contribution 6: overhead irrigation adds no transpiration}
+\begin{derivation}
+The identity of Contribution~4 was applied to the method experiments: E4 (surface, overhead and subsurface on every soil) and E15 (the three methods on coarse loam over all rates, doses and rooting depths), each run against its rainfed twin.
+\end{derivation}
 \begin{keyresult}
+\begin{pencil}
 \[\underbrace{\eta_T^{\text{overhead}}}_{\circled{1}}=-0.08\ \text{(all soils)}\]
 \[\underbrace{\eta_{E_o}^{\text{overhead}}}_{\circled{2}}=0.79\]
+\end{pencil}
 \end{keyresult}
 \begin{pins}
 \pin{1}{A negative marginal transpiration: the crop transpires slightly \emph{less} with overhead irrigation than without.}
@@ -123,8 +141,13 @@ For each soil the drained share was computed at ten doses (1 to 30\,mm). A form 
 \end{pins}
 
 \subsection{Contribution 7: when a sensor's lag matters}
+\begin{derivation}
+The relaxation law of \citet{RossSmettem2000} was solved for a steady drying rate $r$: the water content lags by $r\tau$; dividing by the water capacity $C(h)$ turns this into a suction error; comparing the lag with the interval between irrigations gives the dimensionless number (Section~S3.8).
+\end{derivation}
 \begin{keyresult}
+\begin{pencil}
 \[\underbrace{\Pi_\tau}_{\circled{1}}=\frac{\underbrace{\tau}_{\circled{2}}}{\underbrace{t_i}_{\circled{3}}},\qquad \delta h\simeq\frac{r\tau}{\underbrace{C(h)}_{\circled{4}}}\]
+\end{pencil}
 \end{keyresult}
 \begin{pins}
 \pin{1}{A dimensionless number: if it is much smaller than one, the equilibrium reach of Contribution~1 holds.}
