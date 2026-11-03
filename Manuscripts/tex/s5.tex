@@ -50,6 +50,9 @@ JSON & 4 & 20\,500 & libraries and indexes read by the program (for example the 
 Markdown & 47 & 31\,000 & the chapters of the manual. Why: the text of the manual stays plain text under version control and builds to one PDF.\\
 \LaTeX\ & 103 & -- & the four articles and their supplements (XeLaTeX with BibTeX). Why: exact equations and numbered references, and the same source gives the article and its supplement.\\
 Batch and shell scripts & 7 & 80 & start and build files for Windows and macOS and Linux. Why: a double click starts the program without the user opening a terminal.\\
+C++ (Daisy) & -- & -- & the source language of the Daisy model; used here only as the compiled program of Daisy 7.1.14. Why: it is the model whose runs the suite reads, so it is not rewritten.\\
+SVG and CSV and XLSX & 4 and 24 and 2 & -- & vector figures and plain tables and Excel workbooks. Why: open formats that any program can read.\\
+Daisy log formats (\texttt{.dlf} and \texttt{.dwf}) & 29 & -- & the daily logs and weather files that Daisy writes and reads. Why: the bridge reads them exactly as Daisy writes them.\\
 Daisy set-up language (\texttt{.dai}) & library & -- & the model description that Daisy reads; written by the workbench and by the user. Why: it is the only way to give Daisy a scenario, so the workbench writes it for the user.\\
 \bottomrule\end{tabular}\end{table}
 The model of Daisy itself is written in C++ and is used here as a compiled program; SWAFL does not change its source. No framework (React or Vue or Angular) and no bundler is used: the pages are plain JavaScript loaded in order, so that the program can be read and changed with a text editor.
@@ -130,6 +133,46 @@ Chromium (through Playwright) & screenshots and the tests of the program. Why: t
 
 \subsection{\LaTeX\ packages and fonts}
 The articles and supplements load these packages (from \texttt{pre.tex} and \texttt{supp\_style.tex}): amsmath and amssymb and array and bm and booktabs and caption and cleveref and enumitem and fancyhdr and float and fontspec and geometry and graphicx and hyperref and lineno and longtable and mathtools and microtype and multirow and natbib and pdflscape and setspace and siunitx and subcaption and tabularx and tcolorbox and tikz and titlesec and xcolor and xurl. The fonts are TeX Gyre Termes for the text and TeX Gyre Heros for sans serif and Latin Modern Mono for code. The manual uses DejaVu Serif and DejaVu Sans Mono.
+
+\section{Installing everything: the exact commands}
+These commands install every package of the tables above under the names that the package indexes use (note that scikit-learn is imported as \texttt{sklearn} and Pillow as \texttt{PIL}, and PyMuPDF as \texttt{pymupdf}). Python 3.13 and Node.js 22 are assumed. A user of the finished program needs none of this: \texttt{SWAFL.exe} carries what it needs.
+
+\subsection{Python packages (pip)}
+\begin{verbatim}
+python3 -m pip install -r Manuscripts/reproducibility/requirements_all.txt
+python3 -m playwright install chromium
+\end{verbatim}
+which is the same as
+\begin{verbatim}
+python3 -m pip install numpy==2.5.3 scipy==1.18.1 pandas==3.0.5 \
+    scikit-learn==1.9.1 statsmodels==0.15.0 matplotlib==3.11.2 pillow==12.3.0
+python3 -m pip install openpyxl plotly pypdf wordfreq playwright pymupdf
+\end{verbatim}
+On some Linux systems pip needs the flag \texttt{--break-system-packages} or a virtual environment (\texttt{python3 -m venv .venv} and then \texttt{source .venv/bin/activate}).
+
+\subsection{JavaScript packages (npm)}
+\begin{verbatim}
+cd Software/v1.1.0/SWAFL_Desktop
+npm install                      # electron ^31.0.0 and electron-builder ^24.13.3
+npm run get-app                  # builds SWAFL.exe
+npm install -g playwright        # for the test and screenshot scripts
+npx playwright install chromium
+\end{verbatim}
+Leaflet, GeoTIFF.js and SheetJS are stored in the program folders and need no installation.
+
+\subsection{Programs outside Python and JavaScript}
+\begin{verbatim}
+sudo apt-get install ffmpeg pandoc texlive-xetex texlive-latex-extra \
+    texlive-fonts-extra texlive-bibtex-extra tesseract-ocr poppler-utils \
+    fonts-dejavu fonts-texgyre
+\end{verbatim}
+On Windows the same programs come from their own installers (ffmpeg and pandoc and MiKTeX or TeX Live and Tesseract and poppler); Daisy 7.1.14 is already inside the program folder.
+
+\subsection{Run the checks}
+\begin{verbatim}
+cd Manuscripts/reproducibility
+bash run_all.sh ./work           # regenerates the numbers and figures
+\end{verbatim}
 
 \section{Online services (optional)}
 \begin{table}[H]\centering\small

@@ -2,9 +2,9 @@
 
 Regenerates every number and figure in the four manuscripts from the archived ensemble of the [Daisy model](https://github.com/daisy-model) (University of Copenhagen), and checks the result automatically.
 
-1. *Soil Hydraulic Memory, the Recoverability of Evaporation Savings and the Closure of the Water Balance* (Paper 1; the scripts `p1_*` give the memory analysis, `p2_*` the audit, and `p1_audit_link.py` the link between them)
+1. *Soil Hydraulic Memory and the Recoverability of Evaporation Savings and the Closure of the Water Balance in a Simulation Study with Daisy* (Paper 1; the scripts `p1_*` give the memory analysis, `p2_*` the audit, and `p1_audit_link.py` the link between them)
 2. *Modeling Soil–Water–Atmosphere Interactions for Irrigation Scheduling and Design* (Paper 2; the scripts `p3_*`)
-3. *SWAFL Desktop as an Offline and Equation-Traceable Decision-Support Suite with a Graphical Workbench and a Verified Bridge for the Daisy Model* (Paper 3; the scripts `p4_*`, `p5_*`, `p6_*` and `p7_planner_checks.js`)
+3. *Soil-Water Modelling and Decision Support through a Graphical User Interface for the Daisy Model* (Paper 3; the scripts `p4_*`, `p5_*`, `p6_*` and `p7_planner_checks.js`)
 
 Script names keep the numbering of the earlier six-paper draft.
 
@@ -12,7 +12,7 @@ Script names keep the numbering of the earlier six-paper draft.
 
 ```bash
 cd Manuscripts/reproducibility
-python3 -m pip install -r requirements.txt          # Python 3.13
+python3 -m pip install -r requirements_all.txt      # Python 3.13, every package of the repository
 npm install -g playwright                           # Node >= 22, plus a Chromium build (see "Browser")
 bash run_all.sh ./work                              # ~15-20 min; writes only inside ./work
 ```

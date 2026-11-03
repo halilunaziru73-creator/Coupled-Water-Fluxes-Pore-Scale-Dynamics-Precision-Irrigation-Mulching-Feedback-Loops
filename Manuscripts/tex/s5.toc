@@ -1,20 +1,25 @@
 \contentsline {section}{\numberline {S1}Purpose and scope}{3}{section.1}%
 \contentsline {section}{\numberline {S2}The software at a glance}{3}{section.2}%
 \contentsline {section}{\numberline {S3}Code map of the repository}{3}{section.3}%
-\contentsline {section}{\numberline {S4}Languages}{5}{section.4}%
-\contentsline {section}{\numberline {S5}Runtime stack}{6}{section.5}%
-\contentsline {section}{\numberline {S6}Libraries carried inside the program}{7}{section.6}%
-\contentsline {section}{\numberline {S7}Libraries of the whole repository, by language}{7}{section.7}%
-\contentsline {subsection}{\numberline {S7.1}Python}{7}{subsection.7.1}%
-\contentsline {subsection}{\numberline {S7.2}JavaScript and HTML}{9}{subsection.7.2}%
-\contentsline {subsection}{\numberline {S7.3}Programs called from the code}{10}{subsection.7.3}%
-\contentsline {subsection}{\numberline {S7.4}\LaTeX \ packages and fonts}{10}{subsection.7.4}%
-\contentsline {section}{\numberline {S8}Online services (optional)}{11}{section.8}%
-\contentsline {section}{\numberline {S9}Techniques used in the code}{11}{section.9}%
-\contentsline {subsection}{\numberline {S9.1}Structure of the program}{11}{subsection.9.1}%
-\contentsline {subsection}{\numberline {S9.2}Methods of the models}{12}{subsection.9.2}%
-\contentsline {section}{\numberline {S10}How the software is built}{13}{section.10}%
-\contentsline {section}{\numberline {S11}How the documents are built}{13}{section.11}%
-\contentsline {section}{\numberline {S12}Tools used to test and check}{14}{section.12}%
-\contentsline {section}{\numberline {S13}Licences and credit}{14}{section.13}%
-\contentsline {section}{\numberline {S14}Where to find it}{14}{section.14}%
+\contentsline {section}{\numberline {S4}Languages}{6}{section.4}%
+\contentsline {section}{\numberline {S5}Runtime stack}{7}{section.5}%
+\contentsline {section}{\numberline {S6}Libraries carried inside the program}{8}{section.6}%
+\contentsline {section}{\numberline {S7}Libraries of the whole repository, by language}{8}{section.7}%
+\contentsline {subsection}{\numberline {S7.1}Python}{8}{subsection.7.1}%
+\contentsline {subsection}{\numberline {S7.2}JavaScript and HTML}{10}{subsection.7.2}%
+\contentsline {subsection}{\numberline {S7.3}Programs called from the code}{11}{subsection.7.3}%
+\contentsline {subsection}{\numberline {S7.4}\LaTeX \ packages and fonts}{11}{subsection.7.4}%
+\contentsline {section}{\numberline {S8}Installing everything: the exact commands}{11}{section.8}%
+\contentsline {subsection}{\numberline {S8.1}Python packages (pip)}{12}{subsection.8.1}%
+\contentsline {subsection}{\numberline {S8.2}JavaScript packages (npm)}{12}{subsection.8.2}%
+\contentsline {subsection}{\numberline {S8.3}Programs outside Python and JavaScript}{12}{subsection.8.3}%
+\contentsline {subsection}{\numberline {S8.4}Run the checks}{12}{subsection.8.4}%
+\contentsline {section}{\numberline {S9}Online services (optional)}{13}{section.9}%
+\contentsline {section}{\numberline {S10}Techniques used in the code}{13}{section.10}%
+\contentsline {subsection}{\numberline {S10.1}Structure of the program}{13}{subsection.10.1}%
+\contentsline {subsection}{\numberline {S10.2}Methods of the models}{14}{subsection.10.2}%
+\contentsline {section}{\numberline {S11}How the software is built}{15}{section.11}%
+\contentsline {section}{\numberline {S12}How the documents are built}{15}{section.12}%
+\contentsline {section}{\numberline {S13}Tools used to test and check}{16}{section.13}%
+\contentsline {section}{\numberline {S14}Licences and credit}{16}{section.14}%
+\contentsline {section}{\numberline {S15}Where to find it}{16}{section.15}%
