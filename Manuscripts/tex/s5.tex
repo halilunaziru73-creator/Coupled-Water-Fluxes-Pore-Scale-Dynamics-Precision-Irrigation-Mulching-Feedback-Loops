@@ -14,6 +14,54 @@
 \section{Purpose and scope}
 This supplement stands alone. It belongs to the four articles of the series but is not tied to one of them: it records what SWAFL Desktop 1.1.0 is made of, in which languages it is written, which libraries and programs it carries, which techniques its parts use, and which tools were used to build, test and document it. Every figure below was counted on the source of version 1.1.0 or read from its \texttt{package.json}; where a number is approximate the text says so. Nothing in the stack is proprietary and nothing needs an account: all parts are open source or are the model and data that the series publishes.
 
+\section{Read this first: the words explained for a reader who does not code}
+Software is made like a meal in a restaurant kitchen. The words below use that picture; the rest of this supplement uses the same words with the same meaning.
+{\small
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{2.9cm}>{\raggedright\arraybackslash}p{4.9cm}>{\raggedright\arraybackslash}p{5.2cm}@{}}
+\caption{The words of this supplement in plain language.}\label{tab:words}\\
+\toprule Word & What it means & In the kitchen\\\midrule\endfirsthead
+\toprule Word & What it means & In the kitchen\\\midrule\endhead
+Language & The way instructions are written for a computer (Python and JavaScript are languages). & The language of the recipe.\\
+Code & The instructions themselves, written in a language. & The written recipe.\\
+Runtime & A program that reads the code and carries it out. Electron and Node.js and Python are runtimes. & The cook who can read that recipe.\\
+Library & Code written by someone else that your code calls for one job (draw a map or read an Excel file). & A ready-made sauce or a stock you buy instead of making.\\
+Package & A library or tool wrapped so that one command installs it (\texttt{pip install} or \texttt{npm install}). & The delivery box in which the sauce arrives.\\
+Dependency & A package that another package needs in order to work. & The ingredients that the sauce itself is made from.\\
+Program or tool & A finished application that you start (ffmpeg and pandoc and Daisy). & A kitchen machine such as an oven: you use it but you do not change it.\\
+Framework & A library that also decides how your whole program must be arranged. SWAFL uses none. & A franchise kitchen that dictates the whole menu.\\
+Compiler & A program that turns code into a file the computer runs directly. Daisy was compiled from C++. & Baking the dough into bread: you eat the bread, not the dough.\\
+Version & A number that says which release of a package is meant (for example 2.5.3). & The year of the vintage.\\
+Pinned & A version that is written down so that the same one is installed every time. & Always buying the same batch.\\
+Licence & The permission that the author gives to use and copy the code. MIT and Apache and BSD allow free use. & The label that says you may cook with it.\\
+Build & Putting the parts together into the finished program or document. & Plating the dish.\\
+Bridge & The small piece of code that lets two parts talk to each other. & The waiter between the kitchen and the table.\\
+Service (online) & A website of another organisation that answers questions (weather or satellite pictures). & Ordering an ingredient by phone.\\
+CDN & A web server that hands out libraries to many websites. SWAFL does not use one at run time. & A supplier who delivers every day; here the shelf is already stocked.\\
+\bottomrule\end{longtable}}
+
+\section{How the program is made, step by step in plain words}
+\begin{enumerate}[leftmargin=1.5em]
+\item \textbf{The author writes code} in several languages: JavaScript for what the user sees and does, Python for the scripts that prepare data and figures, and \LaTeX\ and Markdown for the articles and the manual (Table~\ref{tab:lang}).
+\item \textbf{The code borrows libraries} for jobs that are not worth writing again: a map (Leaflet), satellite file reading (GeoTIFF.js), Excel reading (SheetJS) (Table~\ref{tab:libs}). Python scripts borrow packages for mathematics and figures (Table~\ref{tab:py}).
+\item \textbf{The model is Daisy.} Daisy is an existing, tested scientific program written by others in C++. SWAFL does not copy or change it; it writes the question into a file, starts Daisy, and reads the answer back from the files Daisy writes.
+\item \textbf{Electron wraps everything} into one window, like putting the kitchen and the dining room in one building. It carries its own browser and Node.js, so the user does not need to install either.
+\item \textbf{The build tool packs one file.} \texttt{electron-builder} packs the code, the libraries, Daisy and the manual into \texttt{SWAFL.exe} (Table~\ref{tab:build}).
+\item \textbf{The documents are built the same way:} the manual from Markdown by pandoc and XeLaTeX, and the articles from \LaTeX, with figures made by the Python scripts.
+\item \textbf{Tests run the real program} in a hidden browser (Playwright) and check that no page error appears and that the numbers agree with independent references.
+\end{enumerate}
+
+\section{Who needs what}
+\begin{table}[H]\centering\small
+\caption{What each kind of reader has to install.}\label{tab:who}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.4cm}>{\raggedright\arraybackslash}p{9.6cm}@{}}
+\toprule Reader & What to do\\\midrule
+A user of the program & Nothing to install. Double click \texttt{SWAFL.exe}. Everything it needs is inside the file, and the online services are optional.\\
+A reader who only wants to look at the code & Open the folders in a web browser or a text editor. No installation.\\
+A researcher who repeats the numbers & Install Python 3.13 and the packages of the pip section, then run \texttt{run\_all.sh}.\\
+A developer who rebuilds the program & Install Node.js 22 and run \texttt{npm install} and \texttt{npm run get-app}.\\
+A person who rebuilds the manual and articles & Install pandoc, TeX Live (XeLaTeX and BibTeX) and the fonts of the programs section.\\
+\bottomrule\end{tabular}\end{table}
+
 \section{The software at a glance}
 SWAFL Desktop is one program with four layers, from the outside in.
 \begin{enumerate}[nosep,leftmargin=1.5em]
@@ -38,6 +86,7 @@ Code is kept in four folders of the repository and nothing is hidden outside the
 \bottomrule\end{tabular}\end{table}
 
 \section{Languages}
+A language is only the way the instructions are written; the column on the right says what each one is used for in plain terms.
 \begin{table}[H]\centering\small
 \caption{Languages and formats of the 1.1.0 source (the Daisy program and the manual PDF are not counted).}\label{tab:lang}
 \begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.3cm}>{\raggedright\arraybackslash}p{2.0cm}>{\raggedright\arraybackslash}p{2.1cm}>{\raggedright\arraybackslash}p{6.6cm}@{}}

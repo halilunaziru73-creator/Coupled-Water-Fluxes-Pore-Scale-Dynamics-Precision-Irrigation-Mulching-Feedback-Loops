@@ -1,29 +1,32 @@
 \contentsline {section}{\numberline {S1}Purpose and scope}{3}{section.1}%
-\contentsline {section}{\numberline {S2}The software at a glance}{3}{section.2}%
-\contentsline {section}{\numberline {S3}Code map of the repository}{3}{section.3}%
-\contentsline {section}{\numberline {S4}Languages}{6}{section.4}%
-\contentsline {section}{\numberline {S5}Runtime stack}{7}{section.5}%
-\contentsline {section}{\numberline {S6}Libraries carried inside the program}{8}{section.6}%
-\contentsline {section}{\numberline {S7}Libraries of the whole repository, by language}{8}{section.7}%
-\contentsline {subsection}{\numberline {S7.1}Python}{8}{subsection.7.1}%
-\contentsline {subsection}{\numberline {S7.2}JavaScript and HTML}{10}{subsection.7.2}%
-\contentsline {subsection}{\numberline {S7.3}Programs called from the code}{11}{subsection.7.3}%
-\contentsline {subsection}{\numberline {S7.4}\LaTeX \ packages and fonts}{11}{subsection.7.4}%
-\contentsline {section}{\numberline {S8}Installing everything: the exact commands}{11}{section.8}%
-\contentsline {subsection}{\numberline {S8.1}Python packages (pip)}{12}{subsection.8.1}%
-\contentsline {subsection}{\numberline {S8.2}JavaScript packages (npm)}{12}{subsection.8.2}%
-\contentsline {subsection}{\numberline {S8.3}Programs outside Python and JavaScript}{12}{subsection.8.3}%
-\contentsline {subsection}{\numberline {S8.4}Run the checks}{12}{subsection.8.4}%
-\contentsline {section}{\numberline {S9}Packages inside the bundled libraries and inside Daisy}{13}{section.9}%
-\contentsline {subsection}{\numberline {S9.1}GeoTIFF.js}{13}{subsection.9.1}%
-\contentsline {subsection}{\numberline {S9.2}SheetJS, Leaflet and Plotly.js}{14}{subsection.9.2}%
-\contentsline {subsection}{\numberline {S9.3}Libraries shipped with Daisy}{14}{subsection.9.3}%
-\contentsline {section}{\numberline {S10}Online services (optional)}{15}{section.10}%
-\contentsline {section}{\numberline {S11}Techniques used in the code}{15}{section.11}%
-\contentsline {subsection}{\numberline {S11.1}Structure of the program}{15}{subsection.11.1}%
-\contentsline {subsection}{\numberline {S11.2}Methods of the models}{16}{subsection.11.2}%
-\contentsline {section}{\numberline {S12}How the software is built}{17}{section.12}%
-\contentsline {section}{\numberline {S13}How the documents are built}{17}{section.13}%
-\contentsline {section}{\numberline {S14}Tools used to test and check}{18}{section.14}%
-\contentsline {section}{\numberline {S15}Licences and credit}{18}{section.15}%
-\contentsline {section}{\numberline {S16}Where to find it}{18}{section.16}%
+\contentsline {section}{\numberline {S2}Read this first: the words explained for a reader who does not code}{3}{section.2}%
+\contentsline {section}{\numberline {S3}How the program is made, step by step in plain words}{5}{section.3}%
+\contentsline {section}{\numberline {S4}Who needs what}{6}{section.4}%
+\contentsline {section}{\numberline {S5}The software at a glance}{6}{section.5}%
+\contentsline {section}{\numberline {S6}Code map of the repository}{7}{section.6}%
+\contentsline {section}{\numberline {S7}Languages}{7}{section.7}%
+\contentsline {section}{\numberline {S8}Runtime stack}{9}{section.8}%
+\contentsline {section}{\numberline {S9}Libraries carried inside the program}{10}{section.9}%
+\contentsline {section}{\numberline {S10}Libraries of the whole repository, by language}{10}{section.10}%
+\contentsline {subsection}{\numberline {S10.1}Python}{10}{subsection.10.1}%
+\contentsline {subsection}{\numberline {S10.2}JavaScript and HTML}{12}{subsection.10.2}%
+\contentsline {subsection}{\numberline {S10.3}Programs called from the code}{13}{subsection.10.3}%
+\contentsline {subsection}{\numberline {S10.4}\LaTeX \ packages and fonts}{13}{subsection.10.4}%
+\contentsline {section}{\numberline {S11}Installing everything: the exact commands}{13}{section.11}%
+\contentsline {subsection}{\numberline {S11.1}Python packages (pip)}{14}{subsection.11.1}%
+\contentsline {subsection}{\numberline {S11.2}JavaScript packages (npm)}{14}{subsection.11.2}%
+\contentsline {subsection}{\numberline {S11.3}Programs outside Python and JavaScript}{14}{subsection.11.3}%
+\contentsline {subsection}{\numberline {S11.4}Run the checks}{14}{subsection.11.4}%
+\contentsline {section}{\numberline {S12}Packages inside the bundled libraries and inside Daisy}{15}{section.12}%
+\contentsline {subsection}{\numberline {S12.1}GeoTIFF.js}{15}{subsection.12.1}%
+\contentsline {subsection}{\numberline {S12.2}SheetJS, Leaflet and Plotly.js}{16}{subsection.12.2}%
+\contentsline {subsection}{\numberline {S12.3}Libraries shipped with Daisy}{16}{subsection.12.3}%
+\contentsline {section}{\numberline {S13}Online services (optional)}{17}{section.13}%
+\contentsline {section}{\numberline {S14}Techniques used in the code}{17}{section.14}%
+\contentsline {subsection}{\numberline {S14.1}Structure of the program}{17}{subsection.14.1}%
+\contentsline {subsection}{\numberline {S14.2}Methods of the models}{18}{subsection.14.2}%
+\contentsline {section}{\numberline {S15}How the software is built}{19}{section.15}%
+\contentsline {section}{\numberline {S16}How the documents are built}{19}{section.16}%
+\contentsline {section}{\numberline {S17}Tools used to test and check}{20}{section.17}%
+\contentsline {section}{\numberline {S18}Licences and credit}{20}{section.18}%
+\contentsline {section}{\numberline {S19}Where to find it}{20}{section.19}%
