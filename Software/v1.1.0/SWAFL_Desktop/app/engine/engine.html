@@ -3856,7 +3856,7 @@ function drawV7() {
   const BLUE = '#2E7DE8', ORG = '#E8912D';
   ctx.fillStyle = BLUE; ctx.fillRect(330, 52, 12, 8); T('tillage: conventional vs no-till', 346, 60, { s: 10 }); ctx.fillStyle = ORG; ctx.fillRect(330, 66, 12, 8); T('consolidation rate: fastest vs slowest', 346, 74, { s: 10 });
   rows.forEach((r, i) => {
-    const y = 62 + i * 27, sel = r.s === state.soil; if (sel) { ctx.fillStyle = 'rgba(217,48,37,0.10)'; ctx.fillRect(10, y - 2, W - 20, 27); ctx.strokeStyle = '#D93025'; ctx.lineWidth = 1.6; ctx.strokeRect(10, y - 2, W - 20, 27); }
+    const y = 62 + i * 27, sel = r.s === state.soil; if (sel) { ctx.fillStyle = 'rgba(217,48,37,0.10)'; ctx.fillRect(10, y - 2, 336, 27); ctx.strokeStyle = '#D93025'; ctx.lineWidth = 1.6; ctx.strokeRect(10, y - 2, 336, 27); }   // the soil table only; the graph on the right is not shaded
     T(r.name, 128, y + 15, { s: 11, b: sel, a: 'right' }); T(r.clay + '%', 16, y + 15, { s: 9.5, c: MUTE });
     ctx.fillStyle = BLUE; ctx.fillRect(138, y + 2, clampN(r.till / 16, 0, 1) * 150, 9); ctx.fillStyle = ORG; ctx.fillRect(138, y + 13, clampN(r.cons / 16, 0, 1) * 150, 9);
     T(sgn(r.till, 1), 138 + clampN(r.till / 16, 0, 1) * 150 + 5, y + 10.5, { s: 9.5, c: '#1B4FA0' }); T(sgn(r.cons, 1), 138 + clampN(r.cons / 16, 0, 1) * 150 + 5, y + 21.5, { s: 9.5, c: '#A8620F' });
@@ -5526,7 +5526,7 @@ function drawN1Chart() {
   T('Each soil, its own trigger', C.rx0, 122, { s: 11, b: true }); T('f = 0', C.ax0, 122, { s: 10, c: '#1E7A36', b: true }); T('f = 1', C.ax1, 122, { s: 10, c: '#B01E14', b: true, a: 'right' }); T('Mg/ha', (C.yx0 + C.yx1) / 2, 122, { s: 10, b: true, a: 'center' });
   DATA.soils.forEach((sn, i) => {
     const y = C.ry + i * C.rh, cy = y + C.rh / 2, sel = sn === soil, hov = n1ui.hover === i, tv = trigAbsFor(sn), mv = n1ModelFor(sn);
-    ctx.fillStyle = sel ? '#FFF0BF' : hov ? '#E3EEFC' : i % 2 ? '#F4F1E6' : PAPER; ctx.fillRect(C.rx0, y, C.rw, C.rh); if (sel) { ctx.strokeStyle = '#C79A1E'; ctx.lineWidth = 1.6; ctx.strokeRect(C.rx0 + 0.5, y + 0.5, C.rw - 1, C.rh - 1); }
+    ctx.fillStyle = i % 2 ? '#F4F1E6' : PAPER; ctx.fillRect(C.rx0, y, C.rw, C.rh); if (sel || hov) { const hw = C.ax0 - 8 - C.rx0; ctx.fillStyle = sel ? '#FFF0BF' : '#E3EEFC'; ctx.fillRect(C.rx0, y, hw, C.rh); if (sel) { ctx.strokeStyle = '#C79A1E'; ctx.lineWidth = 1.6; ctx.strokeRect(C.rx0 + 0.5, y + 0.5, hw - 1, C.rh - 1); } }   // only the soil name and its trigger text are marked, not the slider or the yield box
     T(DATA.soil_labels[sn], C.ax0 - 14, cy - 1, { s: 11.5, b: sel, a: 'right' }); { const sp = n1Speed(sn); T(tv + ' cm, ' + mv.irr.toFixed(0) + ' mm' + (sp.days != null ? ', ' + Math.max(1, Math.round(sp.days)) + ' d to trigger' : ''), C.ax0 - 14, cy + 11, { s: 9, a: 'right', c: '#3F1D80', b: true }); }
     ctx.strokeStyle = '#B8B2A0'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(C.ax0, cy); ctx.lineTo(C.ax1, cy); ctx.stroke();
     const fo2 = fstarOwn(sn), xS = C.ax0 + clampN(fo2, 0, 1) * (C.ax1 - C.ax0), fS = depletionRaw(sn, tv), rx = C.ax0 + clampN(fS, 0, 1) * (C.ax1 - C.ax0), bad = fS > fo2 + 0.005;

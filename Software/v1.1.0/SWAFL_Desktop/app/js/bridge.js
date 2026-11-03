@@ -113,6 +113,6 @@ const E = (() => {
       });
     }
   };
-  setInterval(() => { if (!document.hidden) api.poll(false); }, 900);
+  Guard.every(() => { if (!document.hidden) api.poll(false); }, 900, "bridge116");
   return api;
 })();

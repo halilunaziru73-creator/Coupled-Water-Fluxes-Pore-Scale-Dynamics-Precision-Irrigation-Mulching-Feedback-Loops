@@ -28,7 +28,7 @@ const FieldGeo = (() => {
   document.addEventListener('click', e => { const b = e.target && e.target.closest && e.target.closest('#fmGeo button'); if (b) { G.lastBtn = b; G.lastBtnT = Date.now(); } }, true);
   const st = m => { G.msg = m; G.live = /(<\/i>|\.\.\.|\u2026)\s*$/.test(m); if (G.live) { if (!G.t0 || G.t0Msg !== m) { if (!G.t0 || !G.liveRun) G.t0 = Date.now(); } G.liveRun = true; } else { G.liveRun = false; G.t0 = 0; } if (G.here === 'ret') G.rmsg = m; paint(); const r = document.getElementById('fgRSt'), e = document.getElementById('fgSt'); if (G.here === 'ret') { G.rmsg = m; if (r) { try { r.scrollIntoView({ block: 'nearest' }); } catch (x) { } } } else if (e) { try { e.scrollIntoView({ block: 'nearest' }); } catch (x) { } } };
   const paint = () => { const sp = G.live ? ' <b style="color:#1565C0">' + '\u25D0\u25D3\u25D1\u25D2'[Math.floor(Date.now() / 250) % 4] + ' ' + Math.floor((Date.now() - (G.t0 || Date.now())) / 1000) + ' s</b>' : '', e = document.getElementById('fgSt'), r = document.getElementById('fgRSt'); if (e && G.msg != null && (G.msg || G.live)) e.innerHTML = G.msg + sp; if (r && G.here === 'ret' && G.rmsg != null && G.rmsg !== '') r.innerHTML = rlogH() + G.rmsg + sp; };
-  setInterval(() => { if (G.live) paint(); }, 250);
+  Guard.every(() => { if (G.live) paint(); }, 250, "fieldgeo31");
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const VIEWS = { contour: 'Contours, flow and channels', twi: 'Wetness index of the terrain', shed: 'Watershed and channel network', sens: 'Soil water: sensors and satellite fused', sensu: 'Uncertainty of the fused soil water', ret_fc: 'Field capacity (retention curves)', ret_wp: 'Wilting point (retention curves)', ret_aw: 'Available water (retention curves)', ret_trig: 'Trigger water content (SWAFL decision)', ret_psi: 'Matric potential now (suction, kPa)', ret_days: 'Days to the trigger' };
   const RAMP = {
@@ -334,7 +334,7 @@ const FieldGeo = (() => {
     } catch (e) { log.push('<b style="color:#B01E14">' + esc(/Failed to fetch|NetworkError/i.test(e.message) ? 'no internet connection' : e.message) + '</b>'); G.msg = ''; panel(); st(log.join('<br>')); }
     finally { G.busy = false; }
   }
-  setInterval(() => { autoRun().catch(() => { G.busy = false; }); }, 1500);
+  Guard.every(() => { autoRun().catch(() => { G.busy = false; }); }, 1500, "fieldgeo337");
   function addAt(ll) { addSensor(ll.lat, ll.lng); }
   function reset() { G.T = null; G.dg = null; G.shed = null; G.ret = null; G.fuse = null; G.opt = null; G.cells = null; G.sens.forEach(s => { s.i = -1; }); G.sens = []; G.B = null; G.satz = null; if (G.lg && G.lgMap) { try { G.lgMap.removeLayer(G.lg); } catch (e) { } } G.lg = null; G.lgMap = null; }
 

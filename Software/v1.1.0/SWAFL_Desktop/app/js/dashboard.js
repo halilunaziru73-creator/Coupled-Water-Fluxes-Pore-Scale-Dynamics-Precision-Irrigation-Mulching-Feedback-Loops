@@ -100,7 +100,7 @@ const Dash = (() => {
   const daisyOnly = id => ['chem', 'dsum', 'dwb', 'dnb', 'dyr', 'dchx', 'dtrd', 'dirr', 'dghg'].includes(id);
   const daisyRan = () => !!E.ev("(window.DAISYLIVE&&DAISYLIVE.runs&&Object.keys(DAISYLIVE.runs).length)?1:0");
   const waiting = id => daisyOnly(id) ? !daisyRan() : ['sid', 'drip', 'spr'].indexOf(id) >= 0 ? !runOn(id) : !E.ev("(window.layerRan&&layerRan('" + id + "'))?1:0");
-  let ranSig = ''; setInterval(() => { try { const s = E.snap; if (!s || !Layers.started() || tab === 'messages') return; const g = s.scene + waiting(s.scene); if (g !== ranSig) { ranSig = g; lastHtml = ''; chartKey = ''; render(); } } catch (e) { } }, 500);
+  let ranSig = ''; Guard.every(() => { try { const s = E.snap; if (!s || !Layers.started() || tab === 'messages') return; const g = s.scene + waiting(s.scene); if (g !== ranSig) { ranSig = g; lastHtml = ''; chartKey = ''; render(); } } catch (e) { } }, 500, "dashboard103");
   const runOn = id => !!E.ev("(window.DESIGN_RUN&&DESIGN_RUN['" + id + "']&&DESIGN_RUN['" + id + "'].on)?1:0");
   const runBtns = id => '<div class="drun"><button class="btn prim" data-run="' + id + '">&#9654; Run simulation</button><button class="btn" data-best="' + id + '">Find the most efficient inputs</button></div>';
   function design(s) {
@@ -320,8 +320,8 @@ const Dash = (() => {
       r('Weather', UI.esc(W2), W2.indexOf('recorded') === 0 ? '#8A5300' : '#1B5E20') + '</table>' + (N.note ? '<div class="dnote">' + UI.esc(N.note) + '</div>' : '');
     if (el.innerHTML !== html) el.innerHTML = html;
   }
-  setInterval(dssLive, 400);
-  setInterval(() => { if ((tab === 'design' || tab === 'charts') && E.snap && Layers.DESIGN.includes(E.snap.scene)) render(); }, 1000);
+  Guard.every(dssLive, 400, "dashboard323");
+  Guard.every(() => { if ((tab === 'design' || tab === 'charts') && E.snap && Layers.DESIGN.includes(E.snap.scene)) render(); }, 1000, "dashboard324");
   // the sections of all the tabs of the layer, drawn out of sight and handed over as pictures with their text: the Figure tab shows only the ones of the process that was clicked
   async function offscreen() {
     const s = E.snap; if (!s || !Layers.started() || waiting(s.scene)) return []; const sb = body, st = tab, lh = lastHtml, ck = chartKey, res = [], names = ['results'].concat(Layers.DESIGN.includes(s.scene) ? ['design'] : []).concat(['charts']);
