@@ -120,3 +120,9 @@ E15), the 20-year daily suction record at 20 cm and the 1994 profiles, all taken
 Data are released with the repository under the [MIT licence](../LICENSE). Please cite the Zenodo record:
 
 > Naziru Halilu. (2026). *Data_coupled_water_fluxes_pore_scale_dynamics* [Dataset]. Zenodo. https://doi.org/10.5281/zenodo.23043626
+
+---
+
+## Manuscript documents and the code of their figures
+
+[`Manuscript_Documents`](Manuscript_Documents) holds each of the four manuscripts (and their supplements) as an editable Word document, and for each paper one Python file (`PaperN_all_figures.py`) that regenerates every figure of that paper from the data of this folder. The Python file is the proof of the data analysis; the PDFs remain in [`Manuscripts/pdf`](../Manuscripts/pdf).
