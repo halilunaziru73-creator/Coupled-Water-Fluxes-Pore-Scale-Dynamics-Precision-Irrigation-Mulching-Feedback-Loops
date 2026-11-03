@@ -1,0 +1,139 @@
+\input{pre.tex}
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\thetable}{S\arabic{table}}
+\hypersetup{pdftitle={Supplementary Material 5 The Open Software Stack Behind SWAFL Desktop},pdfauthor={Naziru Halilu}}
+\input{supp_style.tex}
+\begin{document}
+\begin{center}{\large\bfseries Supplementary Material 5\par}\vspace{4pt}
+{\Large\bfseries The Open Software Stack Behind SWAFL Desktop\par}\vspace{4pt}
+{\normalsize Languages and libraries and code and techniques and tools used to build the software and its documents\par}\end{center}
+\authorblock
+\tableofcontents
+\clearpage
+
+\section{Purpose and scope}
+This supplement stands alone. It belongs to the four articles of the series but is not tied to one of them: it records what SWAFL Desktop 1.1.0 is made of, in which languages it is written, which libraries and programs it carries, which techniques its parts use, and which tools were used to build, test and document it. Every figure below was counted on the source of version 1.1.0 or read from its \texttt{package.json}; where a number is approximate the text says so. Nothing in the stack is proprietary and nothing needs an account: all parts are open source or are the model and data that the series publishes.
+
+\section{The software at a glance}
+SWAFL Desktop is one program with four layers, from the outside in.
+\begin{enumerate}[nosep,leftmargin=1.5em]
+\item \textbf{The desktop shell.} An Electron application (\texttt{main.js}, \texttt{preload.js}, \texttt{daisy-runner.js}, \texttt{serve.js}) that opens the window, saves and opens files, starts Daisy and opens the manual.
+\item \textbf{The workbench.} About 90 JavaScript files in \texttt{app/js} (layers, properties, toolbox, dashboard, field on the map, sketch, the Daisy tabs, scientific figures, reports).
+\item \textbf{The simulation engine.} A single page (\texttt{engine.html}, 1.5\,MB, 7\,225 lines) with the scripts of \texttt{app/engine} (crops, weather, the layers of the seasons, deterministic phenotyping). It runs in an inline frame and is joined to the workbench by a bridge.
+\item \textbf{The Daisy model.} Daisy 7.1.14 for Windows with its library, packed unchanged beside the program and started as a separate process.
+\end{enumerate}
+The same workbench and engine run in a web browser from a small local server (\texttt{npm run web}, or the \texttt{START\_SWAFL\_WEB} files) and online from the project page, so one code base serves the desktop, the browser and the web.
+
+\section{Languages}
+\begin{table}[H]\centering\small
+\caption{Languages and formats of the 1.1.0 source (the Daisy program and the manual PDF are not counted).}\label{tab:lang}
+\begin{tabular}{@{}p{3.3cm}p{2.0cm}p{2.1cm}p{6.6cm}@{}}
+\toprule Language or format & Files & Lines (about) & Used for\\\midrule
+JavaScript (ECMAScript) & 90 & 14\,100 & workbench and engine scripts and desktop shell; every equation of the layers and designs\\
+HTML and inline script & 2 & 7\,200 & the window (\texttt{index.html}) and the simulation engine (\texttt{engine.html})\\
+CSS & 4 & 630 & the classic grey and navy look and the dashboard\\
+Python 3.13 & 20 & 2\,500 & build tools of the data and of the manual (indexes and annotated screenshots and the equation table)\\
+JSON & 4 & 20\,500 & libraries and indexes read by the program (for example the manual index)\\
+Markdown & 47 & 31\,000 & the chapters of the manual\\
+\LaTeX\ & about 100 & -- & the four articles and their supplements (XeLaTeX with BibTeX)\\
+Batch and shell scripts & 7 & 80 & start and build files for Windows and macOS and Linux\\
+Daisy set-up language (\texttt{.dai}) & library & -- & the model description that Daisy reads; written by the workbench and by the user\\
+\bottomrule\end{tabular}\end{table}
+The model of Daisy itself is written in C++ and is used here as a compiled program; SWAFL does not change its source. No framework (React or Vue or Angular) and no bundler is used: the pages are plain JavaScript loaded in order, so that the program can be read and changed with a text editor.
+
+\section{Runtime stack}
+\begin{table}[H]\centering\small
+\caption{What runs when SWAFL.exe is opened.}\label{tab:runtime}
+\begin{tabular}{@{}p{3.6cm}p{2.8cm}p{6.6cm}@{}}
+\toprule Part & Version & Role\\\midrule
+Electron & 31 (range \texttt{\^{}31.0.0}) & window and Chromium and Node.js in one package; the portable build is made with it\\
+Chromium and Node.js & those of Electron 31 & draw the canvases and run the JavaScript; Node gives file and process access to the shell only\\
+Daisy & 7.1.14 & soil and plant and atmosphere process model (University of Copenhagen); its Windows folder carries the program, a Python 3.13 runtime for its Python functions and the C++ libraries it needs\\
+\bottomrule\end{tabular}\end{table}
+The shell and the page talk through a small bridge (\texttt{preload.js}, \texttt{contextBridge}) with about 20 named handlers (save a file, open a file, open the manual, find Daisy, run a Daisy job, read a log, list the runs, fetch an address, and a few window commands). The page itself has no direct access to the disk.
+
+\section{Libraries carried inside the program}
+\begin{table}[H]\centering\small
+\caption{Third party code that is copied into the program (all under open licences; the licence text sits beside each file).}\label{tab:libs}
+\begin{tabular}{@{}p{3.0cm}p{1.9cm}p{2.6cm}p{5.5cm}@{}}
+\toprule Library & Version & Licence & Use in SWAFL\\\midrule
+Leaflet & 1.9.4 & BSD 2-Clause & the map of the field (satellite and street layers; outlining the field)\\
+GeoTIFF.js & bundled & MIT & reading the Sentinel-2 bands of the field from cloud-optimised GeoTIFF files in the browser\\
+SheetJS (xlsx) & 0.18.5 & Apache 2.0 & importing weather from Excel and CSV and writing result tables\\
+Daisy 7.1.14 with Boost and SuiteSparse and the GCC runtime & as shipped & GPL and LGPL families (see the Daisy folder) & the process model and its numerical libraries; started as a separate program, not linked into SWAFL\\
+\bottomrule\end{tabular}\end{table}
+Everything else, including the figures, the report writer, the equations of the layers and the pipe hydraulics, is code written for this program.
+
+\section{Online services (optional)}
+\begin{table}[H]\centering\small
+\caption{Services the program can call. All are optional; without a connection every other number is computed on the computer.}\label{tab:svc}
+\begin{tabular}{@{}p{4.1cm}p{9.0cm}@{}}
+\toprule Service & Used for\\\midrule
+Open-Meteo (forecast and archive and geocoding and elevation) & weather of any place (measured archive and forecast); place names; elevation\\
+Esri World Imagery and OpenStreetMap tiles & the satellite picture and the street map under the field\\
+Microsoft Planetary Computer and Element 84 Earth Search (STAC) & Sentinel-2 L2A scenes for the vegetation and water indices\\
+SoilGrids (ISRIC) & soil of the field and its retention curves\\
+ESA WorldCover and Overpass (OpenStreetMap) & land cover and roads and water sources near the field\\
+Nominatim and Photon & finding a place by name\\
+\bottomrule\end{tabular}\end{table}
+
+\section{Techniques used in the code}
+\subsection{Structure of the program}
+\begin{itemize}[nosep,leftmargin=1.2em]
+\item \textbf{Two halves joined by a bridge.} The workbench (shell page) and the engine (inline frame) share state through one object that the bridge sends to the engine and reads back; a setting changed in Properties is applied to every layer, the dashboard, the report and the designs, so they cannot disagree.
+\item \textbf{Canvas drawing.} Every picture (the field and the layers and the designs and the scientific figures) is drawn on a 2D canvas by code, so a figure can be exported as a picture or as numbers from the same data.
+\item \textbf{Lazy loading and guards.} Heavy scripts load when a tab is first opened; a guard module stops a failed script from freezing the window; long runs are cut into steps so the window stays responsive.
+\item \textbf{Provenance by construction.} Every number that is shown carries a label that leads to a numbered equation of the manual; the table of equations is generated from one file (\texttt{eqs.json}).
+\item \textbf{The rule of the Daisy layers.} A Daisy layer shows a result only from a Daisy run: results are read back from the log files of the run, never typed in.
+\item \textbf{Seeded randomness.} Projected seasons reuse the simulated seasons in a fixed random order from a seeded generator, so a projection is exactly repeatable.
+\end{itemize}
+\subsection{Methods of the models}
+\begin{itemize}[nosep,leftmargin=1.2em]
+\item Soil hydraulics from texture with the Saxton and Rawls pedotransfer functions; the van Genuchten and Mualem retention and conductivity; the Richards equation solved in the soil column tab of the workbench.
+\item Surface irrigation: Kostiakov and Green and Ampt intake, Manning flow in the furrow, advance and recession by volume balance (Walker and Skogerboe).
+\item Pressurised irrigation: Hazen and Williams friction (C of 140 and 150), speed limits, pump head with lift and friction and working head, emitter and sprinkler layouts.
+\item Crop water: the FAO paper 56 daily balance with the crop coefficient method and the yield response of FAO paper 33; the FAO Penman and Monteith evapotranspiration.
+\item Satellite chain: scene search by STAC, band reading by range requests, cloud mask from the scene classification, vegetation and water indices per pixel, zonal statistics inside the outlined field.
+\item Experiment planning for Daisy: a catalogue of the factors Daisy can vary, a check of every design against it, an exact run budget, and a summary of the effect of every input from the logs.
+\item Verification by independent references: worked examples and held-out simulations and stored Daisy output, with the defect found in the denitrification function reported in the articles.
+\end{itemize}
+
+\section{How the software is built}
+\begin{table}[H]\centering\small
+\caption{The build of the program.}\label{tab:build}
+\begin{tabular}{@{}p{3.7cm}p{9.3cm}@{}}
+\toprule Step & What happens\\\midrule
+Start from source & \texttt{START\_SWAFL.bat} (or \texttt{.command}) starts the program from the folder; it finds Node.js or fetches a portable copy of about 30 to 40\,MB into \texttt{tools/node}\\
+Install the build tools & \texttt{npm install} fetches Electron and electron-builder (24.13.3) listed in \texttt{package.json}\\
+Build & \texttt{npm run get-app} runs electron-builder for Windows and writes \texttt{SWAFL.exe}\\
+Targets & \texttt{portable} (one file and no installation) and \texttt{nsis} (an installer); a macOS \texttt{dmg} target is also defined\\
+Packed into the file & the files of the shell and \texttt{app/**/*} and the icon; as extra resources the manual PDF and the \texttt{daisy} folder\\
+Web build & none needed: \texttt{npm run web} serves the same \texttt{app} folder with \texttt{serve.js}\\
+\bottomrule\end{tabular}\end{table}
+The program is not code-signed, so Windows may show a SmartScreen notice, which is cleared with More info and then Run anyway.
+
+\section{How the documents are built}
+\begin{itemize}[nosep,leftmargin=1.2em]
+\item \textbf{The manual.} The chapters are Markdown files. A Python tool (\texttt{build\_single.py}) joins them, adds the icons of the layers and the equation table, and \texttt{pandoc} 3.1.3 with the XeLaTeX engine (TeX Live 2023) makes one PDF with DejaVu Serif and DejaVu Sans Mono. Other tools write the index of sections that the program uses to open the manual at the page in use, and \texttt{PyMuPDF} reduces the size of the pictures so that the PDF opens from GitHub on any device.
+\item \textbf{The screenshots of the manual.} Taken from the running program with Playwright and headless Chromium, then annotated by Python scripts (\texttt{annot.py}, \texttt{new\_capture.py}).
+\item \textbf{The articles and supplements.} \LaTeX\ with XeLaTeX and BibTeX (\texttt{build.sh}); the tables and the numbers are written into the source from the data files by scripts, so that the text, the tables and the figures use the same numbers.
+\item \textbf{The figures of the series.} Python with matplotlib and numpy and pandas and scipy and statsmodels and scikit-learn and openpyxl and Pillow, in the scripts of the repository.
+\end{itemize}
+
+\section{Tools used to test and check}
+\begin{itemize}[nosep,leftmargin=1.2em]
+\item Playwright with headless Chromium drives the real program: every layer is opened and run, the dashboard and the figures are read back, and page errors in the console are counted (the target is none).
+\item Node.js scripts run the equations of the designs outside the page and compare them with worked examples.
+\item Python scripts compare results with the stored Daisy output (\texttt{compare\_results.py}, \texttt{audit\_numbers.py}) and check the data against a table of checksums (\texttt{CHECKSUMS.sha256}).
+\item A local static server (\texttt{python -m http.server}) serves the program for these tests so that the same files are tested as are shipped.
+\end{itemize}
+
+\section{Licences and credit}
+The code of SWAFL and the articles are by Naziru Halilu and are released under the MIT licence of the repository. Leaflet and GeoTIFF.js and SheetJS keep their own licences and notices in the folders \texttt{app/vendor} and \texttt{app/engine/vendor}. Daisy keeps its licence in its own folder and is credited to the Daisy project of the University of Copenhagen \citep{Hansen2012}. The online services keep the terms of their owners and are credited where their data appear.
+
+\section{Where to find it}
+All parts are in the repository \emph{Coupled Water Fluxes, Pore-Scale Dynamics, Precision Irrigation, Mulching Feedback Loops}: the program in \texttt{Software/v1.1.0/SWAFL\_Desktop}, the manual in \texttt{Software/v1.1.0/Manual}, the articles and supplements in \texttt{Manuscripts/pdf}, and the data in \texttt{Data} and \texttt{Results}. The way to rebuild the program is given in the install chapter of the manual.
+
+\bibliographystyle{plainnathl}
+\bibliography{refs}
+\end{document}
