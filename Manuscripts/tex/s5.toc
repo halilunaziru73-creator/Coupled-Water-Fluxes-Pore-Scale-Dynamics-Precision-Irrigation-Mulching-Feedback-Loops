@@ -1,5 +1,5 @@
 \contentsline {section}{\numberline {S1}Purpose and scope}{3}{section.1}%
-\contentsline {section}{\numberline {S2}Read this first: the words explained for a reader who does not code}{3}{section.2}%
+\contentsline {section}{\numberline {S2}Read this first: the words explained}{3}{section.2}%
 \contentsline {section}{\numberline {S3}How the program is made, step by step in plain words}{5}{section.3}%
 \contentsline {section}{\numberline {S4}Who needs what}{6}{section.4}%
 \contentsline {section}{\numberline {S5}The software at a glance}{6}{section.5}%
