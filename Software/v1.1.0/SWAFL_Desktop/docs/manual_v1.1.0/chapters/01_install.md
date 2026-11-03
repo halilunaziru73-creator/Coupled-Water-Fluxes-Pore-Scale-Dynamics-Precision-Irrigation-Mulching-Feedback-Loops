@@ -23,6 +23,19 @@ The Daisy program (version 7.1.14, the folder `daisy` next to the program, about
 Only if all four fail does a message say that Daisy is missing, with the places looked at; unzip the whole SWAFL zip again into a folder of your own. The Scenarios tab shows where Daisy was found (*Daisy is ready: ...*). *Use another Daisy program* (a small link there) is for experts who want another version; if you choose the installer there, it is run, not refused.
 
 
+## What is inside SWAFL.exe: one file, nothing to install {#exe-inside}
+
+`SWAFL.exe` is a portable program. You double click it: it needs no installation, no administrator rights, no Node.js, no Python and no network, because everything the program uses is packed inside the one file. It is made from four parts.
+
+| Part inside the file | What it is |
+|---|---|
+| The Electron runtime | The window, the menus and the engine of the screen (the same code that runs in a browser) |
+| The SWAFL application | The shell, the two simulation engines, the design modules, the library of 48 crops, the soil classes and the built in weather record, all written in JavaScript |
+| The Daisy 7.1.14 program with its library | About 47 MB, run from its own folder inside the package; the installer that the Daisy site offers is never needed |
+| The manual | This manual as a PDF, opened with F1 or from a Manual button at the page of the layer in use |
+
+When the file starts, it unpacks itself to a temporary folder of your account and opens the window from that copy. A few seconds later SWAFL keeps its own copy of Daisy in the folder of the user (see the list above), so Daisy is still found if the temporary folder is cleared or the file is moved. Your projects, runs and reports are saved to files that you choose, never into the package. Only the optional online services (online weather, satellite images, soil and terrain of a field) need a connection; every other number is computed on your computer, so a single file on a computer that is not connected still gives you the field, the designs, Daisy, the decision layers and this manual.
+
 ## Route A: build and install, step by step
 
 1. Install **Node.js** (the LTS version) from nodejs.org if it is not already installed. Close and reopen any terminal afterwards.

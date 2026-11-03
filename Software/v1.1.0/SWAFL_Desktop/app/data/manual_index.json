@@ -32,6 +32,13 @@
 },
 {
 "level": 2,
+"title": "What is inside SWAFL.exe: one file, nothing to install",
+"id": "exe-inside",
+"file": "01_install.md",
+"page": 28
+},
+{
+"level": 2,
 "title": "Route A: build and install, step by step",
 "id": null,
 "file": "01_install.md",
@@ -49,14 +56,14 @@
 "title": "Route C: from source",
 "id": null,
 "file": "01_install.md",
-"page": 28
+"page": 29
 },
 {
 "level": 2,
 "title": "If the build stops",
 "id": null,
 "file": "01_install.md",
-"page": 28
+"page": 29
 },
 {
 "level": 2,
@@ -70,7 +77,7 @@
 "title": "First-run check",
 "id": null,
 "file": "01_install.md",
-"page": 29
+"page": 30
 },
 {
 "level": 1,
