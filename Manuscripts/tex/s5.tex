@@ -28,10 +28,10 @@ The same workbench and engine run in a web browser from a small local server (\t
 Code is kept in four folders of the repository and nothing is hidden outside them. The counts are of the files tracked in the repository on the day of this supplement (the Daisy program folder and the vendored libraries are not counted).
 \begin{table}[H]\centering\small
 \caption{Where the code is, by folder.}\label{tab:codemap}
-\begin{tabular}{@{}p{4.1cm}p{1.2cm}p{1.2cm}p{6.3cm}@{}}
-\toprule Folder & Python files & JavaScript files & What the code does\\\midrule
-\texttt{Software/v1.1.0/SWAFL\_Desktop} & 20 & 90 & the program (shell and workbench and engine) and the tools that build its data and manual (14\,100 lines of JavaScript and 2\,500 of Python)\\
-\texttt{Software/Old\_Version\_1.0} & 16 & 12 & the archived version 1.0 with its own build files (kept for reference)\\
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{4.3cm}>{\raggedright\arraybackslash}p{1.3cm}>{\raggedright\arraybackslash}p{1.3cm}>{\raggedright\arraybackslash}p{6.3cm}@{}}
+\toprule Folder & Python files & JS files & What the code does and why it is there\\\midrule
+\texttt{Software/\allowbreak v1.1.0/\allowbreak SWAFL\_\allowbreak Desktop} & 20 & 90 & the program (shell and workbench and engine) and the tools that build its data and manual (14\,100 lines of JavaScript and 2\,500 of Python)\\
+\texttt{Software/\allowbreak Old\_\allowbreak Version\_\allowbreak 1.0} & 16 & 12 & the archived version 1.0 with its own build files (kept for reference)\\
 \texttt{Manuscripts} & 75 & 27 & figures and tables and checks of the articles (\texttt{reproducibility}) and the graphical abstracts; 103 \LaTeX\ files; scripts for the screenshots and checks in Node.js with Playwright\\
 \texttt{Data} & 4 & 0 & the workbook of the data and the calculation sheets\\
 \texttt{Results} & 13 & 0 & the 50 charts, the interactive charts, the videos, the 3D project and the Excel analysis (\texttt{08\_Scripts})\\
@@ -40,40 +40,40 @@ Code is kept in four folders of the repository and nothing is hidden outside the
 \section{Languages}
 \begin{table}[H]\centering\small
 \caption{Languages and formats of the 1.1.0 source (the Daisy program and the manual PDF are not counted).}\label{tab:lang}
-\begin{tabular}{@{}p{3.3cm}p{2.0cm}p{2.1cm}p{6.6cm}@{}}
-\toprule Language or format & Files & Lines (about) & Used for\\\midrule
-JavaScript (ECMAScript) & 90 & 14\,100 & workbench and engine scripts and desktop shell; every equation of the layers and designs\\
-HTML and inline script & 2 & 7\,200 & the window (\texttt{index.html}) and the simulation engine (\texttt{engine.html})\\
-CSS & 4 & 630 & the classic grey and navy look and the dashboard\\
-Python 3.13 & 20 & 2\,500 & build tools of the data and of the manual (indexes and annotated screenshots and the equation table)\\
-JSON & 4 & 20\,500 & libraries and indexes read by the program (for example the manual index)\\
-Markdown & 47 & 31\,000 & the chapters of the manual\\
-\LaTeX\ & 103 & -- & the four articles and their supplements (XeLaTeX with BibTeX)\\
-Batch and shell scripts & 7 & 80 & start and build files for Windows and macOS and Linux\\
-Daisy set-up language (\texttt{.dai}) & library & -- & the model description that Daisy reads; written by the workbench and by the user\\
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.3cm}>{\raggedright\arraybackslash}p{2.0cm}>{\raggedright\arraybackslash}p{2.1cm}>{\raggedright\arraybackslash}p{6.6cm}@{}}
+\toprule Language or format & Files & Lines (about) & Role and why it is used in the build\\\midrule
+JavaScript (ECMAScript) & 90 & 14\,100 & workbench and engine scripts and desktop shell; every equation of the layers and designs. Why: it runs in the browser and in Electron without a compiler, so one code base serves the desktop and the web.\\
+HTML and inline script & 2 & 7\,200 & the window (\texttt{index.html}) and the simulation engine (\texttt{engine.html}). Why: the engine is one page that can be opened alone and tested alone.\\
+CSS & 4 & 630 & the classic grey and navy look and the dashboard. Why: one style sheet keeps the same classic look in every window.\\
+Python 3.13 & 20 & 2\,500 & build tools of the data and of the manual (indexes and annotated screenshots and the equation table). Why: quick scripts for data, figures and file building that need no packaging.\\
+JSON & 4 & 20\,500 & libraries and indexes read by the program (for example the manual index). Why: readable data that JavaScript reads directly and that a person can edit.\\
+Markdown & 47 & 31\,000 & the chapters of the manual. Why: the text of the manual stays plain text under version control and builds to one PDF.\\
+\LaTeX\ & 103 & -- & the four articles and their supplements (XeLaTeX with BibTeX). Why: exact equations and numbered references, and the same source gives the article and its supplement.\\
+Batch and shell scripts & 7 & 80 & start and build files for Windows and macOS and Linux. Why: a double click starts the program without the user opening a terminal.\\
+Daisy set-up language (\texttt{.dai}) & library & -- & the model description that Daisy reads; written by the workbench and by the user. Why: it is the only way to give Daisy a scenario, so the workbench writes it for the user.\\
 \bottomrule\end{tabular}\end{table}
 The model of Daisy itself is written in C++ and is used here as a compiled program; SWAFL does not change its source. No framework (React or Vue or Angular) and no bundler is used: the pages are plain JavaScript loaded in order, so that the program can be read and changed with a text editor.
 
 \section{Runtime stack}
 \begin{table}[H]\centering\small
 \caption{What runs when SWAFL.exe is opened.}\label{tab:runtime}
-\begin{tabular}{@{}p{3.6cm}p{2.8cm}p{6.6cm}@{}}
-\toprule Part & Version & Role\\\midrule
-Electron & 31 (range \texttt{\^{}31.0.0}) & window and Chromium and Node.js in one package; the portable build is made with it\\
-Chromium and Node.js & those of Electron 31 & draw the canvases and run the JavaScript; Node gives file and process access to the shell only\\
-Daisy & 7.1.14 & soil and plant and atmosphere process model (University of Copenhagen); its Windows folder carries the program, a Python 3.13 runtime for its Python functions and the C++ libraries it needs\\
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.6cm}>{\raggedright\arraybackslash}p{2.8cm}>{\raggedright\arraybackslash}p{6.6cm}@{}}
+\toprule Part & Version & Role and why it is used in the build\\\midrule
+Electron & 31 (range \texttt{\^{}31.0.0}) & window and Chromium and Node.js in one package; the portable build is made with it. Why: it packs a browser and Node.js into one program so that the web code runs as a desktop application without installation.\\
+Chromium and Node.js & those of Electron 31 & draw the canvases and run the JavaScript; Node gives file and process access to the shell only. Why: Chromium draws the canvases and Node.js lets the shell read and write files and start Daisy.\\
+Daisy & 7.1.14 & soil and plant and atmosphere process model (University of Copenhagen); its Windows folder carries the program, a Python 3.13 runtime for its Python functions and the C++ libraries it needs. Why: the process model whose runs the decision layers show; it is used as built, not rewritten.\\
 \bottomrule\end{tabular}\end{table}
 The shell and the page talk through a small bridge (\texttt{preload.js}, \texttt{contextBridge}) with about 20 named handlers (save a file, open a file, open the manual, find Daisy, run a Daisy job, read a log, list the runs, fetch an address, and a few window commands). The page itself has no direct access to the disk.
 
 \section{Libraries carried inside the program}
 \begin{table}[H]\centering\small
 \caption{Third party code that is copied into the program (all under open licences; the licence text sits beside each file).}\label{tab:libs}
-\begin{tabular}{@{}p{3.0cm}p{1.9cm}p{2.6cm}p{5.5cm}@{}}
-\toprule Library & Version & Licence & Use in SWAFL\\\midrule
-Leaflet & 1.9.4 & BSD 2-Clause & the map of the field (satellite and street layers; outlining the field)\\
-GeoTIFF.js & bundled & MIT & reading the Sentinel-2 bands of the field from cloud-optimised GeoTIFF files in the browser\\
-SheetJS (xlsx) & 0.18.5 & Apache 2.0 & importing weather from Excel and CSV and writing result tables\\
-Daisy 7.1.14 with Boost and SuiteSparse and the GCC runtime & as shipped & GPL and LGPL families (see the Daisy folder) & the process model and its numerical libraries; started as a separate program, not linked into SWAFL\\
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{1.9cm}>{\raggedright\arraybackslash}p{2.6cm}>{\raggedright\arraybackslash}p{5.5cm}@{}}
+\toprule Library & Version & Licence & Role and why it is used in the build\\\midrule
+Leaflet & 1.9.4 & BSD 2-Clause & the map of the field (satellite and street layers; outlining the field). Why: a small map library that works offline with local code and gives the field outline tool.\\
+GeoTIFF.js & bundled & MIT & reading the Sentinel-2 bands of the field from cloud-optimised GeoTIFF files in the browser. Why: satellite bands can be read in the page by range request, so no server of ours is needed.\\
+SheetJS (xlsx) & 0.18.5 & Apache 2.0 & importing weather from Excel and CSV and writing result tables. Why: weather and results travel in Excel files, which users already have.\\
+Daisy 7.1.14 with Boost and SuiteSparse and the GCC runtime & as shipped & GPL and LGPL families (see the Daisy folder) & the process model and its numerical libraries; started as a separate program, not linked into SWAFL. Why: these are what Daisy itself needs to run, so they are shipped with it.\\
 \bottomrule\end{tabular}\end{table}
 Everything else, including the figures, the report writer, the equations of the layers and the pipe hydraulics, is code written for this program.
 
@@ -82,50 +82,50 @@ Everything else, including the figures, the report writer, the equations of the 
 All third party Python packages imported anywhere in the repository (\texttt{Software}, \texttt{Manuscripts}, \texttt{Data}, \texttt{Results}) are listed. The versions of the first group are those recorded in \texttt{Manuscripts/reproducibility/requirements.txt} (Python 3.13.16 on Linux x86-64); for the others no version is recorded in the repository and none is claimed. The standard library (os and sys and re and json and codecs and subprocess and others) is used throughout and is not listed.
 \begin{table}[H]\centering\small
 \caption{Python packages and what each is used for.}\label{tab:py}
-\begin{tabular}{@{}p{2.7cm}p{1.7cm}p{8.6cm}@{}}
-\toprule Package & Version & Use\\\midrule
-numpy & 2.5.3 & arrays and the numerics of every analysis script\\
-scipy & 1.18.1 & statistics (Spearman correlation and tests) and curve fitting and root finding (\texttt{brentq}, \texttt{curve\_fit}, \texttt{minimize}) and \texttt{solve\_ivp} and sparse matrices (the checks of the closed forms)\\
-pandas & 3.0.5 & reading the ensemble of 10\,190 runs and summaries\\
-scikit-learn & 1.9.1 & gradient boosting and random forest regression with grouped cross validation (\texttt{GroupKFold}), partial dependence and PCA on the ensemble\\
-statsmodels & 0.15.0 & ordinary least squares models and their confidence intervals\\
-matplotlib & 3.11.2 & every figure; \texttt{mpl\_toolkits.mplot3d} for the 3D project; \texttt{animation} with the FFMpegWriter for the videos\\
-Pillow (PIL) & 12.3.0 & screenshots and figure assembly and annotation\\
-openpyxl & not pinned & writing the Excel workbooks of the data and analysis\\
-plotly & not pinned & the interactive charts and the 3D project saved as web pages\\
-pypdf & not pinned & preparing A4 versions of the articles\\
-wordfreq & not pinned & word frequencies (\texttt{zipf\_frequency}) for a check of the wording in the analysis folder\\
-playwright (Python) & not pinned & screenshots of the program for the manual\\
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{2.7cm}>{\raggedright\arraybackslash}p{1.7cm}>{\raggedright\arraybackslash}p{8.6cm}@{}}
+\toprule Package & Version & Role and why it is used in the build\\\midrule
+numpy & 2.5.3 & arrays and the numerics of every analysis script. Why: fast arrays so that the analysis of 10\,190 runs runs in seconds.\\
+scipy & 1.18.1 & statistics (Spearman correlation and tests) and curve fitting and root finding (\texttt{brentq}, \texttt{curve\_fit}, \texttt{minimize}) and \texttt{solve\_ivp} and sparse matrices (the checks of the closed forms). Why: tested solvers and fitting routines instead of hand-written ones, which makes the checks independent.\\
+pandas & 3.0.5 & reading the ensemble of 10\,190 runs and summaries. Why: tables of runs are grouped and joined by name, which removes indexing mistakes.\\
+scikit-learn & 1.9.1 & gradient boosting and random forest regression with grouped cross validation (\texttt{GroupKFold}), partial dependence and PCA on the ensemble. Why: standard learners and cross validation give results that others can repeat.\\
+statsmodels & 0.15.0 & ordinary least squares models and their confidence intervals. Why: least squares with full statistical output for the effects reported in the articles.\\
+matplotlib & 3.11.2 & every figure; \texttt{mpl\_toolkits.mplot3d} for the 3D project; \texttt{animation} with the FFMpegWriter for the videos. Why: one library makes the print figures and the videos with a shared style.\\
+Pillow (PIL) & 12.3.0 & screenshots and figure assembly and annotation. Why: puts screenshots and panels together without a graphics program.\\
+openpyxl & not pinned & writing the Excel workbooks of the data and analysis. Why: writes the Excel files of the data with formulas and formats.\\
+plotly & not pinned & the interactive charts and the 3D project saved as web pages. Why: charts that can be zoomed and rotated in a web page without a server.\\
+pypdf & not pinned & preparing A4 versions of the articles. Why: sets the page size and joins pages of the PDFs.\\
+wordfreq & not pinned & word frequencies (\texttt{zipf\_frequency}) for a check of the wording in the analysis folder. Why: a check that the wording is plain and common.\\
+playwright (Python) & not pinned & screenshots of the program for the manual. Why: takes the screenshots of the real program, so the manual shows what the user sees.\\
 \bottomrule\end{tabular}\end{table}
 Small modules written for the repository (\texttt{common.py}, \texttt{load.py}, \texttt{figstyle.py}, \texttt{p\_style.py}, \texttt{pm\_style.py}, \texttt{annot.py}, \texttt{spec\_atlas.py}, \texttt{textjs.py} and the like) hold the shared figure style and the loaders, so that every figure of the series has the same look.
 
 \subsection{JavaScript and HTML}
 \begin{table}[H]\centering\small
 \caption{JavaScript and HTML libraries and runtimes, end to end.}\label{tab:js}
-\begin{tabular}{@{}p{3.1cm}p{1.9cm}p{7.9cm}@{}}
-\toprule Library or runtime & Version & Where and for what\\\midrule
-Electron & 31 & shell of the desktop program (\texttt{require('electron')}: app and window and ipcMain and contextBridge and dialogs)\\
-electron-builder & 24.13.3 & development only: packs \texttt{SWAFL.exe} (portable) and the installer\\
-Node.js built-in modules & of Node 22 and Electron 31 & \texttt{fs} and \texttt{path} and \texttt{child\_process} and \texttt{os} and \texttt{zlib} and \texttt{http} and \texttt{vm} and \texttt{url} and \texttt{crypto}: the local server, the Daisy runner, the build and test scripts\\
-Leaflet & 1.9.4 & the map of the field in the program\\
-GeoTIFF.js & bundled & Sentinel-2 bands read in the browser\\
-SheetJS (xlsx) & 0.18.5 & Excel and CSV import and export\\
-Playwright for Node & not pinned & test and screenshot scripts that drive the real program in headless Chromium\\
-Plotly.js & 4.1.1 & the interactive charts and the 3D project in \texttt{Results} (the library file is stored beside the pages so that they work offline)\\
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.1cm}>{\raggedright\arraybackslash}p{1.9cm}>{\raggedright\arraybackslash}p{7.9cm}@{}}
+\toprule Library or runtime & Version & Role and why it is used in the build\\\midrule
+Electron & 31 & shell of the desktop program (\texttt{require('electron')}: app and window and ipcMain and contextBridge and dialogs). Why: it packs a browser and Node.js into one program so that the web code runs as a desktop application without installation.\\
+electron-builder & 24.13.3 & development only: packs \texttt{SWAFL.exe} (portable) and the installer. Why: the standard way to make a Windows portable file and installer from the same folder.\\
+Node.js built-in modules & of Node 22 and Electron 31 & \texttt{fs} and \texttt{path} and \texttt{child\_process} and \texttt{os} and \texttt{zlib} and \texttt{http} and \texttt{vm} and \texttt{url} and \texttt{crypto}: the local server, the Daisy runner, the build and test scripts. Why: no extra package is needed for files and a local server, so the program has no hidden dependencies.\\
+Leaflet & 1.9.4 & the map of the field in the program. Why: a small map library that works with local code and gives the field outline tool.\\
+GeoTIFF.js & bundled & Sentinel-2 bands read in the browser. Why: satellite bands can be read in the page by range request, so no server of ours is needed.\\
+SheetJS (xlsx) & 0.18.5 & Excel and CSV import and export. Why: weather and results travel in Excel files, which users already have.\\
+Playwright for Node & not pinned & test and screenshot scripts that drive the real program in headless Chromium. Why: drives the real program as a user would, so a page error is caught before release.\\
+Plotly.js & 4.1.1 & the interactive charts and the 3D project in \texttt{Results} (the library file is stored beside the pages so that they work offline). Why: the engine of the interactive charts, stored locally so they work offline.\\
 \bottomrule\end{tabular}\end{table}
 Besides these, the program uses only what the browser provides: the 2D canvas, \texttt{Blob} and download links, \texttt{DecompressionStream} for compressed data, \texttt{localStorage} for small settings, \texttt{requestAnimationFrame} for the playing of a season, and \texttt{fetch} for the optional online services. There is no CDN call at run time: the libraries above are stored in the program folders.
 
 \subsection{Programs called from the code}
 \begin{table}[H]\centering\small
 \caption{Command-line programs that scripts call.}\label{tab:progs}
-\begin{tabular}{@{}p{3.3cm}p{9.7cm}@{}}
-\toprule Program & Where it is called and why\\\midrule
-Daisy 7.1.14 (\texttt{daisy-bin.exe}) & started by \texttt{daisy-runner.js}; reads a set-up file and writes the logs\\
-ffmpeg (libx264) & through matplotlib in \texttt{videos.py}: the videos of \texttt{Results/05\_Videos}\\
-pandoc & the manual: Markdown chapters to one PDF with the XeLaTeX engine\\
-XeLaTeX and BibTeX (TeX Live) & the manual and the articles and the supplements\\
-Tesseract and poppler (\texttt{pdftoppm}) & checking and annotating figures in \texttt{annotate\_figs.py}\\
-Chromium (through Playwright) & screenshots and the tests of the program\\
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.3cm}>{\raggedright\arraybackslash}p{9.7cm}@{}}
+\toprule Program & Role and why it is used in the build\\\midrule
+Daisy 7.1.14 (\texttt{daisy-bin.exe}) & started by \texttt{daisy-runner.js}; reads a set-up file and writes the logs. Why: it is the model itself, run as a separate process so a failed run cannot stop the program.\\
+ffmpeg (libx264) & through matplotlib in \texttt{videos.py}: the videos of \texttt{Results/05\_Videos}. Why: matplotlib needs it to write the MP4 files.\\
+pandoc & the manual: Markdown chapters to one PDF with the XeLaTeX engine. Why: turns the Markdown chapters into the PDF of the manual in one step.\\
+XeLaTeX and BibTeX (TeX Live) & the manual and the articles and the supplements. Why: XeLaTeX uses system fonts and Unicode, and BibTeX keeps the references consistent.\\
+Tesseract and poppler (\texttt{pdftoppm}) & checking and annotating figures in \texttt{annotate\_figs.py}. Why: reads text in figures and turns PDF pages into pictures for the checks.\\
+Chromium (through Playwright) & screenshots and the tests of the program. Why: the same engine as the program, so the tests see the same pictures as the user.\\
 \bottomrule\end{tabular}\end{table}
 
 \subsection{\LaTeX\ packages and fonts}
@@ -134,14 +134,14 @@ The articles and supplements load these packages (from \texttt{pre.tex} and \tex
 \section{Online services (optional)}
 \begin{table}[H]\centering\small
 \caption{Services the program can call. All are optional; without a connection every other number is computed on the computer.}\label{tab:svc}
-\begin{tabular}{@{}p{4.1cm}p{9.0cm}@{}}
-\toprule Service & Used for\\\midrule
-Open-Meteo (forecast and archive and geocoding and elevation) & weather of any place (measured archive and forecast); place names; elevation\\
-Esri World Imagery and OpenStreetMap tiles & the satellite picture and the street map under the field\\
-Microsoft Planetary Computer and Element 84 Earth Search (STAC) & Sentinel-2 L2A scenes for the vegetation and water indices\\
-SoilGrids (ISRIC) & soil of the field and its retention curves\\
-ESA WorldCover and Overpass (OpenStreetMap) & land cover and roads and water sources near the field\\
-Nominatim and Photon & finding a place by name\\
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{4.1cm}>{\raggedright\arraybackslash}p{9.0cm}@{}}
+\toprule Service & Role and why it is used\\\midrule
+Open-Meteo (forecast and archive and geocoding and elevation) & weather of any place (measured archive and forecast); place names; elevation. Why: free weather with no key, so the program needs no account.\\
+Esri World Imagery and OpenStreetMap tiles & the satellite picture and the street map under the field. Why: open background maps so the user can see the field.\\
+Microsoft Planetary Computer and Element 84 Earth Search (STAC) & Sentinel-2 L2A scenes for the vegetation and water indices. Why: open access to Sentinel-2 scenes in a standard catalogue (STAC).\\
+SoilGrids (ISRIC) & soil of the field and its retention curves. Why: a soil estimate for any field in the world when the user has no soil data.\\
+ESA WorldCover and Overpass (OpenStreetMap) & land cover and roads and water sources near the field. Why: tells the user what surrounds the field (roads and water) without a survey.\\
+Nominatim and Photon & finding a place by name. Why: lets the user type a place name instead of coordinates.\\
 \bottomrule\end{tabular}\end{table}
 
 \section{Techniques used in the code}
@@ -168,14 +168,14 @@ Nominatim and Photon & finding a place by name\\
 \section{How the software is built}
 \begin{table}[H]\centering\small
 \caption{The build of the program.}\label{tab:build}
-\begin{tabular}{@{}p{3.7cm}p{9.3cm}@{}}
-\toprule Step & What happens\\\midrule
-Start from source & \texttt{START\_SWAFL.bat} (or \texttt{.command}) starts the program from the folder; it finds Node.js or fetches a portable copy of about 30 to 40\,MB into \texttt{tools/node}\\
-Install the build tools & \texttt{npm install} fetches Electron and electron-builder (24.13.3) listed in \texttt{package.json}\\
-Build & \texttt{npm run get-app} runs electron-builder for Windows and writes \texttt{SWAFL.exe}\\
-Targets & \texttt{portable} (one file and no installation) and \texttt{nsis} (an installer); a macOS \texttt{dmg} target is also defined\\
-Packed into the file & the files of the shell and \texttt{app/**/*} and the icon; as extra resources the manual PDF and the \texttt{daisy} folder\\
-Web build & none needed: \texttt{npm run web} serves the same \texttt{app} folder with \texttt{serve.js}\\
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.7cm}>{\raggedright\arraybackslash}p{9.3cm}@{}}
+\toprule Step & What happens and why\\\midrule
+Start from source & \texttt{START\_SWAFL.bat} (or \texttt{.command}) starts the program from the folder; it finds Node.js or fetches a portable copy of about 30 to 40\,MB into \texttt{tools/node}. Why: a user can run the program before any build.\\
+Install the build tools & \texttt{npm install} fetches Electron and electron-builder (24.13.3) listed in \texttt{package.json}. Why: the build tools stay out of the program and are needed only to make the file.\\
+Build & \texttt{npm run get-app} runs electron-builder for Windows and writes \texttt{SWAFL.exe}. Why: one command makes the same file on every machine.\\
+Targets & \texttt{portable} (one file and no installation) and \texttt{nsis} (an installer); a macOS \texttt{dmg} target is also defined. Why: a portable file for no-install use and an installer for those who want a shortcut.\\
+Packed into the file & the files of the shell and \texttt{app/**/*} and the icon; as extra resources the manual PDF and the \texttt{daisy} folder. Why: the program must work offline with Daisy and the manual inside.\\
+Web build & none needed: \texttt{npm run web} serves the same \texttt{app} folder with \texttt{serve.js}. Why: the same files serve the browser, so the web and desktop versions cannot drift apart.\\
 \bottomrule\end{tabular}\end{table}
 The program is not code-signed, so Windows may show a SmartScreen notice, which is cleared with More info and then Run anyway.
 
