@@ -89,7 +89,7 @@
     box('no3', 372, 420, 40, 26, 'NO₃⁻', BE); box('nh4', 344, 478, 60, 26, 'NH₄⁺', BE); box('nh4', 332, 516, 52, 26, 'NH₄⁺ sorbed', BE, { sz: 8 }); box('crop', 444, 342, 60, 26, 'Plant-N', BE); box('carbon', 592, 436, 60, 26, 'Org-N', BE);
     L([[372, 300], [372, 420]], 'none'); L([[376, 300], [376, 340]]); FX(335, 294, 'Fertilization + Atm. Deposition', 'middle', 9, 'Fertilisation and deposition'); L([[340, 478], [340, 300]], 'out'); FX(318, 262, 'Volatilization', 'middle', 9, 'Ammonia volatilisation');
     L([[392, 420], [392, 392]], 'out'); FX(385, 411, 'N₂O', 'end', 9, 'Nitrous oxide emission'); L([[352, 400], [352, 380]], 'out'); FX(336, 390, 'N₂O', 'middle', 9, 'Nitrous oxide emission'); L([[396, 420], [396, 370]]); FX(392, 371, 'Denitrification', 'middle', 8.5, 'Denitrification');
-    L([[388, 478], [388, 446]]); FX(403, 464, 'Nitrification', 'start', 9, 'Nitrification'); L([[413, 429], [443, 362]]); FX(418, 396, 'Uptake', 'start', 9, 'Crop nitrogen uptake'); L([[404, 484], [444, 366]], 'none');
+    L([[388, 478], [388, 446]]); FX(403, 464, 'Nitrification', 'start', 9, 'Nitrification'); L([[413, 429], [443, 362]]); FX(418, 396, 'Uptake', 'start', 9, 'Crop nitrogen uptake');
     L([[592, 444], [413, 436]]); FX(520, 450, 'Immobilization', 'middle', 9, 'Immobilisation'); L([[592, 462], [404, 490]]); FX(500, 484, 'Mineralization', 'middle', 9, 'Mineralisation'); L([[384, 505], [384, 520]], 'none'); L([[388, 504], [388, 642]], 'out'); FX(396, 560, 'Leaching', 'start', 9, 'Nitrate leaching');
     L([[268, 534], [268, 548]], 'none'); L([[374, 520], [286, 520]], 'none');
     // plant
