@@ -116,6 +116,30 @@ Absolute conductivity & $K(\hc)=q_c$ & -- & \multicolumn{3}{l}{not supported (sp
 \end{tabular}
 \end{table}
 
+\paragraph{Why one relative conductivity, and why this value.}
+The constant $\kappa$ is the least obvious element of \cref{eq:hc}, and each of its choices is argued here. (i)~\emph{Why a conductivity.} Water reaches a root only through the soil around it, and the rate it can deliver is proportional to $K$. Because $K_r$ falls by many orders of magnitude over a narrow range of suction (\cref{eq:asym}, \cref{fig:curves}b), any threshold on the conductivity becomes a sharp threshold on the suction: a crop that has reached it cannot dry the layer further whatever its demand, and this is the cliff seen in experiment E2. A threshold on the water content, in contrast, is blunt, because $S_e$ changes by a few tenths over the same range; this is why the fixed-saturation law is the worst of the three (0.23, \cref{tab:laws}). (ii)~\emph{Why relative and not absolute.} The saturated conductivity of a soil is not fixed by its retention curve and differs widely between sources for the same texture, whereas $K_r$ is dimensionless and is fixed by $\alpha$, $n$ and $\ell$. An absolute threshold $K(\hc)=q_c$ does not hold: the conductivity at the reach spans $10^{-4.8}$ to $10^{-8.4}$\,cm\,d$^{-1}$ across soils (\cref{tab:laws}). The relative form also has the correct scaling by construction: multiplying $\alpha$ by a factor shifts the whole retention and conductivity curves along the suction axis by the inverse factor, and \cref{eq:hc} moves the reach by exactly that factor. (iii)~\emph{Why one constant for all soils.} The soils differ in the shape of the curves, which enters through $n$ and $\ell$; the crop, the climate and the sensor do not differ between them, and these are what $\kappa$ stands for (root density at the sensor, transpiration demand, lowest root water potential). A separate constant for each soil would fit the ten intervals exactly and would predict nothing.
+
+\paragraph{Where the value comes from and how little depends on it.}
+$\kappa$ is calibrated, not measured, and it is stated as such: it is the relative conductivity at which, in the simulated crop, soil and weather, an additional drying of the layer at the sensor no longer happens within a season. Its value is the minimum of the interval-censored squared error (zero inside the observed interval), and the minimum is wide. With $\kappa=10^{-11}$, $10^{-10}$, $3.5\times10^{-10}$, $10^{-9}$ and $10^{-8}$ the root-mean-square error of the ten reaches is 0.32, 0.17, 0.14, 0.16 and 0.31 in $\log_{10}$ (fitted on all ten soils): a whole decade of $\kappa$ ($10^{-10}$ to $10^{-9}$) is within a factor of 1.25 of the optimum, and this is why the bootstrap interval ($1.0\times10^{-10}$ to $2.8\times10^{-9}$), the leave-one-soil-out range ($2.3$ to $7.3\times10^{-10}$) and the range for a firing threshold of 1 to 40\,mm\,yr$^{-1}$ ($2.7\times10^{-10}$ to $2.5\times10^{-9}$) all enclose it. The value is the centre of a flat basin, not a sharp optimum, and a reader who prefers $10^{-10}$ or $10^{-9}$ changes no conclusion of this paper.
+
+\paragraph{The baseline: what a rule without $\kappa$ would give.}
+Whether the constant is worth having is judged against what is done without it (\cref{tab:base}). The common practice is to allow the sensor to trigger anywhere down to the wilting point of $-15\,000$\,cm. At that suction $K_r$ is $8\times10^{-22}$ in the sand and $9\times10^{-8}$ in the silty clay loam, so the rule treats a soil that cannot deliver any water as if it could, and it is wrong by a factor of 100 on the sand (RMSE 0.93). The best single suction for all ten soils (3\,140\,cm), the best proportion of $1/\alpha$ alone (the scale of the retention curve without its shape), and \cref{eq:hc} follow, in that order of improvement; each step was fitted on all ten soils, which favours the baselines, and \cref{eq:hc} is given in addition with each soil left out. The baselines are inside the interval for soils only where the interval is open at the top (the five soils that still fire at 10\,000\,cm), which is why the count of soils inside is not used alone.
+\begin{table}[H]\centering\small
+\caption{Rules for the reach of a trigger with and without $\kappa$, fitted to the ten soils of E2.}
+\label{tab:base}
+\footnotesize\begin{tabular}{@{}lrrr@{}}
+\toprule
+Rule & RMSE ($\log_{10}$) & Inside (of 10) & Worst factor\\\midrule
+Reach at the wilting point, $15\,000$\,cm, every soil & 0.93 & 5 & 100\\
+One suction for every soil (best: 3\,140\,cm) & 0.67 & 0 & 21\\
+Scale of the retention curve only, $155/\alpha$ & 0.48 & 1 & 7.1\\
+\Cref{eq:hc}, $\kappa=3.5\times10^{-10}$, fitted on all soils & 0.14 & 5 & 1.9\\
+\Cref{eq:hc}, each soil left out in turn & 0.18 & 5 & 2.3\\\bottomrule
+\end{tabular}
+\end{table}
+One consistency check is added, which is not an independent test because the same intervals were used to fit $\kappa$: the last firing trigger of the five soils with a bracket lies at 0.47 to 0.66 of the predicted reach (\cref{fig:trigger}b), as expected if the reach is an upper limit that a trigger approaches without reaching.
+
+
 \begin{figure}[H]\centering
 \includegraphics[width=\textwidth]{\figdir/paper4/fig3_trigger_reach.pdf}
 \caption{The reach of a suction trigger in experiment E2 (197 runs). (a) Irrigation against the trigger. (b) The same runs against the reach-scaled trigger $\htr/\hc$, irrigation divided by its soil maximum: every soil stops at $\htr/\hc\approx0.5$ to 1. (c) Predicted reach (\cref{eq:hc}) against the observed interval (bars; arrows: only a lower bound); grey band: within a factor of 2. (d) Yield against the trigger: beyond the reach the crop is rainfed.}
