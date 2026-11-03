@@ -86,7 +86,7 @@ const E = (() => {
     seasonDaily() {
       return api.json(`(function(){var r=seasonSim(true),n=NYR*DPY,a=AWC[state.soil]*DZ,k=24,o={rain:[],irr:[],drain:[],E:[],T:[],cover:[],wf:[]};var q=function(v){return Math.round(v*100)/100};
         for(var d=0;d<n;d++){o.rain.push(q(r.rain[d]));o.irr.push(q(r.irr[d]));o.drain.push(q(r.drain[d]));o.E.push(q(r.dE[d]));o.T.push(q(r.dT[d]));o.cover.push(q(r.cover[d]));var s=r.s[d],t=0;for(var i=0;i<k;i++)t+=s[i];o.wf.push(Math.round(1000*t/(k*a))/1000)}
-        var y=(typeof dss!=='undefined'&&dss.ay0!=null)?dss.ay0:NYR-1;o.sel=Math.max(0,Math.min(NYR-1,y));o.cal0=CAL0;o.nyr=NYR;o.dpy=DPY;o.trig=r.fTrig;return o})()`);
+        var y=(typeof dss!=='undefined'&&dss.ay0!=null)?dss.ay0:NYR-1;o.sel=Math.max(0,Math.min(NYR-1,y));o.cal0=CAL0;o.nyr=NYR;o.dpy=DPY;o.trig=r.fTrig;o.proj=(window.projPlan&&window.projN&&window.projN())?{n:window.projN(),F:window.projPlan(window.projN()),note:window.projNote()}:null;return o})()`);
     },
     design(scene) {
       const fn = { sid: 'sidRun', drip: 'drRun', spr: 'spRun' }[scene]; if (!fn) return null;

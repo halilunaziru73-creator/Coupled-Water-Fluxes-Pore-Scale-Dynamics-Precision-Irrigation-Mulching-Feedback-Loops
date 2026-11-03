@@ -55,16 +55,20 @@ window.SciFig = (() => {
   function yearly(cv, D) {
     const S = setup(cv); if (!S) return; const { c, w, h } = S, n = D.dpy, ny = D.nyr, sum = (A, k) => { let s = 0; for (let i = k * n; i < (k + 1) * n; i++) s += A[i]; return s; };
     const R = [], I = [], Dr = [], ET = []; for (let k = 0; k < ny; k++) { R.push(sum(D.rain, k)); I.push(sum(D.irr, k)); Dr.push(sum(D.drain, k)); ET.push(sum(D.E, k) + sum(D.T, k)); }
-    const mean = a => a.reduce((x, y) => x + y, 0) / a.length;
-    const lastLeg = legend(c, [['rgba(70,95,120,0.9)', 'rain', 'bar'], ['#E08A1E', 'irrigation', 'bar'], ['#7A5AA8', 'drainage', 'bar'], ['#2E7D4F', 'evapotranspiration', 'mk'], ['#555', 'mean of the 20 seasons', 'dash']], 10, 14, w);
-    const L = 64, Rr = 20, T = 34 + (lastLeg - 14), B = 40, X0 = L, X1 = w - Rr, Y0 = T, Y1 = h - B, mx = Math.max(...R, ...I, ...Dr, ...ET) * 1.1, slot = (X1 - X0) / ny, bw = slot / 4.2;
+    const mean = a => a.reduce((x, y) => x + y, 0) / a.length, mR = mean(R), mET = mean(ET);
+    const PJ = D.proj && D.proj.n ? D.proj : null, np = PJ ? PJ.n : 0; if (PJ) { const R0 = R.slice(), I0 = I.slice(), D0 = Dr.slice(), E0 = ET.slice(); PJ.F.forEach(g => { R.push(R0[g.s] * g.P); I.push(I0[g.s] * g.I); Dr.push(Math.max(0, D0[g.s] * g.D)); ET.push(E0[g.s] * g.U); }); }
+    const nt = ny + np;
+    const lastLeg = legend(c, [['rgba(70,95,120,0.9)', 'rain', 'bar'], ['#E08A1E', 'irrigation', 'bar'], ['#7A5AA8', 'drainage', 'bar'], ['#2E7D4F', 'evapotranspiration', 'mk'], ['#555', 'mean of the 20 simulated seasons', 'dash']].concat(np ? [['#C77D1A', 'projected seasons (' + np + ')', 'bar']] : []), 10, 14, w);
+    const L = 64, Rr = 20, T = 34 + (lastLeg - 14), B = 40, X0 = L, X1 = w - Rr, Y0 = T, Y1 = h - B, mx = Math.max(...R, ...I, ...Dr, ...ET) * 1.1, slot = (X1 - X0) / nt, bw = slot / 4.2;
     const Y = v => Y1 - (Y1 - Y0) * v / mx;
     axisL(c, X0, Y0, X1, Y1, 0, mx, 'Water per year (mm)', null, true);
+    if (np) { c.fillStyle = 'rgba(232,145,45,0.10)'; c.fillRect(X0 + slot * ny, Y0, slot * np, Y1 - Y0); }
     c.fillStyle = 'rgba(255,220,100,0.28)'; c.fillRect(X0 + slot * D.sel, Y0, slot, Y1 - Y0);
-    const col = ['rgba(70,95,120,0.9)', '#E08A1E', '#7A5AA8']; [R, I, Dr].forEach((A, j) => A.forEach((v, k) => { c.fillStyle = col[j]; c.fillRect(X0 + slot * k + slot * 0.12 + j * bw, Y(v), bw - 1, Y1 - Y(v)); }));
-    [[R, col[0]], [ET, '#2E7D4F']].forEach(([A, cc]) => { c.strokeStyle = cc; c.lineWidth = 1.2; c.setLineDash([6, 4]); c.beginPath(); c.moveTo(X0, Y(mean(A))); c.lineTo(X1, Y(mean(A))); c.stroke(); c.setLineDash([]); });
+    const col = ['rgba(70,95,120,0.9)', '#E08A1E', '#7A5AA8']; [R, I, Dr].forEach((A, j) => A.forEach((v, k) => { c.globalAlpha = k >= ny ? 0.5 : 1; c.fillStyle = col[j]; c.fillRect(X0 + slot * k + slot * 0.12 + j * bw, Y(v), bw - 1, Y1 - Y(v)); c.globalAlpha = 1; }));
+    if (np) { c.strokeStyle = '#C77D1A'; c.setLineDash([3, 3]); c.lineWidth = 1.2; c.beginPath(); c.moveTo(X0 + slot * ny, Y0); c.lineTo(X0 + slot * ny, Y1); c.stroke(); c.setLineDash([]); c.fillStyle = '#C77D1A'; c.font = '10px ' + FONT; c.textAlign = 'left'; c.textBaseline = 'top'; c.fillText('projection', X0 + slot * ny + 4, Y0 + 3); }
+    [[mR, col[0]], [mET, '#2E7D4F']].forEach(([mA, cc]) => { c.strokeStyle = cc; c.lineWidth = 1.2; c.setLineDash([6, 4]); c.beginPath(); c.moveTo(X0, Y(mA)); c.lineTo(X0 + slot * ny, Y(mA)); c.stroke(); c.setLineDash([]); });
     line(c, ET.map((_, k) => X0 + slot * (k + 0.5)), ET.map(Y), '#2E7D4F', 2.2, null, 1);
-    c.fillStyle = '#333'; c.font = '11px ' + FONT; c.textAlign = 'center'; c.textBaseline = 'top'; for (let k = 0; k < ny; k += 2) c.fillText(String(D.cal0 + k), X0 + slot * (k + 0.5), Y1 + 5); c.font = 'bold 11px ' + FONT; c.fillText('year (the working season is shaded)', (X0 + X1) / 2, Y1 + 22);
+    c.fillStyle = '#333'; c.font = '11px ' + FONT; c.textAlign = 'center'; c.textBaseline = 'top'; for (let k = 0; k < nt; k += (nt > 24 ? 4 : 2)) c.fillText(String(D.cal0 + k), X0 + slot * (k + 0.5), Y1 + 5); c.font = 'bold 11px ' + FONT; c.fillText('year (the working season is shaded' + (np ? '; right of the dashed line: projection' : '') + ')', (X0 + X1) / 2, Y1 + 22);
     frame(c, X0, Y0, X1, Y1, '');
     cv._csv = () => [['year', 'rain mm', 'irrigation mm', 'drainage mm', 'evapotranspiration mm']].concat(R.map((v, k) => [D.cal0 + k, v.toFixed(1), I[k].toFixed(1), Dr[k].toFixed(1), ET[k].toFixed(1)]));
   }

@@ -357,5 +357,14 @@
   K.add('dtrd', 'D6 Trade-offs and the best edge', '#1E8E3E', drawTR, 'Yield against nitrate, water and N2O for every run, with the Pareto front and a ranking', 'No run is best on everything: the best edge keeps the runs no other run beats on both yield and loss, and your weights rank them.');
   K.add('dirr', 'D7 The return of irrigation', '#2b83ba', drawIR, 'Yield response to irrigation, the amount that pays, and where each millimetre goes', 'Each extra millimetre brings less yield: the response curve, the price ratio and the share of the water the crop uses decide how much irrigation pays.');
   K.add('dghg', 'D8 Nitrous oxide and gaseous nitrogen', '#8E3B8E', drawGH, 'N2O from nitrification and denitrification, ammonia, the emission factor and CO2-equivalents', 'Nitrogen in wet soil is denitrified to N2O, a greenhouse gas 273 times stronger than CO2: the emission factor shows how much of the fertiliser ends in the air.');
+  // the seasons of the Daisy layers carry on after the last simulated season, with the same climate trend as the other year-by-year layers
+  { const base = window.layerSeries;
+    window.layerSeries = function (id) {
+      const D = base(id); if (!D || !['dwb', 'dnb', 'dyr', 'dirr', 'dghg', 'dchx'].includes(id) || !window.projN || !window.projN() || !D.years || D.years.length < 6) return D;
+      const nO = D.years.length, n = window.projN(), F = window.projPlan(n, nO), y0 = +D.years[nO - 1];
+      const fOf = (t, nm) => { const q = (t + ' ' + nm).toLowerCase(); return /irrigat/.test(q) ? 'I' : /drain|leach|runoff/.test(q) ? 'D' : /rain/.test(q) ? 'P' : /yield/.test(q) ? 'Y' : /evap|transp|uptake/.test(q) ? 'U' : /stress/.test(q) ? 'WS' : null; };
+      D.charts.forEach(c => c.ser.forEach(q => { const f = fOf(c.t, q.n); q.v = q.v.concat(F.map(g => { const v = q.v[g.s]; return v == null || !isFinite(v) ? null : f ? +(v * g[f]).toFixed(3) : v; })); }));
+      D.years = D.years.concat(F.map((_, j) => String(y0 + j + 1))); D.nObs = nO; D.nProj = n; D.note = window.projNote(); return D;
+    }; }
   window.DAISYLAYERS = { ids: ['chem', 'dsum', 'dwb', 'dnb', 'dyr', 'dchx', 'dtrd', 'dirr', 'dghg'] };
 })();

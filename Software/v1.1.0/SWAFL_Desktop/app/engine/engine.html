@@ -1555,7 +1555,7 @@ const IRPIPES = [32, 40, 50, 63, 75, 90, 110, 125, 160, 200, 250, 315];
 const irHW = (Q, D, L) => Q <= 0 ? 0 : 10.67 * L * Math.pow(Q / 1000, 1.852) / (Math.pow(140, 1.852) * Math.pow(D / 1000, 4.871));
 const irVel = (Q, D) => Q / 1000 / (Math.PI * D * D / 4e6);
 const irSize = (Q, vmax) => { for (const D of IRPIPES) if (irVel(Q, D) <= (vmax || 1.5)) return D; return IRPIPES[IRPIPES.length - 1]; };
-const IRX = { Lm: 120, lift: 12, LLs: 150, src: 'well', touch() {}, fd: { drip: { on: false, L: 100, W: 100, touch() {} }, spr: { on: false, L: 200, W: 150, touch() {} } } };
+const IRX = { Lm: 120, lift: 12, LLs: 150, src: 'well', Dm0: 0, Dsm0: 0, touch() {}, fd: { drip: { on: false, L: 100, W: 100, touch() {} }, spr: { on: false, L: 200, W: 150, touch() {} } } };
 // the field given by its area, or by its length and width (the area and the lateral length then follow from them)
 function fdApply() {
   const d = IRX.fd.drip, s = IRX.fd.spr;
@@ -1572,7 +1572,7 @@ function irSystem(kind, R, o) {
   const G = { kind }, A = (kind === 'drip' ? DRP.Af : SPR.Af) * 1e4, Qs = kind === 'drip' ? DRP.Qs : SPR.Qs;
   if (kind === 'drip') { G.LL = o.LL; G.Sl = o.Sl; G.Wf = A / G.LL; G.NL = Math.max(1, Math.floor(G.Wf / G.Sl)); G.Qlat = R.lat.Q; G.zones = Math.max(1, Math.ceil(G.NL * G.Qlat / Qs)); G.lpz = Math.ceil(G.NL / G.zones); G.Qz = G.lpz * G.Qlat; G.Dlat = o.D; G.hfLat = R.lat.hf; G.H0 = o.H0; G.pts = Math.round(G.LL / o.Se) + 1; G.nEmit = G.NL * G.pts; }
   else { G.LL = IRX.LLs; G.Sl = o.Sl; G.Wf = A / G.LL; G.NL = Math.max(1, Math.floor(G.Wf / G.Sl)); G.Ns = Math.max(1, Math.floor(G.LL / o.Ss)); G.Qlat = G.Ns * R.Q / 60; const lops = Math.max(1, Math.floor(Qs / G.Qlat)); G.lpz = Math.min(G.NL, lops); G.zones = Math.ceil(G.NL / G.lpz); G.Qz = G.lpz * G.Qlat; const h = o.P / 9.81, Fm = 1 / 2.852 + 1 / (2 * G.Ns) + Math.sqrt(0.852) / (6 * G.Ns * G.Ns); G.Dlat = 32; for (const D of IRPIPES) { G.Dlat = D; if (irHW(G.Qlat, D, G.LL) * Fm <= 0.2 * h && irVel(G.Qlat, D) <= 2.0) break; } G.hfLat = irHW(G.Qlat, G.Dlat, G.LL) * Fm; G.H0 = h + 1.5 + G.hfLat; G.nSpr = G.NL * G.Ns; }
-  G.Lsm = G.lpz * G.Sl; G.Dsm = irSize(G.Qz, 1.5); G.hfSm = irHW(G.Qz, G.Dsm, G.Lsm) * 0.4; G.Lm = IRX.Lm; G.Dm = irSize(G.Qz, 1.5); G.hfM = irHW(G.Qz, G.Dm, G.Lm); G.lift = IRX.lift; G.hHead = 9;
+  G.Lsm = G.lpz * G.Sl; G.Dsm = IRX.Dsm0 > 0 ? IRX.Dsm0 : irSize(G.Qz, 1.5); G.hfSm = irHW(G.Qz, G.Dsm, G.Lsm) * 0.4; G.Lm = IRX.Lm; G.Dm = IRX.Dm0 > 0 ? IRX.Dm0 : irSize(G.Qz, 1.5); G.hfM = irHW(G.Qz, G.Dm, G.Lm); G.lift = IRX.lift; G.hHead = 9;
   G.TDH = G.lift + G.H0 + G.hfSm + G.hfM + G.hHead; G.kW = 9.81 * G.Qz / 1000 * G.TDH / 0.65; return G;
 }
 function irLayoutDraw(G, y, tauFrac, C) {
@@ -1602,7 +1602,7 @@ function irLayoutDraw(G, y, tauFrac, C) {
 let SPR_R_PX = 8;
 // head control unit: what stands between the water source and the mainline
 function irHeadUnit(G, y) {
-  const items = [['Source', IRX.src === 'well' ? 'well, lift ' + irF(G.lift) + ' m' : IRX.src === 'canal' ? 'canal, lift ' + irF(G.lift) + ' m' : 'tank, lift ' + irF(G.lift) + ' m', '#7FB5D8'], ['Pump', irF(G.Qz, 1) + ' L/s · ' + G.kW.toFixed(1) + ' kW', '#9AA7B8'], ['Filter', 'disc 120 mesh · 5 m loss', '#9CB5C9'], ['Fertigation', 'injector · 2 m loss', '#C9B88A'], ['Valve + gauge', 'zone valve · 2 m loss', '#8FBF9F'], ['Mainline', 'Ø' + G.Dm + ' · ' + irF(G.Lm) + ' m', '#2A5FA8']], w = (W - 28 - 5 * 14) / 6;
+  const items = [['Source', IRX.src === 'well' ? 'well, lift ' + irF(G.lift) + ' m' : IRX.src === 'canal' ? 'canal, lift ' + irF(G.lift) + ' m' : 'tank, lift ' + irF(G.lift) + ' m', '#7FB5D8'], ['Pump', irF(G.Qz, 1) + ' L/s · ' + G.kW.toFixed(1) + ' kW', '#9AA7B8'], ['Filter', 'disc 120 mesh · 5 m loss', '#9CB5C9'], ['Fertigation', 'injector · 2 m loss', '#C9B88A'], ['Valve + gauge', 'zone valve · 2 m loss', '#8FBF9F'], ['Mainline', 'Ø' + G.Dm + ' · ' + irF(G.Lm) + ' m' + (IRX.Dm0 > 0 ? ' (sketch)' : ''), '#2A5FA8']], w = (W - 28 - 5 * 14) / 6;
   items.forEach((q, i) => { const x = 14 + i * (w + 14); ctx.fillStyle = q[2]; ctx.strokeStyle = '#1B1F23'; ctx.lineWidth = 1; rrect(x, y, w, 40, 6); ctx.fill(); ctx.stroke(); T(q[0], x + w / 2, y + 15, { s: 9.5, b: true, a: 'center', c: '#12303A' }); T(q[1], x + w / 2, y + 31, { s: 7.6, a: 'center', c: '#12303A' }); if (i < 5) { ctx.strokeStyle = '#1B1F23'; ctx.fillStyle = '#1B1F23'; ctx.beginPath(); ctx.moveTo(x + w + 1, y + 20); ctx.lineTo(x + w + 11, y + 20); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x + w + 13, y + 20); ctx.lineTo(x + w + 8, y + 17); ctx.lineTo(x + w + 8, y + 23); ctx.closePath(); ctx.fill(); } });
   return y + 40;
 }
@@ -2661,7 +2661,7 @@ const TRIGGER_AT_FSTAR = {
 };
 const FSTAR = 0.45; // soil-independent critical depletion (5% yield loss)
 
-let state = { soil: DATA.soils[4], till: "conv", tcIdx: 0, vffIdx: 9, capIdx: 1, rainIdx: 5, tempIdx: 2, trigIdx: 6, zIdx: 3, nIdx: 6, method: 'M02_Surface', range: 'all', mulchType: 'straw', fview: 'day', trigMode: 'own', trigF: 0.5, salt0: 0.5, ecw: 0.6, yrCrop: 'interest', longCrop: 'olive', trigBy: Object.fromEntries(DATA.soils.map(function (q) { return [q, 0.5]; })), decMode: 'plant', decHor: 'month', decInit: 'sim', areaHa: 1, crop: "cereal" };
+let state = { soil: DATA.soils[4], till: "conv", tcIdx: 0, vffIdx: 9, capIdx: 1, rainIdx: 5, tempIdx: 2, trigIdx: 6, zIdx: 3, nIdx: 6, method: 'M02_Surface', range: 'all', mulchType: 'straw', fview: 'day', trigMode: 'own', trigF: 0.5, salt0: 0.5, ecw: 0.6, yrCrop: 'interest', longCrop: 'olive', trigBy: Object.fromEntries(DATA.soils.map(function (q) { return [q, 0.5]; })), decMode: 'plant', decHor: 'month', decInit: 'sim', areaHa: 1, crop: "cereal", projN: 20, projWt: 0.3, projRt: 0 };
 const TEMP_VALUES = [-1.0,-0.5,0.0,0.5,1.0,1.5,2.0,2.5,3.0,3.5];
 // Cereal is the real, simulated rotation (factor 1.0, no change). Legume and Vegetable factors are
 // illustrative only, loosely reflecting typical relative dry-matter yield and harvest index differences
@@ -4998,8 +4998,20 @@ function drawHotTip() {
   const w = Math.max(...lines.map(l => ctx.measureText(l).width)) + 16, x0 = clampN(hotUi.x + 12, 4, W - w - 8);
   lines.forEach((l, i) => pill(l, x0, clampN(hotUi.y + 26, 16, H - 8 - lines.length * 18) + i * 17, { s: 10, b: true, bg: 'rgba(255,252,225,0.98)', stroke: '#1B1F23' }));
 }
+// the irrigation settings of Properties and the three design layers are one set of inputs: the area, the method (and the depth of the drip laterals) pass to the designs
+function designSync(o) {
+  try {
+    if (!o || (o.areaHa == null && o.method == null)) return; const ha = Math.max(0.01, +state.areaHa || 1), m = (METHODS.find(q => q.k === state.method) || {});
+    if (o.areaHa != null) { DRP.Af = Math.max(0.0001, Math.min(10000, ha)); SPR.Af = Math.max(0.001, Math.min(10000, ha)); }
+    if (o.method != null && m.mid) { DRP.surf = false; DRP.dep = m.mid; } else if (o.method === 'M02_Surface' || o.method === 'M01_Overhead') { /* the layer of the method keeps its own inputs */ }
+    if (window.designInvalidate) window.designInvalidate('the irrigation settings of Properties changed');
+  } catch (e) { }
+}
+window.designSync = designSync;
+// which design layer belongs to the method of Properties
+window.designOfMethod = () => /Drip/.test(state.method) ? 'drip' : /Overhead/.test(state.method) ? 'spr' : 'sid';
 function applyState(o) {
-  Object.assign(state, o); sliders.tc.value = state.tcIdx; sliders.vff.value = state.vffIdx; sliders.cap.value = state.capIdx; sliders.rain.value = state.rainIdx;
+  Object.assign(state, o); designSync(o); sliders.tc.value = state.tcIdx; sliders.vff.value = state.vffIdx; sliders.cap.value = state.capIdx; sliders.rain.value = state.rainIdx;
   sliders.temp.value = state.tempIdx; sliders.trig.value = state.trigIdx; sliders.z.value = state.zIdx; sliders.n.value = state.nIdx; refresh();
 }
 const cyc = (key, n) => applyState({ [key]: (state[key] + 1) % n });
@@ -7074,8 +7086,8 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
 })();
 </script>
 <script src="plus_core.js?v=20261027d"></script>
-<script src="plus_layers.js?v=20261101m"></script>
-<script src="plus_daisy.js?v=20261102h"></script>
+<script src="plus_layers.js?v=20261103b"></script>
+<script src="plus_daisy.js?v=20261103b"></script>
 <script src="plus_phenomodel.js?v=20261030z4"></script>
 <script src="plus_phenotyping.js?v=20261031p1"></script>
 <script src="plus_phenotyping2.js?v=20261031p1"></script>

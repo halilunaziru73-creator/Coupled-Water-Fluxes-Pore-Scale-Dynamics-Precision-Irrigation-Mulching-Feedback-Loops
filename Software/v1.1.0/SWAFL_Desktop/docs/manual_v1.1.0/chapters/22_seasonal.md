@@ -126,3 +126,12 @@ where $V_{stored}$ is the water kept in the root zone, $Z_{lq}$ the mean depth o
 
 \newpage
 
+
+
+## Projecting the seasons after the last simulated one
+
+The year charts of the three layers, the charts of the dashboard for them and the yearly figure of the Charts tab can continue after the twenty simulated seasons. In Properties, the group *Projection* sets **Seasons projected** (none, 10 or 20 years), the **warming per decade** (default +0.3 °C) and the **rainfall change per decade** (default 0 %).
+
+Each projected season is one of the twenty simulated seasons, taken in a fixed random order (the same order every time for the same soil and crop), and moved by the trend of the settings: the reference evapotranspiration rises by 3.5 % per degree of added warming; irrigation follows it (1.2 times that change) and falls with added rain (0.8 times the rainfall change); drainage and the nitrate leached follow the rain (1.5 times the change) and fall with the warming (0.6 times 3.5 % per degree); evapotranspiration and transpiration change by 0.4 of the warming effect and 0.3 of the rainfall change; the yield falls by 2 % per degree and rises by 0.1 of the rainfall change; the days of water stress rise with the warming and fall with the rain. The trend is measured from the middle of the twenty simulated seasons.
+
+Projected seasons are drawn lighter, right of a dashed line marked *projection*, on the same calendar as the simulated seasons, so that the red bar of the working date stays on its year. The mean, the 10 to 90 % range and the reliability figures are those of the twenty simulated seasons only; the layer adds a line that gives the change of the projected seasons against them. A projection shows where a setting is heading under a stated trend; it is not a weather forecast. Setting **Seasons projected** to *None* returns the charts to the twenty simulated seasons.

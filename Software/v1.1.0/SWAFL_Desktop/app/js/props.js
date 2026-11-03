@@ -23,6 +23,10 @@ const Props = (() => {
         { t: 'select', label: 'Material', id: 'mulch', opts: M.mulches, get: s => s.state.mulchType, on: v => E.setMulch(v) },
         SL('vffIdx', 'Strength (vapour-flux factor)', 9, 'vff'), SL('capIdx', 'Interception capacity (mm)', 3, 'cap') ] },
       { id: 'p-wx', name: 'Weather and climate', rows: [ SL('rainIdx', 'Rainfall scale (x baseline)', 9, 'rain'), SL('tempIdx', 'Temperature shift', 9, 'temp') ] },
+      { id: 'p-proj', name: 'Projection (years after the last simulated season)', rows: [
+        { t: 'select', label: 'Seasons projected', id: 'projn', opts: [['0', 'None (simulated seasons only)'], ['10', '10 years'], ['20', '20 years']], get: s => String(s.state.projN == null ? 20 : s.state.projN), on: v => E.set({ projN: +v }) },
+        { t: 'select', label: 'Warming per decade (°C)', id: 'projwt', opts: [0, 0.2, 0.3, 0.5, 0.8, 1].map(v => [String(v), '+' + v + ' °C per decade']), get: s => String(s.state.projWt == null ? 0.3 : s.state.projWt), on: v => E.set({ projWt: +v }) },
+        { t: 'select', label: 'Rainfall change per decade', id: 'projrt', opts: [-10, -5, 0, 5, 10].map(v => [String(v), (v > 0 ? '+' : '') + v + ' %']), get: s => String(s.state.projRt == null ? 0 : s.state.projRt), on: v => E.set({ projRt: +v }) } ] },
       { id: 'p-irr', name: 'Irrigation', rows: [
         { t: 'select', label: 'Method', id: 'method', opts: M.methods, get: s => s.state.method, on: v => E.set({ method: v }) },
         { t: 'select', label: 'Decide for', id: 'dechor', opts: [['next', 'The next irrigation'], ['month', 'The next 30 days'], ['year', 'The next 12 months'], ['season', 'The whole crop season']], get: s => s.state.decHor || 'month', on: v => E.set({ decHor: v }) },
@@ -34,9 +38,20 @@ const Props = (() => {
         { t: 'select', label: 'Critical depletion f (irrigate when depletion reaches f)', id: 'fcrit', opts: [0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8].map(v => [v.toFixed(2), v.toFixed(2)]), get: s => { const b = (s.state.trigBy || {})[s.state.soil], f = b != null ? b : 0.5; return (Math.round(f * 20) / 20).toFixed(2); }, on: v => E.ev('(function(){var f=' + (+v) + ';state.trigF=f;DATA.soils.forEach(function(q){state.trigBy[q]=f});refresh()})()') },
         SL('trigIdx', 'Trigger (sensor suction)', 19, 'trig'), SL('zIdx', 'Sensor depth', 19, 'z') ] },
       { id: 'p-n', name: 'Nutrients', rows: [ SL('nIdx', 'Nitrogen rate (% of standard)', 9, 'n') ] },
-      { id: 'p-act', name: 'Design shortcuts', rows: [ { t: 'btns', btns: [
-        ['Surface design', () => Layers.open('sid')], ['Drip design', () => Layers.open('drip')], ['Sprinklers and pipes', () => Layers.open('spr')], ['Optimise surface', () => Act.optimise()] ] } ] }
+      { id: 'p-act', name: 'Design shortcuts (connected to the irrigation design)', rows: [
+        { t: 'live', get: s => designLive(s) },
+        { t: 'btns', btns: [['Design for the method above', () => Layers.open(E.json('designOfMethod()') || 'sid')], ['Sketch the field and pipes', () => Sketch.open()]] },
+        { t: 'btns', btns: [['Surface design', () => Layers.open('sid')], ['Drip design', () => Layers.open('drip')], ['Sprinklers and pipes', () => Layers.open('spr')], ['Optimise surface', () => Act.optimise()]] } ] }
     ];
+  }
+  // what the irrigation settings are linked to: the design layer of the method, the area, the pipes of the sketch, and the result of the last design run
+  function designLive(s) {
+    const st = s.state, id = /Drip/.test(st.method) ? 'drip' : /Overhead/.test(st.method) ? 'spr' : 'sid', nm = { sid: 'Surface design', drip: 'Drip design', spr: 'Sprinklers and pipes' }[id];
+    let t = 'Method <b>' + UI.esc((M.methods.find(q => q[0] === st.method) || [0, st.method])[1]) + '</b> goes to <b>' + nm + '</b> · area <b>' + (st.areaHa == null ? 1 : st.areaHa) + ' ha</b>, the same area in all three designs.';
+    let R = null; try { if (E.snap && E.snap.scene === id && E.json("!!(window.DESIGN_RUN&&DESIGN_RUN['" + id + "'].on)")) { if (!designLive.c || designLive.c.k !== s.date + id + JSON.stringify(s.state)) designLive.c = { k: s.date + id + JSON.stringify(s.state), R: E.design(id) }; R = designLive.c.R; } } catch (e) { }
+    if (R && R.Ea != null) t += '<br>Last run of this design: application efficiency <b>' + (R.Ea * 100).toFixed(0) + ' %</b>' + (R.kW != null ? ', pump <b>' + (+R.kW).toFixed(1) + ' kW</b>' : '') + '.';
+    else t += '<br>Open the design and press Run simulation: its efficiency and pump size then show here.';
+    return t + '<br>Pipes drawn in the field sketch pass their lengths and diameters to the design when you press <i>Turn the sketch into the design</i>.';
   }
   function build() {
     let h = '';
@@ -50,6 +65,7 @@ const Props = (() => {
         else if (r.t === 'slider') h += '<div class="pr"><label>' + r.label + '<b data-val="' + r.vk + '"></b></label><input type="range" min="0" max="' + r.max + '" step="1" data-r="' + rid + '" data-key="' + r.key + '"></div>';
         else if (r.t === 'btns') h += '<div class="pr btnrow">' + r.btns.map((b, j) => '<button class="btn" data-b="' + rid + ':' + j + '">' + b[0] + '</button>').join('') + '</div>';
         else if (r.t === 'note') h += '<div class="pnote">' + r.text + '</div>';
+        else if (r.t === 'live') h += '<div class="pnote" data-live="' + rid + '"></div>';
       });
       h += '</div></div>';
     });
@@ -76,6 +92,7 @@ const Props = (() => {
       else if (el.classList.contains('seg')) el.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.v === r.get(s)));
       else if (el.matches('input[type=range]')) { const v = s.state[el.dataset.key]; if (document.activeElement !== el && +el.value !== v) el.value = v; }
     });
+    host.querySelectorAll('[data-live]').forEach(el => { const r = map[el.dataset.live]; if (!r) return; let t = ''; try { t = r.get(s); } catch (e) { } if (el.__t !== t) { el.__t = t; el.innerHTML = t; } });
     host.querySelectorAll('[data-val]').forEach(el => { el.textContent = s.vals[el.dataset.val] || ''; });
   }
   function setAll(open) { groups().forEach(g => { closed[g.id] = !open; }); build(); update(E.snap); }

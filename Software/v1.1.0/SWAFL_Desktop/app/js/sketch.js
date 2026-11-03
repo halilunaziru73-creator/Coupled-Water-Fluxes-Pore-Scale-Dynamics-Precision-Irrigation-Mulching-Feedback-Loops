@@ -12,10 +12,13 @@ const Sketch = (() => {
     crop: null, row: 0.75, plant: 0.3,
     soil: null, pan: false,
     sys: 'drip', sub: 'border', dep: 0, kind: 'inline', sprSys: 'solid', sprType: 'impact', dir: 'length',
-    intv: 2, sprSs: 12, sprSl: 18, auto: false,
+    intv: 2, sprSs: 12, sprSl: 18, auto: false, pd: { main: 90, sub: 63, lat: 16 },
     objs: [], cur: null, rect: null                              // greenhouses, plant beds, areas to irrigate, no-irrigation zones, plants and traps
   };
-  const OBJ = { gh: ['Greenhouse / polytunnel', '#1E88E5', 'rect'], bed: ['Plant bed', '#8D6E63', 'rect'], irr: ['Area to irrigate', '#00897B', 'poly'], noirr: ['No-irrigation zone', '#C62828', 'poly'], plant: ['Plant / tree', '#2E7D32', 'pt'], trap: ['Monitoring trap', '#6A1B9A', 'pt'] };
+  const OBJ = { gh: ['Greenhouse / polytunnel', '#1E88E5', 'rect'], bed: ['Plant bed', '#8D6E63', 'rect'], irr: ['Area to irrigate', '#00897B', 'poly'], noirr: ['No-irrigation zone', '#C62828', 'poly'], plant: ['Plant / tree', '#2E7D32', 'pt'], trap: ['Monitoring trap', '#6A1B9A', 'pt'],
+    main: ['Mainline pipe', '#0A246A', 'line'], sub: ['Submain pipe', '#1565C0', 'line'], lat: ['Lateral pipe', '#2E9BE0', 'line'], valve: ['Valve', '#F57C00', 'pt'], pump: ['Pump', '#AD1457', 'pt'], filter: ['Filter', '#00838F', 'pt'], tank: ['Tank', '#5D4037', 'pt'] };
+  const PIPE_D = { main: 90, sub: 63, lat: 16 }, PIPE_OPTS = { main: [50, 63, 75, 90, 110, 125, 160, 200], sub: [40, 50, 63, 75, 90, 110, 125], lat: [12, 16, 20, 25, 32, 40, 50] }, PIPE_C = { main: 140, sub: 140, lat: 150 };
+  const lineLen = P => { let t = 0; for (let i = 1; i < P.length; i++) t += m(len(P[i - 1], P[i])); return t; };
   const HIST = { u: [], r: [] };                                 // undo and redo (Ctrl+Z, Ctrl+Y)
   const snapS = () => JSON.stringify({ pts: S.pts, src: S.src, inlet: S.inlet, objs: S.objs });
   function pushH() { HIST.u.push(snapS()); if (HIST.u.length > 80) HIST.u.shift(); HIST.r = []; }
@@ -126,8 +129,8 @@ const Sketch = (() => {
   const rectPts = (a, b) => [{ x: a.x, y: a.y }, { x: b.x, y: a.y }, { x: b.x, y: b.y }, { x: a.x, y: b.y }];
   const inPoly = (P, x, y) => { let c = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const a = P[i], b = P[j]; if ((a.y > y) !== (b.y > y) && x < (b.x - a.x) * (y - a.y) / (b.y - a.y) + a.x) c = !c; } return c; };
   function objStats() {
-    const o = { gh: 0, bed: 0, irr: 0, noirr: 0, plant: 0, trap: 0, nGh: 0, nBed: 0, nIrr: 0, nNo: 0 };
-    S.objs.forEach(q => { if (q.t === 'plant' || q.t === 'trap') o[q.t]++; else { const a = polyA(q.pts); o[q.t] += a; o['n' + { gh: 'Gh', bed: 'Bed', irr: 'Irr', noirr: 'No' }[q.t]]++; } });
+    const o = { gh: 0, bed: 0, irr: 0, noirr: 0, plant: 0, trap: 0, nGh: 0, nBed: 0, nIrr: 0, nNo: 0, valve: 0, pump: 0, filter: 0, tank: 0, pipes: { main: 0, sub: 0, lat: 0 }, nPipe: 0 };
+    S.objs.forEach(q => { const k = OBJ[q.t][2]; if (k === 'pt') o[q.t]++; else if (k === 'line') { o.pipes[q.t] += lineLen(q.pts); o.nPipe++; } else { const a = polyA(q.pts); o[q.t] += a; o['n' + { gh: 'Gh', bed: 'Bed', irr: 'Irr', noirr: 'No' }[q.t]]++; } });
     return o;
   }
   // the area the design should irrigate: the drawn irrigation areas, else the field less the no-irrigation zones
@@ -136,6 +139,17 @@ const Sketch = (() => {
     if (!cv) return; const c = cv.getContext('2d'), k0 = cv.width / CW; c.setTransform(k0 * V.z, 0, 0, k0 * V.z, -V.x * k0 * V.z, -V.y * k0 * V.z);
     const one = (q, cur) => {
       const d = OBJ[q.t]; c.strokeStyle = d[1]; c.lineWidth = 2 / V.z; c.fillStyle = d[1] + (q.t === 'noirr' ? '30' : q.t === 'gh' ? '33' : '26');
+      if (OBJ[q.t][2] === 'line') {
+        const P = q.pts, w = 1.6 + (q.dia || 16) / 22; c.strokeStyle = d[1]; c.lineWidth = w / V.z; c.lineJoin = 'round'; c.lineCap = 'round'; c.setLineDash(q.t === 'lat' ? [] : []); c.beginPath(); P.forEach((p, i) => i ? c.lineTo(p.x, p.y) : c.moveTo(p.x, p.y)); c.stroke();
+        if (!cur && P.length > 1) { let tot = 0, seg = []; for (let i = 1; i < P.length; i++) { const l = len(P[i - 1], P[i]); seg.push(l); tot += l; } let h = tot / 2, i = 0; while (i < seg.length - 1 && h > seg[i]) { h -= seg[i]; i++; } const a = P[i], b = P[i + 1], f = seg[i] ? h / seg[i] : 0, mx = a.x + (b.x - a.x) * f, my = a.y + (b.y - a.y) * f, t = '\u00D8' + (q.dia || 16) + ' · ' + fmt(lineLen(P)) + ' m'; c.font = 'bold ' + (10 / V.z) + 'px Tahoma,Arial,sans-serif'; const tw = c.measureText(t).width + 6 / V.z; c.fillStyle = 'rgba(255,255,255,0.92)'; c.fillRect(mx - tw / 2, my - 15 / V.z, tw, 13 / V.z); c.fillStyle = d[1]; c.textAlign = 'center'; c.fillText(t, mx, my - 5 / V.z); c.textAlign = 'left'; }
+        return;
+      }
+      if (OBJ[q.t][2] === 'pt' && q.t !== 'plant' && q.t !== 'trap') {
+        const p0 = q.pts[0], r = 9 / V.z; c.fillStyle = '#FFFFFF'; c.strokeStyle = d[1]; c.lineWidth = 2 / V.z; c.beginPath();
+        if (q.t === 'valve') { c.moveTo(p0.x - r, p0.y - r * 0.7); c.lineTo(p0.x + r, p0.y + r * 0.7); c.lineTo(p0.x + r, p0.y - r * 0.7); c.lineTo(p0.x - r, p0.y + r * 0.7); c.closePath(); }
+        else if (q.t === 'pump') c.arc(p0.x, p0.y, r, 0, 7); else c.rect(p0.x - r, p0.y - r * 0.8, 2 * r, 1.6 * r);
+        c.fill(); c.stroke(); c.fillStyle = d[1]; c.font = 'bold ' + (10 / V.z) + 'px Tahoma,Arial,sans-serif'; c.textAlign = 'center'; if (q.t !== 'valve') c.fillText({ pump: 'P', filter: 'F', tank: 'T' }[q.t], p0.x, p0.y + 3.5 / V.z); c.fillText(d[0].split(' /')[0], p0.x, p0.y + 21 / V.z); c.textAlign = 'left'; return;
+      }
       if (q.t === 'plant' || q.t === 'trap') { const r = (q.t === 'plant' ? 5 : 6) / V.z; c.beginPath(); if (q.t === 'plant') c.arc(q.pts[0].x, q.pts[0].y, r, 0, 7); else { c.moveTo(q.pts[0].x, q.pts[0].y - r); c.lineTo(q.pts[0].x + r, q.pts[0].y + r); c.lineTo(q.pts[0].x - r, q.pts[0].y + r); c.closePath(); } c.fillStyle = d[1]; c.fill(); return; }
       const P = q.pts; if (!P.length) return; c.beginPath(); P.forEach((p, i) => i ? c.lineTo(p.x, p.y) : c.moveTo(p.x, p.y)); if (!cur && P.length > 2) { c.closePath(); c.fill(); } if (q.t === 'noirr' || cur) c.setLineDash([6 / V.z, 4 / V.z]); c.stroke(); c.setLineDash([]);
       if (q.t === 'gh' && !cur && P.length > 2) { c.lineWidth = 1 / V.z; for (let i = 1; i < 6; i++) { const f = i / 6; c.beginPath(); c.moveTo(P[0].x + (P[1].x - P[0].x) * f, P[0].y + (P[1].y - P[0].y) * f); c.lineTo(P[3].x + (P[2].x - P[3].x) * f, P[3].y + (P[2].y - P[3].y) * f); c.stroke(); } }
@@ -151,16 +165,21 @@ const Sketch = (() => {
     const d = OBJ[S.mode]; if (!d) return false; pushH();
     if (d[2] === 'pt') S.objs.push({ t: S.mode, pts: [q] });
     else if (d[2] === 'rect') { if (!S.rect) S.rect = { t: S.mode, a: q }; else { if (Math.abs(q.x - S.rect.a.x) > 2 && Math.abs(q.y - S.rect.a.y) > 2) S.objs.push({ t: S.mode, pts: rectPts(S.rect.a, q) }); else HIST.u.pop(); S.rect = null; } }
+    else if (d[2] === 'line') { if (!S.cur) S.cur = { t: S.mode, pts: [], dia: S.pd[S.mode] || PIPE_D[S.mode] }; S.cur.pts.push(q); }
     else { if (!S.cur) S.cur = { t: S.mode, pts: [] }; if (S.cur.pts.length > 2 && len(S.cur.pts[0], q) < 9 / V.z) { finishCur(); return true; } S.cur.pts.push(q); }
     info(); return true;
   }
-  function finishCur() { if (S.cur && S.cur.pts.length > 2) S.objs.push(S.cur); else if (S.cur) HIST.u.pop(); S.cur = null; draw(); info(); }
-  function objAt(p) { for (let i = S.objs.length - 1; i >= 0; i--) { const q = S.objs[i]; if (q.pts.length === 1) { if (len(q.pts[0], p) < 9 / V.z) return i; } else if (inPoly(q.pts, p.x, p.y)) return i; } return -1; }
+  function finishCur() { if (S.cur && OBJ[S.cur.t][2] === 'line') S.cur.pts = S.cur.pts.filter((p, i, a) => !i || len(p, a[i - 1]) > 2); if (S.cur && S.cur.pts.length >= (OBJ[S.cur.t][2] === 'line' ? 2 : 3)) S.objs.push(S.cur); else if (S.cur) HIST.u.pop(); S.cur = null; draw(); info(); }
+  function segD(p, a, b) { const dx = b.x - a.x, dy = b.y - a.y, L2 = dx * dx + dy * dy || 1, t = Math.max(0, Math.min(1, ((p.x - a.x) * dx + (p.y - a.y) * dy) / L2)); return Math.hypot(p.x - a.x - t * dx, p.y - a.y - t * dy); }
+  function objAt(p) { for (let i = S.objs.length - 1; i >= 0; i--) { const q = S.objs[i]; if (OBJ[q.t][2] === 'line') { for (let j = 1; j < q.pts.length; j++) if (segD(p, q.pts[j - 1], q.pts[j]) < 8 / V.z) return i; } else if (q.pts.length === 1) { if (len(q.pts[0], p) < 9 / V.z) return i; } else if (inPoly(q.pts, p.x, p.y)) return i; } return -1; }
   function objSummary() {
     const o = objStats(), a = [];
     if (o.nIrr) a.push('irrigate ' + fmt(o.irr / 10000, 3) + ' ha in ' + o.nIrr + ' area' + (o.nIrr > 1 ? 's' : '')); if (o.nNo) a.push('excluded ' + fmt(o.noirr) + ' m²');
     if (o.nGh) a.push(o.nGh + ' greenhouse' + (o.nGh > 1 ? 's' : '') + ' ' + fmt(o.gh) + ' m²'); if (o.nBed) a.push(o.nBed + ' bed' + (o.nBed > 1 ? 's' : '') + ' ' + fmt(o.bed) + ' m²');
-    if (o.plant) a.push(o.plant + ' plants'); if (o.trap) a.push(o.trap + ' traps'); return a.join(' · ');
+    if (o.plant) a.push(o.plant + ' plants'); if (o.trap) a.push(o.trap + ' traps');
+    if (o.nPipe) a.push('pipes: ' + ['main', 'sub', 'lat'].filter(k => o.pipes[k] > 0).map(k => ({ main: 'mainline', sub: 'submain', lat: 'laterals' }[k]) + ' ' + fmt(o.pipes[k]) + ' m').join(', '));
+    const fit = ['valve', 'pump', 'filter', 'tank'].filter(k => o[k]).map(k => o[k] + ' ' + k + (o[k] > 1 ? 's' : '')); if (fit.length) a.push(fit.join(', '));
+    return a.join(' · ');
   }
   // ------------------------------------------------------------------ the mouse: add, drag and type
   function scr(e) { const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) * CW / r.width, y: (e.clientY - r.top) * CH / r.height }; }
@@ -241,13 +260,13 @@ const Sketch = (() => {
     return '<h4>7. Summary</h4><div id="skSum">' + summary() + '</div>';
   }
   function summary() {
-    const g = geom(); if (!g) return '<p class="pnote">Draw the field first.</p>';
+    const g = geom(); if (!g) return pipeHtml() + '<p class="pnote">Draw the field first.</p>';
     const L = LIST || { crops: [], soils: [] }, cn = (L.crops.find(q => q[0] === S.crop) || [0, S.crop])[1], sn = (L.soils.find(q => q[0] === S.soil) || [0, S.soil])[1];
     const sysN = S.sys === 'sid' ? 'Surface irrigation: ' + ({ border: 'border strips', furrow: 'furrows', basin: 'basins' }[S.sub]) : S.sys === 'drip' ? 'Drip, laterals ' + (S.dep ? 'buried ' + S.dep + ' cm' : 'on the surface') : 'Sprinklers (' + S.sprSys + ', ' + S.sprType + ')';
     const nLat = S.sys === 'drip' ? Math.max(1, Math.floor(g.wid / S.row)) : S.sys === 'spr' ? Math.max(1, Math.floor(g.wid / S.sprSl)) : 0;
-    const rows = [['Field', fmt(g.area / 10000, 2) + ' ha, run ' + fmt(g.run) + ' m × width ' + fmt(g.wid) + ' m, slope ' + fmt(S.slopeDir === 'level' ? 0 : S.slope, 2) + ' %'], ['Water', S.srcType + ', lift ' + fmt(S.lift, 1) + ' m, ' + fmt(S.supply, 1) + ' L/s, ' + fmt(S.hours, 1) + ' h a day'], ['Mainline', S.src ? fmt(g.main) + ' m from the source to the inlet' : 'place the water source'], ['Crop', cn + ', rows ' + fmt(S.row, 2) + ' m, plants ' + fmt(S.plant, 2) + ' m'], ['Soil', sn + (S.pan ? ', compact layer below' : '')], ['System', sysN], ['Layout', (S.sys === 'sid' ? 'run' : 'laterals') + ' ' + fmt(g.run) + ' m ' + (S.dir === 'length' ? 'along the length' : 'across the field') + (nLat ? ', about ' + nLat + ' laterals' : '')]];
+    const rows = [['Field', fmt(g.area / 10000, 2) + ' ha, run ' + fmt(g.run) + ' m × width ' + fmt(g.wid) + ' m, slope ' + fmt(S.slopeDir === 'level' ? 0 : S.slope, 2) + ' %'], ['Water', S.srcType + ', lift ' + fmt(S.lift, 1) + ' m, ' + fmt(S.supply, 1) + ' L/s, ' + fmt(S.hours, 1) + ' h a day'], ['Mainline', S.objs.some(q => q.t === 'main') ? fmt(pipeHandOff().Lm) + ' m drawn, \u00D8 ' + pipeHandOff().Dm + ' mm' : S.src ? fmt(g.main) + ' m from the source to the inlet' : 'place the water source'], ['Crop', cn + ', rows ' + fmt(S.row, 2) + ' m, plants ' + fmt(S.plant, 2) + ' m'], ['Soil', sn + (S.pan ? ', compact layer below' : '')], ['System', sysN], ['Layout', (S.sys === 'sid' ? 'run' : 'laterals') + ' ' + fmt(g.run) + ' m ' + (S.dir === 'length' ? 'along the length' : 'across the field') + (nLat ? ', about ' + nLat + ' laterals' : '')]];
     if (S.objs.length) rows.push(['Drawn on the field', objSummary()]);
-    return '<table class="tbl" style="width:100%">' + rows.map(r => '<tr><td>' + r[0] + '</td><td><b>' + esc(r[1]) + '</b></td></tr>').join('') + '</table><p class="pnote">Press <b>Turn the sketch into the design</b>: the design layer opens with these inputs; check them and press Run simulation.</p>';
+    return '<table class="tbl" style="width:100%">' + rows.map(r => '<tr><td>' + r[0] + '</td><td><b>' + esc(r[1]) + '</b></td></tr>').join('') + '</table>' + pipeHtml() + '<p class="pnote">Press <b>Turn the sketch into the design</b>: the design layer opens with these inputs; check them and press Run simulation.</p>';
   }
   function readStep() {
     const v = id => { const e = document.getElementById(id); return e ? e.value : null; }, n = (id, d) => { const x = parseFloat(v(id)); return isFinite(x) ? x : d; };
@@ -274,7 +293,7 @@ const Sketch = (() => {
     UI.modal({ title: 'Field sketch to design', icon: 'pipe', width: 'min(1120px,97vw)', html:
       '<div class="skwrap"><div class="skleft"><div class="skbar"><div class="seg" id="skMode"><button data-m="field"' + (S.mode === 'field' ? ' class="on"' : '') + '>Field corners</button><button data-m="src"' + (S.mode === 'src' ? ' class="on"' : '') + '>Water source</button><button data-m="inlet"' + (S.mode === 'inlet' ? ' class="on"' : '') + '>Inlet</button><button data-m="pan"' + (S.mode === 'pan' ? ' class="on"' : '') + ' title="Move the drawing (also: right button, middle button or Shift and drag)">&#9995; Hand</button></div>' +
       '<button class="btn" id="skZin" title="Zoom in (mouse wheel up)">&#43;</button><button class="btn" id="skZout" title="Zoom out (mouse wheel down)">&minus;</button><button class="btn" id="skFit" title="Show the whole field">Fit</button><button class="btn pri" id="skMap" title="Find the farm on the satellite map, demarcate it and compute the vegetation and water indices">&#127757; Locate on the map</button>' +
-      '<button class="btn" id="skUndo">Undo corner</button><button class="btn" id="skClear">Clear</button><label>Grid square <select id="skScale">' + SC.map(v => '<option value="' + v + '"' + (v === S.scale ? ' selected' : '') + '>' + v + ' m</option>').join('') + '</select></label></div>' +
+      '<button class="btn" id="skUndo">Undo corner</button><button class="btn" id="skClear">Clear</button><label id="skPdL" style="display:none">Pipe diameter <select id="skPd"></select> mm</label><label>Grid square <select id="skScale">' + SC.map(v => '<option value="' + v + '"' + (v === S.scale ? ' selected' : '') + '>' + v + ' m</option>').join('') + '</select></label></div>' +
       '<div class="skcv"><canvas id="skCv" width="' + CW * 2 + '" height="' + CH * 2 + '"></canvas></div><div id="skInfo" class="skinfo"></div></div>' +
       '<div class="skright"><div class="seg skst" id="skSteps">' + STEPS.map((s, i) => '<button data-s="' + i + '">' + (i + 1) + '. ' + s + '</button>').join('') + '</div><div id="skQ" class="skq"></div>' +
       '<div class="skbtns"><button class="btn" id="skBack">Back</button><button class="btn" id="skNext">Next question</button></div></div></div>',
@@ -282,9 +301,10 @@ const Sketch = (() => {
     cv = document.getElementById('skCv'); wire(); setTimeout(() => { const P2 = S.pts.concat(S.src ? [S.src] : []); if (P2.some(p => p.x < 0 || p.y < 0 || p.x > CW || p.y > CH)) fitView(); }, 0);
     document.getElementById('skZin').onclick = () => zoomAt(1.25); document.getElementById('skZout').onclick = () => zoomAt(1 / 1.25); document.getElementById('skFit').onclick = fitView;
     document.getElementById('skMap').onclick = () => { if (typeof FieldMap !== 'undefined') FieldMap.open(); };
-    { const bar = document.getElementById('skMode'); Object.keys(OBJ).forEach(k => { const b = document.createElement('button'); b.dataset.m = k; b.textContent = OBJ[k][0].split(' /')[0]; b.title = OBJ[k][0] + (OBJ[k][2] === 'rect' ? ': click two opposite corners' : OBJ[k][2] === 'poly' ? ': click the corners, double-click or click the first corner to finish' : ': click to place'); b.style.borderBottom = '3px solid ' + OBJ[k][1]; if (S.mode === k) b.className = 'on'; bar.appendChild(b); }); bar.style.flexWrap = 'wrap'; }
+    { const bar = document.getElementById('skMode'); Object.keys(OBJ).forEach(k => { const b = document.createElement('button'); b.dataset.m = k; b.textContent = OBJ[k][0].split(' /')[0]; b.title = OBJ[k][0] + (OBJ[k][2] === 'rect' ? ': click two opposite corners' : OBJ[k][2] === 'poly' ? ': click the corners, double-click or click the first corner to finish' : OBJ[k][2] === 'line' ? ': click the points of the pipe along its route, double-click (or press Enter) to finish; the diameter is chosen in the list that appears' : ': click to place'); b.style.borderBottom = '3px solid ' + OBJ[k][1]; if (S.mode === k) b.className = 'on'; bar.appendChild(b); }); bar.style.flexWrap = 'wrap'; }
+    pdUpdate();
     if (!window.__skKeys) { window.__skKeys = true; document.addEventListener('keydown', e => { if (!document.getElementById('skCv')) return; if (/INPUT|SELECT|TEXTAREA/.test((e.target || {}).tagName || '')) return; if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'z') { e.preventDefault(); Sketch.undo(); } else if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'y' || (e.shiftKey && e.key.toLowerCase() === 'z'))) { e.preventDefault(); Sketch.redo(); } else if (e.key === 'Enter') Sketch.finish(); else if (e.key === 'Escape') Sketch.cancel(); }); }
-    document.getElementById('skMode').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S.mode = b.dataset.m; S.rect = null; if (S.cur) finishCur(); document.querySelectorAll('#skMode button').forEach(x => x.classList.toggle('on', x === b)); });
+    document.getElementById('skMode').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S.mode = b.dataset.m; S.rect = null; if (S.cur) finishCur(); document.querySelectorAll('#skMode button').forEach(x => x.classList.toggle('on', x === b)); pdUpdate(); });
     document.getElementById('skUndo').onclick = undo; { const b = document.createElement('button'); b.className = 'btn'; b.id = 'skRedo'; b.textContent = 'Redo'; b.title = 'Ctrl+Y'; document.getElementById('skUndo').after(b); b.onclick = redo; document.getElementById('skUndo').textContent = 'Undo'; document.getElementById('skUndo').title = 'Ctrl+Z'; }
     document.getElementById('skClear').onclick = () => { pushH(); S.objs = []; S.cur = null; S.rect = null; S.pts = []; S.src = null; S.inlet = null; S.geo = null; V.z = 1; V.x = V.y = 0; draw(); };
     document.getElementById('skScale').onchange = e => { const ns = +e.target.value, f = S.scale / ns; S.scale = ns; S.pts = S.pts.map(p => ({ x: p.x * f, y: p.y * f })); if (S.src) S.src = { x: S.src.x * f, y: S.src.y * f }; S.inlet = null; draw(); };
@@ -293,11 +313,44 @@ const Sketch = (() => {
     document.getElementById('skNext').onclick = () => { readStep(); S.step = S.step === STEPS.length - 1 ? 0 : S.step + 1; showStep(); };
     showStep();
   }
+  // the diameter list appears while a pipe tool is chosen; a new diameter is applied to the pipes of that kind already drawn
+  function pdUpdate() {
+    const L = document.getElementById('skPdL'), sel = document.getElementById('skPd'); if (!L || !sel) return; const k = S.mode, on = OBJ[k] && OBJ[k][2] === 'line'; L.style.display = on ? '' : 'none'; if (!on) return;
+    sel.innerHTML = PIPE_OPTS[k].map(v => '<option value="' + v + '"' + (v === (S.pd[k] || PIPE_D[k]) ? ' selected' : '') + '>' + v + '</option>').join('');
+    sel.onchange = () => { S.pd[k] = +sel.value; S.objs.forEach(q => { if (q.t === k) q.dia = +sel.value; }); draw(); info(); };
+  }
+  // the pipe network as drawn: length, diameter, flow, speed and friction loss of every pipe (Hazen-Williams), and the pump head it asks for
+  function pipeReport() {
+    const g = geom(), pipes = S.objs.filter(q => OBJ[q.t][2] === 'line'); if (!pipes.length) return null;
+    const Q = Math.max(0.1, S.supply), nl = g ? Math.max(1, Math.floor(g.wid / (S.sys === 'spr' ? S.sprSl : S.row))) : (pipes.filter(q => q.t === 'lat').length || 1), rows = []; let hfMain = 0, hfSub = 0, hfLat = 0;
+    const NAME = { main: 'Mainline', sub: 'Submain', lat: 'Lateral' }, ord = { main: 0, sub: 1, lat: 2 };
+    pipes.slice().sort((a, b) => ord[a.t] - ord[b.t]).forEach(q => {
+      const D = q.dia || PIPE_D[q.t], L = lineLen(q.pts), Qp = q.t === 'lat' ? Q / nl : Q, v = Qp / 1000 / (Math.PI * D * D / 4e6), hf0 = 10.67 * L * Math.pow(Qp / 1000, 1.852) / (Math.pow(PIPE_C[q.t], 1.852) * Math.pow(D / 1000, 4.871)), hf = q.t === 'main' ? hf0 : hf0 * 0.4;
+      if (q.t === 'main') hfMain += hf; else if (q.t === 'sub') hfSub += hf; else hfLat = Math.max(hfLat, hf);
+      const vmax = q.t === 'lat' ? 2 : 1.5, st = v > vmax ? 'too fast' : v < 0.3 ? 'very slow' : 'good';
+      rows.push([NAME[q.t], D, L, Qp, v, hf, st, v > vmax]);
+    });
+    const head = (S.sys === 'spr' ? 30 : 10) + 9, TDH = S.lift + hfMain + hfSub + hfLat + head, kW = 9.81 * Q / 1000 * TDH / 0.65;
+    return { rows, hfMain, hfSub, hfLat, TDH, kW, head, bad: rows.some(r => r[7]), Q };
+  }
+  function pipeHtml() {
+    const R = pipeReport(); if (!R) return '';
+    return '<p class="pnote"><b>Pipe network</b> (flow ' + fmt(R.Q, 1) + ' L/s; Hazen-Williams, C = 140 for the main and submain, 150 for the laterals; every lateral of the layout takes an equal share of the flow; a pipe marked too fast needs a wider diameter)</p><table class="tbl" style="width:100%"><tr><th>Pipe</th><th>&Oslash; mm</th><th>Length m</th><th>Flow L/s</th><th>Speed m/s</th><th>Loss m</th><th>Check</th></tr>' +
+      R.rows.map(r => '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td><td>' + fmt(r[2]) + '</td><td>' + fmt(r[3], 2) + '</td><td' + (r[7] ? ' style="color:#B3261E"' : '') + '>' + fmt(r[4], 2) + '</td><td>' + fmt(r[5], 2) + '</td><td>' + esc(r[6]) + '</td></tr>').join('') + '</table>' +
+      '<p class="pnote">Pump head asked by this network: lift ' + fmt(S.lift, 1) + ' m + friction ' + fmt(R.hfMain + R.hfSub + R.hfLat, 1) + ' m + working head and fittings ' + fmt(R.head) + ' m = <b>' + fmt(R.TDH, 1) + ' m</b>, about <b>' + fmt(R.kW, 1) + ' kW</b> at 65 % efficiency.' + (R.bad ? ' <span style="color:#B3261E">A pipe is too narrow for the flow: choose a wider diameter.</span>' : '') + '</p>';
+  }
+  // what the drawn pipes hand to the design: mainline length, mainline and submain diameter, lateral diameter
+  function pipeHandOff() {
+    const o = { Lm: 0, Dm: 0, Dsm: 0, Dl: 0, js: '' }, P = S.objs.filter(q => OBJ[q.t][2] === 'line'), big = k => { const a = P.filter(q => q.t === k).sort((x, y) => lineLen(y.pts) - lineLen(x.pts))[0]; return a ? a.dia || PIPE_D[k] : 0; };
+    o.Lm = Math.round(P.filter(q => q.t === 'main').reduce((a, q) => a + lineLen(q.pts), 0)); o.Dm = big('main'); o.Dsm = big('sub'); o.Dl = big('lat');
+    o.js = 'IRX.Dm0=' + o.Dm + ';IRX.Dsm0=' + o.Dsm + ';' + (o.Dl && S.sys === 'drip' ? 'DRP.D=' + Math.max(8, Math.min(40, o.Dl)) + ';' : '');
+    return o;
+  }
   function apply() {
     readStep(); const g = geom(); if (!g) { UI.toast('Draw the field first (at least three corners)'); return false; }
-    const cl = (v, a, b) => Math.max(a, Math.min(b, v)), ha = Math.max(0.0001, (S.objs.length ? irrArea() : g.area) / 10000), slope = S.slopeDir === 'level' ? 0 : S.slope, run = Math.round(g.run), wid = Math.round(g.wid), main = Math.round(S.src ? g.main : 120);
+    const cl = (v, a, b) => Math.max(a, Math.min(b, v)), ha = Math.max(0.0001, (S.objs.length ? irrArea() : g.area) / 10000), slope = S.slopeDir === 'level' ? 0 : S.slope, run = Math.round(g.run), wid = Math.round(g.wid), PH = pipeHandOff(), main = PH.Lm || Math.round(S.src ? g.main : 120);
     const st = {}; if (S.crop && S.crop !== LIST.crop) st.crop = S.crop; if (S.soil && S.soil !== LIST.soil) st.soil = S.soil;
-    const id = S.sys, common = 'IRX.lift=' + cl(S.lift, 0, 500) + ';IRX.Lm=' + cl(main, 0, 10000) + ';IRX.src=' + JSON.stringify(S.srcType === 'canal' || S.srcType === 'river' ? 'canal' : S.srcType === 'tank' ? 'tank' : 'well') + ';SPD.top=' + cl(S.hours, 1, 24) + ';SPD.pan=' + (S.pan ? 'true' : 'false') + ';if(window.__FARM)__FARM.auto=' + (S.auto ? 'true' : 'false') + ';';
+    const id = S.sys, common = PH.js + 'IRX.lift=' + cl(S.lift, 0, 500) + ';IRX.Lm=' + cl(main, 0, 10000) + ';IRX.src=' + JSON.stringify(S.srcType === 'canal' || S.srcType === 'river' ? 'canal' : S.srcType === 'tank' ? 'tank' : 'well') + ';SPD.top=' + cl(S.hours, 1, 24) + ';SPD.pan=' + (S.pan ? 'true' : 'false') + ';if(window.__FARM)__FARM.auto=' + (S.auto ? 'true' : 'false') + ';';
     let js;
     if (id === 'sid') { st.method = 'M02_Surface'; js = "(function(){sidSys('" + S.sub + "');SID.L=" + cl(run, 5, 3000) + ";SID.Wf=" + cl(wid, 1, 5000) + ";SID.S=" + cl(slope, 0.001, 10) + ";SID.Qs=" + cl(S.supply, 0.5, 2000) + (S.sub === 'furrow' ? ";SID.w=" + cl(S.row < 0.5 ? 0.75 : S.row, 0.3, 2.5) : '') + ";SID.preset=null;SID.autoQ=true;" + common + "})()"; }
     else if (id === 'drip') { const mm = { 15: 'M04_Drip10-20cm', 25: 'M06_Drip20-30cm', 45: 'M09_Drip40-50cm', 55: 'M10_Drip50-60cm' }[S.dep]; if (mm) st.method = mm;

@@ -42,7 +42,7 @@ ICON = {'01_install': ('start', '⚙'), '02_window': ('start', '▦'), '03_contr
   '06_control': ('layer', '☂'), '07_field': ('layer', '⊞'), '08_structure': ('layer', '☷'), '08b_phenotyping': ('layer', '☘'), '09_mulch': ('layer', '❦'), '10_loops': ('layer', '♻'),
   '11_surface': ('design', '☔'), '12_drip': ('design', '✚'), '13_sprinkler': ('design', '❄'),
   '14_dashboard': ('out', '▤'), '15_workflows': ('out', '✔'), '16_exports': ('out', '✎'), '17_limits': ('out', '⚠'), '18_runs': ('out', '⚑'),
-  '19_weather': ('data', '☀'), '20_field': ('data', '⊞'), '21_crops': ('data', '✿'), '22_seasonal': ('data', '◷'), '23_reports': ('out', '✎'),
+  '19_weather': ('data', '☀'), '20_field': ('data', '⊞'), '21_crops': ('data', '✿'), '22_seasonal': ('data', '◷'), '22b_layer_reference': ('layer', '☷'), '23_reports': ('out', '✎'),
   '24_changes': ('ref', '★'), '25_atlas': ('ref', '▥'),
   '26_daisy_overview': ('daisy', '⚘'), '27_daisy_data': ('daisy', '☀'), '28_daisy_ask': ('daisy', '❖'), '29_daisy_combos': ('daisy', '⚖'), '30_daisy_results': ('daisy', '▤'), '30z_daisy_flow': ('daisy', '⚑'), '31_daisy_build': ('daisy', '⚙'), '31b_daisy_learn': ('daisy', '✎'),
   '32_daisy_topics': ('daisy', '☰'), '33_daisy_params': ('daisy', '⚗'), '34_daisy_factors': ('daisy', '⚖'), '35_daisy_library': ('daisy', '❦'), '36_daisy_stations': ('daisy', '☁'), '37_daisy_index': ('daisy', '☰'), '38_daisy_help': ('daisy', '⚠'), '90_appendices': ('ref', '▦')}

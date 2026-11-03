@@ -1,6 +1,6 @@
 {
 "pdf": "SWAFL_Manual_v1.1.0.pdf",
-"pages": 1155,
+"pages": 1162,
 "sections": [
 {
 "level": 1,
@@ -1571,708 +1571,799 @@
 "page": 230
 },
 {
+"level": 2,
+"title": "Projecting the seasons after the last simulated one",
+"id": null,
+"file": "22_seasonal.md",
+"page": 232
+},
+{
+"level": 1,
+"title": "Reference of every layer: controls, properties and data sources",
+"id": null,
+"file": "22b_layer_reference.md",
+"page": 233
+},
+{
+"level": 2,
+"title": "The Properties that every layer shares",
+"id": null,
+"file": "22b_layer_reference.md",
+"page": 233
+},
+{
+"level": 2,
+"title": "Irrigation design: surface, drip and sprinkler with pipes",
+"id": null,
+"file": "22b_layer_reference.md",
+"page": 234
+},
+{
+"level": 3,
+"title": "Designing the pipes in the field sketch",
+"id": null,
+"file": "22b_layer_reference.md",
+"page": 234
+},
+{
+"level": 2,
+"title": "Irrigation control: sensor and trigger, trigger law",
+"id": null,
+"file": "22b_layer_reference.md",
+"page": 234
+},
+{
+"level": 2,
+"title": "Mulch and evaporation: mulch against bare soil, mulch control, evaporation physics, fate of saved water, regime map",
+"id": null,
+"file": "22b_layer_reference.md",
+"page": 235
+},
+{
+"level": 2,
+"title": "Soil structure and tillage: tillage and structure, soil hydraulic drivers, root structure",
+"id": null,
+"file": "22b_layer_reference.md",
+"page": 235
+},
+{
+"level": 2,
+"title": "Deterministic phenotyping",
+"id": null,
+"file": "22b_layer_reference.md",
+"page": 235
+},
+{
+"level": 2,
+"title": "Field water balance: field balance, soil plant and air, profile evolution",
+"id": null,
+"file": "22b_layer_reference.md",
+"page": 235
+},
+{
+"level": 2,
+"title": "Seasonal data: reliability over the seasons, full water balance, nitrogen budget",
+"id": null,
+"file": "22b_layer_reference.md",
+"page": 235
+},
+{
+"level": 2,
+"title": "Crops: crop water requirement",
+"id": null,
+"file": "22b_layer_reference.md",
+"page": 236
+},
+{
+"level": 2,
+"title": "Feedback loops",
+"id": null,
+"file": "22b_layer_reference.md",
+"page": 236
+},
+{
+"level": 2,
+"title": "Daisy model workbench",
+"id": null,
+"file": "22b_layer_reference.md",
+"page": 236
+},
+{
+"level": 2,
+"title": "Weather, field and map data",
+"id": null,
+"file": "22b_layer_reference.md",
+"page": 236
+},
+{
 "level": 1,
 "title": "Reports",
 "id": null,
 "file": "23_reports.md",
-"page": 232
+"page": 238
 },
 {
 "level": 2,
 "title": "Choosing the layers",
 "id": null,
 "file": "23_reports.md",
-"page": 232
+"page": 238
 },
 {
 "level": 2,
 "title": "What the report holds",
 "id": null,
 "file": "23_reports.md",
-"page": 232
+"page": 238
 },
 {
 "level": 2,
 "title": "The page and its numbers",
 "id": null,
 "file": "23_reports.md",
-"page": 233
+"page": 239
 },
 {
 "level": 2,
 "title": "Saving the outputs of a layer",
 "id": null,
 "file": "23_reports.md",
-"page": 233
+"page": 239
 },
 {
 "level": 1,
 "title": "What changed from version 1.0 to version 1.1",
 "id": null,
 "file": "24_changes.md",
-"page": 234
+"page": 240
 },
 {
 "level": 2,
 "title": "The window",
 "id": null,
 "file": "24_changes.md",
-"page": 234
+"page": 240
 },
 {
 "level": 2,
 "title": "Figures of experiments and the Daisy layers",
 "id": null,
 "file": "24_changes.md",
-"page": 235
+"page": 241
 },
 {
 "level": 2,
 "title": "The designs",
 "id": null,
 "file": "24_changes.md",
-"page": 237
+"page": 243
 },
 {
 "level": 2,
 "title": "The data and the models",
 "id": null,
 "file": "24_changes.md",
-"page": 237
+"page": 243
 },
 {
 "level": 2,
 "title": "Reports",
 "id": null,
 "file": "24_changes.md",
-"page": 237
+"page": 243
 },
 {
 "level": 2,
 "title": "The field on the map",
 "id": null,
 "file": "24_changes.md",
-"page": 237
+"page": 243
 },
 {
 "level": 2,
 "title": "The Daisy workbench",
 "id": null,
 "file": "24_changes.md",
-"page": 239
+"page": 245
 },
 {
 "level": 3,
 "title": "Scenarios, experiments, comparison and layers of the Daisy workbench (November 2026)",
 "id": null,
 "file": "24_changes.md",
-"page": 245
+"page": 251
+},
+{
+"level": 3,
+"title": "Projections, pipe design, linked irrigation settings and a steadier Daisy editor (November 2026)",
+"id": null,
+"file": "24_changes.md",
+"page": 251
 },
 {
 "level": 1,
 "title": "Screenshot atlas: every screen with its governing equations",
 "id": null,
 "file": "25_atlas.md",
-"page": 246
+"page": 253
 },
 {
 "level": 2,
 "title": "The window and its controls",
 "id": null,
 "file": "25_atlas.md",
-"page": 246
+"page": 253
 },
 {
 "level": 3,
 "title": "The welcome dialog",
 "id": null,
 "file": "25_atlas.md",
-"page": 246
+"page": 253
 },
 {
 "level": 3,
 "title": "The workbench",
 "id": null,
 "file": "25_atlas.md",
-"page": 246
+"page": 253
 },
 {
 "level": 3,
 "title": "The File menu",
 "id": null,
 "file": "25_atlas.md",
-"page": 250
+"page": 257
 },
 {
 "level": 3,
 "title": "The Edit menu",
 "id": null,
 "file": "25_atlas.md",
-"page": 251
+"page": 258
 },
 {
 "level": 3,
 "title": "The View menu",
 "id": null,
 "file": "25_atlas.md",
-"page": 252
+"page": 259
 },
 {
 "level": 3,
 "title": "The Tools menu",
 "id": null,
 "file": "25_atlas.md",
-"page": 253
+"page": 260
 },
 {
 "level": 3,
 "title": "The Refresh menu",
 "id": null,
 "file": "25_atlas.md",
-"page": 254
+"page": 261
 },
 {
 "level": 3,
 "title": "The Review menu",
 "id": null,
 "file": "25_atlas.md",
-"page": 255
+"page": 262
 },
 {
 "level": 3,
 "title": "The Run menu",
 "id": null,
 "file": "25_atlas.md",
-"page": 256
+"page": 263
 },
 {
 "level": 3,
 "title": "The Help menu",
 "id": null,
 "file": "25_atlas.md",
-"page": 257
+"page": 264
 },
 {
 "level": 3,
 "title": "The command palette (Ctrl+K)",
 "id": null,
 "file": "25_atlas.md",
-"page": 258
+"page": 265
 },
 {
 "level": 3,
 "title": "The Processing Toolbox",
 "id": null,
 "file": "25_atlas.md",
-"page": 259
+"page": 266
 },
 {
 "level": 3,
 "title": "The toolbar",
 "id": null,
 "file": "25_atlas.md",
-"page": 260
+"page": 267
 },
 {
 "level": 3,
 "title": "The status bar",
 "id": null,
 "file": "25_atlas.md",
-"page": 261
+"page": 268
 },
 {
 "level": 3,
 "title": "The Dashboard, Results tab",
 "id": null,
 "file": "25_atlas.md",
-"page": 262
+"page": 269
 },
 {
 "level": 3,
 "title": "The Dashboard, Design tab",
 "id": null,
 "file": "25_atlas.md",
-"page": 264
+"page": 271
 },
 {
 "level": 3,
 "title": "The Dashboard, Charts tab",
 "id": null,
 "file": "25_atlas.md",
-"page": 266
+"page": 273
 },
 {
 "level": 3,
 "title": "The Dashboard, Messages tab",
 "id": null,
 "file": "25_atlas.md",
-"page": 268
+"page": 275
 },
 {
 "level": 3,
 "title": "The Properties panel",
 "id": null,
 "file": "25_atlas.md",
-"page": 269
+"page": 276
 },
 {
 "level": 2,
 "title": "Surface irrigation design",
 "id": null,
 "file": "25_atlas.md",
-"page": 270
+"page": 277
 },
 {
 "level": 3,
 "title": "The whole layer: inputs and overview",
 "id": null,
 "file": "25_atlas.md",
-"page": 270
+"page": 277
 },
 {
 "level": 3,
 "title": "Layout in plan: the advance front, shaded by the depth already infiltrated",
 "id": null,
 "file": "25_atlas.md",
-"page": 274
+"page": 281
 },
 {
 "level": 3,
 "title": "Longitudinal section: water running over your soil and soaking in",
 "id": null,
 "file": "25_atlas.md",
-"page": 276
+"page": 283
 },
 {
 "level": 3,
 "title": "Hydrograph: inflow, infiltration and runoff through time",
 "id": null,
 "file": "25_atlas.md",
-"page": 279
+"page": 286
 },
 {
 "level": 3,
 "title": "Cross-section at the inlet: the wetted bulb in your soil, and the intake curve",
 "id": null,
 "file": "25_atlas.md",
-"page": 281
+"page": 288
 },
 {
 "level": 3,
 "title": "Advance and opportunity time",
 "id": null,
 "file": "25_atlas.md",
-"page": 284
+"page": 291
 },
 {
 "level": 3,
 "title": "Infiltrated depth along the field against the required depth Zn",
 "id": null,
 "file": "25_atlas.md",
-"page": 287
+"page": 294
 },
 {
 "level": 3,
 "title": "Performance indices and the water balance of one irrigation",
 "id": null,
 "file": "25_atlas.md",
-"page": 289
+"page": 296
 },
 {
 "level": 3,
 "title": "Design table: iterations toward an application efficiency of 85 % or more",
 "id": null,
 "file": "25_atlas.md",
-"page": 291
+"page": 298
 },
 {
 "level": 3,
 "title": "What the efficiency is most sensitive to",
 "id": null,
 "file": "25_atlas.md",
-"page": 293
+"page": 300
 },
 {
 "level": 3,
 "title": "What this means for the season and the farm",
 "id": null,
 "file": "25_atlas.md",
-"page": 294
+"page": 301
 },
 {
 "level": 3,
 "title": "Irrigation schedule: when to irrigate with this design",
-"id": null,
-"file": "25_atlas.md",
-"page": 296
-},
-{
-"level": 3,
-"title": "Intervals, efficiency and the advice in short",
-"id": null,
-"file": "25_atlas.md",
-"page": 297
-},
-{
-"level": 2,
-"title": "Drip irrigation design",
-"id": null,
-"file": "25_atlas.md",
-"page": 299
-},
-{
-"level": 3,
-"title": "The whole layer: inputs and overview",
-"id": null,
-"file": "25_atlas.md",
-"page": 299
-},
-{
-"level": 3,
-"title": "Soil moisture around the emitter: the driest, the average and the wettest emitter",
 "id": null,
 "file": "25_atlas.md",
 "page": 303
 },
 {
 "level": 3,
-"title": "Uniformity along the lateral: pressure falls with friction, so far emitters deliver less",
+"title": "Intervals, efficiency and the advice in short",
+"id": null,
+"file": "25_atlas.md",
+"page": 304
+},
+{
+"level": 2,
+"title": "Drip irrigation design",
 "id": null,
 "file": "25_atlas.md",
 "page": 306
 },
 {
 "level": 3,
-"title": "How the wetted bulb grows with the run time",
+"title": "The whole layer: inputs and overview",
 "id": null,
 "file": "25_atlas.md",
-"page": 309
+"page": 306
 },
 {
 "level": 3,
-"title": "Result for this design",
+"title": "Soil moisture around the emitter: the driest, the average and the wettest emitter",
 "id": null,
 "file": "25_atlas.md",
-"page": 311
+"page": 310
 },
 {
 "level": 3,
-"title": "Layout and infrastructure: source, pump, filter, mainline, valves, submain and laterals",
+"title": "Uniformity along the lateral: pressure falls with friction, so far emitters deliver less",
 "id": null,
 "file": "25_atlas.md",
 "page": 313
 },
 {
 "level": 3,
-"title": "Design table: iterations toward an application efficiency of 85 % or more",
+"title": "How the wetted bulb grows with the run time",
 "id": null,
 "file": "25_atlas.md",
 "page": 316
 },
 {
 "level": 3,
-"title": "What the efficiency is most sensitive to",
-"id": null,
-"file": "25_atlas.md",
-"page": 317
-},
-{
-"level": 3,
-"title": "What this means for the season and the farm",
+"title": "Result for this design",
 "id": null,
 "file": "25_atlas.md",
 "page": 318
 },
 {
 "level": 3,
-"title": "Irrigation schedule: when to irrigate with this design",
+"title": "Layout and infrastructure: source, pump, filter, mainline, valves, submain and laterals",
 "id": null,
 "file": "25_atlas.md",
 "page": 320
 },
 {
 "level": 3,
-"title": "Intervals, efficiency and the advice in short",
-"id": null,
-"file": "25_atlas.md",
-"page": 322
-},
-{
-"level": 2,
-"title": "Sprinkler design and pipes",
-"id": null,
-"file": "25_atlas.md",
-"page": 324
-},
-{
-"level": 3,
-"title": "The whole layer: inputs and overview",
-"id": null,
-"file": "25_atlas.md",
-"page": 324
-},
-{
-"level": 3,
-"title": "Layout in plan: depth infiltrated so far, from the overlapping spray patterns",
-"id": null,
-"file": "25_atlas.md",
-"page": 328
-},
-{
-"level": 3,
-"title": "Along the lateral: depth applied, depth infiltrated and where it ends up in the soil",
-"id": null,
-"file": "25_atlas.md",
-"page": 330
-},
-{
-"level": 3,
-"title": "Soil intake against the application rate: when the soil cannot keep up, water runs off",
-"id": null,
-"file": "25_atlas.md",
-"page": 333
-},
-{
-"level": 3,
-"title": "Result for this design",
-"id": null,
-"file": "25_atlas.md",
-"page": 335
-},
-{
-"level": 3,
-"title": "Does your design pass? The course checks",
-"id": null,
-"file": "25_atlas.md",
-"page": 337
-},
-{
-"level": 3,
-"title": "Kinds of sprinkler system",
-"id": null,
-"file": "25_atlas.md",
-"page": 339
-},
-{
-"level": 3,
-"title": "The sprinkler: parts and pressure class",
-"id": null,
-"file": "25_atlas.md",
-"page": 341
-},
-{
-"level": 3,
-"title": "The jet: trajectory angle, throw radius and droplet size",
-"id": null,
-"file": "25_atlas.md",
-"page": 343
-},
-{
-"level": 3,
-"title": "The water pattern of one sprinkler, and how overlap evens it out",
-"id": null,
-"file": "25_atlas.md",
-"page": 346
-},
-{
-"level": 3,
-"title": "Layouts: rectangular, square and triangular spacing for this sprinkler",
-"id": null,
-"file": "25_atlas.md",
-"page": 348
-},
-{
-"level": 3,
-"title": "What wind and soil allow",
-"id": null,
-"file": "25_atlas.md",
-"page": 350
-},
-{
-"level": 3,
-"title": "Catch-can test: measuring the uniformity the way it is done in the field",
-"id": null,
-"file": "25_atlas.md",
-"page": 352
-},
-{
-"level": 3,
-"title": "Soil water as a reservoir: interval, sets per day and the flow the field needs",
-"id": null,
-"file": "25_atlas.md",
-"page": 354
-},
-{
-"level": 3,
-"title": "Pipes, pump and the hydraulic grade line (the course sizing)",
-"id": null,
-"file": "25_atlas.md",
-"page": 356
-},
-{
-"level": 3,
-"title": "Layout and infrastructure: source, pump, filter, mainline, valves, submain and sprinkler laterals",
-"id": null,
-"file": "25_atlas.md",
-"page": 358
-},
-{
-"level": 3,
 "title": "Design table: iterations toward an application efficiency of 85 % or more",
 "id": null,
 "file": "25_atlas.md",
-"page": 361
+"page": 323
 },
 {
 "level": 3,
 "title": "What the efficiency is most sensitive to",
 "id": null,
 "file": "25_atlas.md",
-"page": 362
+"page": 324
 },
 {
 "level": 3,
 "title": "What this means for the season and the farm",
 "id": null,
 "file": "25_atlas.md",
-"page": 364
+"page": 325
 },
 {
 "level": 3,
 "title": "Irrigation schedule: when to irrigate with this design",
 "id": null,
 "file": "25_atlas.md",
-"page": 366
+"page": 327
 },
 {
 "level": 3,
 "title": "Intervals, efficiency and the advice in short",
 "id": null,
 "file": "25_atlas.md",
+"page": 329
+},
+{
+"level": 2,
+"title": "Sprinkler design and pipes",
+"id": null,
+"file": "25_atlas.md",
+"page": 331
+},
+{
+"level": 3,
+"title": "The whole layer: inputs and overview",
+"id": null,
+"file": "25_atlas.md",
+"page": 331
+},
+{
+"level": 3,
+"title": "Layout in plan: depth infiltrated so far, from the overlapping spray patterns",
+"id": null,
+"file": "25_atlas.md",
+"page": 335
+},
+{
+"level": 3,
+"title": "Along the lateral: depth applied, depth infiltrated and where it ends up in the soil",
+"id": null,
+"file": "25_atlas.md",
+"page": 337
+},
+{
+"level": 3,
+"title": "Soil intake against the application rate: when the soil cannot keep up, water runs off",
+"id": null,
+"file": "25_atlas.md",
+"page": 340
+},
+{
+"level": 3,
+"title": "Result for this design",
+"id": null,
+"file": "25_atlas.md",
+"page": 342
+},
+{
+"level": 3,
+"title": "Does your design pass? The course checks",
+"id": null,
+"file": "25_atlas.md",
+"page": 344
+},
+{
+"level": 3,
+"title": "Kinds of sprinkler system",
+"id": null,
+"file": "25_atlas.md",
+"page": 346
+},
+{
+"level": 3,
+"title": "The sprinkler: parts and pressure class",
+"id": null,
+"file": "25_atlas.md",
+"page": 348
+},
+{
+"level": 3,
+"title": "The jet: trajectory angle, throw radius and droplet size",
+"id": null,
+"file": "25_atlas.md",
+"page": 350
+},
+{
+"level": 3,
+"title": "The water pattern of one sprinkler, and how overlap evens it out",
+"id": null,
+"file": "25_atlas.md",
+"page": 353
+},
+{
+"level": 3,
+"title": "Layouts: rectangular, square and triangular spacing for this sprinkler",
+"id": null,
+"file": "25_atlas.md",
+"page": 355
+},
+{
+"level": 3,
+"title": "What wind and soil allow",
+"id": null,
+"file": "25_atlas.md",
+"page": 357
+},
+{
+"level": 3,
+"title": "Catch-can test: measuring the uniformity the way it is done in the field",
+"id": null,
+"file": "25_atlas.md",
+"page": 359
+},
+{
+"level": 3,
+"title": "Soil water as a reservoir: interval, sets per day and the flow the field needs",
+"id": null,
+"file": "25_atlas.md",
+"page": 361
+},
+{
+"level": 3,
+"title": "Pipes, pump and the hydraulic grade line (the course sizing)",
+"id": null,
+"file": "25_atlas.md",
+"page": 363
+},
+{
+"level": 3,
+"title": "Layout and infrastructure: source, pump, filter, mainline, valves, submain and sprinkler laterals",
+"id": null,
+"file": "25_atlas.md",
+"page": 365
+},
+{
+"level": 3,
+"title": "Design table: iterations toward an application efficiency of 85 % or more",
+"id": null,
+"file": "25_atlas.md",
 "page": 368
+},
+{
+"level": 3,
+"title": "What the efficiency is most sensitive to",
+"id": null,
+"file": "25_atlas.md",
+"page": 369
+},
+{
+"level": 3,
+"title": "What this means for the season and the farm",
+"id": null,
+"file": "25_atlas.md",
+"page": 371
+},
+{
+"level": 3,
+"title": "Irrigation schedule: when to irrigate with this design",
+"id": null,
+"file": "25_atlas.md",
+"page": 373
+},
+{
+"level": 3,
+"title": "Intervals, efficiency and the advice in short",
+"id": null,
+"file": "25_atlas.md",
+"page": 375
 },
 {
 "level": 2,
 "title": "Field balance",
 "id": null,
 "file": "25_atlas.md",
-"page": 370
-},
-{
-"level": 3,
-"title": "The whole layer, part by part",
-"id": null,
-"file": "25_atlas.md",
-"page": 376
-},
-{
-"level": 3,
-"title": "The layer through its playback",
-"id": null,
-"file": "25_atlas.md",
 "page": 377
 },
 {
 "level": 3,
-"title": "The controls of the layer, one state at a time",
-"id": null,
-"file": "25_atlas.md",
-"page": 379
-},
-{
-"level": 2,
-"title": "Soil, plant and air",
+"title": "The whole layer, part by part",
 "id": null,
 "file": "25_atlas.md",
 "page": 383
 },
 {
 "level": 3,
-"title": "The whole layer, part by part",
-"id": null,
-"file": "25_atlas.md",
-"page": 386
-},
-{
-"level": 3,
 "title": "The layer through its playback",
 "id": null,
 "file": "25_atlas.md",
-"page": 388
+"page": 384
 },
 {
 "level": 3,
 "title": "The controls of the layer, one state at a time",
 "id": null,
 "file": "25_atlas.md",
-"page": 391
+"page": 386
+},
+{
+"level": 2,
+"title": "Soil, plant and air",
+"id": null,
+"file": "25_atlas.md",
+"page": 390
+},
+{
+"level": 3,
+"title": "The whole layer, part by part",
+"id": null,
+"file": "25_atlas.md",
+"page": 393
+},
+{
+"level": 3,
+"title": "The layer through its playback",
+"id": null,
+"file": "25_atlas.md",
+"page": 395
+},
+{
+"level": 3,
+"title": "The controls of the layer, one state at a time",
+"id": null,
+"file": "25_atlas.md",
+"page": 398
 },
 {
 "level": 2,
 "title": "Profile evolution",
 "id": null,
 "file": "25_atlas.md",
-"page": 403
+"page": 410
 },
 {
 "level": 3,
 "title": "The whole layer, part by part",
 "id": null,
 "file": "25_atlas.md",
-"page": 405
+"page": 412
 },
 {
 "level": 3,
 "title": "The layer through its playback",
 "id": null,
 "file": "25_atlas.md",
-"page": 406
+"page": 413
 },
 {
 "level": 3,
 "title": "The controls of the layer, one state at a time",
 "id": null,
 "file": "25_atlas.md",
-"page": 408
+"page": 415
 },
 {
 "level": 2,
 "title": "Sensor and trigger",
 "id": null,
 "file": "25_atlas.md",
-"page": 411
+"page": 418
 },
 {
 "level": 3,
 "title": "The whole layer, part by part",
-"id": null,
-"file": "25_atlas.md",
-"page": 415
-},
-{
-"level": 3,
-"title": "The layer through its playback",
-"id": null,
-"file": "25_atlas.md",
-"page": 417
-},
-{
-"level": 3,
-"title": "The controls of the layer, one state at a time",
-"id": null,
-"file": "25_atlas.md",
-"page": 419
-},
-{
-"level": 2,
-"title": "Trigger law",
 "id": null,
 "file": "25_atlas.md",
 "page": 422
 },
 {
 "level": 3,
-"title": "The whole layer, part by part",
+"title": "The layer through its playback",
 "id": null,
 "file": "25_atlas.md",
 "page": 424
@@ -2286,7 +2377,7 @@
 },
 {
 "level": 2,
-"title": "Tillage and structure",
+"title": "Trigger law",
 "id": null,
 "file": "25_atlas.md",
 "page": 429
@@ -2300,105 +2391,105 @@
 },
 {
 "level": 3,
-"title": "The layer through its playback",
+"title": "The controls of the layer, one state at a time",
 "id": null,
 "file": "25_atlas.md",
 "page": 433
+},
+{
+"level": 2,
+"title": "Tillage and structure",
+"id": null,
+"file": "25_atlas.md",
+"page": 436
+},
+{
+"level": 3,
+"title": "The whole layer, part by part",
+"id": null,
+"file": "25_atlas.md",
+"page": 438
+},
+{
+"level": 3,
+"title": "The layer through its playback",
+"id": null,
+"file": "25_atlas.md",
+"page": 440
 },
 {
 "level": 3,
 "title": "The controls of the layer, one state at a time",
 "id": null,
 "file": "25_atlas.md",
-"page": 434
+"page": 441
 },
 {
 "level": 2,
 "title": "Soil hydraulic drivers",
 "id": null,
 "file": "25_atlas.md",
-"page": 441
+"page": 448
 },
 {
 "level": 3,
 "title": "The whole layer, part by part",
 "id": null,
 "file": "25_atlas.md",
-"page": 445
+"page": 452
 },
 {
 "level": 3,
 "title": "The controls of the layer, one state at a time",
 "id": null,
 "file": "25_atlas.md",
-"page": 448
+"page": 455
 },
 {
 "level": 2,
 "title": "Root structure",
 "id": null,
 "file": "25_atlas.md",
-"page": 454
+"page": 461
 },
 {
 "level": 3,
 "title": "The whole layer, part by part",
 "id": null,
 "file": "25_atlas.md",
-"page": 456
+"page": 463
 },
 {
 "level": 3,
 "title": "The controls of the layer, one state at a time",
 "id": null,
 "file": "25_atlas.md",
-"page": 461
+"page": 468
 },
 {
 "level": 2,
 "title": "Mulch against bare soil",
 "id": null,
 "file": "25_atlas.md",
-"page": 472
+"page": 479
 },
 {
 "level": 3,
 "title": "The whole layer, part by part",
 "id": null,
 "file": "25_atlas.md",
-"page": 475
+"page": 482
 },
 {
 "level": 3,
 "title": "The controls of the layer, one state at a time",
-"id": null,
-"file": "25_atlas.md",
-"page": 476
-},
-{
-"level": 2,
-"title": "Mulch control",
 "id": null,
 "file": "25_atlas.md",
 "page": 483
 },
 {
-"level": 3,
-"title": "The whole layer, part by part",
-"id": null,
-"file": "25_atlas.md",
-"page": 485
-},
-{
-"level": 3,
-"title": "The controls of the layer, one state at a time",
-"id": null,
-"file": "25_atlas.md",
-"page": 487
-},
-{
 "level": 2,
-"title": "Evaporation physics",
+"title": "Mulch control",
 "id": null,
 "file": "25_atlas.md",
 "page": 490
@@ -2408,53 +2499,46 @@
 "title": "The whole layer, part by part",
 "id": null,
 "file": "25_atlas.md",
-"page": 493
-},
-{
-"level": 3,
-"title": "The layer through its playback",
-"id": null,
-"file": "25_atlas.md",
-"page": 496
+"page": 492
 },
 {
 "level": 3,
 "title": "The controls of the layer, one state at a time",
 "id": null,
 "file": "25_atlas.md",
-"page": 505
+"page": 494
+},
+{
+"level": 2,
+"title": "Evaporation physics",
+"id": null,
+"file": "25_atlas.md",
+"page": 497
+},
+{
+"level": 3,
+"title": "The whole layer, part by part",
+"id": null,
+"file": "25_atlas.md",
+"page": 500
+},
+{
+"level": 3,
+"title": "The layer through its playback",
+"id": null,
+"file": "25_atlas.md",
+"page": 503
+},
+{
+"level": 3,
+"title": "The controls of the layer, one state at a time",
+"id": null,
+"file": "25_atlas.md",
+"page": 512
 },
 {
 "level": 2,
 "title": "Fate of saved water",
-"id": null,
-"file": "25_atlas.md",
-"page": 517
-},
-{
-"level": 3,
-"title": "The whole layer, part by part",
-"id": null,
-"file": "25_atlas.md",
-"page": 519
-},
-{
-"level": 2,
-"title": "Regime map",
-"id": null,
-"file": "25_atlas.md",
-"page": 521
-},
-{
-"level": 3,
-"title": "The whole layer, part by part",
-"id": null,
-"file": "25_atlas.md",
-"page": 522
-},
-{
-"level": 2,
-"title": "Feedback loops",
 "id": null,
 "file": "25_atlas.md",
 "page": 524
@@ -2464,5054 +2548,5082 @@
 "title": "The whole layer, part by part",
 "id": null,
 "file": "25_atlas.md",
+"page": 526
+},
+{
+"level": 2,
+"title": "Regime map",
+"id": null,
+"file": "25_atlas.md",
 "page": 528
+},
+{
+"level": 3,
+"title": "The whole layer, part by part",
+"id": null,
+"file": "25_atlas.md",
+"page": 529
+},
+{
+"level": 2,
+"title": "Feedback loops",
+"id": null,
+"file": "25_atlas.md",
+"page": 531
+},
+{
+"level": 3,
+"title": "The whole layer, part by part",
+"id": null,
+"file": "25_atlas.md",
+"page": 535
 },
 {
 "level": 3,
 "title": "The layer through its playback",
 "id": null,
 "file": "25_atlas.md",
-"page": 530
+"page": 537
 },
 {
 "level": 2,
 "title": "Screens added in version 1.1",
 "id": null,
 "file": "25_atlas.md",
-"page": 533
+"page": 540
 },
 {
 "level": 3,
 "title": "A design before its run",
 "id": null,
 "file": "25_atlas.md",
-"page": 533
+"page": 540
 },
 {
 "level": 3,
 "title": "The value window of a design input",
 "id": null,
 "file": "25_atlas.md",
-"page": 534
+"page": 541
 },
 {
 "level": 3,
 "title": "Import weather data",
 "id": null,
 "file": "25_atlas.md",
-"page": 534
+"page": 541
 },
 {
 "level": 3,
 "title": "Online weather for a location",
 "id": null,
 "file": "25_atlas.md",
-"page": 535
+"page": 542
 },
 {
 "level": 3,
 "title": "Save report as PDF: choose the layers",
 "id": null,
 "file": "25_atlas.md",
-"page": 535
+"page": 542
 },
 {
 "level": 3,
 "title": "Field sketch to design",
 "id": null,
 "file": "25_atlas.md",
-"page": 536
+"page": 543
 },
 {
 "level": 3,
 "title": "The irrigation systems compared on this field",
 "id": null,
 "file": "25_atlas.md",
-"page": 536
+"page": 543
 },
 {
 "level": 3,
 "title": "The Charts tab of a design after its run",
 "id": null,
 "file": "25_atlas.md",
-"page": 538
+"page": 545
 },
 {
 "level": 3,
 "title": "Dashboard: the Results tab",
 "id": null,
 "file": "25_atlas.md",
-"page": 539
+"page": 546
 },
 {
 "level": 3,
 "title": "Dashboard: the Design tab",
 "id": null,
 "file": "25_atlas.md",
-"page": 541
+"page": 548
 },
 {
 "level": 3,
 "title": "Dashboard: the Charts tab of the Field balance",
 "id": null,
 "file": "25_atlas.md",
-"page": 543
+"page": 550
 },
 {
 "level": 3,
 "title": "Dashboard: the Messages tab",
 "id": null,
 "file": "25_atlas.md",
-"page": 545
+"page": 552
 },
 {
 "level": 3,
 "title": "The surface irrigation design after its run",
 "id": null,
 "file": "25_atlas.md",
-"page": 547
+"page": 554
 },
 {
 "level": 3,
 "title": "The drip irrigation design after its run",
 "id": null,
 "file": "25_atlas.md",
-"page": 548
+"page": 555
 },
 {
 "level": 3,
 "title": "The sprinkler design after its run",
 "id": null,
 "file": "25_atlas.md",
-"page": 549
+"page": 556
 },
 {
 "level": 3,
 "title": "Crop water requirement",
 "id": null,
 "file": "25_atlas.md",
-"page": 550
+"page": 557
 },
 {
 "level": 3,
 "title": "Reliability over 20 seasons",
 "id": null,
 "file": "25_atlas.md",
-"page": 554
+"page": 561
 },
 {
 "level": 3,
 "title": "Full water balance",
 "id": null,
 "file": "25_atlas.md",
-"page": 557
+"page": 564
 },
 {
 "level": 3,
 "title": "Nitrogen budget",
 "id": null,
 "file": "25_atlas.md",
-"page": 560
+"page": 567
 },
 {
 "level": 2,
 "title": "Reverse index: where each equation appears on screen",
 "id": null,
 "file": "25_atlas.md",
-"page": 563
+"page": 570
 },
 {
 "level": 1,
 "title": "The Daisy workbench: overview",
 "id": "daisy-overview",
 "file": "26_daisy_overview.md",
-"page": 569
+"page": 576
 },
 {
 "level": 2,
 "title": "Daisy: governing equations and guiding principles",
 "id": "daisy-equations",
 "file": "26_daisy_overview.md",
-"page": 571
+"page": 578
 },
 {
 "level": 3,
 "title": "Soil water: the Richards equation",
 "id": null,
 "file": "26_daisy_overview.md",
-"page": 571
+"page": 578
 },
 {
 "level": 3,
 "title": "Water balance of the season",
 "id": null,
 "file": "26_daisy_overview.md",
-"page": 572
+"page": 579
 },
 {
 "level": 3,
 "title": "Evaporative demand",
 "id": null,
 "file": "26_daisy_overview.md",
-"page": 572
+"page": 579
 },
 {
 "level": 3,
 "title": "Soil heat and ice",
 "id": null,
 "file": "26_daisy_overview.md",
-"page": 572
+"page": 579
 },
 {
 "level": 3,
 "title": "Solutes: nitrate, ammonium and chemicals",
 "id": null,
 "file": "26_daisy_overview.md",
-"page": 572
+"page": 579
 },
 {
 "level": 3,
 "title": "Organic matter, mineralisation and nitrification",
 "id": null,
 "file": "26_daisy_overview.md",
-"page": 572
+"page": 579
 },
 {
 "level": 3,
 "title": "Denitrification and nitrous oxide",
 "id": null,
 "file": "26_daisy_overview.md",
-"page": 573
+"page": 580
 },
 {
 "level": 3,
 "title": "The crop: light, assimilates and growth",
 "id": null,
 "file": "26_daisy_overview.md",
-"page": 573
+"page": 580
 },
 {
 "level": 3,
 "title": "How the equations reach the screens",
 "id": null,
 "file": "26_daisy_overview.md",
-"page": 573
+"page": 580
 },
 {
 "level": 1,
 "title": "Input data",
 "id": "daisy-data",
 "file": "27_daisy_data.md",
-"page": 575
+"page": 582
 },
 {
 "level": 3,
 "title": "Input data: the starting screen",
 "id": null,
 "file": "27_daisy_data.md",
-"page": 575
+"page": 582
 },
 {
 "level": 3,
 "title": "Input data: online weather of a place",
 "id": null,
 "file": "27_daisy_data.md",
-"page": 577
+"page": 584
 },
 {
 "level": 3,
 "title": "Input data: a weather file of your own",
 "id": null,
 "file": "27_daisy_data.md",
-"page": 578
+"page": 585
 },
 {
 "level": 3,
 "title": "Input data: a Daisy weather station file read and checked",
 "id": null,
 "file": "27_daisy_data.md",
-"page": 579
+"page": 586
 },
 {
 "level": 3,
 "title": "Input data: my own soil",
 "id": null,
 "file": "27_daisy_data.md",
-"page": 580
+"page": 587
 },
 {
 "level": 3,
 "title": "Files: collecting Daisy output and set-up files",
 "id": null,
 "file": "27_daisy_data.md",
-"page": 581
+"page": 588
 },
 {
 "level": 3,
 "title": "Files: the bundled logs loaded",
 "id": null,
 "file": "27_daisy_data.md",
-"page": 582
+"page": 589
 },
 {
 "level": 3,
 "title": "Library: soil horizons",
 "id": null,
 "file": "27_daisy_data.md",
-"page": 583
+"page": 590
 },
 {
 "level": 3,
 "title": "Library: a soil horizon opened",
 "id": null,
 "file": "27_daisy_data.md",
-"page": 584
+"page": 591
 },
 {
 "level": 3,
 "title": "Library: the crops of the Daisy library",
 "id": null,
 "file": "27_daisy_data.md",
-"page": 585
+"page": 592
 },
 {
 "level": 3,
 "title": "Weather stations: the weather loaded in SWAFL is in the list",
 "id": null,
 "file": "27_daisy_data.md",
-"page": 586
+"page": 593
 },
 {
 "level": 3,
 "title": "Weather stations: the bundled stations and the annual rain",
 "id": null,
 "file": "27_daisy_data.md",
-"page": 586
+"page": 593
 },
 {
 "level": 3,
 "title": "Weather stations: another station and the open data of the Danish Meteorological Institute",
 "id": null,
 "file": "27_daisy_data.md",
-"page": 588
+"page": 595
 },
 {
 "level": 3,
 "title": "Weather stations: online weather of any place, for the analysis and the runs",
 "id": null,
 "file": "27_daisy_data.md",
-"page": 589
+"page": 596
 },
 {
 "level": 2,
 "title": "The weather stations of Daisy",
 "id": null,
 "file": "27_daisy_data.md",
-"page": 591
+"page": 598
 },
 {
 "level": 1,
 "title": "Experiments and scenarios: ask a question",
 "id": "daisy-ask",
 "file": "28_daisy_ask.md",
-"page": 592
+"page": 599
 },
 {
 "level": 2,
 "title": "Scenarios",
 "id": null,
 "file": "28_daisy_ask.md",
-"page": 592
+"page": 599
 },
 {
 "level": 3,
 "title": "The options of a scenario",
 "id": null,
 "file": "28_daisy_ask.md",
-"page": 592
+"page": 599
 },
 {
 "level": 3,
 "title": "Scenarios: choose the question",
 "id": null,
 "file": "28_daisy_ask.md",
-"page": 594
+"page": 601
 },
 {
 "level": 3,
 "title": "Scenarios: the 24 questions, and one more run from the library",
 "id": "daisy-scen-list",
 "file": "28_daisy_ask.md",
-"page": 595
+"page": 602
 },
 {
 "level": 3,
 "title": "Scenarios: irrigation",
 "id": null,
 "file": "28_daisy_ask.md",
-"page": 597
+"page": 604
 },
 {
 "level": 3,
 "title": "Scenarios: nitrogen",
 "id": null,
 "file": "28_daisy_ask.md",
-"page": 599
+"page": 606
 },
 {
 "level": 3,
 "title": "Scenarios: climate",
 "id": null,
 "file": "28_daisy_ask.md",
-"page": 601
+"page": 608
 },
 {
 "level": 3,
 "title": "Scenarios: a pesticide or tracer",
 "id": null,
 "file": "28_daisy_ask.md",
-"page": 603
+"page": 610
 },
 {
 "level": 3,
 "title": "Scenarios: soil texture",
 "id": null,
 "file": "28_daisy_ask.md",
-"page": 605
+"page": 612
 },
 {
 "level": 3,
 "title": "Scenarios: your own work",
 "id": null,
 "file": "28_daisy_ask.md",
-"page": 607
+"page": 614
 },
 {
 "level": 3,
 "title": "Scenarios: processes to draw as well",
 "id": null,
 "file": "28_daisy_ask.md",
-"page": 608
+"page": 615
 },
 {
 "level": 2,
 "title": "Experiments",
 "id": null,
 "file": "28_daisy_ask.md",
-"page": 609
+"page": 616
 },
 {
 "level": 3,
 "title": "Experiments: the starting screen",
 "id": null,
 "file": "28_daisy_ask.md",
-"page": 609
+"page": 616
 },
 {
 "level": 3,
 "title": "Soil hydraulic sensitivity",
 "id": "daisy-vg-factors",
 "file": "28_daisy_ask.md",
-"page": 610
+"page": 617
 },
 {
 "level": 3,
 "title": "Experiments: best combinations to start with",
 "id": null,
 "file": "28_daisy_ask.md",
-"page": 611
+"page": 618
 },
 {
 "level": 3,
 "title": "Experiments: the topics of the Daisy reference",
 "id": null,
 "file": "28_daisy_ask.md",
-"page": 612
+"page": 619
 },
 {
 "level": 3,
 "title": "Experiments: a topic with parameters you can vary",
 "id": null,
 "file": "28_daisy_ask.md",
-"page": 613
+"page": 620
 },
 {
 "level": 3,
 "title": "Experiments: import data and set-ups",
 "id": null,
 "file": "28_daisy_ask.md",
-"page": 614
+"page": 621
 },
 {
 "level": 3,
 "title": "Experiments: the plan before running",
 "id": null,
 "file": "28_daisy_ask.md",
-"page": 615
+"page": 622
 },
 {
 "level": 3,
 "title": "Experiments: what each row means, and the number of runs",
 "id": "daisy-exp-rows",
 "file": "28_daisy_ask.md",
-"page": 616
+"page": 623
 },
 {
 "level": 3,
 "title": "Experiments: the folder before it is saved, in colour",
 "id": "daisy-exp-folder",
 "file": "28_daisy_ask.md",
-"page": 618
+"page": 625
 },
 {
 "level": 3,
 "title": "Experiments: weather, soil and years of the experiment",
 "id": null,
 "file": "28_daisy_ask.md",
-"page": 621
+"page": 628
 },
 {
 "level": 3,
 "title": "Experiments: my experiments, ordered and ticked",
 "id": null,
 "file": "28_daisy_ask.md",
-"page": 622
+"page": 629
 },
 {
 "level": 1,
 "title": "The best combinations",
 "id": "daisy-combos",
 "file": "29_daisy_combos.md",
-"page": 623
+"page": 630
 },
 {
 "level": 3,
 "title": "Overhead, surface or drip irrigation",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 623
-},
-{
-"level": 3,
-"title": "Irrigation and nitrogen together",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 625
-},
-{
-"level": 3,
-"title": "When to irrigate: the trigger and the depth of the sensor",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 626
-},
-{
-"level": 3,
-"title": "How much and how fast: dose and duration",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 627
-},
-{
-"level": 3,
-"title": "Nitrogen fertiliser, irrigated and rainfed",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 628
-},
-{
-"level": 3,
-"title": "A drier, wetter or warmer year",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 629
-},
-{
-"level": 3,
-"title": "The irrigation season and a limit on water",
 "id": null,
 "file": "29_daisy_combos.md",
 "page": 630
 },
 {
 "level": 3,
-"title": "Which soil needs the most water",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 631
-},
-{
-"level": 3,
-"title": "Slow or fast irrigation: a constant water flux",
+"title": "Irrigation and nitrogen together",
 "id": null,
 "file": "29_daisy_combos.md",
 "page": 632
 },
 {
 "level": 3,
-"title": "Sensor depth against rooting depth",
+"title": "When to irrigate: the trigger and the depth of the sensor",
 "id": null,
 "file": "29_daisy_combos.md",
 "page": 633
 },
 {
 "level": 3,
-"title": "When the fertiliser is applied and how much",
+"title": "How much and how fast: dose and duration",
 "id": null,
 "file": "29_daisy_combos.md",
 "page": 634
 },
 {
 "level": 3,
-"title": "Warming with and without irrigation",
+"title": "Nitrogen fertiliser, irrigated and rainfed",
 "id": null,
 "file": "29_daisy_combos.md",
 "page": 635
 },
 {
 "level": 3,
-"title": "Tillage and the time and form of the fertiliser",
+"title": "A drier, wetter or warmer year",
 "id": null,
 "file": "29_daisy_combos.md",
 "page": 636
 },
 {
 "level": 3,
-"title": "Evapotranspiration model and radiation",
+"title": "The irrigation season and a limit on water",
 "id": null,
 "file": "29_daisy_combos.md",
 "page": 637
 },
 {
 "level": 3,
-"title": "A dry summer, a dry spring or a wet winter",
+"title": "Which soil needs the most water",
 "id": null,
 "file": "29_daisy_combos.md",
 "page": 638
 },
 {
 "level": 3,
-"title": "Sorption and half-life of a chemical",
+"title": "Slow or fast irrigation: a constant water flux",
 "id": null,
 "file": "29_daisy_combos.md",
 "page": 639
 },
 {
 "level": 3,
-"title": "Deficit irrigation: a water limit against the trigger",
+"title": "Sensor depth against rooting depth",
 "id": null,
 "file": "29_daisy_combos.md",
 "page": 640
 },
 {
 "level": 3,
-"title": "Rooting depth of the crop",
+"title": "When the fertiliser is applied and how much",
 "id": null,
 "file": "29_daisy_combos.md",
 "page": 641
 },
 {
 "level": 3,
-"title": "The same farm under other climates",
+"title": "Warming with and without irrigation",
 "id": null,
 "file": "29_daisy_combos.md",
 "page": 642
 },
 {
 "level": 3,
-"title": "Tillage against fertiliser form",
+"title": "Tillage and the time and form of the fertiliser",
 "id": null,
 "file": "29_daisy_combos.md",
 "page": 643
 },
 {
 "level": 3,
-"title": "The numerical settings of the bioclimate model",
+"title": "Evapotranspiration model and radiation",
 "id": null,
 "file": "29_daisy_combos.md",
 "page": 644
 },
 {
 "level": 3,
-"title": "The groundwater and the aquitard below the profile: aquitard",
+"title": "A dry summer, a dry spring or a wet winter",
 "id": null,
 "file": "29_daisy_combos.md",
 "page": 645
 },
 {
 "level": 3,
-"title": "Turnover of organic matter and the mineral nitrogen it releases",
+"title": "Sorption and half-life of a chemical",
 "id": null,
 "file": "29_daisy_combos.md",
 "page": 646
 },
 {
 "level": 3,
-"title": "Water at the soil surface: runoff and evaporation",
+"title": "Deficit irrigation: a water limit against the trigger",
 "id": null,
 "file": "29_daisy_combos.md",
 "page": 647
 },
 {
 "level": 3,
-"title": "The limits on the chemistry sink terms",
+"title": "Rooting depth of the crop",
 "id": null,
 "file": "29_daisy_combos.md",
 "page": 648
 },
 {
 "level": 3,
-"title": "Pipe drainage",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 650
-},
-{
-"level": 3,
-"title": "The groundwater and the aquitard below the profile: static",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 651
-},
-{
-"level": 2,
-"title": "All combinations in one table",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 652
-},
-{
-"level": 2,
-"title": "The plan of each combination",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 656
-},
-{
-"level": 3,
-"title": "Overhead, surface or drip irrigation",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 656
-},
-{
-"level": 3,
-"title": "Irrigation and nitrogen together",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 656
-},
-{
-"level": 3,
-"title": "When to irrigate: the trigger and the depth of the sensor",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 656
-},
-{
-"level": 3,
-"title": "How much and how fast: dose and duration",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 657
-},
-{
-"level": 3,
-"title": "Nitrogen fertiliser, irrigated and rainfed",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 657
-},
-{
-"level": 3,
-"title": "A drier, wetter or warmer year",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 657
-},
-{
-"level": 3,
-"title": "The irrigation season and a limit on water",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 657
-},
-{
-"level": 3,
-"title": "Which soil needs the most water",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 657
-},
-{
-"level": 3,
-"title": "Slow or fast irrigation: a constant water flux",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 657
-},
-{
-"level": 3,
-"title": "Sensor depth against rooting depth",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 657
-},
-{
-"level": 3,
-"title": "When the fertiliser is applied and how much",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 657
-},
-{
-"level": 3,
-"title": "Warming with and without irrigation",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 657
-},
-{
-"level": 3,
-"title": "Tillage and the time and form of the fertiliser",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 657
-},
-{
-"level": 3,
-"title": "Evapotranspiration model and radiation",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 657
-},
-{
-"level": 3,
-"title": "A dry summer, a dry spring or a wet winter",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 658
-},
-{
-"level": 3,
-"title": "Sorption and half-life of a chemical",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 658
-},
-{
-"level": 3,
-"title": "Deficit irrigation: a water limit against the trigger",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 658
-},
-{
-"level": 3,
-"title": "Rooting depth of the crop",
-"id": null,
-"file": "29_daisy_combos.md",
-"page": 658
-},
-{
-"level": 3,
 "title": "The same farm under other climates",
 "id": null,
 "file": "29_daisy_combos.md",
-"page": 658
+"page": 649
 },
 {
 "level": 3,
 "title": "Tillage against fertiliser form",
 "id": null,
 "file": "29_daisy_combos.md",
+"page": 650
+},
+{
+"level": 3,
+"title": "The numerical settings of the bioclimate model",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 651
+},
+{
+"level": 3,
+"title": "The groundwater and the aquitard below the profile: aquitard",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 652
+},
+{
+"level": 3,
+"title": "Turnover of organic matter and the mineral nitrogen it releases",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 653
+},
+{
+"level": 3,
+"title": "Water at the soil surface: runoff and evaporation",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 654
+},
+{
+"level": 3,
+"title": "The limits on the chemistry sink terms",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 655
+},
+{
+"level": 3,
+"title": "Pipe drainage",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 657
+},
+{
+"level": 3,
+"title": "The groundwater and the aquitard below the profile: static",
+"id": null,
+"file": "29_daisy_combos.md",
 "page": 658
+},
+{
+"level": 2,
+"title": "All combinations in one table",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 659
+},
+{
+"level": 2,
+"title": "The plan of each combination",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 663
+},
+{
+"level": 3,
+"title": "Overhead, surface or drip irrigation",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 663
+},
+{
+"level": 3,
+"title": "Irrigation and nitrogen together",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 663
+},
+{
+"level": 3,
+"title": "When to irrigate: the trigger and the depth of the sensor",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 663
+},
+{
+"level": 3,
+"title": "How much and how fast: dose and duration",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 664
+},
+{
+"level": 3,
+"title": "Nitrogen fertiliser, irrigated and rainfed",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 664
+},
+{
+"level": 3,
+"title": "A drier, wetter or warmer year",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 664
+},
+{
+"level": 3,
+"title": "The irrigation season and a limit on water",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 664
+},
+{
+"level": 3,
+"title": "Which soil needs the most water",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 664
+},
+{
+"level": 3,
+"title": "Slow or fast irrigation: a constant water flux",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 664
+},
+{
+"level": 3,
+"title": "Sensor depth against rooting depth",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 664
+},
+{
+"level": 3,
+"title": "When the fertiliser is applied and how much",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 664
+},
+{
+"level": 3,
+"title": "Warming with and without irrigation",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 664
+},
+{
+"level": 3,
+"title": "Tillage and the time and form of the fertiliser",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 664
+},
+{
+"level": 3,
+"title": "Evapotranspiration model and radiation",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 664
+},
+{
+"level": 3,
+"title": "A dry summer, a dry spring or a wet winter",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 665
+},
+{
+"level": 3,
+"title": "Sorption and half-life of a chemical",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 665
+},
+{
+"level": 3,
+"title": "Deficit irrigation: a water limit against the trigger",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 665
+},
+{
+"level": 3,
+"title": "Rooting depth of the crop",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 665
+},
+{
+"level": 3,
+"title": "The same farm under other climates",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 665
+},
+{
+"level": 3,
+"title": "Tillage against fertiliser form",
+"id": null,
+"file": "29_daisy_combos.md",
+"page": 665
 },
 {
 "level": 3,
 "title": "The numerical settings of the bioclimate model (topic 19)",
 "id": null,
 "file": "29_daisy_combos.md",
-"page": 658
+"page": 665
 },
 {
 "level": 3,
 "title": "The groundwater and the aquitard below the profile: aquitard (topic 45)",
 "id": null,
 "file": "29_daisy_combos.md",
-"page": 658
+"page": 665
 },
 {
 "level": 3,
 "title": "Turnover of organic matter and the mineral nitrogen it releases (topic 60)",
 "id": null,
 "file": "29_daisy_combos.md",
-"page": 658
+"page": 665
 },
 {
 "level": 3,
 "title": "Water at the soil surface: runoff and evaporation (topic 87)",
 "id": null,
 "file": "29_daisy_combos.md",
-"page": 658
+"page": 665
 },
 {
 "level": 3,
 "title": "The limits on the chemistry sink terms (topic 24)",
 "id": null,
 "file": "29_daisy_combos.md",
-"page": 659
+"page": 666
 },
 {
 "level": 3,
 "title": "Pipe drainage (topic 37)",
 "id": null,
 "file": "29_daisy_combos.md",
-"page": 659
+"page": 666
 },
 {
 "level": 3,
 "title": "The groundwater and the aquitard below the profile: static (topic 45)",
 "id": null,
 "file": "29_daisy_combos.md",
-"page": 659
+"page": 666
 },
 {
 "level": 1,
 "title": "Results and analysis",
 "id": "daisy-results",
 "file": "30_daisy_results.md",
-"page": 660
+"page": 667
 },
 {
 "level": 2,
 "title": "The five scenarios, with their results",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 660
+"page": 667
 },
 {
 "level": 2,
 "title": "Results of the irrigation scenario",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 660
+"page": 667
 },
 {
 "level": 3,
 "title": "Results of the irrigation question: the table of means",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 660
+"page": 667
 },
 {
 "level": 3,
 "title": "Yield of each crop, season by season (irrigation)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 662
+"page": 669
 },
 {
 "level": 3,
 "title": "Annual water balance (irrigation)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 663
+"page": 670
 },
 {
 "level": 3,
 "title": "Water content through the soil profile (irrigation)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 664
+"page": 671
 },
 {
 "level": 3,
 "title": "Soil water suction (pF) (irrigation)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 665
+"page": 672
 },
 {
 "level": 3,
 "title": "Crop growth: leaf area and stress (irrigation)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 666
+"page": 673
 },
 {
 "level": 3,
 "title": "Yield by crop: runs compared (irrigation)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 667
+"page": 674
 },
 {
 "level": 3,
 "title": "Water balance: runs compared (irrigation)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 668
+"page": 675
 },
 {
 "level": 3,
 "title": "Yield through the years: runs compared (irrigation)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 669
+"page": 676
 },
 {
 "level": 2,
 "title": "Results of the nitrogen scenario",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 670
+"page": 677
 },
 {
 "level": 3,
 "title": "Results of the nitrogen question: the table of means",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 670
+"page": 677
 },
 {
 "level": 3,
 "title": "Yield of each crop, season by season (nitrogen)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 671
+"page": 678
 },
 {
 "level": 3,
 "title": "Where does the nitrogen go? (nitrogen)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 672
+"page": 679
 },
 {
 "level": 3,
 "title": "Nitrate in the soil solution (nitrogen)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 673
+"page": 680
 },
 {
 "level": 3,
 "title": "Annual water balance (nitrogen)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 674
+"page": 681
 },
 {
 "level": 3,
 "title": "Yield by crop: runs compared (nitrogen)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 675
+"page": 682
 },
 {
 "level": 3,
 "title": "Nitrogen: runs compared (nitrogen)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 676
+"page": 683
 },
 {
 "level": 3,
 "title": "Response to the nitrogen rate (nitrogen)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 677
+"page": 684
 },
 {
 "level": 3,
 "title": "Yield through the years: runs compared (nitrogen)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 678
+"page": 685
 },
 {
 "level": 2,
 "title": "Results of the climate scenario",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 679
+"page": 686
 },
 {
 "level": 3,
 "title": "Results of the climate question: the table of means",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 679
+"page": 686
 },
 {
 "level": 3,
 "title": "Yield of each crop, season by season (climate)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 680
+"page": 687
 },
 {
 "level": 3,
 "title": "Annual water balance (climate)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 681
+"page": 688
 },
 {
 "level": 3,
 "title": "Crop growth: leaf area and stress (climate)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 682
+"page": 689
 },
 {
 "level": 3,
 "title": "Water content through the soil profile (climate)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 683
+"page": 690
 },
 {
 "level": 3,
 "title": "Yield by crop: runs compared (climate)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 684
+"page": 691
 },
 {
 "level": 3,
 "title": "Water balance: runs compared (climate)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 685
+"page": 692
 },
 {
 "level": 3,
 "title": "Nitrogen: runs compared (climate)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 686
+"page": 693
 },
 {
 "level": 3,
 "title": "Yield through the years: runs compared (climate)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 687
+"page": 694
 },
 {
 "level": 2,
 "title": "Results of the chemical scenario",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 688
+"page": 695
 },
 {
 "level": 3,
 "title": "Results of the chemical question: the table of means",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 688
+"page": 695
 },
 {
 "level": 3,
 "title": "Fate of the chemical, season by season (chemical)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 689
+"page": 696
 },
 {
 "level": 3,
 "title": "Chemical concentration through the soil profile (chemical)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 690
+"page": 697
 },
 {
 "level": 3,
 "title": "Annual water balance (chemical)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 691
+"page": 698
 },
 {
 "level": 3,
 "title": "Chemical fate: runs compared (chemical)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 692
+"page": 699
 },
 {
 "level": 3,
 "title": "Yield through the years: runs compared (chemical)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 693
+"page": 700
 },
 {
 "level": 2,
 "title": "Results of the soil scenario",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 694
+"page": 701
 },
 {
 "level": 3,
 "title": "Results of the soil question: the table of means",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 694
+"page": 701
 },
 {
 "level": 3,
 "title": "Yield of each crop, season by season (soil)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 695
+"page": 702
 },
 {
 "level": 3,
 "title": "Annual water balance (soil)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 696
+"page": 703
 },
 {
 "level": 3,
 "title": "Water content through the soil profile (soil)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 697
+"page": 704
 },
 {
 "level": 3,
 "title": "Soil water suction (pF) (soil)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 698
+"page": 705
 },
 {
 "level": 3,
 "title": "Nitrate in the soil solution (soil)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 699
+"page": 706
 },
 {
 "level": 3,
 "title": "Yield by crop: runs compared (soil)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 700
+"page": 707
 },
 {
 "level": 3,
 "title": "Water balance: runs compared (soil)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 701
+"page": 708
 },
 {
 "level": 3,
 "title": "Nitrogen: runs compared (soil)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 702
+"page": 709
 },
 {
 "level": 3,
 "title": "Yield through the years: runs compared (soil)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 703
+"page": 710
 },
 {
 "level": 2,
 "title": "Processes, plots, balance and tests",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 704
+"page": 711
 },
 {
 "level": 3,
 "title": "Processes: the map",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 704
+"page": 711
 },
 {
 "level": 3,
 "title": "Processes: Weather and bioclimate",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 707
+"page": 714
 },
 {
 "level": 3,
 "title": "Processes: Snowpack",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 709
+"page": 716
 },
 {
 "level": 3,
 "title": "Processes: Canopy, litter and ponded water",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 711
+"page": 718
 },
 {
 "level": 3,
 "title": "Processes: Soil water (Richards equation)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 713
+"page": 720
 },
 {
 "level": 3,
 "title": "Processes: Biopores (preferential flow)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 715
+"page": 722
 },
 {
 "level": 3,
 "title": "Processes: Drains and groundwater",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 716
+"page": 723
 },
 {
 "level": 3,
 "title": "Processes: Soil heat and ice",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 717
+"page": 724
 },
 {
 "level": 3,
 "title": "Processes: Nitrate (solute transport)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 719
+"page": 726
 },
 {
 "level": 3,
 "title": "Processes: Ammonium (sorbed and dissolved)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 720
+"page": 727
 },
 {
 "level": 3,
 "title": "Processes: Organic matter pools (AOM, SMB, SOM)",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 721
+"page": 728
 },
 {
 "level": 3,
 "title": "Processes: Carbon balance and residues",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 723
+"page": 730
 },
 {
 "level": 3,
 "title": "Processes: Denitrification and N2O",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 725
+"page": 732
 },
 {
 "level": 3,
 "title": "Processes: Photosynthesis and respiration",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 727
+"page": 734
 },
 {
 "level": 3,
 "title": "Processes: Crop growth: leaf, stem, root, storage organ",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 729
+"page": 736
 },
 {
 "level": 3,
 "title": "Plot: a time series",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 731
+"page": 738
 },
 {
 "level": 3,
 "title": "Plot: twenty-one kinds of figure",
 "id": "daisy-plot-views",
 "file": "30_daisy_results.md",
-"page": 733
+"page": 740
 },
 {
 "level": 3,
 "title": "Plot: annual values",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 734
+"page": 741
 },
 {
 "level": 3,
 "title": "Plot: depth profile through time",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 736
+"page": 743
 },
 {
 "level": 3,
 "title": "Plot: profile at a date, animated",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 737
+"page": 744
 },
 {
 "level": 3,
 "title": "Plot: figures of every result",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 738
+"page": 745
 },
 {
 "level": 3,
 "title": "Mass balance: the form",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 740
+"page": 747
 },
 {
 "level": 3,
 "title": "Mass balance: the control chart",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 741
+"page": 748
 },
 {
 "level": 3,
 "title": "Run comparison: what to compare",
 "id": "daisy-compare",
 "file": "30_daisy_results.md",
-"page": 742
+"page": 749
 },
 {
 "level": 3,
 "title": "Run comparison: the verdict and the table",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 742
+"page": 749
 },
 {
 "level": 3,
 "title": "Run comparison: the figures of a quantity",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 745
+"page": 752
 },
 {
 "level": 3,
 "title": "Double-blind comparison",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 746
+"page": 753
 },
 {
 "level": 2,
 "title": "How the figures are drawn",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 748
+"page": 755
 },
 {
 "level": 2,
 "title": "The raw output of Daisy",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 748
+"page": 755
 },
 {
 "level": 2,
 "title": "The efficiency indices",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 749
+"page": 756
 },
 {
 "level": 2,
 "title": "The figures of one experiment",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 749
+"page": 756
 },
 {
 "level": 2,
 "title": "Every log of every run",
 "id": "daisy-every-log",
 "file": "30_daisy_results.md",
-"page": 751
+"page": 758
 },
 {
 "level": 3,
 "title": "Monthly, yearly and cumulative",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 753
+"page": 760
 },
 {
 "level": 2,
 "title": "Why a run gave no results",
 "id": "daisy-why-failed",
 "file": "30_daisy_results.md",
-"page": 753
+"page": 760
 },
 {
 "level": 2,
 "title": "Every simulated experiment",
 "id": "daisy-all-experiments",
 "file": "30_daisy_results.md",
-"page": 754
+"page": 761
 },
 {
 "level": 2,
 "title": "The summary of an experiment",
 "id": "daisy-summary",
 "file": "30_daisy_results.md",
-"page": 755
+"page": 762
 },
 {
 "level": 2,
 "title": "Which combination is best",
 "id": "daisy-best",
 "file": "30_daisy_results.md",
-"page": 755
+"page": 762
 },
 {
 "level": 2,
 "title": "All the outputs of every run",
 "id": "daisy-raw-all",
 "file": "30_daisy_results.md",
-"page": 756
+"page": 763
 },
 {
 "level": 2,
 "title": "Viewing and editing the outputs of Daisy before they are saved",
 "id": "daisy-view-out",
 "file": "30_daisy_results.md",
-"page": 756
+"page": 763
 },
 {
 "level": 2,
 "title": "Saving the outputs and the raw files of Daisy together",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 757
+"page": 764
 },
 {
 "level": 2,
 "title": "Compare similar runs in Log plots",
 "id": "daisy-cmp-similar",
 "file": "30_daisy_results.md",
-"page": 758
+"page": 765
 },
 {
 "level": 2,
 "title": "The crops of the rotation",
 "id": null,
 "file": "30_daisy_results.md",
-"page": 758
+"page": 765
 },
 {
 "level": 1,
 "title": "From Daisy to the SWAFL project",
 "id": "daisy-flow",
 "file": "30z_daisy_flow.md",
-"page": 759
+"page": 766
 },
 {
 "level": 2,
 "title": "The guided path",
 "id": null,
 "file": "30z_daisy_flow.md",
-"page": 759
+"page": 766
 },
 {
 "level": 3,
 "title": "The guided path: step 1, Input data",
 "id": null,
 "file": "30z_daisy_flow.md",
-"page": 760
+"page": 767
 },
 {
 "level": 3,
 "title": "The guided path: step 4, Scenarios",
 "id": null,
 "file": "30z_daisy_flow.md",
-"page": 762
+"page": 769
 },
 {
 "level": 3,
 "title": "The guided path: step 6, Log plots",
 "id": null,
 "file": "30z_daisy_flow.md",
-"page": 763
+"page": 770
 },
 {
 "level": 3,
 "title": "To the SWAFL layers: the last step of the path",
 "id": null,
 "file": "30z_daisy_flow.md",
-"page": 764
+"page": 771
 },
 {
 "level": 2,
 "title": "What is passed to the SWAFL project",
 "id": null,
 "file": "30z_daisy_flow.md",
-"page": 766
+"page": 773
 },
 {
 "level": 2,
 "title": "The layers that read Daisy runs",
 "id": null,
 "file": "30z_daisy_flow.md",
-"page": 766
+"page": 773
 },
 {
 "level": 3,
 "title": "D5 to D8: chemicals, trade-offs, the return of irrigation and nitrous oxide",
 "id": null,
 "file": "30z_daisy_flow.md",
-"page": 772
+"page": 779
 },
 {
 "level": 3,
 "title": "To the SWAFL layers: every layer in one place",
 "id": null,
 "file": "30z_daisy_flow.md",
-"page": 777
+"page": 784
 },
 {
 "level": 2,
 "title": "What to expect and what not",
 "id": null,
 "file": "30z_daisy_flow.md",
-"page": 778
+"page": 785
 },
 {
 "level": 1,
 "title": "Build and test, and learn",
 "id": "daisy-build",
 "file": "31_daisy_build.md",
-"page": 779
+"page": 786
 },
 {
 "level": 3,
 "title": "Calibrate: the form",
 "id": null,
 "file": "31_daisy_build.md",
-"page": 779
+"page": 786
 },
 {
 "level": 3,
 "title": "Calibrate: a search followed live",
 "id": null,
 "file": "31_daisy_build.md",
-"page": 781
+"page": 788
 },
 {
 "level": 3,
 "title": "Process curves: the start",
 "id": null,
 "file": "31_daisy_build.md",
-"page": 782
+"page": 789
 },
 {
 "level": 3,
 "title": "Set-up editor: the empty editor",
 "id": null,
 "file": "31_daisy_build.md",
-"page": 783
+"page": 790
 },
 {
 "level": 3,
 "title": "Set-up editor: irrigation.dai open",
 "id": null,
 "file": "31_daisy_build.md",
-"page": 784
+"page": 791
 },
 {
 "level": 3,
 "title": "Set-up editor: the placeholders explained",
 "id": null,
 "file": "31_daisy_build.md",
-"page": 785
+"page": 792
 },
 {
 "level": 3,
 "title": "Model builder: any Daisy model as a form",
 "id": null,
 "file": "31_daisy_build.md",
-"page": 787
+"page": 794
 },
 {
 "level": 3,
 "title": "Reference manual: the attributes in the groups of the book",
 "id": null,
 "file": "31_daisy_build.md",
-"page": 788
+"page": 795
 },
 {
 "level": 3,
 "title": "Soil column: the form",
 "id": null,
 "file": "31_daisy_build.md",
-"page": 789
+"page": 796
 },
 {
 "level": 3,
 "title": "Soil column: results",
 "id": null,
 "file": "31_daisy_build.md",
-"page": 790
+"page": 797
 },
 {
 "level": 3,
 "title": "Model and documentation",
 "id": null,
 "file": "31_daisy_build.md",
-"page": 791
+"page": 798
 },
 {
 "level": 1,
 "title": "Learn the Daisy files: Common, .dai files and a sample experiment",
 "id": "daisy-learn",
 "file": "31b_daisy_learn.md",
-"page": 792
+"page": 799
 },
 {
 "level": 2,
 "title": "How a Daisy experiment is laid out",
 "id": null,
 "file": "31b_daisy_learn.md",
-"page": 792
+"page": 799
 },
 {
 "level": 3,
 "title": "Making an experiment, step by step",
 "id": null,
 "file": "31b_daisy_learn.md",
-"page": 793
+"page": 800
 },
 {
 "level": 2,
 "title": "The grammar of a .dai file",
 "id": null,
 "file": "31b_daisy_learn.md",
-"page": 793
+"page": 800
 },
 {
 "level": 2,
 "title": "The soil: Common/my-soil.dai",
 "id": null,
 "file": "31b_daisy_learn.md",
-"page": 794
+"page": 801
 },
 {
 "level": 2,
 "title": "The management: Common/my-management.dai",
 "id": null,
 "file": "31b_daisy_learn.md",
-"page": 796
+"page": 803
 },
 {
 "level": 2,
 "title": "The results: Common/my-logs.dai",
 "id": null,
 "file": "31b_daisy_learn.md",
-"page": 797
+"page": 804
 },
 {
 "level": 2,
 "title": "The weather: a .dwf file",
 "id": null,
 "file": "31b_daisy_learn.md",
-"page": 798
+"page": 805
 },
 {
 "level": 2,
 "title": "One run: run-rainfed/run.dai",
 "id": null,
 "file": "31b_daisy_learn.md",
-"page": 799
+"page": 806
 },
 {
 "level": 2,
 "title": "Run it and read the results",
 "id": null,
 "file": "31b_daisy_learn.md",
-"page": 800
+"page": 807
 },
 {
 "level": 2,
 "title": "When Daisy stops: messages and what to do",
 "id": null,
 "file": "31b_daisy_learn.md",
-"page": 801
+"page": 808
 },
 {
 "level": 2,
 "title": "Templates: one file, many runs",
 "id": null,
 "file": "31b_daisy_learn.md",
-"page": 802
+"page": 809
 },
 {
 "level": 2,
 "title": "The Common folder that the Experiments tab writes",
 "id": null,
 "file": "31b_daisy_learn.md",
-"page": 802
+"page": 809
 },
 {
 "level": 2,
 "title": "A checklist before you run",
 "id": null,
 "file": "31b_daisy_learn.md",
-"page": 803
+"page": 810
 },
 {
 "level": 1,
 "title": "The 107 reference topics",
 "id": "daisy-topics",
 "file": "32_daisy_topics.md",
-"page": 804
+"page": 811
 },
 {
 "level": 2,
 "title": "Topic 1: Introduction",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 804
+"page": 811
 },
 {
 "level": 2,
 "title": "Topic 2: Concepts",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 804
+"page": 811
 },
 {
 "level": 2,
 "title": "Topic 3: Nomenclature",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 804
+"page": 811
 },
 {
 "level": 2,
 "title": "Topic 4: The file parser model",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 805
+"page": 812
 },
 {
 "level": 2,
 "title": "Topic 5: Log File Generation",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 805
+"page": 812
 },
 {
 "level": 2,
 "title": "Topic 6: Error Messages",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 806
+"page": 813
 },
 {
 "level": 2,
 "title": "Topic 7: ABAproduction",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 806
+"page": 813
 },
 {
 "level": 2,
 "title": "Topic 8: AOM",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 807
+"page": 814
 },
 {
 "level": 2,
 "title": "Topic 9: AWI",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 808
+"page": 815
 },
 {
 "level": 2,
 "title": "Topic 10: ClayOM",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 808
+"page": 815
 },
 {
 "level": 2,
 "title": "Topic 11: MV Crop",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 808
+"page": 815
 },
 {
 "level": 2,
 "title": "Topic 12: MV Soil",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 809
+"page": 816
 },
 {
 "level": 2,
 "title": "Topic 13: SMB",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 809
+"page": 816
 },
 {
 "level": 2,
 "title": "Topic 14: SOM",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 809
+"page": 816
 },
 {
 "level": 2,
 "title": "Topic 15: action",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 810
+"page": 817
 },
 {
 "level": 2,
 "title": "Topic 16: adsorption",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 813
+"page": 820
 },
 {
 "level": 2,
 "title": "Topic 17: am",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 814
+"page": 821
 },
 {
 "level": 2,
 "title": "Topic 18: average",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 815
+"page": 822
 },
 {
 "level": 2,
 "title": "Topic 19: bioclimate",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 815
+"page": 822
 },
 {
 "level": 2,
 "title": "Topic 20: biopore",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 815
+"page": 822
 },
 {
 "level": 2,
 "title": "Topic 21: boolean",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 815
+"page": 822
 },
 {
 "level": 2,
 "title": "Topic 22: bound",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 816
+"page": 823
 },
 {
 "level": 2,
 "title": "Topic 23: chemical",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 816
+"page": 823
 },
 {
 "level": 2,
 "title": "Topic 24: chemistry",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 818
+"page": 825
 },
 {
 "level": 2,
 "title": "Topic 25: cloudiness",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 819
+"page": 826
 },
 {
 "level": 2,
 "title": "Topic 26: column",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 819
+"page": 826
 },
 {
 "level": 2,
 "title": "Topic 27: condedge",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 820
+"page": 827
 },
 {
 "level": 2,
 "title": "Topic 28: condition",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 820
+"page": 827
 },
 {
 "level": 2,
 "title": "Topic 29: crop",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 822
+"page": 829
 },
 {
 "level": 2,
 "title": "Topic 30: cstage",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 825
+"page": 832
 },
 {
 "level": 2,
 "title": "Topic 31: daisy/soil/soil.h",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 825
+"page": 832
 },
 {
 "level": 2,
 "title": "Topic 32: denprod",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 825
+"page": 832
 },
 {
 "level": 2,
 "title": "Topic 33: deposition",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 826
+"page": 833
 },
 {
 "level": 2,
 "title": "Topic 34: depth",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 826
+"page": 833
 },
 {
 "level": 2,
 "title": "Topic 35: difrad",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 826
+"page": 833
 },
 {
 "level": 2,
 "title": "Topic 36: domsorp",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 827
+"page": 834
 },
 {
 "level": 2,
 "title": "Topic 37: drain",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 827
+"page": 834
 },
 {
 "level": 2,
 "title": "Topic 38: draineqd",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 827
+"page": 834
 },
 {
 "level": 2,
 "title": "Topic 39: equilibrium",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 828
+"page": 835
 },
 {
 "level": 2,
 "title": "Topic 40: exchange",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 828
+"page": 835
 },
 {
 "level": 2,
 "title": "Topic 41: format",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 828
+"page": 835
 },
 {
 "level": 2,
 "title": "Topic 42: function",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 828
+"page": 835
 },
 {
 "level": 2,
 "title": "Topic 43: ghf",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 829
+"page": 836
 },
 {
 "level": 2,
 "title": "Topic 44: gnuplot",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 829
+"page": 836
 },
 {
 "level": 2,
 "title": "Topic 45: groundwater",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 830
+"page": 837
 },
 {
 "level": 2,
 "title": "Topic 46: heatrect",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 830
+"page": 837
 },
 {
 "level": 2,
 "title": "Topic 47: horizon",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 831
+"page": 838
 },
 {
 "level": 2,
 "title": "Topic 48: hydraulic",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 832
+"page": 839
 },
 {
 "level": 2,
 "title": "Topic 49: integer",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 833
+"page": 840
 },
 {
 "level": 2,
 "title": "Topic 50: listsum",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 834
+"page": 841
 },
 {
 "level": 2,
 "title": "Topic 51: litter",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 834
+"page": 841
 },
 {
 "level": 2,
 "title": "Topic 52: log",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 834
+"page": 841
 },
 {
 "level": 2,
 "title": "Topic 53: macro",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 836
+"page": 843
 },
 {
 "level": 2,
 "title": "Topic 54: mactrans",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 836
+"page": 843
 },
 {
 "level": 2,
 "title": "Topic 55: max exfiltration",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 836
+"page": 843
 },
 {
 "level": 2,
 "title": "Topic 56: movement",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 836
+"page": 843
 },
 {
 "level": 2,
 "title": "Topic 57: net radiation",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 837
+"page": 844
 },
 {
 "level": 2,
 "title": "Topic 58: nitrification",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 837
+"page": 844
 },
 {
 "level": 2,
 "title": "Topic 59: number",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 838
+"page": 845
 },
 {
 "level": 2,
 "title": "Topic 60: organic",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 839
+"page": 846
 },
 {
 "level": 2,
 "title": "Topic 61: parser",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 840
+"page": 847
 },
 {
 "level": 2,
 "title": "Topic 62: pet",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 840
+"page": 847
 },
 {
 "level": 2,
 "title": "Topic 63: phenology",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 841
+"page": 848
 },
 {
 "level": 2,
 "title": "Topic 64: photosynthesis",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 841
+"page": 848
 },
 {
 "level": 2,
 "title": "Topic 65: ponddamp",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 842
+"page": 849
 },
 {
 "level": 2,
 "title": "Topic 66: program",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 842
+"page": 849
 },
 {
 "level": 2,
 "title": "Topic 67: raddist",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 844
+"page": 851
 },
 {
 "level": 2,
 "title": "Topic 68: rainergy",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 844
+"page": 851
 },
 {
 "level": 2,
 "title": "Topic 69: rate",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 844
+"page": 851
 },
 {
 "level": 2,
 "title": "Topic 70: reaction",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 844
+"page": 851
 },
 {
 "level": 2,
 "title": "Topic 71: retention",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 846
+"page": 853
 },
 {
 "level": 2,
 "title": "Topic 72: root",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 846
+"page": 853
 },
 {
 "level": 2,
 "title": "Topic 73: rootdens",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 846
+"page": 853
 },
 {
 "level": 2,
 "title": "Topic 74: rubiscoN",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 847
+"page": 854
 },
 {
 "level": 2,
 "title": "Topic 75: rubiscoNdist",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 847
+"page": 854
 },
 {
 "level": 2,
 "title": "Topic 76: scope",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 848
+"page": 855
 },
 {
 "level": 2,
 "title": "Topic 77: scopesel",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 848
+"page": 855
 },
 {
 "level": 2,
 "title": "Topic 78: secondary",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 848
+"page": 855
 },
 {
 "level": 2,
 "title": "Topic 79: seed",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 848
+"page": 855
 },
 {
 "level": 2,
 "title": "Topic 80: select",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 849
+"page": 856
 },
 {
 "level": 2,
 "title": "Topic 81: solute uptake",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 849
+"page": 856
 },
 {
 "level": 2,
 "title": "Topic 82: solver",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 850
+"page": 857
 },
 {
 "level": 2,
 "title": "Topic 83: source",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 850
+"page": 857
 },
 {
 "level": 2,
 "title": "Topic 84: stomatacon",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 850
+"page": 857
 },
 {
 "level": 2,
 "title": "Topic 85: string",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 851
+"page": 858
 },
 {
 "level": 2,
 "title": "Topic 86: summary",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 851
+"page": 858
 },
 {
 "level": 2,
 "title": "Topic 87: surface",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 852
+"page": 859
 },
 {
 "level": 2,
 "title": "Topic 88: svat",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 853
+"page": 860
 },
 {
 "level": 2,
 "title": "Topic 89: tertiary",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 853
+"page": 860
 },
 {
 "level": 2,
 "title": "Topic 90: tortuosity",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 854
+"page": 861
 },
 {
 "level": 2,
 "title": "Topic 91: transform",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 854
+"page": 861
 },
 {
 "level": 2,
 "title": "Topic 92: transport",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 854
+"page": 861
 },
 {
 "level": 2,
 "title": "Topic 93: ui",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 855
+"page": 862
 },
 {
 "level": 2,
 "title": "Topic 94: uifilter",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 855
+"page": 862
 },
 {
 "level": 2,
 "title": "Topic 95: uiitem",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 855
+"page": 862
 },
 {
 "level": 2,
 "title": "Topic 96: unit",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 855
+"page": 862
 },
 {
 "level": 2,
 "title": "Topic 97: uz1d",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 862
+"page": 869
 },
 {
 "level": 2,
 "title": "Topic 98: uzmodel",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 862
+"page": 869
 },
 {
 "level": 2,
 "title": "Topic 99: uzrect",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 863
+"page": 870
 },
 {
 "level": 2,
 "title": "Topic 100: vegetation",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 863
+"page": 870
 },
 {
 "level": 2,
 "title": "Topic 101: vernalization",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 864
+"page": 871
 },
 {
 "level": 2,
 "title": "Topic 102: volume",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 864
+"page": 871
 },
 {
 "level": 2,
 "title": "Topic 103: weather",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 864
+"page": 871
 },
 {
 "level": 2,
 "title": "Topic 104: wse",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 865
+"page": 872
 },
 {
 "level": 2,
 "title": "Topic 105: xysource",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 865
+"page": 872
 },
 {
 "level": 2,
 "title": "Topic 106: zone",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 866
+"page": 873
 },
 {
 "level": 2,
 "title": "Topic 107: Fixed Components",
 "id": null,
 "file": "32_daisy_topics.md",
-"page": 866
+"page": 873
 },
 {
 "level": 1,
 "title": "The tested parameters",
 "id": "daisy-params",
 "file": "33_daisy_params.md",
-"page": 868
+"page": 875
 },
 {
 "level": 2,
 "title": "Irrigation subsoil permanent of Bioclimate",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 868
+"page": 875
 },
 {
 "level": 2,
 "title": "Litter water storage of Bioclimate",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 868
+"page": 875
 },
 {
 "level": 2,
 "title": "Noofintervals of Bioclimate",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 868
+"page": 875
 },
 {
 "level": 2,
 "title": "Canopy water storage of Bioclimate",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 869
+"page": 876
 },
 {
 "level": 2,
 "title": "Max svat iterations of Bioclimate",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 869
+"page": 876
 },
 {
 "level": 2,
 "title": "Max svat absolute difference of Bioclimate",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 869
+"page": 876
 },
 {
 "level": 2,
 "title": "Maxtdiff of Bioclimate",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 869
+"page": 876
 },
 {
 "level": 2,
 "title": "Maxediff of Bioclimate",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 870
+"page": 877
 },
 {
 "level": 2,
 "title": "Min sun angle of Bioclimate",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 870
+"page": 877
 },
 {
 "level": 2,
 "title": "Max sink total of Chemistry",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 870
+"page": 877
 },
 {
 "level": 2,
 "title": "Max sink solute of Chemistry",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 871
+"page": 878
 },
 {
 "level": 2,
 "title": "Max sink secondary of Chemistry",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 871
+"page": 878
 },
 {
 "level": 2,
 "title": "Min sink total of Chemistry",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 871
+"page": 878
 },
 {
 "level": 2,
 "title": "L of Drain",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 871
+"page": 878
 },
 {
 "level": 2,
 "title": "Rad of Drain",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 872
+"page": 879
 },
 {
 "level": 2,
 "title": "K aquitard of Groundwater",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 872
+"page": 879
 },
 {
 "level": 2,
 "title": "Z aquitard of Groundwater",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 872
+"page": 879
 },
 {
 "level": 2,
 "title": "Table of Groundwater",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 872
+"page": 879
 },
 {
 "level": 2,
 "title": "K nh4 of OrganicMatter",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 873
+"page": 880
 },
 {
 "level": 2,
 "title": "K no3 of OrganicMatter",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 873
+"page": 880
 },
 {
 "level": 2,
 "title": "Co2 threshold of OrganicMatter",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 873
+"page": 880
 },
 {
 "level": 2,
 "title": "Min am c of OrganicMatter",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 873
+"page": 880
 },
 {
 "level": 2,
 "title": "Min am n of OrganicMatter",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 874
+"page": 881
 },
 {
 "level": 2,
 "title": "Temperature change rate of Surface",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 874
+"page": 881
 },
 {
 "level": 2,
 "title": "Epfactor of Surface",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 874
+"page": 881
 },
 {
 "level": 2,
 "title": "Albedo dry of Surface",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 875
+"page": 882
 },
 {
 "level": 2,
 "title": "Albedo wet of Surface",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 875
+"page": 882
 },
 {
 "level": 2,
 "title": "Detentioncapacity of Surface",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 875
+"page": 882
 },
 {
 "level": 2,
 "title": "Reservoirconstant of Surface",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 875
+"page": 882
 },
 {
 "level": 2,
 "title": "Localdetentioncapacity of Surface",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 876
+"page": 883
 },
 {
 "level": 2,
 "title": "Z mixing of Surface",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 876
+"page": 883
 },
 {
 "level": 2,
 "title": "R mixing of Surface",
 "id": null,
 "file": "33_daisy_params.md",
-"page": 876
+"page": 883
 },
 {
 "level": 1,
 "title": "The factors and responses of the Experiments tab",
 "id": "daisy-factors",
 "file": "34_daisy_factors.md",
-"page": 877
+"page": 884
 },
 {
 "level": 2,
 "title": "Responses",
 "id": null,
 "file": "34_daisy_factors.md",
-"page": 877
+"page": 884
 },
 {
 "level": 2,
 "title": "Factors",
 "id": null,
 "file": "34_daisy_factors.md",
-"page": 877
+"page": 884
 },
 {
 "level": 3,
 "title": "How to fill in a row",
 "id": null,
 "file": "34_daisy_factors.md",
-"page": 877
+"page": 884
 },
 {
 "level": 3,
 "title": "The number of runs",
 "id": null,
 "file": "34_daisy_factors.md",
-"page": 878
+"page": 885
 },
 {
 "level": 3,
 "title": "All factors at a glance",
 "id": null,
 "file": "34_daisy_factors.md",
-"page": 878
+"page": 885
 },
 {
 "level": 3,
 "title": "Weather and climate",
 "id": null,
 "file": "34_daisy_factors.md",
-"page": 878
+"page": 885
 },
 {
 "level": 3,
 "title": "Nitrogen and tillage",
 "id": null,
 "file": "34_daisy_factors.md",
-"page": 879
+"page": 886
 },
 {
 "level": 3,
 "title": "Irrigation",
 "id": null,
 "file": "34_daisy_factors.md",
-"page": 879
+"page": 886
 },
 {
 "level": 3,
 "title": "Soil and crop",
 "id": null,
 "file": "34_daisy_factors.md",
-"page": 879
+"page": 886
 },
 {
 "level": 3,
 "title": "Chemicals",
 "id": null,
 "file": "34_daisy_factors.md",
-"page": 879
+"page": 886
 },
 {
 "level": 3,
 "title": "The Daisy library",
 "id": null,
 "file": "34_daisy_factors.md",
-"page": 879
+"page": 886
 },
 {
 "level": 3,
 "title": "Parameters of the Daisy reference",
 "id": null,
 "file": "34_daisy_factors.md",
-"page": 890
+"page": 897
 },
 {
 "level": 2,
 "title": "The Daisy library, all of it, in the experiments",
 "id": null,
 "file": "34_daisy_factors.md",
-"page": 899
+"page": 906
 },
 {
 "level": 1,
 "title": "The Daisy library",
 "id": "daisy-library",
 "file": "35_daisy_library.md",
-"page": 899
+"page": 906
 },
 {
 "level": 2,
 "title": "The text of every item",
 "id": "daisy-lib-source",
 "file": "35_daisy_library.md",
-"page": 901
+"page": 908
 },
 {
 "level": 2,
 "title": "Soil horizons",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 902
+"page": 909
 },
 {
 "level": 3,
 "title": "Horizon Ap_JB1",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 903
+"page": 910
 },
 {
 "level": 3,
 "title": "Horizon Ap_JB2",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 903
+"page": 910
 },
 {
 "level": 3,
 "title": "Horizon Ap_JB3",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 904
+"page": 911
 },
 {
 "level": 3,
 "title": "Horizon Ap_JB4",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 904
+"page": 911
 },
 {
 "level": 3,
 "title": "Horizon Ap_JB5",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 905
+"page": 912
 },
 {
 "level": 3,
 "title": "Horizon Ap_JB6",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 905
+"page": 912
 },
 {
 "level": 3,
 "title": "Horizon Ap_JB7",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 905
+"page": 912
 },
 {
 "level": 3,
 "title": "Horizon B_JB1",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 906
+"page": 913
 },
 {
 "level": 3,
 "title": "Horizon B_JB2",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 906
+"page": 913
 },
 {
 "level": 3,
 "title": "Horizon B_JB3",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 907
+"page": 914
 },
 {
 "level": 3,
 "title": "Horizon B_JB4",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 907
+"page": 914
 },
 {
 "level": 3,
 "title": "Horizon B_JB5",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 907
+"page": 914
 },
 {
 "level": 3,
 "title": "Horizon B_JB6",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 908
+"page": 915
 },
 {
 "level": 3,
 "title": "Horizon B_JB7",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 908
+"page": 915
 },
 {
 "level": 3,
 "title": "Horizon C_JB1",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 909
+"page": 916
 },
 {
 "level": 3,
 "title": "Horizon C_JB2",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 909
+"page": 916
 },
 {
 "level": 3,
 "title": "Horizon C_JB3",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 910
+"page": 917
 },
 {
 "level": 3,
 "title": "Horizon C_JB4",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 910
+"page": 917
 },
 {
 "level": 3,
 "title": "Horizon C_JB5",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 910
+"page": 917
 },
 {
 "level": 3,
 "title": "Horizon C_JB6",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 911
+"page": 918
 },
 {
 "level": 3,
 "title": "Horizon C_JB7",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 911
+"page": 918
 },
 {
 "level": 3,
 "title": "Horizon mini",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 912
+"page": 919
 },
 {
 "level": 3,
 "title": "Horizon Ap",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 912
+"page": 919
 },
 {
 "level": 3,
 "title": "Horizon B",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 912
+"page": 919
 },
 {
 "level": 3,
 "title": "Horizon C",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 913
+"page": 920
 },
 {
 "level": 3,
 "title": "Horizon Orh(g)_Valecov_PG",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 913
+"page": 920
 },
 {
 "level": 3,
 "title": "Horizon E(g)_Valecov_PG",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 913
+"page": 920
 },
 {
 "level": 3,
 "title": "Horizon E(g)/Ig_Valecov_PG",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 914
+"page": 921
 },
 {
 "level": 3,
 "title": "Horizon Ig_Valecov_PG",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 914
+"page": 921
 },
 {
 "level": 3,
 "title": "Horizon Pg_Valecov_PG",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 914
+"page": 921
 },
 {
 "level": 3,
 "title": "Horizon Askov Ap",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 914
+"page": 921
 },
 {
 "level": 3,
 "title": "Horizon Askov B",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 915
+"page": 922
 },
 {
 "level": 3,
 "title": "Horizon Askov C",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 915
+"page": 922
 },
 {
 "level": 3,
 "title": "Horizon Jyndevad Ap",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 916
+"page": 923
 },
 {
 "level": 3,
 "title": "Horizon Jyndevad C",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 916
+"page": 923
 },
 {
 "level": 3,
 "title": "Horizon Foulum AP",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 916
+"page": 923
 },
 {
 "level": 3,
 "title": "Horizon Foulum B",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 916
+"page": 923
 },
 {
 "level": 3,
 "title": "Horizon Foulum C",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 917
+"page": 924
 },
 {
 "level": 3,
 "title": "Horizon Taastrup Ap",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 917
+"page": 924
 },
 {
 "level": 3,
 "title": "Horizon Taastrup plow pan",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 917
+"page": 924
 },
 {
 "level": 3,
 "title": "Horizon Taastrup Bt",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 917
+"page": 924
 },
 {
 "level": 3,
 "title": "Horizon Taastrup C",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 918
+"page": 925
 },
 {
 "level": 3,
 "title": "Horizon Taastrup drain canyon",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 918
+"page": 925
 },
 {
 "level": 3,
 "title": "Horizon WP1 IT CER 2005 L50",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 919
+"page": 926
 },
 {
 "level": 3,
 "title": "Horizon WP1 IT CER 2005 L100",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 919
+"page": 926
 },
 {
 "level": 3,
 "title": "Horizon Ap_JB1_Cosby",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 919
+"page": 926
 },
 {
 "level": 3,
 "title": "Horizon C_JB1_Cosby",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 919
+"page": 926
 },
 {
 "level": 3,
 "title": "Horizon Ap_JB1_hypres",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 920
+"page": 927
 },
 {
 "level": 3,
 "title": "Horizon C_JB1_hypres",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 920
+"page": 927
 },
 {
 "level": 3,
 "title": "Horizon Jadorna 2004",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 920
+"page": 927
 },
 {
 "level": 3,
 "title": "Horizon Jaddeep 2004",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 920
+"page": 927
 },
 {
 "level": 3,
 "title": "Horizon Jaddeeper 2004",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 921
+"page": 928
 },
 {
 "level": 3,
 "title": "Horizon Jaddeepest 2004",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 921
+"page": 928
 },
 {
 "level": 3,
 "title": "Horizon A",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 921
+"page": 928
 },
 {
 "level": 3,
 "title": "Horizon Aor Most7",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 921
+"page": 928
 },
 {
 "level": 3,
 "title": "Horizon B Most7",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 922
+"page": 929
 },
 {
 "level": 3,
 "title": "Horizon C Most7",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 922
+"page": 929
 },
 {
 "level": 3,
 "title": "Horizon D Most7",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 922
+"page": 929
 },
 {
 "level": 3,
 "title": "Horizon S Most7",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 923
+"page": 930
 },
 {
 "level": 3,
 "title": "Horizon Ap_plowing",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 923
+"page": 930
 },
 {
 "level": 3,
 "title": "Horizon Jyn_15h",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 923
+"page": 930
 },
 {
 "level": 3,
 "title": "Horizon KarJyn_B",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 924
+"page": 931
 },
 {
 "level": 3,
 "title": "Horizon KarJyn_C",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 924
+"page": 931
 },
 {
 "level": 2,
 "title": "Fertilisers",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 925
+"page": 932
 },
 {
 "level": 2,
 "title": "Chemicals",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 927
+"page": 934
 },
 {
 "level": 3,
 "title": "Chemical PFAS",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 927
+"page": 934
 },
 {
 "level": 3,
 "title": "Chemical PFOS",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 927
+"page": 934
 },
 {
 "level": 3,
 "title": "Chemical PFOS_Guo",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 927
+"page": 934
 },
 {
 "level": 3,
 "title": "Chemical PFOA",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 927
+"page": 934
 },
 {
 "level": 3,
 "title": "Chemical PFOA_Guo",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 927
+"page": 934
 },
 {
 "level": 3,
 "title": "Chemical PFHxA",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 928
+"page": 935
 },
 {
 "level": 3,
 "title": "Chemical PFPeA",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 928
+"page": 935
 },
 {
 "level": 3,
 "title": "Chemical PFBS",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 928
+"page": 935
 },
 {
 "level": 3,
 "title": "Chemical PFBA",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 928
+"page": 935
 },
 {
 "level": 3,
 "title": "Chemical solid",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 929
+"page": 936
 },
 {
 "level": 3,
 "title": "Chemical classic",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 929
+"page": 936
 },
 {
 "level": 3,
 "title": "Chemical pesticide",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 929
-},
-{
-"level": 3,
-"title": "Chemical fungicide",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 929
-},
-{
-"level": 3,
-"title": "Chemical herbicide",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 929
-},
-{
-"level": 3,
-"title": "Chemical insecticide",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 930
-},
-{
-"level": 3,
-"title": "Chemical metabolite",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 930
-},
-{
-"level": 3,
-"title": "Chemical Tracer",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 930
-},
-{
-"level": 3,
-"title": "Chemical colloid",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 930
-},
-{
-"level": 3,
-"title": "Chemical Atrazine",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 930
-},
-{
-"level": 3,
-"title": "Chemical Bentazon",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 931
-},
-{
-"level": 3,
-"title": "Chemical IPU",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 931
-},
-{
-"level": 3,
-"title": "Chemical MCPP",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 931
-},
-{
-"level": 3,
-"title": "Chemical Pendimethalin",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 931
-},
-{
-"level": 3,
-"title": "Chemical Ioxynil",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 931
-},
-{
-"level": 3,
-"title": "Chemical 2,4-D",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 931
-},
-{
-"level": 3,
-"title": "Chemical Heptachlor",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 932
-},
-{
-"level": 3,
-"title": "Chemical DDT",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 932
-},
-{
-"level": 3,
-"title": "Chemical common",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 932
-},
-{
-"level": 3,
-"title": "Chemical pesticide",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 932
-},
-{
-"level": 3,
-"title": "Chemical herbicide",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 932
-},
-{
-"level": 3,
-"title": "Chemical colloid",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 932
-},
-{
-"level": 3,
-"title": "Chemical Pendimethalin-base",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 933
-},
-{
-"level": 3,
-"title": "Chemical Pendimethalin",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 933
-},
-{
-"level": 3,
-"title": "Chemical Pendimethalin-immobile",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 933
-},
-{
-"level": 3,
-"title": "Chemical Pendimethalin-colloid",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 933
-},
-{
-"level": 2,
-"title": "Crops",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 934
-},
-{
-"level": 3,
-"title": "Crop Beet; V1",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 934
-},
-{
-"level": 3,
-"title": "Crop Beetroot",
 "id": null,
 "file": "35_daisy_library.md",
 "page": 936
 },
 {
 "level": 3,
-"title": "Crop Broccoli",
+"title": "Chemical fungicide",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 936
+},
+{
+"level": 3,
+"title": "Chemical herbicide",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 936
+},
+{
+"level": 3,
+"title": "Chemical insecticide",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 937
+},
+{
+"level": 3,
+"title": "Chemical metabolite",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 937
+},
+{
+"level": 3,
+"title": "Chemical Tracer",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 937
+},
+{
+"level": 3,
+"title": "Chemical colloid",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 937
+},
+{
+"level": 3,
+"title": "Chemical Atrazine",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 937
+},
+{
+"level": 3,
+"title": "Chemical Bentazon",
 "id": null,
 "file": "35_daisy_library.md",
 "page": 938
 },
 {
 "level": 3,
-"title": "Crop Broccoli minus transplanted",
+"title": "Chemical IPU",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 938
+},
+{
+"level": 3,
+"title": "Chemical MCPP",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 938
+},
+{
+"level": 3,
+"title": "Chemical Pendimethalin",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 938
+},
+{
+"level": 3,
+"title": "Chemical Ioxynil",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 938
+},
+{
+"level": 3,
+"title": "Chemical 2,4-D",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 938
+},
+{
+"level": 3,
+"title": "Chemical Heptachlor",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 939
+},
+{
+"level": 3,
+"title": "Chemical DDT",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 939
+},
+{
+"level": 3,
+"title": "Chemical common",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 939
+},
+{
+"level": 3,
+"title": "Chemical pesticide",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 939
+},
+{
+"level": 3,
+"title": "Chemical herbicide",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 939
+},
+{
+"level": 3,
+"title": "Chemical colloid",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 939
+},
+{
+"level": 3,
+"title": "Chemical Pendimethalin-base",
 "id": null,
 "file": "35_daisy_library.md",
 "page": 940
 },
 {
 "level": 3,
-"title": "Crop Brussels sprouts",
+"title": "Chemical Pendimethalin",
 "id": null,
 "file": "35_daisy_library.md",
 "page": 940
 },
 {
 "level": 3,
-"title": "Crop Brussels sprouts minus transplanted",
+"title": "Chemical Pendimethalin-immobile",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 942
+"page": 940
 },
 {
 "level": 3,
-"title": "Crop Celeriac",
+"title": "Chemical Pendimethalin-colloid",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 940
+},
+{
+"level": 2,
+"title": "Crops",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 941
+},
+{
+"level": 3,
+"title": "Crop Beet; V1",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 941
+},
+{
+"level": 3,
+"title": "Crop Beetroot",
 "id": null,
 "file": "35_daisy_library.md",
 "page": 943
 },
 {
 "level": 3,
-"title": "Crop Celeriac minus transplanted",
+"title": "Crop Broccoli",
 "id": null,
 "file": "35_daisy_library.md",
 "page": 945
 },
 {
 "level": 3,
-"title": "Crop Froegraes",
+"title": "Crop Broccoli minus transplanted",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 946
+"page": 947
 },
 {
 "level": 3,
-"title": "Crop Graes",
+"title": "Crop Brussels sprouts",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 948
+"page": 947
 },
 {
 "level": 3,
-"title": "Crop Red fescue",
-"id": null,
-"file": "35_daisy_library.md",
-"page": 948
-},
-{
-"level": 3,
-"title": "Crop Silomajs",
+"title": "Crop Brussels sprouts minus transplanted",
 "id": null,
 "file": "35_daisy_library.md",
 "page": 949
 },
 {
 "level": 3,
-"title": "Crop Silomajs; Foulum",
+"title": "Crop Celeriac",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 951
+"page": 950
 },
 {
 "level": 3,
-"title": "Crop Aert",
+"title": "Crop Celeriac minus transplanted",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 952
+},
+{
+"level": 3,
+"title": "Crop Froegraes",
 "id": null,
 "file": "35_daisy_library.md",
 "page": 953
 },
 {
 "level": 3,
-"title": "Crop Rug",
+"title": "Crop Graes",
 "id": null,
 "file": "35_daisy_library.md",
 "page": 955
 },
 {
 "level": 3,
+"title": "Crop Red fescue",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 955
+},
+{
+"level": 3,
+"title": "Crop Silomajs",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 956
+},
+{
+"level": 3,
+"title": "Crop Silomajs; Foulum",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 958
+},
+{
+"level": 3,
+"title": "Crop Aert",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 960
+},
+{
+"level": 3,
+"title": "Crop Rug",
+"id": null,
+"file": "35_daisy_library.md",
+"page": 962
+},
+{
+"level": 3,
 "title": "Crop Vaarbyg",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 957
+"page": 964
 },
 {
 "level": 3,
 "title": "Crop Vinterbyg",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 959
+"page": 966
 },
 {
 "level": 3,
 "title": "Crop Vinterraps",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 961
+"page": 968
 },
 {
 "level": 3,
 "title": "Crop Vinterhvede",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 963
+"page": 970
 },
 {
 "level": 3,
 "title": "Crop Potato; SCRI minus AArhus",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 966
+"page": 973
 },
 {
 "level": 3,
 "title": "Crop Early potato",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 968
+"page": 975
 },
 {
 "level": 3,
 "title": "Crop Early white cabbage minus transplanted",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 969
+"page": 976
 },
 {
 "level": 3,
 "title": "Crop Fodder Beet",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 969
+"page": 976
 },
 {
 "level": 3,
 "title": "Crop Grass; V1",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 971
+"page": 978
 },
 {
 "level": 3,
 "title": "Crop Grass to grain",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 974
+"page": 981
 },
 {
 "level": 3,
 "title": "Crop Grass",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 974
+"page": 981
 },
 {
 "level": 3,
 "title": "Crop Grass",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 974
+"page": 981
 },
 {
 "level": 3,
 "title": "Crop Maize",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 978
+"page": 985
 },
 {
 "level": 3,
 "title": "Crop Pioneer Maize",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 980
+"page": 987
 },
 {
 "level": 3,
 "title": "Crop Ikuwala Maize",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 982
+"page": 989
 },
 {
 "level": 3,
 "title": "Crop Silage Maize",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 983
+"page": 990
 },
 {
 "level": 3,
 "title": "Crop Onion",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 983
+"page": 990
 },
 {
 "level": 3,
 "title": "Crop Onion minus planting of sets",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 985
+"page": 992
 },
 {
 "level": 3,
 "title": "Crop Pea; V1",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 986
+"page": 993
 },
 {
 "level": 3,
 "title": "Crop Pea",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 986
+"page": 993
 },
 {
 "level": 3,
 "title": "Crop Green Pea",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 990
+"page": 997
 },
 {
 "level": 3,
 "title": "Crop Potato; V1",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 990
+"page": 997
 },
 {
 "level": 3,
 "title": "Crop Potato; Koege",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 992
+"page": 999
 },
 {
 "level": 3,
 "title": "Crop Potato; SCRI",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 994
+"page": 1001
 },
 {
 "level": 3,
 "title": "Crop Potato; FertOrgaNic",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 996
+"page": 1003
 },
 {
 "level": 3,
 "title": "Crop Potato; Agria",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 998
+"page": 1005
 },
 {
 "level": 3,
 "title": "Crop Potato; Folva",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 998
+"page": 1005
 },
 {
 "level": 3,
 "title": "Crop Potato; Triada",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 999
+"page": 1006
 },
 {
 "level": 3,
 "title": "Crop Potato",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 999
+"page": 1006
 },
 {
 "level": 3,
 "title": "Crop Rye",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1000
+"page": 1007
 },
 {
 "level": 3,
 "title": "Crop Ryegrass",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1002
+"page": 1009
 },
 {
 "level": 3,
 "title": "Crop Spring Barley; V1",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1005
+"page": 1012
 },
 {
 "level": 3,
 "title": "Crop Spring Barley",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1005
+"page": 1012
 },
 {
 "level": 3,
 "title": "Crop Spring Barley; Foulum",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1009
+"page": 1016
 },
 {
 "level": 3,
 "title": "Crop Sugar Beet",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1010
+"page": 1017
 },
 {
 "level": 3,
 "title": "Crop Spring Rape; V1",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1012
+"page": 1019
 },
 {
 "level": 3,
 "title": "Crop Spring Rape",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1012
+"page": 1019
 },
 {
 "level": 3,
 "title": "Crop Sugar Beet",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1016
+"page": 1023
 },
 {
 "level": 3,
 "title": "Crop Spring Wheat",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1018
+"page": 1025
 },
 {
 "level": 3,
 "title": "Crop Winter Barley; V1",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1020
+"page": 1027
 },
 {
 "level": 3,
 "title": "Crop Winter Barley",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1020
+"page": 1027
 },
 {
 "level": 3,
 "title": "Crop Winter Barley; Koge",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1024
+"page": 1031
 },
 {
 "level": 3,
 "title": "Crop Winter Barley; Foulum",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1026
+"page": 1033
 },
 {
 "level": 3,
 "title": "Crop Wclover",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1027
+"page": 1034
 },
 {
 "level": 3,
 "title": "Crop White cabbage",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1029
+"page": 1036
 },
 {
 "level": 3,
 "title": "Crop White cabbage minus transplanted",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1031
+"page": 1038
 },
 {
 "level": 3,
 "title": "Crop Winter Rape; V1",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1032
+"page": 1039
 },
 {
 "level": 3,
 "title": "Crop Winter Rape",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1032
+"page": 1039
 },
 {
 "level": 3,
 "title": "Crop Winter Wheat; V1",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1037
+"page": 1044
 },
 {
 "level": 3,
 "title": "Crop Winter Wheat",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1037
+"page": 1044
 },
 {
 "level": 3,
 "title": "Crop Winter Wheat; Foulum",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1041
+"page": 1048
 },
 {
 "level": 3,
 "title": "Crop Winter Wheat JG",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1042
+"page": 1049
 },
 {
 "level": 3,
 "title": "Crop no stress Barley",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1044
+"page": 1051
 },
 {
 "level": 3,
 "title": "Crop Clovercz",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1044
+"page": 1051
 },
 {
 "level": 3,
 "title": "Crop Oatcz",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1044
+"page": 1051
 },
 {
 "level": 3,
 "title": "Crop Triticale",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1044
+"page": 1051
 },
 {
 "level": 3,
 "title": "Crop Rye-grasscz",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1044
+"page": 1051
 },
 {
 "level": 3,
 "title": "Crop Mustardcz",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1044
+"page": 1051
 },
 {
 "level": 3,
 "title": "Crop Potato; CER",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1044
+"page": 1051
 },
 {
 "level": 3,
 "title": "Crop Potato; Folva; SAFIR",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1044
+"page": 1051
 },
 {
 "level": 3,
 "title": "Crop SiteCrop",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1045
+"page": 1052
 },
 {
 "level": 3,
 "title": "Crop Lettuce",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1045
+"page": 1052
 },
 {
 "level": 3,
 "title": "Crop Maize_SK",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1045
+"page": 1052
 },
 {
 "level": 3,
 "title": "Crop Spring Barley_SK",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1046
+"page": 1053
 },
 {
 "level": 3,
 "title": "Crop Winter Wheat_SK",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1046
+"page": 1053
 },
 {
 "level": 3,
 "title": "Crop NewSB",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1046
+"page": 1053
 },
 {
 "level": 3,
 "title": "Crop Potato; Folva; ABA",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1047
+"page": 1054
 },
 {
 "level": 3,
 "title": "Crop Potato; Folva; PRD",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1047
+"page": 1054
 },
 {
 "level": 3,
 "title": "Crop Potato; Exp",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1047
+"page": 1054
 },
 {
 "level": 2,
 "title": "Actions",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1048
+"page": 1055
 },
 {
 "level": 3,
 "title": "Action OpenMI_fertigation",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1048
+"page": 1055
 },
 {
 "level": 3,
 "title": "Action MARKVAND",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1048
+"page": 1055
 },
 {
 "level": 3,
 "title": "Action plowing",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1048
+"page": 1055
 },
 {
 "level": 3,
 "title": "Action rotavation",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1049
+"page": 1056
 },
 {
 "level": 3,
 "title": "Action disk_harrowing",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1049
+"page": 1056
 },
 {
 "level": 3,
 "title": "Action stubble_cultivation",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1049
+"page": 1056
 },
 {
 "level": 3,
 "title": "Action seed_bed_preparation",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1049
+"page": 1056
 },
 {
 "level": 3,
 "title": "Action Barley no stress",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1049
+"page": 1056
 },
 {
 "level": 3,
 "title": "Action MyMan",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1049
+"page": 1056
 },
 {
 "level": 3,
 "title": "Action WW with PFAS cont slurry",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1050
+"page": 1057
 },
 {
 "level": 3,
 "title": "Action WW with PFAS cont irrigation",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1050
+"page": 1057
 },
 {
 "level": 3,
 "title": "Action PFAS cont WW",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1050
+"page": 1057
 },
 {
 "level": 3,
 "title": "Action harrowing",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1050
+"page": 1057
 },
 {
 "level": 3,
 "title": "Action roller",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1050
+"page": 1057
 },
 {
 "level": 3,
 "title": "Action sweep",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1050
+"page": 1057
 },
 {
 "level": 3,
 "title": "Action ridging",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1051
+"page": 1058
 },
 {
 "level": 3,
 "title": "Action haulm_destruction",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1051
+"page": 1058
 },
 {
 "level": 3,
 "title": "Action surface_levelling",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1051
+"page": 1058
 },
 {
 "level": 3,
 "title": "Action manual_burrying_drip_lines",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1051
+"page": 1058
 },
 {
 "level": 3,
 "title": "Action manual_removal_of_drip_lines",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1051
+"page": 1058
 },
 {
 "level": 3,
 "title": "Action WP1 CZ RISWC 2004 WARMUP",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1051
+"page": 1058
 },
 {
 "level": 3,
 "title": "Action SBarley w. MF",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1054
+"page": 1061
 },
 {
 "level": 3,
 "title": "Action SBarley w. OF",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1054
+"page": 1061
 },
 {
 "level": 3,
 "title": "Action WWheat w. MF",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1054
+"page": 1061
 },
 {
 "level": 3,
 "title": "Action WWheat w. OF",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1055
+"page": 1062
 },
 {
 "level": 3,
 "title": "Action WBarley w. MF",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1055
+"page": 1062
 },
 {
 "level": 3,
 "title": "Action WBarley w. MF & OF",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1055
+"page": 1062
 },
 {
 "level": 3,
 "title": "Action WBarley w. OF",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1055
+"page": 1062
 },
 {
 "level": 3,
 "title": "Action WRape w. MF",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1056
+"page": 1063
 },
 {
 "level": 3,
 "title": "Action WRape w. OF",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1056
+"page": 1063
 },
 {
 "level": 3,
 "title": "Action Maize w. MF & OF",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1056
+"page": 1063
 },
 {
 "level": 3,
 "title": "Action Pea w. no F",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1057
+"page": 1064
 },
 {
 "level": 3,
 "title": "Action SBarley & Pea",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1057
+"page": 1064
 },
 {
 "level": 3,
 "title": "Action Sowing Grass",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1057
+"page": 1064
 },
 {
 "level": 3,
 "title": "Action Grass minus 4 cuts",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1058
+"page": 1065
 },
 {
 "level": 3,
 "title": "Action Grass for cutting minus 2y",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1058
+"page": 1065
 },
 {
 "level": 3,
 "title": "Action SBarley w. catch crop",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1058
+"page": 1065
 },
 {
 "level": 3,
 "title": "Action Potato Management",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1059
+"page": 1066
 },
 {
 "level": 3,
 "title": "Action harrowing",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1059
+"page": 1066
 },
 {
 "level": 3,
 "title": "Action irrigation",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1059
+"page": 1066
 },
 {
 "level": 3,
 "title": "Action irrigation onion",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1059
+"page": 1066
 },
 {
 "level": 3,
 "title": "Action Beetroot management",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1059
+"page": 1066
 },
 {
 "level": 3,
 "title": "Action Broccoli minus transplanted management",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1060
+"page": 1067
 },
 {
 "level": 3,
 "title": "Action Brussels sprouts management",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1060
+"page": 1067
 },
 {
 "level": 3,
 "title": "Action Brussels sprouts minus transplanted management",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1060
+"page": 1067
 },
 {
 "level": 3,
 "title": "Action Celeriac minus transplanted management",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1061
+"page": 1068
 },
 {
 "level": 3,
 "title": "Action Early potato management",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1061
+"page": 1068
 },
 {
 "level": 3,
 "title": "Action Onion management",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1062
+"page": 1069
 },
 {
 "level": 3,
 "title": "Action Onion minus planting of sets management",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1062
+"page": 1069
 },
 {
 "level": 3,
 "title": "Action White cabbage minus transplanted management",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1062
+"page": 1069
 },
 {
 "level": 3,
 "title": "Action Early white cabbage minus transplanted management",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1063
+"page": 1070
 },
 {
 "level": 3,
 "title": "Action none",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1063
+"page": 1070
 },
 {
 "level": 3,
 "title": "Action irrigate_30_tensiometer_overhead",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1063
+"page": 1070
 },
 {
 "level": 3,
 "title": "Action irrigate_30_content_overhead",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1064
+"page": 1071
 },
 {
 "level": 3,
 "title": "Action it_irrigate_crop",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1064
+"page": 1071
 },
 {
 "level": 3,
 "title": "Action WP1 IT 2005 warmup",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1064
+"page": 1071
 },
 {
 "level": 3,
 "title": "Action Maize_99",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1067
+"page": 1074
 },
 {
 "level": 3,
 "title": "Action Potato_00",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1067
+"page": 1074
 },
 {
 "level": 3,
 "title": "Action SWheat_01",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1067
+"page": 1074
 },
 {
 "level": 3,
 "title": "Action WWheat_02",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1068
+"page": 1075
 },
 {
 "level": 3,
 "title": "Action SWheat_03",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1068
+"page": 1075
 },
 {
 "level": 3,
 "title": "Action WP1 PL 2004 warmup",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1068
+"page": 1075
 },
 {
 "level": 3,
 "title": "Action Lettuce_management",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1068
+"page": 1075
 },
 {
 "level": 3,
 "title": "Action warmup",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1069
+"page": 1076
 },
 {
 "level": 3,
 "title": "Action Crop_management",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1069
+"page": 1076
 },
 {
 "level": 3,
 "title": "Action irrigation_subsoil_full",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1069
+"page": 1076
 },
 {
 "level": 3,
 "title": "Action irrigation_subsoil_PRD_left",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1070
+"page": 1077
 },
 {
 "level": 3,
 "title": "Action irrigation_subsoil_PRD_right",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1071
+"page": 1078
 },
 {
 "level": 3,
 "title": "Action SBeet_management",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1071
+"page": 1078
 },
 {
 "level": 3,
 "title": "Action SBarley_94",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1072
+"page": 1079
 },
 {
 "level": 3,
 "title": "Action WWheat_95",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1072
+"page": 1079
 },
 {
 "level": 3,
 "title": "Action Maize_1996",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1073
+"page": 1080
 },
 {
 "level": 3,
 "title": "Action Maize_1997",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1073
+"page": 1080
 },
 {
 "level": 3,
 "title": "Action SBarley_98",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1074
+"page": 1081
 },
 {
 "level": 3,
 "title": "Action Pea_99",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1074
+"page": 1081
 },
 {
 "level": 3,
 "title": "Action Maize_2000",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1075
+"page": 1082
 },
 {
 "level": 3,
 "title": "Action S_Barley_01",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1075
+"page": 1082
 },
 {
 "level": 3,
 "title": "Action W_Wheat_02",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1076
+"page": 1083
 },
 {
 "level": 3,
 "title": "Action WP1 SK 2003 warmup",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1076
+"page": 1083
 },
 {
 "level": 3,
 "title": "Action sow_Spring_Barley",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1077
+"page": 1084
 },
 {
 "level": 3,
 "title": "Action MyMan",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1077
+"page": 1084
 },
 {
 "level": 3,
 "title": "Action DK 2005 PRD",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1077
+"page": 1084
 },
 {
 "level": 2,
 "title": "Programs",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1082
+"page": 1089
 },
 {
 "level": 2,
 "title": "Log types",
 "id": null,
 "file": "35_daisy_library.md",
-"page": 1083
+"page": 1090
 },
 {
 "level": 1,
 "title": "The weather of the bundled stations",
 "id": "daisy-stations",
 "file": "36_daisy_stations.md",
-"page": 1087
+"page": 1094
 },
 {
 "level": 2,
 "title": "CZRISWC03",
 "id": null,
 "file": "36_daisy_stations.md",
-"page": 1087
+"page": 1094
 },
 {
 "level": 3,
 "title": "Years of CZRISWC03",
 "id": null,
 "file": "36_daisy_stations.md",
-"page": 1087
+"page": 1094
 },
 {
 "level": 3,
 "title": "Months of CZRISWC03",
 "id": null,
 "file": "36_daisy_stations.md",
-"page": 1088
+"page": 1095
 },
 {
 "level": 2,
 "title": "Foulum",
 "id": null,
 "file": "36_daisy_stations.md",
-"page": 1088
+"page": 1095
 },
 {
 "level": 3,
 "title": "Years of Foulum",
 "id": null,
 "file": "36_daisy_stations.md",
-"page": 1089
+"page": 1096
 },
 {
 "level": 3,
 "title": "Months of Foulum",
 "id": null,
 "file": "36_daisy_stations.md",
-"page": 1089
+"page": 1096
 },
 {
 "level": 2,
 "title": "Jyndevad",
 "id": null,
 "file": "36_daisy_stations.md",
-"page": 1089
+"page": 1096
 },
 {
 "level": 3,
 "title": "Years of Jyndevad",
 "id": null,
 "file": "36_daisy_stations.md",
-"page": 1090
+"page": 1097
 },
 {
 "level": 3,
 "title": "Months of Jyndevad",
 "id": null,
 "file": "36_daisy_stations.md",
-"page": 1090
+"page": 1097
 },
 {
 "level": 2,
 "title": "Taastrup",
 "id": null,
 "file": "36_daisy_stations.md",
-"page": 1090
+"page": 1097
 },
 {
 "level": 3,
 "title": "Years of Taastrup",
 "id": null,
 "file": "36_daisy_stations.md",
-"page": 1091
+"page": 1098
 },
 {
 "level": 3,
 "title": "Months of Taastrup",
 "id": null,
 "file": "36_daisy_stations.md",
-"page": 1092
+"page": 1099
 },
 {
 "level": 2,
 "title": "ITCER04\t(Bologna)",
 "id": null,
 "file": "36_daisy_stations.md",
-"page": 1092
+"page": 1099
 },
 {
 "level": 3,
 "title": "Years of ITCER04\t(Bologna)",
 "id": null,
 "file": "36_daisy_stations.md",
-"page": 1093
+"page": 1100
 },
 {
 "level": 3,
 "title": "Months of ITCER04\t(Bologna)",
 "id": null,
 "file": "36_daisy_stations.md",
-"page": 1093
+"page": 1100
 },
 {
 "level": 2,
 "title": "Jadwisin",
 "id": null,
 "file": "36_daisy_stations.md",
-"page": 1093
+"page": 1100
 },
 {
 "level": 3,
 "title": "Years of Jadwisin",
 "id": null,
 "file": "36_daisy_stations.md",
-"page": 1094
+"page": 1101
 },
 {
 "level": 3,
 "title": "Months of Jadwisin",
 "id": null,
 "file": "36_daisy_stations.md",
-"page": 1094
+"page": 1101
 },
 {
 "level": 2,
 "title": "Bratislava",
 "id": null,
 "file": "36_daisy_stations.md",
-"page": 1095
+"page": 1102
 },
 {
 "level": 3,
 "title": "Years of Bratislava",
 "id": null,
 "file": "36_daisy_stations.md",
-"page": 1095
+"page": 1102
 },
 {
 "level": 3,
 "title": "Months of Bratislava",
 "id": null,
 "file": "36_daisy_stations.md",
-"page": 1096
+"page": 1103
 },
 {
 "level": 1,
 "title": "Index of the components of the Daisy reference",
 "id": "daisy-index",
 "file": "37_daisy_index.md",
-"page": 1097
+"page": 1104
 },
 {
 "level": 1,
 "title": "Limits, messages and glossary of the Daisy workbench",
 "id": "daisy-help",
 "file": "38_daisy_help.md",
-"page": 1122
+"page": 1129
 },
 {
 "level": 2,
 "title": "What the workbench can and cannot do",
 "id": null,
 "file": "38_daisy_help.md",
-"page": 1122
+"page": 1129
 },
 {
 "level": 2,
 "title": "Messages and what to do",
 "id": null,
 "file": "38_daisy_help.md",
-"page": 1123
+"page": 1130
 },
 {
 "level": 2,
 "title": "Glossary",
 "id": null,
 "file": "38_daisy_help.md",
-"page": 1123
+"page": 1130
 },
 {
 "level": 1,
 "title": "Symbols and units",
 "id": null,
 "file": "90_appendices.md",
-"page": 1125
+"page": 1132
 },
 {
 "level": 1,
 "title": "Control value lists",
 "id": null,
 "file": "90_appendices.md",
-"page": 1127
+"page": 1134
 },
 {
 "level": 1,
 "title": "Simulation data sets",
 "id": null,
 "file": "90_appendices.md",
-"page": 1128
+"page": 1135
 },
 {
 "level": 1,
 "title": "Provenance ledger of the numbered equations",
 "id": null,
 "file": "90_appendices.md",
-"page": 1129
+"page": 1136
 },
 {
 "level": 1,
 "title": "References",
 "id": null,
 "file": "90_appendices.md",
-"page": 1135
+"page": 1142
 },
 {
 "level": 1,
 "title": "Equation reference",
 "id": null,
 "file": "90_appendices.md",
-"page": 1138
+"page": 1145
 }
 ]
 }

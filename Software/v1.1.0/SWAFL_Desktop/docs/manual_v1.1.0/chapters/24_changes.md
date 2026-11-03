@@ -224,3 +224,13 @@
 - **Experiment folders**: a README in every run folder, with how its .dai file was created and how Daisy calls everything, line by line.
 - **Parameter library**: a steady view of an item, drawn once, without the page jumping (Section \ref{daisy-lib-source}).
 
+
+
+### Projections, pipe design, linked irrigation settings and a steadier Daisy editor (November 2026)
+
+- **Projection of the seasons**: the year charts of Reliability over 20 seasons, Full water balance and Nitrogen budget, the Daisy layers that show years, the charts of the dashboard and the yearly figure of the Charts tab continue 10 or 20 years after the last simulated season (Properties, Projection), lighter and marked, with the red bar of the working date kept.
+- **Shading**: in Soil hydraulic drivers the selected row shades the soil table only; in the Trigger law the highlight covers the row of the soil only and no longer runs into the chart.
+- **Pipe design in the field sketch**: mainline, submain and lateral pipes with a diameter, and valve, pump, filter and tank symbols; a table of length, flow, speed and head loss for each pipe and the pump head asked; the drawn lengths and diameters pass to the design (Chapter 22b).
+- **Linked irrigation settings**: the method and the field area of Properties pass to the three designs, the Design shortcuts group shows the link and the last result of the design, and the sketch passes the pipes to it.
+- **Daisy editor**: the buttons are ready before the file list loads, a stale tab can no longer break a later one, a failed tab shows a message with a retry button, and very large files and output logs are sent to Log plots; the Daisy scripts load after the first screen, so the program opens faster.
+- **Reference of every layer**: Chapter 22b lists the controls, the Properties and the data sources of each layer.
