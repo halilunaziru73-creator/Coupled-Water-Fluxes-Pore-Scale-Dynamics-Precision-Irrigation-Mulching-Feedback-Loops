@@ -1,4 +1,4 @@
-"""Figure 1 (architecture of the suite) and the workbench figure, drawn in the style of the Daisy process map.
+"""Figure 1 (architecture of the suite) and the workbench figure. 
 Every arrow is a dependency found in the code of SWAFL Desktop 1.1.0 (app/js and app/engine): a module that calls a function
 or reads a variable of another (for example fieldprec.js calls model(); weather.js sets WXD, which the daily model reads;
 daisyflow.js writes DAISYLIVE, which plus_daisy.js reads; the workbench shell talks to the engine only through bridge.js)."""
@@ -62,7 +62,7 @@ for i in range(5): A(ax,[(44+i*41,20),(49+i*41,20)])
 A(ax,[(190,32),(190,42),(170,42),(170,48)]); ax.text(193,37.5,'DAISYLIVE',fontsize=5.2,style='italic',fontfamily='Liberation Serif',ha='left',va='center')
 A(ax,[(108,32),(108,44),(66,44),(66,62)],'dashdot',both=True)
 legend(ax,208,58,step=3.6,w=9,short=True)
-hatch(ax,1.9,'(Not all connections between parts are shown)',x0=3,x1=257)
+hatch(ax,1.9,'',x0=3,x1=257)
 save(fig,'p6/fig01_system')
 
 # =========================== Figure 4: the Daisy workbench =================================
@@ -103,6 +103,6 @@ A(ax,[(140,38),(140,44),(112,44)],arrow=False) if False else None
 legend(ax,160,141,step=3.3,w=9)
 A(ax,[(39.5,36),(39.5,125),(66,125),(66,129)],'dot',both=True)
 A(ax,[(196,36),(196,46),(214,46),(214,134),(156,134)],'dot',both=True) if False else None
-hatch(ax,2.8,'(Not all connections between parts are shown)',x0=3,x1=221)
+hatch(ax,2.8,'',x0=3,x1=221)
 save(fig,'p4/fig01_workbench')
 print('ok')

@@ -113,9 +113,9 @@
     L([[690, 357], [690, 330]], 'out'); T(690, 324, 'CO₂', 'middle', 9); L([[792, 440], [792, 400]], 'out'); L([[760, 440], [760, 405]], 'out'); T(660, 480, 'CO₂', 'middle', 9); L([[690, 492], [690, 470]], 'out'); T(790, 485, 'CO₂', 'middle', 9); T(790, 304, 'CO₂', 'middle', 9); L([[790, 332], [790, 312]], 'out');
     // legend
     const lg = [['none', 'Inputs and movement of matter within modules.'], ['out', 'Outputs of matter.'], ['info', 'Exchange of information within modules.'], ['none2', 'Movement of matter between modules.'], ['mod', 'Exchange of information between modules.']];
-    lg.forEach((l, i) => { const y = 590 + i * 11; o.push('<line x1="640" y1="' + y + '" x2="676" y2="' + y + '" stroke="#222" stroke-width="' + (l[0] === 'none2' ? 2 : 1) + '"' + (l[0] === 'out' ? ' stroke-dasharray="5 3"' : l[0] === 'info' ? ' stroke-dasharray="1.5 2.5"' : l[0] === 'mod' ? ' stroke-dasharray="6 3 1.5 3"' : '') + '/>'); T(682, y + 3, l[1], 'start', 8.5); }); T(640, 650, '(Not all flow of matter and information between modules are shown)', 'start', 8, '#444');
+    lg.forEach((l, i) => { const y = 590 + i * 11; o.push('<line x1="640" y1="' + y + '" x2="676" y2="' + y + '" stroke="#222" stroke-width="' + (l[0] === 'none2' ? 2 : 1) + '"' + (l[0] === 'out' ? ' stroke-dasharray="5 3"' : l[0] === 'info' ? ' stroke-dasharray="1.5 2.5"' : l[0] === 'mod' ? ' stroke-dasharray="6 3 1.5 3"' : '') + '/>'); T(682, y + 3, l[1], 'start', 8.5); });
     // the processes of Daisy that Fig. 1 has no box for, so that none is hidden: they can be clicked and marked like the others
-    box('temp', 108, 658, 210, 24, 'Soil heat and ice', LG, { sz: 9.5 }); box('deni', 330, 658, 230, 24, 'Denitrification and N2O', BE, { sz: 9.5 }); T(572, 674, 'also in Daisy, not a box of the map', 'start', 9, '#444');
+    box('temp', 108, 658, 210, 24, 'Soil heat and ice', LG, { sz: 9.5 }); box('deni', 330, 658, 230, 24, 'Denitrification and N2O', BE, { sz: 9.5 });
     // what the experiment changes (orange) and what it measures (blue), drawn on the same map; arrows run from the changed process to the measured one
     let extraH = 0, base = opt.all ? 694 : 696;
     // the standalone figure: every other component of Daisy drawn as a box of Fig. 1 itself, in the style of the boxes of the map

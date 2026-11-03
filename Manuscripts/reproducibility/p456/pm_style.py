@@ -1,4 +1,4 @@
-"""Drawing helpers in the style of the Daisy process map (rounded pastel boxes, flux pills, two-tone pools, elbow arrows, legend)."""
+"""Drawing helpers (rounded pastel boxes, flux pills, two-tone pools, elbow arrows, legend)."""
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib import patches
@@ -42,4 +42,4 @@ def legend(ax,x,y,step=3.7,w=14,short=False):
 def hatch(ax,y,text,x0=3,x1=197):
     import numpy as np
     for xx in np.arange(x0,x1,2.6): ax.plot([xx,xx+1.8],[y-1.2,y+1.2],color=HAT,lw=0.8,zorder=2)
-    ax.text((x0+x1)/2,y,text,ha='center',va='center',fontsize=5.8,fontfamily='Liberation Serif',color=DK,zorder=7,bbox=dict(fc='white',ec='none',pad=1.2))
+    if text: ax.text((x0+x1)/2,y,text,ha='center',va='center',fontsize=5.8,fontfamily='Liberation Serif',color=DK,zorder=7,bbox=dict(fc='white',ec='none',pad=1.2))

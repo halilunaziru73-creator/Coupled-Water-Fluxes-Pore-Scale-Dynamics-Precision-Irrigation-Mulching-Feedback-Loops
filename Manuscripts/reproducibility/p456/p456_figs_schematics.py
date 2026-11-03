@@ -1,4 +1,4 @@
-"""Schematic figures of the suite paper (architecture, workbench, bridge), drawn in the style of the Daisy process map."""
+"""Schematic figures of the suite paper (architecture, workbench, bridge)."""
 import os, sys
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
 from pm_style import *
