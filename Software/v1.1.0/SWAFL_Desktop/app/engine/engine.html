@@ -1165,7 +1165,7 @@ const IRM = (function () {
   const QZ = [-1.28, -0.52, 0, 0.52, 1.28];
   function drip(o) {
     const kind = o.kind, K = DKIND[kind], lat = latProfile(kind, o.q, o.Se, o.LL, o.H0, o.D), Ae = o.Se * o.Sl, Vreq = o.Zn * Ae;
-    const lam = Math.max(40, o.psi), aspect = clamp(1 + 0.6 * Math.log10(1 + o.ks / (o.q * 1e6 / (2 * Math.PI * lam * lam))), 1, 1.9);
+    const lam = Math.max(40, o.psi), aspect = clamp((0.7 + 1.6 * Math.pow(o.ks / (o.ks + 15), 1.1)) * Math.sqrt(clamp(2 / Math.max(0.5, o.q), 0.7, 1.4)), 0.75, 2.4);   // gravity against capillarity: coarse soils elongate downwards (narrow and deep), fine soils spread sideways (wide and shallow); a larger emitter flow spreads it more
     const c = { dth: Math.max(0.03, o.fT * (o.fc - o.wp)), a: aspect, zd: o.dep * 10, Rm: o.Rmax * 10, Se: o.Se, E0: o.E0 };
     const run = t => {
       const V = lat.qa * t, quant = QZ.map(z => { const Vi = Math.max(0.02 * V, V * (1 + lat.sd * z)), b = bulb(Vi, c), root = Vi - b.below - b.ev, stored = Math.min(root, Vreq); return Object.assign(b, { V: Vi, stored, excess: root - stored, z }); });

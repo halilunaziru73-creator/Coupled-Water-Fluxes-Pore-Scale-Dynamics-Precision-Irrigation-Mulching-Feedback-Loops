@@ -148,16 +148,16 @@ $$
 
 *Provenance (Eq. 12.10):* **[Engineered]**: wetted-bulb geometry and loss partition; constants chosen for the workbench.
 
-**Aspect ratio.** The shape factor $a$ (depth over radius) increases when gravity is strong relative to capillarity, i.e. for a coarse soil and a low flow. It is evaluated from the ratio of the saturated conductivity to the radial capillary spreading rate $q/(2\pi\lambda^{2})$ (the form is a scaling argument and the constants are **[Engineered]**),
+**Aspect ratio.** The shape factor $a$ (depth over radius) follows the soil: gravity dominates in a coarse soil of high saturated conductivity, so the bulb is narrow and deep; capillarity dominates in a fine soil, so the bulb is as wide as it is deep or wider. The form is a scaling argument and the constants are **[Engineered]**,
 
 $$
-a = \mathrm{clip}\Bigl\{1 + 0.6\,\log_{10}\Bigl(1 + \frac{K_s}{q\cdot10^{6}/(2\pi\lambda^{2})}\Bigr);\ 1,\ 1.9\Bigr\},\qquad \lambda=\max(40,\psi_f),
+a = \mathrm{clip}\Bigl\{\Bigl[0.7 + 1.6\Bigl(\frac{K_s}{K_s+15}\Bigr)^{1.1}\Bigr]\sqrt{\mathrm{clip}\bigl(2/q;\ 0.7,\ 1.4\bigr)};\ 0.75,\ 2.4\Bigr\},
 \tag{12.11}
 $$
 
 *Provenance (Eq. 12.11):* **[Engineered]**: wetted-bulb geometry and loss partition; constants chosen for the workbench.
 
-with $K_s$ in mm h$^{-1}$, $q$ in L h$^{-1}$ and $\psi_f$ the wetting-front suction of Eq. (11.3) in mm. The result is a bulb that is round ($a=1$) for a fine soil and elongated downwards (up to $a=1.9$) for a sand.
+with $K_s$ in mm h$^{-1}$ (from the pedotransfer functions of the soil, Section "Intake from your soil" of Chapter 11) and $q$ the emitter flow in L h$^{-1}$. The result changes with the soil you choose: about 2.1 for sand and coarse sand, 1.9 for sandy loam, 1.3 to 1.4 for loam and silt loam, and 0.9 to 1.0 for clay loam and silty clay loam (a bulb wider than deep). A larger emitter flow spreads the bulb sideways. Change the soil in Properties and run the design again to see the bulb of each soil.
 
 **Radius.** For an emitter that delivers $V$ litres, the wetted volume is $V_w = V\cdot10^{6}/\Delta\theta$ mm$^3$ ($1\ \mathrm{L}=10^{6}\ \mathrm{mm^3}$). The radius $r$ is found by bisection (38 steps between 5 and 3500 mm) so that the volume of revolution of Eq. (12.10), integrated in 56 layers,
 

@@ -165,11 +165,21 @@ const Sketch = (() => {
     const d = OBJ[S.mode]; if (!d) return false; pushH();
     if (d[2] === 'pt') S.objs.push({ t: S.mode, pts: [q] });
     else if (d[2] === 'rect') { if (!S.rect) S.rect = { t: S.mode, a: q }; else { if (Math.abs(q.x - S.rect.a.x) > 2 && Math.abs(q.y - S.rect.a.y) > 2) S.objs.push({ t: S.mode, pts: rectPts(S.rect.a, q) }); else HIST.u.pop(); S.rect = null; } }
-    else if (d[2] === 'line') { if (!S.cur) S.cur = { t: S.mode, pts: [], dia: S.pd[S.mode] || PIPE_D[S.mode] }; S.cur.pts.push(q); }
+    else if (d[2] === 'line') {
+      const onPipe = pipeSnap(q);                                  // a click on a pipe already drawn joins it (a junction)
+      if (!S.cur) { S.cur = { t: S.mode, pts: [], dia: S.pd[S.mode] || PIPE_D[S.mode] }; S.cur.pts.push(onPipe || q); }
+      else {
+        const last = S.cur.pts[S.cur.pts.length - 1];
+        if (len(last, q) < 9 / V.z) { if (S.cur.pts.length > 1) { finishCur(); return true; } HIST.u.pop(); return true; }   // a click on the dead end finishes the pipe
+        S.cur.pts.push(onPipe || q); if (onPipe) { finishCur(); return true; }                                          // a click on another pipe ends this one there
+      }
+    }
     else { if (!S.cur) S.cur = { t: S.mode, pts: [] }; if (S.cur.pts.length > 2 && len(S.cur.pts[0], q) < 9 / V.z) { finishCur(); return true; } S.cur.pts.push(q); }
     info(); return true;
   }
-  function finishCur() { if (S.cur && OBJ[S.cur.t][2] === 'line') S.cur.pts = S.cur.pts.filter((p, i, a) => !i || len(p, a[i - 1]) > 2); if (S.cur && S.cur.pts.length >= (OBJ[S.cur.t][2] === 'line' ? 2 : 3)) S.objs.push(S.cur); else if (S.cur) HIST.u.pop(); S.cur = null; draw(); info(); }
+  let lastFin = 0;
+  function pipeSnap(q) { let best = null, bd = 9 / V.z; S.objs.forEach(o => { if (OBJ[o.t][2] !== 'line') return; for (let j = 1; j < o.pts.length; j++) { const a = o.pts[j - 1], b = o.pts[j], dx = b.x - a.x, dy = b.y - a.y, L2 = dx * dx + dy * dy || 1, t = Math.max(0, Math.min(1, ((q.x - a.x) * dx + (q.y - a.y) * dy) / L2)), p = { x: a.x + t * dx, y: a.y + t * dy }, d = len(p, q); if (d < bd) { bd = d; best = p; } } }); return best; }
+  function finishCur() { lastFin = Date.now(); if (S.cur && OBJ[S.cur.t][2] === 'line') S.cur.pts = S.cur.pts.filter((p, i, a) => !i || len(p, a[i - 1]) > 2); if (S.cur && S.cur.pts.length >= (OBJ[S.cur.t][2] === 'line' ? 2 : 3)) S.objs.push(S.cur); else if (S.cur) HIST.u.pop(); S.cur = null; draw(); info(); }
   function segD(p, a, b) { const dx = b.x - a.x, dy = b.y - a.y, L2 = dx * dx + dy * dy || 1, t = Math.max(0, Math.min(1, ((p.x - a.x) * dx + (p.y - a.y) * dy) / L2)); return Math.hypot(p.x - a.x - t * dx, p.y - a.y - t * dy); }
   function objAt(p) { for (let i = S.objs.length - 1; i >= 0; i--) { const q = S.objs[i]; if (OBJ[q.t][2] === 'line') { for (let j = 1; j < q.pts.length; j++) if (segD(p, q.pts[j - 1], q.pts[j]) < 8 / V.z) return i; } else if (q.pts.length === 1) { if (len(q.pts[0], p) < 9 / V.z) return i; } else if (inPoly(q.pts, p.x, p.y)) return i; } return -1; }
   function objSummary() {
@@ -218,7 +228,7 @@ const Sketch = (() => {
     cv.addEventListener('pointerup', () => { drag = null; if (panning) { panning = null; cv.style.cursor = S.mode === 'pan' ? 'grab' : 'crosshair'; } draw(); });
     cv.addEventListener('wheel', e => { e.preventDefault(); const q = scr(e); zoomAt(e.deltaY < 0 ? 1.2 : 1 / 1.2, q.x, q.y); }, { passive: false });
     cv.addEventListener('contextmenu', e => e.preventDefault());
-    cv.addEventListener('dblclick', e => { if (S.cur) { S.cur.pts.pop(); finishCur(); return; } if (OBJ[S.mode] == null) { /* corner removal below */ } else { const k = objAt(at(e)); if (k >= 0) { pushH(); S.objs.splice(k, 1); draw(); info(); } return; } const h = hit(at(e)); if (h && h.t === 'pt' && S.pts.length > 3) { S.pts.splice(h.i, 1); S.inlet = null; draw(); } });
+    cv.addEventListener('dblclick', e => { if (Date.now() - lastFin < 600) return; if (S.cur) { S.cur.pts.pop(); finishCur(); return; } if (OBJ[S.mode] == null) { /* corner removal below */ } else { const k = objAt(at(e)); if (k >= 0) { pushH(); S.objs.splice(k, 1); draw(); info(); } return; } const h = hit(at(e)); if (h && h.t === 'pt' && S.pts.length > 3) { S.pts.splice(h.i, 1); S.inlet = null; draw(); } });
   }
   // type the exact length of a side: the second corner moves along the side
   function openEdit(i) {
@@ -301,7 +311,7 @@ const Sketch = (() => {
     cv = document.getElementById('skCv'); wire(); setTimeout(() => { const P2 = S.pts.concat(S.src ? [S.src] : []); if (P2.some(p => p.x < 0 || p.y < 0 || p.x > CW || p.y > CH)) fitView(); }, 0);
     document.getElementById('skZin').onclick = () => zoomAt(1.25); document.getElementById('skZout').onclick = () => zoomAt(1 / 1.25); document.getElementById('skFit').onclick = fitView;
     document.getElementById('skMap').onclick = () => { if (typeof FieldMap !== 'undefined') FieldMap.open(); };
-    { const bar = document.getElementById('skMode'); Object.keys(OBJ).forEach(k => { const b = document.createElement('button'); b.dataset.m = k; b.textContent = OBJ[k][0].split(' /')[0]; b.title = OBJ[k][0] + (OBJ[k][2] === 'rect' ? ': click two opposite corners' : OBJ[k][2] === 'poly' ? ': click the corners, double-click or click the first corner to finish' : OBJ[k][2] === 'line' ? ': click the points of the pipe along its route, double-click (or press Enter) to finish; the diameter is chosen in the list that appears' : ': click to place'); b.style.borderBottom = '3px solid ' + OBJ[k][1]; if (S.mode === k) b.className = 'on'; bar.appendChild(b); }); bar.style.flexWrap = 'wrap'; }
+    { const bar = document.getElementById('skMode'); Object.keys(OBJ).forEach(k => { const b = document.createElement('button'); b.dataset.m = k; b.textContent = OBJ[k][0].split(' /')[0]; b.title = OBJ[k][0] + (OBJ[k][2] === 'rect' ? ': click two opposite corners' : OBJ[k][2] === 'poly' ? ': click the corners, double-click or click the first corner to finish' : OBJ[k][2] === 'line' ? ': click the points of the pipe along its route; click its last point again (the dead end), click any other pipe, double-click or press Enter to finish; the diameter is chosen in the list that appears' : ': click to place'); b.style.borderBottom = '3px solid ' + OBJ[k][1]; if (S.mode === k) b.className = 'on'; bar.appendChild(b); }); bar.style.flexWrap = 'wrap'; }
     pdUpdate();
     if (!window.__skKeys) { window.__skKeys = true; document.addEventListener('keydown', e => { if (!document.getElementById('skCv')) return; if (/INPUT|SELECT|TEXTAREA/.test((e.target || {}).tagName || '')) return; if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'z') { e.preventDefault(); Sketch.undo(); } else if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'y' || (e.shiftKey && e.key.toLowerCase() === 'z'))) { e.preventDefault(); Sketch.redo(); } else if (e.key === 'Enter') Sketch.finish(); else if (e.key === 'Escape') Sketch.cancel(); }); }
     document.getElementById('skMode').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S.mode = b.dataset.m; S.rect = null; if (S.cur) finishCur(); document.querySelectorAll('#skMode button').forEach(x => x.classList.toggle('on', x === b)); pdUpdate(); });
