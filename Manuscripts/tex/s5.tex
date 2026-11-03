@@ -174,6 +174,48 @@ cd Manuscripts/reproducibility
 bash run_all.sh ./work           # regenerates the numbers and figures
 \end{verbatim}
 
+\section{Packages inside the bundled libraries and inside Daisy}
+A library that is copied into the program carries packages of its own. They are listed here so that the stack is complete from the program down to its smallest part. The libraries are minified single files, so the packages were identified from their code and their licence notices (not from a package list, which a minified file does not have); no version is claimed for them.
+\subsection{GeoTIFF.js}
+GeoTIFF.js (MIT licence, EOX IT Services) reads Sentinel-2 bands from remote GeoTIFF files by HTTP range requests. The program calls \texttt{GeoTIFF.fromUrl} (the maps and the monitoring of the field and the site chain) and \texttt{GeoTIFF.fromArrayBuffer}. Inside the file are these packages.
+\begin{table}[H]\centering\small
+\caption{Packages found inside \texttt{app/vendor/geotiff.js}.}\label{tab:geotiff}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{7.0cm}@{}}
+\toprule Package & Evidence in the file & Role and why it is used in the build\\\midrule
+pako (zlib in JavaScript) & Inflate and Z\_SYNC\_FLUSH code & decompresses DEFLATE tiles, a common compression of cloud-optimised files. Why: a tile cannot be read without it.\\
+LERC (Esri, Apache 2.0) & the LERC decoder with its Esri notice & decodes the LERC compression of some rasters. Why: the same reader then works for more sources.\\
+Zstandard decoder (zstddec) & \texttt{ZSTDDecoder} & decodes Zstandard tiles. Why: newer cloud-optimised files use it.\\
+Half-float support (a float16 package) & \texttt{getFloat16} & reads 16-bit floating point samples. Why: some rasters store them.\\
+Header parser (parse-headers style) & splitting of the header text at line ends & reads the \texttt{Content-Range} header of a range request. Why: the reader must know how long the whole file is.\\
+Block cache (quick-lru style) & a maximum-size cache object & keeps recently read blocks. Why: fewer repeated requests for the same bytes.\\
+XML helper (xml-utils style) & \texttt{findTagsByName} & reads the GDAL metadata of a file (scale and offset and no-data value). Why: the reflectance has to be scaled correctly.\\
+Browser interfaces & \texttt{fetch} and \texttt{createImageBitmap} & range requests and the decoding of JPEG tiles by the browser. Why: no JPEG decoder has to be shipped.\\
+\bottomrule\end{tabular}\end{table}
+A package that GeoTIFF.js can use for worker threads (a web-worker shim) was searched for and not found, so the program reads the tiles in the main thread.
+
+\subsection{SheetJS, Leaflet and Plotly.js}
+\begin{itemize}[nosep,leftmargin=1.2em]
+\item \textbf{SheetJS} (Apache 2.0) carries a table of character code pages (\texttt{cptable} 1.15.0, \texttt{DO\_NOT\_EXPORT\_CODEPAGE} set), which lets it read old Excel and CSV files in other encodings. Why: weather files from other countries do not use one encoding.
+\item \textbf{Leaflet} 1.9.4 has no packages of its own; it is one file with its style sheet and images.
+\item \textbf{Plotly.js} 4.1.1 (Results folder only) bundles its own graphics and mapping code, including the MapLibre GL code that its map charts use. It is not part of the program.
+\end{itemize}
+
+\subsection{Libraries shipped with Daisy}
+The Daisy folder of the program (\texttt{daisy/bin}) carries the program and the libraries it was built with. They are listed from the file names of the folder.
+\begin{table}[H]\centering\small
+\caption{Files of the Daisy folder and what they are.}\label{tab:daisydll}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{4.2cm}>{\raggedright\arraybackslash}p{8.8cm}@{}}
+\toprule File or package & Role and why it is used in the build\\\midrule
+\texttt{daisy-bin.exe} & the Daisy program, started by the workbench. Why: the process model itself.\\
+\texttt{libcore.dll} and \texttt{libwindows.dll} & the core and Windows parts of Daisy (judged from the file names). Why: Daisy was built as a program and libraries.\\
+\texttt{libboost\_filesystem-mt.dll} (Boost) & file and folder handling. Why: Daisy reads and writes many files.\\
+\texttt{libcxsparse.dll} and \texttt{libsuitesparseconfig.dll} (SuiteSparse) & sparse matrix solving. Why: the Richards and solute equations are solved implicitly with sparse matrices.\\
+\texttt{libgomp-1.dll} (GNU OpenMP) & parallel loops. Why: speeds up the solvers on several cores.\\
+\texttt{libstdc++-6.dll} and \texttt{libgcc\_s\_seh-1.dll} and \texttt{libwinpthread-1.dll} (GNU compiler runtime) & the C++ runtime. Why: the program was built with the GNU compilers for Windows.\\
+\texttt{vcruntime140.dll} and \texttt{vcruntime140\_1.dll} (Microsoft) & the Visual C++ runtime. Why: needed by the Python runtime that Daisy carries.\\
+\texttt{python313.dll} and \texttt{python.exe} and the \texttt{Lib} and \texttt{DLLs} folders (Python 3.13) & the Python runtime and its standard library. Why: Daisy can call Python functions inside a set-up.\\
+\bottomrule\end{tabular}\end{table}
+
 \section{Online services (optional)}
 \begin{table}[H]\centering\small
 \caption{Services the program can call. All are optional; without a connection every other number is computed on the computer.}\label{tab:svc}
