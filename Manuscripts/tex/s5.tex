@@ -24,6 +24,19 @@ SWAFL Desktop is one program with four layers, from the outside in.
 \end{enumerate}
 The same workbench and engine run in a web browser from a small local server (\texttt{npm run web}, or the \texttt{START\_SWAFL\_WEB} files) and online from the project page, so one code base serves the desktop, the browser and the web.
 
+\section{Code map of the repository}
+Code is kept in four folders of the repository and nothing is hidden outside them. The counts are of the files tracked in the repository on the day of this supplement (the Daisy program folder and the vendored libraries are not counted).
+\begin{table}[H]\centering\small
+\caption{Where the code is, by folder.}\label{tab:codemap}
+\begin{tabular}{@{}p{4.1cm}p{1.2cm}p{1.2cm}p{6.3cm}@{}}
+\toprule Folder & Python files & JavaScript files & What the code does\\\midrule
+\texttt{Software/v1.1.0/SWAFL\_Desktop} & 20 & 90 & the program (shell and workbench and engine) and the tools that build its data and manual (14\,100 lines of JavaScript and 2\,500 of Python)\\
+\texttt{Software/Old\_Version\_1.0} & 16 & 12 & the archived version 1.0 with its own build files (kept for reference)\\
+\texttt{Manuscripts} & 75 & 27 & figures and tables and checks of the articles (\texttt{reproducibility}) and the graphical abstracts; 103 \LaTeX\ files; scripts for the screenshots and checks in Node.js with Playwright\\
+\texttt{Data} & 4 & 0 & the workbook of the data and the calculation sheets\\
+\texttt{Results} & 13 & 0 & the 50 charts, the interactive charts, the videos, the 3D project and the Excel analysis (\texttt{08\_Scripts})\\
+\bottomrule\end{tabular}\end{table}
+
 \section{Languages}
 \begin{table}[H]\centering\small
 \caption{Languages and formats of the 1.1.0 source (the Daisy program and the manual PDF are not counted).}\label{tab:lang}
@@ -35,7 +48,7 @@ CSS & 4 & 630 & the classic grey and navy look and the dashboard\\
 Python 3.13 & 20 & 2\,500 & build tools of the data and of the manual (indexes and annotated screenshots and the equation table)\\
 JSON & 4 & 20\,500 & libraries and indexes read by the program (for example the manual index)\\
 Markdown & 47 & 31\,000 & the chapters of the manual\\
-\LaTeX\ & about 100 & -- & the four articles and their supplements (XeLaTeX with BibTeX)\\
+\LaTeX\ & 103 & -- & the four articles and their supplements (XeLaTeX with BibTeX)\\
 Batch and shell scripts & 7 & 80 & start and build files for Windows and macOS and Linux\\
 Daisy set-up language (\texttt{.dai}) & library & -- & the model description that Daisy reads; written by the workbench and by the user\\
 \bottomrule\end{tabular}\end{table}
@@ -63,6 +76,60 @@ SheetJS (xlsx) & 0.18.5 & Apache 2.0 & importing weather from Excel and CSV and 
 Daisy 7.1.14 with Boost and SuiteSparse and the GCC runtime & as shipped & GPL and LGPL families (see the Daisy folder) & the process model and its numerical libraries; started as a separate program, not linked into SWAFL\\
 \bottomrule\end{tabular}\end{table}
 Everything else, including the figures, the report writer, the equations of the layers and the pipe hydraulics, is code written for this program.
+
+\section{Libraries of the whole repository, by language}
+\subsection{Python}
+All third party Python packages imported anywhere in the repository (\texttt{Software}, \texttt{Manuscripts}, \texttt{Data}, \texttt{Results}) are listed. The versions of the first group are those recorded in \texttt{Manuscripts/reproducibility/requirements.txt} (Python 3.13.16 on Linux x86-64); for the others no version is recorded in the repository and none is claimed. The standard library (os and sys and re and json and codecs and subprocess and others) is used throughout and is not listed.
+\begin{table}[H]\centering\small
+\caption{Python packages and what each is used for.}\label{tab:py}
+\begin{tabular}{@{}p{2.7cm}p{1.7cm}p{8.6cm}@{}}
+\toprule Package & Version & Use\\\midrule
+numpy & 2.5.3 & arrays and the numerics of every analysis script\\
+scipy & 1.18.1 & statistics (Spearman correlation and tests) and curve fitting and root finding (\texttt{brentq}, \texttt{curve\_fit}, \texttt{minimize}) and \texttt{solve\_ivp} and sparse matrices (the checks of the closed forms)\\
+pandas & 3.0.5 & reading the ensemble of 10\,190 runs and summaries\\
+scikit-learn & 1.9.1 & gradient boosting and random forest regression with grouped cross validation (\texttt{GroupKFold}), partial dependence and PCA on the ensemble\\
+statsmodels & 0.15.0 & ordinary least squares models and their confidence intervals\\
+matplotlib & 3.11.2 & every figure; \texttt{mpl\_toolkits.mplot3d} for the 3D project; \texttt{animation} with the FFMpegWriter for the videos\\
+Pillow (PIL) & 12.3.0 & screenshots and figure assembly and annotation\\
+openpyxl & not pinned & writing the Excel workbooks of the data and analysis\\
+plotly & not pinned & the interactive charts and the 3D project saved as web pages\\
+pypdf & not pinned & preparing A4 versions of the articles\\
+wordfreq & not pinned & word frequencies (\texttt{zipf\_frequency}) for a check of the wording in the analysis folder\\
+playwright (Python) & not pinned & screenshots of the program for the manual\\
+\bottomrule\end{tabular}\end{table}
+Small modules written for the repository (\texttt{common.py}, \texttt{load.py}, \texttt{figstyle.py}, \texttt{p\_style.py}, \texttt{pm\_style.py}, \texttt{annot.py}, \texttt{spec\_atlas.py}, \texttt{textjs.py} and the like) hold the shared figure style and the loaders, so that every figure of the series has the same look.
+
+\subsection{JavaScript and HTML}
+\begin{table}[H]\centering\small
+\caption{JavaScript and HTML libraries and runtimes, end to end.}\label{tab:js}
+\begin{tabular}{@{}p{3.1cm}p{1.9cm}p{7.9cm}@{}}
+\toprule Library or runtime & Version & Where and for what\\\midrule
+Electron & 31 & shell of the desktop program (\texttt{require('electron')}: app and window and ipcMain and contextBridge and dialogs)\\
+electron-builder & 24.13.3 & development only: packs \texttt{SWAFL.exe} (portable) and the installer\\
+Node.js built-in modules & of Node 22 and Electron 31 & \texttt{fs} and \texttt{path} and \texttt{child\_process} and \texttt{os} and \texttt{zlib} and \texttt{http} and \texttt{vm} and \texttt{url} and \texttt{crypto}: the local server, the Daisy runner, the build and test scripts\\
+Leaflet & 1.9.4 & the map of the field in the program\\
+GeoTIFF.js & bundled & Sentinel-2 bands read in the browser\\
+SheetJS (xlsx) & 0.18.5 & Excel and CSV import and export\\
+Playwright for Node & not pinned & test and screenshot scripts that drive the real program in headless Chromium\\
+Plotly.js & 4.1.1 & the interactive charts and the 3D project in \texttt{Results} (the library file is stored beside the pages so that they work offline)\\
+\bottomrule\end{tabular}\end{table}
+Besides these, the program uses only what the browser provides: the 2D canvas, \texttt{Blob} and download links, \texttt{DecompressionStream} for compressed data, \texttt{localStorage} for small settings, \texttt{requestAnimationFrame} for the playing of a season, and \texttt{fetch} for the optional online services. There is no CDN call at run time: the libraries above are stored in the program folders.
+
+\subsection{Programs called from the code}
+\begin{table}[H]\centering\small
+\caption{Command-line programs that scripts call.}\label{tab:progs}
+\begin{tabular}{@{}p{3.3cm}p{9.7cm}@{}}
+\toprule Program & Where it is called and why\\\midrule
+Daisy 7.1.14 (\texttt{daisy-bin.exe}) & started by \texttt{daisy-runner.js}; reads a set-up file and writes the logs\\
+ffmpeg (libx264) & through matplotlib in \texttt{videos.py}: the videos of \texttt{Results/05\_Videos}\\
+pandoc & the manual: Markdown chapters to one PDF with the XeLaTeX engine\\
+XeLaTeX and BibTeX (TeX Live) & the manual and the articles and the supplements\\
+Tesseract and poppler (\texttt{pdftoppm}) & checking and annotating figures in \texttt{annotate\_figs.py}\\
+Chromium (through Playwright) & screenshots and the tests of the program\\
+\bottomrule\end{tabular}\end{table}
+
+\subsection{\LaTeX\ packages and fonts}
+The articles and supplements load these packages (from \texttt{pre.tex} and \texttt{supp\_style.tex}): amsmath and amssymb and array and bm and booktabs and caption and cleveref and enumitem and fancyhdr and float and fontspec and geometry and graphicx and hyperref and lineno and longtable and mathtools and microtype and multirow and natbib and pdflscape and setspace and siunitx and subcaption and tabularx and tcolorbox and tikz and titlesec and xcolor and xurl. The fonts are TeX Gyre Termes for the text and TeX Gyre Heros for sans serif and Latin Modern Mono for code. The manual uses DejaVu Serif and DejaVu Sans Mono.
 
 \section{Online services (optional)}
 \begin{table}[H]\centering\small
@@ -114,10 +181,10 @@ The program is not code-signed, so Windows may show a SmartScreen notice, which 
 
 \section{How the documents are built}
 \begin{itemize}[nosep,leftmargin=1.2em]
-\item \textbf{The manual.} The chapters are Markdown files. A Python tool (\texttt{build\_single.py}) joins them, adds the icons of the layers and the equation table, and \texttt{pandoc} 3.1.3 with the XeLaTeX engine (TeX Live 2023) makes one PDF with DejaVu Serif and DejaVu Sans Mono. Other tools write the index of sections that the program uses to open the manual at the page in use, and \texttt{PyMuPDF} reduces the size of the pictures so that the PDF opens from GitHub on any device.
+\item \textbf{The manual.} The chapters are Markdown files. A Python tool (\texttt{build\_single.py}) joins them, adds the icons of the layers and the equation table, and \texttt{pandoc} 3.1.3 with the XeLaTeX engine (TeX Live 2023) makes one PDF with DejaVu Serif and DejaVu Sans Mono. Other tools write the index of sections that the program uses to open the manual at the page in use, and a short script with PyMuPDF (run at build time and not stored in the repository) reduces the size of the pictures so that the PDF opens from GitHub on any device.
 \item \textbf{The screenshots of the manual.} Taken from the running program with Playwright and headless Chromium, then annotated by Python scripts (\texttt{annot.py}, \texttt{new\_capture.py}).
 \item \textbf{The articles and supplements.} \LaTeX\ with XeLaTeX and BibTeX (\texttt{build.sh}); the tables and the numbers are written into the source from the data files by scripts, so that the text, the tables and the figures use the same numbers.
-\item \textbf{The figures of the series.} Python with matplotlib and numpy and pandas and scipy and statsmodels and scikit-learn and openpyxl and Pillow, in the scripts of the repository.
+\item \textbf{The figures of the series.} Python in the scripts of the repository, with the packages of the Python table above.
 \end{itemize}
 
 \section{Tools used to test and check}
