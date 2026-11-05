@@ -5580,11 +5580,11 @@ Each picture below shows the layer after one control has been pressed or dragged
 \newpage
 
 
-## Evaporation physics
+## Evaporation
 
-![Evaporation physics: the whole workbench.](images/atlas11/ui_wb_e1.jpg){width=100%}
+![Evaporation: the whole workbench.](images/atlas11/ui_wb_e1.jpg){width=100%}
 
-![Evaporation physics: the drawing area.](images/atlas11/55_e1_draw.jpg){width=70%}
+![Evaporation: the drawing area.](images/atlas11/55_e1_draw.jpg){width=70%}
 
 
 **What the arrows point to.** The dashed outlines in the whole-workbench picture mark the layer chosen in the Layers panel (**L**), the drawing (**D**), the Dashboard (**R**) and the controls in Properties (**C**). In the drawing, each numbered arrow ends on the item it names.
@@ -5646,7 +5646,7 @@ $$
 *Provenance (Eq. 8.4):* **[Literature]**: Young--Laplace (Jurin) capillary law.
 
 
-*Eq. 9.2. Where explained: chapter "Mulch and evaporation layers", section "Evaporation physics".*
+*Eq. 9.2. Where explained: chapter "Mulch and evaporation layers", section "Evaporation".*
 
 $$
 t_1 = \frac{Q_1 - q_0}{e_0},\qquad
@@ -5657,7 +5657,7 @@ $$
 *Provenance (Eq. 9.2):* **[Engineered]**: two-stage evaporation of the type described by Ritchie (1972) and Philip, with parameters chosen for the workbench.
 
 
-*Eq. 9.3. Where explained: chapter "Mulch and evaporation layers", section "Evaporation physics".*
+*Eq. 9.3. Where explained: chapter "Mulch and evaporation layers", section "Evaporation".*
 
 $$
 Q(t) = q_0 + \begin{cases} e_0\,t, & t \le t_1\\[3pt] (Q_1 - q_0) + 2\,e_0\,\tau\Bigl(\sqrt{1 + (t - t_1)/\tau} - 1\Bigr), & t > t_1\end{cases}
@@ -5667,7 +5667,7 @@ $$
 *Provenance (Eq. 9.3):* **[Engineered]**: two-stage evaporation of the type described by Ritchie (1972) and Philip, with parameters chosen for the workbench.
 
 
-*Eq. 9.4. Where explained: chapter "Mulch and evaporation layers", section "Evaporation physics".*
+*Eq. 9.4. Where explained: chapter "Mulch and evaporation layers", section "Evaporation".*
 
 $$
 \ell(t) = \min\Bigl\{60,\ \frac{Q(t) - Q_1}{\Delta\theta}\Bigr\}\ \mathrm{mm}\quad (Q > Q_1),
@@ -5677,7 +5677,7 @@ $$
 *Provenance (Eq. 9.4):* **[Engineered]**: drying-front geometry chosen for drawing.
 
 
-*Eq. 9.5. Where explained: chapter "Mulch and evaporation layers", section "Evaporation physics".*
+*Eq. 9.5. Where explained: chapter "Mulch and evaporation layers", section "Evaporation".*
 
 $$
 \log_{10}h(z) = \log_{10}h_s + \bigl(\log_{10}h_i - \log_{10}h_s\bigr)\bigl(1 - e^{-(z-\ell)/\lambda}\bigr)\quad (z \ge \ell),\qquad h = 10^{5}\ \mathrm{cm\ for}\ z<\ell.
@@ -5689,9 +5689,9 @@ $$
 
 ### The whole layer, part by part
 
-The picture below is the complete drawing of the layer Evaporation physics, which in the workbench is scrolled inside the drawing area; here it is shown from top to bottom in several parts, with the playback bar at its start. Each numbered arrow ends on the item that its entry names.
+The picture below is the complete drawing of the layer Evaporation, which in the workbench is scrolled inside the drawing area; here it is shown from top to bottom in several parts, with the playback bar at its start. Each numbered arrow ends on the item that its entry names.
 
-![Evaporation physics, part 1 of 3.](images/atlas11/e1_s0_p1.jpg){width=78%}
+![Evaporation, part 1 of 3.](images/atlas11/e1_s0_p1.jpg){width=78%}
 
 **What the arrows point to.**
 
@@ -5722,7 +5722,7 @@ The picture below is the complete drawing of the layer Evaporation physics, whic
 - **25** The Day shown buttons, 0.5, 1, 1.75, 2.5, 4 and 7 days.
 
 
-![Evaporation physics, part 2 of 3.](images/atlas11/e1_s0_p2.jpg){width=78%}
+![Evaporation, part 2 of 3.](images/atlas11/e1_s0_p2.jpg){width=78%}
 
 **What the arrows point to.**
 
@@ -5749,7 +5749,7 @@ The picture below is the complete drawing of the layer Evaporation physics, whic
 - **21** The histogram of the no-till core.
 
 
-![Evaporation physics, part 3 of 3.](images/atlas11/e1_s0_p3.jpg){width=78%}
+![Evaporation, part 3 of 3.](images/atlas11/e1_s0_p3.jpg){width=78%}
 
 **What the arrows point to.**
 
@@ -5765,50 +5765,50 @@ The picture below is the complete drawing of the layer Evaporation physics, whic
 
 The playback bar runs the layer through time. The pictures below show the parts of the drawing that change, at a third of the run, at two thirds and at the end, with the same arrows and numbers as in the corresponding part above.
 
-![Evaporation physics, part 1, playback a third of the way (day 7.9).](images/atlas11/P_e1_1_p1.jpg){width=70%}
+![Evaporation, part 1, playback a third of the way (day 7.9).](images/atlas11/P_e1_1_p1.jpg){width=70%}
 
-![Evaporation physics, part 1, playback a third of the way (day 7.9).](images/atlas11/P_e1_1_p1.jpg){width=70%}
+![Evaporation, part 1, playback a third of the way (day 7.9).](images/atlas11/P_e1_1_p1.jpg){width=70%}
 
-![Evaporation physics, part 1, playback a third of the way (day 7.9).](images/atlas11/P_e1_1_p1.jpg){width=70%}
+![Evaporation, part 1, playback a third of the way (day 7.9).](images/atlas11/P_e1_1_p1.jpg){width=70%}
 
-![Evaporation physics, part 1, playback two thirds of the way (day 15.8).](images/atlas11/P_e1_2_p1.jpg){width=70%}
+![Evaporation, part 1, playback two thirds of the way (day 15.8).](images/atlas11/P_e1_2_p1.jpg){width=70%}
 
-![Evaporation physics, part 1, playback two thirds of the way (day 15.8).](images/atlas11/P_e1_2_p1.jpg){width=70%}
+![Evaporation, part 1, playback two thirds of the way (day 15.8).](images/atlas11/P_e1_2_p1.jpg){width=70%}
 
-![Evaporation physics, part 1, playback two thirds of the way (day 15.8).](images/atlas11/P_e1_2_p1.jpg){width=70%}
+![Evaporation, part 1, playback two thirds of the way (day 15.8).](images/atlas11/P_e1_2_p1.jpg){width=70%}
 
-![Evaporation physics, part 1, playback the end (day 24.0).](images/atlas11/P_e1_3_p1.jpg){width=70%}
+![Evaporation, part 1, playback the end (day 24.0).](images/atlas11/P_e1_3_p1.jpg){width=70%}
 
-![Evaporation physics, part 1, playback the end (day 24.0).](images/atlas11/P_e1_3_p1.jpg){width=70%}
+![Evaporation, part 1, playback the end (day 24.0).](images/atlas11/P_e1_3_p1.jpg){width=70%}
 
-![Evaporation physics, part 1, playback the end (day 24.0).](images/atlas11/P_e1_3_p1.jpg){width=70%}
+![Evaporation, part 1, playback the end (day 24.0).](images/atlas11/P_e1_3_p1.jpg){width=70%}
 
 
 ### The controls of the layer, one state at a time
 
 Each picture below shows the layer after one control has been pressed or dragged, with the same arrows and numbers as in the corresponding part of the layer above. The caption names the control and what it does.
 
-![Evaporation physics, part 1. The Particle sizes view of the section chosen.](images/atlas11/S_e1_m_particle_p1.jpg){width=70%}
+![Evaporation, part 1. The Particle sizes view of the section chosen.](images/atlas11/S_e1_m_particle_p1.jpg){width=70%}
 
-![Evaporation physics, part 1. The Water and air view of the section chosen.](images/atlas11/S_e1_m_water_p1.jpg){width=70%}
+![Evaporation, part 1. The Water and air view of the section chosen.](images/atlas11/S_e1_m_water_p1.jpg){width=70%}
 
-![Evaporation physics, part 1. The Water paths button switched off, so the arrows and dots of the flow are hidden.](images/atlas11/S_e1_paths_off_p1.jpg){width=70%}
+![Evaporation, part 1. The Water paths button switched off, so the arrows and dots of the flow are hidden.](images/atlas11/S_e1_paths_off_p1.jpg){width=70%}
 
-![Evaporation physics, part 1. The day 0.5 button pressed, so the cores are shown at half a day.](images/atlas11/S_e1_d05_p1.jpg){width=70%}
+![Evaporation, part 1. The day 0.5 button pressed, so the cores are shown at half a day.](images/atlas11/S_e1_d05_p1.jpg){width=70%}
 
-![Evaporation physics, part 1. The day 0.5 button pressed, so the cores are shown at half a day.](images/atlas11/S_e1_d05_p1.jpg){width=70%}
+![Evaporation, part 1. The day 0.5 button pressed, so the cores are shown at half a day.](images/atlas11/S_e1_d05_p1.jpg){width=70%}
 
-![Evaporation physics, part 1. The day 1.75 button pressed.](images/atlas11/S_e1_d175_p1.jpg){width=70%}
+![Evaporation, part 1. The day 1.75 button pressed.](images/atlas11/S_e1_d175_p1.jpg){width=70%}
 
-![Evaporation physics, part 1. The day 1.75 button pressed.](images/atlas11/S_e1_d175_p1.jpg){width=70%}
+![Evaporation, part 1. The day 1.75 button pressed.](images/atlas11/S_e1_d175_p1.jpg){width=70%}
 
-![Evaporation physics, part 1. The day 4 button pressed.](images/atlas11/S_e1_d4_p1.jpg){width=70%}
+![Evaporation, part 1. The day 4 button pressed.](images/atlas11/S_e1_d4_p1.jpg){width=70%}
 
-![Evaporation physics, part 1. The day 4 button pressed.](images/atlas11/S_e1_d4_p1.jpg){width=70%}
+![Evaporation, part 1. The day 4 button pressed.](images/atlas11/S_e1_d4_p1.jpg){width=70%}
 
-![Evaporation physics, part 1. The day 7 button pressed, so the cores are shown at the end of stage 1.](images/atlas11/S_e1_d7_p1.jpg){width=70%}
+![Evaporation, part 1. The day 7 button pressed, so the cores are shown at the end of stage 1.](images/atlas11/S_e1_d7_p1.jpg){width=70%}
 
-![Evaporation physics, part 1. The day 7 button pressed, so the cores are shown at the end of stage 1.](images/atlas11/S_e1_d7_p1.jpg){width=70%}
+![Evaporation, part 1. The day 7 button pressed, so the cores are shown at the end of stage 1.](images/atlas11/S_e1_d7_p1.jpg){width=70%}
 
 
 \newpage
@@ -6430,7 +6430,7 @@ The drawing of the layer from top to bottom. It is explained in Chapter 22; its 
 
 | 5.3 | The two computing engines | Soil, plant and air; Trigger law |
 
-| 5.4 | The two computing engines | Evaporation physics; Feedback loops; Field balance; Mulch against bare soil; Mulch control; Sensor and trigger; Soil hydraulic drivers |
+| 5.4 | The two computing engines | Evaporation; Feedback loops; Field balance; Mulch against bare soil; Mulch control; Sensor and trigger; Soil hydraulic drivers |
 
 | 5.5 | The two computing engines | Feedback loops; Field balance; Sensor and trigger; Soil hydraulic drivers |
 
@@ -6474,7 +6474,7 @@ The drawing of the layer from top to bottom. It is explained in Chapter 22; its 
 
 | 5.25 | The two computing engines | Field balance; Soil, plant and air |
 
-| 5.26 | The two computing engines | Evaporation physics; The Properties panel |
+| 5.26 | The two computing engines | Evaporation; The Properties panel |
 
 | 5.27 | The two computing engines | Surface irrigation design; Surface irrigation design / Cross-section at the inlet; Surface irrigation design / Layout in plan; Drip irrigation design; Sprinkler design and pipes; Trigger law |
 
@@ -6504,9 +6504,9 @@ The drawing of the layer from top to bottom. It is explained in Chapter 22; its 
 
 | 8.2 | Soil structure and tillage layers | Tillage and structure |
 
-| 8.3 | Soil structure and tillage layers | Evaporation physics; Tillage and structure |
+| 8.3 | Soil structure and tillage layers | Evaporation; Tillage and structure |
 
-| 8.4 | Soil structure and tillage layers | Evaporation physics; Tillage and structure |
+| 8.4 | Soil structure and tillage layers | Evaporation; Tillage and structure |
 
 | 8.5 | Soil structure and tillage layers | Soil hydraulic drivers |
 
@@ -6516,13 +6516,13 @@ The drawing of the layer from top to bottom. It is explained in Chapter 22; its 
 
 | 9.1 | Mulch and evaporation layers | Mulch against bare soil |
 
-| 9.2 | Mulch and evaporation layers | Evaporation physics |
+| 9.2 | Mulch and evaporation layers | Evaporation |
 
-| 9.3 | Mulch and evaporation layers | Evaporation physics |
+| 9.3 | Mulch and evaporation layers | Evaporation |
 
-| 9.4 | Mulch and evaporation layers | Evaporation physics |
+| 9.4 | Mulch and evaporation layers | Evaporation |
 
-| 9.5 | Mulch and evaporation layers | Evaporation physics |
+| 9.5 | Mulch and evaporation layers | Evaporation |
 
 | 9.6 | Mulch and evaporation layers | Fate of saved water |
 

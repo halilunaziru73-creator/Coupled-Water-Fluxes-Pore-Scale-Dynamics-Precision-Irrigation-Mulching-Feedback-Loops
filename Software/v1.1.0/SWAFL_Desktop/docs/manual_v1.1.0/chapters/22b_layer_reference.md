@@ -46,7 +46,7 @@ The Summary step lists the pipe network: for each pipe the diameter, length, flo
 
 **Data sources.** The Daisy experiments on the trigger (E2) and on the sensor depth (E3) for the nine soils; the retention curve of each soil (Saxton and Rawls); the weather in use.
 
-## Mulch and evaporation: mulch against bare soil, mulch control, evaporation physics, fate of saved water, regime map
+## Mulch and evaporation: mulch against bare soil, mulch control, evaporation, fate of saved water, regime map
 
 **Controls.** The mulch sliders (strength, capacity) and the material list in Properties; the sliders of the layer for the physics of evaporation; Play, Stop and the year clicks.
 

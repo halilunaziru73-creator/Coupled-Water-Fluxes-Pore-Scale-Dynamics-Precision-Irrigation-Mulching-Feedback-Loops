@@ -529,7 +529,7 @@
  },
  "9.2": {
   "file": "09_mulch.md",
-  "h2": "Evaporation physics (E1)",
+  "h2": "Evaporation (E1)",
   "h3": "",
   "body": "t_1 = \\frac{Q_1 - q_0}{e_0},\\qquad\ne(t) = \\begin{cases} e_0, & t \\le t_1\\\\[3pt] \\dfrac{e_0}{\\sqrt{1 + (t - t_1)/\\tau}}, & t > t_1\\end{cases}\n\\tag{9.2}",
   "prov": "*Provenance (Eq. 9.2):* **[Engineered]**: two-stage evaporation of the type described by Ritchie (1972) and Philip, with parameters chosen for the workbench.",
@@ -539,7 +539,7 @@
  },
  "9.3": {
   "file": "09_mulch.md",
-  "h2": "Evaporation physics (E1)",
+  "h2": "Evaporation (E1)",
   "h3": "",
   "body": "Q(t) = q_0 + \\begin{cases} e_0\\,t, & t \\le t_1\\\\[3pt] (Q_1 - q_0) + 2\\,e_0\\,\\tau\\Bigl(\\sqrt{1 + (t - t_1)/\\tau} - 1\\Bigr), & t > t_1\\end{cases}\n\\tag{9.3}",
   "prov": "*Provenance (Eq. 9.3):* **[Engineered]**: two-stage evaporation of the type described by Ritchie (1972) and Philip, with parameters chosen for the workbench.",
@@ -549,7 +549,7 @@
  },
  "9.4": {
   "file": "09_mulch.md",
-  "h2": "Evaporation physics (E1)",
+  "h2": "Evaporation (E1)",
   "h3": "",
   "body": "\\ell(t) = \\min\\Bigl\\{60,\\ \\frac{Q(t) - Q_1}{\\Delta\\theta}\\Bigr\\}\\ \\mathrm{mm}\\quad (Q > Q_1),\n\\tag{9.4}",
   "prov": "*Provenance (Eq. 9.4):* **[Engineered]**: drying-front geometry chosen for drawing.",
@@ -559,7 +559,7 @@
  },
  "9.5": {
   "file": "09_mulch.md",
-  "h2": "Evaporation physics (E1)",
+  "h2": "Evaporation (E1)",
   "h3": "",
   "body": "\\log_{10}h(z) = \\log_{10}h_s + \\bigl(\\log_{10}h_i - \\log_{10}h_s\\bigr)\\bigl(1 - e^{-(z-\\ell)/\\lambda}\\bigr)\\quad (z \\ge \\ell),\\qquad h = 10^{5}\\ \\mathrm{cm\\ for}\\ z<\\ell.\n\\tag{9.5}",
   "prov": "*Provenance (Eq. 9.5):* **[Engineered]**: drying-front geometry chosen for drawing.",

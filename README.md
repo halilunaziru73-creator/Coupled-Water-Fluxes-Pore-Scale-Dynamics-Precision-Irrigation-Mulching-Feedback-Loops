@@ -108,7 +108,7 @@ The four manuscripts, ordered from the most novel. Each one is set against the c
 |---|---|
 | Irrigation design | surface, drip and sprinkler design with layouts, pipe network, pump, hydraulic grade line, design checks and schedule |
 | Irrigation control | sensor and trigger; trigger law |
-| Mulch and evaporation | mulch against bare soil; mulch control; evaporation physics; fate of saved water; regime map |
+| Mulch and evaporation | mulch against bare soil; mulch control; evaporation; fate of saved water; regime map |
 | Soil structure and tillage | tillage and structure; soil hydraulic drivers; root structure |
 | Deterministic phenotyping | virtual plant under well-watered and drought treatments |
 | Field water balance | field balance; soil, plant and air; profile evolution |

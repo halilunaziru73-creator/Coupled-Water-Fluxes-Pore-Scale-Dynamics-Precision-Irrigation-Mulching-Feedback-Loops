@@ -63,7 +63,7 @@ The tree has the project root *SWAFL project* and eight groups, in the order in 
 |:--|:--|
 | **Irrigation design** | Surface irrigation design; Drip irrigation design; Sprinkler design and pipes, each with its sections |
 | **Irrigation control** | Sensor and trigger; Trigger law |
-| **Mulch and evaporation** | Mulch against bare soil; Mulch control; Evaporation physics; Fate of saved water; Regime map |
+| **Mulch and evaporation** | Mulch against bare soil; Mulch control; Evaporation; Fate of saved water; Regime map |
 | **Soil structure and tillage** | Tillage and structure; Soil hydraulic drivers; Root structure |
 | **Deterministic phenotyping** | Deterministic phenotyping |
 | **Field water balance** | Field balance; Soil, plant and air; Profile evolution |

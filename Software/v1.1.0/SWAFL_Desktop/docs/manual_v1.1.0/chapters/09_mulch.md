@@ -31,11 +31,11 @@ are the evaporation saved, the irrigation saved and the extra drainage, in mm yr
 
 **Steps.** Click a cell to apply that mulch factor and capacity or that tillage and rate; the red outline moves; the Dashboard changes at once.
 
-## Evaporation physics
+## Evaporation
 
 **What it shows.** A modelled thin section of the topsoil drying after a wetting, with liquid water in the pores (blue), vapour moving up (white), the **drying front** (orange) and, for comparison, the bare-soil curve (grey). To the right: the evaporation rate $e(t)$ and cumulative loss $Q(t)$ for 24 days, split into **stage 1** (the surface stays wet, loss at the atmospheric rate) and **stage 2** (a dry layer grows, loss is limited by the soil).
 
-![Evaporation physics layer. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/e1_s0_p1.jpg){width=80%}
+![Evaporation layer. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/e1_s0_p1.jpg){width=80%}
 
 **Governing relations.** The loss is described by the classical two-stage model of soil drying (Philip, 1957; Ritchie, 1972): stage 1 at the atmospheric rate $e_0$, then stage 2 with a rate falling roughly as $t^{-1/2}$ (cumulative loss $\propto \sqrt t$). The implementation in the workbench is
 
@@ -88,7 +88,7 @@ $$
 
 **Pore picture.** Which pores are water-filled at each depth is given by the capillary rule of Eq. (8.4) with the local suction of Eq. (9.5); vapour particles are released from the drying front and rise through air-filled pores. The picture is an **illustration of the mechanism**, not a pore-network simulation.
 
-**Steps.** (1) Open *Evaporation physics* and press **Play** (24 days). (2) Raise the mulch (lower $\varphi$): the grey bare-soil curve stays, your curve lengthens stage 1. (3) Change the soil: stage 1 lasts longest in the sands (largest $Q_1$, about 3 days for the Sand at the season-mean demand) and is shortest in the silty clay loam (about 1 day), because the window between $h_i$ and $h_s$ scales with $1/\alpha$; in stage 2 the fine soils lose water more slowly (larger $\tau$). (4) Set a drip method: $q_0>0$ shortens stage 1 because the surface has less water to lose. (5) Hover over a pore to read its radius and the suction at which it empties.
+**Steps.** (1) Open *Evaporation* and press **Play** (24 days). (2) Raise the mulch (lower $\varphi$): the grey bare-soil curve stays, your curve lengthens stage 1. (3) Change the soil: stage 1 lasts longest in the sands (largest $Q_1$, about 3 days for the Sand at the season-mean demand) and is shortest in the silty clay loam (about 1 day), because the window between $h_i$ and $h_s$ scales with $1/\alpha$; in stage 2 the fine soils lose water more slowly (larger $\tau$). (4) Set a drip method: $q_0>0$ shortens stage 1 because the surface has less water to lose. (5) Hover over a pore to read its radius and the suction at which it empties.
 
 ## Fate of saved water
 

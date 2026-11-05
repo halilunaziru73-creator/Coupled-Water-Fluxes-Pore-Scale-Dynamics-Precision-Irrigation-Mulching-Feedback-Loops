@@ -212,10 +212,10 @@
     let yy = y + 28, xx = cx + 8; VIEWS.forEach(v => { xx += chip(xx, yy, v.t, PH.view === v.k, () => { PH.view = v.k; }, v.tip); });
     yy += 30; const colw = (w - 24) / 2, view = PH.view, rot = PH.rot; ROT.x = cx; ROT.y = yy; ROT.w = w; ROT.h = SH + ZH + 36;
     ['ww', 'dr'].forEach((tr, ci) => {
-      const res = R(tr); if (!res) return; const x0 = cx + 8 + ci * (colw + 8), xc = x0 + colw / 2; ctx.fillStyle = view === 'xray' ? '#15181D' : '#F6F4EE'; ctx.fillRect(x0, yy, colw, SH + ZH + 34); ctx.strokeStyle = '#D2CEC2'; ctx.strokeRect(x0 + 0.5, yy + 0.5, colw - 1, SH + ZH + 33); ctx.fillStyle = view === 'xray' ? '#15181D' : '#FFFFFF'; ctx.fillRect(x0 + 1, yy + 22, colw - 2, 60);
+      const res = R(tr); if (!res) return; const x0 = cx + 8 + ci * (colw + 8), xc = x0 + colw / 2; ctx.fillStyle = view === 'xray' ? '#15181D' : '#F6F4EE'; ctx.fillRect(x0, yy, colw, SH + ZH + 34); ctx.strokeStyle = '#D2CEC2'; ctx.strokeRect(x0 + 0.5, yy + 0.5, colw - 1, SH + ZH + 33); ctx.fillStyle = view === 'xray' ? '#15181D' : '#FFFFFF'; ctx.fillRect(x0 + 1, yy + 22, colw - 2, 66);
       const lab = tr === 'ww' ? RNc() : 'Drought', col = tr === 'ww' ? '#1B1F23' : '#D93025'; ctx.fillStyle = col; ctx.fillRect(x0, yy, 4, 22); T(lab, x0 + 10, yy + 15, { s: 11, b: true, c: view === 'xray' ? '#E8EAEE' : col });
       const tg = res.tgt[d]; T((res.tr === 'pj' ? 'irrigated ' + fmt(res.totals.Ig) + ' mm (' + res.nIrr + ' events)' : res.tr === 'rf' ? 'rain only' : 'water ' + fmt(res.tgt[d] * 100) + ' % set') + ' · soil ' + fmt(100 * res.store[d] / res.awcT) + ' %', x0 + colw - 8, yy + 15, { s: 9, c: view === 'xray' ? '#AEB4BD' : MUTE, a: 'right' });
-      const BAND = 82, gy = yy + 26 + SH - 18, s = (gy - (yy + BAND + 6)) / (Math.max(R('ww').H[N - 1], R('dr').H[N - 1], 10) * 1.12);
+      const BAND = 88, gy = yy + 26 + SH - 18, s = (gy - (yy + BAND + 14)) / (Math.max(R('ww').H[N - 1], R('dr').H[N - 1], 10) * 1.3);   // the tallest plant stops well below the four lines of text above it
       // the shoot and, in the thermal view, its temperature
       if (view === 'thermal') { ctx.fillStyle = '#F0F2F6'; ctx.fillRect(x0 + 1, yy + 23, colw - 2, SH - 17); }
       else if (view !== 'xray') { const sk = ctx.createLinearGradient(0, yy + BAND, 0, gy + 6); sk.addColorStop(0, '#F3F6EE'); sk.addColorStop(1, '#E4EBD9'); ctx.fillStyle = sk; ctx.fillRect(x0 + 1, yy + BAND, colw - 2, gy + 6 - (yy + BAND)); }

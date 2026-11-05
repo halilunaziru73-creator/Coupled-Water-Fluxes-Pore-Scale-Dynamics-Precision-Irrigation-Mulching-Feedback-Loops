@@ -305,7 +305,7 @@ $$
 
 ### Evaporation under warming (used by the E1 layer)
 
-For the Evaporation physics layer a separate atmosphere factor is used (Section 9.3):
+For the Evaporation layer a separate atmosphere factor is used (Section 9.3):
 
 $$
 E_{0,\mathrm{bare}} = 4.2\,(1 + 0.07\,\Delta T)\,\frac{0.35 + 0.65\cdot\tfrac12[1 + \sin(2\pi(\mathrm{doy}-100)/365)]}{0.675}\,\mathrm{clip}\bigl(1 - 0.12(\rho-1);\,0.85,\,1.12\bigr)\sqrt{\gamma_y}\ \ \mathrm{mm\,d^{-1}},
