@@ -234,3 +234,15 @@
 - **Linked irrigation settings**: the method and the field area of Properties pass to the three designs, the Design shortcuts group shows the link and the last result of the design, and the sketch passes the pipes to it.
 - **Daisy editor**: the buttons are ready before the file list loads, a stale tab can no longer break a later one, a failed tab shows a message with a retry button, and very large files and output logs are sent to Log plots; the Daisy scripts load after the first screen, so the program opens faster.
 - **Reference of every layer**: Chapter 22b lists the controls, the Properties and the data sources of each layer.
+
+
+### Final touches: literature figures, more questions, saving and speed (November 2026)
+
+- **Efficiencies, budgets and trade-offs, from the literature**: 21 new figures under every experiment, and under every scenario of three or more runs, measured from the runs: nitrogen use efficiency and surplus, the nitrogen budget, the nitrogen response curve, agronomic efficiency, recovery and physiological efficiency, nitrate in the drainage against the EU limit, the water balance, the water production function, Ky, the Pareto front, correlations, factor sensitivity, distributions, a combined score and the GUS index of a chemical (Section \ref{daisy-eff}).
+- **New results to choose**: nitrogen use efficiency, nitrogen surplus, reactive nitrogen lost, nitrate per Mg of yield, AE, RE and PE of nitrogen, water-use efficiency, yield per m3 of rain and irrigation, harvest index, relative evapotranspiration, nitrate in the drainage and the share of a chemical leached or degraded.
+- **Scenarios**: 37 questions instead of 24, with the 13 new ones on irrigation intensity and window, nitrogen with water, nitrogen on sand and loam, K_sat, pore size, topsoil settling, rain, warming, rain timing, the evapotranspiration model, half-life and the GUS classes (Section \ref{daisy-scen-list}).
+- **Scenario results from your own runs**: the map of the processes shows only what the variants changed and what the logs of the runs measured, with the range of every result.
+- **Interactions and time series**: the interaction map, the interaction plot, the effect of a factor through the year, every run through the year and runs against days (Section \ref{daisy-adv}).
+- **You choose where results are saved**: nothing is written to a hidden folder; the save buttons ask for a folder (Section \ref{daisy-save-folder}).
+- **Faster and steadier**: the Daisy outputs open without a pause (a file is read only when it is opened), figures are drawn when they come into view, the root-structure layer spaces out its background work, and the sensor label of the root-structure layer is clear.
+- **Easier to read**: formulas and units are set as in a journal (subscripts, superscripts, Greek letters and minus signs) in every figure and every label, the layout follows small windows, and every button has a hover text.

@@ -1132,6 +1132,80 @@ Every experiment of the study (E0 to E16) has its own question, its own design a
 
 ![The processes of Daisy in one experiment: the factors (F, orange) act on the processes in the middle, drawn in the fills of Fig. 1 of Daisy, and the results (R, blue) come from them.](images/daisy11/daisy_exp_procs.png){width=100%}
 
+## Efficiencies, budgets and trade-offs, from the literature {#daisy-eff}
+
+Under every experiment, and under every scenario with three or more runs, the group **Efficiencies, budgets and trade-offs, from the literature** draws 21 figures from the results measured in the runs. Nothing is typed in: every number comes from the logs of the runs, and every figure has the toolbar of every figure (*Titles*, *Save* as a picture at 300 or 600 dpi, copy, or the numbers behind it as a CSV table). The figures are drawn when they come into view, so the page opens at once. Point at a dot or a bar for its numbers. The box *Colour the runs by* at the top sets the quantity that gives the colour of the dots and lines in all figures, and *Second objective of the trade-off* sets the second axis of the Pareto figure. A figure whose quantities the runs did not measure is left out, without a message.
+
+**The indices.** They are added to the results of every run, so they can also be chosen as the result of the whole experiment (Section \ref{daisy-best}).
+
+| Result | Formula | Source |
+|:--------|:------------|:--------|
+| Nitrogen use efficiency, NUE (%) | $100 \times$ crop uptake of N $/$ N input | EU Nitrogen Expert Panel 2015 |
+| Nitrogen surplus (kg N per ha) | N input $-$ crop uptake of N | EU Nitrogen Expert Panel 2015 |
+| Reactive nitrogen lost | nitrate leached + denitrified + volatilised N | n/a |
+| Nitrate leached per Mg of yield | nitrate leached $/$ yield | van Groenigen et al. 2010 |
+| Agronomic efficiency, AE (kg per kg N) | (yield $-$ yield of the least fertilised run) $/$ extra N applied | Dobermann 2005 |
+| Apparent recovery, RE (%) | $100 \times$ extra uptake $/$ extra N applied | Dobermann 2005 |
+| Physiological efficiency, PE (kg per kg N) | yield gain $/$ extra N taken up (AE = RE $\times$ PE $/$ 100) | Dobermann 2005 |
+| Water-use efficiency (kg per m3) | yield $/$ evapotranspiration | French and Schultz 1984 |
+| Yield per m3 of rain and irrigation | yield $/$ (rain + irrigation) | Howell 2001 |
+| Harvest index | storage organ $/$ total dry matter | n/a |
+| Relative evapotranspiration | actual $/$ potential | Doorenbos and Kassam 1979 |
+| Nitrate in the drainage (mg N per L) | $100 \times$ nitrate leached $/$ drainage | EU Nitrates Directive 91/676/EEC (limit 11.3 mg N per L) |
+| Chemical leached, degraded (%) | share of the amount sprayed | n/a |
+
+**Nitrogen.**
+
+1. *Nitrogen budget of every run*: a bar for every run, split into crop uptake, nitrate leached, denitrified, volatilised and the rest left in the soil, ranked by surplus.
+2. *Nitrogen use efficiency against nitrogen surplus*: the diagram of the EU Nitrogen Expert Panel. The green box is the target (NUE 50 to 90 % and a surplus below 80 kg N per ha); left of it nitrogen is applied in excess, right of it the soil stock is mined.
+3. *Yield against nitrogen use efficiency*, with the line of best fit.
+4. *Nitrogen response curve*: yield against the nitrogen applied with a quadratic fit $y = a + bx + cx^2$, its R squared and, when the curve bends down, the rate of maximum yield.
+5. *Agronomic efficiency, recovery and physiological efficiency*: three panels sharing the rows.
+6. *Nitrate leached against nitrogen surplus*, with the line of best fit: the slope is the share of the surplus that leaves as nitrate.
+7. *Nitrate in the drainage water*: nitrate leached against drainage with the lines of 5, 11.3 and 20 mg N per L; runs above the 11.3 line exceed the limit of the Nitrates Directive.
+8. *Pathways of the reactive nitrogen lost*: the share of leaching, denitrification and volatilisation; a shift between them is pollution swapping.
+9. *Nitrate leached per tonne of yield* against the nitrogen applied.
+
+**Water.**
+
+10. *Water balance of every run*: evapotranspiration, drainage, runoff and the change in storage as shares of rain plus irrigation.
+11. *Water production function*: yield against evapotranspiration with a line; its slope is the water productivity per extra millimetre.
+12. *Yield response factor Ky*: $1 - Y_a/Y_m = K_y\,(1 - ET_a/ET_m)$, the relative yield decrease against the relative evapotranspiration deficit with the dashed 1:1 line; the slope of the fitted line is Ky.
+13. *Irrigation water productivity* against irrigation, when the experiment has a rainfed run to compare with.
+14. *Water stress against nitrogen stress*: the days of each stress before harvest; runs above the dashed line lack nitrogen first, runs below it lack water first.
+15. *Water and nitrogen efficiency together*: water-use efficiency against NUE with the front of the runs no other run beats on both.
+
+**All results together.**
+
+16. *Correlation of the results*: Pearson r between every pair of results (red: rise together, blue: one rises while the other falls).
+17. *Trade-off and Pareto front*: yield against a second objective of your choice; the red line joins the runs that no other run beats on both counts.
+18. *All results of every run side by side*: parallel coordinates, each axis from the lowest to the highest value.
+19. *Which factor moves the result most*: for each factor the mean result at its lowest and highest value against the mean of all runs, ranked by the length of the bar.
+20. *Distribution of a result*: histogram and cumulative curve with the quartiles.
+21. *Combined score of the runs*: every result scaled from the worst to the best run (inverted where less is better) and averaged with equal weights; stacked bars show what each result contributes.
+
+Two more figures complete the group. *Dose-response of each factor on the main results* draws, for every factor, the mean of each main result at each value, scaled from 0 to 1 so that results in different units share one axis. For chemicals, *GUS leaching index* sets the simulated leaching against $GUS = \log_{10}(DT_{50})\,(4 - \log_{10} K_{OC})$ of Gustafson 1989: a chemical above 2.8 is a likely leacher and one below 1.8 a non-leacher.
+
+## Interactions and time series, for the paper {#daisy-adv}
+
+The group *Interactions and time series, for the paper* has five figures for the results of one experiment.
+
+* **Interaction map of the factors.** Each cell is the share of the variance of the results explained by one factor alone (the diagonal, blue) or by a pair of factors beyond their separate effects (red, an interaction). Click a cell to open the interaction plot of that pair.
+* **Interaction plot.** The mean result at each value of one factor, one line for each value of another, with the lowest and highest run as a whisker; the same numbers with the two factors swapped are in panel (b). Lines that are not parallel mean an interaction.
+* **Effect of a factor through the year.** For matched pairs of runs that differ only in that factor, the difference of a daily quantity day by day, one line for each value of the other factor, with the band of 10 to 90 %.
+* **Every run through the year.** One line for each run, coloured by its final result, with the lowest and highest run in black.
+* **Runs against days.** One row for each run, ranked by the result, one column for each day of the year, coloured by the quantity.
+
+The quantity is chosen in the box *Quantity* (the daily logs of the runs) and can be shown as the value or as the running total. The group is drawn from the logs, so it needs runs with daily logs, or at least two factors.
+
+## Where the results are saved: you choose the folder {#daisy-save-folder}
+
+SWAFL does not write the results of experiments to a hidden folder any more. While the runs are made, the files are kept in a temporary place that is shown only as a note; nothing is saved to the computer by itself. When the runs have finished, *Save the outputs of this experiment* and *Save both: outputs and raw Daisy files* ask for a folder with the usual window of the computer, and write into the folder chosen. *Open folder* shows what was saved. If the window is closed without a choice, nothing is written and the results stay on the screen for another try.
+
+## Hover texts and the details of the measured process map
+
+The process map of an experiment or a scenario now draws every measured result with the range of its values in the runs (for example *yield 4.1 to 8.9 Mg per ha*) and every factor with its levels, and the result selected above the map is outlined. For a scenario the map shows only the factors that the variants you ran changed and the results measured in the logs of those runs, not a generic list. Every button and every figure has a hover text that says what it does.
+
 ## Every log of every run {#daisy-every-log}
 
 Under the figures of an experiment, the panel **Every log of every run** turns everything Daisy wrote into figures: every log of the runs (the daily and the annual logs, and every log of the Daisy library that was added to the runs) and every quantity in it, one figure each. Nothing has to be chosen first; the quantities a paper usually shows come first (leaf area index, the storage organ, the development stage, evapotranspiration, transpiration, soil evaporation, percolation and leaching, crop nitrogen, nitrate, stress, water content), then all the others.

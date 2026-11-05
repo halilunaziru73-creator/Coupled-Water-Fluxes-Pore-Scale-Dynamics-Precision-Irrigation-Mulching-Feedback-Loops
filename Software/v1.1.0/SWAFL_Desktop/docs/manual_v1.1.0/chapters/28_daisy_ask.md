@@ -70,9 +70,9 @@ The Scenarios tab starts with the questions that the built-in farm can answer: w
 
 \newpage
 
-### Scenarios: the 24 questions, and one more run from the library {#daisy-scen-list}
+### Scenarios: the 37 questions, and one more run from the library {#daisy-scen-list}
 
-The Scenarios tab holds 24 questions in five themes: water, nitrogen, soil, crop and climate, and chemicals. *Find a question* filters the cards by a word (drip, slurry, PFAS, clay, maize). Each card says how many runs it compares and, when its runs differ in one option, how many choices of the parameter library can be added. The five questions of the earlier version are kept as they were; the others vary one option each over the values of the parameter library:
+The Scenarios tab holds 37 questions in five themes: water, nitrogen, soil, crop and climate, and chemicals. *Find a question* filters the cards by a word (drip, slurry, PFAS, clay, maize). Each card says how many runs it compares and, when its runs differ in one option, how many choices of the parameter library can be added. The five questions of the earlier version are kept as they were; the others vary one option each over the values of the parameter library:
 
 | Theme | Question | Runs compared | One more run from |
 |:----|:----------|:--------------|:------|
@@ -100,12 +100,27 @@ The Scenarios tab holds 24 questions in five themes: water, nitrogen, soil, crop
 | Chemicals | Pesticides of the Daisy library | Bentazon; MCPP (mecoprop); Atrazine; Isoproturon (IPU); Pendimethalin; 2,4-D | 35 choices of the library |
 | Chemicals | PFAS: the forever chemicals | PFOS; PFOA; PFHxA; PFBS; PFBA | 35 choices of the library |
 | Chemicals | How strongly the chemical is held (K_OC) | K_OC 0 L/kg; K_OC 10 L/kg; K_OC 50 L/kg; K_OC 200 L/kg; K_OC 1000 L/kg | any value |
+| Water | How fast is the water applied? Irrigation intensity | 0.1 mm per hour; 0.5 mm per hour; 2 mm per hour; 5 mm per hour | any value |
+| Water | When in the year may irrigation run? The irrigation window | From April 1 to October 1; From May 1 to October 1; From June 1 to October 1; From May 1 to September 1 | any value |
+| Nitrogen | Nitrogen and water together: the water-nitrogen interaction | Rainfed and irrigated, each at nitrogen x 0.5, x 1 and x 1.3 (six runs) | any value |
+| Nitrogen | The same nitrogen on a sand and on a loam | Sand and loam, each at nitrogen x 0.7, x 1 and x 1.3 (six runs) | any value |
+| Soil | Saturated hydraulic conductivity of the soil | K_sat x 0.25; x 0.5; x 1; x 2; x 4 | any value |
+| Soil | Pore-size distribution of the soil (van Genuchten n) | n minus 1 x 0.7; x 0.85; x 1; x 1.15; x 1.3 | any value |
+| Soil | How fast does the tilled topsoil settle? | Consolidation 0.001; 0.005; 0.01; 0.02 per day | any value |
+| Crop and climate | Dry and wet years: the rain of the weather file scaled | Rain x 0.6; x 0.8; x 1; x 1.2; x 1.4 | any value |
+| Crop and climate | Warming: temperature raised by 0 to 3 degrees | As the weather file; +1 C; +2 C; +3 C | any value |
+| Crop and climate | When the rain falls: dry spring, dry summer, wet winter | As the weather file; Dry summer; Dry spring; Wet winter | any value |
+| Crop and climate | Which evapotranspiration model? | FAO56; Daisy energy balance | n/a |
+| Chemicals | How long the chemical lasts (half-life) | Half-life 5; 15; 30; 90; 365 days at K_OC 100 | any value |
+| Chemicals | Leachers and non-leachers: the GUS classes | Five chemicals with GUS 1.0, 1.5, 2.2, 3.0 and 4.8 | any value |
+
+The thirteen questions added in the last release come from the literature on irrigation, nitrogen, soil hydraulics, climate and pesticide leaching: they let a first-time user ask a complete question (for example *does water make nitrogen pay?*) without building a design. After the runs, every question with three or more runs also shows the efficiency figures of Section \ref{daisy-eff} calculated from its own runs, and the map of the processes of Daisy shows only what the variants changed and what the runs measured.
 
 **Add a run.** In the panel of a question with a varied option, the row *Add a run* offers every other value of that option: a list with a search box for a choice of the library (79 fertilisers and slurries, 84 crops, 35 chemicals, 73 soils, 8 weather stations), or a number box for a number option (with the range it accepts). *Add* makes one more run with that value and every other option as set above; it is ticked like the others and run with them. *Remove the added runs* takes them out again.
 
 **The library in a run.** A run that uses a slurry, a chemical or a crop of the library reads the file of the library inside its rotation file, after the files the rotation reads itself (fertilizer.dai, crop.dai, tillage.dai) and before its own definitions, which use it. The copy of the file in Common/ leaves out what the run already reads, because Daisy stops on a definition made twice. All 24 questions were run with Daisy 7.1.14 and give their logs.
 
-![The 24 questions of the Scenarios tab in their five themes.](images/daisy13/scen_cards.jpg){width=100%}
+![Questions of the Scenarios tab in their five themes.](images/daisy13/scen_cards.jpg){width=100%}
 
 \newpage
 
