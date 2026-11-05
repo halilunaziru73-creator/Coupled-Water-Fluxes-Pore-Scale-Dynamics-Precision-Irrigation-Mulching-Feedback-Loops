@@ -31,5 +31,20 @@
     P.strokeText = function (t, x, y, mw) { if (!quick(t)) return oS.call(this, t, x, y, mw); return draw(oS, this, t, x, y, mw); };
     P.measureText = function (t) { if (!quick(t)) return oM.call(this, t); const s = pre(t); if (!/[_^]\{/.test(s)) return oM.call(this, t); const r = oM.call(this, 'M'), w = layout(this, s).w; return { width: w, actualBoundingBoxLeft: 0, actualBoundingBoxRight: w, actualBoundingBoxAscent: r.actualBoundingBoxAscent, actualBoundingBoxDescent: r.actualBoundingBoxDescent, fontBoundingBoxAscent: r.fontBoundingBoxAscent, fontBoundingBoxDescent: r.fontBoundingBoxDescent }; };
   }
-  root.SciText = { unit, plain, pre, sup };
+  // the same on the page itself: text nodes of the Daisy workbench get real <sub> and <sup>; options of a list (which cannot hold mark-up) get the Unicode form
+  const SKIP = { INPUT: 1, TEXTAREA: 1, SCRIPT: 1, STYLE: 1, CODE: 1, PRE: 1, CANVAS: 1, SUB: 1, SUP: 1, KBD: 1 };
+  function dom(el) {
+    if (!el || !root.document || el.nodeType !== 1) return; const d = root.document, W = d.createTreeWalker(el, 4, null), list = []; let n;
+    while ((n = W.nextNode())) { const t = n.nodeValue; if (!t || (t.indexOf('_') < 0 && t.indexOf('^') < 0 && t.indexOf('DT') < 0)) continue; const pe = n.parentElement; if (!pe || SKIP[pe.tagName] || pe.isContentEditable || pe.closest('pre,code,textarea,[data-nosci]')) continue; if (!/[_^]\{/.test(pre(t))) continue; list.push(n); }
+    list.forEach(n => { const pe = n.parentElement, s2 = pre(n.nodeValue); if (pe.tagName === 'OPTION') { n.nodeValue = plain(n.nodeValue); return; }
+      const f = d.createDocumentFragment(), re = /([_^])\{([^}]*)\}/g; let k = 0, m; while ((m = re.exec(s2))) { if (m.index > k) f.appendChild(d.createTextNode(s2.slice(k, m.index))); const e = d.createElement(m[1] === '_' ? 'sub' : 'sup'); e.textContent = m[2]; e.style.cssText = 'font-size:.75em;line-height:0'; f.appendChild(e); k = re.lastIndex; } if (k < s2.length) f.appendChild(d.createTextNode(s2.slice(k))); pe.replaceChild(f, n); });
+  }
+  if (root.document && root.MutationObserver) {
+    let tm = 0; const todo = new Set(), inDz = e => e.nodeType === 1 && (/^dz/i.test(e.id || '') || e.closest('[id^="dz"],.dzpan,.dzcard,.dzfig,.dzgrp,.dzraw,.dzres'));
+    const flush = () => { tm = 0; todo.forEach(e => { if (e.isConnected) { try { dom(e); } catch (x) { } } }); todo.clear(); };
+    const start = () => new MutationObserver(ms => { ms.forEach(m => { m.addedNodes.forEach(a => { const e = a.nodeType === 3 ? a.parentElement : a; if (e && e.nodeType === 1 && inDz(e)) todo.add(e); }); if (m.type === 'characterData' && m.target.parentElement && inDz(m.target.parentElement)) todo.add(m.target.parentElement); }); if (todo.size && !tm) tm = setTimeout(flush, 120); }).observe(root.document.body, { childList: true, subtree: true, characterData: true });
+    const go = () => { start(); root.document.querySelectorAll('[id^="dz"],.dzpan').forEach(e => todo.add(e)); if (todo.size && !tm) tm = setTimeout(flush, 120); };
+    if (root.document.body) go(); else root.document.addEventListener('DOMContentLoaded', go);
+  }
+  root.SciText = { unit, plain, pre, sup, dom };
 })(typeof window !== 'undefined' ? window : globalThis);
