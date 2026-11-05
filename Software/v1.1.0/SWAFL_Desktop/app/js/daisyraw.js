@@ -49,6 +49,8 @@ window.DaisyRaw = (() => {
   }
   // every raw file of the runs as a map { path: text }, under root/<run>/outputs and root/<run>/setup
   async function collect(runs, root, setup) { const f = {}; runs = (runs || []).filter(r => r && (r.raw || r.rawIndex || r.saved)); for (const r of runs) { const d = root + '/' + sane(r.id || r.label) + '/'; for (const n of filesOf(r)) { const t = await get(r, n); if (t != null) f[d + 'outputs/' + n] = t; } if (setup) { const s = r.setup || {}; Object.keys(s).forEach(n => { f[d + 'setup/' + n] = s[n]; }); if (!r.setup && r.runfile) f[d + 'setup/Run/Runfile.dai'] = r.runfile; } } return f; }
+  // the same map, but a file that is not in memory is read from the disk only when it is opened (or saved): the viewer opens at once
+  function collectLazy(runs, root) { const f = {}; runs = (runs || []).filter(r => r && (r.raw || r.rawIndex || r.saved)); runs.forEach(r => { const d = root + '/' + sane(r.id || r.label) + '/'; filesOf(r).forEach(n => { if (r.raw && r.raw[n] != null) f[d + 'outputs/' + n] = r.raw[n]; else { const fn = async () => { const t = await get(r, n); return t == null ? '(this run has no ' + n + ')' : t; }; fn.sz = sizeOf(r, n) || 0; f[d + 'outputs/' + n] = fn; } }); }); return f; }
   /* every run of an experiment, each a collapsible group with its files; tick what to save, or save everything, in one .zip */
   const typeOf = n => String(n).replace(/^r\d+[-_]/, '').replace(/^.*[\\/]/, '');
   function htmlAll(runs, opt) {
@@ -108,5 +110,5 @@ window.DaisyRaw = (() => {
   }
   const save0 = (name, text, mime) => save(name, text, mime);
   const mark = (host, i, n, t) => { if (!host) return; const m = host.querySelector('[data-ra-mark="' + i + '|' + n.replace(/"/g, '\\"') + '"]'); if (m) m.textContent = t; };
-  return { html, bind, describe, collect, htmlAll, bindAll, openEditor, edited: () => Object.keys(EDIT) };
+  return { html, bind, describe, collect, collectLazy, htmlAll, bindAll, openEditor, edited: () => Object.keys(EDIT) };
 })();

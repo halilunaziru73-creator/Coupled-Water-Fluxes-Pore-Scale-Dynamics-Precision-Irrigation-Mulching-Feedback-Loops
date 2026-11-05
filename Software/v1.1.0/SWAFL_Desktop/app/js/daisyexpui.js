@@ -232,13 +232,13 @@
   // panel on top of the Daisy window (folders fold and unfold, a click on a file shows its text), then Save the folder (.zip)
   function showFolder(tree, zipName, onSaved, opt) {
     opt = opt || {};
-    const enc = new TextEncoder(), size = v => typeof v === 'function' ? 0 : typeof v === 'string' ? enc.encode(v).length : (v && v.length) || 0, fmt = n => n < 1024 ? n + ' B' : n < 1048576 ? (n / 1024).toFixed(1) + ' KB' : (n / 1048576).toFixed(2) + ' MB';
+    const size = v => typeof v === 'function' ? (v.sz || 0) : (v && v.length) || 0, fmt = n => n < 1024 ? n + ' B' : n < 1048576 ? (n / 1024).toFixed(1) + ' KB' : (n / 1048576).toFixed(2) + ' MB';
     const paths = Object.keys(tree).sort((a, b) => { const da = a.split('/').length, db = b.split('/').length; return a.split('/').slice(0, -1).join('/') === b.split('/').slice(0, -1).join('/') ? a.localeCompare(b, undefined, { numeric: true }) : a.localeCompare(b, undefined, { numeric: true }); });
     const root = { dirs: {}, files: [], n: 0, b: 0 };
     paths.forEach(pth => { const parts = pth.split('/'), fn = parts.pop(); let node = root; const sz = size(tree[pth]); node.n++; node.b += sz; parts.forEach(q => { node = node.dirs[q] || (node.dirs[q] = { dirs: {}, files: [], n: 0, b: 0 }); node.n++; node.b += sz; }); node.files.push([fn, pth, sz]); });
     let id = 0; const ids = {};
     const draw = (node, depth) => { let h = ''; Object.keys(node.dirs).sort((a, b) => a.localeCompare(b, undefined, { numeric: true })).forEach(dn => { const d = node.dirs[dn]; h += '<details' + (depth < 1 ? ' open' : '') + ' style="margin-left:' + (depth ? 14 : 0) + 'px"><summary style="cursor:pointer;padding:2px 0"><b>&#128193; ' + esc(dn) + '</b> <small style="color:#667">' + d.n + ' file' + (d.n === 1 ? '' : 's') + (d.b ? ', ' + fmt(d.b) : '') + '</small></summary>' + draw(d, depth + 1) + '</details>'; });
-      node.files.forEach(([fn, pth, sz]) => { const k = 'f' + (id++); ids[k] = pth; h += '<div data-fv="' + k + '" style="margin-left:' + (depth ? 14 : 0) + 'px;padding:2px 4px;cursor:pointer;border-radius:3px;display:flex;gap:8px"><span>&#128196; ' + esc(fn) + '</span><small style="margin-left:auto;color:#667">' + (typeof tree[pth] === 'function' ? 'made when opened' : fmt(sz)) + '</small></div>'; }); return h; };
+      node.files.forEach(([fn, pth, sz]) => { const k = 'f' + (id++); ids[k] = pth; h += '<div data-fv="' + k + '" style="margin-left:' + (depth ? 14 : 0) + 'px;padding:2px 4px;cursor:pointer;border-radius:3px;display:flex;gap:8px"><span>&#128196; ' + esc(fn) + '</span><small style="margin-left:auto;color:#667">' + (typeof tree[pth] === 'function' && !sz ? 'made when opened' : fmt(sz)) + '</small></div>'; }); return h; };
     const old = document.getElementById('dzFolderView'); if (old) old.remove();
     const ov = document.createElement('div'); ov.id = 'dzFolderView'; ov.style.cssText = 'position:fixed;inset:0;z-index:100000;background:rgba(10,20,40,.45);display:flex;align-items:center;justify-content:center';
     ov.innerHTML = '<div style="background:#F4F3EF;width:min(1180px,96vw);height:min(760px,92vh);display:flex;flex-direction:column;border:1px solid #0A246A;box-shadow:0 8px 30px rgba(0,0,0,.4);font:12px Tahoma,Segoe UI,sans-serif;color:#1B1F23">' +
@@ -491,7 +491,7 @@
   async function viewOutputs(ev) {
     const b = (ev && ev.target && ev.target.closest && ev.target.closest('button')) || $('ViewOut'); if (!st.runs.length) return; if (b) b.disabled = true; const lab = b ? b.textContent : '';
     try { if (b) b.textContent = 'Reading the files of Daisy...'; const name = ((st.preset && st.preset.id) || st.pid || 'experiment') + '_' + SWAFLDate.stamp(), tree = {};
-      if (window.DaisyRaw && window.DaisyRaw.collect) { const raw = await window.DaisyRaw.collect(st.runs, 'Daisy outputs', false); Object.keys(raw).forEach(k => { tree[k.replace(/\/outputs\//, '/')] = raw[k]; }); }
+      if (window.DaisyRaw && window.DaisyRaw.collect) { const raw = await (window.DaisyRaw.collectLazy || window.DaisyRaw.collect)(st.runs, 'Daisy outputs', false); Object.keys(raw).forEach(k => { tree[k.replace(/\/outputs\//, '/')] = raw[k]; }); }
       if (!Object.keys(tree).length) { D.note('Xst', 'The files of Daisy can be read only on the computer that ran the runs.', 1); return; }
       const desk = window.swafl && window.swafl.daisyWrite && st.grpDir;
       showFolder(tree, name + '_daisy_outputs.zip', () => D.note('Xst', 'The outputs of Daisy, with your changes, are saved as one .zip.'), { title: 'The outputs of the Daisy simulation, before they are saved', full: true, theme: 'npp', write: desk ? async t => { const r = await window.swafl.daisyWrite(st.grpDir, t); return r && r.ok ? r.n + ' files written to ' + st.grpDir + (/[\\/]$/.test(st.grpDir) ? '' : '/') + 'Daisy outputs (the files Daisy wrote in each run are left as they were)' : 'Could not write: ' + ((r && r.err) || ''); } : null, writeLabel: 'Write them next to the runs' });
