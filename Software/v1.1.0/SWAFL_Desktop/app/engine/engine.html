@@ -5895,7 +5895,7 @@ function drawR1Chart() {
   drawSection(C.cx, y0, C.cw, 100, ppc); horizonTags(C.cx - 34, y0, ppc, 100); depthAxis(C.cx, y0, 100, ppc, 25);
   if (cv > 0.03) cropPlants(C.cx + C.cw / 2, y0, clampN(18 + current.yield * 2, 20, 34) * (0.2 + 0.8 * cv), C.cw / 6, 5, 0, 1, 5, y0 - 8);
   drawSoilWater(sim, dd, C.cx, C.cw, y0, ppc); ctx.save(); ctx.beginPath(); ctx.rect(C.cx, y0 - 2, C.cw, 100 * ppc + 2); ctx.clip(); drawRootsR1(sim, dd, C.cx, C.cw, y0, ppc); ctx.restore(); ctx.strokeStyle = INK; ctx.lineWidth = 1.5; ctx.strokeRect(C.cx, y0, C.cw, 100 * ppc);
-  const zS = Z_VALUES[state.zIdx]; ctx.strokeStyle = '#111'; ctx.setLineDash([4, 3]); ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(C.cx, y0 + zS * ppc); ctx.lineTo(C.sx + C.sw, y0 + zS * ppc); ctx.stroke(); ctx.setLineDash([]); T('sensor ' + zS, C.cx + C.cw + 4, y0 + zS * ppc - 3, { s: 8.5, c: '#111' });
+  const zS = Z_VALUES[state.zIdx]; ctx.strokeStyle = '#111'; ctx.setLineDash([4, 3]); ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(C.cx, y0 + zS * ppc); ctx.lineTo(C.sx + C.sw, y0 + zS * ppc); ctx.stroke(); ctx.setLineDash([]); 
   let mxR = 1e-9, mxU = 1e-9, mxS = 1e-9; for (let i = 0; i < NLAY; i++) { if (rho[i] > mxR) mxR = rho[i]; if (upt[i] > mxU) mxU = upt[i]; if (Y.U[i] > mxS) mxS = Y.U[i]; }
   const panel = (x, w, title) => { ctx.fillStyle = '#F4F1E6'; ctx.fillRect(x, y0, w, 100 * ppc); ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.strokeRect(x, y0, w, 100 * ppc); };
   panel(C.dx, C.dw); panel(C.ux, C.uw); panel(C.sx, C.sw);
@@ -5923,6 +5923,7 @@ function drawR1Chart() {
   hot(16, 676, 74, 22, () => { n1ui.play = !n1ui.play; n1ui.lt = 0; }, n1ui.play ? 'Stop: hold the day shown' : 'Play: the season plays again and again until you press Stop');
   const crop = cropNameAt(sim, dd), live = cv > 0.03;
   TW(Y.y + ' (' + (crop || 'fallow') + '): roots reached ' + Math.round(Y.mxRd) + ' cm. Half of the water the crop took came from the top ' + (Y.d50 || 0) + ' cm and nine tenths from the top ' + (Y.d90 || 0) + ' cm; ' + Math.round(Y.top30 * 100) + '% came from the top 30 cm. ' + (live ? 'On this day the roots reach ' + Math.round(rd) + ' cm and the crop takes ' + upt.reduce((a, b) => a + b, 0).toFixed(1) + ' mm.' : 'On this day there is no crop taking water.'), 100, 680, 500, { s: 10.5 });
+  pillBox('sensor ' + Z_VALUES[state.zIdx] + ' cm', C.cx + C.cw - 6, y0 + Z_VALUES[state.zIdx] * ppc - 4, { a: 'right', b: true, s: 10, c: '#111', bg: 'rgba(255,255,255,0.96)', stroke: '#111' });
   drawR1Compare(); drawR1All(1052, dd); drawR1Data(1052 + 520); if (!r1AllStep()) r1AltStep();
 }
 
