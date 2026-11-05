@@ -5722,6 +5722,9 @@ function r1AltGet(over) {
   if (r1Alt.cache[k]) return r1Alt.cache[k];
   if (!r1Alt.queue.some(q => q.k === k)) r1Alt.queue.push({ k, base }); return null;
 }
+// the background sums of the other soils, tillages and crops are each a whole 20-year simulation: one at a time, never while the pointer is moving and never twice within 150 ms, so the picture keeps moving
+let r1SlotT = 0, r1InT = 0; ['pointermove', 'pointerdown', 'wheel', 'keydown'].forEach(ev => window.addEventListener(ev, () => { r1InT = performance.now(); }, { passive: true, capture: true }));
+function r1Slot() { const t = performance.now(); if (t - r1SlotT < 150 || t - r1InT < 250) return false; r1SlotT = t; return true; }
 function r1AltStep() {
   const q = r1Alt.queue.shift(); if (!q) return; r1Alt.cache[q.k] = r1Metrics(q.base);
   const ks = Object.keys(r1Alt.cache); if (ks.length > 120) delete r1Alt.cache[ks[0]];
@@ -5924,7 +5927,7 @@ function drawR1Chart() {
   const crop = cropNameAt(sim, dd), live = cv > 0.03;
   TW(Y.y + ' (' + (crop || 'fallow') + '): roots reached ' + Math.round(Y.mxRd) + ' cm. Half of the water the crop took came from the top ' + (Y.d50 || 0) + ' cm and nine tenths from the top ' + (Y.d90 || 0) + ' cm; ' + Math.round(Y.top30 * 100) + '% came from the top 30 cm. ' + (live ? 'On this day the roots reach ' + Math.round(rd) + ' cm and the crop takes ' + upt.reduce((a, b) => a + b, 0).toFixed(1) + ' mm.' : 'On this day there is no crop taking water.'), 100, 680, 500, { s: 10.5 });
   pillBox('sensor ' + Z_VALUES[state.zIdx] + ' cm', C.cx + C.cw - 6, y0 + Z_VALUES[state.zIdx] * ppc - 4, { a: 'right', b: true, s: 10, c: '#111', bg: 'rgba(255,255,255,0.96)', stroke: '#111' });
-  drawR1Compare(); drawR1All(1052, dd); drawR1Data(1052 + 520); if (!r1AllStep()) r1AltStep();
+  drawR1Compare(); drawR1All(1052, dd); drawR1Data(1052 + 520); if (r1Slot()) { if (!r1AllStep()) r1AltStep(); }
 }
 
 
