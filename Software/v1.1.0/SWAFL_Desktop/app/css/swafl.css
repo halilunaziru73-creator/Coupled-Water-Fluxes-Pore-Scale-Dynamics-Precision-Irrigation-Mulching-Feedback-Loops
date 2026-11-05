@@ -240,3 +240,20 @@ body.nolayer #engine{visibility:hidden}
 /* small windows: the picture keeps its room (the toolbox folds away, the side panels narrow; the toolbox is still in the Layers and Tools menus) */
 @media (max-width:1100px){#toolboxDock,#splitLeftV{display:none!important}#layersDock{flex:1 1 auto!important;height:auto!important}#leftDock{width:180px;min-width:160px}#rightDock{width:210px;min-width:190px}#dashDock{width:230px;min-width:210px}}
 @media (max-width:880px){#leftDock{width:150px;min-width:140px}#rightDock{width:190px;min-width:170px}#dashDock{width:200px;min-width:190px}}
+
+/* text always stays inside its box: long group titles wrap inside their bar, the tabs of the results give way before the buttons beside them, and nothing runs out of the dock */
+.pgh{height:auto;min-height:24px;padding-top:3px;padding-bottom:3px;line-height:1.25;align-items:flex-start;overflow-wrap:anywhere}
+.pgh .tw{margin-top:2px;flex:none}
+#dashTabs{overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+#dashTabs::-webkit-scrollbar{display:none}
+#dashTabs>button:not(.mini){flex:none}
+#dashTabs .mini{flex:none;position:sticky;right:0;z-index:2}
+#dashTabs .grow{min-width:0;flex:1 0 4px}
+@media (max-width:1499px){#dashTabs .mini[data-act=fullDash]{font-size:0;padding:0 5px}#dashTabs .mini[data-act=maxDash]{font-size:0;padding:0 5px}#dashTabs .mini[data-act=maxDash]::after{content:"\21D4";font-size:13px;line-height:15px}}
+#dashBody{overflow-x:hidden;overflow-wrap:anywhere}
+#dashBody canvas,#dashBody svg,#dashBody img{max-width:100%;height:auto}
+#rightDock label,#rightDock .prow{overflow-wrap:anywhere}
+@media (max-width:1499px){#dashTabs>button:not(.mini){padding-left:6px;padding-right:6px;font-size:12px}}
+#dashTabs .mini[data-act=fullDash]{right:26px}
+@media (min-width:1500px){#dashTabs .mini[data-act=fullDash]{right:70px}}
+#dashTabs .mini[data-act=maxDash]{right:0}

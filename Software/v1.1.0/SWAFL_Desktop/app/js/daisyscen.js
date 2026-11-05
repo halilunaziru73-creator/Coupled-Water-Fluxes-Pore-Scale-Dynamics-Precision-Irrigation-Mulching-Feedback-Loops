@@ -148,6 +148,8 @@
       variants: [5, 15, 30, 90, 365].map(k => V('h' + k, 'Half-life ' + k + ' days', { koc: 100, half: k })), figs: FC },
     { id: 'gusclass', theme: 'Chemicals', vary: 'koc', title: 'Leachers and non-leachers: the GUS classes', question: 'Five chemicals chosen on the GUS index of Gustafson (non-leacher below 1.8, transition 1.8 to 2.8, leacher above 2.8): does the simulated leaching follow the index?', opts: ['soil', 'precip', 'temp', 'start', 'stop'],
       variants: [[1000, 10], [500, 15], [200, 20], [100, 30], [20, 60]].map(q => V('g' + q[0], 'K_OC ' + q[0] + ', half-life ' + q[1] + ' d (GUS ' + (Math.log10(q[1]) * (4 - Math.log10(q[0]))).toFixed(1) + ')', { koc: q[0], half: q[1] })), figs: FC });
+  // variant ids are used in element ids and file names: letters, digits, underscore and hyphen only
+  S.LIST.forEach(sc => (sc.variants || []).forEach(v => { v.id = String(v.id).replace(/[^A-Za-z0-9_-]/g, '_'); }));
   S.THEMES = ['Water', 'Nitrogen', 'Soil', 'Crop and climate', 'Chemicals'];
 
   // the lines of the Daisy set-up
