@@ -236,3 +236,7 @@ body.nolayer #engine{visibility:hidden}
 .mburger{font-weight:600}
 @media (max-width:880px){#menubar{height:34px}.projname{display:none}.mi{white-space:normal;padding:9px 14px}.mi .key{display:none}.menu{min-width:min(260px,calc(100vw - 12px))}}
 @media (pointer:coarse){.mi{padding:11px 14px}.mbtn{padding:0 14px}#menubar{height:38px}}
+
+/* small windows: the picture keeps its room (the toolbox folds away, the side panels narrow; the toolbox is still in the Layers and Tools menus) */
+@media (max-width:1100px){#toolboxDock,#splitLeftV{display:none!important}#layersDock{flex:1 1 auto!important;height:auto!important}#leftDock{width:180px;min-width:160px}#rightDock{width:210px;min-width:190px}#dashDock{width:230px;min-width:210px}}
+@media (max-width:880px){#leftDock{width:150px;min-width:140px}#rightDock{width:190px;min-width:170px}#dashDock{width:200px;min-width:190px}}

@@ -287,3 +287,6 @@ try {
   ids.forEach(i => { if (saved[i]) document.getElementById(i).style.width = saved[i]; });
   window.addEventListener('beforeunload', () => { const o = {}; ids.forEach(i => { const w = document.getElementById(i).style.width; if (w) o[i] = w; }); localStorage.setItem(KEY, JSON.stringify(o)); });
 } catch (e) {}
+
+// a name that is cut short with ... shows in full when the pointer rests on it (tabs, layers, buttons), without each place needing its own tooltip
+document.addEventListener('mouseover', e => { try { const t = e.target; if (!t || t.title || t.children.length || !t.textContent) return; const cs = getComputedStyle(t); if ((cs.textOverflow === 'ellipsis' || cs.overflow === 'hidden') && t.scrollWidth > t.clientWidth + 2) t.title = t.textContent.trim(); } catch (x) { } }, { passive: true });
