@@ -78,7 +78,7 @@ ipcMain.handle('daisy-job', async (_e, job) => {
   try {
     const r = await DR.runJob(job, { exe, timeoutMs: (job && job.timeoutMs) || 1800000 });
     // keep the whole run folder (set-up files and the raw Daisy logs, untouched) so that it can be checked and reused outside SWAFL
-    try { const root = runsRoot(); fs.mkdirSync(root, { recursive: true }); const stamp = new Date().toISOString().replace(/[:T]/g, '-').slice(0, 19), clean = t => String(t || '').replace(/[^A-Za-z0-9._-]+/g, '_').slice(0, 60), nm = clean((job && job.scenario ? job.scenario + '_' : '') + ((job && job.label) || 'run')), grp = clean(job && job.group), rid = clean(job && job.runId); let base = grp ? path.join(root, grp) : root, dest = path.join(base, grp ? (rid ? rid + '_' : '') + nm : stamp + '_' + nm), k = 1; fs.mkdirSync(base, { recursive: true }); while (fs.existsSync(dest)) dest = dest.replace(/_\d+$/, '') + '_' + (++k); fs.cpSync(r.dir, dest, { recursive: true }); r.saved = dest; } catch (e) { r.savedError = String(e.message); }
+    try { const root = scratchRoot(); fs.mkdirSync(root, { recursive: true }); const stamp = new Date().toISOString().replace(/[:T]/g, '-').slice(0, 19), clean = t => String(t || '').replace(/[^A-Za-z0-9._-]+/g, '_').slice(0, 60), nm = clean((job && job.scenario ? job.scenario + '_' : '') + ((job && job.label) || 'run')), grp = clean(job && job.group), rid = clean(job && job.runId); let base = grp ? path.join(root, grp) : root, dest = path.join(base, grp ? (rid ? rid + '_' : '') + nm : stamp + '_' + nm), k = 1; fs.mkdirSync(base, { recursive: true }); while (fs.existsSync(dest)) dest = dest.replace(/_\d+$/, '') + '_' + (++k); fs.cpSync(r.dir, dest, { recursive: true }); r.saved = dest; r.scratch = true; } catch (e) { r.savedError = String(e.message); }
     DR.clean(r.dir); delete r.dir; if (ck && r.code === 0) { jobCache.set(ck, r); while (jobCache.size > 30) jobCache.delete(jobCache.keys().next().value); } return r;
   } catch (e) { return { code: -1, err: String(e.message), logs: {}, out: '' }; }
 });
@@ -89,7 +89,24 @@ const legacyRoot = () => path.join(app.getPath('documents'), 'SWAFL Daisy runs')
 let RUNS_DIR = null;
 const writableDir = d => { try { fs.mkdirSync(d, { recursive: true }); const t = path.join(d, '.swafl-write-test'); fs.writeFileSync(t, '1'); fs.unlinkSync(t); return true; } catch (e) { return false; } };
 const runsRoot = () => { if (RUNS_DIR) return RUNS_DIR; let e = null; try { e = exeNow(); } catch (x) { } const homes = []; if (e) { homes.push(DR.homeFor(e)); homes.push(path.dirname(path.dirname(e))); } homes.push(DR.ownDir()); for (const h of homes) { if (!h) continue; const d = path.join(h, 'SWAFL runs'); if (writableDir(d)) return (RUNS_DIR = d); } return (RUNS_DIR = legacyRoot()); };
-const allRoots = () => Array.from(new Set([runsRoot(), legacyRoot()].map(r => path.resolve(r))));
+// nothing is kept on the computer until the person chooses a folder: the output of a run waits in a scratch folder that is removed when SWAFL closes
+let SCRATCH = null; const USER_DIRS = new Set();
+const scratchRoot = () => SCRATCH || (SCRATCH = path.join(require('os').tmpdir(), 'swafl-scratch-' + process.pid));
+app.on('will-quit', () => { try { if (SCRATCH) fs.rmSync(SCRATCH, { recursive: true, force: true }); } catch (e) { } });
+const allRoots = () => Array.from(new Set([runsRoot(), legacyRoot(), scratchRoot()].map(r => path.resolve(r))));
+// saves what waits in the scratch folder into a folder that the person chooses
+ipcMain.handle('daisy-save-to', async (_e, dirs, title) => {
+  const r = await dialog.showOpenDialog(win, { title: title || 'Choose the folder to save the raw Daisy output in', properties: ['openDirectory', 'createDirectory'], buttonLabel: 'Save here' });
+  if (r.canceled || !r.filePaths[0]) return { ok: false, cancelled: true };
+  const dest = r.filePaths[0], sr = path.resolve(scratchRoot()); let n = 0; const made = [];
+  try {
+    const srcs = Array.from(new Set((dirs || []).map(d => path.resolve(String(d))))).filter(d => d.indexOf(sr + path.sep) === 0);
+    const tops = Array.from(new Set(srcs.map(d => { const rel = path.relative(sr, d).split(path.sep); return rel.length > 1 ? path.join(sr, rel[0]) : d; })));
+    for (const t of tops) { let to = path.join(dest, path.basename(t)), k = 1; while (fs.existsSync(to)) to = path.join(dest, path.basename(t) + '_' + (++k)); fs.cpSync(t, to, { recursive: true }); made.push(to); n++; }
+    made.forEach(m => USER_DIRS.add(path.resolve(m))); USER_DIRS.add(path.resolve(dest));
+    return { ok: true, dest, made, n };
+  } catch (e) { return { ok: false, err: String(e.message) }; }
+});
 const insideRuns = t => allRoots().some(r => t === r || t.indexOf(r + path.sep) === 0);
 ipcMain.handle('daisy-runs-dir', () => { const r = runsRoot(); try { fs.mkdirSync(r, { recursive: true }); } catch (e) { } return r; });
 // lists every saved run (a folder that holds .dlf logs) inside the runs folder, newest first: the run library of Run comparison
@@ -99,7 +116,7 @@ ipcMain.handle('daisy-read-file', async (_e, p) => { const t = path.resolve(Stri
 // opens a folder of saved Daisy runs in the file explorer (only inside the runs folder)
 // files made by the program for one experiment (tables, plan, figures) are written next to its runs; only inside the runs folder
 ipcMain.handle('daisy-write', async (_e, dir, files) => { const base = path.resolve(String(dir || '')); if (!insideRuns(base) || allRoots().indexOf(base) >= 0) return { ok: false, err: 'outside the runs folder' }; let n = 0; try { for (const k of Object.keys(files || {})) { const t = path.resolve(base, k); if (t.indexOf(base) !== 0) continue; fs.mkdirSync(path.dirname(t), { recursive: true }); const v = files[k]; fs.writeFileSync(t, typeof v === 'string' ? v : Buffer.from(v)); n++; } return { ok: true, n, dir: base }; } catch (e) { return { ok: false, err: String(e.message) }; } });
-ipcMain.handle('daisy-open-folder', async (_e, p) => { const t = path.resolve(String(p || runsRoot())); if (!insideRuns(t)) return false; try { fs.mkdirSync(t, { recursive: true }); } catch (e) { } const er = await shell.openPath(t); return !er; });
+ipcMain.handle('daisy-open-folder', async (_e, p) => { const t = path.resolve(String(p || runsRoot())); if (!insideRuns(t) && !Array.from(USER_DIRS).some(u => t === u || t.indexOf(u + path.sep) === 0)) return false; try { fs.mkdirSync(t, { recursive: true }); } catch (e) { } const er = await shell.openPath(t); return !er; });
 const HTTP_OK = /^https:\/\/(dmigw\.govcloud\.dk|api\.dataforsyningen\.dk|data\.geus\.dk|hip\.dataforsyningen\.dk|rest\.isric\.org|maps\.isric\.org)\//i;
 ipcMain.handle('http-get', async (_e, url, bin) => {
   if (!HTTP_OK.test(String(url))) return { status: 403, body: 'host not allowed' };
