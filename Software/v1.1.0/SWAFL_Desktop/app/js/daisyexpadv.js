@@ -21,6 +21,7 @@ window.DaisyExpAdv = (() => {
   const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], MSTART = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
   const TIMECOL = /^(year|month|mday|day|hour|minute|second|date|time)$/i;
   const PRIO = [/^LAI$/, /WSOrg|yield/i, /^DS$/, /evapotranspiration|^Ea$|actual_evap/i, /transpiration/i, /soil.?evap/i, /percolation|matrix.?water|leach|drain/i, /NCrop|uptake/i, /NO3|nitrate/i, /stress/i, /^Theta$/i, /irrigation/i];
+  const SU = u => window.SciText ? window.SciText.unit(u) : u;
   const memo = { st: {} };
   if (!document.getElementById('dzadvCss')) { const t = document.createElement('style'); t.id = 'dzadvCss'; t.textContent = '.dzadv .dzrow{gap:4px 8px;flex-wrap:wrap}.dzadv label{margin-left:8px;font-weight:600}.dzadv .dzrow>b{margin-right:8px}.dzadv .dzrow>.pnote{margin-left:6px}.dzadv-tip{position:fixed;z-index:9999;background:#fffffff2;border:1px solid #154378;border-radius:5px;padding:4px 8px;font:12px "Segoe UI",Arial,sans-serif;pointer-events:none;box-shadow:0 2px 8px #0003;max-width:300px}'; document.head.appendChild(t); }
   let tip = null; const showTip = (e, html) => { if (!tip) { tip = document.createElement('div'); tip.className = 'dzadv-tip'; document.body.appendChild(tip); } tip.innerHTML = html; tip.style.display = 'block'; tip.style.left = Math.min(window.innerWidth - 310, e.clientX + 14) + 'px'; tip.style.top = (e.clientY + 14) + 'px'; };
@@ -42,7 +43,7 @@ window.DaisyExpAdv = (() => {
   function mount(host, c) {
     if (!host) return; const rows = (c.rows || []).filter(r => r && r.r), X_ = X(), runs = (c.runs || []).filter(r => r && r.logs);
     const multi = (c.fids || []).filter(f => f !== 'run' && X_.levels(rows.filter(r => !r.reference), f).length > 1);
-    const resp = c.resp, rname = short(c.rlabel(resp)), runit = (X_.RESP.find(q => q.id === resp) || {}).unit || '';
+    const resp = c.resp, rname = short(c.rlabel(resp)), runit = SU((X_.RESP.find(q => q.id === resp) || {}).unit || '');
     const key = (c.key || 'own') + '|' + multi.join(','), S = memo.st[key] || (memo.st[key] = {});
     const V = multi.length >= 2 ? variance(rows, multi, resp) : null;
     if (V && (!S.a || multi.indexOf(S.a) < 0 || multi.indexOf(S.b) < 0 || S.a === S.b)) { let best = null; for (let i = 0; i < multi.length; i++) for (let j = i + 1; j < multi.length; j++) { const v = V.inter[multi[i] + '|' + multi[j]]; if (!best || v > best.v) best = { v, a: multi[i], b: multi[j] }; } S.a = best.a; S.b = best.b; }
@@ -50,7 +51,7 @@ window.DaisyExpAdv = (() => {
     const logs = {}; runs.forEach(r => Object.keys(r.logs).forEach(k => { const d = r.logs[k]; if (d && d.n && d.cols && !logs[k]) logs[k] = d; }));
     const isDaily = (name, d) => /daily|hourly/i.test(name) || (d.time && d.n > 60 && (d.time[d.n - 1] - d.time[0]) / Math.max(1, d.n - 1) < 3 * 864e5);
     let qs = []; Object.keys(logs).forEach(n => { const d = logs[n]; if (!d.time || !isDaily(n, d)) return; const dc = IO().depthColumns(d), depth = new Set(); Object.keys(dc).forEach(v => dc[v].forEach(q => depth.add(q.j)));
-      d.cols.forEach((col, j) => { if (TIMECOL.test(col) || depth.has(j)) return; const y = d.data[j]; if (!y || !y.some(v => isFinite(v) && v !== 0)) return; qs.push({ id: n + '::' + col, log: n, col, unit: d.units && d.units[col] || '' }); }); });
+      d.cols.forEach((col, j) => { if (TIMECOL.test(col) || depth.has(j)) return; const y = d.data[j]; if (!y || !y.some(v => isFinite(v) && v !== 0)) return; qs.push({ id: n + '::' + col, log: n, col, unit: SU(d.units && d.units[col] || '') }); }); });
     const pr = q => { const i = PRIO.findIndex(r => r.test(q.col)); return i < 0 ? 50 : i; }; qs = qs.map((q, i) => ({ q, i })).sort((a, b) => pr(a.q) - pr(b.q) || a.i - b.i).map(x => x.q);
     if (!S.q || !qs.some(q => q.id === S.q)) S.q = qs.length ? qs[0].id : null; if (!S.mode) S.mode = 'value';
     const Q = qs.find(q => q.id === S.q), qname = Q ? (Q.col.replace(/_/g, ' ') + (Q.unit ? ' (' + Q.unit + ')' : '')) : '';

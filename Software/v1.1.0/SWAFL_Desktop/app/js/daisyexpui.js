@@ -9,7 +9,7 @@
   const EXLAB = ['Trigger and sensor depth', 'Surface, overhead and drip', 'Drier, warmer, wetter', 'Nitrogen rate and leaching'];
   const EXAMPLES = ['How do the trigger suction (-100 to -800 cm) and the sensor depth (10, 30 and 60 cm) change irrigation and yield on sand and loam?', 'Compare overhead, surface and drip irrigation on a sandy loam with Bologna weather for 10 years', 'What if the rain is 20% less and it is 2 degrees warmer? Does irrigation pay off?', 'How much nitrogen should I apply? Nitrate leaching on all soils, from 40 to 100 percent', 'A water limit of 100, 200 and 300 mm per season: effect on yield and water use efficiency', 'Effect of mulch on evaporation'];
   const flabel = id => { const f = X.factor(id); if (f) return f.label.replace(/, factor.*/, '') + (f.unit ? ' (' + f.unit + ')' : ''); const e = Object.keys(X.ENS_FACTORS).find(k => X.ENS_FACTORS[k][0] === id); return e ? X.ENS_FACTORS[e][1] : id; };
-  const rlabel = id => { const r = X.RESP.find(x => x.id === id); return r ? r.label + ' (' + r.unit + ')' : id; };
+  const rlabel = id => { const r = X.RESP.find(x => x.id === id); return r ? r.label + ' (' + (window.SciText ? window.SciText.unit(r.unit) : r.unit) + ')' : id; };
   const lname = (fid, v) => { const f = X.factor(fid); if (!f || typeof v === 'object') return String(v && v.label || v); return X.levelName(f, v); };
   const ctx = () => { const m = window.DaisyScenUI ? window.DaisyScenUI.my() : {}; return { hasUserWx: !!(m && m.wxMode !== 'course' && m.wx), hasUserSoil: !!(m && m.soilOn) }; };
 
