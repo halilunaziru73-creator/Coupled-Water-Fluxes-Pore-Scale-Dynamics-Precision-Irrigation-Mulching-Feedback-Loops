@@ -263,3 +263,9 @@ input[type=range]{accent-color:#0A246A}
 .fmsyc .fmsyk{text-transform:none!important}
 .fmnext{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0}.fmnext a{cursor:pointer;color:#0A246A;text-decoration:underline}
 .fmwarn{margin-top:4px;padding:3px 6px;background:#FFF4D6;border:1px solid #E0C068;color:#6B4A00;font-size:10.5px;border-radius:3px}
+
+/* responsive menus (classic look) */
+.mi.kf,.mi.act{background:var(--navy);color:#FFF}
+.mi.kf .key,.mi.act .key{color:#FFF}
+@media (max-width:880px){.mi{padding:8px 14px 8px 26px}}
+@media (pointer:coarse){.mi{padding:10px 14px 10px 26px}}

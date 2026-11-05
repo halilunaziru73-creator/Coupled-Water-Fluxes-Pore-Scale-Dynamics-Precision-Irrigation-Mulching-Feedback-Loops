@@ -34,47 +34,78 @@ const UI = (() => {
     setTimeout(() => el.remove(), 2600);
   }
 
-  /* ---- menus ---- */
+  /* ---- menus: they stay on the screen, scroll when the window is small, open by hover, click or tap, work from the keyboard, and the bar folds into one Menu button on a narrow window ---- */
   const root = document.getElementById('ctxMenu');
-  let openBar = null;
+  let openBar = null, allMenus = [];
+  const narrow = () => innerWidth < 880;
   function closeMenus() { root.hidden = true; root.innerHTML = ''; document.querySelectorAll('.menu.subm').forEach(m => m.remove()); document.querySelectorAll('.mbtn.open').forEach(b => b.classList.remove('open')); openBar = null; }
+  function fit(el, x, y, rightEdge) {   // put a menu where it is fully visible; if it is taller than the window it scrolls
+    const pad = 6, H = innerHeight - 2 * pad; el.style.maxHeight = H + 'px'; el.style.overflowY = 'auto';
+    const w = el.offsetWidth, h = el.offsetHeight; let L = x, T = y;
+    if (L + w > innerWidth - pad) L = rightEdge != null ? rightEdge - w : innerWidth - w - pad;   // a submenu that does not fit on the right opens on the left of its parent
+    L = Math.max(pad, Math.min(L, innerWidth - w - pad)); T = Math.max(pad, Math.min(T, innerHeight - h - pad));
+    el.style.left = L + 'px'; el.style.top = T + 'px';
+  }
+  const dropSubs = lvl => document.querySelectorAll('.menu.subm').forEach(m => { if (m.__level >= lvl) m.remove(); });
   function fill(el, defs) {
-    el.innerHTML = '';
+    el.innerHTML = ''; el.setAttribute('role', 'menu');
     defs.forEach(d => {
       if (d.sep) { const s = document.createElement('div'); s.className = 'msep'; el.appendChild(s); return; }
       const dis = d.dis && d.dis();
-      const it = document.createElement('div'); it.className = 'mi' + (d.sub ? ' sub' : '') + (dis ? ' dis' : '');
+      const it = document.createElement('div'); it.className = 'mi' + (d.sub ? ' sub' : '') + (dis ? ' dis' : ''); it.setAttribute('role', 'menuitem'); if (d.tip) it.title = d.tip;
       const chk = d.check ? '<span class="mcheck">' + (d.check() ? '&#10003;' : '') + '</span>' : '';
-      it.innerHTML = chk + (d.icon ? icon(d.icon) : (d.check ? '' : '<span class="ico"></span>')) + '<span>' + esc(d.label) + '</span>' + (d.key ? '<span class="key">' + esc(d.key) + '</span>' : '');
+      it.innerHTML = chk + (d.icon ? icon(d.icon) : (d.check ? '' : '<span class="ico"></span>')) + '<span class="ml">' + esc(d.label) + '</span>' + (d.key ? '<span class="key">' + esc(d.key) + '</span>' : '');
       if (d.sub) {
-        it.addEventListener('mouseenter', () => {
-          document.querySelectorAll('.menu.subm').forEach(m => { if (m.__level >= (el.__level || 0) + 1) m.remove(); });
+        const openSub = () => {
+          dropSubs((el.__level || 0) + 1);
           const sm = document.createElement('div'); sm.className = 'menu subm'; sm.__level = (el.__level || 0) + 1;
           fill(sm, typeof d.sub === 'function' ? d.sub() : d.sub); document.body.appendChild(sm);
-          const r = it.getBoundingClientRect();
-          sm.style.left = Math.min(r.right - 2, innerWidth - sm.offsetWidth - 4) + 'px'; sm.style.top = Math.max(2, Math.min(r.top - 3, innerHeight - sm.offsetHeight - 4)) + 'px';
-        });
+          const r = it.getBoundingClientRect(); fit(sm, r.right - 2, r.top - 3, r.left + 2);
+          it.classList.add('act');
+        };
+        it.addEventListener('mouseenter', () => { if (!narrow()) openSub(); });
+        it.addEventListener('click', ev => { ev.stopPropagation(); openSub(); });
+        it.__open = openSub;
       } else if (!dis) {
-        it.addEventListener('mouseenter', () => document.querySelectorAll('.menu.subm').forEach(m => { if (m.__level >= (el.__level || 0) + 1) m.remove(); }));
+        it.addEventListener('mouseenter', () => dropSubs((el.__level || 0) + 1));
         it.addEventListener('click', ev => { ev.stopPropagation(); closeMenus(); if (d.act) d.act(); });
       }
       el.appendChild(it);
     });
   }
   function showMenu(defs, x, y) {
-    closeMenus(); root.hidden = false; fill(root, defs);
-    root.style.left = Math.min(x, innerWidth - root.offsetWidth - 4) + 'px'; root.style.top = Math.min(y, innerHeight - root.offsetHeight - 4) + 'px';
+    closeMenus(); root.hidden = false; root.__level = 0; fill(root, defs); fit(root, x, y);
   }
-  function buildMenubar(menus) {
-    const bar = document.getElementById('menus'); bar.innerHTML = '';
-    menus.forEach(m => {
-      const b = document.createElement('div'); b.className = 'mbtn'; b.textContent = m.label;
+  /* the menu bar: every menu is a button; on a narrow window one Menu button holds them all as submenus */
+  function layoutBar() {
+    const bar = document.getElementById('menus'); if (!bar) return; bar.innerHTML = '';
+    if (narrow()) {
+      const b = document.createElement('div'); b.className = 'mbtn mburger'; b.innerHTML = '<span aria-hidden="true">&#9776;</span>&nbsp;Menu';
+      b.addEventListener('click', ev => { ev.stopPropagation(); if (openBar === b) { closeMenus(); return; } const r = b.getBoundingClientRect(); showMenu(allMenus.map(m => ({ label: m.label, sub: () => (typeof m.items === 'function' ? m.items() : m.items) })), r.left, r.bottom); b.classList.add('open'); openBar = b; });
+      bar.appendChild(b); return;
+    }
+    allMenus.forEach(m => {
+      const b = document.createElement('div'); b.className = 'mbtn'; b.textContent = m.label; b.setAttribute('role', 'button'); b.tabIndex = 0;
       const open = () => { const r = b.getBoundingClientRect(); showMenu(typeof m.items === 'function' ? m.items() : m.items, r.left, r.bottom); b.classList.add('open'); openBar = b; };
+      b.__open = open;
       b.addEventListener('click', ev => { ev.stopPropagation(); if (openBar === b) closeMenus(); else open(); });
       b.addEventListener('mouseenter', () => { if (openBar && openBar !== b) { closeMenus(); open(); } });
       bar.appendChild(b);
     });
   }
+  function buildMenubar(menus) { allMenus = menus; layoutBar(); let was = narrow(); window.addEventListener('resize', () => { closeMenus(); if (narrow() !== was) { was = narrow(); layoutBar(); } }); }
+  /* keyboard: arrows move, Enter opens or runs, Escape closes, left and right change menu */
+  function menuKeys(e) {
+    if (root.hidden) { const ACC = { f: 'File', e: 'Edit', v: 'View', t: 'Tools', s: 'Refresh', r: 'Review', u: 'Run', d: 'Daisy', h: 'Help' }; if (e.altKey && !e.ctrlKey && ACC[e.key.toLowerCase()]) { const m = allMenus.findIndex(x => x.label === ACC[e.key.toLowerCase()]), bt = document.querySelectorAll('#menus .mbtn')[m]; if (bt && bt.__open) { e.preventDefault(); bt.__open(); const f = root.querySelector('.mi:not(.dis)'); if (f) f.classList.add('kf'); } } return; }
+    const subs = Array.from(document.querySelectorAll('.menu.subm')), cur = subs.length ? subs[subs.length - 1] : root, items = Array.from(cur.querySelectorAll('.mi:not(.dis)')); let i = items.findIndex(x => x.classList.contains('kf'));
+    const mark = k => { items.forEach(x => x.classList.remove('kf')); if (items[k]) { items[k].classList.add('kf'); items[k].scrollIntoView({ block: 'nearest' }); } };
+    if (e.key === 'ArrowDown') { e.preventDefault(); mark((i + 1) % items.length); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); mark(i <= 0 ? items.length - 1 : i - 1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); if (i >= 0 && items[i].__open) { items[i].__open(); const s2 = document.querySelectorAll('.menu.subm'), l2 = s2[s2.length - 1], f = l2 && l2.querySelector('.mi:not(.dis)'); if (f) f.classList.add('kf'); } else if (!narrow() && openBar) { const bs = Array.from(document.querySelectorAll('#menus .mbtn')), k = bs.indexOf(openBar); closeMenus(); const nb = bs[(k + 1) % bs.length]; nb.__open(); const f = root.querySelector('.mi:not(.dis)'); if (f) f.classList.add('kf'); } }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); if (subs.length) { subs[subs.length - 1].remove(); } else if (!narrow() && openBar) { const bs = Array.from(document.querySelectorAll('#menus .mbtn')), k = bs.indexOf(openBar); closeMenus(); const nb = bs[(k - 1 + bs.length) % bs.length]; nb.__open(); const f = root.querySelector('.mi:not(.dis)'); if (f) f.classList.add('kf'); } }
+    else if (e.key === 'Enter' || e.key === ' ') { if (i >= 0) { e.preventDefault(); items[i].click(); } }
+  }
+  document.addEventListener('keydown', menuKeys, true);
   document.addEventListener('click', closeMenus);
   window.addEventListener('blur', closeMenus);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeMenus(); closeModal(); } });
