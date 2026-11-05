@@ -97,7 +97,7 @@ window.SWOut = (() => {
       const h = sec.querySelector('h4'); if (!h || h.dataset.sw) return; h.dataset.sw = '1'; const has = sec.querySelector('canvas,table,.kpi'); if (!has) return;
       const s = document.createElement('select'); s.style.cssText = 'margin-left:auto;font-size:11px;max-width:120px'; s.title = 'Save this section'; s.innerHTML = '<option value="">Save...</option><option value="300">Picture 300 dpi</option><option value="600">Picture 600 dpi</option><option value="copy">Copy the picture</option><option value="csv">Numbers (CSV)</option>';
       ['click', 'mousedown'].forEach(ev => s.addEventListener(ev, e => e.stopPropagation()));
-      const full = document.createElement('button'); full.className = 'mini'; full.innerHTML = '<svg viewBox="0 0 16 16" width="13" height="13" style="vertical-align:-2px"><path d="M1.5 5.5v-4h4M10.5 1.5h4v4M14.5 10.5v4h-4M5.5 14.5h-4v-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>'; full.title = 'Show this section on the whole screen (Esc to leave)'; full.style.marginLeft = '6px'; ['click', 'mousedown'].forEach(ev => full.addEventListener(ev, e => e.stopPropagation())); full.onclick = () => fs(sec, () => { try { Dash.tab(curTab()); } catch (e) { } });
+      const full = document.createElement('button'); full.className = 'mini'; full.innerHTML = '<svg viewBox="0 0 16 16" width="13" height="13" style="vertical-align:-2px"><path d="M1.5 5.5v-4h4M10.5 1.5h4v4M14.5 10.5v4h-4M5.5 14.5h-4v-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>'; full.title = 'Show this section on the whole screen (Esc to leave)'; full.style.marginLeft = '6px'; ['click', 'mousedown'].forEach(ev => full.addEventListener(ev, e => e.stopPropagation())); full.onclick = () => secFull(sec, h);
       const pr = procsOfTitle(((h.querySelector('b') || {}).textContent || ''), (MAP[E.snap && E.snap.scene] || [[], []])[1].slice(0, 3)).slice(0, 4), PP = window.DaisyProc;
       const chips = document.createElement('span'); h.style.flexWrap = 'wrap'; chips.style.cssText = 'flex:1 0 100%;order:9;display:flex;gap:3px;flex-wrap:wrap;margin:3px 0 0 18px'; chips.innerHTML = pr.map(id => { const p = PP && PP.byId(id); return p ? '<button class="mini" data-cp="' + id + '" title="Daisy process: ' + esc(p.d) + '" style="border-left:5px solid ' + PP.GC[p.g] + '">' + esc(p.n) + '</button>' : ''; }).join('');
       ['click', 'mousedown'].forEach(ev => chips.addEventListener(ev, e => e.stopPropagation()));
@@ -108,6 +108,22 @@ window.SWOut = (() => {
         if (v === 'copy') { try { await navigator.clipboard.write([new ClipboardItem({ 'image/png': b })]); UI.toast('Picture copied'); } catch (e) { UI.toast('The picture could not be copied here'); } } else dl(b, base + '_' + v + 'dpi.png'); };
       h.appendChild(chips); h.appendChild(full); h.appendChild(s);
     });
+  }
+
+  // one section of the results on the whole screen: a copy of the section (the dashboard redraws itself while a layer runs, so the live block cannot be enlarged in place); Esc or Close leaves
+  function secFull(sec, h) {
+    const old = document.getElementById('secFull'); if (old) { old.remove(); return; }
+    const title = ((h.querySelector('b') || {}).textContent || 'Results').trim(), ov = document.createElement('div'); ov.id = 'secFull';
+    ov.style.cssText = 'position:fixed;left:0;top:0;right:0;bottom:0;z-index:9000;background:#fff;overflow:auto;box-sizing:border-box;color:#111';
+    const top = document.createElement('div'); top.style.cssText = 'position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:8px;padding:8px 16px;background:#E8EDF4;border-bottom:1px solid #8FA3B8;font:600 15px sans-serif';
+    top.innerHTML = '<span style="flex:1">' + esc(title) + '</span><button class="mini" data-x="save" title="Save this section as a picture">Save picture</button><button class="mini" data-x="close" title="Back to the dashboard (Esc)">Close (Esc)</button>';
+    const cl = sec.cloneNode(true); cl.querySelectorAll('select,button,input,.chips').forEach(x => x.remove());
+    const src = sec.querySelectorAll('canvas'), dst = cl.querySelectorAll('canvas');
+    src.forEach((c, i) => { const d = dst[i]; if (!d) return; d.width = c.width; d.height = c.height; try { d.getContext('2d').drawImage(c, 0, 0); } catch (e) { } d.style.width = '100%'; d.style.height = 'auto'; d.style.maxWidth = '100%'; d.removeAttribute('data-h'); });
+    cl.style.cssText = (src.length ? 'max-width:min(1100px,94vw)' : 'zoom:1.45;max-width:min(1100px,66vw)') + ';margin:14px auto 40px;background:#fff';
+    const close = () => { ov.remove(); document.removeEventListener('keydown', key, true); }, key = e => { if (e.key === 'Escape') { e.stopPropagation(); close(); } };
+    top.onclick = async e => { const b = e.target.closest('[data-x]'); if (!b) return; if (b.dataset.x === 'close') close(); else { const cv = await sectionCanvas(sec, 3.125); if (!cv) { UI.toast('Nothing to draw in this section'); return; } dl(await blobOf(cv), 'SWAFL_' + sane(E.snap && E.snap.scene) + '_' + sane(title) + '_300dpi.png'); } };
+    ov.appendChild(top); ov.appendChild(cl); document.body.appendChild(ov); document.addEventListener('keydown', key, true);
   }
 
   // any element on the whole screen (the screen itself when the browser allows it, otherwise the whole window); Esc leaves
