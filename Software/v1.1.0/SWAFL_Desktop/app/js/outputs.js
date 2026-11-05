@@ -258,7 +258,7 @@ window.SWOut = (() => {
       const vb = svgEl().getAttribute('viewBox').split(/\s+/).map(Number), k = 3.125 * 1.2, img = new Image(); img.onload = () => { const c = document.createElement('canvas'); c.width = Math.round(vb[2] * k); c.height = Math.round(vb[3] * k); const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0, c.width, c.height); c.toBlob(bl => dl(bl, 'SWAFL_' + sane(scene) + '_process-figure_300dpi.png'), 'image/png'); }; img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgText()); });
     body.querySelectorAll('.dzPb[data-p]').forEach(g => { g.onclick = () => { const o = g.dataset.o || null; if (o) { figOut = figOut === o ? null : o; figSel = figOut ? g.dataset.p : null; } else { figSel = figSel === g.dataset.p && !figOut ? null : g.dataset.p; figOut = null; } figKey = ''; figOpen = !!(figSel || figOut); figure(body, s); }; });
   }
-  O.bar = bar; O.decorate = decorate; O.remember = remember; O.figure = figure; O.savePicture = savePicture; O.allLayers = allLayers; O.enginePicture = enginePicture;
+  O.fs = fs; O.bar = bar; O.decorate = decorate; O.remember = remember; O.figure = figure; O.savePicture = savePicture; O.allLayers = allLayers; O.enginePicture = enginePicture;
   setInterval(() => { try { bar(); } catch (e) { } }, 700);
   if (typeof E !== 'undefined') { E.on('scene', () => setTimeout(bar, 60)); E.on('snap', () => { if (!barEl || !barEl.firstChild) bar(); }); }
   return O;
