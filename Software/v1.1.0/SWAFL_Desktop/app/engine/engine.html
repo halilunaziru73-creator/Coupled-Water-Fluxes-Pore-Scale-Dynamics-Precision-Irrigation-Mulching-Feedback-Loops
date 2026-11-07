@@ -363,7 +363,7 @@ const SCENES = [
     legend:[['#8E4A3A','Conventional'],['#D9782A','Reduced'],['#2E7D5A','No-till'],['#2E7DE8','Consolidation rate']], insight:"Tillage is an identifiable driver of change in soil hydraulic properties: conventional tillage raises drainage as structural consolidation increases; no-till stays flat." },
   { id:"v4", label:"V4 Mulch vs Bare", color:"#5BD67A", interactive:true, onDown: p => v4Down(p), onMove: p => v4Move(p), onLeave: () => { v4ui.hover = -1; }, draw: () => { drawV4(); hotV4(); }, title:"Mulched against bare soil: evaporation, irrigation and drainage",
     legend:[['#9AA3AE','Bare soil'],['#4FAE5E','Current mulch'],['#1E6B4A','Strongest mulch']], insight:"Mulch is a tunable, dynamic control on evaporation: soil evaporation scales continuously with mulch strength across every soil tested." },
-  { id:"v5", label:"V5 Feedback Loops", color:"#E8C84D", draw: () => drawV5(), title:"Feedback loops between climate, management, soil water, crop and nitrogen",
+  { id:"v5", label:"V5 Feedback Loops", color:"#E8C84D", h:1700, draw: () => drawV5(), title:"Feedback loops between climate, management, soil water, crop and nitrogen",
     legend:[['#D93025','Two-way link (label = change for one step)']], insight:"Atmospheric demand, rainfall, irrigation, soil water, evaporation and drainage form one coupled feedback loop, not independent processes." },
   { id:"v6", label:"V6 Mulch Control", color:"#2FA3A3", h:946, draw: () => { drawV6x(); hotV6(); }, title:"Mulch and tillage as controls on evaporation and drainage",
     legend:[['#ECA03C','Evaporation'],['#5AA0E1','Drainage'],['#D93025','Current setting']], insight:"Mulch strength and interception capacity set evaporation; tillage and consolidation set drainage. The red outline marks your current settings." },
@@ -5338,6 +5338,86 @@ function drawV5() {
     ctx.fillStyle = '#fff'; ctx.strokeStyle = '#7A1A14'; ctx.lineWidth = sel ? 2.4 : 1.2; ctx.beginPath(); ctx.arc(32, yy - 3.5, 6, 0, 6.283); ctx.fill(); ctx.stroke(); T(String(i + 1), 32, yy - 0.5, { s: 8.5, b: true, a: 'center', c: '#7A1A14' }); T(e, 46, yy, { s: 10.2, b: sel });
     hot(20, yy - 11, W - 40, 13, () => { v5ui.sel = sel ? 0 : i + 1; }, 'click to highlight this loop'); });
   T('The arrows are drawn wider for bigger effects. The crop shown is the field at mid-season.', 16, ky + 128 + 14, { s: 10, i: true, c: MUTE });
+  const need = Math.ceil(v5Hidden(ky + 128 + 40) + 14); if (Math.abs((currentScene.h || 0) - need) > 4) { currentScene.h = need; setCanvasH(need); }
+}
+
+// ------------------------------------------------------------------------------------------------
+// V5, second part: eight open questions of vadose-zone science, each closed into a feedback loop of the field and answered for the selected soil
+// from its van Genuchten-Mualem parameters and from the runs of the model above. The topics follow the work of M. Th. van Genuchten and co-authors.
+// ------------------------------------------------------------------------------------------------
+function v5Hidden(Y0) {
+  const soil = state.soil, p = VGE[soil], mm = 1 - 1 / p[1], tex = DATA.texture[soil], m = current, vff = VFF_VALUES[state.vffIdx], rain = RAIN_VALUES[state.rainIdx];
+  const ks = SIDM.saxton(tex.sand / 100, tex.clay / 100, SID.om).ks * 2.4;                                   // saturated conductivity, cm/day
+  const Kr = h => { const s = vgS(h, p); return Math.sqrt(s) * Math.pow(1 - Math.pow(1 - Math.pow(s, 1 / mm), mm), 2); };
+  const th = h => soilTheta(soil, h), phi = soilPhi(soil), hT = Math.max(20, trigAbsFor(soil)), z = Z_VALUES[state.zIdx], cf = CROPS[state.crop].factor;
+  const colW = (W - 42) / 2, PH = 236, GAP = 12, lg = v => Math.log10(v);
+  const sec = 'Hidden questions of the vadose zone, answered for ' + DATA.soil_labels[soil];
+  sidHead(sec, Y0, ''); sidWrap('Each panel closes one open question into a loop of the field. Curves use the van Genuchten and Mualem functions of the soil you selected; the topics follow the work of M. Th. van Genuchten and co-authors.', 16, Y0 + 20, W - 32, { s: 9.5, i: true, c: MUTE }, 12);
+  const panels = [];
+  const P = (title, draw, answer, cite, axes) => panels.push({ title, draw, answer, cite, axes });
+  const clip = (ax, f) => { ctx.save(); ctx.beginPath(); ctx.rect(ax.x, ax.y, ax.w, ax.h); ctx.clip(); f(); ctx.restore(); };
+  const line = (ax, pts, col, wd, dash) => { ctx.strokeStyle = col; ctx.lineWidth = wd || 2; ctx.setLineDash(dash || []); ctx.beginPath(); pts.forEach((q, i) => i ? ctx.lineTo(ax.sx(q[0]), ax.sy(q[1])) : ctx.moveTo(ax.sx(q[0]), ax.sy(q[1]))); ctx.stroke(); ctx.setLineDash([]); };
+  const vline = (ax, xv, col, lab, dy) => { ctx.strokeStyle = col; ctx.lineWidth = 1.4; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(ax.sx(xv), ax.y); ctx.lineTo(ax.sx(xv), ax.y + ax.h); ctx.stroke(); ctx.setLineDash([]); if (lab) { const rt = ax.sx(xv) > ax.x + ax.w * 0.62; pill(lab, ax.sx(xv) + (rt ? -4 : 4), ax.y + 12 + (dy || 0), { s: 8.5, b: true, c: col, a: rt ? 'right' : 'left' }); } };
+  const pF = h => lg(Math.max(h, 0.1)), pts = (a, b, n, f) => { const o = []; for (let i = 0; i <= n; i++) { const x = a + (b - a) * i / n; o.push([x, f(x)]); } return o; };
+
+  // 1 hysteresis: the same suction, two water contents
+  { const dn = th(hT) - th(2 * hT), mmH = dn * z * 10;
+    P('1. Does a sensor read the same water after wetting as after drying?', (ax) => { clip(ax, () => { line(ax, pts(0, 5, 60, x => th(Math.pow(10, x))), '#1B6BB0', 2.2); line(ax, pts(0, 5, 60, x => th(2 * Math.pow(10, x))), '#C0503A', 2.2, [6, 3]); vline(ax, pF(hT), '#374151', 'trigger'); }); const pm = f => { for (let x = 0; x <= 5; x += 0.02) if (f(Math.pow(10, x)) < 0.5 * phi) return x; return 2.5; }, pd = pm(th), pw = pm(h => th(2 * h)); T('drying', ax.sx(pd) + 7, ax.sy(0.5 * phi) + 3, { s: 8.5, b: true, a: 'left', c: '#1B6BB0' }); T('wetting', ax.sx(pw) - 7, ax.sy(0.5 * phi) + 3, { s: 8.5, b: true, a: 'right', c: '#C0503A' }); },
+      'At the trigger suction (' + Math.round(hT) + ' cm) the soil holds ' + (dn * 100).toFixed(1) + ' % more water by volume after drying than after wetting, about ' + mmH.toFixed(0) + ' mm in the ' + z + ' cm of the sensor. A trigger set on suction alone fires early after an irrigation and late after a dry spell.',
+      'Wetting curve with alpha doubled (Kool and Parker 1987); Zhuang et al. 2016, 2017', ['suction pF (log10 of cm)', 'water content (m3/m3)', 0, 5, 0, phi, 5, 4]); }
+  // 2 dry end: film conductivity
+  { const Kc = h => ks * Kr(h), hA = 15849, Kfilm = h => 1e-7 * Math.pow(hA / h, 1.5);
+    let cross = null; for (let x = 2; x <= 6; x += 0.02) { const h = Math.pow(10, x); if (Kfilm(h) > Kc(h)) { cross = x; break; } }
+    const Kt = h => Math.max(1e-14, Kc(h)) + Kfilm(h);
+    P('2. Where does water still move when the soil is air dry?', (ax) => { clip(ax, () => { line(ax, pts(0, 6, 80, x => lg(Math.max(1e-14, Kc(Math.pow(10, x))))), '#1B6BB0', 2.2); line(ax, pts(0, 6, 80, x => lg(Kfilm(Math.pow(10, x)))), '#2F8F4E', 2, [6, 3]); line(ax, pts(0, 6, 80, x => lg(Kt(Math.pow(10, x)))), '#111', 1.4); if (cross) vline(ax, cross, '#C0503A', 'film wins'); }); },
+      cross ? 'Capillary flow collapses and a film of adsorbed water takes over at pF ' + cross.toFixed(1) + ' (' + Math.round(Math.pow(10, cross)).toLocaleString('en-US') + ' cm). Beyond it the pure van Genuchten curve predicts no flow at all, yet the soil keeps drying: the film term feeds stage-2 evaporation and the last water of the root zone.' : 'The capillary flow stays above the film term over the whole range for this soil.',
+      'Film term proportional to |h| to the power -1.5, anchored at 1e-7 cm/day at pF 4.2 (illustrative; Tokunaga 2009, Peters 2013, Rudiyanto et al. 2015)', ['suction pF (log10 of cm)', 'log10 K (cm/day)', 0, 6, -12, Math.ceil(lg(ks)), 6, 4]); }
+  // 3 compaction (real model runs)
+  { const R = [0, 1, 2, 3, 4].map(i => model(vff, rain, { tcIdx: i })), d0 = R[0].drain, d4 = R[4].drain, y0 = R[0].yield * cf, y4 = R[4].yield * cf, mx = Math.max.apply(null, R.map(r => r.drain)) || 1;
+    P('3. Does compaction starve the crop or protect the groundwater?', (ax) => { const bw = ax.w / 5, top = Math.max.apply(null, R.map(r => r.drain)) || 1; ctx.strokeStyle = '#B9C0C7'; ctx.beginPath(); ctx.moveTo(ax.x, ax.y + ax.h + 0.5); ctx.lineTo(ax.x + ax.w, ax.y + ax.h + 0.5); ctx.stroke(); R.forEach((r, i) => { const hh = r.drain / top * (ax.h - 14); ctx.fillStyle = i === state.tcIdx ? '#C0503A' : '#6FA8DC'; ctx.fillRect(ax.x + i * bw + 10, ax.y + ax.h - hh, bw - 20, hh); T(r.drain.toFixed(0), ax.x + i * bw + bw / 2, ax.y + ax.h - hh - 3, { s: 8.5, b: true, a: 'center', c: '#374151' }); T(String(i), ax.x + i * bw + bw / 2, ax.y + ax.h + 11, { s: 8.5, a: 'center', c: MUTE }); }); T('consolidation step (0 loose to 4 settled); drainage, mm/yr', ax.x + ax.w / 2, ax.y + ax.h + 23, { s: 9, a: 'center', c: '#374151' }); },
+      'Over the five consolidation steps drainage goes from ' + d0.toFixed(0) + ' to ' + d4.toFixed(0) + ' mm a year (' + sgn(d4 - d0, 0, 'mm') + ') and yield from ' + y0.toFixed(2) + ' to ' + y4.toFixed(2) + ' ' + CROPS[state.crop].unit + '. Lower conductivity holds the water in the topsoil, so the same compaction saves nitrate in the groundwater and costs aeration and root depth. Red is your setting.',
+      'Runs of this model at each consolidation step; Ngo-Cong et al. 2021, Saffari et al. 2019', null); }
+  // 4 capillary fringe
+  { const hq = (1 / p[0]) * Math.pow(Math.pow(0.9, -1 / mm) - 1, 1 / p[1]);
+    P('4. How far does the water table reach into the root zone?', (ax) => { clip(ax, () => { line(ax, pts(0, 200, 80, x => th(Math.max(x, 0.1))), '#1B6BB0', 2.2); ctx.strokeStyle = '#8A93A0'; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(ax.x, ax.sy(phi)); ctx.lineTo(ax.x + ax.w, ax.sy(phi)); ctx.stroke(); ctx.setLineDash([]); vline(ax, Math.min(hq, 195), '#C0503A', 'fringe ' + Math.round(hq) + ' cm'); }); },
+      'Above a shallow water table the soil stays quasi-saturated (more than 90 % of saturation) up to ' + Math.round(hq) + ' cm. A fringe that thick sits inside the root zone and feeds capillary rise, but it also drowns the roots and routes rain straight to recharge. Fine soils reach several times higher than sands.',
+      'Height above the water table equals suction; Gonçalves et al. 2020', ['height above the water table (cm)', 'water content (m3/m3)', 0, 200, 0, phi, 4, 4]); }
+  // 5 preferential flow
+  { const mac = phi - th(31.6), mes = th(31.6) - th(15849), mic = th(15849), carry = 1 - Kr(31.6);
+    P('5. How much of the water carries nearly all of the nitrate?', (ax) => { const bars = [['pore volume', [mac, mes, mic]], ['flow', [carry, Math.max(0, Kr(31.6) - Kr(15849)), Kr(15849)]]], cols = ['#2A66AC', '#6FA8DC', '#C9D6E6']; bars.forEach((b, i) => { let acc = 0; const tot = b[1].reduce((a, c) => a + c, 0) || 1, bx = ax.x + 8 + i * 72; b[1].forEach((v, j) => { const hh = v / tot * ax.h; ctx.fillStyle = cols[j]; ctx.fillRect(bx, ax.y + ax.h - acc - hh, 56, hh); acc += hh; }); T(b[0], bx + 28, ax.y + ax.h + 12, { s: 8.5, a: 'center', c: '#374151' }); }); [['wide pores', 0], ['medium pores', 1], ['fine pores', 2]].forEach((q, i) => { ctx.fillStyle = cols[q[1]]; ctx.fillRect(ax.x + 158, ax.y + 8 + i * 16, 10, 10); T(q[0], ax.x + 173, ax.y + 17 + i * 16, { s: 8.5, c: '#374151' }); }); },
+      'Pores that empty at less than 31.6 cm suction make up ' + Math.round(mac / phi * 100) + ' % of the pore volume but carry ' + Math.round(carry * 100) + ' % of the saturated flow. After heavy rain or irrigation the nitrate leaves through them, which is why nitrate loss (' + m.nl.toFixed(1) + ' kg N per ha here) tracks the wet days and not the annual drainage.',
+      'Mualem integral over the van Genuchten pore-size distribution; de Vries et al. 2017, Alfaro Soto et al. 2017', null); }
+  // 6 salinity against leaching
+  { const irr = Math.max(m.irr, 1), dr = Math.max(m.drain, 1), ecd = ec => ec * Math.min(12, irr / dr), ece = ec => 0.5 * 0.5 * (ec + ecd(ec)), yl = ec => clampN(100 - 7.1 * Math.max(0, ece(ec) - 6), 0, 100), yl2 = ec => { const d2 = dr * 2; return clampN(100 - 7.1 * Math.max(0, 0.25 * (ec + ec * Math.min(12, irr / d2)) - 6), 0, 100); };
+    const ec0 = 2, lose = 100 - yl(ec0);
+    P('6. How salty can the irrigation water be before the leaching it needs pollutes?', (ax) => { clip(ax, () => { line(ax, pts(0, 12, 48, x => yl(x)), '#C0503A', 2.2); line(ax, pts(0, 12, 48, x => yl2(x)), '#2F8F4E', 2, [6, 3]); }); pill('your drainage', ax.x + 6, ax.y + ax.h - 6, { s: 8.5, b: true, c: '#C0503A' }); pill('drainage doubled', ax.x + 6, ax.y + ax.h - 24, { s: 8.5, b: true, c: '#2F8F4E' }); },
+      'Salt applied with the water leaves only with the drainage. With ' + irr.toFixed(0) + ' mm irrigation and ' + dr.toFixed(0) + ' mm drainage the drainage water is ' + Math.min(12, irr / dr).toFixed(1) + ' times as salty as the irrigation water. At 2 dS/m the yield loss is ' + lose.toFixed(0) + ' % (wheat). More leaching protects the crop and carries more nitrate down.',
+      'Steady-state salt balance and the Maas and Hoffman 1977 threshold of 6 dS/m, slope 7.1 % per dS/m (wheat); Feghhenabi et al. 2019-2022', ['salinity of irrigation water (dS/m)', 'relative yield (%)', 0, 12, 0, 100, 4, 4]); }
+  // 7 root-water uptake
+  { const a = h => h <= 25 ? clampN((h - 10) / 15, 0, 1) : h <= 500 ? 1 : clampN((8000 - h) / 7500, 0, 1), aT = a(hT);
+    P('7. Where on the suction scale does the trigger really cost yield?', (ax) => { clip(ax, () => { line(ax, pts(0, 5, 80, x => a(Math.pow(10, x)) * 100), '#2F8F4E', 2.4); vline(ax, pF(hT), '#C0503A', 'your trigger'); }); },
+      'Uptake starts to fall at 500 cm and stops at 8,000 cm (Feddes). At your trigger of ' + Math.round(hT) + ' cm the crop transpires ' + (aT * 100).toFixed(0) + ' % of its demand, ' + (aT >= 0.999 ? 'so irrigation fires before any stress.' : 'so each irrigation interval already costs yield.') + ' Deeper roots can take water from the wetter layers below and flatten the curve.',
+      'Piecewise-linear reduction function (Feddes et al. 1978); Lazarovitch et al. 2018', ['suction pF (log10 of cm)', 'relative uptake (%)', 0, 5, 0, 100, 5, 4]); }
+  // 8 evaporation stages
+  { const E0 = Math.max(0.3, 5 * vff) / 10, L = 5, q = h => ks * Kr(h) * (1 + h / L); let hc = null; for (let x = 0.5; x <= 5; x += 0.01) { const h = Math.pow(10, x); if (q(h) < E0) { hc = h; break; } }
+    const d1 = hc ? Math.max(0, (th(33) - th(hc)) * L * 10 / (E0 * 10)) : null, d1b = (() => { const E1 = 0.5; let h2 = null; for (let x = 0.5; x <= 5; x += 0.01) { const h = Math.pow(10, x); if (q(h) < E1) { h2 = h; break; } } return h2 ? Math.max(0, (th(33) - th(h2)) * L * 10 / (E1 * 10)) : null; })();
+    const dTxt = (d, bare) => d == null || d < 0.1 ? (bare ? 'less than a day' : 'less than a day') : (bare ? d.toFixed(1) + ' days' : 'about ' + d.toFixed(1) + ' days');
+    P('8. How long does the soil keep up with the sun, and what does mulch change?', (ax) => { clip(ax, () => { line(ax, pts(0, 5, 80, x => lg(Math.max(1e-9, q(Math.pow(10, x))))), '#1B6BB0', 2.2); ctx.strokeStyle = '#C0503A'; ctx.lineWidth = 1.6; ctx.setLineDash([6, 3]); ctx.beginPath(); ctx.moveTo(ax.x, ax.sy(lg(E0))); ctx.lineTo(ax.x + ax.w, ax.sy(lg(E0))); ctx.stroke(); ctx.setLineDash([]); if (hc) vline(ax, pF(hc), '#374151', 'stage 2'); }); T('demand ' + (E0 * 10).toFixed(1) + ' mm/day', ax.x + ax.w - 4, ax.sy(lg(E0)) - 4, { s: 8.5, b: true, a: 'right', c: '#C0503A' }); },
+      hc ? 'The topsoil can deliver the demand of ' + (E0 * 10).toFixed(1) + ' mm/day until its suction reaches ' + Math.round(hc) + ' cm, ' + dTxt(d1) + ' after wetting. Then evaporation drops to what the soil can conduct (stage 2). Bare soil at 5 mm/day would last ' + dTxt(d1b, true) + ': mulch lowers the demand, so stage 1 lasts longer and the saved water is kept near the surface.' : 'The soil delivers the demand at every suction in this range.',
+      'Evaporation from a 5 cm surface layer with the gradient (1 + h/L); Bezerra-Coelho et al. 2018 (evaporation method)', ['suction pF (log10 of cm)', 'log10 supply (cm/day)', 0, 5, -5, 2, 5, 4]); }
+
+  const x0 = 16, y1 = Y0 + 46;
+  panels.forEach((pn, i) => {
+    const col = i % 2, row = Math.floor(i / 2), px = x0 + col * (colW + 10), py = y1 + row * (PH + GAP);
+    box(px, py, colW, PH, { fill: '#fff', r: 8 });
+    const nl = sidWrap(pn.title, px + 10, py + 16, colW - 20, { s: 10.5, b: true, c: '#12303A' }, 13);
+    const ay = py + 14 + nl * 13, ah = 78, gx = px + 44, gw = colW - 58;
+    let ax; if (pn.axes) { const d = pn.axes; ax = sidAxes(gx, ay, gw, ah, d[2], d[3], d[4], d[5], d[0], d[1], d[6], d[7]); } else ax = { x: gx, y: ay, w: gw, h: ah };
+    pn.draw(ax);
+    const ty = ay + ah + 36, n = sidWrap(pn.answer, px + 10, ty, colW - 20, { s: 9, c: '#1F2933' }, 11.2);
+    sidWrap(pn.cite, px + 10, ty + n * 11.2 + 3, colW - 20, { s: 8, i: true, c: MUTE }, 10);
+  });
+  return y1 + Math.ceil(panels.length / 2) * (PH + GAP) + 6;
 }
 
 // ------------------------------------------------------------------------------------------------

@@ -42,6 +42,23 @@ $$
 
 which the study reports as roughly 1.06 kg N ha$^{-1}$ per mm of drainage (README). The numbers are **[Data-driven]** one-step differences, not partial derivatives, so a step at the end of a list can be smaller than the step in the middle.
 
+## Hidden questions of the vadose zone
+
+Below the seven effects the layer answers eight further questions, each as a small figure computed for the soil you selected from its van Genuchten and Mualem functions (and, for the compaction panel, from runs of the model at each consolidation step). The topics follow the work of M. Th. van Genuchten and co-authors.
+
+| Panel | Question | What is drawn | Source of the form used |
+|---|---|---|---|
+| 1 | Does a sensor read the same after wetting as after drying? | The drying and wetting curves of the soil (alpha doubled on wetting) with the trigger suction; the water held in the sensor depth by the difference. | Kool and Parker 1987; Zhuang et al. 2016, 2017 |
+| 2 | Where does water still move when the soil is air dry? | log K against suction: capillary flow, an illustrative film term proportional to the suction to the power −1.5, and their sum. | Tokunaga 2009; Peters 2013; Rudiyanto et al. 2015 |
+| 3 | Does compaction starve the crop or protect the groundwater? | Drainage at each of the five consolidation steps, from runs of this model; yield change in the text. | Ngo-Cong et al. 2021; Saffari et al. 2019 |
+| 4 | How far does the water table reach into the root zone? | Water content against height above the water table and the height where saturation falls below 90 %. | Gonçalves et al. 2020 |
+| 5 | How much of the water carries nearly all of the nitrate? | The share of pore volume and the share of conductivity of the wide pores (drained above 31.6 cm suction). | de Vries et al. 2017; Alfaro Soto et al. 2017 |
+| 6 | How salty can the irrigation water be before the leaching it needs pollutes? | Relative yield of wheat against the salinity of the irrigation water for your drainage and for twice the drainage. | Maas and Hoffman 1977; Feghhenabi et al. 2019 to 2022 |
+| 7 | Where on the suction scale does the trigger cost yield? | The reduction of root uptake with suction and your trigger. | Feddes et al. 1978; Lazarovitch et al. 2018 |
+| 8 | How long does the soil keep up with the sun, and what does mulch change? | The water the topsoil can deliver against suction, the evaporative demand (reduced by your mulch) and the suction where stage 2 begins. | Bezerra-Coelho et al. 2018 |
+
+The film term and the salt balance are simple, stated forms for teaching and comparison; they are not calibrated to a field.
+
 ## The sentence under the picture
 
 A status pill reports the day: *"Irrigating now: 28 mm (soil reached the trigger)"*, *"Rain day: 12 mm, no irrigation needed"* or *"Irrigation stopped: soil wet enough"*. The text for the trigger says whether *"the sensor has reached the trigger (depletion $f$)"*, to what depth *"the water wets the soil"* (the wetting front of the day's irrigation, Section 5.2) and, when that is shallower than the sensor, *"the sensor may stay beyond the trigger"*. If no irrigation is due, it states how many days are free in the next 14 and that rain is needed to keep it that way.
