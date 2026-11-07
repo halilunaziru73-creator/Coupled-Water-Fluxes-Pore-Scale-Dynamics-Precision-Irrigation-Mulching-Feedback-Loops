@@ -5443,16 +5443,18 @@ function v5Hidden(Y0) {
       answer: hc ? 'The topsoil delivers the demand of ' + (E0 * 10).toFixed(1) + ' mm/day (bare soil would demand 5) until its suction reaches ' + Math.round(hc) + ' cm, ' + (days(hc) < 0.1 ? 'less than a day' : 'about ' + days(hc).toFixed(1) + ' days') + ' after wetting; then evaporation drops to what the soil conducts. Bare soil would last ' + dTxt(daysB(hb)) + '. Mulch lowers the demand, so the first stage lasts longer and the saved water is kept near the surface.' : 'The soil delivers the demand at every suction in this range.' }); }
 
   const x0 = 16, y1 = Y0 + 46, TH = 70, ah = 56; v5h.rects = [];
+  const yEnd = y1 + Math.ceil(panels.length / 2) * (PH + GAP), nRows = Math.ceil(panels.length / 2), cr = v5h.zoom || v5h.gz ? Math.min(Math.floor(((v5h.zoom || v5h.gz).y - y1) / (PH + GAP)), nRows - 2) : 0, cBox = v5h.zoom || v5h.gz ? { y: y1 + cr * (PH + GAP), h: 2 * PH + GAP } : null;
   panels.forEach((pn, i) => {
     const col = i % 2, row = Math.floor(i / 2), px = x0 + col * (colW + 10), py = y1 + row * (PH + GAP), iw = colW - 20;
     box(px, py, colW, PH, { fill: '#fff', r: 8 });
+    if (cBox && py + PH > cBox.y && py < cBox.y + cBox.h) return;
     const nl = sidWrap(pn.title, px + 10, py + 16, iw, { s: 10.5, b: true, c: '#12303A' }, 13), ty = py + 12 + nl * 13 + 4, n = pn.tiles.length, tw = (iw - 6 * (n - 1)) / n;
     pn.tiles.forEach((t, k) => { const tx = px + 10 + k * (tw + 6), ar = tw / TH, sw = Math.min(220, 150 * ar), sh = Math.min(150, 220 / ar);
       ctx.save(); ctx.beginPath(); rrect(tx, ty, tw, TH, 4); ctx.clip(); ctx.drawImage(t.t.cv, (220 - sw) / 2, (150 - sh) / 2, sw, sh, tx, ty, tw, TH); ctx.restore();
       const hov = v5h.hv && v5h.hv.x >= tx && v5h.hv.x <= tx + tw && v5h.hv.y >= ty && v5h.hv.y <= ty + TH;
       ctx.strokeStyle = hov ? '#0B7285' : t.mark ? '#C0503A' : '#6B7280'; ctx.lineWidth = hov || t.mark ? 2.4 : 1; rrect(tx, ty, tw, TH, 4); ctx.stroke(); T(t.cap, tx + tw / 2, ty + TH + 11, { s: 8, a: 'center', c: '#374151' });
       v5h.rects.push({ x: tx, y: ty, w: tw, h: TH, sw, sh, t: t.t, title: pn.title });
-      if (!v5h.zoom && !v5h.gz) hot(tx, ty, tw, TH, () => { v5h.gz = null; v5h.zoom = { pF: t.t.o.pF, tc: t.t.o.tc, tint: t.t.o.tint, title: pn.title, y: py }; }, 'click: enlarge this section, read the pore sizes and drag the suction'); });
+      if (!v5h.zoom && !v5h.gz) hot(tx, ty, tw, TH, () => { v5h.gz = null; v5h.zoom = { pF: t.t.o.pF, tc: t.t.o.tc, tint: t.t.o.tint, title: pn.title, y: py, ans: pn.answer }; }, 'click: enlarge this section, read the pore sizes and drag the suction'); });
     const ay = ty + TH + 22, gx = px + 44, gw = colW - 58; let ax; if (pn.axes) { const d = pn.axes; ax = sidAxes(gx, ay, gw, ah, d[2], d[3], d[4], d[5], d[0], d[1], d[6], d[7]); } else ax = { x: gx, y: ay, w: gw, h: ah };
     pn.draw(ax); { const gh0 = v5h.hv && v5h.hv.x >= gx - 40 && v5h.hv.x <= gx + gw && v5h.hv.y >= ay - 4 && v5h.hv.y <= ay + ah + 28 && !v5h.zoom && !v5h.gz; if (gh0) { ctx.strokeStyle = '#0B7285'; ctx.lineWidth = 2; rrect(gx - 42, ay - 6, gw + 44, ah + 38, 5); ctx.stroke(); } if (!v5h.zoom && !v5h.gz) hot(gx - 42, ay - 6, gw + 44, ah + 38, () => { v5h.gz = { i, y: py }; }, 'click: enlarge this graph and read its values'); }
     sidWrap(pn.answer, px + 10, ay + ah + 36, iw, { s: 9, c: '#1F2933' }, 11.2);
@@ -5471,21 +5473,22 @@ function v5Hidden(Y0) {
   // ---- the enlarged section: drag the suction and the soil drains or fills; pore sizes, water and the soil curves follow ----
   const Z = v5h.zoom;
   if (Z) {
-    const CH = 378, cy0 = clampN(Z.y, y1, y1 + Math.ceil(panels.length / 2) * (PH + GAP) - CH), cx0 = 16, cw = W - 32, t = ctTile({ pF: Z.pF, tc: Z.tc, tint: Z.tint }), h = Math.pow(10, Z.pF);
+    const CH = cBox.h, cy0 = cBox.y, cx0 = 16, cw = W - 32, t = ctTile({ pF: Z.pF, tc: Z.tc, tint: Z.tint }), h = Math.pow(10, Z.pF);
     ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = 16; ctx.fillStyle = '#fff'; rrect(cx0, cy0, cw, CH, 10); ctx.fill(); ctx.restore(); ctx.strokeStyle = '#0B7285'; ctx.lineWidth = 2; rrect(cx0, cy0, cw, CH, 10); ctx.stroke();
     sidWrap(Z.title.replace(/^\d+\.\s*/, ''), cx0 + 14, cy0 + 20, cw - 120, { s: 11.5, b: true, c: '#12303A' }, 14);
     ctx.fillStyle = '#EEF1F3'; rrect(cx0 + cw - 90, cy0 + 8, 78, 22, 6); ctx.fill(); T('Close ✕', cx0 + cw - 51, cy0 + 23, { s: 10, b: true, a: 'center', c: '#374151' }); hot(cx0 + cw - 90, cy0 + 8, 78, 22, () => { v5h.zoom = null; }, 'close the enlarged section');
-    const ix = cx0 + 14, iy = cy0 + 50, iw = 330, ih = Math.round(330 * 150 / 220);
+    const ix = cx0 + 14, iy = cy0 + 50, iw = 300, ih = Math.round(300 * 150 / 220);
     ctx.drawImage(t.cv, ix, iy, iw, ih); ctx.strokeStyle = '#374151'; ctx.lineWidth = 1; ctx.strokeRect(ix, iy, iw, ih);
     const barMm = 0.1, barPx = barMm / 0.6 * iw; ctx.fillStyle = '#fff'; ctx.fillRect(ix + 8, iy + ih - 20, barPx + 56, 14); ctx.fillStyle = '#111'; ctx.fillRect(ix + 12, iy + ih - 14, barPx, 3); T('0.1 mm', ix + 16 + barPx, iy + ih - 9, { s: 8.5, b: true, c: '#111' });
     const lgd = [['quartz', '#E8E0C8'], ['feldspar', '#D6A68A'], ['dark mineral', '#48443F'], ['mica', '#BCC2CA'], ['organic', '#402E20'], ['water', '#2F7FC0']]; lgd.forEach((q, k) => { const lx = ix + (k % 3) * 112, ly = iy + ih + 10 + Math.floor(k / 3) * 13; ctx.fillStyle = q[1]; ctx.beginPath(); ctx.arc(lx + 5, ly - 3, 4, 0, 6.283); ctx.fill(); T(q[0], lx + 13, ly, { s: 8.5, c: '#374151' }); });
+    sidWrap(Z.ans || '', cx0 + 14, iy + ih + 52, 300, { s: 9, c: '#1F2933' }, 11.5);
     // pore-size distribution
-    const gx = ix + iw + 40, gw = cw - (gx - cx0) - 18, gy = cy0 + 62, gh = 100, nb = t.edges.length - 1, tot = Math.max(1, t.wet.reduce((a, b2) => a + b2, 0) + t.air.reduce((a, b2) => a + b2, 0)), mxb = Math.max.apply(null, t.wet.map((v, k) => (v + t.air[k]) / tot)) || 0.1;
-    T('Pore sizes in this section', gx - 4, cy0 + 50, { s: 9.5, b: true, c: '#12303A' });
+    const gx = ix + iw + 30, gw = cw - (gx - cx0) - 18, gy = cy0 + 62, gh = 100, nb = t.edges.length - 1, tot = Math.max(1, t.wet.reduce((a, b2) => a + b2, 0) + t.air.reduce((a, b2) => a + b2, 0)), mxb = Math.max.apply(null, t.wet.map((v, k) => (v + t.air[k]) / tot)) || 0.1;
+    T('Pore sizes in this section', gx, cy0 + 50, { s: 9.5, b: true, c: '#12303A' });
     ctx.strokeStyle = '#B9C0C7'; ctx.beginPath(); ctx.moveTo(gx, gy + gh + 0.5); ctx.lineTo(gx + gw, gy + gh + 0.5); ctx.stroke(); const bw2 = gw / nb;
     for (let k = 0; k < nb; k++) { const aw = t.air[k] / tot / mxb * (gh - 8), ww = t.wet[k] / tot / mxb * (gh - 8); ctx.fillStyle = '#D5DBE3'; ctx.fillRect(gx + k * bw2 + 2, gy + gh - aw, bw2 - 4, aw); ctx.fillStyle = '#2F7FC0'; ctx.fillRect(gx + k * bw2 + 2, gy + gh - aw - ww, bw2 - 4, ww);
       T(String(t.edges[k]), gx + k * bw2 + bw2 / 2, gy + gh + 11, { s: 7.5, a: 'center', c: '#374151' }); const hs2 = 1490 / t.edges[k]; T(hs2 >= 1000 ? Math.round(hs2 / 100) / 10 + 'k' : String(Math.round(hs2)), gx + k * bw2 + bw2 / 2, gy + gh + 22, { s: 7.5, a: 'center', c: '#8A4B1E' }); }
-    T('radius µm', gx - 4, gy + gh + 11, { s: 7.5, a: 'right', c: '#374151' }); T('empties at, cm', gx - 4, gy + gh + 22, { s: 7.5, a: 'right', c: '#8A4B1E' });
+    sidWrap('Top row: pore radius in µm. Brown row: suction in cm at which that pore size empties.', gx, gy + gh + 36, gw, { s: 8, c: '#4B5563', a: 'left' }, 10);
     ctx.fillStyle = '#2F7FC0'; ctx.fillRect(gx + gw - 92, gy - 4, 8, 8); T('water', gx + gw - 80, gy + 3, { s: 8, c: '#374151' }); ctx.fillStyle = '#D5DBE3'; ctx.fillRect(gx + gw - 46, gy - 4, 8, 8); T('air', gx + gw - 34, gy + 3, { s: 8, c: '#374151' });
     const rc = 1490 / h, Kc = ks * Kr(h), lines = [
       'Suction ' + (h >= 100 ? Math.round(h).toLocaleString('en-US') : h.toFixed(1)) + ' cm, pF ' + Z.pF.toFixed(1),
@@ -5493,7 +5496,7 @@ function v5Hidden(Y0) {
       'Pores take up ' + pct(t.porosity) + ' of this section; ' + pct(t.sat) + ' of that area holds water',
       'Water content of the soil ' + (th(h) * 100).toFixed(1) + ' % by volume (saturation ' + pct(th(h) / phi) + ')',
       'Hydraulic conductivity ' + (Kc >= 0.01 ? Kc.toFixed(2) : Kc.toExponential(1)) + ' cm per day'];
-    let ly2 = gy + gh + 44; lines.forEach((q, k) => { ly2 += sidWrap(q, gx - 4, ly2, cx0 + cw - gx - 8, { s: k === 0 ? 10 : 9, b: k === 0, c: k === 0 ? '#12303A' : '#1F2933' }, 12) * 12 + 2; });
+    let ly2 = gy + gh + 64; lines.forEach((q, k) => { ly2 += sidWrap(q, gx, ly2, cx0 + cw - gx - 16, { s: k === 0 ? 10 : 9, b: k === 0, c: k === 0 ? '#12303A' : '#1F2933' }, 12) * 12 + 2; });
     // slider
     const sy2 = cy0 + CH - 30, sx2 = cx0 + 40, sw2 = cw - 80; v5h.zoom.sl = { x: sx2, y: sy2, w: sw2 };
     T('Drag to drain or fill the soil', cx0 + 14, sy2 - 12, { s: 9.5, b: true, c: '#12303A' });
@@ -5505,11 +5508,11 @@ function v5Hidden(Y0) {
   // ---- the enlarged graph: click any small graph to read it large; move over it for the values ----
   const G = v5h.gz;
   if (G && panels[G.i]) {
-    const pn = panels[G.i], CH = 490, cx0 = 16, cw = W - 32, cy0 = clampN(G.y, y1, y1 + Math.ceil(panels.length / 2) * (PH + GAP) - CH);
+    const pn = panels[G.i], CH = cBox.h, cx0 = 16, cw = W - 32, cy0 = cBox.y;
     ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = 16; ctx.fillStyle = '#fff'; rrect(cx0, cy0, cw, CH, 10); ctx.fill(); ctx.restore(); ctx.strokeStyle = '#0B7285'; ctx.lineWidth = 2; rrect(cx0, cy0, cw, CH, 10); ctx.stroke();
     sidWrap(pn.title.replace(/^\d+\.\s*/, ''), cx0 + 14, cy0 + 20, cw - 120, { s: 11.5, b: true, c: '#12303A' }, 14);
     ctx.fillStyle = '#EEF1F3'; rrect(cx0 + cw - 90, cy0 + 8, 78, 22, 6); ctx.fill(); T('Close ✕', cx0 + cw - 51, cy0 + 23, { s: 10, b: true, a: 'center', c: '#374151' }); hot(cx0 + cw - 90, cy0 + 8, 78, 22, () => { v5h.gz = null; }, 'close the enlarged graph');
-    const d = pn.axes, gx2 = cx0 + 70, gy2 = cy0 + 54, gw2 = cw - 100, gh2 = 250; let ax2;
+    const d = pn.axes, gx2 = cx0 + 70, gy2 = cy0 + 54, gw2 = cw - 100, gh2 = CH - 240; let ax2;
     if (d) ax2 = sidAxes(gx2, gy2, gw2, gh2, d[2], d[3], d[4], d[5], d[0], d[1], d[6] + 2, d[7] + 2); else ax2 = { x: gx2, y: gy2, w: gw2, h: gh2 };
     pn.draw(ax2);
     const hv = v5h.hv;
