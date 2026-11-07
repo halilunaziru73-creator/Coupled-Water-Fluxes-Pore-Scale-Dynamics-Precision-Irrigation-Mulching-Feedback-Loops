@@ -44,20 +44,47 @@ which the study reports as roughly 1.06 kg N ha$^{-1}$ per mm of drainage (READM
 
 ## Hidden questions of the vadose zone
 
-Below the seven effects the layer answers eight further questions, each as a small figure computed for the soil you selected from its van Genuchten and Mualem functions (and, for the compaction panel, from runs of the model at each consolidation step). The topics follow the work of M. Th. van Genuchten and co-authors.
+Below the seven effects the layer answers eight further questions. Every panel has the same three parts: pore-scale sections of the soil, a curve, and a sentence with the numbers.
 
-| Panel | Question | What is drawn | Source of the form used |
-|---|---|---|---|
-| 1 | Does a sensor read the same after wetting as after drying? | The drying and wetting curves of the soil (alpha doubled on wetting) with the trigger suction; the water held in the sensor depth by the difference. | Kool and Parker 1987; Zhuang et al. 2016, 2017 |
-| 2 | Where does water still move when the soil is air dry? | log K against suction: capillary flow, an illustrative film term proportional to the suction to the power −1.5, and their sum. | Tokunaga 2009; Peters 2013; Rudiyanto et al. 2015 |
-| 3 | Does compaction starve the crop or protect the groundwater? | Drainage at each of the five consolidation steps, from runs of this model; yield change in the text. | Ngo-Cong et al. 2021; Saffari et al. 2019 |
-| 4 | How far does the water table reach into the root zone? | Water content against height above the water table and the height where saturation falls below 90 %. | Gonçalves et al. 2020 |
-| 5 | How much of the water carries nearly all of the nitrate? | The share of pore volume and the share of conductivity of the wide pores (drained above 31.6 cm suction). | de Vries et al. 2017; Alfaro Soto et al. 2017 |
-| 6 | How salty can the irrigation water be before the leaching it needs pollutes? | Relative yield of wheat against the salinity of the irrigation water for your drainage and for twice the drainage. | Maas and Hoffman 1977; Feghhenabi et al. 2019 to 2022 |
-| 7 | Where on the suction scale does the trigger cost yield? | The reduction of root uptake with suction and your trigger. | Feddes et al. 1978; Lazarovitch et al. 2018 |
-| 8 | How long does the soil keep up with the sun, and what does mulch change? | The water the topsoil can deliver against suction, the evaporative demand (reduced by your mulch) and the suction where stage 2 begins. | Bezerra-Coelho et al. 2018 |
+**The sections.** Each section is the modelled thin section of the soil used in the Soil, plant and air layer and in the Evaporation layer: grains in their natural colours, the fine matrix dark, air-filled pores empty and water in blue. It is built from the texture of the selected soil, the tillage system and the settling of the project, then filled with water at the suction named under the section (a pore of radius r empties at a suction of about 1.49 divided by r, with r in centimetres, and a film of water remains on the grains). It is not a scan of a real sample. The percentage under a section is the share of the pores in the picture that are full of water.
 
-The film term and the salt balance are simple, stated forms for teaching and comparison; they are not calibrated to a field.
+**The curves.** The curves are the van Genuchten and Mualem functions of the selected soil. The compaction panel is made of runs of the model at each of the five settling steps.
+
+**Connected to the controls.** Every panel follows the soil, tillage, settling, mulch, trigger suction, sensor depth, rain, temperature, crop and nitrogen set in Properties. For example, a drier trigger changes the suction of panels 1, 2 and 7, stronger mulch changes the demand and the stage lengths of panel 8, a different tillage or settling changes the pores of every section, and rain and irrigation change the salt balance of panel 6.
+
+| Panel | Question | Sections | Curve | What it connects to |
+|---|---|---|---|---|
+| 1 | Does a sensor read the same after wetting as after drying? | At the trigger suction after drying, and after wetting (the wetting curve has twice the alpha of the drying curve) | Drying and wetting curves | Trigger suction, sensor depth, soil |
+| 2 | Where does water still move when the soil is air dry? | At the trigger, at pF 4.2 and at pF 5.5 | log K against suction: capillary flow, an illustrative film term proportional to the suction to the power −1.5 anchored at 10⁻⁷ cm per day at pF 4.2, and their sum | Trigger suction, soil |
+| 3 | Does compaction starve the crop or protect the groundwater? | Settling steps 0, 2 and 4 at field capacity | Drainage at each of the five steps, from runs of the model, with yield in the text | Tillage, settling, mulch, rain, crop, nitrogen |
+| 4 | How far does the water table reach into the root zone? | 5, 25, 60 and 150 cm above the water table | Water content against height, and the height where saturation falls below 90 % | Soil, tillage, settling |
+| 5 | How much of the water carries nearly all of the nitrate? | All pores wet, and the wide pores (those that empty at less than 31.6 cm) drained | The share of pore volume and the share of conductivity carried by wide, medium and fine pores | Soil, tillage, settling, nitrogen leaching of the model |
+| 6 | How salty can the irrigation water be before the leaching it needs pollutes? | Water coloured amber with its salt: irrigation water at 2 dS/m and the drainage water | Relative yield of wheat against the salinity of the irrigation water for your drainage and for twice the drainage | Irrigation and drainage of the model (rain, mulch, trigger, soil) |
+| 7 | Where on the suction scale does the trigger cost yield? | At 500 cm, at the trigger and at 8,000 cm | Reduction of root uptake with suction | Trigger suction, soil |
+| 8 | How long does the soil keep up with the sun, and what does mulch change? | Just wetted, at the end of stage 1 and in stage 2 | Water the topsoil can deliver against suction, the demand reduced by mulch, and where stage 2 begins | Mulch, soil |
+
+The film term, the salt balance (steady state, root-zone salinity taken as a quarter of the sum of the salinity of the irrigation and drainage water, wheat threshold 6 dS/m, slope 7.1 % per dS/m) and the uptake curve (breakpoints at 10, 25, 500 and 8,000 cm) are simple, stated forms for teaching and comparison. They are not calibrated to a field.
+
+### References for the hidden questions
+
+The figures do not carry references; they are listed here.
+
+1. van Genuchten, M. Th. (1980). A closed-form equation for predicting the hydraulic conductivity of unsaturated soils. Soil Science Society of America Journal 44: 892 to 898.
+2. Mualem, Y. (1976). A new model for predicting the hydraulic conductivity of unsaturated porous media. Water Resources Research 12: 513 to 522.
+3. Kool, J. B., and Parker, J. C. (1987). Development and evaluation of closed-form expressions for hysteretic soil hydraulic properties. Water Resources Research 23: 105 to 114.
+4. Zhuang, L., Bezerra Coelho, C. R., Hassanizadeh, S. M., and van Genuchten, M. Th. (2017). Analysis of the hysteretic hydraulic properties of unsaturated soil. Vadose Zone Journal 16(5): 1 to 9.
+5. Tokunaga, T. K. (2009). Hydraulic properties of adsorbed water films in unsaturated porous media. Water Resources Research 45: W06415.
+6. Peters, A. (2013). Simple consistent models for water retention and hydraulic conductivity in the complete moisture range. Water Resources Research 49: 6765 to 6780.
+7. Rudiyanto, Sakai, M., van Genuchten, M. Th., Alazba, A. A., Setiawan, B. I., and Minasny, B. (2015). A complete soil hydraulic model accounting for capillary and adsorptive water retention, capillary and film conductivity, and hysteresis. Water Resources Research 51(11): 8757 to 8772.
+8. Ngo-Cong, D., Antille, D. L., van Genuchten, M. Th., Nguyen, H. Q., Tekeste, M. Z., and Baillie, C. P. (2021). A modeling framework to quantify the effects of compaction on soil water retention and infiltration. Soil Science Society of America Journal 85(6): 1931 to 1945.
+9. Saffari, R., Nikooee, E., Habibagahi, G., and van Genuchten, M. Th. (2019). Effects of biological stabilization on the water retention properties of unsaturated soils. Journal of Geotechnical and Geoenvironmental Engineering 145(7): 04019028.
+10. Gonçalves, R. D., Teramoto, E. H., Engelbrecht, B. Z., Alfaro Soto, M. A., Chang, H. K., and van Genuchten, M. Th. (2020). Quasi-saturated layer: implications for estimating recharge and groundwater modeling. Groundwater 58(3): 432 to 440.
+11. de Vries, E. T., Raoof, A., and van Genuchten, M. Th. (2017). Multiscale modelling of dual-porosity porous media; a computational pore-scale study for flow and solute transport. Advances in Water Resources 105: 82 to 95.
+12. Maas, E. V., and Hoffman, G. J. (1977). Crop salt tolerance, current assessment. Journal of the Irrigation and Drainage Division, ASCE 103: 115 to 134.
+13. Feghhenabi, F., Hadi, H., Khodaverdiloo, H., and van Genuchten, M. Th. (2020). Seed priming alleviated salinity stress during germination and emergence of wheat. Agricultural Water Management 231: 106022.
+14. Feddes, R. A., Kowalik, P. J., and Zaradny, H. (1978). Simulation of field water use and crop yield. Pudoc, Wageningen.
+15. Lazarovitch, N., Vanderborght, J., Jin, Y., and van Genuchten, M. Th. (2018). The root zone: soil physics and beyond. Vadose Zone Journal 17(1): 1 to 6.
+16. Bezerra-Coelho, C. R., Zhuang, L., Barbosa, M. C., Alfaro Soto, M. A., and van Genuchten, M. Th. (2018). Further tests of the HYPROP evaporation method for estimating the unsaturated soil hydraulic properties. Journal of Hydrology and Hydromechanics 66(2): 161 to 169.
 
 ## The sentence under the picture
 
