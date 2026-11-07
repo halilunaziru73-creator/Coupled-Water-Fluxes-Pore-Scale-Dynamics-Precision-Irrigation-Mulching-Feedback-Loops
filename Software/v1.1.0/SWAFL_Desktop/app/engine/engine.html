@@ -363,7 +363,7 @@ const SCENES = [
     legend:[['#8E4A3A','Conventional'],['#D9782A','Reduced'],['#2E7D5A','No-till'],['#2E7DE8','Consolidation rate']], insight:"Tillage is an identifiable driver of change in soil hydraulic properties: conventional tillage raises drainage as structural consolidation increases; no-till stays flat." },
   { id:"v4", label:"V4 Mulch vs Bare", color:"#5BD67A", interactive:true, onDown: p => v4Down(p), onMove: p => v4Move(p), onLeave: () => { v4ui.hover = -1; }, draw: () => { drawV4(); hotV4(); }, title:"Mulched against bare soil: evaporation, irrigation and drainage",
     legend:[['#9AA3AE','Bare soil'],['#4FAE5E','Current mulch'],['#1E6B4A','Strongest mulch']], insight:"Mulch is a tunable, dynamic control on evaporation: soil evaporation scales continuously with mulch strength across every soil tested." },
-  { id:"v5", label:"V5 Feedback Loops", color:"#E8C84D", h:2100, draw: () => drawV5(), title:"Feedback loops between climate, management, soil water, crop and nitrogen",
+  { id:"v5", label:"V5 Feedback Loops", color:"#E8C84D", h:2100, interactive: true, onDown: p => v5hDown(p), onMove: p => v5hMove(p), onUp: () => { v5h.drag = false; }, onLeave: () => { v5h.drag = false; v5h.hv = null; }, draw: () => drawV5(), title:"Feedback loops between climate, management, soil water, crop and nitrogen",
     legend:[['#D93025','Two-way link (label = change for one step)']], insight:"Atmospheric demand, rainfall, irrigation, soil water, evaporation and drainage form one coupled feedback loop, not independent processes." },
   { id:"v6", label:"V6 Mulch Control", color:"#2FA3A3", h:946, draw: () => { drawV6x(); hotV6(); }, title:"Mulch and tillage as controls on evaporation and drainage",
     legend:[['#ECA03C','Evaporation'],['#5AA0E1','Drainage'],['#D93025','Current setting']], insight:"Mulch strength and interception capacity set evaporation; tillage and consolidation set drainage. The red outline marks your current settings." },
@@ -5355,8 +5355,14 @@ function ctTile(o) {                              // o: pF, tc (consolidation in
   microPaint(g, () => Math.pow(10, o.pF), 'soil', 0);
   const c = document.createElement('canvas'); c.width = 220; c.height = 150; const cx = c.getContext('2d'); cx.drawImage(g.cv, 0, 0);
   if (o.tint > 0) { const im = cx.getImageData(0, 0, 220, 150), d = im.data, f = o.tint, A = [226, 150, 30]; for (let i = 0; i < d.length; i += 4) if (d[i + 2] - d[i] > 60 && d[i + 2] > 150) { d[i] += (A[0] - d[i]) * f; d[i + 1] += (A[1] - d[i + 1]) * f; d[i + 2] += (A[2] - d[i + 2]) * f; } cx.putImageData(im, 0, 0); }
-  r = { cv: c, sat: g.nWater / Math.max(1, g.nWater + g.nAir) }; CTC.m.set(key, r); if (CTC.m.size > 120) CTC.m.delete(CTC.m.keys().next().value); return r;
+  const EDG = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000], nb = EDG.length - 1, wet = new Array(nb).fill(0), air = new Array(nb).fill(0), wa = g.water.slice(); let np = 0;
+  for (let i = 0; i < g.N; i++) if (g.type[i] === 0) { np++; const rr = g.T[i] * g.s * 1000; let b = 0; while (b < nb - 1 && rr >= EDG[b + 1]) b++; if (wa[i]) wet[b]++; else air[b]++; }
+  r = { cv: c, g, wa, wet, air, edges: EDG, porosity: np / g.N, sat: g.nWater / Math.max(1, g.nWater + g.nAir), o: { pF: o.pF, tc: tc, tint: o.tint || 0 } }; CTC.m.set(key, r); if (CTC.m.size > 200) CTC.m.delete(CTC.m.keys().next().value); return r;
 }
+const v5h = { hv: null, zoom: null, drag: false, rects: [], card: null };
+function v5hDown(p) { const z = v5h.zoom; if (!z || !z.sl) return false; const s = z.sl; if (p.x >= s.x - 10 && p.x <= s.x + s.w + 10 && p.y >= s.y - 12 && p.y <= s.y + 16) { v5h.drag = true; v5hSlide(p); return true; } return false; }
+function v5hSlide(p) { const z = v5h.zoom, s = z.sl; z.pF = clampN(Math.round((p.x - s.x) / s.w * 56) / 10, 0, 5.6); }
+function v5hMove(p) { v5h.hv = p; if (v5h.drag) { v5hSlide(p); return true; } return false; }
 function v5Hidden(Y0) {
   const soil = state.soil, p = VGE[soil], mm = 1 - 1 / p[1], tex = DATA.texture[soil], m = current, vff = VFF_VALUES[state.vffIdx], rain = RAIN_VALUES[state.rainIdx];
   const ks = SIDM.saxton(tex.sand / 100, tex.clay / 100, SID.om).ks * 2.4;                                   // saturated conductivity, cm/day
@@ -5436,17 +5442,66 @@ function v5Hidden(Y0) {
       draw: ax => { clip(ax, () => { line(ax, pts(0, 5, 80, x => lg(Math.max(1e-9, q(Math.pow(10, x))))), '#1B6BB0', 2.2); ctx.strokeStyle = '#C0503A'; ctx.lineWidth = 1.6; ctx.setLineDash([6, 3]); ctx.beginPath(); ctx.moveTo(ax.x, ax.sy(lg(E0))); ctx.lineTo(ax.x + ax.w, ax.sy(lg(E0))); ctx.stroke(); ctx.setLineDash([]); if (hc) vline(ax, pF(hc), '#374151', 'stage 2'); }); T('demand ' + (E0 * 10).toFixed(1) + ' mm/day', ax.x + ax.w - 4, ax.sy(lg(E0)) - 4, { s: 8.5, b: true, a: 'right', c: '#C0503A' }); },
       answer: hc ? 'The topsoil delivers the demand of ' + (E0 * 10).toFixed(1) + ' mm/day (bare soil would demand 5) until its suction reaches ' + Math.round(hc) + ' cm, ' + (days(hc) < 0.1 ? 'less than a day' : 'about ' + days(hc).toFixed(1) + ' days') + ' after wetting; then evaporation drops to what the soil conducts. Bare soil would last ' + dTxt(daysB(hb)) + '. Mulch lowers the demand, so the first stage lasts longer and the saved water is kept near the surface.' : 'The soil delivers the demand at every suction in this range.' }); }
 
-  const x0 = 16, y1 = Y0 + 46, TH = 70, ah = 56;
+  const x0 = 16, y1 = Y0 + 46, TH = 70, ah = 56; v5h.rects = [];
   panels.forEach((pn, i) => {
     const col = i % 2, row = Math.floor(i / 2), px = x0 + col * (colW + 10), py = y1 + row * (PH + GAP), iw = colW - 20;
     box(px, py, colW, PH, { fill: '#fff', r: 8 });
     const nl = sidWrap(pn.title, px + 10, py + 16, iw, { s: 10.5, b: true, c: '#12303A' }, 13), ty = py + 12 + nl * 13 + 4, n = pn.tiles.length, tw = (iw - 6 * (n - 1)) / n;
     pn.tiles.forEach((t, k) => { const tx = px + 10 + k * (tw + 6), ar = tw / TH, sw = Math.min(220, 150 * ar), sh = Math.min(150, 220 / ar);
       ctx.save(); ctx.beginPath(); rrect(tx, ty, tw, TH, 4); ctx.clip(); ctx.drawImage(t.t.cv, (220 - sw) / 2, (150 - sh) / 2, sw, sh, tx, ty, tw, TH); ctx.restore();
-      ctx.strokeStyle = t.mark ? '#C0503A' : '#6B7280'; ctx.lineWidth = t.mark ? 2.4 : 1; rrect(tx, ty, tw, TH, 4); ctx.stroke(); T(t.cap, tx + tw / 2, ty + TH + 11, { s: 8, a: 'center', c: '#374151' }); });
+      const hov = v5h.hv && v5h.hv.x >= tx && v5h.hv.x <= tx + tw && v5h.hv.y >= ty && v5h.hv.y <= ty + TH;
+      ctx.strokeStyle = hov ? '#0B7285' : t.mark ? '#C0503A' : '#6B7280'; ctx.lineWidth = hov || t.mark ? 2.4 : 1; rrect(tx, ty, tw, TH, 4); ctx.stroke(); T(t.cap, tx + tw / 2, ty + TH + 11, { s: 8, a: 'center', c: '#374151' });
+      v5h.rects.push({ x: tx, y: ty, w: tw, h: TH, sw, sh, t: t.t, title: pn.title });
+      if (!v5h.zoom) hot(tx, ty, tw, TH, () => { v5h.zoom = { pF: t.t.o.pF, tc: t.t.o.tc, tint: t.t.o.tint, title: pn.title, y: py }; }, 'click: enlarge this section, read the pore sizes and drag the suction'); });
     const ay = ty + TH + 22, gx = px + 44, gw = colW - 58; let ax; if (pn.axes) { const d = pn.axes; ax = sidAxes(gx, ay, gw, ah, d[2], d[3], d[4], d[5], d[0], d[1], d[6], d[7]); } else ax = { x: gx, y: ay, w: gw, h: ah };
     pn.draw(ax); sidWrap(pn.answer, px + 10, ay + ah + 36, iw, { s: 9, c: '#1F2933' }, 11.2);
   });
+  // ---- hover: what is under the pointer in any section (grain, matrix, pore size, water or air, and the suction at which the pore empties) ----
+  const probe = (t, hv, X, Y, Wd, Ht, sx0, sy0, sw0, sh0) => {          // the section is drawn from (sx0,sy0,sw0,sh0) of its 220 by 150 pixels into the rectangle X,Y,Wd,Ht
+    const px = clampN(Math.floor(sx0 + (hv.x - X) / Wd * sw0), 0, 219), py = clampN(Math.floor(sy0 + (hv.y - Y) / Ht * sh0), 0, 149), g = t.g, i = py * 220 + px, ty = g.type[i];
+    ctx.strokeStyle = 'rgba(255,255,255,0.95)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(hv.x - 8, hv.y); ctx.lineTo(hv.x + 8, hv.y); ctx.moveTo(hv.x, hv.y - 8); ctx.lineTo(hv.x, hv.y + 8); ctx.stroke(); ctx.strokeStyle = 'rgba(0,0,0,0.65)'; ctx.beginPath(); ctx.arc(hv.x, hv.y, 10, 0, 6.283); ctx.stroke();
+    let l1, l2 = '', l3 = '';
+    if (ty === 1) { const d = 2 * (g.rads[g.own[i]] || 0.05) * 1000; l1 = 'Mineral grain: ' + MINN[minOf(g.hue[i] / 255)]; l2 = 'diameter about ' + Math.round(d) + ' µm (' + (d >= 50 ? 'sand' : d >= 2 ? 'silt' : 'clay') + ' size)'; }
+    else if (ty === 2) { l1 = 'Fine matrix'; l2 = 'clay and fine silt, pores below the resolution'; l3 = 'holds water until about pF 4'; }
+    else { const r = g.T[i] * g.s * 1000, w = t.wa[i] === 1, hc = r > 0 ? 1490 / r : 0; l1 = w ? 'Water-filled pore' : 'Air-filled pore'; l2 = 'pore radius about ' + (r >= 100 ? Math.round(r) : r.toFixed(1)) + ' µm'; l3 = 'empties at suctions above ' + (hc >= 100 ? Math.round(hc).toLocaleString('en-US') : hc.toFixed(0)) + ' cm (pF ' + lg(Math.max(hc, 1)).toFixed(1) + ')'; }
+    const ln = [l1, l2, l3].filter(Boolean); ctx.font = 'bold 10px sans-serif'; const w = Math.max.apply(null, ln.map(q => ctx.measureText(q).width)) + 14, h2 = ln.length * 14 + 8; let bx = hv.x + 16, by = hv.y + 14; if (bx + w > W - 4) bx = hv.x - w - 16; if (by + h2 > H - 4) by = hv.y - h2 - 10;
+    ctx.fillStyle = 'rgba(255,252,225,0.98)'; ctx.strokeStyle = '#1B1F23'; ctx.lineWidth = 1; rrect(bx, by, w, h2, 6); ctx.fill(); ctx.stroke(); ln.forEach((q, k) => T(q, bx + 7, by + 15 + k * 14, { s: 10, b: k === 0, c: INK }));
+  };
+  // ---- the enlarged section: drag the suction and the soil drains or fills; pore sizes, water and the soil curves follow ----
+  const Z = v5h.zoom;
+  if (Z) {
+    const CH = 378, cy0 = clampN(Z.y, y1, y1 + Math.ceil(panels.length / 2) * (PH + GAP) - CH), cx0 = 16, cw = W - 32, t = ctTile({ pF: Z.pF, tc: Z.tc, tint: Z.tint }), h = Math.pow(10, Z.pF);
+    ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = 16; ctx.fillStyle = '#fff'; rrect(cx0, cy0, cw, CH, 10); ctx.fill(); ctx.restore(); ctx.strokeStyle = '#0B7285'; ctx.lineWidth = 2; rrect(cx0, cy0, cw, CH, 10); ctx.stroke();
+    sidWrap(Z.title.replace(/^\d+\.\s*/, ''), cx0 + 14, cy0 + 20, cw - 120, { s: 11.5, b: true, c: '#12303A' }, 14);
+    ctx.fillStyle = '#EEF1F3'; rrect(cx0 + cw - 90, cy0 + 8, 78, 22, 6); ctx.fill(); T('Close ✕', cx0 + cw - 51, cy0 + 23, { s: 10, b: true, a: 'center', c: '#374151' }); hot(cx0 + cw - 90, cy0 + 8, 78, 22, () => { v5h.zoom = null; }, 'close the enlarged section');
+    const ix = cx0 + 14, iy = cy0 + 50, iw = 330, ih = Math.round(330 * 150 / 220);
+    ctx.drawImage(t.cv, ix, iy, iw, ih); ctx.strokeStyle = '#374151'; ctx.lineWidth = 1; ctx.strokeRect(ix, iy, iw, ih);
+    const barMm = 0.1, barPx = barMm / 0.6 * iw; ctx.fillStyle = '#fff'; ctx.fillRect(ix + 8, iy + ih - 20, barPx + 56, 14); ctx.fillStyle = '#111'; ctx.fillRect(ix + 12, iy + ih - 14, barPx, 3); T('0.1 mm', ix + 16 + barPx, iy + ih - 9, { s: 8.5, b: true, c: '#111' });
+    const lgd = [['quartz', '#E8E0C8'], ['feldspar', '#D6A68A'], ['dark mineral', '#48443F'], ['mica', '#BCC2CA'], ['organic', '#402E20'], ['water', '#2F7FC0']]; lgd.forEach((q, k) => { const lx = ix + (k % 3) * 112, ly = iy + ih + 10 + Math.floor(k / 3) * 13; ctx.fillStyle = q[1]; ctx.beginPath(); ctx.arc(lx + 5, ly - 3, 4, 0, 6.283); ctx.fill(); T(q[0], lx + 13, ly, { s: 8.5, c: '#374151' }); });
+    // pore-size distribution
+    const gx = ix + iw + 40, gw = cw - (gx - cx0) - 18, gy = cy0 + 62, gh = 100, nb = t.edges.length - 1, tot = Math.max(1, t.wet.reduce((a, b2) => a + b2, 0) + t.air.reduce((a, b2) => a + b2, 0)), mxb = Math.max.apply(null, t.wet.map((v, k) => (v + t.air[k]) / tot)) || 0.1;
+    T('Pore sizes in this section', gx - 4, cy0 + 50, { s: 9.5, b: true, c: '#12303A' });
+    ctx.strokeStyle = '#B9C0C7'; ctx.beginPath(); ctx.moveTo(gx, gy + gh + 0.5); ctx.lineTo(gx + gw, gy + gh + 0.5); ctx.stroke(); const bw2 = gw / nb;
+    for (let k = 0; k < nb; k++) { const aw = t.air[k] / tot / mxb * (gh - 8), ww = t.wet[k] / tot / mxb * (gh - 8); ctx.fillStyle = '#D5DBE3'; ctx.fillRect(gx + k * bw2 + 2, gy + gh - aw, bw2 - 4, aw); ctx.fillStyle = '#2F7FC0'; ctx.fillRect(gx + k * bw2 + 2, gy + gh - aw - ww, bw2 - 4, ww);
+      T(String(t.edges[k]), gx + k * bw2 + bw2 / 2, gy + gh + 11, { s: 7.5, a: 'center', c: '#374151' }); const hs2 = 1490 / t.edges[k]; T(hs2 >= 1000 ? Math.round(hs2 / 100) / 10 + 'k' : String(Math.round(hs2)), gx + k * bw2 + bw2 / 2, gy + gh + 22, { s: 7.5, a: 'center', c: '#8A4B1E' }); }
+    T('radius µm', gx - 4, gy + gh + 11, { s: 7.5, a: 'right', c: '#374151' }); T('empties at, cm', gx - 4, gy + gh + 22, { s: 7.5, a: 'right', c: '#8A4B1E' });
+    ctx.fillStyle = '#2F7FC0'; ctx.fillRect(gx + gw - 92, gy - 4, 8, 8); T('water', gx + gw - 80, gy + 3, { s: 8, c: '#374151' }); ctx.fillStyle = '#D5DBE3'; ctx.fillRect(gx + gw - 46, gy - 4, 8, 8); T('air', gx + gw - 34, gy + 3, { s: 8, c: '#374151' });
+    const rc = 1490 / h, Kc = ks * Kr(h), lines = [
+      'Suction ' + (h >= 100 ? Math.round(h).toLocaleString('en-US') : h.toFixed(1)) + ' cm, pF ' + Z.pF.toFixed(1),
+      'Pores smaller than ' + (rc >= 100 ? Math.round(rc) : rc.toFixed(1)) + ' µm radius are full of water',
+      'Pores take up ' + pct(t.porosity) + ' of this section; ' + pct(t.sat) + ' of that area holds water',
+      'Water content of the soil ' + (th(h) * 100).toFixed(1) + ' % by volume (saturation ' + pct(th(h) / phi) + ')',
+      'Hydraulic conductivity ' + (Kc >= 0.01 ? Kc.toFixed(2) : Kc.toExponential(1)) + ' cm per day'];
+    let ly2 = gy + gh + 44; lines.forEach((q, k) => { ly2 += sidWrap(q, gx - 4, ly2, cx0 + cw - gx - 8, { s: k === 0 ? 10 : 9, b: k === 0, c: k === 0 ? '#12303A' : '#1F2933' }, 12) * 12 + 2; });
+    // slider
+    const sy2 = cy0 + CH - 30, sx2 = cx0 + 40, sw2 = cw - 80; v5h.zoom.sl = { x: sx2, y: sy2, w: sw2 };
+    T('Drag to drain or fill the soil', cx0 + 14, sy2 - 12, { s: 9.5, b: true, c: '#12303A' });
+    [['saturated', 0], ['field capacity', 2.0], ['your trigger', lg(hT)], ['wilting point', 4.2], ['air dry', 5.5]].forEach((q, k) => { const w3 = 82, bx3 = cx0 + 200 + k * (w3 + 4); ctx.fillStyle = Math.abs(Z.pF - q[1]) < 0.06 ? '#0B7285' : '#EEF1F3'; rrect(bx3, sy2 - 24, w3, 17, 5); ctx.fill(); T(q[0], bx3 + w3 / 2, sy2 - 12, { s: 8.5, b: true, a: 'center', c: Math.abs(Z.pF - q[1]) < 0.06 ? '#fff' : '#374151' }); hot(bx3, sy2 - 24, w3, 17, () => { v5h.zoom.pF = Math.round(q[1] * 10) / 10; }, 'set the suction: ' + q[0]); });
+    ctx.fillStyle = '#DDE3EA'; rrect(sx2, sy2, sw2, 8, 4); ctx.fill(); const kx = sx2 + Z.pF / 5.6 * sw2; ctx.fillStyle = '#0B7285'; rrect(sx2, sy2, kx - sx2, 8, 4); ctx.fill(); ctx.fillStyle = '#fff'; ctx.strokeStyle = '#0B7285'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(kx, sy2 + 4, 8, 0, 6.283); ctx.fill(); ctx.stroke();
+    [0, 1, 2, 3, 4, 5].forEach(k => T('pF ' + k, sx2 + k / 5.6 * sw2, sy2 + 22, { s: 8, a: 'center', c: MUTE }));
+    v5h.rects = [{ x: ix, y: iy, w: iw, h: ih, sw: 220, sh: 150, t, zoom: true }];
+  }
+  if (v5h.hv) for (const r of v5h.rects) if (v5h.hv.x >= r.x && v5h.hv.x <= r.x + r.w && v5h.hv.y >= r.y && v5h.hv.y <= r.y + r.h) { probe(r.t, v5h.hv, r.x, r.y, r.w, r.h, (220 - (r.sw || 220)) / 2, (150 - (r.sh || 150)) / 2, r.sw || 220, r.sh || 150); break; }
   return y1 + Math.ceil(panels.length / 2) * (PH + GAP) + 6;
 }
 
