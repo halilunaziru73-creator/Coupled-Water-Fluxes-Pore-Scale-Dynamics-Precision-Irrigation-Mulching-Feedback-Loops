@@ -78,7 +78,8 @@ const Layers = (() => {
     if (!tabs.includes(id)) tabs.push(id);
     sectionPick = {}; if (sec) sectionPick[id] = sec;
     const need = !E.snap || E.snap.scene !== id; if (need) E.scene(id);
-    if (sec) setTimeout(() => E.scrollTo(id, sec), need ? 260 : 20); else if (need) setTimeout(() => E.scrollTop(), 80);
+    /* no waiting: the scene is drawn at once, so the scroll is instant; one short retry only if the sections are not yet known */
+    if (sec) { if (!E.scrollTo(id, sec)) setTimeout(() => E.scrollTo(id, sec), 90); } else if (need) E.scrollTop();
     cur = id; reveal(id, sec); renderTabs(); render(); renderViewBar(); try { Dash.render(); } catch (e) {}
   }
   function closeTab(id) {

@@ -17,10 +17,10 @@ const E = (() => {
     scrollTo(sceneId, title) {
       const sec = api.json('window.__SEC||{}') || {}, m = (sec[sceneId] || {})[title]; if (!m) return false;
       const cv = api.win.document.getElementById('profileCanvas'), wrap = api.win.document.querySelector('.canvaswrap');
-      if (cv && wrap) { wrap.scrollTo({ top: Math.max(0, m[0] * cv.clientWidth / m[1] - 34), behavior: 'smooth' }); return true; }
+      if (cv && wrap) { wrap.scrollTo({ top: Math.max(0, m[0] * cv.clientWidth / m[1] - 34), behavior: 'instant' }); return true; }
       return false;
     },
-    scrollTop() { const w = api.win && api.win.document.querySelector('.canvaswrap'); if (w) w.scrollTo({ top: 0, behavior: 'smooth' }); },
+    scrollTop() { const w = api.win && api.win.document.querySelector('.canvaswrap'); if (w) w.scrollTo({ top: 0, behavior: 'instant' }); },
 
     /* ---- state ---- */
     set(o) { api.ev('applyState(' + JSON.stringify(o) + ')'); api.poll(true); },
