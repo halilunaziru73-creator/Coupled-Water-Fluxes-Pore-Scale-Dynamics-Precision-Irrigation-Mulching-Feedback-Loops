@@ -5527,7 +5527,7 @@ function v5Hidden(Y0) {
     ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = 16; ctx.fillStyle = '#fff'; rrect(cx0, cy0, cw, CH, 10); ctx.fill(); ctx.restore(); ctx.strokeStyle = '#0B7285'; ctx.lineWidth = 2; rrect(cx0, cy0, cw, CH, 10); ctx.stroke();
     sidWrap(pn.title.replace(/^\d+\.\s*/, ''), cx0 + 14, cy0 + 20, cw - 120, { s: 11.5, b: true, c: '#12303A' }, 14);
     ctx.fillStyle = '#EEF1F3'; rrect(cx0 + cw - 90, cy0 + 8, 78, 22, 6); ctx.fill(); T('Close ✕', cx0 + cw - 51, cy0 + 23, { s: 10, b: true, a: 'center', c: '#374151' }); hot(cx0 + cw - 90, cy0 + 8, 78, 22, () => { v5h.gz = null; }, 'close the enlarged graph');
-    const d = pn.axes, gx2 = cx0 + 70, gy2 = cy0 + 54, gw2 = cw - 100, gh2 = CH - 240; let ax2;
+    const d = pn.axes, gx2 = cx0 + 70, gy2 = cy0 + 54, gw2 = cw - 100, gh2 = CH - 320; let ax2;
     if (d) ax2 = sidAxes(gx2, gy2, gw2, gh2, d[2], d[3], d[4], d[5], d[0], d[1], d[6] + 2, d[7] + 2); else ax2 = { x: gx2, y: gy2, w: gw2, h: gh2 };
     pn.draw(ax2);
     const hv = v5h.hv;
@@ -5538,9 +5538,8 @@ function v5Hidden(Y0) {
       ctx.font = 'bold 10px sans-serif'; const w = Math.max.apply(null, ln.map(q => ctx.measureText(q).width)) + 14, h2 = ln.length * 14 + 8; let bx = hv.x + 14, by = hv.y + 14; if (bx + w > ax2.x + ax2.w) bx = hv.x - w - 14; if (by + h2 > ax2.y + ax2.h) by = hv.y - h2 - 10;
       ctx.fillStyle = 'rgba(255,252,225,0.98)'; ctx.strokeStyle = '#1B1F23'; rrect(bx, by, w, h2, 6); ctx.fill(); ctx.stroke(); ln.forEach((q, k) => T(q, bx + 7, by + 15 + k * 14, { s: 10, b: k === 0, c: INK }));
     }
-    const mk = pn.tiles.length, tw2 = Math.min(150, (cw - 28 - 8 * (mk - 1)) / mk);
-    pn.tiles.forEach((t, k) => { const tx = cx0 + 14 + k * (tw2 + 8), ty = gy2 + gh2 + 52; ctx.drawImage(t.t.cv, tx, ty, tw2, tw2 * 150 / 220); ctx.strokeStyle = '#6B7280'; ctx.lineWidth = 1; ctx.strokeRect(tx, ty, tw2, tw2 * 150 / 220); T(t.cap, tx + tw2 / 2, ty + tw2 * 150 / 220 + 11, { s: 8, a: 'center', c: '#374151' }); });
-    sidWrap(pn.answer, cx0 + 14 + mk * (tw2 + 8) + 6, gy2 + gh2 + 62, cx0 + cw - (cx0 + 14 + mk * (tw2 + 8) + 6) - 14, { s: 9.5, c: '#1F2933' }, 12.5);
+    const mk = pn.tiles.length, tw2 = Math.min(150, (cw - 28 - 8 * (mk - 1)) / mk), ay2 = gy2 + gh2 + 46, nl2 = sidWrap(pn.answer, cx0 + 14, ay2, cw - 28, { s: 9.5, c: '#1F2933' }, 12.5), ty2 = ay2 + nl2 * 12.5 + 6;
+    pn.tiles.forEach((t, k) => { const tx = cx0 + 14 + k * (tw2 + 8); ctx.drawImage(t.t.cv, tx, ty2, tw2, tw2 * 150 / 220); v5Live(t.t, tx, ty2, tw2, tw2 * 150 / 220, 0, 0, 220, 150); ctx.strokeStyle = '#6B7280'; ctx.lineWidth = 1; ctx.strokeRect(tx, ty2, tw2, tw2 * 150 / 220); T(t.cap, tx + tw2 / 2, ty2 + tw2 * 150 / 220 + 11, { s: 8, a: 'center', c: '#374151' }); });
   }
   if (v5h.hv) for (const r of v5h.rects) if (v5h.hv.x >= r.x && v5h.hv.x <= r.x + r.w && v5h.hv.y >= r.y && v5h.hv.y <= r.y + r.h) { probe(r.t, v5h.hv, r.x, r.y, r.w, r.h, (220 - (r.sw || 220)) / 2, (150 - (r.sh || 150)) / 2, r.sw || 220, r.sh || 150); break; }
   return y1 + Math.ceil(panels.length / 2) * (PH + GAP) + 6;
