@@ -5452,9 +5452,10 @@ function v5Hidden(Y0) {
       const hov = v5h.hv && v5h.hv.x >= tx && v5h.hv.x <= tx + tw && v5h.hv.y >= ty && v5h.hv.y <= ty + TH;
       ctx.strokeStyle = hov ? '#0B7285' : t.mark ? '#C0503A' : '#6B7280'; ctx.lineWidth = hov || t.mark ? 2.4 : 1; rrect(tx, ty, tw, TH, 4); ctx.stroke(); T(t.cap, tx + tw / 2, ty + TH + 11, { s: 8, a: 'center', c: '#374151' });
       v5h.rects.push({ x: tx, y: ty, w: tw, h: TH, sw, sh, t: t.t, title: pn.title });
-      if (!v5h.zoom) hot(tx, ty, tw, TH, () => { v5h.zoom = { pF: t.t.o.pF, tc: t.t.o.tc, tint: t.t.o.tint, title: pn.title, y: py }; }, 'click: enlarge this section, read the pore sizes and drag the suction'); });
+      if (!v5h.zoom && !v5h.gz) hot(tx, ty, tw, TH, () => { v5h.gz = null; v5h.zoom = { pF: t.t.o.pF, tc: t.t.o.tc, tint: t.t.o.tint, title: pn.title, y: py }; }, 'click: enlarge this section, read the pore sizes and drag the suction'); });
     const ay = ty + TH + 22, gx = px + 44, gw = colW - 58; let ax; if (pn.axes) { const d = pn.axes; ax = sidAxes(gx, ay, gw, ah, d[2], d[3], d[4], d[5], d[0], d[1], d[6], d[7]); } else ax = { x: gx, y: ay, w: gw, h: ah };
-    pn.draw(ax); sidWrap(pn.answer, px + 10, ay + ah + 36, iw, { s: 9, c: '#1F2933' }, 11.2);
+    pn.draw(ax); { const gh0 = v5h.hv && v5h.hv.x >= gx - 40 && v5h.hv.x <= gx + gw && v5h.hv.y >= ay - 4 && v5h.hv.y <= ay + ah + 28 && !v5h.zoom && !v5h.gz; if (gh0) { ctx.strokeStyle = '#0B7285'; ctx.lineWidth = 2; rrect(gx - 42, ay - 6, gw + 44, ah + 38, 5); ctx.stroke(); } if (!v5h.zoom && !v5h.gz) hot(gx - 42, ay - 6, gw + 44, ah + 38, () => { v5h.gz = { i, y: py }; }, 'click: enlarge this graph and read its values'); }
+    sidWrap(pn.answer, px + 10, ay + ah + 36, iw, { s: 9, c: '#1F2933' }, 11.2);
   });
   // ---- hover: what is under the pointer in any section (grain, matrix, pore size, water or air, and the suction at which the pore empties) ----
   const probe = (t, hv, X, Y, Wd, Ht, sx0, sy0, sw0, sh0) => {          // the section is drawn from (sx0,sy0,sw0,sh0) of its 220 by 150 pixels into the rectangle X,Y,Wd,Ht
@@ -5500,6 +5501,28 @@ function v5Hidden(Y0) {
     ctx.fillStyle = '#DDE3EA'; rrect(sx2, sy2, sw2, 8, 4); ctx.fill(); const kx = sx2 + Z.pF / 5.6 * sw2; ctx.fillStyle = '#0B7285'; rrect(sx2, sy2, kx - sx2, 8, 4); ctx.fill(); ctx.fillStyle = '#fff'; ctx.strokeStyle = '#0B7285'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(kx, sy2 + 4, 8, 0, 6.283); ctx.fill(); ctx.stroke();
     [0, 1, 2, 3, 4, 5].forEach(k => T('pF ' + k, sx2 + k / 5.6 * sw2, sy2 + 22, { s: 8, a: 'center', c: MUTE }));
     v5h.rects = [{ x: ix, y: iy, w: iw, h: ih, sw: 220, sh: 150, t, zoom: true }];
+  }
+  // ---- the enlarged graph: click any small graph to read it large; move over it for the values ----
+  const G = v5h.gz;
+  if (G && panels[G.i]) {
+    const pn = panels[G.i], CH = 490, cx0 = 16, cw = W - 32, cy0 = clampN(G.y, y1, y1 + Math.ceil(panels.length / 2) * (PH + GAP) - CH);
+    ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = 16; ctx.fillStyle = '#fff'; rrect(cx0, cy0, cw, CH, 10); ctx.fill(); ctx.restore(); ctx.strokeStyle = '#0B7285'; ctx.lineWidth = 2; rrect(cx0, cy0, cw, CH, 10); ctx.stroke();
+    sidWrap(pn.title.replace(/^\d+\.\s*/, ''), cx0 + 14, cy0 + 20, cw - 120, { s: 11.5, b: true, c: '#12303A' }, 14);
+    ctx.fillStyle = '#EEF1F3'; rrect(cx0 + cw - 90, cy0 + 8, 78, 22, 6); ctx.fill(); T('Close ✕', cx0 + cw - 51, cy0 + 23, { s: 10, b: true, a: 'center', c: '#374151' }); hot(cx0 + cw - 90, cy0 + 8, 78, 22, () => { v5h.gz = null; }, 'close the enlarged graph');
+    const d = pn.axes, gx2 = cx0 + 70, gy2 = cy0 + 54, gw2 = cw - 100, gh2 = 250; let ax2;
+    if (d) ax2 = sidAxes(gx2, gy2, gw2, gh2, d[2], d[3], d[4], d[5], d[0], d[1], d[6] + 2, d[7] + 2); else ax2 = { x: gx2, y: gy2, w: gw2, h: gh2 };
+    pn.draw(ax2);
+    const hv = v5h.hv;
+    if (d && hv && hv.x >= ax2.x && hv.x <= ax2.x + ax2.w && hv.y >= ax2.y && hv.y <= ax2.y + ax2.h) {
+      const xv = d[2] + (hv.x - ax2.x) / ax2.w * (d[3] - d[2]), yv = d[5] - (hv.y - ax2.y) / ax2.h * (d[5] - d[4]), isPF = /suction pF/.test(d[0]);
+      ctx.strokeStyle = 'rgba(17,24,39,0.55)'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(hv.x, ax2.y); ctx.lineTo(hv.x, ax2.y + ax2.h); ctx.moveTo(ax2.x, hv.y); ctx.lineTo(ax2.x + ax2.w, hv.y); ctx.stroke(); ctx.setLineDash([]);
+      const l1 = d[0].replace(/\s*\(.*\)/, '') + ' = ' + xv.toFixed(isPF ? 2 : 1), l2 = isPF ? 'suction = ' + (Math.pow(10, xv) >= 100 ? Math.round(Math.pow(10, xv)).toLocaleString('en-US') : Math.pow(10, xv).toFixed(1)) + ' cm' : null, l3 = d[1] + ' = ' + yv.toFixed(2), ln = [l1, l2, l3].filter(Boolean);
+      ctx.font = 'bold 10px sans-serif'; const w = Math.max.apply(null, ln.map(q => ctx.measureText(q).width)) + 14, h2 = ln.length * 14 + 8; let bx = hv.x + 14, by = hv.y + 14; if (bx + w > ax2.x + ax2.w) bx = hv.x - w - 14; if (by + h2 > ax2.y + ax2.h) by = hv.y - h2 - 10;
+      ctx.fillStyle = 'rgba(255,252,225,0.98)'; ctx.strokeStyle = '#1B1F23'; rrect(bx, by, w, h2, 6); ctx.fill(); ctx.stroke(); ln.forEach((q, k) => T(q, bx + 7, by + 15 + k * 14, { s: 10, b: k === 0, c: INK }));
+    }
+    const mk = pn.tiles.length, tw2 = Math.min(150, (cw - 28 - 8 * (mk - 1)) / mk);
+    pn.tiles.forEach((t, k) => { const tx = cx0 + 14 + k * (tw2 + 8), ty = gy2 + gh2 + 52; ctx.drawImage(t.t.cv, tx, ty, tw2, tw2 * 150 / 220); ctx.strokeStyle = '#6B7280'; ctx.lineWidth = 1; ctx.strokeRect(tx, ty, tw2, tw2 * 150 / 220); T(t.cap, tx + tw2 / 2, ty + tw2 * 150 / 220 + 11, { s: 8, a: 'center', c: '#374151' }); });
+    sidWrap(pn.answer, cx0 + 14 + mk * (tw2 + 8) + 6, gy2 + gh2 + 62, cx0 + cw - (cx0 + 14 + mk * (tw2 + 8) + 6) - 14, { s: 9.5, c: '#1F2933' }, 12.5);
   }
   if (v5h.hv) for (const r of v5h.rects) if (v5h.hv.x >= r.x && v5h.hv.x <= r.x + r.w && v5h.hv.y >= r.y && v5h.hv.y <= r.y + r.h) { probe(r.t, v5h.hv, r.x, r.y, r.w, r.h, (220 - (r.sw || 220)) / 2, (150 - (r.sh || 150)) / 2, r.sw || 220, r.sh || 150); break; }
   return y1 + Math.ceil(panels.length / 2) * (PH + GAP) + 6;
