@@ -14,7 +14,7 @@ const Props = (() => {
         { t: 'select', label: 'Weather source', id: 'wxsrc', opts: [['record', 'Built-in weather record'], ['file', 'Imported weather file'], ['online', 'Online weather of a location']], get: s => (s.wx && s.wx.src) || 'record', dis: (s, v) => v !== 'record' && !(s.wx && s.wx[v]), on: v => { if (v === 'record' || (E.snap.wx && E.snap.wx[v])) WxUI.use(v); else if (v === 'file') WxUI.importFile(); else WxUI.online(); } },
         { t: 'btns', btns: [['Import weather...', () => WxUI.importFile()], ['Online weather...', () => WxUI.online()]] } ] },
       { id: 'p-soil', name: 'Soil and field', rows: [
-        { t: 'select', label: 'Soil', id: 'soil', opts: M.soils.map(k => [k, M.soilLabels[k] || k]), get: s => s.state.soil, on: v => E.set({ soil: v }) },
+        { t: 'select', label: 'Soil', tri: 'soil', id: 'soil', opts: M.soils.map(k => [k, M.soilLabels[k] || k]), get: s => s.state.soil, on: v => E.set({ soil: v }) },
         { t: 'seg', label: 'Tillage', id: 'till', opts: Object.entries(M.tills), get: s => s.state.till, on: v => E.set({ till: v }) },
         SL('tcIdx', 'Structural consolidation rate', 4, 'tc') ] },
       { id: 'p-crop', name: 'Crop', rows: [
@@ -59,7 +59,7 @@ const Props = (() => {
       h += '<div class="pg" data-g="' + g.id + '"><div class="pgh" data-gh="' + g.id + '"><span class="tw">' + (closed[g.id] ? '&#9654;' : '&#9660;') + '</span>' + g.name + '</div><div class="pgb" ' + (closed[g.id] ? 'hidden' : '') + '>';
       g.rows.forEach((r, i) => {
         const rid = g.id + '-' + i;
-        if (r.t === 'select') { const op = o => '<option value="' + UI.esc(o[0]) + '">' + UI.esc(o[1]) + '</option>'; h += '<div class="pr"><label>' + r.label + '</label><select data-r="' + rid + '">' + (r.groups && r.groups.length ? r.groups.map(g => '<optgroup label="' + UI.esc(g[0]) + '">' + g[1].map(op).join('') + '</optgroup>').join('') : r.opts.map(op).join('')) + '</select></div>'; }
+        if (r.t === 'select') { const op = o => '<option value="' + UI.esc(o[0]) + '">' + UI.esc(o[1]) + '</option>'; h += '<div class="pr"><label>' + r.label + (r.tri ? ' <button class="tri" data-tri="' + r.tri + '" title="Choose the soil on the textural triangle (click a point: its sand, silt and clay and its class)">&#9650;</button>' : '') + '</label><select data-r="' + rid + '">' + (r.groups && r.groups.length ? r.groups.map(g => '<optgroup label="' + UI.esc(g[0]) + '">' + g[1].map(op).join('') + '</optgroup>').join('') : r.opts.map(op).join('')) + '</select></div>'; }
         else if (r.t === 'date') h += '<div class="pr"><label>' + r.label + '</label><input type="date" data-r="' + rid + '"></div>';
         else if (r.t === 'seg') h += '<div class="pr"><label>' + r.label + '</label><div class="seg" data-r="' + rid + '">' + r.opts.map(o => '<button data-v="' + UI.esc(o[0]) + '">' + UI.esc(o[1]) + '</button>').join('') + '</div></div>';
         else if (r.t === 'slider') h += '<div class="pr"><label>' + r.label + '<b data-val="' + r.vk + '"></b></label><input type="range" min="0" max="' + r.max + '" step="1" data-r="' + rid + '" data-key="' + r.key + '"></div>';
@@ -71,6 +71,7 @@ const Props = (() => {
     });
     host.innerHTML = h; built = true;
     const map = {}; groups().forEach(g => g.rows.forEach((r, i) => { map[g.id + '-' + i] = r; }));
+    host.querySelectorAll('button[data-tri]').forEach(bt => bt.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); const M = E.metaData || {}, T = M.texture || {}; if (!window.SoilTriangle) return; const cur = E.snap && E.snap.state && E.snap.state.soil; SoilTriangle.open({ title: 'Soil textural triangle: choose the soil of the layers', mode: 'soil', current: cur, soils: (M.soils || []).filter(k => T[k]).map(k => ({ id: k, label: (M.soilLabels && M.soilLabels[k]) || k, sand: T[k].sand, silt: T[k].silt, clay: T[k].clay })), onPick: r => { if (r && r.soil) E.set({ soil: r.soil.id }); } }); }));
     host.querySelectorAll('select[data-r]').forEach(el => el.addEventListener('change', () => { const r = map[el.dataset.r]; r.on(el.value); if (r.id === 'preset') el.value = ''; }));
     host.querySelectorAll('input[type=date][data-r]').forEach(el => el.addEventListener('change', () => map[el.dataset.r].on(el.value)));
     host.querySelectorAll('.seg[data-r]').forEach(el => el.addEventListener('click', ev => { const b = ev.target.closest('button'); if (b) map[el.dataset.r].on(b.dataset.v); }));

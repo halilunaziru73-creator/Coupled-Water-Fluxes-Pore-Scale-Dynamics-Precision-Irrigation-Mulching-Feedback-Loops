@@ -314,7 +314,7 @@
     const HP = window.DaisyFactorHelp && window.DaisyFactorHelp.get(F), q = F.param;
     const help = HP ? '<div class="dzfh"><span>' + esc(HP.w) + '</span>' + (q ? ' <span class="pnote">Daisy default <b>' + esc(String(q.def)) + '</b>' + (q.farm != null ? ', the farm <b>' + esc(String(q.farm)) + '</b>' : '') + (F.range ? '; "allowed" is what this box accepts (0 to 10 times the value used), not a limit of Daisy' : '') + '.</span>' : '') +
       '<details><summary>more: where Daisy reads it, typical values, what to type, what changes</summary><table class="dztab" style="margin:3px 0"><tr><td><b>Where</b></td><td>' + esc(HP.d || '') + '</td></tr><tr><td><b>Typical</b></td><td>' + esc(HP.t || '') + '</td></tr><tr><td><b>What to type</b></td><td>' + esc(HP.f || '') + (F.kind === 'num' ? ' Each value is one level; the runs combine the levels of every row.' : '') + '</td></tr><tr><td><b>What changes</b></td><td>' + esc(HP.e || '') + '</td></tr>' + (q && HP.ref && HP.ref !== HP.w ? '<tr><td><b>Daisy reference</b></td><td>' + esc(HP.ref) + ' (chapter ' + q.ch + ')</td></tr>' : '') + '</table></details></div>' : '';
-    return '<tr><td><b>' + esc(flabel(f.id).replace(/ \(.*/, '')) + '</b>' + (F.unit ? '<div class="pnote">' + esc(F.unit) + '</div>' : '') + (F.irr ? '<div class="pnote">needs irrigation</div>' : '') + '</td><td>' + cell + help + '</td><td><button class="btn" data-fdel="' + i + '">remove</button></td></tr>';
+    return '<tr><td><b>' + esc(flabel(f.id).replace(/ \(.*/, '')) + '</b>' + (F.unit ? '<div class="pnote">' + esc(F.unit) + '</div>' : '') + (F.irr ? '<div class="pnote">needs irrigation</div>' : '') + (F.id === 'soil' ? '<div><button class="btn" data-ftri="' + i + '" title="Pick the soil classes on the soil textural triangle">triangle</button></div>' : '') + '</td><td>' + cell + help + '</td><td><button class="btn" data-fdel="' + i + '">remove</button></td></tr>';
   };
   function readPlanInputs() {
     { const lg = document.querySelectorAll('#dzXPlan [data-lg]'); if (lg.length) st.logs = [...lg].filter(i => i.checked).map(i => i.value); }
@@ -376,6 +376,9 @@
   }
   function bindPlan() {
     const box = $('Plan'); box.querySelectorAll('[data-q]').forEach(b => b.onclick = () => answer(b.dataset.q));
+    box.querySelectorAll('[data-ftri]').forEach(b => b.onclick = () => { readPlanInputs(); const i = +b.dataset.ftri, f = st.factors[i]; if (!f || !window.SoilTriangle) return; const U = (SC.USDA || {});
+      SoilTriangle.open({ title: 'Soil textural triangle: click a soil class to add it to the experiment', mode: 'soil', current: (f.levels.find(l => String(l).indexOf('usda:') === 0) || '').toString() || null, soils: Object.keys(U).map(k => ({ id: 'usda:' + k, label: U[k][0], sand: U[k][1], silt: U[k][2], clay: U[k][3] })),
+        onPick: r => { if (r && r.soil && f.levels.indexOf(r.soil.id) < 0) f.levels.push(r.soil.id); renderPlan(); } }); });
     box.querySelectorAll('[data-fdel]').forEach(b => b.onclick = () => { readPlanInputs(); st.factors.splice(+b.dataset.fdel, 1); renderPlan(); });
     const add = $('Add'); if (add) add.onchange = () => { readPlanInputs(); if (add.value) { const f = X.factor(add.value); let lv = f.levels.map(v => typeof v === 'object' ? v.label : v).slice(); if (f.lib && !lv.length) lv = ((SC.OPTIONS[f.key] || {}).opts || []).filter(o => o[0] !== 'A_F_R').slice(0, 2).map(o => o[0]); st.factors.push({ id: f.id, levels: lv }); renderPlan(); } };
     box.querySelectorAll('.dzlvf').forEach(f => { f.oninput = () => { const q = f.value.toLowerCase(), list = f.nextElementSibling; list.querySelectorAll('label').forEach(l => { l.style.display = !q || l.textContent.toLowerCase().includes(q) ? 'block' : 'none'; }); }; });

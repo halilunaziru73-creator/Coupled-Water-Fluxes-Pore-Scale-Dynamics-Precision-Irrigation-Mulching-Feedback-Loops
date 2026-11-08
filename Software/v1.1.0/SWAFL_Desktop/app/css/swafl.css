@@ -267,3 +267,5 @@ body.nolayer #engine{visibility:hidden}
 .dzpan,.dzres,.dzgrp,.dztab,.xhero~*{font-weight:500;color:#0C2238}
 .dzpan p,.dzpan li,.dzpan td,.dzpan label,.dzres p,.dzres li,.dzres td,.dzgrp p,.dzgrp li,.dzgrp td{font-weight:500;color:#0C2238}
 .dzpan b,.dzpan strong,.dzpan th,.dzres b,.dzres th,.dzgrp b,.dzgrp summary{font-weight:700}
+
+.pr label .tri{margin-left:6px;width:20px;height:18px;padding:0;border:1px solid #6b7f95;background:#EFEDE5;color:#0F3B63;font-size:10px;line-height:14px;cursor:pointer;vertical-align:middle}.pr label .tri:hover{background:#BBD6F0}
