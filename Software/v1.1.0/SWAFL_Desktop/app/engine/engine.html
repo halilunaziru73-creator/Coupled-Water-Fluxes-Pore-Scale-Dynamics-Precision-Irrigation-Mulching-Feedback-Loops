@@ -363,7 +363,7 @@ const SCENES = [
     legend:[['#8E4A3A','Conventional'],['#D9782A','Reduced'],['#2E7D5A','No-till'],['#2E7DE8','Consolidation rate']], insight:"Tillage is an identifiable driver of change in soil hydraulic properties: conventional tillage raises drainage as structural consolidation increases; no-till stays flat." },
   { id:"v4", label:"V4 Mulch vs Bare", color:"#5BD67A", interactive:true, onDown: p => v4Down(p), onMove: p => v4Move(p), onLeave: () => { v4ui.hover = -1; }, draw: () => { drawV4(); hotV4(); }, title:"Mulched against bare soil: evaporation, irrigation and drainage",
     legend:[['#9AA3AE','Bare soil'],['#4FAE5E','Current mulch'],['#1E6B4A','Strongest mulch']], insight:"Mulch is a tunable, dynamic control on evaporation: soil evaporation scales continuously with mulch strength across every soil tested." },
-  { id:"v5", label:"V5 Feedback Loops", color:"#E8C84D", h:2100, interactive: true, onDown: p => v5hDown(p), onMove: p => v5hMove(p), onUp: () => { v5h.drag = false; }, onLeave: () => { v5h.drag = false; v5h.hv = null; }, draw: () => drawV5(), title:"Feedback loops between climate, management, soil water, crop and nitrogen",
+  { id:"v5", label:"V5 Feedback Loops", color:"#E8C84D", h:2100, fpsCap: 24, interactive: true, onDown: p => v5hDown(p), onMove: p => v5hMove(p), onUp: () => { v5h.drag = false; }, onLeave: () => { v5h.drag = false; v5h.hv = null; }, draw: () => drawV5(), title:"Feedback loops between climate, management, soil water, crop and nitrogen",
     legend:[['#D93025','Two-way link (label = change for one step)']], insight:"Atmospheric demand, rainfall, irrigation, soil water, evaporation and drainage form one coupled feedback loop, not independent processes." },
   { id:"v6", label:"V6 Mulch Control", color:"#2FA3A3", h:946, draw: () => { drawV6x(); hotV6(); }, title:"Mulch and tillage as controls on evaporation and drainage",
     legend:[['#ECA03C','Evaporation'],['#5AA0E1','Drainage'],['#D93025','Current setting']], insight:"Mulch strength and interception capacity set evaporation; tillage and consolidation set drainage. The red outline marks your current settings." },
@@ -2971,7 +2971,7 @@ if (new URLSearchParams(location.search).get('app')) {
   let lw = canvas.width, lh = canvas.height, SS = 1, curS = 1, fitMode = 'window', lastKey = '', fitDims = '', fitSc = 0;
   const wrapEl = () => canvas.closest('.canvaswrap') || canvas.parentElement;
   const phys = () => {
-    SS = window.__hiScale ? window.__hiScale : Math.max(2, Math.min(3, 1.25 * curS * (window.devicePixelRatio || 1))); { const cap = window.__hiScale ? 90e6 : 16e6;   /* the screen resolution with a 25 % margin: sharp, and no oversized picture to send to the screen every frame */ if (lw * lh * SS * SS > cap) SS = Math.sqrt(cap / (lw * lh)); }   // __hiScale: a picture saved at 300, 600 dpi or more
+    SS = window.__hiScale ? window.__hiScale : Math.max(Math.max(1, ((lw * lh < 0.9e6) ? 2 : 1.4) - (window.__ssPen || 0)), Math.min(3, 1.25 * curS * (window.devicePixelRatio || 1)) - (window.__ssPen || 0)); { const cap = window.__hiScale ? 90e6 : (window.__ssPen ? 4e6 : 7e6);   /* the screen resolution with a 25 % margin: sharp, and no oversized picture to send to the screen every frame */ if (lw * lh * SS * SS > cap) SS = Math.sqrt(cap / (lw * lh)); }   // __hiScale: a picture saved at 300, 600 dpi or more
     dW.set.call(canvas, Math.round(lw * SS)); dH.set.call(canvas, Math.round(lh * SS)); ctx.setTransform(SS, 0, 0, SS, 0, 0); window.__SS = SS;
   };
   const fit = () => {
@@ -2996,8 +2996,13 @@ if (new URLSearchParams(location.search).get('app')) {
   const raf0 = window.requestAnimationFrame.bind(window); let lastF = 0, act = 0; ['pointermove', 'pointerdown', 'wheel', 'keydown'].forEach(ev => window.addEventListener(ev, () => { act = performance.now(); }, { passive: true, capture: true }));
   window.requestAnimationFrame = cb => raf0(t => {
     let busy = true; try { busy = !!(play.on || fclock.on || n1ui.play || dss.drag); } catch (e) {}
-    const now = performance.now(), gap = (now - act < 1500) ? 16 : busy ? 34 : 60, el = now - lastF;
-    if (el < gap) setTimeout(() => raf0(cb), gap - el); else { lastF = now; cb(t); }
+    const sc0 = currentScene, now = performance.now(); let gap = (now - act < 1500) ? 16 : busy ? 34 : 60; const el = now - lastF;
+    if (sc0 && sc0.fpsCap) gap = Math.max(gap, 1000 / sc0.fpsCap);                 // layers that move all the time (the pore sections) are drawn at a calm rate
+    if (window.__ema > 22) gap = Math.max(gap, Math.min(140, window.__ema * 1.7));  // a slow computer: draw less often, so that the controls stay quick
+    if (el < gap) setTimeout(() => raf0(cb), gap - el); else {
+      lastF = now; cb(t); const d = performance.now() - now; window.__ema = (window.__ema == null ? d : window.__ema * 0.88 + d * 0.12);
+      window.__slow = d > 45 ? (window.__slow || 0) + 1 : Math.max(0, (window.__slow || 0) - 2); if (window.__slow >= 24 && (window.__ssPen || 0) < 1) { window.__ssPen = (window.__ssPen || 0) + 0.25; window.__slow = 0; window.__ema = 20; phys(); }   // slow for a long time, not just at the start   // still slow: fewer pixels
+    }
   });
 }
 

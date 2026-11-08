@@ -70,6 +70,7 @@ function runJob(job, opt) {
     } catch (e) { return reject(e); }
     const main = path.join(dir, job.main), wd = path.dirname(main); let out = '', err = '';
     const p = spawn(exe, [path.basename(main)], { cwd: wd, env: envFor(exe) });
+    try { os.setPriority(p.pid, os.constants.priority.PRIORITY_BELOW_NORMAL); } catch (e) { }   // the runs work in the background: the window and the rest of the computer stay quick
     const to = setTimeout(() => { try { p.kill(); } catch (e) { } }, opt.timeoutMs || 1800000);
     p.stdout.on('data', d => { out += d; if (opt.onOut) opt.onOut(String(d)); }); p.stderr.on('data', d => { err += d; if (opt.onOut) opt.onOut(String(d)); });
     p.on('error', e => { clearTimeout(to); if (e && e.code === 'EACCES') e.message = 'Windows would not run ' + exe + ' (EACCES). This is what happens when the file is the Daisy installer (daisy-7.1.x-Windows-...exe), which needs administrator rights. SWAFL has Daisy built in, so choose nothing, or choose bin\\daisy-bin.exe of an installed Daisy.'; reject(e); });
