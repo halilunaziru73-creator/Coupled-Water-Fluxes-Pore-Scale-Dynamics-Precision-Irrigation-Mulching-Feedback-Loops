@@ -2977,7 +2977,13 @@ if (new URLSearchParams(location.search).get('app')) {
   const phys = () => {
     { const dpr = window.devicePixelRatio || 1, want = Math.max(1, Math.min(5, 3 * curS * dpr)), floor = Math.max(0.75, Math.min(5, curS * dpr));   /* exactly two drawn pixels for each screen pixel: the browser then averages them in even pairs (a crisp picture); a fixed 2 or 3 shrunk by 3 to 4 times, when the picture is shown small, made it soft */ SS = window.__hiScale ? window.__hiScale : Math.max(floor, want - (window.__ssPen || 0)); }   // clarity first: never fewer pixels than the screen shows (one picture pixel for one screen pixel), at least 1.5 times the drawing
     { const cap = window.__hiScale ? 90e6 : (window.__ssPen ? 12e6 : 22e6);   /* the screen resolution with a 25 % margin: sharp, and no oversized picture to send to the screen every frame */ if (lw * lh * SS * SS > cap) SS = Math.sqrt(cap / (lw * lh)); }   // __hiScale: a picture saved at 300, 600 dpi or more
-    dW.set.call(canvas, Math.round(lw * SS)); dH.set.call(canvas, Math.round(lh * SS)); ctx.setTransform(SS, 0, 0, SS, 0, 0); window.__SS = SS;
+    // a change of the size clears a canvas; when it happens outside the drawing (the window or a scroll bar changed the room) the screen would show the empty
+    // picture for one frame (a blink). The old picture is kept and put back, at the same scale, until the next drawing replaces it.
+    let snap = null; const oS = window.__SS || 1, ow = dW.get.call(canvas), oh = dH.get.call(canvas), nw = Math.round(lw * SS), nh = Math.round(lh * SS);
+    if (ow > 0 && oh > 0 && (ow !== nw || oh !== nh) && ow * oh < 60e6) { try { snap = document.createElement('canvas'); snap.width = ow; snap.height = oh; snap.getContext('2d').drawImage(canvas, 0, 0); } catch (e) { snap = null; } }
+    dW.set.call(canvas, nw); dH.set.call(canvas, nh);
+    if (snap) { try { const k = SS / oS; ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, nw, nh); ctx.drawImage(snap, 0, 0, Math.round(ow * k), Math.round(oh * k)); } catch (e) { } }
+    ctx.setTransform(SS, 0, 0, SS, 0, 0); window.__SS = SS;
   };
   const fit = () => {
     const w = wrapEl(); if (!w) return; const aw = w.clientWidth, ah = w.clientHeight; if (aw < 50 || ah < 50) return;
@@ -7391,11 +7397,11 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
 <script src="plus_phenoplants.js?v=20261030z4"></script>
 <script src="plus_phenotyping4.js?v=20261109p"></script>
 <script src="plus_phenotyping5.js?v=20261109p"></script>
-<script src="plus_drainage.js?v=20261109y"></script>
+<script src="plus_drainage.js?v=20261109z"></script>
 <script src="phnav.js?v=20261030z4"></script>
-<script src="inputs.js?v=20261109y"></script>
+<script src="inputs.js?v=20261109z"></script>
 <script src="weather.js?v=20261031a"></script>
-<script src="runbar.js?v=20261109y"></script>
+<script src="runbar.js?v=20261109z"></script>
 <link rel="stylesheet" href="classic.css">
 </body>
 </html>
