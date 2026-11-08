@@ -86,8 +86,20 @@ window.DaisyExpTS = (() => {
               acc.forEach((a, k) => { const v = mode === 'cum' ? a[0] : (fx || !daily) && mode !== 'time' ? a[0] : a[0] / a[1]; let q = by.get(k); if (!q) by.set(k, q = []); q.push(v); }); });
             const ks = [...by.keys()].sort((a, b) => a - b), many = rs.length > 1, timeX = daily && mode !== 'year';
             series.push({ name, color, x: ks, m: ks.map(k => center(by.get(k))), lo: many ? ks.map(k => Math.min.apply(null, by.get(k))) : null, hi: many ? ks.map(k => Math.max.apply(null, by.get(k))) : null, pts: (!timeX || mode === 'month') && ks.length <= 80, lw: timeX && mode !== 'month' ? 1.3 : 1.7 }); } });
-        if (series.length) panels.push({ title: pp.title, letter: PP.length > 1 ? '(' + LET[pi % 26] + ')' : '', series }); });
-      if (st.pf === '__each' && f.kind !== 'prof') panels.forEach(q => q.series.forEach(z => { z.lo = null; z.hi = null; }));   /* the spread over the other factors would only hide the lines of the factor shown */
+        if (series.length) panels.push({ title: pp.title, letter: '', series }); });
+      if (st.pf === '__each' && f.kind !== 'prof') panels.forEach(q => q.series.forEach(z => { z.lo = null; z.hi = null; }));
+      // only what the output really shows: a factor whose values give the same curve (they lie within 1 % of the range of the figure) is left out,
+      // so that no panel repeats the same line; when no factor changes the quantity, one curve is shown and the caption says so
+      if (f.kind !== 'prof' && panels.length) {
+        const flat = pn => { const S = pn.series; if (S.length < 2 || S.some(z => !z.m || !z.m.length)) return false; let lo = Infinity, hi = -Infinity; S.forEach(z => z.m.forEach(v => { if (v < lo) lo = v; if (v > hi) hi = v; })); const rng = Math.max(hi - lo, 1e-9 * Math.max(1, Math.abs(hi))), maps = S.map(z => { const m = new Map(); z.x.forEach((x, i) => m.set(x, z.m[i])); return m; }); let dm = 0;
+          maps[0].forEach((v0, x) => { let a0 = v0, b0 = v0; for (let k = 1; k < maps.length; k++) { const v = maps[k].get(x); if (v != null) { if (v < a0) a0 = v; if (v > b0) b0 = v; } } if (b0 - a0 > dm) dm = b0 - a0; }); return dm <= 0.01 * rng; };
+        const one = pn => ({ title: pn.title, letter: '', series: [Object.assign({}, pn.series[0], { name: 'same for every value', color: '#444444', lo: pn.series[0].lo, hi: pn.series[0].hi })] });
+        const fl = panels.map(flat);
+        if (st.pf === '__each') { const keep = panels.filter((q, i) => !fl[i]); if (keep.length && keep.length < panels.length) { const out = keep.slice(); out.msg = 'Factors that do not change this quantity (' + panels.filter((q, i) => fl[i]).map(q => q.title.replace(/^.*: /, '').toLowerCase()).join(', ') + ') are left out.'; return out; }
+          if (!keep.length) { const out = [one(Object.assign({}, panels[0], { title: 'no factor changes this quantity' }))]; out.msg = 'No factor of the experiment changes this quantity: all runs give the same curve, so one curve is shown.'; return out; } }
+        else if (fl.every(Boolean)) { const out = [one(Object.assign({}, panels[0], { title: panels.length > 1 ? 'all panels equal' : panels[0].title }))]; out.msg = 'The runs give the same curve for this quantity, so one curve is shown.'; return out; }
+        else panels.forEach((q, i) => { if (fl[i]) panels[i] = one(q); });
+      }   /* the spread over the other factors would only hide the lines of the factor shown */
       return panels;
     }
     const titleOf = f => f.kind === 'prof' ? nameOf(f.v) + ': profile' : f.kind === 'heat' ? nameOf(f.v) + ' over depth and time' : nameOf(f.col), unitTxt = f => f.unit && f.unit !== (f.col || f.v) ? ' (' + uni(f.unit) + ')' : '';
@@ -114,31 +126,35 @@ window.DaisyExpTS = (() => {
       if (!maps.length) { card.remove(); return; } let lo = Infinity, hi = -Infinity; maps.forEach(m => m.vv.forEach(v => { if (v < lo) lo = v; if (v > hi) hi = v; }));
       const gridBox = card.querySelector('[data-ts="cvs"]'); if (maps.length > 1) { gridBox.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:6px 10px'; card.dataset.cols = 2; cv.parentNode.style.minWidth = '0'; } const cvs = [cv]; while (cvs.length < maps.length) { let c2 = card.querySelectorAll('canvas')[cvs.length]; if (!c2) { const dv = document.createElement('div'); c2 = document.createElement('canvas'); c2.style.cssText = cv.style.cssText; dv.style.minWidth = '0'; dv.appendChild(c2); gridBox.appendChild(dv); } cvs.push(c2); }
       const pal = /theta|water/i.test(f.v) ? 'blues' : /^h$|pF/i.test(f.v) ? 'pf' : /NO3|NH4|nitr|ammon/i.test(f.v) ? 'ylgn' : /^T$|temp/i.test(f.v) ? 'ylorrd' : 'viridis';
-      maps.forEach((m, i) => P().heat(cvs[i], m.tt, m.zz, m.vv, { title: (maps.length > 1 ? '(' + LET[i] + ') ' : '') + (m.pv === null ? nameOf(f.v) : short(c.flabel(hf)) + ': ' + lname(hf, m.pv)), time: true, unit: uni(f.unit) || f.v, pal, lo, hi, h: maps.length > 1 ? 250 : 300, xt: doy ? 'Month of the year (mean of the seasons)' : 'Date', yt: 'Depth (cm)' }));
+      maps.forEach((m, i) => P().heat(cvs[i], m.tt, m.zz, m.vv, { title: (m.pv === null ? nameOf(f.v) : short(c.flabel(hf)) + ': ' + lname(hf, m.pv)), time: true, unit: uni(f.unit) || f.v, pal, lo, hi, h: maps.length > 1 ? 250 : 300, xt: doy ? 'Month of the year (mean of the seasons)' : 'Date', yt: 'Depth (cm)' }));
     }
     function draw() {
       const L = sel(), show = L.slice(0, MAXFIG), cnt = host.querySelector('[data-ts="n"]'); if (cnt) cnt.textContent = L.length + ' figures' + (L.length > MAXFIG ? ' (the first ' + MAXFIG + '; choose one log or find a quantity for the others)' : '');
-      box.innerHTML = ''; const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting && e.target._go) { e.target._go(); io.unobserve(e.target); } }), { rootMargin: '600px' }) : null;
+      box.innerHTML = ''; // the figures are drawn one at a time, each in its own turn, so that the program stays quick while a large experiment is drawn
+      const Q = []; let busyQ = false; const pump = () => { if (busyQ) return; const el = Q.shift(); if (!el) return; busyQ = true; setTimeout(() => { try { if (el.isConnected && el._go) { const g = el._go; el._go = null; g(); } } catch (e) { } busyQ = false; pump(); }, 0); };
+      const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting && e.target._go) { io.unobserve(e.target); Q.push(e.target); pump(); } }), { rootMargin: '400px' }) : null;
       const groups = {}; show.forEach(f => { (groups[f.log] = groups[f.log] || []).push(f); }); const gbox = {};
       Object.keys(groups).forEach((lg, gi) => { const dt = document.createElement('details'); dt.className = 'dzgrp'; if (gi === 0 || st.log !== '*') dt.open = true; dt.innerHTML = '<summary><b>' + esc(lg) + '</b> <span class="pnote">' + groups[lg].length + ' figure' + (groups[lg].length === 1 ? '' : 's') + (window.DaisyRaw && window.DaisyRaw.describe ? ' · ' + esc(window.DaisyRaw.describe(lg)) : '') + '</span></summary><div></div>'; box.appendChild(dt); gbox[lg] = dt.lastChild; dt.addEventListener('toggle', () => { if (dt.open) dt.querySelectorAll('.dzfig').forEach(cd => { if (cd._go && io) { io.unobserve(cd); io.observe(cd); } }); }); });
-      show.forEach((f, i) => { const card = document.createElement('div'); card.className = 'dzpan dzfig'; card.dataset.xf = 'ts' + i;
+      const makeCard = (f, i) => { const card = document.createElement('div'); card.className = 'dzpan dzfig'; card.dataset.xf = 'ts' + i;
         card.innerHTML = '<div class="dzrow"><b>' + esc(titleOf(f)) + unitTxt(f) + '</b><span class="pnote" style="margin-left:8px">' + esc(f.log) + '</span></div><p class="pnote" style="margin:2px 0 4px">' + esc(noteOf(f)) + '</p><div data-ts="cvs"><div><canvas style="display:block;width:100%"></canvas></div></div>';
         gbox[f.log].appendChild(card); const cv = card.querySelector('canvas');
-        let memo = null; const job = () => { if (f.kind === 'heat') return heatJob(f, card, cv); const panels = memo || (memo = build(f));   /* the numbers are worked out once; drawing again (saving at 300 dpi) only draws */ if (!panels.length) { card.remove(); return; } const daily = isDaily(f.log, logs[f.log]);
+        let memo = null; const job = () => { if (f.kind === 'heat') return heatJob(f, card, cv); const panels = memo || (memo = build(f));   /* the numbers are worked out once; drawing again (saving at 300 dpi) only draws */ if (!panels.length) { card.remove(); return; } const daily = isDaily(f.log, logs[f.log]); if (panels.msg) { const pn = card.querySelector('p.pnote'); if (pn && !pn._m) { pn._m = 1; pn.textContent += ' ' + panels.msg; } }
           if (f.kind === 'prof') P().profiles(cv, panels, { title: titleOf(f), xt: nameOf(f.v) + unitTxt(f) });
           else P().ribbons(cv, panels, { title: titleOf(f), yt: (st.mode === 'cum' ? 'Cumulative ' + String(NAMES[f.col] || f.col).replace(/^./, c0 => c0.toLowerCase()) : (NAMES[f.col] || f.col)) + unitTxt(f) + (isDaily(f.log, logs[f.log]) && isFlux(f) && (st.mode === 'month' || st.mode === 'year') ? ' per ' + (st.mode === 'month' ? 'month' : 'year') : ''), xkind: daily && st.mode === 'doy' ? 'doy' : daily && (st.mode === 'time' || st.mode === 'month' || st.mode === 'cum') ? 'time' : 'num', xt: daily && st.mode === 'doy' ? 'Month of the year' : daily && st.mode !== 'year' ? 'Date' : 'Year' }); };
         card._go = () => { try { job(); } catch (e) { console.warn('time series', f.log, e); card.remove(); } };
         if (FK()) FK().attach(card, { name: 'daisy-' + (f.log + '-' + (f.col || f.v)).replace(/[^A-Za-z0-9._-]+/g, '_'), redraw: () => { try { job(); } catch (e) { } } });
-        if (io) io.observe(card); else card._go(); });
+        if (io) io.observe(card); else card._go(); };
+      // the cards are made a few at a time (a large experiment has up to 120 figures)
+      let ix = 0; box._flush = () => { for (; ix < show.length; ix++) makeCard(show[ix], ix); }; const stepC = () => { if (!box.isConnected) return; const e = Math.min(show.length, ix + 6); for (; ix < e; ix++) makeCard(show[ix], ix); if (ix < show.length) setTimeout(stepC, 20); }; stepC();
     }
     const on = (k, ev, fn) => { const e = host.querySelector('[data-ts="' + k + '"]'); if (e) e[ev] = fn; };
     on('pf', 'onchange', e => { st.pf = e.target.value || null; mount(host, c); }); on('cf', 'onchange', e => { st.cf = e.target.value || null; mount(host, c); });
     on('mode', 'onchange', e => { st.mode = e.target.value; mount(host, c); }); on('stat', 'onchange', e => { st.stat = e.target.value; mount(host, c); }); on('log', 'onchange', e => { st.log = e.target.value; draw(); });
     { let tm = null; on('q', 'oninput', e => { st.q = e.target.value; clearTimeout(tm); tm = setTimeout(draw, 300); }); }
-    on('zip', 'onclick', async e => { const b = e.target; if (!FK() || !window.DaisyExp) return; b.disabled = true; try { box.querySelectorAll('.dzfig').forEach(cd => { if (cd._go) { cd._go(); cd._go = null; } }); const fl = await FK().collect(box, 'time-series', 3, (i, n) => { b.textContent = 'Figure ' + i + ' of ' + n + '...'; }); const z = window.DaisyExp.zip(fl), a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([z], { type: 'application/zip' })); a.download = SWAFLDate.name('daisy-every-log.zip'); a.click(); } catch (x) { console.warn(x); } b.disabled = false; b.textContent = 'Save these figures (.zip)'; });
+    on('zip', 'onclick', async e => { const b = e.target; if (!FK() || !window.DaisyExp) return; b.disabled = true; try { if (box._flush) box._flush(); box.querySelectorAll('.dzfig').forEach(cd => { if (cd._go) { cd._go(); cd._go = null; } }); const fl = await FK().collect(box, 'time-series', 3, (i, n) => { b.textContent = 'Figure ' + i + ' of ' + n + '...'; }); const z = window.DaisyExp.zip(fl), a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([z], { type: 'application/zip' })); a.download = SWAFLDate.name('daisy-every-log.zip'); a.click(); } catch (x) { console.warn(x); } b.disabled = false; b.textContent = 'Save these figures (.zip)'; });
     draw();
   }
   // every figure drawn now (before saving the outputs, so that none is missing)
-  const drawAll = host => { if (host) host.querySelectorAll('details.dzgrp').forEach(d => { d.open = true; }); if (host) host.querySelectorAll('.dzfig').forEach(cd => { if (cd._go) { cd._go(); cd._go = null; } }); };
+  const drawAll = host => { if (host) host.querySelectorAll('[data-ts="figs"]').forEach(b => { if (b._flush) b._flush(); }); if (host) host.querySelectorAll('details.dzgrp').forEach(d => { d.open = true; }); if (host) host.querySelectorAll('.dzfig').forEach(cd => { if (cd._go) { cd._go(); cd._go = null; } }); };
   return { mount, drawAll, figsOf };
 })();

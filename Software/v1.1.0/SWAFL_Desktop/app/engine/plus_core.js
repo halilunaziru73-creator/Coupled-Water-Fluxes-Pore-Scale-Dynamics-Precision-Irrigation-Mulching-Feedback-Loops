@@ -24,7 +24,7 @@
   const wrapDraw = sc => {
     if (!sc || sc._fitWrapped || typeof sc.draw !== 'function' || ['sid', 'drip', 'spr', 'drn', 'v7'].includes(sc.id)) return; const od = sc.draw; sc._fitWrapped = true;   // the design views size themselves
     sc.draw = function () {
-      const measure = (fitFrame++ % 20) === 0 && canvas.height < 9000;
+      const measure = (fitFrame++ % 60) === 0 && canvas.height < 9000;
       if (measure) { FIT.on = true; FIT.max = 0; }
       try { return od.apply(this, arguments); }
       finally {

@@ -30,7 +30,7 @@ window.DaisyExpFig = (() => {
   // the panels of a figure: [{ label, draw(canvas, letter) }]
   function panelsOf(f, c, rows) {
     const E = X(), PL = P(), R = f.r || 'yield', RL = c.rlabel(R), data = pick(rows, f.where), out = [];
-    const pLev = f.p ? E.levels(data, f.p) : [null], multiP = pLev.length > 1, letter = i => (multiP || f.letters) ? LET[i] : '';
+    const pLev = f.p ? E.levels(data, f.p) : [null], multiP = pLev.length > 1, letter = i => '';
     const sub = (pv, extra) => (pv === null ? '' : short(c.flabel(f.p)) + ': ' + c.lname(f.p, pv)) + (extra || '');
     // one scale for all panels of a figure, so that the panels can be compared
     const scale = fn => { const v = []; pLev.forEach(pv => fn(pv).forEach(x => { if (isFinite(x)) v.push(x); })); if (!v.length) return {}; const lo = Math.min.apply(null, v), hi = Math.max.apply(null, v), ylo = lo >= 0 ? 0 : lo, nn = PL.nice(ylo, hi > ylo ? hi * 1.04 : ylo + 1, 5); return { ylo: ylo, yhi: nn.hi }; };

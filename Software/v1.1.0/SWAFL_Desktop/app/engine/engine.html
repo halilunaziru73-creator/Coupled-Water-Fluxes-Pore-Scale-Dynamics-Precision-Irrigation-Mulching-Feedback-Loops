@@ -1646,7 +1646,7 @@ const _IRP = { keys: [], val: {} };
 // of the root zone (ECe, dS/m) adds an osmotic head of 36 kPa per dS/m, so the wilting point rises (Brooks-Corey from Saxton & Rawls 2006)
 const _HYD = {};
 window.hydLimits = function (k, ec, tillK) {
-  const soil = state.soil, tex = DATA.texture[soil], om0 = SID.om, vff = VFF_VALUES[state.vffIdx], awc = AWC[soil] || 1.5, sx = (om) => { const key = soil + '|' + om.toFixed(2); return _HYD[key] || (_HYD[key] = SIDM.saxton(tex.sand / 100, tex.clay / 100, om)); };
+  const soil = state.soil, tex = DATA.texture[soil], om0 = SID.om, vff = VFF_VALUES[state.vffIdx], awc = AWC[soil] || 1.5, sx = (om) => { const key = soil + '|' + Math.round(om * 100); return _HYD[key] || (_HYD[key] = SIDM.saxton(tex.sand / 100, tex.clay / 100, om)); };
   const B0 = sx(om0), AW0 = Math.max(0.02, B0.fc - B0.wp), omEq = ({ conv: 0.85, reduced: 1.0, notill: 1.2 }[state.till] || 1) * (vff < 0.95 ? 1.08 : 1), phi0 = ({ conv: 0.06, reduced: 0.03, notill: 0 }[state.till] || 0), tcR = TC_VALUES[state.tcIdx] || 0.005;
   const om = om0 * (omEq + (1 - omEq) * Math.exp(-(k / DPY) / 25)), s = sx(om), dphi = tillK != null && k >= tillK ? phi0 * Math.exp(-tcR * (k - tillK)) : 0, psm = Math.max(150, 1500 - 36 * (ec || 0)), wpE = s.wp * Math.pow(1500 / psm, s.lam || 0.2);
   const awK = clampN(awc * (Math.max(0.01, s.fc + 0.2 * dphi - wpE)) / AW0, 0.25 * awc, 1.6 * awc);
@@ -2980,7 +2980,9 @@ if (new URLSearchParams(location.search).get('app')) {
     // a change of the size clears a canvas; when it happens outside the drawing (the window or a scroll bar changed the room) the screen would show the empty
     // picture for one frame (a blink). The old picture is kept and put back, at the same scale, until the next drawing replaces it.
     let snap = null; const oS = window.__SS || 1, ow = dW.get.call(canvas), oh = dH.get.call(canvas), nw = Math.round(lw * SS), nh = Math.round(lh * SS);
-    if (ow > 0 && oh > 0 && (ow !== nw || oh !== nh) && ow * oh < 60e6) { try { snap = document.createElement('canvas'); snap.width = ow; snap.height = oh; snap.getContext('2d').drawImage(canvas, 0, 0); } catch (e) { snap = null; } }
+    if (ow === nw && oh === nh && window.__physOnce) { window.__SS = SS; return; }   /* same size: nothing to allocate (the start-up asked for it many times) */
+    window.__physOnce = true;
+    if (ow > 0 && oh > 0 && (ow !== nw || oh !== nh) && ow * oh < 14e6) { try { snap = document.createElement('canvas'); snap.width = ow; snap.height = oh; snap.getContext('2d').drawImage(canvas, 0, 0); } catch (e) { snap = null; } }
     dW.set.call(canvas, nw); dH.set.call(canvas, nh);
     if (snap) { try { const k = SS / oS; ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, nw, nh); ctx.drawImage(snap, 0, 0, Math.round(ow * k), Math.round(oh * k)); } catch (e) { } }
     ctx.setTransform(SS, 0, 0, SS, 0, 0); window.__SS = SS;
@@ -7397,11 +7399,11 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
 <script src="plus_phenoplants.js?v=20261030z4"></script>
 <script src="plus_phenotyping4.js?v=20261109p"></script>
 <script src="plus_phenotyping5.js?v=20261109p"></script>
-<script src="plus_drainage.js?v=20261109z"></script>
+<script src="plus_drainage.js?v=20261110a"></script>
 <script src="phnav.js?v=20261030z4"></script>
-<script src="inputs.js?v=20261109z"></script>
+<script src="inputs.js?v=20261110a"></script>
 <script src="weather.js?v=20261031a"></script>
-<script src="runbar.js?v=20261109z"></script>
+<script src="runbar.js?v=20261110a"></script>
 <link rel="stylesheet" href="classic.css">
 </body>
 </html>

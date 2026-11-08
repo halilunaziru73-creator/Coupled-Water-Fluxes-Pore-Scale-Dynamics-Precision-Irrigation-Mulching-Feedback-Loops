@@ -5,7 +5,7 @@
 'use strict';
 (() => {
   const M = window.SWAFLManual = { idx: null };
-  M.load = async () => { if (M.idx) return M.idx; try { const r = await fetch('data/manual_index.json?v=20261109z'); M.idx = await r.json(); } catch (e) { M.idx = { sections: [], pages: 0 }; } return M.idx; };
+  M.load = async () => { if (M.idx) return M.idx; try { const r = await fetch('data/manual_index.json?v=20261110a'); M.idx = await r.json(); } catch (e) { M.idx = { sections: [], pages: 0 }; } return M.idx; };
   M.url = page => (window.SWAFL_MANUAL_URL || '../docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf') + (page ? '#page=' + page : '');
   M.open = page => { if (window.swafl && window.swafl.openManual) { window.swafl.openManual(page || 0); return; } window.open(M.url(page), '_blank'); };
   // the section of the manual for each tab of the Daisy workbench (its title in the manual)

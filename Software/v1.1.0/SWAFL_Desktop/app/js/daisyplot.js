@@ -288,7 +288,7 @@ window.DaisyPlot = (() => {
       p.series.forEach(s => { g.strokeStyle = s.color; g.lineWidth = s.lw || 1.7; g.setLineDash(s.dash || []); g.beginPath(); let on = false; s.x.forEach((x, i) => { const v = s.m[i]; if (!isFinite(v)) { on = false; return; } on ? g.lineTo(X(x), Y(v)) : g.moveTo(X(x), Y(v)); on = true; }); g.stroke(); g.setLineDash([]); g.lineWidth = 1;
         if (s.pts) s.x.forEach((x, i) => { const v = s.m[i]; if (!isFinite(v)) return; g.beginPath(); g.arc(X(x), Y(v), 3.4, 0, 7); g.fillStyle = '#fff'; g.fill(); g.strokeStyle = s.color; g.lineWidth = 1.6; g.stroke(); g.lineWidth = 1; }); });
       g.restore(); g.strokeStyle = '#333'; g.lineWidth = 1; g.strokeRect(px + 0.5, top + 0.5, pw - 1, ph - 1);
-      if (p.letter) { g.font = 'bold 13px ' + FONT; g.fillStyle = '#111'; g.textAlign = 'left'; g.fillText(p.letter, px + 6, top + 16); } });
+      if (false && p.letter) { g.font = 'bold 13px ' + FONT; g.fillStyle = '#111'; g.textAlign = 'left'; g.fillText(p.letter, px + 6, top + 16); } });
     yTitle(g, o.yt, 13, F.top + 6, nr * (PH + 44) - 44); g.fillStyle = INK; g.font = '12px ' + FONT; g.textAlign = 'center'; if (o.xt) g.fillText(o.xt, LM + (w - LM - 12) / 2, F.top + 6 + nr * (PH + 44) + 2);
     if (names.length > 1) legend(g, items, w, F.top + 6 + nr * (PH + 44) + 22, {}); if (o.foot) { g.fillStyle = '#555'; g.font = '11px ' + FONT; g.textAlign = 'left'; g.fillText(o.foot, 8, F.h - 8); }
   }
