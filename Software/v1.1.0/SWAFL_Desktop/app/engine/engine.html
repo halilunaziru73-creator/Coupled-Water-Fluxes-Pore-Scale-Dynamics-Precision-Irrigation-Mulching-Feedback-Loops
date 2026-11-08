@@ -2994,12 +2994,12 @@ if (new URLSearchParams(location.search).get('app')) {
   window.__rephys = () => { phys(); lastKey = ''; return SS; };
   window.__setFit = m => { fitMode = m; lastKey = ''; fitSc = 0; fit(); }; window.__fit = () => { lastKey = ''; fitSc = 0; fit(); };
   phys(); try { new ResizeObserver(() => { lastKey = ''; fit(); }).observe(wrapEl()); } catch (e) { window.addEventListener('resize', () => { lastKey = ''; fit(); }); }
-  const raf0 = window.requestAnimationFrame.bind(window); let lastF = 0, act = 0; ['pointermove', 'pointerdown', 'wheel', 'keydown'].forEach(ev => window.addEventListener(ev, () => { act = performance.now(); }, { passive: true, capture: true }));
+  const raf0 = window.requestAnimationFrame.bind(window); let lastF = 0, act = 0; window.__wake = () => { act = performance.now(); lastF = 0; };   /* the program around the picture calls this when the user clicks a layer or a button: the next picture is drawn at once */ const winFocus = () => { try { return window.top.document.hasFocus(); } catch (e) { return document.hasFocus(); } }; ['pointermove', 'pointerdown', 'wheel', 'keydown'].forEach(ev => window.addEventListener(ev, () => { act = performance.now(); }, { passive: true, capture: true }));
   window.requestAnimationFrame = cb => raf0(t => {
     let busy = true; try { busy = !!(play.on || fclock.on || n1ui.play || dss.drag); } catch (e) {}
     const sc0 = currentScene, now = performance.now(); let gap = (now - act < 1500) ? 16 : busy ? 34 : 60; const el = now - lastF;
     if (!busy && now - act > 20000) gap = Math.max(gap, 300);      // nobody is touching the window: a few pictures a second are enough
-    if (!document.hasFocus()) gap = Math.max(gap, 600);              // another program is in front: the window rests
+    if (!winFocus()) gap = Math.max(gap, 600);              // another program is in front: the window rests
     if (sc0 && sc0.fpsCap) gap = Math.max(gap, 1000 / sc0.fpsCap);                 // layers that move all the time (the pore sections) are drawn at a calm rate
     if (window.__ema > 22) gap = Math.max(gap, Math.min(140, window.__ema * 1.7));  // a slow computer: draw less often, so that the controls stay quick
     if (el < gap) setTimeout(() => raf0(cb), gap - el); else {

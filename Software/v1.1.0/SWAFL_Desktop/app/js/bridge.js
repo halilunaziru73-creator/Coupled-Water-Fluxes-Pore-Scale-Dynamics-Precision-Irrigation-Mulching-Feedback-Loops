@@ -13,7 +13,7 @@ const E = (() => {
     json(expr) { const s = api.ev('JSON.stringify(' + expr + ')'); return s === undefined ? undefined : JSON.parse(s); },
 
     /* ---- navigation ---- */
-    scene(id) { api.ev("switchScene(SCENES.find(function(s){return s.id==='" + id + "'}))"); api.poll(true); },
+    scene(id) { api.ev("switchScene(SCENES.find(function(s){return s.id==='" + id + "'})); window.__wake && window.__wake()"); api.poll(true); },
     scrollTo(sceneId, title) {
       const sec = api.json('window.__SEC||{}') || {}, m = (sec[sceneId] || {})[title]; if (!m) return false;
       const cv = api.win.document.getElementById('profileCanvas'), wrap = api.win.document.querySelector('.canvaswrap');
@@ -116,3 +116,7 @@ const E = (() => {
   Guard.every(() => { if (!document.hidden) api.poll(false); }, 900, "bridge116");
   return api;
 })();
+
+/* a click anywhere in the program wakes the picture: it was drawn only every 0.3 to 0.6 s while the window around it had the focus, which made a layer appear late */
+document.addEventListener('pointerdown', () => { try { const w = document.getElementById('engine').contentWindow; w.__wake && w.__wake(); } catch (e) {} }, true);
+document.addEventListener('keydown', () => { try { const w = document.getElementById('engine').contentWindow; w.__wake && w.__wake(); } catch (e) {} }, true);
