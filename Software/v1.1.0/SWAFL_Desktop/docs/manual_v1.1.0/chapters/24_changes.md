@@ -268,3 +268,4 @@
 - Next irrigations chart of the irrigation design: the labels inside the picture (baseline touch, AW bracket, day of the film, refill, irrigation dates) are now placed one after the other so that none covers another, the axis or the values at the right edge.
 - Heavier text in every layer picture: the plain text of all charts, tables and notes drawn in the layers is slightly bolder for reading, while bold headings stay as they were.
 - Tillage and structure layer: the numbers under the three soil profiles now wrap inside their boxes, and the explanation lines below them wrap to the width of the screen. A full pass over all 142 layers and the 18 Daisy tabs found no script errors.
+- Root zone depletion and the trigger law: every soil in the list now has an orange bar and a number for its speed of depletion, in percent of the available water used per day (coarse sand fastest, silt loam slowest), so the soils can be told apart at a glance.
