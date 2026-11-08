@@ -2975,8 +2975,8 @@ if (new URLSearchParams(location.search).get('app')) {
   let lw = canvas.width, lh = canvas.height, SS = 1, curS = 1, fitMode = 'window', lastKey = '', fitDims = '', fitSc = 0;
   const wrapEl = () => canvas.closest('.canvaswrap') || canvas.parentElement;
   const phys = () => {
-    { const dpr = window.devicePixelRatio || 1, want = Math.max(1, Math.min(4, 2 * curS * dpr)), floor = Math.max(0.75, Math.min(4, curS * dpr));   /* exactly two drawn pixels for each screen pixel: the browser then averages them in even pairs (a crisp picture); a fixed 2 or 3 shrunk by 3 to 4 times, when the picture is shown small, made it soft */ SS = window.__hiScale ? window.__hiScale : Math.max(floor, want - (window.__ssPen || 0)); }   // clarity first: never fewer pixels than the screen shows (one picture pixel for one screen pixel), at least 1.5 times the drawing
-    { const cap = window.__hiScale ? 90e6 : (window.__ssPen ? 9e6 : 12e6);   /* the screen resolution with a 25 % margin: sharp, and no oversized picture to send to the screen every frame */ if (lw * lh * SS * SS > cap) SS = Math.sqrt(cap / (lw * lh)); }   // __hiScale: a picture saved at 300, 600 dpi or more
+    { const dpr = window.devicePixelRatio || 1, want = Math.max(1, Math.min(5, 3 * curS * dpr)), floor = Math.max(0.75, Math.min(5, curS * dpr));   /* exactly two drawn pixels for each screen pixel: the browser then averages them in even pairs (a crisp picture); a fixed 2 or 3 shrunk by 3 to 4 times, when the picture is shown small, made it soft */ SS = window.__hiScale ? window.__hiScale : Math.max(floor, want - (window.__ssPen || 0)); }   // clarity first: never fewer pixels than the screen shows (one picture pixel for one screen pixel), at least 1.5 times the drawing
+    { const cap = window.__hiScale ? 90e6 : (window.__ssPen ? 12e6 : 22e6);   /* the screen resolution with a 25 % margin: sharp, and no oversized picture to send to the screen every frame */ if (lw * lh * SS * SS > cap) SS = Math.sqrt(cap / (lw * lh)); }   // __hiScale: a picture saved at 300, 600 dpi or more
     dW.set.call(canvas, Math.round(lw * SS)); dH.set.call(canvas, Math.round(lh * SS)); ctx.setTransform(SS, 0, 0, SS, 0, 0); window.__SS = SS;
   };
   const fit = () => {
@@ -7391,11 +7391,11 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
 <script src="plus_phenoplants.js?v=20261030z4"></script>
 <script src="plus_phenotyping4.js?v=20261109p"></script>
 <script src="plus_phenotyping5.js?v=20261109p"></script>
-<script src="plus_drainage.js?v=20261109w"></script>
+<script src="plus_drainage.js?v=20261109x"></script>
 <script src="phnav.js?v=20261030z4"></script>
-<script src="inputs.js?v=20261109w"></script>
+<script src="inputs.js?v=20261109x"></script>
 <script src="weather.js?v=20261031a"></script>
-<script src="runbar.js?v=20261109w"></script>
+<script src="runbar.js?v=20261109x"></script>
 <link rel="stylesheet" href="classic.css">
 </body>
 </html>

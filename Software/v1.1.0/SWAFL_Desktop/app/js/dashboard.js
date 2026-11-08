@@ -149,7 +149,7 @@ const Dash = (() => {
       series: [{ y: S.y, c: '#8E24AA', n: 'root zone with irrigation', w: 2 }, { y: S.base, c: '#C62828', n: 'baseline: no irrigation', w: 1.8, dash: [5, 4] }], marks, pts: S.pts, arrows: S.arrows });
   }
   function xyChart(cv, o) {
-    const dpr = Math.max(2, window.devicePixelRatio || 1), w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return; cv.width = w * dpr; cv.height = h * dpr;
+    const dpr = Math.max(3, window.devicePixelRatio || 1), w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return; cv.width = w * dpr; cv.height = h * dpr;
     const c = cv.getContext('2d'); c.scale(dpr, dpr); c.clearRect(0, 0, w, h); c.fillStyle = '#FFFFFF'; c.fillRect(0, 0, w, h);
     c.font = '11px Arial,Helvetica,sans-serif';
     cv._csv = () => { const rows = [[o.xl || 'x'].concat((o.series || []).map(q => q.n || 'y'))]; (o.x || []).forEach((xv, i) => rows.push([o.xfmt ? o.xfmt(xv) : xv].concat((o.series || []).map(q => q.y && isFinite(q.y[i]) ? q.y[i] : '')))); return rows; };
@@ -191,7 +191,7 @@ const Dash = (() => {
       F.map((q, i) => '<div class="fl"><i style="background:' + col[i] + '"></i>' + q[0] + ': <b>' + ((q[1] || 0) * 100).toFixed(1) + ' %</b></div>').join('') + '</div>';
   }
   function timeBars(cv, tt, u) {
-    if (!cv) return; const dpr = Math.max(2, window.devicePixelRatio || 1), w = cv.clientWidth, hh = cv.clientHeight; if (!w || !hh) return; cv.width = w * dpr; cv.height = hh * dpr; const c = cv.getContext('2d'); c.scale(dpr, dpr); c.fillStyle = '#fff'; c.fillRect(0, 0, w, hh);
+    if (!cv) return; const dpr = Math.max(3, window.devicePixelRatio || 1), w = cv.clientWidth, hh = cv.clientHeight; if (!w || !hh) return; cv.width = w * dpr; cv.height = hh * dpr; const c = cv.getContext('2d'); c.scale(dpr, dpr); c.fillStyle = '#fff'; c.fillRect(0, 0, w, hh);
     cv._csv = () => [['item', u || 'value']].concat(tt.map(q => [q[0], q[1]]));
     c.font = '11px Arial,Helvetica,sans-serif'; c.textBaseline = 'alphabetic'; let lw = 0; tt.forEach(q => { lw = Math.max(lw, c.measureText(q[0]).width); });
     const x0 = Math.min(lw + 14, w * 0.45), T = 8, B = 30, R = 64, bh = (hh - T - B) / tt.length, mx = Math.max(...tt.map(q => q[1]), 1e-9) * 1.05, X = v => x0 + (w - x0 - R) * v / mx;
