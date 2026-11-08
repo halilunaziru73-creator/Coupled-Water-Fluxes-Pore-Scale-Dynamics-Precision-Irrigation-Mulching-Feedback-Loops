@@ -9,18 +9,41 @@
   // ------------------------------------------------------------------ DLF: Daisy log files
   // header lines, a line of dashes, the column names (tab separated), the units line, then the numbers
   DaisyIO.readDlf = function (text, name) {
-    const lines = String(text).replace(/\r/g, '').split('\n'); let i = 0; const header = {};
-    for (; i < lines.length; i++) {
-      const row = lines[i].trim(); if (/^-{10,}/.test(row)) { i++; break; } if (!row) continue;
+    const T = String(text), dm = /^[ \t]*-{10,}/m.exec(T), header = {};
+    // the header: the lines before the line of dashes
+    const head = (dm ? T.slice(0, dm.index) : T).replace(/\r/g, '').split('\n');
+    for (let h = 0; h < head.length; h++) {
+      const row = head[h].trim(); if (!row) continue;
       if (/^dlf-/i.test(row)) { header.info = row; const m = row.match(/dlf-([0-9]+\.[0-9]+)\s*--\s*([^(]+)(?:\((.*)\))?/i); if (m) { header['dlf-version'] = m[1]; header['dlf-component'] = m[2].trim(); header['dlf-def-location'] = m[3] ? m[3].trim() : 'builtin'; } continue; }
       const k = row.indexOf(':'); if (k < 0) continue; const key = row.slice(0, k).trim(), val = row.slice(k + 1).trim();
       if (key in header) { if (Array.isArray(header[key])) header[key].push(val); else header[key] = [header[key], val]; } else header[key] = val;
     }
-    const cols = (lines[i++] || '').replace(/\n$/, '').split('\t').map(s => s.trim()), uraw = (lines[i++] || '').split('\t').map(s => s.trim()), units = {};
+    const L = T.length; let pos = dm ? T.indexOf('\n', dm.index) : -1; pos = pos < 0 ? L : pos + 1;
+    const line = () => { if (pos >= L) return ''; let e = T.indexOf('\n', pos); if (e < 0) e = L; const r = T.slice(pos, e).replace(/\r$/, ''); pos = e + 1; return r; };
+    const cols = line().split('\t').map(s => s.trim()), uraw = line().split('\t').map(s => s.trim()), units = {};
     // the units line can be shorter than the names line when the first columns have no unit: right-align it
     const off = cols.length - uraw.length; cols.forEach((c, j) => { units[c] = j - off >= 0 ? uraw[j - off] || '' : ''; });
-    const data = cols.map(() => []), rawc = cols.map(() => []); for (; i < lines.length; i++) { const ln = lines[i]; if (!ln.trim()) continue; const p = ln.split('\t'); cols.forEach((c, j) => { rawc[j].push((p[j] || '').trim()); const v = parseFloat(p[j]); data[j].push(isFinite(v) ? v : (p[j] != null && /^(nan|na|\.)$/i.test(p[j].trim()) ? NaN : (p[j] === '' || p[j] == null ? NaN : v))); }); }
-    const d = { name: name || header.LOGFILE || 'log', header, units, cols, data, n: data[0] ? data[0].length : 0, str: {} }; cols.forEach((c, j) => { if (data[j].some(isNaN) && rawc[j].some(x => x !== '' && !/^(nan|na|\.)$/i.test(x) && isNaN(parseFloat(x)))) d.str[c] = rawc[j]; }); DaisyIO.addTime(d); return d;
+    // the numbers: read straight from the text, a cell at a time, without cutting it into lines and cells first (a log has millions of cells)
+    const nc = cols.length, data = new Array(nc), isW = new Array(nc).fill(false), first = pos; for (let j = 0; j < nc; j++) data[j] = [];
+    while (pos < L) {
+      let e = T.indexOf('\n', pos); if (e < 0) e = L; let s0 = pos; pos = e + 1; while (s0 < e && T.charCodeAt(s0) <= 32 && T.charCodeAt(s0) !== 9) s0++; if (s0 >= e) continue;
+      let c0 = s0, j = 0;
+      while (j < nc) {
+        let c1 = T.indexOf('\t', c0); if (c1 < 0 || c1 > e) c1 = e;
+        // a plain number is read from its characters; anything else goes to parseFloat
+        let v = NaN, q = c0, neg = false, ch = q < c1 ? T.charCodeAt(q) : 0, ok = c1 > c0;
+        if (ch === 45) { neg = true; q++; } else if (ch === 43) q++;
+        let ip = 0, nd = 0; while (q < c1 && (ch = T.charCodeAt(q)) >= 48 && ch <= 57) { ip = ip * 10 + (ch - 48); q++; nd++; }
+        let fp = 0, sc = 1; if (q < c1 && T.charCodeAt(q) === 46) { q++; while (q < c1 && (ch = T.charCodeAt(q)) >= 48 && ch <= 57) { fp = fp * 10 + (ch - 48); sc *= 10; q++; nd++; } }
+        if (ok && nd > 0 && nd < 16 && (q === c1 || T.charCodeAt(q) === 13 || T.charCodeAt(q) === 32)) { v = ip + fp / sc; if (neg) v = -v; }
+        else { const sj = T.slice(c0, c1).replace(/\r$/, ''); v = parseFloat(sj); if (v !== v) { if (sj.trim() === '' || /^\s*(nan|na|\.)\s*$/i.test(sj)) v = NaN; else isW[j] = true; } }
+        data[j].push(v); j++; c0 = c1 + 1; if (c1 >= e) break;
+      }
+      for (; j < nc; j++) data[j].push(NaN);
+    }
+    const d = { name: name || header.LOGFILE || 'log', header, units, cols, data, n: nc && data[0] ? data[0].length : 0, str: {} };
+    for (let j = 0; j < nc; j++) if (isW[j]) { const raw = []; let p2 = first; while (p2 < L) { let e = T.indexOf('\n', p2); if (e < 0) e = L; const ln = T.slice(p2, e); p2 = e + 1; if (!ln.trim()) continue; raw.push((ln.split('\t')[j] || '').replace(/\r$/, '').trim()); } d.str[cols[j]] = raw; }
+    DaisyIO.addTime(d); return d;
   };
   const nz = c => String(c).toLowerCase().replace(/[\s_-]+/g, '');
   DaisyIO.colIndex = (d, c) => { let j = d.cols.indexOf(c); if (j < 0) j = d.cols.findIndex(x => nz(x) === nz(c)); return j; };
