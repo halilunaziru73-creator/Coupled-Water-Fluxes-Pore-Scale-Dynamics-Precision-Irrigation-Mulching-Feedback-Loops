@@ -107,6 +107,8 @@ The weather is then put on the grid as above. On the dashboard, the *Next 14 day
 
 The online weather needs the internet; everything else does not. If the place search or the weather service cannot be reached, the dialog says so and **the current weather stays in use**; nothing else changes. The service is a free public weather archive that needs no key.
 
+**When the first service is busy.** If the service answers *too many requests* or cannot be reached, SWAFL tries again after a short wait, then asks a second service (NASA POWER, which covers every place on Earth) for the daily rain, temperature and radiation and computes the reference evapotranspiration from them with the Hargreaves equation. A place search that fails is tried again with a second place service. Weather that has been fetched once is kept on the computer, so the same place and years open at once and also work without the internet. The notes of the dialog say which service gave the weather.
+
 ## Switching back
 
 Choose *Built-in weather record* in Properties ▸ Scenario ▸ *Weather source*. The rainfall scale and temperature shift you had before the import come back. The imported file and the online weather stay available in the list until the program is closed.

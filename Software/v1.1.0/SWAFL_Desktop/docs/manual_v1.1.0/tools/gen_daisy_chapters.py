@@ -38,7 +38,7 @@ t += '## Experiments\n\nExperiments is the free design. Runs are chosen from the
 for sid in ids('ask', 'Experiments'): t += S(sid)
 out['28_daisy_ask.md'] = t
 # 29 the 27 combinations
-t = '# The best combinations {#daisy-combos}\n\nStart from the Daisy reference offers 27 combinations of factors that the Daisy reference manual makes worth comparing. Each is shown as it opens in the Experiments tab, with the reason it is offered and the place of the reference manual where its parameters are described.\n\n'
+t = '# The best combinations {#daisy-combos}\n\nStart from the Daisy reference offers 43 combinations of factors that the Daisy reference manual makes worth comparing. Each is shown as it opens in the Experiments tab, with the reason it is offered and the place of the reference manual where its parameters are described.\n\n'
 by = {s['id']: s for s in SG}
 for sid in ids('combos'):
     v = IDX[sid]; n = int(sid.split('_')[-1]); 

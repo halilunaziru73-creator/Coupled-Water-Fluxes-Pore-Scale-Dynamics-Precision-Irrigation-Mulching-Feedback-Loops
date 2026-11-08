@@ -120,6 +120,10 @@ A sand holds about 0.6 mm per cm, so the same demand empties it in about a third
 
 Choosing another soil, in the list or in Properties, starts the replay again from the start of the season (day 95), with the gauge set to the new soil.
 
+**The orange bar and the number *%/d*.** Under the slider of every soil in the list an orange bar shows the *speed of depletion*, $100\,r_s$ in percent of the available water of the soil used per day. 6.0 %/d means that the crop takes 6 % of the water held between field capacity and the wilting point each day, so the soil reaches its trigger in about $f_{\mathrm{trig}}/r_s$ days (the *d to trigger* of the same row). The longer the bar, the faster the soil dries: coarse sand is the fastest and silt loam the slowest. All soils meet the same crop demand, so only the water they hold makes the difference.
+
+**The box in *Mg/ha*.** It gives the simulated yield of the crop on that soil, in megagrams (tonnes) per hectare, with the settings of Properties. The filled part is the yield relative to the best soil of the list. It is green when the trigger of the soil lies at or before the critical depletion $f^*=0.45$, and pink when the crop would already be stressed when irrigation starts.
+
 ### The core trade-off: f = 0.50 or f = 0.45
 
 Under the explanation, a panel answers the question each grower asks: trigger at a depletion of 0.50 or of 0.45? It has two columns, and each condition is ticked when it applies to your settings.

@@ -6,6 +6,8 @@ The Dashboard is the panel to the right of the drawing. It has four tabs (*Resul
 
 ## Results
 
+**Full screen.** The *Full screen* button above the dashboard (and the one above every figure) makes the results or the picture cover the whole window; **Esc** leaves it. The simulation keeps running while the results are on the whole screen, because the picture of the layer is still drawn behind them.
+
 The first block of the Results tab carries the name of the open layer and its **key numbers** (the same lines as in the report). For example, on *Soil hydraulic drivers* it shows the change in drainage due to tillage and to the consolidation rate on your soil, and the leading driver. A design layer shows its key numbers after its run.
 
 On *Trigger law* this block shows only the soil you are working on. It lists the trigger (cm) and its depletion, the critical $f^*$, the sensor reading and its depletion now, the days from field capacity to the trigger, the drying speed, the water held in the root zone, the yield, the irrigation and drainage, the share of the best trigger's yield, and the advice $f = 0.50$ or $f = 0.45$ with its reasons. Click another soil in the drawing to see its numbers. Under the table, the chart of the season shows the depletion at the sensor day by day, the trigger (dashed) and the irrigation days (blue), with both axes named; then the advice, and the two lists *Choose f = 0.50 if* and *Choose f = 0.45 if*, each condition ticked or not with the value that decides it.

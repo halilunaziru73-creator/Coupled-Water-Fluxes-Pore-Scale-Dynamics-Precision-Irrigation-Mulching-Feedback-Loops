@@ -284,7 +284,7 @@ Five factors change the van Genuchten-Mualem curves of every horizon of the buil
 
 ### Experiments: best combinations to start with
 
-The list holds 27 combinations in groups: Irrigation, Nitrogen, Climate, Soil and crop, Chemicals and Parameters. Each shows the topics of the reference it draws on. Choosing one shows why it is worth running; the tick boxes select several to add at once.
+The list holds 43 combinations in groups: Irrigation, Nitrogen, Climate, Soil and water, Soil and crop, Chemicals and Parameters. Each shows the topics of the reference it draws on. Choosing one shows why it is worth running; the tick boxes select several to add at once.
 
 ![Experiments: best combinations to start with. Screen 23 of the Daisy workbench.](images/daisy11/dz_exp_02.jpg){width=100% height=17cm}
 

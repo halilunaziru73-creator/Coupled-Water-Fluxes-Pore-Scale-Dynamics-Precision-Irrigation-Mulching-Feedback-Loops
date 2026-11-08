@@ -23,6 +23,15 @@ All model inputs live in the **Properties** panel (far right). Each group can be
 | **Crop** | the simulated cereal/oilseed rotation and the 48 crops of the library, in the groups *Staple food crops* (9), *Cash and oil crops* (8), *Vegetables* (4) and *Trees, vines and palms* (27) | Cereal/Oilseed | Chooses the crop calendar, the crop coefficients, the root depth, the depletion fraction and the yield response (Chapter 21). The cereal rotation is the simulated crop; the library crops are transferred from it with their FAO-56 crop coefficients (Section 21.4). |
 | **Structural consolidation rate** | 0.001, 0.0025, 0.005, 0.01, 0.02 d$^{-1}$ | 0.001 | The rate $\tau_c$ at which conventionally tilled pores close (Eq. 8.1). In the simulations it changes the results of the five finer soils (loam to silty clay loam, up to about 6 mm a year of drainage and 14 kg N/ha of leaching); in the five coarser soils every rate gives the same result. |
 
+### The soil textural triangle
+
+Beside **Soil** in Properties, and beside each horizon of *My soil* and the soil factor of the Daisy experiments, a small triangle button opens the **soil textural triangle** of the USDA. It shows the twelve classes of the triangle with the sand, silt and clay scales, and the ten soils of SWAFL as numbered dots.
+
+* **Click** anywhere on the triangle: the class (for example *Clay loam*) and the sand, silt and clay percentages of the point are shown, with the nearest soil of SWAFL. **Use this soil** sets that soil for all the layers.
+* **Type your own mixture** in the Sand, Silt and Clay boxes: when two values are given the third completes to 100, and the point is placed on the triangle at once. The layers of SWAFL run the ten soils of the program, so a mixture drives them through the nearest of those, and the panel says which. In *My soil* of the Daisy workbench the exact percentages are used.
+* In the Daisy experiments a click adds the matching USDA class as a level of the soil factor; Daisy has no level for sandy clay, silty clay and clay, so there the nearest class that exists is added.
+* **Esc** closes the triangle without a change.
+
 ## Mulch
 
 | Control | Values | Default | Effect |

@@ -1,6 +1,6 @@
 # The factors and responses of the Experiments tab {#daisy-factors}
 
-The Experiments tab offers 58 factors. Each has levels that are tried, a range that is accepted, and words that make the tab propose it when the question is typed in words. Fourteen responses are measured in every run.
+The Experiments tab offers 69 factors. Each has levels that are tried, a range that is accepted, and words that make the tab propose it when the question is typed in words. Fourteen responses are measured in every run.
 
 ## Responses
 
@@ -16,14 +16,32 @@ The Experiments tab offers 58 factors. Each has levels that are tried, a range t
 | Rain | mm/season | not ranked |
 | Water-stress days at harvest | days | lower |
 | Nitrogen-stress days at harvest | days | lower |
-| Irrigation water-use efficiency (yield gain over the rainfed reference per mm) | kg DM per ha per mm | higher |
+| Irrigation water-use efficiency (yield gain over the rainfed reference per m3 of irrigation) | kg per m3 | higher |
 | Deep-percolation fraction of rain + irrigation | % | lower |
 | Partial factor productivity of nitrogen | kg DM per kg N | higher |
 | Nitrate leached as a share of N applied | % | lower |
+| Runoff | mm/season | lower |
+| Nitrogen taken up by the crop | kg N/ha/season | higher |
+| Ammonia volatilised | kg N/ha/season | lower |
+| Nitrogen applied | kg N/ha/season | not ranked |
+| Nitrogen use efficiency (crop uptake as a share of N input) | % | higher |
+| Nitrogen surplus (input minus crop uptake) | kg N/ha/season | lower |
+| Reactive nitrogen lost (leached, denitrified, volatilised) | kg N/ha/season | lower |
+| Nitrate leached per tonne of yield | kg N per Mg | lower |
+| Agronomic efficiency of nitrogen (yield gain over the least fertilised run) | kg DM per kg N | higher |
+| Apparent nitrogen recovery (extra uptake over the least fertilised run) | % | higher |
+| Physiological efficiency of nitrogen (yield gain per extra N taken up) | kg DM per kg N | higher |
+| Water-use efficiency (yield per m3 of evapotranspiration) | kg per m3 | higher |
+| Yield per m3 of rain and irrigation | kg per m3 | higher |
+| Harvest index (storage organ over total dry matter) | ratio | higher |
+| Relative evapotranspiration (actual over potential) | ratio | higher |
+| Nitrate in the drainage (flow-weighted concentration) | mg N/L | lower |
+| Chemical leached below 200 cm, share of the amount sprayed | % | lower |
+| Chemical degraded, share of the amount sprayed | % | not ranked |
 
 ## Factors
 
-Each row of *What will be tested* is one factor: one thing that changes between the runs. The text under the row says what the factor is; *more* opens where Daisy reads it, the typical values, what to type and what changes in the results. This chapter gives the same for all 63 factors.
+Each row of *What will be tested* is one factor: one thing that changes between the runs. The text under the row says what the factor is; *more* opens where Daisy reads it, the typical values, what to type and what changes in the results. This chapter gives the same for all 69 factors.
 
 ### How to fill in a row
 
@@ -266,7 +284,7 @@ The tillage operation done before sowing.
 |:--------|:--------------------|
 | Where Daisy reads it | The tillage action of the rotation (plowing, rotavation, disk_harrowing, stubble_cultivation) or none. |
 | Typical values | plowing (the farm), rotavation, disk_harrowing, stubble_cultivation, none. |
-| Levels offered | plowing, rotavation, none |
+| Levels offered | plowing, rotavation, disk_harrowing, stubble_cultivation, none |
 | What to type | Tick the operations. |
 | What changes | Mixing of residues and organic matter, the loosening of the topsoil (with consolidation) and so infiltration and evaporation. |
 | Needs irrigation | no |
@@ -1142,20 +1160,91 @@ The resistance to the mixing of dissolved compounds between soil and ponded wate
 | Daisy reference | chapter 87: Resistance to mixing inorganic compounds between soil and ponding. |
 | Words that propose it | surface r mixing, r_mixing of surface, r mixing, r_mixing |
 
-## The Daisy library, all of it, in the experiments
+#### Stubble left at harvest (15.14)
 
-Everything of the Daisy library can be tested in an experiment. In *Add something to change*, the group **The Daisy library (all of it)** lists, with their numbers:
+n/a
 
-| What changes | Choices | What a run does with it |
-|:--|--:|:--|
-| Soil | 63 soil horizons (and the USDA classes) | the texture and humus of the horizon down the profile with HYPRES, or the Daisy horizon itself when its file gives no texture |
-| Crop of the Daisy library, grown every year | 84 crops | the crop grown every year with the dates of its template |
-| Type of fertiliser | 79 fertilisers | mineral: in place of N25S; organic (slurry, manure): the same nitrogen, as fresh weight from its dry matter and nitrogen |
-| Chemical of the Daisy library | 35 chemicals | the chemical followed under the name Tracer, with all its own properties (sorption, decay, uptake) |
-| Management of the Daisy library | 82 actions | a whole management replaces the farm rotation; a single operation (harrowing, rolling, ridging...) is done each year in place of the ploughing |
-| Program of the Daisy library | 55 programs | the program run as it comes with Daisy, with its own files and weather; the settings of SWAFL do not apply |
-| Tillage | the tillage operations | in place of the ploughing |
+| Item | Value |
+|:--------|:--------------------|
+| Where Daisy reads it | n/a |
+| Typical values | n/a |
+| Levels offered | 0, 8, 15, 30 |
+| Box accepts | 0 to 60 cm |
+| What to type | n/a |
+| What changes | n/a |
+| Needs irrigation | no |
+| Words that propose it | stubble, stub, cutting height, harvest height, residue height |
 
-The long lists have a search box. **Logs of the Daisy library added to every run** (176 logs, with a search box) adds any log of the library to the output of every run. The files of the Daisy samples that a choice needs (and the files they read in turn) are copied into the Common folder of the experiment and read through the path of the run; the files of the Daisy library itself are read from Daisy. In the tab **Parameter library**, every item has the button **Test it in an experiment** (for a log: **Write this log in every run of my experiment**), which puts it in the experiment.
+#### Straw at harvest, left or removed (15.14)
 
-![Experiments: a chemical of the Daisy library as the thing that changes, and a log of the library added to every run.](images/daisy11/dz_exp_library.jpg){width=100%}
+n/a
+
+| Item | Value |
+|:--------|:--------------------|
+| Where Daisy reads it | n/a |
+| Typical values | n/a |
+| Levels offered | asis, left, removed |
+| What to type | n/a |
+| What changes | n/a |
+| Needs irrigation | no |
+| Words that propose it | straw, residue, residues, stem and leaf, crop residue removal |
+
+#### Temperature of the irrigation water (15.18)
+
+n/a
+
+| Item | Value |
+|:--------|:--------------------|
+| Where Daisy reads it | n/a |
+| Typical values | n/a |
+| Levels offered | 5, 12, 20, 30 |
+| Box accepts | 0 to 40 C |
+| What to type | n/a |
+| What changes | n/a |
+| Needs irrigation | yes: the runs are irrigated, with a rainfed reference |
+| Words that propose it | water temperature, cold water, warm water, temperature of the water, irrigation water temperature |
+
+#### Depth the fertiliser is worked into (15.12, 15.13)
+
+n/a
+
+| Item | Value |
+|:--------|:--------------------|
+| Where Daisy reads it | n/a |
+| Typical values | n/a |
+| Levels offered | 0, 5, 10, 20 |
+| Box accepts | 0 to 40 cm |
+| What to type | n/a |
+| What changes | n/a |
+| Needs irrigation | no |
+| Words that propose it | incorporate, incorporation, injection, inject, fertiliser depth, fertilizer depth, placement, broadcast |
+
+#### Fertiliser by the soil nitrogen: target minus the mineral N in the soil (15.11)
+
+n/a
+
+| Item | Value |
+|:--------|:--------------------|
+| Where Daisy reads it | n/a |
+| Typical values | n/a |
+| Levels offered | off, on |
+| What to type | n/a |
+| What changes | n/a |
+| Needs irrigation | no |
+| Words that propose it | precision fertili, target, soil mineral n, nmin, n-min, soil test, split application |
+
+#### Surface detention capacity: ponding before runoff (15.40)
+
+n/a
+
+| Item | Value |
+|:--------|:--------------------|
+| Where Daisy reads it | n/a |
+| Typical values | n/a |
+| Levels offered | 0, 5, 15, 30 |
+| Box accepts | 0 to 100 mm |
+| What to type | n/a |
+| What changes | n/a |
+| Needs irrigation | no |
+| Words that propose it | detention, ponding, runoff, run-off, surface storage, bunds, ridges |
+
