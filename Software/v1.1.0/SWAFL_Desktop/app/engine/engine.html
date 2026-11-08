@@ -5354,6 +5354,7 @@ function drawSWAx(x, y, w, sky, soilPx, gwH) {
 
 // V5: the feedback loops drawn on the real profile (no boxes); the effect of one step of each control listed below
 function drawV5() {
+  CTC.spent = 0; CTC.pending = false; CTC.todo = 0; CTC.force = false;
   paper(); const { eff, mag } = v5Effects(), x = 14, w = 592, Y = 48;
   T('Feedback loops between climate, management, soil water, crop and nitrogen', 16, 22, { s: 14, b: true }); T('The red arrows join the parts of the field that act on each other; click an arrow or a part.', 16, 38, { s: 10.5, c: MUTE });
   const F = drawSWAx(x, Y, w, 170, 200, 50), gy = F.gy, th = F.th;
@@ -5373,7 +5374,8 @@ function drawV5() {
     ctx.fillStyle = '#fff'; ctx.strokeStyle = '#7A1A14'; ctx.lineWidth = sel ? 2.4 : 1.2; ctx.beginPath(); ctx.arc(32, yy - 3.5, 6, 0, 6.283); ctx.fill(); ctx.stroke(); T(String(i + 1), 32, yy - 0.5, { s: 8.5, b: true, a: 'center', c: '#7A1A14' }); T(e, 46, yy, { s: 10.2, b: sel });
     hot(20, yy - 11, W - 40, 13, () => { v5ui.sel = sel ? 0 : i + 1; }, 'click to highlight this loop'); });
   T('The arrows are drawn wider for bigger effects. The crop shown is the field at mid-season.', 16, ky + 128 + 14, { s: 10, i: true, c: MUTE });
-  const need = Math.ceil(v5Hidden(ky + 128 + 40) + 14); if (Math.abs((currentScene.h || 0) - need) > 4) { currentScene.h = need; setCanvasH(need); }
+  const hy0 = ky + 128 + 40, need = Math.ceil(v5Hidden(hy0) + 14); if (Math.abs((currentScene.h || 0) - need) > 4) { currentScene.h = need; setCanvasH(need); }
+  if (CTC.pending) { ctx.fillStyle = 'rgba(255,255,255,0.93)'; ctx.fillRect(14, hy0 + 40, W - 28, need - hy0 - 52); T('Preparing the pore sections of your soil', W / 2, hy0 + 150, { s: 14, b: true, a: 'center', c: '#12303A' }); T(CTC.todo + ' sections still to build, a few at a time so that the window stays quick', W / 2, hy0 + 172, { s: 10, a: 'center', c: '#4B5563' }); ctx.fillStyle = '#DDE3EA'; rrect(W / 2 - 120, hy0 + 186, 240, 8, 4); ctx.fill(); ctx.fillStyle = '#0B7285'; rrect(W / 2 - 120, hy0 + 186, 240 * (1 - Math.min(1, CTC.todo / 24)), 8, 4); ctx.fill(); }
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -5382,7 +5384,7 @@ function drawV5() {
 // from the texture, tillage and consolidation of the project and filled with water at the suction of the question) beside the curve of the
 // van Genuchten and Mualem functions of the soil and, where it applies, runs of the model. The sources are listed in the manual.
 // ------------------------------------------------------------------------------------------------
-const CTC = { m: new Map() };
+const CTC = { m: new Map(), spent: 0, pending: false, force: false, todo: 0 };
 function v5Live(t, X, Y, Wd, Ht, sx0, sy0, sw0, sh0) {          // water and vapour move through the pores of the section; they follow the pore network, the water and the suction
   const g = t.g, wa = t.wa, ty = g.type, now = performance.now();
   if (!t.pt) { const wi = [], ai = []; for (let i = 0; i < g.N; i++) if (ty[i] === 0) (wa[i] ? wi : ai).push(i); t.pt = { w: [], a: [], wi, ai, last: now };
@@ -5396,7 +5398,18 @@ function v5Live(t, X, Y, Wd, Ht, sx0, sy0, sw0, sh0) {          // water and vap
   P.w.forEach((p, k) => { const x = X + (p.x - sx0) * kx, y = Y + (p.y - sy0) * ky; if (x < X || x > X + Wd || y < Y || y > Y + Ht) return; const r = Math.max(1.7, kx * 1.3), a = 0.8 + 0.2 * Math.sin(tt + k); ctx.fillStyle = 'rgba(255,255,255,' + a.toFixed(2) + ')'; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.283); ctx.fill(); ctx.strokeStyle = 'rgba(8,60,120,0.95)'; ctx.lineWidth = 1; ctx.stroke(); });
   P.a.forEach((p, k) => { const x = X + (p.x - sx0) * kx, y = Y + (p.y - sy0) * ky; if (x < X || x > X + Wd || y < Y || y > Y + Ht) return; ctx.fillStyle = 'rgba(255,255,255,' + (0.6 + 0.3 * Math.sin(tt * 0.8 + k)).toFixed(2) + ')'; ctx.beginPath(); ctx.arc(x, y, Math.max(1.3, kx * 0.9), 0, 6.283); ctx.fill(); });
 }
-function ctTile(o) {                              // o: pF, tc (consolidation index), tint (0..1 amber on the water), sat only
+// the sections are built a few at a time, so that the window never freezes: what is not ready yet is a blank section and the panel says that it is preparing
+function ctTile(o) {
+  const tc = o.tc == null ? state.tcIdx : o.tc, key = [state.soil, state.till, tc, o.pF.toFixed(2), (o.tint || 0).toFixed(2)].join('|');
+  const hit = CTC.m.get(key); if (hit) return hit;
+  if (!CTC.force && CTC.spent > 9) { CTC.pending = true; CTC.todo = (CTC.todo || 0) + 1; return ctPlaceholder(); }
+  const t0 = performance.now(); const r = ctTileBuild(o); CTC.spent += performance.now() - t0; return r;
+}
+function ctPlaceholder() {
+  if (CTC.ph) return CTC.ph; const c = document.createElement('canvas'); c.width = 220; c.height = 150; const x = c.getContext('2d'); x.fillStyle = '#E6EAEE'; x.fillRect(0, 0, 220, 150);
+  return (CTC.ph = { cv: c, g: { type: new Uint8Array(33000), T: new Float32Array(33000), own: new Uint16Array(33000), hue: new Uint8Array(33000), rads: [], s: 0.0027, N: 33000, W: 220, H: 150 }, wa: new Uint8Array(33000), wet: new Array(9).fill(0), air: new Array(9).fill(0), edges: [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000], porosity: 0.4, sat: 0, pending: true, o: { pF: 2, tc: 0, tint: 0 } });
+}
+function ctTileBuild(o) {                              // o: pF, tc (consolidation index), tint (0..1 amber on the water), sat only
   const tc = o.tc == null ? state.tcIdx : o.tc, key = [state.soil, state.till, tc, o.pF.toFixed(2), (o.tint || 0).toFixed(2)].join('|');
   let r = CTC.m.get(key); if (r) return r;
   const g = microGet({ soil: state.soil, mmW: 0.6, W: 220, H: 150, p: poreIdx(state.till, 120, TC_VALUES[tc]), seed: 5, nb: 3 });
@@ -5522,7 +5535,7 @@ function v5Hidden(Y0) {
   const Z = v5h.zoom;
   if (Z && Z.play) { const ph = (performance.now() / 1000 % 28) / 28, tri = ph < 0.5 ? ph * 2 : 2 - ph * 2; Z.pF = Math.round((0.6 + tri * 4.2) * 10) / 10; }
   if (Z) {
-    const CH = cBox.h, cy0 = cBox.y, cx0 = 16, cw = W - 32, t = ctTile({ pF: Z.pF, tc: Z.tc, tint: Z.tint }), h = Math.pow(10, Z.pF);
+    const CH = cBox.h, cy0 = cBox.y, cx0 = 16, cw = W - 32, t = (CTC.force = true, ctTile({ pF: Z.pF, tc: Z.tc, tint: Z.tint })), h = Math.pow(10, Z.pF);
     ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = 16; ctx.fillStyle = '#fff'; rrect(cx0, cy0, cw, CH, 10); ctx.fill(); ctx.restore(); ctx.strokeStyle = '#0B7285'; ctx.lineWidth = 2; rrect(cx0, cy0, cw, CH, 10); ctx.stroke();
     sidWrap(Z.title.replace(/^\d+\.\s*/, ''), cx0 + 14, cy0 + 20, cw - 120, { s: 11.5, b: true, c: '#12303A' }, 14);
     ctx.fillStyle = '#EEF1F3'; rrect(cx0 + cw - 90, cy0 + 8, 78, 22, 6); ctx.fill(); T('Close ✕', cx0 + cw - 51, cy0 + 23, { s: 10, b: true, a: 'center', c: '#374151' }); hot(cx0 + cw - 90, cy0 + 8, 78, 22, () => { v5h.zoom = null; }, 'close the enlarged section');

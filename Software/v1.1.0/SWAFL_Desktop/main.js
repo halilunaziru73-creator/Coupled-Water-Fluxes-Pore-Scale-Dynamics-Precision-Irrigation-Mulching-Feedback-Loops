@@ -5,6 +5,13 @@ const { app, BrowserWindow, ipcMain, shell, dialog, Menu } = require('electron')
 const path = require('path'), fs = require('fs');
 const { listen } = require('./serve');
 
+// speed: the drawing and the rasterising of the pictures go to the graphics card, a big heap for the engine, no throttling of a window that is in front
+try {
+  ['ignore-gpu-blocklist', 'enable-gpu-rasterization', 'enable-zero-copy', 'disable-renderer-backgrounding', 'disable-background-timer-throttling'].forEach(f => app.commandLine.appendSwitch(f));
+  app.commandLine.appendSwitch('enable-features', 'CanvasOopRasterization');
+  app.commandLine.appendSwitch('js-flags', '--max-old-space-size=4096');
+} catch (e) { }
+
 let win = null, srv = null;
 
 async function createWindow() {
@@ -15,7 +22,7 @@ async function createWindow() {
     width: 1480, height: 900, minWidth: 1000, minHeight: 640,
     title: 'SWAFL ' + app.getVersion(), backgroundColor: '#E8EEF5', show: false,
     icon: path.join(__dirname, 'build', 'icon.png'),
-    webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false, sandbox: false }
+    webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false, sandbox: false, spellcheck: false, backgroundThrottling: true }
   });
   Menu.setApplicationMenu(null);              // SWAFL draws its own menu bar (File, Edit, Tools, Refresh, Review, Run, Help)
   win.once('ready-to-show', () => { win.maximize(); win.show(); });
