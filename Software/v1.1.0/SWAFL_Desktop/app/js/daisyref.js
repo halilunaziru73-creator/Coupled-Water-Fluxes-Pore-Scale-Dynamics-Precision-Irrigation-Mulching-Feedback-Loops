@@ -33,7 +33,7 @@
 
   // the combinations to run first; each is {id, title, why, ref, plan:{design, factors:[{id, levels}], base}, score}
   /* which chapters of the reference have something that can be varied and run in this app */
-  R.CHAPTER_MAP = { 15: ['method', 'trigger', 'dose', 'window', 'flux', 'tillage', 'nitrogen'], 16: ['chemical'], 19: ['etmodel', 'climate'], 23: ['chemical'], 28: ['trigger'], 29: ['rooting'], 47: ['soils'], 48: ['soils'], 62: ['etmodel'], 103: ['climate', 'season', 'stations'] };
+  R.CHAPTER_MAP = { 15: ['method', 'trigger', 'dose', 'window', 'flux', 'tillage', 'nitrogen', 'straw', 'wtemp', 'fdepth', 'nprec', 'detain', 'tilltypes', 'irrfull', 'fluxmethod', 'windowtrig', 'ntypeirr', 'ntimerain', 'residtill', 'dripdepth2'], 16: ['chemical'], 19: ['etmodel', 'climate'], 23: ['chemical'], 28: ['trigger'], 29: ['rooting', 'rootclimate'], 47: ['soils', 'soilmethod'], 48: ['soils', 'detain', 'soilmethod'], 62: ['etmodel'], 103: ['climate', 'season', 'stations'] };
 
   /* chapters whose models cannot be changed directly yet lead to the process they belong to: the experiments of that process are offered, marked as related */
   const GROUPS = [
@@ -42,7 +42,7 @@
     { topic: 'nitrogen, carbon and organic matter', ids: ['nitrogen', 'tillage'], ch: [7, 8, 10, 13, 14, 17, 32, 33, 36, 58, 60, 70, 91, 69, 39, 51, 78] },
     { topic: 'chemicals and their sorption', ids: ['chemical'], ch: [16, 23, 24] },
     { topic: 'weather, radiation and evapotranspiration', ids: ['etmodel', 'climate', 'season', 'stations'], ch: [19, 25, 35, 43, 57, 62, 67, 68, 103] },
-    { topic: 'management', ids: ['method', 'trigger', 'dose', 'window', 'flux', 'tillage', 'nitrogen'], ch: [15, 28] }
+    { topic: 'management', ids: ['method', 'trigger', 'dose', 'window', 'flux', 'tillage', 'nitrogen', 'straw', 'wtemp', 'fdepth', 'nprec', 'detain', 'tilltypes', 'irrfull', 'fluxmethod', 'windowtrig', 'ntypeirr', 'ntimerain', 'residtill', 'dripdepth2'], ch: [15, 28] }
   ];
   R.CHAPTER_RELATED = {}; GROUPS.forEach(g => g.ch.forEach(n => { R.CHAPTER_RELATED[n] = { topic: g.topic, ids: g.ids }; }));
   R.GENERAL = ['method', 'trigger', 'nitrogen', 'climate', 'soils'];
@@ -113,6 +113,55 @@
     out.push({ id: 'tillnit', title: 'Tillage against fertiliser form', ref: '15.3, 15.12, 17', score: 3, group: 'Nitrogen',
       why: 'The tillage action mixes residues and topsoil; the fertilizer library holds several forms of mineral nitrogen. Crossing the two shows whether the form of the nitrogen matters more under one tillage than another.' + wxNote,
       plan: { design: 'factorial', factors: [{ id: 'till', levels: ['plowing', 'rotavation', 'none'] }, { id: 'ntype', levels: ['N25S', 'AmmoniumNitrate', 'Ammonia'] }].concat(soils), base: {} } });
+    // the other actions of chapter 15 and their combinations
+    out.push({ id: 'straw', title: 'Stubble and straw at harvest', ref: '15.14', score: 4, group: 'Nitrogen',
+      why: 'The harvest action leaves stem and leaf below a stubble height on the field and takes a fraction of the stem, the leaf and the storage organ. Leaving or removing the straw, at four stubble heights, changes the organic matter and the nitrogen that go back to the soil.' + wxNote,
+      plan: { design: 'factorial', factors: [{ id: 'stub', levels: [0, 8, 15, 30] },{ id: 'straw', levels: ['left', 'removed'] }].concat(soils), base: {} } });
+    out.push({ id: 'wtemp', title: 'Temperature of the irrigation water', ref: '15.18, 15.19, 15.21', score: 3, group: 'Irrigation',
+      why: 'Every irrigate action has a temperature, by default that of the air. Cold and warm water, applied over the canopy and on the soil surface, differ in evaporation and in the heat that enters the soil (the temperature is not used by the subsoil action).' + wxNote,
+      plan: { design: 'factorial', factors: [{ id: 'wtemp', levels: [5, 12, 20, 30] },{ id: 'method', levels: ['overhead', 'surface'] }].concat(soils), base: { irrig: '1' } } });
+    out.push({ id: 'fdepth', title: 'How deep the fertiliser goes, and which fertiliser', ref: '15.12, 15.13, 17', score: 4, group: 'Nitrogen',
+      why: 'The fertilize action can spread the nitrogen on the surface or work it into the soil between two heights. Surface, 5, 10 and 20 cm, with three mineral forms, show how much nitrogen is lost to the air from the surface and how much is exposed to leaching.' + wxNote,
+      plan: { design: 'factorial', factors: [{ id: 'fdepth', levels: [0, 5, 10, 20] },{ id: 'ntype', levels: ['N25S', 'AmmoniumNitrate', 'Ammonia'] }].concat(soils), base: {} } });
+    out.push({ id: 'nprec', title: 'Fertiliser by the nitrogen already in the soil', ref: '15.11, 15.12', score: 5, group: 'Nitrogen',
+      why: 'With the precision option the amount applied is the target minus the mineral nitrogen already in the soil between two depths. Fixed rates against the same targets applied by this rule, at three doses, show how much nitrogen is saved and what happens to the yield.' + wxNote,
+      plan: { design: 'factorial', factors: [{ id: 'nprec', levels: ['off', 'on'] },{ id: 'nfac', levels: [0.7, 1, 1.3] }].concat(soils), base: {} } });
+    out.push({ id: 'detain', title: 'Ponding on the soil surface before runoff', ref: '15.40, 48', score: 3, group: 'Soil and water',
+      why: 'The surface can hold a depth of ponding before water runs off. From none to 30 mm, with the rain scaled, shows how much water the soil gets in dry and wet years and how much is lost.' + wxNote,
+      plan: { design: 'factorial', factors: [{ id: 'detain', levels: [0, 5, 15, 30] },{ id: 'precip', levels: [0.8, 1, 1.2] }].concat(soils), base: {} } });
+    out.push({ id: 'tilltypes', title: 'Plowing, rotavation, disk harrowing, stubble cultivation or none', ref: '15.24, 15.25, 15.26, 15.28, 15.52', score: 5, group: 'Nitrogen',
+      why: 'Each tillage action mixes the soil down to a depth (plowing deepest, then rotavation, disk harrowing and stubble cultivation). The five systems, with the consolidation of the loosened soil, show how the mixing depth changes the water, the nitrogen and the yield.' + wxNote,
+      plan: { design: 'factorial', factors: [{ id: 'till', levels: ['plowing', 'rotavation', 'disk_harrowing', 'stubble_cultivation', 'none'] },{ id: 'tc', levels: [0.001, 0.01] }].concat(soils), base: {} } });
+    out.push({ id: 'irrfull', title: 'Method, trigger and dose of irrigation together', ref: '15.5, 15.18, 15.19, 15.20, 15.21, 28.39', score: 6, group: 'Irrigation',
+      why: 'The three ways of applying water, three triggers and three doses, all crossed. The best combination is the one that gives the yield for the least water.' + wxNote,
+      plan: { design: 'factorial', factors: [{ id: 'method', levels: ['overhead', 'surface', 'drip'] },{ id: 'trig', levels: trigs.slice(0, 3) },{ id: 'mm', levels: [15, 30, 45] }].concat(soils), base: { irrig: '1' } } });
+    out.push({ id: 'fluxmethod', title: 'Speed of application for each method', ref: '15.18 to 15.21', score: 4, group: 'Irrigation',
+      why: 'The same dose applied slowly or fast by the three actions: slow drip keeps the water in the root zone, a fast surface flow can run off or drain below the roots.' + wxNote,
+      plan: { design: 'factorial', factors: [{ id: 'flux', levels: [0.1, 0.5, 2] },{ id: 'method', levels: ['overhead', 'surface', 'drip'] }].concat(soils), base: { irrig: '1' } } });
+    out.push({ id: 'windowtrig', title: 'The season of irrigation against the trigger', ref: '15.5, 28.39', score: 4, group: 'Irrigation',
+      why: 'The irrigation window and the trigger work together: a late start with a strict trigger can miss the dry spell, an early start with a lax trigger wastes water.' + wxNote,
+      plan: { design: 'factorial', factors: [{ id: 'window', levels: [{ label: 'Apr 1 - Oct 1', set: { w1: '04-01', w2: '10-01' } }, { label: 'May 1 - Sep 1', set: { w1: '05-01', w2: '09-01' } }, { label: 'Jun 1 - Aug 15', set: { w1: '06-01', w2: '08-15' } }] },{ id: 'trig', levels: trigs.slice(0, 3) }].concat(soils), base: { irrig: '1' } } });
+    out.push({ id: 'ntypeirr', title: 'Fertiliser form, irrigated and rainfed', ref: '15.12, 15.5, 17', score: 4, group: 'Nitrogen',
+      why: 'Ammonium and nitrate behave differently in wet soil: nitrate leaches and denitrifies, ammonium is held and can be lost to the air. Irrigation changes the water they meet.' + wxNote,
+      plan: { design: 'factorial', factors: [{ id: 'ntype', levels: ['N25S', 'AmmoniumNitrate', 'Nitrate', 'Ammonia'] },{ id: 'irrig', levels: ['0', '1'] }].concat(soils), base: {} } });
+    out.push({ id: 'ntimerain', title: 'Fertiliser date and the rain of the year', ref: '15.12, 25.7', score: 4, group: 'Nitrogen',
+      why: 'Moving the fertiliser by weeks is a different decision in a wet year than in a dry one: the rain after the date decides how much nitrate leaves the root zone.' + wxNote,
+      plan: { design: 'factorial', factors: [{ id: 'ntime', levels: [-14, 0, 14, 28] },{ id: 'precip', levels: [0.8, 1, 1.2] }].concat(soils), base: {} } });
+    out.push({ id: 'rootclimate', title: 'Rooting depth in a drier or wetter year', ref: '29.1, 72, 25.7', score: 4, group: 'Climate',
+      why: 'Deep roots buffer a dry year and let the crop use nitrate that has moved down. Four rooting depths against the rain scaled by the weather show where depth matters.' + wxNote,
+      plan: { design: 'factorial', factors: [{ id: 'root', levels: [30, 60, 90, 120] },{ id: 'precip', levels: [0.7, 1, 1.3] }].concat(soils), base: {} } });
+    out.push({ id: 'warmn', title: 'Warming and nitrogen', ref: '25.7, 15.12', score: 3, group: 'Climate',
+      why: 'A warmer year speeds up mineralisation and the crop cycle. Warming of 0 to 3 degrees at three nitrogen doses shows the yield and the leaching.' + wxNote,
+      plan: { design: 'factorial', factors: [{ id: 'temp', levels: [0, 1.5, 3] },{ id: 'nfac', levels: [0.7, 1, 1.3] }].concat(soils), base: {} } });
+    out.push({ id: 'residtill', title: 'Straw and tillage together', ref: '15.14, 15.24 to 15.28', score: 3, group: 'Nitrogen',
+      why: 'Straw left on the field is mixed into the soil by the tillage action: the depth of the mixing decides where the residue carbon and nitrogen end up.' + wxNote,
+      plan: { design: 'factorial', factors: [{ id: 'straw', levels: ['left', 'removed'] },{ id: 'till', levels: ['plowing', 'rotavation', 'none'] }].concat(soils), base: {} } });
+    out.push({ id: 'soilmethod', title: 'Which soil needs which irrigation method', ref: '47, 48, 15.19, 15.20, 15.21', score: 4, group: 'Soil and water',
+      why: 'A sand drains the water of a fast surface application, a clay holds it. The three methods on four textures show which method suits which soil.' + wxNote,
+      plan: { design: 'factorial', factors: [{ id: 'soil', levels: ['usda:sand', 'usda:sandyloam', 'loam', 'usda:clayloam'] },{ id: 'method', levels: ['overhead', 'surface', 'drip'] }].concat(soils), base: { irrig: '1' } } });
+    out.push({ id: 'dripdepth2', title: 'Depth of the drip line', ref: '15.20', score: 4, group: 'Irrigation',
+      why: 'The subsoil action puts the water between two heights. A shallow line wets the roots and the surface, a deep one keeps the surface dry but can pass below the roots.' + wxNote,
+      plan: { design: 'factorial', factors: [{ id: 'dripdepth', levels: [{ label: 'drip 5-10 cm', set: { method: 'drip', dfrom: 5, dto: 10 } }, { label: 'drip 10-20 cm', set: { method: 'drip', dfrom: 10, dto: 20 } }, { label: 'drip 20-40 cm', set: { method: 'drip', dfrom: 20, dto: 40 } }] },{ id: 'trig', levels: trigs.slice(0, 3) }].concat(soils), base: { irrig: '1' } } });
     // one experiment for each group of parameters that was tested in Daisy: the two or three that moved the results most, around the value the farm uses
     const PR = (typeof window !== 'undefined' ? window.DaisyParams : (typeof globalThis !== 'undefined' ? globalThis.DaisyParams : null)) || [];
     const byAttr = {}; PR.forEach(q => { (byAttr[q.attr + '|' + q.use] = byAttr[q.attr + '|' + q.use] || []).push(q); });
@@ -121,7 +170,7 @@
       out.push({ id: 'p_' + q0.attr + '_' + (q0.use || 'std'), group: 'Parameters', title: (TOP[q0.attr] || q0.attr) + (Object.keys(byAttr).filter(x => x.split('|')[0] === q0.attr).length > 1 ? ': ' + (q0.use && q0.use !== 'std' ? q0.use : 'standard model') : '') + ' (topic ' + q0.ch + ')', ref: String(q0.ch), score: 2 + (L.some(q => q.sens) ? 1 : 0),
         why: L.map(q => q.name + (q.unit ? ' [' + q.unit + ']' : '') + ': ' + (q.desc || '').replace(/\.$/, '')).join('; ') + '. Each is varied from half to double the value the farm uses' + (L.some(q => q.sens) ? '; ' + L.filter(q => q.sens).map(q => q.name).join(', ') + ' moved the yield, water or nitrogen in the test.' : '; none of them moved yield, water or nitrogen in the test, so the effect shows in the process itself.'),
         plan: { design: L.length > 2 ? 'oat' : 'factorial', factors: L.map(q => ({ id: q.opt, levels: [0.5, 1, 2].map(f => rd(q, base(q) * f)).filter((v, i, a) => a.indexOf(v) === i) })), base: {} } }); });
-    const GR = { method: 'Irrigation', trigger: 'Irrigation', dose: 'Irrigation', window: 'Irrigation', flux: 'Irrigation', nitrogen: 'Nitrogen', tillage: 'Nitrogen', climate: 'Climate', season: 'Climate', stations: 'Climate', etmodel: 'Climate', soils: 'Soil and crop', rooting: 'Soil and crop', chemical: 'Chemicals' };
+    const GR = { method: 'Irrigation', trigger: 'Irrigation', dose: 'Irrigation', window: 'Irrigation', flux: 'Irrigation', straw: 'Nitrogen', nitrogen: 'Nitrogen', tillage: 'Nitrogen', climate: 'Climate', season: 'Climate', stations: 'Climate', etmodel: 'Climate', soils: 'Soil and crop', rooting: 'Soil and crop', chemical: 'Chemicals' };
     out.forEach(g => { if (!g.group) g.group = GR[g.id] || 'Other combinations'; });
     return out.sort((a, b) => b.score - a.score);
   };

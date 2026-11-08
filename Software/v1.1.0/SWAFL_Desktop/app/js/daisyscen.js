@@ -40,6 +40,12 @@
     mgmt: { label: 'Management of the field (Daisy library)', type: 'select', opts: [['A_F_R', 'the SWAFL farm rotation (default)']] },
     prog: { label: 'Program of the Daisy library, run as it is', type: 'select', opts: [] },
     ntype: { label: 'Fertiliser', type: 'select', opts: [['N25S', 'N25S (default)'], ['AmmoniumNitrate', 'ammonium nitrate'], ['CalciumNitrate', 'calcium nitrate'], ['Nitrate', 'nitrate'], ['Ammonia', 'ammonia']] },
+    stub: { label: 'Stubble left at harvest (cm; manual 15.14)', type: 'number', min: 0, max: 60, step: 1 },
+    straw: { label: 'Straw at harvest (manual 15.14: stem and leaf fractions)', type: 'select', opts: [['asis', 'as in the farm rotation'], ['left', 'left on the field'], ['removed', 'removed with the grain']] },
+    wtemp: { label: 'Temperature of the irrigation water (degC; manual 15.18, blank = air)', type: 'text' },
+    fdepth: { label: 'Fertiliser worked into the soil down to (cm; manual 15.12, 0 = on the surface)', type: 'number', min: 0, max: 40, step: 1 },
+    nprec: { label: 'Fertiliser by the soil nitrogen (manual 15.11, precision: target minus the mineral N in the top 100 cm)', type: 'select', opts: [['off', 'the fixed rate'], ['on', 'rate = target minus soil mineral N']] },
+    detain: { label: 'Surface detention capacity (mm of ponding before runoff; manual 15.40, blank = Daisy default)', type: 'text' },
     ntime: { label: 'Fertiliser dates moved by (days)', type: 'number', min: -21, max: 28, step: 7 },
     bio: { label: 'Evapotranspiration model (Bioclimate)', type: 'select', opts: [['auto', 'FAO56 reference evapotranspiration'], ['default', 'Daisy default (energy balance; needs wind and vapour pressure)']] },
     radscale: { label: 'Global radiation, scale', type: 'number', min: 0.5, max: 1.5, step: 0.05 },
@@ -47,7 +53,7 @@
     pmonths: { label: 'Rain scale per month (12 numbers, Jan to Dec; blank = none)', type: 'text' }
   };
   S.OPTIONS.station.opts = S.STATIONS.map(x => [x.id, x.label]);
-  S.DEFAULTS = { soil: 'loam', station: 'course', start: 1980, stop: 2000, precip: 1, temp: 0, nfac: 1, irrig: '0', method: 'overhead', trig: -300, z: 20, mm: 30, hours: 3, dfrom: 10, dto: 20, limit: 0, w1: '04-01', w2: '10-01', root: 0, koc: 0, half: 0, flux: 0, patch: '', waitd: 2, spin: 1, till: 'plowing', ntype: 'N25S', ntime: 0, bio: 'auto', radscale: 1, pmonths: '' };
+  S.DEFAULTS = { soil: 'loam', station: 'course', start: 1980, stop: 2000, precip: 1, temp: 0, nfac: 1, irrig: '0', method: 'overhead', trig: -300, z: 20, mm: 30, hours: 3, dfrom: 10, dto: 20, limit: 0, w1: '04-01', w2: '10-01', root: 0, koc: 0, half: 0, flux: 0, patch: '', waitd: 2, spin: 1, till: 'plowing', ntype: 'N25S', ntime: 0, stub: 8, straw: 'asis', wtemp: '', fdepth: 0, nprec: 'off', detain: '', bio: 'auto', radscale: 1, pmonths: '' };
 
   S.LIST = [
     { id: 'irrigation', theme: 'Water', title: 'Irrigation: does it pay off, and what does it cost the soil?',
@@ -171,13 +177,21 @@
       if (fz && fz.organic) rot = rot.replace(/\(N25S\s+\(weight\s+([\d.]+)\s*\[kg N\/ha\]\)\)/g, (m, w) => '("' + nm + '" (weight ' + (+w / fz.nPerMg).toFixed(2) + ' [Mg w.w./ha]))');   // organic: the same nitrogen as fresh weight
       else rot = rot.replace(/\(N25S\s+/g, String(o.ntype).indexOf('|') > 0 ? '("' + nm + '" ' : '(' + nm + ' '); }
     if (S.num(o.ntime, 0)) { const dn = Math.round(S.num(o.ntime, 0)); rot = rot.replace(/\(wait_mm_dd\s+(\d{1,2})\s+(\d{1,2})\)\s*\(fertilize/g, (m, a, b) => { const d = new Date(Date.UTC(2001, +a - 1, +b) + dn * 864e5); return '(wait_mm_dd ' + (d.getUTCMonth() + 1) + ' ' + d.getUTCDate() + ')(fertilize'; }); }
+    // more of the actions of the manual (chapter 15): stubble and straw at harvest (15.14), the depth of the fertiliser (15.12), fertiliser by the soil nitrogen (15.11), the surface detention capacity (15.40)
+    if (S.num(o.stub, 8) !== 8) rot = rot.replace(/\(stub\s+8\s*\[cm\]\)/g, '(stub ' + Math.max(0, S.num(o.stub, 8)) + ' [cm])');
+    if (o.straw === 'left') rot = rot.replace(/\(harvest\s+("[^"]+")\s*\(stub\s+([\d.]+)\s*\[cm\]\)\s*\)/g, '(harvest $1 (stub $2 [cm])(stem 0.0)(leaf 0.0))');
+    else if (o.straw === 'removed') rot = rot.replace(/\(stem 0\.0\)\s*\(leaf 0\.0\)/g, '(stem 1.0)(leaf 1.0)');
+    if (S.num(o.fdepth, 0) > 0 || o.nprec === 'on') rot = rot.replace(/\(fertilize\s+(\([^()]*\(weight\s+([\d.]+)\s*\[[^\]]*\]\)\))\s*\)/g, (m, am, w) => '(fertilize ' + am + (o.nprec === 'on' ? '\n    (precision (target ' + (+w).toFixed(0) + ' [kg N/ha]) (from 0 [cm]) (to -100 [cm]))' : '') + (S.num(o.fdepth, 0) > 0 ? ' (from 0 [cm]) (to -' + Math.round(S.num(o.fdepth, 0)) + ' [cm])' : '') + ')');
+    if (String(o.detain == null ? '' : o.detain).trim() !== '' && isFinite(parseFloat(o.detain))) rot = rot.replace(/(\(wait_mm_dd\s+\d{1,2}\s+\d{1,2}\)\s*)(\()/, '$1(set_surface_detention_capacity ' + Math.max(0, parseFloat(o.detain)) + ' [mm])$2');
     rot = rot.replace(/K_OC\s+[\d.]+\s*\[L\/kg\]/, 'K_OC ' + S.num(o.koc, 0) + ' [L/kg]').replace(/decompose_rate\s+[\d.eE+-]+\s*\[h\^-1\]/, 'decompose_rate ' + (S.num(o.half, 0) > 0 ? (Math.LN2 / (24 * S.num(o.half, 0))).toExponential(5) : '0') + ' [h^-1]');
     if (o.chem) { const nm = useLib(o.chem); rot = rot.replace(/\(defchemical "Tracer" default[\s\S]*?(?=\n;\s*List of chemicals)/, '(defchemical "Tracer" "' + nm + '"\n  (description "the chemical ' + nm.replace(/"/g, "'") + ' of the Daisy library, followed under the name Tracer"))'); }
     let manager = 'A_F_R'; if (o.mgmt && o.mgmt !== 'A_F_R') { const nm = useLib(o.mgmt), A = S.ACT[o.mgmt]; if (A && A.single) rot = rot.replace(/\(plowing\)/g, '("' + nm + '")'); else manager = nm; }
     if (o.irrig === '1') {
       const mm = Math.max(1, S.num(o.mm, 30)); let hrs = Math.max(1, Math.round(S.num(o.hours, 3))); if (S.num(o.flux, 0) > 0) hrs = Math.max(1, Math.round(mm / S.num(o.flux, 0))); if (mm / hrs > 20) hrs = Math.ceil(mm / 20);   // Daisy solves the water flow better with a moderate rate
       const rate = +(mm / hrs).toFixed(3), z = Math.max(1, Math.round(S.num(o.z, 20))), md = v => { const m = String(v || '').match(/^(\d{1,2})[-\/.](\d{1,2})$/); return m ? [+m[1], +m[2]] : null; }, a1 = md(o.w1) || [4, 1], a2 = md(o.w2) || [10, 1];
-      const how = o.method === 'surface' ? '(irrigate_surface ' + rate + ' [mm/h] (hours ' + hrs + '))' : o.method === 'drip' ? '(irrigate_subsoil ' + rate + ' [mm/h] (hours ' + hrs + ') (from -' + Math.min(S.num(o.dfrom, 10), S.num(o.dto, 20)) + ' [cm]) (to -' + Math.max(S.num(o.dfrom, 10) + 1, S.num(o.dto, 20)) + ' [cm]))' : '(irrigate_overhead ' + rate + ' [mm/h] (hours ' + hrs + '))';
+      const wt = String(o.wtemp == null ? '' : o.wtemp).trim(), wT = wt !== '' && isFinite(parseFloat(wt)) && o.method !== 'drip' ? ' (temperature ' + parseFloat(wt) + ' [dg C])' : '';
+      const how0 = o.method === 'surface' ? '(irrigate_surface ' + rate + ' [mm/h] (hours ' + hrs + '))' : o.method === 'drip' ? '(irrigate_subsoil ' + rate + ' [mm/h] (hours ' + hrs + ') (from -' + Math.min(S.num(o.dfrom, 10), S.num(o.dto, 20)) + ' [cm]) (to -' + Math.max(S.num(o.dfrom, 10) + 1, S.num(o.dto, 20)) + ' [cm]))' : '(irrigate_overhead ' + rate + ' [mm/h] (hours ' + hrs + '))';
+      const how = wT ? how0.replace(/\)$/, wT + ')') : how0;
       const act = '(defaction irrigate_30_tensiometer_overhead activity\n  ;; SWAFL: tensiometer-triggered irrigation, ' + o.method + ', ' + mm + ' mm per event\n  (wait (and (after_mm_dd ' + a1[0] + ' ' + a1[1] + ')\n             (before_mm_dd ' + a2[0] + ' ' + a2[1] + ')\n             (not (soil_water_pressure_above (height -' + z + ' [cm]) (potential ' + Math.round(S.num(o.trig, -300)) + ' [cm])))))\n  ' + how + '\n  (wait_days ' + Math.max(1, Math.round(S.num(o.waitd, 2))) + '))';
       const re = /\(defaction irrigate_30_tensiometer_overhead activity[\s\S]*?\(wait_days\s+\d+\)\s*\)/; if (!re.test(rot)) throw new Error('the irrigation action was not found in the rotation file'); rot = rot.replace(re, () => act);
       const lim = S.num(o.limit, 0); if (lim > 0) { const k = Math.max(1, Math.round(lim / mm)); rot = rot.replace(/\(repeat irrigate_30_tensiometer_overhead\)/g, '(activity' + ' irrigate_30_tensiometer_overhead'.repeat(k) + ')'); }
