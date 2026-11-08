@@ -276,3 +276,4 @@
 
 - **Plain words.** Help > "Plain words: what the terms mean" lists 54 terms (field capacity, TAW, RAW, pF, Mg/ha, K_OC, NSE and more) in easy words, with a search box. The same words also appear as a hint when the pointer rests on such a term anywhere in the program.
 - **Deterministic phenotyping, clearer text.** Every small or pale text of the layer (section notes, chart titles, legends, captions) is now larger, darker and heavier, and the legends and the section titles keep their space so that nothing overlaps.
+- **Clearer text in every layer.** Pale grey texts of all layers (notes, captions, axis labels) are drawn darker and a little heavier. Sizes and positions did not change.

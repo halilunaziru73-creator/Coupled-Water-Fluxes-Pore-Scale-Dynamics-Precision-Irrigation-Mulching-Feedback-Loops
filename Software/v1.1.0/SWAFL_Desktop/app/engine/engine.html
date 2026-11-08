@@ -3406,8 +3406,14 @@ function phClear(o) {   // Deterministic phenotyping: every small or pale text i
   else if (!c || /^rgba?\(/.test(c)) n.c = '#1B1F23';
   n.ph = 1; return n;
 }
+function allClear(o) {   // every layer: pale grey text is drawn darker and a little heavier; sizes and positions are not touched, so nothing moves
+  const c = o.c; if (typeof c !== 'string' || !/^#[0-9a-f]{6}$/i.test(c)) return o;
+  const r = parseInt(c.substr(1, 2), 16), g = parseInt(c.substr(3, 2), 16), b = parseInt(c.substr(5, 2), 16), mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+  if (mx - mn > 40 || 0.299 * r + 0.587 * g + 0.114 * b < 105 || 0.299 * r + 0.587 * g + 0.114 * b > 190) return o;   // coloured or already dark text, or a very light one (on dark ground), stays
+  const n = Object.assign({}, o); n.c = '#' + [r, g, b].map(v => ('0' + Math.round(v * 0.5).toString(16)).slice(-2)).join(''); n.ph = 1; return n;
+}
 function T(txt, x, y, o) {
-  o = o || {}; if (!o.ph && phOn()) o = phClear(o); txt = mAuto(txt);
+  o = o || {}; if (!o.ph) o = phOn() ? phClear(o) : allClear(o); txt = mAuto(txt);
   if (typeof txt === 'string' && txt.indexOf('$') >= 0) { mathDraw(txt, x, y, o); return; }
   ctx.font = (o.i ? 'italic ' : '') + (o.b ? 'bold ' : '') + (o.s || 11) + 'px ' + (o.f || 'sans-serif');
   ctx.fillStyle = o.c || INK; ctx.textAlign = o.a || 'left'; ctx.textBaseline = o.v || 'alphabetic';
