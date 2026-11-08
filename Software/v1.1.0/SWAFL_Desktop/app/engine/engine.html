@@ -786,8 +786,8 @@ function sidSlider(key, label, x, y, w, rng, val, fmt, dis, sub) {
 }
 function sidSet(sl, p) { const v0 = sl.rng[0] + clampN((p.x - sl.x) / sl.w, 0, 1) * (sl.rng[1] - sl.rng[0]), st = sl.rng[2] || 0.01, v = Math.round(v0 / st) * st; sl.obj[sl.key] = +(v * (sl.scale || 1)).toFixed(6); if (sl.obj === SID) sidTouch(sl.key); else if (sl.obj.touch) sl.obj.touch(sl.key); }
 function sidDown(p) { for (const s of SIDW) if (p.x >= s.x - 8 && p.x <= s.x + s.w + 8 && Math.abs(p.y - s.y) <= 10) { if (s.key === 'qLs' && s.obj === SID) SID.autoQ = false; SID.drag = s; sidSet(s, p); return true; } return false; }
-function sidPill(txt, x, y, bg) { ctx.font = 'bold 9px sans-serif'; const w = (String(txt).indexOf('$') >= 0 ? mathWidth(txt, { s: 9, b: true }) : ctx.measureText(txt).width) + 8; ctx.fillStyle = bg || 'rgba(15,30,45,0.72)'; rrect(x, y - 10, w, 13, 4); ctx.fill(); T(txt, x + 4, y, { s: 9, b: true, c: '#fff' }); }
-function sidPillR(txt, xr, y, bg) { ctx.font = 'bold 9px sans-serif'; const w = ctx.measureText(txt).width + 8; sidPill(txt, xr - w, y, bg); }
+function sidPill(txt, x, y, bg) { txt = mAuto(txt); ctx.font = 'bold 9px sans-serif'; const w = (String(txt).indexOf('$') >= 0 ? mathWidth(txt, { s: 9, b: true }) : ctx.measureText(txt).width) + 8; ctx.fillStyle = bg || 'rgba(15,30,45,0.72)'; rrect(x, y - 10, w, 13, 4); ctx.fill(); T(txt, x + 4, y, { s: 9, b: true, c: '#fff' }); }
+function sidPillR(txt, xr, y, bg) { txt = mAuto(txt); ctx.font = 'bold 9px sans-serif'; const w = (String(txt).indexOf('$') >= 0 ? mathWidth(txt, { s: 9, b: true }) : ctx.measureText(txt).width) + 8; sidPill(txt, xr - w, y, bg); }
 function sidChip(x, y, w, h, label, on, fn, tip) {
   ctx.fillStyle = on ? SIDC.ac : '#fff'; ctx.strokeStyle = on ? '#08505F' : '#9AA3AE'; ctx.lineWidth = on ? 2 : 1; rrect(x, y, w, h, 6); ctx.fill(); ctx.stroke();
   T(label, x + w / 2, y + h / 2 + 3.5, { s: 9.5, b: true, a: 'center', c: on ? '#fff' : '#374151' }); hot(x, y, w, h, fn, tip);
@@ -802,7 +802,7 @@ function sidHead(txt, y, sub) {
   return ex;
 }
 // ---------- compact (phone) layout helpers: W follows the pane width, text wraps, rows reflow ----------
-function sidWrap(txt, x, y, mw, o, lh, dry) { ctx.font = (o.i ? 'italic ' : '') + (o.b ? 'bold ' : '') + (o.s || 11) + 'px sans-serif'; const words = String(txt).replace(/\$[^$]*\$/g, m => m.replace(/ /g, '\u00a0')).split(' '); let line = '', n = 0; const out = () => { if (!dry) T(line, x, y + n * lh, o); n++; }; words.forEach(w => { const t = line ? line + ' ' + w : w; if ((t.indexOf('$') >= 0 ? mathWidth(t, o) : ctx.measureText(t).width) > mw && line) { out(); line = w; } else line = t; }); if (line) out(); return n; }
+function sidWrap(txt, x, y, mw, o, lh, dry) { txt = mAuto(txt); ctx.font = (o.i ? 'italic ' : '') + (o.b ? 'bold ' : '') + (o.s || 11) + 'px sans-serif'; const words = String(txt).replace(/\$[^$]*\$/g, m => m.replace(/ /g, '\u00a0')).split(' '); let line = '', n = 0; const out = () => { if (!dry) T(line, x, y + n * lh, o); n++; }; words.forEach(w => { const t = line ? line + ' ' + w : w; if ((t.indexOf('$') >= 0 ? mathWidth(t, o) : ctx.measureText(t).width) > mw && line) { out(); line = w; } else line = t; }); if (line) out(); return n; }
 function sidRowC(label, y, items) { T(label, 16, y + 9, { s: 9, b: true, c: MUTE }); let x = 16, yy = y + 14; const maxX = W - 14; items.forEach(it => { ctx.font = 'bold 9.5px sans-serif'; const w = Math.max(56, ctx.measureText(it[0]).width + 18); if (x + w > maxX && x > 16) { x = 16; yy += 34; } sidChip(x, yy, Math.min(w, W - 30), 28, it[0], it[1], it[2], it[3]); x += w + 6; }); return yy + 28 + 10; }
 function sidTx(txt, x, y, o, lh) { if (W < 620) return sidWrap(txt, x, y, W - x - 14, o, lh || 11); T(txt, x, y, o); return 1; }
 function RW(label, y, items) { if (W < 620) return sidRowC(label, y, items); sidRow(label, y, items); return y + 28; }
@@ -3356,6 +3356,10 @@ const CL = { rain: '#6FB1E8', irr: '#2E7DE8', evap: '#E0B04A', transp: '#4FAE5E'
 // the clock of the moving pictures; Trigger law and Mulch against bare soil stand still (no drops, no vapour, no waves) until Play
 const nowSec = () => { try { const id = currentScene && currentScene.id; if ((id === 'v4' && !AUTO.on) || (id === 'n1' && !n1ui.play)) return 12.5; } catch (e) {} return performance.now() / 1000; };
 
+// the symbols of the irrigation design layers are typeset automatically: Ea -> E_a, Zn -> Z_n, Qs -> Q_s ...
+const MSYM = { Ea: 'E_a', Eu: 'E_u', Es: 'E_s', Ed: 'E_d', Zn: 'Z_n', Z0: 'Z_0', ZL: 'Z_L', Qs: 'Q_s', H0: 'H_0', A0: 'A_0', ET0: 'ET_0', ETc: 'ET_c', Kc: 'K_c', Sl: 'S_l', Se: 'S_e', Sd: 'S_d', Ss: 'S_s', Cs: 'C_s' };
+const MSYM_RE = new RegExp('\\b(' + Object.keys(MSYM).join('|') + ')\\b', 'g');
+function mAuto(txt) { if (typeof txt !== 'string' || txt.indexOf('$') >= 0) return txt; const id = currentScene && currentScene.id; if (id !== 'sid' && id !== 'drip' && id !== 'spr') return txt; return txt.replace(MSYM_RE, m => '$' + MSYM[m] + '$'); }
 // ---------- scientific typography on the canvas: $...$ is mathematics: italic symbols, upright numbers and operators, true subscripts and superscripts ----------
 const MATHF = '"Cambria Math", "STIX Two Math", "Times New Roman", Times, serif';
 function mathRuns(src) {                                  // one string with $...$ spans -> runs {s, lvl (-1 sub, 0, 1 sup), it, math}
@@ -3381,7 +3385,7 @@ function mathDraw(txt, x, y, o) {
   ctx.textBaseline = 'alphabetic';
 }
 function T(txt, x, y, o) {
-  o = o || {};
+  o = o || {}; txt = mAuto(txt);
   if (typeof txt === 'string' && txt.indexOf('$') >= 0) { mathDraw(txt, x, y, o); return; }
   ctx.font = (o.i ? 'italic ' : '') + (o.b ? 'bold ' : '') + (o.s || 11) + 'px ' + (o.f || 'sans-serif');
   ctx.fillStyle = o.c || INK; ctx.textAlign = o.a || 'left'; ctx.textBaseline = o.v || 'alphabetic';
@@ -4350,7 +4354,7 @@ const n1F = () => depletionRaw(state.soil, trigAbsFor(state.soil));
 
 function n1Up() { n1ui.drag = false; n1ui.scrub = false; }
 function pill(txt, x, y, o) { o = o || {}; const _r = pillBox(txt, x, y, o); return _r; }
-function pillBox(txt, x, y, o) { ctx.font = (o.b ? 'bold ' : '') + (o.s || 10.5) + 'px sans-serif'; const w = (String(txt).indexOf('$') >= 0 ? mathWidth(txt, o) : ctx.measureText(txt).width) + 10, xx = o.a === 'right' ? x - w : o.a === 'center' ? x - w / 2 : x; ctx.fillStyle = o.bg || 'rgba(255,255,255,0.93)'; rrect(xx, y - 11, w, 16, 5); ctx.fill(); if (o.stroke) { ctx.strokeStyle = o.stroke; ctx.lineWidth = 1; ctx.stroke(); } T(txt, xx + 5, y + 1, { s: o.s || 10.5, b: o.b, c: o.c || INK }); return { x: xx, y: y - 11, w, h: 16 }; }
+function pillBox(txt, x, y, o) { txt = mAuto(txt); ctx.font = (o.b ? 'bold ' : '') + (o.s || 10.5) + 'px sans-serif'; const w = (String(txt).indexOf('$') >= 0 ? mathWidth(txt, o) : ctx.measureText(txt).width) + 10, xx = o.a === 'right' ? x - w : o.a === 'center' ? x - w / 2 : x; ctx.fillStyle = o.bg || 'rgba(255,255,255,0.93)'; rrect(xx, y - 11, w, 16, 5); ctx.fill(); if (o.stroke) { ctx.strokeStyle = o.stroke; ctx.lineWidth = 1; ctx.stroke(); } T(txt, xx + 5, y + 1, { s: o.s || 10.5, b: o.b, c: o.c || INK }); return { x: xx, y: y - 11, w, h: 16 }; }
 
 const ptrN1 = { x: -99, y: -99 };
 
