@@ -34,6 +34,7 @@ window.SoilTriangle = (() => {
       '<div style="background:linear-gradient(90deg,#0F3B63,#2A6AA8);color:#fff;padding:6px 10px;font-weight:700;display:flex;align-items:center"><span>' + esc(o.title || 'Soil textural triangle') + '</span><span data-x style="margin-left:auto;cursor:pointer;padding:0 6px" title="Close (Esc)">&#10005;</span></div>' +
       '<div style="display:flex;gap:12px;padding:10px;flex-wrap:wrap"><div><canvas data-c style="display:block;cursor:crosshair;background:#fff;border:1px solid #9aa"></canvas></div>' +
       '<div style="width:250px;min-width:230px;font-weight:500;color:#0C2238"><div data-read style="background:#fff;border:1px solid #B9B4A6;padding:8px;min-height:92px"><b>Click in the triangle</b><br>Each point is one mixture of sand, silt and clay. The colours are the USDA textural classes' + (soils.length ? '; the numbered dots are the soils of the program.' : '.') + '</div>' +
+      '<div style="margin:8px 0 0;font-weight:700">Type your own mixture (%)</div><div style="display:flex;gap:5px;align-items:center"><label>Sand <input data-in="0" type="number" min="0" max="100" step="1" style="width:52px"></label><label>Silt <input data-in="1" type="number" min="0" max="100" step="1" style="width:52px"></label><label>Clay <input data-in="2" type="number" min="0" max="100" step="1" style="width:52px"></label></div><div data-sum style="font-size:11px;color:#35506C">The third value is completed to 100 automatically and the point is placed on the triangle.</div>' +
       (soils.length ? '<div style="margin:8px 0 3px;font-weight:700">Soils of the program</div><div data-list style="display:flex;flex-direction:column;gap:3px"></div>' : '') +
       '<div style="margin-top:10px;display:flex;gap:6px"><button data-use class="btn pri" disabled style="font-weight:700">' + (mode === 'soil' ? 'Use this soil' : 'Use these percentages') + '</button><button data-cancel class="btn">Cancel</button></div></div></div></div>';
     document.body.appendChild(ov); document.addEventListener('keydown', onKey, true);
@@ -79,9 +80,19 @@ window.SoilTriangle = (() => {
     }
     function show(sa, si, cl, picked) {
       const cls = classify(sa, si, cl), s = soils.length ? nearest(sa, si, cl) : null;
-      read.innerHTML = '<b>' + esc(cls) + '</b><br>Sand ' + Math.round(sa) + ' %, silt ' + Math.round(si) + ' %, clay ' + Math.round(cl) + ' %' + (mode === 'soil' && s ? '<br><span style="color:#14558C">Nearest soil of the program: <b>' + esc(s.label) + '</b></span>' : '');
-      use.disabled = false; state.pick = { sand: Math.round(sa), silt: Math.round(si), clay: Math.round(cl), cls, soil: s }; if (mode === 'soil' && s) { state.soil = s.id; markList(); }
+      read.innerHTML = '<b>' + esc(cls) + '</b><br>Sand ' + Math.round(sa) + ' %, silt ' + Math.round(si) + ' %, clay ' + Math.round(cl) + ' %' + (mode === 'soil' && s ? '<br><span style="color:#14558C">The SWAFL layers will use the nearest soil: <b>' + esc(s.label) + '</b></span>' : '');
+      fillIns(sa, si, cl); use.disabled = false; state.pick = { sand: Math.round(sa), silt: Math.round(si), clay: Math.round(cl), cls, soil: s }; if (mode === 'soil' && s) { state.soil = s.id; markList(); }
     }
+    const ins = ov.querySelectorAll('[data-in]');
+    function fillIns(sa, si, cl) { [sa, si, cl].forEach((v, i) => { if (ins[i] !== document.activeElement) ins[i].value = Math.round(v * 10) / 10; }); }
+    ins.forEach((el, i) => el.addEventListener('input', () => {
+      const v = ins.length ? [...ins].map(q => parseFloat(q.value)) : []; if (!isFinite(v[i])) return; v[i] = Math.max(0, Math.min(100, v[i]));
+      let sa = v[0], si = v[1], cl = v[2];
+      if (i === 0) { if (!isFinite(cl)) cl = 0; cl = Math.min(cl, 100 - sa); si = 100 - sa - cl; }
+      else if (i === 2) { if (!isFinite(sa)) sa = 0; sa = Math.min(sa, 100 - cl); si = 100 - sa - cl; }
+      else { if (!isFinite(cl)) cl = 0; cl = Math.min(cl, 100 - si); sa = 100 - si - cl; }
+      ins.forEach((q, j) => { if (j !== i) q.value = Math.round([sa, si, cl][j] * 10) / 10; });
+      state.pt = [sa, si, cl]; show(sa, si, cl, true); draw(); }));
     function markList() { if (!list) return; list.querySelectorAll('button').forEach(b => { const on = b.dataset.id === state.soil; b.style.background = on ? '#BBD6F0' : '#fff'; b.style.fontWeight = on ? '700' : '500'; }); }
     if (list) { soils.forEach(s => { const b = document.createElement('button'); b.dataset.id = s.id; b.style.cssText = 'text-align:left;border:1px solid #B9B4A6;padding:3px 6px;cursor:pointer;font:inherit;color:#0C2238'; b.innerHTML = '<b style="display:inline-block;width:18px;height:18px;line-height:18px;text-align:center;border-radius:9px;background:#0F3B63;color:#fff;font-size:10px;margin-right:6px">' + (soils.indexOf(s) + 1) + '</b>' + esc(s.label) + ' <span style="color:#35506C;font-size:11px">' + Math.round(s.sand) + ' / ' + Math.round(s.silt) + ' / ' + Math.round(s.clay) + '</span>'; b.onclick = () => { state.pt = [s.sand, s.silt, s.clay]; state.soil = s.id; show(s.sand, s.silt, s.clay); state.soil = s.id; state.pick.soil = s; markList(); draw(); }; list.appendChild(b); }); markList(); }
     const at = e => { const r = cv.getBoundingClientRect(), x = (e.clientX - r.left) * (W / r.width), y = (e.clientY - r.top) * (H / r.height), [sa, si, cl] = fromXY(x, y); return inside(sa / 100, si / 100, cl / 100) ? [sa, si, cl] : null; };
