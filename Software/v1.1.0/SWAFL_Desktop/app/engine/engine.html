@@ -3007,8 +3007,8 @@ if (new URLSearchParams(location.search).get('app')) {
     if (sc0 && sc0.fpsCap) gap = Math.max(gap, 1000 / sc0.fpsCap);                 // layers that move all the time (the pore sections) are drawn at a calm rate
     if (window.__ema > 22) gap = Math.max(gap, Math.min(140, window.__ema * 1.7));  // a slow computer: draw less often, so that the controls stay quick
     if (el < gap) setTimeout(() => raf0(cb), gap - el); else {
-      lastF = now; cb(t); const d = performance.now() - now; window.__ema = (window.__ema == null ? d : window.__ema * 0.88 + d * 0.12);
-      window.__slow = d > 45 ? (window.__slow || 0) + 1 : Math.max(0, (window.__slow || 0) - 2); if (window.__slow >= 24 && (window.__ssPen || 0) < 0.5) { window.__ssPen = (window.__ssPen || 0) + 0.25; window.__slow = 0; window.__ema = 20; phys(); }   // slow for a long time, not just at the start   // still slow: fewer pixels
+      lastF = now; if (window.__physPend) { window.__physPend = 0; phys(); }   /* the lower detail is set just before the picture is drawn, so the screen never shows the cleared picture (it blinked once) */ cb(t); const d = performance.now() - now; window.__ema = (window.__ema == null ? d : window.__ema * 0.88 + d * 0.12);
+      window.__slow = d > 45 ? (window.__slow || 0) + 1 : Math.max(0, (window.__slow || 0) - 2); if (window.__slow >= 24 && (window.__ssPen || 0) < 0.5) { window.__ssPen = (window.__ssPen || 0) + 0.25; window.__slow = 0; window.__ema = 20; window.__physPend = 1; }   // slow for a long time, not just at the start   // still slow: fewer pixels
     }
   });
 }
@@ -7391,11 +7391,11 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
 <script src="plus_phenoplants.js?v=20261030z4"></script>
 <script src="plus_phenotyping4.js?v=20261109p"></script>
 <script src="plus_phenotyping5.js?v=20261109p"></script>
-<script src="plus_drainage.js?v=20261109x"></script>
+<script src="plus_drainage.js?v=20261109y"></script>
 <script src="phnav.js?v=20261030z4"></script>
-<script src="inputs.js?v=20261109x"></script>
+<script src="inputs.js?v=20261109y"></script>
 <script src="weather.js?v=20261031a"></script>
-<script src="runbar.js?v=20261109x"></script>
+<script src="runbar.js?v=20261109y"></script>
 <link rel="stylesheet" href="classic.css">
 </body>
 </html>
