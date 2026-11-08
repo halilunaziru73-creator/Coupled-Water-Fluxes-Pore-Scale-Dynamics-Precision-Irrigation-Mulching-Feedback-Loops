@@ -126,8 +126,19 @@
     sidSlider('Ece', 'Salt tolerance of the crop, ECe (dS/m)', cx2, y + 155, cw, [1, 10, 0.5], DN.Ece, v => v.toFixed(1) + ' dS/m');
     SIDCUR = IRX; sidSlider('lift', 'Water lift, source to field (m)', cx2, y + 186, cw, [0, 60, 1], IRX.lift, v => irF(v) + ' m'); SIDCUR = DN;
     y = 516;
+    { // the answer in plain words
+      const mid = DN.depth - R.hD - R.gate, okW = mid >= R.zc - 0.005, okP = R.Lmax >= DN.Lf, col = okW && okP ? DNCOL.ok : DNCOL.bad, bh = 168;
+      ctx.fillStyle = okW && okP ? '#E8F3EA' : '#FBEAEA'; ctx.fillRect(14, y, W - 28, bh); ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.strokeRect(14, y, W - 28, bh);
+      T('THE ANSWER IN PLAIN WORDS', 28, y + 20, { s: 11, b: true, c: col });
+      let yy = y + 40; const nm = { pipe: 'a buried pipe drain', gate: 'a buried pipe drain with a control gate', ditch: 'an open ditch' }[DN.type];
+      yy += 17 * sidWrap('Use ' + nm + ' ' + f1(DN.depth, 2) + ' m below the surface, one every ' + irF(R.L) + ' m' + (DN.type === 'ditch' ? '.' : ', ' + R.NL + ' pipes of ' + irF(DN.Lf) + ' m with ' + R.Dl + ' mm pipe and a ' + R.Dc + ' mm collector.'), 28, yy, W - 56, { s: 13, b: true, c: '#111' }, 17) + 4;
+      yy += 15 * sidWrap('Halfway between two drains the water table then stays ' + f1(mid, 2) + ' m below the soil surface. Your crop (' + ((CROPS[state.crop] || {}).label || state.crop) + ') needs it deeper than ' + f1(R.zc, 2) + ' m. ' + (okW ? 'So the roots stay out of the water: OK.' : 'So the roots would sit in the water: make the spacing smaller or the drains deeper.'), 28, yy, W - 56, { s: 11.5, c: '#111' }, 15) + 4;
+      yy += 15 * sidWrap('In the season the soil was too wet on ' + irF(R.ctrl.days) + ' of ' + R.n + ' days, and the drains carried away ' + irF(R.ctrl.tot) + ' mm of water. ' + (okP ? '' : 'The pipes are too short a run for this field length: use a larger pipe or a steeper slope. '), 28, yy, W - 56, { s: 11.5, c: '#111' }, 15) + 4;
+      sidWrap('Why this spacing: your soil (' + C.sName + ', water moves ' + f1(R.K1, 2) + ' m per day), your crop (roots ' + irF(C.Rmax) + ' cm) and your irrigation design (' + des.name + ', ' + irF(des.Ea * 100) + ' % efficient, sends ' + irF(des.dpf * 100) + ' % of the water below the roots). Change any of them and the answer follows after a new run.', 28, yy, W - 56, { s: 10.5, i: true, c: '#333' }, 14);
+      y += bh + 22;
+    }
     // 1. recharge
-    sidHead('Recharge: the water the drains must remove, day by day', y, 'Deep percolation of the DSS season: rain and the part of the irrigation that is lost, from ' + des.name);
+    sidHead('1. How much water must the drains remove? (day by day)', y, 'Deep percolation of the DSS season: rain and the part of the irrigation that is lost, from ' + des.name);
     const ax = sidAxes(70, y + 38, 360, 120, 0, Math.max(10, R.n), 0, Math.max(10, Math.ceil(Math.max(R.p95 * 1000 * 1.6, ...R.Rd.map(v => v * 1000)))), 'day of the season', 'recharge (mm/day)', 5, 4);
     ctx.fillStyle = IRC.dp; R.Rd.forEach((v, i) => { const bw = Math.max(1, ax.w / Math.max(1, R.n) - 0.5); ctx.fillRect(ax.sx(i), ax.sy(v * 1000), bw, ax.y + ax.h - ax.sy(v * 1000)); });
     ctx.strokeStyle = DNCOL.bad; ctx.setLineDash([5, 3]); ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(ax.x, ax.sy(R.qdes)); ctx.lineTo(ax.x + ax.w, ax.sy(R.qdes)); ctx.stroke(); ctx.setLineDash([]); pill('design discharge ' + f1(R.qdes) + ' mm/d', ax.x + 6, ax.sy(R.qdes) - 5, { s: 8.8, b: true, c: DNCOL.bad });
@@ -135,24 +146,24 @@
     irRows2(440, y + 50, [['Rain in the season', irF(R.rain) + ' mm'], ['Net irrigation', irF(R.irr) + ' mm'], ['Efficiency of the design', irF(des.Ea * 100) + ' %'], ['Applied water that percolates', irF(des.dpf * 100) + ' %'], ['Recharge of the season', irF(R.rech) + ' mm'], ['Design discharge (P95)', f1(R.qdes) + ' mm/d']]);
     y += 208;
     // 2. spacing
-    sidHead('Spacing: Hooghoudt for the steady flow and Glover-Dumm for the falling water table', y, 'The spacing that holds the water table ' + f1(R.zc, 2) + ' m below the surface with the drains at ' + f1(DN.depth, 2) + ' m');
+    sidHead('2. How far apart must the drains be?', y, 'K = how fast water moves in the soil, h = allowed rise of the water table. The spacing that holds the water table ' + f1(R.zc, 2) + ' m below the surface with the drains at ' + f1(DN.depth, 2) + ' m');
     const qs = []; for (let q = 1; q <= 20; q += 0.5) qs.push(q); const curve = dz => qs.map(q => { const h = dz - R.zc; return h > 0.02 ? hooghoudtL(q / 1000, h, R.K1, R.K2, DN.D, R.u) : 0; });
     const c0 = curve(DN.depth), c1 = curve(DN.depth - 0.3), c2 = curve(DN.depth + 0.3), ymax = Math.max(20, Math.ceil(Math.max(...c2, R.L * 1.2) / 10) * 10), ax2 = sidAxes(70, y + 38, 360, 130, 1, 20, 0, ymax, 'design discharge q (mm/day)', 'drain spacing L (m)', 6, 4);
     [[c1, '#8A5A00', 1.4, '0.3 m shallower'], [c2, IRC.st, 1.4, '0.3 m deeper'], [c0, IRC.ac, 2.4, 'drains at ' + f1(DN.depth, 2) + ' m']].forEach(([c, col, wd]) => { ctx.strokeStyle = col; ctx.lineWidth = wd; ctx.beginPath(); let st = false; qs.forEach((q, i) => { if (!c[i]) return; const px = ax2.sx(q), py = ax2.sy(Math.min(c[i], ymax)); st ? ctx.lineTo(px, py) : ctx.moveTo(px, py); st = true; }); ctx.stroke(); });
     ctx.fillStyle = DNCOL.bad; ctx.beginPath(); ctx.arc(ax2.sx(clampN(R.qdes, 1, 20)), ax2.sy(Math.min(R.L, ymax)), 5, 0, 6.2832); ctx.fill(); pill('your design: L = ' + irF(R.L) + ' m', ax2.sx(clampN(R.qdes, 1, 20)) + 8, ax2.sy(Math.min(R.L, ymax)) - 6, { s: 9, b: true, c: DNCOL.bad });
     irLeg([[IRC.st, 'drains 0.3 m deeper'], [IRC.ac, 'at the chosen depth'], ['#8A5A00', 'drains 0.3 m shallower']], 70, y + 212);
     sidHover(ax2, v => { const h = DN.depth - R.zc; return ['q ' + f1(v) + ' mm/d', 'L ' + irF(h > 0.02 ? hooghoudtL(v / 1000, h, R.K1, R.K2, DN.D, R.u) : 0) + ' m']; });
-    irRows2(440, y + 50, [['K above / below', f1(R.K1, 2) + ' / ' + f1(R.K2, 2) + ' m/d'], ['Drainable porosity', f1(R.mu, 3)], ['Equivalent depth d', f1(R.d, 2) + ' m'], ['Allowed head h', f1(R.hAllow, 2) + ' m'], ['L steady (Hooghoudt)', R.Ls ? irF(R.Ls) + ' m' : 'none'], ['L falling (Glover-Dumm)', R.Lu ? irF(R.Lu) + ' m' : 'none'], ['Spacing used', irF(R.L) + ' m'], ['Head midway at q', f1(R.hD, 2) + ' m']]);
+    irRows2(440, y + 50, [['Soil K above / below', f1(R.K1, 2) + ' / ' + f1(R.K2, 2) + ' m/d'], ['Drainable pore space', f1(R.mu, 3)], ['Effective depth d', f1(R.d, 2) + ' m'], ['Rise allowed (h)', f1(R.hAllow, 2) + ' m'], ['L steady (Hooghoudt)', R.Ls ? irF(R.Ls) + ' m' : 'none'], ['L falling (Glover-Dumm)', R.Lu ? irF(R.Lu) + ' m' : 'none'], ['Spacing used', irF(R.L) + ' m'], ['Rise at this flow', f1(R.hD, 2) + ' m']]);
     y += 238;
     if (R.hAllow <= 0.02) { ctx.fillStyle = '#FDECEA'; ctx.strokeStyle = DNCOL.bad; ctx.lineWidth = 1; rrect(14, y - 8, W - 28, 34, 6); ctx.fill(); ctx.stroke(); sidWrap('Warning: the drains are at ' + f1(DN.depth, 2) + ' m, not deeper than the depth the water table must keep (' + f1(R.zc, 2) + ' m). No spacing can hold the water table down: lay the drains deeper or accept a shallower water table.', 24, y + 6, W - 48, { s: 9.4, b: true, c: '#8B1A12' }, 12); y += 36; }
     // 3. cross-sections
-    sidHead('Cross-section between two drains: free drainage and controlled drainage', y, 'To scale. Run simulation: the water table rises to its level at the design discharge. Blue is the saturated soil, the red dashed line the depth the crop needs');
+    sidHead('3. Side view between two drains', y, 'To scale. Blue = water-filled soil, red dashed line = depth the crop needs. Left = free drain, right = with the gate (identical until you choose a control gate)');
     const pw = (W - 28 - 12) / 2, ph = 170, py0 = y + 36; const xa = 14, xb = 14 + pw + 12;
     crossSection(xa, py0, pw, ph, R, C, 'free', t); const wa = labelXS(xa, py0, pw, R, C, 'free', t); T('Free drainage \u00b7 K above the drain ' + f1(R.K1, 2) + ' m/d, below ' + f1(R.K2, 2) + ' m/d', xa + pw / 2, py0 + ph + 14, { s: 9.6, b: true, a: 'center', c: IRC.ink });
     const mode2 = DN.type === 'gate' ? 'gate' : 'free'; crossSection(xb, py0, pw, ph, R, C, mode2, t); const wb = labelXS(xb, py0, pw, R, C, mode2, t); T(DN.type === 'gate' ? 'Controlled drainage: gate raised ' + f1(R.gate, 2) + ' m' : DN.type === 'ditch' ? 'Open ditch' : 'Pipe drain (the same, no gate)', xb + pw / 2, py0 + ph + 14, { s: 10, b: true, a: 'center', c: IRC.ink });
     y = py0 + ph + 36;
     // 4. the season
-    sidHead('The water table through the season', y, 'Daily balance: recharge in, outflow through the drains at the water table height above the outlet');
+    sidHead('4. Where the water table sits through the season', y, 'Daily balance: recharge in, outflow through the drains at the water table height above the outlet');
     const nn = Math.max(10, R.n), ax3 = sidAxes(70, y + 38, 360, 140, 0, nn, 0, Math.ceil((DN.depth + 0.3) * 10) / 10, 'day of the season', 'depth of the water table (m)', 5, 4);
     ctx.save(); ctx.beginPath(); ctx.rect(ax3.x, ax3.y, ax3.w, ax3.h); ctx.clip(); ctx.fillStyle = 'rgba(192,80,58,0.10)'; ctx.fillRect(ax3.x, ax3.sy(0), ax3.w, ax3.sy(R.zc) - ax3.sy(0)); ctx.restore();
     const yD = v => (v);
@@ -173,13 +184,13 @@
     sidHover(ax4, v => { const i = clampN(Math.round(v), 0, R.n - 1); return ['day ' + (i + 1), 'outflow ' + f1(ctrl.qo[i]) + ' mm/d']; });
     y += 150;
     // 5. infrastructure
-    sidHead('Layout and infrastructure: laterals, collector, control chamber and outlet', y, 'To scale. Run simulation: the water moves along the laterals to the collector. Pipes sized with Manning (n ' + NMAN + ', corrugated), running at most 80 % full');
+    sidHead('5. Layout: pipes, collector and outlet, seen from above', y, 'To scale. Run simulation: the water moves along the laterals to the collector. Pipes sized with Manning (n ' + NMAN + ', corrugated), running at most 80 % full');
     const ph2 = Math.min(200, 60 + DN.Wf * 0.3); planView(24, y + 44, 440, ph2, R, t);
     const ok1 = R.Lmax >= DN.Lf, ok2 = R.vl >= 0.3;
     irRows2(500, y + 50, [['Laterals', R.NL + ' × ' + irF(DN.Lf) + ' m'], ['Lateral flow', f1(R.Ql * 1000, 2) + ' L/s'], ['Lateral pipe', R.Dl + ' mm'], ['Longest lateral', irF(R.Lmax) + ' m' + (ok1 ? '' : ' (short)')], ['Pipe speed', f1(R.vl, 2) + ' m/s' + (ok2 ? '' : ' low')], ['Collector flow', f1(R.Qc * 1000, 1) + ' L/s'], ['Collector pipe', R.Dc + ' mm'], ['Trench volume', irF(R.trench) + ' m³'], [R.ditch ? 'Land taken' : 'Pipe laid', R.ditch ? f1(R.mm / R.L * 100, 1) + ' %' : irF(R.pm) + ' m'], ['Outlet', DN.type === 'gate' ? 'gate ' + f1(R.gate, 2) + ' m' : 'free']]);
     y += 34 + Math.max(ph2, 210) + 22;
     // 6. what the soil changes
-    sidHead('What the soil changes: the same drains in every soil of the program', y, 'Spacing at your design discharge and depth, with the conductivity of each soil (Saxton and Rawls)');
+    sidHead('6. The same drains in every soil', y, 'Spacing at your design discharge and depth, with the conductivity of each soil (Saxton and Rawls)');
     const soils = Object.keys(DATA.soil_labels).slice(0, 14), rowH = 18, hx = 16; const hdr = [['Soil', 22], ['Ks m/d', 300], ['d m', 370], ['L steady m', 440], ['Pipe m/ha', 520]];
     ctx.fillStyle = '#ECEFF1'; ctx.fillRect(14, y + 26, W - 28, 18); hdr.forEach(h => T(h[0], h[1], y + 39, { s: 9, b: true, c: IRC.ink }));
     soils.forEach((sn, i) => { const yy = y + 44 + i * rowH, K = Math.max(0.005, soilK(sn)), K2 = Math.max(0.003, K * DN.Ksub), h = DN.depth - R.zc, Ls = h > 0.02 ? hooghoudtL(R.qdes / 1000, h, K, K2, DN.D, R.u) : 0, cur = sn === state.soil; ctx.fillStyle = cur ? '#E6F4F7' : i % 2 ? '#F6F7F5' : '#fff'; ctx.fillRect(14, yy, W - 28, rowH); if (cur) { ctx.strokeStyle = IRC.ac; ctx.lineWidth = 1.2; ctx.strokeRect(14.5, yy + 0.5, W - 29, rowH - 1); }
