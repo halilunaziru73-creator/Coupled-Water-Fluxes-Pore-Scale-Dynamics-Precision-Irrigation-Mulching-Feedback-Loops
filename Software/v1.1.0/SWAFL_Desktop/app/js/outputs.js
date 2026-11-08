@@ -133,7 +133,10 @@ window.SWOut = (() => {
     el._fs = el.style.cssText; el.classList.add('swfs'); el.style.cssText += ';position:fixed;left:0;top:0;right:0;bottom:0;width:auto;height:auto;z-index:9000;overflow:auto;background:#fff;margin:0;box-sizing:border-box';
     el._fsh = () => { if (!document.fullscreenElement && el.classList.contains('swfs')) leave(); }; el._fsk = e => { if (e.key === 'Escape' && el.classList.contains('swfs')) leave(); };
     document.addEventListener('fullscreenchange', el._fsh); document.addEventListener('keydown', el._fsk);
-    try { if (el.requestFullscreen) el.requestFullscreen().catch(() => { }); } catch (e) { }
+    /* the browser's own full screen shows nothing but this element, so the picture of the simulation (in another frame) stops being drawn and the film stops;
+       only an element that holds the picture itself goes to the real full screen, the results and figures cover the window and the film keeps running */
+    try { if (el.requestFullscreen && el.querySelector('iframe')) el.requestFullscreen().catch(() => { }); } catch (e) { }
+    const wk = () => { try { const w = document.getElementById('engine').contentWindow; w.__wake && w.__wake(); } catch (e) { } }; wk(); setTimeout(wk, 400);
     setTimeout(() => after && after(), 150);
   }
   // the own chain of processes of each layer, in the words of that layer: process id : what happens in this layer

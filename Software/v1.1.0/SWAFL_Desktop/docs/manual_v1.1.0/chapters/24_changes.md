@@ -269,3 +269,4 @@
 - Heavier text in every layer picture: the plain text of all charts, tables and notes drawn in the layers is slightly bolder for reading, while bold headings stay as they were.
 - Tillage and structure layer: the numbers under the three soil profiles now wrap inside their boxes, and the explanation lines below them wrap to the width of the screen. A full pass over all 142 layers and the 18 Daisy tabs found no script errors.
 - Root zone depletion and the trigger law: every soil in the list now has an orange bar and a number for its speed of depletion, in percent of the available water used per day (coarse sand fastest, silt loam slowest), so the soils can be told apart at a glance.
+- Full screen of the results and figures: the simulation keeps running. The results and figures now cover the whole window instead of the browser's own full screen mode, which stopped the picture of the simulation from being drawn. The picture itself still uses the real full screen.
