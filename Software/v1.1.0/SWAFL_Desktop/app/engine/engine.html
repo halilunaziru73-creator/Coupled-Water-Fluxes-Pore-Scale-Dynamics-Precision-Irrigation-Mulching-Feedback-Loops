@@ -4515,13 +4515,15 @@ function snapshotOf(sc, view, firstPx) {
   if (sc.id === 'spr' && window.SPA) { try { SPA.warm(45); } catch (e) {} }
   if (sc.id === 'sid' || sc.id === 'drip' || sc.id === 'spr') play.t = 1;   // the finished irrigation: every result complete
   ctx.clearRect(0, 0, W, H); if (sc.id === 'v4') { anim.v4 = null; for (let i = 0; i < 70; i++) sc.draw(); } sc.draw();
-  for (let k = 0; k < 3; k++) { const h0 = canvas.height; ctx.clearRect(0, 0, W, canvas.height); sc.draw(); if (canvas.height === h0) break; }      // scenes that size themselves to their content settle after a draw or two
-  const Hn = canvas.height, crops = [], full = ctx.getImageData(0, 0, W, Hn).data;
+  for (let k = 0; k < 80; k++) { const h0 = canvas.height; ctx.clearRect(0, 0, W, canvas.height); sc.draw(); if (canvas.height === h0) break; }      // a layer that builds itself step by step (the genotypes of the phenotyping layer) is drawn until it is complete: a change of the size clears the picture      // scenes that size themselves to their content settle after a draw or two
+  const Hn = canvas.height, crops = [], S1 = Math.max(1, window.__SS || 1), lo = document.createElement('canvas'); lo.width = W; lo.height = Hn; lo.getContext('2d').drawImage(canvas, 0, 0, Math.round(W * S1), Math.round(Hn * S1), 0, 0, W, Hn);   // the drawing is kept at S1 times the size: the ink is read from a copy at the logical size, the pictures are cut at the full resolution
+  const full = lo.getContext('2d').getImageData(0, 0, W, Hn).data;
   const ink = y => { let n = 0; const o = y * W * 4, q0 = o + 8 * 4, r0 = full[q0], g0 = full[q0 + 1], b0 = full[q0 + 2]; for (let x = 8; x < W - 8; x++) { const q = o + x * 4; if (Math.abs(full[q] - r0) + Math.abs(full[q + 1] - g0) + Math.abs(full[q + 2] - b0) > 30) n++; } return n; };
   const secY = Object.values(((window.__SEC || {})[sc.id]) || {}).map(v => v[0] - 24).filter(v => v > 0).sort((a, b) => a - b);
   const brk = (from, limit) => { const end = from + limit; if (end >= Hn) return Hn; { const hs = secY.filter(v => v > from + limit * 0.4 && v <= end); if (hs.length) return hs[hs.length - 1]; } let best = end, bi = 1e9; for (let y = end; y > from + limit * 0.55; y--) { let t = 0; for (let k = 0; k < 5; k++) t += ink(Math.min(Hn - 1, y - k)); if (t < bi) { bi = t; best = y; } if (t === 0) return y - 2; } return best; };
-  const cut = (sy, sh) => { const c = document.createElement('canvas'); c.width = W; c.height = sh; c.getContext('2d').drawImage(canvas, 0, sy, W, sh, 0, 0, W, sh); const b = atob(c.toDataURL('image/jpeg', 0.9).split(',')[1]), a = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); crops.push({ jpeg: a, w: W, h: sh }); };
-  const kpt = W / 515, full1 = Math.floor(758 * kpt); let y0 = 0, lim = firstPx ? Math.floor(firstPx * kpt) : full1; while (y0 < Hn - 2) { const y1 = Math.max(y0 + 60, brk(y0, lim)); cut(y0, Math.min(y1, Hn) - y0); y0 = Math.min(y1, Hn); lim = full1; }
+  const cut = (sy, sh) => { const c = document.createElement('canvas'), cw = Math.round(W * S1), chh = Math.max(1, Math.round(sh * S1)); c.width = cw; c.height = chh; c.getContext('2d').drawImage(canvas, 0, Math.round(sy * S1), cw, chh, 0, 0, cw, chh); const b = atob(c.toDataURL('image/jpeg', 0.9).split(',')[1]), a = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); crops.push({ jpeg: a, w: cw, h: chh }); };
+  const kpt = W / 515, full1 = Math.floor(758 * kpt), inkRows = (a, z) => { let n = 0; for (let y = a; y < Math.min(Hn, z); y++) if (ink(y) > 0) n++; return n; };
+  let y0 = 0, lim = firstPx ? Math.floor(firstPx * kpt) : full1; while (y0 < Hn - 2) { const y1 = Math.max(y0 + 60, brk(y0, lim)), e1 = Math.min(y1, Hn); if (!crops.length || inkRows(y0, e1) > 10) cut(y0, e1 - y0); y0 = e1; lim = full1; }   // a stretch with nothing in it (the empty end of a layer that has not been run) is left out
   currentScene = keep.cs; setCanvasH(keep.h); state.fview = keep.fv; state.trigMode = keepTrig.m; state.trigIdx = keepTrig.i; play.t = keep.pt; fclock.day = keep.fd; fclock.pause = keep.fp; fclock.lastKd = keep.lk; fclock.mem = keep.mem; canvas.style.cursor = keep.cur;
   return crops;
 }
@@ -4608,6 +4610,7 @@ function buildReport(ids, title) {
       y = p.wrap(sc.title || '', 40, y, 515, 11, { b: true }); y = p.wrap(updateInsightText(sc, view), 40, y + 1, 515, 9, { i: true, c: '#4b5563' });
       y += 6; p.text('Key numbers at your inputs', 40, y, 10.5, { b: true, c: GREEN }); y += 14;
       reportNotes(sc, view).forEach(l => { if (y > 796) newPage(cont); y = p.wrap(l, 46, y, 505, 9); });
+      if (/^d(sum|wb|nb|yr|chx|trd|irr|ghg)$/.test(sc.id) && !(window.DAISYLIVE && window.DAISYLIVE.runs && Object.keys(window.DAISYLIVE.runs).length)) { if (y > 796) newPage(cont); y = p.wrap('No Daisy run has been made yet, so this layer has no picture here. Run the Daisy workbench (Daisy model, Scenarios, Run) and save the report again.', 46, y + 4, 505, 9.5, { i: true, c: '#6b7280' }); return; }
       const top = y - 4, room = 806 - top, crops = snapshotOf(sc, view, room >= 120 ? room : 0);
       crops.forEach((c, i) => { if (i > 0 || room < 120) newPage(cont); y = p.image(c.jpeg, c.w, c.h, 40, (i === 0 && room >= 120) ? top : y, 515); });
     });
@@ -5405,7 +5408,7 @@ function v5Live(t, X, Y, Wd, Ht, sx0, sy0, sw0, sh0) {          // water and vap
 function ctTile(o) {
   const tc = o.tc == null ? state.tcIdx : o.tc, key = [state.soil, state.till, tc, o.pF.toFixed(2), (o.tint || 0).toFixed(2)].join('|');
   const hit = CTC.m.get(key); if (hit) return hit;
-  if (!CTC.force && CTC.spent > 9) { CTC.pending = true; CTC.todo = (CTC.todo || 0) + 1; return ctPlaceholder(); }
+  if (!CTC.force && !window.__REPORTING && CTC.spent > 9) { CTC.pending = true; CTC.todo = (CTC.todo || 0) + 1; return ctPlaceholder(); }
   const t0 = performance.now(); const r = ctTileBuild(o); CTC.spent += performance.now() - t0; return r;
 }
 function ctPlaceholder() {
