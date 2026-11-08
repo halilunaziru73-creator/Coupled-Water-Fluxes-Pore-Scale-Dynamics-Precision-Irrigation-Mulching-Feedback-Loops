@@ -13,16 +13,16 @@ const Sketch = (() => {
     soil: null, pan: false,
     sys: 'drip', sub: 'border', dep: 0, kind: 'inline', sprSys: 'solid', sprType: 'impact', dir: 'length',
     intv: 2, sprSs: 12, sprSl: 18, auto: false, pd: { main: 90, sub: 63, lat: 16 },
-    objs: [], cur: null, rect: null                              // greenhouses, plant beds, areas to irrigate, no-irrigation zones, plants and traps
+    objs: [], cad: [], cur: null, rect: null                              // greenhouses, plant beds, areas to irrigate, no-irrigation zones, plants and traps
   };
   const OBJ = { gh: ['Greenhouse / polytunnel', '#1E88E5', 'rect'], bed: ['Plant bed', '#8D6E63', 'rect'], irr: ['Area to irrigate', '#00897B', 'poly'], noirr: ['No-irrigation zone', '#C62828', 'poly'], plant: ['Plant / tree', '#2E7D32', 'pt'], trap: ['Monitoring trap', '#6A1B9A', 'pt'],
     main: ['Mainline pipe', '#0A246A', 'line'], sub: ['Submain pipe', '#1565C0', 'line'], lat: ['Lateral pipe', '#2E9BE0', 'line'], valve: ['Valve', '#F57C00', 'pt'], pump: ['Pump', '#AD1457', 'pt'], filter: ['Filter', '#00838F', 'pt'], tank: ['Tank', '#5D4037', 'pt'] };
   const PIPE_D = { main: 90, sub: 63, lat: 16 }, PIPE_OPTS = { main: [50, 63, 75, 90, 110, 125, 160, 200], sub: [40, 50, 63, 75, 90, 110, 125], lat: [12, 16, 20, 25, 32, 40, 50] }, PIPE_C = { main: 140, sub: 140, lat: 150 };
   const lineLen = P => { let t = 0; for (let i = 1; i < P.length; i++) t += m(len(P[i - 1], P[i])); return t; };
   const HIST = { u: [], r: [] };                                 // undo and redo (Ctrl+Z, Ctrl+Y)
-  const snapS = () => JSON.stringify({ pts: S.pts, src: S.src, inlet: S.inlet, objs: S.objs });
+  const snapS = () => JSON.stringify({ pts: S.pts, src: S.src, inlet: S.inlet, objs: S.objs, cad: S.cad });
   function pushH() { HIST.u.push(snapS()); if (HIST.u.length > 80) HIST.u.shift(); HIST.r = []; }
-  function loadH(j) { const o = JSON.parse(j); S.pts = o.pts; S.src = o.src; S.inlet = o.inlet; S.objs = o.objs; S.cur = null; S.rect = null; }
+  function loadH(j) { const o = JSON.parse(j); S.pts = o.pts; S.src = o.src; S.inlet = o.inlet; S.objs = o.objs; S.cad = o.cad || []; S.cur = null; S.rect = null; if (window.SketchCAD) SketchCAD.reset(); }
   function undo() { if (S.cur && S.cur.pts.length) { S.cur.pts.pop(); if (!S.cur.pts.length) S.cur = null; draw(); return; } if (!HIST.u.length) return; HIST.r.push(snapS()); loadH(HIST.u.pop()); draw(); info(); }
   function redo() { if (!HIST.r.length) return; HIST.u.push(snapS()); loadH(HIST.r.pop()); draw(); info(); }
   let cv = null, drag = null, hover = null, cursor = null, edit = null, LIST = null, panning = null;
@@ -59,7 +59,8 @@ const Sketch = (() => {
   }
 
   // ------------------------------------------------------------------ drawing
-  function draw() { draw0(); drawObjs(); }
+  function draw() { draw0(); drawObjs(); if (window.SketchCAD) SketchCAD.draw(); }
+  const cadOn = () => !!window.SketchCAD && String(S.mode).indexOf('cad:') === 0;
   function draw0() {
     if (!cv) return; const c = cv.getContext('2d'), k0 = cv.width / CW, vw = CW / V.z, vh = CH / V.z, w = V.x + vw, h = V.y + vh, x0 = V.x, y0 = V.y;
     c.setTransform(k0, 0, 0, k0, 0, 0); c.fillStyle = '#FBFBF8'; c.fillRect(0, 0, CW, CH);
@@ -84,8 +85,8 @@ const Sketch = (() => {
     { const t = '1 square = ' + S.scale + ' m · zoom ' + Math.round(V.z * 100) + ' %' + (S.geo ? ' · ' + S.geo.lat.toFixed(5) + ', ' + S.geo.lon.toFixed(5) : ''); c.font = '11px Tahoma,Arial,sans-serif'; const tw = c.measureText(t).width + 10; c.fillStyle = 'rgba(251,251,248,0.92)'; c.fillRect(2, H2 - 20, tw, 17); c.fillStyle = '#505050'; c.fillText(t, 7, H2 - 8); }
     { const nice = [1, 2, 5, 10, 20, 25, 50, 100, 200, 250, 500, 1000, 2000], mpp = S.scale / GRID / V.z, bm = nice.reduce((b, v) => v / mpp <= 110 ? v : b, nice[0]), bl = bm / mpp; c.fillStyle = 'rgba(251,251,248,0.92)'; c.fillRect(W2 - bl - 24, H2 - 32, bl + 20, 28); c.strokeStyle = '#303030'; c.lineWidth = 2; c.beginPath(); c.moveTo(W2 - bl - 14, H2 - 12); c.lineTo(W2 - 14, H2 - 12); c.moveTo(W2 - bl - 14, H2 - 16); c.lineTo(W2 - bl - 14, H2 - 8); c.moveTo(W2 - 14, H2 - 16); c.lineTo(W2 - 14, H2 - 8); c.stroke(); c.fillStyle = '#303030'; c.font = '11px Tahoma,Arial,sans-serif'; c.textAlign = 'center'; c.fillText(bm + ' m', W2 - 14 - bl / 2, H2 - 18); c.textAlign = 'left'; }
     { c.fillStyle = 'rgba(255,255,255,0.9)'; c.fillRect(W2 - 34, 6, 28, 38); c.fillStyle = '#303030'; c.beginPath(); c.moveTo(W2 - 20, 10); c.lineTo(W2 - 27, 30); c.lineTo(W2 - 13, 30); c.closePath(); c.fill(); c.font = 'bold 10px Tahoma,Arial,sans-serif'; c.textAlign = 'center'; c.fillText('N', W2 - 20, 41); c.textAlign = 'left'; }
-    if (cursor && !panning) { const sp = toScr(cursor), t = 'x ' + fmt(m(cursor.x)) + ' m · y ' + fmt(m(cursor.y)) + ' m'; c.font = '10px Tahoma,Arial,sans-serif'; const tw = c.measureText(t).width + 10, bx = Math.min(W2 - tw - 4, sp.x + 12), by = Math.max(4, sp.y - 24); c.fillStyle = 'rgba(27,31,35,0.85)'; c.fillRect(bx, by, tw, 16); c.fillStyle = '#fff'; c.fillText(t, bx + 5, by + 12); }
-    if (!P.length) { c.fillStyle = '#505050'; c.font = '13px Tahoma,Arial,sans-serif'; c.textAlign = 'center'; c.fillText('Click to place the corners of your field, or use "Make a rectangle" on the right.', W2 / 2, H2 / 2 - 18); c.fillText('Drag a corner to move it; click a side length to type it exactly.', W2 / 2, H2 / 2 + 2); c.fillText('Or find the farm on the satellite map: "Locate on the map".', W2 / 2, H2 / 2 + 22); c.textAlign = 'left'; }
+    if (cursor && !panning && !cadOn()) { const sp = toScr(cursor), t = 'x ' + fmt(m(cursor.x)) + ' m · y ' + fmt(m(cursor.y)) + ' m'; c.font = '10px Tahoma,Arial,sans-serif'; const tw = c.measureText(t).width + 10, bx = Math.min(W2 - tw - 4, sp.x + 12), by = Math.max(4, sp.y - 24); c.fillStyle = 'rgba(27,31,35,0.85)'; c.fillRect(bx, by, tw, 16); c.fillStyle = '#fff'; c.fillText(t, bx + 5, by + 12); }
+    if (!P.length && !(S.cad && S.cad.length) && !cadOn()) { c.fillStyle = '#505050'; c.font = '13px Tahoma,Arial,sans-serif'; c.textAlign = 'center'; c.fillText('Click to place the corners of your field, or use "Make a rectangle" on the right.', W2 / 2, H2 / 2 - 18); c.fillText('Drag a corner to move it; click a side length to type it exactly.', W2 / 2, H2 / 2 + 2); c.fillText('Or find the farm on the satellite map: "Locate on the map".', W2 / 2, H2 / 2 + 22); c.textAlign = 'left'; }
     info();
   }
   // the layout inside the field: furrows, borders or basins; drip laterals; sprinklers; submain, mainline and valves
@@ -206,14 +207,15 @@ const Sketch = (() => {
   function wire() {
     cv.addEventListener('pointermove', e => {
       if (panning) { const q = scr(e); V.x = panning.vx - (q.x - panning.x) / V.z; V.y = panning.vy - (q.y - panning.y) / V.z; draw(); return; }
-      const p = at(e); cursor = p;
+      const p = at(e); cursor = cadOn() ? SketchCAD.track(p, e) : p;
       if (drag) { const q = { x: snap(p.x), y: snap(p.y) }; if (drag.t === 'pt') S.pts[drag.i] = q; else if (drag.t === 'src') S.src = q; else if (drag.t === 'inlet') S.inlet = nearestOnEdge(p).p; }
-      else { hover = S.mode === 'pan' ? null : hit(p); cv.style.cursor = S.mode === 'pan' ? 'grab' : hover ? (hover.t === 'side' ? 'text' : 'move') : 'crosshair'; }
+      else { hover = (S.mode === 'pan' || cadOn()) ? null : hit(p); cv.style.cursor = S.mode === 'pan' ? 'grab' : hover ? (hover.t === 'side' ? 'text' : 'move') : 'crosshair'; }
       draw();
     });
     cv.addEventListener('pointerleave', () => { cursor = null; hover = null; draw(); });
     cv.addEventListener('pointerdown', e => {
       if (S.mode === 'pan' || e.button === 1 || e.button === 2 || e.shiftKey) { const q = scr(e); panning = { x: q.x, y: q.y, vx: V.x, vy: V.y }; cv.setPointerCapture(e.pointerId); cv.style.cursor = 'grabbing'; e.preventDefault(); return; }
+      if (cadOn()) { if (e.button === 0) { SketchCAD.down(at(e), e); try { cv.setPointerCapture(e.pointerId); } catch (x) { } } return; }
       const p = at(e), h = hit(p); closeEdit();
       if (h && h.t === 'side') { openEdit(h.i); return; }
       if (h && h.t !== 'side') { pushH(); drag = h; cv.setPointerCapture(e.pointerId); return; }
@@ -225,10 +227,10 @@ const Sketch = (() => {
       else { if (S.pts.length > 2) { const ne = nearestOnEdge(p); if (ne.d < 10) { S.pts.splice(ne.i + 1, 0, q); draw(); return; } } S.pts.push(q); S.inlet = null; }
       draw();
     });
-    cv.addEventListener('pointerup', () => { drag = null; if (panning) { panning = null; cv.style.cursor = S.mode === 'pan' ? 'grab' : 'crosshair'; } draw(); });
+    cv.addEventListener('pointerup', () => { if (cadOn()) SketchCAD.up(); drag = null; if (panning) { panning = null; cv.style.cursor = S.mode === 'pan' ? 'grab' : 'crosshair'; } draw(); });
     cv.addEventListener('wheel', e => { e.preventDefault(); const q = scr(e); zoomAt(e.deltaY < 0 ? 1.2 : 1 / 1.2, q.x, q.y); }, { passive: false });
     cv.addEventListener('contextmenu', e => e.preventDefault());
-    cv.addEventListener('dblclick', e => { if (Date.now() - lastFin < 600) return; if (S.cur) { S.cur.pts.pop(); finishCur(); return; } if (OBJ[S.mode] == null) { /* corner removal below */ } else { const k = objAt(at(e)); if (k >= 0) { pushH(); S.objs.splice(k, 1); draw(); info(); } return; } const h = hit(at(e)); if (h && h.t === 'pt' && S.pts.length > 3) { S.pts.splice(h.i, 1); S.inlet = null; draw(); } });
+    cv.addEventListener('dblclick', e => { if (cadOn()) { SketchCAD.dbl(); return; } if (Date.now() - lastFin < 600) return; if (S.cur) { S.cur.pts.pop(); finishCur(); return; } if (OBJ[S.mode] == null) { /* corner removal below */ } else { const k = objAt(at(e)); if (k >= 0) { pushH(); S.objs.splice(k, 1); draw(); info(); } return; } const h = hit(at(e)); if (h && h.t === 'pt' && S.pts.length > 3) { S.pts.splice(h.i, 1); S.inlet = null; draw(); } });
   }
   // type the exact length of a side: the second corner moves along the side
   function openEdit(i) {
@@ -296,6 +298,8 @@ const Sketch = (() => {
     draw();
   }
 
+  // what the CAD tools may use of the sketch
+  const CADAPI = { get S() { return S; }, V, CW, CH, GRID, m, px, get cv() { return cv; }, draw: () => draw(), pushH: () => pushH(), undo: () => undo(), info: () => info(), finishCur: () => { if (S.cur) finishCur(); } };
   // ------------------------------------------------------------------ the window
   function open() {
     LIST = E.json("({crops:Object.keys(CROPS).map(function(k){return [k,CROPS[k].label]}),soils:DATA.soils.map(function(k){return [k,DATA.soil_labels[k]]}),crop:state.crop,soil:state.soil,rows:Object.fromEntries(Object.keys(CROPS).map(function(k){var r=(typeof IRCROP!=='undefined'&&IRCROP[k])||{};return [k,Math.max(0.2,r.row||0.75)]})),sys:SID.sys,lift:IRX.lift,Qs:DRP.Qs})") || { crops: [], soils: [], rows: {} };
@@ -304,19 +308,19 @@ const Sketch = (() => {
       '<div class="skwrap"><div class="skleft"><div class="skbar"><div class="seg" id="skMode"><button data-m="field"' + (S.mode === 'field' ? ' class="on"' : '') + '>Field corners</button><button data-m="src"' + (S.mode === 'src' ? ' class="on"' : '') + '>Water source</button><button data-m="inlet"' + (S.mode === 'inlet' ? ' class="on"' : '') + '>Inlet</button><button data-m="pan"' + (S.mode === 'pan' ? ' class="on"' : '') + ' title="Move the drawing (also: right button, middle button or Shift and drag)">&#9995; Hand</button></div>' +
       '<button class="btn" id="skZin" title="Zoom in (mouse wheel up)">&#43;</button><button class="btn" id="skZout" title="Zoom out (mouse wheel down)">&minus;</button><button class="btn" id="skFit" title="Show the whole field">Fit</button><button class="btn pri" id="skMap" title="Find the farm on the satellite map, demarcate it and compute the vegetation and water indices">&#127757; Locate on the map</button>' +
       '<button class="btn" id="skUndo">Undo corner</button><button class="btn" id="skClear">Clear</button><label id="skPdL" style="display:none">Pipe diameter <select id="skPd"></select> mm</label><label>Grid square <select id="skScale">' + SC.map(v => '<option value="' + v + '"' + (v === S.scale ? ' selected' : '') + '>' + v + ' m</option>').join('') + '</select></label></div>' +
-      '<div class="skcv"><canvas id="skCv" width="' + CW * 2 + '" height="' + CH * 2 + '"></canvas></div><div id="skInfo" class="skinfo"></div></div>' +
+      '<div class="skcv"><canvas id="skCv" width="' + CW * 2 + '" height="' + CH * 2 + '"></canvas></div><div id="skCadHost"></div><div id="skInfo" class="skinfo"></div></div>' +
       '<div class="skright"><div class="seg skst" id="skSteps">' + STEPS.map((s, i) => '<button data-s="' + i + '">' + (i + 1) + '. ' + s + '</button>').join('') + '</div><div id="skQ" class="skq"></div>' +
       '<div class="skbtns"><button class="btn" id="skBack">Back</button><button class="btn" id="skNext">Next question</button></div></div></div>',
       full: true, buttons: [{ label: 'Turn the sketch into the design', pri: true, act: () => apply() }, { label: 'Close' }] });
-    cv = document.getElementById('skCv'); wire(); setTimeout(() => { const P2 = S.pts.concat(S.src ? [S.src] : []); if (P2.some(p => p.x < 0 || p.y < 0 || p.x > CW || p.y > CH)) fitView(); }, 0);
+    cv = document.getElementById('skCv'); wire(); if (window.SketchCAD) { SketchCAD.init(CADAPI); SketchCAD.mount(document.getElementById('skCadHost')); } setTimeout(() => { const P2 = S.pts.concat(S.src ? [S.src] : []); if (P2.some(p => p.x < 0 || p.y < 0 || p.x > CW || p.y > CH)) fitView(); }, 0);
     document.getElementById('skZin').onclick = () => zoomAt(1.25); document.getElementById('skZout').onclick = () => zoomAt(1 / 1.25); document.getElementById('skFit').onclick = fitView;
     document.getElementById('skMap').onclick = () => { if (typeof FieldMap !== 'undefined') FieldMap.open(); };
     { const bar = document.getElementById('skMode'); Object.keys(OBJ).forEach(k => { const b = document.createElement('button'); b.dataset.m = k; b.textContent = OBJ[k][0].split(' /')[0]; b.title = OBJ[k][0] + (OBJ[k][2] === 'rect' ? ': click two opposite corners' : OBJ[k][2] === 'poly' ? ': click the corners, double-click or click the first corner to finish' : OBJ[k][2] === 'line' ? ': click the points of the pipe along its route; click its last point again (the dead end), click any other pipe, double-click or press Enter to finish; the diameter is chosen in the list that appears' : ': click to place'); b.style.borderBottom = '3px solid ' + OBJ[k][1]; if (S.mode === k) b.className = 'on'; bar.appendChild(b); }); bar.style.flexWrap = 'wrap'; }
     pdUpdate();
     if (!window.__skKeys) { window.__skKeys = true; document.addEventListener('keydown', e => { if (!document.getElementById('skCv')) return; if (/INPUT|SELECT|TEXTAREA/.test((e.target || {}).tagName || '')) return; if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'z') { e.preventDefault(); Sketch.undo(); } else if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'y' || (e.shiftKey && e.key.toLowerCase() === 'z'))) { e.preventDefault(); Sketch.redo(); } else if (e.key === 'Enter') Sketch.finish(); else if (e.key === 'Escape') Sketch.cancel(); }); }
-    document.getElementById('skMode').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S.mode = b.dataset.m; S.rect = null; if (S.cur) finishCur(); document.querySelectorAll('#skMode button').forEach(x => x.classList.toggle('on', x === b)); pdUpdate(); });
+    document.getElementById('skMode').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S.mode = b.dataset.m; S.rect = null; if (S.cur) finishCur(); document.querySelectorAll('#skMode button').forEach(x => x.classList.toggle('on', x === b)); pdUpdate(); if (window.SketchCAD) SketchCAD.sync(); draw(); });
     document.getElementById('skUndo').onclick = undo; { const b = document.createElement('button'); b.className = 'btn'; b.id = 'skRedo'; b.textContent = 'Redo'; b.title = 'Ctrl+Y'; document.getElementById('skUndo').after(b); b.onclick = redo; document.getElementById('skUndo').textContent = 'Undo'; document.getElementById('skUndo').title = 'Ctrl+Z'; }
-    document.getElementById('skClear').onclick = () => { pushH(); S.objs = []; S.cur = null; S.rect = null; S.pts = []; S.src = null; S.inlet = null; S.geo = null; V.z = 1; V.x = V.y = 0; draw(); };
+    document.getElementById('skClear').onclick = () => { pushH(); S.cad = []; if (window.SketchCAD) SketchCAD.reset(); S.objs = []; S.cur = null; S.rect = null; S.pts = []; S.src = null; S.inlet = null; S.geo = null; V.z = 1; V.x = V.y = 0; draw(); };
     document.getElementById('skScale').onchange = e => { const ns = +e.target.value, f = S.scale / ns; S.scale = ns; S.pts = S.pts.map(p => ({ x: p.x * f, y: p.y * f })); if (S.src) S.src = { x: S.src.x * f, y: S.src.y * f }; S.inlet = null; draw(); };
     document.getElementById('skSteps').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; readStep(); S.step = +b.dataset.s; showStep(); });
     document.getElementById('skBack').onclick = () => { readStep(); S.step = Math.max(0, S.step - 1); showStep(); };

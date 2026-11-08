@@ -252,3 +252,4 @@
 - The small graphs of the hidden questions are clickable: click to enlarge, hover to read values.
 - The pore-scale sections move: water drops travel through the wet pores and vapour rises through the air-filled pores; the enlarged section has a drying cycle.
 - The equations of the surface irrigation design layer are typeset as in a paper: italic symbols, true subscripts and superscripts.
+- The field sketch has AutoCAD style tools: draw (line, polyline, rectangle, circle, arc, text, dimension), modify (move, copy, rotate, mirror, scale, offset, trim, corner, explode, array, erase), object snaps, ortho and polar, layers, a command line with exact input, grips, DXF save and open, and a button that turns a drawn shape into the field, an area, a greenhouse or a pipe of the design.

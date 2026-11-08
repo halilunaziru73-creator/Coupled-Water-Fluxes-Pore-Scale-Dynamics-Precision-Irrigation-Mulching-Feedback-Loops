@@ -94,6 +94,18 @@ Applying a combination writes its values into the value boxes, so you can see an
 
 ![The sketch zoomed in, with the hand, zoom and map buttons.](images/ui/sketch_zoom.jpg){width=100%}
 
+**CAD tools under the grid.** Below the grid is a drawing toolbar in the manner of AutoCAD. Choose a tool, or type its short name in the command box (a letter such as L, PL, REC, C, A, D, T, M, CO, RO, MI, SC, O, TR, F, X, AR, E) and press Enter. The line under the toolbar always says what the tool asks for next.
+
+* **Select:** click an object, or drag a window. A window dragged from left to right takes the objects wholly inside it; dragged from right to left it takes every object it touches. Shift adds or removes an object. The blue squares of a selected object are grips: drag one to change that point. Delete erases the selection, Ctrl+A selects all.
+* **Draw:** Line (chained), Polyline (C closes the shape, Enter or double-click finishes), Rectangle (two corners, or type width,height in metres), Circle (centre and radius, or type D and the diameter), Arc (three points), Text (click, then type the note) and Dimension (two points, then where the dimension line goes; it reads the length in metres).
+* **Modify:** Move, Copy, Rotate, Mirror, Scale, Offset (a parallel copy at a typed distance), Trim (cuts a line at the lines that cross it), Corner (joins two lines in a sharp corner), Explode (a rectangle or polyline into lines), Array (rows and columns of copies, for example 3,5,2,0.75 for three rows 2 m apart and five columns 0.75 m apart) and Erase. Select first, then choose the tool, as in AutoCAD; with nothing selected the tool asks you to select.
+* **Inquiry:** Distance gives the distance, the angle and the two offsets between two points; Area gives the area in square metres and hectares and the perimeter of a shape.
+* **Exact input:** with a point already placed, type a length to go that far toward the cursor, *length*<*angle* (for example 12<30), or @*dx*,*dy* in metres. Without a point, type *x*,*y* in metres, with y upward. The length and angle also show beside the cursor.
+* **Snap, Ortho, Polar:** Snap (F3) pulls the cursor to endpoints, middles, centres, crossings, the nearest point of a line and the grid; the small button Snaps chooses which. Ortho (F8, or hold Shift) keeps lines horizontal or vertical; Polar clicks to every 15 degrees.
+* **Layers:** the Layers button lists the layers (0, Pipes, Dimensions, Text, Construction). Tick to show or hide, change the colour, choose the layer for new objects, or add one.
+* **Use the selected shape as:** a closed shape drawn with these tools becomes the field, an area to irrigate, a no-irrigation zone, a greenhouse or a plant bed; an open line or polyline becomes a mainline, submain or lateral pipe. The design then reads it as if it had been drawn with the green and blue tools.
+* **Save DXF and Open DXF:** Save DXF writes the drawing, the field and the objects of the design in metres for AutoCAD or any CAD program. Open DXF reads lines, polylines, circles, arcs and text; a file that looks like millimetres is scaled to metres. Zoom all shows the whole drawing. Ctrl+Z and Ctrl+Y undo and redo every CAD step.
+
 **Greenhouses, beds, areas to irrigate, exclusions, plants and traps.** Beside the modes above, the sketch has six more tools for drawing what is on the field. Choose the tool, then click on the grid (the buttons are in the row above the grid):
 
 | Tool | How to draw it | What it is used for |
