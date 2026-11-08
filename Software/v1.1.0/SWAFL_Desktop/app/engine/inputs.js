@@ -10,7 +10,7 @@
 'use strict';
 (function () {
   if (typeof SCENES === 'undefined' || typeof sidSlider !== 'function') return;
-  const DES = ['sid', 'drip', 'spr'];
+  const DES = ['sid', 'drip', 'spr', 'drn'];
   // yield unit of the crop: Mg/ha for the simulated cereal, % of the potential for the library crops
   window.yU = () => (CROPS[state.crop] && CROPS[state.crop].lib) ? '% points' : 'Mg/ha'; window.yD = () => (CROPS[state.crop] && CROPS[state.crop].lib) ? 1 : 2;
   // one background and one accent for every layer: white sheets and the navy of the workbench
@@ -52,8 +52,8 @@
     };
   }
   try { SIDC.ac = '#0A246A'; SIDC.ink = '#000000'; IRC.ac = '#0A246A'; IRC.ink = '#000000'; } catch (e) {}
-  const OBJ = () => ({ sid: SID, drip: DRP, spr: SPR });
-  const RUN = { sid: { on: false, st: '', why: '' }, drip: { on: false, st: '', why: '' }, spr: { on: false, st: '', why: '' } };
+  const OBJ = () => ({ sid: SID, drip: DRP, spr: SPR, drn: window.DRN && DRN.DN });
+  const RUN = { sid: { on: false, st: '', why: '' }, drip: { on: false, st: '', why: '' }, spr: { on: false, st: '', why: '' }, drn: { on: false, st: '', why: '' } };
   const BEST = {};
   // Sensor-triggered Daisy runs that never irrigate at the reference setting (the sand and loamy sand at -300 cm): the
   // irrigation of another trigger, sensor depth or method is added as its simulated amount (a ratio to zero is undefined)
@@ -195,14 +195,15 @@
   // the inputs that change a design result (the irrigation method of the annual model does not)
   const stateKey = () => JSON.stringify(Object.assign({}, state, { method: 0, n1Prev: 0 })) + '|' + (typeof dss !== 'undefined' ? dss.mode : '');
   window.designStateKey = () => stateKey();
-  function runDesign(id) { id = id || curId(); if (!id) return; RUN[id].on = true; RUN[id].st = stateKey(); RUN[id].why = ''; play.t = 0; play.hold = 0; play.on = true; const pb = document.getElementById('playBtn'); if (pb) pb.textContent = 'Pause'; try { BEST[id] = bestFor(id); } catch (e) { BEST[id] = null; } }
+  const sKey = id => stateKey() + (id === 'drn' && window.drnKey ? '|' + window.drnKey() : '');
+  function runDesign(id) { id = id || curId(); if (!id) return; RUN[id].on = true; RUN[id].st = sKey(id); RUN[id].why = ''; play.t = 0; play.hold = 0; play.on = true; const pb = document.getElementById('playBtn'); if (pb) pb.textContent = 'Pause'; try { BEST[id] = bestFor(id); } catch (e) { BEST[id] = null; } }
   window.runDesign = runDesign;
   const btn3d = (x, y, w, h, label, prim) => { ctx.fillStyle = prim ? '#0A246A' : '#D4D0C8'; ctx.fillRect(x, y, w, h); ctx.fillStyle = prim ? '#3A6EA5' : '#FFFFFF'; ctx.fillRect(x, y, w, 2); ctx.fillRect(x, y, 2, h); ctx.fillStyle = prim ? '#000' : '#404040'; ctx.fillRect(x, y + h - 2, w, 2); ctx.fillRect(x + w - 2, y, 2, h); T(label, x + w / 2, y + h / 2 + 4.5, { s: 12, b: true, a: 'center', c: prim ? '#FFFFFF' : '#000' }); };
-  DES.forEach(id => {
+  const wrapDes = id => {
     const sc = SCENES.find(s => s.id === id); if (!sc || sc._runWrapped) return; sc._runWrapped = true; const od = sc.draw;
     sc.draw = function () {
       const R = RUN[id];
-      if (R.on && R.st !== stateKey()) { R.on = false; R.why = 'the settings in Properties changed'; }
+      if (R.on && R.st !== sKey(id)) { R.on = false; R.why = 'the settings in Properties changed'; }
       if (!R.on && !reporting()) { play.on = false; play.t = 0; play.hold = 0; }
       const out = od.apply(this, arguments);
       // after a run the simulation keeps playing, and starts again at the end of the season, until Pause is pressed
@@ -215,15 +216,16 @@
         const g = ctx.createLinearGradient(bx, 0, bx + bw, 0); g.addColorStop(0, '#0A246A'); g.addColorStop(0.7, '#3A6EA5'); g.addColorStop(1, '#A6CAF0'); ctx.fillStyle = g; ctx.fillRect(bx + 3, by + 3, bw - 6, 20);
         T('Run the design', bx + 10, by + 17, { s: 11, b: true, c: '#FFFFFF' });
         T(R.why ? 'The ' + R.why + ': the results wait for a new run.' : 'Set the inputs above (click a value box to type the exact value), then run.', bx + 14, by + 46, { s: 10.5, c: '#000' });
-        T('The results, charts and design table follow the run.', bx + 14, by + 64, { s: 10, c: '#404040' });
+        T(id === 'drn' ? 'Irrigation design in use: ' + (window.drnKey && window.DRN ? DRN.run().des.name + ' (change it in the irrigation design layers or in Properties); the results follow the run.' : '') : 'The results, charts and design table follow the run.', bx + 14, by + 64, { s: 10, c: '#404040' });
         btn3d(bx + 14, by + 82, 190, 34, '▶  Run simulation', true); hot(bx + 14, by + 82, 190, 34, () => runDesign(id), 'compute this design with the inputs above');
-        btn3d(bx + 216, by + 82, 250, 34, 'Find the most efficient inputs', false); hot(bx + 216, by + 82, 250, 34, () => { BEST[id] = bestFor(id); applyBest(id); runDesign(id); }, 'search the inputs for the highest application efficiency, apply them and run');
+        if (id !== 'drn') btn3d(bx + 216, by + 82, 250, 34, 'Find the most efficient inputs', false); if (id !== 'drn') hot(bx + 216, by + 82, 250, 34, () => { BEST[id] = bestFor(id); applyBest(id); runDesign(id); }, 'search the inputs for the highest application efficiency, apply them and run');
         T('Results are hidden until the run, so nothing changes while you type.', bx + 14, by + 136, { s: 9, i: true, c: '#404040' });
         const pb = document.getElementById('playBtn'); if (pb && pb.textContent !== 'Run simulation') pb.textContent = 'Run simulation';
       }
       return out;
     };
-  });
+  };
+  DES.forEach(wrapDes); window.designWrap = wrapDes;
   // where the inputs end: the first result heading of the layer
   function inputsEnd(id) { const sec = (window.__SEC || {})[id] || {}; let m = 1e9; for (const k in sec) m = Math.min(m, sec[k][0]); if (m < 1e9) return Math.max(200, m - 20); let e = 0; SIDW.forEach(s => { e = Math.max(e, (s.by || s.y) + (s.bh || 10)); }); return Math.max(e + 26, 300); }
   window.designInputsEnd = inputsEnd;
@@ -240,6 +242,7 @@
   // ------------------------------------------------------------------ the most efficient combination of the inputs
   const score = R => (R && isFinite(R.Ea) ? R.Ea : 0) - Math.max(0, 0.95 - (R && isFinite(R.Es) ? R.Es : 0)) * 3;
   function bestFor(id) {
+    if (id === 'drn') return null;
     const t0 = performance.now(); let best = null;
     if (id === 'sid') {
       const d = SIDDEF[SID.sys], keep = { cut: SID.cut, tman: SID.tman }; const qs = []; for (let i = 0; i <= 10; i++) qs.push(+(d.qr[0] * Math.pow(d.qr[1] / d.qr[0], i / 10)).toFixed(2));

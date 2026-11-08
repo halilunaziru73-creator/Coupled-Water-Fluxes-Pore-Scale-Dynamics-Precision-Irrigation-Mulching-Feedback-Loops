@@ -21,7 +21,7 @@ const Dash = (() => {
   let dayCache = { key: '', D: null }, layerCache = { key: '', L: null }, n1Chart = null, N1T = null, v7Chart = null;
   function results(s) {
     const key = s.date + '|' + JSON.stringify(s.state) + '|' + s.year + '|' + ((s.wx && s.wx.key) || '');
-    if (s.scene === 'drn') { let N = null; try { N = E.json('window.drnDash ? drnDash() : null'); } catch (e) { } if (N) { const tick = q => '<li class="' + (q[0] ? 'ok' : 'no') + '"><span>' + (q[0] ? '&#10003;' : '&ndash;') + '</span><div><b>' + UI.esc(q[1]) + '</b><br><small>' + UI.esc(q[2]) + '</small></div></li>';
+    if (s.scene === 'drn' && runOn('drn')) { let N = null; try { N = E.json('window.drnDash ? drnDash() : null'); } catch (e) { } if (N) { const tick = q => '<li class="' + (q[0] ? 'ok' : 'no') + '"><span>' + (q[0] ? '&#10003;' : '&ndash;') + '</span><div><b>' + UI.esc(q[1]) + '</b><br><small>' + UI.esc(q[2]) + '</small></div></li>';
       setBody(SEC('drn', 'Drainage design: ' + UI.esc(N.soil), 'follows every control', '<table class="n1t">' + N.rows.map(r => '<tr><td>' + UI.esc(r[0]) + '</td><td><b>' + UI.esc(r[1]) + '</b></td></tr>').join('') + '</table><ul class="n1l">' + N.checks.map(tick).join('') + '</ul>')); return; } }
     if (Layers.DESIGN.includes(s.scene) && !runOn(s.scene)) { setBody(SEC('dr-pre', UI.esc(Layers.nameOf(s.scene)), 'inputs', '<div class="dnote">Nothing has been simulated yet. Set the inputs in the drawing (click a value box to type its exact value), then press <b>Run simulation</b>: the results of this design appear here.</div>' + runBtns(s.scene))); return; }
     if (dayCache.key !== key) { dayCache = { key, D: E.day() }; }
@@ -101,12 +101,13 @@ const Dash = (() => {
   // the layers that are not designs show their results only after Run simulation (the engine keeps that state: runbar.js)
   const daisyOnly = id => ['chem', 'dsum', 'dwb', 'dnb', 'dyr', 'dchx', 'dtrd', 'dirr', 'dghg'].includes(id);
   const daisyRan = () => !!E.ev("(window.DAISYLIVE&&DAISYLIVE.runs&&Object.keys(DAISYLIVE.runs).length)?1:0");
-  const waiting = id => daisyOnly(id) ? !daisyRan() : ['sid', 'drip', 'spr'].indexOf(id) >= 0 ? !runOn(id) : !E.ev("(window.layerRan&&layerRan('" + id + "'))?1:0");
+  const waiting = id => daisyOnly(id) ? !daisyRan() : ['sid', 'drip', 'spr', 'drn'].indexOf(id) >= 0 ? !runOn(id) : !E.ev("(window.layerRan&&layerRan('" + id + "'))?1:0");
   let ranSig = ''; Guard.every(() => { try { const s = E.snap; if (!s || !Layers.started() || tab === 'messages') return; const g = s.scene + waiting(s.scene); if (g !== ranSig) { ranSig = g; lastHtml = ''; chartKey = ''; render(); } } catch (e) { } }, 500, "dashboard103");
   const runOn = id => !!E.ev("(window.DESIGN_RUN&&DESIGN_RUN['" + id + "']&&DESIGN_RUN['" + id + "'].on)?1:0");
   const runBtns = id => '<div class="drun"><button class="btn prim" data-run="' + id + '">&#9654; Run simulation</button><button class="btn" data-best="' + id + '">Find the most efficient inputs</button></div>';
   function design(s) {
     const id = s.scene;
+    if (id === 'drn') { if (!runOn(id)) { setBody(SEC('dr-drn', 'Drainage design', 'waiting for a run', '<div class="dnote">Set the inputs in the drawing, then press <b>Run simulation</b>. The results appear here.</div>')); return; } results(s); return; }
     if (!DL[id]) { setBody('<div class="dnote">The Design tab shows efficiencies, uniformity, times and volumes of the irrigation system you are designing. Open <b>Surface irrigation design</b>, <b>Drip irrigation design</b> or <b>Sprinkler design and pipes</b> in the Layers panel.</div>'); return; }
     if (!runOn(id)) { setBody(SEC('dr-' + id, UI.esc(Layers.nameOf(id)), 'waiting for a run', '<div class="dnote">Set the inputs in the drawing (click a value box to type the exact value, with its unit), then press <b>Run simulation</b>. The results appear here after the run.</div>' + runBtns(id))); return; }
     const R = E.design(id); if (!R) return;
