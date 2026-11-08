@@ -115,9 +115,11 @@
     ctx.font = '9px sans-serif'; const subW = sub ? ctx.measureText(String(sub)).width : 0; const tt = fitT(title, sub ? Math.max(w * 0.58, w - subW - 30) : w * 0.9, 11, true); ctx.font = 'bold 11px sans-serif'; const tw = ctx.measureText(tt).width; T(tt, x + 8, y + 15, { s: 11, b: true, c: HEAD }); if (sub) { const st = fitT(sub, w - tw - 36, 9, false); T(st, x + w - 8, y + 15, { s: 9, c: MUTE, a: 'right' }); }
   }
   function yAxis(x0, y0, w, h, lo, hi, unit, ticks) {
+    // the axes of a journal figure: light grid, black axes with outward tick marks, dark tick labels, the quantity and its unit
     ctx.strokeStyle = GRID; ctx.lineWidth = 1; const n = ticks || 4;
-    for (let i = 0; i <= n; i++) { const v = lo + (hi - lo) * i / n, y = y0 + h - h * i / n; ctx.beginPath(); ctx.moveTo(x0, y + 0.5); ctx.lineTo(x0 + w, y + 0.5); ctx.stroke(); T(fmt(v, Math.abs(hi - lo) < 5 ? 1 : 0), x0 - 4, y + 3, { s: 8.5, c: MUTE, a: 'right' }); }
-    if (unit) T(unit, x0 + 4, y0 + 11, { s: 8.5, c: MUTE, a: 'left' });
+    for (let i = 0; i <= n; i++) { const v = lo + (hi - lo) * i / n, y = y0 + h - h * i / n; ctx.strokeStyle = GRID; ctx.beginPath(); ctx.moveTo(x0, y + 0.5); ctx.lineTo(x0 + w, y + 0.5); ctx.stroke(); ctx.strokeStyle = '#1B1F23'; ctx.beginPath(); ctx.moveTo(x0 - 4, y + 0.5); ctx.lineTo(x0, y + 0.5); ctx.stroke(); T(fmt(v, Math.abs(hi - lo) < 5 ? 1 : 0), x0 - 7, y + 3.5, { s: 9, c: '#1B1F23', a: 'right' }); }
+    ctx.strokeStyle = '#1B1F23'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(x0 + 0.5, y0 - 2); ctx.lineTo(x0 + 0.5, y0 + h + 0.5); ctx.lineTo(x0 + w, y0 + h + 0.5); ctx.stroke();
+    if (unit) T(unit, x0 + 5, y0 + 11, { s: 9, b: true, c: '#1B1F23', a: 'left' });
   }
   const nice = v => { if (v <= 0) return 1; const p = Math.pow(10, Math.floor(Math.log10(v))), f = v / p; return ([1, 1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].find(q => f <= q + 1e-9) || 10) * p; };
   // text that shrinks to fit its width (down to 7 px), then is shortened
@@ -134,7 +136,7 @@
       if (o.overlay && o.overlay[i] != null) { ctx.fillStyle = '#1B1F23'; ctx.beginPath(); ctx.arc(bx + bw * 0.35, Math.max(y0 + 3, Math.min(y0 + hh - 3, Y(o.overlay[i]))), 2.6, 0, Math.PI * 2); ctx.fill(); }
       if (o.line && o.line[i] != null) { ctx.strokeStyle = '#7B2FA8'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(bx - bw * 0.1, Y(o.line[i])); ctx.lineTo(bx + bw * 0.8, Y(o.line[i])); ctx.stroke(); }
       hot(bx, y0, bw * 0.7, hh, () => { if (i < NYR) setYear(i); }, YRS()[i] + (i >= nO ? ' (projected)' : '') + ': ' + fmt(v, o.dec) + ' ' + (o.unit || ''));
-      if (i % (n > 24 ? 6 : 4) === 0 || (i === n - 1 && (n - 1) % (n > 24 ? 6 : 4) > 3.5)) T(YRS()[i] || '', bx + bw * 0.35, y0 + hh + 12, { s: 8, c: MUTE, a: 'center' });
+      if (i % (n > 24 ? 6 : 4) === 0 || (i === n - 1 && (n - 1) % (n > 24 ? 6 : 4) > 3.5)) { ctx.strokeStyle = '#1B1F23'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(bx + bw * 0.35 + 0.5, y0 + hh); ctx.lineTo(bx + bw * 0.35 + 0.5, y0 + hh + 4); ctx.stroke(); } T(YRS()[i] || '', bx + bw * 0.35, y0 + hh + 14, { s: 9, c: '#1B1F23', a: 'center' });
     });
     if (nO < n) { ctx.strokeStyle = '#C77D1A'; ctx.setLineDash([3, 3]); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(x0 + nO * bw, y0); ctx.lineTo(x0 + nO * bw, y0 + hh); ctx.stroke(); ctx.setLineDash([]); T('projection', x0 + nO * bw + 4, y0 + 9, { s: 8.5, c: '#C77D1A' }); }
     ctx.strokeStyle = '#1B1F23'; ctx.setLineDash([4, 3]); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(x0, Y(m)); ctx.lineTo(x0 + ww, Y(m)); ctx.stroke(); ctx.setLineDash([]);

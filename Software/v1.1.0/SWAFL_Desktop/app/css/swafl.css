@@ -259,3 +259,11 @@ body.nolayer #engine{visibility:hidden}
 #dashTabs .mini[data-act=maxDash]{right:0}
 /* the process figure of a layer: wide enough to read the words (the window scrolls sideways when the dashboard is narrow; Full screen shows it whole) */
 .swmap[data-own]>svg{min-width:1100px;width:100%;height:auto;display:block}
+/* result text a little bolder and darker, in the dashboard of the layers and in the Daisy window (it was thin and pale, hard to read) */
+#dashBody{font-weight:500;color:#0C2238}
+#dashBody .pnote,.pnote{color:#35506C;font-weight:500}
+#dashBody li,#dashBody p,#dashBody td,#dashBody th,#dashBody label{font-weight:500}
+#dashBody b,#dashBody strong,#dashBody summary{font-weight:700}
+.dzpan,.dzres,.dzgrp,.dztab,.xhero~*{font-weight:500;color:#0C2238}
+.dzpan p,.dzpan li,.dzpan td,.dzpan label,.dzres p,.dzres li,.dzres td,.dzgrp p,.dzgrp li,.dzgrp td{font-weight:500;color:#0C2238}
+.dzpan b,.dzpan strong,.dzpan th,.dzres b,.dzres th,.dzgrp b,.dzgrp summary{font-weight:700}

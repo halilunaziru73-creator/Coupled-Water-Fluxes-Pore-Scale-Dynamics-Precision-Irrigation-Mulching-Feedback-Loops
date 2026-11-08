@@ -35,8 +35,10 @@
     return { x0, y0, ww, hh, hi };
   }
   function groupBars(x, y, w, h, labels, series, o) {
-    o = o || {}; const n = labels.length, all = [].concat(...series.map(s => s.v.filter(isFinite))), hi = K.nice(Math.max(1, ...all) * 1.05), x0 = x + 48, y0 = y + 28, ww = w - 60, hh = h - 62; K.yAxis(x0, y0, ww, hh, 0, hi, o.unit); const bw = ww / n, m = series.length;
-    labels.forEach((lb, i) => { series.forEach((s, k) => { const v = s.v[i]; if (!isFinite(v)) return; const bx = x0 + i * bw + bw * 0.1 + k * bw * 0.8 / m, hgt = v / hi * hh; ctx.fillStyle = s.c; ctx.fillRect(bx, y0 + hh - hgt, bw * 0.8 / m, hgt); hot(bx, y0, bw * 0.8 / m, hh, () => { }, lb + ' ' + s.n + ': ' + fmt(v, hi < 5 ? 2 : 1) + ' ' + (o.unit || '')); }); if (i % 3 === 0 || i === n - 1) T(lb, x0 + i * bw + bw / 2, y0 + hh + 12, { s: 8, c: MUTE, a: 'center' }); });
+    o = o || {}; const n = labels.length, all = [].concat(...series.map(s => s.v.filter(isFinite))), mn = Math.min(0, ...all), hi = K.nice(Math.max(1, ...all) * 1.05), lo = mn < 0 ? -K.nice(-mn * 1.05) : 0, x0 = x + 48, y0 = y + 28, ww = w - 60, hh = h - (o.xt ? 74 : 62); K.yAxis(x0, y0, ww, hh, lo, hi, o.unit); const bw = ww / n, m = series.length, Y = v => y0 + hh - (v - lo) / (hi - lo) * hh;
+    if (lo < 0) { ctx.strokeStyle = '#1B1F23'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x0, Y(0) + 0.5); ctx.lineTo(x0 + ww, Y(0) + 0.5); ctx.stroke(); }
+    labels.forEach((lb, i) => { series.forEach((s, k) => { const v = s.v[i]; if (!isFinite(v)) return; const bx = x0 + i * bw + bw * 0.1 + k * bw * 0.8 / m, top = Y(Math.max(v, 0)), bot = Y(Math.min(v, 0)); ctx.fillStyle = s.c; ctx.fillRect(bx, top, bw * 0.8 / m, Math.max(1, bot - top)); hot(bx, y0, bw * 0.8 / m, hh, () => { }, lb + ' ' + s.n + ': ' + fmt(v, hi < 5 ? 2 : 1) + ' ' + (o.unit || '')); }); if (i % 3 === 0 || i === n - 1) { ctx.strokeStyle = '#1B1F23'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x0 + i * bw + bw / 2 + 0.5, y0 + hh); ctx.lineTo(x0 + i * bw + bw / 2 + 0.5, y0 + hh + 4); ctx.stroke(); T(lb, x0 + i * bw + bw / 2, y0 + hh + 15, { s: 9, c: '#1B1F23', a: 'center' }); } });
+    if (o.xt) T(o.xt, x0 + ww / 2, y0 + hh + 30, { s: 9.5, b: true, c: '#1B1F23', a: 'center' });
     return { x0, y0, ww, hh, hi };
   }
   // a label cut to the room it has (measured in the font it is written in), so no two labels ever run into each other
@@ -303,7 +305,7 @@
     K.legend(PART.map(p => [p[1], p[0]]), 62, y + fh - 16); y += fh + 10;
     // season by season for the chosen run
     const R = L().runs[DS.k], Rb = L().runs[ref.k], yA = yieldSeries(R), yB = yieldSeries(Rb), labels = R.year.map(v => String(v - 1)), gain = yA.map((v, i) => v - yB[i]);
-    frame0(y, 300, 'Season by season: ' + runLab(DS.k) + ' against ' + runLab(ref.k), 'gain in yield (Mg/ha, bars) and the irrigation given (mm, numbers above)'); const gb = groupBars(16, y, W - 32, 270, labels, [{ n: 'gain', c: '#2b83ba', v: gain.map(v => Math.max(0, v)) }], { unit: 'Mg/ha' }); labels.forEach((lb, i) => { if (i % 2) return; T(fmt(R.I[i]), gb.x0 + (i + 0.5) * gb.ww / labels.length, gb.y0 - 4, { s: 8, c: '#2b83ba', a: 'center' }); }); y += 312;
+    frame0(y, 300, 'Season by season: ' + runLab(DS.k) + ' against ' + runLab(ref.k), 'gain in yield (Mg/ha, bars) and the irrigation given (mm, numbers above)'); const gb = groupBars(16, y, W - 32, 270, labels, [{ n: 'gain', c: '#2b83ba', v: gain }], { unit: 'Gain in yield (Mg/ha)', xt: 'Season (harvest year)' }); T('mm', gb.x0 - 6, gb.y0 - 4, { s: 8.5, b: true, c: '#14558C', a: 'right' }); labels.forEach((lb, i) => { if (i % 2) return; T(fmt(R.I[i]), gb.x0 + (i + 0.5) * gb.ww / labels.length, gb.y0 - 4, { s: 8.5, b: true, c: '#14558C', a: 'center' }); }); y += 312;
     const r1 = rows.find(q => q.q.k === DS.k) || rows[0], s1 = r1.q.s; frame0(y, 150, 'What the results say', runLab(DS.k)); [
       'Irrigation of ' + fmt(s1.I) + ' mm a year raises the yield by ' + fmt(r1.gain, 2) + ' Mg/ha (' + fmt(100 * r1.gain / (b.Y || 1), 1) + ' %): ' + fmt(r1.mwp, 1) + ' kg of dry matter for each m³ of irrigation water.',
       fmt(100 * r1.dE) + ' % of the irrigation is used by the crop as extra evapotranspiration, ' + fmt(100 * Math.max(0, r1.dD)) + ' % drains below 1 m and ' + fmt(100 * Math.max(0, r1.dR), 1) + ' % runs off.',
