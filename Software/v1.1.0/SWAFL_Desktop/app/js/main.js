@@ -148,7 +148,7 @@ const MENUS = [
     { label: 'Process curves...', icon: 'refresh', act: () => DaisyUI.open('deni') },
     { label: 'Model, documentation and installation...', icon: 'book', act: () => DaisyUI.open('docs') } ] },
   { label: 'Help', items: [
-    { label: 'Manual (PDF)', icon: 'book', key: 'F1', act: Act.manual }, { label: 'How to use SWAFL', icon: 'book', act: Act.guide }, { label: 'Troubleshooting (running the app)', icon: 'bug', act: () => guideModal('trouble') }, { label: 'Keyboard shortcuts', icon: 'key', act: Act.shortcuts }, { sep: 1 },
+    { label: 'Manual (PDF)', icon: 'book', key: 'F1', act: Act.manual }, { label: 'How to use SWAFL', icon: 'book', act: Act.guide }, { label: 'Plain words: what the terms mean', icon: 'book', tip: 'Field capacity, TAW, Mg/ha, pF and the other terms in easy words', act: () => window.Glossary && Glossary.open() }, { label: 'Troubleshooting (running the app)', icon: 'bug', act: () => guideModal('trouble') }, { label: 'Keyboard shortcuts', icon: 'key', act: Act.shortcuts }, { sep: 1 },
     { label: 'SWAFL on GitHub (repository)', icon: 'github', act: Act.github }, { label: 'Full documentation on GitHub', icon: 'book', act: Act.docs }, { label: 'Report a problem', icon: 'bug', act: Act.issues }, { sep: 1 }, { label: 'About SWAFL', icon: 'info', act: Act.about }] }
 ];
 
