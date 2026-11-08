@@ -136,7 +136,7 @@
       if (o.overlay && o.overlay[i] != null) { ctx.fillStyle = '#1B1F23'; ctx.beginPath(); ctx.arc(bx + bw * 0.35, Math.max(y0 + 3, Math.min(y0 + hh - 3, Y(o.overlay[i]))), 2.6, 0, Math.PI * 2); ctx.fill(); }
       if (o.line && o.line[i] != null) { ctx.strokeStyle = '#7B2FA8'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(bx - bw * 0.1, Y(o.line[i])); ctx.lineTo(bx + bw * 0.8, Y(o.line[i])); ctx.stroke(); }
       hot(bx, y0, bw * 0.7, hh, () => { if (i < NYR) setYear(i); }, YRS()[i] + (i >= nO ? ' (projected)' : '') + ': ' + fmt(v, o.dec) + ' ' + (o.unit || ''));
-      if (i % (n > 24 ? 6 : 4) === 0 || (i === n - 1 && (n - 1) % (n > 24 ? 6 : 4) > 3.5)) { ctx.strokeStyle = '#1B1F23'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(bx + bw * 0.35 + 0.5, y0 + hh); ctx.lineTo(bx + bw * 0.35 + 0.5, y0 + hh + 4); ctx.stroke(); } T(YRS()[i] || '', bx + bw * 0.35, y0 + hh + 14, { s: 9, c: '#1B1F23', a: 'center' });
+      if (i % (n > 24 ? 6 : 4) === 0 || (i === n - 1 && (n - 1) % (n > 24 ? 6 : 4) > 3.5)) { ctx.strokeStyle = '#1B1F23'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(bx + bw * 0.35 + 0.5, y0 + hh); ctx.lineTo(bx + bw * 0.35 + 0.5, y0 + hh + 4); ctx.stroke(); T(YRS()[i] || '', bx + bw * 0.35, y0 + hh + 14, { s: 9, c: '#1B1F23', a: 'center' }); }
     });
     if (nO < n) { ctx.strokeStyle = '#C77D1A'; ctx.setLineDash([3, 3]); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(x0 + nO * bw, y0); ctx.lineTo(x0 + nO * bw, y0 + hh); ctx.stroke(); ctx.setLineDash([]); T('projection', x0 + nO * bw + 4, y0 + 9, { s: 8.5, c: '#C77D1A' }); }
     ctx.strokeStyle = '#1B1F23'; ctx.setLineDash([4, 3]); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(x0, Y(m)); ctx.lineTo(x0 + ww, Y(m)); ctx.stroke(); ctx.setLineDash([]);
