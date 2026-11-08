@@ -276,3 +276,4 @@
 
 - **Plain words.** Help > "Plain words: what the terms mean" lists 54 terms (field capacity, TAW, RAW, pF, Mg/ha, K_OC, NSE and more) in easy words, with a search box. The same words also appear as a hint when the pointer rests on such a term anywhere in the program.
 - **Back to the real design after a refresh.** A text size chosen in View > Text size now lasts only until the page is refreshed. When the browser zoom is not 100 % (the browser remembers it for each site) a small "Zoom ... Reset view" button appears at the bottom right; one click, or Ctrl+0, brings the design back to its real size.
+- **Real design on every load.** The program measures the browser zoom and, when it is not 100 %, scales the page by the opposite amount, so the design always looks as it was made, also after a refresh. The small button at the bottom right turns this correction off if you want your own zoom.
