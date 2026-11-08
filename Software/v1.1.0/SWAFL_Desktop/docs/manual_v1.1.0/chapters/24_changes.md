@@ -275,3 +275,4 @@
 - Easier reading of the soil list of the Trigger law layer: the yield column is titled Yield with its unit Mg/ha = t/ha, and pointing at the orange bar or at a yield box of a soil says in plain words what it means.
 
 - **Plain words.** Help > "Plain words: what the terms mean" lists 54 terms (field capacity, TAW, RAW, pF, Mg/ha, K_OC, NSE and more) in easy words, with a search box. The same words also appear as a hint when the pointer rests on such a term anywhere in the program.
+- **Deterministic phenotyping, clearer text.** Every small or pale text of the layer (section notes, chart titles, legends, captions) is now larger, darker and heavier, and the legends and the section titles keep their space so that nothing overlaps.

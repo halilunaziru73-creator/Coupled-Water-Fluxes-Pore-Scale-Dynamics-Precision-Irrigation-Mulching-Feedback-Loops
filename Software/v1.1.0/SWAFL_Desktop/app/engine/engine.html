@@ -802,7 +802,7 @@ function sidHead(txt, y, sub) {
   return ex;
 }
 // ---------- compact (phone) layout helpers: W follows the pane width, text wraps, rows reflow ----------
-function sidWrap(txt, x, y, mw, o, lh, dry) { txt = mAuto(txt); ctx.font = (o.i ? 'italic ' : '') + (o.b ? 'bold ' : '') + (o.s || 11) + 'px sans-serif'; const words = String(txt).replace(/\$[^$]*\$/g, m => m.replace(/ /g, '\u00a0')).split(' '); let line = '', n = 0; const out = () => { if (!dry) T(line, x, y + n * lh, o); n++; }; words.forEach(w => { const t = line ? line + ' ' + w : w; if ((t.indexOf('$') >= 0 ? mathWidth(t, o) : ctx.measureText(t).width) > mw && line) { out(); line = w; } else line = t; }); if (line) out(); return n; }
+function sidWrap(txt, x, y, mw, o, lh, dry) { txt = mAuto(txt); ctx.font = (o.i ? 'italic ' : '') + (o.b ? 'bold ' : '') + phBump(o.s || 11) + 'px sans-serif'; const words = String(txt).replace(/\$[^$]*\$/g, m => m.replace(/ /g, '\u00a0')).split(' '); let line = '', n = 0; const out = () => { if (!dry) T(line, x, y + n * lh, o); n++; }; words.forEach(w => { const t = line ? line + ' ' + w : w; if ((t.indexOf('$') >= 0 ? mathWidth(t, o) : ctx.measureText(t).width) > mw && line) { out(); line = w; } else line = t; }); if (line) out(); return n; }
 function sidRowC(label, y, items) { T(label, 16, y + 9, { s: 9, b: true, c: MUTE }); let x = 16, yy = y + 14; const maxX = W - 14; items.forEach(it => { ctx.font = 'bold 9.5px sans-serif'; const w = Math.max(56, ctx.measureText(it[0]).width + 18); if (x + w > maxX && x > 16) { x = 16; yy += 34; } sidChip(x, yy, Math.min(w, W - 30), 28, it[0], it[1], it[2], it[3]); x += w + 6; }); return yy + 28 + 10; }
 function sidTx(txt, x, y, o, lh) { if (W < 620) return sidWrap(txt, x, y, W - x - 14, o, lh || 11); T(txt, x, y, o); return 1; }
 function RW(label, y, items) { if (W < 620) return sidRowC(label, y, items); sidRow(label, y, items); return y + 28; }
@@ -3397,13 +3397,22 @@ function mathDraw(txt, x, y, o) {
   runs.forEach(r => { ctx.font = mathFont(r, o); const dy = r.lvl === -1 ? (o.s || 11) * 0.24 : r.lvl === 1 ? -(o.s || 11) * 0.42 : 0; ctx.fillText(r.s, cx, y + dy); if (!o.b && !window.__THIN) { const lw = ctx.lineWidth, ss = ctx.strokeStyle; ctx.strokeStyle = ctx.fillStyle; ctx.lineWidth = Math.max(0.3, (o.s || 11) * 0.045); ctx.strokeText(r.s, cx, y + dy); ctx.lineWidth = lw; ctx.strokeStyle = ss; } cx += ctx.measureText(r.s).width; });
   ctx.textBaseline = 'alphabetic';
 }
+function phOn() { return typeof currentScene !== 'undefined' && currentScene && currentScene.id === 'dph'; }
+function phBump(sz) { return phOn() && sz && sz < 11 ? Math.min(10.6, sz + 0.9) : sz; }
+function phClear(o) {   // Deterministic phenotyping: every small or pale text is drawn larger, darker and heavier, so that the whole dashboard reads at once
+  const n = Object.assign({}, o), c = n.c;
+  if (!n.fit && n.s && n.s < 11) n.s = Math.min(10.6, n.s + 0.9);
+  if (typeof c === 'string' && /^#[0-9a-f]{6}$/i.test(c)) { const r = parseInt(c.substr(1, 2), 16), g = parseInt(c.substr(3, 2), 16), b = parseInt(c.substr(5, 2), 16); if (0.299 * r + 0.587 * g + 0.114 * b > 95) n.c = '#' + [r, g, b].map(v => ('0' + Math.round(v * 0.45).toString(16)).slice(-2)).join(''); }
+  else if (!c || /^rgba?\(/.test(c)) n.c = '#1B1F23';
+  n.ph = 1; return n;
+}
 function T(txt, x, y, o) {
-  o = o || {}; txt = mAuto(txt);
+  o = o || {}; if (!o.ph && phOn()) o = phClear(o); txt = mAuto(txt);
   if (typeof txt === 'string' && txt.indexOf('$') >= 0) { mathDraw(txt, x, y, o); return; }
   ctx.font = (o.i ? 'italic ' : '') + (o.b ? 'bold ' : '') + (o.s || 11) + 'px ' + (o.f || 'sans-serif');
   ctx.fillStyle = o.c || INK; ctx.textAlign = o.a || 'left'; ctx.textBaseline = o.v || 'alphabetic';
   ctx.fillText(txt, x, y);
-  if (!o.b && !window.__THIN) { const lw = ctx.lineWidth, ss = ctx.strokeStyle, lj = ctx.lineJoin; ctx.strokeStyle = ctx.fillStyle; ctx.lineWidth = Math.max(0.3, (o.s || 11) * 0.045); ctx.lineJoin = 'round'; ctx.strokeText(txt, x, y); ctx.lineWidth = lw; ctx.strokeStyle = ss; ctx.lineJoin = lj; }   // a little heavier than the plain font, for reading
+  if (!o.b && !window.__THIN) { const lw = ctx.lineWidth, ss = ctx.strokeStyle, lj = ctx.lineJoin; ctx.strokeStyle = ctx.fillStyle; ctx.lineWidth = Math.max(0.3, (o.s || 11) * (o.ph ? 0.075 : 0.045)); ctx.lineJoin = 'round'; ctx.strokeText(txt, x, y); ctx.lineWidth = lw; ctx.strokeStyle = ss; ctx.lineJoin = lj; }   // a little heavier than the plain font, for reading
   ctx.textBaseline = 'alphabetic';
 }
 function rrect(x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
@@ -7366,15 +7375,15 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
 })();
 </script>
 <script src="plus_core.js?v=20261027d"></script>
-<script src="plus_layers.js?v=20261108e"></script>
+<script src="plus_layers.js?v=20261109p"></script>
 <script src="plus_daisy.js?v=20261108c"></script>
 <script src="plus_phenomodel.js?v=20261030z4"></script>
-<script src="plus_phenotyping.js?v=20261031p1"></script>
-<script src="plus_phenotyping2.js?v=20261031p1"></script>
-<script src="plus_phenotyping3.js?v=20261031p1"></script>
+<script src="plus_phenotyping.js?v=20261109p"></script>
+<script src="plus_phenotyping2.js?v=20261109p"></script>
+<script src="plus_phenotyping3.js?v=20261109p"></script>
 <script src="plus_phenoplants.js?v=20261030z4"></script>
-<script src="plus_phenotyping4.js?v=20261031p1"></script>
-<script src="plus_phenotyping5.js?v=20261031p1"></script>
+<script src="plus_phenotyping4.js?v=20261109p"></script>
+<script src="plus_phenotyping5.js?v=20261109p"></script>
 <script src="phnav.js?v=20261030z4"></script>
 <script src="inputs.js?v=20261031a"></script>
 <script src="weather.js?v=20261031a"></script>

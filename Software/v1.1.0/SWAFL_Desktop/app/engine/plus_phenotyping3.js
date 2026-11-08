@@ -12,7 +12,7 @@
 
   // ================================================================== the roots day by day: profile of the day and the time series that moves with it
   const RROWS = [
-    { t: 'Root length of the plant', u: 'm', f: r => r.Lroot, s: 0.01 }, { t: 'Deepest root tip', u: 'cm', f: r => r.Rdepth },
+    { t: 'Root length', u: 'm', f: r => r.Lroot, s: 0.01 }, { t: 'Deepest root tip', u: 'cm', f: r => r.Rdepth },
     { t: 'Depth of 95 % (D95)', u: 'cm', f: r => r.D95 }, { t: 'Root growth per day', u: 'cm/d', f: r => r.dL },
     { t: 'Carbon share to the roots', u: '%', f: r => r.fr, s: 100 }, { t: 'Root : shoot ratio', u: '', f: r => Array.from(r.Wr, (v, i) => v / Math.max(1e-6, r.Wl[i] + r.Ws[i] + r.Wg[i])) }
   ];

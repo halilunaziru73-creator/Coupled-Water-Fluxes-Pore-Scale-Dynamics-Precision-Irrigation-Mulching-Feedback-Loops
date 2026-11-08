@@ -63,7 +63,7 @@
         hot(x0, y, wid, SHH + ROH, () => { PH.anim.on = false; play.on = false; play.t = q.dd / (N - 1); }, 'go to day ' + q.dd + ' (' + dateOf(q.dd) + ')'); });
       y += SHH + ROH + 22;
     });
-    T('Time series of the same plants (black ' + RN() + ', red drought; the line is solid up to the day shown). Click or drag on any chart to move the day.', cx + 10, y + 4, { s: 9, c: MUTE }); y += 14;
+    T('Same plants in time (black ' + RN() + ', red drought; solid up to the day shown). Click or drag a chart to move the day.', cx + 10, y + 4, { s: 9, c: MUTE }); y += 14;
     y = grid(ROWS, cx + 36, y + 4, w - 52, 2, 56);
     y += 6; endFrame(cx, y0, y, w); return y + 10;
   }

@@ -112,7 +112,7 @@
     ctx.fillStyle = PANEL; ctx.fillRect(x, y, w, h); ctx.strokeStyle = '#B9B4A6'; ctx.lineWidth = 1; ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);
     ctx.fillStyle = '#ECE9E0'; ctx.fillRect(x + 1, y + 1, w - 2, 20); ctx.strokeStyle = '#D2CEC2'; ctx.beginPath(); ctx.moveTo(x, y + 21.5); ctx.lineTo(x + w, y + 21.5); ctx.stroke();
     const fitT = (t, mw, sz, bd) => { t = String(t); ctx.font = (bd ? 'bold ' : '') + sz + 'px sans-serif'; if (ctx.measureText(t).width <= mw) return t; let lo = 0, hi = t.length; while (lo < hi) { const m = (lo + hi + 1) >> 1; if (ctx.measureText(t.slice(0, m) + '\u2026').width <= mw) lo = m; else hi = m - 1; } return t.slice(0, lo).replace(/[\s\u00b7,;]+$/, '') + '\u2026'; };
-    ctx.font = '9px sans-serif'; const subW = sub ? ctx.measureText(String(sub)).width : 0; const tt = fitT(title, sub ? Math.max(w * 0.58, w - subW - 30) : w * 0.9, 11, true); ctx.font = 'bold 11px sans-serif'; const tw = ctx.measureText(tt).width; T(tt, x + 8, y + 15, { s: 11, b: true, c: HEAD }); if (sub) { const st = fitT(sub, w - tw - 36, 9, false); T(st, x + w - 8, y + 15, { s: 9, c: MUTE, a: 'right' }); }
+    ctx.font = phBump(9) + 'px sans-serif'; const subW = sub ? ctx.measureText(String(sub)).width : 0; const tt = fitT(title, sub ? Math.max(w * 0.58, w - subW - 30) : w * 0.9, 11, true); ctx.font = 'bold 11px sans-serif'; const tw = ctx.measureText(tt).width; T(tt, x + 8, y + 15, { s: 11, b: true, c: HEAD }); if (sub) { const st = fitT(sub, w - tw - 36, phBump(9), false); T(st, x + w - 8, y + 15, { s: phBump(9), fit: 1, c: MUTE, a: 'right' }); }
   }
   function yAxis(x0, y0, w, h, lo, hi, unit, ticks) {
     // the axes of a journal figure: light grid, black axes with outward tick marks, dark tick labels, the quantity and its unit
@@ -123,7 +123,7 @@
   }
   const nice = v => { if (v <= 0) return 1; const p = Math.pow(10, Math.floor(Math.log10(v))), f = v / p; return ([1, 1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].find(q => f <= q + 1e-9) || 10) * p; };
   // text that shrinks to fit its width (down to 7 px), then is shortened
-  const TF = (txt, x, y, maxW, o) => { if (typeof maxW === 'object') { o = maxW; maxW = null; } if (maxW == null) maxW = W - x - 12; o = Object.assign({}, o || {}); let sz = o.s || 11; ctx.font = (o.b ? 'bold ' : '') + sz + 'px sans-serif'; while (ctx.measureText(txt).width > maxW && sz > 7) { sz -= 0.5; ctx.font = (o.b ? 'bold ' : '') + sz + 'px sans-serif'; } let t = txt; while (ctx.measureText(t).width > maxW && t.length > 4) t = t.slice(0, -2); if (t !== txt) t = t.slice(0, -1) + '…'; o.s = sz; T(t, x, y, o); };
+  const TF = (txt, x, y, maxW, o) => { if (typeof maxW === 'object') { o = maxW; maxW = null; } if (maxW == null) maxW = W - x - 12; o = Object.assign({}, o || {}); let sz = phBump(o.s || 11); o.fit = 1; ctx.font = (o.b ? 'bold ' : '') + sz + 'px sans-serif'; while (ctx.measureText(txt).width > maxW && sz > 7) { sz -= 0.5; ctx.font = (o.b ? 'bold ' : '') + sz + 'px sans-serif'; } let t = txt; while (ctx.measureText(t).width > maxW && t.length > 4) t = t.slice(0, -2); if (t !== txt) t = t.slice(0, -1) + '…'; o.s = sz; T(t, x, y, o); };
   function yearBars(x, y, w, h, vals, o) {
     o = o || {}; const n = vals.length, vmin = Math.min(0, ...vals, ...(o.extra || []).filter(v => v != null)), lo = o.lo != null ? o.lo : (vmin > -0.06 * Math.max(...vals.map(Math.abs), 1) ? 0 : -nice(-vmin)), hi = nice(Math.max(o.hiMin || 0, ...vals.map(Math.abs), ...(o.extra || []).filter(v => v != null)) * 1.05);
     const x0 = x + 42, y0 = y + 38, ww = w - 54, hh = h - 72; yAxis(x0, y0, ww, hh, lo, hi, o.unit);
@@ -144,9 +144,9 @@
     TF((nO < n ? 'simulated seasons: ' : '') + 'mean ' + fmt(m, o.dec) + ' · 10–90 %: ' + fmt(p10, o.dec) + ' to ' + fmt(p90, o.dec) + ' · variation ' + fmt(cv * 100) + ' %', x + 8, y + h - 10, w - 16, { s: 9.5, c: INK });
     return { m, p10, p90, cv };
   }
-  function legend(items, x, y) { let xx = x; items.forEach(([c, t]) => { ctx.font = '9.5px sans-serif'; if (xx > x && xx + ctx.measureText(t).width + 16 > W - 40) { xx = x; y += 14; } ctx.fillStyle = c; ctx.fillRect(xx, y - 8, 10, 10); ctx.strokeStyle = 'rgba(0,0,0,0.3)'; ctx.strokeRect(xx + 0.5, y - 7.5, 9, 9); T(t, xx + 14, y + 1, { s: 9.5 }); ctx.font = '9.5px sans-serif'; xx += ctx.measureText(t).width + 30; }); return y; }
+  function legend(items, x, y) { let xx = x; const fs = (typeof currentScene !== 'undefined' && currentScene && currentScene.id === 'dph') ? 10.8 : 9.5, gp = fs > 10 ? 38 : 30; items.forEach(([c, t]) => { ctx.font = fs + 'px sans-serif'; if (xx > x && xx + ctx.measureText(t).width + 16 > W - 40) { xx = x; y += 14; } ctx.fillStyle = c; ctx.fillRect(xx, y - 8, 10, 10); ctx.strokeStyle = 'rgba(0,0,0,0.3)'; ctx.strokeRect(xx + 0.5, y - 7.5, 9, 9); T(t, xx + 14, y + 1, { s: fs }); ctx.font = fs + 'px sans-serif'; xx += ctx.measureText(t).width + gp; }); return y; }
   function header(title, sub, y) { TF(title, 16, y + 18, W - 32, { s: 16, b: true, c: HEAD }); if (sub) TF(sub, 16, y + 36, W - 32, { s: 10.5, c: MUTE }); return y + 48; }
-  function badge(txt, x, y, col) { ctx.font = 'bold 9px sans-serif'; const w = ctx.measureText(txt).width + 10; ctx.fillStyle = col || '#1E8E3E'; rrect(x, y - 10, w, 14, 7); ctx.fill(); T(txt, x + 5, y + 1, { s: 9, b: true, c: '#fff' }); return w; }
+  function badge(txt, x, y, col) { ctx.font = 'bold ' + phBump(9) + 'px sans-serif'; const w = ctx.measureText(txt).width + 10; ctx.fillStyle = col || '#1E8E3E'; rrect(x, y - 10, w, 14, 7); ctx.fill(); T(txt, x + 5, y + 1, { s: 9, b: true, c: '#fff' }); return w; }
   const noData = (y) => { T('Loading the year-by-year results...', 16, y + 30, { s: 12, c: MUTE }); return y + 60; };
 
   // ================================================================== Y1 Year by year
