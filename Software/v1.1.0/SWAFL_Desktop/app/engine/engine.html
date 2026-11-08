@@ -2978,6 +2978,7 @@ if (new URLSearchParams(location.search).get('app')) {
     const w = wrapEl(); if (!w) return; const aw = w.clientWidth, ah = w.clientHeight; if (aw < 50 || ah < 50) return;
     const fW = aw / lw, fH = ah / lh; let sc;
     if (fitMode === 'window' && lh <= 1050) sc = Math.min(fW, fH, 2.6); else if (lh <= 1050) sc = Math.min(fW, 2.6); else sc = Math.min(fW, 2.6);   // the picture fills the width of the window, left and right
+    if (fitMode === 'window' && lh <= 1050 && sc < fW * 0.94) sc = Math.min(fW, 2.6);   // no empty bands at the left and right: the picture fills the width of the window and scrolls
     if (fitMode === 'window' && lh <= 1050 && sc < 0.7) sc = Math.min(fW, 1.0);   // too small to read: use the full width and scroll (Focus view fits it all)
     sc = Math.max(0.35, sc);
     // no see-saw: a scroll bar that comes and goes changes the room by a few pixels; such small changes of the scale are ignored,
