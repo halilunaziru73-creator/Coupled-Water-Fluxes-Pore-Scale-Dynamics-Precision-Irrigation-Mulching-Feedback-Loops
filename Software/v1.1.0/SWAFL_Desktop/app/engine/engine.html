@@ -2971,7 +2971,7 @@ if (new URLSearchParams(location.search).get('app')) {
   let lw = canvas.width, lh = canvas.height, SS = 1, curS = 1, fitMode = 'window', lastKey = '', fitDims = '', fitSc = 0;
   const wrapEl = () => canvas.closest('.canvaswrap') || canvas.parentElement;
   const phys = () => {
-    { const dpr = window.devicePixelRatio || 1, want = Math.max(2, Math.min(3, 1.25 * curS * dpr)), floor = Math.max(1.5, Math.min(3, curS * dpr)); SS = window.__hiScale ? window.__hiScale : Math.max(floor, want - (window.__ssPen || 0)); }   // clarity first: never fewer pixels than the screen shows (one picture pixel for one screen pixel), at least 1.5 times the drawing
+    { const dpr = window.devicePixelRatio || 1, want = Math.max(1, Math.min(4, 2 * curS * dpr)), floor = Math.max(0.75, Math.min(4, curS * dpr));   /* exactly two drawn pixels for each screen pixel: the browser then averages them in even pairs (a crisp picture); a fixed 2 or 3 shrunk by 3 to 4 times, when the picture is shown small, made it soft */ SS = window.__hiScale ? window.__hiScale : Math.max(floor, want - (window.__ssPen || 0)); }   // clarity first: never fewer pixels than the screen shows (one picture pixel for one screen pixel), at least 1.5 times the drawing
     { const cap = window.__hiScale ? 90e6 : (window.__ssPen ? 9e6 : 12e6);   /* the screen resolution with a 25 % margin: sharp, and no oversized picture to send to the screen every frame */ if (lw * lh * SS * SS > cap) SS = Math.sqrt(cap / (lw * lh)); }   // __hiScale: a picture saved at 300, 600 dpi or more
     dW.set.call(canvas, Math.round(lw * SS)); dH.set.call(canvas, Math.round(lh * SS)); ctx.setTransform(SS, 0, 0, SS, 0, 0); window.__SS = SS;
   };
@@ -2987,7 +2987,7 @@ if (new URLSearchParams(location.search).get('app')) {
     if (fitDims === lw + 'x' + lh && fitSc && Math.abs(sc - fitSc) / fitSc < 0.04) return; fitDims = lw + 'x' + lh; fitSc = sc;
     const key = lw + 'x' + lh + '@' + sc.toFixed(3); if (key === lastKey) return; lastKey = key;
     canvas.style.width = Math.round(lw * sc) + 'px'; canvas.style.maxWidth = 'none'; canvas.style.margin = '0 auto'; canvas.style.display = 'block';
-    const old = SS; curS = sc; const nS = Math.max(2, Math.min(3, sc * (window.devicePixelRatio || 1))); if (Math.abs(nS - old) > 0.02) phys();
+    curS = sc; phys();   // the pixels always follow the size shown on the screen (a small size change used to leave the picture a little too coarse)
   };
   Object.defineProperty(canvas, 'width', { get: () => lw, set: v => { lw = v; phys(); lastKey = ''; fit(); }, configurable: true });
   Object.defineProperty(canvas, 'height', { get: () => lh, set: v => { lh = v; phys(); lastKey = ''; fit(); }, configurable: true });
