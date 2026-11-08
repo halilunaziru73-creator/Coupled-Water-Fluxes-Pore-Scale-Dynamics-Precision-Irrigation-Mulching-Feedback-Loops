@@ -111,12 +111,13 @@
   function frame(x, y, w, h, title, sub) {
     ctx.fillStyle = PANEL; ctx.fillRect(x, y, w, h); ctx.strokeStyle = '#B9B4A6'; ctx.lineWidth = 1; ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);
     ctx.fillStyle = '#ECE9E0'; ctx.fillRect(x + 1, y + 1, w - 2, 20); ctx.strokeStyle = '#D2CEC2'; ctx.beginPath(); ctx.moveTo(x, y + 21.5); ctx.lineTo(x + w, y + 21.5); ctx.stroke();
-    ctx.font = 'bold 11px sans-serif'; const tw = Math.min(w * 0.62, ctx.measureText(title).width); TF(title, x + 8, y + 15, w * 0.62, { s: 11, b: true, c: HEAD }); if (sub) TF(sub, x + w - 8, y + 15, w - tw - 28, { s: 9, c: MUTE, a: 'right' });
+    const fitT = (t, mw, sz, bd) => { t = String(t); ctx.font = (bd ? 'bold ' : '') + sz + 'px sans-serif'; if (ctx.measureText(t).width <= mw) return t; let lo = 0, hi = t.length; while (lo < hi) { const m = (lo + hi + 1) >> 1; if (ctx.measureText(t.slice(0, m) + '\u2026').width <= mw) lo = m; else hi = m - 1; } return t.slice(0, lo).replace(/[\s\u00b7,;]+$/, '') + '\u2026'; };
+    const tt = fitT(title, w * (sub ? 0.58 : 0.9), 11, true); ctx.font = 'bold 11px sans-serif'; const tw = ctx.measureText(tt).width; T(tt, x + 8, y + 15, { s: 11, b: true, c: HEAD }); if (sub) { const st = fitT(sub, w - tw - 36, 9, false); T(st, x + w - 8, y + 15, { s: 9, c: MUTE, a: 'right' }); }
   }
   function yAxis(x0, y0, w, h, lo, hi, unit, ticks) {
     ctx.strokeStyle = GRID; ctx.lineWidth = 1; const n = ticks || 4;
     for (let i = 0; i <= n; i++) { const v = lo + (hi - lo) * i / n, y = y0 + h - h * i / n; ctx.beginPath(); ctx.moveTo(x0, y + 0.5); ctx.lineTo(x0 + w, y + 0.5); ctx.stroke(); T(fmt(v, Math.abs(hi - lo) < 5 ? 1 : 0), x0 - 4, y + 3, { s: 8.5, c: MUTE, a: 'right' }); }
-    if (unit) T(unit, x0 - 4, y0 - 5, { s: 8.5, c: MUTE, a: 'right' });
+    if (unit) T(unit, x0 - 4, y0 - 13, { s: 8.5, c: MUTE, a: 'right' });
   }
   const nice = v => { if (v <= 0) return 1; const p = Math.pow(10, Math.floor(Math.log10(v))), f = v / p; return ([1, 1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].find(q => f <= q + 1e-9) || 10) * p; };
   // text that shrinks to fit its width (down to 7 px), then is shortened

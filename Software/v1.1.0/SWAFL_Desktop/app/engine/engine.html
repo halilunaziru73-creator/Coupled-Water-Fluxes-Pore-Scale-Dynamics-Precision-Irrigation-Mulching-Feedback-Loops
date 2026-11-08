@@ -2997,6 +2997,8 @@ if (new URLSearchParams(location.search).get('app')) {
   window.requestAnimationFrame = cb => raf0(t => {
     let busy = true; try { busy = !!(play.on || fclock.on || n1ui.play || dss.drag); } catch (e) {}
     const sc0 = currentScene, now = performance.now(); let gap = (now - act < 1500) ? 16 : busy ? 34 : 60; const el = now - lastF;
+    if (!busy && now - act > 20000) gap = Math.max(gap, 300);      // nobody is touching the window: a few pictures a second are enough
+    if (!document.hasFocus()) gap = Math.max(gap, 600);              // another program is in front: the window rests
     if (sc0 && sc0.fpsCap) gap = Math.max(gap, 1000 / sc0.fpsCap);                 // layers that move all the time (the pore sections) are drawn at a calm rate
     if (window.__ema > 22) gap = Math.max(gap, Math.min(140, window.__ema * 1.7));  // a slow computer: draw less often, so that the controls stay quick
     if (el < gap) setTimeout(() => raf0(cb), gap - el); else {
@@ -3007,7 +3009,7 @@ if (new URLSearchParams(location.search).get('app')) {
 }
 
 { const _ft = ctx.fillText.bind(ctx), _st = ctx.strokeText.bind(ctx), _mt = ctx.measureText.bind(ctx);
-  ctx.fillText = (t, ...a) => _ft(calTxt(t), ...a); ctx.strokeText = (t, ...a) => _st(calTxt(t), ...a); ctx.measureText = t => _mt(calTxt(t)); }
+  ctx.fillText = (t, ...a) => _ft(calTxt(t), ...a); ctx.strokeText = (t, ...a) => _st(calTxt(t), ...a); ctx.measureText = t => { try { if (typeof t === 'string') { const m = mAuto(t); if (m.indexOf('$') >= 0) { const f = ctx.font, sz = parseFloat((f.match(/(\d+(?:\.\d+)?)px/) || [])[1]) || 11, bd = /bold/.test(f), w = mathWidth(m, { s: sz, b: bd }); ctx.font = f; return { width: w }; } } } catch (er) { } return _mt(calTxt(t)); }; }
 let W = canvas.width; let H = canvas.height; const W_DEF = 620;
 const DEPTH = 46;
 const BX0 = 70, BX1 = W-150, BY0 = 170, BY1 = H-70;
@@ -3364,7 +3366,8 @@ const nowSec = () => { try { const id = currentScene && currentScene.id; if ((id
 // the symbols of the irrigation design layers are typeset automatically: Ea -> E_a, Zn -> Z_n, Qs -> Q_s ...
 const MSYM = { Ea: 'E_a', Eu: 'E_u', Es: 'E_s', Ed: 'E_d', Zn: 'Z_n', Z0: 'Z_0', ZL: 'Z_L', Qs: 'Q_s', H0: 'H_0', A0: 'A_0', ET0: 'ET_0', ETc: 'ET_c', Kc: 'K_c', Sl: 'S_l', Se: 'S_e', Sd: 'S_d', Ss: 'S_s', Cs: 'C_s' };
 const MSYM_RE = new RegExp('\\b(' + Object.keys(MSYM).join('|') + ')\\b', 'g');
-function mAuto(txt) { if (typeof txt !== 'string' || txt.indexOf('$') >= 0) return txt; const id = currentScene && currentScene.id; if (id !== 'sid' && id !== 'drip' && id !== 'spr') return txt; return txt.replace(MSYM_RE, m => '$' + MSYM[m] + '$'); }
+const MSUB_RE = /\b([A-Z]{1,2})_([A-Za-z0-9]{1,4})\b/g;
+function mAuto(txt) { if (typeof txt !== 'string' || txt.indexOf('$') >= 0) return txt; if (txt.indexOf('_') >= 0) txt = txt.replace(MSUB_RE, (m, a, b) => '$' + a + '_{' + b + '}$'); const id = currentScene && currentScene.id; if (id !== 'sid' && id !== 'drip' && id !== 'spr') return txt; return txt.replace(MSYM_RE, m => '$' + MSYM[m] + '$'); }
 // ---------- scientific typography on the canvas: $...$ is mathematics: italic symbols, upright numbers and operators, true subscripts and superscripts ----------
 const MATHF = '"Cambria Math", "STIX Two Math", "Times New Roman", Times, serif';
 function mathRuns(src) {                                  // one string with $...$ spans -> runs {s, lvl (-1 sub, 0, 1 sup), it, math}
@@ -7348,8 +7351,8 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
 })();
 </script>
 <script src="plus_core.js?v=20261027d"></script>
-<script src="plus_layers.js?v=20261103b"></script>
-<script src="plus_daisy.js?v=20261103b"></script>
+<script src="plus_layers.js?v=20261108a"></script>
+<script src="plus_daisy.js?v=20261108a"></script>
 <script src="plus_phenomodel.js?v=20261030z4"></script>
 <script src="plus_phenotyping.js?v=20261031p1"></script>
 <script src="plus_phenotyping2.js?v=20261031p1"></script>

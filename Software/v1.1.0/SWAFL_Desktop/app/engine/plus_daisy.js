@@ -41,8 +41,8 @@
   }
   // a label cut to the room it has (measured in the font it is written in), so no two labels ever run into each other
   const clipT = (t, maxW, sz, b) => { t = String(t == null ? '' : t); ctx.font = (b ? 'bold ' : '') + (sz || 10) + 'px sans-serif'; if (ctx.measureText(t).width <= maxW) return t; let lo = 0, hi = t.length; while (lo < hi) { const m = (lo + hi + 1) >> 1; if (ctx.measureText(t.slice(0, m) + '…').width <= maxW) lo = m; else hi = m - 1; } return t.slice(0, lo).replace(/[\s·,;]+$/, '') + '…'; };
-  const chipW = t => { ctx.font = '10.5px sans-serif'; return ctx.measureText(t).width + 26; };
-  const chip = (x, y, text, on, fn, tip) => { ctx.font = '10.5px sans-serif'; const w = ctx.measureText(text).width + 18; ctx.fillStyle = on ? '#1B3A6B' : '#EFEDE5'; rrect(x, y, w, 22, 11); ctx.fill(); ctx.strokeStyle = on ? '#1B3A6B' : '#B9B4A6'; ctx.stroke(); T(text, x + 9, y + 15, { s: 10.5, c: on ? '#fff' : HEAD, b: on }); hot(x, y, w, 22, fn, tip); return w + 8; };
+  const chipW = t => { ctx.font = 'bold 10.5px sans-serif'; return ctx.measureText(t).width + 26; };
+  const chip = (x, y, text, on, fn, tip) => { ctx.font = (on ? 'bold ' : '') + '10.5px sans-serif'; const w = ctx.measureText(text).width + 18; ctx.fillStyle = on ? '#1B3A6B' : '#EFEDE5'; rrect(x, y, w, 22, 11); ctx.fill(); ctx.strokeStyle = on ? '#1B3A6B' : '#B9B4A6'; ctx.stroke(); T(text, x + 9, y + 15, { s: 10.5, c: on ? '#fff' : HEAD, b: on }); hot(x, y, w, 22, fn, tip); return w + 8; };
   function source(y, runs) {
     K.badge('YOUR DAISY RUN', 16, y, '#1E8E3E');
     const txt = 'Daisy 7.1.14, run in the Daisy workbench: ' + ((L() && L().label) || 'your weather and soil') + '. Items for which you have not run the question are left out.';
@@ -139,7 +139,7 @@
   const runKeys = () => { const l = L(); return l && l.runs ? Object.keys(l.runs).filter(k => l.runs[k] && l.runs[k].year) : []; };
   const runLab = k => (L() && L().meta && L().meta[k] && (L().meta[k].short || L().meta[k].label)) || RUNLAB[k] || k;
   const runLong = k => (L() && L().meta && L().meta[k] && L().meta[k].label) || runLab(k);
-  function pickRun(y) { const ks = runKeys(); if (!ks.length) return null; if (!DS.k || ks.indexOf(DS.k) < 0) DS.k = ks.indexOf('rainfed') >= 0 ? 'rainfed' : ks[0]; let cx = 16; T('Run', cx, y + 15, { s: 10, b: true, c: MUTE }); cx += 34; ks.forEach(k => { if (cx > W - 140) { cx = 50; y += 28; } cx += chip(cx, y, runLab(k), DS.k === k, () => { DS.k = k; DS.yr = null; }, 'show the run ' + runLab(k)); }); return { r: L().runs[DS.k], y: y + 34 }; }
+  function pickRun(y) { const ks = runKeys(); if (!ks.length) return null; if (!DS.k || ks.indexOf(DS.k) < 0) DS.k = ks.indexOf('rainfed') >= 0 ? 'rainfed' : ks[0]; let cx = 16; T('Run', cx, y + 15, { s: 10, b: true, c: MUTE }); cx += 34; ks.forEach(k => { const lb = clipT(runLab(k), 300, 10.5, DS.k === k); if (cx > 50 && cx + chipW(lb) > W - 20) { cx = 50; y += 28; } cx += chip(cx, y, lb, DS.k === k, () => { DS.k = k; DS.yr = null; }, 'show the run ' + runLab(k)); }); return { r: L().runs[DS.k], y: y + 34 }; }
   const sum = a => (a || []).reduce((s, x) => s + (isFinite(x) ? x : 0), 0);
   const stressSeries = (r, j) => r.year.map(y => { const hs = (r.harvest || []).filter(h => h[0] === y - 1); return hs.length ? mean(hs.map(h => h[j])) : NaN; });
   const wstat = r => { const ys = yieldSeries(r), P = mean(r.P), I = mean(r.I), ETa = mean(r.ETa), ETp = mean(r.ETp), D = mean(r.D), Ro = mean(r.Ro), Y = mean(ys); return { P, I, ETa, ETp, D, Ro, dS: P + I - ETa - D - Ro, Y, WP: ETa > 0 ? Y * 1000 / (ETa * 10) : NaN, IWP: I > 0 ? Y * 1000 / ((P + I) * 10) : NaN, rel: ETp > 0 ? ETa / ETp : NaN }; };
@@ -179,10 +179,10 @@
     paper(); let y = K.header('Yield risk and what limits the crop', texLabel() + ' · how often the yield falls short, and whether water or nitrogen holds it back, from your Daisy runs', 4);
     if (!L()) { waiting(y); return; } const R = pickRun(y); if (!R || !R.r.harvest) { waiting(y); return; } y = source(R.y, []); y += 8; const r = R.r, labels = r.year.map(v => String(v - 1)), s = ystat(r);
     // exceedance: the share of the seasons with at least this yield, every run
-    frame0(y, 320, 'How likely is a yield?', 'the share of the seasons in which the yield reaches at least the value on the axis · each line is one run'); const ks = runKeys(), x0 = 70, ww = W - 32 - 110, y0 = y + 36, hh = 220, all = [].concat(...ks.map(k => ystat(L().runs[k]).ys)), hi = K.nice(Math.max(1, ...all) * 1.05);
+    const lgRows = Math.ceil(runKeys().length / 2), lgX = Math.max(0, lgRows - 2) * 14; frame0(y, 320 + lgX, 'How likely is a yield?', 'the share of the seasons in which the yield reaches at least the value on the axis · each line is one run'); const ks = runKeys(), x0 = 70, ww = W - 32 - 110, y0 = y + 36, hh = 220, all = [].concat(...ks.map(k => ystat(L().runs[k]).ys)), hi = K.nice(Math.max(1, ...all) * 1.05);
     K.yAxis(x0, y0, ww, hh, 0, hi, 'Mg/ha'); [0, 25, 50, 75, 100].forEach(p => { T(p + ' %', x0 + p / 100 * ww, y0 + hh + 14, { s: 8.5, c: MUTE, a: 'center' }); }); T('share of seasons with at least this yield', x0 + ww / 2, y0 + hh + 28, { s: 9, c: MUTE, a: 'center' });
     ks.forEach((k, i) => { const v = ystat(L().runs[k]).ys.slice().sort((a, b) => b - a), n = v.length; if (!n) return; ctx.strokeStyle = SPEC[(i * 3) % 9]; ctx.lineWidth = k === DS.k ? 3 : 1.5; ctx.beginPath(); v.forEach((q, j) => { const X = x0 + (n > 1 ? j / (n - 1) : 0.5) * ww, Yv = y0 + hh - q / hi * hh; j ? ctx.lineTo(X, Yv) : ctx.moveTo(X, Yv); }); ctx.stroke(); });
-    K.legend(ks.map((k, i) => [SPEC[(i * 3) % 9], clipT(runLab(k), 220, 9.5)]), 62, y0 + hh + 46); y += 330;
+    K.legend(ks.map((k, i) => [SPEC[(i * 3) % 9], clipT(runLab(k), 220, 9.5)]), 62, y0 + hh + 46); y += 330 + lgX;
     frame0(y, 300, 'Water stress and nitrogen stress, season by season', 'mean stress of the harvests of the season · 0 none, 1 full; the larger one limits the yield'); const ws = stressSeries(r, 3), ns = stressSeries(r, 4);
     groupBars(16, y, W - 32, 270, labels, [{ n: 'water stress', c: '#2b83ba', v: ws }, { n: 'nitrogen stress', c: '#c8861c', v: ns }], { unit: '' }); K.legend([['#2b83ba', 'water stress'], ['#c8861c', 'nitrogen stress']], 62, y + 290); y += 312;
     frame0(y, 152, 'The yield in numbers', 'all seasons of the run ' + runLab(DS.k));
