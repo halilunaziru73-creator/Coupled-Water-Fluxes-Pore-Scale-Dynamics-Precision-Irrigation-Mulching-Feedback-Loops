@@ -2971,7 +2971,8 @@ if (new URLSearchParams(location.search).get('app')) {
   let lw = canvas.width, lh = canvas.height, SS = 1, curS = 1, fitMode = 'window', lastKey = '', fitDims = '', fitSc = 0;
   const wrapEl = () => canvas.closest('.canvaswrap') || canvas.parentElement;
   const phys = () => {
-    SS = window.__hiScale ? window.__hiScale : Math.max(Math.max(1, ((lw * lh < 0.9e6) ? 2 : 1.4) - (window.__ssPen || 0)), Math.min(3, 1.25 * curS * (window.devicePixelRatio || 1)) - (window.__ssPen || 0)); { const cap = window.__hiScale ? 90e6 : (window.__ssPen ? 4e6 : 7e6);   /* the screen resolution with a 25 % margin: sharp, and no oversized picture to send to the screen every frame */ if (lw * lh * SS * SS > cap) SS = Math.sqrt(cap / (lw * lh)); }   // __hiScale: a picture saved at 300, 600 dpi or more
+    { const dpr = window.devicePixelRatio || 1, want = Math.max(2, Math.min(3, 1.25 * curS * dpr)), floor = Math.max(1.5, Math.min(3, curS * dpr)); SS = window.__hiScale ? window.__hiScale : Math.max(floor, want - (window.__ssPen || 0)); }   // clarity first: never fewer pixels than the screen shows (one picture pixel for one screen pixel), at least 1.5 times the drawing
+    { const cap = window.__hiScale ? 90e6 : (window.__ssPen ? 9e6 : 12e6);   /* the screen resolution with a 25 % margin: sharp, and no oversized picture to send to the screen every frame */ if (lw * lh * SS * SS > cap) SS = Math.sqrt(cap / (lw * lh)); }   // __hiScale: a picture saved at 300, 600 dpi or more
     dW.set.call(canvas, Math.round(lw * SS)); dH.set.call(canvas, Math.round(lh * SS)); ctx.setTransform(SS, 0, 0, SS, 0, 0); window.__SS = SS;
   };
   const fit = () => {
@@ -3003,7 +3004,7 @@ if (new URLSearchParams(location.search).get('app')) {
     if (window.__ema > 22) gap = Math.max(gap, Math.min(140, window.__ema * 1.7));  // a slow computer: draw less often, so that the controls stay quick
     if (el < gap) setTimeout(() => raf0(cb), gap - el); else {
       lastF = now; cb(t); const d = performance.now() - now; window.__ema = (window.__ema == null ? d : window.__ema * 0.88 + d * 0.12);
-      window.__slow = d > 45 ? (window.__slow || 0) + 1 : Math.max(0, (window.__slow || 0) - 2); if (window.__slow >= 24 && (window.__ssPen || 0) < 1) { window.__ssPen = (window.__ssPen || 0) + 0.25; window.__slow = 0; window.__ema = 20; phys(); }   // slow for a long time, not just at the start   // still slow: fewer pixels
+      window.__slow = d > 45 ? (window.__slow || 0) + 1 : Math.max(0, (window.__slow || 0) - 2); if (window.__slow >= 24 && (window.__ssPen || 0) < 0.5) { window.__ssPen = (window.__ssPen || 0) + 0.25; window.__slow = 0; window.__ema = 20; phys(); }   // slow for a long time, not just at the start   // still slow: fewer pixels
     }
   });
 }
