@@ -3394,7 +3394,7 @@ function mathWidth(txt, o) { o = o || {}; let w = 0; mathRuns(String(txt).replac
 function mathDraw(txt, x, y, o) {
   o = o || {}; const runs = mathRuns(String(txt).replace(/\u00a0/g, ' ')), w = mathWidth(txt, o); let cx = o.a === 'right' ? x - w : o.a === 'center' ? x - w / 2 : x;
   ctx.fillStyle = o.c || INK; ctx.textAlign = 'left'; ctx.textBaseline = o.v || 'alphabetic';
-  runs.forEach(r => { ctx.font = mathFont(r, o); const dy = r.lvl === -1 ? (o.s || 11) * 0.24 : r.lvl === 1 ? -(o.s || 11) * 0.42 : 0; ctx.fillText(r.s, cx, y + dy); cx += ctx.measureText(r.s).width; });
+  runs.forEach(r => { ctx.font = mathFont(r, o); const dy = r.lvl === -1 ? (o.s || 11) * 0.24 : r.lvl === 1 ? -(o.s || 11) * 0.42 : 0; ctx.fillText(r.s, cx, y + dy); if (!o.b && !window.__THIN) { const lw = ctx.lineWidth, ss = ctx.strokeStyle; ctx.strokeStyle = ctx.fillStyle; ctx.lineWidth = Math.max(0.3, (o.s || 11) * 0.045); ctx.strokeText(r.s, cx, y + dy); ctx.lineWidth = lw; ctx.strokeStyle = ss; } cx += ctx.measureText(r.s).width; });
   ctx.textBaseline = 'alphabetic';
 }
 function T(txt, x, y, o) {
@@ -3402,7 +3402,9 @@ function T(txt, x, y, o) {
   if (typeof txt === 'string' && txt.indexOf('$') >= 0) { mathDraw(txt, x, y, o); return; }
   ctx.font = (o.i ? 'italic ' : '') + (o.b ? 'bold ' : '') + (o.s || 11) + 'px ' + (o.f || 'sans-serif');
   ctx.fillStyle = o.c || INK; ctx.textAlign = o.a || 'left'; ctx.textBaseline = o.v || 'alphabetic';
-  ctx.fillText(txt, x, y); ctx.textBaseline = 'alphabetic';
+  ctx.fillText(txt, x, y);
+  if (!o.b && !window.__THIN) { const lw = ctx.lineWidth, ss = ctx.strokeStyle, lj = ctx.lineJoin; ctx.strokeStyle = ctx.fillStyle; ctx.lineWidth = Math.max(0.3, (o.s || 11) * 0.045); ctx.lineJoin = 'round'; ctx.strokeText(txt, x, y); ctx.lineWidth = lw; ctx.strokeStyle = ss; ctx.lineJoin = lj; }   // a little heavier than the plain font, for reading
+  ctx.textBaseline = 'alphabetic';
 }
 function rrect(x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
 function box(x, y, w, h, o) {
