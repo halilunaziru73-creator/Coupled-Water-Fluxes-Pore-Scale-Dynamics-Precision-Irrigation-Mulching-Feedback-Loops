@@ -147,5 +147,5 @@
     return { ok: true, r2, n, terms: m, next: picked.map(c => ({ val: val(c), predicted: pred(c) })), best: (() => { let bi = 0; ys.forEach((v, i) => { if (v > ys[bi]) bi = i; }); return { val: val(cand[bi]), predicted: pred(cand[bi]) }; })() };
   };
   function solve(A, b) { const n = b.length, M = A.map((r, i) => r.concat([b[i]])); for (let i = 0; i < n; i++) { let p = i; for (let r = i + 1; r < n; r++) if (Math.abs(M[r][i]) > Math.abs(M[p][i])) p = r; if (Math.abs(M[p][i]) < 1e-12) return null; [M[i], M[p]] = [M[p], M[i]]; for (let r = 0; r < n; r++) if (r !== i) { const f = M[r][i] / M[i][i]; for (let c = i; c <= n; c++) M[r][c] -= f * M[i][c]; } } return M.map((r, i) => r[n] / r[i]); }
-  if (typeof module !== 'undefined' && module.exports) module.exports = R; else window.DaisyRef = R;
+  if (typeof module !== 'undefined' && module.exports) module.exports = R; if (typeof window !== 'undefined') window.DaisyRef = R;   // also in a window that has a module object
 })();

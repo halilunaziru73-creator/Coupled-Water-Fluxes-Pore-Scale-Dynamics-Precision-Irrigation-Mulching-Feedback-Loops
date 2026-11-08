@@ -2,7 +2,7 @@
    (desktop app with Daisy) or explore the 10 190 published runs of the study (works offline anywhere); figures are drawn from the results. */
 'use strict';
 (() => {
-  const R = window.DaisyRef, D = DaisyUI, IO = window.DaisyIO, SC = window.DaisyScen, X = window.DaisyExp, AI = window.DaisyAI, esc = D.esc, K = () => D.kit;
+  const R = new Proxy({}, { get: (_, k) => { const r = window.DaisyRef; if (!r) throw new Error('The reference library (daisyref.js) did not load. Close this window, press Ctrl+Shift+R to reload, and open it again.'); return r[k]; } }), D = DaisyUI, IO = window.DaisyIO, SC = window.DaisyScen, X = window.DaisyExp, AI = window.DaisyAI, esc = D.esc, K = () => D.kit;
   const $ = id => document.getElementById('dzX' + id);
   const st = { text: '', res: null, factors: [], base: {}, design: 'factorial', max: 40, log: 'light', useMy: true, rows: [], runs: [], source: 'daisy', preset: null, ens: null, resp: 'yield', jobs: Math.max(2, Math.min(8, (navigator.hardwareConcurrency || 4) - 1)), stop: false, running: false, key: '', model: '', ai: false, responses: [] };
   try { localStorage.removeItem('swafl.ai.key'); localStorage.removeItem('swafl.ai.model'); } catch (e) { }
