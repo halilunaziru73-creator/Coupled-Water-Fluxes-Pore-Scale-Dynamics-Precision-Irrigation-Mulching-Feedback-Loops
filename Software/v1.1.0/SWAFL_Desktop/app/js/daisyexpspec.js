@@ -54,20 +54,35 @@
   E.SPEC = SPEC;
 
   // figures for an experiment that has no entry above (the user's own design): the factors take the roles of the axes
+  // the results that each kind of factor moves: the figures of a factor are drawn on these, so that a factor never shows as a flat line
+  const CHEM = ['koc', 'half', 'chem'], NFAC = ['nfac', 'ntype', 'ntime']; E.CHEM_F = CHEM;
+  E.respFor = function (id) { id = id && id.id || id; const F = E.factor(id) || {}; if (CHEM.indexOf(id) >= 0) return ['CLF', 'CDF']; if (NFAC.indexOf(id) >= 0) return ['yield', 'leach', 'NLF']; if (F.irr || id === 'irrig') return ['yield', 'irr', 'perc', 'IE']; if (id === 'soil' || id === 'till' || id === 'tc' || /^vg_/.test(id)) return ['yield', 'perc', 'leach']; return ['yield', 'perc', 'aet']; };
+  const idsOf = factors => (factors || []).map(f => typeof f === 'string' ? f : f.id).filter(id => E.factor(id));
+  // the figures of one factor: every response it moves, the factor along the axis, another factor as colour and a third as panels
+  function figsOne(id, all, nR) {
+    const f = E.factor(id), n = all.length, i = all.indexOf(id), c = n > 1 ? all[(i + 1) % n] : undefined, p = n > 2 ? all[(i + 2) % n] : undefined, out = [];
+    E.respFor(id).slice(0, nR || 3).forEach(r => out.push({ k: f.kind === 'num' ? 'lines' : 'bars', x: id, c, p, r }));
+    return out;
+  }
   E.autoFigs = function (factors, resp) {
-    const fs = (factors || []).map(f => typeof f === 'string' ? E.factor(f) : E.factor(f.id)).filter(Boolean), num = fs.filter(f => f.kind === 'num'), cat = fs.filter(f => f.kind !== 'num'), has = id => fs.some(f => f.id === id), out = [];
-    const rs = has('nfac') ? ['yield', 'leach', 'NLF'] : fs.some(f => f.irr || f.id === 'irrig') ? ['yield', 'irr', 'perc', 'IE'] : ['yield', 'perc', 'aet'];
-    const xf = num.slice().sort((a, b) => b.levels.length - a.levels.length)[0], rest = fs.filter(f => f !== xf);
-    if (xf) rs.forEach(r => out.push({ k: 'lines', x: xf.id, c: rest[0] && rest[0].id, p: rest[1] && rest[1].id, r }));
-    else if (cat[0]) rs.forEach(r => out.push({ k: 'bars', x: cat[0].id, c: cat[1] && cat[1].id, r }));
-    if (num.length >= 2) out.push({ k: 'surface', x: num[0].id, y: num[1].id, p: fs.filter(f => f !== num[0] && f !== num[1])[0] && fs.filter(f => f !== num[0] && f !== num[1])[0].id, r: rs[1] || rs[0] });
-    if (fs.length) out.push({ k: 'partition', x: (xf || fs[0]).id, p: rest[0] && rest[0].id });
-    if (has('nfac')) out.push({ k: 'nfate', x: 'nfac', p: rest.find(f => f.id !== 'nfac') && rest.find(f => f.id !== 'nfac').id });
-    if (fs.length >= 3) out.push({ k: 'effects', r: rs[0] });
+    const ids = idsOf(factors), fs = ids.map(E.factor), out = [], n = ids.length, nR = n > 5 ? 1 : n > 3 ? 2 : 3, chem = ids.filter(id => CHEM.indexOf(id) >= 0), other = ids.filter(id => CHEM.indexOf(id) < 0), num = fs.filter(f => f.kind === 'num');
+    ids.forEach(id => figsOne(id, ids, nR).forEach(g => out.push(g)));
+    if (num.length >= 2) out.push({ k: 'surface', x: num[0].id, y: num[1].id, p: ids.find(id => id !== num[0].id && id !== num[1].id), r: E.respFor(num[0].id)[0] });
+    if (other.length) out.push({ k: 'partition', x: other[0], p: other[1] });
+    if (ids.some(id => NFAC.indexOf(id) >= 0)) out.push({ k: 'nfate', x: ids.find(id => NFAC.indexOf(id) >= 0), p: ids.find(id => NFAC.indexOf(id) < 0) });
+    if (chem.length) out.push({ k: 'cfate', x: chem[0], p: ids.find(id => id !== chem[0]), c: undefined });
+    if (n >= 3) { out.push({ k: 'effects', r: 'yield' }); if (chem.length) out.push({ k: 'effects', r: 'CLF' }); }
     return out;
   };
-  // the figures of an experiment: the entry of the study, or the automatic ones
-  E.figsFor = function (presetId, factors) { const s = presetId && SPEC[presetId]; const f = s && s.figs && s.figs.length ? s.figs : E.autoFigs(factors); return f.map((x, i) => Object.assign({ id: 'f' + (i + 1) }, x)); };
+  // every factor of the experiment is on the axis, in the colours or in the panels of some figure; the chemical has its own results
+  E.cover = function (figs, factors) {
+    const ids = idsOf(factors), seen = new Set(); figs.forEach(g => [g.x, g.y, g.c, g.p].forEach(v => v && seen.add(v)));
+    const out = figs.slice(); ids.filter(id => !seen.has(id)).forEach(id => figsOne(id, ids, 2).forEach(g => out.push(g)));
+    if (ids.some(id => CHEM.indexOf(id) >= 0) && !out.some(g => g.k === 'cfate' || g.r === 'CLF' || g.r === 'CDF')) { const ch = ids.find(id => CHEM.indexOf(id) >= 0); out.push({ k: 'cfate', x: ch, p: ids.find(id => id !== ch) }); figsOne(ch, ids, 2).forEach(g => out.push(g)); }
+    return out;
+  };
+  // the figures of an experiment: the entry of the study, or the automatic ones, and whatever factor they leave out
+  E.figsFor = function (presetId, factors) { const s = presetId && SPEC[presetId]; const f = s && s.figs && s.figs.length ? s.figs : E.autoFigs(factors); return E.cover(f, factors).map((x, i) => Object.assign({ id: 'f' + (i + 1) }, x)); };
   // marks for the process map: which processes the experiment changes (orange) and which it measures (blue)
   E.procMarks = function (factors, figs, resp) {
     const F = {}, R = {}, fl = []; (factors || []).forEach(f => { const id = typeof f === 'string' ? f : f.id, ps = E.PROC_F[id] || (E.factor(id) && E.factor(id).param ? ['water'] : []); if (ps.length) fl.push({ id, ps }); ps.forEach(p => { (F[p] = F[p] || []).push(id); }); });

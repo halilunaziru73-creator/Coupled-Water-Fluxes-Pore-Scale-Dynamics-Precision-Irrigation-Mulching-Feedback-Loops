@@ -20,7 +20,7 @@ window.DaisyExpFig = (() => {
   function titleOf(f, c) {
     if (f.t) return f.t; const R = short(c.rlabel(f.r || 'yield')), x = f.x ? short(c.flabel(f.x)).toLowerCase() : '';
     switch (f.k) {
-      case 'partition': return 'Where the water goes' + (f.perRun ? ', run by run' : ', by ' + x); case 'nfate': return 'Where the nitrogen goes' + (f.perRun ? ', run by run' : ', by ' + x); case 'effects': return 'Effect of each factor on ' + R.toLowerCase();
+      case 'partition': return 'Where the water goes' + (f.perRun ? ', run by run' : ', by ' + x); case 'nfate': return 'Where the nitrogen goes' + (f.perRun ? ', run by run' : ', by ' + x); case 'cfate': return 'Where the chemical goes, by ' + x; case 'effects': return 'Effect of each factor on ' + R.toLowerCase();
       case 'surface': return R + ' over ' + x + ' and ' + short(c.flabel(f.y)).toLowerCase(); case 'runs': return 'The results of every run'; case 'main': return 'Main effect of each factor on ' + R.toLowerCase();
       default: return R + (x ? ' by ' + x : '');
     }
@@ -48,6 +48,16 @@ window.DaisyExpFig = (() => {
       const water = f.k === 'partition', all = rows.filter(r => !r.reference || water), comp = water ? [['Evapotranspiration', 'aet', '#E69F00'], ['Drainage below 1 m', 'perc', '#0072B2'], ['Runoff', 'run', '#56B4E9']] : [['Crop uptake', 'upt', '#009E73'], ['Nitrate leached', 'leach', '#D55E00'], ['Denitrification', 'den', '#CC79A7'], ['Ammonia volatilised', 'vol', '#F0E442']];
       out.push({ label: '', draw: cv => PL.runStacks(cv, all.map(r => E.shortLabel(fv(r), r.reference)), comp.map(q => ({ name: q[0], color: q[2], vals: all.map(r => r.r[q[1]]) })).filter(q => q.vals.some(isFinite)), { title: titleOf(f, c), xt: water ? 'Water (mm per season)' : 'Nitrogen (kg N/ha per season)' }) });
       return out; }
+    if (f.k === 'cfate') {
+      const xs = E.levels(data, f.x);
+      pLev.forEach((pv, i) => out.push({ label: sub(pv), draw: cv => {
+        const d = sel(pv), g = xv => { const cond = {}; cond[f.x] = xv; return k2 => cellMean(d, cond, k2); };
+        const parts = [['Leached below 200 cm', 'CLF', '#D55E00'], ['Degraded', 'CDF', '#009E73']].map(q => ({ name: q[0], color: q[2], vals: xs.map(xv => g(xv)(q[1])) }));
+        parts.push({ name: 'Still in the soil or taken up', color: '#999999', vals: xs.map((xv, k) => { const v = 100 - parts[0].vals[k] - parts[1].vals[k]; return isFinite(v) ? Math.max(0, v) : NaN; }) });
+        PL.stackBars(cv, xs.map(xv => c.lname(f.x, xv)), parts.filter(q => q.vals.some(isFinite)), { title: multiP ? sub(pv) : titleOf(f, c), panel: letter(i), h: 320, xt: c.flabel(f.x), yt: 'Share of the amount sprayed (%)' });
+      } }));
+      return out;
+    }
     if (f.k === 'lines' || f.k === 'bars') {
       const xs = E.levels(data, f.x), cs = f.c ? E.levels(data, f.c) : [null], numX = xs.length > 2 && xs.every(v => typeof v === 'number') && f.k === 'lines', numC = cs.length > 3 && cs.every(v => typeof v === 'number');
       const val = (pv, cv2, xv) => { const cond = {}; cond[f.x] = xv; if (f.p) cond[f.p] = pv; if (f.c) cond[f.c] = cv2; return cellMean(data, cond, R); };
@@ -98,7 +108,7 @@ window.DaisyExpFig = (() => {
     const has = id => !id || E.levels(d, id).length > 0; if (!has(f.x) || !has(f.y) || !has(f.c) || !has(f.p)) return false;
     if (f.k === 'runs') return rows.length > 1 && rows.length <= 150; if (f.k === 'main') return c.fids.some(id => E.levels(d, id).length > 1);
     if (f.k === 'surface') return E.levels(d, f.x).length > 1 && E.levels(d, f.y).length > 1; if (f.k === 'effects') return c.fids.filter(id => E.levels(d, id).length > 1).length > 1;
-    if (f.k === 'partition') return d.some(r => isFinite(r.r.aet) && isFinite(r.r.perc)); if (f.k === 'nfate') return d.some(r => isFinite(r.r.leach) || isFinite(r.r.upt)); return E.levels(d, f.x).length > 0;
+    if (f.k === 'cfate') return d.some(r => isFinite(r.r.CLF) || isFinite(r.r.CDF)); if (f.k === 'partition') return d.some(r => isFinite(r.r.aet) && isFinite(r.r.perc)); if (f.k === 'nfate') return d.some(r => isFinite(r.r.leach) || isFinite(r.r.upt)); return E.levels(d, f.x).length > 0;
   }
   // a note written from this figure's own factors and results
   const noteOf = (f, c, rows) => {
@@ -108,13 +118,14 @@ window.DaisyExpFig = (() => {
     if (f.k === 'runs') return 'Every run of the experiment is one row: one combination of the values, named by its values, with its own results side by side (each panel has its own scale). Runs are ordered by ' + nm(rl(rows.some(r => isFinite(r.r.yield)) ? 'yield' : f.r)).toLowerCase() + '.';
     if (f.k === 'main') return 'The mean of ' + nm(rl(f.r)).toLowerCase() + ' over the runs at each value of a factor, with one standard error and the number of runs: the main effect of each factor, the others averaged over the runs that were made.' + rng(f.r);
     if (f.k === 'partition') return 'Where the water went in each run: transpiration and evaporation (actual evapotranspiration), percolation below the root zone and run-off, as parts of the same bar.' + rng('perc').replace('It', ' Percolation');
+    if (f.k === 'cfate') return 'Where the chemical went at each value: the share of the amount sprayed that leached below 200 cm, the share degraded, and what is still in the soil or was taken up, with the other factors averaged over the runs that were made.';
     if (f.k === 'nfate') return 'Where the nitrogen went in each run: crop uptake, leaching, denitrification and volatilisation, in kg N per hectare.' + rng('leach').replace('It', ' Leaching');
     if (f.k === 'effects') return 'Main effect of each factor on ' + nm(rl(f.r)).toLowerCase() + ': the change in the mean when the factor moves from its lowest to its highest level.' + rng(f.r);
     if (f.k === 'surface') return nm(rl(f.r)) + ' over ' + nm(fl(f.x)).toLowerCase() + ' (x) and ' + nm(fl(f.y)).toLowerCase() + ' (y); lines join equal values, dots are the runs.' + rng(f.r);
     if (f.k === 'bars') return nm(rl(f.r)) + ' for each level of ' + nm(fl(f.x)).toLowerCase() + (f.c ? ', split by ' + nm(fl(f.c)).toLowerCase() : '') + (f.p ? ', one panel for each level of ' + nm(fl(f.p)).toLowerCase() : '') + '.' + rng(f.r);
     return nm(rl(f.r)) + ' against ' + nm(fl(f.x)).toLowerCase() + (f.c ? ', one line for each level of ' + nm(fl(f.c)).toLowerCase() : '') + (f.p ? ', one panel for each level of ' + nm(fl(f.p)).toLowerCase() : '') + '.' + rng(f.r);
   };
-  const procsOf = f => { const E = X(), s = new Set(); [f.x, f.y, f.c, f.p].forEach(id => id && (E.PROC_F[id] || []).forEach(p => s.add(p))); const r = f.k === 'partition' ? ['aet', 'perc', 'run'] : f.k === 'nfate' ? ['upt', 'leach', 'den', 'vol'] : [f.r]; r.forEach(q => q && (E.PROC_R[q] || []).forEach(p => s.add(p))); return Array.from(s); };
+  const procsOf = f => { const E = X(), s = new Set(); [f.x, f.y, f.c, f.p].forEach(id => id && (E.PROC_F[id] || []).forEach(p => s.add(p))); const r = f.k === 'cfate' ? ['CLF', 'CDF'] : f.k === 'partition' ? ['aet', 'perc', 'run'] : f.k === 'nfate' ? ['upt', 'leach', 'den', 'vol'] : [f.r]; r.forEach(q => q && (E.PROC_R[q] || []).forEach(p => s.add(p))); return Array.from(s); };
 
   // mount: c = { key, presetId, factors, rows, fids, flabel, rlabel, lname, onMap(procId) }
   M.mount = function (host, c) {
@@ -123,9 +134,12 @@ window.DaisyExpFig = (() => {
     // every run is one combination: its own row. When only some of the combinations were run, lines and panels by factor would join runs that differ
     // in other values too, so the figures are those of a screening design: every run, the main effects with their error, the balances run by run
     let base = E.figsFor(c.presetId, c.factors); if (!complete) base = base.filter(f => ['effects', 'partition', 'nfate'].indexOf(f.k) >= 0).map(f => f.k === 'effects' ? f : Object.assign({}, f, { perRun: true, p: undefined, x: undefined, c: undefined }));
-    const all = [{ id: 'runs', k: 'runs', r: 'yield', letters: 1 }, { id: 'main', k: 'main', r: (c.resp || 'yield'), letters: 1 }].concat(base).concat(mm.added.map((f, i) => Object.assign({ id: 'u' + (i + 1) }, f))), figs = all.filter(f => usable(f, c, rows)), spec = c.presetId && E.SPEC[c.presetId];
+    const sens = (id, r) => { const m = E.marginal(real, id, r).map(q => q.mean).filter(isFinite); if (m.length < 2) return 0; const mu = m.reduce((s2, v) => s2 + Math.abs(v), 0) / m.length; return mu > 1e-9 ? (Math.max.apply(null, m) - Math.min.apply(null, m)) / mu : 0; };
+    // a factor that does not move the chosen result is shown on the result it does move (a sorption constant does not change the yield, but the leaching)
+    const r0 = c.resp || 'yield', extraR = []; varied.forEach(id => { if (sens(id, r0) < 0.02) { let b = 0.02, br = null; E.RESP.forEach(q => { if (q.id === 'rain' || q.id === 'fert' || !rows.some(x => isFinite(x.r[q.id]))) return; const s2 = sens(id, q.id); if (s2 > b) { b = s2; br = q.id; } }); if (br && extraR.indexOf(br) < 0 && br !== r0) extraR.push(br); } });
+    const all = [{ id: 'runs', k: 'runs', r: 'yield', letters: 1 }, { id: 'main', k: 'main', r: r0, letters: 1 }].concat(extraR.slice(0, 4).map(r => ({ id: 'main_' + r, k: 'main', r, letters: 1 }))).concat(base).concat(mm.added.map((f, i) => Object.assign({ id: 'u' + (i + 1) }, f))), figs = all.filter(f => usable(f, c, rows)), spec = c.presetId && E.SPEC[c.presetId];
     const fl = (c.fids || []).filter(id => E.levels(rows.filter(r => !r.reference), id).length > 1), rs = E.RESP.filter(q => rows.some(r => isFinite(r.r[q.id])));
-    const KINDS = [['lines', 'Lines: a response against a factor'], ['bars', 'Bars: a response for each level'], ['surface', 'Surface: a response over two factors'], ['partition', 'Where the water goes'], ['nfate', 'Where the nitrogen goes'], ['effects', 'Which factor matters most']];
+    const KINDS = [['lines', 'Lines: a response against a factor'], ['bars', 'Bars: a response for each level'], ['surface', 'Surface: a response over two factors'], ['partition', 'Where the water goes'], ['nfate', 'Where the nitrogen goes'], ['cfate', 'Where the chemical goes'], ['effects', 'Which factor matters most']];
     const opt = (list, sel, none) => (none ? '<option value="">' + none + '</option>' : '') + list.map(a => '<option value="' + esc(a[0]) + '"' + (a[0] === sel ? ' selected' : '') + '>' + esc(a[1]) + '</option>').join('');
     let h = '<div class="dzpan"><div class="dzrow"><h3 style="margin:0">Figures of this experiment' + (spec ? ': ' + esc(c.presetId) : '') + '</h3><span class="pnote">' + figs.length + ' figures, drawn from the ' + rows.length + ' runs' + (complete ? ' (every combination of the values was run)' : ' (' + nSeen + ' of the ' + nComb.toLocaleString() + ' combinations were run, so every run is shown as its own row and the effects are means with their error)') + '</span></div>' +
       (spec ? '<p style="margin:4px 0"><b>Question.</b> ' + esc(spec.aim) + '<br><b>Design.</b> ' + esc(spec.design) + '</p>' : '<p class="pnote" style="margin:4px 0">Your own design: the figures follow the factors you chose.</p>') +
