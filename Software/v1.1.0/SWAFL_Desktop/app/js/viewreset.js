@@ -6,13 +6,7 @@
   let on = true, comp = 1, pill = null, man = 0, sel = null;
   try { man = +localStorage.getItem('viewreset.manual') || 0; } catch (e) { }
   try { on = sessionStorage.getItem('viewreset.off') !== '1'; } catch (e) { }
-  // Two ways to measure the zoom: window width / page width, and the pixel ratio (a ratio below 1, or 1.1, can only come from zoom).
-  const raw = () => {
-    const o = window.outerWidth, i = window.innerWidth, d = window.devicePixelRatio || 1;
-    let a = (o > 300 && i > 200) ? o / i : 1;
-    if (Math.abs(a - 1) < 0.06) { if (d < 0.97 || Math.abs(d - 1.1) < 0.02) a = d; }
-    return a;
-  };
+  const raw = () => { const o = window.outerWidth, i = window.innerWidth; return (o > 300 && i > 200) ? o / i : 1; };
   const snap = r => { const b = S.reduce((a, c) => Math.abs(c - r) < Math.abs(a - r) ? c : a); return Math.abs(b - r) < 0.06 * b ? b : 1; };
   function put(z) {
     comp = z;
