@@ -5019,15 +5019,18 @@ function drawV7Profiles(y0) {
   [0, 25, 50, 75, 100].forEach(d => { const yy = top + d / 100 * ph; T(String(d), X[0] - 5, yy + 3, { s: 8.5, a: 'right', c: MUTE }); ctx.strokeStyle = MUTE; ctx.lineWidth = 0.8; ctx.beginPath(); ctx.moveTo(X[0] - 3, yy); ctx.lineTo(X[0], yy); ctx.stroke(); }); T('cm', X[0] - 5, top - 8, { s: 8.5, a: 'right', c: MUTE });
   // numbers per column
   const ny = top + ph + 16, nd = C.S.find(s => s.k === 'notill');
-  C.S.forEach((S, i) => { const x = X[i]; ctx.fillStyle = '#F4F1E6'; rrect(x, ny, PW, 86, 6); ctx.fill(); ctx.strokeStyle = '#C9C2AC'; ctx.lineWidth = 1; ctx.stroke();
-    T('pore index of the tilled layer ' + S.p.toFixed(2), x + 7, ny + 15, { s: 9, c: INK }); T('voids on the face: ' + (S.Gt.voidFrac * 100).toFixed(0) + '%, ' + (S.Gt.connFrac * 100).toFixed(0) + '% open to air', x + 7, ny + 29, { s: 9, c: INK });
-    T('drainage below 1 m (simulated): ' + (S.drain == null ? 'n/a' : S.drain.toFixed(0) + ' mm/yr'), x + 7, ny + 45, { s: 9, b: true, c: '#1B4FA0' });
-    T(S.k === 'notill' || S.drain == null || !nd || nd.drain == null ? 'reference system' : (S.drain - nd.drain >= 0 ? '+' : '') + (S.drain - nd.drain).toFixed(1) + ' mm/yr against no-till', x + 7, ny + 59, { s: 9, c: MUTE });
-    T(S.yield == null ? '' : 'yield ' + (S.yield * CROPS[state.crop].factor).toFixed(2) + ' ' + CROPS[state.crop].unit.split(' ')[0], x + 7, ny + 74, { s: 9, c: INK }); });
+  const nTx = S => [['pore index of the tilled layer ' + S.p.toFixed(2), { s: 9, c: INK }], ['voids on the face: ' + (S.Gt.voidFrac * 100).toFixed(0) + '%, ' + (S.Gt.connFrac * 100).toFixed(0) + '% open to air', { s: 9, c: INK }],
+    ['drainage below 1 m (simulated): ' + (S.drain == null ? 'n/a' : S.drain.toFixed(0) + ' mm/yr'), { s: 9, b: true, c: '#1B4FA0' }],
+    [S.k === 'notill' || S.drain == null || !nd || nd.drain == null ? 'reference system' : (S.drain - nd.drain >= 0 ? '+' : '') + (S.drain - nd.drain).toFixed(1) + ' mm/yr against no-till', { s: 9, c: MUTE }],
+    [S.yield == null ? '' : 'yield ' + (S.yield * CROPS[state.crop].factor).toFixed(2) + ' ' + CROPS[state.crop].unit.split(' ')[0], { s: 9, c: INK }]];
+  const nLines = S => nTx(S).reduce((q, l) => q + (l[0] ? sidWrap(l[0], 0, 0, PW - 14, l[1], 13, true) : 0), 0), nH = Math.max.apply(null, C.S.map(nLines)) * 13 + 12;
+  C.S.forEach((S, i) => { const x = X[i]; ctx.fillStyle = '#F4F1E6'; rrect(x, ny, PW, nH, 6); ctx.fill(); ctx.strokeStyle = '#C9C2AC'; ctx.lineWidth = 1; ctx.stroke();
+    let yy = ny + 15; nTx(S).forEach(l => { if (l[0]) yy += sidWrap(l[0], x + 7, yy, PW - 14, l[1], 13) * 13; }); });
+  let ey = ny + nH + 22;
   ['What each driver does here:', 'Tillage system sets how loose the tilled layer starts (pore index 1.0, 0.72 or 0.42) and so how big the clods and cracks are.', 'Consolidation rate sets how fast that layer settles back towards 0.30, so cracks close sooner at a high rate.',
-   'Soil sets the colour, the crack pattern (more clay, wider cracks) and the water the pores hold. The subsoil is the same for all three systems.'].forEach((l, k) => T(l, 16, ny + 106 + k * 13, { s: 9.2, b: k === 0, c: k ? INK : '#1F4D2E' }));
+   'Soil sets the colour, the crack pattern (more clay, wider cracks) and the water the pores hold. The subsoil is the same for all three systems.'].forEach((l, k) => { ey += sidWrap(l, 16, ey, W - 32, { s: 9.2, b: k === 0, c: k ? INK : '#1F4D2E' }, 13) * 13; });
   if (tip && V7P.hv) { const hv = V7P.hv; ctx.font = 'bold 10px sans-serif'; const w = Math.max(...tip.map(q => ctx.measureText(q).width)) + 14, h2 = tip.length * 14 + 8; let bx = hv.x + 14, by = hv.y + 12; if (bx + w > W - 4) bx = hv.x - w - 14; ctx.fillStyle = 'rgba(255,252,225,0.97)'; ctx.strokeStyle = INK; ctx.lineWidth = 1; rrect(bx, by, w, h2, 6); ctx.fill(); ctx.stroke(); tip.forEach((q, k) => T(q, bx + 7, by + 15 + k * 14, { s: 10, b: k === 0, c: INK })); }
-  return ny + 160;
+  return ey + 12;
 }
 
 function drawV7x() { drawV7(); drawV7Graphs(); sectionHeader('The system in the field: how tillage and settling change the pores', 906); drawSWA(14, 918, 592, 'structure'); const e = drawV7Profiles(1200); if (Math.abs(H - (e + 30)) > 4) { currentScene.h = Math.ceil(e + 30); setCanvasH(currentScene.h); } }
