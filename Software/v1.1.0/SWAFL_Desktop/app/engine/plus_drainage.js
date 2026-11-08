@@ -214,6 +214,8 @@
     draw: () => { IREND.drn = drawDRN(); }, title: 'Drainage design: spacing, depth, pipes and controlled drainage for your soil, crop and irrigation',
     legend: [['#1F6FB5', 'Water table'], ['#2B2F33', 'Drain pipe'], ['#C0803A', 'Control gate'], ['#C0503A', 'Depth the crop needs']],
     insight: 'Your soil sets how fast the water moves to the drains, your crop sets how deep the water table must stay, and your irrigation design sets how much water the drains must remove.' });
+  // the play bar shows the calendar date of the season day that is replayed, in the year of the date set in the app
+  window.drnLabel = t => { const C = irCtx(), P = C.plan, S = P && P.season; if (!S || !S.dpA || !S.dpA.length || typeof dateOfK !== 'function') return 'season of the DSS'; const n = S.dpA.length, i = clampN(Math.round(t * (n - 1)), 0, n - 1), d = dateOfK(S.a + (P.sh || 0) + i); return fmtDate(d) + ' (day ' + (i + 1) + ' of ' + n + ' of the season)'; };
   window.drnKey = () => JSON.stringify([DN, window.SID, window.DRP, window.SPR, window.IRX, state.method]);
   if (window.designWrap) window.designWrap('drn');
   window.drnDash = () => { const C = irCtx(), R = dnRun(C), c = R.ctrl, f1b = (v, d) => isFinite(v) ? v.toFixed(d == null ? 1 : d) : '-', okL = R.Lmax >= DN.Lf;
