@@ -43,7 +43,7 @@ window.DaisyExpTS = (() => {
     const byId = {}; (c.rows || []).forEach(r => { byId[r.id] = r; }); const valOf = r => (byId[r.id] || {}).val || r.val || {}, refOf = r => !!(byId[r.id] || {}).reference;
     const fids = (c.fids || []).filter(f => f !== 'run'), lev = f => { const s = []; runs.forEach(r => { const v = valOf(r)[f]; if (v !== undefined && !s.some(x => String(x) === String(v))) s.push(v); }); return s.sort((a, b) => (typeof a === 'number' && typeof b === 'number') ? a - b : String(a).localeCompare(String(b), undefined, { numeric: true })); };
     const varied = fids.filter(f => lev(f).length > 1);
-    if (st.pf === undefined || (st.pf && varied.indexOf(st.pf) < 0)) st.pf = varied.length > 1 ? varied[0] : null;
+    if (st.pf === undefined || (st.pf && st.pf !== '__each' && varied.indexOf(st.pf) < 0)) st.pf = varied.length ? '__each' : null;   /* by default every ticked factor gets its own panel, with one line for each of its values */
     if (st.cf === undefined || (st.cf && st.cf !== '__run' && varied.indexOf(st.cf) < 0)) st.cf = varied.length > 1 ? varied[1] : varied[0] || '__run';
     const logs = {}; runs.forEach(r => Object.keys(r.logs).forEach(k => { const d = r.logs[k]; if (d && d.n && d.cols && !logs[k]) logs[k] = d; }));
     const names = Object.keys(logs).sort((a, b) => logOrder(a) - logOrder(b) || a.localeCompare(b)); let figs = []; names.forEach(n => figsOf(n, logs[n]).forEach(f => figs.push(f))); figs = figs.map((f, i) => ({ f, i })).sort((a, b) => prio(a.f) - prio(b.f) || logOrder(a.f.log) - logOrder(b.f.log) || a.i - b.i).map(q => q.f);
@@ -51,7 +51,7 @@ window.DaisyExpTS = (() => {
     const opt = (v, t, cur) => '<option value="' + esc(v) + '"' + (String(cur) === String(v) ? ' selected' : '') + '>' + esc(t) + '</option>';
     let h = '<div class="dzpan"><div class="dzrow"><h3 style="margin:0">Every log of every run</h3><span class="pnote" data-ts="n"></span></div>' +
       '<p class="pnote" style="margin:2px 0 6px">Every quantity that Daisy wrote in the runs of this experiment (' + names.length + ' logs), one figure each, in the style of a journal figure: one panel for each value of one factor, one line for each value of another, the other factors averaged over the runs that share these values, and a band for the spread. ' + (anyDaily ? 'Daily logs are drawn through the year (the mean of the seasons, day by day) or over the whole period; ' : '') + 'annual logs year by year; depth logs as profiles. All of them are saved with the outputs of the experiment.</p>' +
-      '<div class="dzrow dzts"><label>Panels by</label><select data-ts="pf">' + opt('', 'one panel', st.pf || '') + varied.map(f => opt(f, short(c.flabel(f)), st.pf)).join('') + '</select>' +
+      '<div class="dzrow dzts"><label>Panels by</label><select data-ts="pf">' + opt('', 'one panel', st.pf || '') + (varied.length ? opt('__each', 'every factor, one panel for each', st.pf) : '') + varied.map(f => opt(f, short(c.flabel(f)), st.pf)).join('') + '</select>' +
       '<label>Lines by</label><select data-ts="cf">' + opt('', 'one line (all runs)', st.cf || '') + varied.map(f => opt(f, short(c.flabel(f)), st.cf)).join('') + opt('__run', 'every run', st.cf) + '</select>' +
       '<label>Time</label><select data-ts="mode">' + (anyDaily ? opt('doy', 'through the year (mean of the seasons)', st.mode) + opt('time', 'every day of the period', st.mode) + opt('month', 'monthly', st.mode) : '') + opt('year', 'yearly', st.mode) + opt('cum', 'cumulative over all the years', st.mode) + '</select>' +
       '<label>Line</label><select data-ts="stat">' + opt('mean', 'mean', st.stat) + opt('median', 'median', st.stat) + '</select>' +
@@ -62,13 +62,16 @@ window.DaisyExpTS = (() => {
     const pl = st.pf ? lev(st.pf) : [null], cl = st.cf === '__run' ? runs.map(r => r.id) : st.cf ? lev(st.cf) : [null], cols = colours(cl.filter(x => x !== null));
     const lname = (f, v) => f === '__run' ? (window.DaisyExp && window.DaisyExp.shortLabel ? window.DaisyExp.shortLabel(valOf(runs.find(r => r.id === v) || {}), refOf(runs.find(r => r.id === v) || {})) || v : v) : c.lname(f, v);
     const grp = (pv, cv) => runs.filter(r => (pv === null || String(valOf(r)[st.pf]) === String(pv)) && (cv === null || (st.cf === '__run' ? r.id === cv : String(valOf(r)[st.cf]) === String(cv))));
+    const PP = st.pf === '__each' ? varied.map(fid => { const cl0 = lev(fid); return { pv: fid, cf: fid, cl: cl0, cols: colours(cl0), rsOf: cv => runs.filter(r => String(valOf(r)[fid]) === String(cv)), title: short(c.flabel(fid)) }; })
+      : pl.map(pv => ({ pv, cf: st.cf, cl, cols, rsOf: cv => grp(pv, cv), title: pv === null ? '' : short(c.flabel(st.pf)) + ': ' + lname(st.pf, pv) }));
+    const hf = st.pf === '__each' ? varied[0] || null : st.pf;   /* the maps of depth and time: one for each value of one factor */
     const center = a => st.stat === 'median' ? pct(a, 0.5) : mean(a);
     const colOf = (d, name) => { const j = d.cols.indexOf(name); return j >= 0 ? d.data[j] : null; };
     // one figure: the panels and their lines
     function build(f) {
       const panels = [];
-      pl.forEach((pv, pi) => { const series = [];
-        cl.forEach((cv, ci) => { const rs = grp(pv, cv); if (!rs.length) return; const color = cv === null ? '#0072B2' : cols[ci], name = cv === null ? (pl.length > 1 ? '' : 'all runs') : lname(st.cf, cv);
+      PP.forEach((pp, pi) => { const series = [];
+        pp.cl.forEach((cv, ci) => { const rs = pp.rsOf(cv); if (!rs.length) return; const color = cv === null ? '#0072B2' : pp.cols[ci], name = cv === null ? (PP.length > 1 ? '' : 'all runs') : lname(pp.cf, cv);
           if (f.kind === 'prof') { const z = [], v = [], lo = [], hi = []; const dc0 = IO().depthColumns(logs[f.log])[f.v] || []; dc0.forEach(q => { const pool = [], ms = []; rs.forEach(r => { const d = r.logs[f.log]; if (!d) return; const y = d.data[q.j]; if (!y) return; const fin = y.filter(isFinite); if (fin.length) { ms.push(mean(fin)); fin.forEach(x => pool.push(x)); } }); if (!ms.length) return; z.push(q.z); v.push(center(ms)); lo.push(pct(pool, 0.1)); hi.push(pct(pool, 0.9)); }); if (z.length) series.push({ name, color, z, v, lo, hi }); return; }
           const daily = isDaily(f.log, logs[f.log]);
           if (daily && st.mode === 'doy') { const bins = Array.from({ length: 366 }, () => []); rs.forEach(r => { const d = r.logs[f.log]; if (!d || !d.time) return; const y = colOf(d, f.col); if (!y) return; for (let i = 0; i < d.n; i++) if (isFinite(y[i])) bins[Math.min(365, doyOf(d.time[i]))].push(y[i]); });
@@ -83,25 +86,26 @@ window.DaisyExpTS = (() => {
               acc.forEach((a, k) => { const v = mode === 'cum' ? a[0] : (fx || !daily) && mode !== 'time' ? a[0] : a[0] / a[1]; let q = by.get(k); if (!q) by.set(k, q = []); q.push(v); }); });
             const ks = [...by.keys()].sort((a, b) => a - b), many = rs.length > 1, timeX = daily && mode !== 'year';
             series.push({ name, color, x: ks, m: ks.map(k => center(by.get(k))), lo: many ? ks.map(k => Math.min.apply(null, by.get(k))) : null, hi: many ? ks.map(k => Math.max.apply(null, by.get(k))) : null, pts: (!timeX || mode === 'month') && ks.length <= 80, lw: timeX && mode !== 'month' ? 1.3 : 1.7 }); } });
-        if (series.length) panels.push({ title: pv === null ? '' : short(c.flabel(st.pf)) + ': ' + lname(st.pf, pv), letter: pl.length > 1 ? '(' + LET[pi % 26] + ')' : '', series }); });
+        if (series.length) panels.push({ title: pp.title, letter: PP.length > 1 ? '(' + LET[pi % 26] + ')' : '', series }); });
+      if (st.pf === '__each' && f.kind !== 'prof') panels.forEach(q => q.series.forEach(z => { z.lo = null; z.hi = null; }));   /* the spread over the other factors would only hide the lines of the factor shown */
       return panels;
     }
     const titleOf = f => f.kind === 'prof' ? nameOf(f.v) + ': profile' : f.kind === 'heat' ? nameOf(f.v) + ' over depth and time' : nameOf(f.col), unitTxt = f => f.unit && f.unit !== (f.col || f.v) ? ' (' + uni(f.unit) + ')' : '';
-    function noteOf(f) { const d = logs[f.log], daily = isDaily(f.log, d), what = st.cf === '__run' ? 'one line for each run' : st.cf ? 'one line for each value of ' + short(c.flabel(st.cf)).toLowerCase() : 'all runs together', pan = st.pf ? 'one panel for each value of ' + short(c.flabel(st.pf)).toLowerCase() : '';
-      const rest = varied.filter(x => x !== st.pf && x !== st.cf).map(x => short(c.flabel(x)).toLowerCase()), stat = st.stat === 'median' ? 'median' : 'mean';
+    function noteOf(f) { const d = logs[f.log], daily = isDaily(f.log, d), what = st.pf === '__each' ? '' : st.cf === '__run' ? 'one line for each run' : st.cf ? 'one line for each value of ' + short(c.flabel(st.cf)).toLowerCase() : 'all runs together', pan = st.pf === '__each' ? 'one panel for each factor of the experiment, one line for each of its values, the other factors averaged' : st.pf ? 'one panel for each value of ' + short(c.flabel(st.pf)).toLowerCase() : '';
+      const rest = st.pf === '__each' ? [] : varied.filter(x => x !== st.pf && x !== st.cf).map(x => short(c.flabel(x)).toLowerCase()), stat = st.stat === 'median' ? 'median' : 'mean';
       let t = f.kind === 'prof' ? 'The ' + stat + ' of ' + f.v + ' at each depth over the whole period, from the log ' + f.log + '; band: 10 to 90 % of the days and runs.'
         : daily && st.mode === 'doy' ? 'Day by day through the year from the log ' + f.log + ': the ' + stat + ' of all seasons and runs on that day; band: 10 to 90 % of them.'
         : st.mode === 'cum' ? 'Cumulative over all the years from the log ' + f.log + ': the running total of every run from the start, the ' + stat + ' of the runs; band: the lowest to the highest run.'
         : daily && st.mode === 'month' ? 'Month by month from the log ' + f.log + ': ' + (isFlux(f) ? 'the total of each month' : 'the mean of each month') + ' in every run, the ' + stat + ' of the runs; band: the lowest to the highest run.'
         : daily && st.mode === 'time' ? 'Every day of the period from the log ' + f.log + ': the ' + stat + ' of the runs; band: the lowest to the highest run.'
         : 'Year by year from the log ' + f.log + ': ' + (daily ? (isFlux(f) ? 'the total of each year' : 'the mean of each year') : 'the value Daisy wrote for each season') + ' in every run, the ' + stat + ' of the runs; band: the lowest to the highest run.';
-      if (f.kind === 'heat') return (daily && st.mode === 'doy' ? 'Day of the year (x) and depth (y), the mean of all seasons and runs' : 'Every day (x) and depth (y), the mean of the runs') + ', from the log ' + f.log + '; one map for each value of ' + (st.pf ? short(c.flabel(st.pf)).toLowerCase() : 'the experiment') + ', with one colour scale for all maps.';
+      if (f.kind === 'heat') return (daily && st.mode === 'doy' ? 'Day of the year (x) and depth (y), the mean of all seasons and runs' : 'Every day (x) and depth (y), the mean of the runs') + ', from the log ' + f.log + '; one map for each value of ' + (hf ? short(c.flabel(hf)).toLowerCase() : 'the experiment') + ', with one colour scale for all maps.';
       const tail = [pan, what].filter(Boolean).join(', '); return t + (tail ? ' ' + tail.charAt(0).toUpperCase() + tail.slice(1) : '') + '.' + (rest.length ? ' Averaged over ' + rest.join(', ') + '.' : ''); }
     // depth and time: one map for each value of the panel factor, the mean of its runs (through the year: of its seasons too), one colour scale
     function heatJob(f, card, cv) {
       if (card._maps) return drawMaps(f, card, cv, card._maps);
       const dc0 = IO().depthColumns(logs[f.log])[f.v] || [], daily = isDaily(f.log, logs[f.log]), doy = daily && st.mode === 'doy', maps = [];
-      pl.slice(0, 6).forEach(pv => { const rs = grp(pv, null), acc = new Map(); rs.forEach(r => { const d = r.logs[f.log]; if (!d || !d.time) return; dc0.forEach(q => { const y = d.data[q.j]; if (!y) return; for (let i = 0; i < d.n; i++) { if (!isFinite(y[i])) continue; const t = doy ? Date.UTC(2001, 0, 1) + Math.min(364, doyOf(d.time[i])) * 864e5 : Math.round(d.time[i] / 864e5) * 864e5, k = t + '|' + q.z; let a = acc.get(k); if (!a) acc.set(k, a = [0, 0]); a[0] += y[i]; a[1]++; } }); });
+      (hf ? lev(hf) : [null]).slice(0, 6).forEach(pv => { const rs = runs.filter(r => pv === null || String(valOf(r)[hf]) === String(pv)), acc = new Map(); rs.forEach(r => { const d = r.logs[f.log]; if (!d || !d.time) return; dc0.forEach(q => { const y = d.data[q.j]; if (!y) return; for (let i = 0; i < d.n; i++) { if (!isFinite(y[i])) continue; const t = doy ? Date.UTC(2001, 0, 1) + Math.min(364, doyOf(d.time[i])) * 864e5 : Math.round(d.time[i] / 864e5) * 864e5, k = t + '|' + q.z; let a = acc.get(k); if (!a) acc.set(k, a = [0, 0]); a[0] += y[i]; a[1]++; } }); });
         const tt = [], zz = [], vv = []; acc.forEach((a, k) => { const i = k.indexOf('|'); tt.push(+k.slice(0, i)); zz.push(+k.slice(i + 1)); vv.push(a[0] / a[1]); }); if (vv.length) maps.push({ pv, tt, zz, vv }); });
       card._maps = maps; return drawMaps(f, card, cv, maps);
     }
@@ -110,7 +114,7 @@ window.DaisyExpTS = (() => {
       if (!maps.length) { card.remove(); return; } let lo = Infinity, hi = -Infinity; maps.forEach(m => m.vv.forEach(v => { if (v < lo) lo = v; if (v > hi) hi = v; }));
       const gridBox = card.querySelector('[data-ts="cvs"]'); if (maps.length > 1) { gridBox.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:6px 10px'; card.dataset.cols = 2; cv.parentNode.style.minWidth = '0'; } const cvs = [cv]; while (cvs.length < maps.length) { let c2 = card.querySelectorAll('canvas')[cvs.length]; if (!c2) { const dv = document.createElement('div'); c2 = document.createElement('canvas'); c2.style.cssText = cv.style.cssText; dv.style.minWidth = '0'; dv.appendChild(c2); gridBox.appendChild(dv); } cvs.push(c2); }
       const pal = /theta|water/i.test(f.v) ? 'blues' : /^h$|pF/i.test(f.v) ? 'pf' : /NO3|NH4|nitr|ammon/i.test(f.v) ? 'ylgn' : /^T$|temp/i.test(f.v) ? 'ylorrd' : 'viridis';
-      maps.forEach((m, i) => P().heat(cvs[i], m.tt, m.zz, m.vv, { title: (maps.length > 1 ? '(' + LET[i] + ') ' : '') + (m.pv === null ? nameOf(f.v) : short(c.flabel(st.pf)) + ': ' + lname(st.pf, m.pv)), time: true, unit: uni(f.unit) || f.v, pal, lo, hi, h: maps.length > 1 ? 250 : 300, xt: doy ? 'Month of the year (mean of the seasons)' : 'Date', yt: 'Depth (cm)' }));
+      maps.forEach((m, i) => P().heat(cvs[i], m.tt, m.zz, m.vv, { title: (maps.length > 1 ? '(' + LET[i] + ') ' : '') + (m.pv === null ? nameOf(f.v) : short(c.flabel(hf)) + ': ' + lname(hf, m.pv)), time: true, unit: uni(f.unit) || f.v, pal, lo, hi, h: maps.length > 1 ? 250 : 300, xt: doy ? 'Month of the year (mean of the seasons)' : 'Date', yt: 'Depth (cm)' }));
     }
     function draw() {
       const L = sel(), show = L.slice(0, MAXFIG), cnt = host.querySelector('[data-ts="n"]'); if (cnt) cnt.textContent = L.length + ' figures' + (L.length > MAXFIG ? ' (the first ' + MAXFIG + '; choose one log or find a quantity for the others)' : '');
