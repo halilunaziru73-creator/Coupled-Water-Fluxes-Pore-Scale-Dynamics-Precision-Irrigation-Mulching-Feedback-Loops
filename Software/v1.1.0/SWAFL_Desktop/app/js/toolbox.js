@@ -30,6 +30,7 @@ const Toolbox = (() => {
       ['Optimise surface layout (best design)', 'run', () => Act.optimise(), 'optimum best length width cutoff'],
       ['Open drip irrigation design', 'drop', () => Layers.open('drip'), 'emitter lateral dripline'],
       ['Open sprinkler design and pipes', 'sprinkler', () => Layers.open('spr'), 'pipe lateral mainline pump nozzle layout'],
+      ['Open drainage design', 'pipe', () => Layers.open('drn'), 'drain spacing hooghoudt water table waterlogging controlled drainage tile pipe ditch salinity leaching'],
       ['Use overhead sprinkler method', 'sprinkler', () => E.set({ method: 'M01_Overhead' }), 'overhead'],
       ['Use surface method', 'pipe', () => E.set({ method: 'M02_Surface' }), 'furrow'],
       ['Use drip 20 to 30 cm method', 'drop', () => E.set({ method: 'M06_Drip20-30cm' }), 'subsurface'] ] },

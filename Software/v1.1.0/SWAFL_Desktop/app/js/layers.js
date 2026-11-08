@@ -2,7 +2,7 @@
 'use strict';
 const Layers = (() => {
   const GROUPS = [
-    { id: 'g-design', name: 'Irrigation design', icon: 'pipe', items: [['sid', 'Surface irrigation design', 'S2'], ['drip', 'Drip irrigation design', 'S3'], ['spr', 'Sprinkler design and pipes', 'S4']] },
+    { id: 'g-design', name: 'Irrigation design', icon: 'pipe', items: [['sid', 'Surface irrigation design', 'S2'], ['drip', 'Drip irrigation design', 'S3'], ['spr', 'Sprinkler design and pipes', 'S4'], ['drn', 'Drainage design', 'S5']] },
     { id: 'g-ctrl', name: 'Irrigation control', icon: 'drop', items: [['v1', 'Sensor and trigger', 'V1'], ['n1', 'Trigger law', 'N1']] },
     { id: 'g-mulch', name: 'Mulch and evaporation', icon: 'layers', items: [['v4', 'Mulch against bare soil', 'V4'], ['v6', 'Mulch control', 'V6'], ['e1', 'Evaporation', 'E1'], ['n2', 'Fate of saved water', 'N2'], ['n3', 'Regime map', 'N3']] },
     { id: 'g-soil', name: 'Soil structure and tillage', icon: 'soil', items: [['v3', 'Tillage and structure', 'V3'], ['v7', 'Soil hydraulic drivers', 'V7'], ['r1', 'Root structure', 'R1']] },
@@ -22,7 +22,7 @@ const Layers = (() => {
     { id: 'g-dbuilt', name: 'Model development', icon: 'soil', items: [['dz-editor', 'Set-up editor (.dai)', ''], ['dz-build', 'Model builder (any Daisy model as a form)', ''], ['dz-richards', 'Soil column (Richards equation)', ''], ['dz-deni', 'Denitrification and N2O response curves', ''], ['dz-calib', 'Calibration', '']] },
     { id: 'g-ddoc', name: 'Documentation', icon: 'book', items: [['dz-learn', 'Learn the Daisy files (.dai, Common, a sample experiment)', ''], ['dz-docs', 'Model description and installation', ''], ['dz-refman', 'Daisy reference manual (every component and parameter)', ''], ['dz-manual', 'The SWAFL manual inside the program (every section, at its page)', '']] }
   ];
-  const DESIGN = ['sid', 'drip', 'spr'];
+  const DESIGN = ['sid', 'drip', 'spr', 'drn'];
   // the manual at the section of the layer in use (the manual is built into the program: js/daisymanual.js)
   const manBtn = id => { const M = window.SWAFLManual, sx = M && M.idx ? M.forLayer(id) : null; return '<button class="vb" data-man="' + (sx ? sx.page : 0) + '" title="' + UI.esc(sx ? 'The manual: ' + sx.title + ', page ' + sx.page : 'The manual') + '" style="margin-left:auto">&#128214; Manual' + (sx ? ' p. ' + sx.page : '') + '</button>'; };
   let dzCur = null, tabs = [], cur = null, started = false, collapsed = { 'g-water': true, 'g-ctrl': true, 'g-soil': true, 'g-pheno': true, 'g-mulch': true, 'g-loop': true, 'g-design': true, 'g-crop': true, 'g-year': true, 'g-chem': true, 'g-dss': true, 'g-dscen': true, 'g-ddss': true, 'droot': true, 'g-ddata': true, 'g-dproc': true, 'g-dana': true, 'g-dbuilt': true, 'g-ddoc': true, 'g-daisy': true, 's-sid': true, 's-drip': true, 's-spr': true }, sectionPick = {};

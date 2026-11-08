@@ -21,6 +21,8 @@ const Dash = (() => {
   let dayCache = { key: '', D: null }, layerCache = { key: '', L: null }, n1Chart = null, N1T = null, v7Chart = null;
   function results(s) {
     const key = s.date + '|' + JSON.stringify(s.state) + '|' + s.year + '|' + ((s.wx && s.wx.key) || '');
+    if (s.scene === 'drn') { let N = null; try { N = E.json('window.drnDash ? drnDash() : null'); } catch (e) { } if (N) { const tick = q => '<li class="' + (q[0] ? 'ok' : 'no') + '"><span>' + (q[0] ? '&#10003;' : '&ndash;') + '</span><div><b>' + UI.esc(q[1]) + '</b><br><small>' + UI.esc(q[2]) + '</small></div></li>';
+      setBody(SEC('drn', 'Drainage design: ' + UI.esc(N.soil), 'follows every control', '<table class="n1t">' + N.rows.map(r => '<tr><td>' + UI.esc(r[0]) + '</td><td><b>' + UI.esc(r[1]) + '</b></td></tr>').join('') + '</table><ul class="n1l">' + N.checks.map(tick).join('') + '</ul>')); return; } }
     if (Layers.DESIGN.includes(s.scene) && !runOn(s.scene)) { setBody(SEC('dr-pre', UI.esc(Layers.nameOf(s.scene)), 'inputs', '<div class="dnote">Nothing has been simulated yet. Set the inputs in the drawing (click a value box to type its exact value), then press <b>Run simulation</b>: the results of this design appear here.</div>' + runBtns(s.scene))); return; }
     if (dayCache.key !== key) { dayCache = { key, D: E.day() }; }
     const D = dayCache.D, Y = D && D.year ? D.year : null;

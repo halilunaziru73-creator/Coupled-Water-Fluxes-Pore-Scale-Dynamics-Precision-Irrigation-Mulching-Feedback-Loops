@@ -40,7 +40,7 @@ def fitmath(s):
 PARTS = {'start': ('swaflblue', 'Start'), 'layer': ('partgreen', 'Layers'), 'design': ('partteal', 'Design'), 'out': ('partorange', 'Outputs'), 'data': ('partbrown', 'Data'), 'ref': ('partgrey', 'Reference'), 'daisy': ('partpurple', 'Daisy')}
 ICON = {'01_install': ('start', '⚙'), '02_window': ('start', '▦'), '03_controls': ('start', '☰'), '04_dates': ('start', '◷'), '05_engine': ('start', '⚛'),
   '06_control': ('layer', '☂'), '07_field': ('layer', '⊞'), '08_structure': ('layer', '☷'), '08b_phenotyping': ('layer', '☘'), '09_mulch': ('layer', '❦'), '10_loops': ('layer', '♻'),
-  '11_surface': ('design', '☔'), '12_drip': ('design', '✚'), '13_sprinkler': ('design', '❄'),
+  '11_surface': ('design', '☔'), '12_drip': ('design', '✚'), '13_sprinkler': ('design', '❄'), '13b_drainage': ('design', '≋'),
   '14_dashboard': ('out', '▤'), '15_workflows': ('out', '✔'), '16_exports': ('out', '✎'), '17_limits': ('out', '⚠'), '18_runs': ('out', '⚑'),
   '19_weather': ('data', '☀'), '20_field': ('data', '⊞'), '21_crops': ('data', '✿'), '22_seasonal': ('data', '◷'), '22b_layer_reference': ('layer', '☷'), '23_reports': ('out', '✎'),
   '24_changes': ('ref', '★'), '25_atlas': ('ref', '▥'),

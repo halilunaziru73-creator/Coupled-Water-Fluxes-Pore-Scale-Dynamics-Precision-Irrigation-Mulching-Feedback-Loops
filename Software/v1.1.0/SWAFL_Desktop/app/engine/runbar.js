@@ -5,7 +5,7 @@
 'use strict';
 (function () {
   if (typeof SCENES === 'undefined' || typeof switchScene !== 'function') return;
-  const DES = ['sid', 'drip', 'spr'], RX = {}, UI_ONLY = ['fview', 'range', 'n1Prev'];
+  const DES = ['sid', 'drip', 'spr', 'drn'], RX = {}, UI_ONLY = ['fview', 'range', 'n1Prev'];
   const key = () => { const s = {}; Object.keys(state).forEach(k => { if (UI_ONLY.indexOf(k) < 0) s[k] = state[k]; }); let w = ''; try { w = window.WXD && window.WXD.on ? window.WXD.key : 'rec'; } catch (e) { } let x = ''; try { x = window.RUNKEY_EXTRA ? window.RUNKEY_EXTRA(currentScene.id) : ''; } catch (e) { } return JSON.stringify(s) + '|' + w + '|' + x; };
   const gated = sc => sc && DES.indexOf(sc.id) < 0 && !window.__REPORTING && !window.__NORUNGATE && !document.body.classList.contains('embed');
   // A change of the settings that the PERSON makes (a control, a button, a click on the picture) invalidates a result. Some layers
@@ -15,7 +15,7 @@
   { const mark = e => { try { const t = e.target, bar = document.getElementById('playBtn') && document.getElementById('playBtn').parentElement; if (t && t.closest && (t.closest('#playBtn') || (bar && bar.contains(t)))) return; } catch (x) { } touched = Date.now(); };
     ['input', 'change', 'click', 'keydown'].forEach(ev => document.addEventListener(ev, mark, true)); }
   function run(id) { touched = 0; const sc = SCENES.find(s => s.id === id); RX[id] = { on: true, st: key(), why: '' }; if (sc && sc.h) { try { setCanvasH(sc.h); } catch (e) { } } if (sc && sc.play) { play.t = 0; play.hold = 0; play.on = true; const pb = document.getElementById('playBtn'); if (pb) pb.textContent = 'Pause'; } }
-  window.runLayer = run; window.layerRan = id => id === 'dph' ? !!(window.__phRan && window.__phRan()) : !!(RX[id] && RX[id].on);
+  window.runLayer = run; window.layerRan = id => id === 'drn' ? true : id === 'dph' ? !!(window.__phRan && window.__phRan()) : !!(RX[id] && RX[id].on);
   const btn = (x, y, w, h, label) => { ctx.fillStyle = '#0A246A'; ctx.fillRect(x, y, w, h); ctx.fillStyle = '#3A6EA5'; ctx.fillRect(x, y, w, 2); ctx.fillRect(x, y, 2, h); ctx.fillStyle = '#000'; ctx.fillRect(x, y + h - 2, w, 2); ctx.fillRect(x + w - 2, y, 2, h); T(label, x + w / 2, y + h / 2 + 4, { s: 11, b: true, c: '#FFFFFF', a: 'center' }); };
   function card(sc, R) {
     try { setCanvasH(Math.min(sc.h || 600, 420)); } catch (e) { } paper();

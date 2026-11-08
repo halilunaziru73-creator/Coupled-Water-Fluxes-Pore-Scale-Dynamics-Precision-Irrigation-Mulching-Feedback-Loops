@@ -41,7 +41,7 @@ const Props = (() => {
       { id: 'p-act', name: 'Design shortcuts (connected to the irrigation design)', rows: [
         { t: 'live', get: s => designLive(s) },
         { t: 'btns', btns: [['Design for the method above', () => Layers.open(E.json('designOfMethod()') || 'sid')], ['Sketch the field and pipes', () => Sketch.open()]] },
-        { t: 'btns', btns: [['Surface design', () => Layers.open('sid')], ['Drip design', () => Layers.open('drip')], ['Sprinklers and pipes', () => Layers.open('spr')], ['Optimise surface', () => Act.optimise()]] } ] }
+        { t: 'btns', btns: [['Surface design', () => Layers.open('sid')], ['Drip design', () => Layers.open('drip')], ['Sprinklers and pipes', () => Layers.open('spr')], ['Drainage', () => Layers.open('drn')], ['Optimise surface', () => Act.optimise()]] } ] }
     ];
   }
   // what the irrigation settings are linked to: the design layer of the method, the area, the pipes of the sketch, and the result of the last design run
