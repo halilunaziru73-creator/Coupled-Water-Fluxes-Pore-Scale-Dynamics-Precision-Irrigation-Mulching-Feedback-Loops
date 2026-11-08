@@ -112,19 +112,19 @@
     ctx.fillStyle = PANEL; ctx.fillRect(x, y, w, h); ctx.strokeStyle = '#B9B4A6'; ctx.lineWidth = 1; ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);
     ctx.fillStyle = '#ECE9E0'; ctx.fillRect(x + 1, y + 1, w - 2, 20); ctx.strokeStyle = '#D2CEC2'; ctx.beginPath(); ctx.moveTo(x, y + 21.5); ctx.lineTo(x + w, y + 21.5); ctx.stroke();
     const fitT = (t, mw, sz, bd) => { t = String(t); ctx.font = (bd ? 'bold ' : '') + sz + 'px sans-serif'; if (ctx.measureText(t).width <= mw) return t; let lo = 0, hi = t.length; while (lo < hi) { const m = (lo + hi + 1) >> 1; if (ctx.measureText(t.slice(0, m) + '\u2026').width <= mw) lo = m; else hi = m - 1; } return t.slice(0, lo).replace(/[\s\u00b7,;]+$/, '') + '\u2026'; };
-    const tt = fitT(title, w * (sub ? 0.58 : 0.9), 11, true); ctx.font = 'bold 11px sans-serif'; const tw = ctx.measureText(tt).width; T(tt, x + 8, y + 15, { s: 11, b: true, c: HEAD }); if (sub) { const st = fitT(sub, w - tw - 36, 9, false); T(st, x + w - 8, y + 15, { s: 9, c: MUTE, a: 'right' }); }
+    ctx.font = '9px sans-serif'; const subW = sub ? ctx.measureText(String(sub)).width : 0; const tt = fitT(title, sub ? Math.max(w * 0.58, w - subW - 30) : w * 0.9, 11, true); ctx.font = 'bold 11px sans-serif'; const tw = ctx.measureText(tt).width; T(tt, x + 8, y + 15, { s: 11, b: true, c: HEAD }); if (sub) { const st = fitT(sub, w - tw - 36, 9, false); T(st, x + w - 8, y + 15, { s: 9, c: MUTE, a: 'right' }); }
   }
   function yAxis(x0, y0, w, h, lo, hi, unit, ticks) {
     ctx.strokeStyle = GRID; ctx.lineWidth = 1; const n = ticks || 4;
     for (let i = 0; i <= n; i++) { const v = lo + (hi - lo) * i / n, y = y0 + h - h * i / n; ctx.beginPath(); ctx.moveTo(x0, y + 0.5); ctx.lineTo(x0 + w, y + 0.5); ctx.stroke(); T(fmt(v, Math.abs(hi - lo) < 5 ? 1 : 0), x0 - 4, y + 3, { s: 8.5, c: MUTE, a: 'right' }); }
-    if (unit) T(unit, x0 - 4, y0 - 13, { s: 8.5, c: MUTE, a: 'right' });
+    if (unit) T(unit, x0 + 4, y0 + 11, { s: 8.5, c: MUTE, a: 'left' });
   }
   const nice = v => { if (v <= 0) return 1; const p = Math.pow(10, Math.floor(Math.log10(v))), f = v / p; return ([1, 1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].find(q => f <= q + 1e-9) || 10) * p; };
   // text that shrinks to fit its width (down to 7 px), then is shortened
   const TF = (txt, x, y, maxW, o) => { if (typeof maxW === 'object') { o = maxW; maxW = null; } if (maxW == null) maxW = W - x - 12; o = Object.assign({}, o || {}); let sz = o.s || 11; ctx.font = (o.b ? 'bold ' : '') + sz + 'px sans-serif'; while (ctx.measureText(txt).width > maxW && sz > 7) { sz -= 0.5; ctx.font = (o.b ? 'bold ' : '') + sz + 'px sans-serif'; } let t = txt; while (ctx.measureText(t).width > maxW && t.length > 4) t = t.slice(0, -2); if (t !== txt) t = t.slice(0, -1) + '…'; o.s = sz; T(t, x, y, o); };
   function yearBars(x, y, w, h, vals, o) {
     o = o || {}; const n = vals.length, vmin = Math.min(0, ...vals, ...(o.extra || []).filter(v => v != null)), lo = o.lo != null ? o.lo : (vmin > -0.06 * Math.max(...vals.map(Math.abs), 1) ? 0 : -nice(-vmin)), hi = nice(Math.max(o.hiMin || 0, ...vals.map(Math.abs), ...(o.extra || []).filter(v => v != null)) * 1.05);
-    const x0 = x + 42, y0 = y + 30, ww = w - 54, hh = h - 64; yAxis(x0, y0, ww, hh, lo, hi, o.unit);
+    const x0 = x + 42, y0 = y + 38, ww = w - 54, hh = h - 72; yAxis(x0, y0, ww, hh, lo, hi, o.unit);
     const nO = o.nObs || n, obs = vals.slice(0, nO), bw = ww / n, sel = yearNow(), m = mean(obs), p10 = pct(obs, 0.1), p90 = pct(obs, 0.9), Y = v => y0 + hh - (v - lo) / (hi - lo) * hh;
     if (nO < n) { ctx.fillStyle = 'rgba(232,145,45,0.10)'; ctx.fillRect(x0 + nO * bw, y0, ww - nO * bw, hh); }
     ctx.fillStyle = 'rgba(46,125,232,0.08)'; ctx.fillRect(x0, Y(p90), ww, Y(p10) - Y(p90));
@@ -134,7 +134,7 @@
       if (o.overlay && o.overlay[i] != null) { ctx.fillStyle = '#1B1F23'; ctx.beginPath(); ctx.arc(bx + bw * 0.35, Math.max(y0 + 3, Math.min(y0 + hh - 3, Y(o.overlay[i]))), 2.6, 0, Math.PI * 2); ctx.fill(); }
       if (o.line && o.line[i] != null) { ctx.strokeStyle = '#7B2FA8'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(bx - bw * 0.1, Y(o.line[i])); ctx.lineTo(bx + bw * 0.8, Y(o.line[i])); ctx.stroke(); }
       hot(bx, y0, bw * 0.7, hh, () => { if (i < NYR) setYear(i); }, YRS()[i] + (i >= nO ? ' (projected)' : '') + ': ' + fmt(v, o.dec) + ' ' + (o.unit || ''));
-      if (i % (n > 24 ? 6 : 4) === 0 || (i === n - 1 && (n - 1) % (n > 24 ? 6 : 4) > 2)) T(YRS()[i] || '', bx + bw * 0.35, y0 + hh + 12, { s: 8, c: MUTE, a: 'center' });
+      if (i % (n > 24 ? 6 : 4) === 0 || (i === n - 1 && (n - 1) % (n > 24 ? 6 : 4) > 3.5)) T(YRS()[i] || '', bx + bw * 0.35, y0 + hh + 12, { s: 8, c: MUTE, a: 'center' });
     });
     if (nO < n) { ctx.strokeStyle = '#C77D1A'; ctx.setLineDash([3, 3]); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(x0 + nO * bw, y0); ctx.lineTo(x0 + nO * bw, y0 + hh); ctx.stroke(); ctx.setLineDash([]); T('projection', x0 + nO * bw + 4, y0 + 9, { s: 8.5, c: '#C77D1A' }); }
     ctx.strokeStyle = '#1B1F23'; ctx.setLineDash([4, 3]); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(x0, Y(m)); ctx.lineTo(x0 + ww, Y(m)); ctx.stroke(); ctx.setLineDash([]);
@@ -162,7 +162,7 @@
       ['Evapotranspiration', 'mm per year', rp.ET, { col: '#E8912D', unit: 'mm' }],
       ['Days of crop water stress', 'days per season', rp.WS, { col: '#D93025', unit: 'days', dec: 1, overlay: rfp ? rfp.WS : null, extra: rfp ? rfp.WS : [] }],
       ['Salt in the root zone (ECe)', r.tol ? 'dS/m, season mean · yield falls above ' + r.tol.th + ' dS/m' : 'dS/m, season mean', rp.EC, { col: '#8E7A2A', unit: 'dS/m', dec: 1 }],
-      ['Wilting point of the season', '% by volume, season mean: rises with the salt', rp.WPm, { col: '#B23A2E', unit: '%', dec: 1 }],
+      ['Wilting point of the season', '% by volume, season mean', rp.WPm, { col: '#B23A2E', unit: '%', dec: 1 }],
     ];
     const st = {};
     P.forEach((p, i) => { const x = 16 + (i % 2) * (cw + 12), yy = y + 6 + Math.floor(i / 2) * (ph + 10); frame(x, yy, cw, ph, p[0], p[1]); st[p[0]] = yearBars(x, yy, cw, ph, p[2].map(v => v == null ? 0 : v), Object.assign({ nObs: 20 }, p[3])); });
@@ -178,7 +178,7 @@
       ['Years with a yield below 80 % of the average', Yv.filter(v => v < 0.8 * mY).length + ' of 20', 'yield risk at this setting'],
       ['Nitrate leaching in the worst year', fmt(Math.max(...NL), 1) + ' kg N/ha', 'mean ' + fmt(mean(NL), 1) + ' kg N/ha'],
     ];
-    if (NP()) { const pI = rp.I.slice(20), pY = rp.Y.slice(20), dI = 100 * (mean(pI) / Math.max(1e-6, mI) - 1), dY = 100 * (mean(pY) / Math.max(1e-6, mY) - 1); rows.push(['Projected ' + NP() + ' seasons (' + YRS()[20] + ' to ' + YRS()[19 + NP()] + '): irrigation / yield', (dI >= 0 ? '+' : '') + fmt(dI) + ' % / ' + (dY >= 0 ? '+' : '') + fmt(dY) + ' %', 'against the 20 simulated seasons, with the climate trend of Properties']); }
+    if (NP()) { const pI = rp.I.slice(20), pY = rp.Y.slice(20), dI = 100 * (mean(pI) / Math.max(1e-6, mI) - 1), dY = 100 * (mean(pY) / Math.max(1e-6, mY) - 1); rows.push(['Projected ' + NP() + ' seasons (' + YRS()[20] + ' to ' + YRS()[19 + NP()] + '): irrigation / yield', (dI >= 0 ? '+' : '') + fmt(dI) + ' % / ' + (dY >= 0 ? '+' : '') + fmt(dY) + ' %', 'against the 20 simulated seasons']); }
     rows.forEach((q, i) => { const yy = y + 40 + i * 21; if (i % 2) { ctx.fillStyle = '#F6F4EE'; ctx.fillRect(17, yy - 14, W - 34, 21); } T(q[0], 26, yy, { s: 10.5 }); T(q[1], W * 0.62, yy, { s: 10.5, b: true, a: 'right' }); TF(q[2], W * 0.64, yy, { s: 10, c: MUTE }); });
     y += 160 + (NP() ? 22 : 0);
     // exceedance curve of irrigation
@@ -211,7 +211,7 @@
       [['T', rp.T[i]], ['Es', rp.Es[i]], ['Ec', rp.Ec[i]], ['El', rp.El[i]], ['Ep', rp.Ep[i]], ['Esn', rp.Esn[i]], ['D', Math.max(0, rp.D[i])], ['RO', rp.RO[i]]].forEach(([k, v]) => { const hgt = v * sc; ctx.fillStyle = WBC[k]; ctx.fillRect(bx, dn, w, hgt); dn += hgt; });
       ctx.globalAlpha = 1; if (i === sel) { ctx.strokeStyle = '#D93025'; ctx.lineWidth = 2; ctx.strokeRect(bx - 2, up - 2, w + 4, dn - up + 4); }
       hot(bx, top, w, hh, () => { if (i < NYR) setYear(i); }, YRS()[i] + (i >= nO ? ' (projected)' : ''));
-      if (i % (n > 24 ? 6 : 4) === 0 || (i === n - 1 && (n - 1) % (n > 24 ? 6 : 4) > 2)) T(YRS()[i], bx + w / 2, top + hh + 14, { s: 8, c: MUTE, a: 'center' });
+      if (i % (n > 24 ? 6 : 4) === 0 || (i === n - 1 && (n - 1) % (n > 24 ? 6 : 4) > 3.5)) T(YRS()[i], bx + w / 2, top + hh + 14, { s: 8, c: MUTE, a: 'center' });
     }
     legend([[WBC.P, 'Precipitation'], [WBC.I, 'Irrigation'], [WBC.T, 'Transpiration'], [WBC.Es, 'Soil evaporation'], [WBC.Ec, 'Canopy (intercepted)']], x0 - 40, top + hh + 40);
     legend([[WBC.El, 'Litter / mulch'], [WBC.Ep, 'Ponded water'], [WBC.Esn, 'Snow'], [WBC.D, 'Drainage below 1 m'], [WBC.RO, 'Surface runoff']], x0 - 40, top + hh + 60);
@@ -258,7 +258,7 @@
       [['fert', rp.Nfert[i]], ['min', rp.Nmin[i]]].forEach(([k, v]) => { const hgt = Math.max(0, v) * sc; ctx.fillStyle = NC[k]; ctx.fillRect(bx, up - hgt, w, hgt); up -= hgt; });
       [['up', rp.Nup[i]], ['NL', rp.NL[i]], ['den', rp.Nden[i]], ['vol', rp.Nvol[i]]].forEach(([k, v]) => { const hgt = Math.max(0, v) * sc; ctx.fillStyle = NC[k]; ctx.fillRect(bx, dn, w, hgt); dn += hgt; });
       ctx.globalAlpha = 1; if (i === sel) { ctx.strokeStyle = '#D93025'; ctx.lineWidth = 2; ctx.strokeRect(bx - 2, up - 2, w + 4, dn - up + 4); }
-      hot(bx, top, w, hh, () => { if (i < NYR) setYear(i); }, YRS()[i] + (i >= nO ? ' (projected)' : '')); if (i % (n > 24 ? 6 : 4) === 0 || (i === n - 1 && (n - 1) % (n > 24 ? 6 : 4) > 2)) T(YRS()[i], bx + w / 2, top + hh + 14, { s: 8, c: MUTE, a: 'center' });
+      hot(bx, top, w, hh, () => { if (i < NYR) setYear(i); }, YRS()[i] + (i >= nO ? ' (projected)' : '')); if (i % (n > 24 ? 6 : 4) === 0 || (i === n - 1 && (n - 1) % (n > 24 ? 6 : 4) > 3.5)) T(YRS()[i], bx + w / 2, top + hh + 14, { s: 8, c: MUTE, a: 'center' });
     }
     legend([[NC.fert, 'Fertiliser'], [NC.min, 'Mineralisation'], [NC.up, 'Crop uptake'], [NC.NL, 'Leaching below 1 m'], [NC.den, 'Denitrification'], [NC.vol, 'Volatilisation']], x0 - 40, top + hh + 46);
     y += hh + 110;
