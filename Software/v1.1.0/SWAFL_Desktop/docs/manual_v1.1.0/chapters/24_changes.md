@@ -251,3 +251,4 @@
 - The pore-scale sections of the feedback loops layer are interactive: hover for the pore size, grain size, water or air and emptying suction, click to enlarge with a pore-size distribution and a suction slider.
 - The small graphs of the hidden questions are clickable: click to enlarge, hover to read values.
 - The pore-scale sections move: water drops travel through the wet pores and vapour rises through the air-filled pores; the enlarged section has a drying cycle.
+- The equations of the surface irrigation design layer are typeset as in a paper: italic symbols, true subscripts and superscripts.
