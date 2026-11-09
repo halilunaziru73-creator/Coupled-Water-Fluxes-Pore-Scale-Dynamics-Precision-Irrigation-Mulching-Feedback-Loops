@@ -25,6 +25,10 @@ It runs the same simulation engine as the web explorer, inside a classic enginee
 
 SWAFL does not depend on one weather record. The user chooses the weather of the whole project, and every layer, the dashboard and the Daisy runs follow it: (1) the built-in benchmark record (Taastrup, Denmark); (2) the bundled Daisy stations Taastrup, Foulum, Jyndevad (Denmark), Bologna (Italy), Jadwisin (Poland), Bratislava (Slovakia) and Valecov (Czech Republic), and the Daisy sample stations of other sites; (3) the user's own file (CSV, TXT, Excel, Daisy DWF, DLF or DAI); (4) online weather of any place on Earth from the Open-Meteo archive (checked for complete years); (5) DMI open data with the user's own free key. Any working date from 1980 to 2100 can be typed in the toolbar. The 10,190 archived runs used one fixed weather, Taastrup 1980 to 1999, so that the experiments are comparable; that is a choice of the experiment, not a limit of the software.
 
+## End User Licence Agreement
+
+Before the first use SWAFL shows its End User Licence Agreement (`EULA.txt`, version 1.0): in the program and in the browser, in the Windows installer (before the installation starts) and in the `START_SWAFL` scripts. Read it to the end and accept it to continue; *I Decline* closes the program. You can open it again in **Help, About SWAFL**. The source code stays under the MIT licence (`LICENSE`).
+
 ## Download the software (Windows)
 
 **Windows app:** version 1.1.0 is run from source with the steps below, or online.

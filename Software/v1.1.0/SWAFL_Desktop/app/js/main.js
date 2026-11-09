@@ -213,7 +213,7 @@ function shortcutsModal() {
   UI.modal({ title: 'Keyboard shortcuts', icon: 'key', width: 'min(520px,94vw)', html: '<table class="tbl">' + R.map(r => '<tr><td><span class="kbd">' + r[0] + '</span></td><td style="text-align:left">' + r[1] + '</td></tr>').join('') + '</table>' });
 }
 function aboutModal() {
-  UI.modal({ title: 'About SWAFL', icon: 'info', width: 'min(560px,94vw)', html: '<div class="about"><img src="assets/logo.svg" width="96" height="96" alt=""><div><h3 style="margin:0">SWAFL ' + VERSION + '</h3><p>Soil Water, Atmosphere, Feedback and Layout workbench</p><p>Coupled water fluxes, pore-scale dynamics, precision irrigation and mulching feedback loops, with surface, drip and sprinkler design.</p><p>Built on 10,190 simulations across ten soils.<br>Author: Naziru Halilu</p><p>' + link(REPO, 'github.com/halilunaziru73-creator') + '</p></div></div>' });
+  UI.modal({ title: 'About SWAFL', icon: 'info', width: 'min(560px,94vw)', html: '<div class="about"><img src="assets/logo.svg" width="96" height="96" alt=""><div><h3 style="margin:0">SWAFL ' + VERSION + '</h3><p>Soil Water, Atmosphere, Feedback and Layout workbench</p><p>Coupled water fluxes, pore-scale dynamics, precision irrigation and mulching feedback loops, with surface, drip and sprinkler design.</p><p>Built on 10,190 simulations across ten soils.<br>Author: Naziru Halilu</p><p>' + link(REPO, 'github.com/halilunaziru73-creator') + '</p><p><a href="#" onclick="if(window.swaflEula){swaflEula.show()}return false">End User Licence Agreement</a></p></div></div>' });
 }
 
 /* ---------- keyboard ---------- */
