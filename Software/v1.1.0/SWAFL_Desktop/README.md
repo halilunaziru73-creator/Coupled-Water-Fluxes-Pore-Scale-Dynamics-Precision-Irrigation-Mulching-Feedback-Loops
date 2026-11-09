@@ -27,7 +27,7 @@ SWAFL does not depend on one weather record. The user chooses the weather of the
 
 ## End User Licence Agreement
 
-Before the first use SWAFL shows its End User Licence Agreement (`EULA.txt`, version 1.0): in the program and in the browser, in the Windows installer (before the installation starts) and in the `START_SWAFL` scripts. Read it to the end and accept it to continue; *I Decline* closes the program. You can open it again in **Help, About SWAFL**. The source code stays under the MIT licence (`LICENSE`).
+Before the first use SWAFL shows its End User Licence Agreement (`EULA.txt`, version 1.0): in the program and in the browser, in the Windows installer (before the installation starts) and in the `START_SWAFL` scripts. It is a short setup with **Back / Next** buttons (Welcome, Licence agreement, Privacy and online features, Ready). Read the agreement to the end and accept it to continue; *Cancel* closes the program. You can open it again in **Help, About SWAFL**. The source code stays under the MIT licence (`LICENSE`).
 
 ## Download the software (Windows)
 

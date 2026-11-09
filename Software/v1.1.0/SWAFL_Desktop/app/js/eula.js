@@ -1,4 +1,4 @@
-/* SWAFL End User Licence Agreement: shown before first use (and again whenever the agreement version changes). */
+/* SWAFL setup wizard with the End User Licence Agreement: shown before first use (and again whenever the agreement version changes). */
 (function(){
 'use strict';
 var VER="1.0", KEY='swafl.eula.accepted', DATE="9 November 2026";
@@ -6,44 +6,69 @@ var SECTIONS=[["1. Acceptance of this agreement", ["This End User Licence Agreem
 function get(){try{return JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){return window.__eulaMem||null}}
 function set(v){try{localStorage.setItem(KEY,JSON.stringify(v))}catch(e){window.__eulaMem=v}}
 function ok(){var a=get();return a&&a.v===VER}
+var STEPS=['Welcome','Licence agreement','Privacy and online features','Ready'];
 var css='#eula{position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;background:rgba(14,28,20,.82);font:14px/1.55 "Segoe UI",Arial,sans-serif;color:#1A2318;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}'+
-'#eula .ep{background:#fff;width:min(820px,94vw);height:min(86vh,720px);border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.45);display:flex;flex-direction:column;overflow:hidden}'+
-'#eula .eh{flex:none;padding:18px 24px;background:#14532D;color:#fff;border-bottom:4px solid #D4A94A}'+
+'#eula .ep{background:#fff;width:min(840px,94vw);height:min(86vh,680px);border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.45);display:flex;flex-direction:column;overflow:hidden}'+
+'#eula .eh{flex:none;padding:16px 24px 14px;background:#14532D;color:#fff;border-bottom:4px solid #D4A94A}'+
 '#eula .eh b{font-size:19px;letter-spacing:.2px}#eula .eh span{display:block;font-size:12px;opacity:.85;margin-top:2px}'+
+'#eula .est{flex:none;display:flex;gap:6px;padding:12px 24px;background:#F4F8F5;border-bottom:1px solid #E3E3E3;font-size:12px;color:#6B6B6B;flex-wrap:wrap}'+
+'#eula .est i{font-style:normal;padding:3px 10px;border-radius:12px;background:#E3EBE5}#eula .est i.on{background:#14532D;color:#fff;font-weight:600}#eula .est i.dn{background:#D4A94A;color:#2A1B05}'+
 '#eula .eb{flex:1;overflow:auto;padding:18px 26px;background:#FCFCFA}'+
-'#eula h4{margin:16px 0 4px;font-size:13px;letter-spacing:.6px;text-transform:uppercase;color:#14532D}'+
-'#eula h4:first-child{margin-top:0}#eula p{margin:0 0 8px;text-align:left}'+
+'#eula h3{margin:0 0 8px;font-size:18px;color:#14532D}#eula h4{margin:16px 0 4px;font-size:13px;letter-spacing:.6px;text-transform:uppercase;color:#14532D}'+
+'#eula h4:first-child{margin-top:0}#eula p{margin:0 0 8px;text-align:left}#eula ul{margin:0 0 8px;padding-left:20px}#eula li{margin:3px 0}'+
 '#eula .ef{flex:none;padding:12px 24px 16px;border-top:1px solid #E3E3E3;background:#fff}'+
-'#eula label{display:flex;gap:9px;align-items:flex-start;font-size:13px;cursor:pointer}'+
-'#eula .er{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}'+
-'#eula .eh2{font-size:11.5px;color:#6B6B6B}'+
-'#eula button{font:inherit;font-weight:600;border-radius:8px;padding:9px 22px;cursor:pointer;border:1px solid #14532D}'+
-'#eula .ea{background:#14532D;color:#fff}#eula .ea:disabled{opacity:.4;cursor:not-allowed}'+
-'#eula .ed{background:#fff;color:#14532D;margin-right:8px}';
+'#eula label{display:flex;gap:9px;align-items:flex-start;font-size:13px;cursor:pointer;margin-bottom:5px}'+
+'#eula .er{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:10px;flex-wrap:wrap}'+
+'#eula .eh2{font-size:11.5px;color:#6B6B6B;flex:1}'+
+'#eula button{font:inherit;font-weight:600;border-radius:8px;padding:9px 22px;cursor:pointer;border:1px solid #14532D;background:#fff;color:#14532D;margin-left:8px}'+
+'#eula button.ea{background:#14532D;color:#fff}#eula button:disabled{opacity:.4;cursor:not-allowed}#eula button.ec{border-color:#C9C9C9;color:#6B6B6B}';
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+var P={
+0:'<h3>Welcome to SWAFL setup</h3><p>SWAFL (Soil Water, Atmosphere, Feedback and Layout workbench) is a soil-water and irrigation decision-support suite: coupled water fluxes, precision irrigation, mulching, drainage and drip, surface and sprinkler design, with a Daisy agro-ecosystem workbench.</p><p>This short setup takes four steps:</p><ul><li><b>Welcome</b> (this page)</li><li><b>Licence agreement</b>: you read and accept the End User Licence Agreement</li><li><b>Privacy and online features</b>: what stays on your device and what is sent to online services</li><li><b>Ready</b>: you start SWAFL</li></ul><p>Click <b>Next</b> to continue, or <b>Cancel</b> to leave.</p>',
+2:'<h3>Privacy and online features</h3><p>SWAFL runs on your own device.</p><ul><li>There are <b>no user accounts</b> and <b>no usage statistics</b> (no telemetry).</li><li>Your projects, inputs and results stay on your device or in your browser. The Software does not upload them.</li></ul><p>Some features contact other services <b>only when you use them</b>:</p><ul><li><b>Weather and place names</b>: Open-Meteo and OpenStreetMap Nominatim</li><li><b>Map imagery</b>: for example Esri</li><li><b>Satellite data</b>: Microsoft Planetary Computer</li><li><b>Downloads of components</b>: GitHub</li></ul><p>These requests can include coordinates, place names or dates you enter, and your IP address, and are governed by those providers\u2019 terms. If you do not want them, do not use those features. You can read the full text again in Help, About SWAFL.</p>'
+};
 function show(force){
  if(!force&&ok())return;
  if(document.getElementById('eula'))return;
  var st=document.createElement('style');st.id='eula-css';st.textContent=css;document.head.appendChild(st);
- var d=document.createElement('div');d.id='eula';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');d.setAttribute('aria-label','SWAFL End User Licence Agreement');
- var h='<div class="ep"><div class="eh"><b>SWAFL End User Licence Agreement</b><span>Version '+VER+' \u00b7 '+DATE+' \u00b7 Please read the whole agreement before you continue</span></div><div class="eb" tabindex="0">';
- SECTIONS.forEach(function(s){h+='<h4>'+esc(s[0])+'</h4>';s[1].forEach(function(p){h+='<p>'+esc(p)+'</p>'})});
- h+='<p><b>By clicking \u201cI Accept\u201d, or by installing or using the Software, you agree to this Agreement.</b></p></div>'+
- '<div class="ef"><label><input type="checkbox" id="eula-chk" disabled> <span>I have read and understood this agreement and I agree to its terms.</span></label>'+
- '<div class="er"><span class="eh2" id="eula-hint">Scroll to the end of the agreement to enable the checkbox.</span><span><button class="ed" id="eula-no">I Decline</button><button class="ea" id="eula-yes" disabled>I Accept</button></span></div></div></div>';
- d.innerHTML=h;document.body.appendChild(d);
- var body=d.querySelector('.eb'),chk=d.querySelector('#eula-chk'),yes=d.querySelector('#eula-yes'),no=d.querySelector('#eula-no'),hint=d.querySelector('#eula-hint');
- function atEnd(){if(body.scrollTop+body.clientHeight>=body.scrollHeight-8){chk.disabled=false;hint.textContent='Tick the box, then click I Accept.'}}
- body.addEventListener('scroll',atEnd);setTimeout(atEnd,50);
- chk.addEventListener('change',function(){yes.disabled=!chk.checked});
- yes.addEventListener('click',function(){set({v:VER,t:new Date().toISOString()});d.remove();st.remove();document.documentElement.style.overflow='';try{window.dispatchEvent(new Event('swafl-eula-accepted'))}catch(e){}});
- no.addEventListener('click',function(){
+ var d=document.createElement('div');d.id='eula';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');d.setAttribute('aria-label','SWAFL setup');
+ document.body.appendChild(d);document.documentElement.style.overflow='hidden';
+ var step=0,read=false,agree=false;
+ function close(){d.remove();st.remove();document.documentElement.style.overflow=''}
+ function decline(){
   if(window.swafl&&window.swafl.quit){window.swafl.quit();return}
-  d.innerHTML='<div class="ep" style="height:auto;max-width:520px"><div class="eh"><b>Agreement declined</b></div><div class="eb"><p>You need to accept the End User Licence Agreement to use SWAFL. You can close this tab, or review the agreement again.</p></div><div class="ef"><div class="er"><span></span><button class="ea" id="eula-back">Review agreement</button></div></div></div>';
-  d.querySelector('#eula-back').addEventListener('click',function(){d.remove();st.remove();show(true)});
- });
- document.documentElement.style.overflow='hidden';
- setTimeout(function(){body.focus()},60);
+  d.innerHTML='<div class="ep" style="height:auto;max-width:520px"><div class="eh"><b>Setup cancelled</b></div><div class="eb"><p>You need to accept the End User Licence Agreement to use SWAFL. You can close this tab, or start the setup again.</p></div><div class="ef"><div class="er"><span></span><button class="ea" id="eula-back">Start setup again</button></div></div></div>';
+  d.querySelector('#eula-back').addEventListener('click',function(){close();show(true)});
+ }
+ function render(){
+  var h='<div class="ep"><div class="eh"><b>SWAFL Setup</b><span>Version 1.1.0 \u00b7 Agreement version '+VER+' \u00b7 '+DATE+'</span></div><div class="est">';
+  STEPS.forEach(function(n,i){h+='<i class="'+(i===step?'on':(i<step?'dn':''))+'">'+(i<step?'\u2713 ':(i+1)+'. ')+n+'</i>'});
+  h+='</div><div class="eb" tabindex="0">';
+  if(step===1){h+='<h3>Licence agreement</h3><p>Please read the agreement to the end. You can then accept it to continue.</p>';SECTIONS.forEach(function(s){h+='<h4>'+esc(s[0])+'</h4>';s[1].forEach(function(p){h+='<p>'+esc(p)+'</p>'})})}
+  else if(step===3){h+='<h3>Ready to start</h3><p>You accepted the End User Licence Agreement (version '+VER+').</p><ul><li>SWAFL will open now with the Welcome screen.</li><li>The agreement is not shown again, until a new version of it comes with a release.</li><li>You can read it again at any time in <b>Help \u2192 About SWAFL \u2192 End User Licence Agreement</b>.</li></ul><p>Click <b>Start SWAFL</b> to finish.</p>'}
+  else h+=P[step];
+  h+='</div><div class="ef">';
+  if(step===1)h+='<label><input type="radio" name="eula-r" id="eula-acc" disabled> <span>I accept the terms of the agreement</span></label><label><input type="radio" name="eula-r" id="eula-rej"> <span>I do not accept the terms of the agreement</span></label>';
+  h+='<div class="er"><span class="eh2" id="eula-hint">'+(step===1&&!read?'Scroll to the end of the agreement to enable \u201cI accept\u201d.':'')+'</span><span><button class="ec" id="eula-cancel">Cancel</button>'+(step>0&&step<3?'<button id="eula-prev">\u2039 Back</button>':'')+(step<3?'<button class="ea" id="eula-next">Next \u203a</button>':'<button class="ea" id="eula-go">Start SWAFL</button>')+'</span></div></div></div>';
+  d.innerHTML=h;
+  var body=d.querySelector('.eb'),nx=d.querySelector('#eula-next'),hint=d.querySelector('#eula-hint');
+  d.querySelector('#eula-cancel').addEventListener('click',decline);
+  var pv=d.querySelector('#eula-prev');if(pv)pv.addEventListener('click',function(){step--;render()});
+  if(nx)nx.addEventListener('click',function(){step++;render()});
+  var go=d.querySelector('#eula-go');if(go)go.addEventListener('click',function(){set({v:VER,t:new Date().toISOString()});close();try{window.dispatchEvent(new Event('swafl-eula-accepted'))}catch(e){}});
+  if(step===1){
+   var acc=d.querySelector('#eula-acc'),rej=d.querySelector('#eula-rej');
+   function sync(){acc.disabled=!read;if(read&&hint.textContent)hint.textContent='';nx.disabled=!(read&&agree)}
+   function atEnd(){if(body.scrollTop+body.clientHeight>=body.scrollHeight-8){read=true;sync()}}
+   body.addEventListener('scroll',atEnd);setTimeout(atEnd,50);
+   acc.checked=agree&&read;rej.checked=!agree&&rej.dataset.x==='1';
+   acc.addEventListener('change',function(){agree=acc.checked;sync()});
+   rej.addEventListener('change',function(){agree=false;sync()});
+   sync();
+  }
+  setTimeout(function(){body.focus()},60);
+ }
+ render();
 }
 window.swaflEula={show:function(){show(true)},accepted:ok};
 function boot(){if(document.body)show(false);else document.addEventListener('DOMContentLoaded',function(){show(false)})}
