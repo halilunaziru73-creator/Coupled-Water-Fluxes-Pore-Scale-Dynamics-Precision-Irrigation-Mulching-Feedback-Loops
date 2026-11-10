@@ -4071,7 +4071,21 @@ function pk20() { if ((state.soil === 'S01_CoarseLoam' || state.soil === 'S02_Co
 const nameSoil20 = () => pk20() === 'x' ? 'The daily simulation record (' + profName() + ') set to your settings: ' + DATA.soil_labels[state.soil].toLowerCase() + ', sensor at ' + Z_VALUES[state.zIdx] + ' cm' : 'The simulated daily output at the 20 cm sensor depth, ' + profName();
 const fmtDays = (n) => n + ' of ' + SEASON;
 
+// the year detail is prepared while the 20-year picture is on screen (the soil textures and the rainfed layers), so the year list answers at once
+let warmKey = '';
+function warmDetail() {
+  const key = (simCache && simCache.key || '') + '|' + state.soil + '|' + currentScene.id; if (warmKey === key) return; warmKey = key;
+  setTimeout(() => {
+    try {
+      const sc = currentScene, id = sc.id; if (state.range !== 'all' || (id !== 'v1' && id !== 'v2')) return;
+      const sim = seasonSim(); if (sim && sim.rfLayers) sim.rfLayers();
+      state.range = 'y94'; ctx.save(); try { id === 'v2' ? drawV2Detail() : drawV1Detail(); } finally { ctx.restore(); state.range = 'all'; }
+      hotspots.length = 0; ctx.save(); try { sc.draw(); } finally { ctx.restore(); }
+    } catch (e) { state.range = 'all'; }
+  }, 700);
+}
 function drawV1All() {
+  warmDetail();
   paper(); const pk = pk20(), thr = trigAbsFor(state.soil), N = D20.n, k = Math.floor(play.t * (N - 1));
   const ys = yearStats(thr), curY = clampN(new Date(D20START + k * DAYMS).getUTCFullYear(), 1980, 1999), ci = curY - 1980, st = ys[ci];
   const x0 = 70, x1 = 602, y0 = 60, y1 = 232, xm = i => x0 + i / (N - 1) * (x1 - x0), ym = v => y1 - lg5(v) * (y1 - y0);
@@ -5199,6 +5213,7 @@ function drawV2Detail() {
 // V2, all 20 years: every season at the 20 cm sensor, and two columns showing what was recorded on the day the cursor is on
 // ------------------------------------------------------------------------------------------------
 function drawV2All() {
+  warmDetail();
   paper(); const pk = pk20(), thr = trigAbsFor(state.soil), tp = play.t * NYEARS, cy = clampN(Math.floor(tp), 0, NYEARS - 1), dayI = v2Day(tp), ys = yearStats(thr), st = ys[cy];
   const x0 = 70, x1 = 430, y0 = 96, y1 = 292, xm = d => x0 + d / (YLEN - 1) * (x1 - x0), ym = v => y1 - lg5(v) * (y1 - y0), med = yearMedian(pk), a = yearIdx(cy) + dayI;
   T('Soil pressure head through the year, January to December, every year ' + CAL0 + ' to ' + (CAL0 + 19), 16, 22, { s: 14, b: true }); T(nameSoil20(), 16, 38, { s: 10.5, c: MUTE });
