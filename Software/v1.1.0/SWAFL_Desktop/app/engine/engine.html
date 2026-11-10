@@ -3664,7 +3664,7 @@ function drawField() {
 const play = { on: true, t: 0, hold: 0 };
 function stepPlay(dur) {
   if (!play.on) return;
-  if (play.t >= 1) { if (++play.hold > 80) { play.t = 0; play.hold = 0; } return; }
+  if (play.t >= 1) { if (++play.hold > 80) { const id = currentScene.id; if ((id === 'v1' || id === 'v2' || id === 'v3') && typeof dss !== 'undefined' && dss.ready) { dssHold(); dssSyncPlay(id); } else { play.t = 0; play.hold = 0; } } return; }   // the date layers come back to today when the run ends, they do not restart from the first year
   play.t = Math.min(1, play.t + 1 / (dur * 60));
 }
 const PDAYS = 183, P0 = Date.UTC(1994, 3, 1), DAYMS = 86400000, MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -7407,7 +7407,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
 <script src="phnav.js?v=20261030z4"></script>
 <script src="inputs.js?v=20261110c"></script>
 <script src="weather.js?v=20261031a"></script>
-<script src="runbar.js?v=20261110c"></script>
+<script src="runbar.js?v=20261110d"></script>
 <link rel="stylesheet" href="classic.css">
 </body>
 </html>
