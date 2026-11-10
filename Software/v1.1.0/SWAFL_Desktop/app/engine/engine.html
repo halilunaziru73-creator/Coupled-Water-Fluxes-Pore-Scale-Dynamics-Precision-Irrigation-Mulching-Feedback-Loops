@@ -3687,6 +3687,17 @@ function prAdj(tr, d, i, v) {
 const prKey = () => ((state.soil === 'S01_CoarseLoam' || state.soil === 'S02_CoarseSand') && STD20()) ? 'std' : simCache.key;
 const detYear = () => clampN(yearOf(fclock.kd()), 0, NYR - 1), detCal = () => dateOfK(fclock.kd()).getUTCFullYear();
 // the depth profile of a year other than the recorded 1994: the daily model of SWAFL at your settings, to 100 cm, read at the depths of the recorded profile
+function simVal(tr, doy, z) {
+  const sim = seasonSim(); if (!sim || !sim.s) return NaN; const L = /_irr$/.test(tr) ? sim.s : sim.rfLayers(), row = L[clampN(detYear() * DPY + doy, 0, ND - 1)];
+  const x = clampN(z / DZ - 0.5, 0, NLAY - 1), i = Math.floor(x), j = Math.min(NLAY - 1, i + 1), f = x - i; return Math.pow(10, hOfDep(state.soil, 1 - (row[i] + (row[j] - row[i]) * f)));
+}
+// the sensor trace for the whole calendar year: the recorded profile where it exists (April to September of its own year), the daily model for the other days
+function yearSeries(tr, si) {
+  const key = 'YS' + detYear() + tr + '|' + si + '|' + (simCache.key || '') + '|' + prKey(); if (dailyCache[key]) return dailyCache[key];
+  const rec = detYear() === 14 ? dailySeries(tr, si) : null, out = new Array(365);
+  for (let dd = 0; dd < 365; dd++) out[dd] = rec && dd >= 90 && dd - 90 < rec.length ? rec[dd - 90] : simVal(tr, dd, PROFILE.depths[si]);
+  return dailyCache[key] = out;
+}
 function simProfileAt(tr, d) {
   const sim = seasonSim(); if (!sim || !sim.s) return null; const L = /_irr$/.test(tr) ? sim.s : sim.rfLayers(), k = clampN(detYear() * DPY + 90 + Math.round(d), 0, ND - 1), row = L[k];
   return PROFILE.depths.map(z => { const x = clampN(z / DZ - 0.5, 0, NLAY - 1), i = Math.floor(x), j = Math.min(NLAY - 1, i + 1), f = x - i, w = row[i] + (row[j] - row[i]) * f; return Math.pow(10, hOfDep(state.soil, 1 - w)); });
@@ -5172,16 +5183,16 @@ function drawV2Detail() {
   const share = pr => { let wgt = 0, h = 0; pr.forEach((v, i) => { if (PROFILE.depths[i] > 60) return; const th = i < pr.length - 1 ? PROFILE.depths[i + 1] - PROFILE.depths[i] : 10; wgt += th; if (v > thr) h += th; }); return wgt ? h / wgt : 0; };
   T(dayLabel(d), 16, 484, { s: 19, b: true, c: '#1F3864' }); T('At the sensor depth (' + PROFILE.depths[si] + ' cm)', 16, 506, { s: 11, b: true }); T('irrigated ' + fmtS(pI[si]) + ' cm   |   rainfed ' + fmtS(pR[si]) + ' cm', 16, 522, { s: 11.5 });
   T('Root zone (0 to 60 cm) beyond the trigger', 16, 546, { s: 11, b: true }); T('irrigated ' + Math.round(share(pI) * 100) + '%   |   rainfed ' + Math.round(share(pR) * 100) + '% of the depth', 16, 562, { s: 11.5 });
-  const mx0 = 330, mx1 = 596, my0 = 512, my1 = 594, sI = dailySeries(pk + '_irr', si), sR = dailySeries(pk + '_rain', si), mxx = dd => mx0 + dd / (PDAYS - 1) * (mx1 - mx0), myy = v => my1 - clampN((logv(v) - 1) / 4, 0, 1) * (my1 - my0);
+  const mx0 = 330, mx1 = 596, my0 = 512, my1 = 594, sI = yearSeries(pk + '_irr', si), sR = yearSeries(pk + '_rain', si), mxx = dd => mx0 + dd / 364 * (mx1 - mx0), myy = v => my1 - clampN((logv(v) - 1) / 4, 0, 1) * (my1 - my0);
   ctx.strokeStyle = RULE; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(16, 628); ctx.lineTo(W - 16, 628); ctx.stroke();
-  T('Suction at the sensor depth through the season', mx0, 500, { s: 10.5, b: true }); ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.strokeRect(mx0, my0, mx1 - mx0, my1 - my0); ctx.strokeStyle = '#D93025'; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(mx0, myy(thr)); ctx.lineTo(mx1, myy(thr)); ctx.stroke(); ctx.setLineDash([]);
+  T('Suction at the sensor depth through the year', mx0, 500, { s: 10.5, b: true }); ctx.fillStyle = 'rgba(240,214,120,0.16)'; ctx.fillRect(mxx(90), my0, mxx(273) - mxx(90), my1 - my0); ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.strokeRect(mx0, my0, mx1 - mx0, my1 - my0); ctx.strokeStyle = '#D93025'; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(mx0, myy(thr)); ctx.lineTo(mx1, myy(thr)); ctx.stroke(); ctx.setLineDash([]);
   [[sR, '#E8912D'], [sI, '#1B6FD8']].forEach(([s, c]) => { ctx.strokeStyle = c; ctx.lineWidth = 1.6; ctx.beginPath(); s.forEach((v, i) => { i ? ctx.lineTo(mxx(i), myy(v)) : ctx.moveTo(mxx(i), myy(v)); }); ctx.stroke(); });
-  ctx.strokeStyle = 'rgba(27,31,35,0.6)'; ctx.beginPath(); ctx.moveTo(mxx(d), my0); ctx.lineTo(mxx(d), my1); ctx.stroke(); [0, 30, 61, 91, 122, 153].forEach((dd, i) => { const xx = mxx(dd); ctx.strokeStyle = '#B9C0C7'; ctx.beginPath(); ctx.moveTo(xx, my1); ctx.lineTo(xx, my1 + 4); ctx.stroke(); T(MON[3 + i], xx + (i === 0 ? 0 : 0), my1 + 15, { s: 9, c: MUTE, a: i === 0 ? 'left' : 'center' }); });
+  ctx.strokeStyle = 'rgba(27,31,35,0.6)'; ctx.beginPath(); ctx.moveTo(mxx(90 + d), my0); ctx.lineTo(mxx(90 + d), my1); ctx.stroke(); [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334].forEach((dd, i) => { const xx = mxx(dd); ctx.strokeStyle = '#B9C0C7'; ctx.beginPath(); ctx.moveTo(xx, my1); ctx.lineTo(xx, my1 + 4); ctx.stroke(); T(MON[i], xx + 1, my1 + 15, { s: 8.2, c: MUTE }); });
   annualLine(16, 646, 661);
   // clickable: a depth on the profile or a column moves the sensor, the season trace moves the date
   hot(x0, y0, x1 - x0, maxCm * ppc, p => applyState({ zIdx: nearestIdx(Z_VALUES, (p.y - y0) / ppc) }), 'click a depth to put the sensor there');
   hot(cR, y0, cw, maxCm * ppc, p => applyState({ zIdx: nearestIdx(Z_VALUES, (p.y - y0) / ppc) }), 'click a depth to put the sensor there'); hot(cI, y0, cw, maxCm * ppc, p => applyState({ zIdx: nearestIdx(Z_VALUES, (p.y - y0) / ppc) }), 'click a depth to put the sensor there');
-  hot(mx0, my0, mx1 - mx0, my1 - my0, p => setPlayT((p.x - mx0) / (mx1 - mx0)), 'click to jump to a date');
+  hot(mx0, my0, mx1 - mx0, my1 - my0, p => setPlayT(clampN(((p.x - mx0) / (mx1 - mx0) * 364 - 90) / (PDAYS - 1), 0, 1)), 'click to jump to a date');
 }
 
 // ------------------------------------------------------------------------------------------------
