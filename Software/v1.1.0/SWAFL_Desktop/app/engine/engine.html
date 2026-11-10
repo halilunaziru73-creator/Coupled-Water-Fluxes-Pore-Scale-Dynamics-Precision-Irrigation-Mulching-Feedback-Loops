@@ -4007,6 +4007,12 @@ function yearStats(thr, pkIn) {
   }
   return ysCache[k] = out;
 }
+function yearMedian(pk) {
+  const mk = 'Y' + pk + (pk === 'x' ? '|' + D20.xKey : ''); if (medCache[mk]) return medCache[mk];
+  const r = { irr: [], rain: [] };
+  ['irr', 'rain'].forEach(f => { for (let d = 0; d < YLEN; d++) { const v = []; for (let y = 0; y < NYEARS; y++) v.push(D20[pk + '_' + f][yearIdx(y) + d]); v.sort((a, b) => a - b); r[f].push(Math.pow(10, (v[9] + v[10]) / 2000)); } });
+  return medCache[mk] = r;
+}
 function seasonMedian(pk) {
   const mk = pk + (pk === 'x' ? '|' + D20.xKey : ''); if (medCache[mk]) return medCache[mk];
   const r = { irr: [], rain: [] };
@@ -5126,8 +5132,9 @@ function wetFromProfile(tr, d) {
 // the 20-year record exists at the 20 cm sensor only, so only the zone around the sensor is shaded
 const wetFromSensor = S => { const sid = dataSoilId(), v = 1 - depletionAt(sid, S); return cm => Math.abs(cm - 20) <= 11 ? v : null; };
 function columnLegend(x, y, w) { x += 22; w -= 44; const g = ctx.createLinearGradient(x, 0, x + w, 0); g.addColorStop(0, 'rgba(30,110,225,0.08)'); g.addColorStop(1, 'rgba(30,110,225,0.62)'); ctx.fillStyle = g; ctx.fillRect(x, y, w, 8); ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.strokeRect(x, y, w, 8); T('dry', x - 4, y + 8, { s: 9, c: MUTE, a: 'right' }); T('wet', x + w + 4, y + 8, { s: 9, c: MUTE }); }
-const v2Date = (cy, dayI) => { const dt = new Date(Date.UTC(CAL0 + cy, 3, 1 + dayI)); return dt.getUTCDate() + ' ' + MON[dt.getUTCMonth()] + ' ' + dt.getUTCFullYear(); };
-const v2AllLabel = () => { const tp = play.t * NYEARS, cy = clampN(Math.floor(tp), 0, NYEARS - 1); return v2Date(cy, clampN(Math.floor((tp - cy) * (SEASON - 1)), 0, SEASON - 1)); };
+const YLEN = 365, yearIdx = y => Math.round((Date.UTC(1980 + y, 0, 1) - D20START) / DAYMS), v2Day = (tp) => clampN(Math.round((tp - clampN(Math.floor(tp), 0, NYEARS - 1)) * (YLEN - 1)), 0, YLEN - 1);
+const v2Date = (cy, dayI) => { const dt = new Date(Date.UTC(CAL0 + cy, 0, 1 + dayI)); return dt.getUTCDate() + ' ' + MON[dt.getUTCMonth()] + ' ' + dt.getUTCFullYear(); };
+const v2AllLabel = () => { const tp = play.t * NYEARS, cy = clampN(Math.floor(tp), 0, NYEARS - 1); return v2Date(cy, v2Day(tp)); };
 function legendRow(items, x, y) { items.forEach(it => { ctx.strokeStyle = it.c; ctx.lineWidth = it.w || 2.6; ctx.setLineDash(it.dash || []); ctx.beginPath(); ctx.moveTo(x, y - 3); ctx.lineTo(x + 16, y - 3); ctx.stroke(); ctx.setLineDash([]); T(it.t, x + 21, y, { s: 10 }); ctx.font = '10px sans-serif'; x += 21 + ctx.measureText(it.t).width + 14; }); return x; }
 
 // ------------------------------------------------------------------------------------------------
@@ -5172,14 +5179,14 @@ function drawV2Detail() {
 // V2, all 20 years: every season at the 20 cm sensor, and two columns showing what was recorded on the day the cursor is on
 // ------------------------------------------------------------------------------------------------
 function drawV2All() {
-  paper(); const pk = pk20(), thr = trigAbsFor(state.soil), tp = play.t * NYEARS, cy = clampN(Math.floor(tp), 0, NYEARS - 1), dayI = clampN(Math.floor((tp - cy) * (SEASON - 1)), 0, SEASON - 1), ys = yearStats(thr), st = ys[cy];
-  const x0 = 70, x1 = 430, y0 = 96, y1 = 292, xm = d => x0 + d / (SEASON - 1) * (x1 - x0), ym = v => y1 - lg5(v) * (y1 - y0), med = seasonMedian(pk), a = seasonIdx(1980 + cy) + dayI;
-  T('Soil pressure head through the season, every year ' + CAL0 + ' to ' + (CAL0 + 19), 16, 22, { s: 14, b: true }); T(nameSoil20(), 16, 38, { s: 10.5, c: MUTE });
+  paper(); const pk = pk20(), thr = trigAbsFor(state.soil), tp = play.t * NYEARS, cy = clampN(Math.floor(tp), 0, NYEARS - 1), dayI = v2Day(tp), ys = yearStats(thr), st = ys[cy];
+  const x0 = 70, x1 = 430, y0 = 96, y1 = 292, xm = d => x0 + d / (YLEN - 1) * (x1 - x0), ym = v => y1 - lg5(v) * (y1 - y0), med = yearMedian(pk), a = yearIdx(cy) + dayI;
+  T('Soil pressure head through the year, January to December, every year ' + CAL0 + ' to ' + (CAL0 + 19), 16, 22, { s: 14, b: true }); T(nameSoil20(), 16, 38, { s: 10.5, c: MUTE });
   let lx = legendRow([{ c: '#1B6FD8', t: 'irrigated' }, { c: '#FF9A2E', t: 'rainfed' }, { c: '#14407F', w: 2, dash: [6, 3], t: 'median' }, { c: '#D93025', w: 1.6, dash: [6, 4], t: 'trigger ' + thr.toLocaleString('en-US') + ' cm' }], 16, 62); T('bold = ' + (CAL0 + st.y - 1980) + ', faint = other years', lx, 62, { s: 10, c: MUTE });
   ctx.strokeStyle = RULE; ctx.lineWidth = 1; [1, 10, 100, 1000, 10000, 100000].forEach(v => { ctx.beginPath(); ctx.moveTo(x0, ym(v)); ctx.lineTo(x1, ym(v)); ctx.stroke(); T(v.toLocaleString('en-US'), x0 - 6, ym(v) + 3.5, { s: 9.5, a: 'right', c: MUTE }); });
-  [0, 30, 61, 91, 122, 153].forEach((dd, i) => { ctx.beginPath(); ctx.moveTo(xm(dd), y0); ctx.lineTo(xm(dd), y1); ctx.stroke(); T(MON[3 + i], xm(dd) + 3, y1 + 14, { s: 9.5, c: MUTE }); });
+  { ctx.fillStyle = 'rgba(240,214,120,0.16)'; ctx.fillRect(xm(90), y0, xm(273) - xm(90), y1 - y0); [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334].forEach((dd, i) => { ctx.beginPath(); ctx.moveTo(xm(dd), y0); ctx.lineTo(xm(dd), y1); ctx.stroke(); T(MON[i], xm(dd) + 2, y1 + 14, { s: 8.6, c: MUTE }); }); T('shaded: the growing season, April to September', x1, y0 - 6, { s: 8.6, i: true, c: MUTE, a: 'right' }); }
   ctx.save(); ctx.translate(13, (y0 + y1) / 2); ctx.rotate(-Math.PI / 2); T('suction (cm)', 0, 0, { s: 10, a: 'center', c: MUTE }); ctx.restore(); ctx.strokeStyle = INK; ctx.lineWidth = 1.2; ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
-  const season = (f, y) => { const s0 = seasonIdx(1980 + y), pts = []; for (let dd = 0; dd < SEASON; dd++) pts.push(d20(pk + '_' + f, s0 + dd)); return pts; };
+  const season = (f, y) => { const s0 = yearIdx(y), pts = []; for (let dd = 0; dd < YLEN; dd++) pts.push(d20(pk + '_' + f, s0 + dd)); return pts; };
   const path = (pts, col, lw, al, dash) => { ctx.strokeStyle = col; ctx.globalAlpha = al; ctx.lineWidth = lw; ctx.setLineDash(dash || []); ctx.beginPath(); pts.forEach((v, dd) => { dd ? ctx.lineTo(xm(dd), ym(v)) : ctx.moveTo(xm(dd), ym(v)); }); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1; };
   for (let y = 0; y < NYEARS; y++) { if (y === cy) continue; path(season('rain', y), '#E8912D', 1, 0.22); path(season('irr', y), '#1B6FD8', 1, 0.22); }
   path(med.rain, '#A8620F', 2.2, 0.95, [6, 3]); path(med.irr, '#14407F', 2.2, 0.95, [6, 3]); path(season('rain', cy), '#FF9A2E', 3.2, 1); path(season('irr', cy), '#1B6FD8', 3.2, 1);
@@ -5187,13 +5194,13 @@ function drawV2All() {
   const vI = d20(pk + '_irr', a), vR = d20(pk + '_rain', a); ctx.strokeStyle = 'rgba(27,31,35,0.65)'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(xm(dayI), y0); ctx.lineTo(xm(dayI), y1); ctx.stroke();
   [[vR, '#FF9A2E'], [vI, '#1B6FD8']].forEach(([v, c]) => { ctx.fillStyle = c; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.arc(xm(dayI), ym(v), 5, 0, 6.283); ctx.fill(); ctx.stroke(); });
   // the two columns: what was recorded on the day under the cursor
-  const k = cy * DPY + 90 + dayI, cR = 452, cI = 526, cw = 66, ppc = (y1 - y0) / 150;
+  const k = cy * DPY + dayI, cR = 452, cI = 526, cw = 66, ppc = (y1 - y0) / 150;
   T('rainfed', cR + cw / 2, y0 - 44, { s: 11, b: true, a: 'center', c: '#A8620F' }); T('irrigated', cI + cw / 2, y0 - 44, { s: 11, b: true, a: 'center', c: '#1B4FA0' });
   soilColumn(cR, y0, cw, ppc, 150, wetFromSensor(vR), k, { sensors: [{ d: 20, col: '#1F3864', sens: true, hot: vR > thr }], water: true }); soilColumn(cI, y0, cw, ppc, 150, wetFromSensor(vI), k, { sensors: [{ d: 20, col: '#1F3864', sens: true, hot: vI > thr }], water: true });
   T(fmtS(vR) + ' cm', cR + cw / 2, y1 + 36, { s: 10, b: true, a: 'center', c: vR > thr ? '#D93025' : INK }); T(fmtS(vI) + ' cm', cI + cw / 2, y1 + 36, { s: 10, b: true, a: 'center', c: vI > thr ? '#D93025' : INK });
   columnLegend(cR + 8, y1 + 46, 118); TW('Shaded only around the 20 cm sensor, the only depth recorded in this year. Click a column for the full 1994 profile.', cR - 2, y1 + 70, 150, { s: 9, i: true, c: MUTE, lh: 11 });
   // the dryness of every season
-  const hx = 70, hw = (440 - 70) / NYEARS; T('Mean suction of each growing season (darker = drier)', 16, 330, { s: 11, b: true });
+  const hx = 70, hw = (440 - 70) / NYEARS; T('Mean suction of each growing season, April to September (darker = drier)', 16, 330, { s: 11, b: true });
   [['rainfed', 'mr', 346], ['irrigated', 'mi', 372]].forEach(([lab, key, yy]) => { T(lab, hx - 6, yy + 15, { s: 9.5, a: 'right', c: MUTE }); ys.forEach((r, i) => { const t = clampN((Math.log10(r[key]) - 1.5) / 3, 0, 1); ctx.fillStyle = 'rgb(' + [Math.round(255 - 150 * t), Math.round(236 - 120 * t), Math.round(190 - 150 * t)].join(',') + ')'; ctx.fillRect(hx + i * hw, yy, hw - 1, 22); if (i === cy) { ctx.strokeStyle = '#D93025'; ctx.lineWidth = 2.4; ctx.strokeRect(hx + i * hw - 1, yy - 1, hw + 1, 24); } }); });
   for (let i = 0; i < NYEARS; i += 2) T(String(CAL0 + i).slice(2), hx + i * hw + hw / 2, 410, { s: 9, a: 'center', c: i === cy ? '#D93025' : MUTE });
   { const hd = dss.ready && dss.held && state.range === 'all' && Math.abs(play.t - dss.lastT) < 0.0008 && dss.lastId === 'v2'; if (hd) { const tdy = fmtDate(dateOfK(fclock.kd())); T(tdy, 16, 452, { s: 19, b: true, c: '#1F3864' }); } else T(v2Date(cy, dayI), 16, 452, { s: 19, b: true, c: '#1F3864' }); } T('Rainfed ' + fmtS(vR) + ' cm, irrigated ' + fmtS(vI) + ' cm on this day', 16, 474, { s: 11, b: true });
@@ -5202,7 +5209,7 @@ function drawV2All() {
   const dry = ys.slice().sort((p, q) => q.mr - p.mr), wet = dry[dry.length - 1]; T('Driest rainfed season: ' + (CAL0 + dry[0].y - 1980) + ' (' + fmtS(dry[0].mr) + ' cm).  Wettest: ' + (CAL0 + wet.y - 1980) + ' (' + fmtS(wet.mr) + ' cm).', 16, 536, { s: 11 });
   { const lr = ys.map(r => Math.log10(Math.max(1, r.mr))), li = ys.map(r => Math.log10(Math.max(1, r.mi))), rg = a2 => Math.max(...a2) - Math.min(...a2), gR = rg(lr), gI = rg(li); T('Season-mean suction varies ' + (gI > 0 ? (gR / gI).toFixed(1) : '–') + ' times more between rainfed years (×' + Math.pow(10, gR).toFixed(0) + ' from wettest to driest) than between irrigated years (×' + Math.pow(10, gI).toFixed(1) + ').', 16, 560, { s: 10.5, i: true, c: MUTE }); } T('Full-depth profiles are simulated for 1994 only; the columns above show 1994 in full when you click them.', 16, 600, { s: 9.5, i: true, c: MUTE });
   annualLine(16, 619, 633);
-  hot(x0, y0, x1 - x0, y1 - y0, p => setPlayT((cy + clampN((p.x - x0) / (x1 - x0), 0, 1)) / NYEARS), 'click to move the cursor in this season');
+  hot(x0, y0, x1 - x0, y1 - y0, p => setPlayT((cy + clampN((p.x - x0) / (x1 - x0), 0, 1)) / NYEARS), 'click to move the cursor in this year');
   hot(hx, 346, 370, 48, p => setPlayT((clampN(Math.floor((p.x - hx) / hw), 0, NYEARS - 1) + 0.02) / NYEARS), 'click a year to look at its season');
   hot(cR, y0, 2 * cw + 8, 150 * ppc, () => setRange('y94'), 'click for the full 1994 profile');
 }
@@ -5670,7 +5677,7 @@ function dssHold() { dss.held = true; fclock.on = false; play.on = false; play.h
 function dssSyncPlay(id) {                                      // the scenes with their own time axis show the date on the clock
   const k = fclock.kd(), ay = yearOf(k), doy = k - ay * DPY, dt = dateOfK(k), idx = Math.round((Date.UTC(1980 + ay, dt.getUTCMonth(), dt.getUTCDate()) - D20START) / DAYMS);
   if (id === 'v1') play.t = state.range === 'all' ? clampN(idx / (D20.n - 1), 0, 1) : clampN((doy - 90) / 2 / (PDAYS - 1), 0, 1);
-  else if (id === 'v2') play.t = state.range === 'all' ? clampN((ay + clampN((doy - 90) / SEASON, 0, 0.999)) / NYEARS, 0, 1) : clampN((doy - 90) / 2 / (PDAYS - 1), 0, 1);
+  else if (id === 'v2') play.t = state.range === 'all' ? clampN((ay + clampN(doy / (YLEN - 1), 0, 0.9999)) / NYEARS, 0, 1) : clampN((doy - 90) / 2 / (PDAYS - 1), 0, 1);
   else if (id === 'v3') play.t = clampN(doy / 365, 0, 1);
   else return; play.hold = 0; dss.lastT = play.t; dss.lastId = id; if (dss.held) { play.on = false; const pb = document.getElementById('playBtn'); if (pb) pb.textContent = 'Play'; }
 }
@@ -6671,7 +6678,7 @@ function loop() {
   const sc = currentScene;
   if (sc.play) {
     const wide = (sc.id === 'v1' || sc.id === 'v2') && state.range === 'all';
-    stepPlay(wide ? 26 : sc.dur);
+    stepPlay(wide ? (sc.id === 'v2' ? 40 : 26) : sc.dur);
     const pr = document.getElementById('playRange'), pl = document.getElementById('playLabel');
     if (document.activeElement !== pr) pr.value = Math.round(play.t * 1000);
     pl.textContent = calTxt(sc.id === 'dph' ? 'day ' + Math.round(play.t * 139) + ' after emergence' + (window.PHUI ? ' (' + window.PHUI.dateOf(Math.round(play.t * 139)) + ')' : '') : sc.id === 'v3' ? 'day ' + Math.round(play.t * 365) : sc.id === 'e1' ? 'day ' + (play.t * E1.days).toFixed(1) : wide ? (sc.id === 'v1' ? d20Label(play.t) : v2AllLabel()) : dayLabel(play.t * (PDAYS - 1)));
@@ -6680,7 +6687,7 @@ function loop() {
     if (sc.id === 'drn' && window.drnLabel) { try { pl.textContent = calTxt(window.drnLabel(play.t)); } catch (e) { } }
     if (dss.held && (sc.id === 'v2' || sc.id === 'v3') && dss.lastId === sc.id && Math.abs(play.t - dss.lastT) < 0.0008) pl.textContent = calTxt(fmtDate(dateOfK(fclock.kd())));
     if (sc.id === 'sid') pl.textContent = calTxt('irrigation time ' + Math.round(play.t * (SID.lastTco || 0)) + ' of ' + Math.round(SID.lastTco || 0) + ' min');
-    else if (dss.held && sc.id === 'v2' && (fclock.kd() - yearOf(fclock.kd()) * DPY < 90 || fclock.kd() - yearOf(fclock.kd()) * DPY > 90 + SEASON)) pl.textContent = calTxt(fmtDate(dateOfK(fclock.kd())) + ' (outside the plotted Apr\u2013Sep window)');
+    else if (dss.held && sc.id === 'v2' && state.range !== 'all' && (fclock.kd() - yearOf(fclock.kd()) * DPY < 90 || fclock.kd() - yearOf(fclock.kd()) * DPY > 90 + SEASON)) pl.textContent = calTxt(fmtDate(dateOfK(fclock.kd())) + ' (outside the plotted Apr\u2013Sep window)');
   }
   if (sc.id === 'field') { stepField(); const pr = document.getElementById('playRange'), pl = document.getElementById('playLabel'); if (document.activeElement !== pr) pr.value = Math.round(fclock.day / (ND - 1) * 1000); pl.textContent = calTxt(fieldLabel()); }
   autoTick(sc); hotspots.length = 0; try { if (sc.draw) sc.draw(); } catch (e) { if (!window.__DRAWERR || window.__DRAWERR !== String(e)) { window.__DRAWERR = String(e); console.error('draw', sc.id, e); } } drawHotTip();
