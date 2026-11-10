@@ -276,7 +276,7 @@ UI.hsplit(document.getElementById('splitDash'), document.getElementById('dashDoc
 UI.vsplit(document.getElementById('splitLeftV'), () => document.getElementById('toolboxDock'), 'up', 80, 560);
 document.querySelector('#dashTabs [data-act=fullDash]').onclick = () => { const d = document.getElementById('dashDock'); if (window.SWOut && SWOut.fs) SWOut.fs(d, () => { try { Dash.render(); } catch (e) { } }); };
 document.querySelector('#dashTabs [data-act=maxDash]').onclick = e => { const d = document.getElementById('dashDock'); d.style.width = ''; d.classList.toggle('max'); e.target.textContent = d.classList.contains('max') ? 'Smaller' : 'Wider'; };
-if (window.swafl) window.swafl.version().then(v => { document.getElementById('stVer').textContent = v + ' · build 11 Nov 2026 (e)'; }).catch(() => {});
+if (window.swafl) window.swafl.version().then(v => { document.getElementById('stVer').textContent = v + ' · build 11 Nov 2026 (f)'; }).catch(() => {});
 document.getElementById('engine').addEventListener('load', () => { if (bootedOnce) boot(true); });
 boot();
 

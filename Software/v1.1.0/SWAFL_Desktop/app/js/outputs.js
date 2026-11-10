@@ -249,7 +249,7 @@ window.SWOut = (() => {
     const runsOf = () => { const r = []; try { (window.DaisyScenUI ? DaisyScenUI.runs() : []).forEach(x => r.push({ label: 'Scenario: ' + (x.label || x.id), logs: x.logs })); (window.DaisyExpUI ? DaisyExpUI.runs() : []).forEach(x => r.push({ label: 'Experiment: ' + x.id + ' ' + (x.label || ''), logs: x.logs })); } catch (e) { } return r; };
     if (resBox) resBox.innerHTML = '';
     if ((figSel || figOut) && figOpen) { figOpen = false; const nm = figOut ? ((outs.find(x => x.id === figOut) || {}).t || 'Result') : ((P.byId(figSel) || {}).n || 'Process');
-      UI.modal({ title: layerName() + ': ' + nm, width: 'min(1100px,96vw)', html: '<div data-wres style="max-height:78vh;overflow:auto"></div>', buttons: [{ label: 'Close', pri: true }] });
+      UI.modal({ title: layerName() + ': ' + nm, width: 'min(1700px,98vw)', full: true, html: '<div data-wres style="max-height:84vh;overflow:auto"></div>', buttons: [{ label: 'Close', pri: true }] });
       const wr = document.querySelector('[data-wres]'); const rb = document.createElement('div'); wr.appendChild(rb); const db = document.createElement('div'); wr.appendChild(db);
       fillRes(rb, scene, figSel, m, body, true); if (figSel) P.detailInto(db, figSel, runsOf(), ''); }
     // the first time: the sections of every tab of the dashboard are drawn out of sight, then the figure shows all of them

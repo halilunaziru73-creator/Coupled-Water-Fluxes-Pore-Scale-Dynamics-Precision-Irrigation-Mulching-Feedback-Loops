@@ -295,3 +295,4 @@
 - **Year detail list.** In Profile evolution and Sensor and trigger the button "1994 detail" is now a scrolling list of every year from 1994 to 2100, showing the year of the clock (today's year at the start). Choosing a year moves the date to that year and opens its full-depth detail.
 - **Trigger law: the text at the bottom is no longer cut.** The page grows with its text, so the advice line and the two question cards are shown in full. The Year detail list also works in Sensor and trigger.
 - Year list and the blue buttons switch at once: the 20-year picture prepares the year detail (rainfed layers and soil textures) in the background.
+- The window that shows the results of a process or result clicked in the interactive figure now opens in front of the full-screen figure, and it is large.

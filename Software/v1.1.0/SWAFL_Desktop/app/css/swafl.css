@@ -20,7 +20,7 @@ button,input,select{font:inherit;color:inherit}
 .mbtn{position:relative;display:flex;align-items:center;padding:0 11px;cursor:default;color:var(--text)}
 .mbtn:hover,.mbtn.open{background:var(--sel)}
 .projname{color:var(--muted);font-size:12px}
-.menu{position:fixed;z-index:1000;min-width:230px;background:var(--white);border:1px solid var(--border);box-shadow:0 6px 18px rgba(31,90,142,.25);padding:3px 0}
+.menu{position:fixed;z-index:9700;min-width:230px;background:var(--white);border:1px solid var(--border);box-shadow:0 6px 18px rgba(31,90,142,.25);padding:3px 0}
 .menu[hidden]{display:none}
 .mi{display:flex;align-items:center;gap:10px;padding:5px 14px 5px 12px;cursor:default;white-space:nowrap;position:relative}
 .mi:hover{background:var(--sel)}
@@ -144,7 +144,7 @@ table.tbl{border-collapse:collapse;width:100%;background:var(--white)}
 #statusbar .sep{width:1px;height:12px;background:rgba(255,255,255,.35)}
 
 /* modal */
-#modalRoot .ov{position:fixed;inset:0;background:rgba(40,70,100,.45);display:flex;align-items:center;justify-content:center;z-index:2000}
+#modalRoot .ov{position:fixed;inset:0;background:rgba(40,70,100,.45);display:flex;align-items:center;justify-content:center;z-index:9500}
 .modal{width:min(720px,92vw);max-height:86vh;display:flex;flex-direction:column;background:var(--white);border:1px solid var(--border);box-shadow:0 12px 40px rgba(15,59,99,.35)}
 .modal .mh{display:flex;align-items:center;gap:8px;height:30px;padding:0 10px;background:linear-gradient(var(--head1),var(--head2));border-bottom:1px solid var(--border);font-weight:600;color:var(--navy)}
 .modal .mh .x{margin-left:auto;cursor:pointer;padding:0 6px}
@@ -157,7 +157,7 @@ table.tbl{border-collapse:collapse;width:100%;background:var(--white)}
 .modal .mb a{color:var(--accent);cursor:pointer;text-decoration:underline}
 .modal .mf{display:flex;justify-content:flex-end;gap:8px;padding:8px 12px;border-top:1px solid var(--border2);background:var(--panel)}
 .about{display:flex;gap:18px;align-items:center}
-#toast{position:fixed;right:14px;bottom:34px;background:var(--navy);color:#fff;padding:7px 14px;border-radius:3px;z-index:3000;box-shadow:0 4px 14px rgba(15,59,99,.35)}
+#toast{position:fixed;right:14px;bottom:34px;background:var(--navy);color:#fff;padding:7px 14px;border-radius:3px;z-index:9600;box-shadow:0 4px 14px rgba(15,59,99,.35)}
 
 @media (max-width:1180px){#rightDock{width:260px}#leftDock{width:250px}}
 @media print{#menubar,#toolbar,#leftDock,#rightDock,#statusbar,.hsplit,.vsplit,#dashDock,#docTabs,#viewBar{display:none!important}}
