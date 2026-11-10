@@ -74,9 +74,6 @@
           "**/*"
         ]
       }
-    ],
-    "dmg": {
-      "license": "build/EULA.txt"
-    }
+    ]
   }
 }
