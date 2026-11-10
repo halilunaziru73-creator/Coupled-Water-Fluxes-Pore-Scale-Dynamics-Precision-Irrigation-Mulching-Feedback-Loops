@@ -296,3 +296,4 @@
 - **Trigger law: the text at the bottom is no longer cut.** The page grows with its text, so the advice line and the two question cards are shown in full. The Year detail list also works in Sensor and trigger.
 - Year list and the blue buttons switch at once: the 20-year picture prepares the year detail (rainfed layers and soil textures) in the background.
 - The window that shows the results of a process or result clicked in the interactive figure now opens in front of the full-screen figure, and it is large.
+- The results window of the interactive figure keeps its usual size and now opens in front of the full-screen figure.
