@@ -5874,7 +5874,8 @@ function drawN1Chart() {
   yq = TW('On this day the sensor reads ' + sensorCm.toLocaleString('en-US') + ' cm (depletion ' + fSensor.toFixed(2) + ') against the trigger of ' + fT.toFixed(2) + ': ' + (fSensor >= fT ? (growing ? 'irrigation is due.' : 'beyond it, but no crop is growing, so nothing is irrigated.') : 'within it.') + (fSensor >= fT && growing && sim.irrFront > 0 && z > sim.irrFront + 3 ? ' Irrigation here wets only to about ' + Math.round(sim.irrFront) + ' cm, so a sensor at ' + z + ' cm is not reached.' : '') + (z > rd + 3 && inRoot > 0 && beyond === inRoot && fSensor < fT ? ' The roots reach only ' + Math.round(rd) + ' cm, so a sensor at ' + z + ' cm does not see the dry root zone.' : '') + ' ' + beyond + ' of ' + inRoot + ' root-zone layers are beyond the trigger (red bars in the column).', 26, yq + 2, 560, { s: 10.5 });
   { const sp = n1Speed(sf), sand = (DATA.texture[sf] || {}).sand || 0; yq = TW('How fast ' + DATA.soil_labels[sf].toLowerCase() + ' dries: about ' + (sp.rate * 100).toFixed(1) + ' % of its available water a day at the peak of the season (the crop uses ' + sp.mm.toFixed(1) + ' mm a day of the ' + sp.taw.toFixed(0) + ' mm the root zone holds), so from field capacity it reaches its trigger in about ' + (sp.days != null ? Math.max(1, Math.round(sp.days)) : '-') + ' days. ' + (sand >= 60 ? 'A sandy soil holds little water: it dries fast and needs light, frequent irrigation.' : sand <= 30 ? 'A fine soil holds much water: it dries slowly and can take larger, less frequent irrigation.' : 'A medium soil: it dries at a moderate pace.') + ' The gauge follows the soil at this pace when you press Play.', 26, yq + 1, 560, { s: 10.5, c: '#12303A', b: true }); }
 
-  n1Choice(by0 + 176 + 14, sf, sim, dd);
+  const endY = n1Choice(by0 + 176 + 14, sf, sim, dd);
+  if (endY + 16 > canvas.height) setCanvasH(Math.ceil(endY + 16));   // the page grows with its text, so the last lines are never cut
 }
 // ------------------------------------------------------------------------------------------------
 // The core trade-off: trigger at depletion f = 0.50 or f = 0.45. Each question is answered from your settings (crop, soil, the time
@@ -5930,21 +5931,24 @@ function n1Choice(y, sf, sim, dd) {
     [fine, 'Your soil is loam or clay (high water-holding capacity)', DATA.soil_labels[sf]],
     [cycDays != null && !slow, 'Your system can irrigate the entire field quickly', cycDays == null ? 'open the design to know its time per round' : cycDays.toFixed(1) + ' days per round']];
   const n45 = Q45.filter(q => q[0]).length, n50 = Q50.filter(q => q[0]).length, rec = n45 > 0 ? 0.45 : 0.5, cur = depletionRaw(sf, trigAbsFor(sf));
-  box(14, y, W - 28, 262, { fill: '#fff', r: 8 });
-  T('The core trade-off: trigger at f = 0.50 or f = 0.45?', 26, y + 20, { s: 12.5, b: true, c: '#12303A' });
-  T('Each question is answered from your settings; a tick means it applies to you.', 26, y + 35, { s: 9.5, i: true, c: MUTE });
-  const col = (x, title, Q, on, f) => { const w = (W - 28 - 36) / 2; ctx.fillStyle = on ? '#E8F4EA' : '#F6F5F0'; rrect(x, y + 44, w, 166, 6); ctx.fill(); ctx.strokeStyle = on ? '#2E7D32' : '#C8C4B8'; ctx.lineWidth = on ? 2 : 1; ctx.stroke();
-    T(title, x + 10, y + 62, { s: 11, b: true, c: on ? '#1E5A2A' : '#12303A' });
-    let yy = y + 80; Q.forEach(q => { ctx.fillStyle = q[0] ? '#2E9E5B' : '#C8C4B8'; ctx.beginPath(); ctx.arc(x + 16, yy - 4, 6, 0, 6.283); ctx.fill(); T(q[0] ? '✓' : '–', x + 16, yy - 0.5, { s: 9, b: true, a: 'center', c: '#fff' });
-      const n1 = sidWrap(q[1], x + 28, yy, w - 36, { s: 9.4, b: true, c: '#12303A' }, 11); const n2 = sidWrap(q[2], x + 28, yy + 11 * n1, w - 36, { s: 8.8, c: '#4B5563' }, 11); yy += 11 * (n1 + n2) + 7; });
-    const bx = x + 10, bw = w - 20, byy = y + 182; ctx.fillStyle = Math.abs(cur - f) < 0.005 ? '#1E5A2A' : '#0A246A'; rrect(bx, byy, bw, 22, 5); ctx.fill(); T(Math.abs(cur - f) < 0.005 ? 'In use: trigger at f = ' + f.toFixed(2) : 'Use f = ' + f.toFixed(2) + ' for ' + DATA.soil_labels[sf].toLowerCase(), bx + bw / 2, byy + 15, { s: 10, b: true, a: 'center', c: '#fff' });
-    hot(bx, byy, bw, 22, () => { state.trigBy[sf] = f; refresh(); }, 'set the trigger of this soil to depletion ' + f.toFixed(2)); };
-  col(26, 'Choose f = 0.50 if', Q50, rec === 0.5, 0.5); col(26 + (W - 28 - 36) / 2 + 12, 'Choose f = 0.45 if', Q45, rec === 0.45, 0.45);
   const R45 = ['the soil is sandy and dries out fast', 'the system needs several days for a full round', 'the crop is at flowering or pollination'], R50 = ['it is a standard field crop', 'the soil holds much water', 'the system covers the whole field quickly'];
   const join = a => a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1];
   const why = rec === 0.45 ? 'Advice for you: f = 0.45, because ' + join(Q45.map((q, i) => q[0] ? R45[i] : null).filter(Boolean)) + '. Irrigating a little earlier keeps the crop out of stress while the round goes on.' : 'Advice for you: f = 0.50' + (n50 ? ', because ' + join(Q50.map((q, i) => q[0] ? R50[i] : null).filter(Boolean)) : '') + '. The soil can give half of its available water before the crop feels it, with fewer irrigations.';
+  const colW = (W - 28 - 36) / 2, colEnd = Q => { let yy = 80; Q.forEach(q => { const a = sidWrap(q[1], 0, 0, colW - 36, { s: 9.4, b: true }, 11, true), b = sidWrap(q[2], 0, 0, colW - 36, { s: 8.8 }, 11, true); yy += 11 * (a + b) + 7; }); return yy; }, dl = Math.max(0, Math.max(colEnd(Q50), colEnd(Q45)) - 168);
+  const advTxt = why + ' Now: f = ' + cur.toFixed(2) + '.', advN = sidWrap(advTxt, 26, 0, W - 52, { s: 9.6, b: true }, 12, true), bh = Math.max(262, 226 + 12 * advN + 12) + dl;
+  box(14, y, W - 28, bh, { fill: '#fff', r: 8 });
+  T('The core trade-off: trigger at f = 0.50 or f = 0.45?', 26, y + 20, { s: 12.5, b: true, c: '#12303A' });
+  T('Each question is answered from your settings; a tick means it applies to you.', 26, y + 35, { s: 9.5, i: true, c: MUTE });
+  const col = (x, title, Q, on, f) => { const w = (W - 28 - 36) / 2; ctx.fillStyle = on ? '#E8F4EA' : '#F6F5F0'; rrect(x, y + 44, w, 166 + dl, 6); ctx.fill(); ctx.strokeStyle = on ? '#2E7D32' : '#C8C4B8'; ctx.lineWidth = on ? 2 : 1; ctx.stroke();
+    T(title, x + 10, y + 62, { s: 11, b: true, c: on ? '#1E5A2A' : '#12303A' });
+    let yy = y + 80; Q.forEach(q => { ctx.fillStyle = q[0] ? '#2E9E5B' : '#C8C4B8'; ctx.beginPath(); ctx.arc(x + 16, yy - 4, 6, 0, 6.283); ctx.fill(); T(q[0] ? '✓' : '–', x + 16, yy - 0.5, { s: 9, b: true, a: 'center', c: '#fff' });
+      const n1 = sidWrap(q[1], x + 28, yy, w - 36, { s: 9.4, b: true, c: '#12303A' }, 11); const n2 = sidWrap(q[2], x + 28, yy + 11 * n1, w - 36, { s: 8.8, c: '#4B5563' }, 11); yy += 11 * (n1 + n2) + 7; });
+    const bx = x + 10, bw = w - 20, byy = y + 182 + dl; ctx.fillStyle = Math.abs(cur - f) < 0.005 ? '#1E5A2A' : '#0A246A'; rrect(bx, byy, bw, 22, 5); ctx.fill(); T(Math.abs(cur - f) < 0.005 ? 'In use: trigger at f = ' + f.toFixed(2) : 'Use f = ' + f.toFixed(2) + ' for ' + DATA.soil_labels[sf].toLowerCase(), bx + bw / 2, byy + 15, { s: 10, b: true, a: 'center', c: '#fff' });
+    hot(bx, byy, bw, 22, () => { state.trigBy[sf] = f; refresh(); }, 'set the trigger of this soil to depletion ' + f.toFixed(2)); };
+  col(26, 'Choose f = 0.50 if', Q50, rec === 0.5, 0.5); col(26 + (W - 28 - 36) / 2 + 12, 'Choose f = 0.45 if', Q45, rec === 0.45, 0.45);
   window.__N1ADV = { soil: sf, rec, why, cur, q50: Q50.map(q => [!!q[0], q[1], q[2]]), q45: Q45.map(q => [!!q[0], q[1], q[2]]) };
-  sidWrap(why + ' Now: f = ' + cur.toFixed(2) + '.', 26, y + 226, W - 52, { s: 9.6, b: true, c: rec === 0.45 ? '#8A5A00' : '#1E5A2A' }, 12);
+  sidWrap(advTxt, 26, y + 226 + dl, W - 52, { s: 9.6, b: true, c: rec === 0.45 ? '#8A5A00' : '#1E5A2A' }, 12);
+  return y + bh;
 }
 
 // ------------------------------------------------------------------------------------------------
