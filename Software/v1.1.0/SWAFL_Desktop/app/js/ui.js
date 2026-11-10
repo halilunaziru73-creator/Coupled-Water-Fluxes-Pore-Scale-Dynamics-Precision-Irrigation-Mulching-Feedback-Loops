@@ -135,7 +135,11 @@ const UI = (() => {
   }
 
   /* ---- external links ---- */
-  function openExternal(url) { if (window.swafl) window.swafl.openExternal(url); else window.open(url, '_blank', 'noopener'); }
+  function openExternal(url) {
+    // the manual is part of SWAFL: its links open the PDF that comes with the program (at the right page), not the GitHub page
+    if (/\/Manual\/SWAFL_Manual_v1\.1\.0\.pdf/.test(String(url)) && window.SWAFLManual) { const m = /#page=(\d+)/.exec(url); window.SWAFLManual.open(m ? +m[1] : 0); return; }
+    if (window.swafl) window.swafl.openExternal(url); else window.open(url, '_blank', 'noopener');
+  }
 
   /* ---- file output (desktop dialog or browser download) ---- */
   async function saveFile(name, data, isBase64, mime) {

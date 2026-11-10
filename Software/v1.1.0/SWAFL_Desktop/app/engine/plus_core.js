@@ -52,6 +52,7 @@
 
   // ------------------------------------------------------------------ 2. F1 opens the manual
   window.openManual = function () {
+    try { if (window.parent && window.parent !== window && window.parent.SWAFLAct && window.parent.SWAFLAct.manual) return window.parent.SWAFLAct.manual(); } catch (e) {}   // the program opens the manual at the page of the open layer
     try { const host = window.parent && window.parent.swafl; if (host && host.openManual) return host.openManual(); } catch (e) {}
     try { if (window.swafl && window.swafl.openManual) return window.swafl.openManual(); } catch (e) {}
     window.open(window.SWAFL_MANUAL_URL || '../../docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf', '_blank');   // the manual of the current version, beside the app (also on the online site)

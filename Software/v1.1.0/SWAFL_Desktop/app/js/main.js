@@ -64,7 +64,7 @@ const Act = {
     }, 80);
   },
   reportChoose() { Act.report(); },
-  manual() { if (window.swafl && window.swafl.openManual) { window.swafl.openManual(); return; } window.open(window.SWAFL_MANUAL_URL || '../docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf', '_blank'); },
+  manual() { let pg = 0; try { const M = window.SWAFLManual, id = typeof Layers !== 'undefined' && Layers.current(), sx = M && M.idx && id ? M.forLayer(id) : null; pg = sx ? sx.page : 0; } catch (e) { } if (window.SWAFLManual) { window.SWAFLManual.open(pg); return; } if (window.swafl && window.swafl.openManual) { window.swafl.openManual(pg); return; } window.open(window.SWAFL_MANUAL_URL || '../docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf' + (pg ? '#page=' + pg : ''), '_blank'); },
   undo() { if (Hist.i > 0) { Hist.i--; histApply(Hist.stack[Hist.i]); } },
   redo() { if (Hist.i < Hist.stack.length - 1) { Hist.i++; histApply(Hist.stack[Hist.i]); } },
   resetSettings() { E.reset(); UI.log('Settings reset to default'); },
@@ -290,3 +290,4 @@ try {
 
 // a name that is cut short with ... shows in full when the pointer rests on it (tabs, layers, buttons), without each place needing its own tooltip
 document.addEventListener('mouseover', e => { try { const t = e.target; if (!t || t.title || t.children.length || !t.textContent) return; const cs = getComputedStyle(t); if ((cs.textOverflow === 'ellipsis' || cs.overflow === 'hidden') && t.scrollWidth > t.clientWidth + 2) t.title = t.textContent.trim(); } catch (x) { } }, { passive: true });
+window.SWAFLAct = Act;   // the engine (inside its frame) opens the manual at the page of the open layer
