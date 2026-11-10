@@ -355,9 +355,9 @@ const SCENES = [
   { id:"field", label:"Field Balance", color:"#2E7DE8", fieldBar:true, interactive:true, onDown: p => fieldDown(p), onMove: p => fieldMove(p), onUp: () => { fieldUi.drag = false; }, onLeave: () => { fyUi.hover = -1; }, draw: () => { drawField(); hotField(); }, title:"Field water balance: precipitation, irrigation, evapotranspiration, drainage",
     legendFn: () => LEG_FIELD(), insight:"Rain plus irrigation is shared between transpiration, evaporation, drainage and storage; every flux follows the controls.",
     insightFn: () => fieldInsight() },
-  { id:"v1", label:"V1 Sensor + Trigger", color:"#5B9FD6", play:true, dur:16, draw: () => { drawV1(); hotV1(); }, title:"Sensor suction through the season, irrigated against rainfed",
+  { id:"v1", label:"V1 Sensor + Trigger", color:"#5B9FD6", play:true, dur:16, h: 672, draw: () => { drawV1(); hotV1(); }, title:"Sensor suction through the season, irrigated against rainfed",
     legendFn: () => LEG_V1(), insight:"Soil-moisture sensors trigger irrigation once suction crosses a threshold; trigger spans 24-84% depletion across these ten soils." },
-  { id:"v2", label:"V2 Profile Evolution", color:"#9B7FD6", play:true, dur:16, draw: () => drawV2(), title:"Pressure head through the season, irrigated against rainfed",
+  { id:"v2", label:"V2 Profile Evolution", color:"#9B7FD6", play:true, dur:16, h: 672, draw: () => drawV2(), title:"Pressure head through the season, irrigated against rainfed",
     legendFn: () => LEG_V2(), insight:"Pressure head through the profile responds to rain and irrigation together; wetting fronts move fastest in coarse, low-storage soils." },
   { id:"v3", label:"V3 Tillage + Structure", color:"#D97848", play:true, dur:12, h:990, interactive:true, onDown: p => v3Down(p), onMove: p => v3Move(p), onUp: () => { v3ui.drag = false; }, onLeave: () => { v3ui.hv = null; }, draw: () => { drawV3(); hotV3(); }, title:"Tillage and structural consolidation of the topsoil",
     legend:[['#8E4A3A','Conventional'],['#D9782A','Reduced'],['#2E7D5A','No-till'],['#2E7DE8','Consolidation rate']], insight:"Tillage is an identifiable driver of change in soil hydraulic properties: conventional tillage raises drainage as structural consolidation increases; no-till stays flat." },
@@ -3752,25 +3752,25 @@ function drawV1Detail() {
   for (let d = 0; d <= k; d++) if (ss[d] > thr) { above++; ctx.beginPath(); ctx.moveTo(xm(d), y1 + 22); ctx.lineTo(xm(d), y1 + 32); ctx.stroke(); }
   T('sensor beyond trigger', x0, y1 + 47, { s: 10, c: MUTE });
   // soil column with live readings
-  const cx = 84, cw = 92, cy = 396, ppc = 2.2; drawSection(cx, cy, cw, 100, ppc); depthAxis(cx - 2, cy, 100, ppc, 25); horizonTags(cx - 28, cy, ppc, 100);
-  T('Soil profile and sensor readings', 16, 384, { s: 11, b: true });
+  const cx = 84, cw = 92, cy = 418, ppc = 2.2; drawSection(cx, cy, cw, 100, ppc); depthAxis(cx - 2, cy, 100, ppc, 25); horizonTags(cx - 28, cy, ppc, 100);
+  T('Soil profile and sensor readings', 16, 396, { s: 11, b: true });
   dps.forEach(q => {
     const yy = cy + q.d * ppc, v = profileAt(pk + '_irr', k)[q.i], hot = v > thr;
     ctx.fillStyle = hot ? '#D93025' : q.col; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.arc(cx + cw / 2, yy, q.sensor ? 7 : 5, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
     ctx.strokeStyle = q.col; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(cx + cw, yy); ctx.lineTo(cx + cw + 22, yy); ctx.stroke();
   });
   // readings table
-  const tx = 230; T(dayLabel(k), tx, 410, { s: 19, b: true, c: '#1F3864' });
-  T('depth', tx, 436, { s: 10, c: MUTE }); T('irrigated', tx + 165, 436, { s: 10, c: MUTE, a: 'right' }); T('rainfed', tx + 240, 436, { s: 10, c: MUTE, a: 'right' }); T('cm suction', tx + 250, 436, { s: 10, c: MUTE });
+  const tx = 230; T(dayLabel(k), tx, 432, { s: 19, b: true, c: '#1F3864' });
+  T('depth', tx, 458, { s: 10, c: MUTE }); T('irrigated (cm)', tx + 165, 458, { s: 10, c: MUTE, a: 'right' }); T('rainfed (cm)', tx + 240, 458, { s: 10, c: MUTE, a: 'right' });
   const prI = profileAt(pk + '_irr', k), prR = profileAt(pk + '_rain', k);
   dps.forEach((q, r) => {
-    const yy = 456 + r * 22; ctx.fillStyle = q.col; ctx.fillRect(tx, yy - 9, 14, 7);
+    const yy = 478 + r * 22; ctx.fillStyle = q.col; ctx.fillRect(tx, yy - 9, 14, 7);
     T(q.d + ' cm' + (q.sensor ? ' sensor' : ''), tx + 20, yy - 1, { s: 11, b: q.sensor }); T(fmtS(prI[q.i]), tx + 165, yy - 1, { s: 11, b: true, a: 'right', c: prI[q.i] > thr ? '#D93025' : INK }); T(fmtS(prR[q.i]), tx + 240, yy - 1, { s: 11, a: 'right', c: '#6B7280' });
   });
   const pct = (k + 1) ? above / (k + 1) : 0;
-  T(above + ' of ' + (k + 1) + ' days the sensor read beyond ' + thr.toLocaleString('en-US') + ' cm', tx, 584, { s: 11, b: true });
-  ctx.fillStyle = '#EEE9DA'; ctx.fillRect(tx, 592, 340, 10); ctx.fillStyle = '#D93025'; ctx.fillRect(tx, 592, 340 * pct, 10); ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.strokeRect(tx, 592, 340, 10);
-  annualLine(tx, 619, 633, true);
+  T(above + ' of ' + (k + 1) + ' days the sensor read beyond ' + thr.toLocaleString('en-US') + ' cm', tx, 606, { s: 11, b: true });
+  ctx.fillStyle = '#EEE9DA'; ctx.fillRect(tx, 614, 340, 10); ctx.fillStyle = '#D93025'; ctx.fillRect(tx, 614, 340 * pct, 10); ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.strokeRect(tx, 614, 340, 10);
+  annualLine(16, 646, 660, true);
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -5172,11 +5172,12 @@ function drawV2Detail() {
   const share = pr => { let wgt = 0, h = 0; pr.forEach((v, i) => { if (PROFILE.depths[i] > 60) return; const th = i < pr.length - 1 ? PROFILE.depths[i + 1] - PROFILE.depths[i] : 10; wgt += th; if (v > thr) h += th; }); return wgt ? h / wgt : 0; };
   T(dayLabel(d), 16, 484, { s: 19, b: true, c: '#1F3864' }); T('At the sensor depth (' + PROFILE.depths[si] + ' cm)', 16, 506, { s: 11, b: true }); T('irrigated ' + fmtS(pI[si]) + ' cm   |   rainfed ' + fmtS(pR[si]) + ' cm', 16, 522, { s: 11.5 });
   T('Root zone (0 to 60 cm) beyond the trigger', 16, 546, { s: 11, b: true }); T('irrigated ' + Math.round(share(pI) * 100) + '%   |   rainfed ' + Math.round(share(pR) * 100) + '% of the depth', 16, 562, { s: 11.5 });
-  const mx0 = 330, mx1 = 596, my0 = 504, my1 = 598, sI = dailySeries(pk + '_irr', si), sR = dailySeries(pk + '_rain', si), mxx = dd => mx0 + dd / (PDAYS - 1) * (mx1 - mx0), myy = v => my1 - clampN((logv(v) - 1) / 4, 0, 1) * (my1 - my0);
-  T('Suction at the sensor depth through the season', mx0, 498, { s: 10.5, b: true }); ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.strokeRect(mx0, my0, mx1 - mx0, my1 - my0); ctx.strokeStyle = '#D93025'; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(mx0, myy(thr)); ctx.lineTo(mx1, myy(thr)); ctx.stroke(); ctx.setLineDash([]);
+  const mx0 = 330, mx1 = 596, my0 = 512, my1 = 594, sI = dailySeries(pk + '_irr', si), sR = dailySeries(pk + '_rain', si), mxx = dd => mx0 + dd / (PDAYS - 1) * (mx1 - mx0), myy = v => my1 - clampN((logv(v) - 1) / 4, 0, 1) * (my1 - my0);
+  ctx.strokeStyle = RULE; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(16, 628); ctx.lineTo(W - 16, 628); ctx.stroke();
+  T('Suction at the sensor depth through the season', mx0, 500, { s: 10.5, b: true }); ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.strokeRect(mx0, my0, mx1 - mx0, my1 - my0); ctx.strokeStyle = '#D93025'; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(mx0, myy(thr)); ctx.lineTo(mx1, myy(thr)); ctx.stroke(); ctx.setLineDash([]);
   [[sR, '#E8912D'], [sI, '#1B6FD8']].forEach(([s, c]) => { ctx.strokeStyle = c; ctx.lineWidth = 1.6; ctx.beginPath(); s.forEach((v, i) => { i ? ctx.lineTo(mxx(i), myy(v)) : ctx.moveTo(mxx(i), myy(v)); }); ctx.stroke(); });
-  ctx.strokeStyle = 'rgba(27,31,35,0.6)'; ctx.beginPath(); ctx.moveTo(mxx(d), my0); ctx.lineTo(mxx(d), my1); ctx.stroke(); T('Apr', mx0, my1 + 13, { s: 9.5, c: MUTE }); T('Sep', mx1, my1 + 13, { s: 9.5, c: MUTE, a: 'right' });
-  annualLine(16, 619, 633);
+  ctx.strokeStyle = 'rgba(27,31,35,0.6)'; ctx.beginPath(); ctx.moveTo(mxx(d), my0); ctx.lineTo(mxx(d), my1); ctx.stroke(); [0, 30, 61, 91, 122, 153].forEach((dd, i) => { const xx = mxx(dd); ctx.strokeStyle = '#B9C0C7'; ctx.beginPath(); ctx.moveTo(xx, my1); ctx.lineTo(xx, my1 + 4); ctx.stroke(); T(MON[3 + i], xx + (i === 0 ? 0 : 0), my1 + 15, { s: 9, c: MUTE, a: i === 0 ? 'left' : 'center' }); });
+  annualLine(16, 646, 661);
   // clickable: a depth on the profile or a column moves the sensor, the season trace moves the date
   hot(x0, y0, x1 - x0, maxCm * ppc, p => applyState({ zIdx: nearestIdx(Z_VALUES, (p.y - y0) / ppc) }), 'click a depth to put the sensor there');
   hot(cR, y0, cw, maxCm * ppc, p => applyState({ zIdx: nearestIdx(Z_VALUES, (p.y - y0) / ppc) }), 'click a depth to put the sensor there'); hot(cI, y0, cw, maxCm * ppc, p => applyState({ zIdx: nearestIdx(Z_VALUES, (p.y - y0) / ppc) }), 'click a depth to put the sensor there');
