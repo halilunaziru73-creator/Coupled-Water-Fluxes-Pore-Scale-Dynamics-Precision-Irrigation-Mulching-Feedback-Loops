@@ -37,9 +37,8 @@ figures and reports; and cite or discuss results produced with the Software.
 You may not: remove or alter copyright, author or licence notices; present the
 Software or its models as your own work; use the Software for any unlawful
 purpose; attempt to disrupt the third-party services that the Software
-contacts; or use the name or logos of the Author, SUSTAGRI, the universities
-or any funder to suggest endorsement of your work or products without written
-permission.
+contacts; or use the name or logo of the Author to suggest endorsement of your work or
+products without written permission.
 
 4. DECISION-SUPPORT ONLY: NO PROFESSIONAL ADVICE
 SWAFL is a simulation and decision-support tool. Its results are model
