@@ -14,7 +14,8 @@
   let touched = 0;
   { const mark = e => { try { const t = e.target, bar = document.getElementById('playBtn') && document.getElementById('playBtn').parentElement; if (t && t.closest && (t.closest('#playBtn') || (bar && bar.contains(t)))) return; } catch (x) { } touched = Date.now(); };
     ['input', 'change', 'click', 'keydown'].forEach(ev => document.addEventListener(ev, mark, true)); }
-  function run(id) { touched = 0; const sc = SCENES.find(s => s.id === id); RX[id] = { on: true, st: key(), why: '' }; if (sc && sc.h) { try { setCanvasH(sc.h); } catch (e) { } } if (sc && sc.play) { play.t = 0; play.hold = 0; play.on = true; const pb = document.getElementById('playBtn'); if (pb) pb.textContent = 'Pause'; } }
+  const atToday = id => { try { if (typeof dss !== 'undefined' && dss.ready) dssSyncPlay(id); } catch (e) { } };   // the date layers start at the working date (today), not at the first day of the weather record
+  function run(id) { touched = 0; const sc = SCENES.find(s => s.id === id); RX[id] = { on: true, st: key(), why: '' }; if (sc && sc.h) { try { setCanvasH(sc.h); } catch (e) { } } if (sc && sc.play) { play.t = 0; atToday(id); play.hold = 0; play.on = true; const pb = document.getElementById('playBtn'); if (pb) pb.textContent = 'Pause'; } }
   window.runLayer = run; window.layerRan = id => id === 'dph' ? !!(window.__phRan && window.__phRan()) : !!((window.DESIGN_RUN && DESIGN_RUN[id] && DESIGN_RUN[id].on) || (RX[id] && RX[id].on));
   const btn = (x, y, w, h, label) => { ctx.fillStyle = '#0A246A'; ctx.fillRect(x, y, w, h); ctx.fillStyle = '#3A6EA5'; ctx.fillRect(x, y, w, 2); ctx.fillRect(x, y, 2, h); ctx.fillStyle = '#000'; ctx.fillRect(x, y + h - 2, w, 2); ctx.fillRect(x + w - 2, y, 2, h); T(label, x + w / 2, y + h / 2 + 4, { s: 11, b: true, c: '#FFFFFF', a: 'center' }); };
   function card(sc, R) {
@@ -35,7 +36,7 @@
       if (!gated(sc) || sc.id === 'dph') return od.apply(this, arguments);
       const R = RX[sc.id] || (RX[sc.id] = { on: false, st: '', why: '' });
       if (R.on) { const k = key(); if (R.st !== k) { if (Date.now() - touched < 1500) { R.on = false; R.why = 'settings in Properties changed'; try { setCanvasH(Math.min(sc.h || 600, 420)); } catch (e) { } } else R.st = k; } }
-      if (!R.on) { play.on = false; play.t = 0; card(sc, R); return; }
+      if (!R.on) { play.on = false; play.t = 0; atToday(sc.id); play.on = false; card(sc, R); return; }
       return od.apply(this, arguments);
     };
   }
@@ -52,5 +53,5 @@
   // the layer stays at the top while it draws; the first wheel, touch or key of the person ends it
   let topTok = 0, topUser = false; ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(ev => document.addEventListener(ev, () => { topUser = true; }, true));
   const holdTop = () => { const tok = ++topTok; topUser = false; toTop(); [40, 120, 250, 500, 900, 1500, 2400].forEach(ms => setTimeout(() => { if (tok === topTok && !topUser) toTop(); }, ms)); };
-  switchScene = function (sc) { const r = oSwitch.apply(this, arguments); holdTop(); try { if (sc && gated(sc) && sc.id !== 'dph' && !(RX[sc.id] && RX[sc.id].on)) { play.on = false; play.t = 0; } } catch (e) { } return r; };
+  switchScene = function (sc) { const r = oSwitch.apply(this, arguments); holdTop(); try { if (sc && gated(sc) && sc.id !== 'dph' && !(RX[sc.id] && RX[sc.id].on)) { play.on = false; play.t = 0; atToday(sc.id); play.on = false; } } catch (e) { } return r; };
 })();
