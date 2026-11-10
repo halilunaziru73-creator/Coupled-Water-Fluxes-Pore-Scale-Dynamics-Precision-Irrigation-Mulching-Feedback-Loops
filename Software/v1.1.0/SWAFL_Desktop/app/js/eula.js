@@ -7,21 +7,22 @@ function get(){try{return JSON.parse(localStorage.getItem(KEY)||'null')}catch(e)
 function set(v){try{localStorage.setItem(KEY,JSON.stringify(v))}catch(e){window.__eulaMem=v} try{sessionStorage.setItem(KEY,VER)}catch(e){window.__eulaSes=VER}}
 function ok(){var a=get(),s=null;try{s=sessionStorage.getItem(KEY)}catch(e){s=window.__eulaSes||null}return !!(a&&a.v===VER&&s===VER)}   // the licence window opens every time SWAFL is started; the choice holds until SWAFL is closed
 var STEPS=['Welcome','Licence agreement','Privacy and online features','Ready'];
-var css='#eula{position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;background:rgba(14,28,20,.82);font:14px/1.55 "Segoe UI",Arial,sans-serif;color:#1A2318;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}'+
-'#eula .ep{background:#fff;width:min(840px,94vw);height:min(86vh,680px);border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.45);display:flex;flex-direction:column;overflow:hidden}'+
-'#eula .eh{flex:none;padding:16px 24px 14px;background:#14532D;color:#fff;border-bottom:4px solid #D4A94A}'+
-'#eula .eh b{font-size:19px;letter-spacing:.2px}#eula .eh span{display:block;font-size:12px;opacity:.85;margin-top:2px}'+
-'#eula .est{flex:none;display:flex;gap:6px;padding:12px 24px;background:#F4F8F5;border-bottom:1px solid #E3E3E3;font-size:12px;color:#6B6B6B;flex-wrap:wrap}'+
-'#eula .est i{font-style:normal;padding:3px 10px;border-radius:12px;background:#E3EBE5}#eula .est i.on{background:#14532D;color:#fff;font-weight:600}#eula .est i.dn{background:#D4A94A;color:#2A1B05}'+
-'#eula .eb{flex:1;overflow:auto;padding:18px 26px;background:#FCFCFA}'+
-'#eula h3{margin:0 0 8px;font-size:18px;color:#14532D}#eula h4{margin:16px 0 4px;font-size:13px;letter-spacing:.6px;text-transform:uppercase;color:#14532D}'+
-'#eula h4:first-child{margin-top:0}#eula p{margin:0 0 8px;text-align:left}#eula ul{margin:0 0 8px;padding-left:20px}#eula li{margin:3px 0}'+
-'#eula .ef{flex:none;padding:12px 24px 16px;border-top:1px solid #E3E3E3;background:#fff}'+
-'#eula label{display:flex;gap:9px;align-items:flex-start;font-size:13px;cursor:pointer;margin-bottom:5px}'+
-'#eula .er{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:10px;flex-wrap:wrap}'+
-'#eula .eh2{font-size:11.5px;color:#6B6B6B;flex:1}'+
-'#eula button{font:inherit;font-weight:600;border-radius:8px;padding:9px 22px;cursor:pointer;border:1px solid #14532D;background:#fff;color:#14532D;margin-left:8px}'+
-'#eula button.ea{background:#14532D;color:#fff}#eula button:disabled{opacity:.4;cursor:not-allowed}#eula button.ec{border-color:#C9C9C9;color:#6B6B6B}';
+var css='#eula{position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;background:rgba(10,20,50,.55);font:12.5px/1.5 Tahoma,"Segoe UI","MS Sans Serif",Verdana,Arial,sans-serif;color:#000;-webkit-text-stroke:.3px #000}'+
+'#eula .ep{background:#D4D0C8;width:min(840px,94vw);height:min(86vh,680px);border:0;border-radius:0;box-shadow:inset -1px -1px #404040,inset 1px 1px #FFFFFF,inset -2px -2px #808080,inset 2px 2px #DFDFDF,4px 4px 0 rgba(0,0,0,.35);display:flex;flex-direction:column;overflow:hidden;padding:3px}'+
+'#eula .eh{flex:none;padding:5px 8px 6px;background:linear-gradient(90deg,#0A246A,#3A6EA5 70px,#A6CAF0);color:#fff;-webkit-text-stroke:0}'+
+'#eula .eh b{color:#fff;font-size:13px;font-weight:bold;letter-spacing:.2px}#eula .eh span{display:block;font-size:11px;opacity:.95;margin-top:1px}'+
+'#eula .est{flex:none;display:flex;gap:2px;padding:7px 4px 0;background:#D4D0C8;font-size:11.5px;color:#404040;flex-wrap:wrap}'+
+'#eula .est i{font-style:normal;padding:3px 11px;background:#D4D0C8;box-shadow:inset -1px 0 #404040,inset 1px 1px #FFFFFF,inset -2px 0 #808080;color:#404040;-webkit-text-stroke:.2px #404040}#eula .est i.on{background:#0A246A;color:#fff;font-weight:bold;box-shadow:inset -1px -1px #000,inset 1px 1px #3A6EA5;-webkit-text-stroke:0}#eula .est i.dn{color:#0A246A;font-weight:bold;-webkit-text-stroke:0}'+
+'#eula .eb{flex:1;overflow:auto;padding:14px 18px;margin:0 4px;background:#FFFFFF;box-shadow:inset 1px 1px #808080,inset -1px -1px #FFFFFF,inset 2px 2px #404040,inset -2px -2px #D4D0C8}'+
+'#eula h3{margin:0 0 8px;font-size:16px;font-weight:bold;color:#14146A;-webkit-text-stroke:0}#eula h4{margin:14px 0 4px;font-size:12px;font-weight:bold;color:#0A246A;background:linear-gradient(#ECE9D8,#D8D4C8);padding:3px 6px;border-bottom:1px solid #808080;-webkit-text-stroke:0}'+
+'#eula h4:first-child{margin-top:0}#eula p{margin:0 0 8px;text-align:left}#eula ul{margin:0 0 8px;padding-left:20px}#eula li{margin:3px 0}#eula b{font-weight:bold;-webkit-text-stroke:0;color:#0A246A}'+
+'#eula .ef{flex:none;padding:8px 8px 6px;background:#D4D0C8;border-top:1px solid #FFFFFF}'+
+'#eula label{display:flex;gap:7px;align-items:flex-start;font-size:12px;cursor:pointer;margin-bottom:4px}#eula input{accent-color:#0A246A}'+
+'#eula .er{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:8px;flex-wrap:wrap}'+
+'#eula .eh2{font-size:11px;color:#404040;flex:1}'+
+'#eula button{font:bold 12px Tahoma,"Segoe UI",Verdana,sans-serif;-webkit-text-stroke:0;border:0;border-radius:0;padding:5px 20px;cursor:pointer;background:#D4D0C8;color:#000;margin-left:8px;min-width:84px;box-shadow:inset -1px -1px #404040,inset 1px 1px #FFFFFF,inset -2px -2px #808080,inset 2px 2px #DFDFDF}'+
+'#eula button:hover{background:#E3E0D8}#eula button:active{box-shadow:inset 1px 1px #808080,inset -1px -1px #FFFFFF,inset 2px 2px #404040,inset -2px -2px #D4D0C8}'+
+'#eula button.ea{background:#0A246A;color:#FFF;box-shadow:inset -1px -1px #000,inset 1px 1px #3A6EA5}#eula button.ea:hover{background:#163A8C}#eula button:disabled{opacity:.45;cursor:not-allowed}#eula button.ec{color:#000}';
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
 var P={
 0:'<h3>Welcome to SWAFL setup</h3><p>SWAFL (Soil Water, Atmosphere, Feedback and Layout workbench) is a soil-water and irrigation decision-support suite: coupled water fluxes, precision irrigation, mulching, drainage and drip, surface and sprinkler design, with a Daisy agro-ecosystem workbench.</p><p>This short setup takes four steps:</p><ul><li><b>Welcome</b> (this page)</li><li><b>Licence agreement</b>: you read and accept the End User Licence Agreement</li><li><b>Privacy and online features</b>: what stays on your device and what is sent to online services</li><li><b>Ready</b>: you start SWAFL</li></ul><p>Click <b>Next</b> to continue, or <b>Cancel</b> to leave.</p>',
