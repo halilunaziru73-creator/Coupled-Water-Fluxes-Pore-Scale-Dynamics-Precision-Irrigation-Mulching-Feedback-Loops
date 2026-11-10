@@ -135,11 +135,33 @@ ipcMain.handle('reload-app', () => { if (win) win.webContents.reloadIgnoringCach
 ipcMain.handle('version', () => app.getVersion());
 // F1: the manual of this version , shipped with the program or, when run from the source, in docs/manual_v1.1.0
 const MAN11 = 'SWAFL_Manual_v1.1.0.pdf';
+const MAN_REPO = 'halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops';
+const MAN_RAW = 'https://raw.githubusercontent.com/' + MAN_REPO + '/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf';
+const MAN_PAGES = 'https://halilunaziru73-creator.github.io/' + MAN_REPO.split('/')[1] + '/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf';
+// the manual is not inside a small download: the first time it is needed it is fetched once into the user data folder of SWAFL and kept there
+function fetchManual(dest) {
+  return new Promise(resolve => {
+    const https = require('https'); let done = false; const fin = ok => { if (!done) { done = true; resolve(ok); } };
+    const get = (u, n) => { if (n > 5) return fin(false); const rq = https.get(u, { headers: { 'User-Agent': 'SWAFL' } }, rs => {
+      if (rs.statusCode >= 300 && rs.statusCode < 400 && rs.headers.location) { rs.resume(); return get(new URL(rs.headers.location, u).href, n + 1); }
+      if (rs.statusCode !== 200) { rs.resume(); return fin(false); }
+      try { fs.mkdirSync(path.dirname(dest), { recursive: true }); } catch (e) { }
+      const tmp = dest + '.part', w = fs.createWriteStream(tmp); rs.pipe(w);
+      w.on('finish', () => { try { if (fs.statSync(tmp).size > 1e6) { fs.renameSync(tmp, dest); fin(true); } else fin(false); } catch (e) { fin(false); } });
+      w.on('error', () => fin(false)); rs.on('error', () => fin(false)); });
+      rq.on('error', () => fin(false)); rq.setTimeout(60000, () => { rq.destroy(); fin(false); }); };
+    get(MAN_RAW, 0);
+  });
+}
+const showManual = async (file, page, title) => { try { const mw = new BrowserWindow({ width: 1100, height: 900, title: 'SWAFL manual' + (page ? ', page ' + page : ''), icon: path.join(__dirname, 'build', 'icon.png'), webPreferences: { plugins: true } }); mw.setMenuBarVisibility(false); await mw.loadURL(file + (page ? '#page=' + (+page || 1) : '')); return true; } catch (e) { return false; } };
 ipcMain.handle('open-manual', async (_e, page) => {
-  const exeDir = path.dirname(process.execPath || ''), cands = [path.join(process.resourcesPath || '', MAN11), path.join(__dirname, 'Manual', MAN11), path.join(__dirname, '..', 'Manual', MAN11), path.join(__dirname, MAN11), path.join(exeDir, 'Manual', MAN11), path.join(exeDir, MAN11), path.join(__dirname, 'docs', 'manual_v1.1.0', MAN11), path.join(process.resourcesPath || '', 'SWAFL_Manual.pdf'), path.join(__dirname, 'docs', 'SWAFL_Manual.pdf')];
-  const f = cands.find(p => { try { return fs.existsSync(p); } catch (e) { return false; } });
-  // at a page: the manual opens in a window of SWAFL itself, at that page; without a page, in the PDF reader of the computer
-  if (f && page) { try { const mw = new BrowserWindow({ width: 1100, height: 900, title: 'SWAFL manual, page ' + page, icon: path.join(__dirname, 'build', 'icon.png'), webPreferences: { plugins: true } }); mw.setMenuBarVisibility(false); await mw.loadURL(require('url').pathToFileURL(f).href + '#page=' + (+page || 1)); return true; } catch (e) { } }
+  const exeDir = path.dirname(process.execPath || ''), cache = path.join(app.getPath('userData'), 'manual', MAN11);
+  const cands = [path.join(process.resourcesPath || '', MAN11), path.join(__dirname, 'Manual', MAN11), path.join(__dirname, '..', 'Manual', MAN11), path.join(__dirname, MAN11), path.join(exeDir, 'Manual', MAN11), path.join(exeDir, MAN11), path.join(__dirname, 'docs', 'manual_v1.1.0', MAN11), path.join(process.resourcesPath || '', 'SWAFL_Manual.pdf'), path.join(__dirname, 'docs', 'SWAFL_Manual.pdf'), cache];
+  let f = cands.find(p => { try { return fs.existsSync(p); } catch (e) { return false; } });
+  if (!f && await fetchManual(cache)) f = cache;
+  // the manual opens in a window of SWAFL itself, at the exact page
+  if (f && await showManual(require('url').pathToFileURL(f).href, page)) return true;
   if (f) { const err = await shell.openPath(f); return !err; }
-  shell.openExternal('https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/blob/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/' + MAN11); return true;
+  // no copy and no way to fetch it (offline): the online manual, still inside a SWAFL window at the page, not the GitHub page
+  return await showManual(MAN_PAGES, page);
 });

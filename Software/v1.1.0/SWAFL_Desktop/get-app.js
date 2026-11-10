@@ -11,6 +11,15 @@ try {
   // remove the previous build so an old SWAFL.exe can never be copied by mistake
   try { fs.rmSync(path.join(__dirname, 'dist'), { recursive: true, force: true }); } catch (e) {}
   if (!fs.existsSync(path.join(__dirname, 'daisy', 'bin', 'daisy-bin.exe'))) console.log('\nNote: the folder daisy (the Daisy program that comes with SWAFL) is missing, so the built SWAFL will not run Daisy by itself. Unzip the whole SWAFL zip again.\n');
+  // the manual PDF is too large for the small download: fetch it once so that it is packed into SWAFL.exe (Windows 10 and later have curl)
+  try {
+    const mp = path.join(__dirname, 'docs', 'manual_v1.1.0', 'SWAFL_Manual_v1.1.0.pdf');
+    if (!fs.existsSync(mp)) {
+      console.log('Fetching the manual (53 MB, once) ...'); fs.mkdirSync(path.dirname(mp), { recursive: true });
+      execSync('curl -L -f -s -o "' + mp + '.part" "https://raw.githubusercontent.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf"', { stdio: 'inherit' });
+      if (fs.statSync(mp + '.part').size > 1e6) fs.renameSync(mp + '.part', mp); else fs.rmSync(mp + '.part', { force: true });
+    }
+  } catch (e) { console.log('The manual could not be fetched now (offline?). SWAFL will fetch it the first time you press F1.'); try { fs.rmSync(path.join(__dirname, 'docs', 'manual_v1.1.0', 'SWAFL_Manual_v1.1.0.pdf.part'), { force: true }); } catch (e2) {} }
   if (!fs.existsSync(path.join(__dirname, 'node_modules', 'electron-builder'))) run('npm install');
   try { run('npm run dist'); }
   catch (e1) {
