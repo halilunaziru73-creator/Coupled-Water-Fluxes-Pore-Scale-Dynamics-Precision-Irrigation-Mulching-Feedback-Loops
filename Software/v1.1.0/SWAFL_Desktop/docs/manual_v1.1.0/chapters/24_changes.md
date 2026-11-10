@@ -298,3 +298,4 @@
 - The window that shows the results of a process or result clicked in the interactive figure now opens in front of the full-screen figure, and it is large.
 - The results window of the interactive figure keeps its usual size and now opens in front of the full-screen figure.
 - Dashboard: an Original button (and View > Original layout) puts every panel back to its first size.
+- Original layout also leaves a stuck full-screen state of a panel.
