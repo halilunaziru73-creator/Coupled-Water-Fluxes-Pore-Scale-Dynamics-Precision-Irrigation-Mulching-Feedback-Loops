@@ -297,3 +297,4 @@
 - Year list and the blue buttons switch at once: the 20-year picture prepares the year detail (rainfed layers and soil textures) in the background.
 - The window that shows the results of a process or result clicked in the interactive figure now opens in front of the full-screen figure, and it is large.
 - The results window of the interactive figure keeps its usual size and now opens in front of the full-screen figure.
+- Dashboard: an Original button (and View > Original layout) puts every panel back to its first size.

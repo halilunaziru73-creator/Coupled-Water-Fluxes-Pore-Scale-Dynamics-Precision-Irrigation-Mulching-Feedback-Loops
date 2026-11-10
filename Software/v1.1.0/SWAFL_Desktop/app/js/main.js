@@ -112,7 +112,7 @@ const MENUS = [
     { label: 'Field sketch to design...', icon: 'field', act: () => Sketch.open() }, { sep: 1 },
     { label: 'Layers and Processing Toolbox', check: () => vis('leftDock'), act: () => Act.toggle('leftDock', 'splitLeft') }, { label: 'Properties', check: () => vis('rightDock'), act: () => Act.toggle('rightDock', 'splitRight') },
     { label: 'Dashboard', check: () => vis('dashDock'), act: () => Act.toggle('dashDock', 'splitDash') }, { sep: 1 },
-    { label: 'Fit drawing to window', check: () => Act.fitMode === 'window', act: () => Act.fit('window') }, { label: 'Drawing at full width (scroll)', check: () => Act.fitMode === 'width', act: () => Act.fit('width') }, { label: 'Focus view (hide panels)', key: 'F9', act: Act.focus }, { sep: 1 },
+    { label: 'Fit drawing to window', check: () => Act.fitMode === 'window', act: () => Act.fit('window') }, { label: 'Drawing at full width (scroll)', check: () => Act.fitMode === 'width', act: () => Act.fit('width') }, { label: 'Focus view (hide panels)', key: 'F9', act: Act.focus }, { label: 'Original layout (all panels back to their first size)', act: () => window.resetLayout() }, { sep: 1 },
     { label: 'Text size', icon: 'zoom', sub: () => [{ label: 'Larger text', key: 'Ctrl+=', act: () => UIScale.step(0.1) }, { label: 'Smaller text', key: 'Ctrl+-', act: () => UIScale.step(-0.1) }, { label: 'Automatic for this window (now ' + UIScale.pct() + ')', check: () => !localStorage.getItem('swafl.textsize'), act: () => UIScale.set(0) }] }, { sep: 1 }, { label: 'Expand all layers', act: () => Layers.expandAll() }, { label: 'Collapse all layers', act: () => Layers.collapseAll() }, { sep: 1 }, { label: 'Full screen', key: 'F11', act: Act.fullscreen }] },
   { label: 'Tools', items: [
     { label: 'Field sketch to design...', icon: 'field', act: () => Sketch.open() }, { label: 'Field on the map: satellite, indices, report...', icon: 'search', act: () => FieldMap.open() }, { label: 'Compare the irrigation systems on this field', icon: 'chart', act: () => Sketch.compare() },
@@ -275,8 +275,10 @@ UI.hsplit(document.getElementById('splitRight'), document.getElementById('rightD
 UI.hsplit(document.getElementById('splitDash'), document.getElementById('dashDock'), 'right', 300, 900);
 UI.vsplit(document.getElementById('splitLeftV'), () => document.getElementById('toolboxDock'), 'up', 80, 560);
 document.querySelector('#dashTabs [data-act=fullDash]').onclick = () => { const d = document.getElementById('dashDock'); if (window.SWOut && SWOut.fs) SWOut.fs(d, () => { try { Dash.render(); } catch (e) { } }); };
-document.querySelector('#dashTabs [data-act=maxDash]').onclick = e => { const d = document.getElementById('dashDock'); d.style.width = ''; d.classList.toggle('max'); e.target.textContent = d.classList.contains('max') ? 'Smaller' : 'Wider'; };
-if (window.swafl) window.swafl.version().then(v => { document.getElementById('stVer').textContent = v + ' · build 11 Nov 2026 (g)'; }).catch(() => {});
+window.resetLayout = () => { try { ['leftDock', 'rightDock', 'dashDock'].forEach(i => { const el = document.getElementById(i); if (el) { el.style.width = ''; el.style.height = ''; el.classList.remove('max'); el.hidden = false; el.style.display = ''; } }); ['splitLeft', 'splitRight', 'splitDash'].forEach(i => { const el = document.getElementById(i); if (el) el.style.display = ''; }); document.body.classList.remove('focus'); const mb = document.querySelector('#dashTabs [data-act=maxDash]'); if (mb) mb.textContent = 'Wider'; localStorage.removeItem('swafl.layout'); window.dispatchEvent(new Event('resize')); try { Dash.render(); } catch (e) { } } catch (e) { } };
+document.querySelector('#dashTabs [data-act=maxDash]').onclick = e => { const d = document.getElementById('dashDock'); d.style.width = ''; d.classList.toggle('max'); e.target.textContent = d.classList.contains('max') ? 'Smaller' : 'Wider'; window.dispatchEvent(new Event('resize')); };
+document.querySelector('#dashTabs [data-act=origLayout]').onclick = () => window.resetLayout();
+if (window.swafl) window.swafl.version().then(v => { document.getElementById('stVer').textContent = v + ' · build 11 Nov 2026 (h)'; }).catch(() => {});
 document.getElementById('engine').addEventListener('load', () => { if (bootedOnce) boot(true); });
 boot();
 
