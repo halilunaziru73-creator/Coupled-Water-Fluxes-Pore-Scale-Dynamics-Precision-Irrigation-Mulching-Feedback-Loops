@@ -3669,7 +3669,7 @@ function stepPlay(dur) {
 }
 const PDAYS = 183, P0 = Date.UTC(1994, 3, 1), DAYMS = 86400000, MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const pFrameDay = PROFILE.dates.map(d => (Date.parse(d + 'T00:00:00Z') - P0) / DAYMS);
-const dayLabel = d => { const dt = new Date(P0 + Math.round(d) * DAYMS); return dt.getUTCDate() + ' ' + MON[dt.getUTCMonth()] + ' ' + (typeof detYear === 'function' && detYear() !== 14 ? CAL0 + detYear() : 1994); };
+const dayLabel = d => { const dt = new Date(P0 + Math.round(d) * DAYMS); return dt.getUTCDate() + ' ' + MON[dt.getUTCMonth()] + ' ' + (typeof detCal === 'function' ? detCal() : 1994); };
 const profKey = () => DATA.texture[state.soil].sand >= 60 ? 'sand' : 'loam';
 const profName = () => profKey() === 'loam' ? 'coarse loam' : 'coarse sand';
 const nearestDepthIdx = z => PROFILE.depths.reduce((b, d, i) => Math.abs(d - z) < Math.abs(PROFILE.depths[b] - z) ? i : b, 0);
@@ -3685,7 +3685,7 @@ function prAdj(tr, d, i, v) {
   return Math.pow(10, hOfDep(state.soil, depletionRaw(refSoil, v) + dl));
 }
 const prKey = () => ((state.soil === 'S01_CoarseLoam' || state.soil === 'S02_CoarseSand') && STD20()) ? 'std' : simCache.key;
-const detYear = () => state.dyear == null ? 14 : state.dyear;
+const detYear = () => clampN(yearOf(fclock.kd()), 0, NYR - 1), detCal = () => dateOfK(fclock.kd()).getUTCFullYear();
 // the depth profile of a year other than the recorded 1994: the daily model of SWAFL at your settings, to 100 cm, read at the depths of the recorded profile
 function simProfileAt(tr, d) {
   const sim = seasonSim(); if (!sim || !sim.s) return null; const L = /_irr$/.test(tr) ? sim.s : sim.rfLayers(), k = clampN(detYear() * DPY + 90 + Math.round(d), 0, ND - 1), row = L[k];
@@ -3727,7 +3727,7 @@ function drawV1Detail() {
   paper(); const pk = profKey(), thr = trigAbsFor(state.soil), z = Z_VALUES[state.zIdx];
   const k = Math.floor(play.t * (PDAYS - 1)), dps = shownDepths(), sens = dps.find(q => q.sensor);
   const x0 = 70, x1 = 600, y0 = 66, y1 = 320, xm = d => x0 + d / (PDAYS - 1) * (x1 - x0), ym = v => y1 - clampN((logv(v) - 1) / 4, 0, 1) * (y1 - y0);
-  T('Tensiometer suction at five depths, ' + (detYear() === 14 ? '1994' : CAL0 + detYear()), 16, 22, { s: 14, b: true }); T((detYear() === 14 ? datasetNote() : 'Daily profile from the SWAFL daily model at your settings'), 16, 38, { s: 10.5, c: MUTE });
+  T('Tensiometer suction at five depths, ' + detCal(), 16, 22, { s: 14, b: true }); T(datasetNote(), 16, 38, { s: 10.5, c: MUTE });
   ctx.strokeStyle = RULE; ctx.lineWidth = 1; [10, 100, 1000, 10000, 100000].forEach(v => { ctx.beginPath(); ctx.moveTo(x0, ym(v)); ctx.lineTo(x1, ym(v)); ctx.stroke(); T(v.toLocaleString('en-US'), x0 - 6, ym(v) + 3.5, { s: 9.5, a: 'right', c: MUTE }); });
   [0, 30, 61, 91, 122, 153].forEach((d, i) => { ctx.beginPath(); ctx.moveTo(xm(d), y0); ctx.lineTo(xm(d), y1); ctx.strokeStyle = RULE; ctx.stroke(); T(MON[3 + i], xm(d) + 3, y1 + 14, { s: 9.5, c: MUTE }); });
   ctx.strokeStyle = INK; ctx.lineWidth = 1.2; ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
@@ -5151,7 +5151,7 @@ function legendRow(items, x, y) { items.forEach(it => { ctx.strokeStyle = it.c; 
 function drawV2Detail() {
   paper(); const pk = profKey(), thr = trigAbsFor(state.soil), z = Z_VALUES[state.zIdx], d = play.t * (PDAYS - 1), k = detYear() * DPY + 90 + Math.round(d);
   const x0 = 104, x1 = 410, y0 = 96, ppc = 2.2, maxCm = 150, y1 = y0 + maxCm * ppc, xm = v => x0 + clampN((logv(v) - 1) / 4, 0, 1) * (x1 - x0);
-  T('Soil pressure head through ' + (detYear() === 14 ? '1994' : CAL0 + detYear()), 16, 22, { s: 14, b: true }); T(detYear() === 14 ? datasetNote() : 'Daily profile from the SWAFL daily model at your settings (' + profName() + ')', 16, 38, { s: 10.5, c: MUTE });
+  T('Soil pressure head through ' + detCal(), 16, 22, { s: 14, b: true }); T(datasetNote(), 16, 38, { s: 10.5, c: MUTE });
   legendRow([{ c: '#1B6FD8', t: 'irrigated' }, { c: '#E8912D', t: 'rainfed' }, { c: '#111', w: 1.4, dash: [3, 3], t: 'sensor depth ' + z + ' cm' }], 16, 62);
   drawSection(x0, y0, x1 - x0, maxCm, ppc); ctx.fillStyle = 'rgba(255,255,255,0.22)'; ctx.fillRect(x0, y0, x1 - x0, maxCm * ppc);
   depthAxis(x0, y0, maxCm, ppc, 25); horizonTags(x0 - 30, y0, ppc, maxCm); T('depth', 40, y0 - 8, { s: 10, c: MUTE });
@@ -5176,7 +5176,6 @@ function drawV2Detail() {
   T('Suction at the sensor depth through the season', mx0, 498, { s: 10.5, b: true }); ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.strokeRect(mx0, my0, mx1 - mx0, my1 - my0); ctx.strokeStyle = '#D93025'; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(mx0, myy(thr)); ctx.lineTo(mx1, myy(thr)); ctx.stroke(); ctx.setLineDash([]);
   [[sR, '#E8912D'], [sI, '#1B6FD8']].forEach(([s, c]) => { ctx.strokeStyle = c; ctx.lineWidth = 1.6; ctx.beginPath(); s.forEach((v, i) => { i ? ctx.lineTo(mxx(i), myy(v)) : ctx.moveTo(mxx(i), myy(v)); }); ctx.stroke(); });
   ctx.strokeStyle = 'rgba(27,31,35,0.6)'; ctx.beginPath(); ctx.moveTo(mxx(d), my0); ctx.lineTo(mxx(d), my1); ctx.stroke(); T('Apr', mx0, my1 + 13, { s: 9.5, c: MUTE }); T('Sep', mx1, my1 + 13, { s: 9.5, c: MUTE, a: 'right' });
-  if (detYear() !== 14) T('Simulated to 100 cm by the daily model; below that the curve is held at its 100 cm value. The recorded full-depth profile is the year ' + (CAL0 + 14) + ' record.', 16, 596, { s: 9.5, i: true, c: MUTE });
   annualLine(16, 619, 633);
   // clickable: a depth on the profile or a column moves the sensor, the season trace moves the date
   hot(x0, y0, x1 - x0, maxCm * ppc, p => applyState({ zIdx: nearestIdx(Z_VALUES, (p.y - y0) / ppc) }), 'click a depth to put the sensor there');
@@ -5220,7 +5219,7 @@ function drawV2All() {
   annualLine(16, 619, 633);
   hot(x0, y0, x1 - x0, y1 - y0, p => setPlayT((cy + clampN((p.x - x0) / (x1 - x0), 0, 1)) / NYEARS), 'click to move the cursor in this year');
   hot(hx, 346, 370, 48, p => setPlayT((clampN(Math.floor((p.x - hx) / hw), 0, NYEARS - 1) + 0.02) / NYEARS), 'click a year to look at its season');
-  hot(cR, y0, 2 * cw + 8, 150 * ppc, () => { state.dyear = cy; setRange('y94'); }, 'click for the full-depth profile of this year');
+  hot(cR, y0, 2 * cw + 8, 150 * ppc, () => { detailGo(CAL0 + cy); }, 'click for the full-depth profile of this year');
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -5741,14 +5740,14 @@ function buildYearStrip() {
 function curYearIdx() { if (currentScene.id !== 'v1' && currentScene.id !== 'v2') return clampN(yearOf(fclock.kd()), 0, 19); if (state.range === 'y94') return detYear(); if (currentScene.id === 'v1') return clampN(new Date(D20START + Math.floor(play.t * (D20.n - 1)) * DAYMS).getUTCFullYear() - 1980, 0, 19); return clampN(Math.floor(play.t * NYEARS), 0, 19); }
 function yearPick(y) {
   if (currentScene.id !== 'v1' && currentScene.id !== 'v2') { dss.mode = String(y); const ys = document.getElementById('dssYear'); ys.value = String(y); document.getElementById('dssDate').dispatchEvent(new Event('change')); yearUi.last = -1; return; }
-  if (state.range === 'y94' && y - CAL0 >= 0 && y - CAL0 < NYEARS) { state.dyear = y - CAL0; play.t = 0; play.hold = 0; play.on = true; yearUi.last = -1; syncDetailSel(); return; }
+  if (state.range === 'y94' && y >= 1994) { detailGo(y); return; }
   if (state.range === 'y94' && y !== 1994 && y < 2000) setRange('all'); if (state.range === 'y94' && y < 2000) return;
   if (state.range === 'y94') setRange('all');
   const t = dateOfK(fclock.kd()), mo = t.getUTCMonth(); let da = t.getUTCDate(); const last = new Date(Date.UTC(y, mo + 1, 0)).getUTCDate(); if (da > last) da = last;
   const d = document.getElementById('dssDate'); d.value = isoDate(new Date(Date.UTC(y, mo, da))); d.dispatchEvent(new Event('change', { bubbles: true }));
 }
 function updateYearStrip() {
-  fillDetailSel(); const i = state.range === 'y94' && (currentScene.id === 'v1' || currentScene.id === 'v2') ? clampN(CAL0 + detYear() - 1980, 0, 120) : dss.held ? clampN(dateOfK(fclock.kd()).getUTCFullYear() - 1980, 0, 120) : curYearIdx(); if (i === yearUi.last) return; yearUi.last = i; const el = document.getElementById('yearStrip');
+  fillDetailSel(); syncDetailSel(); const i = state.range === 'y94' && (currentScene.id === 'v1' || currentScene.id === 'v2') ? clampN(CAL0 + detYear() - 1980, 0, 120) : dss.held ? clampN(dateOfK(fclock.kd()).getUTCFullYear() - 1980, 0, 120) : curYearIdx(); if (i === yearUi.last) return; yearUi.last = i; const el = document.getElementById('yearStrip');
   [...el.children].forEach((b, j) => b.classList.toggle('active', j === i)); const b = el.children[i]; if (b) { const l = b.offsetLeft - el.clientWidth / 2 + b.offsetWidth / 2; el.scrollTo({ left: Math.max(0, l), behavior: 'smooth' }); }
 }
 // legends that only list what the current view draws
@@ -6701,7 +6700,7 @@ function loop() {
     if (sc.id === 'drn' && window.drnLabel) { try { pl.textContent = calTxt(window.drnLabel(play.t)); } catch (e) { } }
     if (dss.held && (sc.id === 'v2' || sc.id === 'v3') && dss.lastId === sc.id && Math.abs(play.t - dss.lastT) < 0.0008) pl.textContent = calTxt(fmtDate(dateOfK(fclock.kd())));
     if (sc.id === 'sid') pl.textContent = calTxt('irrigation time ' + Math.round(play.t * (SID.lastTco || 0)) + ' of ' + Math.round(SID.lastTco || 0) + ' min');
-    else if (dss.held && sc.id === 'v2' && state.range !== 'all' && (fclock.kd() - yearOf(fclock.kd()) * DPY < 90 || fclock.kd() - yearOf(fclock.kd()) * DPY > 90 + SEASON)) pl.textContent = calTxt(fmtDate(dateOfK(fclock.kd())) + ' (outside the plotted Apr\u2013Sep window)');
+    else if (dss.held && sc.id === 'v2' && state.range !== 'all' && (fclock.kd() - yearOf(fclock.kd()) * DPY < 90 || fclock.kd() - yearOf(fclock.kd()) * DPY > 90 + SEASON)) pl.textContent = calTxt(fmtDate(dateOfK(fclock.kd())));
   }
   if (sc.id === 'field') { stepField(); const pr = document.getElementById('playRange'), pl = document.getElementById('playLabel'); if (document.activeElement !== pr) pr.value = Math.round(fclock.day / (ND - 1) * 1000); pl.textContent = calTxt(fieldLabel()); }
   autoTick(sc); hotspots.length = 0; try { if (sc.draw) sc.draw(); } catch (e) { if (!window.__DRAWERR || window.__DRAWERR !== String(e)) { window.__DRAWERR = String(e); console.error('draw', sc.id, e); } } drawHotTip();
@@ -6711,11 +6710,18 @@ function loop() {
   window.__lastDraw = performance.now(); window.__drawMs = dm * 0.7 + (window.__lastDraw - t0) * 0.3;
   requestAnimationFrame(loop);
 }
-let selCal = -1;
-function fillDetailSel() { const el = document.getElementById('range94'); if (!el || selCal === CAL0) return; selCal = CAL0; el.innerHTML = '<option value="">Year detail \u25BE</option>' + Array.from({ length: NYEARS }, (_, i) => '<option value="' + i + '">' + (CAL0 + i) + (i === 14 ? ' (recorded profile)' : ' (simulated)') + '</option>').join(''); syncDetailSel(); }
-function syncDetailSel() { const el = document.getElementById('range94'); if (el) el.value = state.range === 'y94' ? String(detYear()) : ''; }
+let selBuilt = false;
+// every year from 1994 to 2100, the number only: the working date moves to that year, then its detail opens; the list always shows the year of the clock (today's year at the start)
+function fillDetailSel() { const el = document.getElementById('range94'); if (!el || selBuilt) return; selBuilt = true; let h = ''; for (let y = 1994; y <= 2100; y++) h += '<option value="' + y + '">' + y + '</option>'; el.innerHTML = h; syncDetailSel(); }
+function syncDetailSel() { const el = document.getElementById('range94'); if (!el || document.activeElement === el) return; const y = String(clampN(detCal(), 1994, 2100)); if (el.value !== y) el.value = y; }
+function detailGo(y) {
+  const t = dateOfK(fclock.kd()), mo = t.getUTCMonth(); let da = t.getUTCDate(); const last = new Date(Date.UTC(y, mo + 1, 0)).getUTCDate(); if (da > last) da = last;
+  const d = document.getElementById('dssDate'); d.value = isoDate(new Date(Date.UTC(y, mo, da))); d.dispatchEvent(new Event('change', { bubbles: true }));
+  dailyCache = {}; yearUi.last = -1;
+  if (state.range !== 'y94') setRange('y94'); else { play.t = 0; play.hold = 0; play.on = true; if (dss.ready) dssSyncPlay(currentScene.id); syncDetailSel(); }
+}
 const setRange = r => { state.range = r; try { fillDetailSel(); syncDetailSel(); } catch (e) { } play.t = 0; play.hold = 0; play.on = true; document.getElementById('playBtn').textContent = 'Pause'; document.getElementById('rangeAll').classList.toggle('active', r === 'all'); document.getElementById('range94').classList.toggle('active', r !== 'all'); applyPanelChrome(currentScene.id); yearUi.last = -1; if (dss.ready) dssSyncPlay(currentScene.id); refresh(); };
-document.getElementById('rangeAll').onclick = () => setRange('all'); document.getElementById('range94').onchange = e => { const v = e.target.value; if (v === '') { setRange('all'); return; } state.dyear = +v; setRange('y94'); };
+document.getElementById('rangeAll').onclick = () => setRange('all'); document.getElementById('range94').onchange = e => { detailGo(+e.target.value); e.target.blur(); };
 document.getElementById('playBtn').onclick = () => { autoToggle(); };
 document.getElementById('playRange').oninput = e => {
   if (currentScene.id === 'field') { fclock.day = e.target.value / 1000 * (ND - 1); fclock.pause = 0; fclock.mem = []; fclock.on = false; document.getElementById('playBtn').textContent = 'Play'; return; }
