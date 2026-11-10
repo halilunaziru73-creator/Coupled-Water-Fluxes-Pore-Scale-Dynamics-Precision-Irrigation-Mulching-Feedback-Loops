@@ -6664,6 +6664,9 @@ function drawE1Core(y0) {
 let frameN = 0, dssFrame = 0, ysFrame = 0;
 const d20Label = t => { const dt = new Date(D20START + Math.round(t * (D20.n - 1)) * DAYMS); return dt.getUTCDate() + ' ' + MON[dt.getUTCMonth()] + ' ' + (dt.getUTCFullYear() + CAL0 - 1980); };
 function loop() {
+  // pacing: when a picture takes long to draw (a slow computer, a busy layer), the next frames are skipped so that the clicks, the scroll and the typing of the person always get the processor in between; nothing is cut when the drawing is fast
+  const t0 = performance.now(), dm = window.__drawMs || 0;
+  if (dm > 22 && t0 - (window.__lastDraw || 0) < 1.5 * dm && !window.__physOnce) { requestAnimationFrame(loop); return; }
   ctx.clearRect(0, 0, W, H);
   const sc = currentScene;
   if (sc.play) {
@@ -6684,6 +6687,7 @@ function loop() {
   if (sc.id === 'field' && frameN++ % 10 === 0) updateInsight();
   if (dssFrame++ % 10 === 0) dssRender(false);
   if (ysFrame++ % 6 === 0) updateYearStrip();
+  window.__lastDraw = performance.now(); window.__drawMs = dm * 0.7 + (window.__lastDraw - t0) * 0.3;
   requestAnimationFrame(loop);
 }
 const setRange = r => { state.range = r; play.t = 0; play.hold = 0; play.on = true; document.getElementById('playBtn').textContent = 'Pause'; document.getElementById('rangeAll').classList.toggle('active', r === 'all'); document.getElementById('range94').classList.toggle('active', r !== 'all'); applyPanelChrome(currentScene.id); yearUi.last = -1; if (dss.ready) dssSyncPlay(currentScene.id); refresh(); };
@@ -7401,7 +7405,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
 <script src="plus_phenotyping5.js?v=20261109p"></script>
 <script src="plus_drainage.js?v=20261110b"></script>
 <script src="phnav.js?v=20261030z4"></script>
-<script src="inputs.js?v=20261110b"></script>
+<script src="inputs.js?v=20261110c"></script>
 <script src="weather.js?v=20261031a"></script>
 <script src="runbar.js?v=20261110c"></script>
 <link rel="stylesheet" href="classic.css">

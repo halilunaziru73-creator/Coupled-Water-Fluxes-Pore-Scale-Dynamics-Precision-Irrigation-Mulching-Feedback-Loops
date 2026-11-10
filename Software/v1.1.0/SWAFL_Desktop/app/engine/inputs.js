@@ -19,6 +19,7 @@
   if (typeof sidPill === 'function') { const oPill = sidPill; sidPill = function (txt, x, y, bg) { ctx.font = 'bold 9px sans-serif'; const w = ctx.measureText(txt).width + 8; let yy = y; for (let k = 0; k < 6; k++) { const hit = PILLS.find(r => x < r.x + r.w && x + w > r.x && yy - 10 < r.y + 3 && yy + 3 > r.y - 10); if (!hit) break; yy = hit.y + 15; } PILLS.push({ x, y: yy, w }); return oPill(txt, x, yy, bg); }; }
   paper = function () { PILLS = []; ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, W, H); ctx.strokeStyle = '#A0A0A0'; ctx.lineWidth = 1; ctx.strokeRect(0.5, 0.5, W - 1, H - 1); };
   // no text runs past the edge of the sheet: it shrinks (to 7.5 px) and is then shortened with an ellipsis
+  const MWc = new Map(); const MW = t => { const k = ctx.font + '|' + t; let v = MWc.get(k); if (v === undefined) { v = ctx.measureText(t).width; if (MWc.size > 6000) MWc.clear(); MWc.set(k, v); } return v; };   // text widths are measured once, not on every frame
   const oT = T;
   T = function (txt, x, y, o) {
     o = o || {}; const M0 = ctx.getTransform(), ss = window.__SS || 1, M = { a: M0.a / ss, b: M0.b, c: M0.c, e: M0.e / ss };   // in sheet units (the app draws at a finer resolution)
@@ -26,12 +27,12 @@
       const X = M.a * x + M.e, a = o.a || 'left', avail = (a === 'left' ? (W - 4 - X) : a === 'right' ? (X - 4) : 2 * Math.min(X - 4, W - 4 - X)) / M.a;
       let sz = o.s || 11; const font = s2 => (o.i ? 'italic ' : '') + (o.b ? 'bold ' : '') + s2 + 'px ' + (o.f || 'sans-serif');
       ctx.font = font(sz);
-      if (avail > 20 && ctx.measureText(txt).width > avail) {
-        while (sz > 7.5 && ctx.measureText(txt).width > avail) { sz -= 0.5; ctx.font = font(sz); }
-        const fw = ctx.measureText(txt).width, sheet = (W - 8) / M.a;
+      if (avail > 20 && MW(txt) > avail) {
+        while (sz > 7.5 && MW(txt) > avail) { sz -= 0.5; ctx.font = font(sz); }
+        const fw = MW(txt), sheet = (W - 8) / M.a;
         if (fw > avail && fw <= sheet) {   // the whole text fits on the sheet: move it inwards rather than cut it
           if (a === 'left') x -= (fw - avail); else if (a === 'right') x += (fw - avail); else { const cx = X / M.a; x = Math.max(4 / M.a + fw / 2, Math.min((W - 4) / M.a - fw / 2, x)); }
-        } else { let t = txt; while (t.length > 4 && ctx.measureText(t + '…').width > avail) t = t.slice(0, -1);
+        } else { let t = txt; while (t.length > 4 && MW(t + '…') > avail) t = t.slice(0, -1);
           if (t !== txt) txt = t.replace(/[\s,;:·]+$/, '') + '…'; }
         o = Object.assign({}, o, { s: sz });
       }
