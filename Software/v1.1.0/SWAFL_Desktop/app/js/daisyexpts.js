@@ -63,7 +63,10 @@ window.DaisyExpTS = (() => {
     const pl = st.pf ? lev(st.pf) : [null], cl = st.cf === '__run' ? runs.map(r => r.id) : st.cf ? lev(st.cf) : [null], cols = colours(cl.filter(x => x !== null));
     const lname = (f, v) => f === '__run' ? (window.DaisyExp && window.DaisyExp.shortLabel ? window.DaisyExp.shortLabel(valOf(runs.find(r => r.id === v) || {}), refOf(runs.find(r => r.id === v) || {})) || v : v) : c.lname(f, v);
     const grp = (pv, cv) => runs.filter(r => (pv === null || String(valOf(r)[st.pf]) === String(pv)) && (cv === null || (st.cf === '__run' ? r.id === cv : String(valOf(r)[st.cf]) === String(cv))));
-    const PP = st.pf === '__each' ? varied.map(fid => { const cl0 = lev(fid); return { pv: fid, cf: fid, cl: cl0, cols: colours(cl0), rsOf: cv => runs.filter(r => String(valOf(r)[fid]) === String(cv)), title: short(c.flabel(fid)) }; })
+    // factors that divide the runs in exactly the same way (a few runs of a large design) cannot be told apart: they share one panel, named by all of them, so that no two panels show the same lines
+    const part = f => lev(f).map(l => runs.filter(r => String(valOf(r)[f]) === String(l)).map(r => r.id).sort().join('+')).sort().join('|');
+    const groups = []; varied.forEach(f => { const k = part(f), g = groups.find(x => x.k === k); if (g) g.f.push(f); else groups.push({ k, f: [f] }); });
+    const PP = st.pf === '__each' ? groups.map(g => { const fid = g.f[0], cl0 = lev(fid), multi = g.f.length > 1; return { pv: fid, cf: fid, cl: cl0, cols: colours(cl0), rsOf: cv => runs.filter(r => String(valOf(r)[fid]) === String(cv)), title: g.f.map(f => short(c.flabel(f))).join(' + ') + (multi ? ' (changed together in these runs)' : ''), lab: multi ? cv => { const r = runs.find(q => String(valOf(q)[fid]) === String(cv)) || {}; return g.f.map(f => lname(f, valOf(r)[f])).join(', '); } : null }; })
       : pl.map(pv => ({ pv, cf: st.cf, cl, cols, rsOf: cv => grp(pv, cv), title: pv === null ? '' : short(c.flabel(st.pf)) + ': ' + lname(st.pf, pv) }));
     const hf = st.pf === '__each' ? varied[0] || null : st.pf;   /* the maps of depth and time: one for each value of one factor */
     const center = a => st.stat === 'median' ? pct(a, 0.5) : mean(a);
@@ -72,7 +75,7 @@ window.DaisyExpTS = (() => {
     function build(f) {
       const panels = [];
       PP.forEach((pp, pi) => { const series = [];
-        pp.cl.forEach((cv, ci) => { const rs = pp.rsOf(cv); if (!rs.length) return; const color = cv === null ? '#0072B2' : pp.cols[ci], name = cv === null ? (PP.length > 1 ? '' : 'all runs') : lname(pp.cf, cv);
+        pp.cl.forEach((cv, ci) => { const rs = pp.rsOf(cv); if (!rs.length) return; const color = cv === null ? '#0072B2' : pp.cols[ci], name = cv === null ? (PP.length > 1 ? '' : 'all runs') : pp.lab ? pp.lab(cv) : lname(pp.cf, cv);
           if (f.kind === 'prof') { const z = [], v = [], lo = [], hi = []; const dc0 = IO().depthColumns(logs[f.log])[f.v] || []; dc0.forEach(q => { const pool = [], ms = []; rs.forEach(r => { const d = r.logs[f.log]; if (!d) return; const y = d.data[q.j]; if (!y) return; const fin = y.filter(isFinite); if (fin.length) { ms.push(mean(fin)); fin.forEach(x => pool.push(x)); } }); if (!ms.length) return; z.push(q.z); v.push(center(ms)); lo.push(pct(pool, 0.1)); hi.push(pct(pool, 0.9)); }); if (z.length) series.push({ name, color, z, v, lo, hi }); return; }
           const daily = isDaily(f.log, logs[f.log]);
           if (daily && st.mode === 'doy') { const bins = Array.from({ length: 366 }, () => []); rs.forEach(r => { const d = r.logs[f.log]; if (!d || !d.time) return; const y = colOf(d, f.col); if (!y) return; for (let i = 0; i < d.n; i++) if (isFinite(y[i])) bins[Math.min(365, doyOf(d.time[i]))].push(y[i]); });

@@ -311,3 +311,4 @@
 - Faster start-up of the simulation engine: nothing is drawn until a layer is opened, and the three design windows are prepared once, without waiting between them.
 - Daisy experiments: Run the ticked now shows a progress panel next to the button (spinner, moving bar, experiment in progress, runs done, elapsed time); the button becomes Stop while it runs.
 - Daisy experiments, Processes of Daisy in this experiment: every figure is coded to its processes; a number on each component gives how many figures depend on it, and a figure is drawn only when its component is clicked. Show every figure remains available.
+- Daisy experiments: the progress panel moves between finished runs and gives the time left; the precision fertiliser rule is written in the form Daisy reads; factors that change together in a few runs share one panel with every run named by its values; the process map now follows the width of the window.
