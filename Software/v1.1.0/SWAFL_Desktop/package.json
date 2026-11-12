@@ -18,7 +18,8 @@
   },
   "devDependencies": {
     "electron": "^31.0.0",
-    "electron-builder": "^24.13.3"
+    "electron-builder": "^24.13.3",
+    "rcedit": "^4.0.1"
   },
   "build": {
     "appId": "io.github.halilunaziru73.swafl",
@@ -36,7 +37,8 @@
       "app/**/*",
       "build/icon.png",
       "package.json",
-      "EULA.txt"
+      "EULA.txt",
+      "build/icon.ico"
     ],
     "icon": "build/icon.ico",
     "win": {
@@ -80,6 +82,7 @@
           "**/*"
         ]
       }
-    ]
+    ],
+    "afterPack": "build/afterPack.js"
   }
 }

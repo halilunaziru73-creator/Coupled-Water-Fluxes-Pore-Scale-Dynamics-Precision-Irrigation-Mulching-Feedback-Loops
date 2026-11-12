@@ -36,7 +36,7 @@ async function createWindow() {
   win = new BrowserWindow({
     width: 1480, height: 900, minWidth: 1000, minHeight: 640,
     title: 'SWAFL ' + app.getVersion(), backgroundColor: '#E8EEF5', show: false,
-    icon: path.join(__dirname, 'build', 'icon.png'),
+    icon: path.join(__dirname, 'build', fs.existsSync(path.join(__dirname, 'build', 'icon.ico')) ? 'icon.ico' : 'icon.png'),
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false, sandbox: false, spellcheck: false, backgroundThrottling: true }
   });
   Menu.setApplicationMenu(null);              // SWAFL draws its own menu bar (File, Edit, Tools, Refresh, Review, Run, Help)
@@ -55,6 +55,7 @@ const gotLock = app.requestSingleInstanceLock();
 if (!gotLock) app.quit();
 else {
   app.on('second-instance', () => { if (win) { if (win.isMinimized()) win.restore(); win.focus(); } });
+  try { app.setAppUserModelId('io.github.halilunaziru73.swafl'); } catch (e) { }
   app.whenReady().then(() => { showSplash(); createWindow(); setTimeout(() => { try { DR.provisionAsync(); } catch (e) { } }, 8000); });
   app.on('window-all-closed', () => { if (srv) srv.close(); app.quit(); });
 }
