@@ -161,7 +161,10 @@
   // the lines of the Daisy set-up
   S.defaultsFor = sc => Object.assign({}, S.DEFAULTS, (sc && sc.defaults) || {});
   S.num = (v, d) => { const x = parseFloat(v); return isFinite(x) ? x : d; };
-  S.norm = function (o) { const r = Object.assign({}, S.DEFAULTS, o || {}), st0 = S.station(r.station), lo = r.userWx ? r.userWx.first + 1 : st0.first + 1, hi = r.userWx ? r.userWx.last : st0.last; r.start = Math.round(S.num(r.start, 1980)); r.stop = Math.round(S.num(r.stop, 2000)); if (r.start < lo) r.start = lo; if (r.stop > hi) r.stop = hi; if (r.stop < r.start + 2) r.start = Math.max(lo, r.stop - 2); if (r.stop < r.start + 2) r.stop = r.start + 2; if (r.stop < r.start + 1) r.start = Math.max(lo, r.stop - 2); r.irrig = String(r.irrig === true ? '1' : r.irrig === false ? '0' : r.irrig); return r; };
+  S.norm = function (o) { const r = Object.assign({}, S.DEFAULTS, o || {}), st0 = S.station(r.station), lo = r.userWx ? r.userWx.first + 1 : st0.first + 1, hi = r.userWx ? r.userWx.last : st0.last; r.start = Math.round(S.num(r.start, 1980)); r.stop = Math.round(S.num(r.stop, 2000));
+    // weather of the user (a file or the internet): when the years asked for hardly meet the years of the weather (the built-in 1980 to 2000 left in the options), the run uses all the years of the weather
+    if (r.userWx && hi - lo >= 2 && (Math.min(r.stop, hi) - Math.max(r.start, lo) < 2)) { r.start = lo; r.stop = hi; }
+    if (r.start < lo) r.start = lo; if (r.stop > hi) r.stop = hi; if (r.stop < r.start + 2) r.start = Math.max(lo, r.stop - 2); if (r.stop < r.start + 2) r.stop = r.start + 2; if (r.stop < r.start + 1) r.start = Math.max(lo, r.stop - 2); r.irrig = String(r.irrig === true ? '1' : r.irrig === false ? '0' : r.irrig); return r; };
   // files: { 'ArableFarmRotation.dai', 'ArableFarmRotation_withirrigation.dai', 'ResFarm.dai', 'OutputLog.dai' } texts of the bundled common folder
   S.buildJob = function (scId, options, variantId, files) {
     const sc = S.LIST.find(x => x.id === scId) || {}, vr = (((options && options._variants) || sc.variants || []).find(v => v.id === variantId) || { set: {} }), o = S.norm(Object.assign({}, options, vr.set)), pre = (variantId || 'run') + '-';

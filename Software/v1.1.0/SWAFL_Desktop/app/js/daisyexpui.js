@@ -329,7 +329,7 @@
   function effYears() {
     const yrs = AI.years(st.base), rs = isFinite(st.base.start) ? Math.round(st.base.start) : yrs.start, re = isFinite(st.base.stop) ? Math.round(st.base.stop) : yrs.stop;
     const m = st.useMy && window.DaisyScenUI ? window.DaisyScenUI.my() : null;
-    if (m && m.wxMode !== 'course' && m.wx && st.wxPick !== 'built') { const lo = m.wx.first + 1, hi = m.wx.last; let a = Math.max(rs, lo), b = Math.min(re, hi); if (b < a + 2) { a = Math.max(lo, b - 2); if (b < a + 2) b = Math.min(hi, a + 2); } return { start: a, stop: b, asked: [rs, re], wx: [m.wx.first, m.wx.last], name: m.wx.name || 'your weather' }; }
+    if (m && m.wxMode !== 'course' && m.wx && st.wxPick !== 'built') { const lo = m.wx.first + 1, hi = m.wx.last; let a = Math.max(rs, lo), b = Math.min(re, hi); if (hi - lo >= 2 && b - a < 2) { a = lo; b = hi; } if (b < a + 2) { a = Math.max(lo, b - 2); if (b < a + 2) b = Math.min(hi, a + 2); } return { start: a, stop: b, asked: [rs, re], wx: [m.wx.first, m.wx.last], name: m.wx.name || 'your weather' }; }
     return { start: yrs.start, stop: yrs.stop, asked: [rs, re], wx: null };
   }
   function yearsNote() { const y = effYears(), sp = Math.max(1, Math.round(SC.num(st.base.spin, (SC.DEFAULTS && SC.DEFAULTS.spin) || 1))), from = Math.min(y.stop - 1, y.start + sp), changed = y.asked[0] !== y.start || y.asked[1] !== y.stop;

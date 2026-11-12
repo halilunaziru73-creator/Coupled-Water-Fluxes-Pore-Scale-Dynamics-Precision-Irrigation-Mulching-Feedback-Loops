@@ -304,3 +304,6 @@
 - Crops: 27 crops added and the whole library refined with the FAO-56 edition of 2025 (Kc, height, rooting depth, depletion fraction p, yield response Ky, salinity tolerance); the crop ribbon shows p, roots, height, Ky and the salinity threshold; the Crop list has a new group *Pulses*; chapter 21 and Table 21.2 updated.
 - The licence no longer names any country.
 - Daisy process map: the two biopore lines no longer cross Soil Evaporation or the Drain; the labels and the drain line were re-ordered.
+
+- Daisy with weather fetched from the internet (or a file of your own) now runs every year of that weather, in every tab and in the process map. Before, the built-in years (1980 to 2000) left in the options could be cut down to a single year when the weather covered, for example, 2000 to 2026. Years you type that lie inside the weather are still respected.
+- Weather fetched from the internet is kept on the computer in the same compact form as the built-in weather (one 16-bit number per day and variable): about five times smaller, and read back faster.

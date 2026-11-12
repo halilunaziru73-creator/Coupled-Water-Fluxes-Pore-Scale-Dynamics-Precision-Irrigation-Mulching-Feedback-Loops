@@ -54,9 +54,27 @@
   };
   // the weather already fetched for this place is kept on this computer (the past does not change): no new request, and it works without the internet
   const ckey = (lat, lon, y0, y1) => 'swafl.wx.' + lat.toFixed(2) + ',' + lon.toFixed(2) + ',' + y0 + '-' + y1;
-  const cacheGet = k => { try { const t = localStorage.getItem(k); if (!t) return null; const o = JSON.parse(t); o.rows = o.rows.map(a => ({ t: a[0], P: a[1], tn: a[2], tx: a[3], rad: a[4], et0: a[5], wind: a[6], vp: a[7] })); return o; } catch (e) { return null; } };
+  // kept in the same compact form as the built-in weather: one 16-bit number (value x 100) per day and variable, as base64;
+  // a 27-year record takes about 270 kB instead of 1.3 MB of text, and it is read back without parsing a single date
+  const COLS = ['P', 'tn', 'tx', 'rad', 'et0', 'wind', 'vp'];
+  const day = t => Date.UTC(+t.slice(0, 4), +t.slice(5, 7) - 1, +t.slice(8, 10)) / 864e5;
+  const dstr = n => new Date(n * 864e5).toISOString().slice(0, 10);
+  function pack(rows) {
+    const n = rows.length, d0 = day(rows[0].t); for (let i = 1; i < n; i++) if (day(rows[i].t) !== d0 + i) return null;
+    const a = new Int16Array(n * 7); for (let i = 0; i < n; i++) COLS.forEach((c, j) => { const v = rows[i][c]; a[j * n + i] = isFinite(v) ? Math.max(-32767, Math.min(32767, Math.round(v * 100))) : -32768; });
+    const u = new Uint8Array(a.buffer); let s = ''; for (let i = 0; i < u.length; i += 8192) s += String.fromCharCode.apply(null, u.subarray(i, i + 8192));
+    return { t0: rows[0].t, n, d: btoa(s) };
+  }
+  function unpack(p) {
+    const s = atob(p.d), u = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i);
+    const a = new Int16Array(u.buffer), n = p.n, d0 = day(p.t0), rows = new Array(n);
+    for (let i = 0; i < n; i++) { const q = { t: dstr(d0 + i) }; COLS.forEach((c, j) => { const v = a[j * n + i]; q[c] = v === -32768 ? NaN : v / 100; }); rows[i] = q; }
+    return rows;
+  }
+  const cacheGet = k => { try { const t = localStorage.getItem(k); if (!t) return null; const o = JSON.parse(t); if (o.pk) { o.rows = unpack(o.pk); delete o.pk; } else o.rows = o.rows.map(a => ({ t: a[0], P: a[1], tn: a[2], tx: a[3], rad: a[4], et0: a[5], wind: a[6], vp: a[7] })); return o; } catch (e) { return null; } };
   const cachePut = (k, o) => { try { const keys = Object.keys(localStorage).filter(x => x.indexOf('swafl.wx.') === 0); while (keys.length > 5) localStorage.removeItem(keys.shift());
-    const r = x => (isFinite(x) ? Math.round(x * 100) / 100 : null); localStorage.setItem(k, JSON.stringify({ rows: o.rows.map(q => [q.t, r(q.P), r(q.tn), r(q.tx), r(q.rad), r(q.et0), r(q.wind), r(q.vp)]), use: o.use, notes: o.notes, stats: o.stats, elevation: o.elevation, years: o.years, source: o.source })); } catch (e) { } };
+    const r = x => (isFinite(x) ? Math.round(x * 100) / 100 : null), pk = pack(o.rows), meta = { use: o.use, notes: o.notes, stats: o.stats, elevation: o.elevation, years: o.years, source: o.source };
+    localStorage.setItem(k, JSON.stringify(pk ? Object.assign({ pk }, meta) : Object.assign({ rows: o.rows.map(q => [q.t, r(q.P), r(q.tn), r(q.tx), r(q.rad), r(q.et0), r(q.wind), r(q.vp)]) }, meta))); } catch (e) { } };
   const NASA = 'https://power.larc.nasa.gov/api/temporal/daily/point';
   // reference evapotranspiration from temperature and the position (Hargreaves and Samani), used when a service does not give it
   const hargreaves = (lat, t, tn, tx) => { const d = new Date(t), J = Math.round((t - Date.UTC(d.getUTCFullYear(), 0, 0)) / DAY), phi = lat * Math.PI / 180, dr = 1 + 0.033 * Math.cos(2 * Math.PI * J / 365), de = 0.409 * Math.sin(2 * Math.PI * J / 365 - 1.39), ws = Math.acos(Math.max(-1, Math.min(1, -Math.tan(phi) * Math.tan(de)))), Ra = 24 * 60 / Math.PI * 0.082 * dr * (ws * Math.sin(phi) * Math.sin(de) + Math.cos(phi) * Math.cos(de) * Math.sin(ws));
