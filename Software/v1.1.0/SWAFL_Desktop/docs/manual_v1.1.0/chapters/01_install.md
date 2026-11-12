@@ -25,7 +25,7 @@ Only if all four fail does a message say that Daisy is missing, with the places 
 
 ## What is inside SWAFL.exe: one file, nothing to install {#exe-inside}
 
-`SWAFL.exe` is the one file to use. You double click it once: a setup window opens (the licence, the folder, the shortcuts; no administrator rights are needed), installs SWAFL, adds the SWAFL icon to the Desktop and the Start menu, and starts it; afterwards you open SWAFL from that icon, and it opens at once. It needs no administrator rights, no Node.js, no Python and no network, because everything the program uses is packed inside the one file. It is made from four parts.
+`SWAFL.exe` is the one file to use. You double click it once: a setup window opens with the usual pages (welcome, for you only or for everyone who uses the computer, the licence, the folder, Install, Finish; installing for you only needs no administrator rights), installs SWAFL, adds the SWAFL icon to the Desktop and the Start menu, and starts it; afterwards you open SWAFL from that icon, and it opens at once. It needs no administrator rights, no Node.js, no Python and no network, because everything the program uses is packed inside the one file. It is made from four parts.
 
 | Part inside the file | What it is |
 |---|---|

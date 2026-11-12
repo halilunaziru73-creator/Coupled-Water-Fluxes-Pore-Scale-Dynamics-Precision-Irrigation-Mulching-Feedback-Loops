@@ -30,7 +30,7 @@ try {
   }
 } catch (e) { console.error('\nBuild failed. Read the message above (see README: Troubleshooting). If you typed npm run get_app, the name is get-app (a hyphen).'); process.exit(1); }
 
-// One file only: dist/SWAFL.exe. Double-click it once: the setup window opens (licence, folder, shortcuts), with no administrator rights needed;
+// One file only: dist/SWAFL.exe. Double-click it once: the setup window opens (welcome, for you only or for everyone, licence, folder, Install, Finish; no administrator rights for you only);
 // it installs SWAFL, puts it on the Desktop and in the Start menu, and starts it. From then on use the SWAFL shortcut: the program opens at once.
 const exe = path.join(__dirname, 'dist', 'SWAFL.exe');
 if (!fs.existsSync(exe)) { console.error('SWAFL.exe was not created. Check the messages above.'); process.exit(1); }
@@ -41,4 +41,4 @@ try { desktop = execSync('powershell -NoProfile -Command "[Environment]::GetFold
 try { fs.copyFileSync(exe, path.join(desktop, 'SWAFL.exe')); console.log('\nSWAFL.exe (the one file) is also on your Desktop: ' + path.join(desktop, 'SWAFL.exe')); } catch (e) { console.log('\nSWAFL.exe is here: ' + exe); }
 console.log('Starting the setup of SWAFL ' + require('./package.json').version + ' ...');
 spawn(exe, [], { detached: true, stdio: 'ignore' }).unref();
-console.log('\nDone. Follow the setup window (Next, Install, Finish); no administrator rights are needed. Afterwards open it from the SWAFL icon on the Desktop or in the Start menu.');
+console.log('\nDone. Follow the setup window (Next, Install, Finish); choosing for you only needs no administrator rights. Afterwards open it from the SWAFL icon on the Desktop or in the Start menu.');
