@@ -114,7 +114,10 @@
   window.rainSeries = function () { const WX = (window.WXD && WXD.on) ? WXD : null, sim = seasonSim(), wxP = WX ? RAIN_VALUES[state.rainIdx] / (WX.rainRef || 1) : 1, P = new Float32Array(ND); for (let k = 0; k < ND; k++) P[k] = WX ? WX.P[k] * wxP : (sim.rain[k] || 0); return { P: Array.from(P), years: NYR, dpy: DPY, src: WX ? (WX.src === 'online' ? 'online weather of ' + WX.name : 'weather file ' + WX.name) : 'recorded weather of the simulations', y0: WX ? WX.y0 : 1980 }; };
   // salinity tolerance (threshold ECe in dS/m, % yield lost per dS/m above it): Maas and Hoffman (1977), FAO Irrigation and Drainage Paper 29;
   // crops not tabulated take 2.0 and 10 (field crops) or 1.5 and 15 (trees, vines and palms)
-  const SALT = { wheat: [6.0, 7.1], maize: [1.7, 12], rice: [3.0, 12], sorghum: [6.8, 16], cotton: [7.7, 5.2], soybean: [5.0, 20], potato: [1.7, 12], tomato: [2.5, 9.9], onion: [1.2, 16], cabbage: [1.8, 9.7], pepper: [1.5, 14], groundnut: [3.2, 29], cowpea: [4.9, 12], citrus: [1.7, 16], apple: [1.7, 19], pear: [1.7, 19], peach: [1.7, 21], apricot: [1.6, 24], almond: [1.5, 19], winegrape: [1.5, 9.6], tablegrape: [1.5, 9.6], datepalm: [4.0, 3.6], cereal: [6.0, 7.1] };
+  const SALT = { wheat: [6.0, 7.1], maize: [1.7, 12], rice: [3.0, 12], sorghum: [6.8, 16], cotton: [7.7, 5.2], soybean: [5.0, 20], potato: [1.7, 12], tomato: [2.5, 9.9], onion: [1.2, 16], cabbage: [1.8, 9.7], pepper: [1.5, 14], groundnut: [3.2, 29], cowpea: [4.9, 12], citrus: [1.7, 16], apple: [1.7, 19], pear: [1.7, 19], peach: [1.7, 21], apricot: [1.6, 24], almond: [1.5, 19], winegrape: [1.5, 9.6], tablegrape: [1.5, 9.6], datepalm: [4.0, 3.6], cereal: [6.0, 7.1],
+    /* FAO-56 (2025) Tables 8.8 and 8.9: ECe threshold (dS/m) and slope b (% per dS/m); the mid-point where a range is tabulated */
+    carrot: [1.0, 14.0], garlic: [3.9, 14.3], sweetpotato: [2.0, 10.5], lettuce: [1.5, 12.5], spinach: [2.6, 11.8], broccoli: [2.05, 12.5], cauliflower: [1.65, 10.3], cucumber: [1.8, 10.0], eggplant: [1.1, 6.9], melon: [1.0, 8.4], pumpkin: [1.2, 13.0], zucchini: [4.8, 10.25],
+    barley: [8.0, 5.0], durumwheat: [5.8, 4.65], sweetmaize: [1.7, 12.0], sunflower: [4.8, 5.0], canola: [11.0, 13.0], flax: [1.7, 12.0], sugarbeet: [7.0, 5.9], pea: [2.45, 12.3], commonbean: [1.0, 19.0], favabean: [1.55, 9.6], greengram: [1.8, 20.7] };
   window.saltTol = function (k) { const L = window.CROPLIB, c = L && L.crops[k], s = SALT[k]; return s ? { th: s[0], sl: s[1], tab: true } : c && c.group === 'perennial' ? { th: 1.5, sl: 15, tab: false } : { th: 2.0, sl: 10, tab: false }; };
   window.CWB = function (cropKey, opt) {
     opt = opt || {};
@@ -165,7 +168,7 @@
     }
     const mean = a => a.reduce((x, y) => x + y, 0) / a.length;
     out.mean = { I: mean(out.I), In: mean(out.In), ETc: mean(out.ETc), ETa: mean(out.ETa), DP: mean(out.DP), RO: mean(out.RO), P: mean(out.P), ev: mean(out.ev), stress: mean(out.stress), RY: mean(out.RY), EC: mean(out.EC), WP: mean(out.WP), FC: mean(out.FC) };
-    out.tol = tol; out.pp = pp; out.fc = fcS; out.daily = daily; out.effApp = effApp; out.fT = fT; out.real = f.real; out.kySrc = pp ? (pp.ky == null ? 'assumed 1.0 (not tabulated)' : 'tabulated') : 'tabulated';
+    out.tol = tol; out.pp = pp; out.fc = fcS; out.daily = daily; out.effApp = effApp; out.fT = fT; out.real = f.real; out.kySrc = pp ? (pp.ky == null ? 'assumed 1.0 (not tabulated)' : (pp.c && pp.c.kySrc) || 'tabulated') : 'tabulated';
     _cwb[key] = out; return out;
   };
 
@@ -240,7 +243,7 @@
   // ------------------------------------------------------------------ provenance ribbon for transferred results
   window.cropNote = function () {
     if (!isLib(state.crop)) return null; const pp = cropParams(), c = CWB(state.crop);
-    return pp.label + ': Cereal results transferred with FAO-56 crop coefficients (Kc ' + pp.kcIni.toFixed(2) + ' / ' + pp.kcMid.toFixed(2) + ' / ' + pp.kcEnd.toFixed(2) + '); yield as % of potential (Ky ' + (c.pp.ky == null ? 'assumed 1.0' : c.pp.ky.toFixed(2)) + ')';
+    return pp.label + ': Cereal results transferred with FAO-56 (2025) crop coefficients (Kc ' + pp.kcIni.toFixed(2) + ' / ' + pp.kcMid.toFixed(2) + ' / ' + pp.kcEnd.toFixed(2) + '); depletion fraction p ' + pp.p.toFixed(2) + ', roots to ' + Math.round(pp.root) + ' cm, height ' + pp.height.toFixed(2) + ' m; yield as % of potential (Ky ' + (c.pp.ky == null ? 'assumed 1.0' : c.pp.ky.toFixed(2)) + '), salinity threshold ' + saltTol(state.crop).th.toFixed(1) + ' dS/m';
   };
   setInterval(() => { try { const n = cropNote(), el = document.getElementById('cropNoteBar'); if (n) { let e = el; if (!e) { e = document.createElement('div'); e.id = 'cropNoteBar'; const pc = document.getElementById('proCenter') || document.body; pc.insertBefore(e, pc.firstChild); } e.textContent = n; e.style.display = ''; } else if (el) el.style.display = 'none'; } catch (e) {} }, 600);
   try { refresh(); } catch (e) {}
@@ -256,9 +259,10 @@
   if (!CROPS[state.crop]) state.crop = MIG[state.crop] || 'cereal';
   const box = document.getElementById('cropBtns'); if (!box) return;
   const L = CROPLIB.crops, groups = [['Simulated', ['cereal']],
-    ['Staple food crops', ['cassava', 'yam', 'rice', 'maize', 'sorghum', 'pearlmillet', 'cowpea', 'wheat', 'potato']],
-    ['Cash and oil crops', ['groundnut', 'soybean', 'cotton', 'mustard', 'greengram', 'chickpea', 'oilpalm', 'cocoa']],
-    ['Vegetables', ['tomato', 'onion', 'cabbage', 'pepper']],
+    ['Staple food crops', ['cassava', 'yam', 'sweetpotato', 'rice', 'maize', 'sweetmaize', 'sorghum', 'pearlmillet', 'wheat', 'durumwheat', 'barley', 'oats', 'potato']],
+    ['Pulses', ['cowpea', 'commonbean', 'lentil', 'pea', 'favabean', 'chickpea', 'greengram']],
+    ['Cash and oil crops', ['groundnut', 'soybean', 'cotton', 'mustard', 'sunflower', 'canola', 'sesame', 'safflower', 'flax', 'sugarbeet', 'oilpalm', 'cocoa']],
+    ['Vegetables', ['tomato', 'onion', 'cabbage', 'pepper', 'carrot', 'garlic', 'lettuce', 'spinach', 'broccoli', 'cauliflower', 'cucumber', 'eggplant', 'melon', 'watermelon', 'pumpkin', 'zucchini']],
     ['Trees, vines and palms', Object.keys(L).filter(k => L[k].group === 'perennial' && !['oilpalm', 'cocoa'].includes(k))]];
   const used = new Set(groups.flatMap(g => g[1])); const rest = Object.keys(L).filter(k => !used.has(k)); if (rest.length) groups.push(['Other field crops', rest]);
   const sel = document.createElement('select'); sel.id = 'cropSel'; sel.style.cssText = 'width:100%;padding:4px;font:inherit';

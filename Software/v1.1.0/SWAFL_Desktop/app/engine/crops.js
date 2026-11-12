@@ -11,26 +11,60 @@
 window.CROPLIB = (function () {
   const F = (label, kind, kc, st, h, root, p, ky, opt) => Object.assign({ label, kind, group: 'field', habit: 'annual', kcIni: kc[0], kcMid: kc[1], kcEnd: kc[2], stages: st, height: h, root, p, ky, kySrc: ky == null ? 'not tabulated' : 'tabulated', fc: 0.9 }, opt || {});
   const crops = {
-    rice:        F('Rice', 'rice', [1.05, 1.20, 0.90], [15, 30, 45, 30], 0.8, 75, 0.20, null, { ponded: true }),
-    maize:       F('Maize (grain)', 'maize', [0.30, 1.20, 0.60], [15, 30, 40, 20], 1.5, 135, 0.55, 1.25),
-    pearlmillet: F('Millet', 'millet', [0.30, 1.00, 0.30], [15, 25, 40, 25], 1.5, 150, 0.55, null),
-    sorghum:     F('Sorghum (grain)', 'sorghum', [0.30, 1.00, 0.55], [20, 35, 40, 30], 1.5, 150, 0.55, 0.90),
-    cassava:     F('Cassava', 'cassava', [0.30, 0.80, 0.30], [20, 40, 90, 60], 1.0, 65, 0.35, null),
-    yam:         F('Yam', 'yam', [0.50, 1.10, 0.85], [30, 60, 90, 60], 1.5, 60, 0.40, null, { rootSrc: 'group default', stSrc: 'group default' }),
-    cowpea:      F('Cowpea (beans)', 'cowpea', [0.40, 1.05, 0.50], [20, 30, 30, 20], 0.4, 80, 0.45, null),
-    greengram:   F('Green gram (mung bean)', 'legume', [0.40, 0.96, 0.51], [17, 23, 34, 16], 0.4, 75, 0.45, null),
-    soybean:     F('Soybean', 'soybean', [0.40, 1.15, 0.50], [20, 30, 45, 25], 0.6, 95, 0.50, 0.85),
-    groundnut:   F('Groundnut', 'groundnut', [0.40, 1.15, 0.60], [20, 35, 40, 25], 0.4, 75, 0.50, 0.70),
-    cotton:      F('Cotton', 'cotton', [0.35, 1.15, 0.50], [30, 45, 65, 50], 1.1, 135, 0.65, 0.85),
-    wheat:       F('Wheat', 'wheat', [0.40, 1.15, 0.41], [20, 30, 45, 25], 0.8, 165, 0.55, 1.05),
-    chickpea:    F('Chickpea', 'legume', [0.40, 1.00, 0.40], [15, 35, 45, 25], 0.4, 80, 0.50, null),
-    mustard:     F('Mustard', 'mustard', [0.35, 1.15, 0.35], [15, 35, 45, 25], 1.3, 125, 0.60, null),
-    tomato:      F('Tomato', 'vegetable', [0.60, 1.15, 0.80], [30, 40, 40, 25], 0.6, 100, 0.40, 1.05),
-    potato:      F('Potato', 'vegetable', [0.50, 1.15, 0.75], [25, 30, 45, 30], 0.6, 50, 0.35, 1.10),
-    onion:       F('Onion (dry)', 'vegetable', [0.70, 1.05, 0.75], [15, 25, 70, 40], 0.4, 45, 0.30, 1.10),
-    cabbage:     F('Cabbage', 'vegetable', [0.70, 1.05, 0.95], [40, 60, 50, 15], 0.4, 65, 0.45, 0.95),
-    pepper:      F('Sweet pepper', 'vegetable', [0.60, 1.05, 0.90], [25, 35, 40, 20], 0.7, 75, 0.30, 1.10),
+    rice:        F('Rice', 'rice', [1.05, 1.20, 1.05], [15, 30, 45, 30], 1.0, 75, 0.20, null, { ponded: true }),
+    maize:       F('Maize (grain)', 'maize', [0.30, 1.20, 0.60], [15, 30, 40, 20], 1.5, 135, 0.50, 1.285),
+    pearlmillet: F('Millet', 'millet', [0.30, 1.10, 0.35], [15, 25, 40, 25], 2.0, 150, 0.55, null),
+    sorghum:     F('Sorghum (grain)', 'sorghum', [0.30, 1.05, 0.45], [20, 35, 40, 30], 1.75, 150, 0.55, 0.90),
+    cassava:     F('Cassava', 'cassava', [0.30, 1.00, 0.60], [20, 40, 90, 60], 1.0, 65, 0.50, null),
+    yam:         F('Yam, taro', 'yam', [0.70, 1.05, 1.00], [30, 60, 90, 60], 1.2, 40, 0.20, null, { stSrc: 'group default' }),
+    cowpea:      F('Cowpea (beans)', 'cowpea', [0.40, 1.05, 0.35], [20, 30, 30, 20], 0.7, 80, 0.50, null),
+    greengram:   F('Green gram (mung bean)', 'legume', [0.40, 1.10, 0.40], [17, 23, 34, 16], 0.75, 75, 0.45, null),
+    soybean:     F('Soybean', 'soybean', [0.40, 1.10, 0.50], [20, 30, 45, 25], 0.8, 95, 0.50, 1.075),
+    groundnut:   F('Groundnut', 'groundnut', [0.40, 1.05, 0.60], [20, 35, 40, 25], 0.5, 100, 0.50, 0.70),
+    cotton:      F('Cotton', 'cotton', [0.40, 1.10, 0.50], [30, 45, 65, 50], 1.2, 135, 0.60, 1.05),
+    wheat:       F('Wheat', 'wheat', [0.40, 1.15, 0.41], [20, 30, 45, 25], 0.9, 150, 0.50, 1.05),
+    chickpea:    F('Chickpea', 'legume', [0.40, 1.05, 0.35], [15, 35, 45, 25], 0.6, 100, 0.45, null),
+    mustard:     F('Mustard', 'mustard', [0.35, 1.10, 0.40], [15, 35, 45, 25], 1.75, 110, 0.55, null),
+    tomato:      F('Tomato', 'vegetable', [0.60, 1.10, 1.00], [30, 40, 40, 25], 0.6, 120, 0.40, 1.20),
+    potato:      F('Potato', 'vegetable', [0.50, 1.10, 0.40], [25, 30, 45, 30], 0.6, 60, 0.40, 1.10),
+    onion:       F('Onion (dry)', 'vegetable', [0.70, 1.05, 0.70], [15, 25, 70, 40], 0.45, 60, 0.30, 1.175),
+    cabbage:     F('Cabbage', 'vegetable', [0.70, 1.05, 1.00], [40, 60, 50, 15], 0.4, 50, 0.35, 0.95),
+    pepper:      F('Sweet pepper', 'vegetable', [0.60, 1.10, 1.00], [25, 35, 40, 20], 0.7, 100, 0.40, 1.10),
   };
+  // added from FAO-56 (2025 edition): Kc ini / mid / end and maximum height from Tables 6.1 and 6.2, depletion fraction p from Tables 8.1 and 8.2,
+  // yield response factor Ky from Table 8.7 (mid-point where a range is given); the stage days are the typical lengths of the 1998 edition (Table 11,
+  // flagged 'typical') because the 2025 edition gives thermal time instead; Tbase / Tupper (Table 6.10) are kept for the thermal-time calendar
+  const V = (label, kc, st, h, root, p, ky, tb, opt) => F(label, 'vegetable', kc, st, h, root, p, ky, Object.assign({ stSrc: 'typical', tbase: tb ? tb[0] : null, tupper: tb ? tb[1] : null, tab: 'FAO-56 (2025) Tables 6.1, 8.1' }, opt || {}));
+  const G = (label, kind, kc, st, h, root, p, ky, tb, opt) => F(label, kind, kc, st, h, root, p, ky, Object.assign({ stSrc: 'typical', tbase: tb ? tb[0] : null, tupper: tb ? tb[1] : null, tab: 'FAO-56 (2025) Tables 6.2, 8.2' }, opt || {}));
+  Object.assign(crops, {
+    carrot:      V('Carrot', [0.70, 1.00, 0.85], [20, 30, 50, 20], 0.30, 50, 0.30, null, [6, 30]),
+    garlic:      V('Garlic', [0.70, 1.05, 0.70], [20, 35, 70, 40], 0.50, 50, 0.30, null, [4, 30]),
+    sweetpotato: V('Sweet potato', [0.50, 1.10, 0.65], [20, 30, 60, 40], 0.50, 120, 0.45, null, [12, 30]),
+    lettuce:     V('Lettuce', [0.70, 1.05, 1.05], [20, 30, 15, 10], 0.35, 50, 0.30, null, [4, 28]),
+    spinach:     V('Spinach', [0.70, 1.05, 1.00], [20, 20, 15, 5], 0.35, 50, 0.25, null, [4, 25]),
+    broccoli:    V('Broccoli', [0.70, 1.10, 1.10], [35, 45, 40, 15], 0.60, 90, 0.40, null, [4.5, 30]),
+    cauliflower: V('Cauliflower', [0.70, 1.05, 1.00], [35, 50, 40, 15], 0.40, 90, 0.40, null, [4.5, 30]),
+    cucumber:    V('Cucumber', [0.60, 1.00, 0.75], [20, 30, 40, 15], 0.40, 120, 0.45, 0.95, [10, 32]),
+    eggplant:    V('Eggplant', [0.60, 1.05, 0.95], [30, 40, 40, 20], 0.80, 100, 0.40, 1.025, [10, 35], { kySrc: 'tabulated range (mid-point)' }),
+    melon:       V('Melon', [0.50, 1.00, 0.80], [25, 35, 40, 20], 0.30, 120, 0.40, null, [10, 38]),
+    watermelon:  V('Watermelon', [0.40, 1.05, 0.70], [20, 30, 30, 30], 0.40, 150, 0.45, 1.175, [10, 35], { kySrc: 'tabulated range (mid-point)' }),
+    pumpkin:     V('Pumpkin, winter squash', [0.50, 0.95, 0.70], [20, 30, 30, 20], 0.40, 150, 0.40, null, [10, 32]),
+    zucchini:    V('Zucchini, squash', [0.50, 1.00, 0.70], [25, 35, 25, 15], 0.50, 110, 0.45, null, [10, 32]),
+    barley:      G('Barley', 'wheat', [0.30, 1.10, 0.25], [15, 25, 50, 30], 0.80, 120, 0.55, 1.25, [0, 30]),
+    oats:        G('Oats', 'wheat', [0.30, 1.05, 0.25], [15, 25, 50, 30], 0.95, 150, 0.55, null, null),
+    durumwheat:  G('Durum wheat', 'wheat', [0.50, 1.05, 0.25], [20, 30, 45, 25], 0.90, 150, 0.50, null, null, { stSrc: 'group default' }),
+    sweetmaize:  G('Sweet maize', 'maize', [0.30, 1.15, 1.05], [20, 25, 25, 10], 2.00, 135, 0.50, 1.285, null),
+    sunflower:   G('Sunflower', 'mustard', [0.35, 1.15, 0.30], [25, 35, 45, 25], 2.00, 200, 0.50, 0.95, [6, 34]),
+    canola:      G('Canola, rapeseed', 'mustard', [0.50, 1.10, 0.35], [25, 35, 55, 20], 1.25, 130, 0.50, 0.90, [5, 30]),
+    sesame:      G('Sesame', 'mustard', [0.35, 1.05, 0.25], [20, 30, 40, 20], 1.30, 150, 0.60, null, null),
+    safflower:   G('Safflower', 'mustard', [0.35, 1.05, 0.25], [20, 35, 45, 25], 1.10, 200, 0.60, 0.865, null, { kySrc: 'tabulated range (mid-point)' }),
+    flax:        G('Flax, linseed', 'mustard', [0.45, 1.05, 0.25], [25, 35, 50, 40], 1.00, 150, 0.50, null, null),
+    sugarbeet:   G('Sugar beet', 'vegetable', [0.35, 1.10, 0.75], [30, 45, 90, 15], 0.50, 120, 0.55, 1.05, [3, 30], { kySrc: 'tabulated range (mid-point)' }),
+    lentil:      G('Lentil', 'legume', [0.40, 1.05, 0.30], [20, 30, 60, 40], 0.50, 80, 0.50, null, [2, 35]),
+    pea:         G('Pea (dry)', 'legume', [0.60, 1.10, 0.30], [15, 25, 35, 15], 0.80, 100, 0.40, 1.15, [5, 27]),
+    commonbean:  G('Common bean (dry)', 'legume', [0.40, 1.05, 0.40], [20, 30, 40, 20], 0.60, 90, 0.45, 1.15, [10, 32]),
+    favabean:    G('Fava bean (dry)', 'legume', [0.40, 1.10, 0.40], [15, 25, 35, 15], 0.80, 70, 0.45, null, [5, 30], { stSrc: 'group default' }),
+  });
   // tree, vine and berry crops: [density / training system, fc, height (m), Kc mid, Kc end]
   const P = (label, kind, habit, dens, root, p, opt) => Object.assign({ label, kind, group: 'perennial', habit, densities: dens, root, p, ky: null, kySrc: 'not tabulated' }, opt || {});
   const DEC = { start: 100, stages: [20, 70, 90, 30] }, VIN = { start: 110, stages: [20, 40, 120, 60] }, EVG = { start: 0, stages: [60, 90, 120, 95] };
@@ -65,6 +99,7 @@ window.CROPLIB = (function () {
     cocoa:      P('Cocoa', 'cocoa', 'evergreen', [['Under high shade canopy', 0.80, 3.0, 1.05, 1.05]], 85, 0.30, Object.assign({ kcIni: 1.00 }, EVG)),
     cherimoya:  P('Cherimoya', 'citrus', 'evergreen', [['Medium', 0.57, 4.0, 0.65, 0.55]], 120, 0.50, Object.assign({ rootSrc: 'group default' }, EVG)),
   });
+  ['maize', 'soybean', 'cotton', 'tomato', 'onion'].forEach(k => { crops[k].kySrc = 'tabulated range (mid-point)'; });   // Table 8.7 gives a range for these
   for (const k in crops) { const c = crops[k]; c.key = k; if (!c.rootSrc) c.rootSrc = 'tabulated'; }
   const FIELD = Object.keys(crops).filter(k => crops[k].group === 'field'), PERENNIAL = Object.keys(crops).filter(k => crops[k].group === 'perennial');
 

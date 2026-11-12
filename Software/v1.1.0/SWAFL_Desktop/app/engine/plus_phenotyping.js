@@ -6,7 +6,7 @@
   if (typeof SCENES === 'undefined' || !window.PLUSKIT || !window.PHENO) return;
   const K = window.PLUSKIT, P = window.PHENO, HEAD = '#1B1F23', GRID = '#E6E2D6', NAVY = '#1B3A6B';
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v)), fmt = K.fmt, TF = K.TF, N = 140, NL = P.NL, DZ = P.DZ, ZMAX = P.ZMAX;
-  const CMAP = { maize: 'maize', sorghum: 'sorghum', pearlmillet: 'sorghum', wheat: 'wheat', rice: 'wheat', cereal: 'wheat', soybean: 'bean', cowpea: 'bean', greengram: 'bean', chickpea: 'bean', groundnut: 'bean', tomato: 'bean', mustard: 'bean' };
+  const CMAP = { maize: 'maize', sorghum: 'sorghum', pearlmillet: 'sorghum', wheat: 'wheat', rice: 'wheat', cereal: 'wheat', soybean: 'bean', cowpea: 'bean', greengram: 'bean', chickpea: 'bean', groundnut: 'bean', tomato: 'bean', mustard: 'bean', barley: 'wheat', oats: 'wheat', durumwheat: 'wheat', sweetmaize: 'maize', lentil: 'bean', pea: 'bean', commonbean: 'bean', favabean: 'bean' };
   const CLIM = { project: { Tm: 8.5, Tamp: 8.2, sow: 0, t: 'Project climate (cool, humid)' }, warm: { Tm: 15.5, Tamp: 9.5, sow: -10, t: 'Warm season' }, hot: { Tm: 23, Tamp: 8.5, sow: -35, t: 'Hot, dry season' } };
   const PH = {
     anim: { on: false, t0: 0, dur: 14 }, secY: {}, sp: CMAP[typeof state !== 'undefined' ? state.crop : 'cereal'] || 'wheat', follow: true, ref: 'pj', gid: 'ref', g: Object.assign({}, P.GENO[0]), clim: 'project', rain: 'none', dr: { type: 'pulse', onset: 45, len: 35, sev: 15, rainOut: true },

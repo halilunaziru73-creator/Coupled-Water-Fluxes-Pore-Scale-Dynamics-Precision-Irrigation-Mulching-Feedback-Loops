@@ -2,23 +2,36 @@
 
 ## The crops
 
-Version 1.1 carries **48 crops** besides the simulated cereal/oilseed rotation. They are chosen in Properties ▸ Soil and field ▸ **Crop**, in four groups: *Staple food crops*, *Cash and oil crops*, *Vegetables*, and *Trees, vines and palms*. For each crop the library holds the crop coefficients $K_{c,\mathrm{ini}}$, $K_{c,\mathrm{mid}}$ and $K_{c,\mathrm{end}}$, the lengths of the four growth stages (initial, development, mid-season, late season), the plant height, the maximum rooting depth, the depletion fraction $p$, the yield response factor $K_y$, the ground cover and, for trees and vines, the planting densities or training systems. Field crops take their coefficients and stages from a field study that computed the daily crop water requirement with the FAO Penman and Monteith reference evapotranspiration; trees, vines and berries from the updated FAO-56 coefficients of fruit trees and vines. Rooting depth, $p$ and $K_y$ are the FAO-56 and FAO-33 tabulated values; where a crop is not tabulated the group value is used and the table says *group default*.
+Version 1.1 carries **75 crops** besides the simulated cereal/oilseed rotation. They are chosen in Properties ▸ Soil and field ▸ **Crop**, in six groups: *Staple food crops*, *Pulses*, *Cash and oil crops*, *Vegetables*, and *Trees, vines and palms*, after the simulated cereal/oilseed rotation. For each crop the library holds the crop coefficients $K_{c,\mathrm{ini}}$, $K_{c,\mathrm{mid}}$ and $K_{c,\mathrm{end}}$, the lengths of the four growth stages (initial, development, mid-season, late season), the plant height, the maximum rooting depth, the depletion fraction $p$, the yield response factor $K_y$, the ground cover and, for trees and vines, the planting densities or training systems. The field crops of the first release take their stages from a field study that computed the daily crop water requirement with the FAO Penman and Monteith reference evapotranspiration; their coefficients, depletion fractions, heights and rooting depths, and the 27 crops added later, follow the FAO-56 edition of 2025 (next section); trees, vines and berries from the updated FAO-56 coefficients of fruit trees and vines. Rooting depth, $p$ and $K_y$ are the FAO-56 and FAO-33 tabulated values; where a crop is not tabulated the group value is used and the table says *group default*.
 
-The staple and cash crops asked for in this release carry these coefficients:
+The staple and cash crops asked for in this release carry these coefficients (FAO-56, 2025, standard sub-humid climate):
 
-| Crop | $K_{c,\mathrm{ini}}$ | $K_{c,\mathrm{mid}}$ | $K_{c,\mathrm{end}}$ | Note |
-|:--|:--:|:--:|:--:|:--|
-| Cassava | 0.30 | 0.80 | 0.30 | |
-| Yam | 0.50 | 1.10 | 0.85 | stages and rooting depth: group default |
-| Rice | 1.05 | 1.20 | 0.90 | bunded: no runoff in the season |
-| Maize | 0.30 | 1.20 | 0.60 | |
-| Sorghum | 0.30 | 1.00 | 0.55 | |
-| Millet | 0.30 | 1.00 | 0.30 | |
-| Cowpeas | 0.40 | 1.05 | 0.50 | |
-| Groundnut | 0.40 | 1.15 | 0.60 | |
-| Soybean | 0.40 | 1.15 | 0.50 | |
-| Oil palm | 0.90 | 0.95 | 0.95 | perennial |
-| Cocoa | 1.00 | 1.05 | 1.05 | perennial, high canopy shade |
+| Crop | $K_{c,\mathrm{ini}}$ | $K_{c,\mathrm{mid}}$ | $K_{c,\mathrm{end}}$ | $p$ | Note |
+|:--|:--:|:--:|:--:|:--:|:--|
+| Cassava | 0.30 | 1.00 | 0.60 | 0.50 | first year |
+| Yam, taro | 0.70 | 1.05 | 1.00 | 0.20 | stages: group default |
+| Rice | 1.05 | 1.20 | 1.05 | 0.20 | flooded; bunded: no runoff in the season |
+| Maize | 0.30 | 1.20 | 0.60 | 0.50 | grain |
+| Sorghum | 0.30 | 1.05 | 0.45 | 0.55 | grain |
+| Millet | 0.30 | 1.10 | 0.35 | 0.55 | pearl millet |
+| Cowpeas | 0.40 | 1.05 | 0.35 | 0.50 | dry |
+| Groundnut | 0.40 | 1.05 | 0.60 | 0.50 | |
+| Soybean | 0.40 | 1.10 | 0.50 | 0.50 | |
+| Oil palm | 0.90 | 0.95 | 0.95 | 0.65 | perennial |
+| Cocoa | 1.00 | 1.05 | 1.05 | 0.30 | perennial, high canopy shade |
+
+## Crops refined and added from FAO-56 (2025)
+
+The crop library was compared with the tables of the FAO-56 edition of 2025 (Tables 6.1 and 6.2 for $K_c$, height and rooting depth; Tables 8.1 and 8.2 for the depletion fraction $p$; Table 8.7 for the yield response factor $K_y$; Tables 8.8 and 8.9 for the salinity tolerance; Tables 6.10 and 6.11 for the base and upper temperatures and the thermal time). Every crop that is tabulated now uses the tabulated values, and the following 27 crops were added:
+
+- **Vegetables (13):** carrot, garlic, sweet potato, lettuce, spinach, broccoli, cauliflower, cucumber, eggplant, melon, watermelon, pumpkin (winter squash) and zucchini.
+- **Cereals (4):** barley, oats, durum wheat and sweet maize.
+- **Oil and sugar crops (6):** sunflower, canola (rapeseed), sesame, safflower, flax (linseed) and sugar beet.
+- **Pulses (4):** lentil, pea (dry), common bean (dry) and fava bean (dry).
+
+A crop chosen in Properties ▸ Soil and field ▸ **Crop** (or in the crop list of any layer) changes the whole program together: the crop coefficient curve and with it the water need, the maximum rooting depth and the root distribution, the depletion fraction $p$ that sets the trigger and the water-stress onset, the yield response factor $K_y$ of the relative yield, and the salinity threshold and slope that act through the two salinity controls, *Salinity of the irrigation water (ECw)* and *Accumulated salt in the root zone now (ECe)*. The ribbon above the drawing states these numbers for the open crop: $K_c$ (ini / mid / end), $p$, rooting depth, height, $K_y$ and the salinity threshold.
+
+*Rules used where the 2025 tables give a range or no value.* A tabulated range (for example $K_y$ of maize 1.25 to 1.32 or the salinity slope of broccoli) is entered at its mid-point and the table marks it *tabulated range (mid-point)*. A crop without a tabulated $K_y$ keeps the neutral $K_y=1$, and one without a tabulated salinity tolerance the group default; both are marked. The 2025 edition gives the lengths of the growth stages as thermal time (growing degree days, Tables 6.11 and 6.12) and no longer in days; the stage days of the added crops are therefore the typical lengths of the 1998 edition and are marked *typical* in the table, while the base and upper temperatures of Table 6.10 are stored with each crop. The maximum rooting depth of the table is the deepest value of the tabulated range, and the model uses at most the 100 cm of the simulated soil profile for the water balance.
 
 The complete library is listed in Table 21.2 at the end of this chapter.
 
@@ -130,25 +143,52 @@ Table 21.2. The 48 crops of the library: crop coefficients, stage lengths (initi
 
 | Crop | Group | $K_{c,ini}$ | $K_{c,mid}$ | $K_{c,end}$ | Stages (d) | Height (m) | Root (cm) | $p$ | $K_y$ |
 |:--|:--|--:|--:|--:|:--|--:|--:|--:|--:|
-| Rice | field crop | 1.05 | 1.20 | 0.90 | 15/30/45/30 | 0.8 | 75 | 0.20 | n/a |
-| Maize (grain) | field crop | 0.30 | 1.20 | 0.60 | 15/30/40/20 | 1.5 | 135 | 0.55 | 1.25 |
-| Millet | field crop | 0.30 | 1.00 | 0.30 | 15/25/40/25 | 1.5 | 150 | 0.55 | n/a |
-| Sorghum (grain) | field crop | 0.30 | 1.00 | 0.55 | 20/35/40/30 | 1.5 | 150 | 0.55 | 0.90 |
-| Cassava | field crop | 0.30 | 0.80 | 0.30 | 20/40/90/60 | 1.0 | 65 | 0.35 | n/a |
-| Yam | field crop | 0.50 | 1.10 | 0.85 | 30/60/90/60 | 1.5 | 60 | 0.40 | n/a |
-| Cowpea (beans) | field crop | 0.40 | 1.05 | 0.50 | 20/30/30/20 | 0.4 | 80 | 0.45 | n/a |
-| Green gram (mung bean) | field crop | 0.40 | 0.96 | 0.51 | 17/23/34/16 | 0.4 | 75 | 0.45 | n/a |
-| Soybean | field crop | 0.40 | 1.15 | 0.50 | 20/30/45/25 | 0.6 | 95 | 0.50 | 0.85 |
-| Groundnut | field crop | 0.40 | 1.15 | 0.60 | 20/35/40/25 | 0.4 | 75 | 0.50 | 0.70 |
-| Cotton | field crop | 0.35 | 1.15 | 0.50 | 30/45/65/50 | 1.1 | 135 | 0.65 | 0.85 |
-| Wheat | field crop | 0.40 | 1.15 | 0.41 | 20/30/45/25 | 0.8 | 165 | 0.55 | 1.05 |
-| Chickpea | field crop | 0.40 | 1.00 | 0.40 | 15/35/45/25 | 0.4 | 80 | 0.50 | n/a |
-| Mustard | field crop | 0.35 | 1.15 | 0.35 | 15/35/45/25 | 1.3 | 125 | 0.60 | n/a |
-| Tomato | field crop | 0.60 | 1.15 | 0.80 | 30/40/40/25 | 0.6 | 100 | 0.40 | 1.05 |
-| Potato | field crop | 0.50 | 1.15 | 0.75 | 25/30/45/30 | 0.6 | 50 | 0.35 | 1.10 |
-| Onion (dry) | field crop | 0.70 | 1.05 | 0.75 | 15/25/70/40 | 0.4 | 45 | 0.30 | 1.10 |
-| Cabbage | field crop | 0.70 | 1.05 | 0.95 | 40/60/50/15 | 0.4 | 65 | 0.45 | 0.95 |
-| Sweet pepper | field crop | 0.60 | 1.05 | 0.90 | 25/35/40/20 | 0.7 | 75 | 0.30 | 1.10 |
+| Rice | field crop | 1.05 | 1.20 | 1.05 | 15/30/45/30 | 1.0 | 75 | 0.20 | n/a |
+| Maize (grain) | field crop | 0.30 | 1.20 | 0.60 | 15/30/40/20 | 1.5 | 135 | 0.50 | 1.28 |
+| Millet | field crop | 0.30 | 1.10 | 0.35 | 15/25/40/25 | 2.0 | 150 | 0.55 | n/a |
+| Sorghum (grain) | field crop | 0.30 | 1.05 | 0.45 | 20/35/40/30 | 1.8 | 150 | 0.55 | 0.90 |
+| Cassava | field crop | 0.30 | 1.00 | 0.60 | 20/40/90/60 | 1.0 | 65 | 0.50 | n/a |
+| Yam, taro | field crop | 0.70 | 1.05 | 1.00 | 30/60/90/60 | 1.2 | 40 | 0.20 | n/a |
+| Cowpea (beans) | field crop | 0.40 | 1.05 | 0.35 | 20/30/30/20 | 0.7 | 80 | 0.50 | n/a |
+| Green gram (mung bean) | field crop | 0.40 | 1.10 | 0.40 | 17/23/34/16 | 0.8 | 75 | 0.45 | n/a |
+| Soybean | field crop | 0.40 | 1.10 | 0.50 | 20/30/45/25 | 0.8 | 95 | 0.50 | 1.07 |
+| Groundnut | field crop | 0.40 | 1.05 | 0.60 | 20/35/40/25 | 0.5 | 100 | 0.50 | 0.70 |
+| Cotton | field crop | 0.40 | 1.10 | 0.50 | 30/45/65/50 | 1.2 | 135 | 0.60 | 1.05 |
+| Wheat | field crop | 0.40 | 1.15 | 0.41 | 20/30/45/25 | 0.9 | 150 | 0.50 | 1.05 |
+| Chickpea | field crop | 0.40 | 1.05 | 0.35 | 15/35/45/25 | 0.6 | 100 | 0.45 | n/a |
+| Mustard | field crop | 0.35 | 1.10 | 0.40 | 15/35/45/25 | 1.8 | 110 | 0.55 | n/a |
+| Tomato | field crop | 0.60 | 1.10 | 1.00 | 30/40/40/25 | 0.6 | 120 | 0.40 | 1.20 |
+| Potato | field crop | 0.50 | 1.10 | 0.40 | 25/30/45/30 | 0.6 | 60 | 0.40 | 1.10 |
+| Onion (dry) | field crop | 0.70 | 1.05 | 0.70 | 15/25/70/40 | 0.5 | 60 | 0.30 | 1.18 |
+| Cabbage | field crop | 0.70 | 1.05 | 1.00 | 40/60/50/15 | 0.4 | 50 | 0.35 | 0.95 |
+| Sweet pepper | field crop | 0.60 | 1.10 | 1.00 | 25/35/40/20 | 0.7 | 100 | 0.40 | 1.10 |
+| Carrot | field crop | 0.70 | 1.00 | 0.85 | 20/30/50/20 | 0.3 | 50 | 0.30 | n/a |
+| Garlic | field crop | 0.70 | 1.05 | 0.70 | 20/35/70/40 | 0.5 | 50 | 0.30 | n/a |
+| Sweet potato | field crop | 0.50 | 1.10 | 0.65 | 20/30/60/40 | 0.5 | 120 | 0.45 | n/a |
+| Lettuce | field crop | 0.70 | 1.05 | 1.05 | 20/30/15/10 | 0.3 | 50 | 0.30 | n/a |
+| Spinach | field crop | 0.70 | 1.05 | 1.00 | 20/20/15/5 | 0.3 | 50 | 0.25 | n/a |
+| Broccoli | field crop | 0.70 | 1.10 | 1.10 | 35/45/40/15 | 0.6 | 90 | 0.40 | n/a |
+| Cauliflower | field crop | 0.70 | 1.05 | 1.00 | 35/50/40/15 | 0.4 | 90 | 0.40 | n/a |
+| Cucumber | field crop | 0.60 | 1.00 | 0.75 | 20/30/40/15 | 0.4 | 120 | 0.45 | 0.95 |
+| Eggplant | field crop | 0.60 | 1.05 | 0.95 | 30/40/40/20 | 0.8 | 100 | 0.40 | 1.02 |
+| Melon | field crop | 0.50 | 1.00 | 0.80 | 25/35/40/20 | 0.3 | 120 | 0.40 | n/a |
+| Watermelon | field crop | 0.40 | 1.05 | 0.70 | 20/30/30/30 | 0.4 | 150 | 0.45 | 1.18 |
+| Pumpkin, winter squash | field crop | 0.50 | 0.95 | 0.70 | 20/30/30/20 | 0.4 | 150 | 0.40 | n/a |
+| Zucchini, squash | field crop | 0.50 | 1.00 | 0.70 | 25/35/25/15 | 0.5 | 110 | 0.45 | n/a |
+| Barley | field crop | 0.30 | 1.10 | 0.25 | 15/25/50/30 | 0.8 | 120 | 0.55 | 1.25 |
+| Oats | field crop | 0.30 | 1.05 | 0.25 | 15/25/50/30 | 0.9 | 150 | 0.55 | n/a |
+| Durum wheat | field crop | 0.50 | 1.05 | 0.25 | 20/30/45/25 | 0.9 | 150 | 0.50 | n/a |
+| Sweet maize | field crop | 0.30 | 1.15 | 1.05 | 20/25/25/10 | 2.0 | 135 | 0.50 | 1.28 |
+| Sunflower | field crop | 0.35 | 1.15 | 0.30 | 25/35/45/25 | 2.0 | 200 | 0.50 | 0.95 |
+| Canola, rapeseed | field crop | 0.50 | 1.10 | 0.35 | 25/35/55/20 | 1.2 | 130 | 0.50 | 0.90 |
+| Sesame | field crop | 0.35 | 1.05 | 0.25 | 20/30/40/20 | 1.3 | 150 | 0.60 | n/a |
+| Safflower | field crop | 0.35 | 1.05 | 0.25 | 20/35/45/25 | 1.1 | 200 | 0.60 | 0.86 |
+| Flax, linseed | field crop | 0.45 | 1.05 | 0.25 | 25/35/50/40 | 1.0 | 150 | 0.50 | n/a |
+| Sugar beet | field crop | 0.35 | 1.10 | 0.75 | 30/45/90/15 | 0.5 | 120 | 0.55 | 1.05 |
+| Lentil | field crop | 0.40 | 1.05 | 0.30 | 20/30/60/40 | 0.5 | 80 | 0.50 | n/a |
+| Pea (dry) | field crop | 0.60 | 1.10 | 0.30 | 15/25/35/15 | 0.8 | 100 | 0.40 | 1.15 |
+| Common bean (dry) | field crop | 0.40 | 1.05 | 0.40 | 20/30/40/20 | 0.6 | 90 | 0.45 | 1.15 |
+| Fava bean (dry) | field crop | 0.40 | 1.10 | 0.40 | 15/25/35/15 | 0.8 | 70 | 0.45 | n/a |
 | Table grapes | tree, vine or palm | n/a | n/a | n/a | 20/40/120/60 | n/a | 150 | 0.35 | n/a |
 | Wine grapes | tree, vine or palm | n/a | n/a | n/a | 20/40/120/60 | n/a | 150 | 0.45 | n/a |
 | Kiwi | tree, vine or palm | n/a | n/a | n/a | 20/40/120/60 | n/a | 100 | 0.35 | n/a |

@@ -2,23 +2,36 @@
 
 ## The crops
 
-Version 1.1 carries **48 crops** besides the simulated cereal/oilseed rotation. They are chosen in Properties ▸ Soil and field ▸ **Crop**, in four groups: *Staple food crops*, *Cash and oil crops*, *Vegetables*, and *Trees, vines and palms*. For each crop the library holds the crop coefficients $K_{c,\mathrm{ini}}$, $K_{c,\mathrm{mid}}$ and $K_{c,\mathrm{end}}$, the lengths of the four growth stages (initial, development, mid-season, late season), the plant height, the maximum rooting depth, the depletion fraction $p$, the yield response factor $K_y$, the ground cover and, for trees and vines, the planting densities or training systems. Field crops take their coefficients and stages from a field study that computed the daily crop water requirement with the FAO Penman and Monteith reference evapotranspiration; trees, vines and berries from the updated FAO-56 coefficients of fruit trees and vines. Rooting depth, $p$ and $K_y$ are the FAO-56 and FAO-33 tabulated values; where a crop is not tabulated the group value is used and the table says *group default*.
+Version 1.1 carries **75 crops** besides the simulated cereal/oilseed rotation. They are chosen in Properties ▸ Soil and field ▸ **Crop**, in six groups: *Staple food crops*, *Pulses*, *Cash and oil crops*, *Vegetables*, and *Trees, vines and palms*, after the simulated cereal/oilseed rotation. For each crop the library holds the crop coefficients $K_{c,\mathrm{ini}}$, $K_{c,\mathrm{mid}}$ and $K_{c,\mathrm{end}}$, the lengths of the four growth stages (initial, development, mid-season, late season), the plant height, the maximum rooting depth, the depletion fraction $p$, the yield response factor $K_y$, the ground cover and, for trees and vines, the planting densities or training systems. The field crops of the first release take their stages from a field study that computed the daily crop water requirement with the FAO Penman and Monteith reference evapotranspiration; their coefficients, depletion fractions, heights and rooting depths, and the 27 crops added later, follow the FAO-56 edition of 2025 (next section); trees, vines and berries from the updated FAO-56 coefficients of fruit trees and vines. Rooting depth, $p$ and $K_y$ are the FAO-56 and FAO-33 tabulated values; where a crop is not tabulated the group value is used and the table says *group default*.
 
-The staple and cash crops asked for in this release carry these coefficients:
+The staple and cash crops asked for in this release carry these coefficients (FAO-56, 2025, standard sub-humid climate):
 
-| Crop | $K_{c,\mathrm{ini}}$ | $K_{c,\mathrm{mid}}$ | $K_{c,\mathrm{end}}$ | Note |
-|:--|:--:|:--:|:--:|:--|
-| Cassava | 0.30 | 0.80 | 0.30 | |
-| Yam | 0.50 | 1.10 | 0.85 | stages and rooting depth: group default |
-| Rice | 1.05 | 1.20 | 0.90 | bunded: no runoff in the season |
-| Maize | 0.30 | 1.20 | 0.60 | |
-| Sorghum | 0.30 | 1.00 | 0.55 | |
-| Millet | 0.30 | 1.00 | 0.30 | |
-| Cowpeas | 0.40 | 1.05 | 0.50 | |
-| Groundnut | 0.40 | 1.15 | 0.60 | |
-| Soybean | 0.40 | 1.15 | 0.50 | |
-| Oil palm | 0.90 | 0.95 | 0.95 | perennial |
-| Cocoa | 1.00 | 1.05 | 1.05 | perennial, high canopy shade |
+| Crop | $K_{c,\mathrm{ini}}$ | $K_{c,\mathrm{mid}}$ | $K_{c,\mathrm{end}}$ | $p$ | Note |
+|:--|:--:|:--:|:--:|:--:|:--|
+| Cassava | 0.30 | 1.00 | 0.60 | 0.50 | first year |
+| Yam, taro | 0.70 | 1.05 | 1.00 | 0.20 | stages: group default |
+| Rice | 1.05 | 1.20 | 1.05 | 0.20 | flooded; bunded: no runoff in the season |
+| Maize | 0.30 | 1.20 | 0.60 | 0.50 | grain |
+| Sorghum | 0.30 | 1.05 | 0.45 | 0.55 | grain |
+| Millet | 0.30 | 1.10 | 0.35 | 0.55 | pearl millet |
+| Cowpeas | 0.40 | 1.05 | 0.35 | 0.50 | dry |
+| Groundnut | 0.40 | 1.05 | 0.60 | 0.50 | |
+| Soybean | 0.40 | 1.10 | 0.50 | 0.50 | |
+| Oil palm | 0.90 | 0.95 | 0.95 | 0.65 | perennial |
+| Cocoa | 1.00 | 1.05 | 1.05 | 0.30 | perennial, high canopy shade |
+
+## Crops refined and added from FAO-56 (2025)
+
+The crop library was compared with the tables of the FAO-56 edition of 2025 (Tables 6.1 and 6.2 for $K_c$, height and rooting depth; Tables 8.1 and 8.2 for the depletion fraction $p$; Table 8.7 for the yield response factor $K_y$; Tables 8.8 and 8.9 for the salinity tolerance; Tables 6.10 and 6.11 for the base and upper temperatures and the thermal time). Every crop that is tabulated now uses the tabulated values, and the following 27 crops were added:
+
+- **Vegetables (13):** carrot, garlic, sweet potato, lettuce, spinach, broccoli, cauliflower, cucumber, eggplant, melon, watermelon, pumpkin (winter squash) and zucchini.
+- **Cereals (4):** barley, oats, durum wheat and sweet maize.
+- **Oil and sugar crops (6):** sunflower, canola (rapeseed), sesame, safflower, flax (linseed) and sugar beet.
+- **Pulses (4):** lentil, pea (dry), common bean (dry) and fava bean (dry).
+
+A crop chosen in Properties ▸ Soil and field ▸ **Crop** (or in the crop list of any layer) changes the whole program together: the crop coefficient curve and with it the water need, the maximum rooting depth and the root distribution, the depletion fraction $p$ that sets the trigger and the water-stress onset, the yield response factor $K_y$ of the relative yield, and the salinity threshold and slope that act through the two salinity controls, *Salinity of the irrigation water (ECw)* and *Accumulated salt in the root zone now (ECe)*. The ribbon above the drawing states these numbers for the open crop: $K_c$ (ini / mid / end), $p$, rooting depth, height, $K_y$ and the salinity threshold.
+
+*Rules used where the 2025 tables give a range or no value.* A tabulated range (for example $K_y$ of maize 1.25 to 1.32 or the salinity slope of broccoli) is entered at its mid-point and the table marks it *tabulated range (mid-point)*. A crop without a tabulated $K_y$ keeps the neutral $K_y=1$, and one without a tabulated salinity tolerance the group default; both are marked. The 2025 edition gives the lengths of the growth stages as thermal time (growing degree days, Tables 6.11 and 6.12) and no longer in days; the stage days of the added crops are therefore the typical lengths of the 1998 edition and are marked *typical* in the table, while the base and upper temperatures of Table 6.10 are stored with each crop. The maximum rooting depth of the table is the deepest value of the tabulated range, and the model uses at most the 100 cm of the simulated soil profile for the water balance.
 
 The complete library is listed in Table 21.2 at the end of this chapter.
 
