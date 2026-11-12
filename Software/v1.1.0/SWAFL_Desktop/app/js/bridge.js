@@ -13,7 +13,7 @@ const E = (() => {
     json(expr) { const s = api.ev('JSON.stringify(' + expr + ')'); return s === undefined ? undefined : JSON.parse(s); },
 
     /* ---- navigation ---- */
-    scene(id) { api.ev("switchScene(SCENES.find(function(s){return s.id==='" + id + "'})); window.__wake && window.__wake()"); api.poll(true); },
+    scene(id) { api.ev("window.__idleStart=false;switchScene(SCENES.find(function(s){return s.id==='" + id + "'})); window.__wake && window.__wake()"); api.poll(true); },
     scrollTo(sceneId, title) {
       const sec = api.json('window.__SEC||{}') || {}, m = (sec[sceneId] || {})[title]; if (!m) return false;
       const cv = api.win.document.getElementById('profileCanvas'), wrap = api.win.document.querySelector('.canvaswrap');
@@ -104,9 +104,9 @@ const E = (() => {
               clearInterval(iv); api.win = w; api.ready = true;
               api.defaults = JSON.parse(w.eval('JSON.stringify(state)')); api.setFit('window');
               // visit the three design scenes once so their section headings become layer sub-nodes
-              const keep = w.eval('currentScene.id'), sw = id => { try { w.eval("switchScene(SCENES.find(function(s){return s.id==='" + id + "'}))"); } catch (e) {} };
+              const keep = w.eval('currentScene.id'), sw = id => { try { w.eval("switchScene(SCENES.find(function(s){return s.id==='" + id + "'})); try{currentScene.draw&&currentScene.draw();if(currentScene.id==='sid')currentScene.draw()}catch(e){}"); } catch (e) {} };
               const seq = ['sid', 'drip', 'spr', keep]; let i = 0;
-              (function step() { sw(seq[i]); i++; if (i < seq.length) setTimeout(step, 140); else setTimeout(() => { const t = new Date(), p = n => String(n).padStart(2, '0'); api.setDate(t.getFullYear() + '-' + p(t.getMonth() + 1) + '-' + p(t.getDate())); api.ev('dssHold()'); api.poll(true); res(true); }, 300); })();
+              (function step() { sw(seq[i]); i++; if (i < seq.length) setTimeout(step, 20); else setTimeout(() => { const t = new Date(), p = n => String(n).padStart(2, '0'); api.setDate(t.getFullYear() + '-' + p(t.getMonth() + 1) + '-' + p(t.getDate())); api.ev('dssHold()'); api.poll(true); res(true); }, 300); })();
             } else if (Date.now() - t0 > 40000) { clearInterval(iv); res(false); }
           } catch (e) { /* not loaded yet */ }
         }, 150);

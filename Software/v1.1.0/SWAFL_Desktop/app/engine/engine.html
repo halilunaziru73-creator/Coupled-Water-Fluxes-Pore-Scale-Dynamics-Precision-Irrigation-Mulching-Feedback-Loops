@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <link rel="icon" type="image/png" href="../assets/logo-64.png">
-<link rel="stylesheet" href="touch.css?v=20261112z"><script src="tapfx.js?v=20261112z"></script><script src="wheelfix.js?v=20261112j"></script>
+<link rel="stylesheet" href="touch.css?v=20261113a"><script src="tapfx.js?v=20261113a"></script><script src="wheelfix.js?v=20261112j"></script>
 <script src="crops.js?v=20261112m"></script>
 <meta charset="UTF-8">
 <meta name="description" content="Interactive soil, water and atmosphere explorer built on 10,190 simulations: irrigation trigger law, mulch water balance, and evaporation-drainage regimes.">
@@ -6712,6 +6712,7 @@ function drawE1Core(y0) {
 let frameN = 0, dssFrame = 0, ysFrame = 0;
 const d20Label = t => { const dt = new Date(D20START + Math.round(t * (D20.n - 1)) * DAYMS); return dt.getUTCDate() + ' ' + MON[dt.getUTCMonth()] + ' ' + (dt.getUTCFullYear() + CAL0 - 1980); };
 function loop() {
+  if (window.__idleStart) { requestAnimationFrame(loop); return; }   // desktop start-up: nothing is drawn until the person opens a layer (the first picture used to cost about a second, much more on a slow computer)
   // pacing: when a picture takes long to draw (a slow computer, a busy layer), the next frames are skipped so that the clicks, the scroll and the typing of the person always get the processor in between; nothing is cut when the drawing is fast
   const t0 = performance.now(), dm = window.__drawMs || 0;
   if (dm > 22 && t0 - (window.__lastDraw || 0) < 1.5 * dm && !window.__physOnce) { requestAnimationFrame(loop); return; }
@@ -6768,6 +6769,7 @@ setupButtons();
 buildYearStrip(); autoWire();
 { const vy = new URLSearchParams(location.search).get('vy'); if (vy) document.body.style.setProperty('--vy', parseFloat(vy) || 0); }
 { const em = new URLSearchParams(location.search).get('embed'); const es = em && em !== '1' && SCENES.find(x => x.id === em); if (es) currentScene = es; }
+if (new URLSearchParams(location.search).get('app') === '1' && !new URLSearchParams(location.search).get('embed')) window.__idleStart = true;
 switchScene(currentScene);          // full set-up of the starting scene: toolbar, title, legend, canvas size, insight
 // the first screen is shown before the heavy first calculation (the field starts at today's date, with a typical year)
 requestAnimationFrame(() => setTimeout(() => { dssInit(); loop(); const sp = document.getElementById('splash'); if (sp) sp.remove(); }, 0));
