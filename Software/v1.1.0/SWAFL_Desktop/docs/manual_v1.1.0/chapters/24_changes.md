@@ -300,3 +300,4 @@
 - Dashboard: an Original button (and View > Original layout) puts every panel back to its first size.
 - Original layout also leaves a stuck full-screen state of a panel.
 - Original layout escapes every special state: full screen, open windows, focus view, wide or pinned panels.
+- The software loads after the licence window is closed, so Next and Back answer at once; a short Loading line shows while it starts.

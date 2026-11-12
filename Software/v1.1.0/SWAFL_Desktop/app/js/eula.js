@@ -31,11 +31,12 @@ var P={
 function show(force){
  if(!force&&ok())return;
  if(document.getElementById('eula'))return;
+ window.__eulaOpen=true;
  var st=document.createElement('style');st.id='eula-css';st.textContent=css;document.head.appendChild(st);
  var d=document.createElement('div');d.id='eula';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');d.setAttribute('aria-label','SWAFL setup');
  document.body.appendChild(d);document.documentElement.style.overflow='hidden';
  var step=0,read=false,agree=false;
- function close(){d.remove();st.remove();document.documentElement.style.overflow=''}
+ function close(){d.remove();st.remove();document.documentElement.style.overflow='';window.__eulaOpen=false}
  function decline(){
   if(window.swafl&&window.swafl.quit){window.swafl.quit();return}
   d.innerHTML='<div class="ep" style="height:auto;max-width:520px"><div class="eh"><b>Setup cancelled</b></div><div class="eb"><p>You need to accept the End User Licence Agreement to use SWAFL. You can close this tab, or start the setup again.</p></div><div class="ef"><div class="er"><span></span><button class="ea" id="eula-back">Start setup again</button></div></div></div>';

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="swafl-build" content="20261111r">
-<script>/* web version: if the browser holds an older copy of this page, fetch the new one once (the desktop program is not affected) */(function(){if(!/^https?:/.test(location.protocol))return;try{if(sessionStorage.getItem('swafl.rf'))return}catch(e){}fetch(location.pathname,{cache:'reload'}).then(function(r){return r.text()}).then(function(t){var m=t.match(/name="swafl-build" content="([^"]+)"/);if(m&&m[1]!=='20261111r'){try{sessionStorage.setItem('swafl.rf','1')}catch(e){}location.replace(location.pathname+'?r='+Date.now()+location.hash)}}).catch(function(){})})()</script>
+<meta name="swafl-build" content="20261111s">
+<script>/* web version: if the browser holds an older copy of this page, fetch the new one once (the desktop program is not affected) */(function(){if(!/^https?:/.test(location.protocol))return;try{if(sessionStorage.getItem('swafl.rf'))return}catch(e){}fetch(location.pathname,{cache:'reload'}).then(function(r){return r.text()}).then(function(t){var m=t.match(/name="swafl-build" content="([^"]+)"/);if(m&&m[1]!=='20261111s'){try{sessionStorage.setItem('swafl.rf','1')}catch(e){}location.replace(location.pathname+'?r='+Date.now()+location.hash)}}).catch(function(){})})()</script>
 <meta charset="utf-8">
 <title>SWAFL 1.1.0 - Soil Water Atmosphere Feedback Layout</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" type="image/png" href="assets/logo-64.png">
 <link rel="stylesheet" href="vendor/leaflet.css">
-<link rel="stylesheet" href="css/swafl.css?v=20261111r">
+<link rel="stylesheet" href="css/swafl.css?v=20261111s">
 <link rel="stylesheet" href="css/classic.css?v=20261101p">
 <link rel="stylesheet" href="css/daisydesign.css?v=20261101t">
 </head>
@@ -49,7 +49,14 @@
       <div id="viewBar"></div>
       <div id="centerRow">
       <div id="engineHost">
-        <iframe id="engine" title="SWAFL simulation window"></iframe><script>(function(){var u="engine/engine.html?app=1&v=20261111r"+(/^https?:/.test(location.protocol)?"&t="+Date.now():"")+"#scene=field";document.getElementById("engine").src=u})()</script>
+        <iframe id="engine" title="SWAFL simulation window"></iframe><script>(function(){var u="engine/engine.html?app=1&v=20261111s"+(/^https?:/.test(location.protocol)?"&t="+Date.now():"")+"#scene=field";
+/* the engine loads after the licence window is closed, so that the window answers at once; with no licence window it starts straight away */
+window.__eulaOpen=false;var started=false,veil=null;
+window.SWAFLStartEngine=function(){if(started)return;started=true;var f=document.getElementById("engine");
+ try{veil=document.createElement("div");veil.id="engVeil";veil.style.cssText="position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;background:#d4d0c8;font:bold 13px Tahoma,Segoe UI,sans-serif;color:#0a246a";veil.textContent="Loading SWAFL ...";f.parentNode.appendChild(veil);var gone=function(){if(veil){veil.remove();veil=null}};f.addEventListener("load",gone);var tm=setInterval(function(){try{if(!veil){clearInterval(tm);return}if(f.contentWindow&&typeof f.contentWindow.switchScene==="function"){gone();clearInterval(tm)}}catch(e){}},200)}catch(e){}
+ f.src=u};
+window.addEventListener("swafl-eula-accepted",window.SWAFLStartEngine);
+window.addEventListener("load",function(){setTimeout(function(){if(!window.__eulaOpen)window.SWAFLStartEngine()},400)})})()</script>
         <div id="emptyStage"><img src="assets/logo.svg" width="72" height="72" alt=""><div><b>No layer open</b><br>Click a layer in the Layers panel to open it here.</div></div>
         <div id="loading"><div class="spl"><img src="assets/logo.svg" width="84" height="84" alt=""><h1>SWAFL</h1><p class="spt">Soil Water, Irrigation and Field Decision Workbench</p><div class="spbar"><i></i></div><p class="spm">Starting the simulation engine, soils, crops and weather&hellip;</p><div class="spd"><span>Soil water balance</span><span>Irrigation scheduling</span><span>Crop water use</span><span>Weather driven</span></div></div></div>
       </div>
@@ -91,25 +98,25 @@
     <span id="stCase">&nbsp;</span>
     <span class="grow"></span>
     <span id="stPlay">Stopped</span><span class="sep"></span>
-    <span>SWAFL <span id="stVer">1.1.0 · build 11 Nov 2026 (j)</span></span>
+    <span>SWAFL <span id="stVer">1.1.0 · build 12 Nov 2026 (a)</span></span>
   </footer>
 </div>
 
 <div id="modalRoot"></div>
 <div id="ctxMenu" class="menu" hidden></div>
 
-<script src="js/eula.js?v=20261111r"></script>
+<script src="js/eula.js?v=20261111s"></script>
 <script src="js/guard.js?v=20261103a"></script>
 <script src="js/uiscale.js?v=20261101m"></script>
 <script src="js/scitext.js?v=20261105a"></script>
 <script src="js/localdate.js?v=20261101m"></script>
 <script src="js/bridge.js?v=20261110b"></script>
-<script src="js/ui.js?v=20261111r"></script>
+<script src="js/ui.js?v=20261111s"></script>
 <script src="js/layers.js?v=20261107a"></script>
 <script src="js/toolbox.js?v=20261101m"></script>
 <script src="js/soiltriangle.js?v=20261110b"></script><script src="js/props.js?v=20261109u"></script>
 <script src="js/scifig.js?v=20261103b"></script><script src="js/dashboard.js?v=20261103b"></script>
-<script src="js/layerfig.js?v=20261101m"></script><script src="js/outputs.js?v=20261111r"></script>
+<script src="js/layerfig.js?v=20261101m"></script><script src="js/outputs.js?v=20261111s"></script>
 <script src="js/palette.js?v=20261101m"></script>
 <script src="js/weatherui.js?v=20261101m"></script>
 <script src="vendor/leaflet.js"></script>
@@ -122,6 +129,6 @@
 <script src="js/fieldprec.js?v=20261101s"></script>
 <script src="js/fieldgeo.js?v=20261103b"></script>
 <script src="js/daisyload.js?v=20261110b"></script>
-<script src="js/glossary.js?v=20261110b"></script><script src="js/main.js?v=20261111r"></script>
+<script src="js/glossary.js?v=20261110b"></script><script src="js/main.js?v=20261111s"></script>
 </body>
 </html>
