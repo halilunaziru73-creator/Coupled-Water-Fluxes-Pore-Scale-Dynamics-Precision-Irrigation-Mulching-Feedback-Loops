@@ -3,7 +3,7 @@
 <head>
 <link rel="icon" type="image/png" href="../assets/logo-64.png">
 <script src="wheelfix.js?v=20261112j"></script>
-<script src="crops.js?v=20261112b"></script>
+<script src="crops.js?v=20261112m"></script>
 <meta charset="UTF-8">
 <meta name="description" content="Interactive soil, water and atmosphere explorer built on 10,190 simulations: irrigation trigger law, mulch water balance, and evaporation-drainage regimes.">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -4076,14 +4076,14 @@ const fmtDays = (n) => n + ' of ' + SEASON;
 let warmKey = '';
 function warmDetail() {
   const key = (simCache && simCache.key || '') + '|' + state.soil + '|' + currentScene.id; if (warmKey === key) return; warmKey = key;
-  setTimeout(() => {
+  setTimeout(() => (window.requestIdleCallback || setTimeout)(() => {
     try {
       const sc = currentScene, id = sc.id; if (state.range !== 'all' || (id !== 'v1' && id !== 'v2')) return;
       const sim = seasonSim(); if (sim && sim.rfLayers) sim.rfLayers();
       state.range = 'y94'; ctx.save(); try { id === 'v2' ? drawV2Detail() : drawV1Detail(); } finally { ctx.restore(); state.range = 'all'; }
       hotspots.length = 0; ctx.save(); try { sc.draw(); } finally { ctx.restore(); }
     } catch (e) { state.range = 'all'; }
-  }, 700);
+  }), 2500);
 }
 function drawV1All() {
   warmDetail();
@@ -7451,11 +7451,11 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
   window.fitNow = fit;
 })();
 </script>
-<script src="plus_core.js?v=20261112b"></script>
-<script src="plus_layers.js?v=20261109p"></script>
+<script src="plus_core.js?v=20261112m"></script>
+<script src="plus_layers.js?v=20261112m"></script>
 <script src="plus_daisy.js?v=20261108c"></script>
 <script src="plus_phenomodel.js?v=20261030z4"></script>
-<script src="plus_phenotyping.js?v=20261112b"></script>
+<script src="plus_phenotyping.js?v=20261112m"></script>
 <script src="plus_phenotyping2.js?v=20261109p"></script>
 <script src="plus_phenotyping3.js?v=20261109p"></script>
 <script src="plus_phenoplants.js?v=20261030z4"></script>

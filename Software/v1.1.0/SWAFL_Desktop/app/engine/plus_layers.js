@@ -18,7 +18,7 @@
 
   // the Daisy run that matches the current settings (each experiment varies one control around the irrigated baseline)
   window.pickRun = function () {
-    const P = window.PERYEAR; if (!P) return null;
+    const P = window.PERYEAR; if (!P) { try { window.__loadPerYear && window.__loadPerYear(); } catch (e) {} return null; }
     const s = state.soil, R = P.runs, vff = VFF_VALUES[state.vffIdx], cap = CAP_VALUES[state.capIdx], tc = TC_VALUES[state.tcIdx], z = Z_VALUES[state.zIdx], trig = Math.abs(trigAbsFor(s));
     const has = id => R[id] ? { id, r: R[id] } : null;
     let pick = null, why = '';
@@ -361,7 +361,7 @@
   add('crop', 'C1 Crop water requirement', '#2F7F3E', drawCrop, 'Crop coefficients, daily water need and the irrigation schedule of the chosen crop', 'Each crop has its own season, crop coefficient and rooting depth: the same soil and weather give very different irrigation needs.');
   { const c1 = SCENES.find(s => s.id === 'crop'); if (c1) c1.h = 1760; }   // its full height from the first frame (the schedule fills in as the daily model runs)
   // peryear.js is large: load it after the engine has started
-  if (!window.PERYEAR) { const sc = document.createElement('script'); sc.src = 'peryear.js'; sc.onload = () => { try { refresh(); } catch (e) {} }; document.body.appendChild(sc); }
+  if (!window.PERYEAR) { const ld = () => { if (window.PERYEAR || window.__pyLoading) return; window.__pyLoading = 1; const sc = document.createElement('script'); sc.src = 'peryear.js'; sc.onload = () => { try { refresh(); } catch (e) {} }; document.body.appendChild(sc); }; window.__loadPerYear = ld; setTimeout(() => { (window.requestIdleCallback || setTimeout)(ld, { timeout: 4000 }); }, 3500); }   // read after the first picture is drawn, in a moment of rest
   SCENES.forEach(sc => { if (GRPN[sc.id]) { try { sceneButton(sc); } catch (e) { } } });
   window.PLUSKIT = { frame, yAxis, nice, TF, legend, header, badge, fmt, mean, sd, add, YRS, sceneButton };   // the chart kit, used by plus_daisy.js
 })();

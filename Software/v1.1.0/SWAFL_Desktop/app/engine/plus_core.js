@@ -96,7 +96,7 @@
   // the seasonal weight of the daily model. Daily rain: Daisy's precipitation of each year, on 28 % wet days.
   const wE = doy => 0.35 + 0.65 * 0.5 * (1 + Math.sin(2 * Math.PI * (doy - 100) / DPY)); let wEs = 0; for (let k = 0; k < DPY; k++) wEs += wE(k);
   function yearlyForcing() {
-    const P = window.PERYEAR; let et0 = null, pr = null;
+    if (!window.PERYEAR) { try { window.__loadPerYear && window.__loadPerYear(); } catch (e) {} } const P = window.PERYEAR; let et0 = null, pr = null;
     if (P) { const r = P.runs['E0_' + state.soil + '_Rainfed']; if (r) { et0 = r.ET0.slice(); pr = r.P.slice(); } }
     if (!et0) { et0 = new Array(NYR).fill(878); pr = new Array(NYR).fill(464); }
     const g = RAIN_VALUES[state.rainIdx], dT = TEMP_VALUES[state.tempIdx];
