@@ -26,34 +26,19 @@ try {
     // on Windows without administrator rights or Developer Mode the signing tools cannot be unpacked ("Cannot create symbolic link ... A required privilege is not held by the client"); the program does not need them
     console.log('\nThe build stopped (often "Cannot create symbolic link", a Windows privilege). Trying again without the code-signing tools, which SWAFL does not need ...');
     try { fs.rmSync(path.join(__dirname, 'dist'), { recursive: true, force: true }); } catch (e) {}
-    run('npx electron-builder --win portable nsis dir -c.win.signAndEditExecutable=false');
+    run('npx electron-builder --win nsis -c.win.signAndEditExecutable=false');
   }
 } catch (e) { console.error('\nBuild failed. Read the message above (see README: Troubleshooting). If you typed npm run get_app, the name is get-app (a hyphen).'); process.exit(1); }
 
-const exe = path.join(__dirname, 'dist', 'SWAFL.exe'), setup = path.join(__dirname, 'dist', 'SWAFL-Setup.exe'), unp = path.join(__dirname, 'dist', 'win-unpacked');
-if (!fs.existsSync(exe) && !fs.existsSync(path.join(unp, 'SWAFL.exe'))) { console.error('SWAFL.exe was not created. Check the messages above.'); process.exit(1); }
-
-// Desktop folder (works with OneDrive-redirected desktops too)
+// One file only: dist/SWAFL.exe. Double-click it once: it installs SWAFL for you (no questions, no administrator rights), puts SWAFL on the Desktop
+// and in the Start menu, and starts it. From then on use the SWAFL shortcut: the program opens at once.
+const exe = path.join(__dirname, 'dist', 'SWAFL.exe');
+if (!fs.existsSync(exe)) { console.error('SWAFL.exe was not created. Check the messages above.'); process.exit(1); }
+// keep only the one file in dist, so there is nothing else to choose from
+try { fs.readdirSync(path.join(__dirname, 'dist')).forEach(n => { if (n !== 'SWAFL.exe') fs.rmSync(path.join(__dirname, 'dist', n), { recursive: true, force: true }); }); } catch (e) { }
 let desktop = path.join(os.homedir(), 'Desktop');
-try { desktop = execSync('powershell -NoProfile -Command "[Environment]::GetFolderPath(\'Desktop\')"').toString().trim() || desktop; } catch (e) {}
-
-// The program is installed once as an unpacked folder and started from a shortcut: it opens at once.
-// (The single-file SWAFL.exe unpacks the whole program, Daisy and the manual included, into a temporary folder at every start, which takes a long time.)
-let started = false;
-if (fs.existsSync(path.join(unp, 'SWAFL.exe'))) {
-  try {
-    const home = path.join(process.env.LOCALAPPDATA || path.join(os.homedir(), 'AppData', 'Local'), 'SWAFL');
-    fs.rmSync(home, { recursive: true, force: true }); fs.cpSync(unp, home, { recursive: true });
-    const lnk = path.join(desktop, 'SWAFL.lnk'), target = path.join(home, 'SWAFL.exe');
-    execSync('powershell -NoProfile -Command "$s=(New-Object -ComObject WScript.Shell).CreateShortcut(\'' + lnk + '\'); $s.TargetPath=\'' + target + '\'; $s.WorkingDirectory=\'' + home + '\'; $s.IconLocation=\'' + target + ',0\'; $s.Save()"');
-    try { const old = path.join(desktop, 'SWAFL.exe'); if (fs.existsSync(old)) fs.rmSync(old, { force: true }); } catch (e) {}   // the slow single-file copy of an earlier build
-    console.log('\nSWAFL installed in: ' + home + '\nShortcut on your Desktop: ' + lnk); spawn(target, [], { detached: true, stdio: 'ignore' }).unref(); started = true;
-  } catch (e) { console.log('\nThe quick installation did not complete (' + e.message + '). Using the single-file SWAFL.exe instead.'); }
-}
-if (!started) {
-  const target = path.join(desktop, 'SWAFL.exe');
-  try { fs.copyFileSync(exe, target); console.log('\nSWAFL.exe copied to your Desktop: ' + target); spawn(target, [], { detached: true, stdio: 'ignore' }).unref(); }
-  catch (e) { console.log('\nCould not copy to the Desktop. Your app is here: ' + exe); spawn(exe, [], { detached: true, stdio: 'ignore' }).unref(); }
-}
-if (fs.existsSync(setup)) console.log('Installer (Start menu + shortcut): ' + setup);
-console.log('\nDone: SWAFL ' + require('./package.json').version + '. From now on just double-click SWAFL on your Desktop - no code needed.');
+try { desktop = execSync('powershell -NoProfile -Command "[Environment]::GetFolderPath(\'Desktop\')"').toString().trim() || desktop; } catch (e) { }
+try { fs.copyFileSync(exe, path.join(desktop, 'SWAFL.exe')); console.log('\nSWAFL.exe (the one file) is also on your Desktop: ' + path.join(desktop, 'SWAFL.exe')); } catch (e) { console.log('\nSWAFL.exe is here: ' + exe); }
+console.log('Installing and starting SWAFL ' + require('./package.json').version + ' ...');
+spawn(exe, [], { detached: true, stdio: 'ignore' }).unref();
+console.log('\nDone. SWAFL installs itself in a few seconds and opens. Afterwards open it from the SWAFL icon on the Desktop or in the Start menu.');

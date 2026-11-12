@@ -87,8 +87,7 @@ npm run dist
 
 Result in `dist/`:
 
-* `SWAFL.exe` – portable, double-click to run (no install)
-* `SWAFL-Setup.exe` – installer with desktop shortcut
+* `SWAFL.exe` – the one file: double-click it once; it installs SWAFL (no questions, no administrator rights), adds the SWAFL icon to the Desktop and the Start menu, and starts it
 
 Without a Windows PC: push this folder to GitHub — the workflow `.github/workflows/build-exe.yml` builds `SWAFL.exe` on a Windows runner. Open the repository's **Actions** tab → *Build SWAFL.exe* → download the artifact (or the file attached to a Release when you push a tag such as `v1.0.0`).
 

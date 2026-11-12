@@ -31,7 +31,6 @@ jobs:
           name: SWAFL-windows
           path: |
             ${{ env.PROJ }}/dist/SWAFL.exe
-            ${{ env.PROJ }}/dist/SWAFL-Setup.exe
       - name: Attach to release
         if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
         uses: softprops/action-gh-release@v2
@@ -40,11 +39,9 @@ jobs:
           name: SWAFL Desktop ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || 'v1.0.0' }}
           body: |
             Download area for the SWAFL desktop app (Windows).
-            - `SWAFL.exe`: portable app, double-click to run.
-            - `SWAFL-Setup.exe`: installer.
+            - `SWAFL.exe`: the one file. Double-click it once: it installs SWAFL, adds the SWAFL icon to the Desktop and the Start menu, and starts it.
             - `SWAFL_Desktop.zip`: the source; build it yourself with `npm.cmd install` then `npm.cmd run get-app`.
             The exe files are unsigned, so Windows SmartScreen may ask: More info, then Run anyway.
           files: |
             Software/v1.1.0/SWAFL_Desktop.zip
             ${{ env.PROJ }}/dist/SWAFL.exe
-            ${{ env.PROJ }}/dist/SWAFL-Setup.exe

@@ -9,7 +9,7 @@
   "scripts": {
     "start": "electron .",
     "web": "node serve.js",
-    "dist": "electron-builder --win portable nsis dir",
+    "dist": "electron-builder --win nsis",
     "dist:dir": "electron-builder --dir",
     "dist:mac": "electron-builder --mac dmg",
     "get-app": "node get-app.js",
@@ -42,22 +42,19 @@
     "win": {
       "icon": "build/icon.ico",
       "target": [
-        "portable",
         "nsis"
       ]
     },
-    "portable": {
-      "artifactName": "SWAFL.exe"
-    },
     "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "artifactName": "SWAFL-Setup.exe",
+      "oneClick": true,
+      "perMachine": false,
+      "runAfterFinish": true,
+      "artifactName": "SWAFL.exe",
       "installerIcon": "build/icon.ico",
       "uninstallerIcon": "build/icon.ico",
       "createDesktopShortcut": true,
-      "shortcutName": "SWAFL",
-      "license": "build/EULA.txt"
+      "createStartMenuShortcut": true,
+      "shortcutName": "SWAFL"
     },
     "extraResources": [
       {
