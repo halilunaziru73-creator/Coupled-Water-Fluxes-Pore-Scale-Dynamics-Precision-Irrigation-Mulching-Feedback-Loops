@@ -155,7 +155,7 @@ input[type=range]{accent-color:#0A246A}
 .dlist{margin:4px 0 2px;padding:0 4px 0 18px;font-size:12px;line-height:1.45;color:#1b1f23}.dlist li{margin:0 0 3px}
 /* field sketch */
 .skwrap{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start}
-.skleft{flex:1 1 560px;min-width:320px}.skright{flex:1 1 300px;min-width:280px;display:flex;flex-direction:column;gap:6px}
+.skleft{flex:1 1 640px;min-width:320px}.skright{flex:0 1 320px;min-width:280px;display:flex;flex-direction:column;gap:6px}
 .skbar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:6px}.skbar label{display:flex;gap:4px;align-items:center}
 .skcv{position:relative}.skcv canvas{width:100%;height:auto;display:block;box-shadow:inset 1px 1px #808080,inset -1px -1px #fff;border:1px solid #9AA5B1;touch-action:none;cursor:crosshair}
 .skinfo{margin-top:5px;font-size:12px;color:#1b1f23}

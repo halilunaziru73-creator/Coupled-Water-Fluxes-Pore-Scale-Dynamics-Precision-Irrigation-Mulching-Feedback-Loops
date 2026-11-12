@@ -3,7 +3,7 @@
    inputs of the irrigation design, ready to run. Also the comparison of the three systems on the present field. */
 'use strict';
 const Sketch = (() => {
-  const CW = 640, CH = 440, GRID = 32;                          // canvas and grid square (px)
+  let CW = 640, CH = 440; const GRID = 32;                          // canvas and grid square (px)
   const SC = [1, 2, 5, 10, 20, 25, 50, 100];
   const S = {                                                   // the sketch and the answers, kept while the program runs
     pts: [], src: null, inlet: null, scale: 10, mode: 'field', step: 0,
@@ -69,15 +69,15 @@ const Sketch = (() => {
     for (let y = Math.floor(y0 / GRID) * GRID; y <= h; y += GRID) { c.beginPath(); c.moveTo(x0, y); c.lineTo(w, y); c.stroke(); }
     const P = S.pts, g = geom();
     if (P.length) {
-      c.fillStyle = 'rgba(126,170,90,0.20)'; c.strokeStyle = '#2E7D32'; c.lineWidth = 2; c.beginPath(); P.forEach((p, i) => i ? c.lineTo(p.x, p.y) : c.moveTo(p.x, p.y)); if (P.length > 2) c.closePath(); c.fill(); c.stroke();
+      c.fillStyle = 'rgba(126,170,90,0.20)'; c.strokeStyle = '#2E7D32'; c.lineWidth = 2 / V.z; c.beginPath(); P.forEach((p, i) => i ? c.lineTo(p.x, p.y) : c.moveTo(p.x, p.y)); if (P.length > 2) c.closePath(); c.fill(); c.stroke();
     }
     if (g) layout(c, g);
     // corners and side lengths (click a length to type it)
-    P.forEach((p, i) => { const on = hover && hover.t === 'pt' && hover.i === i; c.fillStyle = on ? '#C62828' : '#2E7D32'; c.beginPath(); c.arc(p.x, p.y, on ? 7 : 5, 0, Math.PI * 2); c.fill(); c.strokeStyle = '#fff'; c.lineWidth = 1.5; c.stroke(); });
-    if (P.length > 1) P.forEach((p, i) => { if (P.length < 3 && i === P.length - 1) return; const q = P[(i + 1) % P.length], t = fmt(m(len(p, q))) + ' m', [mx, my] = sideLab(i); c.font = 'bold 11px Tahoma,Arial,sans-serif'; const tw = c.measureText(t).width + 10; const on = hover && hover.t === 'side' && hover.i === i; c.fillStyle = on ? '#FFF4C2' : 'rgba(255,255,255,0.95)'; c.strokeStyle = on ? '#C62828' : '#9AA5B1'; c.lineWidth = 1; c.fillRect(mx - tw / 2, my - 9, tw, 18); c.strokeRect(mx - tw / 2 + 0.5, my - 8.5, tw - 1, 17); c.fillStyle = '#1B1F23'; c.textAlign = 'center'; c.fillText(t, mx, my + 4); c.textAlign = 'left'; });
+    P.forEach((p, i) => { const on = hover && hover.t === 'pt' && hover.i === i; c.fillStyle = on ? '#C62828' : '#2E7D32'; c.beginPath(); c.arc(p.x, p.y, (on ? 7 : 5) / V.z, 0, Math.PI * 2); c.fill(); c.strokeStyle = '#fff'; c.lineWidth = 1.5 / V.z; c.stroke(); });
+    if (P.length > 1) P.forEach((p, i) => { if (P.length < 3 && i === P.length - 1) return; const q = P[(i + 1) % P.length], t = fmt(m(len(p, q))) + ' m', [mx, my] = sideLab(i); c.save(); c.translate(mx, my); c.scale(1 / V.z, 1 / V.z); c.font = 'bold 11px Tahoma,Arial,sans-serif'; const tw = c.measureText(t).width + 10; const on = hover && hover.t === 'side' && hover.i === i; c.fillStyle = on ? '#FFF4C2' : 'rgba(255,255,255,0.95)'; c.strokeStyle = on ? '#C62828' : '#9AA5B1'; c.lineWidth = 1; c.fillRect(-tw / 2, -9, tw, 18); c.strokeRect(-tw / 2 + 0.5, -8.5, tw - 1, 17); c.fillStyle = '#1B1F23'; c.textAlign = 'center'; c.fillText(t, 0, 4); c.restore(); c.textAlign = 'left'; });
     // water source and inlet
-    if (S.src) { const on = hover && hover.t === 'src'; c.fillStyle = '#1F5FA8'; c.beginPath(); c.arc(S.src.x, S.src.y, on ? 11 : 9, 0, Math.PI * 2); c.fill(); c.fillStyle = '#fff'; c.font = 'bold 10px Tahoma,Arial,sans-serif'; c.textAlign = 'center'; c.fillText('W', S.src.x, S.src.y + 3.5); c.fillStyle = '#1F5FA8'; c.font = 'bold 10px Tahoma,Arial,sans-serif'; c.fillText({ well: 'well', borehole: 'borehole', canal: 'canal', river: 'river', tank: 'pond or tank' }[S.srcType] || 'source', S.src.x, S.src.y + 22); c.textAlign = 'left'; }
-    if (g && S.src) { const on = hover && hover.t === 'inlet'; c.fillStyle = '#F2C230'; c.strokeStyle = '#5A4500'; c.lineWidth = 1.5; c.beginPath(); c.rect(g.inl.x - (on ? 7 : 5), g.inl.y - (on ? 7 : 5), on ? 14 : 10, on ? 14 : 10); c.fill(); c.stroke(); }
+    if (S.src) { const on = hover && hover.t === 'src'; c.fillStyle = '#1F5FA8'; c.beginPath(); c.arc(S.src.x, S.src.y, (on ? 11 : 9) / V.z, 0, Math.PI * 2); c.fill(); c.fillStyle = '#fff'; c.font = 'bold ' + (10 / V.z) + 'px Tahoma,Arial,sans-serif'; c.textAlign = 'center'; c.fillText('W', S.src.x, S.src.y + 3.5 / V.z); c.fillStyle = '#1F5FA8'; c.font = 'bold ' + (10 / V.z) + 'px Tahoma,Arial,sans-serif'; c.fillText({ well: 'well', borehole: 'borehole', canal: 'canal', river: 'river', tank: 'pond or tank' }[S.srcType] || 'source', S.src.x, S.src.y + 22 / V.z); c.textAlign = 'left'; }
+    if (g && S.src) { const on = hover && hover.t === 'inlet'; c.fillStyle = '#F2C230'; c.strokeStyle = '#5A4500'; c.lineWidth = 1.5 / V.z; c.beginPath(); c.rect(g.inl.x - (on ? 7 : 5) / V.z, g.inl.y - (on ? 7 : 5) / V.z, (on ? 14 : 10) / V.z, (on ? 14 : 10) / V.z); c.fill(); c.stroke(); }
     // the moving cursor: crosshair and its position in metres
     if (cursor && !drag && !panning) { c.strokeStyle = 'rgba(198,40,40,0.35)'; c.lineWidth = 1 / V.z; c.setLineDash([3 / V.z, 3 / V.z]); c.beginPath(); c.moveTo(cursor.x, y0); c.lineTo(cursor.x, h); c.moveTo(x0, cursor.y); c.lineTo(w, cursor.y); c.stroke(); c.setLineDash([]); }
     // what stays on the screen: the grid square, the scale bar, the zoom and the cursor position
@@ -95,16 +95,16 @@ const Sketch = (() => {
     c.save(); c.beginPath(); Pp.forEach((p, i) => i ? c.lineTo(p.x, p.y) : c.moveTo(p.x, p.y)); c.closePath(); c.clip();
     const along = (t, s) => ({ x: s * g.ux - t * g.uy, y: s * g.uy + t * g.ux });
     let spM = sysS === 'drip' ? S.row : sysS === 'spr' ? S.sprSl : sysS === 'furrow' ? S.row : sysS === 'border' ? 10 : 20, sp = px(spM), k = Math.max(1, Math.ceil(5 / sp));
-    if (sysS === 'basin') { const n = Math.max(1, Math.round(m(g.hi - g.lo) / 40)); c.strokeStyle = '#8A6A3A'; c.lineWidth = 2; for (let i = 1; i < n; i++) { const s = g.lo + (g.hi - g.lo) * i / n, a = along(g.wlo - 5, s), b = along(g.whi + 5, s); c.beginPath(); c.moveTo(a.x, a.y); c.lineTo(b.x, b.y); c.stroke(); } }
-    c.lineWidth = sysS === 'drip' ? 1.2 : sysS === 'spr' ? 1.6 : 1.4; c.strokeStyle = sysS === 'drip' ? '#1F5FA8' : sysS === 'spr' ? '#3A6EA5' : sysS === 'furrow' ? '#6B4F2A' : '#8A6A3A';
+    if (sysS === 'basin') { const n = Math.max(1, Math.round(m(g.hi - g.lo) / 40)); c.strokeStyle = '#8A6A3A'; c.lineWidth = 2 / V.z; for (let i = 1; i < n; i++) { const s = g.lo + (g.hi - g.lo) * i / n, a = along(g.wlo - 5, s), b = along(g.whi + 5, s); c.beginPath(); c.moveTo(a.x, a.y); c.lineTo(b.x, b.y); c.stroke(); } }
+    c.lineWidth = (sysS === 'drip' ? 1.2 : sysS === 'spr' ? 1.6 : 1.4) / V.z; c.strokeStyle = sysS === 'drip' ? '#1F5FA8' : sysS === 'spr' ? '#3A6EA5' : sysS === 'furrow' ? '#6B4F2A' : '#8A6A3A';
     let n = 0; for (let t = g.wlo + sp / 2; t < g.whi; t += sp * k) { const a = along(t, g.lo - 5), b = along(t, g.hi + 5); c.beginPath(); c.moveTo(a.x, a.y); c.lineTo(b.x, b.y); c.stroke(); n++; }
-    if (sysS === 'spr') { const ss = px(S.sprSs), kk = Math.max(1, Math.ceil(6 / ss)); c.fillStyle = '#1F5FA8'; for (let t = g.wlo + sp / 2; t < g.whi; t += sp * k) for (let s = g.lo + ss / 2; s < g.hi; s += ss * kk) { const q = along(t, s); if (!inside(q.x, q.y)) continue; c.beginPath(); c.arc(q.x, q.y, 2.2, 0, Math.PI * 2); c.fill(); c.strokeStyle = 'rgba(31,95,168,0.12)'; c.beginPath(); c.arc(q.x, q.y, ss * kk * 0.65, 0, Math.PI * 2); c.stroke(); } }
+    if (sysS === 'spr') { const ss = px(S.sprSs), kk = Math.max(1, Math.ceil(6 / ss)); c.fillStyle = '#1F5FA8'; for (let t = g.wlo + sp / 2; t < g.whi; t += sp * k) for (let s = g.lo + ss / 2; s < g.hi; s += ss * kk) { const q = along(t, s); if (!inside(q.x, q.y)) continue; c.beginPath(); c.arc(q.x, q.y, 2.2 / V.z, 0, Math.PI * 2); c.fill(); c.strokeStyle = 'rgba(31,95,168,0.12)'; c.beginPath(); c.arc(q.x, q.y, ss * kk * 0.65, 0, Math.PI * 2); c.stroke(); } }
     c.restore();
     // submain (or head ditch) along the inlet end of the run, mainline from the source
     const SM = submainSeg(g), sEnd = SM.sEnd, a = SM.a, b = SM.b;
-    c.strokeStyle = S.sys === 'sid' ? '#3A7BD5' : '#0A246A'; c.lineWidth = S.sys === 'sid' ? 6 : 3.5; c.beginPath(); c.moveTo(a.x, a.y); c.lineTo(b.x, b.y); c.stroke();
-    if (S.src) { c.strokeStyle = '#0A246A'; c.lineWidth = 3; c.setLineDash([8, 4]); c.beginPath(); c.moveTo(S.src.x, S.src.y); c.lineTo(g.inl.x, g.inl.y); c.stroke(); c.setLineDash([]); }
-    const lab = (t, x, y, col) => { c.font = 'bold 10px Tahoma,Arial,sans-serif'; const tw = c.measureText(t).width + 8; c.fillStyle = 'rgba(255,255,255,0.92)'; c.fillRect(x - tw / 2, y - 10, tw, 15); c.fillStyle = col || '#0A246A'; c.textAlign = 'center'; c.fillText(t, x, y + 1); c.textAlign = 'left'; };
+    c.strokeStyle = S.sys === 'sid' ? '#3A7BD5' : '#0A246A'; c.lineWidth = (S.sys === 'sid' ? 6 : 3.5) / V.z; c.beginPath(); c.moveTo(a.x, a.y); c.lineTo(b.x, b.y); c.stroke();
+    if (S.src) { c.strokeStyle = '#0A246A'; c.lineWidth = 3 / V.z; c.setLineDash([8 / V.z, 4 / V.z]); c.beginPath(); c.moveTo(S.src.x, S.src.y); c.lineTo(g.inl.x, g.inl.y); c.stroke(); c.setLineDash([]); }
+    const lab = (t, x, y, col) => { c.save(); c.translate(x, y); c.scale(1 / V.z, 1 / V.z); c.font = 'bold 10px Tahoma,Arial,sans-serif'; const tw = c.measureText(t).width + 8; c.fillStyle = 'rgba(255,255,255,0.92)'; c.fillRect(-tw / 2, -10, tw, 15); c.fillStyle = col || '#0A246A'; c.textAlign = 'center'; c.fillText(t, 0, 1); c.restore(); };
     if (S.src) { const dx = g.inl.x - S.src.x, dy = g.inl.y - S.src.y, dl = Math.hypot(dx, dy) || 1, nx = -dy / dl, ny = dx / dl, sg = ny > 0 ? -1 : 1; lab('mainline ' + fmt(g.main) + ' m', (S.src.x + g.inl.x) / 2 + nx * 16 * sg, (S.src.y + g.inl.y) / 2 + ny * 16 * sg + 4); }
     { const ln = m(len(a, b)), d0 = len(g.inl, a) > len(g.inl, b) ? 0.3 : 0.7, q = { x: a.x + (b.x - a.x) * d0, y: a.y + (b.y - a.y) * d0 }, dl = len(a, b) || 1; let nx = -(b.y - a.y) / dl, ny = (b.x - a.x) / dl; if (!inside(q.x + nx * 6, q.y + ny * 6)) { nx = -nx; ny = -ny; } lab((S.sys === 'sid' ? 'head ditch ' : 'submain ') + fmt(ln) + ' m', q.x + nx * 18, q.y + ny * 18 + 4); }
     const mid = along((g.wlo + g.whi) / 2, (g.lo + g.hi) / 2);
@@ -299,7 +299,14 @@ const Sketch = (() => {
   }
 
   // what the CAD tools may use of the sketch
-  const CADAPI = { get S() { return S; }, V, CW, CH, GRID, m, px, get cv() { return cv; }, draw: () => draw(), pushH: () => pushH(), undo: () => undo(), info: () => info(), finishCur: () => { if (S.cur) finishCur(); } };
+  const CADAPI = { get S() { return S; }, V, get CW() { return CW; }, get CH() { return CH; }, GRID, m, px, get cv() { return cv; }, draw: () => draw(), pushH: () => pushH(), undo: () => undo(), info: () => info(), finishCur: () => { if (S.cur) finishCur(); } };
+  // the drawing area takes all the room the window offers (width of its column, height of the window)
+  function fitCanvas(keep) {
+    if (!cv) return; const box = cv.parentNode, w = Math.floor(box.clientWidth); if (w < 200) return;
+    const top = box.getBoundingClientRect().top, h = Math.max(340, Math.min(Math.round(w * 0.9), Math.floor(window.innerHeight - top - 150)));
+    if (w === CW && h === CH) return; const ow = CW, oh = CH; CW = w; CH = h; cv.width = CW * 2; cv.height = CH * 2;
+    if (keep) { V.x -= (CW - ow) / 2 / V.z; V.y -= (CH - oh) / 2 / V.z; } draw();
+  }
   // ------------------------------------------------------------------ the window
   function open() {
     LIST = E.json("({crops:Object.keys(CROPS).map(function(k){return [k,CROPS[k].label]}),soils:DATA.soils.map(function(k){return [k,DATA.soil_labels[k]]}),crop:state.crop,soil:state.soil,rows:Object.fromEntries(Object.keys(CROPS).map(function(k){var r=(typeof IRCROP!=='undefined'&&IRCROP[k])||{};return [k,Math.max(0.2,r.row||0.75)]})),sys:SID.sys,lift:IRX.lift,Qs:DRP.Qs})") || { crops: [], soils: [], rows: {} };
@@ -312,7 +319,7 @@ const Sketch = (() => {
       '<div class="skright"><div class="seg skst" id="skSteps">' + STEPS.map((s, i) => '<button data-s="' + i + '">' + (i + 1) + '. ' + s + '</button>').join('') + '</div><div id="skQ" class="skq"></div>' +
       '<div class="skbtns"><button class="btn" id="skBack">Back</button><button class="btn" id="skNext">Next question</button></div></div></div>',
       full: true, buttons: [{ label: 'Turn the sketch into the design', pri: true, act: () => apply() }, { label: 'Close' }] });
-    cv = document.getElementById('skCv'); wire(); if (window.SketchCAD) { SketchCAD.init(CADAPI); SketchCAD.mount(document.getElementById('skCadHost')); } setTimeout(() => { const P2 = S.pts.concat(S.src ? [S.src] : []); if (P2.some(p => p.x < 0 || p.y < 0 || p.x > CW || p.y > CH)) fitView(); }, 0);
+    cv = document.getElementById('skCv'); fitCanvas(false); { let t = 0; const rs = () => { clearTimeout(t); t = setTimeout(() => { if (!document.body.contains(cv)) { window.removeEventListener('resize', rs); return; } fitCanvas(true); }, 60); }; window.addEventListener('resize', rs); if (window.ResizeObserver) new ResizeObserver(rs).observe(cv.parentNode); } wire(); if (window.SketchCAD) { SketchCAD.init(CADAPI); SketchCAD.mount(document.getElementById('skCadHost')); } setTimeout(() => { const P2 = S.pts.concat(S.src ? [S.src] : []); if (P2.some(p => p.x < 0 || p.y < 0 || p.x > CW || p.y > CH)) fitView(); }, 0);
     document.getElementById('skZin').onclick = () => zoomAt(1.25); document.getElementById('skZout').onclick = () => zoomAt(1 / 1.25); document.getElementById('skFit').onclick = fitView;
     document.getElementById('skMap').onclick = () => { if (typeof FieldMap !== 'undefined') FieldMap.open(); };
     { const bar = document.getElementById('skMode'); Object.keys(OBJ).forEach(k => { const b = document.createElement('button'); b.dataset.m = k; b.textContent = OBJ[k][0].split(' /')[0]; b.title = OBJ[k][0] + (OBJ[k][2] === 'rect' ? ': click two opposite corners' : OBJ[k][2] === 'poly' ? ': click the corners, double-click or click the first corner to finish' : OBJ[k][2] === 'line' ? ': click the points of the pipe along its route; click its last point again (the dead end), click any other pipe, double-click or press Enter to finish; the diameter is chosen in the list that appears' : ': click to place'); b.style.borderBottom = '3px solid ' + OBJ[k][1]; if (S.mode === k) b.className = 'on'; bar.appendChild(b); }); bar.style.flexWrap = 'wrap'; }
