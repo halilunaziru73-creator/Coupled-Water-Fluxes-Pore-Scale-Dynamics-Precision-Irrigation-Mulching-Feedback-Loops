@@ -104,9 +104,9 @@ breach it. You can end it at any time by uninstalling and deleting all copies
 of the Software. Sections 4, 6, 8, 9 and 11 continue after termination.
 
 11. GENERAL TERMS
-This Agreement is governed by the laws of Greece, where the Author is based,
-without regard to conflict-of-law rules, and subject to any mandatory
-consumer-protection law of your country of residence. If any part of this
+This Agreement is governed by the law that applies to the Author, without regard to
+conflict-of-law rules, and subject to any mandatory consumer-protection law
+of the place where you live. If any part of this
 Agreement is found unenforceable, the rest stays in force. This Agreement,
 together with the MIT Licence for the source code, is the entire agreement
 about the Software. The Author may publish a new version of this Agreement
