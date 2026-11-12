@@ -1,5 +1,5 @@
-SWAFL — END USER LICENCE AGREEMENT
-Version 1.0 · 9 November 2026
+SWAFL - END USER LICENCE AGREEMENT
+Version 1.0 - 9 November 2026
 Copyright (c) 2026 Naziru Halilu
 
 1. ACCEPTANCE OF THIS AGREEMENT
@@ -71,8 +71,7 @@ expressly give you. Your own data, projects and results belong to you.
 
 If you publish work that uses the Software, please cite it as: Halilu, N.
 (2026). SWAFL: soil-water and irrigation decision-support suite, version
-1.1.0, and the associated publications and Zenodo records listed at
-https://halilunaziru73-creator.github.io/.
+1.1.0. Zenodo record: https://zenodo.org/records/23043626
 
 7. UPDATES AND SUPPORT
 The Software may be updated, changed or discontinued at any time. The Author
@@ -114,7 +113,7 @@ with a new release; you will be asked to accept it before you continue using
 that release.
 
 12. CONTACT
-Naziru Halilu · halilunaziru73@gmail.com
+Naziru Halilu - halilunaziru73@gmail.com
 
 BY CLICKING "I ACCEPT" OR BY INSTALLING OR USING THE SOFTWARE YOU AGREE TO THIS AGREEMENT.
 

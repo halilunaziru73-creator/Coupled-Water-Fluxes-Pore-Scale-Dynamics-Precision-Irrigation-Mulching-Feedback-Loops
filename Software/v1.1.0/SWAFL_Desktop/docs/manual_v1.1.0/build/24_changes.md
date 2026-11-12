@@ -305,3 +305,4 @@
 - Field sketch to design: the drawing area fills the whole window and resizes with it; side lengths, labels, corner points and pipe lines keep a constant, readable size at every zoom.
 - Field sketch to design: the drawing text keeps a normal size when the window text size (A+) is enlarged.
 - Field sketch to design: Grid and Snap switches (keys G and N), Save sketch and Open sketch, automatic restore of the last sketch, Import field (KML, GeoJSON, CSV), Export (PNG, DXF, CSV), a keyboard and mouse help, and a manual page for each step. The desktop app shows a notice when a newer version is published.
+- Licence agreement: corrected the characters in the installer's licence page and replaced the record link with the Zenodo record https://zenodo.org/records/23043626.
