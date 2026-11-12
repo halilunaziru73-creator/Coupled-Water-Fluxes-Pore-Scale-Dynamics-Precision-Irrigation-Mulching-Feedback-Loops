@@ -302,8 +302,9 @@ const Sketch = (() => {
   const CADAPI = { get S() { return S; }, V, get CW() { return CW; }, get CH() { return CH; }, GRID, m, px, get cv() { return cv; }, draw: () => draw(), pushH: () => pushH(), undo: () => undo(), info: () => info(), finishCur: () => { if (S.cur) finishCur(); } };
   // the drawing area takes all the room the window offers (width of its column, height of the window)
   function fitCanvas(keep) {
-    if (!cv) return; const box = cv.parentNode, w = Math.floor(box.clientWidth); if (w < 200) return;
-    const top = box.getBoundingClientRect().top, h = Math.max(340, Math.min(Math.round(w * 0.9), Math.floor(window.innerHeight - top - 150)));
+    if (!cv) return; const box = cv.parentNode, lw = box.clientWidth, r = box.getBoundingClientRect(); if (lw < 120 || !r.width) return;
+    const z = r.width / lw, s = Math.max(1, Math.min(z, 1.25));      // z: how much the window zoom (A+ / A-) and screen scaling enlarge this area; s: text size kept
+    const w = Math.round(lw * z / s), h = Math.max(300, Math.round(Math.min(w * 0.9, (window.innerHeight - r.top - 150) / s)));
     if (w === CW && h === CH) return; const ow = CW, oh = CH; CW = w; CH = h; cv.width = CW * 2; cv.height = CH * 2;
     if (keep) { V.x -= (CW - ow) / 2 / V.z; V.y -= (CH - oh) / 2 / V.z; } draw();
   }

@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="swafl-build" content="20261112u">
-<script>/* web version: if the browser holds an older copy of this page, fetch the new one once (the desktop program is not affected) */(function(){if(!/^https?:/.test(location.protocol))return;try{if(sessionStorage.getItem('swafl.rf'))return}catch(e){}fetch(location.pathname,{cache:'reload'}).then(function(r){return r.text()}).then(function(t){var m=t.match(/name="swafl-build" content="([^"]+)"/);if(m&&m[1]!=='20261112u'){try{sessionStorage.setItem('swafl.rf','1')}catch(e){}location.replace(location.pathname+'?r='+Date.now()+location.hash)}}).catch(function(){})})()</script>
+<meta name="swafl-build" content="20261112v">
+<script>/* web version: if the browser holds an older copy of this page, fetch the new one once (the desktop program is not affected) */(function(){if(!/^https?:/.test(location.protocol))return;try{if(sessionStorage.getItem('swafl.rf'))return}catch(e){}fetch(location.pathname,{cache:'reload'}).then(function(r){return r.text()}).then(function(t){var m=t.match(/name="swafl-build" content="([^"]+)"/);if(m&&m[1]!=='20261112v'){try{sessionStorage.setItem('swafl.rf','1')}catch(e){}location.replace(location.pathname+'?r='+Date.now()+location.hash)}}).catch(function(){})})()</script>
 <meta charset="utf-8">
 <title>SWAFL 1.1.0 - Soil Water Atmosphere Feedback Layout</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" type="image/png" href="assets/logo-64.png">
 <link rel="stylesheet" href="vendor/leaflet.css">
-<link rel="stylesheet" href="css/swafl.css?v=20261112u"><link rel="stylesheet" href="css/touch.css?v=20261112u">
-<link rel="stylesheet" href="css/classic.css?v=20261112u">
+<link rel="stylesheet" href="css/swafl.css?v=20261112v"><link rel="stylesheet" href="css/touch.css?v=20261112v">
+<link rel="stylesheet" href="css/classic.css?v=20261112v">
 <link rel="stylesheet" href="css/daisydesign.css?v=20261101t">
 </head>
 <body class="nolayer"><div id="bootVeil" style="position:fixed;inset:0;z-index:2147482000;background:#E8EEF5;display:flex;flex-direction:column;align-items:center;justify-content:center;font:bold 14px Tahoma,Segoe UI,sans-serif;color:#0A246A"><img src="assets/logo.svg" width="72" height="72" alt=""><div style="margin-top:10px;font-size:20px">SWAFL</div><div style="margin-top:6px;font-weight:normal">Starting ...</div></div>
@@ -49,7 +49,7 @@
       <div id="viewBar"></div>
       <div id="centerRow">
       <div id="engineHost">
-        <iframe id="engine" title="SWAFL simulation window"></iframe><script>(function(){var u="engine/engine.html?app=1&v=20261112u"+(/^https?:/.test(location.protocol)?"&t="+Date.now():"")+"#scene=field";
+        <iframe id="engine" title="SWAFL simulation window"></iframe><script>(function(){var u="engine/engine.html?app=1&v=20261112v"+(/^https?:/.test(location.protocol)?"&t="+Date.now():"")+"#scene=field";
 /* the engine loads after the licence window is closed, so that the window answers at once; with no licence window it starts straight away */
 window.__eulaOpen=false;var started=false,veil=null;
 window.SWAFLStartEngine=function(){if(started)return;started=true;var f=document.getElementById("engine");
@@ -58,7 +58,7 @@ window.SWAFLStartEngine=function(){if(started)return;started=true;var f=document
 window.addEventListener("swafl-eula-accepted",window.SWAFLStartEngine);
 window.addEventListener("swafl-eula-ready",window.SWAFLStartEngine);
 /* while the licence window is read, the engine files are only fetched into the cache (no code is run, so the window stays quick); the engine then opens at once */
-function warm(){try{if(!window.fetch)return;fetch("engine/engine.html?v=20261112u").then(function(r){return r.text()}).then(function(t){var l=[],re=/<(?:script[^>]+src|link[^>]+href)="([^"#]+)"/g,m;while((m=re.exec(t)))if(!/^(https?:|data:)/.test(m[1]))l.push("engine/"+m[1]);var i=0;(function nx(){if(i>=l.length)return;var u=l[i++];fetch(u).then(function(r){return r.arrayBuffer()}).catch(function(){}).then(function(){setTimeout(nx,30)})})()}).catch(function(){})}catch(e){}}
+function warm(){try{if(!window.fetch)return;fetch("engine/engine.html?v=20261112v").then(function(r){return r.text()}).then(function(t){var l=[],re=/<(?:script[^>]+src|link[^>]+href)="([^"#]+)"/g,m;while((m=re.exec(t)))if(!/^(https?:|data:)/.test(m[1]))l.push("engine/"+m[1]);var i=0;(function nx(){if(i>=l.length)return;var u=l[i++];fetch(u).then(function(r){return r.arrayBuffer()}).catch(function(){}).then(function(){setTimeout(nx,30)})})()}).catch(function(){})}catch(e){}}
 window.addEventListener("load",function(){if(window.__eulaOpen)setTimeout(warm,300);else window.SWAFLStartEngine()})})()</script>
         <div id="emptyStage"><img src="assets/logo.svg" width="72" height="72" alt=""><div><b>No layer open</b><br>Click a layer in the Layers panel to open it here.</div></div>
         <div id="loading"><div class="spl"><img src="assets/logo.svg" width="84" height="84" alt=""><h1>SWAFL</h1><p class="spt">Soil Water, Irrigation and Field Decision Workbench</p><div class="spbar"><i></i></div><p class="spm">Starting the simulation engine, soils, crops and weather&hellip;</p><div class="spd"><span>Soil water balance</span><span>Irrigation scheduling</span><span>Crop water use</span><span>Weather driven</span></div></div></div>
@@ -101,32 +101,32 @@ window.addEventListener("load",function(){if(window.__eulaOpen)setTimeout(warm,3
     <span id="stCase">&nbsp;</span>
     <span class="grow"></span>
     <span id="stPlay">Stopped</span><span class="sep"></span>
-    <span>SWAFL <span id="stVer">1.1.0 · build 12 Nov 2026 (u)</span></span>
+    <span>SWAFL <span id="stVer">1.1.0 · build 12 Nov 2026 (v)</span></span>
   </footer>
 </div>
 
 <div id="modalRoot"></div>
 <div id="ctxMenu" class="menu" hidden></div>
 
-<script src="js/eula.js?v=20261112u"></script>
+<script src="js/eula.js?v=20261112v"></script>
 <script src="js/guard.js?v=20261103a"></script>
 <script src="js/uiscale.js?v=20261101m"></script>
 <script src="js/scitext.js?v=20261105a"></script>
 <script src="js/localdate.js?v=20261101m"></script>
 <script src="js/bridge.js?v=20261110b"></script>
-<script src="js/tapfx.js?v=20261112u"></script>
-<script src="js/wheelfix.js?v=20261112u"></script>
-<script src="js/ui.js?v=20261112u"></script>
+<script src="js/tapfx.js?v=20261112v"></script>
+<script src="js/wheelfix.js?v=20261112v"></script>
+<script src="js/ui.js?v=20261112v"></script>
 <script src="js/layers.js?v=20261107a"></script>
 <script src="js/toolbox.js?v=20261101m"></script>
 <script src="js/soiltriangle.js?v=20261110b"></script><script src="js/props.js?v=20261109u"></script>
 <script src="js/scifig.js?v=20261103b"></script><script src="js/dashboard.js?v=20261103b"></script>
-<script src="js/layerfig.js?v=20261101m"></script><script src="js/outputs.js?v=20261112u"></script>
+<script src="js/layerfig.js?v=20261101m"></script><script src="js/outputs.js?v=20261112v"></script>
 <script src="js/palette.js?v=20261101m"></script>
 <script src="js/weatherui.js?v=20261101m"></script>
 <script src="vendor/leaflet.js"></script>
 <script src="vendor/geotiff.js"></script>
-<script src="js/sketchcad.js?v=20261108b"></script><script src="js/sketch.js?v=20261112u"></script>
+<script src="js/sketchcad.js?v=20261108b"></script><script src="js/sketch.js?v=20261112v"></script>
 <script src="js/fieldsym.js?v=20261101m"></script>
 <script src="js/fieldsite.js?v=20261101n"></script>
 <script src="js/fieldmap.js?v=20261101r"></script>
@@ -134,6 +134,6 @@ window.addEventListener("load",function(){if(window.__eulaOpen)setTimeout(warm,3
 <script src="js/fieldprec.js?v=20261101s"></script>
 <script src="js/fieldgeo.js?v=20261103b"></script>
 <script src="js/daisyload.js?v=20261110b"></script>
-<script src="js/glossary.js?v=20261110b"></script><script src="js/main.js?v=20261112u"></script><script>(function(){var v=document.getElementById("bootVeil");if(v)v.remove()})()</script>
+<script src="js/glossary.js?v=20261110b"></script><script src="js/main.js?v=20261112v"></script><script>(function(){var v=document.getElementById("bootVeil");if(v)v.remove()})()</script>
 </body>
 </html>

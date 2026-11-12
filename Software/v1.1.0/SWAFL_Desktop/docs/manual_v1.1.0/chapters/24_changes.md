@@ -320,3 +320,4 @@
 - Every window with a manual section (field sketch, field on the map, weather, reports, keyboard shortcuts, Daisy and others) has a Manual, page N button in its title bar that opens the manual at that page.
 - Build: only one file is made, dist/SWAFL.exe. Double-click it once: a setup window opens with the usual pages (welcome, for you only or for everyone, licence, folder, Install, Finish; for you only needs no administrator rights), installs SWAFL, adds the SWAFL icon to the Desktop and the Start menu, and starts it. There is no second SWAFL-Setup file and no portable copy to choose between.
 - Field sketch to design: the drawing area fills the whole window and resizes with it; side lengths, labels, corner points and pipe lines keep a constant, readable size at every zoom.
+- Field sketch to design: the drawing text keeps a normal size when the window text size (A+) is enlarged.
