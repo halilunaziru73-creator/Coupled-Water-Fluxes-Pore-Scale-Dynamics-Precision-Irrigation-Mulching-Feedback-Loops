@@ -57,6 +57,7 @@ function show(force){
   d.querySelector('#eula-cancel').addEventListener('click',decline);
   var pv=d.querySelector('#eula-prev');if(pv)pv.addEventListener('click',function(){step--;render()});
   if(nx)nx.addEventListener('click',function(){step++;render()});
+  if(step===3)setTimeout(function(){try{if(window.__eulaOpen)window.dispatchEvent(new Event('swafl-eula-ready'))}catch(e){}},500);
   var go=d.querySelector('#eula-go');if(go)go.addEventListener('click',function(){set({v:VER,t:new Date().toISOString()});close();try{window.dispatchEvent(new Event('swafl-eula-accepted'))}catch(e){}});
   if(step===1){
    var acc=d.querySelector('#eula-acc'),rej=d.querySelector('#eula-rej');

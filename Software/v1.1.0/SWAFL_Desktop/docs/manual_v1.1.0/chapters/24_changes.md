@@ -310,3 +310,4 @@
 - Daisy Processes tab: a link to the Daisy paper (Hansen et al., 2012) now sits beside the figure selector.
 - Daisy Processes tab: one single figure. Every other component of Daisy (crop, management, water, heat, nitrogen, carbon, chemicals, numerics) is now a box of the same map, grouped by module beside the part it belongs to; the second figure choice and the paper link were removed.
 - Daisy Processes tab: click any added component and its relationship is drawn on the map, a dotted line to the box of Fig. 1 it belongs to, with that box framed in red (one line at a time, so none cross).
+- Start-up: while the licence window is read, the engine files are fetched into the cache in the background, and the engine starts on the last page of the window ('Ready to start'), so the layers open at once after Start.
