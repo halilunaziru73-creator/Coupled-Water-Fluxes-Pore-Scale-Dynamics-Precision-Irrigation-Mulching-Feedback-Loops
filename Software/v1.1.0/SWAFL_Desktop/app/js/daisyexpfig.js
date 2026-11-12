@@ -155,7 +155,7 @@ window.DaisyExpFig = (() => {
       const cols = ps.length > 1 ? Math.min(2, ps.length) : 1; grid.style.cssText = 'display:grid;grid-template-columns:repeat(' + cols + ',minmax(0,1fr));gap:6px'; card.dataset.cols = cols;
       grid.innerHTML = ps.map((p, k) => '<div style="min-width:0"><canvas data-xc="sp_' + f.id + '_' + k + '"></canvas></div>').join(''); cards['sp_' + f.id] = card;
       const draw = () => ps.forEach((p, k) => { const cv = grid.querySelector('[data-xc="sp_' + f.id + '_' + k + '"]'); if (cv) { try { p.draw(cv); } catch (e) { console.warn(f.id, e); } } });
-      redo['sp_' + f.id] = draw; draw();
+      redo['sp_' + f.id] = () => { if (card._drawn) draw(); }; card._draw = draw; card._drawn = false;   // drawn when its process is clicked on the map, not before
       if (window.DaisyFigKit && DaisyFigKit.procStrip) DaisyFigKit.procStrip(card, procsOf(f), c.runs, 'Drawn from the runs of this experiment.');
     });
     host.querySelector('[data-ef="all"]').onclick = () => { mm.off = {}; c.again(); }; host.querySelector('[data-ef="none"]').onclick = () => { all.forEach(f => { mm.off[f.id] = 1; }); c.again(); };
@@ -169,7 +169,8 @@ window.DaisyExpFig = (() => {
   // the figures that depend on a process of the map
   M.focus = function (host, procId) { host.querySelectorAll('.dzfig[data-procs]').forEach(card => { const on = !procId || card.dataset.procs.split(',').indexOf(procId) >= 0; card.style.opacity = on ? '' : '0.28'; card.style.outline = procId && on ? '2px solid #c0392b' : ''; }); };
   // only the figures of the process chosen on the map (all of them when none is chosen)
-  M.only = function (host, procId) { host.querySelectorAll('.dzfig[data-procs]').forEach(card => { const on = !procId || card.dataset.procs.split(',').indexOf(procId) >= 0; card.style.display = on ? '' : 'none'; card.style.opacity = ''; card.style.outline = ''; }); };
+  M.only = function (host, procId, all) { host.querySelectorAll('.dzfig[data-procs]').forEach(card => { const on = !!all || (!!procId && card.dataset.procs.split(',').indexOf(procId) >= 0); card.style.display = on ? '' : 'none'; card.style.opacity = ''; card.style.outline = ''; if (on && !card._drawn && card._draw) { card._drawn = true; try { card._draw(); } catch (e) { console.warn(e); } } }); };
+  M.count = function (host) { const n = {}; host.querySelectorAll('.dzfig[data-procs]').forEach(card => card.dataset.procs.split(',').filter(Boolean).forEach(p => { n[p] = (n[p] || 0) + 1; })); return n; };
   M.titleOf = titleOf; M.procsOf = procsOf;
   return M;
 })();
