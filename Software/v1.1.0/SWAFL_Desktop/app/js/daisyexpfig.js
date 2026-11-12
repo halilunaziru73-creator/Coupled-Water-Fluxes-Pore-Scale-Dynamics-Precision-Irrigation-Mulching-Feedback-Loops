@@ -105,6 +105,8 @@ window.DaisyExpFig = (() => {
   // does the experiment hold what a figure needs?
   function usable(f, c, rows) {
     const E = X(); if (f.r && !rows.some(r => isFinite(r.r[f.r]))) return false; const d = pick(rows, f.where); if (!d.length) return false; if (f.k === 'runs' || f.k === 'main') return f.k === 'runs' ? rows.length > 1 && rows.length <= 150 : c.fids.some(id => E.levels(d, id).length > 1);
+    // a response against a factor needs the factor at two or more levels: one level gives a lone bar, which says nothing
+    if (f.x && !/^(runs|main|surface|effects|cfate)$/.test(f.k) && !f.perRun && E.levels(d, f.x).length < 2) return false;
     const has = id => !id || E.levels(d, id).length > 0; if (!has(f.x) || !has(f.y) || !has(f.c) || !has(f.p)) return false;
     if (f.k === 'runs') return rows.length > 1 && rows.length <= 150; if (f.k === 'main') return c.fids.some(id => E.levels(d, id).length > 1);
     if (f.k === 'surface') return E.levels(d, f.x).length > 1 && E.levels(d, f.y).length > 1; if (f.k === 'effects') return c.fids.filter(id => E.levels(d, id).length > 1).length > 1;
@@ -166,6 +168,8 @@ window.DaisyExpFig = (() => {
   };
   // the figures that depend on a process of the map
   M.focus = function (host, procId) { host.querySelectorAll('.dzfig[data-procs]').forEach(card => { const on = !procId || card.dataset.procs.split(',').indexOf(procId) >= 0; card.style.opacity = on ? '' : '0.28'; card.style.outline = procId && on ? '2px solid #c0392b' : ''; }); };
+  // only the figures of the process chosen on the map (all of them when none is chosen)
+  M.only = function (host, procId) { host.querySelectorAll('.dzfig[data-procs]').forEach(card => { const on = !procId || card.dataset.procs.split(',').indexOf(procId) >= 0; card.style.display = on ? '' : 'none'; card.style.opacity = ''; card.style.outline = ''; }); };
   M.titleOf = titleOf; M.procsOf = procsOf;
   return M;
 })();

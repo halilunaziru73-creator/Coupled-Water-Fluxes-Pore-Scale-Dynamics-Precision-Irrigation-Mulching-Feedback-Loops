@@ -9,6 +9,7 @@ const { listen } = require('./serve');
 try {
   ['ignore-gpu-blocklist', 'enable-gpu-rasterization', 'enable-zero-copy', 'disable-renderer-backgrounding', 'disable-background-timer-throttling'].forEach(f => app.commandLine.appendSwitch(f));
   app.commandLine.appendSwitch('enable-features', 'CanvasOopRasterization');
+  app.commandLine.appendSwitch('disable-features', 'CalculateNativeWinOcclusion');   // Windows no longer works out which window covers which, a cause of stalls when windows are moved
   app.commandLine.appendSwitch('js-flags', '--max-old-space-size=4096');
 } catch (e) { }
 

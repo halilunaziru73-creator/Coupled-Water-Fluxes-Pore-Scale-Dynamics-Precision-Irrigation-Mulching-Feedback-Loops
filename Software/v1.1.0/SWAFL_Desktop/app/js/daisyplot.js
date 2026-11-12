@@ -71,6 +71,8 @@ window.DaisyPlot = (() => {
     (o.bands || []).forEach(b => b.x.forEach((x, i) => { if (isFinite(x) && isFinite(b.lo[i]) && isFinite(b.hi[i])) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, b.lo[i]); y1 = Math.max(y1, b.hi[i]); } }));
     if (!isFinite(x0)) { g.fillStyle = '#666'; g.textAlign = 'left'; g.fillText(o.empty || 'This log holds no values for this figure.', 60, F.top + 40); cv._geo = null; return null; }
     if (series.some(s => s.bars) && y0 > 0) y0 = 0; if (o.zero && y0 > 0) y0 = 0;
+    // a quantity that does not change (the same value in every year and run): a centred axis and a note, not a line on the border of an empty frame
+    const flat = y1 === y0 && !(o.hlines || []).length; const flatV = y0; if (flat) { const dd = Math.abs(y0) > 0 ? Math.abs(y0) * 0.5 : 1; y0 -= dd; y1 += dd; if (o.ylo == null && !o.zero && y0 < 0 && flatV >= 0) y0 = Math.min(y0, -dd * 0.2); }
     let ny = nice(y0, y1 === y0 ? y0 + 1 : y1, 5); if (o.ylo != null) ny = Object.assign(nice(o.ylo, o.yhi != null ? o.yhi : ny.hi, 5), { lo: o.ylo }); if (o.yhi != null) ny.hi = o.yhi; if (o.ylo != null || o.yhi != null) ny.t = nice(ny.lo, ny.hi, 5).t.filter(v => v >= ny.lo - 1e-9 && v <= ny.hi + 1e-9);
     if (!o.time && x1 > x0 && (o.xint || series.some(s => s.pts))) { const pd = (x1 - x0) * 0.04; x0 -= pd; x1 += pd; }
     if (x1 <= x0) { x0 -= 0.5; x1 += 0.5; if (o.time) { x0 -= 432e5; x1 += 432e5; } }
@@ -101,6 +103,7 @@ window.DaisyPlot = (() => {
     if (o.cbar) colourbar(g, L + pw + 20, T + 8, 13, Math.max(60, ph - 16), o.cbar);
     if (!o.noLegend) legend(g, items, w, T + ph + (o.xt ? 56 : 38), o);
     cv._csv = () => { const rows = [['series', o.time ? 'date' : 'x', 'value']]; series.forEach(q => q.x.forEach((x, i) => { if (isFinite(x) && isFinite(q.y[i])) rows.push([q.name || '', o.time ? dstr(x) : x, q.y[i]]); })); return rows; };
+    if (flat) { g.save(); g.font = '12px ' + FONT; g.fillStyle = '#444'; g.textAlign = 'left'; g.fillText('Constant: ' + (Math.abs(flatV) >= 1e4 || (flatV !== 0 && Math.abs(flatV) < 1e-3) ? flatV.toExponential(2) : +flatV.toPrecision(4)) + (o.yt && /\(/.test(o.yt) ? ' ' + o.yt.replace(/^[^(]*\(|\).*$/g, '') : '') + ' in every year and run', L + 8, T + 16); g.restore(); }
     const geo = { X, Y, x0, x1, L, T, pw, ph, series, tm: !!o.time }; cv._geo = geo; hover(cv); return geo;
   }
   function hover(cv) {
