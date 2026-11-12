@@ -4,7 +4,7 @@
 'use strict';
 (() => {
   const D = DaisyUI, IO = window.DaisyIO, esc = D.esc, K = () => D.kit;
-  const st = { sel: 'water', src: null, view: 'orig' };
+  const st = { sel: 'water', src: null, view: 'all' };
   // colours of the groups, a spectral set
   const GC = { drive: '#5e4fa2', water: '#3288bd', heat: '#66c2a5', nitrogen: '#e6c200', carbon: '#f46d43', crop: '#4d9221' };
   const GN = { drive: 'Drivers', water: 'Water', heat: 'Heat', nitrogen: 'Nitrogen', carbon: 'Carbon and organic matter', crop: 'Crop' };
@@ -57,7 +57,7 @@
   X.forEach(p => { const pr = P.find(q => q.id === p.pid), all = pr ? pr.figs : [], f = FK[p.key] ? all.filter(q => FK[p.key].test(q.t)) : []; p.figs = FG[p.key] || (f.length ? f : all); });
   // opt: { marks: { F:{proc:[factor ids]}, R:{proc:[response ids]}, factors:[{id,ps}], resp:[ids] }, names:{id:text}, sel:proc|null, extra:true }
   function svg(opt) {
-    opt = opt || {};
+    opt = Object.assign({}, opt || {}, { all: true });
     const o = [], T = (x, y, t, a, sz, c, w, rot) => o.push('<text x="' + x + '" y="' + y + '" text-anchor="' + (a || 'middle') + '" font-size="' + (sz || 9.5) + '" fill="' + (c || '#111') + '"' + (w ? ' font-weight="' + w + '"' : '') + (rot ? ' transform="rotate(' + rot + ' ' + x + ' ' + y + ')"' : '') + ' font-family="Cambria,Georgia,serif" stroke="#fff" stroke-width="2.6" paint-order="stroke" stroke-linejoin="round" style="pointer-events:none">' + esc(t) + '</text>');
     const L = (pts, k) => { const dash = k === 'out' ? ' stroke-dasharray="5 3"' : k === 'info' ? ' stroke-dasharray="1.5 2.5"' : k === 'mod' ? ' stroke-dasharray="6 3 1.5 3"' : ''; o.push('<polyline points="' + pts.map(q => q.join(',')).join(' ') + '" fill="none" stroke="' + (k === 'blue' ? '#3b6fa5' : '#222') + '" stroke-width="' + (k === 'blue' ? 2.2 : 1.1) + '"' + dash + (k === 'none' ? '' : ' marker-end="url(#dzAr)"') + '/>'); };
     const sel = id => opt.sel === null ? false : id === (opt.sel || st.sel), pos = {};
@@ -121,13 +121,21 @@
     // the standalone figure: every other component of Daisy drawn as a box of Fig. 1 itself, in the style of the boxes of the map
     // (the same rectangles, colours, serif labels and line weights), in rows under the profile, one row group for each module
     if (opt.all) {
-      const rest = X.filter(q => XMAP.indexOf(q.n) < 0), bx0 = 238, cw = 172, bh = 17, gap = 6; let y = base;
-      T(108, y + 4, 'Other components of Daisy, by module:', 'start', 9.5, '#111', 600); y += 14;
-      Object.keys(XG).forEach(gk => { const L2 = rest.filter(q => q.gk === gk); if (!L2.length) return; const rows = Math.ceil(L2.length / 4);
-        T(108, y + 12, XG[gk][0].replace(/ \(actions of the farmer\)/, ''), 'start', 9, '#111');
-        L2.forEach((q, k) => { const x = bx0 + (k % 4) * cw, yy = y + Math.floor(k / 4) * (bh + gap), sz = q.n.length > 34 ? 7.6 : q.n.length > 28 ? 8 : 8.5; box(q.id, x, yy, cw - 8, bh, q.n, XG[gk][2], { sz }); });
-        y += rows * (bh + gap) + 5; });
-      T(108, y + 8, 'Click any box to read what Daisy does there and to draw its figures.', 'start', 8.5, '#444'); base = y + 22; extraH = base - 660; }
+      // every other component of Daisy as a box of the figure, in the style of its boxes, beside the part of the model it belongs to:
+      // crop and management in a column at the right (next to the crop and the organic-matter inputs), the rest in blocks under the ground line
+      // (below the soil column, the nitrogen and solute boxes, and the carbon pools), each block grouped by module
+      const rest = X.filter(q => XMAP.indexOf(q.n) < 0), bh = 17, gap = 5;
+      const sizeOf = q => q.n.length > 34 ? 7.6 : q.n.length > 28 ? 8 : 8.5;
+      const colBlock = (gks, x0, y0, cols, cw, title) => { let y = y0; if (title) { T(x0, y + 4, title, 'start', 9.5, '#111', 600); y += 14; }
+        gks.forEach(gk => { const L2 = rest.filter(q => q.gk === gk); if (!L2.length) return; T(x0, y + 7, XG[gk][0].replace(/ \(actions of the farmer\)/, ''), 'start', 8.5, '#333', 600); y += 12;
+          L2.forEach((q, k) => box(q.id, x0 + (k % cols) * (cw + 6), y + Math.floor(k / cols) * (bh + gap), cw, bh, q.n, XG[gk][2], { sz: sizeOf(q) })); y += Math.ceil(L2.length / cols) * (bh + gap) + 4; });
+        return y; };
+      // right column, from the top: the crop, then the management
+      colBlock(['C', 'M'], 946, 24, 1, 182, 'Also in the model:');
+      // under the ground line: three blocks
+      const y0 = base; T(108, y0 + 2, 'The other components of Daisy, by module (click any box):', 'start', 9.5, '#111', 600);
+      const e1 = colBlock(['W', 'H'], 108, y0 + 12, 2, 150, ''), e2 = colBlock(['N', 'O', 'K'], 436, y0 + 12, 2, 150, ''), e3 = colBlock(['S'], 764, y0 + 12, 2, 150, '');
+      base = Math.max(e1, e2, e3) + 8; extraH = base - 660; }
     if (opt.marks) {
       const M = opt.marks, nm = opt.names || {}, ctr = id => { const r = (pos[id] || [])[0]; return r ? [r[0] + r[2] / 2, r[1] + r[3] / 2] : null; }, top = [];
       const ring = (id, col, grow) => (pos[id] || []).forEach(r => o.push('<rect x="' + (r[0] - grow) + '" y="' + (r[1] - grow) + '" width="' + (r[2] + 2 * grow) + '" height="' + (r[3] + 2 * grow) + '" rx="5" fill="' + (col === '#e8710a' ? 'rgba(232,113,10,0.13)' : 'rgba(0,114,178,0.13)') + '" stroke="' + col + '" stroke-width="2.6" style="pointer-events:none"/>'));
@@ -147,10 +155,10 @@
       o.push('<text x="515" y="' + (py + ph - 7) + '" text-anchor="middle" font-size="9.5" fill="#555" font-family="Cambria,Georgia,serif">Orange frames: the processes the factors act on. Blue frames: the processes the results come from. Click a box to light up the figures that depend on it.</text>');
     }
     extraH = Math.max(extraH, 38);
-    return '<svg viewBox="84 14 850 ' + (646 + extraH) + '" style="width:100%;max-width:1000px;height:auto;display:block;background:#fff;border:1px solid #d6dae0;border-radius:6px" role="img" aria-label="Schematic overview of the main processes in Daisy' + (opt.marks ? ', marked for this experiment' : '') + '">' + o.join('') + '</svg>';
+    return '<svg viewBox="84 14 1110 ' + (646 + extraH) + '" style="width:100%;max-width:1180px;height:auto;display:block;background:#fff;border:1px solid #d6dae0;border-radius:6px" role="img" aria-label="Schematic overview of the main processes in Daisy' + (opt.marks ? ', marked for this experiment' : '') + '">' + o.join('') + '</svg>';
   }
   const XMAP = ["Added organic matter (AOM)", "Ammonia volatilisation", "Biopore flow", "Canopy interception", "Canopy structure", "Crop nitrogen uptake", "Denitrification", "Evaporation from litter", "Evaporation from ponded water", "Evaporation from the canopy", "Fertilisation and deposition", "Harvest", "Immobilisation", "Infiltration", "Mineralisation", "Nitrate leaching", "Nitrification", "Nitrous oxide emission", "Partitioning of assimilate", "Percolation and capillary rise", "Rainfall", "Residues and rhizodeposition", "Respiration", "Runoff", "Senescence and stress", "Snow melt and snow evaporation", "Snowfall", "Soil evaporation", "Symbiotic nitrogen fixation", "Throughfall and drip", "Transpiration"];
-  function chips() { if (st.view === 'all') return '<div style="margin:6px 0;font-size:12px;color:#444">Every component of Daisy is a box of this figure: the flows and pools of Fig. 1 above the ground line, every other component below it, grouped by module.</div>'; return '<div style="margin:6px 0;font-size:12px;color:#444">Also in Daisy, not drawn in Fig. 1: ' + ['temp', 'bio', 'deni'].map(id => '<button class="dzPc" data-p="' + id + '" style="margin-right:6px' + (st.sel === id ? ';font-weight:700;outline:2px solid #d7191c' : '') + '">' + esc(byId(id).n) + '</button>').join('') + '</div>' + '<details style="margin:4px 0;font-size:12px"><summary style="cursor:pointer">More components of Daisy that have no arrow in the figure (' + X.filter(q => XMAP.indexOf(q.n) < 0).length + ')</summary>' + X.filter(q => XMAP.indexOf(q.n) < 0).map(q => '<button class="dzPc" data-p="' + q.id + '" style="margin:2px 4px 2px 0;' + (st.sel === q.id ? 'font-weight:700;outline:2px solid #d7191c' : '') + '">' + esc(q.n) + '</button>').join('') + '</details>'; }
+  function chips() { if (1) return '<div style="margin:6px 0;font-size:12px;color:#444">Every component of Daisy is a box of this one figure, each placed beside the part of the model it belongs to. Click any box.</div>'; return '<div style="margin:6px 0;font-size:12px;color:#444">Also in Daisy, not drawn in Fig. 1: ' + ['temp', 'bio', 'deni'].map(id => '<button class="dzPc" data-p="' + id + '" style="margin-right:6px' + (st.sel === id ? ';font-weight:700;outline:2px solid #d7191c' : '') + '">' + esc(byId(id).n) + '</button>').join('') + '</div>' + '<details style="margin:4px 0;font-size:12px"><summary style="cursor:pointer">More components of Daisy that have no arrow in the figure (' + X.filter(q => XMAP.indexOf(q.n) < 0).length + ')</summary>' + X.filter(q => XMAP.indexOf(q.n) < 0).map(q => '<button class="dzPc" data-p="' + q.id + '" style="margin:2px 4px 2px 0;' + (st.sel === q.id ? 'font-weight:700;outline:2px solid #d7191c' : '') + '">' + esc(q.n) + '</button>').join('') + '</details>'; }
   // the data the figures are drawn from: the last scenario run, the runs of the Experiments tab, or the logs in the Files list; nothing is drawn without them
   function sources() {
     const out = [], SU = window.DaisyScenUI, XU = window.DaisyExpUI;
@@ -167,7 +175,7 @@
   function html(arg) {
     if (arg && byId(arg)) st.sel = arg;
     return '<div class="dzcard"><b>The processes of the Daisy model</b> redrawn from Fig. 1 of the Daisy paper. Click a box (snowpack, intercepted water, litter, pond, soil water, biopores, drain, NO3, NH4, Plant-N, organs, residues, photosynthesis, AOM, SMB, SOM) to read what Daisy does there and to draw its figures from the logs of a standard run of the rotation.</div>' +
-      (window.DaisyScenUI ? window.DaisyScenUI.strip() : '') + '<div class="dzrow" style="justify-content:center"><label>Figure</label><select id="dzPview"><option value="orig"' + (st.view === 'orig' ? ' selected' : '') + '>Fig. 1 of the Daisy paper (original)</option><option value="all"' + (st.view === 'all' ? ' selected' : '') + '>Fig. 1 with every component of Daisy (standalone)</option></select><span class="pnote"><a href="https://doi.org/10.13031/2013.42244" target="_blank" rel="noopener" title="Open the Daisy paper">Open the paper</a>: Hansen, S., Abrahamsen, P., Petersen, C.T., Styczen, M. (2012). Daisy: Model use, calibration, and validation. Transactions of the ASABE 55(4): 1317-1335.</span><span class="pnote">Save the figure shown:</span><button class="btn" id="dzPsvg">Save as SVG (vector)</button><button class="btn" id="dzPpng">Save as PNG, 300 dpi</button><button class="btn" id="dzPpng6">PNG, 600 dpi</button></div>' + '<div id="dzPmap" style="display:flex;justify-content:center">' + svg({ complete: 1, all: st.view === 'all' }) + '</div><div id="dzPchips" style="text-align:center">' + chips() + '</div><div id="dzPdet"></div>';
+      (window.DaisyScenUI ? window.DaisyScenUI.strip() : '') + '<div class="dzrow" style="justify-content:center"><span class="pnote">Save the figure shown:</span><button class="btn" id="dzPsvg">Save as SVG (vector)</button><button class="btn" id="dzPpng">Save as PNG, 300 dpi</button><button class="btn" id="dzPpng6">PNG, 600 dpi</button></div>' + '<div id="dzPmap" style="display:flex;justify-content:center">' + svg({ complete: 1, all: true }) + '</div><div id="dzPchips" style="text-align:center">' + chips() + '</div><div id="dzPdet"></div>';
   }
   async function detail() {
     const p = byId(st.sel), box = document.getElementById('dzPdet'); if (!box) return;
@@ -208,7 +216,7 @@
     Object.keys(F).forEach(id => F[id].forEach(f => { if (pos.f[f] != null && pos.p[id] != null) arrow(cx.f[1], pos.f[f], cx.p[0] - (R[id] ? 6 : 2), pos.p[id], '#e8710a', 'dzSo'); }));
     Object.keys(R).forEach(id => R[id].forEach(r => { if (pos.r[r] != null && pos.p[id] != null) arrow(cx.p[1] + (F[id] ? 6 : 2), pos.p[id], cx.r[0] - 2, pos.r[r], '#0072b2', 'dzSb'); }));
     o.push('<text x="' + W / 2 + '" y="' + (H - 16) + '" text-anchor="middle" font-size="10" fill="#555" ' + FT + '>Fills as in Fig. 1 of Daisy: blue water, green heat, crop and residues, beige nitrogen, brown organic matter. Orange: what the factors act on; blue: where the results come from. Click a process to light up its figures.</text>');
-    return '<svg viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;max-width:1000px;height:auto;display:block;background:#fff;border:1px solid #d6dae0;border-radius:6px" role="img" aria-label="The processes of Daisy in this experiment">' + o.join('') + '</svg>';
+    return '<svg viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;max-width:1180px;height:auto;display:block;background:#fff;border:1px solid #d6dae0;border-radius:6px" role="img" aria-label="The processes of Daisy in this experiment">' + o.join('') + '</svg>';
   }
   async function drawFigs(p, figs, getLog, stale, what) {
     let ok = 0, bad = 0;
@@ -238,12 +246,12 @@
     const cols = d.cols.slice(4); const n = panels(cv, card, d, cols, title, note, false); if (!n.drawn) throw new Error('every column is zero in this run'); note.textContent = 'Annual totals per season of the standard run (a season starts on 1 April; the label is the year in which it starts).' + (n.zeros.length ? ' Left out because they are zero throughout: ' + n.zeros.join(', ') + '.' : '');
   }
   function bind() {
-    const map = document.getElementById('dzPmap'); const act = id => { if (!id || !byId(id)) return; st.sel = id; map.innerHTML = svg({ complete: 1, all: st.view === 'all' }); document.getElementById('dzPchips').innerHTML = chips(); wire(); detail(); if (id.indexOf('x:') === 0) { const d = document.getElementById('dzPdet'); if (d && d.scrollIntoView) d.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } };
+    const map = document.getElementById('dzPmap'); const act = id => { if (!id || !byId(id)) return; st.sel = id; map.innerHTML = svg({ complete: 1, all: true }); document.getElementById('dzPchips').innerHTML = chips(); wire(); detail(); if (id.indexOf('x:') === 0) { const d = document.getElementById('dzPdet'); if (d && d.scrollIntoView) d.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } };
     const wire = () => { document.querySelectorAll('.dzPc').forEach(b => b.onclick = () => act(b.dataset.p)); map.querySelectorAll('.dzPb[data-p]').forEach(g => { g.onclick = () => act(g.dataset.p); g.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); act(g.dataset.p); } }; }); };
     const svgText = () => { const e = map.querySelector('svg'), c = e.cloneNode(true); c.setAttribute('xmlns', 'http://www.w3.org/2000/svg'); const vb = c.getAttribute('viewBox').split(' ').map(Number); c.setAttribute('width', vb[2]); c.setAttribute('height', vb[3]); c.removeAttribute('style'); c.insertAdjacentHTML('afterbegin', '<rect x="' + vb[0] + '" y="' + vb[1] + '" width="' + vb[2] + '" height="' + vb[3] + '" fill="#fff"/>'); return new XMLSerializer().serializeToString(c); };
     const png = sc => { const t = svgText(), img = new Image(), vb = map.querySelector('svg').getAttribute('viewBox').split(' ').map(Number); img.onload = () => { const cv = document.createElement('canvas'); cv.width = Math.round(vb[2] * sc); cv.height = Math.round(vb[3] * sc); const g = cv.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, cv.width, cv.height); g.drawImage(img, 0, 0, cv.width, cv.height); cv.toBlob(b => { const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = st.view === 'all' ? 'daisy-processes-all-components.png' : 'daisy-processes-fig1.png'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }, 'image/png'); }; img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(t); };
-    const pv = document.getElementById('dzPview'); if (pv) pv.onchange = () => { st.view = pv.value; map.innerHTML = svg({ complete: 1, all: st.view === 'all' }); document.getElementById('dzPchips').innerHTML = chips(); wire(); };
-    const b1 = document.getElementById('dzPsvg'); if (b1) { b1.onclick = () => D.download(st.view === 'all' ? 'daisy-processes-all-components.svg' : 'daisy-processes-fig1.svg', svgText(), 'image/svg+xml'); document.getElementById('dzPpng').onclick = () => png(300 / 96 * 1.2); document.getElementById('dzPpng6').onclick = () => png(600 / 96 * 1.2); }
+    const pv = document.getElementById('dzPview'); if (pv) pv.onchange = () => { st.view = pv.value; map.innerHTML = svg({ complete: 1, all: true }); document.getElementById('dzPchips').innerHTML = chips(); wire(); };
+    const b1 = document.getElementById('dzPsvg'); if (b1) { b1.onclick = () => D.download('daisy-processes.svg', svgText(), 'image/svg+xml'); document.getElementById('dzPpng').onclick = () => png(300 / 96 * 1.2); document.getElementById('dzPpng6').onclick = () => png(600 / 96 * 1.2); }
     wire(); detail(); if (window.DaisyScenUI) window.DaisyScenUI.bindStrip();
   }
   // click on a process anywhere (experiment, scenario, SWAFL layer): what Daisy does there and its figures, drawn from the logs of the runs given

@@ -308,3 +308,4 @@
 - Daisy with weather fetched from the internet (or a file of your own) now runs every year of that weather, in every tab and in the process map. Before, the built-in years (1980 to 2000) left in the options could be cut down to a single year when the weather covered, for example, 2000 to 2026. Years you type that lie inside the weather are still respected.
 - Weather fetched from the internet is kept on the computer in the same compact form as the built-in weather (one 16-bit number per day and variable): about five times smaller, and read back faster.
 - Daisy Processes tab: a link to the Daisy paper (Hansen et al., 2012) now sits beside the figure selector.
+- Daisy Processes tab: one single figure. Every other component of Daisy (crop, management, water, heat, nitrogen, carbon, chemicals, numerics) is now a box of the same map, grouped by module beside the part it belongs to; the second figure choice and the paper link were removed.
