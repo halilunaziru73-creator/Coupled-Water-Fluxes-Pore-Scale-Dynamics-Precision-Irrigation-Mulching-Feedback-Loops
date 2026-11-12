@@ -306,3 +306,4 @@
 - Field sketch to design: the drawing text keeps a normal size when the window text size (A+) is enlarged.
 - Field sketch to design: Grid and Snap switches (keys G and N), Save sketch and Open sketch, automatic restore of the last sketch, Import field (KML, GeoJSON, CSV), Export (PNG, DXF, CSV), a keyboard and mouse help, and a manual page for each step. The desktop app shows a notice when a newer version is published.
 - Licence agreement: corrected the characters in the installer's licence page and replaced the record link with the Zenodo record https://zenodo.org/records/23043626.
+- The desktop app no longer shows the licence a second time: it is accepted once, in the installer. The licence stays available under Help, Licence agreement. The web version still asks on first use.
