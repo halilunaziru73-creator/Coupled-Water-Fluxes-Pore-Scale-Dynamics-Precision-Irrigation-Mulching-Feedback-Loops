@@ -135,6 +135,13 @@
       // under the ground line: three blocks
       const y0 = base; T(108, y0 + 2, 'The other components of Daisy, by module (click any box):', 'start', 9.5, '#111', 600);
       const e1 = colBlock(['W', 'H'], 108, y0 + 12, 2, 150, ''), e2 = colBlock(['N', 'O', 'K'], 436, y0 + 12, 2, 150, ''), e3 = colBlock(['S'], 764, y0 + 12, 2, 150, '');
+      // the relationship of the box that is selected: a dotted information line to the box of Fig. 1 it belongs to, with that box framed
+      // (one line at a time, so no lines cross; the selected box and its parent are the only ones marked)
+      const rel = []; rest.forEach(q => { if (q.id !== st.sel) return; const a = (pos[q.id] || [])[0], b = (pos[q.pid] || [])[0]; if (!a || !b) return; const tx = a[0] + a[2] / 2, ty = a[1];
+        const bx = Math.max(b[0], Math.min(tx, b[0] + b[2])), by = ty < b[1] ? b[1] : (ty > b[1] + b[3] ? b[1] + b[3] : b[1] + b[3] / 2);
+        rel.push('<rect x="' + (b[0] - 3) + '" y="' + (b[1] - 3) + '" width="' + (b[2] + 6) + '" height="' + (b[3] + 6) + '" rx="5" fill="rgba(215,25,28,0.08)" stroke="#d7191c" stroke-width="2.2" style="pointer-events:none"/>');
+        rel.push('<path d="M' + tx + ' ' + ty + ' L' + bx + ' ' + by + '" fill="none" stroke="#d7191c" stroke-width="1.4" stroke-dasharray="2 3" style="pointer-events:none"/>'); });
+      o.push(rel.join(''));
       base = Math.max(e1, e2, e3) + 8; extraH = base - 660; }
     if (opt.marks) {
       const M = opt.marks, nm = opt.names || {}, ctr = id => { const r = (pos[id] || [])[0]; return r ? [r[0] + r[2] / 2, r[1] + r[3] / 2] : null; }, top = [];

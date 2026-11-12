@@ -309,3 +309,4 @@
 - Weather fetched from the internet is kept on the computer in the same compact form as the built-in weather (one 16-bit number per day and variable): about five times smaller, and read back faster.
 - Daisy Processes tab: a link to the Daisy paper (Hansen et al., 2012) now sits beside the figure selector.
 - Daisy Processes tab: one single figure. Every other component of Daisy (crop, management, water, heat, nitrogen, carbon, chemicals, numerics) is now a box of the same map, grouped by module beside the part it belongs to; the second figure choice and the paper link were removed.
+- Daisy Processes tab: click any added component and its relationship is drawn on the map, a dotted line to the box of Fig. 1 it belongs to, with that box framed in red (one line at a time, so none cross).
