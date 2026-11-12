@@ -46,15 +46,21 @@
       ]
     },
     "nsis": {
-      "oneClick": true,
+      "oneClick": false,
       "perMachine": false,
+      "allowElevation": false,
+      "allowToChangeInstallationDirectory": true,
       "runAfterFinish": true,
       "artifactName": "SWAFL.exe",
       "installerIcon": "build/icon.ico",
       "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico",
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "SWAFL"
+      "shortcutName": "SWAFL",
+      "uninstallDisplayName": "SWAFL",
+      "deleteAppDataOnUninstall": false,
+      "license": "build/EULA.txt"
     },
     "extraResources": [
       {
