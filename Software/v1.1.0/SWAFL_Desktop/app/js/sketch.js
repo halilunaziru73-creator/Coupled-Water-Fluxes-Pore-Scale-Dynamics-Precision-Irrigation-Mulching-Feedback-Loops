@@ -30,7 +30,7 @@ const Sketch = (() => {
   const toScr = p => ({ x: (p.x - V.x) * V.z, y: (p.y - V.y) * V.z });
   const len = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
   const m = px => px * S.scale / GRID, px = mm => mm * GRID / S.scale;    // pixels <-> metres
-  const snap = v => Math.round(v / (GRID / 4)) * (GRID / 4);
+  const snap = v => S.snapOn === false ? v : Math.round(v / (GRID / 4)) * (GRID / 4);
   const fmt = (v, d) => (isFinite(v) ? (+v).toFixed(d == null ? 0 : d) : '-');
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
@@ -59,14 +59,15 @@ const Sketch = (() => {
   }
 
   // ------------------------------------------------------------------ drawing
-  function draw() { draw0(); drawObjs(); if (window.SketchCAD) SketchCAD.draw(); }
+  let AT = 0;
+  function draw() { draw0(); drawObjs(); if (window.SketchCAD) SketchCAD.draw(); clearTimeout(AT); AT = setTimeout(autoSave, 900); }
   const cadOn = () => !!window.SketchCAD && String(S.mode).indexOf('cad:') === 0;
   function draw0() {
     if (!cv) return; const c = cv.getContext('2d'), k0 = cv.width / CW, vw = CW / V.z, vh = CH / V.z, w = V.x + vw, h = V.y + vh, x0 = V.x, y0 = V.y;
     c.setTransform(k0, 0, 0, k0, 0, 0); c.fillStyle = '#FBFBF8'; c.fillRect(0, 0, CW, CH);
     c.setTransform(k0 * V.z, 0, 0, k0 * V.z, -V.x * k0 * V.z, -V.y * k0 * V.z); c.strokeStyle = '#E6E4DC'; c.lineWidth = 1 / V.z;
-    for (let x = Math.floor(x0 / GRID) * GRID; x <= w; x += GRID) { c.beginPath(); c.moveTo(x, y0); c.lineTo(x, h); c.stroke(); }
-    for (let y = Math.floor(y0 / GRID) * GRID; y <= h; y += GRID) { c.beginPath(); c.moveTo(x0, y); c.lineTo(w, y); c.stroke(); }
+    if (S.grid !== false) for (let x = Math.floor(x0 / GRID) * GRID; x <= w; x += GRID) { c.beginPath(); c.moveTo(x, y0); c.lineTo(x, h); c.stroke(); }
+    if (S.grid !== false) for (let y = Math.floor(y0 / GRID) * GRID; y <= h; y += GRID) { c.beginPath(); c.moveTo(x0, y); c.lineTo(w, y); c.stroke(); }
     const P = S.pts, g = geom();
     if (P.length) {
       c.fillStyle = 'rgba(126,170,90,0.20)'; c.strokeStyle = '#2E7D32'; c.lineWidth = 2 / V.z; c.beginPath(); P.forEach((p, i) => i ? c.lineTo(p.x, p.y) : c.moveTo(p.x, p.y)); if (P.length > 2) c.closePath(); c.fill(); c.stroke();
@@ -295,7 +296,7 @@ const Sketch = (() => {
     host.querySelectorAll('input,select').forEach(el => el.addEventListener('change', () => { readStep(); if (el.id === 'qSys') showStep(); if (el.id === 'qCrop') { const r = (LIST.rows || {})[S.crop]; if (r) { S.row = r; const q = document.getElementById('qRow'); if (q) q.value = r; } } draw(); }));
     const rb = document.getElementById('qRect'); if (rb) rb.onclick = () => { readStep(); rectangle(); const s2 = document.getElementById('skScale'); if (s2) s2.value = S.scale; draw(); };
     document.getElementById('skBack').disabled = S.step === 0; document.getElementById('skNext').textContent = S.step === STEPS.length - 1 ? 'Back to the start' : 'Next question';
-    draw();
+    stepManual(); draw();
   }
 
   // what the CAD tools may use of the sketch
@@ -308,6 +309,53 @@ const Sketch = (() => {
     if (w === CW && h === CH) return; const ow = CW, oh = CH; CW = w; CH = h; cv.width = CW * 2; cv.height = CH * 2;
     if (keep) { V.x -= (CW - ow) / 2 / V.z; V.y -= (CH - oh) / 2 / V.z; } draw();
   }
+
+  // ------------------------------------------------------------------ files: save, open, import, export, autosave, help
+  const AUTO = 'swafl_sketch_autosave', pickF = accept => new Promise(res => { const i = document.createElement('input'); i.type = 'file'; i.accept = accept; i.onchange = () => { const f = i.files[0]; if (!f) return res(null); const rd = new FileReader(); rd.onload = () => res({ name: f.name, data: rd.result }); rd.readAsText(f); }; i.click(); });
+  const saveObj = () => { const o = { app: 'SWAFL field sketch', v: 1 }; Object.keys(S).forEach(k => { if (k !== 'cur' && k !== 'rect') o[k] = S[k]; }); return JSON.stringify(o); };
+  function loadObj(txt) {
+    const o = JSON.parse(txt); if (!o || !Array.isArray(o.pts)) throw new Error('This file is not a SWAFL field sketch.');
+    delete o.app; delete o.v; Object.assign(S, o); S.cur = null; S.rect = null; HIST.u = []; HIST.r = []; if (window.SketchCAD) SketchCAD.reset();
+    const sc = document.getElementById('skScale'); if (sc) sc.value = S.scale; syncTools(); if (cv) { fitView(); showStep(); info(); }
+  }
+  function autoSave() { if (!cv || !document.body.contains(cv)) return; try { if (S.pts.length || S.objs.length) localStorage.setItem(AUTO, saveObj()); else localStorage.removeItem(AUTO); } catch (e) { } }
+  function autoLoad() { try { const t = localStorage.getItem(AUTO); if (t && !S.pts.length && !S.objs.length) { loadObj(t); UI.toast('Your last sketch was restored.'); } } catch (e) { } }
+  function ring(c) { const a = c.filter(p => isFinite(p[0]) && isFinite(p[1])); if (a.length > 3 && a[0][0] === a[a.length - 1][0] && a[0][1] === a[a.length - 1][1]) a.pop(); return a; }
+  function parseCoords(name, t) {
+    const ext = (name.split('.').pop() || '').toLowerCase(); let P = null, geo = false;
+    if (ext === 'kml' || /<kml/i.test(t)) { const mm = /<coordinates>([\s\S]*?)<\/coordinates>/i.exec(t); if (!mm) throw new Error('No coordinates were found in this KML file.'); P = ring(mm[1].trim().split(/\s+/).map(q => q.split(',').map(Number))); geo = true; }
+    else if (ext === 'geojson' || /^\s*\{/.test(t)) { const j = JSON.parse(t); let g = j; const dig = x => { if (!x) return null; if (x.type === 'FeatureCollection') return dig((x.features || [])[0]); if (x.type === 'Feature') return dig(x.geometry); if (x.type === 'Polygon') return x.coordinates[0]; if (x.type === 'MultiPolygon') return x.coordinates[0][0]; if (x.type === 'LineString') return x.coordinates; return null; }; const c = dig(g); if (!c) throw new Error('No polygon was found in this GeoJSON file.'); P = ring(c); geo = true; }
+    else { const L = t.split(/\r?\n/).map(l => l.trim()).filter(Boolean), h = L[0].toLowerCase(), hd = /[a-z]/.test(h); let ix = 0, iy = 1, lat = false; const cols = L[0].split(/[;,\t ]+/).map(x => x.toLowerCase()); if (hd) { const a = cols.findIndex(x => /^(lon|lng|long|longitude)/.test(x)), b = cols.findIndex(x => /^(lat|latitude)/.test(x)); if (a >= 0 && b >= 0) { ix = a; iy = b; geo = true; } else { const a2 = cols.findIndex(x => /^x|east/.test(x)), b2 = cols.findIndex(x => /^y|north/.test(x)); if (a2 >= 0 && b2 >= 0) { ix = a2; iy = b2; } } } P = ring(L.slice(hd ? 1 : 0).map(l => l.split(/[;,\t ]+/).map(Number)).map(r => [r[ix], r[iy]])); }
+    if (!P || P.length < 3) throw new Error('At least three corners are needed.');
+    if (geo) { const la = P.reduce((a, p) => a + p[1], 0) / P.length, lo = P.reduce((a, p) => a + p[0], 0) / P.length; return P.map(p => [(p[0] - lo) * 111320 * Math.cos(la * Math.PI / 180), -(p[1] - la) * 110540]); }
+    return P.map(p => [p[0], -p[1]]);
+  }
+  async function importFile() { try { const f = await pickF('.kml,.geojson,.json,.csv,.txt'); if (!f) return; if (/\.swafl?sketch$|\.swsk$/i.test(f.name) || /"app"\s*:\s*"SWAFL field sketch"/.test(f.data.slice(0, 200))) { loadObj(f.data); return; } const xy = parseCoords(f.name, f.data); setMetres(xy, null); pushH(); fitView(); showStep(); info(); UI.toast('Field imported: ' + xy.length + ' corners.'); } catch (e) { UI.toast('Import failed: ' + e.message); } }
+  async function openFile() { try { const f = await pickF('.swsk,.json'); if (f) { loadObj(f.data); UI.toast('Sketch opened: ' + f.name); } } catch (e) { UI.toast('Open failed: ' + e.message); } }
+  function dxf() {
+    const L = []; const add = (...a) => a.forEach(x => L.push(String(x))); const M = p => [m(p.x).toFixed(3), (-m(p.y)).toFixed(3)];
+    add(0, 'SECTION', 2, 'ENTITIES'); const poly = (pts, layer, closed) => { add(0, 'LWPOLYLINE', 8, layer, 90, pts.length, 70, closed ? 1 : 0); pts.forEach(p => { const q = M(p); add(10, q[0], 20, q[1]); }); };
+    if (S.pts.length > 1) poly(S.pts, 'FIELD', true); S.objs.forEach(o => { const d = OBJ[o.t]; if (!d) return; const n = d[0].split(' /')[0].toUpperCase().replace(/[^A-Z0-9]+/g, '_'); if (d[2] === 'pt') { const q = M(o.pts[0]); add(0, 'POINT', 8, n, 10, q[0], 20, q[1]); } else poly(o.pts, n, d[2] !== 'line'); });
+    if (S.src) { const q = M(S.src); add(0, 'CIRCLE', 8, 'WATER_SOURCE', 10, q[0], 20, q[1], 40, 2); } if (S.inlet) { const q = M(S.inlet); add(0, 'POINT', 8, 'INLET', 10, q[0], 20, q[1]); }
+    add(0, 'ENDSEC', 0, 'EOF'); return L.join('\r\n');
+  }
+  function exportAs(k) {
+    if (k === 'png') { const d = cv.toDataURL('image/png'); UI.saveFile('SWAFL_field_sketch.png', d.split(',')[1], true, 'image/png'); }
+    else if (k === 'dxf') UI.saveFile('SWAFL_field_sketch.dxf', dxf(), false, 'application/dxf');
+    else if (k === 'csv') UI.saveFile('SWAFL_field_corners.csv', 'corner,x_m,y_m\r\n' + S.pts.map((p, i) => (i + 1) + ',' + m(p.x).toFixed(2) + ',' + (-m(p.y)).toFixed(2)).join('\r\n'), false, 'text/csv');
+  }
+  function syncTools() { const g = document.getElementById('skGrid'), n = document.getElementById('skSnap'); if (g) g.classList.toggle('on', S.grid !== false); if (n) n.classList.toggle('on', S.snapOn !== false); }
+  function toggle(k) { if (k === 'grid') S.grid = S.grid === false; else S.snapOn = S.snapOn === false; syncTools(); draw(); }
+  function keysHelp() {
+    let h = document.getElementById('skHelp'); if (h) { h.remove(); return; } h = document.createElement('div'); h.id = 'skHelp'; h.style.cssText = 'position:absolute;right:8px;top:8px;z-index:5;background:#FBFAF6;border:1px solid #6B7785;box-shadow:2px 2px 6px rgba(0,0,0,.3);padding:8px 10px;font-size:12px;max-width:min(420px,90%)';
+    h.innerHTML = '<div style="display:flex;justify-content:space-between;gap:12px;margin-bottom:4px"><b style="color:#0A246A">Keyboard and mouse</b><span style="cursor:pointer" id="skHelpX">&#10005;</span></div><table style="border-collapse:collapse">' + [['Place a corner or a point', 'Click'], ['Finish a line or area', 'Enter, or double-click'], ['Cancel the drawing', 'Esc'], ['Undo / redo', 'Ctrl+Z / Ctrl+Y'], ['Zoom', 'Mouse wheel, + and \u2212'], ['Move the drawing', 'Right or middle button, Shift and drag, Hand'], ['Show the whole field', 'Fit'], ['Grid on or off', 'G'], ['Snap on or off', 'N'], ['Type a side length', 'Click the length'], ['Remove a corner', 'Double-click it']].map(r => '<tr><td style="padding:1px 10px 1px 0">' + r[0] + '</td><td><b>' + r[1] + '</b></td></tr>').join('') + '</table>';
+    cv.parentNode.appendChild(h); document.getElementById('skHelpX').onclick = () => h.remove();
+  }
+  const STEP_MAN = [() => 'The field sketch', () => 'The site: water sources and the irrigation system', () => 'Crops: crop water requirement', () => 'The soil of the field, from SoilGrids', () => S.sys === 'spr' ? 'Sprinkler irrigation design' : S.sys === 'sid' ? 'Surface irrigation design' : 'Drip irrigation design', () => 'Running a design and finding the most efficient inputs', () => 'Comparing the three systems'];
+  function stepManual() {
+    const b = document.querySelector('#modalRoot [data-manual]'), M = window.SWAFLManual; if (!b || !M) return;
+    M.load().then(() => { const sx = M.find(STEP_MAN[S.step] ? STEP_MAN[S.step]() : 'The field sketch') || M.find('The field sketch'); if (!sx) return; b.dataset.page = sx.page; b.textContent = 'Manual, page ' + sx.page; b.title = 'Open the manual at page ' + sx.page + ': ' + sx.title; b.style.display = ''; }).catch(() => { });
+  }
   // ------------------------------------------------------------------ the window
   function open() {
     LIST = E.json("({crops:Object.keys(CROPS).map(function(k){return [k,CROPS[k].label]}),soils:DATA.soils.map(function(k){return [k,DATA.soil_labels[k]]}),crop:state.crop,soil:state.soil,rows:Object.fromEntries(Object.keys(CROPS).map(function(k){var r=(typeof IRCROP!=='undefined'&&IRCROP[k])||{};return [k,Math.max(0.2,r.row||0.75)]})),sys:SID.sys,lift:IRX.lift,Qs:DRP.Qs})") || { crops: [], soils: [], rows: {} };
@@ -316,16 +364,18 @@ const Sketch = (() => {
       '<div class="skwrap"><div class="skleft"><div class="skbar"><div class="seg" id="skMode"><button data-m="field"' + (S.mode === 'field' ? ' class="on"' : '') + '>Field corners</button><button data-m="src"' + (S.mode === 'src' ? ' class="on"' : '') + '>Water source</button><button data-m="inlet"' + (S.mode === 'inlet' ? ' class="on"' : '') + '>Inlet</button><button data-m="pan"' + (S.mode === 'pan' ? ' class="on"' : '') + ' title="Move the drawing (also: right button, middle button or Shift and drag)">&#9995; Hand</button></div>' +
       '<button class="btn" id="skZin" title="Zoom in (mouse wheel up)">&#43;</button><button class="btn" id="skZout" title="Zoom out (mouse wheel down)">&minus;</button><button class="btn" id="skFit" title="Show the whole field">Fit</button><button class="btn pri" id="skMap" title="Find the farm on the satellite map, demarcate it and compute the vegetation and water indices">&#127757; Locate on the map</button>' +
       '<button class="btn" id="skUndo">Undo corner</button><button class="btn" id="skClear">Clear</button><label id="skPdL" style="display:none">Pipe diameter <select id="skPd"></select> mm</label><label>Grid square <select id="skScale">' + SC.map(v => '<option value="' + v + '"' + (v === S.scale ? ' selected' : '') + '>' + v + ' m</option>').join('') + '</select></label></div>' +
-      '<div class="skcv"><canvas id="skCv" width="' + CW * 2 + '" height="' + CH * 2 + '"></canvas></div><div id="skCadHost"></div><div id="skInfo" class="skinfo"></div></div>' +
+      '<div class="skbar" id="skTools"><button class="btn on" id="skGrid" title="Show or hide the grid (G)">Grid</button><button class="btn on" id="skSnap" title="Snap the points to the grid (N)">Snap</button><button class="btn" id="skSave" title="Save this sketch as a file">Save sketch</button><button class="btn" id="skOpen" title="Open a saved sketch">Open sketch</button><button class="btn" id="skImp" title="Bring in a field outline from a KML, GeoJSON or CSV file">Import field</button><select id="skExp" title="Export the sketch"><option value="">Export...</option><option value="png">Picture (PNG)</option><option value="dxf">CAD drawing (DXF)</option><option value="csv">Corner coordinates (CSV)</option></select><button class="btn" id="skKeys" title="Keyboard and mouse help">Help keys</button></div><div class="skcv"><canvas id="skCv" width="' + CW * 2 + '" height="' + CH * 2 + '"></canvas></div><div id="skCadHost"></div><div id="skInfo" class="skinfo"></div></div>' +
       '<div class="skright"><div class="seg skst" id="skSteps">' + STEPS.map((s, i) => '<button data-s="' + i + '">' + (i + 1) + '. ' + s + '</button>').join('') + '</div><div id="skQ" class="skq"></div>' +
       '<div class="skbtns"><button class="btn" id="skBack">Back</button><button class="btn" id="skNext">Next question</button></div></div></div>',
       full: true, buttons: [{ label: 'Turn the sketch into the design', pri: true, act: () => apply() }, { label: 'Close' }] });
     cv = document.getElementById('skCv'); fitCanvas(false); { let t = 0; const rs = () => { clearTimeout(t); t = setTimeout(() => { if (!document.body.contains(cv)) { window.removeEventListener('resize', rs); return; } fitCanvas(true); }, 60); }; window.addEventListener('resize', rs); if (window.ResizeObserver) new ResizeObserver(rs).observe(cv.parentNode); } wire(); if (window.SketchCAD) { SketchCAD.init(CADAPI); SketchCAD.mount(document.getElementById('skCadHost')); } setTimeout(() => { const P2 = S.pts.concat(S.src ? [S.src] : []); if (P2.some(p => p.x < 0 || p.y < 0 || p.x > CW || p.y > CH)) fitView(); }, 0);
+    document.getElementById('skGrid').onclick = () => toggle('grid'); document.getElementById('skSnap').onclick = () => toggle('snap'); document.getElementById('skKeys').onclick = keysHelp; document.getElementById('skImp').onclick = importFile; document.getElementById('skOpen').onclick = openFile;
+    document.getElementById('skSave').onclick = () => UI.saveFile('SWAFL_field_sketch.swsk', saveObj(), false, 'application/json'); { const ex = document.getElementById('skExp'); ex.onchange = () => { if (ex.value) exportAs(ex.value); ex.value = ''; }; } syncTools(); autoLoad();
     document.getElementById('skZin').onclick = () => zoomAt(1.25); document.getElementById('skZout').onclick = () => zoomAt(1 / 1.25); document.getElementById('skFit').onclick = fitView;
     document.getElementById('skMap').onclick = () => { if (typeof FieldMap !== 'undefined') FieldMap.open(); };
     { const bar = document.getElementById('skMode'); Object.keys(OBJ).forEach(k => { const b = document.createElement('button'); b.dataset.m = k; b.textContent = OBJ[k][0].split(' /')[0]; b.title = OBJ[k][0] + (OBJ[k][2] === 'rect' ? ': click two opposite corners' : OBJ[k][2] === 'poly' ? ': click the corners, double-click or click the first corner to finish' : OBJ[k][2] === 'line' ? ': click the points of the pipe along its route; click its last point again (the dead end), click any other pipe, double-click or press Enter to finish; the diameter is chosen in the list that appears' : ': click to place'); b.style.borderBottom = '3px solid ' + OBJ[k][1]; if (S.mode === k) b.className = 'on'; bar.appendChild(b); }); bar.style.flexWrap = 'wrap'; }
     pdUpdate();
-    if (!window.__skKeys) { window.__skKeys = true; document.addEventListener('keydown', e => { if (!document.getElementById('skCv')) return; if (/INPUT|SELECT|TEXTAREA/.test((e.target || {}).tagName || '')) return; if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'z') { e.preventDefault(); Sketch.undo(); } else if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'y' || (e.shiftKey && e.key.toLowerCase() === 'z'))) { e.preventDefault(); Sketch.redo(); } else if (e.key === 'Enter') Sketch.finish(); else if (e.key === 'Escape') Sketch.cancel(); }); }
+    if (!window.__skKeys) { window.__skKeys = true; document.addEventListener('keydown', e => { if (!document.getElementById('skCv')) return; if (/INPUT|SELECT|TEXTAREA/.test((e.target || {}).tagName || '')) return; if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'z') { e.preventDefault(); Sketch.undo(); } else if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'y' || (e.shiftKey && e.key.toLowerCase() === 'z'))) { e.preventDefault(); Sketch.redo(); } else if (!e.ctrlKey && !e.metaKey && (e.key === 'g' || e.key === 'G')) Sketch.tg('grid'); else if (!e.ctrlKey && !e.metaKey && (e.key === 'n' || e.key === 'N')) Sketch.tg('snap'); else if (e.key === 'Enter') Sketch.finish(); else if (e.key === 'Escape') Sketch.cancel(); }); }
     document.getElementById('skMode').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S.mode = b.dataset.m; S.rect = null; if (S.cur) finishCur(); document.querySelectorAll('#skMode button').forEach(x => x.classList.toggle('on', x === b)); pdUpdate(); if (window.SketchCAD) SketchCAD.sync(); draw(); });
     document.getElementById('skUndo').onclick = undo; { const b = document.createElement('button'); b.className = 'btn'; b.id = 'skRedo'; b.textContent = 'Redo'; b.title = 'Ctrl+Y'; document.getElementById('skUndo').after(b); b.onclick = redo; document.getElementById('skUndo').textContent = 'Undo'; document.getElementById('skUndo').title = 'Ctrl+Z'; }
     document.getElementById('skClear').onclick = () => { pushH(); S.cad = []; if (window.SketchCAD) SketchCAD.reset(); S.objs = []; S.cur = null; S.rect = null; S.pts = []; S.src = null; S.inlet = null; S.geo = null; V.z = 1; V.x = V.y = 0; draw(); };
@@ -440,5 +490,5 @@ const Sketch = (() => {
     out.label = (S.sys === 'sid' ? (S.sub === 'furrow' ? 'Furrows' : S.sub === 'basin' ? 'Basins' : 'Border strips') : sysS === 'drip' ? 'Drip laterals' : 'Sprinklers') + ' every ' + (spM * k).toFixed(spM * k < 10 ? 2 : 0) + ' m' + (k > 1 ? ' (one line of every ' + k + ' drawn)' : '');
     return out;
   }
-  return { open, compare, undo, redo, finish: () => { if (S.cur) finishCur(); }, cancel: () => { S.cur = null; S.rect = null; draw(); }, objStats, irrArea, getMetres, setMetres, setGeo, setSrcMetres, setAnswers, layoutM, _S: S, _V: V };
+  return { tg: toggle, open, compare, undo, redo, finish: () => { if (S.cur) finishCur(); }, cancel: () => { S.cur = null; S.rect = null; draw(); }, objStats, irrArea, getMetres, setMetres, setGeo, setSrcMetres, setAnswers, layoutM, _S: S, _V: V };
 })();

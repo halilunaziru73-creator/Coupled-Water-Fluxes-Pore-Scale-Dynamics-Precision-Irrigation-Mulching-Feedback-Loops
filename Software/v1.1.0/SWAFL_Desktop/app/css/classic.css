@@ -269,3 +269,5 @@ input[type=range]{accent-color:#0A246A}
 .mi.kf .key,.mi.act .key{color:#FFF}
 @media (max-width:880px){.mi{padding:8px 14px 8px 26px}}
 @media (pointer:coarse){.mi{padding:10px 14px 10px 26px}}
+
+.skbar .btn.on{background:#0A246A;color:#fff;border-color:#0A246A}.skbar select{height:24px}

@@ -304,3 +304,4 @@
 - Crops: 27 crops added and the whole library refined with the FAO-56 edition of 2025 (Kc, height, rooting depth, depletion fraction p, yield response Ky, salinity tolerance); the crop ribbon shows p, roots, height, Ky and the salinity threshold; the Crop list has a new group *Pulses*; chapter 21 and Table 21.2 updated.
 - Field sketch to design: the drawing area fills the whole window and resizes with it; side lengths, labels, corner points and pipe lines keep a constant, readable size at every zoom.
 - Field sketch to design: the drawing text keeps a normal size when the window text size (A+) is enlarged.
+- Field sketch to design: Grid and Snap switches (keys G and N), Save sketch and Open sketch, automatic restore of the last sketch, Import field (KML, GeoJSON, CSV), Export (PNG, DXF, CSV), a keyboard and mouse help, and a manual page for each step. The desktop app shows a notice when a newer version is published.
