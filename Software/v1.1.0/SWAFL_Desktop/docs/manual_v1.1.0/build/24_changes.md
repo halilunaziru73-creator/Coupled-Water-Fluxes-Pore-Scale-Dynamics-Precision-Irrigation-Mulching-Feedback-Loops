@@ -309,3 +309,4 @@
 - The desktop app no longer shows the licence a second time: it is accepted once, in the installer. The licence stays available under Help, Licence agreement. The web version still asks on first use.
 - Desktop app: the SWAFL logo now appears on SWAFL.exe, the taskbar, the Desktop shortcut and the Start menu entry, instead of the default Electron icon.
 - Faster start-up of the simulation engine: nothing is drawn until a layer is opened, and the three design windows are prepared once, without waiting between them.
+- Daisy experiments: Run the ticked now shows a progress panel next to the button (spinner, moving bar, experiment in progress, runs done, elapsed time); the button becomes Stop while it runs.

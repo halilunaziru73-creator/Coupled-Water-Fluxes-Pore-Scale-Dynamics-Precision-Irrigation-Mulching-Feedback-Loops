@@ -217,14 +217,29 @@
     const cl = $('SetClear'); if (cl) cl.onclick = () => { st.set = []; renderSet(); };
     $('SetOpen').onchange = async ev => { try { for (const f of Array.from(ev.target.files)) { const j = JSON.parse(await f.text()), arr = j.set || [j]; arr.forEach(x => { const p = x.plan || x; if (!p.factors) throw new Error(f.name + ' has no experiment in it'); p.factors.forEach(q => { if (!X.factor(q.id)) throw new Error('this plan uses "' + q.id + '", which this version does not know'); }); addToSet({ label: x.name || x.request || f.name.replace(/\.json$/, ''), text: x.request || x.text || x.name, factors: p.factors.map(q => ({ id: q.id, levels: q.levels.slice() })), base: Object.assign({}, p.base), design: p.design || 'factorial', max: p.max || 40, responses: x.responses || [], log: st.log }); }); } } catch (e) { msg('<span style="color:#b3261e">' + esc(e.message) + '</span>'); } };
   }
+  // a visible sign of work while experiments run: a moving bar, the experiment in progress, its count and the time
+  function busyPanel(after, head) {
+    if (!document.getElementById('dzBusyCss')) { const c = document.createElement('style'); c.id = 'dzBusyCss'; c.textContent = '@keyframes dzbm{0%{left:-35%}100%{left:100%}}@keyframes dzsp{to{transform:rotate(360deg)}}.dzbusy{border:1px solid #0A246A;border-left:5px solid #0A246A;background:#F4F8FF;padding:8px 12px;margin:8px 0;font:12px Tahoma,Segoe UI,sans-serif;color:#1B1F23}.dzbusy .sp{display:inline-block;width:14px;height:14px;border:3px solid #BBD0EE;border-top-color:#0A246A;border-radius:50%;animation:dzsp .8s linear infinite;vertical-align:-3px;margin-right:8px}.dzbusy .tr{position:relative;height:8px;background:#DDE4EF;border-radius:4px;overflow:hidden;margin:7px 0 5px}.dzbusy .tr i{position:absolute;top:0;height:8px;width:35%;background:#2F6FD0;border-radius:4px;animation:dzbm 1.3s ease-in-out infinite}.dzbusy .tr b{position:absolute;left:0;top:0;height:8px;background:#0A246A;border-radius:4px;transition:width .4s}'; document.head.appendChild(c); }
+    const old = document.getElementById('dzXBusy'); if (old) old.remove();
+    const d = document.createElement('div'); d.id = 'dzXBusy'; d.className = 'dzbusy'; d.innerHTML = '<span class="sp"></span><b class="ti">' + esc(head) + '</b><div class="tr"><i></i><b style="width:0"></b></div><div class="de" style="color:#445">Starting Daisy...</div>';
+    const host = after && after.parentNode ? after.parentNode : document.body; host.insertBefore(d, after || null); const t0 = Date.now(); let pct = 0, txt = '';
+    const show = () => { d.querySelector('.de').textContent = (txt ? txt + ' - ' : '') + Math.round(pct) + ' % of all runs, ' + Math.round((Date.now() - t0) / 1000) + ' s elapsed'; };
+    const clk = setInterval(show, 1000); try { d.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (e) { }
+    return { title(t) { d.querySelector('.ti').textContent = t; }, set(p, t) { pct = Math.max(pct, Math.min(100, p)); txt = t || ''; d.querySelector('.tr b').style.width = pct + '%'; show(); },
+      done() { clearInterval(clk); d.querySelector('.sp').style.animation = 'none'; d.querySelector('.tr i').remove(); d.querySelector('.tr b').style.width = '100%'; d.querySelector('.ti').textContent = 'Finished'; d.querySelector('.de').textContent = Math.round((Date.now() - t0) / 1000) + ' s in all'; setTimeout(() => { try { d.remove(); } catch (e) { } }, 6000); } };
+  }
   async function runAll() {
     if (st.running) { st.stop = true; D.note('Xst', 'Stopping after the runs that have started...'); return; }
     if (!D.isDesk() || !window.swafl || !window.swafl.daisyJob) { D.note('XSetMsg', 'Daisy itself runs in the desktop app. Here you can save all experiments as one folder (.zip) and run it anywhere.', 1); return; }
     const items = (st.set || []).filter(it => it.on !== false), keep = snap(); if (!items.length) { D.note('XSetMsg', 'Tick at least one experiment.', 1); return; } const sm = $('SetMsg'); st.stopAll = false;
-    for (let i = 0; i < items.length; i++) {
+    const sbtn = $('SetRun'); if (sbtn) sbtn.textContent = 'Stop'; const prog = busyPanel(sm, 'Running the ticked experiments'); let cur = 0;
+    const tick = setInterval(() => { try { const t = $('Prog'), bi = $('BarIn'), inner = bi ? parseFloat(bi.style.width) || 0 : 0; prog.set(((cur + inner / 100) / items.length) * 100, (t ? t.textContent : 'starting Daisy')); } catch (e) { } }, 400);
+    try {
+    for (let i = 0; i < items.length; i++) { cur = i; prog.title('Experiment E' + ((st.set || []).indexOf(items[i]) + 1) + ' (' + (i + 1) + ' of ' + items.length + '): ' + items[i].label);
       applyItem(items[i]); renderPlan(); const m = $('SetMsg'); if (m) m.textContent = 'Experiment E' + ((st.set || []).indexOf(items[i]) + 1) + ' (' + (i + 1) + ' of ' + items.length + '): ' + items[i].label; st.rows = []; st.runs = [];
       await run(false); if (st.rows.length) items[i].res = { rows: st.rows.slice(), runs: st.runs.slice(), fids: st.fids, design0: st.design0, resp: st.resp }; if (st.stop) break;
     }
+    } finally { clearInterval(tick); prog.done(); const b2 = $('SetRun'); if (b2) b2.textContent = 'Run the ticked'; }
     st.curSet = items.findIndex(it => it.res); renderSet(); const m = $('SetMsg'); if (m) m.textContent = 'Finished: ' + items.filter(it => it.res).length + ' of ' + items.length + ' experiments have results; choose which to look at above the figures.'; if (st.curSet >= 0) showSetRes(st.curSet);
   }
   function showSetRes(i) { const it = (st.set || [])[i]; if (!it || !it.res) return; st.curSet = i; st.rows = it.res.rows; st.runs = it.res.runs; st.fids = it.res.fids; st.design0 = it.res.design0; st.source = 'daisy'; st.responses = it.responses || []; drawResults(); }
@@ -699,7 +714,7 @@
     let f = st.factors.find(q => q.id === id); if (!f) { f = { id, levels: [] }; st.factors.push(f); } if (!f.levels.includes(hit[0])) f.levels.push(hit[0]);
     D.note('Xst', esc(x.name) + ' is a value of “' + esc(F.label) + '” in the experiment. Add more values, then press Run all.'); if ($('Plan')) renderPlan();
   }
-  window.DaisyExpUI = { runs: () => st.runs, imported: () => (st.imp ? st.imp.files : {}), addLib, filesFor: async (files, optsList) => { const need = new Set(); optsList.forEach(o => SC.libNeeds(o).forEach(q => need.add(q))); for (const q of need) await loadLib(files, q, false); await stationFiles(files, Array.from(new Set(optsList.map(o => o.station).filter(Boolean)))); return files; } };
+  window.DaisyExpUI = { busy: busyPanel, runs: () => st.runs, imported: () => (st.imp ? st.imp.files : {}), addLib, filesFor: async (files, optsList) => { const need = new Set(); optsList.forEach(o => SC.libNeeds(o).forEach(q => need.add(q))); for (const q of need) await loadLib(files, q, false); await stationFiles(files, Array.from(new Set(optsList.map(o => o.station).filter(Boolean)))); return files; } };
   window.DaisyExpRuns = () => (st.runs || []).map(r => ({ id: r.id, label: (r.id || '') + ' ' + (r.label || ''), short: r.short || '', logs: r.logs || {} }));
   D.register('exp', { html, bind });
 })();
