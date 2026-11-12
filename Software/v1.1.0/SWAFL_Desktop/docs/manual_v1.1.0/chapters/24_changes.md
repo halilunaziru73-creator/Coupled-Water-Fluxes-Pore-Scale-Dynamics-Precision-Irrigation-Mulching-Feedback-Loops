@@ -303,3 +303,4 @@
 - The software loads after the licence window is closed, so Next and Back answer at once; a short Loading line shows while it starts.
 - Crops: 27 crops added and the whole library refined with the FAO-56 edition of 2025 (Kc, height, rooting depth, depletion fraction p, yield response Ky, salinity tolerance); the crop ribbon shows p, roots, height, Ky and the salinity threshold; the Crop list has a new group *Pulses*; chapter 21 and Table 21.2 updated.
 - The licence no longer names any country.
+- Daisy process map: the two biopore lines no longer cross Soil Evaporation or the Drain; the labels and the drain line were re-ordered.

@@ -79,10 +79,10 @@
     L([[232, 148], [232, 298]]); FX(228, 215, 'Melt water', 'end', 9, 'Snow melt and snow evaporation'); L([[330, 135], [268, 135], [268, 298]]); FX(272, 190, 'Throughfall', 'start', 9, 'Throughfall and drip'); L([[388, 148], [388, 262], [290, 262], [290, 298]]); FX(392, 215, 'Drip off', 'start', 9, 'Canopy interception'); L([[216, 298], [216, 232]], 'out'); FX(212, 258, 'Evaporation', 'end', 9, 'Evaporation from litter');
     // litter, pond and soil
     box('surf', 198, 300, 98, 13, 'Litter water', LB, { sz: 8.5 }); box('surf', 170, 334, 84, 13, 'Ponded water', LB, { sz: 8.5 }); L([[186, 334], [186, 288]], 'out'); FX(182, 306, 'Evaporation', 'end', 9, 'Evaporation from ponded water');
-    L([[225, 313], [225, 334]]); FX(282, 326, 'Drains to pond', 'end', 9, 'Throughfall and drip'); L([[170, 340], [132, 340]], 'out'); FX(128, 344, 'Runoff', 'end', 9, 'Runoff'); L([[212, 347], [212, 368]]); FX(208, 361, 'Infiltration', 'end', 9, 'Infiltration');
+    L([[225, 313], [225, 334]]); FX(282, 326, 'Drains to pond', 'end', 9, 'Throughfall and drip'); L([[170, 340], [132, 340]], 'out'); FX(128, 344, 'Runoff', 'end', 9, 'Runoff'); L([[176, 347], [176, 368]]); FX(172, 361, 'Infiltration', 'end', 9, 'Infiltration');
     box('water', 168, 368, 104, 260, '', 'url(#dzDot)', { rx: 2 }); T(220, 408, 'Soil water', 'middle', 10, '#111', 700); T(220, 421, '(Richards Eq.)', 'middle', 9.5); T(220, 446, 'Solute transport', 'middle', 10, '#111', 700); T(220, 459, '(Advection-dispersion Eq.)', 'middle', 8.5);
     L([[262, 368], [262, 348]], 'out'); 
-    box('pore', 284, 318, 5, 262, '', '#6fa0d0', { rx: 1 }); box('pore', 296, 318, 5, 262, '', '#6fa0d0', { rx: 1 }); FX(265, 365, 'Soil Evaporation', 'start', 8, 'Soil evaporation'); FX(312, 340, 'Biopore flow', 'start', 9, 'Biopore flow');
+    box('pore', 284, 318, 5, 182, '', '#6fa0d0', { rx: 1 }); box('pore', 296, 318, 5, 182, '', '#6fa0d0', { rx: 1 }); FX(255, 362, 'Soil Evaporation', 'end', 7.5, 'Soil evaporation'); FX(312, 340, 'Biopore flow', 'start', 9, 'Biopore flow');
     o.push('<g class="dzPb" data-p="drain" style="cursor:pointer" tabindex="0" role="button" aria-label="Drain"><circle cx="268" cy="520" r="14" fill="' + BL + '" stroke="' + (sel('drain') ? '#d7191c' : '#555') + '" stroke-width="' + (sel('drain') ? 2.6 : 0.8) + '"/></g>'); (pos.drain = pos.drain || []).push([254, 506, 28, 28]); T(268, 523, 'Drain', 'middle', 9.5, '#111', 600);
     L([[184, 642], [184, 628]]); FX(116, 606, 'Capillary rise', 'middle', 9, 'Percolation and capillary rise'); L([[250, 628], [250, 642]], 'out'); FX(238, 620, 'Percolation', 'end', 9, 'Percolation and capillary rise');
     // nitrogen
@@ -91,7 +91,7 @@
     L([[392, 420], [392, 392]], 'out'); FX(385, 411, 'N₂O', 'end', 9, 'Nitrous oxide emission'); L([[352, 400], [352, 380]], 'out'); FX(336, 390, 'N₂O', 'middle', 9, 'Nitrous oxide emission'); L([[396, 420], [396, 370]]); FX(392, 371, 'Denitrification', 'middle', 8.5, 'Denitrification');
     L([[388, 478], [388, 446]]); FX(403, 464, 'Nitrification', 'start', 9, 'Nitrification'); L([[413, 429], [443, 362]]); FX(418, 396, 'Uptake', 'start', 9, 'Crop nitrogen uptake');
     L([[592, 444], [413, 436]]); FX(520, 450, 'Immobilization', 'middle', 9, 'Immobilisation'); L([[592, 462], [404, 490]]); FX(500, 484, 'Mineralization', 'middle', 9, 'Mineralisation'); L([[384, 505], [384, 520]], 'none'); L([[388, 504], [388, 642]], 'out'); FX(396, 560, 'Leaching', 'start', 9, 'Nitrate leaching');
-    L([[268, 534], [268, 548]], 'none'); L([[374, 520], [286, 520]], 'none');
+    L([[268, 534], [268, 548]], 'none'); L([[332, 520], [282, 520]], 'none');
     // plant
     L([[460, 342], [460, 258]]); L([[475, 342], [475, 200]]); L([[490, 342], [490, 116]]); L([[474, 368], [474, 398]]); FX(482, 290, 'Harvest', 'middle', 9, 'Harvest'); L([[470, 284], [470, 250]], 'out'); FX(432, 323, 'Symbiotic Fixation', 'start', 9, 'Symbiotic nitrogen fixation');
     box('crop', 444, 88, 60, 26, 'Storage Organ', LG, { half: BE, sz: 8.5 }); box('crop', 444, 172, 60, 26, 'Leaf', LG, { half: BE }); box('crop', 444, 232, 60, 26, 'Stem', LG, { half: BE }); box('crop', 444, 398, 60, 26, 'Root', LG, { half: BE });
