@@ -82,4 +82,6 @@ function runJob(job, opt) {
   });
 }
 function clean(dir) { try { if (dir && dir.indexOf('swafl-daisy-') >= 0) fs.rmSync(dir, { recursive: true, force: true }); } catch (e) { } }
-module.exports = { isInstaller, findExe, homeFor, version, runJob, clean, EXE, candidates, provision, findInstaller, runInstaller, looked, ownDir: OWN };
+// the same copy, made in the background without stopping the window (the first start copies the bundled Daisy once; a synchronous copy froze the program for seconds)
+async function provisionAsync() { try { if (isFile(ownExe()) && isFile(path.join(OWN(), 'lib', 'crop.dai'))) return ownExe(); const src = bundledDir(); if (!src) return null; await fs.promises.mkdir(OWN(), { recursive: true }); await fs.promises.cp(src, OWN(), { recursive: true, force: true }); return isFile(ownExe()) ? ownExe() : null; } catch (e) { return null; } }
+module.exports = { isInstaller, findExe, homeFor, version, runJob, clean, EXE, candidates, provision, provisionAsync, findInstaller, runInstaller, looked, ownDir: OWN };

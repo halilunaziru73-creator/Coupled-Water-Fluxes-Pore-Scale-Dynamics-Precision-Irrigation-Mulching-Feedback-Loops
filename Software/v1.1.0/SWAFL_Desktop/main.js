@@ -14,6 +14,20 @@ try {
 
 let win = null, srv = null;
 
+// a small window that is on the screen at once, while the program starts, so that nobody waits in front of nothing
+let splash = null;
+function showSplash() {
+  try {
+    let img = ''; try { img = 'data:image/png;base64,' + fs.readFileSync(path.join(__dirname, 'build', 'icon.png')).toString('base64'); } catch (e) { }
+    splash = new BrowserWindow({ width: 420, height: 260, frame: false, resizable: false, movable: true, alwaysOnTop: true, center: true, show: true, skipTaskbar: false, backgroundColor: '#0A246A', title: 'SWAFL', webPreferences: { sandbox: true } });
+    const html = '<body style="margin:0;background:linear-gradient(#0A246A,#3A6EA5);color:#fff;font:14px Segoe UI,Tahoma,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;overflow:hidden">' +
+      (img ? '<img src="' + img + '" width="84" height="84">' : '') + '<div style="font-size:26px;font-weight:700;margin-top:10px;letter-spacing:1px">SWAFL</div><div style="opacity:.9;margin-top:4px">Soil Water, Atmosphere, Feedback and Layout</div>' +
+      '<div style="margin-top:18px;opacity:.9">Starting ...</div><div style="margin-top:8px;width:220px;height:4px;background:rgba(255,255,255,.25);overflow:hidden"><div style="width:90px;height:4px;background:#fff;animation:m 1.1s linear infinite"></div></div><style>@keyframes m{from{margin-left:-90px}to{margin-left:220px}}</style></body>';
+    splash.setMenu(null); splash.loadURL('data:text/html;charset=utf-8,' + encodeURIComponent(html));
+  } catch (e) { splash = null; }
+}
+function closeSplash() { try { if (splash && !splash.isDestroyed()) splash.close(); } catch (e) { } splash = null; }
+
 async function createWindow() {
   const root = path.join(__dirname, 'app');
   const { server, port } = await listen(root, 0);
@@ -25,9 +39,13 @@ async function createWindow() {
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false, sandbox: false, spellcheck: false, backgroundThrottling: true }
   });
   Menu.setApplicationMenu(null);              // SWAFL draws its own menu bar (File, Edit, Tools, Refresh, Review, Run, Help)
-  win.once('ready-to-show', () => { win.maximize(); win.show(); });
+  win.once('ready-to-show', () => { win.maximize(); win.show(); setTimeout(closeSplash, 150); });
+  setTimeout(closeSplash, 30000);
   win.webContents.setWindowOpenHandler(({ url }) => { if (/^https?:/i.test(url)) shell.openExternal(url); return { action: 'deny' }; });
-  try { await win.webContents.session.clearCache(); } catch (e) {}   // always load the files of this version
+  try {   // the files of a new version must be loaded afresh; on every other start the cache stays, which makes the start quicker
+    const vf = path.join(app.getPath('userData'), 'last-version.txt'); let last = ''; try { last = fs.readFileSync(vf, 'utf8'); } catch (e) { }
+    if (last !== app.getVersion() + '|' + process.versions.electron) { await win.webContents.session.clearCache(); try { fs.writeFileSync(vf, app.getVersion() + '|' + process.versions.electron); } catch (e) { } }
+  } catch (e) { }
   win.setTitle('SWAFL ' + app.getVersion());
   win.loadURL('http://127.0.0.1:' + port + '/index.html');
 }
@@ -36,7 +54,7 @@ const gotLock = app.requestSingleInstanceLock();
 if (!gotLock) app.quit();
 else {
   app.on('second-instance', () => { if (win) { if (win.isMinimized()) win.restore(); win.focus(); } });
-  app.whenReady().then(() => { createWindow(); setTimeout(() => { try { DR.provision(); } catch (e) { } }, 4000); });
+  app.whenReady().then(() => { showSplash(); createWindow(); setTimeout(() => { try { DR.provisionAsync(); } catch (e) { } }, 8000); });
   app.on('window-all-closed', () => { if (srv) srv.close(); app.quit(); });
 }
 

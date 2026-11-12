@@ -9,7 +9,7 @@
   "scripts": {
     "start": "electron .",
     "web": "node serve.js",
-    "dist": "electron-builder --win portable nsis",
+    "dist": "electron-builder --win portable nsis dir",
     "dist:dir": "electron-builder --dir",
     "dist:mac": "electron-builder --mac dmg",
     "get-app": "node get-app.js",
