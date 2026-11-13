@@ -1,4 +1,4 @@
-/* Download of a fetched weather record in every format: Daisy weather file (.dwf), Daisy log (.dlf), CSV, TSV,
+/* Download of a fetched weather record in every format: Daisy weather file (.dwf), Daisy log (.dlf), CSV,
    Excel (.xlsx), JSON, or all of them in one .zip. Rows: [{ d|t (date or ms), P, tmin|tn, tmax|tx, vp, wind, rad, et0|ET0 }]. */
 (function (root) {
   'use strict';
