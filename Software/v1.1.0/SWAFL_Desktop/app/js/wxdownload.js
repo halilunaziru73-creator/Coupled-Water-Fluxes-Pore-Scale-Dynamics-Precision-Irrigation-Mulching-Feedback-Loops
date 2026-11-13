@@ -4,7 +4,7 @@
   'use strict';
   const COLS = ['year', 'month', 'day', 'precipitation', 'tmin', 'tmax', 'vapour_pressure', 'wind', 'radiation', 'et0'];
   const UNITS = ['', '', '', 'mm/d', 'dgC', 'dgC', 'hPa', 'm/s', 'kWh/d/m^2', 'mm/d'];
-  const MIME = { dwf: 'text/plain', dlf: 'text/plain', csv: 'text/csv', tsv: 'text/tab-separated-values', json: 'application/json', xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', zip: 'application/zip' };
+  const MIME = { dwf: 'text/plain', dlf: 'text/plain', csv: 'text/csv', json: 'application/json', xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', zip: 'application/zip' };
   const num = v => (v == null || v === '' || !isFinite(+v)) ? null : +v;
   function table(rows) {
     const out = rows.map(r => { const t = (r.d && typeof r.d.getTime === 'function') ? r.d.getTime() : +(r.t != null ? r.t : r.d), d = new Date(t); if (!isFinite(t)) return null;
@@ -44,13 +44,12 @@
   function files(rows, m) {
     const t = table(rows); if (!t.length) throw new Error('there is no daily weather to save');
     const base = String(m.name || 'weather').replace(/[^\w.-]+/g, '_').replace(/^_+|_+$/g, '') || 'weather', lat = num(m.lat), lon = num(m.lon), f = {};
-    const meta = { name: m.name || 'weather', latitude: lat, longitude: lon, elevation_m: num(m.elev), first_date: iso(t[0]), last_date: iso(t[t.length - 1]), days: t.length, source: m.source || '', note: 'missing values are empty (CSV, TSV, Excel), null (JSON) or -999 (Daisy files)', created: new Date().toISOString().slice(0, 10) };
+    const meta = { name: m.name || 'weather', latitude: lat, longitude: lon, elevation_m: num(m.elev), first_date: iso(t[0]), last_date: iso(t[t.length - 1]), days: t.length, source: m.source || '', note: 'missing values are empty (CSV, Excel), null (JSON) or -999 (Daisy files)', created: new Date().toISOString().slice(0, 10) };
     const dcell = r => r.map((v, i) => i < 3 ? v : f2(v));
     f[base + '.dwf'] = 'dwf-0.0 -- ' + meta.name + '\n\n# General information about the station itself.\nStation: ' + String(meta.name).replace(/[^\w .\-]/g, '_') + '\n' + (num(m.elev) != null ? 'Elevation: ' + Math.round(m.elev) + ' m\n' : '') + (lon != null ? 'Longitude: ' + Math.abs(lon).toFixed(2) + ' dg' + (lon >= 0 ? 'East' : 'West') + '\n' : '') + (lat != null ? 'Latitude: ' + Math.abs(lat).toFixed(2) + ' dg' + (lat >= 0 ? 'North' : 'South') + '\n' : '') + '\n# Source: ' + meta.source + '\n# Missing values are written as -999.\nBegin: ' + meta.first_date + '\nEnd:   ' + meta.last_date + '\nTimestep: 24 hours\n\n-------------------------------------------------------------------------------------\nYear\tMonth\tDay\tPrecip\tT_min\tT_max\tVapPres\tWind\tGlobRad\tRefEvap\nyear\tmonth\tday\tmm/d\tdgC\tdgC\thPa\tm/s\tkWh/d/m^2\tmm/d\n' + t.map(r => dcell(r).join('\t')).join('\n') + '\n';
     f[base + '.dlf'] = 'SIMFILE: SWAFL weather\nSource: ' + meta.source + '\n--------------------\n' + COLS.join('\t') + '\n' + UNITS.join('\t') + '\n' + t.map(r => dcell(r).join('\t')).join('\n') + '\n';
     const cell = v => v == null ? '' : v;
     f[base + '.csv'] = COLS.join(',') + '\n' + t.map(r => r.map(cell).join(',')).join('\n') + '\n';
-    f[base + '.tsv'] = COLS.join('\t') + '\n' + t.map(r => r.map(cell).join('\t')).join('\n') + '\n';
     f[base + '.json'] = JSON.stringify({ metadata: meta, columns: COLS.map((c, i) => ({ name: c, unit: UNITS[i] })), daily: t.map(r => { const o = {}; COLS.forEach((c, i) => { o[c] = r[i]; }); return o; }) }, null, 1);
     f[base + '.xlsx'] = xlsx(t, meta);
     return { files: f, base, meta };
@@ -63,7 +62,7 @@
     return name;
   }
   // html for the row of buttons; bind(host, () => ({ rows, meta })) makes them work
-  function html() { return '<div class="dzrow wxdl" style="margin-top:6px;flex-wrap:wrap;gap:4px"><b>Download this weather</b> ' + ['dwf', 'dlf', 'csv', 'tsv', 'xlsx', 'json'].map(k => '<button class="btn" type="button" data-wxd="' + k + '" title="Save as a .' + k + ' file">.' + k + '</button>').join(' ') + ' <button class="btn" type="button" data-wxd="zip" title="All the formats in one .zip file">All formats (.zip)</button> <span class="pnote wxdlmsg"></span></div>'; }
+  function html() { return '<div class="dzrow wxdl" style="margin-top:6px;flex-wrap:wrap;gap:4px"><b>Download this weather</b> ' + ['dwf', 'dlf', 'csv', 'xlsx', 'json'].map(k => '<button class="btn" type="button" data-wxd="' + k + '" title="Save as a .' + k + ' file">.' + k + '</button>').join(' ') + ' <button class="btn" type="button" data-wxd="zip" title="All the formats in one .zip file">All formats (.zip)</button> <span class="pnote wxdlmsg"></span></div>'; }
   function bind(host, get) {
     host.querySelectorAll('[data-wxd]').forEach(b => { b.onclick = ev => { ev.preventDefault(); const msg = host.querySelector('.wxdlmsg'); try { const g = get(); msg.textContent = 'Saved ' + save(b.dataset.wxd, g.rows, g.meta || {}) + '.'; } catch (e) { msg.textContent = 'Could not save: ' + e.message; msg.style.color = '#b3261e'; } }; });
   }

@@ -351,12 +351,11 @@
     const d = { header: { info: '# Weather for ' + w.name + ' (' + meta.source + ')' }, cols: WX_COLS, units: WX_UNITS, data: WX_COLS.map((c, j) => rows.map(r => r[j])), n: rows.length };
     f[b + '.dlf'] = window.DaisyIO.writeDlf({ header: { 'SIMFILE': 'SWAFL weather', 'Source': meta.source }, cols: d.cols, units: d.units, data: d.data, n: d.n }, '\t');
     f[b + '.csv'] = WX_COLS.join(',') + '\n' + rows.map(r => line(r, ',')).join('\n') + '\n';
-    f[b + '.tsv'] = WX_COLS.join('\t') + '\n' + rows.map(r => line(r, '\t')).join('\n') + '\n';
     f[b + '.json'] = JSON.stringify({ metadata: meta, notes: w.notes || [], columns: WX_COLS.map(c => ({ name: c, unit: WX_UNITS[c] })), daily: rows.map(r => { const o = {}; WX_COLS.forEach((c, j) => { o[c] = r[j]; }); return o; }) }, null, 1);
     f[b + '.xlsx'] = wxXlsx(w, rows);
     return f;
   }
-  const WX_MIME = { dwf: 'text/plain', dlf: 'text/plain', csv: 'text/csv', tsv: 'text/tab-separated-values', json: 'application/json', xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', zip: 'application/zip' };
+  const WX_MIME = { dwf: 'text/plain', dlf: 'text/plain', csv: 'text/csv', json: 'application/json', xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', zip: 'application/zip' };
   function wxSave(kind) {
     const w = st.my.wx; if (!w) return; const f = wxFiles(w), b = wxBase(w);
     if (kind === 'zip') f.README = 'Weather for ' + w.name + '\nSource: ' + (w.cite || 'SWAFL weather') + '\nFiles: ' + Object.keys(f).join(', ') + '\nColumns: ' + WX_COLS.map(c => c + (WX_UNITS[c] ? ' (' + WX_UNITS[c] + ')' : '')).join(', ') + '\n';
@@ -366,7 +365,7 @@
   }
   function wxButtons() {
     const w = st.my.wx; if (!w || st.my.wxMode === 'course' || !wxTable(w).length) return '';
-    return '<div id="dzMyWxDl" class="dzrow" style="margin-top:4px"><label>Download this weather</label>' + ['dwf', 'dlf', 'csv', 'tsv', 'xlsx', 'json'].map(k => '<button class="btn" data-wxdl="' + k + '" title="Save as a .' + k + ' file">.' + k + '</button>').join(' ') + ' <button class="btn" data-wxdl="zip" title="All formats in one .zip file">All formats (.zip)</button><span class="pnote">.dwf and .dlf are the Daisy formats; the daily values are the ones Daisy will use.</span></div>';
+    return '<div id="dzMyWxDl" class="dzrow" style="margin-top:4px"><label>Download this weather</label>' + ['dwf', 'dlf', 'csv', 'xlsx', 'json'].map(k => '<button class="btn" data-wxdl="' + k + '" title="Save as a .' + k + ' file">.' + k + '</button>').join(' ') + ' <button class="btn" data-wxdl="zip" title="All formats in one .zip file">All formats (.zip)</button><span class="pnote">.dwf and .dlf are the Daisy formats; the daily values are the ones Daisy will use.</span></div>';
   }
   document.addEventListener('click', ev => { const b = ev.target.closest && ev.target.closest('[data-wxdl]'); if (!b) return; try { wxSave(b.dataset.wxdl); } catch (e) { const i = $('MyWxInfo'); if (i) i.insertAdjacentHTML('beforeend', '<div style="color:#b3261e">' + esc(e.message) + '</div>'); } });
   window.DaisyScenUI = { online: onlineWx, project: useProject, projectName: () => { const w = projWx(); return w ? (w.name || w.src || 'loaded') : null; }, onWx: h => wxHooks.push(h), defaultWx, useFile: (act, name, text) => { st.pending = { act, name, text }; D.show('data'); }, runStandard, my: () => st.my, strip, bindStrip, runs: () => st.runs, sc: () => st.sc, dataLabel: () => ({ weather: wxLabel().replace(/<[^>]+>/g, ''), soil: soilLabel() }) };
