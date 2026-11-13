@@ -17,7 +17,7 @@ function createServer(root) {
   });
 }
 function listen(root, port = 0) {
-  return new Promise(resolve => { const s = createServer(root); s.listen(port, '127.0.0.1', () => resolve({ server: s, port: s.address().port })); });
+  return new Promise((resolve, reject) => { const s = createServer(root); s.once('error', reject); s.listen(port, '127.0.0.1', () => resolve({ server: s, port: s.address().port })); });
 }
 module.exports = { listen };
 

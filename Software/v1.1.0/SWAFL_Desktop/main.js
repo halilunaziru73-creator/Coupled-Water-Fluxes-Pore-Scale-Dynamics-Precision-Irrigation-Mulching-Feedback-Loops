@@ -31,7 +31,10 @@ function closeSplash() { try { if (splash && !splash.isDestroyed()) splash.close
 
 async function createWindow() {
   const root = path.join(__dirname, 'app');
-  const { server, port } = await listen(root, 0);
+  // A fixed port keeps the same web address on every start, so what the person has already answered or set up
+  // (licence, welcome notes, saved choices) is remembered. Another port is used only if this one is taken.
+  let srv; try { srv = await listen(root, 47831); } catch (e) { srv = await listen(root, 0); }
+  const { server, port } = srv;
   srv = server;
   win = new BrowserWindow({
     width: 1480, height: 900, minWidth: 1000, minHeight: 640,
