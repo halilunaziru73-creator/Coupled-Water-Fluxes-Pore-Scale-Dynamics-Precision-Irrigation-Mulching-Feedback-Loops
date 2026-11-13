@@ -49,7 +49,7 @@ a{color:#1a4fb5}
 <li><a href="#intro">Introduction</a></li><li><a href="#summary">Summary</a></li><li><a href="#meta">Meta-information</a></li>
 <li><a href="#focus">General focus of the software</a></li><li><a href="#context">General context of use</a></li><li><a href="#history">History</a></li>
 <li><a href="#systems">Systems, sub-systems, mechanisms</a></li><li><a href="#concepts">Concepts and modelling formalism</a></li><li><a href="#theory">Theory</a></li>
-<li><a href="#arch">Architecture and modules</a></li><li><a href="#policy">Policy variables and interventions</a></li><li><a href="#building">Building and using the model</a></li>
+<li><a href="#arch">Architecture and modules</a></li><li><a href="#daisy">Daisy layers and design of experiments</a></li><li><a href="#policy">Policy variables and interventions</a></li><li><a href="#building">Building and using the model</a></li>
 <li><a href="#strengths">Strengths and limitations</a></li><li><a href="#downloads">Downloads and status</a></li></ol></div>
 
 <h2 id="intro">Introduction</h2>
@@ -64,6 +64,7 @@ a{color:#1a4fb5}
 <li>History of the software</li>
 <li>Concepts: soil water, evaporation and mulch, irrigation control, crops, design hydraulics, the Daisy workbench and the field tools</li>
 <li>Architecture: the layers, the three computing engines and the shared project</li>
+<li>The Daisy layers: input data, design of experiments, results, decision support and model development</li>
 <li>Building a model: soil, weather, crop and management, runs, calibration and outputs</li>
 <li>Strengths and limitations, with what has and has not been verified</li>
 </ul>
@@ -142,6 +143,45 @@ a{color:#1a4fb5}
 <tr><td>Feedback loops</td><td>seven soil-atmosphere feedback loops</td></tr>
 <tr><td>Daisy output</td><td>decision table; fate of a chemical (live Daisy runs only)</td></tr>
 </table>
+
+<h2 id="daisy">The Daisy layers: from the question to the decision</h2>
+<p>The Daisy workbench opens from the Daisy model button of the toolbar. Its fourteen tabs are grouped by what a person does, in the order of the guided nine-step path with its Back and Next buttons. The weather and the soil are set once and every simulation uses them.</p>
+<div class="tw"><table>
+<tr><th class="n">Group</th><th class="n">Layer (tab)</th><th class="n">What it is for</th></tr>
+<tr><td rowspan="2">Input data</td><td>Input data</td><td>Weather (online weather of a place, a file, the stations bundled with Daisy) and the soil of the site, set once</td></tr>
+<tr><td>Parameter library</td><td>Horizons, crops, fertilisers and other entries of the Daisy library</td></tr>
+<tr><td rowspan="2">Experiments</td><td>Experiments (design of experiments)</td><td>Design your own set of runs from the factors of Daisy, or start from the best combinations</td></tr>
+<tr><td>Scenarios</td><td>Ready questions in five themes (water, nitrogen, soil, crop and climate, chemicals), each open to any other value of the parameter library</td></tr>
+<tr><td rowspan="4">Results and analysis</td><td>Process map</td><td>One map of the model processes and components; opening a process shows its figures</td></tr>
+<tr><td>Log plots</td><td>Any column of a Daisy log, or of the output of your runs</td></tr>
+<tr><td>Mass balance</td><td>A check that inputs, outputs and content agree</td></tr>
+<tr><td>Run comparison</td><td>Two logs compared against the smallest meaningful level</td></tr>
+<tr><td>Decision support</td><td>To the SWAFL layers</td><td>The results of your Daisy runs are taken to the decision layers (below)</td></tr>
+<tr><td rowspan="4">Model development</td><td>Set-up editor</td><td>Edit and run a Daisy set-up file</td></tr>
+<tr><td>Soil column</td><td>The Richards equation solved for a soil column, with no Daisy run needed</td></tr>
+<tr><td>Response curves</td><td>Any function of the Daisy library drawn</td></tr>
+<tr><td>Calibration</td><td>Parameter search with three optimisers (sequential, CMA-ES, Bayesian)</td></tr>
+<tr><td>Documentation</td><td>Model and documentation</td><td>The model, the questions and where each is answered, the downloads</td></tr>
+</table></div>
+
+<h3>Design of experiments</h3>
+<ul>
+<li><b>Factors.</b> The experiment is built from the factors of the farm and of Daisy, for example rain, temperature, irrigation, mulch, soil, crop, fertiliser and the parameters of the Daisy library. Each factor takes the values you choose.</li>
+<li><b>Designs.</b> A full factorial design (every combination of values), one change at a time (one run with every factor at the value of the farm, then one run for each value of each factor) or a paired design. When the number of runs would be too large, a chosen maximum is applied and the runs are picked in a balanced way (every value used about equally often) or at random with a stated seed, so the same plan gives the same runs.</li>
+<li><b>Checks before the runs.</b> The plan is checked against the catalogue of what Daisy can vary, the run time is estimated, and a planner can turn a request in plain words into a plan that is checked in the same way.</li>
+<li><b>Prepared designs.</b> A set of best combinations and ready scenarios start the work without designing anything.</li>
+<li><b>Running.</b> The ticked experiments are run one after another with a progress panel that shows the percentage and the time left.</li>
+<li><b>Results.</b> Figures coded to the process map, time series with the panels of the factors, efficiency indices, interactions, a summary of each experiment and a ranking of the combinations; every log and raw output of every run can be viewed and saved.</li>
+</ul>
+
+<h3>Daisy output layers of the decision workbench</h3>
+<p>These layers show Daisy results inside the decision layers. They follow one rule of origin: a Daisy layer shows only a Daisy run made in the workbench, and otherwise says that there is none.</p>
+<div class="tw"><table>
+<tr><th class="n">Layer</th><th class="n">What it shows</th></tr>
+<tr><td>Decision table (Daisy output)</td><td>The runs of your Daisy experiment set side by side, with the water, nitrogen and irrigation measures that decide between them, and the best combination</td></tr>
+<tr><td>Fate of a chemical (live Daisy runs only)</td><td>Where an applied chemical goes: the chemical budget of your Daisy runs, tested for closure. It is shown only for live Daisy runs, never for stored or simulated values</td></tr>
+</table></div>
+<p>Other links between Daisy and the layers: a mapping of eight of the ten built-in soils to Daisy soils (two are flagged as unmapped), parsers for the Daisy logs, and a return path for the weather of the project, so that a figure and the project use the same weather.</p>
 
 <h2 id="policy">Policy variables and intervention measures</h2>
 <ul>
