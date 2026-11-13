@@ -7,7 +7,7 @@
   const D = DaisyUI, esc = D.esc, SC = window.DaisyScen;
   // the steps of the path, with one plain sentence each; the tools (Build and test, Learn) are outside the path
   const PATH = [
-    ['data', 'My data and weather', 'Set the weather and the soil of your site once, or look at a weather station or bring online weather of any place. Every simulation uses them.'],
+    ['data', 'My data and weather', 'Set the weather and the soil of your site once, or look at a weather station or bring online weather of any place, which can then be downloaded in every format (.dwf, .dlf, CSV, Excel, JSON, .zip). Every simulation uses them.'],
     ['library', 'Library', 'Browse the soils, crops, fertilisers and chemicals of Daisy (you can skip this step).'],
     ['exp', 'Experiments', 'Design your own set of runs from the factors of the model, or load a ready one.'],
     ['scen', 'Scenarios', 'Or choose a ready-made question and run it.'],
@@ -23,7 +23,7 @@
   const idx = t => PATH.findIndex(p => p[0] === t);
   // what to do on each tab, in three short steps (shown under the bar; Hide tips folds them for every tab)
   const HELP = {
-    data: ['Choose the weather: built-in, a Daisy station, a file, or the online weather of your place.', 'Tick My soil and type your soil layers if you know them; otherwise the built-in soils are used.', 'Press Next.'],
+    data: ['Choose the weather: built-in, a Daisy station, a file, or the online weather of your place (it can be downloaded in all formats from the row under the weather summary).', 'Tick My soil and type your soil layers if you know them; otherwise the built-in soils are used.', 'Press Next.'],
     library: ['Look through the soils, crops and fertilisers Daisy knows.', 'Click one to read its values.', 'You can skip this step: press Next.'],
     scen: ['Pick the question closest to yours (water, nitrogen, climate, chemical or soil).', 'Press Run (in the desktop app Daisy runs on your computer).', 'Read the figures that appear, then press Next.'],
     exp: ['Choose a ready experiment: Best combinations, By topic, Prepared experiments, Import, or Load this experiment.', 'Check what changes and the values tested; remove or add rows.', 'Press Run all (desktop) or Save the experiment folder to run it anywhere.'],

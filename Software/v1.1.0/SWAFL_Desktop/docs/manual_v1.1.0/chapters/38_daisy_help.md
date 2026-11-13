@@ -12,6 +12,8 @@
 | Which years can be simulated? | Daisy starts one year after the first year of the weather. A weather record of at least six years is therefore needed. |
 | Is online weather complete? | Only complete years up to last year are asked for. A request that ends in the current year is refused by the weather service. |
 | What are the sources of online weather? | Daily data of the Open-Meteo archive, which is based on the ERA5 reanalysis. They are checked before use and the checks are shown. |
+| In which formats can I save online weather? | Daisy weather file (.dwf), Daisy log file (.dlf), CSV, Excel (.xlsx), JSON, or all of them in one .zip. Use the *Download this weather* row that appears after the weather has been read. The conversion is automatic. |
+| Why are some columns empty or -999? | The weather service did not give that value (for example wind or radiation in the main program). It is empty in CSV and Excel, null in JSON and -999 in the Daisy files. |
 
 ## Messages and what to do
 

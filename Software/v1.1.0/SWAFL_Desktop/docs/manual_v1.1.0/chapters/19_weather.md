@@ -109,6 +109,25 @@ The online weather needs the internet; everything else does not. If the place se
 
 **When the first service is busy.** If the service answers *too many requests* or cannot be reached, SWAFL tries again after a short wait, then asks a second service (NASA POWER, which covers every place on Earth) for the daily rain, temperature and radiation and computes the reference evapotranspiration from them with the Hargreaves equation. A place search that fails is tried again with a second place service. Weather that has been fetched once is kept on the computer, so the same place and years open at once and also work without the internet. The notes of the dialog say which service gave the weather.
 
+## How the online weather is called and saved in every format
+
+**How it is called.** SWAFL asks for the weather in two steps, both without a key. First the **place search** turns the name you typed into a latitude and longitude (the Open-Meteo place service; a second place service is tried when the first does not answer). Then the **weather call** asks the Open-Meteo archive (ERA5 reanalysis) for the daily record of that point: rain, reference evapotranspiration, maximum and minimum temperature, and, in the Daisy workbench, also the radiation and, when the service gives them, the wind and the vapour pressure. If the first service is busy, NASA POWER is called instead. The answer is checked day by day (gaps, impossible values) before it is used, and the checks are shown.
+
+**How it is converted.** You do not convert anything yourself. As soon as the weather has been read, SWAFL holds it as one daily table with the same columns and units whatever the source: year, month, day, precipitation (mm/d), minimum and maximum temperature (dgC), vapour pressure (hPa), wind (m/s), radiation (kWh/d/m^2) and reference evapotranspiration (mm/d). From this one table the **Download this weather** row writes, on a click, each of these formats:
+
+| Button | File | What it is |
+|:--|:--|:--|
+| .dwf | Daisy weather file | Daisy header with the station, longitude, latitude, elevation and the first and last day, then the daily lines; ready for a Daisy run |
+| .dlf | Daisy log file | The same table as a Daisy log with a units line, for the Plot, Compare and Mass balance tabs |
+| .csv | Comma separated text | Opens in any spreadsheet or statistics program |
+| .xlsx | Excel workbook | Sheet *Weather* (values and units) and sheet *About* (place, coordinates, first and last day, source) |
+| .json | JSON | The metadata, the columns with their units and the daily values, for programs |
+| All formats (.zip) | One zip file | All the files above and a short README |
+
+A value that the weather service does not give is left empty in the CSV and Excel files, is *null* in the JSON file and is written as *-999* in the two Daisy files. The file name is made from the place, the coordinates and the date and time of the download. Every file carries the source, so that the weather can be cited.
+
+**Where the row is.** The **Download this weather** row is shown in four places: in the report that opens after *Online weather for a location* has read the weather, in the window *Climate of the weather in use* (it then saves the weather the program is using now: the benchmark record, an imported file or the online weather), in the Weather tab of the Daisy workbench under *Online weather of a place*, and in *My data* under the weather summary.
+
 ## Switching back
 
 Choose *Built-in weather record* in Properties ▸ Scenario ▸ *Weather source*. The rainfall scale and temperature shift you had before the import come back. The imported file and the online weather stay available in the list until the program is closed.

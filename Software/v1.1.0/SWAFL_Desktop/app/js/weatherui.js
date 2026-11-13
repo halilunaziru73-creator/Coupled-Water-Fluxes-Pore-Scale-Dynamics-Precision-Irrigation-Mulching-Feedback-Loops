@@ -64,7 +64,7 @@ const WxUI = (() => {
   }
   function online() {
     UI.modal({ title: 'Online weather for a location', icon: 'search', width: 'min(620px,94vw)', html:
-      '<p>Get the measured daily weather of your location for the last twenty years and the forecast for the next sixteen days. The program then runs on that weather; the next days on the dashboard follow the forecast.</p>' +
+      '<p>Get the measured daily weather of your location for the last twenty years and the forecast for the next sixteen days. The program then runs on that weather; the next days on the dashboard follow the forecast. The place is looked up first, then the daily record of that point is called from the Open-Meteo archive; when it has been read, <b>Download this weather</b> saves it as a Daisy weather file (.dwf), a Daisy log (.dlf), CSV, Excel, JSON or all of them in one .zip, converted automatically.</p>' +
       '<div class="pr"><label>Place (town, village or district)</label><div style="display:flex;gap:6px"><input type="text" id="wxPlace" placeholder="for example: Kano, Nigeria" style="flex:1"><button class="btn" id="wxFind">Find</button></div></div>' +
       '<div class="pr"><label>Or the coordinates (latitude, longitude)</label><div style="display:flex;gap:6px"><input type="number" id="wxLatO" step="0.0001" placeholder="latitude" style="width:130px"><input type="number" id="wxLonO" step="0.0001" placeholder="longitude" style="width:130px"></div></div>' +
       '<div id="wxList"></div><div id="wxMsgO" class="pnote"></div>',

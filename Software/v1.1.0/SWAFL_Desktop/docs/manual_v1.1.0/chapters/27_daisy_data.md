@@ -20,6 +20,8 @@ Input data is the first tab of the group Input data. It is where the weather and
 
 With Online weather of my area the place is typed once; Find looks it up and fills the site boxes, and Get the weather reads the daily data of the chosen years from the internet. Only complete years up to last year are asked for.
 
+Once the weather is read, a **Download this weather** row appears under the weather summary. It saves the same daily weather as a Daisy weather file (.dwf), a Daisy log file (.dlf), CSV, Excel (.xlsx), JSON, or all of them in one .zip; the conversion is automatic and every file has the same columns and units. How the weather is called and converted is described in the chapter on weather, section *How the online weather is called and saved in every format*.
+
 ![Input data: online weather of a place. Screen 2 of the Daisy workbench.](images/daisy11/dz_data_02.jpg){width=100% height=17cm}
 
 **What the arrows point to.**
@@ -190,7 +192,7 @@ The lower part of the tab reads open weather data of the Danish Meteorological I
 
 ### Weather stations: online weather of any place, for the analysis and the runs
 
-The section Online weather of a place, at the foot of Weather stations, finds a place by name, reads its daily weather of the years you choose from the internet (Open-Meteo, ERA5 reanalysis) and then offers three uses: the weather of the SWAFL project, the weather of every Daisy run, and a log in the list of the plots. The same record is therefore used in the analysis of the project, in the Daisy runs and in the figures.
+The section Online weather of a place, at the foot of Weather stations, finds a place by name, reads its daily weather of the years you choose from the internet (Open-Meteo, ERA5 reanalysis) and then offers three uses: the weather of the SWAFL project, the weather of every Daisy run, and a log in the list of the plots. The same record is therefore used in the analysis of the project, in the Daisy runs and in the figures. Under the weather summary the **Download this weather** row saves the record in every format (.dwf, .dlf, CSV, Excel, JSON and one .zip with all of them).
 
 ![Weather stations: online weather of any place, for the analysis and the runs. Screen 13 of the Daisy workbench.](images/daisy11/dz_weather_03.jpg){width=100% height=17cm}
 
