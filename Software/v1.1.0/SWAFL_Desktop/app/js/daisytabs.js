@@ -26,7 +26,7 @@
   function wxInfo() {
     const w = st.my.wx; if (st.my.wxMode === 'course' || !w) return st.my.wxMode === 'course' ? 'The built-in weather (Taastrup, Denmark, 1965-2000) is used.' : 'Choose the file or press the button once the site is given.';
     const u = w.use || {}, cols = Object.keys(u).filter(k => u[k]).map(k => k + ': ' + esc(u[k])).join('; ');
-    return (st.my.latNote && w ? '<div class="pnote">Latitude: ' + esc(st.my.latNote) + '</div>' : '') + '<b>' + esc(w.name) + '</b>: ' + w.first + ' to ' + w.last + ' (' + w.years + ' complete years, mean rain ' + Math.round(w.Pmean) + ' mm/year, mean temperature ' + w.Tmean.toFixed(1) + ' C). Runs start in ' + (w.first + 1) + ' at the earliest. <span class="pnote">Columns used: ' + cols + '</span>' + ((w.notes.length || (w.quality && w.quality.fixed.length)) ? '<ul style="margin:3px 0 0 16px">' + w.notes.concat((w.quality && w.quality.fixed || []).map(x => 'checked and corrected: ' + x)).map(n => '<li>' + esc(n) + '</li>').join('') + '</ul>' : '') + (w.quality ? '<div class="pnote">Checked: ' + w.quality.days + ' days, no gaps left, no impossible values.</div>' : '');
+    return (st.my.latNote && w ? '<div class="pnote">Latitude: ' + esc(st.my.latNote) + '</div>' : '') + '<b>' + esc(w.name) + '</b>: ' + w.first + ' to ' + w.last + ' (' + w.years + ' complete years, mean rain ' + Math.round(w.Pmean) + ' mm/year, mean temperature ' + w.Tmean.toFixed(1) + ' C). Runs start in ' + (w.first + 1) + ' at the earliest. <span class="pnote">Columns used: ' + cols + '</span>' + ((w.notes.length || (w.quality && w.quality.fixed.length)) ? '<ul style="margin:3px 0 0 16px">' + w.notes.concat((w.quality && w.quality.fixed || []).map(x => 'checked and corrected: ' + x)).map(n => '<li>' + esc(n) + '</li>').join('') + '</ul>' : '') + (w.quality ? '<div class="pnote">Checked: ' + w.quality.days + ' days, no gaps left, no impossible values.</div>' : '') + wxButtons();
   }
   function soilTable() {
     const hz = st.my.soil.horizons, c = (i, k, w) => '<td><input type="number" step="any" data-sh="' + i + ':' + k + '" value="' + (hz[i][k] == null ? '' : hz[i][k]) + '" style="width:' + w + 'px"></td>';
@@ -317,6 +317,58 @@
     let src; try { src = await DaisyOnline.fetchDaily(+m.lat, +m.lon, y0, y1, msg => { const e = $('MyWxInfo'); if (e) e.textContent = msg; }); } catch (e) { throw new Error(/Failed to fetch|NetworkError|Load failed|network/i.test(e.message) ? 'no connection to the weather service (' + e.message + '). Use a weather file in My data instead, or try again online.' : e.message); }
     if (src.elevation != null && (m.elev === '' || m.elev == null)) m.elev = Math.round(src.elevation); convertWx(src, (m.place || 'Online weather') + ' ' + (+m.lat).toFixed(2) + 'N ' + (+m.lon).toFixed(2) + 'E'); m.wx.quality = src.stats; m.wx.cite = 'weather: Open-Meteo archive, ERA5 reanalysis (Zippenfenig, 2023; Hersbach et al., 2020), ' + (+m.lat).toFixed(2) + 'N ' + (+m.lon).toFixed(2) + 'E'; return m.wx;
   }
+  // ---- download the fetched weather in every format ----
+  const WX_COLS = ['year', 'month', 'day', 'precipitation', 'tmin', 'tmax', 'vapour_pressure', 'wind', 'radiation', 'et0'];
+  const WX_UNITS = { year: '', month: '', day: '', precipitation: 'mm/d', tmin: 'dgC', tmax: 'dgC', vapour_pressure: 'hPa', wind: 'm/s', radiation: 'kWh/d/m^2', et0: 'mm/d' };
+  function wxTable(w) {
+    const rows = []; String(w.text || '').split(/\r?\n/).forEach(l => { const p = l.split('\t'); if (p.length >= 10 && /^\d{4}$/.test(p[0].trim())) rows.push(p.slice(0, 10).map(Number)); });
+    return rows;
+  }
+  function wxBase(w) { return String(w.name || 'weather').replace(/[^\w.-]+/g, '_').replace(/^_+|_+$/g, '') || 'weather'; }
+  function wxMeta(w) {
+    const h = k => { const x = String(w.text || '').match(new RegExp('^' + k + ':\\s*([0-9.]+)\\s*(\\w*)', 'm')); return x ? { v: parseFloat(x[1]), d: x[2] } : null; }, la = h('Latitude'), lo = h('Longitude'), el = h('Elevation');
+    return { name: w.name, latitude: la ? (/South/i.test(la.d) ? -la.v : la.v) : null, longitude: lo ? (/West/i.test(lo.d) ? -lo.v : lo.v) : null, elevation_m: el ? el.v : null, first_year: w.first, last_year: w.last, complete_years: w.years, source: w.cite || 'SWAFL weather', created: new Date().toISOString().slice(0, 10) };
+  }
+  function wxXlsx(w, rows) {
+    const esc2 = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const col = i => String.fromCharCode(65 + i), str = (r, c, v) => '<c r="' + col(c) + r + '" t="inlineStr"><is><t>' + esc2(v) + '</t></is></c>';
+    let s1 = '<row r="1">' + WX_COLS.map((c, i) => str(1, i, c)).join('') + '</row><row r="2">' + WX_COLS.map((c, i) => str(2, i, WX_UNITS[c])).join('') + '</row>';
+    rows.forEach((r, k) => { s1 += '<row r="' + (k + 3) + '">' + r.map((v, i) => isFinite(v) ? '<c r="' + col(i) + (k + 3) + '"><v>' + v + '</v></c>' : '').join('') + '</row>'; });
+    const meta = wxMeta(w); let s2 = ''; Object.keys(meta).forEach((k, i) => { s2 += '<row r="' + (i + 1) + '">' + str(i + 1, 0, k) + str(i + 1, 1, meta[k] == null ? '' : meta[k]) + '</row>'; });
+    const sh = x => '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData>' + x + '</sheetData></worksheet>', H = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+    return window.DaisyExp.zip({
+      '[Content_Types].xml': H + '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/></Types>',
+      '_rels/.rels': H + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>',
+      'xl/workbook.xml': H + '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="Weather" sheetId="1" r:id="rId1"/><sheet name="About" sheetId="2" r:id="rId2"/></sheets></workbook>',
+      'xl/_rels/workbook.xml.rels': H + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet2.xml"/></Relationships>',
+      'xl/worksheets/sheet1.xml': sh(s1), 'xl/worksheets/sheet2.xml': sh(s2)
+    });
+  }
+  function wxFiles(w) {
+    const rows = wxTable(w); if (!rows.length) throw new Error('the weather has no daily lines to save');
+    const b = wxBase(w), meta = wxMeta(w), line = (r, sep) => r.join(sep), f = {};
+    f[b + '.dwf'] = w.text;
+    const d = { header: { info: '# Weather for ' + w.name + ' (' + meta.source + ')' }, cols: WX_COLS, units: WX_UNITS, data: WX_COLS.map((c, j) => rows.map(r => r[j])), n: rows.length };
+    f[b + '.dlf'] = window.DaisyIO.writeDlf({ header: { 'SIMFILE': 'SWAFL weather', 'Source': meta.source }, cols: d.cols, units: d.units, data: d.data, n: d.n }, '\t');
+    f[b + '.csv'] = WX_COLS.join(',') + '\n' + rows.map(r => line(r, ',')).join('\n') + '\n';
+    f[b + '.tsv'] = WX_COLS.join('\t') + '\n' + rows.map(r => line(r, '\t')).join('\n') + '\n';
+    f[b + '.json'] = JSON.stringify({ metadata: meta, notes: w.notes || [], columns: WX_COLS.map(c => ({ name: c, unit: WX_UNITS[c] })), daily: rows.map(r => { const o = {}; WX_COLS.forEach((c, j) => { o[c] = r[j]; }); return o; }) }, null, 1);
+    f[b + '.xlsx'] = wxXlsx(w, rows);
+    return f;
+  }
+  const WX_MIME = { dwf: 'text/plain', dlf: 'text/plain', csv: 'text/csv', tsv: 'text/tab-separated-values', json: 'application/json', xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', zip: 'application/zip' };
+  function wxSave(kind) {
+    const w = st.my.wx; if (!w) return; const f = wxFiles(w), b = wxBase(w);
+    if (kind === 'zip') f.README = 'Weather for ' + w.name + '\nSource: ' + (w.cite || 'SWAFL weather') + '\nFiles: ' + Object.keys(f).join(', ') + '\nColumns: ' + WX_COLS.map(c => c + (WX_UNITS[c] ? ' (' + WX_UNITS[c] + ')' : '')).join(', ') + '\n';
+    const name = kind === 'zip' ? b + '-weather.zip' : b + '.' + kind, data = kind === 'zip' ? window.DaisyExp.zip(f) : f[b + '.' + kind];
+    const blob = new Blob([data], { type: WX_MIME[kind] }), a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = window.SWAFLDate ? SWAFLDate.name(name) : name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    const e = $('MyWxDl'); if (e) e.dataset.last = name;
+  }
+  function wxButtons() {
+    const w = st.my.wx; if (!w || st.my.wxMode === 'course' || !wxTable(w).length) return '';
+    return '<div id="dzMyWxDl" class="dzrow" style="margin-top:4px"><label>Download this weather</label>' + ['dwf', 'dlf', 'csv', 'tsv', 'xlsx', 'json'].map(k => '<button class="btn" data-wxdl="' + k + '" title="Save as a .' + k + ' file">.' + k + '</button>').join(' ') + ' <button class="btn" data-wxdl="zip" title="All formats in one .zip file">All formats (.zip)</button><span class="pnote">.dwf and .dlf are the Daisy formats; the daily values are the ones Daisy will use.</span></div>';
+  }
+  document.addEventListener('click', ev => { const b = ev.target.closest && ev.target.closest('[data-wxdl]'); if (!b) return; try { wxSave(b.dataset.wxdl); } catch (e) { const i = $('MyWxInfo'); if (i) i.insertAdjacentHTML('beforeend', '<div style="color:#b3261e">' + esc(e.message) + '</div>'); } });
   window.DaisyScenUI = { online: onlineWx, project: useProject, projectName: () => { const w = projWx(); return w ? (w.name || w.src || 'loaded') : null; }, onWx: h => wxHooks.push(h), defaultWx, useFile: (act, name, text) => { st.pending = { act, name, text }; D.show('data'); }, runStandard, my: () => st.my, strip, bindStrip, runs: () => st.runs, sc: () => st.sc, dataLabel: () => ({ weather: wxLabel().replace(/<[^>]+>/g, ''), soil: soilLabel() }) };
   D.register('data', { html: () => '<h3 style="margin:2px 0 6px">My data: weather and soil</h3><p class="pnote">Set the weather and the soil of your site once. Scenarios, experiments and the process figures all use them. Weather can come from the internet for your area, from a file, or from SWAFL.</p>' + myBox(), bind: () => { bindMy(); bindStrip(); } });
   window.DaisyScenRuns = () => (st.runs || []).map(r => ({ id: r.id, label: (r.label || r.id || ''), logs: r.logs || {} }));
