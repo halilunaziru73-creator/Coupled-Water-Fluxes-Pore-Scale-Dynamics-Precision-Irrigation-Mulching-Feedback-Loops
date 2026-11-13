@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SWAFL 1.1.0 - Description</title>
+<meta name="description" content="Description of SWAFL, the soil water, atmosphere, feedback and layout workbench for irrigation and evaporation-control mulching.">
+<style>
+:root{--blue:#0A246A;--ink:#1d2433;--mut:#5b6577;--line:#d5dae3;--bg:#fff;--tint:#eef2fa}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.6 "Segoe UI",system-ui,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+header{background:var(--blue);color:#fff;padding:14px 20px}
+header b{font-size:1.15rem}
+nav{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:6px;font-size:.92rem}
+nav a{color:#cfe0ff;text-decoration:none}nav a:hover{color:#fff;text-decoration:underline}
+main{max-width:920px;margin:0 auto;padding:22px 20px 60px}
+h1{color:var(--blue);font-size:1.9rem;margin:.2em 0 .1em}
+h2{color:var(--blue);font-size:1.3rem;margin:1.8em 0 .4em;padding-bottom:.2em;border-bottom:2px solid var(--line)}
+h3{font-size:1.02rem;margin:1.2em 0 .2em}
+.lead{color:var(--mut);margin-top:0}
+.toc{background:var(--tint);border:1px solid var(--line);border-radius:6px;padding:10px 18px;margin:18px 0}
+.toc ol{margin:.3em 0;columns:2;column-gap:30px}
+@media(max-width:640px){.toc ol{columns:1}}
+table{border-collapse:collapse;width:100%;margin:10px 0;font-size:.95rem}
+th,td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+th{background:var(--tint);width:30%}
+td.n,th.n{width:auto}
+ul{margin:.4em 0 .8em 1.1em;padding:0}
+li{margin:.15em 0}
+img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:4px}
+figure{margin:14px 0}figcaption{font-size:.88rem;color:var(--mut)}
+.note{background:#fff7e6;border:1px solid #f0d9a8;border-radius:6px;padding:8px 14px;margin:14px 0}
+footer{border-top:1px solid var(--line);padding:16px 20px;color:var(--mut);font-size:.88rem;text-align:center}
+a{color:#1a4fb5}
+</style>
+</head>
+<body>
+<header><b>SWAFL</b> &nbsp;Soil Water, Atmosphere, Feedback and Layout
+<nav><a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops">Repository</a>
+<a href="SWAFL_Desktop/app/index.html?v=1.1.0">Online workbench</a>
+<a href="SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">Manual (PDF)</a>
+<a href="https://doi.org/10.5281/zenodo.23043626">Data (Zenodo)</a></nav></header>
+<main>
+<h1>SWAFL: description</h1>
+<p class="lead">Version 1.1.0 &middot; author Naziru Halilu</p>
+
+<div class="toc"><b>On this page</b>
+<ol>
+<li><a href="#intro">Introduction</a></li><li><a href="#summary">Summary</a></li><li><a href="#meta">Meta-information</a></li>
+<li><a href="#focus">General focus of the software</a></li><li><a href="#context">General context of use</a></li><li><a href="#history">History</a></li>
+<li><a href="#systems">Systems, sub-systems, mechanisms</a></li><li><a href="#concepts">Concepts and modelling formalism</a></li><li><a href="#theory">Theory</a></li>
+<li><a href="#arch">Architecture and modules</a></li><li><a href="#policy">Policy variables and interventions</a></li><li><a href="#building">Building and using the model</a></li>
+<li><a href="#strengths">Strengths and limitations</a></li><li><a href="#downloads">Downloads and status</a></li></ol></div>
+
+<h2 id="intro">Introduction</h2>
+<p>SWAFL is an open-source decision-support workbench for irrigation and evaporation-control mulching. It joins a one-dimensional soil-water model (the Daisy model), a fast daily water balance and closed-form irrigation design modules in one offline program, with the layers on the left, the properties on the right and a dashboard of results beside the drawing. It runs as a desktop application and in the browser.</p>
+<p>Its central question is what is left of an irrigation or evaporation saving once the soil, the weather and the irrigation rule are allowed to act. Every number on the screen can be followed to a numbered equation that carries a label of origin: literature, data-driven or engineered.</p>
+<figure><img src="SWAFL_Desktop/docs/swafl_workbench.png" alt="SWAFL 1.1.0: the drip irrigation design with the soil water of the days ahead"><figcaption>The SWAFL workbench: a drip irrigation design with the soil water of the days ahead.</figcaption></figure>
+
+<h2 id="summary">Summary</h2>
+<ul>
+<li>Meta-information: name, version, inputs, outputs, platform and licence</li>
+<li>Focus and context of use</li>
+<li>History of the software</li>
+<li>Concepts: soil water, evaporation and mulch, irrigation control, crops, design hydraulics, the Daisy workbench and the field tools</li>
+<li>Architecture: the layers, the three computing engines and the shared project</li>
+<li>Building a model: soil, weather, crop and management, runs, calibration and outputs</li>
+<li>Strengths and limitations, with what has and has not been verified</li>
+</ul>
+
+<h2 id="meta">Meta-information</h2>
+<table>
+<tr><th>Name</th><td>SWAFL (Soil Water, Atmosphere, Feedback and Layout), SWAFL Desktop</td></tr>
+<tr><th>Version</th><td>1.1.0 (the manual of version 1.0 stays in the repository)</td></tr>
+<tr><th>Author and contact</th><td>Naziru Halilu, <a href="https://github.com/halilunaziru73-creator">github.com/halilunaziru73-creator</a></td></tr>
+<tr><th>Type</th><td>Decision-support workbench with a graphical front end to the Daisy soil-plant-atmosphere model</td></tr>
+<tr><th>Inputs</th><td>Soil (10 built-in soils, own soil layers), weather (built-in benchmark record 1980 to 1999 with a projection to 2100, bundled Daisy stations, own file in CSV, Excel, DWF, DLF or DAI, online weather of any place, DMI open data), crop (library of 75 crops), irrigation system and rule, mulch, field outline (sketch, KML, GeoJSON, CSV), working date (1980 to 2100)</td></tr>
+<tr><th>Outputs</th><td>Irrigation dates and depths, crop water requirement, soil water and drainage, nitrogen budget, design drawings and hydraulic checks, dashboard, reports, field prescriptions, Daisy figures and logs; weather and results can be saved as .dwf, .dlf, CSV, Excel and JSON</td></tr>
+<tr><th>Computing engines</th><td>A meta-model of 10,190 Daisy runs, a daily 40-layer water balance, closed-form design modules for surface, drip and sprinkler systems; Daisy 7.1.14 for full runs</td></tr>
+<tr><th>Language and tools</th><td>JavaScript, HTML and CSS (Electron for the desktop app); Python for the analysis scripts</td></tr>
+<tr><th>Platform</th><td>Windows desktop application; any current browser for the online workbench (the Daisy runs need the desktop application)</td></tr>
+<tr><th>Licence</th><td>Source code under the MIT Licence; end user licence agreement for the compiled application (installed with the program, with a translation in seven languages)</td></tr>
+<tr><th>Documentation</th><td>Manual of more than 1,100 pages (PDF), four manuscripts with a supplement, data on Zenodo</td></tr>
+<tr><th>Citation</th><td>Halilu, N. (2026). SWAFL. <a href="https://doi.org/10.5281/zenodo.23043626">doi:10.5281/zenodo.23043626</a></td></tr>
+</table>
+
+<h2 id="focus">General focus of the software</h2>
+<ul>
+<li>Irrigation scheduling and design: surface, drip and sprinkler layouts, pipe network, pump, hydraulic grade line, design checks and schedule.</li>
+<li>Irrigation control: a sensor and trigger rule, and a soil independent trigger law in which one depletion target becomes a sensor suction for each soil.</li>
+<li>Mulch and evaporation: mulch against bare soil, the fate of saved evaporation (less irrigation, more transpiration or more drainage) and a regime map of evaporation against drainage.</li>
+<li>Soil structure and tillage, root structure, and deterministic virtual phenotyping of one plant under well-watered and drought treatments.</li>
+<li>Seasonal data: reliability over 20 seasons, full water balance, nitrogen budget and projections 10 or 20 years beyond the simulated seasons.</li>
+<li>The real field: field sketch, field on the map, Sentinel-2 indices, water sources, terrain and soil from open data, management zones and variable-rate irrigation.</li>
+<li>Experiments with Daisy: 17 prepared experiments, 53 factors, calibration and publication-style figures.</li>
+</ul>
+
+<h2 id="context">General context of use</h2>
+<ul>
+<li><b>Research.</b> Comparing irrigation and mulching strategies across soils and climates, with closed water balances and repeatable runs.</li>
+<li><b>Applied use and advice.</b> Irrigation dates, depths and design checks for a field, with the reason for each number shown.</li>
+<li><b>Decision support.</b> A dashboard of the days ahead built on weather forecasts, and prescriptions for zones of a field.</li>
+<li><b>Training.</b> Every screen is documented with labelled pictures; the soil column, the process curves and the response curves show the processes without starting Daisy.</li>
+</ul>
+<p>The software is built to be used with the <a href="https://github.com/daisy-model">Daisy model</a> and with open data (Open-Meteo, NASA POWER, Sentinel-2).</p>
+
+<h2 id="history">History</h2>
+<ul>
+<li><b>Version 1.0.</b> Decision layers for irrigation design, mulch and evaporation, soil structure, the field water balance and the seasonal data, with the 10,190-run meta-model. It remains in the repository (<code>Software/Old_Version_1.0</code>).</li>
+<li><b>Version 1.1.0.</b> The graphical Daisy workbench (guided nine-step path, experiments, process map, soil column, response curves, calibration) with Daisy bundled for Windows; the bridge from Daisy to the decision layers; the library of crops and virtual phenotyping; the field sketch and field on the map; weather from several sources, including online weather that can be saved in every file format; a working date from 1980 to 2100.</li>
+</ul>
+<p>Every change is listed in the chapter of the manual on the changes since version 1.0.</p>
+
+<h2 id="systems">Systems, sub-systems, mechanisms</h2>
+<p>SWAFL describes a vertical column of soil with the crop and the atmosphere above it, and a field of such columns for design. The systems are the soil profile (matrix flow and its hydraulic proxies for the pore network), the surface with its mulch, the crop with its roots and water uptake, the irrigation system with its pipes, and the weather as the boundary condition. Across the field, zones and sources of water are handled by the field tools.</p>
+
+<h2 id="concepts">Concepts and modelling formalism</h2>
+<p><b>Soil water.</b> Water flow in the soil follows the Richards equation with van Genuchten and Mualem hydraulics. The soil-column solver of the workbench and the daily 40-layer balance use the same retention and conductivity relations.</p>
+<p><b>Evaporation and mulch.</b> The reference evapotranspiration follows the FAO Penman and Monteith equation. Evaporation from the soil and the effect of a mulch are modelled against bare soil, and the water that is saved is followed into less irrigation, extra transpiration or extra drainage.</p>
+<p><b>Crops.</b> A library of 75 crops, refined with the FAO-56 edition of 2025, gives each coefficient with a stated source and daily crop coefficient curves. Water uptake follows Feddes.</p>
+<p><b>Irrigation control.</b> A trigger is expressed as root-zone depletion instead of suction, so that one target applies to many soils.</p>
+<p><b>Design hydraulics.</b> Pipe losses follow Hazen and Williams, with speed checks and pump head; closed-form design modules for surface, drip and sprinkler systems are checked against FAO-45 and textbook examples.</p>
+<p><b>Nitrogen and chemicals.</b> A nitrogen budget over the season, and a chemical budget from Daisy runs that is tested for closure.</p>
+<p><b>Weather.</b> Daily rain, temperature, radiation and evapotranspiration. Online weather is called by place name and then by coordinates from the Open-Meteo archive (ERA5 reanalysis), with NASA POWER as a second service, checked day by day and converted to one daily table that can be saved as a Daisy weather file, a Daisy log, CSV, Excel, JSON or one zip.</p>
+
+<h2 id="theory">Theory</h2>
+<p>The analysis behind SWAFL treats water management as a set of coupled fluxes: irrigation, evaporation, transpiration, drainage and storage change. A water balance that does not close is not interpreted. For this reason every partition used in the analysis is audited for closure, and a data-driven search must first recover the known balance. The relation between an evaporation change and its fate is described by the soil hydraulic memory, a measurable property of the soil, and the competition between the saturated conductivity and the rate of withdrawal.</p>
+<p>The model is one-dimensional and vertical; the pore network is represented through hydraulic proxies, so the findings about hydraulic memory are mechanistic hypotheses. About 470 numbered equations are listed in the manual with their origin and the screens that use them.</p>
+
+<h2 id="arch">Architecture and modules</h2>
+<p>The workbench is made of layers (22 decision layers in nine groups), three computing engines and one project that all layers share. The simulation engine runs in a separate window and the workbench talks to it through one bridge; the Daisy workbench starts Daisy as a program of the computer and reads its logs. A process map shows the components of Daisy (14 processes, 76 components): opening a component shows its settings, its results and its figures.</p>
+<table>
+<tr><th class="n">Group</th><th class="n">Layers</th></tr>
+<tr><td>Irrigation design</td><td>surface, drip and sprinkler design, pipe network, pump, schedule</td></tr>
+<tr><td>Irrigation control</td><td>sensor and trigger; trigger law</td></tr>
+<tr><td>Mulch and evaporation</td><td>mulch against bare soil; mulch control; evaporation; fate of saved water; regime map</td></tr>
+<tr><td>Soil structure and tillage</td><td>tillage and structure; soil hydraulic drivers; root structure</td></tr>
+<tr><td>Deterministic phenotyping</td><td>virtual plant, well watered and under drought</td></tr>
+<tr><td>Field water balance</td><td>field balance; soil, plant and air; profile evolution</td></tr>
+<tr><td>Seasonal data</td><td>reliability over 20 seasons; full water balance; nitrogen budget</td></tr>
+<tr><td>Crops</td><td>crop water requirement</td></tr>
+<tr><td>Feedback loops</td><td>seven soil-atmosphere feedback loops</td></tr>
+<tr><td>Daisy output</td><td>decision table; fate of a chemical (live Daisy runs only)</td></tr>
+</table>
+
+<h2 id="policy">Policy variables and intervention measures</h2>
+<ul>
+<li>Irrigation system, layout, depth and trigger (suction or depletion)</li>
+<li>Mulch cover and the evaporation it controls</li>
+<li>Tillage and soil structure</li>
+<li>Crop, genotype and sowing date; fertilizer rate and its precision application</li>
+<li>Drainage and the choice of soil, weather and years</li>
+</ul>
+
+<h2 id="building">Building and using the model</h2>
+<ul>
+<li><b>Parameters.</b> Soil, weather, crop and management are set once in <i>My data</i> or in the Properties panel; every layer uses them. Built-in soils and crops are used when nothing is typed.</li>
+<li><b>Runs.</b> The workbench runs a design or an experiment, shows the progress with percentage and time left, and draws the results in figures coded to the process map.</li>
+<li><b>Calibration and checks.</b> A calibration tool (sequential, CMA-ES and Bayesian) is available before Daisy is started. Every Daisy design is checked against a catalogue of what Daisy can vary.</li>
+<li><b>Outputs.</b> Dashboard, reports, figures, logs and prescription files; weather and results can be downloaded in several file formats.</li>
+</ul>
+
+<h2 id="strengths">Strengths and limitations</h2>
+<p><b>Strengths.</b> The program works offline and uses open data when a connection exists; each online service falls back to simulated data and says what it used. Every number can be traced to a numbered equation with its origin. Runs are repeatable: the phenotyping runs are identical when repeated and the soil water balance closes to a very small error. The design modules reproduce FAO-45 and textbook worked examples within 3 percent.</p>
+<p><b>Limitations.</b></p>
+<ul>
+<li>No field measurement is used and no field validation is claimed. Verification is against worked examples, held-out simulations, independent solvers and stored model output.</li>
+<li>The pore network is represented by hydraulic proxies in a one-dimensional matrix-flow model.</li>
+<li>The phenotyping constants are typical editable values, not data of an experiment.</li>
+<li>Daisy runs need the desktop application on Windows; the satellite and open-data services were exercised on test data only; the application is not code-signed, so Windows may show a SmartScreen warning.</li>
+<li>For three-dimensional flow, detailed crop growth under many stresses, or regional hydrology, a dedicated model is a better choice.</li>
+</ul>
+
+<h2 id="downloads">Downloads and status</h2>
+<table>
+<tr><th>Online workbench</th><td><a href="SWAFL_Desktop/app/index.html?v=1.1.0">SWAFL 1.1.0, no installation</a></td></tr>
+<tr><th>Manual</th><td><a href="SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">SWAFL Manual version 1.1.0 (PDF)</a></td></tr>
+<tr><th>Software</th><td><a href="SWAFL_Desktop.zip">SWAFL_Desktop.zip</a> and the <a href="RELEASE_NOTES_v1.1.0.md">release notes</a></td></tr>
+<tr><th>Data</th><td><a href="https://doi.org/10.5281/zenodo.23043626">Zenodo record</a></td></tr>
+<tr><th>Status</th><td>Version 1.1.0 is released. The repository is open under the MIT Licence; the field validation of the results is not yet done.</td></tr>
+</table>
+</main>
+<footer>&copy; 2026 Naziru Halilu &middot; SWAFL 1.1.0</footer>
+</body>
+</html>
