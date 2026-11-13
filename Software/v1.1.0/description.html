@@ -75,11 +75,15 @@ footer{background:var(--soft);margin-top:80px;padding-bottom:36px;border-top:0}
 <div class="crumb"><a href="#top">Home</a><i>&rsaquo;</i><a href="#downloads">Software</a><i>&rsaquo;</i><span>Daisy decision support system - Version 1.1.0</span></div>
 <p class="intro">SWAFL is a decision support system for the Daisy soil-plant-atmosphere model. It turns Daisy runs, a fast daily water balance and closed-form design modules into one offline workbench with a graphical interface for irrigation and evaporation-control mulching decisions: it prepares and checks Daisy experiments, runs them, and brings the results back to the decision layers. It shows how much of an irrigation or evaporation saving remains once the soil, the weather and the irrigation rule have acted, and it traces every number to a numbered equation.</p>
 <hr class="rule">
-<figure class="dgwrap"><svg class="dg" viewBox="0 0 900 540" role="img" aria-label="Water fluxes between atmosphere, plant, mulch, soil, groundwater and surface water in SWAFL">
+<figure class="dgwrap"><svg class="dg" viewBox="0 0 900 830" role="img" aria-label="All water, nitrogen and heat interactions between atmosphere, plant, mulch, soil, groundwater and surface water in SWAFL, with the seven feedback loops">
 <defs><linearGradient id="gs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8ee8ee"/><stop offset=".5" stop-color="#2aa7e8"/><stop offset="1" stop-color="#1230c8"/></linearGradient>
-<marker id="ah" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0L10,5L0,10z" fill="#0A246A"/></marker>
-<marker id="aw" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0L10,5L0,10z" fill="#fff"/></marker>
-<marker id="ar" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0L10,5L0,10z" fill="#B8432F"/></marker></defs>
+<marker id="ah" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="#0A246A"/></marker>
+<marker id="aw" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="#fff"/></marker>
+<marker id="ar" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="#B8432F"/></marker>
+<marker id="an" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="#9a6a00"/></marker>
+<marker id="ay" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="#ffd166"/></marker>
+<marker id="ag" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="#5b6577"/></marker>
+</defs><g transform="translate(0,44)">
 <rect x="300" y="170" width="280" height="260" fill="url(#gs)"/><rect x="300" y="430" width="280" height="70" fill="#0a1ea8"/><rect x="300" y="162" width="280" height="10" fill="#8a5a2b"/>
 <line x1="40" y1="167" x2="300" y2="167" class="ln"/><line x1="580" y1="167" x2="650" y2="167" class="ln"/>
 <polygon points="650,167 700,380 820,380 860,167" fill="#cfe6ff" stroke="currentColor"/><polygon points="702,380 716,300 806,300 820,380" fill="#1230c8"/>
@@ -90,30 +94,83 @@ footer{background:var(--soft);margin-top:80px;padding-bottom:36px;border-top:0}
 <text x="40" y="150" font-size="26" font-weight="700" style="fill:#0A246A">Plant and mulch</text>
 <text x="40" y="300" font-size="26" font-weight="700" style="fill:#0A246A">Soil water</text>
 <text x="40" y="470" font-size="26" font-weight="700" style="fill:#0A246A">Groundwater</text>
+<rect x="350" y="-40" width="300" height="26" rx="4" fill="none" stroke="currentColor" stroke-dasharray="4 3"/><text x="500" y="-22" text-anchor="middle" font-size="13" font-weight="600">Radiation, temperature, humidity, wind</text>
+<line x1="500" y1="-12" x2="500" y2="22" stroke="#5b6577" stroke-width="2" stroke-dasharray="3 3" marker-end="url(#ag)"/>
+<text x="508" y="4" text-anchor="start" font-size="11" font-style="italic" font-weight="600" style="fill:#5b6577;paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">set the demand</text>
 <line x1="330" y1="48" x2="330" y2="100" stroke="#0A246A" stroke-width="4.5" marker-end="url(#ah)"/>
 <text x="330" y="38" text-anchor="middle" font-size="14" font-style="italic" font-weight="600" style="paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">Precipitation</text>
-<line x1="605" y1="48" x2="605" y2="118" stroke="#0A246A" stroke-width="4.5" marker-end="url(#ah)"/>
-<text x="605" y="38" text-anchor="middle" font-size="14" font-style="italic" font-weight="600" style="paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">Irrigation</text>
+<text x="285" y="76" text-anchor="end" font-size="12" font-style="italic" font-weight="600" style="fill:#5b6577;paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">Snow, then snowmelt</text>
+<line x1="290" y1="72" x2="322" y2="72" stroke="#5b6577" stroke-width="2" marker-end="url(#ag)"/>
+<line x1="640" y1="48" x2="640" y2="140" stroke="#0A246A" stroke-width="4.5" marker-end="url(#ah)"/>
+<text x="640" y="38" text-anchor="middle" font-size="14" font-style="italic" font-weight="600" style="paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">Irrigation</text>
 <line x1="392" y1="150" x2="392" y2="104" stroke="#0A246A" stroke-width="4.5" marker-end="url(#ah)"/>
 <text x="384" y="128" text-anchor="end" font-size="14" font-style="italic" font-weight="600" style="paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">Evaporation</text>
 <line x1="525" y1="150" x2="525" y2="96" stroke="#0A246A" stroke-width="4.5" marker-end="url(#ah)"/>
 <text x="534" y="92" text-anchor="start" font-size="14" font-style="italic" font-weight="600" style="paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">Transpiration</text>
+<line x1="340" y1="92" x2="430" y2="84" stroke="#0A246A" stroke-width="2" marker-end="url(#ah)" stroke-dasharray="4 3"/>
+<text x="396" y="78" text-anchor="middle" font-size="12" font-style="italic" font-weight="600" style="paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">Interception</text>
+<line x1="565" y1="150" x2="565" y2="118" stroke="#9a6a00" stroke-width="3" marker-end="url(#an)"/>
+<text x="573" y="114" text-anchor="start" font-size="11" font-style="italic" font-weight="600" style="fill:#9a6a00;paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">N2O and gases</text>
 <line x1="585" y1="152" x2="650" y2="152" stroke="#0A246A" stroke-width="4.5" marker-end="url(#ah)"/>
 <text x="617" y="184" text-anchor="middle" font-size="14" font-style="italic" font-weight="600" style="paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">Runoff</text>
+<ellipse cx="352" cy="165" rx="30" ry="4" fill="#9fd4ff"/>
+<text x="352" y="156" text-anchor="middle" font-size="11" font-style="italic" font-weight="600" style="paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">Ponding</text>
 <text x="440" y="170" text-anchor="middle" font-size="11" font-weight="700" style="fill:#fff" letter-spacing="2">MULCH</text>
 <line x1="350" y1="186" x2="350" y2="262" stroke="#fff" stroke-width="4.5" marker-end="url(#aw)"/>
-<text x="360" y="224" text-anchor="start" font-size="14" font-style="italic" font-weight="600" style="fill:#fff">Infiltration</text>
+<text x="360" y="244" text-anchor="start" font-size="14" font-style="italic" font-weight="600" style="fill:#fff">Infiltration</text>
+<line x1="565" y1="186" x2="565" y2="280" stroke="#fff" stroke-width="2.6" marker-end="url(#aw)" stroke-dasharray="3 3"/>
+<text x="556" y="208" text-anchor="end" font-size="12" font-style="italic" font-weight="600" style="fill:#fff">Biopores</text>
 <line x1="420" y1="330" x2="420" y2="262" stroke="#fff" stroke-width="4.5" marker-end="url(#aw)"/>
 <text x="410" y="296" text-anchor="end" font-size="14" font-style="italic" font-weight="600" style="fill:#fff">Root uptake</text>
+<line x1="400" y1="362" x2="520" y2="362" stroke="#fff" stroke-width="2.6" marker-start="url(#aw)" marker-end="url(#aw)"/>
+<text x="460" y="354" text-anchor="middle" font-size="12" font-style="italic" font-weight="600" style="fill:#fff">Redistribution</text>
 <line x1="350" y1="350" x2="350" y2="430" stroke="#fff" stroke-width="4.5" marker-end="url(#aw)"/>
 <text x="360" y="396" text-anchor="start" font-size="14" font-style="italic" font-weight="600" style="fill:#fff">Drainage</text>
+<line x1="376" y1="404" x2="376" y2="428" stroke="#ffd166" stroke-width="3" marker-end="url(#ay)"/>
+<text x="386" y="422" text-anchor="start" font-size="12" font-style="italic" font-weight="600" style="fill:#fff">Nitrate leaching</text>
+<line x1="556" y1="336" x2="556" y2="304" stroke="#ffd166" stroke-width="2.6" marker-end="url(#ay)"/>
+<text x="548" y="328" text-anchor="end" font-size="12" font-style="italic" font-weight="600" style="fill:#fff">N uptake</text>
+<line x1="440" y1="176" x2="440" y2="214" stroke="#ffd166" stroke-width="3" marker-end="url(#ay)"/>
+<text x="432" y="206" text-anchor="end" font-size="12" font-style="italic" font-weight="600" style="fill:#fff">Fertiliser</text>
 <line x1="540" y1="470" x2="540" y2="380" stroke="#fff" stroke-width="4.5" marker-end="url(#aw)"/>
-<text x="530" y="420" text-anchor="end" font-size="14" font-style="italic" font-weight="600" style="fill:#fff">Capillary rise</text>
+<text x="530" y="452" text-anchor="end" font-size="14" font-style="italic" font-weight="600" style="fill:#fff">Capillary rise</text>
+<line x1="350" y1="440" x2="350" y2="492" stroke="#fff" stroke-width="3" marker-end="url(#aw)"/>
+<text x="360" y="474" text-anchor="start" font-size="12" font-style="italic" font-weight="600" style="fill:#fff">Recharge</text>
 <line x1="582" y1="330" x2="700" y2="330" stroke="#0A246A" stroke-width="4.5" marker-end="url(#ah)"/>
 <text x="641" y="318" text-anchor="middle" font-size="14" font-style="italic" font-weight="600" style="paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">Lateral drainage</text>
+<line x1="702" y1="368" x2="584" y2="368" stroke="#0A246A" stroke-width="2.6" marker-end="url(#ah)"/>
+<text x="643" y="388" text-anchor="middle" font-size="12" font-style="italic" font-weight="600" style="paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">Seepage from the ditch</text>
+<line x1="584" y1="464" x2="706" y2="404" stroke="#0A246A" stroke-width="2.6" marker-end="url(#ah)"/>
+<text x="645" y="452" text-anchor="middle" font-size="12" font-style="italic" font-weight="600" style="paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">Groundwater to ditch</text>
 <circle cx="470" cy="296" r="8" fill="#B8432F" stroke="#fff" stroke-width="2"/><text x="486" y="300" font-size="13" font-weight="700" style="fill:#fff">Sensor</text>
-<path d="M500,330 C650,370 690,230 625,176 C615,160 608,140 606,124" stroke="#B8432F" stroke-width="3" fill="none" stroke-dasharray="7 4" marker-end="url(#ar)"/><text x="672" y="276" font-size="13" font-weight="700" style="fill:#B8432F">trigger</text>
-<text x="450" y="525" text-anchor="middle" font-size="13" class="mut">Nitrate leaves with the drainage. Every flux is a numbered equation in the manual.</text></svg><figcaption>The soil, water and atmosphere system that SWAFL simulates. The solid arrows are water fluxes; the dashed arrow is the irrigation trigger that reads the suction at the sensor.</figcaption></figure>
+<path d="M478,290 C540,236 640,254 662,212 C668,190 652,172 640,150" stroke="#B8432F" stroke-width="3" fill="none" stroke-dasharray="7 4" marker-end="url(#ar)"/>
+<text x="676" y="196" font-size="13" font-weight="700" style="fill:#B8432F">trigger</text>
+<text x="40" y="334" text-anchor="start" font-size="12" font-style="italic" font-weight="600" style="fill:#9a6a00;paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">Nitrogen in the soil: mineralisation,</text>
+<text x="40" y="351" text-anchor="start" font-size="12" font-style="italic" font-weight="600" style="fill:#9a6a00;paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">nitrification, denitrification, the</text>
+<text x="40" y="368" text-anchor="start" font-size="12" font-style="italic" font-weight="600" style="fill:#9a6a00;paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">organic matter pools</text>
+<text x="40" y="392" text-anchor="start" font-size="12" font-style="italic" font-weight="600" style="fill:#5b6577;paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">Soil heat and frost: they slow</text>
+<text x="40" y="409" text-anchor="start" font-size="12" font-style="italic" font-weight="600" style="fill:#5b6577;paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">and stop the flow</text>
+<circle cx="322" cy="2" r="10" fill="#B8432F" stroke="#fff" stroke-width="2"/><text x="322" y="6" text-anchor="middle" font-size="12" font-weight="700" style="fill:#fff">1</text>
+<circle cx="318" cy="70" r="10" fill="#B8432F" stroke="#fff" stroke-width="2"/><text x="318" y="74" text-anchor="middle" font-size="12" font-weight="700" style="fill:#fff">2</text>
+<circle cx="330" cy="167" r="10" fill="#B8432F" stroke="#fff" stroke-width="2"/><text x="330" y="171" text-anchor="middle" font-size="12" font-weight="700" style="fill:#fff">3</text>
+<circle cx="672" cy="258" r="10" fill="#B8432F" stroke="#fff" stroke-width="2"/><text x="672" y="262" text-anchor="middle" font-size="12" font-weight="700" style="fill:#fff">4</text>
+<circle cx="335" cy="376" r="10" fill="#B8432F" stroke="#fff" stroke-width="2"/><text x="335" y="380" text-anchor="middle" font-size="12" font-weight="700" style="fill:#fff">5</text>
+<circle cx="578" cy="344" r="10" fill="#B8432F" stroke="#fff" stroke-width="2"/><text x="578" y="348" text-anchor="middle" font-size="12" font-weight="700" style="fill:#fff">6</text>
+<circle cx="312" cy="198" r="10" fill="#B8432F" stroke="#fff" stroke-width="2"/><text x="312" y="202" text-anchor="middle" font-size="12" font-weight="700" style="fill:#fff">7</text>
+</g>
+<line x1="20" y1="620" x2="880" y2="620" class="ln" stroke-width="1" opacity=".4"/><text x="20" y="644" font-size="15" font-weight="700" style="fill:#0A246A">The seven feedback loops</text>
+<circle cx="30" cy="668" r="10" fill="#B8432F"/><text x="30" y="672" text-anchor="middle" font-size="12" font-weight="700" style="fill:#fff">1</text><text x="48" y="672" font-size="13">Temperature changes the crop water need and the yield</text>
+<circle cx="480" cy="668" r="10" fill="#B8432F"/><text x="480" y="672" text-anchor="middle" font-size="12" font-weight="700" style="fill:#fff">2</text><text x="498" y="672" font-size="13">Rain changes the drainage and the irrigation</text>
+<circle cx="30" cy="694" r="10" fill="#B8432F"/><text x="30" y="698" text-anchor="middle" font-size="12" font-weight="700" style="fill:#fff">3</text><text x="48" y="698" font-size="13">Mulch changes the soil evaporation and the irrigation</text>
+<circle cx="480" cy="694" r="10" fill="#B8432F"/><text x="480" y="698" text-anchor="middle" font-size="12" font-weight="700" style="fill:#fff">4</text><text x="498" y="698" font-size="13">The trigger moves the irrigation and the yield</text>
+<circle cx="30" cy="720" r="10" fill="#B8432F"/><text x="30" y="724" text-anchor="middle" font-size="12" font-weight="700" style="fill:#fff">5</text><text x="48" y="724" font-size="13">More drainage carries more nitrate away</text>
+<circle cx="480" cy="720" r="10" fill="#B8432F"/><text x="480" y="724" text-anchor="middle" font-size="12" font-weight="700" style="fill:#fff">6</text><text x="498" y="724" font-size="13">Nitrogen changes the leaching and the yield</text>
+<circle cx="30" cy="746" r="10" fill="#B8432F"/><text x="30" y="750" text-anchor="middle" font-size="12" font-weight="700" style="fill:#fff">7</text><text x="48" y="750" font-size="13">Consolidation of the soil changes the drainage</text>
+<line x1="440" y1="780" x2="468" y2="780" stroke="#0A246A" stroke-width="4" marker-end="url(#ah)"/><text x="476" y="784" font-size="12">water</text>
+<line x1="520" y1="780" x2="548" y2="780" stroke="#9a6a00" stroke-width="3" marker-end="url(#an)"/><text x="556" y="784" font-size="12">nitrogen</text>
+<line x1="620" y1="780" x2="648" y2="780" stroke="#5b6577" stroke-width="2.5" marker-end="url(#ag)"/><text x="656" y="784" font-size="12">drivers, heat, snow</text>
+<line x1="780" y1="780" x2="808" y2="780" stroke="#B8432F" stroke-width="2.5" marker-end="url(#ar)" stroke-dasharray="6 3"/><text x="816" y="784" font-size="12">trigger</text>
+<text x="450" y="812" text-anchor="middle" font-size="13" class="mut">Every flux is a numbered equation in the manual.</text></svg><figcaption>The soil, water and atmosphere system that SWAFL simulates, with every interaction of the model. Dark arrows are water fluxes, amber arrows are nitrogen, grey arrows are the weather drivers, snow and heat, and the dashed red arrow is the irrigation trigger that reads the suction at the sensor. The numbered red circles mark the seven feedback loops listed below the drawing.</figcaption></figure>
 <div class="content" id="content">
 <h2 id="intro">Introduction</h2>
 <p>The workbench shows the layers on the left, the properties on the right and a dashboard of results beside the drawing. It runs as a desktop application and in the browser, with no installation needed for the online version.</p>
