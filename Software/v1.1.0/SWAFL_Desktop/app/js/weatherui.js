@@ -19,7 +19,16 @@ const WxUI = (() => {
     if (T) { const tmx = Math.max(...T.filter(isFinite), 10) * 1.1, tmn = Math.min(0, ...T.filter(isFinite)), Yt = v => B - (v - tmn) / (tmx - tmn) * (B - Tp); c.strokeStyle = '#C62828'; c.lineWidth = 2; c.beginPath(); T.forEach((v, m) => { if (!isFinite(v)) return; m ? c.lineTo(X(m), Yt(v)) : c.moveTo(X(m), Yt(v)); }); c.stroke(); c.lineWidth = 1; c.fillStyle = '#C62828'; c.textAlign = 'left'; c.fillText('temperature \u00b0C: ' + Math.round(Math.min(...T.filter(isFinite))) + ' to ' + Math.round(Math.max(...T.filter(isFinite))), R - 150, Tp - 4); }
     c.textAlign = 'left'; c.fillStyle = '#29B6F6'; c.fillRect(L, h - 12, 10, 8); c.fillStyle = '#12303A'; c.fillText('rain (mm/month)', L + 14, h - 4); c.fillStyle = '#FB8C00'; c.fillRect(L + 120, h - 12, 10, 8); c.fillStyle = '#12303A'; c.fillText('reference ET (mm/month)', L + 134, h - 4);
   }
-  function climate() { UI.modal({ title: 'Climate of the weather in use', icon: 'info', width: 'min(640px,94vw)', html: '<canvas id="wxClim" width="600" height="250" style="max-width:100%"></canvas><p class="pnote">The irrigation dates, the crop water need, the soil water, the dashboard and every layer are calculated from this weather. Change it in Properties, Scenario, Weather source.</p>' }); setTimeout(() => drawClim('wxClim'), 30); }
+  // the daily weather the program runs on now: the file or online weather, or the benchmark record of the software
+  function dailyInUse() {
+    const W0 = E.win && E.win.WXD, dm = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    if (W0 && W0.on && W0.rows && W0.rows.length) return { rows: W0.rows, meta: { name: W0.name || 'weather', lat: W0.lat, lon: W0.lon, source: W0.src === 'file' ? 'imported weather file' : 'Open-Meteo archive and forecast (ERA5 reanalysis; Zippenfenig, 2023; Hersbach et al., 2020)' } };
+    const sim = E.json('(function(){var s=seasonSim();return {rain:Array.prototype.slice.call(s.rain),et:Array.prototype.slice.call(s.rain).map(function(_,k){return s.dE?s.dE[k]+s.dT[k]:0})}})()');
+    if (!sim || !sim.rain || !sim.rain.length) throw new Error('the daily weather is not available yet');
+    const rows = []; let k = 0; for (let y = 0; k < sim.rain.length; y++) for (let m = 0; m < 12; m++) for (let d = 0; d < dm[m] && k < sim.rain.length; d++, k++) rows.push({ t: Date.UTC(2001 + y, m, d + 1), P: sim.rain[k], et0: sim.et[k] });
+    return { rows, meta: { name: 'Benchmark record of the software', source: 'Benchmark weather record of SWAFL (daily rain and reference evapotranspiration, 365 days a year; the years are numbered from 2001 only to give dates, they are not calendar years)' } };
+  }
+  function climate() { UI.modal({ title: 'Climate of the weather in use', icon: 'info', width: 'min(640px,94vw)', html: '<canvas id="wxClim" width="600" height="250" style="max-width:100%"></canvas><p class="pnote">The irrigation dates, the crop water need, the soil water, the dashboard and every layer are calculated from this weather. Change it in Properties, Scenario, Weather source.</p>' + (window.WxDownload ? '<div id="wxDlC">' + WxDownload.html() + '</div>' : '') }); setTimeout(() => { drawClim('wxClim'); const h = document.getElementById('wxDlC'); if (h) WxDownload.bind(h, dailyInUse); }, 30); }
   function report(s, title) {
     const notes = (s.notes || []).map(n => '<li>' + UI.esc(n) + '</li>').join('');
     UI.modal({ title, icon: 'info', width: 'min(600px,94vw)', html:

@@ -5,7 +5,7 @@
   const COLS = ['year', 'month', 'day', 'precipitation', 'tmin', 'tmax', 'vapour_pressure', 'wind', 'radiation', 'et0'];
   const UNITS = ['', '', '', 'mm/d', 'dgC', 'dgC', 'hPa', 'm/s', 'kWh/d/m^2', 'mm/d'];
   const MIME = { dwf: 'text/plain', dlf: 'text/plain', csv: 'text/csv', json: 'application/json', xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', zip: 'application/zip' };
-  const num = v => (v == null || v === '' || !isFinite(+v)) ? null : +v;
+  const num = v => (v == null || v === '' || !isFinite(+v)) ? null : Math.round(+v * 1000) / 1000;
   function table(rows) {
     const out = rows.map(r => { const t = (r.d && typeof r.d.getTime === 'function') ? r.d.getTime() : +(r.t != null ? r.t : r.d), d = new Date(t); if (!isFinite(t)) return null;
       return [d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate(), num(r.P), num(r.tmin != null ? r.tmin : r.tn), num(r.tmax != null ? r.tmax : r.tx), num(r.vp), num(r.wind), num(r.rad), num(r.et0 != null ? r.et0 : r.ET0)]; }).filter(Boolean);
