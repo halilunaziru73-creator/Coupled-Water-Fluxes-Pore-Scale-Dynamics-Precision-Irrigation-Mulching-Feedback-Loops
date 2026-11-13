@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SWAFL 1.1.0 - Description</title>
+<title>SWAFL 1.1.0 - Daisy decision support system</title>
 <meta name="description" content="Description of SWAFL, the soil water, atmosphere, feedback and layout workbench for irrigation and evaporation-control mulching.">
 <style>
 :root{--blue:#0A246A;--ink:#1d2433;--mut:#5b6577;--line:#d5dae3;--bg:#fff;--tint:#eef2fa}
@@ -41,7 +41,7 @@ a{color:#1a4fb5}
 <a href="SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">Manual (PDF)</a>
 <a href="https://doi.org/10.5281/zenodo.23043626">Data (Zenodo)</a></nav></header>
 <main>
-<h1>SWAFL: description</h1>
+<h1>SWAFL: decision support system for the Daisy model</h1>
 <p class="lead">Version 1.1.0 &middot; author Naziru Halilu</p>
 
 <div class="toc"><b>On this page</b>
@@ -53,7 +53,7 @@ a{color:#1a4fb5}
 <li><a href="#strengths">Strengths and limitations</a></li><li><a href="#downloads">Downloads and status</a></li></ol></div>
 
 <h2 id="intro">Introduction</h2>
-<p>SWAFL is an open-source decision-support workbench for irrigation and evaporation-control mulching. It joins a one-dimensional soil-water model (the Daisy model), a fast daily water balance and closed-form irrigation design modules in one offline program, with the layers on the left, the properties on the right and a dashboard of results beside the drawing. It runs as a desktop application and in the browser.</p>
+<p>SWAFL is an open-source decision support system for the Daisy soil-plant-atmosphere model, built for irrigation and evaporation-control mulching decisions. It gives the Daisy model a graphical workbench, and joins it with a fast daily water balance and closed-form irrigation design modules in one offline program, with the layers on the left, the properties on the right and a dashboard of results beside the drawing. It runs as a desktop application and in the browser.</p>
 <p>Its central question is what is left of an irrigation or evaporation saving once the soil, the weather and the irrigation rule are allowed to act. Every number on the screen can be followed to a numbered equation that carries a label of origin: literature, data-driven or engineered.</p>
 <figure><img src="SWAFL_Desktop/docs/swafl_workbench.png" alt="SWAFL 1.1.0: the drip irrigation design with the soil water of the days ahead"><figcaption>The SWAFL workbench: a drip irrigation design with the soil water of the days ahead.</figcaption></figure>
 
@@ -73,7 +73,7 @@ a{color:#1a4fb5}
 <tr><th>Name</th><td>SWAFL (Soil Water, Atmosphere, Feedback and Layout), SWAFL Desktop</td></tr>
 <tr><th>Version</th><td>1.1.0 (the manual of version 1.0 stays in the repository)</td></tr>
 <tr><th>Author and contact</th><td>Naziru Halilu, <a href="https://github.com/halilunaziru73-creator">github.com/halilunaziru73-creator</a></td></tr>
-<tr><th>Type</th><td>Decision-support workbench with a graphical front end to the Daisy soil-plant-atmosphere model</td></tr>
+<tr><th>Type</th><td>Decision support system for the Daisy soil-plant-atmosphere model, with a graphical workbench, decision layers and field tools</td></tr>
 <tr><th>Inputs</th><td>Soil (10 built-in soils, own soil layers), weather (built-in benchmark record 1980 to 1999 with a projection to 2100, bundled Daisy stations, own file in CSV, Excel, DWF, DLF or DAI, online weather of any place, DMI open data), crop (library of 75 crops), irrigation system and rule, mulch, field outline (sketch, KML, GeoJSON, CSV), working date (1980 to 2100)</td></tr>
 <tr><th>Outputs</th><td>Irrigation dates and depths, crop water requirement, soil water and drainage, nitrogen budget, design drawings and hydraulic checks, dashboard, reports, field prescriptions, Daisy figures and logs; weather and results can be saved as .dwf, .dlf, CSV, Excel and JSON</td></tr>
 <tr><th>Computing engines</th><td>A meta-model of 10,190 Daisy runs, a daily 40-layer water balance, closed-form design modules for surface, drip and sprinkler systems; Daisy 7.1.14 for full runs</td></tr>
