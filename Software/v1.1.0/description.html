@@ -54,6 +54,53 @@ a{color:#1a4fb5}
 
 <h2 id="intro">Introduction</h2>
 <p>SWAFL is an open-source decision support system for the Daisy soil-plant-atmosphere model, built for irrigation and evaporation-control mulching decisions. It gives the Daisy model a graphical workbench, and joins it with a fast daily water balance and closed-form irrigation design modules in one offline program, with the layers on the left, the properties on the right and a dashboard of results beside the drawing. It runs as a desktop application and in the browser.</p>
+<style>
+.dg{width:100%;height:auto;display:block;color:var(--fg,var(--ink,#111));font-family:var(--ui,var(--body,system-ui,sans-serif))}
+.dg text{fill:currentColor}.dg .w{fill:#fff}.dg .k{fill:#10131c}
+.dg .ln{stroke:currentColor;fill:none;stroke-width:1.6}.dg .mut{opacity:.7}
+.dg .card{fill:var(--soft,var(--tint,#eef2fa));stroke:var(--line,#999);stroke-width:1}
+.dg .navy{fill:#0A246A}.dg .teal{fill:#00808A}
+.dgwrap{margin:18px 0}.dgwrap figcaption{margin-top:6px}
+</style>
+<figure class="dgwrap"><svg class="dg" viewBox="0 0 900 540" role="img" aria-label="Water fluxes between atmosphere, plant, mulch, soil, groundwater and surface water in SWAFL">
+<defs><linearGradient id="gs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8ee8ee"/><stop offset=".5" stop-color="#2aa7e8"/><stop offset="1" stop-color="#1230c8"/></linearGradient>
+<marker id="ah" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0L10,5L0,10z" fill="#0A246A"/></marker>
+<marker id="aw" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0L10,5L0,10z" fill="#fff"/></marker>
+<marker id="ar" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0L10,5L0,10z" fill="#B8432F"/></marker></defs>
+<rect x="300" y="170" width="280" height="260" fill="url(#gs)"/><rect x="300" y="430" width="280" height="70" fill="#0a1ea8"/><rect x="300" y="162" width="280" height="10" fill="#8a5a2b"/>
+<line x1="40" y1="167" x2="300" y2="167" class="ln"/><line x1="580" y1="167" x2="650" y2="167" class="ln"/>
+<polygon points="650,167 700,380 820,380 860,167" fill="#cfe6ff" stroke="currentColor"/><polygon points="702,380 716,300 806,300 820,380" fill="#1230c8"/>
+<text x="756" y="222" text-anchor="middle" font-size="19" font-weight="700" style="fill:#0A246A">Surface water</text><text x="756" y="244" text-anchor="middle" font-size="13" style="fill:#0A246A">ditch, drain, runoff</text>
+<path d="M470,167 C470,130 468,100 472,70" stroke="#2f8f3a" fill="none" stroke-width="3"/><path d="M471,115 C444,105 434,90 437,75 C457,79 469,95 471,115z M471,98 C499,93 513,79 509,63 C487,67 473,81 471,98z" fill="#4caf50"/>
+<path d="M470,172 C462,230 444,262 430,300 M470,172 C472,240 476,280 476,330 M470,172 C490,225 512,250 528,290" stroke="#2f8f3a" fill="none" stroke-width="1.6"/>
+<text x="40" y="60" font-size="26" font-weight="700" style="fill:#0A246A">Atmosphere</text>
+<text x="40" y="150" font-size="26" font-weight="700" style="fill:#0A246A">Plant and mulch</text>
+<text x="40" y="300" font-size="26" font-weight="700" style="fill:#0A246A">Soil water</text>
+<text x="40" y="470" font-size="26" font-weight="700" style="fill:#0A246A">Groundwater</text>
+<line x1="330" y1="48" x2="330" y2="100" stroke="#0A246A" stroke-width="4.5" marker-end="url(#ah)"/>
+<text x="330" y="38" text-anchor="middle" font-size="14" font-style="italic" font-weight="600" style="paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">Precipitation</text>
+<line x1="605" y1="48" x2="605" y2="118" stroke="#0A246A" stroke-width="4.5" marker-end="url(#ah)"/>
+<text x="605" y="38" text-anchor="middle" font-size="14" font-style="italic" font-weight="600" style="paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">Irrigation</text>
+<line x1="392" y1="150" x2="392" y2="104" stroke="#0A246A" stroke-width="4.5" marker-end="url(#ah)"/>
+<text x="384" y="128" text-anchor="end" font-size="14" font-style="italic" font-weight="600" style="paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">Evaporation</text>
+<line x1="525" y1="150" x2="525" y2="96" stroke="#0A246A" stroke-width="4.5" marker-end="url(#ah)"/>
+<text x="534" y="92" text-anchor="start" font-size="14" font-style="italic" font-weight="600" style="paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">Transpiration</text>
+<line x1="585" y1="152" x2="650" y2="152" stroke="#0A246A" stroke-width="4.5" marker-end="url(#ah)"/>
+<text x="617" y="184" text-anchor="middle" font-size="14" font-style="italic" font-weight="600" style="paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">Runoff</text>
+<text x="440" y="170" text-anchor="middle" font-size="11" font-weight="700" style="fill:#fff" letter-spacing="2">MULCH</text>
+<line x1="350" y1="186" x2="350" y2="262" stroke="#fff" stroke-width="4.5" marker-end="url(#aw)"/>
+<text x="360" y="224" text-anchor="start" font-size="14" font-style="italic" font-weight="600" style="fill:#fff">Infiltration</text>
+<line x1="420" y1="330" x2="420" y2="262" stroke="#fff" stroke-width="4.5" marker-end="url(#aw)"/>
+<text x="410" y="296" text-anchor="end" font-size="14" font-style="italic" font-weight="600" style="fill:#fff">Root uptake</text>
+<line x1="350" y1="350" x2="350" y2="430" stroke="#fff" stroke-width="4.5" marker-end="url(#aw)"/>
+<text x="360" y="396" text-anchor="start" font-size="14" font-style="italic" font-weight="600" style="fill:#fff">Drainage</text>
+<line x1="540" y1="470" x2="540" y2="380" stroke="#fff" stroke-width="4.5" marker-end="url(#aw)"/>
+<text x="530" y="420" text-anchor="end" font-size="14" font-style="italic" font-weight="600" style="fill:#fff">Capillary rise</text>
+<line x1="582" y1="330" x2="700" y2="330" stroke="#0A246A" stroke-width="4.5" marker-end="url(#ah)"/>
+<text x="641" y="318" text-anchor="middle" font-size="14" font-style="italic" font-weight="600" style="paint-order:stroke;stroke:var(--bg,#fff);stroke-width:4px">Lateral drainage</text>
+<circle cx="470" cy="296" r="8" fill="#B8432F" stroke="#fff" stroke-width="2"/><text x="486" y="300" font-size="13" font-weight="700" style="fill:#fff">Sensor</text>
+<path d="M500,330 C650,370 690,230 625,176 C615,160 608,140 606,124" stroke="#B8432F" stroke-width="3" fill="none" stroke-dasharray="7 4" marker-end="url(#ar)"/><text x="672" y="276" font-size="13" font-weight="700" style="fill:#B8432F">trigger</text>
+<text x="450" y="525" text-anchor="middle" font-size="13" class="mut">Nitrate leaves with the drainage. Every flux is a numbered equation in the manual.</text></svg><figcaption>The soil, water and atmosphere system that SWAFL simulates. The solid arrows are water fluxes; the dashed arrow is the irrigation trigger that reads the suction at the sensor.</figcaption></figure>
 <p>Its central question is what is left of an irrigation or evaporation saving once the soil, the weather and the irrigation rule are allowed to act. Every number on the screen can be followed to a numbered equation that carries a label of origin: literature, data-driven or engineered.</p>
 <figure><img src="SWAFL_Desktop/docs/swafl_workbench.png" alt="SWAFL 1.1.0: the drip irrigation design with the soil water of the days ahead"><figcaption>The SWAFL workbench: a drip irrigation design with the soil water of the days ahead.</figcaption></figure>
 
@@ -130,6 +177,80 @@ a{color:#1a4fb5}
 
 <h2 id="arch">Architecture and modules</h2>
 <p>The workbench is made of layers (22 decision layers in nine groups), three computing engines and one project that all layers share. The simulation engine runs in a separate window and the workbench talks to it through one bridge; the Daisy workbench starts Daisy as a program of the computer and reads its logs. A process map shows the components of Daisy (14 processes, 76 components): opening a component shows its settings, its results and its figures.</p>
+<figure class="dgwrap"><svg class="dg" viewBox="0 0 900 600" role="img" aria-label="How the layers of SWAFL are built from the inputs, the engines and the Daisy workbench">
+<defs><marker id="aa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="currentColor"/></marker></defs>
+<text x="20" y="20" font-size="12" font-weight="700" letter-spacing="1.4" class="mut">YOUR SITE AND YOUR QUESTION</text>
+<rect x="20" y="28" width="160" height="46" rx="4" class="card"/>
+<text x="100" y="56" text-anchor="middle" font-size="14" font-weight="600" class="">Soil</text>
+<rect x="195" y="28" width="160" height="46" rx="4" class="card"/>
+<text x="275" y="56" text-anchor="middle" font-size="14" font-weight="600" class="">Weather</text>
+<rect x="370" y="28" width="160" height="46" rx="4" class="card"/>
+<text x="450" y="56" text-anchor="middle" font-size="14" font-weight="600" class="">Crop</text>
+<rect x="545" y="28" width="160" height="46" rx="4" class="card"/>
+<text x="625" y="56" text-anchor="middle" font-size="14" font-weight="600" class="">Mulch and irrigation</text>
+<rect x="720" y="28" width="160" height="46" rx="4" class="card"/>
+<text x="800" y="56" text-anchor="middle" font-size="14" font-weight="600" class="">Field outline</text>
+<line x1="450" y1="74" x2="450" y2="92" class="ln" marker-end="url(#aa)"/>
+<rect x="20" y="92" width="860" height="36" rx="4" class="navy"/>
+<text x="450" y="115" text-anchor="middle" font-size="14" font-weight="600" class="w">One project, shared by every layer</text>
+<line x1="450" y1="128" x2="450" y2="166" class="ln" marker-end="url(#aa)"/>
+<text x="20" y="160" font-size="12" font-weight="700" letter-spacing="1.4" class="mut"></text>
+<text x="466" y="154" font-size="12" font-weight="700" letter-spacing="1.4" class="mut">COMPUTING ENGINES</text>
+<rect x="20" y="166" width="200" height="62" rx="4" class="card"/>
+<text x="120" y="194" text-anchor="middle" font-size="14" font-weight="600" class="">Meta-model</text>
+<text x="120" y="208" text-anchor="middle" font-size="12" class=" mut">10,190 Daisy runs</text>
+<rect x="240" y="166" width="200" height="62" rx="4" class="card"/>
+<text x="340" y="194" text-anchor="middle" font-size="14" font-weight="600" class="">Daily water balance</text>
+<text x="340" y="208" text-anchor="middle" font-size="12" class=" mut">40 soil layers</text>
+<rect x="460" y="166" width="200" height="62" rx="4" class="card"/>
+<text x="560" y="194" text-anchor="middle" font-size="14" font-weight="600" class="">Design modules</text>
+<text x="560" y="208" text-anchor="middle" font-size="12" class=" mut">surface, drip, sprinkler</text>
+<rect x="680" y="166" width="200" height="62" rx="4" class="card"/>
+<text x="780" y="194" text-anchor="middle" font-size="14" font-weight="600" class="">Daisy 7.1.14</text>
+<text x="780" y="208" text-anchor="middle" font-size="12" class=" mut">desktop app, bundled</text>
+<line x1="450" y1="228" x2="450" y2="262" class="ln" marker-end="url(#aa)"/>
+<text x="466" y="254" font-size="12" font-weight="700" letter-spacing="1.4" class="mut">LAYERS OF THE WORKBENCH</text>
+<rect x="20" y="262" width="160" height="62" rx="4" class="card"/><rect x="20" y="262" width="160" height="6" rx="3" fill="#3288bd"/>
+<text x="100" y="299" text-anchor="middle" font-size="14" font-weight="600">Irrigation design</text>
+<rect x="195" y="262" width="160" height="62" rx="4" class="card"/><rect x="195" y="262" width="160" height="6" rx="3" fill="#3288bd"/>
+<text x="275" y="299" text-anchor="middle" font-size="14" font-weight="600">Irrigation control</text>
+<rect x="370" y="262" width="160" height="62" rx="4" class="card"/><rect x="370" y="262" width="160" height="6" rx="3" fill="#66c2a5"/>
+<text x="450" y="291" text-anchor="middle" font-size="14" font-weight="600">Mulch and</text>
+<text x="450" y="308" text-anchor="middle" font-size="14" font-weight="600">evaporation</text>
+<rect x="545" y="262" width="160" height="62" rx="4" class="card"/><rect x="545" y="262" width="160" height="6" rx="3" fill="#66c2a5"/>
+<text x="625" y="291" text-anchor="middle" font-size="14" font-weight="600">Soil structure and</text>
+<text x="625" y="308" text-anchor="middle" font-size="14" font-weight="600">tillage</text>
+<rect x="720" y="262" width="160" height="62" rx="4" class="card"/><rect x="720" y="262" width="160" height="6" rx="3" fill="#4d9221"/>
+<text x="800" y="291" text-anchor="middle" font-size="14" font-weight="600">Deterministic</text>
+<text x="800" y="308" text-anchor="middle" font-size="14" font-weight="600">phenotyping</text>
+<rect x="20" y="338" width="160" height="62" rx="4" class="card"/><rect x="20" y="338" width="160" height="6" rx="3" fill="#4d9221"/>
+<text x="100" y="375" text-anchor="middle" font-size="14" font-weight="600">Field water balance</text>
+<rect x="195" y="338" width="160" height="62" rx="4" class="card"/><rect x="195" y="338" width="160" height="6" rx="3" fill="#e6c200"/>
+<text x="275" y="375" text-anchor="middle" font-size="14" font-weight="600">Seasonal data</text>
+<rect x="370" y="338" width="160" height="62" rx="4" class="card"/><rect x="370" y="338" width="160" height="6" rx="3" fill="#e6c200"/>
+<text x="450" y="375" text-anchor="middle" font-size="14" font-weight="600">Crops</text>
+<rect x="545" y="338" width="160" height="62" rx="4" class="card"/><rect x="545" y="338" width="160" height="6" rx="3" fill="#f46d43"/>
+<text x="625" y="375" text-anchor="middle" font-size="14" font-weight="600">Feedback loops</text>
+<rect x="720" y="338" width="160" height="62" rx="4" class="teal"/><text x="800" y="362" text-anchor="middle" font-size="14" font-weight="700" class="w">Daisy output</text><text x="800" y="380" text-anchor="middle" font-size="11.5" class="w">decision table, fate of a</text><text x="800" y="393" text-anchor="middle" font-size="11.5" class="w">chemical (live runs only)</text>
+<line x1="450" y1="400" x2="450" y2="446" class="ln" marker-end="url(#aa)"/>
+<text x="466" y="438" font-size="12" font-weight="700" letter-spacing="1.4" class="mut">WHAT YOU GET</text>
+<rect x="20" y="446" width="160" height="64" rx="4" class="navy"/>
+<text x="100" y="475" text-anchor="middle" font-size="14" font-weight="600" class="w">Dashboard</text>
+<text x="100" y="490" text-anchor="middle" font-size="12" class="w mut">days ahead, alerts</text>
+<rect x="195" y="446" width="160" height="64" rx="4" class="navy"/>
+<text x="275" y="475" text-anchor="middle" font-size="14" font-weight="600" class="w">Reports</text>
+<text x="275" y="490" text-anchor="middle" font-size="12" class="w mut">field and season</text>
+<rect x="370" y="446" width="160" height="64" rx="4" class="navy"/>
+<text x="450" y="475" text-anchor="middle" font-size="14" font-weight="600" class="w">Prescriptions</text>
+<text x="450" y="490" text-anchor="middle" font-size="12" class="w mut">by zone</text>
+<rect x="545" y="446" width="160" height="64" rx="4" class="navy"/>
+<text x="625" y="475" text-anchor="middle" font-size="14" font-weight="600" class="w">Figures and logs</text>
+<text x="625" y="490" text-anchor="middle" font-size="12" class="w mut">Daisy runs</text>
+<rect x="720" y="446" width="160" height="64" rx="4" class="navy"/>
+<text x="800" y="475" text-anchor="middle" font-size="14" font-weight="600" class="w">Weather files</text>
+<text x="800" y="490" text-anchor="middle" font-size="12" class="w mut">.dwf .dlf CSV Excel JSON</text>
+<text x="450" y="545" text-anchor="middle" font-size="13" class="mut">Each layer reads the project and one engine, and every number leads to a numbered equation.</text>
+<text x="450" y="565" text-anchor="middle" font-size="13" class="mut">The Daisy output layers show a Daisy run made in the workbench, and otherwise say that there is none.</text></svg><figcaption>How SWAFL is built: the project feeds four engines, the engines feed the layers, and the layers produce the dashboard, reports, prescriptions, figures and files.</figcaption></figure>
 <table>
 <tr><th class="n">Group</th><th class="n">Layers</th></tr>
 <tr><td>Irrigation design</td><td>surface, drip and sprinkler design, pipe network, pump, schedule</td></tr>
@@ -164,6 +285,79 @@ a{color:#1a4fb5}
 <tr><td>Documentation</td><td>Model and documentation</td><td>The model, the questions and where each is answered, the downloads</td></tr>
 </table></div>
 
+<figure class="dgwrap"><svg class="dg" viewBox="0 0 900 500" role="img" aria-label="Process map of the Daisy model">
+<defs><marker id="pa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="currentColor"/></marker></defs>
+<polyline points="115,76 115,100" class="ln" stroke-width="1.5" marker-end="url(#pa)"/>
+<polyline points="115,150 115,174" class="ln" stroke-width="1.5" marker-end="url(#pa)"/>
+<polyline points="210,200 230,200 230,56 250,56" class="ln" stroke-width="1.5" marker-end="url(#pa)"/>
+<polyline points="210,40 250,40" class="ln" stroke-width="1.5" marker-end="url(#pa)"/>
+<polyline points="350,76 350,100" class="ln" stroke-width="1.5" marker-end="url(#pa)"/>
+<polyline points="350,150 350,174" class="ln" stroke-width="1.5" marker-end="url(#pa)"/>
+<polyline points="450,40 490,40" class="ln" stroke-width="1.5" marker-end="url(#pa)" marker-start="url(#pa)"/>
+<polyline points="450,64 470,64 470,125 490,125" class="ln" stroke-width="1.5" marker-end="url(#pa)"/>
+<polyline points="585,174 585,150" class="ln" stroke-width="1.5" marker-end="url(#pa)"/>
+<polyline points="680,128 715,128" class="ln" stroke-width="1.5" marker-end="url(#pa)"/>
+<polyline points="200,290 200,262 585,262 585,230" class="ln" stroke-width="1.5" marker-end="url(#pa)"/>
+<polyline points="290,325 330,325" class="ln" stroke-width="1.5" marker-end="url(#pa)" marker-start="url(#pa)"/>
+<polyline points="155,400 155,360" class="ln" stroke-width="1.5" marker-end="url(#pa)"/>
+<polyline points="450,400 450,360" class="ln" stroke-width="1.5" marker-end="url(#pa)"/>
+<polyline points="260,430 300,430" class="ln" stroke-width="1.5" marker-end="url(#pa)"/>
+<g><rect x="20" y="20" width="190" height="56" rx="4" fill="#5e4fa2"/>
+<text x="115" y="53" text-anchor="middle" font-size="14" font-weight="600" class="w">Weather and bioclimate</text>
+</g>
+<g><rect x="20" y="100" width="190" height="50" rx="4" fill="#3288bd"/>
+<text x="115" y="130" text-anchor="middle" font-size="14" font-weight="600" class="w">Snowpack</text>
+</g>
+<g><rect x="20" y="174" width="190" height="56" rx="4" fill="#3288bd"/>
+<text x="115" y="198" text-anchor="middle" font-size="14" font-weight="600" class="w">Canopy, litter and ponded</text>
+<text x="115" y="216" text-anchor="middle" font-size="14" font-weight="600" class="w">water</text>
+</g>
+<g><rect x="250" y="20" width="200" height="56" rx="4" fill="#3288bd"/>
+<text x="350" y="44" text-anchor="middle" font-size="14" font-weight="600" class="w">Soil water (Richards</text>
+<text x="350" y="62" text-anchor="middle" font-size="14" font-weight="600" class="w">equation)</text>
+</g>
+<g><rect x="250" y="100" width="200" height="50" rx="4" fill="#3288bd"/>
+<text x="350" y="121" text-anchor="middle" font-size="14" font-weight="600" class="w">Biopores (preferential</text>
+<text x="350" y="139" text-anchor="middle" font-size="14" font-weight="600" class="w">flow)</text>
+</g>
+<g><rect x="250" y="174" width="200" height="56" rx="4" fill="#3288bd"/>
+<text x="350" y="207" text-anchor="middle" font-size="14" font-weight="600" class="w">Drains and groundwater</text>
+</g>
+<g><rect x="490" y="20" width="190" height="56" rx="4" fill="#66c2a5"/>
+<text x="585" y="53" text-anchor="middle" font-size="14" font-weight="600" class="w">Soil heat and ice</text>
+</g>
+<g><rect x="490" y="100" width="190" height="50" rx="4" fill="#e6c200"/>
+<text x="585" y="121" text-anchor="middle" font-size="14" font-weight="600" class="k">Nitrate (solute</text>
+<text x="585" y="139" text-anchor="middle" font-size="14" font-weight="600" class="k">transport)</text>
+</g>
+<g><rect x="490" y="174" width="190" height="56" rx="4" fill="#e6c200"/>
+<text x="585" y="198" text-anchor="middle" font-size="14" font-weight="600" class="k">Ammonium (sorbed and</text>
+<text x="585" y="216" text-anchor="middle" font-size="14" font-weight="600" class="k">dissolved)</text>
+</g>
+<g><rect x="20" y="290" width="270" height="70" rx="4" fill="#f46d43"/>
+<text x="155" y="330" text-anchor="middle" font-size="14" font-weight="600" class="w">Organic matter pools (AOM, SMB, SOM)</text>
+</g>
+<g><rect x="330" y="290" width="220" height="70" rx="4" fill="#f46d43"/>
+<text x="440" y="330" text-anchor="middle" font-size="14" font-weight="600" class="w">Carbon balance and residues</text>
+</g>
+<g><rect x="715" y="100" width="165" height="56" rx="4" fill="#e6c200"/>
+<text x="797" y="124" text-anchor="middle" font-size="14" font-weight="600" class="k">Denitrification and</text>
+<text x="797" y="142" text-anchor="middle" font-size="14" font-weight="600" class="k">N2O</text>
+</g>
+<g><rect x="20" y="400" width="240" height="60" rx="4" fill="#4d9221"/>
+<text x="140" y="435" text-anchor="middle" font-size="14" font-weight="600" class="w">Photosynthesis and respiration</text>
+</g>
+<g><rect x="300" y="400" width="300" height="60" rx="4" fill="#4d9221"/>
+<text x="450" y="426" text-anchor="middle" font-size="14" font-weight="600" class="w">Crop growth: leaf, stem, root, storage</text>
+<text x="450" y="444" text-anchor="middle" font-size="14" font-weight="600" class="w">organ</text>
+</g>
+<rect x="20" y="478" width="14" height="14" fill="#5e4fa2"/><text x="40" y="490" font-size="13">Drivers</text>
+<rect x="111" y="478" width="14" height="14" fill="#3288bd"/><text x="131" y="490" font-size="13">Water</text>
+<rect x="188" y="478" width="14" height="14" fill="#66c2a5"/><text x="208" y="490" font-size="13">Heat</text>
+<rect x="258" y="478" width="14" height="14" fill="#e6c200"/><text x="278" y="490" font-size="13">Nitrogen</text>
+<rect x="357" y="478" width="14" height="14" fill="#f46d43"/><text x="377" y="490" font-size="13">Carbon and organic matter</text>
+<rect x="582" y="478" width="14" height="14" fill="#4d9221"/><text x="602" y="490" font-size="13">Crop</text>
+</svg><figcaption>The process map of the Daisy model as it is drawn in the workbench: water, heat, nitrogen, carbon and crop processes. In the program every box opens the figures of that process.</figcaption></figure>
 <h3>Design of experiments</h3>
 <ul>
 <li><b>Factors.</b> The experiment is built from the factors of the farm and of Daisy, for example rain, temperature, irrigation, mulch, soil, crop, fertiliser and the parameters of the Daisy library. Each factor takes the values you choose.</li>
