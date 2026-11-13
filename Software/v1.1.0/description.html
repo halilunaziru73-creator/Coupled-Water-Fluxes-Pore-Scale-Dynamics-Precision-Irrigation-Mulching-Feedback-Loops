@@ -138,7 +138,7 @@ footer{background:var(--soft);margin-top:80px;padding-bottom:36px;border-top:0}
 <tr><th>Outputs</th><td>Irrigation dates and depths, crop water requirement, soil water and drainage, nitrogen budget, design drawings and hydraulic checks, dashboard, reports, field prescriptions, Daisy figures and logs; weather and results can be saved as .dwf, .dlf, CSV, Excel and JSON</td></tr>
 <tr><th>Computing engines</th><td>A meta-model of 10,190 Daisy runs, a daily 40-layer water balance, closed-form design modules for surface, drip and sprinkler systems; Daisy 7.1.14 for full runs</td></tr>
 <tr><th>Language and tools</th><td>JavaScript, HTML and CSS (Electron for the desktop app); Python for the analysis scripts</td></tr>
-<tr><th>Platform</th><td>Windows desktop application; any current browser for the online workbench (the Daisy runs need the desktop application)</td></tr>
+<tr><th>Platform</th><td>Windows desktop application with Daisy bundled (start scripts for macOS are included; Daisy runs there only with a Daisy built for the Mac); any current browser for the online workbench (the Daisy runs need the desktop application)</td></tr>
 <tr><th>Licence</th><td>Source code under the MIT Licence; end user licence agreement for the compiled application (installed with the program, with a translation in seven languages)</td></tr>
 <tr><th>Documentation</th><td>Manual of more than 1,100 pages (PDF), four manuscripts with a supplement, data on Zenodo</td></tr>
 <tr><th>Citation</th><td>Halilu, N. (2026). SWAFL. <a href="https://doi.org/10.5281/zenodo.23043626">doi:10.5281/zenodo.23043626</a></td></tr>
@@ -152,7 +152,7 @@ footer{background:var(--soft);margin-top:80px;padding-bottom:36px;border-top:0}
 <li>Soil structure and tillage, root structure, and deterministic virtual phenotyping of one plant under well-watered and drought treatments.</li>
 <li>Seasonal data: reliability over 20 seasons, full water balance, nitrogen budget and projections 10 or 20 years beyond the simulated seasons.</li>
 <li>The real field: field sketch, field on the map, Sentinel-2 indices, water sources, terrain and soil from open data, management zones and variable-rate irrigation.</li>
-<li>Experiments with Daisy: 17 prepared experiments, 53 factors, calibration and publication-style figures.</li>
+<li>Experiments with Daisy: 17 prepared experiments, 69 factors, calibration and publication-style figures.</li>
 </ul>
 
 <h2 id="context">General context of use</h2>
@@ -188,11 +188,11 @@ footer{background:var(--soft);margin-top:80px;padding-bottom:36px;border-top:0}
 <p>The model is one-dimensional and vertical; the pore network is represented through hydraulic proxies, so the findings about hydraulic memory are mechanistic hypotheses. About 470 numbered equations are listed in the manual with their origin and the screens that use them.</p>
 
 <h2 id="arch">Architecture and modules</h2>
-<p>The workbench is made of layers (22 decision layers in nine groups), three computing engines and one project that all layers share. The simulation engine runs in a separate window and the workbench talks to it through one bridge; the Daisy workbench starts Daisy as a program of the computer and reads its logs. A process map shows the components of Daisy (14 processes, 76 components): opening a component shows its settings, its results and its figures.</p>
+<p>The workbench is made of layers (23 decision layers in nine groups, and nine Daisy output layers), four computing engines (the meta-model, the daily water balance, the design modules and Daisy) and one project that all layers share. The simulation engine runs in a separate window and the workbench talks to it through one bridge; the Daisy workbench starts Daisy as a program of the computer and reads its logs. A process map shows the components of Daisy (14 processes, 76 components): opening a component shows its settings, its results and its figures.</p>
 <p>One figure, the process map in <a href="#daisy">The Daisy layers</a>, shows the whole structure: the Daisy processes, the SWAFL layers linked to them, what you get, the computing engines, the shared project and the inputs.</p>
 <div class="tw"><table>
 <tr><th class="n">Group</th><th class="n">Layers</th></tr>
-<tr><td>Irrigation design</td><td>surface, drip and sprinkler design, pipe network, pump, schedule</td></tr>
+<tr><td>Irrigation design</td><td>surface irrigation design; drip irrigation design; sprinkler design and pipes; drainage design</td></tr>
 <tr><td>Irrigation control</td><td>sensor and trigger; trigger law</td></tr>
 <tr><td>Mulch and evaporation</td><td>mulch against bare soil; mulch control; evaporation; fate of saved water; regime map</td></tr>
 <tr><td>Soil structure and tillage</td><td>tillage and structure; soil hydraulic drivers; root structure</td></tr>
@@ -238,12 +238,8 @@ footer{background:var(--soft);margin-top:80px;padding-bottom:36px;border-top:0}
 </ul>
 
 <h3>Daisy output layers of the decision workbench</h3>
-<p>These layers show Daisy results inside the decision layers. They follow one rule of origin: a Daisy layer shows only a Daisy run made in the workbench, and otherwise says that there is none.</p>
-<div class="tw"><table>
-<tr><th class="n">Layer</th><th class="n">What it shows</th></tr>
-<tr><td>Decision table (Daisy output)</td><td>The runs of your Daisy experiment set side by side, with the water, nitrogen and irrigation measures that decide between them, and the best combination</td></tr>
-<tr><td>Fate of a chemical (live Daisy runs only)</td><td>Where an applied chemical goes: the chemical budget of your Daisy runs, tested for closure. It is shown only for live Daisy runs, never for stored or simulated values</td></tr>
-</table></div>
+<p>These nine layers show Daisy results inside the decision layers. They follow one rule of origin: a Daisy layer shows only a Daisy run made in the workbench, and otherwise says that there is none.</p>
+<div class="tw"><table><tr><th class="n">Layer</th><th class="n">What it shows</th></tr><tr><td>Decision table (from my runs)</td><td>The runs of your Daisy experiment set side by side, with the water, nitrogen and irrigation measures that decide between them, and the best combination</td></tr><tr><td>Water balance (from my runs)</td><td>Rain and irrigation against evapotranspiration, drainage and runoff; water productivity</td></tr><tr><td>Nitrogen balance (from my runs)</td><td>Fertiliser, deposition and mineralisation against uptake, leaching, denitrification and ammonia</td></tr><tr><td>Yield risk and limiting factor (from my runs)</td><td>How likely each yield is; water stress against nitrogen stress</td></tr><tr><td>Trade-offs and the best edge (from my runs)</td><td>Yield against nitrate, water and N2O for every run; the Pareto front and a ranking with your weights</td></tr><tr><td>The return of irrigation (from my runs)</td><td>Yield response to irrigation, the amount that pays at your price ratio and where each millimetre goes</td></tr><tr><td>Nitrous oxide and gaseous nitrogen (from my runs)</td><td>N2O from nitrification and denitrification, ammonia, the emission factor and CO2-equivalents</td></tr><tr><td>Chemical fate (from my runs)</td><td>Where an applied chemical goes: the chemical budget of your Daisy runs, tested for closure. It is shown only for live Daisy runs, never for stored or simulated values</td></tr><tr><td>Chemicals and drinking water (from my runs)</td><td>The share of a pesticide, PFAS or tracer that leaves the root zone and its concentration against 0.1 &micro;g/L</td></tr></table></div>
 <p>Other links between Daisy and the layers: a mapping of eight of the ten built-in soils to Daisy soils (two are flagged as unmapped), parsers for the Daisy logs, and a return path for the weather of the project, so that a figure and the project use the same weather.</p>
 
 <h2 id="policy">Policy variables and intervention measures</h2>
