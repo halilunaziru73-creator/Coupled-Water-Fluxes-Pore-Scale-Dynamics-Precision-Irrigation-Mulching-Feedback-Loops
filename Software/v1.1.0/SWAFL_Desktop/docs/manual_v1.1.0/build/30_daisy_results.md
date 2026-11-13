@@ -602,6 +602,8 @@ Processes is a map of the model after Fig. 1 of the Daisy paper. Each box is a p
 
 ![Processes: the map. Screen 100 of the Daisy workbench.](images/daisy11/dz_proc_01.jpg){width=100% height=17cm}
 
+**The map with the layers of SWAFL.** The Process map tab draws the map in the colours of the program, with every component of the lists beside and under the map linked to the boxes of the map it acts on by a thin line, in the colour of its group (teal for water and the surface, amber for the crop, rose and coral for nitrogen and heat, blue for management, grey for the soil column and numerics). Under the map is a block with the ten layer groups of SWAFL (irrigation design, irrigation control, mulch and evaporation, soil structure and tillage, deterministic phenotyping, field water balance, seasonal data, crops, feedback loops and Daisy output), each linked in the same way to the processes it reads or changes, and below the layers the five results of the workbench (dashboard, reports, prescriptions, figures and logs, weather files), the four computing engines, the one project shared by every layer and the inputs of the site and the question. Point at a box of a list or a layer to show only its links; click a layer to close the window and open that layer in the workbench; click a box of the map as before to read the process and draw its figures. The buttons *Save as SVG* and *Save as PNG* save the whole drawing, with the links.
+
 **What the arrows point to.**
 
 1. **Process map.** One box for each process, coloured by group.
