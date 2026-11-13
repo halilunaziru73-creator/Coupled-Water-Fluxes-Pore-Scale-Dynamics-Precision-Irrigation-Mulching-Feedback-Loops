@@ -30,7 +30,8 @@ const WxUI = (() => {
       '<tr><td>Mean annual rainfall</td><td><b>' + fmt(s.Pmean) + ' mm</b></td></tr><tr><td>Mean annual reference ET</td><td><b>' + fmt(s.ET0mean) + ' mm</b> (' + UI.esc(s.how || '') + ')</td></tr>' +
       '<tr><td>Annual model set to</td><td>rainfall ×' + (+s.rain).toFixed(1) + ', temperature ' + (s.dT >= 0 ? '+' : '') + (+s.dT).toFixed(1) + ' °C</td></tr>' +
       (s.cols ? '<tr><td>Columns read</td><td>' + UI.esc(s.cols.join(', ')) + '</td></tr>' : '') + '</table>' + (notes ? '<p style="margin-top:8px"><b>Notes</b></p><ul>' + notes + '</ul>' : '') +
-      '<canvas id="wxClimR" width="560" height="240" style="max-width:100%"></canvas><p>Switch back at any time in Properties, Scenario, <b>Weather source</b>.</p>' }); setTimeout(() => drawClim('wxClimR'), 30);
+      (s.daily && window.WxDownload ? '<div id="wxDlR">' + WxDownload.html() + '</div>' : '') + '<canvas id="wxClimR" width="560" height="240" style="max-width:100%"></canvas><p>Switch back at any time in Properties, Scenario, <b>Weather source</b>.</p>' }); setTimeout(() => drawClim('wxClimR'), 30);
+    setTimeout(() => { const h = document.getElementById('wxDlR'); if (h && s.daily) WxDownload.bind(h, () => ({ rows: s.daily, meta: { name: s.name, lat: s.lat, lon: s.lon, source: 'Open-Meteo archive and forecast (ERA5 reanalysis; Zippenfenig, 2023; Hersbach et al., 2020)' } })); }, 40);
   }
   function importFile() {
     const r = UI.modal({ title: 'Import weather data', icon: 'open', width: 'min(620px,94vw)', html:

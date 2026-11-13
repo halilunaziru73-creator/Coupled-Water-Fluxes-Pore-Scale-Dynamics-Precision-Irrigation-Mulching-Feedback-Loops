@@ -167,6 +167,6 @@
     for (let d = new Date(lastD.getTime() + 864e5); d.getUTCFullYear() === y1; d = new Date(d.getTime() + 864e5)) { const src = map.get(Date.UTC(typ, d.getUTCMonth(), d.getUTCDate())); if (src) all.push(Object.assign({}, src, { d })); }
     const fcStart = fc ? Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) : null;
     const s = apply(all, { src: 'online', name: label || (lat.toFixed(3) + ', ' + lon.toFixed(3)), how: 'daily reference ET (FAO Penman-Monteith) of the weather service', lastYear: y1, allowPartial: true, fcStart });
-    s.hist = nHist; s.forecast = fc ? 16 : 0; s.lat = lat; s.lon = lon; if (W.WXSRC.online) { W.WXSRC.online.lat = lat; W.WXSRC.online.lon = lon; } return s;
+    s.daily = all; s.hist = nHist; s.forecast = fc ? 16 : 0; s.lat = lat; s.lon = lon; if (W.WXSRC.online) { W.WXSRC.online.lat = lat; W.WXSRC.online.lon = lon; } return s;
   };
 })();

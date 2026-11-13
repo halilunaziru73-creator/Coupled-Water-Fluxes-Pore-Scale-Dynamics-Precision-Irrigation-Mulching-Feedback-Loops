@@ -287,7 +287,7 @@ document.querySelector('#dashTabs [data-act=maxDash]').onclick = e => { const d 
 document.querySelector('#dashTabs [data-act=origLayout]').onclick = () => window.resetLayout();
 // a notice when a newer version is published (desktop app only, once per start, silent when offline)
 if (window.swafl) setTimeout(() => { fetch('https://raw.githubusercontent.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/main/Software/v1.1.0/SWAFL_Desktop/package.json', { cache: 'no-store' }).then(r => r.json()).then(j => { const a = String(j.version).split('.').map(Number), b = VERSION.split('.').map(Number); if (a.some((v, i) => v > b[i] && a.slice(0, i).every((w, k) => w === b[k]))) UI.toast('A newer version of SWAFL (' + j.version + ') is available. See Help, Download and install.'); }).catch(() => { }); }, 6000);
-if (window.swafl) window.swafl.version().then(v => { document.getElementById('stVer').textContent = v + ' · build 13 Nov 2026 (h)'; }).catch(() => {});
+if (window.swafl) window.swafl.version().then(v => { document.getElementById('stVer').textContent = v + ' · build 13 Nov 2026 (i)'; }).catch(() => {});
 document.getElementById('engine').addEventListener('load', () => { if (bootedOnce) boot(true); });
 boot();
 
