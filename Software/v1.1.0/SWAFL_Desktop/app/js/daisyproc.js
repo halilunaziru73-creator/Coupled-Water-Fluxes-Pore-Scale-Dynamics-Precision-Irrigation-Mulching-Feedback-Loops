@@ -4,7 +4,7 @@
 'use strict';
 (() => {
   const D = DaisyUI, IO = window.DaisyIO, esc = D.esc, K = () => D.kit;
-  const st = { sel: 'water', src: null, view: 'all' };
+  const st = { sel: 'water', src: null, view: 'all', pin: null };
   // colours of the groups, a spectral set
   const GC = { drive: '#5e4fa2', water: '#3288bd', heat: '#66c2a5', nitrogen: '#e6c200', carbon: '#f46d43', crop: '#4d9221' };
   const GN = { drive: 'Drivers', water: 'Water', heat: 'Heat', nitrogen: 'Nitrogen', carbon: 'Carbon and organic matter', crop: 'Crop' };
@@ -211,7 +211,7 @@
   // after the map is in the page: number the boxes, draw the links, light up the links of the box the pointer is on
   function decorate(host) {
     const sv = host && host.querySelector('svg'); if (!sv) return;
-    if (!document.getElementById('dzLkCss')) { const s = document.createElement('style'); s.id = 'dzLkCss'; s.textContent = '.dzLk{transition:opacity .15s,stroke-width .15s;pointer-events:none}svg.hl .dzLk{opacity:.07}svg.hl .dzLk.on{opacity:1}svg.hl path.dzLk.on{stroke-width:2.4;stroke-opacity:1}'; document.head.appendChild(s); }
+    if (!document.getElementById('dzLkCss')) { const s = document.createElement('style'); s.id = 'dzLkCss'; s.textContent = '.dzLk{transition:opacity .15s,stroke-width .15s;pointer-events:none}svg.nolk:not(.hl) .dzLk{opacity:0}svg.hl .dzLk{opacity:.05}svg.hl .dzLk.on{opacity:1}svg.hl path.dzLk.on{stroke-width:2.6;stroke-opacity:1}svg g.dzPb.dzHot rect{stroke:#d7191c;stroke-width:2}svg g.dzPb.dzHot:focus{outline:none}'; document.head.appendChild(s); }
     const gs = [].slice.call(sv.querySelectorAll('g.dzPb')); gs.forEach((g, i) => g.setAttribute('data-i', i));
     if (gs.length !== 137 || sv.querySelector('.dzLk')) return;
     let G; try { G = gs.map(g => g.getBBox()); } catch (e) { return; } if (!G[0] || !G[0].width) return;
@@ -226,17 +226,24 @@
         if (ex > c.x && ex < c.x + c.width && ey > c.y && ey < c.y + c.height) ey = sy > ty ? c.y + c.height : c.y;
         const dy = ey - sy, m = Math.min(90, Math.abs(dy) / 2 + 20), sg = dy < 0 ? -1 : 1;
         const d = side ? 'M' + sx + ',' + sy + ' C' + (sx - 120) + ',' + sy + ' ' + (ex + 80) + ',' + ey + ' ' + ex + ',' + ey : 'M' + sx + ',' + sy + ' C' + sx + ',' + (sy + sg * m) + ' ' + ex + ',' + (ey - sg * m) + ' ' + ex + ',' + ey;
-        out.push('<path class="dzLk" data-i="' + i + '" d="' + d + '" fill="none" stroke="' + col + '" stroke-width="1" stroke-opacity=".38"/><circle class="dzLk" data-i="' + i + '" cx="' + ex + '" cy="' + ey + '" r="2.4" fill="' + col + '" fill-opacity=".7"/>'); }); });
+        out.push('<path class="dzLk" data-i="' + i + '" data-t="' + t + '" d="' + d + '" fill="none" stroke="' + col + '" stroke-width="1" stroke-opacity=".38"/><circle class="dzLk" data-i="' + i + '" data-t="' + t + '" cx="' + ex + '" cy="' + ey + '" r="2.4" fill="' + col + '" fill-opacity=".7"/>'); }); });
     gs[0].insertAdjacentHTML('beforebegin', out.join(''));
-    const on = i => { sv.classList.add('hl'); sv.querySelectorAll('.dzLk').forEach(e => e.classList.toggle('on', e.getAttribute('data-i') === String(i))); };
-    const off = () => { sv.classList.remove('hl'); sv.querySelectorAll('.dzLk.on').forEach(e => e.classList.remove('on')); };
-    gs.forEach((g, i) => { g.addEventListener('mouseenter', () => on(i)); g.addEventListener('mouseleave', off); g.addEventListener('focus', () => on(i)); g.addEventListener('blur', off);
+    const nm = g => { const q = g.dataset.p && byId(g.dataset.p); return (q && q.n) || (g.getAttribute('aria-label') || '').replace(/: open the layer$/, ''); }, tgt = {}; Object.keys(LK).forEach(k => LK[k].forEach(t => { (tgt[t] = tgt[t] || []).push(+k); }));
+    gs.forEach((g, i) => { const to = (LK[i] || []).map(t => nm(gs[t])).filter((v, k, A) => v && A.indexOf(v) === k), by = tgt[i] || [], ti = g.querySelector('title') || g.insertBefore(document.createElementNS('http://www.w3.org/2000/svg', 'title'), g.firstChild);
+      ti.textContent = g.dataset.lay ? nm(g) + ': click to open the layer. It acts on: ' + to.join(', ') + '.' : (nm(g) || 'Box') + '. ' + (to.length ? 'Acts on: ' + to.join(', ') + '. ' : '') + (by.length ? by.length + ' component' + (by.length > 1 ? 's' : '') + ' or layer' + (by.length > 1 ? 's' : '') + ' act on it. ' : '') + (g.dataset.p ? 'Click to read the process.' : ''); });
+    const show = i => { sv.classList.add('hl'); sv.querySelectorAll('.dzLk').forEach(e => e.classList.toggle('on', e.getAttribute('data-i') === String(i) || e.getAttribute('data-t') === String(i))); sv.querySelectorAll('.dzHot').forEach(e => e.classList.remove('dzHot')); gs[i].classList.add('dzHot'); (LK[i] || []).concat(tgt[i] || []).forEach(k => gs[k].classList.add('dzHot')); };
+    const clear = () => { sv.classList.remove('hl'); sv.querySelectorAll('.dzLk.on').forEach(e => e.classList.remove('on')); sv.querySelectorAll('.dzHot').forEach(e => e.classList.remove('dzHot')); };
+    const back = () => { if (st.pin != null && gs[st.pin]) show(st.pin); else clear(); };
+    gs.forEach((g, i) => { g.addEventListener('mouseenter', () => show(i)); g.addEventListener('mouseleave', back); g.addEventListener('focus', () => show(i)); g.addEventListener('blur', back);
+      g.addEventListener('click', () => { if (g.dataset.lay) return; st.pin = st.pin === i && !g.dataset.p ? null : i; back(); });
       if (g.dataset.lay) { const go = () => { if (window.DaisyFlow && window.DaisyFlow.toLayer) window.DaisyFlow.toLayer(g.dataset.lay); }; g.addEventListener('click', go); g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } }); } });
+    sv.addEventListener('click', e => { if (e.target === sv) { st.pin = null; clear(); } });
+    const lk = document.getElementById('dzPlkOn'); sv.classList.toggle('nolk', !!(lk && !lk.checked)); back();
   }
   function html(arg) {
     if (arg && byId(arg)) st.sel = arg;
     return '<div class="dzcard"><b>The processes of the Daisy model</b> redrawn from Fig. 1 of the Daisy paper. Click a box (snowpack, intercepted water, litter, pond, soil water, biopores, drain, NO3, NH4, Plant-N, organs, residues, photosynthesis, AOM, SMB, SOM) to read what Daisy does there and to draw its figures from the logs of a standard run of the rotation. The thin coloured lines link every component in the lists, and every layer of SWAFL under the map, to the boxes of the map it acts on: point at a box to show only its links, and click a layer of SWAFL to open it.</div>' +
-      (window.DaisyScenUI ? window.DaisyScenUI.strip() : '') + '<div class="dzrow" style="justify-content:center"><span class="pnote">Save the figure shown:</span><button class="btn" id="dzPsvg">Save as SVG (vector)</button><button class="btn" id="dzPpng">Save as PNG, 300 dpi</button><button class="btn" id="dzPpng6">PNG, 600 dpi</button></div>' + '<div id="dzPmap" style="display:flex;justify-content:center">' + svg({ complete: 1, all: true }) + '</div><div id="dzPchips" style="text-align:center">' + chips() + '</div><div id="dzPdet"></div>';
+      (window.DaisyScenUI ? window.DaisyScenUI.strip() : '') + '<div class="dzrow" style="justify-content:center"><span class="pnote">Save the figure shown:</span><button class="btn" id="dzPsvg">Save as SVG (vector)</button><button class="btn" id="dzPpng">Save as PNG, 300 dpi</button><button class="btn" id="dzPpng6">PNG, 600 dpi</button></div>' + '<div class="dzrow" style="justify-content:center;gap:12px"><label><input type="checkbox" id="dzPlkOn" checked> Show the links</label><button class="btn" id="dzPtoL">Go to the SWAFL layers</button><button class="btn" id="dzPclr">Clear the selection</button><span class="pnote">Point at or tap a box to show only its links, tap the same box again, or press Clear the selection, to clear. A layer of SWAFL opens when you click it.</span></div><div id="dzPmap" style="display:flex;justify-content:center">' + svg({ complete: 1, all: true }) + '</div><div id="dzPchips" style="text-align:center">' + chips() + '</div><div id="dzPdet"></div>';
   }
   async function detail() {
     const p = byId(st.sel), box = document.getElementById('dzPdet'); if (!box) return;
@@ -313,6 +320,9 @@
     const png = sc => { const t = svgText(), img = new Image(), vb = map.querySelector('svg').getAttribute('viewBox').split(' ').map(Number); img.onload = () => { const cv = document.createElement('canvas'); cv.width = Math.round(vb[2] * sc); cv.height = Math.round(vb[3] * sc); const g = cv.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, cv.width, cv.height); g.drawImage(img, 0, 0, cv.width, cv.height); cv.toBlob(b => { const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = st.view === 'all' ? 'daisy-processes-all-components.png' : 'daisy-processes-fig1.png'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }, 'image/png'); }; img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(t); };
     const pv = document.getElementById('dzPview'); if (pv) pv.onchange = () => { st.view = pv.value; map.innerHTML = svg({ complete: 1, all: true }); document.getElementById('dzPchips').innerHTML = chips(); wire(); };
     const b1 = document.getElementById('dzPsvg'); if (b1) { b1.onclick = () => D.download('daisy-processes.svg', svgText(), 'image/svg+xml'); document.getElementById('dzPpng').onclick = () => png(300 / 96 * 1.2); document.getElementById('dzPpng6').onclick = () => png(600 / 96 * 1.2); }
+    const lkb = document.getElementById('dzPlkOn'); if (lkb) lkb.onchange = () => { const sv = map.querySelector('svg'); if (sv) sv.classList.toggle('nolk', !lkb.checked); };
+    const toL = document.getElementById('dzPtoL'); if (toL) toL.onclick = () => { const sv = map.querySelector('svg'), g = sv && sv.querySelector('[data-lay]'); if (g) g.scrollIntoView({ behavior: 'smooth', block: 'center' }); };
+    const clr = document.getElementById('dzPclr'); if (clr) clr.onclick = () => { st.pin = null; const sv = map.querySelector('svg'); if (sv) { sv.classList.remove('hl'); sv.querySelectorAll('.dzLk.on,.dzHot').forEach(e => e.classList.remove('on', 'dzHot')); } };
     wire(); detail(); if (window.DaisyScenUI) window.DaisyScenUI.bindStrip();
   }
   // click on a process anywhere (experiment, scenario, SWAFL layer): what Daisy does there and its figures, drawn from the logs of the runs given
