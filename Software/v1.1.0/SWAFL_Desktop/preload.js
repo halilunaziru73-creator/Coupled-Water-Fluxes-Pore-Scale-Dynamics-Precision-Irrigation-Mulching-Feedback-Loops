@@ -9,6 +9,7 @@ contextBridge.exposeInMainWorld('swafl', {
   reload: () => ipcRenderer.invoke('reload-app'),
   version: () => ipcRenderer.invoke('version'),
   openManual: page => ipcRenderer.invoke('open-manual', page),
+  openLicencePdf: () => ipcRenderer.invoke('open-licence-pdf'),
   daisyInfo: () => ipcRenderer.invoke('daisy-info'),
   daisyChoose: () => ipcRenderer.invoke('daisy-choose'),
   daisyEnsure: () => ipcRenderer.invoke('daisy-ensure'),

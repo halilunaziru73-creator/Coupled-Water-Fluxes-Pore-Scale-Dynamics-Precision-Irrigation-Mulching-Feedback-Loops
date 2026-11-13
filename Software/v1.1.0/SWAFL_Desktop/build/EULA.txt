@@ -1,6 +1,7 @@
 SWAFL - END USER LICENCE AGREEMENT
 Version 1.0 - 9 November 2026
 Copyright (c) 2026 Naziru Halilu
+A translation of this agreement in seven languages (PDF) is installed with SWAFL: Help, Licence in seven languages. The English text is the binding text.
 
 1. ACCEPTANCE OF THIS AGREEMENT
 This End User Licence Agreement (the "Agreement") is a legal agreement between

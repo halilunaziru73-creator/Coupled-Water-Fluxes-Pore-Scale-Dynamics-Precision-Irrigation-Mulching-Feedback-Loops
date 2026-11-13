@@ -81,6 +81,13 @@
         "filter": [
           "**/*"
         ]
+      },
+      {
+        "from": "Licence",
+        "to": "Licence",
+        "filter": [
+          "*.pdf"
+        ]
       }
     ],
     "afterPack": "build/afterPack.js"

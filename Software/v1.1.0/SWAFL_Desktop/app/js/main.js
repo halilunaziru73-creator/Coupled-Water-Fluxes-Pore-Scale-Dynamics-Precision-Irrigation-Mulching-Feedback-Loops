@@ -155,7 +155,7 @@ const MENUS = [
     { label: 'Model, documentation and installation...', icon: 'book', act: () => DaisyUI.open('docs') } ] },
   { label: 'Help', items: [
     { label: 'Manual (PDF)', icon: 'book', key: 'F1', act: Act.manual }, { label: 'How to use SWAFL', icon: 'book', act: Act.guide }, { label: 'Glossary of terms', icon: 'book', tip: 'Definitions of field capacity, TAW, Mg/ha, pF and the other terms used', act: () => window.Glossary && Glossary.open() }, { label: 'Troubleshooting (running the app)', icon: 'bug', act: () => guideModal('trouble') }, { label: 'Keyboard shortcuts', icon: 'key', act: Act.shortcuts }, { sep: 1 },
-    { label: 'SWAFL on GitHub (repository)', icon: 'github', act: Act.github }, { label: 'Full documentation on GitHub', icon: 'book', act: Act.docs }, { label: 'Report a problem', icon: 'bug', act: Act.issues }, { sep: 1 }, { label: 'Licence agreement', icon: 'book', act: () => window.swaflEula && swaflEula.show(true) }, { label: 'Third-party notices and credits', icon: 'book', act: () => Act.credits() }, { label: 'How to cite SWAFL', icon: 'book', act: () => Act.cite() }, { label: 'About SWAFL', icon: 'info', act: Act.about }] }
+    { label: 'SWAFL on GitHub (repository)', icon: 'github', act: Act.github }, { label: 'Full documentation on GitHub', icon: 'book', act: Act.docs }, { label: 'Report a problem', icon: 'bug', act: Act.issues }, { sep: 1 }, { label: 'Licence agreement', icon: 'book', act: () => window.swaflEula && swaflEula.show(true) }, ...(window.swafl && window.swafl.openLicencePdf ? [{ label: 'Licence in seven languages (PDF)', icon: 'book', tip: 'The licence agreement in English, Chinese, Spanish, French, Portuguese, German and Russian', act: () => window.swafl.openLicencePdf() }] : []), { label: 'Third-party notices and credits', icon: 'book', act: () => Act.credits() }, { label: 'How to cite SWAFL', icon: 'book', act: () => Act.cite() }, { label: 'About SWAFL', icon: 'info', act: Act.about }] }
 ];
 
 /* ---------- toolbar ---------- */
@@ -287,7 +287,7 @@ document.querySelector('#dashTabs [data-act=maxDash]').onclick = e => { const d 
 document.querySelector('#dashTabs [data-act=origLayout]').onclick = () => window.resetLayout();
 // a notice when a newer version is published (desktop app only, once per start, silent when offline)
 if (window.swafl) setTimeout(() => { fetch('https://raw.githubusercontent.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/main/Software/v1.1.0/SWAFL_Desktop/package.json', { cache: 'no-store' }).then(r => r.json()).then(j => { const a = String(j.version).split('.').map(Number), b = VERSION.split('.').map(Number); if (a.some((v, i) => v > b[i] && a.slice(0, i).every((w, k) => w === b[k]))) UI.toast('A newer version of SWAFL (' + j.version + ') is available. See Help, Download and install.'); }).catch(() => { }); }, 6000);
-if (window.swafl) window.swafl.version().then(v => { document.getElementById('stVer').textContent = v + ' · build 13 Nov 2026 (e)'; }).catch(() => {});
+if (window.swafl) window.swafl.version().then(v => { document.getElementById('stVer').textContent = v + ' · build 13 Nov 2026 (f)'; }).catch(() => {});
 document.getElementById('engine').addEventListener('load', () => { if (bootedOnce) boot(true); });
 boot();
 

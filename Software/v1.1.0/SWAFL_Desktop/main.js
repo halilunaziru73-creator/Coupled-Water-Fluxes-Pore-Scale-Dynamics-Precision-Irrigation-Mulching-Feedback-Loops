@@ -174,6 +174,14 @@ function fetchManual(dest) {
   });
 }
 const showManual = async (file, page, title) => { try { const mw = new BrowserWindow({ width: 1100, height: 900, title: 'SWAFL manual' + (page ? ', page ' + page : ''), icon: path.join(__dirname, 'build', 'icon.png'), webPreferences: { plugins: true } }); mw.setMenuBarVisibility(false); await mw.loadURL(file + (page ? '#page=' + (+page || 1) : '')); return true; } catch (e) { return false; } };
+ipcMain.handle('open-licence-pdf', async () => {
+  // the licence in seven languages (PDF), installed with the app; offline copies first, the published copy as the last resort
+  const N = 'SWAFL_Licence_Seven_Languages.pdf', exeDir = path.dirname(process.execPath || '');
+  const cands = [path.join(process.resourcesPath || '', 'Licence', N), path.join(__dirname, 'Licence', N), path.join(__dirname, '..', 'Licence', N), path.join(exeDir, 'Licence', N)];
+  const f = cands.find(p => { try { return fs.existsSync(p); } catch (e) { return false; } });
+  if (f) { const err = await shell.openPath(f); return !err; }
+  shell.openExternal('https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/Licence/' + N); return true;
+});
 ipcMain.handle('open-manual', async (_e, page) => {
   const exeDir = path.dirname(process.execPath || ''), cache = path.join(app.getPath('userData'), 'manual', MAN11);
   const cands = [path.join(process.resourcesPath || '', MAN11), path.join(__dirname, 'Manual', MAN11), path.join(__dirname, '..', 'Manual', MAN11), path.join(__dirname, MAN11), path.join(exeDir, 'Manual', MAN11), path.join(exeDir, MAN11), path.join(__dirname, 'docs', 'manual_v1.1.0', MAN11), path.join(process.resourcesPath || '', 'SWAFL_Manual.pdf'), path.join(__dirname, 'docs', 'SWAFL_Manual.pdf'), cache];
