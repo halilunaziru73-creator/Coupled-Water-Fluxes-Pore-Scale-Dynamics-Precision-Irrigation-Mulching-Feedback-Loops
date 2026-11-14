@@ -128,8 +128,20 @@ const Layers = (() => {
 
   function expandAll() { collapsed = {}; render(); }
   function collapseAll() { GROUPS.forEach(g => { collapsed[g.id] = true; }); DAISY.forEach(g => { collapsed[g.id] = true; }); collapsed['droot'] = true; collapsed['root'] = false; DESIGN.forEach(d => { collapsed['s-' + d] = true; }); render(); }
-  document.querySelector('#layersDock [data-act=expandAll]').onclick = expandAll;
-  document.querySelector('#layersDock [data-act=collapseAll]').onclick = collapseAll;
+  /* "+" and "-" act on one group at a time: the group of the layer in use first, then the next closed one (Shift+click: all) */
+  const ALLG = () => GROUPS.map(g => g.id).concat(DAISY.map(g => g.id));
+  const curGroup = () => { const id = dzCur && String(cur || '').length === 0 ? dzCur : (cur || dzCur); const d = DAISY.find(g => g.items.some(i => i[0] === dzCur)); return (cur && groupOf(cur)) || (d && d.id) || null; };
+  function expandOne() {
+    const root = !collapsed['root'], g = curGroup(); if (collapsed['root']) { collapsed['root'] = false; render(); return; }
+    if (g && collapsed[g]) { collapsed[g] = false; if (DAISY.some(x => x.id === g)) collapsed['droot'] = false; render(); return; }
+    const nx = ALLG().find(id => collapsed[id]); if (nx) { collapsed[nx] = false; if (DAISY.some(x => x.id === nx)) collapsed['droot'] = false; render(); const el = tree.querySelector('[data-id="' + nx + '"]'); if (el && el.scrollIntoView) el.scrollIntoView({ block: 'nearest' }); }
+  }
+  function collapseOne() {
+    const g = curGroup(); if (g && !collapsed[g]) { collapsed[g] = true; render(); return; }
+    const open = ALLG().filter(id => !collapsed[id]); if (open.length) { collapsed[open[open.length - 1]] = true; render(); }
+  }
+  document.querySelector('#layersDock [data-act=expandAll]').onclick = e => e.shiftKey ? expandAll() : expandOne();
+  document.querySelector('#layersDock [data-act=collapseAll]').onclick = e => e.shiftKey ? collapseAll() : collapseOne();
 
   E.on('scene', s => { if (!started) return; cur = s.scene; if (!tabs.includes(cur)) tabs.push(cur); renderTabs(); render(); renderViewBar(); });
   let lastSec = '';
