@@ -269,3 +269,29 @@ body.nolayer #engine{visibility:hidden}
 .dzpan b,.dzpan strong,.dzpan th,.dzres b,.dzres th,.dzgrp b,.dzgrp summary{font-weight:700}
 
 .pr label .tri{margin-left:6px;width:20px;height:18px;padding:0;border:1px solid #6b7f95;background:#EFEDE5;color:#0F3B63;font-size:10px;line-height:14px;cursor:pointer;vertical-align:middle}.pr label .tri:hover{background:#BBD6F0}
+
+/* ===== small screens: one pane at a time (js/narrow.js) ===== */
+#paneBar{display:none}
+@media (max-width:900px){
+  #app{grid-template-rows:auto auto auto 1fr auto auto;height:100dvh}
+  #paneBar{display:flex;grid-row:5;background:var(--status);gap:2px;padding:3px 4px}
+  #paneBar button{flex:1;min-height:40px;font-size:13px;font-weight:700;border:1px solid #808080;background:#EDEBE4;color:#0A246A;border-radius:3px}
+  #paneBar button.on{background:#0A246A;color:#fff;border-color:#0A246A}
+  #statusbar{grid-row:6;overflow:hidden;white-space:nowrap}#statusbar>span:nth-child(n+3){display:none}
+  #work{display:block;position:relative;min-height:0;overflow:hidden}
+  #work .hsplit,#work .vsplit{display:none!important}
+  #leftDock,#rightDock,#center{display:none!important;width:100%!important;min-width:0!important;max-width:none!important;height:100%;flex:none}
+  body[data-pane=layers] #leftDock{display:flex!important;flex-direction:column}
+  body[data-pane=layers] #layersDock{flex:1 1 auto;height:auto!important;min-height:0}
+  body[data-pane=props] #rightDock{display:block!important;overflow:auto}
+  body[data-pane=picture] #center,body[data-pane=results] #center{display:flex!important}
+  body[data-pane=picture] #dashDock{display:none!important}
+  body[data-pane=results] #engineHost,body[data-pane=results] #docTabs,body[data-pane=results] #viewBar{display:none!important}
+  body[data-pane=results] #dashDock{display:flex!important;width:100%!important;min-width:0!important;max-width:none!important;flex:1;height:100%!important}
+  #viewBar{overflow-x:auto;white-space:nowrap;flex-wrap:nowrap}#docTabs{overflow-x:auto}
+  #dashTabs{overflow-x:auto;flex-wrap:nowrap}#dashTabs .mini{display:none}
+  #toolbar{overflow-x:auto;flex-wrap:nowrap}#wxBar{overflow-x:auto}
+  #layerTree .tn,#props .pgh{min-height:40px}
+  .modal{max-width:100vw!important;max-height:100dvh!important}
+}
+@media (max-width:900px){#viewBar .pnote{display:none}}
