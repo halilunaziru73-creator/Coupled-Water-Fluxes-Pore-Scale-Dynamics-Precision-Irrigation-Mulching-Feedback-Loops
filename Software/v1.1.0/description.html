@@ -6,7 +6,8 @@
 <title>SWAFL Daisy Decision Support</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap">
-<style>
+<style>.upd{border:2px solid var(--navy);background:var(--soft);padding:.8rem 1rem;margin:1rem 0;display:flex;flex-wrap:wrap;gap:.6rem 1.2rem;align-items:center}.upd b{color:var(--navy)}.upd ul{margin:.3rem 0 0;padding-left:1.1rem;flex-basis:100%}.upd a.btn{background:var(--navy);color:#fff;padding:.45rem .9rem;text-decoration:none;font-weight:700;margin-left:auto}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .upd b{color:var(--link)}}:root[data-theme="dark"] .upd b{color:var(--link)}
+
 /* layout: a government-style software page: utility links, logo and search, a full-width navigation bar, centred title, breadcrumb, wide intro, short rule, download list, footer in columns. Colours are those of the SWAFL program. */
 :root{--bg:#fff;--fg:#000;--mut:#404040;--line:#808080;--soft:#E8E6F4;--grey:#D4D0C8;--navy:#0A246A;--teal:#00808A;--link:#0A246A;--navfg:#fff;--field:#fff
 ;--ui:"Public Sans","Segoe UI",system-ui,Arial,sans-serif}
@@ -74,6 +75,7 @@ footer{background:var(--soft);margin-top:80px;padding-bottom:36px;border-top:0}
 <h1>SWAFL: Decision Support System for the Daisy Model - Version 1.1.0</h1>
 <div class="crumb"><a href="#top">Home</a><i>&rsaquo;</i><a href="#downloads">Software</a><i>&rsaquo;</i><span>Daisy decision support system - Version 1.1.0</span></div>
 <p class="intro">SWAFL is a decision support system for the Daisy soil-plant-atmosphere model. It turns Daisy runs, a fast daily water balance and closed-form design modules into one offline workbench with a graphical interface for irrigation and evaporation-control mulching decisions: it prepares and checks Daisy experiments, runs them, and brings the results back to the decision layers. It shows how much of an irrigation or evaporation saving remains once the soil, the weather and the irrigation rule have acted, and it traces every number to a numbered equation.</p>
+<aside class="upd" id="update" aria-label="Software update"><div><b>Software update: SWAFL 1.1.0.</b> New graphical Daisy workbench, Daisy bundled for Windows, bridge to the decision layers, a crop library of 75 crops, virtual phenotyping, field sketch and map, online weather in every format, and a linked process map with the SWAFL layers.</div><a class="btn" href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops#readme">Read the repository README</a></aside>
 <hr class="rule">
 <figure class="dgwrap"><svg class="dg" viewBox="0 0 900 830" role="img" aria-label="All water, nitrogen and heat interactions between atmosphere, plant, mulch, soil, groundwater and surface water in SWAFL, with the seven feedback loops">
 <defs><linearGradient id="gs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8ee8ee"/><stop offset=".5" stop-color="#2aa7e8"/><stop offset="1" stop-color="#1230c8"/></linearGradient>
