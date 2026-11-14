@@ -57,7 +57,7 @@
   }
   // ---------- drawing helpers ----------
   const f1 = (v, d) => isFinite(v) ? v.toFixed(d == null ? 1 : d) : '—', tone = (ok, w) => ok ? DNCOL.ok : w ? DNCOL.warn : DNCOL.bad;
-  function soilFill(x, y, w, h, col, hatch) { ctx.fillStyle = col; ctx.fillRect(x, y, w, h); if (hatch) { ctx.strokeStyle = 'rgba(255,255,255,0.35)'; ctx.lineWidth = 1; for (let i = -h; i < w; i += 7) { ctx.beginPath(); ctx.moveTo(x + i, y + h); ctx.lineTo(x + i + h, y); ctx.stroke(); } } }
+  function soilFill(x, y, w, h, col, hatch) { ctx.fillStyle = col; ctx.fillRect(x, y, w, h); if (!hatch && window.RealSoil && w > 30 && h > 20) try { RealSoil.overlay(ctx, x, y, w, h, state.soil + col, DATA.texture[state.soil], 0.5); } catch (e) { } if (hatch) { ctx.strokeStyle = 'rgba(255,255,255,0.35)'; ctx.lineWidth = 1; for (let i = -h; i < w; i += 7) { ctx.beginPath(); ctx.moveTo(x + i, y + h); ctx.lineTo(x + i + h, y); ctx.stroke(); } } }
   function crossSection(x, y, w, h, R, C, mode, t) {   // mode 'free' or 'gate': to scale in metres, two drains at the edges, the water table midway
     const Dv = Math.min(DN.D, 2.2), zmax = DN.depth + Dv + 0.25, py = v => y + 16 + v / zmax * (h - 34), px = v => x + 8 + v / R.L * (w - 16), g = mode === 'gate' ? R.gate : 0;
     ctx.save(); ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip(); ctx.fillStyle = '#EAF3FA'; ctx.fillRect(x, y, w, h);

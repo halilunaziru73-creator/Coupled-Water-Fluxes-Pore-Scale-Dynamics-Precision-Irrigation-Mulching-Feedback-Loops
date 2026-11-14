@@ -201,6 +201,7 @@
       ctx.fillStyle = view === 'soil' ? wcol(f) : view === 'xray' ? mix('#2A2D33', '#4A515C', f) : view === 'thermal' ? mix('#5B4A38', '#4A5C6E', f) : mix(mix(base, '#6A4B2C', 0.5), '#4A3520', f * 0.55);
       ctx.fillRect(x, y + i * dz, cw, dz + 0.5);
     }
+    if (view !== 'xray' && window.RealSoil) try { RealSoil.overlay(ctx, x, y, cw, ch, state.soil, tx, 0.5); } catch (e) { }
     ctx.strokeStyle = 'rgba(255,255,255,0.10)'; ctx.lineWidth = 1; for (let i = 1; i < NL; i++) { ctx.beginPath(); ctx.moveTo(x, y + i * dz + 0.5); ctx.lineTo(x + cw, y + i * dz + 0.5); ctx.stroke(); }
     ctx.strokeStyle = 'rgba(0,0,0,0.35)'; ctx.strokeRect(x + 0.5, y + 0.5, cw - 1, ch - 1);
   }
