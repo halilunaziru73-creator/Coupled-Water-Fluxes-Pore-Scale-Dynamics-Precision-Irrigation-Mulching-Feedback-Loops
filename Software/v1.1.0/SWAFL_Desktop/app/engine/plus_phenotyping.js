@@ -124,7 +124,7 @@
     ctx.fillStyle = '#FFFFFF'; ctx.fillRect(bx - 3, y - 2, bw + 3, vis * RH + 4); ctx.strokeStyle = '#7A7A7A'; ctx.lineWidth = 1; ctx.strokeRect(bx - 2.5, y - 1.5, bw + 2, vis * RH + 3);
     for (let r = 0; r < vis; r++) { let cx2 = bx; (rows[PH.cropRow + r] || []).forEach(q => { cx2 += chip(cx2, y + r * RH + 1, q.t, state.crop === q.k, () => { applyState({ crop: q.k }); }, 'the crop of the project (' + P.SP[(CMAP[q.k] || (() => { const c = window.CROPLIB && CROPLIB.crops[q.k]; return c ? (KIND[c.kind] || (c.group === 'perennial' ? 'bean' : 'wheat')) : 'wheat'; })())].name.toLowerCase() + ' model)'); }); }
     if (maxR > 0) { const tx = bx + bw - 14, th = vis * RH, thumb = Math.max(18, th * vis / rows.length), ty = y + (th - thumb) * PH.cropRow / maxR; ctx.fillStyle = '#D4D0C8'; ctx.fillRect(tx, y, 14, th); ctx.fillStyle = '#F4F2EC'; ctx.fillRect(tx + 1, ty, 12, thumb); ctx.strokeStyle = '#404040'; ctx.strokeRect(tx + 0.5, ty + 0.5, 12, thumb - 1); CBOX.bar = { x: tx, y, w: 14, h: th, thumb }; hot(tx, y, 14, th, () => { }, 'scroll the crops'); } else CBOX.bar = null;
-    T(keys.length + ' crops of the library · scroll with the wheel or the bar · modelled as ' + P.SP[projSpecies()].name.toLowerCase(), bx, y + vis * RH + 14, { s: 8.5, c: MUTE });
+    T((keys.length - 1) + ' crops of the library · scroll with the wheel or the bar · modelled as ' + P.SP[projSpecies()].name.toLowerCase(), bx, y + vis * RH + 14, { s: 8.5, c: MUTE });
     return y + vis * RH + 24;
   }
   function drawControls(y) {
