@@ -101,17 +101,23 @@ ipcMain.handle('daisy-pick', async () => {
 });
 // a run that is asked for again with exactly the same set-up files gives the same logs: they are kept in memory (the last 30 runs) and returned at once
 const jobCache = new Map(), jobKey = job => { try { return require('crypto').createHash('sha1').update(JSON.stringify([job.main, job.files, !!job.copyBundle, job.logPattern, job.prefix])).digest('hex'); } catch (e) { return null; } };
-ipcMain.handle('daisy-job', async (_e, job) => {
+// at most a few Daisy programs run at once: always two cores (at least a quarter of them) and a part of the memory stay free for the window and for the rest of the computer
+const SLOTS = () => { const os = require('os'), c = os.cpus().length || 4; return Math.max(1, Math.min(6, c - Math.max(2, Math.ceil(c / 4)), Math.floor(os.freemem() / 700e6))); };
+let RUNNING = 0; const WAIT = [];
+const slot = () => new Promise(res => { const go = () => { if (RUNNING < SLOTS()) { RUNNING++; res(); } else WAIT.push(go); }; go(); });
+const release = () => { RUNNING = Math.max(0, RUNNING - 1); const n = WAIT.shift(); if (n) setTimeout(n, 20); };
+ipcMain.handle('daisy-job', async (_e, job) => { await slot(); try { return await daisyJob(job); } finally { release(); } });
+async function daisyJob(job) {
   const ck = job && !job.noCache ? jobKey(job) : null; if (ck && jobCache.has(ck)) { const c = jobCache.get(ck); jobCache.delete(ck); jobCache.set(ck, c); return Object.assign({}, c, { seconds: 0, cached: true }); }
   let exe = exeNow(); if (!exe) { const en = await ensureDaisy(); exe = en.found ? en.exe : null; } if (!exe) return { code: -2, err: 'The Daisy program was not found: unzip the whole SWAFL zip again (the folder daisy must be next to the program).', logs: {}, out: '' };
   if (job && job.copyBundle) job.copyDir = path.join(__dirname, 'app', 'data', 'daisy', 'scenarios', 'common');
   try {
     const r = await DR.runJob(job, { exe, timeoutMs: (job && job.timeoutMs) || 1800000 });
     // keep the whole run folder (set-up files and the raw Daisy logs, untouched) so that it can be checked and reused outside SWAFL
-    try { const root = scratchRoot(); fs.mkdirSync(root, { recursive: true }); const stamp = new Date().toISOString().replace(/[:T]/g, '-').slice(0, 19), clean = t => String(t || '').replace(/[^A-Za-z0-9._-]+/g, '_').slice(0, 60), nm = clean((job && job.scenario ? job.scenario + '_' : '') + ((job && job.label) || 'run')), grp = clean(job && job.group), rid = clean(job && job.runId); let base = grp ? path.join(root, grp) : root, dest = path.join(base, grp ? (rid ? rid + '_' : '') + nm : stamp + '_' + nm), k = 1; fs.mkdirSync(base, { recursive: true }); while (fs.existsSync(dest)) dest = dest.replace(/_\d+$/, '') + '_' + (++k); fs.cpSync(r.dir, dest, { recursive: true }); r.saved = dest; r.scratch = true; } catch (e) { r.savedError = String(e.message); }
+    try { const root = scratchRoot(); fs.mkdirSync(root, { recursive: true }); const stamp = new Date().toISOString().replace(/[:T]/g, '-').slice(0, 19), clean = t => String(t || '').replace(/[^A-Za-z0-9._-]+/g, '_').slice(0, 60), nm = clean((job && job.scenario ? job.scenario + '_' : '') + ((job && job.label) || 'run')), grp = clean(job && job.group), rid = clean(job && job.runId); let base = grp ? path.join(root, grp) : root, dest = path.join(base, grp ? (rid ? rid + '_' : '') + nm : stamp + '_' + nm), k = 1; fs.mkdirSync(base, { recursive: true }); while (fs.existsSync(dest)) dest = dest.replace(/_\d+$/, '') + '_' + (++k); await fs.promises.cp(r.dir, dest, { recursive: true }); r.saved = dest; r.scratch = true; } catch (e) { r.savedError = String(e.message); }
     DR.clean(r.dir); delete r.dir; if (ck && r.code === 0) { jobCache.set(ck, r); while (jobCache.size > 30) jobCache.delete(jobCache.keys().next().value); } return r;
   } catch (e) { return { code: -1, err: String(e.message), logs: {}, out: '' }; }
-});
+}
 // the runs are kept next to Daisy itself: "SWAFL runs" in the Daisy folder that runs them (when it can be written; Program Files cannot),
 // otherwise next to the Daisy that SWAFL keeps for itself (%LOCALAPPDATA%\SWAFL\Daisy-7.1.14\SWAFL runs). Runs of older versions in
 // Documents\SWAFL Daisy runs are still listed and read.
