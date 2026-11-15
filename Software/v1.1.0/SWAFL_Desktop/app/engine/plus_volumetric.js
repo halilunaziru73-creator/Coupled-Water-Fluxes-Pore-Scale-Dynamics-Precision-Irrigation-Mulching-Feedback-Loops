@@ -195,36 +195,64 @@
   const hue = k => ['#1B3A6B', '#2E9E4F', '#D93025', '#E8A33D', '#8E3B8E', '#2b83ba'][k % 6];
   const errCol = e => U.pal(clamp(e / 12, 0, 1));
   // the oblique view of a cloud, turned about the vertical axis
+  // ---- the 3D view of the rig and the clouds: a lit studio with a floor, a pot on a turntable, spheres on rods, a rail with the cameras and the plant as a cloud of points
+  const LEAFC = {};
+  const leafCol = (hh, jit, sh, stem) => { const k = (stem ? 's' : 'l') + Math.round(hh * 7) + jit + Math.round(sh * 5); return LEAFC[k] || (LEAFC[k] = stem ? 'hsl(30,34%,' + (20 + sh * 22) + '%)' : 'hsl(' + (96 + hh * 22 + jit * 6) + ',' + (46 + jit * 7 + hh * 8) + '%,' + (17 + hh * 19 + sh * 20 + jit * 2) + '%)'); };
   function drawCloud(c, x, y, w, h, o) {
-    o = o || {}; ctx.save(); if (!o.keep) { ctx.fillStyle = '#10151C'; ctx.fillRect(x, y, w, h); } ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip(); const MODE = o.col || VP.col;
+    o = o || {}; if (o.base && (o.spheres || []).length && o.R0) o = Object.assign({}, o, { base: false }); ctx.save(); const MODE = o.col || VP.col;
+    if (!o.keep) { const bg = ctx.createLinearGradient(0, y, 0, y + h); bg.addColorStop(0, '#0C141D'); bg.addColorStop(1, '#1D2D3E'); ctx.fillStyle = bg; ctx.fillRect(x, y, w, h); }
+    ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
     if (!c || !c.n) { T('no points', x + w / 2, y + h / 2, { s: 11, c: '#8A94A0', a: 'center' }); ctx.restore(); return; }
-    const sc = o.sc || Math.min(w * 0.46 / Math.max(10, (o.R0 || 28) * 1.1), h * 0.84 / Math.max(10, o.ext || 60)), ca = Math.cos(VP.rot), sa = Math.sin(VP.rot), cx = x + w / 2, cy = o.base ? y + h - 20 : o.sc ? Math.min(y + h - 22, y + h * 0.5 + 0.46 * (o.H || 60) * o.sc) : y + h - 22, tilt = 0.5, ord = []; const st = Math.max(1, Math.floor(c.n / (o.cap || 2400)));
-    for (let i = 0; i < c.n; i += st) { const xr = c.x[i] * ca - c.y[i] * sa, yr = c.x[i] * sa + c.y[i] * ca; ord.push([yr, xr, c.z[i], i]); } ord.sort((a, b) => a[0] - b[0]);
-    // the ground ring and the six spheres
-    ctx.strokeStyle = 'rgba(180,190,205,0.25)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.ellipse(cx, cy, (o.R0 || 28) * sc, (o.R0 || 28) * sc * tilt, 0, 0, 6.283); ctx.stroke();
-    (o.spheres || []).forEach(s => { const xr = s.x * ca - s.y * sa, yr = s.x * sa + s.y * ca, px = cx + xr * sc, py = cy + yr * sc * tilt - s.z * sc * 0.92, r = Math.max(3, s.r * sc); const g = ctx.createRadialGradient(px - r * 0.3, py - r * 0.3, r * 0.1, px, py, r); g.addColorStop(0, '#fff'); g.addColorStop(1, hue(s.i)); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(px, py, r, 0, 6.283); ctx.fill(); });
-    const H0 = o.H || 60; ord.forEach(q => { const i = q[3], px = cx + q[1] * sc, py = cy + q[0] * sc * tilt - q[2] * sc * 0.92; let col; if (MODE === 'view') col = hue(c.v ? c.v[i] : 0); else if (MODE === 'error' && c.err) col = errCol(c.err[i] || 0); else if (MODE === 'height') col = U.pal(clamp(q[2] / H0, 0, 1) * 0.92); else { const hh = clamp(q[2] / H0, 0, 1), dp = clamp(0.5 + q[0] / (o.dep || 30) * 0.5, 0, 1), lt = 0.62 + 0.38 * dp, stem = c.kd && c.kd[i] === 1; col = stem ? 'rgb(' + Math.round(110 * lt) + ',' + Math.round(88 * lt) + ',' + Math.round(52 * lt) + ')' : 'rgb(' + Math.round((38 + 55 * hh) * lt) + ',' + Math.round((92 + 98 * hh) * lt) + ',' + Math.round((30 + 25 * hh) * lt) + ')'; } ctx.fillStyle = col; const ps = Math.max(2.2, Math.min(5, 0.45 * sc)); ctx.fillRect(px - ps / 2, py - ps / 2, ps, ps); });
-    ctx.restore(); VP.proj = { sc, cx, cy, ca, sa, tilt }; ROTB.x = Math.min(ROTB.x || x, x); }
+    const R0 = o.R0 === undefined ? 28 : o.R0, S = Math.max(R0, 6) / 28, Hh = Math.max(o.fixH || o.H || 60, 3), sph = o.spheres || [], ring = o.ring !== false && R0 > 0, pitch = o.pitch !== undefined ? o.pitch : 0.42, cp = Math.cos(pitch), spt = Math.sin(pitch), ca = Math.cos(VP.rot), sa = Math.sin(VP.rot);
+    const Rw = o.fixR ? o.fixR * 1.2 : ring ? R0 * 1.55 : sph.length ? R0 * 1.3 : Math.max(o.cr || Hh * 0.3, 4) * 1.3;
+    const s0 = Math.min(w * 0.5 / Rw, o.base ? (h - 40) / (Hh * cp + Rw * spt * 0.5) : h * 0.5 / (Hh * cp * 0.58 + Rw * spt * 0.95 + 3 * S)), tz = Hh * 0.42, cx = x + w / 2, cy = o.base ? y + h - 26 - tz * cp * s0 : y + h * 0.5 + 6, Dc = 3.4 * Math.max(Rw, Hh);
+    const pj = (X, Y, Z) => { const xr = X * ca - Y * sa, yr = X * sa + Y * ca, dc = -yr * cp + (Z - tz) * spt, k = Dc / Math.max(Dc * 0.3, Dc - dc), up = (Z - tz) * cp + yr * spt; return [cx + xr * s0 * k, cy - up * s0 * k, k, dc]; };
+    VP.pj = pj; VP.s0 = s0;
+    // floor: a disc with rings and spokes, and the soft shadow of the plant
+    const Rf = (ring ? R0 * 1.55 : Math.max(Rw, R0 * 1.1)) , circ = (r, z, n) => { const q = []; for (let i = 0; i <= n; i++) { const a = i / n * 6.2832; q.push(pj(r * Math.cos(a), r * Math.sin(a), z)); } return q; };
+    const poly = (q, fill, stroke, lw) => { ctx.beginPath(); q.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); if (fill) { ctx.fillStyle = fill; ctx.fill(); } if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw || 1; ctx.stroke(); } };
+    if (!o.keep || o.floor) { const fg = pj(0, 0, 0), fl = ctx.createRadialGradient(fg[0], fg[1], 2, fg[0], fg[1], Rf * s0); fl.addColorStop(0, '#30465C'); fl.addColorStop(1, '#16222F'); poly(circ(Rf, 0, 60), fl, 'rgba(150,175,205,0.35)', 1.2);
+      [0.33, 0.66].forEach(f => poly(circ(Rf * f, 0, 48), null, 'rgba(150,175,205,0.16)', 1)); ctx.strokeStyle = 'rgba(150,175,205,0.12)'; ctx.lineWidth = 1; for (let a = 0; a < 360; a += 30) { const p1 = pj(0, 0, 0), p2 = pj(Rf * Math.cos(a * D2R), Rf * Math.sin(a * D2R), 0); ctx.beginPath(); ctx.moveTo(p1[0], p1[1]); ctx.lineTo(p2[0], p2[1]); ctx.stroke(); }
+      const cr = Math.max(o.cr || Hh * 0.28, 3.5); for (let q = 3; q >= 1; q--) poly(circ(cr * (0.55 + q * 0.28), 0, 30), 'rgba(0,0,0,' + (0.13 / q * 1.4) + ')'); }
+    const cams = o.cams || [], Rc = R0 * 1.3, zc = Hh * 0.45 + Rc * Math.tan(22 * D2R), items = [];
+    // the rail of the cameras: the far half before the plant, the near half after it
+    const rail = [], dc0 = pj(0, 0, zc)[3]; if (ring) for (let i = 0; i <= 72; i++) { const a = i / 72 * 6.2832; rail.push(pj(Rc * Math.cos(a), Rc * Math.sin(a), zc)); }
+    const arc = (far) => { ctx.lineCap = 'round'; for (let pass = 0; pass < 2; pass++) { ctx.strokeStyle = pass ? 'rgba(205,215,228,0.85)' : 'rgba(0,0,0,0.45)'; ctx.lineWidth = pass ? 2.6 : 4.4; ctx.beginPath(); let on = false; for (let i = 0; i < rail.length; i++) { const f = rail[i][3] < dc0; if (f === far) { on ? ctx.lineTo(rail[i][0], rail[i][1] + (pass ? 0 : 1.5)) : ctx.moveTo(rail[i][0], rail[i][1] + (pass ? 0 : 1.5)); on = true; } else on = false; } ctx.stroke(); } };
+    if (ring) { arc(true); for (let a = 0; a < 360; a += 60) { const p1 = pj(Rc * Math.cos(a * D2R), Rc * Math.sin(a * D2R), zc), p2 = pj(Rc * Math.cos(a * D2R), Rc * Math.sin(a * D2R), 0); if (p1[3] < dc0) { ctx.strokeStyle = 'rgba(190,200,215,0.45)'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(p1[0], p1[1]); ctx.lineTo(p2[0], p2[1]); ctx.stroke(); } } }
+    // the things that can hide each other, drawn from the far to the near
+    const st = Math.max(1, Math.floor(c.n / (o.cap || 1500))); const ps0 = Math.max(1.6, Math.min(4.2, 0.34 * s0)), stemR = 0.6 * S;
+    for (let i = 0; i < c.n; i += st) { const q = pj(c.x[i], c.y[i], c.z[i]); items.push([q[3], 0, i, q[0], q[1], q[2]]); }
+    sph.forEach(sp => { const q = pj(sp.x, sp.y, sp.z); items.push([q[3], 1, sp, q[0], q[1], q[2]]); });
+    items.push([pj(0, 0, -3 * S)[3], 2]); cams.forEach(cm => { const a = cm.ph * D2R, q = pj(Rc * Math.cos(a), Rc * Math.sin(a), zc); items.push([q[3], 3, cm, q[0], q[1], q[2]]); });
+    items.sort((p, q) => p[0] - q[0]);
+    const potTop = pj(0, 0, 0), pr = 4.4 * S * s0 * potTop[2];
+    items.forEach(it => {
+      if (it[1] === 0) { const i = it[2], px = it[3], py = it[4], k = it[5], sh = clamp(it[0] / (Rw * 1.4) * 0.5 + 0.55, 0, 1), hh = clamp(c.z[i] / Hh, 0, 1); let col;
+        if (MODE === 'view') col = hue(c.v ? c.v[i] : 0); else if (MODE === 'error' && c.err) col = errCol(c.err[i] || 0); else if (MODE === 'height') col = U.pal(clamp(c.z[i] / Hh, 0, 1) * 0.92);
+        else col = leafCol(hh, (i * 2654435761 >>> 0) % 3, sh, c.kd ? c.kd[i] === 1 : (c.x[i] * c.x[i] + c.y[i] * c.y[i] < stemR * stemR && c.z[i] < Hh * 0.7));
+        const ps = Math.max(1.7, Math.min(5, ps0 * k)); ctx.fillStyle = col; ctx.fillRect(px - ps / 2, py - ps / 2, ps, ps); }
+      else if (it[1] === 1) { const sp = it[2], px = it[3], py = it[4], r = Math.max(4, sp.r * s0 * it[5]), foot = pj(sp.x, sp.y, 0), base = pj(sp.x, sp.y, sp.z - sp.r);
+        poly(circ(0, 0, 4), null); ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.ellipse(foot[0], foot[1], r * 0.9, r * 0.9 * Math.max(0.25, spt), 0, 0, 6.283); ctx.fill();
+        ctx.strokeStyle = 'rgba(190,200,215,0.7)'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(base[0], base[1]); ctx.lineTo(foot[0], foot[1]); ctx.stroke();
+        const g = ctx.createRadialGradient(px - r * 0.35, py - r * 0.4, r * 0.08, px, py, r); g.addColorStop(0, '#FFFFFF'); g.addColorStop(0.25, hue(sp.i)); g.addColorStop(1, 'rgba(10,14,20,0.95)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(px, py, r, 0, 6.283); ctx.fill(); }
+      else if (it[1] === 2) { const bot = pj(0, 0, -6.5 * S), tt = pj(0, 0, -6.8 * S), ry = Math.max(0.2, spt), tdr = 9 * S * s0 * tt[2];
+        ctx.fillStyle = '#7C8794'; ctx.beginPath(); ctx.ellipse(tt[0], tt[1] + 4, tdr, tdr * ry, 0, 0, 6.283); ctx.fill(); ctx.fillStyle = '#9AA6B3'; ctx.beginPath(); ctx.ellipse(tt[0], tt[1], tdr, tdr * ry, 0, 0, 6.283); ctx.fill();
+        const pb = pj(0, 0, -6.5 * S), prb = 3.6 * S * s0 * pb[2]; ctx.fillStyle = '#20262E'; ctx.beginPath(); ctx.moveTo(potTop[0] - pr, potTop[1]); ctx.lineTo(pb[0] - prb, pb[1]); ctx.ellipse(pb[0], pb[1], prb, prb * ry, 0, Math.PI, 0, true); ctx.lineTo(potTop[0] + pr, potTop[1]); ctx.ellipse(potTop[0], potTop[1], pr, pr * ry, 0, 0, Math.PI, true); ctx.closePath(); ctx.fill();
+        ctx.fillStyle = '#4A3A2C'; ctx.beginPath(); ctx.ellipse(potTop[0], potTop[1], pr, pr * ry, 0, 0, 6.283); ctx.fill(); ctx.strokeStyle = '#3A424C'; ctx.lineWidth = 1.5; ctx.stroke(); }
+      else { const cm = it[2], px = it[3], py = it[4], k = it[5], a = cm.ph * D2R, tg = pj(0, 0, Hh * 0.5), sz = Math.max(7, 0.075 * Rc * s0 * k);
+        if (cm.on) { const nx = -(tg[1] - py), ny = tg[0] - px, ln = Math.hypot(nx, ny) || 1, wd = Math.max(10, Hh * 0.38 * s0); ctx.fillStyle = 'rgba(255,213,74,0.14)'; ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(tg[0] + nx / ln * wd, tg[1] + ny / ln * wd); ctx.lineTo(tg[0] - nx / ln * wd, tg[1] - ny / ln * wd); ctx.closePath(); ctx.fill(); ctx.strokeStyle = 'rgba(255,213,74,0.8)'; ctx.setLineDash([4, 4]); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(tg[0], tg[1]); ctx.stroke(); ctx.setLineDash([]); }
+        ctx.fillStyle = cm.on ? '#FFD54A' : '#CBD5E1'; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(px - sz, py - sz * 0.7, sz * 2, sz * 1.4, 3) : ctx.rect(px - sz, py - sz * 0.7, sz * 2, sz * 1.4); ctx.fill(); ctx.fillStyle = '#10151C'; ctx.beginPath(); ctx.arc(px, py, sz * 0.45, 0, 6.283); ctx.fill(); ctx.fillStyle = cm.on ? '#FFF3B0' : '#7C8794'; ctx.beginPath(); ctx.arc(px - sz * 0.12, py - sz * 0.12, sz * 0.16, 0, 6.283); ctx.fill();
+        if (o.labels) T(Math.round(cm.ph) + '°', px, py - sz - 4, { s: 10, b: true, c: '#E8EEF5', a: 'center' }); }
+    });
+    if (ring) arc(false);
+    ctx.restore(); ROTB.x = Math.min(ROTB.x || x, x); }
   function drawRigTop(x, y, w, h, S, scn) {
-    ctx.fillStyle = '#F4F2EA'; ctx.fillRect(x, y, w, h); ctx.strokeStyle = '#B9B4A6'; ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);
-    const cx = x + w / 2, cy = y + h / 2, R = Math.min(w, h) * 0.42, ext = 28 * S * 1.9, sc = R / ext, T0 = scn ? scn.T : null;
-    // the plant: the leaves seen from above (the direction and the reach of each leaf)
-    const Rn = Rr(VP.trt), d = U.day(); if (Rn) { const g = P.leaves(Rn, d, 0); ctx.lineCap = 'round'; g.leaves.forEach(l => { const e = l.reach * sc, a = l.az; ctx.strokeStyle = l.gf > 0.55 ? '#3E8E41' : '#B8A04A'; ctx.lineWidth = Math.max(2, Math.sqrt(l.a) * 0.9 * sc * 0.6); ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + e * Math.cos(a), cy + e * Math.sin(a)); ctx.stroke(); }); }
-    ctx.fillStyle = '#3B2A1E'; ctx.beginPath(); ctx.arc(cx, cy, Math.max(3, 5 * sc * S * 0.6), 0, 6.283); ctx.fill();
-    ctx.strokeStyle = '#8A8577'; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.arc(cx, cy, R * 0.96, 0, 6.283); ctx.stroke(); ctx.setLineDash([]);
-    const rg = rig(S); rg.sp.forEach((s, i) => { const px = cx + s.x * sc, py = cy - s.y * sc, r = Math.max(4, s.r * sc * 1.4); const g = ctx.createRadialGradient(px - r * 0.3, py - r * 0.3, 1, px, py, r); g.addColorStop(0, '#fff'); g.addColorStop(1, hue(i)); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(px, py, r, 0, 6.283); ctx.fill(); });
-    for (let k = 0; k < VP.nV; k++) { const ph = k * 360 / VP.nV, a = ph * D2R, px = cx + R * Math.cos(a), py = cy - R * Math.sin(a); rg.sp.forEach((s, i) => { if (sees(s.a, ph)) { ctx.strokeStyle = 'rgba(27,58,107,0.10)'; ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(cx + s.x * sc, cy - s.y * sc); ctx.stroke(); } });
-      ctx.save(); ctx.translate(px, py); ctx.rotate(-a + Math.PI); ctx.fillStyle = k === 0 ? '#D93025' : NAVY; ctx.fillRect(-7, -5, 14, 10); ctx.fillStyle = '#9FB7D9'; ctx.fillRect(-9, -3, 3, 6); ctx.restore(); T(Math.round(ph) + '°', cx + (R + 17) * Math.cos(a), cy - (R + 17) * Math.sin(a) + 4, { s: 9.5, b: true, c: k === 0 ? '#D93025' : NAVY, a: 'center' }); }
-    T('seen from above', x + 8, y + 14, { s: 9.5, c: MUTE, i: true }); }
-  function drawRigSide(x, y, w, h, S) {
-    ctx.fillStyle = '#F4F2EA'; ctx.fillRect(x, y, w, h); ctx.strokeStyle = '#B9B4A6'; ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);
-    const Rn = Rr(VP.trt), d = U.day(), H = Rn ? Rn.H[d] : 60, gy = y + h - 22, sc = (h - 52) / Math.max(40, H * 1.25), cx = x + w * 0.42;
-    ctx.fillStyle = '#C9B48A'; ctx.fillRect(x + 6, gy, w - 12, 5); ctx.fillStyle = '#4A3A2A'; ctx.fillRect(cx - 12, gy - 14, 24, 14);
-    if (Rn) { const g = P.leaves(Rn, d, 0); ctx.strokeStyle = '#2F6B33'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(cx, gy - 14); ctx.lineTo(cx, gy - 14 - H * sc); ctx.stroke(); g.leaves.forEach(l => { const bx = cx, by = gy - 14 - l.hgt * sc, ex = bx + Math.cos(l.az) * l.reach * sc * 0.9, ey = by - Math.sin(l.elev) * l.len * sc * 0.8 + l.len * sc * 0.2; ctx.strokeStyle = l.gf > 0.55 ? '#4C9A4F' : '#B8A04A'; ctx.lineWidth = Math.max(2, Math.sqrt(l.a) * 0.5 * sc); ctx.beginPath(); ctx.moveTo(bx, by); ctx.quadraticCurveTo((bx + ex) / 2, by - Math.sin(l.elev) * l.len * sc * 0.6, ex, ey); ctx.stroke(); }); }
-    const rg = rig(S); rg.sp.forEach((s, i) => { const px = cx + (i % 2 ? 1 : -1) * s.r * 0 + (i < 3 ? -1 : 1) * (22 + i * 3), py = gy - s.z * sc, r = Math.max(3.5, s.r * sc * 1.2); ctx.fillStyle = hue(i); ctx.beginPath(); ctx.arc(cx + (i < 3 ? -1 : 1) * (40 + (i % 3) * 18), gy - (s.z * sc) * 0.9 - 6, r, 0, 6.283); ctx.fill(); });
-    const camx = x + w - 34; ctx.strokeStyle = NAVY; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(camx, gy); ctx.lineTo(camx, gy - (h - 60)); ctx.stroke();
-    ctx.fillStyle = NAVY; const cy0 = gy - (h - 60) * 0.55; ctx.fillRect(camx - 14, cy0 - 6, 18, 12); ctx.strokeStyle = 'rgba(27,58,107,0.5)'; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(camx - 14, cy0); ctx.lineTo(cx, gy - 14 - H * sc * 0.5); ctx.stroke(); ctx.setLineDash([]);
-    TF('camera 22° above the plant', x + 8, y + 28, w * 0.55, { s: 9, c: NAVY }); T('seen from the side', x + 8, y + 14, { s: 9.5, c: MUTE, i: true }); T('plant height ' + fmt(H) + ' cm', x + w - 8, gy + 14, { s: 9.5, b: true, c: '#2F6B33', a: 'right' }); }
+    const nV = VP.nV, cams = []; for (let k = 0; k < nV; k++) cams.push({ ph: k * 360 / nV, on: k === 0 });
+    drawCloud(scn.T, x, y, w, h, { col: 'natural', spheres: scn.rg.sp.map((q, i) => Object.assign({ i }, q)), cams, labels: true, pitch: 1.5708, H: scn.T.H, R0: scn.rg.R0, cap: 1800 });
+    T('seen from above · a camera every ' + fmt(360 / nV, 0) + '°', x + 10, y + 16, { s: 10, c: '#C9D6E6', i: true }); }
+  function drawRigSide(x, y, w, h, S, scn) {
+    drawCloud(scn.T, x, y, w, h, { col: 'natural', spheres: scn.rg.sp.map((q, i) => Object.assign({ i }, q)), cams: [{ ph: 0, on: true }], pitch: 0.34, H: scn.T.H, R0: scn.rg.R0, cap: 1800 });
+    T('seen from the side · the camera looks down at 22°', x + 10, y + 16, { s: 10, c: '#C9D6E6', i: true }); T('plant height ' + fmt(scn.T.H, scn.T.H < 20 ? 1 : 0) + ' cm', x + w - 10, y + h - 10, { s: 10, b: true, c: '#9FE0A8', a: 'right' }); }
   function lineChart(x, y, w, h, title, sub, lo, hi, unit, series, xs) {
     frame(x, y, w, h, title, sub); const x0 = x + 44, y0 = y + 34, ww = w - 62, hh = h - 62; K.yAxis(x0, y0, ww, hh, lo, hi, unit, 4); const X = d => x0 + ww * d / (N - 1), Y = v => y0 + hh - hh * (v - lo) / Math.max(1e-9, hi - lo);
     [0, 35, 70, 105, 139].forEach(d => { T(U.dateOf(d), X(d), y0 + hh + 14, { s: 8.5, c: MUTE, a: 'center' }); });
@@ -238,18 +266,6 @@
   // ---------------------------------------------------------------- the whole layer
   const sec = (y, t, s) => { ctx.fillStyle = '#E4E9F2'; ctx.fillRect(14, y, W - 28, 24); ctx.fillStyle = NAVY; ctx.fillRect(14, y, 4, 24); ctx.font = 'bold 12px sans-serif'; const w1 = ctx.measureText(t).width; T(t, 26, y + 16, { s: 12, b: true, c: NAVY }); if (s && W - 40 - w1 > 120) TF(s, 26 + w1 + 14, y + 16, W - 40 - w1 - 14, { s: 9.5, c: MUTE, i: true }); return y + 32; };
 
-  // ---- the real pictures of the literature, shown as they are (no change of any kind)
-  const PICS = [['fig2_drift_spheres.png', 'Seedling cloud with the calibration spheres'], ['fig1_scanner_cabin.png', 'A real scanning cabin'], ['fig4_ring_rig.png', 'A ring rig for a whole tree'], ['fig3_pipelines.png', 'Ways to obtain a point cloud'], ['fig5_time_series.png', 'A scan through the season'], ['fig6_leaf_segmentation.png', 'Leaves segmented in the cloud'], ['fig7_species.png', 'Several species, photo and cloud']].map(q => { const im = new Image(); im.onload = () => { PICS.n++; PG.ok = false; }; im.src = 'img/volumetric/' + q[0]; return { im, t: q[1] }; });
-  PICS.n = 0;
-  function picSection(y) {
-    y = sec(y, '2a  The real scanners', 'pictures of the literature the layer is built on, shown unchanged');
-    const cols = W >= 900 ? 3 : W >= 600 ? 2 : 1, gap = 10, cw = (W - 32 - (cols - 1) * gap) / cols, rows = [];
-    for (let i = 0; i < PICS.length; i += cols) rows.push(PICS.slice(i, i + cols));
-    rows.forEach(r => { let rh = 0; r.forEach(q => { const im = q.im, ok = im.complete && im.naturalWidth > 0; q.h = ok ? Math.min(cw * im.naturalHeight / im.naturalWidth, 300) : 120; q.w = ok ? q.h * im.naturalWidth / im.naturalHeight : cw; rh = Math.max(rh, q.h); });
-      r.forEach((q, j) => { const x = 16 + j * (cw + gap); ctx.fillStyle = '#FFFFFF'; ctx.fillRect(x, y, cw, rh + 34); ctx.strokeStyle = '#B9B4A6'; ctx.strokeRect(x + 0.5, y + 0.5, cw - 1, rh + 33); if (q.im.complete && q.im.naturalWidth > 0) ctx.drawImage(q.im, x + (cw - q.w) / 2, y + 4 + (rh - q.h) / 2, q.w, q.h); else T('loading the picture…', x + cw / 2, y + rh / 2, { s: 10, c: MUTE, a: 'center' }); TF(q.t, x + 6, y + rh + 22, cw - 12, { s: 9, c: MUTE, i: true }); });
-      y += rh + 42; });
-    TF('Pictures reproduced unchanged for documentation, after Wang et al. (2025), Zhu et al. (2018) and the works they cite; the rights belong to the authors. Full captions are in the manual, chapter Volumetric phenotyping.', 16, y, W - 32, { s: 9, i: true, c: MUTE }); return y + 22;
-  }
   // ---- the step by step simulation of the scan (the arm turns, the views arrive, are joined, cleaned and measured)
   const ASTEPS = [['The plant stands in the rig', 'six calibration spheres on a ring, the plant in the middle'], ['The camera turns round the plant', 'one view every 360 / views degrees; each view sees one side only'], ['The spheres are found in every view', 'the centre of each sphere is fitted (least squares or enhanced RANSAC)'], ['The views are joined', 'spheres give the first alignment, ICP refines it'], ['The cloud is cleaned in voxels', 'voxel grid, isolated points removed'], ['The plant is measured', 'height, crown, volume, leaf area, leaf count against the model of P1']];
   const adur = nV => [1.4, 1.7 * nV, 1.8, 3.0, 2.0, 4.2];
@@ -274,7 +290,7 @@
     } else if (stg === 2) {
       const parts = S.views.map((v, k) => ({ k, x: v.cl.x, y: v.cl.y, z: v.cl.z, idx: vo(k) })); drawCloud(cloudOf(parts), X, y, pw, ph, Object.assign({ col: 'view', spheres }, base));
       const kk = Math.min(nV - 1, Math.floor(u * nV)); cam = { ph: S.views[kk].f.ph, k: kk, f: 1 };
-      const P = VP.proj; if (P) { S.views[kk].cen.forEach(q => { const sp = S.rg.sp[q.i], xr = sp.x * P.ca - sp.y * P.sa, yr = sp.x * P.sa + sp.y * P.ca, px = P.cx + xr * P.sc, py = P.cy + yr * P.sc * P.tilt - sp.z * P.sc * 0.92, r = Math.max(5, sp.r * P.sc) + 4 + 3 * Math.sin(now / 160); ctx.strokeStyle = '#FFD54A'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(px, py, r, 0, 6.283); ctx.stroke(); }); }
+      if (VP.pj) S.views[kk].cen.forEach(q => { const sp = S.rg.sp[q.i], pq = VP.pj(sp.x, sp.y, sp.z), r = Math.max(6, sp.r * VP.s0 * pq[2]) + 5 + 3 * Math.sin(now / 160); ctx.strokeStyle = '#FFD54A'; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.arc(pq[0], pq[1], r, 0, 6.283); ctx.stroke(); });
       info = 'View ' + (kk + 1) + ': ' + S.views[kk].cen.length + ' spheres found and their centres fitted (' + (VP.fit === 'ransac' ? 'enhanced RANSAC' : 'least squares') + ')';
     } else if (stg === 3) {
       const parts = S.views.map((v, k) => { const u0 = (k / nV) * 0.6, e = ease((u - u0) / 0.4), m = S.mapped[k], o = { n: v.n, x: new Float32Array(v.n), y: new Float32Array(v.n), z: new Float32Array(v.n) }; for (let i = 0; i < v.n; i++) { o.x[i] = v.cl.x[i] + (m.x[i] - v.cl.x[i]) * e; o.y[i] = v.cl.y[i] + (m.y[i] - v.cl.y[i]) * e; o.z[i] = v.cl.z[i] + (m.z[i] - v.cl.z[i]) * e; } const idx = []; for (let i = 0; i < v.n; i++) idx.push(i); return { k, x: o.x, y: o.y, z: o.z, idx }; });
@@ -285,14 +301,14 @@
       drawCloud(cloudOf(fm), X, y, pw, ph, Object.assign({ col: 'view', spheres }, base)); const F = S.fused, mf = Math.round(ease(u) * F.n), part = { n: mf, x: F.x.subarray(0, mf), y: F.y.subarray(0, mf), z: F.z.subarray(0, mf), kd: null };
       drawCloud(part, X, y, pw, ph, Object.assign({ col: 'natural', keep: true }, base)); info = 'Voxels of ' + fmt(F.vs || VP.vox, 2) + ' cm · ' + (F.before || F.n) + ' points → ' + F.n + ' after the voxel grid and the removal of ' + (F.removed || 0) + ' isolated points';
     } else {
-      drawCloud(S.fused, X, y, pw, ph, Object.assign({ col: 'natural' }, base)); const P = VP.proj, kk = Math.min(4, Math.floor(u * 5));
-      if (P) { const pr = (a, b, c) => [P.cx + (a * P.ca - b * P.sa) * P.sc, P.cy + (a * P.sa + b * P.ca) * P.sc * P.tilt - c * P.sc * 0.92]; const ht = tt.ok ? tt.height : Hh;
-        if (kk >= 0) { const a = pr(0, 0, 0), b = pr(0, 0, ht * ease(u * 5)); ctx.strokeStyle = '#FFD54A'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(a[0] - 16, a[1]); ctx.lineTo(a[0] + 16, a[1]); ctx.moveTo(a[0] + 22, a[1]); ctx.lineTo(b[0] + 22, b[1]); ctx.stroke(); }
+      drawCloud(S.fused, X, y, pw, ph, Object.assign({ col: 'natural' }, base)); const kk = Math.min(4, Math.floor(u * 5));
+      if (VP.pj) { const pr = (a, b, c) => VP.pj(a, b, c); const ht = tt.ok ? tt.height : Hh;
+        { const a = pr(0, 0, 0), b = pr(0, 0, ht * ease(u * 5)); ctx.strokeStyle = '#FFD54A'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(a[0] - 16, a[1]); ctx.lineTo(a[0] + 16, a[1]); ctx.moveTo(a[0] + 22, a[1]); ctx.lineTo(b[0] + 22, b[1]); ctx.stroke(); }
         if (kk >= 1 && tt.ok) { ctx.strokeStyle = '#7BD3FF'; ctx.lineWidth = 2; ctx.beginPath(); for (let i = 0; i <= 48; i++) { const t = i / 48 * 6.283, q = pr(Math.cos(t) * tt.crown / 2, Math.sin(t) * tt.crown / 2, 0); i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]); } ctx.stroke(); } }
       info = 'Measured on the joined cloud and compared with the model of P1'; ctx.save(); ctx.fillStyle = 'rgba(16,21,28,0.78)'; ctx.fillRect(X + 8, y + 8, 232, 22 + 5 * 17); const rows = [['Height', fmt(tt.height, 1) + ' cm', fmt(tr.height, 1) + ' cm'], ['Crown width', fmt(tt.crown, 1) + ' cm', fmt(tr.crown, 1) + ' cm'], ['Canopy volume', fmt(tt.vox, 1) + ' L', fmt(tr.vox, 1) + ' L'], ['Leaf area', fmt(tt.area, 0) + ' cm²', fmt(tr.area, 0) + ' cm²'], ['Leaves', tt.nLeaf + '', tr.nLeaf + '']]; T('trait · scan · model', X + 16, y + 24, { s: 9.5, c: '#9FB0C4' }); rows.forEach((r, i) => { if (i <= kk) { T(r[0], X + 16, y + 42 + i * 17, { s: 10.5, c: '#E8EEF5' }); T(r[1], X + 140, y + 42 + i * 17, { s: 10.5, b: true, c: '#FFD54A', a: 'right' }); T(r[2], X + 232, y + 42 + i * 17, { s: 10.5, c: '#B8C4D2', a: 'right' }); } }); ctx.restore();
     }
-    if (cam) { const P = VP.proj; if (P) { const Rc = R0 * 1.3, a = cam.ph * D2R, xw = Rc * Math.cos(a), yw = Rc * Math.sin(a), zw = Rc * Math.tan(22 * D2R) * 0.8, xr = xw * P.ca - yw * P.sa, yr = xw * P.sa + yw * P.ca, px = P.cx + xr * P.sc, py = P.cy + yr * P.sc * P.tilt - zw * P.sc * 0.92, tx = P.cx, ty = P.cy - Hh * 0.5 * P.sc * 0.92;
-      ctx.save(); ctx.beginPath(); ctx.rect(X, y, pw, ph); ctx.clip(); ctx.fillStyle = 'rgba(255,213,74,0.13)'; ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(tx - 30, ty - Hh * 0.45 * P.sc); ctx.lineTo(tx + 30, ty + Hh * 0.45 * P.sc); ctx.closePath(); ctx.fill(); ctx.strokeStyle = '#FFD54A'; ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(tx, ty); ctx.stroke(); ctx.setLineDash([]); ctx.fillStyle = '#FFD54A'; ctx.fillRect(px - 8, py - 6, 16, 12); ctx.fillStyle = '#10151C'; ctx.fillRect(px - 3, py - 3, 6, 6); ctx.restore(); ROTB.noRot = 1; } }
+    if (cam && VP.pj) { const Rc = R0 * 1.3, a = cam.ph * D2R, pc = VP.pj(Rc * Math.cos(a), Rc * Math.sin(a), Hh * 0.45 + Rc * Math.tan(22 * D2R)), tg = VP.pj(0, 0, Hh * 0.5), px = pc[0], py = pc[1], sz = Math.max(8, 0.075 * Rc * VP.s0 * pc[2]), nx = -(tg[1] - py), ny = tg[0] - px, ln = Math.hypot(nx, ny) || 1, wd = Math.max(10, Hh * 0.38 * VP.s0);
+      ctx.save(); ctx.beginPath(); ctx.rect(X, y, pw, ph); ctx.clip(); ctx.fillStyle = 'rgba(255,213,74,0.16)'; ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(tg[0] + nx / ln * wd, tg[1] + ny / ln * wd); ctx.lineTo(tg[0] - nx / ln * wd, tg[1] - ny / ln * wd); ctx.closePath(); ctx.fill(); ctx.strokeStyle = '#FFD54A'; ctx.setLineDash([4, 4]); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(tg[0], tg[1]); ctx.stroke(); ctx.setLineDash([]); ctx.fillStyle = '#FFD54A'; ctx.fillRect(px - sz, py - sz * 0.7, sz * 2, sz * 1.4); ctx.fillStyle = '#10151C'; ctx.beginPath(); ctx.arc(px, py, sz * 0.45, 0, 6.283); ctx.fill(); ctx.restore(); ROTB.noRot = 1; }
     ctx.save(); ctx.fillStyle = 'rgba(16,21,28,0.8)'; ctx.fillRect(X, y + ph - 24, pw, 24); ctx.restore(); TF(info, X + 8, y + ph - 8, pw - 16, { s: 10, c: '#E8EEF5' });
     // the steps
     const lx = wide ? X + pw + 12 : X, ly = wide ? y : y + ph + 8, lh = wide ? ph : 6 * 44 + 8;
@@ -316,7 +332,7 @@
   function drawVph() {
     KB = null; const cv = ctx.canvas, tn = performance.now();
     if (!VP.kT || tn - VP.kT > 150) { VP.kT = tn; VP.kS = keyBase(); }
-    const sig = [VP.trt, VP.nV, VP.reg, VP.fit, VP.scal, VP.noise, VP.vox, VP.col, VP.rot.toFixed(3), W, cv.width, cv.height, (play && play.on ? Math.round(U.day() / 3) * 3 : U.day()), VP.kS, VP.ser ? VP.ser.n : 0, PICS.n, PH.sowMode, VP.drag ? 1 : 0].join('|');
+    const sig = [VP.trt, VP.nV, VP.reg, VP.fit, VP.scal, VP.noise, VP.vox, VP.col, VP.rot.toFixed(3), W, cv.width, cv.height, (play && play.on ? Math.round(U.day() / 3) * 3 : U.day()), VP.kS, VP.ser ? VP.ser.n : 0, PH.sowMode, VP.drag ? 1 : 0].join('|');
     if (PG.ok && PG.sig === sig && PG.cv && PG.cv.width === cv.width && PG.cv.height === cv.height) {
       ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(PG.cv, 0, 0); ctx.restore(); PG.hots.forEach(h => hotspots.push(h));
       animSection(PG.ay, PG.S, PG.tt, PG.tr); return;
@@ -347,11 +363,10 @@
     T('Every control re-scans the plant. The scan is deterministic: the same settings give the same cloud.', 16, yy + 4, { s: 9.5, i: true, c: MUTE }); y = yy + 18;
     // ---- 2. the rig
     y = sec(y, '2  The virtual rig', 'after Wang et al. (2025): a camera on a turning arm and six calibration spheres'); const rw = (W - 48) / 2, rh = 250;
-    drawRigTop(16, y, rw, rh, S.T.S, S); drawRigSide(32 + rw, y, rw, rh, S.T.S); y += rh + 8;
+    drawRigTop(16, y, rw, rh, S.T.S, S); drawRigSide(32 + rw, y, rw, rh, S.T.S, S); y += rh + 8;
     // per view: how much of the plant the camera sees
     frame(16, y, W - 32, 60 + S.nV * 20, 'What each view sees', 'points of the cloud that each camera takes, and the share of the whole plant'); S.views.forEach((v, k) => { const yy2 = y + 36 + k * 20, f = v.n / Math.max(1, S.T.n); T('view ' + (k + 1) + ' · ' + Math.round(v.f.ph) + '°', 30, yy2 + 10, { s: 10 }); ctx.fillStyle = '#EDEBE4'; ctx.fillRect(130, yy2, W - 130 - Math.max(150, W * 0.36) - 24, 12); ctx.fillStyle = hue(k); ctx.fillRect(130, yy2, (W - 130 - Math.max(150, W * 0.36) - 24) * clamp(f, 0, 1), 12); TF(v.n + ' points · ' + fmt(100 * f) + ' % of the plant · ' + v.cen.length + ' spheres', W - 28 - Math.max(150, W * 0.36) + 12, yy2 + 10, Math.max(150, W * 0.36) - 12, { s: 10 }); });
     y += 60 + S.nV * 20 + 8;
-    y = picSection(y);
     y = sec(y, '2b  Watch the scan, step by step', 'a moving simulation: the arm turns, the views arrive, are joined, cleaned and measured'); { const ay = y; VP.pa = { h0: hotspots.length, y: ay, S, tt, tr }; y = animSection(y, S, tt, tr); VP.pa.h1 = hotspots.length; }
     // ---- 3. point clouds
     y = sec(y, '3  The point clouds', 'drag a cloud to turn it · one view, the joined views, the plant itself'); y = U.chipRow('Colour', [{ k: 'natural', t: 'natural colour' }, { k: 'height', t: 'by height' }, { k: 'view', t: 'by view' }, { k: 'error', t: 'by error against the plant' }], VP.col, v => { VP.col = v; }, 16, y, W - 40);
@@ -365,7 +380,7 @@
     { const gd = [10, 30, 50, 70, 90, 115, 139], n7 = gd.length, gw = (W - 32 - (n7 - 1) * 6) / n7, gh = 230, Rg = Rr(VP.trt), tf = truthCloud(Rg, N - 1); let crm = 4, hmx = 5; for (let i = 0; i < tf.n; i += 3) crm = Math.max(crm, Math.hypot(tf.x[i], tf.y[i])); for (let k = 0; k < N; k++) hmx = Math.max(hmx, Rg.H[k]);
       const gsc = Math.min(gw * 0.46 / crm, (gh - 52) / (hmx * 1.08));
       gd.forEach((dd, k) => { const sg = scan(VP.trt, dd, true), px = 16 + k * (gw + 6), cur = Math.abs(dd - d) <= 10 && Math.min(...gd.map(q => Math.abs(q - d))) === Math.abs(dd - d);
-        drawCloud(sg.fused, px, y + 18, gw, gh - 18, { sc: gsc, base: true, dep: crm * 2, H: sg.T.H, R0: 0, spheres: [], cap: 800 });
+        drawCloud(sg.fused, px, y + 18, gw, gh - 18, { base: true, fixH: hmx * 1.04, fixR: crm, cr: crm, H: sg.T.H, R0: 0, ring: false, pitch: 0.3, floor: true, cap: 700 });
         if (cur) { ctx.strokeStyle = NAVY; ctx.lineWidth = 2; ctx.strokeRect(px + 1, y + 19, gw - 2, gh - 20); }
         TF('day ' + dd + ' · ' + U.dateOfY(dd), px, y + 10, gw, { s: 9, b: true, c: cur ? NAVY : '#2A2F36' });
         TF(fmt(sg.traits.ok ? sg.traits.height : sg.T.H, sg.T.H < 20 ? 1 : 0) + ' cm' + (sg.traits.ok ? ' · ' + sg.traits.nLeaf + ' leaves' : ''), px + 4, y + gh - 4, gw - 6, { s: 9, c: '#C9D2DE' }); });
@@ -440,7 +455,7 @@
   function onMove(p) { const dg = VP.drag; if (!dg) { hotMove(p); return false; } if (dg.t === 'sl') { dg.s.set(clamp(dg.s.min + (dg.s.max - dg.s.min) * (p.x - dg.s.x0) / dg.s.w0, dg.s.min, dg.s.max)); return true; } if (dg.t === 'rot') { VP.rot = dg.r0 + (p.x - dg.x0) * 0.012; return true; } return false; }
   function onUp() { VP.drag = null; }
   K.add('vph', 'P2 Volumetric phenotyping', '#1E6F8E', drawVph, 'Volumetric phenotyping: a virtual 3D scanner measures volume, crown, leaves and height of the plant (point clouds, spheres, SR-ICP)', 'A plant seen from six sides is a plant seen whole: the clouds of the views are joined with calibration spheres and ICP, and the volume of the canopy follows the soil water, the weather and the irrigation of the project through the plant of P1.');
-  const sc = SCENES.find(s => s.id === 'vph'); if (sc) { sc.play = true; sc.dur = 40; sc.h = 4900; sc.onDown = onDown; sc.onMove = onMove; sc.onUp = onUp; sc.onLeave = () => { hotUi.hover = null; }; }
+  const sc = SCENES.find(s => s.id === 'vph'); if (sc) { sc.play = true; sc.dur = 40; sc.h = 4300; sc.onDown = onDown; sc.onMove = onMove; sc.onUp = onUp; sc.onLeave = () => { hotUi.hover = null; }; }
   (function place() {
     const s = SCENES.find(x => x.id === 'vph'), bar = document.getElementById('sceneBar'); if (!s || !bar || bar.querySelector('[data-scene="vph"]')) return;
     const b = document.createElement('div'); b.className = 'scenebtn'; b.innerHTML = '<span class="no">P2</span><span>Volumetric phenotyping</span>'; b.style.setProperty('--sc', s.color); b.dataset.scene = 'vph'; b.title = s.title; b.onclick = () => switchScene(s);
