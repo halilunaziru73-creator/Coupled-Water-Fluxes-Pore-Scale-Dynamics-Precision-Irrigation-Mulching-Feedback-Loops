@@ -69,19 +69,19 @@
     ax /= n; ay /= n; az /= n; bx /= n; by /= n; bz /= n; let sc = 0, ss = 0; for (let i = 0; i < n; i++) { const p = A[i][0] - ax, q = A[i][1] - ay, r = B[i][0] - bx, s = B[i][1] - by; sc += p * r + q * s; ss += p * s - q * r; }
     const th = Math.atan2(ss, sc), c = Math.cos(th), s = Math.sin(th); return { c, s, tx: bx - (c * ax - s * ay), ty: by - (s * ax + c * ay), tz: bz - az };
   }
-  function grid(c, cs) { const m = new Map(); for (let i = 0; i < c.n; i++) { const k = (Math.floor(c.x[i] / cs) + 2048) * 4194304 + (Math.floor(c.y[i] / cs) + 2048) * 2048 + (Math.floor(c.z[i] / cs) + 1024); let a = m.get(k); if (!a) m.set(k, a = []); a.push(i); } return { m, cs }; }
+  function grid(c, cs, st) { const m = new Map(); for (let i = 0; i < c.n; i += (st || 1)) { const k = (Math.floor(c.x[i] / cs) + 2048) * 4194304 + (Math.floor(c.y[i] / cs) + 2048) * 2048 + (Math.floor(c.z[i] / cs) + 1024); let a = m.get(k); if (!a) m.set(k, a = []); a.push(i); } return { m, cs }; }
   function nearest(g, c, x, y, z) { const cs = g.cs, ix = Math.floor(x / cs), iy = Math.floor(y / cs), iz = Math.floor(z / cs); let bd = 1e9, bi = -1; for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) for (let e = -1; e <= 1; e++) { const l = g.m.get((ix + a + 2048) * 4194304 + (iy + b + 2048) * 2048 + (iz + e + 1024)); if (l) for (let q = 0; q < l.length; q++) { const j = l[q], dx = c.x[j] - x, dy = c.y[j] - y, dz = c.z[j] - z, dd = dx * dx + dy * dy + dz * dz; if (dd < bd) { bd = dd; bi = j; } } } return bi < 0 ? null : [bi, Math.sqrt(bd)]; }
   function icp(src, tgt, S, its) {
-    const cs = 2.2 * Math.sqrt(S), g = grid(tgt, cs), hist = []; let T = ID(); const step = Math.max(1, Math.floor(src.n / 450));
+    const tst = Math.max(1, Math.floor(tgt.n / 2600)), cs = 2.2 * Math.sqrt(S) * Math.sqrt(tst), g = grid(tgt, cs, tst), hist = []; let T = ID(); const step = Math.max(1, Math.floor(src.n / 300));
     for (let it = 0; it < its; it++) {
       const prs = []; for (let i = 0; i < src.n; i += step) { const p = apply(T, src.x[i], src.y[i], src.z[i]), q = nearest(g, tgt, p[0], p[1], p[2]); if (q) prs.push([p, q[0], q[1]]); }
       if (prs.length < 12) break; const ds = prs.map(a => a[2]).sort((a, b) => a - b), cut = ds[Math.floor(ds.length * 0.8)], keep = prs.filter(a => a[2] <= cut); let sq = 0; keep.forEach(a => { sq += a[2] * a[2]; }); hist.push(Math.sqrt(sq / keep.length) * 10);
-      const dT = procrustes(keep.map(a => a[0]), keep.map(a => [tgt.x[a[1]], tgt.y[a[1]], tgt.z[a[1]]])); if (!dT) break; T = compose(dT, T); if (it > 1 && Math.abs(hist[it] - hist[it - 1]) < 0.002) break;
+      const dT = procrustes(keep.map(a => a[0]), keep.map(a => [tgt.x[a[1]], tgt.y[a[1]], tgt.z[a[1]]])); if (!dT) break; T = compose(dT, T); if (it > 1 && Math.abs(hist[it] - hist[it - 1]) < 0.02) break;
     }
     return { T, hist };
   }
   // ---------------------------------------------------------------- 4. the scan of one plant on one day
-  const keyBase = () => { try { return U.keyOf(false) + '|' + JSON.stringify([VP.nV, VP.reg, VP.fit, VP.scal, VP.noise, VP.vox]); } catch (e) { return ''; } };
+  let KB = null; const keyBase = () => { if (KB !== null) return KB; try { KB = U.keyOf(false) + '|' + JSON.stringify([VP.nV, VP.reg, VP.fit, VP.scal, VP.noise, VP.vox]); } catch (e) { KB = ''; } return KB; };
   function scan(trt, d, fast) {
     const R = Rr(trt); if (!R) return null; const ck = keyBase() + '|' + trt + '|' + d + '|' + (fast ? 1 : 0); if (VP.cache[ck]) return VP.cache[ck];
     const T = truthCloud(R, d), S = T.S, rg = rig(S), nV = VP.nV, noiseCm = VP.noise / 10 * Math.sqrt(S), rand = rng(5521 + d * 13 + nV), views = [], phis = [];
@@ -105,7 +105,7 @@
     }
     // the clouds in the frame of view 0; ICP puts each one onto the clouds already joined
     const mapped = views.map((v, k) => { const o = { n: v.n, x: new Float32Array(v.n), y: new Float32Array(v.n), z: new Float32Array(v.n), src: v.cl.src }; for (let i = 0; i < v.n; i++) { const p = apply(Tk[k], v.cl.x[i], v.cl.y[i], v.cl.z[i]); o.x[i] = p[0]; o.y[i] = p[1]; o.z[i] = p[2]; } return o; });
-    const joined = [mapped[0]]; const its = fast ? 4 : 10;
+    const joined = [mapped[0]]; const its = fast ? 3 : 8;
     for (let k = 1; k < nV; k++) {
       let m = mapped[k];
       if (VP.reg === 'icp') { const tgt = merge(joined), r = icp(m, tgt, S, its); info[k].rmse = r.hist; const o = { n: m.n, x: new Float32Array(m.n), y: new Float32Array(m.n), z: new Float32Array(m.n), src: m.src }; for (let i = 0; i < m.n; i++) { const p = apply(r.T, m.x[i], m.y[i], m.z[i]); o.x[i] = p[0]; o.y[i] = p[1]; o.z[i] = p[2]; } m = o; mapped[k] = m; }
@@ -198,7 +198,7 @@
   function drawCloud(c, x, y, w, h, o) {
     o = o || {}; ctx.save(); if (!o.keep) { ctx.fillStyle = '#10151C'; ctx.fillRect(x, y, w, h); } ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip(); const MODE = o.col || VP.col;
     if (!c || !c.n) { T('no points', x + w / 2, y + h / 2, { s: 11, c: '#8A94A0', a: 'center' }); ctx.restore(); return; }
-    const sc = o.sc || Math.min(w * 0.46 / Math.max(10, (o.R0 || 28) * 1.1), h * 0.84 / Math.max(10, o.ext || 60)), ca = Math.cos(VP.rot), sa = Math.sin(VP.rot), cx = x + w / 2, cy = o.base ? y + h - 20 : o.sc ? Math.min(y + h - 22, y + h * 0.5 + 0.46 * (o.H || 60) * o.sc) : y + h - 22, tilt = 0.5, ord = []; const st = Math.max(1, Math.floor(c.n / 3600));
+    const sc = o.sc || Math.min(w * 0.46 / Math.max(10, (o.R0 || 28) * 1.1), h * 0.84 / Math.max(10, o.ext || 60)), ca = Math.cos(VP.rot), sa = Math.sin(VP.rot), cx = x + w / 2, cy = o.base ? y + h - 20 : o.sc ? Math.min(y + h - 22, y + h * 0.5 + 0.46 * (o.H || 60) * o.sc) : y + h - 22, tilt = 0.5, ord = []; const st = Math.max(1, Math.floor(c.n / (o.cap || 2400)));
     for (let i = 0; i < c.n; i += st) { const xr = c.x[i] * ca - c.y[i] * sa, yr = c.x[i] * sa + c.y[i] * ca; ord.push([yr, xr, c.z[i], i]); } ord.sort((a, b) => a[0] - b[0]);
     // the ground ring and the six spheres
     ctx.strokeStyle = 'rgba(180,190,205,0.25)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.ellipse(cx, cy, (o.R0 || 28) * sc, (o.R0 || 28) * sc * tilt, 0, 0, 6.283); ctx.stroke();
@@ -238,6 +238,18 @@
   // ---------------------------------------------------------------- the whole layer
   const sec = (y, t, s) => { ctx.fillStyle = '#E4E9F2'; ctx.fillRect(14, y, W - 28, 24); ctx.fillStyle = NAVY; ctx.fillRect(14, y, 4, 24); ctx.font = 'bold 12px sans-serif'; const w1 = ctx.measureText(t).width; T(t, 26, y + 16, { s: 12, b: true, c: NAVY }); if (s && W - 40 - w1 > 120) TF(s, 26 + w1 + 14, y + 16, W - 40 - w1 - 14, { s: 9.5, c: MUTE, i: true }); return y + 32; };
 
+  // ---- the real pictures of the literature, shown as they are (no change of any kind)
+  const PICS = [['fig2_drift_spheres.png', 'Seedling cloud with the calibration spheres'], ['fig1_scanner_cabin.png', 'A real scanning cabin'], ['fig4_ring_rig.png', 'A ring rig for a whole tree'], ['fig3_pipelines.png', 'Ways to obtain a point cloud'], ['fig5_time_series.png', 'A scan through the season'], ['fig6_leaf_segmentation.png', 'Leaves segmented in the cloud'], ['fig7_species.png', 'Several species, photo and cloud']].map(q => { const im = new Image(); im.onload = () => { PICS.n++; PG.ok = false; }; im.src = 'img/volumetric/' + q[0]; return { im, t: q[1] }; });
+  PICS.n = 0;
+  function picSection(y) {
+    y = sec(y, '2a  The real scanners', 'pictures of the literature the layer is built on, shown unchanged');
+    const cols = W >= 900 ? 3 : W >= 600 ? 2 : 1, gap = 10, cw = (W - 32 - (cols - 1) * gap) / cols, rows = [];
+    for (let i = 0; i < PICS.length; i += cols) rows.push(PICS.slice(i, i + cols));
+    rows.forEach(r => { let rh = 0; r.forEach(q => { const im = q.im, ok = im.complete && im.naturalWidth > 0; q.h = ok ? Math.min(cw * im.naturalHeight / im.naturalWidth, 300) : 120; q.w = ok ? q.h * im.naturalWidth / im.naturalHeight : cw; rh = Math.max(rh, q.h); });
+      r.forEach((q, j) => { const x = 16 + j * (cw + gap); ctx.fillStyle = '#FFFFFF'; ctx.fillRect(x, y, cw, rh + 34); ctx.strokeStyle = '#B9B4A6'; ctx.strokeRect(x + 0.5, y + 0.5, cw - 1, rh + 33); if (q.im.complete && q.im.naturalWidth > 0) ctx.drawImage(q.im, x + (cw - q.w) / 2, y + 4 + (rh - q.h) / 2, q.w, q.h); else T('loading the picture…', x + cw / 2, y + rh / 2, { s: 10, c: MUTE, a: 'center' }); TF(q.t, x + 6, y + rh + 22, cw - 12, { s: 9, c: MUTE, i: true }); });
+      y += rh + 42; });
+    TF('Pictures reproduced unchanged for documentation, after Wang et al. (2025), Zhu et al. (2018) and the works they cite; the rights belong to the authors. Full captions are in the manual, chapter Volumetric phenotyping.', 16, y, W - 32, { s: 9, i: true, c: MUTE }); return y + 22;
+  }
   // ---- the step by step simulation of the scan (the arm turns, the views arrive, are joined, cleaned and measured)
   const ASTEPS = [['The plant stands in the rig', 'six calibration spheres on a ring, the plant in the middle'], ['The camera turns round the plant', 'one view every 360 / views degrees; each view sees one side only'], ['The spheres are found in every view', 'the centre of each sphere is fitted (least squares or enhanced RANSAC)'], ['The views are joined', 'spheres give the first alignment, ICP refines it'], ['The cloud is cleaned in voxels', 'voxel grid, isolated points removed'], ['The plant is measured', 'height, crown, volume, leaf area, leaf count against the model of P1']];
   const adur = nV => [1.4, 1.7 * nV, 1.8, 3.0, 2.0, 4.2];
@@ -294,16 +306,30 @@
     // the transport
     const tw = W - 32, bx = 16; ctx.fillStyle = '#E4E9F2'; ctx.fillRect(bx, y, tw, 6); ctx.fillStyle = NAVY; ctx.fillRect(bx, y, tw * clamp(AN.t / tot, 0, 1), 6); hot(bx, y - 6, tw, 18, (mx) => { AN.t = clamp((mx - bx) / tw, 0, 1) * tot; AN.hold = 0; }, 'move along the scan');
     let cx2 = 16; const cy2 = y + 12; const ch = (t, on, fn, tip) => { ctx.font = '10.5px sans-serif'; const w = ctx.measureText(t).width + 16; chip(cx2, cy2, t, on, fn, tip); cx2 += w + 6; };
-    ch(AN.on && AN.t < tot ? '❚❚ Pause' : '▶ Play', AN.on, () => { if (AN.t >= tot) AN.t = 0; AN.hold = 0; AN.on = !AN.on; }, 'play or pause the scan'); ch('⏮ Restart', false, () => { AN.t = 0; AN.hold = 0; AN.on = true; }, 'start again'); ch('◀ Step', false, () => { AN.on = false; let j = 0; for (let i = 0; i < 6; i++) if (AN.t > st[i] + 0.05) j = i; AN.t = st[Math.max(0, j - (AN.t - st[j] < 0.4 ? 1 : 0))] + 0.001; }, 'previous step'); ch('Step ▶', false, () => { AN.on = false; const j = Math.min(5, stg + 1); AN.t = st[j] + 0.001; }, 'next step');
+    ch(AN.on && AN.t < tot ? '❚❚ Pause scan' : '▶ Play scan', AN.on, () => { if (AN.t >= tot) AN.t = 0; AN.hold = 0; AN.on = !AN.on; }, 'play or pause the scan'); ch('⏮ Restart', false, () => { AN.t = 0; AN.hold = 0; AN.on = true; }, 'start again'); ch('◀ Step', false, () => { AN.on = false; let j = 0; for (let i = 0; i < 6; i++) if (AN.t > st[i] + 0.05) j = i; AN.t = st[Math.max(0, j - (AN.t - st[j] < 0.4 ? 1 : 0))] + 0.001; }, 'previous step'); ch('Step ▶', false, () => { AN.on = false; const j = Math.min(5, stg + 1); AN.t = st[j] + 0.001; }, 'next step');
     [[0.5, 'slow'], [1, 'normal'], [2, 'fast']].forEach(q => ch(q[1], AN.sp === q[0], () => { AN.sp = q[0]; })); ch(AN.loop ? 'Loop: on' : 'Loop: off', AN.loop, () => { AN.loop = !AN.loop; });
     TF('Step ' + (AN.t >= tot ? 6 : stg + 1) + ' of 6 · ' + ASTEPS[AN.t >= tot ? 5 : stg][0] + ' · then press Play at the bottom of the page to watch the same scan through the season', 16, cy2 + 40, W - 32, { s: 9.5, i: true, c: MUTE });
     return y + 52;
   }
+  // the page is drawn once for a state and copied on every later frame; only the film (2b) is drawn again, so the page stays light
+  const PG = { cv: null, sig: '', ok: false };
   function drawVph() {
-    paper(); SLd.length = 0; U.syncSpecies(); U.ensureRun(); if (!PH.run) { K.header('Volumetric phenotyping', 'The plant of Deterministic phenotyping is needed first: press Run simulation.', 4); return; }
-    serStep(); if (!PH.sowMode && !VP.sowSet) { VP.sowSet = 1; PH.sowMode = 'project'; U.ensureRun(); } if (!VP.dayInit) { VP.dayInit = 1; const R0 = Rr(VP.trt); let hm = 0, dd = 0; R0.H.forEach(v => { if (v > hm) hm = v; }); for (let i = 0; i < R0.H.length; i++) if (R0.H[i] >= 0.9 * hm) { dd = i; break; } if (play) { play.t = clamp(dd / (N - 1), 0, 1); play.on = false; } }
+    KB = null; const cv = ctx.canvas, tn = performance.now();
+    if (!VP.kT || tn - VP.kT > 150) { VP.kT = tn; VP.kS = keyBase(); }
+    const sig = [VP.trt, VP.nV, VP.reg, VP.fit, VP.scal, VP.noise, VP.vox, VP.col, VP.rot.toFixed(3), W, cv.width, cv.height, (play && play.on ? Math.round(U.day() / 3) * 3 : U.day()), VP.kS, VP.ser ? VP.ser.n : 0, PICS.n, PH.sowMode, VP.drag ? 1 : 0].join('|');
+    if (PG.ok && PG.sig === sig && PG.cv && PG.cv.width === cv.width && PG.cv.height === cv.height) {
+      ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(PG.cv, 0, 0); ctx.restore(); PG.hots.forEach(h => hotspots.push(h));
+      animSection(PG.ay, PG.S, PG.tt, PG.tr); return;
+    }
+    drawVphFull(); PG.ok = false; const pa = VP.pa;
+    if (pa && pa.h1 !== undefined) { try { if (!PG.cv) PG.cv = document.createElement('canvas'); PG.cv.width = cv.width; PG.cv.height = cv.height; const pc = PG.cv.getContext('2d'); pc.drawImage(cv, 0, 0); PG.hots = hotspots.slice(0, pa.h0).concat(hotspots.slice(pa.h1)); PG.ay = pa.y; PG.S = pa.S; PG.tt = pa.tt; PG.tr = pa.tr; PG.sig = sig; PG.ok = true; } catch (e) { PG.ok = false; } }
+  }
+  function drawVphFull() {
+    KB = null; VP.pa = null; paper(); SLd.length = 0; U.syncSpecies(); U.ensureRun(); if (!PH.run) { K.header('Volumetric phenotyping', 'The plant of Deterministic phenotyping is needed first: press Run simulation.', 4); return; }
+    serStep(); if (!PH.sowMode && !VP.sowSet) { VP.sowSet = 1; PH.sowMode = 'project'; U.ensureRun(); } if (!VP.dayInit) { VP.dayInit = 1; const R0 = Rr(VP.trt); let hm = 0, dd = 0; R0.H.forEach(v => { if (v > hm) hm = v; }); for (let i = 0; i < R0.H.length; i++) if (R0.H[i] >= 0.9 * hm) { dd = i; break; } if (play) { play.t = 0; play.on = true; play.hold = 0; const pb = document.getElementById('playBtn'); if (pb) { pb.textContent = 'Pause'; pb.classList.add('active'); } } }
     let y = K.header('Volumetric phenotyping', 'A virtual 3D scanner measures volume, crown, leaves and height of the plant of P1 · views, calibration spheres, SR-ICP', 4);
-    const d = U.day(), Rn = Rr(VP.trt), R2 = Rr(VP.trt === 'ww' ? 'dr' : 'ww'), S = scan(VP.trt, d, !!(play && play.on)), S2 = scan(VP.trt === 'ww' ? 'dr' : 'ww', d, true), tt = S.traits, tr = truth(VP.trt, d), t2 = S2.traits, tr2 = truth(VP.trt === 'ww' ? 'dr' : 'ww', d);
+    const d = U.day(), Rn = Rr(VP.trt), R2 = Rr(VP.trt === 'ww' ? 'dr' : 'ww'), S = scan(VP.trt, d, !!(play && play.on)), S2 = (play && play.on && VP.s2 && VP.s2.k === VP.trt && performance.now() - VP.s2.t < 1200) ? VP.s2.s : scan(VP.trt === 'ww' ? 'dr' : 'ww', d, true), tt = S.traits, tr = truth(VP.trt, d), t2 = S2.traits, tr2 = truth(VP.trt === 'ww' ? 'dr' : 'ww', d);
+    if (!VP.s2 || VP.s2.s !== S2) VP.s2 = { k: VP.trt, s: S2, t: performance.now() };
     K.badge('MODEL RUN', 16, y, '#1E8E3E'); T('Day ' + d + ' (' + U.dateOfY(d) + ') · ' + ((window.CROPS && CROPS[state.crop] || {}).label || state.crop) + ' · plant shown: ' + trtName(VP.trt) + ' · ' + S.T.n + ' surface points on the plant, ' + S.fused.n + ' in the joined scan', 110, y + 11, { s: 10, c: MUTE }); y += 24;
     // ---- 1. controls
     y = sec(y, '1  Set up the scan', 'the plant, the soil and the weather come from the project and from P1');
@@ -325,7 +351,8 @@
     // per view: how much of the plant the camera sees
     frame(16, y, W - 32, 60 + S.nV * 20, 'What each view sees', 'points of the cloud that each camera takes, and the share of the whole plant'); S.views.forEach((v, k) => { const yy2 = y + 36 + k * 20, f = v.n / Math.max(1, S.T.n); T('view ' + (k + 1) + ' · ' + Math.round(v.f.ph) + '°', 30, yy2 + 10, { s: 10 }); ctx.fillStyle = '#EDEBE4'; ctx.fillRect(130, yy2, W - 130 - Math.max(150, W * 0.36) - 24, 12); ctx.fillStyle = hue(k); ctx.fillRect(130, yy2, (W - 130 - Math.max(150, W * 0.36) - 24) * clamp(f, 0, 1), 12); TF(v.n + ' points · ' + fmt(100 * f) + ' % of the plant · ' + v.cen.length + ' spheres', W - 28 - Math.max(150, W * 0.36) + 12, yy2 + 10, Math.max(150, W * 0.36) - 12, { s: 10 }); });
     y += 60 + S.nV * 20 + 8;
-    y = sec(y, '2b  Watch the scan, step by step', 'a moving simulation: the arm turns, the views arrive, are joined, cleaned and measured'); y = animSection(y, S, tt, tr);
+    y = picSection(y);
+    y = sec(y, '2b  Watch the scan, step by step', 'a moving simulation: the arm turns, the views arrive, are joined, cleaned and measured'); { const ay = y; VP.pa = { h0: hotspots.length, y: ay, S, tt, tr }; y = animSection(y, S, tt, tr); VP.pa.h1 = hotspots.length; }
     // ---- 3. point clouds
     y = sec(y, '3  The point clouds', 'drag a cloud to turn it · one view, the joined views, the plant itself'); y = U.chipRow('Colour', [{ k: 'natural', t: 'natural colour' }, { k: 'height', t: 'by height' }, { k: 'view', t: 'by view' }, { k: 'error', t: 'by error against the plant' }], VP.col, v => { VP.col = v; }, 16, y, W - 40);
     const cw = (W - 56) / 3, ch = 300; let cr = 4; for (let i = 0; i < S.T.n; i += 3) cr = Math.max(cr, Math.hypot(S.T.x[i], S.T.y[i])); const fit = Math.min((W - 56) / 3 * 0.44 / cr, 300 * 0.8 / Math.max(S.T.H * 1.08, 6)), ext = Math.max(S.T.H * 0.9, 40), opt = { ext, sc: fit, dep: cr * 2, H: S.T.H, R0: S.rg.R0, spheres: S.rg.sp.map((s, i) => Object.assign({ i }, s)) };
@@ -338,7 +365,7 @@
     { const gd = [10, 30, 50, 70, 90, 115, 139], n7 = gd.length, gw = (W - 32 - (n7 - 1) * 6) / n7, gh = 230, Rg = Rr(VP.trt), tf = truthCloud(Rg, N - 1); let crm = 4, hmx = 5; for (let i = 0; i < tf.n; i += 3) crm = Math.max(crm, Math.hypot(tf.x[i], tf.y[i])); for (let k = 0; k < N; k++) hmx = Math.max(hmx, Rg.H[k]);
       const gsc = Math.min(gw * 0.46 / crm, (gh - 52) / (hmx * 1.08));
       gd.forEach((dd, k) => { const sg = scan(VP.trt, dd, true), px = 16 + k * (gw + 6), cur = Math.abs(dd - d) <= 10 && Math.min(...gd.map(q => Math.abs(q - d))) === Math.abs(dd - d);
-        drawCloud(sg.fused, px, y + 18, gw, gh - 18, { sc: gsc, base: true, dep: crm * 2, H: sg.T.H, R0: 0, spheres: [] });
+        drawCloud(sg.fused, px, y + 18, gw, gh - 18, { sc: gsc, base: true, dep: crm * 2, H: sg.T.H, R0: 0, spheres: [], cap: 800 });
         if (cur) { ctx.strokeStyle = NAVY; ctx.lineWidth = 2; ctx.strokeRect(px + 1, y + 19, gw - 2, gh - 20); }
         TF('day ' + dd + ' · ' + U.dateOfY(dd), px, y + 10, gw, { s: 9, b: true, c: cur ? NAVY : '#2A2F36' });
         TF(fmt(sg.traits.ok ? sg.traits.height : sg.T.H, sg.T.H < 20 ? 1 : 0) + ' cm' + (sg.traits.ok ? ' · ' + sg.traits.nLeaf + ' leaves' : ''), px + 4, y + gh - 4, gw - 6, { s: 9, c: '#C9D2DE' }); });
@@ -413,7 +440,7 @@
   function onMove(p) { const dg = VP.drag; if (!dg) { hotMove(p); return false; } if (dg.t === 'sl') { dg.s.set(clamp(dg.s.min + (dg.s.max - dg.s.min) * (p.x - dg.s.x0) / dg.s.w0, dg.s.min, dg.s.max)); return true; } if (dg.t === 'rot') { VP.rot = dg.r0 + (p.x - dg.x0) * 0.012; return true; } return false; }
   function onUp() { VP.drag = null; }
   K.add('vph', 'P2 Volumetric phenotyping', '#1E6F8E', drawVph, 'Volumetric phenotyping: a virtual 3D scanner measures volume, crown, leaves and height of the plant (point clouds, spheres, SR-ICP)', 'A plant seen from six sides is a plant seen whole: the clouds of the views are joined with calibration spheres and ICP, and the volume of the canopy follows the soil water, the weather and the irrigation of the project through the plant of P1.');
-  const sc = SCENES.find(s => s.id === 'vph'); if (sc) { sc.play = true; sc.dur = 40; sc.h = 3800; sc.onDown = onDown; sc.onMove = onMove; sc.onUp = onUp; sc.onLeave = () => { hotUi.hover = null; }; }
+  const sc = SCENES.find(s => s.id === 'vph'); if (sc) { sc.play = true; sc.dur = 40; sc.h = 4900; sc.onDown = onDown; sc.onMove = onMove; sc.onUp = onUp; sc.onLeave = () => { hotUi.hover = null; }; }
   (function place() {
     const s = SCENES.find(x => x.id === 'vph'), bar = document.getElementById('sceneBar'); if (!s || !bar || bar.querySelector('[data-scene="vph"]')) return;
     const b = document.createElement('div'); b.className = 'scenebtn'; b.innerHTML = '<span class="no">P2</span><span>Volumetric phenotyping</span>'; b.style.setProperty('--sc', s.color); b.dataset.scene = 'vph'; b.title = s.title; b.onclick = () => switchScene(s);
