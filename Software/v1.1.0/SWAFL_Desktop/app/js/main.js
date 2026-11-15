@@ -331,7 +331,7 @@ window.SWAFLAct = Act;   // the engine (inside its frame) opens the manual at th
           var ex = document.getElementById('dzXProg'), tot = 0, dn = s.done, m = ex && /(\d+)\s+of\s+(\d+)/.exec(ex.textContent || ''); if (m) { dn = +m[1]; tot = +m[2]; }
           var el = s.since ? (now - s.since) / 1000 : 0, pct = tot ? Math.min(100, dn / tot * 100) : 0;
           card.querySelector('.dl-in').style.width = pct + '%'; card.querySelector('.dl-ind').style.display = busy ? 'block' : 'none';
-          card.querySelector('b').textContent = busy ? 'Daisy is running' : 'Daisy has finished';
+          card.querySelector('b').textContent = (busy ? 'Daisy is running' : 'Daisy has finished') + (tot ? ' · ' + Math.round(pct) + ' %' : '');
           card.querySelector('#dlT').textContent = (s.running ? s.running + ' running' : '') + (s.waiting ? ' · ' + s.waiting + ' waiting' : '') + (tot ? ' · ' + dn + ' of ' + tot + ' runs finished' : ' · ' + s.done + ' finished') + ' · ' + fmt(el);
           var sb = document.getElementById('stPlay'); if (sb && busy) sb.textContent = 'Daisy running';
         }
