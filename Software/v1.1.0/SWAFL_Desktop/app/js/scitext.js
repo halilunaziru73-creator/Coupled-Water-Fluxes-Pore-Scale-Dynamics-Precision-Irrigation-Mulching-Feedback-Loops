@@ -35,8 +35,8 @@
   const SKIP = { INPUT: 1, TEXTAREA: 1, SCRIPT: 1, STYLE: 1, CODE: 1, PRE: 1, CANVAS: 1, SUB: 1, SUP: 1, KBD: 1 };
   function dom(el) {
     if (!el || !root.document || el.nodeType !== 1) return; const d = root.document, W = d.createTreeWalker(el, 4, null), list = []; let n;
-    while ((n = W.nextNode())) { const t = n.nodeValue; if (!t || (t.indexOf('_') < 0 && t.indexOf('^') < 0 && t.indexOf('DT') < 0)) continue; const pe = n.parentElement; if (!pe || SKIP[pe.tagName] || pe.isContentEditable || pe.closest('pre,code,textarea,[data-nosci]')) continue; if (!/[_^]\{/.test(pre(t))) continue; list.push(n); }
-    list.forEach(n => { const pe = n.parentElement, s2 = pre(n.nodeValue); if (pe.tagName === 'OPTION') { n.nodeValue = plain(n.nodeValue); return; }
+    while ((n = W.nextNode())) { const t = n.nodeValue; if (!t || (t.indexOf('_') < 0 && t.indexOf('^') < 0 && t.indexOf('DT') < 0)) continue; const pe = n.parentElement; if (!pe || SKIP[pe.tagName] || pe.isContentEditable || pe.closest('pre,code,textarea,[data-nosci]')) continue; if (!/[_^]\{/.test(pre(t))) continue; if (pe.tagName === 'OPTION' && plain(t) === t) continue; list.push(n); }
+    list.forEach(n => { const pe = n.parentElement, s2 = pre(n.nodeValue); if (pe.tagName === 'OPTION') { const v = plain(n.nodeValue); if (v !== n.nodeValue) n.nodeValue = v; return; }
       const f = d.createDocumentFragment(), re = /([_^])\{([^}]*)\}/g; let k = 0, m; while ((m = re.exec(s2))) { if (m.index > k) f.appendChild(d.createTextNode(s2.slice(k, m.index))); const e = d.createElement(m[1] === '_' ? 'sub' : 'sup'); e.textContent = m[2]; e.style.cssText = 'font-size:.75em;line-height:0'; f.appendChild(e); k = re.lastIndex; } if (k < s2.length) f.appendChild(d.createTextNode(s2.slice(k))); pe.replaceChild(f, n); });
   }
   if (root.document && root.MutationObserver) {
