@@ -38,26 +38,42 @@ window.DaisyExpPub = (() => {
   const pstr = p => !fin(p) ? 'n.t.' : p < 0.001 ? '< 0.001' : p < 0.01 ? p.toFixed(3) : p.toFixed(2);
   const stars = p => !fin(p) ? '' : p < 0.001 ? '***' : p < 0.01 ? '**' : p < 0.05 ? '*' : ' ns';
 
-  // sequential analysis of variance by orthogonalising the columns of each term (it also works when the combinations are not all present)
-  function anova(R, fids, resp) {
-    const n = R.length; if (n < 4) return null; const y = Float64Array.from(R, r => r.r[resp]), gm = mean(Array.from(y)), yc = y.map(v => v - gm); let SST = 0; yc.forEach(v => { SST += v * v; }); if (!(SST > 1e-18)) return null;
-    const lv = {}, ix = {}; fids.forEach(f => { lv[f] = X().levels(R, f); ix[f] = R.map(r => lv[f].findIndex(l => same(l, fv(r)[f]))); });
+  // sequential analysis of variance by orthogonalising the columns of each term (it also works when the combinations are not all present).
+  // The work is done by anovaCore, a function with no outside reference, so that it can run in a worker thread and never stop the screen.
+  function anovaCore(d) {
+    const n = d.n, y = d.y, fids = d.fids; let gm = 0; for (let i = 0; i < n; i++) gm += y[i]; gm /= n; const yc = new Float64Array(n); let SST = 0; for (let i = 0; i < n; i++) { yc[i] = y[i] - gm; SST += yc[i] * yc[i]; }
+    if (!(SST > 1e-18)) return null;
     const basis = [new Float64Array(n).fill(1 / Math.sqrt(n))], fit = new Float64Array(n);
-    const ind = (f, j) => { const c = new Float64Array(n); for (let i = 0; i < n; i++) if (ix[f][i] === j) c[i] = 1; return c; };
-    const add = cols => { let ss = 0, df = 0; cols.forEach(col => { let o2 = 0; for (let i = 0; i < n; i++) o2 += col[i] * col[i]; if (!o2) return; const v = Float64Array.from(col);
-      for (let pass = 0; pass < 2; pass++) for (let k = 0; k < basis.length; k++) { const q = basis[k]; let d = 0; for (let i = 0; i < n; i++) d += v[i] * q[i]; for (let i = 0; i < n; i++) v[i] -= d * q[i]; }
-      let n2 = 0; for (let i = 0; i < n; i++) n2 += v[i] * v[i]; if (n2 < 1e-7 * o2) return; const s = 1 / Math.sqrt(n2); let c = 0; for (let i = 0; i < n; i++) { v[i] *= s; c += v[i] * yc[i]; } basis.push(v); for (let i = 0; i < n; i++) fit[i] += c * v[i]; ss += c * c; df++; }); return { ss, df }; };
-    const terms = []; fids.forEach(f => { const t = add(lv[f].map((_, j) => ind(f, j))); terms.push({ fs: [f], ss: t.ss, df: t.df }); });
-    // the pairs: all of them when the work is small, those of the factors that explain most otherwise
-    const order = fids.slice().sort((a, b) => terms.find(t => t.fs[0] === b).ss - terms.find(t => t.fs[0] === a).ss); let keep = order.slice(); const cost = fs => { let p = 0; fs.forEach(f => { p += lv[f].length; }); for (let i = 0; i < fs.length; i++) for (let j = i + 1; j < fs.length; j++) p += lv[fs[i]].length * lv[fs[j]].length; return p; };
-    while (keep.length > 2 && n * cost(keep) * cost(keep) > 1.5e8) keep.pop();
-    for (let i = 0; i < keep.length; i++) for (let j = i + 1; j < keep.length; j++) { const f = keep[i], g = keep[j], cols = []; lv[f].forEach((_, a) => lv[g].forEach((__, b) => { const c = new Float64Array(n); let any = 0; for (let k = 0; k < n; k++) if (ix[f][k] === a && ix[g][k] === b) { c[k] = 1; any = 1; } if (any) cols.push(c); })); const t = add(cols); terms.push({ fs: [f, g], ss: t.ss, df: t.df }); }
-    let ssRes = SST - terms.reduce((s, t) => s + t.ss, 0), dfRes = n - 1 - terms.reduce((s, t) => s + t.df, 0); if (ssRes < 0) ssRes = 0;
-    // unreplicated: the smallest interactions are pooled into the error, the usual way of testing an experiment without replicates
+    const add = cols => { let ss = 0, df = 0; for (let ci = 0; ci < cols.length; ci++) { const col = cols[ci]; let o2 = 0; for (let i = 0; i < n; i++) o2 += col[i] * col[i]; if (!o2) continue; const v = Float64Array.from(col); let n2 = o2;
+        for (let pass = 0; pass < 2 && n2 > 0.5 * o2 * (pass ? 0 : 1) + (pass ? 0 : -1); pass++) { for (let k = 0; k < basis.length; k++) { const q = basis[k]; let dd = 0; for (let i = 0; i < n; i++) dd += v[i] * q[i]; for (let i = 0; i < n; i++) v[i] -= dd * q[i]; } n2 = 0; for (let i = 0; i < n; i++) n2 += v[i] * v[i]; if (n2 > 0.5 * o2) break; }
+        if (n2 < 1e-7 * o2) continue; const sc = 1 / Math.sqrt(n2); let c = 0; for (let i = 0; i < n; i++) { v[i] *= sc; c += v[i] * yc[i]; fit[i] += 0; } for (let i = 0; i < n; i++) fit[i] += c * v[i]; basis.push(v); ss += c * c; df++; } return { ss, df }; };
+    const ind = (f, j) => { const c = new Float64Array(n), x = d.ix[f]; for (let i = 0; i < n; i++) if (x[i] === j) c[i] = 1; return c; };
+    const terms = []; fids.forEach(f => { const cols = []; for (let j = 0; j < d.len[f]; j++) cols.push(ind(f, j)); const t = add(cols); terms.push({ fs: [f], ss: t.ss, df: t.df }); });
+    const order = fids.slice().sort((a, b) => terms.find(t => t.fs[0] === b).ss - terms.find(t => t.fs[0] === a).ss), keep = order.slice(), cost = fs => { let p = 0; fs.forEach(f => { p += d.len[f]; }); for (let i = 0; i < fs.length; i++) for (let j = i + 1; j < fs.length; j++) p += d.len[fs[i]] * d.len[fs[j]]; return p; };
+    while (keep.length > 2 && n * cost(keep) * cost(keep) > 3e8) keep.pop();
+    for (let i = 0; i < keep.length; i++) for (let j = i + 1; j < keep.length; j++) { const f = keep[i], g = keep[j], cols = [], xf = d.ix[f], xg = d.ix[g]; for (let a = 0; a < d.len[f]; a++) for (let b = 0; b < d.len[g]; b++) { const c = new Float64Array(n); let any = 0; for (let k = 0; k < n; k++) if (xf[k] === a && xg[k] === b) { c[k] = 1; any = 1; } if (any) cols.push(c); } const t = add(cols); terms.push({ fs: [f, g], ss: t.ss, df: t.df }); }
+    const res = new Float64Array(n); for (let i = 0; i < n; i++) res[i] = yc[i] - fit[i];
+    return { terms, SST, gm, res };
+  }
+  let worker = null, wjobs = {}, wid = 0, wbad = false;
+  function runCore(d) {
+    return new Promise(resolve => {
+      const sync = () => setTimeout(() => { try { resolve(anovaCore(d)); } catch (e) { console.warn('anova', e); resolve(null); } }, 0);
+      if (wbad || typeof Worker === 'undefined' || typeof Blob === 'undefined') return sync();
+      try { if (!worker) { const src = 'const anovaCore = ' + anovaCore.toString() + ';self.onmessage = e => { let r = null; try { r = anovaCore(e.data.d); } catch (x) { } self.postMessage({ id: e.data.id, r }); };'; worker = new Worker(URL.createObjectURL(new Blob([src], { type: 'text/javascript' }))); worker.onmessage = e => { const j = wjobs[e.data.id]; delete wjobs[e.data.id]; if (j) j(e.data.r); }; worker.onerror = () => { wbad = true; try { worker.terminate(); } catch (x) { } worker = null; const js = wjobs; wjobs = {}; Object.keys(js).forEach(k => js[k](undefined)); }; }
+        const id = ++wid; wjobs[id] = r => { if (r === undefined) { sync(); } else resolve(r); }; worker.postMessage({ id, d }); } catch (e) { wbad = true; sync(); } });
+  }
+  function anovaFinish(core, lv, n) {
+    if (!core) return null; const terms = core.terms, SST = core.SST; let ssRes = SST - terms.reduce((s, t) => s + t.ss, 0), dfRes = n - 1 - terms.reduce((s, t) => s + t.df, 0); if (ssRes < 0) ssRes = 0;
     const pooled = []; if (dfRes < 2) { const ints = terms.filter(t => t.fs.length > 1 && t.df > 0).sort((a, b) => a.ss / a.df - b.ss / b.df); for (const t of ints) { if (dfRes >= 3) break; if (ints.length - pooled.length <= 1 && dfRes + t.df < 2) break; pooled.push(t); t.pooled = true; ssRes += t.ss; dfRes += t.df; } }
-    const tested = dfRes >= 2 && ssRes > 1e-12 * SST; const MSE = tested ? ssRes / dfRes : NaN;
+    const tested = dfRes >= 2 && ssRes > 1e-12 * SST, MSE = tested ? ssRes / dfRes : NaN;
     terms.forEach(t => { t.eta = t.ss / SST; if (tested && !t.pooled && t.df > 0) { t.F = (t.ss / t.df) / MSE; t.p = pF(t.F, t.df, dfRes); } });
-    return { terms, SST, n, ssRes, dfRes, MSE, tested, pooled, resEta: ssRes / SST, lv, res: Array.from(yc, (v, i) => v - fit[i]), gm };
+    return { terms, SST, n, ssRes, dfRes, MSE, tested, pooled, resEta: ssRes / SST, lv, res: Array.from(core.res), gm: core.gm };
+  }
+  // the runs and the factors, as numbers, and the analysis made off the main thread
+  function anova(R, fids, resp) {
+    const n = R.length; if (n < 4) return Promise.resolve(null); const lv = {}, ix = {}, len = {}; fids.forEach(f => { lv[f] = X().levels(R, f); len[f] = lv[f].length; const a = new Int32Array(n); R.forEach((r, i) => { a[i] = lv[f].findIndex(l => same(l, fv(r)[f])); }); ix[f] = a; });
+    return runCore({ n, y: Float64Array.from(R, r => r.r[resp]), ix, len, fids }).then(core => anovaFinish(core, lv, n));
   }
   const termOf = (an, a, b) => an && an.terms.find(t => t.fs.length === 2 && ((t.fs[0] === a && t.fs[1] === b) || (t.fs[0] === b && t.fs[1] === a)));
 
@@ -98,11 +114,11 @@ window.DaisyExpPub = (() => {
     const ALIAS = { nfac: ['nrate'], limit: ['wstrat'], mm: ['amt_mm'] }, res = id => [id].concat(ALIAS[id] || []).find(f => multi.indexOf(f) >= 0);
     const numFirst = p => { const a = isNum(X_.levels(rows, p[0])), b = isNum(X_.levels(rows, p[1])); return !a && b ? [p[1], p[0]] : p; };
     const pickPair = an => { const sp = (story.pair || []).map(res).filter(Boolean); if (sp.length >= 2 && sp[0] !== sp[1]) return numFirst([sp[0], sp[1]]); if (multi.length < 2) return null; let best = null; if (an) an.terms.forEach(t => { if (t.fs.length === 2 && (!best || t.eta > best.eta)) best = t; }); return numFirst(best ? best.fs.slice() : [multi[0], multi[1]]); };
-    let an = null, shown = false; const anC = {}, anovaC = (R, r) => anC[r] || (anC[r] = anova(R, multi, r));
+    let an = null, shown = false; const anC = {}, anD = {}, anovaC = (R, r) => anC[r] || (anC[r] = anova(R, multi, r).then(a => (anD[r] = a || null)));
     const opt = (v, t, cur) => '<option value="' + esc(v) + '"' + (String(cur) === String(v) ? ' selected' : '') + '>' + esc(t) + '</option>';
-    const draw = () => { try { render(); } catch (e) { console.warn('paper figures', e); } };
-    function render() {
-      const R = rows.filter(r => fin(r.r[S.resp])); an = anovaC(R, S.resp);
+    const draw = () => { render().catch(e => console.warn('paper figures', e)); };
+    async function render() {
+      const tok = S.tok = (S.tok || 0) + 1, R = rows.filter(r => fin(r.r[S.resp])); if (!an) host.innerHTML = '<p class="pnote">Analysing the runs for the figures...</p>'; an = await anovaC(R, S.resp); if (S.tok !== tok || !host.isConnected) return;
       if (multi.length >= 2) { if (!S.a || !S.b || multi.indexOf(S.a) < 0 || multi.indexOf(S.b) < 0 || S.a === S.b) { const p = pickPair(an); S.a = p[0]; S.b = p[1]; } } else { S.a = multi[0]; S.b = null; }
       const A = S.a, B = S.b, pr = RS(S.resp), nm = (c.name ? c.name : '') ;
       let h = '<div class="dzpub">';
@@ -119,7 +135,7 @@ window.DaisyExpPub = (() => {
       Object.keys(redo).forEach((k, i) => { const run = () => { const t0 = performance.now(); try { redo[k](); } catch (e) { console.warn(k, e); } if (k === 'pub_f1') { const cap = captions(R, an, A, B); const q1 = host.querySelector('[data-p="cap1"]'), q2 = host.querySelector('[data-p="rd1"]'); if (q1) q1.innerHTML = cap.c1; if (q2) q2.innerHTML = cap.rd; } window.__pubMs = (window.__pubMs || []).concat([[k, Math.round(performance.now() - t0)]]); }; if (i === 0) run(); else setTimeout(run, 60 * i); });
       // the caption and the results sentence
       const cap = captions(R, an, A, B); if (q('cap2')) q('cap2').innerHTML = cap.c2; if (q('cap3')) q('cap3').innerHTML = cap.c3;
-      const runStats = () => { const st0 = q('stats'); if (!st0) return; st0.innerHTML = '<p class="pnote">Analysing the runs...</p>'; setTimeout(() => { try { const sb = statsBlock(R, an, A, B); const ar = allResults(); sb.csv.push(['Analysis of every result']); sb.csv.push(ar.head); ar.body.forEach(r => sb.csv.push(r));
+      const runStats = () => { const st0 = q('stats'); if (!st0) return; st0.innerHTML = '<p class="pnote">Analysing the runs...</p>'; setTimeout(async () => { try { const sb = statsBlock(R, an, A, B); const ar = await allResults(); sb.csv.push(['Analysis of every result']); sb.csv.push(ar.head); ar.body.forEach(r => sb.csv.push(r));
         st0.innerHTML = (sb.find.length ? '<div class="rd"><b>What the analysis finds.</b><ul style="margin:4px 0 0 18px;padding:0">' + sb.find.map(t => '<li>' + t + '</li>').join('') + '</ul></div>' : '') + sb.html + '<p style="margin:12px 0 3px"><b>Analysis of every result of the experiment</b></p><p class="pnote" style="margin:0 0 4px">Share of the variance of each result explained by each factor (η², with stars of the F-test), by all the interactions together and left in the residual.</p><div style="overflow:auto"><table class="dzt" style="font-size:12px;table-layout:auto"><tr>' + ar.head.map((x, i) => '<th' + (i ? ' style="text-align:right"' : '') + '>' + esc(x) + '</th>').join('') + '</tr>' + ar.body.map(r => '<tr>' + r.map((x, i) => '<td' + (i ? ' style="text-align:right"' : '') + '>' + esc(x) + '</td>').join('') + '</tr>').join('') + '</table></div>';
         const cs = q('stcsv'); if (cs) cs.onclick = () => { const qq = v => { v = v == null ? '' : String(v); return /[",\n;]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }, a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['\ufeff' + sb.csv.map(r => r.map(qq).join(',')).join('\r\n')], { type: 'text/csv' })); a.download = 'daisy-' + (c.presetId || 'experiment') + '-statistics.csv'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); };
         const ct = q('sttxt'); if (ct) ct.onclick = () => { const t = st0.innerText; try { navigator.clipboard.writeText(t); ct.textContent = 'Copied'; setTimeout(() => { ct.textContent = 'Copy as text'; }, 1600); } catch (e) { } }; } catch (e) { console.warn('statistics', e); const st0 = q('stats'); if (st0) st0.innerHTML = '<p class="pnote">The analysis could not be made: ' + esc(e.message) + '</p>'; } }, 30); };
@@ -203,7 +219,7 @@ window.DaisyExpPub = (() => {
       setFont(g, 10, false); g.fillStyle = MUT; g.fillText(an0.tested ? 'F-test; * P < 0.05, ** P < 0.01, *** P < 0.001, ns not significant' : 'Unreplicated design: shares only, not tested', L, ly + 14); }
 
     // ---- the figures ----
-    function sheet(cv, H) { const par = cv.parentNode, w = Math.max(360, (par ? par.clientWidth : 800) - 4); const F = P().frame(cv, { h: H(w) }, H(w)); cv._hits = []; return F; }
+    function sheet(cv, H) { const par = cv.parentNode, w = Math.max(360, (par ? par.clientWidth : 800) - 4); const F = P().frame(cv, { h: H(w), rs: Math.max(2, Math.round((window.devicePixelRatio || 1) * 1.5)) }, H(w)); cv._hits = []; return F; }
     const hover = cv => { cv.onmousemove = e => { const b = cv.getBoundingClientRect(), k = parseFloat(cv.style.width) / (cv.clientWidth || 1), x = (e.clientX - b.left) * k, y = (e.clientY - b.top) * k; let best = null; (cv._hits || []).forEach(p => { const d = Math.hypot(p.x - x, p.y - y); if (d < p.r && (!best || d < best.d)) best = { d, p }; }); if (best) showTip(e, best.p.html); else hideTip(); }; cv.onmouseleave = hideTip; };
     function drawF1(cv) {
       const A = S.a, B = S.b, resp = S.resp, R = rows.filter(r => fin(r.r[resp])), two = !!B;
@@ -220,7 +236,7 @@ window.DaisyExpPub = (() => {
     function drawF2(cv) {
       const A = S.a, B = S.b, rs = keyResp.slice(0, 4), cols0 = rs.length;
       const F = sheet(cv, w => 20 + Math.ceil(rs.length / (w >= 820 ? 2 : 1)) * 332), { g, w } = F, cols = w >= 820 ? 2 : 1, gap = 18, pad = 10, pw = (w - 2 * pad - gap * (cols - 1)) / cols, ph = 320; const L = 'abcd'; S.f2 = [];
-      const sync = (P().exportScale || 1) > 1, token = cv._tok = (cv._tok || 0) + 1; const panel = k => { if (cv._tok !== token) return; const r = rs[k], b = { x: pad + (k % cols) * (pw + gap), y: 10 + Math.floor(k / cols) * (ph + 12), w: pw, h: ph }; const R = rows.filter(q => fin(q.r[r])), an2 = anovaC(R, r), t = termOf(an2, A, B); letter(g, b.x, b.y, L[k], rl(r), b.w); ixPlot(g, cv._hits, b, { R, fa: A, fb: B, resp: r, mod: an2, an: t ? (t.eta < 1e-6 ? [cut(fl(A), 16) + ' × ' + cut(fl(B), 16) + ':', 'no interaction'] : fin(t.F) ? [cut(fl(A), 16) + ' × ' + cut(fl(B), 16) + ':', 'F(' + t.df + ', ' + an2.dfRes + ') = ' + num(t.F, 3) + ', P ' + (t.p < 0.001 ? '< 0.001' : '= ' + pstr(t.p)), 'η² = ' + num(t.eta * 100, 3) + ' %'] : [cut(fl(A), 16) + ' × ' + cut(fl(B), 16) + ':', 'η² = ' + num(t.eta * 100, 3) + ' % (not tested)']) : null }); S.f2.push({ r, t, an: an2 }); }; rs.forEach((r, k) => { if (sync || k === 0) panel(k); else setTimeout(() => panel(k), 25 * k); });
+      const sync = (P().exportScale || 1) > 1, token = cv._tok = (cv._tok || 0) + 1; const panel = async k => { if (cv._tok !== token) return; const r = rs[k], b = { x: pad + (k % cols) * (pw + gap), y: 10 + Math.floor(k / cols) * (ph + 12), w: pw, h: ph }; const R = rows.filter(q => fin(q.r[r])), an2 = sync && anD[r] !== undefined ? anD[r] : await anovaC(R, r); if (cv._tok !== token) return; const t = termOf(an2, A, B); letter(g, b.x, b.y, L[k], rl(r), b.w); ixPlot(g, cv._hits, b, { R, fa: A, fb: B, resp: r, mod: an2, an: t ? (t.eta < 1e-6 ? [cut(fl(A), 16) + ' × ' + cut(fl(B), 16) + ':', 'no interaction'] : fin(t.F) ? [cut(fl(A), 16) + ' × ' + cut(fl(B), 16) + ':', 'F(' + t.df + ', ' + an2.dfRes + ') = ' + num(t.F, 3) + ', P ' + (t.p < 0.001 ? '< 0.001' : '= ' + pstr(t.p)), 'η² = ' + num(t.eta * 100, 3) + ' %'] : [cut(fl(A), 16) + ' × ' + cut(fl(B), 16) + ':', 'η² = ' + num(t.eta * 100, 3) + ' % (not tested)']) : null }); S.f2.push({ r, t, an: an2 }); }; rs.forEach((r, k) => { if (sync || k === 0) panel(k); else setTimeout(() => panel(k), 25 * k); });
       hover(cv); cv._csv = () => { const o = [['result', 'interaction', 'df', 'F', 'P', 'share of the variance (%)']]; S.f2.forEach(q => o.push([rl(q.r), q.t ? termLabel(q.t) : '', q.t ? q.t.df : '', q.t ? q.t.F : '', q.t ? q.t.p : '', q.t ? q.t.eta * 100 : ''])); return o; };
     }
     function drawF3(cv, others) {
@@ -273,7 +289,7 @@ window.DaisyExpPub = (() => {
       { const lab = r => multi.map(f => lname(f, fv(r)[f])).join(', '), srt = R.slice().sort((a, b) => b.r[resp] - a.r[resp]), k = Math.min(5, Math.floor(n / 2)); if (k > 0) h += T('Highest and lowest runs', ['Run', rn + (ru0 ? ' (' + ru0 + ')' : ''), 'Rank'], srt.slice(0, k).map((r, i) => [lab(r), f3(r.r[resp], 4), String(i + 1)]).concat(srt.slice(-k).map((r, i) => [lab(r), f3(r.r[resp], 4), String(n - k + i + 1)]))); }
       return { html: h, csv, find };
     }
-    function allResults() { const rs = resps.filter(r => r !== 'rain' || true).slice(0, 12); const head = ['Result', 'Mean ± s.d.'].concat(multi.map(f => fl(f) + ' (η²)')).concat(['Interactions (η²)', 'Residual (η²)']), body = rs.map(r => { const R = rows.filter(q => fin(q.r[r])), a = anovaC(R, r), y = R.map(q => q.r[r]); if (!a) return [rl(r), f3(mean(y)) + ' ± ' + f3(sdev(y))].concat(multi.map(() => '–')).concat(['–', '–']); return [rl(r) + (ru(r) ? ' (' + ru(r) + ')' : ''), f3(mean(y), 3) + ' ± ' + f3(sdev(y), 2)].concat(multi.map(f => { const t = a.terms.find(q => q.fs.length === 1 && q.fs[0] === f); return t ? f3(t.eta * 100, 3) + ' %' + stars(t.p) : '–'; })).concat([f3(a.terms.filter(t => t.fs.length > 1).reduce((q, t) => q + t.eta, 0) * 100, 3) + ' %', f3(Math.max(0, 1 - a.terms.reduce((q, t) => q + t.eta, 0)) * 100, 3) + ' %']); }); return { head, body }; }
+    async function allResults() { const rs = resps.slice(0, 12); const head = ['Result', 'Mean ± s.d.'].concat(multi.map(f => fl(f) + ' (η²)')).concat(['Interactions (η²)', 'Residual (η²)']), body = []; for (const r of rs) { const R = rows.filter(q => fin(q.r[r])), a = await anovaC(R, r), y = R.map(q => q.r[r]); body.push((() => { if (!a) return [rl(r), f3(mean(y)) + ' ± ' + f3(sdev(y))].concat(multi.map(() => '–')).concat(['–', '–']); return [rl(r) + (ru(r) ? ' (' + ru(r) + ')' : ''), f3(mean(y), 3) + ' ± ' + f3(sdev(y), 2)].concat(multi.map(f => { const t = a.terms.find(q => q.fs.length === 1 && q.fs[0] === f); return t ? f3(t.eta * 100, 3) + ' %' + stars(t.p) : '–'; })).concat([f3(a.terms.filter(t => t.fs.length > 1).reduce((q, t) => q + t.eta, 0) * 100, 3) + ' %', f3(Math.max(0, 1 - a.terms.reduce((q, t) => q + t.eta, 0)) * 100, 3) + ' %']); })()); } return { head, body }; }
 
     // ---- caption and results sentence, written for this experiment ----
     function captions(R, an0, A, B) {
