@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <link rel="icon" type="image/png" href="../assets/logo-64.png">
-<link rel="stylesheet" href="touch.css?v=20261115e"><script src="tapfx.js?v=20261115e"></script><script src="wheelfix.js?v=20261112j"></script>
-<script src="crops.js?v=20261112m"></script><script src="realsoil.js?v=20261115e"></script>
+<link rel="stylesheet" href="touch.css?v=20261115f"><script src="tapfx.js?v=20261115f"></script><script src="wheelfix.js?v=20261112j"></script>
+<script src="crops.js?v=20261112m"></script><script src="realsoil.js?v=20261115f"></script>
 <meta charset="UTF-8">
 <meta name="description" content="Interactive soil, water and atmosphere explorer built on 10,190 simulations: irrigation trigger law, mulch water balance, and evaporation-drainage regimes.">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -6708,7 +6708,7 @@ function loop() {
     stepPlay(wide ? (sc.id === 'v2' ? 40 : 26) : sc.dur);
     const pr = document.getElementById('playRange'), pl = document.getElementById('playLabel');
     if (document.activeElement !== pr) pr.value = Math.round(play.t * 1000);
-    pl.textContent = calTxt(sc.id === 'dph' ? 'day ' + Math.round(play.t * 139) + ' after emergence' + (window.PHUI ? ' (' + window.PHUI.dateOf(Math.round(play.t * 139)) + ')' : '') : sc.id === 'v3' ? 'day ' + Math.round(play.t * 365) : sc.id === 'e1' ? 'day ' + (play.t * E1.days).toFixed(1) : wide ? (sc.id === 'v1' ? d20Label(play.t) : v2AllLabel()) : dayLabel(play.t * (PDAYS - 1)));
+    pl.textContent = calTxt(sc.id === 'dph' || sc.id === 'vph' ? 'day ' + Math.round(play.t * 139) + ' after emergence' + (window.PHUI ? ' (' + (window.PHUI.dateOfY ? window.PHUI.dateOfY(Math.round(play.t * 139)) : window.PHUI.dateOf(Math.round(play.t * 139))) + ')' : '') : sc.id === 'v3' ? 'day ' + Math.round(play.t * 365) : sc.id === 'e1' ? 'day ' + (play.t * E1.days).toFixed(1) : wide ? (sc.id === 'v1' ? d20Label(play.t) : v2AllLabel()) : dayLabel(play.t * (PDAYS - 1)));
     if (dss.held && sc.id === 'v1' && wide && Math.abs(play.t - (function(){ const k = fclock.kd(), ay = yearOf(k), dt = dateOfK(k); return clampN((Math.round((Date.UTC(1980 + ay, dt.getUTCMonth(), dt.getUTCDate()) - D20START) / DAYMS)) / (D20.n - 1), 0, 1); })()) < 0.0005) pl.textContent = calTxt(fmtDate(dateOfK(fclock.kd())));
     if (sc.id === 'drip' || sc.id === 'spr') pl.textContent = calTxt(IRLAB);
     if (sc.id === 'drn' && window.drnLabel) { try { pl.textContent = calTxt(window.drnLabel(play.t)); } catch (e) { } }
@@ -7448,7 +7448,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
 <script src="plus_phenoplants.js?v=20261030z4"></script>
 <script src="plus_phenotyping4.js?v=20261109p"></script>
 <script src="plus_phenotyping5.js?v=20261109p"></script>
-<script src="plus_volumetric.js?v=20261115e"></script>
+<script src="plus_volumetric.js?v=20261115f"></script>
 <script src="plus_drainage.js?v=20261110b"></script>
 <script src="phnav.js?v=20261030z4"></script>
 <script src="inputs.js?v=20261110c"></script>
