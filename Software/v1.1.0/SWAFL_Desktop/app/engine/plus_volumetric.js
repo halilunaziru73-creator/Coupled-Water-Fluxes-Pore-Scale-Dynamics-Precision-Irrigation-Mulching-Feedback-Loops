@@ -205,7 +205,7 @@
     ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
     if (!c || !c.n) { T('no points', x + w / 2, y + h / 2, { s: 11, c: '#8A94A0', a: 'center' }); ctx.restore(); return; }
     const R0 = o.R0 === undefined ? 28 : o.R0, S = Math.max(R0, 6) / 28, Hh = Math.max(o.fixH || o.H || 60, 3), sph = o.spheres || [], ring = o.ring !== false && R0 > 0, pitch = o.pitch !== undefined ? o.pitch : 0.42, cp = Math.cos(pitch), spt = Math.sin(pitch), ca = Math.cos(VP.rot), sa = Math.sin(VP.rot);
-    const Rw = o.fixR ? o.fixR * 1.2 : ring ? R0 * 1.55 : sph.length ? R0 * 1.3 : Math.max(o.cr || Hh * 0.3, 4) * 1.3;
+    const Rw = o.fixR ? o.fixR * 1.2 : ring ? R0 * (o.labels ? 2.05 : 1.6) : sph.length ? R0 * 1.3 : Math.max(o.cr || Hh * 0.3, 4) * 1.3;
     const s0 = Math.min(w * 0.5 / Rw, o.base ? (h - 40) / (Hh * cp + Rw * spt * 0.5) : h * 0.5 / (Hh * cp * 0.58 + Rw * spt * 0.95 + 3 * S)), tz = Hh * 0.42, cx = x + w / 2, cy = o.base ? y + h - 26 - tz * cp * s0 : y + h * 0.5 + 6, Dc = 3.4 * Math.max(Rw, Hh);
     const pj = (X, Y, Z) => { const xr = X * ca - Y * sa, yr = X * sa + Y * ca, dc = -yr * cp + (Z - tz) * spt, k = Dc / Math.max(Dc * 0.3, Dc - dc), up = (Z - tz) * cp + yr * spt; return [cx + xr * s0 * k, cy - up * s0 * k, k, dc]; };
     VP.pj = pj; VP.s0 = s0;
@@ -243,17 +243,18 @@
       else { const cm = it[2], px = it[3], py = it[4], k = it[5], a = cm.ph * D2R, tg = pj(0, 0, Hh * 0.5), sz = Math.max(7, 0.075 * Rc * s0 * k);
         if (cm.on) { const nx = -(tg[1] - py), ny = tg[0] - px, ln = Math.hypot(nx, ny) || 1, wd = Math.max(10, Hh * 0.38 * s0); ctx.fillStyle = 'rgba(255,213,74,0.14)'; ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(tg[0] + nx / ln * wd, tg[1] + ny / ln * wd); ctx.lineTo(tg[0] - nx / ln * wd, tg[1] - ny / ln * wd); ctx.closePath(); ctx.fill(); ctx.strokeStyle = 'rgba(255,213,74,0.8)'; ctx.setLineDash([4, 4]); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(tg[0], tg[1]); ctx.stroke(); ctx.setLineDash([]); }
         ctx.fillStyle = cm.on ? '#FFD54A' : '#CBD5E1'; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(px - sz, py - sz * 0.7, sz * 2, sz * 1.4, 3) : ctx.rect(px - sz, py - sz * 0.7, sz * 2, sz * 1.4); ctx.fill(); ctx.fillStyle = '#10151C'; ctx.beginPath(); ctx.arc(px, py, sz * 0.45, 0, 6.283); ctx.fill(); ctx.fillStyle = cm.on ? '#FFF3B0' : '#7C8794'; ctx.beginPath(); ctx.arc(px - sz * 0.12, py - sz * 0.12, sz * 0.16, 0, 6.283); ctx.fill();
-        if (o.labels) T(Math.round(cm.ph) + '°', px, py - sz - 4, { s: 10, b: true, c: '#E8EEF5', a: 'center' }); }
+        if (o.labels) { const ox = px - tg[0], oy = py - tg[1], ol = Math.hypot(ox, oy) || 1, lx = px + ox / ol * (sz + 13), ly = py + oy / ol * (sz + 9) + 4; T(Math.round(cm.ph) + '°', lx, ly, { s: 10, b: true, c: '#E8EEF5', a: 'center' }); } }
     } catch (e) { VP.err = e && e.message; } });
     if (ring) arc(false);
     ctx.restore(); ROTB.x = Math.min(ROTB.x || x, x); }
+  function cap(x, y, t) { ctx.save(); ctx.font = 'italic 10px sans-serif'; const w = ctx.measureText(t).width + 14; ctx.fillStyle = 'rgba(8,14,22,0.82)'; ctx.fillRect(x, y, w, 19); T(t, x + 7, y + 14, { s: 10, c: '#DCE6F2', i: true }); ctx.restore(); }
   function drawRigTop(x, y, w, h, S, scn) {
     const nV = VP.nV, cams = []; for (let k = 0; k < nV; k++) cams.push({ ph: k * 360 / nV, on: k === 0 });
     drawCloud(scn.T, x, y, w, h, { col: 'natural', spheres: scn.rg.sp.map((q, i) => Object.assign({ i }, q)), cams, labels: true, pitch: 1.5708, H: scn.T.H, R0: scn.rg.R0, cap: 1800 });
-    T('seen from above · a camera every ' + fmt(360 / nV, 0) + '°', x + 10, y + 16, { s: 10, c: '#C9D6E6', i: true }); }
+    cap(x + 8, y + 8, 'seen from above · a camera every ' + fmt(360 / nV, 0) + '°'); }
   function drawRigSide(x, y, w, h, S, scn) {
     drawCloud(scn.T, x, y, w, h, { col: 'natural', spheres: scn.rg.sp.map((q, i) => Object.assign({ i }, q)), cams: [{ ph: 0, on: true }], pitch: 0.34, H: scn.T.H, R0: scn.rg.R0, cap: 1800 });
-    T('seen from the side · the camera looks down at 22°', x + 10, y + 16, { s: 10, c: '#C9D6E6', i: true }); T('plant height ' + fmt(scn.T.H, scn.T.H < 20 ? 1 : 0) + ' cm', x + w - 10, y + h - 10, { s: 10, b: true, c: '#9FE0A8', a: 'right' }); }
+    cap(x + 8, y + 8, 'seen from the side · the camera looks down at 22°'); T('plant height ' + fmt(scn.T.H, scn.T.H < 20 ? 1 : 0) + ' cm', x + w - 10, y + h - 10, { s: 10, b: true, c: '#9FE0A8', a: 'right' }); }
   function lineChart(x, y, w, h, title, sub, lo, hi, unit, series, xs) {
     frame(x, y, w, h, title, sub); const x0 = x + 44, y0 = y + 34, ww = w - 62, hh = h - 62; K.yAxis(x0, y0, ww, hh, lo, hi, unit, 4); const X = d => x0 + ww * d / (N - 1), Y = v => y0 + hh - hh * (v - lo) / Math.max(1e-9, hi - lo);
     [0, 35, 70, 105, 139].forEach(d => { T(U.dateOf(d), X(d), y0 + hh + 14, { s: 8.5, c: MUTE, a: 'center' }); });
@@ -326,7 +327,7 @@
     ch(AN.on && AN.t < tot ? '❚❚ Pause scan' : '▶ Play scan', AN.on, () => { if (AN.t >= tot) AN.t = 0; AN.hold = 0; AN.on = !AN.on; }, 'play or pause the scan'); ch('⏮ Restart', false, () => { AN.t = 0; AN.hold = 0; AN.on = true; }, 'start again'); ch('◀ Step', false, () => { AN.on = false; let j = 0; for (let i = 0; i < 6; i++) if (AN.t > st[i] + 0.05) j = i; AN.t = st[Math.max(0, j - (AN.t - st[j] < 0.4 ? 1 : 0))] + 0.001; }, 'previous step'); ch('Step ▶', false, () => { AN.on = false; const j = Math.min(5, stg + 1); AN.t = st[j] + 0.001; }, 'next step');
     [[0.5, 'slow'], [1, 'normal'], [2, 'fast']].forEach(q => ch(q[1], AN.sp === q[0], () => { AN.sp = q[0]; })); ch(AN.loop ? 'Loop: on' : 'Loop: off', AN.loop, () => { AN.loop = !AN.loop; });
     TF('Step ' + (AN.t >= tot ? 6 : stg + 1) + ' of 6 · ' + ASTEPS[AN.t >= tot ? 5 : stg][0] + ' · then press Play at the bottom of the page to watch the same scan through the season', 16, cy2 + 40, W - 32, { s: 9.5, i: true, c: MUTE });
-    return y + 52;
+    return y + 74;
   }
   // the page is drawn once for a state and copied on every later frame; only the film (2b) is drawn again, so the page stays light
   const PG = { cv: null, sig: '', ok: false };
@@ -366,7 +367,7 @@
     const one = { n: S.mapped[0].n, x: S.mapped[0].x, y: S.mapped[0].y, z: S.mapped[0].z, v: new Uint8Array(S.mapped[0].n), err: null };
     ROTB.x = 16; ROTB.y = y; ROTB.w = W - 32; ROTB.h = ch + 24;
     [[one, 'One view: ' + one.n + ' points'], [S.fused, 'Joined, ' + S.nV + ' view' + (S.nV > 1 ? 's' : '') + ': ' + S.fused.n], [S.T, 'The plant: ' + S.T.n + ' points']].forEach((q, i) => { const px = 16 + i * (cw + 12); TF(q[1], px, y + 10, cw, { s: 10, b: true }); const cc = i === 2 ? Object.assign({}, q[0], { v: new Uint8Array(q[0].n), err: null }) : q[0]; drawCloud(cc, px, y + 18, cw, ch, opt); }); hot(16, y + 18, W - 32, ch, () => { }, 'drag to turn the clouds');
-    y += ch + 30; T('Distance of the joined cloud to the plant: ' + fmt(S.c2c.mean, 2) + ' mm on average (sd ' + fmt(S.c2c.sd, 2) + ' mm) · Wang et al. (2025) report 0.7 to 1.2 mm for their six-view scans.', 16, y, { s: 10, c: MUTE }); y += 22;
+    y += ch + 30; TF('Distance of the joined cloud to the plant: ' + fmt(S.c2c.mean, 2) + ' mm on average (sd ' + fmt(S.c2c.sd, 2) + ' mm) · Wang et al. (2025) report 0.7 to 1.2 mm for their six-view scans.', 16, y, W - 32, { s: 10, c: MUTE }); y += 40;
     // ---- 3b. growth from the first day to the end of the season: the plant scanned on seven dates
     y = sec(y, '3b  Growth from emergence to the end of the season', 'the same rig scans the plant on seven dates; every picture has the same scale');
     { const gd = [10, 30, 50, 70, 90, 115, 139], n7 = gd.length, gw = (W - 32 - (n7 - 1) * 6) / n7, gh = 230, Rg = Rr(VP.trt), tf = truthCloud(Rg, N - 1); let crm = 4, hmx = 5; for (let i = 0; i < tf.n; i += 3) crm = Math.max(crm, Math.hypot(tf.x[i], tf.y[i])); for (let k = 0; k < N; k++) hmx = Math.max(hmx, Rg.H[k]);
@@ -376,7 +377,7 @@
         if (cur) { ctx.strokeStyle = NAVY; ctx.lineWidth = 2; ctx.strokeRect(px + 1, y + 19, gw - 2, gh - 20); }
         TF('day ' + dd + ' · ' + U.dateOfY(dd), px, y + 10, gw, { s: 9, b: true, c: cur ? NAVY : '#2A2F36' });
         TF(fmt(sg.traits.ok ? sg.traits.height : sg.T.H, sg.T.H < 20 ? 1 : 0) + ' cm' + (sg.traits.ok ? ' · ' + sg.traits.nLeaf + ' leaves' : ''), px + 4, y + gh - 4, gw - 6, { s: 9, c: '#C9D2DE' }); });
-      y += gh + 8; TF('Plant shown: ' + (VP.trt === 'ww' ? 'project irrigation' : 'drought') + ' · the box marks the date nearest to the day of the scan above · the season follows the crop, soil, weather and irrigation of the project.', 16, y, W - 32, { s: 9.5, i: true, c: MUTE }); y += 20; }
+      y += gh + 22; TF('Plant shown: ' + (VP.trt === 'ww' ? 'project irrigation' : 'drought') + ' · the box marks the date nearest to the day of the scan above · the season follows the crop, soil, weather and irrigation of the project.', 16, y, W - 32, { s: 9.5, i: true, c: MUTE }); y += 40; }
     // ---- 4. registration
     y = sec(y, '4  Joining the views', 'self-registration with the spheres, then ICP: the error of each view against the truth');
     const xs = [30, W * 0.27, W * 0.50, W * 0.64, W * 0.78, W - 30]; frame(16, y, W - 32, 62 + S.nV * 22 + 26, 'Registration of every view to view 1', VP.reg === 'none' ? 'no joining: the clouds are only turned' : VP.reg === 'sr' ? 'spheres only' : 'spheres, then ICP');
@@ -392,7 +393,7 @@
     T('Trait', 30, y + 38, { s: 9.5, b: true, c: MUTE }); ['Model', 'Scan', 'Error', VP.trt === 'ww' ? 'Drought scan' : 'Project scan', 'Ratio'].forEach((h, i) => T(h, [W * 0.56, W * 0.66, W * 0.75, W * 0.87, W - 30][i], y + 38, { s: 9.5, b: true, c: MUTE, a: 'right' }));
     rowsT.forEach((r, i) => { const yy4 = y + 58 + i * 22, mv = tr[r[2]], sv = tt[r[2]], ov = t2[r[2]], er = isFinite(mv) && mv ? 100 * (sv - mv) / mv : NaN; if (i % 2) { ctx.fillStyle = '#F6F4EE'; ctx.fillRect(18, yy4 - 13, W - 36, 22); } TF(r[0] + (r[1] ? ' (' + r[1] + ')' : ''), 30, yy4, W * 0.5 - 40, { s: 10 }); const dd2 = r[3] === 2 ? 2 : r[3]; const sc2 = r[2] === 'lai' ? 1 : 1;
       T(fmt(mv * sc2, dd2), W * 0.56, yy4, { s: 10, a: 'right' }); T(fmt(sv, dd2), W * 0.66, yy4, { s: 10, b: true, a: 'right' }); T(isFinite(er) ? (er > 0 ? '+' : '') + fmt(er, 1) + ' %' : '–', W * 0.75, yy4, { s: 10, c: Math.abs(er) < 10 ? '#1E8E3E' : Math.abs(er) < 25 ? '#9A6A00' : '#B3261E', a: 'right' }); T(fmt(ov, dd2), W * 0.87, yy4, { s: 10, a: 'right' }); T(isFinite(sv / ov) ? fmt(sv / ov, 2) : '–', W - 30, yy4, { s: 10, a: 'right' }); });
-    TF('The leaf area is counted from the voxels of the surface (area ≈ voxels × size² / 1.5); the leaves are counted as the peaks of the histogram of the angle of the points round the stem (Zhu et al., 2018), and then split by shape; leaves that touch each other along the same angle are counted as one.', 28, y + 62 + rowsT.length * 22 + 4, W - 60, { s: 9.5, i: true, c: MUTE });
+    TF('Leaf area: voxels of the surface × size² / 1.5. Leaves: peaks of the histogram of the angle of the points round the stem (Zhu et al., 2018), then split by shape; leaves that touch along the same angle count as one.', 28, y + 62 + rowsT.length * 22 + 4, W - 60, { s: 9.5, i: true, c: MUTE });
     y += th + 8;
     // ---- 6. volume profile and angle histogram
     y = sec(y, '6  Where the volume is', 'the leaf area over the height of the plant, and the leaves round the stem'); const bw2 = (W - 48) / 2, bh2 = 280; frame(16, y, bw2, bh2, 'Leaf area by height', 'cm² per layer, both plants');
