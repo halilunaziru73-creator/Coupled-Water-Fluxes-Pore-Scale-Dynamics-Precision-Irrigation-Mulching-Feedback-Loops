@@ -574,7 +574,9 @@ The pictures of this section are real equipment and real scans from the literatu
 
 ### What the page shows
 
-The page has eight sections: the set-up of the scan (plant, views, joining, sphere fit, scale, noise, voxel size, day); the virtual rig seen from above and from the side, with what each view sees; the point clouds (one view, joined views, the plant), which can be turned with the mouse and coloured by height, by view or by error; the registration of every view; the traits against the model of P1; the volume by height and the leaves round the stem; the season (a scan every 10 days, for the project irrigation and the drought); and the connections to the other layers.
+The page has eight sections: the set-up of the scan (plant, views, joining, sphere fit, scale, noise, voxel size, day); the virtual rig seen from above and from the side, with what each view sees; the point clouds (one view, joined views, the plant), which can be turned with the mouse and are shown in natural colour, by height, by view or by error; the growth strip, in which the same rig scans the plant on seven dates from emergence to the end of the season, all with the same scale, so that the growth of the project's plant is seen from the first leaf to the full canopy; the registration of every view; the traits against the model of P1; the volume by height and the leaves round the stem; the season (a scan every 10 days, for the project irrigation and the drought); and the connections to the other layers.
+
+The control **Season starts** is shared with P1: the season can start on the date of the toolbar, on the planting day of the project (the whole season of the crop is simulated; this is the default of the layer) or automatically. The play bar under the layer shows the day after emergence and the real date with the year.
 
 ### How the layer is connected
 
