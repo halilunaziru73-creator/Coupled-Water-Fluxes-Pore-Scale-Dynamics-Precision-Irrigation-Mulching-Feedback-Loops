@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <link rel="icon" type="image/png" href="../assets/logo-64.png">
-<link rel="stylesheet" href="touch.css?v=20261115m"><script src="tapfx.js?v=20261115m"></script><script src="wheelfix.js?v=20261112j"></script>
-<script src="crops.js?v=20261112m"></script><script src="realsoil.js?v=20261115m"></script>
+<link rel="stylesheet" href="touch.css?v=20261115n"><script src="tapfx.js?v=20261115n"></script><script src="wheelfix.js?v=20261112j"></script>
+<script src="crops.js?v=20261112m"></script><script src="realsoil.js?v=20261115n"></script>
 <meta charset="UTF-8">
 <meta name="description" content="Interactive soil, water and atmosphere explorer built on 10,190 simulations: irrigation trigger law, mulch water balance, and evaporation-drainage regimes.">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2979,6 +2979,7 @@ if (new URLSearchParams(location.search).get('app')) {
   const phys = () => {
     { const dpr = window.devicePixelRatio || 1, want = Math.max(1, Math.min(5, 3 * curS * dpr)), floor = Math.max(0.75, Math.min(5, curS * dpr));   /* exactly two drawn pixels for each screen pixel: the browser then averages them in even pairs (a crisp picture); a fixed 2 or 3 shrunk by 3 to 4 times, when the picture is shown small, made it soft */ SS = window.__hiScale ? window.__hiScale : Math.max(floor, want - (window.__ssPen || 0)); }   // clarity first: never fewer pixels than the screen shows (one picture pixel for one screen pixel), at least 1.5 times the drawing
     { const cap = window.__hiScale ? 90e6 : (window.__ssPen ? 12e6 : 22e6);   /* the screen resolution with a 25 % margin: sharp, and no oversized picture to send to the screen every frame */ if (lw * lh * SS * SS > cap) SS = Math.sqrt(cap / (lw * lh)); }   // __hiScale: a picture saved at 300, 600 dpi or more
+    { const mx = 7600; if (lh * SS > mx) SS = Math.max(0.5, mx / lh); if (lw * SS > mx) SS = Math.max(0.5, mx / lw); }   /* a picture taller than about 8000 pixels is shown only in part by some graphic cards (half of the width stayed empty): the drawn size is kept below that */
     // a change of the size clears a canvas; when it happens outside the drawing (the window or a scroll bar changed the room) the screen would show the empty
     // picture for one frame (a blink). The old picture is kept and put back, at the same scale, until the next drawing replaces it.
     let snap = null; const oS = window.__SS || 1, ow = dW.get.call(canvas), oh = dH.get.call(canvas), nw = Math.round(lw * SS), nh = Math.round(lh * SS);
@@ -7448,7 +7449,7 @@ body.embed #proMenu, body.embed #proStatus { display: none; }
 <script src="plus_phenoplants.js?v=20261030z4"></script>
 <script src="plus_phenotyping4.js?v=20261109p"></script>
 <script src="plus_phenotyping5.js?v=20261109p"></script>
-<script src="plus_volumetric.js?v=20261115m"></script>
+<script src="plus_volumetric.js?v=20261115n"></script>
 <script src="plus_drainage.js?v=20261110b"></script>
 <script src="phnav.js?v=20261030z4"></script>
 <script src="inputs.js?v=20261110c"></script>
