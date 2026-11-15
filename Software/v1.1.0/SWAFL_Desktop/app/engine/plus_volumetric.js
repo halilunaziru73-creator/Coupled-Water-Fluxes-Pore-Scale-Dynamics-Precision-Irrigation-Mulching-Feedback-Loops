@@ -198,7 +198,8 @@
   // ---- the 3D view of the rig and the clouds: a lit studio with a floor, a pot on a turntable, spheres on rods, a rail with the cameras and the plant as a cloud of points
   const LEAFC = {};
   const leafCol = (hh, jit, sh, stem) => { const k = (stem ? 's' : 'l') + Math.round(hh * 7) + jit + Math.round(sh * 5); return LEAFC[k] || (LEAFC[k] = stem ? 'hsl(30,34%,' + (20 + sh * 22) + '%)' : 'hsl(' + (96 + hh * 22 + jit * 6) + ',' + (46 + jit * 7 + hh * 8) + '%,' + (17 + hh * 19 + sh * 20 + jit * 2) + '%)'); };
-  function drawCloud(c, x, y, w, h, o) {
+  function drawCloud(c, x, y, w, h, o) { const dpt = ctx.__sd = 0; try { drawCloud0(c, x, y, w, h, o); } catch (e) { try { ctx.restore(); } catch (e2) { } VP.err = e && e.message; } }
+  function drawCloud0(c, x, y, w, h, o) {
     o = o || {}; if (o.base && (o.spheres || []).length && o.R0) o = Object.assign({}, o, { base: false }); ctx.save(); const MODE = o.col || VP.col;
     if (!o.keep) { const bg = ctx.createLinearGradient(0, y, 0, y + h); bg.addColorStop(0, '#0C141D'); bg.addColorStop(1, '#1D2D3E'); ctx.fillStyle = bg; ctx.fillRect(x, y, w, h); }
     ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
@@ -226,7 +227,7 @@
     items.push([pj(0, 0, -3 * S)[3], 2]); cams.forEach(cm => { const a = cm.ph * D2R, q = pj(Rc * Math.cos(a), Rc * Math.sin(a), zc); items.push([q[3], 3, cm, q[0], q[1], q[2]]); });
     items.sort((p, q) => p[0] - q[0]);
     const potTop = pj(0, 0, 0), pr = 4.4 * S * s0 * potTop[2];
-    items.forEach(it => {
+    items.forEach(it => { try {
       if (it[1] === 0) { const i = it[2], px = it[3], py = it[4], k = it[5], sh = clamp(it[0] / (Rw * 1.4) * 0.5 + 0.55, 0, 1), hh = clamp(c.z[i] / Hh, 0, 1); let col;
         if (MODE === 'view') col = hue(c.v ? c.v[i] : 0); else if (MODE === 'error' && c.err) col = errCol(c.err[i] || 0); else if (MODE === 'height') col = U.pal(clamp(c.z[i] / Hh, 0, 1) * 0.92);
         else col = leafCol(hh, (i * 2654435761 >>> 0) % 3, sh, c.kd ? c.kd[i] === 1 : (c.x[i] * c.x[i] + c.y[i] * c.y[i] < stemR * stemR && c.z[i] < Hh * 0.7));
@@ -243,7 +244,7 @@
         if (cm.on) { const nx = -(tg[1] - py), ny = tg[0] - px, ln = Math.hypot(nx, ny) || 1, wd = Math.max(10, Hh * 0.38 * s0); ctx.fillStyle = 'rgba(255,213,74,0.14)'; ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(tg[0] + nx / ln * wd, tg[1] + ny / ln * wd); ctx.lineTo(tg[0] - nx / ln * wd, tg[1] - ny / ln * wd); ctx.closePath(); ctx.fill(); ctx.strokeStyle = 'rgba(255,213,74,0.8)'; ctx.setLineDash([4, 4]); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(tg[0], tg[1]); ctx.stroke(); ctx.setLineDash([]); }
         ctx.fillStyle = cm.on ? '#FFD54A' : '#CBD5E1'; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(px - sz, py - sz * 0.7, sz * 2, sz * 1.4, 3) : ctx.rect(px - sz, py - sz * 0.7, sz * 2, sz * 1.4); ctx.fill(); ctx.fillStyle = '#10151C'; ctx.beginPath(); ctx.arc(px, py, sz * 0.45, 0, 6.283); ctx.fill(); ctx.fillStyle = cm.on ? '#FFF3B0' : '#7C8794'; ctx.beginPath(); ctx.arc(px - sz * 0.12, py - sz * 0.12, sz * 0.16, 0, 6.283); ctx.fill();
         if (o.labels) T(Math.round(cm.ph) + '°', px, py - sz - 4, { s: 10, b: true, c: '#E8EEF5', a: 'center' }); }
-    });
+    } catch (e) { VP.err = e && e.message; } });
     if (ring) arc(false);
     ctx.restore(); ROTB.x = Math.min(ROTB.x || x, x); }
   function drawRigTop(x, y, w, h, S, scn) {
