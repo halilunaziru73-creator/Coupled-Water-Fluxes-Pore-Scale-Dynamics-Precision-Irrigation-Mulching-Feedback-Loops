@@ -206,7 +206,7 @@
     if (!c || !c.n) { T('no points', x + w / 2, y + h / 2, { s: 11, c: '#8A94A0', a: 'center' }); ctx.restore(); return; }
     const R0 = o.R0 === undefined ? 28 : o.R0, S = Math.max(R0, 6) / 28, Hh = Math.max(o.fixH || o.H || 60, 3), sph = o.spheres || [], ring = o.ring !== false && R0 > 0, pitch = o.pitch !== undefined ? o.pitch : 0.42, cp = Math.cos(pitch), spt = Math.sin(pitch), ca = Math.cos(VP.rot), sa = Math.sin(VP.rot);
     const Rw = o.fixR ? o.fixR * 1.2 : ring ? R0 * (o.labels ? 2.05 : 1.6) : sph.length ? R0 * 1.3 : Math.max(o.cr || Hh * 0.3, 4) * 1.3;
-    const s0 = Math.min(w * 0.5 / Rw, o.base ? (h - 40) / (Hh * cp + Rw * spt * 0.5) : h * 0.5 / (Hh * cp * 0.58 + Rw * spt * 0.95 + 3 * S)), tz = Hh * 0.42, cx = x + w / 2, cy = o.base ? y + h - 26 - tz * cp * s0 : y + h * 0.5 + 6, Dc = 3.4 * Math.max(Rw, Hh);
+    const s0 = 0.84 * Math.min(w * 0.5 / Rw, o.base ? (h - 40) / (Hh * cp + Rw * spt * 0.5) : h * 0.5 / (Hh * cp * 0.58 + Rw * spt * 0.95 + 3 * S)), tz = Hh * 0.42, cx = x + w / 2, cy = o.base ? y + h - 26 - tz * cp * s0 : y + h * 0.5 + 6, Dc = 5 * Math.max(Rw, Hh);
     const pj = (X, Y, Z) => { const xr = X * ca - Y * sa, yr = X * sa + Y * ca, dc = -yr * cp + (Z - tz) * spt, k = Dc / Math.max(Dc * 0.3, Dc - dc), up = (Z - tz) * cp + yr * spt; return [cx + xr * s0 * k, cy - up * s0 * k, k, dc]; };
     VP.pj = pj; VP.s0 = s0;
     // floor: a disc with rings and spokes, and the soft shadow of the plant
