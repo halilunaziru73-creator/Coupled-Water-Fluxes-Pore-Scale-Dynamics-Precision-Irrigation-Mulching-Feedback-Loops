@@ -506,3 +506,44 @@ $G_j$ is the root growth of the period against the watered plant (below 100 mean
 * The roots are drawn as the projection of the three dimensional system on the plane of the view; the root length, depth and density are those of the three dimensional system.
 
 *References of the layer:* Allen et al. (1998), FAO Irrigation and Drainage Paper 56; Maas and Hoffman (1977); Mualem (1976); Ritchie (1972); Ritchie and NeSmith (1991); Brouwer (1963); Davidson (1969); Feddes et al. (1978); Fernandez (1992); Fischer and Maurer (1978); Gardner (1960); Jackson et al. (1981); Jarvis (1976); Lockhart (1965); Lorence and Medina-Jimenez (eds, 2022), *High-Throughput Plant Phenotyping*, Methods in Molecular Biology 2539, Springer; Monsi and Saeki (1953); Monteith (1977); Pagès et al. (2014); Panguluri and Kumar (eds, 2013), *Phenotyping for Plant Breeding*, Springer; Tanner and Sinclair (1983); van den Honert (1948); van Genuchten (1980); Yin et al. (1995).
+
+
+## Volumetric phenotyping layer
+
+### What the layer is
+
+**P2 Volumetric phenotyping** is the second layer of the group *Phenotyping*. It measures the plant of P1 the way a three dimensional scanner measures it. A virtual rig stands round the plant: six calibration spheres on a ring, and a camera on an arm that turns round the plant and takes one view every 60° (one to six views can be chosen). Each view sees only the side of the plant that faces the camera, so a single view is a partial cloud of points; the cloud of the whole plant is built by joining the views (Wang et al., 2025; Zhu et al., 2018).
+
+The plant that is scanned is **the plant of P1**, for the project irrigation and for the drought. Nothing is typed in again: the crop, soil, tillage, weather, mulch and irrigation of Properties decide how the plant grows, and the scan measures it. When a control is changed in Properties or in P1, the plant, the scan, the traits and the season charts change with it.
+
+### The method, step by step
+
+1. **The plant and its surface.** The leaves and the stem of P1 on the chosen day are sampled as a cloud of points of the surface (the plant itself, used as the truth).
+2. **The capture.** For each view a z-buffer keeps only the points that the camera can see, adds the noise of the sensor (larger at the edges of the leaves) and a scale error of the camera (a few tenths of a percent when the rig is calibrated on the pot, a few percent when it is not).
+3. **The spheres.** The centre of each sphere is fitted from its points, by least squares or by the enhanced RANSAC that rejects outliers. The fit error of the centres is the error of the registration.
+4. **Joining the views.** Each view is brought to the frame of view 1 by self-registration: the spheres that two views have in common give a rotation and a shift (at least three spheres are needed), and the chain of the transforms is applied. The optional **ICP** step refines every transform on the points of the plants themselves (ten iterations, the nearest 80 % of the pairs).
+5. **Voxels and clean-up.** The joined cloud is placed in voxels of the chosen size, and isolated points are removed.
+6. **The traits.** Height (99.8th percentile of the vertical axis), crown width (the longest horizontal span of the convex hull), canopy volume (occupied cubes and the hull of horizontal slices), leaf area (surface voxels × size² / 1.5), leaf area index, number of leaves (the peaks of the histogram of the angle of the points round the stem, then split by shape; Zhu et al., 2018), and the length and width of the mean leaf (principal axes).
+7. **The checks.** The cloud-to-cloud distance between the joined cloud and the plant, the error of every view against the truth, and, for every scan day of the season, the scatter of scan against model with its R².
+
+### What the page shows
+
+The page has eight sections: the set-up of the scan (plant, views, joining, sphere fit, scale, noise, voxel size, day); the virtual rig seen from above and from the side, with what each view sees; the point clouds (one view, joined views, the plant), which can be turned with the mouse and coloured by height, by view or by error; the registration of every view; the traits against the model of P1; the volume by height and the leaves round the stem; the season (a scan every 10 days, for the project irrigation and the drought); and the connections to the other layers.
+
+### How the layer is connected
+
+* **Soil and tillage** decide the water of the root zone, so the plant that is scanned.
+* **Weather and irrigation** decide the stress; the drought plant and the project plant are scanned side by side.
+* **Leaf water and leaf rolling** (P1) narrow the crown, so the crown width of the scan follows them.
+* The **volumetric stress index** is the canopy volume of the drought plant divided by that of the project plant.
+* The **transpiration per litre of canopy** joins the water used by the plant to the volume that the scan measures.
+* A click on a row of the connections opens the layer that feeds it (soil and tillage, field balance, soil-plant-air path, P1, crop water requirement, seasonal data).
+
+### Limits
+
+* The scanner is virtual: noise, scale error and the sphere fit are modelled, not measured. The errors shown are those of the model of the scanner, not of a particular camera.
+* The leaf area from voxels depends on the voxel size (a coarse voxel counts the thickness of the leaf); the figure is shown so, with its error, and is not corrected.
+* Leaves that touch along the same angle are counted as one leaf; the count is best for plants of up to about ten leaves seen from several sides.
+* The scans are cached for the controls in use; a change of any control scans again (a few tens of milliseconds for one scan).
+
+*References of the layer:* Wang Z, Zhang H, Bian L, Zhou L, Ge Y (2025), Accurate plant 3D reconstruction and phenotypic traits extraction via stereo imaging and multi-view point cloud alignment, *Frontiers in Plant Science* 16:1642388; Zhu F, Thapa S, Gao T, Ge Y, Walia H, Yu H (2018), 3D reconstruction of plant leaves for high-throughput phenotyping, University of Nebraska-Lincoln.

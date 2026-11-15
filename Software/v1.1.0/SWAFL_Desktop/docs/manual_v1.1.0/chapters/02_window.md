@@ -57,7 +57,7 @@ Press **Ctrl+K** anywhere to open a search box over *every* layer, section, tool
 
 ## Layers panel
 
-The tree has the project root *SWAFL project* and eight groups, in the order in which a field is usually designed and studied. Click a group to expand it, click a layer to open it as a tab, and click the small triangle beside a layer to list its sections; a section jumps the drawing to that part.
+The tree has the project root *SWAFL project* and nine groups, in the order in which a field is usually designed and studied. Click a group to expand it, click a layer to open it as a tab, and click the small triangle beside a layer to list its sections; a section jumps the drawing to that part.
 
 | Group | Layers |
 |:--|:--|
@@ -65,7 +65,7 @@ The tree has the project root *SWAFL project* and eight groups, in the order in 
 | **Irrigation control** | Sensor and trigger; Trigger law |
 | **Mulch and evaporation** | Mulch against bare soil; Mulch control; Evaporation; Fate of saved water; Regime map |
 | **Soil structure and tillage** | Tillage and structure; Soil hydraulic drivers; Root structure |
-| **Deterministic phenotyping** | Deterministic phenotyping |
+| **Phenotyping** | Deterministic phenotyping; Volumetric phenotyping |
 | **Field water balance** | Field balance; Soil, plant and air; Profile evolution |
 | **Seasonal data** | Reliability over 20 seasons; Full water balance; Nitrogen budget |
 | **Crops** | Crop water requirement |

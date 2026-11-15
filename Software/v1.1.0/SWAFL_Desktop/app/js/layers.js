@@ -6,7 +6,7 @@ const Layers = (() => {
     { id: 'g-ctrl', name: 'Irrigation control', icon: 'drop', items: [['v1', 'Sensor and trigger', 'V1'], ['n1', 'Trigger law', 'N1']] },
     { id: 'g-mulch', name: 'Mulch and evaporation', icon: 'layers', items: [['v4', 'Mulch against bare soil', 'V4'], ['v6', 'Mulch control', 'V6'], ['e1', 'Evaporation', 'E1'], ['n2', 'Fate of saved water', 'N2'], ['n3', 'Regime map', 'N3']] },
     { id: 'g-soil', name: 'Soil structure and tillage', icon: 'soil', items: [['v3', 'Tillage and structure', 'V3'], ['v7', 'Soil hydraulic drivers', 'V7'], ['r1', 'Root structure', 'R1']] },
-    { id: 'g-pheno', name: 'Deterministic phenotyping', icon: 'soil', items: [['dph', 'Deterministic phenotyping', 'P1']] },
+    { id: 'g-pheno', name: 'Phenotyping', icon: 'soil', items: [['dph', 'Deterministic phenotyping', 'P1'], ['vph', 'Volumetric phenotyping', 'P2']] },
     { id: 'g-water', name: 'Field water balance', icon: 'field', items: [['field', 'Field balance', ''], ['spac', 'Soil, plant and air', 'S1'], ['v2', 'Profile evolution', 'V2']] },
     { id: 'g-year', name: 'Seasonal data', icon: 'refresh', items: [['yby', 'Reliability over 20 seasons', 'Y1'], ['wb2', 'Full water balance', 'W1'], ['nb', 'Nitrogen budget', 'N4']] },
     { id: 'g-crop', name: 'Crops', icon: 'drop', items: [['crop', 'Crop water requirement', 'C1']] },

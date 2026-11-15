@@ -79,6 +79,16 @@ The Summary step lists the pipe network: for each pipe the diameter, length, flo
 
 **Data sources.** The phenotyping models of the program (crop growth, canopy, roots and traits) driven by the weather in use; the traits typed into the layer.
 
+## Volumetric phenotyping
+
+**Controls.** The plant (project irrigation or drought), the number of views (1 to 6), the joining (none, spheres, spheres and ICP), the sphere fit (least squares or enhanced RANSAC), the scale (calibrated or not), the sensor noise, the voxel size and the day; the point clouds are turned with the mouse and coloured by height, view or error.
+
+**How it is generated.** The plant of the layer Deterministic phenotyping is scanned by a virtual rig of six spheres and a turning camera. The views are joined by the spheres and by ICP, and the traits are measured on the joined cloud and compared with the model (Chapter 8b). The same controls give the same scan.
+
+**Properties.** Soil, tillage, crop, mulch, irrigation, rainfall, temperature and the weather in use: they act through the plant of P1.
+
+**Data sources.** The plant of P1 and its run; the method of Wang et al. (2025) and Zhu et al. (2018).
+
 ## Field water balance: field balance, soil plant and air, profile evolution
 
 **Controls.** The control bar under the drawing (play, stop, speed, the year and the day), the click on a year bar to move the clock, and the decision panel of Properties (horizon, crop in the decision, soil water on the date, field area).
