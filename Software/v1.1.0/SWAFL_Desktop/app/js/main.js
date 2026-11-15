@@ -309,3 +309,34 @@ try {
 // a name that is cut short with ... shows in full when the pointer rests on it (tabs, layers, buttons), without each place needing its own tooltip
 document.addEventListener('mouseover', e => { try { const t = e.target; if (!t || t.title || t.children.length || !t.textContent) return; const cs = getComputedStyle(t); if ((cs.textOverflow === 'ellipsis' || cs.overflow === 'hidden') && t.scrollWidth > t.clientWidth + 2) t.title = t.textContent.trim(); } catch (x) { } }, { passive: true });
 window.SWAFLAct = Act;   // the engine (inside its frame) opens the manual at the page of the open layer
+
+/* the Daisy loading card: whenever Daisy is running (an experiment, a scenario, a trial) a card at the lower right shows it, with the number running, waiting and finished and the time */
+(function () {
+  if (!window.swafl || !window.swafl.daisyStatus) return;
+  var card = null, lastOn = 0, hideT = 0;
+  function mk() {
+    var st = document.createElement('style'); st.textContent = '#dzLoad{position:fixed;right:16px;bottom:34px;z-index:9500;width:330px;background:#fff;border:1px solid #0A246A;box-shadow:0 4px 18px rgba(10,36,106,.35);font:12.5px Tahoma,"Segoe UI",Arial,sans-serif;color:#10213f;padding:9px 12px;display:none}#dzLoad b{color:#0A246A}#dzLoad .dl-h{display:flex;align-items:center;gap:9px}#dzLoad .dl-sp{width:18px;height:18px;border:3px solid #cfd9ee;border-top-color:#0A246A;border-radius:50%;animation:dlsp .8s linear infinite;flex:none}#dzLoad .dl-bar{height:7px;background:#e4e9f4;border-radius:4px;margin:8px 0 5px;overflow:hidden;position:relative}#dzLoad .dl-in{height:7px;background:#2b6cc4;border-radius:4px;width:0;transition:width .4s}#dzLoad .dl-ind{position:absolute;top:0;left:0;height:7px;width:35%;background:linear-gradient(90deg,transparent,#2b6cc4,transparent);animation:dlind 1.2s ease-in-out infinite}#dzLoad .dl-t{color:#4a5a78;font-size:11.5px}@keyframes dlsp{to{transform:rotate(360deg)}}@keyframes dlind{0%{left:-35%}100%{left:100%}}';
+    document.head.appendChild(st); card = document.createElement('div'); card.id = 'dzLoad'; card.setAttribute('role', 'status'); card.setAttribute('aria-live', 'polite');
+    card.innerHTML = '<div class="dl-h"><span class="dl-sp"></span><b>Daisy is running</b></div><div class="dl-bar"><div class="dl-in"></div><div class="dl-ind"></div></div><div class="dl-t" id="dlT"></div>'; document.body.appendChild(card);
+  }
+  function fmt(s) { s = Math.round(s); return s < 90 ? s + ' s' : Math.floor(s / 60) + ' min ' + (s % 60) + ' s'; }
+  function tick() {
+    window.swafl.daisyStatus().then(function (s) {
+      var busy = s && (s.running > 0 || s.waiting > 0), now = Date.now(); if (busy) lastOn = now;
+      var on = s && s.asked > 0 && (busy || now - lastOn < 2500);
+      if (!card && on) mk();
+      if (card) {
+        card.style.display = on ? 'block' : 'none';
+        if (on) {
+          var ex = document.getElementById('dzXProg'), tot = 0, dn = s.done, m = ex && /(\d+)\s+of\s+(\d+)/.exec(ex.textContent || ''); if (m) { dn = +m[1]; tot = +m[2]; }
+          var el = s.since ? (now - s.since) / 1000 : 0, pct = tot ? Math.min(100, dn / tot * 100) : 0;
+          card.querySelector('.dl-in').style.width = pct + '%'; card.querySelector('.dl-ind').style.display = busy ? 'block' : 'none';
+          card.querySelector('b').textContent = busy ? 'Daisy is running' : 'Daisy has finished';
+          card.querySelector('#dlT').textContent = (s.running ? s.running + ' running' : '') + (s.waiting ? ' · ' + s.waiting + ' waiting' : '') + (tot ? ' · ' + dn + ' of ' + tot + ' runs finished' : ' · ' + s.done + ' finished') + ' · ' + fmt(el);
+          var sb = document.getElementById('stPlay'); if (sb && busy) sb.textContent = 'Daisy running';
+        }
+      }
+    }).catch(function () { });
+  }
+  setInterval(tick, 700);
+})();

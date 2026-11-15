@@ -106,7 +106,12 @@ const SLOTS = () => { const os = require('os'), c = os.cpus().length || 4; retur
 let RUNNING = 0; const WAIT = [];
 const slot = () => new Promise(res => { const go = () => { if (RUNNING < SLOTS()) { RUNNING++; res(); } else WAIT.push(go); }; go(); });
 const release = () => { RUNNING = Math.max(0, RUNNING - 1); const n = WAIT.shift(); if (n) setTimeout(n, 20); };
-ipcMain.handle('daisy-job', async (_e, job) => { await slot(); try { return await daisyJob(job); } finally { release(); } });
+let FIN = 0, T0 = 0, ASK = 0, idleT = null;
+ipcMain.handle('daisy-status', () => ({ running: RUNNING, waiting: WAIT.length, asked: ASK, done: FIN, since: T0, slots: SLOTS() }));
+ipcMain.handle('daisy-job', async (_e, job) => {
+  if (idleT) { clearTimeout(idleT); idleT = null; } if (ASK === FIN) { FIN = 0; ASK = 0; T0 = Date.now(); } ASK++;
+  await slot(); try { return await daisyJob(job); } finally { release(); FIN++; if (FIN >= ASK) idleT = setTimeout(() => { if (FIN >= ASK) { FIN = 0; ASK = 0; T0 = 0; } }, 6000); }
+});
 async function daisyJob(job) {
   const ck = job && !job.noCache ? jobKey(job) : null; if (ck && jobCache.has(ck)) { const c = jobCache.get(ck); jobCache.delete(ck); jobCache.set(ck, c); return Object.assign({}, c, { seconds: 0, cached: true }); }
   let exe = exeNow(); if (!exe) { const en = await ensureDaisy(); exe = en.found ? en.exe : null; } if (!exe) return { code: -2, err: 'The Daisy program was not found: unzip the whole SWAFL zip again (the folder daisy must be next to the program).', logs: {}, out: '' };
