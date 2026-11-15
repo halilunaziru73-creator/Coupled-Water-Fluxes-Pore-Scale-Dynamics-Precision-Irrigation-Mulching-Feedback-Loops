@@ -6,13 +6,8 @@
 
 <p align="center">
   <a href="https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/description.html">
-    <img src="https://img.shields.io/badge/%E2%98%85%20SOFTWARE%20UPDATE-SWAFL%201.1.0%20%E2%80%94%20read%20the%20full%20description-0A246A?style=for-the-badge" alt="Software update: SWAFL 1.1.0, read the full description">
+    <img src="https://img.shields.io/badge/DESCRIPTION-SWAFL%201.1.0%20%E2%80%94%20read%20the%20full%20description-0A246A?style=for-the-badge" alt="SWAFL 1.1.0, read the full description">
   </a>
-</p>
-
-> **SOFTWARE UPDATE, version 1.1.0.** New in this release: a graphical Daisy workbench, Daisy bundled for Windows, a bridge to the decision layers, a crop library of 75 crops, virtual phenotyping, a field sketch and map, online weather in every format, and a linked process map with the SWAFL layers. **Full description of the software: [halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/description.html](https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/description.html)**
-
-<p align="center">
   <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">
     <img src="https://img.shields.io/badge/%E2%86%93%20DOWNLOAD-the%20SWAFL%20manual%20(PDF%2C%20v1.1.0)-B8432F?style=for-the-badge&logo=adobeacrobatreader&logoColor=white" alt="Download the SWAFL manual (PDF), version 1.1.0">
   </a>
@@ -20,8 +15,6 @@
     <img src="https://img.shields.io/badge/%E2%86%92%20ONLINE-SWAFL%201.1.0%20workbench-0A246A?style=for-the-badge&logo=googlechrome&logoColor=white" alt="SWAFL 1.1.0 online workbench">
   </a>
 </p>
-
-<p align="center"><b>Download the SWAFL manual (PDF):</b> SWAFL Manual version 1.1.0, the latest: <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">open in the browser</a> or <a href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf">download</a></p>
 
 <p align="center">
   <a href="https://doi.org/10.5281/zenodo.23043626">
