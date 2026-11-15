@@ -516,6 +516,24 @@ $G_j$ is the root growth of the period against the watered plant (below 100 mean
 
 The plant that is scanned is **the plant of P1**, for the project irrigation and for the drought. Nothing is typed in again: the crop, soil, tillage, weather, mulch and irrigation of Properties decide how the plant grows, and the scan measures it. When a control is changed in Properties or in P1, the plant, the scan, the traits and the season charts change with it.
 
+### The real scanners that the layer imitates
+
+The pictures of this section are real equipment and real scans from the literature on three dimensional plant phenotyping. They are given here, and not in the layer, as the documentation of what the virtual rig imitates. They are reproduced for documentation; the rights belong to the authors of the original works (Wang et al., 2025; Zhu et al., 2018, and the works that they cite).
+
+![A real scanning cabin: a potted plant on a platform that moves through a chamber with a lamp panel above, a camera and the safety signs of the laser unit. The virtual rig of the layer replaces the cabin by a ring of calibration spheres and a turning camera.](images/volumetric/fig1_scanner_cabin.png){ width=60% }
+
+![(A) The point cloud of a seedling with the errors that the layer reproduces: point cloud distortion and point cloud drift on single views. (B) The calibration spheres, in different colours, as they appear in the cloud; their centres are the points that join the views.](images/volumetric/fig2_drift_spheres.png){ width=85% }
+
+![Four ways to obtain a point cloud of a plant: (a) laser scanning, (b) structured light with a projector and a camera, (c) feature matching and triangulation from photographs (structure from motion and multi-view stereo), and the newer image-based models: (d) neural radiance fields (volumetric function modelling, point sampling, volume rendering, model optimisation) and (e) 3D Gaussian splatting (initialisation from a sparse cloud, splatting, density control, model optimisation).](images/volumetric/fig3_pipelines.png){ width=85% }
+
+![A ring rig for a whole tree: the plant stands in a measured volume (blue box), and cameras on a ring and on a mast look at it from two heights (the two dashed circles). The virtual rig of the layer has a camera on a turning arm at 22° above the plant.](images/volumetric/fig4_ring_rig.png){ width=55% }
+
+![A scan through the season: (A) plants in the growth facility, (B) the images taken in the cabin on successive dates, (C) the three dimensional reconstruction, (D) skeletonisation and leaf extension, (E) stem tip detection and organ segmentation (stem, ligulated leaves and growing leaves). The season chart of the layer follows the same idea with a scan every 10 days.](images/volumetric/fig5_time_series.png){ width=70% }
+
+![Segmentation of the leaves of one plant in a point cloud: each leaf has its own colour and the stem is dark. The layer counts and measures leaves in the same way (the peaks of the angle round the stem, then the shape; Zhu et al., 2018).](images/volumetric/fig6_leaf_segmentation.png){ width=70% }
+
+![The photograph (above) and the reconstructed point cloud (below) of several species: (a) to (d) small rosette and flowering plants, (e) wheat, (f) a grass, (g) maize and (h) a legume. The reconstruction keeps the form of each plant; the layer scans the plant of Deterministic phenotyping in the same way.](images/volumetric/fig7_species.png){ width=60% }
+
 ### The method, step by step
 
 1. **The plant and its surface.** The leaves and the stem of P1 on the chosen day are sampled as a cloud of points of the surface (the plant itself, used as the truth).

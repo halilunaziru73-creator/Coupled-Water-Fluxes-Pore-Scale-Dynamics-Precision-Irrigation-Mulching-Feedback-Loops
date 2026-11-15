@@ -309,7 +309,6 @@
     else { T('Scanning the season in the background … ' + VP.ser.n + ' of ' + SDAYS.length * 2 + ' scans done.', 16, y + 14, { s: 11, b: true, c: '#9A6A00' }); y += 30; }
     // ---- 8. the connections
     y = sec(y, '8  What feeds this layer and what it feeds', 'every number below is read from the run of the project'); y = connections(y, S, S2, tt, t2, tr, tr2);
-    T('References: Wang Z, Zhang H, Bian L, Zhou L, Ge Y (2025) Accurate plant 3D reconstruction and phenotypic traits extraction via stereo imaging and multi-view point cloud alignment. Front. Plant Sci. 16:1642388.', 16, y + 12, { s: 9, i: true, c: MUTE }); T('Zhu F, Thapa S, Gao T, Ge Y, Walia H, Yu H (2018) 3D reconstruction of plant leaves for high-throughput phenotyping. University of Nebraska-Lincoln.', 16, y + 26, { s: 9, i: true, c: MUTE }); y += 40;
     try { const h = Math.ceil(y + 20); if (Math.abs(currentScene.h - h) > 4) { currentScene.h = h; setCanvasH(h); } } catch (e) { }
   }
   // the links of this layer with the rest of SWAFL
