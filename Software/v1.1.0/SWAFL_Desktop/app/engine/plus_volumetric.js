@@ -11,7 +11,7 @@
   if (typeof SCENES === 'undefined' || !window.PHUI || !window.PLUSKIT || !window.PHENO) return;
   const U = window.PHUI, K = window.PLUSKIT, P = window.PHENO, PH = U.PH, HEAD = '#1B1F23', MUTE = '#5A5F66', NAVY = '#1B3A6B', GRID = '#E6E2D6', INK = '#1B1F23';
   const TF = window.PLUSKIT.TF, clamp = (v, a, b) => Math.max(a, Math.min(b, v)), fmt = K.fmt, D2R = Math.PI / 180, N = U.N;
-  const VP = { trt: 'dr', nV: 6, reg: 'icp', fit: 'ransac', scal: true, noise: 0.8, vox: 0.6, rot: 0.6, col: 'height', drag: null, cache: {}, jobs: [], ser: null, serKey: '', ranKey: '' };
+  const VP = { trt: 'dr', nV: 6, reg: 'icp', fit: 'ransac', scal: true, noise: 0.8, vox: 0.6, rot: 0.6, col: 'natural', drag: null, cache: {}, jobs: [], ser: null, serKey: '', ranKey: '' };
   const SLd = [];                                    // the sliders of this layer
   const ROTB = { x: 0, y: 0, w: 0, h: 0 };
   // ---------------------------------------------------------------- numbers: seeded random draws (the same inputs always give the same scan)
@@ -23,7 +23,7 @@
   // ---------------------------------------------------------------- 1. the plant as a cloud of surface points (the truth the scanner is compared with)
   function truthCloud(R, d) {
     const g = P.leaves(R, d, 0), L = g.leaves, H = Math.max(3, R.H[d]); let tot = 0; L.forEach(l => { tot += l.a; });
-    const dens = clamp(4200 / Math.max(tot, 1), 0.12, 5), rand = rng(9173 + d * 31), X = [], Y = [], Z = [], KD = [], LF = [], ED = [];
+    const dens = clamp(5200 / Math.max(tot, 1), 0.12, 45), rand = rng(9173 + d * 31), X = [], Y = [], Z = [], KD = [], LF = [], ED = [];
     const rs = clamp(0.25 + H * 0.004, 0.3, 1.3), ns = Math.max(14, Math.round(H * 2.2));
     for (let i = 0; i < ns; i++) { const a = rand() * 6.2832, z = rand() * H * 0.97; X.push(rs * Math.cos(a)); Y.push(rs * Math.sin(a)); Z.push(z); KD.push(1); LF.push(-1); ED.push(0); }
     const prof = s => Math.pow(Math.sin(Math.PI * Math.pow(s, 0.85)), 0.9);
@@ -113,7 +113,7 @@
     // the error of each registration against the truth: the points of view k must lie on their true places
     mapped.forEach((m, k) => { let ex = 0, ey = 0, ez = 0, n = 0, yawA = 0; const cnt = Math.min(m.n, 400), st = Math.max(1, Math.floor(m.n / cnt)); for (let i = 0; i < m.n; i += st) { const s = m.src[i]; ex += m.x[i] - T.x[s]; ey += m.y[i] - T.y[s]; ez += m.z[i] - T.z[s]; n++; }
       info[k].tr = Math.hypot(ex / n, ey / n, ez / n) * 10; let num = 0, den = 0; for (let i = 0; i < m.n; i += st) { const s = m.src[i]; num += T.x[s] * m.y[i] - T.y[s] * m.x[i]; den += T.x[s] * m.x[i] + T.y[s] * m.y[i]; } info[k].yaw = Math.atan2(num, den) / D2R; });
-    const all = merge(mapped), vc = denoise(voxelise(all, VP.vox, mapped), VP.vox * 3.2, 2), single = mapped[0];
+    const ve = Math.min(VP.vox, Math.max(0.12, T.H / 45)), all = merge(mapped), vc = denoise(voxelise(all, ve, mapped), ve * 3.2, 2), single = mapped[0];
     const res = { trt, d, T, views, info, mapped, fused: vc, single, rg, traits: traitsOf(vc, T, R, d), c2c: c2c(vc, T), nV };
     const keys = Object.keys(VP.cache); if (keys.length > 60) delete VP.cache[keys[0]]; VP.cache[ck] = res; return res;
   }
@@ -170,7 +170,7 @@
   }
   // the truth of the model for the same day, from the plant itself (no occlusion, no noise)
   function truthOf(trt, d) {
-    const R = Rr(trt), T = truthCloud(R, d), vs = VP.vox; const m = new Set(), cv = vs * 2.5; for (let i = 0; i < T.n; i++) { const k = (Math.floor(T.x[i] / cv) + 2048) * 4194304 + (Math.floor(T.y[i] / cv) + 2048) * 2048 + (Math.floor(T.z[i] / cv) + 1024); m.add(k); }
+    const R = Rr(trt), T = truthCloud(R, d), vs = Math.min(VP.vox, Math.max(0.12, T.H / 45)); const m = new Set(), cv = vs * 2.5; for (let i = 0; i < T.n; i++) { const k = (Math.floor(T.x[i] / cv) + 2048) * 4194304 + (Math.floor(T.y[i] / cv) + 2048) * 2048 + (Math.floor(T.z[i] / cv) + 1024); m.add(k); }
     const hl = hull2(Array.from({ length: T.n }, (_, i) => T.kd[i] === 0 ? [T.x[i], T.y[i]] : null).filter(Boolean)), ds = Math.max(vs * 2, T.H / 30); let hv = 0; for (let z0 = 0; z0 < T.H * 1.2; z0 += ds) { const pts = []; for (let i = 0; i < T.n; i++) if (T.z[i] >= z0 && T.z[i] < z0 + ds) pts.push([T.x[i], T.y[i]]); if (pts.length > 3) hv += hullA(hullT(pts)) * ds; }
     return { height: R.H[d], crown: feret(hl), vox: m.size * cv * cv * cv / 1000, hv: hv / 1000, area: T.area, lai: T.area / Math.max(R.A, 1), nLeaf: T.nLeaf, leafLen: T.meanLen, leafWid: T.meanWid };
   }
@@ -197,12 +197,12 @@
   function drawCloud(c, x, y, w, h, o) {
     o = o || {}; ctx.save(); ctx.fillStyle = '#10151C'; ctx.fillRect(x, y, w, h); ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
     if (!c || !c.n) { T('no points', x + w / 2, y + h / 2, { s: 11, c: '#8A94A0', a: 'center' }); ctx.restore(); return; }
-    const sc = o.sc || Math.min(w * 0.46 / Math.max(10, (o.R0 || 28) * 1.1), h * 0.84 / Math.max(10, o.ext || 60)), ca = Math.cos(VP.rot), sa = Math.sin(VP.rot), cx = x + w / 2, cy = y + h - 22, tilt = 0.5, ord = []; const st = Math.max(1, Math.floor(c.n / 3600));
+    const sc = o.sc || Math.min(w * 0.46 / Math.max(10, (o.R0 || 28) * 1.1), h * 0.84 / Math.max(10, o.ext || 60)), ca = Math.cos(VP.rot), sa = Math.sin(VP.rot), cx = x + w / 2, cy = o.sc ? Math.min(y + h - 22, y + h * 0.5 + 0.46 * (o.H || 60) * o.sc) : y + h - 22, tilt = 0.5, ord = []; const st = Math.max(1, Math.floor(c.n / 3600));
     for (let i = 0; i < c.n; i += st) { const xr = c.x[i] * ca - c.y[i] * sa, yr = c.x[i] * sa + c.y[i] * ca; ord.push([yr, xr, c.z[i], i]); } ord.sort((a, b) => a[0] - b[0]);
     // the ground ring and the six spheres
     ctx.strokeStyle = 'rgba(180,190,205,0.25)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.ellipse(cx, cy, (o.R0 || 28) * sc, (o.R0 || 28) * sc * tilt, 0, 0, 6.283); ctx.stroke();
     (o.spheres || []).forEach(s => { const xr = s.x * ca - s.y * sa, yr = s.x * sa + s.y * ca, px = cx + xr * sc, py = cy + yr * sc * tilt - s.z * sc * 0.92, r = Math.max(3, s.r * sc); const g = ctx.createRadialGradient(px - r * 0.3, py - r * 0.3, r * 0.1, px, py, r); g.addColorStop(0, '#fff'); g.addColorStop(1, hue(s.i)); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(px, py, r, 0, 6.283); ctx.fill(); });
-    const H0 = o.H || 60; ord.forEach(q => { const i = q[3], px = cx + q[1] * sc, py = cy + q[0] * sc * tilt - q[2] * sc * 0.92; let col; if (VP.col === 'view') col = hue(c.v ? c.v[i] : 0); else if (VP.col === 'error' && c.err) col = errCol(c.err[i] || 0); else col = U.pal(clamp(q[2] / H0, 0, 1) * 0.92); ctx.fillStyle = col; ctx.fillRect(px - 1, py - 1, 2.2, 2.2); });
+    const H0 = o.H || 60; ord.forEach(q => { const i = q[3], px = cx + q[1] * sc, py = cy + q[0] * sc * tilt - q[2] * sc * 0.92; let col; if (VP.col === 'view') col = hue(c.v ? c.v[i] : 0); else if (VP.col === 'error' && c.err) col = errCol(c.err[i] || 0); else if (VP.col === 'height') col = U.pal(clamp(q[2] / H0, 0, 1) * 0.92); else { const hh = clamp(q[2] / H0, 0, 1), dp = clamp(0.5 + q[0] / (o.dep || 30) * 0.5, 0, 1), lt = 0.62 + 0.38 * dp, stem = c.kd && c.kd[i] === 1; col = stem ? 'rgb(' + Math.round(110 * lt) + ',' + Math.round(88 * lt) + ',' + Math.round(52 * lt) + ')' : 'rgb(' + Math.round((38 + 55 * hh) * lt) + ',' + Math.round((92 + 98 * hh) * lt) + ',' + Math.round((30 + 25 * hh) * lt) + ')'; } ctx.fillStyle = col; const ps = Math.max(2.2, Math.min(5, 0.45 * sc)); ctx.fillRect(px - ps / 2, py - ps / 2, ps, ps); });
     ctx.restore(); ROTB.x = Math.min(ROTB.x || x, x); }
   function drawRigTop(x, y, w, h, S, scn) {
     ctx.fillStyle = '#F4F2EA'; ctx.fillRect(x, y, w, h); ctx.strokeStyle = '#B9B4A6'; ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);
@@ -223,7 +223,7 @@
     const rg = rig(S); rg.sp.forEach((s, i) => { const px = cx + (i % 2 ? 1 : -1) * s.r * 0 + (i < 3 ? -1 : 1) * (22 + i * 3), py = gy - s.z * sc, r = Math.max(3.5, s.r * sc * 1.2); ctx.fillStyle = hue(i); ctx.beginPath(); ctx.arc(cx + (i < 3 ? -1 : 1) * (40 + (i % 3) * 18), gy - (s.z * sc) * 0.9 - 6, r, 0, 6.283); ctx.fill(); });
     const camx = x + w - 34; ctx.strokeStyle = NAVY; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(camx, gy); ctx.lineTo(camx, gy - (h - 60)); ctx.stroke();
     ctx.fillStyle = NAVY; const cy0 = gy - (h - 60) * 0.55; ctx.fillRect(camx - 14, cy0 - 6, 18, 12); ctx.strokeStyle = 'rgba(27,58,107,0.5)'; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(camx - 14, cy0); ctx.lineTo(cx, gy - 14 - H * sc * 0.5); ctx.stroke(); ctx.setLineDash([]);
-    T('camera, 22° above the plant, on the arm that turns', camx - 20, cy0 - 12, { s: 9, c: NAVY, a: 'right' }); T('seen from the side', x + 8, y + 14, { s: 9.5, c: MUTE, i: true }); T('plant height ' + fmt(H) + ' cm', cx + 14, gy - 14 - H * sc - 6, { s: 9.5, b: true, c: '#2F6B33' }); }
+    TF('camera 22° above the plant', x + 8, y + 28, w * 0.55, { s: 9, c: NAVY }); T('seen from the side', x + 8, y + 14, { s: 9.5, c: MUTE, i: true }); T('plant height ' + fmt(H) + ' cm', x + w - 8, gy + 14, { s: 9.5, b: true, c: '#2F6B33', a: 'right' }); }
   function lineChart(x, y, w, h, title, sub, lo, hi, unit, series, xs) {
     frame(x, y, w, h, title, sub); const x0 = x + 44, y0 = y + 34, ww = w - 62, hh = h - 62; K.yAxis(x0, y0, ww, hh, lo, hi, unit, 4); const X = d => x0 + ww * d / (N - 1), Y = v => y0 + hh - hh * (v - lo) / Math.max(1e-9, hi - lo);
     [0, 35, 70, 105, 139].forEach(d => { T(U.dateOf(d), X(d), y0 + hh + 14, { s: 8.5, c: MUTE, a: 'center' }); });
@@ -238,10 +238,10 @@
   const sec = (y, t, s) => { ctx.fillStyle = '#E4E9F2'; ctx.fillRect(14, y, W - 28, 24); ctx.fillStyle = NAVY; ctx.fillRect(14, y, 4, 24); ctx.font = 'bold 12px sans-serif'; const w1 = ctx.measureText(t).width; T(t, 26, y + 16, { s: 12, b: true, c: NAVY }); if (s && W - 40 - w1 > 120) TF(s, 26 + w1 + 14, y + 16, W - 40 - w1 - 14, { s: 9.5, c: MUTE, i: true }); return y + 32; };
   function drawVph() {
     paper(); SLd.length = 0; U.syncSpecies(); U.ensureRun(); if (!PH.run) { K.header('Volumetric phenotyping', 'The plant of Deterministic phenotyping is needed first: press Run simulation.', 4); return; }
-    serStep();
+    serStep(); if (!VP.dayInit) { VP.dayInit = 1; const R0 = Rr(VP.trt); let hm = 0, dd = 0; R0.H.forEach(v => { if (v > hm) hm = v; }); for (let i = 0; i < R0.H.length; i++) if (R0.H[i] >= 0.9 * hm) { dd = i; break; } if (play) { play.t = clamp(dd / (N - 1), 0, 1); play.on = false; } }
     let y = K.header('Volumetric phenotyping', 'A virtual 3D scanner measures volume, crown, leaves and height of the plant of P1 · views, calibration spheres, SR-ICP', 4);
     const d = U.day(), Rn = Rr(VP.trt), R2 = Rr(VP.trt === 'ww' ? 'dr' : 'ww'), S = scan(VP.trt, d, !!(play && play.on)), S2 = scan(VP.trt === 'ww' ? 'dr' : 'ww', d, true), tt = S.traits, tr = truth(VP.trt, d), t2 = S2.traits, tr2 = truth(VP.trt === 'ww' ? 'dr' : 'ww', d);
-    K.badge('MODEL RUN', 16, y, '#1E8E3E'); T('Day ' + d + ' (' + U.dateOf(d) + ') · ' + ((window.CROPS && CROPS[state.crop] || {}).label || state.crop) + ' · plant shown: ' + trtName(VP.trt) + ' · ' + S.T.n + ' surface points on the plant, ' + S.fused.n + ' in the joined scan', 110, y + 11, { s: 10, c: MUTE }); y += 24;
+    K.badge('MODEL RUN', 16, y, '#1E8E3E'); T('Day ' + d + ' (' + U.dateOfY(d) + ') · ' + ((window.CROPS && CROPS[state.crop] || {}).label || state.crop) + ' · plant shown: ' + trtName(VP.trt) + ' · ' + S.T.n + ' surface points on the plant, ' + S.fused.n + ' in the joined scan', 110, y + 11, { s: 10, c: MUTE }); y += 24;
     // ---- 1. controls
     y = sec(y, '1  Set up the scan', 'the plant, the soil and the weather come from the project and from P1');
     const cx0 = 16; let yy = y;
@@ -253,7 +253,7 @@
     const sw = Math.min(300, (W - 56) / 2); U.slider ? 0 : 0;
     const sl = (xx, yv, label, mn, mx, val, txt, set) => { T(label, xx, yv + 9, { s: 9.5, c: MUTE }); T(txt, xx + sw, yv + 9, { s: 9.5, b: true, a: 'right' }); const ty = yv + 20, f = clamp((val - mn) / (mx - mn), 0, 1); ctx.fillStyle = '#DCD8CC'; ctx.fillRect(xx, ty, sw, 4); ctx.fillStyle = NAVY; ctx.fillRect(xx, ty, sw * f, 4); ctx.fillStyle = '#fff'; ctx.strokeStyle = NAVY; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(xx + sw * f, ty + 2, 6, 0, 6.283); ctx.fill(); ctx.stroke(); SLd.push({ x: xx - 7, y: yv + 6, w: sw + 14, h: 28, min: mn, max: mx, set, x0: xx, w0: sw }); hot(xx - 7, yv + 6, sw + 14, 28, () => { }, 'drag to change'); };
     sl(16, yy, 'Sensor noise', 0.2, 3, VP.noise, fmt(VP.noise, 1) + ' mm', v => { VP.noise = Math.round(v * 10) / 10; }); sl(36 + sw, yy, 'Voxel size (the grain of the volume)', 0.3, 3, VP.vox, fmt(VP.vox, 1) + ' cm', v => { VP.vox = Math.round(v * 10) / 10; });
-    yy += 40; sl(16, yy, 'Day of the season', 0, N - 1, d, 'day ' + d + ' · ' + U.dateOf(d), v => { play.t = clamp(v / (N - 1), 0, 1); play.on = false; }); yy += 40;
+    yy += 40; sl(16, yy, 'Day of the season', 0, N - 1, d, 'day ' + d + ' · ' + U.dateOfY(d), v => { play.t = clamp(v / (N - 1), 0, 1); play.on = false; }); yy += 40;
     T('Every control re-scans the plant. The scan is deterministic: the same settings give the same cloud.', 16, yy + 4, { s: 9.5, i: true, c: MUTE }); y = yy + 18;
     // ---- 2. the rig
     y = sec(y, '2  The virtual rig', 'after Wang et al. (2025): a camera on a turning arm and six calibration spheres'); const rw = (W - 48) / 2, rh = 250;
@@ -262,8 +262,8 @@
     frame(16, y, W - 32, 60 + S.nV * 20, 'What each view sees', 'points of the cloud that each camera takes, and the share of the whole plant'); S.views.forEach((v, k) => { const yy2 = y + 36 + k * 20, f = v.n / Math.max(1, S.T.n); T('view ' + (k + 1) + ' · ' + Math.round(v.f.ph) + '°', 30, yy2 + 10, { s: 10 }); ctx.fillStyle = '#EDEBE4'; ctx.fillRect(130, yy2, W - 130 - Math.max(150, W * 0.36) - 24, 12); ctx.fillStyle = hue(k); ctx.fillRect(130, yy2, (W - 130 - Math.max(150, W * 0.36) - 24) * clamp(f, 0, 1), 12); TF(v.n + ' points · ' + fmt(100 * f) + ' % of the plant · ' + v.cen.length + ' spheres', W - 28 - Math.max(150, W * 0.36) + 12, yy2 + 10, Math.max(150, W * 0.36) - 12, { s: 10 }); });
     y += 60 + S.nV * 20 + 8;
     // ---- 3. point clouds
-    y = sec(y, '3  The point clouds', 'drag a cloud to turn it · one view, the joined views, the plant itself'); y = U.chipRow('Colour', [{ k: 'height', t: 'by height' }, { k: 'view', t: 'by view' }, { k: 'error', t: 'by error against the plant' }], VP.col, v => { VP.col = v; }, 16, y, W - 40);
-    const cw = (W - 56) / 3, ch = 300; const ext = Math.max(S.T.H * 0.9, 40), opt = { ext, H: S.T.H, R0: S.rg.R0, spheres: S.rg.sp.map((s, i) => Object.assign({ i }, s)) };
+    y = sec(y, '3  The point clouds', 'drag a cloud to turn it · one view, the joined views, the plant itself'); y = U.chipRow('Colour', [{ k: 'natural', t: 'natural colour' }, { k: 'height', t: 'by height' }, { k: 'view', t: 'by view' }, { k: 'error', t: 'by error against the plant' }], VP.col, v => { VP.col = v; }, 16, y, W - 40);
+    const cw = (W - 56) / 3, ch = 300; let cr = 4; for (let i = 0; i < S.T.n; i += 3) cr = Math.max(cr, Math.hypot(S.T.x[i], S.T.y[i])); const fit = Math.min((W - 56) / 3 * 0.44 / cr, 300 * 0.8 / Math.max(S.T.H * 1.08, 6)), ext = Math.max(S.T.H * 0.9, 40), opt = { ext, sc: fit, dep: cr * 2, H: S.T.H, R0: S.rg.R0, spheres: S.rg.sp.map((s, i) => Object.assign({ i }, s)) };
     const one = { n: S.mapped[0].n, x: S.mapped[0].x, y: S.mapped[0].y, z: S.mapped[0].z, v: new Uint8Array(S.mapped[0].n), err: null };
     ROTB.x = 16; ROTB.y = y; ROTB.w = W - 32; ROTB.h = ch + 24;
     [[one, 'One view: ' + one.n + ' points'], [S.fused, 'Joined, ' + S.nV + ' view' + (S.nV > 1 ? 's' : '') + ': ' + S.fused.n], [S.T, 'The plant: ' + S.T.n + ' points']].forEach((q, i) => { const px = 16 + i * (cw + 12); TF(q[1], px, y + 10, cw, { s: 10, b: true }); const cc = i === 2 ? Object.assign({}, q[0], { v: new Uint8Array(q[0].n), err: null }) : q[0]; drawCloud(cc, px, y + 18, cw, ch, opt); }); hot(16, y + 18, W - 32, ch, () => { }, 'drag to turn the clouds');
