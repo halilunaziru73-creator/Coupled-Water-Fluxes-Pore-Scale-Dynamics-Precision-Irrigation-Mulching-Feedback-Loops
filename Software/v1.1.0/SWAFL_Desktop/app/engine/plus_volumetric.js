@@ -331,17 +331,7 @@
   // the page is drawn once for a state and copied on every later frame; only the film (2b) is drawn again, so the page stays light
   const PG = { cv: null, sig: '', ok: false };
   const BAND = 1024;     // the page is kept in strips: one large picture is not drawn completely by some graphic cards
-  function drawVph() {
-    KB = null; const cv = ctx.canvas, tn = performance.now();
-    if (!VP.kT || tn - VP.kT > 150) { VP.kT = tn; VP.kS = keyBase(); }
-    const sig = [VP.trt, VP.nV, VP.reg, VP.fit, VP.scal, VP.noise, VP.vox, VP.col, VP.rot.toFixed(3), W, cv.width, cv.height, (play && play.on ? Math.round(U.day() / 3) * 3 : U.day()), VP.kS, VP.ser ? VP.ser.n : 0, PH.sowMode, VP.drag ? 1 : 0].join('|');
-    if (PG.ok && PG.sig === sig && PG.bw === cv.width && PG.bh === cv.height && PG.bands) {
-      ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); PG.bands.forEach((b, i) => ctx.drawImage(b, 0, i * BAND)); ctx.restore(); PG.hots.forEach(h => hotspots.push(h));
-      animSection(PG.ay, PG.S, PG.tt, PG.tr); return;
-    }
-    drawVphFull(); PG.ok = false; const pa = VP.pa;
-    if (pa && pa.h1 !== undefined) { try { const bands = []; for (let by = 0; by < cv.height; by += BAND) { const bc = document.createElement('canvas'), hh = Math.min(BAND, cv.height - by); bc.width = cv.width; bc.height = hh; bc.getContext('2d').drawImage(cv, 0, by, cv.width, hh, 0, 0, cv.width, hh); bands.push(bc); } PG.bands = bands; PG.bw = cv.width; PG.bh = cv.height; PG.hots = hotspots.slice(0, pa.h0).concat(hotspots.slice(pa.h1)); PG.ay = pa.y; PG.S = pa.S; PG.tt = pa.tt; PG.tr = pa.tr; PG.sig = sig; PG.ok = true; } catch (e) { PG.ok = false; } }
-  }
+  function drawVph() { KB = null; const tn = performance.now(); if (!VP.kT || tn - VP.kT > 150) { VP.kT = tn; VP.kS = keyBase(); } drawVphFull(); }     // the whole page is drawn each time: a saved copy of the page was not shown completely on some computers
   function drawVphFull() {
     KB = null; VP.pa = null; paper(); SLd.length = 0; U.syncSpecies(); U.ensureRun(); if (!PH.run) { K.header('Volumetric phenotyping', 'The plant of Deterministic phenotyping is needed first: press Run simulation.', 4); return; }
     serStep(); if (!PH.sowMode && !VP.sowSet) { VP.sowSet = 1; PH.sowMode = 'project'; U.ensureRun(); } if (!VP.dayInit) { VP.dayInit = 1; const R0 = Rr(VP.trt); let hm = 0, dd = 0; R0.H.forEach(v => { if (v > hm) hm = v; }); for (let i = 0; i < R0.H.length; i++) if (R0.H[i] >= 0.9 * hm) { dd = i; break; } if (play) { play.t = 0; play.on = true; play.hold = 0; const pb = document.getElementById('playBtn'); if (pb) { pb.textContent = 'Pause'; pb.classList.add('active'); } } }
