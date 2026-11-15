@@ -499,7 +499,7 @@
     F[root + 'plan.json'] = JSON.stringify({ experiment: pid, name: (st.preset && st.preset.name) || null, text: st.text, plan: { factors: st.factors, base: st.base, design: st.design, max: st.max }, responses: st.responses }, null, 1);
     F[root + 'design.csv'] = '﻿' + dl.join('\r\n'); if (st.summary) F[root + 'summary.csv'] = summaryCsv(); F[root + 'results.csv'] = '﻿' + X.csv(rows, st.fids || [], resps);
     if (window.DaisyFigKit && lazy) { const host = $('Res'); host.querySelectorAll('details.dzgrp').forEach(d => { d.open = true; }); const fig = window.DaisyFigKit.lazy(host, 'figures', scale || 3); Object.keys(fig).forEach(k => { F[root + k] = fig[k]; }); }
-    else if (window.DaisyFigKit) { const host = $('Res'); if (window.DaisyExpTS) window.DaisyExpTS.drawAll(host); if (st.flushDraw) st.flushDraw(); if (st.pubM && st.pubM.drawAll) st.pubM.drawAll(); await new Promise(r => setTimeout(r, 80)); const fig = await window.DaisyFigKit.collect(host, 'figures', scale || 3, onStep); Object.keys(fig).forEach(k => { F[root + k] = fig[k]; }); }
+    else if (window.DaisyFigKit) { const host = $('Res'); if (window.DaisyExpTS) await (window.DaisyExpTS.drawAllAsync ? window.DaisyExpTS.drawAllAsync(host) : window.DaisyExpTS.drawAll(host)); if (st.flushDraw) st.flushDraw(); await new Promise(r => setTimeout(r, 0)); if (st.pubM && st.pubM.drawAll) st.pubM.drawAll(); await new Promise(r => setTimeout(r, 80)); const fig = await window.DaisyFigKit.collect(host, 'figures', scale || 3, onStep); Object.keys(fig).forEach(k => { F[root + k] = fig[k]; }); }
     return { files: F, name };
   }
   // the outputs of the experiment and the raw files of Daisy, in one .zip (and, on the desktop, the outputs written next to the runs as well)
@@ -545,7 +545,8 @@
   async function saveOutputs(zip) {
     const b = $('SaveOut'); if (!st.rows.length) return; if (b) b.disabled = true;
     try {
-      const o = await outputFiles(3, (i, n) => { if (b) b.textContent = 'Drawing figure ' + i + ' of ' + n + '...'; });
+      const FKg = window.DaisyFigKit; if (FKg && zip === false) FKg.gentle = true;   /* the saving after a run works at a third of the speed, the window stays free */
+      let o; try { o = await outputFiles(3, (i, n) => { if (b) b.textContent = 'Drawing figure ' + i + ' of ' + n + '...'; }); } finally { if (FKg) FKg.gentle = false; }
       if (zip || !(window.swafl && window.swafl.daisyWrite && st.grpDir)) { D.download(o.name + '_outputs.zip', new Blob([X.zip(o.files)], { type: 'application/zip' }), 'application/zip'); D.note('Xst', 'The outputs of this experiment are saved as a zip.'); }
       else { const r = await window.swafl.daisyWrite(st.grpDir, o.files); if (r && r.ok) doneSign('Outputs saved', r.n + ' files written next to the runs.'); D.note('Xst', r && r.ok ? 'Outputs of this experiment written next to its runs (' + r.n + ' files): ' + st.grpDir + (/[\\/]$/.test(st.grpDir) ? '' : '\\') + 'Outputs' : 'Could not write the outputs: ' + ((r && r.err) || ''), !(r && r.ok)); }
     } catch (e) { D.note('Xst', 'Could not save the outputs: ' + e.message, 1); }

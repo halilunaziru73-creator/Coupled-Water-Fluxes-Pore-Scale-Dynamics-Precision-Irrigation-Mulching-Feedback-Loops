@@ -13,9 +13,10 @@ window.DaisyExpTS = (() => {
   const TIMECOL = /^(year|month|mday|day|hour|minute|second|date|time)$/i, MAXFIG = 120, LET = 'abcdefghijklmnopqrstuvwxyz';
   const st = { pf: undefined, cf: undefined, mode: 'doy', stat: 'mean', log: '*', q: '' };
   const short = s => String(s || '').replace(/ \(.*/, '');
-  const pct = (a, p) => { if (!a.length) return NaN; const s = a.slice().sort((x, y) => x - y), k = (s.length - 1) * p, i = Math.floor(k); return i + 1 < s.length ? s[i] + (s[i + 1] - s[i]) * (k - i) : s[i]; };
+  const pct = (a, p) => { if (!a.length) return NaN; const s = Float64Array.from(a).sort(), k = (s.length - 1) * p, i = Math.floor(k); return i + 1 < s.length ? s[i] + (s[i + 1] - s[i]) * (k - i) : s[i]; };
+  const pctS = (s, p) => { if (!s.length) return NaN; const k = (s.length - 1) * p, i = Math.floor(k); return i + 1 < s.length ? s[i] + (s[i + 1] - s[i]) * (k - i) : s[i]; };
   const mean = a => a.length ? a.reduce((s, v) => s + v, 0) / a.length : NaN;
-  const doyOf = t => { const d = new Date(t); return Math.round((t - Date.UTC(d.getUTCFullYear(), 0, 1)) / 864e5); };
+  const DOYM = new Map(), doyOf = t => { let v = DOYM.get(t); if (v === undefined) { const d = new Date(t); v = Math.round((t - Date.UTC(d.getUTCFullYear(), 0, 1)) / 864e5); if (DOYM.size > 200000) DOYM.clear(); DOYM.set(t, v); } return v; };   /* the same days come back for every run */
   const isDaily = (name, d) => /daily|hourly/i.test(name) || (d.time && d.n > 60 && (d.time[d.n - 1] - d.time[0]) / Math.max(1, d.n - 1) < 3 * 864e5);
   // readable names of the columns Daisy writes most often, and the quantities a paper shows first
   const NAMES = { DS: 'Development stage', LAI: 'Leaf area index', Height: 'Crop height', WLeaf: 'Leaf dry matter', WStem: 'Stem dry matter', WSOrg: 'Storage organ dry matter', WRoot: 'Root dry matter', WDead: 'Dead leaf dry matter', NCrop: 'Nitrogen in the crop', NLeaf: 'Nitrogen in the leaves', NSOrg: 'Nitrogen in the storage organ', NStem: 'Nitrogen in the stems', NRoot: 'Nitrogen in the roots', H2OStress: 'Water stress', NStress: 'Nitrogen stress', Theta: 'Volumetric water content', h: 'Soil water pressure', pF: 'pF', T: 'Soil temperature', NO3: 'Nitrate', NH4: 'Ammonium', C: 'Concentration', M: 'Content' };
@@ -76,10 +77,12 @@ window.DaisyExpTS = (() => {
       const panels = [];
       PP.forEach((pp, pi) => { const series = [];
         pp.cl.forEach((cv, ci) => { const rs = pp.rsOf(cv); if (!rs.length) return; const color = cv === null ? '#0072B2' : pp.cols[ci], name = cv === null ? (PP.length > 1 ? '' : 'all runs') : pp.lab ? pp.lab(cv) : lname(pp.cf, cv);
-          if (f.kind === 'prof') { const z = [], v = [], lo = [], hi = []; const dc0 = IO().depthColumns(logs[f.log])[f.v] || []; dc0.forEach(q => { const pool = [], ms = []; rs.forEach(r => { const d = r.logs[f.log]; if (!d) return; const y = d.data[q.j]; if (!y) return; const fin = y.filter(isFinite); if (fin.length) { ms.push(mean(fin)); fin.forEach(x => pool.push(x)); } }); if (!ms.length) return; z.push(q.z); v.push(center(ms)); lo.push(pct(pool, 0.1)); hi.push(pct(pool, 0.9)); }); if (z.length) series.push({ name, color, z, v, lo, hi }); return; }
+          if (f.kind === 'prof') { const z = [], v = [], lo = [], hi = []; const dc0 = IO().depthColumns(logs[f.log])[f.v] || []; dc0.forEach(q => { const parts = [], ms = []; let tot = 0; rs.forEach(r => { const d = r.logs[f.log]; if (!d) return; const y = d.data[q.j]; if (!y) return; let sm = 0, k = 0; const fa = new Float64Array(y.length); for (let i = 0; i < y.length; i++) { const x = y[i]; if (x === x && x !== Infinity && x !== -Infinity) { fa[k++] = x; sm += x; } } if (k) { ms.push(sm / k); parts.push(fa.subarray(0, k)); tot += k; } }); if (!ms.length) return;
+        const stp = Math.max(1, Math.ceil(tot / 80000)), pool = new Float64Array(Math.ceil(tot / stp) + parts.length); let np = 0; parts.forEach(a => { for (let i = 0; i < a.length; i += stp) pool[np++] = a[i]; }); const sp = pool.subarray(0, np).sort();   /* one sort; a very long log is read at every few days for the band */
+        z.push(q.z); v.push(center(ms)); lo.push(pctS(sp, 0.1)); hi.push(pctS(sp, 0.9)); }); if (z.length) series.push({ name, color, z, v, lo, hi }); return; }
           const daily = isDaily(f.log, logs[f.log]);
           if (daily && st.mode === 'doy') { const bins = Array.from({ length: 366 }, () => []); rs.forEach(r => { const d = r.logs[f.log]; if (!d || !d.time) return; const y = colOf(d, f.col); if (!y) return; for (let i = 0; i < d.n; i++) if (isFinite(y[i])) bins[Math.min(365, doyOf(d.time[i]))].push(y[i]); });
-            const x = [], m = [], lo = [], hi = []; bins.forEach((b, k) => { if (!b.length) return; x.push(k); m.push(center(b)); lo.push(pct(b, 0.1)); hi.push(pct(b, 0.9)); }); if (x.length) series.push({ name, color, x, m, lo, hi }); }
+            const x = [], m = [], lo = [], hi = []; bins.forEach((b, k) => { if (!b.length) return; const sb = Float64Array.from(b).sort(); x.push(k); m.push(st.stat === 'median' ? pctS(sb, 0.5) : mean(b)); lo.push(pctS(sb, 0.1)); hi.push(pctS(sb, 0.9)); });   /* one sort for the three numbers */ if (x.length) series.push({ name, color, x, m, lo, hi }); }
           else { const by = new Map(), fx = isFlux(f), mode = st.mode === 'doy' && !daily ? 'year' : st.mode;
             rs.forEach(r => { const d = r.logs[f.log]; if (!d) return; const y = colOf(d, f.col); if (!y) return; const acc = new Map(); let run = 0, first = true;
               for (let i = 0; i < d.n; i++) { if (!isFinite(y[i])) continue; const t = d.time ? d.time[i] : i, D = d.time ? new Date(t) : null;
@@ -121,8 +124,15 @@ window.DaisyExpTS = (() => {
     function heatJob(f, card, cv) {
       if (card._maps) return drawMaps(f, card, cv, card._maps);
       const dc0 = IO().depthColumns(logs[f.log])[f.v] || [], daily = isDaily(f.log, logs[f.log]), doy = daily && st.mode === 'doy', maps = [];
-      (hf ? lev(hf) : [null]).slice(0, 6).forEach(pv => { const rs = runs.filter(r => pv === null || String(valOf(r)[hf]) === String(pv)), acc = new Map(); rs.forEach(r => { const d = r.logs[f.log]; if (!d || !d.time) return; dc0.forEach(q => { const y = d.data[q.j]; if (!y) return; for (let i = 0; i < d.n; i++) { if (!isFinite(y[i])) continue; const t = doy ? Date.UTC(2001, 0, 1) + Math.min(364, doyOf(d.time[i])) * 864e5 : Math.round(d.time[i] / 864e5) * 864e5, k = t + '|' + q.z; let a = acc.get(k); if (!a) acc.set(k, a = [0, 0]); a[0] += y[i]; a[1]++; } }); });
-        const tt = [], zz = [], vv = []; acc.forEach((a, k) => { const i = k.indexOf('|'); tt.push(+k.slice(0, i)); zz.push(+k.slice(i + 1)); vv.push(a[0] / a[1]); }); if (vv.length) maps.push({ pv, tt, zz, vv }); });
+      const T0 = Date.UTC(2001, 0, 1);
+      (hf ? lev(hf) : [null]).slice(0, 6).forEach(pv => { const rs = runs.filter(r => pv === null || String(valOf(r)[hf]) === String(pv));
+        // the sums are kept in arrays of numbers for every depth and every day (strings as keys of a map made this the slowest figure)
+        const acc = dc0.map(() => doy ? { s: new Float64Array(365), n: new Uint32Array(365) } : new Map());
+        rs.forEach(r => { const d = r.logs[f.log]; if (!d || !d.time) return; const dk = new Int32Array(d.n); for (let i = 0; i < d.n; i++) dk[i] = doy ? Math.min(364, doyOf(d.time[i])) : Math.round(d.time[i] / 864e5);
+          dc0.forEach((q, qi) => { const y = d.data[q.j]; if (!y) return; const A = acc[qi];
+            if (doy) { for (let i = 0; i < d.n; i++) { const x = y[i]; if (x !== x || x === Infinity || x === -Infinity) continue; A.s[dk[i]] += x; A.n[dk[i]]++; } }
+            else { for (let i = 0; i < d.n; i++) { const x = y[i]; if (x !== x || x === Infinity || x === -Infinity) continue; let a = A.get(dk[i]); if (!a) A.set(dk[i], a = [0, 0]); a[0] += x; a[1]++; } } }); });
+        const tt = [], zz = [], vv = []; dc0.forEach((q, qi) => { const A = acc[qi]; if (doy) { for (let k = 0; k < 365; k++) if (A.n[k]) { tt.push(T0 + k * 864e5); zz.push(q.z); vv.push(A.s[k] / A.n[k]); } } else A.forEach((a, k) => { tt.push(k * 864e5); zz.push(q.z); vv.push(a[0] / a[1]); }); }); if (vv.length) maps.push({ pv, tt, zz, vv }); });
       card._maps = maps; return drawMaps(f, card, cv, maps);
     }
     function drawMaps(f, card, cv, maps) {
@@ -160,5 +170,7 @@ window.DaisyExpTS = (() => {
   }
   // every figure drawn now (before saving the outputs, so that none is missing)
   const drawAll = host => { if (host) host.querySelectorAll('[data-ts="figs"]').forEach(b => { if (b._flush) b._flush(); }); if (host) host.querySelectorAll('details.dzgrp').forEach(d => { d.open = true; }); if (host) host.querySelectorAll('.dzfig').forEach(cd => { if (cd._go) { cd._go(); cd._go = null; } }); };
-  return { mount, drawAll, figsOf };
+  // the same, one figure at a time with the window free in between (the saving of the outputs after a run used to draw all of them in one block)
+  const drawAllAsync = async host => { if (!host) return; host.querySelectorAll('[data-ts="figs"]').forEach(b => { if (b._flush) b._flush(); }); host.querySelectorAll('details.dzgrp').forEach(d => { d.open = true; }); const list = Array.from(host.querySelectorAll('.dzfig')).filter(cd => cd._go); for (const cd of list) { await new Promise(r => setTimeout(r, 0)); const t0 = performance.now(); if (cd._go) { cd._go(); cd._go = null; } if (FK() && FK().rest) await FK().rest(t0); } };
+  return { mount, drawAll, drawAllAsync, figsOf };
 })();

@@ -18,6 +18,7 @@ window.DaisyFigKit = (() => {
   async function picture(card, o, scale) {
     const P = window.DaisyPlot; let e = scale || 1;
     if (e > 1 && o && o.redraw && P) { const a0 = area(card) / Math.pow(P.exportScale || 1, 2); e = Math.max(1, Math.min(e, Math.sqrt(70e6 / Math.max(1, a0)))); P.exportScale = e; try { o.redraw(); } catch (x) { console.warn(x); } }
+    await new Promise(r => setTimeout(r, 0));   /* the window is free between the drawing and the picture */
     const out = compose(cvs(card), +card.dataset.cols || 1); const blob = out ? await blobOf(out) : null;
     if (P && P.exportScale !== 1) { P.exportScale = 1; try { o && o.redraw && o.redraw(); } catch (x) { } }
     return { blob, scale: e };
@@ -74,11 +75,13 @@ window.DaisyFigKit = (() => {
       files[nm + '.csv'] = async () => { ready(c); const t = csvOf(c); return t ? '\ufeff' + t : ''; }; });
     return files;
   };
+  // the automatic saving after a run works in small steps with a rest after each (about a third of the time), so the window and the rest of the computer stay quick
+  K.gentle = false; K.rest = async t0 => { if (!K.gentle) return; const d = performance.now() - t0; await new Promise(r => setTimeout(r, Math.min(300, Math.max(12, d * 2)))); };
   // every figure of a result as files: { 'name/01_title.png': bytes, 'name/01_title.csv': text }
   K.collect = async function (host, name, scale, onStep) {
     const files = {}, list = Array.from(host.querySelectorAll('.dzfig')).filter(c => c.querySelector('canvas'));
-    for (let i = 0; i < list.length; i++) { const c = list[i], was = c.dataset.open; if (was === '0' && c._fkSet) c._fkSet(true); if (onStep) onStep(i + 1, list.length); const nm = String(i + 1).padStart(2, '0') + '_' + sane((c.querySelector('b') || {}).textContent);
-      const r = await picture(c, c._fkOpt, scale || 3); if (r.blob) files[name + '/' + nm + '.png'] = new Uint8Array(await r.blob.arrayBuffer()); const t = csvOf(c); if (t) files[name + '/' + nm + '.csv'] = '\ufeff' + t; if (was === '0' && c._fkSet) c._fkSet(false); }
+    for (let i = 0; i < list.length; i++) { await new Promise(r => setTimeout(r, 0)); const tS = performance.now(); const c = list[i], was = c.dataset.open; if (was === '0' && c._fkSet) c._fkSet(true); if (onStep) onStep(i + 1, list.length); const nm = String(i + 1).padStart(2, '0') + '_' + sane((c.querySelector('b') || {}).textContent);
+      const r = await picture(c, c._fkOpt, scale || 3); if (r.blob) files[name + '/' + nm + '.png'] = new Uint8Array(await r.blob.arrayBuffer()); const t = csvOf(c); if (t) files[name + '/' + nm + '.csv'] = '\ufeff' + t; if (was === '0' && c._fkSet) c._fkSet(false); await K.rest(tS); }
     return files;
   };
   // the processes of one figure as chips; a click opens the figures of that process inside the card
@@ -115,7 +118,7 @@ window.DaisyFigKit = (() => {
     bar.querySelector('[data-b="c"]').onclick = () => cards().forEach(c => c._fkSet && c._fkSet(false)); bar.querySelector('[data-b="e"]').onclick = () => cards().forEach(c => c._fkSet && c._fkSet(true));
     bar.querySelector('[data-b="z"]').onclick = async e => {
       const btn = e.target, sc = +bar.querySelector('[data-b="r"]').value, files = {}, list = cards(); btn.disabled = true;
-      for (let i = 0; i < list.length; i++) { const c = list[i], was = c.dataset.open; if (was === '0') c._fkSet(true); btn.textContent = 'Drawing ' + (i + 1) + ' of ' + list.length + '...'; const r = await picture(c, c._fkOpt, sc); if (r.blob) files[(o.name || 'daisy') + '/' + String(i + 1).padStart(2, '0') + '_' + sane((c.querySelector('b') || {}).textContent) + '.png'] = new Uint8Array(await r.blob.arrayBuffer()); const t = csvOf(c); if (t) files[(o.name || 'daisy') + '/' + String(i + 1).padStart(2, '0') + '_' + sane((c.querySelector('b') || {}).textContent) + '.csv'] = '﻿' + t; if (was === '0') c._fkSet(false); }
+      for (let i = 0; i < list.length; i++) { await new Promise(r => setTimeout(r, 0)); const tS = performance.now(); const c = list[i], was = c.dataset.open; if (was === '0') c._fkSet(true); btn.textContent = 'Drawing ' + (i + 1) + ' of ' + list.length + '...'; const r = await picture(c, c._fkOpt, sc); if (r.blob) files[(o.name || 'daisy') + '/' + String(i + 1).padStart(2, '0') + '_' + sane((c.querySelector('b') || {}).textContent) + '.png'] = new Uint8Array(await r.blob.arrayBuffer()); const t = csvOf(c); if (t) files[(o.name || 'daisy') + '/' + String(i + 1).padStart(2, '0') + '_' + sane((c.querySelector('b') || {}).textContent) + '.csv'] = '﻿' + t; if (was === '0') c._fkSet(false); }
       btn.disabled = false; btn.textContent = 'All pictures (zip)'; if (!Object.keys(files).length || !window.DaisyExp) return; dl(new Blob([window.DaisyExp.zip(files)], { type: 'application/zip' }), (o.name || 'daisy') + '-figures.zip');
     };
     return bar;

@@ -61,12 +61,15 @@ function walk(dir, base, out) { fs.readdirSync(dir, { withFileTypes: true }).for
    returns { code, out, err, dir, logs:{ name: text }, seconds } */
 function runJob(job, opt) {
   opt = opt || {};
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     const exe = opt.exe; if (!exe) return reject(new Error('the Daisy program was not found'));
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'swafl-daisy-')); const t0 = Date.now();
+    let dir; const t0 = Date.now();
+    // the run folder is made in the background: nothing here stops the window, however many runs are started
     try {
-      if (job.copyDir) { const cd = path.join(dir, 'Common'); fs.mkdirSync(cd, { recursive: true }); fs.readdirSync(job.copyDir).forEach(n => { const s = path.join(job.copyDir, n); if (fs.statSync(s).isFile()) fs.copyFileSync(s, path.join(cd, n)); }); }
-      Object.keys(job.files).forEach(f => { const p = path.join(dir, f); if (path.resolve(p).indexOf(path.resolve(dir)) !== 0) throw new Error('bad file name ' + f); fs.mkdirSync(path.dirname(p), { recursive: true }); fs.writeFileSync(p, job.files[f], 'utf8'); });
+      dir = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'swafl-daisy-'));
+      if (job.copyDir) { const cd = path.join(dir, 'Common'); await fs.promises.mkdir(cd, { recursive: true }); const names = await fs.promises.readdir(job.copyDir); await Promise.all(names.map(async n => { const s = path.join(job.copyDir, n); if ((await fs.promises.stat(s)).isFile()) await fs.promises.copyFile(s, path.join(cd, n)); })); }
+      const root = path.resolve(dir);
+      for (const f of Object.keys(job.files)) { const p = path.join(dir, f); if (path.resolve(p).indexOf(root) !== 0) throw new Error('bad file name ' + f); await fs.promises.mkdir(path.dirname(p), { recursive: true }); await fs.promises.writeFile(p, job.files[f], 'utf8'); }
     } catch (e) { return reject(e); }
     const main = path.join(dir, job.main), wd = path.dirname(main); let out = '', err = '';
     const p = spawn(exe, [path.basename(main)], { cwd: wd, env: envFor(exe), windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });   // no console window, no waiting for input
