@@ -87,7 +87,7 @@ $$
 
 When your weather lies outside the simulated range (for example 1,500 mm of rain, more than 1.4 times the record), the annual results use the nearest step and the dialog says so; the daily layers use your weather as it is.
 
-The crop water requirement (Chapter 21) uses your daily rain and ET0 directly.
+The crop water requirement (Chapter 22) uses your daily rain and ET0 directly.
 
 **The years.** With your weather, the twenty years of the grid are the calendar years of your record, so a working date inside them shows that very day of your weather (Eq. 4.2).
 

@@ -133,7 +133,7 @@ The three irrigation design layers (surface, drip, sprinkler) open with their in
 ```
 
 
-where $V_{stored}$ is the water kept in the root zone, $Z_{lq}$ the mean depth of the lowest quarter of the field and $Z_{avg}$ the mean depth. Chapters 11 to 13 give the equations of each system.
+where $V_{stored}$ is the water kept in the root zone, $Z_{lq}$ the mean depth of the lowest quarter of the field and $Z_{avg}$ the mean depth. Chapters 12 to 14 give the equations of each system.
 
 \newpage
 

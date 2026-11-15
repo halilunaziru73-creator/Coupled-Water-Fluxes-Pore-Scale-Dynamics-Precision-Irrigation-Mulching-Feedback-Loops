@@ -5,13 +5,13 @@
 * The program, its title bar, the status bar and the About window show **1.1.0**. The build removes any older program before building, and the program clears its cache on start, so an old version cannot be shown by mistake.
 * The **Layers panel** has a new order: Irrigation design, Irrigation control, Mulch and evaporation, Soil structure and tillage, Deterministic phenotyping, Field water balance, Seasonal data, Crops, Feedback loops. The short codes of the layers (S2, V1, N4, …) are gone; layers are named by their names only.
 * The **year strip** and the date bar under the drawings are gone; the year (1980 to 2100) and the date are set in Properties and on the toolbar.
-* The **dashboard** is laid out like the Properties panel and every block folds on its own; the Charts tab draws the hydrograph, the times of the irrigation and where the water goes for each design (Chapter 14).
+* The **dashboard** is laid out like the Properties panel and every block folds on its own; the Charts tab draws the hydrograph, the times of the irrigation and where the water goes for each design (Chapter 15).
 * **Properties**: the *Weather of years after 1999* selector and the explanatory notes under it, under the consolidation rate and under the design shortcuts have gone; their content is in this manual. *Weather source* chooses the built-in record, an imported file or the online weather.
 * The name of the simulation model is no longer shown anywhere in the program; badges that said so now say *Simulated*.
 * Labels are drawn after the pictures and moved apart when they would overlap; text near the edge of a drawing is moved inwards instead of being cut; long drawings take their full height at once.
 * On screens narrower than 1500 pixels the docks give way so that the drawing keeps its size; the drawing always fits the window, nothing is cut off on the right.
 * The selected layer is marked in light blue; the Play/Pause button is small.
-* The first block of the Results tab gives the key numbers of the open layer (Chapter 14).
+* The first block of the Results tab gives the key numbers of the open layer (Chapter 15).
 * Layers that play by changing a setting (each soil in turn, rainfall from dry to wet) wait for **Play** in the program, so Properties and the dashboard keep your values.
 
 * Variable-rate irrigation is also computed cell by cell (10 m): the depth and the date of the next irrigation vary continuously over the field, in smooth colours stretched to the range of the field; out of the crop season the vegetation seen by Sentinel-2 drives the water use, so the maps are no longer all grey.
@@ -71,19 +71,19 @@
 * **Nothing runs while you type**: results appear after **Run simulation** and are withdrawn when an input or a setting changes (Section 18.1).
 * **Find the most efficient inputs**, with your present inputs competing (Section 18.4); the surface search also tries shorter runs.
 * **Field size** as an area or as a length and a width, for drip and sprinklers (Section 18.3).
-* The **field sketch** is a guided drawing: corners you drag, side lengths you type, the source and the inlet, the pipe layout drawn as you choose, and seven steps of questions (field, water, crop, soil, system, running, summary) (Chapter 20). **Compare the irrigation systems** (Section 18.7).
-* Each design ends with a **film of the soil water** covering the days ahead and the rest of the season. Every day is coloured by its phase (irrigation, rain, comfortable, nearing the trigger, stress, near wilting, no crop). The film shows the root zone drying towards the trigger and, without irrigation, towards the wilting point, and gives the totals and the share of days in each phase (Chapter 20). The schedule takes its depths and times from the design.
-* The seasonal layers have **one dashboard chart per part of the layer**, with how each quantity varies over the twenty seasons (Chapter 14).
+* The **field sketch** is a guided drawing: corners you drag, side lengths you type, the source and the inlet, the pipe layout drawn as you choose, and seven steps of questions (field, water, crop, soil, system, running, summary) (Chapter 21). **Compare the irrigation systems** (Section 18.7).
+* Each design ends with a **film of the soil water** covering the days ahead and the rest of the season. Every day is coloured by its phase (irrigation, rain, comfortable, nearing the trigger, stress, near wilting, no crop). The film shows the root zone drying towards the trigger and, without irrigation, towards the wilting point, and gives the totals and the share of days in each phase (Chapter 21). The schedule takes its depths and times from the design.
+* The seasonal layers have **one dashboard chart per part of the layer**, with how each quantity varies over the twenty seasons (Chapter 15).
 * *Trigger law* and *Mulch against bare soil* stand still until **Play**; the season plays at two days a second.
 * Values may be typed up to the **physical limits** of the system, beyond the usual range of the list (Section 18.2).
-* A surface set lasts at most 48 hours; when the inflow is too small for the soil, the design says so (Chapter 11).
-* The surface layer iterates the advance exponent in the steady-intake term (Chapter 11); the slow-advance cases of the textbook example are now within 2 %.
+* A surface set lasts at most 48 hours; when the inflow is too small for the soil, the design says so (Chapter 12).
+* The surface layer iterates the advance exponent in the steady-intake term (Chapter 12); the slow-advance cases of the textbook example are now within 2 %.
 
 ## The data and the models
 
-* **Weather**: import of daily weather files and the online weather of a place, with every layer following (Chapter 19).
-* **Crops**: 48 crops with their FAO-56 coefficients; the *Crop water requirement* layer (Chapter 21).
-* **Seasonal data**: the twenty seasons of the simulations, following every setting (Chapter 22).
+* **Weather**: import of daily weather files and the online weather of a place, with every layer following (Chapter 20).
+* **Crops**: 48 crops with their FAO-56 coefficients; the *Crop water requirement* layer (Chapter 22).
+* **Seasonal data**: the twenty seasons of the simulations, following every setting (Chapter 23).
 * **Sensor records** follow every setting and every soil by the delta method (Eq. 6.4a).
 * **Sand and loamy sand** now respond to the trigger, the sensor depth and the method (Eq. 5.12a).
 * The water balance of every crop closes (the limit on evapotranspiration was raised from 2,000 to 5,000 mm).
@@ -91,15 +91,15 @@
 
 ## Reports
 
-* The report asks which layers to include, all ticked to start with; notes and drawings continue on the next pages; designs are drawn complete (Chapter 23).
+* The report asks which layers to include, all ticked to start with; notes and drawings continue on the next pages; designs are drawn complete (Chapter 24).
 
 ## The field on the map
 
 * The field sketch has a hand to move the drawing, zoom in and out (buttons and mouse wheel), *Fit*, and a north arrow and scale bar that follow the zoom.
-* The field sketch draws greenhouses and polytunnels, plant beds, areas to irrigate, no-irrigation zones, single plants and monitoring traps; the area to irrigate feeds the design; *Undo* and *Redo* (Ctrl+Z, Ctrl+Y) cover every change (Chapter 18).
-* The real field has a section 4b: terrain (contours, flow, wetness index, 3D view), watershed with Strahler orders and time of concentration, soil retention curves mapped by geostatistics with the days to the trigger cell by cell, soil water sensors fused with the satellite by regression kriging, optimised sites, and *Use this field in the DSS* (Chapter 20).
-* *Tools ▸ Field on the map…* finds the farm (place search, coordinates, satellite image, Google Earth), demarcates it on the image, computes NDVI, EVI, SAVI, NDRE and NDWI of the demarcated field from Sentinel-2 or simulated by SWAFL, and exports the report (PDF or PNG at 96 to 600 dpi, with coordinates and authorship), GeoJSON and CSV (Chapter 20).
-* The virtual farm simulation has been removed; the real field on the map (Chapter 20) takes its place.
+* The field sketch draws greenhouses and polytunnels, plant beds, areas to irrigate, no-irrigation zones, single plants and monitoring traps; the area to irrigate feeds the design; *Undo* and *Redo* (Ctrl+Z, Ctrl+Y) cover every change (Chapter 19).
+* The real field has a section 4b: terrain (contours, flow, wetness index, 3D view), watershed with Strahler orders and time of concentration, soil retention curves mapped by geostatistics with the days to the trigger cell by cell, soil water sensors fused with the satellite by regression kriging, optimised sites, and *Use this field in the DSS* (Chapter 21).
+* *Tools ▸ Field on the map…* finds the farm (place search, coordinates, satellite image, Google Earth), demarcates it on the image, computes NDVI, EVI, SAVI, NDRE and NDWI of the demarcated field from Sentinel-2 or simulated by SWAFL, and exports the report (PDF or PNG at 96 to 600 dpi, with coordinates and authorship), GeoJSON and CSV (Chapter 21).
+* The virtual farm simulation has been removed; the real field on the map (Chapter 21) takes its place.
 * The Trigger law block of the Dashboard shows the current soil as a table, its season chart and the advice with each condition ticked.
 * The index map is cut exactly to the demarcated outline on the real map and follows every change of the outline; it shows continuous colours or five management zones with their areas, two indices side by side, the value under the cursor, and the irrigation layout of the sketch.
 * The soil-water film of every design follows the season of the crop in Properties (starting at its next sowing when the working date has no crop), gives the advice of when to plant over the whole year, and each design has the weather line with the button for the online weather of the farm.
@@ -125,18 +125,18 @@
 * Start from the Daisy reference offers 27 best combinations and 107 reference topics, in words that need no knowledge of modelling.
 * The Processes tab is a map of the model with the figures of each process, drawn from a Daisy run with all process logs.
 * The Process curves tab draws any function of the Daisy library.
-* The Daisy workbench is arranged as a guided path with Back and Next, from the data of the site to the layers of the SWAFL project, which read the Daisy runs: the layers *Chemical fate (Daisy runs)* and *Daisy decision table* (Chapter 31). Online weather of any place can be used for the analysis, the Daisy runs and the figures, and every weather figure carries its citation.
+* The Daisy workbench is arranged as a guided path with Back and Next, from the data of the site to the layers of the SWAFL project, which read the Daisy runs: the layers *Chemical fate (Daisy runs)* and *Daisy decision table* (Chapter 32). Online weather of any place can be used for the analysis, the Daisy runs and the figures, and every weather figure carries its citation.
 * The Daisy workbench has a new look: a slate and ink window with a spectral accent line, rounded cards, pill tabs and a calmer Experiments tab with three steps (Ask, Check the plan, Run and read), short text and example questions as chips. Figure captions carry a short source line only; the long reference lines are gone.
-* The figures of the Daisy workbench were redrawn in the style of a journal figure and of the figures of the repository (Chapter 30). No citation or caption is added any more to a figure, a saved picture or a saved report. Several panels of one figure are saved as one picture. The tabs Plot and Soil column draw their figure at once.
-* The raw output of Daisy is given for every run: the files exactly as Daisy wrote them, one by one or as a zip, with the set-up, and the folder on the computer where the desktop app keeps every run (Chapter 30).
+* The figures of the Daisy workbench were redrawn in the style of a journal figure and of the figures of the repository (Chapter 31). No citation or caption is added any more to a figure, a saved picture or a saved report. Several panels of one figure are saved as one picture. The tabs Plot and Soil column draw their figure at once.
+* The raw output of Daisy is given for every run: the files exactly as Daisy wrote them, one by one or as a zip, with the set-up, and the folder on the computer where the desktop app keeps every run (Chapter 31).
 * Experiments: the rainfed reference is made for every soil and weather of the design, so the gain from irrigation is always set against the same soil; a rainfed run is no longer repeated for each irrigation setting and no longer counts as a level of an irrigation factor; the reference runs are left out of the main effects; a one at a time design includes its baseline run. The nitrogen scenario has five fertiliser levels, from none to 50 % more.
 * Denitrification was read from a column name that Daisy 7 does not use; the gaseous loss of nitrogen (denitrification and N2O) is now read from the right columns.
-* Chapters 26 to 39 show all of these screens with numbered arrows and the data behind them.
-* Daisy experiments: every experiment of the study has its own figures (lines with a colour bar, bars, smooth surfaces with contour lines, where the water and the nitrogen go, a ranking of the factors) drawn again from its runs when results arrive; the user chooses which figures to draw and can add others; the map of the processes is redrawn for each experiment with the changed and the measured processes marked, and the caption under it was removed (Chapter 30). Scenarios are a part of Experiments.
+* Chapters 27 to 40 show all of these screens with numbered arrows and the data behind them.
+* Daisy experiments: every experiment of the study has its own figures (lines with a colour bar, bars, smooth surfaces with contour lines, where the water and the nitrogen go, a ranking of the factors) drawn again from its runs when results arrive; the user chooses which figures to draw and can add others; the map of the processes is redrawn for each experiment with the changed and the measured processes marked, and the caption under it was removed (Chapter 31). Scenarios are a part of Experiments.
 * Each experiment keeps its own folder of runs and its own Outputs folder (README, plan, design table, results table, every figure and its numbers); experiments E5 (tillage and consolidation of the tilled layer) and E6 (nitrogen rate in a Mediterranean climate) were added.
-* The crops of the rotation are chosen by the user from the whole Daisy library, with their own dates and nitrogen (Chapter 30).
+* The crops of the rotation are chosen by the user from the whole Daisy library, with their own dates and nitrogen (Chapter 31).
 * The titles, the axis texts and the panel letters of every Daisy figure can be edited; time axes show every year; files saved from the program carry the date and the time of the computer in their names.
-* SWAFL layers: a bar above the simulation window saves the picture of a layer at 300 dpi, 600 dpi or the highest resolution the computer allows (the layer is drawn again at that size) with a title and a caption, copies it, saves the numbers, saves and loads the position of the widgets, and saves every layer at once in one zip (Chapter 23). Every section of the dashboard has a Save menu for its picture and its numbers, and a new tab *Figure* shows the process map of Daisy marked for the layer and linked to its outputs.
+* SWAFL layers: a bar above the simulation window saves the picture of a layer at 300 dpi, 600 dpi or the highest resolution the computer allows (the layer is drawn again at that size) with a title and a caption, copies it, saves the numbers, saves and loads the position of the widgets, and saves every layer at once in one zip (Chapter 24). Every section of the dashboard has a Save menu for its picture and its numbers, and a new tab *Figure* shows the process map of Daisy marked for the layer and linked to its outputs.
 * The program carries its own Node.js on Windows, so that npm is not needed on the computer; the moving widget of the deterministic phenotyping layer no longer extends over the dashboard.
 * The process figures are complete: the map is no longer cut at the left, and the processes Daisy has but Fig. 1 has no box for (soil heat and ice, denitrification) are boxes of their own under the map. Click a process in an experiment, a scenario or a SWAFL layer and the program shows what Daisy does there and the figures of that process from your runs; in a SWAFL layer the map is marked for that layer, the processes it does not use are pale and the layer scrolls to the matching section. Start files for the Mac were added (START_SWAFL.command) and the Windows start no longer stops on a PATH with parentheses.
 - Every figure can be shown on the whole screen: a full screen button on each Daisy figure, on the layer picture, on each section of the dashboard and on the process figure of the layer. Esc leaves it.
@@ -183,7 +183,7 @@
 * The map of the processes of Daisy (Process map tab) and the list of components below it are centred on the screen.
 * The dashboard of every SWAFL layer has the colours of the Daisy workbench: grey ground, cards with a thin border and beige title bars.
 * A layer holds the top of its picture while it draws (until the person scrolls or presses a key), so the inputs of the irrigation design layers are in view at once; the waiting message of the design layers points to the Run simulation button in the picture.
-* The manual has new sections at the end of Chapter 26, Daisy: governing equations and guiding principles (Richards equation with van Genuchten and Mualem hydraulics and Feddes uptake, the water balance, evaporative demand, soil heat, solute transport, organic matter and nitrification, denitrification and nitrous oxide, and the crop chain from light to yield), and new sections at the end of Chapter 22 with three labelled screens of the dashboard, the charts and the design layers, each with its governing principle.
+* The manual has new sections at the end of Chapter 27, Daisy: governing equations and guiding principles (Richards equation with van Genuchten and Mualem hydraulics and Feddes uptake, the water balance, evaporative demand, soil heat, solute transport, organic matter and nitrification, denitrification and nitrous oxide, and the crop chain from light to yield), and new sections at the end of Chapter 23 with three labelled screens of the dashboard, the charts and the design layers, each with its governing principle.
 * The screens of the Daisy workbench (Input data, Experiments, Log plots, Mass balance, Run comparison, Set-up editor, Soil column, Calibration, Documentation, Process map) were taken again from the current program; the names of the tabs and groups in the text follow the program (Input data, Parameter library, Experiments, Scenarios, Process map, Log plots, Mass balance, Run comparison, To the SWAFL layers, Model development, Documentation). The screens of the processes with figures of real Daisy runs need the Daisy program and are kept from the earlier capture.
 * The denitrification function of the Daisy calculator (response curves) now takes its inputs as already corrected by the pressure response, as Daisy does, and reproduces all 792 stored Daisy outputs to rounding error (the earlier form differed by a median of 40 %); the raw form of the extension remains available by an option.
 * Daisy workbench: **Model builder**, a form for every model of the Daisy reference manual (683 models of 95 components) that writes, checks and saves the definition; **Fill in a form for this model** in the reference manual; the reference manual tab checked against the manual, with every attribute and its kind (3249 attributes) and the attributes grouped as in the book.
@@ -230,10 +230,10 @@
 
 - **Projection of the seasons**: the year charts of Reliability over 20 seasons, Full water balance and Nitrogen budget, the Daisy layers that show years, the charts of the dashboard and the yearly figure of the Charts tab continue 10 or 20 years after the last simulated season (Properties, Projection), lighter and marked, with the red bar of the working date kept.
 - **Shading**: in Soil hydraulic drivers the selected row shades the soil table only; in the Trigger law the highlight covers the row of the soil only and no longer runs into the chart.
-- **Pipe design in the field sketch**: mainline, submain and lateral pipes with a diameter, and valve, pump, filter and tank symbols; a table of length, flow, speed and head loss for each pipe and the pump head asked; the drawn lengths and diameters pass to the design (Chapter 22b).
+- **Pipe design in the field sketch**: mainline, submain and lateral pipes with a diameter, and valve, pump, filter and tank symbols; a table of length, flow, speed and head loss for each pipe and the pump head asked; the drawn lengths and diameters pass to the design (Chapter 23b).
 - **Linked irrigation settings**: the method and the field area of Properties pass to the three designs, the Design shortcuts group shows the link and the last result of the design, and the sketch passes the pipes to it.
 - **Daisy editor**: the buttons are ready before the file list loads, a stale tab can no longer break a later one, a failed tab shows a message with a retry button, and very large files and output logs are sent to Log plots; the Daisy scripts load after the first screen, so the program opens faster.
-- **Reference of every layer**: Chapter 22b lists the controls, the Properties and the data sources of each layer.
+- **Reference of every layer**: Chapter 23b lists the controls, the Properties and the data sources of each layer.
 
 
 ### Final touches: literature figures, more questions, saving and speed (November 2026)
@@ -271,7 +271,7 @@
 - Root zone depletion and the trigger law: every soil in the list now has an orange bar and a number for its speed of depletion, in percent of the available water used per day (coarse sand fastest, silt loam slowest), so the soils can be told apart at a glance.
 - Full screen of the results and figures: the simulation keeps running. The results and figures now cover the whole window instead of the browser's own full screen mode, which stopped the picture of the simulation from being drawn. The picture itself still uses the real full screen.
 - Daisy reference, more experiments: six new factors from the actions of the reference (chapter 15): stubble height and straw at harvest (15.14), temperature of the irrigation water (15.18), depth the fertiliser is worked into (15.12 and 15.13), fertiliser by the soil nitrogen (15.11) and surface detention capacity (15.40). Tillage now has five systems (plowing, rotavation, disk harrowing, stubble cultivation, none). The Best combinations list grows from 27 to 43, among them method with trigger and dose, speed of application for each method, the irrigation season against the trigger, fertiliser form with irrigation, fertiliser date with the rain of the year, rooting depth with the rain, warming with nitrogen, straw with tillage, soil with irrigation method and depth of the drip line.
-- The manual is brought up to date with the program: the soil textural triangle (Chapter 3), the speed of depletion bar and the yield box of the Trigger law layer (Chapter 6), full screen (Chapter 14), the second weather service and the stored weather (Chapter 19), and the Daisy chapters of the combinations and of the factors (43 combinations, 69 factors). The page index that the program uses to open the manual at the page of a layer or a tab is rebuilt with the manual (1181 pages), and every layer and tab was checked to open at its own section.
+- The manual is brought up to date with the program: the soil textural triangle (Chapter 3), the speed of depletion bar and the yield box of the Trigger law layer (Chapter 6), full screen (Chapter 15), the second weather service and the stored weather (Chapter 20), and the Daisy chapters of the combinations and of the factors (43 combinations, 69 factors). The page index that the program uses to open the manual at the page of a layer or a tab is rebuilt with the manual (1181 pages), and every layer and tab was checked to open at its own section.
 - Easier reading of the soil list of the Trigger law layer: the yield column is titled Yield with its unit Mg/ha = t/ha, and pointing at the orange bar or at a yield box of a soil says in plain words what it means.
 
 - **Plain words.** Help > "Plain words: what the terms mean" lists 54 terms (field capacity, TAW, RAW, pF, Mg/ha, K_OC, NSE and more) in easy words, with a search box. The same words also appear as a hint when the pointer rests on such a term anywhere in the program.
@@ -301,7 +301,7 @@
 - Original layout also leaves a stuck full-screen state of a panel.
 - Original layout escapes every special state: full screen, open windows, focus view, wide or pinned panels.
 - The software loads after the licence window is closed, so Next and Back answer at once; a short Loading line shows while it starts.
-- Crops: 27 crops added and the whole library refined with the FAO-56 edition of 2025 (Kc, height, rooting depth, depletion fraction p, yield response Ky, salinity tolerance); the crop ribbon shows p, roots, height, Ky and the salinity threshold; the Crop list has a new group *Pulses*; chapter 21 and Table 21.2 updated.
+- Crops: 27 crops added and the whole library refined with the FAO-56 edition of 2025 (Kc, height, rooting depth, depletion fraction p, yield response Ky, salinity tolerance); the crop ribbon shows p, roots, height, Ky and the salinity threshold; the Crop list has a new group *Pulses*; chapter 22 and Table 21.2 updated.
 - The licence no longer names any country.
 - Daisy process map: the two biopore lines no longer cross Soil Evaporation or the Drain; the labels and the drain line were re-ordered.
 
@@ -340,7 +340,7 @@
 
 ## Volumetric phenotyping (new layer, November 2026)
 
-- The group **Phenotyping** now holds two layers: Deterministic phenotyping (P1) and the new **Volumetric phenotyping** (P2). P2 scans the plant of P1 with a virtual rig (six calibration spheres, a camera that turns round the plant), joins the views by self-registration on the spheres and by ICP, and measures height, crown width, canopy volume, leaf area, leaf area index, number of leaves and the length and width of the leaf on the joined cloud, against the model of P1 (Chapter 8b).
+- The group **Phenotyping** now holds two layers: Deterministic phenotyping (P1) and the new **Volumetric phenotyping** (P2). P2 scans the plant of P1 with a virtual rig (six calibration spheres, a camera that turns round the plant), joins the views by self-registration on the spheres and by ICP, and measures height, crown width, canopy volume, leaf area, leaf area index, number of leaves and the length and width of the leaf on the joined cloud, against the model of P1 (chapter Volumetric phenotyping).
 - P2 is connected to everything that P1 is connected to: the soil, tillage, crop, mulch, irrigation and weather of Properties change the plant, the scan and the season charts. It has its own run bar and its own rows in the Dashboard, the process map and the Output tables.
 - The Layers panel group *Deterministic phenotyping* is renamed *Phenotyping*; the process map keeps its ten SWAFL boxes.
-
+- Volumetric phenotyping has a **chapter of its own** with every step, a moving step-by-step film of the scan (six steps, with play, pause, step, speed and loop), a growth strip with seven scans from emergence to the end of the season, and the season start shared with P1.

@@ -6203,41 +6203,41 @@ The screens below are new in version 1.1. The numbered arrows point to the headi
 
 ### A design before its run
 
-![A design before its run (Chapter 18).](images/atlas11/ui_u14_design_before_run.jpg){width=100%}
+![A design before its run (Chapter 19).](images/atlas11/ui_u14_design_before_run.jpg){width=100%}
 
 ### The value window of a design input
 
-![The value window of a design input (Chapter 18).](images/atlas11/ui_u15_value_window.jpg){width=100%}
+![The value window of a design input (Chapter 19).](images/atlas11/ui_u15_value_window.jpg){width=100%}
 
 ### Import weather data
 
-![Import weather data (Chapter 19).](images/atlas11/ui_u09_weather_import.jpg){width=100%}
+![Import weather data (Chapter 20).](images/atlas11/ui_u09_weather_import.jpg){width=100%}
 
 ### Online weather for a location
 
-![Online weather for a location (Chapter 19).](images/atlas11/ui_u10_weather_online.jpg){width=100%}
+![Online weather for a location (Chapter 20).](images/atlas11/ui_u10_weather_online.jpg){width=100%}
 
 ### Save report as PDF: choose the layers
 
-![Save report as PDF: choose the layers (Chapter 23).](images/atlas11/ui_u11_report.jpg){width=100%}
+![Save report as PDF: choose the layers (Chapter 24).](images/atlas11/ui_u11_report.jpg){width=100%}
 
 ### Field sketch to design
 
-![Field sketch to design (Chapter 18).](images/atlas11/ui_u12_sketch.jpg){width=100%}
+![Field sketch to design (Chapter 19).](images/atlas11/ui_u12_sketch.jpg){width=100%}
 
 ### The irrigation systems compared on this field
 
-![The irrigation systems compared on this field (Chapter 18).](images/atlas11/ui_u13_compare.jpg){width=100%}
+![The irrigation systems compared on this field (Chapter 19).](images/atlas11/ui_u13_compare.jpg){width=100%}
 
 ### The Charts tab of a design after its run
 
-![The Charts tab of a design after its run (Chapter 14).](images/atlas11/ui_u05_dash_charts.jpg){width=100%}
+![The Charts tab of a design after its run (Chapter 15).](images/atlas11/ui_u05_dash_charts.jpg){width=100%}
 
 \newpage
 
 ### Dashboard: the Results tab
 
-The results at the working date and the 20-year averages at your inputs. Click a block header to fold or unfold it (Chapter 14).
+The results at the working date and the 20-year averages at your inputs. Click a block header to fold or unfold it (Chapter 15).
 
 ![Dashboard: the Results tab.](images/atlas11/ui_u05_dash_results.jpg){width=100%}
 
@@ -6245,7 +6245,7 @@ The results at the working date and the 20-year averages at your inputs. Click a
 
 ### Dashboard: the Design tab
 
-The results of the last run of the open design: efficiencies, depths, times, the pump or the gate and the warnings of the run (Chapters 11 to 13 and 18).
+The results of the last run of the open design: efficiencies, depths, times, the pump or the gate and the warnings of the run (Chapters 12 to 14 and 19).
 
 ![Dashboard: the Design tab.](images/atlas11/ui_u05_dash_design.jpg){width=100%}
 
@@ -6253,7 +6253,7 @@ The results of the last run of the open design: efficiencies, depths, times, the
 
 ### Dashboard: the Charts tab of the Field balance
 
-The yearly charts of the twenty seasons; every chart can be folded (Chapter 14).
+The yearly charts of the twenty seasons; every chart can be folded (Chapter 15).
 
 ![Dashboard: the Charts tab of the Field balance.](images/atlas11/ui_u05_dash_charts_field.jpg){width=100%}
 
@@ -6261,7 +6261,7 @@ The yearly charts of the twenty seasons; every chart can be folded (Chapter 14).
 
 ### Dashboard: the Messages tab
 
-The warnings first, then all messages of the session (Chapter 14).
+The warnings first, then all messages of the session (Chapter 15).
 
 ![Dashboard: the Messages tab.](images/atlas11/ui_u05_dash_messages.jpg){width=100%}
 
@@ -6269,7 +6269,7 @@ The warnings first, then all messages of the session (Chapter 14).
 
 ### The surface irrigation design after its run
 
-The whole workbench with the surface design open after Run simulation (Chapters 11 and 18).
+The whole workbench with the surface design open after Run simulation (Chapters 12 and 19).
 
 ![The surface irrigation design after its run.](images/atlas11/ui_wb_sid.jpg){width=100%}
 
@@ -6277,7 +6277,7 @@ The whole workbench with the surface design open after Run simulation (Chapters 
 
 ### The drip irrigation design after its run
 
-The whole workbench with the drip design open after Run simulation (Chapters 12 and 18).
+The whole workbench with the drip design open after Run simulation (Chapters 13 and 19).
 
 ![The drip irrigation design after its run.](images/atlas11/ui_wb_drip.jpg){width=100%}
 
@@ -6285,7 +6285,7 @@ The whole workbench with the drip design open after Run simulation (Chapters 12 
 
 ### The sprinkler design after its run
 
-The whole workbench with the sprinkler design open after Run simulation (Chapters 13 and 18).
+The whole workbench with the sprinkler design open after Run simulation (Chapters 14 and 19).
 
 ![The sprinkler design after its run.](images/atlas11/ui_wb_spr.jpg){width=100%}
 
@@ -6295,7 +6295,7 @@ The whole workbench with the sprinkler design open after Run simulation (Chapter
 
 ![Crop water requirement: the whole workbench.](images/atlas11/ui_wb_crop.jpg){width=100%}
 
-The drawing of the layer from top to bottom. It is explained in Chapter 21; its equations are Eqs. 21.1 to 21.9.
+The drawing of the layer from top to bottom. It is explained in Chapter 22; its equations are Eqs. 21.1 to 21.9.
 
 ![Crop water requirement, part 1 of 3.](images/atlas11/L_crop_p1.jpg){width=78%}
 
@@ -6338,7 +6338,7 @@ The drawing of the layer from top to bottom. It is explained in Chapter 21; its 
 
 ![Reliability over 20 seasons: the whole workbench.](images/atlas11/ui_wb_yby.jpg){width=100%}
 
-The drawing of the layer from top to bottom. It is explained in Chapter 22; its equations are Eqs. 22.1.
+The drawing of the layer from top to bottom. It is explained in Chapter 23; its equations are Eqs. 22.1.
 
 ![Reliability over 20 seasons, part 1 of 2.](images/atlas11/L_yby_p1.jpg){width=78%}
 
@@ -6366,7 +6366,7 @@ The drawing of the layer from top to bottom. It is explained in Chapter 22; its 
 
 ![Full water balance: the whole workbench.](images/atlas11/ui_wb_wb2.jpg){width=100%}
 
-The drawing of the layer from top to bottom. It is explained in Chapter 22; its equations are Eqs. 22.1.
+The drawing of the layer from top to bottom. It is explained in Chapter 23; its equations are Eqs. 22.1.
 
 ![Full water balance, part 1 of 2.](images/atlas11/L_wb2_p1.jpg){width=78%}
 
@@ -6393,7 +6393,7 @@ The drawing of the layer from top to bottom. It is explained in Chapter 22; its 
 
 ![Nitrogen budget: the whole workbench.](images/atlas11/ui_wb_nb.jpg){width=100%}
 
-The drawing of the layer from top to bottom. It is explained in Chapter 22; its equations are Eqs. 22.1.
+The drawing of the layer from top to bottom. It is explained in Chapter 23; its equations are Eqs. 22.1.
 
 ![Nitrogen budget, part 1 of 2.](images/atlas11/L_nb_p1.jpg){width=78%}
 

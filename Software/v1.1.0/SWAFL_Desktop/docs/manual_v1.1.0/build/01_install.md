@@ -2,7 +2,7 @@
 
 ## What you receive
 
-SWAFL Desktop is a self-contained Electron program. The simulation engine is one HTML page (`app/engine/engine.html`) with a few script files beside it, which the program serves to itself on a local port, so **no internet connection is needed once it is installed**. The internet is used only if you ask for the online weather of a location (Chapter 19). Four ways of running it are provided.
+SWAFL Desktop is a self-contained Electron program. The simulation engine is one HTML page (`app/engine/engine.html`) with a few script files beside it, which the program serves to itself on a local port, so **no internet connection is needed once it is installed**. The internet is used only if you ask for the online weather of a location (Chapter 20). Four ways of running it are provided.
 
 | Route | Who it suits | Steps |
 |:--|:--|:--|
@@ -88,6 +88,6 @@ npm run get-app    # build SWAFL.exe, copy it to the Desktop and start it
 
 ## First-run check
 
-After start-up, verify three things: (i) the status bar at the bottom reads *Ready* and ends with *SWAFL 1.1.0*; (ii) the Results tab of the dashboard shows *On* followed by today's date with numbers below; (iii) clicking **Surface irrigation design** in the Layers panel opens the design with its inputs and a *Run the design* box. If the drawing area stays blank, see Chapter 16.
+After start-up, verify three things: (i) the status bar at the bottom reads *Ready* and ends with *SWAFL 1.1.0*; (ii) the Results tab of the dashboard shows *On* followed by today's date with numbers below; (iii) clicking **Surface irrigation design** in the Layers panel opens the design with its inputs and a *Run the design* box. If the drawing area stays blank, see Chapter 17.
 
 ![The workbench on first start: the Field balance layer for today's date. Left: Layers and Processing Toolbox. Centre: the drawing. Right of the drawing: the dashboard. Far right: Properties.](images/atlas11/ui_u01_workbench.jpg){width=100%}

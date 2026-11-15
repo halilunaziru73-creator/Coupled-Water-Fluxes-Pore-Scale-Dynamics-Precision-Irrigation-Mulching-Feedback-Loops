@@ -6,7 +6,7 @@ The program is a **teaching and design-exploration tool** built on a research da
 
 **Engine 2 (the daily bucket model)** is a 40-layer, 1-D, daily water balance. It uses closed-form root, evaporation and transpiration functions with a single calibrated coefficient $k_t$ so that its seasonal transpiration matches Engine 1. It does not solve the Richards equation, has no lateral flow, no runoff on slopes and no water table (upward flow is a redistribution between layers only). Its day-to-day irrigation dates are therefore indicative: use them to compare scenarios, not to schedule a real irrigation to the day.
 
-**Design layers (surface, drip, sprinkler)** are textbook models (Chapters 11 to 13). They are suitable for teaching, for comparing layouts, and for a first sizing. They are **not a substitute for field evaluation** of intake, advance, pressure and flow, or for a hydraulic design by a qualified engineer. In particular:
+**Design layers (surface, drip, sprinkler)** are textbook models (Chapters 12 to 14). They are suitable for teaching, for comparing layouts, and for a first sizing. They are **not a substitute for field evaluation** of intake, advance, pressure and flow, or for a hydraulic design by a qualified engineer. In particular:
 
 * the intake of the soil is derived from texture by pedotransfer functions with their own scatter; measure it in the field for real design;
 * the sprinkler pattern is a parametric shape, not a measured catch-can test; the wind-drift loss is a parametric estimate;

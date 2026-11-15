@@ -39,7 +39,7 @@ $$
 
 *Provenance (Eq. 14.2):* **[Engineered]**: bookkeeping of Engine 2 series.
 
-The bar of the block says *simulated from the weather record* when the days come from the analogue year, and *from the weather forecast* when the online weather is in use and the days fall in its 16-day forecast (Chapter 19).
+The bar of the block says *simulated from the weather record* when the days come from the analogue year, and *from the weather forecast* when the online weather is in use and the days fall in its 16-day forecast (Chapter 20).
 
 **Block 3: Whole year.** For the calendar year of the working date: rain, irrigation, other evaporation (interception, litter, ponded water and snow), soil evaporation, transpiration, drainage, the change in storage and the deepest roots (cm). The water balance of the year closes as
 
@@ -69,7 +69,7 @@ with ▲ (increase) or ▼ (decrease), green when the change is in the better di
 
 ## Design
 
-With a design layer open, the tab shows the results of its **last run**. Before the first run, or after an input changed, it says that the design waits for a run and carries the two buttons **Run simulation** and **Find the most efficient inputs** (Chapter 18). After a run it shows, in folding blocks:
+With a design layer open, the tab shows the results of its **last run**. Before the first run, or after an input changed, it says that the design waits for a run and carries the two buttons **Run simulation** and **Find the most efficient inputs** (Chapter 19). After a run it shows, in folding blocks:
 
 | Block | Contents |
 |:--|:--|

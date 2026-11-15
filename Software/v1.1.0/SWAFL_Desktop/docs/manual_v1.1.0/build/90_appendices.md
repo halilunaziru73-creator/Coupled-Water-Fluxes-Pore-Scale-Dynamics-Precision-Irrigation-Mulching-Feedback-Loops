@@ -305,7 +305,7 @@ Woebbecke, D. M., Meyer, G. E., Von Bargen, K., and Mortensen, D. A. (1995). Col
 
 # Equation reference {-}
 
-This appendix prints every numbered equation of the program in full, in the order of the chapters, with its provenance and the layers of the program that draw on it. The equations added in version 1.1 (Eqs. 5.12a, 6.4a and those of Chapters 14, 18 to 23) are printed in their chapters.
+This appendix prints every numbered equation of the program in full, in the order of the chapters, with its provenance and the layers of the program that draw on it. The equations added in version 1.1 (Eqs. 5.12a, 6.4a and those of Chapters 15, 19 to 24) are printed in their chapters.
 
 **Eq. 4.1**: dates
 

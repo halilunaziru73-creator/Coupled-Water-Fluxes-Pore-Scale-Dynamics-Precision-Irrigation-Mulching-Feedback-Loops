@@ -5,7 +5,7 @@ Every number in SWAFL comes from one of two engines, which are tied together so 
 * **Engine 1, the annual meta-model.** It reads 20-year-mean results of the 10,190 Daisy simulations and scales them for the controls. It produces the Dashboard "20-year averages" and every bar, line and arrow in the annual layers. **[Data-driven]**
 * **Engine 2, the daily bucket model.** A 40-layer soil-water model run for twenty years of daily weather. It produces dates, depths, schedules, root growth, water flow arrows and the animated field. It is **calibrated** so that its mean irrigation equals Engine 1's, and its fluxes are **scaled** to Engine 1's annual means (Eq. 5.24). **[Engineered, with literature components]**
 
-The design layers (Chapters 11 to 13) are a third, separate set of *closed-form hydraulic models*; they take their soil, crop, trigger and depth from Engines 1 and 2 (Section 5.3).
+The design layers (Chapters 12 to 14) are a third, separate set of *closed-form hydraulic models*; they take their soil, crop, trigger and depth from Engines 1 and 2 (Section 5.3).
 
 ## Engine 1: the Daisy simulations and the meta-model
 

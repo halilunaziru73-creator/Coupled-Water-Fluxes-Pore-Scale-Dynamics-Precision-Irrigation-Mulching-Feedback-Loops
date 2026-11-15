@@ -2,9 +2,9 @@
 
 The drip layer designs the **emitter, its placement, the lateral and the pipe network** for the soil, crop and trigger set in the rest of the program. It answers four questions in order: how big a wet bulb does one emitter make, how much of the water it delivers stays in the root zone, how uneven is the delivery along the lateral, and what pump and pipes does the farm need. Everything is a closed-form hydraulic or geometric model, recomputed at every slider move.
 
-The layer's sections, in order: control bar and inputs; soil moisture around the driest, average and wettest emitter (Run simulation animates the wetting); where the water goes; uniformity along the lateral; growth of the wetted bulb with time; result tiles; layout and infrastructure; irrigation schedule; the design table; the sensitivity chart; season and farm; and the "When to irrigate" advice. The last two are shared with the other design layers and are described at the end of Chapter 11.
+The layer's sections, in order: control bar and inputs; soil moisture around the driest, average and wettest emitter (Run simulation animates the wetting); where the water goes; uniformity along the lateral; growth of the wetted bulb with time; result tiles; layout and infrastructure; irrigation schedule; the design table; the sensitivity chart; season and farm; and the "When to irrigate" advice. The last two are shared with the other design layers and are described at the end of Chapter 12.
 
-![Drip design: inputs and the soil moisture around the driest, average and wettest emitter. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/13_drip_draw.jpg){width=80%}
+![Drip design: inputs and the soil moisture around the driest, average and wettest emitter. The numbered arrows are explained in the screenshot atlas (Chapter 26), under the same screen.](images/atlas11/13_drip_draw.jpg){width=80%}
 
 ## Inputs, step by step
 
@@ -131,7 +131,7 @@ The first factor is the manufacturing variation; the second is the hydraulic var
 
 Reading the lateral plot: the solid line is $q_j/q$ in per cent against distance, the dashed line is the head as a percentage of $H_0$. A lateral that is too long or too narrow shows a steep fall of both. For a non-compensating emitter a 10 % loss of head costs about 5 % of flow ($x=0.5$); the PC emitter stays flat until the head drops below $H_{\min}$.
 
-![Drip design: uniformity along the lateral and the growth of the wetted bulb with run time. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/15_drip_uniformity_along_the_lateral_draw.jpg){width=80%}
+![Drip design: uniformity along the lateral and the growth of the wetted bulb with run time. The numbered arrows are explained in the screenshot atlas (Chapter 26), under the same screen.](images/atlas11/15_drip_uniformity_along_the_lateral_draw.jpg){width=80%}
 
 ## The wetted bulb
 
@@ -168,7 +168,7 @@ Water from an emitter spreads into soil that is initially at the trigger water c
 
 *Provenance (Eq. 12.11):* **[Engineered]**: wetted-bulb geometry and loss partition; constants chosen for the workbench.
 
-with $K_s$ in mm h$^{-1}$ (from the pedotransfer functions of the soil, Section "Intake from your soil" of Chapter 11) and $q$ the emitter flow in L h$^{-1}$. The result changes with the soil you choose: about 2.1 for sand and coarse sand, 1.9 for sandy loam, 1.3 to 1.4 for loam and silt loam, and 0.9 to 1.0 for clay loam and silty clay loam (a bulb wider than deep). A larger emitter flow spreads the bulb sideways. Change the soil in Properties and run the design again to see the bulb of each soil.
+with $K_s$ in mm h$^{-1}$ (from the pedotransfer functions of the soil, Section "Intake from your soil" of Chapter 12) and $q$ the emitter flow in L h$^{-1}$. The result changes with the soil you choose: about 2.1 for sand and coarse sand, 1.9 for sandy loam, 1.3 to 1.4 for loam and silt loam, and 0.9 to 1.0 for clay loam and silty clay loam (a bulb wider than deep). A larger emitter flow spreads the bulb sideways. Change the soil in Properties and run the design again to see the bulb of each soil.
 
 **Radius.** For an emitter that delivers $V$ litres, the wetted volume is $V_w = V\cdot10^{6}/\Delta\theta$ mm$^3$ ($1\ \mathrm{L}=10^{6}\ \mathrm{mm^3}$). The radius $r$ is found by bisection (38 steps between 5 and 3500 mm) so that the volume of revolution of Eq. (12.10), integrated in 56 layers,
 
@@ -210,9 +210,9 @@ and the part evaporated from the wet surface patch is limited to half the delive
 
 *Provenance (Eq. 12.15):* **[Engineered]**: wetted-bulb geometry and loss partition; constants chosen for the workbench.
 
-(for a line source the area is $2\rho(0)S_e\cdot10^{-6}$ m$^2$ per emitter). The factor 2 corresponds to about two days of evaporation from a wet surface patch of mean demand $E_0$; this is an **[Engineered]** simplification of the two-stage evaporation of Chapter 9. For a surface line ($z_d=0$) the bulb is half-spherical and the evaporating patch is largest, which is why surface drip stores less than buried drip in the table. The remainder is available to the roots, $V_{\mathrm{root}}=V-V_{\mathrm{dp}}^{(1)}-V_{\mathrm{ev}}$.
+(for a line source the area is $2\rho(0)S_e\cdot10^{-6}$ m$^2$ per emitter). The factor 2 corresponds to about two days of evaporation from a wet surface patch of mean demand $E_0$; this is an **[Engineered]** simplification of the two-stage evaporation of Chapter 10. For a surface line ($z_d=0$) the bulb is half-spherical and the evaporating patch is largest, which is why surface drip stores less than buried drip in the table. The remainder is available to the roots, $V_{\mathrm{root}}=V-V_{\mathrm{dp}}^{(1)}-V_{\mathrm{ev}}$.
 
-![Drip design: result tiles and the water partition of one irrigation. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/17_drip_result_for_this_design_draw.jpg){width=80%}
+![Drip design: result tiles and the water partition of one irrigation. The numbered arrows are explained in the screenshot atlas (Chapter 26), under the same screen.](images/atlas11/17_drip_result_for_this_design_draw.jpg){width=80%}
 
 ## Spread between emitters and the efficiencies
 
@@ -315,7 +315,7 @@ P = \frac{\rho g\,Q_z\,\mathrm{TDH}}{\eta} = \frac{9.81\,(Q_z/1000)\,\mathrm{TDH
 
 The constant 9 m covers the filter, valves and fittings, and $\eta=0.65$ is the overall pump-and-motor efficiency; both are **[Engineered]** design allowances, not measured values. The laterals' own loss is already inside $H_0$.
 
-![Drip design: layout and infrastructure, to scale, with the zones running in turn. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/18_drip_layout_and_infrastructure_draw.jpg){width=80%}
+![Drip design: layout and infrastructure, to scale, with the zones running in turn. The numbered arrows are explained in the screenshot atlas (Chapter 26), under the same screen.](images/atlas11/18_drip_layout_and_infrastructure_draw.jpg){width=80%}
 
 The drawing shows the source, pump, filter, mainline, valves, submain and laterals to scale; during the run the zones run one after the other, and the head along the flow path is drawn underneath. The table beside it gives zones ($\times$ laterals per zone), laterals and emitters, TDH, pump power, lateral head loss and pipe laid per hectare, $(N_L L_L + L_{sm})/A_f$.
 
@@ -344,7 +344,7 @@ E_{\mathrm{kWh}}=H_{\mathrm{pump}}\,P.}
 
 *Provenance (Eq. 12.25):* **[Engineered]**: layout, sizing and scoring rules; the 1.5 m/s velocity limit is a common practice.
 
-The layer prints these as a table (net irrigation need and number of events, gross water per irrigation and per season in mm and m$^3$ ha$^{-1}$, peak crop need, flow per hectare, sets for $A_f$ with $Q_s$, hours of pumping and energy). Then the *Irrigation schedule* and the *When to irrigate* advice, described at the end of Chapter 11, close the layer.
+The layer prints these as a table (net irrigation need and number of events, gross water per irrigation and per season in mm and m$^3$ ha$^{-1}$, peak crop need, flow per hectare, sets for $A_f$ with $Q_s$, hours of pumping and energy). Then the *Irrigation schedule* and the *When to irrigate* advice, described at the end of Chapter 12, close the layer.
 
 ## The design table
 
@@ -371,7 +371,7 @@ The score is
 
 so a design is penalised when the root zone is not refilled to 90 %. A move is accepted when its best candidate improves the score by more than 0.002; the search stops when $E_a\ge85$ % **and** $E_s\ge85$ %, or after ten moves. One move is performed per screen update, and the search pauses while a slider is being dragged. Each accepted row shows the step, $q$, $S_e$, depth, run time, $E_a$, $E_s$ and DP; a green row meets the target, and **tapping any row applies that design** to the sliders (including the placement depth and the explorer's irrigation method). If the target is not met, the layer reports the best found and suggests a shorter interval or a different emitter.
 
-![Drip design table and the sensitivity chart. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/19_drip_design_table_draw.jpg){width=80%}
+![Drip design table and the sensitivity chart. The numbered arrows are explained in the screenshot atlas (Chapter 26), under the same screen.](images/atlas11/19_drip_design_table_draw.jpg){width=80%}
 
 ## Sensitivity
 

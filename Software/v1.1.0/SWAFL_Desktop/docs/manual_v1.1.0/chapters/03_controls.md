@@ -1,17 +1,17 @@
 # Every control, value by value
 
-All model inputs live in the **Properties** panel (far right). Each group can be collapsed; **+** and **−** in the panel header expand or collapse all. The sliders are *indices* into lists of discrete values, because every value in the lists corresponds to a set of simulations (Chapter 5). The number shown beside a slider is the value the index stands for. The inputs of the three irrigation designs are not in Properties: they are the value boxes inside each design layer (Chapters 11 to 13 and 18).
+All model inputs live in the **Properties** panel (far right). Each group can be collapsed; **+** and **−** in the panel header expand or collapse all. The sliders are *indices* into lists of discrete values, because every value in the lists corresponds to a set of simulations (Chapter 5). The number shown beside a slider is the value the index stands for. The inputs of the three irrigation designs are not in Properties: they are the value boxes inside each design layer (Chapters 12 to 14 and 19).
 
-![The Properties panel, with every group open (the arrows point to the groups; Chapter 25).](images/atlas11/ui_u06_properties_page.jpg){width=45%}
+![The Properties panel, with every group open (the arrows point to the groups; Chapter 26).](images/atlas11/ui_u06_properties_page.jpg){width=45%}
 
 ## Scenario
 
 | Control | Values | Default | What it does |
 |:--|:--|:--|:--|
 | **Ready-made case** | seven cases (Section 3.8) | n/a | Replaces many controls at once, as one undoable step. |
-| **Year** | 1980 … 2100 | the current year | The calendar year of the working date. Years 1980 to 1999 use the recorded weather of that year; later years use the typical year of the record, or your own weather when it covers the year (Chapter 4 and Chapter 19). |
+| **Year** | 1980 … 2100 | the current year | The calendar year of the working date. Years 1980 to 1999 use the recorded weather of that year; later years use the typical year of the record, or your own weather when it covers the year (Chapter 4 and Chapter 20). |
 | **Date in the season** | any calendar date | today | The working date: the day drawn, the "On …" block of the dashboard and the first day of every irrigation schedule. |
-| **Weather source** | Built-in weather record; Imported weather file; Online weather of a location | built-in | Which daily weather every layer uses. The second and third choices become active only after you have imported a file or fetched the weather of a place (Chapter 19). |
+| **Weather source** | Built-in weather record; Imported weather file; Online weather of a location | built-in | Which daily weather every layer uses. The second and third choices become active only after you have imported a file or fetched the weather of a place (Chapter 20). |
 | **Import weather… / Online weather…** | buttons | | Open the two weather dialogs. |
 
 ## Soil and field
@@ -20,7 +20,7 @@ All model inputs live in the **Properties** panel (far right). Each group can be
 |:--|:--|:--|:--|
 | **Soil** | Sand, Loamy Sand, Sandy Loam, Coarse Sand, Coarse Loam, Loam, Silt Loam, Sandy Clay Loam, Clay Loam, Silty Clay Loam | Coarse Loam | Selects the soil's texture, its van Genuchten parameters $(\alpha, n)$ (Table 5.3), the baseline run, plant-available water per cm (`AWC`) and the trigger anchor. Re-computes every layer and cancels the last run of every design. |
 | **Tillage** | Conventional / Reduced / No-till | Conventional | Sets the initial pore index $p_0$ (1.00, 0.72, 0.42) and therefore the starting structure of the topsoil (Section 8.1). |
-| **Crop** | the simulated cereal/oilseed rotation and the 48 crops of the library, in the groups *Staple food crops* (9), *Cash and oil crops* (8), *Vegetables* (4) and *Trees, vines and palms* (27) | Cereal/Oilseed | Chooses the crop calendar, the crop coefficients, the root depth, the depletion fraction and the yield response (Chapter 21). The cereal rotation is the simulated crop; the library crops are transferred from it with their FAO-56 crop coefficients (Section 21.4). |
+| **Crop** | the simulated cereal/oilseed rotation and the 48 crops of the library, in the groups *Staple food crops* (9), *Cash and oil crops* (8), *Vegetables* (4) and *Trees, vines and palms* (27) | Cereal/Oilseed | Chooses the crop calendar, the crop coefficients, the root depth, the depletion fraction and the yield response (Chapter 22). The cereal rotation is the simulated crop; the library crops are transferred from it with their FAO-56 crop coefficients (Section 21.4). |
 | **Structural consolidation rate** | 0.001, 0.0025, 0.005, 0.01, 0.02 d$^{-1}$ | 0.001 | The rate $\tau_c$ at which conventionally tilled pores close (Eq. 8.1). In the simulations it changes the results of the five finer soils (loam to silty clay loam, up to about 6 mm a year of drainage and 14 kg N/ha of leaching); in the five coarser soils every rate gives the same result. |
 
 ### The soil textural triangle

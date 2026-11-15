@@ -122,7 +122,7 @@ $$
 E_a=\frac{V_{stored}}{V_{applied}},\qquad DU=\frac{Z_{lq}}{Z_{avg}},
 $$
 
-where $V_{stored}$ is the water kept in the root zone, $Z_{lq}$ the mean depth of the lowest quarter of the field and $Z_{avg}$ the mean depth. Chapters 11 to 13 give the equations of each system.
+where $V_{stored}$ is the water kept in the root zone, $Z_{lq}$ the mean depth of the lowest quarter of the field and $Z_{avg}$ the mean depth. Chapters 12 to 14 give the equations of each system.
 
 \newpage
 

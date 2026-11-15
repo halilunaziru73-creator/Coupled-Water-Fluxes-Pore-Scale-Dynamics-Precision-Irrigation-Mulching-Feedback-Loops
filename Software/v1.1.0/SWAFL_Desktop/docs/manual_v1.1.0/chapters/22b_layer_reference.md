@@ -23,7 +23,7 @@ The toolbar **Date** is the key date: the working year, the red bar of every yea
 **Controls.** Every number of the drawing is a value box: click it to open a picker with the exact value, its unit (metres or kilometres, litres per second or cubic metres per hour, hectares or square metres) and a list of values across the allowed range. **Run simulation** computes the design; **Find the most efficient inputs** searches the inputs for the highest application efficiency; *Optimise surface* applies the best surface design; the tabs **Results, Design, Charts, Figure, Messages** show the numbers, the inputs, the hydrograph and depth charts, the picture and the log. The sprinkler layer draws the pipe network (source, pump, filter, fertigation, valve, mainline, submain, laterals) with the diameter, length, flow, speed and head loss of each pipe.
 
 
-**How it is generated.** Surface: the intake of your soil is built from its texture (Saxton and Rawls to Green and Ampt to Kostiakov), the inflow is turned into a flow depth by Manning, the advance by a volume balance, and the cut off time, depths, efficiencies and uniformity follow from the advance and the intake (Chapter 11). Drip: the emitter flow along the lateral comes from the head loss of the lateral (Hazen and Williams, Keller and Karmeli); the water of one emitter fills a wetted bulb whose volume is the water divided by the water the soil can still store, and whose shape depends on the soil (narrow and deep in sand, wide and shallow in clay loam, Eq. 12.11); the part of the bulb below the roots, the evaporation from its wet surface and the water stored in the root zone give the efficiencies (Chapter 12). Sprinkler: the application rate and the overlap of the heads, the wind and evaporation losses, and the pipe sizes from the flow and the allowed speed (Chapter 13). In all three the crop water need comes from the crop library and the weather.
+**How it is generated.** Surface: the intake of your soil is built from its texture (Saxton and Rawls to Green and Ampt to Kostiakov), the inflow is turned into a flow depth by Manning, the advance by a volume balance, and the cut off time, depths, efficiencies and uniformity follow from the advance and the intake (Chapter 12). Drip: the emitter flow along the lateral comes from the head loss of the lateral (Hazen and Williams, Keller and Karmeli); the water of one emitter fills a wetted bulb whose volume is the water divided by the water the soil can still store, and whose shape depends on the soil (narrow and deep in sand, wide and shallow in clay loam, Eq. 12.11); the part of the bulb below the roots, the evaporation from its wet surface and the water stored in the root zone give the efficiencies (Chapter 13). Sprinkler: the application rate and the overlap of the heads, the wind and evaporation losses, and the pipe sizes from the flow and the allowed speed (Chapter 14). In all three the crop water need comes from the crop library and the weather.
 
 **Properties.** Soil, crop, method (which decides the design layer), field area (the same area in the three designs), salt, trigger and weather. The drip depth of the method sets the depth of the laterals. The mainline length, the mainline and submain diameters and the lateral diameter can come from the field sketch (see below).
 
@@ -51,7 +51,7 @@ The Summary step lists the pipe network: for each pipe the diameter, length, flo
 **Controls.** The mulch sliders (strength, capacity) and the material list in Properties; the sliders of the layer for the physics of evaporation; Play, Stop and the year clicks.
 
 
-**How it is generated.** The mulch lowers the vapour flux from the soil by the strength you set and holds a depth of rain (the capacity) that evaporates from the mulch. The effect on evaporation, drainage, irrigation and yield is the ratio of the Daisy runs with and without the mulch, taken from the grid of mulch strength, rain and capacity, and moved by the temperature grid (Chapter 9).
+**How it is generated.** The mulch lowers the vapour flux from the soil by the strength you set and holds a depth of rain (the capacity) that evaporates from the mulch. The effect on evaporation, drainage, irrigation and yield is the ratio of the Daisy runs with and without the mulch, taken from the grid of mulch strength, rain and capacity, and moved by the temperature grid (Chapter 10).
 
 **Properties.** Mulch group, soil, tillage, rainfall scale, temperature shift.
 
@@ -73,7 +73,7 @@ The Summary step lists the pipe network: for each pipe the diameter, length, flo
 **Controls.** The sowing mode, species, genotype and climate lists of the layer, its sliders and its Run button.
 
 
-**How it is generated.** Each genotype is a set of traits; the crop model grows canopy, roots and yield day by day on the weather and the soil water, and the table reports the traits that result. The same inputs always give the same output (Chapter 8b).
+**How it is generated.** Each genotype is a set of traits; the crop model grows canopy, roots and yield day by day on the weather and the soil water, and the table reports the traits that result. The same inputs always give the same output (the chapter Volumetric phenotyping).
 
 **Properties.** Soil, tillage, rainfall, temperature and the weather in use.
 
@@ -83,7 +83,7 @@ The Summary step lists the pipe network: for each pipe the diameter, length, flo
 
 **Controls.** The plant (project irrigation or drought), the number of views (1 to 6), the joining (none, spheres, spheres and ICP), the sphere fit (least squares or enhanced RANSAC), the scale (calibrated or not), the sensor noise, the voxel size and the day; the point clouds are turned with the mouse and coloured by height, view or error.
 
-**How it is generated.** The plant of the layer Deterministic phenotyping is scanned by a virtual rig of six spheres and a turning camera. The views are joined by the spheres and by ICP, and the traits are measured on the joined cloud and compared with the model (Chapter 8b). The same controls give the same scan.
+**How it is generated.** The plant of the layer Deterministic phenotyping is scanned by a virtual rig of six spheres and a turning camera. The views are joined by the spheres and by ICP, and the traits are measured on the joined cloud and compared with the model (the chapter Volumetric phenotyping). The same controls give the same scan.
 
 **Properties.** Soil, tillage, crop, mulch, irrigation, rainfall, temperature and the weather in use: they act through the plant of P1.
 
@@ -107,7 +107,7 @@ The Summary step lists the pipe network: for each pipe the diameter, length, flo
 **Projection.** Seasons after the twenty simulated ones are drawn lighter, right of a dashed line marked *projection*, on the calendar that follows the working date. Each projected season is one of the twenty simulated seasons, taken in a fixed random order, and moved by the climate trend of Properties: the warming per decade (default +0.3 °C) raises the reference evapotranspiration by 3.5 % per degree, which raises irrigation and crop water use and lowers yield by 2 % per degree; the rainfall change per decade (default 0 %) scales the rain and, through it, the drainage, the nitrate leached and the irrigation. The means, the 10 to 90 % range and the reliability figures always use the twenty simulated seasons only. A projection shows where the setting is heading; it is not a weather forecast.
 
 
-**How it is generated.** For each soil the Daisy runs hold twenty years of rain, irrigation, evaporation, transpiration, drainage, yield and nitrogen. Your settings move these years by the ratio of the annual model at your settings against its reference; for a library crop the daily FAO balance of that crop replaces them season by season (Chapter 22).
+**How it is generated.** For each soil the Daisy runs hold twenty years of rain, irrigation, evaporation, transpiration, drainage, yield and nitrogen. Your settings move these years by the ratio of the annual model at your settings against its reference; for a library crop the daily FAO balance of that crop replaces them season by season (Chapter 23).
 
 **Properties.** Every group; crop and weather move the seasons most.
 
@@ -118,7 +118,7 @@ The Summary step lists the pipe network: for each pipe the diameter, length, flo
 **Controls.** The crop list, the year and the dates; the crop curve and the daily balance of the season in the picture.
 
 
-**How it is generated.** The crop coefficient curve of the crop (initial, mid and end values over four growth stages) multiplies the reference evapotranspiration of each day; rain, soil storage and the depletion fraction give the irrigation need and the stress (Chapter 21).
+**How it is generated.** The crop coefficient curve of the crop (initial, mid and end values over four growth stages) multiplies the reference evapotranspiration of each day; rain, soil storage and the depletion fraction give the irrigation need and the stress (Chapter 22).
 
 **Properties.** Crop, soil, trigger, weather, salt, method.
 
@@ -129,7 +129,7 @@ The Summary step lists the pipe network: for each pipe the diameter, length, flo
 **Controls.** The sliders of mulch, rain and temperature in Properties and the click on an arrow of the loop to read its effect.
 
 
-**How it is generated.** Seven effects of the mulch (on evaporation, temperature, drainage, nitrogen, structure, roots and yield) are computed as ratios of the Daisy runs and shown as loops that feed each other (Chapter 10).
+**How it is generated.** Seven effects of the mulch (on evaporation, temperature, drainage, nitrogen, structure, roots and yield) are computed as ratios of the Daisy runs and shown as loops that feed each other (Chapter 11).
 
 **Properties.** Mulch, weather and climate, soil, nitrogen, crop.
 
@@ -140,7 +140,7 @@ The Summary step lists the pipe network: for each pipe the diameter, length, flo
 **Controls.** The tabs of the workbench (data, library, experiments, scenarios, process map, log plots, mass balance, comparison, set up editor, model builder, soil column, denitrification, learning, documentation, reference manual); every tab has a **Manual p. N** button. The Set up editor opens the folders and files of the library, formats, saves and runs; a very large file or an output log (.dlf, .dwf, .csv) is sent to Log plots instead of the editor, so the editor never has to draw it.
 
 
-**How it is generated.** The Daisy tabs write the files of a Daisy run (set up, weather, soil, management), run Daisy on the desktop (or save the folder to run elsewhere), and read its logs for the figures; the decision support layers are built from the logs of your own runs (Chapters 26 to 38).
+**How it is generated.** The Daisy tabs write the files of a Daisy run (set up, weather, soil, management), run Daisy on the desktop (or save the folder to run elsewhere), and read its logs for the figures; the decision support layers are built from the logs of your own runs (Chapters 27 to 39).
 
 **Properties.** The Daisy tabs read the weather and the soil of the project when you press *Use the project*; the Decision support layers (chemical fate, decision table, water balance, nitrogen balance, yield risk, chemicals and drinking water, trade offs, return of irrigation, nitrous oxide) read the runs you made. Their year charts also carry the projection of Properties.
 

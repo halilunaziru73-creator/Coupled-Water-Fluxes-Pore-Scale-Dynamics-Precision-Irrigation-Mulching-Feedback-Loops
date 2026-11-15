@@ -21,7 +21,7 @@ The layer is made for four tasks of a phenotyping programme:
 
 ![Set up the experiment. Maize, warm season, rain-out shelter, pulse of drought from day 40 for 28 days at 30 % of the plant-available water, reference genotype, Coarse Loam, conventional tillage.](images/pheno/p1_setup.png){width=85%}
 
-**Run simulation.** The button is **under the inputs**, after the last control of the section *Set up the experiment* (the other layers of the window, whose inputs are in the Properties panel, have their own **Run simulation** bar at the top, Chapter 18). A layer shows its figures only after the button is pressed for the present controls; when a control changes, the bar asks to run again. The Play button of the toolbar does the same. **Every section of the layer has a triangle on its title: click it to collapse or expand the section**, so that a long page can be read part by part. After the run, the season **plays by itself**, from the first day to the last and again from the first, until **Pause** is pressed (the button of the toolbar, or the button *Pause* of the section *Season film*); clicking or dragging on any chart pauses it at that day.
+**Run simulation.** The button is **under the inputs**, after the last control of the section *Set up the experiment* (the other layers of the window, whose inputs are in the Properties panel, have their own **Run simulation** bar at the top, Chapter 19). A layer shows its figures only after the button is pressed for the present controls; when a control changes, the bar asks to run again. The Play button of the toolbar does the same. **Every section of the layer has a triangle on its title: click it to collapse or expand the section**, so that a long page can be read part by part. After the run, the season **plays by itself**, from the first day to the last and again from the first, until **Pause** is pressed (the button of the toolbar, or the button *Pause* of the section *Season film*); clicking or dragging on any chart pauses it at that day.
 
 Once run, every control re-runs the model, and every chart answers it.
 
@@ -410,7 +410,7 @@ $C$ is the salt concentration (dS m⁻¹), $EC_e$ the electrical conductivity of
 
 #### The SWAFL data (P.20 and P.21)
 
-**P.20 Against the SWAFL data.** The plant is compared with the Daisy runs of the soil and the controls (E2, E7, E13 and E14, Chapter 27) in numbers that do not depend on the length of the season:
+**P.20 Against the SWAFL data.** The plant is compared with the Daisy runs of the soil and the controls (E2, E7, E13 and E14, Chapter 28) in numbers that do not depend on the length of the season:
 
 
 ```{=latex}
@@ -535,63 +535,4 @@ $G_j$ is the root growth of the period against the watered plant (below 100 mean
 
 *References of the layer:* Allen et al. (1998), FAO Irrigation and Drainage Paper 56; Maas and Hoffman (1977); Mualem (1976); Ritchie (1972); Ritchie and NeSmith (1991); Brouwer (1963); Davidson (1969); Feddes et al. (1978); Fernandez (1992); Fischer and Maurer (1978); Gardner (1960); Jackson et al. (1981); Jarvis (1976); Lockhart (1965); Lorence and Medina-Jimenez (eds, 2022), *High-Throughput Plant Phenotyping*, Methods in Molecular Biology 2539, Springer; Monsi and Saeki (1953); Monteith (1977); Pagès et al. (2014); Panguluri and Kumar (eds, 2013), *Phenotyping for Plant Breeding*, Springer; Tanner and Sinclair (1983); van den Honert (1948); van Genuchten (1980); Yin et al. (1995).
 
-
-## Volumetric phenotyping layer
-
-### What the layer is
-
-**P2 Volumetric phenotyping** is the second layer of the group *Phenotyping*. It measures the plant of P1 the way a three dimensional scanner measures it. A virtual rig stands round the plant: six calibration spheres on a ring, and a camera on an arm that turns round the plant and takes one view every 60° (one to six views can be chosen). Each view sees only the side of the plant that faces the camera, so a single view is a partial cloud of points; the cloud of the whole plant is built by joining the views (Wang et al., 2025; Zhu et al., 2018).
-
-The plant that is scanned is **the plant of P1**, for the project irrigation and for the drought. Nothing is typed in again: the crop, soil, tillage, weather, mulch and irrigation of Properties decide how the plant grows, and the scan measures it. When a control is changed in Properties or in P1, the plant, the scan, the traits and the season charts change with it.
-
-### The real scanners that the layer imitates
-
-The pictures of this section are real equipment and real scans from the literature on three dimensional plant phenotyping. They are given here, and not in the layer, as the documentation of what the virtual rig imitates. They are reproduced for documentation; the rights belong to the authors of the original works (Wang et al., 2025; Zhu et al., 2018, and the works that they cite).
-
-![A real scanning cabin: a potted plant on a platform that moves through a chamber with a lamp panel above, a camera and the safety signs of the laser unit. The virtual rig of the layer replaces the cabin by a ring of calibration spheres and a turning camera.](images/volumetric/fig1_scanner_cabin.png){ width=60% }
-
-![(A) The point cloud of a seedling with the errors that the layer reproduces: point cloud distortion and point cloud drift on single views. (B) The calibration spheres, in different colours, as they appear in the cloud; their centres are the points that join the views.](images/volumetric/fig2_drift_spheres.png){ width=85% }
-
-![Four ways to obtain a point cloud of a plant: (a) laser scanning, (b) structured light with a projector and a camera, (c) feature matching and triangulation from photographs (structure from motion and multi-view stereo), and the newer image-based models: (d) neural radiance fields (volumetric function modelling, point sampling, volume rendering, model optimisation) and (e) 3D Gaussian splatting (initialisation from a sparse cloud, splatting, density control, model optimisation).](images/volumetric/fig3_pipelines.png){ width=85% }
-
-![A ring rig for a whole tree: the plant stands in a measured volume (blue box), and cameras on a ring and on a mast look at it from two heights (the two dashed circles). The virtual rig of the layer has a camera on a turning arm at 22° above the plant.](images/volumetric/fig4_ring_rig.png){ width=55% }
-
-![A scan through the season: (A) plants in the growth facility, (B) the images taken in the cabin on successive dates, (C) the three dimensional reconstruction, (D) skeletonisation and leaf extension, (E) stem tip detection and organ segmentation (stem, ligulated leaves and growing leaves). The season chart of the layer follows the same idea with a scan every 10 days.](images/volumetric/fig5_time_series.png){ width=70% }
-
-![Segmentation of the leaves of one plant in a point cloud: each leaf has its own colour and the stem is dark. The layer counts and measures leaves in the same way (the peaks of the angle round the stem, then the shape; Zhu et al., 2018).](images/volumetric/fig6_leaf_segmentation.png){ width=70% }
-
-![The photograph (above) and the reconstructed point cloud (below) of several species: (a) to (d) small rosette and flowering plants, (e) wheat, (f) a grass, (g) maize and (h) a legume. The reconstruction keeps the form of each plant; the layer scans the plant of Deterministic phenotyping in the same way.](images/volumetric/fig7_species.png){ width=60% }
-
-### The method, step by step
-
-1. **The plant and its surface.** The leaves and the stem of P1 on the chosen day are sampled as a cloud of points of the surface (the plant itself, used as the truth).
-2. **The capture.** For each view a z-buffer keeps only the points that the camera can see, adds the noise of the sensor (larger at the edges of the leaves) and a scale error of the camera (a few tenths of a percent when the rig is calibrated on the pot, a few percent when it is not).
-3. **The spheres.** The centre of each sphere is fitted from its points, by least squares or by the enhanced RANSAC that rejects outliers. The fit error of the centres is the error of the registration.
-4. **Joining the views.** Each view is brought to the frame of view 1 by self-registration: the spheres that two views have in common give a rotation and a shift (at least three spheres are needed), and the chain of the transforms is applied. The optional **ICP** step refines every transform on the points of the plants themselves (ten iterations, the nearest 80 % of the pairs).
-5. **Voxels and clean-up.** The joined cloud is placed in voxels of the chosen size, and isolated points are removed.
-6. **The traits.** Height (99.8th percentile of the vertical axis), crown width (the longest horizontal span of the convex hull), canopy volume (occupied cubes and the hull of horizontal slices), leaf area (surface voxels × size² / 1.5), leaf area index, number of leaves (the peaks of the histogram of the angle of the points round the stem, then split by shape; Zhu et al., 2018), and the length and width of the mean leaf (principal axes).
-7. **The checks.** The cloud-to-cloud distance between the joined cloud and the plant, the error of every view against the truth, and, for every scan day of the season, the scatter of scan against model with its R².
-
-### What the page shows
-
-The page has eight sections: the set-up of the scan (plant, views, joining, sphere fit, scale, noise, voxel size, day); the virtual rig seen from above and from the side, with what each view sees; the point clouds (one view, joined views, the plant), which can be turned with the mouse and are shown in natural colour, by height, by view or by error; the growth strip, in which the same rig scans the plant on seven dates from emergence to the end of the season, all with the same scale, so that the growth of the project's plant is seen from the first leaf to the full canopy; the registration of every view; the traits against the model of P1; the volume by height and the leaves round the stem; the season (a scan every 10 days, for the project irrigation and the drought); and the connections to the other layers.
-
-The control **Season starts** is shared with P1: the season can start on the date of the toolbar, on the planting day of the project (the whole season of the crop is simulated; this is the default of the layer) or automatically. The play bar under the layer shows the day after emergence and the real date with the year.
-
-### How the layer is connected
-
-* **Soil and tillage** decide the water of the root zone, so the plant that is scanned.
-* **Weather and irrigation** decide the stress; the drought plant and the project plant are scanned side by side.
-* **Leaf water and leaf rolling** (P1) narrow the crown, so the crown width of the scan follows them.
-* The **volumetric stress index** is the canopy volume of the drought plant divided by that of the project plant.
-* The **transpiration per litre of canopy** joins the water used by the plant to the volume that the scan measures.
-* A click on a row of the connections opens the layer that feeds it (soil and tillage, field balance, soil-plant-air path, P1, crop water requirement, seasonal data).
-
-### Limits
-
-* The scanner is virtual: noise, scale error and the sphere fit are modelled, not measured. The errors shown are those of the model of the scanner, not of a particular camera.
-* The leaf area from voxels depends on the voxel size (a coarse voxel counts the thickness of the leaf); the figure is shown so, with its error, and is not corrected.
-* Leaves that touch along the same angle are counted as one leaf; the count is best for plants of up to about ten leaves seen from several sides.
-* The scans are cached for the controls in use; a change of any control scans again (a few tens of milliseconds for one scan).
-
-*References of the layer:* Wang Z, Zhang H, Bian L, Zhou L, Ge Y (2025), Accurate plant 3D reconstruction and phenotypic traits extraction via stereo imaging and multi-view point cloud alignment, *Frontiers in Plant Science* 16:1642388; Zhu F, Thapa S, Gao T, Ge Y, Walia H, Yu H (2018), 3D reconstruction of plant leaves for high-throughput phenotyping, University of Nebraska-Lincoln.
+*The second layer of the group, Volumetric phenotyping (P2), has its own chapter that follows this one.*

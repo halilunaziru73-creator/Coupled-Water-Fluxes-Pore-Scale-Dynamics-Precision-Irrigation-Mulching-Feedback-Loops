@@ -2,7 +2,7 @@
 
 ## Why the date matters
 
-SWAFL runs on **twenty years of daily weather** arranged on a 365-day calendar without leap days. With the built-in weather these are the twenty recorded years 1980 to 1999 of the study site (Chapter 5); with imported or online weather they are the last twenty complete years of your own record (Chapter 19). The program maps *any calendar date* you choose onto one of those twenty years. The working date therefore decides (i) which day is drawn, (ii) which of the twenty years acts as the *analogue* for that date, and (iii) the first line of every irrigation schedule.
+SWAFL runs on **twenty years of daily weather** arranged on a 365-day calendar without leap days. With the built-in weather these are the twenty recorded years 1980 to 1999 of the study site (Chapter 5); with imported or online weather they are the last twenty complete years of your own record (Chapter 20). The program maps *any calendar date* you choose onto one of those twenty years. The working date therefore decides (i) which day is drawn, (ii) which of the twenty years acts as the *analogue* for that date, and (iii) the first line of every irrigation schedule.
 
 ## The date control
 
@@ -41,15 +41,15 @@ Y_0 - Y_{\mathrm{rec}} & Y_{\mathrm{rec}}\le Y_0\le Y_{\mathrm{rec}}+19
 
 where $P_{\mathrm{thr},y}$ is the sum of throughfall (rain reaching the soil) in year $y$ (Section 5.2) and $Y_{\mathrm{rec}}$ is the first year of the record (1980 for the built-in weather, the first of the twenty years of your weather otherwise).
 
-**What this means for you.** A date in 2029 is *not* a forecast for 2029 unless the online weather is in use and the date falls in its 16-day forecast. Otherwise it shows how this soil, crop, trigger and method would behave on that day of the year in a typical year. Chapter 17 repeats this as a validity limit.
+**What this means for you.** A date in 2029 is *not* a forecast for 2029 unless the online weather is in use and the date falls in its 16-day forecast. Otherwise it shows how this soil, crop, trigger and method would behave on that day of the year in a typical year. Chapter 18 repeats this as a validity limit.
 
 ## The playback bar
 
-Under the drawing, the **playback bar** carries the play button (F5) and, for the field layers, the *Day by day*, *All 20 years* and *Average year* views and the speed buttons. In the field layers the play button animates the field clock: each real second advances 15 model days times the speed setting, and the clock *dwells* for about $3.2/\sqrt{\text{speed}}$ s on every day on which an irrigation, a wetting front of at least 20 cm, or drainage occurs. The clock wraps at the end of the twenty years. **Restart** (Shift+F5) returns to day 1 of the working year. In the three design layers the same button is **Run simulation** (Chapter 18). The year strip that sat under the drawing in version 1.0 has gone: the year is set only in Properties and on the toolbar.
+Under the drawing, the **playback bar** carries the play button (F5) and, for the field layers, the *Day by day*, *All 20 years* and *Average year* views and the speed buttons. In the field layers the play button animates the field clock: each real second advances 15 model days times the speed setting, and the clock *dwells* for about $3.2/\sqrt{\text{speed}}$ s on every day on which an irrigation, a wetting front of at least 20 cm, or drainage occurs. The clock wraps at the end of the twenty years. **Restart** (Shift+F5) returns to day 1 of the working year. In the three design layers the same button is **Run simulation** (Chapter 19). The year strip that sat under the drawing in version 1.0 has gone: the year is set only in Properties and on the toolbar.
 
 ## The 14-day look-ahead
 
-The "Next 14 days" block on the Results tab sums the same simulated daily fluxes from the working date forward. It is labelled *simulated from the weather record* because the rain on those days is the analogue year's rain. When the online weather is in use and the days fall in its 16-day forecast, the block says *from the weather forecast* instead (Chapter 19).
+The "Next 14 days" block on the Results tab sums the same simulated daily fluxes from the working date forward. It is labelled *simulated from the weather record* because the rain on those days is the analogue year's rain. When the online weather is in use and the days fall in its 16-day forecast, the block says *from the weather forecast* instead (Chapter 20).
 
 ## Detail year and sensor record
 

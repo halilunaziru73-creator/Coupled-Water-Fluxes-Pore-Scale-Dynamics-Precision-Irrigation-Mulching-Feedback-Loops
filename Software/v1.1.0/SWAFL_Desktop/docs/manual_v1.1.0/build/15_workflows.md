@@ -9,7 +9,7 @@ Each workflow is a complete sequence of clicks, what to expect, and the equation
 3. In Properties ▸ Mulch choose **Wheat straw**; the strength becomes 0.4 and the capacity 4 mm. Read the arrows: soil evaporation falls (green), irrigation falls (green).
 4. Open *Mulch and evaporation ▸ Fate of saved water* to see where the saved water goes (less irrigation, more drainage, more transpiration).
 
-*Why:* the strength $\varphi$ scales the vapour flux through the mulch, and the capacity the water the mulch holds (Chapter 9); *Irrigation without mulch* minus *Irrigation* is the saving on the whole-year balance.
+*Why:* the strength $\varphi$ scales the vapour flux through the mulch, and the capacity the water the mulch holds (Chapter 10); *Irrigation without mulch* minus *Irrigation* is the saving on the whole-year balance.
 
 ## Workflow 2: When should I irrigate?
 
@@ -32,7 +32,7 @@ Each workflow is a complete sequence of clicks, what to expect, and the equation
 2. *Field size*: **Length and width**; type the length and width of the field. The area and the lateral length follow (Eq. 18.1).
 3. *Placement*: compare *Surface*, *25 cm* and *45 cm*: each change cancels the run; run each and compare $E_a$ and the losses.
 4. Set the farm supply $Q_s$; read zones, pump head and power in the layout block (Eqs. 12.20 to 12.23), and the pump hydrograph on the Charts tab.
-5. Open *Tools ▸ Field on the map…* to read the real field: its indices, its land cover, the water sources around it and the system that suits it (Chapter 20).
+5. Open *Tools ▸ Field on the map…* to read the real field: its indices, its land cover, the water sources around it and the system that suits it (Chapter 21).
 
 ## Workflow 5: Check a sprinkler against the course rules
 
@@ -43,7 +43,7 @@ Each workflow is a complete sequence of clicks, what to expect, and the equation
 
 ## Workflow 6: My own weather, a warmer future
 
-1. *File ▸ Import weather data* and choose your daily weather file, or *File ▸ Online weather for a location* (Chapter 19). Every layer now runs on it; Properties shows *Imported weather file* (or *Online weather of a location*) as the weather source.
+1. *File ▸ Import weather data* and choose your daily weather file, or *File ▸ Online weather for a location* (Chapter 20). Every layer now runs on it; Properties shows *Imported weather file* (or *Online weather of a location*) as the weather source.
 2. Pin the baseline.
 3. Set the temperature shift to +2 °C and the rainfall scale to ×0.8. The arrows show the effect of the change on your own climate.
 4. Switch back to *Built-in weather record* in Properties ▸ Scenario at any time: your earlier rainfall and temperature settings return.
@@ -52,7 +52,7 @@ Each workflow is a complete sequence of clicks, what to expect, and the equation
 
 1. *File ▸ Save report as PDF (choose the layers)…*.
 2. Untick the groups you do not need (for example *Seasonal data* and *Feedback loops*), keep the irrigation design.
-3. **Make the PDF**, choose where to save it. Each layer gets your inputs, its key numbers and its full drawing; long drawings continue on the next pages, cut at their section headings (Chapter 23).
+3. **Make the PDF**, choose where to save it. Each layer gets your inputs, its key numbers and its full drawing; long drawings continue on the next pages, cut at their section headings (Chapter 24).
 
 ## Workflow 8: Save, share and reproduce
 

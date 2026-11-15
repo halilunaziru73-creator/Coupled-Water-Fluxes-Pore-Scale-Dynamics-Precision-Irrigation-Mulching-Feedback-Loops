@@ -19,7 +19,7 @@ The layer is a long scrolling drawing. The sub-section bar above it (*Whole desi
 | 11 | What this means for the season and the farm | Season, sets, hours |
 | 12 | Irrigation schedule and *Intervals, efficiency and the advice in short* | Dates, gaps, "When to irrigate" |
 
-![Surface irrigation design: the inputs (top) and the layout in plan. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/00_sid_draw.jpg){width=80%}
+![Surface irrigation design: the inputs (top) and the layout in plan. The numbered arrows are explained in the screenshot atlas (Chapter 26), under the same screen.](images/atlas11/00_sid_draw.jpg){width=80%}
 
 ## Inputs, step by step
 
@@ -39,7 +39,7 @@ The four worked examples reproduce the course exercises so that the program can 
 3. **System**: *Border strip*, *Furrow* or *Basin*. This resets $L$, $S$, $q$, $n$ to the system defaults of Table 11.1.
 4. **Intake**: *From my soil* (Green and Ampt from the soil's texture, fitted to Kostiakov, Section 11.2) or *Type k and A* (your own Kostiakov constants).
 5. **Cutoff**: *Es = 1* (cut off when the tail has just received $Z_n$), *85 % of L* (cut off when the front reaches 85 % of the length plus the storage time), *Manual* (set the time), and the toggle *Exact curve* (draw the exact Kostiakov $Z(x)$ instead of the straight-line profile of the lecture notes).
-6. Set the value boxes (Table 11.1): click a box, type the exact value or pick it from the list, choose the unit. Then press **Run simulation**; the results below are computed for these inputs (Chapter 18).
+6. Set the value boxes (Table 11.1): click a box, type the exact value or pick it from the list, choose the unit. Then press **Run simulation**; the results below are computed for these inputs (Chapter 19).
 
 Table 11.1. Surface-design inputs (value boxes): ranges (min, max, step) and system defaults.
 
@@ -302,7 +302,7 @@ E_s = \frac{V_{\mathrm{st}}}{V_{\mathrm{req}}},\quad
 
 $E_a$ is the **application efficiency**, $E_s$ the **storage (requirement) efficiency**, and CU the uniformity coefficient of Christiansen (1942) evaluated on the infiltrated depths. Because $V_{\mathrm{app}} = V_{\mathrm{inf}}+V_{\mathrm{ro}}$ and $V_{\mathrm{inf}}=V_{\mathrm{st}}+V_{\mathrm{dp}}$, the three fractions satisfy $E_a+\mathrm{DP}+\mathrm{RO}=1$, which the layer prints as the closed water balance of one irrigation. The deficit $V_{\mathrm{df}}$ is the missing part of $Z_n$. The distance at which $Z$ crosses $Z_n$, if it does, is $X = L\,(Z_0-Z_n)/(Z_0-Z_L)$.
 
-![Surface design: longitudinal section with $Z_0$, $Z_L$, $Z_n$ and the water balance of one irrigation. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/02_sid_longitudinal_section_draw.jpg){width=80%}
+![Surface design: longitudinal section with $Z_0$, $Z_L$, $Z_n$ and the water balance of one irrigation. The numbered arrows are explained in the screenshot atlas (Chapter 26), under the same screen.](images/atlas11/02_sid_longitudinal_section_draw.jpg){width=80%}
 
 ## Hydrograph
 
@@ -370,7 +370,7 @@ The search tries, in this order, ten single-variable moves, **cut-off, inflow, c
 
 For every candidate other than a pure cut-off move, six cut-off times are also tried ($0.62$ to $1.02$ times the "$E_s=1$" cut-off). The search stops when the target is met or after the ten moves. Each accepted row lists $q$, $L$, cutback, cut-off, $E_a$, $E_s$, DP and RO; **tap a row (green when it meets the target) to apply it** to the sliders. If the target cannot be reached the layer says so and suggests a shorter field, tailwater reuse, or drip or sprinklers. The same search is run by the toolbox item *Optimise surface layout (best design)*.
 
-![Surface design table: iterations toward $E_a \ge 85\,\%$, then the tornado chart. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/08_sid_design_table_draw.jpg){width=80%}
+![Surface design table: iterations toward $E_a \ge 85\,\%$, then the tornado chart. The numbered arrows are explained in the screenshot atlas (Chapter 26), under the same screen.](images/atlas11/08_sid_design_table_draw.jpg){width=80%}
 
 ## Sensitivity (tornado chart)
 
@@ -419,6 +419,6 @@ The last two sections are common to all three design layers, so they are describ
 
 **Advice message.** The message *When to irrigate* is generated from these numbers: the *next irrigation date* and its net and pumped depth; *"Then irrigate about every $\bar g$ days (between $g_{\min}$ and $g_{\max}$ days, shorter in hot weather and longer after rain)"*; the efficiencies of the design ($E_a$, $E_s$) and the time of one round; and the rule *"If a rain above 10 mm is forecast, delay the irrigation by a day or two"*. If no irrigation is triggered, it says to *keep the sensor at $z_s$ cm and irrigate when it reaches depletion $f_T$*.
 
-![The irrigation schedule and the "When to irrigate" message at the end of the surface design. The numbered arrows are explained in the screenshot atlas (Chapter 25), under the same screen.](images/atlas11/11_sid_irrigation_schedule_draw.jpg){width=80%}
+![The irrigation schedule and the "When to irrigate" message at the end of the surface design. The numbered arrows are explained in the screenshot atlas (Chapter 26), under the same screen.](images/atlas11/11_sid_irrigation_schedule_draw.jpg){width=80%}
 
 **Reading it.** The first row is today's decision. If the *Gap to next* is short (2 to 4 days) the trigger is wet or the soil store is small; if it is long (10+ days) the soil store is large or the weather cool. Move the **Date** to see how the schedule changes with the season, and move the **Trigger** or **Sensor depth** to see the dates shift.

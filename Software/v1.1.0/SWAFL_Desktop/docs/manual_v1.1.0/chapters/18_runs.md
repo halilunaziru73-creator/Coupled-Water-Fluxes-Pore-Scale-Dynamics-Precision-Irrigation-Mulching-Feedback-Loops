@@ -51,7 +51,7 @@ $$
 
 *Provenance (Eq. 18.1):* **[Engineered]**: geometry; laterals longer than $L_{\max}$ are split into equal runs from a central submain.
 
-with $L_{\min}=20$ m and $L_{\max}=300$ m for drip laterals and $L_{\min}=40$ m and $L_{\max}=500$ m for sprinkler laterals. The number of laterals follows from the width, $n_l=\lfloor W_f/S_l\rfloor$ with $W_f=A_f\cdot10^4/L_{\mathrm{lat}}$ (Eq. 12.20 and its sprinkler analogue in Chapter 13), and with it the zones, the pipes and the pump.
+with $L_{\min}=20$ m and $L_{\max}=300$ m for drip laterals and $L_{\min}=40$ m and $L_{\max}=500$ m for sprinkler laterals. The number of laterals follows from the width, $n_l=\lfloor W_f/S_l\rfloor$ with $W_f=A_f\cdot10^4/L_{\mathrm{lat}}$ (Eq. 12.20 and its sprinkler analogue in Chapter 14), and with it the zones, the pipes and the pump.
 
 The surface design is given by its run length and width directly (*Field length L*, *Field width*), and its area is their product.
 
@@ -90,7 +90,7 @@ Applying a combination writes its values into the value boxes, so you can see an
 * **Inlet:** in this mode, drag the yellow square along the edge of the field to where the pipe or the canal enters.
 * **Grid square:** sets the scale, from 1 to 100 m per square.
 * **Hand, zoom in and out, Fit:** the hand button moves the drawing; the right or middle mouse button, or Shift and drag, also move it in any mode. **+** and **−**, or the mouse wheel over the grid, zoom in and out around the cursor (10 % to 1200 %). **Fit** shows the whole field. The scale bar and the north arrow stay on the screen and follow the zoom.
-* **Locate on the map:** opens the field on the satellite map (Chapter 20), to find the farm, demarcate it on the image and compute its vegetation and water indices.
+* **Locate on the map:** opens the field on the satellite map (Chapter 21), to find the farm, demarcate it on the image and compute its vegetation and water indices.
 
 ![The sketch zoomed in, with the hand, zoom and map buttons.](images/ui/sketch_zoom.jpg){width=100%}
 
@@ -170,7 +170,7 @@ Each design layer (surface, drip and sprinklers) ends with a film of the soil wa
 
 **How the dates and depths are computed.** The film and the schedule under it come from one FAO-56 daily root-zone balance of the farm (Allen et al., 1998), the *irrigation plan*:
 
-* the **crop water use** of every day, $ET_c=K_c\,ET_0$: $K_c$ from the four-stage curve of the crop in Properties (its stages, $K_{c,ini}$, $K_{c,mid}$ and $K_{c,end}$, its sowing date and, for trees, its density; Chapter 21), or $0.3+0.85\,c$ from the crop cover $c$ for the simulated cereal rotation; the part of $K_c$ that is evaporation from the bare ground between the plants, $0.8\,\min(K_c,1)(1-c)$, is cut by the mulch to its vapour-flux fraction;
+* the **crop water use** of every day, $ET_c=K_c\,ET_0$: $K_c$ from the four-stage curve of the crop in Properties (its stages, $K_{c,ini}$, $K_{c,mid}$ and $K_{c,end}$, its sowing date and, for trees, its density; Chapter 22), or $0.3+0.85\,c$ from the crop cover $c$ for the simulated cereal rotation; the part of $K_c$ that is evaporation from the bare ground between the plants, $0.8\,\min(K_c,1)(1-c)$, is cut by the mulch to its vapour-flux fraction;
 * the **reference evapotranspiration $ET_0$ and the rain** of every day of the weather in use: the online weather of the farm with its 16-day forecast, a weather file, or the recorded weather, with the rainfall scale and the temperature shift of Properties;
 * the **root zone**: the roots of every day of the daily model (Chapter 5) and the available water of the soil, $\mathrm{TAW}=\mathrm{AWC}\,z_r$;
 * the **trigger** of the soil (Chapter 6) and the **design**: its net depth per irrigation $Z_n$, its pumped depth and its run time.
@@ -186,7 +186,7 @@ $$
 
 **The season of your crop.** The crop chosen in Properties is the crop of the decision. When the working date falls in its season, the film runs from the working date to 30 days after the harvest. When the working date has no crop (before sowing or after harvest), the film starts at the **next sowing of that crop** and runs through its whole season, and a yellow note above the film says so; the schedule under the film follows the same season. With the online weather, whose record ends in the present year, the next season is predicted with the weather of the last season of the record, its dates moved on by one year. The crops of the library are sown on their sowing date (Properties), which may be any day of the year; their season may run past 31 December, and the daily model irrigates them whenever they are in the field.
 
-**The weather of the decision.** The banner at the top of every design has a **WEATHER** line: the weather in use (the recorded weather of Taastrup, Denmark, 1980 to 1999; a weather file; or the online weather of a place with the 16-day forecast) and the button **Online weather of the farm…** (or *Change the weather…*), which opens the online-weather window (Chapter 19). The weather of your farm calibrates everything that follows: the soil water of every day, the irrigation dates and depths, the film, the schedule and the planting advice.
+**The weather of the decision.** The banner at the top of every design has a **WEATHER** line: the weather in use (the recorded weather of Taastrup, Denmark, 1980 to 1999; a weather file; or the online weather of a place with the 16-day forecast) and the button **Online weather of the farm…** (or *Change the weather…*), which opens the online-weather window (Chapter 20). The weather of your farm calibrates everything that follows: the soil water of every day, the irrigation dates and depths, the film, the schedule and the planting advice.
 
 * **Left: the profile of the day.** The water content of each layer of the real soil, 0 to 100 cm, with lines at the wilting point, the trigger and field capacity, the depth of the roots and the sensor. The frame and the label below take the colour of the phase of the day.
 * **Right: the days, coloured by phase.** The band at the top colours every day: irrigation day (blue), rain over 5 mm (light blue), comfortable (green), nearing the trigger (yellow), crop stress, $K_s<1$ (orange, also shaded across the chart), near the wilting point (red), and no crop (grey). The chart also shows:
@@ -226,7 +226,7 @@ $$
 
 *Provenance (Eq. 18.5):* **[Literature]** with an **[Engineered]** floor: the crop and the soil keep losing about a third of $ET_c$ as the soil dries. The wilting point is reached when $D_r\ge 0.97\,\mathrm{TAW}$.
 
-**The schedule** under the film lists the next eight irrigations of this design: the date and the days to it, $K_c$ and $ET_c$ of that day, the water the root zone has lost (of its TAW), the net and pumped depths and the run time (shorter when the trigger comes before the design depth), and the gap to the next one. *The season in numbers* gives, for the season of the decision, when to irrigate, the crop water use ($K_c\times ET_0$, with its peak), the rain and its runoff, the irrigations (their number, dates, net and pumped water), the mean, shortest and longest interval, the drainage below the roots, the days of crop stress with the yield as a share of the potential ($1-K_y(1-ET_a/ET_c)$), and the efficiency of the design. The season rows of each design (*Net irrigation in the season*, the gross water and the pumping hours) use the same plan, and so does the zone-by-zone irrigation of the field map (Chapter 20).
+**The schedule** under the film lists the next eight irrigations of this design: the date and the days to it, $K_c$ and $ET_c$ of that day, the water the root zone has lost (of its TAW), the net and pumped depths and the run time (shorter when the trigger comes before the design depth), and the gap to the next one. *The season in numbers* gives, for the season of the decision, when to irrigate, the crop water use ($K_c\times ET_0$, with its peak), the rain and its runoff, the irrigations (their number, dates, net and pumped water), the mean, shortest and longest interval, the drainage below the roots, the days of crop stress with the yield as a share of the potential ($1-K_y(1-ET_a/ET_c)$), and the efficiency of the design. The season rows of each design (*Net irrigation in the season*, the gross water and the pumping hours) use the same plan, and so does the zone-by-zone irrigation of the field map (Chapter 21).
 
 ![The schedule of the drip design and the season in numbers.](images/ui/dss_schedule.jpg){width=88%}
 

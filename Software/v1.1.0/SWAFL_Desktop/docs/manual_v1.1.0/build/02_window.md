@@ -23,25 +23,25 @@ The **status bar** shows, from left to right: the state (*Ready*), the active la
 
 | Menu | Item | Shortcut | Action |
 |:--|:--|:--|:--|
-| File | Import weather data (CSV, Excel, DWF, DLF, DAI)… | | Reads a daily weather file; every layer, the dashboard and the crop water requirement then use it (Chapter 19). |
-| | Online weather for a location… | | Gets twenty years of daily weather and a 16-day forecast for a place (Chapter 19). |
+| File | Import weather data (CSV, Excel, DWF, DLF, DAI)… | | Reads a daily weather file; every layer, the dashboard and the crop water requirement then use it (Chapter 20). |
+| | Online weather for a location… | | Gets twenty years of daily weather and a 16-day forecast for a place (Chapter 20). |
 | | New project | Ctrl+N | Resets every control to the defaults (Appendix B). |
 | | Open project… / Save project… | Ctrl+O / Ctrl+S | Loads or saves a `.swafl` file: JSON with the version, the open layer, every control, the year and the date. |
 | | Export ▸ | Ctrl+E | Picture of the window (PNG); yearly results (CSV); design results (CSV). |
-| | Save report as PDF (choose the layers)… | Ctrl+Shift+P | Asks which layers to include (all are ticked to start with) and writes the report (Chapter 23). |
+| | Save report as PDF (choose the layers)… | Ctrl+Shift+P | Asks which layers to include (all are ticked to start with) and writes the report (Chapter 24). |
 | | Print / save this view as PDF… | Ctrl+P | Prints the open layer through the system print dialog. |
 | | Exit | Ctrl+Q | Closes the program. |
 | Edit | Undo / Redo | Ctrl+Z / Ctrl+Y | Steps through the history of control changes. |
 | | Reset all settings; Copy settings as text | | Defaults for the controls only; a text list of every control value on the clipboard. |
-| | Pin results as baseline / Clear baseline | Ctrl+B | Freezes the 20-year averages for comparison (Chapter 14). |
+| | Pin results as baseline / Clear baseline | Ctrl+B | Freezes the 20-year averages for comparison (Chapter 15). |
 | | Find a tool… | Ctrl+F | Moves the cursor to the Toolbox search box. |
 | View | Design layouts ▸ | | Jumps to the layout drawing of the surface, drip or sprinkler design. |
-| | Field sketch to design… | | The field sketch (Chapter 18). |
+| | Field sketch to design… | | The field sketch (Chapter 19). |
 | | Layers and Processing Toolbox / Properties / Dashboard | | Show or hide each dock. |
 | | Fit drawing to window / Drawing at full width (scroll) / Focus view (hide panels) | F9 | Three ways of showing the drawing. |
 | | Expand all layers / Collapse all layers; Full screen | F11 | Tree display; full screen. |
-| Tools | Field sketch to design…; Compare the irrigation systems on this field; Find the most efficient design inputs | | Chapter 18. |
-| | Import weather data…; Online weather for a location… | | Chapter 19. |
+| Tools | Field sketch to design…; Compare the irrigation systems on this field; Find the most efficient design inputs | | Chapter 19. |
+| | Import weather data…; Online weather for a location… | | Chapter 20. |
 | | Ready-made cases ▸; Irrigation design ▸; Irrigation method ▸; Mulch material ▸ | | Set the control directly. |
 | | Run 20-year season simulation; Find a tool… | | Chapter 5. |
 | Refresh | Refresh display (F6); Reload simulation engine; Clear message log | | |
@@ -49,7 +49,7 @@ The **status bar** shows, from left to right: the state (*Ready*), the active la
 | Run | Run / pause the season (F5); Restart from day 1 (Shift+F5); 20-year season simulation; Optimise surface layout; Ready-made cases ▸ | | |
 | Help | Manual (PDF) (F1); How to use SWAFL; Troubleshooting (running the app); Keyboard shortcuts; SWAFL on GitHub; Full documentation on GitHub; Report a problem; About SWAFL | | |
 
-The eight menus are pictured, opened, in the screenshot atlas (Chapter 25).
+The eight menus are pictured, opened, in the screenshot atlas (Chapter 26).
 
 ## The command palette (Ctrl+K)
 
@@ -101,5 +101,5 @@ Drag the thin splitters between the docks to resize them. The program remembers 
 
 * **Hot spots.** Many drawings are clickable. Hovering shows a tooltip; clicking applies a setting (for example, clicking a year bar jumps to that year, clicking a soil on a chart selects that soil).
 * **Value boxes.** Every input of the three design layers is a value box. Click it: a small window opens in which you type the exact value, choose its unit (for example m, km or ft; L/s, m³/h or L/min; ha, m² or acre; kPa, bar, m of water or psi) or pick a value from the list of the allowed range. A value outside the range is brought back to its nearest limit.
-* **Nothing runs while you type.** Every layer, not only the three designs, has a **Run simulation** bar and shows its figures only after the button (or the Play button of the toolbar) is pressed for the present controls (Chapter 18); when a control changes, the bar asks to run again.
+* **Nothing runs while you type.** Every layer, not only the three designs, has a **Run simulation** bar and shows its figures only after the button (or the Play button of the toolbar) is pressed for the present controls (Chapter 19); when a control changes, the bar asks to run again.
 * **Colours.** Water blues, soil browns, crop greens; text is dark on a white sheet; labels sit in white boxes drawn after the pictures, so no arrow covers a label.

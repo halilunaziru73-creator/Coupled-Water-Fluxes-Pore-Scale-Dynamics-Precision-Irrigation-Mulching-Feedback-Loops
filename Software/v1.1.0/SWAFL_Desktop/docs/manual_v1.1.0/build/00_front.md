@@ -47,13 +47,13 @@ This manual documents **SWAFL Desktop**, the Soil Water Atmosphere Field Loop de
 
 1. Chapters 1 to 3 install the program and explain the window and every control.
 2. Chapters 4 to 5 explain the clock (dates) and the two computing engines that sit under every layer.
-3. Chapters 6 to 10 document each *layer* of the Layers panel: what it designs or shows, how the picture is generated, and the governing equations.
-4. Chapters 11 to 13 document the three irrigation design layers (surface, drip, sprinkler) in full, including the irrigation schedule and the "When to irrigate" message.
-5. Chapters 14 to 16 document the dashboard, step-by-step workflows, exports and troubleshooting.
-6. Chapter 17 states the validity limits.
-7. Chapters 18 to 24 document the additions of version 1.1: running a design and finding the most efficient inputs, weather data (your own file or the online weather of a place), the real field on the map (satellite indices, image analysis of the satellite photo, water sources and the choice of the irrigation system), the crop library and the crop water requirement, the seasonal data, the reports, and every change from version 1.0.
-8. Chapter 25 is the screenshot atlas. It shows every screen of the workbench (all layers, every section of the three design layers, the menus, the toolbox, the Properties panel, the Dashboard and the dialogs of version 1.1) from the program itself, and prints under each screenshot every equation that the screen draws on, with its number, source chapter and provenance. A reverse index gives, for every numbered equation, the screens that use it.
-9. Chapters 26 to 39 document the Daisy workbench: the overview of its groups of tabs, the governing equations and guiding principles (the last sections of Chapter 26), every screen with numbered arrows (Input data with online weather, Experiments and scenarios, the 27 best combinations, Results and analysis with the figures of real Daisy runs, the guided path with Back and Next and its hand-over to the layers of the SWAFL project, Model development, Documentation), the 107 reference topics, the tested parameters, the factors and responses of the experiments, the Daisy library as it comes with the program, and the weather of the bundled stations.
+3. Chapters 6 to 11 document each *layer* of the Layers panel: what it designs or shows, how the picture is generated, and the governing equations.
+4. Chapters 12 to 14 document the three irrigation design layers (surface, drip, sprinkler) in full, including the irrigation schedule and the "When to irrigate" message.
+5. Chapters 15 to 17 document the dashboard, step-by-step workflows, exports and troubleshooting.
+6. Chapter 18 states the validity limits.
+7. Chapters 19 to 25 document the additions of version 1.1: running a design and finding the most efficient inputs, weather data (your own file or the online weather of a place), the real field on the map (satellite indices, image analysis of the satellite photo, water sources and the choice of the irrigation system), the crop library and the crop water requirement, the seasonal data, the reports, and every change from version 1.0.
+8. Chapter 26 is the screenshot atlas. It shows every screen of the workbench (all layers, every section of the three design layers, the menus, the toolbox, the Properties panel, the Dashboard and the dialogs of version 1.1) from the program itself, and prints under each screenshot every equation that the screen draws on, with its number, source chapter and provenance. A reverse index gives, for every numbered equation, the screens that use it.
+9. Chapters 27 to 40 document the Daisy workbench: the overview of its groups of tabs, the governing equations and guiding principles (the last sections of Chapter 27), every screen with numbered arrows (Input data with online weather, Experiments and scenarios, the 27 best combinations, Results and analysis with the figures of real Daisy runs, the guided path with Back and Next and its hand-over to the layers of the SWAFL project, Model development, Documentation), the 107 reference topics, the tested parameters, the factors and responses of the experiments, the Daisy library as it comes with the program, and the weather of the bundled stations.
 10. The appendices give symbols, control value lists, data sets, the provenance ledger, the references and the reference of all numbered equations.
 
 **The map of the manual.** Every chapter carries an icon in the colour of its part, in the table of contents and on its first page:
@@ -61,12 +61,12 @@ This manual documents **SWAFL Desktop**, the Soil Water Atmosphere Field Loop de
 | Part | Colour | Chapters | Icons |
 |:--|:--|:--|:--|
 | Start: install, window, controls, clock, engines | blue | 1 to 5 | `{\color{swaflblue}\iconfont ⚙ ▦ ☰ ◷ ⚛}`{=latex} |
-| Layers of the field | green | 6 to 10 | `{\color{partgreen}\iconfont ☂ ⊞ ☷ ☘ ❦ ♻}`{=latex} |
-| Irrigation design | teal | 11 to 13 | `{\color{partteal}\iconfont ☔ ✚ ❄}`{=latex} |
-| Outputs: dashboard, workflows, exports, limits, runs, reports | orange | 14 to 18, 23 | `{\color{partorange}\iconfont ▤ ✔ ✎ ⚠ ⚑}`{=latex} |
-| Data: weather, the real field, crops, seasons | brown | 19 to 22 | `{\color{partbrown}\iconfont ☀ ⊞ ✿ ◷}`{=latex} |
-| Reference: changes, atlas, appendices | grey | 24, 25, appendices | `{\color{partgrey}\iconfont ★ ▥ ▦}`{=latex} |
-| The Daisy workbench | purple | 26 to 39 | `{\color{partpurple}\iconfont ⚘ ☀ ❖ ⚖ ▤ ⚑ ⚙ ✎ ☰ ⚗ ❦ ☁ ⚠}`{=latex} |
+| Layers of the field | green | 6 to 11 | `{\color{partgreen}\iconfont ☂ ⊞ ☷ ☘ ◈ ❦ ♻}`{=latex} |
+| Irrigation design | teal | 12 to 14 | `{\color{partteal}\iconfont ☔ ✚ ❄}`{=latex} |
+| Outputs: dashboard, workflows, exports, limits, runs, reports | orange | 15 to 19, 24 | `{\color{partorange}\iconfont ▤ ✔ ✎ ⚠ ⚑}`{=latex} |
+| Data: weather, the real field, crops, seasons | brown | 20 to 23 | `{\color{partbrown}\iconfont ☀ ⊞ ✿ ◷}`{=latex} |
+| Reference: changes, atlas, appendices | grey | 25, 26, appendices | `{\color{partgrey}\iconfont ★ ▥ ▦}`{=latex} |
+| The Daisy workbench | purple | 27 to 40 | `{\color{partpurple}\iconfont ⚘ ☀ ❖ ⚖ ▤ ⚑ ⚙ ✎ ☰ ⚗ ❦ ☁ ⚠}`{=latex} |
 
 **The manual inside the program.** This manual comes with SWAFL and opens from the program itself, at the page you need: **F1** or **Help > Manual** opens it whole; the button **Manual p. N** on the bar of every tab of the Daisy workbench and above every layer of the SWAFL project opens it at the section of that screen; and the tab **The SWAFL manual** of the Daisy workbench (also in the Layers panel, Daisy model, Documentation) lists all its sections with their pages, with a search. On the desktop it opens in a window of SWAFL at that page; in the web version, in a tab of the browser. The page of every section is read from this PDF each time the manual is built (tools/make_manual_index.py writes app/data/manual_index.json), so the buttons always point to the right page.
 

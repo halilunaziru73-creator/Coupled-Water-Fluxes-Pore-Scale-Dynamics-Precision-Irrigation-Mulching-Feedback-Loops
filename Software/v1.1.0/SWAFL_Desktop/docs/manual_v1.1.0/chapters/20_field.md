@@ -241,7 +241,7 @@ and the trend of the last three scenes (least squares, per 30 days). The **monit
 
 * **its soil**: SoilGrids at the centre of the zone (sand and clay), the nearest soil of SWAFL and its available water $\mathrm{AWC}_z$;
 * **its observed cover**: the crop development of the SWAFL daily model, scaled by the zone's cover from its last NDVI against the field, $f_{c,z}(t)=\min\bigl(1,\ c(t)\,f_{c}(\mathrm{NDVI}_z)/\overline{f_c}\bigr)$ with $f_c=(\mathrm{NDVI}-0.15)/0.7$, and the crop coefficient $K_c=K_{c,ini}+(K_{c,mid}-K_{c,ini})\,K_d$, $K_d=\min(1,\,1.5f_c,\,f_c^{0.5})$ (Allen and Pereira, 2009), with the coefficients of the crop in Properties;
-* **the farm of the simulation**: the roots of every day, the trigger, the depletion fraction and the past irrigations of the irrigation plan of Chapter 18 (Eq. 18.4), the season of the decision of Chapter 18, and the application efficiency of the design in use;
+* **the farm of the simulation**: the roots of every day, the trigger, the depletion fraction and the past irrigations of the irrigation plan of Chapter 19 (Eq. 18.4), the season of the decision of Chapter 19, and the application efficiency of the design in use;
 * **the weather in use**: the daily reference ET and rain (the online weather of the farm with its forecast, a weather file, or the recorded weather).
 
 The balance starts 45 days before the decision with the water of the SWAFL model on that day:
@@ -251,7 +251,7 @@ D_{r,z}(t+1)=D_{r,z}(t)+K_{c,z}(t)\,K_{s}\,ET_0(t)-\bigl(P(t)-RO(t)\bigr)-I(t),\
 \tag{20.8}
 $$
 
-*Provenance (Eq. 20.8):* **[Literature]** FAO-56 root-zone balance (Allen et al., 1998) with the trigger and irrigation rule of the SWAFL daily model; $RO=0.3(P-35)$ above 35 mm as in the crop balance of Chapter 21.
+*Provenance (Eq. 20.8):* **[Literature]** FAO-56 root-zone balance (Allen et al., 1998) with the trigger and irrigation rule of the SWAFL daily model; $RO=0.3(P-35)$ above 35 mm as in the crop balance of Chapter 22.
 
 **Cell by cell.** The same balance (Eq. 20.8) is also run for every 10 m cell of the field, with the NDVI of that cell (the last clear Sentinel-2 scene, or the computed indices) and its available water interpolated between the zones (inverse squared distance to the zone centres). The two maps, *depth of the next irrigation* and *date of the next irrigation*, are drawn from these cells as continuous colours with smooth interpolation: the depth on the chosen palette, stretched over the 2nd to 98th percentile of the field so that differences stand out, and the date from red (soon) to blue (late). Cells that need no water within the 60 days (bare soil, or enough water) are drawn in pale sand. The legend gives the range in mm or in dates, the share of the field that needs no water, and the zone table below it. The cursor reads the date, net depth, water left, NDVI and available water of the cell under it, and *Cells CSV (10 m)* saves all of them.
 
