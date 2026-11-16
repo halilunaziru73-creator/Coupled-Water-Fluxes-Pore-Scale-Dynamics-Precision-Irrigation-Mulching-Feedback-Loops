@@ -317,7 +317,8 @@ window.SWAFLAct = Act;   // the engine (inside its frame) opens the manual at th
   function mk() {
     var st = document.createElement('style'); st.textContent = '#dzLoad{position:fixed;right:16px;bottom:34px;z-index:9500;width:330px;background:#fff;border:1px solid #0A246A;box-shadow:0 4px 18px rgba(10,36,106,.35);font:12.5px Tahoma,"Segoe UI",Arial,sans-serif;color:#10213f;padding:9px 12px;display:none}#dzLoad b{color:#0A246A}#dzLoad .dl-h{display:flex;align-items:center;gap:9px}#dzLoad .dl-sp{width:18px;height:18px;border:3px solid #cfd9ee;border-top-color:#0A246A;border-radius:50%;animation:dlsp .8s linear infinite;flex:none}#dzLoad .dl-bar{height:7px;background:#e4e9f4;border-radius:4px;margin:8px 0 5px;overflow:hidden;position:relative}#dzLoad .dl-in{height:7px;background:#2b6cc4;border-radius:4px;width:0;transition:width .4s}#dzLoad .dl-ind{position:absolute;top:0;left:0;height:7px;width:35%;background:linear-gradient(90deg,transparent,#2b6cc4,transparent);animation:dlind 1.2s ease-in-out infinite}#dzLoad .dl-t{color:#4a5a78;font-size:11.5px}@keyframes dlsp{to{transform:rotate(360deg)}}@keyframes dlind{0%{left:-35%}100%{left:100%}}';
     document.head.appendChild(st); card = document.createElement('div'); card.id = 'dzLoad'; card.setAttribute('role', 'status'); card.setAttribute('aria-live', 'polite');
-    card.innerHTML = '<div class="dl-h"><span class="dl-sp"></span><b>Daisy is running</b></div><div class="dl-bar"><div class="dl-in"></div><div class="dl-ind"></div></div><div class="dl-t" id="dlT"></div>'; document.body.appendChild(card);
+    card.innerHTML = '<div class="dl-h"><span class="dl-sp"></span><b>Daisy is running</b></div><div class="dl-bar"><div class="dl-in"></div><div class="dl-ind"></div></div><div class="dl-t" id="dlT"></div><div style="text-align:right;margin-top:6px"><button id="dlStop" style="font:12px Tahoma,Segoe UI,Arial,sans-serif;padding:2px 14px;border:1px solid #b3261e;background:#fff;color:#b3261e;cursor:pointer">Stop all runs</button></div>'; document.body.appendChild(card);
+    card.querySelector('#dlStop').onclick = function () { try { if (window.DaisyExpUI && window.DaisyExpUI.stop) window.DaisyExpUI.stop(); else window.swafl.daisyStop(); } catch (e) { } card.style.display = 'none'; lastOn = 0; };
   }
   function fmt(s) { s = Math.round(s); return s < 90 ? s + ' s' : Math.floor(s / 60) + ' min ' + (s % 60) + ' s'; }
   function tick() {
@@ -325,6 +326,7 @@ window.SWAFLAct = Act;   // the engine (inside its frame) opens the manual at th
       var busy = s && (s.running > 0 || s.waiting > 0), now = Date.now(); if (busy) lastOn = now;
       var on = s && s.asked > 0 && (busy || now - lastOn < 2500);
       if (!card && on) mk();
+      if (!busy) { var sb0 = document.getElementById('stPlay'); if (sb0 && sb0.dataset.was && sb0.textContent === 'Daisy running') { sb0.textContent = sb0.dataset.was; } if (sb0) delete sb0.dataset.was; }
       if (card) {
         card.style.display = on ? 'block' : 'none';
         if (on) {
@@ -333,7 +335,7 @@ window.SWAFLAct = Act;   // the engine (inside its frame) opens the manual at th
           card.querySelector('.dl-in').style.width = pct + '%'; card.querySelector('.dl-ind').style.display = busy ? 'block' : 'none';
           card.querySelector('b').textContent = (busy ? 'Daisy is running' : 'Daisy has finished') + (tot ? ' · ' + Math.round(pct) + ' %' : '');
           card.querySelector('#dlT').textContent = (s.running ? s.running + ' running' : '') + (s.waiting ? ' · ' + s.waiting + ' waiting' : '') + (tot ? ' · ' + dn + ' of ' + tot + ' runs finished' : ' · ' + s.done + ' finished') + ' · ' + fmt(el);
-          var sb = document.getElementById('stPlay'); if (sb && busy) sb.textContent = 'Daisy running';
+          var sb = document.getElementById('stPlay'); if (sb && busy) { if (!sb.dataset.was) sb.dataset.was = sb.textContent; sb.textContent = 'Daisy running'; }
         }
       }
     }).catch(function () { });

@@ -108,9 +108,12 @@ const slot = () => new Promise(res => { const go = () => { if (RUNNING < SLOTS()
 const release = () => { RUNNING = Math.max(0, RUNNING - 1); const n = WAIT.shift(); if (n) setTimeout(n, 20); };
 let FIN = 0, T0 = 0, ASK = 0, idleT = null;
 ipcMain.handle('daisy-status', () => ({ running: RUNNING, waiting: WAIT.length, asked: ASK, done: FIN, since: T0, slots: SLOTS() }));
+let STOPGEN = 0;
+// Stop: every Daisy program that is running is ended at once, and the runs that wait for a place give no result
+ipcMain.handle('daisy-stop', () => { STOPGEN++; const n = DR.stopAll(), w = WAIT.length; if (idleT) { clearTimeout(idleT); idleT = null; } FIN = 0; ASK = 0; T0 = 0; return { ok: true, ended: n, waiting: w }; });   /* the card that shows Daisy at work goes at once */
 ipcMain.handle('daisy-job', async (_e, job) => {
   if (idleT) { clearTimeout(idleT); idleT = null; } if (ASK === FIN) { FIN = 0; ASK = 0; T0 = Date.now(); } ASK++;
-  await slot(); try { return await daisyJob(job); } finally { release(); FIN++; if (FIN >= ASK) idleT = setTimeout(() => { if (FIN >= ASK) { FIN = 0; ASK = 0; T0 = 0; } }, 6000); }
+  const gen = STOPGEN; await slot(); try { if (gen !== STOPGEN) return { code: -9, stopped: true, logs: {}, out: '', err: '' }; const r0 = await daisyJob(job); return r0; } finally { release(); FIN++; if (FIN >= ASK) idleT = setTimeout(() => { if (FIN >= ASK) { FIN = 0; ASK = 0; T0 = 0; } }, 6000); }
 });
 async function daisyJob(job) {
   const ck = job && !job.noCache ? jobKey(job) : null; if (ck && jobCache.has(ck)) { const c = jobCache.get(ck); jobCache.delete(ck); jobCache.set(ck, c); return Object.assign({}, c, { seconds: 0, cached: true }); }
@@ -118,6 +121,7 @@ async function daisyJob(job) {
   if (job && job.copyBundle) job.copyDir = path.join(__dirname, 'app', 'data', 'daisy', 'scenarios', 'common');
   try {
     const r = await DR.runJob(job, { exe, timeoutMs: (job && job.timeoutMs) || 1800000 });
+    if (r.stopped) { DR.clean(r.dir); delete r.dir; return r; }
     // keep the whole run folder (set-up files and the raw Daisy logs, untouched) so that it can be checked and reused outside SWAFL
     try { const root = scratchRoot(); await fs.promises.mkdir(root, { recursive: true }); const stamp = new Date().toISOString().replace(/[:T]/g, '-').slice(0, 19), clean = t => String(t || '').replace(/[^A-Za-z0-9._-]+/g, '_').slice(0, 60), nm = clean((job && job.scenario ? job.scenario + '_' : '') + ((job && job.label) || 'run')), grp = clean(job && job.group), rid = clean(job && job.runId); let base = grp ? path.join(root, grp) : root, dest = path.join(base, grp ? (rid ? rid + '_' : '') + nm : stamp + '_' + nm), k = 1; await fs.promises.mkdir(base, { recursive: true }); const ex = p => fs.promises.access(p).then(() => true, () => false); while (await ex(dest)) dest = dest.replace(/_\d+$/, '') + '_' + (++k); await fs.promises.cp(r.dir, dest, { recursive: true }); r.saved = dest; r.scratch = true; } catch (e) { r.savedError = String(e.message); }
     DR.clean(r.dir); delete r.dir; if (ck && r.code === 0) { jobCache.set(ck, r); while (jobCache.size > 30) jobCache.delete(jobCache.keys().next().value); } return r;

@@ -59,8 +59,12 @@ function walk(dir, base, out) { fs.readdirSync(dir, { withFileTypes: true }).for
 
 /* job: { main:'Run/Runfile.dai', files:{ 'Common/x.dai': text, ... }, copyDir: path to a folder copied to workDir/Common (not overriding job.files), prefix, logPattern }
    returns { code, out, err, dir, logs:{ name: text }, seconds } */
+// the Daisy programs that are running, so that Stop can end them at once
+const ACTIVE = new Set(); let GEN = 0;
+function stopAll() { GEN++; let n = 0; ACTIVE.forEach(p => { n++; try { if (isWin) spawn('taskkill', ['/pid', String(p.pid), '/T', '/F'], { windowsHide: true, stdio: 'ignore' }).on('error', () => { try { p.kill(); } catch (e) { } }); else p.kill('SIGKILL'); } catch (e) { try { p.kill(); } catch (e2) { } } try { p.stdout.destroy(); p.stderr.destroy(); } catch (e) { } }); return n; }   /* the pipes are closed too, so the run ends this moment even if a helper program is left behind */
 function runJob(job, opt) {
   opt = opt || {};
+  const gen = GEN;
   return new Promise(async (resolve, reject) => {
     const exe = opt.exe; if (!exe) return reject(new Error('the Daisy program was not found'));
     let dir; const t0 = Date.now();
@@ -71,14 +75,15 @@ function runJob(job, opt) {
       const root = path.resolve(dir);
       for (const f of Object.keys(job.files)) { const p = path.join(dir, f); if (path.resolve(p).indexOf(root) !== 0) throw new Error('bad file name ' + f); await fs.promises.mkdir(path.dirname(p), { recursive: true }); await fs.promises.writeFile(p, job.files[f], 'utf8'); }
     } catch (e) { return reject(e); }
+    if (gen !== GEN) return resolve({ code: -9, stopped: true, out: '', err: '', dir, logs: {}, seconds: 0 });   // Stop was pressed while the folder was made
     const main = path.join(dir, job.main), wd = path.dirname(main); let out = '', err = '';
     const p = spawn(exe, [path.basename(main)], { cwd: wd, env: envFor(exe), windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });   // no console window, no waiting for input
     try { os.setPriority(p.pid, os.constants.priority.PRIORITY_BELOW_NORMAL); } catch (e) { }   // the runs work in the background: the window and the rest of the computer stay quick
-    const to = setTimeout(() => { try { p.kill(); } catch (e) { } }, opt.timeoutMs || 1800000);
+    ACTIVE.add(p); const to = setTimeout(() => { try { p.kill(); } catch (e) { } }, opt.timeoutMs || 1800000);
     p.stdout.on('data', d => { out += d; if (opt.onOut) opt.onOut(String(d)); }); p.stderr.on('data', d => { err += d; if (opt.onOut) opt.onOut(String(d)); });
-    p.on('error', e => { clearTimeout(to); if (e && e.code === 'EACCES') e.message = 'Windows would not run ' + exe + ' (EACCES). This is what happens when the file is the Daisy installer (daisy-7.1.x-Windows-...exe), which needs administrator rights. SWAFL has Daisy built in, so choose nothing, or choose bin\\daisy-bin.exe of an installed Daisy.'; reject(e); });
+    p.on('error', e => { clearTimeout(to); ACTIVE.delete(p); if (e && e.code === 'EACCES') e.message = 'Windows would not run ' + exe + ' (EACCES). This is what happens when the file is the Daisy installer (daisy-7.1.x-Windows-...exe), which needs administrator rights. SWAFL has Daisy built in, so choose nothing, or choose bin\\daisy-bin.exe of an installed Daisy.'; reject(e); });
     p.on('close', async code => {
-      clearTimeout(to); const logs = {};
+      clearTimeout(to); ACTIVE.delete(p); const logs = {}; if (gen !== GEN) return resolve({ code: -9, stopped: true, out: '', err: '', dir, logs, seconds: (Date.now() - t0) / 1000 });
       // the logs are read one by one without stopping the program (a synchronous read of tens of megabytes froze the window and the rest of the computer)
       try { const names = await fs.promises.readdir(wd); for (const n of names) { if (/\.(dlf|csv)$/i.test(n) || /^daisy\.log$/.test(n)) { try { const f = path.join(wd, n), s = await fs.promises.stat(f); if (s.size < 80e6) logs[n] = await fs.promises.readFile(f, 'utf8'); } catch (e) { } } } } catch (e) { }
       resolve({ code, out: out.slice(-30000), err: err.slice(-30000), dir, logs, seconds: (Date.now() - t0) / 1000 });
@@ -88,4 +93,4 @@ function runJob(job, opt) {
 function clean(dir) { try { if (dir && dir.indexOf('swafl-daisy-') >= 0) fs.promises.rm(dir, { recursive: true, force: true }).catch(() => { }); } catch (e) { } }   // removed in the background
 // the same copy, made in the background without stopping the window (the first start copies the bundled Daisy once; a synchronous copy froze the program for seconds)
 async function provisionAsync() { try { if (isFile(ownExe()) && isFile(path.join(OWN(), 'lib', 'crop.dai'))) return ownExe(); const src = bundledDir(); if (!src) return null; await fs.promises.mkdir(OWN(), { recursive: true }); await fs.promises.cp(src, OWN(), { recursive: true, force: true }); return isFile(ownExe()) ? ownExe() : null; } catch (e) { return null; } }
-module.exports = { isInstaller, findExe, homeFor, version, runJob, clean, EXE, candidates, provision, provisionAsync, findInstaller, runInstaller, looked, ownDir: OWN };
+module.exports = { stopAll, isInstaller, findExe, homeFor, version, runJob, clean, EXE, candidates, provision, provisionAsync, findInstaller, runInstaller, looked, ownDir: OWN };
