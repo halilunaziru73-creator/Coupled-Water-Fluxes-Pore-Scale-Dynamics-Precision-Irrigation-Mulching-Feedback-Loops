@@ -105,8 +105,12 @@ const E = (() => {
               api.defaults = JSON.parse(w.eval('JSON.stringify(state)')); api.setFit('window');
               // visit the three design scenes once so their section headings become layer sub-nodes
               const keep = w.eval('currentScene.id'), sw = id => { try { w.eval("switchScene(SCENES.find(function(s){return s.id==='" + id + "'})); try{currentScene.draw&&currentScene.draw();if(currentScene.id==='sid')currentScene.draw()}catch(e){}"); } catch (e) {} };
+              /* The headings of the three design layers do not change between starts, so after the first start they are kept and the three drawings (about a second and a half of work at every start) are not repeated. */
+              const verK = 'swafl.secs.' + ((new URL(frame.src, location.href)).searchParams.get('v') || '0'); let cached = null; try { cached = JSON.parse(localStorage.getItem(verK) || 'null'); } catch (e) {}
+              const fin = () => setTimeout(() => { const t = new Date(), p = n => String(n).padStart(2, '0'); api.setDate(t.getFullYear() + '-' + p(t.getMonth() + 1) + '-' + p(t.getDate())); api.ev('dssHold()'); api.poll(true); res(true); }, cached ? 0 : 300);
+              if (cached && cached.sid && cached.drip && cached.spr) { try { w.eval('window.__SEC=Object.assign(window.__SEC||{},' + JSON.stringify(cached) + ')'); fin(); return; } catch (e) { cached = null; } }
               const seq = ['sid', 'drip', 'spr', keep]; let i = 0;
-              (function step() { sw(seq[i]); i++; if (i < seq.length) setTimeout(step, 20); else setTimeout(() => { const t = new Date(), p = n => String(n).padStart(2, '0'); api.setDate(t.getFullYear() + '-' + p(t.getMonth() + 1) + '-' + p(t.getDate())); api.ev('dssHold()'); api.poll(true); res(true); }, 300); })();
+              (function step() { sw(seq[i]); i++; if (i < seq.length) setTimeout(step, 20); else { try { const sc = JSON.parse(w.eval('JSON.stringify(window.__SEC||{})')); if (sc.sid && sc.drip && sc.spr) { for (const k in localStorage) if (k.indexOf('swafl.secs.') === 0 && k !== verK) localStorage.removeItem(k); localStorage.setItem(verK, JSON.stringify({ sid: sc.sid, drip: sc.drip, spr: sc.spr })); } } catch (e) {} fin(); } })();
             } else if (Date.now() - t0 > 40000) { clearInterval(iv); res(false); }
           } catch (e) { /* not loaded yet */ }
         }, 150);
