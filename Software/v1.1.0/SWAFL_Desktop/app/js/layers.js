@@ -73,6 +73,7 @@ const Layers = (() => {
   });
 
   function open(id, sec) {
+    try { if (window.SWBusy) { const hb = SWBusy.begin('Loading', { delay: 0 }); setTimeout(hb.end, 700); } } catch (e) {}
     if (String(id).indexOf('dz-') === 0) { dzCur = id; try { DaisyUI.open(id.slice(3)); } catch (e) { UI.log('Daisy workbench: ' + e.message); } render(); return; }
     if (!started) { started = true; document.body.classList.remove('nolayer'); }
     if (!tabs.includes(id)) tabs.push(id);

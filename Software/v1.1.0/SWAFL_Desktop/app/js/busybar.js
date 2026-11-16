@@ -2,6 +2,7 @@
    SWBusy.begin('Loading the Daisy tools') gives a handle: h.set(percent, 'text'), h.end(). Several tasks at once are listed one under the other. */
 'use strict';
 window.SWBusy = (() => {
+  const LOGO = (() => { try { return new URL('../assets/logo-64.png', document.currentScript.src).href; } catch (e) { return 'assets/logo-64.png'; } })();
   const tasks = new Map(); let box = null, n = 0, timer = 0;
   function mk() {
     const st = document.createElement('style');
@@ -11,7 +12,7 @@ window.SWBusy = (() => {
   function paint() {
     if (!box) mk(); if (!tasks.size) { box.style.display = 'none'; box.innerHTML = ''; clearInterval(timer); timer = 0; return; }
     box.style.display = 'block'; let h = ''; const now = Date.now();
-    tasks.forEach(t => { const k = Math.round((now - t.t0) / 1000); h += '<div class="bt"><div class="bh"><span class="bs"><img src="assets/logo-64.png" alt=""></span><span class="bl">' + t.label.replace(/</g, '&lt;') + (t.pct != null ? ' · ' + Math.round(t.pct) + ' %' : '') + '</span></div><div class="bb">' + (t.pct != null ? '<div class="bi" style="width:' + t.pct + '%"></div>' : '<div class="bd"></div>') + '</div><div class="bx">' + (t.note ? t.note.replace(/</g, '&lt;') + ' · ' : '') + (k < 90 ? k + ' s' : Math.floor(k / 60) + ' min ' + (k % 60) + ' s') + '</div></div>'; });
+    tasks.forEach(t => { const k = Math.round((now - t.t0) / 1000); h += '<div class="bt"><div class="bh"><span class="bs"><img src="' + LOGO + '" alt=""></span><span class="bl">' + t.label.replace(/</g, '&lt;') + (t.pct != null ? ' · ' + Math.round(t.pct) + ' %' : '') + '</span></div><div class="bb">' + (t.pct != null ? '<div class="bi" style="width:' + t.pct + '%"></div>' : '<div class="bd"></div>') + '</div><div class="bx">' + (t.note ? t.note.replace(/</g, '&lt;') + ' · ' : '') + (k < 90 ? k + ' s' : Math.floor(k / 60) + ' min ' + (k % 60) + ' s') + '</div></div>'; });
     box.innerHTML = h;
   }
   // the card appears only if the work lasts a little (no flicker for quick things)
@@ -22,10 +23,7 @@ window.SWBusy = (() => {
     return { set(p, note, lab) { if (p != null) t.pct = Math.max(0, Math.min(100, p)); if (note != null) t.note = note; if (lab) t.label = lab; if (tasks.has(id)) paint(); }, end() { t.done = true; clearTimeout(t.w); if (tasks.delete(id)) paint(); } };
   }
   // every file or service that takes more than a moment to load shows the same sign, with the name of what is loading
-  const nameOf = u => { try { const x = new URL(u, location.href), h = x.hostname, p = x.pathname.split('/').pop() || h;
-      if (/open-meteo/.test(h)) return 'Loading weather data'; if (/nominatim|openstreetmap/.test(h)) return 'Searching for the place'; if (/planetarycomputer/.test(h)) return 'Loading satellite data'; if (/arcgis|esri|tile/.test(h)) return 'Loading the map';
-      if (/ensemble/.test(p)) return 'Loading the 10 190 published runs'; if (/\.(png|jpe?g|svg|webp)$/i.test(p)) return 'Loading an image'; if (/\.(js|css)$/i.test(p)) return 'Loading ' + p;
-      if (/\.(csv|json|gz|dat|tif|tiff|txt)$/i.test(p)) return 'Loading data: ' + decodeURIComponent(p).slice(0, 40); return 'Loading ' + (h !== location.hostname ? h : p); } catch (e) { return 'Loading'; } };
+  const nameOf = () => 'Loading';
   if (window.fetch && !window.__swFetch) { window.__swFetch = 1; const of = window.fetch.bind(window);
     window.fetch = function (u, o) { const url = typeof u === 'string' ? u : (u && u.url) || ''; if (/^(data|blob):/.test(url)) return of(u, o); const h = begin(nameOf(url), { delay: 450 });
       return of(u, o).then(r => { try { const cl = +r.headers.get('content-length') || 0; if (cl > 2e6 && r.body && r.body.getReader) { let got = 0; const rd = r.clone().body.getReader(); (function pump() { rd.read().then(q => { if (q.done) return h.end(); got += q.value.length; h.set(got / cl * 100); pump(); }).catch(() => h.end()); })(); return r; } } catch (e) {} h.end(); return r; }, e => { h.end(); throw e; }); }; }
