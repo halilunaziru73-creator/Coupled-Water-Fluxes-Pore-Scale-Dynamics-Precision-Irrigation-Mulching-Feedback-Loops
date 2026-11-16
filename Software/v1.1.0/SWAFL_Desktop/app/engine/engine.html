@@ -1128,7 +1128,11 @@ let sidEnd = 0;
 const IRM = (function () {
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   // ---------- drip ----------
-  const DKIND = { online: { label: 'Online emitter', cv: 0.07, x: 0.5, ne: 1, Hmin: 0, q: 4, Se: 0.75, D: 16 }, inline: { label: 'Inline emitter', cv: 0.04, x: 0.5, ne: 1, Hmin: 0, q: 2, Se: 0.5, D: 16 }, tape: { label: 'Drip tape', cv: 0.08, x: 0.6, ne: 2, Hmin: 0, q: 1, Se: 0.2, D: 16 }, pc: { label: 'Pressure-compensating', cv: 0.03, x: 0.05, ne: 1, Hmin: 8, q: 2, Se: 0.6, D: 16 } };
+  const DKIND = { online: { label: 'Online emitter', cv: 0.07, x: 0.5, ne: 1, Hmin: 0, q: 4, Se: 0.75, D: 16 }, inline: { label: 'Inline emitter', cv: 0.04, x: 0.5, ne: 1, Hmin: 0, q: 2, Se: 0.5, D: 16 }, tape: { label: 'Drip tape', cv: 0.08, x: 0.6, ne: 2, Hmin: 0, q: 1, Se: 0.2, D: 16 }, pc: { label: 'Pressure-compensating', cv: 0.03, x: 0.05, ne: 1, Hmin: 8, q: 2, Se: 0.6, D: 16, hide: true },
+    pcas: { label: 'PC AS dripper', cv: 0.03, x: 0, ne: 1, Hmin: 5.1, q: 2, Se: 0.5, D: 13.7, qs: [2, 4, 8.5], bar: [0.5, 4], shut: null, cat: true },
+    pclc: { label: 'PC LCNL dripper', cv: 0.03, x: 0, ne: 1, Hmin: 10.2, q: 2, Se: 0.5, D: 13.7, qs: [2, 4, 8.5], bar: [1, 4], shut: 0.15, cat: true },
+    pchc: { label: 'PC HCNL dripper', cv: 0.03, x: 0, ne: 1, Hmin: 14.3, q: 3, Se: 0.5, D: 13.7, qs: [3, 6, 12], bar: [1.4, 4], shut: 0.3, cat: true } };
+  const DPIPE = [{ k: 'GR16', label: 'GR 16 mm', od: 16, wall: 0.95, id: 13.7, bar: 4.5 }, { k: 'GR20', label: 'GR 20 mm', od: 20, wall: 1.1, id: 17.5, bar: 4.5 }];
   function latProfile(kind, q, Se, LL, H0, D) {
     const k = DKIND[kind], N = Math.max(2, Math.round(LL / Se)), C = 140, Dm = D / 1000, step = Math.max(1, Math.floor(N / 60)), qs = [], hs = [], xs = [];
     // head along the lateral: loss in each segment from the flow still to be delivered downstream (Hazen-Williams)
@@ -1227,7 +1231,7 @@ const IRM = (function () {
     const R = run(T); const g = R.gross;
     return Object.assign(R, { nz, P, CU, AR, wdel, f, nx, ny, K, A, Sd, Q: nz.q, Ae: area, wdTot: R.wd / g, fr: { st: R.st / g, dp: R.ex / g, ro: R.ro / g, wd: R.wd / g }, dp: R.ex / g, ro: R.ro / g });
   }
-  return { clamp, shape, bulb, DKIND, drip, dripAt, latProfile, STYPE, angF, nozzle, pattern, field, sprinkler, point, WD };
+  return { clamp, shape, bulb, DKIND, DPIPE, drip, dripAt, latProfile, STYPE, angF, nozzle, pattern, field, sprinkler, point, WD };
 })();
 
 
@@ -1281,10 +1285,10 @@ function irSens(y, items, base, evalF, sub) {
 function irRows(y, rows) { rows.forEach((q, i) => { const yy = y + i * 20; ctx.fillStyle = i % 2 ? '#F6F7F5' : '#fff'; ctx.fillRect(14, yy - 12, W - 28, 20); T(q[0], 20, yy + 2, { s: 9.5, c: '#374151' }); T(q[1], W - 20, yy + 2, { s: 9.5, b: true, a: 'right', c: IRC.ac }); }); return y + rows.length * 20; }
 
 // ---------------------------------------------------------------- S3 DRIP
-const DRP = { surf: false, kind: 'inline', dep: 25, q: 2, Se: 0.5, Sl: 1.5, LL: 100, H0: 10, D: 16, t: null, tauto: true, intv: 2, Zn: null, Qs: 30, Af: 1, touch(k) { if (k === 't') this.tauto = false; } };
+const DRP = { Kr: 0.85, dens: 500, ne: 4, ECw: 0.8, ECx: 8, surf: false, kind: 'inline', dep: 25, q: 2, Se: 0.5, Sl: 1.5, LL: 100, H0: 10, D: 16, t: null, tauto: true, intv: 2, Zn: null, Qs: 30, Af: 1, touch(k) { if (k === 't') this.tauto = false; } };
 const DRDEP = [[0, 'Surface'], [15, '15 cm'], [25, '25 cm'], [45, '45 cm'], [55, '55 cm']];
 function drDepEff() { if (DRP.surf) return 0; const m = METHODS.find(q => q.k === state.method); return m && m.mid ? m.mid : DRP.dep; }
-function drKind(k) { const d = IRM.DKIND[k]; DRP.kind = k; DRP.q = d.q; DRP.Se = d.Se; DRP.D = d.D; DRP.H0 = k === 'pc' ? 15 : 10; DRP.tauto = true; }
+function drKind(k) { const d = IRM.DKIND[k]; DRP.kind = k; DRP.q = d.q; DRP.Se = d.Se; DRP.D = d.D; DRP.H0 = d.Hmin ? Math.max(15, Math.ceil(d.Hmin + (d.cat ? 10 : 5))) : 10; DRP.tauto = true; }
 function drInput(ov) {
   const C = irCtx(); ov = ov || {}; const g = n => (ov[n] != null ? ov[n] : DRP[n]);
   const Zn = ov.Zn != null ? ov.Zn : (DRP.Zn != null ? DRP.Zn : Math.min(C.ZnD, Math.max(4, C.ETpk * g('intv'))));
@@ -1326,7 +1330,7 @@ function drPanel(x, y, w, h, R, qi, label, fr, pxcm, C) {
 function drawDRIP() {
   fdApply(); irFit('drip'); paper(); SIDW = []; SIDCUR = DRP; const C = irCtx(), R = drRun(), o = R.o, K = IRM.DKIND[o.kind], tau = play.t * R.t; IRLAB = 'irrigation time ' + irF(tau, 1) + ' of ' + irF(R.t, 1) + ' h';
   irHead(C, 'Drip irrigation design: emitters, wetted bulb and uniformity for your soil', 'wetted bulb, emitter hydraulics (Keller-Karmeli, Hazen-Williams) and where the water ends up');
-  irCtl(96); sidRow('Emitter', 152, Object.keys(IRM.DKIND).map(k => [IRM.DKIND[k].label.replace('Pressure-compensating', 'Pressure-comp.'), DRP.kind === k, () => drKind(k), 'Typical flow, spacing and variation for this emitter type']));
+  irCtl(96); sidRow('Emitter', 152, Object.keys(IRM.DKIND).filter(k => !IRM.DKIND[k].hide).map(k => { const d = IRM.DKIND[k]; return [d.label.replace(' dripper', ''), DRP.kind === k || (DRP.kind === 'pc' && k === 'pcas'), () => drKind(k), d.cat ? 'Catalogue pressure-compensating dripper (x = 0): ' + d.qs.join(', ') + ' L/h, working range ' + d.bar[0] + '-' + d.bar[1] + ' bar' + (d.shut ? ', shut-off ' + d.shut + ' bar' : '') : 'Typical flow, spacing and variation for this emitter type']; }));
   sidRow('Placement', 180, DRDEP.map(q => [q[1], drDepEff() === q[0], () => { if (!q[0]) DRP.surf = true; else { DRP.surf = false; DRP.dep = q[0]; applyState({ method: METHODS.find(m => m.mid === q[0]).k }); } }, q[0] ? 'Buried line at ' + q[0] + ' cm (also sets the explorer irrigation method)' : 'Laid on the surface (design only)']));
   sidRow('Run time', 208, [['Automatic', DRP.tauto, () => { DRP.tauto = true; }, 'Time to deliver the depth at the driest emitters'], ['Manual', !DRP.tauto, () => { DRP.tauto = false; DRP.t = +R.t.toFixed(2); }, 'Choose the run time yourself']]);
   fieldSizeRow('drip', 236);
@@ -1396,6 +1400,34 @@ function drawDRIP() {
   // sensitivity
   const base = R.Ea;
   y = irSens(y, [['Emitter flow q', 'q', 0.25, () => o.q], ['Emitter spacing', 'Se', 0.25, () => o.Se], ['Lateral spacing', 'Sl', 0.25, () => o.Sl], ['Placement depth', 'dep', 0.3, () => Math.max(10, o.dep)], ['Depth per irrigation', 'Zn', 0.25, () => o.Zn], ['Run time', 't', 0.2, () => R.t]], base, ov => drRun(ov).Ea, 'Change in Ea when one input moves ±25–30 %, all others held');
+  // course checks (localized irrigation, Day 1 and Day 2): pipe, operating window, filtration, local ET, volume and runtime, leaching
+  {
+    SIDCUR = DRP; sidHead('Design checks: pipe, working pressure, filtration, plant water volume and leaching', y, 'Catalogue values and the course formulas: ETc-loc = Kr × Kc × ET0; 1 mm over 1 ha = 10 m³; t = Vplant ÷ (n × q); LF = Dr ÷ Iin');
+    y += 34; sidRow('Pipe', y, [['Own diameter', !IRM.DPIPE.some(p => Math.abs(p.id - o.D) < 0.05), () => {}, 'Use the inside diameter set above']].concat(IRM.DPIPE.map(p => [p.label + ' · ID ' + p.id, Math.abs(p.id - o.D) < 0.05, () => { DRP.D = p.id; }, 'Eurodrip GR dripline: OD ' + p.od + ' mm, wall ' + p.wall + ' mm, inside diameter ' + p.id + ' mm, up to ' + p.bar + ' bar']))); y += 36;
+    const cx1b = 16, cx2b = 322, cwb = 282;
+    sidSlider('Kr', 'Local reduction Kr (ETc-loc = Kr × ETc)', cx1b, y, cwb, [0.3, 1, 0.01], DRP.Kr, v => v.toFixed(2));
+    sidSlider('dens', 'Plants per hectare', cx2b, y, cwb, [50, 5000, 10], DRP.dens, v => irF(v) + ' /ha');
+    sidSlider('ne', 'Emitters per plant n', cx1b, y + 31, cwb, [1, 12, 1], DRP.ne, v => irF(v));
+    sidSlider('ECw', 'Irrigation water salinity ECw (dS/m)', cx2b, y + 31, cwb, [0.1, 6, 0.1], DRP.ECw, v => v.toFixed(1) + ' dS/m');
+    sidSlider('ECx', 'Crop ECe at zero yield (dS/m)', cx1b, y + 62, cwb, [2, 24, 0.5], DRP.ECx, v => v.toFixed(1) + ' dS/m');
+    y += 100;
+    const bar = h => h * 0.0980665, hIn = o.H0, hEnd = R.lat.Hend, pipe = IRM.DPIPE.find(p => Math.abs(p.id - o.D) < 0.05);
+    const win = K.bar ? (bar(hEnd) >= K.bar[0] && bar(hIn) <= K.bar[1]) : null;
+    const Kr = DRP.Kr, ETl = Kr * C.ETpk, Ea = Math.max(0.3, R.Ea), netI = ETl * DRP.intv, grossI = netI / Ea, Vha = grossI * 10, Vpl = Vha * 1000 / DRP.dens, qpl = DRP.ne * o.q, tt = Vpl / qpl;
+    const LR = clampN(DRP.ECw / (2 * DRP.ECx), 0, 0.99), LF = R.dp / Math.max(0.05, 1 - R.ev), LRc = LR > 0.01;
+    const ok = (t, c) => ({ t, c: c ? '#14532D' : '#B91C1C' });
+    const rows = [
+      ['Emitter, ' + K.label, K.bar ? (K.x === 0 ? 'x = 0, ' : '') + 'working range ' + K.bar[0] + '–' + K.bar[1] + ' bar' + (K.shut ? ', shuts off below ' + K.shut + ' bar' : '') + ' · filtration 130 µm (120 mesh)' : 'q = k·h^' + K.x + ' · use a 120 mesh (130 µm) filter or finer']
+      , ['Pressure on the lateral', 'inlet ' + bar(hIn).toFixed(2) + ' bar, far end ' + bar(hEnd).toFixed(2) + ' bar' + (win === null ? '' : win ? ' · inside the emitter range' : ' · OUTSIDE the emitter range ' + K.bar[0] + '–' + K.bar[1] + ' bar')]
+      , ['Pipe', pipe ? pipe.label + ': OD ' + pipe.od + ', wall ' + pipe.wall + ', ID ' + pipe.id + ' mm, SDR ' + (pipe.od / pipe.wall).toFixed(0) + ' · ' + (bar(hIn) <= pipe.bar ? 'inlet within ' + pipe.bar + ' bar' : 'inlet ABOVE the ' + pipe.bar + ' bar limit') : 'inside diameter ' + irF(o.D, 1) + ' mm (choose a catalogue pipe above for wall and pressure limit)']
+      , ['Local crop water use', 'ETc-loc = ' + Kr.toFixed(2) + ' × ' + C.ETpk.toFixed(1) + ' = ' + ETl.toFixed(2) + ' mm/day at the seasonal peak']
+      , ['Depth and volume per interval', irF(netI, 1) + ' mm net → ' + grossI.toFixed(1) + ' mm gross (Ea ' + irF(R.Ea * 100) + ' %) = ' + irF(Vha) + ' m³/ha']
+      , ['Volume per plant', irF(Vha) + ' m³/ha × 1000 ÷ ' + irF(DRP.dens) + ' plants = ' + irF(Vpl, 1) + ' L per plant']
+      , ['Run time t = Vplant ÷ (n × q)', irF(Vpl, 1) + ' ÷ (' + irF(DRP.ne) + ' × ' + o.q.toFixed(1) + ') = ' + tt.toFixed(1) + ' h per irrigation']
+      , ['Leaching requirement LR = ECw ÷ (2·ECe,max)', irF(LR * 100, 1) + ' % · achieved LF = Dr ÷ Iin = ' + irF(LF * 100, 1) + ' %' + (LRc ? (LF >= LR ? ' · salts leached' : ' · short, add ' + irF((LR - LF) * grossI, 1) + ' mm per interval or plan a leaching event') : ' · low-salinity water, no extra leaching needed')]];
+    y = irRows(y, rows) + 4;
+    T('LR here is the simplified drip-irrigation estimate (Rhoades); it assumes steady state. Monitor ECe after rain and do not treat all drainage as waste.', 20, y + 6, { s: 8.6, i: true, c: '#6B7280' }); y += 34;
+  }
   // season
   const ay = C.ay, PLs = irPlan({ Zn: o.Zn, Ea: R.Ea }), events = PLs.season.ev.length, gross = R.gross, flowHa = o.q * (1e4 / R.Ae) / 3600, zones = Math.max(1, Math.ceil(flowHa * DRP.Af / DRP.Qs)), cyc = zones * R.t;
   sidHead('What this means for the season and the farm', y, 'The DSS sets the crop need; the design decides what is pumped');
