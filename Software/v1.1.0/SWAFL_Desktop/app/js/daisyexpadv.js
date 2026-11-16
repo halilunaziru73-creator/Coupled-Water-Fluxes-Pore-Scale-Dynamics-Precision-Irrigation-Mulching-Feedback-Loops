@@ -13,7 +13,7 @@ window.DaisyExpAdv = (() => {
   const FONT = '"Segoe UI", Arial, sans-serif', NAVY = '#154378', INK = '#222', GRID = '#e3e6ea';
   const mean = a => { a = a.filter(isFinite); return a.length ? a.reduce((s, v) => s + v, 0) / a.length : NaN; };
   const pct = (a, p) => { a = a.filter(isFinite).sort((x, y) => x - y); if (!a.length) return NaN; const k = (a.length - 1) * p, i = Math.floor(k); return i + 1 < a.length ? a[i] + (a[i + 1] - a[i]) * (k - i) : a[i]; };
-  const short = s => String(s || '').replace(/ \(.*/, '').replace(/, factor.*/, '');
+  const short = s => { s = String(s || ''); const m = s.match(/^(.*?), factor on the (weather|rotation)/); if (m) return m[1] + ' (\u00d7 ' + (m[2] === 'weather' ? 'observed' : 'rotation rate') + ')'; return s.replace(/ \((?!\u00d7).*/, '').replace(/, factor.*/, ''); };
   const fv = r => r.val || r.f || {}, same = (a, b) => String(a) === String(b);
   const pc = v => !isFinite(v) ? '-' : v < 5e-5 ? '0 %' : (v * 100 < 0.1 ? (v * 100).toFixed(2) : (v * 100).toFixed(1)) + ' %';
   const num = (v, d) => v == null || !isFinite(v) ? '-' : Math.abs(v) >= 1000 ? String(Math.round(v)) : (+v.toPrecision(d || 3)).toString();

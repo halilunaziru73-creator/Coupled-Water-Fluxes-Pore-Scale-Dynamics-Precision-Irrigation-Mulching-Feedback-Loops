@@ -191,20 +191,23 @@
     rows.forEach(x => { if (x.reference) return; const ref = refs.find(q => Object.keys(q.f).every(k => q.f[k] === x.f[k])) || refs[0], irr = x.r.irr; x.r.IWUE = irr > 5 ? (x.r.yield - ref.r.yield) * 1000 / (irr * 10) : NaN; });
   };
   // the table of the published runs, in the same shape
-  E.ENS_FACTORS = { P: ['precip', 'Rain scale'], dT: ['temp', 'Temperature shift (C)'], Ep: ['ep', 'Soil evaporation factor'], trig: ['trig', 'Trigger suction (cm)'], z: ['z', 'Sensor depth (cm)'], amt_mm: ['mm', 'Water per irrigation (mm)'], vff: ['vff', 'Mulch vapour flux factor'], cap: ['cap', 'Mulch interception capacity (mm)'], Nrate: ['nrate', 'Nitrogen rate (kg N/ha)'], wstrat: ['wstrat', 'Water strategy'], root: ['root', 'Rooting depth (cm)'], soil: ['soil', 'Soil'] };
+  E.ENS_FACTORS = { P: ['precip', 'Rain scale'], dT: ['temp', 'Temperature shift (C)'], Ep: ['ep', 'Soil evaporation factor'], trig: ['trig', 'Trigger suction (cm)'], z: ['z', 'Sensor depth (cm)'], amt_mm: ['mm', 'Water per irrigation (mm)'], vff: ['vff', 'Mulch vapour flux factor'], cap: ['cap', 'Mulch interception capacity (mm)'], Nrate: ['nrate', 'Nitrogen rate (kg N/ha)'], wstrat: ['wstrat', 'Water strategy'], root: ['root', 'Rooting depth (cm)'], soil: ['soil', 'Soil'], isuc: ['isuc', 'Initial soil suction (cm)'], rdur: ['rdur', 'Duration of the rain (h)'] };
   E.ENS_RESP = { yield_Mg_ha: 'yield', irrigation_mm: 'irr', ET_mm: 'aet', drainage_1m_mm: 'perc', N_leached_kg_ha: 'leach', IE_kg_m3: 'IE', rain_mm: 'rain', transpiration_mm: 'transp', soil_evap_mm: 'sevap', water_stress_d: 'stress' };
   E.parseEnsemble = function (text) {
     const L = text.replace(/\r/g, '').split('\n'); const h = L[0].split(','), ix = n => h.indexOf(n), rows = [];
     for (let i = 1; i < L.length; i++) { if (!L[i]) continue; const p = L[i].split(','), g = n => p[ix(n)], row = { exp: g('exp'), id: g('run_id'), soil: (g('soil') || '').replace(/^S\d+_/, ''), treatment: g('treatment'), valid: +g('valid'), f: {}, r: {} };
       Object.keys(E.ENS_FACTORS).forEach(k => { const v = g(k); if (v !== '' && v != null) { const x = parseFloat(v); row.f[E.ENS_FACTORS[k][0]] = isFinite(x) && k !== 'wstrat' && k !== 'soil' ? x : (k === 'soil' ? row.soil : v); } });
-      Object.keys(E.ENS_RESP).forEach(k => { const x = parseFloat(g(k)); row.r[E.ENS_RESP[k]] = isFinite(x) ? x : NaN; }); rows.push(row); }
+      Object.keys(E.ENS_RESP).forEach(k => { const x = parseFloat(g(k)); row.r[E.ENS_RESP[k]] = isFinite(x) ? x : NaN; });
+      if (row.exp === 'E8') { const tp = (row.treatment || '').split('_'), d = tp[2] || '';   // E8: the column trig holds the initial suction of the soil, and the rain duration is in the name of the treatment (obs = the observed hourly rain, 1h to 24h = the same rain spread over that time)
+        if (row.f.trig !== undefined) { row.f.isuc = row.f.trig; delete row.f.trig; } row.f.rdur = d === 'obs' ? 'observed' : d.replace(/h$/, ' h'); }
+      rows.push(row); }
     return rows;
   };
 
   // ------------------------------------------------------------------ summaries over rows [{ val|f:{factorId:value}, r:{resp} }]
   const fv = row => row.val || row.f || {}, num = x => typeof x === 'number' ? x : parseFloat(x);
   const mean = a => { const v = a.filter(isFinite); return v.length ? v.reduce((s, x) => s + x, 0) / v.length : NaN; };
-  const keyCmp = (a, b) => { const x = num(a), y = num(b); return isFinite(x) && isFinite(y) ? x - y : String(a).localeCompare(String(b)); };
+  const keyCmp = (a, b) => { const nn = v => { const n = num(v); return isFinite(n) ? n : /^obs/i.test(String(v)) ? -1e9 : NaN; }, x = nn(a), y = nn(b); return isFinite(x) && isFinite(y) ? x - y : String(a).localeCompare(String(b)); };
   E.levels = (rows, fid) => Array.from(new Set(rows.map(r => fv(r)[fid]).filter(v => v !== undefined && v !== ''))).sort(keyCmp);
   E.marginal = function (rows, fid, resp) { rows = rows.filter(r => !r.reference); return E.levels(rows, fid).map(l => { const v = rows.filter(r => fv(r)[fid] === l).map(r => r.r[resp]).filter(isFinite); return { level: l, mean: mean(v), n: v.length, min: v.length ? Math.min.apply(null, v) : NaN, max: v.length ? Math.max.apply(null, v) : NaN }; }); };
   E.grid = function (rows, f1, f2, resp) { rows = rows.filter(r => !r.reference); const xs = E.levels(rows, f1), ys = E.levels(rows, f2), z = ys.map(y => xs.map(x => mean(rows.filter(r => fv(r)[f1] === x && fv(r)[f2] === y).map(r => r.r[resp])))); return { xs, ys, z }; };

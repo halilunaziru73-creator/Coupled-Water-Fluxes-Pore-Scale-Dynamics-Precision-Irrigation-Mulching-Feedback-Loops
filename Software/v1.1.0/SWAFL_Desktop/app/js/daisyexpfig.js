@@ -9,7 +9,7 @@ window.DaisyExpFig = (() => {
   const memo = {};                       // per experiment: which figures are switched off and the figures the person added
   const mean = a => { a = a.filter(isFinite); return a.length ? a.reduce((s, v) => s + v, 0) / a.length : NaN; };
   const fv = r => r.val || r.f || {};
-  const short = s => String(s || '').replace(/ \(.*/, '').replace(/, factor.*/, '');
+  const short = s => { s = String(s || ''); const m = s.match(/^(.*?), factor on the (weather|rotation)/); if (m) return m[1] + ' (\u00d7 ' + (m[2] === 'weather' ? 'observed' : 'rotation rate') + ')'; return s.replace(/ \((?!\u00d7).*/, '').replace(/, factor.*/, ''); };
   const LET = 'abcdefghijklmnopqrstuvwxyz';
   const same = (a, b) => String(a) === String(b);
 

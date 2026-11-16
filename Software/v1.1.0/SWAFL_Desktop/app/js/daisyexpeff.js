@@ -14,7 +14,7 @@ window.DaisyExpEff = (() => {
   const mean = a => { a = a.filter(fin); return a.length ? a.reduce((s, v) => s + v, 0) / a.length : NaN; };
   const num = (v, d) => !fin(v) ? '-' : Math.abs(v) >= 1000 ? String(Math.round(v)) : (+v.toPrecision(d || 3)).toString();
   const SU = u => window.SciText ? window.SciText.unit(u) : u;
-  const short = s => String(s || '').replace(/ \(.*/, '').replace(/, factor.*/, '');
+  const short = s => { s = String(s || ''); const m = s.match(/^(.*?), factor on the (weather|rotation)/); if (m) return m[1] + ' (\u00d7 ' + (m[2] === 'weather' ? 'observed' : 'rotation rate') + ')'; return s.replace(/ \((?!\u00d7).*/, '').replace(/, factor.*/, ''); };
   const same = (a, b) => String(a) === String(b), fv = r => r.val || r.f || {};
   const OKI = ['#0072B2', '#D55E00', '#009E73', '#CC79A7', '#E69F00', '#56B4E9', '#7a6f00', '#444444'];
   const ramp = t => P().ramp('viridis', Math.max(0, Math.min(1, t)));
