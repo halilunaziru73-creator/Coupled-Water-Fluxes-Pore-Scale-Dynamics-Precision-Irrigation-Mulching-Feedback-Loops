@@ -72,6 +72,8 @@ button,input,select{font:inherit;color:inherit}
 .tn .ico{width:15px;height:15px;margin:0 6px 0 2px;flex:none;color:var(--accent)}
 .tn.grp{font-weight:600;color:var(--navy)}
 .tn .lbl{overflow:hidden;text-overflow:ellipsis}
+.tkids .tn .lbl{white-space:normal;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-height:1.25;padding:1px 0}   /* a long heading shows in two lines instead of being cut; the whole heading stays in the tooltip */
+.tkids .tn{height:auto;min-height:22px;align-items:center}
 .tn .badge{margin-left:auto;padding-left:8px;font-size:10px;color:var(--muted)}
 .tkids{display:block}
 .tkids[hidden]{display:none}
