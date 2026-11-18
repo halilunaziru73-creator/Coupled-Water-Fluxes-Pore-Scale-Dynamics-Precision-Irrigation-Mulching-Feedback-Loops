@@ -290,3 +290,10 @@ input[type=range]{accent-color:#0A246A}
 #layerTree .tn.sel,#layerTree .tn.sel:hover{background:#0A246A;color:#FFF;font-weight:normal;box-shadow:inset 0 0 0 1px #F0B030}
 #layerTree .tn.sel .ico,#layerTree .tn.sel .tw{stroke:#FFF;color:#FFF}
 #layerTree .tn.sel .lbl{color:#FFF}
+
+/* the pages of a layer as one line of steps: a vertical rail with a small diamond for each page, no numbers */
+#layerTree .tkids .tkids .tkids{margin-left:24px;border-left:2px solid #A9B8D2}
+#layerTree .tkids .tkids .tkids .tn{padding-left:16px!important}
+#layerTree .tkids .tkids .tkids .tn::before{left:-5px;top:50%;width:8px;height:8px;margin-top:-4px;border:0;background:#0A246A;transform:rotate(45deg);box-shadow:0 0 0 2px #FFF}
+#layerTree .tkids .tkids .tkids .tn:hover::before{background:#3A6EA5}
+#layerTree .tkids .tkids .tkids .tn.sel::before{background:#F0B030;box-shadow:0 0 0 2px #FFF}

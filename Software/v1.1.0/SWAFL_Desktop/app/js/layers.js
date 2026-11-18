@@ -102,7 +102,7 @@ const Layers = (() => {
     drip: [['Simulation', /^Soil moisture around/], ['Lateral hydraulics', /^Uniformity along/], ['Layout and pipes', /^Layout and infrastructure/], ['Results', /^Result for this design/], ['Design table', /^Design table/]],
     spr: [['Layout design', /^Layout in plan/], ['Simulation', /^Along the lateral/], ['Pipes and pump', /^Pipes, pump/], ['Infrastructure layout', /^Layout and infrastructure/], ['Results', /^Result for this design/], ['Design checks', /^Does your design pass/], ['Design table', /^Design table/]]
   };
-  const short = t => { const p = t.split(':')[0]; return p.length > 64 ? p.slice(0, 61) + '...' : p; };
+  const short = t => { const p = t.split(':')[0].replace(/^\s*\d+\s*[.)]\s*/, ''); return p.length > 64 ? p.slice(0, 61) + '...' : p; };
   function renderViewBar() {
     const el = document.getElementById('viewBar');
     if (!started) { el.innerHTML = ''; return; }
