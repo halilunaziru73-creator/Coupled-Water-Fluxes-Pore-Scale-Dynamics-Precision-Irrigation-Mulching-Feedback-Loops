@@ -6,7 +6,11 @@ The form at the end of `description.html` collects a first name and an e-mail ad
 
 **What you get:** the sheet **Subscribers** with date, name, e-mail, status (pending, confirmed, unsubscribed), and a menu **SWAFL newsletter** with the count, a test mail to yourself, and the button that notifies everybody.
 
-## Setup (about 10 minutes, once)
+## Until the sheet is set up
+
+The form already works with one click. It sends each new subscriber (first name and e-mail address) to halilunaziru73@gmail.com through the free form service FormSubmit (formsubmit.co). **The first time anybody subscribes, FormSubmit sends you one activation e-mail: click its link once.** After that every subscription arrives as an e-mail with the subject "SWAFL subscriber: ...", and you can notify everybody from Gmail (put the addresses in Bcc). This route has no confirmation e-mail and no automatic unsubscribe link, so move to the sheet below when you can.
+
+## Setup of the sheet (about 10 minutes, once)
 
 1. Sign in to Google as halilunaziru73@gmail.com. Open https://sheets.google.com and create a blank spreadsheet named **SWAFL subscribers**.
 2. In the sheet: **Extensions → Apps Script**. Delete the sample code and paste the whole of `Code.gs` from this folder. Save.

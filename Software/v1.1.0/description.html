@@ -370,7 +370,8 @@ footer{background:var(--soft);margin-top:80px;padding-bottom:36px;border-top:0}
 <script>
 (function(){
 /* After deploying newsletter/Code.gs (see newsletter/README.md), paste the web app URL (it ends in /exec) between the quotes. */
-var NEWSLETTER_URL='';
+var NEWSLETTER_URL='';var MAILBOX='halilunaziru73@gmail.com';   /* until the list is set up, the form is delivered to this mailbox */
+if(!NEWSLETTER_URL){var fp=document.querySelector('#newsletter .fine');if(fp)fp.textContent='Your first name and e-mail address are delivered to the author by the form service FormSubmit (formsubmit.co) and are used only to send release notices. Release notices are sent by the author, Naziru Halilu, from his own e-mail address. The list is not shared.'}
 var f=document.getElementById('nlf'),msg=document.getElementById('nlmsg'),go=document.getElementById('nlgo'),t0=Date.now();
 function say(t,bad){msg.textContent=t;msg.style.color=bad?'#ffd0c8':'#fff'}
 f.onsubmit=function(e){e.preventDefault();
@@ -379,8 +380,10 @@ f.onsubmit=function(e){e.preventDefault();
  if(!document.getElementById('nlok').checked){say('Please tick the box to agree.',1);return}
  if(document.getElementById('nlhp').value||Date.now()-t0<1500){say('Thank you.');return}
  if(!NEWSLETTER_URL){
-  var s=encodeURIComponent('Subscribe to SWAFL release notices'),b=encodeURIComponent('Please add me to the SWAFL release notices.\n\nFirst name: '+name+'\nE-mail: '+mail+'\n\nI agree that my first name and e-mail address are kept to send me a notice when a new version is released.');
-  window.location.href='mailto:halilunaziru73@gmail.com?subject='+s+'&body='+b;say('Your e-mail program opens with a ready message: send it to subscribe.');return}
+  go.disabled=true;say('Sending...');
+  fetch('https://formsubmit.co/ajax/'+MAILBOX,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({_subject:'SWAFL subscriber: '+mail,_template:'table',_captcha:'false',_honey:'',name:name,email:mail,page:location.href,consent:'agreed to release notices'})})
+   .then(function(r){return r.json()}).then(function(j){if(j&&(j.success===true||j.success==='true')){say('Thank you. Your address is added: you will receive an e-mail when a new version of SWAFL is released.');f.reset()}else{say('The subscription could not be sent. Please try again later.',1)}go.disabled=false})
+   .catch(function(){say('The subscription could not be sent. Please try again later.',1);go.disabled=false});return}
  go.disabled=true;say('Sending...');
  var body=new URLSearchParams({name:name,email:mail,hp:'',page:location.href});
  fetch(NEWSLETTER_URL,{method:'POST',mode:'no-cors',body:body}).then(function(){say('Thank you. We have sent you an e-mail: click the link in it to confirm your address (look in the spam folder if it does not arrive).');f.reset();go.disabled=false}).catch(function(){say('The subscription could not be sent. Please try again later.',1);go.disabled=false});
