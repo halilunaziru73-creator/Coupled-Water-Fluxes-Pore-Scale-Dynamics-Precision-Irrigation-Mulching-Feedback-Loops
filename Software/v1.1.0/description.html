@@ -387,7 +387,7 @@ f.onsubmit=function(e){e.preventDefault();
   var fm=document.createElement('form');fm.method='POST';fm.action='https://formsubmit.co/'+MAILBOX;fm.target='nlframe';fm.style.display='none';
   var F={_subject:'SWAFL subscriber: '+mail,_template:'table',_captcha:'false',_honey:'',name:name,email:mail,page:location.href,consent:'agreed to release notices'};
   for(var k in F){var i=document.createElement('input');i.type='hidden';i.name=k;i.value=F[k];fm.appendChild(i)}
-  document.body.appendChild(fm);var done=false,fin=function(ok){if(done)return;done=true;go.disabled=false;fm.remove();if(ok){say('Thank you. Your address is added: you will receive an e-mail when a new version of SWAFL is released.');f.reset()}else say('The subscription could not be sent. Please check your connection and try again.',1)};
+  document.body.appendChild(fm);var done=false,fin=function(ok){if(done)return;done=true;go.disabled=false;fm.remove();if(ok){say('Thank you. Your address is added: you will receive an e-mail when a new version of SWAFL is released or updated.');f.reset()}else say('The subscription could not be sent. Please check your connection and try again.',1)};
   setTimeout(function(){fr.onload=function(){fin(true)};fm.submit()},30);setTimeout(function(){fin(false)},20000);return}
  go.disabled=true;say('Sending...');
  var body=new URLSearchParams({name:name,email:mail,hp:'',page:location.href});
