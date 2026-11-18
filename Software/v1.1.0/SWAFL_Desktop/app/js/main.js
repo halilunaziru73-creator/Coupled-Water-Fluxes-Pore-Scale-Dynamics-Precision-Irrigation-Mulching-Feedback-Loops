@@ -331,7 +331,7 @@ window.SWAFLAct = Act;   // the engine (inside its frame) opens the manual at th
         card.style.display = on ? 'block' : 'none';
         if (on) {
           var ex = document.getElementById('dzXProg'), tot = 0, dn = s.done, m = ex && /(\d+)\s+of\s+(\d+)/.exec(ex.textContent || ''); if (m) { dn = +m[1]; tot = +m[2]; } else if (s.asked > 0) { tot = s.asked; dn = Math.min(s.done, s.asked); }   // the count of the program itself, so that the percentage stays when the tab of the experiment is closed or another layer is open
-          var el = s.since ? (now - s.since) / 1000 : 0, pct = tot ? Math.min(100, dn / tot * 100) : 0;
+          var el = s.since ? (now - s.since) / 1000 : 0, pct = tot ? Math.min(100, dn / tot * 100) : 0; if (tot && busy && dn < tot) { pct = dn === 0 ? Math.min(90, 90 * el / (el + 60)) / tot + 0 : Math.min(99, (dn + 0.5 * (s.running || 0)) / tot * 100); }   // a share while the first run is still going, half a run for each run that is under way
           card.querySelector('.dl-in').style.width = pct + '%'; card.querySelector('.dl-ind').style.display = busy ? 'block' : 'none';
           card.querySelector('b').textContent = (busy ? 'Daisy is running' : 'Daisy has finished') + (tot ? ' · ' + Math.round(pct) + ' %' : '');
           card.querySelector('#dlT').textContent = (s.running ? s.running + ' running' : '') + (s.waiting ? ' · ' + s.waiting + ' waiting' : '') + (tot ? ' · ' + dn + ' of ' + tot + ' runs finished' : ' · ' + s.done + ' finished') + ' · ' + fmt(el) + (busy && tot && dn > 0 && dn < tot ? ' · about ' + fmt(el / dn * (tot - dn)) + ' left' : '');
