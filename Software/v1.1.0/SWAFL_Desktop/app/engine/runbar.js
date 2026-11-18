@@ -15,7 +15,7 @@
   { const mark = e => { try { const t = e.target, bar = document.getElementById('playBtn') && document.getElementById('playBtn').parentElement; if (t && t.closest && (t.closest('#playBtn') || (bar && bar.contains(t)))) return; } catch (x) { } touched = Date.now(); };
     ['input', 'change', 'click', 'keydown'].forEach(ev => document.addEventListener(ev, mark, true)); }
   const atToday = id => { try { if (typeof dss !== 'undefined' && dss.ready) dssSyncPlay(id); } catch (e) { } };   // the date layers start at the working date (today), not at the first day of the weather record
-  function run(id) { touched = 0; const sc = SCENES.find(s => s.id === id); RX[id] = { on: true, st: key(), why: '' }; if (sc && sc.h) { try { setCanvasH(sc.h); } catch (e) { } } if (sc && sc.play) { play.t = 0; atToday(id); play.hold = 0; play.on = true; const pb = document.getElementById('playBtn'); if (pb) pb.textContent = 'Pause'; } }
+  function run(id) { touched = 0; const sc = SCENES.find(s => s.id === id); RX[id] = { on: true, st: key(), why: '', t0: Date.now() }; if (sc && sc.h) { try { setCanvasH(sc.h); } catch (e) { } } if (sc && sc.play) { play.t = 0; atToday(id); play.hold = 0; play.on = true; const pb = document.getElementById('playBtn'); if (pb) pb.textContent = 'Pause'; } }
   window.runLayer = run; window.layerRan = id => id === 'dph' ? !!(window.__phRan && window.__phRan()) : !!((window.DESIGN_RUN && DESIGN_RUN[id] && DESIGN_RUN[id].on) || (RX[id] && RX[id].on));
   const btn = (x, y, w, h, label) => { ctx.fillStyle = '#0A246A'; ctx.fillRect(x, y, w, h); ctx.fillStyle = '#3A6EA5'; ctx.fillRect(x, y, w, 2); ctx.fillRect(x, y, 2, h); ctx.fillStyle = '#000'; ctx.fillRect(x, y + h - 2, w, 2); ctx.fillRect(x + w - 2, y, 2, h); T(label, x + w / 2, y + h / 2 + 4, { s: 11, b: true, c: '#FFFFFF', a: 'center' }); };
   function card(sc, R) {
@@ -35,7 +35,7 @@
     sc.draw = function () {
       if (!gated(sc) || sc.id === 'dph') return od.apply(this, arguments);
       const R = RX[sc.id] || (RX[sc.id] = { on: false, st: '', why: '' });
-      if (R.on) { const k = key(); if (R.st !== k) { if (Date.now() - touched < 1500) { R.on = false; R.why = 'settings in Properties changed'; try { setCanvasH(Math.min(sc.h || 600, 420)); } catch (e) { } } else R.st = k; } }
+      if (R.on) { const k = key(); if (R.st !== k) { if (Date.now() - (R.t0 || 0) < 2500) R.st = k;   /* the settings settle just after Run (the date, the weather, the soil are set by the program itself): that is not a change by the person */ else if (Date.now() - touched < 1500) { R.on = false; R.why = 'settings in Properties changed'; try { setCanvasH(Math.min(sc.h || 600, 420)); } catch (e) { } } else R.st = k; } }
       if (!R.on) { play.on = false; play.t = 0; atToday(sc.id); play.on = false; card(sc, R); return; }
       return od.apply(this, arguments);
     };
@@ -43,7 +43,7 @@
   SCENES.forEach(wrap);
   // the Play button of a layer that has not run is the Run button
   const pb = document.getElementById('playBtn');
-  if (pb) pb.addEventListener('click', e => { const sc = currentScene; if (gated(sc) && sc.id !== 'dph' && !(RX[sc.id] && RX[sc.id].on)) { e.stopImmediatePropagation(); e.preventDefault(); run(sc.id); } }, true);
+  document.addEventListener('click', e => { const hit = e.target && e.target.closest && e.target.closest('#playBtn'); if (!hit) return; { const sc = currentScene; if (gated(sc) && sc.id !== 'dph' && !(RX[sc.id] && RX[sc.id].on)) { e.stopImmediatePropagation(); e.preventDefault(); run(sc.id); } } }, true);
   // the one Run button: navy and bold while it runs the layer
   { const st = document.createElement('style'); st.textContent = 'body.appmode #playBtn.runme{background:#0A246A !important;color:#fff !important;font-weight:bold !important;border:1px solid #05154a !important;padding:0 16px !important;height:26px !important;font-size:12px !important;line-height:24px !important}'; document.head.appendChild(st); setInterval(() => { const b = document.getElementById('playBtn'); if (b) { const isRun = b.textContent === 'Run simulation'; b.classList.toggle('runme', isRun); b.style.display = isRun && currentScene && DES.indexOf(currentScene.id) >= 0 ? 'none' : ''; } }, 250); }
   // opening a layer never starts it

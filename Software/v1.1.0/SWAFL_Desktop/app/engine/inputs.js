@@ -202,14 +202,14 @@
   const stateKey = () => JSON.stringify(Object.assign({}, state, { method: 0, n1Prev: 0 })) + '|' + (typeof dss !== 'undefined' ? dss.mode : '');
   window.designStateKey = () => stateKey();
   const sKey = id => stateKey() + (id === 'drn' && window.drnKey ? '|' + window.drnKey() : '');
-  function runDesign(id) { id = id || curId(); if (!id) return; RUN[id].on = true; RUN[id].st = sKey(id); RUN[id].why = ''; play.t = 0; play.hold = 0; play.on = true; const pb = document.getElementById('playBtn'); if (pb) pb.textContent = 'Pause'; try { BEST[id] = bestFor(id); } catch (e) { BEST[id] = null; } }
+  function runDesign(id) { id = id || curId(); if (!id) return; RUN[id].on = true; RUN[id].st = sKey(id); RUN[id].why = ''; RUN[id].t0 = Date.now(); play.t = 0; play.hold = 0; play.on = true; const pb = document.getElementById('playBtn'); if (pb) pb.textContent = 'Pause'; try { BEST[id] = bestFor(id); } catch (e) { BEST[id] = null; } }
   window.runDesign = runDesign;
   const btn3d = (x, y, w, h, label, prim) => { ctx.fillStyle = prim ? '#0A246A' : '#D4D0C8'; ctx.fillRect(x, y, w, h); ctx.fillStyle = prim ? '#3A6EA5' : '#FFFFFF'; ctx.fillRect(x, y, w, 2); ctx.fillRect(x, y, 2, h); ctx.fillStyle = prim ? '#000' : '#404040'; ctx.fillRect(x, y + h - 2, w, 2); ctx.fillRect(x + w - 2, y, 2, h); T(label, x + w / 2, y + h / 2 + 4.5, { s: 12, b: true, a: 'center', c: prim ? '#FFFFFF' : '#000' }); };
   const wrapDes = id => {
     const sc = SCENES.find(s => s.id === id); if (!sc || sc._runWrapped) return; sc._runWrapped = true; const od = sc.draw;
     sc.draw = function () {
       const R = RUN[id];
-      if (R.on && R.st !== sKey(id)) { R.on = false; R.why = 'the settings in Properties changed'; }
+      if (R.on && R.st !== sKey(id)) { if (Date.now() - (R.t0 || 0) < 2500) R.st = sKey(id); else { R.on = false; R.why = 'the settings in Properties changed'; } }   // the settings settle just after Run: not a change by the person
       if (!R.on && !reporting()) { play.on = false; play.t = 0; play.hold = 0; }
       const out = od.apply(this, arguments);
       // after a run the simulation keeps playing, and starts again at the end of the season, until Pause is pressed
