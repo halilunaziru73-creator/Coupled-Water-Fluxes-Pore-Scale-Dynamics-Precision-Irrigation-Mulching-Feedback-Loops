@@ -127,18 +127,19 @@
           }
           a += d;
         }
-        return '<g transform="translate(' + x + ',' + y + ')" fill="none" stroke-linecap="round" pointer-events="none" opacity=".8"><path d="' + a + '" stroke="#a8875a" stroke-width="2.6"/><path d="' + b + '" stroke="#b9996a" stroke-width="1.3"/><path d="' + c + '" stroke="#c8ad80" stroke-width=".7"/></g>';
+        return '<g transform="translate(' + x + ',' + y + ')" fill="none" stroke-linecap="round" pointer-events="none" opacity=".62"><path d="' + a + '" stroke="#a8875a" stroke-width="2.6"/><path d="' + b + '" stroke="#b9996a" stroke-width="1.3"/><path d="' + c + '" stroke="#c8ad80" stroke-width=".7"/></g>';
       };
       // the soil under the plants of a zone, with the surface line
-      const soil = (x1, x2, y1, y2) => '<rect x="' + x1 + '" y="' + y1 + '" width="' + (x2 - x1) + '" height="' + (y2 - y1) + '" fill="url(#dzSoilV)" opacity=".8" pointer-events="none"/><rect x="' + x1 + '" y="' + y1 + '" width="' + (x2 - x1) + '" height="' + (y2 - y1) + '" fill="url(#dzCr)" opacity=".75" pointer-events="none"/><path d="M' + x1 + ',' + y1 + ' H' + x2 + '" stroke="#3b2616" stroke-width="3" opacity=".7" pointer-events="none"/>';   // topsoil dark with humus, lighter with depth, with crumbs and stones
+      const soil = (x1, x2, y1, y2) => '<rect x="' + x1 + '" y="' + y1 + '" width="' + (x2 - x1) + '" height="' + (y2 - y1) + '" fill="url(#dzSoilV)" opacity=".4" pointer-events="none"/><rect x="' + x1 + '" y="' + y1 + '" width="' + (x2 - x1) + '" height="' + (y2 - y1) + '" fill="url(#dzCr)" opacity=".6" pointer-events="none"/><path d="M' + x1 + ',' + y1 + ' H' + x2 + '" stroke="#3b2616" stroke-width="3" opacity=".7" pointer-events="none"/>';   // topsoil dark with humus, lighter with depth, with crumbs and stones
       const plant = (kind, x, y, k, dep, sd, n) => roots(x, y, dep, sd, n || 6) + big('', kind === 'w' ? wheat(x, y, k) : seed(x, y, k));
       const zone = (d, fc, sc) => '<path d="' + d + '" fill="' + fc + '" stroke="' + sc + '" stroke-width="2.4" stroke-linejoin="round"/>';
       const ttl = (x, y, t, c, c2) => '<text x="' + x + '" y="' + y + '" font-size="12.5" font-weight="700" fill="' + c + '" font-family="Carlito,Calibri,Segoe UI,sans-serif" stroke="' + (c2 || '#fff') + '" stroke-width="3.2" paint-order="stroke" pointer-events="none">' + t + '</text>';
-      o.push('<g class="dzZones">' + '<clipPath id="dzcB"><path d="M150,100 H462 V168 H330 V652 H150 Z"/></clipPath><clipPath id="dzcP"><path d="M326,328 H914 V592 H326 Z"/></clipPath><clipPath id="dzcG"><path d="M430,72 H934 V296 H522 V440 H430 Z"/></clipPath>' + zone('M150,100 H462 V168 H330 V652 H150 Z', '#dcebf9', '#8db6de') + zone('M326,328 H914 V592 H326 Z', '#fbe2ec', '#e29bb6') + zone('M430,72 H934 V296 H522 V440 H430 Z', '#e0f1d0', '#92c46d')
-                + '<g clip-path="url(#dzcB)">' + soil(150, 330, 505, 652) + plant('w', 306, 505, 1.8, 125, 11) + plant('w', 262, 505, 1.5, 110, 12) + plant('s', 206, 505, 2.2, 120, 13, 7) + '</g>' + drop(300, 150, 2.6) + drop(262, 168, 1.5)
-        + '<g clip-path="url(#dzcP)">' + soil(326, 914, 480, 592) + plant('s', 356, 480, 2.2, 100, 21, 7) + plant('w', 430, 480, 1.8, 105, 22) + plant('w', 640, 480, 1.7, 100, 23) + plant('s', 760, 480, 2.2, 100, 24, 7) + plant('w', 884, 480, 1.8, 105, 25) + '</g>'
-        + '<g clip-path="url(#dzcG)">' + soil(522, 934, 205, 296) + plant('w', 612, 205, 1.6, 82, 31) + plant('w', 700, 205, 1.8, 86, 32) + plant('w', 776, 205, 1.6, 82, 33) + plant('w', 858, 205, 1.8, 86, 34) + plant('s', 912, 205, 2.0, 80, 35, 7) + '</g>'
-        + ttl(160, 116, 'Water', '#245f9e') + ttl(338, 584, 'Soil nitrogen and organic matter', '#ffffff', '#3b2616') + ttl(528, 90, 'Crop', '#2f6b1c')
+      o.push('<g class="dzZones">' + '<clipPath id="dzcB"><path d="M150,100 H462 V168 H330 V652 H150 Z"/></clipPath><clipPath id="dzcP"><path d="M326,328 H914 V592 H326 Z"/></clipPath><clipPath id="dzcS"><path d="M150,200 H914 V592 H330 V652 H150 Z"/></clipPath><clipPath id="dzcG"><path d="M430,72 H934 V352 H522 V440 H430 Z"/></clipPath>' + zone('M150,100 H462 V168 H330 V652 H150 Z', '#dcebf9', '#8db6de') + zone('M326,328 H914 V592 H326 Z', '#fbe2ec', '#e29bb6') + zone('M430,72 H934 V352 H522 V440 H430 Z', '#e0f1d0', '#92c46d')
+                + '<g clip-path="url(#dzcS)">' + soil(150, 330, 352, 652) + soil(326, 914, 352, 592) + '</g>' + '<rect x="430" y="352" width="92" height="88" fill="#e0f1d0" opacity=".35" pointer-events="none"/><path d="M430,352 V440 H522 V352" fill="none" stroke="#92c46d" stroke-width="2.4" pointer-events="none"/>'
+        + '<g clip-path="url(#dzcS)">' + plant('w', 306, 352, 1.5, 150, 11) + plant('w', 262, 352, 1.3, 130, 12) + plant('s', 206, 352, 1.9, 120, 13, 7)
+        + plant('s', 356, 352, 1.9, 170, 21, 7) + plant('w', 400, 352, 1.5, 190, 22) + plant('w', 612, 352, 1.6, 200, 23) + plant('w', 700, 352, 1.7, 215, 24) + plant('w', 776, 352, 1.6, 200, 25) + plant('w', 858, 352, 1.7, 215, 26) + plant('s', 904, 352, 1.9, 150, 27, 7) + '</g>'
+        + drop(300, 150, 2.6) + drop(262, 168, 1.5)
+        + ttl(338, 114, 'Water', '#245f9e') + ttl(338, 584, 'Soil nitrogen and organic matter', '#ffffff', '#3b2616') + ttl(548, 90, 'Crop', '#2f6b1c')
         + '</g>');
     }
     // the ground and the bottom of the profile
@@ -219,7 +220,7 @@
     L([[690, 357], [690, 330]], 'out'); T(690, 324, 'CO₂', 'middle', 9); L([[792, 440], [792, 400]], 'out'); L([[760, 440], [760, 405]], 'out'); T(660, 480, 'CO₂', 'middle', 9); L([[690, 492], [690, 470]], 'out'); T(790, 485, 'CO₂', 'middle', 9); T(790, 304, 'CO₂', 'middle', 9); L([[790, 332], [790, 312]], 'out');
     // legend
     const lg = [['none', 'Inputs and movement of matter within modules.'], ['out', 'Outputs of matter.'], ['info', 'Exchange of information within modules.'], ['none2', 'Movement of matter between modules.'], ['mod', 'Exchange of information between modules.']];
-    lg.forEach((l, i) => { const y = 590 + i * 11; o.push('<line x1="640" y1="' + y + '" x2="676" y2="' + y + '" stroke="#222" stroke-width="' + (l[0] === 'none2' ? 2 : 1) + '"' + (l[0] === 'out' ? ' stroke-dasharray="5 3"' : l[0] === 'info' ? ' stroke-dasharray="1.5 2.5"' : l[0] === 'mod' ? ' stroke-dasharray="6 3 1.5 3"' : '') + '/>'); T(682, y + 3, l[1], 'start', 8.5); });
+    lg.forEach((l, i) => { const y = 478 + i * 13; o.push('<line x1="948" y1="' + y + '" x2="982" y2="' + y + '" stroke="#222" stroke-width="' + (l[0] === 'none2' ? 2 : 1) + '"' + (l[0] === 'out' ? ' stroke-dasharray="5 3"' : l[0] === 'info' ? ' stroke-dasharray="1.5 2.5"' : l[0] === 'mod' ? ' stroke-dasharray="6 3 1.5 3"' : '') + '/>'); T(988, y + 3, l[1], 'start', 8); });
     // the processes of Daisy that Fig. 1 has no box for, so that none is hidden: they can be clicked and marked like the others
     box('temp', 108, 658 + GW, 210, 24, 'Soil heat and ice', LG, { sz: 9.5 }); box('deni', 330, 658 + GW, 230, 24, 'Denitrification and N2O', BE, { sz: 9.5 });
     // what the experiment changes (orange) and what it measures (blue), drawn on the same map; arrows run from the changed process to the measured one
