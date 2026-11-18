@@ -381,9 +381,14 @@ f.onsubmit=function(e){e.preventDefault();
  if(document.getElementById('nlhp').value||Date.now()-t0<1500){say('Thank you.');return}
  if(!NEWSLETTER_URL){
   go.disabled=true;say('Sending...');
-  fetch('https://formsubmit.co/ajax/'+MAILBOX,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({_subject:'SWAFL subscriber: '+mail,_template:'table',_captcha:'false',_honey:'',name:name,email:mail,page:location.href,consent:'agreed to release notices'})})
-   .then(function(r){return r.json()}).then(function(j){if(j&&(j.success===true||j.success==='true')){say('Thank you. Your address is added: you will receive an e-mail when a new version of SWAFL is released.');f.reset()}else{say('The subscription could not be sent. Please try again later.',1)}go.disabled=false})
-   .catch(function(){say('The subscription could not be sent. Please try again later.',1);go.disabled=false});return}
+  /* a plain form post into a hidden frame: it needs no cross-site permission, so no browser setting or blocker of scripts can stop it */
+  var fr=document.getElementById('nlframe');if(fr)fr.remove();
+  fr=document.createElement('iframe');fr.name='nlframe';fr.id='nlframe';fr.style.display='none';fr.setAttribute('aria-hidden','true');document.body.appendChild(fr);
+  var fm=document.createElement('form');fm.method='POST';fm.action='https://formsubmit.co/'+MAILBOX;fm.target='nlframe';fm.style.display='none';
+  var F={_subject:'SWAFL subscriber: '+mail,_template:'table',_captcha:'false',_honey:'',name:name,email:mail,page:location.href,consent:'agreed to release notices'};
+  for(var k in F){var i=document.createElement('input');i.type='hidden';i.name=k;i.value=F[k];fm.appendChild(i)}
+  document.body.appendChild(fm);var done=false,fin=function(ok){if(done)return;done=true;go.disabled=false;fm.remove();if(ok){say('Thank you. Your address is added: you will receive an e-mail when a new version of SWAFL is released.');f.reset()}else say('The subscription could not be sent. Please check your connection and try again.',1)};
+  setTimeout(function(){fr.onload=function(){fin(true)};fm.submit()},30);setTimeout(function(){fin(false)},20000);return}
  go.disabled=true;say('Sending...');
  var body=new URLSearchParams({name:name,email:mail,hp:'',page:location.href});
  fetch(NEWSLETTER_URL,{method:'POST',mode:'no-cors',body:body}).then(function(){say('Thank you. We have sent you an e-mail: click the link in it to confirm your address (look in the spam folder if it does not arrive).');f.reset();go.disabled=false}).catch(function(){say('The subscription could not be sent. Please try again later.',1);go.disabled=false});
