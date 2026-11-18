@@ -119,6 +119,9 @@
     sid: { L: [5, 3000], S: [0.001, 10], qLs: [0.01, 300], n: [0.01, 0.6], cb: [0.1, 1], Zn: [5, 400], Qs: [0.5, 2000], Wf: [1, 5000], om: [0, 20] },
     drip: { Se: [0.05, 5], Sl: [0.1, 10], q: [0.1, 100], LL: [1, 1000], H0: [0.5, 100], D: [4, 110], intv: [1, 60], Zn: [0.5, 300], Af: [0.0001, 10000], Qs: [0.1, 2000], Lm: [0, 10000], lift: [0, 500] },
     spr: { S: [0, 60], u: [0, 30], Sd: [0, 100], d: [1, 40], P: [50, 1200], alpha: [0, 60], Ss: [1, 120], Sl: [1, 120], Zn: [1, 300], top: [1, 24], Af: [0.001, 10000], Qs: [0.1, 5000], LLs: [5, 2000], Lm: [0, 10000], lift: [0, 500] } };
+  // any number is accepted and the design is computed exactly as entered: only what no equation can take is held back (a length, a flow or a roughness at or below zero goes to a hundredth of the usual lowest value; a fraction of the flow above 1 is 1)
+  const CAPS = { cb: 1 };
+  function anyValue(v, key, plo, phi) { if (!isFinite(v)) return v; if (CAPS[key] != null && curId() === 'sid') v = Math.min(v, CAPS[key]); const floor = plo > 0 ? plo * 0.01 : plo; return Math.max(v, floor); }
   function pickNumber(w) {
     closePick(); const U = unitsFor(w.label), cur = w.cur, lo = w.rng[0], hi = w.rng[1], st = w.rng[2] || (hi - lo) / 100, PL = (LIM[curId()] || {})[w.key], plo = PL ? Math.min(PL[0], lo) : lo, phi = PL ? Math.max(PL[1], hi) : hi;
     const el = document.createElement('div'); el.id = 'swPick'; PK = el;
@@ -126,13 +129,15 @@
     el.innerHTML = '<div class="h">' + (w.label || 'Value').replace(/</g, '&lt;') + '</div>' +
       '<div class="r"><label style="width:70px">Exact value</label><input id="pkV" type="number" step="any"><select id="pkU">' + U.map((u, i) => '<option value="' + i + '">' + u[0] + '</option>').join('') + '</select></div>' +
       '<div class="r"><label style="width:70px">Or choose</label><select id="pkL" class="list"><option value="">from the range...</option>' + vals.map(v => '<option value="' + v + '">' + nice(v) + ' ' + U[0][0] + '</option>').join('') + '</select></div>' +
-      '<div class="note">Type any value from ' + nice(plo) + ' to ' + nice(phi) + ' ' + U[0][0] + ' (the physical limits); the list covers the usual range, ' + nice(lo) + ' to ' + nice(hi) + '. The design is computed when you press Run simulation.</div>' +
+      '<div class="note" id="pkNote">Type any value: the design is computed exactly as you enter it. The usual range is ' + nice(plo) + ' to ' + nice(phi) + ' ' + U[0][0] + '. The design is computed when you press Run simulation.</div>' +
       '<div class="b"><button id="pkOk">OK</button><button id="pkNo">Cancel</button></div>';
     const [cx, cy] = toClient(w.bx, w.by + w.bh + 2); place(el, cx, cy);
     const iv = el.querySelector('#pkV'), iu = el.querySelector('#pkU'), il = el.querySelector('#pkL');
     iv.value = +(+cur).toFixed(4); iu.onchange = () => { const f = U[+iu.value][1]; iv.value = nice(cur / f); };
     il.onchange = () => { if (il.value !== '') { iu.value = '0'; iv.value = il.value; } };
-    const ok = () => { const raw = parseFloat(String(iv.value).replace(',', '.')); if (!isFinite(raw)) { iv.focus(); return; } let v = raw * U[+iu.value][1]; v = clampN(v, plo, phi); w.set(v); closePick(); invalidate('inputs changed'); try { refresh(); } catch (e) {} };
+    const nt = el.querySelector('#pkNote'), n0 = nt.innerHTML, chk = () => { const raw = parseFloat(String(iv.value).replace(',', '.')); if (!isFinite(raw)) { nt.innerHTML = n0; return; } const v = raw * U[+iu.value][1]; nt.innerHTML = v < plo || v > phi ? '<b>Outside the usual range</b> (' + nice(plo) + ' to ' + nice(phi) + ' ' + U[0][0] + '): the equations are applied as entered, so read the result as an extrapolation.' : n0; };
+    iv.addEventListener('input', chk); iu.addEventListener('change', chk);
+    const ok = () => { const raw = parseFloat(String(iv.value).replace(',', '.')); if (!isFinite(raw)) { iv.focus(); return; } let v = raw * U[+iu.value][1]; v = anyValue(v, w.key, plo, phi); w.set(v); closePick(); invalidate('inputs changed'); try { refresh(); } catch (e) {} };
     el.querySelector('#pkOk').onclick = ok; el.querySelector('#pkNo').onclick = closePick;
     iv.addEventListener('keydown', e => { if (e.key === 'Enter') ok(); if (e.key === 'Escape') closePick(); });
     setTimeout(() => { iv.focus(); iv.select(); }, 20);
@@ -169,7 +174,7 @@
     if (n === ex || Math.abs(n - val) > 0.5001 * Math.pow(10, -d) || String(ex).length > 9) return t; return t.slice(0, m.index) + String(ex) + t.slice(m.index + m[0].length); };
   // values the user typed are shown as typed; values set by the program keep the decimals of their label
   const TYPED = new WeakMap(), typedOf = (o, k) => !!(o && TYPED.get(o) && TYPED.get(o).has(k));
-  const setField = (s, v) => { if (!TYPED.get(s.obj)) TYPED.set(s.obj, new Set()); TYPED.get(s.obj).add(s.key); s.obj[s.key] = +(v * (s.scale || 1)).toFixed(6); if (s.obj === SID) { if (s.key === 'qLs') SID.autoQ = false; if (s.key === 'tman') SID.cut = 'man'; sidTouch(s.key); } else if (s.obj.touch) s.obj.touch(s.key); };
+  const setField = (s, v) => { if (!TYPED.get(s.obj)) TYPED.set(s.obj, new Set()); TYPED.get(s.obj).add(s.key); s.obj[s.key] = +(v * (s.scale || 1)).toPrecision(12); if (s.obj === SID) { if (s.key === 'qLs') SID.autoQ = false; if (s.key === 'tman') SID.cut = 'man'; sidTouch(s.key); } else if (s.obj.touch) s.obj.touch(s.key); };
   const oSidDown = sidDown;
   sidDown = function (p) {
     const id0 = curId(), lim = id0 && !RUN[id0].on ? inputsEnd(id0) : 1e9;
