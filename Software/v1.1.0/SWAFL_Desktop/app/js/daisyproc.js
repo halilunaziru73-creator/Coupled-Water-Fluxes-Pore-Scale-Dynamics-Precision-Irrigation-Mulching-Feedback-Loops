@@ -55,6 +55,41 @@
   // a box of the map shows the figures of its own flux or pool when the parent process has such a figure, otherwise all the figures of the parent process
   const FK = { infiltr: /infiltration|runoff/i, runoff: /infiltration|runoff/i, N2O: /N2O/i, denitr: /denitrification/i, CO2: /CO2/i, respir: /respiration/i, AOM: /added/i, SMB: /microbial/i, SOM: /SOM/i, LAI: /leaf area/i, root: /root/i, partit: /dry matter|nitrogen/i, harvest: /dry matter/i, stage: /leaf area|height/i, canopy: /canopy/i };
   X.forEach(p => { const pr = P.find(q => q.id === p.pid), all = pr ? pr.figs : [], f = FK[p.key] ? all.filter(q => FK[p.key].test(q.t)) : []; p.figs = FG[p.key] || (f.length ? f : all); });
+  // Each component of the map gets only the figures that Daisy writes for it itself: the column names are matched in the logs of the run (re), so what is drawn is what the run wrote. A component with no log column of its own has
+  // no figures (p.none), and says so, with a button to the process it acts through; a parent's figures are never shown in its place.
+  const pf = (id, i) => P.find(q => q.id === id).figs[i];
+  const FW = (re, t, o) => Object.assign({ log: 'Daily-FWater', alt: ['Annual-FWater'], re, t }, o), FNf = (re, t) => ({ log: 'Daily-FN', alt: ['Annual-FN', 'Annual-FN_100cm'], re, t });
+  const CP = (re, t) => ({ log: 'Daily-CropProduction', re, t }), BC = (re, t) => ({ log: 'Daily-Bioclimate', re, t }), SW = (re, t) => ({ log: 'Daily-SurfaceWater', re, t });
+  const SPN = {
+    'Snowfall': [pf('snow', 0), pf('snow', 1)], 'Snow melt and snow evaporation': [pf('snow', 2), pf('snow', 0)],
+    'Net radiation and cloudiness': [BC(/radiation|cloud/i, 'Radiation and cloudiness')], 'Light in the canopy': [BC(/light|PAR|radiation/i, 'Light reaching the canopy'), CP(/^LAI$/, 'Leaf area index that intercepts it')],
+    'Soil, vegetation and atmosphere (SVAT)': [BC(/^(crop|soil|canopy|pond|litter)_(ep|ea)$/, 'Potential and actual evaporation and transpiration of each part'), FG.evapotrans[0]],
+    'Infiltration': [SW(/infiltration/i, 'Infiltration into the matrix and the biopores')], 'Runoff': [SW(/runoff/i, 'Runoff from the surface'), FW(/runoff/i, 'Runoff in the field water balance')],
+    'Pond damping and rain energy': [SW(/pond/i, 'Water on the surface pond')],
+    'Retention and conductivity of the soil': [pf('water', 0), pf('water', 1)], 'Percolation and capillary rise': [pf('water', 2), FW(/percolation/i, 'Percolation through the bottom of the profile')],
+    'Root water uptake': [FG.transp[0], FW(/actual evapotranspiration/i, 'Actual evapotranspiration of the field')],
+    'Biopore flow': [pf('pore', 0), FW(/biopore/i, 'Water in and through the biopores')], 'Matrix and secondary domain': [FW(/biopore water|soil matrix water/i, 'Water held in the matrix and in the biopores')],
+    'Tile drains': [pf('drain', 0), FW(/drain/i, 'Water leaving through the drains')], 'Groundwater and aquitard': [FW(/percolation|soil matrix water/i, 'Water leaving the profile below the drains')],
+    'Maximal exfiltration': [FG.soil[0]],
+    'Heat conduction': [pf('temp', 0)], 'Freezing and thawing': [pf('temp', 1)],
+    'Fertilisation and deposition': [FNf(/fertili[sz]er|deposition|org-/i, 'Nitrogen added as fertiliser, manure and deposition')], 'Fertilising': [FNf(/fertili[sz]er|deposition|org-/i, 'Nitrogen added as fertiliser, manure and deposition')],
+    'Symbiotic nitrogen fixation': [CP(/fixated/i, 'Nitrogen fixed by the crop'), FNf(/fixated/i, 'Fixation in the nitrogen balance')],
+    'Crop nitrogen uptake': [FNf(/crop-uptake/i, 'Nitrogen taken up by the crop'), pf('crop', 3)],
+    'Mineralisation': [FNf(/mineali[sz]ation|mineralization/i, 'Mineralisation of nitrogen')], 'Immobilisation': [FNf(/immobili[sz]ation/i, 'Immobilisation of nitrogen')],
+    'Nitrification': [pf('nh4', 0), FNf(/n2o-nitrification/i, 'N2O lost in nitrification')],
+    'Nitrate leaching': [pf('no3', 0), FNf(/leaching|drain/i, 'Nitrate leached through the matrix, the biopores and the drains')],
+    'Ammonia volatilisation': [FNf(/volati/i, 'Ammonia lost to the air')], 'Denitrification': [pf('deni', 0), FNf(/denitrification/i, 'Nitrogen lost by denitrification')], 'Nitrous oxide emission': [pf('deni', 2), FNf(/n2o/i, 'N2O from nitrification and denitrification')],
+    'Ammonium sorption': [pf('nh4', 0)], 'Added organic matter (AOM)': [pf('om', 2)], 'Microbial biomass (SMB)': [pf('om', 1)], 'Soil organic matter (SOM)': [pf('om', 0)], 'Clay and organic matter': [pf('om', 0), pf('om', 3)],
+    'Carbon dioxide from the soil': [{ log: 'Daily-Photosynthesis', re: /OM_CO2|RootRespiration/, t: 'CO2 from the soil organic matter and the roots' }, pf('deni', 1)],
+    'Residues and rhizodeposition': [pf('carbon', 3), FNf(/residuals/i, 'Nitrogen returned with the residues')],
+    'Phenology': [CP(/^DS$|phenology/i, 'Development stage')], 'Emergence and seed': [CP(/^DS$|^LAI$|^Height$/, 'Development stage, leaf area and height')], 'Sowing and planting': [CP(/^DS$|^WRoot$|^WLeaf$/, 'Development stage and the first dry matter')],
+    'Photosynthesis': [pf('photo', 0)], 'Partitioning of assimilate': [pf('crop', 2)], 'Respiration': [pf('photo', 1), pf('photo', 2)], 'Canopy structure': [pf('crop', 0)], 'Root growth and density': [pf('crop', 1), CP(/^WRoot$|^NRoot$/, 'Root dry matter and nitrogen')],
+    'Senescence and stress': [CP(/wdead|ndead|stress/i, 'Dead material and the stress factors')], 'Water stress effect on production': [CP(/water_stress|nitrogen_stress/, 'Water and nitrogen stress (1 is no stress)'), pf('photo', 0)], 'Stomatal conductance': [CP(/water_stress/, 'Water stress, which closes the stomata (1 is no stress)')],
+    'Harvest': [pf('crop', 2), FNf(/^harvest$/i, 'Nitrogen removed with the harvest')], 'Irrigation': [FG.irrig[0], FW(/irrigation/i, 'Irrigation in the field water balance')],
+    'Solute transport': [pf('no3', 0)], 'Solute uptake by roots': [FNf(/crop-uptake/i, 'Nitrogen taken up by the crop')], 'Litter and mulch': FG.litter
+  };
+  const NOP = {};
+  X.forEach(p => { const sp = SPN[p.n]; if (sp) { p.figs = sp; p.own = true; return; } if (FG[p.key] && ['canopy', 'litter', 'pond', 'soil', 'transp', 'evapotrans', 'irrig'].indexOf(p.key) >= 0) { p.figs = FG[p.key]; p.own = true; return; } p.figs = []; p.none = true; });
   // opt: { marks: { F:{proc:[factor ids]}, R:{proc:[response ids]}, factors:[{id,ps}], resp:[ids] }, names:{id:text}, sel:proc|null, extra:true }
   function svg(opt) {
     opt = Object.assign({}, opt || {}, { all: true });
@@ -256,16 +291,19 @@
     return '<div class="dzcard"><b>The processes of the Daisy model</b> redrawn from Fig. 1 of the Daisy paper. Click a box (snowpack, intercepted water, litter, pond, soil water, biopores, drain, NO3, NH4, Plant-N, organs, residues, photosynthesis, AOM, SMB, SOM) to read what Daisy does there and to draw its figures from the logs of a standard run of the rotation. The thin coloured lines link every component in the lists, and every layer of SWAFL under the map, to the boxes of the map it acts on: point at a box to show only its links, and click a layer of SWAFL to open it.</div>' +
       (window.DaisyScenUI ? window.DaisyScenUI.strip() : '') + '<div class="dzrow" style="justify-content:center"><span class="pnote">Save the figure shown:</span><button class="btn" id="dzPsvg">Save as SVG (vector)</button><button class="btn" id="dzPpng">Save as PNG, 300 dpi</button><button class="btn" id="dzPpng6">PNG, 600 dpi</button></div>' + '<div class="dzrow" style="justify-content:center;gap:12px"><label><input type="checkbox" id="dzPlkOn" checked> Show the links</label><button class="btn" id="dzPtoL">Go to the SWAFL layers</button><button class="btn" id="dzPclr">Clear the selection</button><span class="pnote">Point at or tap a box to show only its links, tap the same box again, or press Clear the selection, to clear. A layer of SWAFL opens when you click it.</span></div><div id="dzPmap" style="display:flex;justify-content:center">' + svg({ complete: 1, all: true }) + '</div><div id="dzPchips" style="text-align:center">' + chips() + '</div><div id="dzPdet"></div>';
   }
+  // a component that Daisy writes no log column for: said plainly, with the way to the process it acts through
+  const noneHTML = p => { const pr = byId(p.pid); return 'Daisy writes no column of its own for <b>' + esc(p.n) + '</b>, so there is no graph of it to draw from the logs: its effect is inside the process it acts through' + (pr ? ', <b>' + esc(pr.n) + '</b>' : '') + '. ' + (pr ? '<button class="btn" data-pgo="' + esc(pr.id) + '">Show the figures of ' + esc(pr.n) + '</button>' : ''); };
   async function detail() {
     const p = byId(st.sel), box = document.getElementById('dzPdet'); if (!box) return;
     box.innerHTML = '<div class="dzcard"><h3 style="margin:0 0 6px;color:' + GC[p.g] + '">' + esc(p.n) + '</h3><div>' + esc(p.d) + '</div><div style="margin-top:6px;color:#555;font-size:12px">Daisy: ' + esc(p.par) + '</div><div id="dzPst" style="margin-top:6px;font-size:12px;color:#555">Reading the bundled results...</div></div><div id="dzPfigs"></div>';
     const figs = document.getElementById('dzPfigs'), msg = document.getElementById('dzPst'), L = sources(), me = cur();
+    if (p.none) { msg.innerHTML = noneHTML(p); const b = msg.querySelector('[data-pgo]'); if (b) b.onclick = () => { const g = document.querySelector('#dzPmap .dzPb[data-p="' + b.dataset.pgo + '"]'); if (g) g.dispatchEvent(new MouseEvent('click', { bubbles: true })); }; return; }
     if (!me) { msg.innerHTML = 'No data to draw from yet. The figures of this process come from your own run: <button class="btn pri" id="dzPRun">Run Daisy with my data now</button> or load the logs of a Daisy run in the <a href="#" data-goto="files">Files</a> tab, or run a <a href="#" data-goto="scen">scenario</a> or an <a href="#" data-goto="exp">experiment</a> (tick this process under "What I am interested in").'; const b = document.getElementById('dzPRun'); if (b) b.onclick = () => runNow(msg); if (window.DaisyScenUI) window.DaisyScenUI.bindStrip(); document.querySelectorAll('#dzPst [data-goto]').forEach(a => a.onclick = ev => { ev.preventDefault(); D.show(a.dataset.goto); }); return; }
     const o = me.run.options; if (o && window.DaisyCite) window.DaisyCite.ctx = window.DaisyCite.describe(o, window.DaisyScen);
     msg.innerHTML = 'Drawn from <select id="dzPSrc">' + L.map(x => '<option value="' + esc(x.id) + '"' + (x.id === me.id ? ' selected' : '') + '>' + esc(x.label) + '</option>').join('') + '</select> <button class="btn" id="dzPRun">Run Daisy with my data and all process logs</button> <span id="dzPsum" class="pnote"></span>';
     document.getElementById('dzPSrc').onchange = e => { st.src = e.target.value; detail(); }; document.getElementById('dzPRun').onclick = () => runNow(document.getElementById('dzPsum'));
     const r = await drawFigs(p, figs, async k => me.run.logs[k] || null, () => st.sel !== p.id);
-    if (r) document.getElementById('dzPsum').textContent = r.ok + ' figure' + (r.ok === 1 ? '' : 's') + (0 ? ', ' + r.bad + ' not drawn (this run did not write those logs: run again with the button, or tick the process under "What I am interested in" in Scenarios)' : '') + '.';
+    if (r) document.getElementById('dzPsum').textContent = r.ok + ' figure' + (r.ok === 1 ? '' : 's') + (r.bad ? '. Not drawn, because this run did not write them: ' + r.miss.map(esc).join('; ') + '. Run again with the button to write all the process logs' : '') + '.';
   }
   // draw the figure cards of one process into a host; getLog(key) gives the parsed log; stale() tells when to stop
   // the processes of one experiment only: what it changes (left, orange) -> the processes of Daisy involved, in the fills of Fig. 1 (middle) ->
@@ -299,19 +337,26 @@
   }
   async function drawFigs(p, figs, getLog, stale, what) {
     let ok = 0, bad = 0;
+    const miss = [];
     for (const f of p.figs) {
-      if (stale()) return null; const card = document.createElement('div'); card.className = 'dzcard dzfig'; card.innerHTML = '<b>' + esc(f.t) + '</b> <button class="dzPng btn">Save PNG</button><div><canvas style="display:block;width:100%;margin-top:6px"></canvas></div><div class="dzPn" style="font-size:12px;color:#555"></div><div class="pnote">' + esc(p.n) + ': ' + esc(f.t) + '. Written by Daisy in the log ' + esc(f.log) + (f.c && f.c.length ? ', columns: ' + esc(f.c.join(', ')) : ', by year') + '.</div>'; figs.appendChild(card);
+      if (stale()) return null; const card = document.createElement('div'); card.className = 'dzcard dzfig'; card.innerHTML = '<b>' + esc(f.t) + '</b> <button class="dzPng btn">Save PNG</button><div><canvas style="display:block;width:100%;margin-top:6px"></canvas></div><div class="dzPn" style="font-size:12px;color:#555"></div><div class="pnote dzSrc"></div>'; figs.appendChild(card);
       const cv = card.querySelector('canvas'), note = card.querySelector('.dzPn'); card._jobs = []; if (window.DaisyFigKit) window.DaisyFigKit.attach(card, { name: 'daisy-' + p.id + '-' + f.log, redraw: () => card._jobs.forEach(j => j()) });
       try {
-        const d = await getLog(f.log); if (stale()) return null; if (!d) throw new Error(f.log + ' was not written by this run');
-        if (f.annual) { annual(cv, card, d, note, f.t); ok++; continue; }
+        let d = null, lg = f.log; for (const L of [f.log].concat(f.alt || [])) { d = await getLog(L); if (stale()) return null; if (d) { lg = L; break; } }
+        if (!d) throw new Error([f.log].concat(f.alt || []).join(' or ') + ' was not written by this run');
+        const src = card.querySelector('.dzSrc'), ann = f.annual || /^Annual-/i.test(lg);
+        let cols = f.c;
+        if (f.re) { cols = d.cols.slice(4).filter(c => f.re.test(c)); if (!cols.length) throw new Error('no column of ' + lg + ' matches ' + f.re); }
+        src.textContent = p.n + ': ' + f.t + '. Written by Daisy in the log ' + lg + (cols && cols.length ? ', columns: ' + cols.join(', ') : ', by year') + '.';
+        if (f.annual && !f.re) { annual(cv, card, d, note, f.t); ok++; continue; }
+        if (ann && f.re) { const n0 = panels(cv, card, d, cols, f.t, note, false); if (!n0.drawn) throw new Error('every selected column of ' + lg + ' is zero in this run'); note.textContent = 'Annual totals per season.' + (n0.zeros.length ? ' Left out because they are zero throughout: ' + n0.zeros.join(', ') + '.' : ''); ok++; continue; }
         const span = new Date(d.time[0]).getUTCFullYear() + ' to ' + new Date(d.time[d.n - 1]).getUTCFullYear();
         if (f.heat) { const dc = IO.depthColumns(d), vs = Object.keys(dc); if (!vs.length) throw new Error('no depth columns in ' + f.log); const pal = { Theta: 'blues', h: 'pf', C: 'ylgn' };
           vs.slice(0, 2).forEach((v, k) => { const L = IO.depthLong(d, v); let c = cv; if (k) { c = document.createElement('canvas'); c.style.cssText = cv.style.cssText; { const dv = document.createElement('div'); dv.appendChild(c); card.insertBefore(dv, note); } } J(card, () => K().heat(c, L.t, L.z, L.v, { title: f.t + (vs.length > 1 ? ': ' + v : ''), time: true, unit: L.unit || v, pal: pal[v] || 'viridis', h: 300 })); }); note.textContent = span + '; ' + vs.slice(0, 2).join(', ') + '. Colour bar in ' + (d.units[dc[vs[0]][0].c] || 'model units') + '.'; ok++; continue; }
-        const n = panels(cv, card, d, f.c, f.t, note, true); if (!n.drawn) throw new Error(n.zeros.length ? 'every selected column of ' + f.log + ' is zero in this run (' + n.zeros.join(', ') + '), so there is nothing to draw' : 'columns not in ' + f.log); note.textContent = span + '.' + (n.zeros.length ? ' Left out because they are zero throughout: ' + n.zeros.join(', ') + '.' : ''); ok++;
-      } catch (e) { bad++; card.remove(); }   // a log this run did not write: the figure is left out, without a message
+        const n = panels(cv, card, d, cols, f.t, note, true); if (!n.drawn) throw new Error(n.zeros.length ? 'every selected column of ' + f.log + ' is zero in this run (' + n.zeros.join(', ') + '), so there is nothing to draw' : 'columns not in ' + f.log); note.textContent = span + '.' + (n.zeros.length ? ' Left out because they are zero throughout: ' + n.zeros.join(', ') + '.' : ''); ok++;
+      } catch (e) { bad++; miss.push(f.t + ' (' + e.message + ')'); card.remove(); }   // a log or column this run did not write: the figure is left out and named in the summary
     }
-    return { ok, bad };
+    return { ok, bad, miss };
   }
   const J = (card, fn) => { (card._jobs = card._jobs || []).push(fn); fn(); };   // a drawing that can be repeated (editing the titles, saving at a higher resolution)
   // one panel for each unit that the columns have, so that a rate in mm and a content in kg N are never on one axis
@@ -340,9 +385,10 @@
   // runs: [{ label, logs }]; the figures are those of the Processes tab
   async function detailInto(host, pid, runs, note) {
     const p = byId(pid); if (!p) { host.innerHTML = ''; return; } const mine = (runs || []).filter(r => r && r.logs); let pick = 0, seq = 0;
+    if (p.none) { host.innerHTML = '<div class="dzcard"><h3 style="margin:0 0 4px;color:' + GC[p.g] + '">' + esc(p.n) + '</h3><div>' + esc(p.d) + '</div><div class="pnote" style="margin-top:6px">' + noneHTML(p) + '</div></div>'; const b = host.querySelector('[data-pgo]'); if (b) b.onclick = () => detailInto(host, b.dataset.pgo, runs, note); return; }
     host.innerHTML = '<div class="dzcard"><h3 style="margin:0 0 4px;color:' + GC[p.g] + '">' + esc(p.n) + '</h3><div>' + esc(p.d) + '</div>' +
       '<div class="dzrow" style="margin-top:6px">' + (mine.length ? '<label>Figures of this process from run</label><select data-pd="run">' + mine.map((r, i) => '<option value="' + i + '">' + esc(r.label || r.id || 'run ' + (i + 1)) + '</option>').join('') + '</select>' : '') + '</div><div data-pd="figs"></div></div>';
-    const draw = async () => { const my = ++seq, fh = host.querySelector('[data-pd="figs"]'); if (!fh || !mine.length) return; fh.innerHTML = ''; const r = mine[pick]; await drawFigs(p, fh, async k => r.logs[k] || null, () => my !== seq); };
+    const draw = async () => { const my = ++seq, fh = host.querySelector('[data-pd="figs"]'); if (!fh || !mine.length) return; fh.innerHTML = ''; const r = mine[pick]; const rr = await drawFigs(p, fh, async k => r.logs[k] || null, () => my !== seq); if (rr && rr.bad && my === seq) fh.insertAdjacentHTML('beforeend', '<p class="pnote">Not drawn, because this run did not write them: ' + rr.miss.map(esc).join('; ') + '.</p>'); };
     const sel = host.querySelector('[data-pd="run"]'); if (sel) sel.onchange = () => { pick = +sel.value; draw(); }; draw();
   }
   window.DaisyProc = { PROCESSES: P, drawFigs, GC, svg, svgSimple, byId, detailInto };
