@@ -18,9 +18,9 @@ The form already works with one click. It sends each new subscriber (first name 
 4. Open `Software/v1.1.0/description.html`, find the line `var NEWSLETTER_URL='';` and put the URL between the quotes. Commit and push. The form now works.
 5. Back in the sheet, reload the page: the menu **SWAFL newsletter** appears, and the sheet **Message** is created.
 
-## Announcing a release
+## Announcing a release or an update
 
-1. In the sheet **Message** write the subject, the message and the release label (for example `1.1.1`). `{name}` becomes the subscriber's first name and `{link}` the page of the software.
+1. In the sheet **Message** write the subject, the message and the update label (for example `1.1.1` or `2026-12-update`). `{name}` becomes the subscriber's first name and `{link}` the page of the software.
 2. Menu **SWAFL newsletter → Send a test to myself**, and read it.
 3. Menu **SWAFL newsletter → Notify confirmed subscribers of the release**. Each subscriber gets the mail once for each label; running it again does not send duplicates.
 

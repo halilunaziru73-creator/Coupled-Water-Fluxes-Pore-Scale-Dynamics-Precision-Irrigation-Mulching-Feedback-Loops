@@ -70,8 +70,8 @@ function page_(h, t) { return HtmlService.createHtmlOutput('<div style="font:16p
 function confirmMail_(name, email, token) {
   var link = url_() + '?a=confirm&t=' + encodeURIComponent(token);
   MailApp.sendEmail({ to: email, name: SENDER_NAME, subject: 'Please confirm your subscription to SWAFL release notices',
-    body: 'Hello' + (name ? ' ' + name : '') + ',\n\nPlease confirm that you want to receive a short e-mail when a new version of SWAFL is released:\n' + link + '\n\nIf you did not ask for this, ignore this message and nothing will be sent to you.\n\nNaziru Halilu\n' + SITE,
-    htmlBody: '<p>Hello' + (name ? ' ' + esc_(name) : '') + ',</p><p>Please confirm that you want to receive a short e-mail when a new version of SWAFL is released:</p><p><a href="' + link + '">Confirm my subscription</a></p><p>If you did not ask for this, ignore this message and nothing will be sent to you.</p><p>Naziru Halilu<br><a href="' + SITE + '">SWAFL</a></p>' });
+    body: 'Hello' + (name ? ' ' + name : '') + ',\n\nPlease confirm that you want to receive a short e-mail when a new version of SWAFL is released or SWAFL is updated:\n' + link + '\n\nIf you did not ask for this, ignore this message and nothing will be sent to you.\n\nNaziru Halilu\n' + SITE,
+    htmlBody: '<p>Hello' + (name ? ' ' + esc_(name) : '') + ',</p><p>Please confirm that you want to receive a short e-mail when a new version of SWAFL is released or SWAFL is updated:</p><p><a href="' + link + '">Confirm my subscription</a></p><p>If you did not ask for this, ignore this message and nothing will be sent to you.</p><p>Naziru Halilu<br><a href="' + SITE + '">SWAFL</a></p>' });
 }
 
 /** The menu in the sheet. */
@@ -86,8 +86,8 @@ function onOpen() {
 function messageSheet_() {
   var sh = sheet_(MESSAGE), v = sh.getRange('A1:B3').getValues();
   if (!sh.getRange('A1').getValue()) {
-    sh.getRange('A1:A3').setValues([['Subject'], ['Message (use {name} for the first name and {link} for the page)'], ['Release label (a notice is sent once for each label)']]).setFontWeight('bold');
-    sh.getRange('B1:B3').setValues([['SWAFL 1.1.1 is released'], ['Hello {name},\n\nA new version of SWAFL is released. What is new, and the download, are on the page:\n{link}\n\nNaziru Halilu'], ['1.1.1']]);
+    sh.getRange('A1:A3').setValues([['Subject'], ['Message (use {name} for the first name and {link} for the page)'], ['Update label, for example 1.1.1 or 2026-12-update (a notice is sent once for each label)']]).setFontWeight('bold');
+    sh.getRange('B1:B3').setValues([['SWAFL update: what is new'], ['Hello {name},\n\nA new version or an update of SWAFL is available. What is new, and the download, are on the page:\n{link}\n\nNaziru Halilu'], ['1.1.1']]);
     sh.setColumnWidth(1, 260); sh.setColumnWidth(2, 640); sh.getRange('B2').setWrap(true);
   }
   return sh;
