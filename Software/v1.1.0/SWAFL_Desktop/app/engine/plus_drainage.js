@@ -202,6 +202,8 @@
     irTile(14 + 2 * (tw + 10), ty, tw, 'Water table midway', f1(DN.depth - R.hD - R.gate, 2) + ' m deep', DN.depth - R.hD - R.gate >= R.zc ? IRC.st : IRC.df, DN.depth - R.hD - R.gate >= R.zc ? 'meets ' + f1(R.zc, 2) + ' m' : 'short of ' + f1(R.zc, 2) + ' m');
     irTile(14, ty + 62, tw, 'Days too wet', irF(ctrl.days) + ' of ' + R.n, ctrl.days <= 0.03 * R.n ? IRC.st : IRC.df); irTile(14 + tw + 10, ty + 62, tw, 'Drained in the season', irF(ctrl.tot) + ' mm', IRC.dp, irF(ctrl.tot * 10) + ' m³/ha'); irTile(14 + 2 * (tw + 10), ty + 62, tw, 'Lateral pipe', R.Dl + ' mm', ok1 ? IRC.st : IRC.df, 'collector ' + R.Dc + ' mm');
     y = ty + 134;
+    // the next irrigations of the coming years: the water that the drains will have to carry away follows them
+    y = irTenYears(y + 14, 0, des.Ea) + 14;
     // 8. meaning
     sidHead('What this means for the farm', y, 'The soil sets the conductivity, the crop sets the depth, the irrigation design sets the recharge');
     y = irRows(y + 34, [['Soil, crop and irrigation in use', C.sName + ', ' + ((CROPS[state.crop] || {}).label || state.crop) + ', ' + des.name + ' (Ea ' + irF(des.Ea * 100) + ' %)'], ['Water table to be kept below', f1(R.zc, 2) + ' m (roots reach ' + irF(C.Rmax) + ' cm)'], ['Drained water per hectare', irF(ctrl.tot * 10) + ' m³ in the season'], ['Salt balance', R.ECw > 0 ? 'water of ' + f1(R.ECw, 1) + ' dS/m needs ' + irF(R.LR * 100) + ' % leaching = ' + irF(R.leachNeed) + ' mm' : 'irrigation water without salt: no leaching requirement'], ['Total field', f1(R.Af, 1) + ' ha, ' + R.NL + ' laterals every ' + irF(R.L) + ' m']]);
@@ -209,7 +211,7 @@
     if (!adv.length) adv.push('The design holds the water table below the roots with these pipes: ' + R.NL + ' laterals every ' + irF(R.L) + ' m, ' + R.Dl + ' mm.'); adv.forEach(a => { const n = sidWrap(a, 24, y + 12, W - 48, { s: 9.6, b: true, c: '#12303A' }, 13); y += 14 + 13 * Math.max(0, n - 1); }); y += 20;
     return y;
   }
-  SCENES.push({ id: 'drn', label: 'S5 Drainage', color: '#2F6F8F', play: true, dur: 14, h: 4300, interactive: true,
+  SCENES.push({ id: 'drn', label: 'S5 Drainage', color: '#2F6F8F', play: true, dur: 14, h: 4750, interactive: true,
     onDown: p => sidDown(p), onMove: p => { SID.hv = p; if (SID.drag) { sidSet(SID.drag, p); return true; } return false; }, onUp: () => { SID.drag = null; }, onLeave: () => { SID.drag = null; SID.hv = null; },
     draw: () => { IREND.drn = drawDRN(); }, title: 'Drainage design: spacing, depth, pipes and controlled drainage for your soil, crop and irrigation',
     legend: [['#1F6FB5', 'Water table'], ['#2B2F33', 'Drain pipe'], ['#C0803A', 'Control gate'], ['#C0503A', 'Depth the crop needs']],
