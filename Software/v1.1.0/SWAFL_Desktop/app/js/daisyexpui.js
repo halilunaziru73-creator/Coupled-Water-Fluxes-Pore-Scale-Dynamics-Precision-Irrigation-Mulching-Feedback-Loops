@@ -758,6 +758,22 @@
     let f = st.factors.find(q => q.id === id); if (!f) { f = { id, levels: [] }; st.factors.push(f); } if (!f.levels.includes(hit[0])) f.levels.push(hit[0]);
     D.note('Xst', esc(x.name) + ' is a value of “' + esc(F.label) + '” in the experiment. Add more values, then press Run all.'); if ($('Plan')) renderPlan();
   }
+  /* A click is lost when the page changes under the pointer between the press and the release: typing in a box and then pressing a button first sends the change of the box, the panel redraws (the count of runs, the plan), the button moves or is replaced, and the release lands on something else. The user then has to click twice. The press on a button is remembered here, and when the release comes without the click of that button, the click is given to the same button (found again by its id) at once. */
+  (function () {
+    if (window.__dzClickGuard) return; window.__dzClickGuard = 1;
+    let pd = null;
+    const key = b => b.id ? '#' + b.id : (() => { const a = Array.prototype.find.call(b.attributes, x => /^data-/.test(x.name)); return a ? '[' + a.name + '="' + String(a.value).replace(/"/g, '\\"') + '"]' : ''; })();
+    document.addEventListener('pointerdown', e => { if (e.button) return; const b = e.target.closest && e.target.closest('button,[id^="dz"],[data-q],[data-fdel],[data-ftri]'); if (!b || !b.closest('[id^="dz"]') || b.disabled || /^(INPUT|SELECT|TEXTAREA)$/.test(b.tagName)) { pd = null; return; } pd = { x: e.clientX, y: e.clientY, b, k: key(b), t: Date.now(), box: b.closest('[id^="dz"]').id, up: false }; }, true);
+    document.addEventListener('click', e => { if (pd && e.target.closest && pd.b.isConnected && pd.b.contains(e.target)) pd = null; else if (pd && !pd.b.isConnected) pd.lost = true; }, true);
+    document.addEventListener('pointerup', e => {
+      const q = pd; if (!q) return; const moved = Math.abs(e.clientX - q.x) + Math.abs(e.clientY - q.y) > 10; setTimeout(() => {
+        if (pd !== q) return; pd = null;                                   // the click of the button itself came: nothing to do
+        if (moved || Date.now() - q.t > 1500 || !q.k) return;   // a release away from the press is a cancel, as with any button
+        const n = q.b.isConnected ? q.b : document.querySelector(q.k); if (!n || n.disabled) return;
+        try { n.click(); } catch (x) { }
+      }, 0);
+    }, true);
+  })();
   window.DaisyExpUI = { stop: stopNow, busy: busyPanel, runs: () => st.runs, imported: () => (st.imp ? st.imp.files : {}), addLib, filesFor: async (files, optsList) => { const need = new Set(); optsList.forEach(o => SC.libNeeds(o).forEach(q => need.add(q))); for (const q of need) await loadLib(files, q, false); await stationFiles(files, Array.from(new Set(optsList.map(o => o.station).filter(Boolean)))); return files; } };
   window.DaisyExpRuns = () => (st.runs || []).map(r => ({ id: r.id, label: (r.id || '') + ' ' + (r.label || ''), short: r.short || '', logs: r.logs || {} }));
   D.register('exp', { html, bind });
