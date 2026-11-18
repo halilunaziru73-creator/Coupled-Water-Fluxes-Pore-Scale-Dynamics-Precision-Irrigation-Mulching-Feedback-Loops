@@ -1123,7 +1123,7 @@ function drawSID() {
   L9.forEach((q, i) => { if (nc) { const yy = y + 28 + i * 36; ctx.fillStyle = i % 2 ? '#F6F7F5' : '#fff'; ctx.fillRect(14, yy - 12, W - 28, 36); sidWrap(q[0], 20, yy, W - 40, { s: 9, c: '#374151' }, 11); T(q[1], W - 20, yy + 16, { s: 9.5, b: true, a: 'right', c: SIDC.ac }); return; } const yy = y + 34 + i * 20; ctx.fillStyle = i % 2 ? '#F6F7F5' : '#fff'; ctx.fillRect(14, yy - 12, W - 28, 20); T(q[0], 20, yy + 2, { s: 9.5, c: '#374151' }); T(q[1], W - 20, yy + 2, { s: 9.5, b: true, a: 'right', c: SIDC.ac }); });
   return irAdvice(nc ? y + 28 + 6 * 36 + 16 : y + 34 + 6 * 20 + 16, { sys: 'Surface', Zn: Zn, gross: gross, Ea: R.Ea, Es: R.Es, timeH: Ttot, nc: nc });
 }
-SCENES.push({ id: 'sid', label: 'S2 Design', color: '#0B7285', play: true, dur: 16, h: 3500, interactive: true,
+SCENES.push({ id: 'sid', label: 'S2 Design', color: '#0B7285', play: true, dur: 16, h: 3060, interactive: true,
   onDown: p => sidDown(p), onMove: p => { SID.hv = p; if (SID.drag) { sidSet(SID.drag, p); return true; } return false; }, onUp: () => { SID.drag = null; }, onLeave: () => { SID.drag = null; SID.hv = null; },
   draw: () => { const ww = wantW(); if (ww !== W) { setCanvasW(ww); setCanvasH(currentScene.h || 640); } irFit('sid'); IREND.sid = drawSID(); }, title: 'Surface irrigation design: intake, advance, cutoff, efficiency and layout for your soil',
   legend: [['#0B7285', 'Design from the standard equations'], ['#3F8F6B', 'Water stored in the root zone'], ['#4C5FA8', 'Deep percolation'], ['#B8743A', 'Runoff']],
@@ -1442,7 +1442,7 @@ function drawDRIP() {
   y = irAdvice(y, { sys: 'Drip', Zn: o.Zn, gross: gross, Ea: R.Ea, Es: R.Es, timeH: cyc });
   return y;
 }
-SCENES.push({ id: 'drip', label: 'S3 Drip', color: '#1B7F8C', play: true, dur: 14, h: 3740, interactive: true,
+SCENES.push({ id: 'drip', label: 'S3 Drip', color: '#1B7F8C', play: true, dur: 14, h: 3300, interactive: true,
   onDown: p => sidDown(p), onMove: p => { SID.hv = p; if (SID.drag) { sidSet(SID.drag, p); return true; } return false; }, onUp: () => { SID.drag = null; }, onLeave: () => { SID.drag = null; SID.hv = null; },
   draw: () => { IREND.drip = drawDRIP(); }, title: 'Drip irrigation design: emitter type, placement, wetted bulb, uniformity and efficiency for your soil',
   legend: [['#3F8F6B', 'Water stored in the root zone'], ['#4C5FA8', 'Deep percolation'], ['#D9A441', 'Surface evaporation'], ['#C0503A', 'Deficit']],
@@ -1544,7 +1544,7 @@ function drawSPR() {
   y = irAdvice(y, { sys: 'Sprinkler', Zn: o.Zn, gross: gross, Ea: R.Ea, Es: R.Es, timeH: cyc });
   return y;
 }
-SCENES.push({ id: 'spr', label: 'S4 Sprinklers', color: '#2B6CB0', play: true, dur: 14, h: 3940, interactive: true,
+SCENES.push({ id: 'spr', label: 'S4 Sprinklers', color: '#2B6CB0', play: true, dur: 14, h: 3500, interactive: true,
   onDown: p => sidDown(p), onMove: p => { SID.hv = p; if (SID.drag) { sidSet(SID.drag, p); return true; } return false; }, onUp: () => { SID.drag = null; }, onLeave: () => { SID.drag = null; SID.hv = null; },
   draw: () => { IREND.spr = drawSPR(); }, title: 'Sprinkler irrigation design: sprinkler type, nozzle, spacing, wind, runoff and efficiency for your soil',
   legend: [['#3F8F6B', 'Water stored in the root zone'], ['#4C5FA8', 'Deep percolation'], ['#B8743A', 'Runoff'], ['#7FAFD0', 'Wind drift and evaporation']],
@@ -2123,34 +2123,6 @@ function dssLecturePanel(y, PL) {
 
 // ===== Irrigation schedule and advice: closes every irrigation design (surface, drip, sprinkler) =====
 
-// ===== The next irrigations over the coming years (up to 10 years): every irrigation day, and the yearly count and depth =====
-function irTenYears(y, Zn, Ea) {
-  const W0 = W, L = 44, R0 = W0 - 18, cw = R0 - L;
-  let PL = null; try { PL = irPlan({ Zn: Zn > 0 ? Zn : undefined, Ea: Ea, span: 3650 }); } catch (e) { PL = null; }
-  sidHead('The next irrigations over the coming years (up to 10 years)', y, 'Each bar is one irrigation day, its height the gross depth');
-  y += 34; if (!PL) { T('The irrigations of the coming years are not available for this setting.', 20, y, { s: 9.4, c: '#374151' }); return y + 24; }
-  const k0 = PL.k0, H = Math.max(365, Math.min(3650, PL.end - k0)), yrs = Math.max(1, Math.floor(H / 365)), evs = PL.ev.filter(e => e.k >= k0 && e.k <= k0 + H);
-  const gm = Math.max(1, ...evs.map(e => e.gross)), top = Math.ceil(gm / 5) * 5, yr0 = dateOfK(k0).getUTCFullYear(), xk = k => L + (k - k0) / H * cw;
-  const ph = 118, py = y + 20, pb = py + ph;
-  ctx.fillStyle = '#F6F7F5'; ctx.fillRect(L, py, cw, ph);
-  for (let i = 0; i <= yrs; i++) { const x = L + i * 365 / H * cw; ctx.fillStyle = i % 2 ? '#EEF3F6' : '#E4ECF1'; if (i < yrs) ctx.fillRect(x, py, 365 / H * cw, ph); ctx.fillStyle = '#9AA3AE'; ctx.fillRect(x, py, 1, ph + 4); if (i < yrs) T(String(dateOfK(k0 + i * 365).getUTCFullYear()), x + 3, pb + 15, { s: 8.6, b: true, c: '#374151' }); }
-  [0, 0.5, 1].forEach(f => { const yy = pb - f * ph * 0.95; ctx.fillStyle = '#C9D1D9'; ctx.fillRect(L, yy, cw, 1); T(String(Math.round(top * f)), L - 5, yy + 3, { s: 8.4, a: 'right', c: '#374151' }); });
-  T('gross depth (mm)', L, py - 6, { s: 8.4, c: '#374151' });
-  evs.forEach((e, i) => { const x = xk(e.k), h = Math.max(2, e.gross / top * ph * 0.95); ctx.fillStyle = i === 0 ? '#D9A441' : IRC.ac; ctx.fillRect(x - 0.8, pb - h, Math.max(2.4, cw / H * 1.6), h); });
-  ctx.fillStyle = '#404040'; ctx.fillRect(L, pb, cw, 1);
-  if (!evs.length) T('No irrigation is due in the coming ' + yrs + ' years: the rain covers the crop need.', L + 10, py + 28, { s: 9.4, b: true, c: '#374151' });
-  y = pb + 36;
-  // per year: number of irrigations and the gross water
-  const cnt = [], wat = []; for (let i = 0; i < yrs; i++) { cnt.push(0); wat.push(0); } evs.forEach(e => { const i = Math.min(yrs - 1, Math.floor((e.k - k0) / 365)); cnt[i]++; wat[i] += e.gross; });
-  const cm = Math.max(1, ...cnt), bh = 70, by = y + 12, bw = cw / yrs;
-  T('Irrigations in each year (number above the bar; gross water in mm below the axis)', L, y + 2, { s: 9, b: true, c: IRC.ink });
-  cnt.forEach((c, i) => { const h = c / cm * bh, x = L + i * bw + bw * 0.18; ctx.fillStyle = IRC.st; ctx.fillRect(x, by + 14 + bh - h, bw * 0.64, h); T(String(c), x + bw * 0.32, by + 10 + bh - h, { s: 9, b: true, a: 'center', c: '#0A246A' }); T(String(Math.round(wat[i])), x + bw * 0.32, by + 14 + bh + 12, { s: 8.6, a: 'center', c: '#374151' }); T(String(yr0 + i), x + bw * 0.32, by + 14 + bh + 24, { s: 8, a: 'center', c: '#6B7280' }); });
-  ctx.fillStyle = '#404040'; ctx.fillRect(L, by + 14 + bh, cw, 1); y = by + 14 + bh + 40;
-  const nx = evs.slice(0, 10).map((e, i) => (i + 1) + ') ' + FDK(e.k) + ' · ' + irF(e.gross, 0) + ' mm').join('    ');
-  if (evs.length) { const n = sidWrap('Next ' + Math.min(10, evs.length) + ' irrigation days: ' + nx, 20, y, W0 - 40, { s: 9.2, c: '#374151' }, 13); y += n * 13 + 6; }
-  T('In ' + yrs + ' years: ' + evs.length + ' irrigations, ' + irF(evs.reduce((a, e) => a + e.gross, 0)) + ' mm of gross water' + (yrs < 10 ? ' (the simulated record ends here)' : '') + '. ' + (PL.virt ? 'The crop is assumed to be planted on the same date every year.' : 'Years without a crop in the field have no irrigation.'), 20, y, { s: 9, i: true, c: '#6B7280' });
-  return y + 22;
-}
 function irAdvice(y0, sp) {
   try { (window.__CYCLE = window.__CYCLE || {})[sp.sys] = sp.timeH || null; } catch (e) {}
   const sim = simCache.val || seasonSim(), kW = fclock.kd(), Ea = Math.max(0.05, sp.Ea || 0.5), gross0 = sp.gross || sp.Zn / Ea, PL = irPlan({ Zn: sp.Zn, Ea: sp.Zn > 0 ? sp.Zn / gross0 : Ea }), k0 = PL.k0; IRSH = PL.sh; sp = Object.assign({}, sp, { note: PL.note, plan: PL });
@@ -2163,7 +2135,7 @@ function irAdvice(y0, sp) {
   PL.up.forEach((e, i) => { const d = e.k, nxt = PL.up[i + 1] ? PL.up[i + 1].k - d : (PL.ev[PL.ev.indexOf(e) + 1] ? PL.ev[PL.ev.indexOf(e) + 1].k - d : null); ctx.fillStyle = i % 2 ? '#F6F7F5' : '#fff'; ctx.fillRect(14, y - 12, W - 28, 20);
     const dW = d + IRSH - kW, kc = PL.at(PL.KC, d), etc = PL.at(PL.ETc, d), row = [String(i + 1), FDK((d)), dW === 0 ? 'today' : dW === 1 ? 'tomorrow' : dW + ' days', kc.toFixed(2), etc.toFixed(1), irF(e.deficit, 0) + ' of ' + irF(e.taw, 0), irF(e.net, 1), irF(e.net * gross0 / Math.max(0.1, sp.Zn), 1), sp.timeH ? irF(sp.timeH * e.net / Math.max(0.1, sp.Zn), 1) + ' h' : '-', nxt == null ? '-' : nxt + ' d'];
     row.forEach((v, c) => T(v, cols[c][1], y + 2, { s: 9.1, b: c === 1, c: i === 0 ? IRC.ac : '#374151' })); y += 20; });
-  y = irTenYears(y + 18, sp.Zn, sp.Zn > 0 ? sp.Zn / gross0 : Ea) + 6; y = dssLecturePanel(y + 10, PL) + 4; y += 14; sidHead('The season in numbers, and the advice in short', y, 'The season of the decision (' + FDK(S.a) + ' to ' + FDK(S.b) + '), with ' + sp.sys.toLowerCase() + ' irrigation');
+  y = dssLecturePanel(y + 10, PL) + 4; y += 14; sidHead('The season in numbers, and the advice in short', y, 'The season of the decision (' + FDK(S.a) + ' to ' + FDK(S.b) + '), with ' + sp.sys.toLowerCase() + ' irrigation');
   const thrNow = PL.at(PL.THR, k0), tawNow = PL.at(PL.TAW, k0);
   y = irRows(y + 34, [['Irrigate when', 'the root zone has lost ' + irF(thrNow, 0) + ' of ' + irF(tawNow, 0) + ' mm (' + ('the trigger, depletion ' + PL.fT.toFixed(2)) + '; sensor at ' + zs + ' cm)'],
     ['Crop water use ETc = Kc × ET0', irF(S.ETc) + ' mm in the season (peak ' + S.ETpk.toFixed(1) + ' mm/day; Kc ' + PL.kcIni.toFixed(2) + ' to ' + PL.kcMid.toFixed(2) + ')'],
