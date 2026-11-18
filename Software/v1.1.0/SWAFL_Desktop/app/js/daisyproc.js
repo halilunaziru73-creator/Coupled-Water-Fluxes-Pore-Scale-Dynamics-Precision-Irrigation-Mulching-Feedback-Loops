@@ -93,6 +93,7 @@
   // opt: { marks: { F:{proc:[factor ids]}, R:{proc:[response ids]}, factors:[{id,ps}], resp:[ids] }, names:{id:text}, sel:proc|null, extra:true }
   function svg(opt) {
     opt = Object.assign({}, opt || {}, { all: true });
+    const GW = 134;   // height of the groundwater section under the soil profile; everything below it is moved down by this much
     const o = [], T = (x, y, t, a, sz, c, w, rot) => o.push('<text x="' + x + '" y="' + y + '" text-anchor="' + (a || 'middle') + '" font-size="' + (sz || 9.5) + '" fill="' + (c || '#111') + '"' + (w ? ' font-weight="' + w + '"' : '') + (rot ? ' transform="rotate(' + rot + ' ' + x + ' ' + y + ')"' : '') + ' font-family="Cambria,Georgia,serif" stroke="#fff" stroke-width="2.6" paint-order="stroke" stroke-linejoin="round" style="pointer-events:none">' + esc(t) + '</text>');
     const L = (pts, k) => { const dash = k === 'out' ? ' stroke-dasharray="5 3"' : k === 'info' ? ' stroke-dasharray="1.5 2.5"' : k === 'mod' ? ' stroke-dasharray="6 3 1.5 3"' : ''; o.push('<polyline points="' + pts.map(q => q.join(',')).join(' ') + '" fill="none" stroke="' + (k === 'blue' ? '#3b6fa5' : '#222') + '" stroke-width="' + (k === 'blue' ? 2.2 : 1.1) + '"' + dash + (k === 'none' ? '' : ' marker-end="url(#dzAr)"') + '/>'); };
     const sel = id => opt.sel === null ? false : id === (opt.sel || st.sel), pos = {};
@@ -142,6 +143,38 @@
     }
     // the ground and the bottom of the profile
     o.push('<line x1="150" y1="352" x2="900" y2="352" stroke="#c9a46a" stroke-width="1.2" stroke-dasharray="2 2"/><rect x="150" y="640" width="750" height="9" fill="url(#dzHat)"/>');
+    // groundwater: a cross-section under the soil profile (drawn here from the usual layering of a shallow aquifer system), the water table, the layers that carry water and the layer that slows it, the rock with water in its cracks
+    {
+      const X0 = 108, X1 = 922, W0 = X1 - X0, yw = 652, yA = 696, yS = 714, yD = 744, yR = 778, rn = (() => { let sd = 7; return () => { sd = (sd * 16807) % 2147483647; return sd / 2147483647; }; })();
+      o.push('<defs><pattern id="dzGp" width="30" height="18" patternUnits="userSpaceOnUse"><rect width="30" height="18" fill="#8fc0e6"/><g fill="#f4ead0" stroke="#bda770" stroke-width=".8"><ellipse cx="6" cy="5" rx="5" ry="3.6"/><ellipse cx="18" cy="4.5" rx="4.4" ry="3.2"/><ellipse cx="26" cy="12" rx="4" ry="3.2"/><ellipse cx="10" cy="13.5" rx="4.6" ry="3.2"/><ellipse cx="20" cy="14" rx="3.2" ry="2.6"/></g></pattern>'
+        + '<pattern id="dzSt" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#c3aa86"/><circle cx="1.6" cy="2" r=".8" fill="#9b8160"/><circle cx="5.2" cy="5" r=".8" fill="#9b8160"/></pattern>'
+        + '<marker id="dzGa" viewBox="0 0 8 8" refX="7" refY="4" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#0b4f8a"/></marker></defs>');
+      { const gid = XI('Groundwater and aquitard'); o.push('<g class="dzGw' + (gid ? ' dzPb' : '') + '" ' + (gid ? 'data-p="' + gid + '" style="cursor:pointer" tabindex="0" role="button" aria-label="Groundwater and aquitard"' : 'pointer-events="none"') + '>'); }
+      o.push('<rect x="' + X0 + '" y="' + yw + '" width="' + W0 + '" height="' + (yA - yw) + '" fill="url(#dzGp)"/>');
+      o.push('<rect x="' + X0 + '" y="' + yA + '" width="' + W0 + '" height="' + (yS - yA) + '" fill="url(#dzSt)"/>');
+      o.push('<rect x="' + X0 + '" y="' + yS + '" width="' + W0 + '" height="' + (yD - yS) + '" fill="url(#dzGp)"/>');
+      o.push('<rect x="' + X0 + '" y="' + yD + '" width="' + W0 + '" height="' + (yR - yD) + '" fill="#7d5338"/>');
+      // the layers are cut with a gentle, uneven edge
+      let edge = (y0) => { let d = 'M' + X0 + ',' + y0; for (let x = X0 + 40; x <= X1; x += 40) d += 'Q' + (x - 20) + ',' + (y0 + (rn() - .5) * 6) + ' ' + x + ',' + y0; return d; };
+      o.push('<path d="' + edge(yA) + '" fill="none" stroke="#6e5638" stroke-width="1.3"/><path d="' + edge(yS) + '" fill="none" stroke="#6e5638" stroke-width="1.3"/><path d="' + edge(yD) + '" fill="none" stroke="#4a2f1c" stroke-width="1.3"/>');
+      // cracks of the rock, full of water
+      let cr = '', cr2 = '';
+      for (let i = 0; i < 16; i++) { let x = X0 + 14 + i * (W0 / 16) + rn() * 24, y = yD + 4 + rn() * 10, d = 'M' + Math.round(x) + ',' + Math.round(y); const n = 3 + (rn() * 3 | 0); for (let j = 0; j < n; j++) { x += (rn() - .35) * 26; y += 5 + rn() * 7; if (y > yR - 2) y = yR - 2; d += 'L' + Math.round(x) + ',' + Math.round(y); } cr += d; if (rn() < .6) { const bx = x - 8, by = y - 6; cr2 += 'M' + Math.round(x) + ',' + Math.round(y - 6) + 'L' + Math.round(bx - 10 + rn() * 20) + ',' + Math.round(by + 8); } }
+      o.push('<path d="' + cr + '" fill="none" stroke="#4d96d4" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><path d="' + cr2 + '" fill="none" stroke="#4d96d4" stroke-width="1.2" stroke-linecap="round"/>');
+      for (let i = 0; i < 24; i++) o.push('<ellipse cx="' + Math.round(X0 + 10 + rn() * (W0 - 20)) + '" cy="' + Math.round(yD + 4 + rn() * (yR - yD - 8)) + '" rx="' + (1.6 + rn() * 2.2).toFixed(1) + '" ry="' + (1.1 + rn() * 1.5).toFixed(1) + '" fill="#4d96d4"/>');
+      // the water table: the top of the saturated layer
+      o.push('<line x1="' + X0 + '" y1="' + yw + '" x2="' + X1 + '" y2="' + yw + '" stroke="#0b4f8a" stroke-width="2" stroke-dasharray="7 4"/>');
+      // recharge and capillary rise through the bottom of the profile, and the flow of the groundwater
+      o.push('<path d="M250,649 V672" stroke="#0b4f8a" stroke-width="2.6" fill="none" marker-end="url(#dzGa)"/><path d="M184,676 V653" stroke="#0b4f8a" stroke-width="2.6" fill="none" marker-end="url(#dzGa)"/>');
+      o.push('<path d="M340,676 C440,684 560,668 700,676 S820,682 880,676" stroke="#0b4f8a" stroke-width="2.6" fill="none" marker-end="url(#dzGa)"/><path d="M340,732 C460,738 600,728 760,734 S850,736 884,732" stroke="#0b4f8a" stroke-width="2.4" fill="none" marker-end="url(#dzGa)"/>');
+      // labels, each on a light plate so that it reads on the stones
+      const lab = (x, y, t, col, bold) => { const w = Math.round(t.length * (bold ? 5.9 : 5.3) + 12); o.push('<rect x="' + x + '" y="' + (y - 11) + '" width="' + w + '" height="15" rx="4" fill="#fff" opacity=".88"/><text x="' + (x + 6) + '" y="' + y + '" font-size="' + (bold ? 10 : 9.2) + '" fill="' + col + '" font-weight="' + (bold ? 700 : 600) + '" font-family="Cambria,Georgia,serif">' + t + '</text>'); };
+      lab(330, yw + 15, 'Water table', '#0b4f8a', 1); lab(X0 + 6, yw + 34, 'Aquifer of sand and gravel', '#1e3a5f'); lab(X0 + 6, yS - 5, 'Silty layer: slows the water', '#4a3a24'); lab(X0 + 6, yD - 5, 'Deeper sand and gravel aquifer', '#1e3a5f'); lab(X0 + 6, yR - 8, 'Fractured rock: water in cracks and pores', '#3b2414');
+      lab(270, yw + 30, 'Recharge', '#0b4f8a');
+      lab(560, yw + 14, 'Groundwater flow', '#0b4f8a'); lab(560, yD - 17, 'Flow in the deep aquifer', '#0b4f8a');
+      o.push('</g>');
+      o.push('<g pointer-events="none"><path d="M' + (X1 + 8) + ',' + yw + ' V' + yR + '" stroke="#555" stroke-width="1"/><path d="M' + (X1 + 4) + ',' + yw + ' h8 M' + (X1 + 4) + ',' + yR + ' h8" stroke="#555" stroke-width="1"/><text x="' + (X1 + 16) + '" y="' + ((yw + yR) / 2) + '" font-size="9.5" fill="#333" font-weight="700" font-family="Cambria,Georgia,serif" transform="rotate(90 ' + (X1 + 16) + ' ' + ((yw + yR) / 2) + ')" text-anchor="middle">Groundwater zone</text></g>');
+    }
     // driving variables
     box('bio', 628, 30, 224, 32, '', '#fff', { dash: 1, rx: 6 }); T(740, 43, 'Driving variables', 'middle', 9.5); T(672, 56, 'Precipitation & Irrigation', 'middle', 9, '#111', 600); T(765, 56, 'Temperature', 'middle', 9, '#111', 600); T(820, 56, 'Light', 'middle', 9, '#111', 600);
     L([[628, 46], [300, 46], [300, 62]], 'none'); o.push('<circle cx="300" cy="67" r="5" fill="#7ea6d2" stroke="#333"/>'); FX(262, 50, 'Snowfall', 'middle', 9, 'Snowfall'); FX(340, 50, 'Rainfall', 'middle', 9, 'Rainfall');
@@ -188,9 +221,9 @@
     const lg = [['none', 'Inputs and movement of matter within modules.'], ['out', 'Outputs of matter.'], ['info', 'Exchange of information within modules.'], ['none2', 'Movement of matter between modules.'], ['mod', 'Exchange of information between modules.']];
     lg.forEach((l, i) => { const y = 590 + i * 11; o.push('<line x1="640" y1="' + y + '" x2="676" y2="' + y + '" stroke="#222" stroke-width="' + (l[0] === 'none2' ? 2 : 1) + '"' + (l[0] === 'out' ? ' stroke-dasharray="5 3"' : l[0] === 'info' ? ' stroke-dasharray="1.5 2.5"' : l[0] === 'mod' ? ' stroke-dasharray="6 3 1.5 3"' : '') + '/>'); T(682, y + 3, l[1], 'start', 8.5); });
     // the processes of Daisy that Fig. 1 has no box for, so that none is hidden: they can be clicked and marked like the others
-    box('temp', 108, 658, 210, 24, 'Soil heat and ice', LG, { sz: 9.5 }); box('deni', 330, 658, 230, 24, 'Denitrification and N2O', BE, { sz: 9.5 });
+    box('temp', 108, 658 + GW, 210, 24, 'Soil heat and ice', LG, { sz: 9.5 }); box('deni', 330, 658 + GW, 230, 24, 'Denitrification and N2O', BE, { sz: 9.5 });
     // what the experiment changes (orange) and what it measures (blue), drawn on the same map; arrows run from the changed process to the measured one
-    let extraH = 0, base = opt.all ? 694 : 696;
+    let extraH = 0, base = (opt.all ? 694 : 696) + GW;
     // the standalone figure: every other component of Daisy drawn as a box of Fig. 1 itself, in the style of the boxes of the map
     // (the same rectangles, colours, serif labels and line weights), in rows under the profile, one row group for each module
     if (opt.all) {
@@ -215,7 +248,7 @@
         rel.push('<rect x="' + (b[0] - 3) + '" y="' + (b[1] - 3) + '" width="' + (b[2] + 6) + '" height="' + (b[3] + 6) + '" rx="5" fill="rgba(215,25,28,0.08)" stroke="#d7191c" stroke-width="2.2" style="pointer-events:none"/>');
         rel.push('<path d="M' + tx + ' ' + ty + ' L' + bx + ' ' + by + '" fill="none" stroke="#d7191c" stroke-width="1.4" stroke-dasharray="2 3" style="pointer-events:none"/>'); });
       o.push(rel.join(''));
-      base = Math.max(e1, e2, e3) + 8; extraH = base - 660; }
+      base = Math.max(e1, e2, e3) + 8; extraH = base - 660 - GW; }
     if (opt.marks) {
       const M = opt.marks, nm = opt.names || {}, ctr = id => { const r = (pos[id] || [])[0]; return r ? [r[0] + r[2] / 2, r[1] + r[3] / 2] : null; }, top = [];
       const ring = (id, col, grow) => (pos[id] || []).forEach(r => o.push('<rect x="' + (r[0] - grow) + '" y="' + (r[1] - grow) + '" width="' + (r[2] + 2 * grow) + '" height="' + (r[3] + 2 * grow) + '" rx="5" fill="' + (col === '#e8710a' ? 'rgba(232,113,10,0.13)' : 'rgba(0,114,178,0.13)') + '" stroke="' + col + '" stroke-width="2.6" style="pointer-events:none"/>'));
@@ -225,7 +258,7 @@
       const fl = (M.factors || []).map(f => f.id || f), rl = M.resp || [], used = {}, tag = (id, col, txt) => { const r = (pos[id] || [])[0]; if (!r) return; const w = txt.length * 6 + 8, off = used[id] || 0; used[id] = off + w + 2; const x = r[0] + r[2] - w + 3 - off, y = r[1] - 8; o.push('<g style="pointer-events:none"><rect x="' + x + '" y="' + y + '" width="' + w + '" height="14" rx="7" fill="' + col + '" stroke="#fff" stroke-width="1.2"/><text x="' + (x + w / 2) + '" y="' + (y + 10.5) + '" text-anchor="middle" font-size="9.5" fill="#fff" font-weight="700" font-family="Cambria,Georgia,serif">' + esc(txt) + '</text></g>'); };
       Object.keys(M.F || {}).forEach(id => M.F[id].forEach(f => { const k = fl.indexOf(f); if (k >= 0) tag(id, '#e8710a', 'F' + (k + 1)); }));
       Object.keys(M.R || {}).forEach(id => M.R[id].forEach(f => { const k = rl.indexOf(f); if (k >= 0) tag(id, '#0072b2', 'R' + (k + 1)); }));
-      const rows = Math.max(fl.length, rl.length, 1), ph = 34 + rows * 15 + 20, py = base; extraH = py + ph + 14 - 660;
+      const rows = Math.max(fl.length, rl.length, 1), ph = 34 + rows * 15 + 20, py = base; extraH = py + ph + 14 - 660 - GW;
       o.push('<rect x="108" y="' + py + '" width="814" height="' + ph + '" rx="6" fill="#fff" stroke="#c9ced6"/>');
       const head = (x, col, txt) => { o.push('<rect x="' + x + '" y="' + (py + 10) + '" width="20" height="11" rx="3" fill="' + (col === '#e8710a' ? 'rgba(232,113,10,0.13)' : 'rgba(0,114,178,0.13)') + '" stroke="' + col + '" stroke-width="2"/>'); o.push('<text x="' + (x + 28) + '" y="' + (py + 20) + '" font-size="11" font-weight="700" fill="#111" font-family="Cambria,Georgia,serif">' + esc(txt) + '</text>'); };
       head(124, '#e8710a', (opt.labels && opt.labels.f) || 'Changed in this experiment'); head(524, '#0072b2', (opt.labels && opt.labels.r) || 'Measured');
@@ -235,7 +268,7 @@
       o.push('<text x="515" y="' + (py + ph - 7) + '" text-anchor="middle" font-size="9.5" fill="#555" font-family="Cambria,Georgia,serif">Orange frames: the processes the factors act on. Blue frames: the processes the results come from. Click a box to light up the figures that depend on it.</text>');
     }
     extraH = Math.max(extraH, 38);
-    const H = 646 + extraH, full = opt.complete && !opt.marks, body = full ? recolour(o.join('')) + swaflBlock(14 + H + 28) : o.join('');
+    const H = 646 + GW + extraH, full = opt.complete && !opt.marks, body = full ? recolour(o.join('')) + swaflBlock(14 + H + 28) : o.join('');
     return '<svg viewBox="84 14 1110 ' + (full ? H + SW_H : H) + '" style="width:100%;min-width:620px;max-width:none;height:auto;' + (full ? '' : 'max-height:86vh;') + 'display:block;background:#fff;border:1px solid #d6dae0;border-radius:6px" role="img" aria-label="Schematic overview of the main processes in Daisy' + (opt.marks ? ', marked for this experiment' : full ? ', with the layers of SWAFL linked to them' : '') + '">' + body + '</svg>';
   }
   const XMAP = ["Added organic matter (AOM)", "Ammonia volatilisation", "Biopore flow", "Canopy interception", "Canopy structure", "Crop nitrogen uptake", "Denitrification", "Evaporation from litter", "Evaporation from ponded water", "Evaporation from the canopy", "Fertilisation and deposition", "Harvest", "Immobilisation", "Infiltration", "Mineralisation", "Nitrate leaching", "Nitrification", "Nitrous oxide emission", "Partitioning of assimilate", "Percolation and capillary rise", "Rainfall", "Residues and rhizodeposition", "Respiration", "Runoff", "Senescence and stress", "Snow melt and snow evaporation", "Snowfall", "Soil evaporation", "Symbiotic nitrogen fixation", "Throughfall and drip", "Transpiration"];
