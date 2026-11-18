@@ -111,9 +111,14 @@
     // then as many as still fit, so the number of runs is the one asked for whenever the combinations allow it
     const rnd = pickHow === 'balanced' || pickHow === 'random'; guard = 0;
     while (nRuns < max && guard++ < 120) { const kk = Math.min(total, k + (rnd ? guard % 3 : 1)); if (kk === k && !rnd) break; const T2 = choose(kk), n2 = runsOf(T2); if (n2 <= max && (n2 > nRuns || (n2 === nRuns && kk > k))) { k = kk; T = T2; nRuns = n2; } else if (!rnd && n2 > max) break; if (kk >= total && !rnd) break; }
+    // every value of every factor must be tested: when the number of runs is too small for that, it is raised to the fewest runs that do (a figure of the effect of a soil that was never run would be empty)
+    const covers = TT => fs.every((x, i) => x.levels.length < 2 || x.levels.every((_, j) => TT.some(t => t[i] === j)));
+    let raisedTo = 0;
+    if (!covers(T) && k < total) { let kk = k, ok = false; for (let g = 0; g < 700 && kk < total; g++) { kk++; const T2 = choose(kk); if (covers(T2)) { T = T2; k = kk; nRuns = runsOf(T2); ok = true; break; } }
+      if (!ok && total <= 20000) { T = choose(total); k = total; nRuns = runsOf(T); } if (nRuns > max) raisedTo = nRuns; }
     const thinned = T.length < total;
     combos = T.map(t => mk(t.map((j, i) => j === undefined ? undefined : fs[i].levels[j])));
-    const limited = { max, chosen: combos.length, pick: pickHow, seed, total };
+    const limited = { max, chosen: combos.length, pick: pickHow, seed, total, raised: raisedTo ? { from: max, to: raisedTo } : null };
     // a rainfed run does not depend on any irrigation setting: those settings are taken out of it, so the same rainfed run is never made twice
     // and a rainfed run is never counted as a level of an irrigation factor (it would dilute the effect of that factor)
     if (hasIrr && irrIds.length) { const seenR = {}; combos = combos.filter(c => { if (String(c.set.irrig) !== '0') return true; irrKeys.forEach(k => { delete c.set[k]; }); irrIds.forEach(id => { delete c.level[id]; delete c.val[id]; }); const key = JSON.stringify([c.set, c.val]); if (seenR[key]) return false; seenR[key] = 1; return true; }); }
