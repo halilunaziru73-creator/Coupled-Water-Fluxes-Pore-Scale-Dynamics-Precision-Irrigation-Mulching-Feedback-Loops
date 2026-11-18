@@ -3004,6 +3004,8 @@ const ctx = canvas.getContext('2d');
 const calTxt = t => t;
 // ---- desktop (app) mode only: fit the whole drawing to the window, sharp resolution, quick response ----
 if (new URLSearchParams(location.search).get('app')) {
+  // the writing of every result on the picture is in the font of the program (Tahoma, as the menus, the tabs and the tables), not in the browser's default sans-serif
+  { const C2 = CanvasRenderingContext2D.prototype, fd = Object.getOwnPropertyDescriptor(C2, 'font'), SF = 'Tahoma, "Segoe UI", Verdana, Arial, sans-serif'; if (fd && fd.set) Object.defineProperty(C2, 'font', { configurable: true, enumerable: fd.enumerable, get: fd.get, set: function (v) { fd.set.call(this, typeof v === 'string' ? v.replace(/(\d(?:px|pt))\s+(?:Arial,\s*Helvetica,\s*)?sans-serif\s*$/i, '$1 ' + SF).replace(/(\d(?:px|pt))\s+Arial\s*$/i, '$1 ' + SF) : v); } }); }
   // the same text in the same font is measured thousands of times a frame: the result depends only on the two, so it is kept
   { const C2 = CanvasRenderingContext2D.prototype, om = C2.measureText; let M = new Map(); C2.measureText = function (t) { const k = this.font + '\u0001' + t; let r = M.get(k); if (!r) { r = om.call(this, t); if (M.size > 30000) M = new Map(); M.set(k, r); } return r; }; }
   const dW = Object.getOwnPropertyDescriptor(HTMLCanvasElement.prototype, 'width'), dH = Object.getOwnPropertyDescriptor(HTMLCanvasElement.prototype, 'height');

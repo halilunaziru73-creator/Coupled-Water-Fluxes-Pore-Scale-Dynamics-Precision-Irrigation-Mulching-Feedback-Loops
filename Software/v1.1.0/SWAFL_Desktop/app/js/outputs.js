@@ -26,11 +26,11 @@ window.SWOut = (() => {
   // a picture with a title above and the caption below, as a figure in a paper
   function frameCanvas(src, title, extra) {
     const S = Math.max(1, src.width / Math.max(300, src.clientWidth || src.width || 1)), u = Math.max(1, Math.round(src.width / 900 * 10) / 10), pad = 12 * u, th = title ? 30 * u : 0, lines = [];
-    const cap = [extra, mem.caption].filter(Boolean).join(' '), tmp = document.createElement('canvas').getContext('2d'); tmp.font = (12 * u) + 'px Arial';
+    const cap = [extra, mem.caption].filter(Boolean).join(' '), tmp = document.createElement('canvas').getContext('2d'); tmp.font = (12 * u) + 'px Tahoma,"Segoe UI",Verdana,Arial,sans-serif';
     const maxW = src.width - 2 * pad; let cur = ''; (cap + ' ' + settings()).split(/\s+/).forEach(w => { if (tmp.measureText(cur + ' ' + w).width > maxW && cur) { lines.push(cur); cur = w; } else cur = (cur + ' ' + w).trim(); }); if (cur) lines.push(cur);
     const fh = lines.length * 16 * u + pad, out = document.createElement('canvas'); out.width = src.width; out.height = Math.round(src.height + th + fh); const g = out.getContext('2d');
-    g.fillStyle = '#fff'; g.fillRect(0, 0, out.width, out.height); if (title) { g.fillStyle = '#0A246A'; g.font = 'bold ' + (16 * u) + 'px Arial'; g.textBaseline = 'alphabetic'; g.fillText(title, pad, 21 * u); }
-    g.drawImage(src, 0, th); g.fillStyle = '#333'; g.font = (12 * u) + 'px Arial'; lines.forEach((l, i) => g.fillText(l, pad, th + src.height + 16 * u * (i + 1) - 2 * u)); return out;
+    g.fillStyle = '#fff'; g.fillRect(0, 0, out.width, out.height); if (title) { g.fillStyle = '#0A246A'; g.font = 'bold ' + (16 * u) + 'px Tahoma,"Segoe UI",Verdana,Arial,sans-serif'; g.textBaseline = 'alphabetic'; g.fillText(title, pad, 21 * u); }
+    g.drawImage(src, 0, th); g.fillStyle = '#333'; g.font = (12 * u) + 'px Tahoma,"Segoe UI",Verdana,Arial,sans-serif'; lines.forEach((l, i) => g.fillText(l, pad, th + src.height + 16 * u * (i + 1) - 2 * u)); return out;
   }
   // the simulation picture, drawn again at a scale (1.5 about screen, 3.125 = 300 dpi, 6.25 = 600 dpi, 0 = the highest the computer allows)
   async function enginePicture(scale, noFrame) {
@@ -75,9 +75,9 @@ window.SWOut = (() => {
   // ---------------------------------------------------------------- sections of the dashboard
   function tableRows(t) { return Array.from(t.querySelectorAll('tr')).map(tr => Array.from(tr.children).map(c => c.textContent.replace(/\s+/g, ' ').trim())); }
   function tableCanvas(rows, S) {
-    const c = document.createElement('canvas'), g = c.getContext('2d'), fs = 12 * S, rh = 20 * S; g.font = fs + 'px Arial'; const cw = []; rows.forEach(r => r.forEach((v, i) => { cw[i] = Math.max(cw[i] || 0, g.measureText(v).width + 14 * S); }));
-    c.width = Math.ceil(cw.reduce((a, b) => a + b, 0)) + 2; c.height = rows.length * rh + 2; g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.font = fs + 'px Arial'; g.textBaseline = 'middle';
-    rows.forEach((r, j) => { let x = 1; if (j === 0) { g.fillStyle = '#e6e9ee'; g.fillRect(0, 0, c.width, rh); } r.forEach((v, i) => { g.fillStyle = '#111'; g.font = (j === 0 ? 'bold ' : '') + fs + 'px Arial'; g.textAlign = i === 0 ? 'left' : 'right'; g.fillText(v, i === 0 ? x + 6 * S : x + cw[i] - 6 * S, j * rh + rh / 2 + 1); x += cw[i]; }); g.strokeStyle = '#c9ced6'; g.beginPath(); g.moveTo(0, (j + 1) * rh); g.lineTo(c.width, (j + 1) * rh); g.stroke(); });
+    const c = document.createElement('canvas'), g = c.getContext('2d'), fs = 12 * S, rh = 20 * S; g.font = fs + 'px Tahoma,"Segoe UI",Verdana,Arial,sans-serif'; const cw = []; rows.forEach(r => r.forEach((v, i) => { cw[i] = Math.max(cw[i] || 0, g.measureText(v).width + 14 * S); }));
+    c.width = Math.ceil(cw.reduce((a, b) => a + b, 0)) + 2; c.height = rows.length * rh + 2; g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.font = fs + 'px Tahoma,"Segoe UI",Verdana,Arial,sans-serif'; g.textBaseline = 'middle';
+    rows.forEach((r, j) => { let x = 1; if (j === 0) { g.fillStyle = '#e6e9ee'; g.fillRect(0, 0, c.width, rh); } r.forEach((v, i) => { g.fillStyle = '#111'; g.font = (j === 0 ? 'bold ' : '') + fs + 'px Tahoma,"Segoe UI",Verdana,Arial,sans-serif'; g.textAlign = i === 0 ? 'left' : 'right'; g.fillText(v, i === 0 ? x + 6 * S : x + cw[i] - 6 * S, j * rh + rh / 2 + 1); x += cw[i]; }); g.strokeStyle = '#c9ced6'; g.beginPath(); g.moveTo(0, (j + 1) * rh); g.lineTo(c.width, (j + 1) * rh); g.stroke(); });
     return c;
   }
   const curTab = () => { const b = document.querySelector('#dashTabs button.on'); return b ? b.dataset.tab : 'results'; };

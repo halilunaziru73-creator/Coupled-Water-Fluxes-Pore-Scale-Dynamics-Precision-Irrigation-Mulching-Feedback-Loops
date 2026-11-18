@@ -151,7 +151,7 @@ const Dash = (() => {
   function xyChart(cv, o) {
     const dpr = Math.max(3, window.devicePixelRatio || 1), w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return; cv.width = w * dpr; cv.height = h * dpr;
     const c = cv.getContext('2d'); c.scale(dpr, dpr); c.clearRect(0, 0, w, h); c.fillStyle = '#FFFFFF'; c.fillRect(0, 0, w, h);
-    c.font = '11px Arial,Helvetica,sans-serif';
+    c.font = '11px Tahoma,"Segoe UI",Verdana,Arial,sans-serif';
     cv._csv = () => { const rows = [[o.xl || 'x'].concat((o.series || []).map(q => q.n || 'y'))]; (o.x || []).forEach((xv, i) => rows.push([o.xfmt ? o.xfmt(xv) : xv].concat((o.series || []).map(q => q.y && isFinite(q.y[i]) ? q.y[i] : '')))); return rows; };
     // the legend wraps onto as many lines as the width needs, and the plot starts below it
     const leg = []; { let lx = 50, ly = 0; o.series.forEach(s => { if (!s.n) return; const lw = 22 + c.measureText(s.n).width; if (lx + lw > w - 6 && lx > 50) { lx = 50; ly++; } leg.push([s, lx, ly]); lx += lw; }); }
@@ -163,12 +163,12 @@ const Dash = (() => {
     let ymx = o.ymax != null ? o.ymax : (Math.max(...all, 0) > 0 ? Math.max(...all) * 1.08 : 1), ymn = o.ymin != null ? o.ymin : Math.min(0, ...all);
     if (o.invert) [ymn, ymx] = [ymx, ymn];
     const xmn = Math.min(...xs), xmx = Math.max(...xs), X = v => L + (w - L - R) * (v - xmn) / ((xmx - xmn) || 1), Y = v => T + (h - T - B) * (1 - (v - ymn) / ((ymx - ymn) || 1));
-    c.font = '11px Arial,Helvetica,sans-serif'; c.strokeStyle = '#E4E7EB'; c.fillStyle = '#222'; c.lineWidth = 1; c.setLineDash([2, 3]);
+    c.font = '11px Tahoma,"Segoe UI",Verdana,Arial,sans-serif'; c.strokeStyle = '#E4E7EB'; c.fillStyle = '#222'; c.lineWidth = 1; c.setLineDash([2, 3]);
     { const lo = Math.min(ymn, ymx), hi = Math.max(ymn, ymx), yt = nice(lo, hi, Math.max(2, Math.floor((h - T - B) / 32))); yt.out.forEach(v => { const y = Y(v); c.setLineDash([2, 3]); c.strokeStyle = '#E4E7EB'; c.beginPath(); c.moveTo(L, y); c.lineTo(w - R, y); c.stroke(); c.setLineDash([]); c.strokeStyle = '#222'; c.beginPath(); c.moveTo(L - 4, y); c.lineTo(L, y); c.stroke(); c.textAlign = 'right'; c.fillText(tf(v, yt.st), L - 4, y + 3); }); }
     { const xt = o.xstep ? (() => { const px = (w - L - R) / ((xmx - xmn) || 1), st2 = [o.xstep, o.xstep * 2, o.xstep * 3, o.xstep * 4, o.xstep * 6].find(q => q * px >= 50) || o.xstep * 8, out = []; for (let v = xmn; v <= xmx + 1e-9; v += st2) out.push(v); return { out, st: st2 }; })() : nice(xmn, xmx, Math.max(2, Math.floor((w - L - R) / 52))); let last = -1e9; c.textAlign = 'center'; xt.out.forEach(v => { const x = X(v), t = o.xfmt ? o.xfmt(v) : o.xl === 'year' ? String(Math.round(v)) : tf0(v, xt.st), tw = c.measureText(t).width; if (x - tw / 2 < last + 4) return; c.fillText(t, Math.min(w - tw / 2 - 1, x), h - B + 13); last = x + tw / 2; }); }
     c.fillText(o.xl || '', L + (w - L - R) / 2, h - 4); c.save(); c.translate(10, T + (h - T - B) / 2); c.rotate(-Math.PI / 2); c.fillText(o.yl || '', 0, 0); c.restore();
     c.setLineDash([]); c.strokeStyle = '#222'; c.lineWidth = 1.2; c.strokeRect(L, T, w - L - R, h - T - B); c.lineWidth = 1;
-    if (cv.dataset && cv.dataset.panel) { c.font = 'bold 12px Arial'; c.fillStyle = '#111'; c.textAlign = 'left'; c.fillText(cv.dataset.panel, L + 7, T + 15); c.font = '11px Arial,Helvetica,sans-serif'; }
+    if (cv.dataset && cv.dataset.panel) { c.font = 'bold 12px Tahoma,"Segoe UI",Verdana,Arial,sans-serif'; c.fillStyle = '#111'; c.textAlign = 'left'; c.fillText(cv.dataset.panel, L + 7, T + 15); c.font = '11px Tahoma,"Segoe UI",Verdana,Arial,sans-serif'; }
     c.save(); c.beginPath(); c.rect(L, T, w - L - R, h - T - B); c.clip();
     if (o.projFrom != null && o.projFrom < xmx) { const px = X(o.projFrom + 0.5); c.fillStyle = 'rgba(232,145,45,0.10)'; c.fillRect(px, T, w - R - px, h - T - B); c.strokeStyle = '#C77D1A'; c.setLineDash([3, 3]); c.lineWidth = 1.2; c.beginPath(); c.moveTo(px, T); c.lineTo(px, h - B); c.stroke(); c.setLineDash([]); c.fillStyle = '#C77D1A'; c.textAlign = 'left'; c.fillText('projection', px + 4, T + 12); }
     (o.hband || []).forEach(b => { c.fillStyle = b.c; c.fillRect(L, Math.min(Y(b.lo), Y(b.hi)), w - L - R, Math.abs(Y(b.lo) - Y(b.hi))); });
@@ -193,7 +193,7 @@ const Dash = (() => {
   function timeBars(cv, tt, u) {
     if (!cv) return; const dpr = Math.max(3, window.devicePixelRatio || 1), w = cv.clientWidth, hh = cv.clientHeight; if (!w || !hh) return; cv.width = w * dpr; cv.height = hh * dpr; const c = cv.getContext('2d'); c.scale(dpr, dpr); c.fillStyle = '#fff'; c.fillRect(0, 0, w, hh);
     cv._csv = () => [['item', u || 'value']].concat(tt.map(q => [q[0], q[1]]));
-    c.font = '11px Arial,Helvetica,sans-serif'; c.textBaseline = 'alphabetic'; let lw = 0; tt.forEach(q => { lw = Math.max(lw, c.measureText(q[0]).width); });
+    c.font = '11px Tahoma,"Segoe UI",Verdana,Arial,sans-serif'; c.textBaseline = 'alphabetic'; let lw = 0; tt.forEach(q => { lw = Math.max(lw, c.measureText(q[0]).width); });
     const x0 = Math.min(lw + 14, w * 0.45), T = 8, B = 30, R = 64, bh = (hh - T - B) / tt.length, mx = Math.max(...tt.map(q => q[1]), 1e-9) * 1.05, X = v => x0 + (w - x0 - R) * v / mx;
     // grid and axis with outward ticks, as in a journal figure
     const raw = mx / 5, p = Math.pow(10, Math.floor(Math.log10(raw))), m = raw / p, st = (m <= 1 ? 1 : m <= 2 ? 2 : m <= 5 ? 5 : 10) * p;
