@@ -13,7 +13,7 @@
 window.DaisyExpPub = (() => {
   const P = () => window.DaisyPlot, X = () => window.DaisyExp, FK = () => window.DaisyFigKit;
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  const FONT = 'Arial, "Helvetica Neue", Helvetica, sans-serif', INK = '#111', AX = '#222', MUT = '#555', NAVY = '#154378';
+  const FONT = '"DejaVu Sans", Verdana, Arial, "Helvetica Neue", Helvetica, sans-serif', INK = '#111', AX = '#222', MUT = '#555', NAVY = '#154378';
   const OKI = ['#0072B2', '#D55E00', '#009E73', '#CC79A7', '#E69F00', '#56B4E9', '#7a6f00', '#444444'];
   const fin = v => typeof v === 'number' && isFinite(v);
   const mean = a => a.length ? a.reduce((s, v) => s + v, 0) / a.length : NaN;
@@ -150,7 +150,7 @@ const MN = t => typeof t === 'string' ? t.replace(/(^|[\s(\u00b1\u00d7,:])-(?=\d
 
     // ---- drawing helpers ----
     const setFont = (g, px, bold) => { if (!g.__mn) { const ft = g.fillText.bind(g); g.fillText = (t, x, y, w) => ft(MN(t), x, y, w); g.__mn = 1; } g.font = (bold ? 'bold ' : '') + px + 'px ' + FONT; };
-    const letter = (g, x, y, l, title, w) => { g.fillStyle = INK; g.textAlign = 'left'; setFont(g, 17, true); g.fillText(l, x, y + 14); const lw = g.measureText(l).width; if (title) { setFont(g, 12.5, false); g.fillStyle = INK; g.fillText(cut(title, Math.max(10, Math.floor((w - lw - 14) / 6.3))), x + lw + 8, y + 14); } };
+    const letter = (g, x, y, l, title, w) => { g.fillStyle = INK; g.textAlign = 'left'; setFont(g, 17, true); g.fillText(l, x, y + 14); const lw = g.measureText(l).width; if (title) { setFont(g, 12.5, true); g.fillStyle = INK; g.fillText(cut(title, Math.max(10, Math.floor((w - lw - 14) / 7.4))), x + lw + 8, y + 14); } };
     const marker = (g, k, x, y, r) => { g.beginPath(); const m = k % 4; if (m === 0) g.arc(x, y, r, 0, 7); else if (m === 1) g.rect(x - r, y - r, 2 * r, 2 * r); else if (m === 2) { g.moveTo(x, y - r * 1.2); g.lineTo(x + r * 1.1, y + r * .8); g.lineTo(x - r * 1.1, y + r * .8); g.closePath(); } else { g.moveTo(x, y - r * 1.3); g.lineTo(x + r * 1.3, y); g.lineTo(x, y + r * 1.3); g.lineTo(x - r * 1.3, y); g.closePath(); } };
     const colours = (bs, numeric) => bs.map((b, i) => numeric && bs.length > 3 ? P().ramp('viridis', 0.05 + 0.82 * i / (bs.length - 1)) : OKI[i % 8]);
     const isNum = vs => vs.length > 2 && vs.every(v => typeof v === 'number');
