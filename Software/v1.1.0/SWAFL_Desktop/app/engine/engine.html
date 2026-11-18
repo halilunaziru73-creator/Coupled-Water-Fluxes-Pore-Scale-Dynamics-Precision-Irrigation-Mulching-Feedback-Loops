@@ -1409,14 +1409,14 @@ function drawDRIP() {
   y = irSens(y, [['Emitter flow q', 'q', 0.25, () => o.q], ['Emitter spacing', 'Se', 0.25, () => o.Se], ['Lateral spacing', 'Sl', 0.25, () => o.Sl], ['Placement depth', 'dep', 0.3, () => Math.max(10, o.dep)], ['Depth per irrigation', 'Zn', 0.25, () => o.Zn], ['Run time', 't', 0.2, () => R.t]], base, ov => drRun(ov).Ea, 'Change in Ea when one input moves ±25–30 %, all others held');
   // course checks (localized irrigation, Day 1 and Day 2): pipe, operating window, filtration, local ET, volume and runtime, leaching
   {
-    SIDCUR = DRP; sidHead('Design checks: pipe, working pressure, filtration, plant water volume and leaching', y, 'Catalogue values and the course formulas: ETc-loc = Kr × Kc × ET0; 1 mm over 1 ha = 10 m³; t = Vplant ÷ (n × q); LF = Dr ÷ Iin');
+    SIDCUR = DRP; sidHead('Design checks: pipe, working pressure, filtration, plant water volume and leaching', y, 'Catalogue values and standard formulas: $ET_{c,loc} = K_r · K_c · ET_0$; 1 mm over 1 ha = 10 m³; $t = V_{pl} / (n · q)$; $LF = D_r / I_{in}$');
     y += 34; sidRow('Pipe', y, [['Own diameter', !IRM.DPIPE.some(p => Math.abs(p.id - o.D) < 0.05), () => {}, 'Use the inside diameter set above']].concat(IRM.DPIPE.map(p => [p.label + ' · ID ' + p.id, Math.abs(p.id - o.D) < 0.05, () => { DRP.D = p.id; }, 'Eurodrip GR dripline: OD ' + p.od + ' mm, wall ' + p.wall + ' mm, inside diameter ' + p.id + ' mm, up to ' + p.bar + ' bar']))); y += 36;
     const cx1b = 16, cx2b = 322, cwb = 282;
-    sidSlider('Kr', 'Local reduction Kr (ETc-loc = Kr × ETc)', cx1b, y, cwb, [0.3, 1, 0.01], DRP.Kr, v => v.toFixed(2));
+    sidSlider('Kr', 'Local reduction $K_r$ ($ET_{c,loc} = K_r · ET_c$)', cx1b, y, cwb, [0.3, 1, 0.01], DRP.Kr, v => v.toFixed(2));
     sidSlider('dens', 'Plants per hectare', cx2b, y, cwb, [50, 5000, 10], DRP.dens, v => irF(v) + ' /ha');
-    sidSlider('ne', 'Emitters per plant n', cx1b, y + 31, cwb, [1, 12, 1], DRP.ne, v => irF(v));
-    sidSlider('ECw', 'Irrigation water salinity ECw (dS/m)', cx2b, y + 31, cwb, [0.1, 6, 0.1], DRP.ECw, v => v.toFixed(1) + ' dS/m');
-    sidSlider('ECx', 'Crop ECe at zero yield (dS/m)', cx1b, y + 62, cwb, [2, 24, 0.5], DRP.ECx, v => v.toFixed(1) + ' dS/m');
+    sidSlider('ne', 'Emitters per plant $n$', cx1b, y + 31, cwb, [1, 12, 1], DRP.ne, v => irF(v));
+    sidSlider('ECw', 'Irrigation water salinity $EC_w$ (dS/m)', cx2b, y + 31, cwb, [0.1, 6, 0.1], DRP.ECw, v => v.toFixed(1) + ' dS/m');
+    sidSlider('ECx', 'Crop $EC_e$ at zero yield (dS/m)', cx1b, y + 62, cwb, [2, 24, 0.5], DRP.ECx, v => v.toFixed(1) + ' dS/m');
     y += 100;
     const bar = h => h * 0.0980665, hIn = o.H0, hEnd = R.lat.Hend, pipe = IRM.DPIPE.find(p => Math.abs(p.id - o.D) < 0.05);
     const win = K.bar ? (bar(hEnd) >= K.bar[0] && bar(hIn) <= K.bar[1]) : null;
@@ -1424,21 +1424,21 @@ function drawDRIP() {
     const LR = clampN(DRP.ECw / (2 * DRP.ECx), 0, 0.99), LF = R.dp / Math.max(0.05, 1 - R.ev), LRc = LR > 0.01;
     const ok = (t, c) => ({ t, c: c ? '#14532D' : '#B91C1C' });
     const rows = [
-      ['Emitter, ' + K.label, K.bar ? (K.x === 0 ? 'x = 0, ' : '') + 'working range ' + K.bar[0] + '–' + K.bar[1] + ' bar' + (K.shut ? ', shuts off below ' + K.shut + ' bar' : '') + ' · filtration 130 µm (120 mesh)' : 'q = k·h^' + K.x + ' · use a 120 mesh (130 µm) filter or finer']
+      ['Emitter, ' + K.label, K.bar ? (K.x === 0 ? 'x = 0, ' : '') + 'working range ' + K.bar[0] + '–' + K.bar[1] + ' bar' + (K.shut ? ', shuts off below ' + K.shut + ' bar' : '') + ' · filtration 130 µm (120 mesh)' : '$q = k·h^{' + K.x + '}$ · use a 120 mesh (130 µm) filter or finer']
       , ['Pressure on the lateral', 'inlet ' + bar(hIn).toFixed(2) + ' bar, far end ' + bar(hEnd).toFixed(2) + ' bar' + (win === null ? '' : win ? ' · inside the emitter range' : ' · OUTSIDE the emitter range ' + K.bar[0] + '–' + K.bar[1] + ' bar')]
       , ['Pipe', pipe ? pipe.label + ': OD ' + pipe.od + ', wall ' + pipe.wall + ', ID ' + pipe.id + ' mm, SDR ' + (pipe.od / pipe.wall).toFixed(0) + ' · ' + (bar(hIn) <= pipe.bar ? 'inlet within ' + pipe.bar + ' bar' : 'inlet ABOVE the ' + pipe.bar + ' bar limit') : 'inside diameter ' + irF(o.D, 1) + ' mm (choose a catalogue pipe above for wall and pressure limit)']
-      , ['Local crop water use', 'ETc-loc = ' + Kr.toFixed(2) + ' × ' + C.ETpk.toFixed(1) + ' = ' + ETl.toFixed(2) + ' mm/day at the seasonal peak']
-      , ['Depth and volume per interval', irF(netI, 1) + ' mm net → ' + grossI.toFixed(1) + ' mm gross (Ea ' + irF(R.Ea * 100) + ' %) = ' + irF(Vha) + ' m³/ha']
-      , ['Volume per plant', irF(Vha) + ' m³/ha × 1000 ÷ ' + irF(DRP.dens) + ' plants = ' + irF(Vpl, 1) + ' L per plant']
-      , ['Run time t = Vplant ÷ (n × q)', irF(Vpl, 1) + ' ÷ (' + irF(DRP.ne) + ' × ' + o.q.toFixed(1) + ') = ' + tt.toFixed(1) + ' h per irrigation']
-      , ['Leaching requirement LR = ECw ÷ (2·ECe,max)', irF(LR * 100, 1) + ' % · achieved LF = Dr ÷ Iin = ' + irF(LF * 100, 1) + ' %' + (LRc ? (LF >= LR ? ' · salts leached' : ' · short, add ' + irF((LR - LF) * grossI, 1) + ' mm per interval or plan a leaching event') : ' · low-salinity water, no extra leaching needed')]];
+      , ['Local crop water use $ET_{c,loc}$', '$ET_{c,loc} = K_r · ET_c = ' + Kr.toFixed(2) + ' × ' + C.ETpk.toFixed(1) + ' = ' + ETl.toFixed(2) + '$ mm/day at the seasonal peak']
+      , ['Depth and volume per interval', '$d_n = ' + irF(netI, 1) + '$ mm, $d_g = d_n / E_a = ' + grossI.toFixed(1) + '$ mm ($E_a = ' + irF(R.Ea * 100) + '$ %), $V_{ha} = 10 d_g = ' + irF(Vha) + '$ m³/ha']
+      , ['Volume per plant', '$V_{pl} = V_{ha} × 1000 / N = ' + irF(Vha) + ' × 1000 / ' + irF(DRP.dens) + ' = ' + irF(Vpl, 1) + '$ L per plant']
+      , ['Run time $t = V_{pl} / (n · q)$', '$t = ' + irF(Vpl, 1) + ' / (' + irF(DRP.ne) + ' × ' + o.q.toFixed(1) + ') = ' + tt.toFixed(1) + '$ h per irrigation']
+      , ['Leaching requirement $LR = EC_w / (2·EC_{e,max})$', '$LR = ' + irF(LR * 100, 1) + '$ % · achieved $LF = D_r / I_{in} = ' + irF(LF * 100, 1) + '$ %' + (LRc ? (LF >= LR ? ' · salts leached' : ' · short, add ' + irF((LR - LF) * grossI, 1) + ' mm per interval or plan a leaching event') : ' · low-salinity water, no extra leaching needed')]];
     y = irRows(y, rows) + 4;
     T('LR here is the simplified drip-irrigation estimate (Rhoades); it assumes steady state. Monitor ECe after rain and do not treat all drainage as waste.', 20, y + 6, { s: 8.6, i: true, c: '#6B7280' }); y += 34;
   }
   // season
   const ay = C.ay, PLs = irPlan({ Zn: o.Zn, Ea: R.Ea }), events = PLs.season.ev.length, gross = R.gross, flowHa = o.q * (1e4 / R.Ae) / 3600, zones = Math.max(1, Math.ceil(flowHa * DRP.Af / DRP.Qs)), cyc = zones * R.t;
   sidHead('What this means for the season and the farm', y, 'The DSS sets the crop need; the design decides what is pumped');
-  y = irRows(y + 34, [['Net irrigation in the season (FAO-56, Kc × ET0)', irF(PLs.season.In) + ' mm → ' + events + ' irrigations of ' + irF(o.Zn) + ' mm'], ['Gross water per irrigation', irF(gross, 1) + ' mm (Ea ' + irF(R.Ea * 100) + ' %)'], ['Gross water per season', irF(events * gross) + ' mm = ' + irF(events * gross * 10) + ' m³ per hectare'], ['Peak crop need / interval', C.ETpk.toFixed(1) + ' mm/day × ' + irF(DRP.intv) + ' day' + (DRP.intv === 1 ? '' : 's')], ['System flow per hectare', flowHa.toFixed(2) + ' L/s/ha (' + irF(1e4 / R.Ae) + ' emitters/ha, ' + irF(1e4 / o.Sl) + ' m of lateral/ha)'], ['Sets for ' + DRP.Af.toFixed(1) + ' ha with ' + irF(DRP.Qs) + ' L/s', zones + (zones === 1 ? ' set × ' : ' sets × ') + irF(R.t, 1) + ' h = ' + cyc.toFixed(1) + ' h per round'], ['Pumping per season', irF(cyc * events) + ' hours \u00b7 ' + irF(cyc * events * R.G.kW) + ' kWh']]) + 16;
+  y = irRows(y + 34, [['Net irrigation in the season (FAO-56, $K_c · ET_0$)', '$\ΣI_n = ' + irF(PLs.season.In) + '$ mm = ' + events + ' irrigations of $d_n = ' + irF(o.Zn) + '$ mm'], ['Gross water per irrigation', '$d_g = d_n / E_a = ' + irF(gross, 1) + '$ mm ($E_a = ' + irF(R.Ea * 100) + '$ %)'], ['Gross water per season', '$\Σd_g = ' + irF(events * gross) + '$ mm = ' + irF(events * gross * 10) + ' m³ per hectare'], ['Peak crop need / interval', '$ET_{c,max} × \Δt = ' + C.ETpk.toFixed(1) + ' × ' + irF(DRP.intv) + '$ mm/day × day' + (DRP.intv === 1 ? '' : 's')], ['System flow per hectare', flowHa.toFixed(2) + ' L/s/ha (' + irF(1e4 / R.Ae) + ' emitters/ha, ' + irF(1e4 / o.Sl) + ' m of lateral/ha)'], ['Sets for ' + DRP.Af.toFixed(1) + ' ha with ' + irF(DRP.Qs) + ' L/s', '$N_s × t = ' + zones + ' × ' + irF(R.t, 1) + ' = ' + cyc.toFixed(1) + '$ h per round'], ['Pumping per season', irF(cyc * events) + ' hours \u00b7 ' + irF(cyc * events * R.G.kW) + ' kWh']]) + 16;
   y = irAdvice(y, { sys: 'Drip', Zn: o.Zn, gross: gross, Ea: R.Ea, Es: R.Es, timeH: cyc });
   return y;
 }
@@ -1540,7 +1540,7 @@ function drawSPR() {
   y = irSens(y, [['Soil intake k', 'K', 0.2, () => 1], ['Wind speed', 'u', 0.5, () => Math.max(1, o.u)], ['Pressure', 'P', 0.2, () => o.P], ['Nozzle diameter', 'd', 0.15, () => o.d], ['Spacing along lateral', 'Ss', 0.2, () => o.Ss], ['Spacing between laterals', 'Sl', 0.2, () => o.Sl], ['Depth per irrigation', 'Zn', 0.25, () => o.Zn], ['Ground slope', 'S', 0.5, () => Math.max(0.5, o.S)]], R.Ea, ov => { if (ov.K) return IRM.sprinkler({ ...o, K: o.K * ov.K, T: SPR.tauto ? null : o.T }).Ea; return spRun(ov).Ea; }, 'Change in Ea when one input moves, all others held');
   const ay = C.ay, PLs = irPlan({ Zn: o.Zn, Ea: R.Ea }), events = PLs.season.ev.length, gross = R.gross, nsp = Math.max(1, Math.round(SPR.Af * 1e4 / (o.Ss * o.Sl))), flowTot = nsp * R.Q / 60, sets = Math.max(1, Math.ceil(flowTot / SPR.Qs)), cyc = sets * T0 / 60;
   y = spPart(y, 'season', 5, 'What it means for the season', 'Water, hours and energy for a whole year of irrigating'); sidHead('What this means for the season and the farm', y, 'The DSS sets the crop need; the design decides what is pumped');
-  y = irRows(y + 34, [['Net irrigation in the season (FAO-56, Kc × ET0)', irF(PLs.season.In) + ' mm → ' + events + ' irrigations of ' + irF(o.Zn) + ' mm'], ['Gross water per irrigation', irF(gross, 1) + ' mm (Ea ' + irF(R.Ea * 100) + ' %)'], ['Gross water per season', irF(events * gross) + ' mm = ' + irF(events * gross * 10) + ' m³ per hectare'], ['One sprinkler', R.Q.toFixed(1) + ' L/min at ' + irF(o.P) + ' kPa, reaches ' + R.nz.R.toFixed(1) + ' m'], ['Sprinklers for ' + SPR.Af.toFixed(1) + ' ha', irF(nsp) + ' (' + irF(flowTot, 1) + ' L/s if all run)'], ['Sets with ' + irF(SPR.Qs) + ' L/s', sets + ' sets × ' + irF(T0) + ' min = ' + cyc.toFixed(1) + ' h per round'], ['Pumping per season', irF(cyc * events) + ' hours \u00b7 ' + irF(cyc * events * R.G.kW) + ' kWh']]) + 16;
+  y = irRows(y + 34, [['Net irrigation in the season (FAO-56, $K_c · ET_0$)', '$\ΣI_n = ' + irF(PLs.season.In) + '$ mm = ' + events + ' irrigations of $d_n = ' + irF(o.Zn) + '$ mm'], ['Gross water per irrigation', '$d_g = d_n / E_a = ' + irF(gross, 1) + '$ mm ($E_a = ' + irF(R.Ea * 100) + '$ %)'], ['Gross water per season', '$\Σd_g = ' + irF(events * gross) + '$ mm = ' + irF(events * gross * 10) + ' m³ per hectare'], ['One sprinkler', R.Q.toFixed(1) + ' L/min at ' + irF(o.P) + ' kPa, reaches ' + R.nz.R.toFixed(1) + ' m'], ['Sprinklers for ' + SPR.Af.toFixed(1) + ' ha', irF(nsp) + ' (' + irF(flowTot, 1) + ' L/s if all run)'], ['Sets with ' + irF(SPR.Qs) + ' L/s', '$N_s × t = ' + sets + ' × ' + irF(T0) + '$ min $= ' + cyc.toFixed(1) + '$ h per round'], ['Pumping per season', irF(cyc * events) + ' hours \u00b7 ' + irF(cyc * events * R.G.kW) + ' kWh']]) + 16;
   y = irAdvice(y, { sys: 'Sprinkler', Zn: o.Zn, gross: gross, Ea: R.Ea, Es: R.Es, timeH: cyc });
   return y;
 }
@@ -2143,7 +2143,7 @@ function irAdvice(y0, sp) {
     ['Interval between irrigations', S.gaps.length ? irF(S.mean, 1) + ' days on average (shortest ' + S.gmin + ', longest ' + S.gmax + ')' : '-'],
     ['Depth per irrigation', irF(sp.Zn, 1) + ' mm net, ' + irF(gross0, 1) + ' mm pumped'],
     ['Drainage below the roots', irF(S.DP) + ' mm in the season'],
-    ['Crop stress days (Ks < 1)', S.stress + ' of ' + S.days + ' · yield ' + Math.round(S.RY * 100) + ' % of potential'],
+    ['Crop stress days ($K_s < 1$)', S.stress + ' of ' + S.days + ' · yield ' + Math.round(S.RY * 100) + ' % of potential'],
     ['Efficiency of the design', 'Ea ' + irF(Ea * 100, 1) + ' %, Es ' + irF((sp.Es || 0) * 100, 1) + ' %' + (sp.timeH ? ', ' + irF(sp.timeH, 1) + ' h per round' : '')]]) + 8;
   const nE = PL.up[0], dn = nE ? nE.k + IRSH - kW : null, big = sp.Zn > PL.fT * tawNow * 1.05;
   // the date of the irrigation, always: inside the horizon, or the first one of the daily model after it, or the dry-down without rain; with the Kc and ETc of that day
@@ -2208,7 +2208,7 @@ function spBook(R, o, C, Lx0, Af, Qs, lift, Lconv) {
     ['Rate below the soil’s saturated conductivity', B.r < B.Ks, B.r.toFixed(1) + ' against Ks ' + B.Ks.toFixed(1) + ' mm/h'],
     ['Christiansen uniformity CU ≥ 85 %', R.CU >= 0.85, (R.CU * 100).toFixed(0) + ' %'],
     ['Lateral head loss ≤ 20 % of hs', B.lat.ok, B.lat.hf.toFixed(1) + ' m against ' + (0.2 * B.hs).toFixed(1) + ' m (Ø' + B.lat.D + ')'],
-    ['Mainline gradient J < 0.05', B.main.ok, B.main.J.toFixed(3) + ' m/m (Ø' + B.main.D + ')'],
+    ['Mainline gradient $J < 0.05$', B.main.ok, B.main.J.toFixed(3) + ' m/m (Ø' + B.main.D + ')'],
     ['Whole field done within the interval T', B.pick.okT, (B.sets > 0 ? B.pick.Nd + ' days against T = ' + B.Tint + ' days' : 'one set takes ' + B.tset.toFixed(1) + ' h, more than the ' + SPD.top + ' h working day')],
     ['Flow within the farm supply', B.pick.okQ, B.pick.Qin.toFixed(1) + ' against ' + (Qs * 3.6).toFixed(1) + ' m³/h']
   ];
@@ -2347,7 +2347,7 @@ function spdOverlap(y, B, o, R) {
 // ---------- 6. the three layouts: rectangle, square, triangle ----------
 function spdLayouts(y, B, o, R) {
   sidHead('Layouts: rectangular, square and triangular spacing for this sprinkler', y, 'To scale. Wind lowers the spacing along the lateral. Shaded: the area one sprinkler serves');
-  const Re = B.k * B.Rw, defs = [['Rectangular', Re, 1.5 * B.Rw, 'S ≤ Rw, Sm ≤ 1.5 Rw', 'rect'], ['Square', Math.SQRT2 * Re, Math.SQRT2 * Re, 'S = Sm ≤ √2·Rw', 'sq'], ['Triangular', Math.sqrt(3) * Re, 1.5 * Re, 'S = √3·Rw, Sm = 1.5 Rw', 'tri']], pw = (W - 28 - 20) / 3, by = y + 34, ph = 150, cur = SPR.tri ? 2 : Math.abs(o.Ss - o.Sl) < 0.1 ? 1 : 0;
+  const Re = B.k * B.Rw, defs = [['Rectangular', Re, 1.5 * B.Rw, '$S ≤ R_w$, $S_m ≤ 1.5 R_w$', 'rect'], ['Square', Math.SQRT2 * Re, Math.SQRT2 * Re, '$S = S_m ≤ √2 · R_w$', 'sq'], ['Triangular', Math.sqrt(3) * Re, 1.5 * Re, '$S = √3 · R_w$, $S_m = 1.5 R_w$', 'tri']], pw = (W - 28 - 20) / 3, by = y + 34, ph = 150, cur = SPR.tri ? 2 : Math.abs(o.Ss - o.Sl) < 0.1 ? 1 : 0;
   defs.forEach((q, i) => { const x = 14 + i * (pw + 10), on = cur === i; spdBox(x, by, pw, ph, on ? '#E6F4F7' : '#fff'); if (on) { ctx.strokeStyle = '#0B7285'; ctx.lineWidth = 2; ctx.strokeRect(x + 1, by + 1, pw - 2, ph - 2); }
     const S = q[1], Sm = q[2], sc = Math.min((pw - 24) / (S * 2.1), (ph - 60) / (Sm * 2.1), 3.2), cx = x + pw / 2, cy = by + 22 + (ph - 66) / 2; ctx.save(); ctx.beginPath(); ctx.rect(x + 2, by + 22, pw - 4, ph - 66); ctx.clip();
     const pts = []; for (let j = -2; j <= 2; j++) for (let k = -2; k <= 2; k++) pts.push([cx + (k * S + (q[4] === 'tri' && (j & 1) ? S / 2 : 0)) * sc, cy + j * Sm * sc]);
@@ -2417,7 +2417,7 @@ function spdHydraulics(y, B, o, R) {
   const by = y + 34, tw = (W - 28 - 12) / 2, tr = (x, title, rows, hdr) => { T(title, x, by + 4, { s: 9.2, b: true, c: IRC.ink }); ctx.fillStyle = '#E6F4F7'; ctx.fillRect(x, by + 10, tw, 17); hdr.forEach((h, j) => T(h, j === hdr.length - 1 ? x + tw - 8 : x + 8 + j * (tw - 16) / (hdr.length - 1), by + 22, { s: 8.2, b: true, a: j === hdr.length - 1 ? 'right' : j ? 'center' : 'left', c: IRC.ink })); rows.forEach((r, i) => { const yy = by + 28 + i * 17, ch = r[4]; ctx.fillStyle = ch ? '#EAF6EE' : i % 2 ? '#F6F7F5' : '#fff'; ctx.fillRect(x, yy, tw, 17); r.slice(0, 4).forEach((v, j) => T(String(v), j === 3 ? x + tw - 8 : x + 8 + j * (tw - 16) / (hdr.length - 1), yy + 12, { s: 8.6, b: ch || j === 3, a: j === 3 ? 'right' : j ? 'center' : 'left', c: j === 3 ? (r[3].indexOf('rejected') === 0 ? '#B91C1C' : '#14532D') : '#1B1F23' })); }); };
   const li = Math.max(B.latTr.indexOf(B.lat), 0), lrows = B.latTr.slice(Math.max(0, li - 1), li + 2).map(q => ['Ø' + q.D + ' mm', 'J ' + q.J.toFixed(3), q.hf.toFixed(2) + ' m', q.ok ? 'accepted' : 'rejected', q === B.lat]);
   const mi = Math.max(B.mainTr.indexOf(B.main), 0), mrows = B.mainTr.slice(Math.max(0, mi - 1), mi + 2).map(q => ['Ø' + q.D + ' mm', 'J ' + q.J.toFixed(3), q.J < 0.05 ? '< 0.05' : '≥ 0.05', q.ok ? 'accepted' : 'rejected', q === B.main]);
-  tr(14, 'Lateral: ' + B.N + ' sprinklers, ' + B.QL.toFixed(0) + ' L/h, F = ' + B.F.toFixed(3), lrows, ['Pipe', 'Gradient', 'Loss 1.1·F·J·L', 'Result']); tr(14 + tw + 12, 'Mainline: ' + B.pick.n + ' lateral' + (B.pick.n > 1 ? 's' : '') + ' running, ' + B.Qm.toFixed(0) + ' L/h', mrows, ['Pipe', 'Gradient', 'Limit', 'Result']);
+  tr(14, 'Lateral: ' + B.N + ' sprinklers, ' + B.QL.toFixed(0) + ' L/h, F = ' + B.F.toFixed(3), lrows, ['Pipe', 'Gradient', 'Loss $1.1·F·J·L$', 'Result']); tr(14 + tw + 12, 'Mainline: ' + B.pick.n + ' lateral' + (B.pick.n > 1 ? 's' : '') + ' running, ' + B.Qm.toFixed(0) + ' L/h', mrows, ['Pipe', 'Gradient', 'Limit', 'Result']);
   const gy = by + 28 + 3 * 17 + 18, gh = 150, gx = 62, gw = W - 14 - gx - 8, segs = [['', 0.04], ['conveyance ' + irF(B.Lconv) + ' m', Math.max(0.14, Math.min(0.4, B.Lconv / (B.Lconv + B.Lmain + B.Llat)))], ['mainline ' + irF(B.Lmain) + ' m', Math.max(0.14, Math.min(0.4, B.Lmain / (B.Lconv + B.Lmain + B.Llat)))], ['lateral ' + irF(B.Llat) + ' m', 0.4]], ts = segs.reduce((t, q) => t + q[1], 0);
   const top = Math.ceil(B.Hman * 1.08 / 10) * 10, sy = v => gy + gh - v / top * gh; spdBox(gx, gy, gw, gh, '#fff'); for (let v = 0; v <= top; v += 10) { spdLn(gx, sy(v), gx + gw, sy(v), '#EEF1F3', 1); T(String(v), gx - 4, sy(v) + 3, { s: 8.2, a: 'right', c: MUTE }); } ctx.save(); ctx.translate(14, gy + gh / 2); ctx.rotate(-Math.PI / 2); T('head (m)', 0, 0, { s: 8.6, a: 'center', c: '#374151' }); ctx.restore();
   let xx = gx; const xs = segs.map(q => { const a = xx; xx += q[1] / ts * gw; return [a, xx]; }), H1 = B.Hman - B.lift, H2 = H1 - B.hfConv, H3 = H2 - B.hfMain, H4 = B.hinLat;
