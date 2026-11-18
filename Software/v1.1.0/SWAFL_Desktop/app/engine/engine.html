@@ -790,16 +790,22 @@ function sidSet(sl, p) { const v0 = sl.rng[0] + clampN((p.x - sl.x) / sl.w, 0, 1
 function sidDown(p) { for (const s of SIDW) if (p.x >= s.x - 8 && p.x <= s.x + s.w + 8 && Math.abs(p.y - s.y) <= 10) { if (s.key === 'qLs' && s.obj === SID) SID.autoQ = false; SID.drag = s; sidSet(s, p); return true; } return false; }
 function sidPill(txt, x, y, bg) { txt = mAuto(txt); ctx.font = 'bold 9px sans-serif'; const w = (String(txt).indexOf('$') >= 0 ? mathWidth(txt, { s: 9, b: true }) : ctx.measureText(txt).width) + 8; ctx.fillStyle = bg || 'rgba(15,30,45,0.72)'; rrect(x, y - 10, w, 13, 4); ctx.fill(); T(txt, x + 4, y, { s: 9, b: true, c: '#fff' }); }
 function sidPillR(txt, xr, y, bg) { txt = mAuto(txt); ctx.font = 'bold 9px sans-serif'; const w = (String(txt).indexOf('$') >= 0 ? mathWidth(txt, { s: 9, b: true }) : ctx.measureText(txt).width) + 8; sidPill(txt, xr - w, y, bg); }
+function clsBevel(x, y, w, h, on) {
+  ctx.fillStyle = on ? '#0A246A' : '#D4D0C8'; ctx.fillRect(x, y, w, h);
+  ctx.fillStyle = on ? '#404040' : '#fff'; ctx.fillRect(x, y, w, 1); ctx.fillRect(x, y, 1, h);
+  ctx.fillStyle = on ? '#fff' : '#404040'; ctx.fillRect(x, y + h - 1, w, 1); ctx.fillRect(x + w - 1, y, 1, h);
+  ctx.fillStyle = on ? '#808080' : '#808080'; if (!on) { ctx.fillRect(x + 1, y + h - 2, w - 2, 1); ctx.fillRect(x + w - 2, y + 1, 1, h - 2); }
+}
 function sidChip(x, y, w, h, label, on, fn, tip) {
-  ctx.fillStyle = on ? SIDC.ac : '#fff'; ctx.strokeStyle = on ? '#08505F' : '#9AA3AE'; ctx.lineWidth = on ? 2 : 1; rrect(x, y, w, h, 6); ctx.fill(); ctx.stroke();
-  T(label, x + w / 2, y + h / 2 + 3.5, { s: 9.5, b: true, a: 'center', c: on ? '#fff' : '#374151' }); hot(x, y, w, h, fn, tip);
+  clsBevel(x, y, w, h, on);
+  T(label, x + w / 2, y + h / 2 + 3.5 + (on ? 0.5 : 0), { s: 9.5, b: true, a: 'center', c: on ? '#fff' : '#000' }); hot(x, y, w, h, fn, tip);
 }
 function sidRow(label, y, items) { T(label, 16, y + 15, { s: 9, b: true, c: MUTE }); const x0 = 92, gap = 5, tw = W - 14 - x0; const cw = (tw - gap * (items.length - 1)) / items.length; items.forEach((it, i) => sidChip(x0 + i * (cw + gap), y, cw, 22, it[0], it[1], it[2], it[3])); }
 function sidHead(txt, y, sub) {
   try { const k = currentScene && currentScene.id; (window.__SEC = window.__SEC || {})[k] = (window.__SEC[k] || {}); window.__SEC[k][String(txt).replace(/\$([^$]*)\$/g, (m, s) => s.replace(/[_^{}]/g, ''))] = [y, W]; } catch (e) {}
   const nc = W < 620, mw = W - 32; let ex = 0;
   if (nc) { ex = (sidWrap(txt, 16, y, mw, { s: 12.5, b: true, c: SIDC.ink }, 15) - 1) * 15; } else T(txt, 16, y, { s: 12.5, b: true, c: SIDC.ink });
-  ctx.strokeStyle = SIDC.ac; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(16, y + 6 + ex); ctx.lineTo(W - 16, y + 6 + ex); ctx.stroke();
+  ctx.fillStyle = '#808080'; ctx.fillRect(16, y + 6 + ex, W - 32, 1); ctx.fillStyle = '#fff'; ctx.fillRect(16, y + 7 + ex, W - 32, 1);
   if (sub) { if (nc) ex += (sidWrap(sub, 16, y + 19 + ex, mw, { s: 9, i: true, c: MUTE }, 11) - 1) * 11; else T(sub, 16, y + 19, { s: 9, i: true, c: MUTE }); }
   return ex;
 }
@@ -2440,8 +2446,9 @@ function spTextbook(y, C, R, o, tau) {
 
 // ---------- the inputs, in the order a designer works: site, sprinkler, operation, pipes and water ----------
 function spInHead(y, n, title, sub) {
-  ctx.fillStyle = '#12303A'; rrect(10, y, W - 20, 22, 6); ctx.fill(); ctx.fillStyle = '#D4A94A'; ctx.beginPath(); ctx.arc(26, y + 11, 8, 0, 6.2832); ctx.fill();
-  T(n, 26, y + 15, { s: 10, b: true, a: 'center', c: '#12303A' }); T(title, 42, y + 15, { s: 11, b: true, c: '#FFFFFF' }); if (sub) T(sub, W - 18, y + 15, { s: 8.3, a: 'right', c: '#BFD3DC' }); return y + 36;
+  const g = ctx.createLinearGradient(10, 0, W - 10, 0); g.addColorStop(0, '#0A246A'); g.addColorStop(0.7, '#3A6EA5'); g.addColorStop(1, '#A6CAF0');
+  ctx.fillStyle = g; ctx.fillRect(10, y, W - 20, 22); ctx.fillStyle = '#fff'; ctx.fillRect(15, y + 3, 16, 16); ctx.strokeStyle = '#404040'; ctx.lineWidth = 1; ctx.strokeRect(15.5, y + 3.5, 15, 15);
+  T(n, 23, y + 15, { s: 10, b: true, a: 'center', c: '#0A246A' }); T(title, 40, y + 15, { s: 11, b: true, c: '#FFFFFF' }); if (sub) T(sub, W - 18, y + 15, { s: 8.3, a: 'right', c: '#0A246A' }); return y + 36;
 }
 function spLive(y) {
   const c = SPA.tick(); SPY.live = y - 6; T('Live view: what the settings above do', 16, y + 6, { s: 10.5, b: true, c: '#12303A' }); T('Tap a picture to pause', W - 16, y + 6, { s: 8.4, a: 'right', i: true, c: MUTE });
@@ -3451,7 +3458,7 @@ function T(txt, x, y, o) {
   if (!o.b && !window.__THIN) { const lw = ctx.lineWidth, ss = ctx.strokeStyle, lj = ctx.lineJoin; ctx.strokeStyle = ctx.fillStyle; ctx.lineWidth = Math.max(0.3, (o.s || 11) * (o.ph ? 0.075 : 0.045)); ctx.lineJoin = 'round'; ctx.strokeText(txt, x, y); ctx.lineWidth = lw; ctx.strokeStyle = ss; ctx.lineJoin = lj; }   // a little heavier than the plain font, for reading
   ctx.textBaseline = 'alphabetic';
 }
-function rrect(x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+function rrect(x, y, w, h, r) { if (r > 2) r = 2; ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
 function box(x, y, w, h, o) {
   o = o || {}; rrect(x, y, w, h, o.r == null ? 8 : o.r);
   if (o.fill) { ctx.fillStyle = o.fill; ctx.fill(); }
