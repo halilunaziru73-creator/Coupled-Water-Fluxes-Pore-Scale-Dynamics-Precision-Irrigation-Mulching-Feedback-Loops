@@ -93,7 +93,7 @@
   // opt: { marks: { F:{proc:[factor ids]}, R:{proc:[response ids]}, factors:[{id,ps}], resp:[ids] }, names:{id:text}, sel:proc|null, extra:true }
   function svg(opt) {
     opt = Object.assign({}, opt || {}, { all: true });
-    const GW = 134;   // height of the groundwater section under the soil profile; everything below it is moved down by this much
+    const GW = opt.gw != null ? opt.gw : 134;   // height of the groundwater section under the soil profile; everything below it is moved down by this much
     const o = [], T = (x, y, t, a, sz, c, w, rot) => o.push('<text x="' + x + '" y="' + y + '" text-anchor="' + (a || 'middle') + '" font-size="' + (sz || 9.5) + '" fill="' + (c || '#111') + '"' + (w ? ' font-weight="' + w + '"' : '') + (rot ? ' transform="rotate(' + rot + ' ' + x + ' ' + y + ')"' : '') + ' font-family="Cambria,Georgia,serif" stroke="#fff" stroke-width="2.6" paint-order="stroke" stroke-linejoin="round" style="pointer-events:none">' + esc(t) + '</text>');
     const L = (pts, k) => { const dash = k === 'out' ? ' stroke-dasharray="5 3"' : k === 'info' ? ' stroke-dasharray="1.5 2.5"' : k === 'mod' ? ' stroke-dasharray="6 3 1.5 3"' : ''; o.push('<polyline points="' + pts.map(q => q.join(',')).join(' ') + '" fill="none" stroke="' + (k === 'blue' ? '#3b6fa5' : '#222') + '" stroke-width="' + (k === 'blue' ? 2.2 : 1.1) + '"' + dash + (k === 'none' ? '' : ' marker-end="url(#dzAr)"') + '/>'); };
     const sel = id => opt.sel === null ? false : id === (opt.sel || st.sel), pos = {};
@@ -146,6 +146,7 @@
         + ttl(338, 114, 'Water', '#245f9e') + ttl(338, 584, 'Soil nitrogen and organic matter', '#ffffff', '#3b2616') + ttl(548, 90, 'Crop', '#2f6b1c')
         + '</g>');
     }
+    const zoneIdx = o.length, PAN = [];   // the panels behind the lists of components go right after the zones
     // the ground and the bottom of the profile
     o.push('<line x1="150" y1="352" x2="900" y2="352" stroke="#c9a46a" stroke-width="1.2" stroke-dasharray="2 2"/><rect x="150" y="640" width="750" height="9" fill="url(#dzHat)"/>');
     // groundwater: a cross-section under the soil profile (drawn here from the usual layering of a shallow aquifer system), the water table, the layers that carry water and the layer that slows it, the rock with water in its cracks
@@ -238,8 +239,8 @@
       const rest = X.filter(q => XMAP.indexOf(q.n) < 0), bh = 17, gap = 5;
       const sizeOf = q => q.n.length > 34 ? 7.6 : q.n.length > 28 ? 8 : 8.5;
       const colBlock = (gks, x0, y0, cols, cw, title) => { let y = y0; if (title) { T(x0, y + 4, title, 'start', 9.5, '#111', 600); y += 14; }
-        gks.forEach(gk => { const L2 = rest.filter(q => q.gk === gk); if (!L2.length) return; T(x0, y + 7, XG[gk][0].replace(/ \(actions of the farmer\)/, ''), 'start', 8.5, '#333', 600); y += 12;
-          L2.forEach((q, k) => box(q.id, x0 + (k % cols) * (cw + 6), y + Math.floor(k / cols) * (bh + gap), cw, bh, q.n, XG[gk][2], { sz: sizeOf(q) })); y += Math.ceil(L2.length / cols) * (bh + gap) + 4; });
+        gks.forEach(gk => { const L2 = rest.filter(q => q.gk === gk); if (!L2.length) return; const yG = y; T(x0, y + 7, XG[gk][0].replace(/ \(actions of the farmer\)/, ''), 'start', 8.5, '#333', 600); y += 12;
+          L2.forEach((q, k) => box(q.id, x0 + (k % cols) * (cw + 6), y + Math.floor(k / cols) * (bh + gap), cw, bh, q.n, XG[gk][2], { sz: sizeOf(q) })); y += Math.ceil(L2.length / cols) * (bh + gap) + 4; PAN.push('<rect x="' + (x0 - 7) + '" y="' + (yG - 6) + '" width="' + (cols * cw + (cols - 1) * 6 + 14) + '" height="' + (y - yG - 4) + '" rx="7" fill="' + XG[gk][2] + '" fill-opacity=".42" stroke="' + XG[gk][2] + '" stroke-width="1.2" pointer-events="none"/>'); });
         return y; };
       // right column, from the top: the crop, then the management
       colBlock(['C', 'M'], 946, 24, 1, 182, 'Also in the model:');
@@ -273,6 +274,7 @@
       o.push('<text x="515" y="' + (py + ph - 7) + '" text-anchor="middle" font-size="9.5" fill="#555" font-family="Cambria,Georgia,serif">Orange frames: the processes the factors act on. Blue frames: the processes the results come from. Click a box to light up the figures that depend on it.</text>');
     }
     extraH = Math.max(extraH, 38);
+    if (PAN.length) o.splice(zoneIdx, 0, '<g class="dzPanels">' + PAN.join('') + '</g>');
     const H = 646 + GW + extraH, full = opt.complete && !opt.marks, body = full ? recolour(o.join('')) + swaflBlock(14 + H + 28) : o.join('');
     return '<svg viewBox="84 14 1110 ' + (full ? H + SW_H : H) + '" style="width:100%;min-width:620px;max-width:none;height:auto;' + (full ? '' : 'max-height:86vh;') + 'display:block;background:#fff;border:1px solid #d6dae0;border-radius:6px" role="img" aria-label="Schematic overview of the main processes in Daisy' + (opt.marks ? ', marked for this experiment' : full ? ', with the layers of SWAFL linked to them' : '') + '">' + body + '</svg>';
   }
@@ -305,6 +307,8 @@
     const T = (x, y, t, sz, w, an, halo) => '<text x="' + x + '" y="' + y + '" text-anchor="' + (an || 'middle') + '" font-size="' + sz + '" fill="#111" font-weight="' + (w || 600) + '" ' + FF + ' ' + (halo === 0 ? '' : HALO + ' ') + 'style="pointer-events:none">' + esc(t) + '</text>';
     const B = (x, y, w, h, f, ex) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" fill="' + f + '" stroke="#555" stroke-width="0.8"' + (ex || '') + '/>';
     const LX = 90, LW = 208, LG = 12, Yo = Y0 + 142, Yb = Y0 + 224; let X = '';
+    { const pn = (y1, y2, f, st) => '<rect x="' + (LX - 6) + '" y="' + y1 + '" width="' + (5 * LW + 4 * LG + 12) + '" height="' + (y2 - y1) + '" rx="8" fill="' + f + '" stroke="' + st + '" stroke-width="1.2" pointer-events="none"/>';
+      X += '<g class="dzSwPanels">' + pn(Y0 + 8, Y0 + 112, '#e8f0fa', '#bcd0e8') + pn(Yo - 24, Yo + 42, '#e6f5f2', '#a9d8d0') + pn(Yb - 22, Yb + 42, '#eceef4', '#c6cdda') + pn(Yb + 100, Yb + 148, '#fbf3e2', '#e6d3a6') + '</g>'; }
     X += '<line x1="84" y1="' + (Y0 - 18) + '" x2="1194" y2="' + (Y0 - 18) + '" stroke="#2a9d8f" stroke-width="1.4" stroke-dasharray="3 2"/>' + T(90, Y0 + 2, 'The SWAFL layers built on these processes (click any box to open the layer):', 11, 700, 'start', 0);
     SW_LAYERS.forEach((l, k) => { const x = LX + (k % 5) * (LW + LG), y = Y0 + 14 + Math.floor(k / 5) * 50;
       X += '<g class="dzPb dzLay" data-lay="' + l[3] + '" style="cursor:pointer" tabindex="0" role="button" aria-label="' + esc(l[0]) + ': open the layer"><title>' + esc(l[0]) + ': open the layer</title>' + B(x, y, LW, 40, l[2]) + '</g>' + T(x + LW / 2, y + 17, l[0], 10.5) + T(x + LW / 2, y + 30, l[1], 8.5, 500); });
