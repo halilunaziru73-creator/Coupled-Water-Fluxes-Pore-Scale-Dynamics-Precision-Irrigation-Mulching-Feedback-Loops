@@ -76,7 +76,7 @@
       const ttl = (x, y, t, c) => '<text x="' + x + '" y="' + y + '" font-size="12.5" font-weight="700" fill="' + c + '" font-family="Carlito,Calibri,Segoe UI,sans-serif" pointer-events="none">' + t + '</text>';
       o.push('<g class="dzZones">' + zone('M150,100 H462 V168 H330 V652 H150 Z', '#dcebf9', '#8db6de') + zone('M326,328 H914 V592 H326 Z', '#fbe2ec', '#e29bb6') + zone('M430,72 H934 V296 H522 V440 H430 Z', '#e0f1d0', '#92c46d')
         + ttl(160, 116, 'Water', '#245f9e') + ttl(338, 584, 'Soil nitrogen and organic matter', '#a3345f') + ttl(528, 90, 'Crop', '#2f6b1c')
-        + drop(296, 112, .8) + drop(278, 116, .55) + wheat(902, 150, .9) + seed(866, 120, .9) + wheat(892, 470, .9) + seed(862, 478, .8) + seed(210, 628, .9) + '</g>');
+        + drop(296, 112, .8) + drop(278, 116, .55) + '<ellipse cx="886" cy="128" rx="46" ry="4" fill="#b98a5a" opacity=".75"/>' + seed(866, 128, .8) + wheat(902, 128, .72) + '</g>');
     }
     // the ground and the bottom of the profile
     o.push('<line x1="150" y1="352" x2="900" y2="352" stroke="#c9a46a" stroke-width="1.2" stroke-dasharray="2 2"/><rect x="150" y="640" width="750" height="9" fill="url(#dzHat)"/>');
