@@ -221,7 +221,7 @@ body.appmode canvas#profileCanvas { margin: 0 auto; }
 </style>
 </head>
 <body>
-<div id="splash" style="position:fixed;inset:0;z-index:99;background:#0D1117;color:#E6EDF3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;font-family:system-ui,sans-serif"><div style="width:34px;height:34px;border:4px solid #30363D;border-top-color:#D4A94A;border-radius:50%;animation:spl 0.9s linear infinite"></div><div style="font-size:15px">Loading the SWAFL explorer</div></div><style>@keyframes spl{to{transform:rotate(360deg)}}</style>
+<div id="splash" style="position:fixed;inset:0;z-index:99;background:#0D1117;color:#E6EDF3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;font-family:Tahoma,Verdana,Arial,sans-serif"><div style="width:34px;height:34px;border:4px solid #30363D;border-top-color:#D4A94A;border-radius:50%;animation:spl 0.9s linear infinite"></div><div style="font-size:15px">Loading the SWAFL explorer</div></div><style>@keyframes spl{to{transform:rotate(360deg)}}</style>
 <header>
   <h1>SWAFL &middot; Soil-Water-Atmosphere Feedback Loop Explorer</h1>
   <button id="reportBtn" class="pillbtn active" style="font-weight:700;">Download report (PDF)</button>
@@ -2568,7 +2568,7 @@ function spInputs(C, R, o, ST, T0, y) {
     ctx.fillStyle = 'rgba(40,60,95,0.07)'; ctx.beginPath(); ctx.ellipse(Cx, Cy, c.Rm * s, c.Rm * k, 0, 0, 7); ctx.fill();
     ctx.save(); ctx.translate(Cx, Cy); ctx.scale(s * 2 * S.E / S.N, k * 2 * S.E / S.N); ctx.translate(-S.N / 2, -S.N / 2); ctx.imageSmoothingEnabled = true; ctx.drawImage(S.tx, 0, 0); ctx.restore();
     ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.setLineDash([4, 4]); ctx.lineWidth = 1; ctx.beginPath(); ctx.ellipse(Cx, Cy, c.Rm * s, c.Rm * k, 0, 0, 7); ctx.stroke(); ctx.setLineDash([]);
-    ctx.fillStyle = 'rgba(255,255,255,0.85)'; ctx.font = '600 ' + Math.max(10, r.w * 0.017) + 'px system-ui,sans-serif'; ctx.textAlign = 'left'; ctx.fillText('throw radius ' + c.Rm.toFixed(1) + ' m', Cx + c.Rm * s * 0.62, Cy + c.Rm * k + 14);
+    ctx.fillStyle = 'rgba(255,255,255,0.85)'; ctx.font = '600 ' + Math.max(10, r.w * 0.017) + 'px Tahoma,Verdana,Arial,sans-serif'; ctx.textAlign = 'left'; ctx.fillText('throw radius ' + c.Rm.toFixed(1) + ' m', Cx + c.Rm * s * 0.62, Cy + c.Rm * k + 14);
     const px = p => Cx + p.x * s, py = p => Cy + p.z * k - p.y * s, drops = pass => { for (const b of [[0, 0.9, 1.0], [0.9, 1.9, 1.5], [1.9, 9, 2.1]]) { ctx.beginPath(); for (const p of S.parts) { if ((p.z >= 0) !== pass || p.s < b[0] || p.s >= b[1]) continue; const x = px(p), y = py(p); ctx.moveTo(x, y); ctx.lineTo(x - p.vx * s * 0.014, y + p.vy * s * 0.014 - p.vz * k * 0.014); } ctx.lineWidth = Math.max(0.8, b[2] * (r.w / 700)); ctx.strokeStyle = 'rgba(70,150,230,0.92)'; ctx.lineCap = 'round'; ctx.stroke(); } };
     drops(false);
     ctx.fillStyle = 'rgba(0,0,0,0.25)'; ctx.beginPath(); ctx.ellipse(Cx, Cy, Math.max(5, s * 0.5), Math.max(2, k * 0.5), 0, 0, 7); ctx.fill(); ctx.strokeStyle = '#6b7480'; ctx.lineWidth = Math.max(2.5, s * 0.2); ctx.beginPath(); ctx.moveTo(Cx, Cy); ctx.lineTo(Cx, Cy - 0.55 * s); ctx.stroke(); ctx.fillStyle = '#c79a3a'; ctx.beginPath(); ctx.arc(Cx, Cy - 0.65 * s, Math.max(2.5, s * 0.17), 0, 7); ctx.fill();
@@ -2576,7 +2576,7 @@ function spInputs(C, R, o, ST, T0, y) {
     drops(true);
     ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.beginPath(); for (const q of S.spl) { const x = px(q), y = py(q); ctx.moveTo(x + 1, y); ctx.arc(x, y, Math.max(0.8, r.w * 0.0016), 0, 7); } ctx.fill();
     // wind arrow and sock
-    const wu = c.u, wx = r.x + 14, wy = r.y + 22; ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.font = '600 ' + Math.max(10, r.w * 0.017) + 'px system-ui,sans-serif'; ctx.fillText('wind ' + wu.toFixed(1) + ' m/s', wx, wy);
+    const wu = c.u, wx = r.x + 14, wy = r.y + 22; ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.font = '600 ' + Math.max(10, r.w * 0.017) + 'px Tahoma,Verdana,Arial,sans-serif'; ctx.fillText('wind ' + wu.toFixed(1) + ' m/s', wx, wy);
     ctx.strokeStyle = 'rgba(255,255,255,0.9)'; ctx.fillStyle = ctx.strokeStyle; ctx.lineWidth = 2; const al = 14 + wu * 7; ctx.beginPath(); ctx.moveTo(wx, wy + 10); ctx.lineTo(wx + al, wy + 10); ctx.stroke(); ctx.beginPath(); ctx.moveTo(wx + al + 6, wy + 10); ctx.lineTo(wx + al - 2, wy + 6); ctx.lineTo(wx + al - 2, wy + 14); ctx.fill();
     ctx.restore();
   }
@@ -2585,7 +2585,7 @@ function spInputs(C, R, o, ST, T0, y) {
     ctx.save(); ctx.beginPath(); rr(rO, 8); ctx.clip(); ctx.translate(rO.x, rO.y); ctx.scale(rO.w / 300, rO.h / 190);
     let g = ctx.createLinearGradient(0, 0, 0, r.h); g.addColorStop(0, '#79b9ea'); g.addColorStop(1, '#d9edf8'); ctx.fillStyle = g; ctx.fillRect(0, 0, r.w, r.h);
     const soil = hexRGBa(soilCol()); ctx.fillStyle = 'rgb(' + mix(soil, [0, 0, 0], 0.1) + ')'; ctx.fillRect(0, gy, r.w, r.h - gy);
-    ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.font = '600 ' + Math.max(10, r.w * 0.03) + 'px system-ui,sans-serif'; ctx.textAlign = 'left'; ctx.fillText('Close-up of the head, slow motion', 8, 15);
+    ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.font = '600 ' + Math.max(10, r.w * 0.03) + 'px Tahoma,Verdana,Arial,sans-serif'; ctx.textAlign = 'left'; ctx.fillText('Close-up of the head, slow motion', 8, 15);
     const cxp = geo.cxp, al = c.al, ar = armAng(), AM = 0.55, impact = c.o.type === 'impact' || c.o.type === 'gun';
     // jet drops (behind head)
     const drawDrops = () => { ctx.lineCap = 'round'; ctx.beginPath(); for (const p of S.cp) { if (p.sp) continue; ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - p.vx * 0.018, p.y - p.vy * 0.018); } ctx.lineWidth = Math.max(1.6, u * 0.16); ctx.strokeStyle = 'rgba(62,145,232,0.8)'; ctx.stroke(); ctx.beginPath(); for (const p of S.cp) { if (!p.sp) continue; ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - p.vx * 0.02, p.y - p.vy * 0.02); } ctx.lineWidth = Math.max(1, u * 0.08); ctx.strokeStyle = 'rgba(200,230,255,0.95)'; ctx.stroke(); };
@@ -2612,15 +2612,15 @@ function spInputs(C, R, o, ST, T0, y) {
     }
     drawDrops && 0;
     // labels
-    ctx.fillStyle = '#10161d'; ctx.font = '600 ' + Math.max(9, r.w * 0.026) + 'px system-ui,sans-serif'; const lab = (t, x, y) => { ctx.fillText(t, x, y); };
+    ctx.fillStyle = '#10161d'; ctx.font = '600 ' + Math.max(9, r.w * 0.026) + 'px Tahoma,Verdana,Arial,sans-serif'; const lab = (t, x, y) => { ctx.fillText(t, x, y); };
     lab('riser', cxp - 0.5 * u - ctx.measureText('riser').width - 4, gy - 2 * u); if (impact) { lab('swing arm', cxp - 1.0 * u - ctx.measureText('swing arm').width - 4, geo.pivY - 0.5 * u); lab('spoon', cxp + 3.1 * u, geo.pivY - 0.8 * u); lab('spring', cxp + 0.2 * u, geo.pivY - 0.9 * u); } lab('nozzle', geo.tx - 0.3 * u, geo.ty + 1.6 * u); lab('bearing', cxp - 0.75 * u - ctx.measureText('bearing').width - 4, geo.bodyTop + 1.35 * u);
-    if (impact && S.armHit > 0.3) { ctx.fillStyle = '#c0392b'; ctx.font = '700 ' + Math.max(10, r.w * 0.03) + 'px system-ui,sans-serif'; ctx.fillText('hit: head turns one step', cxp - 0.9 * u, gy - 4.3 * u - 7 * u * 0 + 4); }
+    if (impact && S.armHit > 0.3) { ctx.fillStyle = '#c0392b'; ctx.font = '700 ' + Math.max(10, r.w * 0.03) + 'px Tahoma,Verdana,Arial,sans-serif'; ctx.fillText('hit: head turns one step', cxp - 0.9 * u, gy - 4.3 * u - 7 * u * 0 + 4); }
     ctx.restore();
   }
   function drawPlan(c, r) {
     ctx.save(); ctx.beginPath(); rr(r, 8); ctx.clip(); ctx.fillStyle = '#12181f'; ctx.fillRect(r.x, r.y, r.w, r.h);
     const wide = r.w / r.h > 1.3, side = wide ? Math.min(r.h - 26, r.w * 0.5) : Math.min(r.w - 24, r.h * 0.52), dx = r.x + 10 + (wide ? 0 : (r.w - 20 - side) / 2), dy = r.y + 22;
-    ctx.fillStyle = '#e8edf3'; ctx.font = '600 ' + Math.max(10, Math.min(13, r.w * 0.034)) + 'px system-ui,sans-serif'; ctx.textAlign = 'left'; ctx.fillText('Seen from above: wetted ground and catch cans', r.x + 8, r.y + 14);
+    ctx.fillStyle = '#e8edf3'; ctx.font = '600 ' + Math.max(10, Math.min(13, r.w * 0.034)) + 'px Tahoma,Verdana,Arial,sans-serif'; ctx.textAlign = 'left'; ctx.fillText('Seen from above: wetted ground and catch cans', r.x + 8, r.y + 14);
     const soil = hexRGBa(soilCol()); ctx.fillStyle = 'rgb(' + soil + ')'; ctx.fillRect(dx, dy, side, side); ctx.imageSmoothingEnabled = true; ctx.drawImage(S.tx, dx, dy, side, side);
     const pc = side / (2 * S.E), ox = dx + side / 2, oy = dy + side / 2; ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.arc(ox, oy, c.Rm * pc, 0, 7); ctx.stroke(); ctx.setLineDash([]);
     ctx.strokeStyle = 'rgba(255,230,140,0.9)'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(ox + Math.cos(S.th) * c.Rm * pc, oy + Math.sin(S.th) * c.Rm * pc); ctx.stroke();
@@ -2632,7 +2632,7 @@ function spInputs(C, R, o, ST, T0, y) {
     for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) { const x = (i + 0.5) * cell - S.E, y = (j + 0.5) * cell - S.E, rd = Math.hypot(x, y); if (rd < ext) { const b = Math.floor(rd / ext * nb); bs[b] += d[j * N + i]; bn[b]++; } }
     for (let j = 0; j < P.n; j++) for (let i = 0; i < P.n; i++) { const x = -P.ext + i * P.hh, y = -P.ext + j * P.hh, rd = Math.hypot(x, y); if (rd < ext) { const b = Math.floor(rd / ext * nb); ms[b] += P.g[j * P.n + i]; mn[b]++; } }
     let m1 = 0.0001, m2 = 0.0001; for (let b = 0; b < nb; b++) { bs[b] = bn[b] ? bs[b] / bn[b] : 0; ms[b] = mn[b] ? ms[b] / mn[b] : 0; m1 = Math.max(m1, bs[b]); m2 = Math.max(m2, ms[b]); }
-    ctx.fillStyle = '#9AA7B4'; ctx.font = Math.max(9, Math.min(11, r.w * 0.03)) + 'px system-ui,sans-serif'; ctx.fillText('depth by distance: bars live, line model', bx, by - 6, bw);
+    ctx.fillStyle = '#9AA7B4'; ctx.font = Math.max(9, Math.min(11, r.w * 0.03)) + 'px Tahoma,Verdana,Arial,sans-serif'; ctx.fillText('depth by distance: bars live, line model', bx, by - 6, bw);
     ctx.fillStyle = '#0c1116'; ctx.fillRect(bx, by, bw, bh); const w1 = bw / nb;
     for (let b = 0; b < nb; b++) { const h = bs[b] / m1 * bh * 0.92; ctx.fillStyle = 'rgba(74,160,240,0.85)'; ctx.fillRect(bx + b * w1 + 1, by + bh - h, w1 - 2, h); }
     ctx.strokeStyle = '#ffb84d'; ctx.lineWidth = 2; ctx.beginPath(); for (let b = 0; b < nb; b++) { const x = bx + (b + 0.5) * w1, y = by + bh - ms[b] / m2 * bh * 0.92; b ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke();
@@ -2676,7 +2676,7 @@ function spInputs(C, R, o, ST, T0, y) {
   nav.innerHTML = `<style>
   #spNav{position:sticky;top:0;z-index:30;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:7px 8px;margin:0 0 8px;background:rgba(15,20,25,0.96);border:1px solid #2B333D;border-radius:10px;scrollbar-width:none}
   #spNav::-webkit-scrollbar{display:none}
-  #spNav button{flex:0 0 auto;min-height:38px;padding:0 13px;border-radius:19px;border:1px solid #3a4452;background:#18202a;color:#E6EDF3;font:600 12.5px system-ui,sans-serif;cursor:pointer;white-space:nowrap}
+  #spNav button{flex:0 0 auto;min-height:38px;padding:0 13px;border-radius:19px;border:1px solid #3a4452;background:#18202a;color:#E6EDF3;font:600 12.5px Tahoma,Verdana,Arial,sans-serif;cursor:pointer;white-space:nowrap}
   #spNav button b{color:#D4A94A;margin-right:5px}
   #spNav button.on{background:#D4A94A;border-color:#D4A94A;color:#1a1405}#spNav button.on b{color:#1a1405}
   </style>`;

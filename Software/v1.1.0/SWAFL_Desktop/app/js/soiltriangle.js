@@ -29,7 +29,7 @@ window.SoilTriangle = (() => {
   function onKey(e) { if (e.key === 'Escape') { e.stopPropagation(); close(); } }
   function open(o) {
     close(); o = o || {}; const soils = (o.soils || []).filter(s => isFinite(s.sand) && isFinite(s.silt) && isFinite(s.clay)), mode = o.mode || 'soil';
-    ov = document.createElement('div'); ov.style.cssText = 'position:fixed;inset:0;z-index:100000;background:rgba(12,24,40,.55);display:flex;align-items:center;justify-content:center;font:13px/1.35 system-ui,Segoe UI,sans-serif';
+    ov = document.createElement('div'); ov.style.cssText = 'position:fixed;inset:0;z-index:100000;background:rgba(12,24,40,.55);display:flex;align-items:center;justify-content:center;font:13px/1.35 Tahoma,Verdana,Arial,sans-serif';
     ov.innerHTML = '<div style="background:#F4F1E8;border:2px solid #0F3B63;box-shadow:0 8px 30px rgba(0,0,0,.4);max-width:96vw;max-height:96vh;overflow:auto;display:flex;flex-direction:column">' +
       '<div style="background:linear-gradient(90deg,#0F3B63,#2A6AA8);color:#fff;padding:6px 10px;font-weight:700;display:flex;align-items:center"><span>' + esc(o.title || 'Soil textural triangle') + '</span><span data-x style="margin-left:auto;cursor:pointer;padding:0 6px" title="Close (Esc)">&#10005;</span></div>' +
       '<div style="display:flex;gap:12px;padding:10px;flex-wrap:wrap"><div><canvas data-c style="display:block;cursor:crosshair;background:#fff;border:1px solid #9aa"></canvas></div>' +
