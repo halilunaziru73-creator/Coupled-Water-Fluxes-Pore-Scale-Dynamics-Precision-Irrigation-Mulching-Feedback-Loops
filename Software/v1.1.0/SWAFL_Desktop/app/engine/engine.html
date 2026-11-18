@@ -608,7 +608,7 @@ SCENES.push({ id: 'spac', label: 'S1 Soil-Plant-Air', color: '#1E8E3E', h: 1720,
   legend: [['#1E8E3E', 'From the simulation record'], ['#8A8F98', 'Derived along the path'], ['#2E8FD6', 'Water potential (log scale)'], ['#E8912D', 'Water leaving to the air']],
   insight: 'Water moves from wet soil to dry air along a falling potential. The simulated soil sets the soil end; the air sets the pull; the plant is the pipe between.' });
 
-// ===== S2 Surface Irrigation Design: model (Kargas lecture method: Kostiakov intake, volume-balance advance, storage/cutoff, indices, design) =====
+// ===== S2 Surface Irrigation Design: model (standard method: Kostiakov intake, volume-balance advance, storage/cutoff, indices, design) =====
 const SIDM = (function () {
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   // Furrow cross-section: V-section with side slope z (H:V) and depth D; flow area A0 from Manning at the inlet flow
@@ -818,7 +818,7 @@ function sidHeaderC(sName, sim) {
   let y = 22; const mw = W - 32, crop = (CROPS[state.crop] || {}).label;
   let n = sidWrap('Surface irrigation design: from your soil to a working layout', 16, y, mw, { s: 14, b: true, c: SIDC.ink }, 17); y += (n - 1) * 17 + 18;
   n = sidWrap(sName + ' · ' + crop + ' · root zone ' + Math.round(sim.Rmax) + ' cm · trigger at ' + Math.round(sim.fTrig * 100) + '% depleted · ' + fmtDate(dateOfK(fclock.kd())), 16, y, mw, { s: 10, c: MUTE }, 13); y += n * 13 + 4;
-  const t1 = 'soil texture, field capacity, wilting point, root depth, depletion trigger and yearly irrigation come from the DSS simulation', t2 = 'intake (Kostiakov), advance (volume balance), cutoff and efficiencies: the Surface Irrigation lecture equations', x0 = 76, tw = W - 22 - x0;
+  const t1 = 'soil texture, field capacity, wilting point, root depth, depletion trigger and yearly irrigation come from the DSS simulation', t2 = 'intake (Kostiakov), advance (volume balance), cutoff and efficiencies: the standard surface irrigation equations', x0 = 76, tw = W - 22 - x0;
   const n1 = sidWrap(t1, 0, 0, tw, { s: 9, b: true }, 11, true), n2 = sidWrap(t2, 0, 0, tw, { s: 9 }, 11, true), bh = (n1 + n2) * 11 + 20;
   ctx.fillStyle = '#E6F4F7'; ctx.strokeStyle = SIDC.ac; ctx.lineWidth = 1.5; rrect(14, y, W - 28, bh, 8); ctx.fill(); ctx.stroke();
   sidBadge('DSS', 22, y + 14, true); sidWrap(t1, x0, y + 14, tw, { s: 9, b: true, c: '#0B4F5C' }, 11); sidBadge('DESIGN', 22, y + 14 + n1 * 11 + 4, false); sidWrap(t2, x0, y + 14 + n1 * 11 + 4, tw, { s: 9, c: '#4B5563' }, 11);
@@ -872,10 +872,10 @@ function drawSID() {
     T(sName + ' · ' + (CROPS[state.crop] || {}).label + ' · root zone ' + Math.round(sim.Rmax) + ' cm · trigger at ' + Math.round(sim.fTrig * 100) + '% depleted · ' + fmtDate(dateOfK(fclock.kd())), 16, 42, { s: 10.5, c: MUTE });
     ctx.fillStyle = '#E6F4F7'; ctx.strokeStyle = SIDC.ac; ctx.lineWidth = 1.5; rrect(14, 50, W - 28, 36, 8); ctx.fill(); ctx.stroke();
     sidBadge('DSS', 22, 66, true); T('soil texture, field capacity, wilting point, root depth, depletion trigger and yearly irrigation come from the DSS simulation', 80, 66, { s: 9.2, b: true, c: '#0B4F5C' });
-    wxLine(80, 'intake (Kostiakov), advance (volume balance), cutoff and efficiencies: the Surface Irrigation lecture equations');
+    wxLine(80, 'intake (Kostiakov), advance (volume balance), cutoff and efficiencies: the standard surface irrigation equations');
   } else { y = sidHeaderC(sName, sim); wxCtl(y); y += 32; }
   // chips
-  y = RW('Start from', y, SIDPRE.map(q => [q[1], SID.preset === q[0], () => sidPreset(q[0]), q[0] === 'soil' ? 'Intake, depth and layout from your soil' : 'Worked example from the lecture notes']));
+  y = RW('Start from', y, SIDPRE.map(q => [q[1], SID.preset === q[0], () => sidPreset(q[0]), q[0] === 'soil' ? 'Intake, depth and layout from your soil' : 'Worked example with standard values']));
   y = RW('System', y, Object.keys(SIDSYS).map(s => [SIDSYS[s], sys === s, () => { SID.preset = null; SID.autoQ = true; sidSys(s); }, 'Default layout for a ' + SIDSYS[s].toLowerCase()]));
   y = RW('Intake', y, [['From my soil', soilMode, () => { SID.intake = 'soil'; SID.preset = null; }, 'Green-Ampt from texture, fitted to Kostiakov'], ['Type k and A', !soilMode, () => { SID.intake = 'lec'; SID.preset = null; SID.k = I.fit.k; SID.A = I.fit.A; }, 'Enter your own Kostiakov constants']]);
   y = RW('Cutoff', y, [['Es = 1', SID.cut === 'es1', () => { SID.cut = 'es1'; SID.preset = null; }, 'Cut off when the tail has the required depth'], ['85% of L', SID.cut === 'r85', () => { SID.cut = 'r85'; SID.preset = null; }, 'Cut off when the front reaches 85% of the length'], ['Manual', SID.cut === 'man', () => { SID.cut = 'man'; SID.preset = null; SID.tman = Math.round(R.tco); }, 'Choose the time yourself'], ['Exact curve', SID.prof === 'curve', () => { SID.prof = SID.prof === 'curve' ? 'line' : 'curve'; SID.preset = null; }, 'Toggle the straight-line profile of the notes against the exact Kostiakov curve']]);
@@ -1126,7 +1126,7 @@ function drawSID() {
 SCENES.push({ id: 'sid', label: 'S2 Design', color: '#0B7285', play: true, dur: 16, h: 3060, interactive: true,
   onDown: p => sidDown(p), onMove: p => { SID.hv = p; if (SID.drag) { sidSet(SID.drag, p); return true; } return false; }, onUp: () => { SID.drag = null; }, onLeave: () => { SID.drag = null; SID.hv = null; },
   draw: () => { const ww = wantW(); if (ww !== W) { setCanvasW(ww); setCanvasH(currentScene.h || 640); } irFit('sid'); IREND.sid = drawSID(); }, title: 'Surface irrigation design: intake, advance, cutoff, efficiency and layout for your soil',
-  legend: [['#0B7285', 'Design from the lecture equations'], ['#3F8F6B', 'Water stored in the root zone'], ['#4C5FA8', 'Deep percolation'], ['#B8743A', 'Runoff']],
+  legend: [['#0B7285', 'Design from the standard equations'], ['#3F8F6B', 'Water stored in the root zone'], ['#4C5FA8', 'Deep percolation'], ['#B8743A', 'Runoff']],
   insight: 'Your soil sets the intake, your trigger sets the depth to refill, and the layout decides how much of the water pumped actually reaches the roots. Slide the length, slope and inflow and watch the efficiency respond.' });
 let sidEnd = 0;
 
@@ -1960,7 +1960,7 @@ function wxCtl(y) {
   hot(bx, y + 2, bw, 20, wxOpen, 'the daily weather of your farm (20 years and the 16-day forecast) calibrates the soil water, the schedule, the film and the planting advice');
 }
 
-// ===== The decision horizon, the soil-water limits of the next irrigations and the lecture-note schedule =====
+// ===== The decision horizon, the soil-water limits of the next irrigations and the simple-method schedule =====
 // How far the decision looks: the next irrigation, the next 30 days, the next 12 months or the crop season (the "Decide for" box)
 function dssSpan(sim, PL, k0, nx) {
   const winNow = sim.widx[k0] >= 0 ? sim.wins[sim.widx[k0]] : null;
@@ -1973,7 +1973,7 @@ function dssSpan(sim, PL, k0, nx) {
 }
 // residual water content of the ten soils (typical values, Carsel and Parrish, 1988)
 const RESID = { S01_CoarseLoam: 0.065, S02_CoarseSand: 0.045, S03_Sand: 0.045, S04_LoamySand: 0.057, S05_SandyLoam: 0.065, S06_Loam: 0.078, S07_SiltLoam: 0.067, S08_SandyClayLoam: 0.10, S09_ClayLoam: 0.095, S10_SiltyClayLoam: 0.089 };
-// the simple calculation method of the lecture note (AGEN 506): net depth from the root class and the soil class (Tables 4 and 5), gross depth from the
+// the simple calculation method: net depth from the root class and the soil class, gross depth from the
 // field efficiency, the irrigation need IN of each month, the number of applications and the interval, for the whole season, the peak months and both together
 function dssLecture(PL) {
   const S = PL.season, a = S.a, b = S.b; if (!(b > a) || S.days < 5) return null;
@@ -2108,13 +2108,13 @@ function dssLife(y, PL, sp) {
   return ty + 8;
 }
 function dssLecturePanel(y, PL) {
-  sidHead('Check with the simple calculation method of the lecture note (net depth, interval, peak months)', y, 'd net from the root class and the soil class (Tables 4 and 5); d gross = 100 × d net / Ea; IN = ETc − effective rain by month; applications = IN / d net; interval = days / applications, rounded down');
+  sidHead('Check with the simple calculation method (net depth, interval, peak months)', y, 'd net from the root class and the soil class; d gross = 100 × d net / Ea; IN = ETc − effective rain by month; applications = IN / d net; interval = days / applications, rounded down');
   y += 44; const Lc = dssLecture(PL);
   if (!Lc) { T('No crop is in the field in this decision, so there is no season to schedule.', 20, y, { s: 9.4, c: '#374151' }); return y + 22; }
   const SN = ['sandy or shallow', 'loamy', 'clayey'], RN = ['shallow-rooting', 'medium-rooting', 'deep-rooting'], pr = (v, n) => (+v).toFixed(n == null ? 0 : n), MO = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   let nl = sidWrap('Step 1: ' + SN[Lc.sc] + ' soil, ' + RN[Lc.rc] + ' crop (roots ' + pr(Lc.rootcm) + ' cm): d net = ' + Lc.dnet + ' mm; field efficiency ' + pr(Lc.ea * 100) + ' %, so d gross = ' + pr(Lc.dgross) + ' mm. Step 2: IN of the season = ' + pr(Lc.tot) + ' mm in ' + Lc.days + ' days.', 20, y, W - 40, { s: 9.2, b: true, c: '#12303A' }, 13); y += nl * 13 + 4;
   nl = sidWrap((Lc.n1 || Lc.n2 ? 'Whole season: ' + (Lc.n1 ? Lc.n1 + ' applications, one every ' + Lc.int1 + ' days' : 'none needed') + '. Peak months (' + (Lc.pk.map(m => MO[m.m]).join(', ') || 'none') + '): ' + (Lc.n2 ? Lc.n2 + ' applications, one every ' + Lc.int2 + ' days' : 'none') + '. Combined: every ' + (Lc.int1 || '-') + ' days, and every ' + (Lc.int2 || '-') + ' days in the peak months.' : 'Rain covers the crop need in this season by this method: no irrigation is scheduled; the daily model below decides on the day.'), 20, y, W - 40, { s: 9.2, b: true, c: '#1565C0' }, 13); y += nl * 13 + 4;
-  const mean = PL.season.mean; nl = sidWrap('Daily model of this farm (FAO-56 balance with your soil, roots, trigger and weather): ' + PL.season.ev.length + ' irrigations in the season, mean gap ' + (mean ? pr(mean, 1) + ' days' : '-') + (Lc.int1 && mean && Math.abs(mean - Lc.int1) > 0.5 * Lc.int1 ? '. It differs from the lecture estimate because the rain, the actual trigger and the roots of each day are used.' : '.'), 20, y, W - 40, { s: 9, c: '#374151' }, 13); y += nl * 13 + 10;
+  const mean = PL.season.mean; nl = sidWrap('Daily model of this farm (FAO-56 balance with your soil, roots, trigger and weather): ' + PL.season.ev.length + ' irrigations in the season, mean gap ' + (mean ? pr(mean, 1) + ' days' : '-') + (Lc.int1 && mean && Math.abs(mean - Lc.int1) > 0.5 * Lc.int1 ? '. It differs from the simple estimate because the rain, the actual trigger and the roots of each day are used.' : '.'), 20, y, W - 40, { s: 9, c: '#374151' }, 13); y += nl * 13 + 10;
   const cw9 = (W - 28) / 100, cols = [['Month', 2], ['Days', 24], ['IN mm', 33], ['Season: applied', 42], ['− IN', 56], ['Peak: applied', 64], ['− IN', 77], ['Combined', 85], ['− IN', 95]].map(c => [c[0], Math.round(14 + c[1] * cw9)]);
   ctx.fillStyle = '#E6F4F7'; ctx.fillRect(14, y - 12, W - 28, 20); cols.forEach(c => T(c[0], c[1], y + 2, { s: 8.6, b: true, c: IRC.ink })); y += 20;
   Lc.M.slice(0, 14).forEach((m, i) => { ctx.fillStyle = m.pk ? '#EAF3FF' : i % 2 ? '#F6F7F5' : '#fff'; ctx.fillRect(14, y - 12, W - 28, 18); const bal = v => (v >= 0 ? '+' : '') + pr(v); [MO[m.m] + ' ' + m.y + (m.pk ? ' (peak)' : ''), m.d, pr(m.IN), pr(m.a1), bal(m.a1 - m.IN), pr(m.a2), bal(m.a2 - m.IN), pr(m.a3), bal(m.a3 - m.IN)].forEach((v, c) => T(String(v), cols[c][1], y + 1, { s: 8.8, c: c === 4 || c === 6 || c === 8 ? ((String(v)[0] === '-') ? '#C62828' : '#2E7D32') : '#374151' })); y += 18; });
