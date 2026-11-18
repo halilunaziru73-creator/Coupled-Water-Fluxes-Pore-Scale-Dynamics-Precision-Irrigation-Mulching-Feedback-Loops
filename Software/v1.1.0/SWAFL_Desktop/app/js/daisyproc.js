@@ -107,15 +107,38 @@
       const wheat = (x, y, k) => '<g transform="translate(' + x + ',' + y + ') scale(' + k + ')" pointer-events="none"><path d="M0,0 C1,-18 -1,-34 0,-52" stroke="#3f7d2b" stroke-width="2" fill="none"/><path d="M0,-10 C-10,-12 -16,-20 -15,-28 C-6,-26 -1,-19 0,-10z M0,-20 C10,-22 16,-30 15,-38 C6,-36 1,-29 0,-20z" fill="#6cb04a"/><g fill="#d9a82b" stroke="#a97c12" stroke-width=".6"><ellipse cx="0" cy="-62" rx="3.4" ry="6"/><ellipse cx="-4" cy="-56" rx="3" ry="5.4" transform="rotate(-22 -4 -56)"/><ellipse cx="4" cy="-56" rx="3" ry="5.4" transform="rotate(22 4 -56)"/><ellipse cx="-4" cy="-47" rx="3" ry="5" transform="rotate(-22 -4 -47)"/><ellipse cx="4" cy="-47" rx="3" ry="5" transform="rotate(22 4 -47)"/></g></g>';
       const seed = (x, y, k) => '<g transform="translate(' + x + ',' + y + ') scale(' + k + ')" pointer-events="none"><path d="M0,0 C0,-8 1,-14 0,-20" stroke="#3f7d2b" stroke-width="2" fill="none"/><path d="M0,-18 C-12,-18 -18,-28 -16,-34 C-6,-34 -1,-28 0,-18z" fill="#6cb04a"/><path d="M0,-18 C12,-18 18,-28 16,-34 C6,-34 1,-28 0,-18z" fill="#4c9a3a"/><path d="M-12,0 H12" stroke="#8a5a2b" stroke-width="2.4"/><path d="M0,0 C-3,6 -6,10 -8,14 M0,0 C0,7 1,11 1,16 M0,0 C3,6 6,10 9,13" stroke="#8a5a2b" stroke-width="1" fill="none"/></g>';
       const drop = (x, y, k) => '<path transform="translate(' + x + ',' + y + ') scale(' + k + ')" d="M0,-12 C6,-4 9,0 9,4 A9,9 0 0 1 -9,4 C-9,0 -6,-4 0,-12z" fill="#4a90d9" stroke="#2c6aa8" stroke-width=".8" pointer-events="none"/>';
-      const big = (c, g) => '<g opacity=".42" pointer-events="none">' + g + '</g>';   // large plants behind the boxes: each coloured zone has its own, in its own tone
-      const ground = (x1, x2, y) => '<path d="M' + x1 + ',' + y + ' H' + x2 + '" stroke="#b98a5a" stroke-width="3" opacity=".5" pointer-events="none"/>';
+      const big = (c, g) => '<g opacity=".42" pointer-events="none">' + g + '</g>';   // large plants behind the boxes: each coloured zone has its own
+      const rnd = sd => () => { sd |= 0; sd = sd + 0x6D2B79F5 | 0; let t = Math.imul(sd ^ sd >>> 15, 1 | sd); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+      // a fibrous root system as in a real plant: main roots that fan out and bend, side roots along each of them, and fine root hairs on the side roots
+      const roots = (x, y, depth, sd, n) => {
+        const r = rnd(sd), R = v => Math.round(v * 10) / 10; let a = '', b = '', c = '';
+        for (let i = 0; i < n; i++) {
+          let ang = ((n > 1 ? i / (n - 1) : .5) - .5) * 1.55 + (r() - .5) * .3, len = depth * (.62 + r() * .38), px = 0, py = 0, d = 'M0,0';
+          const m = 7, st = len / m;
+          for (let j = 1; j <= m; j++) {
+            ang += (r() - .5) * .42; px += Math.sin(ang) * st; py += Math.cos(ang) * st; d += 'L' + R(px) + ',' + R(py);
+            if (j >= 2 && j < m + 1) {
+              const sides = r() < .75 ? [-1, 1] : [r() < .5 ? -1 : 1];
+              sides.forEach(sg => { const la = ang + sg * (.75 + r() * .6), ll = st * (1.4 + r() * 1.6) * (1 - j / (m + 3)), mx = px + Math.sin(la) * ll * .5 + (r() - .5) * 3, my = py + Math.cos(la) * ll * .5, ex = px + Math.sin(la) * ll, ey = py + Math.cos(la) * ll;
+                b += 'M' + R(px) + ',' + R(py) + 'Q' + R(mx) + ',' + R(my) + ' ' + R(ex) + ',' + R(ey);
+                for (let h = 0; h < 3; h++) { const t = .35 + h * .3, hx = px + (ex - px) * t, hy = py + (ey - py) * t, ha = la + (h % 2 ? 1 : -1) * (.7 + r() * .5), hl = 5 + r() * 7; c += 'M' + R(hx) + ',' + R(hy) + 'L' + R(hx + Math.sin(ha) * hl) + ',' + R(hy + Math.cos(ha) * hl); } });
+            }
+          }
+          a += d;
+        }
+        return '<g transform="translate(' + x + ',' + y + ')" fill="none" stroke-linecap="round" pointer-events="none" opacity=".8"><path d="' + a + '" stroke="#a8875a" stroke-width="2.6"/><path d="' + b + '" stroke="#b9996a" stroke-width="1.3"/><path d="' + c + '" stroke="#c8ad80" stroke-width=".7"/></g>';
+      };
+      // the soil under the plants of a zone, with the surface line
+      const soil = (x1, x2, y1, y2) => '<rect x="' + x1 + '" y="' + y1 + '" width="' + (x2 - x1) + '" height="' + (y2 - y1) + '" fill="#8a6a45" opacity=".13" pointer-events="none"/><path d="M' + x1 + ',' + y1 + ' H' + x2 + '" stroke="#9b7448" stroke-width="3" opacity=".55" pointer-events="none"/>';
+      const plant = (kind, x, y, k, dep, sd, n) => roots(x, y, dep, sd, n || 6) + big('', kind === 'w' ? wheat(x, y, k) : seed(x, y, k));
       const zone = (d, fc, sc) => '<path d="' + d + '" fill="' + fc + '" stroke="' + sc + '" stroke-width="2.4" stroke-linejoin="round"/>';
       const ttl = (x, y, t, c) => '<text x="' + x + '" y="' + y + '" font-size="12.5" font-weight="700" fill="' + c + '" font-family="Carlito,Calibri,Segoe UI,sans-serif" pointer-events="none">' + t + '</text>';
-      o.push('<g class="dzZones">' + zone('M150,100 H462 V168 H330 V652 H150 Z', '#dcebf9', '#8db6de') + zone('M326,328 H914 V592 H326 Z', '#fbe2ec', '#e29bb6') + zone('M430,72 H934 V296 H522 V440 H430 Z', '#e0f1d0', '#92c46d')
+      o.push('<g class="dzZones">' + '<clipPath id="dzcB"><path d="M150,100 H462 V168 H330 V652 H150 Z"/></clipPath><clipPath id="dzcP"><path d="M326,328 H914 V592 H326 Z"/></clipPath><clipPath id="dzcG"><path d="M430,72 H934 V296 H522 V440 H430 Z"/></clipPath>' + zone('M150,100 H462 V168 H330 V652 H150 Z', '#dcebf9', '#8db6de') + zone('M326,328 H914 V592 H326 Z', '#fbe2ec', '#e29bb6') + zone('M430,72 H934 V296 H522 V440 H430 Z', '#e0f1d0', '#92c46d')
         + ttl(160, 116, 'Water', '#245f9e') + ttl(338, 584, 'Soil nitrogen and organic matter', '#a3345f') + ttl(528, 90, 'Crop', '#2f6b1c')
-        + big('#3f7fbf', drop(300, 150, 2.6) + drop(262, 168, 1.5) + wheat(306, 650, 2.3) + wheat(262, 650, 1.7) + seed(210, 650, 2.4)) + ground(150, 330, 650)
-        + big('#b9487a', seed(356, 584, 2.6) + wheat(430, 584, 2.2) + wheat(640, 584, 1.9) + seed(760, 584, 2.4) + wheat(884, 584, 2.2)) + ground(326, 914, 584)
-        + big('#4f9a2e', wheat(700, 296, 2.5) + wheat(776, 296, 2.1) + wheat(858, 296, 2.7) + seed(920, 296, 2.3) + wheat(612, 296, 2.0)) + ground(430, 934, 296) + '</g>');
+        + '<g clip-path="url(#dzcB)">' + soil(150, 330, 505, 652) + plant('w', 306, 505, 1.8, 125, 11) + plant('w', 262, 505, 1.5, 110, 12) + plant('s', 206, 505, 2.2, 120, 13, 7) + '</g>' + drop(300, 150, 2.6) + drop(262, 168, 1.5)
+        + '<g clip-path="url(#dzcP)">' + soil(326, 914, 480, 592) + plant('s', 356, 480, 2.2, 100, 21, 7) + plant('w', 430, 480, 1.8, 105, 22) + plant('w', 640, 480, 1.7, 100, 23) + plant('s', 760, 480, 2.2, 100, 24, 7) + plant('w', 884, 480, 1.8, 105, 25) + '</g>'
+        + '<g clip-path="url(#dzcG)">' + soil(522, 934, 205, 296) + plant('w', 612, 205, 1.6, 82, 31) + plant('w', 700, 205, 1.8, 86, 32) + plant('w', 776, 205, 1.6, 82, 33) + plant('w', 858, 205, 1.8, 86, 34) + plant('s', 912, 205, 2.0, 80, 35, 7) + '</g>'
+        + '</g>');
     }
     // the ground and the bottom of the profile
     o.push('<line x1="150" y1="352" x2="900" y2="352" stroke="#c9a46a" stroke-width="1.2" stroke-dasharray="2 2"/><rect x="150" y="640" width="750" height="9" fill="url(#dzHat)"/>');
