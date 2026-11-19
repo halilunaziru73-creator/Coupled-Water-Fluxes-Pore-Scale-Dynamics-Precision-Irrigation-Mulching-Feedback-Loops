@@ -1,0 +1,144 @@
+\chapter{Solving the Richards equation numerically}
+\markboth{Solving the Richards equation}{Solving the Richards equation}
+\textbf{After this chapter you can} discretise the Richards equation with a conservative finite-volume scheme, explain why the \emph{modified Picard} iteration conserves mass, run a one-dimensional infiltration simulation yourself, and judge whether a numerical result has converged.
+
+\section{Why numerics matter}
+Chapter~4 wrote the Richards equation. It has no general analytical solution, because $K$ and $C=d\theta/dh$ vary by orders of magnitude with $h$. Daisy solves it numerically in every run, and a run is counted as a \emph{solver failure} when the solution cannot be completed: 149 of the 10,190 runs of the ensemble. Knowing how the scheme works explains both the failures and the limits of the equilibrium assumption.
+
+\section{The head-based form and the capacity}
+Let $\psi=-h$ be the pressure head (cm, negative in unsaturated soil) and let $z$ be the depth, positive downward. The downward flux is $q=K(\psi)\bigl(1-\partial\psi/\partial z\bigr)$ and the equation is
+\begin{equation}\label{eq:rich-psi}
+C(\psi)\frac{\partial\psi}{\partial t}=\frac{\partial}{\partial z}\Bigl[K(\psi)\Bigl(\frac{\partial\psi}{\partial z}-1\Bigr)\Bigr]-S_r,\qquad C(\psi)=\frac{d\theta}{d\psi}.
+\end{equation}
+For the van Genuchten curve, with $x=\alpha|\psi|$,
+\begin{equation}\label{eq:cap}
+C(\psi)=(\theta_s-\theta_r)\,\alpha\,m\,n\,x^{\,n-1}(1+x^n)^{-m-1}.
+\end{equation}
+\begin{example}{the capacity of a loam}
+For the loam S06 ($\alpha=0.036$, $n=1.56$, $m=0.359$) with $\theta_s=0.43$ and $\theta_r=0.078$, at $\psi=-100$ cm: $x=3.6$, $x^{n-1}=3.6^{0.56}=2.05$, $(1+x^n)=1+3.6^{1.56}=8.40$ and $8.40^{-1.359}=0.0551$. Then $C=0.352(0.036)(0.359)(1.56)(2.05)(0.0551)=8.0\times10^{-4}$ cm$^{-1}$. A change of head by 10 cm changes $\theta$ by only $0.008$ there.
+\end{example}
+
+\section{Finite-volume discretisation}
+Divide the column into $N$ cells of thickness $\Delta z$, with cell centres $z_i$. Integrate Equation~(\ref{eq:rich-psi}) over cell $i$ and use the flux between cells $i-1$ and $i$:
+\begin{equation}\label{eq:face}
+q_{i-1/2}=K_{i-1/2}\Bigl(1+\frac{\psi_{i-1}-\psi_i}{\Delta z}\Bigr),
+\end{equation}
+where $K_{i-1/2}$ is the conductivity at the face, taken as the geometric mean $\sqrt{K_{i-1}K_i}$. Mass conservation for the cell gives
+\begin{equation}\label{eq:cellbal}
+\Delta z\,\frac{\theta_i^{\,j+1}-\theta_i^{\,j}}{\Delta t}=q_{i-1/2}^{\,j+1}-q_{i+1/2}^{\,j+1}-S_{r,i}\Delta z,
+\end{equation}
+with time level $j$ and an implicit (backward Euler) treatment of the fluxes, which is stable for any $\Delta t$.
+
+\section{The modified Picard iteration}
+Equation~(\ref{eq:cellbal}) is non-linear in $\psi^{j+1}$. Let $k$ be the iteration index and write $\theta^{\,j+1,k+1}\approx\theta^{\,j+1,k}+C^{\,k}(\psi^{\,j+1,k+1}-\psi^{\,j+1,k})$. Substituting,
+\begin{equation}\label{eq:picard}
+\frac{C^{k}}{\Delta t}\bigl(\psi^{k+1}-\psi^{k}\bigr)+\frac{\theta^{k}-\theta^{j}}{\Delta t}=\text{(flux divergence at }\psi^{k+1}\text{, with }K\text{ frozen at level }k).
+\end{equation}
+The second term on the left is what makes the method \emph{modified} (Celia, Bouloutas and Zarba, 1990): it is the mass that is still missing, so when the iteration has converged ($\psi^{k+1}=\psi^k$) the discrete equation reduces exactly to Equation~(\ref{eq:cellbal}), and mass is conserved. The simple Picard iteration without this term converges to the same limit only if $C$ is exact, and in practice it loses mass near sharp fronts. Each iteration solves a tridiagonal linear system.
+
+\section{A worked simulation: ponded infiltration into a loam}
+We simulate the loam S06 (Carsel and Parrish values: $\theta_r=0.078$, $\theta_s=0.43$, $\Ks=24.96$ cm\,d$^{-1}$, with $\alpha=0.036$ cm$^{-1}$ and $n=1.56$) in a 100 cm column that starts at $\psi=-1000$ cm ($\theta=0.125$). The top is ponded ($\psi=0$) and the bottom has free drainage. With 200 cells of 0.5 cm and $\Delta t=2\times10^{-4}$ d (about 17 s), the run takes about one minute in Python. The core of the program is:
+{\footnotesize\begin{verbatim}
+for it in range(50):                       # modified Picard iterations
+    Kc = K(pn); Kf = sqrt(Kc[:-1]*Kc[1:])  # face conductivity, geometric mean
+    Kf = concatenate([[K(0.0)], Kf])       # ponded top face
+    A  = assemble(Kf, dz)                  # tridiagonal flux matrix
+    M  = A + diag(C(pn)*dz/dt)             # capacity term
+    rhs = b + C(pn)*dz/dt*pn - (theta(pn)-theta_old)*dz/dt
+    pnew = solve(M, rhs)
+    if max(abs(pnew-pn)) < 1e-6: break     # converged
+    pn = pnew
+\end{verbatim}}
+\begin{table}[H]\centering\small\caption{Computed infiltration into the loam S06. $I$ is the cumulative infiltration obtained by summing $\theta-\theta_0$ over the column; the front is where $\theta$ is halfway between the initial and the saturated value; $K_st$ is the gravity-driven infiltration of a saturated column.}\label{tab:loam}
+\begin{tabular}{rrrr}\toprule time (h)&$I$ (cm)&front depth (cm)&$K_st$ (cm)\\\midrule
+1.2&2.57&9.3&1.25\\2.4&3.97&13.8&2.50\\6.0&7.71&26.3&6.24\\12.0&13.81&46.3&12.48\\\bottomrule\end{tabular}\end{table}
+\fig{g_loam}{0.6}{Water-content profiles computed by the program of this chapter: the sharp wetting front moves down as the ponded loam infiltrates.}
+\begin{example}{reading the result}
+After 6 h the loam has taken 7.71 cm, about 24 per cent more than the $K_st=6.24$ cm of the gravity term alone. The excess is the capillary contribution: the dry soil ahead of the front pulls water in. After 12 h the excess is 1.33 cm (11 per cent) and the ratio $I/K_st$ falls towards 1: as time grows, the infiltration rate tends to $\Ks$, as it must. Between 6 and 12 h the infiltration rate is $(13.81-7.71)/0.25=24.4$ cm\,d$^{-1}$, within 2 per cent of $\Ks=24.96$ cm\,d$^{-1}$. The front speed is this rate divided by the water-content change, $24.4/(0.43-0.125)=80$ cm\,d$^{-1}$, which agrees with the front moving from 26.3 to 46.3 cm in 0.25 d.
+\end{example}
+
+\section{Checking convergence}
+A numerical solution is not an answer until you have tested that it does not depend on the grid and the time step. For the loam at $t=0.25$ d, 100 cells with $\Delta t=5\times10^{-4}$ d give $I=7.59$ cm, 100 cells with $2\times10^{-4}$ d give 7.57 cm, and 200 cells with $2\times10^{-4}$ d give 7.71 cm: the results agree to within 2 per cent, which is adequate here. For the sand S03 (very narrow pore-size distribution, $\Ks=712.8$ cm\,d$^{-1}$), the front is so sharp that the same test fails: 100 cells give 1.54 cm and 200 cells give 3.27 cm at the same time. This is the kind of difficulty that makes a solver fail, and it is consistent with the sand S03 having lost 13 of the 100 runs of its E9 lattice (87 are valid). The remedy is a finer grid and a much smaller time step, not more iterations.
+
+\begin{daisybox}{what Daisy adds}
+Daisy solves the same equation in a layered column, with root uptake $S_r$ from Chapter~4, a surface boundary that switches between a prescribed flux (rain, irrigation, evaporation demand) and a prescribed head (ponding), and a lower boundary set in the set-up file. Its logs of suction and water content by layer and day are what the figures of the study are built from. A run that fails to converge is written as a failure, and is excluded from the 10,041 valid runs.
+\end{daisybox}
+
+\begin{exercise}Derive Equation~(\ref{eq:cap}) by differentiating $\theta(\psi)=\theta_r+(\theta_s-\theta_r)[1+(\alpha|\psi|)^n]^{-m}$.\end{exercise}
+\begin{exercise}Compute $C$ at $\psi=-300$ cm for the loam, with $\theta_s-\theta_r=0.352$.\end{exercise}
+\begin{exercise}Show that when the iteration of Equation~(\ref{eq:picard}) has converged, the discrete mass balance Equation~(\ref{eq:cellbal}) holds.\end{exercise}
+\begin{exercise}Explain in a few sentences why the arithmetic mean of $K$ at a face overestimates the flux in front of a sharp wetting front.\end{exercise}
+\begin{exercise}A student halves $\Delta z$ and finds $I$ changes by 6 per cent. Is the solution converged? What should she do next?\end{exercise}
+\begin{exercise}Using Table~\ref{tab:loam}, estimate the infiltration rate in cm\,d$^{-1}$ between 6 and 12 h and compare it with $\Ks$.\end{exercise}
+
+\chapter{Evapotranspiration and the two stages of soil evaporation}
+\markboth{Evapotranspiration and soil evaporation}{Evapotranspiration and soil evaporation}
+\textbf{After this chapter you can} compute a reference evapotranspiration with the Penman--Monteith equation, describe the two stages of soil evaporation, and see why a mulch changes only part of the water balance.
+
+\section{The energy that drives evaporation}
+Evaporation of one kilogram of water needs the latent heat $\lambda\approx2.45$ MJ\,kg$^{-1}$. A net radiation of $R_n=13$ MJ\,m$^{-2}$\,d$^{-1}$ would evaporate $13/2.45=5.3$ mm of water per day if all of it were used for evaporation. This is why potential evapotranspiration is called \emph{energy based}. The equivalent depth of evaporation is $R_n/\lambda=0.408\,R_n$ in mm\,d$^{-1}$ with $R_n$ in MJ\,m$^{-2}$\,d$^{-1}$.
+
+\section{The Penman--Monteith equation}
+For a well-watered grass reference, the FAO-56 form of the Penman--Monteith equation gives the reference evapotranspiration
+\begin{equation}\label{eq:pm}
+ET_0=\frac{0.408\,\Delta(R_n-G)+\gamma\,\dfrac{900}{T+273}\,u_2\,(e_s-e_a)}{\Delta+\gamma(1+0.34\,u_2)},
+\end{equation}
+in mm\,d$^{-1}$, where $\Delta$ is the slope of the saturation vapour pressure curve (kPa\,$^\circ$C$^{-1}$), $\gamma$ the psychrometric constant, $G$ the soil heat flux, $u_2$ the wind speed at 2 m, and $e_s-e_a$ the vapour pressure deficit. The first term is the radiation term and the second the aerodynamic term.
+\begin{example}{a mild day}
+Take $T=20\,^\circ$C, $R_n=13$ MJ\,m$^{-2}$\,d$^{-1}$, $G=0$, $u_2=2$ m\,s$^{-1}$, relative humidity 60 per cent and pressure 101.3 kPa. Then $e_s=0.6108\exp[17.27(20)/(20+237.3)]=2.338$ kPa, $e_a=0.60(2.338)=1.403$ kPa, $\Delta=4098\,e_s/(T+237.3)^2=0.1447$, and $\gamma=0.000665(101.3)=0.0674$. The radiation term is $0.408(0.1447)(13)=0.768$; the aerodynamic term is $0.0674\,(900/293)(2)(0.935)=0.387$; the denominator is $0.1447+0.0674(1+0.68)=0.2579$. So $ET_0=(0.768+0.387)/0.2579=4.48$ mm\,d$^{-1}$. About two thirds of it is driven by radiation.
+\end{example}
+
+\section{Evaporation from bare soil: two stages}
+Soil evaporation does not follow the atmospheric demand for long. In \emph{stage 1} the surface is wet and the soil evaporates at the potential rate, limited only by energy, until the cumulative evaporation reaches a limit $U$. In \emph{stage 2} the surface layer has dried, water reaches the surface as vapour or liquid through a dry layer, and the rate falls. A simple description (Ritchie, 1972) gives the cumulative evaporation in stage 2 as proportional to the square root of time since the start of the stage,
+\begin{equation}\label{eq:stage2}
+E(t)=U+\beta\sqrt{t-t_1},
+\end{equation}
+where $t_1$ is the time at which stage 1 ends and $\beta$ (mm\,d$^{-1/2}$) is a soil constant.
+\begin{example}{evaporation after a wetting}
+With $U=9$ mm and $\beta=3.5$ mm\,d$^{-1/2}$ (typical textbook values for a loam) and a potential rate of 4.5 mm\,d$^{-1}$, stage 1 lasts $9/4.5=2$ days. After a further 1, 4 and 9 days the stage-2 cumulative evaporation is $3.5$, $7.0$ and $10.5$ mm: the rate has fallen from 4.5 to $\beta/(2\sqrt{t})=1.75$ mm\,d$^{-1}$ after one day and to 0.58 mm\,d$^{-1}$ after nine. Rain that wets the soil restarts stage 1, which is why small frequent wettings, from rain or from irrigation, lose a large share to evaporation: this is the 60 to 72 per cent loss that the ensemble finds for a 1 mm dose.
+\end{example}
+\fig{sc_e1k}{0.75}{The SWAFL evaporation layer: from the pore to the atmosphere, with the two stages.}
+
+\section{What a mulch changes}
+A mulch lowers the energy that reaches the soil surface and the vapour exchange with the atmosphere, so it lowers $E_s$, mainly in stage 1, and it intercepts some rain. It does not change transpiration directly. Its effect on the balance is a change of $E_s$ of, say, $-\Delta E$; by Equation~(\ref{eq:bal}) this must be balanced by an increase of $T$, of $D$, of storage or by a decrease of irrigation. Chapter~7 gives the memory fate that tells how it is shared.
+
+\begin{daisybox}{potential evapotranspiration in Daisy}
+Daisy computes an energy-based potential evapotranspiration from the weather of its input file and divides it between the canopy and the soil according to the cover. The soil evaporation of Daisy then follows the water content of the top layers through the Richards equation, so the two-stage behaviour of this chapter appears in the output without being imposed. Daisy's logs give $T$, $E_s$ and the canopy evaporation separately, and the audit of Chapter~8 asks whether they add up to $ET$.
+\end{daisybox}
+
+\begin{exercise}Compute $ET_0$ for $T=30\,^\circ$C, $R_n=18$, $G=0$, $u_2=3$, relative humidity 35 per cent, $P=101.3$ kPa.\end{exercise}
+\begin{exercise}Derive the equivalent evaporation depth $R_n/\lambda$ in mm for $R_n=1$ MJ\,m$^{-2}$\,d$^{-1}$ using $\lambda=2.45$ MJ\,kg$^{-1}$ and $\rho_w=1000$ kg\,m$^{-3}$.\end{exercise}
+\begin{exercise}With $U=6$ mm, $\beta=2.5$ mm\,d$^{-1/2}$ and a potential rate of 5 mm\,d$^{-1}$, find the cumulative evaporation 6 days after a wetting.\end{exercise}
+\begin{exercise}Explain why two 5 mm irrigations one week apart can lose more to evaporation than one 10 mm irrigation.\end{exercise}
+
+\chapter{Crop water stress and yield}
+\markboth{Crop water stress and yield}{Crop water stress and yield}
+\textbf{After this chapter you can} compute the water stress coefficient from the root-zone depletion, estimate actual evapotranspiration, and relate a water deficit to a yield loss.
+
+\section{Available water and depletion}
+The total available water of a root zone is $TAW=1000(\theta_{fc}-\theta_{wp})Z_r$ in mm, with $Z_r$ the rooting depth in m. In the ensemble the total available water to 1 m runs from 60 mm (sand) to 220 mm (silt loam) (Table~\ref{tab:soils}). The depletion $D_r$ is the water missing from field capacity. A crop does not suffer until the depletion exceeds a fraction $p$ of $TAW$, the readily available water $RAW=p\,TAW$.
+
+\section{The stress coefficient}
+Beyond $RAW$ the transpiration falls linearly with the depletion:
+\begin{equation}\label{eq:Ks}
+K_s=\begin{cases}1,&D_r\le RAW\\[2pt] \dfrac{TAW-D_r}{(1-p)\,TAW},&D_r>RAW\end{cases}\qquad ET_a=K_s\,K_c\,ET_0 .
+\end{equation}
+\begin{example}{a loam under drying}
+The loam S06 has $TAW=150$ mm; take $p=0.5$, so $RAW=75$ mm. With $K_c=1.15$ and $ET_0=4.48$ mm\,d$^{-1}$ (Chapter~13) the unstressed demand is $ET_c=5.15$ mm\,d$^{-1}$. At $D_r=60$ and 75 mm, $K_s=1$ and $ET_a=5.15$. At $D_r=100$ mm, $K_s=(150-100)/(0.5\cdot150)=0.667$ and $ET_a=3.43$ mm\,d$^{-1}$. At $D_r=120$, $K_s=0.40$ and $ET_a=2.06$. The depletion at which the field must be irrigated to avoid stress is $RAW=75$ mm; irrigating at the trigger gives the schedule of the application.
+\end{example}
+
+\section{From deficit to yield}
+A widely used linear relation (FAO-33) links the relative yield loss to the relative evapotranspiration deficit:
+\begin{equation}\label{eq:Ky}
+1-\frac{Y_a}{Y_m}=K_y\Bigl(1-\frac{ET_a}{ET_m}\Bigr).
+\end{equation}
+\begin{example}{a hypothetical cereal}
+With a yield response factor $K_y=1.15$ (illustrative) and a season in which $ET_a/ET_m=0.80$, the relative yield is $Y_a/Y_m=1-1.15(0.20)=0.77$. If $Y_m=6.6$ Mg\,ha$^{-1}$, as in the best triggers of the ensemble (the reach figure of Chapter~5, panel d), $Y_a=5.1$ Mg\,ha$^{-1}$. The ensemble's rainfed sand yields about 1.1 Mg\,ha$^{-1}$, because a trigger beyond the reach means no irrigation at all.
+\end{example}
+
+\section{Link with the trigger}
+The suction at the sensor at which the depletion reaches $RAW$ is the \emph{ideal} trigger. If it lies beyond the reach $\hc$ of the soil, the crop cannot reach it and the field is stressed before the sensor says so. Comparing the two is the use of Chapter~5 in design: choose the trigger below the smaller of the two, and below $\hc/2$ in practice.
+\begin{exercise}A soil has $TAW=95$ mm (S05) and $p=0.55$. Find $RAW$ and $K_s$ at $D_r=70$ mm.\end{exercise}
+\begin{exercise}With $K_y=0.9$ and a season mean $ET_a/ET_m=0.7$, find the relative yield.\end{exercise}
+\begin{exercise}For sand (S03, $TAW=60$ mm, $p=0.5$) find how many days at $ET_c=5$ mm\,d$^{-1}$ pass between a full profile and the onset of stress. Compare with the loam.\end{exercise}
+\begin{exercise}Explain why a sensor trigger beyond the reach leads to a larger yield loss in a sand than the stress coefficient alone would predict.\end{exercise}

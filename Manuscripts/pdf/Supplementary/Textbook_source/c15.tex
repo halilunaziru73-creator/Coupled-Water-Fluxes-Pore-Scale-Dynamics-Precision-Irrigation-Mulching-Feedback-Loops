@@ -1,0 +1,95 @@
+\chapter{Mathematics of irrigation design}
+\markboth{Mathematics of irrigation design}{Mathematics of irrigation design}
+\textbf{After this chapter you can} compute the time to infiltrate a required depth with a Kostiakov intake, size a sprinkler or drip schedule from an application rate, evaluate the uniformity of a sprinkler test, and space subsurface drains with the Hooghoudt equation. These are the classical relations behind the design layers of the application; the application shows the equation and the origin label of each number it uses, and you should read those in the manual when you compare.
+
+\section{Net and gross requirement}
+The net depth $Z_n$ is the water that the root zone must receive to refill the depleted store; the gross depth is $Z_g=Z_n/E_a$ with $E_a$ the application efficiency. The soil and the trigger of the simulation give $Z_n$: for the screenshot of Figure~\ref{fig:sid} the required depth is 72 mm.
+\fig{sc_sidk}{0.7}{The surface irrigation layer. The required depth, 72 mm, comes from the simulation (soil, root depth and depletion trigger).}\label{fig:sid}
+
+\section{Surface irrigation: intake and opportunity time}
+The cumulative intake of a furrow or border at a point is often described by the Kostiakov relation
+\begin{equation}\label{eq:kost}Z(\tau)=k\,\tau^{a},\end{equation}
+where $\tau$ is the \emph{opportunity time}, the time during which water is on the soil at that point, and $k,a$ are constants for the soil. The opportunity time needed to infiltrate $Z_n$ is $\tau=(Z_n/k)^{1/a}$.
+\begin{example}{opportunity time}
+With $k=4.0$ mm\,min$^{-a}$ and $a=0.55$ (illustrative values), $Z_n=72$ mm needs $\tau=(72/4.0)^{1/0.55}=18^{1.818}=192$ min. If the inflow per metre width is $q=1.05$ L\,s$^{-1}$\,m$^{-1}$ and the field length is $L=150$ m, then in the ideal case in which every point receives exactly 192 min of water the applied depth is $qt/L=(1.05\times10^{-3})(192\times60)/150=0.0806$ m $=80.6$ mm, so $E_a\le72/80.6=0.89$. Real borders do worse, because water is on the upper end longer than on the lower end (the advance time) and some runs off the tail; reducing this loss is the purpose of the cutoff and cutback rules of the layer.
+\end{example}
+
+\section{Sprinklers: application rate and uniformity}
+A sprinkler with discharge $q_s$ on a spacing $S_l\times S_m$ applies depth at the rate
+\begin{equation}\label{eq:sprrate}r=\frac{q_s}{S_l\,S_m}.\end{equation}
+\begin{example}{a set time}
+With $q_s=1.2$ m$^3$\,h$^{-1}$ on a $12\times18$ m spacing, $r=1.2/216=0.00556$ m\,h$^{-1}=5.56$ mm\,h$^{-1}$. To apply a net depth of 72 mm at $E_a=0.75$ the gross depth is $96$ mm, and the set time is $96/5.56=17.3$ h. The rate must also stay below the intake rate of the soil, or water ponds and runs off: check $r$ against the infiltration rate of Chapter~12 (for the loam, about $\Ks=24.96$ cm\,d$^{-1}=104$ mm\,h$^{-1}$ at long times, far above 5.56 mm\,h$^{-1}$).
+\end{example}
+\textbf{Uniformity.} A catch-can test of $N$ collectors gives depths $x_j$ with mean $\bar x$. The Christiansen coefficient is
+\begin{equation}\label{eq:cu}CU=100\Bigl(1-\frac{\sum_j|x_j-\bar x|}{N\bar x}\Bigr).\end{equation}
+\begin{example}{a catch-can test}
+Ten cans collect $8.2,\ 9.1,\ 10.5,\ 7.4,\ 8.8,\ 9.6,\ 11.2,\ 8.0,\ 9.9,\ 10.1$ mm. The mean is $9.28$ mm, the absolute deviations sum to $9.8$ mm, so $CU=100(1-9.8/92.8)=89.4$ per cent. Values above about 85 per cent are usually considered acceptable for field crops.
+\end{example}
+\fig{sc_sprk}{0.7}{The SWAFL sprinkler layer: nozzle, spacing, wind and soil intake.}
+
+\section{Drip: rate per area}
+A drip line has emitters of discharge $q_e$ at spacing $s_e$ on laterals at spacing $s_l$. The depth rate over the whole area is $r=q_e/(s_e s_l)$.
+\begin{example}{a drip schedule}
+With $q_e=2$ L\,h$^{-1}$, $s_e=0.5$ m and $s_l=1.5$ m, $r=2/(0.5\times1.5)=2.67$ mm\,h$^{-1}$. A daily gross requirement of 6 mm needs $6/2.67=2.25$ h. The wetted bulb below an emitter is narrow and deep in sand and wide and shallow in clay, because the capillary pull (Chapter~2) is weak in a sand, where $K$ at the wet end is large and gravity dominates.
+\end{example}
+\fig{sc_dripk}{0.7}{The SWAFL drip layer: emitters, wetted bulb and uniformity.}
+
+\section{Pipe network}
+The friction loss of Equation~(\ref{eq:hw}) and the speed $v=4Q/(\pi D^2)$ are computed for every pipe of the sketch, and the pump head is the static lift plus the largest sum of losses along a path (including the operating pressure of the emitters or sprinklers).
+\fig{sketch}{0.8}{The field sketch of the application.}
+
+\section{Subsurface drainage: the Hooghoudt equation}
+For parallel drains at spacing $L$ above an impermeable layer, the steady-state water table midway between the drains has a height $h$ above drain level given by the Hooghoudt equation,
+\begin{equation}\label{eq:hooghoudt}L^{2}=\frac{8K_2\,d_e\,h+4K_1h^{2}}{q},\end{equation}
+where $q$ is the drainage rate (m\,d$^{-1}$), $K_1$ and $K_2$ the conductivities above and below drain level, and $d_e$ the equivalent depth that accounts for convergence of the flow towards the drain.
+\begin{example}{drain spacing}
+With $K_1=K_2=0.5$ m\,d$^{-1}$, $d_e=1.5$ m, $h=0.60$ m and $q=0.005$ m\,d$^{-1}$: $L^2=(8\cdot0.5\cdot1.5\cdot0.6+4\cdot0.5\cdot0.36)/0.005=(3.6+0.72)/0.005=864$ m$^2$, so $L=29.4$ m. Halving the conductivity to 0.25 m\,d$^{-1}$ halves $L^2$ to 432, so $L=20.8$ m.
+\end{example}
+\fig{sc_drnk}{0.7}{The SWAFL drainage layer.}
+
+\begin{exercise}With $k=3.0$ and $a=0.6$ find the opportunity time for $Z_n=60$ mm.\end{exercise}
+\begin{exercise}A sprinkler of 2.0 m$^3$\,h$^{-1}$ is on a $15\times15$ m spacing. Find $r$ and the set time for a gross depth of 80 mm.\end{exercise}
+\begin{exercise}Compute $CU$ for cans of $6,\ 8,\ 9,\ 10,\ 12$ mm.\end{exercise}
+\begin{exercise}A drip system has $q_e=4$ L\,h$^{-1}$ at 0.75 m spacing on laterals 2 m apart. Find $r$ and the time to apply 5 mm gross.\end{exercise}
+\begin{exercise}Find the Hooghoudt spacing for $K=1$ m\,d$^{-1}$ ($K_1=K_2$), $d_e=2$ m, $h=0.5$ m and $q=0.007$ m\,d$^{-1}$.\end{exercise}
+\begin{exercise}Why can $E_a$ of Equation~(\ref{eq:kost})'s ideal case not be reached in a real border?\end{exercise}
+
+\chapter{Statistics of the evidence}
+\markboth{Statistics of the evidence}{Statistics of the evidence}
+\textbf{After this chapter you can} compute a Spearman correlation by hand, run a bootstrap, perform a leave-one-soil-out test, and fit a constant to interval-censored data. These are the tools with which the studies decide whether a law is believed.
+
+\section{Rank correlation}
+Pearson's correlation measures straight-line dependence and is sensitive to outliers. Spearman's rank correlation replaces each value by its rank and is the Pearson correlation of the ranks; when there are no ties
+\begin{equation}\label{eq:spearman}\rho=1-\frac{6\sum_i d_i^{2}}{N(N^{2}-1)},\end{equation}
+with $d_i$ the difference of the ranks of the $i$-th pair.
+\begin{example}{memory against $n$ for ten soils}
+Rank the ten soils by $n$ (Table~\ref{tab:soils}) and by the memory fate. The rank differences are $+1$ for S01, $+2$ for S02, $-1$ for S06, $-1$ for S08, $-1$ for S09 and zero for the other four, so $\sum d^2=1+4+1+1+1=8$ and $\rho=1-6(8)/(10\cdot99)=0.952$. This is the 0.95 of the study. An exact permutation test, in which the memory values are shuffled over the soils in all $10!$ ways, finds a correlation this high or higher with probability $196/3{,}628{,}800=5.4\times10^{-5}$ (one-sided): only 196 of the permutations have $\sum d^2\le8$.
+\end{example}
+\fig{g_mem_n}{0.55}{The memory fate against $n$ for the ten soils: Spearman $\rho=0.95$.}
+
+\section{The bootstrap}
+To measure how uncertain a statistic is, resample the data with replacement many times and recompute it. For the mean memory fate of the ten soils, $0.335$, 1,000 resamples (random seed 1) give a 95 per cent interval of $[0.17,\ 0.52]$, the 2.5th and 97.5th percentiles of the resampled means. The study uses the same idea twice: it resamples the 100 lattice cells of each soil, 1,000 times, for the confidence interval of the memory fate, and it resamples soils to find the interval of $\kappa$.
+
+\section{Leave-one-soil-out validation}
+A law fitted to all ten soils will always look good on those ten. The honest test is to leave one soil out, fit to the remaining nine, and predict the one that was left out; repeat for each soil and report the error over the predictions.
+\begin{example}{a straight line as a baseline}
+Fit a straight line of the memory fate against $n$ ten times, each time without one soil. The prediction errors have a root-mean-square value of $0.12$, against $0.32$ for the benchmark that always predicts the mean of the other nine. A straight line is a crude law; the competition law of Chapter~7, with one parameter, reaches 0.058, so it is more than twice as accurate. (The 0.12 and 0.32 here are our illustration from the numbers of Table~\ref{tab:soils}; 0.058 is the study's value.)
+\end{example}
+
+\section{Fitting a constant to intervals}
+For each soil the experiment does not give the reach, only an interval: the reach lies above the largest firing trigger and below the smallest non-firing one, or only above the largest firing trigger if every trigger fires. The constant $\kappa$ is fitted by minimising
+\begin{equation}\label{eq:icloss}\mathcal L(\kappa)=\sum_{s}\mathrm{dist}\bigl(\log_{10}\hc(\kappa;\alpha_s,n_s),\ [\ell_s,u_s]\bigr)^{2},\end{equation}
+where the distance is zero inside the interval $[\ell_s,u_s]$ (in $\log_{10}$) and is the distance to the nearest end outside it.
+\begin{example}{a toy fit}
+Take three soils with synthetic intervals: S03 (sand) $[100,300]$ cm, S05 (sandy loam) $[1000,2000]$ cm and S10 (silty clay loam) bounded only below, $\ge10{,}000$ cm. For $\kappa=10^{-11},\ 10^{-10.5},\ 10^{-10},\ 10^{-9.5},\ 10^{-9},\ 10^{-8.5},\ 10^{-8}$ the loss is $0.079,\ 0.024,\ 0.0013,\ 0,\ 0,\ 0.0003,\ 0.019$. It is exactly zero for $\kappa$ between $1.4\times10^{-10}$ and $2.6\times10^{-9}$: the minimum is a \emph{plateau}, not a point, because all three predictions lie inside their intervals. At $\kappa=10^{-9.5}$ the predicted reaches are $202,\ 1{,}654$ and $132{,}968$ cm. The study's $\kappa=3.47\times10^{-10}$ lies in such a plateau, and its bootstrap interval, $1.0\times10^{-10}$ to $2.8\times10^{-9}$, is of the same width: the data fix $\kappa$ to within about one order of magnitude, and Chapter~5 showed that this is enough, because $\hc\propto\kappa^{-1/E}$.
+\end{example}
+\fig{g_kappa}{0.55}{The reach against $\kappa$ for sand, sandy loam and silty clay loam. The dashed line is the fitted value.}
+
+\section{Choosing between laws}
+Several laws can be compared on the same footing: fit each to all soils, and for each compute the leave-one-soil-out error and the number of soils whose observed interval contains the prediction. For the four laws of the study the Mualem form has error 0.18 (log$_{10}$) and puts 5 of 10 soils inside; the power law 0.14 and 4; the fixed-saturation law 0.23 and 4; and the absolute-conductivity law is not supported, because $K(\hc)$ would have to span 3.6 decades. The Mualem form is preferred not because it is the smallest error but because it is derived from the physics and has one constant that does not depend on the soil.
+
+\begin{exercise}Compute the Spearman correlation of the pairs $(1,2),(2,1),(3,3),(4,5),(5,4)$.\end{exercise}
+\begin{exercise}Explain why the bootstrap resamples cells of the lattice, and not the runs of different lattices.\end{exercise}
+\begin{exercise}Using the toy fit of this chapter, find $\mathcal L$ at $\kappa=3.5\times10^{-10}$ and say whether it is on the plateau.\end{exercise}
+\begin{exercise}Why is a leave-one-soil-out test harder to pass than a fit to all soils?\end{exercise}
+\begin{exercise}The exact one-sided permutation $p$ value of the memory--$n$ correlation is $5.4\times10^{-5}$. What is the smallest possible exact one-sided $p$ for $N=10$ with no ties?\end{exercise}

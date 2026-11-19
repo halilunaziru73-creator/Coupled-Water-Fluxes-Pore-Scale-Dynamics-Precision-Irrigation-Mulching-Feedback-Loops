@@ -32,20 +32,3 @@ The second rule of origin says that a decision layer draws a Daisy result only f
 \begin{exercise}Use E10 to estimate $\eta_D$ for a soil and a dose of your choice (Chapter~6), by differencing against the rainfed twin of E0.\end{exercise}
 \begin{exercise}Use E9 to compute $\phi_D$ for one soil with Equation~(\ref{eq:phi}) and compare with Table~\ref{tab:soils}.\end{exercise}
 
-\chapter{What is claimed, what is not, and what comes next}
-\markboth{Limits and next steps}{Limits and next steps}
-\section{What is shown}
-Memory, audit, reach and fate for ten soils in a one-dimensional matrix-flow model. The design modules reproduce published worked examples. Parsers and shared functions agree with independent readers, and defects were removed. Daisy 7.1.14 runs end to end from SWAFL, including a 5.85 ha field from a satellite image to a schedule. Data, code, manual and application are open.
-
-\section{What is not claimed}
-\begin{itemize}[leftmargin=*]
-\item Field validation: measured drainage, lysimeters and sensor-scheduled plots are still needed. The memory result gives a testable prediction: sand should drain about 85 per cent of the released storage and silty clay loam about 2 per cent.
-\item Run-by-run repetition of the published experiments.
-\item The Windows build and the online data services on a connected machine.
-\item The non-equilibrium criterion $\Pi_\tau$ is proposed, not tested.
-\item Several model terms need attention: the baseline offset, sprinkler range coefficients, the wind term and the conductivity floor.
-\end{itemize}
-The constant $\kappa$ describes the crop, the climate and the sensor, and all E2 runs used one cereal rotation, one weather series and a sensor at 20 cm. For another crop or climate, $\kappa$ is determined again from a trigger experiment on a few soils.
-
-\section{Planned chapters}
-This edition covers the derivations of the reach, the fate, the memory and the audit in full and tours the application. Chapters planned for later parts: unsaturated flow numerics and the solution of the Richards equation; canopy energy balance and potential evapotranspiration; crop growth and water stress; nitrogen transformations; soil structure, tillage and consolidation; the design of surface, drip and sprinkler systems in depth; drainage design; satellite indices and variable-rate irrigation; and a collection of laboratory problems built on the open ensemble.
