@@ -1,0 +1,44 @@
+\appendix
+\chapter{Solutions to the exercises}
+\markboth{Solutions}{Solutions}
+Numerical answers were computed from the equations of the text; small differences in the last digit come from rounding.
+\begin{description}[leftmargin=0pt,labelindent=0pt,itemsep=4pt]
+\item[1.1] $\Delta S=480-(210+170+60+0+55)=-15$ mm: the store lost 15 mm.
+\item[1.2] Lowering $E_s$ leaves energy and water that may go to drainage, to storage or to transpiration; how much of each depends on the soil (Chapter 7).
+\item[1.3] Subtracting the two balances gives $I=(T-T_0)+(E_s-E_{s,0})+(E_o-E_{o,0})+(D-D_0)+(\Delta S-\Delta S_0+Q-Q_0)$; divide by $I$.
+\item[2.1] $\Se=0.638$ at 50 cm, $0.262$ at 300 cm and $0.073$ at 3000 cm.
+\item[2.2] Put $\Se=[1+(\alpha h)^n]^{-m}$; then $\Se^{-1/m}=1+(\alpha h)^n$, so $h=\alpha^{-1}(\Se^{-1/m}-1)^{1/n}$.
+\item[2.3] $r=0.1456\times10^{-3}/(998\cdot9.81\cdot h)$ with $h$ in metres: $1.49\ \mu$m at 1000 cm and $0.099\ \mu$m at 15,000 cm.
+\item[2.4] Soil B (the broad one) releases more. With $\alpha=0.05$: $\Se(100)=0.089$ and $\Se(300)=0.017$ for $n=2.5$ (change 0.072); $0.601$ and $0.441$ for $n=1.3$ (change 0.160). The broad-pore soil has a flatter curve, so it gives up more water over this band.
+\item[3.1] Differentiate: $\frac{d}{d\Se}\alpha[1-(1-\Se^{1/m})^m]=\alpha(1-y)^{m-1}\Se^{1/m-1}$ with $y=\Se^{1/m}$. The integrand is $1/h=\alpha(\Se^{-1/m}-1)^{-1/n}=\alpha\,y^{1/n}(1-y)^{-1/n}$. Since $-1/n=m-1$ and $\Se^{1/m-1}=\Se^{1/(n-1)}=y^{1/n}$ (because $mn=n-1$), the two agree.
+\item[3.2] $\Kr(S06,300\text{ cm})=3.8\times10^{-5}$.
+\item[3.3] At $\Se=1$ the bracket is $1-0=1$; at $\Se\to0$, $\Se^\ell\to0$ and the bracket $\to0$.
+\item[3.4] The exponent $m-1+1/n$ vanishes, leaving $(1-y)^{m-1}$ whose primitive is elementary; otherwise one needs an incomplete beta function.
+\item[4.1] $\Pi_\tau=3/48=0.0625\ll1$: the equilibrium reach applies. For hourly pulses $\Pi_\tau=3\gg1$ (the lag exceeds the interval) and the equilibrium law fails.
+\item[4.2] $u\propto K(h)\Delta h$ is linear in $K$ at fixed $\Delta h$.
+\item[4.3] Mass in a layer of thickness $dz$: $\partial\theta/\partial t\,dz=q(z)-q(z+dz)-S_r\,dz$, then use Equation (4.1).
+\item[4.4] Because the water content is assumed to follow the retention curve at once.
+\item[5.1] $m=0.4118$, $E=2(1.7)+0.5(0.7)=3.75$, $\ln(m^2/\kappa)=20.00$, so $(m^2/\kappa)^{1/E}=e^{5.333}=207$ and $\hc=207/0.03\approx6{,}900$ cm.
+\item[5.2] See the derivation in Section 5.2.
+\item[5.3] At $n=1.5$: $m=0.3333$, $E=3.25$, $\ln(m^2/\kappa)=19.57$; first term $2/(0.3333\cdot2.25\cdot3.25)=0.820$; second $2.5\cdot19.57/10.56=4.633$; derivative $-3.81$: the reach falls steeply with $n$.
+\item[5.4] A factor of $10^{1/E}=10^{1/4.5}=1.67$ shorter for $\kappa$ ten times larger ($1{,}856\to1{,}113$ cm).
+\item[5.5] The reach of the loamy sand is 425 cm and 300 cm is $0.7\hc$, so irrigation is nearly nil; keep the trigger below $\hc/2\approx210$ cm.
+\item[6.1] $\eta_S=150-(45+40+30+30)=5$ mm, so shares $0.30,\ 0.267,\ 0.20,\ 0.20,\ 0.033$.
+\item[6.2] If the added water is intercepted and evaporates, canopy evaporation of the irrigation can exceed what the crop would otherwise take up, so the change of $T$ can be below zero.
+\item[6.3] $\eta_D=0.45(1-e^{-d/4.1})$: $0.147$, $0.250$, $0.411$, $0.447$ at 2, 5, 10, 25 mm. 90 per cent of the plateau at $d=4.1\ln10=9.4$ mm.
+\item[6.4] The ratio of sums weights each run by its irrigation and gives the share of the total irrigation; a mean of ratios would give a run with almost no irrigation the same weight as a large one.
+\item[6.5] The correct limits (zero dose drains nothing; large dose passes on a constant share) and a single scale.
+\item[7.1] Deviations $(-15,-5,5,15)$ and $(-3,-1,1,3)$: numerator $45+5+5+45=100$, denominator $500$, $\phi_{E_s}=0.20$.
+\item[7.2] $dS/dt=-(k_D+k_W)S\Rightarrow S=S_0e^{-(k_D+k_W)t}$; $\int_0^\infty k_DS\,dt=k_DS_0/(k_D+k_W)$; with $k_D\propto\Ks$ and $k_W\propto q^*$ the factor $L$ cancels.
+\item[7.3] $\phi_D=0.25,\ 0.77,\ 0.97$ for $\Ks=0.5,\ 5,\ 50$ (with $q^*=1.5$).
+\item[7.4] An effect that is known to be absent shows what a null result looks like and guards against reading a pattern into noise.
+\item[7.5] Sand: $40\times(1-0.85)=6$ mm stay; silty clay loam: $40\times(1-0.02)=39.2$ mm stay.
+\item[8.1] Substituting each row: $800-520-250-30=0$, and so on for the other three rows.
+\item[8.2] $R=540-230-170-60=80$ mm, which is $14.8$ per cent of $ET$.
+\item[8.3] $\psi_D=12/36=0.33$ and $\psi_D'=12/30=0.40$.
+\item[8.4] Because a method that finds the known balance within 5 per cent is not inventing structure.
+\item[9.1] $h_f=10.67(150)(0.006)^{1.852}/(130^{1.852}\,0.075^{4.87})$ and $v=4(0.006)/(\pi\,0.075^2)=1.36$ m\,s$^{-1}$; $h_f=4.5$ m.
+\item[9.2] Doubling $D$ divides $h_f$ by $2^{4.87}=29.3$; doubling $Q$ multiplies it by $2^{1.852}=3.61$.
+\item[9.3] Answers depend on the equation chosen.
+\item[10.x, 11.x] Open-ended exercises; compare with the figures of Chapters 5 to 7.
+\end{description}

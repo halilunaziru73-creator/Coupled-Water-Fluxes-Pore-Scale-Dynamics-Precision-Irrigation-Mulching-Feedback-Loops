@@ -1,0 +1,51 @@
+\chapter{The Daisy workbench: planning and reading experiments}
+\markboth{The Daisy workbench}{The Daisy workbench}
+\textbf{After this chapter you can} plan an experiment with a run budget, read a Daisy run through plots and balances, and rebuild an analysis of the book from the archived data.
+
+\section{Planning an experiment}
+The workbench plans experiments, checks every design against a catalogue of what Daisy can vary, and keeps the run budget. If the factors have $n_1,n_2,\dots$ levels and the budget is $B$ runs, the number of runs is
+\begin{equation}\label{eq:runs}N=\min\Bigl(\prod_i n_i,\ B\Bigr).\end{equation}
+\begin{example}{counting runs}
+Dose with 6 levels, 10 irrigation windows and 10 soils give $6\times10\times10=600$ runs. With a budget of 500 the workbench reduces the design to $N=500$, and says so. The ensemble's E10 had $10$ soils $\times\ 10$ windows $\times\ 10$ doses $=1000$ cells, of which 954 were valid.
+\end{example}
+\fig{sh_dz-exp}{0.95}{Experiments: 43 ready combinations from 17 topics of the Daisy reference manual. A link opens the page of the manual that documents the setting.}
+\fig{zip}{0.9}{The experiment folder: 58 files with Daisy set-ups, ready to run.}
+
+\section{Reading a run}
+After a run, the workbench plots every log and can save it as a figure or as numbers. It shows the mass balance of the run (inputs, outputs and content agree), compares two logs or many runs, and offers a double-blind comparison.
+\fig{run_pf}{0.9}{Soil water suction (pF) over depth and time, written by Daisy for twenty years.}
+\fig{run_dm}{0.9}{Dry matter of the organs: leaf, stem, storage organ and root.}
+
+\section{From Daisy output to a decision layer}
+The second rule of origin says that a decision layer draws a Daisy result only from a Daisy run. A parser reads the logs, the bridge passes them to nine layers (decision table, water balance, nitrogen balance, yield risk, chemicals, trade-offs, return of irrigation, nitrous oxide and chemical fate).
+\fig{p3_bridge}{0.9}{The bridge from Daisy output to the decision layers.}
+\fig{p3_effects}{0.9}{Decision table: the effect of every input on yield, water and nitrate.}
+
+\section{Reproducing an analysis of this book}
+\begin{enumerate}[leftmargin=*]
+\item Download the summary file of the ensemble from the repository (one row per run) or the raw archive from Zenodo.
+\item Select experiment E2 and a soil. For each trigger compute the mean annual irrigation; a trigger \emph{fires} if it exceeds 5 mm\,yr$^{-1}$.
+\item The reach interval of the soil is bounded below by the largest firing trigger and above by the smallest non-firing one.
+\item Compute the predicted reach of Equation~(\ref{eq:reach}) from the soil's $\alpha$ and $n$ and compare.
+\end{enumerate}
+\begin{exercise}Carry out steps 1--4 for the sand S03 and the sandy loam S05. Is the prediction inside the observed interval?\end{exercise}
+\begin{exercise}Use E10 to estimate $\eta_D$ for a soil and a dose of your choice (Chapter~6), by differencing against the rainfed twin of E0.\end{exercise}
+\begin{exercise}Use E9 to compute $\phi_D$ for one soil with Equation~(\ref{eq:phi}) and compare with Table~\ref{tab:soils}.\end{exercise}
+
+\chapter{What is claimed, what is not, and what comes next}
+\markboth{Limits and next steps}{Limits and next steps}
+\section{What is shown}
+Memory, audit, reach and fate for ten soils in a one-dimensional matrix-flow model. The design modules reproduce published worked examples. Parsers and shared functions agree with independent readers, and defects were removed. Daisy 7.1.14 runs end to end from SWAFL, including a 5.85 ha field from a satellite image to a schedule. Data, code, manual and application are open.
+
+\section{What is not claimed}
+\begin{itemize}[leftmargin=*]
+\item Field validation: measured drainage, lysimeters and sensor-scheduled plots are still needed. The memory result gives a testable prediction: sand should drain about 85 per cent of the released storage and silty clay loam about 2 per cent.
+\item Run-by-run repetition of the published experiments.
+\item The Windows build and the online data services on a connected machine.
+\item The non-equilibrium criterion $\Pi_\tau$ is proposed, not tested.
+\item Several model terms need attention: the baseline offset, sprinkler range coefficients, the wind term and the conductivity floor.
+\end{itemize}
+The constant $\kappa$ describes the crop, the climate and the sensor, and all E2 runs used one cereal rotation, one weather series and a sensor at 20 cm. For another crop or climate, $\kappa$ is determined again from a trigger experiment on a few soils.
+
+\section{Planned chapters}
+This edition covers the derivations of the reach, the fate, the memory and the audit in full and tours the application. Chapters planned for later parts: unsaturated flow numerics and the solution of the Richards equation; canopy energy balance and potential evapotranspiration; crop growth and water stress; nitrogen transformations; soil structure, tillage and consolidation; the design of surface, drip and sprinkler systems in depth; drainage design; satellite indices and variable-rate irrigation; and a collection of laboratory problems built on the open ensemble.

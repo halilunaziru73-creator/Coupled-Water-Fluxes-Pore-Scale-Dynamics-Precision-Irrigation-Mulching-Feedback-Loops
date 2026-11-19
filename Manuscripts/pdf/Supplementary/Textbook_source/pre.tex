@@ -1,0 +1,45 @@
+\documentclass[11pt,twoside,openany]{book}
+\usepackage[a4paper,inner=26mm,outer=22mm,top=25mm,bottom=27mm]{geometry}
+\usepackage[T1]{fontenc}\usepackage{lmodern}\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools,bm}
+\usepackage{graphicx,float,booktabs,array,enumitem,xcolor,caption,fancyhdr,titlesec}
+\usepackage[most]{tcolorbox}
+\usepackage[hidelinks]{hyperref}
+\definecolor{rd}{HTML}{A31F34}\definecolor{og}{HTML}{D86A00}\definecolor{ink}{HTML}{12303B}\definecolor{pn}{HTML}{F4F1EC}
+\titleformat{\chapter}[display]{\normalfont\bfseries\color{ink}}{\Large\color{og}CHAPTER \thechapter}{4pt}{\Huge\color{rd}}
+\titleformat{\section}{\normalfont\Large\bfseries\color{ink}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{ink}}{\thesubsection}{0.6em}{}
+\pagestyle{fancy}\fancyhf{}\fancyhead[LE]{\small\nouppercase{\leftmark}}\fancyhead[RO]{\small\nouppercase{\rightmark}}\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\numberwithin{equation}{chapter}
+\captionsetup{font=small,labelfont={bf,color=rd}}
+\setlength{\parindent}{0pt}\setlength{\parskip}{6pt}
+\newcommand{\hc}{h_{\mathrm c}}\newcommand{\Se}{S_{\mathrm e}}\newcommand{\Kr}{K_{\mathrm r}}\newcommand{\Ks}{K_{\mathrm s}}
+\newcounter{ex}[chapter]\renewcommand{\theex}{\thechapter.\arabic{ex}}
+\newtcolorbox{example}[1]{colback=pn,colframe=og,boxrule=0.6pt,arc=0pt,left=6pt,right=6pt,top=4pt,bottom=4pt,breakable,title={\refstepcounter{ex}Worked example \theex\ --- #1},fonttitle=\bfseries\small,coltitle=white,colbacktitle=og}
+\newtcolorbox{daisybox}[1]{colback=white,colframe=ink,boxrule=0.6pt,arc=0pt,breakable,title={From the Daisy outputs --- #1},fonttitle=\bfseries\small,colbacktitle=ink}
+\newtcolorbox{keybox}{colback=rd!6,colframe=rd,boxrule=0.6pt,arc=0pt,breakable,title={Key result},fonttitle=\bfseries\small}
+\newcounter{exr}[chapter]\renewcommand{\theexr}{\thechapter.\arabic{exr}}
+\newenvironment{exercise}{\par\refstepcounter{exr}\noindent\textbf{\color{rd}Exercise \theexr.}\ }{\par}
+\newcommand{\fig}[3]{\begin{figure}[H]\centering\includegraphics[width=#2\textwidth]{fig/#1}\caption{#3}\end{figure}}
+\begin{document}
+\frontmatter
+\begin{titlepage}\centering\vspace*{3cm}
+{\color{og}\Large\bfseries A TEXTBOOK FOR UNIVERSITY STUDENTS}\\[1.4cm]
+{\fontsize{44}{50}\selectfont\bfseries\color{rd} Pore-Scale\\Dynamics}\\[1cm]
+{\Large\color{ink} Soil water, irrigation and evaporation control:\\ derivations, worked examples and exercises\\ with the Daisy model and the SWAFL application}\\[3cm]
+{\Large Naziru Halilu}\\[0.4cm] Agricultural University of Athens \quad Public University of Navarre\\[3cm]
+{\small Based on four studies, their Supplementary derivations, the SWAFL Desktop 1.1.0 manual and an open ensemble of 10,190 Daisy simulations (Zenodo, doi 10.5281/zenodo.23043626). Licence: MIT.}
+\end{titlepage}
+\chapter*{How to use this book}
+This book teaches, from first principles, the equations that sit behind the reach of a suction trigger, the fate of an irrigation millimetre, hydraulic memory and the audit of a water balance, and shows how each equation is derived from the outputs of the Daisy model. It follows the studies and the Supplementary derivations of the project, and every screenshot is taken from the SWAFL application.
+
+\textbf{Structure.} Each chapter has a short statement of what you will be able to do, the derivation, worked examples with numbers that you can reproduce with a pocket calculator or a few lines of code, a box that says how the quantity is obtained from the Daisy outputs, and exercises. Solutions are at the end of the book.
+
+\textbf{Prerequisites.} Calculus, a first course in physics, and some familiarity with soil water. No knowledge of Daisy is assumed.
+
+\textbf{Scope.} All findings concern a one-dimensional matrix-flow model; no field validation is claimed. Where a law is phenomenological and not derived from physics, the text says so.
+
+\textbf{Status of this edition.} This is the first part of a larger textbook. The chapters present the derivations of the reach, the fate, the memory and the audit in full, and tour every layer of the application. Planned further chapters are listed in the closing chapter.
+\tableofcontents
+\mainmatter

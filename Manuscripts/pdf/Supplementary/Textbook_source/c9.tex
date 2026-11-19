@@ -1,0 +1,115 @@
+\chapter{Closing the water balance: an audit of model outputs}\label{ch:audit}
+\markboth{Closing the water balance}{Closing the water balance}
+\textbf{After this chapter you can} search for linear invariants in model output with a singular value decomposition, define the unattributed evaporative term, and show why a saving must be judged against the closed non-transpiration term.
+
+\section{Why audit a model}
+Process-model outputs that support a saving are treated as closed accounts. This can be tested: if the terms of the water balance of Equation~(\ref{eq:bal}) are written for every run, one can check whether they add up, and find out which term is missing when they do not.
+
+\section{A blind search for linear invariants}
+Collect, for $N$ runs, the annual terms in a matrix $X$ with one row per run and one column per term, for example $W=P+I$, $ET$, $D$ and $\Delta S+Q$. A \emph{linear invariant} is a vector $c$ with $Xc=0$ for every run. It is found, without being told, as the right singular vector of $X$ with the smallest singular value: if $X=U\Sigma V^{\top}$ then $\|Xc\|$ is smallest for the last column of $V$.
+
+\begin{example}{finding the balance blindly}
+Four runs have $(W,ET,D,\Delta S+Q)=(800,520,250,30),\ (760,500,240,20),\ (900,560,300,40),\ (700,480,200,20)$ mm. The singular values of $X$ are $1958,\ 43.7,\ 8.01$ and $\approx10^{-13}$. The last is zero to machine precision, and the corresponding singular vector, scaled so that its first entry is 1, is $(1,-1,-1,-1)$: the balance $W=ET+D+(\Delta S+Q)$ was recovered without being supplied. When the study ran this search on the Daisy output, the coefficients were recovered within 5 per cent.
+\end{example}
+
+\section{The unattributed evaporative term}
+Model outputs report transpiration $T$, soil evaporation $E_s$ and canopy evaporation $E_c$. The non-transpiration evapotranspiration is $ET_{nt}=ET-T$, which in the model is $E_s+E_c$ plus a small residual in the bookkeeping of the evapotranspiration. The audit shows that the residual is not small. Define the unattributed evaporative term
+\begin{equation}\label{eq:R}
+R=ET-T-E_s-E_c .
+\end{equation}
+Averaged over the ensemble, $R=164$ mm\,yr$^{-1}$, which is 30 per cent of the evapotranspiration. It is a property of the model's bookkeeping, not of a real field.
+
+\fig{p1_hidden}{0.95}{The unattributed evaporative term $R$ by experiment (a) and against annual rain (b).}
+
+\section{Judging a saving against the wrong total}
+Suppose a mulch or a lower evaporation factor changes the soil evaporation by $\Delta E_s$ and the non-transpiration term by $\Delta ET_{nt}$, and that drainage changes by $\Delta D$. The drainage share of the non-transpiration change is $\psi_D=\Delta D/\Delta ET_{nt}$. If one divides instead by the reported soil evaporation, one obtains $\psi_D'=\Delta D/\Delta E_s=\psi_D\,\Delta ET_{nt}/\Delta E_s$, which differs from $\psi_D$ by the factor $\Delta ET_{nt}/\Delta E_s$.
+
+\begin{example}{a wrong denominator}
+A lower evaporation factor changes soil evaporation by $-40$ mm, and the non-transpiration term by $-55$ mm; drainage changes by $-22$ mm (in magnitudes: drainage given up). The closed share is $\psi_D=22/55=0.40$. Against soil evaporation alone it is $22/40=0.55$, an error of 0.15 --- more than the 0.1 that the study finds in six of ten soils. When $\Delta E_s$ and $\Delta ET_{nt}$ have opposite signs, which happens in two soils, the ratio even changes sign.
+\end{example}
+
+\section{Prediction and its limits}
+A compact three-term law predicts evapotranspiration in withheld experiments and withheld soils as well as gradient boosting, with $R^2=0.898$ across withheld experiments and 0.904 across withheld soils. Drainage resists every compact law that was tried. The storage term does not close fully: there is a non-closure of 16 per cent in two experiments.
+
+\begin{daisybox}{reading the logs for the audit}
+All terms of this chapter are annual totals read from the Daisy logs: rainfall, irrigation, evapotranspiration, transpiration, soil evaporation, canopy evaporation, drainage at 1 m, storage change and runoff. The matrix $X$ is built from the one-row-per-run summary of the repository. A closed balance means that the singular vector of the smallest singular value is the balance itself.
+\end{daisybox}
+
+\begin{exercise}Show by hand that $c=(1,-1,-1,-1)$ gives $Xc=0$ for the four runs of the worked example.\end{exercise}
+\begin{exercise}A run has $ET=540$, $T=230$, $E_s=170$, $E_c=60$. Compute $R$ and the fraction of $ET$ that it represents.\end{exercise}
+\begin{exercise}A saving lowers $E_s$ by 30 mm and $ET_{nt}$ by 36 mm and drainage by 12 mm. Compute $\psi_D$ and $\psi_D'$.\end{exercise}
+\begin{exercise}Why does the success of the blind search on the known balance give confidence in what it reports about $R$?\end{exercise}
+
+\chapter{Engines you can check: pipes, design and traceability}
+\markboth{Engines you can check}{Engines you can check}
+\textbf{After this chapter you can} explain why every number in a decision tool should carry an origin label, compute the friction loss of a pipe with the Hazen--Williams equation, and test an engine against a published worked example.
+
+\section{Provenance of equations}
+The application has 134 numbered equations. Each carries a label: 38 come from the literature, 18 are data-driven (fitted to the Daisy ensemble) and 78 are engineered for the application. The label is shown beside the number that the equation produced, so a user can find where a number comes from and which origin it has.
+
+\section{Verification}
+Every layer has an independent reference test. The design modules reproduce FAO-45 and textbook worked examples within 3 per cent; a meta-model ranks left-out scenarios with Spearman correlations from 0.64 to 0.97 and sweeps $10^{5}$ scenarios in 2 s. Verification found three defects in the first release: a sprinkler range coefficient and a drip iteration count, both corrected, and a fixed advance exponent in the surface layer that under-predicted slow advance by up to 29 per cent (removed in version 1.1.0). It also exposed limits: leaf water potential is set by a conductivity floor, and the drainage share of a mulch saving is understated. A check is valuable only if it can fail, and these failures are reported.
+
+\fig{p2_ws}{0.95}{The surface layer against published advance times and application efficiencies.}
+
+\section{Pipes: Hazen and Williams}
+The head loss by friction in a pipe of length $L$, diameter $D$ and flow $Q$ is, in SI units,
+\begin{equation}\label{eq:hw}
+h_f=\frac{10.67\,L\,Q^{1.852}}{C^{1.852}D^{4.87}},
+\end{equation}
+where $C$ is the roughness coefficient of the pipe. The mean speed is $v=4Q/(\pi D^2)$; speed checks keep $v$ in a sensible range. The pump head adds the static lift to the friction losses.
+
+\begin{example}{a lateral and a pump}
+A main line has $L=200$ m, $Q=0.010$ m$^3$\,s$^{-1}$ (10 L\,s$^{-1}$) and $C=140$. With $D=0.10$ m, $h_f=10.67(200)(0.010)^{1.852}/(140^{1.852}\,0.10^{4.87})=3.3$ m and $v=1.27$ m\,s$^{-1}$. With a smaller pipe, $D=0.08$ m, $h_f=9.8$ m and $v=1.99$ m\,s$^{-1}$: the loss is three times larger because $D^{-4.87}$ is steep. The saving of a larger pipe in pump energy has to be weighed against its cost.
+\end{example}
+
+\fig{sketch}{0.95}{The field sketch of SWAFL: seven questions, a drawing area and drawing tools. The pipes drawn here feed the friction and pump-head calculations.}
+
+\begin{exercise}Compute $h_f$ for $L=150$ m, $Q=0.006$ m$^3$\,s$^{-1}$, $D=0.075$ m and $C=130$, and the speed $v$.\end{exercise}
+\begin{exercise}By what factor does $h_f$ change if the diameter is doubled? If the flow is doubled?\end{exercise}
+\begin{exercise}Choose one equation of the application and find its origin label in the manual. State whether it is literature, data-driven or engineered, and which experiment of the ensemble would test it.\end{exercise}
+
+\chapter{A tour of the SWAFL layers}
+\markboth{A tour of the SWAFL layers}{A tour of the SWAFL layers}
+\textbf{After this chapter you can} open any decision layer of the application, identify the equation behind each number, and repeat the examples of the earlier chapters on your own soil. Every screenshot below is taken from the application; open the same layer and compare.
+
+\section{The workbench}
+\fig{sh_full}{0.98}{The SWAFL workbench: the layer tree on the left, the simulation window, the properties and the dashboard. The date in the toolbar moves the whole workbench.}
+There are 32 layers: 23 for decisions, in nine groups, and nine that work with Daisy. Version 1.1.0 adds seasons projected 10 or 20 years ahead, a pipe network with Hazen--Williams losses and pump head, a drip wetting pattern that follows the soil, and a Daisy scenario designer. Weather comes from a built-in record, your own file, or an online archive.
+
+\section{Field balance and the soil--plant--air column}
+\fig{sc_fieldk}{0.8}{Field water balance: precipitation, irrigation, evapotranspiration, drainage and storage (Equation~\ref{eq:bal}).}
+\fig{sc_spack}{0.8}{Soil, plant and air: the water potential of each compartment, from the soil particles to the atmosphere.}
+\begin{exercise}Open the field balance for the sand and for the silty clay loam. Which has the larger drainage? Relate your answer to Table~\ref{tab:soils}.\end{exercise}
+
+\section{Mulch, evaporation and the fate of saved water}
+\fig{sc_e1k}{0.8}{Evaporation from the pore to the atmosphere: stage 1 is limited by the atmosphere, stage 2 by vapour transport through a dry layer.}
+\fig{sc_n2k}{0.8}{Fate of the water saved by mulch across rainfall. The drained share depends on the soil (Chapter~7).}
+\fig{sc_n3k}{0.8}{The regime map: where vapour gives way to drainage.}
+\begin{exercise}Use the competition law of Chapter~7 to predict, for sand and for silty clay loam, which of the two soils shows more drainage in the fate-of-saved-water layer, and check on the screen.\end{exercise}
+
+\section{Triggers, structure and roots}
+\fig{sc_v1k}{0.8}{Sensor suction every day from 2019 to 2039. The dashed line is the trigger. Irrigated (blue) against rainfed (orange); bars give the growing-season days beyond the trigger. In 2029 the irrigated field had no days beyond 471 cm and the rainfed field had 101 of 183.}
+\fig{sc_n1k}{0.8}{The trigger law: the depletion of the root zone at the trigger is soil independent.}
+\fig{sc_r1k}{0.8}{The root layer: where the water is taken.}
+\begin{exercise}In the sensor layer set the trigger of the sand to 300 cm. Predict, with Table~\ref{tab:reach}, what you will see, then check.\end{exercise}
+
+\section{Irrigation design: surface, drip, sprinkler}
+\fig{sc_sidk}{0.8}{Surface irrigation design: from your soil to a working layout, with the advance front shaded by the depth already infiltrated.}
+\fig{sc_dripk}{0.8}{Drip design: emitters, wetted bulb and uniformity for your soil.}
+\fig{sc_sprk}{0.8}{Sprinkler design: nozzle, spacing, wind and soil intake.}
+\begin{exercise}In the surface layer compare the advance time for the same inflow on a loam and a sand, and explain the difference from the intake.\end{exercise}
+
+\section{Drainage and crops}
+\fig{sc_drnk}{0.8}{Drainage design: spacing, depth, pipes and controlled drainage.}
+\fig{sc_cropk}{0.8}{Crop coefficients, daily water need and the irrigation schedule. The library has 75 crops and follows the FAO-56 edition of 2025.}
+
+\section{Seasons, balances and feedback loops}
+\fig{sc_wb2k}{0.8}{Full water balance year by year. Seasons after 2038 are projections.}
+\fig{sc_nbk}{0.8}{Nitrogen budget year by year.}
+\fig{sc_v5k}{0.8}{Feedback loops between climate, management, soil water, crop and nitrogen. The red arrows join the parts that act on each other; the table lists what one step of each control does.}
+
+\section{Phenotyping and the real field}
+\fig{sc_dphk}{0.75}{Deterministic phenotyping: an exactly reproducible virtual experiment whose water balance closes (set-up form shown).}
+\fig{sc_vphk}{0.75}{Volumetric phenotyping: a virtual three-dimensional scanner that measures volume, crown, leaves and height.}
+\begin{exercise}Explain why an exactly reproducible virtual experiment is useful for teaching, and name one limit.\end{exercise}

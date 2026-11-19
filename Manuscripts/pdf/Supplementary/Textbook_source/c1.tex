@@ -1,0 +1,144 @@
+\chapter{Water, soil and the problem of saving}
+\markboth{Water, soil and the problem of saving}{Water, soil and the problem of saving}
+\textbf{After this chapter you can} state why a water saving is not automatically a water gain, name the four fluxes that carry water out of a root zone, and read the notation used in the rest of the book.
+
+\section{Why a saved millimetre is not a gained millimetre}
+Irrigation takes most of the freshwater that people withdraw, so a better use of each millimetre is a first-order goal. Evaporation is the largest single outflow from land that is not saturated, so any measure that lowers evaporation, such as a mulch, seems to promise water that is saved. The promise rests on an assumption: that water not evaporated stays available. But water is conserved. If it does not evaporate it either remains in the root zone, where the crop can use it, or it drains below the roots, where the crop cannot. Which of the two happens depends on the soil, the climate and the management. This book gives the equations that decide it.
+
+\fig{p1_framework}{0.85}{The framework of the work: a designed ensemble of Daisy runs, the closed water balance and the four lines of analysis (reach, fate, memory, audit).}
+
+\section{The water balance of a root zone}
+Over a period, a root zone with rainfall $P$ and irrigation $I$ satisfies
+\begin{equation}\label{eq:bal}
+P + I = T + E_s + E_o + D + \Delta S + Q ,
+\end{equation}
+where $T$ is transpiration, $E_s$ soil evaporation, $E_o$ the other evaporation (intercepted water, ponds, litter and snow), $D$ drainage below the root zone, $\Delta S$ the change of stored water and $Q$ runoff. All terms are depths of water, in mm, per year if the period is a year. The sum $E_s+E_o+T$ is the evapotranspiration $ET$. Equation~(\ref{eq:bal}) is an accounting identity, and in a model it can be checked, because every term is written to a file.
+
+\begin{example}{closing a balance}
+In one run of the ensemble the rainfall is $P=620$ mm\,yr$^{-1}$ and the irrigation $I=164$ mm\,yr$^{-1}$. The evapotranspiration is $ET=560$, drainage $D=80$ and runoff $Q=4$. The change of storage is then
+$\Delta S = P+I-ET-D-Q = 620+164-560-80-4 = 140$ mm over the period. If a user had instead reported a storage change of $20$ mm, the balance would be open by $120$ mm, and one would ask which flux has been left out. Chapter~\ref{ch:audit} shows that in Daisy output such an open term exists and has a name.
+\end{example}
+
+\section{Notation}
+\begin{center}\small\begin{tabular}{@{}lll@{}}\toprule
+Symbol & Meaning & Unit\\\midrule
+$h$ & suction head & cm\\
+$\theta,\ \Se$ & water content; effective saturation & $-$\\
+$\alpha,\ n,\ m$ & van Genuchten parameters, $m=1-1/n$ & cm$^{-1}$, $-$, $-$\\
+$\Ks,\ K,\ \Kr$ & saturated, unsaturated and relative conductivity & cm\,d$^{-1}$, $-$\\
+$\ell$ & pore-connectivity exponent (0.5) & $-$\\
+$\hc,\ h_t$ & reach of a trigger; trigger value & cm\\
+$\kappa$ & relative conductivity at the reach & $-$\\
+$\eta_X$ & marginal fate of irrigation in flux $X$ & $-$\\
+$d,\ d_D$ & dose per event; dose scale of the drained share & mm\\
+$\phi_x$ & memory fate of flux $x$ & $-$\\
+$\bar R$ & released storage & mm\,yr$^{-1}$\\
+$R$ & unattributed evaporative term & mm\,yr$^{-1}$\\\bottomrule
+\end{tabular}\end{center}
+
+\section{Three ways of knowing, and which this book uses}
+A \emph{measurement} tells you what happened in a field. A \emph{model} tells you what follows from stated equations. A \emph{simulation ensemble} varies a model over many soils and conditions, so that the response of the model to each factor can be separated from the others. This book is about the third: the Daisy model is run 10,190 times, and the equations of the book are either derived from physics and checked against the ensemble, or fitted to the ensemble and tested on soils left out of the fit. The limits of this approach are stated in the last chapter.
+
+\begin{exercise}A root zone receives $P=480$ mm and $I=0$ in a rainfed year, with $T=210$, $E_s=170$, $E_o=60$, $Q=0$ and $D=55$. Find $\Delta S$.\end{exercise}
+\begin{exercise}Explain in two sentences why lowering $E_s$ by 50 mm does not necessarily raise $T$ by 50 mm.\end{exercise}
+\begin{exercise}Using Equation~(\ref{eq:bal}), write the balance of the rainfed twin of an irrigated run and subtract the two. Show that dividing by $I$ gives five shares that sum to one.\end{exercise}
+
+\chapter{Soil water retention}
+\markboth{Soil water retention}{Soil water retention}
+\textbf{After this chapter you can} derive the relation between suction and pore radius, write the van Genuchten retention curve, and compute the effective saturation of a soil at a given suction.
+
+\section{Capillarity and the Young--Laplace law}
+A soil is a porous medium. Water is held in the pores by surface tension, and the smaller the pore, the more strongly it holds. For a cylindrical capillary of radius $r$ and a contact angle $\gamma$, the pressure difference across the curved water surface is
+\begin{equation}\label{eq:yl}
+\Delta p = \frac{2\sigma\cos\gamma}{r},
+\end{equation}
+where $\sigma$ is the surface tension of water. Expressing the pressure as a suction head $h = \Delta p/(\rho_w g)$ gives
+\begin{equation}\label{eq:hr}
+h = \frac{2\sigma\cos\gamma}{\rho_w g\, r}\quad\Longrightarrow\quad h\propto \frac1r .
+\end{equation}
+When the soil is drained to a suction $h$, pores with radius larger than $r(h)$ are empty and smaller pores are full. The retention curve is therefore a map of the pore-size distribution: the fraction of the pore space that is water-filled at suction $h$ equals the fraction of pores smaller than $r(h)$.
+
+\begin{example}{the pore radius at 300 cm}
+With $\sigma=0.0728$ N\,m$^{-1}$, $\gamma=0$, $\rho_w=998$ kg\,m$^{-3}$ and $g=9.81$ m\,s$^{-2}$, a suction of $h=300$ cm $=3$ m gives $r=2\sigma/(\rho_w g h)=2(0.0728)/(998\cdot 9.81\cdot 3)=4.96\times10^{-6}$ m, that is about 5 $\mu$m. At $h=10{,}000$ cm the radius is 0.15 $\mu$m. A trigger of 300 cm therefore says: ``irrigate when the pores larger than 5 $\mu$m are empty''.
+\end{example}
+
+\section{The effective saturation}
+The effective saturation is the scaled water content
+\begin{equation}\label{eq:Se}
+\Se(h)=\frac{\theta(h)-\theta_r}{\theta_s-\theta_r},
+\end{equation}
+which runs from 1 at saturation to 0 at the residual water content $\theta_r$.
+
+\section{The van Genuchten curve}
+Van Genuchten (1980) chose a smooth, closed form that follows the shape of measured curves:
+\begin{equation}\label{eq:vg}
+\Se(h)=\bigl[1+(\alpha h)^n\bigr]^{-m},\qquad m=1-\frac1n .
+\end{equation}
+The parameter $\alpha$ (cm$^{-1}$) sets the suction scale, roughly the inverse of the air-entry suction. The parameter $n$ sets the width of the pore-size distribution: a large $n$ means that most pores have nearly the same size, so the soil releases most of its water over a narrow band of suction; a small $n$ means a broad distribution and a gradual release. Inverting Equation~(\ref{eq:vg}),
+\begin{equation}\label{eq:vginv}
+h(\Se)=\frac1\alpha\Bigl(\Se^{-1/m}-1\Bigr)^{1/n}.
+\end{equation}
+
+\begin{example}{effective saturation of sand and of silty clay loam}
+Sand (S03) has $\alpha=0.145$ cm$^{-1}$ and $n=2.68$, so $m=1-1/2.68=0.627$. At $h=100$ cm, $\alpha h=14.5$ and $(\alpha h)^n=14.5^{2.68}=1.29\times10^{3}$. Then $\Se=(1+1290)^{-0.627}=0.011$: the sand is almost dry at 100 cm. Silty clay loam (S10) has $\alpha=0.010$ and $n=1.23$, $m=0.187$. At the same suction $\alpha h=1$, $(\alpha h)^n=1$ and $\Se=2^{-0.187}=0.878$: the soil is still 88 per cent saturated. Same suction, very different state of water.
+\end{example}
+
+\fig{p4_curves}{0.85}{Retention and conductivity curves of the ten soils of the ensemble (from the study of the reach of a trigger).}
+
+\section{Where the parameters come from in Daisy}
+\begin{daisybox}{soil parameters}
+Daisy reads the van Genuchten parameters of each soil layer in its set-up file. In the ensemble, eight soils use the mean values of Carsel and Parrish (1988) and two use effective parameters. Table~\ref{tab:soils} lists them. The parameters are inputs. Daisy's retention function is then used inside the Richards equation, so every suction in the model logs follows Equation~(\ref{eq:vg}).
+\end{daisybox}
+\begin{table}[H]\centering\small
+\caption{The ten soils of the ensemble.}\label{tab:soils}
+\begin{tabular}{llrrrr}\toprule ID & Texture & $\alpha$ (cm$^{-1}$) & $n$ & TAW (mm) & Memory fate\\\midrule
+S01&Coarse loam&0.0961&1.353&130&0.029\\S02&Coarse sand&0.0536&1.600&105&0.265\\S03&Sand&0.1450&2.680&60&0.846\\S04&Loamy sand&0.1240&2.280&75&0.741\\S05&Sandy loam&0.0750&1.890&95&0.643\\S06&Loam&0.0360&1.560&150&0.289\\S07&Silt loam&0.0200&1.410&220&0.147\\S08&Sandy clay loam&0.0590&1.480&160&0.285\\S09&Clay loam&0.0190&1.310&175&0.087\\S10&Silty clay loam&0.0100&1.230&195&0.022\\\bottomrule\end{tabular}\end{table}
+
+\begin{exercise}Compute $\Se$ for the loam S06 ($\alpha=0.036$, $n=1.56$) at $h=50$, $300$ and $3000$ cm.\end{exercise}
+\begin{exercise}Show that Equation~(\ref{eq:vginv}) is the inverse of Equation~(\ref{eq:vg}).\end{exercise}
+\begin{exercise}Compute the radius of the largest water-filled pore at $h=1000$ cm and at $h=15{,}000$ cm (the permanent wilting point is often taken at 15,000 cm).\end{exercise}
+\begin{exercise}Soil A has $n=2.5$ and soil B has $n=1.3$, with the same $\alpha$. Which one releases more water between 100 and 300 cm? Justify your answer with Equation~(\ref{eq:vg}).\end{exercise}
+
+\chapter{Hydraulic conductivity}
+\markboth{Hydraulic conductivity}{Hydraulic conductivity}
+\textbf{After this chapter you can} derive the van Genuchten--Mualem conductivity from a capillary bundle, and explain why it falls by many orders of magnitude between saturation and the dry end.
+
+\section{Why the conductivity falls}
+Water flows through the pores that are water-filled. When the soil dries, the largest pores empty first, and these carry most of the flow, because the flow in a capillary goes as the fourth power of its radius (Poiseuille). Water must also find a connected, tortuous path. Both effects reduce the conductivity, and together they make it fall by many orders of magnitude.
+
+\section{Mualem's model}
+Mualem (1976) wrote the relative conductivity $\Kr=K/\Ks$ of a bundle of capillaries as the product of a tortuosity--connectivity term $\Se^{\ell}$ and the square of a normalised integral of the pore radius over the filled pores. Since $r\propto 1/h$ (Equation~\ref{eq:hr}),
+\begin{equation}\label{eq:mualem}
+\Kr(\Se)=\Se^{\ell}\left[\frac{\int_0^{\Se} h(x)^{-1}\,dx}{\int_0^{1} h(x)^{-1}\,dx}\right]^{2}.
+\end{equation}
+
+\section{Derivation of the closed form}
+Insert the inverse retention curve, Equation~(\ref{eq:vginv}), and substitute $y=x^{1/m}$, so that $x=y^m$ and $dx=m\,y^{m-1}dy$:
+\begin{equation}\label{eq:int1}
+\int_0^{\Se}\frac{dx}{h(x)}=\alpha m\int_0^{\Se^{1/m}} y^{\,m-1}\bigl(y^{-1}-1\bigr)^{-1/n}dy
+=\alpha m\int_0^{\Se^{1/m}} y^{\,m-1+1/n}(1-y)^{-1/n}dy .
+\end{equation}
+With the restriction $m=1-1/n$ the exponent of $y$ is $m-1+1/n=0$, and $-1/n=m-1$, so the integral is elementary:
+\begin{equation}\label{eq:int2}
+\int_0^{\Se}\frac{dx}{h(x)}=\alpha m\int_0^{\Se^{1/m}}(1-y)^{m-1}dy=\alpha\Bigl[1-\bigl(1-\Se^{1/m}\bigr)^{m}\Bigr].
+\end{equation}
+Dividing by the same integral taken to $\Se=1$, which equals $\alpha$, and inserting in Equation~(\ref{eq:mualem}), gives the van Genuchten--Mualem pair:
+\begin{equation}\label{eq:vgm}
+\boxed{\;\Kr(\Se)=\Se^{\ell}\Bigl[1-\bigl(1-\Se^{1/m}\bigr)^{m}\Bigr]^{2}\;}
+\end{equation}
+with $\ell=0.5$, the value Mualem found as the average of many soils.
+
+\begin{example}{conductivity of sand and silty clay loam}
+For the sand S03 at $h=100$ cm we found $\Se=0.0112$, with $m=0.627$. Then $\Se^{1/m}=0.0112^{1.595}=7.8\times10^{-4}$, and $1-(1-7.8\times10^{-4})^{0.627}=4.9\times10^{-4}$. So $\Kr=0.0112^{0.5}\,(4.9\times10^{-4})^{2}=0.106\times2.4\times10^{-7}=2.5\times10^{-8}$. At 300 cm it is $2.7\times10^{-11}$, and at 1000 cm $1.6\times10^{-14}$. For the silty clay loam S10 at 300 cm, $\Kr=1.5\times10^{-3}$, and at 1000 cm $8.6\times10^{-5}$. At 300 cm the conductivity of the sand is $10^{8}$ times smaller than that of the silty clay loam, in relative terms. This is the physical reason why a 300 cm trigger is unreachable in sand: the crop cannot pull water through a conductivity that has collapsed.
+\end{example}
+
+\fig{p4_reach}{0.9}{The reach of a trigger. (a) Irrigation against trigger suction for the ten soils. (b) The same runs on the reach scale $h_t/h_c$: the curves fall to zero near 1. (c) The closed form, Equation~(\ref{eq:reach}), against the observed reach interval from Daisy. (d) Yield: a trigger beyond the reach is rainfed.}
+
+\begin{daisybox}{what Daisy does with the conductivity}
+Daisy solves the Richards equation with these functions, so the model's conductivity at each suction follows Equation~(\ref{eq:vgm}), with its own saturated conductivity $\Ks$ per soil. Eight of the ten soils have literature values of $\Ks$ (Carsel and Parrish, 1988); the reach law of Chapter~\ref{ch:reach} will use only $\Kr$, that is, it does not need $\Ks$.
+\end{daisybox}
+
+\begin{exercise}Verify Equation~(\ref{eq:int2}) by differentiating the right-hand side with respect to $\Se$.\end{exercise}
+\begin{exercise}Compute $\Kr$ for the loam S06 at $h=300$ cm.\end{exercise}
+\begin{exercise}Show that $\Kr\to1$ as $\Se\to1$ and $\Kr\to0$ as $\Se\to0$.\end{exercise}
+\begin{exercise}Why does the restriction $m=1-1/n$ make the integral elementary? What would be needed otherwise?\end{exercise}
