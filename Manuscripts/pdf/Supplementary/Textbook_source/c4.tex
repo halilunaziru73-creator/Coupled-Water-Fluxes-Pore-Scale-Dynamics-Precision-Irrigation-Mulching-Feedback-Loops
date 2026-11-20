@@ -49,10 +49,22 @@ For each run and each year the summariser adds the daily fluxes of transpiration
 \section{Sensor lag: when the equilibrium assumption matters}\label{sec:lag}
 Under fast wetting and drying the water content lags the equilibrium of the retention curve, $\partial\theta/\partial t=[\theta_{\mathrm{eq}}(h)-\theta]/\tau$. A sensor then reads a suction that is not the one of Equation~(\ref{eq:vg}). For a schedule with interval $t_i$ between applications, the dimensionless lag $\Pi_\tau=\tau/t_i$ says when this matters. For daily or multi-day scheduling ($t_i\ge1$ d) and $\tau$ of minutes to hours, $\Pi_\tau\ll1$ and the equilibrium reach applies. For pulses of minutes to hours, as in pulsed drip, $\Pi_\tau\sim1$ and the sensor reading becomes rate dependent. Daisy solves the equilibrium equation, so this criterion is stated here for later testing; it is not evaluated in the studies.
 
-\begin{exercise}A schedule irrigates every 2 days and the sensor lag is $\tau=3$ h. Compute $\Pi_\tau$ and say whether the equilibrium reach applies. Repeat for pulses every 1 h.\end{exercise}
-\begin{exercise}From Equation~(\ref{eq:radial}), show that if $K$ falls by a factor of $10^3$ and $\Delta h$ is fixed, the uptake falls by the same factor.\end{exercise}
-\begin{exercise}Starting from Equation~(\ref{eq:darcy}), derive Equation~(\ref{eq:richards}) by applying conservation of mass to a thin layer.\end{exercise}
-\begin{exercise}Why does Daisy's solution of the equilibrium Richards equation not need a sensor-lag parameter?\end{exercise}
+\begin{example}{problem 4.1}\textbf{Problem.} A schedule irrigates every 2 days and the sensor lag is $\tau=3$ h. Compute $\Pi_\tau$ and say whether the equilibrium reach applies. Repeat for pulses every 1 h.
+
+\textbf{Solution.} $\Pi_\tau=3/48=0.0625\ll1$: the equilibrium reach applies. For hourly pulses $\Pi_\tau=3\gg1$ (the lag exceeds the interval) and the equilibrium law fails.
+\end{example}
+\begin{example}{problem 4.2}\textbf{Problem.} From Equation~(\ref{eq:radial}), show that if $K$ falls by a factor of $10^3$ and $\Delta h$ is fixed, the uptake falls by the same factor.
+
+\textbf{Solution.} $u\propto K(h)\Delta h$ is linear in $K$ at fixed $\Delta h$.
+\end{example}
+\begin{example}{problem 4.3}\textbf{Problem.} Starting from Equation~(\ref{eq:darcy}), derive Equation~(\ref{eq:richards}) by applying conservation of mass to a thin layer.
+
+\textbf{Solution.} Mass in a layer of thickness $dz$: $\partial\theta/\partial t\,dz=q(z)-q(z+dz)-S_r\,dz$, then use Equation (4.1).
+\end{example}
+\begin{example}{problem 4.4}\textbf{Problem.} Why does Daisy's solution of the equilibrium Richards equation not need a sensor-lag parameter?
+
+\textbf{Solution.} Because the water content is assumed to follow the retention curve at once.
+\end{example}
 
 \chapter{The reach of a suction trigger}\label{ch:reach}
 \markboth{The reach of a suction trigger}{The reach of a suction trigger}
@@ -113,8 +125,23 @@ Define the reach-scaled trigger $x=h_t/\hc$. Plotting irrigation against $x$ ins
 \label{fig:reachscale}
 \fig{p4_reach}{0.9}{Reach scale and closed form against Daisy (same figure as in Chapter~3, now read with Equation~(\ref{eq:reach})).}
 
-\begin{exercise}Compute $\hc$ for $\alpha=0.03$ cm$^{-1}$, $n=1.7$ with $\kappa=3.5\times10^{-10}$ and $\ell=0.5$.\end{exercise}
-\begin{exercise}Derive Equation~(\ref{eq:asym}) from Equation~(\ref{eq:vgm}), step by step, stating each approximation.\end{exercise}
-\begin{exercise}Derive Equation~(\ref{eq:sens}). Evaluate it at $n=1.5$ with $\kappa=3.5\times10^{-10}$ and $\ell=0.5$ and say whether the reach rises or falls with $n$.\end{exercise}
-\begin{exercise}For the soil of the worked example, by what factor does the reach change if $\kappa$ is $3.5\times10^{-9}$ instead of $3.5\times10^{-10}$?\end{exercise}
-\begin{exercise}A farmer sets a 300 cm trigger in a loamy sand. Use Table~\ref{tab:reach} to explain why the field is in effect rainfed, and propose a trigger.\end{exercise}
+\begin{example}{problem 5.1}\textbf{Problem.} Compute $\hc$ for $\alpha=0.03$ cm$^{-1}$, $n=1.7$ with $\kappa=3.5\times10^{-10}$ and $\ell=0.5$.
+
+\textbf{Solution.} $m=0.4118$, $E=2(1.7)+0.5(0.7)=3.75$, $\ln(m^2/\kappa)=20.00$, so $(m^2/\kappa)^{1/E}=e^{5.333}=207$ and $\hc=207/0.03\approx6{,}900$ cm.
+\end{example}
+\begin{example}{problem 5.2}\textbf{Problem.} Derive Equation~(\ref{eq:asym}) from Equation~(\ref{eq:vgm}), step by step, stating each approximation.
+
+\textbf{Solution.} See the derivation in Section 5.2.
+\end{example}
+\begin{example}{problem 5.3}\textbf{Problem.} Derive Equation~(\ref{eq:sens}). Evaluate it at $n=1.5$ with $\kappa=3.5\times10^{-10}$ and $\ell=0.5$ and say whether the reach rises or falls with $n$.
+
+\textbf{Solution.} At $n=1.5$: $m=0.3333$, $E=3.25$, $\ln(m^2/\kappa)=19.57$; first term $2/(0.3333\cdot2.25\cdot3.25)=0.820$; second $2.5\cdot19.57/10.56=4.633$; derivative $-3.81$: the reach falls steeply with $n$.
+\end{example}
+\begin{example}{problem 5.4}\textbf{Problem.} For the soil of the worked example, by what factor does the reach change if $\kappa$ is $3.5\times10^{-9}$ instead of $3.5\times10^{-10}$?
+
+\textbf{Solution.} A factor of $10^{1/E}=10^{1/4.5}=1.67$ shorter for $\kappa$ ten times larger ($1{,}856\to1{,}113$ cm).
+\end{example}
+\begin{example}{problem 5.5}\textbf{Problem.} A farmer sets a 300 cm trigger in a loamy sand. Use Table~\ref{tab:reach} to explain why the field is in effect rainfed, and propose a trigger.
+
+\textbf{Solution.} The reach of the loamy sand is 425 cm and 300 cm is $0.7\hc$, so irrigation is nearly nil; keep the trigger below $\hc/2\approx210$ cm.
+\end{example}

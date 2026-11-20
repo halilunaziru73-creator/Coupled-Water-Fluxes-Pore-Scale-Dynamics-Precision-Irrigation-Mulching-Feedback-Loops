@@ -47,12 +47,30 @@ With $K_1=K_2=0.5$ m\,d$^{-1}$, $d_e=1.5$ m, $h=0.60$ m and $q=0.005$ m\,d$^{-1}
 \end{example}
 \fig{sc_drnk}{0.7}{The SWAFL drainage layer.}
 
-\begin{exercise}With $k=3.0$ and $a=0.6$ find the opportunity time for $Z_n=60$ mm.\end{exercise}
-\begin{exercise}A sprinkler of 2.0 m$^3$\,h$^{-1}$ is on a $15\times15$ m spacing. Find $r$ and the set time for a gross depth of 80 mm.\end{exercise}
-\begin{exercise}Compute $CU$ for cans of $6,\ 8,\ 9,\ 10,\ 12$ mm.\end{exercise}
-\begin{exercise}A drip system has $q_e=4$ L\,h$^{-1}$ at 0.75 m spacing on laterals 2 m apart. Find $r$ and the time to apply 5 mm gross.\end{exercise}
-\begin{exercise}Find the Hooghoudt spacing for $K=1$ m\,d$^{-1}$ ($K_1=K_2$), $d_e=2$ m, $h=0.5$ m and $q=0.007$ m\,d$^{-1}$.\end{exercise}
-\begin{exercise}Why can $E_a$ of Equation~(\ref{eq:kost})'s ideal case not be reached in a real border?\end{exercise}
+\begin{example}{problem 15.1}\textbf{Problem.} With $k=3.0$ and $a=0.6$ find the opportunity time for $Z_n=60$ mm.
+
+\textbf{Solution.} $\tau=(60/3)^{1/0.6}=20^{1.667}=147$ min.
+\end{example}
+\begin{example}{problem 15.2}\textbf{Problem.} A sprinkler of 2.0 m$^3$\,h$^{-1}$ is on a $15\times15$ m spacing. Find $r$ and the set time for a gross depth of 80 mm.
+
+\textbf{Solution.} $r=2.0/225=8.89$ mm\,h$^{-1}$; $80/8.89=9.0$ h.
+\end{example}
+\begin{example}{problem 15.3}\textbf{Problem.} Compute $CU$ for cans of $6,\ 8,\ 9,\ 10,\ 12$ mm.
+
+\textbf{Solution.} Mean $9$; deviations $3,1,0,1,3$ sum to $8$; $CU=100(1-8/45)=82.2$ per cent.
+\end{example}
+\begin{example}{problem 15.4}\textbf{Problem.} A drip system has $q_e=4$ L\,h$^{-1}$ at 0.75 m spacing on laterals 2 m apart. Find $r$ and the time to apply 5 mm gross.
+
+\textbf{Solution.} $r=4/(0.75\cdot2)=2.67$ mm\,h$^{-1}$; $5/2.67=1.88$ h.
+\end{example}
+\begin{example}{problem 15.5}\textbf{Problem.} Find the Hooghoudt spacing for $K=1$ m\,d$^{-1}$ ($K_1=K_2$), $d_e=2$ m, $h=0.5$ m and $q=0.007$ m\,d$^{-1}$.
+
+\textbf{Solution.} $L^2=(8\cdot1\cdot2\cdot0.5+4\cdot1\cdot0.25)/0.007=9/0.007=1{,}286$, $L=35.9$ m.
+\end{example}
+\begin{example}{problem 15.6}\textbf{Problem.} Why can $E_a$ of Equation~(\ref{eq:kost})'s ideal case not be reached in a real border?
+
+\textbf{Solution.} Water arrives at the top before the bottom, so the top gets a longer opportunity time than the bottom, and some water runs off the tail.
+\end{example}
 
 \chapter{Statistics of the evidence}
 \markboth{Statistics of the evidence}{Statistics of the evidence}
@@ -88,8 +106,23 @@ Take three soils with synthetic intervals: S03 (sand) $[100,300]$ cm, S05 (sandy
 \section{Choosing between laws}
 Several laws can be compared on the same footing: fit each to all soils, and for each compute the leave-one-soil-out error and the number of soils whose observed interval contains the prediction. For the four laws of the study the Mualem form has error 0.18 (log$_{10}$) and puts 5 of 10 soils inside; the power law 0.14 and 4; the fixed-saturation law 0.23 and 4; and the absolute-conductivity law is not supported, because $K(\hc)$ would have to span 3.6 decades. The Mualem form is preferred not because it is the smallest error but because it is derived from the physics and has one constant that does not depend on the soil.
 
-\begin{exercise}Compute the Spearman correlation of the pairs $(1,2),(2,1),(3,3),(4,5),(5,4)$.\end{exercise}
-\begin{exercise}Explain why the bootstrap resamples cells of the lattice, and not the runs of different lattices.\end{exercise}
-\begin{exercise}Using the toy fit of this chapter, find $\mathcal L$ at $\kappa=3.5\times10^{-10}$ and say whether it is on the plateau.\end{exercise}
-\begin{exercise}Why is a leave-one-soil-out test harder to pass than a fit to all soils?\end{exercise}
-\begin{exercise}The exact one-sided permutation $p$ value of the memory--$n$ correlation is $5.4\times10^{-5}$. What is the smallest possible exact one-sided $p$ for $N=10$ with no ties?\end{exercise}
+\begin{example}{problem 16.1}\textbf{Problem.} Compute the Spearman correlation of the pairs $(1,2),(2,1),(3,3),(4,5),(5,4)$.
+
+\textbf{Solution.} Rank differences $-1,1,0,-1,1$, $\sum d^2=4$, $\rho=1-24/120=0.8$.
+\end{example}
+\begin{example}{problem 16.2}\textbf{Problem.} Explain why the bootstrap resamples cells of the lattice, and not the runs of different lattices.
+
+\textbf{Solution.} Cells within a lattice share a soil and a design, so they are the units that are exchangeable; resampling across different lattices would mix designs.
+\end{example}
+\begin{example}{problem 16.3}\textbf{Problem.} Using the toy fit of this chapter, find $\mathcal L$ at $\kappa=3.5\times10^{-10}$ and say whether it is on the plateau.
+
+\textbf{Solution.} $\mathcal L(3.5\times10^{-10})=0$; the predicted reaches are $199,\ 1{,}615$ and $127{,}830$ cm, all inside the intervals. It is on the plateau.
+\end{example}
+\begin{example}{problem 16.4}\textbf{Problem.} Why is a leave-one-soil-out test harder to pass than a fit to all soils?
+
+\textbf{Solution.} Because the left-out soil cannot influence the fit, so the error measures prediction and not description.
+\end{example}
+\begin{example}{problem 16.5}\textbf{Problem.} The exact one-sided permutation $p$ value of the memory--$n$ correlation is $5.4\times10^{-5}$. What is the smallest possible exact one-sided $p$ for $N=10$ with no ties?
+
+\textbf{Solution.} $1/10!=1/3{,}628{,}800=2.8\times10^{-7}$.
+\end{example}

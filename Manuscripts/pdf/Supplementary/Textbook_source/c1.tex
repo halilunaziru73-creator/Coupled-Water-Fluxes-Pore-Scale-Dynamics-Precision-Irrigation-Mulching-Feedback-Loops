@@ -39,9 +39,18 @@ $R$ & unattributed evaporative term & mm\,yr$^{-1}$\\\bottomrule
 \section{Three ways of knowing, and which this book uses}
 A \emph{measurement} tells you what happened in a field. A \emph{model} tells you what follows from stated equations. A \emph{simulation ensemble} varies a model over many soils and conditions, so that the response of the model to each factor can be separated from the others. This book is about the third: the Daisy model is run 10,190 times, and the equations of the book are either derived from physics and checked against the ensemble, or fitted to the ensemble and tested on soils left out of the fit. The limits of this approach are stated in the last chapter.
 
-\begin{exercise}A root zone receives $P=480$ mm and $I=0$ in a rainfed year, with $T=210$, $E_s=170$, $E_o=60$, $Q=0$ and $D=55$. Find $\Delta S$.\end{exercise}
-\begin{exercise}Explain in two sentences why lowering $E_s$ by 50 mm does not necessarily raise $T$ by 50 mm.\end{exercise}
-\begin{exercise}Using Equation~(\ref{eq:bal}), write the balance of the rainfed twin of an irrigated run and subtract the two. Show that dividing by $I$ gives five shares that sum to one.\end{exercise}
+\begin{example}{problem 1.1}\textbf{Problem.} A root zone receives $P=480$ mm and $I=0$ in a rainfed year, with $T=210$, $E_s=170$, $E_o=60$, $Q=0$ and $D=55$. Find $\Delta S$.
+
+\textbf{Solution.} $\Delta S=480-(210+170+60+0+55)=-15$ mm: the store lost 15 mm.
+\end{example}
+\begin{example}{problem 1.2}\textbf{Problem.} Explain in two sentences why lowering $E_s$ by 50 mm does not necessarily raise $T$ by 50 mm.
+
+\textbf{Solution.} Lowering $E_s$ leaves energy and water that may go to drainage, to storage or to transpiration; how much of each depends on the soil (Chapter 7).
+\end{example}
+\begin{example}{problem 1.3}\textbf{Problem.} Using Equation~(\ref{eq:bal}), write the balance of the rainfed twin of an irrigated run and subtract the two. Show that dividing by $I$ gives five shares that sum to one.
+
+\textbf{Solution.} Subtracting the two balances gives $I=(T-T_0)+(E_s-E_{s,0})+(E_o-E_{o,0})+(D-D_0)+(\Delta S-\Delta S_0+Q-Q_0)$; divide by $I$.
+\end{example}
 
 \chapter{Soil water retention}
 \markboth{Soil water retention}{Soil water retention}
@@ -94,10 +103,22 @@ Daisy reads the van Genuchten parameters of each soil layer in its set-up file. 
 \begin{tabular}{llrrrr}\toprule ID & Texture & $\alpha$ (cm$^{-1}$) & $n$ & TAW (mm) & Memory fate\\\midrule
 S01&Coarse loam&0.0961&1.353&130&0.029\\S02&Coarse sand&0.0536&1.600&105&0.265\\S03&Sand&0.1450&2.680&60&0.846\\S04&Loamy sand&0.1240&2.280&75&0.741\\S05&Sandy loam&0.0750&1.890&95&0.643\\S06&Loam&0.0360&1.560&150&0.289\\S07&Silt loam&0.0200&1.410&220&0.147\\S08&Sandy clay loam&0.0590&1.480&160&0.285\\S09&Clay loam&0.0190&1.310&175&0.087\\S10&Silty clay loam&0.0100&1.230&195&0.022\\\bottomrule\end{tabular}\end{table}
 
-\begin{exercise}Compute $\Se$ for the loam S06 ($\alpha=0.036$, $n=1.56$) at $h=50$, $300$ and $3000$ cm.\end{exercise}
-\begin{exercise}Show that Equation~(\ref{eq:vginv}) is the inverse of Equation~(\ref{eq:vg}).\end{exercise}
-\begin{exercise}Compute the radius of the largest water-filled pore at $h=1000$ cm and at $h=15{,}000$ cm (the permanent wilting point is often taken at 15,000 cm).\end{exercise}
-\begin{exercise}Soil A has $n=2.5$ and soil B has $n=1.3$, with the same $\alpha$. Which one releases more water between 100 and 300 cm? Justify your answer with Equation~(\ref{eq:vg}).\end{exercise}
+\begin{example}{problem 2.1}\textbf{Problem.} Compute $\Se$ for the loam S06 ($\alpha=0.036$, $n=1.56$) at $h=50$, $300$ and $3000$ cm.
+
+\textbf{Solution.} $\Se=0.638$ at 50 cm, $0.262$ at 300 cm and $0.073$ at 3000 cm.
+\end{example}
+\begin{example}{problem 2.2}\textbf{Problem.} Show that Equation~(\ref{eq:vginv}) is the inverse of Equation~(\ref{eq:vg}).
+
+\textbf{Solution.} Put $\Se=[1+(\alpha h)^n]^{-m}$; then $\Se^{-1/m}=1+(\alpha h)^n$, so $h=\alpha^{-1}(\Se^{-1/m}-1)^{1/n}$.
+\end{example}
+\begin{example}{problem 2.3}\textbf{Problem.} Compute the radius of the largest water-filled pore at $h=1000$ cm and at $h=15{,}000$ cm (the permanent wilting point is often taken at 15,000 cm).
+
+\textbf{Solution.} $r=0.1456\times10^{-3}/(998\cdot9.81\cdot h)$ with $h$ in metres: $1.49\ \mu$m at 1000 cm and $0.099\ \mu$m at 15,000 cm.
+\end{example}
+\begin{example}{problem 2.4}\textbf{Problem.} Soil A has $n=2.5$ and soil B has $n=1.3$, with the same $\alpha$. Which one releases more water between 100 and 300 cm? Justify your answer with Equation~(\ref{eq:vg}).
+
+\textbf{Solution.} Soil B (the broad one) releases more. With $\alpha=0.05$: $\Se(100)=0.089$ and $\Se(300)=0.017$ for $n=2.5$ (change 0.072); $0.601$ and $0.441$ for $n=1.3$ (change 0.160). The broad-pore soil has a flatter curve, so it gives up more water over this band.
+\end{example}
 
 \chapter{Hydraulic conductivity}
 \markboth{Hydraulic conductivity}{Hydraulic conductivity}
@@ -138,7 +159,19 @@ For the sand S03 at $h=100$ cm we found $\Se=0.0112$, with $m=0.627$. Then $\Se^
 Daisy solves the Richards equation with these functions, so the model's conductivity at each suction follows Equation~(\ref{eq:vgm}), with its own saturated conductivity $\Ks$ per soil. Eight of the ten soils have literature values of $\Ks$ (Carsel and Parrish, 1988); the reach law of Chapter~\ref{ch:reach} will use only $\Kr$, that is, it does not need $\Ks$.
 \end{daisybox}
 
-\begin{exercise}Verify Equation~(\ref{eq:int2}) by differentiating the right-hand side with respect to $\Se$.\end{exercise}
-\begin{exercise}Compute $\Kr$ for the loam S06 at $h=300$ cm.\end{exercise}
-\begin{exercise}Show that $\Kr\to1$ as $\Se\to1$ and $\Kr\to0$ as $\Se\to0$.\end{exercise}
-\begin{exercise}Why does the restriction $m=1-1/n$ make the integral elementary? What would be needed otherwise?\end{exercise}
+\begin{example}{problem 3.1}\textbf{Problem.} Verify Equation~(\ref{eq:int2}) by differentiating the right-hand side with respect to $\Se$.
+
+\textbf{Solution.} Differentiate: $\frac{d}{d\Se}\alpha[1-(1-\Se^{1/m})^m]=\alpha(1-y)^{m-1}\Se^{1/m-1}$ with $y=\Se^{1/m}$. The integrand is $1/h=\alpha(\Se^{-1/m}-1)^{-1/n}=\alpha\,y^{1/n}(1-y)^{-1/n}$. Since $-1/n=m-1$ and $\Se^{1/m-1}=\Se^{1/(n-1)}=y^{1/n}$ (because $mn=n-1$), the two agree.
+\end{example}
+\begin{example}{problem 3.2}\textbf{Problem.} Compute $\Kr$ for the loam S06 at $h=300$ cm.
+
+\textbf{Solution.} $\Kr(S06,300\text{ cm})=3.8\times10^{-5}$.
+\end{example}
+\begin{example}{problem 3.3}\textbf{Problem.} Show that $\Kr\to1$ as $\Se\to1$ and $\Kr\to0$ as $\Se\to0$.
+
+\textbf{Solution.} At $\Se=1$ the bracket is $1-0=1$; at $\Se\to0$, $\Se^\ell\to0$ and the bracket $\to0$.
+\end{example}
+\begin{example}{problem 3.4}\textbf{Problem.} Why does the restriction $m=1-1/n$ make the integral elementary? What would be needed otherwise?
+
+\textbf{Solution.} The exponent $m-1+1/n$ vanishes, leaving $(1-y)^{m-1}$ whose primitive is elementary; otherwise one needs an incomplete beta function.
+\end{example}

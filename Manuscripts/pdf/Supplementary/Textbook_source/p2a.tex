@@ -1,0 +1,123 @@
+\part{SWAFL layers: worked mathematics}
+\chapter{Engine 1: depletion, critical suction and the meta-model}\label{ch:e1}
+\markboth{Engine 1}{Engine 1}
+\textbf{After this chapter you can} compute the depletion of plant-available water from a suction, invert it by bisection, reproduce the table of critical suctions of the application, and evaluate the meta-model ratios, the closure window and the irrigation efficiency by hand.
+
+Part II treats the application layer by layer. Every layer of SWAFL is driven by one of two engines (the Daisy meta-model and the daily bucket model) or by a design module. For each layer this part states the relations that the manual gives, then solves them with numbers. The numbers come from running the stated equations; every problem is solved in full, and where an input is not published (an annual flux, say) it is labelled as an assumed value.
+
+\section{Depletion between field capacity and wilting point}
+The application defines depletion of plant-available water between field capacity (suction 100 cm, pF 2.0) and the wilting point (15,849 cm, pF 4.2):
+\begin{equation}\label{eq:fdep}
+f(h)=\frac{\Se(100)-\Se(|h|)}{\Se(100)-\Se(15\,849)},\qquad f_{\rm used}=\min\{1,\max\{0,f\}\}.
+\end{equation}
+$f=0$ is field capacity and $f=1$ is the wilting point.
+
+\begin{example}{depletion at 300 cm in three soils}
+Compute $f$ at the sensor suction $|h|=300$ cm for the loam S06 ($\alpha=0.036$, $n=1.56$), the sand S03 ($\alpha=0.145$, $n=2.68$) and the silty clay loam S10 ($\alpha=0.010$, $n=1.23$).
+
+\textbf{Solution.} For each soil compute $m=1-1/n$ and three values of $\Se=[1+(\alpha h)^n]^{-m}$.
+
+\textbf{Loam} ($m=0.3590$): $\Se(100)=0.4663$, $\Se(300)=0.2615$, $\Se(15849)=0.0286$. Then $f=(0.4663-0.2615)/(0.4663-0.0286)=0.468$.
+
+\textbf{Sand} ($m=0.6269$): $\Se(100)=0.0112$, $\Se(300)=0.0018$, $\Se(15849)=0.0000$. Then $f=(0.0112-0.0018)/(0.0112-0.0000)=0.842$.
+
+\textbf{Silty clay loam} ($m=0.1870$): $\Se(100)=0.8784$, $\Se(300)=0.7440$, $\Se(15849)=0.3118$. Then $f=(0.8784-0.7440)/(0.8784-0.3118)=0.237$.
+
+\textbf{Reading.} At $-300$ cm the sand has used 84 per cent of its plant-available water while the silty clay loam has used 24 per cent. The same suction means very different dryness in different soils; this is the reason for the trigger law of Chapter~\ref{ch:ctrl}.
+\end{example}
+
+\begin{example}{inverting the depletion by bisection}
+Find the suction at which the loam S06 reaches the soil-independent critical depletion $f^*=0.45$. The application solves $f(h)=f^*$ by bisection on $\log_{10}|h|\in[0,4.6]$ with 60 halvings.
+
+\textbf{Solution.} Start with the interval $[0,4.6]$. At each step take the midpoint $x=\log_{10}h$, evaluate $f$ with Equation~(\ref{eq:fdep}) and keep the half that still brackets $0.45$ (if $f<0.45$ the root is above, so the lower end moves up). The first eight steps are in Table~\ref{tab:bis}; the interval has then shrunk to $4.6/2^8=0.018$ in $\log_{10}h$, that is 4 per cent in $h$. After 60 halvings the width is $4\times10^{-18}$ and the answer is $h^*=284.3$ cm.
+\begin{table}[H]\centering\small\caption{First eight bisection steps for the loam at $f^*=0.45$.}\label{tab:bis}
+\begin{tabular}{lrrrr}\toprule
+Step & $\log_{10}h$ mid & $h$ (cm) & $f(h)$ & Keep\\\midrule
+1 & 2.3000 & 199.5 & 0.3201 & lower\\
+2 & 3.4500 & 2818.4 & 0.8935 & upper\\
+3 & 2.8750 & 749.9 & 0.7053 & upper\\
+4 & 2.5875 & 386.8 & 0.5456 & upper\\
+5 & 2.4437 & 277.8 & 0.4422 & lower\\
+6 & 2.5156 & 327.8 & 0.4961 & upper\\
+7 & 2.4797 & 301.8 & 0.4697 & upper\\
+8 & 2.4617 & 289.5 & 0.4561 & upper\\\bottomrule\end{tabular}\end{table}
+\textbf{Check.} The application's table gives 284 cm for the loam; the computed value agrees to the rounding of the printed parameters.
+\end{example}
+
+\section{Table of critical suctions for the ten soils}
+\begin{example}{the table of critical suctions}
+Reproduce the application's table of effective parameters: for each of the ten soils compute the suction $h^*$ at $f^*=0.45$ and the depletion at 300 cm.
+
+\textbf{Solution.} Repeat the bisection for every soil. The result is in Table~\ref{tab:h45}. The published values are $387, 262, 143, 160, 195, 284, 401, 311, 503, 729$ cm and $0.380, 0.496, 0.842, 0.756, 0.627, 0.468, 0.367, 0.439, 0.314, 0.237$; the largest difference is 1 cm and 0.001 in $f$, which comes from the rounding of the printed parameters.
+\begin{table}[H]\centering\small\caption{Critical suction at $f^*=0.45$ and depletion at 300 cm, computed from Equation~(\ref{eq:fdep}).}\label{tab:h45}
+\begin{tabular}{lrrrrrr}\toprule
+ID & Soil & $\alpha$ (cm$^{-1}$) & $n$ & AWC (mm/cm) & $h^*$ (cm) & $f(300)$\\\midrule
+S01 & Coarse loam & 0.0961 & 1.353 & 1.5 & 387 & 0.379\\
+S02 & Coarse sand & 0.0536 & 1.600 & 0.5 & 262 & 0.496\\
+S03 & Sand & 0.1450 & 2.680 & 0.6 & 143 & 0.842\\
+S04 & Loamy sand & 0.1240 & 2.280 & 0.9 & 160 & 0.756\\
+S05 & Sandy loam & 0.0750 & 1.890 & 1.2 & 195 & 0.627\\
+S06 & Loam & 0.0360 & 1.560 & 1.7 & 284 & 0.468\\
+S07 & Silt loam & 0.0200 & 1.410 & 2.0 & 401 & 0.366\\
+S08 & Sandy clay loam & 0.0590 & 1.480 & 1.4 & 311 & 0.438\\
+S09 & Clay loam & 0.0190 & 1.310 & 1.6 & 503 & 0.314\\
+S10 & Silty clay loam & 0.0100 & 1.230 & 1.7 & 729 & 0.237\\\bottomrule\end{tabular}\end{table}
+\textbf{Reading.} The critical suction rises from 143 cm for the sand to 729 cm for the silty clay loam: a fivefold spread in suction for one and the same depletion. A trigger at a fixed suction is therefore a different management in every soil.
+\end{example}
+
+\begin{example}{net irrigation depth and rooting depth}
+The default net irrigation depth is $Z_n=\mathrm{clip}(f_T\cdot\mathrm{AWC}\cdot R_{\max};25,150)$ mm, with the maximum rooting depth
+\begin{equation}\label{eq:rmax}R_{\max}=\mathrm{clip}\Bigl(R_c(0.85+0.3\,\mathrm{sand})\bigl[1+0.12\log_{10}(|h_T|/300)\bigr]\bigl[1-0.18\tfrac{N-100}{100}\bigr];25,100\Bigr)\ \text{cm}.\end{equation}
+For a cereal $R_c=95$ cm. Find $Z_n$ for the loam S06 (sand 40 per cent, AWC 1.7 mm cm$^{-1}$) with trigger $-300$ cm and nitrogen $100$ per cent.
+
+\textbf{Solution.} 1. Rooting depth: $0.85+0.3(0.40)=0.97$; the suction factor is $1+0.12\log_{10}(300/300)=1$; the nitrogen factor is $1-0.18(0)=1$. So $R_{\max}=95(0.97)=92.15$ cm, inside the clip $[25,100]$.
+
+2. Trigger depletion: $f_T=f(300)=0.468$ (Table~\ref{tab:h45}).
+
+3. Depth: $Z_n=0.468\times1.7\times92.15=73.3$ mm, inside $[25,150]$ mm.
+
+\textbf{Repeat for the sand S03} (sand 92 per cent). $R_{\max}=95(0.85+0.276)=106.97$, clipped to $100$ cm. $f_T=0.842$, so $Z_n=0.842\times0.6\times100=50.5$ mm. The sand needs a smaller net depth per event (50.5 mm against 73.3 mm) because it holds less water per centimetre, although it is irrigated from a deeper depletion.
+
+\textbf{Effect of a drier trigger.} For the loam at $h_T=1000$ cm: the suction factor is $1+0.12\log_{10}(3.333)=1.0627$, $R_{\max}=92.15\times1.0627=97.9$ cm, $f_T=f(1000)$ is $0.759$, so $Z_n=0.759\times1.7\times97.9=126.3$ mm. A drier trigger deepens the roots by 6 per cent and increases the depth of each application by 72 per cent.
+\end{example}
+
+\section{The meta-model: ratios of Daisy results}
+The annual fluxes of Engine 1 are built from the 20-year Daisy means $\mathbf b=(E_b,T_b,ET_b,I_b,Y_b,D_b,N_b)$ and from lookups in the mulch tables $M(\varphi,\rho)$ and warming tables $W(\Delta T,\rho)$ of the ensemble. The structure is multiplicative for fluxes and additive for drainage:
+\begin{align}
+T&=T_b\Bigl[\frac{\mathrm{now}.T}{\mathrm{bare}.T}\Bigr]\,\mathrm{clip}\Bigl(\frac{\mathrm{tN}.T}{\mathrm{tB}.T};0.3,2.5\Bigr),\label{eq:mT}\\
+D&=D_b+(\mathrm{now}.D-\mathrm{bare}.D)+(\mathrm{tN}.D-\mathrm{tB}.D).\label{eq:mD}
+\end{align}
+Fluxes are multiplied because ratios of large numbers are stable; drainage and leaching are added because ratios of numbers near zero are not.
+
+\begin{example}{combining mulch and warming ratios}
+For a soil the baseline is $T_b=240$ mm, $D_b=40$ mm. The mulch table gives, at the present mulch and rain, $\mathrm{now}.T=232$, $\mathrm{bare}.T=225$, $\mathrm{now}.D=55$, $\mathrm{bare}.D=38$; the warming table gives $\mathrm{tN}.T=236$, $\mathrm{tB}.T=229$, $\mathrm{tN}.D=44$, $\mathrm{tB}.D=40$. (These table entries are \emph{assumed} illustration values; the real ones are in the ensemble tables.) Find $T$ and $D$.
+
+\textbf{Solution.} Transpiration: the mulch ratio is $232/225=1.0311$; the warming ratio is $236/229=1.0306$, inside $[0.3,2.5]$. So $T=240\times1.0311\times1.0306=255.0$ mm.
+
+Drainage: $D=40+(55-38)+(44-40)=40+17+4=61$ mm.
+
+\textbf{Why not multiply drainage?} If $\mathrm{bare}.D$ were $2$ mm and $\mathrm{now}.D$ were $6$ mm, the ratio would be 3 and $D_b=40$ would become 120 mm; the additive form adds only the 4 mm difference. This is why the application treats drainage and leaching as differences.
+\end{example}
+
+\begin{example}{closure window and irrigation efficiency}
+After the four corrections the model enforces closure: $ET\in[P+I-D-30,\ P+I-D+15]$; if $ET$ lies outside, $ET$ is clipped and $E$, $T$ are scaled by the same factor. Then $E_{\rm other}=\max(0,ET-T-E)$, $\Delta S=P+I-ET-D$ and the irrigation efficiency $\mathrm{IE}=100Y/I$ (kg m$^{-3}$). Take $P=600$, $I=150$, $D=61$, $T=255$, $E=190$, $ET=520$ and $Y=6.4$ Mg ha$^{-1}$.
+
+\textbf{Solution.} 1. Window: $P+I-D=689$, so $ET$ must lie in $[659,704]$. The model value $ET=520$ is below the lower bound.
+
+2. Clip: $ET\leftarrow659$. The scale factor is $659/520=1.2673$, so $T=255\times1.2673=323.2$ and $E=190\times1.2673=240.8$ mm.
+
+3. $E_{\rm other}=\max(0,659-323.2-240.8)=95.0$ mm (interception and mulch evaporation).
+
+4. $\Delta S=600+150-659-61=30$ mm.
+
+5. $\mathrm{IE}=100(6.4)/150=4.27$ kg m$^{-3}$ (1 mm is 10 m$^3$ ha$^{-1}$, so 150 mm is 1,500 m$^3$ and 6,400 kg / 1,500 m$^3$ = 4.27).
+
+\textbf{Reading.} The window protects the balance from independent effects compounding beyond what the water allows; here it raised $ET$ by 139 mm, a large correction, which would signal that the ratio inputs are inconsistent.
+\end{example}
+
+\section{Sensitivity of the reported numbers}
+\begin{example}{sensitivity of the depth to the water capacity}
+For the loam, $Z_n$ is proportional to $f_T$, AWC and $R_{\max}$. Compute the relative change of $Z_n$ if AWC is overestimated by 20 per cent.
+
+\textbf{Solution.} $Z_n\propto \mathrm{AWC}$, so the relative change is $+20$ per cent: $73.3\to88.0$ mm. Because $f_T=f(h_T)$ does not involve AWC, the suction at which irrigation starts is unchanged; only the depth per application changes. The number of events per season falls in proportion, so the seasonal total is first-order unaffected, but the events are larger and rarer.
+\end{example}

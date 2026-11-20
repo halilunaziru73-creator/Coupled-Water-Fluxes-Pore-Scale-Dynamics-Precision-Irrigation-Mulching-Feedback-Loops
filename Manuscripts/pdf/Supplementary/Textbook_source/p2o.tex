@@ -1,0 +1,157 @@
+\chapter{Crop library and crop water requirement}\label{ch:crops}
+\markboth{Crop water requirement}{Crop water requirement}
+\textbf{After this chapter you can} build the four-stage crop-coefficient curve, turn it into a daily crop water need, grow the root zone, compute readily available water and the stress coefficient, run the FAO-56 daily balance with the trigger, convert net depths to gross by the method efficiency, estimate the relative yield from the yield response factor, and carry a library crop into the cereal-based annual model.
+
+\textit{Illustrative climate used throughout.} The chapter uses a synthetic year so that every number can be reproduced: reference evapotranspiration $ET_0=4.0+2.0\sin[2\pi(d-100)/365]$ mm d$^{-1}$ with a small seeded noise (mean 4 mm d$^{-1}$, 1,460 mm per year), and rain on 25\% of the days with exponential depths of mean 8.2 mm (about 600 mm per year; seed 7). The soil is the loam with $\mathrm{AWC}=1.7$ mm cm$^{-1}$ and the trigger suction $-300$ cm, which corresponds to the depletion fraction $f_T=0.468$ of total available water (Eq.~5.3). Planting is on day 100.
+
+\section{The crop-coefficient curve}
+\begin{equation}K_c(t)=\begin{cases}K_{c,\rm ini}&t<L_1\\K_{c,\rm ini}+(K_{c,\rm mid}-K_{c,\rm ini})\dfrac{t-L_1}{L_2}&L_1\le t<L_1+L_2\\K_{c,\rm mid}&L_1+L_2\le t<L_1+L_2+L_3\\K_{c,\rm mid}+(K_{c,\rm end}-K_{c,\rm mid})\min\!\Big(1,\dfrac{t-L_1-L_2-L_3}{L_4}\Big)&\text{after}\end{cases}\end{equation}
+with $t$ days after planting and stage lengths $L_1\ldots L_4$ (initial, development, mid-season, late). Outside the season the bare soil has $K_c=0.25$ (the FAO-56 single-coefficient curve).
+
+\begin{example}{reading the curve}
+Maize: $K_{c,\rm ini}=0.30$, $K_{c,\rm mid}=1.20$, $K_{c,\rm end}=0.60$; stages $15/30/40/20$ d. Find $K_c$ at $t=10,\,30,\,60,\,95$ d.
+
+\textbf{Solution.} $t=10<15$: $K_c=0.30$. $t=30$ lies in the development stage ($15\le30<45$): $K_c=0.30+0.90\times(30-15)/30=0.30+0.45=0.75$. $t=60$ lies in the mid-season ($45\le60<85$): $K_c=1.20$. $t=95$ is in the late season ($85\le95<105$): $K_c=1.20+(0.60-1.20)\times(95-85)/20=1.20-0.30=0.90$.
+\end{example}
+
+\begin{example}{daily crop need}
+The daily need is $ET_c=K_cET_0$. On a day with $ET_0=5.2$ mm d$^{-1}$ find $ET_c$ of maize at $t=30$ and $t=60$, and the total need of the development stage if $ET_0$ stays at 5.2.
+
+\textbf{Solution.} $t=30$: $0.75\times5.2=3.90$ mm. $t=60$: $1.20\times5.2=6.24$ mm. The development stage covers $t=15\ldots44$, $K_c$ rising linearly from 0.30 to 1.20; its mean is 0.75 (the average of the end points), so the need is $30\times0.75\times5.2=117.0$ mm.
+\end{example}
+
+\section{Roots, total and readily available water, and stress}
+The roots of an annual crop grow with the canopy,
+\begin{equation}z_r=\mathrm{clip}\Big(15+(R_{\max}-15)\min\Big(1,\frac{1.15K_c}{\max(0.3,K_{c,\rm mid})}\Big);\,15,R_{\max}\Big)\ \text{cm},\quad R_{\max}\le100,\end{equation}
+and the total and readily available water follow FAO-56:
+\begin{equation}\mathrm{TAW}=\mathrm{AWC}\,z_r,\quad p_d=\mathrm{clip}\{p+0.04(5-K_cET_0);0.1,0.8\},\quad \mathrm{RAW}=p_d\mathrm{TAW},\quad K_s=\begin{cases}1&D_r\le\mathrm{RAW}\\\dfrac{\mathrm{TAW}-D_r}{(1-p_d)\mathrm{TAW}}&D_r>\mathrm{RAW}\end{cases}\end{equation}
+and $ET_a=K_sET_c$. The depletion $D_r$ changes by $D_{r,d}=D_{r,d-1}-(P_d-RO_d)+ET_{a,d}$ with $RO_d=0.3\max(0,P_d-35)$, and a negative $D_r$ drains below the roots. Irrigation refills the root zone to field capacity on the day the depletion reaches the trigger, $D_r\ge f_T\mathrm{TAW}$: the net depth is $I_n=D_r$ and the gross depth $I=I_n/E_{a,m}$ with $E_{a,m}=0.60$ (surface), 0.75 (overhead), 0.90 (drip).
+
+\begin{example}{TAW, RAW and the stress coefficient}
+Maize ($R_{\max}=135$ cm, capped at 100 cm by the model profile; $p=0.50$) on the loam (AWC $=1.7$ mm cm$^{-1}$). At $t=30$ ($K_c=0.75$) with $ET_0=5.2$ mm d$^{-1}$, find $z_r$, TAW, $p_d$, RAW, and $K_s$ when $D_r=40$ mm and when $D_r=55$ mm.
+
+\textbf{Solution.} $1.15K_c/\max(0.3,1.20)=1.15\times0.75/1.20=0.719$; $z_r=15+85\times0.719=76.1$ cm. TAW $=1.7\times76.1=129.4$ mm. $p_d=0.50+0.04(5-0.75\times5.2)=0.50+0.04\times1.1=0.544$; RAW $=0.544\times129.4=70.4$ mm. With $D_r=40\le$ RAW: $K_s=1$. With $D_r=55>$ RAW: $K_s=(129.4-55)/((1-0.544)\times129.4)=74.4/59.0=1.261$.
+\end{example}
+
+\begin{table}[H]\centering\small\caption{Growth of the maize root zone on the loam ($ET_0=4.5$ mm d$^{-1}$ in $p_d$).}\label{tab:roots}
+\begin{tabular}{lrrrrr}\toprule
+$t$ (d) & $K_c$ & $z_r$ (cm) & TAW (mm) & $p_d$ & RAW (mm)\\\midrule
+0 & 0.30 & 39.4 & 67.0 & 0.646 & 43.3\\
+10 & 0.30 & 39.4 & 67.0 & 0.646 & 43.3\\
+20 & 0.45 & 51.7 & 87.8 & 0.619 & 54.4\\
+30 & 0.75 & 76.1 & 129.4 & 0.565 & 73.1\\
+45 & 1.20 & 100.0 & 170.0 & 0.484 & 82.3\\
+60 & 1.20 & 100.0 & 170.0 & 0.484 & 82.3\\
+85 & 1.20 & 100.0 & 170.0 & 0.484 & 82.3\\
+104 & 0.63 & 66.3 & 112.7 & 0.587 & 66.1\\\bottomrule\end{tabular}\end{table}
+
+\section{A season of maize}
+Running the balance day by day from planting gives the irrigations of the season. Table~\ref{tab:maizeirr} lists them for surface irrigation ($E_{a,m}=0.60$).
+
+\begin{table}[H]\centering\small\caption{Irrigations of maize on the loam, trigger $-300$ cm, surface irrigation.}\label{tab:maizeirr}
+\begin{tabular}{lrrr}\toprule
+day after planting & day of year & net $I_n$ (mm) & gross $I$ (mm)\\\midrule
+42 & 142 & 81.5 & 135.8\\
+55 & 155 & 81.6 & 136.1\\
+68 & 168 & 81.1 & 135.2\\
+84 & 184 & 84.0 & 140.0\\
+104 & 204 & 60.3 & 100.4\\\bottomrule\end{tabular}\end{table}
+
+\begin{example}{four days to an irrigation}
+Follow the four days up to the first irrigation of Table~\ref{tab:maizeirr}.
+
+\textbf{Solution.} The depletion on the day before is $D_r=63.24$ mm. Each day: $D_r\leftarrow D_r-(P-RO)+ET_a$.
+\begin{itemize}
+\item day 39: $K_c=0.990$, $ET_0=5.16$, $ET_c=5.11$, $z_r=95.6$, TAW $=162.6$, RAW $=80.6$, $K_s=1.000$, $ET_a=5.11$, $P=0.0$, $D_r=68.35$ mm, $I_n=0.0$
+\item day 40: $K_c=1.020$, $ET_0=4.90$, $ET_c=5.00$, $z_r=98.1$, TAW $=166.7$, RAW $=83.4$, $K_s=1.000$, $ET_a=5.00$, $P=0.0$, $D_r=73.35$ mm, $I_n=0.0$
+\item day 41: $K_c=1.050$, $ET_0=5.66$, $ET_c=5.94$, $z_r=100.0$, TAW $=170.0$, RAW $=78.6$, $K_s=1.000$, $ET_a=5.94$, $P=3.3$, $D_r=75.96$ mm, $I_n=0.0$
+\item day 42: $K_c=1.080$, $ET_0=5.11$, $ET_c=5.52$, $z_r=100.0$, TAW $=170.0$, RAW $=81.5$, $K_s=1.000$, $ET_a=5.52$, $P=0.0$, $D_r=0.00$ mm, $I_n=81.5$
+\end{itemize}
+The trigger depletion is $f_T\mathrm{TAW}=0.468\times170.0=79.5$ mm. On the last day $D_r$ reaches that value, so the layer irrigates the net depth $I_n=D_r=81.5$ mm and the root zone returns to field capacity ($D_r=0$). The gross depth for surface irrigation is $81.5/0.60=135.8$ mm.
+\end{example}
+
+\begin{table}[H]\centering\small\caption{The same season under three methods.}\label{tab:method}
+\begin{tabular}{lrrrrr}\toprule
+Method & $E_{a,m}$ & irrigations & net (mm) & gross (mm) & lost (mm)\\\midrule
+surface & 0.60 & 5 & 388 & 647 & 259\\
+overhead & 0.75 & 5 & 388 & 518 & 129\\
+drip & 0.90 & 5 & 388 & 432 & 43\\\bottomrule\end{tabular}\end{table}
+
+\begin{example}{what the method saves}
+From Table~\ref{tab:method}, what does moving from surface to drip save in water per hectare?
+
+\textbf{Solution.} Net need is the same in both (388 mm); gross falls from 647 mm to 432 mm, a saving of 216 mm $=2{,}158$ m$^3$ ha$^{-1}$ (1 mm over 1 ha is 10 m$^3$). The saving is the difference of the losses: $388(1/0.60-1/0.90)=216$ mm.
+\end{example}
+
+\section{Relative yield}
+The relative yield of a season is the FAO-33 response
+\begin{equation}Y_{\rm rel}=\mathrm{clip}\Big(1-K_y\Big(1-\frac{\sum ET_a}{\sum ET_c}\Big);0,1\Big),\end{equation}
+with $K_y=1$ when the crop has no tabulated value.
+
+\begin{table}[H]\centering\small\caption{Maize on the loam at different triggers (surface irrigation, synthetic year).}\label{tab:trig}
+\begin{tabular}{lrrrrrr}\toprule
+trigger (cm) & $f_T$ & irrigations & gross (mm) & $\sum ET_a$ & $\sum ET_a/\sum ET_c$ & $Y_{\rm rel}$\\\midrule
+50 & 0.000 & 105 & 734 & 514 & 1.000 & 1.000\\
+100 & 0.000 & 105 & 734 & 514 & 1.000 & 1.000\\
+200 & 0.321 & 7 & 629 & 514 & 1.000 & 1.000\\
+300 & 0.468 & 5 & 647 & 513 & 0.998 & 0.997\\
+500 & 0.614 & 3 & 524 & 482 & 0.939 & 0.922\\
+800 & 0.718 & 3 & 556 & 473 & 0.920 & 0.898\\
+1500 & 0.821 & 2 & 424 & 406 & 0.790 & 0.731\\
+5000 & 0.941 & 1 & 267 & 364 & 0.708 & 0.626\\
+50000 & 1.000 & 1 & 194 & 252 & 0.490 & 0.347\\\bottomrule\end{tabular}\end{table}
+
+\begin{example}{rainfed maize}
+Compute $Y_{\rm rel}$ of maize with no irrigation, $K_y=1.28$.
+
+\textbf{Solution.} With rain only, the season has $\sum ET_c=514$ mm and $\sum ET_a=252$ mm, so the ratio is $0.490$. $Y_{\rm rel}=1-1.28\times(1-0.490)=0.347$. A deficit of 51.0\% of the crop need becomes a yield loss of 65.3\%, because $K_y>1$ (maize is sensitive). A tolerant crop such as groundnut ($K_y=0.70$) would lose only 35.7\% for the same deficit.
+\end{example}
+
+\begin{keybox}Table~\ref{tab:trig} shows the same shape as the manuscript trigger experiment (Chapter~\ref{ch:e2}): yield is flat over a wide range of wet triggers, then falls as the trigger goes drier, while the gross irrigation falls overall (not strictly at every step, because a wetter trigger irrigates earlier and rain refills part of the root zone). At the wettest triggers ($f_T=0$) the rule irrigates every day, which is the model's limit of continuous irrigation. The numbers come from a synthetic climate, so they differ from the manuscript's; the shape is the point.\end{keybox}
+\section{Every crop on one soil}
+Table~\ref{tab:lib} runs the balance for twelve library crops of Table~21.2 of the manual on the same loam, weather, trigger ($-300$ cm) and method (surface), planting on day 100.
+
+\begin{table}[H]\centering\small\caption{Twelve crops on the loam (synthetic year, surface method).}\label{tab:lib}
+\begin{tabular}{lrrrrrrrrr}\toprule
+Crop & $K_{c,\rm ini}$ & $K_{c,\rm mid}$ & $K_{c,\rm end}$ & days & $\sum ET_c$ & net & irr. & $K_y$ & $Y_{\rm rel}$\\\midrule
+Maize & 0.30 & 1.20 & 0.60 & 105 & 514 & 388 & 5 & 1.28 & 0.997\\
+Wheat & 0.40 & 1.15 & 0.41 & 120 & 570 & 389 & 5 & 1.05 & 0.999\\
+Sorghum & 0.30 & 1.05 & 0.45 & 125 & 527 & 323 & 4 & 0.90 & 1.000\\
+Soybean & 0.40 & 1.10 & 0.50 & 120 & 556 & 379 & 5 & 1.07 & 0.999\\
+Groundnut & 0.40 & 1.05 & 0.60 & 120 & 534 & 323 & 4 & 0.70 & 1.000\\
+Cotton & 0.40 & 1.10 & 0.50 & 190 & 839 & 508 & 7 & 1.05 & 1.000\\
+Tomato & 0.60 & 1.10 & 1.00 & 135 & 675 & 456 & 6 & 1.20 & 0.978\\
+Potato & 0.50 & 1.10 & 0.40 & 130 & 602 & 405 & 9 & 1.10 & 0.986\\
+Onion & 0.70 & 1.05 & 0.70 & 150 & 767 & 487 & 10 & 1.18 & 0.939\\
+Cabbage & 0.70 & 1.05 & 1.00 & 165 & 796 & 516 & 13 & 0.95 & 0.981\\
+Cassava & 0.30 & 1.00 & 0.60 & 210 & 876 & 561 & 11 & 1.00 & 1.000\\\bottomrule\end{tabular}\end{table}
+
+\begin{example}{comparing the crops}
+Which crop needs the most water in Table~\ref{tab:lib}, which gets the most irrigations, and why can the two differ?
+
+\textbf{Solution.} The largest seasonal need is Cassava ($\sum ET_c=876$ mm over 210 days) and the smallest is Maize ($514$ mm over 105 days). Need follows the length of the season and the height of $K_c$; the number of irrigations follows the size of the root-zone reservoir instead: Cabbage gets the most irrigations (13), because its small TAW (shallow roots, $R_{\max}$ = 50 cm) is used up quickly, even though its seasonal need is lower than the largest. The irrigation is also only the part of the need not met by rain and stored water, so it depends on when in the year the crop grows. The lowest relative yield is Onion ($Y_{\rm rel}=0.939$), where the shallow roots and the small $p$ make the root zone run dry between irrigations at this trigger.
+\end{example}
+
+\section{Carrying a library crop into the cereal-based model}
+The annual model (Chapter~\ref{ch:e2}) is built from cereal runs. A library crop is transferred from it by the ratio of two runs of the balance above on the same soil, weather, trigger and method, one for the crop ($c$) and one for the cereal reference ($r$, small grains $K_c=0.30/1.15/0.25$). With $m$ the annual-model result of the cereal,
+\begin{align}I&=\begin{cases}I_m\,\mathrm{clip}(I_c/I_r;0,4)&I_r>5\text{ mm}\\I_c&\text{otherwise}\end{cases}\\
+T&=\min\Big(0.9ET,\;T_m\,\mathrm{clip}\Big(\frac{ET_{a,c}}{ET_{c,c}}\cdot\frac{ET_{c,c}}{ET_{c,r}}\Big(\frac{f_{c,c}}{f_{c,r}}\Big)^{0.3};0.2,3\Big)\Big),\qquad E^*=E_m\,\mathrm{clip}\Big(\frac{1-0.7f_{c,c}}{1-0.7f_{c,r}};0.6,1.6\Big)\\
+D&=\max(0.2D_m,D_m+0.5(DP_c-DP_r)),\quad ET=\mathrm{clip}(P+I-D-\Delta S_m;50,5000),\quad N_L=N_{L,m}\frac{D+5}{D_m+5}.\end{align}
+The remainder of the balance, $ET-T$, is shared between soil evaporation and the other evaporation terms in proportion to their targets ($E_{\rm other}^*=E_{{\rm other},m}ET/ET_m$).
+
+\begin{example}{transferring sorghum from the cereal result}
+The cereal model run of the loam (trigger $-300$ cm, 600 mm rain; Chapter~\ref{ch:e2}) gives $P=606$, $I_m=90$, $D_m=200$, $E_m=158$, $T_m=230$ mm, so $ET_m=P+I_m-D_m=496$ mm and $E_{{\rm other},m}=ET_m-T_m-E_m=108$ mm; assume $\Delta S_m=0$ and $N_{L,m}=40$ kg ha$^{-1}$. Transfer sorghum with ground covers $f_{c,c}=0.80$ and $f_{c,r}=0.85$ (assumed mid-season values). The balances of this chapter give: sorghum $I_c=538$ mm, $ET_{a,c}/ET_{c,c}=1.000$, $ET_{c,c}=527$ mm, $DP_c=11$ mm; reference $I_r=609$ mm, $ET_{c,r}=543$ mm, $DP_r=0$ mm.
+
+\textbf{Solution.} \emph{Irrigation:} $I=90\times\mathrm{clip}(538/609)=90\times0.884=80$ mm. \emph{Drainage:} $D=\max(0.2\times200,200+0.5(11-0))=206$ mm. \emph{Evapotranspiration:} $ET=P+I-D=606+80-206=480$ mm. \emph{Transpiration:} ratio $=1.000\times(527/543)\times(0.80/0.85)^{0.3}=0.952$, so $T=\min(0.9\times480,\,230\times0.952)=219$ mm. \emph{Evaporation:} $E^*=158\times\mathrm{clip}((1-0.56)/(1-0.595))=158\times1.086=172$ mm, $E^*_{\rm other}=108\times480/496=104$ mm; sharing $ET-T=261$ mm in that proportion gives $E=163$ and $E_{\rm other}=99$ mm. Leaching: $N_L=40\times(206+5)/(200+5)=41.1$ kg ha$^{-1}$. The balance closes: $T+E+E_{\rm other}=480=ET$.
+\end{example}
+
+\begin{keybox}These transfer rules are engineered, not measured: the clips (0.2--3, 0.6--1.6, 0--4) keep the result within the range in which the cereal simulation is informative, and the layer never gives a library crop the resolution of the cereal runs. The yield shown for a library crop is the relative yield of Equation 21.5, in per cent.\end{keybox}
+
+\section{Summary of the crop layer}
+\begin{itemize}
+\item $K_c(t)$ in four stages; $ET_c=K_cET_0$; roots grow with the canopy.
+\item TAW $=\mathrm{AWC}z_r$, RAW $=p_d$TAW with $p_d=p+0.04(5-K_cET_0)$; $K_s$ falls linearly below RAW.
+\item The balance $D_r$ triggers irrigation at $f_T$TAW; gross $=$ net$/E_{a,m}$.
+\item $Y_{\rm rel}=1-K_y(1-\sum ET_a/\sum ET_c)$.
+\item A library crop enters the annual model by the ratio of its balance to the cereal reference.
+\end{itemize}

@@ -1,0 +1,239 @@
+\chapter{Weather and field data}\label{ch:weather}
+\markboth{Weather and field data}{Weather and field data}
+\textbf{After this chapter you can} compute reference evapotranspiration from temperature or radiation, put a weather record on the model's twenty-year grid, compute the area and slope of a field from coordinates and elevations, derive the vegetation and water indices from satellite bands, run the zone-by-zone water balance from NDVI, and estimate runoff, gully risk and soil loss.
+
+\section{Reference evapotranspiration}
+Without an ET$_0$ column in the weather file the program computes it. With daily maximum and minimum temperature it uses Hargreaves--Samani (FAO-56 Eq.~52),
+\begin{equation}ET_0=0.0023(T_{\rm mean}+17.8)\sqrt{T_{\max}-T_{\min}}\;R_a\times0.408\ \ (\mathrm{mm\,d^{-1}}),\end{equation}
+where $R_a$ (MJ m$^{-2}$ d$^{-1}$) is the extraterrestrial radiation at the latitude typed in the dialog (FAO-56 Eq.~21),
+\begin{equation}R_a=\frac{24\cdot60}{\pi}G_{sc}d_r\left[\omega_s\sin\varphi\sin\delta+\cos\varphi\cos\delta\sin\omega_s\right],\ d_r=1+0.033\cos\frac{2\pi J}{365},\ \delta=0.409\sin\left(\frac{2\pi J}{365}-1.39\right),\ \omega_s=\arccos(-\tan\varphi\tan\delta),\end{equation}
+$G_{sc}=0.0820$ MJ m$^{-2}$ min$^{-1}$. With the daily mean temperature and the global radiation $R_s$ (MJ m$^{-2}$ d$^{-1}$) it uses Makkink,
+\begin{equation}ET_0=0.61\frac{\Delta}{\Delta+\gamma}\frac{R_s}{2.45}-0.12,\quad\Delta=\frac{4098\times0.6108\,e^{17.27T/(T+237.3)}}{(T+237.3)^2},\ \gamma=0.066\ \mathrm{kPa\,K^{-1}}.\end{equation}
+
+\begin{example}{Hargreaves at 10$^\circ$N}
+A site at latitude $10^\circ$N on day of year $J=180$ has $T_{\max}=33^\circ$C and $T_{\min}=21^\circ$C. Compute $R_a$ and Hargreaves ET$_0$.
+
+\textbf{Solution.} $\varphi=10^\circ=0.1745$ rad. $d_r=1+0.033\cos(2\pi\times180/365)=1+0.033\times-0.9991=0.9670$. $\delta=0.409\sin(2\pi\times180/365-1.39)=0.409\sin(1.7086)=0.4051$ rad. $\omega_s=\arccos(-\tan\varphi\tan\delta)=\arccos(-0.1763\times0.4288)=1.6465$ rad. Then $R_a=(1440/\pi)\times0.0820\times0.9670\times[1.6465\times\sin\varphi\sin\delta+\cos\varphi\cos\delta\sin\omega_s]=36.90$ MJ m$^{-2}$ d$^{-1}$. $T_{\rm mean}=27^\circ$C, $\sqrt{33-21}=3.464$. $ET_0=0.0023\times(27+17.8)\times3.464\times36.90\times0.408=5.37$ mm d$^{-1}$.
+\end{example}
+
+\begin{table}[H]\centering\small\caption{Extraterrestrial radiation (MJ m$^{-2}$ d$^{-1}$) by latitude and day, and Hargreaves ET$_0$ at midsummer of the northern hemisphere (mm d$^{-1}$).}\label{tab:ra}
+\begin{tabular}{lrrrrr}\toprule
+Latitude & $R_a$ J=15 & J=105 & J=196 & J=288 & Hargreaves J=196 (30/18$^\circ$C)\\\midrule
+0 & 36.2 & 36.8 & 33.9 & 37.3 & 4.60\\
+10 & 31.9 & 37.9 & 37.1 & 35.1 & 5.03\\
+30 & 21.1 & 36.8 & 40.5 & 27.5 & 5.51\\
+50 & 8.9 & 31.5 & 40.2 & 16.8 & 5.46\\\bottomrule\end{tabular}\end{table}
+
+\begin{example}{Makkink}
+Makkink: $T=27^\circ$C, $R_s=20$ MJ m$^{-2}$ d$^{-1}$.
+
+\textbf{Solution.} $e^{17.27\times27/(27+237.3)}=e^{1.7642}=5.8372$; saturation pressure $0.6108\times5.8372=3.5653$ kPa; $\Delta=4098\times3.5653/(264.3)^2=0.2092$ kPa K$^{-1}$. $\Delta/(\Delta+\gamma)=0.2092/(0.2092+0.066)=0.7601$. $ET_0=0.61\times0.7601\times20/2.45-0.12=3.67$ mm d$^{-1}$.
+\end{example}
+
+\subsection*{The FAO Penman--Monteith value of the online weather}
+When the weather of a place is fetched the reference ET$_0$ comes from the weather service (FAO Penman--Monteith). The equation is the literature one (FAO-56 Eq.~6):
+\begin{equation}ET_0=\frac{0.408\Delta(R_n-G)+\gamma\frac{900}{T+273}u_2(e_s-e_a)}{\Delta+\gamma(1+0.34u_2)},\quad G\approx0\ \text{(daily)}.\end{equation}
+The program does not compute this itself (the service does), so the example below is for understanding and for checking the Hargreaves value, not a reproduction of the app.
+
+\begin{example}{FAO Penman--Monteith for comparison}
+Same day: $T_{\max}=33$, $T_{\min}=21^\circ$C, mean RH 60\%, wind $u_2=2.0$ m s$^{-1}$, $R_s=20$ MJ m$^{-2}$ d$^{-1}$, altitude 100 m.
+
+\textbf{Solution.} $T=27$; pressure $P=101.3[(293-0.0065\times100)/293]^{5.26}=100.12$ kPa, $\gamma=0.000665P=0.06658$. $e_s=[e^\circ(33)+e^\circ(21)]/2=3.759$ kPa, $e_a=0.60e_s=2.255$. $\Delta=0.2092$. $R_a=36.90$; clear-sky $R_{so}=(0.75+2\times10^{-5}\times100)R_a=27.75$. $R_{ns}=0.77\times20=15.40$; $R_{nl}=4.903\times10^{-9}[\ldots](0.34-0.14\sqrt{e_a})(1.35R_s/R_{so}-0.35)=3.23$; $R_n=12.17$. Then $ET_0=[0.408\times0.2092\times12.17+0.06658\times900/300\times2\times(3.759-2.255)]/[0.2092+0.06658(1+0.68)]=5.11$ mm d$^{-1}$. Compare Hargreaves (5.37) and Makkink (3.67): the three differ by up to about 1.7 mm d$^{-1}$, which is why the layer reports how ET$_0$ was obtained.
+\end{example}
+
+\section{Reading and gridding a weather file}
+Radiation columns are read in MJ m$^{-2}$ d$^{-1}$, or in W m$^{-2}$ when the values exceed 60 (a daily mean power: multiply by $0.0864$); in the Daisy files radiation is in kWh m$^{-2}$ d$^{-1}$ ($\times3.6$ gives MJ m$^{-2}$ d$^{-1}$). Rain in inches is multiplied by 25.4. The program works on twenty years of 365 days: the last twenty complete years (at least 300 days each) are used, leap days dropped, a missing day of rain taken from the same day of another year, a missing ET$_0$ from the mean of that day of the year.
+
+\begin{example}{units}
+A file gives mean radiation 230 W m$^{-2}$, another 5.6 kWh m$^{-2}$ d$^{-1}$, a third 18.4 MJ m$^{-2}$ d$^{-1}$, and a rain value of 0.8 in. Convert all to model units.
+
+\textbf{Solution.} $230>60$, so it is W m$^{-2}$: $230\times0.0864=19.87$ MJ m$^{-2}$ d$^{-1}$. $5.6\times3.6=20.16$ MJ m$^{-2}$ d$^{-1}$. $18.4$ is already in MJ. Rain: $0.8\times25.4=20.3$ mm. Note the threshold: a value of 55 would be read as MJ, which is unphysical (the extraterrestrial maximum is about 45), so the 60 limit is safe for daily totals; a mean power of 55 W m$^{-2}$ would be misread, a limitation of the rule.
+\end{example}
+
+The daily model then uses the rain of the file scaled to the rainfall scale $\rho$ of the Properties panel and a demand weight proportional to the daily ET$_0$:
+\begin{equation}P_k^{\rm model}=P_k\frac{\rho}{\rho_{\rm ref}},\qquad e_k=\frac{ET_{0,k}}{\overline{ET_0}/365},\qquad\rho_{\rm ref}=\mathop{\mathrm{nearest}}_{\rho\in\{0.5,\dots,1.4\}}\frac{\bar P}{P_{\rm rec}},\qquad\Delta T_{\rm ref}=\mathop{\mathrm{nearest}}_{\Delta T\in\{-1,\dots,3.5\}}\frac{\overline{ET_0}/E_{\rm rec}-1}{0.035},\end{equation}
+with $P_{\rm rec}=464$ mm the mean annual rain of the built-in record, and $E_{\rm rec}\approx870$ mm its reference ET. The annual model (Engine~1) uses the simulated steps nearest the weather.
+
+\begin{example}{placing a file on the grid}
+A weather file has mean annual rain $\bar P=640$ mm and $\overline{ET_0}=1{,}150$ mm. Find $\rho_{\rm ref}$ and $\Delta T_{\rm ref}$, and say whether the annual model can represent the file.
+
+\textbf{Solution.} $\bar P/P_{\rm rec}=640/464=1.379$. The nearest step of $\{0.5,0.6,\dots,1.4\}$ is $1.4$. $\overline{ET_0}/E_{\rm rec}=1150/870=1.322$; $(1.322-1)/0.035=9.2$ $^\circ$C. The warming steps stop at 3.5, so the nearest is $3.5$ and the file lies outside the simulated range: the annual results use the nearest step and the dialog says so. The daily layers use the file as it is. A second file with $\bar P=900$ mm gives $900/464=1.940$ and is also capped at 1.4.
+\end{example}
+
+\section{Field geometry}
+The field outline $(\varphi_i,\lambda_i)$ (radians) gives the area and the perimeter on a sphere of radius $R=6\,378\,137$ m,
+\begin{equation}A=\frac{R^2}2\Big|\sum_i(\lambda_{i+1}-\lambda_i)(2+\sin\varphi_i+\sin\varphi_{i+1})\Big|,\qquad P=\sum_i2R\arcsin\sqrt{\sin^2\tfrac{\Delta\varphi}{2}+\cos\varphi_i\cos\varphi_{i+1}\sin^2\tfrac{\Delta\lambda}{2}}.\end{equation}
+
+\begin{example}{area of a field from its corners}
+A rectangular field has corners at $9.000^\circ$N, $7.500^\circ$E and extends about 300 m north and 400 m east. Compute the area and the perimeter from the two formulas above.
+
+\textbf{Solution.} The north--south side is $300/111{,}320=0.002695^\circ$; the east--west side $400/(111{,}320\cos9^\circ)=0.003638^\circ$. Summing the four terms of the area formula gives $A=119{,}998$ m$^2=12.000$ ha. The haversine perimeter is $1{,}399.99$ m, within 0.01 m of the plane value $2(300+400)=1{,}400$ m, and $A$ is within 2 m$^2$ of $300\times400=120{,}000$ m$^2$. At this size the curvature of the Earth does not matter; the spherical formulas are there so that large or distant outlines are right, and this agreement is the check.
+\end{example}
+
+\subsection*{Slope by a fitted plane}
+The ground slope is that of the least-squares plane $z=a+bx+cy$ through the elevations ($x$, $y$ in metres east and north of the centre): $s=100\sqrt{b^2+c^2}$ per cent, falling in the direction of $-(b,c)$.
+
+\begin{table}[H]\centering\small\caption{Nine elevations over the field.}\label{tab:dem}
+\begin{tabular}{lrr}\toprule
+$x$ (m) & $y$ (m) & $z$ (m)\\\midrule
+-150 & -100 & 512.3\\
+0 & -100 & 511.2\\
+150 & -100 & 510.4\\
+-150 & 0 & 512.9\\
+0 & 0 & 511.6\\
+150 & 0 & 510.7\\
+-150 & 100 & 513.4\\
+0 & 100 & 512.2\\
+150 & 100 & 511.0\\\bottomrule\end{tabular}\end{table}
+
+\begin{example}{slope of the field}
+Fit the plane to Table~\ref{tab:dem}; give the slope in per cent and the downhill direction.
+
+\textbf{Solution.} The nine points are symmetric about the centre, so the normal equations decouple: $a=\bar z=511.744$, $b=\sum xz/\sum x^2=-0.00722$, $c=\sum yz/\sum y^2=0.00450$ ($\sum x^2=6\times150^2=135{,}000$, $\sum y^2=6\times100^2=60{,}000$). $s=100\sqrt{-0.00722^2+0.00450^2}=0.85\%$. The ground falls toward $-(b,c)$, that is toward the east-south-east: bearing $122^\circ$ from north. A slope of 0.85\% is the value used by the sprinkler layer (Chapter~\ref{ch:sprinkler}) to look up the allowed application rate (0--5\% column).
+\end{example}
+
+\subsection*{Where to take the water from}
+\begin{equation}\mathrm{score}=B_{\rm type}-30[\text{seasonal}]-\min(45,d/60)-\min(20,0.8\Delta z),\end{equation}
+with $B=92$ river, 90 canal, 86 reservoir, 82 lake, 74 borehole, 70 well, 62 pond, 60 spring, 58 stream, 50 water seen in the photo, 42 ditch, 30 drain; $d$ the distance from the field edge (m), $\Delta z$ the lift (m). The weights are engineered, not fitted.
+
+\begin{table}[H]\centering\small\caption{Five candidate sources.}\label{tab:src}
+\begin{tabular}{lrrrrr}\toprule
+Source & $B$ & seasonal & $d$ (m) & lift (m) & score\\\midrule
+River (seasonal) & 92 & yes & 900 & 8 & 40.6\\
+Canal & 90 & no & 1200 & 3 & 67.6\\
+Reservoir & 86 & no & 400 & 25 & 59.3\\
+Borehole & 74 & no & 150 & 0 & 71.5\\
+Pond & 62 & no & 100 & 4 & 57.1\\\bottomrule\end{tabular}\end{table}
+
+\begin{example}{choosing the water source}
+Score the sources of Table~\ref{tab:src}.
+
+\textbf{Solution.} River: $92-30-\min(45,900/60)-\min(20,0.8\times8)=92-30-15-6.4=40.6$. Canal: $90-0-20-2.4=67.6$. Reservoir: $86-6.67-20=59.3$ (the lift term is capped at 20). Borehole: $74-2.5-0=71.5$. Pond: $62-1.67-3.2=57.1$. The best is the Borehole ($71.5$). The seasonal river drops below the canal because of its $-30$ penalty even though its type score is higher.
+\end{example}
+
+\section{Vegetation and water indices}
+For each 10 m cell with blue, red, red-edge, NIR and SWIR reflectances $\rho_B,\rho_R,\rho_{RE},\rho_N,\rho_{SW}$:
+\begin{equation}\mathrm{NDVI}=\frac{\rho_N-\rho_R}{\rho_N+\rho_R},\ \mathrm{EVI}=2.5\frac{\rho_N-\rho_R}{\rho_N+6\rho_R-7.5\rho_B+1},\ \mathrm{SAVI}=\frac{(1+L)(\rho_N-\rho_R)}{\rho_N+\rho_R+L},\ L=0.5,\ \mathrm{NDRE}=\frac{\rho_N-\rho_{RE}}{\rho_N+\rho_{RE}},\ \mathrm{NDWI}=\frac{\rho_N-\rho_{SW}}{\rho_N+\rho_{SW}}.\end{equation}
+From the colour photo only: $\mathrm{VARI}=\frac{G-R}{G+R-B}$, $\mathrm{GLI}=\frac{2G-R-B}{2G+R+B}$, $\mathrm{ExG}=2g-r-b$ (chromatic coordinates), $\mathrm{NGRDI}=\frac{G-R}{G+R}$.
+
+\begin{table}[H]\centering\small\caption{Indices from illustrative reflectances (blue, red, red-edge, NIR, SWIR): dense (0.03, 0.04, 0.18, 0.45, 0.20), sparse (0.05, 0.10, 0.20, 0.30, 0.25), bare (0.09, 0.20, 0.23, 0.27, 0.35), stressed (0.04, 0.08, 0.20, 0.32, 0.28).}\label{tab:idx}
+\begin{tabular}{lrrrrr}\toprule
+Cell type & NDVI & EVI & SAVI & NDRE & NDWI\\\midrule
+Dense crop & 0.837 & 0.700 & 0.621 & 0.429 & 0.385\\
+Sparse crop & 0.500 & 0.328 & 0.333 & 0.200 & 0.091\\
+Bare soil & 0.149 & 0.097 & 0.108 & 0.080 & -0.129\\
+Stressed crop & 0.600 & 0.400 & 0.400 & 0.231 & 0.067\\\bottomrule\end{tabular}\end{table}
+
+\begin{example}{indices of one cell}
+Compute the indices of the dense-crop cell $(\rho_B,\rho_R,\rho_{RE},\rho_N,\rho_{SW})=(0.03,0.04,0.18,0.45,0.20)$.
+
+\textbf{Solution.} NDVI $=(0.45-0.04)/(0.45+0.04)=0.41/0.49=0.837$. EVI $=2.5\times0.41/(0.45+0.24-0.225+1)=1.025/1.465=0.700$. SAVI $=1.5\times0.41/(0.45+0.04+0.5)=0.615/0.99=0.621$. NDRE $=(0.45-0.18)/(0.45+0.18)=0.27/0.63=0.429$. NDWI $=(0.45-0.20)/(0.45+0.20)=0.25/0.65=0.385$. For the bare cell NDVI is only 0.149, and its NDWI is negative (-0.129): bare soil reflects more in the SWIR than in the NIR.
+\end{example}
+
+\begin{example}{visible-band indices}
+A drone photo cell has $R=110$, $G=150$, $B=60$ (8-bit). Compute VARI, GLI, ExG and NGRDI.
+
+\textbf{Solution.} Sum $R+G+B=320$; $r=0.3438$, $g=0.4688$, $b=0.1875$. VARI $=(150-110)/(150+110-60)=40/200=0.200$. GLI $=(300-110-60)/(300+110+60)=130/470=0.277$. ExG $=2\times0.4688-0.3438-0.1875=0.406$. NGRDI $=40/260=0.154$. All four are positive: the cell is greener than red.
+\end{example}
+
+\section{Zones, cover and the zone-by-zone balance}
+From the series of scenes each cell gets the standardised index $z_{i,t}=(\mathrm{NDVI}_{i,t}-\overline{\mathrm{NDVI}}_t)/\sigma_t$, the stability $\frac1n\sum_tz_{i,t}$ and the change $\Delta_i=\mathrm{NDVI}_{i,t_n}-\mathrm{NDVI}_{i,t_{n-1}}$. For the zone balance the cover is $f_c=(\mathrm{NDVI}-0.15)/0.7$, scaled by the model's crop development $c(t)$ as $f_{c,z}(t)=\min(1,c(t)f_c(\mathrm{NDVI}_z)/\bar f_c)$, and the crop coefficient $K_c=K_{c,\rm ini}+(K_{c,\rm mid}-K_{c,\rm ini})K_d$ with $K_d=\min(1,1.5f_c,f_c^{0.5})$ (Allen and Pereira, 2009).
+
+\begin{table}[H]\centering\small\caption{NDVI of four cells over five scenes; population standard deviation.}\label{tab:ndvi}
+\begin{tabular}{lrrrrrrr}\toprule
+ & t1 & t2 & t3 & t4 & t5 & stability & $\Delta$\\\midrule
+cell 1 & 0.42 & 0.55 & 0.66 & 0.71 & 0.62 & 0.30 & -0.09\\
+cell 2 & 0.40 & 0.57 & 0.70 & 0.74 & 0.60 & 0.41 & -0.14\\
+cell 3 & 0.30 & 0.44 & 0.52 & 0.55 & 0.47 & -1.66 & -0.08\\
+cell 4 & 0.45 & 0.60 & 0.72 & 0.76 & 0.66 & 0.95 & -0.10\\
+field mean & 0.393 & 0.540 & 0.650 & 0.690 & 0.588 &  & \\
+$\sigma_t$ & 0.056 & 0.060 & 0.078 & 0.083 & 0.071 &  & \\\bottomrule\end{tabular}\end{table}
+
+\begin{example}{stability of a cell}
+For Table~\ref{tab:ndvi} find $z_{3,t}$, the stability of cell 3 and its change since the previous scene, and say which cell belongs in the weakest monitoring zone.
+
+\textbf{Solution.} Field means $(0.393, 0.540, 0.650, 0.690, 0.588)$; standard deviations $(0.056, 0.060, 0.078, 0.083, 0.071)$. For cell 3: $z=(0.30-0.393)/0.056=-1.64$, then -1.66, -1.66, -1.69, -1.65. Stability $=\frac15\sum z=-1.66$; $\Delta_3=0.47-0.55=-0.08$. Cell 3 is below the field on every date (stability $-1.66$), so it belongs to the weakest zone: a zone is a part of the field that is weaker on every date, not on one.
+\end{example}
+
+\begin{table}[H]\centering\small\caption{Cover and crop coefficient from NDVI ($K_{c,\rm ini}=0.30$, $K_{c,\rm mid}=1.20$).}\label{tab:ndvikc}
+\begin{tabular}{lrrr}\toprule
+NDVI & $f_c$ & $K_d$ & $K_c$ (maize)\\\midrule
+0.20 & 0.071 & 0.107 & 0.396\\
+0.30 & 0.214 & 0.321 & 0.589\\
+0.45 & 0.429 & 0.643 & 0.879\\
+0.60 & 0.643 & 0.802 & 1.022\\
+0.75 & 0.857 & 0.926 & 1.133\\
+0.85 & 1.000 & 1.000 & 1.200\\\bottomrule\end{tabular}\end{table}
+
+\begin{example}{crop coefficient from NDVI}
+A zone has NDVI = 0.60. Find $f_c$, $K_d$ and the maize $K_c$.
+
+\textbf{Solution.} $f_c=(0.60-0.15)/0.7=0.643$. $K_d=\min(1,1.5\times0.643,\sqrt{0.643})=\min(1,0.964,0.802)=0.802$. $K_c=0.30+0.90\times0.802=1.022$. For a thin canopy (NDVI 0.30), $f_c=0.214$, $K_d=\min(1,0.321,0.463)=0.321$ and $K_c=0.589$: $K_d$ rises faster than the cover at first (the $1.5f_c$ branch) and then follows $\sqrt{f_c}$.
+\end{example}
+
+\section{Runoff, gullies and soil loss}
+\textbf{Runoff.} The runoff of each day follows the SCS curve number (TR-55): with $S=25400/CN-254$ (mm) and $I_a=0.2S$, $Q=(P-I_a)^2/(P+0.8S)$ for $P>I_a$. The curve number depends on the hydrologic soil group (from the SoilGrids texture) and the cover: row crop in good condition, or bare soil when the monthly NDVI is below 0.3. The values below are the standard TR-55 ones for those two classes and are quoted for the worked example; they were not checked against the program.
+
+\begin{table}[H]\centering\small\caption{Runoff $Q$ (mm) from daily rain $P$ = 20, 40, 80 mm.}\label{tab:cn}
+\begin{tabular}{lrrrrrrrr}\toprule
+Group & CN row & CN bare & Q 20 & Q 40 & Q 80 & bare Q 20 & bare Q 40 & bare Q 80\\\midrule
+A & 67 & 77 & 0.0 & 1.6 & 16.8 & 0.3 & 6.1 & 29.9\\
+B & 78 & 86 & 0.4 & 6.8 & 31.4 & 2.6 & 13.8 & 45.5\\
+C & 85 & 91 & 2.2 & 12.7 & 43.6 & 5.6 & 20.4 & 56.2\\
+D & 89 & 94 & 4.2 & 17.5 & 51.7 & 8.5 & 25.5 & 63.4\\\bottomrule\end{tabular}\end{table}
+
+\begin{example}{runoff of one storm}
+A 40 mm rain falls on a group B soil under a row crop ($CN=78$) and then on the same soil bare ($CN=86$).
+
+\textbf{Solution.} Row crop: $S=25400/78-254=71.6$ mm, $I_a=0.2S=14.3$ mm, $Q=(40-14.3)^2/(40+0.8\times71.6)=6.8$ mm. Bare ($CN=86$): $S=41.3$, $I_a=8.3$, $Q=13.8$ mm. Bare soil sheds 2.03 times as much runoff.
+\end{example}
+
+\textbf{Ephemeral gullies.} A gully is likely where $G=S\,A^{0.4}/0.025\ge1$, with $A$ the upslope area (ha) and $S$ the slope (m m$^{-1}$) (Vandaele et al., 1996).
+\textbf{Soil loss (RUSLE).} $A_s=RKLS\,CP$ with $R=0.0483P_a^{1.61}$ (for $P_a\le850$ mm; $587.8-1.219P_a+0.004105P_a^2$ above), shared over the months by the erosive daily rains ($P_d\ge12.7$ mm, exponent 1.81), $C_i=\sum_m(R_m/R)\,e^{-2\mathrm{NDVI}_{i,m}/(1-\mathrm{NDVI}_{i,m})}$ and $LS=(A/22.13)^{0.4}(\sin\beta/0.0896)^{1.3}$ (Moore and Wilson, 1992; $A$ the specific upslope area).
+
+\begin{table}[H]\centering\small\caption{Gully threshold.}\label{tab:gully}
+\begin{tabular}{lrrr}\toprule
+$A$ (ha) & $S$ (\%) & $G$ & gully\\\midrule
+0.1 & 1 & 0.16 & no\\
+0.1 & 3 & 0.48 & no\\
+0.5 & 1 & 0.30 & no\\
+0.5 & 3 & 0.91 & no\\
+1.0 & 1 & 0.40 & no\\
+1.0 & 3 & 1.20 & likely\\
+2.0 & 1 & 0.53 & no\\
+2.0 & 3 & 1.58 & likely\\
+5.0 & 1 & 0.76 & no\\
+5.0 & 3 & 2.28 & likely\\\bottomrule\end{tabular}\end{table}
+
+\begin{table}[H]\centering\small\caption{Months of an illustrative year: erosive-rain share, NDVI and the cover factor $C_m=e^{-2\mathrm{NDVI}/(1-\mathrm{NDVI})}$.}\label{tab:rusle}
+\begin{tabular}{lrrrr}\toprule
+month & erosive share (\%) & NDVI & $C_m$ & $R_m$\\\midrule
+1 & 0 & 0.25 & 0.513 & 0\\
+2 & 0 & 0.25 & 0.513 & 0\\
+3 & 1 & 0.25 & 0.513 & 16\\
+4 & 6 & 0.30 & 0.424 & 96\\
+5 & 14 & 0.45 & 0.195 & 223\\
+6 & 20 & 0.65 & 0.024 & 318\\
+7 & 23 & 0.72 & 0.006 & 366\\
+8 & 19 & 0.70 & 0.009 & 302\\
+9 & 13 & 0.55 & 0.087 & 207\\
+10 & 4 & 0.35 & 0.341 & 64\\
+11 & 0 & 0.25 & 0.513 & 0\\
+12 & 0 & 0.25 & 0.513 & 0\\\bottomrule\end{tabular}\end{table}
+
+\begin{example}{soil loss of a field}
+Annual rain 640 mm; loam (40\% sand, 40\% silt, 20\% clay, 1.2\% organic carbon); slope 4\% with a specific upslope area of 60 m; monthly NDVI and erosive-rain share of Table~\ref{tab:rusle}. Find the soil loss with $P=1$.
+
+\textbf{Solution.} $R=0.0483\times640^{1.61}=1{,}592$ MJ mm ha$^{-1}$ h$^{-1}$ y$^{-1}$. $K$ (EPIC): $0.2+0.3e^{-0.0256\times40(1-0.40)}=0.3623$; $[40/60]^{0.3}=0.8855$; organic-carbon term $0.8749$; sand term $0.9999$; $K=0.2806$ (US units), $0.0370$ in t ha h ha$^{-1}$ MJ$^{-1}$ mm$^{-1}$. $LS=(60/22.13)^{0.4}(\sin\beta/0.0896)^{1.3}$ with $\beta=\arctan0.04$: $\sin\beta=0.0400$, $LS=0.522$. $C=\sum(R_m/R)C_m=0.091$ (the erosive months have a green canopy, so the effective $C$ is much smaller than the bare-soil value $e^{-0.667}=0.51$). So $A_s=1{,}592\times0.0370\times0.522\times0.091\times1=2.79$ t ha$^{-1}$ y$^{-1}$, above the tolerable 2 t ha$^{-1}$ y$^{-1}$.
+\end{example}
+
+\begin{keybox}The soil-loss figure is as good as its factors: the $R$ law was fitted to rain regimes quite different from many sites, the $K$ formula is the EPIC approximation of the nomograph, and the $C$ factor from NDVI is an empirical curve. The layer presents the result against the tolerable 2 t ha$^{-1}$ y$^{-1}$ and names the risk window (months when NDVI is below 0.35 meets a large erosive share); it does not predict a gully's depth.\end{keybox}
+
+\section{Summary}
+\begin{itemize}
+\item ET$_0$ from temperature (Hargreaves), radiation (Makkink), or the service (Penman--Monteith).
+\item A weather file is gridded by $\rho_{\rm ref}$ and $\Delta T_{\rm ref}$; the daily layers use the file as is.
+\item Area and perimeter on the sphere; slope by a fitted plane; water source by an engineered score.
+\item NDVI and companions from reflectances; zones from standardised series; $K_c$ from NDVI cover.
+\item Runoff by curve number; gullies by the $SA^{0.4}$ threshold; soil loss by RUSLE.
+\end{itemize}

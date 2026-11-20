@@ -1,4 +1,4 @@
-\chapter{Solving the Richards equation numerically}
+\chapter{Solving the Richards equation numerically}\label{ch:rich}
 \markboth{Solving the Richards equation}{Solving the Richards equation}
 \textbf{After this chapter you can} discretise the Richards equation with a conservative finite-volume scheme, explain why the \emph{modified Picard} iteration conserves mass, run a one-dimensional infiltration simulation yourself, and judge whether a numerical result has converged.
 
@@ -64,12 +64,30 @@ A numerical solution is not an answer until you have tested that it does not dep
 Daisy solves the same equation in a layered column, with root uptake $S_r$ from Chapter~4, a surface boundary that switches between a prescribed flux (rain, irrigation, evaporation demand) and a prescribed head (ponding), and a lower boundary set in the set-up file. Its logs of suction and water content by layer and day are what the figures of the study are built from. A run that fails to converge is written as a failure, and is excluded from the 10,041 valid runs.
 \end{daisybox}
 
-\begin{exercise}Derive Equation~(\ref{eq:cap}) by differentiating $\theta(\psi)=\theta_r+(\theta_s-\theta_r)[1+(\alpha|\psi|)^n]^{-m}$.\end{exercise}
-\begin{exercise}Compute $C$ at $\psi=-300$ cm for the loam, with $\theta_s-\theta_r=0.352$.\end{exercise}
-\begin{exercise}Show that when the iteration of Equation~(\ref{eq:picard}) has converged, the discrete mass balance Equation~(\ref{eq:cellbal}) holds.\end{exercise}
-\begin{exercise}Explain in a few sentences why the arithmetic mean of $K$ at a face overestimates the flux in front of a sharp wetting front.\end{exercise}
-\begin{exercise}A student halves $\Delta z$ and finds $I$ changes by 6 per cent. Is the solution converged? What should she do next?\end{exercise}
-\begin{exercise}Using Table~\ref{tab:loam}, estimate the infiltration rate in cm\,d$^{-1}$ between 6 and 12 h and compare it with $\Ks$.\end{exercise}
+\begin{example}{problem 12.1}\textbf{Problem.} Derive Equation~(\ref{eq:cap}) by differentiating $\theta(\psi)=\theta_r+(\theta_s-\theta_r)[1+(\alpha|\psi|)^n]^{-m}$.
+
+\textbf{Solution.} $d\theta/d\psi$ with $x=\alpha|\psi|$, $dx/d\psi=-\alpha$ for $\psi<0$: $(\theta_s-\theta_r)(-m)(1+x^n)^{-m-1}n\,x^{n-1}(-\alpha)$, which is Equation (12.2).
+\end{example}
+\begin{example}{problem 12.2}\textbf{Problem.} Compute $C$ at $\psi=-300$ cm for the loam, with $\theta_s-\theta_r=0.352$.
+
+\textbf{Solution.} $C(-300)=0.352(0.036)(0.359)(1.56)(3.79)(0.00625)=1.7\times10^{-4}$ cm$^{-1}$.
+\end{example}
+\begin{example}{problem 12.3}\textbf{Problem.} Show that when the iteration of Equation~(\ref{eq:picard}) has converged, the discrete mass balance Equation~(\ref{eq:cellbal}) holds.
+
+\textbf{Solution.} If $\psi^{k+1}=\psi^k$ the capacity term vanishes and the remaining term $(\theta^k-\theta^j)/\Delta t$ is the storage change with $\theta^k=\theta(\psi^{j+1})$; the right-hand side is the flux divergence at $\psi^{j+1}$, which is Equation (12.4).
+\end{example}
+\begin{example}{problem 12.4}\textbf{Problem.} Explain in a few sentences why the arithmetic mean of $K$ at a face overestimates the flux in front of a sharp wetting front.
+
+\textbf{Solution.} At a sharp front $K$ changes by orders of magnitude between neighbouring cells. The arithmetic mean is dominated by the wet value and lets water into the dry cell far faster than it can go; the geometric mean is close to the smaller value.
+\end{example}
+\begin{example}{problem 12.5}\textbf{Problem.} Suppose a modeller halves $\Delta z$ and finds $I$ changes by 6 per cent. Is the solution converged? What should be done next?
+
+\textbf{Solution.} No. A change of 6 per cent shows the result still depends on the grid. Refine again (and reduce $\Delta t$) until successive changes are below about 1 to 2 per cent.
+\end{example}
+\begin{example}{problem 12.6}\textbf{Problem.} Using Table~\ref{tab:loam}, estimate the infiltration rate in cm\,d$^{-1}$ between 6 and 12 h and compare it with $\Ks$.
+
+\textbf{Solution.} $(13.81-7.71)/0.25=24.4$ cm\,d$^{-1}$, which is $98$ per cent of $\Ks=24.96$.
+\end{example}
 
 \chapter{Evapotranspiration and the two stages of soil evaporation}
 \markboth{Evapotranspiration and soil evaporation}{Evapotranspiration and soil evaporation}
@@ -106,10 +124,22 @@ A mulch lowers the energy that reaches the soil surface and the vapour exchange 
 Daisy computes an energy-based potential evapotranspiration from the weather of its input file and divides it between the canopy and the soil according to the cover. The soil evaporation of Daisy then follows the water content of the top layers through the Richards equation, so the two-stage behaviour of this chapter appears in the output without being imposed. Daisy's logs give $T$, $E_s$ and the canopy evaporation separately, and the audit of Chapter~8 asks whether they add up to $ET$.
 \end{daisybox}
 
-\begin{exercise}Compute $ET_0$ for $T=30\,^\circ$C, $R_n=18$, $G=0$, $u_2=3$, relative humidity 35 per cent, $P=101.3$ kPa.\end{exercise}
-\begin{exercise}Derive the equivalent evaporation depth $R_n/\lambda$ in mm for $R_n=1$ MJ\,m$^{-2}$\,d$^{-1}$ using $\lambda=2.45$ MJ\,kg$^{-1}$ and $\rho_w=1000$ kg\,m$^{-3}$.\end{exercise}
-\begin{exercise}With $U=6$ mm, $\beta=2.5$ mm\,d$^{-1/2}$ and a potential rate of 5 mm\,d$^{-1}$, find the cumulative evaporation 6 days after a wetting.\end{exercise}
-\begin{exercise}Explain why two 5 mm irrigations one week apart can lose more to evaporation than one 10 mm irrigation.\end{exercise}
+\begin{example}{problem 13.1}\textbf{Problem.} Compute $ET_0$ for $T=30\,^\circ$C, $R_n=18$, $G=0$, $u_2=3$, relative humidity 35 per cent, $P=101.3$ kPa.
+
+\textbf{Solution.} $e_s=4.243$, $e_a=1.485$, $\Delta=0.2434$, $\gamma=0.0674$; $ET_0=9.07$ mm\,d$^{-1}$.
+\end{example}
+\begin{example}{problem 13.2}\textbf{Problem.} Derive the equivalent evaporation depth $R_n/\lambda$ in mm for $R_n=1$ MJ\,m$^{-2}$\,d$^{-1}$ using $\lambda=2.45$ MJ\,kg$^{-1}$ and $\rho_w=1000$ kg\,m$^{-3}$.
+
+\textbf{Solution.} $1/2.45=0.408$ mm per MJ\,m$^{-2}$\,d$^{-1}$.
+\end{example}
+\begin{example}{problem 13.3}\textbf{Problem.} With $U=6$ mm, $\beta=2.5$ mm\,d$^{-1/2}$ and a potential rate of 5 mm\,d$^{-1}$, find the cumulative evaporation 6 days after a wetting.
+
+\textbf{Solution.} Stage 1 lasts $6/5=1.2$ d; $t-t_1=4.8$ d; $E=6+2.5\sqrt{4.8}=11.5$ mm.
+\end{example}
+\begin{example}{problem 13.4}\textbf{Problem.} Explain why two 5 mm irrigations one week apart can lose more to evaporation than one 10 mm irrigation.
+
+\textbf{Solution.} Each wetting restarts stage 1, where evaporation proceeds at the potential rate; a single large wetting spends most of its time in stage 2, with the dry surface layer slowing evaporation.
+\end{example}
 
 \chapter{Crop water stress and yield}
 \markboth{Crop water stress and yield}{Crop water stress and yield}
@@ -138,7 +168,19 @@ With a yield response factor $K_y=1.15$ (illustrative) and a season in which $ET
 
 \section{Link with the trigger}
 The suction at the sensor at which the depletion reaches $RAW$ is the \emph{ideal} trigger. If it lies beyond the reach $\hc$ of the soil, the crop cannot reach it and the field is stressed before the sensor says so. Comparing the two is the use of Chapter~5 in design: choose the trigger below the smaller of the two, and below $\hc/2$ in practice.
-\begin{exercise}A soil has $TAW=95$ mm (S05) and $p=0.55$. Find $RAW$ and $K_s$ at $D_r=70$ mm.\end{exercise}
-\begin{exercise}With $K_y=0.9$ and a season mean $ET_a/ET_m=0.7$, find the relative yield.\end{exercise}
-\begin{exercise}For sand (S03, $TAW=60$ mm, $p=0.5$) find how many days at $ET_c=5$ mm\,d$^{-1}$ pass between a full profile and the onset of stress. Compare with the loam.\end{exercise}
-\begin{exercise}Explain why a sensor trigger beyond the reach leads to a larger yield loss in a sand than the stress coefficient alone would predict.\end{exercise}
+\begin{example}{problem 14.1}\textbf{Problem.} A soil has $TAW=95$ mm (S05) and $p=0.55$. Find $RAW$ and $K_s$ at $D_r=70$ mm.
+
+\textbf{Solution.} $RAW=0.55(95)=52.3$ mm; $K_s=(95-70)/(0.45\cdot95)=0.585$.
+\end{example}
+\begin{example}{problem 14.2}\textbf{Problem.} With $K_y=0.9$ and a season mean $ET_a/ET_m=0.7$, find the relative yield.
+
+\textbf{Solution.} $1-0.9(0.3)=0.73$.
+\end{example}
+\begin{example}{problem 14.3}\textbf{Problem.} For sand (S03, $TAW=60$ mm, $p=0.5$) find how many days at $ET_c=5$ mm\,d$^{-1}$ pass between a full profile and the onset of stress. Compare with the loam.
+
+\textbf{Solution.} Sand: $RAW=30$ mm, $30/5=6$ d. Loam: $RAW=75$ mm, $15$ d.
+\end{example}
+\begin{example}{problem 14.4}\textbf{Problem.} Explain why a sensor trigger beyond the reach leads to a larger yield loss in a sand than the stress coefficient alone would predict.
+
+\textbf{Solution.} A sensor trigger beyond the reach is never read, so the crop is not irrigated even as the stress coefficient falls; the field is rainfed and the sand's small $TAW$ means the stress comes within days.
+\end{example}

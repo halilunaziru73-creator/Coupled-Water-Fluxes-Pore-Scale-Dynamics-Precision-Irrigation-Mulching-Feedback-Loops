@@ -1,4 +1,4 @@
-\chapter{The fate of an irrigation millimetre}
+\chapter{The fate of an irrigation millimetre}\label{ch:fate}
 \markboth{The fate of an irrigation millimetre}{The fate of an irrigation millimetre}
 \textbf{After this chapter you can} derive the marginal fate of irrigation from two water balances, explain why a share can be negative, and use the dose law to choose a dose.
 
@@ -46,13 +46,28 @@ Take a soil with $\eta_\infty=0.30$ and $d_D=4.1$ mm. Equation~(\ref{eq:dose}) g
 For each soil and each run of E10 (dose 1 to 30 mm applied in 12 h, ten irrigation windows), the annual drainage at 1 m is read from the Daisy log and subtracted from the drainage of the rainfed twin in E0. Pooling gives $\eta_D$ per soil and dose. Equation~(\ref{eq:dose}) is then fitted per soil by nonlinear least squares for $\eta_\infty$ and $d_D$. Methods come from E4 (surface, overhead, subsurface on each soil) and from E15 (method crossed with rate, dose and rooting depth in coarse loam). All shares sum to one by construction, so the fifth is obtained as a check, not fitted.
 \end{daisybox}
 
-\begin{exercise}A run has $I=150$ mm and differences from its twin of $T$: $+45$, $E_s$: $+40$, $E_o$: $+30$, $D$: $+30$. Find $\eta_S$ and all five shares.\end{exercise}
-\begin{exercise}Show that a negative $\eta_T$ is possible when the added water is intercepted and evaporated.\end{exercise}
-\begin{exercise}For $\eta_\infty=0.45$ and $d_D=4.1$ mm compute $\eta_D$ at 2, 5, 10 and 25 mm. At what dose does $\eta_D$ reach 90 per cent of the plateau?\end{exercise}
-\begin{exercise}Why is the ratio of sums, and not the mean of the ratios, used when pooling runs?\end{exercise}
-\begin{exercise}The text says Equation~(\ref{eq:dose}) is phenomenological. Name two properties it was chosen for.\end{exercise}
+\begin{example}{problem 6.1}\textbf{Problem.} A run has $I=150$ mm and differences from its twin of $T$: $+45$, $E_s$: $+40$, $E_o$: $+30$, $D$: $+30$. Find $\eta_S$ and all five shares.
 
-\chapter{Hydraulic memory}
+\textbf{Solution.} $\eta_S=150-(45+40+30+30)=5$ mm, so shares $0.30,\ 0.267,\ 0.20,\ 0.20,\ 0.033$.
+\end{example}
+\begin{example}{problem 6.2}\textbf{Problem.} Show that a negative $\eta_T$ is possible when the added water is intercepted and evaporated.
+
+\textbf{Solution.} If the added water is intercepted and evaporates, canopy evaporation of the irrigation can exceed what the crop would otherwise take up, so the change of $T$ can be below zero.
+\end{example}
+\begin{example}{problem 6.3}\textbf{Problem.} For $\eta_\infty=0.45$ and $d_D=4.1$ mm compute $\eta_D$ at 2, 5, 10 and 25 mm. At what dose does $\eta_D$ reach 90 per cent of the plateau?
+
+\textbf{Solution.} $\eta_D=0.45(1-e^{-d/4.1})$: $0.147$, $0.250$, $0.411$, $0.447$ at 2, 5, 10, 25 mm. 90 per cent of the plateau at $d=4.1\ln10=9.4$ mm.
+\end{example}
+\begin{example}{problem 6.4}\textbf{Problem.} Why is the ratio of sums, and not the mean of the ratios, used when pooling runs?
+
+\textbf{Solution.} The ratio of sums weights each run by its irrigation and gives the share of the total irrigation; a mean of ratios would give a run with almost no irrigation the same weight as a large one.
+\end{example}
+\begin{example}{problem 6.5}\textbf{Problem.} The text says Equation~(\ref{eq:dose}) is phenomenological. Name two properties it was chosen for.
+
+\textbf{Solution.} The correct limits (zero dose drains nothing; large dose passes on a constant share) and a single scale.
+\end{example}
+
+\chapter{Hydraulic memory}\label{ch:mem}
 \markboth{Hydraulic memory}{Hydraulic memory}
 \textbf{After this chapter you can} define the memory fate as a pooled regression slope, derive the rate-competition law, and explain why a saving from evaporation is soil specific.
 
@@ -96,8 +111,23 @@ In experiment E16, a $2^6$ factorial per soil (rainfall scale, temperature shift
 Leave-one-soil-out prediction compares four soil predictors (total available water, $\Se$ at 100 cm, $n$ and $\log\Ks$) and a mean-only benchmark. Spearman correlations come with exact permutation $p$ values and 10,000 bootstrap resamples; an exact sign test across soils checks the direction. All inputs are annual values read from the Daisy logs of E9, E7 and E16.
 \end{daisybox}
 
-\begin{exercise}Four cells have $\bar R=(5,15,25,35)$ and $E_s=(20,22,24,26)$ in one rain level. Compute $\phi_{E_s}$.\end{exercise}
-\begin{exercise}Derive Equation~(\ref{eq:comp}) from the two first-order sinks, showing the integral.\end{exercise}
-\begin{exercise}If $q^*=1.5$ cm\,d$^{-1}$ (a hypothetical value) find $\phi_D$ for $\Ks=0.5$, $5$ and $50$ cm\,d$^{-1}$.\end{exercise}
-\begin{exercise}Explain why a nitrogen factor with no effect is useful as a negative control.\end{exercise}
-\begin{exercise}A mulch saves 40 mm of evaporation in sand ($\phi_D=0.85$) and in silty clay loam ($\phi_D=0.02$). Estimate, using the memory fate as the drained share, how many millimetres stay available to the crop in each.\end{exercise}
+\begin{example}{problem 7.1}\textbf{Problem.} Four cells have $\bar R=(5,15,25,35)$ and $E_s=(20,22,24,26)$ in one rain level. Compute $\phi_{E_s}$.
+
+\textbf{Solution.} Deviations $(-15,-5,5,15)$ and $(-3,-1,1,3)$: numerator $45+5+5+45=100$, denominator $500$, $\phi_{E_s}=0.20$.
+\end{example}
+\begin{example}{problem 7.2}\textbf{Problem.} Derive Equation~(\ref{eq:comp}) from the two first-order sinks, showing the integral.
+
+\textbf{Solution.} $dS/dt=-(k_D+k_W)S\Rightarrow S=S_0e^{-(k_D+k_W)t}$; $\int_0^\infty k_DS\,dt=k_DS_0/(k_D+k_W)$; with $k_D\propto\Ks$ and $k_W\propto q^*$ the factor $L$ cancels.
+\end{example}
+\begin{example}{problem 7.3}\textbf{Problem.} If $q^*=1.5$ cm\,d$^{-1}$ (a hypothetical value) find $\phi_D$ for $\Ks=0.5$, $5$ and $50$ cm\,d$^{-1}$.
+
+\textbf{Solution.} $\phi_D=0.25,\ 0.77,\ 0.97$ for $\Ks=0.5,\ 5,\ 50$ (with $q^*=1.5$).
+\end{example}
+\begin{example}{problem 7.4}\textbf{Problem.} Explain why a nitrogen factor with no effect is useful as a negative control.
+
+\textbf{Solution.} An effect that is known to be absent shows what a null result looks like and guards against reading a pattern into noise.
+\end{example}
+\begin{example}{problem 7.5}\textbf{Problem.} A mulch saves 40 mm of evaporation in sand ($\phi_D=0.85$) and in silty clay loam ($\phi_D=0.02$). Estimate, using the memory fate as the drained share, how many millimetres stay available to the crop in each.
+
+\textbf{Solution.} Sand: $40\times(1-0.85)=6$ mm stay; silty clay loam: $40\times(1-0.02)=39.2$ mm stay.
+\end{example}
