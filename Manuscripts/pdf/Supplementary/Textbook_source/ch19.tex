@@ -3,197 +3,213 @@
 \chapter{The Atlas of Results I: the System, the Soil Pores and the Coupled Fluxes}\label{chap:19}
 \markboth{The Atlas of Results I: the System, the Soil Pores and the Coupled Fluxes}{The Atlas of Results I: the System, the Soil Pores and the Coupled Fluxes}
 Every figure of this chapter is shown with the same five items, in the same order: \emph{what it shows}, \emph{the equation behind it} with the meaning of its symbols, \emph{how it is derived} from the Daisy outputs, \emph{the data} it uses, and \emph{how to read it}. The experiments are named E0 to E16 as in the earlier chapters; ``Daisy output used'' names the columns of the run table that the figure draws on. A figure is read against its equation: the axes are the symbols of the equation, and a feature of the curves that none of them explains is a finding to be checked, not a result to be reported.
-\banner{The system, the forcing and the baseline}
-\section{Feedback loops with data-derived effect sizes}
+\section{The system, the forcing and the baseline}
+This group holds 5 figures: Feedback loops with data-derived effect sizes; Experiment design matrix; Climate forcing; Rainfed yields per year and soil; Rainfed water balance per soil. Each is set out in the order of the introduction to this chapter.
+\par\vspace{6pt}\noindent\hd{Feedback loops with data-derived effect sizes}\par\nobreak
 \fig{at/a19_01.jpg}{1.0}{Causal-loop diagram; arrow labels are regression slopes from E11, E14, E12, E1/E10 and E13.}\label{fig:a19_1}
 \par\noindent\textbf{\color{khmag}\emph{What it shows.}} Causal-loop diagram; arrow labels are regression slopes from E11, E14, E12, E1/E10 and E13.
 \par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
-\[b=\dfrac{\sum_i (x_i-\bar x)(y_i-\bar y)}{\sum_i (x_i-\bar x)^2}\]
+\begin{equation}\boxed{b=\dfrac{\sum_i (x_i-\bar x)(y_i-\bar y)}{\sum_i (x_i-\bar x)^2}}\end{equation}
 \par\noindent where $x_i,y_i$ the factor level and the output of run $i$; $\bar x,\bar y$ their means; $b$ the least-squares slope.
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Ten arrows are ten least-squares slopes, each from the runs of one experiment with the other factors fixed (effect\_sizes.csv).
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E1,E10-E14; Daisy output used: irrigation\_mm, ET\_mm, soil\_evap\_mm, drainage\_1m\_mm, N\_leached\_kg\_ha, yield\_Mg\_ha.
-\section{Experiment design matrix}
+\par\vspace{6pt}\noindent\hd{Experiment design matrix}\par\nobreak
 \fig{at/a19_02.jpg}{1.0}{Number of levels of each factor per experiment (from the run names) and the number of simulations; red = runs excluded for solver failure.}\label{fig:a19_2}
 \par\noindent\textbf{\color{khmag}\emph{What it shows.}} Number of levels of each factor per experiment (from the run names) and the number of simulations; red = runs excluded for solver failure.
 \par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
-\[N=\sum_{e=0}^{16} n_e=10\,190,\qquad N_{\mathrm{valid}}=10\,041\]
+\begin{equation}\boxed{N=\sum_{e=0}^{16} n_e=10\,190,\qquad N_{\mathrm{valid}}=10\,041}\end{equation}
 \par\noindent where $n_e$ number of runs of experiment $e$ (E0 to E16); $N$ total runs; 149 solver failures are excluded.
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} The matrix lists which factor varies in which experiment; counts are taken from the run table.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: All; Daisy output used: run table columns experiment, valid.
-\section{Climate forcing}
+\par\vspace{6pt}\noindent\hd{Climate forcing}\par\nobreak
 \fig{at/a19_03.jpg}{1.0}{Annual rain, reference ET and temperature for the two climates used (Taastrup: E0--E5, E7--E16; Bologna: E6).}\label{fig:a19_3}
 \par\noindent\textbf{\color{khmag}\emph{What it shows.}} Annual rain, reference ET and temperature for the two climates used (Taastrup: E0--E5, E7--E16; Bologna: E6).
 \par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
-\[A=\overline{\left(ET_0/P\right)}\]
+\begin{equation}\boxed{A=\overline{\left(ET_0/P\right)}}\end{equation}
 \par\noindent where $ET_0$ annual reference evapotranspiration (mm); $P$ annual rain (mm); $A$ mean aridity index.
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Annual rain, reference ET and temperature are read from the two weather files (Taastrup and Bologna).
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: Weather files, E0; Daisy output used: weather files (rain, reference ET, temperature).
-\section{Rainfed yields per year and soil}
+\par\vspace{6pt}\noindent\hd{Rainfed yields per year and soil}\par\nobreak
 \fig{at/a19_04.jpg}{1.0}{Harvest-by-harvest yields from the E0 baselines (re-run for per-year output; matches the user's runs within 0.4 \%).}\label{fig:a19_4}
 \par\noindent\textbf{\color{khmag}\emph{What it shows.}} Harvest-by-harvest yields from the E0 baselines (re-run for per-year output; matches the user's runs within 0.4 \%).
 \par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
-\[Y_{s,y}=\mathrm{sorg\_DM}_{s,y}\]
+\begin{equation}\boxed{Y_{s,y}=\mathrm{sorg\_DM}_{s,y}}\end{equation}
 \par\noindent where $Y_{s,y}$ dry-matter yield of soil $s$ in harvest year $y$.
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Harvest-by-harvest yields of the ten rainfed baselines, re-run for per-year output.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E0; Daisy output used: Annual-Harvest.dlf: sorg\_DM.
-\section{Rainfed water balance per soil}
+\par\vspace{6pt}\noindent\hd{Rainfed water balance per soil}\par\nobreak
 \fig{at/a19_05.jpg}{1.0}{Mean annual partitioning of rain in the 10 rainfed baselines.}\label{fig:a19_5}
 \par\noindent\textbf{\color{khmag}\emph{What it shows.}} Mean annual partitioning of rain in the 10 rainfed baselines.
 \par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
-\[P+I=T+E_s+E_c+E_o+D+\Delta S+R,\qquad E_o=ET-T-E_s-E_c\]
+\begin{equation}\boxed{P+I=T+E_s+E_c+E_o+D+\Delta S+R,\qquad E_o=ET-T-E_s-E_c}\end{equation}
 \par\noindent where $P$ rain; $I$ irrigation; $T$ transpiration; $E_s$ soil evaporation; $E_c$ canopy evaporation; $E_o$ evaporation of ponded water, snow and litter or mulch; $D$ drainage across 1 m; $\Delta S$ storage change; $R$ runoff; $ET$ actual evapotranspiration (all mm yr$^{-1}$).
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Mean annual partition of rain in the ten rainfed baselines; $E_o$ is the closing term.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E0; Daisy output used: Annual-FWater\_100cm.dlf, Annual-SWater.dlf.
-\banner{The pore scale and the structure of the soils}
-\section{Retention curves of the 10 soils}
+\exbox{Closing the water balance of a rainfed-plus-irrigated season}{In one season a field receives $P=600$ mm of rain and $I=150$ mm of irrigation. The model gives transpiration $T=380$ mm, soil evaporation $E_s=150$ mm, canopy evaporation $E_c=40$ mm, other evaporation $E_o=15$ mm, drainage below 1 m $D=120$ mm and a change of storage $\Delta S=-5$ mm. Find the runoff $R$ that closes the balance of the figure (illustrative values).}\sol \givenline{$P=600$ ; $I=150$ ; $T=380$ ; $E_s=150$ ; $E_c=40$ ; $E_o=15$ ; $D=120$ ; $\Delta S=-5$ (mm)}
+\par\noindent From the balance under the figure, $P+I=T+E_s+E_c+E_o+D+\Delta S+R$, so
+\[R=(P+I)-(T+E_s+E_c+E_o+D)-\Delta S=750-705-(-5)=50\ \text{mm}\quad\text{\finans}\]
+The fluxes of the soil account for $705$ of the $750$ mm that came in; the store lost $5$ mm, and $50$ mm left as runoff. A residual that is much larger than the error of the log files would be the unattributed term of the audit of Chapter~\ref{chap:04}.
+
+\section{The pore scale and the structure of the soils}
+This group holds 8 figures: Retention curves of the 10 soils; Pore-size distribution; Unsaturated conductivity; Available water, air entry and Ksat; Topsoil conductivity and water content over time; Structural degradation rate effects; Tillage $\times$ water-regime interaction; Wetting--drying loops. Each is set out in the order of the introduction to this chapter.
+\par\vspace{6pt}\noindent\hd{Retention curves of the 10 soils}\par\nobreak
 \fig{at/a19_06.jpg}{1.0}{van Genuchten $\theta$(h) with field capacity (pF 2), the -300 cm trigger and wilting point (pF 4.2).}\label{fig:a19_6}
 \par\noindent\textbf{\color{khmag}\emph{What it shows.}} van Genuchten $\theta$(h) with field capacity (pF 2), the -300 cm trigger and wilting point (pF 4.2).
 \par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
-\[\theta(h)=\theta_r+\dfrac{\theta_s-\theta_r}{\left[1+(\alpha|h|)^{n}\right]^{m}},\quad m=1-\dfrac1n\]
+\begin{equation}\boxed{\theta(h)=\theta_r+\dfrac{\theta_s-\theta_r}{\left[1+(\alpha|h|)^{n}\right]^{m}},\quad m=1-\dfrac1n}\end{equation}
 \par\noindent where $\theta$ volumetric water content (cm$^3$ cm$^{-3}$); $h$ suction head (cm); $\theta_r,\theta_s$ residual and saturated water contents; $\alpha$ (cm$^{-1}$) and $n$ van Genuchten shape parameters.
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} The van Genuchten curve of each soil and horizon, with field capacity at pF 2, the trigger at 300 cm and the wilting point at pF 4.2 ($\mathrm{pF}=\log_{10}|h|$).
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: Soil files; Daisy output used: soil files (parameters only).
-\section{Pore-size distribution}
+\par\vspace{6pt}\noindent\hd{Pore-size distribution}\par\nobreak
 \fig{at/a19_07.jpg}{1.0}{Derivative of the retention curve (-d$\theta$/dpF) for each soil; top axis converts suction to equivalent pore radius.}\label{fig:a19_7}
 \par\noindent\textbf{\color{khmag}\emph{What it shows.}} Derivative of the retention curve (-d$\theta$/dpF) for each soil; top axis converts suction to equivalent pore radius.
 \par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
-\[\text{density}=-\dfrac{d\theta}{d\,\mathrm{pF}}\]
-\[r\,(\mu\mathrm{m})=\dfrac{0.149}{h}\times10^{4}\]
+\begin{equation}\boxed{\text{density}=-\dfrac{d\theta}{d\,\mathrm{pF}}}\end{equation}
+\begin{equation}\boxed{r\,(\mu\mathrm{m})=\dfrac{0.149}{h}\times10^{4}}\end{equation}
 \par\noindent where pF$=\log_{10}|h|$; $h$ suction (cm); $r$ equivalent pore radius from the Young--Laplace law $r=2\sigma\cos\gamma/(\rho g h)=0.149/h$ cm.
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} The derivative of the retention curve is the pore-volume density; the top axis converts suction to pore radius.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: Soil files; Daisy output used: soil files (parameters only).
-\section{Unsaturated conductivity}
+\par\vspace{6pt}\noindent\hd{Unsaturated conductivity}\par\nobreak
 \fig{at/a19_08.jpg}{1.0}{Mualem--van Genuchten K(Se) and K(h) (Ap horizon), mm/day; dotted line = trigger.}\label{fig:a19_8}
 \par\noindent\textbf{\color{khmag}\emph{What it shows.}} Mualem--van Genuchten K(Se) and K(h) (Ap horizon), mm/day; dotted line = trigger.
 \par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
-\[K(S_e)=K_s\,S_e^{\,\ell}\left[1-\left(1-S_e^{1/m}\right)^{m}\right]^{2},\quad S_e=\left[1+(\alpha|h|)^{n}\right]^{-m}\]
+\begin{equation}\boxed{K(S_e)=K_s\,S_e^{\,\ell}\left[1-\left(1-S_e^{1/m}\right)^{m}\right]^{2},\quad S_e=\left[1+(\alpha|h|)^{n}\right]^{-m}}\end{equation}
 \par\noindent where $K$ hydraulic conductivity; $K_s$ saturated conductivity; $S_e$ effective saturation; $\ell$ pore-connectivity exponent; $m=1-1/n$.
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Mualem--van Genuchten conductivity of the Ap horizon, converted to mm day$^{-1}$ (cm h$^{-1}\times240$).
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: Soil files; Daisy output used: soil files (parameters only).
-\section{Available water, air entry and Ksat}
+\par\vspace{6pt}\noindent\hd{Available water, air entry and Ksat}\par\nobreak
 \fig{at/a19_09.jpg}{1.0}{Soil-physical indicators computed from the hydraulic parameters of each soil.}\label{fig:a19_9}
 \par\noindent\textbf{\color{khmag}\emph{What it shows.}} Soil-physical indicators computed from the hydraulic parameters of each soil.
 \par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
-\[\mathrm{TAW}=\sum_{k\in\{Ap,Bt\}}\bigl[\theta_k(100)-\theta_k(15849)\bigr]\,\Delta z_k\times10\]
-\[h_{\mathrm{ae}}=1/\alpha\]
+\begin{equation}\boxed{\mathrm{TAW}=\sum_{k\in\{Ap,Bt\}}\bigl[\theta_k(100)-\theta_k(15849)\bigr]\,\Delta z_k\times10}\end{equation}
+\begin{equation}\boxed{h_{\mathrm{ae}}=1/\alpha}\end{equation}
 \par\noindent where TAW total available water 0--100 cm (mm); $\theta_k(h)$ van Genuchten water content of horizon $k$; $\Delta z_k$ thickness (cm; Ap 25 cm, Bt 75 cm); $h_{\mathrm{ae}}$ air-entry suction.
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Plant-available water from field capacity (100 cm) to wilting point (15\,849 cm), air entry from $1/\alpha$, and $K_s$ from the soil file.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: Soil files; Daisy output used: soil files (parameters only).
-\section{Topsoil conductivity and water content over time}
+\par\vspace{6pt}\noindent\hd{Topsoil conductivity and water content over time}\par\nobreak
 \fig{at/a19_10.jpg}{1.0}{Daily log10 K and $\theta$ at 3.75 cm (30-day rolling statistics), E5 re-runs.}\label{fig:a19_10}
 \par\noindent\textbf{\color{khmag}\emph{What it shows.}} Daily log10 K and $\theta$ at 3.75 cm (30-day rolling statistics), E5 re-runs.
 \par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
-\[K(t)=K\bigl(h(t)\bigr),\quad \bar x_{30}(t)=\dfrac1{30}\sum_{j=0}^{29}x(t-j)\]
+\begin{equation}\boxed{K(t)=K\bigl(h(t)\bigr),\quad \bar x_{30}(t)=\dfrac1{30}\sum_{j=0}^{29}x(t-j)}\end{equation}
 \par\noindent where $K(h)$ Mualem--van Genuchten conductivity at the daily suction $h$; $\bar x_{30}$ 30-day rolling mean of $\log_{10}K$ or $\theta$.
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Daily log K and water content at 3.75 cm, smoothed with a 30-day rolling mean.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E5 daily; Daisy output used: profile logs: h @ -3.75, Theta @ -3.75.
-\section{Structural degradation rate effects}
+\par\vspace{6pt}\noindent\hd{Structural degradation rate effects}\par\nobreak
 \fig{at/a19_11.jpg}{1.0}{E5: change in yield, drainage and irrigation relative to tc = 0.001/day, per tillage system.}\label{fig:a19_11}
 \par\noindent\textbf{\color{khmag}\emph{What it shows.}} E5: change in yield, drainage and irrigation relative to tc = 0.001/day, per tillage system.
 \par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
-\[\Delta_k=\overline{x_k-x_{k,b}}\]
+\begin{equation}\boxed{\Delta_k=\overline{x_k-x_{k,b}}}\end{equation}
 \par\noindent where $x_k$ yield, drainage or irrigation at consolidation rate $k$; $x_{k,b}$ the same at the baseline rate $t_c=0.001$ d$^{-1}$; the bar the mean over soils.
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} The change in each output relative to the baseline structural-degradation rate, per tillage system.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E5; Daisy output used: yield\_Mg\_ha, drainage\_1m\_mm, irrigation\_mm (E5).
-\section{Tillage $\times$ water-regime interaction}
+\par\vspace{6pt}\noindent\hd{Tillage $\times$ water-regime interaction}\par\nobreak
 \fig{at/a19_12.jpg}{1.0}{E5 means over the five consolidation rates.}\label{fig:a19_12}
 \par\noindent\textbf{\color{khmag}\emph{What it shows.}} E5 means over the five consolidation rates.
 \par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
-\[\bar y_{s,t,w}=\dfrac1{n}\sum_{r\in(s,t,w)} y_r\]
+\begin{equation}\boxed{\bar y_{s,t,w}=\dfrac1{n}\sum_{r\in(s,t,w)} y_r}\end{equation}
 \par\noindent where $y_r$ output of run $r$; $s$ soil; $t$ tillage system; $w$ water regime (irrigated or rainfed); mean over the five consolidation rates.
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Means of E5 outputs by soil, tillage and water regime.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E5; Daisy output used: yield\_Mg\_ha, irrigation\_mm, drainage\_1m\_mm (E5).
-\section{Wetting--drying loops}
+\par\vspace{6pt}\noindent\hd{Wetting--drying loops}\par\nobreak
 \fig{at/a19_13.jpg}{1.0}{Daily $\theta$ vs pF at 3.75 cm through the 1994 season for each tillage system.}\label{fig:a19_13}
 \par\noindent\textbf{\color{khmag}\emph{What it shows.}} Daily $\theta$ vs pF at 3.75 cm through the 1994 season for each tillage system.
 \par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
-\[\mathrm{pF}(t)=\log_{10}\bigl(-h(t)\bigr)\ \ \text{plotted against}\ \ \theta(t)\]
+\begin{equation}\boxed{\mathrm{pF}(t)=\log_{10}\bigl(-h(t)\bigr)\ \ \text{plotted against}\ \ \theta(t)}\end{equation}
 \par\noindent where $h(t)$ daily suction and $\theta(t)$ daily water content at 3.75 cm during 1994.
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Hysteresis-like loops appear because the same pF has a different $\theta$ on the wetting and drying branch.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E5 daily; Daisy output used: profile logs: h @ -3.75, Theta @ -3.75.
-\banner{The coupled water fluxes}
-\section{Water-flux Sankey, loam vs sand}
+\exbox{Reading a retention curve and a pore radius}{A horizon has the van Genuchten parameters $\theta_r=0.05$, $\theta_s=0.45$, $\alpha=0.02$ cm$^{-1}$ and $n=1.5$. Find the water content at a suction of 300 cm and the radius of the largest pore that is still water-filled at that suction (illustrative values).}\sol \givenline{$\theta_r=0.05$ ; $\theta_s=0.45$ ; $\alpha=0.02$ cm$^{-1}$ ; $n=1.5$ ; $h=300$ cm}
+\par\noindent With $m=1-1/n=1/3$, the term $(\alpha|h|)^n=(0.02\times300)^{1.5}=6^{1.5}=14.70$. Then
+\[\theta=0.05+\frac{0.45-0.05}{(1+14.70)^{1/3}}=0.05+\frac{0.40}{2.503}=0.210\quad\text{\finans}\]
+The equivalent pore radius from the Young--Laplace relation is $r=0.149/h=0.149/300=4.97\times10^{-4}$ cm, that is $r=4.97$ $\mu$m \finans. Pores wider than about 5 $\mu$m are empty at this suction, and the curve above shows how much water is held in the finer pores.
+
+\section{The coupled water fluxes}
+This group holds 10 figures: Water-flux Sankey, loam vs sand; Seasonal E/T partitioning; Daily drainage vs rain events; Cumulative fluxes by method; Partitioning by method $\times$ soil; Drip depth vs drainage and evaporation; Method $\times$ rooting depth $\times$ amount; Annual drainage vs water input; Profile pressure-head evolution; Year-to-year variability. Each is set out in the order of the introduction to this chapter.
+\par\vspace{6pt}\noindent\hd{Water-flux Sankey, loam vs sand}\par\nobreak
 \fig{at/a19_14.jpg}{1.0}{Mean annual inputs (rain, irrigation) and outputs (T, E, interception, other evaporation, drainage) from E2 at the course trigger.}\label{fig:a19_14}
 \par\noindent\textbf{\color{khmag}\emph{What it shows.}} Mean annual inputs (rain, irrigation) and outputs (T, E, interception, other evaporation, drainage) from E2 at the course trigger.
 \par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
-\[P+I=T+E_s+E_c+E_o+D+\Delta S+R,\qquad E_o=ET-T-E_s-E_c\]
-\[R_{\mathrm{res}}=P+I-(T+E_s+E_c+E_o+D)\]
+\begin{equation}\boxed{P+I=T+E_s+E_c+E_o+D+\Delta S+R,\qquad E_o=ET-T-E_s-E_c}\end{equation}
+\begin{equation}\boxed{R_{\mathrm{res}}=P+I-(T+E_s+E_c+E_o+D)}\end{equation}
 \par\noindent where $P$ rain; $I$ irrigation; $T$ transpiration; $E_s$ soil evaporation; $E_c$ canopy evaporation; $E_o$ evaporation of ponded water, snow and litter or mulch; $D$ drainage across 1 m; $\Delta S$ storage change; $R$ runoff; $ET$ actual evapotranspiration (all mm yr$^{-1}$); $R_{\mathrm{res}}$ storage or runoff, drawn when larger than 3 mm.
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Inputs (rain, irrigation) and outputs of the 20-year mean annual balance of the runs E2 at the $-300$ cm trigger on coarse loam and coarse sand.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E2; Daisy output used: rain\_mm, irrigation\_mm, transpiration\_mm, soil\_evap\_mm, canopy\_evap\_mm, drainage\_1m\_mm.
-\section{Seasonal E/T partitioning}
+\par\vspace{6pt}\noindent\hd{Seasonal E/T partitioning}\par\nobreak
 \fig{at/a19_15.jpg}{1.0}{Daily transpiration and soil evaporation (7-day means) with LAI, rainfed vs irrigated vs mulched.}\label{fig:a19_15}
 \par\noindent\textbf{\color{khmag}\emph{What it shows.}} Daily transpiration and soil evaporation (7-day means) with LAI, rainfed vs irrigated vs mulched.
 \par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
-\[\text{share}_{E}=\dfrac{\sum E_s}{\sum E_s+\sum T}\]
+\begin{equation}\boxed{\text{share}_{E}=\dfrac{\sum E_s}{\sum E_s+\sum T}}\end{equation}
 \par\noindent where $E_s$ daily soil evaporation; $T$ daily transpiration (both 7-day means); sums over the season.
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} The soil-evaporation share of evaporation plus transpiration appears in each panel title.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E0,E2,E7 daily; Daisy output used: Daily-SWater.dlf: Actual transpiration, Evaporation of soil water; LAI.
-\section{Daily drainage vs rain events}
+\par\vspace{6pt}\noindent\hd{Daily drainage vs rain events}\par\nobreak
 \fig{at/a19_16.jpg}{1.0}{Daily rain and irrigation (bars, top) and drainage at 1 m (shaded, inverted) in the driest and wettest years.}\label{fig:a19_16}
 \par\noindent\textbf{\color{khmag}\emph{What it shows.}} Daily rain and irrigation (bars, top) and drainage at 1 m (shaded, inverted) in the driest and wettest years.
 \par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
-\[D_d=-q(z{=}100\ \mathrm{cm},d)\]
+\begin{equation}\boxed{D_d=-q(z{=}100\ \mathrm{cm},d)}\end{equation}
 \par\noindent where $D_d$ daily drainage across 1 m on day $d$; $q$ downward water flux.
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Daily rain and irrigation (bars) and drainage at 1 m (shaded) for the driest and wettest years.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E2 daily; Daisy output used: Daily-SWater.dlf: rain, Surface irrigation; Daily-FWater\_100cm.dlf.
-\section{Cumulative fluxes by method}
+\par\vspace{6pt}\noindent\hd{Cumulative fluxes by method}\par\nobreak
 \fig{at/a19_17.jpg}{1.0}{Cumulative irrigation, drainage and canopy evaporation 1980--2000 for four methods.}\label{fig:a19_17}
 \par\noindent\textbf{\color{khmag}\emph{What it shows.}} Cumulative irrigation, drainage and canopy evaporation 1980--2000 for four methods.
 \par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
-\[C_x(t)=\sum_{\tau\le t} x_\tau\]
+\begin{equation}\boxed{C_x(t)=\sum_{\tau\le t} x_\tau}\end{equation}
 \par\noindent where $x_\tau$ daily irrigation, drainage or canopy evaporation; $C_x(t)$ cumulative total from 1980 to day $t$.
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Cumulative curves of four irrigation methods on coarse loam.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E4 daily; Daisy output used: Daily irrigation, drainage, Evaporation from canopy.
-\section{Partitioning by method $\times$ soil}
+\par\vspace{6pt}\noindent\hd{Partitioning by method $\times$ soil}\par\nobreak
 \fig{at/a19_18.jpg}{1.0}{Stacked mean annual fluxes for 10 methods in all 10 soils; dots = irrigation.}\label{fig:a19_18}
 \par\noindent\textbf{\color{khmag}\emph{What it shows.}} Stacked mean annual fluxes for 10 methods in all 10 soils; dots = irrigation.
 \par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
-\[P+I=T+E_s+E_c+E_o+D+\Delta S+R,\qquad E_o=ET-T-E_s-E_c\]
+\begin{equation}\boxed{P+I=T+E_s+E_c+E_o+D+\Delta S+R,\qquad E_o=ET-T-E_s-E_c}\end{equation}
 \par\noindent where $P$ rain; $I$ irrigation; $T$ transpiration; $E_s$ soil evaporation; $E_c$ canopy evaporation; $E_o$ evaporation of ponded water, snow and litter or mulch; $D$ drainage across 1 m; $\Delta S$ storage change; $R$ runoff; $ET$ actual evapotranspiration (all mm yr$^{-1}$).
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Mean annual fluxes stacked for ten methods in ten soils; dots mark irrigation.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E4; Daisy output used: E4 annual outputs.
-\section{Drip depth vs drainage and evaporation}
+\par\vspace{6pt}\noindent\hd{Drip depth vs drainage and evaporation}\par\nobreak
 \fig{at/a19_19.jpg}{1.0}{E4 lines per soil; E15 averaged over the 10 amounts per rooting depth.}\label{fig:a19_19}
 \par\noindent\textbf{\color{khmag}\emph{What it shows.}} E4 lines per soil; E15 averaged over the 10 amounts per rooting depth.
 \par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
-\[\mathrm{DPF}=\dfrac{D}{P+I}\]
-\[z_{\mathrm{mid}}=\dfrac{z_1+z_2}2\]
+\begin{equation}\boxed{\mathrm{DPF}=\dfrac{D}{P+I}}\end{equation}
+\begin{equation}\boxed{z_{\mathrm{mid}}=\dfrac{z_1+z_2}2}\end{equation}
 \par\noindent where $D$ drainage across 1 m depth (mm yr$^{-1}$); $P$ rain; $I$ irrigation; DPF deep-percolation fraction; $z_1,z_2$ top and bottom depth of the drip band (cm); $z_{\mathrm{mid}}$ its mid-depth.
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} DPF and soil evaporation plotted against the mid-depth of the drip band; E15 averaged over the ten amounts per rooting depth.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E4,E15; Daisy output used: drainage\_1m\_mm, rain\_mm, irrigation\_mm, soil\_evap\_mm (E4, E15).
-\section{Method $\times$ rooting depth $\times$ amount}
+\par\vspace{6pt}\noindent\hd{Method $\times$ rooting depth $\times$ amount}\par\nobreak
 \fig{at/a19_20.jpg}{1.0}{IE for 1,000 runs; each panel one application method.}\label{fig:a19_20}
 \par\noindent\textbf{\color{khmag}\emph{What it shows.}} IE for 1,000 runs; each panel one application method.
 \par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
-\[\mathrm{IE}=\dfrac{1000\,Y}{10\,I}\]
+\begin{equation}\boxed{\mathrm{IE}=\dfrac{1000\,Y}{10\,I}}\end{equation}
 \par\noindent where $Y$ yield (Mg ha$^{-1}$); $I$ irrigation (mm yr$^{-1}$); IE irrigation efficiency (kg m$^{-3}$); kept only where $I\ge 20$ mm yr$^{-1}$.
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} IE of 1,000 runs, one panel per application method; colour scale from the 2nd to the 98th percentile.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E15; Daisy output used: yield\_Mg\_ha, irrigation\_mm (E15).
-\section{Annual drainage vs water input}
+\par\vspace{6pt}\noindent\hd{Annual drainage vs water input}\par\nobreak
 \fig{at/a19_21.jpg}{1.0}{One point per year; lines = linear fits per soil.}\label{fig:a19_21}
 \par\noindent\textbf{\color{khmag}\emph{What it shows.}} One point per year; lines = linear fits per soil.
 \par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
-\[D=a+b\,P,\qquad D=a'+b'\,(P+I)\]
+\begin{equation}\boxed{D=a+b\,P,\qquad D=a'+b'\,(P+I)}\end{equation}
 \par\noindent where $D$ annual drainage; $P$ annual rain; $I$ annual irrigation; $a,b,a',b'$ least-squares intercepts and slopes per soil.
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} One point per year; the lines are linear fits per soil.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E0,E2 per year; Daisy output used: Annual-FWater\_100cm.dlf: Precipitation, Irrigation, Matrix percolation.
-\section{Profile pressure-head evolution}
+\par\vspace{6pt}\noindent\hd{Profile pressure-head evolution}\par\nobreak
 \fig{at/a19_22.jpg}{1.0}{Depth $\times$ date pF with the trigger iso-line; dashed line = sensor depth.}\label{fig:a19_22}
 \par\noindent\textbf{\color{khmag}\emph{What it shows.}} Depth $\times$ date pF with the trigger iso-line; dashed line = sensor depth.
 \par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
-\[\mathrm{pF}(z,t)=\log_{10}\bigl(-h(z,t)\bigr),\qquad \text{contour at } \mathrm{pF}=\log_{10}300\]
+\begin{equation}\boxed{\mathrm{pF}(z,t)=\log_{10}\bigl(-h(z,t)\bigr),\qquad \text{contour at } \mathrm{pF}=\log_{10}300}\end{equation}
 \par\noindent where $h(z,t)$ suction at depth $z$ and date $t$; the black line is the $-300$ cm trigger iso-line.
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Depth by date map of pF in 1994 with the trigger iso-line and the sensor depth.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E2 daily; Daisy output used: profile logs: h @ depth.
-\section{Year-to-year variability}
+\par\vspace{6pt}\noindent\hd{Year-to-year variability}\par\nobreak
 \fig{at/a19_23.jpg}{1.0}{Boxplots across the 20 harvest years for each trigger and method.}\label{fig:a19_23}
 \par\noindent\textbf{\color{khmag}\emph{What it shows.}} Boxplots across the 20 harvest years for each trigger and method.
 \par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
-\[\text{box}=(Q_{25},Q_{50},Q_{75}),\ \text{whiskers}=1.5\,\mathrm{IQR}\]
+\begin{equation}\boxed{\text{box}=(Q_{25},Q_{50},Q_{75}),\ \text{whiskers}=1.5\,\mathrm{IQR}}\end{equation}
 \par\noindent where $Q_p$ percentile over the 20 harvest years; IQR interquartile range.
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Boxplots of the yearly values for each trigger and each method.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E2,E4 per year; Daisy output used: per-year Annual-Harvest.dlf, Annual-FWater\_100cm.dlf.
+\exbox{The three indices of a season}{A season has $P+I=750$ mm, drainage $D=120$ mm and a grain yield $Y=8$ Mg\,ha$^{-1}$ with an irrigation of $I=150$ mm. Find the drainage fraction DPF and the irrigation efficiency IE of the figures (illustrative values).}\sol \givenline{$P+I=750$ mm ; $D=120$ mm ; $Y=8$ Mg\,ha$^{-1}$ ; $I=150$ mm}
+\par\noindent The drainage fraction is $\mathrm{DPF}=D/(P+I)=120/750=0.16$ \finans. The irrigation efficiency is $\mathrm{IE}=1000\,Y/(10\,I)$, where $1000\,Y=8000$ kg\,ha$^{-1}$ and $10\,I=1500$ m$^3$\,ha$^{-1}$ (1 mm is 10 m$^3$\,ha$^{-1}$), so $\mathrm{IE}=8000/1500=5.33$ kg\,m$^{-3}$ \finans. A sixth of the water that enters the field leaves below the roots, and each cubic metre of irrigation is paired with $5.3$ kg of grain.
+
 \begin{itemize}
 \item A figure is a statement about one equation and one data set; both are named under it.
 \item The ten soils are ordered by the shape parameter $n$ of the van Genuchten curve; many figures are read along that order.
@@ -218,15 +234,15 @@ Every figure of this chapter is shown with the same five items, in the same orde
 \end{exlist}
 \backhead{OBJECTIVE TYPE QUESTIONS}{khred}\begin{exlist}
 \item The data of the figure ``Retention curves of the 10 soils'' come from
-\opt{E1-E4,E10}{Soil files}{E5 daily}{E5, E0 daily}
+\opt{E11,E12,E14}{Soil files}{E7,E2}{E9,E12,E14}
 \item The data of the figure ``Pore-size distribution'' come from
-\opt{Soil files}{E0,E2 per year}{E7,E2}{Pareto set}
+\opt{Soil files}{Re-runs}{E10-E16}{E7,E14}
 \item The data of the figure ``Profile pressure-head evolution'' come from
-\opt{E2 daily}{E2 + soil hydraulics}{E1-E7}{E2,E4 per year}
+\opt{E2 daily}{E6,E13}{E10-E16}{E0,E2,E7 daily}
 \item The data of the figure ``Annual drainage vs water input'' come from
-\opt{E7,E14}{E0,E2 per year}{E4 daily}{E0,E2 daily}
+\opt{Re-runs}{E0,E2 per year}{E1,E10-E14}{E1-E4,E10}
 \item The data of the figure ``Year-to-year variability'' come from
-\opt{E2,E4 per year}{E1-E7}{E5, E0 daily}{E0,E2 per year}
+\opt{E2,E4 per year}{E10-E16}{E9,E12,E14}{E10-E15}
 \end{exlist}
 \objkey{1.\ (b),\quad 2.\ (a),\quad 3.\ (a),\quad 4.\ (b),\quad 5.\ (a)}
 \swaflvideo{19}
