@@ -1,25 +1,24 @@
 \frontmatter
 \thispagestyle{empty}
 \begin{tikzpicture}[remember picture,overlay]
-  \def\pw{\paperwidth}\def\ph{\paperheight}
-  % teal title band
-  \shade[top color=khteal!80!black,bottom color=khteal] (current page.north west) rectangle ($(current page.north east)+(0,-0.365*\paperheight)$);
-  \node[text=white,font=\sfb\fontsize{58}{60}\selectfont,inner sep=0] at ($(current page.north)+(0,-0.082*\paperheight)$) {\scalebox{0.74}[1]{PORE-SCALE}};
-  \node[text=white,font=\sfb\fontsize{84}{86}\selectfont,inner sep=0] at ($(current page.north)+(0,-0.205*\paperheight)$) {\scalebox{0.70}[1]{DYNAMICS}};
-  % authors on a white-to-teal wash
-  \shade[left color=white,right color=khteal!25,shading angle=0] ($(current page.north west)+(0,-0.365*\paperheight)$) rectangle ($(current page.north east)+(0,-0.455*\paperheight)$);
-  \node[text=khink,font=\sfb\fontsize{15}{18}\selectfont,align=center,inner sep=0] at ($(current page.north)+(0,-0.403*\paperheight)$) {NAZIRU HALILU};
-  \node[text=khink,font=\sffamily\fontsize{10}{12}\selectfont,align=center,inner sep=0] at ($(current page.north)+(0,-0.432*\paperheight)$) {Soil water, irrigation and evaporation control};
-  % collage
-  \node[anchor=north west,inner sep=0] at ($(current page.north west)+(0,-0.455*\paperheight)$) {\includegraphics[width=0.33\paperwidth,height=0.37\paperheight]{fig/cv1.jpg}};
-  \node[anchor=north east,inner sep=0] at ($(current page.north east)+(0,-0.455*\paperheight)$) {\includegraphics[width=0.67\paperwidth,height=0.37\paperheight]{fig/cv2.jpg}};
-  \node[anchor=north west,inner sep=0] at ($(current page.north west)+(0,-0.825*\paperheight)$) {\includegraphics[width=0.33\paperwidth,height=0.108\paperheight]{fig/cv3.jpg}};
-  \node[anchor=north,inner sep=0] at ($(current page.north)+(0,-0.825*\paperheight)$) {\includegraphics[width=0.34\paperwidth,height=0.108\paperheight]{fig/cv4.jpg}};
-  \node[anchor=north east,inner sep=0] at ($(current page.north east)+(0,-0.825*\paperheight)$) {\includegraphics[width=0.33\paperwidth,height=0.108\paperheight]{fig/cv5.jpg}};
-  \fill[white] ($(current page.south west)+(0,0.063*\paperheight)$) rectangle ($(current page.south west)+(0.34*\paperwidth,0.0*\paperheight)$);
-  \node[anchor=west,text=khnavy,font=\sfb\itshape\fontsize{19}{20}\selectfont,inner sep=0] at ($(current page.south west)+(0.03*\paperwidth,0.032*\paperheight)$) {SWAFL};
-  \shade[top color=khgold!70!white,bottom color=khgold!90!black,shading angle=90] (current page.south west) ++(0.34*\paperwidth,0) rectangle ($(current page.south east)+(0,0.063*\paperheight)$);
-  \shade[top color=khgold!60!white,bottom color=khgold] ($(current page.south west)+(0,0.0*\paperheight)$) ++(0,0) rectangle ++(0,0);
+  \node[anchor=north west,inner sep=0] at (current page.north west) {\includegraphics[width=\paperwidth,height=\paperheight]{fig/cover_art.png}};
+  % thin gold frame
+  \draw[khgold,line width=1.1pt] ($(current page.north west)+(7mm,-7mm)$) rectangle ($(current page.south east)+(-7mm,7mm)$);
+  \draw[white!70,line width=0.4pt] ($(current page.north west)+(9mm,-9mm)$) rectangle ($(current page.south east)+(-9mm,9mm)$);
+  % top label
+  \node[text=khgold,font=\sffamily\bfseries\fontsize{8.5}{10}\selectfont,inner sep=0,align=center] at ($(current page.north)+(0,-19mm)$) {S O I L \ \ W A T E R \ \ $\cdot$ \ \ A T M O S P H E R E \ \ $\cdot$ \ \ F E E D B A C K \ \ $\cdot$ \ \ L A Y O U T};
+  \draw[khgold,line width=0.6pt] ($(current page.north)+(-30mm,-24mm)$) -- ($(current page.north)+(30mm,-24mm)$);
+  % title
+  \node[text=white,font=\sfb\fontsize{50}{52}\selectfont,inner sep=0] at ($(current page.north)+(0,-48mm)$) {\scalebox{0.76}[1]{PORE-SCALE}};
+  \node[text=khgold,font=\sfb\fontsize{74}{76}\selectfont,inner sep=0] at ($(current page.north)+(0,-74mm)$) {\scalebox{0.72}[1]{DYNAMICS}};
+  \node[text=white,font=\sffamily\itshape\fontsize{12.5}{15}\selectfont,inner sep=0,align=center,text width=0.78\paperwidth] at ($(current page.north)+(0,-100mm)$) {From the pore to the field: the mathematics of soil water, \hbox{precision} irrigation, mulching and feedback loops, worked in full};
+  % equation ribbon in the pore zone
+  \node[fill=white,fill opacity=0.88,text opacity=1,text=khnavy,inner sep=4pt,rounded corners=2pt,font=\fontsize{10}{12}\selectfont] at ($(current page.center)+(0,-14mm)$) {$\displaystyle \frac{\partial\theta}{\partial t}=\frac{\partial}{\partial z}\Bigl[K(h)\Bigl(\frac{\partial h}{\partial z}+1\Bigr)\Bigr]-S$};
+  % author and mark
+  \node[text=white,font=\sfb\fontsize{19}{22}\selectfont,inner sep=0] at ($(current page.south)+(0,38mm)$) {NAZIRU HALILU};
+  \draw[khgold,line width=0.6pt] ($(current page.south)+(-24mm,32mm)$) -- ($(current page.south)+(24mm,32mm)$);
+  \node[text=white!90,font=\sffamily\fontsize{9.5}{12}\selectfont,inner sep=0,align=center] at ($(current page.south)+(0,25mm)$) {Soil water, irrigation and evaporation control\\[2pt] with the SWAFL application};
+  \node[draw=khgold,line width=1pt,text=khgold,font=\sfb\itshape\fontsize{13}{14}\selectfont,inner sep=3pt,rounded corners=2pt] at ($(current page.south)+(0,15mm)$) {SWAFL};
 \end{tikzpicture}
 \cleardoublepage
 \thispagestyle{empty}\vspace*{0pt}
