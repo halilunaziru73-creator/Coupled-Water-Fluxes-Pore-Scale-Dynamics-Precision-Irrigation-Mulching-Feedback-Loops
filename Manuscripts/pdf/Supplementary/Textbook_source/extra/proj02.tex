@@ -1,0 +1,17 @@
+\banner{Design project 2: capillary contribution of a shallow water table}
+\textbf{Brief.} A forage crop grows over a shallow water table in a river valley. The root zone ends at 0.6 m and the grower wishes to know how deep the water table must be kept (by drainage) so that it still supplies a useful share of the crop demand, and how much irrigation must be added when it is lowered. The table below is the main design table of the project.
+
+\textbf{Method.} In steady upward flow from a water table at depth $L$, Darcy's law $q=-K(h)(\mathrm dh/\mathrm dz+1)$ integrates to $L-d=\int_0^{h}\mathrm dh'/[1+q/K(h')]$, where $h$ is the suction at the height $d=0$ of the base of the root zone and $q$ is the (upward) flux. For a given $L$ and suction $h_{top}=3000$ cm at the base of the root zone (still a moist soil for the roots), the equation is solved for $q$ by bisection with the numerical integral; $K(h)$ is the Mualem function of the soil with an assumed $K_s$ (Table~\ref{tab:cap}).
+
+\begin{table}[!htbp]\centering\small\caption{Maximum steady capillary flux (mm per day) from a water table at depth $L$ below the base of the roots, for a suction of 3000 cm at the base of the root zone.}
+\begin{tabular}{llrrrr}\toprule
+\hd{Soil} & \hd{Class} & \hd{$L=60$ cm} & \hd{100 cm} & \hd{150 cm} & \hd{200 cm}\\\midrule
+S05 & Sandy loam & 0.31 & 0.04 & 0.01 & 0.00\\
+S06 & Loam & 2.45 & 0.55 & 0.15 & 0.06\\
+S07 & Silt loam & 5.34 & 1.66 & 0.59 & 0.27\\
+S09 & Clay loam & 2.44 & 0.84 & 0.33 & 0.16\\\bottomrule\end{tabular}\end{table}
+
+\textbf{Reading the table.} The capillary flux depends on both the soil and the depth. For the loam it is 2.5 mm\,d$^{-1}$ at $L=60$ cm, 0.6 at 100 cm and 0.15 at 150 cm; the silt loam and sandy loam give more at 60 cm but the sandy loam falls fastest with depth because its conductivity collapses beyond about 200 cm of suction. The crop demand is 5 mm\,d$^{-1}$ in the peak week.
+
+\textbf{Decision.} A target of covering at least 40 per cent of the peak demand (2 mm\,d$^{-1}$) from the water table is met in the loam if the water table is kept within about 100 cm of the base of the roots (flux 0.6 mm\,d$^{-1}$); at 150 cm it supplies only 0.15 mm\,d$^{-1}$ (3 per cent) and the rest, 4.8 mm\,d$^{-1}$ in the peak week, must be irrigated. A drainage design that lowered the water table to 200 cm would remove the contribution almost entirely, which shows why drainage and irrigation must be designed together (Chapter~14).
+

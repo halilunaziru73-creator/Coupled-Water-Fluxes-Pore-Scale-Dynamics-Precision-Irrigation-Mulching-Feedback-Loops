@@ -1,0 +1,19 @@
+\banner{Design project 6: sizing the mainline and the pump of a sprinkler block}
+\textbf{Brief.} A sprinkler block needs $Q=60$ L\,s$^{-1}$ at 35 m of working head (operating pressure at the block plus lateral losses, and the lift). The mainline is 800 m of PVC ($C=140$). The designer chooses between standard diameters from 110 to 250 mm, balancing the cost of pipe (taken as $0.0004D^{1.7}$ currency units per metre, $D$ in mm, an assumed price law) against the cost of the energy to overcome the friction, with a pump efficiency of 65 per cent, 1\,200 h of pumping per year and an energy price of 0.12 units per kWh over a 15-year life at a discount of 6 per cent (present-value factor 9.71).
+
+\begin{table}[!htbp]\centering\small\caption{Design table of the mainline: velocity, friction loss, pump power for friction plus 35 m, pipe cost, the check on velocity, present value of energy and total cost.}
+\begin{tabular}{rrrrrlrr}\toprule
+\hd{$D$ (mm)} & \hd{$v$ (m/s)} & \hd{$h_f$ (m)} & \hd{Power (kW)} & \hd{Pipe cost} & \hd{Velocity} & \hd{Energy PV} & \hd{Total}\\\midrule
+110 & 6.31 & 230.7 & 240.6 & 945 & v>1.5 & 336417 & 337362\\
+125 & 4.89 & 123.8 & 143.8 & 1175 & v>1.5 & 201067 & 202242\\
+140 & 3.90 & 71.3 & 96.2 & 1424 & v>1.5 & 134511 & 135935\\
+160 & 2.98 & 37.2 & 65.4 & 1787 & v>1.5 & 91445 & 93232\\
+180 & 2.36 & 21.0 & 50.7 & 2183 & v>1.5 & 70891 & 73074\\
+200 & 1.91 & 12.5 & 43.1 & 2612 & v>1.5 & 60264 & 62876\\
+225 & 1.51 & 7.1 & 38.1 & 3191 & v>1.5 & 53273 & 56464\\
+250 & 1.22 & 4.2 & 35.5 & 3816 & ok & 49638 & 53454\\\bottomrule\end{tabular}\end{table}
+
+\textbf{Decision.} Among the diameters with an acceptable velocity the least total cost is for $D=250$ mm: velocity 1.22 m\,s$^{-1}$, friction loss 4.2 m, pump power 35.5 kW, total 53454 units. Smaller pipes are cheaper but the energy to push the water through them dominates; larger pipes cost more than the energy they save. The optimum is shallow, so a neighbouring standard size within a few per cent of the cost may be chosen for availability. The pump must deliver $60$ L\,s$^{-1}$ at a head of $35+4.2=39.2$ m.
+
+\textbf{Check.} Water hammer: for a closing time of 10 s in a PVC pipe of wave speed 400 m\,s$^{-1}$ and length 800 m, the surge is $\Delta H=2Lv/(gt)=2\times800\times1.22/(9.81\times10)=20$ m, well above the 35 m working head: a slow-closing valve or an air vessel must be specified.
+

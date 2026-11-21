@@ -1,0 +1,21 @@
+\banner{Design project 4: an audit of the water balance of forty runs}
+\textbf{Brief.} Forty annual runs of a water-balance model are to be audited before their savings are quoted. For each run the output gives $P$, $I$, $ET$, $D$, $Q$ and the change of storage $\Delta S$ (mm). The task is to compute the residual of every run, summarise it, test it against zero and decide whether the model can be used. Table~\ref{tab:audit} shows the first eight runs.
+
+\textbf{Method.} Residual $R_j=P_j+I_j-ET_j-D_j-Q_j-\Delta S_j$; mean $\bar R$, standard deviation $s_R$, and the $t$ statistic $t=\bar R\sqrt N/s_R$ against the hypothesis $\bar R=0$; maximum $|R|$.
+
+\begin{table}[!htbp]\centering\small\caption{First eight of the forty runs of the audit, all in mm; the last column is the residual of the balance.}
+\begin{tabular}{lrrrrrrr}\toprule
+\hd{Run} & \hd{$P$} & \hd{$I$} & \hd{$ET$} & \hd{$D$} & \hd{$Q$} & \hd{$\Delta S$} & \hd{$R$}\\\midrule
+1 & 603 & 0 & 402 & 155 & 17.7 & 28.4 & 0.07\\
+2 & 722 & 0 & 511 & 189 & 24.0 & -0.6 & -1.27\\
+3 & 710 & 0 & 480 & 165 & 21.6 & 43.9 & -0.19\\
+4 & 554 & 0 & 386 & 116 & 17.2 & 33.8 & 1.14\\
+5 & 573 & 173 & 519 & 183 & 23.5 & 20.7 & -0.32\\
+6 & 553 & 202 & 526 & 185 & 20.5 & 26.1 & -3.96\\
+7 & 651 & 0 & 465 & 158 & 18.1 & 12.5 & -1.91\\
+8 & 595 & 0 & 399 & 164 & 20.9 & 7.7 & 4.17\\\bottomrule\end{tabular}\end{table}
+
+\textbf{Result.} Over the forty runs $\bar R=-0.345$ mm, $s_R=1.740$ mm, $\max|R|=4.19$ mm and $t=-1.25$; the 95 per cent interval of the mean is $[-0.901,\,0.211]$ mm. The mean residual is not different from zero at the 5 per cent level (the critical $t$ for 39 degrees of freedom is 2.02); the largest single residual is 0.7 per cent of the mean rainfall.
+
+\textbf{Decision.} The residuals are small against the fluxes (a few tenths of a millimetre against hundreds) and have no trend with irrigation; the model conserves water to the precision of its output, and the savings computed from it can be quoted as redistributions of a conserved quantity. Had the residual been systematically positive with the amount of mulch, the same audit would have located an uncounted evaporation, as the unattributed term of this book does.
+

@@ -1,0 +1,150 @@
+\section{Sprinkler irrigation: what the layer does}
+The sprinkler layer simulates the distribution of water from a set of sprinklers over the field and the fate of that water in the soil. From a sprinkler type, a nozzle diameter, a pressure and a spacing, it computes the discharge and the wetted radius; it superposes the patterns of all the sprinklers around a point to get the depth caught at every point of a repeating cell; it removes the water lost to wind drift and evaporation; and it passes the rest through the intake of the soil to find the water stored, lost to deep percolation and lost as runoff. The set time is chosen so that the driest quarter of the field receives the net depth.
+
+\section{Types of sprinklers}
+\begin{table}[!htbp]\centering\footnotesize\setlength{\tabcolsep}{3pt}\caption{Sprinkler types of the application.}
+\begin{tabular}{lrlrcccc}\toprule
+\hd{Type} & \hd{$c_R$} & \hd{pattern} & \hd{drift $F$} & \hd{nozzle range (mm)} & \hd{pressure range (kPa)} & \hd{default $d$ / $P$} & \hd{default $S_s\times S_l$ (m)}\\\midrule
+Impact sprinkler & 1.35 & 1.3 & 1.0 & 2.4--8.0 & 200--500 & 4.4 / 300 & 12 $\times$ 18\\
+Rotating spray & 0.80 & ring & 1.6 & 1.5--5.0 & 70--250 & 3.2 / 170 & 6 $\times$ 6\\
+Micro-sprinkler & 0.70 & ring2 & 0.7 & 0.8--2.5 & 100--250 & 1.3 / 180 & 3 $\times$ 3\\
+Big gun & 0.95 & 1.0 & 1.3 & 10.0--25.0 & 350--700 & 16.0 / 500 & 30 $\times$ 36\\\bottomrule\end{tabular}\end{table}
+
+\textbf{Impact sprinklers} are the classic rotating-arm heads, with one or two nozzles and a throw of 12 to 20 m; they give a triangular-like pattern and a good uniformity at moderate pressure. \textbf{Rotating sprays} throw less (5 to 8 m) at low pressure (70--250 kPa) and give a pattern that is heaviest in a ring; their small drops drift more (factor 1.6). \textbf{Micro-sprinklers} are small, low-pressure heads for trees, with a throw of 2 to 4 m and a flat pattern. \textbf{Big guns} are large rotating nozzles of 10 to 25 mm that throw 30 m or more at 350--700 kPa; they are used on travelling reels and are the most sensitive to wind. For each type the pattern is a function of the relative distance $x=r/R$ from the sprinkler:
+
+\begin{equation}\hat p(x)=\begin{cases}1-x^{m}&\text{impact }(m=1.3),\ \text{big gun }(m=1)\\ (0.5+0.5x)(1-x^{6})&\text{rotating spray}\\ (0.55+0.45x)(1-x^{5})&\text{micro-sprinkler}\end{cases},\quad \hat p=0\ (x\ge1),\label{eq:p-pat}\end{equation}
+\par\noindent where $\hat p(x)$ is the relative application rate at the relative distance $x=r/R$ (1 at the sprinkler), $r$ the distance from the sprinkler (m), $R$ the wetted radius (m) and $m$ the exponent of the pattern. The pattern is scaled so that its integral over the circle equals the discharge of the nozzle.
+
+\section{Nozzle, pressure and radius}
+\begin{equation}\boxed{q=0.95\,A_n\sqrt{2g\,h}\times6\times10^{4},\quad A_n=\pi\left(\frac{d}{2000}\right)^{2},\quad h=\frac{P}{9.81},}\label{eq:p-q}\end{equation}
+\par\noindent where $q$ is the discharge of the nozzle (L\,min$^{-1}$), 0.95 the discharge coefficient, $A_n$ the area of the nozzle (m$^2$), $d$ its diameter (mm), $g=9.81$ m\,s$^{-2}$, $h$ the pressure head (m) and $P$ the operating pressure (kPa); $6\times10^{4}$ converts m$^3$\,s$^{-1}$ to L\,min$^{-1}$.
+
+\begin{equation}\boxed{R=c_R\sqrt{d\,h}\;\Phi(\alpha),\qquad\Phi(\alpha)=\left[\frac{\max(0.05,\sin3.1\alpha^{\circ})}{0.9763}\right]^{0.45},}\label{eq:p-R}\end{equation}
+\par\noindent where $R$ is the wetted radius (m), $c_R$ the radius coefficient of the type (Table above), $d$ the nozzle diameter (mm), $h$ the pressure head (m) and $\Phi(\alpha)$ a correction for the angle $\alpha$ of the trajectory above the horizontal (degrees); $\Phi=1$ at the default angle of 25$^\circ$, and the range peaks near $29^\circ$.
+
+\exbox{Discharge and radius of a nozzle}{An impact sprinkler with a 4.4-mm nozzle at 300 kPa and a trajectory of 25$^\circ$: find the head, the discharge and the wetted radius.}\sol $h=300/9.81=30.58$ m \ans $A_n=\pi(4.4/2000)^2=1.521e-05$ m$^2$ \ans $q=0.95\times1.521e-05\times\sqrt{2\times9.81\times30.58}\times6\times10^4=21.23$ L\,min$^{-1}$ ($1.27$ m$^3$\,h$^{-1}$) \ans $\Phi(25^\circ)=1$; $R=1.35\sqrt{4.4\times30.58}=15.66$ m \ans Wetted diameter $31.3$ m; the spacing of 12$\times$18 m is 38 and 57 per cent of the diameter \ans
+
+\begin{table}[!htbp]\centering\footnotesize\setlength{\tabcolsep}{3pt}\caption{Discharge and radius for three nozzle sizes of each type at its default pressure.}
+\begin{tabular}{lrrrrrr}\toprule
+\hd{Type} & \hd{$d$ (mm)} & \hd{$P$ (kPa)} & \hd{$h$ (m)} & \hd{$q$ (L/min)} & \hd{$R$ (m)} & \hd{$q$ (m$^3$/h)}\\\midrule
+Impact sprinkler & 2.4 & 300 & 30.6 & 6.32 & 11.6 & 0.38\\
+Impact sprinkler & 4.4 & 300 & 30.6 & 21.23 & 15.7 & 1.27\\
+Impact sprinkler & 6.4 & 300 & 30.6 & 44.92 & 18.9 & 2.69\\
+Rotating spray & 1.5 & 170 & 17.3 & 1.86 & 4.1 & 0.11\\
+Rotating spray & 3.2 & 170 & 17.3 & 8.45 & 6.0 & 0.51\\
+Rotating spray & 5 & 170 & 17.3 & 20.64 & 7.4 & 1.24\\
+Micro-sprinkler & 0.8 & 180 & 18.3 & 0.54 & 2.7 & 0.03\\
+Micro-sprinkler & 1.3 & 180 & 18.3 & 1.44 & 3.4 & 0.09\\
+Micro-sprinkler & 2.5 & 180 & 18.3 & 5.31 & 4.7 & 0.32\\
+Big gun & 10 & 500 & 51.0 & 141.57 & 21.4 & 8.49\\
+Big gun & 16 & 500 & 51.0 & 362.41 & 27.1 & 21.74\\
+Big gun & 25 & 500 & 51.0 & 884.80 & 33.9 & 53.09\\\bottomrule\end{tabular}\end{table}
+
+\begin{table}[!htbp]\centering\footnotesize\setlength{\tabcolsep}{3pt}\caption{Effect of the pressure on the impact sprinkler of 4.4 mm.}
+\begin{tabular}{rrrr}\toprule
+\hd{$P$ (kPa)} & \hd{$h$ (m)} & \hd{$q$ (L/min)} & \hd{$R$ (m)}\\\midrule
+200 & 20.4 & 17.33 & 12.8\\
+250 & 25.5 & 19.38 & 14.3\\
+300 & 30.6 & 21.23 & 15.7\\
+350 & 35.7 & 22.93 & 16.9\\
+400 & 40.8 & 24.51 & 18.1\\
+500 & 51.0 & 27.41 & 20.2\\\bottomrule\end{tabular}\end{table}
+
+\section{Overlap and uniformity}
+The application rate at a point is the sum of the contributions of all sprinklers around it. The application evaluates it on a repeating cell of the layout, $S_s\times S_l$ for a rectangular layout and $S_s\times2S_l$ for a triangular layout (where every second lateral is shifted by $S_s/2$):
+
+\begin{equation}\boxed{a(x,y)=\sum_{i,j}p\bigl(x-x_{ij},\,y-y_{ij}\bigr),\qquad \overline{a}=\frac{1}{n}\sum a,\qquad CU=1-\frac{\frac1n\sum|a-\bar a|}{\bar a},}\label{eq:p-cu}\end{equation}
+\par\noindent where $a(x,y)$ is the gross application rate at the point $(x,y)$ (mm\,min$^{-1}$), $p$ the pattern of one sprinkler (Eq.~\ref{eq:p-pat} scaled to the discharge), $(x_{ij},y_{ij})$ the positions of the sprinklers (shifted by $S_s/2$ on alternate laterals in a triangular layout), $n$ the number of points of the cell (196 for a rectangular layout), $\bar a$ the mean rate and $CU$ the Christiansen uniformity coefficient (fraction); the mean rate over the cell equals the discharge divided by the area, $q/(S_sS_l)$.
+
+
+
+The wind distorts the pattern: it shifts the centre downwind by $0.03uR$ and stretches the radius to $R(1+0.022u\cos\theta)$ downwind and shortens it upwind (limits 0.7 to 1.4). Here $u$ is the wind speed (m\,s$^{-1}$) and $\theta$ the angle from the wind direction.
+
+\begin{table}[!htbp]\centering\footnotesize\setlength{\tabcolsep}{3pt}\caption{Spacing and layout for the impact sprinkler (4.4 mm, 300 kPa, wind 3 m/s) on the loam S06, $Z_n=12$ mm.}
+\begin{tabular}{llrrrr}\toprule
+\hd{Layout} & \hd{$S_s\times S_l$ (m)} & \hd{mean rate (mm/h)} & \hd{$CU$ (\%)} & \hd{$DU_{lq}$ (\%)} & \hd{set time (min)}\\\midrule
+rectangular & 9 $\times$ 9 & 15.7 & 98.2 & 97.8 & 49\\
+rectangular & 12 $\times$ 12 & 8.8 & 98.9 & 98.5 & 86\\
+rectangular & 12 $\times$ 18 & 5.9 & 96.2 & 94.4 & 134\\
+rectangular & 15 $\times$ 18 & 4.7 & 95.1 & 91.9 & 173\\
+rectangular & 18 $\times$ 18 & 3.9 & 96.0 & 94.1 & 202\\
+rectangular & 18 $\times$ 24 & 2.9 & 74.3 & 61.8 & 411\\
+rectangular & 24 $\times$ 24 & 2.2 & 68.7 & 45.7 & 742\\
+triangular & 9 $\times$ 9 & 15.7 & 98.5 & 98.2 & 48\\
+triangular & 12 $\times$ 12 & 8.8 & 97.2 & 95.8 & 88\\
+triangular & 12 $\times$ 18 & 5.9 & 97.9 & 97.2 & 131\\
+triangular & 15 $\times$ 18 & 4.7 & 94.1 & 89.7 & 177\\
+triangular & 18 $\times$ 18 & 3.9 & 93.5 & 89.8 & 212\\
+triangular & 18 $\times$ 24 & 2.9 & 74.1 & 63.5 & 400\\
+triangular & 24 $\times$ 24 & 2.2 & 69.5 & 56.1 & 604\\\bottomrule\end{tabular}\end{table}
+
+\begin{table}[!htbp]\centering\footnotesize\setlength{\tabcolsep}{3pt}\caption{Effect of the wind on the impact sprinkler, 12 $\times$ 18 m, loam S06.}
+\begin{tabular}{rrrrrr}\toprule
+\hd{Wind $u$ (m/s)} & \hd{$CU$ (\%)} & \hd{$DU_{lq}$ (\%)} & \hd{drift loss (\%)} & \hd{set time (min)} & \hd{$E_a$ (\%)}\\\midrule
+0 & 96.2 & 94.3 & 1.5 & 131 & 92.7\\
+1 & 96.2 & 94.3 & 2.2 & 132 & 92.1\\
+2 & 96.2 & 94.4 & 2.9 & 133 & 91.4\\
+3 & 96.2 & 94.4 & 3.8 & 134 & 90.6\\
+5 & 96.3 & 94.5 & 5.9 & 137 & 88.8\\
+7 & 96.5 & 94.7 & 8.3 & 141 & 86.7\\
+10 & 96.5 & 94.9 & 12.7 & 148 & 82.7\\\bottomrule\end{tabular}\end{table}
+
+\section{Wind drift and evaporation}
+\begin{equation}\delta=\min\Bigl\{0.45,\ \tfrac1{100}\bigl(1.2+0.5u+0.04u^{2}\bigr)F\Bigl(\tfrac{P}{250}\Bigr)^{0.7}\bigl[1+0.025(T_a-20)\bigr]\bigl[0.6+0.4\tfrac{\sin\alpha}{0.4226}\bigr]\Bigr\},\label{eq:p-wd}\end{equation}
+\par\noindent where $\delta$ is the fraction of the discharge lost to drift and evaporation of the drops in the air (the percentage is clipped between 0.5 and 45), $u$ the wind speed at the sprinkler (m\,s$^{-1}$), $F$ the drift factor of the type (1, 1.6, 0.7, 1.3), $P$ the pressure (kPa), $T_a$ the air temperature ($^\circ$C) and $\alpha$ the trajectory angle (the last factor is 1 at 25$^\circ$).
+
+\exbox{Drift loss}{Find the drift and evaporation loss of the impact sprinkler at 300 kPa, wind 3 m\,s$^{-1}$, 24$^\circ$C and a trajectory of 25$^\circ$.}\sol $1.2+0.5(3)+0.04(9)=3.06$ \ans $(P/250)^{0.7}=(1.2)^{0.7}=1.136$; $1+0.025(24-20)=1.10$; angle factor $0.6+0.4\sin25^\circ/0.4226=1.0$ \ans $\delta=3.06\times1\times1.136\times1.10\times1.0/100=0.0382$, i.e.\ 3.8 per cent \ans On a gross depth of 13.2 mm this is 0.51 mm lost before the water reaches the soil \ans
+
+\section{The soil intake and the set time}
+At a point that receives the rate $a$ (net of the drift) for the time $T$ the intake follows Kostiakov, $F=KT^{A}$ with $K$ in mm\,min$^{-A}$. Water arrives at the rate $a$ until the soil can no longer take it; ponding starts at
+
+\begin{equation}t_p=\left(\frac{a}{K}\right)^{\frac1{A-1}},\qquad F=\begin{cases}aT&T\le t_p\\ KT^{A}&T>t_p\end{cases},\qquad RO=\max\{0,\ aT-F-S_{d,\rm eff}\},\quad S_{d,\rm eff}=\frac{S_d}{1+0.25S},\label{eq:p-ga}\end{equation}
+\par\noindent where $t_p$ is the time of ponding (min), $a$ the application rate at the point (mm\,min$^{-1}$), $K$ (mm\,min$^{-A}$) and $A$ the Kostiakov parameters of the soil (from the Saxton--Rawls and Green--Ampt chain of Chapter~11), $T$ the time of the set (min), $F$ the infiltrated depth (mm), $RO$ the runoff (mm), $S_{d,\rm eff}$ the effective depression storage (mm), $S_d$ the surface storage (5, 3.5 and 2 mm for conventional, reduced and no tillage) and $S$ the ground slope (per cent).
+
+
+
+The set time is the smallest $T$ for which the mean depth in the driest quarter of the points reaches the net depth $Z_n$ (a bisection over 1 to 2400 min). The performance indicators follow:
+
+\begin{equation}\boxed{E_a=\frac{\overline{\min(I,Z_n)}}{\bar a T},\quad E_s=\frac{\overline{\min(I,Z_n)}}{Z_n},\quad DU_{lq}=\frac{\overline{I}_{lq}}{\bar I},}\label{eq:p-ind}\end{equation}
+\par\noindent where $I$ is the depth infiltrated at a point (mm), $\bar a T$ the gross depth applied (mm), $\overline{\min(I,Z_n)}$ the mean stored depth over the points, $E_s$ the requirement efficiency and $DU_{lq}$ the distribution uniformity, the mean of the lowest quarter of the infiltrated depths $\overline I_{lq}$ divided by the mean $\bar I$; the deep percolation is $\overline{\max(I-Z_n,0)}/(\bar aT)$ and the runoff $\overline{RO}/(\bar aT)$.
+
+
+
+\begin{table}[!htbp]\centering\footnotesize\setlength{\tabcolsep}{3pt}\caption{Impact sprinkler (4.4 mm, 300 kPa, 12 $\times$ 18 m, wind 3 m/s) on the ten soils, $Z_n=12$ mm.}
+\begin{tabular}{llrrrrrrrr}\toprule
+\hd{ID} & \hd{Soil} & \hd{$K_s$ (mm/h)} & \hd{$k$} & \hd{$A$} & \hd{set (min)} & \hd{$E_a$ (\%)} & \hd{$DP$ (\%)} & \hd{$RO$ (\%)} & \hd{$DU_{lq}$ (\%)}\\\midrule
+S01 & Coarse loam & 13.1 & 0.0008 & 0.793 & 134 & 91 & 5.6 & 0.0 & 94\\
+S02 & Coarse sand & 114.7 & 0.0056 & 0.827 & 134 & 91 & 5.6 & 0.0 & 94\\
+S03 & Sand & 134.7 & 0.0055 & 0.853 & 134 & 91 & 5.6 & 0.0 & 94\\
+S04 & Loamy sand & 86.4 & 0.0041 & 0.830 & 134 & 91 & 5.6 & 0.0 & 94\\
+S05 & Sandy loam & 44.7 & 0.0031 & 0.778 & 134 & 91 & 5.6 & 0.0 & 94\\
+S06 & Loam & 12.1 & 0.0017 & 0.693 & 134 & 91 & 5.6 & 0.0 & 94\\
+S07 & Silt loam & 10.9 & 0.0020 & 0.671 & 134 & 91 & 5.6 & 0.0 & 94\\
+S08 & Sandy clay loam & 5.3 & 0.0007 & 0.699 & 134 & 91 & 5.6 & 0.0 & 94\\
+S09 & Clay loam & 3.2 & 0.0008 & 0.643 & 134 & 91 & 5.6 & 0.0 & 94\\
+S10 & Silty clay loam & 3.8 & 0.0010 & 0.634 & 134 & 91 & 5.6 & 0.0 & 94\\\bottomrule\end{tabular}\end{table}
+
+The table repeats the lesson of Chapter~6: the rate of the sprinkler, about 6 mm\,h$^{-1}$, is below the intake of most soils, so there is no runoff, and the main loss is the deep percolation from the over-irrigated overlap on the coarse soils; on the clays, where the intake is small, ponding and runoff begin sooner and the set time must be shortened.
+
+\begin{table}[!htbp]\centering\footnotesize\setlength{\tabcolsep}{3pt}\caption{Effect of the pressure (12 $\times$ 18 m spacing is held, loam S06).}
+\begin{tabular}{rrrrrr}\toprule
+\hd{$P$ (kPa)} & \hd{$R$ (m)} & \hd{mean rate (mm/h)} & \hd{$CU$ (\%)} & \hd{set (min)} & \hd{$E_a$ (\%)}\\\midrule
+200 & 12.8 & 4.8 & 82.2 & 199 & 75.0\\
+250 & 14.3 & 5.4 & 92.4 & 157 & 84.9\\
+300 & 15.7 & 5.9 & 96.2 & 134 & 90.6\\
+350 & 16.9 & 6.4 & 96.6 & 126 & 89.2\\
+400 & 18.1 & 6.8 & 95.7 & 121 & 87.3\\
+450 & 19.2 & 7.2 & 95.5 & 113 & 87.6\\\bottomrule\end{tabular}\end{table}
+
+\begin{table}[!htbp]\centering\footnotesize\setlength{\tabcolsep}{3pt}\caption{Effect of the nozzle size (300 kPa, 12 $\times$ 18 m, loam S06).}
+\begin{tabular}{rrrrrrr}\toprule
+\hd{$d$ (mm)} & \hd{$q$ (m$^3$/h)} & \hd{$R$ (m)} & \hd{rate (mm/h)} & \hd{$CU$ (\%)} & \hd{set (min)} & \hd{$E_a$ (\%)}\\\midrule
+3.2 & 0.67 & 13.4 & 3.1 & 86.6 & 292 & 78.6\\
+3.8 & 0.95 & 14.6 & 4.4 & 93.5 & 190 & 85.9\\
+4.4 & 1.27 & 15.7 & 5.9 & 96.2 & 134 & 90.6\\
+5.0 & 1.64 & 16.7 & 7.6 & 96.8 & 105 & 90.1\\
+5.6 & 2.06 & 17.7 & 9.6 & 96.0 & 85 & 88.6\\
+6.4 & 2.69 & 18.9 & 12.5 & 95.5 & 65 & 88.6\\\bottomrule\end{tabular}\end{table}
+
+\exbox{A sprinkler set from nozzle to fate of the water}{Design the sprinkler set for the loam S06 with a net depth $Z_n=12$ mm: impact sprinkler 4.4 mm at 300 kPa, 12$\times$18 m, wind 3 m\,s$^{-1}$, air at 24$^\circ$C. Report the pattern, the set time and the fate of the water.}\sol Discharge $q=21.23$ L\,min$^{-1}$; radius $R=15.7$ m \ans Mean gross rate $\bar a=q/(S_sS_l)=21.23\times60/216=5.90$ mm\,h$^{-1}$ \ans Superposition on the $14\times14$ cell: $CU=96.2$ per cent \ans Drift loss $\delta=3.8$ per cent, so the net rate is $5.67$ mm\,h$^{-1}$ \ans The bisection finds $T=134$ min ($2.24$ h) for which the driest quarter catches 12 mm \ans Gross depth $13.2$ mm; $E_a=90.6$, $E_s=99.8$, deep percolation $5.6$, runoff $0.0$, drift $3.8$ per cent; $DU_{lq}=94.4$ per cent \ans
+

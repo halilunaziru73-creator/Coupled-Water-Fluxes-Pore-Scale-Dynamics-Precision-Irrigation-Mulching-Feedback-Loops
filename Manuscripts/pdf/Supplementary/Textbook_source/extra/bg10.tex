@@ -1,0 +1,19 @@
+\section{Introduction: why phenotype water use}
+Phenotyping is the measurement of the traits of a plant in its environment. For water use the useful traits are the yield, the water used, the way the canopy takes and loses water, and the way it responds to stress. The application treats phenotyping as a layer on top of the balance: the balance supplies the water, the trait tables supply the response of each genotype, and the comparison of genotypes is made on the same water.
+
+\section{Traits and indices}
+The main traits are the \emph{water productivity} $WP=Y/ET_a$, the \emph{harvest index} $HI=Y/B$ (grain over biomass), the \emph{transpiration efficiency} $TE=B/T$, the \emph{stomatal conductance} $g_s$ and the \emph{canopy temperature} $T_c$. The last gives the \kw{crop water stress index}
+
+\begin{equation}CWSI=\frac{(T_c-T_a)-(T_c-T_a)_{LL}}{(T_c-T_a)_{UL}-(T_c-T_a)_{LL}},\quad 0\le CWSI\le1,\end{equation}
+
+
+where LL and UL are the non-stressed and fully stressed baselines. A well-watered canopy runs 2 to 4 C below the air; a stressed one runs above it.
+
+\section{Experimental design}
+A trial is a set of plots in which genotype is the factor and the other conditions are the same. The \emph{randomised complete block} design gives every genotype one plot in every block, so that gradients of soil and slope are removed from the comparison. With $g$ genotypes and $r$ blocks the degrees of freedom of the error are $(g-1)(r-1)$, and the standard error of a genotype mean is $s/\sqrt r$. A trial of 20 genotypes in 4 blocks has 76 error degrees of freedom and 80 plots.
+
+The least significant difference at $p=0.05$ is $LSD=t_{0.05,\nu}\sqrt{2s^2/r}$; with $s=0.6$ Mg\,ha$^{-1}$, $r=4$, $t\approx2.0$: $LSD=0.85$ Mg\,ha$^{-1}$.
+
+\section{Volumetric scan and image traits}
+The application's scan reads a series of images or point-cloud slices of a plant and returns the volume of the canopy and of the root system. The biomass is estimated by $B=\rho_{v}V$ where $\rho_v$ is the volumetric dry density (kg\,m$^{-3}$) of the tissue. A canopy volume of 0.18 m$^3$ per plant at $\rho_v=18$ kg\,m$^{-3}$ gives $B=3.24$ kg per plant; at 5 plants\,m$^{-2}$ the biomass is 162.0 Mg\,ha$^{-1}$.
+

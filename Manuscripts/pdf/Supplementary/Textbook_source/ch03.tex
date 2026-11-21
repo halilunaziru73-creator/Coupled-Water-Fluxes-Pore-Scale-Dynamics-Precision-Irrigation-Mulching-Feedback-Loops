@@ -1,0 +1,309 @@
+\chapimg{fig/op03.png}
+\IfFileExists{extra/lead03.tex}{\input{extra/lead03}}{}
+\chapter{Triggers: Reach, Fate and Hydraulic Memory}\label{chap:03}
+\markboth{Triggers: Reach, Fate and Hydraulic Memory}{Triggers: Reach, Fate and Hydraulic Memory}
+\IfFileExists{extra/bg03.tex}{\input{extra/bg03}}{}
+\banner{The reach of a suction trigger}\label{ch:reach}
+\section{The question}
+Sensor-scheduled irrigation applies water when the suction at a sensor passes a trigger $h_t$. Triggers of 300 to 600 cm come from tables, the same for every soil. But a soil may never reach such a suction. If the crop cannot dry the soil beyond some suction $\hc$, then a trigger $h_t>\hc$ is never reached, the crop is not irrigated, and the field is in effect rainfed. A trigger $h_t<\hc$ can fire. The quantity $\hc$ is the \emph{reach} of the trigger.
+
+\begin{kfig}{Sensor suction through a season: the days beyond the trigger $h_T$ are counted; rainfed (dashed) crosses the trigger earlier and stays beyond it for longer than irrigated.}
+\draw[axis] (0,0)--(7.6,0);\draw[axis] (0,0)--(0,4.2);
+\node[lab,below] at (3.8,-0.45) {Day of the season};\node[lab,rotate=90] at (-0.8,2.1) {Suction $h$ (cm)};
+\draw[gd] (0,2.6)--(7.4,2.6);\node[lab,right] at (7.4,2.6) {$h_T$};
+\draw[crv,smooth] plot coordinates {(0,0.4)(1,0.6)(2,1.2)(3,2.0)(3.5,2.75)(3.6,1.0)(4.4,1.4)(5.2,2.0)(5.9,2.8)(6.0,1.0)(6.8,1.5)(7.4,2.1)};
+\draw[ln,dashed,smooth] plot coordinates {(0,0.4)(1,0.9)(2,1.8)(3,2.7)(4,3.3)(5,3.7)(6,3.9)(7.4,4.0)};
+\fill[khcyan!25] (3.0,2.6) rectangle (3.5,2.75);\node[lab] at (1.4,3.6) {irrigated: ---};\node[lab] at (1.5,3.2) {rainfed: - - -};
+\end{kfig}
+
+\section{The dry-end asymptote}
+Far from saturation, $\alpha h\gg1$. Then $\Se^{1/m}=[1+(\alpha h)^n]^{-1}\approx(\alpha h)^{-n}$ and, since $m n=n-1$, $\Se\approx(\alpha h)^{-(n-1)}$. In Equation~(\ref{eq:vgm}), $1-(1-y)^m\approx m y$ for small $y=\Se^{1/m}$, so the bracket is $\approx m(\alpha h)^{-n}$ and
+\begin{equation}\label{eq:asym}\boxed{\boxed{\;\Kr(h)\simeq m^{2}(\alpha h)^{-[\,2n+\ell(n-1)\,]},\qquad\alpha h\gg1.\;}}\end{equation}
+\par\noindent where $K_r$ is the relative conductivity, $h$ the suction (cm), $\alpha$, $n$ and $m$ the van Genuchten parameters, and $\ell$ the connectivity parameter; the power-law form holds when $\alpha h\gg1$, that is in dry soil.
+
+The conductivity is a power law of suction, and the exponent $E=2n+\ell(n-1)$ grows with $n$.
+
+\exbox{How good is the asymptote?}{For the silty clay loam S10 ($\alpha=0.010$, $n=1.23$, $m=0.187$, $E=2.575$): at $h=1000$ cm the exact value is $\Kr=8.64\times10^{-5}$ and Equation~(\ref{eq:asym}) gives $9.30\times10^{-5}$, an error of 8 per cent. At $h=10{,}000$ cm the exact value is $2.46\times10^{-7}$ and the asymptote $2.48\times10^{-7}$, an error under 1 per cent. At 100 cm, where $\alpha h=1$, the asymptote $3.5\times10^{-2}$ is wrong by a factor of 2.5, because the assumption $\alpha h\gg1$ fails. The asymptote is therefore reliable at the suctions where triggers sit.}
+
+
+
+\section{One constant for all soils}
+Suppose the crop stops drying the soil when the relative conductivity has fallen to a value $\kappa$. The justification is Chapter 4: the uptake collapses once $K$ is small enough. Setting $\Kr(\hc)=\kappa$ in Equation~(\ref{eq:asym}),
+\begin{equation}\label{eq:reach}\boxed{\boxed{\;\hc=\frac1\alpha\left(\frac{m^{2}}{\kappa}\right)^{1/[2n+\ell(n-1)]}\;}}\end{equation}
+\par\noindent where $h_c$ is the reach, the suction (cm) beyond which the soil can no longer supply the demand of the crop, $\alpha$, $m$, $n$ and $\ell$ the van Genuchten parameters, $\kappa$ a dimensionless constant that lumps the demand of the crop, the climate and the geometry of the roots (here $3.5\times10^{-10}$ in the application), and $E=2n+\ell(n-1)$ the exponent of the power law.
+
+The constant $\kappa$ describes the crop, the climate and the sensor. It does not depend on the soil, which enters only through $\alpha$, $n$ and $\ell$. With $\kappa=3.5\times10^{-10}$ and $\ell=0.5$:
+
+\begin{table}[!htbp]\centering\small\caption{Reach of a trigger from Equation~(\ref{eq:reach}), $\kappa=3.5\times10^{-10}$, $\ell=0.5$, computed from the rounded parameters of Table~\ref{tab:soils}; the study's values differ by under 1 per cent. The last column: does a 300 cm trigger fire?}\label{tab:reach}
+\begin{tabular}{llrrrrl}\toprule
+\hd{ID} & \hd{Texture} & \hd{$n$} & \hd{$E$} & \hd{$\alpha\hc$} & \hd{$\hc$ (cm)} & \hd{300 cm}\\\midrule
+S03&Sand&2.680&6.200&28.8&199&never\\S04&Loamy sand&2.280&5.200&52.7&425&never\\S05&Sandy loam&1.890&4.225&121&1,615&fires\\S02&Coarse sand&1.600&3.500&287&5,359&fires\\S08&Sandy clay loam&1.480&3.200&446&7,559&fires\\S01&Coarse loam&1.353&2.882&751&7,814&fires\\S06&Loam&1.560&3.400&331&9,186&fires\\S07&Silt loam&1.410&3.025&591&29,528&fires\\S09&Clay loam&1.310&2.775&905&47,608&fires\\S10&Silty clay loam&1.230&2.575&1,278&127,830&fires\\\bottomrule\end{tabular}\end{table}
+(The study reports values above 10,000 cm as bounded from below, because the trigger experiment stops at 10,000 cm.)
+
+\exbox{The reach of a soil by hand}{A soil has $\alpha=0.05$ cm$^{-1}$ and $n=2.0$. Then $m=0.5$, $E=2(2.0)+0.5(1.0)=4.5$, $m^2/\kappa=0.25/(3.5\times10^{-10})=7.14\times10^{8}$, $\ln(7.14\times10^8)=20.39$, and $20.39/4.5=4.531$, so $(m^2/\kappa)^{1/E}=e^{4.531}=92.9$. The reach is $\hc=92.9/0.05=1{,}856$ cm. A trigger of 300 cm fires in this soil. In practice one keeps the trigger below about half the reach, here under 930 cm, because irrigation falls to zero as $h_t/\hc$ approaches 1 (figure at the end of this chapter).}
+
+
+
+\subsection{Properties of the reach}
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+\item $\alpha$ only rescales the reach: $\alpha\hc$ depends on $n$, $\ell$ and $\kappa$ alone.
+\item \emph{Sensitivity to $n$.} Write $\ln(\alpha\hc)=\ln(m^2/\kappa)/E$. With $dm/dn=1/n^2$,
+\begin{equation}\label{eq:sens}\boxed{\frac{\partial\ln(\alpha\hc)}{\partial n}=\frac{2}{m\,n^2E}-\frac{(2+\ell)\ln(m^2/\kappa)}{E^2}.}\end{equation}
+\par\noindent where $\partial\ln(\alpha h_c)/\partial n$ is the logarithmic sensitivity of the reach to the shape parameter $n$; $m=1-1/n$, $E=2n+\ell(n-1)$, $\ell$ and $\kappa$ are as in Eq.~(\ref{eq:reach}).
+
+The second term dominates, since $\ln(m^2/\kappa)$ is between 18 and 21. The reach therefore shortens steeply as $n$ grows: $\alpha\hc\approx1{,}280$ at $n=1.23$ and $\approx29$ at $n=2.68$.
+\item A larger $\ell$ shortens the reach, because the conductivity collapses faster.
+\item For $n\to1$ the exponent tends to 2 and $m\to0$, so the reach tends to $\alpha^{-1}(m^2/\kappa)^{1/2}$, which vanishes slowly. Very broad pore-size distributions remain reachable far into the dry range, as observed for the silty clay loam.
+\item \emph{Robustness.} Because $\hc\propto\kappa^{-1/E}$, a tenfold change of $\kappa$ changes the reach by $10^{1/E}$: 1.45 in the sand ($E=6.2$) and 2.44 in the silty clay loam ($E=2.575$).
+\end{enumerate}
+
+\begin{keybox}A suction trigger has a reach $\hc=\alpha^{-1}(m^2/\kappa)^{1/[2n+\ell(n-1)]}$. A trigger beyond it can never fire. One constant, $\kappa\approx3.5\times10^{-10}$, serves all ten soils; left-out soils are predicted within a factor of 2.3.\end{keybox}
+
+\section{Why a trigger has a reach, in words}
+A crop dries the soil at the sensor only as fast as the soil delivers water to the roots. That delivery scales with the conductivity, which falls by many orders of magnitude as the soil dries. In a soil with a narrow pore-size distribution (large $n$, sands) the conductivity collapses within a narrow band of suction just past the air entry, so the crop stops drying the soil there, and whatever trigger is set beyond that band is never read. In a soil with a broad distribution (small $n$, silty clay loams) the conductivity fades slowly over many decades, and the crop can still dry the soil at very high suctions.
+
+\section{Why a deeper sensor does not help}
+Below the sensor depth of the experiments the root density is smaller, so the soil dries even less, and in sands the deeper soil is also wetted by drainage from above. A deeper sensor therefore reads lower suctions, not higher ones.
+
+\section{The reach scale}
+Define the reach-scaled trigger $x=h_t/\hc$. Plotting irrigation against $x$ instead of against $h_t$ collapses the curves of ten soils: the mean within-bin variance of the normalised irrigation, in ten quantile bins, falls from 54 per cent of the total variance (on $h_t$ alone) to 32 per cent (on $x$). It does not fall to zero, because the reach sets where irrigation ends, but how irrigation fades \emph{before} the reach depends on how often the soil reaches a given suction in a season, which depends on the water held between field capacity and that suction: a retention property, not a conductivity property.
+
+\label{fig:reachscale}
+
+\exbox{}{Compute $\hc$ for $\alpha=0.03$ cm$^{-1}$, $n=1.7$ with $\kappa=3.5\times10^{-10}$ and $\ell=0.5$.}\sol  $m=0.4118$, $E=2(1.7)+0.5(0.7)=3.75$, $\ln(m^2/\kappa)=20.00$, so $(m^2/\kappa)^{1/E}=e^{5.333}=207$ and $\hc=207/0.03\approx6{,}900$ cm.
+
+\exbox{}{Derive Equation~(\ref{eq:asym}) from Equation~(\ref{eq:vgm}), step by step, stating each approximation.}\sol  See the derivation in Section 5.2.
+
+\exbox{}{Derive Equation~(\ref{eq:sens}). Evaluate it at $n=1.5$ with $\kappa=3.5\times10^{-10}$ and $\ell=0.5$ and say whether the reach rises or falls with $n$.}\sol  At $n=1.5$: $m=0.3333$, $E=3.25$, $\ln(m^2/\kappa)=19.57$; first term $2/(0.3333\cdot2.25\cdot3.25)=0.820$; second $2.5\cdot19.57/10.56=4.633$; derivative $-3.81$: the reach falls steeply with $n$.
+
+\exbox{}{For the soil of the worked example, by what factor does the reach change if $\kappa$ is $3.5\times10^{-9}$ instead of $3.5\times10^{-10}$?}\sol  A factor of $10^{1/E}=10^{1/4.5}=1.67$ shorter for $\kappa$ ten times larger ($1{,}856\to1{,}113$ cm).
+
+\exbox{}{A farmer sets a 300 cm trigger in a loamy sand. Use Table~\ref{tab:reach} to explain why the field is in effect rainfed, and propose a trigger.}\sol  The reach of the loamy sand is 425 cm and 300 cm is $0.7\hc$, so irrigation is nearly nil; keep the trigger below $\hc/2\approx210$ cm.
+\banner{The fate of an irrigation millimetre}\label{ch:fate}
+\section{Marginal, not average}
+Of every millimetre of water pumped onto a field, how much does the crop transpire, and where does the rest go? The answer must hold for many soils, doses, seasons and methods. Take an irrigated run and its \emph{rainfed twin}, which has the same soil, weather and crop. The long-term balances are
+\begin{equation}\label{eq:twin}\boxed{P+I=T+E_s+E_o+D+\Delta S+Q,\qquad P=T_0+E_{s,0}+E_{o,0}+D_0+\Delta S_0+Q_0 .}\end{equation}
+\par\noindent where $P$ is the precipitation, $I$ the irrigation, $T$ the transpiration, $E_s$ the soil evaporation, $E_o$ the other evaporation (canopy and mulch), $D$ the drainage, $\Delta S$ the change of stored water and $Q$ the runoff (all in mm over the season); the subscript 0 marks the rainfed twin that receives no irrigation.
+
+Subtracting and dividing by $I$,
+\begin{equation}\label{eq:fate}
+\boxed{\;1=\underbrace{\frac{T-T_0}{I}}_{\eta_T}+\underbrace{\frac{E_s-E_{s,0}}{I}}_{\eta_{E_s}}+\underbrace{\frac{E_o-E_{o,0}}{I}}_{\eta_{E_o}}+\underbrace{\frac{D-D_0}{I}}_{\eta_D}+\underbrace{\frac{\Delta S-\Delta S_0+Q-Q_0}{I}}_{\eta_S}\;}
+\end{equation}
+\par\noindent where $\eta_X=(X-X_0)/I$ is the share of the irrigation $I$ (mm) that appears as the change of the term $X$ ($X=T,E_s,E_o,D$, or storage plus runoff) relative to the rainfed twin (subscript 0); the five shares add to one because the balance of Eq.~(\ref{eq:twin}) closes.
+
+Each $\eta_X=(X-X_0)/I$ is the share of the irrigation that appears as a change in flux $X$. The shares are \emph{marginal}: they describe the response to the water that was added, not the share of the total in the irrigated run, so a share can be negative (overhead irrigation can lower transpiration) or larger than the average loss fraction. Pooling a group of runs uses the ratio of sums, $\eta_X=\sum(X-X_0)/\sum I$, which weights each run by its irrigation.
+
+\exbox{One pair of runs}{An irrigated run has $I=200$ mm, and compared with its rainfed twin: $T-T_0=+76$, $E_s-E_{s,0}=+50$, $E_o-E_{o,0}=+38$, $D-D_0=+32$ and $\Delta S-\Delta S_0+Q-Q_0=+4$ mm. These add to $200$ mm. The shares are $\eta_T=0.38$, $\eta_{E_s}=0.25$, $\eta_{E_o}=0.19$, $\eta_D=0.16$ and $\eta_S=0.02$ --- the average fate found over the ensemble. Less than half of the water is transpired.}
+
+
+
+\fig{p4_fate}{0.9}{The fate of an irrigation millimetre by soil and method, from the Daisy ensemble.}
+
+\section{What the ensemble shows}
+Over eight soils, ten doses, ten seasons and three methods, each irrigation millimetre became 0.38~mm of transpiration, 0.25~mm of soil evaporation, 0.19~mm of other evaporation, 0.16~mm of drainage below 1~m and 0.02--0.03~mm of storage and runoff. The transpired share is largest in sandy loam (0.64) and smallest in coarse sand (0.23), where 0.32 drains. In the five fine-textured soils the shares are close: 0.34 to 0.46 transpired and 0.15 drained.
+
+\subsection{Overhead irrigation adds no transpiration}
+In the methods experiments the extra transpiration of overhead irrigation is nil or negative ($-0.08$ in E4 and $-0.01$ in E15): the water that the canopy intercepts evaporates (0.79 and 0.56 of each millimetre) and lowers the transpiration that it replaces. Subsurface application transpires most (0.51 in E4, 0.40 in E15) but also drains most. Why: transpiration is limited by the energy available to the canopy and by the cover; water applied to a wet surface or to a canopy that does not cover the ground evaporates using the same energy, and water applied beyond the storage of the root zone drains.
+
+\begin{kfig}{The drained share of the water applied rises with the dose per event $d$ and saturates at $\eta_D$: $\phi_D=\eta_D\,(1-e^{-d/d_D})$.}
+\draw[axis] (0,0)--(7.4,0);\draw[axis] (0,0)--(0,4.2);
+\node[lab,below] at (3.7,-0.55) {Dose per event $d$ (mm)};\node[lab,rotate=90] at (-0.9,2.1) {Drained share $\phi_D$};
+\foreach \x/\t in {0/0,1.5/10,3/20,4.5/30,6/40}{\draw[ln] (\x,0)--(\x,-0.1);\node[lab,below] at (\x,-0.1) {\t};}
+\draw[gd] (0,3.4)--(7.2,3.4);\node[lab,above right] at (0.1,3.4) {$\eta_D$};
+\draw[crv,domain=0:7,samples=50,smooth] plot (\x,{3.4*(1-exp(-\x/1.9))});
+\draw[gd] (1.9,0)--(1.9,2.149);\draw[gd] (0,2.149)--(1.9,2.149);\node[lab,below] at (1.9,-0.5) {$d_D$};
+\end{kfig}
+
+\section{The dose law}
+The drained share rises with the dose $d$ applied per event and levels off. A simple form with the right limits is
+\begin{equation}\label{eq:dose}\boxed{\boxed{\;\eta_D(d)=\eta_\infty\bigl(1-e^{-d/d_D}\bigr)\;}}\end{equation}
+\par\noindent where $\eta_D$ is the share of the irrigation that drains (dimensionless), $d$ the dose applied per event (mm), $\eta_\infty$ the limit of the share for very large doses and $d_D$ the characteristic dose (mm) at which 63 per cent of the limit is reached.
+
+\textbf{Why this form.} Let a dose be applied when the root zone has a deficit. Part of the dose is used by the crop and the surface before it can move below the roots; the rest can drain. If the water usable before redistribution grows with the dose and saturates, and the drained share of the remainder is a soil property $\eta_\infty$, then Equation~(\ref{eq:dose}) is the simplest form with the right limits: $\eta_D\to\eta_\infty d/d_D$ for $d\ll d_D$ (a vanishing dose cannot drain) and $\eta_D\to\eta_\infty$ for $d\gg d_D$. The dose scale $d_D$ is the dose at which $1-e^{-1}=63$ per cent of the plateau is reached. \emph{The law is phenomenological}: it was chosen for its limits and tested on data (coefficient of determination 0.92 to 0.96 on seven soils), not derived from the Richards equation.
+
+\subhd{Findings.} The dose scale is $d_D=4.1\pm0.6$ mm, the same in every soil and close to one day of crop water use. The plateau $\eta_\infty$ is soil specific, between 0.10 and 0.45, and highest in coarse sand.
+
+\subhd{Why the scale is the same in every soil.} The water that a dose can lose to drainage is the part that the crop and the surface do not use before it redistributes below the roots. The crop uses about one day of evapotranspiration in that time whatever the soil, so the dose scale is set by the atmosphere and the crop, not by the soil. \textbf{Why the plateau depends on the soil:} once a dose is large, the share that drains is the share of the excess that the soil passes on before the crop uses it, a race between drainage and uptake. Coarse sand passes water fast, fine soils hold it.
+
+\exbox{Choosing a dose}{Take a soil with $\eta_\infty=0.30$ and $d_D=4.1$ mm. Equation~(\ref{eq:dose}) gives $\eta_D=0.065$ at $d=1$ mm, $0.19$ at 4.1 mm, $0.257$ at 8 mm, $0.284$ at 12 mm and $0.298$ at 20 mm. Increasing the dose from 4.1 to 12 mm raises the drained share from 0.19 to 0.28, that is, 9 extra drained millimetres per 100 mm applied. But a dose of 1 mm drains almost nothing and loses 60 to 72 per cent to evaporation, so very small doses are no solution either: the transpired share rises with the dose up to 15 to 20 mm in most soils.}
+
+
+
+\fig{p4_dose}{0.9}{Drained, transpired and evaporated share against the dose per event, with the fit of Equation~(\ref{eq:dose}).}
+
+\begin{daisybox}{computing the fate and the dose law}
+For each soil and each run of E10 (dose 1 to 30 mm applied in 12 h, ten irrigation windows), the annual drainage at 1 m is read from the Daisy log and subtracted from the drainage of the rainfed twin in E0. Pooling gives $\eta_D$ per soil and dose. Equation~(\ref{eq:dose}) is then fitted per soil by nonlinear least squares for $\eta_\infty$ and $d_D$. Methods come from E4 (surface, overhead, subsurface on each soil) and from E15 (method crossed with rate, dose and rooting depth in coarse loam). All shares sum to one by construction, so the fifth is obtained as a check, not fitted.
+\end{daisybox}
+
+\exbox{}{A run has $I=150$ mm and differences from its twin of $T$: $+45$, $E_s$: $+40$, $E_o$: $+30$, $D$: $+30$. Find $\eta_S$ and all five shares.}\sol  $\eta_S=150-(45+40+30+30)=5$ mm, so shares $0.30,\ 0.267,\ 0.20,\ 0.20,\ 0.033$.
+
+\exbox{}{Show that a negative $\eta_T$ is possible when the added water is intercepted and evaporated.}\sol  If the added water is intercepted and evaporates, canopy evaporation of the irrigation can exceed what the crop would otherwise take up, so the change of $T$ can be below zero.
+
+\exbox{}{For $\eta_\infty=0.45$ and $d_D=4.1$ mm compute $\eta_D$ at 2, 5, 10 and 25 mm. At what dose does $\eta_D$ reach 90 per cent of the plateau?}\sol  $\eta_D=0.45(1-e^{-d/4.1})$: $0.147$, $0.250$, $0.411$, $0.447$ at 2, 5, 10, 25 mm. 90 per cent of the plateau at $d=4.1\ln10=9.4$ mm.
+
+\exbox{}{Why is the ratio of sums, and not the mean of the ratios, used when pooling runs?}\sol  The ratio of sums weights each run by its irrigation and gives the share of the total irrigation; a mean of ratios would give a run with almost no irrigation the same weight as a large one.
+
+\exbox{}{The text says Equation~(\ref{eq:dose}) is phenomenological. Name two properties it was chosen for.}\sol  The correct limits (zero dose drains nothing; large dose passes on a constant share) and a single scale.
+\banner{Hydraulic memory}\label{ch:mem}
+\section{The idea}
+A soil that starts a season wet releases some of its stored water during the season. Where does the released water go: to transpiration, to evaporation, or to drainage below the roots? Hydraulic memory is the share that drains. It is a property of the soil, not of one season.
+
+\section{Definition: memory fate as a pooled slope}
+Experiment E9 imposes, for each soil, an initial suction $h_0$ (ten values from 30 to 3,000 cm) and a rainfall scale $P$ (ten values from 0.5 to 1.4): a $10\times10$ lattice, 100 runs per soil. Wetter initial states (small $h_0$) release more storage, so the released storage $\bar R$ varies along the $h_0$ axis. For a flux $x\in\{E_s,T,D,\mathrm{oth}\}$ the memory fate is the within-$P$ pooled regression slope of that flux on $\bar R$:
+\begin{equation}\label{eq:phi}
+\boxed{\;\phi_x=\frac{\sum_P\sum_{c\in P}(\bar R_c-\bar R_P)(x_c-\bar x_P)}{\sum_P\sum_{c\in P}(\bar R_c-\bar R_P)^2},\qquad\phi_{E_s}+\phi_T+\phi_D+\phi_{\mathrm{oth}}=1\;}
+\end{equation}
+\par\noindent where $\phi_x$ is the fraction of the variation of rainfall that goes to the flux $x$ ($x=E_s,T,D$ or the rest), the sums run over the patterns $P$ and the cells $c$ of each, $\bar R_c$ is the mean rainfall of cell $c$, $\bar R_P$ the mean of pattern $P$, $x_c$ the value of the flux in the cell and $\bar x_P$ its mean over the pattern.
+
+The sums run over lattice cells $c$ of one soil, and bars denote means within each rain level $P$. Pooling within $P$ removes the first-order effect of the change of rainfall on $\bar R$ and isolates the response to the antecedent state. $\phi_D$ is the hydraulic memory of drainage: the fraction of an additional millimetre of antecedent storage released that is shed as drainage. The unity constraint follows from the water balance when the irrigation response to $\bar R$ is negligible within the lattice. Confidence intervals come from bootstrapping the 100 cells (1,000 resamples).
+
+\exbox{A slope by hand}{Within one rain level take four cells with released storage $\bar R=(10,20,30,40)$ mm and drainage $D=(6,13,17,24)$ mm. Means: $\bar R_P=25$, $\bar D_P=15$. Deviations of $\bar R$: $(-15,-5,5,15)$; of $D$: $(-9,-2,2,9)$. The numerator is $135+10+10+135=290$; the denominator is $225+25+25+225=500$. So $\phi_D=0.58$: of each extra millimetre released, 0.58 mm drains. In a real analysis the sums run over all ten rain levels of the lattice.}
+
+
+
+\fig{p1_mem}{0.9}{Hydraulic memory of drainage across the ten soils, from the ensemble.}
+
+\begin{kfig}{Hydraulic memory: the response to a saving decays as the store drains; the memory fate $\phi$ is the share of the saving still held by the soil after a season.}
+\draw[axis] (0,0)--(7.4,0);\draw[axis] (0,0)--(0,4.2);
+\node[lab,below] at (3.7,-0.45) {Time after the saving};\node[lab,rotate=90] at (-0.8,2.1) {Retained saving};
+\draw[crv,domain=0:7,samples=40,smooth] plot (\x,{3.8*exp(-\x/5)});
+\draw[ln,domain=0:7,samples=40,smooth] plot (\x,{3.8*exp(-\x/1.6)});
+\draw[gd] (6.0,0)--(6.0,{3.8*exp(-6/5)});\node[lab,above] at (6.0,{3.8*exp(-6/5)+0.05}) {$\phi$};
+\node[lab,text=khmag] at (5.2,2.5) {fine soil};\node[lab,text=khcyan!70!black] at (2.1,1.0) {coarse soil};
+\end{kfig}
+
+\section{Results across soils}
+The memory fate $\phi_D$ runs from 0.85 in sand (S03) to 0.02 in silty clay loam (S10); see Table~\ref{tab:soils}. It follows the pore-size parameter $n$ (Spearman correlation $0.95$) and the saturated conductivity ($0.97$), and it transfers to independent evaporation and mulch experiments (correlations $0.85$ and $0.89$).
+
+\section{The rate-competition law}
+Let stored water $S$ above field capacity leave by two parallel first-order sinks: drainage with rate constant $k_D\propto\Ks/L$ and withdrawal by evaporation and uptake with $k_W\propto q^*/L$, where $L$ is a common length. Then $dS/dt=-(k_D+k_W)S$ and the drainage that leaves over the whole release is
+\begin{equation}\label{eq:comp}\boxed{\int_0^\infty k_DS\,dt=\frac{k_D}{k_D+k_W}S_0\quad\Longrightarrow\quad\boxed{\;\phi_D=\frac{\Ks}{\Ks+q^*}\;}}\end{equation}
+\par\noindent where $k_D$ and $k_W$ are the rate constants of drainage and of the other withdrawals (d$^{-1}$), $S$ the storage that remains at time $t$ (mm), $S_0$ the initial storage, $\phi_D$ the fraction that drains, $K_s$ the saturated conductivity (mm\,d$^{-1}$) and $q^*$ the mean withdrawal rate of the crop and soil (mm\,d$^{-1}$).
+
+The law is bounded in $[0,1]$, tends to 0 for an impermeable soil and to 1 for a free-draining one, and is the only one-parameter form with these limits that is linear in $\Ks$ at small $\Ks$. By the Buckingham theorem $\phi_D=F(\Ks/q^*,n,\alpha h^*)$, and the law keeps the first group only. The constant $q^*$ is one withdrawal scale shared by all soils, fitted by nonlinear least squares on the eight soils with a literature $\Ks$. Left-out soils are predicted with a leave-one-soil-out root-mean-square error of 0.058.
+
+\exbox{Reading the law}{If $\Ks=q^*$ then $\phi_D=1/2$: drainage and withdrawal are equally fast. A soil with $\Ks=9q^*$ has $\phi_D=0.9$, and one with $\Ks=q^*/9$ has $\phi_D=0.1$. A ninefold step in conductivity moves the memory fate from 0.1 to 0.5 to 0.9, which is why the memory of sand and silty clay loam are so far apart.}
+
+
+
+\section{Why the memory transfers to other experiments}
+The same competition decides where any extra water goes, whether it comes from initial storage, from a lower evaporation factor or from a mulch; the share is a property of the conductivity of the soil, not of the source of the water.
+
+\section{Climate and the recoverable share of a saving}
+In experiment E16, a $2^6$ factorial per soil (rainfall scale, temperature shift, trigger, dose, nitrogen rate, soil-evaporation factor), paired differences between a high and a low evaporation factor give the loss fate of each component. The results: warming raises the evaporative demand, so withdrawal is faster and less of a saved millimetre drains (the recoverable share rises); a wetter climate keeps the profile closer to field capacity, where drainage is fast, so more drains. The nitrogen rate changes the growth of the crop but not the hydraulic properties; it has no effect and so serves as a \emph{negative control}.
+
+\begin{daisybox}{how the tests were done}
+Leave-one-soil-out prediction compares four soil predictors (total available water, $\Se$ at 100 cm, $n$ and $\log\Ks$) and a mean-only benchmark. Spearman correlations come with exact permutation $p$ values and 10,000 bootstrap resamples; an exact sign test across soils checks the direction. All inputs are annual values read from the Daisy logs of E9, E7 and E16.
+\end{daisybox}
+
+\exbox{}{Four cells have $\bar R=(5,15,25,35)$ and $E_s=(20,22,24,26)$ in one rain level. Compute $\phi_{E_s}$.}\sol  Deviations $(-15,-5,5,15)$ and $(-3,-1,1,3)$: numerator $45+5+5+45=100$, denominator $500$, $\phi_{E_s}=0.20$.
+
+\exbox{}{Derive Equation~(\ref{eq:comp}) from the two first-order sinks, showing the integral.}\sol  $dS/dt=-(k_D+k_W)S\Rightarrow S=S_0e^{-(k_D+k_W)t}$; $\int_0^\infty k_DS\,dt=k_DS_0/(k_D+k_W)$; with $k_D\propto\Ks$ and $k_W\propto q^*$ the factor $L$ cancels.
+
+\exbox{}{If $q^*=1.5$ cm\,d$^{-1}$ (a hypothetical value) find $\phi_D$ for $\Ks=0.5$, $5$ and $50$ cm\,d$^{-1}$.}\sol  $\phi_D=0.25,\ 0.77,\ 0.97$ for $\Ks=0.5,\ 5,\ 50$ (with $q^*=1.5$).
+
+\exbox{}{Explain why a nitrogen factor with no effect is useful as a negative control.}\sol  An effect that is known to be absent shows what a null result looks like and guards against reading a pattern into noise.
+
+\exbox{}{A mulch saves 40 mm of evaporation in sand ($\phi_D=0.85$) and in silty clay loam ($\phi_D=0.02$). Estimate, using the memory fate as the drained share, how many millimetres stay available to the crop in each.}\sol  Sand: $40\times(1-0.85)=6$ mm stay; silty clay loam: $40\times(1-0.02)=39.2$ mm stay.
+\banner{Irrigation control layers: sensor, trigger and trigger law}\label{ch:ctrl}
+\section{Sensor and trigger}
+A simulated tensiometer records the suction $h$ at the sensor depth every day. For year $y$ the layer counts the growing-season days (183 from 1 April) beyond the trigger $h_T$:
+\begin{equation}\boxed{N_y(h_T)=\#\{d\in\text{season}_y:h_d>h_T\},\qquad X=100\Bigl(1-\frac{\bar N_{\rm irr}}{\bar N_{\rm rainfed}}\Bigr),\ \bar N=\frac1{20}\sum_yN_y.}\end{equation}
+\par\noindent where $N_y(h_T)$ is the number of days of year $y$ on which the suction $h_d$ exceeds the trigger $h_T$ (cm), $\bar N_{\rm irr}$ and $\bar N_{\rm rainfed}$ the means over the 20 years for the irrigated and the rainfed runs, and $X$ the percentage reduction of the days beyond the trigger.
+
+
+\exbox{Days beyond the trigger}{The layer prints: ``Irrigated: 85 of 183 days beyond 300 cm. Rainfed: 168 of 183 days beyond. Irrigation removes 39 \%.'' The 39 per cent is a 20-year mean while 85 and 168 are for the year drawn. (a) Verify the arithmetic for the year drawn. (b) If the rainfed 20-year mean is $\bar N_{\rm rainfed}=168$, what is the irrigated mean?}\sol  (a) For the year drawn, $X=100(1-85/168)=49.4$ per cent, which differs from the printed 39 per cent because $X$ uses the 20-year means, not one year. (b) $39=100(1-\bar N_{\rm irr}/168)$ gives $\bar N_{\rm irr}=168\times0.61=102.5$ days. So in an average year the irrigated sensor is beyond the trigger on 102 of 183 days against 168 rainfed. The year drawn is wetter than average for the irrigated trace by $102.5-85=17.5$ days.
+
+\subhd{Reading.} A trigger of $-300$ cm does not mean ``never beyond 300 cm'': irrigation starts \emph{after} the sensor crosses the trigger, the dose is applied once per event, and the suction rises again between events.
+
+
+\exbox{The delta method}{When the settings differ from the stored ones, the record is moved by the delta method
+\begin{equation}\boxed{h^{\rm x}_d=h_{\rm soil}\Bigl(f_{\rm ref}(h^{\rm rec}_d)+\frac17\sum_{q=-3}^{3}\bigl[f^{\rm set}_{d+q}-f^{\rm std}_{d+q}\bigr]\Bigr).}\end{equation}
+\par\noindent where $h^{\rm x}_d$ is the suction predicted for day $d$ (cm), $h_{\rm soil}$ the scale of the soil (cm), $f_{\rm ref}$ the reference depletion curve evaluated at the recorded suction $h^{\rm rec}_d$, and $f^{\rm set}$, $f^{\rm std}$ the depletion fractions of the chosen set and of the standard set, averaged over the seven days $d-3,\ldots,d+3$.
+
+Suppose on day $d$ the stored record has $h^{\rm rec}=100$ cm in the reference soil (Coarse loam, depletion $f_{\rm ref}=f(100)$ in that soil) and the target soil is the loam S06. The seven-day differences $f^{\rm set}-f^{\rm std}$ of the sensor layer (the daily model run at your settings minus at standard settings) are $0.02,0.03,0.05,0.06,0.04,0.03,0.02$. Compute the moved suction. (Assume that the stored record is at $f_{\rm ref}=0.30$.)}\sol  The mean difference is $(0.02+0.03+0.05+0.06+0.04+0.03+0.02)/7=0.25/7=0.0357$. The new depletion is $0.30+0.0357=0.3357$. Convert it to a suction in the loam by inverting Equation~(\ref{eq:fdep}) by bisection: $h^{\rm x}=208$ cm. The same depletion $0.30$ would be $h=190$ cm in the loam. The settings therefore raise the suction at the sensor from 190 to 208 cm, an increase of 9 per cent for a depletion change of 0.036. Because suction is steep in depletion, a small change in depletion is a large change in suction.
+
+
+\begin{kfig}{Relative yield against trigger depletion: yield stays near its maximum for small depletions and then falls; the largest trigger with $Y_{rel}\ge0.95$ is read from the dashed lines.}
+\draw[axis] (0,0)--(7.4,0);\draw[axis] (0,0)--(0,4.4);
+\node[lab,below] at (3.7,-0.5) {Trigger depletion $f$};\node[lab,rotate=90] at (-0.9,2.2) {Relative yield $Y_{rel}$};
+\foreach \x/\t in {0/0,2.4/0.25,4.8/0.5,7.2/0.75}{\draw[ln] (\x,0)--(\x,-0.1);\node[lab,below] at (\x,-0.1) {\t};}
+\draw[crv,smooth] plot coordinates {(0,4.0)(1.2,3.98)(2.4,3.8)(3.6,3.4)(4.8,2.8)(6,2.1)(7.2,1.3)};
+\draw[gd] (0,3.8)--(7.2,3.8);\node[lab,left] at (0,3.8) {0.95};\draw[gd] (2.4,0)--(2.4,3.8);
+\end{kfig}
+
+\section{Trigger law}
+The suction at which a soil reaches a chosen depletion is $h(f)=\{h:f(h)=f\}$ (Equation~\ref{eq:fdep} inverted), the net irrigation per event is $Z_n=f\cdot\mathrm{AWC}\cdot R_{\max}$, and the relative yield at a trigger is
+\begin{equation}\boxed{Y_{\rm rel}(h_T)=\frac{Y(h_T)}{\max_hY(h)}\quad(\text{data-driven, run set E2}).}\end{equation}
+\par\noindent where $Y_{\rm rel}$ is the relative yield (0 to 1), $Y(h_T)$ the yield for trigger $h_T$ (Mg\,ha$^{-1}$) and $\max_hY(h)$ its maximum over all triggers, taken from the run set E2.
+
+
+\exbox{Relative yield against trigger depletion}{Use the archived E2 trigger runs to compute, for three soils, the depletion at each trigger and the relative yield, and find the largest trigger with $Y_{\rm rel}\ge0.95$.}\sol  For each soil take $Y_{\max}$ as the largest yield over its triggers, and evaluate $f(h_T)$ with Equation~(\ref{eq:fdep}). Table~\ref{tab:yrel} lists the result.\begin{table}[!htbp]\centering\small\caption{Archived trigger runs (E2): depletion at the trigger, irrigation, yield and relative yield.}\label{tab:yrel}
+\begin{tabular}{lrrrrr}\toprule
+\hd{Soil} & \hd{Trigger (cm)} & \hd{$f$} & \hd{Irrigation (mm)} & \hd{Yield (Mg/ha)} & \hd{$Y_{\rm rel}$}\\\midrule
+S06 & 50 & 0.000 & 424 & 6.62 & 1.000\\
+S06 & 100 & 0.000 & 346 & 6.61 & 0.997\\
+S06 & 200 & 0.321 & 257 & 6.38 & 0.964\\
+S06 & 300 & 0.468 & 212 & 6.12 & 0.925\\
+S06 & 500 & 0.614 & 173 & 5.96 & 0.899\\
+S06 & 1000 & 0.759 & 116 & 5.19 & 0.783\\
+S06 & 3000 & 0.899 & 37 & 3.57 & 0.540\\
+S03 & 50 & 0.000 & 122 & 3.04 & 1.000\\
+S03 & 100 & 0.000 & 6 & 1.23 & 0.406\\
+S03 & 200 & 0.688 & 0 & 1.13 & 0.373\\
+S03 & 300 & 0.842 & 0 & 1.13 & 0.373\\
+S03 & 500 & 0.933 & 0 & 1.13 & 0.373\\
+S03 & 1000 & 0.979 & 0 & 1.13 & 0.373\\
+S03 & 3000 & 0.997 & 0 & 1.13 & 0.373\\
+S10 & 50 & 0.000 & 383 & 5.99 & 0.908\\
+S10 & 100 & 0.000 & 347 & 6.23 & 0.945\\
+S10 & 200 & 0.142 & 306 & 6.51 & 0.988\\
+S10 & 300 & 0.237 & 278 & 6.58 & 0.998\\
+S10 & 500 & 0.361 & 242 & 6.51 & 0.987\\
+S10 & 1000 & 0.522 & 190 & 6.42 & 0.975\\
+S10 & 3000 & 0.745 & 150 & 5.87 & 0.891\\\bottomrule\end{tabular}\end{table}
+
+Loam: the largest trigger with $Y_{\rm rel}\ge0.95$ is 200 cm, $f=0.32$. Sand: the largest trigger with $Y_{\rm rel}\ge0.95$ is 50 cm, $f=0.00$. Silty clay loam: the largest trigger with $Y_{\rm rel}\ge0.95$ is 1500 cm, $f=0.61$. 
+
+\subhd{Reading.} In suction the thresholds differ by a large factor between soils; in depletion they cluster near $f^*\approx0.45$ (the study's soil-independent value; 5 per cent yield loss), which is the content of the trigger law. The statement is data-driven for one crop, one weather series and a sensor at 20 cm.
+
+
+\exbox{How fast each soil dries}{Every soil is compared on the same crop demand $ET_c$; only the water held differs:
+\begin{equation}\boxed{r_s=\frac{ET_c}{\mathrm{TAW}_s},\quad\mathrm{TAW}_s=\mathrm{AWC}_sz_r,\quad t_{{\rm trig},s}=\frac{f_{{\rm trig},s}}{r_s}.}\end{equation}
+\par\noindent where $r_s$ is the depletion rate of soil $s$ (fraction of TAW per day), $ET_c$ the crop evapotranspiration (mm\,d$^{-1}$), ${\rm TAW}_s$ the total available water of the soil (mm), ${\rm AWC}_s$ its available water capacity (mm\,cm$^{-1}$), $z_r$ the rooting depth (cm), $f_{{\rm trig},s}$ the depletion fraction at which the trigger fires and $t_{{\rm trig},s}$ the time to the trigger (d).
+
+Take $ET_c=3.5$ mm d$^{-1}$ (assumed peak-season value), $z_r=90$ cm and $f_{\rm trig}=0.45$. Compute $r_s$ in per cent per day and the days to the trigger for the ten soils.}\sol  For the sand, $\mathrm{TAW}=0.6\times90=54$ mm, $r=3.5/54=0.0648$, that is $6.5$ per cent per day, and $t=0.45/0.0648=6.9$ days. For the coarse loam, $\mathrm{TAW}=1.5\times90=135$ mm, $r=2.6$ per cent per day and $t=17.4$ days. These agree with the application text (about 7 days for sand and 18 days for coarse loam). Table~\ref{tab:dry} gives all ten soils.\begin{table}[!htbp]\centering\small\caption{Speed of depletion and days from field capacity to the trigger $f=0.45$ (assumed $ET_c=3.5$ mm d$^{-1}$, $z_r=90$ cm).}\label{tab:dry}
+\begin{tabular}{lrrrrr}\toprule
+\hd{ID} & \hd{Soil} & \hd{AWC} & \hd{TAW (mm)} & \hd{$100r_s$ (\%/d)} & \hd{Days to trigger}\\\midrule
+S01 & Coarse loam & 1.5 & 135 & 2.6 & 17.4\\
+S02 & Coarse sand & 0.5 & 45 & 7.8 & 5.8\\
+S03 & Sand & 0.6 & 54 & 6.5 & 6.9\\
+S04 & Loamy sand & 0.9 & 81 & 4.3 & 10.4\\
+S05 & Sandy loam & 1.2 & 108 & 3.2 & 13.9\\
+S06 & Loam & 1.7 & 153 & 2.3 & 19.7\\
+S07 & Silt loam & 2.0 & 180 & 1.9 & 23.1\\
+S08 & Sandy clay loam & 1.4 & 126 & 2.8 & 16.2\\
+S09 & Clay loam & 1.6 & 144 & 2.4 & 18.5\\
+S10 & Silty clay loam & 1.7 & 153 & 2.3 & 19.7\\\bottomrule\end{tabular}\end{table}
+\textbf{Reading.} The coarse sand dries fastest (smallest AWC, 0.5 mm cm$^{-1}$) and the silt loam slowest (AWC 2.0): a four-fold spread in the interval between irrigations, from 5.8 to 23 days. A sprinkler round that takes three days is long compared with the 5.8 days of the coarse sand but short compared with the 23 days of the silt loam, which is why the f=0.45 advice for coarse soils exists.
+
+
+\exbox{Choosing between f = 0.50 and f = 0.45}{The application advises $f=0.45$ if any of the following holds: a round of the design takes more than 2 days; the soil is sandy (sand $\ge60$ per cent or AWC $\le0.9$ mm cm$^{-1}$); the crop is at $\ge85$ per cent cover (critical stage). Otherwise $f=0.50$. Decide for three cases.}
+\textbf{Case A:} maize on the loam (sand 40 per cent, AWC 1.7), drip system, round 1.5 days, date with cover 60 per cent. No $f=0.45$ condition holds (round $\le2$ d, sand $<60$, AWC $>0.9$, cover $<85$ per cent), so the advice is $f=0.50$. In suction, $f=0.50$ in the loam is $h=332$ cm.
+
+\subhd{Case B:} same field but a sprinkler round of 3.5 days. The round exceeds 2 days, so the advice is $f=0.45$ ($h=284$ cm): the field must be triggered earlier because the last block is irrigated 3.5 days after the first, and during that time depletion advances by $3.5\times r_s$. With $r_s=3.5/153=2.3$ per cent per day (loam, $\mathrm{TAW}=1.7\times90=153$ mm) the last block gains $0.08$ in depletion, so starting at $0.45$ the last block reaches $0.53$, just above $0.50$.
+
+\subhd{Case C:} sand (92 per cent sand), drip, round 1 day. The soil is sandy, so $f=0.45$ ($h=143$ cm).
+
+
+\exbox{Reading the sensor tile}{The Dashboard tile ``Sensor / trigger'' reads $0.02/0.38$ for the coarse loam on a date. Interpret it and find the suction of the sensor and the days to irrigation at $r=2.6$ per cent per day.}\sol  The first number is the present depletion of the sensor layer ($f=0.02$, almost field capacity); the second is the trigger depletion $f_T=f(300\text{ cm})=0.38$ of the coarse loam. Irrigation is due when the first reaches the second. The sensor suction is $h(0.02)=105 cm$, close to the field capacity of 100 cm. At $r=0.026$ d$^{-1}$ the soil needs $(0.38-0.02)/0.026=13.8$ days without rain to reach the trigger.
+\IfFileExists{extra/proj03.tex}{\input{extra/proj03}}{}
+\IfFileExists{extra/ten03.tex}{\input{extra/ten03}}{}
+\IfFileExists{extra/tenb03.tex}{\input{extra/tenb03}}{}
+\IfFileExists{extra/teny03.tex}{\input{extra/teny03}}{}
+\IfFileExists{extra/tenby03.tex}{\input{extra/tenby03}}{}
+\IfFileExists{extra/tenx03.tex}{\input{extra/tenx03}}{}
+\IfFileExists{extra/tenbx03.tex}{\input{extra/tenbx03}}{}
+\IfFileExists{extra/ex03.tex}{\input{extra/ex03}}{}
+\IfFileExists{extra/dyk03.tex}{\input{extra/dyk03}}{}
+\IfFileExists{extra/obj03.tex}{\input{extra/obj03}}{}

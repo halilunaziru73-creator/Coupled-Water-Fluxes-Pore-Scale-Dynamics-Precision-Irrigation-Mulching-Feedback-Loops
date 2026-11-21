@@ -3,7 +3,7 @@ sys.path.insert(0,'/tmp/book/gen')
 from lib import *
 import eng2, numpy as np, pandas as pd
 O=[];w=O.append
-R='../../../../results/'
+R='/home/claude/coupled-water-fluxes-pore-scale-dynamics-precision-irrigation-mulching-feedback-loops/Manuscripts/results/'
 def phi(cl,si): return min(.5,max(.34,.36+.0016*cl+.0009*si))
 def th(s,h):
     nm,a,n,awc,sa,si,cl=SOIL[s];p=phi(cl,si);tr=.01+.0006*cl

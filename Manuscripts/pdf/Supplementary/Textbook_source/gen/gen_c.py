@@ -3,7 +3,7 @@ sys.path.insert(0,'/tmp/book/gen')
 from lib import *
 import eng2, numpy as np, pandas as pd
 O=[];w=O.append
-R='../../../../results/'
+R='/home/claude/coupled-water-fluxes-pore-scale-dynamics-precision-irrigation-mulching-feedback-loops/Manuscripts/results/'
 # ================= Chapter control
 w(r"""\chapter{Irrigation control layers: sensor, trigger and trigger law}\label{ch:ctrl}
 \markboth{Irrigation control}{Irrigation control}

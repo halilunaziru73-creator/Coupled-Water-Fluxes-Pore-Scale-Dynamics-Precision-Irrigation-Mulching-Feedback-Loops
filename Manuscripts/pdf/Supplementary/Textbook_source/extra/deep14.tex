@@ -1,0 +1,145 @@
+\section{Drainage: what the layer does}
+The drainage layer answers three questions of the farm that is irrigated: how far apart must the drains be to keep the water table below the roots; how large must the pipes be to carry the water away; and how much extra water must be applied, and drained, to wash out the salt. It takes the recharge of the water table from the field water balance (the deep percolation of rain and the loss of the irrigation design), the conductivity of the soil from the Saxton and Rawls functions, and the crop's tolerance of salinity and of a shallow water table.
+
+\section{Types of drains}
+The application offers three. A \textbf{buried pipe drain} is a perforated corrugated pipe in a gravel envelope; the flow enters through the perforations, the pipe runs half full, and the effective wetted perimeter is $u=\pi r_0$ with $r_0=0.05$ m (a 100-mm pipe). A \textbf{pipe drain with a control gate} has an adjustable outlet that holds the water table at a chosen height $g$ above the drain level, so that in the dry months the water is kept in the soil for the crop; it is the \emph{controlled drainage} of the application. An \textbf{open ditch} is an excavated channel with side slope 1.5 and bottom width $b_w$; the wetted perimeter is $u=b_w+2D_w\sqrt{1+1.5^2}$ with a water depth $D_w=0.3$ m, Manning $n=0.03$, and it takes more land (the ditch occupies $b_w+1.5\,\text{depth}$ of the width) and is cleaned each year. Pipe drains use $n=0.016$ (corrugated polyethylene).
+
+\begin{table}[!htbp]\centering\footnotesize\setlength{\tabcolsep}{3pt}\caption{The drain types of the application.}
+\begin{tabular}{llll}\toprule
+\hd{} & \hd{Buried pipe} & \hd{Pipe with gate} & \hd{Open ditch}\\\midrule
+Wetted perimeter $u$ & $\pi r_0=0.157$ m & $\pi r_0=0.157$ m & $b_w+2D_w\sqrt{1+z^2}$\\
+Manning $n$ & 0.016 & 0.016 & 0.030\\
+Default depth of drain (m) & 1.2 & 1.2 & 1.2\\
+Controls water table & no & yes (gate $g$) & no\\
+Land lost & none & none & ditch and spoil bank\\
+Maintenance & low & low & high (annual cleaning)\\\bottomrule\end{tabular}\end{table}
+
+\section{Steady design: Hooghoudt and the equivalent depth}
+When the recharge $q$ is steady, the water table between two parallel drains of spacing $L$ rises to a height $h$ above the drain level in the middle; Hooghoudt's equation relates them:
+
+\begin{equation}\boxed{q=\frac{8K_2\,d_e\,h+4K_1\,h^{2}}{L^{2}},\qquad L=\sqrt{\frac{8K_2d_eh+4K_1h^2}{q}},}\label{eq:dr-h}\end{equation}
+\par\noindent where $q$ is the design discharge (recharge) (m\,d$^{-1}$), $L$ the spacing of the drains (m), $h$ the allowed height of the water table midway above the drain level (m), $K_1$ the saturated conductivity of the layer above the drain level and $K_2$ that of the layer below it (m\,d$^{-1}$) and $d_e$ the equivalent depth (m). In the application $K_1=K_s$ of the soil (Saxton and Rawls) and $K_2=K_1\times K_{sub}$ with $K_{sub}$ chosen by the user (default 1).
+
+
+
+Close to the drain the flow lines converge, which lengthens the path and raises the head needed; Hooghoudt replaced the real depth $D$ of the barrier below the drains by a smaller \emph{equivalent depth} $d_e$ that allows for this. The application computes it from the exact solution of Moody (van Beers' form):
+
+\begin{equation}\boxed{d_e=\min\left\{D,\ \frac{\pi L/8}{\ln(L/u)+F(x)}\right\},\quad F(x)=\sum_{n=1,3,5,\ldots,29}\frac{4e^{-2nx}}{n\,(1-e^{-2nx})},\quad x=\frac{2\pi D}{L},}\label{eq:dr-de}\end{equation}
+\par\noindent where $d_e$ is the equivalent depth (m), $D$ the depth of the impermeable layer below the drains (m), $L$ the spacing (m), $u$ the wetted perimeter of the drain (m), $x$ a dimensionless number and $F(x)$ the series (15 terms) that tends to zero when the barrier is deep ($x$ large) and corrects for the finite depth otherwise.
+
+
+
+Since $d_e$ depends on $L$ the equation is solved by iteration: start with $L=\sqrt{(4K_1h^2+8K_2Dh)/q}$, compute $d_e(L)$, update $L$, and average the old and the new value until the change is below 1 cm. The critical depth of the water table is $z_c=\mathrm{clip}(0.3+0.4R_{max}/100,\ 0.4,\ 0.9)$ m (the root zone plus a margin), so that the allowed head is $h=z_{drain}-z_c$.
+
+\begin{table}[!htbp]\centering\footnotesize\setlength{\tabcolsep}{3pt}\caption{Hooghoudt spacing for the loam S06 ($K_1=K_2=0.29$ m/d, $q=6$ mm/d, $z_c=0.5$ m) at several drain depths and barrier depths.}
+\begin{tabular}{rrrrrr}\toprule
+\hd{Drain depth (m)} & \hd{Barrier $D$ (m)} & \hd{$h$ (m)} & \hd{$d_e$ (m)} & \hd{$L$ (m)} & \hd{pipe (m/ha)}\\\midrule
+1.0 & 2 & 0.50 & 1.11 & 16.2 & 625\\
+1.0 & 4 & 0.50 & 1.36 & 17.9 & 588\\
+1.0 & 8 & 0.50 & 1.49 & 18.5 & 556\\
+1.2 & 2 & 0.70 & 1.21 & 20.7 & 500\\
+1.2 & 4 & 0.70 & 1.64 & 23.3 & 435\\
+1.2 & 8 & 0.70 & 1.85 & 24.6 & 417\\
+1.5 & 2 & 1.00 & 1.33 & 26.7 & 385\\
+1.5 & 4 & 1.00 & 1.91 & 30.6 & 333\\
+1.5 & 8 & 1.00 & 2.34 & 33.1 & 303\\
+1.8 & 2 & 1.30 & 1.42 & 32.3 & 312\\
+1.8 & 4 & 1.30 & 2.12 & 37.3 & 270\\
+1.8 & 8 & 1.30 & 2.71 & 41.1 & 244\\
+2.0 & 2 & 1.50 & 1.46 & 35.9 & 286\\
+2.0 & 4 & 1.50 & 2.22 & 41.6 & 244\\
+2.0 & 8 & 1.50 & 2.92 & 46.1 & 217\\\bottomrule\end{tabular}\end{table}
+
+\exbox{Drain spacing by Hooghoudt}{Loam S06 ($K_1=K_2=0.290$ m\,d$^{-1}$, $\mu=0.164$). Drains of 100 mm lie at 1.2 m with the barrier $D=3$ m below them; the design recharge is 6 mm\,d$^{-1}$ and the water table must not rise within 0.5 m of the surface. Find the allowed head, the spacing and the water table at that spacing.}\sol $h=1.2-0.5=0.70$ m; $u=\pi(0.05)=0.157$ m \ans First estimate: $L_0=\sqrt{(4K_1h^2+8K_2Dh)/q}=\sqrt{(4\times0.290\times0.49+8\times0.290\times3\times0.7)/0.006}=30.1$ m \ans Equivalent depth at $L_0$ (Eq.~\ref{eq:dr-de}): $x=2\pi(3)/30.1$, $d_e=1.72$ m; new $L=\sqrt{(8K_2d_eh+4K_1h^2)/q}$ \ans After iteration $L=22.3$ m, $d_e=1.48$ m; the spacing is taken as $\lfloor L\rfloor=22$ m \ans Check: $h_{mid}=0.687$ m at that spacing from the quadratic $4K_1h^2+8K_2d_eh-qL^2=0$ \ans Pipe per hectare $10^4/22=455$ m \ans
+
+\section{Transient design: Glover--Dumm}
+For a rain that raises the water table, the farmer wants to know how fast it falls. The \emph{falling-water-table} basis of the application gives the spacing that lowers the water table from $h_0=z_{drain}-0.1$ to the allowed height $h_t$ in $t$ days:
+
+\begin{equation}\boxed{L=\pi\sqrt{\frac{K\,d_e\,t}{\mu\,\ln\bigl(1.16\,h_0/h_t\bigr)}},\qquad K=\frac{K_1\bar h+K_2d_e}{\bar h+d_e},\quad\bar h=\tfrac12(h_0+h_t),}\label{eq:dr-gd}\end{equation}
+\par\noindent where $L$ is the spacing (m), $K$ the weighted conductivity (m\,d$^{-1}$), $d_e$ the equivalent depth (m), $t$ the time allowed to draw the water table down (d; default 5), $\mu$ the drainable porosity ($\theta_s-\theta_{33}$, between 0.03 and 0.25), $h_0$ and $h_t$ the initial and final heights of the water table above the drain level (m) and 1.16 is the factor of the Glover--Dumm solution for a water table that starts as a flat horizontal line.
+
+
+
+The design basis may be the steady spacing, the falling spacing, or the smaller of the two (the default for a drain that must satisfy both). The water table midway for any chosen $L$ follows from the quadratic of Hooghoudt, $h_{mid}=\bigl[-8K_2d_e+\sqrt{(8K_2d_e)^2+16K_1qL^2}\bigr]/(8K_1)$, and the discharge for any height $h$ is $q=(8K_2d_eh+4K_1h^2)/L^2$.
+
+\begin{table}[!htbp]\centering\footnotesize\setlength{\tabcolsep}{3pt}\caption{Steady and falling-water-table spacings for the loam S06 ($D=3$ m, drain at 1.2 m, $q=6$ mm/d, $z_c=0.5$ m).}
+\begin{tabular}{rrrr}\toprule
+\hd{draw-down time $t$ (d)} & \hd{steady $L$ (m)} & \hd{falling $L$ (m)} & \hd{design (smaller) (m)}\\\midrule
+2 & 22.3 & 6.2 & 6.2\\
+3 & 22.3 & 8.5 & 8.5\\
+5 & 22.3 & 12.4 & 12.4\\
+7 & 22.3 & 15.8 & 15.8\\
+10 & 22.3 & 20.3 & 20.3\\\bottomrule\end{tabular}\end{table}
+
+\section{The ten soils}
+\begin{table}[!htbp]\centering\footnotesize\setlength{\tabcolsep}{3pt}\caption{Drain spacing for each of the ten soils (drain 1.2 m, barrier 3 m, $q=6$ mm/d, $z_c=0.5$ m, $t=5$ d); $L$ is limited to 5--200 m.}
+\begin{tabular}{llrrrrrr}\toprule
+\hd{ID} & \hd{Soil} & \hd{$K_1$ (m/d)} & \hd{$\mu$} & \hd{steady $L$ (m)} & \hd{falling $L$ (m)} & \hd{$L$ used (m)} & \hd{pipe (m/ha)}\\\midrule
+S01 & Coarse loam & 0.316 & 0.171 & 23.5 & 12.9 & 23 & 435\\
+S02 & Coarse sand & 2.754 & 0.250 & 83.5 & 42.1 & 83 & 120\\
+S03 & Sand & 3.233 & 0.250 & 91.2 & 46.3 & 91 & 110\\
+S04 & Loamy sand & 2.073 & 0.250 & 71.3 & 35.3 & 71 & 141\\
+S05 & Sandy loam & 1.073 & 0.250 & 49.1 & 23.2 & 49 & 204\\
+S06 & Loam & 0.290 & 0.164 & 22.3 & 12.4 & 22 & 455\\
+S07 & Silt loam & 0.262 & 0.150 & 21.0 & 12.4 & 20 & 500\\
+S08 & Sandy clay loam & 0.127 & 0.129 & 13.1 & 8.0 & 13 & 769\\
+S09 & Clay loam & 0.077 & 0.108 & 9.5 & 6.3 & 9 & 1111\\
+S10 & Silty clay loam & 0.090 & 0.112 & 10.5 & 6.9 & 10 & 1000\\\bottomrule\end{tabular}\end{table}
+
+The conductivity of the soil governs everything: on the sands a single drain serves 200 m of field or more (the limit of the application) and drainage is rarely necessary; on the silty and clay soils the spacing falls to a few metres, the pipe per hectare multiplies, and drainage becomes expensive. This is one reason why the drainage layer is read together with the irrigation design: a design with less deep percolation lowers the recharge $q$ and widens the spacing.
+
+\section{Pipes and structures}
+The lateral pipe must carry the discharge collected from a strip of width $L$ along its length $L_f$, $Q_l=q\,L\,L_f/86400$ (m$^3$\,s$^{-1}$, $q$ in m\,d$^{-1}$), and the collector the discharge of the whole field, $Q_c=qL_fW_f/86400$. The smallest standard diameter from 80, 100, 125, 160, 200, 250, 315, 400, 500 mm that carries the flow at 80 per cent of the full-pipe capacity is chosen. For a full circular pipe, Manning's equation reduces to
+
+\begin{equation}\boxed{Q_{cap}=\frac1n\,\frac{\pi D^2}{4}\left(\frac D4\right)^{2/3}s^{1/2},\qquad L_{\max}=\min\left\{1500,\ \frac{0.8\,Q_{cap}}{q\,L/86400}\right\},}\label{eq:dr-pipe}\end{equation}
+\par\noindent where $Q_{cap}$ is the full-pipe capacity (m$^3$\,s$^{-1}$), $n$ the Manning coefficient (0.016 for the pipe), $D$ the inside diameter (m), $s$ the slope of the pipe (m\,m$^{-1}$), $L_{\max}$ the longest lateral that the pipe can serve (m, limited to 1500 m), $q$ the design discharge (m\,d$^{-1}$) and $L$ the drain spacing (m).
+
+
+
+\begin{table}[!htbp]\centering\footnotesize\setlength{\tabcolsep}{3pt}\caption{Full-pipe capacity of corrugated pipe ($n=0.016$) at three slopes.}
+\begin{tabular}{rrrr}\toprule
+\hd{$D$ (mm)} & \hd{$Q_{cap}$ at 0.15\% (L/s)} & \hd{at 0.30\% (L/s)} & \hd{at 0.50\% (L/s)}\\\midrule
+80 & 0.9 & 1.3 & 1.6\\
+100 & 1.6 & 2.3 & 3.0\\
+125 & 2.9 & 4.2 & 5.4\\
+160 & 5.7 & 8.1 & 10.4\\
+200 & 10.3 & 14.6 & 18.8\\
+250 & 18.7 & 26.5 & 34.2\\
+315 & 34.7 & 49.0 & 63.3\\
+400 & 65.5 & 92.7 & 119.6\\
+500 & 118.8 & 168.0 & 216.9\\\bottomrule\end{tabular}\end{table}
+
+\exbox{Pipes of a drained field}{A field of 300 m by 200 m on the loam is drained with laterals along the 300-m side, at the spacing of the previous example, slope 0.15 per cent, $q=6$ mm\,d$^{-1}$. Find the number of laterals, the flow in a lateral, the pipe size, the longest lateral and the collector.}\sol Spacing $L=22$ m; number of laterals $\lfloor200/22\rfloor+1=10$ \ans $Q_l=qLL_f/86400=0.006\times22\times300/86400=4.58e-04$ m$^3$\,s$^{-1}$ ($0.458$ L\,s$^{-1}$) \ans Smallest pipe with $0.8Q_{cap}\ge Q_l$ at $s=0.0015$: $D=80$ mm ($Q_{cap}=0.90$ L\,s$^{-1}$) \ans $L_{\max}=\min\{1500,\ 0.8Q_{cap}/(qL/86400)\}=469$ m \ans Collector: $Q_c=0.006\times300\times200/86400=4.17e-03$ m$^3$\,s$^{-1}$ ($4.17$ L\,s$^{-1}$), diameter $160$ mm \ans Pipe in the field: $10\times300+200=3200$ m, i.e.\ $533$ m\,ha$^{-1}$ over $6.0$ ha \ans
+
+\section{Salinity and the leaching requirement}
+Drainage and salinity are one problem. Each irrigation brings salt; the crop takes the water and leaves the salt; unless a fraction of the water passes below the roots the salt accumulates. Rhoades' leaching requirement gives the fraction of the water that must leave the root zone for the crop to see no more than its tolerable salinity,
+
+\begin{equation}\boxed{LR=\mathrm{clip}\left\{\frac{EC_w}{5EC_e-EC_w},\ 0,\ 0.9\right\},\qquad I_{leach}=\frac{LR}{1-LR}\,I_n,}\label{eq:dr-lr}\end{equation}
+\par\noindent where $LR$ is the leaching requirement (fraction of the applied water), $EC_w$ the electrical conductivity of the irrigation water (dS\,m$^{-1}$), $EC_e$ the salinity of the saturation extract that the crop tolerates without loss (dS\,m$^{-1}$; the user enters the threshold of the crop), $I_{leach}$ the extra water to be applied for leaching (mm) and $I_n$ the net irrigation of the season (mm).
+
+
+
+The deep percolation caused by the irrigation (the recharge) already provides some leaching; the design is complete when the leaching fraction of the field water balance is at least $LR$ and the drains carry that water away.
+
+\begin{table}[!htbp]\centering\footnotesize\setlength{\tabcolsep}{3pt}\caption{Leaching requirement for crops of different tolerance and waters of different salinity.}
+\begin{tabular}{rrrrrr}\toprule
+\hd{$EC_e$ (dS/m)} & \hd{$EC_w=0.5$} & \hd{1.0} & \hd{1.5} & \hd{2.5} & \hd{4.0}\\\midrule
+1.2 & 0.091 & 0.200 & 0.333 & 0.714 & 0.900\\
+1.7 & 0.062 & 0.133 & 0.214 & 0.417 & 0.889\\
+3.0 & 0.034 & 0.071 & 0.111 & 0.200 & 0.364\\
+4.8 & 0.021 & 0.043 & 0.067 & 0.116 & 0.200\\
+7.0 & 0.014 & 0.029 & 0.045 & 0.077 & 0.129\\
+7.7 & 0.013 & 0.027 & 0.041 & 0.069 & 0.116\\\bottomrule\end{tabular}\end{table}
+
+\exbox{Leaching for a sensitive and a tolerant crop}{Maize ($EC_e$ threshold 1.7 dS\,m$^{-1}$) is irrigated with water of 1.0 dS\,m$^{-1}$; the net irrigation of the season is $I_n=480$ mm. Cotton ($EC_e=7.7$) is irrigated with the same water. Find the leaching requirement and the extra water in each case.}\sol Maize: $LR=1.0/(5\times1.7-1.0)=0.133$ \ans $I_{leach}=\frac{0.133}{1-0.133}\times480=74$ mm \ans Cotton: $LR=1.0/(5\times7.7-1.0)=0.027$ \ans $I_{leach}=\frac{0.027}{1-0.027}\times480=13$ mm \ans The tolerant crop needs one-fifth of the leaching of the sensitive one; with water of 1 dS\,m$^{-1}$ the maize needs about 15 per cent more water, which the drains must carry away \ans
+
+\section{Controlled drainage}
+With a gate on the outlet the drain does not discharge until the water table rises above the gate level $g$. The water table then follows, day by day, the balance
+
+\begin{equation}\boxed{\mu\frac{dh}{dt}=R(t)-q_{out}(h-g),\qquad q_{out}(h')=\frac{8K_2d_eh'+4K_1h'^2}{L^2}\ (h'>0),}\label{eq:dr-ctl}\end{equation}
+\par\noindent where $\mu$ is the drainable porosity, $h$ the height of the water table midway above the drain level (m), $g$ the height of the gate (m), $R(t)$ the recharge of the day (m\,d$^{-1}$), $q_{out}$ the discharge of the drain (m\,d$^{-1}$) and $h'=h-g$ the head above the gate. The application integrates it in six sub-steps per day over the whole record, with the water table capped at the soil surface (the excess is runoff) and reports the days on which the water table is shallower than the critical depth $z_c$, the sum of the exceedance of the depth of 0.3 m (the SEW$_{30}$ index, in cm\,d), and the total drainage.
+
+
+
+Raising the gate from 0 to 0.3 m keeps more of the winter rain in the profile and cuts the discharge (and the loss of nitrate with it), at the price of more days with a shallow water table. The balance between these two is what the controlled-drainage design is for.
+

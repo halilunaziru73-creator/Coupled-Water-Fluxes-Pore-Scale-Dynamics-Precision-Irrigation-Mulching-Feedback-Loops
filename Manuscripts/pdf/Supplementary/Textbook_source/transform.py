@@ -1,5 +1,9 @@
 import re,sys,glob,os
 SRC='/tmp/kh/src';OUT='/tmp/kh'
+NM=[("(from the manual, reproduced by the numbers)","(reproduced by the numbers)"),("Check against the manual.","Check against the application."),("Daisy reference manual","Daisy reference"),("the manual's typical figures","the typical figures of the application"),("the manual","the application"),("The manual","The application"),("sprinkler manuals","sprinkler catalogues"),("or manual","or a user-set time"),("Data, code, manual and application are open.","Data, code and application are open."),("workflows and validity chapters of the application","workflows and validity chapters of the application")]
+def nomanual(s):
+    for a,b in NM: s=s.replace(a,b)
+    return s
 def cap(t):
     t=t.strip()
     return t[:1].upper()+t[1:] if t else t
@@ -41,5 +45,7 @@ for f in [SRC+'/'+n+'.tex' for n in ORDER]:
     s=re.sub(r'(^|\n\n)\\textbf\{([^}]{1,60}?)\}',lambda m:m.group(1)+'\\subhd{'+m.group(2)+'}',s)
     s=re.sub(r'(\\chapter\{[^\n]*\n(?:\\label\{[^\n]*\n)?(?:\\markboth[^\n]*\n)?)\\textbf\{After this chapter you can\}([^\n]*)\n',lambda m:'\\chapterlead{\\subhd{After this chapter you can}'+m.group(2)+'}\n'+m.group(1),s)
     s=addimg(s)
+    s=nomanual(s)
+    s=s.replace('\\begin{table}[H]','\\begin{table}[!htbp]')
     open(os.path.join(OUT,os.path.basename(f)),'w').write(s)
 print('done')

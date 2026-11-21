@@ -1,0 +1,56 @@
+\section{The two phenotyping layers}
+The application has two layers of phenotyping. The first, \emph{deterministic phenotyping}, is an exactly reproducible virtual experiment: a plant is grown by a model driven by the soil, the tillage, the weather, the irrigation, the mulch and the crop of the project, with a well-watered treatment and a drought treatment side by side. Nothing in it is random between runs, so every control of the project moves the numbers and two runs with the same inputs give the same plant. The second, \emph{volumetric phenotyping}, places a virtual scanner around that plant, in the way a stereo-camera rig looks at a seedling on a turntable, and measures the volume, the crown width, the height, the leaf area and the number of leaves from the point cloud that the scanner records. The difference between the two is the difference between the truth of the model and what an instrument would report.
+
+\section{The scanner: views, registration and the iterative closest point}
+Each view is a cloud of points in its own frame. The method follows Wang et al.\ (2025): structure from motion and multi-view stereo with six views at intervals of $60^\circ$ and calibration spheres placed beside the plant, used to join the views (self-registration), and a refinement by the iterative closest point (ICP) algorithm. The joining of two clouds is the search for the rotation $\mathbf R$ and translation $\mathbf t$ that minimise
+
+\begin{equation}\min_{\mathbf R,\mathbf t}\sum_{i=1}^{n}\left\|\mathbf R\,\mathbf p_i+\mathbf t-\mathbf q_i\right\|^{2},\qquad \mathbf R=\mathbf V\,\mathrm{diag}\bigl(1,1,\det(\mathbf V\mathbf U^{\!\top})\bigr)\,\mathbf U^{\!\top},\quad \mathbf t=\bar{\mathbf q}-\mathbf R\bar{\mathbf p},\label{eq:ph-icp}\end{equation}
+\par\noindent where $\mathbf p_i$ and $\mathbf q_i$ are corresponding points of the moving and the fixed cloud, $n$ the number of pairs, $\mathbf R$ the rotation matrix, $\mathbf t$ the translation vector, $\bar{\mathbf p}$ and $\bar{\mathbf q}$ the centroids, and $\mathbf U\boldsymbol\Sigma\mathbf V^{\!\top}$ the singular-value decomposition of the covariance $\sum(\mathbf p_i-\bar{\mathbf p})(\mathbf q_i-\bar{\mathbf q})^{\!\top}$ (the determinant factor excludes reflections).
+
+
+
+The calibration spheres give the first correspondences (their centres are seen in every view); ICP then pairs every point with its nearest neighbour in the other cloud, solves Eq.~(\ref{eq:ph-icp}), moves the cloud and repeats until the error stops falling.
+
+\begin{table}[!htbp]\centering\footnotesize\setlength{\tabcolsep}{3pt}\caption{Registration of two views of 400 points rotated by $60^\circ$ about the vertical axis, with Gaussian noise in the points (SVD solution of Eq.~\ref{eq:ph-icp}).}
+\begin{tabular}{rrrr}\toprule
+\hd{noise $\sigma$ (mm)} & \hd{recovered angle ($^\circ$)} & \hd{error ($^\circ$)} & \hd{residual RMS (mm)}\\\midrule
+0.0 & 60.000 & 0.000 & 0.00\\
+0.5 & 59.946 & 0.054 & 0.87\\
+1.0 & 60.007 & 0.007 & 1.68\\
+2.0 & 60.042 & 0.042 & 3.53\\
+4.0 & 60.416 & 0.416 & 7.01\\\bottomrule\end{tabular}\end{table}
+
+\exbox{Registration error}{Two views of a plant have 400 matched points spread over about 50 mm in width and 80 mm in height. The scanner noise is $\sigma=1$ mm. Estimate the error in the registration angle and say how many views are needed to close the circle.}\sol Six views at $60^\circ$ close the circle ($6\times60^\circ=360^\circ$) \ans With the numbers of the table, at $\sigma=1.0$ mm the angle of one pair is recovered with an error of order $0.01^\circ$ and a residual RMS of about 1.7 mm, which is the noise itself, so the registration adds no bias \ans The error of a chain of five joints adds as the square root of the number of joints if the errors are independent: $\sqrt5\times0.01\approx0.02^\circ$, which at a radius of 25 mm moves a point by $25\times0.02\times\pi/180\approx0.009$ mm, negligible against the 0.6-mm voxel \ans
+
+\section{Measuring volume from the cloud}
+The joined cloud is voxelised with a cube of side $v$ (default 0.6 mm) and the volume is the number of occupied voxels times $v^3$; the crown width and the height are the extents of the cloud; the leaf area is the sum of the areas of the triangles of the surface of each leaf, after the points of a leaf have been clustered by their angle around the stem (Zhu et al.\ 2018). The voxel size is a compromise between detail and noise. For a solid body the occupied volume converges to the true volume as $v\to0$; for a surface cloud, the voxels along the surface are the only ones filled, so the estimate is biased unless the interior is filled.
+
+\begin{equation}\boxed{V_{vox}=N_{occ}\,v^{3},\qquad \varepsilon=\frac{V_{vox}-V_{true}}{V_{true}}\approx\frac{3}{2}\frac{v}{r}\ \ (\text{ball of radius }r\text{, surface voxels only}),}\label{eq:ph-vox}\end{equation}
+\par\noindent where $V_{vox}$ is the volume estimated (mm$^3$), $N_{occ}$ the number of occupied voxels, $v$ the voxel side (mm), $V_{true}$ the true volume, $\varepsilon$ the relative error and $r$ the radius of the body (mm); for a cloud that covers only the surface the occupied shell has a thickness of about one voxel.
+
+
+
+\begin{table}[!htbp]\centering\footnotesize\setlength{\tabcolsep}{3pt}\caption{Voxel volume of a ball of radius 30 mm ($V_{true}=113097$ mm$^3$) with the interior filled, and with the surface only.}
+\begin{tabular}{rrrrr}\toprule
+\hd{voxel $v$ (mm)} & \hd{solid fill $V$ (mm$^3$)} & \hd{error (\%)} & \hd{surface shell $V$ (mm$^3$)} & \hd{error (\%)}\\\midrule
+0.2 & 113100 & 0.00 & 2254 & -98.0\\
+0.4 & 113082 & -0.01 & 4449 & -96.1\\
+0.6 & 113007 & -0.08 & 6677 & -94.1\\
+1.0 & 113081 & -0.01 & 11138 & -90.2\\
+1.5 & 112728 & -0.33 & 15964 & -85.9\\
+2.5 & 111766 & -1.18 & 24656 & -78.2\\\bottomrule\end{tabular}\end{table}
+
+\exbox{}{A canopy of a seedling is the ellipsoid with semi-axes 40, 40 and 60 mm. Compute its true volume, and the volume found by voxels of 0.6 mm and of 2.5 mm if the interior is filled.}\sol 
+
+\exbox{Volume of a canopy by voxels}{A canopy of a seedling is the ellipsoid with semi-axes 40, 40 and 60 mm. Compute its true volume and the volume found by voxels of 0.6 mm and of 2.5 mm if the interior is filled.}\sol $V=\frac43\pi abc=\frac43\pi(40)(40)(60)=402124$ mm$^3$ \ans Counting the voxels inside the ellipsoid, $v=0.6$ mm gives $402092$ mm$^3$ (-0.01 per cent error) \ans $v=2.5$ mm gives $402656$ mm$^3$ (0.13 per cent error) \ans A coarse voxel is nearly as good for a solid body; the fine voxel matters for thin leaves, whose thickness is smaller than the voxel \ans
+
+\section{Water productivity and stress traits from the scan}
+The scan gives a biomass proxy, $B=\rho_vV$, where $\rho_v$ is a volumetric dry density of the tissue; combined with the water used in the water balance, it gives the transpiration efficiency and the water productivity of each genotype or treatment. The comparison of the well-watered and drought treatments gives the \emph{drought index}
+
+\begin{equation}\boxed{DI=1-\frac{V_{dr}}{V_{ww}},\qquad WP_{B}=\frac{B}{ET_a},\qquad \Delta WP=\frac{WP_{dr}-WP_{ww}}{WP_{ww}},}\label{eq:ph-di}\end{equation}
+\par\noindent where $DI$ is the drought index (0 for no effect of drought), $V_{dr}$ and $V_{ww}$ the canopy volumes in the drought and well-watered treatments (cm$^3$), $WP_B$ the biomass water productivity (g\,mm$^{-1}$ per plant, or kg\,m$^{-3}$ for a stand), $B$ the biomass (g), $ET_a$ the actual evapotranspiration (mm) and $\Delta WP$ the relative gain of productivity under drought.
+
+
+
+\exbox{Drought index and water productivity from a scan}{A scan gives the canopy volume of 520 cm$^3$ per plant in the well-watered treatment ($ET_a=410$ mm) and 330 cm$^3$ in the drought treatment ($ET_a=270$ mm); the dry density of the tissue is $\rho_v=0.045$ g\,cm$^{-3}$. Find the drought index, the biomass and the water productivities.}\sol $DI=1-330/520=0.365$ \ans $B_{ww}=0.045\times520=23.4$ g; $B_{dr}=0.045\times330=14.8$ g \ans $WP_{ww}=23.4/410=0.0571$ g\,mm$^{-1}$; $WP_{dr}=14.8/270=0.0550$ g\,mm$^{-1}$ \ans $\Delta WP=-3.6$ per cent: the drought plant used 34 per cent less water and lost 37 per cent of its volume, so it used the water more efficiently \ans
+

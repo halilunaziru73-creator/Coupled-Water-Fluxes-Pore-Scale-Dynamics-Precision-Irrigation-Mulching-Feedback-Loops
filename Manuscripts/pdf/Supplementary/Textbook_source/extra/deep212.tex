@@ -1,0 +1,28 @@
+\section{System design: zones, sets and pumping}
+The lateral and the emitter fix the discharge per unit area; the farm supply fixes how much of the farm can be watered at once. The application divides the field into zones that are irrigated in turn, and computes the length of the round. Let $A_f$ be the area to irrigate (ha), $Q_s$ the supply (L\,s$^{-1}$), $q_{ha}$ the flow of the design per hectare (L\,s$^{-1}$\,ha$^{-1}$), $t$ the run time of a zone (h) and $T_i$ the irrigation interval (d). Then
+
+\begin{equation}q_{ha}=\frac{10^{4}}{S_eS_l}\,\frac{\bar q}{3600},\qquad N_z=\left\lceil\frac{A_fq_{ha}}{Q_s}\right\rceil,\qquad t_{round}=N_z\,t,\qquad \text{feasible if }t_{round}\le 20\,T_i,\label{eq:d-zone}\end{equation}
+\par\noindent where $q_{ha}$ is the flow per hectare (L\,s$^{-1}$\,ha$^{-1}$), $S_e$ and $S_l$ the emitter and lateral spacings (m), $\bar q$ the mean emitter discharge (L\,h$^{-1}$), $A_f$ the area (ha), $Q_s$ the farm supply (L\,s$^{-1}$), $N_z$ the number of zones (sets), $t$ the run time of one zone (h), $t_{round}$ the duration of a round (h), $T_i$ the interval (d) and 20 h the working day of the system.
+
+
+
+The seasonal volume follows from the gross depth: $\sum d_g=n_{irr}\,d_n/E_a$ per season, in mm, or $10\sum d_g$ m$^3$ per hectare. The pump power is $P=\rho gQH/\eta$ with $H$ the sum of the lift, the head at the inlet of the lateral, the friction in the submain and mainline, and the filter loss.
+
+\begin{table}[!htbp]\centering\footnotesize\setlength{\tabcolsep}{3pt}\caption{Zones and round for the inline-emitter design of Chapter~12 ($q_{ha}=7.15$ L\,s$^{-1}$\,ha$^{-1}$, run time 3.74 h).}
+\begin{tabular}{rrrrrrl}\toprule
+\hd{$A_f$ (ha)} & \hd{$Q_s$ (L/s)} & \hd{$q_{ha}$ (L/s/ha)} & \hd{zones} & \hd{round (h)} & \hd{round (d at 20 h)} & \hd{fits $T_i=2$ d}\\\midrule
+1 & 10 & 7.15 & 1 & 3.7 & 0.2 & yes\\
+1 & 30 & 7.15 & 1 & 3.7 & 0.2 & yes\\
+2 & 10 & 7.15 & 2 & 7.5 & 0.4 & yes\\
+2 & 30 & 7.15 & 1 & 3.7 & 0.2 & yes\\
+5 & 10 & 7.15 & 4 & 15.0 & 0.7 & yes\\
+5 & 30 & 7.15 & 2 & 7.5 & 0.4 & yes\\
+10 & 10 & 7.15 & 8 & 29.9 & 1.5 & yes\\
+10 & 30 & 7.15 & 3 & 11.2 & 0.6 & yes\\
+20 & 10 & 7.15 & 15 & 56.1 & 2.8 & no\\
+20 & 30 & 7.15 & 5 & 18.7 & 0.9 & yes\\
+40 & 10 & 7.15 & 29 & 108.5 & 5.4 & no\\
+40 & 30 & 7.15 & 10 & 37.4 & 1.9 & yes\\\bottomrule\end{tabular}\end{table}
+
+\exbox{Zones and pumping}{A farm of 10 ha is to be watered by the drip design of the loam (emitters 0.5 m, laterals 1.5 m, $\bar q=1.93$ L\,h$^{-1}$, run time 3.74 h) from a supply of 30 L\,s$^{-1}$, every 2 days. Find the flow per hectare, the number of zones, the length of the round and the pump power for a total head of 45 m at 70 per cent efficiency.}\sol $q_{ha}=10^4/(0.5\times1.5)\times1.93/3600=7.15$ L\,s$^{-1}$\,ha$^{-1}$ ($13333$ emitters per ha) \ans Whole farm: $10\times7.15=71.5$ L\,s$^{-1}$, which is below the supply of 30, so one zone could be run if the pipes allowed: $N_z=\lceil71.5/30\rceil=3$ \ans Round $3\times3.74=11.2$ h, well within $20\times2=40$ h \ans Better to split in zones of equal size to keep pipe sizes small: with 4 zones each flows $17.9$ L\,s$^{-1}$ \ans Pump power $P=\rho gQH/\eta=1000\times9.81\times0.030\times45/0.70=18.9$ kW \ans
+

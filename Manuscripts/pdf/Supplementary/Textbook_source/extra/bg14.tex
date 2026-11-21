@@ -1,0 +1,17 @@
+\section{Introduction}
+Irrigation adds water and salts. Where the water table is shallow, or the soil drains slowly, the salts stay in the root zone and the water table rises, so the crop is both too wet and too salty. Drainage removes the surplus water and, with it, the salt; it is the part of the water balance that keeps irrigation sustainable. This chapter gives the two calculations of drainage design: the spacing of subsurface drains and the leaching needed to keep the salinity at the tolerable level.
+
+\section{Types of drainage}
+Drainage is \emph{surface} (ditches, land levelling, bedding) or \emph{subsurface} (buried perforated pipes or tiles, mole drains, tube wells for vertical drainage). Subsurface pipe drains suit flat irrigated land with fine texture and a barrier below.
+
+\section{Steady-state spacing: the Hooghoudt equation}
+For steady recharge $q$ onto a water table midway between two drains of spacing $L$, with the water table $h$ above drain level, the Hooghoudt equation is
+
+\begin{equation}q=\frac{8K_2d_e\,h+4K_1h^2}{L^2},\end{equation}
+
+
+where $K_1$ is the conductivity above the drains, $K_2$ below, and $d_e$ the equivalent depth that allows for the convergence of flow to the drains: $d_e=d/\bigl[1+\frac{d}{L}\bigl(\frac{8}{\pi}\ln\frac{d}{r_0}-3.4\bigr)\bigr]$ for $d/L<0.3$, where $d$ is the depth of the barrier below the drains and $r_0$ the drain radius. Since $d_e$ depends on $L$, the equation is solved by iteration.
+
+\section{Salinity and the leaching requirement}
+A crop tolerates a saturation-extract salinity $EC_e$. The water that drains below the roots carries away the salt of the irrigation water, concentrated by evapotranspiration. The \kw{leaching requirement} is $LR=EC_w/(5EC_e-EC_w)$. For irrigation water of $EC_w=1.5$ dS\,m$^{-1}$ and a crop with $EC_e=3.0$: $LR=0.111$, so 11.1 per cent of the applied water must drain.
+

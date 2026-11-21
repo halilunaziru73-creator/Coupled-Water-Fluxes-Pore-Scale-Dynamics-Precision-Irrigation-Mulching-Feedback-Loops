@@ -1,0 +1,140 @@
+\chapimg{fig/op14.png}
+\IfFileExists{extra/lead14.tex}{\input{extra/lead14}}{}
+\chapter{Drainage Design}\label{chap:14}
+\markboth{Drainage Design}{Drainage Design}
+\IfFileExists{extra/bg14.tex}{\input{extra/bg14}}{}
+\IfFileExists{extra/deep14.tex}{\input{extra/deep14}}{}
+\banner{Drainage design}\label{ch:drain}
+\section{The depth to be kept free}
+The crop sets how deep the water table must stay: $z_c=0.3+0.4R_{\max}$ (m), bounded to 0.4--0.9 m, with $R_{\max}$ the rooting depth. The allowed head of the water table above the drain level, midway between the drains, is then $h=z_d-z_c$ (drain depth less $z_c$).
+
+\exbox{The water table limit}{Maize roots to 1.0 m; drains lie 1.4 m deep. Find $z_c$ and $h$. Then repeat for a shallow-rooted crop ($R_{\max}=0.3$ m) and a deep one ($R_{\max}=1.8$ m).}\sol  Maize: $z_c=0.3+0.4\times1.0=0.70$ m, within 0.4--0.9, so $h=1.4-0.70=0.70$ m. Shallow crop: $0.3+0.12=0.42$ m, so $h=0.98$ m: the drains may let the water table rise higher between them. Deep crop: $0.3+0.72=1.02$ m, clipped to 0.9 m, so $h=0.50$ m. The deeper the roots, the closer the drains must be.
+
+
+\section{Recharge and the design discharge}
+The recharge is the deep percolation of the daily balance plus the part of the applied irrigation lost to deep percolation by the irrigation design in use (DP times gross water, gross $=$ net$/E_a$). The design discharge $q$ is the 95th percentile of the three-day mean recharge of the season, between 2 and 25 mm d$^{-1}$.
+
+\exbox{Design discharge from the daily balance}{The daily bucket model (Chapter~\ref{ch:e2}) of the loam is run for a wet year ($P=900$ mm, seed 3). It gives rainfall 808 mm, irrigation 105 mm, deep percolation 386 mm. The sprinkler layout of Chapter~\ref{ch:sprinkler} loses $\mathrm{DP}=6.0\%$ of the gross, $E_a=82\%$, so each irrigation adds $0.060/0.820=0.0732$ times its net depth to the recharge: $7.7$ mm over the season. Total recharge $=386+7.7=394$ mm. The three-day means have 95th percentile $6.43$ mm d$^{-1}$, inside 2--25 mm d$^{-1}$, so $q=6.43$ mm d$^{-1}=0.00643$ m d$^{-1}$.}
+\textbf{Reading.} By construction 5\% of the three-day windows carry more recharge than the design value; the drains are not sized for those.
+
+
+\section{Spacing: Hooghoudt with the exact equivalent depth}
+For steady flow, with recharge $q$ (m d$^{-1}$), water table height $h$ midway, conductivities $K_1$ above and $K_2$ below the drain, the spacing $L$ is
+\begin{equation}\boxed{qL^2=8K_2dh+4K_1h^2.}\end{equation}
+\par\noindent where $q$ is the drain discharge per unit area (m\,d$^{-1}$), $L$ the drain spacing (m), $K_1$ and $K_2$ the conductivities above and below the drains (m\,d$^{-1}$), $d$ the equivalent depth of the barrier below the drains (m) and $h$ the height of the water table midway between drains above the drain level (m).
+
+The equivalent depth $d$ replaces the real depth $D$ of the barrier below the drain because the flow converges radially on the drain; the layer solves the series of Moody and van Beers rather than reading a table:
+\begin{equation}\boxed{d=\frac{\pi L/8}{\ln(L/u)+F(x)},\quad F(x)=\sum_{n=1,3,5,\dots}\frac{4e^{-2nx}}{n(1-e^{-2nx})},\quad x=\frac{2\pi D}L,\quad d\le D,}\end{equation}
+with $u=\pi r_0$ the wetted perimeter of a pipe running half full. Because $d$ depends on $L$, the pair is iterated.
+
+\begin{table}[!htbp]\centering\small\caption{Iteration of the spacing: $q=6.43$ mm d$^{-1}$, $K_1=K_2=0.290$ m d$^{-1}$, $D=5$ m, $h=0.70$ m, $r_0=0.05$ m.}\label{tab:hoogit}
+\begin{tabular}{lrrr}\toprule
+\hd{Iteration} & \hd{$L$ used (m)} & \hd{$d$ (m)} & \hd{$L$ new (m)}\\\midrule
+1 & 30.000 & 2.025 & 24.475\\
+2 & 24.475 & 1.786 & 23.208\\
+3 & 23.208 & 1.726 & 22.878\\
+4 & 22.878 & 1.709 & 22.789\\
+5 & 22.789 & 1.705 & 22.765\\
+6 & 22.765 & 1.704 & 22.758\\
+7 & 22.758 & 1.704 & 22.756\\
+8 & 22.756 & 1.703 & 22.756\\\bottomrule\end{tabular}\end{table}
+
+\exbox{One converged step}{Verify the converged spacing of Table~\ref{tab:hoogit}.}\sol  At $L=22.76$ m: $x=2\pi\times5/22.76=1.381$. $F(x)=4e^{-2x}/(1-e^{-2x})+\dots=0.2703$ (the $n=1$ term dominates). $u=\pi\times0.05=0.1571$ m, $\ln(L/u)=\ln(22.76/0.1571)=4.976$. Then $d=(\pi\times22.76/8)/(4.976+0.2703)=8.936/5.246=1.703$ m ($<D$). Check the spacing: $8K_2dh=8\times0.290\times1.703\times0.70=2.7631$, $4K_1h^2=4\times0.290\times0.49=0.5677$; sum $=3.3309$; $L^2=3.3309/0.00643=517.8$, $L=22.76$ m. ({\it Without} the correction, using $d=D=5$ m, the spacing would be $\sqrt{(8\times0.290\times5\times0.7+0.5677)/0.00643}=36.7$ m: the radial-flow correction matters.)
+
+
+\begin{table}[!htbp]\centering\small\caption{The same drains in the ten soils: $q=6.43$ mm d$^{-1}$, $z_d=1.4$ m, $h=0.70$ m, $D=5$ m, $K_2=K_1$ (Saxton--Rawls $K_s$).}\label{tab:drsoils}
+\begin{tabular}{lrrrr}\toprule
+\hd{Soil} & \hd{$K$ (m/d)} & \hd{$L$ (m)} & \hd{$d$ (m)} & \hd{pipe (m/ha)}\\\midrule
+Coarse loam & 0.316 & 24.1 & 1.77 & 414\\
+Coarse sand & 2.754 & 95.0 & 3.42 & 105\\
+Sand & 3.233 & 104.3 & 3.52 & 96\\
+Loamy sand & 2.073 & 80.4 & 3.23 & 124\\
+Sandy loam & 1.073 & 53.8 & 2.75 & 186\\
+Loam & 0.290 & 22.8 & 1.70 & 439\\
+Silt loam & 0.262 & 21.2 & 1.63 & 471\\
+Sandy clay loam & 0.127 & 12.8 & 1.14 & 781\\
+Clay loam & 0.077 & 9.1 & 0.88 & 1{,}100\\
+Silty clay loam & 0.090 & 10.1 & 0.95 & 990\\\bottomrule\end{tabular}\end{table}
+
+\begin{keybox}Table~\ref{tab:drsoils} runs from 9.1 m (Clay loam) to 104.3 m (Sand). The spacing scales roughly with $\sqrt K$ (a tenfold increase in $K$ gives a spacing about three times larger), so the pipe per hectare, $10^4/L$ metres, is the cost driver of a drainage scheme in the finer soils.\end{keybox}
+\exbox{Falling water table}{After a wet spell the water table must fall from $h_0=0.70$ m to $h_t=0.35$ m above the drain within $t=3$ d. The drainable porosity of the loam is $\mu=0.95\theta_s-\theta_{33}=0.143$ (between 0.03 and 0.25). Find the spacing from $L^2=\pi^2Kdt/[\mu\ln(1.16h_0/h_t)]$ and compare with the steady value.}\sol  $\ln(1.16\times0.70/0.35)=\ln2.32=0.842$. $L^2=\pi^2\times0.290\times1.703\times3/(0.143\times0.842)=14.609/0.1202=121.5$, $L=11.0$ m. The steady (Hooghoudt) spacing is 22.8 m, so the design takes the closer, $L=\min=11.0$ m. (Using $d=1.703$ m from the steady solution; the layer iterates $d$ with $L$ in the same way.)
+
+
+\section{The water table through the season}
+The daily balance is $\mu\,dh/dt=R-q_{\rm out}(h-g)$ with the outflow $q_{\rm out}(h)=(8K_2dh+4K_1h^2)/L^2$ (six sub-steps a day), $R$ the recharge of the day and $g$ the height of the control gate (zero for plain drains). The results are the days with the water table shallower than the crop needs, the $\mathrm{SEW}_{30}$ of Sieben (the sum over the days of $30-z$, in cm, when the water table is shallower than 30 cm), the drained water, the maximum outflow, and for the gate the water held, $\mu g$.
+
+\begin{table}[!htbp]\centering\small\caption{Water-table results for the wet-year recharge at four spacings ($d$ kept at the design value).}\label{tab:wtsim}
+\begin{tabular}{lrrrr}\toprule
+\hd{$L$ (m)} & \hd{days $z<z_c$} & \hd{SEW$_{30}$} & \hd{drained (mm)} & \hd{max outflow (mm/d)}\\\midrule
+11.0 & 0 & 0 & 371 & 8.02\\
+22.8 & 0 & 0 & 343 & 4.25\\
+35.0 & 8 & 0 & 296 & 3.16\\
+50.0 & 59 & 3 & 242 & 2.32\\
+70.0 & 68 & 710 & 181 & 1.59\\\bottomrule\end{tabular}\end{table}
+
+\begin{table}[!htbp]\centering\small\caption{Controlled drainage: gate height at the design spacing.}\label{tab:gate}
+\begin{tabular}{lrrrr}\toprule
+\hd{gate $g$ (m)} & \hd{days $z<z_c$} & \hd{SEW$_{30}$} & \hd{drained (mm)} & \hd{water held $\mu g$ (mm)}\\\midrule
+0.00 & 0 & 0 & 371 & 0.0\\
+0.10 & 0 & 0 & 356 & 14.3\\
+0.20 & 0 & 0 & 342 & 28.6\\
+0.30 & 0 & 0 & 328 & 42.8\\\bottomrule\end{tabular}\end{table}
+
+\exbox{Spacing and gate in the season}{Table~\ref{tab:wtsim} and Table~\ref{tab:gate} come from the same recharge series. Read what they say about spacing and the gate.}\sol  At the design spacing $L=11.0$ m the water table is shallower than $z_c=0.70$ m on 0 day(s). Widening the spacing to 50 m raises that to 59 days (SEW$_{30}$ = 3) and to 70 m, 68 days. A gate raised by 0.3 m holds $\mu g=43$ mm in the soil (the loam's $\mu=0.143$) and changes the number of days shallower than $z_c$ to 0. The gate saves water for the crop but costs aeration if it is raised beyond the largest height that keeps the water table below the crop; the layer displays that limit.
+
+
+\section{Pipes}
+Drain pipes are sized by the Manning equation for a full pipe,
+\begin{equation}\boxed{Q=\frac1n\,\frac{\pi D^2}4\left(\frac D4\right)^{2/3}s^{1/2},\quad n=0.016\ \text{(corrugated polyethylene)},}\end{equation}
+\par\noindent where $Q$ is the full-pipe capacity (m$^3$\,s$^{-1}$), $n$ Manning's roughness coefficient, $D$ the pipe diameter (m) and $s$ the slope (m\,m$^{-1}$); $\pi D^2/4$ is the area and $D/4$ the hydraulic radius of a full circular pipe.
+
+choosing the smallest standard size (80--500 mm) that carries the design flow at no more than 80\% of its capacity. The lateral flow is $qLL_{\rm lat}$ and the collector flow is $qA$. Silt settles when the full-pipe velocity is below 0.3 m s$^{-1}$.
+
+\begin{table}[!htbp]\centering\small\caption{Manning capacity of corrugated pipe at slope 0.2\%.}\label{tab:pipe}
+\begin{tabular}{lrrr}\toprule
+\hd{$D$ (mm)} & \hd{$Q_{\rm full}$ (L/s)} & \hd{$0.8Q$ (L/s)} & \hd{$v$ (m/s)}\\\midrule
+80 & 1.04 & 0.83 & 0.21\\
+100 & 1.88 & 1.50 & 0.24\\
+125 & 3.40 & 2.72 & 0.28\\
+160 & 6.57 & 5.26 & 0.33\\
+200 & 11.92 & 9.53 & 0.38\\
+250 & 21.61 & 17.29 & 0.44\\
+315 & 40.02 & 32.02 & 0.51\\
+400 & 75.67 & 60.54 & 0.60\\
+500 & 137.20 & 109.76 & 0.70\\\bottomrule\end{tabular}\end{table}
+
+\exbox{Pipes of the scheme}{The field is 400 m $\times$ 300 m; laterals run 200 m at slope 0.2\%. Size the lateral and the collector.}\sol  The lateral drains a strip $L=11.0$ m wide and 200 m long: $Q=qLL_{\rm lat}=0.00643\times11.0\times200=14.18$ m$^3$ d$^{-1}=0.164$ L s$^{-1}$. With 80\% of capacity allowed, Table~\ref{tab:pipe} gives the smallest pipe whose $0.8Q$ exceeds 0.164 L s$^{-1}$: $D=80$ mm. The collector carries the whole 12 ha: $Q=qA=0.00643\times120{,}000=771.9$ m$^3$ d$^{-1}=8.93$ L s$^{-1}$, so $D=200$ mm. The full-pipe speed of the lateral is 0.21 m s$^{-1}$, below the silting limit of 0.3 m s$^{-1}$.
+
+
+\section{Salt and the leaching requirement}
+The leaching requirement of Rhoades is $LR=EC_w/(5EC_e-EC_w)$, with $EC_w$ the salinity of the irrigation water and $EC_e$ the salinity of the saturation extract the crop tolerates (dS m$^{-1}$); the gross irrigation is $\mathrm{net}/(1-LR)$ when $LR$ is added to the need.
+
+\begin{table}[!htbp]\centering\small\caption{Leaching requirement for two water qualities.}\label{tab:lr}
+\begin{tabular}{lrrrr}\toprule
+\hd{$EC_e$} & \hd{$EC_w$} & \hd{$LR$} & \hd{$EC_w$} & \hd{$LR$}\\\midrule
+1.5 & 0.5 & 0.0714 & 1.5 & 0.2500\\
+3 & 0.5 & 0.0345 & 1.5 & 0.1111\\
+6 & 0.5 & 0.0169 & 1.5 & 0.0526\\
+10 & 0.5 & 0.0101 & 1.5 & 0.0309\\\bottomrule\end{tabular}\end{table}
+
+\exbox{Leaching requirement}{Irrigation water of 1.5 dS m$^{-1}$ is applied to a crop that tolerates $EC_e=3$ dS m$^{-1}$ (a moderately sensitive crop), net need 211.68 mm. Find $LR$ and the gross.}\sol  $LR=1.5/(5\times3-1.5)=1.5/13.5=0.1111$. Gross $=211.68/(1-0.1111)=238.1$ mm: an extra 26.5 mm, which must leave through the drains. For $EC_e=6$: $LR=1.5/28.5=0.0526$ and the extra is only 11.8 mm. The more tolerant the crop, the less water the drains have to carry away for salt.
+
+
+\section{Summary of the drainage layer}
+\begin{itemize}
+\item Depth limit $z_c=0.3+0.4R_{\max}$; allowed head $h=z_d-z_c$.
+\item Design discharge $=$ 95th percentile of the three-day recharge (rain and irrigation losses).
+\item Spacing: Hooghoudt with Moody--van Beers equivalent depth; Glover--Dumm for the falling table; the closer governs.
+\item Season: $\mu\,dh/dt=R-q_{\rm out}(h-g)$; $\mathrm{SEW}_{30}$; gate holds $\mu g$.
+\item Pipes by Manning at 80\% capacity; leaching $LR=EC_w/(5EC_e-EC_w)$.
+\end{itemize}
+\IfFileExists{extra/proj14.tex}{\input{extra/proj14}}{}
+\IfFileExists{extra/ten14.tex}{\input{extra/ten14}}{}
+\IfFileExists{extra/tenb14.tex}{\input{extra/tenb14}}{}
+\IfFileExists{extra/teny14.tex}{\input{extra/teny14}}{}
+\IfFileExists{extra/tenby14.tex}{\input{extra/tenby14}}{}
+\IfFileExists{extra/tenx14.tex}{\input{extra/tenx14}}{}
+\IfFileExists{extra/tenbx14.tex}{\input{extra/tenbx14}}{}
+\IfFileExists{extra/ex14.tex}{\input{extra/ex14}}{}
+\IfFileExists{extra/dyk14.tex}{\input{extra/dyk14}}{}
+\IfFileExists{extra/obj14.tex}{\input{extra/obj14}}{}

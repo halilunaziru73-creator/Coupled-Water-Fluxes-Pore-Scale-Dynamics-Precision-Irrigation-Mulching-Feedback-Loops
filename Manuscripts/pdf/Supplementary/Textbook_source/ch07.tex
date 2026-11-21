@@ -1,0 +1,55 @@
+\chapimg{fig/op07.png}
+\IfFileExists{extra/lead07.tex}{\input{extra/lead07}}{}
+\chapter{A Tour of the SWAFL Layers}\label{chap:07}
+\markboth{A Tour of the SWAFL Layers}{A Tour of the SWAFL Layers}
+\IfFileExists{extra/bg07.tex}{\input{extra/bg07}}{}
+\banner{A tour of the SWAFL layers}
+\section{The workbench}
+\fig{sh_full}{0.98}{The SWAFL workbench: the layer tree on the left, the simulation window, the properties and the dashboard. The date in the toolbar moves the whole workbench.}
+There are 32 layers: 23 for decisions, in nine groups, and nine that work with Daisy. Version 1.1.0 adds seasons projected 10 or 20 years ahead, a pipe network with Hazen--Williams losses and pump head, a drip wetting pattern that follows the soil, and a Daisy scenario designer. Weather comes from a built-in record, your own file, or an online archive.
+
+\section{Field balance and the soil--plant--air column}
+\fig{sc_fieldk}{0.8}{Field water balance: precipitation, irrigation, evapotranspiration, drainage and storage (Equation~\ref{eq:bal}).}
+\fig{sc_spack}{0.8}{Soil, plant and air: the water potential of each compartment, from the soil particles to the atmosphere.}
+\exbox{}{Open the field balance for the sand and for the silty clay loam. Which has the larger drainage? Relate your answer to Table~\ref{tab:soils}.}\sol  Sand (S03) has the larger drainage. Table~\ref{tab:soils} gives the memory fate $\phi_D=0.846$ for the sand and $0.022$ for the silty clay loam: of each millimetre of stored surplus the sand drains $85$ per cent and the silty clay loam $2$ per cent. The ratio is $0.846/0.022=38$.
+
+
+\section{Mulch, evaporation and the fate of saved water}
+\fig{sc_n2k}{0.8}{Fate of the water saved by mulch across rainfall. The drained share depends on the soil (Chapter~7).}
+\fig{sc_n3k}{0.8}{The regime map: where vapour gives way to drainage.}
+\exbox{}{Use the competition law of Chapter~7 to predict, for sand and for silty clay loam, which of the two soils shows more drainage in the fate-of-saved-water layer, and check on the screen.}\sol  Invert $\phi_D=\Ks/(\Ks+q^*)$ to get $\Ks/q^*=\phi_D/(1-\phi_D)$. Sand: $0.846/0.154=5.5$. Silty clay loam: $0.022/0.978=0.0225$. The conductivity-to-withdrawal ratio of the sand is $5.5/0.0225\approx 244$ times larger, so the sand drains far more of the saved water; on the screen the drainage bar of the sand dominates and that of the silty clay loam is nearly empty.
+
+
+\section{Triggers, structure and roots}
+\fig{sc_v1k}{0.8}{Sensor suction every day from 2019 to 2039. The dashed line is the trigger. Irrigated (blue) against rainfed (orange); bars give the growing-season days beyond the trigger. In 2029 the irrigated field had no days beyond 471 cm and the rainfed field had 101 of 183.}
+\fig{sc_n1k}{0.8}{The trigger law: the depletion of the root zone at the trigger is soil independent.}
+\fig{sc_r1k}{0.8}{The root layer: where the water is taken.}
+\exbox{}{In the sensor layer set the trigger of the sand to 300 cm. Predict, with Table~\ref{tab:reach}, what you will see, then check.}\sol  For the sand (S03), $\hc=199$ cm. The ratio is $300/199=1.51>1$, so the trigger lies beyond the reach and cannot fire. The archived trigger runs agree: mean irrigation is $122$, $38.5$ and $6.4$ mm yr$^{-1}$ at 50, 75 and 100 cm, and $0$ from 150 cm upward. On the screen you see an irrigation total of zero with the crop on rainfall alone.
+
+
+\section{Irrigation design: surface, drip, sprinkler}
+\exbox{}{In the surface layer compare the advance time for the same inflow on a loam and a sand, and explain the difference from the intake.}\sol  Use the volume balance $Q_0t=\sigma_zLZ(t)$ with $\sigma_z=0.7$, $L=100$ m, $Q_0=0.001$ m$^2$\,s$^{-1}$ per unit width and the Kostiakov intake $Z=k\tau^a$ (cm, $\tau$ in min). The parameters below are \emph{illustrative}, not measured: sand $k=1.2$, $a=0.6$; loam $k=0.5$, $a=0.45$. Sand: $0.06t=70(0.012)t^{0.6}$ gives $t^{0.4}=14$, so $t=733$ min. Loam: $0.06t=70(0.005)t^{0.45}$ gives $t^{0.55}=5.83$, so $t=24.7$ min. The sand takes thirty times longer to advance (it never completes the run in a realistic furrow) because its intake is much larger at all times.
+
+
+\section{Drainage and crops}
+\fig{sc_cropk}{0.8}{Crop coefficients, daily water need and the irrigation schedule. The library has 75 crops and follows the FAO-56 edition of 2025.}
+
+\section{Seasons, balances and feedback loops}
+\fig{sc_wb2k}{0.8}{Full water balance year by year. Seasons after 2038 are projections.}
+\fig{sc_nbk}{0.8}{Nitrogen budget year by year.}
+\fig{sc_v5k}{0.8}{Feedback loops between climate, management, soil water, crop and nitrogen. The red arrows join the parts that act on each other; the table lists what one step of each control does.}
+
+\section{Phenotyping and the real field}
+\fig{sc_dphk}{0.75}{Deterministic phenotyping: an exactly reproducible virtual experiment whose water balance closes (set-up form shown).}
+\fig{sc_vphk}{0.75}{Volumetric phenotyping: a virtual three-dimensional scanner that measures volume, crown, leaves and height.}
+\exbox{}{Explain why an exactly reproducible virtual experiment is useful for teaching, and name one limit.}\sol  A virtual experiment can be repeated exactly: the same weather, soil and settings give the same numbers, so a result can be checked by anyone and one factor changed at a time. One limit: the model is one-dimensional matrix flow, so macropores, lateral flow and real field variability are absent, and no field validation is implied.
+\IfFileExists{extra/proj07.tex}{\input{extra/proj07}}{}
+\IfFileExists{extra/ten07.tex}{\input{extra/ten07}}{}
+\IfFileExists{extra/tenb07.tex}{\input{extra/tenb07}}{}
+\IfFileExists{extra/teny07.tex}{\input{extra/teny07}}{}
+\IfFileExists{extra/tenby07.tex}{\input{extra/tenby07}}{}
+\IfFileExists{extra/tenx07.tex}{\input{extra/tenx07}}{}
+\IfFileExists{extra/tenbx07.tex}{\input{extra/tenbx07}}{}
+\IfFileExists{extra/ex07.tex}{\input{extra/ex07}}{}
+\IfFileExists{extra/dyk07.tex}{\input{extra/dyk07}}{}
+\IfFileExists{extra/obj07.tex}{\input{extra/obj07}}{}

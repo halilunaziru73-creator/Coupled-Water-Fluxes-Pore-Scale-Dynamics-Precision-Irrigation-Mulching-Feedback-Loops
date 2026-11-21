@@ -1,0 +1,19 @@
+\banner{Design project 3: choosing a suction trigger for six soils}
+\textbf{Brief.} A sensor-controlled system is to be installed on six soils of a farm. The crop (a vegetable) roots to 0.6 m and tolerates a depletion of 50 per cent of the available water before it is stressed; its peak demand is 5 mm\,d$^{-1}$. The designer must set the trigger of each sensor so that (i) the depletion stays below 50 per cent, (ii) the trigger is within the reach of the soil (taken as 80 per cent of $h_c$ to allow a margin), and (iii) the net dose $Z_n$ and the interval at the peak are known.
+
+\textbf{Method.} For each soil: the suction at 50 per cent depletion $h_{50}$ is found by bisection of $f(h)=0.5$ with the van Genuchten curve; the reach $h_c$ from Equation~(\ref{eq:reach3}); the trigger is $h_t=\min(h_{50},0.8h_c)$; the actual depletion $f_t=f(h_t)$; the net dose $Z_n=f_t\cdot\mathrm{AWC}\cdot R_{max}$ with $R_{max}=60$ cm; and the interval at the peak $T=Z_n/5$.
+
+\begin{table}[!htbp]\centering\small\caption{Design of the trigger for six soils: suction at 50 \% depletion, reach, chosen trigger, depletion at the trigger, net dose and interval at the peak demand.}
+\begin{tabular}{llrrrrrr}\toprule
+\hd{Soil} & \hd{Class} & \hd{$h_{50}$} & \hd{$h_c$} & \hd{$h_t$} & \hd{$f_t$} & \hd{$Z_n$ (mm)} & \hd{Interval (d)}\\\midrule
+S03 & Sand & 151 & 199 & 151 & 0.50 & 18 & 3.6\\
+S05 & Sandy loam & 217 & 1\,615 & 217 & 0.50 & 36 & 7.2\\
+S06 & Loam & 332 & 9\,186 & 332 & 0.50 & 51 & 10.2\\
+S07 & Silt loam & 483 & 29\,528 & 483 & 0.50 & 60 & 12.0\\
+S09 & Clay loam & 618 & 47\,608 & 618 & 0.50 & 48 & 9.6\\
+S10 & Silty clay loam & 906 & 127\,830 & 906 & 0.50 & 51 & 10.2\\\bottomrule\end{tabular}\end{table}
+
+\textbf{Reading the table.} In coarse soils (sand, sandy loam) the depletion limit $h_{50}$ is low and is the binding constraint; the trigger is $h_{50}$ and the dose is small, so the sensors call for frequent small irrigations (the interval is a day or two). In the fine soils the reach is the binding limit when $h_{50}$ exceeds $0.8h_c$: the trigger cannot be set at a depletion of 50 per cent because the roots could not dry the soil that far, and the practical depletion at the trigger is lower than the design limit. The designer should then choose a drip or a pulsed system in the coarse soils and accept that the fine soils will be irrigated at less than their allowed depletion.
+
+\textbf{Check.} For the loam, the trigger of 332 cm gives a depletion of 50 per cent; a net dose of 51 mm every 10.2 days at the peak. The drained share of such a dose is read from the dose law of this chapter.
+

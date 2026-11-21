@@ -1,0 +1,21 @@
+\banner{Design project 7: a complete design for a 40-ha maize farm, layer by layer}
+\textbf{Brief.} A farm of 40 ha on loam (S06) grows maize. The weather is that of a semi-arid summer, with a peak $ET_0$ of 7 mm\,d$^{-1}$. The farmer asks for a sensor-controlled sprinkler system with a trigger, a pipe and a pump. This project chains the layers of the application: the crop and weather layer gives the demand, the soil and control layers the dose and the interval, the design layer the capacity, and the pipe and the pump follow. Every step of the table is computed by hand.
+
+\begin{table}[!htbp]\centering\small\caption{The chain of the design: each line uses the result above it.}
+\begin{tabular}{lll}\toprule
+\hd{Layer} & \hd{Quantity} & \hd{Result}\\\midrule
+Crop & $K_{c,mid}\,ET_{0,peak}$ & $1.20\times7.0=8.4$ mm/d\\
+Soil & TAW $=1.7\times90$ & 153 mm\\
+Control & RAW $=0.5\,$TAW & 76 mm\\
+Control & Interval $=RAW/ET_c$ & 9.1 d $\to$ 9 d\\
+Design & Gross depth $RAW/0.75$ & 102 mm\\
+Design & Capacity $10Ad/(E_aTh)$ & 227 m$^3$/h = 63.0 L/s\\
+Pipe & Velocity in $D=200$ mm & 2.00 m/s\\
+Pipe & $h_f$ (800 m, $C=140$) & 13.7 m\\
+Pump & Head $35+h_f$ & 48.7 m\\
+Pump & Power $\rho gQH/0.65$ & 46.3 kW\\\bottomrule\end{tabular}\end{table}
+
+\textbf{Reading.} The soil can store 76 mm of readily available water, which a crop at the peak demand of 8.4 mm\,d$^{-1}$ uses in 9.1 days; the cycle is therefore 9 days. A gross depth of 102 mm every 9 days on 40 ha, applied in 20 h per day, calls for 63.0 L\,s$^{-1}$. In a 200 mm mainline this flow runs at 2.00 m\,s$^{-1}$ (above the limit of 1.5) and loses 13.7 m of head, so the pump has to give 48.7 m and draws 46.3 kW.
+
+\textbf{Sensitivity.} If the system efficiency falls from 0.75 to 0.65 (a worn sprinkler package), the capacity rises by $0.75/0.65-1=15$ per cent and the friction loss by about $(1.154)^{1.852}-1=30$ per cent, so the pump power grows by about 33 per cent: an efficiency lost in the field is paid for in the pump house.
+

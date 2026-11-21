@@ -1,0 +1,28 @@
+\section{Introduction: the soil surface as a control}
+The surface of a soil is where rain is partitioned into runoff and infiltration and where water leaves as evaporation. Both are controlled by structure (aggregates, pores, crust) and by what covers the soil (residue, mulch, canopy). Tillage and mulch are therefore the farmer's two direct tools on the surface balance. This chapter treats them one after the other and then ties them in the feedback loops of the application, where the state of the soil changes the water balance and the water balance changes the soil in return.
+
+\section{Soil structure and porosity}
+The total porosity is $\phi=1-\rho_b/\rho_s$ with $\rho_s\approx2.65$ Mg\,m$^{-3}$. Tillage loosens the soil: a topsoil of $\rho_b=1.45$ is brought to 1.20 by ploughing, so $\phi$ rises from 0.453 to 0.547. The extra porosity is macro-porosity: it raises the saturated conductivity and the infiltration, but it also dries faster and settles back under rain and traffic, with a half-life of one season or so.
+
+\begin{equation}\phi=1-\frac{\rho_b}{\rho_s},\qquad \Delta z=z_0\left(\frac{\rho_{b0}}{\rho_{b1}}-1\right).\end{equation}
+\par\noindent where $\phi$ is the porosity (m$^3$\,m$^{-3}$), $\rho_b$ the dry bulk density and $\rho_s$ the particle density (Mg\,m$^{-3}$), $\Delta z$ the swelling of the layer (m), $z_0$ its initial thickness and $\rho_{b0},\rho_{b1}$ the bulk densities before and after tillage.
+
+
+
+A layer of $z_0=0.25$ m at $\rho_{b0}=1.45$ loosened to $\rho_{b1}=1.20$ swells by $\Delta z=5.2$ cm; the same mass of soil takes more room.
+
+\section{Tillage and the surface balance}
+Four effects of tillage matter for the water balance: the roughness stores water in depressions and delays runoff; the loosened layer raises infiltration; the buried residue changes the cover; the broken capillary continuity cuts the supply to the surface and so reduces the evaporation of the second stage. No-till reverses these: the soil is firmer, residue stays on top, infiltration is held by biopores. The application reads the tillage choice as a set of multipliers on $K_s$, on the surface storage and on the evaporation factor.
+
+The depression storage is $S_d\approx0.112\,RR+0.031\,RR^2-0.012\,RR\,s$ (mm), with random roughness $RR$ in cm and slope $s$ in per cent. For a ploughed field with $RR=2.5$ cm and $s=2$: $S_d=0.41$ mm; for a fine seedbed with $RR=0.8$: $S_d=0.09$ mm.
+
+\section{Mulches: types and effects}
+Mulches are of three kinds: \emph{organic} (straw, stubble, wood chips), \emph{synthetic} (plastic film, usually black, clear or white) and \emph{mineral} (gravel, sand). Each acts through the same few physical effects: it blocks the vapour path (a resistance in series), reflects or absorbs radiation, and changes the soil temperature. Organic mulches also add organic matter and feed the biology. Plastic films cut the evaporation almost completely but they stop the rain; they must be used with drip irrigation.
+
+In the model, evaporation under a cover is the bare-soil value multiplied by $(1-f_c)$, where $f_c$ is the cover factor of the mulch, and the stage-one limit $U$ is shortened. Chapter~6 gave the two stages; here we apply them.
+
+\section{Feedback loops}
+A \emph{feedback loop} is a chain of effects that returns on itself. Three loops are built into the application. (i) \emph{Structure--infiltration}: tillage raises $K_s$, more water infiltrates, the soil is wetter, aggregates slake, the surface seals, $K_s$ falls. (ii) \emph{Mulch--evaporation}: mulch reduces evaporation, the surface stays moist, residue decomposes, the cover thins. (iii) \emph{Water--crop--atmosphere}: stress closes the stomata, transpiration falls, the canopy warms, $ET_0$ demand and the stress rise further. Each loop is a pair of equations coupled by a state variable, and each can be reinforcing (positive) or balancing (negative).
+
+A simple discrete model of the first loop is $K_{n+1}=K_n+\alpha(K_{\max}-K_n)-\beta\,R_n K_n$ with rainfall energy $R_n$. Its fixed point is $K^*=\alpha K_{\max}/(\alpha+\beta R)$. With $\alpha=0.02$, $K_{\max}=40$ mm\,h$^{-1}$, $\beta=0.0005$ and $R=60$: $K^*=16.0$ mm\,h$^{-1}$; with a doubled rainfall energy, $K^*=10.0$.
+

@@ -1,0 +1,136 @@
+\section{Drip irrigation: what the layer does}
+The drip layer designs the system from the emitter to the root zone. From the soil of the field it takes the water that must be applied (the net depth $Z_n$ to the trigger), the water-holding properties ($\theta_{33}$, $\theta_{1500}$, $K_s$) and the root depth; from the user it takes the emitter, the spacing of emitters and laterals, the length and diameter of the lateral, the inlet pressure and the depth of placement. It returns the emission uniformity, the head lost along the lateral, the wetted bulb under the average emitter, the run time, and the fate of every litre: stored in the root zone, deep percolation, or evaporation from the wet surface.
+
+\section{Types of emitters and their parameters}
+The application offers six emitters. They differ in the variation of the discharge from one emitter to another (the manufacturing coefficient of variation $c_v$), in the sensitivity of the discharge to pressure (the exponent $x$), in the number of emitters that a plant is watered by ($n_e$) and, for the pressure-compensating drippers, in the minimum head $H_{\min}$ below which compensation fails.
+
+\begin{table}[!htbp]\centering\footnotesize\setlength{\tabcolsep}{3pt}\caption{Emitters of the drip layer.}
+\begin{tabular}{lrrrrrrr}\toprule
+\hd{Emitter} & \hd{$c_v$} & \hd{$x$} & \hd{$n_e$} & \hd{$H_{\min}$ (m)} & \hd{default $q$ (L/h)} & \hd{default $S_e$ (m)} & \hd{inside $D$ (mm)}\\\midrule
+Online emitter & 0.07 & 0.50 & 1 & 0.0 & 4.0 & 0.75 & 16.0\\
+Inline emitter & 0.04 & 0.50 & 1 & 0.0 & 2.0 & 0.50 & 16.0\\
+Drip tape & 0.08 & 0.60 & 2 & 0.0 & 1.0 & 0.20 & 16.0\\
+PC AS dripper & 0.03 & 0.00 & 1 & 5.1 & 2.0 & 0.50 & 13.7\\
+PC LCNL dripper & 0.03 & 0.00 & 1 & 10.2 & 2.0 & 0.50 & 13.7\\
+PC HCNL dripper & 0.03 & 0.00 & 1 & 14.3 & 3.0 & 0.50 & 13.7\\\bottomrule\end{tabular}\end{table}
+
+\textbf{Online emitters} are punched into a polyethylene tube; they are cheap and can be placed where the plants are, but they vary most ($c_v=0.07$). \textbf{Inline emitters} are welded in the tube at a fixed spacing and vary less ($c_v=0.04$). \textbf{Drip tape} is a thin-walled tube with a continuous labyrinth; it is used for one season on vegetables at close spacing (0.2 m), and because the wall is thin the discharge is sensitive to pressure ($x=0.6$) and each plant is watered by two emitters. The three \textbf{pressure-compensating} drippers (PC AS, anti-siphon; PC LCNL, low-pressure non-leakage; PC HCNL, high-pressure non-leakage) keep the discharge constant ($x=0$) above a minimum head, which is why they are used on slopes and in long laterals. The non-leakage types shut off below 0.15 or 0.3 m of head, which prevents draining of the lateral at the end of the run. The lateral pipes of the library are 16 mm (inside 13.7 mm, wall 0.95 mm, working pressure 4.5 bar) and 20 mm (inside 17.5 mm).
+
+\section{Where to place the emitter}
+The emitter can lie on the surface or be buried at 15, 25, 45 or 55 cm. Burying reduces the evaporation from the wet surface and keeps the water in the root zone; but if the emitter is deeper than the roots, or the soil is coarse, the water leaves the root zone before the roots can take it. The application computes, for every placement, the water that passes below the maximum rooting depth ($R_{max}$) as deep percolation, and the water that reaches the surface as evaporation.
+
+\section{Governing equations}
+\textbf{The emitter.} The discharge depends on the head $H$ at the emitter as a power law,
+
+\begin{equation}\boxed{q=q_0\left(\frac{H}{H_0}\right)^{x},}\label{eq:d-em}\end{equation}
+\par\noindent where $q$ is the discharge of the emitter (L\,h$^{-1}$), $q_0$ the nominal discharge at the nominal head $H_0$ (m), $H$ the head at the emitter (m) and $x$ the emitter exponent ($x=0.5$ for a fully turbulent orifice, 1 for a laminar one, 0 for a perfect compensator). A pressure-compensating emitter keeps $q=q_0[1+0.04(H-H_0)/H_0]$ for $H\ge H_{\min}$ and falls as $q_0(H/H_{\min})^{0.5}$ below it.
+
+
+
+\textbf{The lateral.} The head falls along the lateral because of friction. For the segment between emitters $j$ and $j+1$, of length $S_e$ and carrying the flow still to be delivered downstream, $Q_j=\sum_{i>j}q_i$, the Hazen--Williams loss is
+
+\begin{equation}\boxed{\Delta H_j=\frac{10.67\,S_e\,Q_j^{1.852}}{C^{1.852}D^{4.871}},\qquad H_{j+1}=H_j-\Delta H_j,}\label{eq:d-hw}\end{equation}
+\par\noindent where $\Delta H_j$ is the head lost in the segment (m), $S_e$ the emitter spacing (m), $Q_j$ the flow in the segment (m$^3$\,s$^{-1}$; the sum of the discharges, in L\,h$^{-1}$, of the emitters beyond $j$ divided by $3.6\times10^{6}$), $C$ the Hazen--Williams coefficient (140 in the application) and $D$ the inside diameter (m).
+
+
+
+The discharges depend on the heads and the heads on the discharges, so the application iterates (four undamped passes, then under-relaxed with a factor 0.5, until the discharges change by less than $10^{-7}q$, at most 500 passes). The result is the head and the discharge at every emitter. A lateral is outside the usual design limit when the head lost exceeds 20 per cent of the inlet head: $h_f/H_0>0.2$.
+
+\textbf{Uniformity.} The coefficient of variation of the discharge combines the manufacturing variation and the variation due to pressure,
+
+\begin{equation}\sigma_q=\sqrt{c_v^2+\sigma_P^2},\quad\sigma_P^2=\frac{1}{N+1}\sum_j\left(\frac{q_j}{\bar q}-1\right)^2,\quad E_u=\min\left\{1,\ \left(1-\frac{1.27\,c_v}{\sqrt{n_e}}\right)\frac{q_{\min}}{\bar q}\right\},\label{eq:d-eu}\end{equation}
+\par\noindent where $\sigma_q$ is the total coefficient of variation of the discharge, $c_v$ the manufacturing coefficient, $\sigma_P$ that due to the pressure, $q_j$ the discharge of emitter $j$, $\bar q$ the mean discharge (L\,h$^{-1}$), $N+1$ the number of emitters on the lateral, $E_u$ the emission uniformity (limited to the range 0.3 to 1), $n_e$ the number of emitters per plant and $q_{\min}$ the smallest discharge on the lateral.
+
+
+
+The lateral carries $Q=N\bar q/3600$ L\,s$^{-1}$.
+
+\begin{table}[!htbp]\centering\footnotesize\setlength{\tabcolsep}{3pt}\caption{Laterals with emitters of 2 L/h at 0.5 m spacing and 10 m inlet head: head loss and uniformity from the iteration.}
+\begin{tabular}{lrrrrrrr}\toprule
+\hd{Emitter} & \hd{$L$ (m)} & \hd{$D$ (mm)} & \hd{$h_f$ (m)} & \hd{$h_f/H_0$ (\%)} & \hd{$q_{\min}$ (L/h)} & \hd{$\bar q$ (L/h)} & \hd{$E_u$ (\%)}\\\midrule
+Inline emitter & 100 & 13.7 & 1.91 & 19.1 & 1.799 & 1.852 & 92.2\\
+Inline emitter & 200 & 13.7 & 6.82 & 68.2 & 1.128 & 1.366 & 78.4\\
+PC AS dripper & 200 & 13.7 & 8.26 & 82.6 & 1.168 & 1.531 & 73.4\\
+Inline emitter & 100 & 16 & 0.98 & 9.8 & 1.900 & 1.926 & 93.6\\
+Inline emitter & 200 & 16 & 4.67 & 46.7 & 1.460 & 1.605 & 86.3\\
+PC AS dripper & 200 & 16 & 6.32 & 63.2 & 1.698 & 1.856 & 88.0\\
+Inline emitter & 100 & 17.5 & 0.65 & 6.5 & 1.934 & 1.951 & 94.1\\
+Inline emitter & 200 & 17.5 & 3.51 & 35.1 & 1.611 & 1.715 & 89.2\\
+PC AS dripper & 200 & 17.5 & 4.78 & 47.8 & 1.962 & 1.972 & 95.7\\
+Inline emitter & 100 & 20 & 0.35 & 3.5 & 1.965 & 1.974 & 94.5\\
+Inline emitter & 200 & 20 & 2.13 & 21.3 & 1.774 & 1.834 & 91.8\\
+PC AS dripper & 200 & 20 & 2.53 & 25.3 & 1.980 & 1.985 & 95.9\\\bottomrule\end{tabular}\end{table}
+
+\exbox{Head loss and uniformity of a lateral}{An inline-emitter lateral ($q_0=2$ L\,h$^{-1}$, $S_e=0.5$ m, $L=100$ m, $D=16$ mm, $H_0=10$ m, $x=0.5$, $c_v=0.04$) is run in the application. Report the number of emitters, the head lost, the extreme and mean discharges, $E_u$ and the flow.}\sol $N=L/S_e=200$ intervals, i.e.\ 201 emitters \ans At the inlet the segment carries the discharge of the 200 emitters beyond: $Q\approx200\times2/3.6\times10^6=1.11\times10^{-4}$ m$^3$\,s$^{-1}$, $\Delta H=10.67(0.5)(1.11\times10^{-4})^{1.852}/(140^{1.852}\times0.016^{4.871})=0.0150$ m \ans Adding the losses of all segments with the discharges updated by Eq.~(\ref{eq:d-em}) gives, after convergence, $h_f=0.98$ m, so the last emitter has $H=9.02$ m, i.e.\ $h_f/H_0=9.8$ per cent (within the 20 per cent limit) \ans $q_{\min}=1.900$ L\,h$^{-1}$ (last emitter), $\bar q=1.926$ L\,h$^{-1}$ \ans $\sigma_P$ and the manufacturing variation give $\sigma_q=0.0427$ \ans $E_u=(1-1.27\times0.04/\sqrt1)(1.900/1.926)=0.936$, that is 93.6 per cent \ans Flow $Q=201\times1.926/3600=0.108$ L\,s$^{-1}$ \ans
+
+\section{The wetted bulb}
+Around a buried or surface emitter the water spreads as a body of revolution. The application describes it as a half-ellipsoid below the emitter (radius $r$ at the emitter depth, vertical semi-axis $a\,r$) and a short one above it (vertical semi-axis $u\,r$, $u=0.6$). The width of the body at depth $z$ is
+
+\begin{equation}\boxed{\rho(z)=r\sqrt{1-\left(\frac{z-z_d}{a\,r}\right)^2}\ \ (z\ge z_d),\qquad \rho(z)=r\sqrt{1-\left(\frac{z_d-z}{u\,r}\right)^2}\ \ (z<z_d),}\label{eq:d-bulb}\end{equation}
+\par\noindent where $\rho(z)$ is the radius of the wet body at depth $z$ (mm), $z_d$ the depth of the emitter (mm), $r$ the radius at emitter depth (mm), $a$ the aspect ratio (depth below the emitter over radius) and $u=0.6$ the same ratio above.
+
+
+
+The volume of soil that holds the water of one emitter is $V_w=V/\Delta\theta$, where $V$ is the volume applied and $\Delta\theta=\max\{0.03,\ f_T(\theta_{33}-\theta_{1500})\}$ is the water that the soil takes up between the trigger and field capacity; the radius $r$ is the one at which the volume of the body, $\int\pi\rho^2dz$ (or $\int2\rho\,dz$ for a line source), equals $V_w$. The shape depends on the soil through the aspect ratio, which expresses the competition of gravity and capillarity:
+
+\begin{equation}\boxed{a=\mathrm{clip}\left\{\left[0.7+1.6\left(\frac{K_s}{K_s+15}\right)^{1.1}\right]\sqrt{\mathrm{clip}\!\left(\frac{2}{q};\,0.7,\,1.4\right)};\ 0.75,\,2.4\right\},}\label{eq:d-asp}\end{equation}
+\par\noindent where $a$ is the aspect ratio of the bulb, $K_s$ the saturated conductivity in cm\,d$^{-1}$ ($=2.4\times K_s$ in mm\,h$^{-1}$) and $q$ the discharge of the emitter (L\,h$^{-1}$); coarse soils give a narrow, deep bulb ($a$ large), fine soils a wide, shallow one, and a larger discharge spreads the water more.
+
+
+
+When the emitter spacing is less than 0.34 m, or the bulbs of neighbouring emitters touch ($2r>S_e$ with $S_e<1.2$ m), the emitters form a continuous wet strip and the body is treated as a line source with the volume per metre $V/S_e$.
+
+\textbf{Fate of the water.} Of the volume $V_i$ applied by one emitter, the part of the body below the maximum rooting depth $R_m$ is deep percolation, a part $e=\min\{0.5V_i,\ A_{s}E_0\cdot2\}$ evaporates from the wet surface of area $A_s$ ($E_0$ is the surface evaporation rate in mm\,d$^{-1}$), and the rest, $V_i-V_{below}-e$, is the water in the root zone. The part of that held within the requirement $V_{req}=Z_nS_eS_l$ is \emph{stored}; the excess is deep percolation too. The emitters are not equal, so five emitters at the quantiles $z=-1.28,-0.52,0,0.52,1.28$ of the normal distribution, with discharge $V(1+\sigma_qz)$, are computed and averaged:
+
+\begin{equation}E_a=\frac{\overline{V_{st}}}{\overline V},\quad E_s=\frac{\overline{V_{st}}}{V_{req}},\quad DP=\frac{\overline{V_{below}+V_{excess}}}{\overline V},\quad t=\frac{V_{req}}{\bar q\,E_u},\label{eq:d-fate}\end{equation}
+\par\noindent where $E_a$ is the application efficiency, $E_s$ the storage efficiency, $DP$ the deep-percolation share, $V_{st}$ the volume stored in the root zone of one quantile emitter (L), $V$ the volume it delivers (L), $V_{req}=Z_nS_eS_l$ the requirement per emitter (L, with $Z_n$ in mm and spacings in m), the overbar the average over the five quantiles and $t$ the default run time (h); the factor $E_u$ lengthens the run so that the poorest emitter still refills the root zone.
+
+
+
+\begin{table}[!htbp]\centering\footnotesize\setlength{\tabcolsep}{3pt}\caption{Drip design on the ten soils: inline emitter 2 L/h at 0.5 m, laterals every 1.5 m, buried 25 cm, net depth 9 mm.}
+\begin{tabular}{llrrrrrrrr}\toprule
+\hd{ID} & \hd{Soil} & \hd{$K_s$ (cm/d)} & \hd{$a$} & \hd{run $t$ (h)} & \hd{width (cm)} & \hd{depth (cm)} & \hd{$E_a$ (\%)} & \hd{$DP$ (\%)} & \hd{Evap. (\%)}\\\midrule
+S01 & Coarse loam & 31.6 & 1.74 & 3.7 & 50 & 68 & 92 & 8 & 0\\
+S02 & Coarse sand & 275.4 & 2.21 & 3.7 & 66 & 98 & 68 & 32 & 0\\
+S03 & Sand & 323.3 & 2.22 & 3.7 & 66 & 98 & 67 & 33 & 0\\
+S04 & Loamy sand & 207.3 & 2.18 & 3.7 & 66 & 97 & 68 & 32 & 0\\
+S05 & Sandy loam & 107.3 & 2.09 & 3.7 & 54 & 81 & 79 & 21 & 0\\
+S06 & Loam & 29.0 & 1.71 & 3.7 & 48 & 66 & 93 & 7 & 0\\
+S07 & Silt loam & 26.2 & 1.67 & 3.7 & 41 & 60 & 93 & 7 & 0\\
+S08 & Sandy clay loam & 12.7 & 1.38 & 3.7 & 59 & 66 & 93 & 7 & 0\\
+S09 & Clay loam & 7.7 & 1.19 & 3.7 & 54 & 57 & 94 & 6 & 0\\
+S10 & Silty clay loam & 9.0 & 1.24 & 3.7 & 49 & 56 & 94 & 6 & 0\\\bottomrule\end{tabular}\end{table}
+
+The coarse soils give the narrowest and deepest bulbs, and the largest losses to deep percolation; the fine soils spread sideways and hold the water in the root zone. This is why the placement and the emitter spacing must be chosen soil by soil.
+
+\begin{table}[!htbp]\centering\footnotesize\setlength{\tabcolsep}{3pt}\caption{Effect of the depth of placement on the loam S06.}
+\begin{tabular}{rrrrrrr}\toprule
+\hd{Placement (cm)} & \hd{run $t$ (h)} & \hd{bulb depth (cm)} & \hd{$E_a$ (\%)} & \hd{$E_s$ (\%)} & \hd{$DP$ (\%)} & \hd{Evaporation (\%)}\\\midrule
+surface & 3.7 & 48 & 81 & 86 & 0 & 19\\
+15 & 3.7 & 56 & 94 & 100 & 6 & 0\\
+25 & 3.7 & 66 & 93 & 99 & 7 & 0\\
+45 & 3.7 & 86 & 60 & 64 & 40 & 0\\
+55 & 3.7 & 96 & 38 & 40 & 62 & 0\\\bottomrule\end{tabular}\end{table}
+
+\begin{table}[!htbp]\centering\footnotesize\setlength{\tabcolsep}{3pt}\caption{Effect of the emitter spacing on the loam S06 ($S_l=1.5$ m).}
+\begin{tabular}{rrrrrr}\toprule
+\hd{Emitter spacing (m)} & \hd{run $t$ (h)} & \hd{$E_a$ (\%)} & \hd{$E_s$ (\%)} & \hd{$DP$ (\%)} & \hd{emitters per ha}\\\midrule
+0.20 & 1.8 & 88 & 99 & 12 & 33333\\
+0.30 & 2.4 & 91 & 100 & 9 & 22222\\
+0.50 & 3.7 & 93 & 99 & 7 & 13333\\
+0.75 & 5.5 & 88 & 93 & 12 & 8889\\
+1.00 & 7.2 & 84 & 88 & 16 & 6667\\
+1.50 & 10.7 & 78 & 82 & 22 & 4444\\\bottomrule\end{tabular}\end{table}
+
+\begin{table}[!htbp]\centering\footnotesize\setlength{\tabcolsep}{3pt}\caption{Effect of the emitter discharge on the loam S06.}
+\begin{tabular}{rrrrrr}\toprule
+\hd{$q$ (L/h)} & \hd{$a$} & \hd{run $t$ (h)} & \hd{width (cm)} & \hd{$E_a$ (\%)} & \hd{$DP$ (\%)}\\\midrule
+1.0 & 2.02 & 7.2 & 45 & 90 & 10\\
+1.6 & 1.91 & 4.6 & 46 & 91 & 9\\
+2.0 & 1.71 & 3.7 & 48 & 93 & 7\\
+3.0 & 1.43 & 2.6 & 52 & 92 & 8\\
+4.0 & 1.43 & 2.1 & 52 & 90 & 10\\
+8.0 & 1.43 & 1.5 & 55 & 80 & 20\\\bottomrule\end{tabular}\end{table}
+
+\exbox{A drip design from soil to run time}{Design a drip system for the loam S06 for a crop that needs $Z_n=9$ mm per irrigation: inline emitters 2 L\,h$^{-1}$ at 0.5 m, laterals 1.5 m apart, 100 m long, 16 mm, 10 m head, buried at 25 cm, root zone 60 cm. Report the run time, the bulb and the fate of the water.}\sol Requirement per emitter $V_{req}=9\times0.5\times1.5=6.75$ L \ans $E_u=0.936$, $\bar q=1.926$ L\,h$^{-1}$, so $t=V_{req}/(\bar qE_u)=6.75/(1.926\times0.936)=3.74$ h \ans Volume per emitter $V=\bar qt=7.21$ L, i.e.\ a gross depth of $9.6$ mm \ans Aspect ratio of the loam ($K_s=29.0$ cm\,d$^{-1}$): $a=1.71$ \ans The average emitter wets a width of $48$ cm to a depth of $66$ cm \ans $E_a=93.0$, $E_s=99.3$, $DP=7.0$, evaporation $0.0$ per cent \ans Per hectare: $13333$ emitters, $6667$ m of lateral, system flow $7.13$ L\,s$^{-1}$\,ha$^{-1}$ \ans
+

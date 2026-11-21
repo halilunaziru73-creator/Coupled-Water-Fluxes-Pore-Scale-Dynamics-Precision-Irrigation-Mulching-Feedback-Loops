@@ -1,0 +1,20 @@
+\banner{Design project 8: choosing the trigger of a maize season by simulation}\label{sec:proj8}
+\textbf{Brief.} A season of 125 days of maize on a soil with TAW = 150 mm and $p=0.5$ is simulated with the daily bucket on a weather record of seeded rain events (a mean of 212 mm of rain, $\Sigma ET_0=797$ mm). The irrigation rule applies the whole depletion when it reaches a fraction $f_t$ of TAW. The designer compares triggers from $f_t=0.3$ to 0.8 and the rainfed case on irrigation, drainage, yield and the extra yield per extra millimetre of irrigation. The maximum yield is $Y_m=11.5$ Mg\,ha$^{-1}$ and $K_y=1.28$.
+
+\begin{table}[!htbp]\centering\small\caption{Seasonal results of the bucket for seven triggers.}
+\begin{tabular}{lrrrrrr}\toprule
+\hd{Trigger $f_t$} & \hd{Irrigations} & \hd{Irrigation (mm)} & \hd{Drainage (mm)} & \hd{$ET_a$ (mm)} & \hd{$Y/Y_m$} & \hd{Yield gain per 100 mm}\\\midrule
+0.30 & 12 & 577 & 45 & 747 & 1.000 & 2.0\\
+0.40 & 9 & 573 & 41 & 747 & 1.000 & 2.0\\
+0.50 & 7 & 556 & 30 & 747 & 1.000 & 2.1\\
+0.60 & 6 & 557 & 57 & 737 & 0.983 & 2.0\\
+0.70 & 4 & 430 & 30 & 699 & 0.919 & 2.5\\
+0.80 & 3 & 367 & 30 & 641 & 0.818 & 2.6\\
+rainfed & 0 & 0 & 30 & 292 & 0.221 & 0.0\\\bottomrule\end{tabular}\end{table}
+
+\textbf{Reading the table.} A trigger below the stress threshold ($f_t\le0.5=p$) keeps $K_s=1$, so $ET_a=ET_c$ and the relative yield is 1; lower triggers add irrigations but not yield and send water to drainage. Triggers above $p$ let stress start and the yield fall by $K_y$ times the relative deficit. The rainfed season gives $Y/Y_m=0.221$. The choice of the designer is $f_t=0.5$: the largest depletion that keeps the yield at its maximum, which needs the least irrigation (556 mm) among the stress-free triggers.
+
+\textbf{Check.} A trigger of 0.6 saves -1 mm of irrigation against 0.5 at a yield loss of 1.7 per cent; whether it is worth it depends on the price of water against the price of grain, as in Chapter~5.
+
+
+\fig{g8_bucket}{0.95}{Daily bucket for a 125-day maize season. (a) Depletion for three triggers, with the irrigation applied in brackets and the limit RAW. (b) The rainfall of the season.}

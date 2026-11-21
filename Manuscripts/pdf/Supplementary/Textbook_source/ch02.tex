@@ -1,0 +1,387 @@
+\chapimg{fig/op02.png}
+\IfFileExists{extra/lead02.tex}{\input{extra/lead02}}{}
+\chapter{Flow, Roots and the Daisy Model}\label{chap:02}
+\markboth{Flow, Roots and the Daisy Model}{Flow, Roots and the Daisy Model}
+\IfFileExists{extra/bg02.tex}{\input{extra/bg02}}{}
+\banner{The Richards equation, roots and the Daisy ensemble}
+\section{Flow in an unsaturated soil}
+Darcy's law for vertical flow, with $z$ positive upward and $h$ the suction (so that the pressure head is $-h$), gives the flux
+\begin{equation}\label{eq:darcy}\boxed{q = -K(h)\left(\frac{\partial(-h)}{\partial z}+1\right)=K(h)\left(\frac{\partial h}{\partial z}-1\right).}\end{equation}
+\par\noindent where $q$ is the water flux density (cm\,d$^{-1}$, positive upward as written), $K(h)$ the hydraulic conductivity at suction $h$ (cm\,d$^{-1}$), $h$ the suction head (cm, positive when the soil is dry), $z$ the height above the reference level (cm) and the term 1 the gravity gradient.
+
+Conservation of mass for the water content $\theta$ with a sink $S_r$ for root uptake gives
+\begin{equation}\label{eq:richards}\boxed{\frac{\partial\theta}{\partial t}=-\frac{\partial q}{\partial z}-S_r=\frac{\partial}{\partial z}\left[K(h)\left(1-\frac{\partial h}{\partial z}\right)\right]-S_r .}\end{equation}
+\par\noindent where $\theta$ is the volumetric water content (m$^3$\,m$^{-3}$), $t$ the time (d), $q$ the flux (cm\,d$^{-1}$), $z$ the vertical coordinate (cm), $K(h)$ the conductivity (cm\,d$^{-1}$), $h$ the suction (cm) and $S_r$ the root water uptake, a sink (d$^{-1}$).
+
+Equation~(\ref{eq:richards}) is the Richards equation. Together with the retention curve $\theta(h)$ of Equation~(\ref{eq:vg}) and the conductivity of Equation~(\ref{eq:vgm}) it is a closed, non-linear equation for $h(z,t)$. It solves the \emph{equilibrium} form: the water content follows the retention curve at once. When wetting and drying are fast, the water content lags behind, and the criterion of Section~\ref{sec:lag} says when this matters.
+
+\section{Uptake by roots: the conductance of the soil around a root}
+Roots take water from the soil around them. For a cylindrical root of radius $r_0$ in a soil cylinder of radius $r_1$, steady radial flow gives an uptake per unit root length
+\begin{equation}\label{eq:radial}\boxed{u\simeq\frac{2\pi}{\ln(r_1/r_0)}\int_{h_{\mathrm{root}}}^{h}K(h')\,dh'\approx\frac{2\pi}{\ln(r_1/r_0)}\,K(h)\,\Delta h ,}\end{equation}
+where $\Delta h$ is the head drop from the bulk soil to the root surface (Gardner, 1960). Multiplying by the root length density $L_v$ gives the sink per unit volume. Two things follow. First, the uptake is proportional to $K(h)$, so as the soil dries and $K$ falls by orders of magnitude (Chapter~3), uptake falls with it. Second, $\Delta h$ is bounded by the plant, since the root water potential cannot fall below the wilting point. So there is a suction beyond which the soil delivers too little water for the crop to dry it further in a season. This is the origin of the reach (Chapter~\ref{ch:reach}). Daisy computes uptake from a soil--root potential difference over a conductance of this type (Abrahamsen and Hansen, 2000).
+
+\exbox{The collapse of uptake}{Take $\Delta h$ and the geometry as fixed and compare the uptake at two suctions in the silty clay loam S10. From Chapter~3, $\Kr(300\text{ cm})=1.5\times10^{-3}$ and $\Kr(3000\text{ cm})\approx 5.5\times10^{-6}$ (from the asymptote of Chapter~\ref{ch:reach}). With the same $\Delta h$ and root length density the uptake falls by a factor of about 280 when the soil dries from 300 to 3000 cm. In the sand the same drying takes $\Kr$ from $2.7\times10^{-11}$ to about $2\times10^{-17}$: the uptake is already negligible at 300 cm.}
+
+
+
+\begin{kfig}{Radial flow to a root: water moves through the soil from the radius $r_1$ to the root surface $r_0$; the conductance of this path is the soil term in the uptake law.}
+\draw[soil] (0,0) circle (2.3);\draw[wtr] (0,0) circle (0.45);\fill[khcyan!60] (0,0) circle (0.2);
+\foreach \a in {0,60,...,300}{\draw[vec] ({2.15*cos(\a)},{2.15*sin(\a)})--({0.6*cos(\a)},{0.6*sin(\a)});}
+\draw[<->,ln] (0,0)--(0.45,0);\draw[gd] (0,0)--(2.3,-0.0);
+\node[lab,above] at (1.2,0.05) {$r_1$};\node[lab] at (0.0,-0.75) {$r_0$};\node[lab,right] at (2.45,0) {soil, $h_1$};\node[lab] at (-0.75,0.3) {root, $h_0$};
+\end{kfig}
+
+\section{What Daisy is}
+Daisy is a soil, plant and atmosphere model developed at the University of Copenhagen. The version used here is 7.1.14. It solves Equation~(\ref{eq:richards}) in a layered one-dimensional column with the functions above. It couples the soil to a crop (light interception, photosynthesis, roots, water stress), to a surface residue layer that intercepts rain and suppresses soil evaporation, to an energy-based potential evapotranspiration, and to nitrogen turnover. For every run it writes daily logs of water content, suction, the water fluxes, the crop and the nitrogen pools.
+
+\fig{sh_dzmap}{0.95}{The Daisy process map as shown in the SWAFL workbench. Clicking a box opens the description of the process and its figures.}
+
+\section{The ensemble}
+The ensemble has 17 experiments, E0 to E16, ten soils (Table~\ref{tab:soils}), 20 years of weather from Taastrup, Denmark (1980--1999) and a cereal rotation. Of 10,190 runs 10,041 are valid and 149 are solver failures, which are excluded. The irrigation scheduler of Daisy applies a dose whenever the suction at a sensor depth exceeds a trigger. Every run is archived: the one-row-per-run summary, every log year by year, and the summariser are in the repository, and the complete raw archive is on Zenodo (doi 10.5281/zenodo.23043626).
+
+\begin{table}[!htbp]\centering\small\caption{Experiments used in this book.}\begin{tabular}{llp{6.4cm}r}\toprule
+\hd{Exp.} & \hd{Name} & \hd{Factors varied} & \hd{Valid runs}\\\midrule
+E0&Baselines&soil (the rainfed twin of every run)&10\\
+E2&TriggerPressure&soil, trigger from 50 to 10,000 cm; sensor at 20 cm&197\\
+E3&SensorDepth&soil, sensor depth 5 to 100 cm at a 300 cm trigger&200\\
+E4&Methods&soil, method (surface, overhead, subsurface)&96\\
+E9&Initial suction lattice&soil, initial suction (10 values), rainfall scale (10 values)&987\\
+E10&Amount--timing--soil&soil, dose (1 to 30 mm), irrigation window&954\\
+E15&Method--depth--amount&coarse loam; method, rate, dose, rooting depth&1000\\
+E16&Factorial&soil; six factors at two levels&740\\\bottomrule\end{tabular}\end{table}
+
+\begin{daisybox}{reading an annual flux}
+For each run and each year the summariser adds the daily fluxes of transpiration, soil evaporation, other evaporation, drainage at 1 m and irrigation. A twenty-year mean per run is what the equations of the next chapters use as $T$, $E_s$, $E_o$, $D$ and $I$. The other evaporation is $E_o=ET-T-E_s$, and in the data it closes the evapotranspiration to within 1.1 mm.
+\end{daisybox}
+
+\section{Sensor lag: when the equilibrium assumption matters}\label{sec:lag}
+Under fast wetting and drying the water content lags the equilibrium of the retention curve, $\partial\theta/\partial t=[\theta_{\mathrm{eq}}(h)-\theta]/\tau$. A sensor then reads a suction that is not the one of Equation~(\ref{eq:vg}). For a schedule with interval $t_i$ between applications, the dimensionless lag $\Pi_\tau=\tau/t_i$ says when this matters. For daily or multi-day scheduling ($t_i\ge1$ d) and $\tau$ of minutes to hours, $\Pi_\tau\ll1$ and the equilibrium reach applies. For pulses of minutes to hours, as in pulsed drip, $\Pi_\tau\sim1$ and the sensor reading becomes rate dependent. Daisy solves the equilibrium equation, so this criterion is stated here for later testing; it is not evaluated in the studies.
+
+\exbox{}{A schedule irrigates every 2 days and the sensor lag is $\tau=3$ h. Compute $\Pi_\tau$ and say whether the equilibrium reach applies. Repeat for pulses every 1 h.}\sol  $\Pi_\tau=3/48=0.0625\ll1$: the equilibrium reach applies. For hourly pulses $\Pi_\tau=3\gg1$ (the lag exceeds the interval) and the equilibrium law fails.
+
+\exbox{}{From Equation~(\ref{eq:radial}), show that if $K$ falls by a factor of $10^3$ and $\Delta h$ is fixed, the uptake falls by the same factor.}\sol  $u\propto K(h)\Delta h$ is linear in $K$ at fixed $\Delta h$.
+
+\exbox{}{Starting from Equation~(\ref{eq:darcy}), derive Equation~(\ref{eq:richards}) by applying conservation of mass to a thin layer.}\sol  Mass in a layer of thickness $dz$: $\partial\theta/\partial t\,dz=q(z)-q(z+dz)-S_r\,dz$, then use Equation (4.1).
+
+\exbox{}{Why does Daisy's solution of the equilibrium Richards equation not need a sensor-lag parameter?}\sol  Because the water content is assumed to follow the retention curve at once.
+\banner{The Daisy workbench: planning and reading experiments}
+\section{Planning an experiment}
+The workbench plans experiments, checks every design against a catalogue of what Daisy can vary, and keeps the run budget. If the factors have $n_1,n_2,\dots$ levels and the budget is $B$ runs, the number of runs is
+\begin{equation}\label{eq:runs}\boxed{N=\min\Bigl(\prod_i n_i,\ B\Bigr).}\end{equation}
+\par\noindent where $N$ is the number of runs actually made, $n_i$ the number of levels of factor $i$ (so $\prod n_i$ is the full factorial) and $B$ the budget of runs allowed.
+
+\exbox{Counting runs}{Dose with 6 levels, 10 irrigation windows and 10 soils give $6\times10\times10=600$ runs. With a budget of 500 the workbench reduces the design to $N=500$, and says so. The ensemble's E10 had $10$ soils $\times\ 10$ windows $\times\ 10$ doses $=1000$ cells, of which 954 were valid.}
+
+
+\fig{sh_dz-exp}{0.95}{Experiments: 43 ready combinations from 17 topics of the Daisy reference. A link opens the page of the application that documents the setting.}
+\fig{zip}{0.9}{The experiment folder: 58 files with Daisy set-ups, ready to run.}
+
+\section{Reading a run}
+After a run, the workbench plots every log and can save it as a figure or as numbers. It shows the mass balance of the run (inputs, outputs and content agree), compares two logs or many runs, and offers a double-blind comparison.
+\fig{run_pf}{0.9}{Soil water suction (pF) over depth and time, written by Daisy for twenty years.}
+\fig{run_dm}{0.9}{Dry matter of the organs: leaf, stem, storage organ and root.}
+
+\section{From Daisy output to a decision layer}
+The second rule of origin says that a decision layer draws a Daisy result only from a Daisy run. A parser reads the logs, the bridge passes them to nine layers (decision table, water balance, nitrogen balance, yield risk, chemicals, trade-offs, return of irrigation, nitrous oxide and chemical fate).
+\fig{p3_bridge}{0.9}{The bridge from Daisy output to the decision layers.}
+\fig{p3_effects}{0.9}{Decision table: the effect of every input on yield, water and nitrate.}
+
+\section{Reproducing an analysis of this book}
+\begin{enumerate}[leftmargin=*]
+\item Download the summary file of the ensemble from the repository (one row per run) or the raw archive from Zenodo.
+\item Select experiment E2 and a soil. For each trigger compute the mean annual irrigation; a trigger \emph{fires} if it exceeds 5 mm\,yr$^{-1}$.
+\item The reach interval of the soil is bounded below by the largest firing trigger and above by the smallest non-firing one.
+\item Compute the predicted reach of Equation~(\ref{eq:reach}) from the soil's $\alpha$ and $n$ and compare.
+\end{enumerate}
+\exbox{}{Carry out steps 1--4 for the sand S03 and the sandy loam S05. Is the prediction inside the observed interval?}\sol  From the archived trigger runs, a trigger \emph{fires} when the mean irrigation exceeds 5 mm\,yr$^{-1}$. \textbf{Sand S03:} irrigation is $6.4$ mm at 100 cm and $0$ at 150 cm, so the reach lies in $(100,150]$ cm; Equation~(\ref{eq:reach}) predicts $\hc=199$ cm, which is $1.3$ to $2.0$ times above the interval. \textbf{Sandy loam S05:} $17.5$ mm at 800 cm and $4.1$ mm at 1000 cm, so the interval is $(800,1000]$ cm; predicted $1{,}615$ cm, $1.6$ to $2.0$ times above. Neither prediction falls \emph{inside} the observed interval, but both lie within the factor $2.3$ stated for left-out soils; the law overestimates slightly for these two soils.
+
+\exbox{}{Use E10 to estimate $\eta_D$ for a soil and a dose of your choice (Chapter~6), by differencing against the rainfed twin of E0.}\sol  Take the loam S06 and a dose of $10$ mm. The fitted law $\eta_D=\eta_\infty(1-e^{-d/d_D})$ with $\eta_\infty=0.197$ and $d_D=3.89$ mm gives $0.197(1-e^{-2.57})=0.182$. The archived differenced value at 10 mm is $0.173$ (and $0.145$ at 4 mm, $0.165$ at 6 mm); the fit is within $0.01$, consistent with $R^2=0.93$. Of 10 mm applied, about $1.7$ mm drains.
+
+\exbox{}{Use E9 to compute $\phi_D$ for one soil with Equation~(\ref{eq:phi}) and compare with Table~\ref{tab:soils}.}\sol  For the sand S03 the archived pooled within-P slope is $\phi_D=0.8455$ (Table~\ref{tab:soils} lists $0.846$). The competition law then implies $\Ks/q^*=0.8455/0.1545=5.47$. For the silty clay loam, $\phi_D=0.0220$ gives $\Ks/q^*=0.0225$. The law reproduces the table by construction; what it adds is the ratio $5.47/0.0225=243$ between the two soils.
+\banner{Solving the Richards equation numerically}\label{ch:rich}
+\section{Why numerics matter}
+Chapter~4 wrote the Richards equation. It has no general analytical solution, because $K$ and $C=d\theta/dh$ vary by orders of magnitude with $h$. Daisy solves it numerically in every run, and a run is counted as a \emph{solver failure} when the solution cannot be completed: 149 of the 10,190 runs of the ensemble. Knowing how the scheme works explains both the failures and the limits of the equilibrium assumption.
+
+\section{The head-based form and the capacity}
+Let $\psi=-h$ be the pressure head (cm, negative in unsaturated soil) and let $z$ be the depth, positive downward. The downward flux is $q=K(\psi)\bigl(1-\partial\psi/\partial z\bigr)$ and the equation is
+\begin{equation}\label{eq:rich-psi}
+C(\psi)\frac{\partial\psi}{\partial t}=\frac{\partial}{\partial z}\Bigl[K(\psi)\Bigl(\frac{\partial\psi}{\partial z}-1\Bigr)\Bigr]-S_r,\qquad C(\psi)=\frac{d\theta}{d\psi}.
+\end{equation}
+\par\noindent where $\psi$ is the pressure head (cm, negative when unsaturated), $C(\psi)$ the specific water capacity (cm$^{-1}$), $K(\psi)$ the conductivity (cm\,d$^{-1}$), $S_r$ the root uptake (d$^{-1}$), $t$ the time (d) and $z$ the depth (cm).
+
+For the van Genuchten curve, with $x=\alpha|\psi|$,
+\begin{equation}\label{eq:cap}\boxed{C(\psi)=(\theta_s-\theta_r)\,\alpha\,m\,n\,x^{\,n-1}(1+x^n)^{-m-1}.}\end{equation}
+\par\noindent where $C$ is the specific water capacity (cm$^{-1}$), $\theta_s$ and $\theta_r$ the saturated and residual water contents, $\alpha$, $n$, $m$ the van Genuchten parameters and $x=\alpha|\psi|$ the scaled suction (dimensionless).
+
+\exbox{The capacity of a loam}{For the loam S06 ($\alpha=0.036$, $n=1.56$, $m=0.359$) with $\theta_s=0.43$ and $\theta_r=0.078$, at $\psi=-100$ cm: $x=3.6$, $x^{n-1}=3.6^{0.56}=2.05$, $(1+x^n)=1+3.6^{1.56}=8.40$ and $8.40^{-1.359}=0.0551$. Then $C=0.352(0.036)(0.359)(1.56)(2.05)(0.0551)=8.0\times10^{-4}$ cm$^{-1}$. A change of head by 10 cm changes $\theta$ by only $0.008$ there.}
+
+
+
+\section{Finite-volume discretisation}
+Divide the column into $N$ cells of thickness $\Delta z$, with cell centres $z_i$. Integrate Equation~(\ref{eq:rich-psi}) over cell $i$ and use the flux between cells $i-1$ and $i$:
+\begin{equation}\label{eq:face}\boxed{q_{i-1/2}=K_{i-1/2}\Bigl(1+\frac{\psi_{i-1}-\psi_i}{\Delta z}\Bigr),}\end{equation}
+where $K_{i-1/2}$ is the conductivity at the face, taken as the geometric mean $\sqrt{K_{i-1}K_i}$. Mass conservation for the cell gives
+\begin{equation}\label{eq:cellbal}\boxed{\Delta z\,\frac{\theta_i^{\,j+1}-\theta_i^{\,j}}{\Delta t}=q_{i-1/2}^{\,j+1}-q_{i+1/2}^{\,j+1}-S_{r,i}\Delta z,}\end{equation}
+with time level $j$ and an implicit (backward Euler) treatment of the fluxes, which is stable for any $\Delta t$.
+
+\section{The modified Picard iteration}
+Equation~(\ref{eq:cellbal}) is non-linear in $\psi^{j+1}$. Let $k$ be the iteration index and write $\theta^{\,j+1,k+1}\approx\theta^{\,j+1,k}+C^{\,k}(\psi^{\,j+1,k+1}-\psi^{\,j+1,k})$. Substituting,
+\begin{equation}\label{eq:picard}
+\frac{C^{k}}{\Delta t}\bigl(\psi^{k+1}-\psi^{k}\bigr)+\frac{\theta^{k}-\theta^{j}}{\Delta t}=\text{(flux divergence at }\psi^{k+1}\text{, with }K\text{ frozen at level }k).
+\end{equation}
+\par\noindent where $k$ is the iteration level of the Picard scheme and $j$ the old time level, $\psi^{k}$ the pressure head at the current iterate (cm), $\Delta t$ the time step (d), $C^{k}$ the capacity at level $k$ (cm$^{-1}$), and $\theta^{k},\theta^{j}$ the water contents at the iterate and at the old time.
+
+The second term on the left is what makes the method \emph{modified} (Celia, Bouloutas and Zarba, 1990): it is the mass that is still missing, so when the iteration has converged ($\psi^{k+1}=\psi^k$) the discrete equation reduces exactly to Equation~(\ref{eq:cellbal}), and mass is conserved. The simple Picard iteration without this term converges to the same limit only if $C$ is exact, and in practice it loses mass near sharp fronts. Each iteration solves a tridiagonal linear system.
+
+\section{A worked simulation: ponded infiltration into a loam}
+We simulate the loam S06 (Carsel and Parrish values: $\theta_r=0.078$, $\theta_s=0.43$, $\Ks=24.96$ cm\,d$^{-1}$, with $\alpha=0.036$ cm$^{-1}$ and $n=1.56$) in a 100 cm column that starts at $\psi=-1000$ cm ($\theta=0.125$). The top is ponded ($\psi=0$) and the bottom has free drainage. With 200 cells of 0.5 cm and $\Delta t=2\times10^{-4}$ d (about 17 s), the run takes about one minute in Python. The core of the program is:
+{\footnotesize\begin{verbatim}
+for it in range(50):                       # modified Picard iterations
+    Kc = K(pn); Kf = sqrt(Kc[:-1]*Kc[1:])  # face conductivity, geometric mean
+    Kf = concatenate([[K(0.0)], Kf])       # ponded top face
+    A  = assemble(Kf, dz)                  # tridiagonal flux matrix
+    M  = A + diag(C(pn)*dz/dt)             # capacity term
+    rhs = b + C(pn)*dz/dt*pn - (theta(pn)-theta_old)*dz/dt
+    pnew = solve(M, rhs)
+    if max(abs(pnew-pn)) < 1e-6: break     # converged
+    pn = pnew
+\end{verbatim}}
+\begin{table}[!htbp]\centering\small\caption{Computed infiltration into the loam S06. $I$ is the cumulative infiltration obtained by summing $\theta-\theta_0$ over the column; the front is where $\theta$ is halfway between the initial and the saturated value; $K_st$ is the gravity-driven infiltration of a saturated column.}\label{tab:loam}
+\begin{tabular}{rrrr}\toprule
+\hd{time (h)} & \hd{$I$ (cm)} & \hd{front depth (cm)} & \hd{$K_st$ (cm)}\\\midrule
+1.2&2.57&9.3&1.25\\2.4&3.97&13.8&2.50\\6.0&7.71&26.3&6.24\\12.0&13.81&46.3&12.48\\\bottomrule\end{tabular}\end{table}
+\fig{g_loam}{0.6}{Water-content profiles computed by the program of this chapter: the sharp wetting front moves down as the ponded loam infiltrates.}
+\exbox{Reading the result}{After 6 h the loam has taken 7.71 cm, about 24 per cent more than the $K_st=6.24$ cm of the gravity term alone. The excess is the capillary contribution: the dry soil ahead of the front pulls water in. After 12 h the excess is 1.33 cm (11 per cent) and the ratio $I/K_st$ falls towards 1: as time grows, the infiltration rate tends to $\Ks$, as it must. Between 6 and 12 h the infiltration rate is $(13.81-7.71)/0.25=24.4$ cm\,d$^{-1}$, within 2 per cent of $\Ks=24.96$ cm\,d$^{-1}$. The front speed is this rate divided by the water-content change, $24.4/(0.43-0.125)=80$ cm\,d$^{-1}$, which agrees with the front moving from 26.3 to 46.3 cm in 0.25 d.}
+
+
+
+\section{Checking convergence}
+A numerical solution is not an answer until you have tested that it does not depend on the grid and the time step. For the loam at $t=0.25$ d, 100 cells with $\Delta t=5\times10^{-4}$ d give $I=7.59$ cm, 100 cells with $2\times10^{-4}$ d give 7.57 cm, and 200 cells with $2\times10^{-4}$ d give 7.71 cm: the results agree to within 2 per cent, which is adequate here. For the sand S03 (very narrow pore-size distribution, $\Ks=712.8$ cm\,d$^{-1}$), the front is so sharp that the same test fails: 100 cells give 1.54 cm and 200 cells give 3.27 cm at the same time. This is the kind of difficulty that makes a solver fail, and it is consistent with the sand S03 having lost 13 of the 100 runs of its E9 lattice (87 are valid). The remedy is a finer grid and a much smaller time step, not more iterations.
+
+\begin{daisybox}{what Daisy adds}
+Daisy solves the same equation in a layered column, with root uptake $S_r$ from Chapter~4, a surface boundary that switches between a prescribed flux (rain, irrigation, evaporation demand) and a prescribed head (ponding), and a lower boundary set in the set-up file. Its logs of suction and water content by layer and day are what the figures of the study are built from. A run that fails to converge is written as a failure, and is excluded from the 10,041 valid runs.
+\end{daisybox}
+
+\exbox{}{Derive Equation~(\ref{eq:cap}) by differentiating $\theta(\psi)=\theta_r+(\theta_s-\theta_r)[1+(\alpha|\psi|)^n]^{-m}$.}\sol  $d\theta/d\psi$ with $x=\alpha|\psi|$, $dx/d\psi=-\alpha$ for $\psi<0$: $(\theta_s-\theta_r)(-m)(1+x^n)^{-m-1}n\,x^{n-1}(-\alpha)$, which is Equation (12.2).
+
+\exbox{}{Compute $C$ at $\psi=-300$ cm for the loam, with $\theta_s-\theta_r=0.352$.}\sol  $C(-300)=0.352(0.036)(0.359)(1.56)(3.79)(0.00625)=1.7\times10^{-4}$ cm$^{-1}$.
+
+\exbox{}{Show that when the iteration of Equation~(\ref{eq:picard}) has converged, the discrete mass balance Equation~(\ref{eq:cellbal}) holds.}\sol  If $\psi^{k+1}=\psi^k$ the capacity term vanishes and the remaining term $(\theta^k-\theta^j)/\Delta t$ is the storage change with $\theta^k=\theta(\psi^{j+1})$; the right-hand side is the flux divergence at $\psi^{j+1}$, which is Equation (12.4).
+
+\exbox{}{Explain in a few sentences why the arithmetic mean of $K$ at a face overestimates the flux in front of a sharp wetting front.}\sol  At a sharp front $K$ changes by orders of magnitude between neighbouring cells. The arithmetic mean is dominated by the wet value and lets water into the dry cell far faster than it can go; the geometric mean is close to the smaller value.
+
+\exbox{}{Suppose a modeller halves $\Delta z$ and finds $I$ changes by 6 per cent. Is the solution converged? What should be done next?}\sol  No. A change of 6 per cent shows the result still depends on the grid. Refine again (and reduce $\Delta t$) until successive changes are below about 1 to 2 per cent.
+
+\exbox{}{Using Table~\ref{tab:loam}, estimate the infiltration rate in cm\,d$^{-1}$ between 6 and 12 h and compare it with $\Ks$.}\sol  $(13.81-7.71)/0.25=24.4$ cm\,d$^{-1}$, which is $98$ per cent of $\Ks=24.96$.
+\banner{The Daisy workbench: governing equations worked}\label{ch:daisy}
+The Daisy workbench runs the Daisy 7.1.14 model and draws its results. Where the workbench computes by itself (the tabs Soil column, Process curves and Calibration) the forms below are the ones it uses; where Daisy computes (Scenarios and Experiments) they are the standard forms of the Daisy reference. This chapter works the forms with explicit numbers; it does not re-run Daisy, so no number here is a Daisy output. The soil is the loam of the ensemble with illustrative van Genuchten parameters: $\alpha=0.036$ cm$^{-1}$, $n=1.56$, $\theta_s=0.433$ (Saxton and Rawls), $\theta_r=0.02$, $K_s=29.0$ cm d$^{-1}$, $l=0.5$.
+
+\section{Retention and conductivity}
+With $m=1-1/n$,
+\begin{equation}\boxed{S_e=[1+(\alpha|h|)^n]^{-m},\quad\theta(h)=\theta_r+(\theta_s-\theta_r)S_e,\quad K(h)=K_sS_e^{\,l}\big[1-(1-S_e^{1/m})^m\big]^2.}\end{equation}
+\par\noindent where $S_e$ is the effective saturation, $h$ the suction (cm), $\alpha$ (cm$^{-1}$), $n$ and $m=1-1/n$ the van Genuchten parameters, $K_s$ the saturated conductivity (cm\,d$^{-1}$) and $l$ the connectivity parameter.
+
+Field capacity is read at $h=-100$ cm, the wilting point at $-15{,}000$ cm; the available water of a horizon is $\theta_{FC}-\theta_{WP}$.
+
+\begin{table}[!htbp]\centering\small\caption{Retention and conductivity of the loam.}\label{tab:vg}
+\begin{tabular}{lrr}\toprule
+\hd{$h$ (cm)} & \hd{$\theta$} & \hd{$K$ (cm/d)}\\\midrule
+-10 & 0.4066 & 6.24062\\
+-33 & 0.3260 & 0.84754\\
+-100 & 0.2126 & 0.03937\\
+-330 & 0.1226 & 0.00080\\
+-1000 & 0.0755 & 0.00002\\
+-5000 & 0.0425 & 0.00000\\
+-15000 & 0.0322 & 0.00000\\\bottomrule\end{tabular}\end{table}
+
+\exbox{One point of the curves}{Evaluate $\theta$ and $K$ at $h=-100$ cm and the available water.}\sol  $m=1-1/1.56=0.3590$. $\alpha|h|=0.036\times100=3.6$; $3.6^{1.56}=7.376$; $S_e=(1+7.376)^{-0.3590}=0.4663$. $\theta=0.02+(0.433-0.02)\times0.4663=0.2126$. $K=28.97\times0.4663^{0.5}\times[1-(1-0.4663^{1/0.3590})^{0.3590}]^2$: $0.4663^{1/0.3590}=0.1194$; $(1-0.1194)^{0.3590}=0.9554$; bracket $=0.0446$, squared $0.00199$; $K=28.97\times0.6828\times0.00199=0.0394$ cm d$^{-1}$. At $-15{,}000$ cm, $\theta=0.0322$, so the available water is $0.2126-0.0322=0.1805$ cm$^3$cm$^{-3}$ ($18.0$ mm per 10 cm).
+
+
+\section{The Richards equation and the soil-column solver}
+With $z$ downward the Darcy flux is $q=K(h)(1-\partial h/\partial z)$ and
+\begin{equation}\boxed{\frac{\partial\theta}{\partial t}=\frac{\partial}{\partial z}\Big[K(h)\Big(\frac{\partial h}{\partial z}-1\Big)\Big]-S(z,t).}\end{equation}
+\par\noindent where $\theta$ is the water content, $t$ the time, $z$ the depth, $K(h)$ the conductivity, $h$ the suction and $S(z,t)$ the root uptake at depth $z$ and time $t$ (d$^{-1}$).
+
+The workbench solves it by an implicit finite-volume scheme with the mass-conserving modified Picard iteration of Celia et al.\ (1990): in each cell, with $k$ the iteration and $n$ the old time level,
+\begin{equation}C(h^k)\frac{h^{k+1}-h^k}{\Delta t}+\frac{\theta(h^k)-\theta^n}{\Delta t}=\frac1{\Delta z}\Big[K_{i+1/2}\Big(\frac{h_{i+1}^{k+1}-h_i^{k+1}}{\Delta z}-1\Big)-K_{i-1/2}\Big(\frac{h_i^{k+1}-h_{i-1}^{k+1}}{\Delta z}-1\Big)\Big],\end{equation}
+with $C=d\theta/dh$ and the interface conductivity the arithmetic mean of the two cells. The top boundary is a rain flux, the bottom a free drain ($q=K(h_N)$), a closed bottom or a groundwater table. The step is halved when the iteration does not converge. (The formula is exactly the one coded for this chapter, so its numbers can be reproduced.)
+
+\begin{table}[!htbp]\centering\small\caption{Water content of the loam column after a 30 mm rain in one day (initial $h=-300$ cm, $\theta=0.128$).}\label{tab:richprof}
+\begin{tabular}{lrrr}\toprule
+\hd{depth (cm)} & \hd{$\theta$ day 1} & \hd{day 3} & \hd{day 10}\\\midrule
+5 & 0.350 & 0.268 & 0.230\\
+15 & 0.210 & 0.236 & 0.214\\
+31 & 0.128 & 0.138 & 0.178\\
+51 & 0.128 & 0.128 & 0.130\\
+81 & 0.128 & 0.128 & 0.128\\
+99 & 0.127 & 0.127 & 0.125\\\bottomrule\end{tabular}\end{table}
+
+\exbox{An infiltration event in the soil column}{A 100 cm column (50 cells of 2 cm) starts at $h=-300$ cm everywhere, receives 3 cm of rain in the first day and then none, with a free-drain bottom. Check the mass balance over 10 days and read the wetting front.}\sol  Inflow $=3.000$ cm. Drainage out of the bottom $=0.0100$ cm. The storage rose from the initial content to the final content by $\Delta S=2.9900$ cm. Residual $=Q_{\rm in}-Q_{\rm out}-\Delta S=-0.00000$ cm, 0.0000\% of the inflow: the scheme conserves mass to the tolerance of the iteration (0.001 cm of head). The run took 202 steps and 907 Picard iterations. Table~\ref{tab:richprof} shows the front: at day 1 the top 10 cm hold the rain and the profile below is still at its initial $\theta=0.128$; the wetted layer then spreads downward under gravity and capillarity, so by day 10 the water content at 30 cm has risen from 0.128 to 0.178 and the surface has drained from 0.350 to 0.230. Essentially no water has left the column (0.0100 cm out of 3 cm): the 30 mm event is stored within the top metre of this loam, as the field capacity argument predicts (the rain is smaller than the available-water deficit of the profile).
+
+
+\exbox{A wet spell on a profile at field capacity}{Start the column at field capacity ($h=-100$ cm, $\theta=0.213$) and apply 5 cm d$^{-1}$ for six days (30 cm in all, a wet spell; the flux stays below $K_s=29.0$ cm d$^{-1}$, so the top boundary can be a flux). Run 15 days. What leaves the bottom?}\sol  $Q_{\rm in}=29.875$ cm. $Q_{\rm out}=11.954$ cm drained below 1 m (40\% of the rain), $\Delta S=17.921$ cm stored, residual $0.00002$ cm. At field capacity the profile can still take 22.1 cm before it is saturated, so the first part of the spell is stored, and from then on the rain drains. Compare the Engine~2 bucket (Chapter~\ref{ch:e2}), which passes the excess to the next layer within the day: the Richards solution releases the water gradually, which is the main difference the Daisy workbench is there to show.
+
+
+\section{Root uptake}
+The potential transpiration $E_p$ is spread over the roots in proportion to root density, $S_p(z)=E_p\,\rho(z)/\int\rho\,dz$, and reduced by a stress factor $\alpha_s(h)$ that is 1 in the comfortable range of the pressure head and falls to 0 near saturation and toward the wilting point: $S(z)=\alpha_s(h)S_p(z)$. For the worked example, $\alpha_s$ is the piecewise-linear Feddes function with breakpoints $h_1=-10$, $h_2=-25$, $h_3=-500$, $h_4=-15{,}000$ cm (illustrative values; the library gives the ones of each crop).
+
+\begin{table}[!htbp]\centering\small\caption{Root uptake for $E_p=5$ mm d$^{-1}$.}\label{tab:feddes}
+\begin{tabular}{lrrrrr}\toprule
+\hd{layer (cm)} & \hd{root fraction} & \hd{$h$ (cm)} & \hd{$\alpha_s$} & \hd{$S_p$ (mm/d)} & \hd{$S$ (mm/d)}\\\midrule
+0--20 & 0.50 & -200 & 1.000 & 2.50 & 2.50\\
+20--50 & 0.30 & -700 & 0.986 & 1.50 & 1.48\\
+50--100 & 0.20 & -4000 & 0.759 & 1.00 & 0.76\\\bottomrule\end{tabular}\end{table}
+
+\exbox{Uptake from three layers}{Find the transpiration of Table~\ref{tab:feddes}.}\sol  The top layer is in the comfortable range ($-25>-200\ge-500$, so $\alpha_s=1$): $S=5\times0.50\times1=2.50$ mm d$^{-1}$. The second layer, $h=-700$, lies in the falling branch: $\alpha_s=(-700+15000)/(15000-500)=0.986$, $S=1.5\times0.986=1.48$. The deep layer, $h=-4000$: $\alpha_s=0.759$, $S=1.0\times0.759=0.76$. Total $T=4.74$ mm d$^{-1}$, that is 94.8\% of $E_p$; the shortfall $0.26$ mm d$^{-1}$ is the stress. The crop takes the water from where it is easiest: the wet top layer carries most of the uptake.
+
+
+\section{The water balance and the Mass balance tab}
+The tab checks $P+I=E_s+E_i+T+D+R+\Delta S$ on any log: rain, irrigation, soil evaporation, evaporation of intercepted water, transpiration, drainage, runoff and storage change. The residual should be small compared with the largest term.
+
+\exbox{The mass balance test}{Check the balance of the Engine~2 loam year (Chapter~\ref{ch:dash}): $P=606.1$, $I=90.0$, $E_i=61.7$ (interception), $E_s=158.5$, $T=229.6$, $D=200.2$, $R=0$, $\Delta S=46.1$ mm.}\sol  Inputs $P+I=696.1$ mm. Outputs plus storage $=61.7+158.5+229.6+200.2+46.1=696.1$ mm. Residual $=-0.000000$ mm, relative to the largest term (rain, 606.1 mm) $0.000000\%$. A balance like this passes the test; a bucket model that loses water in rounding would show a residual of several mm.
+
+
+\section{Evaporative demand and the canopy}
+The reference rate is Penman--Monteith (Chapter~\ref{ch:weather}); the crop's potential rate is $ET_c=K_cET_0$. The canopy shares the demand with the light that reaches the soil, $\exp(-k\,\mathrm{LAI})$ (Beer--Lambert with extinction coefficient $k$): the soil evaporation is $E_p\,e^{-k\mathrm{LAI}}$ and the transpiration $E_p(1-e^{-k\mathrm{LAI}})$.
+
+\begin{table}[!htbp]\centering\small\caption{Partition of a demand of 5 mm d$^{-1}$, $k=0.5$.}\label{tab:beer}
+\begin{tabular}{lrrrr}\toprule
+\hd{LAI} & \hd{$e^{-kLAI}$} & \hd{share to $T$} & \hd{$E$ (mm/d)} & \hd{$T$ (mm/d)}\\\midrule
+0 & 1.000 & 0.000 & 5.00 & 0.00\\
+0.5 & 0.779 & 0.221 & 3.89 & 1.11\\
+1 & 0.607 & 0.393 & 3.03 & 1.97\\
+2 & 0.368 & 0.632 & 1.84 & 3.16\\
+3 & 0.223 & 0.777 & 1.12 & 3.88\\
+4 & 0.135 & 0.865 & 0.68 & 4.32\\
+5 & 0.082 & 0.918 & 0.41 & 4.59\\\bottomrule\end{tabular}\end{table}
+
+\exbox{Sharing the demand}{A cereal has LAI = 3 and $k=0.5$, $ET_0=6$ mm d$^{-1}$, $K_c=1.1$. Find $E$ and $T$.}\sol  $E_p=1.1\times6=6.6$ mm d$^{-1}$. $e^{-0.5\times3}=0.223$. $E=6.6\times0.223=1.47$ mm d$^{-1}$; $T=6.6\times(1-0.223)=5.13$ mm d$^{-1}$. The cover intercepts 78\% of the light, so 78\% of the demand is transpiration. At LAI = 0.5 (a young crop) the same demand is only 22\% transpiration, which is why the early season loses water mostly by soil evaporation.
+
+
+\section{Soil heat}
+Heat moves by conduction (and with the water flux): $C_h\,\partial T/\partial t=\partial(\lambda\,\partial T/\partial z)/\partial z-C_wq\,\partial T/\partial z+L_f\,\partial\theta_i/\partial t$. For a sinusoidal surface temperature of angular frequency $\omega$ and no flow, the solution is a wave that damps and lags with depth,
+\begin{equation}\boxed{T(z,t)=\bar T+A_0e^{-z/d_T}\sin(\omega t-z/d_T),\qquad d_T=\sqrt{2D/\omega},\quad D=\lambda/C_h.}\end{equation}
+\par\noindent where $T(z,t)$ is the soil temperature (K or $^\circ$C) at depth $z$ (m) and time $t$ (s), $\bar T$ the mean temperature, $A_0$ the amplitude at the surface, $\omega=2\pi/P$ the angular frequency for period $P$ (rad\,s$^{-1}$), $d_T$ the damping depth (m), $D$ the thermal diffusivity (m$^2$\,s$^{-1}$), $\lambda$ the thermal conductivity (W\,m$^{-1}$\,K$^{-1}$) and $C_h$ the volumetric heat capacity (J\,m$^{-3}$\,K$^{-1}$).
+
+
+\begin{table}[!htbp]\centering\small\caption{Damping of the temperature wave ($\lambda=1.2$ W m$^{-1}$K$^{-1}$, $C_h=2.2$ MJ m$^{-3}$K$^{-1}$).}\label{tab:heat}
+\begin{tabular}{lrrrrrr}\toprule
+\hd{wave} & \hd{$d_T$ (m)} & \hd{amp. at 0.1 m (\%)} & \hd{0.5 m} & \hd{1 m} & \hd{2 m} & \hd{lag at 0.5 m (d)}\\\midrule
+daily & 0.122 & 44.2 & 1.7 & 0.0 & 0.0 & 0.6\\
+annual & 2.340 & 95.8 & 80.8 & 65.2 & 42.5 & 12.4\\\bottomrule\end{tabular}\end{table}
+
+\exbox{Damping with depth}{The mean annual temperature is 12$^\circ$C with an annual amplitude of 10 K at the surface. Find the amplitude and the time of the maximum at 1 m.}\sol  $D=\lambda/C_h=1.2/(2.2\times10^6)=5.455e-07$ m$^2$ s$^{-1}$. $\omega=2\pi/(365\times86400)=1.992e-07$ s$^{-1}$. $d_T=\sqrt{2D/\omega}=2.34$ m. At $z=1$ m: amplitude $=10e^{-1/2.34}=6.52$ K, phase lag $z/d_T=0.427$ rad $=25$ days. So at 1 m the temperature varies by $12\pm6.52$ K and is about 25 days behind the surface maximum. For the daily wave $d_T=0.122$ m: at 0.5 m the daily amplitude is only $1.69\%$ of the surface value, which is why the factors of biological rates at depth do not follow the weather.
+
+
+\section{Solute transport and sorption}
+A solute is carried by the water and spread by dispersion with sorption: $\partial(\theta c+\rho_bs)/\partial t=\partial(\theta D\,\partial c/\partial z)/\partial z-\partial(qc)/\partial z-\mu(\theta c+\rho_bs)-U$, with $s=K_dc$ (linear sorption), $D=\lambda_d|q|/\theta+D_m\tau$ and, for a pesticide, $K_d=K_{OC}f_{OC}$. Dividing by $\theta$ gives the retardation factor and the front velocity
+\begin{equation}\boxed{R=1+\frac{\rho_bK_d}{\theta},\qquad v=\frac q\theta,\qquad v_c=\frac vR.}\end{equation}
+\par\noindent where $R$ is the retardation factor (dimensionless), $\rho_b$ the dry bulk density (g\,cm$^{-3}$), $K_d$ the distribution coefficient (cm$^3$\,g$^{-1}$), $\theta$ the water content, $v$ the pore-water velocity (cm\,d$^{-1}$), $q$ the Darcy flux (cm\,d$^{-1}$) and $v_c$ the velocity of the retarded solute (cm\,d$^{-1}$).
+
+
+\exbox{Retardation and decay}{Compare a mobile tracer with a pesticide: $K_{OC}=100$ L kg$^{-1}$, $f_{OC}=0.012$, $\rho_b=1.4$ kg L$^{-1}$, $\theta=0.30$, steady flux $q=0.5$ cm d$^{-1}$, half-life 40 d. Find $R$, the depth of the front after 60 d, and the fraction left.}\sol  $K_d=100\times0.012=1.2$ L kg$^{-1}$. $R=1+1.4\times1.2/0.30=6.60$. $v=0.5/0.30=1.667$ cm d$^{-1}$. After 60 d the tracer front is at $z=vt=100$ cm; the pesticide front at $vt/R=15.2$ cm. First-order decay: $\mu=\ln2/40=0.0173$ d$^{-1}$, fraction left $=e^{-\mu t}=0.354$ (35.4\%). The pesticide is retarded by a factor 6.60 and has decayed to 35.4\% before the front has moved even 15.2 cm: sorption plus decay is what protects the groundwater, while the tracer moves 100 cm.
+
+
+With a continuous source the analytic solution of the convection--dispersion equation without decay (Ogata and Banks) is
+\begin{equation}\boxed{\frac{c}{c_0}=\frac12\Big[\mathrm{erfc}\frac{z-vt}{2\sqrt{Dt}}+e^{vz/D}\mathrm{erfc}\frac{z+vt}{2\sqrt{Dt}}\Big],}\end{equation}
+with $v\to v/R$ and $D\to D/R$ for the sorbed solute.
+
+\begin{table}[!htbp]\centering\small\caption{Concentration after 60 d ($\lambda_d=5$ cm, $D=\lambda_dv$).}\label{tab:ob}
+\begin{tabular}{lrr}\toprule
+\hd{depth (cm)} & \hd{$c/c_0$ tracer} & \hd{$c/c_0$ pesticide (no decay)}\\\midrule
+10 & 1.000 & 0.814\\
+20 & 0.998 & 0.464\\
+30 & 0.995 & 0.163\\
+40 & 0.985 & 0.033\\
+50 & 0.966 & 0.004\\
+60 & 0.931 & 0.000\\
+80 & 0.792 & 0.000\\
+100 & 0.562 & 0.000\\\bottomrule\end{tabular}\end{table}
+
+\exbox{Reading the breakthrough profile}{Table~\ref{tab:ob} shows the tracer front where $c/c_0=0.5$ near $z=vt=100$ cm (the profile is symmetric about it, widened by the dispersion $\sqrt{2Dt}=31.6$ cm), and the pesticide profile confined to the top 15 cm, to which the numbers $0.5$ at $z\approx vt/R$ correspond. Neglecting dispersion would give a sharp step; the spread is what makes a small fraction of the pesticide reach deeper than the front, which matters for the drinking-water criterion.}
+
+
+
+\section{Organic matter, mineralisation and nitrification}
+Each pool decays by first-order kinetics modified by temperature and moisture, with part of the decayed carbon built into other pools (efficiency $E$) and the rest released as CO$_2$:
+\begin{equation}\boxed{\frac{dC_i}{dt}=-k_if_T(T)f_\theta(h)C_i+\sum_jE_{ji}k_jf_Tf_\theta C_j+\text{inputs},\qquad f_T=Q_{10}^{(T-T_{\rm ref})/10}.}\end{equation}
+\par\noindent where $C_i$ is the content of pool $i$ (kg\,ha$^{-1}$), $t$ the time (d), $k_i$ the first-order rate constant of pool $i$ (d$^{-1}$), $f_T$ and $f_\theta$ the temperature and moisture response factors (0 to 1), $E_{ji}$ the efficiency with which decay of pool $j$ feeds pool $i$, $Q_{10}$ the rise of rate for a 10-K rise of temperature (about 2), $T$ the soil temperature and $T_{\rm ref}$ the reference temperature (K).
+
+The nitrogen follows from the carbon-to-nitrogen ratios: if $N$ is released by the source pool faster than the receiving pool needs, ammonium is mineralised; otherwise ammonium is immobilised. Nitrification saturates with ammonium: $r_{nit}=f_Tf_\theta V_{\max}[\mathrm{NH}_4^+]/(K_m+[\mathrm{NH}_4^+])$.
+
+\exbox{Immobilisation by straw}{A straw pool holds $C=2000$ kg C ha$^{-1}$ with C:N $=40$, decay rate $k=0.01$ d$^{-1}$ at $T_{\rm ref}=10^\circ$C, $Q_{10}=2$, soil at 20$^\circ$C, moisture factor $f_\theta=0.8$; efficiency $E=0.6$ into a microbial pool with C:N $=8$. Find the decay, CO$_2$ and the nitrogen exchange for one day.}\sol  $f_T=2^{(20-10)/10}=2.00$. Decay $=0.01\times2.00\times0.8\times2000=32.00$ kg C ha$^{-1}$ d$^{-1}$. Built into the microbes: $0.6\times32.00=19.20$; released as CO$_2$: $12.80$. Nitrogen released by the straw: $32.00/40=0.800$ kg N; nitrogen needed by the microbes: $19.20/8=2.400$ kg N. Balance $=0.800-2.400=-1.600$ kg N ha$^{-1}$ d$^{-1}$: negative, so ammonium is \emph{immobilised}. Straw with a C:N of 40 takes mineral N from the soil until the pool has decayed enough for its C:N to fall. The break-even C:N of the source is $C{:}N=8/0.6=13.3$.
+
+
+\begin{table}[!htbp]\centering\small\caption{Nitrification with $V_{\max}=1.5$ mg L$^{-1}$d$^{-1}$, $K_m=2$ mg L$^{-1}$, $f_T=1$, $f_\theta=0.8$.}\label{tab:nit}
+\begin{tabular}{lr}\toprule
+\hd{{[}NH$_4^+${]} (mg/L)} & \hd{$r_{nit}$ (mg L$^{-1}$d$^{-1}$)}\\\midrule
+0.5 & 0.240\\
+1 & 0.400\\
+2 & 0.600\\
+5 & 0.857\\
+10 & 1.000\\
+20 & 1.091\\\bottomrule\end{tabular}\end{table}
+
+\exbox{Michaelis--Menten}{From Table~\ref{tab:nit}, at what ammonium concentration is the rate half of its maximum, and what is the maximum?}\sol  At $[\mathrm{NH}_4^+]=K_m$ the rate is $\frac12V_{\max}f_Tf_\theta$, so the half-rate concentration is 2 mg L$^{-1}$; the maximum is $1.5\times0.8=1.2$ mg L$^{-1}$d$^{-1}$, approached at high concentration (20 mg L$^{-1}$ gives 1.091, $91\%$ of it).
+
+
+\subsection*{Denitrification and nitrous oxide}
+The potential rate follows the CO$_2$ produced, $r_{pot}=f_T(\alpha_F\mathrm{CO}_2^{\rm fast}+\alpha(\mathrm{CO}_2-\mathrm{CO}_2^{\rm fast}))$; it is limited by the water-filled pore space (a rising function of WFPS, 0 at 40\% and 1 at 90\%) and by nitrate; the gas is split by $f_r=\mathrm{N_2/N_2O}$: $\mathrm{N_2O}=r_{act}/(1+f_r)$, $\mathrm{N_2}=r_{act}/(1+1/f_r)$. In the example the WFPS function is taken linear between 40 and 90\% (the shape is not given in the application; the library function may differ).
+
+\begin{table}[!htbp]\centering\small\caption{Water limitation of denitrification.}\label{tab:wfps}
+\begin{tabular}{lrr}\toprule
+\hd{WFPS (\%)} & \hd{$f_w$ (linear)} & \hd{$r_{act}$ (kg N/ha/d), $r_{pot}=0.6$}\\\midrule
+30 & 0.00 & 0.000\\
+40 & 0.00 & 0.000\\
+50 & 0.20 & 0.120\\
+60 & 0.40 & 0.240\\
+70 & 0.60 & 0.360\\
+80 & 0.80 & 0.480\\
+90 & 1.00 & 0.600\\
+100 & 1.00 & 0.600\\\bottomrule\end{tabular}\end{table}
+
+\exbox{Splitting the denitrified nitrogen}{At WFPS = 70\% the potential rate is 0.6 kg N ha$^{-1}$d$^{-1}$, nitrate is not limiting, and $f_r=4$ (assumed). Split the gas.}\sol  $f_w=(70-40)/50=0.6$; $r_{act}=0.6\times0.6=0.36$ kg N ha$^{-1}$d$^{-1}$. N$_2$O $=0.36/(1+4)=0.072$; N$_2=0.36/(1+0.25)=0.288$; the sum is $0.360=r_{act}$. If a wetter soil lowers nothing else but raises $f_w$ to 1 and $f_r$ falls to 1 (more N$_2$O per unit), the N$_2$O rises to $0.6/2=0.30$: wetting makes the loss larger \emph{and} dirtier.
+
+
+\section{The crop: light, assimilates and growth}
+Absorbed light is $I_a=I_0(1-e^{-k\,\mathrm{LAI}})$; the gross assimilation of a leaf layer is $A=A_{\max}(1-e^{-\varepsilon I/A_{\max}})$; maintenance respiration is $R_m=\sum_or_of_TW_o$ with a $Q_{10}$ temperature factor; the rest is partitioned among the organs by fractions that depend on the development stage DS (0 at emergence, 1 at flowering, 2 at maturity); DS advances with the temperature sum.
+
+\exbox{Light interception and assimilation}{A canopy has LAI = 4, $k=0.6$, incident light $I_0=40$ mol m$^{-2}$d$^{-1}$ (about 18 MJ m$^{-2}$d$^{-1}$ of global radiation in the PAR range), $A_{\max}=1.2$ g CH$_2$O m$^{-2}$h$^{-1}$ per unit of leaf, $\varepsilon=0.012$ in the same units per unit of light. Illustrate the saturating response and the light absorbed.}\sol  $I_a=40(1-e^{-0.6\times4})=40\times(1-0.091)=36.4$ mol m$^{-2}$ d$^{-1}$ (91\% intercepted). The assimilation response of a leaf layer at three light levels: $A(I=20)=1.2(1-e^{-0.012\times20/1.2})=0.218$, $A(100)=0.759$, $A(500)=1.192$ g m$^{-2}$h$^{-1}$: it rises almost linearly at low light and saturates toward $A_{\max}=1.2$. Water stress, temperature, senescence and leaf nitrogen multiply $A$ by factors below 1, so a stressed crop is on a lower curve, not a different shape.
+
+
+\exbox{Maintenance respiration}{Maintenance respiration of the organs: root 150, stem 300, leaf 250, storage 100 g dry matter m$^{-2}$ with rates $r_o=0.015,0.010,0.030,0.003$ g g$^{-1}$d$^{-1}$ at 25$^\circ$C, $Q_{10}=2$; find $R_m$ at 25 and 15$^\circ$C.}\sol  At 25$^\circ$C: $150\times0.015+300\times0.010+250\times0.030+100\times0.003=2.25+3.00+7.50+0.30=13.05$ g m$^{-2}$d$^{-1}$. At 15$^\circ$C: $f_T=2^{-1}=0.5$, $R_m=6.53$. A cooler night saves half the maintenance cost, which is why a warm night is costly for the yield of a cereal in the model.
+
+
+\section{Calibration with three optimisers}
+The tab Calibration minimises the loss $\mathrm{MSE}=\frac1n\sum(y_i-\hat y_i)^2$. To work it, ``measured'' retention data are generated from the loam ($\alpha=0.036$, $n=1.56$) at nine pressure heads with a fixed pseudo-random error of $\pm0.005$ cm$^3$cm$^{-3}$; the loam's $\theta_s$ and $\theta_r$ are held fixed; $\alpha$ and $n$ are the unknowns. Three optimisers are compared: a grid search, a random search and the Nelder--Mead simplex.
+
+\begin{table}[!htbp]\centering\small\caption{Calibration of $\alpha$ and $n$ on nine noisy retention data.}\label{tab:calib}
+\begin{tabular}{lrrrr}\toprule
+\hd{Optimiser} & \hd{evaluations} & \hd{$\alpha$} & \hd{$n$} & \hd{MSE}\\\midrule
+Grid ($29\times33$) & 957 & 0.0375 & 1.550 & 1.340e-05\\
+Random (1000) & 1000 & 0.0345 & 1.588 & 1.647e-05\\
+Nelder--Mead & 103 & 0.0364 & 1.563 & 1.200e-05\\
+true & - & 0.0360 & 1.560 & 1.334e-05\\\bottomrule\end{tabular}\end{table}
+
+\exbox{Three optimisers}{Compare the three optimisers in Table~\ref{tab:calib}.}\sol  The data have an error of up to 0.005, so the noise variance is $0.005^2/3=8.33e-06$; the true parameters give an MSE of $1.33e-05$. The grid finds $(\alpha,n)=(0.0375,1.550)$ with MSE $1.34e-05$ after 957 evaluations; the random search is a little worse for the same effort order; Nelder--Mead converges to $(0.0364,1.563)$ with MSE $1.20e-05$ in only 103 evaluations. All three land near the true values: the retention data constrain $\alpha$ and $n$ well, but the grid is limited by its spacing and the random search by luck, while the simplex uses the shape of the loss surface. The fitted MSE is below the true-parameter MSE: with nine points the fit absorbs part of the noise, a reminder that a low loss does not prove the parameters are right.
+
+
+\section{Summary}
+\begin{itemize}
+\item van Genuchten--Mualem $\theta(h)$, $K(h)$; Richards equation by an implicit, mass-conserving Picard scheme; the balance $P+I=E_s+E_i+T+D+R+\Delta S$ closes to the tolerance.
+\item Root uptake $S=\alpha_s(h)S_p$; demand shared by $e^{-k\mathrm{LAI}}$; heat damped by $e^{-z/d_T}$.
+\item Solutes: retardation $R=1+\rho_bK_d/\theta$, decay $e^{-\mu t}$, the Ogata--Banks profile.
+\item Organic matter: $k f_Tf_\theta C$, efficiency $E$, immobilisation when C:N $>$ the break-even $C{:}N_{\rm target}/E$; nitrification saturates; denitrification is limited by WFPS and split between N$_2$O and N$_2$.
+\item Crop: $I_a=I_0(1-e^{-kLAI})$, saturating assimilation, $Q_{10}$ respiration; calibration by MSE.
+\end{itemize}
+\textit{Not covered here:} the 107 reference topics, the 69 experiment factors and the 43 best combinations of the workbench (they are tables of Daisy parameters and runs, not equations), and the glossary; these remain for a later edition.
+\IfFileExists{extra/proj02.tex}{\input{extra/proj02}}{}
+\IfFileExists{extra/ten02.tex}{\input{extra/ten02}}{}
+\IfFileExists{extra/tenb02.tex}{\input{extra/tenb02}}{}
+\IfFileExists{extra/teny02.tex}{\input{extra/teny02}}{}
+\IfFileExists{extra/tenby02.tex}{\input{extra/tenby02}}{}
+\IfFileExists{extra/tenx02.tex}{\input{extra/tenx02}}{}
+\IfFileExists{extra/tenbx02.tex}{\input{extra/tenbx02}}{}
+\IfFileExists{extra/ex02.tex}{\input{extra/ex02}}{}
+\IfFileExists{extra/dyk02.tex}{\input{extra/dyk02}}{}
+\IfFileExists{extra/obj02.tex}{\input{extra/obj02}}{}

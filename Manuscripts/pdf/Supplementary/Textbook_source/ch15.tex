@@ -1,0 +1,191 @@
+\chapimg{fig/op15.png}
+\IfFileExists{extra/lead15.tex}{\input{extra/lead15}}{}
+\chapter{Worked Solutions and Reference Tables}\label{chap:15}
+\markboth{Worked Solutions and Reference Tables}{Worked Solutions and Reference Tables}
+\IfFileExists{extra/bg15.tex}{\input{extra/bg15}}{}
+\banner{Worked solutions for the ten soils}\markboth{Ten soils worked}{Ten soils worked}
+Each page below repeats the same calculation for one soil of the ensemble, step by step, so that you can check your own work on the exercises of Chapters 2, 3 and 5. The constants are $\kappa=3.5\times10^{-10}$ and $\ell=0.5$. Numbers are rounded to three significant figures; use the soil parameters of Table~\ref{tab:soils}.
+\section{S03, Sand: $\alpha=0.145$ cm$^{-1}$, $n=2.68$}
+\begin{enumerate}[leftmargin=*,itemsep=1pt]
+\item $m=1-1/n=1-1/2.68=0.6269$.
+\item Exponent: $E=2n+\ell(n-1)=2(2.68)+0.5(1.680)=6.200$.
+\item $m^2/\kappa=0.3930/(3.5\times10^{-10})=1.12\times10^{9}$ and $\ln(m^2/\kappa)=20.84$.
+\item $(m^2/\kappa)^{1/E}=\exp(20.84/6.200)=\exp(3.361)=28.82$, so $\alpha h_c=28.82$.
+\item Reach: $h_c=28.82/0.145=199$ cm. Keep the trigger below $h_c/2=99$ cm.
+\item A 300 cm trigger never fires (300 cm is beyond the reach).
+\item Pore radius at the reach: $r=2\sigma/(\rho_wgh_c)=7.48\ \mu$m.
+\item At 100 cm: $S_e=0.0112$. At 300 cm: $S_e=0.0018$, $K_r=2.73\times10^{-11}$ (exact) and $2.73\times10^{-11}$ (asymptote, Equation 5.1); $K_r(300)/\kappa=0.0779$.
+\item A tenfold change of $\kappa$ changes the reach by the factor $10^{1/E}=1.45$.
+\item Memory fate $\phi_D=0.846$, so in the competition law $\Ks/q^*=\phi_D/(1-\phi_D)=5.49$: drainage is much faster than withdrawal.
+\end{enumerate}
+\section{S04, Loamy sand: $\alpha=0.124$ cm$^{-1}$, $n=2.28$}
+\begin{enumerate}[leftmargin=*,itemsep=1pt]
+\item $m=1-1/n=1-1/2.28=0.5614$.
+\item Exponent: $E=2n+\ell(n-1)=2(2.28)+0.5(1.280)=5.200$.
+\item $m^2/\kappa=0.3152/(3.5\times10^{-10})=9.00\times10^{8}$ and $\ln(m^2/\kappa)=20.62$.
+\item $(m^2/\kappa)^{1/E}=\exp(20.62/5.200)=\exp(3.965)=52.72$, so $\alpha h_c=52.72$.
+\item Reach: $h_c=52.72/0.124=425$ cm. Keep the trigger below $h_c/2=213$ cm.
+\item A 300 cm trigger fires (300 cm is below the reach).
+\item Pore radius at the reach: $r=2\sigma/(\rho_wgh_c)=3.5\ \mu$m.
+\item At 100 cm: $S_e=0.0398$. At 300 cm: $S_e=0.0098$, $K_r=2.15\times10^{-9}$ (exact) and $2.15\times10^{-9}$ (asymptote, Equation 5.1); $K_r(300)/\kappa=6.13$.
+\item A tenfold change of $\kappa$ changes the reach by the factor $10^{1/E}=1.56$.
+\item Memory fate $\phi_D=0.741$, so in the competition law $\Ks/q^*=\phi_D/(1-\phi_D)=2.86$: drainage is much faster than withdrawal.
+\end{enumerate}
+\section{S05, Sandy loam: $\alpha=0.075$ cm$^{-1}$, $n=1.89$}
+\begin{enumerate}[leftmargin=*,itemsep=1pt]
+\item $m=1-1/n=1-1/1.89=0.4709$.
+\item Exponent: $E=2n+\ell(n-1)=2(1.89)+0.5(0.890)=4.225$.
+\item $m^2/\kappa=0.2217/(3.5\times10^{-10})=6.34\times10^{8}$ and $\ln(m^2/\kappa)=20.27$.
+\item $(m^2/\kappa)^{1/E}=\exp(20.27/4.225)=\exp(4.797)=121.1$, so $\alpha h_c=121.1$.
+\item Reach: $h_c=121.1/0.075=1,615$ cm. Keep the trigger below $h_c/2=808$ cm.
+\item A 300 cm trigger fires (300 cm is below the reach).
+\item Pore radius at the reach: $r=2\sigma/(\rho_wgh_c)=0.921\ \mu$m.
+\item At 100 cm: $S_e=0.1647$. At 300 cm: $S_e=0.0625$, $K_r=4.27\times10^{-7}$ (exact) and $4.29\times10^{-7}$ (asymptote, Equation 5.1); $K_r(300)/\kappa=1.22e+03$.
+\item A tenfold change of $\kappa$ changes the reach by the factor $10^{1/E}=1.72$.
+\item Memory fate $\phi_D=0.643$, so in the competition law $\Ks/q^*=\phi_D/(1-\phi_D)=1.80$: drainage is much faster than withdrawal.
+\end{enumerate}
+\section{S02, Coarse sand: $\alpha=0.0536$ cm$^{-1}$, $n=1.6$}
+\begin{enumerate}[leftmargin=*,itemsep=1pt]
+\item $m=1-1/n=1-1/1.6=0.3750$.
+\item Exponent: $E=2n+\ell(n-1)=2(1.6)+0.5(0.600)=3.500$.
+\item $m^2/\kappa=0.1406/(3.5\times10^{-10})=4.02\times10^{8}$ and $\ln(m^2/\kappa)=19.81$.
+\item $(m^2/\kappa)^{1/E}=\exp(19.81/3.500)=\exp(5.660)=287.3$, so $\alpha h_c=287.3$.
+\item Reach: $h_c=287.3/0.0536=5,359$ cm. Keep the trigger below $h_c/2=2,680$ cm.
+\item A 300 cm trigger fires (300 cm is below the reach).
+\item Pore radius at the reach: $r=2\sigma/(\rho_wgh_c)=0.277\ \mu$m.
+\item At 100 cm: $S_e=0.3563$. At 300 cm: $S_e=0.1881$, $K_r=8.28\times10^{-6}$ (exact) and $8.43\times10^{-6}$ (asymptote, Equation 5.1); $K_r(300)/\kappa=2.37e+04$.
+\item A tenfold change of $\kappa$ changes the reach by the factor $10^{1/E}=1.93$.
+\item Memory fate $\phi_D=0.265$, so in the competition law $\Ks/q^*=\phi_D/(1-\phi_D)=0.36$: withdrawal is much faster than drainage.
+\end{enumerate}
+\section{S08, Sandy clay loam: $\alpha=0.059$ cm$^{-1}$, $n=1.48$}
+\begin{enumerate}[leftmargin=*,itemsep=1pt]
+\item $m=1-1/n=1-1/1.48=0.3243$.
+\item Exponent: $E=2n+\ell(n-1)=2(1.48)+0.5(0.480)=3.200$.
+\item $m^2/\kappa=0.1052/(3.5\times10^{-10})=3.01\times10^{8}$ and $\ln(m^2/\kappa)=19.52$.
+\item $(m^2/\kappa)^{1/E}=\exp(19.52/3.200)=\exp(6.100)=446$, so $\alpha h_c=446$.
+\item Reach: $h_c=446/0.059=7,559$ cm. Keep the trigger below $h_c/2=3,780$ cm.
+\item A 300 cm trigger fires (300 cm is below the reach).
+\item Pore radius at the reach: $r=2\sigma/(\rho_wgh_c)=0.197\ \mu$m.
+\item At 100 cm: $S_e=0.4170$. At 300 cm: $S_e=0.2506$, $K_r=1.05\times10^{-5}$ (exact) and $1.07\times10^{-5}$ (asymptote, Equation 5.1); $K_r(300)/\kappa=2.99e+04$.
+\item A tenfold change of $\kappa$ changes the reach by the factor $10^{1/E}=2.05$.
+\item Memory fate $\phi_D=0.285$, so in the competition law $\Ks/q^*=\phi_D/(1-\phi_D)=0.40$: withdrawal is much faster than drainage.
+\end{enumerate}
+\section{S01, Coarse loam: $\alpha=0.0961$ cm$^{-1}$, $n=1.353$}
+\begin{enumerate}[leftmargin=*,itemsep=1pt]
+\item $m=1-1/n=1-1/1.353=0.2609$.
+\item Exponent: $E=2n+\ell(n-1)=2(1.353)+0.5(0.353)=2.882$.
+\item $m^2/\kappa=0.0681/(3.5\times10^{-10})=1.94\times10^{8}$ and $\ln(m^2/\kappa)=19.09$.
+\item $(m^2/\kappa)^{1/E}=\exp(19.09/2.882)=\exp(6.621)=750.9$, so $\alpha h_c=750.9$.
+\item Reach: $h_c=750.9/0.0961=7,814$ cm. Keep the trigger below $h_c/2=3,907$ cm.
+\item A 300 cm trigger fires (300 cm is below the reach).
+\item Pore radius at the reach: $r=2\sigma/(\rho_wgh_c)=0.19\ \mu$m.
+\item At 100 cm: $S_e=0.4445$. At 300 cm: $S_e=0.3044$, $K_r=4.16\times10^{-6}$ (exact) and $4.22\times10^{-6}$ (asymptote, Equation 5.1); $K_r(300)/\kappa=1.19e+04$.
+\item A tenfold change of $\kappa$ changes the reach by the factor $10^{1/E}=2.22$.
+\item Memory fate $\phi_D=0.029$, so in the competition law $\Ks/q^*=\phi_D/(1-\phi_D)=0.03$: withdrawal is much faster than drainage.
+\end{enumerate}
+\section{S06, Loam: $\alpha=0.036$ cm$^{-1}$, $n=1.56$}
+\begin{enumerate}[leftmargin=*,itemsep=1pt]
+\item $m=1-1/n=1-1/1.56=0.3590$.
+\item Exponent: $E=2n+\ell(n-1)=2(1.56)+0.5(0.560)=3.400$.
+\item $m^2/\kappa=0.1289/(3.5\times10^{-10})=3.68\times10^{8}$ and $\ln(m^2/\kappa)=19.72$.
+\item $(m^2/\kappa)^{1/E}=\exp(19.72/3.400)=\exp(5.801)=330.7$, so $\alpha h_c=330.7$.
+\item Reach: $h_c=330.7/0.036=9,186$ cm. Keep the trigger below $h_c/2=4,593$ cm.
+\item A 300 cm trigger fires (300 cm is below the reach).
+\item Pore radius at the reach: $r=2\sigma/(\rho_wgh_c)=0.162\ \mu$m.
+\item At 100 cm: $S_e=0.4663$. At 300 cm: $S_e=0.2615$, $K_r=3.80\times10^{-5}$ (exact) and $3.95\times10^{-5}$ (asymptote, Equation 5.1); $K_r(300)/\kappa=1.09e+05$.
+\item A tenfold change of $\kappa$ changes the reach by the factor $10^{1/E}=1.97$.
+\item Memory fate $\phi_D=0.289$, so in the competition law $\Ks/q^*=\phi_D/(1-\phi_D)=0.41$: withdrawal is much faster than drainage.
+\end{enumerate}
+\section{S07, Silt loam: $\alpha=0.02$ cm$^{-1}$, $n=1.41$}
+\begin{enumerate}[leftmargin=*,itemsep=1pt]
+\item $m=1-1/n=1-1/1.41=0.2908$.
+\item Exponent: $E=2n+\ell(n-1)=2(1.41)+0.5(0.410)=3.025$.
+\item $m^2/\kappa=0.0846/(3.5\times10^{-10})=2.42\times10^{8}$ and $\ln(m^2/\kappa)=19.30$.
+\item $(m^2/\kappa)^{1/E}=\exp(19.30/3.025)=\exp(6.381)=590.6$, so $\alpha h_c=590.6$.
+\item Reach: $h_c=590.6/0.02=29,528$ cm. Keep the trigger below $h_c/2=14,764$ cm.
+\item A 300 cm trigger fires (300 cm is below the reach).
+\item Pore radius at the reach: $r=2\sigma/(\rho_wgh_c)=0.0504\ \mu$m.
+\item At 100 cm: $S_e=0.6859$. At 300 cm: $S_e=0.4691$, $K_r=3.35\times10^{-4}$ (exact) and $3.74\times10^{-4}$ (asymptote, Equation 5.1); $K_r(300)/\kappa=9.57e+05$.
+\item A tenfold change of $\kappa$ changes the reach by the factor $10^{1/E}=2.14$.
+\item Memory fate $\phi_D=0.147$, so in the competition law $\Ks/q^*=\phi_D/(1-\phi_D)=0.17$: withdrawal is much faster than drainage.
+\end{enumerate}
+\section{S09, Clay loam: $\alpha=0.019$ cm$^{-1}$, $n=1.31$}
+\begin{enumerate}[leftmargin=*,itemsep=1pt]
+\item $m=1-1/n=1-1/1.31=0.2366$.
+\item Exponent: $E=2n+\ell(n-1)=2(1.31)+0.5(0.310)=2.775$.
+\item $m^2/\kappa=0.0560/(3.5\times10^{-10})=1.60\times10^{8}$ and $\ln(m^2/\kappa)=18.89$.
+\item $(m^2/\kappa)^{1/E}=\exp(18.89/2.775)=\exp(6.807)=904.6$, so $\alpha h_c=904.6$.
+\item Reach: $h_c=904.6/0.019=47,608$ cm. Keep the trigger below $h_c/2=23,804$ cm.
+\item A 300 cm trigger fires (300 cm is below the reach).
+\item Pore radius at the reach: $r=2\sigma/(\rho_wgh_c)=0.0312\ \mu$m.
+\item At 100 cm: $S_e=0.7529$. At 300 cm: $S_e=0.5697$, $K_r=3.92\times10^{-4}$ (exact) and $4.47\times10^{-4}$ (asymptote, Equation 5.1); $K_r(300)/\kappa=1.12e+06$.
+\item A tenfold change of $\kappa$ changes the reach by the factor $10^{1/E}=2.29$.
+\item Memory fate $\phi_D=0.087$, so in the competition law $\Ks/q^*=\phi_D/(1-\phi_D)=0.10$: withdrawal is much faster than drainage.
+\end{enumerate}
+\section{S10, Silty clay loam: $\alpha=0.01$ cm$^{-1}$, $n=1.23$}
+\begin{enumerate}[leftmargin=*,itemsep=1pt]
+\item $m=1-1/n=1-1/1.23=0.1870$.
+\item Exponent: $E=2n+\ell(n-1)=2(1.23)+0.5(0.230)=2.575$.
+\item $m^2/\kappa=0.0350/(3.5\times10^{-10})=9.99\times10^{7}$ and $\ln(m^2/\kappa)=18.42$.
+\item $(m^2/\kappa)^{1/E}=\exp(18.42/2.575)=\exp(7.153)=1278$, so $\alpha h_c=1278$.
+\item Reach: $h_c=1278/0.01=127,830$ cm. Keep the trigger below $h_c/2=63,915$ cm.
+\item A 300 cm trigger fires (300 cm is below the reach).
+\item Pore radius at the reach: $r=2\sigma/(\rho_wgh_c)=0.0116\ \mu$m.
+\item At 100 cm: $S_e=0.8784$. At 300 cm: $S_e=0.7440$, $K_r=1.53\times10^{-3}$ (exact) and $2.07\times10^{-3}$ (asymptote, Equation 5.1); $K_r(300)/\kappa=4.38e+06$.
+\item A tenfold change of $\kappa$ changes the reach by the factor $10^{1/E}=2.45$.
+\item Memory fate $\phi_D=0.022$, so in the competition law $\Ks/q^*=\phi_D/(1-\phi_D)=0.02$: withdrawal is much faster than drainage.
+\end{enumerate}
+\banner{Reference tables}\markboth{Reference tables}{Reference tables}
+\section{Effective saturation of the ten soils}\begin{table}[!htbp]\centering\small\begin{tabular}{lrrrrrrr}\toprule
+\hd{Soil} & \hd{10} & \hd{30} & \hd{100} & \hd{300} & \hd{1,000} & \hd{3,000} & \hd{10,000}\\\midrule
+S03 & 0.4399 & 0.0836 & 0.0112 & 0.0018 & 0.0002 & 0.0000 & 0.0000\\
+S04 & 0.5807 & 0.1811 & 0.0398 & 0.0098 & 0.0021 & 0.0005 & 0.0001\\
+S05 & 0.8061 & 0.4432 & 0.1647 & 0.0625 & 0.0214 & 0.0081 & 0.0028\\
+S02 & 0.8890 & 0.6512 & 0.3563 & 0.1881 & 0.0917 & 0.0474 & 0.0230\\
+S08 & 0.8849 & 0.6771 & 0.4170 & 0.2506 & 0.1411 & 0.0834 & 0.0468\\
+S01 & 0.8404 & 0.6508 & 0.4445 & 0.3044 & 0.1995 & 0.1354 & 0.0885\\
+S06 & 0.9358 & 0.7626 & 0.4663 & 0.2615 & 0.1342 & 0.0726 & 0.0370\\
+S07 & 0.9718 & 0.8911 & 0.6859 & 0.4691 & 0.2916 & 0.1865 & 0.1139\\
+S09 & 0.9749 & 0.9116 & 0.7529 & 0.5697 & 0.3994 & 0.2852 & 0.1966\\
+S10 & 0.9894 & 0.9624 & 0.8784 & 0.7440 & 0.5826 & 0.4561 & 0.3465\\
+\bottomrule\end{tabular}\caption{$S_e$ at suctions of 10 to 10,000 cm (columns), from Equation~(\ref{eq:vg}).}\end{table}
+\section{Relative conductivity of the ten soils}\begin{table}[!htbp]\centering\small\begin{tabular}{lrrrrrrr}\toprule
+\hd{Soil} & \hd{10} & \hd{30} & \hd{100} & \hd{300} & \hd{1,000} & \hd{3,000} & \hd{10,000}\\\midrule
+S03 & $2.12\times10^{-2}$ & $4.16\times10^{-5}$ & $2.47\times10^{-8}$ & $2.73\times10^{-11}$ & $1.56\times10^{-14}$ & $1.72\times10^{-17}$ & $9.86\times10^{-21}$\\
+S04 & $4.22\times10^{-2}$ & $3.11\times10^{-4}$ & $6.46\times10^{-7}$ & $2.15\times10^{-9}$ & $4.10\times10^{-12}$ & $1.35\times10^{-14}$ & $2.59\times10^{-17}$\\
+S05 & $1.27\times10^{-1}$ & $5.15\times10^{-3}$ & $4.29\times10^{-5}$ & $4.27\times10^{-7}$ & $2.65\times10^{-9}$ & $2.56\times10^{-11}$ & $1.58\times10^{-13}$\\
+S02 & $1.42\times10^{-1}$ & $1.45\times10^{-2}$ & $3.56\times10^{-4}$ & $8.28\times10^{-6}$ & $1.24\times10^{-7}$ & $2.67\times10^{-9}$ & $3.94\times10^{-11}$\\
+S08 & $9.22\times10^{-2}$ & $9.85\times10^{-3}$ & $3.24\times10^{-4}$ & $1.05\times10^{-5}$ & $2.26\times10^{-7}$ & $6.73\times10^{-9}$ & $1.43\times10^{-10}$\\
+S01 & $2.69\times10^{-2}$ & $2.38\times10^{-3}$ & $9.39\times10^{-5}$ & $4.16\times10^{-6}$ & $1.31\times10^{-7}$ & $5.52\times10^{-9}$ & $1.72\times10^{-10}$\\
+S06 & $2.15\times10^{-1}$ & $3.63\times10^{-2}$ & $1.36\times10^{-3}$ & $3.80\times10^{-5}$ & $6.55\times10^{-7}$ & $1.57\times10^{-8}$ & $2.62\times10^{-10}$\\
+S07 & $2.44\times10^{-1}$ & $7.26\times10^{-2}$ & $6.52\times10^{-3}$ & $3.35\times10^{-4}$ & $9.60\times10^{-6}$ & $3.52\times10^{-7}$ & $9.25\times10^{-9}$\\
+S09 & $1.72\times10^{-1}$ & $5.24\times10^{-2}$ & $5.74\times10^{-3}$ & $3.92\times10^{-4}$ & $1.54\times10^{-5}$ & $7.46\times10^{-7}$ & $2.65\times10^{-8}$\\
+S10 & $1.73\times10^{-1}$ & $7.17\times10^{-2}$ & $1.39\times10^{-2}$ & $1.53\times10^{-3}$ & $8.64\times10^{-5}$ & $5.39\times10^{-6}$ & $2.46\times10^{-7}$\\
+\bottomrule\end{tabular}\caption{$K_r$ from Equation~(\ref{eq:vgm}).}\end{table}
+\section{Reach against $\kappa$}\begin{table}[!htbp]\centering\small\begin{tabular}{lrrrrr}\toprule
+\hd{Soil} & \hd{$3.50\times10^{-11}$} & \hd{$1.00\times10^{-10}$} & \hd{$3.50\times10^{-10}$} & \hd{$1.00\times10^{-9}$} & \hd{$3.50\times10^{-9}$}\\\midrule
+S03 & 288 & 243 & 199 & 168 & 137\\
+S04 & 662 & 541 & 425 & 347 & 273\\
+S05 & 2,785 & 2,173 & 1,615 & 1,260 & 937\\
+S02 & 10,347 & 7,666 & 5,359 & 3,971 & 2,776\\
+S08 & 15,523 & 11,182 & 7,559 & 5,445 & 3,681\\
+S01 & 17,369 & 12,067 & 7,814 & 5,429 & 3,515\\
+S06 & 18,082 & 13,278 & 9,186 & 6,746 & 4,667\\
+S07 & 63,213 & 44,677 & 29,528 & 20,869 & 13,793\\
+S09 & 109,155 & 74,773 & 47,608 & 32,612 & 20,765\\
+S10 & 312,595 & 207,932 & 127,830 & 85,030 & 52,274\\
+\bottomrule\end{tabular}\caption{Reach $h_c$ (cm) for five values of $\kappa$; the column $3.5\times10^{-10}$ is the one used in the book.}\end{table}
+\section{Dose law}\begin{table}[!htbp]\centering\small\begin{tabular}{lrrrrrrrrr}\toprule
+\hd{$\eta_\infty$} & \hd{1} & \hd{2} & \hd{4.1} & \hd{6} & \hd{8} & \hd{10} & \hd{15} & \hd{20} & \hd{30}\\\midrule
+0.1 & 0.022 & 0.039 & 0.063 & 0.077 & 0.086 & 0.091 & 0.097 & 0.099 & 0.100\\
+0.2 & 0.043 & 0.077 & 0.126 & 0.154 & 0.172 & 0.183 & 0.195 & 0.198 & 0.200\\
+0.3 & 0.065 & 0.116 & 0.190 & 0.231 & 0.257 & 0.274 & 0.292 & 0.298 & 0.300\\
+0.45 & 0.097 & 0.174 & 0.284 & 0.346 & 0.386 & 0.411 & 0.438 & 0.447 & 0.450\\
+\bottomrule\end{tabular}\caption{Drained share $\eta_D$ from Equation~(\ref{eq:dose}) with $d_D=4.1$ mm; columns are doses in mm.}\end{table}
+\fig{g_ten_soils}{0.95}{Retention (left) and relative conductivity (right) of the ten soils. The dots on the right mark the reach $h_c$ at $K_r=\kappa$; the dotted red line is a 300 cm trigger.}
+\fig{g_reach_n}{0.6}{$\alpha h_c$ against $n$ (Equation 5.2), with the ten soils.}
+\fig{g_dose}{0.6}{The dose law for three plateaus.}
+\IfFileExists{extra/proj15.tex}{\input{extra/proj15}}{}
+\IfFileExists{extra/ex15.tex}{\input{extra/ex15}}{}
+\IfFileExists{extra/dyk15.tex}{\input{extra/dyk15}}{}
+\IfFileExists{extra/obj15.tex}{\input{extra/obj15}}{}

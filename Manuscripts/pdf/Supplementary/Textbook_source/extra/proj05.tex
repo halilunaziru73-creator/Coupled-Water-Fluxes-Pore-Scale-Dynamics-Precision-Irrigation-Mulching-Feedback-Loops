@@ -1,0 +1,19 @@
+\banner{Design project 5: seasonal irrigation requirement of a maize field}
+\textbf{Brief.} A maize crop is sown on 1 May on a loam. Monthly reference evapotranspiration and rainfall are given in Table~\ref{tab:nir5}. The task is to find the monthly crop evapotranspiration, the effective rainfall, the net irrigation requirement, the gross requirement for a sprinkler system (efficiency 75 per cent) and a drip system (90 per cent), the volume for a field of 30 ha, and the yield if the farmer supplies only 70 per cent of the net requirement.
+
+\textbf{Method.} $K_c$ is evaluated at the middle day of each month; $ET_c=K_cET_0\times$days; effective rainfall is taken as 80 per cent of the monthly rain (capped at 60 mm); net irrigation requirement $NIR=\max(0,ET_c-P_{eff})$; gross $GIR=NIR/E_a$.
+
+\begin{table}[!htbp]\centering\small\caption{Monthly computation of the net irrigation requirement of maize.}
+\begin{tabular}{lrrrrrr}\toprule
+\hd{Month} & \hd{$ET_0$ (mm/d)} & \hd{$K_c$} & \hd{$ET_c$ (mm)} & \hd{Rain (mm)} & \hd{$P_{eff}$ (mm)} & \hd{NIR (mm)}\\\midrule
+May & 3.8 & 0.32 & 37 & 68 & 54 & 0\\
+Jun & 4.9 & 1.20 & 176 & 52 & 42 & 135\\
+Jul & 5.6 & 1.20 & 208 & 31 & 25 & 184\\
+Aug & 5.9 & 0.60 & 110 & 24 & 19 & 91\\
+Sep & 5.2 & 0.60 & 94 & 45 & 36 & 58\\
+Oct & 4.1 & 0.60 & 76 & 64 & 51 & 25\\\bottomrule\end{tabular}\end{table}
+
+\textbf{Season totals.} $ET_c=701$ mm, effective rain $=227$ mm, net requirement $NIR=492$ mm. A sprinkler system with $E_a=0.75$ needs $655$ mm gross, which over 30 ha is $196608$ m$^3$ ($197$ thousand m$^3$); a drip system with $E_a=0.90$ needs $546$ mm and $163840$ m$^3$, a saving of 17 per cent of the water of the sprinkler system.
+
+\textbf{Deficit irrigation.} If only 70 per cent of $NIR$ is applied, $ET_a\approx0.7NIR+P_{eff}=571$ mm and $ET_a/ET_c=0.814$; by Equation~(\ref{eq:ky}) with $K_y=1.28$, the relative yield is $1-1.28\times(1-0.814)=0.762$, a loss of 23.8 per cent of a yield for a saving of 58982 m$^3$ of water on the 30 ha (sprinkler). The decision between full and deficit irrigation then depends on the price of water against the price of grain; the break-even price ratio is the loss in yield value per cubic metre saved.
+

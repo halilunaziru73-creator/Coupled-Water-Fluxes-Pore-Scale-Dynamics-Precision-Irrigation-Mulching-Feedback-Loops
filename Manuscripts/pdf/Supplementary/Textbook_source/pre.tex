@@ -1,4 +1,5 @@
 \documentclass[10pt,twoside,openany]{book}
+\usepackage{longtable}
 \usepackage[paperwidth=170mm,paperheight=250mm,inner=12mm,outer=9mm,top=21mm,bottom=15mm,headheight=14pt,headsep=3mm,footskip=8mm]{geometry}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,mathtools,bm}
@@ -115,9 +116,9 @@
 \newcommand{\Lshow}{\par\vspace{5pt}\noindent
   \hbox to\textwidth{\rlap{\tikz[overlay,x=1pt,y=1pt]{\fill[khgreen] (0,{-\dp\Lbox}) rectangle (9,{\ht\Lbox+3});\fill[khgreen] (0,{-\dp\Lbox}) rectangle (40,{-\dp\Lbox+9});}}\hss\usebox{\Lbox}\hss}\par\vspace{1pt}}
 \newcommand{\Lfig}[1]{\sbox{\Lbox}{#1}\Lshow}
-\newcommand{\fig}[3]{\begin{figure}[H]\centering\Lfig{\includegraphics[width=#2\textwidth]{fig/#1}}\caption{#3}\end{figure}}
+\newcommand{\fig}[3]{\begin{figure}[!htbp]\centering\Lfig{\includegraphics[width=#2\textwidth,height=0.6\textheight,keepaspectratio]{fig/#1}}\caption{#3}\end{figure}}
 % a figure drawn with TikZ: \begin{kfig}{caption} ...tikz code... \end{kfig}
-\newenvironment{kfig}[1]{\begin{figure}[H]\centering\def\kcap{#1}\setbox\Lbox\hbox\bgroup\begin{tikzpicture}[kh]}{\end{tikzpicture}\egroup\Lshow\caption{\kcap}\end{figure}}
+\newenvironment{kfig}[1]{\begin{figure}[!htbp]\centering\def\kcap{#1}\setbox\Lbox\hbox\bgroup\begin{tikzpicture}[kh]}{\end{tikzpicture}\egroup\Lshow\caption{\kcap}\end{figure}}
 \tikzset{kh/.style={font=\sffamily\footnotesize,line cap=round,line join=round,
   ln/.style={draw=khcyan,line width=0.6pt},axis/.style={draw=khcyan,line width=0.6pt,-{Triangle[length=2.4mm,width=1.7mm,fill=khcyan]}},
   vec/.style={draw=khcyan,line width=0.6pt,-{Triangle[length=2.3mm,width=1.7mm,color=khmag,fill=khmag]}},
@@ -129,4 +130,13 @@
 \makeatother
 \gdef\totchap{0}
 \arrayrulecolor{khsalmon}
+\renewcommand{\topfraction}{.92}\renewcommand{\bottomfraction}{.92}\renewcommand{\textfraction}{.08}\renewcommand{\floatpagefraction}{.75}\setcounter{totalnumber}{5}\setcounter{topnumber}{3}\setcounter{bottomnumber}{3}
+% ---------------------------------------------------------------- topic banners, exercises, questions
+\newcommand{\banner}[1]{\par\vspace{14pt plus 4pt}\noindent\colorbox{khfeat}{\parbox{\dimexpr\textwidth-2\fboxsep\relax}{\centering\sfb\fontsize{13.5}{16}\selectfont\color{khblue}#1}}\par\nobreak\vspace{5pt}}
+\newcommand{\backhead}[2]{\par\vspace{12pt plus 4pt}\begin{center}{\sfb\fontsize{15}{18}\selectfont\color{#2}#1}\end{center}\nobreak\vspace{2pt}}
+\newcommand{\dykband}[1]{\par\vspace{10pt plus 4pt}\noindent\colorbox{khex}{\parbox{\dimexpr\textwidth-2\fboxsep\relax}{\centering\sfb\fontsize{14}{17}\selectfont\color{khblue}#1}}\par\nobreak\vspace{4pt}}
+\newenvironment{exlist}{\begin{enumerate}[label={\bfseries\color{khmag}\arabic*.},leftmargin=2.2em,itemsep=5pt,labelsep=0.5em,topsep=2pt]}{\end{enumerate}}
+\newcommand{\exans}[1]{\par\nopagebreak\hfill{\bfseries\color{khmag}[~Ans.~#1~]}}
+\newcommand{\opt}[4]{\par\nopagebreak\noindent\hspace{0.2em}(a)\ #1\quad(b)\ #2\quad(c)\ #3\quad(d)\ #4}
+\newcommand{\objkey}[1]{\par\vspace{6pt}\noindent{\sfb\color{khmag}ANSWERS}\ \ {\small #1}\par}
 \begin{document}

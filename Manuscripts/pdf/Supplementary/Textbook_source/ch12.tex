@@ -1,0 +1,122 @@
+\chapimg{fig/op12.png}
+\IfFileExists{extra/lead12.tex}{\input{extra/lead12}}{}
+\chapter{Drip Irrigation Design}\label{chap:12}
+\markboth{Drip Irrigation Design}{Drip Irrigation Design}
+\IfFileExists{extra/bg12.tex}{\input{extra/bg12}}{}
+\IfFileExists{extra/deep12.tex}{\input{extra/deep12}}{}
+\IfFileExists{extra/deep212.tex}{\input{extra/deep212}}{}
+\IfFileExists{extra/deep312.tex}{\input{extra/deep312}}{}
+\banner{Drip irrigation design}\label{ch:drip}
+\section{Depth per irrigation}
+By default the depth is the crop need over the interval capped by what the root zone holds at the trigger: $Z_n=\min\{Z_n^{\rm DSS},\max(4,ET_{\rm pk}\Delta t)\}$ mm, with $ET_{\rm pk}=\mathrm{clip}\{\max_d\frac15\sum_{j=0}^{4}(E_{d+j}+T_{d+j});2.5,9\}$ mm d$^{-1}$.
+
+\exbox{Depth per irrigation}{The five-day mean of $E+T$ peaks at $6.4$ mm d$^{-1}$ in the season of the loam. Find $ET_{\rm pk}$, and $Z_n$ for irrigation every 1, 2, 3 and 5 days with $Z_n^{\rm DSS}=73.3$ mm.}\sol  $ET_{\rm pk}=\mathrm{clip}(6.4;2.5,9)=6.4$. $Z_n=\min\{73.3,\max(4,6.4\Delta t)\}$: $\Delta t=1$: $6.4$ mm; $2$: $12.8$; $3$: $19.2$; $5$: $32.0$ mm. All are below the root-zone limit 73.3 mm, so the crop need decides. At the default $\Delta t=2$ d the depth is 12.8 mm, which is what a drip line must deliver at each irrigation.
+
+
+\section{Lateral hydraulics}
+A lateral of length $L_L$ has $N=\mathrm{round}(L_L/S_e)$ intervals and $N+1$ emitters. The friction loss in the segment feeding emitter $j$ is the Hazen--Williams loss $h_{f,j}=\dfrac{10.67\,S_eQ_j^{1.852}}{C^{1.852}D^{4.871}}$ with $C=140$ and $Q_j=\sum_{i\ge j+1}q_i$ (m$^3$ s$^{-1}$); the head is $h_j=h_{j-1}-h_{f,j-1}$ with $h_0=H_0$; the emitter law is $q_j=q(h_j/H_0)^x$ (non-compensating), or for the pressure-compensating emitter $q_j=q[1+0.04(h_j-H_0)/H_0]$ above $H_{\min}=8$ m and $q(\max(h_j,0.1)/H_{\min})^{0.5}$ below it. Flows and heads depend on each other: the pair is iterated from the uniform start (three plain substitution passes, then the flows averaged with the previous pass) until the largest relative change is below $10^{-7}$.
+
+\exbox{Hand pass of a short lateral}{Hand-solve a lateral with three emitters ($N=2$): online emitter $q=4$ L h$^{-1}$ at $H_0=10$ m, $x=0.5$, $S_e=0.75$ m, $D=16$ mm, $C=140$. Do the first pass of the iteration and the check of the loss.}\sol  Start with $q_j=4$ L h$^{-1}$ $=1.111\times10^{-6}$ m$^3$ s$^{-1}$ at every emitter. The segment before emitter 1 carries $Q=q_1+q_2=2.222\times10^{-6}$ m$^3$ s$^{-1}$: $h_f=10.67(0.75)(2.222\times10^{-6})^{1.852}/(140^{1.852}\times0.016^{4.871})$. Compute: $(2.222\times10^{-6})^{1.852}=e^{1.852\ln(2.222\times10^{-6})}=e^{1.852\times(-13.017)}=e^{-24.11}=3.4\times10^{-11}$; $140^{1.852}=e^{1.852\times4.9416}=e^{9.152}=9{,}420$; $0.016^{4.871}=e^{4.871\times(-4.1352)}=e^{-20.14}=1.8\times10^{-9}$. So $h_f=8.0\times3.4\times10^{-11}/(9420\times1.8\times10^{-9})=2.7\times10^{-10}/1.7\times10^{-5}=1.6\times10^{-5}$ m: a negligible loss, so $q_1\approx q_0$ and the three emitters are the same at this length. Short laterals are uniform; the loss grows with the square of the length (flow) times length (pipe) so that it is of order $L^{2.852}$.
+
+
+\exbox{Flow and head along a 100 m lateral}{Solve a lateral of $L_L=100$ m with the online emitter ($q=4$ L h$^{-1}$, $S_e=0.75$ m, $x=0.5$, $H_0=10$ m, $D=16$ mm): the head at the far end, $\bar q$, $q_{\min}$ and the number of passes.}\sol  $N=\mathrm{round}(100/0.75)=133$ intervals and $134$ emitters. At the start the segment at the inlet carries all 134 emitters: $Q=134\times1.111\times10^{-6}=1.489\times10^{-4}$ m$^3$ s$^{-1}$, and the loss of its first 0.75 m is $h_f=0.03877$ m. Summing the losses along the lateral lowers the head, which lowers the flows, which lowers the losses: Table~\ref{tab:latiter} lists the first ten passes (the first three are plain substitution). The iteration converges (to $10^{-7}$) after 13 passes to $\bar q=3.7590$ L h$^{-1}$, $q_{\min}=3.6722$ L h$^{-1}$ at the last emitter and an end head $H_{\rm end}=8.428$ m. The loss along the lateral is $h_f=H_0-H_{\rm end}=1.57$ m, 15.7 per cent of the inlet head (the warning level is 20 per cent).\begin{table}[!htbp]\centering\small\caption{Convergence of the lateral solution.}\label{tab:latiter}
+\begin{tabular}{lrrrr}\toprule
+\hd{Pass} & \hd{$\bar q$ (L/h)} & \hd{$q_{\min}$ (L/h)} & \hd{$H_{\rm end}$ (m)} & \hd{max change}\\\midrule
+1 & 3.7230 & 3.6217 & 8.198 & 9.46e-02\\
+2 & 3.7642 & 3.6795 & 8.462 & 1.60e-02\\
+3 & 3.7582 & 3.6711 & 8.423 & 2.27e-03\\
+4 & 3.7587 & 3.6717 & 8.429 & 1.65e-04\\
+5 & 3.7588 & 3.6720 & 8.428 & 7.06e-05\\
+6 & 3.7589 & 3.6721 & 8.428 & 3.02e-05\\
+7 & 3.7590 & 3.6722 & 8.428 & 1.29e-05\\
+8 & 3.7590 & 3.6722 & 8.428 & 5.51e-06\\
+9 & 3.7590 & 3.6722 & 8.428 & 2.36e-06\\
+10 & 3.7590 & 3.6722 & 8.428 & 1.01e-06\\\bottomrule\end{tabular}\end{table}
+
+
+\section{Emission uniformity}
+\begin{equation}E_u=\mathrm{clip}\Bigl\{\Bigl(1-\frac{1.27c_v}{\sqrt{n_e}}\Bigr)\frac{q_{\min}}{\bar q};0.3,1\Bigr\},\qquad\sigma_q=\sqrt{c_v^2+\sigma_P^2},\ \sigma_P^2=\frac1{N+1}\sum_j\Bigl(\frac{q_j}{\bar q}-1\Bigr)^2.\end{equation}
+\par\noindent where $E_u$ is the emission uniformity (0.3 to 1), $c_v$ the manufacturing coefficient of variation, $n_e$ the number of emitters per plant, $q_{\min}$ and $\bar q$ the minimum and mean discharge (L\,h$^{-1}$), $\sigma_q$ the total variation of discharge, $\sigma_P$ that caused by pressure, $q_j$ the discharge of emitter $j$ and $N+1$ the number of emitters.
+
+
+\exbox{Emission uniformity of four emitters}{Compute the emission uniformity of the four emitter types of the application (Table 12.1 of the application: online, inline, drip tape and pressure-compensating) on a lateral of 100 m, with $D=16$ mm.}\sol  Solve each lateral as above, then apply the clip formula. For the online emitter: $(1-1.27(0.07)/\sqrt1)=0.911$, $q_{\min}/\bar q=3.672/3.759=0.977$, so $E_u=0.911\times0.977=0.890$, $89$ per cent. Table~\ref{tab:eu} gives the four.\begin{table}[!htbp]\centering\small\caption{Uniformity of four emitters on a 100 m lateral.}\label{tab:eu}
+\begin{tabular}{lrrrrrr}\toprule
+\hd{Emitter} & \hd{$q$ (L/h)} & \hd{$S_e$ (m)} & \hd{Head loss (\%)} & \hd{$q_{\min}/\bar q$} & \hd{$E_u$ (\%)} & \hd{$\sigma_q$}\\\midrule
+Online & 4 & 0.75 & 15.7 & 0.977 & 89.0 & 0.074\\
+Inline & 2 & 0.5 & 9.8 & 0.986 & 93.6 & 0.043\\
+Drip tape & 1 & 0.2 & 13.8 & 0.976 & 90.6 & 0.084\\
+PC & 2 & 0.6 & 5.1 & 0.999 & 96.1 & 0.030\\\bottomrule\end{tabular}\end{table}
+\textbf{Reading.} The drip tape (many small emitters: $2\times$ per plant and $S_e=0.2$ m) flows 1 L h$^{-1}$ each, but the 500 emitters on 100 m make the lateral carry 0.14 L s$^{-1}$; its head loss ($13.8$ per cent) is comparable to that of the online emitter. The manufacturing term is the larger part of the non-uniformity for the compensating emitter, whose hydraulic variation is tiny.
+
+
+\exbox{How long can the lateral be}{Find how the head loss and the flow ratio $q_{\min}/\bar q$ of the online emitter (D 16 mm) and the pressure-compensating emitter change with the lateral length 50 to 300 m, and where the 20 per cent loss warning appears.}\sol  Table~\ref{tab:long} lists the solutions. For the online emitter the loss rises from a few per cent at 50 m to tens of per cent at 300 m, since the loss goes as $L^{2.852}$ in a uniform pipe; the flow ratio falls by roughly half that percentage, because $q\propto h^{0.5}$ (a 10 per cent head loss costs about 5 per cent of flow). The compensating emitter keeps $q_{\min}/\bar q$ near 1 until the head falls below $H_{\min}=8$ m. (Beyond about 250 m the head reaches the application's floor of 0.5 m, which is why the loss column stops growing; such a lateral is outside the design rule.)\begin{table}[!htbp]\centering\small\caption{Effect of lateral length.}\label{tab:long}
+\begin{tabular}{lrrrr}\toprule
+\hd{$L_L$ (m)} & \hd{online loss (\%)} & \hd{online $q_{\min}/\bar q$} & \hd{PC loss (\%)} & \hd{PC $q_{\min}/\bar q$}\\\midrule
+50 & 2.5 & 0.997 & 0.7 & 1.000\\
+100 & 15.7 & 0.977 & 5.1 & 0.999\\
+150 & 39.0 & 0.930 & 15.9 & 0.998\\
+200 & 62.1 & 0.855 & 35.4 & 0.996\\
+250 & 78.5 & 0.758 & 59.1 & 0.930\\
+300 & 72.9 & 0.751 & 73.8 & 0.837\\\bottomrule\end{tabular}\end{table}
+
+
+\section{The wetted bulb}
+The soil stores $\Delta\theta=\max\{0.03,f_T(\theta_{fc}-\theta_{wp})\}$. The bulb below the emitter is a half-ellipsoid of horizontal radius $r$ and lower semi-axis $ar$, with a short upper half of semi-axis $ur$, $u=0.6$: $\rho(z)=r\sqrt{1-\zeta^2}$ with $\zeta=(z-z_d)/(ar)$ below the emitter and $(z_d-z)/(ur)$ above it. The aspect ratio follows the soil,
+\begin{equation}\boxed{a=\mathrm{clip}\Bigl\{\Bigl[0.7+1.6\Bigl(\frac{K_s}{K_s+15}\Bigr)^{1.1}\Bigr]\sqrt{\mathrm{clip}(2/q;0.7,1.4)};0.75,2.4\Bigr\},}\end{equation}
+\par\noindent where $a$ is the radius of the wetted bulb (m), $K_s$ the saturated conductivity (cm\,d$^{-1}$) and $q$ the emitter discharge (L\,h$^{-1}$); the constants set the soil and discharge effects, and the value is kept between 0.75 and 2.4 m.
+
+and the radius is found by bisection so that $\int\pi\rho(z)^2dz=V\cdot10^6/\Delta\theta$ mm$^3$ ($V$ in litres).
+
+\exbox{The shape and size of the bulb}{(a) Compute the shape factor $a$ for the ten soils at $q=4$ L h$^{-1}$ (the application quotes about 2.1 for sand, 1.9 sandy loam, 1.3 to 1.4 for loam and silt loam, 0.9 to 1.0 for clay loam and silty clay loam). (b) For the loam with a buried emitter at $z_d=250$ mm delivering 1 litre, find the wetted radius.}
+\textbf{Solution (a).} For the loam: $K_s/(K_s+15)=12.07/27.07=0.446$; $0.446^{1.1}=0.4115$; $0.7+1.6\times0.4115=1.358$; $\sqrt{\mathrm{clip}(2/4;0.7,1.4)}=\sqrt{0.7}=0.8367$; $a=1.358\times0.8367=1.136$. For all soils see Table~\ref{tab:aspect}; with $q=4$ L h$^{-1}$ the factor $\sqrt{0.7}$ lowers $a$ by 16 per cent relative to $q=2$, so the values here are lower than the typical figures of the application, which correspond to 2 L h$^{-1}$ ($\sqrt{1}=1$). A larger emitter flow spreads the bulb sideways.
+
+\subhd{Solution (b).} $\Delta\theta=\max\{0.03,0.468(0.2687-0.1309)\}=0.0645$. The wetted volume is $V_w=1\times10^6/0.0645=1.551e+07$ mm$^3$ (about 15.5 litres of soil). Bisection on $r$ in $[5,3500]$ mm over 38 steps until the volume of revolution equals $V_w$ gives $r=162$ mm (lower semi-axis $ar=184$ mm, upper $0.6r=97$ mm). The bulb is buried at 250 mm, so the upper part reaches 153 mm (below the surface).\begin{table}[!htbp]\centering\small\caption{Wetting-bulb aspect ratio from the soil.}\label{tab:aspect}
+\begin{tabular}{lrrrr}\toprule
+\hd{ID} & \hd{Soil} & \hd{$K_s$ (mm/h)} & \hd{$\Delta\theta$} & \hd{$a$ at $q=4$}\\\midrule
+S01 & Coarse loam & 13.1 & 0.057 & 1.17\\
+S02 & Coarse sand & 114.7 & 0.030 & 1.76\\
+S03 & Sand & 134.7 & 0.030 & 1.78\\
+S04 & Loamy sand & 86.4 & 0.030 & 1.71\\
+S05 & Sandy loam & 44.7 & 0.042 & 1.56\\
+S06 & Loam & 12.1 & 0.062 & 1.14\\
+S07 & Silt loam & 10.9 & 0.085 & 1.10\\
+S08 & Sandy clay loam & 5.3 & 0.047 & 0.89\\
+S09 & Clay loam & 3.2 & 0.062 & 0.78\\
+S10 & Silty clay loam & 3.8 & 0.074 & 0.81\\\bottomrule\end{tabular}\end{table}
+
+
+\exbox{Efficiencies over the spread of emitters}{Evaluate the efficiencies of a drip system on the loam: online emitter ($q=4$ L h$^{-1}$, $\bar q=0.94q=3.76$), $S_e=0.75$ m, laterals $S_l=1.0$ m (cereal), buried at 250 mm, $Z_n=12.8$ mm, root zone $R_{\max}=920$ mm, $E_0=3$ mm d$^{-1}$, $E_u=0.89$, $\sigma_q=\sqrt{0.07^2+0.03^2}=0.076$ (assumed $\sigma_P=0.03$).}\sol  1. Water required per emitter: $V_{req}=Z_nS_eS_l=12.8\times0.75\times1.0=9.60$ L (1 mm over 1 m$^2$ is 1 L). 2. Automatic run time: $t=V_{req}/(\bar qE_u)=9.60/(3.76\times0.89)=2.87$ h. 3. Mean delivery $\bar V=\bar qt=10.79$ L. 4. Five emitters at the normal quantiles $z=-1.28,-0.52,0,0.52,1.28$ deliver $V_i=\bar V(1+\sigma_qz_i)$ (Table~\ref{tab:quant}); for each the bulb radius, the part below $R_{\max}$, the evaporation $V_{ev}=\min\{0.5V,\pi\rho(0)^2\times10^{-6}\times2E_0\}$ and the root water follow Equations (12.10) to (12.15). 5. Storage $V_{st,i}=\min(V_{root,i},V_{req})$ and the excess $V_{ex,i}$. 6. Averages over the five: $E_a=0.890$, $E_s=1.000$, $DP=0.110$, $EV=0.000$; $E_a+DP+EV=1.000$. Gross depth $Z_{gross}=\bar V/(S_eS_l)=14.4$ mm.\begin{table}[!htbp]\centering\small\caption{Five representative emitters.}\label{tab:quant}
+\begin{tabular}{lrrrrrrr}\toprule
+\hd{$z$} & \hd{$V$ (L)} & \hd{$r$ (mm)} & \hd{$V_{dp}$} & \hd{$V_{ev}$} & \hd{$V_{root}$} & \hd{$V_{st}$} & \hd{$V_{ex}$}\\\midrule
+-1.28 & 9.74 & 346 & 0.000 & 0.000 & 9.74 & 9.60 & 0.14\\
+-0.52 & 10.36 & 353 & 0.000 & 0.000 & 10.36 & 9.60 & 0.76\\
+0 & 10.79 & 358 & 0.000 & 0.000 & 10.79 & 9.60 & 1.19\\
+0.52 & 11.21 & 363 & 0.000 & 0.000 & 11.21 & 9.60 & 1.61\\
+1.28 & 11.84 & 370 & 0.000 & 0.000 & 11.84 & 9.60 & 2.24\\\bottomrule\end{tabular}\end{table}
+\textbf{Reading.} The drier emitters ($z<0$) deliver less than the need, so $E_s<1$; the wetter ones deliver more than the root zone accepts, and the excess is counted with deep percolation. This is why $E_a<1$ even with no water below the root zone: the spread of emitters alone costs efficiency.
+
+
+\exbox{Soil and placement}{Compare the same drip system on the loam and on the sand ($f_T=0.842$) and with the emitter at the surface, 25 cm and 55 cm.}\sol  Recompute the bulb for each case (Table~\ref{tab:place}). With a surface line the half-spherical bulb exposes the largest wet patch and evaporation takes about 30 per cent of the water; the buried lines lose none. For the three buried depths the bulb stays inside the 92 cm root zone, so the only loss is the excess delivered by the wetter emitters (DP $=0.11$), and the result is the same in the two soils at the same delivery and run time; the soil changes the bulb shape, not the efficiency, for this small depth.\begin{table}[!htbp]\centering\small\caption{Efficiency by soil and placement.}\label{tab:place}
+\begin{tabular}{lrrrrrr}\toprule
+\hd{Soil} & \hd{Emitter depth} & \hd{$t$ (h)} & \hd{$E_a$} & \hd{$E_s$} & \hd{DP} & \hd{EV}\\\midrule
+Loam & 25 cm & 2.87 & 0.890 & 1.000 & 0.110 & 0.000\\
+Loam & surface & 2.87 & 0.703 & 0.789 & 0.000 & 0.297\\
+Loam & 55 cm & 2.87 & 0.890 & 1.000 & 0.110 & 0.000\\
+Sand & 25 cm & 2.87 & 0.890 & 1.000 & 0.110 & 0.000\\
+Sand & surface & 2.87 & 0.675 & 0.759 & 0.000 & 0.325\\\bottomrule\end{tabular}\end{table}
+
+
+\exbox{Layout, pipes and pump of one hectare}{Lay out 1 ha of the loam with laterals of $L_L=100$ m, $S_l=1.0$ m, farm supply $Q_s=30$ L s$^{-1}$, mainline $L_m=120$ m, lift 12 m, inlet head $H_0=10$ m. Find the number of laterals, zones, the zone flow, the pipe diameter, the head losses, the total dynamic head and the pump power.}\sol  $W_f=10^4A_f/L_L=10^4/100=100$ m; $N_L=\lfloor W_f/S_l\rfloor=100$ laterals. Each carries $134\bar q/3600=0.1399$ L s$^{-1}$ ($\bar q=3.759$ L h$^{-1}$), so all together 13.99 L s$^{-1}$. Zones: $n_{zone}=\lceil N_LQ_{lat}/Q_s\rceil=\lceil13.99/30\rceil=1$; laterals per zone $n_l=\lceil100/1\rceil=100$; zone flow $Q_z=n_lQ_{lat}=13.99$ L s$^{-1}$. Pipe: the smallest diameter of the series with $v=4Q_z/(\pi D^2)\le1.5$ m s$^{-1}$ is $D=110$ mm ($v=1.47$ m s$^{-1}$). Submain length $L_{sm}=n_lS_l=100$ m; the submain loss is 0.4 of the full Hazen--Williams loss, $h_{f,sm}=0.78$ m, and the mainline loss $h_{f,m}=2.33$ m. TDH $=z_{lift}+H_0+h_{f,sm}+h_{f,m}+9=12+10+0.78+2.33+9=34.1$ m. Pump power $P=9.81(Q_z/1000)\,TDH/0.65=7.20$ kW. Pipe per hectare: $(N_LL_L+L_{sm})/A_f=10100$ m.
+
+
+\exbox{Season and farm of the drip system}{Season and farm for the same system with a net seasonal irrigation $y_I=150$ mm and $Z_n=12.8$ mm.}\sol  $n_{ev}=y_I/Z_n=150/12.8=11.7$ events; gross depth $Z_{gross}=14.4$ mm per event; $Z_{season}=n_{ev}Z_{gross}=169$ mm ($=1685$ m$^3$ ha$^{-1}$). Flow per hectare $q_{ha}=q\times10^4/(3600S_eS_l)=4\times10^4/(3600\times0.75\times1.0)=14.81$ L s$^{-1}$ ha$^{-1}$; sets $n_{set}=\lceil q_{ha}A_f/Q_s\rceil=\lceil14.81/30\rceil=1$; round time $t_{round}=1\times2.87=2.87$ h; pumping hours $H_{pump}=n_{ev}t_{round}=34$ h; energy $E_{kWh}=34\times7.20=242$ kWh.
+\IfFileExists{extra/proj12.tex}{\input{extra/proj12}}{}
+\IfFileExists{extra/ten12.tex}{\input{extra/ten12}}{}
+\IfFileExists{extra/tenb12.tex}{\input{extra/tenb12}}{}
+\IfFileExists{extra/teny12.tex}{\input{extra/teny12}}{}
+\IfFileExists{extra/tenby12.tex}{\input{extra/tenby12}}{}
+\IfFileExists{extra/tenx12.tex}{\input{extra/tenx12}}{}
+\IfFileExists{extra/tenbx12.tex}{\input{extra/tenbx12}}{}
+\IfFileExists{extra/ex12.tex}{\input{extra/ex12}}{}
+\IfFileExists{extra/dyk12.tex}{\input{extra/dyk12}}{}
+\IfFileExists{extra/obj12.tex}{\input{extra/obj12}}{}

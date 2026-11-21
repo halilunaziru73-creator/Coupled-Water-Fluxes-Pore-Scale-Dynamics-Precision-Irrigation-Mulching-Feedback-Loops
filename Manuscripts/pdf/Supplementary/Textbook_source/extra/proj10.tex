@@ -1,0 +1,23 @@
+\banner{Design project 10: ranking genotypes in a managed-stress trial}\label{sec:proj10}
+\textbf{Brief.} Five genotypes were grown in a stress trial. Their yield, seasonal evapotranspiration, harvest index and canopy temperature at midday are in the table. The task is to rank them by water productivity and stress index and to recommend the genotype for a water-scarce scheme.
+
+\begin{table}[!htbp]\centering\small\caption{Five genotypes in a managed-stress trial.}
+\begin{tabular}{lrrrrr}\toprule
+\hd{Genotype} & \hd{Yield (Mg/ha)} & \hd{$ET_a$ (mm)} & \hd{WP (kg/m$^3$)} & \hd{HI} & \hd{Canopy temp. (C)}\\\midrule
+G1 & 9.8 & 455 & 2.15 & 0.42 & 31.0\\
+G2 & 10.6 & 490 & 2.16 & 0.45 & 29.5\\
+G3 & 8.9 & 410 & 2.17 & 0.40 & 33.0\\
+G4 & 11.2 & 540 & 2.07 & 0.43 & 28.5\\
+G5 & 10.1 & 445 & 2.27 & 0.47 & 30.5\\\bottomrule\end{tabular}\end{table}
+
+\begin{table}[!htbp]\centering\small\caption{Crop water stress index from canopy temperature ($T_a=34$ C, lower limit $T_a-3$, upper limit $T_a+4$).}
+\begin{tabular}{lrr}\toprule
+\hd{Genotype} & \hd{$T_c$ (C)} & \hd{CWSI}\\\midrule
+G1 & 31.0 & 0.00\\
+G2 & 29.5 & -0.21\\
+G3 & 33.0 & 0.29\\
+G4 & 28.5 & -0.36\\
+G5 & 30.5 & -0.07\\\bottomrule\end{tabular}\end{table}
+
+\textbf{Reading.} The highest water productivity is G5 at 2.27 kg\,m$^{-3}$. The canopy of G3 is the warmest (CWSI 0.29), a sign of the stomata closing early; G4 yields most but uses most water. For a scheme where water is the limit, rank by WP, then confirm it with the CWSI: the genotype with the best WP and a low stress index is the safest.
+\fig{g10_geno}{0.95}{Five genotypes of the stress trial. (a) Yield against seasonal evapotranspiration. (b) Water productivity against the crop water stress index.}

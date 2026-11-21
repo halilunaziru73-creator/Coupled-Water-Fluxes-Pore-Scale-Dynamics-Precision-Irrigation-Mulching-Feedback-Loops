@@ -1,0 +1,21 @@
+\banner{Design project 1: the soil-water data of a field for a schedule}
+\textbf{Brief.} A grower of maize on a 24-ha field of loam asks for the soil-water numbers on which an irrigation schedule is built. The roots reach 0.9 m. The profile was sampled in four layers; the retention curve of each layer was taken from the van Genuchten parameters measured on cores. The peak crop evapotranspiration is $ET_c=6.2$ mm\,d$^{-1}$, the management allowed depletion is $p=0.55$, the system is sprinklers of 75 per cent application efficiency, the pump delivers $Q=48$ L\,s$^{-1}$ and the system irrigates one tenth of the field at a time. The task is to find the total and readily available water, the net and gross irrigation depths, the interval, the volume per irrigation, the set time and the number of sets per cycle, and to check the cycle against the peak demand.
+
+\begin{table}[!htbp]\centering\small\caption{Step 1: field capacity, wilting point and total available water of each layer, computed from the van Genuchten parameters.}
+\begin{tabular}{lrrrrrrr}\toprule
+\hd{Layer (cm)} & \hd{$z$ (cm)} & \hd{$\theta_s$} & \hd{$\alpha$} & \hd{$n$} & \hd{$\theta_{FC}$} & \hd{$\theta_{WP}$} & \hd{TAW (mm)}\\\midrule
+0--20 & 20 & 0.468 & 0.041 & 1.52 & 0.227 & 0.035 & 38.3\\
+20--40 & 20 & 0.455 & 0.036 & 1.56 & 0.223 & 0.032 & 38.1\\
+40--60 & 20 & 0.447 & 0.030 & 1.52 & 0.248 & 0.039 & 41.8\\
+60--90 & 30 & 0.440 & 0.026 & 1.48 & 0.269 & 0.048 & 66.4\\\bottomrule\end{tabular}\end{table}
+
+\textbf{Step 2: allowed depletion and net depth.} The sum of the table is $\mathrm{TAW}=185$ mm. With $p=0.55$, $\mathrm{RAW}=0.55\times185=102$ mm, which is the net depth $Z_n$ applied at each irrigation.
+
+\textbf{Step 3: interval.} At the peak demand the root zone loses $6.2$ mm\,d$^{-1}$ and the allowed depletion is used in $T=Z_n/ET_c=102/6.2=16.4$ days. The system must therefore return to each set at least every 16 days; the cycle is rounded down to 16 days.
+
+\textbf{Step 4: gross depth and volume.} With an efficiency of 75 per cent the gross depth is $Z_g=Z_n/E_a=102/0.75=135$ mm. One set covers 2.4 ha, so the volume per set is $V=Z_g\times A=135\times10^{-3}\times24\,000=3250$ m$^3$ (1 mm over 1 ha is 10 m$^3$).
+
+\textbf{Step 5: set time and capacity check.} At $Q=48$ L\,s$^{-1}=172.8$ m$^3$\,h$^{-1}$ the set time is $t=V/Q=3250/172.8=18.81$ h. Ten sets need $188.1$ h of pumping; with 22 h of pumping available per day, a cycle of 16 days is feasible: the available pumping time per cycle is $22\times16=352$ h against the 188 h needed.
+
+\textbf{Conclusion.} The soil stores 102 mm of readily available water; a 75 per cent efficient system must apply 135 mm gross every 16 days, which the pump can do with a margin of 47 per cent of its pumping time.
+

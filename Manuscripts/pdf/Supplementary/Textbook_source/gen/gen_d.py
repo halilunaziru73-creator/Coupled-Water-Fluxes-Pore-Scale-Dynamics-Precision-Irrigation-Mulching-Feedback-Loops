@@ -3,7 +3,7 @@ sys.path.insert(0,'/tmp/book/gen')
 from lib import *
 import eng2, numpy as np, pandas as pd
 O=[];w=O.append
-R='../../../../results/'
+R='/home/claude/coupled-water-fluxes-pore-scale-dynamics-precision-irrigation-mulching-feedback-loops/Manuscripts/results/'
 w(r"""\chapter{Field balance, soil--plant--air and profile evolution}\label{ch:bal}
 \markboth{Field balance}{Field balance}
 \textbf{After this chapter you can} check the budget printed by the field-balance layer, compute the potentials along the soil--plant--air path, and the share of the root zone beyond a trigger.

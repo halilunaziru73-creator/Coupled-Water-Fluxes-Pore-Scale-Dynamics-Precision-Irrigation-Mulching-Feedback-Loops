@@ -1,0 +1,148 @@
+\chapimg{fig/op04.png}
+\IfFileExists{extra/lead04.tex}{\input{extra/lead04}}{}
+\chapter{Auditing a Model: Balance, Statistics and Limits}\label{chap:04}
+\markboth{Auditing a Model: Balance, Statistics and Limits}{Auditing a Model: Balance, Statistics and Limits}
+\IfFileExists{extra/bg04.tex}{\input{extra/bg04}}{}
+\banner{Closing the water balance: an audit of model outputs}\label{ch:audit}
+\section{Why audit a model}
+Process-model outputs that support a saving are treated as closed accounts. This can be tested: if the terms of the water balance of Equation~(\ref{eq:bal}) are written for every run, one can check whether they add up, and find out which term is missing when they do not.
+
+\section{A blind search for linear invariants}
+Collect, for $N$ runs, the annual terms in a matrix $X$ with one row per run and one column per term, for example $W=P+I$, $ET$, $D$ and $\Delta S+Q$. A \emph{linear invariant} is a vector $c$ with $Xc=0$ for every run. It is found, without being told, as the right singular vector of $X$ with the smallest singular value: if $X=U\Sigma V^{\top}$ then $\|Xc\|$ is smallest for the last column of $V$.
+
+\exbox{Finding the balance blindly}{Four runs have $(W,ET,D,\Delta S+Q)=(800,520,250,30),\ (760,500,240,20),\ (900,560,300,40),\ (700,480,200,20)$ mm. The singular values of $X$ are $1958,\ 43.7,\ 8.01$ and $\approx10^{-13}$. The last is zero to machine precision, and the corresponding singular vector, scaled so that its first entry is 1, is $(1,-1,-1,-1)$: the balance $W=ET+D+(\Delta S+Q)$ was recovered without being supplied. When the study ran this search on the Daisy output, the coefficients were recovered within 5 per cent.}
+
+
+
+\begin{kfig}{Closing the balance: the inputs $P+I$ equal the outputs plus the change of storage; what is left after all the reported fluxes is the unattributed term $R$.}
+\def\u{0.032}
+\draw[axis] (0,0)--(0,4.6);\node[lab,rotate=90] at (-0.7,2.3) {Water (mm)};
+\fill[khcyan!35] (0.5,0) rectangle (1.7,{620*\u/3});\fill[khcyan!75] (0.5,{620*\u/3}) rectangle (1.7,{784*\u/3});
+\node[lab] at (1.1,{310*\u/3}) {$P$};\node[lab] at (1.1,{702*\u/3}) {$I$};
+\fill[khsalmon!60] (3.2,0) rectangle (4.4,{560*\u/3});\fill[khgreen!80!black!40] (3.2,{560*\u/3}) rectangle (4.4,{640*\u/3});\fill[khpurple!70] (3.2,{640*\u/3}) rectangle (4.4,{780*\u/3});\fill[khmag!40] (3.2,{780*\u/3}) rectangle (4.4,{784*\u/3+0.0});
+\node[lab] at (3.8,{280*\u/3}) {$ET$};\node[lab] at (3.8,{600*\u/3}) {$D$};\node[lab] at (3.8,{710*\u/3}) {$\Delta S$};\node[lab,right] at (4.5,{784*\u/3}) {$Q,\,R$};
+\draw[ln] (0,0)--(5,0);\draw[gd] (0.5,{784*\u/3})--(4.4,{784*\u/3});
+\node[lab,below] at (1.1,-0.05) {inputs};\node[lab,below] at (3.8,-0.05) {outputs};
+\end{kfig}
+
+\section{The unattributed evaporative term}
+Model outputs report transpiration $T$, soil evaporation $E_s$ and canopy evaporation $E_c$. The non-transpiration evapotranspiration is $ET_{nt}=ET-T$, which in the model is $E_s+E_c$ plus a small residual in the bookkeeping of the evapotranspiration. The audit shows that the residual is not small. Define the unattributed evaporative term
+\begin{equation}\label{eq:R}\boxed{R=ET-T-E_s-E_c .}\end{equation}
+\par\noindent where $R$ is the residual flux (mm), $ET$ the total evapotranspiration, $T$ the transpiration, $E_s$ the soil evaporation and $E_c$ the canopy evaporation (all in mm over the period).
+
+Averaged over the ensemble, $R=164$ mm\,yr$^{-1}$, which is 30 per cent of the evapotranspiration. It is a property of the model's bookkeeping, not of a real field.
+
+\fig{p1_hidden}{0.95}{The unattributed evaporative term $R$ by experiment (a) and against annual rain (b).}
+
+\section{Judging a saving against the wrong total}
+Suppose a mulch or a lower evaporation factor changes the soil evaporation by $\Delta E_s$ and the non-transpiration term by $\Delta ET_{nt}$, and that drainage changes by $\Delta D$. The drainage share of the non-transpiration change is $\psi_D=\Delta D/\Delta ET_{nt}$. If one divides instead by the reported soil evaporation, one obtains $\psi_D'=\Delta D/\Delta E_s=\psi_D\,\Delta ET_{nt}/\Delta E_s$, which differs from $\psi_D$ by the factor $\Delta ET_{nt}/\Delta E_s$.
+
+\exbox{A wrong denominator}{A lower evaporation factor changes soil evaporation by $-40$ mm, and the non-transpiration term by $-55$ mm; drainage changes by $-22$ mm (in magnitudes: drainage given up). The closed share is $\psi_D=22/55=0.40$. Against soil evaporation alone it is $22/40=0.55$, an error of 0.15 --- more than the 0.1 that the study finds in six of ten soils. When $\Delta E_s$ and $\Delta ET_{nt}$ have opposite signs, which happens in two soils, the ratio even changes sign.}
+
+
+
+\section{Prediction and its limits}
+A compact three-term law predicts evapotranspiration in withheld experiments and withheld soils as well as gradient boosting, with $R^2=0.898$ across withheld experiments and 0.904 across withheld soils. Drainage resists every compact law that was tried. The storage term does not close fully: there is a non-closure of 16 per cent in two experiments.
+
+\begin{daisybox}{reading the logs for the audit}
+All terms of this chapter are annual totals read from the Daisy logs: rainfall, irrigation, evapotranspiration, transpiration, soil evaporation, canopy evaporation, drainage at 1 m, storage change and runoff. The matrix $X$ is built from the one-row-per-run summary of the repository. A closed balance means that the singular vector of the smallest singular value is the balance itself.
+\end{daisybox}
+
+\exbox{}{Show by hand that $c=(1,-1,-1,-1)$ gives $Xc=0$ for the four runs of the worked example.}\sol  Substituting each row: $800-520-250-30=0$, and so on for the other three rows.
+
+\exbox{}{A run has $ET=540$, $T=230$, $E_s=170$, $E_c=60$. Compute $R$ and the fraction of $ET$ that it represents.}\sol  $R=540-230-170-60=80$ mm, which is $14.8$ per cent of $ET$.
+
+\exbox{}{A saving lowers $E_s$ by 30 mm and $ET_{nt}$ by 36 mm and drainage by 12 mm. Compute $\psi_D$ and $\psi_D'$.}\sol  $\psi_D=12/36=0.33$ and $\psi_D'=12/30=0.40$.
+
+\exbox{}{Why does the success of the blind search on the known balance give confidence in what it reports about $R$?}\sol  Because a method that finds the known balance within 5 per cent is not inventing structure.
+\banner{Engines you can check: pipes, design and traceability}
+\section{Provenance of equations}
+The application has 134 numbered equations. Each carries a label: 38 come from the literature, 18 are data-driven (fitted to the Daisy ensemble) and 78 are engineered for the application. The label is shown beside the number that the equation produced, so a user can find where a number comes from and which origin it has.
+
+\section{Verification}
+Every layer has an independent reference test. The design modules reproduce FAO-45 and textbook worked examples within 3 per cent; a meta-model ranks left-out scenarios with Spearman correlations from 0.64 to 0.97 and sweeps $10^{5}$ scenarios in 2 s. Verification found three defects in the first release: a sprinkler range coefficient and a drip iteration count, both corrected, and a fixed advance exponent in the surface layer that under-predicted slow advance by up to 29 per cent (removed in version 1.1.0). It also exposed limits: leaf water potential is set by a conductivity floor, and the drainage share of a mulch saving is understated. A check is valuable only if it can fail, and these failures are reported.
+
+\fig{p2_ws}{0.95}{The surface layer against published advance times and application efficiencies.}
+
+\section{Pipes: Hazen and Williams}
+The head loss by friction in a pipe of length $L$, diameter $D$ and flow $Q$ is, in SI units,
+\begin{equation}\label{eq:hw}\boxed{h_f=\frac{10.67\,L\,Q^{1.852}}{C^{1.852}D^{4.87}},}\end{equation}
+where $C$ is the roughness coefficient of the pipe. The mean speed is $v=4Q/(\pi D^2)$; speed checks keep $v$ in a sensible range. The pump head adds the static lift to the friction losses.
+
+\exbox{A lateral and a pump}{A main line has $L=200$ m, $Q=0.010$ m$^3$\,s$^{-1}$ (10 L\,s$^{-1}$) and $C=140$. With $D=0.10$ m, $h_f=10.67(200)(0.010)^{1.852}/(140^{1.852}\,0.10^{4.87})=3.3$ m and $v=1.27$ m\,s$^{-1}$. With a smaller pipe, $D=0.08$ m, $h_f=9.8$ m and $v=1.99$ m\,s$^{-1}$: the loss is three times larger because $D^{-4.87}$ is steep. The saving of a larger pipe in pump energy has to be weighed against its cost.}
+
+
+
+\fig{sketch}{0.95}{The field sketch of SWAFL: seven questions, a drawing area and drawing tools. The pipes drawn here feed the friction and pump-head calculations.}
+
+\exbox{}{Compute $h_f$ for $L=150$ m, $Q=0.006$ m$^3$\,s$^{-1}$, $D=0.075$ m and $C=130$, and the speed $v$.}\sol  $h_f=10.67(150)(0.006)^{1.852}/(130^{1.852}\,0.075^{4.87})$ and $v=4(0.006)/(\pi\,0.075^2)=1.36$ m\,s$^{-1}$; $h_f=4.5$ m.
+
+\exbox{}{By what factor does $h_f$ change if the diameter is doubled? If the flow is doubled?}\sol  Doubling $D$ divides $h_f$ by $2^{4.87}=29.3$; doubling $Q$ multiplies it by $2^{1.852}=3.61$.
+
+\exbox{}{Choose one equation of the application and find its origin label in the application. State whether it is literature, data-driven or engineered, and which experiment of the ensemble would test it.}\sol  Answers depend on the equation chosen.
+\banner{Statistics of the evidence}
+\section{Rank correlation}
+Pearson's correlation measures straight-line dependence and is sensitive to outliers. Spearman's rank correlation replaces each value by its rank and is the Pearson correlation of the ranks; when there are no ties
+\begin{equation}\label{eq:spearman}\boxed{\rho=1-\frac{6\sum_i d_i^{2}}{N(N^{2}-1)},}\end{equation}
+with $d_i$ the difference of the ranks of the $i$-th pair.
+\exbox{Memory against $n$ for ten soils}{Rank the ten soils by $n$ (Table~\ref{tab:soils}) and by the memory fate. The rank differences are $+1$ for S01, $+2$ for S02, $-1$ for S06, $-1$ for S08, $-1$ for S09 and zero for the other four, so $\sum d^2=1+4+1+1+1=8$ and $\rho=1-6(8)/(10\cdot99)=0.952$. This is the 0.95 of the study. An exact permutation test, in which the memory values are shuffled over the soils in all $10!$ ways, finds a correlation this high or higher with probability $196/3{,}628{,}800=5.4\times10^{-5}$ (one-sided): only 196 of the permutations have $\sum d^2\le8$.}
+
+
+\fig{g_mem_n}{0.55}{The memory fate against $n$ for the ten soils: Spearman $\rho=0.95$.}
+
+\section{The bootstrap}
+To measure how uncertain a statistic is, resample the data with replacement many times and recompute it. For the mean memory fate of the ten soils, $0.335$, 1,000 resamples (random seed 1) give a 95 per cent interval of $[0.17,\ 0.52]$, the 2.5th and 97.5th percentiles of the resampled means. The study uses the same idea twice: it resamples the 100 lattice cells of each soil, 1,000 times, for the confidence interval of the memory fate, and it resamples soils to find the interval of $\kappa$.
+
+\section{Leave-one-soil-out validation}
+A law fitted to all ten soils will always look good on those ten. The honest test is to leave one soil out, fit to the remaining nine, and predict the one that was left out; repeat for each soil and report the error over the predictions.
+\exbox{A straight line as a baseline}{Fit a straight line of the memory fate against $n$ ten times, each time without one soil. The prediction errors have a root-mean-square value of $0.12$, against $0.32$ for the benchmark that always predicts the mean of the other nine. A straight line is a crude law; the competition law of Chapter~7, with one parameter, reaches 0.058, so it is more than twice as accurate. (The 0.12 and 0.32 here are our illustration from the numbers of Table~\ref{tab:soils}; 0.058 is the study's value.)}
+
+
+
+\section{Fitting a constant to intervals}
+For each soil the experiment does not give the reach, only an interval: the reach lies above the largest firing trigger and below the smallest non-firing one, or only above the largest firing trigger if every trigger fires. The constant $\kappa$ is fitted by minimising
+\begin{equation}\label{eq:icloss}\boxed{\mathcal L(\kappa)=\sum_{s}\mathrm{dist}\bigl(\log_{10}\hc(\kappa;\alpha_s,n_s),\ [\ell_s,u_s]\bigr)^{2},}\end{equation}
+where the distance is zero inside the interval $[\ell_s,u_s]$ (in $\log_{10}$) and is the distance to the nearest end outside it.
+\exbox{A toy fit}{Take three soils with synthetic intervals: S03 (sand) $[100,300]$ cm, S05 (sandy loam) $[1000,2000]$ cm and S10 (silty clay loam) bounded only below, $\ge10{,}000$ cm. For $\kappa=10^{-11},\ 10^{-10.5},\ 10^{-10},\ 10^{-9.5},\ 10^{-9},\ 10^{-8.5},\ 10^{-8}$ the loss is $0.079,\ 0.024,\ 0.0013,\ 0,\ 0,\ 0.0003,\ 0.019$. It is exactly zero for $\kappa$ between $1.4\times10^{-10}$ and $2.6\times10^{-9}$: the minimum is a \emph{plateau}, not a point, because all three predictions lie inside their intervals. At $\kappa=10^{-9.5}$ the predicted reaches are $202,\ 1{,}654$ and $132{,}968$ cm. The study's $\kappa=3.47\times10^{-10}$ lies in such a plateau, and its bootstrap interval, $1.0\times10^{-10}$ to $2.8\times10^{-9}$, is of the same width: the data fix $\kappa$ to within about one order of magnitude, and Chapter~5 showed that this is enough, because $\hc\propto\kappa^{-1/E}$.}
+
+
+\fig{g_kappa}{0.55}{The reach against $\kappa$ for sand, sandy loam and silty clay loam. The dashed line is the fitted value.}
+
+\section{Choosing between laws}
+Several laws can be compared on the same footing: fit each to all soils, and for each compute the leave-one-soil-out error and the number of soils whose observed interval contains the prediction. For the four laws of the study the Mualem form has error 0.18 (log$_{10}$) and puts 5 of 10 soils inside; the power law 0.14 and 4; the fixed-saturation law 0.23 and 4; and the absolute-conductivity law is not supported, because $K(\hc)$ would have to span 3.6 decades. The Mualem form is preferred not because it is the smallest error but because it is derived from the physics and has one constant that does not depend on the soil.
+
+\exbox{}{Compute the Spearman correlation of the pairs $(1,2),(2,1),(3,3),(4,5),(5,4)$.}\sol  Rank differences $-1,1,0,-1,1$, $\sum d^2=4$, $\rho=1-24/120=0.8$.
+
+\exbox{}{Explain why the bootstrap resamples cells of the lattice, and not the runs of different lattices.}\sol  Cells within a lattice share a soil and a design, so they are the units that are exchangeable; resampling across different lattices would mix designs.
+
+\exbox{}{Using the toy fit of this chapter, find $\mathcal L$ at $\kappa=3.5\times10^{-10}$ and say whether it is on the plateau.}\sol  $\mathcal L(3.5\times10^{-10})=0$; the predicted reaches are $199,\ 1{,}615$ and $127{,}830$ cm, all inside the intervals. It is on the plateau.
+
+\exbox{}{Why is a leave-one-soil-out test harder to pass than a fit to all soils?}\sol  Because the left-out soil cannot influence the fit, so the error measures prediction and not description.
+
+\exbox{}{The exact one-sided permutation $p$ value of the memory--$n$ correlation is $5.4\times10^{-5}$. What is the smallest possible exact one-sided $p$ for $N=10$ with no ties?}\sol  $1/10!=1/3{,}628{,}800=2.8\times10^{-7}$.
+\banner{What is claimed, what is not, and what comes next}
+\section{What is shown}
+Memory, audit, reach and fate for ten soils in a one-dimensional matrix-flow model. The design modules reproduce published worked examples. Parsers and shared functions agree with independent readers, and defects were removed. Daisy 7.1.14 runs end to end from SWAFL, including a 5.85 ha field from a satellite image to a schedule. Data, code and application are open.
+
+\section{What is not claimed}
+\begin{itemize}[leftmargin=*]
+\item Field validation: measured drainage, lysimeters and sensor-scheduled plots are still needed. The memory result gives a testable prediction: sand should drain about 85 per cent of the released storage and silty clay loam about 2 per cent.
+\item Run-by-run repetition of the published experiments.
+\item The Windows build and the online data services on a connected machine.
+\item The non-equilibrium criterion $\Pi_\tau$ is proposed, not tested.
+\item Several model terms need attention: the baseline offset, sprinkler range coefficients, the wind term and the conductivity floor.
+\end{itemize}
+The constant $\kappa$ describes the crop, the climate and the sensor, and all E2 runs used one cereal rotation, one weather series and a sensor at 20 cm. For another crop or climate, $\kappa$ is determined again from a trigger experiment on a few soils.
+
+\section{What is covered and what is not yet}
+Part~I derives the equations of the manuscripts; Part~II works the mathematics of the SWAFL layers with computed examples: Engine~1 and Engine~2, irrigation control, the field balance and the soil--plant--atmosphere resistances, soil structure and tillage, mulch and evaporation, feedback and the hidden questions, phenotyping, surface, drip and sprinkler design, drainage design, the crop library and crop water requirement, weather and field data (evapotranspiration, satellite indices, runoff and soil loss), the Dashboard, and the governing equations of the Daisy workbench (Richards column, roots, heat, solutes, nitrogen, crop, calibration). Not yet worked in this edition: the reports, workflows and validity chapters of the application; the 107 reference topics, 69 experiment factors and 43 best combinations of the Daisy workbench (tables of Daisy parameters and runs); the screenshot atlas; the full numerical analysis of the Richards solver (only one worked column is shown); nitrogen transformations beyond the forms in Chapter~\ref{ch:daisy}; and a collection of laboratory problems on the open ensemble. The book has not reached the length first planned; it holds what has been worked and checked.
+\IfFileExists{extra/proj04.tex}{\input{extra/proj04}}{}
+\IfFileExists{extra/ten04.tex}{\input{extra/ten04}}{}
+\IfFileExists{extra/tenb04.tex}{\input{extra/tenb04}}{}
+\IfFileExists{extra/teny04.tex}{\input{extra/teny04}}{}
+\IfFileExists{extra/tenby04.tex}{\input{extra/tenby04}}{}
+\IfFileExists{extra/tenx04.tex}{\input{extra/tenx04}}{}
+\IfFileExists{extra/tenbx04.tex}{\input{extra/tenbx04}}{}
+\IfFileExists{extra/ex04.tex}{\input{extra/ex04}}{}
+\IfFileExists{extra/dyk04.tex}{\input{extra/dyk04}}{}
+\IfFileExists{extra/obj04.tex}{\input{extra/obj04}}{}

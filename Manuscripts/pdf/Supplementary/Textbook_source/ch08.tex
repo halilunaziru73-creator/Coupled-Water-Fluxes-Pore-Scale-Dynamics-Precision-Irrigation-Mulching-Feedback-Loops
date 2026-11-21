@@ -1,0 +1,352 @@
+\chapimg{fig/op08.png}
+\IfFileExists{extra/lead08.tex}{\input{extra/lead08}}{}
+\chapter{The Engines and the Dashboard}\label{chap:08}
+\markboth{The Engines and the Dashboard}{The Engines and the Dashboard}
+\IfFileExists{extra/bg08.tex}{\input{extra/bg08}}{}
+\banner{Engine 1: depletion, critical suction and the meta-model}\label{ch:e1}
+Part II treats the application layer by layer. Every layer of SWAFL is driven by one of two engines (the Daisy meta-model and the daily bucket model) or by a design module. For each layer this part states the relations that the application gives, then solves them with numbers. The numbers come from running the stated equations; every problem is solved in full, and where an input is not published (an annual flux, say) it is labelled as an assumed value.
+
+\section{Depletion between field capacity and wilting point}
+The application defines depletion of plant-available water between field capacity (suction 100 cm, pF 2.0) and the wilting point (15,849 cm, pF 4.2):
+\begin{equation}\label{eq:fdep}\boxed{f(h)=\frac{\Se(100)-\Se(|h|)}{\Se(100)-\Se(15\,849)},\qquad f_{\rm used}=\min\{1,\max\{0,f\}\}.}\end{equation}
+\par\noindent where $f$ is the depletion fraction (0 at field capacity, 1 at wilting point), $S_e(h)$ the effective saturation at suction $h$, $|h|=100$ cm the field-capacity suction, $|h|=15\,849$ cm the wilting-point suction and $f_{\rm used}$ the value limited to $[0,1]$.
+
+$f=0$ is field capacity and $f=1$ is the wilting point.
+
+\exbox{Depletion at 300 cm in three soils}{Compute $f$ at the sensor suction $|h|=300$ cm for the loam S06 ($\alpha=0.036$, $n=1.56$), the sand S03 ($\alpha=0.145$, $n=2.68$) and the silty clay loam S10 ($\alpha=0.010$, $n=1.23$).}\sol  For each soil compute $m=1-1/n$ and three values of $\Se=[1+(\alpha h)^n]^{-m}$.
+
+\subhd{Loam} ($m=0.3590$): $\Se(100)=0.4663$, $\Se(300)=0.2615$, $\Se(15849)=0.0286$. Then $f=(0.4663-0.2615)/(0.4663-0.0286)=0.468$.
+
+\subhd{Sand} ($m=0.6269$): $\Se(100)=0.0112$, $\Se(300)=0.0018$, $\Se(15849)=0.0000$. Then $f=(0.0112-0.0018)/(0.0112-0.0000)=0.842$.
+
+\subhd{Silty clay loam} ($m=0.1870$): $\Se(100)=0.8784$, $\Se(300)=0.7440$, $\Se(15849)=0.3118$. Then $f=(0.8784-0.7440)/(0.8784-0.3118)=0.237$.
+
+\subhd{Reading.} At $-300$ cm the sand has used 84 per cent of its plant-available water while the silty clay loam has used 24 per cent. The same suction means very different dryness in different soils; this is the reason for the trigger law of Chapter~\ref{ch:ctrl}.
+
+
+\exbox{Inverting the depletion by bisection}{Find the suction at which the loam S06 reaches the soil-independent critical depletion $f^*=0.45$. The application solves $f(h)=f^*$ by bisection on $\log_{10}|h|\in[0,4.6]$ with 60 halvings.}\sol  Start with the interval $[0,4.6]$. At each step take the midpoint $x=\log_{10}h$, evaluate $f$ with Equation~(\ref{eq:fdep}) and keep the half that still brackets $0.45$ (if $f<0.45$ the root is above, so the lower end moves up). The first eight steps are in Table~\ref{tab:bis}; the interval has then shrunk to $4.6/2^8=0.018$ in $\log_{10}h$, that is 4 per cent in $h$. After 60 halvings the width is $4\times10^{-18}$ and the answer is $h^*=284.3$ cm.
+\begin{table}[!htbp]\centering\small\caption{First eight bisection steps for the loam at $f^*=0.45$.}\label{tab:bis}
+\begin{tabular}{lrrrr}\toprule
+\hd{Step} & \hd{$\log_{10}h$ mid} & \hd{$h$ (cm)} & \hd{$f(h)$} & \hd{Keep}\\\midrule
+1 & 2.3000 & 199.5 & 0.3201 & lower\\
+2 & 3.4500 & 2818.4 & 0.8935 & upper\\
+3 & 2.8750 & 749.9 & 0.7053 & upper\\
+4 & 2.5875 & 386.8 & 0.5456 & upper\\
+5 & 2.4437 & 277.8 & 0.4422 & lower\\
+6 & 2.5156 & 327.8 & 0.4961 & upper\\
+7 & 2.4797 & 301.8 & 0.4697 & upper\\
+8 & 2.4617 & 289.5 & 0.4561 & upper\\\bottomrule\end{tabular}\end{table}
+\textbf{Check.} The application's table gives 284 cm for the loam; the computed value agrees to the rounding of the printed parameters.
+
+
+\begin{kfig}{Depletion $f$ of plant-available water against suction: zero at field capacity (100 cm), one at the wilting point (15\,849 cm); the loam S06 is drawn.}
+\draw[axis] (0,0)--(7.4,0);\draw[axis] (0,0)--(0,4.4);
+\node[lab,below] at (3.7,-0.55) {Suction $|h|$ (cm, log scale)};\node[lab,rotate=90] at (-0.8,2.2) {Depletion $f$};
+\foreach \x/\t in {1.5/10,3/100,4.5/1000,6/10000}{\draw[ln] (\x,0)--(\x,-0.1);\node[lab,below] at (\x,-0.1) {\t};}
+\foreach \y/\t in {0/0,2/0.5,4/1}{\draw[ln] (0,\y)--(-0.1,\y);\node[lab,left] at (-0.1,\y) {\t};}
+\draw[crv,smooth] plot coordinates {(3.000,0.000) (3.055,0.175) (3.110,0.345) (3.165,0.510) (3.220,0.670) (3.275,0.825) (3.330,0.974) (3.385,1.118) (3.440,1.256) (3.495,1.389) (3.550,1.517) (3.605,1.639) (3.660,1.757) (3.715,1.870) (3.770,1.978) (3.825,2.081) (3.880,2.180) (3.935,2.275) (3.990,2.366) (4.045,2.452) (4.100,2.535) (4.155,2.614) (4.210,2.689) (4.265,2.761) (4.320,2.830) (4.375,2.896) (4.430,2.959) (4.485,3.019) (4.540,3.076) (4.595,3.130) (4.650,3.183) (4.705,3.232) (4.760,3.280) (4.815,3.325) (4.870,3.368) (4.925,3.409) (4.980,3.449) (5.035,3.486) (5.090,3.522) (5.145,3.556) (5.200,3.589) (5.255,3.620) (5.310,3.649) (5.365,3.677) (5.420,3.704) (5.475,3.730) (5.530,3.755) (5.585,3.778) (5.640,3.800) (5.695,3.822) (5.750,3.842) (5.805,3.861) (5.860,3.880) (5.915,3.897) (5.970,3.914) (6.025,3.930) (6.080,3.946) (6.135,3.960) (6.190,3.974) (6.245,3.987) (6.300,4.000)};
+\draw[gd] (3,0)--(3,4.2);\draw[gd] (6.3,0)--(6.3,4.2);\node[lab,above] at (3,4.2) {FC};\node[lab,above] at (6.3,4.2) {WP};
+\end{kfig}
+
+\section{Table of critical suctions for the ten soils}
+\exbox{The table of critical suctions}{Reproduce the application's table of effective parameters: for each of the ten soils compute the suction $h^*$ at $f^*=0.45$ and the depletion at 300 cm.}\sol  Repeat the bisection for every soil. The result is in Table~\ref{tab:h45}. The published values are $387, 262, 143, 160, 195, 284, 401, 311, 503, 729$ cm and $0.380, 0.496, 0.842, 0.756, 0.627, 0.468, 0.367, 0.439, 0.314, 0.237$; the largest difference is 1 cm and 0.001 in $f$, which comes from the rounding of the printed parameters.
+\begin{table}[!htbp]\centering\small\caption{Critical suction at $f^*=0.45$ and depletion at 300 cm, computed from Equation~(\ref{eq:fdep}).}\label{tab:h45}
+\begin{tabular}{lrrrrrr}\toprule
+\hd{ID} & \hd{Soil} & \hd{$\alpha$ (cm$^{-1}$)} & \hd{$n$} & \hd{AWC (mm/cm)} & \hd{$h^*$ (cm)} & \hd{$f(300)$}\\\midrule
+S01 & Coarse loam & 0.0961 & 1.353 & 1.5 & 387 & 0.379\\
+S02 & Coarse sand & 0.0536 & 1.600 & 0.5 & 262 & 0.496\\
+S03 & Sand & 0.1450 & 2.680 & 0.6 & 143 & 0.842\\
+S04 & Loamy sand & 0.1240 & 2.280 & 0.9 & 160 & 0.756\\
+S05 & Sandy loam & 0.0750 & 1.890 & 1.2 & 195 & 0.627\\
+S06 & Loam & 0.0360 & 1.560 & 1.7 & 284 & 0.468\\
+S07 & Silt loam & 0.0200 & 1.410 & 2.0 & 401 & 0.366\\
+S08 & Sandy clay loam & 0.0590 & 1.480 & 1.4 & 311 & 0.438\\
+S09 & Clay loam & 0.0190 & 1.310 & 1.6 & 503 & 0.314\\
+S10 & Silty clay loam & 0.0100 & 1.230 & 1.7 & 729 & 0.237\\\bottomrule\end{tabular}\end{table}
+\textbf{Reading.} The critical suction rises from 143 cm for the sand to 729 cm for the silty clay loam: a fivefold spread in suction for one and the same depletion. A trigger at a fixed suction is therefore a different management in every soil.
+
+
+\exbox{Net irrigation depth and rooting depth}{The default net irrigation depth is $Z_n=\mathrm{clip}(f_T\cdot\mathrm{AWC}\cdot R_{\max};25,150)$ mm, with the maximum rooting depth
+\begin{equation}\label{eq:rmax}\boxed{R_{\max}=\mathrm{clip}\Bigl(R_c(0.85+0.3\,\mathrm{sand})\bigl[1+0.12\log_{10}(|h_T|/300)\bigr]\bigl[1-0.18\tfrac{N-100}{100}\bigr];25,100\Bigr)\ \text{cm}.}\end{equation}
+\par\noindent where $R_{\max}$ is the maximum rooting depth (cm), $R_c$ the value for the crop class (cm), ${\rm sand}$ the sand fraction, $h_T$ the trigger suction (cm) and $N$ the nitrogen supply (kg\,ha$^{-1}$).
+
+For a cereal $R_c=95$ cm. Find $Z_n$ for the loam S06 (sand 40 per cent, AWC 1.7 mm cm$^{-1}$) with trigger $-300$ cm and nitrogen $100$ per cent.}\sol  1. Rooting depth: $0.85+0.3(0.40)=0.97$; the suction factor is $1+0.12\log_{10}(300/300)=1$; the nitrogen factor is $1-0.18(0)=1$. So $R_{\max}=95(0.97)=92.15$ cm, inside the clip $[25,100]$.
+
+2. Trigger depletion: $f_T=f(300)=0.468$ (Table~\ref{tab:h45}).
+
+3. Depth: $Z_n=0.468\times1.7\times92.15=73.3$ mm, inside $[25,150]$ mm.
+
+\subhd{Repeat for the sand S03} (sand 92 per cent). $R_{\max}=95(0.85+0.276)=106.97$, clipped to $100$ cm. $f_T=0.842$, so $Z_n=0.842\times0.6\times100=50.5$ mm. The sand needs a smaller net depth per event (50.5 mm against 73.3 mm) because it holds less water per centimetre, although it is irrigated from a deeper depletion.
+
+\subhd{Effect of a drier trigger.} For the loam at $h_T=1000$ cm: the suction factor is $1+0.12\log_{10}(3.333)=1.0627$, $R_{\max}=92.15\times1.0627=97.9$ cm, $f_T=f(1000)$ is $0.759$, so $Z_n=0.759\times1.7\times97.9=126.3$ mm. A drier trigger deepens the roots by 6 per cent and increases the depth of each application by 72 per cent.
+
+
+\section{The meta-model: ratios of Daisy results}
+The annual fluxes of Engine 1 are built from the 20-year Daisy means $\mathbf b=(E_b,T_b,ET_b,I_b,Y_b,D_b,N_b)$ and from lookups in the mulch tables $M(\varphi,\rho)$ and warming tables $W(\Delta T,\rho)$ of the ensemble. The structure is multiplicative for fluxes and additive for drainage:
+\begin{align}
+T&=T_b\Bigl[\frac{\mathrm{now}.T}{\mathrm{bare}.T}\Bigr]\,\mathrm{clip}\Bigl(\frac{\mathrm{tN}.T}{\mathrm{tB}.T};0.3,2.5\Bigr),\label{eq:mT}\\
+D&=D_b+(\mathrm{now}.D-\mathrm{bare}.D)+(\mathrm{tN}.D-\mathrm{tB}.D).\label{eq:mD}
+\end{align}
+Fluxes are multiplied because ratios of large numbers are stable; drainage and leaching are added because ratios of numbers near zero are not.
+
+\exbox{Combining mulch and warming ratios}{For a soil the baseline is $T_b=240$ mm, $D_b=40$ mm. The mulch table gives, at the present mulch and rain, $\mathrm{now}.T=232$, $\mathrm{bare}.T=225$, $\mathrm{now}.D=55$, $\mathrm{bare}.D=38$; the warming table gives $\mathrm{tN}.T=236$, $\mathrm{tB}.T=229$, $\mathrm{tN}.D=44$, $\mathrm{tB}.D=40$. (These table entries are \emph{assumed} illustration values; the real ones are in the ensemble tables.) Find $T$ and $D$.}\sol  Transpiration: the mulch ratio is $232/225=1.0311$; the warming ratio is $236/229=1.0306$, inside $[0.3,2.5]$. So $T=240\times1.0311\times1.0306=255.0$ mm.
+
+Drainage: $D=40+(55-38)+(44-40)=40+17+4=61$ mm.
+
+\subhd{Why not multiply drainage?} If $\mathrm{bare}.D$ were $2$ mm and $\mathrm{now}.D$ were $6$ mm, the ratio would be 3 and $D_b=40$ would become 120 mm; the additive form adds only the 4 mm difference. This is why the application treats drainage and leaching as differences.
+
+
+\exbox{Closure window and irrigation efficiency}{After the four corrections the model enforces closure: $ET\in[P+I-D-30,\ P+I-D+15]$; if $ET$ lies outside, $ET$ is clipped and $E$, $T$ are scaled by the same factor. Then $E_{\rm other}=\max(0,ET-T-E)$, $\Delta S=P+I-ET-D$ and the irrigation efficiency $\mathrm{IE}=100Y/I$ (kg m$^{-3}$). Take $P=600$, $I=150$, $D=61$, $T=255$, $E=190$, $ET=520$ and $Y=6.4$ Mg ha$^{-1}$.}\sol  1. Window: $P+I-D=689$, so $ET$ must lie in $[659,704]$. The model value $ET=520$ is below the lower bound.
+
+2. Clip: $ET\leftarrow659$. The scale factor is $659/520=1.2673$, so $T=255\times1.2673=323.2$ and $E=190\times1.2673=240.8$ mm.
+
+3. $E_{\rm other}=\max(0,659-323.2-240.8)=95.0$ mm (interception and mulch evaporation).
+
+4. $\Delta S=600+150-659-61=30$ mm.
+
+5. $\mathrm{IE}=100(6.4)/150=4.27$ kg m$^{-3}$ (1 mm is 10 m$^3$ ha$^{-1}$, so 150 mm is 1,500 m$^3$ and 6,400 kg / 1,500 m$^3$ = 4.27).
+
+\subhd{Reading.} The window protects the balance from independent effects compounding beyond what the water allows; here it raised $ET$ by 139 mm, a large correction, which would signal that the ratio inputs are inconsistent.
+
+
+\section{Sensitivity of the reported numbers}
+\exbox{Sensitivity of the depth to the water capacity}{For the loam, $Z_n$ is proportional to $f_T$, AWC and $R_{\max}$. Compute the relative change of $Z_n$ if AWC is overestimated by 20 per cent.}\sol  $Z_n\propto \mathrm{AWC}$, so the relative change is $+20$ per cent: $73.3\to88.0$ mm. Because $f_T=f(h_T)$ does not involve AWC, the suction at which irrigation starts is unchanged; only the depth per application changes. The number of events per season falls in proportion, so the seasonal total is first-order unaffected, but the events are larger and rarer.
+\banner{Engine 2: the daily bucket model, step by step}\label{ch:e2}
+The daily model has $N=40$ layers of thickness $\Delta z=2.5$ cm. Layer $i$ holds water $w_i$ between $0$ and $W_{\max}=\mathrm{AWC}\,\Delta z$ (mm); relative content $s_i=w_i/W_{\max}$ and depletion $f_i=1-s_i$. All layers start at $0.72W_{\max}$. The sensor layer is $j_s=\mathrm{round}(z_s/\Delta z)$.
+
+\exbox{Layout and state}{For the loam (AWC $=1.7$ mm cm$^{-1}$) with sensor depth 20 cm find $W_{\max}$, the sensor layer, the starting water and the trigger depletion for $-300$ cm.}\sol  $W_{\max}=1.7\times2.5=4.25$ mm; $j_s=\mathrm{round}(20/2.5)=8$; starting water $0.72\times4.25=3.06$ mm per layer, so the 100 cm profile holds $40\times3.06=122.4$ mm of plant-available water out of $170$ mm. The trigger depletion is $f_T=0.468$ (Chapter~\ref{ch:e1}), so the sensor layer must fall to $s_8\le1-0.468=0.532$, that is $w_8\le2.26$ mm, to start irrigation. At the start $w_8=3.06>2.26$, so no irrigation is due.
+
+
+\section{Crop calendar and canopy cover}
+For spring barley the sowing day is 100 and the harvest day is 225. The cover is the logistic
+\begin{equation}\boxed{c(d)=\frac{1}{1+\exp[-(d-d_{\rm mid})/13]},\quad d_{\rm mid}=d_{\rm sow}+50,}\end{equation}
+\par\noindent where $c(d)$ is the canopy cover (0 to 1) on day $d$, $d_{\rm mid}$ the day of half cover, $d_{\rm sow}$ the day of sowing and 13 the width of the logistic rise (d).
+
+which after the peak day $d_{\rm pk}=d_{\rm harv}-50$ declines linearly to zero at harvest: $c\leftarrow c\,\max\{0,1-(d-d_{\rm pk})/(d_{\rm harv}-d_{\rm pk})\}$.
+
+\exbox{Canopy cover through the season}{Compute the canopy cover of spring barley on days 100, 120, 140, 150, 160, 175, 190, 205, 215 and 225.}\sol  $d_{\rm mid}=150$, $d_{\rm pk}=175$. Before the peak $c=1/(1+e^{-(d-150)/13})$: on day 120, $(120-150)/13=-2.308$, $e^{2.308}=10.05$, so $c=1/11.05=0.0905$; on day 150, $c=0.5$; on day 160, $e^{-0.769}=0.4634$ so $c=0.683$. At the peak $d=175$: $e^{-1.923}=0.1462$, $c=0.872$. After the peak the factor is $1-(d-175)/50$: on day 190 the logistic gives $0.956$ and the factor is $1-15/50=0.70$, so $c=0.669$; on day 205, $0.986\times0.40=0.394$; on day 225, the factor is $0$ and $c=0$. Table~\ref{tab:can} lists all ten days.\begin{table}[!htbp]\centering\small\caption{Canopy cover of spring barley.}\label{tab:can}
+\begin{tabular}{lr}\toprule
+\hd{Day} & \hd{Cover $c$}\\\midrule
+100 & 0.021\\
+120 & 0.090\\
+140 & 0.317\\
+150 & 0.500\\
+160 & 0.683\\
+175 & 0.872\\
+190 & 0.669\\
+205 & 0.394\\
+215 & 0.199\\
+225 & 0.000\\\bottomrule\end{tabular}\end{table}
+\textbf{Reading.} The curve is engineered to reproduce the shape of a canopy, not a measured leaf-area record; the cover mean over the year, $\bar C=\frac1{365}\sum c(d)=0.138$ is the divisor that spreads the annual transpiration over the days.
+
+
+\section{Rainfall generator}
+Rain falls on a day with probability 0.28; the wet-day depth is exponential and capped,
+\begin{equation}\boxed{R=\min\{70,\ \mu_0\gamma_y(-\ln U)\},\ U\sim\mathrm{Uniform}(0,1),\quad \mu_0=\frac{P}{0.28\times365}.}\end{equation}
+\par\noindent where $R$ is the daily rainfall (mm), $U$ a random number uniform on (0,1), $\mu_0$ the mean depth of a rainy day (mm), $\gamma_y$ the scale of year $y$, $P$ the annual rainfall (mm) and 0.28 the assumed probability of a rainy day.
+
+The canopy and litter catch the first $I_c=\mu_0\ln(1/r)$ mm of every shower, with $r=\max\{40,P-P_{\rm other}\}/P$, and only throughfall $T_f=\max\{0,R-I_c\}>0.3$ mm enters the soil.
+
+\exbox{Rainfall generator constants}{For an annual rain $P=600$ mm, find $\mu_0$, the expected number of wet days, the probability that a wet day exceeds the cap, and the interception $I_c$ if $P_{\rm other}=60$ mm.}\sol  $\mu_0=600/(0.28\times365)=5.871$ mm. Expected wet days: $0.28\times365=102.2$. The exponential tail gives $P(R>70)=\exp(-70/5.871)=\exp(-11.92)=6.7\times10^{-6}$ (with $\gamma_y=1$), so the cap hardly binds in a year with 102 wet days (the chance that it binds at least once is $102\times6.7\times10^{-6}=7\times10^{-4}$). Next, $r=\max\{40,600-60\}/600=540/600=0.9$ and $I_c=5.871\ln(1/0.9)=0.619$ mm.
+
+\subhd{Check.} The expected interception per wet day is $\mu_0(1-r)=5.871\times0.1=0.587$ mm, so the yearly total is $102.2\times0.587=60.0$ mm, which equals $P_{\rm other}$. The choice of $I_c$ makes the daily generator reproduce the annual interception of Engine 1.
+
+
+\exbox{The year factor}{The dryness factor is $\gamma_y=\mathrm{clip}\bigl((m_{\rm med}/m_y)^{0.3};0.65,1.45\bigr)$ with $m_y=10^{\overline{\log_{10}h}}$ the geometric-mean suction of the growing season. If the median season has $m_{\rm med}=300$ cm and year $y$ has $m_y=900$ cm, find $\gamma_y$ and the mean wet-day depth of that year; do the same for $m_y=60$ cm.}\sol  Dry year: $(300/900)^{0.3}=0.3333^{0.3}=e^{0.3\ln0.3333}=e^{-0.3296}=0.719$; the clip does not bind, so $\gamma_y=0.719$ and the mean wet-day depth is $5.871\times0.719=4.22$ mm. Wet year: $(300/60)^{0.3}=5^{0.3}=e^{0.4828}=1.621$, clipped to $1.45$, so the mean depth is $5.871\times1.45=8.51$ mm. A drier record (higher suction) gives drier generated years, and the clip stops the factor from exceeding $0.65$ to $1.45$.
+
+
+\section{Infiltration, redistribution and drainage}
+Water enters the top layer and cascades: any layer above $W_{\max}$ passes the excess down; the excess leaving layer 40 is drainage. Between layers a slow redistribution moves water toward the drier neighbour, $q_i=0.08(w_{i+1}-w_i)$, $w_i\leftarrow w_i+q_i$, $w_{i+1}\leftarrow w_{i+1}-q_i$.
+
+\exbox{A 10 mm shower in the loam}{The loam ($W_{\max}=4.25$ mm) has all layers at $3.06$ mm. A throughfall of $10.0$ mm arrives. Find the water in layers 1 to 4 after the cascade, then after one redistribution pass over the pair (1,2).}\sol  Layer 1: $3.06+10.00=13.06$ mm, an excess of $13.06-4.25=8.81$ mm, so $w_1=4.25$ and $8.81$ mm moves down. Layer 2: $3.06+8.81=11.87$, excess $7.62$, $w_2=4.25$. Layer 3: $3.06+7.62=10.68$, excess $6.43$, $w_3=4.25$. Layer 4: $3.06+6.43=9.49$, excess $5.24$, $w_4=4.25$. The front continues until the excess is used up: each layer absorbs $4.25-3.06=1.19$ mm, so $10.00/1.19=8.4$ layers are filled, that is the wetting front reaches $8.4\times2.5=21$ cm. No drainage occurs at 100 cm.
+
+\subhd{Redistribution.} Within the filled layers $w_i=w_{i+1}$ so $q=0$. At the front, layers 8 and 9 have $w_8=4.25$ and $w_9=3.06+0.4\times1.19=3.54$: $q_8=0.08(3.54-4.25)=-0.057$ mm, so $0.057$ mm moves from layer 8 to layer 9 (downward), smoothing the front by 0.057 mm per day per layer pair.
+
+
+\section{Roots}
+The rooting depth chases water while the canopy grows,
+\begin{equation}R_d\leftarrow\max\Bigl\{R_d,\ \min\Bigl\{R_{\max}\,\mathrm{clip}\bigl(\tfrac{c-0.04}{0.96};0,1\bigr)^{0.8},\ R_{\max},\ R_d+1.7(0.35+\bar s_{\rm wet})\kappa\Bigr\}\Bigr\},\end{equation}
+\par\noindent where $R_d$ is the rooting depth on day $d$ (cm), $R_{\max}$ the maximum depth, $c$ the canopy cover, $\bar s_{\rm wet}$ the mean wetness of the soil profile (0 to 1) and $\kappa$ the soil resistance factor; the depth never decreases and grows by at most the third term.
+
+and the root density is
+\begin{equation}\boxed{\rho_i\propto\exp\Bigl(-\frac{z_i}{\lambda R_d+8}\Bigr)(0.45+0.9s_i)\Bigl[1+3e^{-((z_i-z_d)/12)^2}\Bigr]_{\rm drip\ only},\quad z_i\le R_d,\ \sum\rho_i=1,}\end{equation}
+with $\lambda=0.32$ for cereal.
+
+\exbox{Rooting depth advance}{On day 150 ($c=0.5$) the root depth is $R_d=20$ cm, $R_{\max}=92.15$ cm, the mean relative content under the front is $\bar s_{\rm wet}=0.60$ and the topsoil is wet ($\kappa=1$). Find the new $R_d$.}\sol  Three candidates: (a) the cover limit $92.15\,\mathrm{clip}((0.5-0.04)/0.96)^{0.8}=92.15\times0.4792^{0.8}=92.15\times0.5549=51.2$ cm; (b) $R_{\max}=92.15$ cm; (c) the growth rate $20+1.7(0.35+0.60)(1)=20+1.615=21.61$ cm. The minimum is 21.61 cm, and the maximum with the old value $20$ is 21.61 cm. The root front therefore advances by 1.6 cm per day while the canopy supports a deeper root: at this rate it needs about $(92-20)/1.6=45$ days to reach full depth.
+
+
+\exbox{Root density by layer}{With $R_d=15$ cm and the six layers of 0 to 15 cm having relative contents $s=0.50,0.55,0.60,0.65,0.70,0.70$ (no drip), compute the root densities.}\sol  $\lambda R_d+8=0.32(15)+8=12.8$ cm. Layer centres $z_i=1.25,3.75,\dots,13.75$ cm. The product $\exp(-z/12.8)(0.45+0.9s)$ is evaluated in Table~\ref{tab:rho} and normalised to sum to 1 (the total before normalisation is $3.4686$). Root density decreases with depth by the exponential and increases with wetness by the second factor; here the wetter lower layers compensate only part of the exponential decline.\begin{table}[!htbp]\centering\small\caption{Root density of the first six layers.}\label{tab:rho}
+\begin{tabular}{lrrrr}\toprule
+\hd{$z_i$ (cm)} & \hd{$s_i$} & \hd{$e^{-z/12.8}$} & \hd{$0.45+0.9s$} & \hd{$\rho_i$}\\\midrule
+1.25 & 0.50 & 0.9070 & 0.900 & 0.2353\\
+3.75 & 0.55 & 0.7460 & 0.945 & 0.2033\\
+6.25 & 0.60 & 0.6137 & 0.990 & 0.1752\\
+8.75 & 0.65 & 0.5048 & 1.035 & 0.1506\\
+11.25 & 0.70 & 0.4152 & 1.080 & 0.1293\\
+13.75 & 0.70 & 0.3416 & 1.080 & 0.1064\\\bottomrule\end{tabular}\end{table}
+
+
+\section{Evaporation and transpiration}
+Daily soil evaporation spreads the annual $E_{\rm yr}$ with a sinusoidal weight reduced by canopy shade,
+\begin{equation}\boxed{E_d=E_{\rm yr}\frac{w({\rm doy})}{\sum_{k=0}^{364}w(k)}(1-0.3c),\quad w({\rm doy})=0.35+0.65\cdot\tfrac12\Bigl[1+\sin\tfrac{2\pi({\rm doy}-100)}{364}\Bigr],}\end{equation}
+\par\noindent where $E_d$ is the daily evaporation (mm), $E_{\rm yr}$ the annual total (mm), $w({\rm doy})$ the seasonal weight on the day of the year, $c$ the canopy cover (0 to 1), which shades the soil, and the sum in the denominator normalises the weights.
+
+drawn from the top four layers with weights $(0.55,0.25,0.12,0.08)$, never below $0.05W_{\max}$. Transpiration demand is $T_d=k_tT_{\rm yr}c(d)/(\bar C\cdot365)$ divided among layers by $q_i^T=T_d\rho_ia_i/\sum_j\rho_ja_j$ with $a_i=\mathrm{clip}\bigl((s_i-0.15)/0.6;0,1\bigr)$.
+
+\exbox{Evaporation of one day}{With $E_{\rm yr}=170$ mm, find the evaporation on day 181 (doy index 180), when the canopy cover is $c=0.8$, and how it is drawn from the layers.}\sol  The seasonal weight is $w(180)=0.35+0.65\times0.5[1+\sin(2\pi\,80/364)]=0.35+0.325[1+0.9820]=0.9942$. The sum of the weights over the year is $\sum w=246.05$ (mean 0.674). Hence $E_d=170\times0.9942/246.05\times(1-0.24)=0.522$ mm. It is taken from layers 1 to 4 as $0.55,0.25,0.12,0.08$ times this: $0.287,0.131,0.063,0.042$ mm, provided that each layer stays above $0.05W_{\max}=0.21$ mm. Without a canopy ($c=0$) the same day would lose $0.687$ mm, 30 per cent more than 0.522: shade reduces evaporation.
+
+
+\exbox{Transpiration demand and its division}{With $T_{\rm yr}=230$ mm, $\bar C=0.138$ and $k_t=1$, find $T_d$ on a day with $c=0.8$ and distribute it among three layers with $\rho=(0.5,0.3,0.2)$ and $s=(0.8,0.5,0.2)$.}\sol  $T_d=230\times0.8/(0.138\times365)=184/50.37=3.653$ mm. Availability $a_i=\mathrm{clip}((s_i-0.15)/0.6)$: $(0.8-0.15)/0.6=1.083\to1$; $(0.5-0.15)/0.6=0.583$; $(0.2-0.15)/0.6=0.083$. The weights $\rho_ia_i=0.5,\ 0.175,\ 0.0167$ sum to $0.6917$. The shares are $0.723,\ 0.253,\ 0.024$, so the uptake is $2.641,\ 0.924,\ 0.088$ mm. The wettest layer supplies 72 per cent although it holds only half of the roots, and the dry third layer is almost shut off: this is the linear stress function between 15 and 75 per cent of plant-available water.
+
+
+\section{The irrigation rule and a season run}
+An irrigation of dose $d$ is applied on a day if the canopy cover exceeds 0.2, $95\le\mathrm{doy}\le250$, the spacing and budget rules hold, the sensor layer is dry enough ($1-s_j\ge f_T$) and $f_T<0.995$. The dose is $d=\mathrm{clip}(\bar I/10;15,35)$ mm.
+
+\exbox{One season of the loam}{For $\bar I=150$ mm yr$^{-1}$ find the dose; then run the daily model for one season of spring barley on the loam with $P=600$ mm, $E_{\rm yr}=170$, $T_{\rm yr}=230$, trigger $-300$ cm, sensor at 20 cm, $k_t=1$ and a fixed random seed. (Simplifications of this worked run: $\bar s_{\rm wet}=0.6$ and $\kappa=1$ in the root advance; no spacing rule.)}\sol  Dose: $150/10=15$ mm, which is at the lower clip, so $d=15$ mm. (The run below used the limit rule $\mathrm{clip}(15;15,35)$.) The run gives: rain $P=606$ mm, irrigation $90$ mm in 6 events on days 147, 148, 164, 165, 181, 198, soil evaporation $158$ mm, transpiration $230$ mm, drainage $200$ mm, and final rooting depth $82$ cm. Storage change: the profile started at $0.72W_{\max}=3.06$ mm per layer, 122.4 mm in all.
+
+\subhd{Balance check.} $P+I-E-T-D=\Delta S$: $606+90-158-230-200=108$ mm; the throughfall is smaller than $P$ by the interception $P-\sum T_f$, so the storage change equals this minus the interception of 62 mm. In words: the engine conserves mass because every flux is taken from, or given to, the layers.\par
+The first irrigation occurs on day 147, when the sensor layer first reaches $1-s_8\ge0.468$; before that the crop lived on rain and storage.
+
+
+\exbox{The same season in the sand}{Repeat the season run for the sand S03 (AWC 0.6 mm cm$^{-1}$, trigger depletion $f_T=0.842$ at 300 cm) with the same weather seed.}\sol  $W_{\max}=0.6\times2.5=1.5$ mm per layer. Irrigation $90$ mm in 6 events (days 140, 155, 165, 174, 188, 199), drainage $251$ mm, transpiration $226$ mm, evaporation $142$ mm. Compared with the loam (drainage $200$ mm) the sand drains $51$ mm more: the layers hold only 1.5 mm each, so most of every shower and irrigation passes below 1 m. With the same dose of 15 mm the sand wastes a larger share, which is the mechanism behind the fate of saved water in Chapter~\ref{ch:fate}.
+
+\subhd{Reading.} The daily model is a tipping-bucket engine; the application scales drainage and the wetting front to Engine~1 (Equation below) because they are not Richards solutions.
+
+
+\section{Scaling to the annual model}
+The daily results are multiplied by constants so that their 20-year means equal Engine 1:
+\begin{equation}\boxed{S_P=\frac P{P_{\rm sim}},\ S_{\rm thr}=\frac{P-P_{\rm other}}{T_{f,\rm sim}},\ S_E=\frac E{E_{\rm sim}},\ S_T=\frac T{T_{\rm sim}},\ S_D=\frac D{D_{\rm sim}},}\end{equation}
+\par\noindent where $S_P,S_E,S_T,S_D$ are the scale factors of rain, evaporation, transpiration and drainage (dimensionless), $P$, $E$, $T$, $D$ the target values and the subscript ``sim'' the simulated values (mm), $P_{\rm other}$ the rain not intercepted, and $T_{f,{\rm sim}}$ the simulated throughfall.
+
+and the displayed fluxes are $R=P_dS_P$, $T_f=\min\{R,T_{f,d}S_{\rm thr}\}$, $E=E_dS_E$, $T=T_dS_T$, $D=D_dS_D$, with $\Delta S_d=T_f+I-E-T-D$.
+
+\exbox{Scale factors}{Engine 1 gives $P=600$, $P_{\rm other}=60$, $E=170$, $T=230$, $D=70$ mm. The daily run of the loam above gave $P_{\rm sim}=606.1$, $T_{f,\rm sim}=544.4$, $E_{\rm sim}=158.5$, $T_{\rm sim}=229.6$, $D_{\rm sim}=200.2$ mm. Find the scale factors and the displayed drainage of a day on which the model drained $12$ mm.}\sol  $S_P=600/606.1=0.9899$; $S_{\rm thr}=540/544.4=0.9919$; $S_E=170/158.5=1.0726$; $S_T=230/229.6=1.0018$; $S_D=70/200.2=0.3496$. A day with a drainage of 12 mm is shown as $12\times0.3496=4.20$ mm. The scale factors are close to 1 when the daily engine is already consistent with the annual one; a factor far from 1 (here $S_D=0.35$) flags a bucket model that drains too much compared with the Richards-based Daisy result, which is the reason for the scaling.
+
+
+\exbox{Evaporation demand under warming}{Under warming the bare-soil demand is $E_{0,\rm bare}=4.2(1+0.07\Delta T)\cdot\frac{0.35+0.65\cdot\frac12[1+\sin(2\pi(\mathrm{doy}-100)/365)]}{0.675}\,\mathrm{clip}(1-0.12(\rho-1);0.85,1.12)\sqrt{\gamma_y}$ mm d$^{-1}$. Find the demand on day 190 with $\Delta T=2$ K, rain scale $\rho=1$, $\gamma_y=1$.}\sol  $4.2\times1.14=4.788$; the seasonal weight is $0.35+0.325[1+\sin(2\pi\,90/365)]=0.35+0.325(1+0.9998)=0.9999$, divided by $0.675$ gives $1.4814$; the cloud factor is $\mathrm{clip}(1,0.85,1.12)=1$ and $\sqrt{\gamma_y}=1$. So $E_{0,\rm bare}=7.09$ mm d$^{-1}$, which is 14 per cent above the unwarmed value 6.22 mm d$^{-1}$ (a 7 per cent per kelvin increase, close to the Clausius--Clapeyron rate).
+\banner{Field balance, soil--plant--air and profile evolution}\label{ch:bal}
+\section{Field balance: the closed budget}
+The home layer draws the water budget of a field for a day, a year or the 20-year mean: $P+I=T+E+E_{\rm other}+D+\Delta S$ (Equation 5.12 of the application). In the average-year view the five numbers over the arrows and the strip below must satisfy this identity.
+
+\exbox{Checking the budget and changing the rain}{The average-year view shows $P=598$, $I=142$, $T=236$, $E=171$, interception and mulch evaporation $E_{\rm other}=88$, $D=207$ mm. (These are illustrative numbers for the check.) (a) Compute the storage change. (b) Change the rainfall scale to $\times1.3$ and recompute the rain; if the extra rain is shared as $25$ per cent evaporated, $15$ per cent intercepted and the rest drained, find the new drainage and $\Delta S$.}\sol  (a) Inputs $598+142=740$ mm; outputs $236+171+88+207=702$ mm; $\Delta S=740-702=+38$ mm. (b) The new rain is $1.3\times598=777.4$ mm, an extra $179.4$ mm. Evaporation takes $0.25\times179.4=44.9$ mm, interception $0.15\times179.4=26.9$ mm, drainage the remaining $60$ per cent, $107.6$ mm. New values: $E=215.9$, $E_{\rm other}=114.9$, $D=314.6$, and $\Delta S=777.4+142-(236+215.9+114.9+314.6)=+38$ mm (unchanged by construction). Drainage rises by 52 per cent for 30 per cent more rain, which is why the drainage and nitrate-leaching arrows thicken together.
+
+\subhd{Efficiency indices.} The irrigation efficiency for a yield of 6.6 Mg ha$^{-1}$ is $100\times6.6/142=4.65$ kg m$^{-3}$; the transpiration share of evapotranspiration is $236/(236+171+88)=47.7$ per cent.
+
+
+\section{Soil, plant and air: potentials along the path}
+The suction of each layer is $h_i=\max\{30,h(f_i)\}$ with $f_i=1-s_i$ and $\psi_{\rm soil,i}=-h_i\times9.807\times10^{-5}$ MPa cm$^{-1}$. The root-zone suction is the density-weighted mean $h_{RZ}=\sum\rho_ih_i/\sum\rho_i$. The plant is a chain of series resistances,
+\begin{align}
+R_{\rm soil}&=0.03\max\{K_r,0.002\}^{-0.55},\quad R_{\rm root}=0.10,\ R_{\rm xyl}=0.05,\ R_{\rm leaf}=0.08\ \ (\text{MPa per mm d}^{-1}),\\
+\psi_{\rm root}&=\psi_{RZ}-aER_{\rm soil},\quad\psi_{\rm stem}=\psi_{\rm root}-aER_{\rm root},\quad\psi_{\rm leaf}=\mathrm{clip}\bigl(\psi_{\rm stem}-aE(R_{\rm xyl}+R_{\rm leaf});-3.2,0\bigr),
+\end{align}
+with $a=1$ when the cover exceeds 0.05 and $a=0$ for a fallow field. The air above the canopy has $\psi_{\rm air}=(RT/V_w)\ln\mathrm{RH}\approx135.5\ln\mathrm{RH}$ MPa.
+
+\exbox{The soil--plant--air path}{A transpiring crop ($a=1$) takes $E=4$ mm d$^{-1}$. Compute the potentials along the path for the loam S06 at root-zone suctions of 50, 300 and 1000 cm, and for the sand S03 at 300 cm.}
+\textbf{Solution (loam, 300 cm, in full).} 1. Relative conductivity $K_r(300)=3.8\times10^{-5}$, below the floor $0.002$, so $R_{\rm soil}=0.03(0.002)^{-0.55}=0.03\times30.5=0.915$ MPa per mm d$^{-1}$. 2. Soil potential $\psi_{RZ}=-300\times9.807\times10^{-5}=-0.0294$ MPa. 3. $\psi_{\rm root}=-0.0294-4(0.915)=-3.689$ MPa. 4. $\psi_{\rm stem}=-3.689-4(0.10)=-4.089$ MPa. 5. $\psi_{\rm leaf}=-4.089-4(0.05+0.08)=-4.609$, clipped to $-3.2$ MPa. Table~\ref{tab:spa} lists the other cases.\begin{table}[!htbp]\centering\small\caption{Potentials (MPa) along the soil--plant path for $E=4$ mm d$^{-1}$.}\label{tab:spa}
+\begin{tabular}{lrrrrrrr}\toprule
+\hd{Soil} & \hd{$h$ (cm)} & \hd{$K_r$} & \hd{$R_{\rm soil}$} & \hd{$\psi_{RZ}$} & \hd{$\psi_{\rm root}$} & \hd{$\psi_{\rm stem}$} & \hd{$\psi_{\rm leaf}$}\\\midrule
+S06 & 50 & 1.03e-02 & 0.371 & -0.0049 & -1.489 & -1.889 & -2.409\\
+S06 & 300 & 3.80e-05 & 0.915 & -0.0294 & -3.691 & -4.091 & -3.200\\
+S06 & 1000 & 6.55e-07 & 0.915 & -0.0981 & -3.759 & -4.159 & -3.200\\
+S03 & 300 & 2.73e-11 & 0.915 & -0.0294 & -3.691 & -4.091 & -3.200\\\bottomrule\end{tabular}\end{table}
+\textbf{Caution (reproduced by the numbers).} In every case except the wet loam the relative conductivity is below the floor and $R_{\rm soil}$ sits at its cap of $0.92$ MPa per mm d$^{-1}$; the leaf potential then reaches the clip at $-3.2$ MPa, below the intended range $-1$ to $-1.5$ MPa. The leaf, stem and root potentials of this layer therefore illustrate the series-resistance concept and are not a measure of plant water status.
+
+
+\exbox{The water potential of the air}{Compute the air potential at $\mathrm{RH}=66$ per cent and under a warming of $\Delta T=3$ K, where $\mathrm{RH}=\mathrm{clip}(0.66-0.03\Delta T;0.35,0.90)$. Also verify the constant 135.5.}\sol  $RT/V_w=8.314\times293/(18\times10^{-6})=1.353\times10^{8}$ Pa $=135.3$ MPa (the application uses 135.5). At $66$ per cent: $\psi_{\rm air}=135.5\ln0.66=-56.3$ MPa. With $\Delta T=3$ K the humidity is $0.66-0.09=0.57$ and $\psi_{\rm air}=135.5\ln0.57=-76.2$ MPa: the air gets $20$ MPa drier. The potential difference from a leaf at $-1.5$ MPa to the air is therefore about 55 to 75 MPa, far larger than any difference inside the plant; the resistances of the chain decide how much of it is used, not the size of the air potential itself.
+
+
+\section{Profile evolution}
+The share of the 0 to 60 cm root zone beyond the trigger is the thickness-weighted fraction
+\begin{equation}\boxed{\mathrm{share}=\frac{\sum_{i:z_i\le60,\ h_i>h_T}\Delta z_i}{\sum_{i:z_i\le60}\Delta z_i},}\end{equation}
+\par\noindent where The share is the fraction of the top 60 cm of the profile whose suction $h_i$ exceeds the trigger $h_T$, $\Delta z_i$ is the thickness of layer $i$ (cm) and $z_i$ its depth (cm).
+
+and the seasonal mean suction is the geometric mean $m_y=10^{\frac1{183}\sum_d\log_{10}h_d}$.
+
+\exbox{Share of the root zone beyond the trigger}{Twelve layers of 5 cm (down to 60 cm) have suctions $h_i=60,80,120,200,350,500,700,900,1100,1300,1600,2000$ cm. Find the share beyond a trigger of 300 cm and beyond 1000 cm; and the geometric mean suction of the profile.}\sol  Layers above 300 cm: 350, 500, 700, 900, 1100, 1300, 1600, 2000, which is 8 of 12, so the share is $8\times5/60=0.667$. Beyond 1000 cm: 1100, 1300, 1600, 2000, which is 4 of 12, so $0.333$. The geometric mean is $10^{\overline{\log_{10}h}}$: the mean of the logarithms is $2.6470$, so $m=444$ cm, which is lower than the arithmetic mean $742$ cm because the geometric mean damps the very dry layers. The heat strip of the application uses the geometric mean for this reason.
+
+
+\exbox{Dry seasons in the record}{In the 20-year record the median growing-season mean suction is $m_{\rm med}=250$ cm. A season has $\overline{\log_{10}h}=2.8$. Find its $m_y$, the year factor $\gamma_y$ for rainfall generation, and the mean wet-day depth for $P=600$ mm.}\sol  $m_y=10^{2.8}=631$ cm. $\gamma_y=(250/631)^{0.3}=0.396^{0.3}=e^{0.3\ln0.396}=e^{-0.2788}=0.757$ (inside $[0.65,1.45]$). $\mu_0=5.871$ mm, so the mean wet-day depth is $5.871\times0.757=4.44$ mm and the expected annual rain is $0.28\times365\times4.44=454$ mm, 24 per cent below the 600 mm normal. A dry season in the record gives a dry generated year.
+\banner{The Dashboard: how every number is produced}\label{ch:dash}
+The Dashboard recomputes from the engine every time the state, the date or the weather changes, so it adds no model of its own: every number is a read-out or a sum of the daily series $P_k,I_k,E_k,T_k,D_k$ of Engine~2 (Chapter~\ref{ch:e2}) and of the annual outputs of Engine~1. This chapter does the sums.
+
+\section{Block 1: the working date}
+On day index $k$ the tab shows $\mathrm{Rain}=P_k$, $\mathrm{Irr}=I_k$, $\mathrm{Evap}=E_k$, $\mathrm{Transp}=T_k$, $\mathrm{Drain}=D_k$ (mm d$^{-1}$), the sensor depletion $f$ and the trigger $f_T$ (irrigation fires when $f\ge f_T$).
+
+\exbox{One day of the dashboard}{The loam at the trigger $-300$ cm (depletion $f_T=0.468$), the first synthetic year (seed 1), working date day 150. Read the first block.}\sol  From the daily series: rain $P=1.0$ mm; rain reaching the soil after interception $0.3$ mm; irrigation $I=0.0$ mm; soil evaporation $E=0.54$ mm; transpiration $T=2.20$ mm; drainage $D=0.0$ mm; canopy cover $c=0.48$; the sensor layer holds 0.924 of its capacity so its relative depletion is $f=1-0.924=0.076$, below the trigger $f_T=0.468$. Irrigation fires on a day when the sensor depletion has reached $f_T$ (Eq.~6.1).
+
+
+\section{Block 2: the next 14 days}
+The sums over the following $N=14$ days are $\Sigma X=\sum_{j=1}^{14}X_{k+j}$ for $X\in\{P,I,E,T,D\}$. The bar says whether the days come from the weather record (the analogue year) or from the 16-day forecast when online weather is in use.
+
+\exbox{The next fortnight}{Sum days 151 to 164.}\sol  $\Sigma P=13.6$ mm, $\Sigma I=15.0$ mm, $\Sigma E=7.4$ mm, $\Sigma T=39.8$ mm, $\Sigma D=0.0$ mm. Evapotranspiration of the fortnight is $\Sigma E+\Sigma T=47.2$ mm, a mean of $3.37$ mm d$^{-1}$. Without rain or irrigation the fortnight would draw 18.6 mm from storage (the model gives the actual change below).
+
+
+\section{Block 3: the whole year and its closure}
+For the calendar year the tab gives rain, irrigation, other evaporation (interception, litter, ponded water, snow), soil evaporation, transpiration, drainage and the storage change; the balance closes by the identity
+\begin{equation}\boxed{\Delta S=P+I-E_{\rm other}-E-T-D.}\end{equation}
+\par\noindent where $\Delta S$ is the change of stored water, $P$ the rain, $I$ the irrigation, $E_{\rm other}$ the interception and surface evaporation, $E$ the soil evaporation, $T$ the transpiration and $D$ the drainage (all in mm).
+
+
+\begin{table}[!htbp]\centering\small\caption{Block 3 of the Results tab.}\label{tab:year}
+\begin{tabular}{lr}\toprule
+\hd{Quantity} & \hd{mm (year 1, loam, $-300$ cm)}\\\midrule
+Rain $P$ & 606.1\\
+Irrigation $I$ & 90.0\\
+Other evaporation $E_{\rm other}$ & 61.7\\
+Soil evaporation $E$ & 158.5\\
+Transpiration $T$ & 229.6\\
+Drainage $D$ & 200.2\\
+Storage change $\Delta S$ & 46.1\\
+Deepest roots (cm) & 82\\\bottomrule\end{tabular}\end{table}
+
+\exbox{Closing the year}{Verify the closure of Table~\ref{tab:year}.}\sol  $\Delta S=P+I-E_{\rm other}-E-T-D=606.1+90.0-61.7-158.5-229.6-200.2=46.1$ mm. Independently, the root-zone store of the 100 cm profile rose from 122.4 mm on 1 January to 168.5 mm on 31 December, a change of 46.1 mm. The two agree because $E_{\rm other}$ is, by construction, the rain that did not reach the soil: $E_{\rm other}=\sum(P_k-P_k^{\rm soil})=61.7$ mm.
+
+
+\section{Block 4 and the Charts tab: twenty seasons}
+Block 4 shows the 20-year averages of the annual model, and each chart has a line stating the mean, the 10--90\% range, the lowest and highest season and the variation between years. The variation is the coefficient of variation $\mathrm{CV}=100\,s/\bar x$ with $s$ the sample standard deviation.
+
+\begin{table}[!htbp]\centering\small\caption{Reliability over twenty synthetic seasons (seeds 1--20), loam, trigger $-300$ cm, mm per year.}\label{tab:rel}
+\begin{tabular}{lrrrrrr}\toprule
+\hd{Quantity} & \hd{mean} & \hd{10\%} & \hd{90\%} & \hd{lowest} & \hd{highest} & \hd{CV (\%)}\\\midrule
+Rain & 602 & 522 & 735 & 438 & 765 & 14\\
+Irrigation & 99 & 58 & 137 & 45 & 150 & 32\\
+Drainage & 207 & 134 & 283 & 111 & 359 & 31\\
+Soil evaporation & 158 & 157 & 160 & 148 & 160 & 2\\
+Transpiration & 230 & 229 & 230 & 228 & 230 & 0\\\bottomrule\end{tabular}\end{table}
+
+\exbox{The statistics line}{From Table~\ref{tab:rel} write the line under the irrigation chart.}\sol  ``Irrigation: mean 99 mm; 10 to 90\% range 58 to 137 mm; lowest 45 mm, highest 150 mm; variation between years 32\%.'' The coefficient of variation is $100\times s/\bar x$ with $s=31.3$ mm and $\bar x=99$ mm. No season was rainfed in this sample.
+
+
+\section{The pinned baseline}
+Press Pin and the tiles of Block 4 are stored; afterwards each tile shows $\Delta_i=x_i-x_i^{\rm pin}$ with $\blacktriangle$ for an increase, $\blacktriangledown$ for a decrease, green when the change is in the better direction, red when worse and ``= no change'' when $|\Delta_i|<10^{-9}$. Lower is better for soil evaporation, drainage, irrigation and nitrogen leaching; higher is better for yield and irrigation efficiency; transpiration, evapotranspiration and rainfall are neutral.
+
+\begin{table}[!htbp]\centering\small\caption{Pin at the trigger $-300$ cm, then move to $-1500$ cm (twenty-season means, mm per year).}\label{tab:pin}
+\begin{tabular}{lrrrll}\toprule
+\hd{Tile} & \hd{pinned (-300 cm)} & \hd{now (-1500 cm)} & \hd{$\Delta$} & \hd{arrow} & \hd{colour}\\\midrule
+Soil evaporation & 157.8 & 156.1 & -1.7 & $\blacktriangledown$ & better (green)\\
+Transpiration & 229.6 & 229.6 & 0.0 & = no change & neutral\\
+Drainage & 206.9 & 156.2 & -50.7 & $\blacktriangledown$ & better (green)\\
+Irrigation & 99.0 & 45.8 & -53.2 & $\blacktriangledown$ & better (green)\\
+Rain & 602.0 & 602.0 & 0.0 & = no change & neutral\\\bottomrule\end{tabular}\end{table}
+
+\exbox{Reading the pinned differences}{Read the tiles of Table~\ref{tab:pin}.}\sol  Irrigation falls from 99.0 to 45.8 mm (-53.2 mm): $\blacktriangledown$ and green, since less is better. Transpiration changes by 0.0 mm and is neutral (it carries no colour, because less transpiration may mean either less stress or a smaller crop). Drainage changes by -50.7 mm. A drier trigger therefore saves irrigation but the dashboard alone cannot say whether the saving is worth it: the yield tile (not computed here) must be read with it, as in Chapter~\ref{ch:ctrl}.
+
+
+\section{The pump hydrograph of a design}
+For drip and sprinkler designs the pump hydrograph is the step series $Q_{\rm pump}(t)=Q_z$ for $t\in[0,n_zt_{\rm run})$ and 0 afterwards: the zones or sets run in turn.
+
+\exbox{A pump hydrograph}{For the sprinkler farm of Chapter~\ref{ch:sprinkler} ($n=3$ laterals at once, set time $T=371$ min) the farm has $N_m=18$ lateral positions, so $n_z=\lceil18/3\rceil=6$ sets. Find the step series.}\sol  The flow of one set is $Q_z=3\times12\times21.2$ L min$^{-1}=764$ L min$^{-1}=12.74$ L s$^{-1}$ (3 laterals of 12 sprinklers). $t_{\rm run}=371/60=6.18$ h. The pump runs at $Q_z$ for $n_zt_{\rm run}=37.1$ h, in steps of $6.18$ h, and the volume is $Q_z\times n_zt_{\rm run}\times3.6=1{,}701$ m$^3$ (check: gross depth $\times$ area of the sets).
+
+
+\section{Summary}
+Every Dashboard number is a read-out, a sum, a mean or a difference of the daily series: Block 1 reads day $k$; Block 2 sums 14 days; Block 3 closes $\Delta S=P+I-E_{\rm other}-E-T-D$; Block 4 and the charts use twenty seasons; the pin shows $\Delta=x-x^{\rm pin}$ with a colour by direction; the pump hydrograph is a step series. Because all of it comes from the same objects, the dashboard, the report and the CSV exports agree digit for digit.
+\IfFileExists{extra/proj08.tex}{\input{extra/proj08}}{}
+\IfFileExists{extra/ten08.tex}{\input{extra/ten08}}{}
+\IfFileExists{extra/tenb08.tex}{\input{extra/tenb08}}{}
+\IfFileExists{extra/teny08.tex}{\input{extra/teny08}}{}
+\IfFileExists{extra/tenby08.tex}{\input{extra/tenby08}}{}
+\IfFileExists{extra/tenx08.tex}{\input{extra/tenx08}}{}
+\IfFileExists{extra/tenbx08.tex}{\input{extra/tenbx08}}{}
+\IfFileExists{extra/ex08.tex}{\input{extra/ex08}}{}
+\IfFileExists{extra/dyk08.tex}{\input{extra/dyk08}}{}
+\IfFileExists{extra/obj08.tex}{\input{extra/obj08}}{}
