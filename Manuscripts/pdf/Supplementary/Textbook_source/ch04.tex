@@ -81,6 +81,36 @@ where $C$ is the roughness coefficient of the pipe. The mean speed is $v=4Q/(\pi
 
 \exbox{}{Choose one equation of the application and find its origin label in the application. State whether it is literature, data-driven or engineered, and which experiment of the ensemble would test it.}\sol  Answers depend on the equation chosen.
 \banner{Statistics of the evidence}
+\section{Reading the statistics of this book in plain words}
+Every chapter that follows reports a few numbers that describe how well a law or a model agrees with data: an error, a bias, an $R^2$, a correlation. Each is simple, and none needs advanced mathematics. This section defines them one at a time on a small set of numbers, so that the figures in later chapters can be read at once.
+
+\par\noindent Let there be $N$ pairs of values. $y_i$ is the \emph{observed} value (the number from Daisy or from a measurement) and $\hat y_i$ is the \emph{predicted} value (the number from the law being tested). The \kw{error} of one pair is $e_i=\hat y_i-y_i$: positive when the law over-predicts, negative when it under-predicts.
+\begin{center}\small\begin{tabular}{@{}p{2.6cm}p{4.6cm}p{5.6cm}@{}}\toprule
+\hd{Measure} & \hd{Formula} & \hd{What it tells you}\\\midrule
+Bias & $\bar e=\dfrac1N\sum e_i$ & whether the law is on average too high or too low; zero means the errors cancel\\[4pt]
+RMSE & $\sqrt{\dfrac1N\sum e_i^2}$ & the typical size of an error, in the unit of the data; large errors count more because they are squared\\[4pt]
+$R^2$ & $1-\dfrac{\sum e_i^2}{\sum(y_i-\bar y)^2}$ & the share of the variation of the data that the law explains; 1 is perfect, 0 is no better than always guessing the mean $\bar y$\\[4pt]
+Correlation $r$ & $\dfrac{\sum(y_i-\bar y)(\hat y_i-\bar{\hat y})}{\sqrt{\sum(y_i-\bar y)^2\sum(\hat y_i-\bar{\hat y})^2}}$ & how closely the points follow a straight line; it ignores a constant offset, which bias does not\\\bottomrule
+\end{tabular}\end{center}
+The reason for two measures of agreement is that they answer different questions. A law can follow every rise and fall of the data ($r$ close to 1) and still be wrong by a constant amount (large bias and RMSE). The RMSE and $R^2$ penalise both faults, and the correlation penalises only the first.
+
+\exbox{Judging a law against six observations}{A law predicts the drained share of irrigation (in mm) for six irrigation events. The observed values are $2.1,\ 3.4,\ 4.0,\ 5.2,\ 6.1,\ 7.5$ and the predicted values are $2.4,\ 3.1,\ 4.5,\ 5.0,\ 6.6,\ 7.0$. Find the bias, the RMSE, $R^2$ and the correlation.}\sol \givenline{$N=6$ ; observed $y=2.1,3.4,4.0,5.2,6.1,7.5$ ; predicted $\hat y=2.4,3.1,4.5,5.0,6.6,7.0$}
+\par\noindent\textbf{Step 1: the errors.} $e_i=\hat y_i-y_i$ gives
+\[e=+0.3,\ -0.3,\ +0.5,\ -0.2,\ +0.5,\ -0.5\ \text{mm}.\]
+\par\noindent\textbf{Step 2: bias.} The sum of the errors is $0.3-0.3+0.5-0.2+0.5-0.5=0.3$, so
+\[\bar e=\frac{0.3}{6}=+0.05\ \text{mm}\quad\text{\finans}\]
+The law is practically unbiased: over- and under-predictions cancel.
+\par\noindent\textbf{Step 3: RMSE.} The squares of the errors are $0.09,\ 0.09,\ 0.25,\ 0.04,\ 0.25,\ 0.25$, with sum $0.97$. Then
+\[\mathrm{RMSE}=\sqrt{\frac{0.97}{6}}=\sqrt{0.162}=0.40\ \text{mm}\quad\text{\finans}\]
+A typical error is 0.4 mm, against observed values between 2 and 7.5 mm.
+\par\noindent\textbf{Step 4: $R^2$.} The mean of the observations is $\bar y=28.3/6=4.72$ mm. The squared distances of the observations from this mean are $6.85,\ 1.73,\ 0.51,\ 0.23,\ 1.91,\ 7.75$, with sum $18.99$. Then
+\[R^2=1-\frac{0.97}{18.99}=1-0.051=0.95\quad\text{\finans}\]
+The law explains 95 per cent of the variation of the six observations.
+\par\noindent\textbf{Step 5: correlation.} Working through the formula in the table gives $r=0.975$, so $r^2=0.951$. Here $r^2$ and $R^2$ are nearly equal because the bias is almost zero. They differ when the law has a large bias, and then $R^2$ is the honest one.
+
+\exbox{The same shape with a constant offset}{Add $+1.5$ mm to every predicted value of the previous example. Find the new bias, RMSE, $R^2$ and correlation, and explain the result.}\sol \givenline{$\hat y_i\to\hat y_i+1.5$}
+\par\noindent Every error increases by $1.5$ mm, so the new errors are $1.8,\ 1.2,\ 2.0,\ 1.3,\ 2.0,\ 1.0$. The bias is $\bar e=9.3/6=1.55$ mm. The sum of squares is $3.24+1.44+4.00+1.69+4.00+1.00=15.37$, so $\mathrm{RMSE}=\sqrt{15.37/6}=1.60$ mm and $R^2=1-15.37/18.99=0.19$. The correlation does not change: $r=0.975$, because adding a constant does not change the shape. A law that moves exactly like the data but sits 1.5 mm too high is nearly useless for predicting amounts, and only the bias, the RMSE and $R^2$ show it. \finans
+
 \section{Rank correlation}
 Pearson's correlation measures straight-line dependence and is sensitive to outliers. Spearman's rank correlation replaces each value by its rank and is the Pearson correlation of the ranks; when there are no ties
 \begin{equation}\label{eq:spearman}\boxed{\rho=1-\frac{6\sum_i d_i^{2}}{N(N^{2}-1)},}\end{equation}

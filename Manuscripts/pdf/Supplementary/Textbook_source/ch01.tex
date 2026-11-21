@@ -44,6 +44,109 @@ A \emph{measurement} tells you what happened in a field. A \emph{model} tells yo
 \exbox{}{Explain in two sentences why lowering $E_s$ by 50 mm does not necessarily raise $T$ by 50 mm.}\sol  Lowering $E_s$ leaves energy and water that may go to drainage, to storage or to transpiration; how much of each depends on the soil (Chapter 7). \finans
 
 \exbox{}{Using Equation~(\ref{eq:bal}), write the balance of the rainfed twin of an irrigated run and subtract the two. Show that dividing by $I$ gives five shares that sum to one.}\sol  Subtracting the two balances gives $I=(T-T_0)+(E_s-E_{s,0})+(E_o-E_{o,0})+(D-D_0)+(\Delta S-\Delta S_0+Q-Q_0)$; divide by $I$.
+\banner{Foundations in plain words}
+\section{The soil as three parts: solids, water and air}
+Before any equation of this book can be used, one must be able to picture what a soil sample is made of. Take a small undisturbed core of soil. It contains three parts. The \kw{solids} are the mineral grains and the organic matter. The \kw{water} fills part of the space between the grains. The \kw{air} fills the rest. The space between the grains, which holds the water and the air, is called the \kw{pore space}.
+
+\par\noindent Let $V_s$, $V_w$ and $V_a$ be the volumes of solids, water and air, and let $M_s$ and $M_w$ be the mass of the solids and of the water. The total volume of the core is
+\begin{equation}\label{eq:fd-vt}V_t=V_s+V_w+V_a,\qquad V_p=V_w+V_a ,\end{equation}
+where $V_t$ is the total volume of the core (cm$^3$) and $V_p$ the volume of its pore space (cm$^3$). Five quantities describe the core. Each is a simple ratio of the quantities above.
+\begin{center}\small\begin{tabular}{@{}p{3.1cm}p{3.5cm}p{6.3cm}@{}}\toprule
+\hd{Quantity} & \hd{Definition} & \hd{What it tells you}\\\midrule
+Dry bulk density $\rho_b$ & $M_s/V_t$ (g\,cm$^{-3}$) & how tightly the soil is packed; compact soil has a high value (about 1.1 to 1.7)\\
+Porosity $\phi$ & $V_p/V_t=1-\rho_b/\rho_s$ & the share of the core that is pore space; $\rho_s\approx2.65$ g\,cm$^{-3}$ is the density of the mineral grains\\
+Volumetric water content $\theta$ & $V_w/V_t$ (m$^3$\,m$^{-3}$) & the share of the core that is water; the quantity used throughout this book\\
+Gravimetric water content $w$ & $M_w/M_s$ (g\,g$^{-1}$) & the mass of water per mass of dry soil; this is what is measured by weighing and oven drying\\
+Degree of saturation $S$ & $V_w/V_p=\theta/\phi$ & how full the pore space is: 0 for a dry soil, 1 for a soil with no air\\\bottomrule
+\end{tabular}\end{center}
+The two water contents are linked by the density of the soil. Since $M_w=\rho_wV_w$ and $M_s=\rho_bV_t$,
+\begin{equation}\label{eq:fd-theta}\boxed{\theta=w\,\frac{\rho_b}{\rho_w},}\end{equation}
+where $\rho_w=1.00$ g\,cm$^{-3}$ is the density of water. A useful consequence: a layer of thickness $z$ holds a depth of water
+\begin{equation}\label{eq:fd-depth}\boxed{d=\theta\,z ,}\end{equation}
+so that $\theta=0.28$ in a layer 300 mm thick means $0.28\times300=84$ mm of water. This is why the water balance of this book, which is written in millimetres, can be read directly from the water content.
+
+\exbox{From a weighed soil core to the water content}{A core of volume $100$ cm$^3$ is taken from a topsoil. Its mass is $168$ g when fresh and $140$ g after drying in an oven. The density of the mineral grains is $2.65$ g\,cm$^{-3}$. Find (a) the gravimetric and volumetric water contents, (b) the porosity, (c) the degree of saturation, and (d) the depth of water held in a layer 30 cm thick that has the same water content.}\sol \givenline{$V_t=100$ cm$^3$ ; fresh mass $=168$ g ; dry mass $M_s=140$ g ; $\rho_s=2.65$ g\,cm$^{-3}$ ; $z=300$ mm}
+\par\noindent\textbf{(a) Water content.} The mass of water is the fresh mass less the dry mass:
+\[M_w=168-140=28\ \text{g}.\]
+We know that the gravimetric water content is the mass of water divided by the mass of dry soil, so
+\[w=\frac{M_w}{M_s}=\frac{28}{140}=0.20\ \text{g\,g}^{-1}.\]
+The dry bulk density is $\rho_b=M_s/V_t=140/100=1.40$ g\,cm$^{-3}$. From Equation~(\ref{eq:fd-theta}),
+\[\theta=w\frac{\rho_b}{\rho_w}=0.20\times\frac{1.40}{1.00}=0.28\ \text{m}^3\,\text{m}^{-3}\quad\text{\finans}\]
+\par\noindent\textbf{(b) Porosity.}
+\[\phi=1-\frac{\rho_b}{\rho_s}=1-\frac{1.40}{2.65}=0.472\quad\text{\finans}\]
+\par\noindent\textbf{(c) Degree of saturation.}
+\[S=\frac{\theta}{\phi}=\frac{0.28}{0.472}=0.59\quad\text{\finans}\]
+So 59 per cent of the pore space is filled with water and 41 per cent (that is, $0.472-0.28=0.192$ of the core volume) holds air.
+\par\noindent\textbf{(d) Depth of water.} From Equation~(\ref{eq:fd-depth}),
+\[d=\theta z=0.28\times300=84\ \text{mm}\quad\text{\finans}\]
+
+\section{Field capacity, wilting point and plant-available water}
+A farmer does not ask how much water the soil holds. The question is how much of it the crop can use. Two reference states answer this.
+
+\subhd{Field capacity.} After a heavy rain or an irrigation, the water in the large pores drains away under gravity within a day or two. The water that remains is held by the soil against gravity. This state is called \kw{field capacity}, with water content $\theta_{fc}$. In this book it is taken as the water content at a suction of $100$ cm.
+
+\subhd{Permanent wilting point.} As the crop takes up water, the soil dries and the water is held more and more strongly. At some point the roots cannot pull the water out any more, and the crop wilts and does not recover overnight. This state is called the \kw{permanent wilting point}, with water content $\theta_{wp}$. It is taken at a suction of $15{,}849$ cm (pF 4.2), about $1.55$ MPa.
+
+\par\noindent The water between the two states is the \kw{plant-available water}. Over a root zone of depth $Z_r$ the \kw{total available water} is
+\begin{equation}\label{eq:fd-taw}\boxed{\mathrm{TAW}=1000\,(\theta_{fc}-\theta_{wp})\,Z_r,}\end{equation}
+where TAW is in mm when $Z_r$ is in m. When the soil has dried to a water content $\theta$, the fraction of the available water that has been used, the \kw{depletion fraction}, is
+\begin{equation}\label{eq:fd-f}\boxed{f=\frac{\theta_{fc}-\theta}{\theta_{fc}-\theta_{wp}} .}\end{equation}
+The depletion fraction runs from 0 (field capacity) to 1 (wilting point). Chapter~\ref{ch:e1} uses the value $f^*=0.45$ as the point at which the crop begins to suffer, so an irrigation is triggered before $f$ reaches it.
+
+\exbox{Available water and depletion of a loam}{The loam S06 has $\alpha=0.036$ cm$^{-1}$ and $n=1.56$. Take $\theta_r=0.08$ and $\theta_s=0.43$ m$^3$\,m$^{-3}$ (illustrative values for this example). (a) Find $\theta_{fc}$ and $\theta_{wp}$. (b) Find the total available water of a root zone 1.0 m deep. (c) A sensor reads a suction of 300 cm. Find the depletion fraction and the depth of water already used.}\sol \givenline{$\alpha=0.036$ cm$^{-1}$ ; $n=1.56$ ; $\theta_r=0.08$ ; $\theta_s=0.43$ ; $Z_r=1.0$ m ; $h=300$ cm}
+\par\noindent\textbf{(a) Water content at the two reference states.} The shape parameter is $m=1-1/n=1-1/1.56=0.359$. From the van Genuchten curve, Equation~(\ref{eq:vg}), at field capacity ($h=100$ cm):
+\[\alpha h=0.036\times100=3.6,\quad(\alpha h)^n=3.6^{1.56}=7.38,\quad \Se=(1+7.38)^{-0.359}=0.466 .\]
+Rearranging Equation~(\ref{eq:Se}), $\theta=\theta_r+(\theta_s-\theta_r)\Se$, so
+\[\theta_{fc}=0.08+(0.43-0.08)\times0.466=0.243 .\]
+At the wilting point ($h=15{,}849$ cm): $\alpha h=570.6$, $(\alpha h)^n=1.99\times10^{4}$, $\Se=(1+1.99\times10^4)^{-0.359}=0.0286$, so
+\[\theta_{wp}=0.08+0.35\times0.0286=0.090\quad\text{\finans}\]
+\par\noindent\textbf{(b) Total available water.} From Equation~(\ref{eq:fd-taw}),
+\[\mathrm{TAW}=1000\,(0.243-0.090)\times1.0=153\ \text{mm}\quad\text{\finans}\]
+This agrees with the 150 mm listed for the loam in Table~\ref{tab:soils}.
+\par\noindent\textbf{(c) Depletion at 300 cm.} At $h=300$ cm, $\alpha h=10.8$, $(\alpha h)^n=10.8^{1.56}=41.2$ and $\Se=(1+41.2)^{-0.359}=0.262$. Then
+\[\theta=0.08+0.35\times0.262=0.172 .\]
+From Equation~(\ref{eq:fd-f}),
+\[f=\frac{0.243-0.172}{0.243-0.090}=\frac{0.071}{0.153}=0.47\quad\text{\finans}\]
+The depth of water already used from the 1.0 m root zone is $1000\,(0.243-0.172)\times1.0=71$ mm, which is 47 per cent of the 153 mm available. A trigger set at $f^*=0.45$ would therefore already have fired at about this suction.
+
+\section{Suction and its units}
+The word \emph{suction} is the first one a reader of this book meets that has no everyday meaning. It is the force per unit area with which the soil holds water, written as the height of a column of water that the force could support. A suction of 300 cm means that the soil holds its water as strongly as a pump would have to pull it up a column 300 cm tall. A dry soil has a large suction and a wet soil has a small one.
+
+\par\noindent Three units are in common use, and all three appear in this book and in the literature:
+\begin{itemize}
+\item \textbf{Centimetres of water} (cm), the unit of this book. It is the easiest to read, because $h$ enters the van Genuchten curve directly.
+\item \textbf{Kilopascals} (kPa). Since one centimetre of water exerts a pressure of $\rho_wg\times0.01=0.0981$ kPa, $h\ (\text{kPa})=0.0981\,h\ (\text{cm})$.
+\item \textbf{pF}, the base-10 logarithm of $h$ in centimetres: $\mathrm{pF}=\log_{10}h$. It compresses the huge range of suctions, from 1 cm in a flooded soil to more than $10^4$ cm in a dry one, into a scale from 0 to about 5.
+\end{itemize}
+\exbox{Converting a suction}{Express the four suctions $100$, $300$, $1000$ and $15{,}849$ cm in kilopascals and in pF, and say what each means for a crop.}\sol \givenline{$h=100,\ 300,\ 1000,\ 15{,}849$ cm}
+\par\noindent Using $h\ (\text{kPa})=0.0981\,h$ and $\mathrm{pF}=\log_{10}h$:
+\begin{center}\small\begin{tabular}{rrrl}\toprule
+\hd{$h$ (cm)} & \hd{$h$ (kPa)} & \hd{pF} & \hd{Meaning}\\\midrule
+100 & 9.8 & 2.00 & field capacity: the soil has just finished draining\\
+300 & 29.4 & 2.48 & a typical irrigation trigger of this book\\
+1000 & 98.1 & 3.00 & strong stress in most crops\\
+15\,849 & 1554 & 4.20 & permanent wilting point\\\bottomrule
+\end{tabular}\end{center}
+\finans
+
+\section{How to evaluate the van Genuchten curve step by step}
+Equation~(\ref{eq:vg}) is used so often that it is worth fixing a routine. To find the effective saturation from a suction, follow these five steps and write each result down.
+\begin{enumerate}
+\item Compute $m=1-1/n$.
+\item Compute $\alpha h$.
+\item Raise it to the power $n$: $(\alpha h)^n$.
+\item Add 1.
+\item Raise the result to the power $-m$. This is $\Se$.
+\end{enumerate}
+To find the suction from a given $\Se$, use Equation~(\ref{eq:vginv}) and reverse the steps: raise $\Se$ to the power $-1/m$, subtract 1, raise to the power $1/n$, and divide by $\alpha$.
+
+\exbox{The suction at which a loam has lost three quarters of its water}{For the loam S06 ($\alpha=0.036$, $n=1.56$) find the suction at which the effective saturation has fallen to $\Se=0.25$.}\sol \givenline{$\alpha=0.036$ cm$^{-1}$ ; $n=1.56$ ; $\Se=0.25$}
+\par\noindent The shape parameter is $m=1-1/1.56=0.359$, so $1/m=2.786$. From Equation~(\ref{eq:vginv}),
+\[\Se^{-1/m}=0.25^{-2.786}=47.5,\qquad \Se^{-1/m}-1=46.5,\qquad (46.5)^{1/n}=46.5^{0.641}=11.7 .\]
+Dividing by $\alpha$,
+\[h=\frac{11.7}{0.036}=326\ \text{cm}\quad\text{\finans}\]
+As a check, Equation~(\ref{eq:vg}) at 326 cm gives $\Se=0.25$, in agreement with the value of the previous example at 300 cm ($\Se=0.262$).
+
 \banner{Soil water retention}
 \section{Capillarity and the Young--Laplace law}
 A soil is a porous medium. Water is held in the pores by surface tension, and the smaller the pore, the more strongly it holds. For a cylindrical capillary of radius $r$ and a contact angle $\gamma$, the pressure difference across the curved water surface is
