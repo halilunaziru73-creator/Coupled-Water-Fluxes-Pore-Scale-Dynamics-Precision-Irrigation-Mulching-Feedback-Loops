@@ -1,0 +1,145 @@
+\chapimg{fig/at/op_at21.jpg}
+\chapterlead{\subhd{After this chapter you can} read the thirteen additional figures of the study (the texture triangle, the pore domains, the model structure, the correlation, the random forest, the validation, the PCA and the variance decomposition) and the eight pages of the Daisy output from which the checks start.}
+\chapter{The Atlas of Results III: Additional Figures and the Daisy Output}\label{chap:21}
+\markboth{The Atlas of Results III}{The Atlas of Results III}
+The first part of this chapter completes the figures of the study with the thirteen additional figures that answer the usual questions of a reader: how the soils are placed in the texture triangle, how the pores are divided, how the model is built and how well it is validated. The second part shows eight pages of the output of Daisy itself, from which every number of the atlas starts.
+\banner{The additional figures}
+\section{Texture triangle}
+\fig{at/a21_01.jpg}{1.0}{Sand--silt--clay of each soil from the soil files.}\label{fig:a21_1}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Sand--silt--clay of each soil from the soil files.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\text{silt}=1-\text{sand}-\text{clay}\]
+\par\noindent where Sand, silt and clay are mass fractions of the soil.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Position of each soil in the texture triangle from the soil files.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: Soil files; Daisy output used: soil files.
+\section{Pore-domain decomposition}
+\fig{at/a21_02.jpg}{1.0}{Macro/meso/micro pore water split at pF 1.5 and 4.2 (after the multi-domain concept in the examples).}\label{fig:a21_2}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Macro/meso/micro pore water split at pF 1.5 and 4.2 (after the multi-domain concept in the examples).
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\theta_{\mathrm{macro}}=\theta_s-\theta(\mathrm{pF}1.5),\ \theta_{\mathrm{meso}}=\theta(\mathrm{pF}1.5)-\theta(\mathrm{pF}4.2),\ \theta_{\mathrm{micro}}=\theta(\mathrm{pF}4.2)\]
+\par\noindent where $\theta$ volumetric water content (cm$^3$ cm$^{-3}$); $h$ suction head (cm); $\theta_r,\theta_s$ residual and saturated water contents; $\alpha$ (cm$^{-1}$) and $n$ van Genuchten shape parameters.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} The retention curve is split at pF 1.5 and 4.2 into macro, meso and micro pore water.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: Soil files; Daisy output used: soil files (parameters only).
+\section{Near-saturated conductivity over time}
+\fig{at/a21_03.jpg}{1.0}{Topsoil K on wet days (a Ksat proxy) and subsoil K, per tillage system.}\label{fig:a21_3}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Topsoil K on wet days (a Ksat proxy) and subsoil K, per tillage system.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[K_{\mathrm{wet}}(t)=K\bigl(h(t)\bigr)\ \ \text{on wet days}\]
+\par\noindent where $K$ hydraulic conductivity; $K_s$ saturated conductivity; $S_e$ effective saturation; $\ell$ pore-connectivity exponent; $m=1-1/n$.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Topsoil conductivity on wet days as a $K_s$ proxy, per tillage system.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E5 daily; Daisy output used: profile logs h and Theta at 3.75 cm.
+\section{Seasonal envelopes}
+\fig{at/a21_04.jpg}{1.0}{Mean and 10--90 \% band by day of year across 1980--2000; blue = mean net precipitation (rain - ET$_0$).}\label{fig:a21_4}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Mean and 10--90 \% band by day of year across 1980--2000; blue = mean net precipitation (rain - ET$_0$).
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\bar x(d),\ Q_{10}(d),\ Q_{90}(d),\ \ P_{\mathrm{net}}=P-ET_0\]
+\par\noindent where $d$ day of year; $x$ daily value over 1980--2000; $P_{\mathrm{net}}$ net precipitation.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Mean and 10 to 90 per cent band for each day of year.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E5, E0 daily; Daisy output used: daily logs.
+\section{Evaporation decline after wetting}
+\fig{at/a21_05.jpg}{1.0}{Composite of all Apr--Sep events 1980--2000 (> 5 mm) followed by 7 dry days; band = interquartile range.}\label{fig:a21_5}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Composite of all Apr--Sep events 1980--2000 (> 5 mm) followed by 7 dry days; band = interquartile range.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[E_s(d),\ d=0,\dots,7\]
+\[\text{event}: W>5\ \mathrm{mm},\ \max_{d=1..7}W<0.5\ \mathrm{mm}\]
+\par\noindent where $E_s(d)$ soil evaporation on day $d$ after a wetting event; $W$ rain plus irrigation (mm).
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} All April to September events followed by seven dry days are overlaid; the band is the interquartile range (stage 1 then stage 2 drying).
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E0,E7 daily; Daisy output used: Daily-SWater.dlf: Evaporation of soil water, rain, Surface irrigation.
+\section{Model structure with fluxes}
+\fig{at/a21_06.jpg}{1.0}{Model compartments annotated with the 20-year mean fluxes of one run (after the Daisy diagrams in the examples).}\label{fig:a21_6}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Model compartments annotated with the 20-year mean fluxes of one run (after the Daisy diagrams in the examples).
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[P+I=T+E_s+E_c+E_o+D+\Delta S+R,\qquad E_o=ET-T-E_s-E_c\]
+\par\noindent where $P$ rain; $I$ irrigation; $T$ transpiration; $E_s$ soil evaporation; $E_c$ canopy evaporation; $E_o$ evaporation of ponded water, snow and litter or mulch; $D$ drainage across 1 m; $\Delta S$ storage change; $R$ runoff; $ET$ actual evapotranspiration (all mm yr$^{-1}$).
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} The model compartments are annotated with the 20-year mean fluxes of one run.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E2; Daisy output used: annual flux logs.
+\section{Root and LAI development}
+\fig{at/a21_07.jpg}{1.0}{Daily LAI and rooting depth from the crop module.}\label{fig:a21_7}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Daily LAI and rooting depth from the crop module.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\mathrm{LAI}(t),\ z_{\mathrm{root}}(t)\]
+\par\noindent where LAI leaf area index (m$^2$ m$^{-2}$); $z_{\mathrm{root}}$ rooting depth (cm).
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Daily values from the crop module.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E2 daily; Daisy output used: Daily crop log: LAI, root depth.
+\section{Correlation matrix}
+\fig{at/a21_08.jpg}{1.0}{Spearman rank correlations between long-term outputs.}\label{fig:a21_8}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Spearman rank correlations between long-term outputs.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\rho_{ij}=\mathrm{corr}\bigl(\mathrm{rank}(x_i),\mathrm{rank}(x_j)\bigr)\]
+\par\noindent where $\rho_{ij}$ Spearman rank correlation of two long-term outputs.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Spearman correlations of the outputs over all valid runs.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: All; Daisy output used: yield, irrigation, drainage, ET, soil evaporation, transpiration, N leached.
+\section{Random-forest drivers}
+\fig{at/a21_09.jpg}{1.0}{Impurity-based importance of design factors and soil properties; out-of-bag R$^2$ shown. Moderate R$^2$ for irrigation/drainage reflects strong soil $\times$ management interactions.}\label{fig:a21_9}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Impurity-based importance of design factors and soil properties; out-of-bag R$^2$ shown. Moderate R$^2$ for irrigation/drainage reflects strong soil $\times$ management interactions.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\mathrm{imp}_k=\sum_{\text{nodes using }k}\Delta\mathrm{impurity}\ \ (\text{mean over 150 trees}),\quad R^2_{\mathrm{OOB}}\]
+\par\noindent where $\mathrm{imp}_k$ impurity-based importance of design factor or soil property $k$; $R^2_{\mathrm{OOB}}$ out-of-bag coefficient of determination.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Random forest with 150 trees and at least three samples per leaf; moderate $R^2$ for irrigation and drainage reflects non-additive interaction.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E10-E16; Daisy output used: yield, irrigation, drainage of E10 to E16.
+\section{Validation of re-runs}
+\fig{at/a21_10.jpg}{1.0}{1:1 comparison; median difference < 0.3 \%, all within 2 \%.}\label{fig:a21_10}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} 1:1 comparison; median difference < 0.3 \%, all within 2 \%.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[r=\mathrm{corr}\bigl(y_{\mathrm{re-run}},y_{\mathrm{original}}\bigr)\]
+\par\noindent where $y_{\mathrm{re-run}}$ Daisy 7.1.14 value; $y_{\mathrm{original}}$ the 7.1.12 value from the 10,190-run table; $r$ Pearson correlation.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} The 36 re-run set-ups reproduce the original results within 2 per cent (median below 0.3 per cent).
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: Re-runs; Daisy output used: annual means of the re-runs.
+\section{PCA biplot}
+\fig{at/a21_11.jpg}{1.0}{Standardised outputs; points coloured by experiment; arrows = loadings.}\label{fig:a21_11}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Standardised outputs; points coloured by experiment; arrows = loadings.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[Z=\dfrac{x-\mu}{\sigma},\qquad Z\approx S\,W^{\top},\quad \mathrm{PC}_j\ \text{ratio}=\lambda_j/\sum\lambda\]
+\par\noindent where $Z$ standardised outputs; $\mu,\sigma$ column mean and standard deviation; $W$ loadings; $S$ scores; $\lambda_j$ eigenvalues.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} The first two principal components of the standardised outputs; arrows are the loadings.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: All; Daisy output used: long-term outputs of all valid runs.
+\section{Parallel coordinates of best runs}
+\fig{at/a21_12.jpg}{1.0}{Each line one Pareto-optimal run (min--max scaled).}\label{fig:a21_12}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Each line one Pareto-optimal run (min--max scaled).
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[x'=\dfrac{x-x_{\min}}{x_{\max}-x_{\min}}\]
+\par\noindent where $x'$ min--max scaled value of an axis (0 to 1).
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Each line is one Pareto-optimal run (the 170 runs of chart 50).
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: Pareto set; Daisy output used: IE, DPF, NLF, irrigation, yield of the Pareto set.
+\section{Variance decomposition}
+\fig{at/a21_13.jpg}{1.0}{Main-effect sums of squares per factor; remainder = interactions (non-additivity).}\label{fig:a21_13}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Main-effect sums of squares per factor; remainder = interactions (non-additivity).
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\mathrm{SS}_k=\sum_{\ell} n_\ell(\bar y_\ell-\bar y)^2,\qquad \text{share}_k=\dfrac{\mathrm{SS}_k}{\mathrm{SS}_{\mathrm{tot}}}\]
+\par\noindent where $\bar y_\ell$ mean output at level $\ell$ of factor $k$; $n_\ell$ runs at that level; $\bar y$ grand mean; the remainder $1-\sum_k\text{share}_k$ is interaction.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Main-effect sums of squares per factor for the three-factor experiments E8 to E15.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E8-E15; Daisy output used: irrigation\_mm, drainage\_1m\_mm, yield\_Mg\_ha.
+\banner{The Daisy output pages}
+\section{Rain and potential evapotranspiration}
+\fig{at/a21s_1.jpg}{1.0}{Rain and potential evapotranspiration of the weather file that drives the run, as Daisy writes them to its daily log.}\label{fig:a21s_1}
+\par\noindent This page of the Daisy output belongs to the weather box of the process map of the process map (Chapters~\ref{chap:15}, \ref{chap:16} and~\ref{chap:17}). The curves are read in the order of the log columns: the first column is the date, and each later column is one quantity in the unit of its header.
+\section{Canopy water and the pond}
+\fig{at/a21s_2.jpg}{1.0}{The canopy water store and the pond on the soil surface, which receive the rain before the soil does.}\label{fig:a21s_2}
+\par\noindent This page of the Daisy output belongs to interception and the pond of the process map (Chapters~\ref{chap:15}, \ref{chap:16} and~\ref{chap:17}). The curves are read in the order of the log columns: the first column is the date, and each later column is one quantity in the unit of its header.
+\section{Evaporation from the pond}
+\fig{at/a21s_3.jpg}{1.0}{Evaporation from the pond and from the soil surface after rain.}\label{fig:a21s_3}
+\par\noindent This page of the Daisy output belongs to surface evaporation of the process map (Chapters~\ref{chap:15}, \ref{chap:16} and~\ref{chap:17}). The curves are read in the order of the log columns: the first column is the date, and each later column is one quantity in the unit of its header.
+\section{The parts of evapotranspiration}
+\fig{at/a21s_4.jpg}{1.0}{The parts of the evapotranspiration of one run: transpiration, soil evaporation, canopy evaporation and the rest.}\label{fig:a21s_4}
+\par\noindent This page of the Daisy output belongs to the evaporation and the uptake boxes of the process map (Chapters~\ref{chap:15}, \ref{chap:16} and~\ref{chap:17}). The curves are read in the order of the log columns: the first column is the date, and each later column is one quantity in the unit of its header.
+\section{The suction at the sensor}
+\fig{at/a21s_5.jpg}{1.0}{The soil-water suction at the depth of the sensor through the season; the trigger of the irrigation rule is read from this curve.}\label{fig:a21s_5}
+\par\noindent This page of the Daisy output belongs to the soil-water box of the process map (Chapters~\ref{chap:15}, \ref{chap:16} and~\ref{chap:17}). The curves are read in the order of the log columns: the first column is the date, and each later column is one quantity in the unit of its header.
+\section{Dry matter of the crop}
+\fig{at/a21s_6.jpg}{1.0}{The dry matter of the organs of the crop through the season.}\label{fig:a21s_6}
+\par\noindent This page of the Daisy output belongs to the crop area, partitioning of the process map (Chapters~\ref{chap:15}, \ref{chap:16} and~\ref{chap:17}). The curves are read in the order of the log columns: the first column is the date, and each later column is one quantity in the unit of its header.
+\section{Mineralisation of nitrogen}
+\fig{at/a21s_7.jpg}{1.0}{Mineralisation of nitrogen from the organic matter of the soil, day by day.}\label{fig:a21s_7}
+\par\noindent This page of the Daisy output belongs to the nitrogen area of the process map (Chapters~\ref{chap:15}, \ref{chap:16} and~\ref{chap:17}). The curves are read in the order of the log columns: the first column is the date, and each later column is one quantity in the unit of its header.
+\section{Carbon of the soil}
+\fig{at/a21s_8.jpg}{1.0}{The carbon of the pools of the soil organic matter and of the added residues.}\label{fig:a21s_8}
+\par\noindent This page of the Daisy output belongs to the pools of carbon of the process map (Chapters~\ref{chap:15}, \ref{chap:16} and~\ref{chap:17}). The curves are read in the order of the log columns: the first column is the date, and each later column is one quantity in the unit of its header.
+\begin{itemize}\item The additional figures answer the questions of a reader about the soils, the structure and the validation.\item The pages of the Daisy output are the origin of every figure: a number that cannot be traced to a column of a log is not a result.\item The 36 re-run setups reproduce the batch results within 2 per cent (median below 0.3 per cent), see the validation figure.\end{itemize}
+\backhead{EXERCISES}{khred}\begin{exlist}
+\item State what the figure ``Texture triangle'' shows and which question of a reader it answers. \exans{see the caption and the text}
+\item State what the figure ``Pore-domain decomposition'' shows and which question of a reader it answers. \exans{see the caption and the text}
+\item State what the figure ``Near-saturated conductivity over time'' shows and which question of a reader it answers. \exans{see the caption and the text}
+\item State what the figure ``Seasonal envelopes'' shows and which question of a reader it answers. \exans{see the caption and the text}
+\item State what the figure ``Evaporation decline after wetting'' shows and which question of a reader it answers. \exans{see the caption and the text}
+\end{exlist}\dykband{DO YOU KNOW ?}\begin{exlist}\item Why are daily figures drawn only from the 36 re-run setups?\item Which log column gives the suction at the sensor?\item Which figure shows how well the Daisy 7.1.14 re-runs reproduce the 7.1.12 batch?\item What does a PCA biplot show that a correlation matrix does not?\end{exlist}
+\swaflvideo{21}

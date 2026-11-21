@@ -1,0 +1,303 @@
+\chapimg{fig/at/op_at20.jpg}
+\chapterlead{\subhd{After this chapter you can} read every figure of this part of the results atlas, name the quantity on each axis, write the equation from which the figure is computed, say which experiment supplies the data, and judge what the figure does and does not show.}
+\chapter{The Atlas of Results II: Irrigation, Mulch, Feedbacks and Nitrogen}\label{chap:20}
+\markboth{The Atlas of Results II: Irrigation, Mulch, Feedbacks and Nitrogen}{The Atlas of Results II: Irrigation, Mulch, Feedbacks and Nitrogen}
+Every figure of this chapter is shown with the same five items, in the same order: \emph{what it shows}, \emph{the equation behind it} with the meaning of its symbols, \emph{how it is derived} from the Daisy outputs, \emph{the data} it uses, and \emph{how to read it}. The experiments are named E0 to E16 as in the earlier chapters; ``Daisy output used'' names the columns of the run table that the figure draws on. A figure is read against its equation: the axes are the symbols of the equation, and a feature of the curves that none of them explains is a finding to be checked, not a result to be reported.
+\banner{The key figure of the study}
+\section{Soil pore structure gates management controllability}
+\fig{at/a20_01.jpg}{1.0}{Controllability of yield, IE, drainage and N-leaching fractions by seven management levers across ten soils, and its rank correlation with plant-available water.}\label{fig:a20_1}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Controllability of yield, IE, drainage and N-leaching fractions by seven management levers across ten soils, and its rank correlation with plant-available water.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\mathrm{lev}=100\,\dfrac{Q_{90}(v)-Q_{10}(v)}{|Q_{50}(v)|}\]
+\[\rho_{\mathrm{S}}=\text{Spearman}\bigl(\mathrm{lev}_s,\ \mathrm{TAW}_s\bigr)_{s=1\ldots10}\]
+\par\noindent where $v$ outcome values (yield, IE, DPF, NLF) of one soil in one experiment; $Q_p$ the $p$-th percentile; lev controllability (per cent); $\mathrm{TAW}_s$ plant-available water of soil $s$; $\rho_{\mathrm{S}}$ rank correlation across ten soils.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Seven levers (E1 to E7), four outcomes, ten soils; the lever's range (10th to 90th percentile) relative to the median measures how much the lever can move the outcome.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E1-E7; Daisy output used: Per-run 20-year means: yield\_Mg\_ha, irrigation\_mm, drainage\_1m\_mm, N\_leached\_kg\_ha.
+\banner{The three novel contributions}
+\section{Soil-independent trigger law (data collapse)}
+\fig{at/a20_02.jpg}{1.0}{E2 (10 soils $\times$ 20 triggers): relative irrigation and yield collapse onto single curves when the trigger is expressed as root-zone depletion f instead of suction; f* = 5 \% yield-loss threshold and the soil-specific suction triggers that achieve it.}\label{fig:a20_2}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} E2 (10 soils $\times$ 20 triggers): relative irrigation and yield collapse onto single curves when the trigger is expressed as root-zone depletion f instead of suction; f* = 5 \% yield-loss threshold and the soil-specific suction triggers that achieve it.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[f(h)=\dfrac{\sum_k\left[\theta_k(100)-\theta_k(h)\right]\Delta z_k}{\sum_k\left[\theta_k(100)-\theta_k(15849)\right]\Delta z_k}\]
+\[f(h^\ast)=f^\ast=0.45,\qquad h^\ast=-\mathrm{brentq}\bigl(f(h)-f^\ast\bigr)\]
+\par\noindent where $f$ root-zone depletion (0 at the 100 cm suction taken as field capacity, 1 at the 15\,849 cm wilting point); $\theta_k(h)$ van Genuchten water content of horizon $k$ (Ap 25 cm, Bt 75 cm); $\Delta z_k$ horizon thickness; $h^\ast$ trigger suction that gives the common critical depletion $f^\ast$.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Relative irrigation and yield of the ten soils collapse onto one curve against depletion f; f* = 0.45 is the first binned median of relative yield below 0.95; h* is found by Brent's method between 5 and 15 000 cm (pooled R2 for yield 0.70 on f against 0.23 on suction).
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E2 + soil hydraulics; Daisy output used: E2 runs: yield\_Mg\_ha, irrigation\_mm (ten soils, twenty triggers).
+\section{Fate of water saved by mulching}
+\fig{at/a20_03.jpg}{1.0}{E14: total evaporation saved (soil + canopy + mulch layer) partitioned by water balance into reduced irrigation, extra transpiration, extra drainage and residual, vs mulch strength and rain; with the resulting change in N leaching.}\label{fig:a20_3}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} E14: total evaporation saved (soil + canopy + mulch layer) partitioned by water balance into reduced irrigation, extra transpiration, extra drainage and residual, vs mulch strength and rain; with the resulting change in N leaching.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[E_{\mathrm{saved}}=\sum_{j\in\{s,o,c\}}\bigl(E_j^{\mathrm{ref}}-E_j\bigr)\]
+\[E_{\mathrm{saved}}=\Delta I+\Delta T+\Delta D+\text{resid}\]
+\[\Delta I=I^{\mathrm{ref}}-I,\ \ \Delta T=T-T^{\mathrm{ref}},\ \ \Delta D=D-D^{\mathrm{ref}}\]
+\par\noindent where Superscript ref: the unmulched run ($v_{ff}=1$) at the same interception capacity and rain; $E_s,E_o,E_c$ soil, other and canopy evaporation; $\Delta I,\Delta T,\Delta D$ less irrigation, extra transpiration and extra drainage (mm yr$^{-1}$); resid the part that goes to storage or runoff.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} The evaporation a mulch saves is followed through the water balance: it either reduces irrigation, raises transpiration or drains below 1 m.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E14; Daisy output used: E14 runs: soil\_evap\_mm, canopy\_evap\_mm, transpiration\_mm, irrigation\_mm, drainage\_1m\_mm, N\_leached\_kg\_ha.
+\section{Feedback regime map and non-additivity}
+\fig{at/a20_04.jpg}{1.0}{Loss-pathway index (evaporation vs drainage dominance) across climate (E11) and mulch-management (E14) planes, with the regime boundary E = D, irrigation contours, and maps of where drivers interact non-additively.}\label{fig:a20_4}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Loss-pathway index (evaporation vs drainage dominance) across climate (E11) and mulch-management (E14) planes, with the regime boundary E = D, irrigation contours, and maps of where drivers interact non-additively.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\mathrm{DI}=\dfrac{E_s-D}{E_s+\max(D,0)}\]
+\[\text{non-additive share}=\dfrac{\sum_r \mathrm{res}_r^{2}}{\sum_r (I_r-\bar I)^{2}}\]
+\par\noindent where DI loss-pathway index ($+1$ soil evaporation dominates, $-1$ drainage dominates); $E_s$ soil evaporation; $D$ drainage; $\mathrm{res}_r$ difference between run $r$ and the additive main-effects model; $I_r$ irrigation of run $r$.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} The regime map colours the factor space by DI; non-additivity is the variance share left after an additive model of the main effects.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E11, E14; Daisy output used: E11 and E14 runs: soil\_evap\_mm, drainage\_1m\_mm, irrigation\_mm.
+\banner{Irrigation control}
+\section{Sensor suction time series}
+\fig{at/a20_05.jpg}{1.0}{Daily suction at 20 cm (log) with the trigger and irrigation days.}\label{fig:a20_5}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Daily suction at 20 cm (log) with the trigger and irrigation days.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\text{irrigate on day } d \iff |h_{20}(d)|\ge |h_t|\]
+\par\noindent where $h_{20}$ suction at the sensor depth 20 cm; $h_t$ trigger suction.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Daily suction at 20 cm on a log axis, the trigger level and the days on which Daisy irrigated.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E0,E2 daily; Daisy output used: profile log h @ -20; irrigation days.
+\section{Trigger pressure response}
+\fig{at/a20_06.jpg}{1.0}{Irrigation, yield and IE vs trigger for each soil.}\label{fig:a20_6}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Irrigation, yield and IE vs trigger for each soil.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\bar y(h_t)=\dfrac1n\sum_{r:\ h_t} y_r\]
+\par\noindent where $\bar y$ mean irrigation, yield or IE over runs with trigger $h_t$, per soil.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Irrigation, yield and IE plotted against the trigger for each soil.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E2; Daisy output used: irrigation\_mm, yield\_Mg\_ha, IE (E2).
+\section{Sensor depth response}
+\fig{at/a20_07.jpg}{1.0}{Events, irrigation and IE vs sensor depth per soil.}\label{fig:a20_7}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Events, irrigation and IE vs sensor depth per soil.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\bar y(z)=\dfrac1n\sum_{r:\ z} y_r\]
+\par\noindent where $z$ sensor depth (cm); $\bar y$ mean number of events, irrigation or IE.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Events, irrigation and IE against sensor depth per soil.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E3; Daisy output used: irrigation\_events, irrigation\_mm, IE (E3).
+\section{Sensor depth $\times$ trigger $\times$ rain}
+\fig{at/a20_08.jpg}{1.0}{1,000 runs; each panel one rainfall scaling.}\label{fig:a20_8}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} 1,000 runs; each panel one rainfall scaling.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\bar y_{z,h_t,P}=\dfrac1n\sum y_r\]
+\par\noindent where $z$ sensor depth; $h_t$ trigger; $P$ rain scale.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} 1,000 coarse-loam runs, one heatmap per rain scale.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E12; Daisy output used: irrigation\_mm, yield\_Mg\_ha, IE (E12).
+\section{Dose $\times$ duration}
+\fig{at/a20_09.jpg}{1.0}{IE and DPF per soil for 4 doses $\times$ 5 durations.}\label{fig:a20_9}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} IE and DPF per soil for 4 doses $\times$ 5 durations.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\mathrm{IE}=\dfrac{1000\,Y}{10\,I}\]
+\[\mathrm{DPF}=\dfrac{D}{P+I}\]
+\par\noindent where $Y$ yield (Mg ha$^{-1}$); $I$ irrigation (mm yr$^{-1}$); IE irrigation efficiency (kg m$^{-3}$); kept only where $I\ge 20$ mm yr$^{-1}$; $D$ drainage across 1 m depth (mm yr$^{-1}$); $P$ rain; $I$ irrigation; DPF deep-percolation fraction.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} IE and DPF per soil for four doses and five durations.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E1; Daisy output used: yield\_Mg\_ha, irrigation\_mm, drainage\_1m\_mm (E1).
+\section{Amount $\times$ timing window}
+\fig{at/a20_10.jpg}{1.0}{IE per soil; x = irrigation window, y = amount per event.}\label{fig:a20_10}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} IE per soil; x = irrigation window, y = amount per event.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\mathrm{IE}=\dfrac{1000\,Y}{10\,I}\]
+\par\noindent where $Y$ yield (Mg ha$^{-1}$); $I$ irrigation (mm yr$^{-1}$); IE irrigation efficiency (kg m$^{-3}$); kept only where $I\ge 20$ mm yr$^{-1}$.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} IE per soil for each irrigation window (x) and amount per event (y).
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E10; Daisy output used: yield\_Mg\_ha, irrigation\_mm (E10).
+\section{Irrigation production function}
+\fig{at/a20_11.jpg}{1.0}{All irrigated runs; saturating fits anchored at each soil's rainfed yield.}\label{fig:a20_11}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} All irrigated runs; saturating fits anchored at each soil's rainfed yield.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[Y=y_0+a\left(1-e^{-I/b}\right)\]
+\par\noindent where $Y$ yield (Mg ha$^{-1}$); $I$ irrigation (mm yr$^{-1}$); $y_0$ rainfed yield of the soil; $a$ yield gain at full irrigation; $b$ irrigation that gives 63 per cent of the gain.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Non-linear least squares per soil (start $a=4$, $b=100$), anchored at the rainfed baseline (production\_function\_fits.csv).
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E1-E4,E10; Daisy output used: yield\_Mg\_ha, irrigation\_mm (E1 to E4, E10).
+\section{Irrigation events per year}
+\fig{at/a20_12.jpg}{1.0}{Number of irrigation starts per calendar year.}\label{fig:a20_12}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Number of irrigation starts per calendar year.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[N_{\mathrm{ev}}(y)=\#\{\text{irrigation starts in year } y\}\]
+\par\noindent where $N_{\mathrm{ev}}$ number of irrigation starts in calendar year $y$.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Count of the days on which Daisy started an irrigation.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E2 daily; Daisy output used: daily irrigation log.
+\banner{Evaporation control and mulching}
+\section{Mulch evaporation reduction $\times$ interception}
+\fig{at/a20_13.jpg}{1.0}{Soil evaporation (mm/yr); titles give the no-mulch value (E2, -300 cm).}\label{fig:a20_13}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Soil evaporation (mm/yr); titles give the no-mulch value (E2, -300 cm).
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\bar E_s(v_{ff},c)=\dfrac1n\sum E_{s,r}\]
+\par\noindent where $E_s$ soil evaporation (mm yr$^{-1}$); $v_{ff}$ vapour-flux factor of the mulch (1 = bare); $c$ interception capacity (mm).
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Heatmaps of mean soil evaporation against $v_{ff}$ and capacity; titles give the unmulched value.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E7,E2; Daisy output used: soil\_evap\_mm (E7, E2).
+\section{Non-linearity of the mulch effect}
+\fig{at/a20_14.jpg}{1.0}{Saved soil evaporation relative to no mulch; dotted lines = proportional (linear) response.}\label{fig:a20_14}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Saved soil evaporation relative to no mulch; dotted lines = proportional (linear) response.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[S(v)=E_s(1)-E_s(v)\]
+\[S_{\mathrm{lin}}(v)=S(v_{\min})\,\dfrac{1-v}{1-v_{\min}}\]
+\par\noindent where $S$ evaporation saved relative to bare soil; $v$ vapour-flux factor; $S_{\mathrm{lin}}$ proportional (linear) reference through the strongest-mulch point.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} The gap between $S$ and $S_{\mathrm{lin}}$ shows the curvature of the mulch effect.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E7,E14; Daisy output used: soil\_evap\_mm (E7, E14).
+\section{Mulch $\times$ rain interaction}
+\fig{at/a20_15.jpg}{1.0}{Irrigation saved relative to vff = 1.0 at the same capacity and rain.}\label{fig:a20_15}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Irrigation saved relative to vff = 1.0 at the same capacity and rain.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\Delta I=I(v_{ff}{=}1,c,P)-I(v_{ff},c,P)\]
+\par\noindent where $\Delta I$ irrigation saved by the mulch (mm yr$^{-1}$); $c$ capacity; $P$ rain scale.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Irrigation of the bare run minus irrigation of the mulched run, at the same capacity and rain.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E14; Daisy output used: irrigation\_mm (E14).
+\section{Interception loss vs capacity}
+\fig{at/a20_16.jpg}{1.0}{Evaporation of water held in the mulch/litter layer (with ponded water and snow).}\label{fig:a20_16}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Evaporation of water held in the mulch/litter layer (with ponded water and snow).
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[E_o=ET-T-E_s-E_c\]
+\par\noindent where $E_o$ evaporation of ponded water, snow and litter or mulch; $ET$ actual evapotranspiration; $T$, $E_s$, $E_c$ transpiration, soil and canopy evaporation.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} The mulch and litter loss is the closing term of the evaporation balance.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E7,E14; Daisy output used: ET\_mm, transpiration\_mm, soil\_evap\_mm, canopy\_evap\_mm.
+\section{Mulch--irrigation substitution}
+\fig{at/a20_17.jpg}{1.0}{Irrigation saved per mm of soil evaporation saved; 1:1 line for reference.}\label{fig:a20_17}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Irrigation saved per mm of soil evaporation saved; 1:1 line for reference.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\Delta I=a+b\,\Delta E_s\]
+\par\noindent where $\Delta E_s$ soil evaporation saved; $\Delta I$ irrigation saved; $b$ the slope fitted by least squares (irrigation saved per mm of evaporation saved); the 1:1 line is for reference.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Each run is a point; the slope $b$ is printed in the legend.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E7,E14; Daisy output used: soil\_evap\_mm, irrigation\_mm (E7, E14).
+\section{Soil evaporation factor response}
+\fig{at/a20_18.jpg}{1.0}{E11 lines per temperature shift at normal rain.}\label{fig:a20_18}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} E11 lines per temperature shift at normal rain.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\bar E_s(E_p)=\dfrac1n\sum E_{s,r}\]
+\par\noindent where $E_p$ soil-evaporation factor; one line per temperature shift.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} E11 lines at normal rain.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E11; Daisy output used: soil\_evap\_mm, irrigation\_mm (E11).
+\section{Mulch benefit by soil}
+\fig{at/a20_19.jpg}{1.0}{Differences between the strongest mulch and the unmulched reference.}\label{fig:a20_19}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Differences between the strongest mulch and the unmulched reference.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\Delta y_s=y_s(\text{strongest mulch})-y_s(\text{no mulch})\]
+\par\noindent where $y_s$ output of soil $s$ (evaporation, irrigation, yield, drainage).
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Differences between the strongest mulch and the unmulched reference.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E7,E2; Daisy output used: E7 and E2 outputs.
+\banner{The non-linear feedbacks}
+\section{Temperature $\times$ rain response surfaces}
+\fig{at/a20_20.jpg}{1.0}{Filled contours of yield, irrigation and drainage.}\label{fig:a20_20}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Filled contours of yield, irrigation and drainage.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\bar y(P,\Delta T)=\dfrac1n\sum_{E_p} y_r\]
+\par\noindent where $P$ rain scale; $\Delta T$ temperature shift ($^\circ$C); mean over the evaporation-factor levels.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Filled contours of yield, irrigation and drainage from E11.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E11; Daisy output used: yield\_Mg\_ha, irrigation\_mm, drainage\_1m\_mm (E11).
+\section{Threshold detection}
+\fig{at/a20_21.jpg}{1.0}{Grid-search two-segment linear fits; red dotted line = breakpoint.}\label{fig:a20_21}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Grid-search two-segment linear fits; red dotted line = breakpoint.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[y=c_0+c_1x+c_2\max(x-x_b,0),\quad x_b=\arg\min\mathrm{SSE}\]
+\par\noindent where $x$ factor ($\log_{10}$ suction for the trigger); $y$ output; $c_0,c_1,c_2$ coefficients; $x_b$ breakpoint searched over 60 values between the 15th and 85th percentile of $x$; SSE sum of squared residuals.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Grid-search two-segment linear fit; the breakpoint is the red dotted line.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E9,E12,E14; Daisy output used: drainage\_1m\_mm (E14), irrigation\_mm (E12), yield\_Mg\_ha (E9).
+\section{Elasticities}
+\fig{at/a20_22.jpg}{1.0}{Log-log slopes of factor-level means (temperature is a semi-elasticity per $^\circ$C).}\label{fig:a20_22}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Log-log slopes of factor-level means (temperature is a semi-elasticity per $^\circ$C).
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\varepsilon=\dfrac{d\ln \bar y}{d\ln |x|}\approx \text{slope of } \ln\bar y_\ell \text{ against } \ln|x_\ell|\]
+\par\noindent where $x_\ell$ level $\ell$ of the driver; $\bar y_\ell$ mean output over all runs at that level; $\varepsilon$ elasticity (for temperature the abscissa is $\Delta T$ itself, a semi-elasticity per $^\circ$C).
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Ten drivers by six outputs (elasticities.csv).
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E10-E15; Daisy output used: irrigation\_mm, drainage\_1m\_mm, soil\_evap\_mm, transpiration\_mm, yield\_Mg\_ha, N\_leached\_kg\_ha.
+\section{Two-way interaction plots}
+\fig{at/a20_23.jpg}{1.0}{Mean irrigation for each pair of drivers.}\label{fig:a20_23}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Mean irrigation for each pair of drivers.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\bar I(x_i,x_j)=\dfrac1n\sum I_r\]
+\par\noindent where $x_i,x_j$ two drivers; $\bar I$ mean irrigation at each pair of levels.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Interaction plots for E11, E12 and E14.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E11,E12,E14; Daisy output used: irrigation\_mm.
+\section{Rain intensity $\times$ starting moisture}
+\fig{at/a20_24.jpg}{1.0}{Heatmaps averaged over intensity; right panel averaged over rain and moisture.}\label{fig:a20_24}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Heatmaps averaged over intensity; right panel averaged over rain and moisture.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\bar y(P,h_0)=\dfrac1n\sum_{\text{intensity}} y_r\]
+\par\noindent where $P$ rain scale; $h_0$ initial suction; mean over rain intensity.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Heatmaps from the 1,000 E8 runs.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E8; Daisy output used: yield\_Mg\_ha, drainage\_1m\_mm (E8).
+\section{Soil $\times$ initial moisture $\times$ rain}
+\fig{at/a20_25.jpg}{1.0}{1,000 single-season runs.}\label{fig:a20_25}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} 1,000 single-season runs.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\bar Y(s,h_0,P)=\dfrac1n\sum Y_r\]
+\par\noindent where $s$ soil; $h_0$ initial suction; $P$ rain scale.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Single-season yield from the 1,000 E9 runs.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E9; Daisy output used: yield\_Mg\_ha (E9).
+\section{Feedback phase diagram}
+\fig{at/a20_26.jpg}{1.0}{Daily trajectories of pF at the sensor vs actual ET.}\label{fig:a20_26}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Daily trajectories of pF at the sensor vs actual ET.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\bigl(\mathrm{pF}_{20}(d),\ ET(d)\bigr),\quad \mathrm{pF}_{20}=\log_{10}(-h_{20})\]
+\par\noindent where $h_{20}$ suction at 20 cm; $ET$ daily actual evapotranspiration.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Daily trajectories show how drying of the soil limits ET.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E0,E2,E7 daily; Daisy output used: profile log h @ -20; daily ET.
+\banner{The coupling to nitrogen}
+\section{N rate $\times$ water strategy}
+\fig{at/a20_27.jpg}{1.0}{Means over soils for each of 10 water strategies.}\label{fig:a20_27}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Means over soils for each of 10 water strategies.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\mathrm{NLF}=\dfrac{N_{\mathrm{leach}}}{N_{\mathrm{fert}}}\]
+\par\noindent where $N_{\mathrm{leach}}$ nitrate-N leached below 1 m (kg N ha$^{-1}$ yr$^{-1}$); $N_{\mathrm{fert}}$ nitrogen applied; NLF nitrate-leaching fraction.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Means over soils for each of ten water strategies and N rates.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E13; Daisy output used: N\_leached\_kg\_ha, N\_fertiliser\_kg\_ha (E13).
+\section{Mediterranean pathways}
+\fig{at/a20_28.jpg}{1.0}{Bars = means over 10 soils; whiskers = SD.}\label{fig:a20_28}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Bars = means over 10 soils; whiskers = SD.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\mathrm{NLF}=\dfrac{N_{\mathrm{leach}}}{N_{\mathrm{fert}}}\]
+\par\noindent where $N_{\mathrm{leach}}$ nitrate-N leached below 1 m (kg N ha$^{-1}$ yr$^{-1}$); $N_{\mathrm{fert}}$ nitrogen applied; NLF nitrate-leaching fraction.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Bars are means over ten soils, whiskers the standard deviation.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E6; Daisy output used: N\_leached\_kg\_ha, drainage\_1m\_mm, irrigation\_mm (E6).
+\section{Drainage nitrate concentration}
+\fig{at/a20_29.jpg}{1.0}{c = N leached / drainage $\times$ 100; log axes; dashed = EU nitrate limit.}\label{fig:a20_29}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} c = N leached / drainage $\times$ 100; log axes; dashed = EU nitrate limit.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[c=\dfrac{N_{\mathrm{leach}}}{D}\times100,\qquad 50\ \mathrm{mg\,NO_3/L}=11.3\ \mathrm{mg\,N/L}\]
+\par\noindent where $c$ nitrate-N concentration of drainage (mg N L$^{-1}$); $N_{\mathrm{leach}}$ in kg N ha$^{-1}$; $D$ in mm (1 kg ha$^{-1}$ per mm equals 100 mg L$^{-1}$).
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Concentration against drainage on log axes with the EU drinking-water limit.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E6,E13; Daisy output used: N\_leached\_kg\_ha, drainage\_1m\_mm (E6, E13).
+\banner{The synthesis}
+\section{Edge-case robustness and factor ranking}
+\fig{at/a20_30.jpg}{1.0}{Left: 77 cases per soil; right: main effects (high - low level) from the 64-case factorial, as \% of the mean.}\label{fig:a20_30}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Left: 77 cases per soil; right: main effects (high - low level) from the 64-case factorial, as \% of the mean.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[\mathrm{effect}_k=\dfrac{\bar y_{k,\mathrm{hi}}-\bar y_{k,\mathrm{lo}}}{|\bar y|}\times100\]
+\par\noindent where $\bar y_{k,\mathrm{hi}},\bar y_{k,\mathrm{lo}}$ mean output at the high and low level of factor $k$ in the 64-case factorial; $\bar y$ overall mean.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Main effects of six factors on four outputs, as per cent of the mean.
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E16; Daisy output used: yield\_Mg\_ha, irrigation\_mm, drainage\_1m\_mm, N\_leached\_kg\_ha (E16).
+\section{Trade-off (Pareto) front}
+\fig{at/a20_31.jpg}{1.0}{Non-dominated runs for (max IE, min DPF, min NLF), irrigation $\geq$ 20 mm/yr.}\label{fig:a20_31}
+\par\noindent\textbf{\color{khmag}\emph{What it shows.}} Non-dominated runs for (max IE, min DPF, min NLF), irrigation $\geq$ 20 mm/yr.
+\par\noindent\textbf{\color{khmag}\emph{The equation.}} The figure is computed from
+\[r\ \text{dominates}\ r' \iff \mathrm{IE}_r\ge\mathrm{IE}_{r'},\ \mathrm{DPF}_r\le\mathrm{DPF}_{r'},\ \mathrm{NLF}_r\le\mathrm{NLF}_{r'},\ \text{one strict}\]
+\par\noindent where $Y$ yield (Mg ha$^{-1}$); $I$ irrigation (mm yr$^{-1}$); IE irrigation efficiency (kg m$^{-3}$); kept only where $I\ge 20$ mm yr$^{-1}$; $D$ drainage across 1 m depth (mm yr$^{-1}$); $P$ rain; $I$ irrigation; DPF deep-percolation fraction; $N_{\mathrm{leach}}$ nitrate-N leached below 1 m (kg N ha$^{-1}$ yr$^{-1}$); $N_{\mathrm{fert}}$ nitrogen applied; NLF nitrate-leaching fraction.
+\par\noindent\textbf{\color{khmag}\emph{How it is derived.}} The 170 runs that no other run dominates form the Pareto front (pareto\_runs.csv).
+\par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: All; Daisy output used: IE, DPF, NLF of all valid runs with $I\ge20$ mm.
+\begin{itemize}
+\item A figure is a statement about one equation and one data set; both are named under it.
+\item The ten soils are ordered by the shape parameter $n$ of the van Genuchten curve; many figures are read along that order.
+\item IE and IWUE are shown only where the irrigation is at least 20 mm per year.
+\end{itemize}
+\backhead{EXERCISES}{khred}\begin{exlist}
+\item Write the equation from which the figure ``Soil pore structure gates management controllability'' is computed and state what each symbol means. \exans{see the equation under the figure}
+\item Write the equation from which the figure ``Soil-independent trigger law (data collapse)'' is computed and state what each symbol means. \exans{see the equation under the figure}
+\item Write the equation from which the figure ``Fate of water saved by mulching'' is computed and state what each symbol means. \exans{see the equation under the figure}
+\item Write the equation from which the figure ``Feedback regime map and non-additivity'' is computed and state what each symbol means. \exans{see the equation under the figure}
+\item Write the equation from which the figure ``Sensor suction time series'' is computed and state what each symbol means. \exans{see the equation under the figure}
+\item Write the equation from which the figure ``Trigger pressure response'' is computed and state what each symbol means. \exans{see the equation under the figure}
+\end{exlist}
+\dykband{DO YOU KNOW ?}\begin{exlist}
+\item What does the figure ``Soil pore structure gates management controllability'' show, and from which experiment does its data come?
+\item What does the figure ``Soil-independent trigger law (data collapse)'' show, and from which experiment does its data come?
+\item What does the figure ``Fate of water saved by mulching'' show, and from which experiment does its data come?
+\item What does the figure ``Feedback regime map and non-additivity'' show, and from which experiment does its data come?
+\item What does the figure ``Sensor suction time series'' show, and from which experiment does its data come?
+\item What does the figure ``Trigger pressure response'' show, and from which experiment does its data come?
+\item What does the figure ``Sensor depth response'' show, and from which experiment does its data come?
+\end{exlist}
+\backhead{OBJECTIVE TYPE QUESTIONS}{khred}\begin{exlist}
+\item The data of the figure ``Mulch--irrigation substitution'' come from
+\opt{E7,E14}{Re-runs}{E10-E16}{E0,E2,E7 daily}
+\item The data of the figure ``Threshold detection'' come from
+\opt{E10-E16}{E1-E7}{Pareto set}{E9,E12,E14}
+\item The data of the figure ``Mulch benefit by soil'' come from
+\opt{Pareto set}{E7,E2}{E11, E14}{E0,E7 daily}
+\item The data of the figure ``Interception loss vs capacity'' come from
+\opt{E9,E12,E14}{E7,E14}{E4 daily}{E4,E15}
+\item The data of the figure ``Non-linearity of the mulch effect'' come from
+\opt{E2 daily}{E7,E14}{E1,E10-E14}{E5, E0 daily}
+\end{exlist}
+\objkey{1.\ (a),\quad 2.\ (d),\quad 3.\ (b),\quad 4.\ (b),\quad 5.\ (b)}
+\swaflvideo{20}
