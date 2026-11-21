@@ -244,6 +244,35 @@ S10 & Silty clay loam & 0.010 & 1.23 & $>$10\,000 & 128\,260 & 6.58 / 2.75 / 6.5
 \end{table}
 The two soils whose observed lower bound exceeds the prediction (coarse sand and coarse loam) are the two without a literature saturated conductivity in the set used here; their reach is underpredicted by at least a factor of 1.9 and 1.3, which a second constant (the power law of \cref{tab:laws}) only partly removes.
 
+\section{Further views of the ensemble}\label{app:further}
+\paragraph{A common depletion for every soil.}
+Let a suction $h$ (in cm) be applied to the whole profile and let the root-zone depletion be
+\begin{equation*}
+f(h)=\frac{\sum_{k}\left[\theta_k(100)-\theta_k(h)\right]\Delta z_k}{\sum_{k}\left[\theta_k(100)-\theta_k(15\,849)\right]\Delta z_k},
+\end{equation*}
+where $\theta_k(h)$ is the van~Genuchten water content of horizon $k$ (Ap, 25\,cm, and Bt, 75\,cm), so that $f=0$ at the suction of 100\,cm taken as field capacity and $f=1$ at the wilting point (15\,849\,cm). Expressed as $f$, the triggers of the ten soils lie much closer than as suctions (\cref{fig:depletion}): pooled over the soils, a cubic in $f$ explains 0.70 of the variance of relative yield, against 0.23 for a cubic in the suction. Relative yield falls below 0.95 beyond a critical depletion $f^{*}=0.45$. The suction that gives $f^{*}$ follows from the hydraulic parameters by inverting $f(h)$; it is 143\,cm in sand and 729\,cm in silty clay loam, and the 300\,cm of the tables corresponds to a depletion of 0.24 in silty clay loam but 0.84 in sand, which is why one suction does not mean one stress.
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/paper4/N1_Depletion_trigger_law.png}
+\caption{A trigger law independent of the soil (E2, ten soils, twenty triggers). Relative irrigation and yield against the trigger, as suction and as root-zone depletion $f$; the curves of the ten soils collapse when depletion is used, and yield falls below 0.95 of its maximum beyond $f^{*}=0.45$. Panel d: the soil-specific suction that gives $f^{*}$, and the depletion reached by the 300\,cm trigger.}
+\label{fig:depletion}
+\end{figure}
+
+\paragraph{Fluxes and controllability.}
+Two views of the same ensemble complete the picture (\cref{fig:sankey,fig:control}). The flux diagram shows that the same trigger sends water along different paths in a loam and in a sand, with drainage a larger outflow in the sand. The controllability, defined as the range from the 10th to the 90th percentile of an outcome over a lever relative to its median, shows how much of each outcome a lever can change in each soil.
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/paper4/Sankey_loam_sand.png}
+\caption{Mean annual water fluxes of E2 at the 300\,cm trigger on coarse loam (left) and coarse sand (right): inputs (rain, irrigation) and outputs (transpiration, soil evaporation, interception and other evaporation, drainage below 1\,m).}
+\label{fig:sankey}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/paper4/Controllability_synthesis.png}
+\caption{How far management can move each outcome, by soil. Controllability of yield, irrigation efficiency, drainage and nitrate-leaching fractions by seven management levers (E1 to E7) across the ten soils, and its rank correlation with the plant-available water of the soil.}
+\label{fig:control}
+\end{figure}
+
 \section{Reproducibility}\label{app:repro}
 The Supplementary Material traces every result back to the data: for each number it names the experiment and runs used, the filter applied, the computation, and the script, result file and workbook sheet that reproduce it; the workbook repeats the algebra as live Excel formulas.
 \begin{table}[H]\centering\footnotesize

@@ -1193,6 +1193,25 @@ S10 & 222 & 0.310 & 0.838 & -0.017 & 1.131 & 160 & 0.414 & 0.629\\
 \end{tabular}
 \end{table}
 
+\section{Further views of the mulch experiments}\label{app:mulchviews}
+\paragraph{Where the evaporation saved by a mulch goes.}
+In E14 (coarse loam, a lattice of mulch strength, interception capacity and rain scale) the total evaporation saved, summed over soil, canopy and the mulch layer, was followed through the water balance and split into less irrigation, extra transpiration, extra drainage and a residual that goes to storage or runoff (\cref{fig:saved}). Which of these takes the saving depends on the rain scale and on the mulch strength: where the crop is irrigated the saving appears first as less irrigation, and where the soil is wet it appears as drainage and as a change in nitrate leaching. A saving is therefore not a gain of water for the crop; it is an amount that the balance sends to one of several outflows, and the share of each is what the memory fate $\phi_D$ and the loss fate $\psi_D$ describe soil by soil.
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/p1/N2_Fate_of_saved_evaporation.png}
+\caption{The fate of the evaporation saved by a mulch in E14. Evaporation saved (soil, canopy and mulch layer) against the reference run without mulch at the same interception capacity and rain, split by the water balance into reduced irrigation, extra transpiration, extra drainage and a residual; and the resulting change in nitrate leaching, against mulch strength (vapour-flux factor) and rain scale.}
+\label{fig:saved}
+\end{figure}
+
+\paragraph{Regimes of the feedback.}
+The loss-pathway index $\mathrm{DI}=(E_s-D)/(E_s+\max(D,0))$, with $E_s$ the soil evaporation and $D$ the drainage below 1\,m, is $+1$ where soil evaporation dominates the loss and $-1$ where drainage dominates; $E_s=D$ is the regime boundary. Mapped over the climate plane of E11 and the management plane of E14 (\cref{fig:regime}), the boundary moves with rain and with mulch strength, and the maps of non-additive interaction show where the effect of one driver depends on the level of another. The regime is thus set jointly by climate and management and cannot be read from either alone.
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{\figdir/p1/N3_Feedback_regime_map.png}
+\caption{Regime map of the soil--atmosphere feedback. Loss-pathway index (evaporation against drainage dominance) over the climate plane (E11) and the management plane (E14), with the boundary $E_s=D$, irrigation contours, and maps of the non-additive interaction of the drivers on irrigation.}
+\label{fig:regime}
+\end{figure}
+
 \section{Reproducibility map of the memory analysis}\label{app:repro}
 The Supplementary Material traces every result back to the data: for each number it names the experiment and runs used, the filter applied, the computation, and the script, result file and workbook sheet that reproduce it; the workbook repeats the algebra as live Excel formulas.
 \begin{table}[H]\centering\footnotesize
