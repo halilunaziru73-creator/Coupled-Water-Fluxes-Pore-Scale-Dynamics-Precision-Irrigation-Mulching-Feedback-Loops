@@ -149,3 +149,16 @@
 \gdef\partbody{}
 \newcommand{\partlist}[3]{\gdef\partbody{\begin{minipage}{0.86\textwidth}\raggedright\small\itshape #3\par\vspace{8mm}\noindent\foreach \n in {#1,...,#2}{\par\vspace{2.5mm}\noindent{\sfb\fontsize{11}{13}\selectfont\color{khblue}\makebox[1.1cm][l]{\csuse{chnum@\n}.}\parbox[t]{0.62\textwidth}{\csuse{chtitle@\n}}\hfill\color{khred}\csuse{chstart@\n}--\csuse{chend@\n}}\par}\end{minipage}}}
 \newcommand{\appfig}[3]{\begin{figure}[!htbp]\centering\Lfig{\includegraphics[width=#2\textwidth,height=0.78\textheight,keepaspectratio]{fig/app_#1.jpg}}\caption{#3}\end{figure}}
+
+\newcommand{\swaflvideo}[1]{\par\vspace{10pt plus 4pt}\noindent\colorbox{khex}{\parbox{\dimexpr\textwidth-2\fboxsep\relax}{\centering\sfb\fontsize{14}{17}\selectfont\color{khblue}WATCH IT RUN IN SWAFL}}\par\nobreak\vspace{6pt}
+\begingroup\noindent\href{https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html}{\begin{tikzpicture}
+\path[use as bounding box] (0,0) rectangle (\textwidth,-62mm);
+\begin{scope}\clip (0,0) rectangle (\textwidth,-62mm);
+\node[inner sep=0,anchor=north west] at (0,0) {\includegraphics[width=\textwidth]{fig/sh#1.jpg}};\end{scope}
+\node[inner sep=0,draw=none,minimum width=\textwidth,minimum height=62mm,anchor=north west] (im) at (0,0) {};
+\fill[black,opacity=0.28] (im.south west) rectangle (im.north east);
+\fill[khred,opacity=0.92] (im.center) circle (11mm);
+\fill[white] ([xshift=-3.6mm,yshift=-5.2mm]im.center) -- ([xshift=-3.6mm,yshift=5.2mm]im.center) -- ([xshift=6mm]im.center) -- cycle;
+\node[anchor=south west,fill=black,opacity=0.75,text opacity=1,text=white,font=\sffamily\small,inner sep=3pt] at ([xshift=2mm,yshift=2mm]im.south west) {Click to open the online SWAFL};
+\end{tikzpicture}}\endgroup\par\vspace{3pt}
+{\small\raggedright\noindent Click the picture to open the online version of SWAFL and repeat the examples of this chapter with your own soil, crop and weather data: Chapter~#1 uses the layer shown above. Address: \url{https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html}\par}}
