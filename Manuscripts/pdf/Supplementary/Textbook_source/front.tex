@@ -12,8 +12,19 @@
   \node[text=white,font=\sfb\fontsize{50}{52}\selectfont,inner sep=0] at ($(current page.north)+(0,-48mm)$) {\scalebox{0.76}[1]{PORE-SCALE}};
   \node[text=khgold,font=\sfb\fontsize{74}{76}\selectfont,inner sep=0] at ($(current page.north)+(0,-74mm)$) {\scalebox{0.72}[1]{DYNAMICS}};
   \node[text=white,font=\sffamily\itshape\fontsize{12.5}{15}\selectfont,inner sep=0,align=center,text width=0.78\paperwidth] at ($(current page.north)+(0,-100mm)$) {From the pore to the field: the mathematics of soil water, \hbox{precision} irrigation, mulching and feedback loops, worked in full};
-  % equation ribbon in the pore zone
-  \node[fill=white,fill opacity=0.88,text opacity=1,text=khnavy,inner sep=4pt,rounded corners=2pt,font=\fontsize{10}{12}\selectfont] at ($(current page.center)+(0,-14mm)$) {$\displaystyle \frac{\partial\theta}{\partial t}=\frac{\partial}{\partial z}\Bigl[K(h)\Bigl(\frac{\partial h}{\partial z}+1\Bigr)\Bigr]-S$};
+  % the author's own equations, from the four papers and their supplements
+  \node[anchor=north,fill=khnavy!85!black,fill opacity=0.82,text opacity=1,text=white,inner xsep=5mm,inner ysep=3.5mm,rounded corners=2pt,draw=khgold,line width=0.5pt] at ($(current page.north)+(0,-116mm)$) {\begin{minipage}{0.80\paperwidth}\fontsize{8.6}{10.6}\selectfont\renewcommand{\arraystretch}{1.28}\setlength{\tabcolsep}{2pt}
+  {\sffamily\bfseries\color{khgold}\fontsize{8}{9}\selectfont THE LAWS DERIVED IN THIS WORK}\\[1pt]
+  \begin{tabular}{@{}p{0.215\paperwidth}@{}l@{}}
+  {\sffamily\itshape\fontsize{7}{8}\selectfont\color{white!80}water balance} & $P_r+I=\mathit{ET}+D+\Delta S+Q_r$\\
+  {\sffamily\itshape\fontsize{7}{8}\selectfont\color{white!80}hydraulic memory} & $\bar R=\mathit{ET}+D-P_r-I,\qquad \varepsilon=\dfrac{W-\mathit{ET}-D}{W}$\\
+  {\sffamily\itshape\fontsize{7}{8}\selectfont\color{white!80}reach of a trigger} & $\displaystyle h_c=\frac1\alpha\Bigl(\frac{m^{2}}{\kappa}\Bigr)^{1/[2n+\ell(n-1)]}$\\
+  {\sffamily\itshape\fontsize{7}{8}\selectfont\color{white!80}fate of a millimetre} & $\eta_X=\dfrac{X-X_0}{I},\qquad \eta_D(d)=\eta_\infty\bigl(1-e^{-d/d_D}\bigr)$\\
+  {\sffamily\itshape\fontsize{7}{8}\selectfont\color{white!80}drained share} & $\phi_D=\dfrac{K_s}{K_s+q^{*}},\qquad \kappa=-\dfrac{\Delta I}{\Delta P_r}$\\
+  {\sffamily\itshape\fontsize{7}{8}\selectfont\color{white!80}memory law} & $\ln R=5.75-0.355\ln P+0.863\ln E_p+0.136\,\Delta T$\\
+  {\sffamily\itshape\fontsize{7}{8}\selectfont\color{white!80}Richards equation} & $\dfrac{\partial\theta}{\partial t}=\dfrac{\partial}{\partial z}\Bigl[K(h)\Bigl(\dfrac{\partial h}{\partial z}+1\Bigr)\Bigr]-S$
+  \end{tabular}
+  \end{minipage}};
   % author and mark
   \node[text=white,font=\sfb\fontsize{19}{22}\selectfont,inner sep=0] at ($(current page.south)+(0,38mm)$) {NAZIRU HALILU};
   \draw[khgold,line width=0.6pt] ($(current page.south)+(-24mm,32mm)$) -- ($(current page.south)+(24mm,32mm)$);
