@@ -3,6 +3,7 @@
 \chapter{Flow, Roots and the Daisy Model}\label{chap:02}
 \markboth{Flow, Roots and the Daisy Model}{Flow, Roots and the Daisy Model}
 \IfFileExists{extra/bg02.tex}{\input{extra/bg02}}{}
+IfFileExists{extra/th02.tex}{\input{extra/th02}}{}
 \banner{The Richards equation, roots and the Daisy ensemble}
 \section{Flow in an unsaturated soil}
 Darcy's law for vertical flow, with $z$ positive upward and $h$ the suction (so that the pressure head is $-h$), gives the flux
@@ -15,7 +16,7 @@ Conservation of mass for the water content $\theta$ with a sink $S_r$ for root u
 
 Equation~(\ref{eq:richards}) is the Richards equation. Together with the retention curve $\theta(h)$ of Equation~(\ref{eq:vg}) and the conductivity of Equation~(\ref{eq:vgm}) it is a closed, non-linear equation for $h(z,t)$. It solves the \emph{equilibrium} form: the water content follows the retention curve at once. When wetting and drying are fast, the water content lags behind, and the criterion of Section~\ref{sec:lag} says when this matters.
 
-\section{Uptake by roots: the conductance of the soil around a root}
+\section{Uptake by roots: the conductance of the soil around a root}\label{ch:root-cyl}
 Roots take water from the soil around them. For a cylindrical root of radius $r_0$ in a soil cylinder of radius $r_1$, steady radial flow gives an uptake per unit root length
 \begin{equation}\label{eq:radial}\boxed{u\simeq\frac{2\pi}{\ln(r_1/r_0)}\int_{h_{\mathrm{root}}}^{h}K(h')\,dh'\approx\frac{2\pi}{\ln(r_1/r_0)}\,K(h)\,\Delta h ,}\end{equation}
 where $\Delta h$ is the head drop from the bulk soil to the root surface (Gardner, 1960). Multiplying by the root length density $L_v$ gives the sink per unit volume. Two things follow. First, the uptake is proportional to $K(h)$, so as the soil dries and $K$ falls by orders of magnitude (Chapter~3), uptake falls with it. Second, $\Delta h$ is bounded by the plant, since the root water potential cannot fall below the wilting point. So there is a suction beyond which the soil delivers too little water for the crop to dry it further in a season. This is the origin of the reach (Chapter~\ref{ch:reach}). Daisy computes uptake from a soil--root potential difference over a conductance of this type (Abrahamsen and Hansen, 2000).

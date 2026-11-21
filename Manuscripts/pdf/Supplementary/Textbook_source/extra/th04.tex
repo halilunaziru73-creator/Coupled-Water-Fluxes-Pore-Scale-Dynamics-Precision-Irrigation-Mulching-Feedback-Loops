@@ -1,0 +1,33 @@
+\section{Errors, uncertainty and the quality of a measurement}
+Every number that comes from a measurement or a model has an error. The \kw{error} is the difference between the value found and the true value, which is never known exactly. Two kinds are distinguished. A \kw{systematic error} (bias) is the same in sign and size every time (a sensor that reads 3 per cent too high); it cannot be reduced by repetition but can be corrected by calibration. A \kw{random error} changes from one reading to the next; it is reduced by averaging. \kw{Accuracy} is the closeness of the result to the true value, and \kw{precision} is the closeness of repeated results to each other: a model can be precise but not accurate.
+\par\noindent When a result is computed from several measured values $x_i$ with independent errors $\delta x_i$, the error of $y=f(x_1,x_2,\dots)$ is
+\begin{equation*}\boxed{\delta y=\sqrt{\sum_i\left(\frac{\partial f}{\partial x_i}\,\delta x_i\right)^2}}\end{equation*}
+\noindent \textbf{Note:} For a sum or difference the absolute errors add in quadrature, and for a product or a quotient the relative errors do. A balance that closes to within the combined error of its terms is satisfactory; a residual larger than that error is a result (Section~\ref{ch:audit-hidden}).
+
+\section{Descriptive statistics}
+For a sample $x_1,\dots,x_n$ the \kw{mean} is $\bar x=\sum x_i/n$, the \kw{median} is the middle value, the \kw{variance} is $s^2=\sum(x_i-\bar x)^2/(n-1)$ and the \kw{standard deviation} is $s$. The \kw{percentile} $Q_p$ is the value below which $p$ per cent of the data lie; $Q_{25}$, $Q_{50}$ and $Q_{75}$ are the quartiles, and the interquartile range $\mathrm{IQR}=Q_{75}-Q_{25}$ measures the spread without the effect of extremes. The median and the IQR are preferred when the data are skewed (as annual drainage is, with a few very wet years), and the mean and $s$ when they are symmetric. The \kw{standard error} of the mean, $s/\sqrt n$, measures how well the mean is known, and is not the same as the spread of the data.
+
+\section{Correlation and regression}
+The \kw{Pearson correlation coefficient} $r$ measures the strength of a straight-line relation of two variables, from $-1$ to $+1$. The \kw{Spearman rank correlation} $\rho$ is the Pearson coefficient of the ranks; it measures any monotonic relation, is not distorted by outliers and is used in this book (Section~\ref{ch:rank}). \kw{Linear regression} finds the line $y=a+bx$ that minimises the sum of squares of the residuals; the slope is $b=\sum(x_i-\bar x)(y_i-\bar y)/\sum(x_i-\bar x)^2$ and the \kw{coefficient of determination} $R^2$ is the share of the variance of $y$ that the line explains.
+\par\noindent \textbf{Notes:} 1. A correlation is not a cause: two quantities can move together because a third drives both. 2. A high $R^2$ for a fitted curve says nothing about the next data set; it must be checked on data left out (cross-validation, Section~\ref{ch:loso}). 3. With ten soils, a correlation of $|\rho|<0.63$ is not significant at the 5 per cent level.
+
+\section{Measures of the agreement of a model with data}
+Let $o_i$ be the observed and $m_i$ the modelled values, $i=1,\dots,n$. The usual measures are given below.
+\begin{center}\small\begin{tabular}{@{}p{3.8cm}p{5.4cm}p{4.2cm}@{}}\toprule
+\hd{Measure} & \hd{Formula} & \hd{Ideal value}\\\midrule
+Bias (mean error) & $\dfrac1n\sum(m_i-o_i)$ & 0\\[4pt]
+Mean absolute error & $\dfrac1n\sum|m_i-o_i|$ & 0\\[4pt]
+Root-mean-square error & $\sqrt{\dfrac1n\sum(m_i-o_i)^2}$ & 0\\[4pt]
+Nash--Sutcliffe efficiency & $1-\dfrac{\sum(m_i-o_i)^2}{\sum(o_i-\bar o)^2}$ & 1 ($0$: no better than the mean)\\[4pt]
+Index of agreement & $1-\dfrac{\sum(m_i-o_i)^2}{\sum(|m_i-\bar o|+|o_i-\bar o|)^2}$ & 1\\\bottomrule
+\end{tabular}\end{center}
+\noindent The root-mean-square error is in the unit of the variable and punishes large errors; the Nash--Sutcliffe efficiency is dimensionless, so that variables of different units can be compared. No single measure is enough: a model can have a zero bias and a large RMSE.
+
+\section{Hypothesis tests and the meaning of $p$}
+A \kw{hypothesis test} asks whether a difference in the data could be due to chance. The \kw{null hypothesis} states that there is no effect; the \kw{$p$-value} is the probability, if the null hypothesis were true, of a result as extreme as the one observed. A small $p$ (below 0.05) is taken as evidence against the null hypothesis. Two warnings: $p$ is not the probability that the hypothesis is true, and a large sample makes tiny effects ``significant''; the size of the effect (the slope, the difference in per cent) matters more than $p$. A \kw{permutation test}, used in this book, makes the null distribution by shuffling the data many times, and requires no assumption about their distribution.
+
+\section{Confidence intervals and the bootstrap}
+A \kw{confidence interval} of 95 per cent is a range that would contain the true value in 95 per cent of repeated experiments. For the mean of a normal sample it is $\bar x\pm t\,s/\sqrt n$. For a statistic with no simple formula the \kw{bootstrap} draws many samples with replacement from the data, computes the statistic for each, and takes the 2.5th and 97.5th percentiles of the results as the interval (Section~\ref{ch:boot}).
+
+\section{Overfitting and the choice of a model}
+A model with many parameters can follow the data of the fit and fail on new data; this is \kw{overfitting}. Two safeguards are used: to test on data not used in the fit (leave-one-out, leave-one-soil-out) and to penalise the number of parameters. The \kw{Akaike criterion} $\mathrm{AIC}=n\ln(\mathrm{SSE}/n)+2k$ (for $k$ parameters) is smaller for the better balance between fit and simplicity; when two laws have the same error on new data, the one with fewer parameters is chosen.

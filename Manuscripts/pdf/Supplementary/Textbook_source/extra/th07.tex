@@ -1,0 +1,17 @@
+\section{What a decision-support system is}
+A \kw{decision-support system} (DSS) is a program that turns data and a model into a recommendation that a manager can act on. It has three parts: a \emph{database} (weather, soil, crop, the state of the field), a \emph{model base} (the equations that compute the water balance, the design or the schedule) and a \emph{user interface} (the screens, the maps, the messages). The difference between a model and a DSS is the last step: the model gives numbers, the DSS gives advice (``irrigate in three days, 28 mm'') and says how sure it is.
+
+\section{The architecture of SWAFL}
+SWAFL is a set of \emph{layers} on one project. A layer is a page that answers one question (when to irrigate, how to design a lateral, where the water goes after a mulch). The layers use two \emph{engines}: Engine~1 (the annual meta-model, scaled to the results of the ensemble) and Engine~2 (the daily soil-water balance). The whole system is written so that the same project file can be opened by the online workbench and by the desktop application.
+\begin{exlist}
+\item \kw{The project.} It holds the field, the soil, the weather, the crop and the management, and everything that the layers compute; a change in one layer is seen in the others.
+\item \kw{The engines.} They give the numbers; they are verified against Daisy (Chapter~\ref{chap:08}).
+\item \kw{The layers.} Each combines the engines with the equations of one topic of this book.
+\item \kw{The Daisy workbench.} It prepares, runs and reads Daisy simulations from the same project.
+\end{exlist}
+
+\section{Verification of a software}
+A program that gives wrong answers with great confidence is dangerous. The software of this book is therefore tested at three levels: \emph{unit tests} (each equation against a hand calculation or a published example), \emph{integration tests} (the layers against each other: the sum of the parts equals the total) and \emph{system tests} (the answers against Daisy on held-out runs). A bug found at one level is corrected, and the test is added to the set, so that it cannot return.
+
+\section{How to read a figure or a message of a layer}
+Every figure of the layers is drawn from numbers, and the numbers come from equations of this book. To read a figure: (1) read the title and the axes, with their units; (2) find the equation that is behind it (the tour below names the chapter); (3) see whether the budget closes, since a figure whose terms do not add up is not to be trusted; (4) look for the warning messages, which say when a value is outside the range for which the equation was verified.

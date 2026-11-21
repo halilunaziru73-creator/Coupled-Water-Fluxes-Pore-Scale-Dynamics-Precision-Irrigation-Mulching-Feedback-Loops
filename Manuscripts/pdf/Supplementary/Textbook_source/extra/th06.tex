@@ -1,0 +1,38 @@
+\section{Methods of irrigation and their classification}
+The methods of applying water to a field are placed in four groups, by the way in which the water reaches the soil.
+\begin{exlist}
+\item \kw{Surface irrigation.} Water flows over the soil by gravity and infiltrates as it moves (basin, border, furrow). It needs a levelled field and little energy (Chapter~\ref{chap:11}).
+\item \kw{Sprinkler irrigation.} Water is sprayed through the air under pressure and falls like rain (solid-set, hand-move, centre pivot, travelling gun). It suits undulating land and light soils (Chapter~\ref{chap:13}).
+\item \kw{Drip (micro) irrigation.} Water is delivered at low pressure through emitters on or near the plant, to a part of the soil volume (Chapter~\ref{chap:12}).
+\item \kw{Subsurface irrigation.} The water table is raised or water is delivered below the surface; the root zone is wetted from below.
+\end{exlist}
+\begin{center}\small\begin{tabular}{@{}p{2.7cm}p{3.2cm}p{3.5cm}p{3.6cm}@{}}\toprule
+\hd{Method} & \hd{Typical $E_a$ (per cent)} & \hd{Energy and cost} & \hd{Best suited to}\\\midrule
+Surface & 50 to 70 (up to 80 with care) & low pressure; high labour or land-levelling cost & level fields, medium to heavy soils, cereals, rice\\
+Sprinkler & 65 to 80 & high pressure; pump cost & undulating land, light soils, wide range of crops\\
+Drip & 85 to 95 & low pressure, filters; high capital cost & orchards, vegetables, scarce water, saline water\\\bottomrule
+\end{tabular}\end{center}
+\noindent The values are typical of well-managed systems; poor management can give much less. Each method is chosen from the water supply, the soil and the slope, the crop, the labour and the capital available.
+
+\section{The efficiencies of an irrigation system}
+The water that leaves the source does not all reach the crop, and each stage has a loss. The efficiencies are ratios and are multiplied:
+\begin{equation*}\boxed{E_c=\frac{V_{field}}{V_{source}},\qquad E_a=\frac{V_{stored}}{V_{field}},\qquad E_{p}=E_c\,E_a}\end{equation*}
+where $E_c$ is the \kw{conveyance efficiency} (the share that reaches the field from the source, reduced by seepage and evaporation in canals), $E_a$ the \kw{application efficiency} (the share of the water delivered to the field that is stored in the root zone), and $E_p$ the \kw{project efficiency}. Two more measures describe the field: the \kw{storage efficiency} (the share of the water needed to refill the root zone that was stored) and the \kw{distribution uniformity} (the evenness of the depth along the field). A system can have a high $E_a$ and a poor uniformity if the deficit is satisfied only in the driest part.
+
+\section{Uniformity}
+The depths applied are never perfectly even. The \kw{Christiansen uniformity coefficient} is
+\begin{equation*}\boxed{CU=100\left(1-\frac{\sum|x_i-\bar x|}{n\,\bar x}\right)}\end{equation*}
+where $x_i$ are the depths collected at $n$ points and $\bar x$ their mean. The \kw{distribution uniformity} of the low quarter is $DU_{lq}=100\,\bar x_{lq}/\bar x$, where $\bar x_{lq}$ is the mean of the lowest quarter of the depths; and for drip systems the \kw{emission uniformity} is based on the lowest quarter of the emitter flows (Chapter~\ref{chap:12}). Good values are $CU>85$ per cent for sprinklers and $DU_{lq}>75$ per cent for surface irrigation.
+
+\section{The leaching requirement}
+All irrigation water contains salts, and the crop takes up water and leaves most of the salt in the soil. If the salt is not removed, it builds up in the root zone. The \kw{leaching requirement} is the fraction of the applied water that must pass below the roots to keep the salinity at the level the crop can tolerate:
+\begin{equation*}\boxed{LR=\frac{EC_w}{5\,EC_e-EC_w}}\end{equation*}
+where $EC_w$ is the electrical conductivity of the irrigation water and $EC_e$ the conductivity of the saturation extract that the crop tolerates (both in dS\,m$^{-1}$). For example, water of $EC_w=1.0$ and a crop with $EC_e=3.0$ give $LR=1.0/(15-1.0)=0.071$: 7 per cent more water than the crop needs must be applied. Drainage must carry this water away (Chapter~\ref{chap:14}).
+
+\section{Weather data: what is needed and why}
+The reference evapotranspiration needs five variables: the air temperature (minimum and maximum), the humidity (dew point or relative humidity), the wind speed at a standard height, the radiation (or the hours of sunshine) and the altitude of the station (for the pressure). Rain is needed for the balance. A weather station records them at 2 m height over short grass; data from a distant station should be used with care, because rain varies in space more than the temperature does. When a variable is missing, the FAO gives rules to estimate it (radiation from the range of temperature, humidity from the minimum temperature), at a cost in accuracy.
+
+\section{Vegetation indices from satellite images}
+Healthy green leaves reflect strongly in the near infrared and absorb red light, and dry soil reflects both about equally. The \kw{normalised difference vegetation index} is
+\begin{equation*}\boxed{NDVI=\frac{\rho_{NIR}-\rho_{red}}{\rho_{NIR}+\rho_{red}}}\end{equation*}
+with $\rho$ the reflectance in the band named. It lies between $-1$ and $+1$; bare soil is near 0.1 to 0.2 and a dense green crop is 0.7 to 0.9. The index is related to the green cover and to the crop coefficient, and it is used to map the variation of a field and to divide it into zones. Its weaknesses are saturation at high cover and the effect of the soil background at low cover.

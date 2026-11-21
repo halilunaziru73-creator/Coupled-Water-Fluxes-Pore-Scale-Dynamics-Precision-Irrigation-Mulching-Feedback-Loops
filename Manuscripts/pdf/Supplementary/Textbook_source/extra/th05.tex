@@ -1,0 +1,45 @@
+\section{The terms of evapotranspiration}
+\kw{Evaporation} is the change of liquid water to vapour at a surface (soil, a wet leaf, a pond); \kw{transpiration} is the same change inside the leaf, with the vapour leaving through the stomata, and it is the flux that the crop needs for growth. Together they are \kw{evapotranspiration} (ET). Three quantities are distinguished, and the difference between them is the aim of the method of the FAO:
+\begin{exlist}
+\item \kw{Reference evapotranspiration} $ET_0$: the rate from a hypothetical grass, well watered and fully covering the soil; it depends on the weather only.
+\item \kw{Crop evapotranspiration} $ET_c=K_c\,ET_0$: the rate of a given crop in standard conditions (healthy, well watered, no limit of nutrients).
+\item \kw{Actual evapotranspiration} $ET_a=K_s\,K_c\,ET_0$: the rate under the real conditions, reduced by the water stress factor $K_s\le1$.
+\end{exlist}
+
+\section{The factors that affect evapotranspiration}
+\textbf{Climate.} The four weather variables are radiation (the energy to vaporise 1 kg of water is $\lambda=2.45$ MJ, so 1 mm of evaporation needs $2.45$ MJ\,m$^{-2}$), air temperature, humidity (a dry air takes more vapour) and wind speed (it removes the saturated air from the surface). \textbf{Crop.} The type, the height, the cover, the roughness and the rooting depth change the rate; a tall crop is more aerodynamically coupled to the air. \textbf{Soil.} A wet soil surface evaporates at the energy limit; a dry one at a falling rate. \textbf{Management.} Mulch, tillage, the method of irrigation and the density of plants change the share of evaporation and transpiration.
+
+\section{The energy balance of a surface}
+The energy received at the surface leaves in three ways:
+\begin{equation*}\boxed{R_n=\lambda E+H+G}\end{equation*}
+where $R_n$ is the net radiation, $\lambda E$ the latent heat flux (the energy used for evaporation), $H$ the sensible heat flux (heating of the air) and $G$ the heat flux into the soil (all in MJ\,m$^{-2}$\,d$^{-1}$). When more energy is used for evaporation there is less to heat the air and the soil, so that an irrigated field is cooler than a dry one. This is also the basis of the canopy-temperature method of scheduling.
+
+\section{Methods for the determination of evapotranspiration}
+\begin{exlist}
+\item \kw{Direct measurement.} The \emph{lysimeter} (a block of soil with a crop, weighed or drained) gives ET from the balance; \emph{eddy covariance} measures the vapour flux in the air above the field; the \emph{soil-water balance} gives ET as the residual of the other terms.
+\item \kw{Temperature methods.} Thornthwaite and Blaney--Criddle use the air temperature (and the hours of daylight); they are simple but crude, and the temperature is not the cause of evaporation.
+\item \kw{Radiation methods.} Priestley--Taylor and Makkink use the radiation, which is the main energy term; Hargreaves uses the range of temperature as an estimate of radiation. They are used where wind and humidity are not measured.
+\item \kw{Combination methods.} Penman (1948) combined the energy balance and the aerodynamic transport; Monteith added the resistance of the canopy. The FAO Penman--Monteith equation (Equation~\ref{eq:pm}) is the standard, and is the method of this book.
+\end{exlist}
+\noindent \textbf{Note:} The FAO recommends Penman--Monteith as the only standard; the others should be calibrated against it where weather data are incomplete.
+
+\section{Growth stages of a crop and the crop coefficient}
+The season of a crop is divided into four stages, and the crop coefficient takes a typical value in each: the \emph{initial} stage (from sowing to about 10 per cent cover; $K_c$ is low, and evaporation from the soil dominates), the \emph{development} stage (to full cover; $K_c$ rises), the \emph{mid-season} stage (full cover to the start of ripening; $K_c$ is at its maximum) and the \emph{late-season} stage (ripening and harvest; $K_c$ falls). Typical values from the FAO are given below.
+\begin{center}\small\begin{tabular}{@{}lccc@{}}\toprule
+\hd{Crop} & \hd{$K_{c\,ini}$} & \hd{$K_{c\,mid}$} & \hd{$K_{c\,end}$}\\\midrule
+Maize (grain) & 0.30 & 1.20 & 0.35\\
+Wheat & 0.30 & 1.15 & 0.25\\
+Tomato & 0.60 & 1.15 & 0.80\\
+Potato & 0.50 & 1.15 & 0.75\\
+Sugar beet & 0.35 & 1.20 & 0.70\\\bottomrule
+\end{tabular}\end{center}
+\noindent The values are for a subhumid climate with light wind; they are corrected for the local humidity and wind, and for the height of the crop.
+
+\section{Water stress: the plant's response}
+When the soil dries, the roots must work harder to extract water, and the leaf water potential falls. The plant first closes its stomata, which reduces the loss of water but also the entry of carbon dioxide, so that photosynthesis falls and growth slows. The sequence is: reduced leaf expansion (the earliest response), stomatal closure, reduced photosynthesis, leaf rolling and senescence, wilting. Plants differ in sensitivity: \kw{drought avoidance} (deep roots, closing stomata early), \kw{drought escape} (finishing the cycle before the dry season) and \kw{drought tolerance} (keeping the cells alive at low potential) are the three strategies that breeders use.
+
+\section{The yield response to water}
+Doorenbos and Kassam (1979) wrote the loss of yield as a linear function of the deficit of evapotranspiration:
+\begin{equation*}\boxed{1-\frac{Y_a}{Y_m}=K_y\left(1-\frac{ET_a}{ET_c}\right)}\end{equation*}
+where $Y_a$ and $Y_m$ are the actual and maximum yields and $K_y$ the yield response factor (about 1.25 for maize, 1.0 for wheat, 1.1 for tomato for the whole season). A crop for which $K_y>1$ loses more than in proportion to the deficit and is sensitive to stress; one with $K_y<1$ is tolerant. The sensitivity also changes with the stage: the flowering and grain-filling stages are the most sensitive.
+\par\noindent \textbf{Note:} The equation can be used for each stage and combined by multiplying the relative yields of the stages. The relation is used in this chapter in Equation~(\ref{eq:Ky}), with the stress coefficient $K_s$ of Equation~(\ref{eq:Ks}) taken from the depletion.

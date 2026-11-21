@@ -1,0 +1,31 @@
+\section{Methods of surface irrigation}
+In \kw{surface irrigation} the water is spread over the field by gravity, and it infiltrates as it flows. There are three methods.
+\begin{exlist}
+\item \kw{Basin irrigation.} A level area surrounded by a bund is flooded quickly and the water ponds until it has infiltrated. It is the method for rice, orchards and level fields; the slope is zero and the efficiency can be high because there is no runoff.
+\item \kw{Border irrigation.} The field is divided into long, sloping strips separated by low ridges; water enters at the top, advances over the whole width and runs to the lower end. It suits cereals, pastures and close-growing crops on a uniform slope of 0.05 to 2 per cent.
+\item \kw{Furrow irrigation.} Water runs in small channels between the rows and wets the soil laterally and downward; the crop is on the ridge and is not flooded. It suits row crops on slopes of 0.05 to 3 per cent, and is the method of the greatest variety of soils.
+\end{exlist}
+\noindent \textbf{Advantages:} low energy use, low cost of equipment, no wetting of the leaves, and the use of a large stream. \textbf{Disadvantages:} the need for levelling and a regular slope, a lower efficiency (the water that infiltrates near the inlet is more than that at the end), the loss by runoff and drainage, and the labour of the irrigator.
+
+\section{The four phases of a surface irrigation}
+Whatever the method, an irrigation event goes through four phases. In the \kw{advance} phase the water moves from the inlet to the end of the field; infiltration takes place along the way, so the upper part is wetted for a longer time. In the \kw{wetting} (storage) phase, which begins when the water reaches the end, the inflow continues, and the water may run off (\emph{free-draining}) or be held (\emph{blocked end}). In the \kw{depletion} phase, after the inflow is cut off, the depth at the upper end falls as the water infiltrates, and in the \kw{recession} phase the water leaves the surface from the top to the end. The time of contact of the water with the soil at a point is the \kw{opportunity time}, which is the difference of the recession and the advance times, and it fixes the depth infiltrated there.
+
+\section{Infiltration equations}
+The intake of the soil is the basis of the design. Four models are in use.
+\begin{center}\small\begin{tabular}{@{}p{3.2cm}p{4.8cm}p{5.4cm}@{}}\toprule
+\hd{Model} & \hd{Cumulative infiltration $Z(\tau)$} & \hd{Remark}\\\midrule
+Kostiakov & $k\,\tau^{a}$ & empirical, two parameters; $a<1$; fails for long times (rate goes to zero)\\
+Modified Kostiakov (Kostiakov--Lewis) & $k\,\tau^{a}+f_0\,\tau$ & adds the final rate $f_0$; used in surface irrigation\\
+Philip & $S\sqrt\tau+A\tau$ & physical, with the sorptivity $S$; short and medium times\\
+Green--Ampt & $K_s\tau+\Delta\theta\,h_f\ln(1+Z/(\Delta\theta h_f))$ (implicit) & physical, with a sharp wetting front\\\bottomrule
+\end{tabular}\end{center}
+\noindent \textbf{Note:} In every model the rate of infiltration is largest at the start of the wetting (a dry soil takes water by suction as well as by gravity) and falls to a steady rate near $K_s$.
+
+\section{Flow in the channel: the Manning equation and the Froude number}
+The discharge in a furrow or a border is given by the equation of Manning, $Q=(A\,R^{2/3}\,S_0^{1/2})/n$, where $A$ is the cross-section of the flow, $R$ the hydraulic radius (area divided by wetted perimeter), $S_0$ the slope and $n$ the roughness (0.04 for a furrow with a crop and 0.15 for a dense pasture). The flow is slow and subcritical: the Froude number $Fr=v/\sqrt{gD}$ is below 1, so that disturbances can travel upstream, and the depth at the inlet is controlled by the downstream condition. The \kw{maximum non-erosive stream} in a furrow is about $Q_{max}=0.63/S$ (L\,s$^{-1}$, with the slope $S$ in per cent); a larger stream erodes the furrow.
+
+\section{Design objectives and the efficiencies}
+The design of a system is a choice of the stream, the length and the time of application, so that (1) the depth required is applied at the end of the field (the \emph{adequacy}), (2) the water lost by runoff and by deep percolation is small, and (3) the distribution is even. The performance is measured by the \kw{application efficiency} $E_a=Z_{req}/Z_{app}$, the \kw{requirement efficiency} (the share of the deficit that was replaced), the \kw{distribution uniformity} and the \kw{tail-water ratio} (the share of the water that runs off at the end). A short field and a large stream make the advance quick and the distribution even, but increase the runoff and the labour of managing it. A \emph{cut-back} or a \emph{surge} flow (alternating on and off) reduces the loss.
+
+\section{Land levelling and the field layout}
+The performance of surface irrigation depends on the surface. A \kw{levelling} to a uniform slope within 2 to 3 cm of the design reduces the variation of the depth of water; laser-guided levelling is the standard. The recommended slopes are 0 for basins, 0.05 to 1 per cent for borders and 0.05 to 3 per cent for furrows; the lengths are 30 to 100 m for basins, 100 to 400 m for borders on medium soils and 100 to 300 m for furrows. Shorter lengths are used in light soils, which take water quickly.

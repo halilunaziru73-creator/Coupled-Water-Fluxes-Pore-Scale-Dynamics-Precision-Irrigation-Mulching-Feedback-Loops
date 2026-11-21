@@ -1,0 +1,23 @@
+\section{Why a figure needs a theory of reading}
+A chart is a compact statement about numbers, and like any statement it can be read well or badly. The chapters of the atlas show the figures of the study, and each type of chart answers a different kind of question. This section sets out the types, what each shows and what it hides, so that the figures that follow can be read in the way their authors meant. The rule that runs through all of them is that a chart shows the data \emph{after} a choice has been made (which variable on which axis, what is averaged, what is excluded) and that the choice is part of the result.
+
+\section{The kinds of chart}
+\begin{exlist}
+\item \kw{Line chart.} A variable against an ordered one (time, suction). It shows trends and the shape of a response, but joining points suggests a continuity that the data may not have.
+\item \kw{Bar chart.} The size of a quantity for each category. The bars must start at zero, or the lengths are misleading.
+\item \kw{Stacked bar chart.} The parts of a whole for each category (the fates of the water input: transpiration, evaporation, drainage). The sum is the height of the bar and the parts are read as shares; the parts in the middle are hard to compare because they do not share a base line.
+\item \kw{Box plot.} The distribution of a variable by its median, its quartiles (the box) and its whiskers (1.5 interquartile range, beyond which points are drawn as outliers). It shows the spread and the skew without assuming a distribution; a \emph{violin plot} adds the shape of the density.
+\item \kw{Scatter plot.} Two variables for each run; the pattern of the points shows the form and the strength of the relation, and the clouds and gaps show the data.
+\item \kw{Heat map.} A table coloured by value; it shows patterns across two categories, but the colour scale decides what is seen.
+\item \kw{Contour and response-surface plot.} A variable over two others, drawn as lines of equal value or as a coloured field; it shows the interaction of the two factors.
+\item \kw{Sankey diagram.} Flows between boxes, drawn with width in proportion to the flow; used for the water balance, in which the inputs are on the left and the fates are on the right.
+\end{exlist}
+
+\section{Reading axes, scales and units}
+Before any pattern is read, three things are checked. The \emph{units}: a flux in mm per year, a ratio without a unit, a suction in cm or in pF. The \emph{scale}: a \emph{logarithmic} axis (used for suction and conductivity, which vary over many orders of magnitude) shows equal ratios as equal distances, so that a straight line means a power law; on a linear axis an exponential is a curve. The \emph{range}: an axis that does not start at zero exaggerates differences; the range of a colour scale can do the same. A figure in which two panels have different scales must not be compared by eye.
+
+\section{Averages, spreads and the number of runs behind a point}
+Most points of the atlas are \emph{means over a group of runs}: all the runs of one soil at one level of a factor, with the other factors averaged. Three consequences follow. First, a mean hides the spread; where the box plots or the bands are shown, the spread should be read together with the mean. Second, the number of runs behind a point is stated (in the title or the caption), and a point with few runs is less reliable. Third, the mean over other factors is a statement about the \emph{design} of the ensemble: if the design is unbalanced, the means are weighted in a way that the plot does not show.
+
+\section{The ten soils, and the order in which they are drawn}
+The figures use ten soils from coarse sand to silty clay loam. They are ordered, in most charts, by the shape parameter $n$ of the van Genuchten curve (a large $n$ means a narrow pore-size distribution and a rapid loss of conductivity near saturation) or by the available water; the colours go with the order. A pattern that follows the order from the first to the last soil points to a hydraulic cause; a pattern that does not follow it points to a feature of one soil (its depth, its horizons) and is checked against the soil file.

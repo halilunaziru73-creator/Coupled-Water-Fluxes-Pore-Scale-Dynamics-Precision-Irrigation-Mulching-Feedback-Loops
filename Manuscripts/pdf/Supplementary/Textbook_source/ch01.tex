@@ -3,6 +3,7 @@
 \chapter{Soil Water: Balance, Retention and Conductivity}\label{chap:01}
 \markboth{Soil Water: Balance, Retention and Conductivity}{Soil Water: Balance, Retention and Conductivity}
 \IfFileExists{extra/bg01.tex}{\input{extra/bg01}}{}
+IfFileExists{extra/th01.tex}{\input{extra/th01}}{}
 \banner{Water, soil and the problem of saving}
 \section{Why a saved millimetre is not a gained millimetre}
 Irrigation takes most of the freshwater that people withdraw, so a better use of each millimetre is a first-order goal. Evaporation is the largest single outflow from land that is not saturated, so any measure that lowers evaporation, such as a mulch, seems to promise water that is saved. The promise rests on an assumption: that water not evaporated stays available. But water is conserved. If it does not evaporate it either remains in the root zone, where the crop can use it, or it drains below the roots, where the crop cannot. Which of the two happens depends on the soil, the climate and the management. This book gives the equations that decide it.
@@ -237,7 +238,7 @@ Water flows through the pores that are water-filled. When the soil dries, the la
 \draw[gd] (6.3,0)--(6.3,1);\node[lab,above] at (6.3,1.05) {WP};
 \end{kfig}
 
-\section{Mualem's model}
+\section{Mualem's model}\label{sec:mualem}
 Mualem (1976) wrote the relative conductivity $\Kr=K/\Ks$ of a bundle of capillaries as the product of a tortuosity--connectivity term $\Se^{\ell}$ and the square of a normalised integral of the pore radius over the filled pores. Since $r\propto 1/h$ (Equation~\ref{eq:hr}),
 \begin{equation}\label{eq:mualem}\boxed{\Kr(\Se)=\Se^{\ell}\left[\frac{\int_0^{\Se} h(x)^{-1}\,dx}{\int_0^{1} h(x)^{-1}\,dx}\right]^{2}.}\end{equation}
 \par\noindent where $\Kr=K/K_s$ is the relative hydraulic conductivity (dimensionless), $K$ the conductivity at the given saturation and $K_s$ the saturated conductivity (both cm\,d$^{-1}$), $\ell$ the pore-connectivity parameter (dimensionless, 0.5 by default), $x$ a dummy variable of integration (an effective saturation) and $h(x)$ the suction at $x$ (cm).

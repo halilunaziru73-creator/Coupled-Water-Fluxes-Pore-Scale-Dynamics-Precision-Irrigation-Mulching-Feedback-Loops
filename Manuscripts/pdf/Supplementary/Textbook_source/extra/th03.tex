@@ -1,0 +1,37 @@
+\section{Irrigation scheduling: the question of when and how much}
+\kw{Irrigation scheduling} is the decision of \emph{when} to irrigate and \emph{how much} water to apply. The aim is to keep the water of the root zone between two limits: a lower limit below which the crop suffers a loss, and an upper limit (field capacity) above which water is lost by drainage. The methods are classified by the quantity on which the decision is based.
+\begin{exlist}
+\item \kw{Calendar (fixed interval) scheduling.} Water is given at fixed intervals, from experience (every 7 days). It needs no instruments, but cannot follow the weather, and wastes water in cool or rainy periods.
+\item \kw{Water-balance (budget) scheduling.} The depletion of the root zone is computed day by day from the weather ($ET_c$ less rain and irrigation), and irrigation is applied when it reaches a limit. It is the method of the FAO and of the field-balance layer of SWAFL (Chapter~\ref{chap:05}).
+\item \kw{Soil-based scheduling.} The water content or the suction is measured at a sensor, and irrigation is given when the reading passes a \emph{trigger}. This is the method studied in this chapter.
+\item \kw{Plant-based scheduling.} The state of the crop is measured: the temperature of the canopy (a hot canopy means closed stomata), the leaf water potential or the stem diameter. It responds to the crop itself, but the readings need interpretation and the equipment is costly.
+\end{exlist}
+
+\section{Management allowed depletion and readily available water}
+The crop does not suffer as soon as the soil starts to dry; the water is easily available down to a limit. The fraction of the total available water (TAW) that may be used before stress is the \kw{management allowed depletion} $p$ (about 0.5 for cereals and 0.3 to 0.4 for vegetables with shallow roots); the water that can be used without stress is the \kw{readily available water}
+\begin{equation*}\boxed{RAW=p\,TAW,\qquad TAW=1000\,(\theta_{FC}-\theta_{WP})\,Z_r}\end{equation*}
+where $Z_r$ is the root depth (m) and $TAW$ and $RAW$ are in mm. Irrigation is applied when the depletion $D_r\ge RAW$. A trigger in suction and a depletion in millimetres are two ways to express the same decision; the law of Chapter~\ref{chap:03} shows how to translate one into the other for every soil.
+
+\section{Sensors and their position}
+A sensor measures the state of the soil at one point, which stands for the whole root zone. The position matters: a sensor at 20 cm in a root zone of 60 cm sees the wettest and the driest layers only if the roots are active there. Three rules follow. (1) Place the sensor where the roots take most of the water, usually in the upper third of the root zone. (2) Use at least two depths, one in the active zone and one below it, to see whether water is passing the roots. (3) Place the sensors in the wetted area of the emitter or the sprinkler and in a representative soil. The results of the ensemble show a fourth point: a deeper sensor does not help in a soil in which the crop cannot dry the profile to the trigger (Section~\ref{ch:reach}).
+
+\section{Advantages and disadvantages of sensor-based scheduling}
+\textbf{Advantages:}
+\begin{exlist}
+\item It follows the real state of the soil and the crop, not an average.
+\item It reduces the water given in cool or rainy periods, and the loss by drainage.
+\item It can be automated and used with any irrigation method.
+\end{exlist}
+\noindent\textbf{Disadvantages:}
+\begin{exlist}
+\item A sensor is a point measurement of a variable soil; errors of placement and contact are common.
+\item Tensiometers fail in dry soil (beyond 80 kPa) and need maintenance; electrical blocks drift.
+\item The trigger value must be set for the soil and the crop; a value taken from a table may never be reached (the question of this chapter).
+\end{exlist}
+
+\section{Design of experiments: how the ensemble was planned}
+An experiment on a model is useful only if the runs are chosen well. In a \kw{one-at-a-time} design, one factor is varied while the others are held fixed; it is simple, but shows no interaction. In a \kw{full factorial} design every combination of levels is run; with $k$ factors of $m$ levels it needs $m^k$ runs, so it grows very fast. A \kw{fractional factorial} or \kw{Latin hypercube} design takes a smaller sample that covers the space evenly. The ensemble of this book is a set of 17 experiments (E0 to E16) in which factors are varied in groups, with 10\,190 runs over ten soils; each experiment answers one question, and the groups are chosen so that interactions of two factors can be seen.
+\par\noindent \textbf{Note:} A response is \emph{additive} if the effect of a factor is the same at every level of the others; it has an \emph{interaction} if the effect of one factor depends on the level of another. The tests of Chapters~\ref{chap:04} and~\ref{chap:19} measure how much of the variation is left unexplained by additive effects.
+
+\section{The efficiency terms of irrigation}
+Several efficiencies are used, and each is a ratio. The \kw{application efficiency} $E_a$ is the share of the water applied that is stored in the root zone; the \kw{irrigation efficiency} IE of the ensemble is the yield per unit of water applied (kg\,m$^{-3}$); the \kw{drainage fraction} DPF is the share of input that drains below the root zone; the \kw{water productivity} is the yield per unit of water consumed by evapotranspiration. They answer different questions, and an improvement in one can lower another: irrigating more often with smaller doses raises the application efficiency but may raise soil evaporation. The summary figure of Chapter~\ref{chap:20} shows the four on one set of axes.

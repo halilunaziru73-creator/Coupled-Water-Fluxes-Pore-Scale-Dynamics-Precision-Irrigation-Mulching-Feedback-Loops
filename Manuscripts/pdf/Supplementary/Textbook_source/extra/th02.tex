@@ -1,0 +1,38 @@
+\section{Mathematical models: what they are and how they are classified}
+A \kw{model} is a simplified representation of a real system, built to answer a question. A mathematical model expresses the system by equations whose unknowns are the state of the system (the water content, the temperature, the dry matter) and whose parameters are properties that must be measured or fitted. Models are classified in several ways, and a model is placed in each class by the purpose it serves.
+\begin{exlist}
+\item \kw{Empirical and mechanistic.} An empirical model describes the observed relation between inputs and outputs without a claim about the cause (a regression of yield on irrigation). A mechanistic (process-based) model builds the relation from the laws of physics and biology (the Richards equation). Mechanistic models can be used outside the range of the data on which they were fitted, but they need many parameters; empirical models need few, but are safe only inside the range of their data.
+\item \kw{Deterministic and stochastic.} A deterministic model gives one output for one set of inputs; a stochastic model has random terms, and gives a distribution of outputs. Daisy is deterministic; the rainfall generator of Chapter~\ref{chap:08} is stochastic.
+\item \kw{Static and dynamic.} A static model describes a state of equilibrium; a dynamic model describes how the state changes with time, and is written as differential equations.
+\item \kw{Lumped and distributed.} A lumped model treats the field as one point (a single value of the water content); a distributed model resolves the variation in space (layers, a grid).
+\item \kw{One-, two- and three-dimensional.} The Daisy soil column is one-dimensional in the vertical; the drain-spacing problem of Chapter~\ref{chap:14} is two-dimensional.
+\end{exlist}
+\noindent\textbf{Note:} No class is better than another. The right model is the simplest one that can answer the question; the unknown in a model that is too detailed is the uncertainty of its parameters.
+
+\section{Verification, calibration and validation}
+Three words are often confused. \kw{Verification} asks whether the equations have been solved correctly (does the program give the analytical solution of a case for which one is known?). \kw{Calibration} is the adjustment of parameters until the model reproduces a set of observations. \kw{Validation} asks whether the calibrated model predicts a second, independent data set that it has not seen. A model that has only been calibrated has not been shown to be right, only to be adjustable; the second data set is what gives evidence. This book keeps the three apart: Chapter~\ref{chap:02} verifies the solver against exact solutions, Chapter~\ref{chap:08} calibrates the engines on part of the Daisy runs and Chapter~\ref{chap:04} validates on soils and experiments that were left out.
+
+\section{Initial and boundary conditions}
+A differential equation has many solutions; the one that fits the problem is chosen by conditions at the start (\kw{initial condition}: the water content at $t=0$ in each layer) and at the edges of the domain (\kw{boundary conditions}). Three kinds occur.
+\begin{center}\small\begin{tabular}{@{}p{3.4cm}p{4.2cm}p{5.8cm}@{}}\toprule
+\hd{Kind} & \hd{What is given} & \hd{Use in the soil column}\\\midrule
+Dirichlet (first kind) & the value of $h$ or $\theta$ & ponded surface ($h=0$); water table at the base\\
+Neumann (second kind) & the value of the flux $q$ & rain or evaporation at the surface; impermeable base ($q=0$)\\
+Free drainage & the gradient of $h$ is zero at the base ($q=K$) & deep soil with no water table\\\bottomrule
+\end{tabular}\end{center}
+\noindent At the surface the condition switches during a run: it is a flux (rain) while the soil can take it, and becomes a head ($h=0$, ponding) when the rain is larger than the infiltration capacity. This switch is the main reason why the numerical solution of the infiltration problem is difficult.
+
+\section{Numerical solution of a differential equation}
+Most equations of soil physics have no closed solution, and a computer solves them by \kw{discretisation}: the profile is divided into layers (nodes) and the time into steps, and the derivatives are replaced by differences. The three common ways are the \emph{finite-difference method} (derivatives replaced by differences of the values at nodes), the \emph{finite-volume method} (the balance of each cell is written and the fluxes through the faces are computed; it conserves mass exactly, and is used in this book) and the \emph{finite-element method} (the solution is built from shape functions; used for complex geometry). A scheme must be:
+\begin{exlist}
+\item \kw{consistent}: the difference equation tends to the differential equation when the steps tend to zero;
+\item \kw{stable}: errors do not grow from step to step (an \emph{explicit} scheme, which uses the old state, is stable only for small steps; an \emph{implicit} scheme, which solves for the new state, is stable for any step, but needs an iteration because the conductivity depends on the unknown);
+\item \kw{convergent}: the numerical solution tends to the true one as the steps are refined. For a consistent scheme, stability is the condition for convergence (Lax's theorem).
+\end{exlist}
+
+\section{The Daisy model: history, structure and files}
+Daisy is a one-dimensional, deterministic, process-based model of the soil--plant--atmosphere system, developed since the 1990s at the University of Copenhagen and released as open-source software. It is built from \kw{modules}, one for each process (soil water, soil heat, solute transport, organic matter and nitrogen, the crop, the bioclimate above the soil, the management of the field), that exchange state variables at each time step. A run is described by a text file of nested entries (\emph{.dai}); the program reads the weather file, the soil file and the management, integrates the model and writes \emph{log files} of any quantity at any depth, daily or hourly. The description of the model, the equations and the chapters on the map of its processes are given in Chapters~\ref{chap:15} to~\ref{chap:17}.
+
+\section{Models of root water uptake}
+Models of how a root takes water are of two kinds. \kw{Microscopic} models follow the flow to one root in a cylinder of soil (Section~\ref{ch:root-cyl}, the conductance around a root) and need the root length density and radius. \kw{Macroscopic} models do not resolve the single root; they write the uptake in each layer as a sink $S_r(z)$ proportional to the root density and reduced by a function $\alpha(h)$ of the suction, which is piecewise linear in the model of Feddes: zero when the soil is saturated (no oxygen), one at the optimum, falling to zero at the wilting point. The sink may also be limited by the demand of the atmosphere, so that the plant takes no more than the potential transpiration. Both approaches agree when the parameters are consistent; the macroscopic form is used in the simulations of the ensemble.
+\par\noindent \textbf{Notes:} 1. The reduction function means that a dry layer is partly replaced by a wetter one below it (\emph{compensation}). 2. A root system that is shallow cannot compensate, and the crop suffers earlier than the average water content of the profile would suggest.

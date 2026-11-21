@@ -1,0 +1,19 @@
+\section{Genotype, environment and phenotype}
+The observable characteristics of a plant, its \kw{phenotype}, result from its genes (the \kw{genotype}), the environment, and their interaction:
+\begin{equation*}\boxed{P=G+E+G\times E}\end{equation*}
+The $G\times E$ term means that the ranking of genotypes can change between environments: a variety that is best in a wet season may be poor in a dry one. \kw{Phenotyping} is the measurement of the traits (height, leaf area, flowering date, biomass, grain yield, canopy temperature, roots) for many genotypes under controlled conditions, so that the genes that give a good phenotype in a stress can be found. The \kw{heritability} $h^2=V_G/V_P$ is the share of the phenotypic variance that is genetic; a trait with a high $h^2$ responds to selection.
+
+\section{High-throughput phenotyping}
+Classical phenotyping is slow and measures few plants. \kw{High-throughput phenotyping} uses sensors on platforms: cameras on gantries or drones (colour, multispectral and thermal images), fluorescence sensors, laser scanners for height and shape, and X-ray or magnetic-resonance imaging for roots. The images are converted to traits by software. The main difficulty is not the images but the link to the plant physiology: a trait is useful only if it is related to the yield in the field. In this book the \emph{deterministic plant} of the layer produces the traits that such platforms would measure, so that the analysis can be tried before an experiment is built.
+
+\section{Light, biomass and thermal time}
+\textbf{Intercepted light.} The fraction of the light absorbed by a canopy with leaf area index $L$ follows the law of Beer and Lambert, $f_i=1-e^{-kL}$, where $k$ is the extinction coefficient (0.4 to 0.7). \textbf{Radiation use efficiency.} The dry matter produced is proportional to the light intercepted (Monteith, 1977):
+\begin{equation*}\boxed{B=\mathrm{RUE}\sum f_i\,\mathrm{PAR}}\end{equation*}
+where $B$ is the dry matter (g\,m$^{-2}$), PAR the photosynthetically active radiation (MJ\,m$^{-2}$) and RUE the efficiency (about 3 g\,MJ$^{-1}$ for C$_4$ crops such as maize and sorghum and 1.5 to 2 for C$_3$ crops such as wheat). \textbf{Thermal time.} Development depends on temperature; the \kw{growing-degree days} $GDD=\sum\max\bigl((T_{max}+T_{min})/2-T_b,\,0\bigr)$, with $T_b$ the base temperature (8 $^\circ$C for maize, 0 $^\circ$C for wheat), measure the progress to flowering and maturity.
+\par\noindent \textbf{Note:} The yield is $Y=B\times HI$, with $HI$ the harvest index (the share of the dry matter in the grain: about 0.5 for modern cereals, 0.3 under strong stress).
+
+\section{Drought strategies and stress indices}
+Plants cope with a dry period by three strategies: \kw{escape} (a short cycle, flowering before the dry period), \kw{avoidance} (deep roots, early closing of stomata, reduced leaf area) and \kw{tolerance} (osmotic adjustment, protection of the cells). Stress is quantified by indices: the \kw{crop water stress index} $CWSI=(T_c-T_{wet})/(T_{dry}-T_{wet})$, from the canopy temperature $T_c$ and the temperatures of a well-watered and of a non-transpiring leaf; the relative water content of the leaf; and the stomatal conductance. $CWSI$ is 0 for an unstressed canopy and 1 for a canopy whose stomata are closed.
+
+\section{The volumetric scan}
+A \kw{volumetric scan} measures the plant or the soil in three dimensions. \emph{X-ray computed tomography} takes many X-ray images from different angles and rebuilds the density of each volume element (voxel); it shows the root system and the pore network of the soil without destroying them. \emph{Magnetic resonance} shows the water. \emph{Photogrammetry} and laser scanning rebuild the shape of the canopy from images. The result is a three-dimensional array of numbers that is processed by thresholds and filters (the steps of Section~\ref{sec:p2}) to give the volume, the surface and the connectivity of pores or roots.

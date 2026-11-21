@@ -1,0 +1,57 @@
+\section{The soil as a porous medium}
+A \kw{soil} is a natural, unconsolidated body of mineral grains, organic matter, water and air, formed by the weathering of rock and by the action of plants and animals. For the study of water it is treated as a \kw{porous medium}: a solid skeleton pierced by connected voids (pores), through which water and air can move. The mixture has three \kw{phases}: the solid phase (mineral grains and organic matter), the liquid phase (the soil solution) and the gas phase (soil air). The proportions of the three phases decide everything that follows in this book: how much water the soil can hold, how fast it moves, and how much is left for the crop.
+
+\par\noindent The following quantities describe the phases. Let $V_s$, $V_w$ and $V_a$ be the volumes of solids, water and air, $V_t=V_s+V_w+V_a$ the total volume, $M_s$ the dry mass of the sample and $M_w$ the mass of its water.
+\begin{center}\small\begin{tabular}{@{}p{3.6cm}p{3.3cm}p{6.6cm}@{}}\toprule
+\hd{Quantity} & \hd{Definition} & \hd{Remark}\\\midrule
+Dry bulk density $\rho_b$ & $M_s/V_t$ & $1.0$ to $1.7$ g\,cm$^{-3}$; low in organic and aggregated soils, high in compacted ones\\
+Particle density $\rho_s$ & $M_s/V_s$ & about $2.65$ g\,cm$^{-3}$ for mineral soil (quartz)\\
+Porosity $\phi$ & $(V_w+V_a)/V_t=1-\rho_b/\rho_s$ & the volume of pores per unit volume of soil\\
+Void ratio $e$ & $(V_w+V_a)/V_s=\phi/(1-\phi)$ & used in soil mechanics\\
+Gravimetric water content $w$ & $M_w/M_s$ & g\,g$^{-1}$; measured by oven-drying at 105\,$^\circ$C\\
+Volumetric water content $\theta$ & $V_w/V_t=w\,\rho_b/\rho_w$ & m$^3$\,m$^{-3}$; the quantity used in all balances\\
+Degree of saturation $S$ & $V_w/(V_w+V_a)=\theta/\phi$ & 0 (dry) to 1 (saturated)\\
+Air-filled porosity $\epsilon$ & $V_a/V_t=\phi-\theta$ & the pore space that is free for gas exchange\\\bottomrule
+\end{tabular}\end{center}
+\noindent\textbf{Notes:} 1. A soil with $\rho_b=1.35$ g\,cm$^{-3}$ and $\rho_s=2.65$ g\,cm$^{-3}$ has $\phi=1-1.35/2.65=0.49$. 2. A depth of water in millimetres is obtained from $\theta$ by multiplying by the thickness of the layer in millimetres: 0.30 m$^3$\,m$^{-3}$ in a layer of 400 mm holds $0.30\times400=120$ mm. This is why the water content is kept volumetric throughout the book.
+
+\section{Soil texture and structure}
+\kw{Texture} is the proportion of the three size classes of the mineral grains, in the system of the USDA: \emph{sand} (2 to 0.05 mm), \emph{silt} (0.05 to 0.002 mm) and \emph{clay} (smaller than 0.002 mm). The textural triangle names twelve classes from the three percentages (sand, loamy sand, sandy loam, loam, silt loam, silt, sandy clay loam, clay loam, silty clay loam, sandy clay, silty clay, clay). Texture is a property of the soil that does not change in a season, and it fixes the size of the pores, so that it is the first predictor of the retention curve and of the conductivity (Chapter~\ref{chap:09}).
+
+\par\noindent \kw{Structure} is the arrangement of the grains into aggregates, with pores between and inside them. The usual types are \emph{granular} and \emph{crumb} (topsoil with much organic matter), \emph{blocky} (subsoil), \emph{prismatic} and \emph{columnar} (clay subsoils), \emph{platy} (compacted layers) and \emph{single-grain} or \emph{massive} (no aggregation). Structure, unlike texture, is changed by tillage, traffic, roots, worms and wetting and drying; it controls the large pores (macropores) through which water moves quickly after rain.
+
+\section{The forms of soil water}
+The water in a soil is held by two forces: \kw{adhesion}, the attraction of the water molecules to the grain surfaces, and \kw{cohesion}, the attraction of the molecules to one another. They give three forms of water, which merge into each other without sharp limits.
+\begin{exlist}
+\item \kw{Hygroscopic water.} It is held as thin films on the grains by adhesion with a force so large (suction beyond about 31 bar, pF~4.5) that the plants cannot take it and it moves only as vapour.
+\item \kw{Capillary water.} It fills the small pores and the corners between grains against gravity by surface tension. It is the water that the crop uses, and it lies between field capacity and the permanent wilting point.
+\item \kw{Gravitational water.} It fills the large pores after rain or irrigation and drains downward under gravity within one to three days; it is lost to the crop except for the short time it stays in the root zone.
+\end{exlist}
+
+\section{The potential of soil water}
+The water of the soil has \kw{energy}, and it moves from a place of higher energy to a place of lower energy. The energy per unit weight of water, relative to free water at the reference level, is the \kw{total potential}. It is the sum of four parts:
+\begin{equation*}\boxed{\psi_t=\psi_m+\psi_g+\psi_o+\psi_p}\end{equation*}
+where $\psi_m$ is the \kw{matric potential} (the attraction of the soil matrix, negative in an unsaturated soil), $\psi_g=z$ the \kw{gravitational potential} (the height above the reference level), $\psi_o$ the \kw{osmotic potential} (the effect of dissolved salts, important only where water crosses a membrane such as a root) and $\psi_p$ the \kw{pressure potential} (positive below a water table). Expressed in the length of a water column, the matric potential is the negative of the suction $h$, with $h>0$ in the unsaturated soil.
+
+\par\noindent \textbf{Notes:} 1. The units used in practice are related by $1$ bar $=100$ kPa $=1020$ cm of water $=0.987$ atm, and pF$\,=\log_{10}h$ with $h$ in cm. 2. The suctions of the reference points of this book are: saturation (0), field capacity (100 cm, pF~2.0), the trigger of a sensor (300 cm, pF~2.5), the permanent wilting point (15\,849 cm, pF~4.2) and the hygroscopic coefficient (about 31\,000 cm, pF~4.5). 3. A gradient of the total potential, not of the water content, drives the flow: two soils at the same water content but of different texture are at different suctions.
+
+\section{Hysteresis of the retention curve}
+The relation between the suction and the water content is not unique. For the same suction the soil holds more water on the \emph{drying} branch than on the \emph{wetting} branch; this is called \kw{hysteresis}. The causes are: the ``ink-bottle'' effect (a wide pore with a narrow neck empties at the suction of the neck, but fills at the suction of the body), the difference in the contact angle of an advancing and a receding water front, air that is trapped in the pores during wetting, and the shrinking and swelling of clays. Hysteresis is largest in coarse soils. The curves of this book are the main drying curves, which is the right branch for a crop that dries the soil between irrigations; the error of ignoring the wetting branch is smaller than the uncertainty of the parameters.
+
+\section{Measuring the water of the soil}
+The water content is measured \emph{directly} by taking a sample and oven-drying it (the gravimetric method, the reference), or \emph{indirectly} by a property that depends on it: the neutron probe (slowing of fast neutrons by hydrogen), the time-domain reflectometer and the capacitance probe (the dielectric constant of the soil, which depends on the water), and the gamma-ray method. The suction is measured by the \emph{tensiometer} (a porous cup and a gauge, range 0 to about $-80$ kPa), by the \emph{gypsum or granular-matrix block} (electrical resistance, up to $-200$ kPa) and, in the laboratory, by the pressure plate and the dew-point psychrometer for the dry range. The tensiometer is the instrument whose reading the trigger of Chapter~\ref{chap:03} refers to; its limit, 80 kPa or 800 cm, is the reason why triggers beyond 600 cm are not read by it directly.
+
+\section{Darcy's law and its limits}
+Henry Darcy (1856) found that the flow of water through a saturated sand column is proportional to the difference of the hydraulic head and inversely proportional to the length of the path: $q=-K_s\,\mathrm dH/\mathrm dz$, where $q$ is the flux (volume per unit area and time), $K_s$ the \kw{saturated hydraulic conductivity} and $H$ the hydraulic head. Three conditions are assumed: the flow is laminar (the Reynolds number of the pores below about 1 to 10, true for all soils except coarse gravel), the medium is rigid and the fluid is incompressible. Typical values of $K_s$ are given below.
+\begin{center}\small\begin{tabular}{@{}lcc@{}}\toprule
+\hd{Class} & \hd{$K_s$ (cm\,d$^{-1}$)} & \hd{Drainage}\\\midrule
+Sand and loamy sand & 50 to 1000 & very fast\\
+Sandy loam & 20 to 100 & fast\\
+Loam and silt loam & 5 to 40 & moderate\\
+Clay loam & 1 to 10 & slow\\
+Clay & 0.1 to 5 & very slow, unless cracked\\\bottomrule
+\end{tabular}\end{center}
+\noindent\textbf{Note:} The values are typical ranges for undisturbed soils; the macropores of a structured clay can make its field conductivity much larger than the table, and compaction can make that of a sand much smaller. The conductivity of an unsaturated soil falls by several orders of magnitude as the soil dries (Section~\ref{sec:mualem}), which is the reason why a dry soil cannot supply a root.
+
+\section{Infiltration, redistribution and drainage}
+Water that reaches the soil surface passes through three stages. \kw{Infiltration} is the entry of water through the surface; its rate starts high, falls and approaches the saturated conductivity of the soil. When the supply is larger than the infiltration capacity, water ponds and, on a slope, runs off. \kw{Redistribution} is the continued movement of water in the profile after the supply stops, from the wet upper layer to the drier layers below; the rate falls steadily, and the water content at the depth of the roots after two to three days is called field capacity. \kw{Drainage} (or deep percolation) is the flow below the root zone; it is lost to the crop, and it carries solutes with it (Chapter~\ref{chap:17}).

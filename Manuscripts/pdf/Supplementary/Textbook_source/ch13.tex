@@ -3,6 +3,7 @@
 \chapter{Sprinkler Irrigation Design}\label{chap:13}
 \markboth{Sprinkler Irrigation Design}{Sprinkler Irrigation Design}
 \IfFileExists{extra/bg13.tex}{\input{extra/bg13}}{}
+IfFileExists{extra/th13.tex}{\input{extra/th13}}{}
 \IfFileExists{extra/deep13.tex}{\input{extra/deep13}}{}
 \banner{Sprinkler irrigation design}\label{ch:sprinkler}
 \section{Nozzle discharge}
@@ -72,7 +73,7 @@ Wind stretches the radius downwind and moves the centre, $R_e(\theta)=R\,\mathrm
 \exbox{Wind distortion of the reach}{At wind speed $u=6.0$ m s$^{-1}$ find the downwind, upwind and crosswind radii of the impact pattern and the shift of its centre.}\sol \givenline{$u=6.0$ m s$^{-1}$ find}\ans Downwind ($\theta=0$): $R_e=15.66\times(1+0.022\times6.0)=15.66\times1.132=17.73$ m. Upwind ($\theta=180^\circ$): $R_e=15.66\times0.868=13.59$ m. Crosswind ($\theta=90^\circ$): $R_e=R=15.66$ m. The shift of the centre is $0.03\times6.0\times15.66=2.82$ m downwind. The elongation is +13.2\% downwind and $-$13.2\% upwind; the clip (0.7 to 1.4) would act only above $13.6$ m s$^{-1}$ upwind and $18.2$ m s$^{-1}$ downwind. \finans
 
 
-\section{Overlap and the coefficient of uniformity}
+\section{Overlap and the coefficient of uniformity}\label{ch:cu}
 On a grid with spacings $S_s$ along the lateral and $S_l$ between laterals the rate at a point is the sum over neighbouring sprinklers, $a(x,y)=\sum_{ij}p(x-x_{ij},y-y_{ij})$, evaluated on a $14\times14$ grid of the repeating cell ($14\times24$ of the $S_s\times2S_l$ cell for the triangular layout, where each second lateral is shifted by $S_s/2$). The mean rate is $\mathrm{AR}=60\bar a$ mm h$^{-1}$ and the Christiansen coefficient is
 \begin{equation}\boxed{\mathrm{CU}=1-\frac{\sum_k|a_k-\bar a|}{n\bar a}.}\end{equation}
 \par\noindent where $CU$ is the Christiansen uniformity (0 to 1), $a_k$ the depth in can $k$ (mm), $\bar a$ the mean depth and $n$ the number of cans.
