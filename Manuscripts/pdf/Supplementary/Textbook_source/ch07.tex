@@ -10,18 +10,30 @@
 There are 32 layers: 23 for decisions, in nine groups, and nine that work with Daisy. Version 1.1.0 adds seasons projected 10 or 20 years ahead, a pipe network with Hazen--Williams losses and pump head, a drip wetting pattern that follows the soil, and a Daisy scenario designer. Weather comes from a built-in record, your own file, or an online archive.
 
 \section{Field balance and the soil--plant--air column}
+The field-balance layer closes the account of Equation~(\ref{eq:bal}) for one season: what enters as rain and irrigation, what leaves as transpiration, soil evaporation, other evaporation and drainage, and what is left in the soil as a change of storage. Each arrow of the picture is a number of the run, in millimetres, and the sum of the arrows into and out of the soil is shown beside the change in storage, so that a user can see at once whether the account closes (the audit of Chapter~\ref{chap:04} does the same check for every run). The picture to read first is therefore the \emph{balance}; the picture to read second is the \emph{column}.
+
+The soil--plant--air column shows the same water as a \emph{potential}. Water moves from where its potential is high to where it is low, so a plant can take water from the soil only while the potential along the path (soil, root surface, stem, leaf, air) falls steadily. In a wet soil the fall from the soil to the root is a few kilopascals and nearly all of the fall is in the leaf and the air; in a dry soil the soil itself takes most of the fall, the root surface is pulled down and the stomata close. The layer ties the suction in the root zone (Chapter~\ref{chap:01}) to the stress of the crop (Chapter~\ref{chap:05}).
+
 \fig{sc_fieldk}{0.8}{Field water balance: precipitation, irrigation, evapotranspiration, drainage and storage (Equation~\ref{eq:bal}).}
 \fig{sc_spack}{0.8}{Soil, plant and air: the water potential of each compartment, from the soil particles to the atmosphere.}
 \exbox{}{Open the field balance for the sand and for the silty clay loam. Which has the larger drainage? Relate your answer to Table~\ref{tab:soils}.}\sol  Sand (S03) has the larger drainage. Table~\ref{tab:soils} gives the memory fate $\phi_D=0.846$ for the sand and $0.022$ for the silty clay loam: of each millimetre of stored surplus the sand drains $85$ per cent and the silty clay loam $2$ per cent. The ratio is $0.846/0.022=38$. \finans
 
 
 \section{Mulch, evaporation and the fate of saved water}
+A mulch lowers the evaporation from the soil surface, and the question of the layer is: where does the water that is saved go? It cannot disappear, so it goes to one of three places: it is transpired by the crop, it stays in the soil as storage, or it drains below the root zone. The layer plots the share of each as a function of the rainfall, for one soil and one mulch strength, so that the user sees the answer change from one soil to another.
+
+The reading is simple. In a soil of low conductivity the saved water stays near the surface and is taken up or re-evaporated, so a mulch is worth its cost. In a sand the saved water passes through the root zone quickly, so that most of it is drainage and the mulch gains little for the crop. The regime map separates the two regions, one in which the vapour flux decides and one in which drainage decides; the law that draws the border is the competition of Chapter~\ref{chap:03} between the saturated conductivity and the rate at which the water arrives.
+
 \fig{sc_n2k}{0.8}{Fate of the water saved by mulch across rainfall. The drained share depends on the soil (Chapter~8).}
 \fig{sc_n3k}{0.8}{The regime map: where vapour gives way to drainage.}
 \exbox{}{Use the competition law of Chapter~8 to predict, for sand and for silty clay loam, which of the two soils shows more drainage in the fate-of-saved-water layer, and check on the screen.}\sol  Invert $\phi_D=\Ks/(\Ks+q^*)$ to get $\Ks/q^*=\phi_D/(1-\phi_D)$. Sand: $0.846/0.154=5.5$. Silty clay loam: $0.022/0.978=0.0225$. The conductivity-to-withdrawal ratio of the sand is $5.5/0.0225\approx 244$ times larger, so the sand drains far more of the saved water; on the screen the drainage bar of the sand dominates and that of the silty clay loam is nearly empty. \finans
 
 
 \section{Triggers, structure and roots}
+This group of layers turns the theory of the trigger into pictures. The sensor layer plots the suction at the sensor day by day for twenty years, with the trigger as a dashed line; a day on which the curve crosses the line is a day on which the irrigation would be started. Irrigated and rainfed fields are drawn together, so that the difference between them is read directly, and the bars count the days of the growing season that remain beyond the trigger.
+
+The trigger layer shows the result of Chapter~\ref{chap:03}: the depletion of the root zone at the trigger does not depend on the soil, although the suction does, because the conductivity falls so steeply at the same value of the depletion. The root layer shows where the water is taken from, layer by layer; a shallow root system takes all its water from the top of the profile and so makes the top dry out first, while a deep one spreads the demand. The effect of the soil structure on the roots and on the pores is the subject of Chapter~\ref{chap:09}.
+
 \fig{sc_v1k}{0.8}{Sensor suction every day from 2019 to 2039. The dashed line is the trigger. Irrigated (blue) against rainfed (orange); bars give the growing-season days beyond the trigger. In 2029 the irrigated field had no days beyond 471 cm and the rainfed field had 101 of 183.}
 \fig{sc_n1k}{0.8}{The trigger law: the depletion of the root zone at the trigger is soil independent.}
 \fig{sc_r1k}{0.8}{The root layer: where the water is taken.}
@@ -29,18 +41,34 @@ There are 32 layers: 23 for decisions, in nine groups, and nine that work with D
 
 
 \section{Irrigation design: surface, drip, sprinkler}
+The design layers do not simulate the soil: they apply the design equations of Chapters~\ref{chap:11}, \ref{chap:12} and~\ref{chap:13} to the depth that the simulation says the field needs. In each of them the user enters the field (length, width, slope), the soil (intake or infiltration), the crop and the source of water, and the layer returns a system that works: the advance and the time of application for a furrow, the emitter, the spacing and the hours of operation for a drip line, the nozzle, the spacing and the pressure for a sprinkler line. A pipe network and a pump are added to each, with the friction losses of the Hazen--Williams equation and the head that the pump must give.
+
+The three methods differ in what is controlled. In surface irrigation the soil does the work, and the design must find the flow and the time that put the required depth in the ground without wasting it at the end of the run. In drip irrigation the emitter controls the rate and the design is a matter of uniformity. In sprinkler irrigation the rate must stay below the intake of the soil so that no water runs off. The common numbers in all three are the net depth and the efficiency, which is why the three layers share one irrigation requirement.
+
 \exbox{}{In the surface layer compare the advance time for the same inflow on a loam and a sand, and explain the difference from the intake.}\sol  Use the volume balance $Q_0t=\sigma_zLZ(t)$ with $\sigma_z=0.7$, $L=100$ m, $Q_0=0.001$ m$^2$\,s$^{-1}$ per unit width and the Kostiakov intake $Z=k\tau^a$ (cm, $\tau$ in min). The parameters below are \emph{illustrative}, not measured: sand $k=1.2$, $a=0.6$; loam $k=0.5$, $a=0.45$. Sand: $0.06t=70(0.012)t^{0.6}$ gives $t^{0.4}=14$, so $t=733$ min. Loam: $0.06t=70(0.005)t^{0.45}$ gives $t^{0.55}=5.83$, so $t=24.7$ min. The sand takes thirty times longer to advance (it never completes the run in a realistic furrow) because its intake is much larger at all times. \finans
 
 
 \section{Drainage and crops}
+The crop layer holds the library of 75 crops, with the crop coefficients of FAO-56 (edition of 2025) for the stages of growth: the initial, the development, the mid-season and the late stage. The daily water need of a crop is $ET_c=K_c\,ET_0$, so the layer needs only the reference evapotranspiration of the weather (Chapter~\ref{chap:05}) and the coefficient of the day; the schedule of irrigation follows by applying the trigger to the root zone that the crop has at that day.
+
+The drainage layer closes the other end of the account. Water that is not used by the crop and not stored goes below the root zone, and in a soil with a high water table it must be removed by drains; the layer gives the spacing and the depth of the drains from the Hooghoudt equation of Chapter~\ref{chap:14}, from the saturated conductivity of the soil, the depth of the barrier and the drainage coefficient. Crops and drains are in the same layer group because the crop sets the depth to which the water table must be lowered and the drains set the time in which it can be done.
+
 \fig{sc_cropk}{0.8}{Crop coefficients, daily water need and the irrigation schedule. The library has 75 crops and follows the FAO-56 edition of 2025.}
 
 \section{Seasons, balances and feedback loops}
+The three figures of this section go from one season to a run of decades. The first is the water balance of every year: precipitation, irrigation, evapotranspiration, drainage and change of storage, side by side, so that a wet year is seen against a dry one. Version 1.1.0 extends the calendar 10 and 20 years ahead; the seasons after the last observed one are \emph{projections} and are marked as such, because they depend on a weather scenario and not on a measurement.
+
+The second figure is the nitrogen budget of the same years, which depends on the water because the nitrate that drains is lost. The third is the map of the feedback loops. Climate and management act on the soil water; the soil water acts on the crop and on the nitrogen; and the crop and the nitrogen act back on the soil, through the roots, the residues and the cover. A red arrow joins two parts that act on each other, and the table of the figure lists what one step of each control does. Chapter~\ref{chap:09} gives the equations of these loops.
+
 \fig{sc_wb2k}{0.8}{Full water balance year by year. Seasons after 2038 are projections.}
 \fig{sc_nbk}{0.8}{Nitrogen budget year by year.}
 \fig{sc_v5k}{0.8}{Feedback loops between climate, management, soil water, crop and nitrogen. The red arrows join the parts that act on each other; the table lists what one step of each control does.}
 
 \section{Phenotyping and the real field}
+Phenotyping in SWAFL has two forms. In the \emph{deterministic} form a plant is grown by a model from the soil, the weather, the irrigation and the crop, with a well-watered and a drought treatment side by side; nothing in it is random, so the same inputs always give the same plant and the water balance of the run closes. In the \emph{volumetric} form a virtual three-dimensional scanner measures the volume, the crown, the leaves and the height of the plant that the model has grown, the way a field scanner would measure a real plant.
+
+The point of the pair is to bring the model to the field. The scanner gives the same kinds of number as a real phenotyping platform, so the model can be compared with measurements of a crop in the field, and the differences read as differences in water, soil or management rather than in the way the plant was measured. Chapter~\ref{chap:10} derives the plant model and the scan.
+
 \fig{sc_dphk}{0.75}{Deterministic phenotyping: an exactly reproducible virtual experiment whose water balance closes (set-up form shown).}
 \fig{sc_vphk}{0.75}{Volumetric phenotyping: a virtual three-dimensional scanner that measures volume, crown, leaves and height.}
 \exbox{}{Explain why an exactly reproducible virtual experiment is useful for teaching, and name one limit.}\sol  A virtual experiment can be repeated exactly: the same weather, soil and settings give the same numbers, so a result can be checked by anyone and one factor changed at a time. One limit: the model is one-dimensional matrix flow, so macropores, lateral flow and real field variability are absent, and no field validation is implied.

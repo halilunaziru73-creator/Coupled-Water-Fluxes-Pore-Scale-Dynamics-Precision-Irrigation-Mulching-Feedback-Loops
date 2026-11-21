@@ -100,7 +100,7 @@ The second rule of origin says that a decision layer draws a Daisy result only f
 
 \exbox{}{Use E9 to compute $\phi_D$ for one soil with Equation~(\ref{eq:phi}) and compare with Table~\ref{tab:soils}.}\sol  For the sand S03 the archived pooled within-P slope is $\phi_D=0.8455$ (Table~\ref{tab:soils} lists $0.846$). The competition law then implies $\Ks/q^*=0.8455/0.1545=5.47$. For the silty clay loam, $\phi_D=0.0220$ gives $\Ks/q^*=0.0225$. The law reproduces the table by construction; what it adds is the ratio $5.47/0.0225=243$ between the two soils.
 \banner{Solving the Richards equation numerically}\label{ch:rich}
-\section{Why numerics matter}
+\subhd{Why numerics matter.}
 Chapter~5 wrote the Richards equation. It has no general analytical solution, because $K$ and $C=d\theta/dh$ vary by orders of magnitude with $h$. Daisy solves it numerically in every run, and a run is counted as a \emph{solver failure} when the solution cannot be completed: 149 of the 10,190 runs of the ensemble. Knowing how the scheme works explains both the failures and the limits of the equilibrium assumption. \finans
 
 \section{The head-based form and the capacity}

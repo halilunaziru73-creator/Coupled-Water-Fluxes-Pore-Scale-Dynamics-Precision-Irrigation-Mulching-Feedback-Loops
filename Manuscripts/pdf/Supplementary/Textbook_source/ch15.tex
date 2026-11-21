@@ -61,7 +61,7 @@ Both terms contribute: energy supplies 72 per cent of the numerator and the wind
 \par\noindent The potential rate of a crop is the reference rate multiplied by a crop coefficient, $ET_c=K_cET_0$ (Chapter~\ref{ch:crops}). In Daisy the potential evapotranspiration is shared between the canopy, the litter, the pond and the soil according to the cover of each. The box \emph{Net radiation and cloudiness} supplies the short- and long-wave radiation and the ground heat flux that give $R_n$ and $G$. The box \emph{Light in the canopy} distributes the light between sun and shade leaves and between the visible and the near-infrared waves; its result is used by the photosynthesis of Chapter~\ref{chap:16}.
 
 \banner{Water above the soil}\label{ch:map-surface}
-\section{Rainfall and snowfall}
+\subhd{Rainfall and snowfall.}
 In the map, precipitation reaches two boxes. Above the freezing threshold it falls as \emph{rain} ($P$ in the balance of Chapter~\ref{chap:01}); below it, as \emph{snowfall}. Rain is shared out: part is caught by the canopy, part by the litter, and the rest falls directly on the pond or the soil surface.
 
 \section{The snowpack}
@@ -111,7 +111,7 @@ The large box with the red outline on the left of the map is the \kw{soil water}
 \[\theta=0.250-0.002=0.248\quad\text{\finans}\]
 A very small change of water content is a large change of flux: the 0.4 mm of this layer is the difference of three terms that are each many times larger. This is why the soil-water box is solved with small steps and with the conservation of water built into the scheme. \finans
 
-\section{Soil evaporation}
+\subhd{Soil evaporation.}
 Soil evaporation (the box \emph{Soil evaporation}, with the dashed arrow upward) removes water from the top of the matrix at the rate that the atmosphere asks for and the soil can deliver. In the first days after a wetting the atmosphere limits the rate; later the conductivity of the drying top layer limits it. This is the two-stage behaviour of Chapter~\ref{chap:09}.
 
 \section{Root water uptake and transpiration}
