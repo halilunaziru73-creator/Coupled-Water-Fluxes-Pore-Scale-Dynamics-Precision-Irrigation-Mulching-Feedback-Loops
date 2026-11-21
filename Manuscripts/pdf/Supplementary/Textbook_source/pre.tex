@@ -122,6 +122,9 @@
   \hbox to\textwidth{\rlap{\tikz[overlay,x=1pt,y=1pt]{\fill[khgreen] (0,{-\dp\Lbox}) rectangle (9,{\ht\Lbox+3});\fill[khgreen] (0,{-\dp\Lbox}) rectangle (40,{-\dp\Lbox+9});}}\hss\usebox{\Lbox}\hss}\par\vspace{1pt}}
 \newcommand{\Lfig}[1]{\sbox{\Lbox}{#1}\Lshow}
 \newcommand{\fig}[3]{\begin{figure}[!htbp]\centering\Lfig{\includegraphics[width=#2\textwidth,height=0.6\textheight,keepaspectratio]{fig/#1}}\caption{#3}\end{figure}}
+
+\let\figfloat\fig
+\newcommand{\fighere}[3]{\par\vspace{4pt}\begin{minipage}{\linewidth}\centering\Lfig{\includegraphics[width=#2\textwidth,height=0.6\textheight,keepaspectratio]{fig/#1}}\par\captionof{figure}{#3}\end{minipage}\par\vspace{6pt}}
 % a figure drawn with TikZ: \begin{kfig}{caption} ...tikz code... \end{kfig}
 \newenvironment{kfig}[1]{\begin{figure}[!htbp]\centering\def\kcap{#1}\setbox\Lbox\hbox\bgroup\begin{tikzpicture}[kh]}{\end{tikzpicture}\egroup\Lshow\caption{\kcap}\end{figure}}
 \tikzset{kh/.style={font=\sffamily\footnotesize,line cap=round,line join=round,
