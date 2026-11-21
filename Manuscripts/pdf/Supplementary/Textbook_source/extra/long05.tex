@@ -1,0 +1,12 @@
+\subsection{Complete calculation of evapotranspiration and stress}
+\exbox{Reference ET, crop ET, stress and yield}{On a day with mean temperature 26$^\circ$C, relative humidity 45 per cent, net radiation 15.2 MJ\,m$^{-2}$\,d$^{-1}$, wind 2.1 m\,s$^{-1}$ at 2 m and altitude 100 m, find $ET_0$, then $ET_c$ and the actual ET of a crop at mid-season ($K_{cb}=1.10$, $K_e=0.10$) whose root zone holds $TAW=140$ mm and is depleted by 90 mm, and the resulting yield loss.}\sol
+\ans Saturation vapour pressure $e_s=0.6108\exp[17.27T/(T+237.3)]=3.361$ kPa; actual $e_a=e_sRH/100=1.513$ kPa; deficit $D=1.849$ kPa
+\ans Slope of the saturation curve $\Delta=4098e_s/(T+237.3)^2=0.1987$ kPa\,K$^{-1}$
+\ans Pressure at 100 m: $P=101.3[(293-0.0065z)/293]^{5.26}=100.1$ kPa; psychrometric constant $\gamma=0.000665P=0.0666$ kPa\,K$^{-1}$
+\ans Penman--Monteith: $ET_0=\dfrac{0.408\Delta(R_n-G)+\gamma\frac{900}{T+273}u_2D}{\Delta+\gamma(1+0.34u_2)}$ with $R_n=15.2$ MJ\,m$^{-2}$\,d$^{-1}$, $u_2=2.1$ m\,s$^{-1}$ gives $ET_0=6.43$ mm\,d$^{-1}$
+\ans Dual crop coefficient at mid-season: $K_{cb}=1.10$, $K_e=0.10$, so $K_c=1.20$ and $ET_c=K_cET_0=7.71$ mm\,d$^{-1}$ without stress
+\ans Stress: $TAW=140$ mm, $p=0.5$, depletion $D_r=90$ mm; $RAW=70$ mm; since $D_r>RAW$, $K_s=(TAW-D_r)/[(1-p)TAW]=0.714$
+\ans Actual evapotranspiration $ET_a=(K_sK_{cb}+K_e)ET_0=5.69$ mm\,d$^{-1}$, a reduction of 26 per cent
+\ans Relative yield by Doorenbos--Kassam with $K_y=1.25$: $1-Y/Y_m=K_y(1-ET_a/ET_c)=0.327$, i.e. a yield loss of 32.7 per cent if this stress lasts all season
+
+
