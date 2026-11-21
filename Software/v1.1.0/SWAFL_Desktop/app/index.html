@@ -8,11 +8,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" type="image/png" href="assets/logo-64.png">
 <link rel="stylesheet" href="vendor/leaflet.css">
-<link rel="stylesheet" href="css/swafl.css?v=20261116p"><link rel="stylesheet" href="css/touch.css?v=20261116j">
+<link rel="stylesheet" href="css/swafl.css?v=20261121b"><link rel="stylesheet" href="css/touch.css?v=20261116j">
 <link rel="stylesheet" href="css/classic.css?v=20261119e">
 <link rel="stylesheet" href="css/daisydesign.css?v=20261101t">
 </head>
-<body class="nolayer"><div id="bootVeil" style="position:fixed;inset:0;z-index:2147482000;background:#E8EEF5;display:flex;flex-direction:column;align-items:center;justify-content:center;font:bold 14px Tahoma,Segoe UI,sans-serif;color:#0A246A"><img src="assets/logo.svg" width="72" height="72" alt=""><div style="margin-top:10px;font-size:20px">SWAFL</div><div style="margin-top:6px;font-weight:normal">Starting ...</div></div>
+<body class="nolayer"><div id="bootVeil" style="position:fixed;inset:0;z-index:2147482000;background:#E8EEF5;display:flex;flex-direction:column;align-items:center;justify-content:center;font:bold 14px Tahoma,Segoe UI,sans-serif;color:#0A246A"></div>
 <div id="app">
 
   <!-- ===== Title / menu bar ===== -->
@@ -54,7 +54,7 @@
 window.__eulaOpen=false;var started=false,veil=null;
 window.SWAFLEngineURL=function(){return "engine/engine.html?app=1&v=20261116j"+(/^https?:/.test(location.protocol)?"&t="+Date.now():"")+"#scene=field"};
 window.SWAFLStartEngine=function(){if(started)return;started=true;var f=document.getElementById("engine");
- try{veil=document.createElement("div");veil.id="engVeil";veil.style.cssText="position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;background:#d4d0c8;font:bold 13px Tahoma,Segoe UI,sans-serif;color:#0a246a";veil.textContent="Loading SWAFL ...";f.parentNode.appendChild(veil);if(window.swaflBusy)window.swaflBusy(true);var gone=function(){if(veil){veil.remove();veil=null;if(window.swaflBusy)window.swaflBusy(false)}};f.addEventListener("load",gone);var tm=setInterval(function(){try{if(!veil){clearInterval(tm);return}if(f.contentWindow&&typeof f.contentWindow.switchScene==="function"){gone();clearInterval(tm)}}catch(e){}},200)}catch(e){}
+ try{veil=null;if(0){veil=document.createElement("div");veil.id="engVeil";veil.style.cssText="position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;background:#d4d0c8;font:bold 13px Tahoma,Segoe UI,sans-serif;color:#0a246a";veil.textContent="Loading SWAFL ...";f.parentNode.appendChild(veil);}if(window.swaflBusy)window.swaflBusy(true);var gone=function(){if(veil){veil.remove();veil=null}if(window.swaflBusy)window.swaflBusy(false)};f.addEventListener("load",gone);var tm=setInterval(function(){try{if(!veil){clearInterval(tm);return}if(f.contentWindow&&typeof f.contentWindow.switchScene==="function"){gone();clearInterval(tm)}}catch(e){}},200)}catch(e){}
  f.src=u};
 window.addEventListener("swafl-eula-accepted",window.SWAFLStartEngine);
 window.addEventListener("swafl-eula-ready",window.SWAFLStartEngine);
@@ -139,6 +139,6 @@ window.addEventListener("load",function(){if(window.__eulaOpen)setTimeout(warm,3
 <script src="js/fieldprec.js?v=20261101s"></script>
 <script src="js/fieldgeo.js?v=20261103b"></script>
 <script src="js/daisyload.js?v=20261118t"></script>
-<script src="js/glossary.js?v=20261110b"></script><script src="js/main.js?v=20261121a"></script><script>(function(){var v=document.getElementById("bootVeil");if(v)v.remove()})()</script>
+<script src="js/glossary.js?v=20261110b"></script><script src="js/main.js?v=20261121b"></script><script>(function(){var v=document.getElementById("bootVeil");if(v)v.remove()})()</script>
 </body>
 </html>

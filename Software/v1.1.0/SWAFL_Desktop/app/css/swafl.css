@@ -297,3 +297,6 @@ body.nolayer #engine{visibility:hidden}
   .modal{max-width:100vw!important;max-height:100dvh!important}
 }
 @media (max-width:900px){#viewBar .pnote{display:none}}
+
+/* no loading screen: the splash shows only if the engine fails to start */
+#loading:not(.err){display:none!important}
