@@ -1,3 +1,15 @@
+
+\makeatletter
+\newsavebox{\eqbox}\newdimen\eqw
+\newcommand{\fiteq}[2]{\sbox{\eqbox}{$\displaystyle #2$}\eqw=\wd\eqbox
+  \ifdim\eqw>#1\relax\resizebox{#1}{!}{\usebox{\eqbox}}\else\usebox{\eqbox}\fi}
+\newcommand{\poreeq}[5]{%
+  \node[circle,minimum size=#3mm,inner sep=0,fill=khnavy!60!black,fill opacity=0.78,draw=cyan!55!white,line width=2.2pt,draw opacity=0.55] at ($(current page.north west)+(#1mm,-#2mm)$) {};
+  \node[circle,minimum size=\dimexpr#3mm-1.6mm\relax,inner sep=0,draw=khgold,line width=0.9pt] at ($(current page.north west)+(#1mm,-#2mm)$) {};
+  \node[text=khgold,font=\sffamily\bfseries\fontsize{4.6}{5}\selectfont,inner sep=0] at ($(current page.north west)+(#1mm,-#2mm)+(0,\dimexpr#3mm*30/100\relax)$) {#4};
+  \node[text=white,inner sep=0,font=\fontsize{9}{10}\selectfont] at ($(current page.north west)+(#1mm,-#2mm)-(0,\dimexpr#3mm*4/100\relax)$) {\fiteq{\dimexpr#3mm*80/100\relax}{#5}};}
+\newcommand{\porebub}[3]{\node[circle,minimum size=#3mm,inner sep=0,fill=khgold!40!white,fill opacity=0.35,draw=cyan!50!white,line width=1.2pt] at ($(current page.north west)+(#1mm,-#2mm)$) {};}
+\makeatother
 \frontmatter
 \thispagestyle{empty}
 \begin{tikzpicture}[remember picture,overlay]
@@ -9,25 +21,33 @@
   \node[text=khgold,font=\sffamily\bfseries\fontsize{8.5}{10}\selectfont,inner sep=0,align=center] at ($(current page.north)+(0,-19mm)$) {S O I L \ \ W A T E R \ \ $\cdot$ \ \ A T M O S P H E R E \ \ $\cdot$ \ \ F E E D B A C K \ \ $\cdot$ \ \ L A Y O U T};
   \draw[khgold,line width=0.6pt] ($(current page.north)+(-30mm,-24mm)$) -- ($(current page.north)+(30mm,-24mm)$);
   % title
-  \node[text=white,font=\sfb\fontsize{50}{52}\selectfont,inner sep=0] at ($(current page.north)+(0,-48mm)$) {\scalebox{0.76}[1]{PORE-SCALE}};
-  \node[text=khgold,font=\sfb\fontsize{74}{76}\selectfont,inner sep=0] at ($(current page.north)+(0,-74mm)$) {\scalebox{0.72}[1]{DYNAMICS}};
-  \node[text=white,font=\sffamily\itshape\fontsize{12.5}{15}\selectfont,inner sep=0,align=center,text width=0.78\paperwidth] at ($(current page.north)+(0,-100mm)$) {From the pore to the field: the mathematics of soil water, \hbox{precision} irrigation, mulching and feedback loops, worked in full};
-  % the author's equations, set as a textbook display
-  \node[anchor=north,fill=khnavy!85!black,fill opacity=0.80,text opacity=1,text=white,inner xsep=6mm,inner ysep=4.5mm,rounded corners=2pt] at ($(current page.north)+(0,-116mm)$) {\begin{minipage}{0.80\paperwidth}\centering\fontsize{8.6}{10.4}\selectfont
-  $\displaystyle h=\frac{2\gamma\cos\beta}{\rho_w g\,r},\qquad Q=\frac{\pi r^{4}\,\Delta p}{8\mu L},\qquad K_s=\frac{\rho_w g}{8\mu}\,\phi\,r^{2}$\\[2.4mm]
-  $\displaystyle \theta(h)=\theta_r+\frac{\theta_s-\theta_r}{\bigl[1+(\alpha|h|)^{n}\bigr]^{m}},\qquad K(S_e)=K_s S_e^{\ell}\Bigl[1-\bigl(1-S_e^{1/m}\bigr)^{m}\Bigr]^{2}$\\[2.6mm]
-  $\displaystyle \frac{\partial\theta}{\partial t}=\frac{\partial}{\partial z}\Bigl[K(h)\Bigl(\frac{\partial h}{\partial z}+1\Bigr)\Bigr]-S_r,\qquad k=\frac{\phi^{3}}{5S_0^{2}(1-\phi)^{2}}$\\[2.6mm]
-  $\displaystyle ET_0=\frac{0.408\,\Delta(R_n-G)+\gamma\frac{900}{T+273}u_2(e_s-e_a)}{\Delta+\gamma(1+0.34u_2)}$\\[2.8mm]
-  $\displaystyle P_r+I=\mathit{ET}+D+\Delta S+Q_r,\qquad \bar R=\mathit{ET}+D-P_r-I,\qquad \varepsilon=\frac{W-\mathit{ET}-D}{W}$\\[2.6mm]
-  $\displaystyle h_c=\frac1\alpha\Bigl(\frac{m^{2}}{\kappa}\Bigr)^{1/[2n+\ell(n-1)]},\qquad \phi_D=\frac{K_s}{K_s+q^{*}},\qquad \kappa=-\frac{\Delta I}{\Delta P_r}$\\[2.6mm]
-  $\displaystyle \eta_X=\frac{X-X_0}{I},\qquad \eta_D(d)=\eta_\infty\bigl(1-e^{-d/d_D}\bigr),\qquad \mathrm{DI}=\frac{E_s-D}{E_s+\max(D,0)}$\\[2.6mm]
-  $\displaystyle \frac{\mathrm dC}{\mathrm dt}=-k\,f_T f_\theta\,C,\qquad L^{2}=\frac{8Kd\,h+4Kh^{2}}{q},\qquad \ln R=5.75-0.355\ln P+0.863\ln E_p+0.136\,\Delta T$
-  \end{minipage}};
+  \node[text=white,font=\sfb\fontsize{50}{52}\selectfont,inner sep=0] at ($(current page.north)+(0,-36mm)$) {\scalebox{0.76}[1]{PORE-SCALE}};
+  \node[text=khgold,font=\sfb\fontsize{74}{76}\selectfont,inner sep=0] at ($(current page.north)+(0,-58mm)$) {\scalebox{0.72}[1]{DYNAMICS}};
+  \node[text=white,font=\sffamily\itshape\fontsize{12.5}{15}\selectfont,inner sep=0,align=center,text width=0.78\paperwidth] at ($(current page.north)+(0,-77mm)$) {From the pore to the field: the mathematics of soil water, \hbox{precision} irrigation, mulching and feedback loops, worked in full};
+  % equations inside the pore circles
+\poreeq{77.60}{107.50}{31.0}{CAPILLARITY}{h=\frac{2\gamma\cos\beta}{\rho_w g\,r}}
+\poreeq{135.51}{105.64}{27.3}{POISEUILLE}{Q=\frac{\pi r^{4}\Delta p}{8\mu L}}
+\poreeq{108.28}{125.74}{37.2}{RETENTION}{\theta(h)=\theta_r+\frac{\theta_s-\theta_r}{[1+(\alpha|h|)^{n}]^{m}}}
+\poreeq{29.60}{179.94}{37.2}{CONDUCTIVITY}{K=K_sS_e^{\ell}\Bigl[1-\bigl(1-S_e^{1/m}\bigr)^{m}\Bigr]^{2}}
+\poreeq{30.22}{140.49}{38.4}{RICHARDS}{\frac{\partial\theta}{\partial t}=\frac{\partial}{\partial z}\Bigl[K\Bigl(\frac{\partial h}{\partial z}+1\Bigr)\Bigr]-S_r}
+\poreeq{37.88}{106.26}{28.5}{KOZENY--CARMAN}{k=\frac{\phi^{3}}{5S_0^{2}(1-\phi)^{2}}}
+\poreeq{82.05}{184.58}{50.8}{PENMAN--MONTEITH}{ET_0=\frac{0.408\Delta(R_n-G)+\gamma\frac{900}{T+273}u_2(e_s-e_a)}{\Delta+\gamma(1+0.34u_2)}}
+\poreeq{69.01}{141.51}{36.0}{WATER BALANCE}{P_r+I=\mathit{ET}+D+\Delta S+Q_r}
+\poreeq{124.94}{193.26}{33.5}{TRIGGER REACH}{h_c=\frac1\alpha\Bigl(\frac{m^{2}}{\kappa}\Bigr)^{\frac{1}{2n+\ell(n-1)}}}
+\poreeq{117.00}{160.36}{31.0}{DEPTH RESPONSE}{\eta_D(d)=\eta_\infty\bigl(1-e^{-d/d_D}\bigr)}
+\porebub{155.49}{97.50}{7.0}
+\porebub{138.05}{126.17}{9.0}
+\porebub{23.12}{117.61}{5.0}
+\porebub{44.14}{199.28}{8.0}
+\porebub{49.52}{153.58}{5.0}
+\porebub{124.94}{141.90}{6.0}
+\porebub{94.27}{97.19}{5.0}
+\porebub{16.50}{113.88}{7.0}
   % author and mark
-  \node[text=white,font=\sfb\fontsize{19}{22}\selectfont,inner sep=0] at ($(current page.south)+(0,38mm)$) {NAZIRU HALILU};
-  \draw[khgold,line width=0.6pt] ($(current page.south)+(-24mm,32mm)$) -- ($(current page.south)+(24mm,32mm)$);
-  \node[text=white!90,font=\sffamily\fontsize{9.5}{12}\selectfont,inner sep=0,align=center] at ($(current page.south)+(0,25mm)$) {Soil water, irrigation and evaporation control\\[2pt] with the SWAFL application};
-  \node[draw=khgold,line width=1pt,text=khgold,font=\sfb\itshape\fontsize{13}{14}\selectfont,inner sep=3pt,rounded corners=2pt] at ($(current page.south)+(0,15mm)$) {SWAFL};
+  \node[text=white,font=\sfb\fontsize{19}{22}\selectfont,inner sep=0] at ($(current page.south)+(0,32mm)$) {NAZIRU HALILU};
+  \draw[khgold,line width=0.6pt] ($(current page.south)+(-24mm,27.5mm)$) -- ($(current page.south)+(24mm,27.5mm)$);
+  \node[text=white!90,font=\sffamily\fontsize{9.5}{12}\selectfont,inner sep=0,align=center] at ($(current page.south)+(0,20mm)$) {Soil water, irrigation and evaporation control\\[2pt] with the SWAFL application};
+  \node[draw=khgold,line width=1pt,text=khgold,font=\sfb\itshape\fontsize{13}{14}\selectfont,inner sep=3pt,rounded corners=2pt] at ($(current page.south)+(0,12mm)$) {SWAFL};
 \end{tikzpicture}
 \cleardoublepage
 \thispagestyle{empty}\vspace*{0pt}

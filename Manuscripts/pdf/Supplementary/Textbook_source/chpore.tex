@@ -4,9 +4,35 @@
 \markboth{Pore Geometry and the Architecture of Soil}{Pore Geometry and the Architecture of Soil}
 \banner{The space between the grains}
 \section{Introduction: why the geometry of the pores matters}
-Every property of soil water that the previous chapter introduced (the retention curve, the field capacity, the conductivity) is a property of the \emph{pores}, not of the grains. The grains give the soil its skeleton, but water and air live in the space between them, and the size, the shape, the number and the connection of the pores decide how much water the soil holds, how strongly it holds it and how fast it moves. Two soils with the same porosity can behave in opposite ways: a sand and a clay may both have a porosity of 0.45, yet the sand drains in minutes and the clay in weeks. The difference is the \emph{geometry}.
+Every property of soil water that this book studies (the retention curve, the field capacity, the conductivity, the response of the soil to irrigation) is a property of the \emph{pores}, not of the grains. The grains give the soil its skeleton, but water and air live in the space between them, and the size, the shape, the number and the connection of the pores decide how much water the soil holds, how strongly it holds it and how fast it moves. Two soils with the same porosity can behave in opposite ways: a sand and a clay may both have a porosity of 0.45, yet the sand drains in minutes and the clay in weeks. The difference is the \emph{geometry}.
 
-\par\noindent This chapter builds the geometry from the beginning. It starts with the classification of pores, derives the two laws that link a pore to the soil water (the capillary law of Young and Laplace, which sets the suction, and the law of Hagen and Poiseuille, which sets the flow), shows how a bundle of pores gives a conductivity, and then adds the complications of real soil: tortuosity, connection, aggregates and macropores. Every formula is followed by an example that can be worked with a pocket calculator.
+\par\noindent This is the first chapter because everything after it rests on it: Chapter~\ref{chap:01} turns the geometry into the retention and conductivity curves, and the later chapters use those curves. The chapter builds the geometry from the beginning. It starts with the classification of pores, derives the two laws that link a pore to the soil water (the capillary law of Young and Laplace, which sets the suction, and the law of Hagen and Poiseuille, which sets the flow), shows how a bundle of pores gives a conductivity, and then adds the complications of real soil: tortuosity, connection, aggregates and macropores. Every formula is followed by an example that can be worked with a pocket calculator.
+
+
+\begin{figure}[!htbp]\centering\Lfig{\includegraphics[width=0.92\textwidth]{fig/pg_scales.png}}\caption{The scales of the pore space, from the nanometre to the field. Each class of pore is introduced in this chapter and is tied to the suction at which it empties.}\end{figure}
+
+\subhd{How this chapter is arranged}
+The sections follow the order in which the ideas depend on one another:
+\begin{exlist}
+\item \kw{The quantities} that are used throughout (porosity, water content, suction, surface tension) are defined first.
+\item \kw{The pores themselves}: where they come from, how the grains pack, and how the pores are grouped into classes.
+\item \kw{The two laws of a single pore}: the Young--Laplace law, which gives the suction at which a pore empties, and the Hagen--Poiseuille law, which gives the flow through it.
+\item \kw{Many pores together}: the pore-size distribution, the bundle of capillaries, the share of the flow, tortuosity, connection and the specific surface, which lead to the Kozeny--Carman equation.
+\item \kw{Models and real soils}: the retention models, the aggregates, the cracks, the effect of management, and the way the pores are measured.
+\end{exlist}
+
+\section{Quantities used in this chapter}\label{sec:quant}
+Six quantities are used in every section. They are defined here once, so that the chapter can be read without the next one.
+\begin{center}\small\begin{tabular}{@{}p{3.3cm}p{2.0cm}p{2.3cm}p{5.5cm}@{}}\toprule
+\hd{Quantity} & \hd{Symbol} & \hd{Unit} & \hd{Meaning and usual value}\\\midrule
+Porosity & $\phi$ & m$^3$\,m$^{-3}$ & volume of pores per volume of soil; 0.35 to 0.55\\
+Volumetric water content & $\theta$ & m$^3$\,m$^{-3}$ & volume of water per volume of soil; $\theta\le\phi$\\
+Suction (matric head) & $h$ & cm of water & the energy per unit weight with which the soil holds water; $\mathrm{pF}=\log_{10}h$\\
+Surface tension of water & $\gamma$ & N\,m$^{-1}$ & $0.0728$ at 20\,$^\circ$C\\
+Viscosity of water & $\mu$ & Pa\,s & $1.00\times10^{-3}$ at 20\,$^\circ$C\\
+Contact angle & $\beta$ & degrees & $0$ for a clean wet mineral wall\\\bottomrule
+\end{tabular}\end{center}
+\noindent The water content is split into the part held by the pores of each class. The retention curve of the van Genuchten model, $\theta(h)=\theta_r+(\theta_s-\theta_r)[1+(\alpha h)^n]^{-m}$ with $m=1-1/n$, is used in this chapter only to attach numbers to the pore classes; it is derived and discussed in Chapter~\ref{chap:01}.
 
 \section{Pores of a soil: definition and origin}
 A \kw{pore} is a void in the soil that is not occupied by solid. Together the pores form the \kw{pore space}, whose volume per unit volume of soil is the porosity $\phi$ (Chapter~\ref{chap:01}). By origin, three groups of pores are distinguished.
@@ -15,7 +41,17 @@ A \kw{pore} is a void in the soil that is not occupied by solid. Together the po
 \item \kw{Structural pores.} They are the spaces between and inside the aggregates, the crumbs and blocks into which the grains are bound by clay, organic matter and roots. They exist only where there is structure, and they are changed by tillage, compaction, wetting and drying.
 \item \kw{Biopores and cracks.} They are made by living roots, by worms and insects (channels of 0.5 to 10 mm), and by the shrinking of a clay as it dries (cracks of 0.1 to 10 mm). They are few, but they are large and continuous, so that they carry a large part of the flow after a heavy rain.
 \end{exlist}
+\begin{figure}[!htbp]\centering\Lfig{\includegraphics[width=0.94\textwidth]{fig/pg_types.png}}\caption{A section of soil showing the three groups of pores: the textural pores between grains (subsoil), the structural pores between and inside aggregates (topsoil), and the biopores and cracks (worm burrow, root channel and shrinkage crack).}\label{fig:pg-types}\end{figure}
 
+\section{Porosity and the packing of grains}\label{sec:pack}
+For grains of one size packed in a regular pattern, the porosity depends only on the arrangement, not on the size of the grains. A \emph{simple cubic} packing of spheres has $\phi=1-\pi/6=0.476$, a \emph{body-centred} packing has $0.320$, and the densest packing, \emph{rhombohedral} (face-centred cubic), has $\phi=1-\pi/(3\sqrt2)=0.260$. A random loose packing of equal spheres has $\phi\approx0.40$ and a random dense packing $\approx0.36$. A real sand has a lower porosity than a packing of equal spheres when the grains have different sizes (the small grains fill the spaces between the large ones), and a clay or an aggregated soil has a higher porosity, because the structure holds the grains apart.
+\par\noindent The porosity is found from the densities, $\phi=1-\rho_b/\rho_s$, which divides the pore space into the part filled with water and the part filled with air (Chapter~\ref{chap:01}).
+\begin{figure}[!htbp]\centering\Lfig{\includegraphics[width=0.92\textwidth]{fig/pg_packing.png}}\caption{Packing of equal spheres: the porosity depends on the arrangement of the grains and not on their size. The pores are the white spaces between the grains.}\label{fig:pg-pack}\end{figure}
+
+\exbox{Porosity from the bulk density}{A topsoil has a dry bulk density $\rho_b=1.30$ g\,cm$^{-3}$ before tillage and $1.50$ g\,cm$^{-3}$ after the passage of a heavy tractor. The particle density is $\rho_s=2.65$ g\,cm$^{-3}$. Find the porosity before and after, and the loss of pore volume.}\sol \givenline{$\rho_b=1.30$ and $1.50$ g\,cm$^{-3}$ ; $\rho_s=2.65$ g\,cm$^{-3}$}
+\par\noindent Before: $\phi=1-1.30/2.65=0.509$ \finans. After: $\phi=1-1.50/2.65=0.434$ \finans. The loss is $0.509-0.434=0.075$ m$^3$\,m$^{-3}$, that is $7.5$ per cent of the volume of the soil, or $15$ per cent of the pore space. Because a tractor compresses the large pores first (they are the only ones that are mostly air), if the macroporosity before was $0.12$, it is now about $0.12-0.075=0.045$, a loss of more than 60 per cent. A small change of the bulk density is therefore a large change of the macropores.
+
+\banner{Capillarity: the law that links a pore to the suction}\label{ch:pg-cap}
 \section{Classification of pores by size}
 Because the pore sizes of a soil range over five orders of magnitude (from a few nanometres to several millimetres), the pores are grouped into classes, and each class has a role. The limits are most easily set by the suction at which a pore empties (Section~\ref{sec:cap}).
 \begin{center}\small\begin{tabular}{@{}p{3.0cm}p{2.7cm}p{2.5cm}p{4.9cm}@{}}\toprule
@@ -28,14 +64,8 @@ Micropores & $<0.09\ \mu$m & pF $>4.2$ & hold water tightly; not available to pl
 
 \begin{figure}[!htbp]\centering\Lfig{\includegraphics[width=0.92\textwidth]{fig/pore_domains.png}}\caption{The pore classes on the retention curve of the loam of Chapter~\ref{chap:01} ($\alpha=0.036$ cm$^{-1}$, $n=1.56$, $\theta_s=0.43$, $\theta_r=0.08$). The suction on the lower axis corresponds to the pore radius of the upper axis through Equation~(\ref{eq:pg-cap}).}\label{fig:pg-dom}\end{figure}
 
-\section{Porosity and the packing of grains}\label{sec:pack}
-For grains of one size packed in a regular pattern, the porosity depends only on the arrangement, not on the size of the grains. A \emph{simple cubic} packing of spheres has $\phi=1-\pi/6=0.476$, a \emph{body-centred} packing has $0.320$, and the densest packing, \emph{rhombohedral} (face-centred cubic), has $\phi=1-\pi/(3\sqrt2)=0.260$. A random loose packing of equal spheres has $\phi\approx0.40$ and a random dense packing $\approx0.36$. A real sand has a lower porosity than a packing of equal spheres when the grains have different sizes (the small grains fill the spaces between the large ones), and a clay or an aggregated soil has a higher porosity, because the structure holds the grains apart.
-\par\noindent The porosity is found from the densities, $\phi=1-\rho_b/\rho_s$, which divides the pore space into the part filled with water and the part filled with air (Chapter~\ref{chap:01}).
+\begin{figure}[!htbp]\centering\Lfig{\includegraphics[width=0.92\textwidth]{fig/pg_ladder.png}}\caption{The ladder of the pore classes: the equivalent radius of each class, the suction at which it empties (from Equation~\ref{eq:pg-cap}) and the role it plays in the soil.}\end{figure}
 
-\exbox{Porosity from the bulk density}{A topsoil has a dry bulk density $\rho_b=1.30$ g\,cm$^{-3}$ before tillage and $1.50$ g\,cm$^{-3}$ after the passage of a heavy tractor. The particle density is $\rho_s=2.65$ g\,cm$^{-3}$. Find the porosity before and after, and the loss of pore volume.}\sol \givenline{$\rho_b=1.30$ and $1.50$ g\,cm$^{-3}$ ; $\rho_s=2.65$ g\,cm$^{-3}$}
-\par\noindent Before: $\phi=1-1.30/2.65=0.509$ \finans. After: $\phi=1-1.50/2.65=0.434$ \finans. The loss is $0.509-0.434=0.075$ m$^3$\,m$^{-3}$, that is $7.5$ per cent of the volume of the soil, or $15$ per cent of the pore space. Because a tractor compresses the large pores first (they are the only ones that are mostly air), if the macroporosity before was $0.12$, it is now about $0.12-0.075=0.045$, a loss of more than 60 per cent. A small change of the bulk density is therefore a large change of the macropores.
-
-\banner{Capillarity: the law that links a pore to the suction}\label{ch:pg-cap}
 \section{The Young--Laplace law: derivation}\label{sec:cap}
 Water in a narrow pore is pulled upward by the attraction between the water and the wall (adhesion) and held together by the surface tension $\gamma$. Consider a cylindrical tube of radius $r$ that is wetted by water with a contact angle $\beta$ between the water surface and the wall. The upward force acts along the line of contact, of length $2\pi r$, with the vertical component $\gamma\cos\beta$:
 \[F_{up}=2\pi r\,\gamma\cos\beta .\]
@@ -45,6 +75,8 @@ where $h$ is the capillary rise or suction (m), $\gamma=0.0728$ N\,m$^{-1}$ the 
 \par\noindent \textbf{Notes:} 1. The pressure difference across the curved surface is $\Delta p=2\gamma\cos\beta/r$; the suction in length of water is $h=\Delta p/(\rho_wg)$. 2. The soil pore is not a cylinder, so $r$ is an \emph{equivalent} radius: the radius of the cylinder that would empty at the same suction. 3. A pore empties when the suction reaches the value of its \emph{narrowest part} (the neck), not its widest, which is the physical origin of hysteresis (Chapter~\ref{chap:01}). 4. If the water does not wet the wall completely ($\beta>0$, as in a soil that is water-repellent after a fire or after heavy organic matter), the rise is smaller and, for $\beta>90^\circ$, water is pushed out of the pore instead.
 
 \begin{figure}[!htbp]\centering\Lfig{\includegraphics[width=0.84\textwidth]{fig/pore_rise.png}}\caption{Capillary rise in three tubes. The height is inversely proportional to the radius (Equation~\ref{eq:pg-cap}), so that a tube ten times narrower holds water ten times higher.}\end{figure}
+
+\begin{figure}[!htbp]\centering\Lfig{\includegraphics[width=0.92\textwidth]{fig/pg_corner.png}}\caption{Drying of an angular pore: the centre of the pore empties first, while the water stays in the corners, where the meniscus has the smallest radius $r_m$. This is why a drying soil keeps a little conductivity long after its large pores are empty.}\end{figure}
 
 \begin{center}\small\begin{tabular}{@{}rrrrl@{}}\toprule
 \hd{$h$ (cm)} & \hd{pF} & \hd{$r$ ($\mu$m)} & \hd{$2r$ ($\mu$m)} & \hd{Meaning}\\\midrule
@@ -120,6 +152,8 @@ Typical values for $\tau$ are 1.2 to 1.6 for sands, and 2 to 5 for aggregated so
 \section{Connection of the pores: bodies and throats}
 A pore in a soil has a wide part (the \kw{body}) and a narrow passage to the next pore (the \kw{throat}). The flow is limited by the throats, and the retention (the emptying) is also limited by the throats during drying, but by the bodies during wetting. Thus a pore that is large but connected only through narrow throats behaves, for the flow, like a narrow pore: this is the cause of the hysteresis and of the fact that a conductivity calculated from the pore sizes of the retention curve is too high unless a connection factor is applied. The factor $\ell$ in the conductivity function of Mualem (Chapter~\ref{chap:01}) is such a connection and tortuosity factor, with a value of about $0.5$ for most soils.
 \par\noindent \textbf{Note:} If the pores were connected at random, there would exist a \kw{percolation threshold}: a minimum fraction of the pore space that must be open to form a path across the sample (about 0.3 in three dimensions for a random network). A soil whose air-filled porosity falls below this value, as in a waterlogged soil, loses the continuity of the gas phase, and the oxygen cannot move.
+
+\begin{figure}[!htbp]\centering\Lfig{\includegraphics[width=0.92\textwidth]{fig/pg_network.png}}\caption{Drying of a network of pore bodies and throats, from (a) saturated to (d) a large suction. The large bodies empty first, but only when a throat that connects them to the air has emptied; the flow is limited by the narrowest throat on the path, and the water that is left is held in the smallest pores.}\end{figure}
 
 \section{The specific surface and the hydraulic radius}
 The \kw{specific surface} is the area of the walls of the pores per unit volume of solid. For spheres of diameter $d$, $S_0=6/d$ (m$^{-1}$). Fine grains have an enormous surface: 1 cm$^3$ of sand of $d=0.5$ mm has an area of $120$ cm$^2$, whereas 1 cm$^3$ of clay with plates of 1 $\mu$m has $6\times10^{4}$ cm$^2$ or more, and a swelling clay such as montmorillonite has an internal surface of up to 800 m$^2$ per gram. The surface determines how much water is held as films, the adsorption of ions and the heat of wetting. The \kw{hydraulic radius} of a pore space is the ratio of its volume to its wall area,
