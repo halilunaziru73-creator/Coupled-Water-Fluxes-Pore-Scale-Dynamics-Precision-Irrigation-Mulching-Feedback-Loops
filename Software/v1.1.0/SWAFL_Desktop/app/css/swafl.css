@@ -298,5 +298,7 @@ body.nolayer #engine{visibility:hidden}
 }
 @media (max-width:900px){#viewBar .pnote{display:none}}
 
-/* no loading screen: the splash shows only if the engine fails to start */
-#loading:not(.err){display:none!important}
+#loading .spm b{font-weight:700;font-variant-numeric:tabular-nums}
+#loading .spbar i{width:var(--lp,0%)!important;animation:none!important;transition:width .25s ease}
+#loading{position:fixed!important;inset:0;z-index:2147481000}
+html body #loading{background:linear-gradient(160deg,#0B2A4A,#0B3D91 55%,#1B7F8C)!important;color:#fff!important}html body #loading h1{color:#fff!important}

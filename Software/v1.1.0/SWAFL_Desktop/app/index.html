@@ -8,11 +8,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" type="image/png" href="assets/logo-64.png">
 <link rel="stylesheet" href="vendor/leaflet.css">
-<link rel="stylesheet" href="css/swafl.css?v=20261121b"><link rel="stylesheet" href="css/touch.css?v=20261116j">
+<link rel="stylesheet" href="css/swafl.css?v=20261121e"><link rel="stylesheet" href="css/touch.css?v=20261116j">
 <link rel="stylesheet" href="css/classic.css?v=20261119e">
 <link rel="stylesheet" href="css/daisydesign.css?v=20261101t">
 </head>
-<body class="nolayer"><div id="bootVeil" style="position:fixed;inset:0;z-index:2147482000;background:#E8EEF5;display:flex;flex-direction:column;align-items:center;justify-content:center;font:bold 14px Tahoma,Segoe UI,sans-serif;color:#0A246A"></div>
+<body class="nolayer"><div id="bootVeil" style="position:fixed;inset:0;z-index:2147482000;background:linear-gradient(160deg,#0B2A4A,#0B3D91 55%,#1B7F8C);display:flex;flex-direction:column;align-items:center;justify-content:center;font:600 14px Tahoma,Segoe UI,sans-serif;color:#fff"><img src="assets/logo.svg" width="84" height="84" alt=""><div style="margin:10px 0 14px;font:700 40px/1 sans-serif;letter-spacing:6px">SWAFL</div><div>Loading <b class="lpct">0%</b></div></div>
 <div id="app">
 
   <!-- ===== Title / menu bar ===== -->
@@ -62,7 +62,7 @@ window.addEventListener("swafl-eula-ready",window.SWAFLStartEngine);
 function warm(){try{if(!window.fetch)return;fetch("engine/engine.html?v=20261118t").then(function(r){return r.text()}).then(function(t){var l=[],re=/<(?:script[^>]+src|link[^>]+href)="([^"#]+)"/g,m;while((m=re.exec(t)))if(!/^(https?:|data:)/.test(m[1]))l.push("engine/"+m[1]);var i=0;(function nx(){if(i>=l.length)return;var u=l[i++];fetch(u).then(function(r){return r.arrayBuffer()}).catch(function(){}).then(function(){setTimeout(nx,30)})})()}).catch(function(){})}catch(e){}}
 window.addEventListener("load",function(){if(window.__eulaOpen)setTimeout(warm,300);else window.SWAFLStartEngine()})})()</script>
         <div id="emptyStage"><img src="assets/logo.svg" width="72" height="72" alt=""><div><b>No layer open</b><br>Click a layer in the Layers panel to open it here.</div></div>
-        <div id="loading"><div class="spl"><img src="assets/logo.svg" width="84" height="84" alt=""><h1>SWAFL</h1><p class="spt">Soil Water, Irrigation and Field Decision Workbench</p><div class="spbar"><i></i></div><p class="spm">Starting the simulation engine, soils, crops and weather&hellip;</p><div class="spd"><span>Soil water balance</span><span>Irrigation scheduling</span><span>Crop water use</span><span>Weather driven</span></div></div></div>
+        <div id="loading"><div class="spl"><img src="assets/logo.svg" width="84" height="84" alt=""><h1>SWAFL</h1><div class="spbar" style="margin-top:20px"><i></i></div><p class="spm">Loading <b class="lpct">0%</b></p></div></div>
       </div>
         <div class="hsplit" id="splitDash" title="Drag to resize"></div>
       <section class="dock" id="dashDock">
@@ -139,6 +139,10 @@ window.addEventListener("load",function(){if(window.__eulaOpen)setTimeout(warm,3
 <script src="js/fieldprec.js?v=20261101s"></script>
 <script src="js/fieldgeo.js?v=20261103b"></script>
 <script src="js/daisyload.js?v=20261118t"></script>
-<script src="js/glossary.js?v=20261110b"></script><script src="js/main.js?v=20261121b"></script><script>(function(){var v=document.getElementById("bootVeil");if(v)v.remove()})()</script>
+<script>(function(){var p=0,t0=Date.now(),done=false;function set(v){p=v;var r=Math.round(v)+"%";var a=document.querySelectorAll(".lpct");for(var i=0;i<a.length;i++)a[i].textContent=r;document.documentElement.style.setProperty("--lp",r)}
+window.__lpReset=function(){done=false;t0=Date.now();set(0)};
+window.__lpDone=function(){done=true;set(100)};
+setInterval(function(){if(done)return;var e=(Date.now()-t0)/1000;set(Math.min(95,95*(1-Math.exp(-e/3.5))))},120);
+var ld=document.getElementById("loading");if(ld)new MutationObserver(function(){if(ld.classList.contains("gone"))window.__lpDone()}).observe(ld,{attributes:true,attributeFilter:["class"]})})()</script><script src="js/glossary.js?v=20261110b"></script><script src="js/main.js?v=20261121c"></script><script>(function(){var v=document.getElementById("bootVeil");if(v)v.remove()})()</script>
 </body>
 </html>

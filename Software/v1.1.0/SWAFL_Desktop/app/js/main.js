@@ -79,7 +79,7 @@ const Act = {
   preset(v) { E.preset(v); const p = E.metaData.presets.find(x => x[0] === String(v)); UI.log('Ready-made case: ' + (p ? p[1] : v)); },
   optimise() { Layers.open('sid'); setTimeout(() => { const ok = E.optimiseSurface(); UI.log(ok ? 'Surface layout optimised' : 'Optimiser not available', ok ? 'info' : 'warn'); UI.toast(ok ? 'Best surface layout applied' : 'Optimiser not available'); Dash.tab('design'); }, 350); },
   refresh() { E.redraw(); Layers.render(); Props.update(E.snap); Dash.render(); UI.log('View refreshed'); UI.toast('Refreshed'); },
-  reloadEngine() { UI.log('Reloading simulation engine...'); const ld = document.getElementById('loading'); ld.classList.remove('gone','err'); const tx = ld.querySelector('.spm'); if (tx) tx.textContent = 'Starting the simulation engine, soils, crops and weather...'; E.ready = false;
+  reloadEngine() { UI.log('Reloading simulation engine...'); const ld = document.getElementById('loading'); ld.classList.remove('gone','err'); const tx = ld.querySelector('.spm'); if (tx) tx.innerHTML = 'Loading <b class="lpct">0%</b>'; if (window.__lpReset) window.__lpReset(); E.ready = false;
     const f = document.getElementById('engine'); f.src = 'about:blank';   // the old engine window is dropped first, so that a start never succeeds against it
     setTimeout(() => { f.src = (window.SWAFLEngineURL ? window.SWAFLEngineURL() : 'engine/engine.html?app=1&t=' + Date.now() + '#scene=field'); boot(true); }, 80); },
   guide() { guideModal(); }, shortcuts() { shortcutsModal(); }, about() { aboutModal(); },
