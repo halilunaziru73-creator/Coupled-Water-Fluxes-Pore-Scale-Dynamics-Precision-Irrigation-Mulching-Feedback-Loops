@@ -9,14 +9,14 @@ After tillage the relative pore space $p$ (1 is freshly loosened) relaxes to a c
 \begin{equation}\boxed{p(t)=p_c+(p_0-p_c)e^{-\tau_ct},\qquad p_0=1.00\ (\text{conventional}),\ 0.72\ (\text{reduced}),}\end{equation}
 with $t$ in days since tillage; no-till keeps $p=0.42$. The half-life of loose pores is $\ln2/\tau_c$.
 
-\exbox{Consolidation after tillage}{Compute $p(t)$ at 30 and 120 days for conventional and reduced tillage at the four rates $\tau_c=0.001,0.005,0.01,0.02$ d$^{-1}$, with the half-lives.}\sol  Half-life $=\ln2/\tau_c$: $693$ d at $0.001$, $139$ d at $0.005$, $69$ d at $0.01$ and $35$ d at $0.02$. For conventional tillage at $\tau_c=0.01$ and $t=30$: $p=0.30+0.70e^{-0.3}=0.30+0.70(0.7408)=0.8186$. At $t=120$: $0.30+0.70e^{-1.2}=0.30+0.70(0.3012)=0.511$. Table~\ref{tab:pore} lists all cases.\begin{table}[!htbp]\centering\small\caption{Relative pore space after tillage.}\label{tab:pore}
+\exbox{Consolidation after tillage}{Compute $p(t)$ at 30 and 120 days for conventional and reduced tillage at the four rates $\tau_c=0.001,0.005,0.01,0.02$ d$^{-1}$, with the half-lives.}\sol \givenline{$\tau_c=0.001,0.005,0.01,0.02$ d$^{-1}$}\ans Half-life $=\ln2/\tau_c$: $693$ d at $0.001$, $139$ d at $0.005$, $69$ d at $0.01$ and $35$ d at $0.02$. For conventional tillage at $\tau_c=0.01$ and $t=30$: $p=0.30+0.70e^{-0.3}=0.30+0.70(0.7408)=0.8186$. At $t=120$: $0.30+0.70e^{-1.2}=0.30+0.70(0.3012)=0.511$. Table~\ref{tab:pore} lists all cases.\begin{table}[!htbp]\centering\small\caption{Relative pore space after tillage.}\label{tab:pore}
 \begin{tabular}{lrrrrr}\toprule
 \hd{$\tau_c$ (d$^{-1}$)} & \hd{Half-life (d)} & \hd{conv. 30 d} & \hd{conv. 120 d} & \hd{reduced 30 d} & \hd{reduced 120 d}\\\midrule
 0.001 & 693 & 0.979 & 0.921 & 0.708 & 0.673\\
 0.005 & 139 & 0.902 & 0.684 & 0.661 & 0.531\\
 0.010 & 69 & 0.819 & 0.511 & 0.611 & 0.427\\
 0.020 & 35 & 0.684 & 0.364 & 0.531 & 0.338\\\bottomrule\end{tabular}\end{table}
-\textbf{Reading.} With the fastest consolidation (0.02) a conventionally tilled topsoil is back at 0.33 after 120 days, nearly consolidated; at 0.001 it is still 0.89 after the same time. The hydrological effect of tillage in the application's bars is read from the Daisy runs (E5), not from this curve; the curve is a drawing constant.
+\textbf{Reading.} With the fastest consolidation (0.02) a conventionally tilled topsoil is back at 0.33 after 120 days, nearly consolidated; at 0.001 it is still 0.89 after the same time. The hydrological effect of tillage in the application's bars is read from the Daisy runs (E5), not from this curve; the curve is a drawing constant. \finans
 
 
 \section{The retention curve from texture}
@@ -35,7 +35,7 @@ S07 & Silt loam & 20 & 65 & 15 & 0.443 & 0.019 & 0.309 & 0.059 & 0.251\\
 S08 & Sandy clay loam & 55 & 15 & 30 & 0.421 & 0.028 & 0.192 & 0.043 & 0.149\\
 S09 & Clay loam & 30 & 35 & 35 & 0.448 & 0.031 & 0.345 & 0.102 & 0.243\\
 S10 & Silty clay loam & 10 & 55 & 35 & 0.465 & 0.031 & 0.413 & 0.166 & 0.246\\\bottomrule\end{tabular}\end{table}
-\textbf{Reading.} Between 100 and 15,849 cm the retention curve gives $0.004$ cm$^3$ cm$^{-3}$ for the sand (0.04 mm per cm) rising to $0.25$ for the silt loam and silty clay loam (2.5 mm per cm). The engineered per-texture constants of Chapter~\ref{ch:e1} are 0.6 mm per cm for the sand and 1.7 to 2.0 for the fine soils. The two agree in order of magnitude for the loams, but not for the sands: with $n=2.68$ almost all of the sand's water leaves the pores before 100 cm. The application labels the AWC constants as typical texture-class values, not derived from the study soil, and this comparison shows why the label matters.
+\textbf{Reading.} Between 100 and 15,849 cm the retention curve gives $0.004$ cm$^3$ cm$^{-3}$ for the sand (0.04 mm per cm) rising to $0.25$ for the silt loam and silty clay loam (2.5 mm per cm). The engineered per-texture constants of Chapter~\ref{ch:e1} are 0.6 mm per cm for the sand and 1.7 to 2.0 for the fine soils. The two agree in order of magnitude for the loams, but not for the sands: with $n=2.68$ almost all of the sand's water leaves the pores before 100 cm. The application labels the AWC constants as typical texture-class values, not derived from the study soil, and this comparison shows why the label matters. \finans
 
 
 \exbox{Jurin's law and the pore picture}{A pore of radius $r$ fills with water at suction $h$ if $r\le r_c(h)$, where Jurin's law gives $r_c=\dfrac{2\sigma\cos\gamma}{\rho_wgh}\approx\dfrac{0.149\ \mathrm{cm}^2}{h}$. (a) Verify the constant $0.149$ cm$^2$. (b) Find the largest water-filled pore at 10, 31.6, 100, 300, 1000 and 15,849 cm. (c) At what suction does a pore of radius 25 $\mu$m empty?}\sol  (a) $\sigma=0.0728$ N m$^{-1}$, $\gamma=0$, $\rho_w=998$ kg m$^{-3}$, $g=9.81$ m s$^{-2}$: $2\sigma/(\rho_wg)=0.1456/(9790.4)=1.487\times10^{-5}$ m$^2$ $=0.1487$ cm$^2$ $\approx0.149$ cm$^2$. (b) $r_c=0.149/h$ cm, that is $1490/h$ $\mu$m, so the radii are $149$, $47.2$, $14.9$, $4.97$, $1.49$ and $0.094$ $\mu$m (Table~\ref{tab:jur} gives the same in $\mu$m). (c) $h=1490/25=59.6$ cm. The rule of the application, ``$r$ in micrometres empties at about 1490 divided by $r$ centimetres'', is the same law. The ``wide pores'' of the hidden-question panel, those that empty at less than 31.6 cm, have $r>47$ $\mu$m.\begin{table}[!htbp]\centering\small\caption{Capillary radius.}\label{tab:jur}
@@ -46,7 +46,7 @@ S10 & Silty clay loam & 10 & 55 & 35 & 0.465 & 0.031 & 0.413 & 0.166 & 0.246\\\b
 100 & 14.90\\
 300 & 4.97\\
 1000 & 1.49\\
-15849 & 0.09\\\bottomrule\end{tabular}\end{table}
+15849 & 0.09\\\bottomrule\end{tabular}\end{table} \finans
 
 
 \section{Hydraulic drivers: regression on clay}
@@ -67,7 +67,7 @@ S06 & Loam & 20 & 0.289 & 0.296\\
 S07 & Silt loam & 15 & 0.147 & 0.385\\
 S08 & Sandy clay loam & 30 & 0.285 & 0.119\\
 S09 & Clay loam & 35 & 0.087 & 0.030\\
-S10 & Silty clay loam & 35 & 0.022 & 0.030\\\bottomrule\end{tabular}\end{table}
+S10 & Silty clay loam & 35 & 0.022 & 0.030\\\bottomrule\end{tabular}\end{table} \finans
 
 
 \exbox{Depth of root uptake}{The depth holding a fraction $p$ of the uptake is $z_p=k_p\Delta z$, $k_p=\min\{k:\sum_{i\le k}U_i/\sum U_i\ge p\}$. For the loam season of Chapter~\ref{ch:e2} the transpiration drawn from the first twenty layers (mm) was 20.5, 18.2, 17.2, 16.2, 15.2, 14.0, 13.1, 12.0, 11.2, 10.5, 9.8, 8.9, 7.9, 6.8, 5.7, 5.0, 4.1, 3.4, 3.1, 2.7. Find $z_{0.5}$ and $z_{0.9}$.}\sol  The total uptake over all layers is $229.6$ mm. The cumulative shares reach 50 per cent at layer 8 (cumulative 0.551; layer 7 has 0.498), so $z_{0.5}=8\times2.5=20.0$ cm. They reach 90 per cent at layer 21 (0.906; one layer less gives 0.895), so $z_{0.9}=52.5$ cm. Half of the water is taken from the upper 20 cm although the roots reach 82 cm: the root-density function decreases exponentially with depth.
@@ -75,10 +75,10 @@ S10 & Silty clay loam & 35 & 0.022 & 0.030\\\bottomrule\end{tabular}\end{table}
 \section{Mulch against bare soil}
 The layer evaluates Engine 1 at bare soil ($\varphi=1$), at your mulch strength and at $\varphi=0.1$. With $E_\varphi,I_\varphi,D_\varphi$ from Equations 5.4, 5.7 and 5.9:
 \begin{equation}\boxed{\Delta E=E_{1.0}-E_\varphi,\quad\Delta I=I_{1.0}-I_\varphi,\quad\Delta D=D_\varphi-D_{1.0}.}\end{equation}
-\par\noindent where $\Delta E$, $\Delta I$ and $\Delta D$ are the savings of evaporation, irrigation and the change of drainage caused by a cover of fraction $\varphi$ (mm), and the subscripts 1.0 (bare) and $\varphi$ (covered) mark the two runs.
+\par\noindent where $\Delta E$, $\Delta I$ and $\Delta D$ are the savings of evaporation, irrigation and the change of drainage caused by a cover of fraction $\varphi$ (mm), and the subscripts 1.0 (bare) and $\varphi$ (covered) mark the two runs. \finans
 
 
-\exbox{What a mulch saves}{For a soil the engine gives bare soil ($\varphi=1$): $E=190$, $I=180$, $D=40$; and with mulch $\varphi=0.5$: $E=140$, $I=148$, $D=62$ mm yr$^{-1}$ (illustration values). Find the three savings and the verdict; then repeat with a wet year ($\rho=1.3$) where $E$ falls from $175$ to $130$, $I$ from $120$ to $112$, and $D$ rises from $150$ to $188$.}\sol  Normal year: $\Delta E=190-140=50$ mm, $\Delta I=180-148=32$ mm, $\Delta D=62-40=22$ mm. The share of the saved evaporation that becomes less irrigation is $32/50=0.64$ and the share that becomes extra drainage is $22/50=0.44$ (the two exceed 1 together, so part of the drainage is not funded from the evaporation saving alone; the rest is storage change and transpiration, see Equation~(\ref{eq:fate2})). Since $\Delta I>\Delta D$ the verdict is ``dry to normal: most of the saved water becomes less irrigation''. Wet year: $\Delta E=45$, $\Delta I=8$, $\Delta D=38$. Now $\Delta D>\Delta I$ and the verdict reads ``wet conditions: much of the water the mulch saves now leaves as drainage''.
+\exbox{What a mulch saves}{For a soil the engine gives bare soil ($\varphi=1$): $E=190$, $I=180$, $D=40$; and with mulch $\varphi=0.5$: $E=140$, $I=148$, $D=62$ mm yr$^{-1}$ (illustration values). Find the three savings and the verdict; then repeat with a wet year ($\rho=1.3$) where $E$ falls from $175$ to $130$, $I$ from $120$ to $112$, and $D$ rises from $150$ to $188$.}\sol \givenline{$\varphi=1$ ; $E=190$ ; $I=180$ ; $D=40$ ; ; $\varphi=0.5$ ; $E=140$ ; $I=148$ ; $D=62$ mm yr$^{-1}$ ; $\rho=1.3$}\ans Normal year: $\Delta E=190-140=50$ mm, $\Delta I=180-148=32$ mm, $\Delta D=62-40=22$ mm. The share of the saved evaporation that becomes less irrigation is $32/50=0.64$ and the share that becomes extra drainage is $22/50=0.44$ (the two exceed 1 together, so part of the drainage is not funded from the evaporation saving alone; the rest is storage change and transpiration, see Equation~(\ref{eq:fate2})). Since $\Delta I>\Delta D$ the verdict is ``dry to normal: most of the saved water becomes less irrigation''. Wet year: $\Delta E=45$, $\Delta I=8$, $\Delta D=38$. Now $\Delta D>\Delta I$ and the verdict reads ``wet conditions: much of the water the mulch saves now leaves as drainage''. \finans
 
 
 \section{Fate of the saved water}
@@ -88,7 +88,7 @@ At each rainfall scale $\rho$ the layer partitions the evaporation saved,
 
 and reports as crossover the first $\rho$ with $\Delta D\ge\Delta I$ and $\Delta D>1$ mm.
 
-\exbox{Partition of the saved evaporation}{A mulch of strength $\varphi=0.5$ gives, at rainfall scales $\rho=0.5,\dots,1.4$, the changes of Table~\ref{tab:fatepart} (illustration values shaped like the study's trend: the irrigation saving falls with rain while drainage rises). Compute the partition of Equation~(\ref{eq:fate2}) and the crossover.}\sol  At $\rho=1.0$: $f_I=26/50=0.52$, $f_D=13/50=0.26$, $f_T=4/50=0.08$, $f_{\rm rest}=1-0.86=0.14$. The other rows are in the table.\begin{table}[!htbp]\centering\small\caption{Partition of the saved evaporation.}\label{tab:fatepart}
+\exbox{Partition of the saved evaporation}{A mulch of strength $\varphi=0.5$ gives, at rainfall scales $\rho=0.5,\dots,1.4$, the changes of Table~\ref{tab:fatepart} (illustration values shaped like the study's trend: the irrigation saving falls with rain while drainage rises). Compute the partition of Equation~(\ref{eq:fate2}) and the crossover.}\sol \givenline{$\varphi=0.5$ gives ; $\rho=0.5,\dots,1.4$}\ans At $\rho=1.0$: $f_I=26/50=0.52$, $f_D=13/50=0.26$, $f_T=4/50=0.08$, $f_{\rm rest}=1-0.86=0.14$. The other rows are in the table.\begin{table}[!htbp]\centering\small\caption{Partition of the saved evaporation.}\label{tab:fatepart}
 \begin{tabular}{lrrrrrrrr}\toprule
 \hd{$\rho$} & \hd{$\Delta E$} & \hd{$\Delta I$} & \hd{$\Delta D$} & \hd{$\Delta T$} & \hd{$f_I$} & \hd{$f_D$} & \hd{$f_T$} & \hd{$f_{\rm rest}$}\\\midrule
 0.5 & 38 & 33 & 0.6 & 1 & 0.87 & 0.02 & 0.03 & 0.09\\
@@ -98,7 +98,7 @@ and reports as crossover the first $\rho$ with $\Delta D\ge\Delta I$ and $\Delta
 1.1 & 50 & 21 & 17 & 4 & 0.42 & 0.34 & 0.08 & 0.16\\
 1.2 & 49 & 15 & 24 & 4 & 0.31 & 0.49 & 0.08 & 0.12\\
 1.3 & 48 & 9 & 29 & 5 & 0.19 & 0.60 & 0.10 & 0.10\\
-1.4 & 46 & 5 & 33 & 5 & 0.11 & 0.72 & 0.11 & 0.07\\\bottomrule\end{tabular}\end{table}
+1.4 & 46 & 5 & 33 & 5 & 0.11 & 0.72 & 0.11 & 0.07\\\bottomrule\end{tabular}\end{table} \finans
 
 The first $\rho$ in the table with $\Delta D\ge\Delta I$ and $\Delta D>1$ is $\rho=1.2$. Between the grid points $\Delta D-\Delta I$ is $-4$ at $\rho=1.1$ and $+9$ at $\rho=1.2$, so linear interpolation puts the crossover at $\rho=1.1+0.1\times4/13=1.131$. The study reports about 60 per cent of the saved water going to reduced irrigation in dry years, about 63 per cent to extra drainage in wet years, and a crossover near $\rho\approx1.2$; the illustration table, which is not the study's, gives $f_I=0.87$ at $\rho=0.5$ and $f_D=0.72$ at $\rho=1.4$, which have the same trend.
 
@@ -116,7 +116,7 @@ For each cell of (mulch factor, rainfall scale) the engine forms the regime inde
 0.5 & 1.0 & 140 & 62 & +0.386 & evaporation\\
 0.5 & 1.3 & 130 & 188 & -0.182 & drainage\\
 0.2 & 1.0 & 70 & 95 & -0.152 & drainage\\\bottomrule\end{tabular}\end{table}
-\textbf{Reading.} Strong mulch in a wet climate pushes the soil into the drainage regime where mulch ``saves less'' water for the crop, because the saved evaporation leaves as drainage.
+\textbf{Reading.} Strong mulch in a wet climate pushes the soil into the drainage regime where mulch ``saves less'' water for the crop, because the saved evaporation leaves as drainage. \finans
 
 
 \section{Two-stage evaporation}
@@ -144,7 +144,7 @@ S10 & Silty clay loam & 25.0 & 400 & 4.60 & 1.10 & 0.0330 & 8.9\\\bottomrule\end
 \textbf{Check against the application.} It says stage 1 lasts about 3 days for the sand at the season-mean demand and about 1 day for the silty clay loam: the table gives $3.03$ and $1.10$ days. Stage 1 is longest in the sands (large $Q_1$, because the window between $h_i$ and $h_s$ scales with $1/\alpha$) while in stage 2 the rate $e_0/\sqrt{1+(t-t_1)/\tau}$ falls faster for the small-$\tau$ sands than for the fine soils: the sands lose their larger stage-1 reserve first and then dry out quickly, as the application describes.
 
 
-\exbox{Mulch and canopy in the evaporation model}{For the loam, with the stage constants above, compute $e_0$, $t_1$, and the cumulative loss at 10 and 24 days for mulch strengths $\varphi=1,0.5,0.2$ with canopy cover $c=0$ and $c=0.8$.}\sol  $e_0=4.2\varphi(1-0.4c)$. For $\varphi=0.5$, $c=0.8$: $e_0=4.2\times0.5\times0.68=1.428$ mm d$^{-1}$, $t_1=8.43/1.428=5.90$ d. Table~\ref{tab:mulchev} lists the six cases. Mulch lengthens stage 1 in proportion to $1/\varphi$ (from 2.0 days to 10 days for $\varphi=0.2$), and the cumulative loss falls more than in proportion because stage 2 starts later, which is why the evaporation saving grows convexly with mulch strength.\begin{table}[!htbp]\centering\small\caption{Effect of mulch and canopy on evaporation of the loam.}\label{tab:mulchev}
+\exbox{Mulch and canopy in the evaporation model}{For the loam, with the stage constants above, compute $e_0$, $t_1$, and the cumulative loss at 10 and 24 days for mulch strengths $\varphi=1,0.5,0.2$ with canopy cover $c=0$ and $c=0.8$.}\sol \givenline{$\varphi=1,0.5,0.2$ ; $c=0$ ; $c=0.8$}\ans $e_0=4.2\varphi(1-0.4c)$. For $\varphi=0.5$, $c=0.8$: $e_0=4.2\times0.5\times0.68=1.428$ mm d$^{-1}$, $t_1=8.43/1.428=5.90$ d. Table~\ref{tab:mulchev} lists the six cases. Mulch lengthens stage 1 in proportion to $1/\varphi$ (from 2.0 days to 10 days for $\varphi=0.2$), and the cumulative loss falls more than in proportion because stage 2 starts later, which is why the evaporation saving grows convexly with mulch strength.\begin{table}[!htbp]\centering\small\caption{Effect of mulch and canopy on evaporation of the loam.}\label{tab:mulchev}
 \begin{tabular}{lrrrrr}\toprule
 \hd{$\varphi$} & \hd{$c$} & \hd{$e_0$} & \hd{$t_1$ (d)} & \hd{$Q(10)$} & \hd{$Q(24)$}\\\midrule
 1.0 & 0 & 4.200 & 2.01 & 11.9 & 14.3\\
@@ -152,15 +152,15 @@ S10 & Silty clay loam & 25.0 & 400 & 4.60 & 1.10 & 0.0330 & 8.9\\\bottomrule\end
 0.5 & 0 & 2.100 & 4.01 & 9.9 & 11.2\\
 0.5 & 0.8 & 1.428 & 5.90 & 9.3 & 10.2\\
 0.2 & 0 & 0.840 & 10.03 & 8.4 & 9.4\\
-0.2 & 0.8 & 0.571 & 14.76 & 5.7 & 8.9\\\bottomrule\end{tabular}\end{table}
+0.2 & 0.8 & 0.571 & 14.76 & 5.7 & 8.9\\\bottomrule\end{tabular}\end{table} \finans
 
 
-\exbox{The drying front}{After stage 1, the depth of the dry layer is $\ell(t)=\min\{60,(Q(t)-Q_1)/\Delta\theta\}$ mm with $\Delta\theta=\mathrm{clip}(\theta(h_i)-\theta(10^4);0.05,0.4)$. For the loam bare soil at 10 days, find $\ell$ and the suction at depth $z=40$ mm from $\log_{10}h(z)=\log_{10}h_s+(\log_{10}h_i-\log_{10}h_s)(1-e^{-(z-\ell)/\lambda})$, $\lambda=L_1/3$.}\sol  $\Delta\theta=\theta(6.94)-\theta(10^4)=0.375$. At 10 days $Q=11.9$ mm, so $\ell=(11.9-8.43)/0.375=9.3$ mm. With $\lambda=13.3$ mm, at $z=40$ mm the exponent is $-(40-9.3)/13.3=-2.30$ and $\log_{10}h=0.962$, that is $h=9$ cm.
+\exbox{The drying front}{After stage 1, the depth of the dry layer is $\ell(t)=\min\{60,(Q(t)-Q_1)/\Delta\theta\}$ mm with $\Delta\theta=\mathrm{clip}(\theta(h_i)-\theta(10^4);0.05,0.4)$. For the loam bare soil at 10 days, find $\ell$ and the suction at depth $z=40$ mm from $\log_{10}h(z)=\log_{10}h_s+(\log_{10}h_i-\log_{10}h_s)(1-e^{-(z-\ell)/\lambda})$, $\lambda=L_1/3$.}\sol \givenline{$\ell(t)=\min\{60,(Q(t)-Q_1)/\Delta\theta\}$ mm ; $z=40$ mm ; $\lambda=L_1/3$}\ans $\Delta\theta=\theta(6.94)-\theta(10^4)=0.375$. At 10 days $Q=11.9$ mm, so $\ell=(11.9-8.43)/0.375=9.3$ mm. With $\lambda=13.3$ mm, at $z=40$ mm the exponent is $-(40-9.3)/13.3=-2.30$ and $\log_{10}h=0.962$, that is $h=9$ cm.
 \banner{Feedback loops and the hidden questions of the vadose zone}\label{ch:fb}
 \section{The seven effects}
-For each control the engine moves one step on its list and re-evaluates Engine 1; the change is printed and the arrow width is $w_k=5+\mathrm{clip}(\mu_k;0,4)$ pixels, with $\mu_k$ from the table: temperature $\mu_1=8|\Delta Y|$; rain $\mu_2=|\Delta D|/12$; mulch $\mu_3=|\Delta E|/14$; trigger $\mu_4=|\Delta I|/8$; nitrate cost of drainage $\mu_5=|\Delta D|/10$; nitrogen $\mu_6=|\Delta N_L|/8$; consolidation $\mu_7=|\Delta D|/2$.
+For each control the engine moves one step on its list and re-evaluates Engine 1; the change is printed and the arrow width is $w_k=5+\mathrm{clip}(\mu_k;0,4)$ pixels, with $\mu_k$ from the table: temperature $\mu_1=8|\Delta Y|$; rain $\mu_2=|\Delta D|/12$; mulch $\mu_3=|\Delta E|/14$; trigger $\mu_4=|\Delta I|/8$; nitrate cost of drainage $\mu_5=|\Delta D|/10$; nitrogen $\mu_6=|\Delta N_L|/8$; consolidation $\mu_7=|\Delta D|/2$. \finans
 
-\exbox{Arrow widths}{One-step differences for a soil (illustration values: $\Delta Y=-0.11$ Mg ha$^{-1}$, $\Delta D=+9.0$ mm for the rain step, $\Delta E=-14$ mm, $\Delta I=-22$ mm, $\Delta N_L=+5.2$ kg ha$^{-1}$, $\Delta D=-0.6$ mm for consolidation) give the arrow widths of Table~\ref{tab:arrow}.}\sol  Example, row 4: $\mu_4=22/8=2.75$, so $w_4=5+2.75=7.75$ pixels. Row 3: $\mu_3=14/14=1.0$, $w_3=6.0$. Row 1: $\mu_1=8\times0.11=0.88$, $w_1=5.88$. A step that would give $\mu>4$ is clipped at width 9 pixels.\begin{table}[!htbp]\centering\small\caption{Arrow widths of the seven feedbacks.}\label{tab:arrow}
+\exbox{Arrow widths}{One-step differences for a soil (illustration values: $\Delta Y=-0.11$ Mg ha$^{-1}$, $\Delta D=+9.0$ mm for the rain step, $\Delta E=-14$ mm, $\Delta I=-22$ mm, $\Delta N_L=+5.2$ kg ha$^{-1}$, $\Delta D=-0.6$ mm for consolidation) give the arrow widths of Table~\ref{tab:arrow}.}\sol \givenline{$\Delta Y=-0.11$ Mg ha$^{-1}$ ; $\Delta D=+9.0$ mm ; $\Delta E=-14$ mm ; $\Delta I=-22$ mm ; $\Delta N_L=+5.2$ kg ha$^{-1}$ ; $\Delta D=-0.6$ mm}\ans Example, row 4: $\mu_4=22/8=2.75$, so $w_4=5+2.75=7.75$ pixels. Row 3: $\mu_3=14/14=1.0$, $w_3=6.0$. Row 1: $\mu_1=8\times0.11=0.88$, $w_1=5.88$. A step that would give $\mu>4$ is clipped at width 9 pixels.\begin{table}[!htbp]\centering\small\caption{Arrow widths of the seven feedbacks.}\label{tab:arrow}
 \begin{tabular}{lrrrrr}\toprule
 \hd{\#} & \hd{Control step} & \hd{Effect} & \hd{Value} & \hd{$\mu$} & \hd{Width (px)}\\\midrule
 1 & Temperature $+0.5$ K & $\Delta Y$ & -0.11 & 0.880 & 5.88\\
@@ -169,22 +169,22 @@ For each control the engine moves one step on its list and re-evaluates Engine 1
 4 & Trigger one step drier & $\Delta I$ & -22.00 & 2.750 & 7.75\\
 5 & Drainage (rain step) & $\Delta D$ & +9.00 & 0.900 & 5.90\\
 6 & Nitrogen $+15$ per cent & $\Delta N_L$ & +5.20 & 0.650 & 5.65\\
-7 & Consolidation one step & $\Delta D$ & -0.60 & 0.300 & 5.30\\\bottomrule\end{tabular}\end{table}
+7 & Consolidation one step & $\Delta D$ & -0.60 & 0.300 & 5.30\\\bottomrule\end{tabular}\end{table} \finans
 
 
-\exbox{The nitrate cost of drainage}{The study reports about $1.06$ kg N ha$^{-1}$ lost per mm of drainage: $\kappa_N=\dfrac{N_L^{(\text{rain step})}-N_L}{D^{(\text{rain step})}-D}$. With the rain step above ($\Delta D=+9.0$ mm, $\Delta N_L=+9.5$ kg N ha$^{-1}$), find $\kappa_N$ and the nitrate lost if the drainage is cut by 40 mm.}\sol  $\kappa_N=9.5/9.0=1.056$ kg N ha$^{-1}$ mm$^{-1}$, consistent with 1.06. Cutting drainage by 40 mm saves $40\times1.06=42.4$ kg N ha$^{-1}$, equal to a dressing of 42 kg of nitrogen that would otherwise be leached. The row is printed only if $|\Delta D|>0.5$ mm (otherwise ``no change''), because the ratio of two tiny differences is unstable.
+\exbox{The nitrate cost of drainage}{The study reports about $1.06$ kg N ha$^{-1}$ lost per mm of drainage: $\kappa_N=\dfrac{N_L^{(\text{rain step})}-N_L}{D^{(\text{rain step})}-D}$. With the rain step above ($\Delta D=+9.0$ mm, $\Delta N_L=+9.5$ kg N ha$^{-1}$), find $\kappa_N$ and the nitrate lost if the drainage is cut by 40 mm.}\sol \givenline{$\Delta D=+9.0$ mm ; $\Delta N_L=+9.5$ kg N ha$^{-1}$}\ans $\kappa_N=9.5/9.0=1.056$ kg N ha$^{-1}$ mm$^{-1}$, consistent with 1.06. Cutting drainage by 40 mm saves $40\times1.06=42.4$ kg N ha$^{-1}$, equal to a dressing of 42 kg of nitrogen that would otherwise be leached. The row is printed only if $|\Delta D|>0.5$ mm (otherwise ``no change''), because the ratio of two tiny differences is unstable. \finans
 
 
 \section{Hidden question 1: wetting and drying}
 The wetting curve has twice the $\alpha$ of the drying curve. A sensor reads a suction from the water content; the same water content therefore corresponds to different suctions on the two branches.
 
-\exbox{The same water content on two branches}{The loam ($\alpha_d=0.036$, $n=1.56$) is at the trigger on the drying curve, $h_d=300$ cm. Find the suction that the same water content has on the wetting curve ($\alpha_w=2\alpha_d$).}\sol  $\Se=\Se(300)=0.2615$ on the drying curve. On the wetting branch, $h_w=\alpha_w^{-1}(\Se^{-1/m}-1)^{1/n}$; since $\alpha_w=2\alpha_d$, $h_w=h_d/2=150$ cm exactly (check: $150.0$ cm). A sensor that has just been wetted thus reads 150 cm where a drying soil at the same water content reads 300 cm: the trigger set in suction fires at twice the water deficit after wetting as after drying. Hysteresis makes the same reading mean different amounts of water.
+\exbox{The same water content on two branches}{The loam ($\alpha_d=0.036$, $n=1.56$) is at the trigger on the drying curve, $h_d=300$ cm. Find the suction that the same water content has on the wetting curve ($\alpha_w=2\alpha_d$).}\sol \givenline{$\alpha_d=0.036$ ; $n=1.56$ ; $h_d=300$ cm ; $\alpha_w=2\alpha_d$}\ans $\Se=\Se(300)=0.2615$ on the drying curve. On the wetting branch, $h_w=\alpha_w^{-1}(\Se^{-1/m}-1)^{1/n}$; since $\alpha_w=2\alpha_d$, $h_w=h_d/2=150$ cm exactly (check: $150.0$ cm). A sensor that has just been wetted thus reads 150 cm where a drying soil at the same water content reads 300 cm: the trigger set in suction fires at twice the water deficit after wetting as after drying. Hysteresis makes the same reading mean different amounts of water. \finans
 
 
 \section{Hidden question 2: where does water still move}
 The capillary conductivity is $K_s K_r(h)$, and a film term proportional to $h^{-1.5}$ and anchored at $10^{-7}$ cm d$^{-1}$ at pF 4.2 ($h=15\,849$ cm) is added.
 
-\exbox{Capillary and film conductivity}{For the loam with $K_s=24.96$ cm d$^{-1}$ compute the capillary conductivity, the film term and their sum at suctions 300, 3000, 15,849, $10^5$ and 316,228 cm (pF 5.5), and find the suction at which the film term overtakes the capillary term.}\sol  At pF 4.2 the film term is $10^{-7}$ cm d$^{-1}$ by construction. At pF 5.5: $10^{-7}(316228/15849)^{-1.5}=10^{-7}\times0.01122=1.12\times10^{-9}$ cm d$^{-1}$. The capillary term is $K_sK_r(h)$ with $K_r$ from the Mualem equation.\begin{table}[!htbp]\centering\small\caption{Conductivity (cm d$^{-1}$) of the loam, capillary and film terms.}\label{tab:film}
+\exbox{Capillary and film conductivity}{For the loam with $K_s=24.96$ cm d$^{-1}$ compute the capillary conductivity, the film term and their sum at suctions 300, 3000, 15,849, $10^5$ and 316,228 cm (pF 5.5), and find the suction at which the film term overtakes the capillary term.}\sol \givenline{$K_s=24.96$ cm d$^{-1}$ compute}\ans At pF 4.2 the film term is $10^{-7}$ cm d$^{-1}$ by construction. At pF 5.5: $10^{-7}(316228/15849)^{-1.5}=10^{-7}\times0.01122=1.12\times10^{-9}$ cm d$^{-1}$. The capillary term is $K_sK_r(h)$ with $K_r$ from the Mualem equation.\begin{table}[!htbp]\centering\small\caption{Conductivity (cm d$^{-1}$) of the loam, capillary and film terms.}\label{tab:film}
 \begin{tabular}{lrrr}\toprule
 \hd{$h$ (cm)} & \hd{Capillary} & \hd{Film} & \hd{Sum}\\\midrule
 300 & 9.50e-04 & 3.84e-05 & 9.88e-04\\
@@ -192,7 +192,7 @@ The capillary conductivity is $K_s K_r(h)$, and a film term proportional to $h^{
 15{,}849 & 1.37e-09 & 1.00e-07 & 1.01e-07\\
 100{,}000 & 2.61e-12 & 6.31e-09 & 6.31e-09\\
 316{,}228 & 5.20e-14 & 1.12e-09 & 1.12e-09\\\bottomrule\end{tabular}\end{table}
-The two terms are equal at $h\approx1{,}653$ cm; beyond it, the film dominates. Where the soil is drier than that the conductivity falls only as $h^{-1.5}$ (a factor of 31.6 per decade of suction) instead of by orders of magnitude, so some water still moves in air-dry soil. The film term is an \emph{illustrative} form, not calibrated.
+The two terms are equal at $h\approx1{,}653$ cm; beyond it, the film dominates. Where the soil is drier than that the conductivity falls only as $h^{-1.5}$ (a factor of 31.6 per decade of suction) instead of by orders of magnitude, so some water still moves in air-dry soil. The film term is an \emph{illustrative} form, not calibrated. \finans
 
 
 \section{Hidden question 5: where does the nitrate travel}
@@ -211,7 +211,7 @@ S07 & Silt loam & 0.115 & 0.9330\\
 S08 & Sandy clay loam & 0.335 & 0.9914\\
 S09 & Clay loam & 0.093 & 0.9514\\
 S10 & Silty clay loam & 0.040 & 0.9321\\\bottomrule\end{tabular}\end{table}
-\textbf{Reading.} Where the wide pores carry nearly all of the conductivity, solute moves fast through a small part of the pore volume, so a nitrate pulse reaches the drain earlier than the mean water content suggests.
+\textbf{Reading.} Where the wide pores carry nearly all of the conductivity, solute moves fast through a small part of the pore volume, so a nitrate pulse reaches the drain earlier than the mean water content suggests. \finans
 
 
 \section{Hidden question 4: the water table}
@@ -229,13 +229,13 @@ S06 & Loam & 0.976 & 0.802 & 0.591 & 0.379 & 13.9\\
 S07 & Silt loam & 0.989 & 0.911 & 0.786 & 0.603 & 27.8\\
 S08 & Sandy clay loam & 0.952 & 0.718 & 0.520 & 0.347 & 8.9\\
 S09 & Clay loam & 0.989 & 0.927 & 0.831 & 0.685 & 33.8\\
-S10 & Silty clay loam & 0.995 & 0.969 & 0.923 & 0.834 & 79.7\\\bottomrule\end{tabular}\end{table}
+S10 & Silty clay loam & 0.995 & 0.969 & 0.923 & 0.834 & 79.7\\\bottomrule\end{tabular}\end{table} \finans
 
 
 \section{Hidden questions 6 and 7: salinity and the uptake curve}
 At steady state the salt entering equals the salt leaving: $I\,EC_{\rm irr}=D\,EC_{\rm dr}$. The root-zone salinity is taken as a quarter of the sum, $EC_{\rm rz}=(EC_{\rm irr}+EC_{\rm dr})/4$, and wheat loses $7.1$ per cent of yield per dS m$^{-1}$ above a threshold of 6 dS m$^{-1}$.
 
-\exbox{How salty can the irrigation water be}{For an irrigation of $I=150$ mm and drainage of $60$, $30$ and $15$ mm, find $EC_{\rm dr}$, $EC_{\rm rz}$ and the relative yield for irrigation water of 2, 4 and 6 dS m$^{-1}$. Then find the largest irrigation-water salinity that keeps the yield at 100 per cent.}\sol  $EC_{\rm dr}=EC_{\rm irr}I/D$. For $I=150$, $D=60$, $EC_{\rm irr}=2$: $EC_{\rm dr}=5$, $EC_{\rm rz}=(2+5)/4=1.75$ dS m$^{-1}$, below 6, so yield 100 per cent. For $D=15$ and $EC_{\rm irr}=6$: $EC_{\rm dr}=60$, $EC_{\rm rz}=16.5$, loss $0.071(16.5-6)=0.745$, yield 25.5 per cent. See Table~\ref{tab:salt}.\begin{table}[!htbp]\centering\small\caption{Salt balance and wheat yield.}\label{tab:salt}
+\exbox{How salty can the irrigation water be}{For an irrigation of $I=150$ mm and drainage of $60$, $30$ and $15$ mm, find $EC_{\rm dr}$, $EC_{\rm rz}$ and the relative yield for irrigation water of 2, 4 and 6 dS m$^{-1}$. Then find the largest irrigation-water salinity that keeps the yield at 100 per cent.}\sol \givenline{$I=150$ mm}\ans $EC_{\rm dr}=EC_{\rm irr}I/D$. For $I=150$, $D=60$, $EC_{\rm irr}=2$: $EC_{\rm dr}=5$, $EC_{\rm rz}=(2+5)/4=1.75$ dS m$^{-1}$, below 6, so yield 100 per cent. For $D=15$ and $EC_{\rm irr}=6$: $EC_{\rm dr}=60$, $EC_{\rm rz}=16.5$, loss $0.071(16.5-6)=0.745$, yield 25.5 per cent. See Table~\ref{tab:salt}.\begin{table}[!htbp]\centering\small\caption{Salt balance and wheat yield.}\label{tab:salt}
 \begin{tabular}{lrrrrr}\toprule
 \hd{$I$} & \hd{$D$} & \hd{$EC_{\rm irr}$} & \hd{$EC_{\rm dr}$} & \hd{$EC_{\rm rz}$} & \hd{Yield (\%)}\\\midrule
 150 & 60 & 2 & 5.0 & 1.75 & 100.0\\
@@ -247,15 +247,15 @@ At steady state the salt entering equals the salt leaving: $I\,EC_{\rm irr}=D\,E
 150 & 15 & 2 & 20.0 & 5.50 & 100.0\\
 150 & 15 & 4 & 40.0 & 11.00 & 64.5\\
 150 & 15 & 6 & 60.0 & 16.50 & 25.5\\\bottomrule\end{tabular}\end{table}
-\textbf{Threshold.} $EC_{\rm rz}=EC_{\rm irr}(1+I/D)/4\le6$ gives $EC_{\rm irr}\le24/(1+I/D)$: $6.86$ dS m$^{-1}$ for $D=60$ ($I/D=2.5$), $4.0$ for $D=30$ and $2.2$ for $D=15$. Less drainage means less leaching and a lower tolerable salinity: the same irrigation water that is safe in a free-draining soil damages wheat in a tight soil. The steady state, the one-quarter rule and the threshold are stated simple forms ``for teaching and comparison'', not calibrated to a field.
+\textbf{Threshold.} $EC_{\rm rz}=EC_{\rm irr}(1+I/D)/4\le6$ gives $EC_{\rm irr}\le24/(1+I/D)$: $6.86$ dS m$^{-1}$ for $D=60$ ($I/D=2.5$), $4.0$ for $D=30$ and $2.2$ for $D=15$. Less drainage means less leaching and a lower tolerable salinity: the same irrigation water that is safe in a free-draining soil damages wheat in a tight soil. The steady state, the one-quarter rule and the threshold are stated simple forms ``for teaching and comparison'', not calibrated to a field. \finans
 
 
-\exbox{Reduction of root uptake with suction}{The uptake curve has breakpoints at 10, 25, 500 and 8,000 cm (a Feddes-type reduction function; here assumed linear in $h$ between breakpoints): uptake is zero at $h\le10$ cm (anaerobic), rises linearly to 1 at 25 cm, stays at 1 until 500 cm and falls linearly to 0 at 8,000 cm. Find the relative uptake at $h=15,\ 300,\ 1000,\ 3000$ and 6000 cm.}\sol  At 15 cm: $(15-10)/(25-10)=0.333$. At 300 cm: 1. At 1000 cm: $1-(1000-500)/7500=0.933$. At 3000: $1-2500/7500=0.667$. At 6000: $1-5500/7500=0.267$. A trigger of $-1000$ cm therefore costs a crop only about 7 per cent of the potential uptake at the moment of the trigger, but the average over the dry-down is lower. In the loam $-1000$ cm is a depletion of 0.76, beyond the $f^*=0.45$.
+\exbox{Reduction of root uptake with suction}{The uptake curve has breakpoints at 10, 25, 500 and 8,000 cm (a Feddes-type reduction function; here assumed linear in $h$ between breakpoints): uptake is zero at $h\le10$ cm (anaerobic), rises linearly to 1 at 25 cm, stays at 1 until 500 cm and falls linearly to 0 at 8,000 cm. Find the relative uptake at $h=15,\ 300,\ 1000,\ 3000$ and 6000 cm.}\sol \givenline{$h=15,\ 300,\ 1000,\ 3000$}\ans At 15 cm: $(15-10)/(25-10)=0.333$. At 300 cm: 1. At 1000 cm: $1-(1000-500)/7500=0.933$. At 3000: $1-2500/7500=0.667$. At 6000: $1-5500/7500=0.267$. A trigger of $-1000$ cm therefore costs a crop only about 7 per cent of the potential uptake at the moment of the trigger, but the average over the dry-down is lower. In the loam $-1000$ cm is a depletion of 0.76, beyond the $f^*=0.45$. \finans
 
 
 \section{Hidden question 8: keeping up with the sun}
 The topsoil delivers water against the demand until stage 2 begins; mulch reduces the demand and lengthens stage 1 (Chapter~\ref{ch:mulch}). The panel's answer is the stage-1 duration $t_1=Q_1/e_0$.
-\exbox{Stage 1 with and without mulch}{For the sand (S03, $Q_1=12.7$ mm) and the silty clay loam (S10, $Q_1=4.6$ mm) find how long the topsoil keeps up with a demand of 4.2 mm d$^{-1}$ bare, and with a mulch $\varphi=0.3$.}\sol  Bare: sand $12.7/4.2=3.0$ d; silty clay loam $4.6/4.2=1.1$ d. With mulch $e_0=4.2\times0.3=1.26$: sand $12.7/1.26=10.1$ d; silty clay loam $4.6/1.26=3.7$ d. Mulch triples the time that the surface keeps pace in both soils; the sand has the longer reserve.
+\exbox{Stage 1 with and without mulch}{For the sand (S03, $Q_1=12.7$ mm) and the silty clay loam (S10, $Q_1=4.6$ mm) find how long the topsoil keeps up with a demand of 4.2 mm d$^{-1}$ bare, and with a mulch $\varphi=0.3$.}\sol \givenline{$Q_1=12.7$ mm ; $Q_1=4.6$ mm ; $\varphi=0.3$}\ans Bare: sand $12.7/4.2=3.0$ d; silty clay loam $4.6/4.2=1.1$ d. With mulch $e_0=4.2\times0.3=1.26$: sand $12.7/1.26=10.1$ d; silty clay loam $4.6/1.26=3.7$ d. Mulch triples the time that the surface keeps pace in both soils; the sand has the longer reserve.
 \IfFileExists{extra/app09.tex}{\input{extra/app09}}{}
 \IfFileExists{extra/long09.tex}{\input{extra/long09}}{}
 \IfFileExists{extra/proj09.tex}{\input{extra/proj09}}{}
@@ -267,4 +267,4 @@ The topsoil delivers water against the demand until stage 2 begins; mulch reduce
 \IfFileExists{extra/tenbx09.tex}{\input{extra/tenbx09}}{}
 \IfFileExists{extra/ex09.tex}{\input{extra/ex09}}{}
 \IfFileExists{extra/dyk09.tex}{\input{extra/dyk09}}{}
-\IfFileExists{extra/obj09.tex}{\input{extra/obj09}}{}
+\IfFileExists{extra/obj09.tex}{\input{extra/obj09}}{} \finans

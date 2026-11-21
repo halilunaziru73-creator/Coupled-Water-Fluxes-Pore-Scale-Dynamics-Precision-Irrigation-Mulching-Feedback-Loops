@@ -48,16 +48,16 @@ A compact three-term law predicts evapotranspiration in withheld experiments and
 All terms of this chapter are annual totals read from the Daisy logs: rainfall, irrigation, evapotranspiration, transpiration, soil evaporation, canopy evaporation, drainage at 1 m, storage change and runoff. The matrix $X$ is built from the one-row-per-run summary of the repository. A closed balance means that the singular vector of the smallest singular value is the balance itself.
 \end{daisybox}
 
-\exbox{}{Show by hand that $c=(1,-1,-1,-1)$ gives $Xc=0$ for the four runs of the worked example.}\sol  Substituting each row: $800-520-250-30=0$, and so on for the other three rows.
+\exbox{}{Show by hand that $c=(1,-1,-1,-1)$ gives $Xc=0$ for the four runs of the worked example.}\sol \givenline{$c=(1,-1,-1,-1)$ gives ; $Xc=0$}\ans Substituting each row: $800-520-250-30=0$, and so on for the other three rows. \finans
 
-\exbox{}{A run has $ET=540$, $T=230$, $E_s=170$, $E_c=60$. Compute $R$ and the fraction of $ET$ that it represents.}\sol  $R=540-230-170-60=80$ mm, which is $14.8$ per cent of $ET$.
+\exbox{}{A run has $ET=540$, $T=230$, $E_s=170$, $E_c=60$. Compute $R$ and the fraction of $ET$ that it represents.}\sol \givenline{$ET=540$ ; $T=230$ ; $E_s=170$ ; $E_c=60$}\ans $R=540-230-170-60=80$ mm, which is $14.8$ per cent of $ET$. \finans
 
-\exbox{}{A saving lowers $E_s$ by 30 mm and $ET_{nt}$ by 36 mm and drainage by 12 mm. Compute $\psi_D$ and $\psi_D'$.}\sol  $\psi_D=12/36=0.33$ and $\psi_D'=12/30=0.40$.
+\exbox{}{A saving lowers $E_s$ by 30 mm and $ET_{nt}$ by 36 mm and drainage by 12 mm. Compute $\psi_D$ and $\psi_D'$.}\sol  $\psi_D=12/36=0.33$ and $\psi_D'=12/30=0.40$. \finans
 
 \exbox{}{Why does the success of the blind search on the known balance give confidence in what it reports about $R$?}\sol  Because a method that finds the known balance within 5 per cent is not inventing structure.
 \banner{Engines you can check: pipes, design and traceability}
 \section{Provenance of equations}
-The application has 134 numbered equations. Each carries a label: 38 come from the literature, 18 are data-driven (fitted to the Daisy ensemble) and 78 are engineered for the application. The label is shown beside the number that the equation produced, so a user can find where a number comes from and which origin it has.
+The application has 134 numbered equations. Each carries a label: 38 come from the literature, 18 are data-driven (fitted to the Daisy ensemble) and 78 are engineered for the application. The label is shown beside the number that the equation produced, so a user can find where a number comes from and which origin it has. \finans
 
 \section{Verification}
 Every layer has an independent reference test. The design modules reproduce FAO-45 and textbook worked examples within 3 per cent; a meta-model ranks left-out scenarios with Spearman correlations from 0.64 to 0.97 and sweeps $10^{5}$ scenarios in 2 s. Verification found three defects in the first release: a sprinkler range coefficient and a drip iteration count, both corrected, and a fixed advance exponent in the surface layer that under-predicted slow advance by up to 29 per cent (removed in version 1.1.0). It also exposed limits: leaf water potential is set by a conductivity floor, and the drainage share of a mulch saving is understated. A check is valuable only if it can fail, and these failures are reported.
@@ -75,9 +75,9 @@ where $C$ is the roughness coefficient of the pipe. The mean speed is $v=4Q/(\pi
 
 \fig{sketch}{0.95}{The field sketch of SWAFL: seven questions, a drawing area and drawing tools. The pipes drawn here feed the friction and pump-head calculations.}
 
-\exbox{}{Compute $h_f$ for $L=150$ m, $Q=0.006$ m$^3$\,s$^{-1}$, $D=0.075$ m and $C=130$, and the speed $v$.}\sol  $h_f=10.67(150)(0.006)^{1.852}/(130^{1.852}\,0.075^{4.87})$ and $v=4(0.006)/(\pi\,0.075^2)=1.36$ m\,s$^{-1}$; $h_f=4.5$ m.
+\exbox{}{Compute $h_f$ for $L=150$ m, $Q=0.006$ m$^3$\,s$^{-1}$, $D=0.075$ m and $C=130$, and the speed $v$.}\sol \givenline{$L=150$ m ; $Q=0.006$ m$^3$\,s$^{-1}$ ; $D=0.075$ m ; $C=130$}\ans $h_f=10.67(150)(0.006)^{1.852}/(130^{1.852}\,0.075^{4.87})$ and $v=4(0.006)/(\pi\,0.075^2)=1.36$ m\,s$^{-1}$; $h_f=4.5$ m. \finans
 
-\exbox{}{By what factor does $h_f$ change if the diameter is doubled? If the flow is doubled?}\sol  Doubling $D$ divides $h_f$ by $2^{4.87}=29.3$; doubling $Q$ multiplies it by $2^{1.852}=3.61$.
+\exbox{}{By what factor does $h_f$ change if the diameter is doubled? If the flow is doubled?}\sol  Doubling $D$ divides $h_f$ by $2^{4.87}=29.3$; doubling $Q$ multiplies it by $2^{1.852}=3.61$. \finans
 
 \exbox{}{Choose one equation of the application and find its origin label in the application. State whether it is literature, data-driven or engineered, and which experiment of the ensemble would test it.}\sol  Answers depend on the equation chosen.
 \banner{Statistics of the evidence}
@@ -85,7 +85,7 @@ where $C$ is the roughness coefficient of the pipe. The mean speed is $v=4Q/(\pi
 Pearson's correlation measures straight-line dependence and is sensitive to outliers. Spearman's rank correlation replaces each value by its rank and is the Pearson correlation of the ranks; when there are no ties
 \begin{equation}\label{eq:spearman}\boxed{\rho=1-\frac{6\sum_i d_i^{2}}{N(N^{2}-1)},}\end{equation}
 with $d_i$ the difference of the ranks of the $i$-th pair.
-\exbox{Memory against $n$ for ten soils}{Rank the ten soils by $n$ (Table~\ref{tab:soils}) and by the memory fate. The rank differences are $+1$ for S01, $+2$ for S02, $-1$ for S06, $-1$ for S08, $-1$ for S09 and zero for the other four, so $\sum d^2=1+4+1+1+1=8$ and $\rho=1-6(8)/(10\cdot99)=0.952$. This is the 0.95 of the study. An exact permutation test, in which the memory values are shuffled over the soils in all $10!$ ways, finds a correlation this high or higher with probability $196/3{,}628{,}800=5.4\times10^{-5}$ (one-sided): only 196 of the permutations have $\sum d^2\le8$.}
+\exbox{Memory against $n$ for ten soils}{Rank the ten soils by $n$ (Table~\ref{tab:soils}) and by the memory fate. The rank differences are $+1$ for S01, $+2$ for S02, $-1$ for S06, $-1$ for S08, $-1$ for S09 and zero for the other four, so $\sum d^2=1+4+1+1+1=8$ and $\rho=1-6(8)/(10\cdot99)=0.952$. This is the 0.95 of the study. An exact permutation test, in which the memory values are shuffled over the soils in all $10!$ ways, finds a correlation this high or higher with probability $196/3{,}628{,}800=5.4\times10^{-5}$ (one-sided): only 196 of the permutations have $\sum d^2\le8$.} \finans
 
 
 \fig{g_mem_n}{0.55}{The memory fate against $n$ for the ten soils: Spearman $\rho=0.95$.}
@@ -111,18 +111,18 @@ where the distance is zero inside the interval $[\ell_s,u_s]$ (in $\log_{10}$) a
 \section{Choosing between laws}
 Several laws can be compared on the same footing: fit each to all soils, and for each compute the leave-one-soil-out error and the number of soils whose observed interval contains the prediction. For the four laws of the study the Mualem form has error 0.18 (log$_{10}$) and puts 5 of 10 soils inside; the power law 0.14 and 4; the fixed-saturation law 0.23 and 4; and the absolute-conductivity law is not supported, because $K(\hc)$ would have to span 3.6 decades. The Mualem form is preferred not because it is the smallest error but because it is derived from the physics and has one constant that does not depend on the soil.
 
-\exbox{}{Compute the Spearman correlation of the pairs $(1,2),(2,1),(3,3),(4,5),(5,4)$.}\sol  Rank differences $-1,1,0,-1,1$, $\sum d^2=4$, $\rho=1-24/120=0.8$.
+\exbox{}{Compute the Spearman correlation of the pairs $(1,2),(2,1),(3,3),(4,5),(5,4)$.}\sol  Rank differences $-1,1,0,-1,1$, $\sum d^2=4$, $\rho=1-24/120=0.8$. \finans
 
-\exbox{}{Explain why the bootstrap resamples cells of the lattice, and not the runs of different lattices.}\sol  Cells within a lattice share a soil and a design, so they are the units that are exchangeable; resampling across different lattices would mix designs.
+\exbox{}{Explain why the bootstrap resamples cells of the lattice, and not the runs of different lattices.}\sol  Cells within a lattice share a soil and a design, so they are the units that are exchangeable; resampling across different lattices would mix designs. \finans
 
-\exbox{}{Using the toy fit of this chapter, find $\mathcal L$ at $\kappa=3.5\times10^{-10}$ and say whether it is on the plateau.}\sol  $\mathcal L(3.5\times10^{-10})=0$; the predicted reaches are $199,\ 1{,}615$ and $127{,}830$ cm, all inside the intervals. It is on the plateau.
+\exbox{}{Using the toy fit of this chapter, find $\mathcal L$ at $\kappa=3.5\times10^{-10}$ and say whether it is on the plateau.}\sol \givenline{$\kappa=3.5\times10^{-10}$}\ans $\mathcal L(3.5\times10^{-10})=0$; the predicted reaches are $199,\ 1{,}615$ and $127{,}830$ cm, all inside the intervals. It is on the plateau. \finans
 
-\exbox{}{Why is a leave-one-soil-out test harder to pass than a fit to all soils?}\sol  Because the left-out soil cannot influence the fit, so the error measures prediction and not description.
+\exbox{}{Why is a leave-one-soil-out test harder to pass than a fit to all soils?}\sol  Because the left-out soil cannot influence the fit, so the error measures prediction and not description. \finans
 
-\exbox{}{The exact one-sided permutation $p$ value of the memory--$n$ correlation is $5.4\times10^{-5}$. What is the smallest possible exact one-sided $p$ for $N=10$ with no ties?}\sol  $1/10!=1/3{,}628{,}800=2.8\times10^{-7}$.
+\exbox{}{The exact one-sided permutation $p$ value of the memory--$n$ correlation is $5.4\times10^{-5}$. What is the smallest possible exact one-sided $p$ for $N=10$ with no ties?}\sol \givenline{$N=10$}\ans $1/10!=1/3{,}628{,}800=2.8\times10^{-7}$.
 \banner{What is claimed, what is not, and what comes next}
 \section{What is shown}
-Memory, audit, reach and fate for ten soils in a one-dimensional matrix-flow model. The design modules reproduce published worked examples. Parsers and shared functions agree with independent readers, and defects were removed. Daisy 7.1.14 runs end to end from SWAFL, including a 5.85 ha field from a satellite image to a schedule. Data, code and application are open.
+Memory, audit, reach and fate for ten soils in a one-dimensional matrix-flow model. The design modules reproduce published worked examples. Parsers and shared functions agree with independent readers, and defects were removed. Daisy 7.1.14 runs end to end from SWAFL, including a 5.85 ha field from a satellite image to a schedule. Data, code and application are open. \finans
 
 \section{What is not claimed}
 \begin{itemize}[leftmargin=*]

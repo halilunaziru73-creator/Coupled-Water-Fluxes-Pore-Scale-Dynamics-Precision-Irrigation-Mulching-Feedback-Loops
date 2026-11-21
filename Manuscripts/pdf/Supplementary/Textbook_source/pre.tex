@@ -35,8 +35,10 @@
 \newcommand{\subhd}[1]{\par\vspace{3pt}\noindent{\bfseries\itshape\color{khblue}#1}\ }
 \newcommand{\kw}[1]{{\bfseries\itshape\color{khmag}#1}}
 \newcommand{\hd}[1]{{\bfseries\itshape\color{khmag}#1}}
-\newcommand{\sol}{\par\vspace{2pt}\noindent{\bfseries\color{khmag}Solution.}\ }
-\newcommand{\ans}{\par\noindent\hangindent=1.5em\hangafter=1\relax}
+\newcommand{\sol}{\par\vspace{2pt}\noindent{\bfseries\color{khblue}Solution.}\ }
+\newcommand{\ans}{\par\indent\ignorespaces}
+\newcommand{\finans}{\ {\bfseries\color{khmag}Ans.}}
+\newcommand{\givenline}[1]{Given\,: #1}
 % ---------------------------------------------------------------- features of the chapters, collected through the .aux file
 \newcommand{\featitem}[2]{\par\noindent\hangindent=1.7em\hangafter=1\makebox[1.7em][l]{#1}#2}
 \gdef\lastchimg{}\newcommand{\chapimg}[1]{\gdef\nextchapimg{#1}}\gdef\nextchapimg{}\newcommand{\chaplead}[0]{}\gdef\chaplead{}\newcommand{\chapterlead}[1]{\long\gdef\chaplead{#1}}\newcommand{\chapleadstyle}{\relax}

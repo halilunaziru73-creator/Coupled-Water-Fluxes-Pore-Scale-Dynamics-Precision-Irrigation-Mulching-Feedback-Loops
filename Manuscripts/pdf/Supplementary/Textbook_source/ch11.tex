@@ -9,7 +9,7 @@ The chain of the layer is: texture $\to$ Saxton and Rawls $\to$ Green and Ampt $
 
 \section{Soil water properties (Saxton and Rawls)}
 
-\exbox{Saxton and Rawls for the loam}{For the loam (sand $S=0.40$, clay $C=0.20$, OM $=1.5$ per cent) compute $\theta_{1500}$, $\theta_{33}$, $\theta_s$, $\lambda$ and $K_s$ with the Saxton and Rawls (2006) equations.}\sol  1. $\theta_{1500,t}=-0.024(0.40)+0.487(0.20)+0.006(1.5)+0.005(0.40)(1.5)-0.013(0.20)(1.5)+0.068(0.40)(0.20)+0.031=0.13234$; correction: $\theta_{1500}=\theta_{1500,t}+(0.14\theta_{1500,t}-0.02)=0.1309$.
+\exbox{Saxton and Rawls for the loam}{For the loam (sand $S=0.40$, clay $C=0.20$, OM $=1.5$ per cent) compute $\theta_{1500}$, $\theta_{33}$, $\theta_s$, $\lambda$ and $K_s$ with the Saxton and Rawls (2006) equations.}\sol \givenline{$S=0.40$ ; $C=0.20$ ; $=1.5$ per cent}\ans 1. $\theta_{1500,t}=-0.024(0.40)+0.487(0.20)+0.006(1.5)+0.005(0.40)(1.5)-0.013(0.20)(1.5)+0.068(0.40)(0.20)+0.031=0.13234$; correction: $\theta_{1500}=\theta_{1500,t}+(0.14\theta_{1500,t}-0.02)=0.1309$. \finans
 
 2. $\theta_{33,t}=-0.251(0.40)+0.195(0.20)+0.011(1.5)+0.006(0.40)(1.5)-0.027(0.20)(1.5)+0.452(0.40)(0.20)+0.299=0.28576$; $\theta_{33}=\theta_{33,t}+(1.283\theta_{33,t}^2-0.374\theta_{33,t}-0.015)=0.2687$.
 
@@ -20,7 +20,7 @@ The chain of the layer is: texture $\to$ Saxton and Rawls $\to$ Green and Ampt $
 \subhd{Reading.} Field capacity $\theta_{fc}=\theta_{33}=0.269$ and wilting $\theta_{wp}=\theta_{1500}=0.131$ give plant-available water $0.138$ cm$^3$ cm$^{-3}$, i.e. 1.38 mm per cm, close to the engineered AWC of 1.7 mm per cm for this soil. These are regressions on a US soil database and carry its scatter: they serve design and not prediction at a site.
 
 
-\exbox{Saxton and Rawls for all soils}{Repeat the calculation for the ten soils (OM $=1.5$ per cent).}\sol  The same four steps give Table~\ref{tab:sr}. The saturated conductivity runs from about 1 mm h$^{-1}$ in the clay loams to about 100 mm h$^{-1}$ in the sand, which sets the intake of every design.\begin{table}[!htbp]\centering\small\caption{Saxton and Rawls properties of the ten soils.}\label{tab:sr}
+\exbox{Saxton and Rawls for all soils}{Repeat the calculation for the ten soils (OM $=1.5$ per cent).}\sol \givenline{$=1.5$ per cent}\ans The same four steps give Table~\ref{tab:sr}. The saturated conductivity runs from about 1 mm h$^{-1}$ in the clay loams to about 100 mm h$^{-1}$ in the sand, which sets the intake of every design.\begin{table}[!htbp]\centering\small\caption{Saxton and Rawls properties of the ten soils.}\label{tab:sr}
 \begin{tabular}{lrrrrrr}\toprule
 \hd{ID} & \hd{Soil} & \hd{$\theta_{1500}$} & \hd{$\theta_{33}$} & \hd{$\theta_s$} & \hd{$K_s$ (mm/h)} & \hd{PAW (mm/cm)}\\\midrule
 S01 & Coarse loam & 0.131 & 0.258 & 0.429 & 13.1 & 1.28\\
@@ -33,7 +33,7 @@ S07 & Silt loam & 0.104 & 0.294 & 0.444 & 10.9 & 1.90\\
 S08 & Sandy clay loam & 0.188 & 0.293 & 0.422 & 5.3 & 1.05\\
 S09 & Clay loam & 0.215 & 0.353 & 0.460 & 3.2 & 1.38\\
 S10 & Silty clay loam & 0.213 & 0.378 & 0.490 & 3.8 & 1.66\\\bottomrule\end{tabular}\end{table}
-\textbf{Check.} For the loam the $K_s$ of 12.1 mm h$^{-1}$ equals $29$ cm d$^{-1}$. (Chapter~\ref{ch:rich}'s loam solver used $K_s=24.96$ cm d$^{-1}$; these are different pedotransfer sets, and the book keeps each with its own source.)
+\textbf{Check.} For the loam the $K_s$ of 12.1 mm h$^{-1}$ equals $29$ cm d$^{-1}$. (Chapter~\ref{ch:rich}'s loam solver used $K_s=24.96$ cm d$^{-1}$; these are different pedotransfer sets, and the book keeps each with its own source.) \finans
 
 
 \section{Wetting-front suction and Green--Ampt}
@@ -42,7 +42,7 @@ The effective suction at the wetting front is $\psi_f=\frac{10}{\alpha}\dfrac{0.
 \par\noindent where $F$ is the cumulative infiltration (cm), $\psi_f$ the suction at the wetting front (cm), $\Delta\theta$ the change of water content at the front (m$^3$\,m$^{-3}$), $K_s$ the saturated conductivity (cm\,h$^{-1}$) and $t$ the time (min).
 
 
-\exbox{Green--Ampt infiltration after one hour}{Compute $\psi_f$ and $\Delta\theta$ for the loam at $f_T=0.468$, then solve the Green--Ampt equation for $F$ at $t=60$ min by Newton's iteration.}\sol  $m=1-1/1.56=0.3590$. Numerator: $0.046(0.3590)+2.07(0.3590)^2+19.5(0.3590)^3=1.1853$. Denominator: $1+4.7(0.3590)+16(0.3590)^2=4.7490$. So $\psi_f=\frac{10}{0.036}\times0.2496=69.3$ mm. (For the coarse loam, $\alpha=0.0961$, the same formula gives 15.7 mm, the 16 mm quoted by the application.) Storage: $\theta_0=0.2687-0.468(0.2687-0.1309)=0.2042$ and $\Delta\theta=\max\{0.05,0.95(0.4331)-0.2042\}=0.2073$.
+\exbox{Green--Ampt infiltration after one hour}{Compute $\psi_f$ and $\Delta\theta$ for the loam at $f_T=0.468$, then solve the Green--Ampt equation for $F$ at $t=60$ min by Newton's iteration.}\sol \givenline{$f_T=0.468$ ; $t=60$ min}\ans $m=1-1/1.56=0.3590$. Numerator: $0.046(0.3590)+2.07(0.3590)^2+19.5(0.3590)^3=1.1853$. Denominator: $1+4.7(0.3590)+16(0.3590)^2=4.7490$. So $\psi_f=\frac{10}{0.036}\times0.2496=69.3$ mm. (For the coarse loam, $\alpha=0.0961$, the same formula gives 15.7 mm, the 16 mm quoted by the application.) Storage: $\theta_0=0.2687-0.468(0.2687-0.1309)=0.2042$ and $\Delta\theta=\max\{0.05,0.95(0.4331)-0.2042\}=0.2073$. \finans
 
 Newton for $t=60$ min: $K_st/60=12.07$ mm and $\psi_f\Delta\theta=14.37$ mm. Start $F_0=\max\{12.07,\sqrt{2(\psi_f\Delta\theta)K_st/60}\}=18.63$ mm. Each step $F\leftarrow F-g/g'$ with $g=F-c\ln(1+F/c)-K_st/60$, $g'=1-1/(1+F/c)$, $c=\psi_f\Delta\theta$.\begin{table}[!htbp]\centering\small\caption{Newton iteration for $F(60\ \mathrm{min})$.}\label{tab:newton}
 \begin{tabular}{lrrr}\toprule
@@ -67,7 +67,7 @@ The iteration converges in four steps to $F(60)=27.41$ mm, so the infiltration r
 240 & 74.46 & 14.40\\
 480 & 129.68 & 13.41\\
 600 & 156.26 & 13.18\\\bottomrule\end{tabular}\end{table}
-The rate falls toward the saturated conductivity 12.1 mm h$^{-1}$ but is still 13.18 mm h$^{-1}$ at 600 min because the front is only a few centimetres deep.
+The rate falls toward the saturated conductivity 12.1 mm h$^{-1}$ but is still 13.18 mm h$^{-1}$ at 600 min because the front is only a few centimetres deep. \finans
 
 
 \section{The Kostiakov fit}
@@ -83,10 +83,10 @@ The design converts the Green--Ampt curve into the power law $Z(\tau)=k\tau^A$ (
 153.3 & 53.04 & 5.0321 & -2.9366 & 55.12\\
 303.2 & 89.42 & 5.7145 & -2.4145 & 88.52\\
 600.0 & 156.26 & 6.3969 & -1.8563 & 142.16\\\bottomrule\end{tabular}\end{table}
-\textbf{Reading.} The coefficient of determination of 0.997 is the quality of the conversion; the application shows ``fit $R^2$ 0.997'' for its coarse-loam example. At 600 min the power law gives the same depth as Green--Ampt to within a few per cent, but it has no steady rate: $dZ/d\tau=kA\tau^{A-1}\to0$ for $A<1$, which makes the long-time intake smaller than the saturated conductivity.
+\textbf{Reading.} The coefficient of determination of 0.997 is the quality of the conversion; the application shows ``fit $R^2$ 0.997'' for its coarse-loam example. At 600 min the power law gives the same depth as Green--Ampt to within a few per cent, but it has no steady rate: $dZ/d\tau=kA\tau^{A-1}\to0$ for $A<1$, which makes the long-time intake smaller than the saturated conductivity. \finans
 
 
-\exbox{Intake parameters for all soils}{Repeat for the ten soils at $f_T=0.45$.}\sol  Table~\ref{tab:kostall} lists $\psi_f$, $\Delta\theta$, $k$, $A$ and $R^2$. The exponent $A$ is larger for the sandy soils (their intake approaches a constant rate early, so the log-log curve is straighter and steeper) and $k$ is larger too.\begin{table}[!htbp]\centering\small\caption{Kostiakov parameters of the ten soils from the pedotransfer chain.}\label{tab:kostall}
+\exbox{Intake parameters for all soils}{Repeat for the ten soils at $f_T=0.45$.}\sol \givenline{$f_T=0.45$}\ans Table~\ref{tab:kostall} lists $\psi_f$, $\Delta\theta$, $k$, $A$ and $R^2$. The exponent $A$ is larger for the sandy soils (their intake approaches a constant rate early, so the log-log curve is straighter and steeper) and $k$ is larger too.\begin{table}[!htbp]\centering\small\caption{Kostiakov parameters of the ten soils from the pedotransfer chain.}\label{tab:kostall}
 \begin{tabular}{lrrrrrr}\toprule
 \hd{ID} & \hd{Soil} & \hd{$\psi_f$ (mm)} & \hd{$\Delta\theta$} & \hd{$k$ (mm min$^{-A}$)} & \hd{$A$} & \hd{$R^2$}\\\midrule
 S01 & Coarse loam & 16 & 0.207 & 0.759 & 0.805 & 0.998\\
@@ -98,13 +98,13 @@ S06 & Loam & 69 & 0.205 & 1.663 & 0.695 & 0.997\\
 S07 & Silt loam & 90 & 0.213 & 1.905 & 0.670 & 0.997\\
 S08 & Sandy clay loam & 36 & 0.155 & 0.686 & 0.702 & 0.997\\
 S09 & Clay loam & 67 & 0.147 & 0.784 & 0.637 & 0.998\\
-S10 & Silty clay loam & 86 & 0.162 & 1.017 & 0.628 & 0.998\\\bottomrule\end{tabular}\end{table}
+S10 & Silty clay loam & 86 & 0.162 & 1.017 & 0.628 & 0.998\\\bottomrule\end{tabular}\end{table} \finans
 
 
 \section{Inlet flow area (Manning)}
 At the inlet, $Q=\frac1nAR_h^{2/3}S^{1/2}$, $R_h=A/P$. For a furrow with side slope $z=1$: $A=zy^2$, $P=2y\sqrt{1+z^2}$, solved for the depth $y$ by 60 bisection steps; $A_0=zy^2$. For a border or basin, $y_0=(qn/\sqrt S)^{0.6}$ with $q$ in m$^2$ s$^{-1}$ and $A_0=y_0$.
 
-\exbox{Manning depth in a furrow}{Find the flow depth and the inlet area for $q=1.2$ L s$^{-1}$, $S=0.003$, $n=0.04$, $z=1$ and check the furrow does not overtop (limit $D=0.25$ m).}\sol  $Q=0.0012$ m$^3$ s$^{-1}$. At depth $y$: $A=y^2$, $P=2.828y$, $R_h=0.3536y$, so $Q(y)=\frac1{0.04}y^2(0.3536y)^{2/3}\sqrt{0.003}$; since $0.3536^{2/3}=0.5000$ and $0.5\times0.05477/0.04=0.6847$, $Q(y)=0.6847\,y^{8/3}$. Setting $Q(y)=0.0012$: $y^{8/3}=0.001752$, $y=0.001752^{3/8}=0.0926$ m. The bisection of the application reaches the same value (Table~\ref{tab:bis2}, first eight steps). The inlet area is $A_0=y^2=0.00857$ m$^2$ = 85.7 cm$^2$. Since $0.0926<0.25$ m, no overtopping.\begin{table}[!htbp]\centering\small\caption{First eight bisection steps for the furrow depth.}\label{tab:bis2}
+\exbox{Manning depth in a furrow}{Find the flow depth and the inlet area for $q=1.2$ L s$^{-1}$, $S=0.003$, $n=0.04$, $z=1$ and check the furrow does not overtop (limit $D=0.25$ m).}\sol \givenline{$q=1.2$ L s$^{-1}$ ; $S=0.003$ ; $n=0.04$ ; $z=1$ ; $D=0.25$ m}\ans $Q=0.0012$ m$^3$ s$^{-1}$. At depth $y$: $A=y^2$, $P=2.828y$, $R_h=0.3536y$, so $Q(y)=\frac1{0.04}y^2(0.3536y)^{2/3}\sqrt{0.003}$; since $0.3536^{2/3}=0.5000$ and $0.5\times0.05477/0.04=0.6847$, $Q(y)=0.6847\,y^{8/3}$. Setting $Q(y)=0.0012$: $y^{8/3}=0.001752$, $y=0.001752^{3/8}=0.0926$ m. The bisection of the application reaches the same value (Table~\ref{tab:bis2}, first eight steps). The inlet area is $A_0=y^2=0.00857$ m$^2$ = 85.7 cm$^2$. Since $0.0926<0.25$ m, no overtopping.\begin{table}[!htbp]\centering\small\caption{First eight bisection steps for the furrow depth.}\label{tab:bis2}
 \begin{tabular}{lrrr}\toprule
 \hd{Step} & \hd{$y$ (m)} & \hd{$Q(y)$ (L/s)} & \hd{Keep}\\\midrule
 1 & 1.00005 & 684.7445 & lower\\
@@ -114,10 +114,10 @@ At the inlet, $Q=\frac1nAR_h^{2/3}S^{1/2}$, $R_h=A/P$. For a furrow with side sl
 5 & 0.06260 & 0.4229 & upper\\
 6 & 0.09385 & 1.2452 & lower\\
 7 & 0.07822 & 0.7662 & upper\\
-8 & 0.08603 & 0.9876 & upper\\\bottomrule\end{tabular}\end{table}
+8 & 0.08603 & 0.9876 & upper\\\bottomrule\end{tabular}\end{table} \finans
 
 
-\exbox{Sheet flow in a border}{For a border strip with $q=6$ L s$^{-1}$ per metre width ($0.006$ m$^2$ s$^{-1}$), $S=0.20$ per cent, $n=0.15$: find $y_0$ and $A_0$.}\sol  $y_0=(qn/\sqrt S)^{0.6}=(0.006\times0.15/0.04472)^{0.6}=(0.02012)^{0.6}=0.0960$ m, so $A_0=0.0960$ m$^2$ per metre of width. A sheet flow 3.7 cm deep at the inlet.
+\exbox{Sheet flow in a border}{For a border strip with $q=6$ L s$^{-1}$ per metre width ($0.006$ m$^2$ s$^{-1}$), $S=0.20$ per cent, $n=0.15$: find $y_0$ and $A_0$.}\sol \givenline{$q=6$ L s$^{-1}$ per metre width ; $S=0.20$ per cent ; $n=0.15$}\ans $y_0=(qn/\sqrt S)^{0.6}=(0.006\times0.15/0.04472)^{0.6}=(0.02012)^{0.6}=0.0960$ m, so $A_0=0.0960$ m$^2$ per metre of width. A sheet flow 3.7 cm deep at the inlet. \finans
 
 
 \section{Advance: the volume balance}
@@ -125,7 +125,7 @@ For an inflow $Q$ (m$^3$ min$^{-1}$) the front position solves $Qt=\sigma_yA_0x+
 \begin{equation}\boxed{x(t)=\frac{Qt}{\sigma_yA_0+\sigma_zk\,t^{A}\,w},\qquad\sigma_z=\frac{A+r(1-A)+1}{(1+A)(1+r)},\qquad r=\frac{\ln2}{\ln(t_L/t_{L/2})},}\end{equation}
 with $\sigma_y=0.8$. The exponent $r$ is found by iterating ten times from $\sigma_z=0.8$, using the times $t_L$ and $t_{L/2}$ at which the front reaches $L$ and $L/2$.
 
-\exbox{The advance of the front}{Find the advance of the front in the furrow field of this chapter. Inflow $Q=1.2$ L s$^{-1}$ $=0.072$ m$^3$ min$^{-1}$, $A_0=0.00857$ m$^2$, $k=0.001675$, $A=0.6943$, $w=0.75$ m, $L=180$ m.}\sol  Start with $\sigma_z=0.8$. Solve $x(t)=L$ and $x(t)=L/2$ by bisection on $t$ (Equation above), then $r=\ln2/\ln(t_L/t_{L/2})$ and the new $\sigma_z$. Table~\ref{tab:iterr} shows the ten iterations; the converged values are $\sigma_z=0.6894$, $r=0.6103$. The advance time to the end is $t_L=49.8$ min (0.83 h).\begin{table}[!htbp]\centering\small\caption{Iteration for the advance exponent.}\label{tab:iterr}
+\exbox{The advance of the front}{Find the advance of the front in the furrow field of this chapter. Inflow $Q=1.2$ L s$^{-1}$ $=0.072$ m$^3$ min$^{-1}$, $A_0=0.00857$ m$^2$, $k=0.001675$, $A=0.6943$, $w=0.75$ m, $L=180$ m.}\sol \givenline{$Q=1.2$ L s$^{-1}$ ; $=0.072$ m$^3$ min$^{-1}$ ; $A_0=0.00857$ m$^2$ ; $k=0.001675$ ; $A=0.6943$ ; $w=0.75$ m ; $L=180$ m}\ans Start with $\sigma_z=0.8$. Solve $x(t)=L$ and $x(t)=L/2$ by bisection on $t$ (Equation above), then $r=\ln2/\ln(t_L/t_{L/2})$ and the new $\sigma_z$. Table~\ref{tab:iterr} shows the ten iterations; the converged values are $\sigma_z=0.6894$, $r=0.6103$. The advance time to the end is $t_L=49.8$ min (0.83 h).\begin{table}[!htbp]\centering\small\caption{Iteration for the advance exponent.}\label{tab:iterr}
 \begin{tabular}{lrrrrr}\toprule
 \hd{Iter.} & \hd{$\sigma_z$ (in)} & \hd{$t_L$ (min)} & \hd{$t_{L/2}$ (min)} & \hd{$r$} & \hd{$\sigma_z$ (out)}\\\midrule
 1 & 0.8000 & 60.49 & 17.86 & 0.5682 & 0.7030\\
@@ -138,7 +138,7 @@ with $\sigma_y=0.8$. The exponent $r$ is found by iterating ten times from $\sig
 8 & 0.6894 & 49.75 & 15.98 & 0.6103 & 0.6894\\
 9 & 0.6894 & 49.75 & 15.98 & 0.6103 & 0.6894\\
 10 & 0.6894 & 49.75 & 15.98 & 0.6103 & 0.6894\\\bottomrule\end{tabular}\end{table}
-\textbf{Check by hand at the converged $\sigma_z$.} $x(t_L)=0.072(49.8)/(0.8\times0.00857+0.6894\times0.001675\times49.8^{0.6943}\times0.75)=180.0$ m, which equals $L=180$ m.
+\textbf{Check by hand at the converged $\sigma_z$.} $x(t_L)=0.072(49.8)/(0.8\times0.00857+0.6894\times0.001675\times49.8^{0.6943}\times0.75)=180.0$ m, which equals $L=180$ m. \finans
 
 
 \exbox{Advance table}{Give the advance times to 20, 45, 90, 135 and 180 m, and check that the advance follows $x=pt^r$.}\sol  Solve $x(t)=x$ at the converged $\sigma_z$ (Table~\ref{tab:adv}). The ratio of the times for $x=90$ and $x=180$ is 0.321 and $2^{-1/r}=2^{-1/0.6103}=0.321$: the two agree, because $r$ was derived from exactly these two times. Between 20 and 45 m the same exponent gives $t_{45}/t_{20}=(2.250)^{1/r}=3.78$ against the computed 2.65; the power law is an approximation of the volume balance, good in the middle of the field.\begin{table}[!htbp]\centering\small\caption{Advance times.}\label{tab:adv}
@@ -148,7 +148,7 @@ with $\sigma_y=0.8$. The exponent $r$ is found by iterating ten times from $\sig
 45 & 6.2 & 0.10\\
 90 & 16.0 & 0.27\\
 135 & 30.1 & 0.50\\
-180 & 49.8 & 0.83\\\bottomrule\end{tabular}\end{table}
+180 & 49.8 & 0.83\\\bottomrule\end{tabular}\end{table} \finans
 
 
 \section{Cut-off, depths and efficiencies}
@@ -157,22 +157,22 @@ The time to infiltrate the required depth is $t_{st}=(Z_n/k)^{1/A}$; the cut-off
 \par\noindent where $E_a$ is the application efficiency, $E_s$ the storage efficiency, $DP$ the deep-percolation fraction, $RO$ the runoff fraction, $V_{st}$ the volume stored in the root zone, $V_{app}$ the volume applied, $V_{req}$ the volume required, $V_{dp}$ the volume lost to deep percolation and $V_{ro}$ the volume of runoff (m$^3$), $CU$ the uniformity (per cent), $Z_i$ the intake at station $i$ (mm), $\bar Z$ its mean and $N+1$ the number of stations.
 
 
-\exbox{Cut-off, depths and efficiencies}{Compute the cut-off, depths, volumes and efficiencies of the design.}\sol  1. Opportunity time to infiltrate $Z_n$: $t_{st}=(0.0733/0.001675)^{1/0.6943}=(43.77)^{1.4403}=231.1$ min. 2. Cut-off $t_{co}=t_L+t_{st}=49.8+231.1=280.8$ min (4.68 h). 3. Inlet depth $Z_0=k t_{co}^A=83.9$ mm; tail depth $Z_L=k(t_{co}-t_L)^A=73.3$ mm ($=Z_n$ by construction). 4. Volumes (per furrow): $V_{app}=0.072\times280.8=20.221$ m$^3$; $V_{req}=0.0733\times180\times0.75=9.896$ m$^3$; trapezoidal integration with $N=300$ gives $V_{inf}=10.791$, $V_{st}=9.896$, $V_{dp}=0.896$, $V_{df}=0.000$ and runoff $V_{ro}=9.430$ m$^3$. 5. Efficiencies: $E_a=0.489$, $E_s=1.000$, $DP=0.044$, $RO=0.466$, $CU=96.7$ per cent. \textbf{Closure:} $E_a+DP+RO=1.0000$.
+\exbox{Cut-off, depths and efficiencies}{Compute the cut-off, depths, volumes and efficiencies of the design.}\sol  1. Opportunity time to infiltrate $Z_n$: $t_{st}=(0.0733/0.001675)^{1/0.6943}=(43.77)^{1.4403}=231.1$ min. 2. Cut-off $t_{co}=t_L+t_{st}=49.8+231.1=280.8$ min (4.68 h). 3. Inlet depth $Z_0=k t_{co}^A=83.9$ mm; tail depth $Z_L=k(t_{co}-t_L)^A=73.3$ mm ($=Z_n$ by construction). 4. Volumes (per furrow): $V_{app}=0.072\times280.8=20.221$ m$^3$; $V_{req}=0.0733\times180\times0.75=9.896$ m$^3$; trapezoidal integration with $N=300$ gives $V_{inf}=10.791$, $V_{st}=9.896$, $V_{dp}=0.896$, $V_{df}=0.000$ and runoff $V_{ro}=9.430$ m$^3$. 5. Efficiencies: $E_a=0.489$, $E_s=1.000$, $DP=0.044$, $RO=0.466$, $CU=96.7$ per cent. \textbf{Closure:} $E_a+DP+RO=1.0000$. \finans
 
 \subhd{Reading.} The tail gets exactly the required depth ($E_s=1$), the field is very uniform ($CU=97$), but 47 per cent of the water runs off the end because the front advances for only 50 minutes of the 281: with no cutback the long soaking time lets the stream run to waste. The application prints this as the closed balance of the irrigation, and the design table below tries to recover it.
 
 
-\exbox{Exact depth against the straight line}{The lecture method replaces $Z(x)$ by the straight line between $Z_0$ and $Z_L$. Compare the line with the exact curve at $x=0.25L,0.5L,0.75L$ and find the distance $X=L(Z_0-Z_n)/(Z_0-Z_L)$ at which the line crosses $Z_n$.}\sol  Exact: $Z(x)=k[t_{co}-t_x(x)]^A$. Line: $Z_0+(Z_L-Z_0)x/L$ with $Z_0=83.9$ and $Z_L=73.3$ mm.\begin{table}[!htbp]\centering\small\caption{Exact and straight-line infiltrated depth.}\label{tab:line}
+\exbox{Exact depth against the straight line}{The lecture method replaces $Z(x)$ by the straight line between $Z_0$ and $Z_L$. Compare the line with the exact curve at $x=0.25L,0.5L,0.75L$ and find the distance $X=L(Z_0-Z_n)/(Z_0-Z_L)$ at which the line crosses $Z_n$.}\sol \givenline{$x=0.25L,0.5L,0.75L$ ; $X=L(Z_0-Z_n)/(Z_0-Z_L)$}\ans Exact: $Z(x)=k[t_{co}-t_x(x)]^A$. Line: $Z_0+(Z_L-Z_0)x/L$ with $Z_0=83.9$ and $Z_L=73.3$ mm.\begin{table}[!htbp]\centering\small\caption{Exact and straight-line infiltrated depth.}\label{tab:line}
 \begin{tabular}{lrrrr}\toprule
 \hd{$x$ (m)} & \hd{$t_x$ (min)} & \hd{exact (mm)} & \hd{line (mm)} & \hd{exact$-$line}\\\midrule
 45 & 6.2 & 82.6 & 81.3 & +1.36\\
 90 & 16.0 & 80.6 & 78.6 & +1.97\\
-135 & 30.1 & 77.6 & 76.0 & +1.61\\\bottomrule\end{tabular}\end{table}
+135 & 30.1 & 77.6 & 76.0 & +1.61\\\bottomrule\end{tabular}\end{table} \finans
 
 The line crosses $Z_n$ at the tail: $X=180(83.9-73.3)/(83.9-73.3)=180$ m, because $Z_L=Z_n$. The exact curve lies slightly below the line (it is convex), so the straight-line method slightly overestimates the infiltrated depth and the deep percolation.
 
 
-\exbox{The best inflow}{In \emph{Your soil} mode the inflow is the one among 25 equally spaced values between $q_{\min}=0.2$ and $q_{\max}$ that maximises $E_aE_s$, where for a furrow $q_{\max}=\min\{q_{\max}^{\rm sys},\frac{0.04}S\frac{1000}{60}\}$ L s$^{-1}$ ($S$ in per cent; the non-erosive stream, close to $0.67/S$). Find it for $S=0.30$ per cent.}\sol  $\frac{0.04}{0.30}\times\frac{1000}{60}=2.22$ L s$^{-1}$, below the system limit of 4, so $q_{\max}=2.22$ L s$^{-1}$ and the grid has step $(2.22-0.2)/24=0.0843$. Evaluating the design at each value (Table~\ref{tab:qbest} lists every second one) gives the maximum of $E_aE_s$ at $q=0.706$ L s$^{-1}$ with $E_a=0.620$ and $E_s=1.000$ ($E_aE_s=0.620$).\begin{table}[!htbp]\centering\small\caption{Efficiency against inflow (no cutback, $E_s=1$ cut-off).}\label{tab:qbest}
+\exbox{The best inflow}{In \emph{Your soil} mode the inflow is the one among 25 equally spaced values between $q_{\min}=0.2$ and $q_{\max}$ that maximises $E_aE_s$, where for a furrow $q_{\max}=\min\{q_{\max}^{\rm sys},\frac{0.04}S\frac{1000}{60}\}$ L s$^{-1}$ ($S$ in per cent; the non-erosive stream, close to $0.67/S$). Find it for $S=0.30$ per cent.}\sol \givenline{$q_{\min}=0.2$ ; $S=0.30$ per cent}\ans $\frac{0.04}{0.30}\times\frac{1000}{60}=2.22$ L s$^{-1}$, below the system limit of 4, so $q_{\max}=2.22$ L s$^{-1}$ and the grid has step $(2.22-0.2)/24=0.0843$. Evaluating the design at each value (Table~\ref{tab:qbest} lists every second one) gives the maximum of $E_aE_s$ at $q=0.706$ L s$^{-1}$ with $E_a=0.620$ and $E_s=1.000$ ($E_aE_s=0.620$).\begin{table}[!htbp]\centering\small\caption{Efficiency against inflow (no cutback, $E_s=1$ cut-off).}\label{tab:qbest}
 \begin{tabular}{lrrrrr}\toprule
 \hd{$q$ (L/s)} & \hd{$E_a$} & \hd{$E_s$} & \hd{$E_aE_s$} & \hd{$t_L$ (min)} & \hd{$t_{co}$ (min)}\\\midrule
 0.200 & 0.108 & 1.000 & 0.108 & 7386 & 7617\\
@@ -188,7 +188,7 @@ The line crosses $Z_n$ at the tail: $X=180(83.9-73.3)/(83.9-73.3)=180$ m, becaus
 1.885 & 0.337 & 1.000 & 0.337 & 29 & 260\\
 2.054 & 0.312 & 1.000 & 0.312 & 27 & 258\\
 2.222 & 0.290 & 1.000 & 0.290 & 25 & 256\\\bottomrule\end{tabular}\end{table}
-\textbf{Reading.} A larger stream advances faster, shortens $t_L$ and therefore the soaking time of the inlet, so deep percolation falls; but more of it reaches the tail and runs off. The optimum balances the two losses.
+\textbf{Reading.} A larger stream advances faster, shortens $t_L$ and therefore the soaking time of the inlet, so deep percolation falls; but more of it reaches the tail and runs off. The optimum balances the two losses. \finans
 
 
 \exbox{The design table}{The design table moves one variable at a time (cut-off, inflow, cutback, length, \dots), keeping a candidate only if the score
@@ -200,10 +200,10 @@ improves by more than $0.003$. The target is $E_a\ge85$ per cent with $E_s\ge80$
 \hd{Move} & \hd{$q$} & \hd{$L$} & \hd{cutback} & \hd{$t_{co}$} & \hd{$E_a$} & \hd{$E_s$} & \hd{DP} & \hd{RO} & \hd{score}\\\midrule
 start & 0.71 & 180 & 1.0 & 377 & 0.620 & 1.000 & 0.176 & 0.205 & +0.620\\
 cutoff & 0.71 & 180 & 1.0 & 219 & 0.870 & 0.814 & 0.000 & 0.130 & +0.870\\\bottomrule\end{tabular}\end{table}
-The search ends with $E_a=0.870$, $E_s=0.814$, DP$=0.000$, RO$=0.130$ and meets the target.
+The search ends with $E_a=0.870$, $E_s=0.814$, DP$=0.000$, RO$=0.130$ and meets the target. \finans
 
 
-\exbox{Tornado chart}{Each of seven inputs is moved down and up while the others are held (cut-off fixed at the design's value), and the change of $E_a$ is reported in percentage points, sorted by the larger absolute change. Compute it around the final design ($E_a=0.870$).}\sol  For the intake coefficient $k$ ($\pm20$ per cent) the design is re-run with $0.8k$ and $1.2k$; $E_a$ changes by the amounts of Table~\ref{tab:torn}. The printed value is $\max(|\Delta E_a^-|,|\Delta E_a^+|)$.\begin{table}[!htbp]\centering\small\caption{Local sensitivity of the application efficiency.}\label{tab:torn}
+\exbox{Tornado chart}{Each of seven inputs is moved down and up while the others are held (cut-off fixed at the design's value), and the change of $E_a$ is reported in percentage points, sorted by the larger absolute change. Compute it around the final design ($E_a=0.870$).}\sol \givenline{$E_a=0.870$}\ans For the intake coefficient $k$ ($\pm20$ per cent) the design is re-run with $0.8k$ and $1.2k$; $E_a$ changes by the amounts of Table~\ref{tab:torn}. The printed value is $\max(|\Delta E_a^-|,|\Delta E_a^+|)$.\begin{table}[!htbp]\centering\small\caption{Local sensitivity of the application efficiency.}\label{tab:torn}
 \begin{tabular}{lrrrr}\toprule
 \hd{Input} & \hd{Perturbation} & \hd{$\Delta E_a^-$ (pts)} & \hd{$\Delta E_a^+$ (pts)} & \hd{max}\\\midrule
 Intake $A$ & $\pm$10\% & -22.3 & -12.1 & 22.3\\
@@ -212,21 +212,21 @@ Length $L$ & $\pm$20\% & -12.0 & +3.6 & 12.0\\
 Inflow $q$ & $\pm$20\% & +4.9 & -10.3 & 10.3\\
 Required depth $Z_n$ & $\pm$20\% & -7.2 & +0.0 & 7.2\\
 Roughness $n$ & $\pm$30\% & +1.5 & -1.4 & 1.5\\
-Slope $S$ & $\pm$30\% & -0.9 & +0.6 & 0.9\\\bottomrule\end{tabular}\end{table}
+Slope $S$ & $\pm$30\% & -0.9 & +0.6 & 0.9\\\bottomrule\end{tabular}\end{table} \finans
 
 The ranking is Intake $A$, Intake $k$, Length $L$ first: those are the inputs around which a design should be tested. The test is local to this layout and not a global importance.
 
 
-\exbox{Season and farm}{Season and farm (Equation 11.24 of the application): with the net irrigation $\sum I=150$ mm of the working year, $Z_n=73.3$ mm, farm supply $Q_s=30$ L s$^{-1}$, field width $W_f=120$ m, find the number of events, the gross depth, the seasonal depth, the number of furrows run at once, the number of sets and the pumping time.}\sol  $n_{ev}=150/73.3=2.05$ events (rounded, about 2). Gross depth per event $Z_g=V_{app}/(Lw)\times1000=9.263/(180\times0.75)\times1000=68.6$ mm; $Z_{season}=n_{ev}Z_g=140$ mm, that is $1404$ m$^3$ ha$^{-1}$. Furrows at once: $N_{0M}=Q_s/q=30/0.71=42.5$; units: $N_{units}=W_f/w=120/0.75=160$; sets: $N_{sets}=\max(1,\lceil160/42.5\rceil)=4$; total set time $T_{tot}=4\times219/60=14.6$ h per round, so the season pumps $n_{ev}T_{tot}=30$ hours.
+\exbox{Season and farm}{Season and farm (Equation 11.24 of the application): with the net irrigation $\sum I=150$ mm of the working year, $Z_n=73.3$ mm, farm supply $Q_s=30$ L s$^{-1}$, field width $W_f=120$ m, find the number of events, the gross depth, the seasonal depth, the number of furrows run at once, the number of sets and the pumping time.}\sol \givenline{$\sum I=150$ mm ; $Z_n=73.3$ mm ; $Q_s=30$ L s$^{-1}$ ; $W_f=120$ m}\ans $n_{ev}=150/73.3=2.05$ events (rounded, about 2). Gross depth per event $Z_g=V_{app}/(Lw)\times1000=9.263/(180\times0.75)\times1000=68.6$ mm; $Z_{season}=n_{ev}Z_g=140$ mm, that is $1404$ m$^3$ ha$^{-1}$. Furrows at once: $N_{0M}=Q_s/q=30/0.71=42.5$; units: $N_{units}=W_f/w=120/0.75=160$; sets: $N_{sets}=\max(1,\lceil160/42.5\rceil)=4$; total set time $T_{tot}=4\times219/60=14.6$ h per round, so the season pumps $n_{ev}T_{tot}=30$ hours. \finans
 
 
-\exbox{Surface irrigation in the sand}{A furrow in the sand S03 ($f_T=0.842$, $Z_n=50.5$ mm) with the same layout. Find its intake and what happens to the advance.}\sol  Pedotransfer: $K_s=135$ mm h$^{-1}$, $\psi_f=38$ mm, $\Delta\theta=0.393$, Kostiakov $k=5.38$ mm min$^{-A}$, $A=0.859$ ($R^2=0.998$). Intake after 60 minutes: $Z(60)=181$ mm, against $29$ mm for the loam. With $Q=0.072$ m$^3$ min$^{-1}$ the stream supplies $0.072\times60=4.3$ m$^3$ per hour, and the soil absorbs 0.14 m$^3$ per metre of furrow in the first hour, so the front reaches only about 30 m in the first hour; the volume balance gives the advance exponent, and the run does not reach 180 m within a realistic time: the application limits a set to 48 h ($t_{co}=2880$ min), and the front then stands at $x_{\max}=68$ m. The part beyond gets no water: the layer warns ``the stream does not reach the end'' and recommends a larger inflow or a shorter run. At $q=4$ L s$^{-1}$ (the system limit) the front would reach 227 m in 48 h (with $\sigma_z=0.8$ assumed); with the converged exponent the front reaches 180 m after $t_L=839$ min (14.0 h), and the required soaking time adds $t_{st}=14$ min, so that $t_{co}=853$ min and the efficiency is $E_a=0.03$ with $0$ per cent runoff. Even at the largest inflow the sand loses nearly all of the water to deep percolation at this length; shorter runs, drip or sprinklers are better, which is what the design table would suggest.
+\exbox{Surface irrigation in the sand}{A furrow in the sand S03 ($f_T=0.842$, $Z_n=50.5$ mm) with the same layout. Find its intake and what happens to the advance.}\sol \givenline{$f_T=0.842$ ; $Z_n=50.5$ mm}\ans Pedotransfer: $K_s=135$ mm h$^{-1}$, $\psi_f=38$ mm, $\Delta\theta=0.393$, Kostiakov $k=5.38$ mm min$^{-A}$, $A=0.859$ ($R^2=0.998$). Intake after 60 minutes: $Z(60)=181$ mm, against $29$ mm for the loam. With $Q=0.072$ m$^3$ min$^{-1}$ the stream supplies $0.072\times60=4.3$ m$^3$ per hour, and the soil absorbs 0.14 m$^3$ per metre of furrow in the first hour, so the front reaches only about 30 m in the first hour; the volume balance gives the advance exponent, and the run does not reach 180 m within a realistic time: the application limits a set to 48 h ($t_{co}=2880$ min), and the front then stands at $x_{\max}=68$ m. The part beyond gets no water: the layer warns ``the stream does not reach the end'' and recommends a larger inflow or a shorter run. At $q=4$ L s$^{-1}$ (the system limit) the front would reach 227 m in 48 h (with $\sigma_z=0.8$ assumed); with the converged exponent the front reaches 180 m after $t_L=839$ min (14.0 h), and the required soaking time adds $t_{st}=14$ min, so that $t_{co}=853$ min and the efficiency is $E_a=0.03$ with $0$ per cent runoff. Even at the largest inflow the sand loses nearly all of the water to deep percolation at this length; shorter runs, drip or sprinklers are better, which is what the design table would suggest. \finans
 
 
 \section{The hydrograph}
 The hydrograph divides the inflow into infiltration $I(t)$, runoff $R(t)$ and storage. The cumulative infiltration of the field is $V_c(t)=w\sum_ik[\min(t,t_{co})-\bar t_{x,i}]^A\Delta x\cdot s_c$ for the intervals already wetted, scaled by $s_c=V_{inf}/V_c(t_{co})$; $R(t)=\max\{0,q-I(t)\}$ while $t_L\le t\le t_{co}$; after cut-off the surface recedes triangularly, $R(t)=\frac{2V_s}{t_r}\bigl(1-\frac{t-t_{co}}{t_r}\bigr)$ for $t_{co}<t<t_{co}+t_r$, with $t_r=\max\{4,\min(0.3t_{co},0.25\max(t_L,10))\}$ min.
 
-\exbox{Hydrograph}{Build the hydrograph of the final design ($L=180$ m, $q=0.71$ L s$^{-1}$, $t_L=146$ min, $t_{co}=219$ min): the scale factor $s_c$, the infiltration and runoff rates at several times, and the recession.}\sol  Divide the field into 300 intervals and take for each the mid-point advance time $\bar t_{x,i}$. The unscaled cumulative infiltration at cut-off is $V_c(t_{co})=8.056$ m$^3$ while the design's $V_{inf}=8.056$, so $s_c=1.0000$. The rate is $I(t)=s_c\,dV_c/dt$ (central difference, converted to L s$^{-1}$) and the runoff is $R=\max\{0,q-I\}$ between $t_L$ and $t_{co}$ (Table~\ref{tab:hydro}).\begin{table}[!htbp]\centering\small\caption{Hydrograph of one furrow.}\label{tab:hydro}
+\exbox{Hydrograph}{Build the hydrograph of the final design ($L=180$ m, $q=0.71$ L s$^{-1}$, $t_L=146$ min, $t_{co}=219$ min): the scale factor $s_c$, the infiltration and runoff rates at several times, and the recession.}\sol \givenline{$L=180$ m ; $q=0.71$ L s$^{-1}$ ; $t_L=146$ min ; $t_{co}=219$ min}\ans Divide the field into 300 intervals and take for each the mid-point advance time $\bar t_{x,i}$. The unscaled cumulative infiltration at cut-off is $V_c(t_{co})=8.056$ m$^3$ while the design's $V_{inf}=8.056$, so $s_c=1.0000$. The rate is $I(t)=s_c\,dV_c/dt$ (central difference, converted to L s$^{-1}$) and the runoff is $R=\max\{0,q-I\}$ between $t_L$ and $t_{co}$ (Table~\ref{tab:hydro}).\begin{table}[!htbp]\centering\small\caption{Hydrograph of one furrow.}\label{tab:hydro}
 \begin{tabular}{lrrr}\toprule
 \hd{$t$ (min)} & \hd{$V_c$ (m$^3$)} & \hd{$I$ (L/s)} & \hd{$R$ (L/s)}\\\midrule
 73 & 2.435 & 0.66 & 0.00\\
@@ -247,4 +247,4 @@ After cut-off the water left on the surface (an upper bound, $V_s\le V_{app}-V_{
 \IfFileExists{extra/tenbx11.tex}{\input{extra/tenbx11}}{}
 \IfFileExists{extra/ex11.tex}{\input{extra/ex11}}{}
 \IfFileExists{extra/dyk11.tex}{\input{extra/dyk11}}{}
-\IfFileExists{extra/obj11.tex}{\input{extra/obj11}}{}
+\IfFileExists{extra/obj11.tex}{\input{extra/obj11}}{} \finans

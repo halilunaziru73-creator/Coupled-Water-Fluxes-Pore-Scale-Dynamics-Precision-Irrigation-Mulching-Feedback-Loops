@@ -11,24 +11,24 @@ There are 32 layers: 23 for decisions, in nine groups, and nine that work with D
 \section{Field balance and the soil--plant--air column}
 \fig{sc_fieldk}{0.8}{Field water balance: precipitation, irrigation, evapotranspiration, drainage and storage (Equation~\ref{eq:bal}).}
 \fig{sc_spack}{0.8}{Soil, plant and air: the water potential of each compartment, from the soil particles to the atmosphere.}
-\exbox{}{Open the field balance for the sand and for the silty clay loam. Which has the larger drainage? Relate your answer to Table~\ref{tab:soils}.}\sol  Sand (S03) has the larger drainage. Table~\ref{tab:soils} gives the memory fate $\phi_D=0.846$ for the sand and $0.022$ for the silty clay loam: of each millimetre of stored surplus the sand drains $85$ per cent and the silty clay loam $2$ per cent. The ratio is $0.846/0.022=38$.
+\exbox{}{Open the field balance for the sand and for the silty clay loam. Which has the larger drainage? Relate your answer to Table~\ref{tab:soils}.}\sol  Sand (S03) has the larger drainage. Table~\ref{tab:soils} gives the memory fate $\phi_D=0.846$ for the sand and $0.022$ for the silty clay loam: of each millimetre of stored surplus the sand drains $85$ per cent and the silty clay loam $2$ per cent. The ratio is $0.846/0.022=38$. \finans
 
 
 \section{Mulch, evaporation and the fate of saved water}
 \fig{sc_n2k}{0.8}{Fate of the water saved by mulch across rainfall. The drained share depends on the soil (Chapter~7).}
 \fig{sc_n3k}{0.8}{The regime map: where vapour gives way to drainage.}
-\exbox{}{Use the competition law of Chapter~7 to predict, for sand and for silty clay loam, which of the two soils shows more drainage in the fate-of-saved-water layer, and check on the screen.}\sol  Invert $\phi_D=\Ks/(\Ks+q^*)$ to get $\Ks/q^*=\phi_D/(1-\phi_D)$. Sand: $0.846/0.154=5.5$. Silty clay loam: $0.022/0.978=0.0225$. The conductivity-to-withdrawal ratio of the sand is $5.5/0.0225\approx 244$ times larger, so the sand drains far more of the saved water; on the screen the drainage bar of the sand dominates and that of the silty clay loam is nearly empty.
+\exbox{}{Use the competition law of Chapter~7 to predict, for sand and for silty clay loam, which of the two soils shows more drainage in the fate-of-saved-water layer, and check on the screen.}\sol  Invert $\phi_D=\Ks/(\Ks+q^*)$ to get $\Ks/q^*=\phi_D/(1-\phi_D)$. Sand: $0.846/0.154=5.5$. Silty clay loam: $0.022/0.978=0.0225$. The conductivity-to-withdrawal ratio of the sand is $5.5/0.0225\approx 244$ times larger, so the sand drains far more of the saved water; on the screen the drainage bar of the sand dominates and that of the silty clay loam is nearly empty. \finans
 
 
 \section{Triggers, structure and roots}
 \fig{sc_v1k}{0.8}{Sensor suction every day from 2019 to 2039. The dashed line is the trigger. Irrigated (blue) against rainfed (orange); bars give the growing-season days beyond the trigger. In 2029 the irrigated field had no days beyond 471 cm and the rainfed field had 101 of 183.}
 \fig{sc_n1k}{0.8}{The trigger law: the depletion of the root zone at the trigger is soil independent.}
 \fig{sc_r1k}{0.8}{The root layer: where the water is taken.}
-\exbox{}{In the sensor layer set the trigger of the sand to 300 cm. Predict, with Table~\ref{tab:reach}, what you will see, then check.}\sol  For the sand (S03), $\hc=199$ cm. The ratio is $300/199=1.51>1$, so the trigger lies beyond the reach and cannot fire. The archived trigger runs agree: mean irrigation is $122$, $38.5$ and $6.4$ mm yr$^{-1}$ at 50, 75 and 100 cm, and $0$ from 150 cm upward. On the screen you see an irrigation total of zero with the crop on rainfall alone.
+\exbox{}{In the sensor layer set the trigger of the sand to 300 cm. Predict, with Table~\ref{tab:reach}, what you will see, then check.}\sol  For the sand (S03), $\hc=199$ cm. The ratio is $300/199=1.51>1$, so the trigger lies beyond the reach and cannot fire. The archived trigger runs agree: mean irrigation is $122$, $38.5$ and $6.4$ mm yr$^{-1}$ at 50, 75 and 100 cm, and $0$ from 150 cm upward. On the screen you see an irrigation total of zero with the crop on rainfall alone. \finans
 
 
 \section{Irrigation design: surface, drip, sprinkler}
-\exbox{}{In the surface layer compare the advance time for the same inflow on a loam and a sand, and explain the difference from the intake.}\sol  Use the volume balance $Q_0t=\sigma_zLZ(t)$ with $\sigma_z=0.7$, $L=100$ m, $Q_0=0.001$ m$^2$\,s$^{-1}$ per unit width and the Kostiakov intake $Z=k\tau^a$ (cm, $\tau$ in min). The parameters below are \emph{illustrative}, not measured: sand $k=1.2$, $a=0.6$; loam $k=0.5$, $a=0.45$. Sand: $0.06t=70(0.012)t^{0.6}$ gives $t^{0.4}=14$, so $t=733$ min. Loam: $0.06t=70(0.005)t^{0.45}$ gives $t^{0.55}=5.83$, so $t=24.7$ min. The sand takes thirty times longer to advance (it never completes the run in a realistic furrow) because its intake is much larger at all times.
+\exbox{}{In the surface layer compare the advance time for the same inflow on a loam and a sand, and explain the difference from the intake.}\sol  Use the volume balance $Q_0t=\sigma_zLZ(t)$ with $\sigma_z=0.7$, $L=100$ m, $Q_0=0.001$ m$^2$\,s$^{-1}$ per unit width and the Kostiakov intake $Z=k\tau^a$ (cm, $\tau$ in min). The parameters below are \emph{illustrative}, not measured: sand $k=1.2$, $a=0.6$; loam $k=0.5$, $a=0.45$. Sand: $0.06t=70(0.012)t^{0.6}$ gives $t^{0.4}=14$, so $t=733$ min. Loam: $0.06t=70(0.005)t^{0.45}$ gives $t^{0.55}=5.83$, so $t=24.7$ min. The sand takes thirty times longer to advance (it never completes the run in a realistic furrow) because its intake is much larger at all times. \finans
 
 
 \section{Drainage and crops}
@@ -53,4 +53,4 @@ IfFileExists{extra/app07.tex}{\input{extra/app07}}{}
 \IfFileExists{extra/tenbx07.tex}{\input{extra/tenbx07}}{}
 \IfFileExists{extra/ex07.tex}{\input{extra/ex07}}{}
 \IfFileExists{extra/dyk07.tex}{\input{extra/dyk07}}{}
-\IfFileExists{extra/obj07.tex}{\input{extra/obj07}}{}
+\IfFileExists{extra/obj07.tex}{\input{extra/obj07}}{} \finans
