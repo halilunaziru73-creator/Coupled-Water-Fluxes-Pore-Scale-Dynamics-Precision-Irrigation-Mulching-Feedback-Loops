@@ -1,6 +1,7 @@
+\chapimg{fig/ch08.jpg}
+\chapterlead{\subhd{After this chapter you can} search for linear invariants in model output with a singular value decomposition, define the unattributed evaporative term, and show why a saving must be judged against the closed non-transpiration term.}
 \chapter{Closing the water balance: an audit of model outputs}\label{ch:audit}
 \markboth{Closing the water balance}{Closing the water balance}
-\textbf{After this chapter you can} search for linear invariants in model output with a singular value decomposition, define the unattributed evaporative term, and show why a saving must be judged against the closed non-transpiration term.
 
 \section{Why audit a model}
 Process-model outputs that support a saving are treated as closed accounts. This can be tested: if the terms of the water balance of Equation~(\ref{eq:bal}) are written for every run, one can check whether they add up, and find out which term is missing when they do not.
@@ -8,15 +9,24 @@ Process-model outputs that support a saving are treated as closed accounts. This
 \section{A blind search for linear invariants}
 Collect, for $N$ runs, the annual terms in a matrix $X$ with one row per run and one column per term, for example $W=P+I$, $ET$, $D$ and $\Delta S+Q$. A \emph{linear invariant} is a vector $c$ with $Xc=0$ for every run. It is found, without being told, as the right singular vector of $X$ with the smallest singular value: if $X=U\Sigma V^{\top}$ then $\|Xc\|$ is smallest for the last column of $V$.
 
-\begin{example}{finding the balance blindly}
-Four runs have $(W,ET,D,\Delta S+Q)=(800,520,250,30),\ (760,500,240,20),\ (900,560,300,40),\ (700,480,200,20)$ mm. The singular values of $X$ are $1958,\ 43.7,\ 8.01$ and $\approx10^{-13}$. The last is zero to machine precision, and the corresponding singular vector, scaled so that its first entry is 1, is $(1,-1,-1,-1)$: the balance $W=ET+D+(\Delta S+Q)$ was recovered without being supplied. When the study ran this search on the Daisy output, the coefficients were recovered within 5 per cent.
-\end{example}
+\exbox{Finding the balance blindly}{Four runs have $(W,ET,D,\Delta S+Q)=(800,520,250,30),\ (760,500,240,20),\ (900,560,300,40),\ (700,480,200,20)$ mm. The singular values of $X$ are $1958,\ 43.7,\ 8.01$ and $\approx10^{-13}$. The last is zero to machine precision, and the corresponding singular vector, scaled so that its first entry is 1, is $(1,-1,-1,-1)$: the balance $W=ET+D+(\Delta S+Q)$ was recovered without being supplied. When the study ran this search on the Daisy output, the coefficients were recovered within 5 per cent.}
+
+
+
+\begin{kfig}{Closing the balance: the inputs $P+I$ equal the outputs plus the change of storage; what is left after all the reported fluxes is the unattributed term $R$.}
+\def\u{0.032}
+\draw[axis] (0,0)--(0,4.6);\node[lab,rotate=90] at (-0.7,2.3) {Water (mm)};
+\fill[khcyan!35] (0.5,0) rectangle (1.7,{620*\u/3});\fill[khcyan!75] (0.5,{620*\u/3}) rectangle (1.7,{784*\u/3});
+\node[lab] at (1.1,{310*\u/3}) {$P$};\node[lab] at (1.1,{702*\u/3}) {$I$};
+\fill[khsalmon!60] (3.2,0) rectangle (4.4,{560*\u/3});\fill[khgreen!80!black!40] (3.2,{560*\u/3}) rectangle (4.4,{640*\u/3});\fill[khpurple!70] (3.2,{640*\u/3}) rectangle (4.4,{780*\u/3});\fill[khmag!40] (3.2,{780*\u/3}) rectangle (4.4,{784*\u/3+0.0});
+\node[lab] at (3.8,{280*\u/3}) {$ET$};\node[lab] at (3.8,{600*\u/3}) {$D$};\node[lab] at (3.8,{710*\u/3}) {$\Delta S$};\node[lab,right] at (4.5,{784*\u/3}) {$Q,\,R$};
+\draw[ln] (0,0)--(5,0);\draw[gd] (0.5,{784*\u/3})--(4.4,{784*\u/3});
+\node[lab,below] at (1.1,-0.05) {inputs};\node[lab,below] at (3.8,-0.05) {outputs};
+\end{kfig}
 
 \section{The unattributed evaporative term}
 Model outputs report transpiration $T$, soil evaporation $E_s$ and canopy evaporation $E_c$. The non-transpiration evapotranspiration is $ET_{nt}=ET-T$, which in the model is $E_s+E_c$ plus a small residual in the bookkeeping of the evapotranspiration. The audit shows that the residual is not small. Define the unattributed evaporative term
-\begin{equation}\label{eq:R}
-R=ET-T-E_s-E_c .
-\end{equation}
+\begin{equation}\label{eq:R}\boxed{R=ET-T-E_s-E_c .}\end{equation}
 Averaged over the ensemble, $R=164$ mm\,yr$^{-1}$, which is 30 per cent of the evapotranspiration. It is a property of the model's bookkeeping, not of a real field.
 
 \fig{p1_hidden}{0.95}{The unattributed evaporative term $R$ by experiment (a) and against annual rain (b).}
@@ -24,9 +34,9 @@ Averaged over the ensemble, $R=164$ mm\,yr$^{-1}$, which is 30 per cent of the e
 \section{Judging a saving against the wrong total}
 Suppose a mulch or a lower evaporation factor changes the soil evaporation by $\Delta E_s$ and the non-transpiration term by $\Delta ET_{nt}$, and that drainage changes by $\Delta D$. The drainage share of the non-transpiration change is $\psi_D=\Delta D/\Delta ET_{nt}$. If one divides instead by the reported soil evaporation, one obtains $\psi_D'=\Delta D/\Delta E_s=\psi_D\,\Delta ET_{nt}/\Delta E_s$, which differs from $\psi_D$ by the factor $\Delta ET_{nt}/\Delta E_s$.
 
-\begin{example}{a wrong denominator}
-A lower evaporation factor changes soil evaporation by $-40$ mm, and the non-transpiration term by $-55$ mm; drainage changes by $-22$ mm (in magnitudes: drainage given up). The closed share is $\psi_D=22/55=0.40$. Against soil evaporation alone it is $22/40=0.55$, an error of 0.15 --- more than the 0.1 that the study finds in six of ten soils. When $\Delta E_s$ and $\Delta ET_{nt}$ have opposite signs, which happens in two soils, the ratio even changes sign.
-\end{example}
+\exbox{A wrong denominator}{A lower evaporation factor changes soil evaporation by $-40$ mm, and the non-transpiration term by $-55$ mm; drainage changes by $-22$ mm (in magnitudes: drainage given up). The closed share is $\psi_D=22/55=0.40$. Against soil evaporation alone it is $22/40=0.55$, an error of 0.15 --- more than the 0.1 that the study finds in six of ten soils. When $\Delta E_s$ and $\Delta ET_{nt}$ have opposite signs, which happens in two soils, the ratio even changes sign.}
+
+
 
 \section{Prediction and its limits}
 A compact three-term law predicts evapotranspiration in withheld experiments and withheld soils as well as gradient boosting, with $R^2=0.898$ across withheld experiments and 0.904 across withheld soils. Drainage resists every compact law that was tried. The storage term does not close fully: there is a non-closure of 16 per cent in two experiments.
@@ -35,26 +45,19 @@ A compact three-term law predicts evapotranspiration in withheld experiments and
 All terms of this chapter are annual totals read from the Daisy logs: rainfall, irrigation, evapotranspiration, transpiration, soil evaporation, canopy evaporation, drainage at 1 m, storage change and runoff. The matrix $X$ is built from the one-row-per-run summary of the repository. A closed balance means that the singular vector of the smallest singular value is the balance itself.
 \end{daisybox}
 
-\begin{example}{problem 8.1}\textbf{Problem.} Show by hand that $c=(1,-1,-1,-1)$ gives $Xc=0$ for the four runs of the worked example.
+\exbox{}{Show by hand that $c=(1,-1,-1,-1)$ gives $Xc=0$ for the four runs of the worked example.}\sol  Substituting each row: $800-520-250-30=0$, and so on for the other three rows.
 
-\textbf{Solution.} Substituting each row: $800-520-250-30=0$, and so on for the other three rows.
-\end{example}
-\begin{example}{problem 8.2}\textbf{Problem.} A run has $ET=540$, $T=230$, $E_s=170$, $E_c=60$. Compute $R$ and the fraction of $ET$ that it represents.
+\exbox{}{A run has $ET=540$, $T=230$, $E_s=170$, $E_c=60$. Compute $R$ and the fraction of $ET$ that it represents.}\sol  $R=540-230-170-60=80$ mm, which is $14.8$ per cent of $ET$.
 
-\textbf{Solution.} $R=540-230-170-60=80$ mm, which is $14.8$ per cent of $ET$.
-\end{example}
-\begin{example}{problem 8.3}\textbf{Problem.} A saving lowers $E_s$ by 30 mm and $ET_{nt}$ by 36 mm and drainage by 12 mm. Compute $\psi_D$ and $\psi_D'$.
+\exbox{}{A saving lowers $E_s$ by 30 mm and $ET_{nt}$ by 36 mm and drainage by 12 mm. Compute $\psi_D$ and $\psi_D'$.}\sol  $\psi_D=12/36=0.33$ and $\psi_D'=12/30=0.40$.
 
-\textbf{Solution.} $\psi_D=12/36=0.33$ and $\psi_D'=12/30=0.40$.
-\end{example}
-\begin{example}{problem 8.4}\textbf{Problem.} Why does the success of the blind search on the known balance give confidence in what it reports about $R$?
+\exbox{}{Why does the success of the blind search on the known balance give confidence in what it reports about $R$?}\sol  Because a method that finds the known balance within 5 per cent is not inventing structure.
 
-\textbf{Solution.} Because a method that finds the known balance within 5 per cent is not inventing structure.
-\end{example}
 
+\chapimg{fig/ch09.jpg}
+\chapterlead{\subhd{After this chapter you can} explain why every number in a decision tool should carry an origin label, compute the friction loss of a pipe with the Hazen--Williams equation, and test an engine against a published worked example.}
 \chapter{Engines you can check: pipes, design and traceability}
 \markboth{Engines you can check}{Engines you can check}
-\textbf{After this chapter you can} explain why every number in a decision tool should carry an origin label, compute the friction loss of a pipe with the Hazen--Williams equation, and test an engine against a published worked example.
 
 \section{Provenance of equations}
 The application has 134 numbered equations. Each carries a label: 38 come from the literature, 18 are data-driven (fitted to the Daisy ensemble) and 78 are engineered for the application. The label is shown beside the number that the equation produced, so a user can find where a number comes from and which origin it has.
@@ -66,33 +69,26 @@ Every layer has an independent reference test. The design modules reproduce FAO-
 
 \section{Pipes: Hazen and Williams}
 The head loss by friction in a pipe of length $L$, diameter $D$ and flow $Q$ is, in SI units,
-\begin{equation}\label{eq:hw}
-h_f=\frac{10.67\,L\,Q^{1.852}}{C^{1.852}D^{4.87}},
-\end{equation}
+\begin{equation}\label{eq:hw}\boxed{h_f=\frac{10.67\,L\,Q^{1.852}}{C^{1.852}D^{4.87}},}\end{equation}
 where $C$ is the roughness coefficient of the pipe. The mean speed is $v=4Q/(\pi D^2)$; speed checks keep $v$ in a sensible range. The pump head adds the static lift to the friction losses.
 
-\begin{example}{a lateral and a pump}
-A main line has $L=200$ m, $Q=0.010$ m$^3$\,s$^{-1}$ (10 L\,s$^{-1}$) and $C=140$. With $D=0.10$ m, $h_f=10.67(200)(0.010)^{1.852}/(140^{1.852}\,0.10^{4.87})=3.3$ m and $v=1.27$ m\,s$^{-1}$. With a smaller pipe, $D=0.08$ m, $h_f=9.8$ m and $v=1.99$ m\,s$^{-1}$: the loss is three times larger because $D^{-4.87}$ is steep. The saving of a larger pipe in pump energy has to be weighed against its cost.
-\end{example}
+\exbox{A lateral and a pump}{A main line has $L=200$ m, $Q=0.010$ m$^3$\,s$^{-1}$ (10 L\,s$^{-1}$) and $C=140$. With $D=0.10$ m, $h_f=10.67(200)(0.010)^{1.852}/(140^{1.852}\,0.10^{4.87})=3.3$ m and $v=1.27$ m\,s$^{-1}$. With a smaller pipe, $D=0.08$ m, $h_f=9.8$ m and $v=1.99$ m\,s$^{-1}$: the loss is three times larger because $D^{-4.87}$ is steep. The saving of a larger pipe in pump energy has to be weighed against its cost.}
+
+
 
 \fig{sketch}{0.95}{The field sketch of SWAFL: seven questions, a drawing area and drawing tools. The pipes drawn here feed the friction and pump-head calculations.}
 
-\begin{example}{problem 9.1}\textbf{Problem.} Compute $h_f$ for $L=150$ m, $Q=0.006$ m$^3$\,s$^{-1}$, $D=0.075$ m and $C=130$, and the speed $v$.
+\exbox{}{Compute $h_f$ for $L=150$ m, $Q=0.006$ m$^3$\,s$^{-1}$, $D=0.075$ m and $C=130$, and the speed $v$.}\sol  $h_f=10.67(150)(0.006)^{1.852}/(130^{1.852}\,0.075^{4.87})$ and $v=4(0.006)/(\pi\,0.075^2)=1.36$ m\,s$^{-1}$; $h_f=4.5$ m.
 
-\textbf{Solution.} $h_f=10.67(150)(0.006)^{1.852}/(130^{1.852}\,0.075^{4.87})$ and $v=4(0.006)/(\pi\,0.075^2)=1.36$ m\,s$^{-1}$; $h_f=4.5$ m.
-\end{example}
-\begin{example}{problem 9.2}\textbf{Problem.} By what factor does $h_f$ change if the diameter is doubled? If the flow is doubled?
+\exbox{}{By what factor does $h_f$ change if the diameter is doubled? If the flow is doubled?}\sol  Doubling $D$ divides $h_f$ by $2^{4.87}=29.3$; doubling $Q$ multiplies it by $2^{1.852}=3.61$.
 
-\textbf{Solution.} Doubling $D$ divides $h_f$ by $2^{4.87}=29.3$; doubling $Q$ multiplies it by $2^{1.852}=3.61$.
-\end{example}
-\begin{example}{problem 9.3}\textbf{Problem.} Choose one equation of the application and find its origin label in the manual. State whether it is literature, data-driven or engineered, and which experiment of the ensemble would test it.
+\exbox{}{Choose one equation of the application and find its origin label in the manual. State whether it is literature, data-driven or engineered, and which experiment of the ensemble would test it.}\sol  Answers depend on the equation chosen.
 
-\textbf{Solution.} Answers depend on the equation chosen.
-\end{example}
 
+\chapimg{fig/ch10.jpg}
+\chapterlead{\subhd{After this chapter you can} open any decision layer of the application, identify the equation behind each number, and repeat the examples of the earlier chapters on your own soil. Every screenshot below is taken from the application; open the same layer and compare.}
 \chapter{A tour of the SWAFL layers}
 \markboth{A tour of the SWAFL layers}{A tour of the SWAFL layers}
-\textbf{After this chapter you can} open any decision layer of the application, identify the equation behind each number, and repeat the examples of the earlier chapters on your own soil. Every screenshot below is taken from the application; open the same layer and compare.
 
 \section{The workbench}
 \fig{sh_full}{0.98}{The SWAFL workbench: the layer tree on the left, the simulation window, the properties and the dashboard. The date in the toolbar moves the whole workbench.}
@@ -101,37 +97,29 @@ There are 32 layers: 23 for decisions, in nine groups, and nine that work with D
 \section{Field balance and the soil--plant--air column}
 \fig{sc_fieldk}{0.8}{Field water balance: precipitation, irrigation, evapotranspiration, drainage and storage (Equation~\ref{eq:bal}).}
 \fig{sc_spack}{0.8}{Soil, plant and air: the water potential of each compartment, from the soil particles to the atmosphere.}
-\begin{example}{problem 10.1}\textbf{Problem.} Open the field balance for the sand and for the silty clay loam. Which has the larger drainage? Relate your answer to Table~\ref{tab:soils}.
+\exbox{}{Open the field balance for the sand and for the silty clay loam. Which has the larger drainage? Relate your answer to Table~\ref{tab:soils}.}\sol  Sand (S03) has the larger drainage. Table~\ref{tab:soils} gives the memory fate $\phi_D=0.846$ for the sand and $0.022$ for the silty clay loam: of each millimetre of stored surplus the sand drains $85$ per cent and the silty clay loam $2$ per cent. The ratio is $0.846/0.022=38$.
 
-\textbf{Solution.} Sand (S03) has the larger drainage. Table~\ref{tab:soils} gives the memory fate $\phi_D=0.846$ for the sand and $0.022$ for the silty clay loam: of each millimetre of stored surplus the sand drains $85$ per cent and the silty clay loam $2$ per cent. The ratio is $0.846/0.022=38$.
-\end{example}
 
 \section{Mulch, evaporation and the fate of saved water}
 \fig{sc_e1k}{0.8}{Evaporation from the pore to the atmosphere: stage 1 is limited by the atmosphere, stage 2 by vapour transport through a dry layer.}
 \fig{sc_n2k}{0.8}{Fate of the water saved by mulch across rainfall. The drained share depends on the soil (Chapter~7).}
 \fig{sc_n3k}{0.8}{The regime map: where vapour gives way to drainage.}
-\begin{example}{problem 10.2}\textbf{Problem.} Use the competition law of Chapter~7 to predict, for sand and for silty clay loam, which of the two soils shows more drainage in the fate-of-saved-water layer, and check on the screen.
+\exbox{}{Use the competition law of Chapter~7 to predict, for sand and for silty clay loam, which of the two soils shows more drainage in the fate-of-saved-water layer, and check on the screen.}\sol  Invert $\phi_D=\Ks/(\Ks+q^*)$ to get $\Ks/q^*=\phi_D/(1-\phi_D)$. Sand: $0.846/0.154=5.5$. Silty clay loam: $0.022/0.978=0.0225$. The conductivity-to-withdrawal ratio of the sand is $5.5/0.0225\approx 244$ times larger, so the sand drains far more of the saved water; on the screen the drainage bar of the sand dominates and that of the silty clay loam is nearly empty.
 
-\textbf{Solution.} Invert $\phi_D=\Ks/(\Ks+q^*)$ to get $\Ks/q^*=\phi_D/(1-\phi_D)$. Sand: $0.846/0.154=5.5$. Silty clay loam: $0.022/0.978=0.0225$. The conductivity-to-withdrawal ratio of the sand is $5.5/0.0225\approx 244$ times larger, so the sand drains far more of the saved water; on the screen the drainage bar of the sand dominates and that of the silty clay loam is nearly empty.
-\end{example}
 
 \section{Triggers, structure and roots}
 \fig{sc_v1k}{0.8}{Sensor suction every day from 2019 to 2039. The dashed line is the trigger. Irrigated (blue) against rainfed (orange); bars give the growing-season days beyond the trigger. In 2029 the irrigated field had no days beyond 471 cm and the rainfed field had 101 of 183.}
 \fig{sc_n1k}{0.8}{The trigger law: the depletion of the root zone at the trigger is soil independent.}
 \fig{sc_r1k}{0.8}{The root layer: where the water is taken.}
-\begin{example}{problem 10.3}\textbf{Problem.} In the sensor layer set the trigger of the sand to 300 cm. Predict, with Table~\ref{tab:reach}, what you will see, then check.
+\exbox{}{In the sensor layer set the trigger of the sand to 300 cm. Predict, with Table~\ref{tab:reach}, what you will see, then check.}\sol  For the sand (S03), $\hc=199$ cm. The ratio is $300/199=1.51>1$, so the trigger lies beyond the reach and cannot fire. The archived trigger runs agree: mean irrigation is $122$, $38.5$ and $6.4$ mm yr$^{-1}$ at 50, 75 and 100 cm, and $0$ from 150 cm upward. On the screen you see an irrigation total of zero with the crop on rainfall alone.
 
-\textbf{Solution.} For the sand (S03), $\hc=199$ cm. The ratio is $300/199=1.51>1$, so the trigger lies beyond the reach and cannot fire. The archived trigger runs agree: mean irrigation is $122$, $38.5$ and $6.4$ mm yr$^{-1}$ at 50, 75 and 100 cm, and $0$ from 150 cm upward. On the screen you see an irrigation total of zero with the crop on rainfall alone.
-\end{example}
 
 \section{Irrigation design: surface, drip, sprinkler}
 \fig{sc_sidk}{0.8}{Surface irrigation design: from your soil to a working layout, with the advance front shaded by the depth already infiltrated.}
 \fig{sc_dripk}{0.8}{Drip design: emitters, wetted bulb and uniformity for your soil.}
 \fig{sc_sprk}{0.8}{Sprinkler design: nozzle, spacing, wind and soil intake.}
-\begin{example}{problem 10.4}\textbf{Problem.} In the surface layer compare the advance time for the same inflow on a loam and a sand, and explain the difference from the intake.
+\exbox{}{In the surface layer compare the advance time for the same inflow on a loam and a sand, and explain the difference from the intake.}\sol  Use the volume balance $Q_0t=\sigma_zLZ(t)$ with $\sigma_z=0.7$, $L=100$ m, $Q_0=0.001$ m$^2$\,s$^{-1}$ per unit width and the Kostiakov intake $Z=k\tau^a$ (cm, $\tau$ in min). The parameters below are \emph{illustrative}, not measured: sand $k=1.2$, $a=0.6$; loam $k=0.5$, $a=0.45$. Sand: $0.06t=70(0.012)t^{0.6}$ gives $t^{0.4}=14$, so $t=733$ min. Loam: $0.06t=70(0.005)t^{0.45}$ gives $t^{0.55}=5.83$, so $t=24.7$ min. The sand takes thirty times longer to advance (it never completes the run in a realistic furrow) because its intake is much larger at all times.
 
-\textbf{Solution.} Use the volume balance $Q_0t=\sigma_zLZ(t)$ with $\sigma_z=0.7$, $L=100$ m, $Q_0=0.001$ m$^2$\,s$^{-1}$ per unit width and the Kostiakov intake $Z=k\tau^a$ (cm, $\tau$ in min). The parameters below are \emph{illustrative}, not measured: sand $k=1.2$, $a=0.6$; loam $k=0.5$, $a=0.45$. Sand: $0.06t=70(0.012)t^{0.6}$ gives $t^{0.4}=14$, so $t=733$ min. Loam: $0.06t=70(0.005)t^{0.45}$ gives $t^{0.55}=5.83$, so $t=24.7$ min. The sand takes thirty times longer to advance (it never completes the run in a realistic furrow) because its intake is much larger at all times.
-\end{example}
 
 \section{Drainage and crops}
 \fig{sc_drnk}{0.8}{Drainage design: spacing, depth, pipes and controlled drainage.}
@@ -145,7 +133,5 @@ There are 32 layers: 23 for decisions, in nine groups, and nine that work with D
 \section{Phenotyping and the real field}
 \fig{sc_dphk}{0.75}{Deterministic phenotyping: an exactly reproducible virtual experiment whose water balance closes (set-up form shown).}
 \fig{sc_vphk}{0.75}{Volumetric phenotyping: a virtual three-dimensional scanner that measures volume, crown, leaves and height.}
-\begin{example}{problem 10.5}\textbf{Problem.} Explain why an exactly reproducible virtual experiment is useful for teaching, and name one limit.
+\exbox{}{Explain why an exactly reproducible virtual experiment is useful for teaching, and name one limit.}\sol  A virtual experiment can be repeated exactly: the same weather, soil and settings give the same numbers, so a result can be checked by anyone and one factor changed at a time. One limit: the model is one-dimensional matrix flow, so macropores, lateral flow and real field variability are absent, and no field validation is implied.
 
-\textbf{Solution.} A virtual experiment can be repeated exactly: the same weather, soil and settings give the same numbers, so a result can be checked by anyone and one factor changed at a time. One limit: the model is one-dimensional matrix flow, so macropores, lateral flow and real field variability are absent, and no field validation is implied.
-\end{example}

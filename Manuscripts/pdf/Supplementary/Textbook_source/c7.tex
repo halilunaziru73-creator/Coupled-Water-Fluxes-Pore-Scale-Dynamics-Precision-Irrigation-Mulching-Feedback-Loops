@@ -1,21 +1,20 @@
+\chapimg{fig/ch06.jpg}
+\chapterlead{\subhd{After this chapter you can} derive the marginal fate of irrigation from two water balances, explain why a share can be negative, and use the dose law to choose a dose.}
 \chapter{The fate of an irrigation millimetre}\label{ch:fate}
 \markboth{The fate of an irrigation millimetre}{The fate of an irrigation millimetre}
-\textbf{After this chapter you can} derive the marginal fate of irrigation from two water balances, explain why a share can be negative, and use the dose law to choose a dose.
 
 \section{Marginal, not average}
 Of every millimetre of water pumped onto a field, how much does the crop transpire, and where does the rest go? The answer must hold for many soils, doses, seasons and methods. Take an irrigated run and its \emph{rainfed twin}, which has the same soil, weather and crop. The long-term balances are
-\begin{equation}\label{eq:twin}
-P+I=T+E_s+E_o+D+\Delta S+Q,\qquad P=T_0+E_{s,0}+E_{o,0}+D_0+\Delta S_0+Q_0 .
-\end{equation}
+\begin{equation}\label{eq:twin}\boxed{P+I=T+E_s+E_o+D+\Delta S+Q,\qquad P=T_0+E_{s,0}+E_{o,0}+D_0+\Delta S_0+Q_0 .}\end{equation}
 Subtracting and dividing by $I$,
 \begin{equation}\label{eq:fate}
 \boxed{\;1=\underbrace{\frac{T-T_0}{I}}_{\eta_T}+\underbrace{\frac{E_s-E_{s,0}}{I}}_{\eta_{E_s}}+\underbrace{\frac{E_o-E_{o,0}}{I}}_{\eta_{E_o}}+\underbrace{\frac{D-D_0}{I}}_{\eta_D}+\underbrace{\frac{\Delta S-\Delta S_0+Q-Q_0}{I}}_{\eta_S}\;}
 \end{equation}
 Each $\eta_X=(X-X_0)/I$ is the share of the irrigation that appears as a change in flux $X$. The shares are \emph{marginal}: they describe the response to the water that was added, not the share of the total in the irrigated run, so a share can be negative (overhead irrigation can lower transpiration) or larger than the average loss fraction. Pooling a group of runs uses the ratio of sums, $\eta_X=\sum(X-X_0)/\sum I$, which weights each run by its irrigation.
 
-\begin{example}{one pair of runs}
-An irrigated run has $I=200$ mm, and compared with its rainfed twin: $T-T_0=+76$, $E_s-E_{s,0}=+50$, $E_o-E_{o,0}=+38$, $D-D_0=+32$ and $\Delta S-\Delta S_0+Q-Q_0=+4$ mm. These add to $200$ mm. The shares are $\eta_T=0.38$, $\eta_{E_s}=0.25$, $\eta_{E_o}=0.19$, $\eta_D=0.16$ and $\eta_S=0.02$ --- the average fate found over the ensemble. Less than half of the water is transpired.
-\end{example}
+\exbox{One pair of runs}{An irrigated run has $I=200$ mm, and compared with its rainfed twin: $T-T_0=+76$, $E_s-E_{s,0}=+50$, $E_o-E_{o,0}=+38$, $D-D_0=+32$ and $\Delta S-\Delta S_0+Q-Q_0=+4$ mm. These add to $200$ mm. The shares are $\eta_T=0.38$, $\eta_{E_s}=0.25$, $\eta_{E_o}=0.19$, $\eta_D=0.16$ and $\eta_S=0.02$ --- the average fate found over the ensemble. Less than half of the water is transpired.}
+
+
 
 \fig{p4_fate}{0.9}{The fate of an irrigation millimetre by soil and method, from the Daisy ensemble.}
 
@@ -25,20 +24,27 @@ Over eight soils, ten doses, ten seasons and three methods, each irrigation mill
 \subsection{Overhead irrigation adds no transpiration}
 In the methods experiments the extra transpiration of overhead irrigation is nil or negative ($-0.08$ in E4 and $-0.01$ in E15): the water that the canopy intercepts evaporates (0.79 and 0.56 of each millimetre) and lowers the transpiration that it replaces. Subsurface application transpires most (0.51 in E4, 0.40 in E15) but also drains most. Why: transpiration is limited by the energy available to the canopy and by the cover; water applied to a wet surface or to a canopy that does not cover the ground evaporates using the same energy, and water applied beyond the storage of the root zone drains.
 
+\begin{kfig}{The drained share of the water applied rises with the dose per event $d$ and saturates at $\eta_D$: $\phi_D=\eta_D\,(1-e^{-d/d_D})$.}
+\draw[axis] (0,0)--(7.4,0);\draw[axis] (0,0)--(0,4.2);
+\node[lab,below] at (3.7,-0.55) {Dose per event $d$ (mm)};\node[lab,rotate=90] at (-0.9,2.1) {Drained share $\phi_D$};
+\foreach \x/\t in {0/0,1.5/10,3/20,4.5/30,6/40}{\draw[ln] (\x,0)--(\x,-0.1);\node[lab,below] at (\x,-0.1) {\t};}
+\draw[gd] (0,3.4)--(7.2,3.4);\node[lab,above right] at (0.1,3.4) {$\eta_D$};
+\draw[crv,domain=0:7,samples=50,smooth] plot (\x,{3.4*(1-exp(-\x/1.9))});
+\draw[gd] (1.9,0)--(1.9,2.149);\draw[gd] (0,2.149)--(1.9,2.149);\node[lab,below] at (1.9,-0.5) {$d_D$};
+\end{kfig}
+
 \section{The dose law}
 The drained share rises with the dose $d$ applied per event and levels off. A simple form with the right limits is
-\begin{equation}\label{eq:dose}
-\boxed{\;\eta_D(d)=\eta_\infty\bigl(1-e^{-d/d_D}\bigr)\;}
-\end{equation}
+\begin{equation}\label{eq:dose}\boxed{\boxed{\;\eta_D(d)=\eta_\infty\bigl(1-e^{-d/d_D}\bigr)\;}}\end{equation}
 \textbf{Why this form.} Let a dose be applied when the root zone has a deficit. Part of the dose is used by the crop and the surface before it can move below the roots; the rest can drain. If the water usable before redistribution grows with the dose and saturates, and the drained share of the remainder is a soil property $\eta_\infty$, then Equation~(\ref{eq:dose}) is the simplest form with the right limits: $\eta_D\to\eta_\infty d/d_D$ for $d\ll d_D$ (a vanishing dose cannot drain) and $\eta_D\to\eta_\infty$ for $d\gg d_D$. The dose scale $d_D$ is the dose at which $1-e^{-1}=63$ per cent of the plateau is reached. \emph{The law is phenomenological}: it was chosen for its limits and tested on data (coefficient of determination 0.92 to 0.96 on seven soils), not derived from the Richards equation.
 
-\textbf{Findings.} The dose scale is $d_D=4.1\pm0.6$ mm, the same in every soil and close to one day of crop water use. The plateau $\eta_\infty$ is soil specific, between 0.10 and 0.45, and highest in coarse sand.
+\subhd{Findings.} The dose scale is $d_D=4.1\pm0.6$ mm, the same in every soil and close to one day of crop water use. The plateau $\eta_\infty$ is soil specific, between 0.10 and 0.45, and highest in coarse sand.
 
-\textbf{Why the scale is the same in every soil.} The water that a dose can lose to drainage is the part that the crop and the surface do not use before it redistributes below the roots. The crop uses about one day of evapotranspiration in that time whatever the soil, so the dose scale is set by the atmosphere and the crop, not by the soil. \textbf{Why the plateau depends on the soil:} once a dose is large, the share that drains is the share of the excess that the soil passes on before the crop uses it, a race between drainage and uptake. Coarse sand passes water fast, fine soils hold it.
+\subhd{Why the scale is the same in every soil.} The water that a dose can lose to drainage is the part that the crop and the surface do not use before it redistributes below the roots. The crop uses about one day of evapotranspiration in that time whatever the soil, so the dose scale is set by the atmosphere and the crop, not by the soil. \textbf{Why the plateau depends on the soil:} once a dose is large, the share that drains is the share of the excess that the soil passes on before the crop uses it, a race between drainage and uptake. Coarse sand passes water fast, fine soils hold it.
 
-\begin{example}{choosing a dose}
-Take a soil with $\eta_\infty=0.30$ and $d_D=4.1$ mm. Equation~(\ref{eq:dose}) gives $\eta_D=0.065$ at $d=1$ mm, $0.19$ at 4.1 mm, $0.257$ at 8 mm, $0.284$ at 12 mm and $0.298$ at 20 mm. Increasing the dose from 4.1 to 12 mm raises the drained share from 0.19 to 0.28, that is, 9 extra drained millimetres per 100 mm applied. But a dose of 1 mm drains almost nothing and loses 60 to 72 per cent to evaporation, so very small doses are no solution either: the transpired share rises with the dose up to 15 to 20 mm in most soils.
-\end{example}
+\exbox{Choosing a dose}{Take a soil with $\eta_\infty=0.30$ and $d_D=4.1$ mm. Equation~(\ref{eq:dose}) gives $\eta_D=0.065$ at $d=1$ mm, $0.19$ at 4.1 mm, $0.257$ at 8 mm, $0.284$ at 12 mm and $0.298$ at 20 mm. Increasing the dose from 4.1 to 12 mm raises the drained share from 0.19 to 0.28, that is, 9 extra drained millimetres per 100 mm applied. But a dose of 1 mm drains almost nothing and loses 60 to 72 per cent to evaporation, so very small doses are no solution either: the transpired share rises with the dose up to 15 to 20 mm in most soils.}
+
+
 
 \fig{p4_dose}{0.9}{Drained, transpired and evaporated share against the dose per event, with the fit of Equation~(\ref{eq:dose}).}
 
@@ -46,30 +52,21 @@ Take a soil with $\eta_\infty=0.30$ and $d_D=4.1$ mm. Equation~(\ref{eq:dose}) g
 For each soil and each run of E10 (dose 1 to 30 mm applied in 12 h, ten irrigation windows), the annual drainage at 1 m is read from the Daisy log and subtracted from the drainage of the rainfed twin in E0. Pooling gives $\eta_D$ per soil and dose. Equation~(\ref{eq:dose}) is then fitted per soil by nonlinear least squares for $\eta_\infty$ and $d_D$. Methods come from E4 (surface, overhead, subsurface on each soil) and from E15 (method crossed with rate, dose and rooting depth in coarse loam). All shares sum to one by construction, so the fifth is obtained as a check, not fitted.
 \end{daisybox}
 
-\begin{example}{problem 6.1}\textbf{Problem.} A run has $I=150$ mm and differences from its twin of $T$: $+45$, $E_s$: $+40$, $E_o$: $+30$, $D$: $+30$. Find $\eta_S$ and all five shares.
+\exbox{}{A run has $I=150$ mm and differences from its twin of $T$: $+45$, $E_s$: $+40$, $E_o$: $+30$, $D$: $+30$. Find $\eta_S$ and all five shares.}\sol  $\eta_S=150-(45+40+30+30)=5$ mm, so shares $0.30,\ 0.267,\ 0.20,\ 0.20,\ 0.033$.
 
-\textbf{Solution.} $\eta_S=150-(45+40+30+30)=5$ mm, so shares $0.30,\ 0.267,\ 0.20,\ 0.20,\ 0.033$.
-\end{example}
-\begin{example}{problem 6.2}\textbf{Problem.} Show that a negative $\eta_T$ is possible when the added water is intercepted and evaporated.
+\exbox{}{Show that a negative $\eta_T$ is possible when the added water is intercepted and evaporated.}\sol  If the added water is intercepted and evaporates, canopy evaporation of the irrigation can exceed what the crop would otherwise take up, so the change of $T$ can be below zero.
 
-\textbf{Solution.} If the added water is intercepted and evaporates, canopy evaporation of the irrigation can exceed what the crop would otherwise take up, so the change of $T$ can be below zero.
-\end{example}
-\begin{example}{problem 6.3}\textbf{Problem.} For $\eta_\infty=0.45$ and $d_D=4.1$ mm compute $\eta_D$ at 2, 5, 10 and 25 mm. At what dose does $\eta_D$ reach 90 per cent of the plateau?
+\exbox{}{For $\eta_\infty=0.45$ and $d_D=4.1$ mm compute $\eta_D$ at 2, 5, 10 and 25 mm. At what dose does $\eta_D$ reach 90 per cent of the plateau?}\sol  $\eta_D=0.45(1-e^{-d/4.1})$: $0.147$, $0.250$, $0.411$, $0.447$ at 2, 5, 10, 25 mm. 90 per cent of the plateau at $d=4.1\ln10=9.4$ mm.
 
-\textbf{Solution.} $\eta_D=0.45(1-e^{-d/4.1})$: $0.147$, $0.250$, $0.411$, $0.447$ at 2, 5, 10, 25 mm. 90 per cent of the plateau at $d=4.1\ln10=9.4$ mm.
-\end{example}
-\begin{example}{problem 6.4}\textbf{Problem.} Why is the ratio of sums, and not the mean of the ratios, used when pooling runs?
+\exbox{}{Why is the ratio of sums, and not the mean of the ratios, used when pooling runs?}\sol  The ratio of sums weights each run by its irrigation and gives the share of the total irrigation; a mean of ratios would give a run with almost no irrigation the same weight as a large one.
 
-\textbf{Solution.} The ratio of sums weights each run by its irrigation and gives the share of the total irrigation; a mean of ratios would give a run with almost no irrigation the same weight as a large one.
-\end{example}
-\begin{example}{problem 6.5}\textbf{Problem.} The text says Equation~(\ref{eq:dose}) is phenomenological. Name two properties it was chosen for.
+\exbox{}{The text says Equation~(\ref{eq:dose}) is phenomenological. Name two properties it was chosen for.}\sol  The correct limits (zero dose drains nothing; large dose passes on a constant share) and a single scale.
 
-\textbf{Solution.} The correct limits (zero dose drains nothing; large dose passes on a constant share) and a single scale.
-\end{example}
 
+\chapimg{fig/ch07.jpg}
+\chapterlead{\subhd{After this chapter you can} define the memory fate as a pooled regression slope, derive the rate-competition law, and explain why a saving from evaporation is soil specific.}
 \chapter{Hydraulic memory}\label{ch:mem}
 \markboth{Hydraulic memory}{Hydraulic memory}
-\textbf{After this chapter you can} define the memory fate as a pooled regression slope, derive the rate-competition law, and explain why a saving from evaporation is soil specific.
 
 \section{The idea}
 A soil that starts a season wet releases some of its stored water during the season. Where does the released water go: to transpiration, to evaporation, or to drainage below the roots? Hydraulic memory is the share that drains. It is a property of the soil, not of one season.
@@ -81,25 +78,32 @@ Experiment E9 imposes, for each soil, an initial suction $h_0$ (ten values from 
 \end{equation}
 The sums run over lattice cells $c$ of one soil, and bars denote means within each rain level $P$. Pooling within $P$ removes the first-order effect of the change of rainfall on $\bar R$ and isolates the response to the antecedent state. $\phi_D$ is the hydraulic memory of drainage: the fraction of an additional millimetre of antecedent storage released that is shed as drainage. The unity constraint follows from the water balance when the irrigation response to $\bar R$ is negligible within the lattice. Confidence intervals come from bootstrapping the 100 cells (1,000 resamples).
 
-\begin{example}{a slope by hand}
-Within one rain level take four cells with released storage $\bar R=(10,20,30,40)$ mm and drainage $D=(6,13,17,24)$ mm. Means: $\bar R_P=25$, $\bar D_P=15$. Deviations of $\bar R$: $(-15,-5,5,15)$; of $D$: $(-9,-2,2,9)$. The numerator is $135+10+10+135=290$; the denominator is $225+25+25+225=500$. So $\phi_D=0.58$: of each extra millimetre released, 0.58 mm drains. In a real analysis the sums run over all ten rain levels of the lattice.
-\end{example}
+\exbox{A slope by hand}{Within one rain level take four cells with released storage $\bar R=(10,20,30,40)$ mm and drainage $D=(6,13,17,24)$ mm. Means: $\bar R_P=25$, $\bar D_P=15$. Deviations of $\bar R$: $(-15,-5,5,15)$; of $D$: $(-9,-2,2,9)$. The numerator is $135+10+10+135=290$; the denominator is $225+25+25+225=500$. So $\phi_D=0.58$: of each extra millimetre released, 0.58 mm drains. In a real analysis the sums run over all ten rain levels of the lattice.}
+
+
 
 \fig{p1_mem}{0.9}{Hydraulic memory of drainage across the ten soils, from the ensemble.}
+
+\begin{kfig}{Hydraulic memory: the response to a saving decays as the store drains; the memory fate $\phi$ is the share of the saving still held by the soil after a season.}
+\draw[axis] (0,0)--(7.4,0);\draw[axis] (0,0)--(0,4.2);
+\node[lab,below] at (3.7,-0.45) {Time after the saving};\node[lab,rotate=90] at (-0.8,2.1) {Retained saving};
+\draw[crv,domain=0:7,samples=40,smooth] plot (\x,{3.8*exp(-\x/5)});
+\draw[ln,domain=0:7,samples=40,smooth] plot (\x,{3.8*exp(-\x/1.6)});
+\draw[gd] (6.0,0)--(6.0,{3.8*exp(-6/5)});\node[lab,above] at (6.0,{3.8*exp(-6/5)+0.05}) {$\phi$};
+\node[lab,text=khmag] at (5.2,2.5) {fine soil};\node[lab,text=khcyan!70!black] at (2.1,1.0) {coarse soil};
+\end{kfig}
 
 \section{Results across soils}
 The memory fate $\phi_D$ runs from 0.85 in sand (S03) to 0.02 in silty clay loam (S10); see Table~\ref{tab:soils}. It follows the pore-size parameter $n$ (Spearman correlation $0.95$) and the saturated conductivity ($0.97$), and it transfers to independent evaporation and mulch experiments (correlations $0.85$ and $0.89$).
 
 \section{The rate-competition law}
 Let stored water $S$ above field capacity leave by two parallel first-order sinks: drainage with rate constant $k_D\propto\Ks/L$ and withdrawal by evaporation and uptake with $k_W\propto q^*/L$, where $L$ is a common length. Then $dS/dt=-(k_D+k_W)S$ and the drainage that leaves over the whole release is
-\begin{equation}\label{eq:comp}
-\int_0^\infty k_DS\,dt=\frac{k_D}{k_D+k_W}S_0\quad\Longrightarrow\quad\boxed{\;\phi_D=\frac{\Ks}{\Ks+q^*}\;}
-\end{equation}
+\begin{equation}\label{eq:comp}\boxed{\int_0^\infty k_DS\,dt=\frac{k_D}{k_D+k_W}S_0\quad\Longrightarrow\quad\boxed{\;\phi_D=\frac{\Ks}{\Ks+q^*}\;}}\end{equation}
 The law is bounded in $[0,1]$, tends to 0 for an impermeable soil and to 1 for a free-draining one, and is the only one-parameter form with these limits that is linear in $\Ks$ at small $\Ks$. By the Buckingham theorem $\phi_D=F(\Ks/q^*,n,\alpha h^*)$, and the law keeps the first group only. The constant $q^*$ is one withdrawal scale shared by all soils, fitted by nonlinear least squares on the eight soils with a literature $\Ks$. Left-out soils are predicted with a leave-one-soil-out root-mean-square error of 0.058.
 
-\begin{example}{reading the law}
-If $\Ks=q^*$ then $\phi_D=1/2$: drainage and withdrawal are equally fast. A soil with $\Ks=9q^*$ has $\phi_D=0.9$, and one with $\Ks=q^*/9$ has $\phi_D=0.1$. A ninefold step in conductivity moves the memory fate from 0.1 to 0.5 to 0.9, which is why the memory of sand and silty clay loam are so far apart.
-\end{example}
+\exbox{Reading the law}{If $\Ks=q^*$ then $\phi_D=1/2$: drainage and withdrawal are equally fast. A soil with $\Ks=9q^*$ has $\phi_D=0.9$, and one with $\Ks=q^*/9$ has $\phi_D=0.1$. A ninefold step in conductivity moves the memory fate from 0.1 to 0.5 to 0.9, which is why the memory of sand and silty clay loam are so far apart.}
+
+
 
 \section{Why the memory transfers to other experiments}
 The same competition decides where any extra water goes, whether it comes from initial storage, from a lower evaporation factor or from a mulch; the share is a property of the conductivity of the soil, not of the source of the water.
@@ -111,23 +115,13 @@ In experiment E16, a $2^6$ factorial per soil (rainfall scale, temperature shift
 Leave-one-soil-out prediction compares four soil predictors (total available water, $\Se$ at 100 cm, $n$ and $\log\Ks$) and a mean-only benchmark. Spearman correlations come with exact permutation $p$ values and 10,000 bootstrap resamples; an exact sign test across soils checks the direction. All inputs are annual values read from the Daisy logs of E9, E7 and E16.
 \end{daisybox}
 
-\begin{example}{problem 7.1}\textbf{Problem.} Four cells have $\bar R=(5,15,25,35)$ and $E_s=(20,22,24,26)$ in one rain level. Compute $\phi_{E_s}$.
+\exbox{}{Four cells have $\bar R=(5,15,25,35)$ and $E_s=(20,22,24,26)$ in one rain level. Compute $\phi_{E_s}$.}\sol  Deviations $(-15,-5,5,15)$ and $(-3,-1,1,3)$: numerator $45+5+5+45=100$, denominator $500$, $\phi_{E_s}=0.20$.
 
-\textbf{Solution.} Deviations $(-15,-5,5,15)$ and $(-3,-1,1,3)$: numerator $45+5+5+45=100$, denominator $500$, $\phi_{E_s}=0.20$.
-\end{example}
-\begin{example}{problem 7.2}\textbf{Problem.} Derive Equation~(\ref{eq:comp}) from the two first-order sinks, showing the integral.
+\exbox{}{Derive Equation~(\ref{eq:comp}) from the two first-order sinks, showing the integral.}\sol  $dS/dt=-(k_D+k_W)S\Rightarrow S=S_0e^{-(k_D+k_W)t}$; $\int_0^\infty k_DS\,dt=k_DS_0/(k_D+k_W)$; with $k_D\propto\Ks$ and $k_W\propto q^*$ the factor $L$ cancels.
 
-\textbf{Solution.} $dS/dt=-(k_D+k_W)S\Rightarrow S=S_0e^{-(k_D+k_W)t}$; $\int_0^\infty k_DS\,dt=k_DS_0/(k_D+k_W)$; with $k_D\propto\Ks$ and $k_W\propto q^*$ the factor $L$ cancels.
-\end{example}
-\begin{example}{problem 7.3}\textbf{Problem.} If $q^*=1.5$ cm\,d$^{-1}$ (a hypothetical value) find $\phi_D$ for $\Ks=0.5$, $5$ and $50$ cm\,d$^{-1}$.
+\exbox{}{If $q^*=1.5$ cm\,d$^{-1}$ (a hypothetical value) find $\phi_D$ for $\Ks=0.5$, $5$ and $50$ cm\,d$^{-1}$.}\sol  $\phi_D=0.25,\ 0.77,\ 0.97$ for $\Ks=0.5,\ 5,\ 50$ (with $q^*=1.5$).
 
-\textbf{Solution.} $\phi_D=0.25,\ 0.77,\ 0.97$ for $\Ks=0.5,\ 5,\ 50$ (with $q^*=1.5$).
-\end{example}
-\begin{example}{problem 7.4}\textbf{Problem.} Explain why a nitrogen factor with no effect is useful as a negative control.
+\exbox{}{Explain why a nitrogen factor with no effect is useful as a negative control.}\sol  An effect that is known to be absent shows what a null result looks like and guards against reading a pattern into noise.
 
-\textbf{Solution.} An effect that is known to be absent shows what a null result looks like and guards against reading a pattern into noise.
-\end{example}
-\begin{example}{problem 7.5}\textbf{Problem.} A mulch saves 40 mm of evaporation in sand ($\phi_D=0.85$) and in silty clay loam ($\phi_D=0.02$). Estimate, using the memory fate as the drained share, how many millimetres stay available to the crop in each.
+\exbox{}{A mulch saves 40 mm of evaporation in sand ($\phi_D=0.85$) and in silty clay loam ($\phi_D=0.02$). Estimate, using the memory fate as the drained share, how many millimetres stay available to the crop in each.}\sol  Sand: $40\times(1-0.85)=6$ mm stay; silty clay loam: $40\times(1-0.02)=39.2$ mm stay.
 
-\textbf{Solution.} Sand: $40\times(1-0.85)=6$ mm stay; silty clay loam: $40\times(1-0.02)=39.2$ mm stay.
-\end{example}

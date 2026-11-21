@@ -1,13 +1,14 @@
+\chapimg{fig/ch11.jpg}
+\chapterlead{\subhd{After this chapter you can} plan an experiment with a run budget, read a Daisy run through plots and balances, and rebuild an analysis of the book from the archived data.}
 \chapter{The Daisy workbench: planning and reading experiments}
 \markboth{The Daisy workbench}{The Daisy workbench}
-\textbf{After this chapter you can} plan an experiment with a run budget, read a Daisy run through plots and balances, and rebuild an analysis of the book from the archived data.
 
 \section{Planning an experiment}
 The workbench plans experiments, checks every design against a catalogue of what Daisy can vary, and keeps the run budget. If the factors have $n_1,n_2,\dots$ levels and the budget is $B$ runs, the number of runs is
-\begin{equation}\label{eq:runs}N=\min\Bigl(\prod_i n_i,\ B\Bigr).\end{equation}
-\begin{example}{counting runs}
-Dose with 6 levels, 10 irrigation windows and 10 soils give $6\times10\times10=600$ runs. With a budget of 500 the workbench reduces the design to $N=500$, and says so. The ensemble's E10 had $10$ soils $\times\ 10$ windows $\times\ 10$ doses $=1000$ cells, of which 954 were valid.
-\end{example}
+\begin{equation}\label{eq:runs}\boxed{N=\min\Bigl(\prod_i n_i,\ B\Bigr).}\end{equation}
+\exbox{Counting runs}{Dose with 6 levels, 10 irrigation windows and 10 soils give $6\times10\times10=600$ runs. With a budget of 500 the workbench reduces the design to $N=500$, and says so. The ensemble's E10 had $10$ soils $\times\ 10$ windows $\times\ 10$ doses $=1000$ cells, of which 954 were valid.}
+
+
 \fig{sh_dz-exp}{0.95}{Experiments: 43 ready combinations from 17 topics of the Daisy reference manual. A link opens the page of the manual that documents the setting.}
 \fig{zip}{0.9}{The experiment folder: 58 files with Daisy set-ups, ready to run.}
 
@@ -28,16 +29,10 @@ The second rule of origin says that a decision layer draws a Daisy result only f
 \item The reach interval of the soil is bounded below by the largest firing trigger and above by the smallest non-firing one.
 \item Compute the predicted reach of Equation~(\ref{eq:reach}) from the soil's $\alpha$ and $n$ and compare.
 \end{enumerate}
-\begin{example}{problem 11.1}\textbf{Problem.} Carry out steps 1--4 for the sand S03 and the sandy loam S05. Is the prediction inside the observed interval?
+\exbox{}{Carry out steps 1--4 for the sand S03 and the sandy loam S05. Is the prediction inside the observed interval?}\sol  From the archived trigger runs, a trigger \emph{fires} when the mean irrigation exceeds 5 mm\,yr$^{-1}$. \textbf{Sand S03:} irrigation is $6.4$ mm at 100 cm and $0$ at 150 cm, so the reach lies in $(100,150]$ cm; Equation~(\ref{eq:reach}) predicts $\hc=199$ cm, which is $1.3$ to $2.0$ times above the interval. \textbf{Sandy loam S05:} $17.5$ mm at 800 cm and $4.1$ mm at 1000 cm, so the interval is $(800,1000]$ cm; predicted $1{,}615$ cm, $1.6$ to $2.0$ times above. Neither prediction falls \emph{inside} the observed interval, but both lie within the factor $2.3$ stated for left-out soils; the law overestimates slightly for these two soils.
 
-\textbf{Solution.} From the archived trigger runs, a trigger \emph{fires} when the mean irrigation exceeds 5 mm\,yr$^{-1}$. \textbf{Sand S03:} irrigation is $6.4$ mm at 100 cm and $0$ at 150 cm, so the reach lies in $(100,150]$ cm; Equation~(\ref{eq:reach}) predicts $\hc=199$ cm, which is $1.3$ to $2.0$ times above the interval. \textbf{Sandy loam S05:} $17.5$ mm at 800 cm and $4.1$ mm at 1000 cm, so the interval is $(800,1000]$ cm; predicted $1{,}615$ cm, $1.6$ to $2.0$ times above. Neither prediction falls \emph{inside} the observed interval, but both lie within the factor $2.3$ stated for left-out soils; the law overestimates slightly for these two soils.
-\end{example}
-\begin{example}{problem 11.2}\textbf{Problem.} Use E10 to estimate $\eta_D$ for a soil and a dose of your choice (Chapter~6), by differencing against the rainfed twin of E0.
+\exbox{}{Use E10 to estimate $\eta_D$ for a soil and a dose of your choice (Chapter~6), by differencing against the rainfed twin of E0.}\sol  Take the loam S06 and a dose of $10$ mm. The fitted law $\eta_D=\eta_\infty(1-e^{-d/d_D})$ with $\eta_\infty=0.197$ and $d_D=3.89$ mm gives $0.197(1-e^{-2.57})=0.182$. The archived differenced value at 10 mm is $0.173$ (and $0.145$ at 4 mm, $0.165$ at 6 mm); the fit is within $0.01$, consistent with $R^2=0.93$. Of 10 mm applied, about $1.7$ mm drains.
 
-\textbf{Solution.} Take the loam S06 and a dose of $10$ mm. The fitted law $\eta_D=\eta_\infty(1-e^{-d/d_D})$ with $\eta_\infty=0.197$ and $d_D=3.89$ mm gives $0.197(1-e^{-2.57})=0.182$. The archived differenced value at 10 mm is $0.173$ (and $0.145$ at 4 mm, $0.165$ at 6 mm); the fit is within $0.01$, consistent with $R^2=0.93$. Of 10 mm applied, about $1.7$ mm drains.
-\end{example}
-\begin{example}{problem 11.3}\textbf{Problem.} Use E9 to compute $\phi_D$ for one soil with Equation~(\ref{eq:phi}) and compare with Table~\ref{tab:soils}.
+\exbox{}{Use E9 to compute $\phi_D$ for one soil with Equation~(\ref{eq:phi}) and compare with Table~\ref{tab:soils}.}\sol  For the sand S03 the archived pooled within-P slope is $\phi_D=0.8455$ (Table~\ref{tab:soils} lists $0.846$). The competition law then implies $\Ks/q^*=0.8455/0.1545=5.47$. For the silty clay loam, $\phi_D=0.0220$ gives $\Ks/q^*=0.0225$. The law reproduces the table by construction; what it adds is the ratio $5.47/0.0225=243$ between the two soils.
 
-\textbf{Solution.} For the sand S03 the archived pooled within-P slope is $\phi_D=0.8455$ (Table~\ref{tab:soils} lists $0.846$). The competition law then implies $\Ks/q^*=0.8455/0.1545=5.47$. For the silty clay loam, $\phi_D=0.0220$ gives $\Ks/q^*=0.0225$. The law reproduces the table by construction; what it adds is the ratio $5.47/0.0225=243$ between the two soils.
-\end{example}
 

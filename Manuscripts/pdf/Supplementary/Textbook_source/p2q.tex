@@ -1,34 +1,29 @@
+\chapimg{fig/ch04.jpg}
+\chapterlead{\subhd{After this chapter you can} reproduce the blocks of the Results tab from the daily series of Engine~2, close the water balance of a year, compute the sums of the next 14 days, read the pinned-baseline differences with the right colour, and compute the reliability statistics of the Charts tab over twenty seasons.}
 \chapter{The Dashboard: how every number is produced}\label{ch:dash}
 \markboth{Dashboard}{Dashboard}
-\textbf{After this chapter you can} reproduce the blocks of the Results tab from the daily series of Engine~2, close the water balance of a year, compute the sums of the next 14 days, read the pinned-baseline differences with the right colour, and compute the reliability statistics of the Charts tab over twenty seasons.
 
 The Dashboard recomputes from the engine every time the state, the date or the weather changes, so it adds no model of its own: every number is a read-out or a sum of the daily series $P_k,I_k,E_k,T_k,D_k$ of Engine~2 (Chapter~\ref{ch:e2}) and of the annual outputs of Engine~1. This chapter does the sums.
 
 \section{Block 1: the working date}
 On day index $k$ the tab shows $\mathrm{Rain}=P_k$, $\mathrm{Irr}=I_k$, $\mathrm{Evap}=E_k$, $\mathrm{Transp}=T_k$, $\mathrm{Drain}=D_k$ (mm d$^{-1}$), the sensor depletion $f$ and the trigger $f_T$ (irrigation fires when $f\ge f_T$).
 
-\begin{example}{one day of the dashboard}
-The loam at the trigger $-300$ cm (depletion $f_T=0.468$), the first synthetic year (seed 1), working date day 150. Read the first block.
+\exbox{One day of the dashboard}{The loam at the trigger $-300$ cm (depletion $f_T=0.468$), the first synthetic year (seed 1), working date day 150. Read the first block.}\sol  From the daily series: rain $P=1.0$ mm; rain reaching the soil after interception $0.3$ mm; irrigation $I=0.0$ mm; soil evaporation $E=0.54$ mm; transpiration $T=2.20$ mm; drainage $D=0.0$ mm; canopy cover $c=0.48$; the sensor layer holds 0.924 of its capacity so its relative depletion is $f=1-0.924=0.076$, below the trigger $f_T=0.468$. Irrigation fires on a day when the sensor depletion has reached $f_T$ (Eq.~6.1).
 
-\textbf{Solution.} From the daily series: rain $P=1.0$ mm; rain reaching the soil after interception $0.3$ mm; irrigation $I=0.0$ mm; soil evaporation $E=0.54$ mm; transpiration $T=2.20$ mm; drainage $D=0.0$ mm; canopy cover $c=0.48$; the sensor layer holds 0.924 of its capacity so its relative depletion is $f=1-0.924=0.076$, below the trigger $f_T=0.468$. Irrigation fires on a day when the sensor depletion has reached $f_T$ (Eq.~6.1).
-\end{example}
 
 \section{Block 2: the next 14 days}
 The sums over the following $N=14$ days are $\Sigma X=\sum_{j=1}^{14}X_{k+j}$ for $X\in\{P,I,E,T,D\}$. The bar says whether the days come from the weather record (the analogue year) or from the 16-day forecast when online weather is in use.
 
-\begin{example}{the next fortnight}
-Sum days 151 to 164.
+\exbox{The next fortnight}{Sum days 151 to 164.}\sol  $\Sigma P=13.6$ mm, $\Sigma I=15.0$ mm, $\Sigma E=7.4$ mm, $\Sigma T=39.8$ mm, $\Sigma D=0.0$ mm. Evapotranspiration of the fortnight is $\Sigma E+\Sigma T=47.2$ mm, a mean of $3.37$ mm d$^{-1}$. Without rain or irrigation the fortnight would draw 18.6 mm from storage (the model gives the actual change below).
 
-\textbf{Solution.} $\Sigma P=13.6$ mm, $\Sigma I=15.0$ mm, $\Sigma E=7.4$ mm, $\Sigma T=39.8$ mm, $\Sigma D=0.0$ mm. Evapotranspiration of the fortnight is $\Sigma E+\Sigma T=47.2$ mm, a mean of $3.37$ mm d$^{-1}$. Without rain or irrigation the fortnight would draw 18.6 mm from storage (the model gives the actual change below).
-\end{example}
 
 \section{Block 3: the whole year and its closure}
 For the calendar year the tab gives rain, irrigation, other evaporation (interception, litter, ponded water, snow), soil evaporation, transpiration, drainage and the storage change; the balance closes by the identity
-\begin{equation}\Delta S=P+I-E_{\rm other}-E-T-D.\end{equation}
+\begin{equation}\boxed{\Delta S=P+I-E_{\rm other}-E-T-D.}\end{equation}
 
 \begin{table}[H]\centering\small\caption{Block 3 of the Results tab.}\label{tab:year}
 \begin{tabular}{lr}\toprule
-Quantity & mm (year 1, loam, $-300$ cm)\\\midrule
+\hd{Quantity} & \hd{mm (year 1, loam, $-300$ cm)}\\\midrule
 Rain $P$ & 606.1\\
 Irrigation $I$ & 90.0\\
 Other evaporation $E_{\rm other}$ & 61.7\\
@@ -38,56 +33,44 @@ Drainage $D$ & 200.2\\
 Storage change $\Delta S$ & 46.1\\
 Deepest roots (cm) & 82\\\bottomrule\end{tabular}\end{table}
 
-\begin{example}{closing the year}
-Verify the closure of Table~\ref{tab:year}.
+\exbox{Closing the year}{Verify the closure of Table~\ref{tab:year}.}\sol  $\Delta S=P+I-E_{\rm other}-E-T-D=606.1+90.0-61.7-158.5-229.6-200.2=46.1$ mm. Independently, the root-zone store of the 100 cm profile rose from 122.4 mm on 1 January to 168.5 mm on 31 December, a change of 46.1 mm. The two agree because $E_{\rm other}$ is, by construction, the rain that did not reach the soil: $E_{\rm other}=\sum(P_k-P_k^{\rm soil})=61.7$ mm.
 
-\textbf{Solution.} $\Delta S=P+I-E_{\rm other}-E-T-D=606.1+90.0-61.7-158.5-229.6-200.2=46.1$ mm. Independently, the root-zone store of the 100 cm profile rose from 122.4 mm on 1 January to 168.5 mm on 31 December, a change of 46.1 mm. The two agree because $E_{\rm other}$ is, by construction, the rain that did not reach the soil: $E_{\rm other}=\sum(P_k-P_k^{\rm soil})=61.7$ mm.
-\end{example}
 
 \section{Block 4 and the Charts tab: twenty seasons}
 Block 4 shows the 20-year averages of the annual model, and each chart has a line stating the mean, the 10--90\% range, the lowest and highest season and the variation between years. The variation is the coefficient of variation $\mathrm{CV}=100\,s/\bar x$ with $s$ the sample standard deviation.
 
 \begin{table}[H]\centering\small\caption{Reliability over twenty synthetic seasons (seeds 1--20), loam, trigger $-300$ cm, mm per year.}\label{tab:rel}
 \begin{tabular}{lrrrrrr}\toprule
-Quantity & mean & 10\% & 90\% & lowest & highest & CV (\%)\\\midrule
+\hd{Quantity} & \hd{mean} & \hd{10\%} & \hd{90\%} & \hd{lowest} & \hd{highest} & \hd{CV (\%)}\\\midrule
 Rain & 602 & 522 & 735 & 438 & 765 & 14\\
 Irrigation & 99 & 58 & 137 & 45 & 150 & 32\\
 Drainage & 207 & 134 & 283 & 111 & 359 & 31\\
 Soil evaporation & 158 & 157 & 160 & 148 & 160 & 2\\
 Transpiration & 230 & 229 & 230 & 228 & 230 & 0\\\bottomrule\end{tabular}\end{table}
 
-\begin{example}{the statistics line}
-From Table~\ref{tab:rel} write the line under the irrigation chart.
+\exbox{The statistics line}{From Table~\ref{tab:rel} write the line under the irrigation chart.}\sol  ``Irrigation: mean 99 mm; 10 to 90\% range 58 to 137 mm; lowest 45 mm, highest 150 mm; variation between years 32\%.'' The coefficient of variation is $100\times s/\bar x$ with $s=31.3$ mm and $\bar x=99$ mm. No season was rainfed in this sample.
 
-\textbf{Solution.} ``Irrigation: mean 99 mm; 10 to 90\% range 58 to 137 mm; lowest 45 mm, highest 150 mm; variation between years 32\%.'' The coefficient of variation is $100\times s/\bar x$ with $s=31.3$ mm and $\bar x=99$ mm. No season was rainfed in this sample.
-\end{example}
 
 \section{The pinned baseline}
 Press Pin and the tiles of Block 4 are stored; afterwards each tile shows $\Delta_i=x_i-x_i^{\rm pin}$ with $\blacktriangle$ for an increase, $\blacktriangledown$ for a decrease, green when the change is in the better direction, red when worse and ``= no change'' when $|\Delta_i|<10^{-9}$. Lower is better for soil evaporation, drainage, irrigation and nitrogen leaching; higher is better for yield and irrigation efficiency; transpiration, evapotranspiration and rainfall are neutral.
 
 \begin{table}[H]\centering\small\caption{Pin at the trigger $-300$ cm, then move to $-1500$ cm (twenty-season means, mm per year).}\label{tab:pin}
 \begin{tabular}{lrrrll}\toprule
-Tile & pinned (-300 cm) & now (-1500 cm) & $\Delta$ & arrow & colour\\\midrule
+\hd{Tile} & \hd{pinned (-300 cm)} & \hd{now (-1500 cm)} & \hd{$\Delta$} & \hd{arrow} & \hd{colour}\\\midrule
 Soil evaporation & 157.8 & 156.1 & -1.7 & $\blacktriangledown$ & better (green)\\
 Transpiration & 229.6 & 229.6 & 0.0 & = no change & neutral\\
 Drainage & 206.9 & 156.2 & -50.7 & $\blacktriangledown$ & better (green)\\
 Irrigation & 99.0 & 45.8 & -53.2 & $\blacktriangledown$ & better (green)\\
 Rain & 602.0 & 602.0 & 0.0 & = no change & neutral\\\bottomrule\end{tabular}\end{table}
 
-\begin{example}{reading the pinned differences}
-Read the tiles of Table~\ref{tab:pin}.
+\exbox{Reading the pinned differences}{Read the tiles of Table~\ref{tab:pin}.}\sol  Irrigation falls from 99.0 to 45.8 mm (-53.2 mm): $\blacktriangledown$ and green, since less is better. Transpiration changes by 0.0 mm and is neutral (it carries no colour, because less transpiration may mean either less stress or a smaller crop). Drainage changes by -50.7 mm. A drier trigger therefore saves irrigation but the dashboard alone cannot say whether the saving is worth it: the yield tile (not computed here) must be read with it, as in Chapter~\ref{ch:ctrl}.
 
-\textbf{Solution.} Irrigation falls from 99.0 to 45.8 mm (-53.2 mm): $\blacktriangledown$ and green, since less is better. Transpiration changes by 0.0 mm and is neutral (it carries no colour, because less transpiration may mean either less stress or a smaller crop). Drainage changes by -50.7 mm. A drier trigger therefore saves irrigation but the dashboard alone cannot say whether the saving is worth it: the yield tile (not computed here) must be read with it, as in Chapter~\ref{ch:ctrl}.
-\end{example}
 
 \section{The pump hydrograph of a design}
 For drip and sprinkler designs the pump hydrograph is the step series $Q_{\rm pump}(t)=Q_z$ for $t\in[0,n_zt_{\rm run})$ and 0 afterwards: the zones or sets run in turn.
 
-\begin{example}{a pump hydrograph}
-For the sprinkler farm of Chapter~\ref{ch:sprinkler} ($n=3$ laterals at once, set time $T=371$ min) the farm has $N_m=18$ lateral positions, so $n_z=\lceil18/3\rceil=6$ sets. Find the step series.
+\exbox{A pump hydrograph}{For the sprinkler farm of Chapter~\ref{ch:sprinkler} ($n=3$ laterals at once, set time $T=371$ min) the farm has $N_m=18$ lateral positions, so $n_z=\lceil18/3\rceil=6$ sets. Find the step series.}\sol  The flow of one set is $Q_z=3\times12\times21.2$ L min$^{-1}=764$ L min$^{-1}=12.74$ L s$^{-1}$ (3 laterals of 12 sprinklers). $t_{\rm run}=371/60=6.18$ h. The pump runs at $Q_z$ for $n_zt_{\rm run}=37.1$ h, in steps of $6.18$ h, and the volume is $Q_z\times n_zt_{\rm run}\times3.6=1{,}701$ m$^3$ (check: gross depth $\times$ area of the sets).
 
-\textbf{Solution.} The flow of one set is $Q_z=3\times12\times21.2$ L min$^{-1}=764$ L min$^{-1}=12.74$ L s$^{-1}$ (3 laterals of 12 sprinklers). $t_{\rm run}=371/60=6.18$ h. The pump runs at $Q_z$ for $n_zt_{\rm run}=37.1$ h, in steps of $6.18$ h, and the volume is $Q_z\times n_zt_{\rm run}\times3.6=1{,}701$ m$^3$ (check: gross depth $\times$ area of the sets).
-\end{example}
 
 \section{Summary}
 Every Dashboard number is a read-out, a sum, a mean or a difference of the daily series: Block 1 reads day $k$; Block 2 sums 14 days; Block 3 closes $\Delta S=P+I-E_{\rm other}-E-T-D$; Block 4 and the charts use twenty seasons; the pin shows $\Delta=x-x^{\rm pin}$ with a colour by direction; the pump hydrograph is a step series. Because all of it comes from the same objects, the dashboard, the report and the CSV exports agree digit for digit.

@@ -1,26 +1,21 @@
+\chapimg{fig/ch18.jpg}
+\chapterlead{\subhd{After this chapter you can} generate the canopy, rain, evaporation, transpiration and irrigation of a day by hand, run a season of the daily model, and scale it to the annual meta-model.}
 \chapter{Engine 2: the daily bucket model, step by step}\label{ch:e2}
 \markboth{Engine 2}{Engine 2}
-\textbf{After this chapter you can} generate the canopy, rain, evaporation, transpiration and irrigation of a day by hand, run a season of the daily model, and scale it to the annual meta-model.
 
 The daily model has $N=40$ layers of thickness $\Delta z=2.5$ cm. Layer $i$ holds water $w_i$ between $0$ and $W_{\max}=\mathrm{AWC}\,\Delta z$ (mm); relative content $s_i=w_i/W_{\max}$ and depletion $f_i=1-s_i$. All layers start at $0.72W_{\max}$. The sensor layer is $j_s=\mathrm{round}(z_s/\Delta z)$.
 
-\begin{example}{layout and state}
-For the loam (AWC $=1.7$ mm cm$^{-1}$) with sensor depth 20 cm find $W_{\max}$, the sensor layer, the starting water and the trigger depletion for $-300$ cm.
+\exbox{Layout and state}{For the loam (AWC $=1.7$ mm cm$^{-1}$) with sensor depth 20 cm find $W_{\max}$, the sensor layer, the starting water and the trigger depletion for $-300$ cm.}\sol  $W_{\max}=1.7\times2.5=4.25$ mm; $j_s=\mathrm{round}(20/2.5)=8$; starting water $0.72\times4.25=3.06$ mm per layer, so the 100 cm profile holds $40\times3.06=122.4$ mm of plant-available water out of $170$ mm. The trigger depletion is $f_T=0.468$ (Chapter~\ref{ch:e1}), so the sensor layer must fall to $s_8\le1-0.468=0.532$, that is $w_8\le2.26$ mm, to start irrigation. At the start $w_8=3.06>2.26$, so no irrigation is due.
 
-\textbf{Solution.} $W_{\max}=1.7\times2.5=4.25$ mm; $j_s=\mathrm{round}(20/2.5)=8$; starting water $0.72\times4.25=3.06$ mm per layer, so the 100 cm profile holds $40\times3.06=122.4$ mm of plant-available water out of $170$ mm. The trigger depletion is $f_T=0.468$ (Chapter~\ref{ch:e1}), so the sensor layer must fall to $s_8\le1-0.468=0.532$, that is $w_8\le2.26$ mm, to start irrigation. At the start $w_8=3.06>2.26$, so no irrigation is due.
-\end{example}
 
 \section{Crop calendar and canopy cover}
 For spring barley the sowing day is 100 and the harvest day is 225. The cover is the logistic
-\begin{equation}c(d)=\frac{1}{1+\exp[-(d-d_{\rm mid})/13]},\quad d_{\rm mid}=d_{\rm sow}+50,\end{equation}
+\begin{equation}\boxed{c(d)=\frac{1}{1+\exp[-(d-d_{\rm mid})/13]},\quad d_{\rm mid}=d_{\rm sow}+50,}\end{equation}
 which after the peak day $d_{\rm pk}=d_{\rm harv}-50$ declines linearly to zero at harvest: $c\leftarrow c\,\max\{0,1-(d-d_{\rm pk})/(d_{\rm harv}-d_{\rm pk})\}$.
 
-\begin{example}{canopy cover through the season}
-Compute the canopy cover of spring barley on days 100, 120, 140, 150, 160, 175, 190, 205, 215 and 225.
-
-\textbf{Solution.} $d_{\rm mid}=150$, $d_{\rm pk}=175$. Before the peak $c=1/(1+e^{-(d-150)/13})$: on day 120, $(120-150)/13=-2.308$, $e^{2.308}=10.05$, so $c=1/11.05=0.0905$; on day 150, $c=0.5$; on day 160, $e^{-0.769}=0.4634$ so $c=0.683$. At the peak $d=175$: $e^{-1.923}=0.1462$, $c=0.872$. After the peak the factor is $1-(d-175)/50$: on day 190 the logistic gives $0.956$ and the factor is $1-15/50=0.70$, so $c=0.669$; on day 205, $0.986\times0.40=0.394$; on day 225, the factor is $0$ and $c=0$. Table~\ref{tab:can} lists all ten days.\begin{table}[H]\centering\small\caption{Canopy cover of spring barley.}\label{tab:can}
+\exbox{Canopy cover through the season}{Compute the canopy cover of spring barley on days 100, 120, 140, 150, 160, 175, 190, 205, 215 and 225.}\sol  $d_{\rm mid}=150$, $d_{\rm pk}=175$. Before the peak $c=1/(1+e^{-(d-150)/13})$: on day 120, $(120-150)/13=-2.308$, $e^{2.308}=10.05$, so $c=1/11.05=0.0905$; on day 150, $c=0.5$; on day 160, $e^{-0.769}=0.4634$ so $c=0.683$. At the peak $d=175$: $e^{-1.923}=0.1462$, $c=0.872$. After the peak the factor is $1-(d-175)/50$: on day 190 the logistic gives $0.956$ and the factor is $1-15/50=0.70$, so $c=0.669$; on day 205, $0.986\times0.40=0.394$; on day 225, the factor is $0$ and $c=0$. Table~\ref{tab:can} lists all ten days.\begin{table}[H]\centering\small\caption{Canopy cover of spring barley.}\label{tab:can}
 \begin{tabular}{lr}\toprule
-Day & Cover $c$\\\midrule
+\hd{Day} & \hd{Cover $c$}\\\midrule
 100 & 0.021\\
 120 & 0.090\\
 140 & 0.317\\
@@ -32,115 +27,82 @@ Day & Cover $c$\\\midrule
 215 & 0.199\\
 225 & 0.000\\\bottomrule\end{tabular}\end{table}
 \textbf{Reading.} The curve is engineered to reproduce the shape of a canopy, not a measured leaf-area record; the cover mean over the year, $\bar C=\frac1{365}\sum c(d)=0.138$ is the divisor that spreads the annual transpiration over the days.
-\end{example}
+
 
 \section{Rainfall generator}
 Rain falls on a day with probability 0.28; the wet-day depth is exponential and capped,
-\begin{equation}R=\min\{70,\ \mu_0\gamma_y(-\ln U)\},\ U\sim\mathrm{Uniform}(0,1),\quad \mu_0=\frac{P}{0.28\times365}.\end{equation}
+\begin{equation}\boxed{R=\min\{70,\ \mu_0\gamma_y(-\ln U)\},\ U\sim\mathrm{Uniform}(0,1),\quad \mu_0=\frac{P}{0.28\times365}.}\end{equation}
 The canopy and litter catch the first $I_c=\mu_0\ln(1/r)$ mm of every shower, with $r=\max\{40,P-P_{\rm other}\}/P$, and only throughfall $T_f=\max\{0,R-I_c\}>0.3$ mm enters the soil.
 
-\begin{example}{rainfall generator constants}
-For an annual rain $P=600$ mm, find $\mu_0$, the expected number of wet days, the probability that a wet day exceeds the cap, and the interception $I_c$ if $P_{\rm other}=60$ mm.
+\exbox{Rainfall generator constants}{For an annual rain $P=600$ mm, find $\mu_0$, the expected number of wet days, the probability that a wet day exceeds the cap, and the interception $I_c$ if $P_{\rm other}=60$ mm.}\sol  $\mu_0=600/(0.28\times365)=5.871$ mm. Expected wet days: $0.28\times365=102.2$. The exponential tail gives $P(R>70)=\exp(-70/5.871)=\exp(-11.92)=6.7\times10^{-6}$ (with $\gamma_y=1$), so the cap hardly binds in a year with 102 wet days (the chance that it binds at least once is $102\times6.7\times10^{-6}=7\times10^{-4}$). Next, $r=\max\{40,600-60\}/600=540/600=0.9$ and $I_c=5.871\ln(1/0.9)=0.619$ mm.
 
-\textbf{Solution.} $\mu_0=600/(0.28\times365)=5.871$ mm. Expected wet days: $0.28\times365=102.2$. The exponential tail gives $P(R>70)=\exp(-70/5.871)=\exp(-11.92)=6.7\times10^{-6}$ (with $\gamma_y=1$), so the cap hardly binds in a year with 102 wet days (the chance that it binds at least once is $102\times6.7\times10^{-6}=7\times10^{-4}$). Next, $r=\max\{40,600-60\}/600=540/600=0.9$ and $I_c=5.871\ln(1/0.9)=0.619$ mm.
+\subhd{Check.} The expected interception per wet day is $\mu_0(1-r)=5.871\times0.1=0.587$ mm, so the yearly total is $102.2\times0.587=60.0$ mm, which equals $P_{\rm other}$. The choice of $I_c$ makes the daily generator reproduce the annual interception of Engine 1.
 
-\textbf{Check.} The expected interception per wet day is $\mu_0(1-r)=5.871\times0.1=0.587$ mm, so the yearly total is $102.2\times0.587=60.0$ mm, which equals $P_{\rm other}$. The choice of $I_c$ makes the daily generator reproduce the annual interception of Engine 1.
-\end{example}
 
-\begin{example}{the year factor}
-The dryness factor is $\gamma_y=\mathrm{clip}\bigl((m_{\rm med}/m_y)^{0.3};0.65,1.45\bigr)$ with $m_y=10^{\overline{\log_{10}h}}$ the geometric-mean suction of the growing season. If the median season has $m_{\rm med}=300$ cm and year $y$ has $m_y=900$ cm, find $\gamma_y$ and the mean wet-day depth of that year; do the same for $m_y=60$ cm.
+\exbox{The year factor}{The dryness factor is $\gamma_y=\mathrm{clip}\bigl((m_{\rm med}/m_y)^{0.3};0.65,1.45\bigr)$ with $m_y=10^{\overline{\log_{10}h}}$ the geometric-mean suction of the growing season. If the median season has $m_{\rm med}=300$ cm and year $y$ has $m_y=900$ cm, find $\gamma_y$ and the mean wet-day depth of that year; do the same for $m_y=60$ cm.}\sol  Dry year: $(300/900)^{0.3}=0.3333^{0.3}=e^{0.3\ln0.3333}=e^{-0.3296}=0.719$; the clip does not bind, so $\gamma_y=0.719$ and the mean wet-day depth is $5.871\times0.719=4.22$ mm. Wet year: $(300/60)^{0.3}=5^{0.3}=e^{0.4828}=1.621$, clipped to $1.45$, so the mean depth is $5.871\times1.45=8.51$ mm. A drier record (higher suction) gives drier generated years, and the clip stops the factor from exceeding $0.65$ to $1.45$.
 
-\textbf{Solution.} Dry year: $(300/900)^{0.3}=0.3333^{0.3}=e^{0.3\ln0.3333}=e^{-0.3296}=0.719$; the clip does not bind, so $\gamma_y=0.719$ and the mean wet-day depth is $5.871\times0.719=4.22$ mm. Wet year: $(300/60)^{0.3}=5^{0.3}=e^{0.4828}=1.621$, clipped to $1.45$, so the mean depth is $5.871\times1.45=8.51$ mm. A drier record (higher suction) gives drier generated years, and the clip stops the factor from exceeding $0.65$ to $1.45$.
-\end{example}
 
 \section{Infiltration, redistribution and drainage}
 Water enters the top layer and cascades: any layer above $W_{\max}$ passes the excess down; the excess leaving layer 40 is drainage. Between layers a slow redistribution moves water toward the drier neighbour, $q_i=0.08(w_{i+1}-w_i)$, $w_i\leftarrow w_i+q_i$, $w_{i+1}\leftarrow w_{i+1}-q_i$.
 
-\begin{example}{a 10 mm shower in the loam}
-The loam ($W_{\max}=4.25$ mm) has all layers at $3.06$ mm. A throughfall of $10.0$ mm arrives. Find the water in layers 1 to 4 after the cascade, then after one redistribution pass over the pair (1,2).
+\exbox{A 10 mm shower in the loam}{The loam ($W_{\max}=4.25$ mm) has all layers at $3.06$ mm. A throughfall of $10.0$ mm arrives. Find the water in layers 1 to 4 after the cascade, then after one redistribution pass over the pair (1,2).}\sol  Layer 1: $3.06+10.00=13.06$ mm, an excess of $13.06-4.25=8.81$ mm, so $w_1=4.25$ and $8.81$ mm moves down. Layer 2: $3.06+8.81=11.87$, excess $7.62$, $w_2=4.25$. Layer 3: $3.06+7.62=10.68$, excess $6.43$, $w_3=4.25$. Layer 4: $3.06+6.43=9.49$, excess $5.24$, $w_4=4.25$. The front continues until the excess is used up: each layer absorbs $4.25-3.06=1.19$ mm, so $10.00/1.19=8.4$ layers are filled, that is the wetting front reaches $8.4\times2.5=21$ cm. No drainage occurs at 100 cm.
 
-\textbf{Solution.} Layer 1: $3.06+10.00=13.06$ mm, an excess of $13.06-4.25=8.81$ mm, so $w_1=4.25$ and $8.81$ mm moves down. Layer 2: $3.06+8.81=11.87$, excess $7.62$, $w_2=4.25$. Layer 3: $3.06+7.62=10.68$, excess $6.43$, $w_3=4.25$. Layer 4: $3.06+6.43=9.49$, excess $5.24$, $w_4=4.25$. The front continues until the excess is used up: each layer absorbs $4.25-3.06=1.19$ mm, so $10.00/1.19=8.4$ layers are filled, that is the wetting front reaches $8.4\times2.5=21$ cm. No drainage occurs at 100 cm.
+\subhd{Redistribution.} Within the filled layers $w_i=w_{i+1}$ so $q=0$. At the front, layers 8 and 9 have $w_8=4.25$ and $w_9=3.06+0.4\times1.19=3.54$: $q_8=0.08(3.54-4.25)=-0.057$ mm, so $0.057$ mm moves from layer 8 to layer 9 (downward), smoothing the front by 0.057 mm per day per layer pair.
 
-\textbf{Redistribution.} Within the filled layers $w_i=w_{i+1}$ so $q=0$. At the front, layers 8 and 9 have $w_8=4.25$ and $w_9=3.06+0.4\times1.19=3.54$: $q_8=0.08(3.54-4.25)=-0.057$ mm, so $0.057$ mm moves from layer 8 to layer 9 (downward), smoothing the front by 0.057 mm per day per layer pair.
-\end{example}
 
 \section{Roots}
 The rooting depth chases water while the canopy grows,
 \begin{equation}R_d\leftarrow\max\Bigl\{R_d,\ \min\Bigl\{R_{\max}\,\mathrm{clip}\bigl(\tfrac{c-0.04}{0.96};0,1\bigr)^{0.8},\ R_{\max},\ R_d+1.7(0.35+\bar s_{\rm wet})\kappa\Bigr\}\Bigr\},\end{equation}
 and the root density is
-\begin{equation}\rho_i\propto\exp\Bigl(-\frac{z_i}{\lambda R_d+8}\Bigr)(0.45+0.9s_i)\Bigl[1+3e^{-((z_i-z_d)/12)^2}\Bigr]_{\rm drip\ only},\quad z_i\le R_d,\ \sum\rho_i=1,\end{equation}
+\begin{equation}\boxed{\rho_i\propto\exp\Bigl(-\frac{z_i}{\lambda R_d+8}\Bigr)(0.45+0.9s_i)\Bigl[1+3e^{-((z_i-z_d)/12)^2}\Bigr]_{\rm drip\ only},\quad z_i\le R_d,\ \sum\rho_i=1,}\end{equation}
 with $\lambda=0.32$ for cereal.
 
-\begin{example}{rooting depth advance}
-On day 150 ($c=0.5$) the root depth is $R_d=20$ cm, $R_{\max}=92.15$ cm, the mean relative content under the front is $\bar s_{\rm wet}=0.60$ and the topsoil is wet ($\kappa=1$). Find the new $R_d$.
+\exbox{Rooting depth advance}{On day 150 ($c=0.5$) the root depth is $R_d=20$ cm, $R_{\max}=92.15$ cm, the mean relative content under the front is $\bar s_{\rm wet}=0.60$ and the topsoil is wet ($\kappa=1$). Find the new $R_d$.}\sol  Three candidates: (a) the cover limit $92.15\,\mathrm{clip}((0.5-0.04)/0.96)^{0.8}=92.15\times0.4792^{0.8}=92.15\times0.5549=51.2$ cm; (b) $R_{\max}=92.15$ cm; (c) the growth rate $20+1.7(0.35+0.60)(1)=20+1.615=21.61$ cm. The minimum is 21.61 cm, and the maximum with the old value $20$ is 21.61 cm. The root front therefore advances by 1.6 cm per day while the canopy supports a deeper root: at this rate it needs about $(92-20)/1.6=45$ days to reach full depth.
 
-\textbf{Solution.} Three candidates: (a) the cover limit $92.15\,\mathrm{clip}((0.5-0.04)/0.96)^{0.8}=92.15\times0.4792^{0.8}=92.15\times0.5549=51.2$ cm; (b) $R_{\max}=92.15$ cm; (c) the growth rate $20+1.7(0.35+0.60)(1)=20+1.615=21.61$ cm. The minimum is 21.61 cm, and the maximum with the old value $20$ is 21.61 cm. The root front therefore advances by 1.6 cm per day while the canopy supports a deeper root: at this rate it needs about $(92-20)/1.6=45$ days to reach full depth.
-\end{example}
 
-\begin{example}{root density by layer}
-With $R_d=15$ cm and the six layers of 0 to 15 cm having relative contents $s=0.50,0.55,0.60,0.65,0.70,0.70$ (no drip), compute the root densities.
-
-\textbf{Solution.} $\lambda R_d+8=0.32(15)+8=12.8$ cm. Layer centres $z_i=1.25,3.75,\dots,13.75$ cm. The product $\exp(-z/12.8)(0.45+0.9s)$ is evaluated in Table~\ref{tab:rho} and normalised to sum to 1 (the total before normalisation is $3.4686$). Root density decreases with depth by the exponential and increases with wetness by the second factor; here the wetter lower layers compensate only part of the exponential decline.\begin{table}[H]\centering\small\caption{Root density of the first six layers.}\label{tab:rho}
+\exbox{Root density by layer}{With $R_d=15$ cm and the six layers of 0 to 15 cm having relative contents $s=0.50,0.55,0.60,0.65,0.70,0.70$ (no drip), compute the root densities.}\sol  $\lambda R_d+8=0.32(15)+8=12.8$ cm. Layer centres $z_i=1.25,3.75,\dots,13.75$ cm. The product $\exp(-z/12.8)(0.45+0.9s)$ is evaluated in Table~\ref{tab:rho} and normalised to sum to 1 (the total before normalisation is $3.4686$). Root density decreases with depth by the exponential and increases with wetness by the second factor; here the wetter lower layers compensate only part of the exponential decline.\begin{table}[H]\centering\small\caption{Root density of the first six layers.}\label{tab:rho}
 \begin{tabular}{lrrrr}\toprule
-$z_i$ (cm) & $s_i$ & $e^{-z/12.8}$ & $0.45+0.9s$ & $\rho_i$\\\midrule
+\hd{$z_i$ (cm)} & \hd{$s_i$} & \hd{$e^{-z/12.8}$} & \hd{$0.45+0.9s$} & \hd{$\rho_i$}\\\midrule
 1.25 & 0.50 & 0.9070 & 0.900 & 0.2353\\
 3.75 & 0.55 & 0.7460 & 0.945 & 0.2033\\
 6.25 & 0.60 & 0.6137 & 0.990 & 0.1752\\
 8.75 & 0.65 & 0.5048 & 1.035 & 0.1506\\
 11.25 & 0.70 & 0.4152 & 1.080 & 0.1293\\
 13.75 & 0.70 & 0.3416 & 1.080 & 0.1064\\\bottomrule\end{tabular}\end{table}
-\end{example}
+
 
 \section{Evaporation and transpiration}
 Daily soil evaporation spreads the annual $E_{\rm yr}$ with a sinusoidal weight reduced by canopy shade,
-\begin{equation}E_d=E_{\rm yr}\frac{w({\rm doy})}{\sum_{k=0}^{364}w(k)}(1-0.3c),\quad w({\rm doy})=0.35+0.65\cdot\tfrac12\Bigl[1+\sin\tfrac{2\pi({\rm doy}-100)}{364}\Bigr],\end{equation}
+\begin{equation}\boxed{E_d=E_{\rm yr}\frac{w({\rm doy})}{\sum_{k=0}^{364}w(k)}(1-0.3c),\quad w({\rm doy})=0.35+0.65\cdot\tfrac12\Bigl[1+\sin\tfrac{2\pi({\rm doy}-100)}{364}\Bigr],}\end{equation}
 drawn from the top four layers with weights $(0.55,0.25,0.12,0.08)$, never below $0.05W_{\max}$. Transpiration demand is $T_d=k_tT_{\rm yr}c(d)/(\bar C\cdot365)$ divided among layers by $q_i^T=T_d\rho_ia_i/\sum_j\rho_ja_j$ with $a_i=\mathrm{clip}\bigl((s_i-0.15)/0.6;0,1\bigr)$.
 
-\begin{example}{evaporation of one day}
-With $E_{\rm yr}=170$ mm, find the evaporation on day 181 (doy index 180), when the canopy cover is $c=0.8$, and how it is drawn from the layers.
+\exbox{Evaporation of one day}{With $E_{\rm yr}=170$ mm, find the evaporation on day 181 (doy index 180), when the canopy cover is $c=0.8$, and how it is drawn from the layers.}\sol  The seasonal weight is $w(180)=0.35+0.65\times0.5[1+\sin(2\pi\,80/364)]=0.35+0.325[1+0.9820]=0.9942$. The sum of the weights over the year is $\sum w=246.05$ (mean 0.674). Hence $E_d=170\times0.9942/246.05\times(1-0.24)=0.522$ mm. It is taken from layers 1 to 4 as $0.55,0.25,0.12,0.08$ times this: $0.287,0.131,0.063,0.042$ mm, provided that each layer stays above $0.05W_{\max}=0.21$ mm. Without a canopy ($c=0$) the same day would lose $0.687$ mm, 30 per cent more than 0.522: shade reduces evaporation.
 
-\textbf{Solution.} The seasonal weight is $w(180)=0.35+0.65\times0.5[1+\sin(2\pi\,80/364)]=0.35+0.325[1+0.9820]=0.9942$. The sum of the weights over the year is $\sum w=246.05$ (mean 0.674). Hence $E_d=170\times0.9942/246.05\times(1-0.24)=0.522$ mm. It is taken from layers 1 to 4 as $0.55,0.25,0.12,0.08$ times this: $0.287,0.131,0.063,0.042$ mm, provided that each layer stays above $0.05W_{\max}=0.21$ mm. Without a canopy ($c=0$) the same day would lose $0.687$ mm, 30 per cent more than 0.522: shade reduces evaporation.
-\end{example}
 
-\begin{example}{transpiration demand and its division}
-With $T_{\rm yr}=230$ mm, $\bar C=0.138$ and $k_t=1$, find $T_d$ on a day with $c=0.8$ and distribute it among three layers with $\rho=(0.5,0.3,0.2)$ and $s=(0.8,0.5,0.2)$.
+\exbox{Transpiration demand and its division}{With $T_{\rm yr}=230$ mm, $\bar C=0.138$ and $k_t=1$, find $T_d$ on a day with $c=0.8$ and distribute it among three layers with $\rho=(0.5,0.3,0.2)$ and $s=(0.8,0.5,0.2)$.}\sol  $T_d=230\times0.8/(0.138\times365)=184/50.37=3.653$ mm. Availability $a_i=\mathrm{clip}((s_i-0.15)/0.6)$: $(0.8-0.15)/0.6=1.083\to1$; $(0.5-0.15)/0.6=0.583$; $(0.2-0.15)/0.6=0.083$. The weights $\rho_ia_i=0.5,\ 0.175,\ 0.0167$ sum to $0.6917$. The shares are $0.723,\ 0.253,\ 0.024$, so the uptake is $2.641,\ 0.924,\ 0.088$ mm. The wettest layer supplies 72 per cent although it holds only half of the roots, and the dry third layer is almost shut off: this is the linear stress function between 15 and 75 per cent of plant-available water.
 
-\textbf{Solution.} $T_d=230\times0.8/(0.138\times365)=184/50.37=3.653$ mm. Availability $a_i=\mathrm{clip}((s_i-0.15)/0.6)$: $(0.8-0.15)/0.6=1.083\to1$; $(0.5-0.15)/0.6=0.583$; $(0.2-0.15)/0.6=0.083$. The weights $\rho_ia_i=0.5,\ 0.175,\ 0.0167$ sum to $0.6917$. The shares are $0.723,\ 0.253,\ 0.024$, so the uptake is $2.641,\ 0.924,\ 0.088$ mm. The wettest layer supplies 72 per cent although it holds only half of the roots, and the dry third layer is almost shut off: this is the linear stress function between 15 and 75 per cent of plant-available water.
-\end{example}
 
 \section{The irrigation rule and a season run}
 An irrigation of dose $d$ is applied on a day if the canopy cover exceeds 0.2, $95\le\mathrm{doy}\le250$, the spacing and budget rules hold, the sensor layer is dry enough ($1-s_j\ge f_T$) and $f_T<0.995$. The dose is $d=\mathrm{clip}(\bar I/10;15,35)$ mm.
 
-\begin{example}{one season of the loam}
-For $\bar I=150$ mm yr$^{-1}$ find the dose; then run the daily model for one season of spring barley on the loam with $P=600$ mm, $E_{\rm yr}=170$, $T_{\rm yr}=230$, trigger $-300$ cm, sensor at 20 cm, $k_t=1$ and a fixed random seed. (Simplifications of this worked run: $\bar s_{\rm wet}=0.6$ and $\kappa=1$ in the root advance; no spacing rule.)
+\exbox{One season of the loam}{For $\bar I=150$ mm yr$^{-1}$ find the dose; then run the daily model for one season of spring barley on the loam with $P=600$ mm, $E_{\rm yr}=170$, $T_{\rm yr}=230$, trigger $-300$ cm, sensor at 20 cm, $k_t=1$ and a fixed random seed. (Simplifications of this worked run: $\bar s_{\rm wet}=0.6$ and $\kappa=1$ in the root advance; no spacing rule.)}\sol  Dose: $150/10=15$ mm, which is at the lower clip, so $d=15$ mm. (The run below used the limit rule $\mathrm{clip}(15;15,35)$.) The run gives: rain $P=606$ mm, irrigation $90$ mm in 6 events on days 147, 148, 164, 165, 181, 198, soil evaporation $158$ mm, transpiration $230$ mm, drainage $200$ mm, and final rooting depth $82$ cm. Storage change: the profile started at $0.72W_{\max}=3.06$ mm per layer, 122.4 mm in all.
 
-\textbf{Solution.} Dose: $150/10=15$ mm, which is at the lower clip, so $d=15$ mm. (The run below used the limit rule $\mathrm{clip}(15;15,35)$.) The run gives: rain $P=606$ mm, irrigation $90$ mm in 6 events on days 147, 148, 164, 165, 181, 198, soil evaporation $158$ mm, transpiration $230$ mm, drainage $200$ mm, and final rooting depth $82$ cm. Storage change: the profile started at $0.72W_{\max}=3.06$ mm per layer, 122.4 mm in all.
-
-\textbf{Balance check.} $P+I-E-T-D=\Delta S$: $606+90-158-230-200=108$ mm; the throughfall is smaller than $P$ by the interception $P-\sum T_f$, so the storage change equals this minus the interception of 62 mm. In words: the engine conserves mass because every flux is taken from, or given to, the layers.\par
+\subhd{Balance check.} $P+I-E-T-D=\Delta S$: $606+90-158-230-200=108$ mm; the throughfall is smaller than $P$ by the interception $P-\sum T_f$, so the storage change equals this minus the interception of 62 mm. In words: the engine conserves mass because every flux is taken from, or given to, the layers.\par
 The first irrigation occurs on day 147, when the sensor layer first reaches $1-s_8\ge0.468$; before that the crop lived on rain and storage.
-\end{example}
 
-\begin{example}{the same season in the sand}
-Repeat the season run for the sand S03 (AWC 0.6 mm cm$^{-1}$, trigger depletion $f_T=0.842$ at 300 cm) with the same weather seed.
 
-\textbf{Solution.} $W_{\max}=0.6\times2.5=1.5$ mm per layer. Irrigation $90$ mm in 6 events (days 140, 155, 165, 174, 188, 199), drainage $251$ mm, transpiration $226$ mm, evaporation $142$ mm. Compared with the loam (drainage $200$ mm) the sand drains $51$ mm more: the layers hold only 1.5 mm each, so most of every shower and irrigation passes below 1 m. With the same dose of 15 mm the sand wastes a larger share, which is the mechanism behind the fate of saved water in Chapter~\ref{ch:fate}.
+\exbox{The same season in the sand}{Repeat the season run for the sand S03 (AWC 0.6 mm cm$^{-1}$, trigger depletion $f_T=0.842$ at 300 cm) with the same weather seed.}\sol  $W_{\max}=0.6\times2.5=1.5$ mm per layer. Irrigation $90$ mm in 6 events (days 140, 155, 165, 174, 188, 199), drainage $251$ mm, transpiration $226$ mm, evaporation $142$ mm. Compared with the loam (drainage $200$ mm) the sand drains $51$ mm more: the layers hold only 1.5 mm each, so most of every shower and irrigation passes below 1 m. With the same dose of 15 mm the sand wastes a larger share, which is the mechanism behind the fate of saved water in Chapter~\ref{ch:fate}.
 
-\textbf{Reading.} The daily model is a tipping-bucket engine; the application scales drainage and the wetting front to Engine~1 (Equation below) because they are not Richards solutions.
-\end{example}
+\subhd{Reading.} The daily model is a tipping-bucket engine; the application scales drainage and the wetting front to Engine~1 (Equation below) because they are not Richards solutions.
+
 
 \section{Scaling to the annual model}
 The daily results are multiplied by constants so that their 20-year means equal Engine 1:
-\begin{equation}S_P=\frac P{P_{\rm sim}},\ S_{\rm thr}=\frac{P-P_{\rm other}}{T_{f,\rm sim}},\ S_E=\frac E{E_{\rm sim}},\ S_T=\frac T{T_{\rm sim}},\ S_D=\frac D{D_{\rm sim}},\end{equation}
+\begin{equation}\boxed{S_P=\frac P{P_{\rm sim}},\ S_{\rm thr}=\frac{P-P_{\rm other}}{T_{f,\rm sim}},\ S_E=\frac E{E_{\rm sim}},\ S_T=\frac T{T_{\rm sim}},\ S_D=\frac D{D_{\rm sim}},}\end{equation}
 and the displayed fluxes are $R=P_dS_P$, $T_f=\min\{R,T_{f,d}S_{\rm thr}\}$, $E=E_dS_E$, $T=T_dS_T$, $D=D_dS_D$, with $\Delta S_d=T_f+I-E-T-D$.
 
-\begin{example}{scale factors}
-Engine 1 gives $P=600$, $P_{\rm other}=60$, $E=170$, $T=230$, $D=70$ mm. The daily run of the loam above gave $P_{\rm sim}=606.1$, $T_{f,\rm sim}=544.4$, $E_{\rm sim}=158.5$, $T_{\rm sim}=229.6$, $D_{\rm sim}=200.2$ mm. Find the scale factors and the displayed drainage of a day on which the model drained $12$ mm.
+\exbox{Scale factors}{Engine 1 gives $P=600$, $P_{\rm other}=60$, $E=170$, $T=230$, $D=70$ mm. The daily run of the loam above gave $P_{\rm sim}=606.1$, $T_{f,\rm sim}=544.4$, $E_{\rm sim}=158.5$, $T_{\rm sim}=229.6$, $D_{\rm sim}=200.2$ mm. Find the scale factors and the displayed drainage of a day on which the model drained $12$ mm.}\sol  $S_P=600/606.1=0.9899$; $S_{\rm thr}=540/544.4=0.9919$; $S_E=170/158.5=1.0726$; $S_T=230/229.6=1.0018$; $S_D=70/200.2=0.3496$. A day with a drainage of 12 mm is shown as $12\times0.3496=4.20$ mm. The scale factors are close to 1 when the daily engine is already consistent with the annual one; a factor far from 1 (here $S_D=0.35$) flags a bucket model that drains too much compared with the Richards-based Daisy result, which is the reason for the scaling.
 
-\textbf{Solution.} $S_P=600/606.1=0.9899$; $S_{\rm thr}=540/544.4=0.9919$; $S_E=170/158.5=1.0726$; $S_T=230/229.6=1.0018$; $S_D=70/200.2=0.3496$. A day with a drainage of 12 mm is shown as $12\times0.3496=4.20$ mm. The scale factors are close to 1 when the daily engine is already consistent with the annual one; a factor far from 1 (here $S_D=0.35$) flags a bucket model that drains too much compared with the Richards-based Daisy result, which is the reason for the scaling.
-\end{example}
 
-\begin{example}{evaporation demand under warming}
-Under warming the bare-soil demand is $E_{0,\rm bare}=4.2(1+0.07\Delta T)\cdot\frac{0.35+0.65\cdot\frac12[1+\sin(2\pi(\mathrm{doy}-100)/365)]}{0.675}\,\mathrm{clip}(1-0.12(\rho-1);0.85,1.12)\sqrt{\gamma_y}$ mm d$^{-1}$. Find the demand on day 190 with $\Delta T=2$ K, rain scale $\rho=1$, $\gamma_y=1$.
+\exbox{Evaporation demand under warming}{Under warming the bare-soil demand is $E_{0,\rm bare}=4.2(1+0.07\Delta T)\cdot\frac{0.35+0.65\cdot\frac12[1+\sin(2\pi(\mathrm{doy}-100)/365)]}{0.675}\,\mathrm{clip}(1-0.12(\rho-1);0.85,1.12)\sqrt{\gamma_y}$ mm d$^{-1}$. Find the demand on day 190 with $\Delta T=2$ K, rain scale $\rho=1$, $\gamma_y=1$.}\sol  $4.2\times1.14=4.788$; the seasonal weight is $0.35+0.325[1+\sin(2\pi\,90/365)]=0.35+0.325(1+0.9998)=0.9999$, divided by $0.675$ gives $1.4814$; the cloud factor is $\mathrm{clip}(1,0.85,1.12)=1$ and $\sqrt{\gamma_y}=1$. So $E_{0,\rm bare}=7.09$ mm d$^{-1}$, which is 14 per cent above the unwarmed value 6.22 mm d$^{-1}$ (a 7 per cent per kelvin increase, close to the Clausius--Clapeyron rate).
 
-\textbf{Solution.} $4.2\times1.14=4.788$; the seasonal weight is $0.35+0.325[1+\sin(2\pi\,90/365)]=0.35+0.325(1+0.9998)=0.9999$, divided by $0.675$ gives $1.4814$; the cloud factor is $\mathrm{clip}(1,0.85,1.12)=1$ and $\sqrt{\gamma_y}=1$. So $E_{0,\rm bare}=7.09$ mm d$^{-1}$, which is 14 per cent above the unwarmed value 6.22 mm d$^{-1}$ (a 7 per cent per kelvin increase, close to the Clausius--Clapeyron rate).
-\end{example}

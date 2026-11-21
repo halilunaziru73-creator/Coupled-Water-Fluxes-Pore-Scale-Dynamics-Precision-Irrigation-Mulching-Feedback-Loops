@@ -1,37 +1,37 @@
+\chapimg{fig/ch19.jpg}
+\chapterlead{\subhd{After this chapter you can} count the days beyond a trigger, apply the delta method that moves a stored suction record to another soil, express any trigger as a depletion, compute how fast a soil dries, and decide between the depletion triggers $f=0.50$ and $f=0.45$.}
 \chapter{Irrigation control layers: sensor, trigger and trigger law}\label{ch:ctrl}
 \markboth{Irrigation control}{Irrigation control}
-\textbf{After this chapter you can} count the days beyond a trigger, apply the delta method that moves a stored suction record to another soil, express any trigger as a depletion, compute how fast a soil dries, and decide between the depletion triggers $f=0.50$ and $f=0.45$.
 
 \section{Sensor and trigger}
 A simulated tensiometer records the suction $h$ at the sensor depth every day. For year $y$ the layer counts the growing-season days (183 from 1 April) beyond the trigger $h_T$:
-\begin{equation}N_y(h_T)=\#\{d\in\text{season}_y:h_d>h_T\},\qquad X=100\Bigl(1-\frac{\bar N_{\rm irr}}{\bar N_{\rm rainfed}}\Bigr),\ \bar N=\frac1{20}\sum_yN_y.\end{equation}
+\begin{equation}\boxed{N_y(h_T)=\#\{d\in\text{season}_y:h_d>h_T\},\qquad X=100\Bigl(1-\frac{\bar N_{\rm irr}}{\bar N_{\rm rainfed}}\Bigr),\ \bar N=\frac1{20}\sum_yN_y.}\end{equation}
 
-\begin{example}{days beyond the trigger}
-The layer prints: ``Irrigated: 85 of 183 days beyond 300 cm. Rainfed: 168 of 183 days beyond. Irrigation removes 39 \%.'' The 39 per cent is a 20-year mean while 85 and 168 are for the year drawn. (a) Verify the arithmetic for the year drawn. (b) If the rainfed 20-year mean is $\bar N_{\rm rainfed}=168$, what is the irrigated mean?
+\exbox{Days beyond the trigger}{The layer prints: ``Irrigated: 85 of 183 days beyond 300 cm. Rainfed: 168 of 183 days beyond. Irrigation removes 39 \%.'' The 39 per cent is a 20-year mean while 85 and 168 are for the year drawn. (a) Verify the arithmetic for the year drawn. (b) If the rainfed 20-year mean is $\bar N_{\rm rainfed}=168$, what is the irrigated mean?}\sol  (a) For the year drawn, $X=100(1-85/168)=49.4$ per cent, which differs from the printed 39 per cent because $X$ uses the 20-year means, not one year. (b) $39=100(1-\bar N_{\rm irr}/168)$ gives $\bar N_{\rm irr}=168\times0.61=102.5$ days. So in an average year the irrigated sensor is beyond the trigger on 102 of 183 days against 168 rainfed. The year drawn is wetter than average for the irrigated trace by $102.5-85=17.5$ days.
 
-\textbf{Solution.} (a) For the year drawn, $X=100(1-85/168)=49.4$ per cent, which differs from the printed 39 per cent because $X$ uses the 20-year means, not one year. (b) $39=100(1-\bar N_{\rm irr}/168)$ gives $\bar N_{\rm irr}=168\times0.61=102.5$ days. So in an average year the irrigated sensor is beyond the trigger on 102 of 183 days against 168 rainfed. The year drawn is wetter than average for the irrigated trace by $102.5-85=17.5$ days.
+\subhd{Reading.} A trigger of $-300$ cm does not mean ``never beyond 300 cm'': irrigation starts \emph{after} the sensor crosses the trigger, the dose is applied once per event, and the suction rises again between events.
 
-\textbf{Reading.} A trigger of $-300$ cm does not mean ``never beyond 300 cm'': irrigation starts \emph{after} the sensor crosses the trigger, the dose is applied once per event, and the suction rises again between events.
-\end{example}
 
-\begin{example}{the delta method}
-When the settings differ from the stored ones, the record is moved by the delta method
-\begin{equation}h^{\rm x}_d=h_{\rm soil}\Bigl(f_{\rm ref}(h^{\rm rec}_d)+\frac17\sum_{q=-3}^{3}\bigl[f^{\rm set}_{d+q}-f^{\rm std}_{d+q}\bigr]\Bigr).\end{equation}
-Suppose on day $d$ the stored record has $h^{\rm rec}=100$ cm in the reference soil (Coarse loam, depletion $f_{\rm ref}=f(100)$ in that soil) and the target soil is the loam S06. The seven-day differences $f^{\rm set}-f^{\rm std}$ of the sensor layer (the daily model run at your settings minus at standard settings) are $0.02,0.03,0.05,0.06,0.04,0.03,0.02$. Compute the moved suction. (Assume that the stored record is at $f_{\rm ref}=0.30$.)
+\exbox{The delta method}{When the settings differ from the stored ones, the record is moved by the delta method
+\begin{equation}\boxed{h^{\rm x}_d=h_{\rm soil}\Bigl(f_{\rm ref}(h^{\rm rec}_d)+\frac17\sum_{q=-3}^{3}\bigl[f^{\rm set}_{d+q}-f^{\rm std}_{d+q}\bigr]\Bigr).}\end{equation}
+Suppose on day $d$ the stored record has $h^{\rm rec}=100$ cm in the reference soil (Coarse loam, depletion $f_{\rm ref}=f(100)$ in that soil) and the target soil is the loam S06. The seven-day differences $f^{\rm set}-f^{\rm std}$ of the sensor layer (the daily model run at your settings minus at standard settings) are $0.02,0.03,0.05,0.06,0.04,0.03,0.02$. Compute the moved suction. (Assume that the stored record is at $f_{\rm ref}=0.30$.)}\sol  The mean difference is $(0.02+0.03+0.05+0.06+0.04+0.03+0.02)/7=0.25/7=0.0357$. The new depletion is $0.30+0.0357=0.3357$. Convert it to a suction in the loam by inverting Equation~(\ref{eq:fdep}) by bisection: $h^{\rm x}=208$ cm. The same depletion $0.30$ would be $h=190$ cm in the loam. The settings therefore raise the suction at the sensor from 190 to 208 cm, an increase of 9 per cent for a depletion change of 0.036. Because suction is steep in depletion, a small change in depletion is a large change in suction.
 
-\textbf{Solution.} The mean difference is $(0.02+0.03+0.05+0.06+0.04+0.03+0.02)/7=0.25/7=0.0357$. The new depletion is $0.30+0.0357=0.3357$. Convert it to a suction in the loam by inverting Equation~(\ref{eq:fdep}) by bisection: $h^{\rm x}=208$ cm. The same depletion $0.30$ would be $h=190$ cm in the loam. The settings therefore raise the suction at the sensor from 190 to 208 cm, an increase of 9 per cent for a depletion change of 0.036. Because suction is steep in depletion, a small change in depletion is a large change in suction.
-\end{example}
+
+\begin{kfig}{Relative yield against trigger depletion: yield stays near its maximum for small depletions and then falls; the largest trigger with $Y_{rel}\ge0.95$ is read from the dashed lines.}
+\draw[axis] (0,0)--(7.4,0);\draw[axis] (0,0)--(0,4.4);
+\node[lab,below] at (3.7,-0.5) {Trigger depletion $f$};\node[lab,rotate=90] at (-0.9,2.2) {Relative yield $Y_{rel}$};
+\foreach \x/\t in {0/0,2.4/0.25,4.8/0.5,7.2/0.75}{\draw[ln] (\x,0)--(\x,-0.1);\node[lab,below] at (\x,-0.1) {\t};}
+\draw[crv,smooth] plot coordinates {(0,4.0)(1.2,3.98)(2.4,3.8)(3.6,3.4)(4.8,2.8)(6,2.1)(7.2,1.3)};
+\draw[gd] (0,3.8)--(7.2,3.8);\node[lab,left] at (0,3.8) {0.95};\draw[gd] (2.4,0)--(2.4,3.8);
+\end{kfig}
 
 \section{Trigger law}
 The suction at which a soil reaches a chosen depletion is $h(f)=\{h:f(h)=f\}$ (Equation~\ref{eq:fdep} inverted), the net irrigation per event is $Z_n=f\cdot\mathrm{AWC}\cdot R_{\max}$, and the relative yield at a trigger is
-\begin{equation}Y_{\rm rel}(h_T)=\frac{Y(h_T)}{\max_hY(h)}\quad(\text{data-driven, run set E2}).\end{equation}
+\begin{equation}\boxed{Y_{\rm rel}(h_T)=\frac{Y(h_T)}{\max_hY(h)}\quad(\text{data-driven, run set E2}).}\end{equation}
 
-\begin{example}{relative yield against trigger depletion}
-Use the archived E2 trigger runs to compute, for three soils, the depletion at each trigger and the relative yield, and find the largest trigger with $Y_{\rm rel}\ge0.95$.
-
-\textbf{Solution.} For each soil take $Y_{\max}$ as the largest yield over its triggers, and evaluate $f(h_T)$ with Equation~(\ref{eq:fdep}). Table~\ref{tab:yrel} lists the result.\begin{table}[H]\centering\small\caption{Archived trigger runs (E2): depletion at the trigger, irrigation, yield and relative yield.}\label{tab:yrel}
+\exbox{Relative yield against trigger depletion}{Use the archived E2 trigger runs to compute, for three soils, the depletion at each trigger and the relative yield, and find the largest trigger with $Y_{\rm rel}\ge0.95$.}\sol  For each soil take $Y_{\max}$ as the largest yield over its triggers, and evaluate $f(h_T)$ with Equation~(\ref{eq:fdep}). Table~\ref{tab:yrel} lists the result.\begin{table}[H]\centering\small\caption{Archived trigger runs (E2): depletion at the trigger, irrigation, yield and relative yield.}\label{tab:yrel}
 \begin{tabular}{lrrrrr}\toprule
-Soil & Trigger (cm) & $f$ & Irrigation (mm) & Yield (Mg/ha) & $Y_{\rm rel}$\\\midrule
+\hd{Soil} & \hd{Trigger (cm)} & \hd{$f$} & \hd{Irrigation (mm)} & \hd{Yield (Mg/ha)} & \hd{$Y_{\rm rel}$}\\\midrule
 S06 & 50 & 0.000 & 424 & 6.62 & 1.000\\
 S06 & 100 & 0.000 & 346 & 6.61 & 0.997\\
 S06 & 200 & 0.321 & 257 & 6.38 & 0.964\\
@@ -56,17 +56,14 @@ S10 & 3000 & 0.745 & 150 & 5.87 & 0.891\\\bottomrule\end{tabular}\end{table}
 
 Loam: the largest trigger with $Y_{\rm rel}\ge0.95$ is 200 cm, $f=0.32$. Sand: the largest trigger with $Y_{\rm rel}\ge0.95$ is 50 cm, $f=0.00$. Silty clay loam: the largest trigger with $Y_{\rm rel}\ge0.95$ is 1500 cm, $f=0.61$. 
 
-\textbf{Reading.} In suction the thresholds differ by a large factor between soils; in depletion they cluster near $f^*\approx0.45$ (the study's soil-independent value; 5 per cent yield loss), which is the content of the trigger law. The statement is data-driven for one crop, one weather series and a sensor at 20 cm.
-\end{example}
+\subhd{Reading.} In suction the thresholds differ by a large factor between soils; in depletion they cluster near $f^*\approx0.45$ (the study's soil-independent value; 5 per cent yield loss), which is the content of the trigger law. The statement is data-driven for one crop, one weather series and a sensor at 20 cm.
 
-\begin{example}{how fast each soil dries}
-Every soil is compared on the same crop demand $ET_c$; only the water held differs:
-\begin{equation}r_s=\frac{ET_c}{\mathrm{TAW}_s},\quad\mathrm{TAW}_s=\mathrm{AWC}_sz_r,\quad t_{{\rm trig},s}=\frac{f_{{\rm trig},s}}{r_s}.\end{equation}
-Take $ET_c=3.5$ mm d$^{-1}$ (assumed peak-season value), $z_r=90$ cm and $f_{\rm trig}=0.45$. Compute $r_s$ in per cent per day and the days to the trigger for the ten soils.
 
-\textbf{Solution.} For the sand, $\mathrm{TAW}=0.6\times90=54$ mm, $r=3.5/54=0.0648$, that is $6.5$ per cent per day, and $t=0.45/0.0648=6.9$ days. For the coarse loam, $\mathrm{TAW}=1.5\times90=135$ mm, $r=2.6$ per cent per day and $t=17.4$ days. These agree with the application text (about 7 days for sand and 18 days for coarse loam). Table~\ref{tab:dry} gives all ten soils.\begin{table}[H]\centering\small\caption{Speed of depletion and days from field capacity to the trigger $f=0.45$ (assumed $ET_c=3.5$ mm d$^{-1}$, $z_r=90$ cm).}\label{tab:dry}
+\exbox{How fast each soil dries}{Every soil is compared on the same crop demand $ET_c$; only the water held differs:
+\begin{equation}\boxed{r_s=\frac{ET_c}{\mathrm{TAW}_s},\quad\mathrm{TAW}_s=\mathrm{AWC}_sz_r,\quad t_{{\rm trig},s}=\frac{f_{{\rm trig},s}}{r_s}.}\end{equation}
+Take $ET_c=3.5$ mm d$^{-1}$ (assumed peak-season value), $z_r=90$ cm and $f_{\rm trig}=0.45$. Compute $r_s$ in per cent per day and the days to the trigger for the ten soils.}\sol  For the sand, $\mathrm{TAW}=0.6\times90=54$ mm, $r=3.5/54=0.0648$, that is $6.5$ per cent per day, and $t=0.45/0.0648=6.9$ days. For the coarse loam, $\mathrm{TAW}=1.5\times90=135$ mm, $r=2.6$ per cent per day and $t=17.4$ days. These agree with the application text (about 7 days for sand and 18 days for coarse loam). Table~\ref{tab:dry} gives all ten soils.\begin{table}[H]\centering\small\caption{Speed of depletion and days from field capacity to the trigger $f=0.45$ (assumed $ET_c=3.5$ mm d$^{-1}$, $z_r=90$ cm).}\label{tab:dry}
 \begin{tabular}{lrrrrr}\toprule
-ID & Soil & AWC & TAW (mm) & $100r_s$ (\%/d) & Days to trigger\\\midrule
+\hd{ID} & \hd{Soil} & \hd{AWC} & \hd{TAW (mm)} & \hd{$100r_s$ (\%/d)} & \hd{Days to trigger}\\\midrule
 S01 & Coarse loam & 1.5 & 135 & 2.6 & 17.4\\
 S02 & Coarse sand & 0.5 & 45 & 7.8 & 5.8\\
 S03 & Sand & 0.6 & 54 & 6.5 & 6.9\\
@@ -78,20 +75,15 @@ S08 & Sandy clay loam & 1.4 & 126 & 2.8 & 16.2\\
 S09 & Clay loam & 1.6 & 144 & 2.4 & 18.5\\
 S10 & Silty clay loam & 1.7 & 153 & 2.3 & 19.7\\\bottomrule\end{tabular}\end{table}
 \textbf{Reading.} The coarse sand dries fastest (smallest AWC, 0.5 mm cm$^{-1}$) and the silt loam slowest (AWC 2.0): a four-fold spread in the interval between irrigations, from 5.8 to 23 days. A sprinkler round that takes three days is long compared with the 5.8 days of the coarse sand but short compared with the 23 days of the silt loam, which is why the f=0.45 advice for coarse soils exists.
-\end{example}
 
-\begin{example}{choosing between f = 0.50 and f = 0.45}
-The application advises $f=0.45$ if any of the following holds: a round of the design takes more than 2 days; the soil is sandy (sand $\ge60$ per cent or AWC $\le0.9$ mm cm$^{-1}$); the crop is at $\ge85$ per cent cover (critical stage). Otherwise $f=0.50$. Decide for three cases.
 
+\exbox{Choosing between f = 0.50 and f = 0.45}{The application advises $f=0.45$ if any of the following holds: a round of the design takes more than 2 days; the soil is sandy (sand $\ge60$ per cent or AWC $\le0.9$ mm cm$^{-1}$); the crop is at $\ge85$ per cent cover (critical stage). Otherwise $f=0.50$. Decide for three cases.}
 \textbf{Case A:} maize on the loam (sand 40 per cent, AWC 1.7), drip system, round 1.5 days, date with cover 60 per cent. No $f=0.45$ condition holds (round $\le2$ d, sand $<60$, AWC $>0.9$, cover $<85$ per cent), so the advice is $f=0.50$. In suction, $f=0.50$ in the loam is $h=332$ cm.
 
-\textbf{Case B:} same field but a sprinkler round of 3.5 days. The round exceeds 2 days, so the advice is $f=0.45$ ($h=284$ cm): the field must be triggered earlier because the last block is irrigated 3.5 days after the first, and during that time depletion advances by $3.5\times r_s$. With $r_s=3.5/153=2.3$ per cent per day (loam, $\mathrm{TAW}=1.7\times90=153$ mm) the last block gains $0.08$ in depletion, so starting at $0.45$ the last block reaches $0.53$, just above $0.50$.
+\subhd{Case B:} same field but a sprinkler round of 3.5 days. The round exceeds 2 days, so the advice is $f=0.45$ ($h=284$ cm): the field must be triggered earlier because the last block is irrigated 3.5 days after the first, and during that time depletion advances by $3.5\times r_s$. With $r_s=3.5/153=2.3$ per cent per day (loam, $\mathrm{TAW}=1.7\times90=153$ mm) the last block gains $0.08$ in depletion, so starting at $0.45$ the last block reaches $0.53$, just above $0.50$.
 
-\textbf{Case C:} sand (92 per cent sand), drip, round 1 day. The soil is sandy, so $f=0.45$ ($h=143$ cm).
-\end{example}
+\subhd{Case C:} sand (92 per cent sand), drip, round 1 day. The soil is sandy, so $f=0.45$ ($h=143$ cm).
 
-\begin{example}{reading the sensor tile}
-The Dashboard tile ``Sensor / trigger'' reads $0.02/0.38$ for the coarse loam on a date. Interpret it and find the suction of the sensor and the days to irrigation at $r=2.6$ per cent per day.
 
-\textbf{Solution.} The first number is the present depletion of the sensor layer ($f=0.02$, almost field capacity); the second is the trigger depletion $f_T=f(300\text{ cm})=0.38$ of the coarse loam. Irrigation is due when the first reaches the second. The sensor suction is $h(0.02)=105 cm$, close to the field capacity of 100 cm. At $r=0.026$ d$^{-1}$ the soil needs $(0.38-0.02)/0.026=13.8$ days without rain to reach the trigger.
-\end{example}
+\exbox{Reading the sensor tile}{The Dashboard tile ``Sensor / trigger'' reads $0.02/0.38$ for the coarse loam on a date. Interpret it and find the suction of the sensor and the days to irrigation at $r=2.6$ per cent per day.}\sol  The first number is the present depletion of the sensor layer ($f=0.02$, almost field capacity); the second is the trigger depletion $f_T=f(300\text{ cm})=0.38$ of the coarse loam. Irrigation is due when the first reaches the second. The sensor suction is $h(0.02)=105 cm$, close to the field capacity of 100 cm. At $r=0.026$ d$^{-1}$ the soil needs $(0.38-0.02)/0.026=13.8$ days without rain to reach the trigger.
+

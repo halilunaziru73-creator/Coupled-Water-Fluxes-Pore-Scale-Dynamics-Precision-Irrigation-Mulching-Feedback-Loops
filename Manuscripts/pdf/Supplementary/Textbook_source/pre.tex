@@ -1,45 +1,132 @@
-\documentclass[11pt,twoside,openany]{book}
-\usepackage[a4paper,inner=26mm,outer=22mm,top=25mm,bottom=27mm]{geometry}
-\usepackage[T1]{fontenc}\usepackage{lmodern}\usepackage{microtype}
-\usepackage{amsmath,amssymb,amsthm,mathtools,bm}
-\usepackage{graphicx,float,booktabs,array,enumitem,xcolor,caption,fancyhdr,titlesec}
+\documentclass[10pt,twoside,openany]{book}
+\usepackage[paperwidth=170mm,paperheight=250mm,inner=12mm,outer=9mm,top=21mm,bottom=15mm,headheight=14pt,headsep=3mm,footskip=8mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,mathtools,bm}
+\usepackage{txfonts}
+\usepackage[scaled=0.95]{helvet}
+\usepackage{microtype}
+\usepackage{colortbl}\usepackage{graphicx,float,booktabs,array,enumitem,xcolor,caption,fancyhdr,titlesec,etoolbox,wrapfig,calc,multicol}
 \usepackage[most]{tcolorbox}
+\usepackage{tikz}\usepackage{pgffor}\usetikzlibrary{arrows.meta,calc,positioning,patterns,decorations.markings,shapes.geometric,backgrounds}
 \usepackage[hidelinks]{hyperref}
-\definecolor{rd}{HTML}{A31F34}\definecolor{og}{HTML}{D86A00}\definecolor{ink}{HTML}{12303B}\definecolor{pn}{HTML}{F4F1EC}
-\titleformat{\chapter}[display]{\normalfont\bfseries\color{ink}}{\Large\color{og}CHAPTER \thechapter}{4pt}{\Huge\color{rd}}
-\titleformat{\section}{\normalfont\Large\bfseries\color{ink}}{\thesection}{0.6em}{}
-\titleformat{\subsection}{\normalfont\large\bfseries\color{ink}}{\thesubsection}{0.6em}{}
-\pagestyle{fancy}\fancyhf{}\fancyhead[LE]{\small\nouppercase{\leftmark}}\fancyhead[RO]{\small\nouppercase{\rightmark}}\fancyfoot[C]{\thepage}
-\renewcommand{\headrulewidth}{0.3pt}
+% ---------------------------------------------------------------- colours (sampled from the reference textbook)
+\definecolor{khblue}{HTML}{005AAA}\definecolor{khred}{HTML}{ED1C24}\definecolor{khmag}{HTML}{EC008C}
+\definecolor{khpeach}{HTML}{FFEFE0}\definecolor{khex}{HTML}{FEE7DC}\definecolor{khfeat}{HTML}{FFFCDF}
+\definecolor{khpurple}{HTML}{C7A0CA}\definecolor{khsalmon}{HTML}{E6A58F}\definecolor{khnavy}{HTML}{2E3092}
+\definecolor{khcyan}{HTML}{00AEEF}\definecolor{khgreen}{HTML}{E3F1DE}\definecolor{khink}{HTML}{231F20}
+\definecolor{khteal}{HTML}{17939A}\definecolor{khgold}{HTML}{C9A227}
+\AtBeginDocument{\color{khink}}
+% ---------------------------------------------------------------- type
+\makeatletter
+\renewcommand{\normalsize}{\@setfontsize\normalsize{10.4}{13}\abovedisplayskip=7pt plus2pt minus2pt\belowdisplayskip=7pt plus2pt minus2pt\abovedisplayshortskip=3pt plus1pt\belowdisplayshortskip=4pt plus1pt}
+\renewcommand{\small}{\@setfontsize\small{9.2}{11.4}}
+\renewcommand{\footnotesize}{\@setfontsize\footnotesize{8.4}{10.2}}
+\makeatother
+\normalsize
+\setlength{\parindent}{1.5em}\setlength{\parskip}{0pt}\sloppy\emergencystretch=2em
+\raggedbottom
+\newcommand{\sfb}{\sffamily\bfseries}
+% ---------------------------------------------------------------- sections: blue sans, numbered 2.6.
+\titleformat{\section}{\sfb\fontsize{12.5}{14.5}\selectfont\color{khblue}}{\thesection.}{0.75em}{}
+\titlespacing*{\section}{0pt}{12pt plus3pt minus2pt}{4pt plus1pt}
+\titleformat{\subsection}{\sfb\fontsize{11}{13}\selectfont\color{khblue}}{\thesubsection.}{0.6em}{}
+\titlespacing*{\subsection}{0pt}{9pt plus2pt}{3pt}
+\newcommand{\subhd}[1]{\par\vspace{3pt}\noindent{\bfseries\itshape\color{khblue}#1}\ }
+\newcommand{\kw}[1]{{\bfseries\itshape\color{khmag}#1}}
+\newcommand{\hd}[1]{{\bfseries\itshape\color{khmag}#1}}
+\newcommand{\sol}{\par\vspace{2pt}\noindent{\bfseries\color{khmag}Solution.}\ }
+\newcommand{\ans}{{\bfseries\color{khmag}Ans.}}
+% ---------------------------------------------------------------- features of the chapters, collected through the .aux file
+\newcommand{\featitem}[2]{\par\noindent\hangindent=1.7em\hangafter=1\makebox[1.7em][l]{#1}#2}
+\gdef\lastchimg{}\newcommand{\chapimg}[1]{\gdef\nextchapimg{#1}}\gdef\nextchapimg{}\newcommand{\chaplead}[0]{}\gdef\chaplead{}\newcommand{\chapterlead}[1]{\long\gdef\chaplead{#1}}\newcommand{\chapleadstyle}{\relax}
+\newcommand{\chapsecs}[1]{\ifcsundef{chsec@#1}{}{\csuse{chsec@#1}}}
+\newcounter{chsecno}\makeatletter
+\newcommand{\registersection}[1]{\stepcounter{chsecno}%
+  \protected@write\@auxout{}{\string\csgappto{chsec@\arabic{chapter}}{\string\featitem{\thechsecno.}{\unexpanded{#1}}}}%
+  \protected@write\@auxout{}{\string\csgappto{chtoc@\arabic{chapter}}{\thechsecno.\string\ \unexpanded{#1}.\string\ \string\ }}}
+\let\oldsection\section
+\renewcommand{\section}{\@ifstar{\oldsection*}{\@dblarg\khsection}}
+\def\khsection[#1]#2{\registersection{#1}\oldsection[#1]{#2}}
+\@addtoreset{chsecno}{chapter}
+\makeatother
+% ---------------------------------------------------------------- chapter opener
+\newlength{\featw}\setlength{\featw}{0.33\textwidth}
+\newsavebox{\featbox}
+\newcommand{\bigdigit}[1]{{\fontfamily{ptm}\fontsize{185}{185}\selectfont\color{khred}#1}}
+\makeatletter
+\def\@makechapterhead#1{%
+  \par\vspace*{-9mm}\noindent
+  \begin{tikzpicture}[x=1mm,y=1mm]
+    \ifx\nextchapimg\empty\else\global\let\lastchimg\nextchapimg\node[anchor=north west,inner sep=0] at (0,0) {\includegraphics[width=64mm,height=64mm]{\nextchapimg}};\fi
+    \node[anchor=north east,inner sep=0] at (\textwidth-4mm,3mm) {\bigdigit{\thechapter}};
+    \fill[khpurple] (\textwidth-2.2mm,6mm) rectangle (\textwidth,-52mm);
+    \path (0,-65mm) rectangle (\textwidth,0);
+  \end{tikzpicture}\par\vspace{3.5mm}
+  \gdef\nextchapimg{}%
+  \protected@write\@auxout{}{\string\csgdef{chstart@\arabic{chapter}}{\thepage}\string\csgdef{chtitle@\arabic{chapter}}{\unexpanded{#1}}\string\csgdef{chnum@\arabic{chapter}}{\thechapter}\string\csgdef{chimg@\arabic{chapter}}{\unexpanded\expandafter{\lastchimg}}}%
+  \sbox{\featbox}{\begin{tcolorbox}[valign=top,colback=khfeat,colframe=khfeat,boxrule=0pt,arc=0pt,left=3mm,right=2.2mm,top=3mm,bottom=3mm,width=\featw]%
+     {\sfb\itshape\color{khblue}\fontsize{10.5}{12}\selectfont Features}\par\vspace{3pt}%
+     {\itshape\fontsize{8.6}{10.6}\selectfont\color{khink}\chapsecs{\arabic{chapter}}\par}\end{tcolorbox}}%
+  \noindent\begin{tikzpicture}[x=1mm,y=1mm]
+   \node[anchor=north west,inner sep=0] at (0,0) {\usebox{\featbox}};
+   \node[anchor=north east,inner sep=0,text width=\dimexpr\textwidth-\featw-4mm\relax,align=left] at (\textwidth,0) {%
+     \textcolor{khsalmon}{\rule{\linewidth}{2.2pt}}\par\vspace{1mm}%
+     {\sfb\fontsize{36}{38}\selectfont\spaceskip=0.3em\relax\color{khink}\raggedleft #1\par}\vspace{1.5mm}%
+     \textcolor{khsalmon}{\rule{\linewidth}{2.2pt}}\par\vspace{4mm}%
+     \ifx\chaplead\empty\else{\small\chaplead\par}\fi};
+  \end{tikzpicture}\par\gdef\chaplead{}\vspace{3mm}%
+}
+\def\@makeschapterhead#1{%
+  \par\vspace*{-2mm}\noindent{\sfb\fontsize{30}{32}\selectfont\color{khink}#1}\par\vspace{1mm}\noindent\textcolor{khsalmon}{\rule{\textwidth}{2.2pt}}\par\vspace{5mm}}
+\makeatother
+\titleformat{\part}[display]{\centering}{\sfb\fontsize{15}{18}\selectfont\color{khred}PART \Roman{part}}{5mm}{\sfb\fontsize{30}{34}\selectfont\color{khblue}}[\vspace{6mm}\textcolor{khsalmon}{\rule{0.7\textwidth}{2.2pt}}]
+\titlespacing*{\part}{0pt}{70mm}{0pt}
+% ---------------------------------------------------------------- running heads
+\pagestyle{fancy}\fancyhf{}\renewcommand{\headrulewidth}{0pt}
+\newcommand{\hbullet}{\raisebox{0.15ex}{\textcolor{khred}{\Large$\bullet$}}}
+\fancyhead[RO]{{\itshape\fontsize{10.5}{12}\selectfont Chapter \thechapter\ : \nouppercase{\leftmark}}\ \ \hbullet\ \ {\sfb\fontsize{14}{14}\selectfont\thepage}}
+\fancyhead[LE]{{\sfb\fontsize{14}{14}\selectfont\thepage}\ \ \hbullet\ \ {\itshape\fontsize{10.5}{12}\selectfont Pore-Scale Dynamics}}
+\makeatletter\def\ps@plain{\let\@mkboth\@gobbletwo\def\@oddhead{}\def\@evenhead{}\def\@oddfoot{\hfil{\sfb\fontsize{10}{12}\selectfont\thepage}\hfil}\let\@evenfoot\@oddfoot}
+\def\ps@front{\let\@mkboth\@gobbletwo\def\@oddhead{}\def\@evenhead{}\def\@oddfoot{\hfil{\itshape\fontsize{9}{11}\selectfont(\roman{page})}\hfil}\let\@evenfoot\@oddfoot}\makeatother
+% ---------------------------------------------------------------- equations: key results sit in a pale peach box, number written as ...(x.y)
+\renewcommand{\boxed}[1]{\begingroup\setlength{\fboxsep}{5pt}\colorbox{khpeach}{$\displaystyle#1$}\endgroup}
+\makeatletter
+\def\tagform@#1{\maketag@@@{\itshape\color{khmag}\ldots\ (#1)\@@italiccorr}}
+\makeatother
 \numberwithin{equation}{chapter}
-\captionsetup{font=small,labelfont={bf,color=rd}}
-\setlength{\parindent}{0pt}\setlength{\parskip}{6pt}
 \newcommand{\hc}{h_{\mathrm c}}\newcommand{\Se}{S_{\mathrm e}}\newcommand{\Kr}{K_{\mathrm r}}\newcommand{\Ks}{K_{\mathrm s}}
+% ---------------------------------------------------------------- worked examples: statement in a peach panel, then the solution
 \newcounter{ex}[chapter]\renewcommand{\theex}{\thechapter.\arabic{ex}}
-\newtcolorbox{example}[1]{colback=pn,colframe=og,boxrule=0.6pt,arc=0pt,left=6pt,right=6pt,top=4pt,bottom=4pt,breakable,title={\refstepcounter{ex}Worked example \theex\ --- #1},fonttitle=\bfseries\small,coltitle=white,colbacktitle=og}
-\newtcolorbox{daisybox}[1]{colback=white,colframe=ink,boxrule=0.6pt,arc=0pt,breakable,title={From the Daisy outputs --- #1},fonttitle=\bfseries\small,colbacktitle=ink}
-\newtcolorbox{keybox}{colback=rd!6,colframe=rd,boxrule=0.6pt,arc=0pt,breakable,title={Key result},fonttitle=\bfseries\small}
+\newcommand{\exbox}[2]{\par\vspace{7pt}\refstepcounter{ex}\noindent\begin{tcolorbox}[enhanced jigsaw,colback=khex,colframe=khex,boxrule=0pt,arc=0pt,left=5pt,right=5pt,top=3pt,bottom=3pt,breakable,before skip=0pt,after skip=3pt]%
+  {\bfseries\itshape\color{khmag}Example \theex.}\ \ifx\relax#1\relax\else{\bfseries\itshape\color{khblue}#1.}\ \fi\itshape #2\end{tcolorbox}\par\nobreak\noindent\ignorespaces}
+\newtcolorbox{daisybox}[1]{enhanced jigsaw,colback=khfeat,colframe=khsalmon,boxrule=0.5pt,arc=0pt,left=5pt,right=5pt,top=8pt,bottom=4pt,breakable,before skip=10pt,after skip=8pt,
+  title={\sfb\fontsize{9.5}{11}\selectfont From the Daisy outputs --- #1},coltitle=khblue,colbacktitle=khfeat,fonttitle=\bfseries,attach boxed title to top left={yshift=-3mm,xshift=3mm},boxed title style={colback=white,colframe=white,boxrule=0pt,arc=0pt,left=2pt,right=2pt,top=0pt,bottom=0pt}}
+\newtcolorbox{keybox}{enhanced jigsaw,colback=khpeach,colframe=khsalmon,boxrule=0.5pt,arc=0pt,left=5pt,right=5pt,top=8pt,bottom=4pt,breakable,before skip=10pt,after skip=8pt,
+  title={\sfb\fontsize{9.5}{11}\selectfont Key result},coltitle=khmag,colbacktitle=khpeach,attach boxed title to top left={yshift=-3mm,xshift=3mm},boxed title style={colback=white,colframe=white,boxrule=0pt,arc=0pt,left=2pt,right=2pt,top=0pt,bottom=0pt}}
 \newcounter{exr}[chapter]\renewcommand{\theexr}{\thechapter.\arabic{exr}}
-\newenvironment{exercise}{\par\refstepcounter{exr}\noindent\textbf{\color{rd}Exercise \theexr.}\ }{\par}
-\newcommand{\fig}[3]{\begin{figure}[H]\centering\includegraphics[width=#2\textwidth]{fig/#1}\caption{#3}\end{figure}}
+\newenvironment{exercise}{\par\refstepcounter{exr}\noindent\textbf{\color{khmag}Exercise \theexr.}\ }{\par}
+% ---------------------------------------------------------------- figures: pale green L-mark at the left, magenta label
+\DeclareCaptionLabelFormat{kh}{Fig.~#2.}
+\DeclareCaptionLabelFormat{khtab}{Table~#2.}
+\captionsetup{labelsep=space,font=small,labelfont={bf,color=khmag},skip=3pt}
+\captionsetup[figure]{labelformat=kh}
+\captionsetup[table]{labelformat=khtab}
+\newsavebox{\Lbox}
+\newcommand{\Lshow}{\par\vspace{5pt}\noindent
+  \hbox to\textwidth{\rlap{\tikz[overlay,x=1pt,y=1pt]{\fill[khgreen] (0,{-\dp\Lbox}) rectangle (9,{\ht\Lbox+3});\fill[khgreen] (0,{-\dp\Lbox}) rectangle (40,{-\dp\Lbox+9});}}\hss\usebox{\Lbox}\hss}\par\vspace{1pt}}
+\newcommand{\Lfig}[1]{\sbox{\Lbox}{#1}\Lshow}
+\newcommand{\fig}[3]{\begin{figure}[H]\centering\Lfig{\includegraphics[width=#2\textwidth]{fig/#1}}\caption{#3}\end{figure}}
+% a figure drawn with TikZ: \begin{kfig}{caption} ...tikz code... \end{kfig}
+\newenvironment{kfig}[1]{\begin{figure}[H]\centering\def\kcap{#1}\setbox\Lbox\hbox\bgroup\begin{tikzpicture}[kh]}{\end{tikzpicture}\egroup\Lshow\caption{\kcap}\end{figure}}
+\tikzset{kh/.style={font=\sffamily\footnotesize,line cap=round,line join=round,
+  ln/.style={draw=khcyan,line width=0.6pt},axis/.style={draw=khcyan,line width=0.6pt,-{Triangle[length=2.4mm,width=1.7mm,fill=khcyan]}},
+  vec/.style={draw=khcyan,line width=0.6pt,-{Triangle[length=2.3mm,width=1.7mm,color=khmag,fill=khmag]}},
+  gd/.style={draw=khmag,dashed,line width=0.45pt},hat/.style={pattern=north east lines,pattern color=khcyan,draw=khcyan,line width=0.4pt},
+  crv/.style={draw=khmag,line width=0.7pt},thin ln/.style={draw=khcyan,line width=0.4pt},wtr/.style={fill=khcyan!25,draw=khcyan,line width=0.5pt},
+  soil/.style={fill=khsalmon!45,draw=khsalmon!80!black,line width=0.5pt},lab/.style={font=\sffamily\footnotesize,text=black}}}
+\makeatletter\newcommand{\writechapend}{\protected@write\@auxout{}{\string\csgdef{chend@\arabic{chapter}}{\thepage}\string\gdef\string\totchap{\arabic{chapter}}}}
+\pretocmd{\chapter}{\writechapend}{}{}\pretocmd{\part}{\writechapend}{}{}
+\makeatother
+\gdef\totchap{0}
+\arrayrulecolor{khsalmon}
 \begin{document}
-\frontmatter
-\begin{titlepage}\centering\vspace*{3cm}
-{\color{og}\Large\bfseries A TEXTBOOK OF WORKED MATHEMATICS}\\[1.4cm]
-{\fontsize{44}{50}\selectfont\bfseries\color{rd} Pore-Scale\\Dynamics}\\[1cm]
-{\Large\color{ink} Soil water, irrigation and evaporation control:\\ derivations and fully solved worked examples\\ with the Daisy model and the SWAFL application}\\[3cm]
-{\Large Naziru Halilu}\\[0.4cm] Agricultural University of Athens \quad Public University of Navarre\\[3cm]
-{\small Based on four studies, their Supplementary derivations, the SWAFL Desktop 1.1.0 manual and an open ensemble of 10,190 Daisy simulations (Zenodo, doi 10.5281/zenodo.23043626). Licence: MIT.}
-\end{titlepage}
-\chapter*{How to use this book}
-This book teaches, from first principles, the equations that sit behind the reach of a suction trigger, the fate of an irrigation millimetre, hydraulic memory and the audit of a water balance, and shows how each equation is derived from the outputs of the Daisy model. It follows the studies and the Supplementary derivations of the project, and every screenshot is taken from the SWAFL application.
-
-\textbf{Structure.} Each chapter has a short statement of what you will be able to do, the derivation, worked examples with numbers that you can reproduce with a pocket calculator or a few lines of code, a box that says how the quantity is obtained from the Daisy outputs, and problems that are solved in full, step by step, directly after they are posed. No problem is left unsolved.
-
-\textbf{Prerequisites.} Calculus, a first course in physics, and some familiarity with soil water. No knowledge of Daisy is assumed.
-
-\textbf{Scope.} All findings concern a one-dimensional matrix-flow model; no field validation is claimed. Where a law is phenomenological and not derived from physics, the text says so.
-
-\textbf{Status of this edition.} Part I presents the derivations. Part II works the mathematics of every SWAFL layer and of the Daisy workbench with computed examples.
-\tableofcontents
-\mainmatter

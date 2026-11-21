@@ -1,15 +1,13 @@
+\chapimg{fig/ch25.jpg}
+\chapterlead{\subhd{After this chapter you can} carry a surface-irrigation design through every step of the application: pedotransfer functions, Green--Ampt, the Kostiakov fit, Manning's inlet, the volume-balance advance, cut-off, efficiencies, the best inflow, the design table, the sensitivity bars and the season and farm figures.}
 \chapter{Surface irrigation design: from soil to schedule}\label{ch:surf}
 \markboth{Surface design}{Surface design}
-\textbf{After this chapter you can} carry a surface-irrigation design through every step of the application: pedotransfer functions, Green--Ampt, the Kostiakov fit, Manning's inlet, the volume-balance advance, cut-off, efficiencies, the best inflow, the design table, the sensitivity bars and the season and farm figures.
 
 The chain of the layer is: texture $\to$ Saxton and Rawls $\to$ Green and Ampt $\to$ Kostiakov $\to$ inlet area (Manning) $\to$ advance (volume balance) $\to$ cut-off $\to$ depths and efficiencies. The worked design below follows one furrow field on the loam S06: $L=180$ m, slope $S=0.30$ per cent, inflow $q=1.2$ L s$^{-1}$ per furrow, Manning $n=0.04$, spacing $w=0.75$ m, organic matter $1.5$ per cent, trigger depletion $f_T=0.468$ (that is $-300$ cm) and required depth $Z_n=73.3$ mm (Chapter~\ref{ch:e1}).
 
 \section{Soil water properties (Saxton and Rawls)}
 
-\begin{example}{Saxton and Rawls for the loam}
-For the loam (sand $S=0.40$, clay $C=0.20$, OM $=1.5$ per cent) compute $\theta_{1500}$, $\theta_{33}$, $\theta_s$, $\lambda$ and $K_s$ with the Saxton and Rawls (2006) equations.
-
-\textbf{Solution.} 1. $\theta_{1500,t}=-0.024(0.40)+0.487(0.20)+0.006(1.5)+0.005(0.40)(1.5)-0.013(0.20)(1.5)+0.068(0.40)(0.20)+0.031=0.13234$; correction: $\theta_{1500}=\theta_{1500,t}+(0.14\theta_{1500,t}-0.02)=0.1309$.
+\exbox{Saxton and Rawls for the loam}{For the loam (sand $S=0.40$, clay $C=0.20$, OM $=1.5$ per cent) compute $\theta_{1500}$, $\theta_{33}$, $\theta_s$, $\lambda$ and $K_s$ with the Saxton and Rawls (2006) equations.}\sol  1. $\theta_{1500,t}=-0.024(0.40)+0.487(0.20)+0.006(1.5)+0.005(0.40)(1.5)-0.013(0.20)(1.5)+0.068(0.40)(0.20)+0.031=0.13234$; correction: $\theta_{1500}=\theta_{1500,t}+(0.14\theta_{1500,t}-0.02)=0.1309$.
 
 2. $\theta_{33,t}=-0.251(0.40)+0.195(0.20)+0.011(1.5)+0.006(0.40)(1.5)-0.027(0.20)(1.5)+0.452(0.40)(0.20)+0.299=0.28576$; $\theta_{33}=\theta_{33,t}+(1.283\theta_{33,t}^2-0.374\theta_{33,t}-0.015)=0.2687$.
 
@@ -17,15 +15,12 @@ For the loam (sand $S=0.40$, clay $C=0.20$, OM $=1.5$ per cent) compute $\theta_
 
 4. $B=(\ln1500-\ln33)/(\ln\theta_{33}-\ln\theta_{1500})=5.307$, $\lambda=1/B=0.1884$, $K_s=1930(\theta_s-\theta_{33})^{3-\lambda}=1930(0.1645)^{2.812}=12.07$ mm h$^{-1}$.
 
-\textbf{Reading.} Field capacity $\theta_{fc}=\theta_{33}=0.269$ and wilting $\theta_{wp}=\theta_{1500}=0.131$ give plant-available water $0.138$ cm$^3$ cm$^{-3}$, i.e. 1.38 mm per cm, close to the engineered AWC of 1.7 mm per cm for this soil. These are regressions on a US soil database and carry its scatter: they serve design and not prediction at a site.
-\end{example}
+\subhd{Reading.} Field capacity $\theta_{fc}=\theta_{33}=0.269$ and wilting $\theta_{wp}=\theta_{1500}=0.131$ give plant-available water $0.138$ cm$^3$ cm$^{-3}$, i.e. 1.38 mm per cm, close to the engineered AWC of 1.7 mm per cm for this soil. These are regressions on a US soil database and carry its scatter: they serve design and not prediction at a site.
 
-\begin{example}{Saxton and Rawls for all soils}
-Repeat the calculation for the ten soils (OM $=1.5$ per cent).
 
-\textbf{Solution.} The same four steps give Table~\ref{tab:sr}. The saturated conductivity runs from about 1 mm h$^{-1}$ in the clay loams to about 100 mm h$^{-1}$ in the sand, which sets the intake of every design.\begin{table}[H]\centering\small\caption{Saxton and Rawls properties of the ten soils.}\label{tab:sr}
+\exbox{Saxton and Rawls for all soils}{Repeat the calculation for the ten soils (OM $=1.5$ per cent).}\sol  The same four steps give Table~\ref{tab:sr}. The saturated conductivity runs from about 1 mm h$^{-1}$ in the clay loams to about 100 mm h$^{-1}$ in the sand, which sets the intake of every design.\begin{table}[H]\centering\small\caption{Saxton and Rawls properties of the ten soils.}\label{tab:sr}
 \begin{tabular}{lrrrrrr}\toprule
-ID & Soil & $\theta_{1500}$ & $\theta_{33}$ & $\theta_s$ & $K_s$ (mm/h) & PAW (mm/cm)\\\midrule
+\hd{ID} & \hd{Soil} & \hd{$\theta_{1500}$} & \hd{$\theta_{33}$} & \hd{$\theta_s$} & \hd{$K_s$ (mm/h)} & \hd{PAW (mm/cm)}\\\midrule
 S01 & Coarse loam & 0.131 & 0.258 & 0.429 & 13.1 & 1.28\\
 S02 & Coarse sand & 0.033 & 0.083 & 0.442 & 114.7 & 0.50\\
 S03 & Sand & 0.026 & 0.069 & 0.449 & 134.7 & 0.43\\
@@ -37,20 +32,17 @@ S08 & Sandy clay loam & 0.188 & 0.293 & 0.422 & 5.3 & 1.05\\
 S09 & Clay loam & 0.215 & 0.353 & 0.460 & 3.2 & 1.38\\
 S10 & Silty clay loam & 0.213 & 0.378 & 0.490 & 3.8 & 1.66\\\bottomrule\end{tabular}\end{table}
 \textbf{Check.} For the loam the $K_s$ of 12.1 mm h$^{-1}$ equals $29$ cm d$^{-1}$. (Chapter~\ref{ch:rich}'s loam solver used $K_s=24.96$ cm d$^{-1}$; these are different pedotransfer sets, and the book keeps each with its own source.)
-\end{example}
+
 
 \section{Wetting-front suction and Green--Ampt}
 The effective suction at the wetting front is $\psi_f=\frac{10}{\alpha}\dfrac{0.046m+2.07m^2+19.5m^3}{1+4.7m+16m^2}$ mm, the storage is $\theta_0=\theta_{fc}-f_T(\theta_{fc}-\theta_{wp})$, $\Delta\theta=\max\{0.05,0.95\theta_s-\theta_0\}$, and the cumulative infiltration solves
-\begin{equation}F-\psi_f\Delta\theta\ln\Bigl(1+\frac F{\psi_f\Delta\theta}\Bigr)=K_s\frac t{60}\quad(t\ \text{in min}).\end{equation}
+\begin{equation}\boxed{F-\psi_f\Delta\theta\ln\Bigl(1+\frac F{\psi_f\Delta\theta}\Bigr)=K_s\frac t{60}\quad(t\ \text{in min}).}\end{equation}
 
-\begin{example}{Green--Ampt infiltration after one hour}
-Compute $\psi_f$ and $\Delta\theta$ for the loam at $f_T=0.468$, then solve the Green--Ampt equation for $F$ at $t=60$ min by Newton's iteration.
-
-\textbf{Solution.} $m=1-1/1.56=0.3590$. Numerator: $0.046(0.3590)+2.07(0.3590)^2+19.5(0.3590)^3=1.1853$. Denominator: $1+4.7(0.3590)+16(0.3590)^2=4.7490$. So $\psi_f=\frac{10}{0.036}\times0.2496=69.3$ mm. (For the coarse loam, $\alpha=0.0961$, the same formula gives 15.7 mm, the 16 mm quoted by the manual.) Storage: $\theta_0=0.2687-0.468(0.2687-0.1309)=0.2042$ and $\Delta\theta=\max\{0.05,0.95(0.4331)-0.2042\}=0.2073$.
+\exbox{Green--Ampt infiltration after one hour}{Compute $\psi_f$ and $\Delta\theta$ for the loam at $f_T=0.468$, then solve the Green--Ampt equation for $F$ at $t=60$ min by Newton's iteration.}\sol  $m=1-1/1.56=0.3590$. Numerator: $0.046(0.3590)+2.07(0.3590)^2+19.5(0.3590)^3=1.1853$. Denominator: $1+4.7(0.3590)+16(0.3590)^2=4.7490$. So $\psi_f=\frac{10}{0.036}\times0.2496=69.3$ mm. (For the coarse loam, $\alpha=0.0961$, the same formula gives 15.7 mm, the 16 mm quoted by the manual.) Storage: $\theta_0=0.2687-0.468(0.2687-0.1309)=0.2042$ and $\Delta\theta=\max\{0.05,0.95(0.4331)-0.2042\}=0.2073$.
 
 Newton for $t=60$ min: $K_st/60=12.07$ mm and $\psi_f\Delta\theta=14.37$ mm. Start $F_0=\max\{12.07,\sqrt{2(\psi_f\Delta\theta)K_st/60}\}=18.63$ mm. Each step $F\leftarrow F-g/g'$ with $g=F-c\ln(1+F/c)-K_st/60$, $g'=1-1/(1+F/c)$, $c=\psi_f\Delta\theta$.\begin{table}[H]\centering\small\caption{Newton iteration for $F(60\ \mathrm{min})$.}\label{tab:newton}
 \begin{tabular}{lrrr}\toprule
-Iteration & $F$ (mm) & $g$ & new $F$\\\midrule
+\hd{Iteration} & \hd{$F$ (mm)} & \hd{$g$} & \hd{new $F$}\\\midrule
 1 & 18.6268 & -5.38888 & 28.1740\\
 2 & 28.1740 & 0.50598 & 27.4099\\
 3 & 27.4099 & 0.00235 & 27.4063\\
@@ -59,14 +51,11 @@ Iteration & $F$ (mm) & $g$ & new $F$\\\midrule
 6 & 27.4063 & -0.00000 & 27.4063\\\bottomrule\end{tabular}\end{table}
 
 The iteration converges in four steps to $F(60)=27.41$ mm, so the infiltration rate averaged over the first hour is 27.4 mm h$^{-1}$, about 2.3 times $K_s$.
-\end{example}
 
-\begin{example}{the infiltration curve}
-Tabulate $F(t)$ and the infiltration rate $i=dF/dt$ at 10, 30, 60, 120, 240, 480 and 600 min.
 
-\textbf{Solution.} Solve the Green--Ampt equation at each time (Newton) and estimate the rate by a central difference $i\approx[F(t+1)-F(t-1)]/2$ per minute, expressed in mm h$^{-1}$ (Table~\ref{tab:GA}).\begin{table}[H]\centering\small\caption{Green--Ampt infiltration of the loam.}\label{tab:GA}
+\exbox{The infiltration curve}{Tabulate $F(t)$ and the infiltration rate $i=dF/dt$ at 10, 30, 60, 120, 240, 480 and 600 min.}\sol  Solve the Green--Ampt equation at each time (Newton) and estimate the rate by a central difference $i\approx[F(t+1)-F(t-1)]/2$ per minute, expressed in mm h$^{-1}$ (Table~\ref{tab:GA}).\begin{table}[H]\centering\small\caption{Green--Ampt infiltration of the loam.}\label{tab:GA}
 \begin{tabular}{lrr}\toprule
-$t$ (min) & $F$ (mm) & rate (mm/h)\\\midrule
+\hd{$t$ (min)} & \hd{$F$ (mm)} & \hd{rate (mm/h)}\\\midrule
 10 & 9.00 & 31.37\\
 30 & 17.47 & 22.00\\
 60 & 27.41 & 18.40\\
@@ -75,17 +64,14 @@ $t$ (min) & $F$ (mm) & rate (mm/h)\\\midrule
 480 & 129.68 & 13.41\\
 600 & 156.26 & 13.18\\\bottomrule\end{tabular}\end{table}
 The rate falls toward the saturated conductivity 12.1 mm h$^{-1}$ but is still 13.18 mm h$^{-1}$ at 600 min because the front is only a few centimetres deep.
-\end{example}
+
 
 \section{The Kostiakov fit}
 The design converts the Green--Ampt curve into the power law $Z(\tau)=k\tau^A$ ($Z$ in m, $\tau$ in min) by least squares on $\ln Z=\ln k+A\ln\tau$ at 25 times spaced geometrically between 10 and 600 min.
 
-\begin{example}{fitting the Kostiakov law}
-Fit $k$ and $A$ for the loam, and report $R^2$.
-
-\textbf{Solution.} With $x_i=\ln\tau_i$, $y_i=\ln(F_i/1000)$ over 25 points: $\bar x=4.3498$, $\bar y=-3.3721$, $\sum(x-\bar x)^2=37.8346$, $\sum(x-\bar x)(y-\bar y)=26.2682$. So $A=0.6943$ and $\ln k=\bar y-A\bar x=-6.3921$, $k=0.001675$ m min$^{-A}$ ($=1.675$ mm min$^{-A}$), $R^2=0.9972$. Table~\ref{tab:kost} compares every fourth point of the Green--Ampt curve with the fitted power law.\begin{table}[H]\centering\small\caption{Kostiakov fit of the loam (every fourth of 25 points).}\label{tab:kost}
+\exbox{Fitting the Kostiakov law}{Fit $k$ and $A$ for the loam, and report $R^2$.}\sol  With $x_i=\ln\tau_i$, $y_i=\ln(F_i/1000)$ over 25 points: $\bar x=4.3498$, $\bar y=-3.3721$, $\sum(x-\bar x)^2=37.8346$, $\sum(x-\bar x)(y-\bar y)=26.2682$. So $A=0.6943$ and $\ln k=\bar y-A\bar x=-6.3921$, $k=0.001675$ m min$^{-A}$ ($=1.675$ mm min$^{-A}$), $R^2=0.9972$. Table~\ref{tab:kost} compares every fourth point of the Green--Ampt curve with the fitted power law.\begin{table}[H]\centering\small\caption{Kostiakov fit of the loam (every fourth of 25 points).}\label{tab:kost}
 \begin{tabular}{lrrrr}\toprule
-$\tau$ (min) & $F$ (mm) & $x$ & $y$ & $k\tau^A$ (mm)\\\midrule
+\hd{$\tau$ (min)} & \hd{$F$ (mm)} & \hd{$x$} & \hd{$y$} & \hd{$k\tau^A$ (mm)}\\\midrule
 10.0 & 9.00 & 2.3026 & -4.7105 & 8.28\\
 19.8 & 13.50 & 2.9850 & -4.3051 & 13.30\\
 39.1 & 20.69 & 3.6674 & -3.8779 & 21.37\\
@@ -94,14 +80,11 @@ $\tau$ (min) & $F$ (mm) & $x$ & $y$ & $k\tau^A$ (mm)\\\midrule
 303.2 & 89.42 & 5.7145 & -2.4145 & 88.52\\
 600.0 & 156.26 & 6.3969 & -1.8563 & 142.16\\\bottomrule\end{tabular}\end{table}
 \textbf{Reading.} The coefficient of determination of 0.997 is the quality of the conversion; the manual shows ``fit $R^2$ 0.997'' for its coarse-loam example. At 600 min the power law gives the same depth as Green--Ampt to within a few per cent, but it has no steady rate: $dZ/d\tau=kA\tau^{A-1}\to0$ for $A<1$, which makes the long-time intake smaller than the saturated conductivity.
-\end{example}
 
-\begin{example}{intake parameters for all soils}
-Repeat for the ten soils at $f_T=0.45$.
 
-\textbf{Solution.} Table~\ref{tab:kostall} lists $\psi_f$, $\Delta\theta$, $k$, $A$ and $R^2$. The exponent $A$ is larger for the sandy soils (their intake approaches a constant rate early, so the log-log curve is straighter and steeper) and $k$ is larger too.\begin{table}[H]\centering\small\caption{Kostiakov parameters of the ten soils from the pedotransfer chain.}\label{tab:kostall}
+\exbox{Intake parameters for all soils}{Repeat for the ten soils at $f_T=0.45$.}\sol  Table~\ref{tab:kostall} lists $\psi_f$, $\Delta\theta$, $k$, $A$ and $R^2$. The exponent $A$ is larger for the sandy soils (their intake approaches a constant rate early, so the log-log curve is straighter and steeper) and $k$ is larger too.\begin{table}[H]\centering\small\caption{Kostiakov parameters of the ten soils from the pedotransfer chain.}\label{tab:kostall}
 \begin{tabular}{lrrrrrr}\toprule
-ID & Soil & $\psi_f$ (mm) & $\Delta\theta$ & $k$ (mm min$^{-A}$) & $A$ & $R^2$\\\midrule
+\hd{ID} & \hd{Soil} & \hd{$\psi_f$ (mm)} & \hd{$\Delta\theta$} & \hd{$k$ (mm min$^{-A}$)} & \hd{$A$} & \hd{$R^2$}\\\midrule
 S01 & Coarse loam & 16 & 0.207 & 0.759 & 0.805 & 0.998\\
 S02 & Coarse sand & 50 & 0.360 & 5.317 & 0.837 & 0.998\\
 S03 & Sand & 38 & 0.376 & 5.279 & 0.862 & 0.998\\
@@ -112,17 +95,14 @@ S07 & Silt loam & 90 & 0.213 & 1.905 & 0.670 & 0.997\\
 S08 & Sandy clay loam & 36 & 0.155 & 0.686 & 0.702 & 0.997\\
 S09 & Clay loam & 67 & 0.147 & 0.784 & 0.637 & 0.998\\
 S10 & Silty clay loam & 86 & 0.162 & 1.017 & 0.628 & 0.998\\\bottomrule\end{tabular}\end{table}
-\end{example}
+
 
 \section{Inlet flow area (Manning)}
 At the inlet, $Q=\frac1nAR_h^{2/3}S^{1/2}$, $R_h=A/P$. For a furrow with side slope $z=1$: $A=zy^2$, $P=2y\sqrt{1+z^2}$, solved for the depth $y$ by 60 bisection steps; $A_0=zy^2$. For a border or basin, $y_0=(qn/\sqrt S)^{0.6}$ with $q$ in m$^2$ s$^{-1}$ and $A_0=y_0$.
 
-\begin{example}{Manning depth in a furrow}
-Find the flow depth and the inlet area for $q=1.2$ L s$^{-1}$, $S=0.003$, $n=0.04$, $z=1$ and check the furrow does not overtop (limit $D=0.25$ m).
-
-\textbf{Solution.} $Q=0.0012$ m$^3$ s$^{-1}$. At depth $y$: $A=y^2$, $P=2.828y$, $R_h=0.3536y$, so $Q(y)=\frac1{0.04}y^2(0.3536y)^{2/3}\sqrt{0.003}$; since $0.3536^{2/3}=0.5000$ and $0.5\times0.05477/0.04=0.6847$, $Q(y)=0.6847\,y^{8/3}$. Setting $Q(y)=0.0012$: $y^{8/3}=0.001752$, $y=0.001752^{3/8}=0.0926$ m. The bisection of the application reaches the same value (Table~\ref{tab:bis2}, first eight steps). The inlet area is $A_0=y^2=0.00857$ m$^2$ = 85.7 cm$^2$. Since $0.0926<0.25$ m, no overtopping.\begin{table}[H]\centering\small\caption{First eight bisection steps for the furrow depth.}\label{tab:bis2}
+\exbox{Manning depth in a furrow}{Find the flow depth and the inlet area for $q=1.2$ L s$^{-1}$, $S=0.003$, $n=0.04$, $z=1$ and check the furrow does not overtop (limit $D=0.25$ m).}\sol  $Q=0.0012$ m$^3$ s$^{-1}$. At depth $y$: $A=y^2$, $P=2.828y$, $R_h=0.3536y$, so $Q(y)=\frac1{0.04}y^2(0.3536y)^{2/3}\sqrt{0.003}$; since $0.3536^{2/3}=0.5000$ and $0.5\times0.05477/0.04=0.6847$, $Q(y)=0.6847\,y^{8/3}$. Setting $Q(y)=0.0012$: $y^{8/3}=0.001752$, $y=0.001752^{3/8}=0.0926$ m. The bisection of the application reaches the same value (Table~\ref{tab:bis2}, first eight steps). The inlet area is $A_0=y^2=0.00857$ m$^2$ = 85.7 cm$^2$. Since $0.0926<0.25$ m, no overtopping.\begin{table}[H]\centering\small\caption{First eight bisection steps for the furrow depth.}\label{tab:bis2}
 \begin{tabular}{lrrr}\toprule
-Step & $y$ (m) & $Q(y)$ (L/s) & Keep\\\midrule
+\hd{Step} & \hd{$y$ (m)} & \hd{$Q(y)$ (L/s)} & \hd{Keep}\\\midrule
 1 & 1.00005 & 684.7445 & lower\\
 2 & 0.50008 & 107.8693 & lower\\
 3 & 0.25009 & 16.9974 & lower\\
@@ -131,10 +111,7 @@ Step & $y$ (m) & $Q(y)$ (L/s) & Keep\\\midrule
 6 & 0.09385 & 1.2452 & lower\\
 7 & 0.07822 & 0.7662 & upper\\
 8 & 0.08603 & 0.9876 & upper\\\bottomrule\end{tabular}\end{table}
-\end{example}
 
-\begin{example}{sheet flow in a border}
-For a border strip with $q=6$ L s$^{-1}$ per metre width ($0.006$ m$^2$ s$^{-1}$), $S=0.20$ per cent, $n=0.15$: find $y_0$ and $A_0$.
 
-\textbf{Solution.} $y_0=(qn/\sqrt S)^{0.6}=(0.006\times0.15/0.04472)^{0.6}=(0.02012)^{0.6}=0.0960$ m, so $A_0=0.0960$ m$^2$ per metre of width. A sheet flow 3.7 cm deep at the inlet.
-\end{example}
+\exbox{Sheet flow in a border}{For a border strip with $q=6$ L s$^{-1}$ per metre width ($0.006$ m$^2$ s$^{-1}$), $S=0.20$ per cent, $n=0.15$: find $y_0$ and $A_0$.}\sol  $y_0=(qn/\sqrt S)^{0.6}=(0.006\times0.15/0.04472)^{0.6}=(0.02012)^{0.6}=0.0960$ m, so $A_0=0.0960$ m$^2$ per metre of width. A sheet flow 3.7 cm deep at the inlet.
+
