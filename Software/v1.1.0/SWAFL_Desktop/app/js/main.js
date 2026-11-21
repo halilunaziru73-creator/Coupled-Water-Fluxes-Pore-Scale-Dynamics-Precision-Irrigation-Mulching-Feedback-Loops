@@ -79,7 +79,9 @@ const Act = {
   preset(v) { E.preset(v); const p = E.metaData.presets.find(x => x[0] === String(v)); UI.log('Ready-made case: ' + (p ? p[1] : v)); },
   optimise() { Layers.open('sid'); setTimeout(() => { const ok = E.optimiseSurface(); UI.log(ok ? 'Surface layout optimised' : 'Optimiser not available', ok ? 'info' : 'warn'); UI.toast(ok ? 'Best surface layout applied' : 'Optimiser not available'); Dash.tab('design'); }, 350); },
   refresh() { E.redraw(); Layers.render(); Props.update(E.snap); Dash.render(); UI.log('View refreshed'); UI.toast('Refreshed'); },
-  reloadEngine() { UI.log('Reloading simulation engine...'); document.getElementById('loading').classList.remove('gone'); E.ready = false; document.getElementById('engine').contentWindow.location.reload(); boot(true); },
+  reloadEngine() { UI.log('Reloading simulation engine...'); const ld = document.getElementById('loading'); ld.classList.remove('gone'); const tx = ld.querySelector('.spm'); if (tx) tx.textContent = 'Starting the simulation engine, soils, crops and weather...'; E.ready = false;
+    const f = document.getElementById('engine'); f.src = 'about:blank';   // the old engine window is dropped first, so that a start never succeeds against it
+    setTimeout(() => { f.src = (window.SWAFLEngineURL ? window.SWAFLEngineURL() : 'engine/engine.html?app=1&t=' + Date.now() + '#scene=field'); boot(true); }, 80); },
   guide() { guideModal(); }, shortcuts() { shortcutsModal(); }, about() { aboutModal(); },
   github() { UI.openExternal(REPO); }, docs() { UI.openExternal(DOCS); }, issues() { // the details a report needs are put in front of the person, ready to copy, before the page for the report opens
     const ver = document.getElementById('stVer'), d = 'SWAFL ' + VERSION + '\nBuild: ' + (ver ? ver.textContent : '') + '\nProgram: ' + (window.swafl && window.swafl.isDesktop ? 'desktop' : 'web page') + '\nBrowser: ' + navigator['user' + 'Agent'] + '\nWindow: ' + innerWidth + 'x' + innerHeight + '\n\nWhat I did, and what I saw (a screenshot helps):\n';
@@ -259,9 +261,15 @@ function weatherAsk() {
   UI.modal({ title: 'Which weather should SWAFL use?', icon: 'info', width: 'min(640px,94vw)', html: '<p>Every irrigation decision follows the weather. Choose where it comes from:</p><ol><li><b>Benchmark weather of the software</b>: the recorded weather of the simulations (1980 to 1999), projected on to 2100.</li><li><b>Import a weather file</b> of your own field (CSV, Excel, DWF or DLF).</li><li><b>Online weather of a location</b>: type the place or its coordinates; twenty years of measured weather and the forecast are fetched.</li></ol><p class="pnote">You can change this at any time in Properties &rarr; Scenario &rarr; Weather source.</p>',
     buttons: [{ label: 'Benchmark weather (to 2100)', act: () => { REM.set('wx', 'record'); try { WxUI.use('record'); } catch (e) {} UI.log('Weather: benchmark record of the software, projected to 2100'); } }, { label: 'Import a weather file...', act: () => { REM.set('wx', 'asked'); setTimeout(() => WxUI.importFile(), 30); } }, { label: 'Online weather by location...', pri: true, act: () => { REM.set('wx', 'asked'); setTimeout(() => WxUI.online(), 30); } }] });
 }
-async function boot(again) {
+let booting = false;
+async function boot(again) { if (booting) return; booting = true; try { await boot0(again); } finally { booting = false; } }
+async function boot0(again) {
   const ok = await E.start();
-  if (!ok) { UI.log('The simulation engine did not start', 'err'); document.querySelector('#loading div').textContent = 'The simulation engine did not start. Use Refresh > Reload simulation engine.'; return; }
+  if (!ok) {
+    UI.log('The simulation engine did not start' + (again ? '' : ': trying once more'), 'err');
+    if (!again) { setTimeout(() => Act.reloadEngine(), 400); return; }   // one automatic second try: a slow first load (a cold network or cache) is the usual cause
+    const ld = document.querySelector('#loading div'); ld.innerHTML = 'The simulation engine did not start.<br><br><button id="engRetry" style="font:bold 13px Tahoma,sans-serif;padding:6px 18px">Try again</button><br><br><span style="font-weight:normal;font-size:12px">If it keeps failing: close other SWAFL windows, press Ctrl+F5, then Try again.</span>';
+    const rb = document.getElementById('engRetry'); if (rb) rb.onclick = () => Act.reloadEngine(); return; }
   E.metaData = E.meta();
   try { E.win.addEventListener('keydown', onKey); } catch (e) {}
   Toolbox.render(); Props.build(); Layers.render(); Layers.renderTabs(); Layers.renderViewBar();

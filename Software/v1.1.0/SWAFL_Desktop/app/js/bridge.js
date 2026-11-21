@@ -97,7 +97,7 @@ const E = (() => {
     /* ---- start-up ---- */
     start() {
       return new Promise(res => {
-        const t0 = Date.now(), iv = setInterval(() => {
+        let t0 = Date.now(), doneAt = 0; const iv = setInterval(() => {
           try {
             const w = frame.contentWindow;
             if (w && w.document.getElementById('profileCanvas') && w.eval("typeof SCENES!=='undefined'&&typeof state!=='undefined'&&typeof switchScene==='function'&&typeof DATA!=='undefined'")) {
@@ -111,8 +111,8 @@ const E = (() => {
               if (cached && cached.sid && cached.drip && cached.spr) { try { w.eval('window.__SEC=Object.assign(window.__SEC||{},' + JSON.stringify(cached) + ')'); fin(); return; } catch (e) { cached = null; } }
               const seq = ['sid', 'drip', 'spr', keep]; let i = 0;
               (function step() { sw(seq[i]); i++; if (i < seq.length) setTimeout(step, 20); else { try { const sc = JSON.parse(w.eval('JSON.stringify(window.__SEC||{})')); if (sc.sid && sc.drip && sc.spr) { for (const k in localStorage) if (k.indexOf('swafl.secs.') === 0 && k !== verK) localStorage.removeItem(k); localStorage.setItem(verK, JSON.stringify({ sid: sc.sid, drip: sc.drip, spr: sc.spr })); } } catch (e) {} fin(); } })();
-            } else if (Date.now() - t0 > 40000) { clearInterval(iv); res(false); }
-          } catch (e) { /* not loaded yet */ }
+            } else if (w && w.document && w.document.readyState === 'complete' && frame.getAttribute('src') && frame.getAttribute('src') !== 'about:blank' && (doneAt = doneAt || Date.now()) && Date.now() - doneAt > 8000) { clearInterval(iv); res(false); /* the page finished loading but the engine is missing: a script failed */ } else if (!frame.getAttribute('src')) { t0 = Date.now(); /* the engine has not been told to start yet (the licence window is open): the clock does not run */ } else if (Date.now() - t0 > 150000) { clearInterval(iv); res(false); }
+          } catch (e) { /* not loaded yet; but a window that cannot be read for 20 s is a failed load (an error page), so the start gives up early and is tried again */ if (frame.getAttribute('src') && Date.now() - t0 > 20000) { clearInterval(iv); res(false); } }
         }, 150);
       });
     }
