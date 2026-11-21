@@ -1,7 +1,7 @@
 \banner{Design project 2: capillary contribution of a shallow water table}
 \textbf{Brief.} A forage crop grows over a shallow water table in a river valley. The root zone ends at 0.6 m and the grower wishes to know how deep the water table must be kept (by drainage) so that it still supplies a useful share of the crop demand, and how much irrigation must be added when it is lowered. The table below is the main design table of the project.
 
-\textbf{Method.} In steady upward flow from a water table at depth $L$, Darcy's law $q=-K(h)(\mathrm dh/\mathrm dz+1)$ integrates to $L-d=\int_0^{h}\mathrm dh'/[1+q/K(h')]$, where $h$ is the suction at the height $d=0$ of the base of the root zone and $q$ is the (upward) flux. For a given $L$ and suction $h_{top}=3000$ cm at the base of the root zone (still a moist soil for the roots), the equation is solved for $q$ by bisection with the numerical integral; $K(h)$ is the Mualem function of the soil with an assumed $K_s$ (Table~\ref{tab:cap}).
+\textbf{Method.} In steady upward flow from a water table at depth $L$, Darcy's law $q=-K(h)(\mathrm dh/\mathrm dz+1)$ integrates to $L-d=\int_0^{h}\mathrm dh'/[1+q/K(h')]$, where $h$ is the suction at the height $d=0$ of the base of the root zone and $q$ is the (upward) flux. For a given $L$ and suction $h_{top}=3000$ cm at the base of the root zone (still a moist soil for the roots), the equation is solved for $q$ by bisection with the numerical integral; $K(h)$ is the Mualem function of the soil with an assumed $K_s$ (the table below).
 
 \begin{table}[!htbp]\centering\small\caption{Maximum steady capillary flux (mm per day) from a water table at depth $L$ below the base of the roots, for a suction of 3000 cm at the base of the root zone.}
 \begin{tabular}{llrrrr}\toprule

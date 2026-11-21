@@ -1,0 +1,47 @@
+\subsection{The output of the application, panel by panel}
+The drip layer is organised in the same way as the surface layer: inputs, the wet soil around the emitter, the uniformity of the lateral, the growth of the bulb, the result for the design, the layout of the whole system with its pump and pipes, a table of improvements, a sensitivity chart, the engineering checks and the water of the season. The case shown is an inline-emitter system of 2.0 L\,h$^{-1}$ emitters every 0.50 m on laterals 1.50 m apart and 100 m long, on one hectare of the coarse loam S01 with wheat.
+
+The buttons choose the emitter family (online, inline, tape, pressure-compensating types) and the placement of the lateral (on the surface or buried at 15, 25, 45 or 55 cm). The run time can be automatic, so that the volume applied equals the requirement divided by the efficiency, or typed by the user. The boxes are the variables of the hydraulic calculation of this chapter: emitter spacing $S_e$ and flow $q$, lateral spacing $S_l$, length and inside diameter, inlet pressure head, the irrigation interval, the area, the mainline, the farm supply and the water lift.
+
+\appfig{drip_inputs}{0.96}{Inputs of the drip layer: crop, mulch, emitter type, placement of the lateral, run time and field size, and the hydraulic and farm variables.}
+
+Three pictures show the wet soil under the driest 10 per cent of emitters, the average emitter and the wettest 10 per cent, because the discharge of the emitters is not exactly equal. Blue is water in the root zone, indigo is water that has passed below the roots and yellow is water evaporated at the surface. The graph and bar at the bottom split the water of one irrigation into stored (94 per cent), deep percolation (6 per cent) and evaporation (0 per cent), and the profile of the day shows the trigger and field capacity for reference.
+
+\appfig{drip_moisture}{0.96}{Soil moisture around the emitter: the driest, the average and the wettest emitter, with the soil water profile of the day and where the water goes.}
+
+The curve is the discharge of the emitters along the lateral as a percentage of the nominal discharge (inline emitter, exponent $x=0.5$), together with the fall of pressure head along the pipe from 10.0 m at the inlet to 9.0 m at the end, a loss of 1.0 m. The table gives the manufacturer's coefficient of variation (0.04), the 200 emitters on the lateral and the flow into it (0.107 L\,s$^{-1}$); the emission uniformity $E_u$ is the number that enters the efficiency.
+
+\appfig{drip_uniform}{0.96}{Uniformity along the lateral: pressure falls with friction, so far emitters deliver less (emission uniformity $E_u=94$ per cent).}
+
+The curves are the width and depth of the wetted bulb as the irrigation runs. The dashed lines are the lateral spacing (150 cm) and the root zone (96 cm). After the 1.7 h of the run the bulb is 46 cm wide and 57 cm deep, 31 per cent of the soil volume is wetted and its shape factor (depth over radius) is 1.39; the design question is whether the bulb covers the roots without passing below them.
+
+\appfig{drip_bulb}{0.96}{How the wetted bulb grows with the run time: width and depth of the wet soil under the average emitter against the root zone and the lateral spacing.}
+
+The six cards summarise the design in the same way as the surface layer does: application efficiency $E_a$ (with the 85 per cent target), the fraction of the root zone refilled $E_s$, the uniformity, the losses to deep percolation and surface evaporation, and the gross depth per irrigation.
+
+\appfig{drip_result}{0.96}{Result for this design: efficiency 93.6 per cent, root zone refilled 100 per cent, uniformity 93.6 per cent, deep percolation 6.4 per cent, evaporation 0.0 per cent, gross depth 4.3 mm for 4 mm.}
+
+The flow chain at the top is the equipment of the system, from the water source (lift 12 m) through the pump (7.1 L\,s$^{-1}$, 3.6 kW) and the 120-mesh filter to the fertigation injector and the zone valve. The plan shows one zone running (66 laterals), drawn to scale on the 100 m wide field; the lower chart is the head at each stage of the path, from the pump at 33.3 m to the lateral end at 9.0 m, and the table gives the totals: 66 laterals and 13\,266 emitters, a pump head of 33.3 m and 6\,699 m of pipe per hectare. The pipe table lists the diameter, length, flow, velocity and head loss of the lateral, the submain and the mainline.
+
+\appfig{drip_layout}{0.96}{Layout and infrastructure: source, pump, filter, fertigation, valve and gauge, submain and laterals, and the head along the flow path.}
+
+The table works like the one of the surface layer: it starts from the current design and, if the target is not met, adds one improvement per row. When the first row already meets the target, as here, the layer says so and leaves the design unchanged.
+
+\appfig{drip_dtable}{0.96}{Design table: the current design already meets the 85 per cent target ($E_a=93.6$ per cent, $E_s=100$ per cent).}
+
+For drip irrigation the run time dominates: a run that is 25 per cent too long loses water below the roots or a run that is too short leaves a deficit. The spacing and the flow of the emitters matter much less, and the lateral spacing, the placement and the depth per irrigation have no effect on $E_a$ in this case because the bulb stays within the roots.
+
+\appfig{drip_sens}{0.96}{What the efficiency is most sensitive to: run time ($\pm15.6$ points), emitter spacing and emitter flow.}
+
+The checks use the catalogue formulas of the application: the local crop water use $ET_{c,loc}=K_r\,K_c\,ET_0$ with the local reduction factor $K_r$, the depth and volume per plant per interval, the run time, the leaching requirement $LR=EC_w/(2\,EC_e)$ that follows from the salinity of the water and the tolerance of the crop (Rhoades), and the filter and pressure limits of the emitter. Each line says whether the design satisfies the rule.
+
+\appfig{drip_checks}{0.96}{Design checks: pipe, working pressure, filtration, plant water volume and leaching requirement.}
+
+The table converts the design into the farm quantities: the net irrigation of the season, the gross water per irrigation ($d_g=d_n/E_a$), the peak crop need over the interval, the system flow per hectare (7.41 L\,s$^{-1}$ for 13\,333 emitters and 6\,667 m of lateral), the number of sets for the farm supply and the pumping hours and energy of the season.
+
+\appfig{drip_meaning}{0.96}{What the design means for the season and the farm: peak crop need, system flow per hectare, sets and pumping hours.}
+
+The same daily model as in the surface layer supplies the net depth: the left panel shows the water content of the profile against the trigger, the right panel the water held in the root zone through the following month, coloured by phase. The depth of 4 mm per irrigation of the design is the depletion between the trigger and field capacity read from this film.
+
+\appfig{drip_film}{0.96}{Soil water in the days ahead (DSS) on which the net depth of the drip design is based.}
+

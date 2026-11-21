@@ -146,3 +146,4 @@
 
 \gdef\partbody{}
 \newcommand{\partlist}[3]{\gdef\partbody{\begin{minipage}{0.86\textwidth}\raggedright\small\itshape #3\par\vspace{8mm}\noindent\foreach \n in {#1,...,#2}{\par\vspace{2.5mm}\noindent{\sfb\fontsize{11}{13}\selectfont\color{khblue}\makebox[1.1cm][l]{\csuse{chnum@\n}.}\parbox[t]{0.62\textwidth}{\csuse{chtitle@\n}}\hfill\color{khred}\csuse{chstart@\n}--\csuse{chend@\n}}\par}\end{minipage}}}
+\newcommand{\appfig}[3]{\begin{figure}[!htbp]\centering\Lfig{\includegraphics[width=#2\textwidth,height=0.78\textheight,keepaspectratio]{fig/app_#1.jpg}}\caption{#3}\end{figure}}

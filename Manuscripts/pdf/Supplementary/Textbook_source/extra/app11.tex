@@ -1,0 +1,51 @@
+\subsection{The output of the application, panel by panel}
+The surface-irrigation layer of SWAFL is organised as one long page that answers the design question from the top down: the inputs, the picture of the advance, the water balance, the performance indices and a table of improvements. The figures of this section are the panels of that page for one worked case, a border strip of $L=150$ m on the coarse loam S01 with $S_0=0.20$ per cent, an inflow $q=1.05$ L\,s$^{-1}$ per metre of width and a net depth $Z_n=72$ mm taken from the daily soil-water simulation (DSS) of the application. Every number in them can be reproduced with the equations of this chapter.
+
+The top of the page holds every choice. \emph{Start from} selects the soil of the explorer or one of the stored designs (A7 border, A9 furrow, A11 border, D1 design). \emph{System} sets the geometry of the flow, \emph{Intake} decides whether the Kostiakov law is built from the texture or typed, and \emph{Cutoff} chooses between the full-run rule ($E_s=1$), the 85-per-cent rule, a time typed by the user and the exact curve. The numerical boxes below are the variables of the volume balance: field length $L$, slope $S_0$, inflow $q$, Manning roughness $n$, required depth $Z_n$ (here 72 mm, read from the DSS and not typed), the cutback after the front arrives, the farm supply $Q_s$, the field width and the organic matter that enters the pedotransfer functions. The cut-off time (401 min) is set by the rule and is shown as a result, not an input.
+
+\appfig{sid_inputs}{0.96}{Inputs of the surface-irrigation layer: start from the soil or from a tabulated design, choose border, furrow or basin, the intake (from the soil, or a given $k$ and $A$) and the cut-off rule, then set length, slope, inflow, roughness, farm supply and field width.}
+
+The plan view draws the border from the supply canal at the left to the tail drain at the right. The colours show what the front has left behind: dry (not yet reached), \emph{short} (wetted but less than $Z_n$), \emph{filled} (between $Z_n$ and the tolerance) and \emph{excess} (more than needed, lost below the roots). The blue line marks the front, and the clock under the drawing is the time since the start. This is the picture of the quantity $x(t)$ obtained from the volume-balance Eq.~(\ref{eq:s-vb}).
+
+\appfig{sid_plan}{0.96}{Layout in plan: the advance front (here 50 m after 27 min of the 401 min run), shaded by the depth already infiltrated.}
+
+The section shows the same run along the length. The surface stream is drawn above the grains of the soil, the wetting front is the line below, and the three labelled depths are $Z_0$ (the depth infiltrated at the inlet, 95 mm), $Z_L$ (at the tail, 72 mm) and $Z_n$ (72 mm). The bar under the picture divides the length into sections: here the whole field is \emph{excess}, so the water that goes below $Z_n$ is lost as deep percolation. The cards give the balance of the irrigation in volumes per metre of width: the required volume $V_{req}=Z_nL$ (10.77 m$^3$), the volume infiltrated (12.50 m$^3$), the volume stored in the roots (10.77 m$^3$), deep percolation (1.73 m$^3$), runoff (12.78 m$^3$) and the deficit (0). These are the quantities $V_{st}$, $V_{dp}$ and $V_{ro}$ of Eq.~(\ref{eq:s-ind}).
+
+\appfig{sid_section}{0.96}{Longitudinal section: water running over the soil and soaking in, with the field divided into short, filled and excess sections and the six result cards.}
+
+The hydrograph integrates the story in time. The horizontal line is the inflow $q=1.05$ L\,s$^{-1}$ per metre. Under it, light blue is the water that fills the surface while the front advances, green is the infiltration, which rises as the wetted length grows and then decays with the intake of the soil, and brown is the runoff that leaves at the tail after $t_L$. After cut-off the inflow falls to zero, the surface drains (the brown triangle is the recession) and the infiltration finishes. The area under each curve is one of the volumes of the cards above.
+
+\appfig{sid_hydro}{0.96}{Hydrograph of the run: inflow $q$, infiltration, runoff and surface storage through time, with the advance time $t_L=119$ min and the cut-off at 401 min.}
+
+The left picture draws the flow area $A_0=0.0337$ m$^2$ per metre of width (sheet depth $y=3.4$ cm, drawn four times larger) and the soil wetted under it. The right graph is the intake of this soil. The dots are the Green--Ampt cumulative infiltration computed from $K_s=13.1$ mm\,h$^{-1}$, $\psi_f=16$ mm and $\Delta\theta=0.21$; the line is the Kostiakov fit $Z=0.82\,t^{0.79}$ mm with $R^2=0.997$. The dashed red line is the required depth $Z_n$ and the dotted line reads off the opportunity time $t_n=283$ min that the soil needs to take it.
+
+\appfig{sid_cross}{0.96}{Cross-section at the inlet: the wetted bulb in the soil, and the Green--Ampt intake curve fitted to $Z=k\,t^{A}$.}
+
+This panel is the heart of the volume-balance method. The blue curve is the time at which the front reaches each distance; it ends at $t_L=119$ min at $x=150$ m. The red dashed line is the cut-off (401 min), so the vertical distance between them is the time the soil at that point stays under water, the opportunity time $\tau(x)$: 373 min at $x=50$ m and 282 min at the tail. The text box repeats the rule that fixes the cut-off, $t_n=(Z_n/k)^{1/A}=283$ min and $t_{co}=t_L+t_n=401$ min.
+
+\appfig{sid_advance}{0.96}{Advance and opportunity time: the advance curve $t_{adv}(x)$ (blue), the cut-off time (red) and the intake opportunity time $\tau(x)=t_{cutoff}-t_{adv}(x)$.}
+
+The depth infiltrated is drawn as a straight line from the inlet to the tail, as constructed in the text. The green area is the water stored in the root zone ($\le Z_n$), the blue area above the dashed line is deep percolation, and any red area under the line would be the deficit. In this run the whole line is above $Z_n$, so the deficit is zero and the loss is shared between percolation and runoff.
+
+\appfig{sid_profile}{0.96}{Infiltrated depth along the field against the required depth $Z_n$ (72 mm): the straight line from $Z_0=95$ mm to $Z_L=72$ mm.}
+
+The bars are the five indicators of Eq.~(\ref{eq:s-ind}). The coloured bar at the right splits the applied volume (25.28 m$^3$ per metre, which is $q\,t_{co}$) into stored (green), deep percolation (blue) and runoff (brown). The verdict under the bars is the rule of the application: an application efficiency below 60 per cent is \emph{poor}, and the text says which loss dominates. Here the layout meets the requirement completely ($E_s=100$ per cent) but 51 per cent of the water leaves as runoff, so the page sends the user to the design table below.
+
+\appfig{sid_perf}{0.96}{Performance indices and the water balance of one irrigation: $E_a=42.6$ per cent, $E_s=100$ per cent, $DP=6.8$ per cent, $RO=50.5$ per cent, $CU=93.1$ per cent.}
+
+The table is the optimiser of the layer. Row 0 is the current layout. Each following row changes one thing: row 1 cuts the inflow off earlier (297 min), row 2 lowers the inflow to 0.70 L\,s$^{-1}$, and row 3 adds a cutback to 20 per cent of the inflow after the front arrives. The columns give the inflow, length, cutback, cut-off, $E_a$, $E_s$, $DP$ and $RO$. The last row reaches $E_a=88.9$ per cent with $E_s=84$ per cent, which satisfies the rule that the root zone stays at least 80 per cent refilled; tapping the row applies it to the inputs. This is the numerical form of the improvements discussed in this chapter
+
+\appfig{sid_dtable}{0.96}{Design table: iterations toward an application efficiency of 85 per cent, changing one variable at each step; the green row meets the target.}
+
+Each bar is the change of $E_a$ (in percentage points) when one input is varied by $\pm20$ per cent (the intake exponent $A$ by $\pm10$ per cent, roughness $n$ and slope $S_0$ by $\pm30$ per cent). The intake exponent $A$ dominates ($\pm15.3$ points), then the intake coefficient $k$ ($\pm6.7$), the inflow $q$ ($\pm5.8$) and the length $L$ ($\pm5.3$); roughness, required depth and slope matter little. Green raises the efficiency and red lowers it. The ranking tells the designer which measurement is worth making carefully: the infiltration test, not the slope survey.
+
+\appfig{sid_sens}{0.96}{What the efficiency is most sensitive to: the change of $E_a$ when one input moves and all others are held.}
+
+The last table converts the design into farm terms. With the supply of 30 L\,s$^{-1}$ and 1.05 L\,s$^{-1}$ per metre, $Q_s/q=28.6$ metres of width can be watered at once, so the 120 m field needs 4.2 sets of 401 min, 28.1 h per irrigation. The gross water per irrigation is 169 mm for 72 mm needed, which is the $E_a$ of 43 per cent. In this season the DSS finds no irrigation due, so the totals for the season are zero.
+
+\appfig{sid_meaning}{0.96}{What the design means for the season and the farm: irrigations, gross water, units run at once, sets and pumping hours.}
+
+The film at the bottom of the page is the daily model on which the design rests (Chapter~8). The left panel is the water content of the profile on the chosen day against the wilting point, the trigger and field capacity; the right panel follows the water held in the root zone, coloured by phase (comfortable, nearing the trigger, crop stress), with the rain and irrigation days at the top. The text gives the verdict and the numbers of the season: irrigations, rain, crop water use and drainage. The required depth $Z_n$ used above is the depletion between the trigger and field capacity read from this film.
+
+\appfig{sid_film}{0.96}{Soil water in the days ahead (DSS): the profile of water content, the water held in the root zone through the 31 days and the advice for the day.}
+

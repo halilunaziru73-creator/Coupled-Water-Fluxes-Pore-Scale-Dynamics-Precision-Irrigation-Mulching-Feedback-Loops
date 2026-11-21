@@ -1,0 +1,43 @@
+\subsection{The output of the application, panel by panel}
+The drainage layer is a numbered sequence of six panels that answers three questions: how much water must the drains remove, how far apart must they be, and how large must the pipes be. The case shown is a buried pipe drain at 1.20 m in the coarse loam S01, with a barrier 3.0 m below the drains, a field of 300 by 200 m and a pipe slope of 0.15 per cent, designed by the steady-flow (Hooghoudt) method with the discharge taken from the DSS recharge.
+
+The buttons choose the type of drain and the design basis of this chapter; spacing and design flow can be automatic (from the equations and the DSS recharge) or typed by the user. The boxes hold the drain depth (1.20 m), the barrier $D$ (3.0 m), the subsoil conductivity as a multiple of that of the topsoil, the time to lower the water table (5.0 d), the field and lateral length, the pipe slope, the critical depth of the water table (0.68 m, from the roots of the crop), the gate height, the ditch width, the salt tolerance of the crop and the lift to the outlet.
+
+\appfig{drn_inputs}{0.96}{Inputs of the drainage layer: crop, mulch, drain type (pipe, pipe with control gate, open ditch), design basis (steady flow, falling water table, both), spacing and flow modes, and the numerical variables.}
+
+The green box states the design as a recommendation a farmer can act on, with the check that the water table stays 0.69 m below the surface, deeper than the 0.68 m the roots need, the number of days too wet in the season (0 of 121), the water carried away by the drains (48 mm), and the reasoning in a sentence.
+
+\appfig{drn_answer}{0.96}{The answer in plain words: one pipe drain at 1.20 m every 37 m, 6 pipes of 300 m with 80 mm pipe and a 125 mm collector.}
+
+The bars are the daily recharge $q$ in mm\,d$^{-1}$ and the dashed line is the design discharge, the value exceeded on only 5 per cent of days (2.0 mm\,d$^{-1}$, the $P_{95}$ of this chapter). The table gives the rain of the season (176 mm), the net irrigation, the efficiency of the irrigation design (43 per cent) and the share of the applied water that percolates (7 per cent).
+
+\appfig{drn_recharge}{0.96}{1. How much water must the drains remove? Day-by-day deep percolation of the DSS season, from rain and from the part of the irrigation that is lost.}
+
+The curves are the Hooghoudt equation solved for the spacing: the lower the discharge the wider the spacing, and a deeper drain (green) allows a wider spacing than a shallow one (brown). The red dot is the design ($q=2.0$ mm\,d$^{-1}$, $L=37$ m). The table lists the conductivity above and below the drain (0.32 m\,d$^{-1}$), the drainable pore space (0.193), the effective depth $d=1.86$ m, the rise allowed $h=0.52$ m and the spacings by the two methods (37 m steady, 9 m falling-table).
+
+\appfig{drn_spacing}{0.96}{2. How far apart must the drains be? The spacing $L$ against the design discharge $q$ for three drain depths.}
+
+The picture shows the water-filled soil, the critical depth of 0.68 m (red dashed line) and the water table midway between the drains at 1.15 m. Both pictures are the same until a control gate is chosen, when the water table on the right is held higher.
+
+\appfig{drn_side}{0.96}{3. Side view between two drains, drawn to scale: free drainage (left) and the pipe with a gate (right).}
+
+The upper chart follows the depth of the water table through the 121 days against the drain level and the critical depth; the lower chart is the outflow of the drains in mm\,d$^{-1}$ against the design value. The table lists the days too wet, the SEW$_{30}$ index, the water drained, the largest outflow, the runoff, the leaching requirement and the water needed for salt.
+
+\appfig{drn_wt}{0.96}{4. Where the water table sits through the season, and the outflow of the drains.}
+
+The plan shows the six laterals of 300 m with the collector and the ditch; the table lists the flow of a lateral (0.26 L\,s$^{-1}$), the lateral pipe (80 mm), the longest lateral that the pipe can carry (837 m), the collector flow (1.4 L\,s$^{-1}$) and its pipe (125 mm), the trench volume (1\,080 m$^3$) and the pipe laid (2\,000 m). The pipes are sized with Manning's equation ($n=0.016$, corrugated pipe) running at most 80 per cent full.
+
+\appfig{drn_layout}{0.96}{5. Layout: pipes, collector and outlet, seen from above.}
+
+The table repeats the calculation for the ten soils of the application at the same discharge and depth, so the effect of the soil is isolated: the sand needs a spacing of 138 m and the silty clay loam 17 m, a difference of eight times. The row of the chosen soil is highlighted.
+
+\appfig{drn_soils}{0.96}{6. The same drains in every soil: spacing at the design discharge and depth for the ten soils, from their conductivity (Saxton and Rawls).}
+
+The cards give the result in the units a contractor needs: the length of pipe per hectare, the drainage coefficient in mm\,d$^{-1}$ and in m$^3$ per hectare per day, the depth of the water table midway and whether it meets the critical depth, the days too wet, the volume drained and the diameters of the pipes.
+
+\appfig{drn_result}{0.96}{Result for this design: drain spacing 37 m (333 m per hectare), drainage coefficient 2.0 mm\,d$^{-1}$, water table midway 0.69 m deep, 0 days too wet, 48 mm drained, lateral 80 mm, collector 125 mm.}
+
+The last table puts the answer in farm terms: the field of 6.0 ha needs 6 laterals every 37 m, the drained water is 475 m$^3$ per hectare for the season, and the salt balance says the water of 0.6 dS\,m$^{-1}$ needs a 4 per cent leaching requirement, which the drained water already provides. A note warns when the flow speed in the pipe falls below 0.3 m\,s$^{-1}$, when silt would settle and a steeper slope is needed.
+
+\appfig{drn_meaning}{0.96}{What this means for the farm: the soil, crop and irrigation in use, the water table to be kept, the water per hectare, the salt balance and the total.}
+
