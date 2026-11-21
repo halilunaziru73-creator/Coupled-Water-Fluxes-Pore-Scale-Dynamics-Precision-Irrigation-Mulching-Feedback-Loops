@@ -1,192 +1,210 @@
-\chapimg{fig/op15.png}
-\IfFileExists{extra/lead15.tex}{\input{extra/lead15}}{}
-\chapter{Worked Solutions and Reference Tables}\label{chap:15}
-\markboth{Worked Solutions and Reference Tables}{Worked Solutions and Reference Tables}
-\IfFileExists{extra/bg15.tex}{\input{extra/bg15}}{}
-\banner{Worked solutions for the ten soils}\markboth{Ten soils worked}{Ten soils worked}
-Each page below repeats the same calculation for one soil of the ensemble, step by step, so that you can check your own work on the exercises of Chapters 2, 3 and 5. The constants are $\kappa=3.5\times10^{-10}$ and $\ell=0.5$. Numbers are rounded to three significant figures; use the soil parameters of Table~\ref{tab:soils}.
-\section{S03, Sand: $\alpha=0.145$ cm$^{-1}$, $n=2.68$}
-\begin{enumerate}[leftmargin=*,itemsep=1pt]
-\item $m=1-1/n=1-1/2.68=0.6269$.
-\item Exponent: $E=2n+\ell(n-1)=2(2.68)+0.5(1.680)=6.200$.
-\item $m^2/\kappa=0.3930/(3.5\times10^{-10})=1.12\times10^{9}$ and $\ln(m^2/\kappa)=20.84$.
-\item $(m^2/\kappa)^{1/E}=\exp(20.84/6.200)=\exp(3.361)=28.82$, so $\alpha h_c=28.82$.
-\item Reach: $h_c=28.82/0.145=199$ cm. Keep the trigger below $h_c/2=99$ cm.
-\item A 300 cm trigger never fires (300 cm is beyond the reach).
-\item Pore radius at the reach: $r=2\sigma/(\rho_wgh_c)=7.48\ \mu$m.
-\item At 100 cm: $S_e=0.0112$. At 300 cm: $S_e=0.0018$, $K_r=2.73\times10^{-11}$ (exact) and $2.73\times10^{-11}$ (asymptote, Equation 5.1); $K_r(300)/\kappa=0.0779$.
-\item A tenfold change of $\kappa$ changes the reach by the factor $10^{1/E}=1.45$.
-\item Memory fate $\phi_D=0.846$, so in the competition law $\Ks/q^*=\phi_D/(1-\phi_D)=5.49$: drainage is much faster than withdrawal.
+\chapimg{fig/op_daisy15.png}
+\chapterlead{\subhd{After this chapter you can} read the process map of the Daisy model from the first arrow to the last; follow a drop of rain through the canopy, the litter, the pond and the soil; compute the evaporative demand, the water caught by a canopy, the melt of a snowpack and the runoff of a storm; and explain how the soil water, the biopores, the drains and the soil heat are tied to each other.}
+\chapter{The Daisy Process Map I: Weather, Water and Heat}\label{chap:15}
+\markboth{The Daisy Process Map I: Weather, Water and Heat}{The Daisy Process Map I: Weather, Water and Heat}
+\banner{How to read the map}\label{ch:map1}
+\section{Why a map of processes}
+The Daisy model is large. It follows water, heat, nitrogen, carbon and a growing crop through a column of soil for years, one hour or one day at a time. A reader who meets it for the first time sees hundreds of parameters and dozens of output files, and may not know where any single number comes from. The \emph{process map} of Figure~\ref{fig:dmap} answers this. It shows, on one page, every process that the model contains, in boxes, and every movement of matter or of information between the processes, in lines. Anything that Daisy writes into a log file is the content of one of these boxes. This is why the SWAFL workbench draws the map on its first screen: each box can be clicked, and the figures of that process are then drawn from the run.
+
+\par\noindent The map is the plan of three chapters. This chapter takes the left side of the figure: the weather that drives the model, the water above and in the soil, and the soil heat. Chapter~\ref{chap:16} takes the crop, the right-hand side of the figure, with the management that acts on it. Chapter~\ref{chap:17} takes the lower part: the nitrogen and the organic matter of the soil, and the chemicals. The order in each chapter is the order in which a drop of water, or a unit of energy, passes through the model.
+
+\fig{daisy_map}{1.0}{The process map of the Daisy model as it is shown in the SWAFL workbench. Boxes are processes or stores, lines are movements of matter or exchanges of information. Blue boxes on the left: water. Green area: the crop. Brown area: soil nitrogen and organic matter. Right-hand column: the further components of the model, grouped into crop, management and the rest. The map follows Fig.~1 of the Daisy reference paper.}\label{fig:dmap}
+
+\section{The four kinds of line}
+The legend in the lower right corner of the figure distinguishes five kinds of line. Their meaning is the same everywhere in the map.
+\begin{center}\small\begin{tabular}{@{}p{3.6cm}p{9.4cm}@{}}\toprule
+\hd{Line} & \hd{Meaning}\\\midrule
+Solid line & the inputs and the movement of matter \emph{within} a module: for example, the water passing from the canopy to the litter\\
+Dashed line & the outputs of matter: water that evaporates, carbon dioxide that leaves the soil\\
+Dotted line & an exchange of information \emph{within} a module: for example, the light that tells the photosynthesis how much to assimilate\\
+Heavy solid line & the movement of matter \emph{between} modules: for example, the shoot residues that pass from the crop to the soil\\
+Dash-dotted line & an exchange of information \emph{between} modules: for example, the leaf area of the crop that tells the weather module how much rain is intercepted\\\bottomrule
+\end{tabular}\end{center}
+The difference between matter and information is the first thing to learn. Matter is conserved. Water that leaves one box must arrive in another or leave the model, so the water balance of Chapter~\ref{chap:01} closes. Information is not conserved. A leaf area index that is read by three processes is still one number. When a figure of a run looks wrong, the first question is therefore whether the fault is in a flow of matter (a balance does not close) or in a flow of information (a process reads a wrong value).
+
+\section{The rule behind every box}
+Daisy follows four principles. They explain the shape of almost every curve in the following sections.
+\begin{enumerate}
+\item \textbf{Conservation.} Water, nitrogen, carbon and heat are accounted for. What enters a box, less what leaves it, is the change of what is stored in it.
+\item \textbf{One dimension, many processes.} The soil is a vertical column of layers. Water, heat and dissolved matter move up and down. The surface processes, the crop and the soil organic matter are all coupled to this one column.
+\item \textbf{Rates with limiting factors.} Most biological rates are a potential rate multiplied by factors between 0 and 1: one for temperature, one for water, one for oxygen, one for nutrients. A figure changes shape when one factor becomes limiting.
+\item \textbf{Demand and supply.} The atmosphere sets the demand for water and the soil sets the supply. The crop takes the smaller of the two, and the shortage appears as stress.
 \end{enumerate}
-\section{S04, Loamy sand: $\alpha=0.124$ cm$^{-1}$, $n=2.28$}
-\begin{enumerate}[leftmargin=*,itemsep=1pt]
-\item $m=1-1/n=1-1/2.28=0.5614$.
-\item Exponent: $E=2n+\ell(n-1)=2(2.28)+0.5(1.280)=5.200$.
-\item $m^2/\kappa=0.3152/(3.5\times10^{-10})=9.00\times10^{8}$ and $\ln(m^2/\kappa)=20.62$.
-\item $(m^2/\kappa)^{1/E}=\exp(20.62/5.200)=\exp(3.965)=52.72$, so $\alpha h_c=52.72$.
-\item Reach: $h_c=52.72/0.124=425$ cm. Keep the trigger below $h_c/2=213$ cm.
-\item A 300 cm trigger fires (300 cm is below the reach).
-\item Pore radius at the reach: $r=2\sigma/(\rho_wgh_c)=3.5\ \mu$m.
-\item At 100 cm: $S_e=0.0398$. At 300 cm: $S_e=0.0098$, $K_r=2.15\times10^{-9}$ (exact) and $2.15\times10^{-9}$ (asymptote, Equation 5.1); $K_r(300)/\kappa=6.13$.
-\item A tenfold change of $\kappa$ changes the reach by the factor $10^{1/E}=1.56$.
-\item Memory fate $\phi_D=0.741$, so in the competition law $\Ks/q^*=\phi_D/(1-\phi_D)=2.86$: drainage is much faster than withdrawal.
-\end{enumerate}
-\section{S05, Sandy loam: $\alpha=0.075$ cm$^{-1}$, $n=1.89$}
-\begin{enumerate}[leftmargin=*,itemsep=1pt]
-\item $m=1-1/n=1-1/1.89=0.4709$.
-\item Exponent: $E=2n+\ell(n-1)=2(1.89)+0.5(0.890)=4.225$.
-\item $m^2/\kappa=0.2217/(3.5\times10^{-10})=6.34\times10^{8}$ and $\ln(m^2/\kappa)=20.27$.
-\item $(m^2/\kappa)^{1/E}=\exp(20.27/4.225)=\exp(4.797)=121.1$, so $\alpha h_c=121.1$.
-\item Reach: $h_c=121.1/0.075=1,615$ cm. Keep the trigger below $h_c/2=808$ cm.
-\item A 300 cm trigger fires (300 cm is below the reach).
-\item Pore radius at the reach: $r=2\sigma/(\rho_wgh_c)=0.921\ \mu$m.
-\item At 100 cm: $S_e=0.1647$. At 300 cm: $S_e=0.0625$, $K_r=4.27\times10^{-7}$ (exact) and $4.29\times10^{-7}$ (asymptote, Equation 5.1); $K_r(300)/\kappa=1.22e+03$.
-\item A tenfold change of $\kappa$ changes the reach by the factor $10^{1/E}=1.72$.
-\item Memory fate $\phi_D=0.643$, so in the competition law $\Ks/q^*=\phi_D/(1-\phi_D)=1.80$: drainage is much faster than withdrawal.
-\end{enumerate}
-\section{S02, Coarse sand: $\alpha=0.0536$ cm$^{-1}$, $n=1.6$}
-\begin{enumerate}[leftmargin=*,itemsep=1pt]
-\item $m=1-1/n=1-1/1.6=0.3750$.
-\item Exponent: $E=2n+\ell(n-1)=2(1.6)+0.5(0.600)=3.500$.
-\item $m^2/\kappa=0.1406/(3.5\times10^{-10})=4.02\times10^{8}$ and $\ln(m^2/\kappa)=19.81$.
-\item $(m^2/\kappa)^{1/E}=\exp(19.81/3.500)=\exp(5.660)=287.3$, so $\alpha h_c=287.3$.
-\item Reach: $h_c=287.3/0.0536=5,359$ cm. Keep the trigger below $h_c/2=2,680$ cm.
-\item A 300 cm trigger fires (300 cm is below the reach).
-\item Pore radius at the reach: $r=2\sigma/(\rho_wgh_c)=0.277\ \mu$m.
-\item At 100 cm: $S_e=0.3563$. At 300 cm: $S_e=0.1881$, $K_r=8.28\times10^{-6}$ (exact) and $8.43\times10^{-6}$ (asymptote, Equation 5.1); $K_r(300)/\kappa=2.37e+04$.
-\item A tenfold change of $\kappa$ changes the reach by the factor $10^{1/E}=1.93$.
-\item Memory fate $\phi_D=0.265$, so in the competition law $\Ks/q^*=\phi_D/(1-\phi_D)=0.36$: withdrawal is much faster than drainage.
-\end{enumerate}
-\section{S08, Sandy clay loam: $\alpha=0.059$ cm$^{-1}$, $n=1.48$}
-\begin{enumerate}[leftmargin=*,itemsep=1pt]
-\item $m=1-1/n=1-1/1.48=0.3243$.
-\item Exponent: $E=2n+\ell(n-1)=2(1.48)+0.5(0.480)=3.200$.
-\item $m^2/\kappa=0.1052/(3.5\times10^{-10})=3.01\times10^{8}$ and $\ln(m^2/\kappa)=19.52$.
-\item $(m^2/\kappa)^{1/E}=\exp(19.52/3.200)=\exp(6.100)=446$, so $\alpha h_c=446$.
-\item Reach: $h_c=446/0.059=7,559$ cm. Keep the trigger below $h_c/2=3,780$ cm.
-\item A 300 cm trigger fires (300 cm is below the reach).
-\item Pore radius at the reach: $r=2\sigma/(\rho_wgh_c)=0.197\ \mu$m.
-\item At 100 cm: $S_e=0.4170$. At 300 cm: $S_e=0.2506$, $K_r=1.05\times10^{-5}$ (exact) and $1.07\times10^{-5}$ (asymptote, Equation 5.1); $K_r(300)/\kappa=2.99e+04$.
-\item A tenfold change of $\kappa$ changes the reach by the factor $10^{1/E}=2.05$.
-\item Memory fate $\phi_D=0.285$, so in the competition law $\Ks/q^*=\phi_D/(1-\phi_D)=0.40$: withdrawal is much faster than drainage.
-\end{enumerate}
-\section{S01, Coarse loam: $\alpha=0.0961$ cm$^{-1}$, $n=1.353$}
-\begin{enumerate}[leftmargin=*,itemsep=1pt]
-\item $m=1-1/n=1-1/1.353=0.2609$.
-\item Exponent: $E=2n+\ell(n-1)=2(1.353)+0.5(0.353)=2.882$.
-\item $m^2/\kappa=0.0681/(3.5\times10^{-10})=1.94\times10^{8}$ and $\ln(m^2/\kappa)=19.09$.
-\item $(m^2/\kappa)^{1/E}=\exp(19.09/2.882)=\exp(6.621)=750.9$, so $\alpha h_c=750.9$.
-\item Reach: $h_c=750.9/0.0961=7,814$ cm. Keep the trigger below $h_c/2=3,907$ cm.
-\item A 300 cm trigger fires (300 cm is below the reach).
-\item Pore radius at the reach: $r=2\sigma/(\rho_wgh_c)=0.19\ \mu$m.
-\item At 100 cm: $S_e=0.4445$. At 300 cm: $S_e=0.3044$, $K_r=4.16\times10^{-6}$ (exact) and $4.22\times10^{-6}$ (asymptote, Equation 5.1); $K_r(300)/\kappa=1.19e+04$.
-\item A tenfold change of $\kappa$ changes the reach by the factor $10^{1/E}=2.22$.
-\item Memory fate $\phi_D=0.029$, so in the competition law $\Ks/q^*=\phi_D/(1-\phi_D)=0.03$: withdrawal is much faster than drainage.
-\end{enumerate}
-\section{S06, Loam: $\alpha=0.036$ cm$^{-1}$, $n=1.56$}
-\begin{enumerate}[leftmargin=*,itemsep=1pt]
-\item $m=1-1/n=1-1/1.56=0.3590$.
-\item Exponent: $E=2n+\ell(n-1)=2(1.56)+0.5(0.560)=3.400$.
-\item $m^2/\kappa=0.1289/(3.5\times10^{-10})=3.68\times10^{8}$ and $\ln(m^2/\kappa)=19.72$.
-\item $(m^2/\kappa)^{1/E}=\exp(19.72/3.400)=\exp(5.801)=330.7$, so $\alpha h_c=330.7$.
-\item Reach: $h_c=330.7/0.036=9,186$ cm. Keep the trigger below $h_c/2=4,593$ cm.
-\item A 300 cm trigger fires (300 cm is below the reach).
-\item Pore radius at the reach: $r=2\sigma/(\rho_wgh_c)=0.162\ \mu$m.
-\item At 100 cm: $S_e=0.4663$. At 300 cm: $S_e=0.2615$, $K_r=3.80\times10^{-5}$ (exact) and $3.95\times10^{-5}$ (asymptote, Equation 5.1); $K_r(300)/\kappa=1.09e+05$.
-\item A tenfold change of $\kappa$ changes the reach by the factor $10^{1/E}=1.97$.
-\item Memory fate $\phi_D=0.289$, so in the competition law $\Ks/q^*=\phi_D/(1-\phi_D)=0.41$: withdrawal is much faster than drainage.
-\end{enumerate}
-\section{S07, Silt loam: $\alpha=0.02$ cm$^{-1}$, $n=1.41$}
-\begin{enumerate}[leftmargin=*,itemsep=1pt]
-\item $m=1-1/n=1-1/1.41=0.2908$.
-\item Exponent: $E=2n+\ell(n-1)=2(1.41)+0.5(0.410)=3.025$.
-\item $m^2/\kappa=0.0846/(3.5\times10^{-10})=2.42\times10^{8}$ and $\ln(m^2/\kappa)=19.30$.
-\item $(m^2/\kappa)^{1/E}=\exp(19.30/3.025)=\exp(6.381)=590.6$, so $\alpha h_c=590.6$.
-\item Reach: $h_c=590.6/0.02=29,528$ cm. Keep the trigger below $h_c/2=14,764$ cm.
-\item A 300 cm trigger fires (300 cm is below the reach).
-\item Pore radius at the reach: $r=2\sigma/(\rho_wgh_c)=0.0504\ \mu$m.
-\item At 100 cm: $S_e=0.6859$. At 300 cm: $S_e=0.4691$, $K_r=3.35\times10^{-4}$ (exact) and $3.74\times10^{-4}$ (asymptote, Equation 5.1); $K_r(300)/\kappa=9.57e+05$.
-\item A tenfold change of $\kappa$ changes the reach by the factor $10^{1/E}=2.14$.
-\item Memory fate $\phi_D=0.147$, so in the competition law $\Ks/q^*=\phi_D/(1-\phi_D)=0.17$: withdrawal is much faster than drainage.
-\end{enumerate}
-\section{S09, Clay loam: $\alpha=0.019$ cm$^{-1}$, $n=1.31$}
-\begin{enumerate}[leftmargin=*,itemsep=1pt]
-\item $m=1-1/n=1-1/1.31=0.2366$.
-\item Exponent: $E=2n+\ell(n-1)=2(1.31)+0.5(0.310)=2.775$.
-\item $m^2/\kappa=0.0560/(3.5\times10^{-10})=1.60\times10^{8}$ and $\ln(m^2/\kappa)=18.89$.
-\item $(m^2/\kappa)^{1/E}=\exp(18.89/2.775)=\exp(6.807)=904.6$, so $\alpha h_c=904.6$.
-\item Reach: $h_c=904.6/0.019=47,608$ cm. Keep the trigger below $h_c/2=23,804$ cm.
-\item A 300 cm trigger fires (300 cm is below the reach).
-\item Pore radius at the reach: $r=2\sigma/(\rho_wgh_c)=0.0312\ \mu$m.
-\item At 100 cm: $S_e=0.7529$. At 300 cm: $S_e=0.5697$, $K_r=3.92\times10^{-4}$ (exact) and $4.47\times10^{-4}$ (asymptote, Equation 5.1); $K_r(300)/\kappa=1.12e+06$.
-\item A tenfold change of $\kappa$ changes the reach by the factor $10^{1/E}=2.29$.
-\item Memory fate $\phi_D=0.087$, so in the competition law $\Ks/q^*=\phi_D/(1-\phi_D)=0.10$: withdrawal is much faster than drainage.
-\end{enumerate}
-\section{S10, Silty clay loam: $\alpha=0.01$ cm$^{-1}$, $n=1.23$}
-\begin{enumerate}[leftmargin=*,itemsep=1pt]
-\item $m=1-1/n=1-1/1.23=0.1870$.
-\item Exponent: $E=2n+\ell(n-1)=2(1.23)+0.5(0.230)=2.575$.
-\item $m^2/\kappa=0.0350/(3.5\times10^{-10})=9.99\times10^{7}$ and $\ln(m^2/\kappa)=18.42$.
-\item $(m^2/\kappa)^{1/E}=\exp(18.42/2.575)=\exp(7.153)=1278$, so $\alpha h_c=1278$.
-\item Reach: $h_c=1278/0.01=127,830$ cm. Keep the trigger below $h_c/2=63,915$ cm.
-\item A 300 cm trigger fires (300 cm is below the reach).
-\item Pore radius at the reach: $r=2\sigma/(\rho_wgh_c)=0.0116\ \mu$m.
-\item At 100 cm: $S_e=0.8784$. At 300 cm: $S_e=0.7440$, $K_r=1.53\times10^{-3}$ (exact) and $2.07\times10^{-3}$ (asymptote, Equation 5.1); $K_r(300)/\kappa=4.38e+06$.
-\item A tenfold change of $\kappa$ changes the reach by the factor $10^{1/E}=2.45$.
-\item Memory fate $\phi_D=0.022$, so in the competition law $\Ks/q^*=\phi_D/(1-\phi_D)=0.02$: withdrawal is much faster than drainage.
-\end{enumerate}
-\banner{Reference tables}\markboth{Reference tables}{Reference tables}
-\section{Effective saturation of the ten soils}\begin{table}[!htbp]\centering\small\begin{tabular}{lrrrrrrr}\toprule
-\hd{Soil} & \hd{10} & \hd{30} & \hd{100} & \hd{300} & \hd{1,000} & \hd{3,000} & \hd{10,000}\\\midrule
-S03 & 0.4399 & 0.0836 & 0.0112 & 0.0018 & 0.0002 & 0.0000 & 0.0000\\
-S04 & 0.5807 & 0.1811 & 0.0398 & 0.0098 & 0.0021 & 0.0005 & 0.0001\\
-S05 & 0.8061 & 0.4432 & 0.1647 & 0.0625 & 0.0214 & 0.0081 & 0.0028\\
-S02 & 0.8890 & 0.6512 & 0.3563 & 0.1881 & 0.0917 & 0.0474 & 0.0230\\
-S08 & 0.8849 & 0.6771 & 0.4170 & 0.2506 & 0.1411 & 0.0834 & 0.0468\\
-S01 & 0.8404 & 0.6508 & 0.4445 & 0.3044 & 0.1995 & 0.1354 & 0.0885\\
-S06 & 0.9358 & 0.7626 & 0.4663 & 0.2615 & 0.1342 & 0.0726 & 0.0370\\
-S07 & 0.9718 & 0.8911 & 0.6859 & 0.4691 & 0.2916 & 0.1865 & 0.1139\\
-S09 & 0.9749 & 0.9116 & 0.7529 & 0.5697 & 0.3994 & 0.2852 & 0.1966\\
-S10 & 0.9894 & 0.9624 & 0.8784 & 0.7440 & 0.5826 & 0.4561 & 0.3465\\
-\bottomrule\end{tabular}\caption{$S_e$ at suctions of 10 to 10,000 cm (columns), from Equation~(\ref{eq:vg}).}\end{table}
-\section{Relative conductivity of the ten soils}\begin{table}[!htbp]\centering\small\begin{tabular}{lrrrrrrr}\toprule
-\hd{Soil} & \hd{10} & \hd{30} & \hd{100} & \hd{300} & \hd{1,000} & \hd{3,000} & \hd{10,000}\\\midrule
-S03 & $2.12\times10^{-2}$ & $4.16\times10^{-5}$ & $2.47\times10^{-8}$ & $2.73\times10^{-11}$ & $1.56\times10^{-14}$ & $1.72\times10^{-17}$ & $9.86\times10^{-21}$\\
-S04 & $4.22\times10^{-2}$ & $3.11\times10^{-4}$ & $6.46\times10^{-7}$ & $2.15\times10^{-9}$ & $4.10\times10^{-12}$ & $1.35\times10^{-14}$ & $2.59\times10^{-17}$\\
-S05 & $1.27\times10^{-1}$ & $5.15\times10^{-3}$ & $4.29\times10^{-5}$ & $4.27\times10^{-7}$ & $2.65\times10^{-9}$ & $2.56\times10^{-11}$ & $1.58\times10^{-13}$\\
-S02 & $1.42\times10^{-1}$ & $1.45\times10^{-2}$ & $3.56\times10^{-4}$ & $8.28\times10^{-6}$ & $1.24\times10^{-7}$ & $2.67\times10^{-9}$ & $3.94\times10^{-11}$\\
-S08 & $9.22\times10^{-2}$ & $9.85\times10^{-3}$ & $3.24\times10^{-4}$ & $1.05\times10^{-5}$ & $2.26\times10^{-7}$ & $6.73\times10^{-9}$ & $1.43\times10^{-10}$\\
-S01 & $2.69\times10^{-2}$ & $2.38\times10^{-3}$ & $9.39\times10^{-5}$ & $4.16\times10^{-6}$ & $1.31\times10^{-7}$ & $5.52\times10^{-9}$ & $1.72\times10^{-10}$\\
-S06 & $2.15\times10^{-1}$ & $3.63\times10^{-2}$ & $1.36\times10^{-3}$ & $3.80\times10^{-5}$ & $6.55\times10^{-7}$ & $1.57\times10^{-8}$ & $2.62\times10^{-10}$\\
-S07 & $2.44\times10^{-1}$ & $7.26\times10^{-2}$ & $6.52\times10^{-3}$ & $3.35\times10^{-4}$ & $9.60\times10^{-6}$ & $3.52\times10^{-7}$ & $9.25\times10^{-9}$\\
-S09 & $1.72\times10^{-1}$ & $5.24\times10^{-2}$ & $5.74\times10^{-3}$ & $3.92\times10^{-4}$ & $1.54\times10^{-5}$ & $7.46\times10^{-7}$ & $2.65\times10^{-8}$\\
-S10 & $1.73\times10^{-1}$ & $7.17\times10^{-2}$ & $1.39\times10^{-2}$ & $1.53\times10^{-3}$ & $8.64\times10^{-5}$ & $5.39\times10^{-6}$ & $2.46\times10^{-7}$\\
-\bottomrule\end{tabular}\caption{$K_r$ from Equation~(\ref{eq:vgm}).}\end{table}
-\section{Reach against $\kappa$}\begin{table}[!htbp]\centering\small\begin{tabular}{lrrrrr}\toprule
-\hd{Soil} & \hd{$3.50\times10^{-11}$} & \hd{$1.00\times10^{-10}$} & \hd{$3.50\times10^{-10}$} & \hd{$1.00\times10^{-9}$} & \hd{$3.50\times10^{-9}$}\\\midrule
-S03 & 288 & 243 & 199 & 168 & 137\\
-S04 & 662 & 541 & 425 & 347 & 273\\
-S05 & 2,785 & 2,173 & 1,615 & 1,260 & 937\\
-S02 & 10,347 & 7,666 & 5,359 & 3,971 & 2,776\\
-S08 & 15,523 & 11,182 & 7,559 & 5,445 & 3,681\\
-S01 & 17,369 & 12,067 & 7,814 & 5,429 & 3,515\\
-S06 & 18,082 & 13,278 & 9,186 & 6,746 & 4,667\\
-S07 & 63,213 & 44,677 & 29,528 & 20,869 & 13,793\\
-S09 & 109,155 & 74,773 & 47,608 & 32,612 & 20,765\\
-S10 & 312,595 & 207,932 & 127,830 & 85,030 & 52,274\\
-\bottomrule\end{tabular}\caption{Reach $h_c$ (cm) for five values of $\kappa$; the column $3.5\times10^{-10}$ is the one used in the book.}\end{table}
-\section{Dose law}\begin{table}[!htbp]\centering\small\begin{tabular}{lrrrrrrrrr}\toprule
-\hd{$\eta_\infty$} & \hd{1} & \hd{2} & \hd{4.1} & \hd{6} & \hd{8} & \hd{10} & \hd{15} & \hd{20} & \hd{30}\\\midrule
-0.1 & 0.022 & 0.039 & 0.063 & 0.077 & 0.086 & 0.091 & 0.097 & 0.099 & 0.100\\
-0.2 & 0.043 & 0.077 & 0.126 & 0.154 & 0.172 & 0.183 & 0.195 & 0.198 & 0.200\\
-0.3 & 0.065 & 0.116 & 0.190 & 0.231 & 0.257 & 0.274 & 0.292 & 0.298 & 0.300\\
-0.45 & 0.097 & 0.174 & 0.284 & 0.346 & 0.386 & 0.411 & 0.438 & 0.447 & 0.450\\
-\bottomrule\end{tabular}\caption{Drained share $\eta_D$ from Equation~(\ref{eq:dose}) with $d_D=4.1$ mm; columns are doses in mm.}\end{table}
-\fig{g_ten_soils}{0.95}{Retention (left) and relative conductivity (right) of the ten soils. The dots on the right mark the reach $h_c$ at $K_r=\kappa$; the dotted red line is a 300 cm trigger.}
-\fig{g_reach_n}{0.6}{$\alpha h_c$ against $n$ (Equation 5.2), with the ten soils.}
-\fig{g_dose}{0.6}{The dose law for three plateaus.}
-\IfFileExists{extra/proj15.tex}{\input{extra/proj15}}{}
-\IfFileExists{extra/ex15.tex}{\input{extra/ex15}}{}
-\IfFileExists{extra/dyk15.tex}{\input{extra/dyk15}}{}
-\IfFileExists{extra/obj15.tex}{\input{extra/obj15}}{}
+
+\exbox{Classifying the lines of the map}{Use Figure~\ref{fig:dmap} and the legend above. Classify each of the following as a movement of matter or an exchange of information, and say whether it is within a module or between modules: (a) throughfall from the canopy to the litter; (b) the leaf area index that sets the interception; (c) shoot residues passing to the soil; (d) the photosynthesis reading the light.}\sol \givenline{the four examples above}
+\par\noindent (a) Throughfall is water, so it is a movement of \emph{matter}; both boxes belong to the surface module, so it is \emph{within} a module (solid line).
+\par\noindent (b) The leaf area index is a number, so it is \emph{information}. It is passed from the crop module to the weather and surface module, so it is \emph{between} modules (dash-dotted line).
+\par\noindent (c) Residues are dry matter, so it is \emph{matter}. They pass from the crop to the soil, so it is \emph{between} modules (heavy solid line).
+\par\noindent (d) Light is read by the photosynthesis, a process in the same module, so it is information \emph{within} a module (dotted line). \finans
+
+\banner{The driving variables and the weather}\label{ch:map-weather}
+\section{What drives the model}
+At the top of the map, in the box with the dashed outline, are the \kw{driving variables}: precipitation and irrigation, temperature and light. They enter the model from outside and are the only things that Daisy does not calculate. Every other number in a run follows from these three, from the soil and crop parameters and from the management.
+
+\par\noindent Daisy reads a daily or an hourly weather file with the air temperature, the global radiation, the precipitation and, if available, the wind speed and the vapour pressure. The \kw{bioclimate} module then divides the energy and the water between the canopy, the litter, the snow, the pond and the soil. In the map this module is the thin frame around the boxes of the upper left; its boxes are the subject of the next sections.
+
+\section{Evaporative demand}
+Evaporation and transpiration are limited first by the energy of the air. The \kw{reference evapotranspiration} $ET_0$ is the demand of a well-watered grass surface. Daisy offers four ways to obtain it: the value from the weather file; the Penman--Monteith equation with vapour pressure and wind; the Hargreaves equation from daily temperatures only; and the Makkink equation as the last choice. The Penman--Monteith form of FAO paper 56 (Allen and others, 1998) is
+\begin{equation}\label{eq:dm-pm}\boxed{ET_0=\frac{0.408\,\Delta\,(R_n-G)+\gamma\,\dfrac{900}{T+273}\,u_2\,(e_s-e_a)}{\Delta+\gamma\,(1+0.34\,u_2)} ,}\end{equation}
+\par\noindent where $ET_0$ is the reference evapotranspiration (mm\,d$^{-1}$), $R_n$ the net radiation at the surface and $G$ the soil heat flux (both MJ\,m$^{-2}$\,d$^{-1}$), $T$ the mean air temperature at 2 m ($^\circ$C), $u_2$ the wind speed at 2 m (m\,s$^{-1}$), $e_s-e_a$ the vapour pressure deficit of the air (kPa), $\Delta$ the slope of the saturation vapour pressure curve (kPa\,$^\circ$C$^{-1}$) and $\gamma$ the psychrometric constant (kPa\,$^\circ$C$^{-1}$).
+
+\par\noindent The equation has two parts. The numerator is the sum of an \emph{energy term}, $0.408\,\Delta(R_n-G)$, and an \emph{aerodynamic term}, which grows with the wind and the dryness of the air. On a calm, humid day the first term dominates; on a hot, windy, dry day the second does. The factor $0.408$ converts megajoules into millimetres of water.
+
+\exbox{Reference evapotranspiration of a summer day}{On a day in July the mean air temperature is $T=16.9$ $^\circ$C, the net radiation $R_n=13.28$ MJ\,m$^{-2}$\,d$^{-1}$ and the soil heat flux is negligible ($G=0$). The wind speed at 2 m is $u_2=2.078$ m\,s$^{-1}$ and the vapour pressure deficit is $e_s-e_a=0.589$ kPa. At this temperature $\Delta=0.122$ kPa\,$^\circ$C$^{-1}$, and $\gamma=0.0666$ kPa\,$^\circ$C$^{-1}$. Find $ET_0$.}\sol \givenline{$T=16.9$ ; $R_n=13.28$ ; $G=0$ ; $u_2=2.078$ ; $e_s-e_a=0.589$ ; $\Delta=0.122$ ; $\gamma=0.0666$}
+\par\noindent The energy term of the numerator is $0.408\times0.122\times13.28=0.661$.
+\par\noindent The aerodynamic term is $\gamma\,\dfrac{900}{T+273}\,u_2(e_s-e_a)=0.0666\times\dfrac{900}{289.9}\times2.078\times0.589=0.253$.
+\par\noindent The numerator is $0.661+0.253=0.914$. The denominator is $\Delta+\gamma(1+0.34u_2)=0.122+0.0666\times(1+0.34\times2.078)=0.122+0.0666\times1.707=0.236$. Then
+\[ET_0=\frac{0.914}{0.236}=3.9\ \text{mm\,d}^{-1}\quad\text{\finans}\]
+Both terms contribute: energy supplies 72 per cent of the numerator and the wind and dry air the remaining 28 per cent.
+
+\par\noindent The potential rate of a crop is the reference rate multiplied by a crop coefficient, $ET_c=K_cET_0$ (Chapter~\ref{ch:crops}). In Daisy the potential evapotranspiration is shared between the canopy, the litter, the pond and the soil according to the cover of each. The box \emph{Net radiation and cloudiness} supplies the short- and long-wave radiation and the ground heat flux that give $R_n$ and $G$. The box \emph{Light in the canopy} distributes the light between sun and shade leaves and between the visible and the near-infrared waves; its result is used by the photosynthesis of Chapter~\ref{chap:16}.
+
+\banner{Water above the soil}\label{ch:map-surface}
+\section{Rainfall and snowfall}
+In the map, precipitation reaches two boxes. Above the freezing threshold it falls as \emph{rain} ($P$ in the balance of Chapter~\ref{chap:01}); below it, as \emph{snowfall}. Rain is shared out: part is caught by the canopy, part by the litter, and the rest falls directly on the pond or the soil surface.
+
+\section{The snowpack}
+Snow builds a \kw{snowpack}, the first blue box of the map. The pack holds liquid water as well as ice, it ages and compacts, it loses water by evaporation and it melts when the heat of the air and of the rain is sufficient. The melt water percolates through the pack and goes to the surface. When the soil below is frozen the melt water cannot enter it and may collect or run off.
+
+\par\noindent The energy needed for melting is large, which is why a snowpack lasts long. The latent heat of fusion of ice is $L_f=334$ kJ\,kg$^{-1}$. One millimetre of water over one square metre is one kilogram, so melting one millimetre of snow water equivalent needs $0.334$ MJ\,m$^{-2}$.
+\begin{equation}\label{eq:dm-melt}\boxed{M=\frac{Q_m}{L_f\,\rho_w}\quad\Longrightarrow\quad M\ (\text{mm})=\frac{Q_m\ (\text{MJ\,m}^{-2})}{0.334} ,}\end{equation}
+\par\noindent where $M$ is the depth of snow water equivalent that melts (mm) and $Q_m$ the heat that reaches the snow and is available for melting (MJ\,m$^{-2}$).
+
+\exbox{The melt of a snowpack}{A snowpack at $0$ $^\circ$C holds $40$ mm of water equivalent. On a mild day the heat that reaches it from the air, the radiation and the rain is $6.7$ MJ\,m$^{-2}$. How much melts, and how long does the pack last at this rate?}\sol \givenline{$Q_m=6.7$ MJ\,m$^{-2}$ per day ; store $=40$ mm}
+\par\noindent From Equation~(\ref{eq:dm-melt}),
+\[M=\frac{6.7}{0.334}=20\ \text{mm per day}\quad\text{\finans}\]
+The pack of 40 mm lasts $40/20=2$ days at this rate. The 20 mm of melt water per day goes to the surface of the soil and is added to the rain. \finans
+
+\section{The canopy: interception, throughfall and drip}
+The next boxes of the map concern the canopy. The leaves hold rain and irrigation as a thin film up to a capacity that grows with the leaf area index. Water above the capacity passes through the canopy or drips from it; this is the box \emph{Throughfall and drip}. The water held on the leaves evaporates at the rate of a wet canopy, which is high because the leaf has no stomata to resist the loss. This water evaporates \emph{before} the plants begin to transpire, and it never reaches the soil.
+
+\par\noindent Let $c$ be the water that one unit of leaf area index can hold (mm per unit of LAI), $L$ the leaf area index and $P$ the rain of one event (mm). The canopy store is $C_{\max}=cL$. For one event,
+\begin{equation}\label{eq:dm-int}\boxed{I_c=\min(P,\,cL),\qquad P_{th}=P-I_c ,}\end{equation}
+\par\noindent where $I_c$ is the water intercepted by the canopy (mm) and $P_{th}$ the throughfall that reaches the litter or the soil (mm). In a run, the value of $c$ is the one in the set-up file; the value used here is only an order of magnitude.
+
+\exbox{Interception by a wheat canopy}{A canopy has $L=3$ and holds $c=0.5$ mm per unit of leaf area index. A storm brings $P=4$ mm. Find the intercepted water and the throughfall. If the intercepted water evaporates at 1.2 mm per day, how long does it take to disappear?}\sol \givenline{$L=3$ ; $c=0.5$ mm ; $P=4$ mm ; evaporation $=1.2$ mm\,d$^{-1}$}
+\par\noindent The canopy store is $C_{\max}=0.5\times3=1.5$ mm. From Equation~(\ref{eq:dm-int}), $I_c=\min(4,1.5)=1.5$ mm\ \finans, so
+\[P_{th}=4-1.5=2.5\ \text{mm}\quad\text{\finans}\]
+The 1.5 mm held on the leaves evaporates in $1.5/1.2=1.25$ days. Over a season with many small showers, a large part of the rain never reaches the soil in this way, and a canopy of high leaf area intercepts more. \finans
+
+\section{Litter, mulch and the pond}
+Below the canopy lies the \kw{litter}: dead plant material or a mulch laid on the soil. It holds water, which evaporates from it (the box \emph{Evaporation from litter}), and it shades the soil, so that the soil evaporates less. This is the physical basis of the mulch experiments of Chapter~\ref{chap:09}: the litter protects the soil but also holds water on its own account.
+
+\par\noindent Water that passes the litter reaches the soil surface. If the soil can take it, it \emph{infiltrates}. If the rain is faster than the infiltration, the surplus collects in the \kw{pond}, a thin layer of water on the soil. The pond evaporates (box \emph{Evaporation from ponded water}), it enters the large pores of the soil (the \emph{biopores}, below), and when it is full it \emph{runs off}. The pond also softens the impact of the raindrops, and the energy of the rain seals the surface (the box \emph{Pond damping and rain energy}). The infiltration of water into the soil matrix is limited by the conductivity of the top layer, and the rate at which the soil can give water back to the surface is limited by the box \emph{Maximal exfiltration}.
+
+\exbox{Runoff from an intense storm}{A storm of $30$ mm falls in $2$ h on a soil whose top layer can take $8$ mm\,h$^{-1}$. The pond can hold $3$ mm and evaporation is negligible. Find the infiltration, and the runoff.}\sol \givenline{$P=30$ mm in $2$ h ; infiltration capacity $=8$ mm\,h$^{-1}$ ; pond store $=3$ mm}
+\par\noindent The rain rate is $30/2=15$ mm\,h$^{-1}$, which is above the capacity of 8 mm\,h$^{-1}$. In 2 hours the soil takes $8\times2=16$ mm\ \finans. The remainder is $30-16=14$ mm. The pond holds 3 mm, so
+\[\text{runoff}=14-3=11\ \text{mm}\quad\text{\finans}\]
+Water that is held in the pond afterwards infiltrates when the rain stops. The balance of the event is $30=16+3+11$. \finans
+
+\banner{Water in the soil}\label{ch:map-soil}
+\section{The soil water box}
+The large box with the red outline on the left of the map is the \kw{soil water}, with the label ``Richards equation''. It is the centre of the left side of the model. Every other box of this chapter either feeds it (rain, melt, irrigation, capillary rise) or takes water from it (evaporation, root uptake, drainage, percolation). The equation was derived in Chapter~\ref{chap:02}:
+\begin{equation}\label{eq:dm-richards}\boxed{\frac{\partial\theta}{\partial t}=\frac{\partial}{\partial z}\Bigl[K(h)\Bigl(\frac{\partial h}{\partial z}-1\Bigr)\Bigr]-S(z,t) ,}\end{equation}
+\par\noindent where $\theta$ is the volumetric water content, $h$ the suction head (cm), $K(h)$ the hydraulic conductivity (cm\,d$^{-1}$), $z$ the depth (cm, positive downward) and $S$ the uptake of water by the roots (d$^{-1}$). The retention curve $\theta(h)$ and the conductivity curve $K(h)$, the box \emph{Retention and conductivity of the soil}, are taken from the van Genuchten and Mualem relations of Chapter~\ref{chap:01}. Daisy also offers the Brooks and Corey form, a bimodal form for soils with two pore systems and a modified form of the WEPP model.
+
+\par\noindent The soil is divided into layers. For each layer, the equation says in words: the water stored changes by what flows in at the top, less what flows out at the bottom, less what the roots take.
+
+\exbox{The water balance of one soil layer}{A layer 20 cm thick has a water content $\theta=0.250$. In one day, $5.0$ mm flows into it from above, $3.0$ mm flows out at the bottom and the roots take $2.4$ mm. Find the new water content.}\sol \givenline{$\Delta z=200$ mm ; $\theta_0=0.250$ ; inflow $=5.0$ mm ; outflow $=3.0$ mm ; uptake $=2.4$ mm}
+\par\noindent The change of water stored in the layer is $5.0-3.0-2.4=-0.4$ mm. Dividing by the thickness, $\Delta\theta=-0.4/200=-0.002$, so
+\[\theta=0.250-0.002=0.248\quad\text{\finans}\]
+A very small change of water content is a large change of flux: the 0.4 mm of this layer is the difference of three terms that are each many times larger. This is why the soil-water box is solved with small steps and with the conservation of water built into the scheme. \finans
+
+\section{Soil evaporation}
+Soil evaporation (the box \emph{Soil evaporation}, with the dashed arrow upward) removes water from the top of the matrix at the rate that the atmosphere asks for and the soil can deliver. In the first days after a wetting the atmosphere limits the rate; later the conductivity of the drying top layer limits it. This is the two-stage behaviour of Chapter~\ref{chap:09}.
+
+\section{Root water uptake and transpiration}
+The roots take water where their length is. When the top soil dries, they take it from wetter and deeper layers. The potential transpiration $E_p$ (the box \emph{Transpiration}, drawn from the crop in the map) is spread over the layers in proportion to the root density, and is reduced in each layer by a stress factor $\alpha_s(h)$ between 0 and 1 that is 1 over the comfortable range of suction and falls to 0 near saturation and towards the wilting point (Feddes):
+\begin{equation}\label{eq:dm-feddes}\boxed{S(z)=\alpha_s(h)\,S_p(z),\qquad\int S_p(z)\,\mathrm dz=E_p .}\end{equation}
+\par\noindent where $S_p$ is the potential uptake in each layer (d$^{-1}$) and the integral is taken over the root zone. The actual transpiration is the integral of $S$. The ratio of the actual to the potential transpiration is the \kw{relative transpiration}; it measures the water stress of the crop.
+
+\exbox{Uptake from three layers}{The potential transpiration is $E_p=5.0$ mm\,d$^{-1}$. The roots are distributed over three layers in the proportions $0.5$, $0.3$ and $0.2$. The stress factors of the three layers are $\alpha_s=1.0$, $0.8$ and $0.4$ (the top layer is the driest). Find the actual transpiration and the relative transpiration.}\sol \givenline{$E_p=5.0$ mm\,d$^{-1}$ ; root shares $0.5,0.3,0.2$ ; $\alpha_s=1.0,0.8,0.4$}
+\par\noindent The potential uptake of each layer is the share of the roots times $E_p$: $2.5$, $1.5$ and $1.0$ mm\,d$^{-1}$. From Equation~(\ref{eq:dm-feddes}) each is multiplied by its stress factor:
+\[S=2.5\times1.0,\ 1.5\times0.8,\ 1.0\times0.4=2.5,\ 1.2,\ 0.4\ \text{mm\,d}^{-1} .\]
+The actual transpiration is $2.5+1.2+0.4=4.1$ mm\,d$^{-1}$\ \finans, and the relative transpiration is $4.1/5.0=0.82$ \finans. The crop transpires 82 per cent of what the air asks for. The lower layers still deliver 0.4 mm of the 1.0 mm that they were asked for, which is how a crop with deep roots survives a dry top soil.
+
+\section{Percolation and capillary rise}
+Water moves up and down the profile under gravity and suction (box \emph{Percolation and capillary rise}). At the bottom of the column, Daisy offers several boundaries: free drainage; a closed bottom; a fixed or a varying water table; a lysimeter (water leaves only when it is free); or an \emph{aquitard} with its own leakage. At the bottom of the red box in the map the arrow marked \emph{Percolation} leaves the column, and the arrow marked \emph{Capillary rise} enters it from below when a water table is near. The drainage of Chapter~\ref{chap:01}, $D$, is the percolation through the bottom of the root zone.
+
+\section{Biopores}
+Worm channels and root channels carry water past the matrix. In the map they are the two thin green columns inside the red box, marked \emph{Biopore flow}. They fill from the surface (the pond infiltrates into them directly, the \emph{tertiary} infiltration) and they release water to the matrix on the way down. Where the pressure in the matrix exceeds a threshold, the water of cracks and a secondary domain is exchanged with the matrix (the box \emph{Matrix and secondary domain}). The biopores make a large difference in a structured soil: a rain that would otherwise run off or pond may enter the soil, and a solute may reach the depth faster than the matrix flow would carry it.
+
+\section{Drains and groundwater}
+A tile drain (the box \emph{Drain} at the lower edge of the red box) removes water from the layers at its depth when the soil there is saturated. The spacing and depth of the drains set the rate; Daisy uses the equations of Moody, of Wesseling and of Mol and Wesseling. These are the same family as the Hooghoudt equation of Chapter~\ref{chap:14}. The lower boundary can also be set as a fixed or varying water table or an aquitard with leakage (box \emph{Groundwater and aquitard}).
+
+\exbox{The discharge of a tile drain}{Use Hooghoudt's equation $qL^2=8K_2dh+4K_1h^2$ of Chapter~\ref{chap:14} with drains at a spacing $L=22$ m, conductivity $K_1=K_2=0.29$ m\,d$^{-1}$, equivalent depth $d=1.70$ m and a water table $h=0.50$ m above the drain level midway between the drains. Find the discharge per unit area.}\sol \givenline{$L=22$ m ; $K_1=K_2=0.29$ m\,d$^{-1}$ ; $d=1.70$ m ; $h=0.50$ m}
+\par\noindent The two terms are $8K_2dh=8\times0.29\times1.70\times0.50=1.972$ and $4K_1h^2=4\times0.29\times0.25=0.290$ (both m$^2$\,d$^{-1}$). Then
+\[q=\frac{1.972+0.290}{22^2}=\frac{2.262}{484}=0.00467\ \text{m\,d}^{-1}=4.7\ \text{mm\,d}^{-1}\quad\text{\finans}\]
+This is the water that this layout removes through the drains when the water table midway between them stands 0.5 m above the drain level. It is the same order as the design discharge of 6.4 mm\,d$^{-1}$ of Chapter~\ref{chap:14}, which corresponds to a higher water table of 0.7 m.
+
+\banner{Soil heat and ice}\label{ch:map-heat}
+\section{Heat in the soil column}
+The box \emph{Soil heat and ice} at the foot of the map is a separate module that works on the same column. Heat moves by conduction and with the water. The heat capacity and the conductivity of the soil depend on how much water and ice it holds:
+\begin{equation}\label{eq:dm-heat}\boxed{C_h\,\frac{\partial T}{\partial t}=\frac{\partial}{\partial z}\Bigl(\lambda\,\frac{\partial T}{\partial z}\Bigr)-C_wq\,\frac{\partial T}{\partial z}+L_f\,\frac{\partial\theta_i}{\partial t} ,}\end{equation}
+\par\noindent where $C_h$ is the volumetric heat capacity of the soil (J\,m$^{-3}$\,K$^{-1}$), $\lambda$ the thermal conductivity (W\,m$^{-1}$\,K$^{-1}$), $C_w$ the heat capacity of water, $q$ the water flux (m\,s$^{-1}$), $L_f$ the latent heat of freezing and $\theta_i$ the ice content. The top boundary is the soil surface temperature, which couples the soil to the air through the ground heat flux (the box \emph{Ground heat flux and surface temperature}).
+
+\par\noindent The temperature matters to the rest of the map through the temperature factors of every biological rate in Chapters~\ref{chap:16} and~\ref{chap:17}, and through the freezing of the water. A frozen layer takes no more water, so a rapid thaw on frozen ground gives runoff.
+
+\exbox{How deep does a temperature wave reach?}{A soil has $\lambda=1.2$ W\,m$^{-1}$\,K$^{-1}$ and $C_h=2.5\times10^{6}$ J\,m$^{-3}$\,K$^{-1}$. For a periodic surface temperature of angular frequency $\omega$, the \kw{damping depth} (the depth at which the amplitude has fallen to $1/e$ of its surface value) is $d_d=\sqrt{2D/\omega}$, with the thermal diffusivity $D=\lambda/C_h$. Find the damping depth of the daily and of the annual wave.}\sol \givenline{$\lambda=1.2$ ; $C_h=2.5\times10^6$ ; $\omega_{day}=2\pi/86\,400$ ; $\omega_{year}=2\pi/(365\times86\,400)$}
+\par\noindent The diffusivity is $D=1.2/(2.5\times10^6)=4.8\times10^{-7}$ m$^2$\,s$^{-1}$. For the daily wave $\omega=7.27\times10^{-5}$ s$^{-1}$, so
+\[d_d=\sqrt{\frac{2\times4.8\times10^{-7}}{7.27\times10^{-5}}}=0.115\ \text{m}\quad\text{\finans}\]
+For the annual wave $\omega=1.99\times10^{-7}$ s$^{-1}$, so $d_d=\sqrt{2\times4.8\times10^{-7}/1.99\times10^{-7}}=2.2$ m \finans. The daily swing is felt only in the top 10 to 20 cm; the seasonal swing reaches several metres. This is why a sensor at 20 cm sees little of the day but all of the season.
+
+\section{Freezing and thawing}
+Below zero, water in the soil turns to ice and releases heat (the box \emph{Freezing and thawing}). The release is large and slows the frost down.
+
+\exbox{The heat released when a layer freezes}{A layer 0.10 m thick has a water content $\theta=0.30$. Find the heat released when all its water freezes, and compare it with the heat released when the layer cools by 1 K. Take $L_f=334$ kJ\,kg$^{-1}$ and $C_h=2.5\times10^6$ J\,m$^{-3}$\,K$^{-1}$.}\sol \givenline{$\Delta z=0.10$ m ; $\theta=0.30$ ; $L_f=334$ kJ\,kg$^{-1}$ ; $C_h=2.5\times10^6$ J\,m$^{-3}$\,K$^{-1}$}
+\par\noindent The water in $1$ m$^2$ of the layer is $0.10\times0.30\times1000=30$ kg, so the heat released on freezing is $30\times334\,000=1.0\times10^{7}$ J, that is $10.0$ MJ\,m$^{-2}$ \finans. Cooling the layer by 1 K releases $C_h\,\Delta z\times1=2.5\times10^6\times0.10=0.25$ MJ\,m$^{-2}$. The ratio is
+\[\frac{10.0}{0.25}=40\ \text{K}\quad\text{\finans}\]
+Freezing the water of the layer releases as much heat as cooling the layer by 40 degrees. For this reason a wet soil cools to just below zero and then stays near zero for a long time while the water freezes layer by layer.
+
+\banner{Where each box of this chapter is found in the map}
+\begin{center}\small\begin{tabular}{@{}p{4.6cm}p{3.1cm}p{5.2cm}@{}}\toprule
+\hd{Box in the map} & \hd{Section} & \hd{Main equation or rule}\\\midrule
+Precipitation, temperature, light & driving variables & input of the model\\
+Potential evapotranspiration & evaporative demand & Eq.~(\ref{eq:dm-pm})\\
+Snowfall, snowpack, melt water & snowpack & Eq.~(\ref{eq:dm-melt})\\
+Intercepted water, throughfall, drip & canopy & Eq.~(\ref{eq:dm-int})\\
+Litter water, ponded water, runoff, infiltration & litter, mulch, pond & capacity and storage\\
+Soil water (Richards) & soil water box & Eq.~(\ref{eq:dm-richards})\\
+Soil evaporation, transpiration & evaporation; root uptake & Eq.~(\ref{eq:dm-feddes})\\
+Percolation, capillary rise & percolation & boundary at the bottom\\
+Biopore flow & biopores & matrix and channels\\
+Drain & drains and groundwater & Hooghoudt, Chapter~\ref{chap:14}\\
+Soil heat and ice & soil heat and ice & Eq.~(\ref{eq:dm-heat})\\\bottomrule
+\end{tabular}\end{center}
+
+\begin{itemize}
+\item The map separates matter (conserved) from information (not conserved). A faulty figure is either a balance that does not close or a wrong value that is read by a process.
+\item The atmosphere sets the demand, the soil sets the supply, and the smaller of the two is what the crop gets.
+\item Rain is shared between canopy, litter, pond and soil; interception and litter evaporation take water that never reaches the soil.
+\item The Richards equation is the centre of the water side; every other box feeds it or draws from it.
+\item Heat and ice set the temperature factors of every biological rate and the freezing of water.
+\end{itemize}
+
+\backhead{EXERCISES}{khred}
+\begin{exlist}
+\item $ET_0$ for $R_n=15$, $G=0$, $T=20$ $^\circ$C, $u_2=2$, $e_s-e_a=1.0$, $\Delta=0.145$, $\gamma=0.0673$.\exans{5.0 mm/d}
+\item Snow water equivalent that melts under $5.01$ MJ\,m$^{-2}$.\exans{15 mm}
+\item Interception of a 2 mm shower by a canopy with $L=4$ and $c=0.5$ mm per unit LAI.\exans{2 mm; throughfall 0}
+\item Runoff of 20 mm in 1 h on a soil taking 6 mm/h with a pond of 2 mm.\exans{12 mm}
+\item Layer of 10 cm with inflow 4 mm, outflow 1 mm, uptake 2 mm: change of $\theta$.\exans{+0.01}
+\item Relative transpiration if $E_p=4$ mm/d and the uptake is 3.2 mm/d.\exans{0.80}
+\item Damping depth of the weekly wave ($\omega=2\pi/(7\times86\,400)$), $D=4.8\times10^{-7}$.\exans{0.30 m}
+\item Heat released by freezing 15 kg of water per m$^2$.\exans{5.0 MJ}
+\item Drain discharge for $L=20$ m, $K=0.3$, $d=1.5$, $h=0.4$.\exans{4.1 mm/d}
+\item Name the two things that limit infiltration.\exans{conductivity of the top soil; pond store}
+\end{exlist}
+
+\dykband{DO YOU KNOW ?}
+\begin{exlist}
+\item What is the difference between a solid and a dash-dotted line in the map?
+\item Which three variables drive Daisy?
+\item Why does interception reduce the water that reaches the soil?
+\item What is the relative transpiration?
+\item Why does freezing slow the cooling of a wet soil?
+\item What are biopores and how are they filled?
+\item Which equation does the drain box use?
+\item Which processes set the temperature factors?
+\end{exlist}
 \swaflvideo{15}

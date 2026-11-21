@@ -1,0 +1,170 @@
+\chapimg{fig/op16.png}
+\chapterlead{\subhd{After this chapter you can} follow the carbon of a crop from the light that falls on the leaves to the grain that is harvested; compute the light a canopy absorbs, the assimilation of a leaf, the opening of the stomata and the maintenance respiration of the organs; share the assimilate between leaf, stem, root and storage organ; and read the management boxes of the map (irrigation, fertilising, tillage, sowing, spraying, rules and rotations).}
+\chapter{The Daisy Process Map II: the Crop and the Management}\label{chap:16}
+\markboth{The Daisy Process Map II: the Crop and the Management}{The Daisy Process Map II: the Crop and the Management}
+\banner{The crop as a chain of stores}\label{ch:map2}
+\section{The green area of the map}
+The green area on the right of Figure~\ref{fig:dmap} is the crop module. Read it from the top to the bottom, as the carbon moves. The \emph{driving variables} (precipitation and irrigation, temperature, light) enter at the top. The light is absorbed by the leaves in the box \emph{Photosynthesis}, and the carbon dioxide of the air is turned into sugars, the \emph{assimilate}. The assimilate is collected in one store, the \emph{assimilate pool}. A part is used at once by the plant as \emph{maintenance respiration} and leaves as carbon dioxide (the small $\mathrm{CO_2}$ boxes with the dashed arrows). The rest is shared out by the box \emph{Partitioning} to four organs: the \emph{leaf}, the \emph{stem}, the \emph{root} and the \emph{storage organ}, which is the grain, the tuber or the beet that is harvested. Each organ has a small coloured bar: the lighter part is dead matter and the darker part is living matter. The dead leaves and roots, and the residues left by the harvest, pass to the soil, where they are the subject of Chapter~\ref{chap:17}.
+
+\par\noindent Information flows in the other direction. The leaf area of the leaf organ goes back into the box \emph{Canopy structure}, which tells the photosynthesis how much light is absorbed, tells the weather module how much rain is intercepted, and tells the evaporation how the demand is shared between the soil and the crop. The box \emph{Stress factors} reduces the photosynthesis when water or nitrogen is short, and the box \emph{Senescence} ages the leaves.
+
+\par\noindent The right-hand column of the map, ``Also in the model'', lists the parts of the crop module that cannot be drawn as flows: phenology, photosynthesis, stomatal conductance, root growth and density, emergence and seed, the abscisic acid signal, vernalization, the nitrogen of rubisco in the canopy, the effect of water stress on production and a vegetation without a crop model. Each has its own section below.
+
+\banner{Development and light}\label{ch:map2-dev}
+\section{Phenology: the development stage}
+A crop does not grow with the calendar but with the heat that it receives. Daisy measures the progress of the crop with the \kw{development stage} $DS$: it is 0 at emergence, 1 at flowering and 2 at maturity. The stage advances with the \kw{temperature sum} (the sum of the daily excess of temperature above a base value) and, for some crops, with the length of the day:
+\begin{equation}\label{eq:dm-tsum}\boxed{TS=\sum_d\max\bigl(T_d-T_b,\,0\bigr),\qquad \frac{\mathrm dDS}{\mathrm dt}=f(T,\text{photoperiod}) ,}\end{equation}
+\par\noindent where $TS$ is the temperature sum ($^\circ$C\,d), $T_d$ the mean temperature of day $d$ ($^\circ$C) and $T_b$ the base temperature below which no development occurs ($^\circ$C). The function $f$ is specific to the crop.
+
+\exbox{Temperature sum and the date of flowering}{A cereal has a base temperature $T_b=5$ $^\circ$C. The mean temperatures of five consecutive days are $8,\ 10,\ 12,\ 9,\ 11$ $^\circ$C. (a) Find the temperature sum of the five days. (b) If the crop needs $1000$ $^\circ$C\,d from emergence to flowering (an illustrative value), and the mean temperature in the growing period is $12$ $^\circ$C, how many days does this take?}\sol \givenline{$T_b=5$ $^\circ$C ; $T_d=8,10,12,9,11$ ; $TS_{fl}=1000$ $^\circ$C\,d ; $\bar T=12$ $^\circ$C}
+\par\noindent\textbf{(a)} From Equation~(\ref{eq:dm-tsum}), the excess over the base on each day is $3,\ 5,\ 7,\ 4,\ 6$, and
+\[TS=3+5+7+4+6=25\ ^\circ\text{C\,d}\quad\text{\finans}\]
+\par\noindent\textbf{(b)} A day at a mean temperature of 12 $^\circ$C adds $12-5=7$ $^\circ$C\,d, so the number of days is
+\[\frac{1000}{7}=143\ \text{days}\quad\text{\finans}\]
+In a cooler spring, with a mean of 9 $^\circ$C, the same crop would need $1000/4=250$ days. This is why the same cultivar flowers at very different dates in different years, and why the figures of the workbench show the stage and not the date.
+
+\section{Emergence, seed and vernalization}
+After sowing, the seed germinates and the crop emerges after a temperature sum that depends on the sowing depth. The seed supplies the first leaf area (the box \emph{Emergence and seed}). Winter crops need a period of cold before they can flower; the box \emph{Vernalization} holds the development stage back until enough cold days have passed, so that a winter wheat sown in spring does not flower in the same year.
+
+\section{Light in the canopy}
+The leaves absorb the light as it passes down through the canopy. The absorbed fraction follows the law of Beer and Lambert:
+\begin{equation}\label{eq:dm-beer}\boxed{I_a=I_0\bigl(1-e^{-kL}\bigr),\qquad I_{soil}=I_0\,e^{-kL} ,}\end{equation}
+\par\noindent where $I_0$ is the light above the canopy, $I_a$ the light absorbed by the leaves, $I_{soil}$ the light that reaches the soil, $k$ the extinction coefficient (dimensionless; about 0.5 for a cereal) and $L$ the leaf area index. The same fraction $e^{-kL}$ divides the evaporative demand between the soil and the crop.
+
+\exbox{The light absorbed by a canopy}{A cereal canopy has $L=3$ and $k=0.5$. Find the share of the light that is absorbed and the share that reaches the soil. How does it change if the leaf area index doubles to $L=6$?}\sol \givenline{$L=3$ ; $k=0.5$ ; $L'=6$}
+\par\noindent From Equation~(\ref{eq:dm-beer}), $kL=1.5$ and $e^{-1.5}=0.223$. The share that reaches the soil is
+\[I_{soil}/I_0=0.223\quad\text{\finans}\]
+and the share absorbed is $1-0.223=0.777$, about 78 per cent \finans. For $L=6$ we have $kL=3$, $e^{-3}=0.050$, so 95 per cent is absorbed. Doubling the leaf area adds only 17 points of absorbed light, and reduces the light on the soil from 22 to 5 per cent, so the soil evaporation falls by the same ratio. Beyond a leaf area index of about 4 the canopy gains little from more leaves.
+
+\banner{Photosynthesis and the exchange of gases}\label{ch:map2-photo}
+\section{Photosynthesis}
+The box \emph{Photosynthesis} turns the absorbed light and the carbon dioxide into assimilate. In Daisy the leaf follows the biochemical model of Farquhar for plants with the C3 and the C4 pathway, which is driven by the light, the temperature and the \kw{rubisco} nitrogen of the leaf (the box \emph{Rubisco nitrogen in the canopy}; the nitrogen of the leaf sets the photosynthetic capacity, and it is distributed through the canopy with the light). For a leaf layer, the \emph{response to light} is well described by a curve that rises with the light and saturates:
+\begin{equation}\label{eq:dm-light}\boxed{A=A_{\max}\Bigl(1-e^{-\varepsilon I/A_{\max}}\Bigr) ,}\end{equation}
+\par\noindent where $A$ is the gross assimilation of the leaf ($\mu$mol\,CO$_2$\,m$^{-2}$\,s$^{-1}$), $A_{\max}$ the light-saturated rate, $\varepsilon$ the quantum efficiency (mol CO$_2$ per mol photons) and $I$ the absorbed light ($\mu$mol photons\,m$^{-2}$\,s$^{-1}$). In the box \emph{Stress factors} the rate is reduced by water stress, temperature, senescence and a shortage of nitrogen.
+
+\exbox{The light response of a leaf}{A leaf has $A_{\max}=30$ $\mu$mol\,m$^{-2}$\,s$^{-1}$ and $\varepsilon=0.05$. Find the assimilation at $I=500$ and $I=1500$ $\mu$mol photons\,m$^{-2}$\,s$^{-1}$, and the share of the maximum that each represents.}\sol \givenline{$A_{\max}=30$ ; $\varepsilon=0.05$ ; $I=500,\ 1500$}
+\par\noindent At $I=500$: $\varepsilon I/A_{\max}=25/30=0.833$, so
+\[A=30\bigl(1-e^{-0.833}\bigr)=30\times0.565=17.0\ \mu\text{mol\,m}^{-2}\,\text{s}^{-1}\quad\text{\finans}\]
+which is $17.0/30=57$ per cent of the maximum. At $I=1500$: $\varepsilon I/A_{\max}=2.5$, and $A=30(1-e^{-2.5})=30\times0.918=27.5$ \finans, 92 per cent of the maximum. Tripling the light raises the assimilation by only 62 per cent: a leaf in bright sun is almost saturated, while the leaves in the shade of the same canopy are not, which is why the light is distributed between sun leaves and shade leaves.
+
+\section{Stomatal conductance}
+The leaf takes up carbon dioxide and loses water through the same pores, the \kw{stomata}. The box \emph{Stomatal conductance} sets how far they are open. Daisy has several models (Ball and Berry, Leuning, and others); the form of Ball and Berry relates the conductance to the assimilation, the humidity and the carbon dioxide at the leaf surface:
+\begin{equation}\label{eq:dm-bb}\boxed{g_s=g_0+m\,\frac{A\,h_s}{C_s} ,}\end{equation}
+\par\noindent where $g_s$ is the stomatal conductance for water vapour (mol\,m$^{-2}$\,s$^{-1}$), $g_0$ the conductance when $A=0$, $m$ an empirical slope (dimensionless), $A$ the assimilation ($\mu$mol\,m$^{-2}$\,s$^{-1}$), $h_s$ the relative humidity at the leaf surface (0 to 1) and $C_s$ the carbon dioxide concentration at the leaf surface ($\mu$mol\,mol$^{-1}$).
+
+\exbox{Opening of the stomata}{A leaf has $g_0=0.01$ mol\,m$^{-2}$\,s$^{-1}$, $m=9$, an assimilation $A=17$ $\mu$mol\,m$^{-2}$\,s$^{-1}$, a surface humidity $h_s=0.7$ and $C_s=400$ $\mu$mol\,mol$^{-1}$. Find $g_s$, and say what happens when the humidity falls to $0.4$.}\sol \givenline{$g_0=0.01$ ; $m=9$ ; $A=17$ ; $h_s=0.7$ ; $C_s=400$}
+\par\noindent From Equation~(\ref{eq:dm-bb}),
+\[g_s=0.01+9\times\frac{17\times0.7}{400}=0.01+0.268=0.278\ \text{mol\,m}^{-2}\,\text{s}^{-1}\quad\text{\finans}\]
+At $h_s=0.4$ the second term falls to $9\times17\times0.4/400=0.153$ and $g_s=0.163$ mol\,m$^{-2}$\,s$^{-1}$ \finans: the stomata close by 41 per cent in dry air. In the same way the stomata close when the roots send the \emph{abscisic acid signal} (box \emph{Abscisic acid (ABA) signal}) as the soil dries: the roots sense the drying before the leaf does and tell the leaf to reduce the loss of water.
+
+\section{Respiration}
+A part of the assimilate is used at once for the upkeep of the living tissue, the \kw{maintenance respiration}, and a part is lost as the cost of building new tissue, the \kw{growth respiration}. Both leave as carbon dioxide (the dashed arrows of the map). The maintenance respiration of an organ is proportional to its living dry matter, and grows with the temperature by a factor that doubles for every ten degrees (a $Q_{10}$ form):
+\begin{equation}\label{eq:dm-resp}\boxed{R_m=f_T\sum_o r_o\,W_o,\qquad f_T=Q_{10}^{(T-T_{ref})/10} ,}\end{equation}
+\par\noindent where $R_m$ is the maintenance respiration of the crop (g dry matter\,m$^{-2}$\,d$^{-1}$), $o$ runs over the organs (root, stem, leaf, storage organ), $r_o$ the rate of the organ at the reference temperature $T_{ref}$ (g\,g$^{-1}$\,d$^{-1}$), $W_o$ its dry matter (g\,m$^{-2}$) and $Q_{10}$ the factor for a rise of ten degrees ($\approx2$).
+
+\exbox{Maintenance respiration of a cereal}{The root, the leaf and the stem have a dry matter of $150$, $250$ and $300$ g\,m$^{-2}$, and rates of $0.003$, $0.010$ and $0.002$ g\,g$^{-1}$\,d$^{-1}$ at the reference temperature $T_{ref}=20$ $^\circ$C. Take $Q_{10}=2$. Find the maintenance respiration at 20 $^\circ$C and at 25 $^\circ$C.}\sol \givenline{$W=150,250,300$ g\,m$^{-2}$ ; $r=0.003,0.010,0.002$ ; $Q_{10}=2$ ; $T=20,\ 25$ $^\circ$C}
+\par\noindent The sum in Equation~(\ref{eq:dm-resp}) is $150\times0.003+250\times0.010+300\times0.002=0.45+2.50+0.60=3.55$ g\,m$^{-2}$\,d$^{-1}$. At 20 $^\circ$C, $f_T=1$, so $R_m=3.55$ g\,m$^{-2}$\,d$^{-1}$ \finans. At 25 $^\circ$C,
+\[f_T=2^{(25-20)/10}=2^{0.5}=1.414,\qquad R_m=1.414\times3.55=5.02\ \text{g\,m}^{-2}\,\text{d}^{-1}\quad\text{\finans}\]
+A warm night raises the cost of keeping the crop alive by 41 per cent and leaves less for growth; this is one reason why a warm night is bad for the yield of a cereal.
+
+\banner{Growth: partitioning, organs and the canopy}\label{ch:map2-growth}
+\section{Partitioning of the assimilate}
+What remains in the assimilate pool, after the maintenance, is shared between the four organs by fractions that depend on the development stage $DS$. In the vegetative stage most goes to leaf, stem and root. After flowering the storage organ takes the largest share and gives the yield. Each unit of assimilate built into an organ costs a part of its carbon as growth respiration, so only a fraction $Y_g$ (the growth efficiency, about 0.7 to 0.8) appears as new dry matter:
+\begin{equation}\label{eq:dm-part}\boxed{\Delta W_o=Y_g\,\bigl(A_{pool}-R_m\bigr)\,f_o(DS),\qquad\sum_of_o=1 ,}\end{equation}
+\par\noindent where $\Delta W_o$ is the daily growth of organ $o$ (g\,m$^{-2}$\,d$^{-1}$), $A_{pool}$ the daily assimilate (g\,m$^{-2}$\,d$^{-1}$), $R_m$ the maintenance respiration (g\,m$^{-2}$\,d$^{-1}$), $Y_g$ the growth efficiency and $f_o(DS)$ the fraction that goes to organ $o$ at the stage $DS$.
+
+\exbox{Where does a day of assimilate go?}{After flowering ($DS=1.3$) the daily assimilate is $12$ g\,m$^{-2}$ and the maintenance respiration is $3.55$ g\,m$^{-2}$ (the value of the previous example at 20 $^\circ$C). The growth efficiency is $Y_g=0.75$ and the fractions at this stage are leaf $0$, stem $0.15$, root $0.05$ and storage organ $0.80$ (illustrative values). Find the growth of each organ, and the yield that results if this goes on for 40 days.}\sol \givenline{$A_{pool}=12$ ; $R_m=3.55$ ; $Y_g=0.75$ ; $f=(0,\ 0.15,\ 0.05,\ 0.80)$}
+\par\noindent The assimilate available for growth is $12-3.55=8.45$ g\,m$^{-2}$, and the new dry matter is $0.75\times8.45=6.34$ g\,m$^{-2}$. From Equation~(\ref{eq:dm-part}):
+\[\Delta W_{leaf}=0,\quad\Delta W_{stem}=0.15\times6.34=0.95,\quad\Delta W_{root}=0.05\times6.34=0.32,\quad\Delta W_{storage}=0.80\times6.34=5.07\ \text{g\,m}^{-2}\,\text{d}^{-1}\ \ \text{\finans}\]
+Over 40 days the storage organ gains $40\times5.07=203$ g\,m$^{-2}$, that is $2.0$ t\,ha$^{-1}$ of dry matter. Of the $12$ g assimilated each day, $5.07/12=42$ per cent ends up in the yield; the rest is respired (maintenance and growth, $8.45\times0.25+3.55=5.7$ g), or is built into stem and root. \finans
+
+\section{Canopy structure and the leaf area index}
+The leaf area index $L$ closes the loop between the crop and the weather. It follows from the dry matter of the leaves and their thickness. If $a_s$ is the specific leaf area (m$^2$ of leaf per gram of dry matter) and $W_l$ the dry matter of the leaves (g\,m$^{-2}$), then
+\begin{equation}\label{eq:dm-lai}\boxed{L=a_s\,W_l .}\end{equation}
+\par\noindent where $L$ is the leaf area index (m$^2$\,m$^{-2}$). The height and the leaf angle of the box \emph{Canopy structure} complete the picture: they govern the light interception and the evaporation. For the cereal of the previous example, $W_l=250$ g\,m$^{-2}$ and $a_s=0.012$ m$^2$\,g$^{-1}$ give $L=3.0$, the leaf area index used in the light example above.
+
+\section{Senescence, stress and the effect of water on production}
+Leaves age and die with time, with drought and with a shortage of nitrogen (the box \emph{Senescence}); the dead leaves pass to the litter and the soil. The box \emph{Stress factors} reduces the assimilation when the soil is too dry, too wet, too cold or short of nitrogen. The effect of water stress on production (the box \emph{Water stress effect on production}) answers a plain question: how much of the potential growth is kept when the crop transpires only a share of what the air asks? Because the transpiration is the water that the plant passes through its leaves while it takes up carbon, a crop that transpires less assimilates less. A simple rule of thumb is that the dry matter is proportional to the water transpired, $B=\mathrm{WUE}\times T$.
+
+\exbox{Production from the transpired water}{A crop transpires $T=236$ mm in a season and has a water use efficiency of $\mathrm{WUE}=3.5$ g of dry matter per kg of water transpired. Find the dry matter produced, and the effect of a 20 per cent reduction of the transpiration by stress.}\sol \givenline{$T=236$ mm $=236$ kg\,m$^{-2}$ ; $\mathrm{WUE}=3.5$ g\,kg$^{-1}$}
+\par\noindent One millimetre of water over one square metre is one kilogram, so $T=236$ kg\,m$^{-2}$. The dry matter is
+\[B=3.5\times236=826\ \text{g\,m}^{-2}=8.3\ \text{t\,ha}^{-1}\quad\text{\finans}\]
+A reduction of 20 per cent gives $T=189$ mm and $B=661$ g\,m$^{-2}=6.6$ t\,ha$^{-1}$ \finans. The loss of $1.7$ t\,ha$^{-1}$ is the cost of the stress, and the relative transpiration of Chapter~\ref{chap:15} is the measure that gives it.
+
+\section{Roots: growth and density}
+The roots grow downward with the temperature and the water and take a distribution of root length with depth (the box \emph{Root growth and density}). A common form is an exponential decline: most roots are near the surface. If $a$ is the decline per cm of depth, the share of the roots between the surface and the depth $z$ is
+\begin{equation}\label{eq:dm-root}\boxed{F(z)=\frac{1-e^{-az}}{1-e^{-aD}} ,}\end{equation}
+\par\noindent where $F(z)$ is the fraction of the total root length above depth $z$, $a$ the decline coefficient (cm$^{-1}$) and $D$ the rooting depth (cm).
+
+\exbox{How many roots are in the top 30 cm?}{A crop roots to $D=100$ cm with $a=0.04$ cm$^{-1}$. Find the share of the roots in the top $30$ cm and in the layer between 30 and 60 cm.}\sol \givenline{$D=100$ cm ; $a=0.04$ cm$^{-1}$}
+\par\noindent The denominator is $1-e^{-4}=0.982$. For $z=30$: $1-e^{-1.2}=0.699$, so $F(30)=0.699/0.982=0.712$ \finans, 71 per cent. For $z=60$: $1-e^{-2.4}=0.909$, so $F(60)=0.926$. The layer between 30 and 60 cm holds $0.926-0.712=0.214$, \textbf{21 per cent} \finans. Only about 7 per cent is below 60 cm, which is why the lower layers help only when the top soil is dry (Chapter~\ref{chap:15}, uptake from three layers).
+
+\section{Harvest and residues}
+At harvest the storage organ is removed, and a part of the straw (the box \emph{Harvest}). What is left goes to the soil as residue: stubble and leaves above the ground, and the roots and root exudates below it. The carbon content of dry matter is about $0.42$ g\,g$^{-1}$.
+
+\exbox{What is returned to the soil}{A crop has a total above-ground dry matter of $9.2$ t\,ha$^{-1}$, of which the grain is $4.6$ t\,ha$^{-1}$. The straw is baled and $40$ per cent of it is removed. Find the harvest index and the carbon returned to the soil by the straw.}\sol \givenline{$B=9.2$ t\,ha$^{-1}$ ; grain $=4.6$ t\,ha$^{-1}$ ; 40 \% of the straw removed ; carbon fraction $=0.42$}
+\par\noindent The harvest index is the grain over the total above-ground dry matter: $4.6/9.2=0.50$ \finans. The straw is $9.2-4.6=4.6$ t\,ha$^{-1}$, of which $0.40\times4.6=1.84$ t is removed and $2.76$ t is returned. The carbon in it is
+\[2.76\times0.42=1.16\ \text{t C\,ha}^{-1}\quad\text{\finans}\]
+This carbon enters the soil as \emph{added organic matter}; Chapter~\ref{chap:17} follows what happens to it.
+
+\section{Vegetation without a crop model}
+Not every cover of the soil is a growing crop. A grassland, a cover crop or a bare soil between two crops is represented by the box \emph{Vegetation without a crop model}, with a fixed or forced leaf area and root depth.
+
+\banner{The management column}\label{ch:map2-man}
+The blue boxes on the right of the map are the actions of the farmer. They are the only part of the map that is given to the model as a plan and not as a law. Each action acts on a box of the left or of the lower part of the map. Daisy runs the actions in a sequence, by date or by a rule.
+
+\begin{center}\small\begin{tabular}{@{}p{3.0cm}p{5.2cm}p{4.7cm}@{}}\toprule
+\hd{Action} & \hd{What it does in the model} & \hd{Box it acts on}\\\midrule
+Irrigation & adds water to the canopy (overhead), to the soil surface (surface) or in the soil (subsoil), by dose, duration, flux or rule & surface water; soil water\\
+Fertilising & adds mineral or organic nitrogen on the surface or in the soil, in kg N\,ha$^{-1}$ & nitrate, ammonium, organic matter\\
+Tillage & plowing, rotavation, harrowing: mixes the layers and resets the porosity & soil structure; organic matter\\
+Sowing and planting & puts seeds or plants in the field on a date or by a rule & emergence and seed\\
+Spraying & puts chemicals on the canopy or the soil surface & chemicals (Chapter~\ref{chap:17})\\
+Decisions and conditions & starts an action by a rule: the date, the day after emergence, the soil water pressure, the temperature or the stage & any action\\
+Rotation and sequence & runs actions in order, repeats them and follows one crop with another & the whole run\\\bottomrule
+\end{tabular}\end{center}
+
+\exbox{Three conversions of management}{(a) An irrigation applies $25$ mm to a field of $1$ ha. How many cubic metres is that? (b) A fertiliser plan needs $120$ kg N\,ha$^{-1}$ and the product is ammonium nitrate with $34$ per cent nitrogen. How many kilograms of product per hectare? (c) A seed rate is $200$ kg\,ha$^{-1}$ of a cereal with a thousand-grain weight of $45$ g. How many seeds per square metre?}\sol \givenline{$I=25$ mm ; area $=10{,}000$ m$^2$ ; $N=120$ kg\,ha$^{-1}$ ; 34 \% N ; 200 kg\,ha$^{-1}$ ; 45 g per 1000 grains}
+\par\noindent\textbf{(a)} One millimetre over one square metre is one litre, so 25 mm over $10{,}000$ m$^2$ is $25\times10{,}000=250{,}000$ L \finans, that is $250$ m$^3$.
+\par\noindent\textbf{(b)} The product needed is $120/0.34=353$ kg\,ha$^{-1}$ \finans.
+\par\noindent\textbf{(c)} The mass of one seed is $45/1000=0.045$ g, so $200$ kg $=200{,}000$ g holds $200{,}000/0.045=4.44\times10^{6}$ seeds per hectare, that is $444$ seeds\,m$^{-2}$ \finans.
+
+\par\noindent\textbf{The rule of the trigger.} The box \emph{Decisions and conditions} is the place where the soil enters the management. A rule such as ``irrigate when the soil water pressure at the sensor is below $-300$ cm'' is the \emph{trigger} of Chapter~\ref{chap:03}; its reach, fate and memory are the results of this book. In the map the rule is an exchange of information from the soil water box to the irrigation box.
+
+\exbox{A rule that fires}{A sensor at 20 cm reads, on five consecutive days, suctions of $120,\ 180,\ 260,\ 340,\ 410$ cm. The rule is: irrigate when the suction exceeds $300$ cm. On which day does the rule first fire, and how many of the five days are beyond the trigger?}\sol \givenline{suctions $=120,180,260,340,410$ cm ; trigger $=300$ cm}
+\par\noindent The suction first exceeds 300 cm on day 4 (340 cm) \finans. Days 4 and 5 are beyond the trigger, so $2$ of the $5$ days \finans. If the irrigation is applied on day 4 the suction on day 5 falls and the count would be one day; the number of days beyond the trigger is the quantity that Chapter~\ref{ch:ctrl} counts for a season.
+
+\begin{itemize}
+\item The crop is a chain of stores: light $\rightarrow$ assimilate $\rightarrow$ four organs $\rightarrow$ residues to the soil.
+\item The development stage follows the temperature sum, not the calendar.
+\item Light absorption follows $1-e^{-kL}$; doubling the leaf area gains little beyond $L\approx4$.
+\item Maintenance respiration doubles for every ten degrees; growth respiration takes a quarter of what is built.
+\item Dry matter follows the transpired water; stress costs yield through the relative transpiration.
+\item The management actions are the only boxes that are given as a plan; the decision rules are where the soil enters the plan.
+\end{itemize}
+
+\backhead{EXERCISES}{khred}
+\begin{exlist}
+\item Temperature sum of $9,\ 12,\ 15,\ 6$ $^\circ$C with $T_b=5$.\exans{22 $^\circ$C\,d}
+\item Light reaching the soil for $L=4$, $k=0.6$.\exans{9.1 \%}
+\item $A$ for $A_{\max}=25$, $\varepsilon=0.05$, $I=300$.\exans{11.3}
+\item $g_s$ for $g_0=0.02$, $m=8$, $A=20$, $h_s=0.6$, $C_s=380$.\exans{0.273}
+\item Respiration factor for 10 $^\circ$C above the reference with $Q_{10}=2.2$.\exans{2.2}
+\item New dry matter for $A_{pool}=10$, $R_m=3$, $Y_g=0.7$.\exans{4.9 g\,m$^{-2}$}
+\item Storage share of the above if $f=0.7$.\exans{3.4 g\,m$^{-2}$}
+\item LAI for $a_s=0.015$ and $W_l=200$.\exans{3.0}
+\item Dry matter for $T=300$ mm and WUE $=4$ g/kg.\exans{12 t/ha}
+\item Fertiliser product for 90 kg N/ha with 46 \% N (urea).\exans{196 kg/ha}
+\end{exlist}
+
+\dykband{DO YOU KNOW ?}
+\begin{exlist}
+\item What does the development stage measure?
+\item Why does the soil evaporate less under a dense canopy?
+\item What is the difference between maintenance and growth respiration?
+\item How do the stomata respond to dry air and to a drying soil?
+\item Which organ takes most of the assimilate after flowering?
+\item Why does less transpiration mean less yield?
+\item Which box turns a soil suction into an irrigation?
+\end{exlist}
+\swaflvideo{16}

@@ -1,0 +1,184 @@
+\chapimg{fig/op17.png}
+\chapterlead{\subhd{After this chapter you can} follow nitrogen and carbon through the soil of the Daisy model; compute the decay of the organic matter pools with temperature, the mineralisation or immobilisation of nitrogen, nitrification, denitrification and nitrous oxide, and leaching; explain how a chemical is held, carried and degraded; and close a nitrogen budget and a carbon budget with the logs of a run.}
+\chapter{The Daisy Process Map III: Nitrogen, Organic Matter and Chemicals}\label{chap:17}
+\markboth{The Daisy Process Map III: Nitrogen, Organic Matter and Chemicals}{The Daisy Process Map III: Nitrogen, Organic Matter and Chemicals}
+\banner{The brown area of the map}\label{ch:map3}
+\section{What the lower part of the map shows}
+The brown area at the bottom of Figure~\ref{fig:dmap}, labelled \emph{Soil nitrogen and organic matter}, is the part of the model that deals with the life of the soil. It has two kinds of box. The pink boxes are the stores and the flows of \emph{nitrogen}: nitrate ($\mathrm{NO_3^-}$), ammonium ($\mathrm{NH_4^+}$), the nitrogen bound in organic matter (\emph{Org-N}) and the nitrogen of the plant (\emph{Plant-N}). The purple boxes are the pools of \emph{carbon}: the added organic matter (AOM1 and AOM2), the microbial biomass (SMB1 and SMB2) and the soil organic matter (SOM1, SOM2 and the inert SOM3). The two are tied together: carbon and nitrogen move in fixed proportions in the organic matter, and it is the ratio of carbon to nitrogen that decides whether the soil gives mineral nitrogen to the crop or takes it away.
+
+\par\noindent The area is connected to the left half of the map by water. Nitrate and ammonium are dissolved in the soil water, so they follow the soil-water box of Chapter~\ref{chap:15}; the water carries nitrate down to the drains and out of the profile (\emph{Leaching}). The area is connected to the crop by the roots, which take up nitrate and ammonium (\emph{Uptake}) and return dead matter (\emph{Root residues}). And it is connected to the weather by temperature, which sets the rate of every biological reaction in it.
+
+\section{The common rule of the biological rates}
+Almost every rate of the brown area is written in the same way: a rate constant, multiplied by factors between 0 and 1 for temperature and for water, and applied to the amount that is present. For the temperature the factor is usually a $Q_{10}$ form,
+\begin{equation}\label{eq:dm-q10}\boxed{f_T(T)=Q_{10}^{\,(T-T_{ref})/10} ,}\end{equation}
+\par\noindent where $f_T$ is the temperature factor (1 at the reference temperature $T_{ref}$), $Q_{10}$ the factor for a rise of ten degrees (about 2 for the biological processes of the soil) and $T$ the soil temperature ($^\circ$C, from the soil heat box of Chapter~\ref{chap:15}). A second factor $f_\theta(h)$ falls to zero when the soil is very dry (no water for the microbes) and, for the processes that need oxygen, when it is very wet.
+
+\banner{Organic matter and carbon}\label{ch:map3-om}
+\section{The pools of carbon}
+Daisy divides the organic carbon of the soil into pools that decompose at different speeds.
+\begin{center}\small\begin{tabular}{@{}p{3.0cm}p{9.9cm}@{}}\toprule
+\hd{Pool} & \hd{What it contains and how it turns over}\\\midrule
+AOM1, AOM2 & \emph{added organic matter}: crop residues, roots, manure and slurry; two pools of slow and of fast turnover for each input\\
+SMB1, SMB2 & \emph{soil microbial biomass}: the microbes that feed on the organic matter; they build their biomass and respire carbon dioxide\\
+SOM1, SOM2 & \emph{soil organic matter}, the humus: a fast and a slow pool\\
+SOM3 & an \emph{inert} pool that does not decay on the time of a run\\\bottomrule
+\end{tabular}\end{center}
+The clay of the soil protects the organic matter, so that the share of clay changes the turnover (the box \emph{Clay and organic matter}). The carbon dioxide made by the microbes and the roots leaves through the soil surface (the dashed arrows marked $\mathrm{CO_2}$).
+
+\section{First-order decay and efficiency}
+Each pool decays at a rate proportional to the amount present, which is a first-order process. A part of the decayed carbon is built into other pools (the \kw{efficiency} $E$) and the rest is released as carbon dioxide:
+\begin{equation}\label{eq:dm-decay}\boxed{\frac{\mathrm dC_i}{\mathrm dt}=-k_i\,f_T\,f_\theta\,C_i+\sum_jE_{ji}\,k_j\,f_T\,f_\theta\,C_j+\text{inputs} ,}\end{equation}
+\par\noindent where $C_i$ is the carbon of pool $i$ (g\,m$^{-2}$), $k_i$ its rate constant (d$^{-1}$), $f_T$ and $f_\theta$ the factors for temperature and water, $E_{ji}$ the share of the carbon decayed in pool $j$ that is built into pool $i$ and the last term the additions from residues and manure. Without inputs and with a constant factor the solution of a single pool is
+\begin{equation}\label{eq:dm-exp}C(t)=C_0\,e^{-kf_Tt},\qquad t_{1/2}=\frac{\ln2}{k f_T} ,\end{equation}
+where $t_{1/2}$ is the half-life of the pool (d).
+
+\par\noindent In the library of Daisy the crop residues are given as pools with the turnover rates $2.917\times10^{-3}$ h$^{-1}$ (fast) and $2.917\times10^{-4}$ h$^{-1}$ (slow), a carbon-to-nitrogen ratio of $100$ and an efficiency of $0.5$. In daily units these are $k=0.0700$ d$^{-1}$ and $0.0070$ d$^{-1}$, with half-lives of $9.9$ and $99$ days at the reference temperature.
+
+\exbox{Decay of a fast residue pool}{A fast pool of crop residue holds $C_0=100$ g C\,m$^{-2}$, with $k=0.0700$ d$^{-1}$ and an efficiency of $0.5$. At the reference temperature, find (a) the carbon left after 10 days, (b) the carbon that has been decomposed, and (c) how it is divided between new microbial biomass and carbon dioxide.}\sol \givenline{$C_0=100$ g\,m$^{-2}$ ; $k=0.0700$ d$^{-1}$ ; $E=0.5$ ; $t=10$ d ; $f_T=f_\theta=1$}
+\par\noindent\textbf{(a)} From Equation~(\ref{eq:dm-exp}),
+\[C=100\,e^{-0.0700\times10}=100\times0.4966=49.7\ \text{g\,m}^{-2}\quad\text{\finans}\]
+\par\noindent\textbf{(b)} The carbon decomposed is $100-49.7=50.3$ g\,m$^{-2}$ \finans.
+\par\noindent\textbf{(c)} With an efficiency of $0.5$, half goes to the microbes and half is respired:
+\[\Delta C_{SMB}=0.5\times50.3=25.2\ \text{g\,m}^{-2},\qquad \Delta C_{CO_2}=25.2\ \text{g\,m}^{-2}\quad\text{\finans}\]
+So in ten days a quarter of the residue carbon has become microbial biomass and a quarter has left the soil as carbon dioxide.
+
+\exbox{The effect of temperature on the half-life}{The same pool decays in a cold soil at $5$ $^\circ$C. Take $T_{ref}=20$ $^\circ$C and $Q_{10}=2$, and ignore the water factor. Find the temperature factor, the new rate and the half-life, and compare it with the warm soil.}\sol \givenline{$k=0.0700$ d$^{-1}$ ; $T=5$ $^\circ$C ; $T_{ref}=20$ $^\circ$C ; $Q_{10}=2$}
+\par\noindent From Equation~(\ref{eq:dm-q10}), $f_T=2^{(5-20)/10}=2^{-1.5}=0.354$. The rate is $kf_T=0.0700\times0.354=0.0248$ d$^{-1}$ \finans, and from Equation~(\ref{eq:dm-exp}),
+\[t_{1/2}=\frac{\ln2}{0.0248}=28\ \text{days}\quad\text{\finans}\]
+against $\ln2/0.0700=9.9$ days in the warm soil. A residue that is gone in a fortnight in summer lasts a month in a cold spring, so the nitrogen in it is released much later.
+
+\exbox{Carbon of a straw residue after one month}{The straw returned in Chapter~\ref{chap:16} holds $1.16$ t C\,ha$^{-1}$. In the sugar-beet file of the library $40$ per cent of the carbon of a residue is put in the slow pool and $60$ per cent in the fast pool (an illustrative split). At the reference temperature, find the carbon that remains after 30 days, and the carbon decomposed.}\sol \givenline{$C_0=1.16$ t C\,ha$^{-1}$ ; slow $0.40$, $k=0.0070$ d$^{-1}$ ; fast $0.60$, $k=0.0700$ d$^{-1}$ ; $t=30$ d}
+\par\noindent The pools hold $0.40\times1.16=0.464$ t C (slow) and $0.60\times1.16=0.696$ t C (fast). After 30 days:
+\[C_{slow}=0.464\,e^{-0.0070\times30}=0.464\times0.811=0.376\ \text{t C},\qquad C_{fast}=0.696\,e^{-0.0700\times30}=0.696\times0.122=0.085\ \text{t C}.\]
+The carbon that remains is $0.376+0.085=0.461$ t C\,ha$^{-1}$ \finans, so $1.16-0.461=0.70$ t C\,ha$^{-1}$ has been decomposed \finans, 60 per cent of it in the first month. Half of this goes to carbon dioxide (0.35 t C\,ha$^{-1}$). The fast pool is almost gone and the slow pool has hardly changed: the residue has become a long-lasting store.
+
+\banner{Mineralisation, immobilisation and the nitrogen cycle}\label{ch:map3-n}
+\section{Mineralisation and immobilisation}
+The nitrogen in the organic matter is released or taken up by the same decay. The reason is the ratio of carbon to nitrogen. Microbes build their cells with a nearly fixed ratio, for example $C/N=8$. When they decompose a residue that is rich in nitrogen (a low ratio, such as young clover), there is more nitrogen than they need, and the surplus is released as ammonium: \kw{mineralisation}. When they decompose a residue that is poor in nitrogen (a high ratio, such as straw with $C/N=100$), they need more nitrogen than the residue has, and they take the missing part from the mineral nitrogen of the soil: \kw{immobilisation}. The mineral nitrogen of the soil falls for a time, and the crop competes with the microbes for it.
+
+\exbox{Does straw release or take up nitrogen?}{Use the result of the first example of this chapter. The $50.3$ g C\,m$^{-2}$ that were decomposed came from a residue with $C/N=100$. The microbes built $25.2$ g C\,m$^{-2}$ into new biomass with $C/N=8$. Find the nitrogen released by the residue, the nitrogen that the microbes need, and the net result, in g\,N\,m$^{-2}$ and in kg\,N\,ha$^{-1}$.}\sol \givenline{$C_{dec}=50.3$ g\,m$^{-2}$ ; $C/N_{res}=100$ ; $C_{SMB}=25.2$ g\,m$^{-2}$ ; $C/N_{SMB}=8$}
+\par\noindent Nitrogen released by the decomposed residue: $50.3/100=0.50$ g N\,m$^{-2}$.
+\par\noindent Nitrogen needed for the new biomass: $25.2/8=3.15$ g N\,m$^{-2}$.
+\par\noindent The balance is $0.50-3.15=-2.65$ g N\,m$^{-2}$, so
+\[\text{net immobilisation}=2.65\ \text{g\,N\,m}^{-2}=26.5\ \text{kg\,N\,ha}^{-1}\quad\text{\finans}\]
+The soil must give 26 kg N\,ha$^{-1}$ of mineral nitrogen to the microbes in the first ten days. A residue with $C/N=100$ therefore \emph{takes} nitrogen; if the soil has none to give, the crop is short of it. The two pools of the map that make this visible are Org-N and the ammonium box.
+
+\section{Nitrification}
+Ammonium is oxidised to nitrate by bacteria (the box \emph{Nitrification}). The rate rises with the ammonium available and saturates at high concentrations, as in the equation of Michaelis and Menten, with the usual factors for temperature and water:
+\begin{equation}\label{eq:dm-nit}\boxed{r_{nit}=f_T\,f_\theta\,\frac{V_{\max}\,[\mathrm{NH_4^+}]}{K_m+[\mathrm{NH_4^+}]} ,}\end{equation}
+\par\noindent where $r_{nit}$ is the nitrification rate (mg\,N\,L$^{-1}$\,d$^{-1}$), $V_{\max}$ the maximum rate, $K_m$ the concentration at which the rate is half the maximum (mg\,N\,L$^{-1}$) and $[\mathrm{NH_4^+}]$ the ammonium concentration in the soil water (mg\,N\,L$^{-1}$).
+
+\exbox{Nitrification of an ammonium fertiliser}{A soil solution holds $[\mathrm{NH_4^+}]=2$ mg\,N\,L$^{-1}$. The constants are $V_{\max}=1.2$ mg\,N\,L$^{-1}$\,d$^{-1}$ and $K_m=3$ mg\,N\,L$^{-1}$ (illustrative values), with $f_T=0.8$ and $f_\theta=0.9$. Find the rate, and the rate after the concentration is raised to $20$ mg\,N\,L$^{-1}$ by a fertiliser.}\sol \givenline{$V_{\max}=1.2$ ; $K_m=3$ ; $f_T=0.8$ ; $f_\theta=0.9$ ; $[\mathrm{NH_4^+}]=2,\ 20$}
+\par\noindent At 2 mg\,N\,L$^{-1}$, from Equation~(\ref{eq:dm-nit}),
+\[r_{nit}=0.8\times0.9\times\frac{1.2\times2}{3+2}=0.72\times0.48=0.346\ \text{mg\,N\,L}^{-1}\,\text{d}^{-1}\quad\text{\finans}\]
+At 20 mg\,N\,L$^{-1}$: $r_{nit}=0.72\times\dfrac{1.2\times20}{3+20}=0.72\times1.043=0.751$ \finans. The concentration is ten times higher but the rate only $2.2$ times: the bacteria are close to saturation, so a large dose of ammonium is nitrified more slowly than a small one, and the ammonium stays in the soil for longer. Ammonium is also held on the clay (the box \emph{Ammonium sorption}), which holds it back from leaching until it is nitrified.
+
+\section{Nitrate leaching}
+Nitrate is not held by the soil. It moves with the water by convection and dispersion, and leaves the profile with the drainage (the box \emph{Leaching}). The loss of nitrogen over a period is the sum, over the days, of the concentration of nitrate in the drainage water times the drainage.
+
+\exbox{Nitrate lost with the drainage}{A soil drains $D=120$ mm in a winter, and the water that leaves the root zone holds an average of $8$ mg\,N\,L$^{-1}$. Find the nitrogen leached in kg\,N\,ha$^{-1}$, and the concentration that would give $20$ kg\,N\,ha$^{-1}$.}\sol \givenline{$D=120$ mm ; $c=8$ mg\,N\,L$^{-1}$}
+\par\noindent One millimetre of drainage is one litre per square metre, so $120$ mm is $120$ L\,m$^{-2}$ and the nitrogen lost is $120\times8=960$ mg\,m$^{-2}=0.96$ g\,m$^{-2}$. Since $1$ g\,m$^{-2}=10$ kg\,ha$^{-1}$,
+\[\text{loss}=9.6\ \text{kg\,N\,ha}^{-1}\quad\text{\finans}\]
+A loss of $20$ kg\,N\,ha$^{-1}=2$ g\,m$^{-2}$ in $120$ L\,m$^{-2}$ corresponds to $2000/120=16.7$ mg\,N\,L$^{-1}$ \finans. The concentration is limited by the standard for drinking water of 11.3 mg\,N\,L$^{-1}$ (50 mg\,L$^{-1}$ of nitrate), so the first soil would meet the standard and the second would not. This is the reason why the amount of drainage matters as much as the nitrogen in the soil, and why a mulch that changes the drainage (Chapter~\ref{chap:09}) changes the leaching.
+
+\section{Denitrification and nitrous oxide}
+In wet soil that is rich in carbon, the microbes use nitrate instead of oxygen, and reduce it to nitrogen gas $\mathrm{N_2}$ and to nitrous oxide $\mathrm{N_2O}$, a strong greenhouse gas (the boxes \emph{Denitrification} and \emph{Nitrous oxide emission}). Daisy gives a potential rate that follows the carbon dioxide produced by the organic matter, and limits it by the water-filled pore space and by the nitrate that is present:
+\begin{equation}\label{eq:dm-deni}\boxed{r_{act}=\min\bigl(f_w\,r_{pot},\ K_d[\mathrm{NO_3^-}]\bigr),\qquad \mathrm{N_2O}=\frac{r_{act}}{1+f_r},\quad\mathrm{N_2}=\frac{r_{act}}{1+1/f_r} ,}\end{equation}
+\par\noindent where $r_{act}$ and $r_{pot}$ are the actual and the potential rates of nitrate reduction (kg\,N\,ha$^{-1}$\,d$^{-1}$), $f_w$ the factor for the water-filled pore space (0 below 40 per cent and rising to 1 at 90 per cent), $K_d[\mathrm{NO_3^-}]$ the rate that the nitrate present can support, and $f_r=\mathrm{N_2/N_2O}$ the ratio of the two gases. The ratio falls when nitrate is plentiful and rises with the carbon dioxide and the wetness.
+
+\exbox{Denitrification after heavy rain}{After rain the soil has a water content $\theta=0.33$ and a porosity $\phi=0.47$. The potential rate is $r_{pot}=0.80$ kg\,N\,ha$^{-1}$\,d$^{-1}$ and the nitrate supports $0.90$ kg\,N\,ha$^{-1}$\,d$^{-1}$. The ratio of the gases is $f_r=9$. Find the water-filled pore space, the factor $f_w$, the actual rate and the two gases.}\sol \givenline{$\theta=0.33$ ; $\phi=0.47$ ; $r_{pot}=0.80$ ; $K_d[\mathrm{NO_3^-}]=0.90$ ; $f_r=9$}
+\par\noindent The water-filled pore space is $\mathrm{WFPS}=\theta/\phi=0.33/0.47=0.702$, or $70$ per cent \finans. The factor rises linearly from 0 at 0.40 to 1 at 0.90:
+\[f_w=\frac{0.702-0.40}{0.90-0.40}=0.604\quad\text{\finans}\]
+From Equation~(\ref{eq:dm-deni}), $f_wr_{pot}=0.604\times0.80=0.483$, which is less than $0.90$, so
+\[r_{act}=0.48\ \text{kg\,N\,ha}^{-1}\,\text{d}^{-1}\quad\text{\finans}\]
+The gases are $\mathrm{N_2O}=0.483/(1+9)=0.048$ and $\mathrm{N_2}=0.483/(1+1/9)=0.435$ kg\,N\,ha$^{-1}$\,d$^{-1}$ \finans. A tenth of the nitrate that is lost goes into the air as the greenhouse gas. The water, not the nitrate, limits the rate in this example; in a drier soil ($\theta=0.25$, $\mathrm{WFPS}=0.53$) the factor would be only $0.26$.
+
+\section{Fertilisation, deposition, fixation, volatilisation and uptake}
+The other boxes of the nitrogen cycle are inputs and outputs of the mineral pools. Fertiliser and manure add nitrate, ammonium and organic nitrogen (\emph{Fertilization + atmospheric deposition}); the air adds a smaller amount in the rain and as dry deposition. Legumes fix nitrogen from the air in their nodules (\emph{Symbiotic fixation}). Part of the ammonium of manure and fertiliser leaves the surface as ammonia gas (\emph{Volatilization}). The roots take up nitrate and ammonium with the water, at a rate set by the demand of the growing organs (\emph{Uptake} and \emph{Plant-N}) and the supply of the soil.
+
+\exbox{A nitrogen budget for one season}{A field receives $120$ kg\,N\,ha$^{-1}$ of fertiliser and $15$ kg\,N\,ha$^{-1}$ of deposition. The net mineralisation of the soil is $30$ kg\,N\,ha$^{-1}$. The crop takes up $110$, the drainage carries $20$, denitrification takes $8$ and volatilisation takes $5$ kg\,N\,ha$^{-1}$. Find the change of the mineral nitrogen in the soil.}\sol \givenline{inputs: $120$, $15$, net mineralisation $30$ ; outputs: $110$, $20$, $8$, $5$ (kg\,N\,ha$^{-1}$)}
+\par\noindent The mineral nitrogen is conserved, so
+\[\Delta N_{min}=\text{inputs}+\text{net mineralisation}-\text{outputs}=(120+15+30)-(110+20+8+5)=165-143=+22\ \text{kg\,N\,ha}^{-1}\quad\text{\finans}\]
+The soil has gained $22$ kg\,N\,ha$^{-1}$ of mineral nitrogen. This is the nitrogen that is at risk of leaching in the following winter. The nitrogen use efficiency of the crop is $110/120=0.92$ of the fertiliser, but only $110/(120+15+30)=0.67$ of the nitrogen that was available. \finans
+
+\banner{Chemicals, solutes and pesticides}\label{ch:map3-chem}
+The right-hand column of the map and the boxes at its lower edge also list a group of processes that act on \emph{any} chemical: a pesticide, a tracer, a nutrient or a colloid. In Daisy all of these are chemicals, and a chemical is described by four properties: how it is applied, how it moves with the water, how strongly the soil holds it and how fast it decays.
+
+\section{Transport by water}
+A solute is carried by the water and spread by dispersion, with sorption to the soil:
+\begin{equation}\label{eq:dm-solute}\boxed{\frac{\partial(\theta c+\rho_bs)}{\partial t}=\frac{\partial}{\partial z}\Bigl(\theta D\,\frac{\partial c}{\partial z}\Bigr)-\frac{\partial(qc)}{\partial z}-\mu\,(\theta c+\rho_bs)-U ,}\end{equation}
+\par\noindent where $c$ is the concentration in the soil water, $s$ the amount sorbed on the soil (per unit mass), $\rho_b$ the dry bulk density, $q$ the water flux, $D$ the dispersion coefficient, $\mu$ the first-order decay constant and $U$ the uptake by the crop. The dispersion is $D=\lambda_d|q|/\theta+D_m\tau$, with the dispersivity $\lambda_d$, the molecular diffusion $D_m$ and the tortuosity $\tau$ (the path through the pores is longer than a straight line, which slows the diffusion). The biopores of Chapter~\ref{chap:15} carry a solute past the matrix, so that a solute may reach the depth faster than the matrix flow alone would carry it.
+
+\section{Sorption}
+A chemical is held on the soil by a linear, a Freundlich or a Langmuir isotherm. For the linear form $s=K_dc$, with $K_d=K_{OC}f_{OC}$ for an organic chemical, where $K_{OC}$ is the coefficient of sorption to organic carbon and $f_{OC}$ the organic-carbon fraction of the soil. Sorption slows the chemical down by the \kw{retardation factor}
+\begin{equation}\label{eq:dm-ret}\boxed{R=1+\frac{\rho_bK_d}{\theta} ,}\end{equation}
+\par\noindent where $R$ is the retardation factor ($\geq1$), $\rho_b$ the bulk density (kg\,L$^{-1}$), $K_d$ the distribution coefficient (L\,kg$^{-1}$) and $\theta$ the volumetric water content. The chemical moves at the pore-water velocity divided by $R$.
+
+\exbox{How fast does a pesticide move compared with nitrate?}{Water drains through a soil at a flux $q=2$ mm\,d$^{-1}$, with $\theta=0.30$ and $\rho_b=1.4$ kg\,L$^{-1}$. A pesticide has $K_{OC}=100$ L\,kg$^{-1}$ and the soil has $f_{OC}=0.02$. Find the retardation factor and the time that nitrate and the pesticide need to travel 1 m.}\sol \givenline{$q=2$ mm\,d$^{-1}$ ; $\theta=0.30$ ; $\rho_b=1.4$ ; $K_{OC}=100$ ; $f_{OC}=0.02$ ; $L=1000$ mm}
+\par\noindent The distribution coefficient is $K_d=K_{OC}f_{OC}=100\times0.02=2$ L\,kg$^{-1}$. From Equation~(\ref{eq:dm-ret}),
+\[R=1+\frac{1.4\times2}{0.30}=10.3\quad\text{\finans}\]
+The pore-water velocity is $v=q/\theta=2/0.30=6.67$ mm\,d$^{-1}$. Nitrate, with $R=1$, travels 1 m in $1000/6.67=150$ days \finans. The pesticide moves at $v/R=0.65$ mm\,d$^{-1}$ and needs $1000/0.65=1550$ days, more than four years \finans. Its half-life is much shorter than that, so it decays before it reaches the depth.
+
+\section{Degradation}
+A chemical decays with a half-life that depends on the temperature and on the water. The law is the first-order form of Equation~(\ref{eq:dm-exp}), $c(t)=c_0e^{-\mu t}$, with $\mu=\ln2/t_{1/2}$.
+
+\exbox{How much of a pesticide is left?}{A pesticide has a half-life of $30$ days. What fraction is left after 90 days? After how many days is 5 per cent left?}\sol \givenline{$t_{1/2}=30$ d}
+\par\noindent The decay constant is $\mu=\ln2/30=0.0231$ d$^{-1}$. After $90$ days the fraction is $e^{-0.0231\times90}=e^{-2.079}=0.125$ \finans, that is $(1/2)^3$: three half-lives. For $5$ per cent, $e^{-0.0231\,t}=0.05$, so $t=\ln20/0.0231=130$ days \finans.
+
+The remaining boxes of the group are variants of these laws: the \emph{reactions and equilibria} between chemicals, the \emph{solute uptake} by roots, the \emph{colloids and filtering} (colloids are released by the rain, carried by the water and held back by the soil as by a filter), and the \emph{PFAS} and other substances that have their own parameter sets.
+
+\banner{Reading the map in the logs of a run}\label{ch:map3-logs}
+Every box of the map has a place in the log files that Daisy writes, and the workbench draws the figure of a box from the columns of the log in which the box has a column of its own. A box without a column of its own shows nothing; the workbench says so and offers the process it acts through. The most useful logs are these.
+\begin{center}\small\begin{tabular}{@{}p{3.2cm}p{5.4cm}p{4.2cm}@{}}\toprule
+\hd{Log file} & \hd{What it holds} & \hd{Boxes of the map}\\\midrule
+Daily-Bioclimate & rain, potential and actual evapotranspiration, canopy, litter, pond and soil terms & weather, interception, evaporation\\
+Daily-Snow & snow content, liquid water, depth, evaporation and percolation & snowpack\\
+Daily-SurfaceWater & pond, infiltration, runoff & pond, infiltration, runoff\\
+Daily-FWater & the water balance of the field: percolation, drainage, biopore water, storage & soil water, biopores, drains\\
+Daily-FN & nitrogen: fertiliser, deposition, leaching, uptake & the pink boxes\\
+Daily-CropProduction & leaf area index, dry matter of the organs & the green area\\
+Annual-Harvest & the yield and the residues at harvest & harvest, residues\\
+Annual-Tracer & the movement of a chemical & chemicals and tracers\\\bottomrule
+\end{tabular}\end{center}
+
+\section{Closing the balances}
+The logs give a check on the whole map. The water balance of Equation~(\ref{eq:bal}) must close; so must the balance of nitrogen and the balance of carbon. For nitrogen, the inputs (fertiliser, deposition, fixation) less the outputs (uptake, leaching, denitrification, volatilisation) must equal the change of the stores (mineral nitrogen, organic nitrogen, plant nitrogen). The audit of Chapter~\ref{chap:04} applied this idea to the water, and found a term that was not attributed to any box of the map. A figure of the workbench is therefore worth trusting only when the balance of its flux closes, and the first step in reading any run is to read the balance and then the boxes.
+
+\exbox{Does the balance close?}{A run gives, over a year, for nitrogen in kg\,N\,ha$^{-1}$: inputs $135$; crop uptake $110$; leaching $20$; denitrification $8$; volatilisation $5$; change of the soil stores of nitrogen (mineral, organic, plant) $+2$. Find the residual and say whether the balance closes.}\sol \givenline{inputs $=135$ ; outputs $=110+20+8+5$ ; $\Delta S=+2$}
+\par\noindent The outputs are $110+20+8+5=143$. The residual is inputs less outputs less the change of storage:
+\[135-143-2=-10\ \text{kg\,N\,ha}^{-1}\quad\text{\finans}\]
+The balance is open by $10$ kg\,N\,ha$^{-1}$, which is $7$ per cent of the inputs. The only way to close it is net mineralisation of $10$ kg\,N\,ha$^{-1}$ that has not been counted as an input: the soil organic matter released that much mineral nitrogen. Once it is included, the balance closes. This is the same reasoning as in Chapter~\ref{chap:01}: a term that is not accounted for is not missing from nature, only from the list.
+
+\begin{itemize}
+\item Carbon and nitrogen are tied together by the carbon-to-nitrogen ratio: a residue with a high ratio takes nitrogen (immobilisation), one with a low ratio gives it (mineralisation).
+\item Every biological rate is a rate constant times $f_T$ and $f_\theta$; the temperature factor doubles the rate for every ten degrees.
+\item Nitrate moves freely with the water and leaves with the drainage; ammonium and pesticides are held and move more slowly.
+\item Denitrification needs water, nitrate and carbon; the water-filled pore space is the usual limit, and a tenth goes to the air as nitrous oxide in the example.
+\item A figure of the workbench is trusted only when the balance of its flux closes.
+\end{itemize}
+
+\backhead{EXERCISES}{khred}
+\begin{exlist}
+\item Carbon left from 80 g C\,m$^{-2}$ with $k=0.0070$ d$^{-1}$ after 60 days.\exans{52.6 g}
+\item $f_T$ at 12 $^\circ$C for $T_{ref}=20$, $Q_{10}=2$.\exans{0.574}
+\item Half-life of a pool with $k=0.02$ d$^{-1}$ at $f_T=0.5$.\exans{69 d}
+\item Nitrogen released by 40 g C decomposed from a residue with $C/N=20$.\exans{2 g N}
+\item Nitrogen needed to build 12 g C of biomass with $C/N=8$.\exans{1.5 g N}
+\item $r_{nit}$ for $V_{\max}=2$, $K_m=4$, $[\mathrm{NH_4^+}]=4$, $f_T=f_\theta=1$.\exans{1.0}
+\item Nitrogen leached with 80 mm of drainage at 10 mg\,N\,L$^{-1}$.\exans{8 kg N/ha}
+\item $f_w$ at WFPS $=0.65$.\exans{0.50}
+\item Retardation factor for $\rho_b=1.3$, $K_d=0.5$, $\theta=0.26$.\exans{3.5}
+\item Fraction left after 60 days with $t_{1/2}=20$ d.\exans{0.125}
+\end{exlist}
+
+\dykband{DO YOU KNOW ?}
+\begin{exlist}
+\item What do AOM, SMB and SOM stand for?
+\item Why does straw with a high $C/N$ take nitrogen from the soil?
+\item Why is nitrate lost with the drainage while ammonium is not?
+\item What limits denitrification in a dry soil?
+\item What is the retardation factor?
+\item Which log file holds the water balance of the field?
+\item What does an open balance tell you?
+\end{exlist}
+\swaflvideo{17}
