@@ -61,7 +61,7 @@
 \def\@makechapterhead#1{%
   \par\vspace*{-9mm}\noindent
   \begin{tikzpicture}[x=1mm,y=1mm]
-    \ifx\nextchapimg\empty\else\global\let\lastchimg\nextchapimg\node[anchor=north west,inner sep=0] at (0,0) {\includegraphics[width=64mm,height=64mm]{\nextchapimg}};\fi
+    \ifx\nextchapimg\empty\else\global\let\lastchimg\nextchapimg\node[anchor=north west,inner sep=0] at (0,0) {\includegraphics[width=0.62\textwidth,height=63mm,keepaspectratio]{\nextchapimg}};\fi
     \node[anchor=north east,inner sep=0] at (\textwidth-4mm,3mm) {\bigdigit{\thechapter}};
     \fill[khpurple] (\textwidth-2.2mm,6mm) rectangle (\textwidth,-52mm);
     \path (0,-65mm) rectangle (\textwidth,0);
