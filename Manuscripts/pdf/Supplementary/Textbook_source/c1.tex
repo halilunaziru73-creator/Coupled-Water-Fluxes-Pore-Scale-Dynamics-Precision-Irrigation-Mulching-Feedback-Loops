@@ -104,7 +104,7 @@ The parameter $\alpha$ (cm$^{-1}$) sets the suction scale, roughly the inverse o
 \begin{daisybox}{soil parameters}
 Daisy reads the van Genuchten parameters of each soil layer in its set-up file. In the ensemble, eight soils use the mean values of Carsel and Parrish (1988) and two use effective parameters. Table~\ref{tab:soils} lists them. The parameters are inputs. Daisy's retention function is then used inside the Richards equation, so every suction in the model logs follows Equation~(\ref{eq:vg}).
 \end{daisybox}
-\begin{table}[H]\centering\small
+\begin{table}[!htbp]\centering\small
 \caption{The ten soils of the ensemble.}\label{tab:soils}
 \begin{tabular}{llrrrr}\toprule
 \hd{ID} & \hd{Texture} & \hd{$\alpha$ (cm$^{-1}$)} & \hd{$n$} & \hd{TAW (mm)} & \hd{Memory fate}\\\midrule

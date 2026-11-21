@@ -1,7 +1,7 @@
 \chapimg{fig/op03.png}
 \IfFileExists{extra/lead03.tex}{\input{extra/lead03}}{}
-\chapter{Triggers: Reach, Fate and Hydraulic Memory}\label{chap:03}
-\markboth{Triggers: Reach, Fate and Hydraulic Memory}{Triggers: Reach, Fate and Hydraulic Memory}
+\chapter{Irrigation Triggers: Reach, Fate and Hydraulic Memory}\label{chap:03}
+\markboth{Irrigation Triggers: Reach, Fate and Hydraulic Memory}{Irrigation Triggers: Reach, Fate and Hydraulic Memory}
 \IfFileExists{extra/bg03.tex}{\input{extra/bg03}}{}
 IfFileExists{extra/th03.tex}{\input{extra/th03}}{}
 \banner{The reach of a suction trigger}\label{ch:reach}
@@ -29,7 +29,7 @@ The conductivity is a power law of suction, and the exponent $E=2n+\ell(n-1)$ gr
 
 
 \section{One constant for all soils}
-Suppose the crop stops drying the soil when the relative conductivity has fallen to a value $\kappa$. The justification is Chapter 4: the uptake collapses once $K$ is small enough. Setting $\Kr(\hc)=\kappa$ in Equation~(\ref{eq:asym}),
+Suppose the crop stops drying the soil when the relative conductivity has fallen to a value $\kappa$. The justification is Chapter 5: the uptake collapses once $K$ is small enough. Setting $\Kr(\hc)=\kappa$ in Equation~(\ref{eq:asym}),
 \begin{equation}\label{eq:reach}\boxed{\boxed{\;\hc=\frac1\alpha\left(\frac{m^{2}}{\kappa}\right)^{1/[2n+\ell(n-1)]}\;}}\end{equation}
 \par\noindent where $h_c$ is the reach, the suction (cm) beyond which the soil can no longer supply the demand of the crop, $\alpha$, $m$, $n$ and $\ell$ the van Genuchten parameters, $\kappa$ a dimensionless constant that lumps the demand of the crop, the climate and the geometry of the roots (here $3.5\times10^{-10}$ in the application), and $E=2n+\ell(n-1)$ the exponent of the power law.
 
@@ -73,7 +73,7 @@ Define the reach-scaled trigger $x=h_t/\hc$. Plotting irrigation against $x$ ins
 
 \exbox{}{Compute $\hc$ for $\alpha=0.03$ cm$^{-1}$, $n=1.7$ with $\kappa=3.5\times10^{-10}$ and $\ell=0.5$.}\sol \givenline{$\alpha=0.03$ cm$^{-1}$ ; $n=1.7$ ; $\kappa=3.5\times10^{-10}$ ; $\ell=0.5$}\ans $m=0.4118$, $E=2(1.7)+0.5(0.7)=3.75$, $\ln(m^2/\kappa)=20.00$, so $(m^2/\kappa)^{1/E}=e^{5.333}=207$ and $\hc=207/0.03\approx6{,}900$ cm. \finans
 
-\exbox{}{Derive Equation~(\ref{eq:asym}) from Equation~(\ref{eq:vgm}), step by step, stating each approximation.}\sol  See the derivation in Section 5.2. \finans
+\exbox{}{Derive Equation~(\ref{eq:asym}) from Equation~(\ref{eq:vgm}), step by step, stating each approximation.}\sol  See the derivation in Section 6.2. \finans
 
 \exbox{}{Derive Equation~(\ref{eq:sens}). Evaluate it at $n=1.5$ with $\kappa=3.5\times10^{-10}$ and $\ell=0.5$ and say whether the reach rises or falls with $n$.}\sol \givenline{$n=1.5$ ; $\kappa=3.5\times10^{-10}$ ; $\ell=0.5$}\ans At $n=1.5$: $m=0.3333$, $E=3.25$, $\ln(m^2/\kappa)=19.57$; first term $2/(0.3333\cdot2.25\cdot3.25)=0.820$; second $2.5\cdot19.57/10.56=4.633$; derivative $-3.81$: the reach falls steeply with $n$. \finans
 

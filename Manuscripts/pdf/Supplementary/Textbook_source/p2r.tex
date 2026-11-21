@@ -3,14 +3,14 @@
 \chapter{The Daisy workbench: governing equations worked}\label{ch:daisy}
 \markboth{Daisy equations}{Daisy equations}
 
-The Daisy workbench runs the Daisy 7.1.14 model and draws its results. Where the workbench computes by itself (the tabs Soil column, Process curves and Calibration) the forms below are the ones it uses; where Daisy computes (Scenarios and Experiments) they are the standard forms of the Daisy reference manual. This chapter works the forms with explicit numbers; it does not re-run Daisy, so no number here is a Daisy output. The soil is the loam of the ensemble with illustrative van Genuchten parameters: $\alpha=0.036$ cm$^{-1}$, $n=1.56$, $\theta_s=0.433$ (Saxton and Rawls), $\theta_r=0.02$, $K_s=29.0$ cm d$^{-1}$, $l=0.5$.
+The Daisy workbench runs the Daisy 7.1.14 model and draws its results. Where the workbench computes by itself (the tabs Soil column, Process curves and Calibration) the forms below are the ones it uses; where Daisy computes (Scenarios and Experiments) they are the standard forms of the Daisy reference. This chapter works the forms with explicit numbers; it does not re-run Daisy, so no number here is a Daisy output. The soil is the loam of the ensemble with illustrative van Genuchten parameters: $\alpha=0.036$ cm$^{-1}$, $n=1.56$, $\theta_s=0.433$ (Saxton and Rawls), $\theta_r=0.02$, $K_s=29.0$ cm d$^{-1}$, $l=0.5$.
 
 \section{Retention and conductivity}
 With $m=1-1/n$,
 \begin{equation}\boxed{S_e=[1+(\alpha|h|)^n]^{-m},\quad\theta(h)=\theta_r+(\theta_s-\theta_r)S_e,\quad K(h)=K_sS_e^{\,l}\big[1-(1-S_e^{1/m})^m\big]^2.}\end{equation}
 Field capacity is read at $h=-100$ cm, the wilting point at $-15{,}000$ cm; the available water of a horizon is $\theta_{FC}-\theta_{WP}$.
 
-\begin{table}[H]\centering\small\caption{Retention and conductivity of the loam.}\label{tab:vg}
+\begin{table}[!htbp]\centering\small\caption{Retention and conductivity of the loam.}\label{tab:vg}
 \begin{tabular}{lrr}\toprule
 \hd{$h$ (cm)} & \hd{$\theta$} & \hd{$K$ (cm/d)}\\\midrule
 -10 & 0.4066 & 6.24062\\
@@ -31,7 +31,7 @@ The workbench solves it by an implicit finite-volume scheme with the mass-conser
 \begin{equation}C(h^k)\frac{h^{k+1}-h^k}{\Delta t}+\frac{\theta(h^k)-\theta^n}{\Delta t}=\frac1{\Delta z}\Big[K_{i+1/2}\Big(\frac{h_{i+1}^{k+1}-h_i^{k+1}}{\Delta z}-1\Big)-K_{i-1/2}\Big(\frac{h_i^{k+1}-h_{i-1}^{k+1}}{\Delta z}-1\Big)\Big],\end{equation}
 with $C=d\theta/dh$ and the interface conductivity the arithmetic mean of the two cells. The top boundary is a rain flux, the bottom a free drain ($q=K(h_N)$), a closed bottom or a groundwater table. The step is halved when the iteration does not converge. (The formula is exactly the one coded for this chapter, so its numbers can be reproduced.)
 
-\begin{table}[H]\centering\small\caption{Water content of the loam column after a 30 mm rain in one day (initial $h=-300$ cm, $\theta=0.128$).}\label{tab:richprof}
+\begin{table}[!htbp]\centering\small\caption{Water content of the loam column after a 30 mm rain in one day (initial $h=-300$ cm, $\theta=0.128$).}\label{tab:richprof}
 \begin{tabular}{lrrr}\toprule
 \hd{depth (cm)} & \hd{$\theta$ day 1} & \hd{day 3} & \hd{day 10}\\\midrule
 5 & 0.350 & 0.268 & 0.230\\
@@ -50,7 +50,7 @@ with $C=d\theta/dh$ and the interface conductivity the arithmetic mean of the tw
 \section{Root uptake}
 The potential transpiration $E_p$ is spread over the roots in proportion to root density, $S_p(z)=E_p\,\rho(z)/\int\rho\,dz$, and reduced by a stress factor $\alpha_s(h)$ that is 1 in the comfortable range of the pressure head and falls to 0 near saturation and toward the wilting point: $S(z)=\alpha_s(h)S_p(z)$. For the worked example, $\alpha_s$ is the piecewise-linear Feddes function with breakpoints $h_1=-10$, $h_2=-25$, $h_3=-500$, $h_4=-15{,}000$ cm (illustrative values; the library gives the ones of each crop).
 
-\begin{table}[H]\centering\small\caption{Root uptake for $E_p=5$ mm d$^{-1}$.}\label{tab:feddes}
+\begin{table}[!htbp]\centering\small\caption{Root uptake for $E_p=5$ mm d$^{-1}$.}\label{tab:feddes}
 \begin{tabular}{lrrrrr}\toprule
 \hd{layer (cm)} & \hd{root fraction} & \hd{$h$ (cm)} & \hd{$\alpha_s$} & \hd{$S_p$ (mm/d)} & \hd{$S$ (mm/d)}\\\midrule
 0--20 & 0.50 & -200 & 1.000 & 2.50 & 2.50\\
@@ -69,7 +69,7 @@ The tab checks $P+I=E_s+E_i+T+D+R+\Delta S$ on any log: rain, irrigation, soil e
 \section{Evaporative demand and the canopy}
 The reference rate is Penman--Monteith (Chapter~\ref{ch:weather}); the crop's potential rate is $ET_c=K_cET_0$. The canopy shares the demand with the light that reaches the soil, $\exp(-k\,\mathrm{LAI})$ (Beer--Lambert with extinction coefficient $k$): the soil evaporation is $E_p\,e^{-k\mathrm{LAI}}$ and the transpiration $E_p(1-e^{-k\mathrm{LAI}})$.
 
-\begin{table}[H]\centering\small\caption{Partition of a demand of 5 mm d$^{-1}$, $k=0.5$.}\label{tab:beer}
+\begin{table}[!htbp]\centering\small\caption{Partition of a demand of 5 mm d$^{-1}$, $k=0.5$.}\label{tab:beer}
 \begin{tabular}{lrrrr}\toprule
 \hd{LAI} & \hd{$e^{-kLAI}$} & \hd{share to $T$} & \hd{$E$ (mm/d)} & \hd{$T$ (mm/d)}\\\midrule
 0 & 1.000 & 0.000 & 5.00 & 0.00\\
@@ -87,7 +87,7 @@ The reference rate is Penman--Monteith (Chapter~\ref{ch:weather}); the crop's po
 Heat moves by conduction (and with the water flux): $C_h\,\partial T/\partial t=\partial(\lambda\,\partial T/\partial z)/\partial z-C_wq\,\partial T/\partial z+L_f\,\partial\theta_i/\partial t$. For a sinusoidal surface temperature of angular frequency $\omega$ and no flow, the solution is a wave that damps and lags with depth,
 \begin{equation}\boxed{T(z,t)=\bar T+A_0e^{-z/d_T}\sin(\omega t-z/d_T),\qquad d_T=\sqrt{2D/\omega},\quad D=\lambda/C_h.}\end{equation}
 
-\begin{table}[H]\centering\small\caption{Damping of the temperature wave ($\lambda=1.2$ W m$^{-1}$K$^{-1}$, $C_h=2.2$ MJ m$^{-3}$K$^{-1}$).}\label{tab:heat}
+\begin{table}[!htbp]\centering\small\caption{Damping of the temperature wave ($\lambda=1.2$ W m$^{-1}$K$^{-1}$, $C_h=2.2$ MJ m$^{-3}$K$^{-1}$).}\label{tab:heat}
 \begin{tabular}{lrrrrrr}\toprule
 \hd{wave} & \hd{$d_T$ (m)} & \hd{amp. at 0.1 m (\%)} & \hd{0.5 m} & \hd{1 m} & \hd{2 m} & \hd{lag at 0.5 m (d)}\\\midrule
 daily & 0.122 & 44.2 & 1.7 & 0.0 & 0.0 & 0.6\\
@@ -107,7 +107,7 @@ With a continuous source the analytic solution of the convection--dispersion equ
 \begin{equation}\boxed{\frac{c}{c_0}=\frac12\Big[\mathrm{erfc}\frac{z-vt}{2\sqrt{Dt}}+e^{vz/D}\mathrm{erfc}\frac{z+vt}{2\sqrt{Dt}}\Big],}\end{equation}
 with $v\to v/R$ and $D\to D/R$ for the sorbed solute.
 
-\begin{table}[H]\centering\small\caption{Concentration after 60 d ($\lambda_d=5$ cm, $D=\lambda_dv$).}\label{tab:ob}
+\begin{table}[!htbp]\centering\small\caption{Concentration after 60 d ($\lambda_d=5$ cm, $D=\lambda_dv$).}\label{tab:ob}
 \begin{tabular}{lrr}\toprule
 \hd{depth (cm)} & \hd{$c/c_0$ tracer} & \hd{$c/c_0$ pesticide (no decay)}\\\midrule
 10 & 1.000 & 0.814\\
@@ -131,7 +131,7 @@ The nitrogen follows from the carbon-to-nitrogen ratios: if $N$ is released by t
 \exbox{Immobilisation by straw}{A straw pool holds $C=2000$ kg C ha$^{-1}$ with C:N $=40$, decay rate $k=0.01$ d$^{-1}$ at $T_{\rm ref}=10^\circ$C, $Q_{10}=2$, soil at 20$^\circ$C, moisture factor $f_\theta=0.8$; efficiency $E=0.6$ into a microbial pool with C:N $=8$. Find the decay, CO$_2$ and the nitrogen exchange for one day.}\sol  $f_T=2^{(20-10)/10}=2.00$. Decay $=0.01\times2.00\times0.8\times2000=32.00$ kg C ha$^{-1}$ d$^{-1}$. Built into the microbes: $0.6\times32.00=19.20$; released as CO$_2$: $12.80$. Nitrogen released by the straw: $32.00/40=0.800$ kg N; nitrogen needed by the microbes: $19.20/8=2.400$ kg N. Balance $=0.800-2.400=-1.600$ kg N ha$^{-1}$ d$^{-1}$: negative, so ammonium is \emph{immobilised}. Straw with a C:N of 40 takes mineral N from the soil until the pool has decayed enough for its C:N to fall. The break-even C:N of the source is $C{:}N=8/0.6=13.3$.
 
 
-\begin{table}[H]\centering\small\caption{Nitrification with $V_{\max}=1.5$ mg L$^{-1}$d$^{-1}$, $K_m=2$ mg L$^{-1}$, $f_T=1$, $f_\theta=0.8$.}\label{tab:nit}
+\begin{table}[!htbp]\centering\small\caption{Nitrification with $V_{\max}=1.5$ mg L$^{-1}$d$^{-1}$, $K_m=2$ mg L$^{-1}$, $f_T=1$, $f_\theta=0.8$.}\label{tab:nit}
 \begin{tabular}{lr}\toprule
 \hd{{[}NH$_4^+${]} (mg/L)} & \hd{$r_{nit}$ (mg L$^{-1}$d$^{-1}$)}\\\midrule
 0.5 & 0.240\\
@@ -145,9 +145,9 @@ The nitrogen follows from the carbon-to-nitrogen ratios: if $N$ is released by t
 
 
 \subsection*{Denitrification and nitrous oxide}
-The potential rate follows the CO$_2$ produced, $r_{pot}=f_T(\alpha_F\mathrm{CO}_2^{\rm fast}+\alpha(\mathrm{CO}_2-\mathrm{CO}_2^{\rm fast}))$; it is limited by the water-filled pore space (a rising function of WFPS, 0 at 40\% and 1 at 90\%) and by nitrate; the gas is split by $f_r=\mathrm{N_2/N_2O}$: $\mathrm{N_2O}=r_{act}/(1+f_r)$, $\mathrm{N_2}=r_{act}/(1+1/f_r)$. In the example the WFPS function is taken linear between 40 and 90\% (the shape is not given in the manual; the library function may differ).
+The potential rate follows the CO$_2$ produced, $r_{pot}=f_T(\alpha_F\mathrm{CO}_2^{\rm fast}+\alpha(\mathrm{CO}_2-\mathrm{CO}_2^{\rm fast}))$; it is limited by the water-filled pore space (a rising function of WFPS, 0 at 40\% and 1 at 90\%) and by nitrate; the gas is split by $f_r=\mathrm{N_2/N_2O}$: $\mathrm{N_2O}=r_{act}/(1+f_r)$, $\mathrm{N_2}=r_{act}/(1+1/f_r)$. In the example the WFPS function is taken linear between 40 and 90\% (the shape is not given in the application; the library function may differ).
 
-\begin{table}[H]\centering\small\caption{Water limitation of denitrification.}\label{tab:wfps}
+\begin{table}[!htbp]\centering\small\caption{Water limitation of denitrification.}\label{tab:wfps}
 \begin{tabular}{lrr}\toprule
 \hd{WFPS (\%)} & \hd{$f_w$ (linear)} & \hd{$r_{act}$ (kg N/ha/d), $r_{pot}=0.6$}\\\midrule
 30 & 0.00 & 0.000\\
@@ -174,7 +174,7 @@ Absorbed light is $I_a=I_0(1-e^{-k\,\mathrm{LAI}})$; the gross assimilation of a
 \section{Calibration with three optimisers}
 The tab Calibration minimises the loss $\mathrm{MSE}=\frac1n\sum(y_i-\hat y_i)^2$. To work it, ``measured'' retention data are generated from the loam ($\alpha=0.036$, $n=1.56$) at nine pressure heads with a fixed pseudo-random error of $\pm0.005$ cm$^3$cm$^{-3}$; the loam's $\theta_s$ and $\theta_r$ are held fixed; $\alpha$ and $n$ are the unknowns. Three optimisers are compared: a grid search, a random search and the Nelder--Mead simplex.
 
-\begin{table}[H]\centering\small\caption{Calibration of $\alpha$ and $n$ on nine noisy retention data.}\label{tab:calib}
+\begin{table}[!htbp]\centering\small\caption{Calibration of $\alpha$ and $n$ on nine noisy retention data.}\label{tab:calib}
 \begin{tabular}{lrrrr}\toprule
 \hd{Optimiser} & \hd{evaluations} & \hd{$\alpha$} & \hd{$n$} & \hd{MSE}\\\midrule
 Grid ($29\times33$) & 957 & 0.0375 & 1.550 & 1.340e-05\\

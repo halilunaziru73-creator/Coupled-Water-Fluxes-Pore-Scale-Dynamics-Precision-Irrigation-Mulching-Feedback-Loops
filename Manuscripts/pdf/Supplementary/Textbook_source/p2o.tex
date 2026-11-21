@@ -25,7 +25,7 @@ and $ET_a=K_sET_c$. The depletion $D_r$ changes by $D_{r,d}=D_{r,d-1}-(P_d-RO_d)
 \exbox{TAW, RAW and the stress coefficient}{Maize ($R_{\max}=135$ cm, capped at 100 cm by the model profile; $p=0.50$) on the loam (AWC $=1.7$ mm cm$^{-1}$). At $t=30$ ($K_c=0.75$) with $ET_0=5.2$ mm d$^{-1}$, find $z_r$, TAW, $p_d$, RAW, and $K_s$ when $D_r=40$ mm and when $D_r=55$ mm.}\sol  $1.15K_c/\max(0.3,1.20)=1.15\times0.75/1.20=0.719$; $z_r=15+85\times0.719=76.1$ cm. TAW $=1.7\times76.1=129.4$ mm. $p_d=0.50+0.04(5-0.75\times5.2)=0.50+0.04\times1.1=0.544$; RAW $=0.544\times129.4=70.4$ mm. With $D_r=40\le$ RAW: $K_s=1$. With $D_r=55>$ RAW: $K_s=(129.4-55)/((1-0.544)\times129.4)=74.4/59.0=1.261$.
 
 
-\begin{table}[H]\centering\small\caption{Growth of the maize root zone on the loam ($ET_0=4.5$ mm d$^{-1}$ in $p_d$).}\label{tab:roots}
+\begin{table}[!htbp]\centering\small\caption{Growth of the maize root zone on the loam ($ET_0=4.5$ mm d$^{-1}$ in $p_d$).}\label{tab:roots}
 \begin{tabular}{lrrrrr}\toprule
 \hd{$t$ (d)} & \hd{$K_c$} & \hd{$z_r$ (cm)} & \hd{TAW (mm)} & \hd{$p_d$} & \hd{RAW (mm)}\\\midrule
 0 & 0.30 & 39.4 & 67.0 & 0.646 & 43.3\\
@@ -40,7 +40,7 @@ and $ET_a=K_sET_c$. The depletion $D_r$ changes by $D_{r,d}=D_{r,d-1}-(P_d-RO_d)
 \section{A season of maize}
 Running the balance day by day from planting gives the irrigations of the season. Table~\ref{tab:maizeirr} lists them for surface irrigation ($E_{a,m}=0.60$).
 
-\begin{table}[H]\centering\small\caption{Irrigations of maize on the loam, trigger $-300$ cm, surface irrigation.}\label{tab:maizeirr}
+\begin{table}[!htbp]\centering\small\caption{Irrigations of maize on the loam, trigger $-300$ cm, surface irrigation.}\label{tab:maizeirr}
 \begin{tabular}{lrrr}\toprule
 \hd{day after planting} & \hd{day of year} & \hd{net $I_n$ (mm)} & \hd{gross $I$ (mm)}\\\midrule
 42 & 142 & 81.5 & 135.8\\
@@ -59,7 +59,7 @@ Running the balance day by day from planting gives the irrigations of the season
 The trigger depletion is $f_T\mathrm{TAW}=0.468\times170.0=79.5$ mm. On the last day $D_r$ reaches that value, so the layer irrigates the net depth $I_n=D_r=81.5$ mm and the root zone returns to field capacity ($D_r=0$). The gross depth for surface irrigation is $81.5/0.60=135.8$ mm.
 
 
-\begin{table}[H]\centering\small\caption{The same season under three methods.}\label{tab:method}
+\begin{table}[!htbp]\centering\small\caption{The same season under three methods.}\label{tab:method}
 \begin{tabular}{lrrrrr}\toprule
 \hd{Method} & \hd{$E_{a,m}$} & \hd{irrigations} & \hd{net (mm)} & \hd{gross (mm)} & \hd{lost (mm)}\\\midrule
 surface & 0.60 & 5 & 388 & 647 & 259\\
@@ -74,7 +74,7 @@ The relative yield of a season is the FAO-33 response
 \begin{equation}\boxed{Y_{\rm rel}=\mathrm{clip}\Big(1-K_y\Big(1-\frac{\sum ET_a}{\sum ET_c}\Big);0,1\Big),}\end{equation}
 with $K_y=1$ when the crop has no tabulated value.
 
-\begin{table}[H]\centering\small\caption{Maize on the loam at different triggers (surface irrigation, synthetic year).}\label{tab:trig}
+\begin{table}[!htbp]\centering\small\caption{Maize on the loam at different triggers (surface irrigation, synthetic year).}\label{tab:trig}
 \begin{tabular}{lrrrrrr}\toprule
 \hd{trigger (cm)} & \hd{$f_T$} & \hd{irrigations} & \hd{gross (mm)} & \hd{$\sum ET_a$} & \hd{$\sum ET_a/\sum ET_c$} & \hd{$Y_{\rm rel}$}\\\midrule
 50 & 0.000 & 105 & 734 & 514 & 1.000 & 1.000\\
@@ -92,9 +92,9 @@ with $K_y=1$ when the crop has no tabulated value.
 
 \begin{keybox}Table~\ref{tab:trig} shows the same shape as the manuscript trigger experiment (Chapter~\ref{ch:e2}): yield is flat over a wide range of wet triggers, then falls as the trigger goes drier, while the gross irrigation falls overall (not strictly at every step, because a wetter trigger irrigates earlier and rain refills part of the root zone). At the wettest triggers ($f_T=0$) the rule irrigates every day, which is the model's limit of continuous irrigation. The numbers come from a synthetic climate, so they differ from the manuscript's; the shape is the point.\end{keybox}
 \section{Every crop on one soil}
-Table~\ref{tab:lib} runs the balance for twelve library crops of Table~21.2 of the manual on the same loam, weather, trigger ($-300$ cm) and method (surface), planting on day 100.
+Table~\ref{tab:lib} runs the balance for twelve library crops of Table~21.2 of the application on the same loam, weather, trigger ($-300$ cm) and method (surface), planting on day 100.
 
-\begin{table}[H]\centering\small\caption{Twelve crops on the loam (synthetic year, surface method).}\label{tab:lib}
+\begin{table}[!htbp]\centering\small\caption{Twelve crops on the loam (synthetic year, surface method).}\label{tab:lib}
 \begin{tabular}{lrrrrrrrrr}\toprule
 \hd{Crop} & \hd{$K_{c,\rm ini}$} & \hd{$K_{c,\rm mid}$} & \hd{$K_{c,\rm end}$} & \hd{days} & \hd{$\sum ET_c$} & \hd{net} & \hd{irr.} & \hd{$K_y$} & \hd{$Y_{\rm rel}$}\\\midrule
 Maize & 0.30 & 1.20 & 0.60 & 105 & 514 & 388 & 5 & 1.28 & 0.997\\

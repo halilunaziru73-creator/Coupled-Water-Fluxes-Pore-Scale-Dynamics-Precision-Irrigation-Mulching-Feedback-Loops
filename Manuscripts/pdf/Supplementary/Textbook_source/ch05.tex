@@ -1,7 +1,7 @@
 \chapimg{fig/op05.png}
 \IfFileExists{extra/lead05.tex}{\input{extra/lead05}}{}
-\chapter{Evapotranspiration, Crop Stress and the Crop Library}\label{chap:05}
-\markboth{Evapotranspiration, Crop Stress and the Crop Library}{Evapotranspiration, Crop Stress and the Crop Library}
+\chapter{Evapotranspiration, Crop Water Stress and the Crop Library}\label{chap:05}
+\markboth{Evapotranspiration, Crop Water Stress and the Crop Library}{Evapotranspiration, Crop Water Stress and the Crop Library}
 \IfFileExists{extra/bg05.tex}{\input{extra/bg05}}{}
 IfFileExists{extra/th05.tex}{\input{extra/th05}}{}
 \banner{Evapotranspiration and the two stages of soil evaporation}
@@ -28,10 +28,10 @@ where $t_1$ is the time at which stage 1 ends and $\beta$ (mm\,d$^{-1/2}$) is a 
 \fig{sc_e1k}{0.75}{The SWAFL evaporation layer: from the pore to the atmosphere, with the two stages.}
 
 \section{What a mulch changes}
-A mulch lowers the energy that reaches the soil surface and the vapour exchange with the atmosphere, so it lowers $E_s$, mainly in stage 1, and it intercepts some rain. It does not change transpiration directly. Its effect on the balance is a change of $E_s$ of, say, $-\Delta E$; by Equation~(\ref{eq:bal}) this must be balanced by an increase of $T$, of $D$, of storage or by a decrease of irrigation. Chapter~7 gives the memory fate that tells how it is shared.
+A mulch lowers the energy that reaches the soil surface and the vapour exchange with the atmosphere, so it lowers $E_s$, mainly in stage 1, and it intercepts some rain. It does not change transpiration directly. Its effect on the balance is a change of $E_s$ of, say, $-\Delta E$; by Equation~(\ref{eq:bal}) this must be balanced by an increase of $T$, of $D$, of storage or by a decrease of irrigation. Chapter~8 gives the memory fate that tells how it is shared.
 
 \begin{daisybox}{potential evapotranspiration in Daisy}
-Daisy computes an energy-based potential evapotranspiration from the weather of its input file and divides it between the canopy and the soil according to the cover. The soil evaporation of Daisy then follows the water content of the top layers through the Richards equation, so the two-stage behaviour of this chapter appears in the output without being imposed. Daisy's logs give $T$, $E_s$ and the canopy evaporation separately, and the audit of Chapter~8 asks whether they add up to $ET$.
+Daisy computes an energy-based potential evapotranspiration from the weather of its input file and divides it between the canopy and the soil according to the cover. The soil evaporation of Daisy then follows the water content of the top layers through the Richards equation, so the two-stage behaviour of this chapter appears in the output without being imposed. Daisy's logs give $T$, $E_s$ and the canopy evaporation separately, and the audit of Chapter~9 asks whether they add up to $ET$.
 \end{daisybox}
 
 \exbox{}{Compute $ET_0$ for $T=30\,^\circ$C, $R_n=18$, $G=0$, $u_2=3$, relative humidity 35 per cent, $P=101.3$ kPa.}\sol \givenline{$T=30\,^\circ$ C ; $R_n=18$ ; $G=0$ ; $u_2=3$ ; $P=101.3$ kPa}\ans $e_s=4.243$, $e_a=1.485$, $\Delta=0.2434$, $\gamma=0.0674$; $ET_0=9.07$ mm\,d$^{-1}$. \finans
@@ -50,7 +50,7 @@ Beyond $RAW$ the transpiration falls linearly with the depletion:
 \begin{equation}\label{eq:Ks}\boxed{K_s=\begin{cases}1,&D_r\le RAW\\[2pt] \dfrac{TAW-D_r}{(1-p)\,TAW},&D_r>RAW\end{cases}\qquad ET_a=K_s\,K_c\,ET_0 .}\end{equation}
 \par\noindent where $K_s$ is the water-stress coefficient (0 to 1), $D_r$ the root-zone depletion (mm), ${\rm RAW}=p\,{\rm TAW}$ the readily available water (mm), ${\rm TAW}$ the total available water (mm), $p$ the fraction of TAW that the crop can use without stress, $ET_a$ the actual and $ET_0$ the reference evapotranspiration (mm\,d$^{-1}$) and $K_c$ the crop coefficient.
 
-\exbox{A loam under drying}{The loam S06 has $TAW=150$ mm; take $p=0.5$, so $RAW=75$ mm. With $K_c=1.15$ and $ET_0=4.48$ mm\,d$^{-1}$ (Chapter~13) the unstressed demand is $ET_c=5.15$ mm\,d$^{-1}$. At $D_r=60$ and 75 mm, $K_s=1$ and $ET_a=5.15$. At $D_r=100$ mm, $K_s=(150-100)/(0.5\cdot150)=0.667$ and $ET_a=3.43$ mm\,d$^{-1}$. At $D_r=120$, $K_s=0.40$ and $ET_a=2.06$. The depletion at which the field must be irrigated to avoid stress is $RAW=75$ mm; irrigating at the trigger gives the schedule of the application.}
+\exbox{A loam under drying}{The loam S06 has $TAW=150$ mm; take $p=0.5$, so $RAW=75$ mm. With $K_c=1.15$ and $ET_0=4.48$ mm\,d$^{-1}$ (Chapter~14) the unstressed demand is $ET_c=5.15$ mm\,d$^{-1}$. At $D_r=60$ and 75 mm, $K_s=1$ and $ET_a=5.15$. At $D_r=100$ mm, $K_s=(150-100)/(0.5\cdot150)=0.667$ and $ET_a=3.43$ mm\,d$^{-1}$. At $D_r=120$, $K_s=0.40$ and $ET_a=2.06$. The depletion at which the field must be irrigated to avoid stress is $RAW=75$ mm; irrigating at the trigger gives the schedule of the application.}
 
 
 
@@ -59,12 +59,12 @@ A widely used linear relation (FAO-33) links the relative yield loss to the rela
 \begin{equation}\label{eq:Ky}\boxed{1-\frac{Y_a}{Y_m}=K_y\Bigl(1-\frac{ET_a}{ET_m}\Bigr).}\end{equation}
 \par\noindent where $Y_a$ and $Y_m$ are the actual and maximum yields (Mg\,ha$^{-1}$), $ET_a$ and $ET_m$ the actual and maximum seasonal evapotranspiration (mm) and $K_y$ the yield response factor of the crop (dimensionless).
 
-\exbox{A hypothetical cereal}{With a yield response factor $K_y=1.15$ (illustrative) and a season in which $ET_a/ET_m=0.80$, the relative yield is $Y_a/Y_m=1-1.15(0.20)=0.77$. If $Y_m=6.6$ Mg\,ha$^{-1}$, as in the best triggers of the ensemble (the reach figure of Chapter~5, panel d), $Y_a=5.1$ Mg\,ha$^{-1}$. The ensemble's rainfed sand yields about 1.1 Mg\,ha$^{-1}$, because a trigger beyond the reach means no irrigation at all.}
+\exbox{A hypothetical cereal}{With a yield response factor $K_y=1.15$ (illustrative) and a season in which $ET_a/ET_m=0.80$, the relative yield is $Y_a/Y_m=1-1.15(0.20)=0.77$. If $Y_m=6.6$ Mg\,ha$^{-1}$, as in the best triggers of the ensemble (the reach figure of Chapter~6, panel d), $Y_a=5.1$ Mg\,ha$^{-1}$. The ensemble's rainfed sand yields about 1.1 Mg\,ha$^{-1}$, because a trigger beyond the reach means no irrigation at all.}
 
 
 
 \section{Link with the trigger}
-The suction at the sensor at which the depletion reaches $RAW$ is the \emph{ideal} trigger. If it lies beyond the reach $\hc$ of the soil, the crop cannot reach it and the field is stressed before the sensor says so. Comparing the two is the use of Chapter~5 in design: choose the trigger below the smaller of the two, and below $\hc/2$ in practice.
+The suction at the sensor at which the depletion reaches $RAW$ is the \emph{ideal} trigger. If it lies beyond the reach $\hc$ of the soil, the crop cannot reach it and the field is stressed before the sensor says so. Comparing the two is the use of Chapter~6 in design: choose the trigger below the smaller of the two, and below $\hc/2$ in practice.
 \exbox{}{A soil has $TAW=95$ mm (S05) and $p=0.55$. Find $RAW$ and $K_s$ at $D_r=70$ mm.}\sol \givenline{$TAW=95$ mm ; $p=0.55$ ; $D_r=70$ mm}\ans $RAW=0.55(95)=52.3$ mm; $K_s=(95-70)/(0.45\cdot95)=0.585$. \finans
 
 \exbox{}{With $K_y=0.9$ and a season mean $ET_a/ET_m=0.7$, find the relative yield.}\sol \givenline{$K_y=0.9$ ; $ET_a/ET_m=0.7$}\ans $1-0.9(0.3)=0.73$. \finans

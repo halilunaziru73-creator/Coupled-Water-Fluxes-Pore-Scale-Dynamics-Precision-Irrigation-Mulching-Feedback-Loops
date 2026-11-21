@@ -21,7 +21,7 @@ The sums over the following $N=14$ days are $\Sigma X=\sum_{j=1}^{14}X_{k+j}$ fo
 For the calendar year the tab gives rain, irrigation, other evaporation (interception, litter, ponded water, snow), soil evaporation, transpiration, drainage and the storage change; the balance closes by the identity
 \begin{equation}\boxed{\Delta S=P+I-E_{\rm other}-E-T-D.}\end{equation}
 
-\begin{table}[H]\centering\small\caption{Block 3 of the Results tab.}\label{tab:year}
+\begin{table}[!htbp]\centering\small\caption{Block 3 of the Results tab.}\label{tab:year}
 \begin{tabular}{lr}\toprule
 \hd{Quantity} & \hd{mm (year 1, loam, $-300$ cm)}\\\midrule
 Rain $P$ & 606.1\\
@@ -39,7 +39,7 @@ Deepest roots (cm) & 82\\\bottomrule\end{tabular}\end{table}
 \section{Block 4 and the Charts tab: twenty seasons}
 Block 4 shows the 20-year averages of the annual model, and each chart has a line stating the mean, the 10--90\% range, the lowest and highest season and the variation between years. The variation is the coefficient of variation $\mathrm{CV}=100\,s/\bar x$ with $s$ the sample standard deviation.
 
-\begin{table}[H]\centering\small\caption{Reliability over twenty synthetic seasons (seeds 1--20), loam, trigger $-300$ cm, mm per year.}\label{tab:rel}
+\begin{table}[!htbp]\centering\small\caption{Reliability over twenty synthetic seasons (seeds 1--20), loam, trigger $-300$ cm, mm per year.}\label{tab:rel}
 \begin{tabular}{lrrrrrr}\toprule
 \hd{Quantity} & \hd{mean} & \hd{10\%} & \hd{90\%} & \hd{lowest} & \hd{highest} & \hd{CV (\%)}\\\midrule
 Rain & 602 & 522 & 735 & 438 & 765 & 14\\
@@ -54,7 +54,7 @@ Transpiration & 230 & 229 & 230 & 228 & 230 & 0\\\bottomrule\end{tabular}\end{ta
 \section{The pinned baseline}
 Press Pin and the tiles of Block 4 are stored; afterwards each tile shows $\Delta_i=x_i-x_i^{\rm pin}$ with $\blacktriangle$ for an increase, $\blacktriangledown$ for a decrease, green when the change is in the better direction, red when worse and ``= no change'' when $|\Delta_i|<10^{-9}$. Lower is better for soil evaporation, drainage, irrigation and nitrogen leaching; higher is better for yield and irrigation efficiency; transpiration, evapotranspiration and rainfall are neutral.
 
-\begin{table}[H]\centering\small\caption{Pin at the trigger $-300$ cm, then move to $-1500$ cm (twenty-season means, mm per year).}\label{tab:pin}
+\begin{table}[!htbp]\centering\small\caption{Pin at the trigger $-300$ cm, then move to $-1500$ cm (twenty-season means, mm per year).}\label{tab:pin}
 \begin{tabular}{lrrrll}\toprule
 \hd{Tile} & \hd{pinned (-300 cm)} & \hd{now (-1500 cm)} & \hd{$\Delta$} & \hd{arrow} & \hd{colour}\\\midrule
 Soil evaporation & 157.8 & 156.1 & -1.7 & $\blacktriangledown$ & better (green)\\

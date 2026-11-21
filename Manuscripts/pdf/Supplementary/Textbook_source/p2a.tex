@@ -4,7 +4,7 @@
 \chapter{Engine 1: depletion, critical suction and the meta-model}\label{ch:e1}
 \markboth{Engine 1}{Engine 1}
 
-Part II treats the application layer by layer. Every layer of SWAFL is driven by one of two engines (the Daisy meta-model and the daily bucket model) or by a design module. For each layer this part states the relations that the manual gives, then solves them with numbers. The numbers come from running the stated equations; every problem is solved in full, and where an input is not published (an annual flux, say) it is labelled as an assumed value.
+Part II treats the application layer by layer. Every layer of SWAFL is driven by one of two engines (the Daisy meta-model and the daily bucket model) or by a design module. For each layer this part states the relations that the application gives, then solves them with numbers. The numbers come from running the stated equations; every problem is solved in full, and where an input is not published (an annual flux, say) it is labelled as an assumed value.
 
 \section{Depletion between field capacity and wilting point}
 The application defines depletion of plant-available water between field capacity (suction 100 cm, pF 2.0) and the wilting point (15,849 cm, pF 4.2):
@@ -23,7 +23,7 @@ $f=0$ is field capacity and $f=1$ is the wilting point.
 
 
 \exbox{Inverting the depletion by bisection}{Find the suction at which the loam S06 reaches the soil-independent critical depletion $f^*=0.45$. The application solves $f(h)=f^*$ by bisection on $\log_{10}|h|\in[0,4.6]$ with 60 halvings.}\sol  Start with the interval $[0,4.6]$. At each step take the midpoint $x=\log_{10}h$, evaluate $f$ with Equation~(\ref{eq:fdep}) and keep the half that still brackets $0.45$ (if $f<0.45$ the root is above, so the lower end moves up). The first eight steps are in Table~\ref{tab:bis}; the interval has then shrunk to $4.6/2^8=0.018$ in $\log_{10}h$, that is 4 per cent in $h$. After 60 halvings the width is $4\times10^{-18}$ and the answer is $h^*=284.3$ cm.
-\begin{table}[H]\centering\small\caption{First eight bisection steps for the loam at $f^*=0.45$.}\label{tab:bis}
+\begin{table}[!htbp]\centering\small\caption{First eight bisection steps for the loam at $f^*=0.45$.}\label{tab:bis}
 \begin{tabular}{lrrrr}\toprule
 \hd{Step} & \hd{$\log_{10}h$ mid} & \hd{$h$ (cm)} & \hd{$f(h)$} & \hd{Keep}\\\midrule
 1 & 2.3000 & 199.5 & 0.3201 & lower\\
@@ -48,7 +48,7 @@ $f=0$ is field capacity and $f=1$ is the wilting point.
 
 \section{Table of critical suctions for the ten soils}
 \exbox{The table of critical suctions}{Reproduce the application's table of effective parameters: for each of the ten soils compute the suction $h^*$ at $f^*=0.45$ and the depletion at 300 cm.}\sol  Repeat the bisection for every soil. The result is in Table~\ref{tab:h45}. The published values are $387, 262, 143, 160, 195, 284, 401, 311, 503, 729$ cm and $0.380, 0.496, 0.842, 0.756, 0.627, 0.468, 0.367, 0.439, 0.314, 0.237$; the largest difference is 1 cm and 0.001 in $f$, which comes from the rounding of the printed parameters.
-\begin{table}[H]\centering\small\caption{Critical suction at $f^*=0.45$ and depletion at 300 cm, computed from Equation~(\ref{eq:fdep}).}\label{tab:h45}
+\begin{table}[!htbp]\centering\small\caption{Critical suction at $f^*=0.45$ and depletion at 300 cm, computed from Equation~(\ref{eq:fdep}).}\label{tab:h45}
 \begin{tabular}{lrrrrrr}\toprule
 \hd{ID} & \hd{Soil} & \hd{$\alpha$ (cm$^{-1}$)} & \hd{$n$} & \hd{AWC (mm/cm)} & \hd{$h^*$ (cm)} & \hd{$f(300)$}\\\midrule
 S01 & Coarse loam & 0.0961 & 1.353 & 1.5 & 387 & 0.379\\

@@ -1,7 +1,7 @@
 \chapimg{fig/sh02.jpg}
 \IfFileExists{extra/lead02.tex}{\input{extra/lead02}}{}
-\chapter{Flow, Roots and the Daisy Model}\label{chap:02}
-\markboth{Flow, Roots and the Daisy Model}{Flow, Roots and the Daisy Model}
+\chapter{Water Flow, Root Uptake and the Daisy Model}\label{chap:02}
+\markboth{Water Flow, Root Uptake and the Daisy Model}{Water Flow, Root Uptake and the Daisy Model}
 \IfFileExists{extra/bg02.tex}{\input{extra/bg02}}{}
 IfFileExists{extra/th02.tex}{\input{extra/th02}}{}
 \banner{The Richards equation, roots and the Daisy ensemble}
@@ -19,9 +19,9 @@ Equation~(\ref{eq:richards}) is the Richards equation. Together with the retenti
 \section{Uptake by roots: the conductance of the soil around a root}\label{ch:root-cyl}
 Roots take water from the soil around them. For a cylindrical root of radius $r_0$ in a soil cylinder of radius $r_1$, steady radial flow gives an uptake per unit root length
 \begin{equation}\label{eq:radial}\boxed{u\simeq\frac{2\pi}{\ln(r_1/r_0)}\int_{h_{\mathrm{root}}}^{h}K(h')\,dh'\approx\frac{2\pi}{\ln(r_1/r_0)}\,K(h)\,\Delta h ,}\end{equation}
-where $\Delta h$ is the head drop from the bulk soil to the root surface (Gardner, 1960). Multiplying by the root length density $L_v$ gives the sink per unit volume. Two things follow. First, the uptake is proportional to $K(h)$, so as the soil dries and $K$ falls by orders of magnitude (Chapter~3), uptake falls with it. Second, $\Delta h$ is bounded by the plant, since the root water potential cannot fall below the wilting point. So there is a suction beyond which the soil delivers too little water for the crop to dry it further in a season. This is the origin of the reach (Chapter~\ref{ch:reach}). Daisy computes uptake from a soil--root potential difference over a conductance of this type (Abrahamsen and Hansen, 2000).
+where $\Delta h$ is the head drop from the bulk soil to the root surface (Gardner, 1960). Multiplying by the root length density $L_v$ gives the sink per unit volume. Two things follow. First, the uptake is proportional to $K(h)$, so as the soil dries and $K$ falls by orders of magnitude (Chapter~4), uptake falls with it. Second, $\Delta h$ is bounded by the plant, since the root water potential cannot fall below the wilting point. So there is a suction beyond which the soil delivers too little water for the crop to dry it further in a season. This is the origin of the reach (Chapter~\ref{ch:reach}). Daisy computes uptake from a soil--root potential difference over a conductance of this type (Abrahamsen and Hansen, 2000).
 
-\exbox{The collapse of uptake}{Take $\Delta h$ and the geometry as fixed and compare the uptake at two suctions in the silty clay loam S10. From Chapter~3, $\Kr(300\text{ cm})=1.5\times10^{-3}$ and $\Kr(3000\text{ cm})\approx 5.5\times10^{-6}$ (from the asymptote of Chapter~\ref{ch:reach}). With the same $\Delta h$ and root length density the uptake falls by a factor of about 280 when the soil dries from 300 to 3000 cm. In the sand the same drying takes $\Kr$ from $2.7\times10^{-11}$ to about $2\times10^{-17}$: the uptake is already negligible at 300 cm.}
+\exbox{The collapse of uptake}{Take $\Delta h$ and the geometry as fixed and compare the uptake at two suctions in the silty clay loam S10. From Chapter~4, $\Kr(300\text{ cm})=1.5\times10^{-3}$ and $\Kr(3000\text{ cm})\approx 5.5\times10^{-6}$ (from the asymptote of Chapter~\ref{ch:reach}). With the same $\Delta h$ and root length density the uptake falls by a factor of about 280 when the soil dries from 300 to 3000 cm. In the sand the same drying takes $\Kr$ from $2.7\times10^{-11}$ to about $2\times10^{-17}$: the uptake is already negligible at 300 cm.}
 
 
 
@@ -62,7 +62,7 @@ Under fast wetting and drying the water content lags the equilibrium of the rete
 
 \exbox{}{From Equation~(\ref{eq:radial}), show that if $K$ falls by a factor of $10^3$ and $\Delta h$ is fixed, the uptake falls by the same factor.}\sol  $u\propto K(h)\Delta h$ is linear in $K$ at fixed $\Delta h$. \finans
 
-\exbox{}{Starting from Equation~(\ref{eq:darcy}), derive Equation~(\ref{eq:richards}) by applying conservation of mass to a thin layer.}\sol  Mass in a layer of thickness $dz$: $\partial\theta/\partial t\,dz=q(z)-q(z+dz)-S_r\,dz$, then use Equation (4.1). \finans
+\exbox{}{Starting from Equation~(\ref{eq:darcy}), derive Equation~(\ref{eq:richards}) by applying conservation of mass to a thin layer.}\sol  Mass in a layer of thickness $dz$: $\partial\theta/\partial t\,dz=q(z)-q(z+dz)-S_r\,dz$, then use Equation (5.1). \finans
 
 \exbox{}{Why does Daisy's solution of the equilibrium Richards equation not need a sensor-lag parameter?}\sol  Because the water content is assumed to follow the retention curve at once.
 \banner{The Daisy workbench: planning and reading experiments}
@@ -96,12 +96,12 @@ The second rule of origin says that a decision layer draws a Daisy result only f
 \end{enumerate}
 \exbox{}{Carry out steps 1--4 for the sand S03 and the sandy loam S05. Is the prediction inside the observed interval?}\sol  From the archived trigger runs, a trigger \emph{fires} when the mean irrigation exceeds 5 mm\,yr$^{-1}$. \textbf{Sand S03:} irrigation is $6.4$ mm at 100 cm and $0$ at 150 cm, so the reach lies in $(100,150]$ cm; Equation~(\ref{eq:reach}) predicts $\hc=199$ cm, which is $1.3$ to $2.0$ times above the interval. \textbf{Sandy loam S05:} $17.5$ mm at 800 cm and $4.1$ mm at 1000 cm, so the interval is $(800,1000]$ cm; predicted $1{,}615$ cm, $1.6$ to $2.0$ times above. Neither prediction falls \emph{inside} the observed interval, but both lie within the factor $2.3$ stated for left-out soils; the law overestimates slightly for these two soils. \finans
 
-\exbox{}{Use E10 to estimate $\eta_D$ for a soil and a dose of your choice (Chapter~6), by differencing against the rainfed twin of E0.}\sol  Take the loam S06 and a dose of $10$ mm. The fitted law $\eta_D=\eta_\infty(1-e^{-d/d_D})$ with $\eta_\infty=0.197$ and $d_D=3.89$ mm gives $0.197(1-e^{-2.57})=0.182$. The archived differenced value at 10 mm is $0.173$ (and $0.145$ at 4 mm, $0.165$ at 6 mm); the fit is within $0.01$, consistent with $R^2=0.93$. Of 10 mm applied, about $1.7$ mm drains. \finans
+\exbox{}{Use E10 to estimate $\eta_D$ for a soil and a dose of your choice (Chapter~7), by differencing against the rainfed twin of E0.}\sol  Take the loam S06 and a dose of $10$ mm. The fitted law $\eta_D=\eta_\infty(1-e^{-d/d_D})$ with $\eta_\infty=0.197$ and $d_D=3.89$ mm gives $0.197(1-e^{-2.57})=0.182$. The archived differenced value at 10 mm is $0.173$ (and $0.145$ at 4 mm, $0.165$ at 6 mm); the fit is within $0.01$, consistent with $R^2=0.93$. Of 10 mm applied, about $1.7$ mm drains. \finans
 
 \exbox{}{Use E9 to compute $\phi_D$ for one soil with Equation~(\ref{eq:phi}) and compare with Table~\ref{tab:soils}.}\sol  For the sand S03 the archived pooled within-P slope is $\phi_D=0.8455$ (Table~\ref{tab:soils} lists $0.846$). The competition law then implies $\Ks/q^*=0.8455/0.1545=5.47$. For the silty clay loam, $\phi_D=0.0220$ gives $\Ks/q^*=0.0225$. The law reproduces the table by construction; what it adds is the ratio $5.47/0.0225=243$ between the two soils.
 \banner{Solving the Richards equation numerically}\label{ch:rich}
 \section{Why numerics matter}
-Chapter~4 wrote the Richards equation. It has no general analytical solution, because $K$ and $C=d\theta/dh$ vary by orders of magnitude with $h$. Daisy solves it numerically in every run, and a run is counted as a \emph{solver failure} when the solution cannot be completed: 149 of the 10,190 runs of the ensemble. Knowing how the scheme works explains both the failures and the limits of the equilibrium assumption. \finans
+Chapter~5 wrote the Richards equation. It has no general analytical solution, because $K$ and $C=d\theta/dh$ vary by orders of magnitude with $h$. Daisy solves it numerically in every run, and a run is counted as a \emph{solver failure} when the solution cannot be completed: 149 of the 10,190 runs of the ensemble. Knowing how the scheme works explains both the failures and the limits of the equilibrium assumption. \finans
 
 \section{The head-based form and the capacity}
 Let $\psi=-h$ be the pressure head (cm, negative in unsaturated soil) and let $z$ be the depth, positive downward. The downward flux is $q=K(\psi)\bigl(1-\partial\psi/\partial z\bigr)$ and the equation is
@@ -160,14 +160,14 @@ for it in range(50):                       # modified Picard iterations
 A numerical solution is not an answer until you have tested that it does not depend on the grid and the time step. For the loam at $t=0.25$ d, 100 cells with $\Delta t=5\times10^{-4}$ d give $I=7.59$ cm, 100 cells with $2\times10^{-4}$ d give 7.57 cm, and 200 cells with $2\times10^{-4}$ d give 7.71 cm: the results agree to within 2 per cent, which is adequate here. For the sand S03 (very narrow pore-size distribution, $\Ks=712.8$ cm\,d$^{-1}$), the front is so sharp that the same test fails: 100 cells give 1.54 cm and 200 cells give 3.27 cm at the same time. This is the kind of difficulty that makes a solver fail, and it is consistent with the sand S03 having lost 13 of the 100 runs of its E9 lattice (87 are valid). The remedy is a finer grid and a much smaller time step, not more iterations.
 
 \begin{daisybox}{what Daisy adds}
-Daisy solves the same equation in a layered column, with root uptake $S_r$ from Chapter~4, a surface boundary that switches between a prescribed flux (rain, irrigation, evaporation demand) and a prescribed head (ponding), and a lower boundary set in the set-up file. Its logs of suction and water content by layer and day are what the figures of the study are built from. A run that fails to converge is written as a failure, and is excluded from the 10,041 valid runs.
+Daisy solves the same equation in a layered column, with root uptake $S_r$ from Chapter~5, a surface boundary that switches between a prescribed flux (rain, irrigation, evaporation demand) and a prescribed head (ponding), and a lower boundary set in the set-up file. Its logs of suction and water content by layer and day are what the figures of the study are built from. A run that fails to converge is written as a failure, and is excluded from the 10,041 valid runs.
 \end{daisybox}
 
-\exbox{}{Derive Equation~(\ref{eq:cap}) by differentiating $\theta(\psi)=\theta_r+(\theta_s-\theta_r)[1+(\alpha|\psi|)^n]^{-m}$.}\sol  $d\theta/d\psi$ with $x=\alpha|\psi|$, $dx/d\psi=-\alpha$ for $\psi<0$: $(\theta_s-\theta_r)(-m)(1+x^n)^{-m-1}n\,x^{n-1}(-\alpha)$, which is Equation (12.2). \finans
+\exbox{}{Derive Equation~(\ref{eq:cap}) by differentiating $\theta(\psi)=\theta_r+(\theta_s-\theta_r)[1+(\alpha|\psi|)^n]^{-m}$.}\sol  $d\theta/d\psi$ with $x=\alpha|\psi|$, $dx/d\psi=-\alpha$ for $\psi<0$: $(\theta_s-\theta_r)(-m)(1+x^n)^{-m-1}n\,x^{n-1}(-\alpha)$, which is Equation (13.2). \finans
 
 \exbox{}{Compute $C$ at $\psi=-300$ cm for the loam, with $\theta_s-\theta_r=0.352$.}\sol \givenline{$\psi=-300$ cm ; $\theta_s-\theta_r=0.352$}\ans $C(-300)=0.352(0.036)(0.359)(1.56)(3.79)(0.00625)=1.7\times10^{-4}$ cm$^{-1}$. \finans
 
-\exbox{}{Show that when the iteration of Equation~(\ref{eq:picard}) has converged, the discrete mass balance Equation~(\ref{eq:cellbal}) holds.}\sol  If $\psi^{k+1}=\psi^k$ the capacity term vanishes and the remaining term $(\theta^k-\theta^j)/\Delta t$ is the storage change with $\theta^k=\theta(\psi^{j+1})$; the right-hand side is the flux divergence at $\psi^{j+1}$, which is Equation (12.4). \finans
+\exbox{}{Show that when the iteration of Equation~(\ref{eq:picard}) has converged, the discrete mass balance Equation~(\ref{eq:cellbal}) holds.}\sol  If $\psi^{k+1}=\psi^k$ the capacity term vanishes and the remaining term $(\theta^k-\theta^j)/\Delta t$ is the storage change with $\theta^k=\theta(\psi^{j+1})$; the right-hand side is the flux divergence at $\psi^{j+1}$, which is Equation (13.4). \finans
 
 \exbox{}{Explain in a few sentences why the arithmetic mean of $K$ at a face overestimates the flux in front of a sharp wetting front.}\sol  At a sharp front $K$ changes by orders of magnitude between neighbouring cells. The arithmetic mean is dominated by the wet value and lets water into the dry cell far faster than it can go; the geometric mean is close to the smaller value. \finans
 

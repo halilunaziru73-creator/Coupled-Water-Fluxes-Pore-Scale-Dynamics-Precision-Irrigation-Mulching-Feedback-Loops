@@ -13,14 +13,15 @@
   \node[text=khgold,font=\sfb\fontsize{74}{76}\selectfont,inner sep=0] at ($(current page.north)+(0,-74mm)$) {\scalebox{0.72}[1]{DYNAMICS}};
   \node[text=white,font=\sffamily\itshape\fontsize{12.5}{15}\selectfont,inner sep=0,align=center,text width=0.78\paperwidth] at ($(current page.north)+(0,-100mm)$) {From the pore to the field: the mathematics of soil water, \hbox{precision} irrigation, mulching and feedback loops, worked in full};
   % the author's equations, set as a textbook display
-  \node[anchor=north,fill=khnavy!85!black,fill opacity=0.80,text opacity=1,text=white,inner xsep=6mm,inner ysep=4.5mm,rounded corners=2pt] at ($(current page.north)+(0,-116mm)$) {\begin{minipage}{0.74\paperwidth}\centering\fontsize{10}{12}\selectfont
-  $\displaystyle P_r+I=\mathit{ET}+D+\Delta S+Q_r$\\[2.2mm]
-  $\displaystyle \bar R=\mathit{ET}+D-P_r-I,\qquad \varepsilon=\frac{W-\mathit{ET}-D}{W}$\\[2.6mm]
-  $\displaystyle h_c=\frac1\alpha\Bigl(\frac{m^{2}}{\kappa}\Bigr)^{1/[2n+\ell(n-1)]}$\\[2.6mm]
-  $\displaystyle \eta_X=\frac{X-X_0}{I},\qquad \eta_D(d)=\eta_\infty\bigl(1-e^{-d/d_D}\bigr)$\\[2.6mm]
-  $\displaystyle \phi_D=\frac{K_s}{K_s+q^{*}},\qquad \kappa=-\frac{\Delta I}{\Delta P_r}$\\[2.4mm]
-  $\displaystyle \ln R=5.75-0.355\ln P+0.863\ln E_p+0.136\,\Delta T$\\[2.6mm]
-  $\displaystyle \frac{\partial\theta}{\partial t}=\frac{\partial}{\partial z}\Bigl[K(h)\Bigl(\frac{\partial h}{\partial z}+1\Bigr)\Bigr]-S$
+  \node[anchor=north,fill=khnavy!85!black,fill opacity=0.80,text opacity=1,text=white,inner xsep=6mm,inner ysep=4.5mm,rounded corners=2pt] at ($(current page.north)+(0,-116mm)$) {\begin{minipage}{0.80\paperwidth}\centering\fontsize{8.6}{10.4}\selectfont
+  $\displaystyle h=\frac{2\gamma\cos\beta}{\rho_w g\,r},\qquad Q=\frac{\pi r^{4}\,\Delta p}{8\mu L},\qquad K_s=\frac{\rho_w g}{8\mu}\,\phi\,r^{2}$\\[2.4mm]
+  $\displaystyle \theta(h)=\theta_r+\frac{\theta_s-\theta_r}{\bigl[1+(\alpha|h|)^{n}\bigr]^{m}},\qquad K(S_e)=K_s S_e^{\ell}\Bigl[1-\bigl(1-S_e^{1/m}\bigr)^{m}\Bigr]^{2}$\\[2.6mm]
+  $\displaystyle \frac{\partial\theta}{\partial t}=\frac{\partial}{\partial z}\Bigl[K(h)\Bigl(\frac{\partial h}{\partial z}+1\Bigr)\Bigr]-S_r,\qquad k=\frac{\phi^{3}}{5S_0^{2}(1-\phi)^{2}}$\\[2.6mm]
+  $\displaystyle ET_0=\frac{0.408\,\Delta(R_n-G)+\gamma\frac{900}{T+273}u_2(e_s-e_a)}{\Delta+\gamma(1+0.34u_2)}$\\[2.8mm]
+  $\displaystyle P_r+I=\mathit{ET}+D+\Delta S+Q_r,\qquad \bar R=\mathit{ET}+D-P_r-I,\qquad \varepsilon=\frac{W-\mathit{ET}-D}{W}$\\[2.6mm]
+  $\displaystyle h_c=\frac1\alpha\Bigl(\frac{m^{2}}{\kappa}\Bigr)^{1/[2n+\ell(n-1)]},\qquad \phi_D=\frac{K_s}{K_s+q^{*}},\qquad \kappa=-\frac{\Delta I}{\Delta P_r}$\\[2.6mm]
+  $\displaystyle \eta_X=\frac{X-X_0}{I},\qquad \eta_D(d)=\eta_\infty\bigl(1-e^{-d/d_D}\bigr),\qquad \mathrm{DI}=\frac{E_s-D}{E_s+\max(D,0)}$\\[2.6mm]
+  $\displaystyle \frac{\mathrm dC}{\mathrm dt}=-k\,f_T f_\theta\,C,\qquad L^{2}=\frac{8Kd\,h+4Kh^{2}}{q},\qquad \ln R=5.75-0.355\ln P+0.863\ln E_p+0.136\,\Delta T$
   \end{minipage}};
   % author and mark
   \node[text=white,font=\sfb\fontsize{19}{22}\selectfont,inner sep=0] at ($(current page.south)+(0,38mm)$) {NAZIRU HALILU};
@@ -36,7 +37,7 @@
 \chapter*{Preface}
 Soil water is the quiet quantity of agriculture: it cannot be seen from the road, it changes every day, and almost every decision of the farmer (when to irrigate, how much, by what method, whether to mulch, whether to drain) is a decision about it. This book was written to give those decisions a mathematical footing. It takes the equations that govern the water in a soil from the scale of one pore to the scale of a field, shows where each one comes from, and works it with numbers.
 
-The book follows the structure of the SWAFL project (Soil Water, Atmosphere, Feedback and Layout). Part I builds the theory: the physics of soil water, the models of its movement, the reach of a suction trigger, the fate of an irrigation millimetre, and the audit of a balance. Part II takes the layers of the SWAFL application one by one (irrigation design, irrigation control, mulch and evaporation, soil structure and tillage, phenotyping, the field water balance, seasonal data, crops, feedback loops and the Daisy model) and, for each, gives the background, the types or divisions of the subject, the governing equations with every symbol defined, the factors and tables the application uses, worked examples and a complete design project.
+The book follows the structure of the SWAFL project (Soil Water, Atmosphere, Feedback and Layout). Part I builds the theory: the physics of soil water, the geometry of the pores, the models of its movement, the reach of a suction trigger, the fate of an irrigation millimetre, and the audit of a balance. Part II takes the layers of the SWAFL application one by one (irrigation design, irrigation control, mulch and evaporation, soil structure and tillage, phenotyping, the field water balance, seasonal data, crops, feedback loops and the Daisy model) and, for each, gives the background, the types or divisions of the subject, the governing equations with every symbol defined, the factors and tables the application uses, worked examples and a complete design project. Part III explains the process map of the Daisy model, box by box. Part IV is an atlas of the results: every figure of the study with its equation, its data and the way to read it. Part V gives the worked solutions and the reference tables.
 
 Every chapter ends with exercises that carry their answers, a short list of questions under \emph{Do you know?}, and objective-type questions with a key. The numerical examples were computed by the same algorithms as the application, so a reader who repeats them in the software, or in a few lines of code, will obtain the same numbers.
 
@@ -74,7 +75,7 @@ This book teaches, from first principles, the equations that sit behind the reac
 
 \subhd{Scope.} All findings concern a one-dimensional matrix-flow model; no field validation is claimed. Where a law is phenomenological and not derived from physics, the text says so.
 
-\subhd{Status of this edition.} Part I presents the derivations. Part II works the mathematics of every SWAFL layer and of the Daisy workbench with computed examples.
+\subhd{Status of this edition.} Part I presents the derivations, beginning with the physics of soil water and the geometry of its pores. Part II works the mathematics of every SWAFL layer and of the Daisy workbench with computed examples. Part III describes the Daisy process map, Part IV is the atlas of results and Part V holds the worked solutions and the reference tables.
 \chapter*{List of symbols and units}
 \small
 \begin{longtable}{@{}p{0.16\textwidth}p{0.60\textwidth}p{0.16\textwidth}@{}}

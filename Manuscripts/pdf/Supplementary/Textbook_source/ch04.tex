@@ -1,7 +1,7 @@
 \chapimg{fig/op04.png}
 \IfFileExists{extra/lead04.tex}{\input{extra/lead04}}{}
-\chapter{Auditing a Model: Balance, Statistics and Limits}\label{chap:04}
-\markboth{Auditing a Model: Balance, Statistics and Limits}{Auditing a Model: Balance, Statistics and Limits}
+\chapter{Model Auditing: Balance, Statistics and Limits}\label{chap:04}
+\markboth{Model Auditing: Balance, Statistics and Limits}{Model Auditing: Balance, Statistics and Limits}
 \IfFileExists{extra/bg04.tex}{\input{extra/bg04}}{}
 IfFileExists{extra/th04.tex}{\input{extra/th04}}{}
 \banner{Closing the water balance: an audit of model outputs}\label{ch:audit}
@@ -126,7 +126,7 @@ To measure how uncertain a statistic is, resample the data with replacement many
 
 \section{Leave-one-soil-out validation}\label{ch:loso}
 A law fitted to all ten soils will always look good on those ten. The honest test is to leave one soil out, fit to the remaining nine, and predict the one that was left out; repeat for each soil and report the error over the predictions.
-\exbox{A straight line as a baseline}{Fit a straight line of the memory fate against $n$ ten times, each time without one soil. The prediction errors have a root-mean-square value of $0.12$, against $0.32$ for the benchmark that always predicts the mean of the other nine. A straight line is a crude law; the competition law of Chapter~7, with one parameter, reaches 0.058, so it is more than twice as accurate. (The 0.12 and 0.32 here are our illustration from the numbers of Table~\ref{tab:soils}; 0.058 is the study's value.)}
+\exbox{A straight line as a baseline}{Fit a straight line of the memory fate against $n$ ten times, each time without one soil. The prediction errors have a root-mean-square value of $0.12$, against $0.32$ for the benchmark that always predicts the mean of the other nine. A straight line is a crude law; the competition law of Chapter~8, with one parameter, reaches 0.058, so it is more than twice as accurate. (The 0.12 and 0.32 here are our illustration from the numbers of Table~\ref{tab:soils}; 0.058 is the study's value.)}
 
 
 
@@ -134,7 +134,7 @@ A law fitted to all ten soils will always look good on those ten. The honest tes
 For each soil the experiment does not give the reach, only an interval: the reach lies above the largest firing trigger and below the smallest non-firing one, or only above the largest firing trigger if every trigger fires. The constant $\kappa$ is fitted by minimising
 \begin{equation}\label{eq:icloss}\boxed{\mathcal L(\kappa)=\sum_{s}\mathrm{dist}\bigl(\log_{10}\hc(\kappa;\alpha_s,n_s),\ [\ell_s,u_s]\bigr)^{2},}\end{equation}
 where the distance is zero inside the interval $[\ell_s,u_s]$ (in $\log_{10}$) and is the distance to the nearest end outside it.
-\exbox{A toy fit}{Take three soils with synthetic intervals: S03 (sand) $[100,300]$ cm, S05 (sandy loam) $[1000,2000]$ cm and S10 (silty clay loam) bounded only below, $\ge10{,}000$ cm. For $\kappa=10^{-11},\ 10^{-10.5},\ 10^{-10},\ 10^{-9.5},\ 10^{-9},\ 10^{-8.5},\ 10^{-8}$ the loss is $0.079,\ 0.024,\ 0.0013,\ 0,\ 0,\ 0.0003,\ 0.019$. It is exactly zero for $\kappa$ between $1.4\times10^{-10}$ and $2.6\times10^{-9}$: the minimum is a \emph{plateau}, not a point, because all three predictions lie inside their intervals. At $\kappa=10^{-9.5}$ the predicted reaches are $202,\ 1{,}654$ and $132{,}968$ cm. The study's $\kappa=3.47\times10^{-10}$ lies in such a plateau, and its bootstrap interval, $1.0\times10^{-10}$ to $2.8\times10^{-9}$, is of the same width: the data fix $\kappa$ to within about one order of magnitude, and Chapter~5 showed that this is enough, because $\hc\propto\kappa^{-1/E}$.}
+\exbox{A toy fit}{Take three soils with synthetic intervals: S03 (sand) $[100,300]$ cm, S05 (sandy loam) $[1000,2000]$ cm and S10 (silty clay loam) bounded only below, $\ge10{,}000$ cm. For $\kappa=10^{-11},\ 10^{-10.5},\ 10^{-10},\ 10^{-9.5},\ 10^{-9},\ 10^{-8.5},\ 10^{-8}$ the loss is $0.079,\ 0.024,\ 0.0013,\ 0,\ 0,\ 0.0003,\ 0.019$. It is exactly zero for $\kappa$ between $1.4\times10^{-10}$ and $2.6\times10^{-9}$: the minimum is a \emph{plateau}, not a point, because all three predictions lie inside their intervals. At $\kappa=10^{-9.5}$ the predicted reaches are $202,\ 1{,}654$ and $132{,}968$ cm. The study's $\kappa=3.47\times10^{-10}$ lies in such a plateau, and its bootstrap interval, $1.0\times10^{-10}$ to $2.8\times10^{-9}$, is of the same width: the data fix $\kappa$ to within about one order of magnitude, and Chapter~6 showed that this is enough, because $\hc\propto\kappa^{-1/E}$.}
 
 
 \fig{g_kappa}{0.55}{The reach against $\kappa$ for sand, sandy loam and silty clay loam. The dashed line is the fitted value.}

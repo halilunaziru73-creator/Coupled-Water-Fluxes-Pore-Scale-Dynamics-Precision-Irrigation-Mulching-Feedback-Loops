@@ -23,7 +23,7 @@ The equivalent depth $d$ replaces the real depth $D$ of the barrier below the dr
 \begin{equation}\boxed{d=\frac{\pi L/8}{\ln(L/u)+F(x)},\quad F(x)=\sum_{n=1,3,5,\dots}\frac{4e^{-2nx}}{n(1-e^{-2nx})},\quad x=\frac{2\pi D}L,\quad d\le D,}\end{equation}
 with $u=\pi r_0$ the wetted perimeter of a pipe running half full. Because $d$ depends on $L$, the pair is iterated.
 
-\begin{table}[H]\centering\small\caption{Iteration of the spacing: $q=6.43$ mm d$^{-1}$, $K_1=K_2=0.290$ m d$^{-1}$, $D=5$ m, $h=0.70$ m, $r_0=0.05$ m.}\label{tab:hoogit}
+\begin{table}[!htbp]\centering\small\caption{Iteration of the spacing: $q=6.43$ mm d$^{-1}$, $K_1=K_2=0.290$ m d$^{-1}$, $D=5$ m, $h=0.70$ m, $r_0=0.05$ m.}\label{tab:hoogit}
 \begin{tabular}{lrrr}\toprule
 \hd{Iteration} & \hd{$L$ used (m)} & \hd{$d$ (m)} & \hd{$L$ new (m)}\\\midrule
 1 & 30.000 & 2.025 & 24.475\\
@@ -38,7 +38,7 @@ with $u=\pi r_0$ the wetted perimeter of a pipe running half full. Because $d$ d
 \exbox{One converged step}{Verify the converged spacing of Table~\ref{tab:hoogit}.}\sol  At $L=22.76$ m: $x=2\pi\times5/22.76=1.381$. $F(x)=4e^{-2x}/(1-e^{-2x})+\dots=0.2703$ (the $n=1$ term dominates). $u=\pi\times0.05=0.1571$ m, $\ln(L/u)=\ln(22.76/0.1571)=4.976$. Then $d=(\pi\times22.76/8)/(4.976+0.2703)=8.936/5.246=1.703$ m ($<D$). Check the spacing: $8K_2dh=8\times0.290\times1.703\times0.70=2.7631$, $4K_1h^2=4\times0.290\times0.49=0.5677$; sum $=3.3309$; $L^2=3.3309/0.00643=517.8$, $L=22.76$ m. ({\it Without} the correction, using $d=D=5$ m, the spacing would be $\sqrt{(8\times0.290\times5\times0.7+0.5677)/0.00643}=36.7$ m: the radial-flow correction matters.)
 
 
-\begin{table}[H]\centering\small\caption{The same drains in the ten soils: $q=6.43$ mm d$^{-1}$, $z_d=1.4$ m, $h=0.70$ m, $D=5$ m, $K_2=K_1$ (Saxton--Rawls $K_s$).}\label{tab:drsoils}
+\begin{table}[!htbp]\centering\small\caption{The same drains in the ten soils: $q=6.43$ mm d$^{-1}$, $z_d=1.4$ m, $h=0.70$ m, $D=5$ m, $K_2=K_1$ (Saxton--Rawls $K_s$).}\label{tab:drsoils}
 \begin{tabular}{lrrrr}\toprule
 \hd{Soil} & \hd{$K$ (m/d)} & \hd{$L$ (m)} & \hd{$d$ (m)} & \hd{pipe (m/ha)}\\\midrule
 Coarse loam & 0.316 & 24.1 & 1.77 & 414\\
@@ -59,7 +59,7 @@ Silty clay loam & 0.090 & 10.1 & 0.95 & 990\\\bottomrule\end{tabular}\end{table}
 \section{The water table through the season}
 The daily balance is $\mu\,dh/dt=R-q_{\rm out}(h-g)$ with the outflow $q_{\rm out}(h)=(8K_2dh+4K_1h^2)/L^2$ (six sub-steps a day), $R$ the recharge of the day and $g$ the height of the control gate (zero for plain drains). The results are the days with the water table shallower than the crop needs, the $\mathrm{SEW}_{30}$ of Sieben (the sum over the days of $30-z$, in cm, when the water table is shallower than 30 cm), the drained water, the maximum outflow, and for the gate the water held, $\mu g$.
 
-\begin{table}[H]\centering\small\caption{Water-table results for the wet-year recharge at four spacings ($d$ kept at the design value).}\label{tab:wtsim}
+\begin{table}[!htbp]\centering\small\caption{Water-table results for the wet-year recharge at four spacings ($d$ kept at the design value).}\label{tab:wtsim}
 \begin{tabular}{lrrrr}\toprule
 \hd{$L$ (m)} & \hd{days $z<z_c$} & \hd{SEW$_{30}$} & \hd{drained (mm)} & \hd{max outflow (mm/d)}\\\midrule
 11.0 & 0 & 0 & 371 & 8.02\\
@@ -68,7 +68,7 @@ The daily balance is $\mu\,dh/dt=R-q_{\rm out}(h-g)$ with the outflow $q_{\rm ou
 50.0 & 59 & 3 & 242 & 2.32\\
 70.0 & 68 & 710 & 181 & 1.59\\\bottomrule\end{tabular}\end{table}
 
-\begin{table}[H]\centering\small\caption{Controlled drainage: gate height at the design spacing.}\label{tab:gate}
+\begin{table}[!htbp]\centering\small\caption{Controlled drainage: gate height at the design spacing.}\label{tab:gate}
 \begin{tabular}{lrrrr}\toprule
 \hd{gate $g$ (m)} & \hd{days $z<z_c$} & \hd{SEW$_{30}$} & \hd{drained (mm)} & \hd{water held $\mu g$ (mm)}\\\midrule
 0.00 & 0 & 0 & 371 & 0.0\\
@@ -84,7 +84,7 @@ Drain pipes are sized by the Manning equation for a full pipe,
 \begin{equation}\boxed{Q=\frac1n\,\frac{\pi D^2}4\left(\frac D4\right)^{2/3}s^{1/2},\quad n=0.016\ \text{(corrugated polyethylene)},}\end{equation}
 choosing the smallest standard size (80--500 mm) that carries the design flow at no more than 80\% of its capacity. The lateral flow is $qLL_{\rm lat}$ and the collector flow is $qA$. Silt settles when the full-pipe velocity is below 0.3 m s$^{-1}$.
 
-\begin{table}[H]\centering\small\caption{Manning capacity of corrugated pipe at slope 0.2\%.}\label{tab:pipe}
+\begin{table}[!htbp]\centering\small\caption{Manning capacity of corrugated pipe at slope 0.2\%.}\label{tab:pipe}
 \begin{tabular}{lrrr}\toprule
 \hd{$D$ (mm)} & \hd{$Q_{\rm full}$ (L/s)} & \hd{$0.8Q$ (L/s)} & \hd{$v$ (m/s)}\\\midrule
 80 & 1.04 & 0.83 & 0.21\\
@@ -103,7 +103,7 @@ choosing the smallest standard size (80--500 mm) that carries the design flow at
 \section{Salt and the leaching requirement}
 The leaching requirement of Rhoades is $LR=EC_w/(5EC_e-EC_w)$, with $EC_w$ the salinity of the irrigation water and $EC_e$ the salinity of the saturation extract the crop tolerates (dS m$^{-1}$); the gross irrigation is $\mathrm{net}/(1-LR)$ when $LR$ is added to the need.
 
-\begin{table}[H]\centering\small\caption{Leaching requirement for two water qualities.}\label{tab:lr}
+\begin{table}[!htbp]\centering\small\caption{Leaching requirement for two water qualities.}\label{tab:lr}
 \begin{tabular}{lrrrr}\toprule
 \hd{$EC_e$} & \hd{$EC_w$} & \hd{$LR$} & \hd{$EC_w$} & \hd{$LR$}\\\midrule
 1.5 & 0.5 & 0.0714 & 1.5 & 0.2500\\

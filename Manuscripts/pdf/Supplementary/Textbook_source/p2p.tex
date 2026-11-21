@@ -14,7 +14,7 @@ $G_{sc}=0.0820$ MJ m$^{-2}$ min$^{-1}$. With the daily mean temperature and the 
 \exbox{Hargreaves at 10$^\circ$N}{A site at latitude $10^\circ$N on day of year $J=180$ has $T_{\max}=33^\circ$C and $T_{\min}=21^\circ$C. Compute $R_a$ and Hargreaves ET$_0$.}\sol  $\varphi=10^\circ=0.1745$ rad. $d_r=1+0.033\cos(2\pi\times180/365)=1+0.033\times-0.9991=0.9670$. $\delta=0.409\sin(2\pi\times180/365-1.39)=0.409\sin(1.7086)=0.4051$ rad. $\omega_s=\arccos(-\tan\varphi\tan\delta)=\arccos(-0.1763\times0.4288)=1.6465$ rad. Then $R_a=(1440/\pi)\times0.0820\times0.9670\times[1.6465\times\sin\varphi\sin\delta+\cos\varphi\cos\delta\sin\omega_s]=36.90$ MJ m$^{-2}$ d$^{-1}$. $T_{\rm mean}=27^\circ$C, $\sqrt{33-21}=3.464$. $ET_0=0.0023\times(27+17.8)\times3.464\times36.90\times0.408=5.37$ mm d$^{-1}$.
 
 
-\begin{table}[H]\centering\small\caption{Extraterrestrial radiation (MJ m$^{-2}$ d$^{-1}$) by latitude and day, and Hargreaves ET$_0$ at midsummer of the northern hemisphere (mm d$^{-1}$).}\label{tab:ra}
+\begin{table}[!htbp]\centering\small\caption{Extraterrestrial radiation (MJ m$^{-2}$ d$^{-1}$) by latitude and day, and Hargreaves ET$_0$ at midsummer of the northern hemisphere (mm d$^{-1}$).}\label{tab:ra}
 \begin{tabular}{lrrrrr}\toprule
 \hd{Latitude} & \hd{$R_a$ J=15} & \hd{J=105} & \hd{J=196} & \hd{J=288} & \hd{Hargreaves J=196 (30/18$^\circ$C)}\\\midrule
 0 & 36.2 & 36.8 & 33.9 & 37.3 & 4.60\\
@@ -56,7 +56,7 @@ The field outline $(\varphi_i,\lambda_i)$ (radians) gives the area and the perim
 \subsection*{Slope by a fitted plane}
 The ground slope is that of the least-squares plane $z=a+bx+cy$ through the elevations ($x$, $y$ in metres east and north of the centre): $s=100\sqrt{b^2+c^2}$ per cent, falling in the direction of $-(b,c)$.
 
-\begin{table}[H]\centering\small\caption{Nine elevations over the field.}\label{tab:dem}
+\begin{table}[!htbp]\centering\small\caption{Nine elevations over the field.}\label{tab:dem}
 \begin{tabular}{lrr}\toprule
 \hd{$x$ (m)} & \hd{$y$ (m)} & \hd{$z$ (m)}\\\midrule
 -150 & -100 & 512.3\\
@@ -76,7 +76,7 @@ The ground slope is that of the least-squares plane $z=a+bx+cy$ through the elev
 \begin{equation}\boxed{\mathrm{score}=B_{\rm type}-30[\text{seasonal}]-\min(45,d/60)-\min(20,0.8\Delta z),}\end{equation}
 with $B=92$ river, 90 canal, 86 reservoir, 82 lake, 74 borehole, 70 well, 62 pond, 60 spring, 58 stream, 50 water seen in the photo, 42 ditch, 30 drain; $d$ the distance from the field edge (m), $\Delta z$ the lift (m). The weights are engineered, not fitted.
 
-\begin{table}[H]\centering\small\caption{Five candidate sources.}\label{tab:src}
+\begin{table}[!htbp]\centering\small\caption{Five candidate sources.}\label{tab:src}
 \begin{tabular}{lrrrrr}\toprule
 \hd{Source} & \hd{$B$} & \hd{seasonal} & \hd{$d$ (m)} & \hd{lift (m)} & \hd{score}\\\midrule
 River (seasonal) & 92 & yes & 900 & 8 & 40.6\\
@@ -93,7 +93,7 @@ For each 10 m cell with blue, red, red-edge, NIR and SWIR reflectances $\rho_B,\
 \begin{equation}\mathrm{NDVI}=\frac{\rho_N-\rho_R}{\rho_N+\rho_R},\ \mathrm{EVI}=2.5\frac{\rho_N-\rho_R}{\rho_N+6\rho_R-7.5\rho_B+1},\ \mathrm{SAVI}=\frac{(1+L)(\rho_N-\rho_R)}{\rho_N+\rho_R+L},\ L=0.5,\ \mathrm{NDRE}=\frac{\rho_N-\rho_{RE}}{\rho_N+\rho_{RE}},\ \mathrm{NDWI}=\frac{\rho_N-\rho_{SW}}{\rho_N+\rho_{SW}}.\end{equation}
 From the colour photo only: $\mathrm{VARI}=\frac{G-R}{G+R-B}$, $\mathrm{GLI}=\frac{2G-R-B}{2G+R+B}$, $\mathrm{ExG}=2g-r-b$ (chromatic coordinates), $\mathrm{NGRDI}=\frac{G-R}{G+R}$.
 
-\begin{table}[H]\centering\small\caption{Indices from illustrative reflectances (blue, red, red-edge, NIR, SWIR): dense (0.03, 0.04, 0.18, 0.45, 0.20), sparse (0.05, 0.10, 0.20, 0.30, 0.25), bare (0.09, 0.20, 0.23, 0.27, 0.35), stressed (0.04, 0.08, 0.20, 0.32, 0.28).}\label{tab:idx}
+\begin{table}[!htbp]\centering\small\caption{Indices from illustrative reflectances (blue, red, red-edge, NIR, SWIR): dense (0.03, 0.04, 0.18, 0.45, 0.20), sparse (0.05, 0.10, 0.20, 0.30, 0.25), bare (0.09, 0.20, 0.23, 0.27, 0.35), stressed (0.04, 0.08, 0.20, 0.32, 0.28).}\label{tab:idx}
 \begin{tabular}{lrrrrr}\toprule
 \hd{Cell type} & \hd{NDVI} & \hd{EVI} & \hd{SAVI} & \hd{NDRE} & \hd{NDWI}\\\midrule
 Dense crop & 0.837 & 0.700 & 0.621 & 0.429 & 0.385\\
@@ -110,7 +110,7 @@ Stressed crop & 0.600 & 0.400 & 0.400 & 0.231 & 0.067\\\bottomrule\end{tabular}\
 \section{Zones, cover and the zone-by-zone balance}
 From the series of scenes each cell gets the standardised index $z_{i,t}=(\mathrm{NDVI}_{i,t}-\overline{\mathrm{NDVI}}_t)/\sigma_t$, the stability $\frac1n\sum_tz_{i,t}$ and the change $\Delta_i=\mathrm{NDVI}_{i,t_n}-\mathrm{NDVI}_{i,t_{n-1}}$. For the zone balance the cover is $f_c=(\mathrm{NDVI}-0.15)/0.7$, scaled by the model's crop development $c(t)$ as $f_{c,z}(t)=\min(1,c(t)f_c(\mathrm{NDVI}_z)/\bar f_c)$, and the crop coefficient $K_c=K_{c,\rm ini}+(K_{c,\rm mid}-K_{c,\rm ini})K_d$ with $K_d=\min(1,1.5f_c,f_c^{0.5})$ (Allen and Pereira, 2009).
 
-\begin{table}[H]\centering\small\caption{NDVI of four cells over five scenes; population standard deviation.}\label{tab:ndvi}
+\begin{table}[!htbp]\centering\small\caption{NDVI of four cells over five scenes; population standard deviation.}\label{tab:ndvi}
 \begin{tabular}{lrrrrrrr}\toprule
  & \hd{t1} & \hd{t2} & \hd{t3} & \hd{t4} & \hd{t5} & \hd{stability} & \hd{$\Delta$}\\\midrule
 cell 1 & 0.42 & 0.55 & 0.66 & 0.71 & 0.62 & 0.30 & -0.09\\
@@ -123,7 +123,7 @@ $\sigma_t$ & 0.056 & 0.060 & 0.078 & 0.083 & 0.071 &  & \\\bottomrule\end{tabula
 \exbox{Stability of a cell}{For Table~\ref{tab:ndvi} find $z_{3,t}$, the stability of cell 3 and its change since the previous scene, and say which cell belongs in the weakest monitoring zone.}\sol  Field means $(0.393, 0.540, 0.650, 0.690, 0.588)$; standard deviations $(0.056, 0.060, 0.078, 0.083, 0.071)$. For cell 3: $z=(0.30-0.393)/0.056=-1.64$, then -1.66, -1.66, -1.69, -1.65. Stability $=\frac15\sum z=-1.66$; $\Delta_3=0.47-0.55=-0.08$. Cell 3 is below the field on every date (stability $-1.66$), so it belongs to the weakest zone: a zone is a part of the field that is weaker on every date, not on one.
 
 
-\begin{table}[H]\centering\small\caption{Cover and crop coefficient from NDVI ($K_{c,\rm ini}=0.30$, $K_{c,\rm mid}=1.20$).}\label{tab:ndvikc}
+\begin{table}[!htbp]\centering\small\caption{Cover and crop coefficient from NDVI ($K_{c,\rm ini}=0.30$, $K_{c,\rm mid}=1.20$).}\label{tab:ndvikc}
 \begin{tabular}{lrrr}\toprule
 \hd{NDVI} & \hd{$f_c$} & \hd{$K_d$} & \hd{$K_c$ (maize)}\\\midrule
 0.20 & 0.071 & 0.107 & 0.396\\
@@ -139,7 +139,7 @@ $\sigma_t$ & 0.056 & 0.060 & 0.078 & 0.083 & 0.071 &  & \\\bottomrule\end{tabula
 \section{Runoff, gullies and soil loss}
 \textbf{Runoff.} The runoff of each day follows the SCS curve number (TR-55): with $S=25400/CN-254$ (mm) and $I_a=0.2S$, $Q=(P-I_a)^2/(P+0.8S)$ for $P>I_a$. The curve number depends on the hydrologic soil group (from the SoilGrids texture) and the cover: row crop in good condition, or bare soil when the monthly NDVI is below 0.3. The values below are the standard TR-55 ones for those two classes and are quoted for the worked example; they were not checked against the program.
 
-\begin{table}[H]\centering\small\caption{Runoff $Q$ (mm) from daily rain $P$ = 20, 40, 80 mm.}\label{tab:cn}
+\begin{table}[!htbp]\centering\small\caption{Runoff $Q$ (mm) from daily rain $P$ = 20, 40, 80 mm.}\label{tab:cn}
 \begin{tabular}{lrrrrrrrr}\toprule
 \hd{Group} & \hd{CN row} & \hd{CN bare} & \hd{Q 20} & \hd{Q 40} & \hd{Q 80} & \hd{bare Q 20} & \hd{bare Q 40} & \hd{bare Q 80}\\\midrule
 A & 67 & 77 & 0.0 & 1.6 & 16.8 & 0.3 & 6.1 & 29.9\\
@@ -153,7 +153,7 @@ D & 89 & 94 & 4.2 & 17.5 & 51.7 & 8.5 & 25.5 & 63.4\\\bottomrule\end{tabular}\en
 \subhd{Ephemeral gullies.} A gully is likely where $G=S\,A^{0.4}/0.025\ge1$, with $A$ the upslope area (ha) and $S$ the slope (m m$^{-1}$) (Vandaele et al., 1996).
 \textbf{Soil loss (RUSLE).} $A_s=RKLS\,CP$ with $R=0.0483P_a^{1.61}$ (for $P_a\le850$ mm; $587.8-1.219P_a+0.004105P_a^2$ above), shared over the months by the erosive daily rains ($P_d\ge12.7$ mm, exponent 1.81), $C_i=\sum_m(R_m/R)\,e^{-2\mathrm{NDVI}_{i,m}/(1-\mathrm{NDVI}_{i,m})}$ and $LS=(A/22.13)^{0.4}(\sin\beta/0.0896)^{1.3}$ (Moore and Wilson, 1992; $A$ the specific upslope area).
 
-\begin{table}[H]\centering\small\caption{Gully threshold.}\label{tab:gully}
+\begin{table}[!htbp]\centering\small\caption{Gully threshold.}\label{tab:gully}
 \begin{tabular}{lrrr}\toprule
 \hd{$A$ (ha)} & \hd{$S$ (\%)} & \hd{$G$} & \hd{gully}\\\midrule
 0.1 & 1 & 0.16 & no\\
@@ -167,7 +167,7 @@ D & 89 & 94 & 4.2 & 17.5 & 51.7 & 8.5 & 25.5 & 63.4\\\bottomrule\end{tabular}\en
 5.0 & 1 & 0.76 & no\\
 5.0 & 3 & 2.28 & likely\\\bottomrule\end{tabular}\end{table}
 
-\begin{table}[H]\centering\small\caption{Months of an illustrative year: erosive-rain share, NDVI and the cover factor $C_m=e^{-2\mathrm{NDVI}/(1-\mathrm{NDVI})}$.}\label{tab:rusle}
+\begin{table}[!htbp]\centering\small\caption{Months of an illustrative year: erosive-rain share, NDVI and the cover factor $C_m=e^{-2\mathrm{NDVI}/(1-\mathrm{NDVI})}$.}\label{tab:rusle}
 \begin{tabular}{lrrrr}\toprule
 \hd{month} & \hd{erosive share (\%)} & \hd{NDVI} & \hd{$C_m$} & \hd{$R_m$}\\\midrule
 1 & 0 & 0.25 & 0.513 & 0\\

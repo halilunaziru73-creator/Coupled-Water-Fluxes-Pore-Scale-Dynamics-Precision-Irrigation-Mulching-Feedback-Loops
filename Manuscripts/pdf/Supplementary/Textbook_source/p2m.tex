@@ -11,7 +11,7 @@ The factor $6\times10^4$ converts m$^3$ s$^{-1}$ to L min$^{-1}$. Because $q\pro
 \exbox{Discharge of one nozzle}{The default impact sprinkler has $d=4.4$ mm and $P=300$ kPa. Find $q$.}\sol  $h=300/9.81=30.58$ m. $A_n=\pi(4.4/2000)^2=1.521\times10^{-5}$ m$^2$. $\sqrt{2gh}=\sqrt{2\times9.81\times30.58}=24.49$ m s$^{-1}$. So $q=0.95\times1.521\times10^{-5}\times24.49\times6\times10^4=21.23$ L min$^{-1}$ ($=1.274$ m$^3$ h$^{-1}$).
 
 
-\begin{table}[H]\centering\small\caption{Discharge $q$ (L min$^{-1}$) of an impact nozzle, Eq.~(13.2).}\label{tab:qnoz}
+\begin{table}[!htbp]\centering\small\caption{Discharge $q$ (L min$^{-1}$) of an impact nozzle, Eq.~(13.2).}\label{tab:qnoz}
 \begin{tabular}{lrrrrr}\toprule
 \hd{$d$ (mm)} & \hd{200 kPa} & \hd{250 kPa} & \hd{300 kPa} & \hd{400 kPa} & \hd{500 kPa}\\\midrule
 2.4 & 5.2 & 5.8 & 6.3 & 7.3 & 8.2\\
@@ -29,7 +29,7 @@ The reach of a sprinkler is an empirical range law,
 \begin{equation}\boxed{R=c_R\sqrt d\sqrt h\,f_\alpha(\alpha),\qquad f_\alpha=\left[\frac{\max\{0.05,\sin(3.1\alpha)\}}{0.9763}\right]^{0.45},}\end{equation}
 with $d$ in mm, $h$ in m and the angle in degrees. The coefficient $c_R$ is 1.35 for the impact sprinkler (the Keller and Bliesner value), 0.80 for the rotating spray, 0.70 for the micro-sprinkler and 0.95 for the big gun; Table~\ref{tab:types} lists the defaults of the four types. The angle function equals 1 at $\alpha=25^\circ$ and peaks near $29^\circ$.
 
-\begin{table}[H]\centering\small\caption{The four sprinkler types at their defaults ($\alpha=25^\circ$): discharge and wetted radius.}\label{tab:types}
+\begin{table}[!htbp]\centering\small\caption{The four sprinkler types at their defaults ($\alpha=25^\circ$): discharge and wetted radius.}\label{tab:types}
 \begin{tabular}{lrrrrrrrr}\toprule
 \hd{Type} & \hd{$d$} & \hd{$P$} & \hd{$S_s$} & \hd{$S_l$} & \hd{$c_R$} & \hd{$F$} & \hd{$q$ (L/min)} & \hd{$R$ (m)}\\\midrule
 Impact & 4.4 & 300 & 12 & 18 & 1.35 & 1.0 & 21.2 & 15.7\\
@@ -40,7 +40,7 @@ Big gun & 16.0 & 500 & 30 & 36 & 0.95 & 1.3 & 362.4 & 27.1\\\bottomrule\end{tabu
 \exbox{Reach and trajectory angle}{Find the radius of the default impact sprinkler at $\alpha=25^\circ$ and at $\alpha=15^\circ$, and say which angle is the better for reach.}\sol  $h=30.58$ m, $\sqrt d=\sqrt{4.4}=2.098$, $\sqrt h=5.530$. At $25^\circ$: $\sin77.5^\circ=0.9763$ so $f_\alpha=1$ and $R=1.35\times2.098\times5.530=15.66$ m. At $15^\circ$: $\sin46.5^\circ=0.7254$; $f_\alpha=(0.7254/0.9763)^{0.45}=0.8749$, so $R=13.70$ m. At $29^\circ$: $\sin89.9^\circ=0.99999$, $f_\alpha=1.0109$, $R=15.83$ m. The angle changes the reach by only a few per cent between $20^\circ$ and $30^\circ$, which is why the default $25^\circ$ is near the optimum, and a flat jet (low $\alpha$) shortens the reach but also lowers the drift (next sections).
 
 
-\begin{table}[H]\centering\small\caption{Angle function, reach and drift of the impact sprinkler.}\label{tab:angle}
+\begin{table}[!htbp]\centering\small\caption{Angle function, reach and drift of the impact sprinkler.}\label{tab:angle}
 \begin{tabular}{lrrr}\toprule
 \hd{$\alpha$ (deg)} & \hd{$f_\alpha$} & \hd{$R$ (m)} & \hd{$w_d$ (\%) at 3 m/s}\\\midrule
 8 & 0.684 & 10.7 & 2.8\\
@@ -74,7 +74,7 @@ Because every drop of the discharge lands somewhere in the repeating cell, the m
 \exbox{Mean application rate}{Compute $\mathrm{AR}$ for the default impact layout ($12\times18$ m, $q=21.23$ L min$^{-1}$) and compare with the sum from the overlap grid.}\sol  $\mathrm{AR}=60\times21.23/(12\times18)=5.897$ mm h$^{-1}$. The summed grid gives 5.898 mm h$^{-1}$ (wind 3 m s$^{-1}$), the same to within 0.1\%, which confirms the volume normalisation. The layer then compares this rate with the largest rate the soil allows (Section~\ref{sec:maxrate}).
 
 
-\begin{table}[H]\centering\small\caption{Spacing along the lateral for the impact sprinkler ($S_l=18$ m, 3 m s$^{-1}$, $Z_n=30$ mm, loam).}\label{tab:ssweep}
+\begin{table}[!htbp]\centering\small\caption{Spacing along the lateral for the impact sprinkler ($S_l=18$ m, 3 m s$^{-1}$, $Z_n=30$ mm, loam).}\label{tab:ssweep}
 \begin{tabular}{lrrrrr}\toprule
 \hd{$S_s$ (m)} & \hd{$S_s/R$ (\%)} & \hd{AR (mm/h)} & \hd{CU (\%)} & \hd{$T$ (min)} & \hd{$E_a$ (\%)}\\\midrule
 6 & 38 & 11.8 & 98.3 & 179 & 85.1\\
@@ -88,13 +88,13 @@ Because every drop of the discharge lands somewhere in the repeating cell, the m
 \exbox{Spacing and uniformity}{Using Table~\ref{tab:ssweep}, what is the widest spacing along the lateral that still gives CU $\ge85\%$, and does it satisfy the rule $S_s\le kR$ of the ten checks (Section~\ref{sec:checks})?}\sol  CU is 98.3\% at $S_s=6$ m, 96.0\% at 12 m, 95.8\% at 18 m and 74.0\% at 24 m. The last spacing at or above 85\% is 21 m. The wind factor for $u=3$ m s$^{-1}$ ($W=10.8$ km h$^{-1}$) is $k=0.9$, so the rule allows $S_s\le0.9\times15.7=14.1$ m. A pattern can therefore keep CU above 85\% at a spacing the rule rejects, or the reverse; the layer reports both and lets the person decide.
 
 
-\begin{table}[H]\centering\small\caption{Square against triangular layout, impact sprinkler at $12\times18$ m, 3 m s$^{-1}$.}\label{tab:tri}
+\begin{table}[!htbp]\centering\small\caption{Square against triangular layout, impact sprinkler at $12\times18$ m, 3 m s$^{-1}$.}\label{tab:tri}
 \begin{tabular}{lrrrrr}\toprule
 \hd{Layout} & \hd{AR} & \hd{CU (\%)} & \hd{DU (\%)} & \hd{$T$ (min)} & \hd{$E_a$ (\%)}\\\midrule
 Square & 5.90 & 96.0 & 93.4 & 371 & 82.0\\
 Triangular & 5.90 & 97.7 & 96.6 & 360 & 84.6\\\bottomrule\end{tabular}\end{table}
 
-\begin{table}[H]\centering\small\caption{Effect of wind on the overlapped pattern of the default impact layout.}\label{tab:wind}
+\begin{table}[!htbp]\centering\small\caption{Effect of wind on the overlapped pattern of the default impact layout.}\label{tab:wind}
 \begin{tabular}{lrrr}\toprule
 \hd{$u$ (m/s)} & \hd{AR} & \hd{CU (\%)} & \hd{$w_d$ (\%)}\\\midrule
 0 & 5.90 & 96.0 & 1.5\\
@@ -113,7 +113,7 @@ where $F$ is the type factor (impact 1.0, spray 1.6, micro 0.7, gun 1.3), $P$ in
 \exbox{Drift loss}{Find $w_d$ for the default impact sprinkler at $u=3$ m s$^{-1}$, $T_a=24^\circ$C.}\sol  Wind term $1.2+0.5\times3+0.04\times9=3.06$. Pressure term $(300/250)^{0.7}=1.1361$. Temperature term $1+0.025\times4=1.1$. Angle term $0.6+0.4\sin25^\circ/0.4226=0.6+0.4\times0.4226/0.4226=1.000$ (since $\sin25^\circ=0.4226$ the bracket is exactly 1). Then $3.06\times1.0\times1.1361\times1.1\times1=3.824$ per cent, within the clip, so $w_d=0.0382$ (3.82\%). Compare the same sprinkler at 9 m s$^{-1}$: $1.2+4.5+3.24=8.94$, $w_d=11.2\%$.
 
 
-\begin{table}[H]\centering\small\caption{Drift loss $w_d$ (\%) of the four types at their default pressures, $\alpha=25^\circ$, $T_a=24^\circ$C.}\label{tab:wd}
+\begin{table}[!htbp]\centering\small\caption{Drift loss $w_d$ (\%) of the four types at their default pressures, $\alpha=25^\circ$, $T_a=24^\circ$C.}\label{tab:wd}
 \begin{tabular}{lrrrr}\toprule
 \hd{Type} & \hd{0 m/s} & \hd{3 m/s} & \hd{6 m/s} & \hd{9 m/s}\\\midrule
 Impact & 1.5 & 3.8 & 7.0 & 11.2\\
@@ -129,7 +129,7 @@ Surface storage is reduced by slope, $S_{d,\rm eff}=\max(0,S_d)/(1+0.25S)$ ($S$ 
 \exbox{Ponding time on the loam}{Conventional tillage gives $S_d=5$ mm on a 1\% slope. A loam under maize with LAI = 2.5 and no mulch is irrigated at the mean rate of the default impact layout. Find $S_{d,\rm eff}$, $I_{\rm int}$, the intake coefficients and the ponding time.}\sol  $S_{d,\rm eff}=5/(1+0.25\times1)=4.00$ mm. $I_{\rm int}=1.2\times2.5=3.0$ mm (no mulch term). The loam's Kostiakov law (Chapter~\ref{ch:surf}) has $k=0.001675$ m min$^{-A}$ and $A=0.694$, so $K=1.675$ mm min$^{-A}$. The applied rate is $a_e=0.0983\,(1-0.0382)=0.0945$ mm min$^{-1}$ ($5.67$ mm h$^{-1}$ after drift). Then $t_p=(0.0945/1.675)^{1/(0.694-1)}=0.0564^{-3.271}=12{,}118$ min. A set is about 371 min long, so $T<t_p$ and the whole supply infiltrates: RO = 0. The loam takes this sprinkler with a wide margin.
 
 
-\begin{table}[H]\centering\small\caption{Default impact and rotating-spray layouts on the ten soils ($Z_n=30$ mm, 1\% slope, $u=3$ m s$^{-1}$, $S_d=4$ mm effective, LAI 2.5). Max is the allowed rate of Table~\ref{tab:maxrate}.}\label{tab:sprsoils}
+\begin{table}[!htbp]\centering\small\caption{Default impact and rotating-spray layouts on the ten soils ($Z_n=30$ mm, 1\% slope, $u=3$ m s$^{-1}$, $S_d=4$ mm effective, LAI 2.5). Max is the allowed rate of Table~\ref{tab:maxrate}.}\label{tab:sprsoils}
 \begin{tabular}{llrrrrrrrr}\toprule
 \hd{Soil} & \hd{Sprinkler} & \hd{$K$} & \hd{$A$} & \hd{AR} & \hd{Max} & \hd{$t_p$} & \hd{$T$} & \hd{RO\%} & \hd{$E_a$\%}\\\midrule
 Coarse loam & Impact & 0.76 & 0.805 & 5.9 & 25 & 43{,}886 & 371 & 0.0 & 82.0\\
@@ -154,7 +154,7 @@ Silty clay loam & Impact & 1.03 & 0.627 & 5.9 & 4 & 598 & 371 & 0.0 & 82.0\\
 Silty clay loam & Rotating spray & 1.03 & 0.627 & 14.1 & 4 & 58 & 224 & 31.0 & 56.4\\\bottomrule\end{tabular}\end{table}
 
 \begin{keybox}
-Table~\ref{tab:sprsoils} shows where the ponding rule bites: runoff appears only on the soils whose intake coefficient is small enough that $t_p$ falls below the run time. In 4 of the 20 soil--sprinkler pairs the run produces runoff above 0.5\% of the gross depth. The allowed-rate column is a second, independent screen from the sprinkler manuals; the two screens do not always agree, because Table~\ref{tab:maxrate} is a tabulated rule of thumb while $t_p$ uses the soil's computed intake.
+Table~\ref{tab:sprsoils} shows where the ponding rule bites: runoff appears only on the soils whose intake coefficient is small enough that $t_p$ falls below the run time. In 4 of the 20 soil--sprinkler pairs the run produces runoff above 0.5\% of the gross depth. The allowed-rate column is a second, independent screen from the sprinkler catalogues; the two screens do not always agree, because Table~\ref{tab:maxrate} is a tabulated rule of thumb while $t_p$ uses the soil's computed intake.
 \end{keybox}
 \exbox{A partition that closes on the worst soil}{Take the soil with the most runoff in Table~\ref{tab:sprsoils} (Clay loam) under the rotating spray. Show how the water partition closes.}\sol  AR = 14.1 mm h$^{-1}$ against the table limit 4.0 mm h$^{-1}$; $w_d=4.1\%$; run time $T=291$ min (automatic); $t_p=32$ min. The partition of the gross depth 68.4 mm: $E_a=43.8\%$, deep percolation $0.4\%$, runoff $47.3\%$, drift plus interception $8.5\%$. Sum: $43.8+0.4+47.3+8.5=100.0\%$. The partition always closes because every millimetre discharged is either lost to drift, retained by the canopy, run off, stored, or drained.
 
@@ -167,7 +167,7 @@ where $Z_{25}$ is the mean of the lowest quarter of $Z_k$. The automatic run tim
 \exbox{The water partition of the default layout}{For the default layout on the loam ($Z_n=30$ mm) the layer finds $T=371$ min. Verify the efficiencies by hand from the summary of the cells.}\sol  Gross depth $=\bar aT=0.0983\times371=36.51$ mm ($\bar a=5.90$ mm h$^{-1}$). After drift ($w_d=3.8\%$) the supply is $35.12$ mm and the canopy retains $I_c=3.0$ mm, leaving a mean $\bar Z=32.12$ mm at the soil. The lowest-quarter mean is $Z_{25}=30.00$ mm, equal to $Z_n$ as required by Eq.~(13.12), so the run was solved correctly. Then $\mathrm{DU}=30.00/32.12=93.4\%$. Because every cell receives at least about $Z_n$, $E_s=99.8\%$ and $E_a=\overline{\min}/\mathrm{gross}=82.0\%$. DP $=6.0\%$, WD $=3.8+3.0/36.51=12.0\%$ and RO $=0$. Sum: $82.0+6.0+0+12.0=100.0\%$.
 
 
-\begin{table}[H]\centering\small\caption{The four sprinklers on the loam at their default settings ($Z_n=30$ mm, 3 m s$^{-1}$).}\label{tab:fourtypes}
+\begin{table}[!htbp]\centering\small\caption{The four sprinklers on the loam at their default settings ($Z_n=30$ mm, 3 m s$^{-1}$).}\label{tab:fourtypes}
 \begin{tabular}{lrrrrrrrrr}\toprule
 \hd{Type} & \hd{$q$} & \hd{$R$} & \hd{AR} & \hd{CU} & \hd{$w_d$} & \hd{$T$} & \hd{$E_a$} & \hd{DP} & \hd{WD}\\\midrule
 Impact & 21.2 & 15.7 & 5.9 & 96.0 & 3.8 & 371 & 82.0 & 6.0 & 12.0\\
@@ -181,7 +181,7 @@ Big gun & 362.4 & 27.1 & 20.1 & 85.2 & 7.1 & 133 & 66.8 & 19.3 & 13.8\\\bottomru
 \section{Maximum allowable application rate}\label{sec:maxrate}
 The allowed rate (mm h$^{-1}$) is read from Table~\ref{tab:maxrate} by soil group and slope class; the ten soils are assigned to rows (coarse sand, sand, loamy sand $\to$ 1; sandy loam, coarse loam $\to$ 3; loam, silt loam $\to$ 5; sandy clay loam $\to$ 6; clay loam, silty clay loam $\to$ 7), and a compact layer moves an odd row to the next one.
 
-\begin{table}[H]\centering\small\caption{Maximum application rate (mm h$^{-1}$) by soil and slope (Keller and Bliesner).}\label{tab:maxrate}
+\begin{table}[!htbp]\centering\small\caption{Maximum application rate (mm h$^{-1}$) by soil and slope (Keller and Bliesner).}\label{tab:maxrate}
 \begin{tabular}{lrrrr}\toprule
 \hd{Soil group} & \hd{0--5\%} & \hd{5--8\%} & \hd{8--12\%} & \hd{12--16\%}\\\midrule
 Deep coarse sandy soils & 50 & 38 & 25 & 13\\
@@ -211,7 +211,7 @@ The program picks the smallest $n$ ($1\ldots4$ laterals at once) with $N_d\le T_
 \exbox{How many laterals run at once}{Farm: $A_f=5$ ha, $Q_s=40$ L s$^{-1}$, $L_L=150$ m, $h_{\rm op}=16$ h d$^{-1}$, $ET_{\rm pk}=6.4$ mm d$^{-1}$, $Z_n=30$ mm; default impact layout, $u=3$ m s$^{-1}$. Find the layout and the number of laterals to run at once.}\sol  $h_s=30.58$ m, $q_h=0.06\times21.23=1.274$ m$^3$ h$^{-1}$, $W=10.8$ km h$^{-1}$ so $k=0.9$. Spacing: $S_s=12\le0.9\times15.66=14.1$ (OK) and $S_l=18\le1.5\times15.66=23.5$ (OK). $L_y=10^4\times5/150=333.3$ m; $N=\lfloor150/12\rfloor=12$ sprinklers per lateral; $N_m=\lfloor333.3/18\rfloor=18$ lateral positions. $t_{\rm set}=36.51/5.90=6.19$ h, so $n_{\rm sets/day}=\lfloor16/6.19\rfloor=2$; $T_{\rm int}=\lfloor30/6.4\rfloor=4$ d. Table~\ref{tab:nlat} gives $N_d$ and $Q_{\rm in}$; the supply limit is $3.6\times40=144$ m$^3$ h$^{-1}$. The smallest $n$ meeting both is $n=3$.
 
 
-\begin{table}[H]\centering\small\caption{Laterals running together for the farm of the worked example.}\label{tab:nlat}
+\begin{table}[!htbp]\centering\small\caption{Laterals running together for the farm of the worked example.}\label{tab:nlat}
 \begin{tabular}{lrrrr}\toprule
 \hd{$n$} & \hd{$N_d$ (days)} & \hd{$Q_{\rm in}$ (m$^3$/h)} & \hd{$N_d\le T_{\rm int}$} & \hd{$Q_{\rm in}\le144$}\\\midrule
 1 & 9 & 15.3 & no & yes\\
@@ -225,7 +225,7 @@ For smooth plastic pipe the friction gradient is $J=0.472Q^{1.75}/D^{4.75}$ (m m
 The mainline has $Q_m=nQ_L$ and length $L_y-S_l/2$ and takes the smallest diameter not below the lateral's with $J<0.05$ m m$^{-1}$. The head and the pump are
 \begin{equation}H_{\rm man}=z_{\rm lift}+JL_{\rm conv}+JL_{\rm main}+h_s+0.75h_{f,\rm lat},\qquad P_{\rm CV}=\frac{1000(Q_m/3.6\times10^6)H_{\rm man}}{75\eta},\ \eta=0.75,\ P_{\rm kW}=0.7355P_{\rm CV}.\end{equation}
 
-\begin{table}[H]\centering\small\caption{Lateral loss for each standard diameter, $Q_L=15{,}285$ L h$^{-1}$, $N=12$ outlets.}\label{tab:latD}
+\begin{table}[!htbp]\centering\small\caption{Lateral loss for each standard diameter, $Q_L=15{,}285$ L h$^{-1}$, $N=12$ outlets.}\label{tab:latD}
 \begin{tabular}{lrrr}\toprule
 \hd{$D$ (mm)} & \hd{$J$ (m/m)} & \hd{$h_f$ (m)} & \hd{$h_f/h_s$ (\%)}\\\midrule
 46.4 & 0.12036 & 7.73 & 25.3\\
@@ -242,7 +242,7 @@ The mainline has $Q_m=nQ_L$ and length $L_y-S_l/2$ and takes the smallest diamet
 \section{The design table and sensitivity}
 The optimiser maximises the score $\min(E_a,1)-2.5\max(0,0.9-E_s)$ over ten moves (pressure, spacing along the lateral, run time, nozzle, spacing between laterals, run time, pressure, layout, run time, spacing along the lateral); a move is accepted only if the score rises by more than 0.002. For pressure, nozzle and spacings the candidates are nine equally spaced values over the range of Table~\ref{tab:types}'s type; for the run time $T_0\times\{0.6,0.7,0.8,0.9,1,1.1,1.25\}$.
 
-\begin{table}[H]\centering\small\caption{First move of the optimiser: nine pressures from 200 to 500 kPa (rounded to 10) for the default impact layout; $\Delta$ is the change from the default score.}\label{tab:optP}
+\begin{table}[!htbp]\centering\small\caption{First move of the optimiser: nine pressures from 200 to 500 kPa (rounded to 10) for the default impact layout; $\Delta$ is the change from the default score.}\label{tab:optP}
 \begin{tabular}{lrrrrrr}\toprule
 \hd{$P$ (kPa)} & \hd{$R$} & \hd{CU (\%)} & \hd{$T$} & \hd{$E_a$ (\%)} & \hd{Score} & \hd{$\Delta$}\\\midrule
 200 & 12.8 & 82.1 & 548 & 67.9 & 0.6792 & -0.1405\\
@@ -258,7 +258,7 @@ The optimiser maximises the score $\min(E_a,1)-2.5\max(0,0.9-E_s)$ over ten move
 \exbox{First optimiser move}{Read the first move from Table~\ref{tab:optP}: which pressure does it choose, and is the gain accepted?}\sol  The default (300 kPa) scores 0.8197. The highest score in the table is 0.8260 at 310 kPa, a change of 0.0063. A move is accepted only if the gain exceeds 0.002; here the gain is 0.0063, so it is accepted. The reason is that raising the pressure widens the reach (and so the overlap) while it also raises the drift loss; the two nearly cancel in $E_a$ when $E_s\approx100\%$ and the score equals $E_a$.
 
 
-\begin{table}[H]\centering\small\caption{Sensitivity of $E_a$ (base 82.0\%) to the eight inputs of the layer.}\label{tab:sens}
+\begin{table}[!htbp]\centering\small\caption{Sensitivity of $E_a$ (base 82.0\%) to the eight inputs of the layer.}\label{tab:sens}
 \begin{tabular}{lrrrrr}\toprule
 \hd{Input} & \hd{low factor} & \hd{$E_a$ (\%)} & \hd{high factor} & \hd{$E_a$ (\%)} & \hd{change (pp)}\\\midrule
 Intake $k$ & 0.80 & 82.0 & 1.20 & 82.0 & 0.0\\

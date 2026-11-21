@@ -6,7 +6,7 @@
 \section{The seven effects}
 For each control the engine moves one step on its list and re-evaluates Engine 1; the change is printed and the arrow width is $w_k=5+\mathrm{clip}(\mu_k;0,4)$ pixels, with $\mu_k$ from the table: temperature $\mu_1=8|\Delta Y|$; rain $\mu_2=|\Delta D|/12$; mulch $\mu_3=|\Delta E|/14$; trigger $\mu_4=|\Delta I|/8$; nitrate cost of drainage $\mu_5=|\Delta D|/10$; nitrogen $\mu_6=|\Delta N_L|/8$; consolidation $\mu_7=|\Delta D|/2$.
 
-\exbox{Arrow widths}{One-step differences for a soil (illustration values: $\Delta Y=-0.11$ Mg ha$^{-1}$, $\Delta D=+9.0$ mm for the rain step, $\Delta E=-14$ mm, $\Delta I=-22$ mm, $\Delta N_L=+5.2$ kg ha$^{-1}$, $\Delta D=-0.6$ mm for consolidation) give the arrow widths of Table~\ref{tab:arrow}.}\sol  Example, row 4: $\mu_4=22/8=2.75$, so $w_4=5+2.75=7.75$ pixels. Row 3: $\mu_3=14/14=1.0$, $w_3=6.0$. Row 1: $\mu_1=8\times0.11=0.88$, $w_1=5.88$. A step that would give $\mu>4$ is clipped at width 9 pixels.\begin{table}[H]\centering\small\caption{Arrow widths of the seven feedbacks.}\label{tab:arrow}
+\exbox{Arrow widths}{One-step differences for a soil (illustration values: $\Delta Y=-0.11$ Mg ha$^{-1}$, $\Delta D=+9.0$ mm for the rain step, $\Delta E=-14$ mm, $\Delta I=-22$ mm, $\Delta N_L=+5.2$ kg ha$^{-1}$, $\Delta D=-0.6$ mm for consolidation) give the arrow widths of Table~\ref{tab:arrow}.}\sol  Example, row 4: $\mu_4=22/8=2.75$, so $w_4=5+2.75=7.75$ pixels. Row 3: $\mu_3=14/14=1.0$, $w_3=6.0$. Row 1: $\mu_1=8\times0.11=0.88$, $w_1=5.88$. A step that would give $\mu>4$ is clipped at width 9 pixels.\begin{table}[!htbp]\centering\small\caption{Arrow widths of the seven feedbacks.}\label{tab:arrow}
 \begin{tabular}{lrrrrr}\toprule
 \hd{\#} & \hd{Control step} & \hd{Effect} & \hd{Value} & \hd{$\mu$} & \hd{Width (px)}\\\midrule
 1 & Temperature $+0.5$ K & $\Delta Y$ & -0.11 & 0.880 & 5.88\\
@@ -30,7 +30,7 @@ The wetting curve has twice the $\alpha$ of the drying curve. A sensor reads a s
 \section{Hidden question 2: where does water still move}
 The capillary conductivity is $K_s K_r(h)$, and a film term proportional to $h^{-1.5}$ and anchored at $10^{-7}$ cm d$^{-1}$ at pF 4.2 ($h=15\,849$ cm) is added.
 
-\exbox{Capillary and film conductivity}{For the loam with $K_s=24.96$ cm d$^{-1}$ compute the capillary conductivity, the film term and their sum at suctions 300, 3000, 15,849, $10^5$ and 316,228 cm (pF 5.5), and find the suction at which the film term overtakes the capillary term.}\sol  At pF 4.2 the film term is $10^{-7}$ cm d$^{-1}$ by construction. At pF 5.5: $10^{-7}(316228/15849)^{-1.5}=10^{-7}\times0.01122=1.12\times10^{-9}$ cm d$^{-1}$. The capillary term is $K_sK_r(h)$ with $K_r$ from the Mualem equation.\begin{table}[H]\centering\small\caption{Conductivity (cm d$^{-1}$) of the loam, capillary and film terms.}\label{tab:film}
+\exbox{Capillary and film conductivity}{For the loam with $K_s=24.96$ cm d$^{-1}$ compute the capillary conductivity, the film term and their sum at suctions 300, 3000, 15,849, $10^5$ and 316,228 cm (pF 5.5), and find the suction at which the film term overtakes the capillary term.}\sol  At pF 4.2 the film term is $10^{-7}$ cm d$^{-1}$ by construction. At pF 5.5: $10^{-7}(316228/15849)^{-1.5}=10^{-7}\times0.01122=1.12\times10^{-9}$ cm d$^{-1}$. The capillary term is $K_sK_r(h)$ with $K_r$ from the Mualem equation.\begin{table}[!htbp]\centering\small\caption{Conductivity (cm d$^{-1}$) of the loam, capillary and film terms.}\label{tab:film}
 \begin{tabular}{lrrr}\toprule
 \hd{$h$ (cm)} & \hd{Capillary} & \hd{Film} & \hd{Sum}\\\midrule
 300 & 9.50e-04 & 3.84e-05 & 9.88e-04\\
@@ -44,7 +44,7 @@ The two terms are equal at $h\approx1{,}653$ cm; beyond it, the film dominates. 
 \section{Hidden question 5: where does the nitrate travel}
 The panel shows the pores that empty at less than 31.6 cm (the \emph{wide} pores, radius above $47\ \mu$m) and the share of pore volume and of conductivity that they carry: share of volume $1-\Se(31.6)$; share of conductivity $1-K_r(31.6)$.
 
-\exbox{Wide pores and conductivity}{Compute these two shares for the ten soils.}\sol  For the loam: $\Se(31.6)=0.751$ and $K_r(31.6)=0.032$; the wide pores hold 25 per cent of the pore volume and carry 96.8 per cent of the conductivity.\begin{table}[H]\centering\small\caption{Share of pore volume and of conductivity in pores emptied below 31.6 cm.}\label{tab:wide}
+\exbox{Wide pores and conductivity}{Compute these two shares for the ten soils.}\sol  For the loam: $\Se(31.6)=0.751$ and $K_r(31.6)=0.032$; the wide pores hold 25 per cent of the pore volume and carry 96.8 per cent of the conductivity.\begin{table}[!htbp]\centering\small\caption{Share of pore volume and of conductivity in pores emptied below 31.6 cm.}\label{tab:wide}
 \begin{tabular}{lrrr}\toprule
 \hd{ID} & \hd{Soil} & \hd{Volume share} & \hd{Conductivity share}\\\midrule
 S01 & Coarse loam & 0.359 & 0.9979\\
@@ -63,7 +63,7 @@ S10 & Silty clay loam & 0.040 & 0.9321\\\bottomrule\end{tabular}\end{table}
 \section{Hidden question 4: the water table}
 The water content above a water table at height $z$ is $\Se=[1+(\alpha z)^n]^{-m}$ (equilibrium, suction $h=z$); the quasi-saturated height is where $\Se<0.9$, that is $z_{90}=\alpha^{-1}(0.9^{-1/m}-1)^{1/n}$.
 
-\exbox{How far the water table reaches into the root zone}{Find $\Se$ at 5, 25, 60 and 150 cm above the water table and the height $z_{90}$ for the ten soils.}\sol  For the loam ($\alpha=0.036$, $n=1.56$, $m=0.359$): $0.9^{-1/m}=0.9^{-2.786}=1.341$, so $z_{90}=(1.341-1)^{0.641}/0.036=(0.341)^{0.641}/0.036=0.5013/0.036=13.9$ cm. Table~\ref{tab:wt} lists the ten soils.\begin{table}[H]\centering\small\caption{Water content above a water table and quasi-saturated height.}\label{tab:wt}
+\exbox{How far the water table reaches into the root zone}{Find $\Se$ at 5, 25, 60 and 150 cm above the water table and the height $z_{90}$ for the ten soils.}\sol  For the loam ($\alpha=0.036$, $n=1.56$, $m=0.359$): $0.9^{-1/m}=0.9^{-2.786}=1.341$, so $z_{90}=(1.341-1)^{0.641}/0.036=(0.341)^{0.641}/0.036=0.5013/0.036=13.9$ cm. Table~\ref{tab:wt} lists the ten soils.\begin{table}[!htbp]\centering\small\caption{Water content above a water table and quasi-saturated height.}\label{tab:wt}
 \begin{tabular}{lrrrrrr}\toprule
 \hd{ID} & \hd{Soil} & \hd{$\Se$(5)} & \hd{$\Se$(25)} & \hd{$\Se$(60)} & \hd{$\Se$(150)} & \hd{$z_{90}$ (cm)}\\\midrule
 S01 & Coarse loam & 0.921 & 0.685 & 0.526 & 0.387 & 6.2\\
@@ -81,7 +81,7 @@ S10 & Silty clay loam & 0.995 & 0.969 & 0.923 & 0.834 & 79.7\\\bottomrule\end{ta
 \section{Hidden questions 6 and 7: salinity and the uptake curve}
 At steady state the salt entering equals the salt leaving: $I\,EC_{\rm irr}=D\,EC_{\rm dr}$. The root-zone salinity is taken as a quarter of the sum, $EC_{\rm rz}=(EC_{\rm irr}+EC_{\rm dr})/4$, and wheat loses $7.1$ per cent of yield per dS m$^{-1}$ above a threshold of 6 dS m$^{-1}$.
 
-\exbox{How salty can the irrigation water be}{For an irrigation of $I=150$ mm and drainage of $60$, $30$ and $15$ mm, find $EC_{\rm dr}$, $EC_{\rm rz}$ and the relative yield for irrigation water of 2, 4 and 6 dS m$^{-1}$. Then find the largest irrigation-water salinity that keeps the yield at 100 per cent.}\sol  $EC_{\rm dr}=EC_{\rm irr}I/D$. For $I=150$, $D=60$, $EC_{\rm irr}=2$: $EC_{\rm dr}=5$, $EC_{\rm rz}=(2+5)/4=1.75$ dS m$^{-1}$, below 6, so yield 100 per cent. For $D=15$ and $EC_{\rm irr}=6$: $EC_{\rm dr}=60$, $EC_{\rm rz}=16.5$, loss $0.071(16.5-6)=0.745$, yield 25.5 per cent. See Table~\ref{tab:salt}.\begin{table}[H]\centering\small\caption{Salt balance and wheat yield.}\label{tab:salt}
+\exbox{How salty can the irrigation water be}{For an irrigation of $I=150$ mm and drainage of $60$, $30$ and $15$ mm, find $EC_{\rm dr}$, $EC_{\rm rz}$ and the relative yield for irrigation water of 2, 4 and 6 dS m$^{-1}$. Then find the largest irrigation-water salinity that keeps the yield at 100 per cent.}\sol  $EC_{\rm dr}=EC_{\rm irr}I/D$. For $I=150$, $D=60$, $EC_{\rm irr}=2$: $EC_{\rm dr}=5$, $EC_{\rm rz}=(2+5)/4=1.75$ dS m$^{-1}$, below 6, so yield 100 per cent. For $D=15$ and $EC_{\rm irr}=6$: $EC_{\rm dr}=60$, $EC_{\rm rz}=16.5$, loss $0.071(16.5-6)=0.745$, yield 25.5 per cent. See Table~\ref{tab:salt}.\begin{table}[!htbp]\centering\small\caption{Salt balance and wheat yield.}\label{tab:salt}
 \begin{tabular}{lrrrrr}\toprule
 \hd{$I$} & \hd{$D$} & \hd{$EC_{\rm irr}$} & \hd{$EC_{\rm dr}$} & \hd{$EC_{\rm rz}$} & \hd{Yield (\%)}\\\midrule
 150 & 60 & 2 & 5.0 & 1.75 & 100.0\\
