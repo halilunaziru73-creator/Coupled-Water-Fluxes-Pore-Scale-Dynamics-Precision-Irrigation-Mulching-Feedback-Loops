@@ -1,23 +1,28 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SWAFL: choose where to go</title>
-<style>
-:root{--bg:#f4f2e6;--fg:#1A2318;--mut:#2b3328;--card:#fff;--line:#E3E6DC;--navy:#0E3B2A;color-scheme:light}
-
-*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--fg);background:linear-gradient(180deg,rgba(244,242,230,.90) 0%,rgba(233,239,224,.90) 45%,rgba(244,242,230,.90) 100%),url(bg.jpg) center top/cover fixed,#f4f2e6;font:600 18px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-main{max-width:640px;margin:0 auto;padding:28px 18px 40px}
-.k{letter-spacing:.14em;font-size:14px;color:#8A6A1A;font-weight:700;text-transform:uppercase}
-h1{font:700 31px/1.25 Georgia,serif;margin:.3em 0 .2em}
-p{color:var(--mut);margin:.2em 0 1.2em}
-a.r{display:flex;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-left:6px solid var(--c);border-radius:10px;padding:14px 16px;margin:10px 0;text-decoration:none;color:var(--fg)}
-a.r:hover{border-color:var(--c)}
-.n{font:800 15px ui-monospace,monospace;color:var(--c);min-width:2.2em}
-b{display:block;font-size:19px;font-weight:800}small{color:var(--mut);display:block;font-size:16px;font-weight:600}
-.u{word-break:break-all;font-size:13px;opacity:.95;margin-top:2px}footer{margin-top:26px;font-size:15px;font-weight:600;color:var(--mut)}
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>:root{--bg:#f4f2e6;--fg:#1A2318;--mut:#3D453A;--card:#fff;--line:#E3E6DC;--navy:#0E3B2A;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:#f1f0e2;color:var(--fg);font:500 17px/1.6 'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;z-index:50;pointer-events:none;border:12px solid #0E3B2A;box-shadow:inset 0 0 0 2px #E4BD58,inset 0 0 0 4px #5a3d05,inset 0 0 0 6px #F6DE9A,inset 0 0 14px rgba(0,0,0,.35),0 0 0 2px #E4BD58}
+body::after{content:"";position:fixed;inset:0;z-index:51;pointer-events:none;background:radial-gradient(circle at 0 0,#F6DE9A 0 5px,#B8860B 6px 9px,transparent 10px) no-repeat,radial-gradient(circle at 100% 0,#F6DE9A 0 5px,#B8860B 6px 9px,transparent 10px) no-repeat,radial-gradient(circle at 0 100%,#F6DE9A 0 5px,#B8860B 6px 9px,transparent 10px) no-repeat,radial-gradient(circle at 100% 100%,#F6DE9A 0 5px,#B8860B 6px 9px,transparent 10px) no-repeat}
+main{max-width:680px;margin:0 auto;padding:38px 24px 48px}
+.hero{position:relative;border-radius:12px;padding:30px 28px 26px;margin-bottom:22px;color:#F0F1EC;background:linear-gradient(rgba(20,78,76,.86),rgba(18,70,78,.90)),url(bg.jpg) center/cover;box-shadow:0 10px 30px rgba(14,59,42,.28);border-top:4px solid #B8860B}
+.k{font:600 13px/1.4 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#9CC9E8;text-transform:uppercase}
+h1{font:700 32px/1.2 'Space Grotesk',sans-serif;margin:.35em 0 .3em;color:#fff}
+.hero p{color:#E7EBE3;margin:.2em 0 0;font-weight:500}
+a.r{display:flex;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-left:6px solid var(--c);border-radius:10px;padding:15px 18px;margin:12px 0;text-decoration:none;color:var(--fg);box-shadow:0 4px 14px rgba(0,0,0,.08);transition:transform .15s,box-shadow .15s}
+a.r:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.14);border-color:var(--c)}
+.n{font:700 15px 'IBM Plex Mono',monospace;color:var(--c);min-width:2.2em}
+b{display:block;font:700 19px/1.3 'Space Grotesk',sans-serif;color:#0E3B2A}
+small{color:var(--mut);display:block;font-size:15.5px;font-weight:500}
+.u{word-break:break-all;font:500 12.5px 'IBM Plex Mono',monospace;color:#5a6355;margin-top:3px}
+footer{margin-top:28px;padding-top:16px;border-top:1px solid #d7d5c8;font-size:14.5px;color:var(--mut)}
 </style></head><body><main>
-<div class="k">Naziru Halilu · SWAFL Desktop 1.1.0</div>
+<div class="hero"><div class="k">Naziru Halilu · SWAFL Desktop 1.1.0</div>
 <h1>Where would you like to go?</h1>
-<p>Coupled water fluxes and pore-scale dynamics under joint precision irrigation and evaporation-control mulching. Pick a route.</p>
+<p>Coupled water fluxes and pore-scale dynamics under joint precision irrigation and evaporation-control mulching. Pick a route.</p></div>
 <a class="r" style="--c:#e31b23" href="https://halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html?v=1.1.0"><span class="n">R1</span><span><b>Online SWAFL workbench</b><small>Runs in the browser, nothing to install</small><small class="u">halilunaziru73-creator.github.io/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/Software/v1.1.0/SWAFL_Desktop/app/index.html?v=1.1.0</small></span></a>
 <a class="r" style="--c:#1f5fbf" href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf"><span class="n">R2</span><span><b>Software manual (PDF)</b><small>Every control, screen and equation</small><small class="u">github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf</small></span></a>
 <a class="r" style="--c:#0b8a4f" href="https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Manuscripts/pdf/Supplementary/Pore-Scale_Dynamics_Textbook.pdf"><span class="n">R3</span><span><b>Textbook (PDF)</b><small>Pore-Scale Dynamics, 447 pages</small><small class="u">github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Manuscripts/pdf/Supplementary/Pore-Scale_Dynamics_Textbook.pdf</small></span></a>
