@@ -10,6 +10,12 @@ The current version of the SWAFL soil-water and irrigation decision-support suit
 - Weather is a choice of several sources: built-in benchmark record, bundled Daisy stations (Denmark, Italy, Poland, Slovakia, Czech Republic), your own file (CSV, Excel, DWF, DLF, DAI), online weather of any place, and DMI open data
 - Working date from 1980 to 2100
 
+**Performance and compatibility update (November 2026)**
+- Daisy runs at below-normal priority and use at most half of the cores, fewer when memory is short: the computer no longer hangs while an experiment runs.
+- Graphics switches that hang old drivers were removed; if the graphics process stops, SWAFL restarts once in safe mode (`--safe`, `SWAFL_SAFE=1`).
+- Compressed, cached local server; capped memory for Daisy output and for the cache of repeated runs; heap size follows the memory of the computer.
+- Linux and macOS build scripts (`dist:linux`, `dist:mac`).
+
 **Assets**
 - `SWAFL_Desktop.zip`: source of version 1.1.0. On Windows, unzip, install Node.js LTS, then run `npm.cmd install` and `npm.cmd run get-app` in the inner `SWAFL_Desktop` folder; it builds `SWAFL.exe`, puts it on the Desktop and starts it. Or double-click `START_SWAFL.bat`.
 - `SWAFL_Manual_v1.1.0.pdf`: the user manual.

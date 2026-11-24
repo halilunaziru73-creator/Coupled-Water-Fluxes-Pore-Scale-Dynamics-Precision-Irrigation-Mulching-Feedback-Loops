@@ -124,6 +124,20 @@ docs/manual_v1.1.0/                  manual of version 1.1.0 (SWAFL_Manual_v1.1.
 
 The program zip does not contain the manual PDF (42 MB); download it from the link at the top and put it in a folder called `Manual` next to the program, and F1 opens it from there. Without it, F1 opens the copy on GitHub. See [docs/USER_GUIDE.md](docs/USER_GUIDE.md) for the step-by-step guide and [docs/manual_v1.1.0](docs/manual_v1.1.0/README.md) for the manual of version 1.1.0 (one PDF, in the chapters of the 1.0 manual with every screenshot taken again from version 1.1.0 and the new chapters added). Author: Naziru Halilu. MIT licence.
 
+## Slow or hanging computer: what SWAFL does, and safe mode
+
+SWAFL keeps the computer usable while experiments run:
+
+- Daisy runs at below-normal priority, so the window, the mouse and your other programs always come first.
+- At most half of the processor cores are used for Daisy runs at once (all of them on a two-core computer), and fewer when free memory is short. "At the same time" in an experiment is a request, not a command: SWAFL never starts more runs than the computer can carry.
+- The graphics card is used only as Windows and Chromium decide. If the graphics process ever stops, SWAFL restarts once with the graphics card off and remembers it (the file `safe-mode` in the SWAFL data folder). Delete that file to try the graphics card again.
+- To start in safe mode by hand, run `npm.cmd run start:safe`, start `SWAFL.exe --safe`, or set the variable `SWAFL_SAFE=1`.
+- Only the end of what Daisy prints is kept, and the cache of repeated runs is limited to 120 MB, so a long experiment no longer fills the memory.
+- The local server sends compressed files and answers "unchanged" to files the window already has, so the start and every reload move much less data.
+- Linux and macOS: `npm run dist:linux` and `npm run dist:mac` build the application; Daisy itself is bundled for Windows only, on other systems install Daisy and put it on the PATH or set `DAISY_EXE`.
+
+If an experiment still makes the computer slow, lower "at the same time" to 1 or 2 in the experiment window.
+
 ## Troubleshooting
 
 | Problem | Fix |

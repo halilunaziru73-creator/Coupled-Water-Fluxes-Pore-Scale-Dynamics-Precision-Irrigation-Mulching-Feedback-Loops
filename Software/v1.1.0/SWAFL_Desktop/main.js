@@ -5,13 +5,30 @@ const { app, BrowserWindow, ipcMain, shell, dialog, Menu } = require('electron')
 const path = require('path'), fs = require('fs');
 const { listen } = require('./serve');
 
-// speed: the drawing and the rasterising of the pictures go to the graphics card, a big heap for the engine, no throttling of a window that is in front
+// compatibility and speed. The program must start on any computer, also one with an old graphics driver or little memory:
+//  - the graphics card is used only the way Chromium itself decides (the switches that forced it on, which hang old drivers, are gone);
+//  - if the graphics process ever crashes, SWAFL starts again once with the graphics card off and remembers it ("safe mode");
+//  - the size of the heap follows the memory of the computer.
+const os0 = require('os');
+const SAFE_FLAG = () => path.join(app.getPath('userData'), 'safe-mode');
+let SAFE = process.argv.includes('--safe') || process.env.SWAFL_SAFE === '1';
+try { if (!SAFE && fs.existsSync(SAFE_FLAG())) SAFE = true; } catch (e) { }
 try {
-  ['ignore-gpu-blocklist', 'enable-gpu-rasterization', 'enable-zero-copy', 'disable-renderer-backgrounding', 'disable-background-timer-throttling'].forEach(f => app.commandLine.appendSwitch(f));
-  app.commandLine.appendSwitch('enable-features', 'CanvasOopRasterization');
+  if (SAFE) { app.disableHardwareAcceleration(); app.commandLine.appendSwitch('disable-gpu'); }
+  if (process.platform === 'linux' && typeof process.getuid === 'function' && process.getuid() === 0) app.commandLine.appendSwitch('no-sandbox');   // a root session of Linux cannot start the sandbox
+  app.commandLine.appendSwitch('disable-background-timer-throttling');   // a long experiment goes on when the window is behind another one
   app.commandLine.appendSwitch('disable-features', 'CalculateNativeWinOcclusion');   // Windows no longer works out which window covers which, a cause of stalls when windows are moved
-  app.commandLine.appendSwitch('js-flags', '--max-old-space-size=4096');
+  const mb = Math.floor(os0.totalmem() / 1048576), heap = Math.max(1024, Math.min(4096, Math.floor(mb * 0.4)));
+  app.commandLine.appendSwitch('js-flags', '--max-old-space-size=' + heap);
 } catch (e) { }
+app.on('child-process-gone', (_e, d) => {
+  try {
+    if (d && d.type === 'GPU' && d.reason !== 'clean-exit' && !SAFE) {   // the graphics process died: once more, without the graphics card
+      try { fs.mkdirSync(app.getPath('userData'), { recursive: true }); fs.writeFileSync(SAFE_FLAG(), 'The graphics process stopped; SWAFL starts without the graphics card. Delete this file to try the graphics card again.'); } catch (e) { }
+      app.relaunch({ args: process.argv.slice(1).concat('--safe') }); app.exit(0);
+    }
+  } catch (e) { }
+});
 
 let win = null, srv = null;
 
@@ -100,9 +117,12 @@ ipcMain.handle('daisy-pick', async () => {
   fs.mkdirSync(path.dirname(daisyCfg()), { recursive: true }); fs.writeFileSync(daisyCfg(), JSON.stringify({ exe: e })); RUNS_DIR = null; return { found: true, exe: e, home: DR.homeFor(e), version: DR.version(e) };
 });
 // a run that is asked for again with exactly the same set-up files gives the same logs: they are kept in memory (the last 30 runs) and returned at once
-const jobCache = new Map(), jobKey = job => { try { return require('crypto').createHash('sha1').update(JSON.stringify([job.main, job.files, !!job.copyBundle, job.logPattern, job.prefix])).digest('hex'); } catch (e) { return null; } };
+let jobBytes = 0; const jobCache = new Map(), sizeOf = r => Object.keys(r.logs || {}).reduce((n, k) => n + ((r.logs[k] || '').length * 2), 0), cacheAdd = (k, r) => { const n = sizeOf(r); if (n > 24e6) return; r.__n = n; jobCache.set(k, r); jobBytes += n; while ((jobCache.size > 30 || jobBytes > 120e6) && jobCache.size) { const o = jobCache.keys().next().value, v = jobCache.get(o); jobBytes -= (v && v.__n) || 0; jobCache.delete(o); } }, jobKey = job => { try { return require('crypto').createHash('sha1').update(JSON.stringify([job.main, job.files, !!job.copyBundle, job.logPattern, job.prefix])).digest('hex'); } catch (e) { return null; } };
 // at most a few Daisy programs run at once: always two cores (at least a quarter of them) and a part of the memory stay free for the window and for the rest of the computer
-const SLOTS = () => { const os = require('os'), c = os.cpus().length || 4; return Math.max(1, Math.min(16, c - 1, Math.floor(os.freemem() / 400e6))); };
+const SLOTS = () => {   // Daisy runs at once: never more than half of the cores (all of them when there are only two), and only as many as the free memory allows
+  const os = require('os'), c = os.cpus().length || 4, byCpu = c <= 2 ? 1 : c <= 8 ? Math.floor(c / 2) : c - 4, byMem = Math.floor((os.freemem() - 1.2e9) / 700e6);
+  return Math.max(1, Math.min(8, byCpu, byMem));
+};
 let RUNNING = 0; const WAIT = [];
 const slot = () => new Promise(res => { const go = () => { if (RUNNING < SLOTS()) { RUNNING++; res(); } else WAIT.push(go); }; go(); });
 const release = () => { RUNNING = Math.max(0, RUNNING - 1); const n = WAIT.shift(); if (n) setTimeout(n, 20); };
@@ -124,7 +144,7 @@ async function daisyJob(job) {
     if (r.stopped) { DR.clean(r.dir); delete r.dir; return r; }
     // keep the whole run folder (set-up files and the raw Daisy logs, untouched) so that it can be checked and reused outside SWAFL
     try { const root = scratchRoot(); await fs.promises.mkdir(root, { recursive: true }); const stamp = new Date().toISOString().replace(/[:T]/g, '-').slice(0, 19), clean = t => String(t || '').replace(/[^A-Za-z0-9._-]+/g, '_').slice(0, 60), nm = clean((job && job.scenario ? job.scenario + '_' : '') + ((job && job.label) || 'run')), grp = clean(job && job.group), rid = clean(job && job.runId); let base = grp ? path.join(root, grp) : root, dest = path.join(base, grp ? (rid ? rid + '_' : '') + nm : stamp + '_' + nm), k = 1; await fs.promises.mkdir(base, { recursive: true }); const ex = p => fs.promises.access(p).then(() => true, () => false); while (await ex(dest)) dest = dest.replace(/_\d+$/, '') + '_' + (++k); try { await fs.promises.rename(r.dir, dest); } catch (e2) { await fs.promises.cp(r.dir, dest, { recursive: true }); } r.saved = dest; r.scratch = true; } catch (e) { r.savedError = String(e.message); }
-    DR.clean(r.dir); delete r.dir; if (ck && r.code === 0) { jobCache.set(ck, r); while (jobCache.size > 30) jobCache.delete(jobCache.keys().next().value); } return r;
+    DR.clean(r.dir); delete r.dir; if (ck && r.code === 0) { cacheAdd(ck, r); } return r;
   } catch (e) { return { code: -1, err: String(e.message), logs: {}, out: '' }; }
 }
 // the runs are kept next to Daisy itself: "SWAFL runs" in the Daisy folder that runs them (when it can be written; Program Files cannot),

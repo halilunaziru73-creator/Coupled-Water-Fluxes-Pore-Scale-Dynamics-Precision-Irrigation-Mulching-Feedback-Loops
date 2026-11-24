@@ -14,7 +14,9 @@
     "dist:mac": "electron-builder --mac dmg",
     "get-app": "node get-app.js",
     "get_app": "node get-app.js",
-    "getapp": "node get-app.js"
+    "getapp": "node get-app.js",
+    "dist:linux": "electron-builder --linux AppImage",
+    "start:safe": "electron . --safe"
   },
   "devDependencies": {
     "electron": "^31.0.0",
@@ -90,6 +92,17 @@
         ]
       }
     ],
-    "afterPack": "build/afterPack.js"
+    "afterPack": "build/afterPack.js",
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Science",
+      "icon": "build/icon.png"
+    },
+    "mac": {
+      "category": "public.app-category.education",
+      "icon": "build/icon.png"
+    }
   }
 }

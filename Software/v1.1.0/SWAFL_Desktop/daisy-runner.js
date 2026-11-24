@@ -78,8 +78,11 @@ function runJob(job, opt) {
     if (gen !== GEN) return resolve({ code: -9, stopped: true, out: '', err: '', dir, logs: {}, seconds: 0 });   // Stop was pressed while the folder was made
     const main = path.join(dir, job.main), wd = path.dirname(main); let out = '', err = '';
     const p = spawn(exe, [path.basename(main)], { cwd: wd, env: envFor(exe), windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });   // no console window, no waiting for input
+    // below normal priority: the program of the user (the window, the mouse, the other programs) always gets the processor first, so the computer stays usable while many runs go on
+    try { if (p.pid) os.setPriority(p.pid, os.constants.priority.PRIORITY_BELOW_NORMAL); } catch (e) { }
     ACTIVE.add(p); const to = setTimeout(() => { try { p.kill(); } catch (e) { } }, opt.timeoutMs || 1800000);
-    p.stdout.on('data', d => { out += d; if (opt.onOut) opt.onOut(String(d)); }); p.stderr.on('data', d => { err += d; if (opt.onOut) opt.onOut(String(d)); });
+    const CAP = 60000, keep = (a, d) => { a += d; return a.length > CAP * 2 ? a.slice(-CAP) : a; };   // only the end of what Daisy prints is kept: a chatty run no longer fills the memory
+    p.stdout.on('data', d => { out = keep(out, d); if (opt.onOut) opt.onOut(String(d)); }); p.stderr.on('data', d => { err = keep(err, d); if (opt.onOut) opt.onOut(String(d)); });
     p.on('error', e => { clearTimeout(to); ACTIVE.delete(p); if (e && e.code === 'EACCES') e.message = 'Windows would not run ' + exe + ' (EACCES). This is what happens when the file is the Daisy installer (daisy-7.1.x-Windows-...exe), which needs administrator rights. SWAFL has Daisy built in, so choose nothing, or choose bin\\daisy-bin.exe of an installed Daisy.'; reject(e); });
     p.on('close', async code => {
       clearTimeout(to); ACTIVE.delete(p); const logs = {}; if (gen !== GEN) return resolve({ code: -9, stopped: true, out: '', err: '', dir, logs, seconds: (Date.now() - t0) / 1000 });
