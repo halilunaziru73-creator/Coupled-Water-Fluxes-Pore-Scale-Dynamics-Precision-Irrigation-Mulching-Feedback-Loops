@@ -43,7 +43,12 @@ window.DaisyPlot = (() => {
     rows.forEach((row, ri) => { let x = (w - row.w) / 2, yy = y + ri * 18; row.it.forEach(([it, ww]) => { g.fillStyle = it.color; g.strokeStyle = it.color; if (it.kind === 'box') g.fillRect(x, yy - 9, 12, 10); else { g.lineWidth = 2; g.beginPath(); g.moveTo(x, yy - 4); g.lineTo(x + 14, yy - 4); g.stroke(); if (it.kind === 'pts') { g.beginPath(); g.arc(x + 7, yy - 4, 3, 0, 7); g.fill(); } g.lineWidth = 1; } g.fillStyle = INK; g.textAlign = 'left'; g.fillText(it.name, x + 19, yy); x += ww; }); });
     return rows.length * 18 + 4;
   }
-  const yTitle = (g, t, x, y0, ph) => { if (!t) return; g.save(); g.translate(x, y0 + ph / 2); g.rotate(-Math.PI / 2); g.fillStyle = INK; g.textAlign = 'center'; g.font = '12px ' + FONT; g.fillText(t, 0, 0); g.restore(); };
+  // the title of the vertical axis: kept inside the height of the panel by breaking it into at most three lines (the last one shortened with ... when it is still too long)
+  const yLines = (g, t, ph) => { t = String(t || ''); if (!t) return []; g.save(); g.font = '12px ' + FONT; const W = Math.max(60, ph - 6); if (g.measureText(t).width <= W) { g.restore(); return [t]; }
+    const words = t.split(/\s+/), L = []; let cur = ''; words.forEach(w => { const c = cur ? cur + ' ' + w : w; if (cur && g.measureText(c).width > W) { L.push(cur); cur = w; } else cur = c; }); if (cur) L.push(cur);
+    let out = L.slice(0, 3); if (L.length > 3) { let l2 = L.slice(2).join(' '); while (l2.length > 3 && g.measureText(l2 + '...').width > W) l2 = l2.slice(0, -1); out[2] = l2 + '...'; }
+    out = out.map(l => { while (l.length > 3 && g.measureText(l).width > W) l = l.slice(0, -1); return l; }); g.restore(); return out; };
+  const yTitle = (g, t, x, y0, ph) => { const L = yLines(g, t, ph); if (!L.length) return; g.save(); g.font = '12px ' + FONT; g.fillStyle = INK; g.textAlign = 'center'; L.forEach((l, k) => { g.save(); g.translate(x + k * 14, y0 + ph / 2); g.rotate(-Math.PI / 2); g.fillText(l, 0, 0); g.restore(); }); g.restore(); };
   const measureW = (g, labs) => Math.max.apply(null, labs.map(l => g.measureText(l).width));
 
   // the time axis: a tick for every year (every second, fifth... year when there are many), months when the span is short
@@ -243,7 +248,7 @@ window.DaisyPlot = (() => {
     cv._csv = () => { const out = [['factor', 'level', 'mean', 'standard error', 'runs']]; panels.forEach(p => p.xs.forEach((x, i) => out.push([p.title, x, p.m[i], p.se[i], p.n[i]]))); return out; };
     const all = []; panels.forEach(p => p.m.forEach((m, i) => { if (isFinite(m)) { all.push(m + (isFinite(p.se[i]) ? p.se[i] : 0)); all.push(m - (isFinite(p.se[i]) ? p.se[i] : 0)); } })); if (!all.length) return;
     let lo = Math.min.apply(null, all), hi = Math.max.apply(null, all); if (lo >= 0 && lo < 0.35 * hi) lo = 0; const nn = nice(lo >= 0 ? Math.max(0, lo - (hi - lo) * 0.06) : lo - (hi - lo) * 0.06, hi + (hi - lo) * 0.08, 4), grand = o.grand;
-    const LM = 58, gap = 14, pw = (w - LM - 12 - gap * (per - 1)) / per;
+    const yl = yLines(g, o.yt, nr * (PH + 76) - 30), LM = 58 + 14 * Math.max(0, yl.length - 1), gap = 14, pw = (w - LM - 12 - gap * (per - 1)) / per;
     panels.forEach((p, k) => { const col = k % per, row = Math.floor(k / per), x0 = LM + col * (pw + gap), y0 = F.top + 6 + row * (PH + 76), Y = q => y0 + 22 + PH - (q - nn.lo) / (nn.hi - nn.lo) * PH, nx = p.xs.length, X = i => x0 + (i + 0.5) * pw / nx;
       strip(g, x0, y0, pw, p.title); g.fillStyle = PANEL; g.fillRect(x0, y0 + 22, pw, PH); g.strokeStyle = '#c9ced6'; g.strokeRect(x0 + 0.5, y0 + 22.5, pw - 1, PH - 1);
       g.font = '11px ' + FONT; nn.t.forEach(t => { const yy = Y(t); g.strokeStyle = GRID; g.beginPath(); g.moveTo(x0, yy + 0.5); g.lineTo(x0 + pw, yy + 0.5); g.stroke(); if (col === 0) { g.fillStyle = AXIS; g.textAlign = 'right'; g.fillText(fmt(t, dec(nn.st)), x0 - 5, yy + 4); } });
@@ -253,7 +258,7 @@ window.DaisyPlot = (() => {
         g.beginPath(); g.arc(X(i), Y(m), 4.8, 0, 7); g.fillStyle = p.color || OKI[0]; g.fill(); g.strokeStyle = '#fff'; g.stroke(); g.fillStyle = '#666'; g.textAlign = 'center'; g.font = '10px ' + FONT; g.fillText('n = ' + p.n[i], X(i), y0 + 22 + PH + 27); });
       g.fillStyle = INK; g.font = '11px ' + FONT; g.textAlign = 'center'; const step = Math.max(1, Math.ceil(nx * 46 / pw)); p.xs.forEach((x, i) => { if (i % step === 0) g.fillText(fitT(g, x, pw / nx * step - 2), X(i), y0 + 22 + PH + 14); });
       if (p.xt) { g.fillStyle = '#555'; g.fillText(fitT(g, p.xt, pw), x0 + pw / 2, y0 + 22 + PH + 42); } });
-    yTitle(g, o.yt, 14, F.top + 28, nr * (PH + 76) - 64);
+    yTitle(g, o.yt, 14, F.top + 6, nr * (PH + 76) - 30);
     g.fillStyle = '#555'; g.font = '11px ' + FONT; g.textAlign = 'left'; g.fillText(o.foot || 'Points: the mean of the runs at each level, bars: one standard error, n: the number of runs. Dashed line: the mean of all runs.', 8, F.h - 8);
   }
   /* one stacked bar for each run: rows [{label, ref}], parts [{name, color, vals}] */
