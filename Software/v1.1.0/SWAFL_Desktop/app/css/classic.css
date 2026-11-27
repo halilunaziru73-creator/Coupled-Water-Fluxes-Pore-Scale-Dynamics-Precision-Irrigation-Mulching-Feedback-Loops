@@ -304,3 +304,5 @@ input[type=range]{accent-color:#0A246A}
 #dashBody .dsec h4 span,.dsec h4 span{color:#404040 !important;font-weight:normal !important}
 #dashBody .dsec h4 .tw,.dsec h4 .tw{color:#0A246A !important}
 #dashBody .dsec{border:1px solid #808080 !important}
+/* field outline locked once its indices are computed: corners show a lock cursor until Clear */
+.fmpt.fmlock{cursor:not-allowed !important;opacity:.85}
