@@ -61,5 +61,5 @@ def build(name):
     print(name, '\n'.join(issues[:30]))
 
 if __name__ == '__main__':
-    names = sys.argv[1:] or ['AWM_Paper1', 'AWM_Paper4', 'SoftwareX_Paper2', 'SoftwareX_Paper3']
+    names = sys.argv[1:] or ['AWM_Paper1', 'AWM_Paper4', 'SoftwareX_SWAFL']
     for n in names: build(n)

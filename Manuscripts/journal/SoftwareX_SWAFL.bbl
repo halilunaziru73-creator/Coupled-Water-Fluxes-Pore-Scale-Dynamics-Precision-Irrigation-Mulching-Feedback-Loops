@@ -54,12 +54,15 @@ D.~N. Moriasi, J.~G. Arnold, M.~W. {Van Liew}, R.~L. Bingner, R.~D. Harmel,
 \newblock \href {https://doi.org/10.13031/2013.23153}
   {\path{doi:10.13031/2013.23153}}.
 
-\bibitem{Hansen1991}
-S.~Hansen, H.~E. Jensen, N.~E. Nielsen, H.~Svendsen, Simulation of nitrogen
-  dynamics and biomass production in winter wheat using the danish simulation
-  model {DAISY}, Fertilizer Research 27 (1991) 245--259.
-\newblock \href {https://doi.org/10.1007/BF01051131}
-  {\path{doi:10.1007/BF01051131}}.
+\bibitem{Hansen1990}
+S.~Hansen, H.~E. Jensen, N.~E. Nielsen, H.~Svendsen, {DAISY}: Soil plant
+  atmosphere system model, Tech. rep., The Royal Veterinary and Agricultural
+  University, Copenhagen; NPO Report A10, Danish Environmental Protection
+  Agency, Copenhagen (1990).
+
+\bibitem{Abrahamsen2000}
+P.~Abrahamsen, S.~Hansen, Daisy: an open soil-crop-atmosphere system model,
+  Environmental Modelling and Software 15 (2000) 313--330.
 
 \bibitem{Hansen2012}
 S.~Hansen, P.~Abrahamsen, C.~T. Petersen, M.~Styczen, Daisy: model use,
@@ -104,19 +107,6 @@ P.~Steduto, T.~C. Hsiao, D.~Raes, E.~Fereres, {AquaCrop}---the {FAO} crop model
 \newblock \href {https://doi.org/10.2134/agronj2008.0139s}
   {\path{doi:10.2134/agronj2008.0139s}}.
 
-\bibitem{Razavi2012}
-S.~Razavi, B.~A. Tolson, D.~H. Burn, Review of surrogate modeling in water
-  resources, Water Resources Research 48 (2012) W07401.
-\newblock \href {https://doi.org/10.1029/2011WR011527}
-  {\path{doi:10.1029/2011WR011527}}.
-
-\bibitem{Asher2015}
-M.~J. Asher, B.~F.~W. Croke, A.~J. Jakeman, L.~J.~M. Peeters, A review of
-  surrogate models and their application to groundwater modeling, Water
-  Resources Research 51 (2015) 5957--5973.
-\newblock \href {https://doi.org/10.1002/2015WR016967}
-  {\path{doi:10.1002/2015WR016967}}.
-
 \bibitem{Walker1987}
 W.~R. Walker, G.~V. Skogerboe, Surface Irrigation: Theory and Practice,
   Prentice-Hall, Englewood Cliffs, NJ, 1987.
@@ -148,6 +138,12 @@ E.~Play{\'a}n, R.~Salvador, J.~M. Faci, N.~Zapata, A.~Mart{\'i}nez-Cob,
 \newblock \href {https://doi.org/10.1016/j.agwat.2005.01.015}
   {\path{doi:10.1016/j.agwat.2005.01.015}}.
 
+\bibitem{HaliluManual}
+N.~Halilu, {SWAFL Desktop} 1.1.0: Technical Manual (1155 pages), distributed
+  with the software and at
+  \url{https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/tree/main/Software/v1.1.0/Manual}
+  (2026).
+
 \bibitem{HaliluData}
 N.~Halilu, Coupled water fluxes and pore scale dynamics under joint precision
   irrigation and evaporation control mulching: ensemble of 10\,190 {Daisy}
@@ -155,10 +151,12 @@ N.~Halilu, Coupled water fluxes and pore scale dynamics under joint precision
 \newblock \href {https://doi.org/10.5281/zenodo.23043626}
   {\path{doi:10.5281/zenodo.23043626}}.
 
-\bibitem{HaliluManual}
-N.~Halilu, {SWAFL Desktop} 1.1.0: Technical Manual (1155 pages), distributed
-  with the software and at
-  \url{https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/tree/main/Software/v1.1.0/Manual}
-  (2026).
+\bibitem{HansenOstermeier2001}
+N.~Hansen, A.~Ostermeier, Completely derandomized self-adaptation in evolution
+  strategies, Evolutionary Computation 9 (2001) 159--195.
+
+\bibitem{Mockus1978}
+J.~Mockus, V.~Tiesis, A.~Zilinskas, The application of {B}ayesian methods for
+  seeking the extremum, Towards Global Optimization 2 (1978) 117--129.
 
 \end{thebibliography}
