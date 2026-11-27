@@ -170,7 +170,7 @@ def merged():
     if '\\section*{Acknowledgements}' in end_b:
         end.append(end_b['\\section*{Acknowledgements}'])
     body.append(elsevier_backmatter('\n'.join(end)))
-    title = 'SWAFL Desktop: equation-traceable irrigation scheduling and design with a graphical workbench for the Daisy model'
+    title = 'SWAFL: An open desktop application for equation-traceable irrigation scheduling and design with a graphical interface to the Daisy model'
     abstract = A['abstract'] + ' ' + B['abstract']
     keywords = A['keywords'].rstrip('.') + '; ' + '; '.join(k for k in B['keywords'].rstrip('.').split('; ') if k.strip() not in A['keywords'])
     meta = METADATA

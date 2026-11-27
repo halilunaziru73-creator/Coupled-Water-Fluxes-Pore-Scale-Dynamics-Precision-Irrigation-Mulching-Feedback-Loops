@@ -5,6 +5,26 @@
 \expandafter\ifx\csname href\endcsname\relax
   \def\href#1#2{#2} \def\path#1{#1}\fi
 
+\bibitem{Fereres2007}
+E.~Fereres, M.~A. Soriano, Deficit irrigation for reducing agricultural water
+  use, Journal of Experimental Botany 58 (2007) 147--159.
+\newblock \href {https://doi.org/10.1093/jxb/erl165}
+  {\path{doi:10.1093/jxb/erl165}}.
+
+\bibitem{Geerts2009}
+S.~Geerts, D.~Raes, Deficit irrigation as an on-farm strategy to maximize crop
+  water productivity in dry areas, Agricultural Water Management 96 (2009)
+  1275--1284.
+\newblock \href {https://doi.org/10.1016/j.agwat.2009.04.009}
+  {\path{doi:10.1016/j.agwat.2009.04.009}}.
+
+\bibitem{Pereira2012}
+L.~S. Pereira, I.~Cordery, I.~Iacovides, Improved indicators of water use
+  performance and productivity for sustainable water conservation and saving,
+  Agricultural Water Management 108 (2012) 39--51.
+\newblock \href {https://doi.org/10.1016/j.agwat.2011.08.022}
+  {\path{doi:10.1016/j.agwat.2011.08.022}}.
+
 \bibitem{Datta2023}
 S.~Datta, S.~Taghvaeian, Soil water sensors for irrigation scheduling in the
   united states: a systematic review of literature, Agricultural Water
@@ -24,6 +44,19 @@ H.~G. Jones, Irrigation scheduling: advantages and pitfalls of plant-based
   methods, Journal of Experimental Botany 55 (2004) 2427--2436.
 \newblock \href {https://doi.org/10.1093/jxb/erh213}
   {\path{doi:10.1093/jxb/erh213}}.
+
+\bibitem{Jakeman2006}
+A.~J. Jakeman, R.~A. Letcher, J.~P. Norton, Ten iterative steps in development
+  and evaluation of environmental models, Environmental Modelling and Software
+  21 (2006) 602--614.
+\newblock \href {https://doi.org/10.1016/j.envsoft.2006.01.004}
+  {\path{doi:10.1016/j.envsoft.2006.01.004}}.
+
+\bibitem{Refsgaard2004}
+J.~C. Refsgaard, H.~J. Henriksen, Modelling guidelines---terminology and
+  guiding principles, Advances in Water Resources 27 (2004) 71--82.
+\newblock \href {https://doi.org/10.1016/j.advwatres.2003.08.006}
+  {\path{doi:10.1016/j.advwatres.2003.08.006}}.
 
 \bibitem{Hutton2016}
 C.~Hutton, T.~Wagener, J.~Freer, D.~Han, C.~Duffy, B.~Arheimer, Most
@@ -54,11 +87,38 @@ D.~N. Moriasi, J.~G. Arnold, M.~W. {Van Liew}, R.~L. Bingner, R.~D. Harmel,
 \newblock \href {https://doi.org/10.13031/2013.23153}
   {\path{doi:10.13031/2013.23153}}.
 
+\bibitem{Legates1999}
+D.~R. Legates, G.~J. McCabe, Evaluating the use of ``goodness-of-fit'' measures
+  in hydrologic and hydroclimatic model validation, Water Resources Research 35
+  (1999) 233--241.
+\newblock \href {https://doi.org/10.1029/1998WR900018}
+  {\path{doi:10.1029/1998WR900018}}.
+
+\bibitem{Razavi2012}
+S.~Razavi, B.~A. Tolson, D.~H. Burn, Review of surrogate modeling in water
+  resources, Water Resources Research 48 (2012) W07401.
+\newblock \href {https://doi.org/10.1029/2011WR011527}
+  {\path{doi:10.1029/2011WR011527}}.
+
+\bibitem{Asher2015}
+M.~J. Asher, B.~F.~W. Croke, A.~J. Jakeman, L.~J.~M. Peeters, A review of
+  surrogate models and their application to groundwater modeling, Water
+  Resources Research 51 (2015) 5957--5973.
+\newblock \href {https://doi.org/10.1002/2015WR016967}
+  {\path{doi:10.1002/2015WR016967}}.
+
 \bibitem{Hansen1990}
 S.~Hansen, H.~E. Jensen, N.~E. Nielsen, H.~Svendsen, {DAISY}: Soil plant
   atmosphere system model, Tech. rep., The Royal Veterinary and Agricultural
   University, Copenhagen; NPO Report A10, Danish Environmental Protection
   Agency, Copenhagen (1990).
+
+\bibitem{Hansen1991}
+S.~Hansen, H.~E. Jensen, N.~E. Nielsen, H.~Svendsen, Simulation of nitrogen
+  dynamics and biomass production in winter wheat using the danish simulation
+  model {DAISY}, Fertilizer Research 27 (1991) 245--259.
+\newblock \href {https://doi.org/10.1007/BF01051131}
+  {\path{doi:10.1007/BF01051131}}.
 
 \bibitem{Abrahamsen2000}
 P.~Abrahamsen, S.~Hansen, Daisy: an open soil-crop-atmosphere system model,
@@ -86,6 +146,13 @@ J.~{\v{S}}im{\r{u}}nek, M.~T. {van Genuchten}, M.~{\v{S}}ejna, Development and
 \newblock \href {https://doi.org/10.2136/vzj2007.0077}
   {\path{doi:10.2136/vzj2007.0077}}.
 
+\bibitem{Simunek2016}
+J.~{\v{S}}im{\r{u}}nek, M.~T. {van Genuchten}, M.~{\v{S}}ejna, Recent
+  developments and applications of the {HYDRUS} computer software packages,
+  Vadose Zone Journal 15~(7) (2016).
+\newblock \href {https://doi.org/10.2136/vzj2016.04.0033}
+  {\path{doi:10.2136/vzj2016.04.0033}}.
+
 \bibitem{Jones2003}
 J.~W. Jones, G.~Hoogenboom, C.~H. Porter, K.~J. Boote, W.~D. Batchelor, L.~A.
   Hunt, et~al., The {DSSAT} cropping system model, European Journal of Agronomy
@@ -107,6 +174,66 @@ P.~Steduto, T.~C. Hsiao, D.~Raes, E.~Fereres, {AquaCrop}---the {FAO} crop model
 \newblock \href {https://doi.org/10.2134/agronj2008.0139s}
   {\path{doi:10.2134/agronj2008.0139s}}.
 
+\bibitem{Richards1931}
+L.~A. Richards, Capillary conduction of liquids through porous mediums, Physics
+  1 (1931) 318--333.
+\newblock \href {https://doi.org/10.1063/1.1745010}
+  {\path{doi:10.1063/1.1745010}}.
+
+\bibitem{vanGenuchten1980}
+M.~T. {van Genuchten}, A closed-form equation for predicting the hydraulic
+  conductivity of unsaturated soils, Soil Science Society of America Journal 44
+  (1980) 892--898.
+\newblock \href {https://doi.org/10.2136/sssaj1980.03615995004400050002x}
+  {\path{doi:10.2136/sssaj1980.03615995004400050002x}}.
+
+\bibitem{Mualem1976}
+Y.~Mualem, A new model for predicting the hydraulic conductivity of unsaturated
+  porous media, Water Resources Research 12 (1976) 513--522.
+\newblock \href {https://doi.org/10.1029/WR012i003p00513}
+  {\path{doi:10.1029/WR012i003p00513}}.
+
+\bibitem{Feddes1978}
+R.~A. Feddes, P.~J. Kowalik, H.~Zaradny, Simulation of Field Water Use and Crop
+  Yield, Pudoc, Wageningen, 1978.
+
+\bibitem{Monteith1965}
+J.~L. Monteith, Evaporation and environment, Symposia of the Society for
+  Experimental Biology 19 (1965) 205--234.
+
+\bibitem{Ritchie1972}
+J.~T. Ritchie, Model for predicting evaporation from a row crop with incomplete
+  cover, Water Resources Research 8 (1972) 1204--1213.
+\newblock \href {https://doi.org/10.1029/WR008i005p01204}
+  {\path{doi:10.1029/WR008i005p01204}}.
+
+\bibitem{Allen1998}
+R.~G. Allen, L.~S. Pereira, D.~Raes, M.~Smith,
+  \href{https://www.fao.org/4/x0490e/x0490e00.htm}{Crop evapotranspiration:
+  Guidelines for computing crop water requirements}, Tech. Rep. FAO Irrigation
+  and Drainage Paper 56, FAO, Rome (1998).
+\newline\urlprefix\url{https://www.fao.org/4/x0490e/x0490e00.htm}
+
+\bibitem{Kostiakov1932}
+A.~N. Kostiakov, On the dynamics of the coefficient of water-percolation in
+  soils and on the necessity for studying it from a dynamic point of view for
+  purposes of amelioration, in: Transactions of the 6th Commission of the
+  International Society of Soil Science, Part A, Moscow, 1932, pp. 17--21.
+
+\bibitem{Philip1957}
+J.~R. Philip, The theory of infiltration: 4. sorptivity and algebraic
+  infiltration equations, Soil Science 84 (1957) 257--264.
+
+\bibitem{GreenAmpt1911}
+W.~H. Green, G.~A. Ampt, Studies on soil physics: 1. the flow of air and water
+  through soils, The Journal of Agricultural Science 4 (1911) 1--24.
+\newblock \href {https://doi.org/10.1017/S0021859600001441}
+  {\path{doi:10.1017/S0021859600001441}}.
+
+\bibitem{Elliott1982}
+R.~L. Elliott, W.~R. Walker, Field evaluation of furrow infiltration and
+  advance functions, Transactions of the ASAE 25 (1982) 396--400.
+
 \bibitem{Walker1987}
 W.~R. Walker, G.~V. Skogerboe, Surface Irrigation: Theory and Practice,
   Prentice-Hall, Englewood Cliffs, NJ, 1987.
@@ -126,6 +253,10 @@ J.~Keller, D.~Karmeli, Trickle irrigation design parameters, Transactions of
 J.~Keller, R.~D. Bliesner, Sprinkle and Trickle Irrigation, Van Nostrand
   Reinhold, New York, 1990.
 
+\bibitem{Hazen1905}
+G.~S. Williams, A.~Hazen, Hydraulic Tables, John Wiley and Sons, New York,
+  1905.
+
 \bibitem{Christiansen1942}
 J.~E. Christiansen, Irrigation by sprinkling, Tech. Rep. Bulletin 670,
   University of California Agricultural Experiment Station, Berkeley (1942).
@@ -137,6 +268,14 @@ E.~Play{\'a}n, R.~Salvador, J.~M. Faci, N.~Zapata, A.~Mart{\'i}nez-Cob,
   139--159.
 \newblock \href {https://doi.org/10.1016/j.agwat.2005.01.015}
   {\path{doi:10.1016/j.agwat.2005.01.015}}.
+
+\bibitem{Burt1997}
+C.~M. Burt, A.~J. Clemmens, T.~S. Strelkoff, K.~H. Solomon, R.~D. Bliesner,
+  L.~A. Hardy, T.~A. Howell, D.~E. Eisenhauer, Irrigation performance measures:
+  efficiency and uniformity, Journal of Irrigation and Drainage Engineering 123
+  (1997) 423--442.
+\newblock \href {https://doi.org/10.1061/(ASCE)0733-9437(1997)123:6(423)}
+  {\path{doi:10.1061/(ASCE)0733-9437(1997)123:6(423)}}.
 
 \bibitem{HaliluManual}
 N.~Halilu, {SWAFL Desktop} 1.1.0: Technical Manual (1155 pages), distributed
@@ -151,6 +290,72 @@ N.~Halilu, Coupled water fluxes and pore scale dynamics under joint precision
 \newblock \href {https://doi.org/10.5281/zenodo.23043626}
   {\path{doi:10.5281/zenodo.23043626}}.
 
+\bibitem{BalwinderSingh2011}
+{Balwinder-Singh}, P.~L. Eberbach, E.~Humphreys, S.~S. Kukal, The effect of
+  rice straw mulch on evapotranspiration, transpiration and soil evaporation of
+  irrigated wheat in punjab, india, Agricultural Water Management 98 (2011)
+  1847--1855.
+\newblock \href {https://doi.org/10.1016/j.agwat.2011.05.007}
+  {\path{doi:10.1016/j.agwat.2011.05.007}}.
+
+\bibitem{Vuaille2024}
+J.~Vuaille, P.~Abrahamsen, S.~M. Jensen, E.~Diamantopoulos, T.~S. Wacker, C.~T.
+  Petersen, Modelling pesticide degradation and leaching in conservation
+  agriculture: effect of no-till and mulching, Science of the Total Environment
+  929 (2024) 172559.
+\newblock \href {https://doi.org/10.1016/j.scitotenv.2024.172559}
+  {\path{doi:10.1016/j.scitotenv.2024.172559}}.
+
+\bibitem{Doorenbos1979}
+J.~Doorenbos, A.~H. Kassam, Yield Response to Water, FAO Irrigation and
+  Drainage Paper 33, Rome, 1979.
+
+\bibitem{Seneviratne2010}
+S.~I. Seneviratne, T.~Corti, E.~L. Davin, M.~Hirschi, E.~B. Jaeger, I.~Lehner,
+  B.~Orlowsky, A.~J. Teuling, Investigating soil moisture--climate interactions
+  in a changing climate: a review, Earth-Science Reviews 99 (2010) 125--161.
+\newblock \href {https://doi.org/10.1016/j.earscirev.2010.02.004}
+  {\path{doi:10.1016/j.earscirev.2010.02.004}}.
+
+\bibitem{Koster2004}
+R.~D. Koster, P.~A. Dirmeyer, Z.~Guo, G.~Bonan, E.~Chan, P.~Cox, C.~T. Gordon,
+  S.~Kanae, E.~Kowalczyk, D.~Lawrence, et~al., Regions of strong coupling
+  between soil moisture and precipitation, Science 305 (2004) 1138--1140.
+\newblock \href {https://doi.org/10.1126/science.1100217}
+  {\path{doi:10.1126/science.1100217}}.
+
+\bibitem{Drusch2012}
+M.~Drusch, U.~Del~Bello, S.~Carlier, et~al., Sentinel-2: {ESA}'s optical
+  high-resolution mission for {GMES} operational services, Remote Sensing of
+  Environment 120 (2012) 25--36.
+
+\bibitem{Rouse1974}
+J.~W. Rouse, R.~H. Haas, J.~A. Schell, D.~W. Deering, Monitoring vegetation
+  systems in the {G}reat {P}lains with {ERTS}, NASA Special Publication 351
+  (1974) 309--317.
+
+\bibitem{Huete2002}
+A.~Huete, K.~Didan, T.~Miura, E.~P. Rodriguez, X.~Gao, L.~G. Ferreira, Overview
+  of the radiometric and biophysical performance of the {MODIS} vegetation
+  indices, Remote Sensing of Environment 83 (2002) 195--213.
+
+\bibitem{Poggio2021}
+L.~Poggio, L.~M. de~Sousa, N.~H. Batjes, G.~B.~M. Heuvelink, B.~Kempen,
+  E.~Ribeiro, D.~Rossiter, {SoilGrids} 2.0: producing soil information for the
+  globe with quantified spatial uncertainty, SOIL 7 (2021) 217--240.
+
+\bibitem{Saltelli2008}
+A.~Saltelli, M.~Ratto, T.~Andres, F.~Campolongo, J.~Cariboni, D.~Gatelli,
+  M.~Saisana, S.~Tarantola, Global Sensitivity Analysis: The Primer, Wiley,
+  Chichester, 2008.
+
+\bibitem{Celia1990}
+M.~A. Celia, E.~T. Bouloutas, R.~L. Zarba, A general mass-conservative
+  numerical solution for the unsaturated flow equation, Water Resources
+  Research 26 (1990) 1483--1496.
+\newblock \href {https://doi.org/10.1029/WR026i007p01483}
+  {\path{doi:10.1029/WR026i007p01483}}.
+
 \bibitem{HansenOstermeier2001}
 N.~Hansen, A.~Ostermeier, Completely derandomized self-adaptation in evolution
   strategies, Evolutionary Computation 9 (2001) 159--195.
@@ -158,5 +363,22 @@ N.~Hansen, A.~Ostermeier, Completely derandomized self-adaptation in evolution
 \bibitem{Mockus1978}
 J.~Mockus, V.~Tiesis, A.~Zilinskas, The application of {B}ayesian methods for
   seeking the extremum, Towards Global Optimization 2 (1978) 117--129.
+
+\bibitem{Nash1970}
+J.~E. Nash, J.~V. Sutcliffe, River flow forecasting through conceptual models
+  part {I}---a discussion of principles, Journal of Hydrology 10 (1970)
+  282--290.
+\newblock \href {https://doi.org/10.1016/0022-1694(70)90255-6}
+  {\path{doi:10.1016/0022-1694(70)90255-6}}.
+
+\bibitem{Hillel1998}
+D.~Hillel, Environmental Soil Physics, Academic Press, San Diego, 1998.
+
+\bibitem{Oreskes1994}
+N.~Oreskes, K.~Shrader-Frechette, K.~Belitz, Verification, validation, and
+  confirmation of numerical models in the earth sciences, Science 263 (1994)
+  641--646.
+\newblock \href {https://doi.org/10.1126/science.263.5147.641}
+  {\path{doi:10.1126/science.263.5147.641}}.
 
 \end{thebibliography}

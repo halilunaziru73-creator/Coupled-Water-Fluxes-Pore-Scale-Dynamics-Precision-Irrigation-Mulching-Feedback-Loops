@@ -1,11 +1,11 @@
 \documentclass[preprint,12pt]{elsarticle}
 \input{jmacros.tex}
 \journal{SoftwareX}
-\hypersetup{pdftitle={SWAFL Desktop: equation-traceable irrigation scheduling and design with a graphical workbench for the Daisy model},pdfauthor={Naziru Halilu}}
+\hypersetup{pdftitle={SWAFL: An open desktop application for equation-traceable irrigation scheduling and design with a graphical interface to the Daisy model},pdfauthor={Naziru Halilu}}
 \begin{document}
 
 \begin{frontmatter}
-\title{SWAFL Desktop: equation-traceable irrigation scheduling and design with a graphical workbench for the Daisy model}
+\title{SWAFL: An open desktop application for equation-traceable irrigation scheduling and design with a graphical interface to the Daisy model}
 
 \author[aua,upna]{Naziru Halilu\corref{cor1}}
 \ead{halilunaziru73@gmail.com}
@@ -14,11 +14,19 @@
 \affiliation[upna]{organization={Public University of Navarre},city={Pamplona},country={Spain}}
 
 \begin{abstract}
-Irrigation software seldom shows which relation produced a number, and process models such as Daisy reach a decision only through hand-made steps in which the origin of a number is lost. SWAFL Desktop is an open, offline application for irrigation scheduling and design that joins three computing engines (a meta-model of a 10\,190-run Daisy ensemble, a daily soil-water model and closed-form surface, drip and sprinkler design modules) with a graphical workbench that plans, runs and explains Daisy simulations. Every output is traced to a numbered equation with a provenance label, every Daisy result shown comes from a Daisy run, and every computing part is tested against a reference outside the software.
+Irrigation software seldom shows which relation produced a number, where that relation holds, or how it was checked. SWAFL is an open, offline desktop application for irrigation scheduling and for the design of surface, drip, sprinkler and drainage systems. Every number on its screens is traced to a numbered equation that carries its origin (literature, data-driven or engineered), and every computing part is backed by a test against a reference outside the software, such as published worked examples and independent solvers. A graphical workbench gives access to the Daisy soil--plant--atmosphere model without editing text files, and a bridge passes its outputs to the decision layers under one rule: a Daisy result is shown only from Daisy output. The design layers reproduce textbook examples within 2\,\%, and the checks found and removed defects that were invisible on the screen.
 \end{abstract}
 
+\begin{highlights}
+\item Open, offline application for irrigation scheduling and system design
+\item Every displayed number is traced to a numbered equation and its source
+\item Surface, drip and sprinkler layers reproduce textbook examples within 2\%
+\item A graphical workbench runs the Daisy model without editing set-up files
+\item Verification against outside references found and removed hidden defects
+\end{highlights}
+
 \begin{keyword}
-irrigation decision support \sep irrigation design \sep Daisy model \sep graphical user interface \sep equation traceability \sep software verification
+irrigation scheduling \sep irrigation design \sep decision support \sep Daisy model \sep graphical user interface \sep software verification
 \end{keyword}
 \end{frontmatter}
 
@@ -33,7 +41,7 @@ C3 & Permanent link to Reproducible Capsule & Not available; all checks re-run f
 C4 & Legal Code License & MIT; Daisy is distributed under its own licence\\
 C5 & Code versioning system used & git\\
 C6 & Software code languages, tools, and services used & JavaScript (Electron, Node.js), HTML/CSS; Python for the verification scripts; Daisy 7.1.14\\
-C7 & Compilation requirements, operating environments \& dependencies & Node.js and Electron (build); Leaflet and geotiff.js and Daisy 7.1.14 for Windows (bundled); runs on Windows, macOS, Linux and in a web browser\\
+C7 & Compilation requirements, operating environments \& dependencies & Node.js and Electron (build); Leaflet, geotiff.js and Daisy 7.1.14 for Windows (bundled); runs on Windows, macOS, Linux and in a web browser\\
 C8 & If available, link to developer documentation/manual & \url{\manualurl}\\
 C9 & Support email for questions & halilunaziru73@gmail.com\\\bottomrule
 \end{tabularx}
@@ -57,63 +65,80 @@ S8 & Support email for questions & halilunaziru73@gmail.com\\\bottomrule
 
 \linenumbers
 \section{Motivation and significance}
-Between soil-water science and a decision about when, how much and by which method to irrigate lies a layer of software: schedulers, sensor dashboards, design calculators and crop-water models \cite{Datta2023,Garcia2020,Jones2004}. Three weaknesses recur. Tools report numbers without saying which equation produced them or whether it comes from the literature or from an in-house heuristic; they are tested on cases chosen by their authors, with results seldom re-runnable by others \cite{Hutton2016,Wilkinson2016}; and screening emulators are used as absolute predictors \cite{Bennett2013,Moriasi2007}.
+The decisions of when, how much and by which method to irrigate are made more and more with software: schedulers, sensor dashboards, design calculators and crop-water models \cite{Fereres2007,Geerts2009,Pereira2012,Datta2023,Garcia2020,Jones2004}. Three weaknesses recur in that software. Numbers are reported without the equation that produced them, or without saying whether it comes from the literature or from an in-house heuristic \cite{Jakeman2006,Refsgaard2004}; tests are chosen by the authors and seldom published in a form others can re-run \cite{Hutton2016,Wilkinson2016}; and fast emulators are used as absolute predictors although their evaluation concerns ranking and fit statistics \cite{Bennett2013,Moriasi2007,Legates1999,Razavi2012,Asher2015}.
 
-Process models such as Daisy \cite{Hansen1990,Abrahamsen2000,Hansen2012,Holbak2026}, HYDRUS \cite{Simunek2008}, DSSAT \cite{Jones2003}, APSIM \cite{Keating2003} and AquaCrop \cite{Steduto2009} are the scientific backbone, but a simulation is specified in a text file, run by a program and read from files. That suits a model developer and stops a person with a question about a field: how much of the water a mulch saves is lost to drainage, which trigger suits a sandy soil, what a smaller nitrogen dose does to leaching. A set of simulations that answers such a question is rarely recorded with the answer, and when a model result reaches a decision tool by hand, its origin is easily lost. Meanwhile, classical irrigation design (volume-balance advance in surface irrigation \cite{Walker1987,Walker1989}, lateral hydraulics in drip \cite{KellerKarmeli1974,Keller1990}, nozzle and pattern analysis for sprinklers \cite{Christiansen1942,Playan2005}) is published as closed-form equations with worked examples, a free and under-used source of verification data.
+Process models such as Daisy \cite{Hansen1990,Hansen1991,Abrahamsen2000,Hansen2012,Holbak2026}, HYDRUS \cite{Simunek2008,Simunek2016}, DSSAT \cite{Jones2003}, APSIM \cite{Keating2003} and AquaCrop \cite{Steduto2009} hold the physics of water flow \cite{Richards1931,vanGenuchten1980,Mualem1976}, root uptake \cite{Feddes1978} and evaporation \cite{Monteith1965,Ritchie1972,Allen1998} that a sound decision needs. They are specified in text files, run from a command line and read from log files, which suits a model developer and stops most people with a question about a field. Classical irrigation design, by contrast, is published as closed-form equations with worked examples: infiltration \cite{Kostiakov1932,Philip1957,GreenAmpt1911}, volume-balance advance in surface irrigation \cite{Elliott1982,Walker1987,Walker1989}, lateral hydraulics in drip \cite{KellerKarmeli1974,Keller1990,Hazen1905} and nozzle and pattern analysis for sprinklers \cite{Christiansen1942,Playan2005}. These worked examples are a free and under-used source of verification data, and the performance indicators of irrigation are well defined \cite{Burt1997}.
 
-SWAFL Desktop addresses these problems under two rules. The \emph{rule of traceability}: every number leads to a numbered equation carrying a provenance label, and every claim of fidelity is backed by a re-runnable test against a reference outside the software. The \emph{rule of origin}: a layer shows a Daisy result only from a Daisy run. It is intended for irrigation engineers, agronomists, extension services, teachers and students who need transparent estimates of schedules and designs, and for researchers who want to run designed Daisy experiments without writing set-up files.
+SWAFL addresses these weaknesses with two rules. The \emph{rule of traceability}: every number leads to a numbered equation with a provenance label, and every computing part is backed by a re-runnable test against a reference outside the software. The \emph{rule of origin}: a layer shows a Daisy result only from Daisy output. The application is for irrigation engineers, agronomists, extension services, teachers and students who need transparent estimates of schedules and designs, and for researchers who want to use Daisy without writing set-up files.
 
 \section{Software description}
 \subsection{Software architecture}
-SWAFL Desktop is an Electron application written in JavaScript (\cref{fig:arch}). The Windows program is one portable executable containing the runtime, the application, Daisy 7.1.14 with its library and the 1\,154-page manual \cite{HaliluManual}; it needs no installation, administrator rights or network. The same code runs in a web browser. The user works in one window with a tree of layers, the drawing of the layer, a dashboard with the same five tabs for every layer, and a panel of project properties (soil, tillage, crop, mulch, weather, irrigation method, trigger, nitrogen and a working date from 1980 to 2100) that every layer shares.
+SWAFL is an Electron application written in JavaScript (\cref{fig:arch}). The Windows program is one portable executable containing the runtime, the application, Daisy 7.1.14 with its library and the user manual \cite{HaliluManual}; it needs no installation, administrator rights or network. The same code runs in a web browser. The user works in one window (\cref{fig:main}) with a tree of layers, the drawing of the open layer, a dashboard with the same tabs for every layer, and a panel of project properties (soil, tillage, crop, mulch, weather, irrigation method, trigger, nitrogen and working date) that all layers share.
 
 %%PULL p2.tex fig:arch side
 
-Four computing parts stand behind the layers. \emph{Engine~1} is an annual meta-model that composes, by ratios and differences, the 20-year means of 10\,190 Daisy simulations in 17 designed experiments \cite{HaliluData} into evapotranspiration, soil evaporation, transpiration, irrigation, yield, drainage and nitrogen leaching for the chosen settings; it fits no parameter. \emph{Engine~2} is a daily 40-layer soil-water model that gives dates, depths and schedules and is scaled so that its 20-year means equal those of Engine~1. The \emph{design layers} solve volume-balance advance with Kostiakov--Lewis intake for border, furrow and basin irrigation, the drip lateral by iterating emitter discharge and Hazen--Williams friction to convergence, and sprinkler discharge, range, uniformity and spacing. The \emph{Daisy workbench} (\cref{fig:wb}) writes Daisy set-ups, runs Daisy and reads its logs back; its bridge (a log parser, a seasonal summariser, a soil map, a question map and one live object from which the Daisy layers read) enforces the rule of origin.
+\begin{figure}[!htbp]\centering
+\includegraphics[width=\textwidth]{\figdir/softwarex/fig2_main_window.jpg}
+\caption{The main window of SWAFL: the tree of layers (left), the drawing of the open layer (centre), the dashboard with results, charts and messages (right of centre) and the shared project properties (right).}
+\label{fig:main}
+\end{figure}
 
-%%PULL p3.tex fig:wb
+Four computing parts stand behind the layers. \emph{Engine~1} is an annual meta-model that composes by ratios and differences the published outputs of designed Daisy experiments \cite{HaliluData} for the chosen soil, tillage, mulch, climate, trigger, sensor depth, method and nitrogen rate; it fits no parameter. \emph{Engine~2} is a daily layered soil-water model in the tradition of FAO-56 \cite{Allen1998} that gives dates, depths and schedules and is scaled to the annual means of Engine~1. The \emph{design layers} solve volume-balance advance with Kostiakov--Lewis intake for border, furrow and basin irrigation \cite{Walker1987,Walker1989}, the drip lateral by iterating emitter discharge and Hazen--Williams friction to convergence \cite{KellerKarmeli1974,Hazen1905}, and sprinkler discharge, range, uniformity and spacing \cite{Keller1990,Christiansen1942}. The \emph{Daisy workbench} writes Daisy set-ups, runs Daisy and reads its logs back; its bridge (a log parser, a seasonal summariser, a soil map, a question map and one live object from which the Daisy layers read) enforces the rule of origin.
 
 \subsection{Software functionalities}
 \begin{itemize}[nosep]
-\item \textbf{Scheduling}: sensor depth and suction trigger against 20 years of daily soil water; a trigger law that expresses the triggers of ten soils as one root-zone depletion; next irrigation, trigger and wilting dates for the working date.
-\item \textbf{Design}: layout, advance, infiltrated depth, efficiencies and a design table for surface irrigation; lateral hydraulics and emission uniformity for drip; nozzle, spacing, uniformity, pipe network and hydraulic grade line for sprinklers; a search for the most efficient inputs.
-\item \textbf{Exploration}: the fate of water saved by mulch, evaporation regimes, tillage and consolidation, roots, seven soil--atmosphere feedback loops, 20-season reliability and water and nitrogen budgets, a crop library of 48 crops, and a field map with Sentinel-2 indices and management zones.
-\item \textbf{Daisy experiments}: scenarios from the Daisy library, 14 prepared experiments of the published ensemble as compact designs of 6 to 72 runs, and the user's own designs, each checked against a catalogue of 54 factors of what Daisy can vary; five factors scale the van~Genuchten--Mualem parameters of every horizon. The number of runs set by the user is a ceiling, kept by a seeded balanced (Latin-hypercube) choice when the combinations are more, and every run is kept file by file next to Daisy.
-\item \textbf{Reading runs}: a summary of the range of every result and the effect of every input on every result, journal-style figures of every quantity of every log, mass balances, and the root cause of every failed run located at the line of the set-up.
-\item \textbf{Model-development tools}: a set-up editor, a Richards soil column, Daisy response curves and calibration by sequential search, CMA-ES \cite{HansenOstermeier2001} or Bayesian optimisation \cite{Mockus1978}.
+\item \textbf{Scheduling} (\cref{fig:sched}): the field water balance, the fate of water saved by mulch \cite{BalwinderSingh2011,Vuaille2024}, the sensor suction day by day against the trigger, a trigger law that expresses the triggers of all soils as one root-zone depletion \cite{Allen1998}, the next irrigation, trigger and wilting dates, crop coefficients and daily water need \cite{Allen1998,Doorenbos1979}, and the feedback loops between climate, management, soil water, crop and nitrogen \cite{Seneviratne2010,Koster2004}.
+\item \textbf{Design} (\cref{fig:design}): layout, advance, infiltrated depth, efficiencies and a design table for surface irrigation; emitters, lateral hydraulics, wetted bulb and emission uniformity for drip; nozzle, spacing, wind, uniformity and soil intake for sprinklers; spacing, depth and pipes for subsurface drainage; and a search for the most efficient inputs.
+\item \textbf{Field}: a sketch of the field that feeds every design, a field map with Sentinel-2 indices \cite{Drusch2012,Rouse1974,Huete2002}, soil from SoilGrids \cite{Poggio2021}, water sources and management zones.
+\item \textbf{Daisy workbench} (\cref{fig:daisy}): the process map, scenarios from the Daisy library, prepared experiments and the user's own designs, each checked against a catalogue of what Daisy can vary and kept within a run budget by a seeded Latin-hypercube choice; every run kept file by file; a summary of the effect of every input on every result \cite{Saltelli2008}; journal-style figures of every logged quantity; mass balances; and the root cause of every failed run, located at the line of the set-up.
+\item \textbf{Model development}: a set-up editor, a Richards soil column \cite{Celia1990}, Daisy response curves and calibration by sequential search, CMA-ES \cite{HansenOstermeier2001} or Bayesian optimisation \cite{Mockus1978}.
 \item \textbf{Traceability}: each tile, chart and arrow names its equation; the manual labels every equation as literature, data-driven or engineered and opens at the section of the layer in use.
 \end{itemize}
 
+\begin{figure}[!htbp]\centering
+\includegraphics[width=\textwidth]{\figdir/softwarex/fig3_scheduling_layers.jpg}
+\caption{Scheduling and soil-water layers. (a) Field water balance: precipitation, irrigation, evapotranspiration and drainage beside the soil profile. (b) Fate of the water saved by mulch. (c) Sensor suction every day against the trigger. (d) Trigger law: root-zone depletion for every soil. (e) Feedback loops between climate, management, soil water, crop and nitrogen. (f) Crop coefficients, daily water need and schedule.}
+\label{fig:sched}
+\end{figure}
+
+\begin{figure}[!htbp]\centering
+\includegraphics[width=\textwidth]{\figdir/softwarex/fig4_design_layers.jpg}
+\caption{Design layers. (a) Surface irrigation, from the soil to a working layout. (b) Drip: emitters, wetted bulb and uniformity. (c) Sprinklers: nozzle, spacing, wind and soil intake. (d) Subsurface drainage: spacing, depth and pipes.}
+\label{fig:design}
+\end{figure}
+
 \section{Illustrative examples}
 \subsection{Design layers against textbook examples}
-Examples~6.1 (furrow) and 6.4 (border) of Walker and Skogerboe \cite{Walker1987} were recomputed. Sixteen published furrow quantities were reproduced with a median error of 0.08\,\% and a maximum of 1.81\,\% (\cref{fig:ws}), and all border quantities within 0.5\,\%. Thirteen advance times of the FAO Irrigation Paper~45 border examples \cite{Walker1989} were reproduced within $-0.2$ to $+0.5$\,\%. The drip lateral loss agrees with the Christiansen reduction factor to 0.01\,\%, and the rebuilt drip solver agrees with an independent solver to $3.2\times10^{-7}$ up to a head loss of 60\,\% of the inlet head, warning the user beyond 20\,\%. The sprinkler layer follows the textbook's decision logic, and its nozzle discharge and wetted diameter are within 1.3\,\% and 1\,\%. These tests exposed three defects of the first release, all corrected: a fixed advance exponent that made slow surface advance too fast (up to $-29$\,\%), a drip solver stopped after four iterations (errors up to 81\,\%), and a sprinkler range coefficient that under-predicted the wetted diameter by 14\,\%.
+Examples~6.1 (furrow) and 6.4 (border) of Walker and Skogerboe \cite{Walker1987} were recomputed. Sixteen published furrow quantities were reproduced with a median error of 0.08\,\% and a maximum of 1.81\,\% (\cref{fig:verif}a), and all border quantities within 0.5\,\%. Thirteen advance times of the FAO Irrigation Paper~45 border examples \cite{Walker1989} were reproduced within $-0.2$ to $+0.5$\,\%. The drip lateral loss agrees with the Christiansen reduction factor \cite{Christiansen1942} to 0.01\,\%, and the rebuilt drip solver agrees with an independent solver to $3.2\times10^{-7}$ up to a head loss of 60\,\% of the inlet head, warning the user beyond 20\,\%. The sprinkler layer follows the textbook's decision logic \cite{Keller1990}, and its nozzle discharge and wetted diameter are within 1.3\,\% and 1\,\%. These tests exposed three defects of the first release, all corrected: a fixed advance exponent that made slow surface advance too fast (up to $-29$\,\%), a drip solver stopped after four iterations (errors up to 81\,\%), and a sprinkler range coefficient that under-predicted the wetted diameter by 14\,\%.
 
-%%PULL p2.tex fig:ws
+\subsection{Engines against held-out references}
+Engine~1 was queried at the factor levels of 1\,000 held-out Daisy runs on a coarse loam. It ranked them correctly (Spearman $\rho=0.96$ for irrigation, 0.92 for drainage, 0.97 for soil evaporation), but its raw values carried a baseline offset between experiment families; after aligning the baseline, the normalised RMSE was 6.2\,\% for evapotranspiration and 18.9\,\% for irrigation (\cref{fig:verif}b), measures recommended for such comparisons \cite{Moriasi2007,Legates1999,Nash1970}. Engine~1 is therefore a rank-faithful screening emulator \cite{Razavi2012,Asher2015}. Engine~2 closed the water balance to a median 0.1\,\% of inflow and matched the annual irrigation of Engine~1 within 10\,\% in 90 of 100 cases; the exceptions are coarse soils at dry triggers. A sweep of $10^5$ Engine~1 scenarios takes about 2\,s.
 
-\subsection{Engines against held-out simulations}
-Engine~1 was queried at the factor levels of 1\,000 held-out Daisy runs (sensor depth $\times$ trigger $\times$ rain on a coarse loam). It ranked them correctly (Spearman $\rho=0.96$ for irrigation, 0.92 for drainage, 0.97 for soil evaporation), but its raw values carried a baseline offset between experiment families; after aligning the baseline, the normalised RMSE was 6.2\,\% for evapotranspiration and 18.9\,\% for irrigation (\cref{fig:e1}, \cref{tab:e1}). Engine~1 is therefore a rank-faithful screening emulator. Engine~2 closed the water balance to a median 0.1\,\% of inflow and matched the annual irrigation of Engine~1 within 10\,\% in 90 of 100 scenarios; the exceptions are coarse soils at dry triggers. A sweep of $10^5$ Engine~1 scenarios takes about 2\,s.
+\begin{figure}[!htbp]\centering
+\begin{subfigure}{\textwidth}\centering\includegraphics[width=0.9\textwidth]{\figdir/p3/fig03_ws_verification.pdf}\caption{Surface layer against Example 6.1 of Walker and Skogerboe: advance time, application efficiency and the relative differences of the 16 published quantities.}\end{subfigure}
+\begin{subfigure}{\textwidth}\centering\includegraphics[width=0.9\textwidth]{\figdir/p3/fig05_engine1_heldout.pdf}\caption{Engine~1 against 1\,000 held-out Daisy runs, as shipped (orange) and re-anchored (blue); grey lines are 1:1.}\end{subfigure}
+\caption{Verification against references outside the software.}
+\label{fig:verif}
+\end{figure}
 
-%%PULL p2.tex fig:e1
-%%PULL p2.tex tab:e1
+\subsection{Using Daisy through the workbench}
+The 14 compact designs of the workbench contain 368 Daisy runs that stand for 7\,990 runs of the published study, about 15 hours of computing instead of 361, and recover its marginal response curves with a median error of 13.2\,\% of their range; a curve that matters is re-run with more levels where it bends. Daisy 7.1.14 ran the set-ups written by the workbench for the library scenarios, deficit irrigation and the soil-hydraulic factors, and scaling the hydraulic parameters of a loam towards a faster-draining soil raised first-season percolation from 177 to 222\,mm and removed runoff, the expected direction \cite{Hillel1998}. The bridge reads the logs exactly: six bundled logs read by the bridge and independently by \texttt{pandas} differed by at most $3\times10^{-15}$, and the chemical budget closed within 0.02\,\% of the applied amount. The soil column differed from an independent reference by 0.3\,\% and 0.9\,\% in drainage for sand and loam. Comparing the denitrification response curve with 792 outputs stored by the Daisy project found a median error of 40\,\% caused by rescaling inputs that Daisy had already rescaled; after correction all 792 rows matched to $3\times10^{-15}$ (\cref{fig:daisy}).
 
-\subsection{Running and explaining Daisy experiments}
-The published study took 17.5 days of Daisy time (median 145\,s per run). The 14 compact designs of the workbench contain 368 runs that stand for 7\,990 runs of the study, about 15 hours instead of 361. They recover the marginal response curves with a median error of 13.2\,\% of their range, so they are for orientation, and a curve that matters is re-run with more levels where it bends, which is one setting (\cref{fig:wbsteps}). Daisy 7.1.14 ran the set-ups written by the workbench for the library scenarios, deficit irrigation and the soil-hydraulic factors; scaling the hydraulic parameters of a loam towards a faster-draining soil raised first-season percolation from 177 to 222\,mm and removed runoff, the expected direction.
-
-%%PULL p3.tex fig:wbsteps
-
-For an experiment the workbench produces the summary of effects, figures of every log and the diagnosis of failed runs (\cref{fig:engine}). The bridge reads the logs exactly: six bundled logs read by the bridge and independently by \texttt{pandas} differed by at most $3\times10^{-15}$, and the chemical budget closed within 0.02\,\% of the applied amount. The soil column differed from an independent reference by 0.3\,\% and 0.9\,\% in drainage for sand and loam. Comparing the denitrification response curve with 792 outputs stored by the Daisy project found a median error of 40\,\%, caused by rescaling inputs that Daisy had already rescaled; after correction all 792 rows matched to $3\times10^{-15}$.
-
-%%PULL p3.tex fig:engine
+\begin{figure}[!htbp]\centering
+\includegraphics[width=\textwidth]{\figdir/softwarex/fig6_daisy_workbench.jpg}
+\caption{The Daisy workbench. (a) The Daisy process map. (b) Experiments, checked against what Daisy can vary. (c) The experiment folder with its set-ups and the set-up editor. (d) Output pages read from Daisy log files. (e) Decision table: the effect of every input on yield, water and nitrate. (f) The bridge from Daisy output to the decision layers.}
+\label{fig:daisy}
+\end{figure}
 
 \section{Impact}
-SWAFL Desktop turns a published process-model ensemble, the Daisy model itself and the classical design theory of three irrigation methods into one offline program whose every number can be audited. A reviewer can select a displayed quantity, find its equation in the manual, check it against its source and re-run the test that supports it, without access to the developer. This changes the question asked of decision software from ``is the tool right?'', which a field trial must answer, to which outputs rest on published theory reproduced against its textbook, which on simulated ratios that preserve the ranking of options, and which on engineered relations that should be confirmed locally. The verification found four defects that were invisible on the screen, which supports shipping a test against an outside reference with every computing part.
+SWAFL turns the Daisy model and the classical design theory of irrigation into one offline program whose every number can be audited \cite{Jakeman2006,Refsgaard2004}. A reviewer can select a displayed quantity, find its equation in the manual, check it against its source and re-run the test that supports it, without access to the developer, in line with the principles of findable, re-usable research software \cite{Wilkinson2016,Hutton2016}. This changes the question asked of decision software from ``is the tool right?'', which a field trial must answer, to which outputs rest on published theory reproduced against its textbook, which on simulated ratios that preserve the ranking of options, and which on engineered relations that should be confirmed locally \cite{Oreskes1994}. The verification found four defects that were invisible on the screen, which supports shipping a test against an outside reference with every computing part.
 
-Three routes from Daisy to a decision become available in one program (\cref{tab:routes}): the published ensemble through Engine~1 in microseconds per scenario, compact experiments in hours, and the user's own runs in minutes each. The software supports research that needs designed simulation experiments (mulch savings, trigger choice, deficit irrigation, nitrogen and chemical fate), teaching of irrigation engineering and soil--plant--atmosphere modelling, and extension work where internet is unreliable. The bridge design is not specific to Daisy and can be reused for other process models. No field validation, agronomic benefit or user study is claimed; Daisy is bundled for Windows only, and the operating envelopes reported here define where field measurements would be most informative.
+Three routes from Daisy to a decision become available in one program (\cref{tab:routes}): the published experiments through Engine~1 in microseconds per scenario, compact experiments in hours, and the user's own runs in minutes each. The software supports research on irrigation and soil water (mulch savings, trigger choice, deficit irrigation \cite{Fereres2007,Geerts2009}, nitrogen and chemical fate), teaching of irrigation engineering and soil--plant--atmosphere modelling, and extension work where internet is unreliable. The bridge design is not specific to Daisy and can be reused for other process models \cite{Simunek2016,Keating2003}. No field validation, agronomic benefit or user study is claimed; Daisy is bundled for Windows only, and the operating envelopes reported here define where field measurements would be most informative.
 
 %%PULL p3.tex tab:routes
 
 \section{Conclusions}
-SWAFL Desktop 1.1.0 is an open, offline application for irrigation scheduling and design in which every output is tied to a numbered equation, a provenance label and a re-runnable test, and in which a graphical workbench plans, runs and explains Daisy simulations under the rule that a Daisy result is shown only from a Daisy run. Its design layers reproduce textbook examples within 2\,\%, its annual meta-model ranks held-out scenarios correctly, its daily model conserves mass, its bridge reads Daisy logs exactly, and the defects found by verification are corrected. Field validation is the next step.
+SWAFL 1.1.0 is an open, offline application for irrigation scheduling and design in which every output is tied to a numbered equation, a provenance label and a re-runnable test, and in which a graphical workbench gives access to the Daisy model under the rule that a Daisy result is shown only from Daisy output. Its design layers reproduce textbook examples within 2\,\%, its annual meta-model ranks held-out cases correctly, its daily model conserves mass, its bridge reads Daisy logs exactly, and the defects found by verification are corrected. Field validation is the next step.
 
 \section*{CRediT authorship contribution statement}
 \textbf{Naziru Halilu:} Conceptualization, Methodology, Software, Validation, Formal analysis, Data curation, Visualization, Writing -- original draft, Writing -- review \& editing.
@@ -125,13 +150,13 @@ The author declares that he has no known competing financial interests or person
 This research did not receive any specific grant from funding agencies in the public, commercial, or not-for-profit sectors.
 
 \section*{Data availability}
-The simulation ensemble is archived on Zenodo (\doihl{10.5281/zenodo.23043626}); every log of every run is in the repository folder \cslink{}. The verification scripts are in \url{\codeurl}.
+The Daisy outputs behind Engine~1 are archived on Zenodo (\doihl{10.5281/zenodo.23043626}); every log of every run is in the repository folder \cslink{}. The verification scripts are in \url{\codeurl}.
 
 \section*{Acknowledgements}
 The Daisy model is developed and maintained at the University of Copenhagen.
 
 \section*{Supplementary material}
-Supplementary material associated with this article is available online. \textbf{Supplementary Material S1} gives the complete text of the study in the order of this article, with every section, figure, table, equation and appendix (numbered S1, S2, \ldots), including the list of symbols, the coupled soil--water--atmosphere system and its variables, the derivations and error propagation of the engines, all result views, the field case, the equation ledger of the 134 equations and all screenshots. \textbf{Supplementary Material S2} gives the derivations, the data and the mechanisms behind every table and figure, and the map from every number to its script and data file.
+Supplementary material associated with this article is available online. \textbf{Supplementary Material S1} gives the complete text of the study in the order of this article, with every section, figure, table, equation and appendix (numbered S1, S2, \ldots), including the list of symbols, the coupled soil--water--atmosphere system and its variables, the derivations and error propagation of the engines, all result views, the field case, the equation ledger and all screenshots. \textbf{Supplementary Material S2} gives the derivations, the data and the mechanisms behind every table and figure, and the map from every number to its script and data file.
 
 \bibliographystyle{elsarticle-num}
 \bibliography{../tex/refs}
