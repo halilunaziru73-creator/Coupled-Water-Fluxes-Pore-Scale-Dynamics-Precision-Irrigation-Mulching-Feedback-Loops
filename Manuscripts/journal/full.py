@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Journal versions that keep the COMPLETE text of the manuscripts.
+"""Supplementary Material S1 of the journal articles: the COMPLETE text of the manuscripts.
+
+The articles themselves (src/ -> build.py) are kept within the limits of the journals; everything else is
+published, complete and in the order of the article, in this Supplementary Material S1.
 
 Each full manuscript in ../tex (the source of the PDFs in ../pdf) is taken as it is, every section, list of
 symbols, figure, table and appendix in the same order, and only its format is changed: the Elsevier
@@ -7,12 +10,14 @@ elsarticle class, the journal front matter (title, author, abstract, highlights,
 names of the declarations and the reference style of the journal. Papers 2 and 3 are merged section by
 section into one software paper, with every sentence of both.
 
-    python3 full.py            # writes and builds the three journal versions
+    python3 full.py            # writes and builds the three Supplementary Material S1 files
 """
 import re, subprocess, pathlib
 J = pathlib.Path(__file__).resolve().parent
 T = J.parent / 'tex'
 rd = lambda f: (T / f).read_text(encoding='utf-8')
+
+WHAT = 'This supplement gives the complete text of the study, every section, the list of symbols, every figure, table, equation and appendix, in the order of the article. The article presents the main line within the length of the journal; the sections here carry the full derivations, analyses, figures and tables to which the article refers.'
 
 HIGHLIGHTS = {'AWM_Paper1.tex': ['Drainage share of released soil storage ranged from 0.02 to 0.85 across ten soils', 'A one-parameter rate-competition law predicted it for held-out soils', 'Warming raised and wetter climates lowered the recoverable evaporation saving', 'Reported ET components omitted an unattributed term of 30\\% of ET', 'Judged on soil evaporation alone, the drainage share erred in 6 of 10 soils'], 'AWM_Paper4.tex': ['A closed form gives the reach of a suction trigger from van Genuchten parameters', 'It predicted the reach of held-out soils within a factor of 2.3', 'Common 300 cm triggers never fired on sand and loamy sand, leaving crops rainfed', 'Of each irrigation millimetre, 38\\% was transpired, 44\\% evaporated, 16\\% drained', 'The drained share rose with dose on a soil-independent scale of about 4 mm']}
 
@@ -70,6 +75,19 @@ def journal_doc(pre, title, fm, body, app, bst):
 def highlights_of(name):
     return HIGHLIGHTS[name]
 
+
+def supp(doc, out, title, what):
+    """Turn a complete journal document into Supplementary Material S1 (S-numbered, no front matter)."""
+    doc = doc.replace('\\documentclass[review,12pt,authoryear]', '\\documentclass[preprint,12pt,authoryear]')
+    doc = re.sub(r'\\journal\{[^}]*\}', r'\\journal{Supplementary Material}', doc)
+    block = ('\\renewcommand{\\thesection}{S\\arabic{section}}\\renewcommand{\\thefigure}{S\\arabic{figure}}'
+             '\\renewcommand{\\thetable}{S\\arabic{table}}\\renewcommand{\\theequation}{S\\arabic{equation}}\n'
+             '\\begin{center}{\\Large\\bfseries Supplementary Material S1}\\\\[6pt]{\\large\\bfseries %s}\\\\[8pt]'
+             'Naziru Halilu\\\\[2pt]{\\small Agricultural University of Athens, Greece; Public University of Navarre, Spain}\\end{center}\n'
+             '\\noindent\\textit{%s}\n\\bigskip\n' % (title, what))
+    doc = re.sub(r'\\begin\{frontmatter\}.*?\\linenumbers\n', lambda m: block, doc, count=1, flags=re.S)
+    (J / out).write_text(doc, encoding='utf-8')
+
 # ---------------------------------------------------------------- Papers 1 and 4 (Agricultural Water Management)
 def awm(src, out, hl_src):
     P = parts(src)
@@ -78,7 +96,7 @@ def awm(src, out, hl_src):
     pre = preamble('review,12pt,authoryear') + P['pre'] + '\\journal{Agricultural Water Management}\n'
     doc = journal_doc(pre, P['title'], front(P['title'], P['abstract'], highlights_of(hl_src), P['keywords']),
                       body, P['app'], 'elsarticle-harv')
-    (J / out).write_text(doc, encoding='utf-8')
+    supp(doc, 'Supplementary_' + out, P['title'], WHAT)
 
 # ---------------------------------------------------------------- Papers 2 and 3 merged (SoftwareX)
 def inline(text, seen=None):
@@ -160,7 +178,7 @@ def merged():
     app = a_app + '\n' + b_app
     doc = journal_doc(pre, title, front(title, abstract, None, keywords, meta), '\n'.join(body), app, 'elsarticle-num')
     doc = re.sub(r'\\cite(?:[tp]|alt|alp)\{', r'\\cite{', doc)       # numbered references
-    (J / 'SoftwareX_SWAFL.tex').write_text(doc, encoding='utf-8')
+    supp(doc, 'Supplementary_SoftwareX_SWAFL.tex', title, WHAT + ' Papers 2 and 3 of the series are merged section by section, with every sentence of both.')
     return clash
 
 def build(n):
@@ -175,4 +193,4 @@ if __name__ == '__main__':
     awm('p1.tex', 'AWM_Paper1.tex', 'AWM_Paper1.tex')
     awm('p4.tex', 'AWM_Paper4.tex', 'AWM_Paper4.tex')
     c = merged(); print('labels of Paper 3 renamed:', len(c))
-    for n in ('AWM_Paper1', 'AWM_Paper4', 'SoftwareX_SWAFL'): build(n)
+    for n in ('AWM_Paper1', 'AWM_Paper4', 'SoftwareX_SWAFL'): build('Supplementary_' + n)
