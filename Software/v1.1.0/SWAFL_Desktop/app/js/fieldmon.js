@@ -20,7 +20,7 @@ const FieldMon = (() => {
   }
   const px = (b, x, y) => { const c = Math.floor((x - b.ox) / b.rx), r = Math.floor((y - b.oy) / b.ry); if (c < 0 || r < 0 || c >= b.w || r >= b.h) return NaN; const v = b.d[r * b.w + c]; return v === undefined ? NaN : v; };
   async function read(st) {
-    const h = H(), F = h.F; if (F.pts.length < 3) throw new Error('demarcate the field first'); if (typeof GeoTIFF === 'undefined') throw new Error('the GeoTIFF reader did not load');
+    const h = H(), F = h.F; if (F.pts.length < 3) throw new Error('demarcate the field first'); await window.needGeoTIFF();
     const ring = F.pts.map(p => [p[1], p[0]]); ring.push(ring[0]); const end = new Date(), start = new Date(end - 365 * 864e5);
     st && (st.textContent = 'Searching the Sentinel-2 scenes of the last twelve months...');
     const items = await h.s2Search(ring, start, end, 60), byM = {}; items.forEach(x => { const m = x.date.slice(0, 7); if (!byM[m] || x.cloud < byM[m].cloud) byM[m] = x; });

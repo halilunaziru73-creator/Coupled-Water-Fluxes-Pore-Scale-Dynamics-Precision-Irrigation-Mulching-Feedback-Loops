@@ -351,7 +351,7 @@ const FieldMap = (() => {
     throw new Error(errs.join('; '));
   }
   async function fromS2(st) {
-    if (typeof GeoTIFF === 'undefined') throw new Error('the GeoTIFF reader did not load');
+    await window.needGeoTIFF();
     const ring = F.pts.map(p => [p[1], p[0]]); ring.push(ring[0]); const end = new Date(), start = new Date(end - F.days * 864e5);
     st.textContent = 'Searching Sentinel-2 scenes of the last ' + F.days + ' days with less than ' + F.cloud + ' % cloud...';
     const items = await s2Search(ring, start, end); if (!items.length) throw new Error('no Sentinel-2 scene with less than ' + F.cloud + ' % cloud in the last ' + F.days + ' days');

@@ -49,17 +49,17 @@
       <div id="viewBar"></div>
       <div id="centerRow">
       <div id="engineHost">
-        <iframe id="engine" title="SWAFL simulation window"></iframe><script>(function(){var u="engine/engine.html?app=1&v=20261127e"+(/^https?:/.test(location.protocol)?"&t="+Date.now():"")+"#scene=field";
+        <iframe id="engine" title="SWAFL simulation window"></iframe><script>(function(){var EV="20261127f",u="engine/engine.html?app=1&v="+EV+"#scene=field";
 /* the engine loads after the licence window is closed, so that the window answers at once; with no licence window it starts straight away */
 window.__eulaOpen=false;var started=false,veil=null;
-window.SWAFLEngineURL=function(){return "engine/engine.html?app=1&v=20261127e"+(/^https?:/.test(location.protocol)?"&t="+Date.now():"")+"#scene=field"};
+window.SWAFLEngineURL=function(){return "engine/engine.html?app=1&v="+EV+"#scene=field"};
 window.SWAFLStartEngine=function(){if(started)return;started=true;var f=document.getElementById("engine");
  try{veil=null;if(0){veil=document.createElement("div");veil.id="engVeil";veil.style.cssText="position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;background:#d4d0c8;font:bold 13px Tahoma,Segoe UI,sans-serif;color:#0a246a";veil.textContent="Loading SWAFL ...";f.parentNode.appendChild(veil);}if(window.swaflBusy)window.swaflBusy(true);var gone=function(){if(veil){veil.remove();veil=null}if(window.swaflBusy)window.swaflBusy(false)};f.addEventListener("load",gone);var tm=setInterval(function(){try{if(!veil){clearInterval(tm);return}if(f.contentWindow&&typeof f.contentWindow.switchScene==="function"){gone();clearInterval(tm)}}catch(e){}},200)}catch(e){}
  f.src=u};
 window.addEventListener("swafl-eula-accepted",window.SWAFLStartEngine);
 window.addEventListener("swafl-eula-ready",window.SWAFLStartEngine);
 /* while the licence window is read, the engine files are only fetched into the cache (no code is run, so the window stays quick); the engine then opens at once */
-function warm(){try{if(!window.fetch)return;fetch("engine/engine.html?v=20261118t").then(function(r){return r.text()}).then(function(t){var l=[],re=/<(?:script[^>]+src|link[^>]+href)="([^"#]+)"/g,m;while((m=re.exec(t)))if(!/^(https?:|data:)/.test(m[1]))l.push("engine/"+m[1]);var i=0;(function nx(){if(i>=l.length)return;var u=l[i++];fetch(u).then(function(r){return r.arrayBuffer()}).catch(function(){}).then(function(){setTimeout(nx,30)})})()}).catch(function(){})}catch(e){}}
+function warm(){try{if(!window.fetch)return;fetch("engine/engine.html?app=1&v="+EV).then(function(r){return r.text()}).then(function(t){var l=[],re=/<(?:script[^>]+src|link[^>]+href)="([^"#]+)"/g,m;while((m=re.exec(t)))if(!/^(https?:|data:)/.test(m[1]))l.push("engine/"+m[1]);var i=0;(function nx(){if(i>=l.length)return;var u=l[i++];fetch(u).then(function(r){return r.arrayBuffer()}).catch(function(){}).then(function(){setTimeout(nx,30)})})()}).catch(function(){})}catch(e){}}
 window.addEventListener("load",function(){if(window.__eulaOpen)setTimeout(warm,300);else window.SWAFLStartEngine()})})()</script>
         <div id="emptyStage"><img src="assets/logo.svg" width="72" height="72" alt=""><div><b>No layer open</b><br>Click a layer in the Layers panel to open it here.</div></div>
         <div id="loading"><div class="spl"><img src="assets/logo.svg" width="84" height="84" alt=""><h1>SWAFL</h1><div class="spbar" style="margin-top:20px"><i></i></div><p class="spm">Loading <b class="lpct">0%</b></p></div></div>
@@ -130,15 +130,15 @@ window.addEventListener("load",function(){if(window.__eulaOpen)setTimeout(warm,3
 <script src="js/wxdownload.js?v=20261116j"></script>
 <script src="js/weatherui.js?v=20261116j"></script>
 <script src="vendor/leaflet.js"></script>
-<script src="vendor/geotiff.js"></script>
+<script>/* the GeoTIFF reader (310 KB) is loaded when a satellite or soil map is first read, not at start */window.needGeoTIFF=function(){if(window.GeoTIFF)return Promise.resolve();return window.__gtP||(window.__gtP=new Promise(function(ok,no){var s=document.createElement("script");s.src="vendor/geotiff.js";s.onload=function(){ok()};s.onerror=function(){window.__gtP=null;no(new Error("the GeoTIFF reader did not load"))};document.head.appendChild(s)}))};</script>
 <script src="js/sketchcad.js?v=20261108b"></script><script src="js/sketch.js?v=20261116j"></script>
 <script src="js/fieldsym.js?v=20261101m"></script>
-<script src="js/fieldsite.js?v=20261101n"></script>
-<script src="js/fieldmap.js?v=20261127b"></script>
-<script src="js/fieldmon.js?v=20261101r"></script>
+<script src="js/fieldsite.js?v=20261127f"></script>
+<script src="js/fieldmap.js?v=20261127f"></script>
+<script src="js/fieldmon.js?v=20261127f"></script>
 <script src="js/fieldprec.js?v=20261101s"></script>
 <script src="js/fieldgeo.js?v=20261103b"></script>
-<script src="js/daisyload.js?v=20261118t"></script>
+<script src="js/daisyload.js?v=20261127f"></script>
 <script>(function(){var p=0,t0=Date.now(),done=false;function set(v){p=v;var r=Math.round(v)+"%";var a=document.querySelectorAll(".lpct");for(var i=0;i<a.length;i++)a[i].textContent=r;document.documentElement.style.setProperty("--lp",r)}
 window.__lpReset=function(){done=false;t0=Date.now();set(0)};
 window.__lpDone=function(){done=true;set(100)};

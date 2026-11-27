@@ -8,6 +8,9 @@ window.DaisyLoad = (() => {
   const one = src => new Promise(res => { const s = document.createElement('script'); s.src = src + '?v=' + V; s.async = false; s.onload = () => res(); s.onerror = () => { failed.push(src); res(); }; document.head.appendChild(s); });
   const ready = () => p || (p = (async () => { const bz = window.SWBusy ? window.SWBusy.begin('Loading', { delay: 600 }) : null; let ni = 0; /* all files are requested at once and run in the listed order (async=false), so the waiting of one file after the other is gone */ await Promise.all(L.map(s => one(s).then(() => { ni++; if (bz) bz.set(ni / L.length * 100, ni + ' of ' + L.length + ' files'); }))); if (bz) bz.end(); if (!window.DaisyRef) { await one('js/daisyrefbook.js'); await one('js/daisyref.js'); }  /* a file that did not run the first time gets a second try */ if (failed.length && window.Guard) Guard.say('These Daisy files could not be loaded: ' + failed.join(', ') + '. Reload the page; if it persists, the app folder is incomplete.'); return !failed.length; })());
   const idle = () => { (window.requestIdleCallback || (f => setTimeout(f, 400)))(() => { ready(); }, { timeout: 4000 }); };
-  if (document.readyState === 'complete') setTimeout(idle, 600); else window.addEventListener('load', () => setTimeout(idle, 600));
+  // the workbench is fetched only after the simulation window is up (or after 15 s at the latest), so the first screen loads first
+  let went = false; const go = () => { if (went) return; went = true; setTimeout(idle, 1500); };
+  const watch = () => { const f = document.getElementById('engine'); if (f) f.addEventListener('load', go, { once: true }); setTimeout(go, 15000); };
+  if (document.readyState === 'complete') watch(); else window.addEventListener('load', watch);
   return { ready, failed };
 })();

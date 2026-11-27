@@ -108,7 +108,7 @@ const FieldSite = (() => {
   }
   // the ESA WorldCover 2021 map (10 m), read from its cloud-optimised files when no Sentinel-2 scene could be read
   async function worldCover(F) {
-    if (typeof GeoTIFF === 'undefined') throw new Error('the GeoTIFF reader did not load');
+    await window.needGeoTIFF();
     const la = F.pts.map(p => p[0]), lo = F.pts.map(p => p[1]), lat0 = Math.min(...la), lon0 = Math.min(...lo), lat1 = Math.max(...la), lon1 = Math.max(...lo), tl = Math.floor(lat0 / 3) * 3, tg = Math.floor(lon0 / 3) * 3;
     const nm = (tl < 0 ? 'S' : 'N') + String(Math.abs(tl)).padStart(2, '0') + (tg < 0 ? 'W' : 'E') + String(Math.abs(tg)).padStart(3, '0');
     const tif = await GeoTIFF.fromUrl('https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_' + nm + '_Map.tif'), img = await tif.getImage(), [ox, oy] = img.getOrigin(), [rx, ry] = img.getResolution();
@@ -207,7 +207,7 @@ const FieldSite = (() => {
   }
   // the 250 m maps of sand, clay and silt (mean of 0-5, 15-30 and 30-60 cm) around a box of latitude and longitude
   async function soilMap(lat0, lon0, lat1, lon1) {
-    if (typeof GeoTIFF === 'undefined') throw new Error('the GeoTIFF reader did not load');
+    await window.needGeoTIFF();
     const P = [[lat0, lon0], [lat0, lon1], [lat1, lon0], [lat1, lon1]].map(q => igh(q[0], q[1])), pad = 375, xa = Math.min(...P.map(q => q[0])) - pad, xb = Math.max(...P.map(q => q[0])) + pad, ya = Math.min(...P.map(q => q[1])) - pad, yb = Math.max(...P.map(q => q[1])) + pad;
     const one = async (prop, dep) => { const u = 'https://maps.isric.org/mapserv?map=/map/' + prop + '.map&SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCoverage&COVERAGEID=' + prop + '_' + dep + '_mean&FORMAT=GEOTIFF_INT16&SUBSET=X(' + Math.round(xa) + ',' + Math.round(xb) + ')&SUBSET=Y(' + Math.round(ya) + ',' + Math.round(yb) + ')&SUBSETTINGCRS=http://www.opengis.net/def/crs/EPSG/0/152160&OUTPUTCRS=http://www.opengis.net/def/crs/EPSG/0/152160';
       const buf = await retry(() => net(u, true, 40000), 2), tif = await GeoTIFF.fromArrayBuffer(buf), img = await tif.getImage(), [ox, oy] = img.getOrigin(), [rx, ry] = img.getResolution(), W = img.getWidth(), Hh = img.getHeight(), ras = (await img.readRasters())[0];
