@@ -1,37 +1,38 @@
 # Journal versions of the manuscripts
 
-The manuscripts (Papers 2 and 3 merged into one software paper), refined to the format of the journals they are aimed at. The full-length versions in `../tex` and `../pdf` are unchanged; they can be submitted as Supplementary Material.
+The complete manuscripts (the same text as the PDFs in `../pdf`), in the format of the journals they are aimed at. Nothing is cut: every section, the list of symbols, every figure, table, equation and appendix is kept in the order of the full manuscript. Only the format changes.
 
-| Paper | Journal | File | Format |
+| Paper | Journal | File | Pages |
 |---|---|---|---|
-| 1. Soil hydraulic memory, recoverability of evaporation savings and water-balance closure | Agricultural Water Management | `AWM_Paper1.pdf` | Research article, Harvard references, 5 highlights, 10 figures, 10 tables |
-| 4. Reach of suction-triggered irrigation and the marginal fate of irrigation water | Agricultural Water Management | `AWM_Paper4.pdf` | Research article, Harvard references, 5 highlights, 5 figures, 4 tables |
-| 2 + 3. SWAFL Desktop: equation-traceable irrigation scheduling and design with a graphical workbench for the Daisy model | SoftwareX | `SoftwareX_SWAFL.pdf` | Original software publication, code and software metadata, 2,833 words with captions, 6 figures |
+| 1. Soil Hydraulic Memory and the Recoverability of Evaporation Savings and the Closure of the Water Balance in a Simulation Study with Daisy | Agricultural Water Management | `AWM_Paper1.pdf` | 127 |
+| 4. The Reach of Suction-Triggered Irrigation and the Marginal Fate of Irrigation Water with Closed Forms from the van Genuchten–Mualem Parameters | Agricultural Water Management | `AWM_Paper4.pdf` | 37 |
+| 2 + 3. SWAFL Desktop: equation-traceable irrigation scheduling and design with a graphical workbench for the Daisy model | SoftwareX | `SoftwareX_SWAFL.pdf` | 201 |
 
-Copies of the PDFs, saved under their titles, are in `../pdf/Journal_versions`.
+Copies, saved under their titles, are in `../pdf/Journal_versions`. The page counts are larger than the full PDFs because the review format of the journals is double spaced.
 
-## What was changed
+## What changes from the full manuscripts
 
-* **Layout and front matter**: Elsevier's `elsarticle` class (official copy from github.com/STM-Document-Engineering/elsarticle), affiliations, corresponding author, abstract, highlights (Agricultural Water Management: 3–5 bullets of at most 85 characters each), keywords, line numbers.
-* **Structure**: Agricultural Water Management papers follow Introduction, Materials and methods, Results, Discussion, Conclusions with numbered subsections (the run-in paragraphs became subsections). SoftwareX papers follow the journal template: Code metadata, Software metadata, Motivation and significance, Software description (architecture, functionalities), Illustrative examples, Impact, Conclusions.
-* **Length**: Paper 1 was cut from about 25,000 to about 7,000 words. The failed-run analysis, the per-experiment invariants, the compositional analysis, irrigation compensation, the drivers of hydraulic properties, the hypothesis register, the software section and the novelty table now go to the Supplementary Material. Paper 4 moved the depletion law, the flux diagrams, the controllability figure and the screenshots to the Supplementary Material. Papers 2 and 3 were merged into one SoftwareX paper within the 3,000-word and six-figure limits: the engines and design layers, and the Daisy workbench and bridge, described as one application.
-* **Declarations** required by Elsevier: CRediT authorship statement, declaration of competing interest, funding and data availability (the declaration of generative AI use is to be added by the author before submission).
-* **References**: Harvard (author–year) for Agricultural Water Management, numbered for SoftwareX, both from `../tex/refs.bib`.
-* **No new results**: every table and figure is copied verbatim from the original manuscripts by `build.py`, and every number in the new text was checked automatically against the originals (all found).
+* Elsevier `elsarticle` class (official copy from github.com/STM-Document-Engineering/elsarticle), review layout with line numbers.
+* Journal front matter: title, author and affiliations, corresponding author, abstract, keywords; highlights for the two Agricultural Water Management papers; code and software metadata tables for the SoftwareX paper.
+* Declarations under the names Elsevier uses: *CRediT authorship contribution statement* and *Declaration of competing interest* (texts unchanged). The declaration of generative AI use is to be added by the author before submission.
+* References: Harvard (author–year) for Agricultural Water Management, numbered for SoftwareX.
+* **Papers 2 and 3 merged section by section.** Introduction of Paper 2 followed by that of Paper 3; architecture and the coupled system of Paper 2; Materials and methods of Paper 2 with those of Paper 3 as Section 4.7; Results of Paper 2 with those of Paper 3 as Section 5.5; Discussion of Paper 2 with that of Paper 3 as Section 6.7; both conclusions; both sets of availability statements, contributions and appendices. Every sentence of both papers is kept. The one label shared by both papers is renamed in Paper 3's part.
+
+Completeness was checked line by line against the sources in `../tex`. The only lines that differ are the renamed declaration headings and Paper 3's section headings, now one level down.
 
 ## Rebuild
 
 ```
-python3 build.py                 # all three
-python3 build.py AWM_Paper4      # one
+python3 full.py
 ```
-Sources with `%%PULL` lines are in `src/`; `build.py` writes the expanded `.tex` next to this file and compiles with XeLaTeX and BibTeX.
+It reads `../tex`, writes the three `.tex` files here and compiles them with XeLaTeX and BibTeX. Any later edit to the full manuscripts is carried over by running it again.
 
 ## Before submitting (to do by the author)
 
-1. **Check the references.** Many references in `refs.bib` were entered from memory and their DOIs were never verified; check each cited entry against the publisher's page.
-2. **SoftwareX code repository.** On acceptance SoftwareX asks for the code version described to be placed in its own GitHub organisation (ElsevierSoftwareX); prepare a tagged release `v1.1.0`.
-3. **Daisy licence.** Daisy is bundled with the Windows program under its own licence; state its terms in the submission if the editor asks.
-4. **Graphical abstracts and highlights** for Papers 1 to 3 are in `../graphical_abstracts`; upload them as separate files. Highlights are also typeset in each PDF.
-5. **Abstract style.** The abstracts keep your choice of no numbers; the highlights carry the key numbers.
-6. **Check the author guides** of both journals on the day of submission, as limits can change.
+1. **Length.** The full texts are far beyond SoftwareX's limit (about 3,000 words and 6 figures) and long for Agricultural Water Management. Editors may ask for shortening or for parts to move to the Supplementary Material.
+2. **Check the references.** Many references in `refs.bib` were entered from memory and their DOIs were never verified.
+3. **SoftwareX code repository.** On acceptance SoftwareX asks for the code version described to be placed in its GitHub organisation (ElsevierSoftwareX); prepare a tagged release `v1.1.0`.
+4. **Daisy licence.** Daisy is bundled with the Windows program under its own licence.
+5. **Graphical abstracts** are in `../graphical_abstracts`; upload them as separate files.
+6. **Declaration of generative AI use**: add it before submission.
+7. **Check the author guides** of both journals on the day of submission.
