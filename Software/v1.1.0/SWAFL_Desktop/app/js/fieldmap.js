@@ -127,13 +127,13 @@ const FieldMap = (() => {
     if (F.map) { try { F.map.remove(); } catch (e) {} F.map = null; }
     let c0 = F.pts.length ? centroid(F.pts) : null; if (!c0 && window.__WXLOC) { c0 = [window.__WXLOC.lat, window.__WXLOC.lon]; if (!F.place) F.place = window.__WXLOC.name || ''; }
     F.map = L.map(el, { zoomControl: false, attributionControl: true, preferCanvas: false }).setView(c0 || [9.08, 7.4], c0 ? 16 : 6);
-    F.map2 = null; setBase(F.base); F.leg = legendCtl(F.map); F.map.on('click', e => { if (F.mode === 'sensor') { FieldGeo.addAt(e.latlng); return; } if (F.mode !== 'draw') return; addCorner([e.latlng.lat, e.latlng.lng]); });
+    F.map2 = null; setBase(F.base); F.leg = legendCtl(F.map); F.map.on('click', e => { if (F.mode === 'sensor') { FieldGeo.addAt(e.latlng); return; } if (F.mode !== 'draw') return; if (locked()) { lockNote(); return; } addCorner([e.latlng.lat, e.latlng.lng]); });
     F.map.on('mousemove', e => cursorInfo(e.latlng)); F.map.on('zoomend', () => drawLayout());
     const $ = id => document.getElementById(id);
     $('fmMode').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; F.mode = b.dataset.m; document.querySelectorAll('#fmMode button').forEach(x => x.classList.toggle('on', x === b)); el.style.cursor = F.mode === 'pan' ? 'grab' : 'crosshair'; });
     el.style.cursor = F.mode === 'pan' ? 'grab' : 'crosshair'; document.querySelectorAll('#fmMode button').forEach(x => x.classList.toggle('on', x.dataset.m === F.mode));
     $('fmZin').onclick = () => F.map.zoomIn(); $('fmZout').onclick = () => F.map.zoomOut(); $('fmFit').onclick = fit;
-    $('fmUndo').onclick = () => { F.pts.pop(); changed(); }; $('fmClear').onclick = () => { F.pts = []; changed(); };
+    $('fmUndo').onclick = () => { if (locked()) { lockNote(); return; } F.pts.pop(); changed(); }; $('fmClear').onclick = () => { F.pts = []; changed(); };
     $('fmBase').value = F.base; $('fmBase').onchange = e => setBase(e.target.value);
     $('fmLay').onchange = e => { F.lay = e.target.checked; drawLayout(); if (F.lay && !layoutData()) UI.toast(needLayout()); };
     $('fmView').value = F.view; $('fmView').onchange = e => { F.view = e.target.value; showRes(); }; $('fmSmooth').value = F.smooth ? '1' : '0'; $('fmSmooth').onchange = e => { F.smooth = e.target.value === '1'; showRes(); };
@@ -173,6 +173,11 @@ const FieldMap = (() => {
   // corners where it lengthens the outline least without a crossing (corners can be clicked in any order)
   function crossing(P) { const n = P.length; if (n < 4) return false; const L2 = P.map(p => local(p, P[0])), cr = (a, b, c, d) => { const o = (p, q, r) => Math.sign((q[0] - p[0]) * (r[1] - p[1]) - (q[1] - p[1]) * (r[0] - p[0])); return o(a, b, c) * o(a, b, d) < 0 && o(c, d, a) * o(c, d, b) < 0; };
     for (let i = 0; i < n; i++) for (let j = i + 2; j < n; j++) { if (i === 0 && j === n - 1) continue; if (cr(L2[i], L2[(i + 1) % n], L2[j], L2[(j + 1) % n])) return true; } return false; }
+  // once the indices are computed the outline is locked: touching the drawing, its corners or the map no longer resets
+  // the results; only Clear unlocks it and starts a new field
+  function locked() { return !!(F.res && F.pts.length > 2); }
+  let lockT = 0; function lockNote() { const t = Date.now(); if (t - lockT < 1500) return; lockT = t; UI.toast('The field and its indices are locked. Press Clear to draw a new field.'); }
+  function lockMarks() { const on = locked(); F.mk.forEach(m => { try { if (m.dragging) { if (on) m.dragging.disable(); else m.dragging.enable(); } const e = m.getElement && m.getElement(); if (e) e.classList.toggle('fmlock', on); } catch (e) {} }); }
   function addCorner(p) {
     const P = F.pts; if (P.length < 3 || !crossing(P.concat([p]))) { P.push(p); changed(); return; }
     const o = P[0], q = local(p, o), d = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]); let best = -1, bc = Infinity;
@@ -184,9 +189,9 @@ const FieldMap = (() => {
     if (!F.map) return; F.mk.forEach(m => F.map.removeLayer(m)); F.mk = []; if (F.poly) F.map.removeLayer(F.poly); if (F.line) F.map.removeLayer(F.line); F.poly = F.line = null;
     if (F.pts.length > 2) F.poly = L.polygon(F.pts, { color: F.res ? '#FFFFFF' : '#FFD600', weight: F.res ? 2.5 : 3, fillColor: '#FFD600', fillOpacity: F.res ? 0 : 0.12, interactive: false }).addTo(F.map);
     else if (F.pts.length > 1) F.line = L.polyline(F.pts, { color: '#FFD600', weight: 3 }).addTo(F.map);
-    F.pts.forEach((p, i) => { const m = L.marker(p, { draggable: true, icon: L.divIcon({ className: 'fmpt', html: String(i + 1), iconSize: [18, 18] }) }).addTo(F.map);
+    F.pts.forEach((p, i) => { const m = L.marker(p, { draggable: !locked(), icon: L.divIcon({ className: 'fmpt', html: String(i + 1), iconSize: [18, 18] }) }).addTo(F.map);
       m.on('drag', e => { F.pts[i] = [e.latlng.lat, e.latlng.lng]; if (F.poly) F.poly.setLatLngs(F.pts); else if (F.line) F.line.setLatLngs(F.pts); fieldInfo(); });
-      m.on('dragend', () => changed()); m.on('contextmenu', () => { F.pts.splice(i, 1); changed(); }); F.mk.push(m); });
+      m.on('dragend', () => { if (locked()) return; changed(); }); m.on('contextmenu', () => { if (locked()) { lockNote(); return; } F.pts.splice(i, 1); changed(); }); F.mk.push(m); });
     fieldInfo(); steps(); if (F.map2) { if (F.poly2) F.map2.removeLayer(F.poly2); F.poly2 = F.pts.length > 2 ? L.polygon(F.pts, { color: '#FFFFFF', weight: 2.5, fill: false, interactive: false }).addTo(F.map2) : null; }
   }
   function fieldInfo() {
@@ -196,7 +201,7 @@ const FieldMap = (() => {
       '<tr><td>Centre</td><td><b>' + c[0].toFixed(6) + ', ' + c[1].toFixed(6) + '</b><br>' + dms(c[0], 'N', 'S') + ' ' + dms(c[1], 'E', 'W') + '</td></tr><tr><td>Corners</td><td>' + F.pts.length + '</td></tr>' + (F.place ? '<tr><td>Place</td><td>' + esc(F.place) + '</td></tr>' : '') + '</table>';
   }
   function placeSketch() {
-    const m = typeof Sketch !== 'undefined' && Sketch.getMetres ? Sketch.getMetres() : null; if (!m || m.length < 3) { UI.toast('Draw the field in the sketch first'); return; }
+    const m = typeof Sketch !== 'undefined' && Sketch.getMetres ? Sketch.getMetres() : null; if (!m || m.length < 3) { UI.toast('Draw the field in the sketch first'); return; } if (locked()) { lockNote(); return; }
     const c = F.map.getCenter(), o = [c.lat, c.lng], cx = m.reduce((a, p) => a + p[0], 0) / m.length, cy = m.reduce((a, p) => a + p[1], 0) / m.length;
     F.pts = m.map(p => unlocal([p[0] - cx, -(p[1] - cy)], o)); if (Sketch.setGeo) Sketch.setGeo({ lat: o[0], lon: o[1], place: F.place, offx: cx, offy: cy }); F.linked = false; changed(); fit();
   }
@@ -498,11 +503,12 @@ const FieldMap = (() => {
   const hist = { past: [], fut: [], busy: false, cur: null,
     snap() { return JSON.stringify({ p: F.pts, s: FieldSym.snapshot() }); },
     rec() { if (this.busy) return; const n = this.snap(); if (n === this.cur) return; if (this.cur != null) { this.past.push(this.cur); if (this.past.length > 200) this.past.shift(); } this.cur = n; this.fut = []; },
-    go(back) { const from = back ? this.past : this.fut, to = back ? this.fut : this.past; if (!from.length) { UI.toast(back ? 'Nothing to undo' : 'Nothing to redo'); return; } const n = from.pop(); to.push(this.cur); const a = JSON.parse(this.cur), b = JSON.parse(n); this.cur = n; this.busy = true;
+    go(back) { const from = back ? this.past : this.fut, to = back ? this.fut : this.past; if (!from.length) { UI.toast(back ? 'Nothing to undo' : 'Nothing to redo'); return; } if (locked() && JSON.stringify(JSON.parse(from[from.length - 1]).p) !== JSON.stringify(F.pts)) { lockNote(); return; } const n = from.pop(); to.push(this.cur); const a = JSON.parse(this.cur), b = JSON.parse(n); this.cur = n; this.busy = true;
       try { if (a.s !== b.s) { FieldSym.load(b.s); restyle(); } if (JSON.stringify(a.p) !== JSON.stringify(b.p)) { F.pts = b.p; changed(); redraw(); } UI.toast((back ? 'Undone: ' : 'Done again: ') + (JSON.stringify(a.p) !== JSON.stringify(b.p) ? 'the outline of the field (' + b.p.length + ' corners)' : 'the colours of the map')); } finally { this.busy = false; } } };
   document.addEventListener('keydown', e => { if (!document.getElementById('fmMap') || !(e.ctrlKey || e.metaKey)) return; const k = e.key.toLowerCase(), t = e.target; if (t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) && t.type !== 'range' && t.type !== 'checkbox') || (t && t.isContentEditable)) return;
     if (k === 'z' && !e.shiftKey) { hist.go(true); } else if (k === 'y' || (k === 'z' && e.shiftKey)) { hist.go(false); } else return; e.preventDefault(); e.stopImmediatePropagation(); }, true);
   function showRes() {
+    lockMarks();
     const el = document.getElementById('fmRes'); if (!el || !F.res) return; const S = F.res.S;
     if (!F.openIdx) F.openIdx = new Set([F.idx]); F.openIdx.add(F.idx); const OPEN = RK().filter(k => F.openIdx.has(k)), NEXT = RK().find(k => !F.openIdx.has(k));
     const idxH = '<table class="tbl fmtab"><tr><th>Index</th><th>Mean</th><th>10–90 %</th><th>Min · max</th><th>Reading of the mean</th></tr>' +

@@ -565,7 +565,7 @@ function drawSPAC() {
   });
   T('bar length: log scale, 0.01 to 100 MPa', lx, ry0 + 8 * rowH + 12, { s: 8.5, i: true, c: MUTE });
   // ---- the chain in numbers ----
-  const Yc = Y0 + H0 + 22; SP.ys.pic = Y0 - 40; SP.ys.num = Yc - 20; ctx.strokeStyle = '#1F4D2E'; ctx.lineWidth = 1.5; T('The same water, as your simulated numbers', 16, Yc, { s: 12.5, b: true, c: '#1F4D2E' }); ctx.beginPath(); ctx.moveTo(16, Yc + 6); ctx.lineTo(W - 16, Yc + 6); ctx.stroke();
+  const Yc = Y0 + H0 + 22; SP.ys.pic = Y0 - 40; SP.ys.num = Yc - 20; sectionHeader('The same water, as your simulated numbers', Yc);
   const cards = [['Rain + irrigation', (m.rain + m.irr).toFixed(0) + ' mm/yr', 'rain ' + m.rain.toFixed(0) + ' + irrigation ' + m.irr.toFixed(0), true, '#2E6FD0'], ['Soil store', A.hRZ.toFixed(0) + ' cm', 'root-zone suction today', true, '#8E4A3A'], ['Root uptake', m.transp.toFixed(0) + ' mm/yr', 'roots reach ' + A.rd.toFixed(0) + ' cm today', true, '#2E9E4F'], ['Leaf', spFmt(A.psiLeaf), A.closed ? 'stomata closing' : 'stomata open', false, '#5B6470'], ['To the air', m.et.toFixed(0) + ' mm/yr', 'evapotranspiration', true, '#E8912D']];
   const cw2 = (W - 32 - 4 * 8) / 5; cards.forEach((c, i) => { const cx = 16 + i * (cw2 + 8), cy = Yc + 18; ctx.fillStyle = '#fff'; ctx.strokeStyle = c[4]; ctx.lineWidth = 2; rrect(cx, cy, cw2, 82, 8); ctx.fill(); ctx.stroke(); ctx.fillStyle = c[4]; ctx.fillRect(cx, cy + 6, 4, 70);
     T(c[0], cx + 10, cy + 16, { s: 9, b: true, c: MUTE }); T(c[1], cx + 10, cy + 38, { s: c[1].length > 9 ? 12 : 14, b: true, c: INK }); T(c[2], cx + 10, cy + 54, { s: 8, c: MUTE }); spBadge(c[3] ? 'SIMULATED' : 'derived', cx + 10, cy + 74, c[3]);
@@ -579,7 +579,7 @@ function drawSPAC() {
   T('Soil conductivity at this suction is ' + (A.Kr * 100 < 1 ? '<1' : (A.Kr * 100).toFixed(A.Kr < 0.1 ? 1 : 0)) + '% of saturated (your fitted van Genuchten curve for ' + sName.toLowerCase() + '),', 26, ky + 32, { s: 9.5, c: INK });
   T('so a drier soil makes every step of the chain harder: ' + (A.dsoil > 0.01 ? 'the soil alone costs ' + A.dsoil.toFixed(2) + ' MPa of the drop today.' : 'there is no crop drawing water today.'), 26, ky + 46, { s: 9.5, c: INK });
   // ---- the particle lens ----
-  const Yl = ky + 78; ctx.strokeStyle = '#1F4D2E'; ctx.lineWidth = 1.5; T('The root meets the real soil particles', 16, Yl, { s: 12.5, b: true, c: '#1F4D2E' }); ctx.beginPath(); ctx.moveTo(16, Yl + 6); ctx.lineTo(W - 16, Yl + 6); ctx.stroke();
+  const Yl = ky + 78; sectionHeader('The root meets the real soil particles', Yl);
   const lw2 = 372, lh2 = 232, lx2 = 14, ly2 = Yl + 16, key = [soil, Math.round(A.hRZ), state.till, state.tcIdx].join('|');
   if (SP.key !== key) { SP.g = microGet({ soil, mmW: 2.0, W: 320, H: 200, p: poreIdx(state.till, 120, TC_VALUES[state.tcIdx]), seed: 5, nb: 3 }); SP.cv = labPaint(SP.g, A.hRZ, 'min', 'lens'); SP.key = key; }
   ctx.save(); ctx.beginPath(); rrect(lx2, ly2, lw2, lh2, 8); ctx.clip(); ctx.imageSmoothingEnabled = true; ctx.drawImage(SP.cv, 0, 0, 320, 200, lx2, ly2, lw2, lh2);
@@ -600,7 +600,7 @@ function drawSPAC() {
   q('Pores holding water in this view', (rp ? SP.cv.nWater / rp * 100 : 0).toFixed(0) + '%', ly2 + 100, ['SIMULATED', true]);
   q('Water films stay in pores narrower than', (rUm * 2 >= 10 ? Math.round(rUm * 2) : (rUm * 2).toFixed(1)) + ' µm', ly2 + 138, ['SIMULATED', true]);
   q('Grain / fine matrix / pore space', (g0.stats.grain * 100).toFixed(0) + ' / ' + (g0.stats.matrix * 100).toFixed(0) + ' / ' + (g0.stats.pore * 100).toFixed(0) + ' %', ly2 + 176, ['SIMULATED', true]);
-  const Yr = ly2 + lh2 + 40; SP.ys.root = Yl - 20; SP.ys.lab = Yr - 20; ctx.strokeStyle = '#1F4D2E'; ctx.lineWidth = 1.5; T('Particle lab: your soil, live and in colour', 16, Yr, { s: 12.5, b: true, c: '#1F4D2E' }); ctx.beginPath(); ctx.moveTo(16, Yr + 6); ctx.lineTo(W - 16, Yr + 6); ctx.stroke(); spBadge('YOUR DATA', W - 20, Yr - 2, true, true);
+  const Yr = ly2 + lh2 + 40; SP.ys.root = Yl - 20; SP.ys.lab = Yr - 20; sectionHeader('Particle lab: your soil, live and in colour', Yr); spBadge('YOUR DATA', W - 20, Yr - 2, true, true);
   const endY = drawLab(A, Yr);
   T('Simulation record: 10 soils, 10,190 runs', 16, ly2 + lh2 + 22, { s: 8.5, i: true, c: MUTE });
 }
@@ -801,12 +801,23 @@ function sidChip(x, y, w, h, label, on, fn, tip) {
   T(label, x + w / 2, y + h / 2 + 3.5 + (on ? 0.5 : 0), { s: 9.5, b: true, a: 'center', c: on ? '#fff' : '#000' }); hot(x, y, w, h, fn, tip);
 }
 function sidRow(label, y, items) { T(label, 16, y + 15, { s: 9, b: true, c: MUTE }); const x0 = 92, gap = 5, tw = W - 14 - x0; const cw = (tw - gap * (items.length - 1)) / items.length; items.forEach((it, i) => sidChip(x0 + i * (cw + gap), y, cw, 22, it[0], it[1], it[2], it[3])); }
+// result headings in the texture of the layer headings: raised grey bar, bold navy title, navy rule under it
+const LBAR = { bg: '#D4D0C8', hi: '#FFFFFF', lo: '#404040', mid: '#808080', ink: '#0A246A' };
+function layerBar(x, y, w, h) {
+  ctx.fillStyle = LBAR.bg; ctx.fillRect(x, y, w, h);
+  ctx.fillStyle = LBAR.hi; ctx.fillRect(x, y, w - 1, 1); ctx.fillRect(x, y, 1, h - 1);
+  ctx.fillStyle = '#DFDFDF'; ctx.fillRect(x + 1, y + 1, w - 3, 1); ctx.fillRect(x + 1, y + 1, 1, h - 3);
+  ctx.fillStyle = LBAR.lo; ctx.fillRect(x, y + h - 1, w, 1); ctx.fillRect(x + w - 1, y, 1, h);
+  ctx.fillStyle = LBAR.mid; ctx.fillRect(x + 1, y + h - 2, w - 2, 1); ctx.fillRect(x + w - 2, y + 1, 1, h - 2);
+  ctx.fillStyle = LBAR.ink; ctx.fillRect(x, y + h, w, 2);
+}
 function sidHead(txt, y, sub) {
   try { const k = currentScene && currentScene.id; (window.__SEC = window.__SEC || {})[k] = (window.__SEC[k] || {}); window.__SEC[k][String(txt).replace(/\$([^$]*)\$/g, (m, s) => s.replace(/[_^{}]/g, ''))] = [y, W]; } catch (e) {}
-  const nc = W < 620, mw = W - 32; let ex = 0;
-  if (nc) { ex = (sidWrap(txt, 16, y, mw, { s: 12.5, b: true, c: SIDC.ink }, 15) - 1) * 15; } else T(txt, 16, y, { s: 12.5, b: true, c: SIDC.ink });
-  ctx.fillStyle = '#808080'; ctx.fillRect(16, y + 6 + ex, W - 32, 1); ctx.fillStyle = '#fff'; ctx.fillRect(16, y + 7 + ex, W - 32, 1);
-  if (sub) { if (nc) ex += (sidWrap(sub, 16, y + 19 + ex, mw, { s: 9, i: true, c: MUTE }, 11) - 1) * 11; else T(sub, 16, y + 19, { s: 9, i: true, c: MUTE }); }
+  const nc = W < 620, mw = W - 44; let ex = 0;
+  if (nc) ex = (sidWrap(txt, 22, y, mw, { s: 12.5, b: true, c: LBAR.ink }, 15, true) - 1) * 15;
+  layerBar(12, y - 15, W - 24, 20 + ex);
+  if (nc) sidWrap(txt, 22, y, mw, { s: 12.5, b: true, c: LBAR.ink }, 15); else T(txt, 22, y, { s: 12.5, b: true, c: LBAR.ink });
+  if (sub) { if (nc) ex += (sidWrap(sub, 16, y + 19 + ex, W - 32, { s: 9, i: true, c: MUTE }, 11) - 1) * 11; else T(sub, 16, y + 19, { s: 9, i: true, c: MUTE }); }
   return ex;
 }
 // ---------- compact (phone) layout helpers: W follows the pane width, text wraps, rows reflow ----------
@@ -4834,7 +4845,7 @@ function poreLens(cx, cy, r, til, tcN, wet) {
 // the capillary fringe and the groundwater. Overlays mark what each scene is about.
 // ------------------------------------------------------------------------------------------------
 const SWA_H = 262;
-function sectionHeader(txt, y) { T(txt, 16, y, { s: 12.5, b: true, c: '#1F4D2E' }); ctx.strokeStyle = '#1F4D2E'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(16, y + 6); ctx.lineTo(W - 16, y + 6); ctx.stroke(); }
+function sectionHeader(txt, y) { layerBar(12, y - 15, W - 24, 20); T(txt, 22, y, { s: 12.5, b: true, c: LBAR.ink }); }
 function drawSWA(x, y, w, mode, o) {
   o = o || {}; const m = current, t = nowSec(), sim = seasonSim(), kd = midSeasonK(), vff = VFF_VALUES[state.vffIdx], rain = RAIN_VALUES[state.rainIdx], dT = TEMP_VALUES[state.tempIdx], heat = clampN((dT + 1) / 4.5, 0, 1);
   const gy = y + 132, PXs = 1.0, gwY = gy + 100, til = TILL_F[state.till], tcN = state.tcIdx / 4;
@@ -6184,7 +6195,7 @@ function r1AllStep() {
 }
 function drawR1All(y0, dd) {
   const list = r1SoilList(), cw = 56, X0 = 44, PX = 2.3, GY = y0 + 66, hh = 100 * PX, ink = '#6B4423';
-  T('Rooting depth in all ten soils', 16, y0, { s: 12.5, b: true, c: ink }); ctx.strokeStyle = ink; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(16, y0 + 6); ctx.lineTo(W - 16, y0 + 6); ctx.stroke();
+  sectionHeader('Rooting depth in all ten soils', y0);
   T('Same day and weather for every soil. Crop, tillage, consolidation, mulch, rain, temperature, trigger, sensor depth,', 16, y0 + 21, { s: 9.2, c: MUTE });
   T('irrigation method and nitrogen all act on every column. Brown dashed line: deepest roots (20-year mean). Green ticks: depth', 16, y0 + 33, { s: 9.2, c: MUTE });
   T('holding 50% and 90% of the water taken. Click a column to use that soil.', 16, y0 + 45, { s: 9.2, c: MUTE });
