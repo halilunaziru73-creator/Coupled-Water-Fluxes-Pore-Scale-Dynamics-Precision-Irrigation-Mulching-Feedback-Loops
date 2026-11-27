@@ -335,10 +335,12 @@
     y += 270;
     // every crop for this soil
     const keys = lib.FIELD.concat(lib.PERENNIAL), rows = keys.map(k => { const o = CWB(k); return [k, lib.params(k, null, state.plantDoy).label, o.mean.ETc, o.mean.In * gI, o.mean.ev * gI, o.mean.RY * gN]; }).sort((a, b) => b[3] - a[3]);
-    const rh = 19, th = 40 + rows.length * rh; frame(16, y, W - 32, th, 'Every crop in the library on this soil', 'net irrigation, highest first · tap a row to choose the crop');
-    const cols = [30, W * 0.42, W * 0.58, W * 0.74, W * 0.9]; T('Crop', cols[0], y + 36, { s: 9.5, b: true, c: MUTE }); T('ETc (mm/yr)', cols[1], y + 36, { s: 9.5, b: true, c: MUTE, a: 'right' }); T('Net irrigation (mm/yr)', cols[2], y + 36, { s: 9.5, b: true, c: MUTE, a: 'right' }); T('Irrigations per year', cols[3], y + 36, { s: 9.5, b: true, c: MUTE, a: 'right' }); T('Relative yield', cols[4], y + 36, { s: 9.5, b: true, c: MUTE, a: 'right' });
+    const rh = 19, hd = 12, th = 40 + hd + rows.length * rh; frame(16, y, W - 32, th, 'Every crop in the library on this soil', 'net irrigation, highest first · tap a row to choose the crop');
+    const cols = [30, W * 0.42, W * 0.58, W * 0.74, W * 0.9]; // the headings on two lines (name, then unit), so the narrow columns never run into each other
+    const hdr = (a, b, x, al) => { T(a, x, y + 34, { s: 9.5, b: true, c: MUTE, a: al }); if (b) T(b, x, y + 46, { s: 8.5, c: MUTE, a: al }); };
+    hdr('Crop', '', cols[0], 'left'); hdr('ETc', '(mm/yr)', cols[1], 'right'); hdr('Net irrigation', '(mm/yr)', cols[2], 'right'); hdr('Irrigations', 'per year', cols[3], 'right'); hdr('Relative', 'yield', cols[4], 'right');
     const imax = Math.max(...rows.map(r => r[3]), 1);
-    rows.forEach((r, i) => { const yy = y + 40 + (i + 1) * rh - 4; if (r[0] === key) { ctx.fillStyle = '#FFF4C8'; ctx.fillRect(17, yy - 14, W - 34, rh); } else if (i % 2) { ctx.fillStyle = '#F6F4EE'; ctx.fillRect(17, yy - 14, W - 34, rh); }
+    rows.forEach((r, i) => { const yy = y + 40 + hd + (i + 1) * rh - 4; if (r[0] === key) { ctx.fillStyle = '#FFF4C8'; ctx.fillRect(17, yy - 14, W - 34, rh); } else if (i % 2) { ctx.fillStyle = '#F6F4EE'; ctx.fillRect(17, yy - 14, W - 34, rh); }
       ctx.fillStyle = 'rgba(46,125,232,0.18)'; ctx.fillRect(cols[1] + 12, yy - 11, (cols[2] - cols[1] - 60) * r[3] / imax, 12);
       T(r[1], cols[0], yy, { s: 10 }); T(fmt(r[2]), cols[1], yy, { s: 10, a: 'right' }); T(fmt(r[3]), cols[2], yy, { s: 10, b: true, a: 'right' }); T(fmt(r[4], 1), cols[3], yy, { s: 10, a: 'right' }); T(fmt(100 * r[5]) + ' %', cols[4], yy, { s: 10, a: 'right' });
       hot(17, yy - 14, W - 34, rh, () => applyState({ crop: r[0] }), 'choose ' + r[1]); });
