@@ -33,7 +33,7 @@ under their own licences, which apply to those components.
 
 3. WHAT YOU MAY AND MAY NOT DO
 You may: run the Software; create, save and share your own projects, results,
-figures and reports; and discuss results produced with the Software.
+figures and reports; and cite or discuss results produced with the Software.
 
 You may not: remove or alter copyright, author or licence notices; present the
 Software or its models as your own work; use the Software for any unlawful
@@ -66,19 +66,27 @@ place names or dates that you enter and your IP address, and are governed by
 those providers' own terms and privacy policies. If you do not want these
 requests, do not use those features.
 
-6. UPDATES AND SUPPORT
+6. INTELLECTUAL PROPERTY AND CITATION
+The Author keeps all rights in the Software that this Agreement does not
+expressly give you. Your own data, projects and results belong to you.
+
+If you publish work that uses the Software, please cite it as: Halilu, N.
+(2026). SWAFL: soil-water and irrigation decision-support suite, version
+1.1.0. Zenodo record: https://zenodo.org/records/23043626
+
+7. UPDATES AND SUPPORT
 The Software may be updated, changed or discontinued at any time. The Author
 has no obligation to provide updates, maintenance or support. Questions and
 bug reports are welcome but are answered on a best-effort basis.
 
-7. DISCLAIMER OF WARRANTY
+8. DISCLAIMER OF WARRANTY
 TO THE FULLEST EXTENT PERMITTED BY LAW, THE SOFTWARE IS PROVIDED "AS IS" AND
 "AS AVAILABLE", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
 WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, ACCURACY,
 NON-INFRINGEMENT, OR THAT THE SOFTWARE WILL BE ERROR-FREE, UNINTERRUPTED OR
 SUITABLE FOR YOUR FIELD, CROP OR DESIGN.
 
-8. LIMITATION OF LIABILITY
+9. LIMITATION OF LIABILITY
 TO THE FULLEST EXTENT PERMITTED BY LAW, THE AUTHOR AND CONTRIBUTORS WILL NOT
 BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL OR
 PUNITIVE DAMAGES, OR FOR LOSS OF CROP, YIELD, WATER, PROFIT, DATA OR BUSINESS,
@@ -90,12 +98,12 @@ IF YOU OBTAINED IT FREE OF CHARGE.
 Nothing in this Agreement limits liability that cannot be limited by law, or
 any rights you have as a consumer under mandatory law.
 
-9. TERMINATION
+10. TERMINATION
 This Agreement applies until it is terminated. It ends automatically if you
 breach it. You can end it at any time by uninstalling and deleting all copies
-of the Software. Sections 4, 7, 8 and 10 continue after termination.
+of the Software. Sections 4, 6, 8, 9 and 11 continue after termination.
 
-10. GENERAL TERMS
+11. GENERAL TERMS
 This Agreement is governed by the law that applies to the Author, without regard to
 conflict-of-law rules, and subject to any mandatory consumer-protection law
 of the place where you live. If any part of this
@@ -105,10 +113,10 @@ about the Software. The Author may publish a new version of this Agreement
 with a new release; you will be asked to accept it before you continue using
 that release.
 
-11. CONTACT
+12. CONTACT
 Naziru Halilu - halilunaziru73@gmail.com
 
 BY CLICKING "I ACCEPT" OR BY INSTALLING OR USING THE SOFTWARE YOU AGREE TO THIS AGREEMENT.
 
-12. Third-party software and data
+13. Third-party software and data
 SWAFL uses the Daisy soil-plant-atmosphere model (a separate program with its own open-source licence), the crop coefficients and equations of FAO Irrigation and Drainage Paper 56 (and its 2025 revision), and, when you ask for them, weather from Open-Meteo and NASA POWER and map tiles from their providers. These belong to their authors and providers and are used under their own terms. Nothing in this Agreement changes those terms.
