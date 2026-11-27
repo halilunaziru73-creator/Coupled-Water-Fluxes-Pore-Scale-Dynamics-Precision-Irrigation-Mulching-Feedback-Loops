@@ -37,7 +37,7 @@ const Dash = (() => {
           r('Water the soil holds', (+N.awc).toFixed(1) + ' mm per cm · ' + Math.round(N.taw) + ' mm in ' + N.roots + ' cm of roots') +
           r('Trigger (when to irrigate)', N.trigCm.toLocaleString('en-US') + ' cm suction · depletion ' + f2(N.fT), '#3F1D80') +
           r('Critical stress f*', f2(N.fstar) + ' = ' + N.critCm.toLocaleString('en-US') + ' cm suction', '#B01E14') +
-          '<tr><td id="n1dL">Sensor</td><td><b id="n1dS">-</b></td></tr><tr><td>Next irrigation</td><td><b id="n1dN" style="color:#1565C0">-</b></td></tr><tr><td>Trigger reached</td><td><b id="n1dT" style="color:#3F1D80">-</b></td></tr><tr><td>Wilting point if no water comes</td><td><b id="n1dW" style="color:#B01E14">-</b></td></tr>' +
+          '<tr><td id="n1dL">Sensor</td><td><b id="n1dS">-</b></td></tr><tr><td id="n1dRL">Root zone</td><td><b id="n1dR">-</b></td></tr><tr><td>Next irrigation</td><td><b id="n1dN" style="color:#1565C0">-</b></td></tr><tr><td>Trigger reached</td><td><b id="n1dT" style="color:#3F1D80">-</b></td></tr><tr><td>Wilting point if no water comes</td><td><b id="n1dW" style="color:#B01E14">-</b></td></tr>' +
           r('Drying speed at the peak of the season', (N.rate * 100).toFixed(1) + ' % a day · crop uses ' + (+N.mm).toFixed(1) + ' mm a day') +
           r('From field capacity to the trigger', N.days != null ? Math.max(1, Math.round(N.days)) + ' days' : '-') +
           r('Yield', (+N.yield).toFixed(2) + ' ' + UI.esc(N.yUnit) + (N.rel != null ? ' · ' + Math.round(N.rel * 100) + ' % of the best trigger' : '')) +
@@ -135,10 +135,14 @@ const Dash = (() => {
     let V = null; try { V = E.json('n1Live()'); } catch (e) {} if (!V) return; const key = V.dd + '|' + V.crop + '|' + V.season.N + '|' + (V.next ? V.next.q : '') + '|' + V.fS.toFixed(3) + '|' + V.fT + '|' + V.soil + '|' + cv.clientWidth; if (key === n1Key && !force) return; n1Key = key;
     const set = (id, t) => { const e = document.getElementById(id); if (e && e.innerHTML !== t) e.innerHTML = t; }, dn = n => n === 0 ? 'today' : n === 1 ? 'tomorrow' : 'in ' + n + ' days';
     set('n1dL', 'Sensor at ' + V.z + ' cm on ' + UI.esc(V.date) + (V.play ? ' <small>(replay)</small>' : ''));
-    set('n1dS', V.sensorCm.toLocaleString('en-US') + ' cm · depletion ' + (V.fS * 100).toFixed(0) + ' % · ' + (V.due ? '<span style="color:#B01E14">irrigate now</span>' : 'within the trigger'));
+    // the sensor row reads exactly what the drawing shows; the next irrigation, the trigger and the wilting point follow the whole root
+    // zone (the water balance of the roots), which is what the irrigation is decided on, so it has its own row
+    set('n1dS', V.zCm.toLocaleString('en-US') + ' cm · depletion ' + V.zF.toFixed(2) + ' · ' + (V.zDue ? '<span style="color:#B01E14">past the trigger at the sensor</span>' : 'within the trigger'));
+    set('n1dRL', 'Root zone' + (V.rd ? ' (0 to ' + V.rd + ' cm)' : '') + '<br><small>decides the irrigation</small>');
+    set('n1dR', 'depletion ' + V.fS.toFixed(2) + ' of ' + V.fT.toFixed(2) + ' (' + V.sensorCm.toLocaleString('en-US') + ' cm) · ' + (V.due ? '<span style="color:#B01E14">irrigate now</span>' : 'within the trigger'));
     set('n1dN', V.next ? UI.esc(V.next.date) + ' (' + dn(V.next.days) + ', ' + V.next.mm + ' mm)' : 'none in the next 12 months');
     set('n1dT', V.due ? 'reached: ' + (V.fS * 100).toFixed(0) + ' % against ' + (V.fT * 100).toFixed(0) + ' %' : V.trig ? UI.esc(V.trig.date) + ' (' + dn(V.trig.days) + ')' : 'about ' + V.trigDry + ' days of drying');
-    set('n1dW', V.wilt ? UI.esc(V.wilt.date) + ' (' + dn(V.wilt.days) + ' at ' + (V.rate * 100).toFixed(1) + ' % a day' + (V.peak ? ', the speed of the peak of the season' : '') + ')' : '-');
+    set('n1dW', !V.wilt ? '-' : V.wilt.none ? 'not reached in the next ' + V.wilt.horizon + ' days (the recorded rain keeps it away)' : UI.esc(V.wilt.date) + ' (' + dn(V.wilt.days) + (V.wilt.line ? ', at ' + (V.rate * 100).toFixed(1) + ' % a day' : ', with the recorded weather and no irrigation') + ')');
     set('n1dCap', 'Root-zone depletion from the chosen date, ' + UI.esc(V.season.start) + ' to ' + UI.esc(V.season.end) + ', for ' + UI.esc(V.crop) + ': 0 % is field capacity, 100 % the wilting point. Purple: the root zone with this irrigation; black dots: the day it touches the trigger and irrigation starts; blue arrows: the refill back to field capacity; dashed red: the baseline with no irrigation; red line: the chosen date.');
     const S = V.season, n = S.x.length;
     const marks = S.x.filter((q, i) => S.irr[i] && (i === 0 || S.x[i - 1] !== q)).map(q => ({ x: q, t: '', c: 'rgba(21,101,192,0.55)' })).concat([{ y: V.fT * 100, t: 'trigger ' + (V.fT * 100).toFixed(0) + ' %', c: '#3F1D80' }]);

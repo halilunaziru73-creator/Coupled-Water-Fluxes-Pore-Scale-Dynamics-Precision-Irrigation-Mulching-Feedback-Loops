@@ -5980,10 +5980,17 @@ window.n1Live = function () {
     else { x.push(q); y.push(+(100 * depAt(k)).toFixed(1)); irr.push(0); base.push(isFinite(bq) ? Math.min(100, bq * 100) : NaN); }
   }
   const toWilt = rate > 0 ? Math.max(0, (1 - fS) / rate) : null, toTrigDry = rate > 0 && fS < fT ? (fT - fS) / rate : 0;
+  // the sensor as the drawing reads it (the soil layer at the sensor depth on the day of the clock), so the panel and the picture agree
+  const zi = clampN(Math.round(z / DZ), 0, NLAY - 1), fZ = clampN(1 - sim.s[dd][zi], 0, 1);
+  // the wilting point: from the dry run with the recorded weather when it reaches it; a straight line at today's speed only when there
+  // is no dry run, and never before the trigger
+  let W2 = null; if (wilt != null) W2 = { date: dateAt(wilt), days: wilt - k0, q: wilt - k0, run: true };
+  else if (PL && dr.out && dr.out.length) W2 = { none: true, horizon: dr.out.length };
+  else if (toWilt != null) { const d = Math.max(Math.ceil(toWilt), trig != null ? trig - k0 + 1 : 0); W2 = { date: dateAt(k0 + d), days: d, q: d, line: true }; }
   return { soil: DATA.soil_labels[soil], dd: k0, date: dateAt(k0), crop, z, fS, fT, sensorCm: Math.round(invDepletion(soil, fS)), due: fS >= fT, inSeason: true,
     today: 0, next: nx ? { date: dateAt(nx.k), days: nx.k - k0, q: nx.k - k0, mm: +nx.net.toFixed(0) } : null,
     trig: trig != null ? { date: dateAt(trig), days: trig - k0, q: trig - k0 } : null, trigDry: Math.ceil(toTrigDry),
-    wilt: wilt != null ? { date: dateAt(wilt), days: wilt - k0, q: wilt - k0 } : (toWilt != null ? { date: dateAt(k0 + Math.ceil(toWilt)), days: Math.ceil(toWilt), q: Math.ceil(toWilt) } : null), rate, peak, taw, rd,
+    wilt: W2, rate, peak, taw, rd, zCm: Math.round(invDepletion(soil, fZ)), zF: fZ, zDue: fZ >= fT,
     season: { x, y, irr, lab, base, pts, arrows, N, year: dateOfK(k0 + (PL ? PL.sh : 0)).getFullYear(), start: dateAt(k0), end: dateAt(k0 + N) }, play: !!n1ui.play };
 };
 function n1Choice(y, sf, sim, dd) {
