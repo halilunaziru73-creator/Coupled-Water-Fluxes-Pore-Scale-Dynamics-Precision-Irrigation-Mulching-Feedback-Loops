@@ -306,3 +306,8 @@ input[type=range]{accent-color:#0A246A}
 #dashBody .dsec{border:1px solid #808080 !important}
 /* field outline locked once its indices are computed: corners show a lock cursor until Clear */
 .fmpt.fmlock{cursor:not-allowed !important;opacity:.85}
+
+/* layer rows grow with their text, so a name on two lines never runs into the row below */
+#layerTree .tkids .tkids .tn:not(.grp){height:auto;min-height:21px;padding-top:2px;padding-bottom:2px}
+#layerTree .tkids .tkids .tn:not(.grp) .lbl{line-height:1.2}
+#layerTree .tn.dzsub{min-height:18px;font-size:10.5px}

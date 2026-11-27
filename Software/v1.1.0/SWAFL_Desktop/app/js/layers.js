@@ -22,6 +22,19 @@ const Layers = (() => {
     { id: 'g-dbuilt', name: 'Model development', icon: 'soil', items: [['dz-editor', 'Set-up editor (.dai)', ''], ['dz-build', 'Model builder (any Daisy model as a form)', ''], ['dz-richards', 'Soil column (Richards equation)', ''], ['dz-deni', 'Denitrification and N2O response curves', ''], ['dz-calib', 'Calibration', '']] },
     { id: 'g-ddoc', name: 'Documentation', icon: 'book', items: [['dz-learn', 'Learn the Daisy files (.dai, Common, a sample experiment)', ''], ['dz-docs', 'Model description and installation', ''], ['dz-refman', 'Daisy reference manual (every component and parameter)', ''], ['dz-manual', 'The SWAFL manual inside the program (every section, at its page)', '']] }
   ];
+  // short names in the tree (the full name stays as the tooltip); the scenarios are listed under "Scenarios"
+  const SHORT = { 'dz-library': 'Parameter library', 'dz-compare': 'Run comparison and tests', 'dz-build': 'Model builder',
+    'dz-learn': 'Learn the Daisy files', 'dz-refman': 'Daisy reference manual', 'dz-manual': 'SWAFL manual',
+    'dz-deni': 'Denitrification response curves',
+    'dz-scen:irrigation': 'Irrigation strategy', 'dz-scen:nitrogen': 'Nitrogen and leaching', 'dz-scen:climate': 'Climate change',
+    'dz-scen:chemical': 'Pesticide and tracer fate', 'dz-scen:soil': 'Sand against loam', 'dz-scen:own': 'Own Daisy set-up',
+    'dz-scen:irrmethod': 'Irrigation method', 'dz-scen:trigger': 'When to irrigate', 'dz-scen:dose': 'Water per irrigation',
+    'dz-scen:deficit': 'Deficit irrigation', 'dz-scen:sensor': 'Sensor depth', 'dz-scen:fertype': 'Fertiliser type',
+    'dz-scen:manure': 'Slurry and manure', 'dz-scen:ntiming': 'When to fertilise', 'dz-scen:textures': 'Eight soil textures',
+    'dz-scen:jbsoils': 'Danish soils JB1 to JB7', 'dz-scen:roots': 'Rooting depth', 'dz-scen:aquitard': 'Aquitard',
+    'dz-scen:stations': 'Six European climates', 'dz-scen:radiation': 'Sunnier or cloudier', 'dz-scen:pesticides': 'Library pesticides',
+    'dz-scen:sorption': 'Sorption (K_OC)' };
+  const shortOf = it => SHORT[it[0]] || it[1].replace(/ \(from my runs\)$/, '').replace(/^Scenario: /, '');
   const DESIGN = ['sid', 'drip', 'spr', 'drn'];
   // the manual at the section of the layer in use (the manual is built into the program: js/daisymanual.js)
   const manBtn = id => { const M = window.SWAFLManual, sx = M && M.idx ? M.forLayer(id) : null; return '<button class="vb" data-man="' + (sx ? sx.page : 0) + '" title="' + UI.esc(sx ? 'The manual: ' + sx.title + ', page ' + sx.page : 'The manual') + '" style="margin-left:auto">&#128214; Manual' + (sx ? ' p. ' + sx.page : '') + '</button>'; };
@@ -53,7 +66,13 @@ const Layers = (() => {
     h += '<div class="tn grp" data-id="droot"><span class="tw">' + (open('droot') ? '&#9660;' : '&#9654;') + '</span>' + UI.icon('soil') + '<span class="lbl">Daisy model</span></div><div class="tkids" ' + (open('droot') ? '' : 'hidden') + '>';
     DAISY.forEach(g => {
       h += '<div class="tn grp" style="padding-left:14px" data-id="' + g.id + '"><span class="tw">' + (open(g.id) ? '&#9660;' : '&#9654;') + '</span>' + UI.icon(g.icon) + '<span class="lbl">' + g.name + '</span></div><div class="tkids" ' + (open(g.id) ? '' : 'hidden') + '>';
-      g.items.forEach(it => { h += '<div class="tn' + (dzCur === it[0] ? ' sel' : '') + '" style="padding-left:30px" data-scene="' + it[0] + '"><span class="tw"></span>' + UI.icon('doc') + '<span class="lbl">' + UI.esc(it[1]) + '</span></div>'; });
+      const row = (it, sub) => '<div class="tn' + (dzCur === it[0] ? ' sel' : '') + (sub ? ' dzsub' : '') + '" style="padding-left:' + (sub ? 16 : 30) + 'px" data-scene="' + it[0] + '" title="' + UI.esc(it[1]) + '"><span class="tw"></span>' + (sub ? '' : UI.icon('doc')) + '<span class="lbl">' + UI.esc(shortOf(it)) + '</span></div>';
+      const subs = g.items.filter(it => /^dz-scen:/.test(it[0]));
+      g.items.forEach(it => {
+        if (/^dz-scen:/.test(it[0])) return;
+        h += row(it, false);
+        if (it[0] === 'dz-scen' && subs.length) h += '<div class="tkids">' + subs.map(x => row(x, true)).join('') + '</div>';
+      });
       h += '</div>';
     });
     h += '</div>';
