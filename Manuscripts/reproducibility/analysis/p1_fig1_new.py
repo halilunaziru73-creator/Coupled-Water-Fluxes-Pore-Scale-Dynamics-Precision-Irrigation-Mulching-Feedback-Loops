@@ -1,6 +1,6 @@
 import sys; sys.path.insert(0,__import__('os').environ.get('SWAFL_MS','.')+'/analysis')
 import p_style as S
-S.use_fig1_palette()
+S.use_fig1_purple_green()
 from p_style import *
 FG=__import__('os').environ.get('SWAFL_MS','.')+'/fig/'
 fig=S.setup(130,95,6.1)

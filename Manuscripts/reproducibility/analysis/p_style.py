@@ -9,6 +9,7 @@ FS=7.0; LW=1.3
 ax=None
 YLO=0
 STIP_BG='#DCE8F4'; STIP_DOT='#7F9FC6'
+SURF_LINE='#B98A4E'; SURF_TXT='#8A6A3E'
 def setup(W,H,figw):
     global ax
     fig=plt.figure(figsize=(figw,figw*H/W),facecolor='white'); ax=fig.add_axes([0,0,1,1]); ax.set_xlim(0,W); ax.set_ylim(0,H); ax.axis('off'); return fig
@@ -60,9 +61,9 @@ def legend(x0,y0,x1,y1,fs=FS-1.8,chip_label='Driving variable or control'):
 def bands(W,H,yg,ylow=0,atm=(65,90),soil=(1.5,None),lx=None):
     """Clear demarcation of the soil: a distinct ground line labelled 'soil surface' (white background kept)."""
     ax.set_xlim(0,W); ax.set_ylim(YLO,H)
-    ax.plot([-60,W+60],[yg,yg],color='#B98A4E',lw=2.6,alpha=0.85,zorder=0.5,solid_capstyle='butt')
-    ax.text(lx if lx else W-1.2,yg-2.0,'soil surface',fontsize=6.0,ha='center' if lx else 'right',va='center',color='#8A6A3E',fontweight='bold',zorder=0.6,style='italic')
-    ax.text(lx if lx else W-1.2,yg-4.8,'soil',fontsize=6.0,ha='center' if lx else 'right',va='center',color='#8A6A3E',fontweight='bold',zorder=0.6)
+    ax.plot([-60,W+60],[yg,yg],color=SURF_LINE,lw=2.6,alpha=0.85,zorder=0.5,solid_capstyle='butt')
+    ax.text(lx if lx else W-1.2,yg-2.0,'soil surface',fontsize=6.0,ha='center' if lx else 'right',va='center',color=SURF_TXT,fontweight='bold',zorder=0.6,style='italic')
+    ax.text(lx if lx else W-1.2,yg-4.8,'soil',fontsize=6.0,ha='center' if lx else 'right',va='center',color=SURF_TXT,fontweight='bold',zorder=0.6)
 
 # ---------- graphical-abstract helpers ----------
 def pore_pack(x0,y0,x1,y1,rmin,rmax,seed=3,fine=0,n_try=6000,label=None):
@@ -117,3 +118,11 @@ def use_fig1_palette():
     for n,f in list(g.items()):
         if isinstance(f,types.FunctionType) and f.__defaults__:
             f.__defaults__=tuple(mp.get(d,d) if isinstance(d,str) else d for d in f.__defaults__)
+
+# ---------- Figure 1 of Paper 1 in purple and green only ----------
+FIG1_PURPLE_GREEN={'WAT':'#D9C6EC','GRN':'#5FAE57','BEI':'#D6EBCB','OCH':'#2E7D32','HEX':'#C8B3E3','LG':'#CFEBD0',
+                   'DRV':'#5B2C83','RED':'#6A1B9A','STIP_BG':'#F1E9F8','STIP_DOT':'#9B7CC2','TXT_OUT':'#5B2C83',
+                   'SURF_LINE':'#4E8F3A','SURF_TXT':'#2E6B26'}
+def use_fig1_purple_green():
+    """Water, drivers, rate competition and feedback in purples; crop, soil, pores, soil surface and results in greens."""
+    FIG1_PALETTE.clear(); FIG1_PALETTE.update(FIG1_PURPLE_GREEN); use_fig1_palette()
