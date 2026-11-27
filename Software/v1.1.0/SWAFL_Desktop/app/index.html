@@ -12,7 +12,11 @@
 <link rel="stylesheet" href="css/classic.css?v=20261127b">
 <link rel="stylesheet" href="css/daisydesign.css?v=20261101t">
 </head>
-<body class="nolayer"><div id="bootVeil" style="position:fixed;inset:0;z-index:2147482000;background:linear-gradient(160deg,#0B2A4A,#0B3D91 55%,#1B7F8C);display:flex;flex-direction:column;align-items:center;justify-content:center;font:600 14px Tahoma,Segoe UI,sans-serif;color:#fff"><img src="assets/logo.svg" width="84" height="84" alt=""><div style="margin:10px 0 14px;font:700 40px/1 sans-serif;letter-spacing:6px">SWAFL</div><div>Loading <b class="lpct">0%</b></div></div>
+<body class="nolayer"><div id="bootVeil" style="position:fixed;inset:0;z-index:2147482000;background:linear-gradient(160deg,#0B2A4A,#0B3D91 55%,#1B7F8C);display:flex;flex-direction:column;align-items:center;justify-content:center;font:600 14px Tahoma,Segoe UI,sans-serif;color:#fff"><img src="assets/logo.svg" width="84" height="84" alt=""><div style="margin:10px 0 14px;font:700 40px/1 sans-serif;letter-spacing:6px">SWAFL</div><div>Loading <b class="lpct">0%</b></div></div><script>(function(){var p=0,t0=Date.now(),done=false;function set(v){p=v;var r=Math.round(v)+"%";var a=document.querySelectorAll(".lpct");for(var i=0;i<a.length;i++)a[i].textContent=r;document.documentElement.style.setProperty("--lp",r)}
+window.__lpReset=function(){done=false;t0=Date.now();set(0)};
+window.__lpDone=function(){done=true;set(100)};
+setInterval(function(){if(done)return;var e=(Date.now()-t0)/1000;set(Math.min(95,95*(1-Math.exp(-e/3.5))))},120);
+document.addEventListener("DOMContentLoaded",function(){var ld=document.getElementById("loading");if(ld)new MutationObserver(function(){if(ld.classList.contains("gone"))window.__lpDone()}).observe(ld,{attributes:true,attributeFilter:["class"]})})})()</script>
 <div id="app">
 
   <!-- ===== Title / menu bar ===== -->
@@ -129,20 +133,18 @@ window.addEventListener("load",function(){if(window.__eulaOpen)setTimeout(warm,3
 <script src="js/palette.js?v=20261101m"></script>
 <script src="js/wxdownload.js?v=20261116j"></script>
 <script src="js/weatherui.js?v=20261116j"></script>
-<script src="vendor/leaflet.js"></script>
 <script>/* the GeoTIFF reader (310 KB) is loaded when a satellite or soil map is first read, not at start */window.needGeoTIFF=function(){if(window.GeoTIFF)return Promise.resolve();return window.__gtP||(window.__gtP=new Promise(function(ok,no){var s=document.createElement("script");s.src="vendor/geotiff.js";s.onload=function(){ok()};s.onerror=function(){window.__gtP=null;no(new Error("the GeoTIFF reader did not load"))};document.head.appendChild(s)}))};</script>
-<script src="js/sketchcad.js?v=20261108b"></script><script src="js/sketch.js?v=20261116j"></script>
-<script src="js/fieldsym.js?v=20261101m"></script>
-<script src="js/fieldsite.js?v=20261127f"></script>
-<script src="js/fieldmap.js?v=20261127f"></script>
-<script src="js/fieldmon.js?v=20261127f"></script>
-<script src="js/fieldprec.js?v=20261101s"></script>
-<script src="js/fieldgeo.js?v=20261103b"></script>
+<script>/* the field map and the sketch (about 650 KB: Leaflet and nine files) load when one of them is first opened, or quietly once the
+   simulation window is up, so the first screen does not wait for them */
+(function(){var V="20261127g",L=["vendor/leaflet.js","js/sketchcad.js","js/sketch.js","js/fieldsym.js","js/fieldsite.js","js/fieldmap.js","js/fieldmon.js","js/fieldprec.js","js/fieldgeo.js"],P=null;
+function one(u){return new Promise(function(ok,no){var s=document.createElement("script");s.src=u+(u.indexOf("vendor/")===0?"":"?v="+V);s.async=false;s.onload=function(){ok()};s.onerror=function(){no(new Error("could not load "+u))};document.head.appendChild(s)})}
+window.FieldLoad={ready:function(){return P||(P=Promise.all(L.map(one)).catch(function(e){P=null;throw e}))}};
+function later(name,fns){var o={};fns.forEach(function(f){o[f]=function(){var a=arguments,bz=window.SWBusy?window.SWBusy.begin("Loading",{delay:300}):null;return window.FieldLoad.ready().then(function(){if(bz)bz.end();var R=(0,eval)(name);return R[f].apply(R,a)},function(e){if(bz)bz.end();if(window.UI&&UI.toast)UI.toast("The map tools could not load: "+e.message+". Check the connection and try again.")})}});return o}
+window.Sketch=later("Sketch",["open","compare"]);window.FieldMap=later("FieldMap",["open"]);
+function idle(){(window.requestIdleCallback||function(f){setTimeout(f,500)})(function(){window.FieldLoad.ready().catch(function(){})},{timeout:5000})}
+window.addEventListener("load",function(){var f=document.getElementById("engine"),went=false,go=function(){if(went)return;went=true;setTimeout(idle,2500)};if(f)f.addEventListener("load",go,{once:true});setTimeout(go,20000)})})()</script>
+
 <script src="js/daisyload.js?v=20261127f"></script>
-<script>(function(){var p=0,t0=Date.now(),done=false;function set(v){p=v;var r=Math.round(v)+"%";var a=document.querySelectorAll(".lpct");for(var i=0;i<a.length;i++)a[i].textContent=r;document.documentElement.style.setProperty("--lp",r)}
-window.__lpReset=function(){done=false;t0=Date.now();set(0)};
-window.__lpDone=function(){done=true;set(100)};
-setInterval(function(){if(done)return;var e=(Date.now()-t0)/1000;set(Math.min(95,95*(1-Math.exp(-e/3.5))))},120);
-var ld=document.getElementById("loading");if(ld)new MutationObserver(function(){if(ld.classList.contains("gone"))window.__lpDone()}).observe(ld,{attributes:true,attributeFilter:["class"]})})()</script><script src="js/glossary.js?v=20261110b"></script><script src="js/main.js?v=20261121c"></script><script>(function(){var v=document.getElementById("bootVeil");if(v)v.remove()})()</script>
+<script src="js/glossary.js?v=20261110b"></script><script src="js/main.js?v=20261121c"></script><script>(function(){var v=document.getElementById("bootVeil");if(v)v.remove()})()</script>
 </body>
 </html>
