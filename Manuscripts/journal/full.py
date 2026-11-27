@@ -36,6 +36,8 @@ def preamble(cls_opts):
     p = '\\documentclass[%s]{elsarticle}\n' % cls_opts + '\n'.join(keep)
     p += '\n\\makeatletter\\def\\input@path{{../tex/}}\\makeatother\n'
     p += '\\crefname{figure}{Fig.}{Figs.}\\Crefname{figure}{Fig.}{Figs.}\n'
+    mac = (pathlib.Path(__file__).resolve().parent / 'jmacros.tex').read_text()
+    p += mac[mac.index('% the page number at the top'):] + '\n'          # page numbers at the top, as in the articles
     return p
 
 def parts(name):

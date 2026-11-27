@@ -28,7 +28,8 @@
 \titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
 \titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
 \titleformat{\subsubsection}{\normalsize\itshape}{\thesubsubsection}{0.5em}{}
-\pagestyle{fancy}\fancyhf{}\fancyfoot[C]{\small\thepage}\renewcommand{\headrulewidth}{0pt}
+\pagestyle{fancy}\fancyhf{}\fancyhead[R]{\small\thepage}\renewcommand{\headrulewidth}{0pt}
+\fancypagestyle{plain}{\fancyhf{}\fancyhead[R]{\small\thepage}\renewcommand{\headrulewidth}{0pt}}
 \setlength{\headheight}{14pt}
 \bibliographystyle{plainnathl}
 \newcommand{\doihl}[1]{doi: \href{https://doi.org/#1}{\nolinkurl{#1}}}

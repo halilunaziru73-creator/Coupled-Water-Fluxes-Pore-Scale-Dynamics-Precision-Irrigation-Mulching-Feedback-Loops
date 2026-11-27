@@ -23,6 +23,7 @@
 \setstretch{1.5}
 \setlength{\parskip}{3pt}
 \captionsetup{font=small,labelfont=bf,justification=centering,singlelinecheck=true}
+\fancypagestyle{plain}{\fancyhf{}\fancyhead[R]{\small\thepage}\renewcommand{\headrulewidth}{0pt}}
 \newcommand{\doihl}[1]{doi: \href{https://doi.org/#1}{\nolinkurl{#1}}}
 \newcommand{\dd}{\mathrm{d}}
 \newcommand{\ET}{\mathit{ET}}
@@ -77,6 +78,13 @@ $^{*}$ Correspondence: \href{mailto:halilunaziru73@gmail.com}{halilunaziru73@gma
 
 \makeatletter\def\input@path{{../tex/}}\makeatother
 \crefname{figure}{Fig.}{Figs.}\Crefname{figure}{Fig.}{Figs.}
+% the page number at the top right of every page, the first page too
+\makeatletter
+\def\ps@plain{\def\@oddhead{\hfil{\small\thepage}}\let\@evenhead\@oddhead\let\@oddfoot\@empty\let\@evenfoot\@empty}
+\g@addto@macro\ps@pprintTitle{\def\@oddhead{\hfil{\small\thepage}}\let\@evenhead\@oddhead}
+\pagestyle{plain}
+\makeatother
+
 
 \newcommand{\hc}{h_{\mathrm{c}}}
 \newcommand{\htr}{h_{\mathrm{t}}}
