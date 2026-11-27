@@ -33,7 +33,22 @@ const Layers = (() => {
     'dz-scen:manure': 'Slurry and manure', 'dz-scen:ntiming': 'When to fertilise', 'dz-scen:textures': 'Eight soil textures',
     'dz-scen:jbsoils': 'Danish soils JB1 to JB7', 'dz-scen:roots': 'Rooting depth', 'dz-scen:aquitard': 'Aquitard',
     'dz-scen:stations': 'Six European climates', 'dz-scen:radiation': 'Sunnier or cloudier', 'dz-scen:pesticides': 'Library pesticides',
-    'dz-scen:sorption': 'Sorption (K_OC)' };
+    'dz-scen:sorption': 'Sorption (K_OC)', 'dz-scen:tillage': 'Tillage', 'dz-scen:crops': 'Which crop', 'dz-scen:pfas': 'PFAS',
+    'dz-data': 'Weather, soil and site', 'dz-plot': 'Log plots and run data', 'dz-editor': 'Set-up editor (.dai)', 'dz-richards': 'Soil column (Richards)',
+    'dz-docs': 'Model description', 'dz-proc:surf': 'Canopy, litter and pond', 'dz-proc:om': 'Soil organic matter',
+    'dyr': 'Yield risk', 'dchx': 'Chemicals and drinking water', 'dtrd': 'Trade-offs', 'dirr': 'Return of irrigation', 'dghg': 'Nitrous oxide and N gases' };
+  // rows that are listed under another row of their group, in themed blocks: [parent, [[heading or '', [ids]], ...]]
+  const NEST = {
+    'dz-scen': [['Water and irrigation', ['dz-scen:irrigation', 'dz-scen:irrmethod', 'dz-scen:trigger', 'dz-scen:dose', 'dz-scen:deficit', 'dz-scen:sensor']],
+                ['Nitrogen and fertiliser', ['dz-scen:nitrogen', 'dz-scen:fertype', 'dz-scen:manure', 'dz-scen:ntiming']],
+                ['Soil and roots', ['dz-scen:soil', 'dz-scen:textures', 'dz-scen:jbsoils', 'dz-scen:tillage', 'dz-scen:roots', 'dz-scen:aquitard']],
+                ['Climate and crop', ['dz-scen:climate', 'dz-scen:stations', 'dz-scen:radiation', 'dz-scen:crops']],
+                ['Pesticides and chemicals', ['dz-scen:chemical', 'dz-scen:pesticides', 'dz-scen:pfas', 'dz-scen:sorption']],
+                ['Your own', ['dz-scen:own']]],
+    'dz-proc': [['Water and heat', ['dz-proc:snow', 'dz-proc:surf', 'dz-proc:water', 'dz-proc:pore', 'dz-proc:drain', 'dz-proc:temp']],
+                ['Nitrogen and carbon', ['dz-proc:no3', 'dz-proc:nh4', 'dz-proc:om', 'dz-proc:carbon', 'dz-proc:deni']],
+                ['Crop', ['dz-proc:photo', 'dz-proc:crop']]] };
+  const nestedIn = id => Object.keys(NEST).find(k => NEST[k].some(b => b[1].includes(id)));
   const shortOf = it => SHORT[it[0]] || it[1].replace(/ \(from my runs\)$/, '').replace(/^Scenario: /, '');
   const DESIGN = ['sid', 'drip', 'spr', 'drn'];
   // the manual at the section of the layer in use (the manual is built into the program: js/daisymanual.js)
@@ -67,12 +82,24 @@ const Layers = (() => {
     DAISY.forEach(g => {
       h += '<div class="tn grp" style="padding-left:14px" data-id="' + g.id + '"><span class="tw">' + (open(g.id) ? '&#9660;' : '&#9654;') + '</span>' + UI.icon(g.icon) + '<span class="lbl">' + g.name + '</span></div><div class="tkids" ' + (open(g.id) ? '' : 'hidden') + '>';
       const row = (it, sub) => '<div class="tn' + (dzCur === it[0] ? ' sel' : '') + (sub ? ' dzsub' : '') + '" style="padding-left:' + (sub ? 16 : 30) + 'px" data-scene="' + it[0] + '" title="' + UI.esc(it[1]) + '"><span class="tw"></span>' + (sub ? '' : UI.icon('doc')) + '<span class="lbl">' + UI.esc(shortOf(it)) + '</span></div>';
-      const subs = g.items.filter(it => /^dz-scen:/.test(it[0]));
+      const byId = {}; g.items.forEach(it => { byId[it[0]] = it; });
+      const placed = new Set();
       g.items.forEach(it => {
-        if (/^dz-scen:/.test(it[0])) return;
+        if (nestedIn(it[0])) return;
         h += row(it, false);
-        if (it[0] === 'dz-scen' && subs.length) h += '<div class="tkids">' + subs.map(x => row(x, true)).join('') + '</div>';
+        const blocks = NEST[it[0]]; if (!blocks) return;
+        h += '<div class="tkids">';
+        blocks.forEach(([head, ids]) => {
+          const rows = ids.filter(id => byId[id]); if (!rows.length) return;
+          if (head) h += '<div class="dzhead">' + UI.esc(head) + '</div>';
+          rows.forEach(id => { placed.add(id); h += row(byId[id], true); });
+        });
+        // anything of this parent not in a block is still listed
+        g.items.filter(x => nestedIn(x[0]) === it[0] && !placed.has(x[0])).forEach(x => { h += row(x, true); });
+        h += '</div>';
       });
+      // a nested row whose parent is not in this group stays visible at the top level
+      g.items.filter(x => nestedIn(x[0]) && !byId[nestedIn(x[0])]).forEach(x => { h += row(x, false); });
       h += '</div>';
     });
     h += '</div>';
