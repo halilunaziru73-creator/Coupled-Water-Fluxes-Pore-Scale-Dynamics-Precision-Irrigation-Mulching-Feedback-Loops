@@ -1,0 +1,614 @@
+\begin{thebibliography}{62}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\href}[2]{#2}
+\providecommand{\path}[1]{#1}
+\providecommand{\DOIprefix}{doi:}
+\providecommand{\ArXivprefix}{arXiv:}
+\providecommand{\URLprefix}{URL: }
+\providecommand{\Pubmedprefix}{pmid:}
+\providecommand{\doi}[1]{\href{http://dx.doi.org/#1}{\path{#1}}}
+\providecommand{\Pubmed}[1]{\href{pmid:#1}{\path{#1}}}
+\providecommand{\bibinfo}[2]{#2}
+\ifx\xfnm\relax \def\xfnm[#1]{\unskip,\space#1}\fi
+%Type = Article
+\bibitem[{Asher et~al.(2015)Asher, Croke, Jakeman and Peeters}]{Asher2015}
+\bibinfo{author}{Asher, M.J.}, \bibinfo{author}{Croke, B.F.W.},
+  \bibinfo{author}{Jakeman, A.J.}, \bibinfo{author}{Peeters, L.J.M.},
+  \bibinfo{year}{2015}.
+\newblock \bibinfo{title}{A review of surrogate models and their application to
+  groundwater modeling}.
+\newblock \bibinfo{journal}{Water Resources Research} \bibinfo{volume}{51},
+  \bibinfo{pages}{5957--5973}.
+\newblock \DOIprefix\doi{10.1002/2015WR016967}.
+%Type = Article
+\bibitem[{{Balwinder-Singh} et~al.(2011){Balwinder-Singh}, Eberbach, Humphreys
+  and Kukal}]{BalwinderSingh2011}
+\bibinfo{author}{{Balwinder-Singh}}, \bibinfo{author}{Eberbach, P.L.},
+  \bibinfo{author}{Humphreys, E.}, \bibinfo{author}{Kukal, S.S.},
+  \bibinfo{year}{2011}.
+\newblock \bibinfo{title}{The effect of rice straw mulch on evapotranspiration,
+  transpiration and soil evaporation of irrigated wheat in punjab, india}.
+\newblock \bibinfo{journal}{Agricultural Water Management}
+  \bibinfo{volume}{98}, \bibinfo{pages}{1847--1855}.
+\newblock \DOIprefix\doi{10.1016/j.agwat.2011.05.007}.
+%Type = Article
+\bibitem[{Berg and Sheffield(2018)}]{Berg2018}
+\bibinfo{author}{Berg, A.}, \bibinfo{author}{Sheffield, J.},
+  \bibinfo{year}{2018}.
+\newblock \bibinfo{title}{Climate change and drought: the soil moisture
+  perspective}.
+\newblock \bibinfo{journal}{Current Climate Change Reports}
+  \bibinfo{volume}{4}, \bibinfo{pages}{180--191}.
+\newblock \DOIprefix\doi{10.1007/s40641-018-0095-0}.
+%Type = Article
+\bibitem[{Beven and Germann(1982)}]{Beven1982}
+\bibinfo{author}{Beven, K.}, \bibinfo{author}{Germann, P.},
+  \bibinfo{year}{1982}.
+\newblock \bibinfo{title}{Macropores and water flow in soils}.
+\newblock \bibinfo{journal}{Water Resources Research} \bibinfo{volume}{18},
+  \bibinfo{pages}{1311--1325}.
+\newblock \DOIprefix\doi{10.1029/WR018i005p01311}.
+%Type = Book
+\bibitem[{Brady and Weil(2016)}]{Brady2016}
+\bibinfo{author}{Brady, N.C.}, \bibinfo{author}{Weil, R.R.},
+  \bibinfo{year}{2016}.
+\newblock \bibinfo{title}{The Nature and Properties of Soils}.
+\newblock \bibinfo{edition}{15} ed., \bibinfo{publisher}{Pearson},
+  \bibinfo{address}{Columbus, OH}.
+%Type = Article
+\bibitem[{Brunton et~al.(2016)Brunton, Proctor and Kutz}]{Brunton2016}
+\bibinfo{author}{Brunton, S.L.}, \bibinfo{author}{Proctor, J.L.},
+  \bibinfo{author}{Kutz, J.N.}, \bibinfo{year}{2016}.
+\newblock \bibinfo{title}{Discovering governing equations from data by sparse
+  identification of nonlinear dynamical systems}.
+\newblock \bibinfo{journal}{Proceedings of the National Academy of Sciences}
+  \bibinfo{volume}{113}, \bibinfo{pages}{3932--3937}.
+\newblock \DOIprefix\doi{10.1073/pnas.1517384113}.
+%Type = Book
+\bibitem[{Budyko(1974)}]{Budyko1974}
+\bibinfo{author}{Budyko, M.I.}, \bibinfo{year}{1974}.
+\newblock \bibinfo{title}{Climate and Life}.
+\newblock \bibinfo{publisher}{Academic Press}, \bibinfo{address}{New York}.
+%Type = Article
+\bibitem[{Carsel and Parrish(1988)}]{Carsel1988}
+\bibinfo{author}{Carsel, R.F.}, \bibinfo{author}{Parrish, R.S.},
+  \bibinfo{year}{1988}.
+\newblock \bibinfo{title}{Developing joint probability distributions of soil
+  water retention characteristics}.
+\newblock \bibinfo{journal}{Water Resources Research} \bibinfo{volume}{24},
+  \bibinfo{pages}{755--769}.
+\newblock \DOIprefix\doi{10.1029/WR024i005p00755}.
+%Type = Article
+\bibitem[{Dai(2013)}]{Dai2013}
+\bibinfo{author}{Dai, A.}, \bibinfo{year}{2013}.
+\newblock \bibinfo{title}{Increasing drought under global warming in
+  observations and models}.
+\newblock \bibinfo{journal}{Nature Climate Change} \bibinfo{volume}{3},
+  \bibinfo{pages}{52--58}.
+\newblock \DOIprefix\doi{10.1038/nclimate1633}.
+%Type = Article
+\bibitem[{Datta and Taghvaeian(2023)}]{Datta2023}
+\bibinfo{author}{Datta, S.}, \bibinfo{author}{Taghvaeian, S.},
+  \bibinfo{year}{2023}.
+\newblock \bibinfo{title}{Soil water sensors for irrigation scheduling in the
+  united states: a systematic review of literature}.
+\newblock \bibinfo{journal}{Agricultural Water Management}
+  \bibinfo{volume}{278}, \bibinfo{pages}{108148}.
+\newblock \DOIprefix\doi{10.1016/j.agwat.2023.108148}.
+%Type = Book
+\bibitem[{Efron and Tibshirani(1993)}]{Efron1993}
+\bibinfo{author}{Efron, B.}, \bibinfo{author}{Tibshirani, R.J.},
+  \bibinfo{year}{1993}.
+\newblock \bibinfo{title}{An Introduction to the Bootstrap}.
+\newblock \bibinfo{publisher}{Chapman and Hall}, \bibinfo{address}{New York}.
+%Type = Article
+\bibitem[{Entekhabi et~al.(1996)Entekhabi, Rodriguez-Iturbe and
+  Castelli}]{Entekhabi1996}
+\bibinfo{author}{Entekhabi, D.}, \bibinfo{author}{Rodriguez-Iturbe, I.},
+  \bibinfo{author}{Castelli, F.}, \bibinfo{year}{1996}.
+\newblock \bibinfo{title}{Mutual interaction of soil moisture state and
+  atmospheric processes}.
+\newblock \bibinfo{journal}{Journal of Hydrology} \bibinfo{volume}{184},
+  \bibinfo{pages}{3--17}.
+\newblock \DOIprefix\doi{10.1016/0022-1694(95)02965-6}.
+%Type = Article
+\bibitem[{Fatichi et~al.(2020)Fatichi, Or, Walko, Vereecken, Young, Ghezzehei
+  et~al.}]{Fatichi2020}
+\bibinfo{author}{Fatichi, S.}, \bibinfo{author}{Or, D.},
+  \bibinfo{author}{Walko, R.}, \bibinfo{author}{Vereecken, H.},
+  \bibinfo{author}{Young, M.H.}, \bibinfo{author}{Ghezzehei, T.A.}, et~al.,
+  \bibinfo{year}{2020}.
+\newblock \bibinfo{title}{Soil structure is an important omission in {Earth}
+  {System} {Models}}.
+\newblock \bibinfo{journal}{Nature Communications} \bibinfo{volume}{11},
+  \bibinfo{pages}{522}.
+\newblock \DOIprefix\doi{10.1038/s41467-020-14411-z}.
+%Type = Article
+\bibitem[{Fereres and Soriano(2007)}]{Fereres2007}
+\bibinfo{author}{Fereres, E.}, \bibinfo{author}{Soriano, M.A.},
+  \bibinfo{year}{2007}.
+\newblock \bibinfo{title}{Deficit irrigation for reducing agricultural water
+  use}.
+\newblock \bibinfo{journal}{Journal of Experimental Botany}
+  \bibinfo{volume}{58}, \bibinfo{pages}{147--159}.
+\newblock \DOIprefix\doi{10.1093/jxb/erl165}.
+%Type = Article
+\bibitem[{Friedman(2001)}]{Friedman2001}
+\bibinfo{author}{Friedman, J.H.}, \bibinfo{year}{2001}.
+\newblock \bibinfo{title}{Greedy function approximation: a gradient boosting
+  machine}.
+\newblock \bibinfo{journal}{The Annals of Statistics} \bibinfo{volume}{29},
+  \bibinfo{pages}{1189--1232}.
+\newblock \DOIprefix\doi{10.1214/aos/1013203451}.
+%Type = Article
+\bibitem[{Geerts and Raes(2009)}]{Geerts2009}
+\bibinfo{author}{Geerts, S.}, \bibinfo{author}{Raes, D.}, \bibinfo{year}{2009}.
+\newblock \bibinfo{title}{Deficit irrigation as an on-farm strategy to maximize
+  crop water productivity in dry areas}.
+\newblock \bibinfo{journal}{Agricultural Water Management}
+  \bibinfo{volume}{96}, \bibinfo{pages}{1275--1284}.
+\newblock \DOIprefix\doi{10.1016/j.agwat.2009.04.009}.
+%Type = Article
+\bibitem[{Ghanbarian et~al.(2013)Ghanbarian, Hunt, Ewing and
+  Sahimi}]{Ghanbarian2013}
+\bibinfo{author}{Ghanbarian, B.}, \bibinfo{author}{Hunt, A.G.},
+  \bibinfo{author}{Ewing, R.P.}, \bibinfo{author}{Sahimi, M.},
+  \bibinfo{year}{2013}.
+\newblock \bibinfo{title}{Tortuosity in porous media: a critical review}.
+\newblock \bibinfo{journal}{Soil Science Society of America Journal}
+  \bibinfo{volume}{77}, \bibinfo{pages}{1461--1477}.
+\newblock \DOIprefix\doi{10.2136/sssaj2012.0435}.
+%Type = Book
+\bibitem[{Good(2005)}]{Good2005}
+\bibinfo{author}{Good, P.I.}, \bibinfo{year}{2005}.
+\newblock \bibinfo{title}{Permutation, Parametric and Bootstrap Tests of
+  Hypotheses}.
+\newblock \bibinfo{edition}{3} ed., \bibinfo{publisher}{Springer},
+  \bibinfo{address}{New York}.
+%Type = Article
+\bibitem[{Grafton et~al.(2018)Grafton, Williams, Perry, Molle, Ringler, Steduto
+  et~al.}]{Grafton2018}
+\bibinfo{author}{Grafton, R.Q.}, \bibinfo{author}{Williams, J.},
+  \bibinfo{author}{Perry, C.J.}, \bibinfo{author}{Molle, F.},
+  \bibinfo{author}{Ringler, C.}, \bibinfo{author}{Steduto, P.}, et~al.,
+  \bibinfo{year}{2018}.
+\newblock \bibinfo{title}{The paradox of irrigation efficiency}.
+\newblock \bibinfo{journal}{Science} \bibinfo{volume}{361},
+  \bibinfo{pages}{748--750}.
+\newblock \DOIprefix\doi{10.1126/science.aat9314}.
+%Type = Article
+\bibitem[{Hansen et~al.(2012)Hansen, Abrahamsen, Petersen and
+  Styczen}]{Hansen2012}
+\bibinfo{author}{Hansen, S.}, \bibinfo{author}{Abrahamsen, P.},
+  \bibinfo{author}{Petersen, C.T.}, \bibinfo{author}{Styczen, M.},
+  \bibinfo{year}{2012}.
+\newblock \bibinfo{title}{Daisy: model use, calibration, and validation}.
+\newblock \bibinfo{journal}{Transactions of the ASABE} \bibinfo{volume}{55},
+  \bibinfo{pages}{1317--1335}.
+\newblock \DOIprefix\doi{10.13031/2013.42244}.
+%Type = Article
+\bibitem[{Hansen et~al.(1991)Hansen, Jensen, Nielsen and Svendsen}]{Hansen1991}
+\bibinfo{author}{Hansen, S.}, \bibinfo{author}{Jensen, H.E.},
+  \bibinfo{author}{Nielsen, N.E.}, \bibinfo{author}{Svendsen, H.},
+  \bibinfo{year}{1991}.
+\newblock \bibinfo{title}{Simulation of nitrogen dynamics and biomass
+  production in winter wheat using the danish simulation model {DAISY}}.
+\newblock \bibinfo{journal}{Fertilizer Research} \bibinfo{volume}{27},
+  \bibinfo{pages}{245--259}.
+\newblock \DOIprefix\doi{10.1007/BF01051131}.
+%Type = Article
+\bibitem[{Harris et~al.(2020)Harris, Millman, van~der Walt, Gommers, Virtanen,
+  Cournapeau et~al.}]{Harris2020}
+\bibinfo{author}{Harris, C.R.}, \bibinfo{author}{Millman, K.J.},
+  \bibinfo{author}{van~der Walt, S.J.}, \bibinfo{author}{Gommers, R.},
+  \bibinfo{author}{Virtanen, P.}, \bibinfo{author}{Cournapeau, D.}, et~al.,
+  \bibinfo{year}{2020}.
+\newblock \bibinfo{title}{Array programming with {NumPy}}.
+\newblock \bibinfo{journal}{Nature} \bibinfo{volume}{585},
+  \bibinfo{pages}{357--362}.
+\newblock \DOIprefix\doi{10.1038/s41586-020-2649-2}.
+%Type = Book
+\bibitem[{Hillel(1998)}]{Hillel1998}
+\bibinfo{author}{Hillel, D.}, \bibinfo{year}{1998}.
+\newblock \bibinfo{title}{Environmental Soil Physics}.
+\newblock \bibinfo{publisher}{Academic Press}, \bibinfo{address}{San Diego}.
+%Type = Article
+\bibitem[{Holbak et~al.(2026)Holbak, Abrahamsen, Gr{\o}nning, Kl{\"o}ffel,
+  Schwartzkopff, Styczen, Svane and Diamantopoulos}]{Holbak2026}
+\bibinfo{author}{Holbak, M.}, \bibinfo{author}{Abrahamsen, P.},
+  \bibinfo{author}{Gr{\o}nning, C.R.}, \bibinfo{author}{Kl{\"o}ffel, T.},
+  \bibinfo{author}{Schwartzkopff, M.V.}, \bibinfo{author}{Styczen, M.E.},
+  \bibinfo{author}{Svane, S.F.}, \bibinfo{author}{Diamantopoulos, E.},
+  \bibinfo{year}{2026}.
+\newblock \bibinfo{title}{The {Daisy} model: a tool for simulating agricultural
+  systems --- recent (2012--2025) developments, calibrations and validations}.
+\newblock \bibinfo{journal}{Agricultural Systems} \bibinfo{volume}{238},
+  \bibinfo{pages}{104846}.
+\newblock \DOIprefix\doi{10.1016/j.agsy.2026.104846}.
+%Type = Article
+\bibitem[{Hunter(2007)}]{Hunter2007}
+\bibinfo{author}{Hunter, J.D.}, \bibinfo{year}{2007}.
+\newblock \bibinfo{title}{Matplotlib: a 2{D} graphics environment}.
+\newblock \bibinfo{journal}{Computing in Science and Engineering}
+  \bibinfo{volume}{9}, \bibinfo{pages}{90--95}.
+\newblock \DOIprefix\doi{10.1109/MCSE.2007.55}.
+%Type = Article
+\bibitem[{Jarvis(2007)}]{Jarvis2007}
+\bibinfo{author}{Jarvis, N.J.}, \bibinfo{year}{2007}.
+\newblock \bibinfo{title}{A review of non-equilibrium water flow and solute
+  transport in soil macropores: principles, controlling factors and
+  consequences for water quality}.
+\newblock \bibinfo{journal}{European Journal of Soil Science}
+  \bibinfo{volume}{58}, \bibinfo{pages}{523--546}.
+\newblock \DOIprefix\doi{10.1111/j.1365-2389.2007.00915.x}.
+%Type = Article
+\bibitem[{Jasechko et~al.(2013)Jasechko, Sharp, Gibson, Birks, Yi and
+  Fawcett}]{Jasechko2013}
+\bibinfo{author}{Jasechko, S.}, \bibinfo{author}{Sharp, Z.D.},
+  \bibinfo{author}{Gibson, J.J.}, \bibinfo{author}{Birks, S.J.},
+  \bibinfo{author}{Yi, Y.}, \bibinfo{author}{Fawcett, P.J.},
+  \bibinfo{year}{2013}.
+\newblock \bibinfo{title}{Terrestrial water fluxes dominated by transpiration}.
+\newblock \bibinfo{journal}{Nature} \bibinfo{volume}{496},
+  \bibinfo{pages}{347--350}.
+\newblock \DOIprefix\doi{10.1038/nature11983}.
+%Type = Article
+\bibitem[{Kang et~al.(2025)Kang, Zhang, Zhao and Wu}]{Kang2024}
+\bibinfo{author}{Kang, W.}, \bibinfo{author}{Zhang, Y.}, \bibinfo{author}{Zhao,
+  W.}, \bibinfo{author}{Wu, S.}, \bibinfo{year}{2025}.
+\newblock \bibinfo{title}{The effect of gravel mulch on soil evaporation and
+  resistance: experimental findings and modeling}.
+\newblock \bibinfo{journal}{Journal of Soil Science and Plant Nutrition}
+  \bibinfo{volume}{25}, \bibinfo{pages}{1135--1148}.
+\newblock \DOIprefix\doi{10.1007/s42729-024-02190-1}.
+%Type = Article
+\bibitem[{Keating et~al.(2003)Keating, Carberry, Hammer, Probert, Robertson,
+  Holzworth et~al.}]{Keating2003}
+\bibinfo{author}{Keating, B.A.}, \bibinfo{author}{Carberry, P.S.},
+  \bibinfo{author}{Hammer, G.L.}, \bibinfo{author}{Probert, M.E.},
+  \bibinfo{author}{Robertson, M.J.}, \bibinfo{author}{Holzworth, D.}, et~al.,
+  \bibinfo{year}{2003}.
+\newblock \bibinfo{title}{An overview of {APSIM}, a model designed for farming
+  systems simulation}.
+\newblock \bibinfo{journal}{European Journal of Agronomy} \bibinfo{volume}{18},
+  \bibinfo{pages}{267--288}.
+\newblock \DOIprefix\doi{10.1016/S1161-0301(02)00108-9}.
+%Type = Article
+\bibitem[{Kirchner(2006)}]{Kirchner2006}
+\bibinfo{author}{Kirchner, J.W.}, \bibinfo{year}{2006}.
+\newblock \bibinfo{title}{Getting the right answers for the right reasons:
+  linking measurements, analyses, and models to advance the science of
+  hydrology}.
+\newblock \bibinfo{journal}{Water Resources Research} \bibinfo{volume}{42},
+  \bibinfo{pages}{W03S04}.
+\newblock \DOIprefix\doi{10.1029/2005WR004362}.
+%Type = Article
+\bibitem[{Koster et~al.(2004)Koster, Dirmeyer, Guo, Bonan, Chan, Cox, Gordon,
+  Kanae, Kowalczyk, Lawrence et~al.}]{Koster2004}
+\bibinfo{author}{Koster, R.D.}, \bibinfo{author}{Dirmeyer, P.A.},
+  \bibinfo{author}{Guo, Z.}, \bibinfo{author}{Bonan, G.},
+  \bibinfo{author}{Chan, E.}, \bibinfo{author}{Cox, P.},
+  \bibinfo{author}{Gordon, C.T.}, \bibinfo{author}{Kanae, S.},
+  \bibinfo{author}{Kowalczyk, E.}, \bibinfo{author}{Lawrence, D.}, et~al.,
+  \bibinfo{year}{2004}.
+\newblock \bibinfo{title}{Regions of strong coupling between soil moisture and
+  precipitation}.
+\newblock \bibinfo{journal}{Science} \bibinfo{volume}{305},
+  \bibinfo{pages}{1138--1140}.
+\newblock \DOIprefix\doi{10.1126/science.1100217}.
+%Type = Article
+\bibitem[{Koster and Suarez(2001)}]{Koster2001}
+\bibinfo{author}{Koster, R.D.}, \bibinfo{author}{Suarez, M.J.},
+  \bibinfo{year}{2001}.
+\newblock \bibinfo{title}{Soil moisture memory in climate models}.
+\newblock \bibinfo{journal}{Journal of Hydrometeorology} \bibinfo{volume}{2},
+  \bibinfo{pages}{558--570}.
+%Type = Article
+\bibitem[{Kratzert et~al.(2019)Kratzert, Klotz, Shalev, Klambauer, Hochreiter
+  and Nearing}]{Kratzert2019}
+\bibinfo{author}{Kratzert, F.}, \bibinfo{author}{Klotz, D.},
+  \bibinfo{author}{Shalev, G.}, \bibinfo{author}{Klambauer, G.},
+  \bibinfo{author}{Hochreiter, S.}, \bibinfo{author}{Nearing, G.},
+  \bibinfo{year}{2019}.
+\newblock \bibinfo{title}{Towards learning universal, regional, and local
+  hydrological behaviors via machine learning applied to large-sample
+  datasets}.
+\newblock \bibinfo{journal}{Hydrology and Earth System Sciences}
+  \bibinfo{volume}{23}, \bibinfo{pages}{5089--5110}.
+\newblock \DOIprefix\doi{10.5194/hess-23-5089-2019}.
+%Type = Article
+\bibitem[{Leuther and Diamantopoulos(2024)}]{Leuther2024}
+\bibinfo{author}{Leuther, F.}, \bibinfo{author}{Diamantopoulos, E.},
+  \bibinfo{year}{2024}.
+\newblock \bibinfo{title}{Simulating bare soil evaporation for undisturbed soil
+  cores: using {HYDRUS} 3d simulation on {X}-ray {$\mu$CT} determined soil
+  macrostructures}.
+\newblock \bibinfo{journal}{Vadose Zone Journal} \bibinfo{volume}{23},
+  \bibinfo{pages}{e20339}.
+\newblock \DOIprefix\doi{10.1002/vzj2.20339}.
+%Type = Article
+\bibitem[{Leuther et~al.(2026)Leuther, Langanki, Lehndorff and
+  Diamantopoulos}]{Leuther2026}
+\bibinfo{author}{Leuther, F.}, \bibinfo{author}{Langanki, A.},
+  \bibinfo{author}{Lehndorff, E.}, \bibinfo{author}{Diamantopoulos, E.},
+  \bibinfo{year}{2026}.
+\newblock \bibinfo{title}{Fresh and degraded maize shoot and root residues
+  temporarily change soil hydraulic properties}.
+\newblock \bibinfo{journal}{EGUsphere} \bibinfo{volume}{2026},
+  \bibinfo{pages}{1--21}.
+\newblock \DOIprefix\doi{10.5194/egusphere-2026-1063}.
+%Type = Article
+\bibitem[{Miller and Miller(1956)}]{Miller1956}
+\bibinfo{author}{Miller, E.E.}, \bibinfo{author}{Miller, R.D.},
+  \bibinfo{year}{1956}.
+\newblock \bibinfo{title}{Physical theory for capillary flow phenomena}.
+\newblock \bibinfo{journal}{Journal of Applied Physics} \bibinfo{volume}{27},
+  \bibinfo{pages}{324--332}.
+\newblock \DOIprefix\doi{10.1063/1.1722370}.
+%Type = Article
+\bibitem[{Milly(1994)}]{Milly1994}
+\bibinfo{author}{Milly, P.C.D.}, \bibinfo{year}{1994}.
+\newblock \bibinfo{title}{Climate, soil water storage, and the average annual
+  water balance}.
+\newblock \bibinfo{journal}{Water Resources Research} \bibinfo{volume}{30},
+  \bibinfo{pages}{2143--2156}.
+\newblock \DOIprefix\doi{10.1029/94WR00586}.
+%Type = Article
+\bibitem[{Mualem(1976)}]{Mualem1976}
+\bibinfo{author}{Mualem, Y.}, \bibinfo{year}{1976}.
+\newblock \bibinfo{title}{A new model for predicting the hydraulic conductivity
+  of unsaturated porous media}.
+\newblock \bibinfo{journal}{Water Resources Research} \bibinfo{volume}{12},
+  \bibinfo{pages}{513--522}.
+\newblock \DOIprefix\doi{10.1029/WR012i003p00513}.
+%Type = Article
+\bibitem[{Nearing et~al.(2021)Nearing, Kratzert, Sampson, Pelissier, Klotz,
+  Frame, Prieto and Gupta}]{Nearing2021}
+\bibinfo{author}{Nearing, G.S.}, \bibinfo{author}{Kratzert, F.},
+  \bibinfo{author}{Sampson, A.K.}, \bibinfo{author}{Pelissier, C.S.},
+  \bibinfo{author}{Klotz, D.}, \bibinfo{author}{Frame, J.M.},
+  \bibinfo{author}{Prieto, C.}, \bibinfo{author}{Gupta, H.V.},
+  \bibinfo{year}{2021}.
+\newblock \bibinfo{title}{What role does hydrological science play in the age
+  of machine learning?}
+\newblock \bibinfo{journal}{Water Resources Research} \bibinfo{volume}{57},
+  \bibinfo{pages}{e2020WR028091}.
+\newblock \DOIprefix\doi{10.1029/2020WR028091}.
+%Type = Article
+\bibitem[{Oreskes et~al.(1994)Oreskes, Shrader-Frechette and
+  Belitz}]{Oreskes1994}
+\bibinfo{author}{Oreskes, N.}, \bibinfo{author}{Shrader-Frechette, K.},
+  \bibinfo{author}{Belitz, K.}, \bibinfo{year}{1994}.
+\newblock \bibinfo{title}{Verification, validation, and confirmation of
+  numerical models in the earth sciences}.
+\newblock \bibinfo{journal}{Science} \bibinfo{volume}{263},
+  \bibinfo{pages}{641--646}.
+\newblock \DOIprefix\doi{10.1126/science.263.5147.641}.
+%Type = Article
+\bibitem[{Pedregosa et~al.(2011)Pedregosa, Varoquaux, Gramfort, Michel,
+  Thirion, Grisel et~al.}]{Pedregosa2011}
+\bibinfo{author}{Pedregosa, F.}, \bibinfo{author}{Varoquaux, G.},
+  \bibinfo{author}{Gramfort, A.}, \bibinfo{author}{Michel, V.},
+  \bibinfo{author}{Thirion, B.}, \bibinfo{author}{Grisel, O.}, et~al.,
+  \bibinfo{year}{2011}.
+\newblock \bibinfo{title}{Scikit-learn: machine learning in {Python}}.
+\newblock \bibinfo{journal}{Journal of Machine Learning Research}
+  \bibinfo{volume}{12}, \bibinfo{pages}{2825--2830}.
+%Type = Article
+\bibitem[{Play{\'a}n and Mateos(2006)}]{Playan2006}
+\bibinfo{author}{Play{\'a}n, E.}, \bibinfo{author}{Mateos, L.},
+  \bibinfo{year}{2006}.
+\newblock \bibinfo{title}{Modernization and optimization of irrigation systems
+  to increase water productivity}.
+\newblock \bibinfo{journal}{Agricultural Water Management}
+  \bibinfo{volume}{80}, \bibinfo{pages}{100--116}.
+\newblock \DOIprefix\doi{10.1016/j.agwat.2005.07.007}.
+%Type = Article
+\bibitem[{Razavi et~al.(2012)Razavi, Tolson and Burn}]{Razavi2012}
+\bibinfo{author}{Razavi, S.}, \bibinfo{author}{Tolson, B.A.},
+  \bibinfo{author}{Burn, D.H.}, \bibinfo{year}{2012}.
+\newblock \bibinfo{title}{Review of surrogate modeling in water resources}.
+\newblock \bibinfo{journal}{Water Resources Research} \bibinfo{volume}{48},
+  \bibinfo{pages}{W07401}.
+\newblock \DOIprefix\doi{10.1029/2011WR011527}.
+%Type = Article
+\bibitem[{Refsgaard and Henriksen(2004)}]{Refsgaard2004}
+\bibinfo{author}{Refsgaard, J.C.}, \bibinfo{author}{Henriksen, H.J.},
+  \bibinfo{year}{2004}.
+\newblock \bibinfo{title}{Modelling guidelines---terminology and guiding
+  principles}.
+\newblock \bibinfo{journal}{Advances in Water Resources} \bibinfo{volume}{27},
+  \bibinfo{pages}{71--82}.
+\newblock \DOIprefix\doi{10.1016/j.advwatres.2003.08.006}.
+%Type = Article
+\bibitem[{Richards(1931)}]{Richards1931}
+\bibinfo{author}{Richards, L.A.}, \bibinfo{year}{1931}.
+\newblock \bibinfo{title}{Capillary conduction of liquids through porous
+  mediums}.
+\newblock \bibinfo{journal}{Physics} \bibinfo{volume}{1},
+  \bibinfo{pages}{318--333}.
+\newblock \DOIprefix\doi{10.1063/1.1745010}.
+%Type = Article
+\bibitem[{Roberts et~al.(2017)Roberts, Bahn, Ciuti, Boyce, Elith,
+  Guillera-Arroita et~al.}]{Roberts2017}
+\bibinfo{author}{Roberts, D.R.}, \bibinfo{author}{Bahn, V.},
+  \bibinfo{author}{Ciuti, S.}, \bibinfo{author}{Boyce, M.S.},
+  \bibinfo{author}{Elith, J.}, \bibinfo{author}{Guillera-Arroita, G.}, et~al.,
+  \bibinfo{year}{2017}.
+\newblock \bibinfo{title}{Cross-validation strategies for data with temporal,
+  spatial, hierarchical, or phylogenetic structure}.
+\newblock \bibinfo{journal}{Ecography} \bibinfo{volume}{40},
+  \bibinfo{pages}{913--929}.
+\newblock \DOIprefix\doi{10.1111/ecog.02881}.
+%Type = Article
+\bibitem[{Rudin(2019)}]{Rudin2019}
+\bibinfo{author}{Rudin, C.}, \bibinfo{year}{2019}.
+\newblock \bibinfo{title}{Stop explaining black box machine learning models for
+  high stakes decisions and use interpretable models instead}.
+\newblock \bibinfo{journal}{Nature Machine Intelligence} \bibinfo{volume}{1},
+  \bibinfo{pages}{206--215}.
+\newblock \DOIprefix\doi{10.1038/s42256-019-0048-x}.
+%Type = Article
+\bibitem[{Saxton and Rawls(2006)}]{Saxton2006}
+\bibinfo{author}{Saxton, K.E.}, \bibinfo{author}{Rawls, W.J.},
+  \bibinfo{year}{2006}.
+\newblock \bibinfo{title}{Soil water characteristic estimates by texture and
+  organic matter for hydrologic solutions}.
+\newblock \bibinfo{journal}{Soil Science Society of America Journal}
+  \bibinfo{volume}{70}, \bibinfo{pages}{1569--1578}.
+\newblock \DOIprefix\doi{10.2136/sssaj2005.0117}.
+%Type = Article
+\bibitem[{Schaap et~al.(2001)Schaap, Leij and {van Genuchten}}]{Schaap2001}
+\bibinfo{author}{Schaap, M.G.}, \bibinfo{author}{Leij, F.J.},
+  \bibinfo{author}{{van Genuchten}, M.T.}, \bibinfo{year}{2001}.
+\newblock \bibinfo{title}{Rosetta: a computer program for estimating soil
+  hydraulic parameters with hierarchical pedotransfer functions}.
+\newblock \bibinfo{journal}{Journal of Hydrology} \bibinfo{volume}{251},
+  \bibinfo{pages}{163--176}.
+\newblock \DOIprefix\doi{10.1016/S0022-1694(01)00466-8}.
+%Type = Article
+\bibitem[{Schlesinger and Jasechko(2014)}]{Schlesinger2014}
+\bibinfo{author}{Schlesinger, W.H.}, \bibinfo{author}{Jasechko, S.},
+  \bibinfo{year}{2014}.
+\newblock \bibinfo{title}{Transpiration in the global water cycle}.
+\newblock \bibinfo{journal}{Agricultural and Forest Meteorology}
+  \bibinfo{volume}{189--190}, \bibinfo{pages}{115--117}.
+\newblock \DOIprefix\doi{10.1016/j.agrformet.2014.01.011}.
+%Type = Article
+\bibitem[{Seneviratne et~al.(2010)Seneviratne, Corti, Davin, Hirschi, Jaeger,
+  Lehner, Orlowsky and Teuling}]{Seneviratne2010}
+\bibinfo{author}{Seneviratne, S.I.}, \bibinfo{author}{Corti, T.},
+  \bibinfo{author}{Davin, E.L.}, \bibinfo{author}{Hirschi, M.},
+  \bibinfo{author}{Jaeger, E.B.}, \bibinfo{author}{Lehner, I.},
+  \bibinfo{author}{Orlowsky, B.}, \bibinfo{author}{Teuling, A.J.},
+  \bibinfo{year}{2010}.
+\newblock \bibinfo{title}{Investigating soil moisture--climate interactions in
+  a changing climate: a review}.
+\newblock \bibinfo{journal}{Earth-Science Reviews} \bibinfo{volume}{99},
+  \bibinfo{pages}{125--161}.
+\newblock \DOIprefix\doi{10.1016/j.earscirev.2010.02.004}.
+%Type = Article
+\bibitem[{Sherwood and Fu(2014)}]{Sherwood2014}
+\bibinfo{author}{Sherwood, S.}, \bibinfo{author}{Fu, Q.}, \bibinfo{year}{2014}.
+\newblock \bibinfo{title}{A drier future?}
+\newblock \bibinfo{journal}{Science} \bibinfo{volume}{343},
+  \bibinfo{pages}{737--739}.
+\newblock \DOIprefix\doi{10.1126/science.1247620}.
+%Type = Article
+\bibitem[{{\v{S}}im{\r{u}}nek et~al.(2008){\v{S}}im{\r{u}}nek, {van Genuchten}
+  and {\v{S}}ejna}]{Simunek2008}
+\bibinfo{author}{{\v{S}}im{\r{u}}nek, J.}, \bibinfo{author}{{van Genuchten},
+  M.T.}, \bibinfo{author}{{\v{S}}ejna, M.}, \bibinfo{year}{2008}.
+\newblock \bibinfo{title}{Development and applications of the {HYDRUS} and
+  {STANMOD} software packages and related codes}.
+\newblock \bibinfo{journal}{Vadose Zone Journal} \bibinfo{volume}{7},
+  \bibinfo{pages}{587--600}.
+\newblock \DOIprefix\doi{10.2136/vzj2007.0077}.
+%Type = Article
+\bibitem[{Steduto et~al.(2009)Steduto, Hsiao, Raes and Fereres}]{Steduto2009}
+\bibinfo{author}{Steduto, P.}, \bibinfo{author}{Hsiao, T.C.},
+  \bibinfo{author}{Raes, D.}, \bibinfo{author}{Fereres, E.},
+  \bibinfo{year}{2009}.
+\newblock \bibinfo{title}{{AquaCrop}---the {FAO} crop model to simulate yield
+  response to water: {I}. concepts and underlying principles}.
+\newblock \bibinfo{journal}{Agronomy Journal} \bibinfo{volume}{101},
+  \bibinfo{pages}{426--437}.
+\newblock \DOIprefix\doi{10.2134/agronj2008.0139s}.
+%Type = Article
+\bibitem[{Strudley et~al.(2008)Strudley, Green and Ascough}]{Strudley2008}
+\bibinfo{author}{Strudley, M.W.}, \bibinfo{author}{Green, T.R.},
+  \bibinfo{author}{Ascough, J.C.}, \bibinfo{year}{2008}.
+\newblock \bibinfo{title}{Tillage effects on soil hydraulic properties in space
+  and time: state of the science}.
+\newblock \bibinfo{journal}{Soil and Tillage Research} \bibinfo{volume}{99},
+  \bibinfo{pages}{4--48}.
+\newblock \DOIprefix\doi{10.1016/j.still.2008.01.007}.
+%Type = Article
+\bibitem[{{van Genuchten}(1980)}]{vanGenuchten1980}
+\bibinfo{author}{{van Genuchten}, M.T.}, \bibinfo{year}{1980}.
+\newblock \bibinfo{title}{A closed-form equation for predicting the hydraulic
+  conductivity of unsaturated soils}.
+\newblock \bibinfo{journal}{Soil Science Society of America Journal}
+  \bibinfo{volume}{44}, \bibinfo{pages}{892--898}.
+\newblock \DOIprefix\doi{10.2136/sssaj1980.03615995004400050002x}.
+%Type = Article
+\bibitem[{Virtanen et~al.(2020)Virtanen, Gommers, Oliphant, Haberland, Reddy,
+  Cournapeau et~al.}]{Virtanen2020}
+\bibinfo{author}{Virtanen, P.}, \bibinfo{author}{Gommers, R.},
+  \bibinfo{author}{Oliphant, T.E.}, \bibinfo{author}{Haberland, M.},
+  \bibinfo{author}{Reddy, T.}, \bibinfo{author}{Cournapeau, D.}, et~al.,
+  \bibinfo{year}{2020}.
+\newblock \bibinfo{title}{{SciPy} 1.0: fundamental algorithms for scientific
+  computing in {Python}}.
+\newblock \bibinfo{journal}{Nature Methods} \bibinfo{volume}{17},
+  \bibinfo{pages}{261--272}.
+\newblock \DOIprefix\doi{10.1038/s41592-019-0686-2}.
+%Type = Article
+\bibitem[{Vuaille et~al.(2024)Vuaille, Abrahamsen, Jensen, Diamantopoulos,
+  Wacker and Petersen}]{Vuaille2024}
+\bibinfo{author}{Vuaille, J.}, \bibinfo{author}{Abrahamsen, P.},
+  \bibinfo{author}{Jensen, S.M.}, \bibinfo{author}{Diamantopoulos, E.},
+  \bibinfo{author}{Wacker, T.S.}, \bibinfo{author}{Petersen, C.T.},
+  \bibinfo{year}{2024}.
+\newblock \bibinfo{title}{Modelling pesticide degradation and leaching in
+  conservation agriculture: effect of no-till and mulching}.
+\newblock \bibinfo{journal}{Science of the Total Environment}
+  \bibinfo{volume}{929}, \bibinfo{pages}{172559}.
+\newblock \DOIprefix\doi{10.1016/j.scitotenv.2024.172559}.
+%Type = Article
+\bibitem[{Ward and Pulido-Velazquez(2008)}]{Ward2008}
+\bibinfo{author}{Ward, F.A.}, \bibinfo{author}{Pulido-Velazquez, M.},
+  \bibinfo{year}{2008}.
+\newblock \bibinfo{title}{Water conservation in irrigation can increase water
+  use}.
+\newblock \bibinfo{journal}{Proceedings of the National Academy of Sciences}
+  \bibinfo{volume}{105}, \bibinfo{pages}{18215--18220}.
+\newblock \DOIprefix\doi{10.1073/pnas.0805554105}.
+%Type = Article
+\bibitem[{Weber et~al.(2024)Weber, Weihermüller, Nemes, Bechtold, Degr{\'e},
+  Diamantopoulos, Fatichi, Filipovi{\'c}, Gupta, Hohenbrink, Hirmas, Jackisch,
+  {de Jong van Lier}, Koestel, Lehmann, Marthews, Minasny, Pagel, {van der
+  Ploeg}, Shojaeezadeh, Svane, Szab{\'o}, Vereecken, Verhoef, Young, Zeng,
+  Zhang and Bonetti}]{Weber2024}
+\bibinfo{author}{Weber, T.K.D.}, \bibinfo{author}{Weihermüller, L.},
+  \bibinfo{author}{Nemes, A.}, \bibinfo{author}{Bechtold, M.},
+  \bibinfo{author}{Degr{\'e}, A.}, \bibinfo{author}{Diamantopoulos, E.},
+  \bibinfo{author}{Fatichi, S.}, \bibinfo{author}{Filipovi{\'c}, V.},
+  \bibinfo{author}{Gupta, S.}, \bibinfo{author}{Hohenbrink, T.L.},
+  \bibinfo{author}{Hirmas, D.R.}, \bibinfo{author}{Jackisch, C.},
+  \bibinfo{author}{{de Jong van Lier}, Q.}, \bibinfo{author}{Koestel, J.},
+  \bibinfo{author}{Lehmann, P.}, \bibinfo{author}{Marthews, T.R.},
+  \bibinfo{author}{Minasny, B.}, \bibinfo{author}{Pagel, H.},
+  \bibinfo{author}{{van der Ploeg}, M.}, \bibinfo{author}{Shojaeezadeh, S.A.},
+  \bibinfo{author}{Svane, S.F.}, \bibinfo{author}{Szab{\'o}, B.},
+  \bibinfo{author}{Vereecken, H.}, \bibinfo{author}{Verhoef, A.},
+  \bibinfo{author}{Young, M.}, \bibinfo{author}{Zeng, Y.},
+  \bibinfo{author}{Zhang, Y.}, \bibinfo{author}{Bonetti, S.},
+  \bibinfo{year}{2024}.
+\newblock \bibinfo{title}{Hydro-pedotransfer functions: a roadmap for future
+  development}.
+\newblock \bibinfo{journal}{Hydrology and Earth System Sciences}
+  \bibinfo{volume}{28}, \bibinfo{pages}{3391--3433}.
+\newblock \DOIprefix\doi{10.5194/hess-28-3391-2024}.
+%Type = Article
+\bibitem[{Zhang et~al.(2001)Zhang, Dawes and Walker}]{Zhang2001}
+\bibinfo{author}{Zhang, L.}, \bibinfo{author}{Dawes, W.R.},
+  \bibinfo{author}{Walker, G.R.}, \bibinfo{year}{2001}.
+\newblock \bibinfo{title}{Response of mean annual evapotranspiration to
+  vegetation changes at catchment scale}.
+\newblock \bibinfo{journal}{Water Resources Research} \bibinfo{volume}{37},
+  \bibinfo{pages}{701--708}.
+\newblock \DOIprefix\doi{10.1029/2000WR900325}.
+%Type = Article
+\bibitem[{Zheng et~al.(2021)Zheng, Fan, Zhang and Zhuang}]{Zheng2021}
+\bibinfo{author}{Zheng, J.}, \bibinfo{author}{Fan, J.}, \bibinfo{author}{Zhang,
+  F.}, \bibinfo{author}{Zhuang, Q.}, \bibinfo{year}{2021}.
+\newblock \bibinfo{title}{Evapotranspiration partitioning and water
+  productivity of rainfed maize under contrasting mulching conditions in
+  northwest china}.
+\newblock \bibinfo{journal}{Agricultural Water Management}
+  \bibinfo{volume}{243}, \bibinfo{pages}{106473}.
+\newblock \DOIprefix\doi{10.1016/j.agwat.2020.106473}.
+
+\end{thebibliography}

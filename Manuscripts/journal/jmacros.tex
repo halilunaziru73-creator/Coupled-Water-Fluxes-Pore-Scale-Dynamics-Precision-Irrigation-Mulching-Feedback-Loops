@@ -1,0 +1,38 @@
+% Shared set-up of the journal versions (Elsevier elsarticle class). Loaded after \documentclass{elsarticle}.
+\usepackage{amsmath,amssymb,bm,mathtools}
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Termes}\setsansfont{TeX Gyre Heros}\setmonofont{Latin Modern Mono}[Scale=0.9]
+\usepackage{graphicx,float,caption,subcaption,booktabs,longtable,array,multirow,tabularx,rotating}
+\usepackage{xcolor,setspace,lineno,microtype,xurl,siunitx,enumitem,pdflscape}
+\definecolor{lk}{RGB}{0,70,140}
+\usepackage[colorlinks=true,linkcolor=lk,citecolor=lk,urlcolor=lk,breaklinks=true,pdfborder={0 0 0}]{hyperref}
+\usepackage[nameinlink,capitalise]{cleveref}
+\crefname{figure}{Fig.}{Figs.}\Crefname{figure}{Fig.}{Figs.}
+\crefname{equation}{Eq.}{Eqs.}\Crefname{equation}{Eq.}{Eqs.}
+\sisetup{detect-all,separate-uncertainty=false}
+\captionsetup{font=small,labelfont=bf}
+\setlength{\emergencystretch}{3em}
+\newcommand{\figdir}{../figures}
+
+\newcommand{\doihl}[1]{doi: \href{https://doi.org/#1}{\nolinkurl{#1}}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\ET}{\mathit{ET}}
+\newcommand{\Ent}{\mathit{ET}_{\mathrm{nt}}}
+\newcommand{\Ks}{K_{\mathrm{s}}}
+\newcommand{\Se}{S_{\mathrm{e}}}
+\newcommand{\TAW}{\mathit{TAW}}
+\newcommand{\repourl}{https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops}
+\newcommand{\repo}{\href{\repourl}{repository}}
+\newcommand{\dataurl}{\repourl/tree/main/Data}
+\newcommand{\codeurl}{\repourl/tree/main/Manuscripts}
+\newcommand{\softurl}{\repourl/tree/main/Software}
+\newcommand{\datalink}{\href{\dataurl}{Data}}
+\newcommand{\codelink}{\href{\codeurl}{Code}}
+\newcommand{\softlink}{\href{\softurl}{Software}}
+\newcommand{\manuallink}{\href{\manualurl}{Manual}}
+\newcommand{\downloadlink}{\href{\exeurl}{SWAFL.exe}}
+\newcommand{\manualurl}{https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf}
+\newcommand{\exeurl}{https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases/latest/download/SWAFL.exe}
+\newcommand{\csurl}{https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/tree/main/Data/Comprehensive_Summary}
+\newcommand{\cslink}{\href{\csurl}{\nolinkurl{Data/Comprehensive_Summary}}}
+\newcommand{\csavail}{\par\smallskip\textbf{Full simulation outputs.} Every value of every log of every run (the annual water and nitrogen balances, the harvests and the crop state, year by year), one compressed table per experiment (\texttt{E00\_Baselines} to \texttt{E16\_Edge\_Cases}), the one-row-per-run summary of all 10\,190 runs (\texttt{00\_summary\_all\_simulations}), the per-experiment summary (\texttt{00\_SUMMARY\_ALL\_EXPERIMENTS}) and the script that made them (\texttt{summarize\_results3.py}) are in the folder \cslink{} of the repository (\url{\csurl}); their 20-year means reproduce the run table within 2\,\%.}

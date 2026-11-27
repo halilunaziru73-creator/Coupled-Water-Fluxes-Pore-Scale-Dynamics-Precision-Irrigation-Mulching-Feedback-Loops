@@ -1,0 +1,317 @@
+\begin{thebibliography}{34}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\href}[2]{#2}
+\providecommand{\path}[1]{#1}
+\providecommand{\DOIprefix}{doi:}
+\providecommand{\ArXivprefix}{arXiv:}
+\providecommand{\URLprefix}{URL: }
+\providecommand{\Pubmedprefix}{pmid:}
+\providecommand{\doi}[1]{\href{http://dx.doi.org/#1}{\path{#1}}}
+\providecommand{\Pubmed}[1]{\href{pmid:#1}{\path{#1}}}
+\providecommand{\bibinfo}[2]{#2}
+\ifx\xfnm\relax \def\xfnm[#1]{\unskip,\space#1}\fi
+%Type = Article
+\bibitem[{Abrahamsen and Hansen(2000)}]{Abrahamsen2000}
+\bibinfo{author}{Abrahamsen, P.}, \bibinfo{author}{Hansen, S.},
+  \bibinfo{year}{2000}.
+\newblock \bibinfo{title}{Daisy: an open soil-crop-atmosphere system model}.
+\newblock \bibinfo{journal}{Environmental Modelling and Software}
+  \bibinfo{volume}{15}, \bibinfo{pages}{313--330}.
+%Type = Techreport
+\bibitem[{Allen et~al.(1998)Allen, Pereira, Raes and Smith}]{Allen1998}
+\bibinfo{author}{Allen, R.G.}, \bibinfo{author}{Pereira, L.S.},
+  \bibinfo{author}{Raes, D.}, \bibinfo{author}{Smith, M.},
+  \bibinfo{year}{1998}.
+\newblock \bibinfo{title}{Crop Evapotranspiration: Guidelines for Computing
+  Crop Water Requirements}.
+\newblock \bibinfo{type}{Technical Report} \bibinfo{number}{FAO Irrigation and
+  Drainage Paper 56}. FAO. \bibinfo{address}{Rome}.
+\newblock \URLprefix \url{https://www.fao.org/4/x0490e/x0490e00.htm}.
+%Type = Article
+\bibitem[{Assouline and Or(2014)}]{Assouline2014}
+\bibinfo{author}{Assouline, S.}, \bibinfo{author}{Or, D.},
+  \bibinfo{year}{2014}.
+\newblock \bibinfo{title}{The concept of field capacity revisited: defining
+  intrinsic static and dynamic criteria for soil internal drainage dynamics}.
+\newblock \bibinfo{journal}{Water Resources Research} \bibinfo{volume}{50}.
+\newblock \DOIprefix\doi{10.1002/2014WR015475}.
+%Type = Article
+\bibitem[{Carminati and Javaux(2020)}]{Carminati2020}
+\bibinfo{author}{Carminati, A.}, \bibinfo{author}{Javaux, M.},
+  \bibinfo{year}{2020}.
+\newblock \bibinfo{title}{Soil rather than xylem vulnerability controls
+  stomatal response to drought}.
+\newblock \bibinfo{journal}{Trends in Plant Science} \bibinfo{volume}{25},
+  \bibinfo{pages}{868--880}.
+%Type = Article
+\bibitem[{Carsel and Parrish(1988)}]{Carsel1988}
+\bibinfo{author}{Carsel, R.F.}, \bibinfo{author}{Parrish, R.S.},
+  \bibinfo{year}{1988}.
+\newblock \bibinfo{title}{Developing joint probability distributions of soil
+  water retention characteristics}.
+\newblock \bibinfo{journal}{Water Resources Research} \bibinfo{volume}{24},
+  \bibinfo{pages}{755--769}.
+\newblock \DOIprefix\doi{10.1029/WR024i005p00755}.
+%Type = Article
+\bibitem[{Diamantopoulos and Durner(2012)}]{Diamantopoulos2012VZJ}
+\bibinfo{author}{Diamantopoulos, E.}, \bibinfo{author}{Durner, W.},
+  \bibinfo{year}{2012}.
+\newblock \bibinfo{title}{Dynamic nonequilibrium of water flow in porous media:
+  a review}.
+\newblock \bibinfo{journal}{Vadose Zone Journal} \bibinfo{volume}{11},
+  \bibinfo{pages}{vzj2011.0197}.
+\newblock \DOIprefix\doi{10.2136/vzj2011.0197}.
+%Type = Article
+\bibitem[{Diamantopoulos and Durner(2013)}]{Diamantopoulos2013AWR}
+\bibinfo{author}{Diamantopoulos, E.}, \bibinfo{author}{Durner, W.},
+  \bibinfo{year}{2013}.
+\newblock \bibinfo{title}{Physically-based model of soil hydraulic properties
+  accounting for variable contact angle and its effect on hysteresis}.
+\newblock \bibinfo{journal}{Advances in Water Resources} \bibinfo{volume}{59},
+  \bibinfo{pages}{169--180}.
+%Type = Article
+\bibitem[{Diamantopoulos et~al.(2013)Diamantopoulos, Durner, Reszkowska and
+  Bachmann}]{Diamantopoulos2013JH}
+\bibinfo{author}{Diamantopoulos, E.}, \bibinfo{author}{Durner, W.},
+  \bibinfo{author}{Reszkowska, A.}, \bibinfo{author}{Bachmann, J.},
+  \bibinfo{year}{2013}.
+\newblock \bibinfo{title}{Effect of soil water repellency on soil hydraulic
+  properties estimated under dynamic conditions}.
+\newblock \bibinfo{journal}{Journal of Hydrology} \bibinfo{volume}{486},
+  \bibinfo{pages}{175--186}.
+%Type = Article
+\bibitem[{Diamantopoulos et~al.(2012)Diamantopoulos, Iden and
+  Durner}]{Diamantopoulos2012WRR}
+\bibinfo{author}{Diamantopoulos, E.}, \bibinfo{author}{Iden, S.C.},
+  \bibinfo{author}{Durner, W.}, \bibinfo{year}{2012}.
+\newblock \bibinfo{title}{Inverse modeling of dynamic nonequilibrium in water
+  flow with an effective approach}.
+\newblock \bibinfo{journal}{Water Resources Research} \bibinfo{volume}{48}.
+%Type = Article
+\bibitem[{Elmaloglou and Diamantopoulos(2007)}]{Elmaloglou2007}
+\bibinfo{author}{Elmaloglou, S.}, \bibinfo{author}{Diamantopoulos, E.},
+  \bibinfo{year}{2007}.
+\newblock \bibinfo{title}{Wetting front advance patterns and water losses by
+  deep percolation under the root zone as influenced by pulsed drip
+  irrigation}.
+\newblock \bibinfo{journal}{Agricultural Water Management}
+  \bibinfo{volume}{90}, \bibinfo{pages}{160--163}.
+%Type = Article
+\bibitem[{Elmaloglou and Diamantopoulos(2008)}]{Elmaloglou2008}
+\bibinfo{author}{Elmaloglou, S.}, \bibinfo{author}{Diamantopoulos, E.},
+  \bibinfo{year}{2008}.
+\newblock \bibinfo{title}{The effect of intermittent water application by
+  surface point sources on the soil moisture dynamics and on deep percolation
+  under the root zone}.
+\newblock \bibinfo{journal}{Computers and Electronics in Agriculture}
+  \bibinfo{volume}{62}, \bibinfo{pages}{266--275}.
+%Type = Article
+\bibitem[{Elmaloglou and Diamantopoulos(2009a)}]{Elmaloglou2009b}
+\bibinfo{author}{Elmaloglou, S.}, \bibinfo{author}{Diamantopoulos, E.},
+  \bibinfo{year}{2009}a.
+\newblock \bibinfo{title}{Effects of hysteresis on redistribution of soil
+  moisture and deep percolation at continuous and pulse drip irrigation}.
+\newblock \bibinfo{journal}{Agricultural Water Management}
+  \bibinfo{volume}{96}, \bibinfo{pages}{533--538}.
+%Type = Article
+\bibitem[{Elmaloglou and Diamantopoulos(2009b)}]{Elmaloglou2009a}
+\bibinfo{author}{Elmaloglou, S.}, \bibinfo{author}{Diamantopoulos, E.},
+  \bibinfo{year}{2009}b.
+\newblock \bibinfo{title}{Simulation of soil water dynamics under subsurface
+  drip irrigation from line sources}.
+\newblock \bibinfo{journal}{Agricultural Water Management}
+  \bibinfo{volume}{96}, \bibinfo{pages}{1587--1595}.
+%Type = Article
+\bibitem[{Elmaloglou and Diamantopoulos(2010)}]{Elmaloglou2010}
+\bibinfo{author}{Elmaloglou, S.}, \bibinfo{author}{Diamantopoulos, E.},
+  \bibinfo{year}{2010}.
+\newblock \bibinfo{title}{Soil water dynamics under surface trickle irrigation
+  as affected by soil hydraulic properties, discharge rate, dripper spacing and
+  irrigation duration}.
+\newblock \bibinfo{journal}{Irrigation and Drainage} \bibinfo{volume}{59},
+  \bibinfo{pages}{254--263}.
+%Type = Article
+\bibitem[{Gardner(1960)}]{Gardner1960}
+\bibinfo{author}{Gardner, W.R.}, \bibinfo{year}{1960}.
+\newblock \bibinfo{title}{Dynamic aspects of water availability to plants}.
+\newblock \bibinfo{journal}{Soil Science} \bibinfo{volume}{89},
+  \bibinfo{pages}{63--73}.
+%Type = Article
+\bibitem[{van Genuchten and Nielsen(1985)}]{vanGenuchten1985}
+\bibinfo{author}{van Genuchten, M.T.}, \bibinfo{author}{Nielsen, D.R.},
+  \bibinfo{year}{1985}.
+\newblock \bibinfo{title}{On describing and predicting the hydraulic properties
+  of unsaturated soils}.
+\newblock \bibinfo{journal}{Annales Geophysicae} \bibinfo{volume}{3},
+  \bibinfo{pages}{615--628}.
+%Type = Article
+\bibitem[{Groh et~al.(2020)Groh, Diamantopoulos, Duan, Ewert, Herbst, Holbak
+  et~al.}]{Groh2020}
+\bibinfo{author}{Groh, J.}, \bibinfo{author}{Diamantopoulos, E.},
+  \bibinfo{author}{Duan, X.}, \bibinfo{author}{Ewert, F.},
+  \bibinfo{author}{Herbst, M.}, \bibinfo{author}{Holbak, M.}, et~al.,
+  \bibinfo{year}{2020}.
+\newblock \bibinfo{title}{Crop growth and soil water fluxes at erosion-affected
+  arable sites: using weighing lysimeter data for model intercomparison}.
+\newblock \bibinfo{journal}{Vadose Zone Journal} \bibinfo{volume}{19},
+  \bibinfo{pages}{e20058}.
+%Type = Misc
+\bibitem[{Halilu(2026a)}]{HaliluData}
+\bibinfo{author}{Halilu, N.}, \bibinfo{year}{2026}a.
+\newblock \bibinfo{title}{Coupled water fluxes and pore scale dynamics under
+  joint precision irrigation and evaporation control mulching: ensemble of
+  10\,190 {Daisy} simulations}.
+\newblock \bibinfo{howpublished}{Zenodo dataset}.
+\newblock \DOIprefix\doi{10.5281/zenodo.23043626}.
+%Type = Manual
+\bibitem[{Halilu(2026b)}]{HaliluManual}
+\bibinfo{author}{Halilu, N.}, \bibinfo{year}{2026}b.
+\newblock \bibinfo{title}{{SWAFL Desktop} 1.1.0: Technical Manual (1155
+  pages)}.
+\newblock \bibinfo{note}{Distributed with the software and at
+  \url{https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/tree/main/Software/v1.1.0/Manual}}.
+%Type = Article
+\bibitem[{Hansen et~al.(2012)Hansen, Abrahamsen, Petersen and
+  Styczen}]{Hansen2012}
+\bibinfo{author}{Hansen, S.}, \bibinfo{author}{Abrahamsen, P.},
+  \bibinfo{author}{Petersen, C.T.}, \bibinfo{author}{Styczen, M.},
+  \bibinfo{year}{2012}.
+\newblock \bibinfo{title}{Daisy: model use, calibration, and validation}.
+\newblock \bibinfo{journal}{Transactions of the ASABE} \bibinfo{volume}{55},
+  \bibinfo{pages}{1317--1335}.
+\newblock \DOIprefix\doi{10.13031/2013.42244}.
+%Type = Techreport
+\bibitem[{Hansen et~al.(1990)Hansen, Jensen, Nielsen and Svendsen}]{Hansen1990}
+\bibinfo{author}{Hansen, S.}, \bibinfo{author}{Jensen, H.E.},
+  \bibinfo{author}{Nielsen, N.E.}, \bibinfo{author}{Svendsen, H.},
+  \bibinfo{year}{1990}.
+\newblock \bibinfo{title}{{DAISY}: Soil Plant Atmosphere System Model}.
+\newblock \bibinfo{type}{Technical Report}. The Royal Veterinary and
+  Agricultural University, Copenhagen; NPO Report A10, Danish Environmental
+  Protection Agency. \bibinfo{address}{Copenhagen}.
+%Type = Article
+\bibitem[{Hansen et~al.(1991)Hansen, Jensen, Nielsen and Svendsen}]{Hansen1991}
+\bibinfo{author}{Hansen, S.}, \bibinfo{author}{Jensen, H.E.},
+  \bibinfo{author}{Nielsen, N.E.}, \bibinfo{author}{Svendsen, H.},
+  \bibinfo{year}{1991}.
+\newblock \bibinfo{title}{Simulation of nitrogen dynamics and biomass
+  production in winter wheat using the danish simulation model {DAISY}}.
+\newblock \bibinfo{journal}{Fertilizer Research} \bibinfo{volume}{27},
+  \bibinfo{pages}{245--259}.
+\newblock \DOIprefix\doi{10.1007/BF01051131}.
+%Type = Article
+\bibitem[{Hassanizadeh et~al.(2002)Hassanizadeh, Celia and
+  Dahle}]{Hassanizadeh2002}
+\bibinfo{author}{Hassanizadeh, S.M.}, \bibinfo{author}{Celia, M.A.},
+  \bibinfo{author}{Dahle, H.K.}, \bibinfo{year}{2002}.
+\newblock \bibinfo{title}{Dynamic effect in the capillary pressure--saturation
+  relationship and its impacts on unsaturated flow}.
+\newblock \bibinfo{journal}{Vadose Zone Journal} \bibinfo{volume}{1},
+  \bibinfo{pages}{38--57}.
+%Type = Article
+\bibitem[{Holbak et~al.(2026)Holbak, Abrahamsen, Gr{\o}nning, Kl{\"o}ffel,
+  Schwartzkopff, Styczen, Svane and Diamantopoulos}]{Holbak2026}
+\bibinfo{author}{Holbak, M.}, \bibinfo{author}{Abrahamsen, P.},
+  \bibinfo{author}{Gr{\o}nning, C.R.}, \bibinfo{author}{Kl{\"o}ffel, T.},
+  \bibinfo{author}{Schwartzkopff, M.V.}, \bibinfo{author}{Styczen, M.E.},
+  \bibinfo{author}{Svane, S.F.}, \bibinfo{author}{Diamantopoulos, E.},
+  \bibinfo{year}{2026}.
+\newblock \bibinfo{title}{The {Daisy} model: a tool for simulating agricultural
+  systems --- recent (2012--2025) developments, calibrations and validations}.
+\newblock \bibinfo{journal}{Agricultural Systems} \bibinfo{volume}{238},
+  \bibinfo{pages}{104846}.
+\newblock \DOIprefix\doi{10.1016/j.agsy.2026.104846}.
+%Type = Article
+\bibitem[{Iden et~al.(2021)Iden, Diamantopoulos and Durner}]{Iden2021}
+\bibinfo{author}{Iden, S.C.}, \bibinfo{author}{Diamantopoulos, E.},
+  \bibinfo{author}{Durner, W.}, \bibinfo{year}{2021}.
+\newblock \bibinfo{title}{Capillary, film, and vapor flow in transient bare
+  soil evaporation (2): experimental identification of hydraulic conductivity
+  in the medium to dry moisture range}.
+\newblock \bibinfo{journal}{Water Resources Research} \bibinfo{volume}{57},
+  \bibinfo{pages}{e2020WR028514}.
+\newblock \DOIprefix\doi{10.1029/2020WR028514}.
+%Type = Article
+\bibitem[{Kumar et~al.(2022)Kumar, Srivastava, Lamba, Diamantopoulos, Ortiz,
+  Morata et~al.}]{Kumar2022}
+\bibinfo{author}{Kumar, H.}, \bibinfo{author}{Srivastava, P.},
+  \bibinfo{author}{Lamba, J.}, \bibinfo{author}{Diamantopoulos, E.},
+  \bibinfo{author}{Ortiz, B.}, \bibinfo{author}{Morata, G.}, et~al.,
+  \bibinfo{year}{2022}.
+\newblock \bibinfo{title}{Site-specific irrigation scheduling using one-layer
+  soil hydraulic properties and inverse modeling}.
+\newblock \bibinfo{journal}{Agricultural Water Management}
+  \bibinfo{volume}{273}, \bibinfo{pages}{107877}.
+%Type = Article
+\bibitem[{Mualem(1976)}]{Mualem1976}
+\bibinfo{author}{Mualem, Y.}, \bibinfo{year}{1976}.
+\newblock \bibinfo{title}{A new model for predicting the hydraulic conductivity
+  of unsaturated porous media}.
+\newblock \bibinfo{journal}{Water Resources Research} \bibinfo{volume}{12},
+  \bibinfo{pages}{513--522}.
+\newblock \DOIprefix\doi{10.1029/WR012i003p00513}.
+%Type = Article
+\bibitem[{Nielsen et~al.(1986)Nielsen, van Genuchten and Biggar}]{Nielsen1986}
+\bibinfo{author}{Nielsen, D.R.}, \bibinfo{author}{van Genuchten, M.T.},
+  \bibinfo{author}{Biggar, J.W.}, \bibinfo{year}{1986}.
+\newblock \bibinfo{title}{Water flow and solute transport processes in the
+  unsaturated zone}.
+\newblock \bibinfo{journal}{Water Resources Research} \bibinfo{volume}{22},
+  \bibinfo{pages}{89S--108S}.
+%Type = Article
+\bibitem[{Ross and Smettem(2000)}]{RossSmettem2000}
+\bibinfo{author}{Ross, P.J.}, \bibinfo{author}{Smettem, K.R.J.},
+  \bibinfo{year}{2000}.
+\newblock \bibinfo{title}{A simple treatment of physical nonequilibrium water
+  flow in soils}.
+\newblock \bibinfo{journal}{Soil Science Society of America Journal}
+  \bibinfo{volume}{64}, \bibinfo{pages}{1926--1930}.
+%Type = Article
+\bibitem[{Schaap et~al.(2001)Schaap, Leij and {van Genuchten}}]{Schaap2001}
+\bibinfo{author}{Schaap, M.G.}, \bibinfo{author}{Leij, F.J.},
+  \bibinfo{author}{{van Genuchten}, M.T.}, \bibinfo{year}{2001}.
+\newblock \bibinfo{title}{Rosetta: a computer program for estimating soil
+  hydraulic parameters with hierarchical pedotransfer functions}.
+\newblock \bibinfo{journal}{Journal of Hydrology} \bibinfo{volume}{251},
+  \bibinfo{pages}{163--176}.
+\newblock \DOIprefix\doi{10.1016/S0022-1694(01)00466-8}.
+%Type = Article
+\bibitem[{{\v{S}}im{\r{u}}nek et~al.(2016){\v{S}}im{\r{u}}nek, {van Genuchten}
+  and {\v{S}}ejna}]{Simunek2016}
+\bibinfo{author}{{\v{S}}im{\r{u}}nek, J.}, \bibinfo{author}{{van Genuchten},
+  M.T.}, \bibinfo{author}{{\v{S}}ejna, M.}, \bibinfo{year}{2016}.
+\newblock \bibinfo{title}{Recent developments and applications of the {HYDRUS}
+  computer software packages}.
+\newblock \bibinfo{journal}{Vadose Zone Journal} \bibinfo{volume}{15}.
+\newblock \DOIprefix\doi{10.2136/vzj2016.04.0033}.
+%Type = Article
+\bibitem[{Twarakavi et~al.(2009)Twarakavi, Sakai and
+  {\v{S}}im{\r{u}}nek}]{Twarakavi2009}
+\bibinfo{author}{Twarakavi, N.K.C.}, \bibinfo{author}{Sakai, M.},
+  \bibinfo{author}{{\v{S}}im{\r{u}}nek, J.}, \bibinfo{year}{2009}.
+\newblock \bibinfo{title}{An objective analysis of the dynamic nature of field
+  capacity}.
+\newblock \bibinfo{journal}{Water Resources Research} \bibinfo{volume}{45},
+  \bibinfo{pages}{W10410}.
+\newblock \DOIprefix\doi{10.1029/2009WR007944}.
+%Type = Article
+\bibitem[{{van Genuchten}(1980)}]{vanGenuchten1980}
+\bibinfo{author}{{van Genuchten}, M.T.}, \bibinfo{year}{1980}.
+\newblock \bibinfo{title}{A closed-form equation for predicting the hydraulic
+  conductivity of unsaturated soils}.
+\newblock \bibinfo{journal}{Soil Science Society of America Journal}
+  \bibinfo{volume}{44}, \bibinfo{pages}{892--898}.
+\newblock \DOIprefix\doi{10.2136/sssaj1980.03615995004400050002x}.
+%Type = Article
+\bibitem[{Weber et~al.(2019)Weber, Durner, Streck and
+  Diamantopoulos}]{Weber2019}
+\bibinfo{author}{Weber, T.K.D.}, \bibinfo{author}{Durner, W.},
+  \bibinfo{author}{Streck, T.}, \bibinfo{author}{Diamantopoulos, E.},
+  \bibinfo{year}{2019}.
+\newblock \bibinfo{title}{A modular framework for modeling unsaturated soil
+  hydraulic properties over the full moisture range}.
+\newblock \bibinfo{journal}{Water Resources Research} \bibinfo{volume}{55},
+  \bibinfo{pages}{4994--5011}.
+
+\end{thebibliography}

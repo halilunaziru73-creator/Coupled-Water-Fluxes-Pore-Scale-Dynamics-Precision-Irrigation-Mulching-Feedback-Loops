@@ -1,0 +1,164 @@
+\begin{thebibliography}{10}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \def\href#1#2{#2} \def\path#1{#1}\fi
+
+\bibitem{Datta2023}
+S.~Datta, S.~Taghvaeian, Soil water sensors for irrigation scheduling in the
+  united states: a systematic review of literature, Agricultural Water
+  Management 278 (2023) 108148.
+\newblock \href {https://doi.org/10.1016/j.agwat.2023.108148}
+  {\path{doi:10.1016/j.agwat.2023.108148}}.
+
+\bibitem{Garcia2020}
+L.~Garc{\'i}a, L.~Parra, J.~M. Jimenez, J.~Lloret, P.~Lorenz, {IoT}-based smart
+  irrigation systems: an overview on the recent trends on sensors and {IoT}
+  systems for irrigation in precision agriculture, Sensors 20 (2020) 1042.
+\newblock \href {https://doi.org/10.3390/s20041042}
+  {\path{doi:10.3390/s20041042}}.
+
+\bibitem{Jones2004}
+H.~G. Jones, Irrigation scheduling: advantages and pitfalls of plant-based
+  methods, Journal of Experimental Botany 55 (2004) 2427--2436.
+\newblock \href {https://doi.org/10.1093/jxb/erh213}
+  {\path{doi:10.1093/jxb/erh213}}.
+
+\bibitem{Hutton2016}
+C.~Hutton, T.~Wagener, J.~Freer, D.~Han, C.~Duffy, B.~Arheimer, Most
+  computational hydrology is not reproducible, so is it really science?, Water
+  Resources Research 52 (2016) 7548--7555.
+\newblock \href {https://doi.org/10.1002/2016WR019285}
+  {\path{doi:10.1002/2016WR019285}}.
+
+\bibitem{Wilkinson2016}
+M.~D. Wilkinson, M.~Dumontier, I.~J. Aalbersberg, G.~Appleton, M.~Axton,
+  A.~Baak, et~al., The {FAIR} guiding principles for scientific data management
+  and stewardship, Scientific Data 3 (2016) 160018.
+\newblock \href {https://doi.org/10.1038/sdata.2016.18}
+  {\path{doi:10.1038/sdata.2016.18}}.
+
+\bibitem{Bennett2013}
+N.~D. Bennett, B.~F.~W. Croke, G.~Guariso, J.~H.~A. Guillaume, S.~H. Hamilton,
+  A.~J. Jakeman, et~al., Characterising performance of environmental models,
+  Environmental Modelling and Software 40 (2013) 1--20.
+\newblock \href {https://doi.org/10.1016/j.envsoft.2012.09.011}
+  {\path{doi:10.1016/j.envsoft.2012.09.011}}.
+
+\bibitem{Moriasi2007}
+D.~N. Moriasi, J.~G. Arnold, M.~W. {Van Liew}, R.~L. Bingner, R.~D. Harmel,
+  T.~L. Veith, Model evaluation guidelines for systematic quantification of
+  accuracy in watershed simulations, Transactions of the ASABE 50 (2007)
+  885--900.
+\newblock \href {https://doi.org/10.13031/2013.23153}
+  {\path{doi:10.13031/2013.23153}}.
+
+\bibitem{Hansen1991}
+S.~Hansen, H.~E. Jensen, N.~E. Nielsen, H.~Svendsen, Simulation of nitrogen
+  dynamics and biomass production in winter wheat using the danish simulation
+  model {DAISY}, Fertilizer Research 27 (1991) 245--259.
+\newblock \href {https://doi.org/10.1007/BF01051131}
+  {\path{doi:10.1007/BF01051131}}.
+
+\bibitem{Hansen2012}
+S.~Hansen, P.~Abrahamsen, C.~T. Petersen, M.~Styczen, Daisy: model use,
+  calibration, and validation, Transactions of the ASABE 55 (2012) 1317--1335.
+\newblock \href {https://doi.org/10.13031/2013.42244}
+  {\path{doi:10.13031/2013.42244}}.
+
+\bibitem{Holbak2026}
+M.~Holbak, P.~Abrahamsen, C.~R. Gr{\o}nning, T.~Kl{\"o}ffel, M.~V.
+  Schwartzkopff, M.~E. Styczen, S.~F. Svane, E.~Diamantopoulos, The {Daisy}
+  model: a tool for simulating agricultural systems --- recent (2012--2025)
+  developments, calibrations and validations, Agricultural Systems 238 (2026)
+  104846.
+\newblock \href {https://doi.org/10.1016/j.agsy.2026.104846}
+  {\path{doi:10.1016/j.agsy.2026.104846}}.
+
+\bibitem{Simunek2008}
+J.~{\v{S}}im{\r{u}}nek, M.~T. {van Genuchten}, M.~{\v{S}}ejna, Development and
+  applications of the {HYDRUS} and {STANMOD} software packages and related
+  codes, Vadose Zone Journal 7 (2008) 587--600.
+\newblock \href {https://doi.org/10.2136/vzj2007.0077}
+  {\path{doi:10.2136/vzj2007.0077}}.
+
+\bibitem{Jones2003}
+J.~W. Jones, G.~Hoogenboom, C.~H. Porter, K.~J. Boote, W.~D. Batchelor, L.~A.
+  Hunt, et~al., The {DSSAT} cropping system model, European Journal of Agronomy
+  18 (2003) 235--265.
+\newblock \href {https://doi.org/10.1016/S1161-0301(02)00107-7}
+  {\path{doi:10.1016/S1161-0301(02)00107-7}}.
+
+\bibitem{Keating2003}
+B.~A. Keating, P.~S. Carberry, G.~L. Hammer, M.~E. Probert, M.~J. Robertson,
+  D.~Holzworth, et~al., An overview of {APSIM}, a model designed for farming
+  systems simulation, European Journal of Agronomy 18 (2003) 267--288.
+\newblock \href {https://doi.org/10.1016/S1161-0301(02)00108-9}
+  {\path{doi:10.1016/S1161-0301(02)00108-9}}.
+
+\bibitem{Steduto2009}
+P.~Steduto, T.~C. Hsiao, D.~Raes, E.~Fereres, {AquaCrop}---the {FAO} crop model
+  to simulate yield response to water: {I}. concepts and underlying principles,
+  Agronomy Journal 101 (2009) 426--437.
+\newblock \href {https://doi.org/10.2134/agronj2008.0139s}
+  {\path{doi:10.2134/agronj2008.0139s}}.
+
+\bibitem{Razavi2012}
+S.~Razavi, B.~A. Tolson, D.~H. Burn, Review of surrogate modeling in water
+  resources, Water Resources Research 48 (2012) W07401.
+\newblock \href {https://doi.org/10.1029/2011WR011527}
+  {\path{doi:10.1029/2011WR011527}}.
+
+\bibitem{Asher2015}
+M.~J. Asher, B.~F.~W. Croke, A.~J. Jakeman, L.~J.~M. Peeters, A review of
+  surrogate models and their application to groundwater modeling, Water
+  Resources Research 51 (2015) 5957--5973.
+\newblock \href {https://doi.org/10.1002/2015WR016967}
+  {\path{doi:10.1002/2015WR016967}}.
+
+\bibitem{Walker1987}
+W.~R. Walker, G.~V. Skogerboe, Surface Irrigation: Theory and Practice,
+  Prentice-Hall, Englewood Cliffs, NJ, 1987.
+
+\bibitem{Walker1989}
+W.~R. Walker, \href{https://www.fao.org/4/t0231e/t0231e00.htm}{Guidelines for
+  designing and evaluating surface irrigation systems}, Tech. Rep. Irrigation
+  and Drainage Paper 45, Food and Agriculture Organization of the United
+  Nations, Rome (1989).
+\newline\urlprefix\url{https://www.fao.org/4/t0231e/t0231e00.htm}
+
+\bibitem{KellerKarmeli1974}
+J.~Keller, D.~Karmeli, Trickle irrigation design parameters, Transactions of
+  the ASAE 17 (1974) 678--684.
+
+\bibitem{Keller1990}
+J.~Keller, R.~D. Bliesner, Sprinkle and Trickle Irrigation, Van Nostrand
+  Reinhold, New York, 1990.
+
+\bibitem{Christiansen1942}
+J.~E. Christiansen, Irrigation by sprinkling, Tech. Rep. Bulletin 670,
+  University of California Agricultural Experiment Station, Berkeley (1942).
+
+\bibitem{Playan2005}
+E.~Play{\'a}n, R.~Salvador, J.~M. Faci, N.~Zapata, A.~Mart{\'i}nez-Cob,
+  I.~S{\'a}nchez, Day and night wind drift and evaporation losses in sprinkler
+  solid-sets and moving laterals, Agricultural Water Management 76 (2005)
+  139--159.
+\newblock \href {https://doi.org/10.1016/j.agwat.2005.01.015}
+  {\path{doi:10.1016/j.agwat.2005.01.015}}.
+
+\bibitem{HaliluData}
+N.~Halilu, Coupled water fluxes and pore scale dynamics under joint precision
+  irrigation and evaporation control mulching: ensemble of 10\,190 {Daisy}
+  simulations, Zenodo dataset (2026).
+\newblock \href {https://doi.org/10.5281/zenodo.23043626}
+  {\path{doi:10.5281/zenodo.23043626}}.
+
+\bibitem{HaliluManual}
+N.~Halilu, {SWAFL Desktop} 1.1.0: Technical Manual (1155 pages), distributed
+  with the software and at
+  \url{https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/tree/main/Software/v1.1.0/Manual}
+  (2026).
+
+\end{thebibliography}

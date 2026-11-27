@@ -1,0 +1,240 @@
+\documentclass[review,12pt,authoryear]{elsarticle}
+\input{jmacros.tex}
+\journal{Agricultural Water Management}
+\hypersetup{pdftitle={Soil hydraulic memory, the recoverability of evaporation savings and the closure of the water balance},pdfauthor={Naziru Halilu}}
+\begin{document}
+
+\begin{frontmatter}
+\title{Soil hydraulic memory, the recoverability of evaporation savings and the closure of the water balance: a ten-soil simulation study with Daisy}
+
+\author[aua,upna]{Naziru Halilu\corref{cor1}}
+\ead{halilunaziru73@gmail.com}
+\cortext[cor1]{Corresponding author. ORCID: 0009-0006-2324-9599.}
+\affiliation[aua]{organization={Agricultural University of Athens},city={Athens},country={Greece}}
+\affiliation[upna]{organization={Public University of Navarre},city={Pamplona},country={Spain}}
+
+\begin{abstract}
+Water kept from evaporating is routinely counted as water gained, and process-model outputs that support this count are treated as closed accounts. Both premises were tested on one designed ensemble of Daisy simulations covering ten soils and seventeen experiments. Hydraulic memory, the share of released antecedent storage that drains, differed strongly between soils, followed the pore-size parameter and the saturated conductivity, transferred to independent evaporation and mulch experiments, and was predicted for held-out soils by a rate-competition law with one parameter. Warming raised and wetter climates lowered the recoverable share of an evaporation saving, while nitrogen, a negative control, had no effect. A blind search for linear invariants recovered the water balance and revealed an unattributed evaporative term that is a large part of evapotranspiration. A compact law predicted evapotranspiration in withheld experiments and soils as well as gradient boosting, whereas drainage resisted every law tried. Judged against reported soil evaporation alone, the drainage share of an evaporation change was misjudged in most soils, so a saving must be judged against the closed non-transpiration term. The study gives a soil- and climate-specific discount for evaporation savings such as mulching, a template for deciding which model outputs can be trusted, and testable predictions for lysimeters. All findings concern a one-dimensional matrix-flow model and need confirmation with measured drainage.
+\end{abstract}
+
+\begin{highlights}
+\item Drainage share of released soil storage ranged from 0.02 to 0.85 across ten soils
+\item A one-parameter rate-competition law predicted it for held-out soils
+\item Warming raised and wetter climates lowered the recoverable evaporation saving
+\item Reported ET components omitted an unattributed term of 30\% of ET
+\item Judged on soil evaporation alone, the drainage share erred in 6 of 10 soils
+\end{highlights}
+
+\begin{keyword}
+evaporation savings \sep mulching \sep deep drainage \sep soil hydraulic properties \sep water-balance closure \sep Daisy model \sep irrigation
+\end{keyword}
+\end{frontmatter}
+
+\linenumbers
+
+\section{Introduction}
+\label{sec:intro}
+Evaporation is the largest single outflow of water from non-saturated terrestrial surfaces, and its response to warming is central to projected changes in soil moisture, drought and irrigation demand \citep{Seneviratne2010,Dai2013,Berg2018,Sherwood2014}. Practical interventions, including residue and straw mulches \citep{BalwinderSingh2011}, deficit and scheduled irrigation \citep{Fereres2007,Geerts2009} and sensor-based scheduling \citep{Datta2023}, are justified by the premise that evaporation can be curtailed and the saved water kept for crops.
+
+That premise is less secure than it looks. \citet{Ward2008} and \citet{Grafton2018} showed at basin scale that apparent savings frequently do not appear as increases in usable water, because the water ``saved'' by a technical improvement was previously a return flow or was consumed elsewhere. The same accounting problem exists inside a single soil profile. If a mulch or a lower evaporation factor suppresses soil evaporation, the water not evaporated may remain in the root zone and reduce the irrigation requirement, be taken up by roots, or percolate below the root zone and be lost to the crop. Only the first two constitute a recoverable saving. The partitioning among them is controlled by the ability of the soil to retain water against gravity, which depends on the pore-size distribution, its connectivity and the unsaturated conductivity at the moisture states that the crop and the irrigation scheduler actually visit.
+
+The relevant physics is old. Capillary flow is described by the Richards equation \citep{Richards1931}, closed with the van~Genuchten--Mualem functions \citep{vanGenuchten1980,Mualem1976}, whose parameters can be estimated from texture by pedotransfer functions \citep{Schaap2001,Saxton2006,Weber2024}; similitude, connectivity, macropores and structure are recognised controls on drainage \citep{Miller1956,Ghanbarian2013,Beven1982,Jarvis2007,Strudley2008,Fatichi2020}. Soil moisture memory is established in land--atmosphere studies as the persistence of moisture anomalies \citep{Koster2001,Koster2004,Entekhabi1996}. What is missing is a compact diagnostic that links these controls to the managerial question ``if evaporation changes by one millimetre, how much of that millimetre is recoverable?''. The Daisy model has been calibrated and validated widely \citep{Hansen1991,Hansen2012,Holbak2026}, including for evaporation from structured soils \citep{Leuther2024}, residue effects on hydraulic properties \citep{Leuther2026} and mulching \citep{Vuaille2024}, but none of these studies defines a transferable recoverability metric.
+
+A second, related problem is the accounting itself. Conservation of mass is the most reliable organising principle in hydrology, yet the fluxes that a process model reports separately (transpiration, soil evaporation, canopy interception) need not add to the evapotranspiration that enters its balance, and the storage term is seldom audited \citep{Hillel1998,Refsgaard2004}. Data-driven discovery of laws and invariants is increasingly used in hydrology \citep{Brunton2016,Kratzert2019,Nearing2021}, but discovery methods are rarely validated against a case with a known answer, laws are seldom tested by withholding whole experiments \citep{Roberts2017}, and failures are rarely documented \citep{Kirchner2006,Oreskes1994}. If the outputs on which a saving is judged do not close, the saving itself is uncertain.
+
+The term \emph{hydraulic memory} is used here in a narrow and measurable sense: the fraction of released antecedent root-zone storage that leaves as drainage rather than as evaporation or transpiration. The objectives were (i) to define memory and loss fates with explicit estimators and to compute them for ten soils; (ii) to test whether hydraulic properties predict them out of sample, including a one-parameter rate-competition law; (iii) to test whether the memory fate transfers to independent evaporation-factor and mulch experiments; (iv) to quantify how warming, rainfall, trigger, dose and nitrogen modify the recoverable share; and (v) to audit the closure of the water balance and of the evapotranspiration partition, and to show how the audit changes the judgement of an evaporation saving.
+
+\section{Materials and methods}
+\subsection{Simulation ensemble}
+\label{sec:methods}
+The analysis used an ensemble of 10\,190 simulations made with Daisy \citep{Hansen2012,Holbak2026}, organised into 17 experiments (E0--E16) that vary irrigation dose, trigger suction, sensor depth, method, soil hydraulic dynamics, mulch, initial moisture, rainfall, temperature, evaporation factor, nitrogen rate and rooting depth (\cref{tab:exp}). Ten soils (S01--S10) span the texture triangle from sand to silty clay loam (\cref{tab:soils}). All runs were driven by the same 20-year weather series of Taastrup, Denmark (1980--1999); every flux reported is a 20-year mean in mm\,yr$^{-1}$, so results describe long-term mean partitioning and not event response. Daisy solves the one-dimensional Richards equation in a layered profile, coupled to a crop module (light interception, photosynthesis, root growth and water stress), a surface mulch and residue layer, an energy-balance-based potential evapotranspiration and nitrogen transformations \citep{Hansen1991,Hansen2012}. The irrigation scheduler applies a fixed dose whenever the suction at a sensor depth exceeds a trigger. Drainage is the flux at 1\,m depth, and no groundwater table is modelled. Of the 10\,190 runs, 149 (1.5\,\%, 129 of them in the coarse sand S02) failed with physically impossible outputs characteristic of non-convergence of the soil-water solver and were excluded, leaving 10\,041 valid runs; re-estimating the evapotranspiration law and the unattributed term without S02 changed their cross-validated scores by less than 0.01 and left the unattributed share of evapotranspiration at 30\,\% (Supplementary Material).
+
+%%PULL p1.tex tab:exp
+
+The retention and conductivity functions are the van~Genuchten--Mualem pair \citep{vanGenuchten1980,Mualem1976}:
+\begin{align}
+S_e(h) &= \bigl[1+(\alpha h)^{n}\bigr]^{-m}, \qquad m = 1-\tfrac{1}{n},\label{eq:vg}\\
+K(S_e) &= K_s\, S_e^{\,\lambda}\Bigl[1-\bigl(1-S_e^{1/m}\bigr)^{m}\Bigr]^{2},\label{eq:mualem}
+\end{align}
+where $h$ is the suction head (cm), $S_e$ the effective saturation, $\alpha$ (cm$^{-1}$) and $n$ shape parameters, $K_s$ the saturated conductivity (cm\,d$^{-1}$) and $\lambda=0.5$ the pore-connectivity exponent. Large $n$ denotes a narrow pore-size distribution (rapid desaturation), small $n$ a broad one. Saturated conductivities were taken from the class means of \citet{Carsel1988} for eight of the ten soils; for S01 (coarse loam) and S02 (coarse sand), whose classes do not map to a single USDA class, $K_s$ was treated as unknown. These $K_s$ values are literature class values and not the Daisy input conductivities.
+
+%%PULL p1.tex tab:soils
+
+\subsection{Water balance and storage release}
+For each run the 20-year mean annual water balance is
+\begin{equation}
+P_r + I = \mathit{ET} + D + \Delta S + Q_r,
+\label{eq:wb}
+\end{equation}
+where $P_r$ is rainfall, $I$ irrigation, $\mathit{ET}$ evapotranspiration, $D$ drainage across the 1\,m boundary, $\Delta S$ the change in profile storage and $Q_r$ runoff. The \emph{storage release}
+\begin{equation}
+\bar R \;=\; \mathit{ET}+D-P_r-I
+\label{eq:release}
+\end{equation}
+is positive when the profile supplies water to the fluxes and equals $-(\Delta S+Q_r)$. The non-transpiration term is $\Ent=\mathit{ET}-T$.
+
+\subsection{Memory fate, loss fate and recoverable fraction}
+Experiment E9 imposes, for each soil, an initial suction $h_0$ (ten values from 30 to 3000\,cm) and a rainfall scale $P$ (ten values from 0.5 to 1.4). With $x\in\{E_s,T,D,\text{oth}\}$ the soil-evaporation, transpiration, drainage and other-evaporation fluxes ($\text{oth}=\mathit{ET}-T-E_s$), the \emph{memory fate} of a flux is the regression slope of that flux on $\bar R$ pooled within rain levels:
+\begin{equation}
+\phi_x \;=\; \frac{\sum_{P}\sum_{c\in P}(\bar R_c-\overline{\bar R}_P)(x_c-\bar x_P)}{\sum_{P}\sum_{c\in P}(\bar R_c-\overline{\bar R}_P)^2},\qquad \phi_{E_s}+\phi_T+\phi_D+\phi_{\mathrm{oth}}=1 ,
+\label{eq:phi}
+\end{equation}
+where $c$ runs over lattice cells of one soil. Pooling within $P$ removes the first-order effect of the rainfall change and isolates the response to antecedent state; $\phi_D$ is the \emph{hydraulic memory}. Confidence intervals came from 1\,000 bootstrap resamples of the cells.
+
+E16 is a $2^6$ factorial per soil (rainfall scale 0.5/1.5, warming $+2$/$+6$\,\textdegree C, trigger 50/2000\,cm, dose 1.2/30\,mm, nitrogen 25/150\,kg\,ha$^{-1}$ and soil-evaporation factor $E_p$ 0.3/1.2). For each of the 32 combinations of the other factors the paired difference between $E_p=1.2$ and $E_p=0.3$ was formed, and the \emph{loss fate} of component $x$ is the ratio of summed paired differences
+\begin{equation}
+\psi_x \;=\; s_x\,\frac{\sum_{k}\bigl[x_k(E_p{=}1.2)-x_k(E_p{=}0.3)\bigr]}{\sum_{k}\bigl[\Ent{}_k(E_p{=}1.2)-\Ent{}_k(E_p{=}0.3)\bigr]},
+\label{eq:psi}
+\end{equation}
+with $s_x=-1$ for drainage and transpiration and $+1$ for irrigation. Thus $\psi_D$ is the drainage given up per millimetre of extra non-transpiration evaporation, and the balance gives $\psi_T+\psi_D+\psi_I\approx1$ (verified numerically in \cref{tab:closure}). Because drainage is the only one of the three accounts that is lost to the crop, the \emph{recoverable fraction} of an evaporation saving is
+\begin{equation}
+\rho_R \;=\; 1-\psi_D .
+\label{eq:rec}
+\end{equation}
+E7 varies the mulch vapour-flux factor and the mulch storage capacity in 20 cells per soil; each flux was regressed on $\Ent$ across the cells, giving $\psi_D=-\mathrm{d}D/\mathrm{d}\Ent$ and $\psi_I=\mathrm{d}I/\mathrm{d}\Ent$ from a physical mulch rather than a bulk evaporation factor.
+
+\subsection{Rate-competition law}
+\label{sec:ratelaw}
+Two pathways compete for water in the transmission zone after wetting: gravity-driven percolation at a rate of order $K_s$, and withdrawal by evaporation and roots at an effective rate $q^\ast$. If the two act in parallel on the same pool,
+\begin{equation}
+\phi_D \;=\; \frac{K_s}{K_s+q^\ast},
+\label{eq:rate}
+\end{equation}
+with one parameter $q^\ast$ (cm\,d$^{-1}$) shared by all soils. This competing-rates closure is not derived from the Richards equation; it is the simplest form that is bounded in $[0,1]$, tends to 0 for impermeable and to 1 for freely draining soils, and has one free parameter. $q^\ast$ was estimated by nonlinear least squares on the eight soils with literature $K_s$ and validated by leave-one-soil-out (LOSO) prediction. Four single-variable alternatives were compared: total available water ($\TAW$), $S_e$ at 100\,cm, $n$ and $\log_{10}K_s$, each as a linear regression clipped to $[0,1]$, against a mean-only benchmark.
+
+\subsection{Audit of the water balance}
+\label{sec:methodsB}
+Writing $\mathit{ET}=T+E_s+E_c+R$, the \emph{unattributed term}
+\begin{equation}
+R \;=\; \mathit{ET}-T-E_s-E_c
+\label{eq:R}
+\end{equation}
+is the remainder of evapotranspiration after the three reported components, defined without ascribing a process, and the closure residual is
+\begin{equation}
+\varepsilon \;=\; \frac{W-\mathit{ET}-D}{W}\;\approx\;\frac{\Delta S+Q_r}{W},\qquad W=P_r+I.
+\label{eq:closure}
+\end{equation}
+A blind linear-invariant search was applied to the flux matrix $\mathbf F$ (rows: runs; columns: rain, irrigation, ET, $T$, $E_s$, $E_c$, $D$). Each column was scaled by its root-mean-square, and the right singular vector of the smallest singular value of $\mathbf F$ (a total-least-squares null direction) was mapped back to mm and scaled to $c_{\mathit{ET}}=-1$. Significance was judged against a column-permutation null (each column permuted independently), and coefficient uncertainty by bootstrapping the 10\,041 runs. This is a positive control: the expected answer is the water balance, $\mathbf c=(1,1,-1,-1)$ on $(P_r,I,\mathit{ET},D)$, and the search is judged by how closely it recovers it.
+
+Compact laws for the logarithm of each flux were then sought by forward selection over a library of dimensionless or log-transformed candidates ($\ln P_r$, $\ln(1+I)$, $\ln W$, $\ln E_p$, warming, $n$, $\ln\TAW$, $\ln\alpha$, mulch, $I/W$, $\ln(W/\TAW)$). At each step the candidate that most increased the cross-validated $R^2$ was added, and the search stopped when the gain fell below 0.003. Validation withheld whole experiments (leave-one-experiment-out, LOEO, 17 folds) or whole soils (LOSO, 10 folds), because runs within one designed experiment are not independent and random folds would overstate the score. The benchmark was a histogram-based gradient-boosting regressor \citep{Friedman2001,Pedregosa2011} on the whole library, validated under the same groupings. A nested evaluation, in which selection was repeated inside each training set, measured the optimism of selecting on the validation score.
+
+\subsection{Statistics}
+Associations among soil-level diagnostics used Spearman $\rho$ with exact permutation $p$ values and percentile bootstrap intervals (10\,000 resamples). Paired effects of E16 factors on $\psi_D$ used per-soil paired differences between factor levels and a two-sided exact sign test across soils. With ten soils, power is limited, and intervals are reported with point estimates \citep{Efron1993,Good2005}. Analyses used Python with NumPy, SciPy, scikit-learn and Matplotlib \citep{Harris2020,Virtanen2020,Pedregosa2011,Hunter2007}.
+
+%%PULL p1.tex fig:framework side
+
+\section{Results}
+\subsection{Antecedent storage drains differently in different soils}
+\label{sec:results}
+The memory fates differed by more than an order of magnitude among soils (\cref{fig:fates}a, \cref{tab:fates}). Drainage took 85\,\% (95\,\% CI 0.80--0.89) of released antecedent storage in sand, 74\,\% in loamy sand and 64\,\% in sandy loam, but only 2--3\,\% in silty clay loam and coarse loam and 9\,\% in clay loam. In the finer soils transpiration took most of the released storage ($\phi_T=0.75$--0.84 in S01 and S10); in the coarse soils evaporation and transpiration together were small ($\phi_{E_s}+\phi_T=0.15$--0.33 in S03--S05). Pooling within rain levels mattered: an unpooled regression differed from $\phi_D$ by $-0.23$ to $-0.93$ in the three coarsest soils, because rainfall changes both release and drainage strongly in free-draining soils.
+
+%%PULL p1.tex fig:fates
+%%PULL p1.tex tab:fates
+
+\subsection{The drainage share of an evaporation change}
+In E16 the drainage share of the extra evaporation $\psi_D$ ranged from 0.19 (coarse sand) to 1.21 (sand; \cref{tab:fates}). In sand a millimetre of additional non-transpiration evaporation removed more than a millimetre of drainage while irrigation changed in the opposite direction ($\psi_I=-0.38$); the three terms still summed to 1.00 (\cref{tab:closure}), so $\psi_D>1$ is not read as a literal fraction. In silty clay loam only 31\,\% of the evaporation change was drainage and 84\,\% was offset by irrigation. In the mulch lattice E7, $\psi_D$ ranged from 0.30 (S01) to 0.71 (S03) and fell from sandy to fine-textured soils (\cref{fig:fates}c), except for the coarse sand S02, where the mulch effect on drainage was larger than the E16 contrast suggests (0.61 against 0.19; the E16 design of S02 is reduced by failed runs and its loss fates are indicative). The recoverable fraction $\rho_R=1-\psi_D$ was therefore small in sandy soils (0.20--0.42 for S04--S05; $\leq0$ for S03), 0.47--0.53 in loam and sandy clay loam, and 0.64--0.71 in coarse loam and the fine soils.
+
+\subsection{Hydraulic properties predict the memory fate}
+$\phi_D$ was strongly ordered by $n$ ($\rho=0.95$, permutation $p=1.5\times10^{-4}$, bootstrap CI 0.69--1.00), by $S_e(100)$ ($\rho=-0.85$), by $\TAW$ ($\rho=-0.77$) and by $\log_{10}K_s$ over the eight soils with literature $K_s$ ($\rho=0.97$; \cref{fig:predictors}). Fitting \cref{eq:rate} to these eight soils gave $q^\ast=71.5$\,cm\,d$^{-1}$ with $R^2=0.971$ (\cref{fig:mech}a). A bootstrap over soils gave a 95\,\% interval of 58--105\,cm\,d$^{-1}$, and omitting each soil in turn gave 66 to 80\,cm\,d$^{-1}$, so the shape of the law is more secure than the exact value of $q^\ast$. The LOSO RMSE was 0.058 on the eight soils, against 0.100 for $n$, 0.064 for $S_e(100)$, 0.088 for $\TAW$ and 0.338 for the mean (\cref{tab:loso}). The law therefore reduced the out-of-sample error by 83\,\% relative to the mean and by 42\,\% relative to $n$, but by only 9\,\% relative to $S_e(100)$, a difference that eight soils cannot resolve; its value lies in the mechanism and in having a single parameter. The law implies $K_s\approx2.1$\,cm\,d$^{-1}$ for S01 and $\approx25.8$\,cm\,d$^{-1}$ for S02, plausible for a coarse loam and a coarse sand but untested.
+
+%%PULL p1.tex fig:predictors
+%%PULL p1.tex fig:mech
+%%PULL p1.tex tab:loso
+
+\subsection{The memory fate transfers to independent experiments}
+\label{sec:transfer}
+$\phi_D$, measured from antecedent moisture, predicted $\psi_D$ measured in experiments that never varied antecedent moisture: $\rho=0.85$ ($p=0.002$) against $\psi_D^{E16}$ and $\rho=0.89$ ($p=0.0014$) against $\psi_D^{E7}$ (\cref{fig:rep}, \cref{tab:rank}). The two loss-fate experiments agreed with each other less well ($\rho=0.71$). The parameter $n$ predicted $\psi_D^{E7}$ as well ($\rho=0.89$) but $\psi_D^{E16}$ only moderately ($\rho=0.70$, bootstrap CI $-0.06$ to 1.00). The data therefore do not show that the memory fate predicts recoverability better than the hydraulic shape parameter of the soil; what $\phi_D$ adds is an operational definition and the demonstration that one mechanism appears under three different perturbations.
+
+%%PULL p1.tex fig:rep
+%%PULL p1.tex tab:rank
+
+\subsection{Climate and management modify the recoverable share}
+\label{sec:mod}
+Warming from $+2$ to $+6$\,\textdegree C lowered $\psi_D$ in all ten soils (mean change $-0.16$; sign test $p=0.002$), so a larger share of the extra evaporation was offset by irrigation or transpiration and the recoverable share rose (\cref{fig:mod}, \cref{tab:mod}). Raising rainfall from 0.5 to 1.5 times the baseline raised $\psi_D$ in nine of nine soils with data at both levels (mean change $+0.42$; $p=0.004$): wetter climates leave more water to drain, so the same evaporation saving is more likely to be a drainage saving. Trigger suction, dose and nitrogen rate (a negative control) had no significant effect.
+
+The finer E11 lattice for coarse loam ($10\times10\times10$: warming $-1$ to $3.5$\,\textdegree C, evaporation factor 0.3 to 1.2, rain scale 0.5 to 1.4) gave a smooth and monotone surface (\cref{fig:e11}). $\psi_D$ rose with rainfall (Spearman $\rho=0.88$) and fell with warming ($\rho=-0.40$), from 0.01 in the driest, warmest corner to 0.61 at the wettest, coolest one. The single value $\psi_D=0.295$ reported for S01 in \cref{tab:fates} is thus one point on a surface that spans a factor of about 50, and a recoverable fraction should always be quoted with the climate for which it was computed.
+
+%%PULL p1.tex fig:mod
+%%PULL p1.tex tab:mod
+%%PULL p1.tex fig:e11
+
+\subsection{Closure of the water balance and an unattributed term}
+\label{sec:resultsB}
+The blind search recovered the water balance. For the four-flux subsystem the null direction, scaled to $c_{\mathit{ET}}=-1$, was
+\begin{equation}
+\mathbf c=(c_{P_r},c_I,c_{\mathit{ET}},c_D)=(1.037,\;0.957,\;-1,\;-1.036),
+\label{eq:law}
+\end{equation}
+with bootstrap 95\,\% intervals of 1.031--1.045 for rain, 0.940--0.974 for irrigation and $-1.052$ to $-1.023$ for drainage, and a smallest singular value of 5.9 against 33.3 under permutation (\cref{fig:invariants}a,b). Every coefficient was within 5\,\% of the exact value, but the intervals did not contain the exact values, reflecting the storage term: excluding E8 and E9, whose initial moisture is deliberately unbalanced, gave $(1.021,\,0.969,\,-1,\,-1.019)$. The closure residual $\varepsilon$ had a median absolute value of 0.9\,\% of the water input over all valid runs and 0.65\,\% excluding E8 and E9 (95th percentile 2.3\,\%), whereas in E8 and E9 the median absolute residual was 16\,\% (\cref{fig:invariants}c).
+
+The reported ET components did not add up to ET. The unattributed term $R$ averaged 164\,mm\,yr$^{-1}$ (interquartile range 103--223\,mm\,yr$^{-1}$), 30\,\% of ET, with experiment medians from 14\,\% to 41\,\% (\cref{fig:invariants}d). Its dependence on management constrains its origin (\cref{fig:hidden}): $R$ was 105\,mm\,yr$^{-1}$ for every subsurface-drip depth in E4, but 183 and 166\,mm\,yr$^{-1}$ under surface and overhead irrigation; it increased with rainfall in the rainfed E9 lattice; and in E11 it scaled almost linearly with the soil-evaporation factor and rose with warming. A term that is independent of drip depth, larger under surface and overhead application, proportional to the evaporation factor, increased under mulch and nearly constant as a share of water input across soils is consistent with evaporation from the surface layer (mulch, litter and ponded water) that is not reported in the soil- or canopy-evaporation outputs. This reading is a hypothesis that an audit of the model output definitions would settle.
+
+%%PULL p1.tex fig:invariants
+%%PULL p1.tex fig:hidden
+
+\subsection{Evapotranspiration is predictable; drainage is not}
+Forward selection chose three terms for ET:
+\begin{equation}
+\ln\mathit{ET}=2.503+0.646\,\ln W-0.299\,n+0.029\,\ln(1+I),
+\label{eq:ETlaw}
+\end{equation}
+with LOEO $R^2=0.898$ and LOSO $R^2=0.904$, against 0.876--0.879 and 0.881--0.894 for gradient boosting (\cref{fig:ETlaw}, \cref{tab:laws}). The LOEO RMSE was 68.8\,mm\,yr$^{-1}$ (mean absolute percentage error 9.2\,\%, and 5.8\,\% without E8 and E9), the coefficients were stable across folds, and the nested evaluation gave $R^2=0.895$ with the same three terms in 15 of 17 outer folds, so the optimism of selection was small. The exponent on $W$ means that ET rises sublinearly with supply, as in Budyko-type curves \citep{Budyko1974,Milly1994,Zhang2001}, and the coefficient on $n$ implies a factor of 0.65 in ET between the most uniform and the most graded soil at the same supply: soils that drain freely retain less water for evaporation, in agreement with the memory results. The law is a compact summary of how the model's ET responds across 17 designs and not a model of mechanism. Transpiration was moderately predictable, soil evaporation poorly, and the drainage fraction worst (LOEO 0.43 and LOSO 0.22 for the best sparse law, 0.50 for gradient boosting): drainage depends on thresholds, event timing and antecedent state that annual fluxes do not contain.
+
+%%PULL p1.tex fig:ETlaw
+%%PULL p1.tex tab:laws
+
+\subsection{The recoverable share judged against the closed term}
+\label{sec:auditlink}
+The memory analysis measures an evaporation change by $\Ent=\mathit{ET}-T$, which carries $R$ with it. A user who read the reported soil evaporation $E_s$ alone would measure a different quantity. For the mulch experiment E7, the slope of drainage on $E_s$ was computed in place of the slope on $\Ent$ (\cref{tab:auditlink}). The change of $E_s$ carried a median of 47\,\% of the change of $\Ent$, the drainage share differed by more than 0.1 in six of ten soils, and in two coarse soils (S03, S04) it changed sign ($-0.93$ and $-0.35$ against 0.71 and 0.69). The partition that the model reports therefore cannot be used to judge whether a saving is recoverable; the closed quantity $\Ent$ can.
+
+%%PULL p1.tex tab:auditlink
+
+\section{Discussion}
+\label{sec:disc}
+\subsection{Why drainage competes with evaporation}
+The soil matrix acts as a reservoir with a conductance. In coarse soils, a narrow pore-size distribution (large $n$) keeps the unsaturated conductivity high until the pores empty, so drainage stays high when the profile is wetter than field capacity; in fine soils, conductivity drops by orders of magnitude over the same suction range and the store is retained \citep{Hillel1998,Brady2016}. When evaporation changes, the change in water remaining in the profile is shared between drainage, which responds on the timescale of $K$, and irrigation or uptake, which respond on the timescale of the scheduler and the crop. The fitted $q^\ast=71.5$\,cm\,d$^{-1}$, two orders of magnitude above mean evapotranspiration, locates where this competition is decided: in the short wet intervals after rain or irrigation, when drainage proceeds at rates of order $K_s$, and not over the seasonal mean of uptake. For $K_s\ll q^\ast$ (the fine soils) the memory fate is proportional to $K_s$, so the uncertainty of a pedotransfer estimate of $K_s$ passes to $\phi_D$ in proportion; for $K_s\gtrsim q^\ast$ (the coarse soils) the fate saturates. Because $K_s$ was taken from independent literature class means and not from the simulator inputs, the law links an emergent property of the simulated soils to an externally measured one.
+
+Warming and rainfall act through the same mechanism. Warming raises evaporative demand and dries the profile, leaving less water in the high-conductivity range to be displaced, so extra evaporation draws more on irrigation and transpiration; rainfall keeps the profile wet and drainage high. That nitrogen had no effect is a useful negative control, because nitrogen influences yield and leaching but is not coupled to the water partition in the model.
+
+\subsection{Implications for mulching and other evaporation-saving practices}
+Where $\rho_R$ is low, in sands and loamy sands, a mulch saves much less irrigation water than its evaporation suppression suggests, because the saved water becomes deep drainage, and more benefit may come from changing irrigation timing and depth \citep{Fereres2007,Playan2006}. In fine soils ($\rho_R=0.64$--0.69) reducing evaporation translates into reduced irrigation need, supporting residue mulches \citep{BalwinderSingh2011,Vuaille2024}. \Cref{tab:mgmt} summarises the ranking. Field and modelling studies of mulching document the reduction of evaporation and the rise of the transpiration share, with stronger responses in finer soils \citep{Zheng2021,Kang2024}; the present analysis adds the share of the saved water that subsequently drains, as a function of the hydraulic properties, and gives a soil-scale mechanism to the efficiency paradox \citep{Ward2008,Grafton2018}. Three consequences follow for practice. The discount that should be applied to an evaporation-saving claim is a property of the soil, management and climate together, not of the practice alone. A soil in the steep middle of the curve of \cref{eq:rate} is the most sensitive to compaction and loosening, which move $K_s$. And because the loss fate depends on climate, the same practice has to be assessed under the climate of the site and under projected changes.
+
+%%PULL p1.tex tab:mgmt
+
+\subsection{What the closure audit means for partitioning studies}
+If the reported ET components of a model omit a third of the flux, a partition fraction computed as $T/(T+E_s+E_c)$ is larger than $T/\mathit{ET}$ by a factor of about $1/(1-0.30)\approx1.4$, an error comparable with the differences between management treatments that are routinely reported \citep{Jasechko2013,Schlesinger2014,BalwinderSingh2011}. For users of Daisy and similar models, the practical recommendation is to compute ET as the model's own total, to report $R$ alongside the components, and to judge savings against the closed term $\Ent$. The audit also locates the limit of compact emulators: ET and transpiration are predictable from annual inputs, whereas drainage and soil evaporation are not and should be emulated with care or derived by closure \citep{Razavi2012,Asher2015}. The sequence used here (a positive control with a known answer, a permutation null, validation across withheld regimes, a closure audit of every target, a flexible benchmark reported where it wins, and a stated domain for every law) is a template that can be applied to other process models \citep{Roberts2017,Rudin2019}.
+
+\subsection{Limitations and testable predictions}
+The results describe a one-dimensional matrix-flow model, one temperate weather series and 20-year means. Macropore bypass \citep{Jarvis2007,Beven1982} is absent, so the recoverable share is an upper bound for soils with active macropore flow, and replication in other models such as HYDRUS, APSIM or AquaCrop \citep{Simunek2008,Keating2003,Steduto2009} is the direct test of generality. Ten soils limit the power of soil-level statistics, the coarse loam contributes more than half of the runs, and the identity of $R$ is inferred from its driver dependence rather than from the model code. No field measurement enters the analysis. Three predictions follow and can be tested with weighing lysimeters on contrasting soils under imposed evaporation reduction by mulching: the drainage share of released storage should increase with $K_s$ along the saturating form of \cref{eq:rate}, with half of the released storage draining at $K_s\approx q^\ast$; the recoverable share should fall in wetter climates and rise under warming; and the ranking of soils by $\phi_D$ should be preserved under a different weather record, because it is set by hydraulic conductance.
+
+\section{Conclusions}
+Hydraulic memory, the drainage share of released antecedent storage, ranged from 0.02 to 0.85 across ten simulated soils, followed the pore-size parameter ($\rho=0.95$) and the saturated conductivity ($\rho=0.97$), and was predicted out of sample by a one-parameter rate-competition law (LOSO RMSE 0.058). It transferred to independent evaporation-factor and mulch experiments ($\rho=0.85$ and 0.89). The recoverable share of an evaporation saving was soil-specific and climate-modified: low in coarse soils, raised by warming and lowered by wetter climates. A blind search recovered the water balance within 5\,\% and revealed an unattributed term of 30\,\% of evapotranspiration; a three-term law predicted evapotranspiration in withheld experiments and soils as well as gradient boosting, and drainage resisted every law. Judged against the reported soil evaporation alone, the drainage share of a mulch saving differed by more than 0.1 in six of ten soils and changed sign in two. Evaporation savings should therefore be discounted by soil and climate and judged against the closed non-transpiration term, and the predictions should be tested in lysimeters.
+
+\section*{CRediT authorship contribution statement}
+\textbf{Naziru Halilu:} Conceptualization, Methodology, Software, Formal analysis, Investigation, Data curation, Visualization, Writing -- original draft, Writing -- review \& editing.
+
+\section*{Declaration of competing interest}
+The author declares that he has no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+
+\section*{Declaration of generative AI and AI-assisted technologies in the writing process}
+During the preparation of this work the author used Claude (Anthropic) to edit language and to format the manuscript for the journal. After using this tool, the author reviewed and edited the content as needed and takes full responsibility for the content of the publication.
+
+\section*{Funding}
+This research did not receive any specific grant from funding agencies in the public, commercial, or not-for-profit sectors.
+
+\section*{Data availability}
+The complete Daisy ensemble outputs (all 10\,190 runs) are archived on Zenodo (\doihl{10.5281/zenodo.23043626}). Every log of every run, year by year, and the one-row-per-run summary are in the repository folder \cslink{} (\url{\csurl}), and the analysis scripts with fixed seeds and checksums are in \url{\codeurl}.
+
+\section*{Acknowledgements}
+The Daisy model is developed and maintained at the University of Copenhagen. The author thanks the maintainers of the open-source libraries cited.
+
+\appendix
+\section{Closure of the loss fates}
+%%PULL p1.tex tab:closure
+
+\section*{Supplementary material}
+Supplementary material associated with this article is available online: the storage-release curves of every soil, the analysis of the 149 failed runs, the per-experiment invariants and closure residuals, the compositional analysis of water fates, the irrigation compensation of rainfall changes, the drivers of soil hydraulic properties over time, the hypothesis register and the map from every number to its script and data.
+
+\bibliographystyle{elsarticle-harv}
+\bibliography{../tex/refs}
+\end{document}
