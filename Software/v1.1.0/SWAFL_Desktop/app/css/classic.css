@@ -297,3 +297,10 @@ input[type=range]{accent-color:#0A246A}
 #layerTree .tkids .tkids .tkids .tn::before{left:-5px;top:50%;width:8px;height:8px;margin-top:-4px;border:0;background:#0A246A;transform:rotate(45deg);box-shadow:0 0 0 2px #FFF}
 #layerTree .tkids .tkids .tkids .tn:hover::before{background:#3A6EA5}
 #layerTree .tkids .tkids .tkids .tn.sel::before{background:#F0B030;box-shadow:0 0 0 2px #FFF}
+/* results headings in the texture of the layer headings: raised grey bar, bold navy title and a rule under it (all layers) */
+#dashBody .dsec h4,.dsec h4{background:#D4D0C8 !important;color:#0A246A !important;font:bold 11px Tahoma,Verdana,sans-serif !important;box-shadow:inset -1px -1px #404040,inset 1px 1px #FFFFFF,inset -2px -2px #808080,inset 2px 2px #DFDFDF !important;border:0 !important;border-bottom:2px solid #0A246A !important;padding:4px 8px 3px !important;margin:0 !important;min-height:19px}
+#dashBody .dsec h4:hover,.dsec h4:hover{background:#E3E0D8 !important}
+#dashBody .dsec h4 b,.dsec h4 b{color:#0A246A !important;font-weight:bold !important;letter-spacing:.1px}
+#dashBody .dsec h4 span,.dsec h4 span{color:#404040 !important;font-weight:normal !important}
+#dashBody .dsec h4 .tw,.dsec h4 .tw{color:#0A246A !important}
+#dashBody .dsec{border:1px solid #808080 !important}
