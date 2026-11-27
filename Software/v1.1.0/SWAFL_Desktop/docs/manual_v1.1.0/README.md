@@ -10,7 +10,7 @@
 - 23, reports;
 - 24, changes from 1.0.
 
-Chapter 25 is the screenshot atlas, which now includes the screens new in 1.1. **Help ▸ Manual (F1)** opens the PDF.
+Each chapter holds everything about its subject: the screenshots of the atlas (`chapters/25_atlas.md`, with the screens new in 1.1) and the reference of the layers (`chapters/22b_layer_reference.md`) are placed by `tools/assemble.py` in the chapter of their screen or layer, as the sections *Screens and equations* and *Reference of the ... layers*; the reverse index of the equations is in the appendices. The drainage design is Chapter 13A, so that the number of each chapter is the number of its equations. **Help ▸ Manual (F1)** opens the PDF.
 
 The manual of version 1.0 is in the folder of version 1.0: `Software/Old_Version_1.0/SWAFL_Desktop/docs/SWAFL_Manual.pdf`.
 

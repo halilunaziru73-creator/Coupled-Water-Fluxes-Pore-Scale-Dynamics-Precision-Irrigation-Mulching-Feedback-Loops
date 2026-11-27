@@ -52,10 +52,10 @@ def icon(name, s):
     col, ch = PARTS[k[0]][0], k[1]
     rep = '# `\\texorpdfstring{\\chapicon{%s}{%s}}{}`{=latex}' % (col, ch)
     return re.sub(r'^# (?!.*\{-\})', lambda m: rep, s, count=1, flags=re.M)
+from assemble import assemble
 B = M + '/build'; shutil.rmtree(B, ignore_errors=True); os.makedirs(B)
-for f in sorted(glob.glob(M + '/chapters/*.md')):
-    s = open(f).read()
+for name, s in assemble(M + '/chapters'):
     if '{{CROPTABLE}}' in s: s = s.replace('{{CROPTABLE}}', crop_table())
     if '{{EQREF}}' in s: s = s.replace('{{EQREF}}', eqref())
-    open(B + '/' + os.path.basename(f), 'w').write(icon(os.path.basename(f)[:-3], fitmath(typo(s))))
+    open(B + '/' + name + '.md', 'w').write(icon(name[4:], fitmath(typo(s))))
 print('chapters', len(glob.glob(B + '/*.md')))
