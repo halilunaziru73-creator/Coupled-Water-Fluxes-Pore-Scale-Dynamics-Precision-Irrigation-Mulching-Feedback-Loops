@@ -18,11 +18,11 @@ Irrigation software seldom shows which relation produced a number, where that re
 \end{abstract}
 
 \begin{highlights}
-\item Open, offline application for irrigation scheduling and system design
-\item Every displayed number is traced to a numbered equation and its source
-\item Surface, drip and sprinkler layers reproduce textbook examples within 2\%
+\item Open, offline tool; every displayed number is traced to a numbered equation
+\item A field sketch feeds the surface, drip, sprinkler and drainage design layers
+\item Layers for irrigation control, field water balance, mulch and evaporation
+\item Soil structure, phenotyping, crops, seasonal data and feedback loop layers
 \item A graphical workbench runs the Daisy model without editing set-up files
-\item Verification against outside references found and removed hidden defects
 \end{highlights}
 
 \begin{keyword}
@@ -91,9 +91,10 @@ Four computing parts stand behind the layers. \emph{Engine~1} is an annual meta-
 
 \subsection{Software functionalities}
 \begin{itemize}[nosep]
-\item \textbf{Scheduling} (\cref{fig:sched}): the field water balance, the fate of water saved by mulch \cite{BalwinderSingh2011,Vuaille2024}, the sensor suction day by day against the trigger, a trigger law that expresses the triggers of all soils as one root-zone depletion \cite{Allen1998}, the next irrigation, trigger and wilting dates, crop coefficients and daily water need \cite{Allen1998,Doorenbos1979}, and the feedback loops between climate, management, soil water, crop and nitrogen \cite{Seneviratne2010,Koster2004}.
+\item \textbf{Irrigation control and scheduling} (\cref{fig:sched}): the field water balance, the fate of water saved by mulch \cite{BalwinderSingh2011,Vuaille2024}, the sensor suction day by day against the trigger, a trigger law that expresses the triggers of all soils as one root-zone depletion \cite{Allen1998}, the next irrigation, trigger and wilting dates, crop coefficients and daily water need \cite{Allen1998,Doorenbos1979}, and the feedback loops between climate, management, soil water, crop and nitrogen \cite{Seneviratne2010,Koster2004}.
 \item \textbf{Design} (\cref{fig:design}): layout, advance, infiltrated depth, efficiencies and a design table for surface irrigation; emitters, lateral hydraulics, wetted bulb and emission uniformity for drip; nozzle, spacing, wind, uniformity and soil intake for sprinklers; spacing, depth and pipes for subsurface drainage; and a search for the most efficient inputs.
-\item \textbf{Field}: a sketch of the field that feeds every design, a field map with Sentinel-2 indices \cite{Drusch2012,Rouse1974,Huete2002}, soil from SoilGrids \cite{Poggio2021}, water sources and management zones.
+\item \textbf{Soil and crop}: soil structure and tillage (structure, soil hydraulic drivers, root structure); deterministic phenotyping (one plant grown day by day, well-watered and under drought, in the soil and weather of the project) and volumetric phenotyping (that plant measured as a three-dimensional scanner would); the crop library with the crop water requirement; and seasonal data over twenty seasons (reliability, the full water balance and the nitrogen budget).
+\item \textbf{Field}: a field sketch with drawing tools in the manner of computer-aided design, on which the field, its side lengths, the water source, the inlet and the pipes are drawn and passed to the surface, drip, sprinkler and drainage designs, a field map with Sentinel-2 indices \cite{Drusch2012,Rouse1974,Huete2002}, soil from SoilGrids \cite{Poggio2021}, water sources and management zones.
 \item \textbf{Daisy workbench} (\cref{fig:daisy}): the process map, scenarios from the Daisy library, prepared experiments and the user's own designs, each checked against a catalogue of what Daisy can vary and kept within a run budget by a seeded Latin-hypercube choice; every run kept file by file; a summary of the effect of every input on every result \cite{Saltelli2008}; journal-style figures of every logged quantity; mass balances; and the root cause of every failed run, located at the line of the set-up.
 \item \textbf{Model development}: a set-up editor, a Richards soil column \cite{Celia1990}, Daisy response curves and calibration by sequential search, CMA-ES \cite{HansenOstermeier2001} or Bayesian optimisation \cite{Mockus1978}.
 \item \textbf{Traceability}: each tile, chart and arrow names its equation; the manual labels every equation as literature, data-driven or engineered and opens at the section of the layer in use.
