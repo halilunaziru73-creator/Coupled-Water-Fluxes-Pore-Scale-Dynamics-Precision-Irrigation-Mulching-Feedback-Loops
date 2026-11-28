@@ -12,14 +12,6 @@ Each package also has a folder **`Data_and_analysis`**, so that every figure and
 
 Supplementary Material S2 of each article is the existing derivations, data and mechanisms PDF in `../pdf/Supplementary`.
 
-## Journal rules applied
-
-* **Both journals**: Elsevier `elsarticle` class (official copy from github.com/STM-Document-Engineering/elsarticle), line numbers, title, affiliations, corresponding author, abstract, keywords, CRediT authorship contribution statement, declaration of competing interest, funding, data availability, acknowledgements, supplementary material statement. The declaration of generative AI use is to be added by the author.
-* **Agricultural Water Management**: research article in the order Introduction, Materials and methods, Results, Discussion, Conclusions, Appendix; 5 highlights of at most 85 characters; abstract under 250 words; Harvard (author–year) references; double-spaced review layout.
-* **SoftwareX** (original software publication): title in the journal's style (*Name: An …*), highlights, an abstract that describes the software without simulation results, code metadata and software metadata tables; sections Motivation and significance, Software description (architecture, functionalities), Illustrative examples, Impact, Conclusions; at most 3,000 words and 6 figures; numbered references.
-* **Supplementary Material S1**: the complete manuscript, with sections, figures, tables and equations numbered S1, S2, … so they cannot be confused with those of the article.
-* **No new results**: tables and figures of the articles are copied verbatim from the full manuscripts, and every number in the article text was checked against them.
-
 ## Rebuild
 
 ```
