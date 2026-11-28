@@ -1,0 +1,39 @@
+key,value
+exogenous.terms,lnW_TAW lnalpha Ifrac dT
+exogenous.hist[0],lnW_TAW 0.1926473731975853
+exogenous.hist[1],lnalpha 0.2601438933057929
+exogenous.hist[2],Ifrac 0.4220369144643822
+exogenous.hist[3],dT 0.43341921799988536
+exogenous.loeo,0.43341921799988536
+exogenous.loso,0.2170555720891837
+exogenous.r2,0.5752330403664858
+exogenous.coef.const,-12.095275975262384
+exogenous.coef.lnW_TAW,4.410833209950144
+exogenous.coef.lnalpha,-1.2143354898479497
+exogenous.coef.Ifrac,-5.565305466056294
+exogenous.coef.dT,-0.9977731328207262
+exogenous.se.const,0.10176789666982956
+exogenous.se.lnW_TAW,0.039566718190247575
+exogenous.se.lnalpha,0.027303081168339724
+exogenous.se.Ifrac,0.1048724088692011
+exogenous.se.dT,0.030428316313452133
+exogenous.gbm_loeo,0.4975449124991346
+with_partition.terms,lnW_TAW lnalpha Ifrac dT
+with_partition.hist[0],lnW_TAW 0.1926473731975853
+with_partition.hist[1],lnalpha 0.2601438933057929
+with_partition.hist[2],Ifrac 0.4220369144643822
+with_partition.hist[3],dT 0.43341921799988536
+with_partition.loeo,0.43341921799988536
+with_partition.loso,0.2170555720891837
+with_partition.r2,0.5752330403664858
+with_partition.coef.const,-12.095275975262384
+with_partition.coef.lnW_TAW,4.410833209950144
+with_partition.coef.lnalpha,-1.2143354898479497
+with_partition.coef.Ifrac,-5.565305466056294
+with_partition.coef.dT,-0.9977731328207262
+with_partition.se.const,0.10176789666982956
+with_partition.se.lnW_TAW,0.039566718190247575
+with_partition.se.lnalpha,0.027303081168339724
+with_partition.se.Ifrac,0.1048724088692011
+with_partition.se.dT,0.030428316313452133
+with_partition.gbm_loeo,0.590603827498083

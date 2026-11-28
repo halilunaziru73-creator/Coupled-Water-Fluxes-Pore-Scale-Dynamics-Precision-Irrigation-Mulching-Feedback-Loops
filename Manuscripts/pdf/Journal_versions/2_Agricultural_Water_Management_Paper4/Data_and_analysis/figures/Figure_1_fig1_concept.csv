@@ -1,0 +1,940 @@
+panel,panel_title,x_label,y_label,kind,series,i,x,x_category,y,y_category,y_low,y_high,x_scale,y_scale
+1,,,,line,,0,2.2,,4.6,,,,linear,linear
+1,,,,line,,1,2.2,,5.5,,,,linear,linear
+1,,,,line,,0,1.85,,5.25,,,,linear,linear
+1,,,,line,,1,2.2,,5.5,,,,linear,linear
+1,,,,line,,2,2.55,,5.25,,,,linear,linear
+1,,,,line,,0,2.2,,4.6,,,,linear,linear
+1,,,,line,,1,1.8,,3,,,,linear,linear
+1,,,,line,,0,2.2,,4.6,,,,linear,linear
+1,,,,line,,1,2.05,,2.75,,,,linear,linear
+1,,,,line,,0,2.2,,4.6,,,,linear,linear
+1,,,,line,,1,2.35,,2.75,,,,linear,linear
+1,,,,line,,0,2.2,,4.6,,,,linear,linear
+1,,,,line,,1,2.6,,3,,,,linear,linear
+1,,,,line,,0,3.4,,4.6,,,,linear,linear
+1,,,,line,,1,3.4,,5.5,,,,linear,linear
+1,,,,line,,0,3.05,,5.25,,,,linear,linear
+1,,,,line,,1,3.4,,5.5,,,,linear,linear
+1,,,,line,,2,3.75,,5.25,,,,linear,linear
+1,,,,line,,0,3.4,,4.6,,,,linear,linear
+1,,,,line,,1,3,,3,,,,linear,linear
+1,,,,line,,0,3.4,,4.6,,,,linear,linear
+1,,,,line,,1,3.25,,2.75,,,,linear,linear
+1,,,,line,,0,3.4,,4.6,,,,linear,linear
+1,,,,line,,1,3.55,,2.75,,,,linear,linear
+1,,,,line,,0,3.4,,4.6,,,,linear,linear
+1,,,,line,,1,3.8,,3,,,,linear,linear
+1,,,,line,,0,4.6,,4.6,,,,linear,linear
+1,,,,line,,1,4.6,,5.5,,,,linear,linear
+1,,,,line,,0,4.25,,5.25,,,,linear,linear
+1,,,,line,,1,4.6,,5.5,,,,linear,linear
+1,,,,line,,2,4.95,,5.25,,,,linear,linear
+1,,,,line,,0,4.6,,4.6,,,,linear,linear
+1,,,,line,,1,4.2,,3,,,,linear,linear
+1,,,,line,,0,4.6,,4.6,,,,linear,linear
+1,,,,line,,1,4.45,,2.75,,,,linear,linear
+1,,,,line,,0,4.6,,4.6,,,,linear,linear
+1,,,,line,,1,4.75,,2.75,,,,linear,linear
+1,,,,line,,0,4.6,,4.6,,,,linear,linear
+1,,,,line,,1,5,,3,,,,linear,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,0,1,$\mathdefault{10^{0}}$,0.99647103,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,1,1.0392557,,0.99608936,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,2,1.0800524,,0.99566664,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,3,1.1224506,,0.99519851,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,4,1.1665131,,0.99468016,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,5,1.2123054,,0.99410629,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,6,1.2598953,,0.99347103,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,7,1.3093533,,0.99276795,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,8,1.3607529,,0.99198995,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,9,1.4141702,,0.99112922,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,10,1.4696844,,0.99017719,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,11,1.5273779,,0.98912444,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,12,1.5873361,,0.98796064,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,13,1.6496481,,0.98667447,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,14,1.7144061,,0.98525356,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,15,1.7817063,,0.98368438,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,16,1.8516484,,0.98195219,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,17,1.9243361,,0.98004092,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,18,1.9998773,,0.97793313,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,19,2.0783838,,0.97560992,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,20,2.1599722,,0.97305083,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,21,2.2447634,,0.97023383,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,22,2.3328831,,0.96713523,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,23,2.424462,,0.96372965,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,24,2.5196359,,0.95999002,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,25,2.618546,,0.9558876,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,26,2.7213388,,0.95139202,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,27,2.8281668,,0.94647136,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,28,2.9391884,,0.94109233,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,29,3.0545682,,0.93522039,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,30,3.1744774,,0.9288201,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,31,3.2990937,,0.92185537,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,32,3.4286019,,0.91428994,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,33,3.563194,,0.90608779,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,34,3.7030696,,0.89721382,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,35,3.8484361,,0.88763443,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,36,3.9995091,,0.87731832,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,37,4.1565126,,0.86623728,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,38,4.3196793,,0.85436713,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,39,4.4892513,,0.84168856,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,40,4.6654799,,0.82818814,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,41,4.8486265,,0.8138592,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,42,5.0389626,,0.79870269,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,43,5.2367705,,0.78272794,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,44,5.4423435,,0.76595327,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,45,5.6559865,,0.74840642,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,46,5.8780161,,0.73012475,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,47,6.1087616,,0.71115518,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,48,6.3485652,,0.69155389,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,49,6.5977825,,0.67138566,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,50,6.8567829,,0.65072306,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,51,7.1259506,,0.62964525,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,52,7.4056847,,0.60823668,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,53,7.6963999,,0.58658559,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,54,7.9985273,,0.5647824,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,55,8.312515,,0.54291805,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,56,8.6388284,,0.52108245,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,57,8.9779516,,0.49936291,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,58,9.3303872,,0.47784278,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,59,9.6966579,,0.45660027,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,60,10.077307,,0.43570746,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,61,10.472898,,0.41522957,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,62,10.884019,,0.3952244,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,63,11.311279,,0.37574209,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,64,11.755311,,0.35682502,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,65,12.216773,,0.33850789,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,66,12.696351,,0.320818,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,67,13.194755,,0.30377564,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,68,13.712724,,0.28739455,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,69,14.251027,,0.27168249,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,70,14.81046,,0.25664181,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,71,15.391855,,0.24227008,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,72,15.996073,,0.22856064,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,73,16.62401,,0.21550329,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,74,17.276597,,0.20308476,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,75,17.954801,,0.19128928,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,76,18.659629,,0.18009906,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,77,19.392126,,0.16949472,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,78,20.153377,,0.15945569,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,79,20.944511,,0.14996058,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,80,21.766703,,0.14098743,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,81,22.621169,,0.13251402,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,82,23.509179,,0.12451808,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,83,24.432048,,0.11697748,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,84,25.391144,,0.10987036,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,85,26.387891,,0.1031753,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,86,27.423766,,0.096871403,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,87,28.500304,,0.090938351,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,88,29.619103,,0.085356505,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,89,30.781821,,0.080106925,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,90,31.990183,,0.075171411,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,91,33.245979,,0.070532513,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,92,34.551073,,0.066173546,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,93,35.907399,,0.062078587,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,94,37.316968,,0.058232469,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,95,38.781871,,0.054620771,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,96,40.30428,,0.051229797,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,97,41.886452,,0.048046562,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,98,43.530734,,0.045058765,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,99,45.239562,,0.042254771,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,100,47.015472,,0.039623578,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,101,48.861097,,0.037154797,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,102,50.779172,,0.034838624,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,103,52.772544,,0.032665812,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,104,54.844166,,0.030627645,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,105,56.997111,,0.028715913,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,106,59.234571,,0.026922887,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,107,61.559865,,0.025241291,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,108,63.97644,,0.023664282,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,109,66.487878,,0.022185423,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,110,69.097905,,0.020798665,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,111,71.810391,,0.01949832,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,112,74.629357,,0.018279045,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,113,77.558983,,0.017135821,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,114,80.603614,,0.016063934,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,115,83.767764,,0.015058959,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,116,87.056125,,0.014116739,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,117,90.473572,,0.013233374,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,118,94.025174,,0.012405202,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,119,97.716197,,0.011628789,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,120,101.55211,,0.01090091,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,121,105.53861,,0.01021854,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,122,109.6816,,0.0095788423,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,123,113.98723,,0.0089791546,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,124,118.46187,,0.0084169802,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,125,123.11217,,0.007889977,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,126,127.94503,,0.0073959486,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,127,132.9676,,0.0069328353,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,128,138.18733,,0.0064987051,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,129,143.61197,,0.0060917468,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,130,149.24955,,0.0057102616,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,131,155.10845,,0.0053526569,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,132,161.19734,,0.0050174391,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,133,167.52525,,0.0047032081,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,134,174.10157,,0.004408651,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,135,180.93604,,0.0041325368,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,136,188.03881,,0.0038737117,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,137,195.4204,,0.0036310935,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,138,203.09176,,0.0034036682,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,139,211.06427,,0.0031904846,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,140,219.34974,,0.0029906514,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,141,227.96046,,0.0028033328,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,142,236.90921,,0.0026277453,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,143,246.20924,,0.0024631546,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,144,255.87435,,0.002308872,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,145,265.91887,,0.0021642523,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,146,276.3577,,0.0020286902,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,147,287.20631,,0.0019016187,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,148,298.48079,,0.001782506,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,149,310.19786,,0.0016708539,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,150,322.37489,,0.0015661949,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,151,335.02993,,0.0014680913,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,152,348.18176,,0.0013761324,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,153,361.84988,,0.0012899334,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,154,376.05454,,0.0012091337,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,155,390.81682,,0.0011333949,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,156,406.1586,,0.0010624002,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,157,422.10263,,0.00099585243,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,158,438.67256,,0.00093347303,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,159,455.89295,,0.00087500094,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,160,473.78934,,0.00082019143,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,161,492.38826,,0.00076881509,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,162,511.7173,,0.00072065689,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,163,531.80511,,0.00067551525,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,164,552.68149,,0.00063320122,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,165,574.37737,,0.0005935377,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,166,596.92495,,0.00055635866,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,167,620.35765,,0.00052150849,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,168,644.71021,,0.0004888413,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,169,670.01875,,0.00045822036,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,170,696.32079,,0.0004295175,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,171,723.65534,,0.00040261257,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,172,752.06293,,0.00037739296,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,173,781.58567,,0.00035375309,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,174,812.26735,,0.00033159401,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,175,844.15346,,0.00031082297,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,176,877.29128,,0.00029135302,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,177,911.72995,,0.00027310267,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,178,947.52053,,0.00025599551,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,179,984.7161,,0.00023995995,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,180,1023.3718,,0.00022492885,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,181,1063.545,,0.00021083929,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,182,1105.2951,,0.00019763231,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,183,1148.6843,,0.00018525261,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,184,1193.7766,,0.00017364837,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,185,1240.6392,,0.00016277102,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,186,1289.3413,,0.00015257503,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,187,1339.9553,,0.00014301772,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,188,1392.5561,,0.00013405908,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,189,1447.2219,,0.0001256616,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,190,1504.0336,,0.00011779015,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,191,1563.0754,,0.00011041176,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,192,1624.435,,0.00010349556,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,193,1688.2033,,9.7012583e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,194,1754.4749,,9.0935704e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,195,1823.348,,8.5239481e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,196,1894.9248,,7.990007e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,197,1969.3113,,7.4895121e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,198,2046.618,,7.0203681e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,199,2126.9594,,6.5806114e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,200,2210.4546,,6.1684011e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,201,2297.2275,,5.7820117e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,202,2387.4068,,5.4198258e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,203,2481.1261,,5.0803272e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,204,2578.5244,,4.7620949e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,205,2679.7461,,4.4637966e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,206,2784.9414,,4.1841838e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,207,2894.2661,,3.922086e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,208,3007.8825,,3.6764061e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,209,3125.959,,3.4461155e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,210,3248.6707,,3.2302504e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,211,3376.1994,,3.0279071e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,212,3508.7345,,2.8382386e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,213,3646.4722,,2.6604509e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,214,3789.617,,2.4937999e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,215,3938.381,,2.337588e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,216,4092.9848,,2.1911612e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,217,4253.6577,,2.0539065e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,218,4420.638,,1.9252496e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,219,4594.1731,,1.8046517e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,220,4774.5205,,1.691608e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,221,4961.9476,,1.5856455e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,222,5156.7322,,1.4863204e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,223,5359.1633,,1.3932171e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,224,5569.5409,,1.3059458e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,225,5788.177,,1.2241412e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,226,6015.3959,,1.1474608e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,227,6251.5344,,1.0755837e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,228,6496.9426,,1.008209e-05,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,229,6751.9845,,9.4505468e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,230,7017.0383,,8.8585633e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,231,7292.4969,,8.3036617e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,232,7578.7689,,7.7835192e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,233,7876.2786,,7.2959585e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,234,8185.4673,,6.8389387e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,235,8506.7934,,6.4105467e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,236,8840.7334,,6.0089892e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,237,9187.7824,,5.6325853e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,238,9548.4551,,5.2797594e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,239,9923.2862,,4.9490345e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,240,10312.832,,4.6390263e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,241,10717.669,,4.3484371e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,242,11138.398,,4.0760504e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,243,11575.644,,3.8207261e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,244,12030.053,,3.5813953e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,245,12502.301,,3.3570562e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,246,12993.088,,3.1467697e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,247,13503.14,,2.9496557e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,248,14033.215,,2.7648888e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,249,14584.099,,2.5916958e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,250,15156.608,,2.4293517e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,251,15751.591,,2.2771767e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,252,16369.93,,2.1345341e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,253,17012.543,,2.0008266e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,254,17680.382,,1.8754945e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,255,18374.437,,1.7580133e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,256,19095.738,,1.6478911e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,257,19845.355,,1.544667e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,258,20624.398,,1.4479088e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,259,21434.022,,1.3572116e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,260,22275.43,,1.2721957e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,261,23149.867,,1.1925052e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,262,24058.631,,1.1178065e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,263,25003.069,,1.047787e-06,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,264,25984.581,,9.8215345e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,265,27004.624,,9.2063123e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,266,28064.708,,8.6296276e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,267,29166.408,,8.0890666e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,268,30311.355,,7.5823664e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,269,31501.248,,7.1074059e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,270,32737.851,,6.6621971e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,271,34022.998,,6.2448762e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,272,35358.594,,5.8536963e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,273,36746.619,,5.4870199e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,274,38189.133,,5.1433123e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,275,39688.274,,4.8211345e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,276,41246.264,,4.519138e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,277,42865.414,,4.2360586e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,278,44548.125,,3.9707113e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,279,46296.892,,3.7219854e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,280,48114.308,,3.4888397e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,281,50003.068,,3.2702983e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,282,51965.973,,3.0654464e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,283,54005.933,,2.8734264e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,284,56125.973,,2.6934346e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,285,58329.236,,2.5247175e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,286,60618.99,,2.3665689e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,287,62998.63,,2.2183267e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,288,65471.684,,2.0793704e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,289,68041.82,,1.9491184e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,290,70712.848,,1.8270253e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,291,73488.729,,1.7125802e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,292,76373.579,,1.605304e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,293,79371.676,,1.5047475e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,294,82487.466,,1.4104899e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,295,85725.567,,1.3221366e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,296,89090.783,,1.2393178e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,297,92588.103,,1.1616868e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,298,96222.712,,1.0889186e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,sand,299,100000,$\mathdefault{10^{5}}$,1.0207086e-07,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,0,1,$\mathdefault{10^{0}}$,0.99799899,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,1,1.0392557,,0.99787561,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,2,1.0800524,,0.99774466,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,3,1.1224506,,0.99760567,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,4,1.1665131,,0.99745815,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,5,1.2123054,,0.99730159,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,6,1.2598953,,0.99713544,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,7,1.3093533,,0.99695912,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,8,1.3607529,,0.99677201,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,9,1.4141702,,0.99657347,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,10,1.4696844,,0.99636279,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,11,1.5273779,,0.99613926,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,12,1.5873361,,0.9959021,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,13,1.6496481,,0.99565049,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,14,1.7144061,,0.99538357,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,15,1.7817063,,0.99510042,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,16,1.8516484,,0.99480007,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,17,1.9243361,,0.9944815,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,18,1.9998773,,0.99414364,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,19,2.0783838,,0.99378533,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,20,2.1599722,,0.99340538,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,21,2.2447634,,0.9930025,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,22,2.3328831,,0.99257536,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,23,2.424462,,0.99212254,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,24,2.5196359,,0.99164254,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,25,2.618546,,0.99113378,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,26,2.7213388,,0.99059461,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,27,2.8281668,,0.99002327,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,28,2.9391884,,0.98941792,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,29,3.0545682,,0.98877664,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,30,3.1744774,,0.98809736,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,31,3.2990937,,0.98737797,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,32,3.4286019,,0.98661621,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,33,3.563194,,0.98580971,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,34,3.7030696,,0.98495602,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,35,3.8484361,,0.98405253,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,36,3.9995091,,0.98309653,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,37,4.1565126,,0.98208519,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,38,4.3196793,,0.98101553,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,39,4.4892513,,0.97988447,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,40,4.6654799,,0.97868878,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,41,4.8486265,,0.97742508,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,42,5.0389626,,0.97608989,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,43,5.2367705,,0.97467957,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,44,5.4423435,,0.97319035,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,45,5.6559865,,0.97161832,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,46,5.8780161,,0.96995945,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,47,6.1087616,,0.96820955,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,48,6.3485652,,0.96636434,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,49,6.5977825,,0.9644194,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,50,6.8567829,,0.96237017,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,51,7.1259506,,0.96021201,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,52,7.4056847,,0.95794018,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,53,7.6963999,,0.95554982,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,54,7.9985273,,0.95303602,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,55,8.312515,,0.9503938,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,56,8.6388284,,0.94761812,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,57,8.9779516,,0.94470391,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,58,9.3303872,,0.9416461,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,59,9.6966579,,0.93843963,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,60,10.077307,,0.93507946,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,61,10.472898,,0.93156061,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,62,10.884019,,0.9278782,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,63,11.311279,,0.92402747,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,64,11.755311,,0.92000378,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,65,12.216773,,0.9158027,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,66,12.696351,,0.91141999,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,67,13.194755,,0.9068517,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,68,13.712724,,0.90209411,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,69,14.251027,,0.89714388,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,70,14.81046,,0.891998,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,71,15.391855,,0.88665386,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,72,15.996073,,0.8811093,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,73,16.62401,,0.8753626,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,74,17.276597,,0.86941258,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,75,17.954801,,0.86325856,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,76,18.659629,,0.85690044,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,77,19.392126,,0.85033869,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,78,20.153377,,0.84357443,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,79,20.944511,,0.83660935,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,80,21.766703,,0.82944581,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,81,22.621169,,0.82208681,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,82,23.509179,,0.814536,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,83,24.432048,,0.80679767,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,84,25.391144,,0.79887675,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,85,26.387891,,0.79077879,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,86,27.423766,,0.78250994,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,87,28.500304,,0.77407693,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,88,29.619103,,0.76548702,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,89,30.781821,,0.75674801,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,90,31.990183,,0.74786815,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,91,33.245979,,0.73885612,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,92,34.551073,,0.72972097,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,93,35.907399,,0.72047211,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,94,37.316968,,0.71111919,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,95,38.781871,,0.70167212,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,96,40.30428,,0.69214095,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,97,41.886452,,0.68253586,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,98,43.530734,,0.67286709,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,99,45.239562,,0.6631449,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,100,47.015472,,0.6533795,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,101,48.861097,,0.64358102,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,102,50.779172,,0.63375944,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,103,52.772544,,0.62392457,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,104,54.844166,,0.61408602,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,105,56.997111,,0.60425312,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,106,59.234571,,0.59443494,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,107,61.559865,,0.58464021,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,108,63.97644,,0.57487736,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,109,66.487878,,0.56515444,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,110,69.097905,,0.55547912,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,111,71.810391,,0.5458587,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,112,74.629357,,0.53630007,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,113,77.558983,,0.52680974,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,114,80.603614,,0.51739379,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,115,83.767764,,0.5080579,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,116,87.056125,,0.49880734,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,117,90.473572,,0.48964701,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,118,94.025174,,0.48058139,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,119,97.716197,,0.47161457,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,120,101.55211,,0.4627503,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,121,105.53861,,0.45399192,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,122,109.6816,,0.44534246,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,123,113.98723,,0.4368046,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,124,118.46187,,0.42838068,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,125,123.11217,,0.42007276,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,126,127.94503,,0.41188257,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,127,132.9676,,0.40381161,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,128,138.18733,,0.39586106,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,129,143.61197,,0.38803189,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,130,149.24955,,0.38032483,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,131,155.10845,,0.37274038,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,132,161.19734,,0.36527883,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,133,167.52525,,0.3579403,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,134,174.10157,,0.35072472,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,135,180.93604,,0.34363186,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,136,188.03881,,0.33666132,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,137,195.4204,,0.32981258,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,138,203.09176,,0.32308499,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,139,211.06427,,0.31647776,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,140,219.34974,,0.30999004,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,141,227.96046,,0.30362082,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,142,236.90921,,0.29736905,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,143,246.20924,,0.29123359,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,144,255.87435,,0.2852132,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,145,265.91887,,0.27930662,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,146,276.3577,,0.2735125,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,147,287.20631,,0.26782946,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,148,298.48079,,0.26225607,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,149,310.19786,,0.25679085,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,150,322.37489,,0.25143231,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,151,335.02993,,0.24617892,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,152,348.18176,,0.24102913,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,153,361.84988,,0.23598137,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,154,376.05454,,0.23103405,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,155,390.81682,,0.2261856,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,156,406.1586,,0.2214344,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,157,422.10263,,0.21677885,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,158,438.67256,,0.21221736,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,159,455.89295,,0.20774831,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,160,473.78934,,0.2033701,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,161,492.38826,,0.19908115,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,162,511.7173,,0.19487987,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,163,531.80511,,0.19076467,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,164,552.68149,,0.18673401,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,165,574.37737,,0.18278632,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,166,596.92495,,0.17892006,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,167,620.35765,,0.17513373,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,168,644.71021,,0.17142579,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,169,670.01875,,0.16779478,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,170,696.32079,,0.16423921,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,171,723.65534,,0.16075764,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,172,752.06293,,0.15734862,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,173,781.58567,,0.15401075,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,174,812.26735,,0.15074262,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,175,844.15346,,0.14754287,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,176,877.29128,,0.14441013,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,177,911.72995,,0.14134309,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,178,947.52053,,0.13834041,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,179,984.7161,,0.13540081,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,180,1023.3718,,0.13252303,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,181,1063.545,,0.12970581,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,182,1105.2951,,0.12694793,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,183,1148.6843,,0.12424817,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,184,1193.7766,,0.12160536,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,185,1240.6392,,0.11901833,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,186,1289.3413,,0.11648593,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,187,1339.9553,,0.11400705,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,188,1392.5561,,0.11158058,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,189,1447.2219,,0.10920543,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,190,1504.0336,,0.10688056,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,191,1563.0754,,0.10460492,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,192,1624.435,,0.10237748,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,193,1688.2033,,0.10019724,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,194,1754.4749,,0.09806323,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,195,1823.348,,0.095974475,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,196,1894.9248,,0.093930033,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,197,1969.3113,,0.091928977,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,198,2046.618,,0.089970401,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,199,2126.9594,,0.088053414,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,200,2210.4546,,0.086177143,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,201,2297.2275,,0.084340735,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,202,2387.4068,,0.082543351,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,203,2481.1261,,0.080784171,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,204,2578.5244,,0.07906239,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,205,2679.7461,,0.077377221,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,206,2784.9414,,0.075727892,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,207,2894.2661,,0.074113646,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,208,3007.8825,,0.072533744,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,209,3125.959,,0.070987459,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,210,3248.6707,,0.069474081,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,211,3376.1994,,0.067992915,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,212,3508.7345,,0.066543279,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,213,3646.4722,,0.065124505,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,214,3789.617,,0.06373594,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,215,3938.381,,0.062376943,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,216,4092.9848,,0.061046889,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,217,4253.6577,,0.059745164,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,218,4420.638,,0.058471166,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,219,4594.1731,,0.057224307,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,220,4774.5205,,0.056004012,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,221,4961.9476,,0.054809716,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,222,5156.7322,,0.053640867,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,223,5359.1633,,0.052496925,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,224,5569.5409,,0.051377361,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,225,5788.177,,0.050281656,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,226,6015.3959,,0.049209303,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,227,6251.5344,,0.048159806,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,228,6496.9426,,0.047132679,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,229,6751.9845,,0.046127446,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,230,7017.0383,,0.045143641,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,231,7292.4969,,0.044180809,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,232,7578.7689,,0.043238502,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,233,7876.2786,,0.042316285,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,234,8185.4673,,0.041413729,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,235,8506.7934,,0.040530417,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,236,8840.7334,,0.039665938,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,237,9187.7824,,0.038819891,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,238,9548.4551,,0.037991884,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,239,9923.2862,,0.037181532,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,240,10312.832,,0.03638846,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,241,10717.669,,0.0356123,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,242,11138.398,,0.034852691,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,243,11575.644,,0.03410928,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,244,12030.053,,0.033381723,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,245,12502.301,,0.032669682,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,246,12993.088,,0.031972825,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,247,13503.14,,0.03129083,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,248,14033.215,,0.03062338,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,249,14584.099,,0.029970164,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,250,15156.608,,0.02933088,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,251,15751.591,,0.02870523,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,252,16369.93,,0.028092924,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,253,17012.543,,0.027493677,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,254,17680.382,,0.026907211,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,255,18374.437,,0.026333254,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,256,19095.738,,0.025771538,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,257,19845.355,,0.025221803,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,258,20624.398,,0.024683794,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,259,21434.022,,0.024157259,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,260,22275.43,,0.023641955,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,261,23149.867,,0.023137643,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,262,24058.631,,0.022644087,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,263,25003.069,,0.022161059,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,264,25984.581,,0.021688333,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,265,27004.624,,0.021225691,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,266,28064.708,,0.020772917,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,267,29166.408,,0.020329801,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,268,30311.355,,0.019896137,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,269,31501.248,,0.019471723,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,270,32737.851,,0.019056362,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,271,34022.998,,0.01864986,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,272,35358.594,,0.01825203,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,273,36746.619,,0.017862686,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,274,38189.133,,0.017481646,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,275,39688.274,,0.017108735,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,276,41246.264,,0.016743778,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,277,42865.414,,0.016386606,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,278,44548.125,,0.016037053,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,279,46296.892,,0.015694956,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,280,48114.308,,0.015360156,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,281,50003.068,,0.015032499,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,282,51965.973,,0.01471183,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,283,54005.933,,0.014398002,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,284,56125.973,,0.014090868,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,285,58329.236,,0.013790285,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,286,60618.99,,0.013496115,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,287,62998.63,,0.013208219,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,288,65471.684,,0.012926465,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,289,68041.82,,0.012650721,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,290,70712.848,,0.012380859,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,291,73488.729,,0.012116754,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,292,76373.579,,0.011858282,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,293,79371.676,,0.011605324,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,294,82487.466,,0.011357762,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,295,85725.567,,0.01111548,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,296,89090.783,,0.010878367,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,297,92588.103,,0.010646312,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,298,96222.712,,0.010419207,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,loam,299,100000,$\mathdefault{10^{5}}$,0.010196947,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,0,1,$\mathdefault{10^{0}}$,0.99935296,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,1,1.0392557,,0.99932165,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,2,1.0800524,,0.99928882,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,3,1.1224506,,0.99925441,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,4,1.1665131,,0.99921834,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,5,1.2123054,,0.99918053,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,6,1.2598953,,0.99914089,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,7,1.3093533,,0.99909934,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,8,1.3607529,,0.99905579,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,9,1.4141702,,0.99901014,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,10,1.4696844,,0.99896229,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,11,1.5273779,,0.99891213,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,12,1.5873361,,0.99885956,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,13,1.6496481,,0.99880446,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,14,1.7144061,,0.99874671,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,15,1.7817063,,0.99868617,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,16,1.8516484,,0.99862273,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,17,1.9243361,,0.99855624,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,18,1.9998773,,0.99848655,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,19,2.0783838,,0.99841352,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,20,2.1599722,,0.99833698,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,21,2.2447634,,0.99825676,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,22,2.3328831,,0.99817271,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,23,2.424462,,0.99808462,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,24,2.5196359,,0.99799231,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,25,2.618546,,0.99789559,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,26,2.7213388,,0.99779424,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,27,2.8281668,,0.99768804,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,28,2.9391884,,0.99757677,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,29,3.0545682,,0.99746018,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,30,3.1744774,,0.99733804,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,31,3.2990937,,0.99721007,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,32,3.4286019,,0.99707601,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,33,3.563194,,0.99693557,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,34,3.7030696,,0.99678845,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,35,3.8484361,,0.99663434,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,36,3.9995091,,0.99647293,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,37,4.1565126,,0.99630386,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,38,4.3196793,,0.99612679,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,39,4.4892513,,0.99594134,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,40,4.6654799,,0.99574714,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,41,4.8486265,,0.99554377,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,42,5.0389626,,0.99533082,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,43,5.2367705,,0.99510786,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,44,5.4423435,,0.99487442,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,45,5.6559865,,0.99463003,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,46,5.8780161,,0.9943742,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,47,6.1087616,,0.99410641,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,48,6.3485652,,0.99382612,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,49,6.5977825,,0.99353278,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,50,6.8567829,,0.9932258,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,51,7.1259506,,0.99290457,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,52,7.4056847,,0.99256847,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,53,7.6963999,,0.99221685,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,54,7.9985273,,0.99184901,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,55,8.312515,,0.99146427,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,56,8.6388284,,0.99106188,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,57,8.9779516,,0.99064109,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,58,9.3303872,,0.9902011,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,59,9.6966579,,0.9897411,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,60,10.077307,,0.98926025,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,61,10.472898,,0.98875766,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,62,10.884019,,0.98823243,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,63,11.311279,,0.98768362,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,64,11.755311,,0.98711027,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,65,12.216773,,0.98651137,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,66,12.696351,,0.9858859,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,67,13.194755,,0.98523278,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,68,13.712724,,0.98455093,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,69,14.251027,,0.98383921,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,70,14.81046,,0.98309646,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,71,15.391855,,0.9823215,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,72,15.996073,,0.98151309,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,73,16.62401,,0.98067,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,74,17.276597,,0.97979093,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,75,17.954801,,0.97887457,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,76,18.659629,,0.97791957,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,77,19.392126,,0.97692458,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,78,20.153377,,0.97588819,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,79,20.944511,,0.97480899,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,80,21.766703,,0.97368553,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,81,22.621169,,0.97251636,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,82,23.509179,,0.97129998,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,83,24.432048,,0.97003492,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,84,25.391144,,0.96871965,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,85,26.387891,,0.96735265,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,86,27.423766,,0.96593241,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,87,28.500304,,0.96445738,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,88,29.619103,,0.96292604,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,89,30.781821,,0.96133686,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,90,31.990183,,0.95968832,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,91,33.245979,,0.95797891,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,92,34.551073,,0.95620716,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,93,35.907399,,0.95437159,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,94,37.316968,,0.95247075,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,95,38.781871,,0.95050326,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,96,40.30428,,0.94846773,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,97,41.886452,,0.94636285,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,98,43.530734,,0.94418734,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,99,45.239562,,0.94193999,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,100,47.015472,,0.93961962,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,101,48.861097,,0.93722516,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,102,50.779172,,0.93475559,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,103,52.772544,,0.93220997,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,104,54.844166,,0.92958744,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,105,56.997111,,0.92688724,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,106,59.234571,,0.9241087,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,107,61.559865,,0.92125126,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,108,63.97644,,0.91831445,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,109,66.487878,,0.91529793,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,110,69.097905,,0.91220144,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,111,71.810391,,0.90902488,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,112,74.629357,,0.90576824,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,113,77.558983,,0.90243164,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,114,80.603614,,0.89901533,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,115,83.767764,,0.89551968,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,116,87.056125,,0.89194521,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,117,90.473572,,0.88829254,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,118,94.025174,,0.88456242,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,119,97.716197,,0.88075575,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,120,101.55211,,0.87687354,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,121,105.53861,,0.87291692,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,122,109.6816,,0.86888714,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,123,113.98723,,0.86478559,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,124,118.46187,,0.86061374,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,125,123.11217,,0.85637319,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,126,127.94503,,0.85206563,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,127,132.9676,,0.84769287,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,128,138.18733,,0.8432568,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,129,143.61197,,0.83875938,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,130,149.24955,,0.83420267,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,131,155.10845,,0.82958879,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,132,161.19734,,0.82491995,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,133,167.52525,,0.82019839,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,134,174.10157,,0.81542642,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,135,180.93604,,0.81060638,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,136,188.03881,,0.80574065,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,137,195.4204,,0.80083165,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,138,203.09176,,0.79588181,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,139,211.06427,,0.79089358,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,140,219.34974,,0.78586941,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,141,227.96046,,0.78081177,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,142,236.90921,,0.77572312,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,143,246.20924,,0.77060588,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,144,255.87435,,0.76546249,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,145,265.91887,,0.76029535,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,146,276.3577,,0.75510684,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,147,287.20631,,0.7498993,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,148,298.48079,,0.74467503,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,149,310.19786,,0.7394363,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,150,322.37489,,0.73418534,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,151,335.02993,,0.72892431,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,152,348.18176,,0.72365534,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,153,361.84988,,0.7183805,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,154,376.05454,,0.71310179,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,155,390.81682,,0.70782118,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,156,406.1586,,0.70254056,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,157,422.10263,,0.69726176,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,158,438.67256,,0.69198657,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,159,455.89295,,0.68671668,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,160,473.78934,,0.68145376,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,161,492.38826,,0.67619939,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,162,511.7173,,0.67095509,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,163,531.80511,,0.66572232,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,164,552.68149,,0.66050249,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,165,574.37737,,0.65529692,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,166,596.92495,,0.6501069,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,167,620.35765,,0.64493365,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,168,644.71021,,0.63977832,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,169,670.01875,,0.634642,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,170,696.32079,,0.62952576,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,171,723.65534,,0.62443057,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,172,752.06293,,0.61935736,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,173,781.58567,,0.61430703,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,174,812.26735,,0.6092804,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,175,844.15346,,0.60427825,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,176,877.29128,,0.59930131,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,177,911.72995,,0.59435028,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,178,947.52053,,0.5894258,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,179,984.7161,,0.58452846,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,180,1023.3718,,0.57965883,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,181,1063.545,,0.57481742,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,182,1105.2951,,0.57000471,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,183,1148.6843,,0.56522114,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,184,1193.7766,,0.56046711,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,185,1240.6392,,0.55574301,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,186,1289.3413,,0.55104918,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,187,1339.9553,,0.54638591,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,188,1392.5561,,0.54175348,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,189,1447.2219,,0.53715216,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,190,1504.0336,,0.53258216,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,191,1563.0754,,0.52804368,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,192,1624.435,,0.52353689,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,193,1688.2033,,0.51906194,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,194,1754.4749,,0.51461897,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,195,1823.348,,0.51020806,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,196,1894.9248,,0.50582932,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,197,1969.3113,,0.5014828,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,198,2046.618,,0.49716856,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,199,2126.9594,,0.49288663,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,200,2210.4546,,0.48863702,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,201,2297.2275,,0.48441973,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,202,2387.4068,,0.48023475,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,203,2481.1261,,0.47608205,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,204,2578.5244,,0.47196159,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,205,2679.7461,,0.46787332,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,206,2784.9414,,0.46381717,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,207,2894.2661,,0.45979306,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,208,3007.8825,,0.45580092,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,209,3125.959,,0.45184064,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,210,3248.6707,,0.44791213,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,211,3376.1994,,0.44401527,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,212,3508.7345,,0.44014994,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,213,3646.4722,,0.43631601,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,214,3789.617,,0.43251335,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,215,3938.381,,0.42874183,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,216,4092.9848,,0.42500129,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,217,4253.6577,,0.42129158,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,218,4420.638,,0.41761255,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,219,4594.1731,,0.41396404,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,220,4774.5205,,0.41034587,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,221,4961.9476,,0.40675789,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,222,5156.7322,,0.40319991,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,223,5359.1633,,0.39967176,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,224,5569.5409,,0.39617326,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,225,5788.177,,0.39270423,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,226,6015.3959,,0.38926448,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,227,6251.5344,,0.38585382,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,228,6496.9426,,0.38247207,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,229,6751.9845,,0.37911903,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,230,7017.0383,,0.37579451,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,231,7292.4969,,0.37249831,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,232,7578.7689,,0.36923024,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,233,7876.2786,,0.3659901,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,234,8185.4673,,0.3627777,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,235,8506.7934,,0.35959282,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,236,8840.7334,,0.35643528,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,237,9187.7824,,0.35330488,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,238,9548.4551,,0.3502014,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,239,9923.2862,,0.34712466,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,240,10312.832,,0.34407444,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,241,10717.669,,0.34105055,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,242,11138.398,,0.33805279,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,243,11575.644,,0.33508096,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,244,12030.053,,0.33213485,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,245,12502.301,,0.32921426,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,246,12993.088,,0.326319,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,247,13503.14,,0.32344886,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,248,14033.215,,0.32060364,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,249,14584.099,,0.31778315,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,250,15156.608,,0.31498718,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,251,15751.591,,0.31221554,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,252,16369.93,,0.30946804,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,253,17012.543,,0.30674446,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,254,17680.382,,0.30404463,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,255,18374.437,,0.30136835,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,256,19095.738,,0.29871542,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,257,19845.355,,0.29608565,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,258,20624.398,,0.29347884,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,259,21434.022,,0.29089482,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,260,22275.43,,0.28833338,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,261,23149.867,,0.28579434,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,262,24058.631,,0.28327752,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,263,25003.069,,0.28078272,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,264,25984.581,,0.27830976,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,265,27004.624,,0.27585846,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,266,28064.708,,0.27342863,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,267,29166.408,,0.27102009,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,268,30311.355,,0.26863266,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,269,31501.248,,0.26626617,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,270,32737.851,,0.26392043,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,271,34022.998,,0.26159527,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,272,35358.594,,0.25929051,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,273,36746.619,,0.25700597,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,274,38189.133,,0.25474149,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,275,39688.274,,0.25249689,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,276,41246.264,,0.250272,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,277,42865.414,,0.24806666,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,278,44548.125,,0.24588069,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,279,46296.892,,0.24371392,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,280,48114.308,,0.24156619,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,281,50003.068,,0.23943735,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,282,51965.973,,0.23732721,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,283,54005.933,,0.23523562,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,284,56125.973,,0.23316243,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,285,58329.236,,0.23110747,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,286,60618.99,,0.22907058,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,287,62998.63,,0.22705161,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,288,65471.684,,0.2250504,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,289,68041.82,,0.22306679,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,290,70712.848,,0.22110064,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,291,73488.729,,0.21915179,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,292,76373.579,,0.21722009,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,293,79371.676,,0.21530539,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,294,82487.466,,0.21340754,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,295,85725.567,,0.2115264,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,296,89090.783,,0.20966182,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,297,92588.103,,0.20781366,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,298,96222.712,,0.20598176,,,,log,linear
+2,Q1 Which suction can a crop impose at the sensor?,suction $h$ (cm),$S_e$,line,silty clay loam,299,100000,$\mathdefault{10^{5}}$,0.204166,,,,log,linear

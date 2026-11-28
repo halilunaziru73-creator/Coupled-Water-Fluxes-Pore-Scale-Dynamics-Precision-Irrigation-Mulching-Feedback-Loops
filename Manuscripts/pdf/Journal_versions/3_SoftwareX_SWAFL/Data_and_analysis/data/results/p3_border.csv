@@ -1,0 +1,11 @@
+key,value
+book.Treq_first,146.4
+book.Treq_later,162.8
+book.Qmax,1.88
+book.tL_first_Q014_L360,158
+book.A0,0.0303
+computed.Treq_first,146.39923625318488
+computed.Treq_later,162.22956242677526
+computed.Qmax,1.8831978952312192
+computed.tL_first_Q014_L360,158.67704498244444
+computed.A0,0.030340453364253273

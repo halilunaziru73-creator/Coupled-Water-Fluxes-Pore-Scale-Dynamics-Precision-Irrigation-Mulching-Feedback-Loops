@@ -1,0 +1,428 @@
+key,value
+fig:arch[0].file,../figures/annot/p2_fig-arch_0.png
+fig:arch[0].labels[0].kind,text
+fig:arch[0].labels[0].text,drainage
+fig:arch[0].labels[1].kind,text
+fig:arch[0].labels[1].text,water
+fig:arch[0].labels[2].kind,text
+fig:arch[0].labels[2].text,vapour deficit
+fig:arch[0].labels[3].kind,text
+fig:arch[0].labels[3].text,Design inputs
+fig:arch[0].labels[4].kind,text
+fig:arch[0].labels[4].text,yield ET - drainage
+fig:arch[0].labels[5].kind,text
+fig:arch[0].labels[5].text,Exchange of information between modules
+fig:swa[0].file,../figures/annot/p2_fig-swa_0.png
+fig:swa[0].labels[0].kind,panel
+fig:swa[0].labels[0].text,a
+fig:swa[0].labels[1].kind,panel
+fig:swa[0].labels[1].text,b
+fig:swa[0].labels[2].kind,panel
+fig:swa[0].labels[2].text,c
+fig:swa[0].labels[3].kind,panel
+fig:swa[0].labels[3].text,d
+fig:swa[0].labels[4].kind,panel
+fig:swa[0].labels[4].text,e
+fig:swa[0].labels[5].kind,panel
+fig:swa[0].labels[5].text,f
+fig:viewsA[0].file,../figures/annot/p2_fig-viewsA_0.png
+fig:viewsA[0].labels[0].kind,text
+fig:viewsA[0].labels[0].text,Precipitation
+fig:viewsA[0].labels[1].kind,text
+fig:viewsA[0].labels[1].text,Interception
+fig:viewsA[0].labels[2].kind,text
+fig:viewsA[0].labels[2].text,Zoom (width of the picture)
+fig:viewsA[0].labels[3].kind,text
+fig:viewsA[0].labels[3].text,drives change in soil properties
+fig:viewsA[0].labels[4].kind,text
+fig:viewsA[0].labels[4].text,Roots through the season: real model
+fig:viewsA[0].labels[5].kind,text
+fig:viewsA[0].labels[5].text,stage 1: films feed the surface
+fig:viewsB[0].file,../figures/annot/p2_fig-viewsB_0.png
+fig:viewsB[0].labels[0].kind,text
+fig:viewsB[0].labels[0].text,Root-zone depletion and the trigger law
+fig:viewsB[0].labels[1].kind,text
+fig:viewsB[0].labels[1].text,Conventional
+fig:viewsB[0].labels[2].kind,text
+fig:viewsB[0].labels[2].text,Clay Loam
+fig:viewsB[0].labels[3].kind,text
+fig:viewsB[0].labels[3].text,Result for this design
+fig:viewsB[0].labels[4].kind,text
+fig:viewsB[0].labels[4].text,Soil and field
+fig:viewsC[0].file,../figures/annot/p2_fig-viewsC_0.png
+fig:viewsC[0].labels[0].kind,text
+fig:viewsC[0].labels[0].text,Soil evaporation
+fig:viewsC[0].labels[1].kind,text
+fig:viewsC[0].labels[1].text,chips
+fig:viewsC[0].labels[2].kind,text
+fig:viewsC[0].labels[2].text,storage and other 7 mm
+fig:viewsC[0].labels[3].kind,text
+fig:viewsC[0].labels[3].text,"soil water, roots, evaporation"
+fig:viewsC[0].labels[4].kind,text
+fig:viewsC[0].labels[4].text,potential along the path
+fig:viewsC[0].labels[5].kind,text
+fig:viewsC[0].labels[5].text,sensor
+fig:sens[0].file,../figures/annot/p2_fig-sens_0.png
+fig:sens[0].labels[0].kind,panel
+fig:sens[0].labels[0].text,a
+fig:sens[0].labels[1].kind,panel
+fig:sens[0].labels[1].text,b
+fig:sens[0].labels[2].kind,panel
+fig:sens[0].labels[2].text,c
+fig:sens[0].labels[3].kind,panel
+fig:sens[0].labels[3].text,d
+fig:sens[0].labels[4].kind,panel
+fig:sens[0].labels[4].text,e
+fig:sens[0].labels[5].kind,panel
+fig:sens[0].labels[5].text,f
+fig:ws[0].file,../figures/annot/p2_fig-ws_0.png
+fig:ws[0].labels[0].kind,panel
+fig:ws[0].labels[0].text,a
+fig:ws[0].labels[1].kind,panel
+fig:ws[0].labels[1].text,b
+fig:ws[0].labels[2].kind,panel
+fig:ws[0].labels[2].text,c
+fig:e1[0].file,../figures/annot/p2_fig-e1_0.png
+fig:e1[0].labels[0].kind,panel
+fig:e1[0].labels[0].text,a
+fig:e1[0].labels[1].kind,panel
+fig:e1[0].labels[1].text,b
+fig:e1[0].labels[2].kind,panel
+fig:e1[0].labels[2].text,c
+fig:e1[0].labels[3].kind,panel
+fig:e1[0].labels[3].text,d
+fig:e1[0].labels[4].kind,panel
+fig:e1[0].labels[4].text,e
+fig:e1[0].labels[5].kind,panel
+fig:e1[0].labels[5].text,f
+fig:e1[0].labels[6].kind,panel
+fig:e1[0].labels[6].text,g
+fig:e2[0].file,../figures/annot/p2_fig-e2_0.png
+fig:e2[0].labels[0].kind,panel
+fig:e2[0].labels[0].text,a
+fig:e2[0].labels[1].kind,panel
+fig:e2[0].labels[1].text,b
+fig:e2[0].labels[2].kind,panel
+fig:e2[0].labels[2].text,c
+fig:drip[0].file,../figures/annot/p2_fig-drip_0.png
+fig:drip[0].labels[0].kind,panel
+fig:drip[0].labels[0].text,a
+fig:drip[0].labels[1].kind,panel
+fig:drip[0].labels[1].text,b
+fig:lit[0].file,../figures/annot/p2_fig-lit_0.png
+fig:lit[0].labels[0].kind,panel
+fig:lit[0].labels[0].text,a
+fig:lit[0].labels[1].kind,panel
+fig:lit[0].labels[1].text,b
+fig:plotviews[0].file,../figures/annot/p2_fig-plotviews_0.png
+fig:plotviews[0].labels[0].kind,text
+fig:plotviews[0].labels[0].text,overhead
+fig:plotviews[0].labels[1].kind,text
+fig:plotviews[0].labels[1].text,plots: experiments/r003 overhead
+fig:plotviews[0].labels[2].kind,text
+fig:plotviews[0].labels[2].text,"over depth, month by month"
+fig:plotviews[0].labels[3].kind,text
+fig:plotviews[0].labels[3].text,Precipitation every day of every year
+fig:shot-layer-field[0].file,../figures/annot/p2_fig-shot-layer-field_0.png
+fig:shot-layer-field[0].labels[0].kind,text
+fig:shot-layer-field[0].labels[0].text,"Soil, and air"
+fig:shot-layer-field[0].labels[1].kind,text
+fig:shot-layer-field[0].labels[1].text,Field balance
+fig:shot-layer-field[0].labels[2].kind,text
+fig:shot-layer-field[0].labels[2].text,Coarse Loam v
+fig:shot-layer-field[0].labels[3].kind,text
+fig:shot-layer-field[0].labels[3].text,Next 14 days
+fig:shot-layer-field[1].file,../figures/annot/p2_fig-shot-layer-field_1.png
+fig:shot-layer-field[1].labels[0].kind,text
+fig:shot-layer-field[1].labels[0].text,Output
+fig:shot-layer-field[1].labels[1].kind,text
+fig:shot-layer-field[1].labels[1].text,Coarse Loam v
+fig:shot-layer-field[1].labels[2].kind,text
+fig:shot-layer-field[1].labels[2].text,Weather and climate
+fig:shot-layer-field[1].labels[3].kind,text
+fig:shot-layer-field[1].labels[3].text,Irrigation efficiency
+fig:shot-layer-v1[0].file,../figures/annot/p2_fig-shot-layer-v1_0.png
+fig:shot-layer-v1[0].labels[0].kind,text
+fig:shot-layer-v1[0].labels[0].text,SWAFL View Run Daisy Help
+fig:shot-layer-v1[0].labels[1].kind,text
+fig:shot-layer-v1[0].labels[1].text,Sensor and trigger
+fig:shot-layer-v1[0].labels[2].kind,text
+fig:shot-layer-v1[0].labels[2].text,Daisy model
+fig:shot-layer-v1[0].labels[3].kind,text
+fig:shot-layer-v1[0].labels[3].text,winter
+fig:shot-layer-v1[1].file,../figures/annot/p2_fig-shot-layer-v1_1.png
+fig:shot-layer-v1[1].labels[0].kind,text
+fig:shot-layer-v1[1].labels[0].text,SWAFL View Run Daisy Help
+fig:shot-layer-v1[1].labels[1].kind,text
+fig:shot-layer-v1[1].labels[1].text,Focus Q Search
+fig:shot-layer-v1[1].labels[2].kind,text
+fig:shot-layer-v1[1].labels[2].text,mm per day
+fig:shot-layer-v1[1].labels[3].kind,text
+fig:shot-layer-v1[1].labels[3].text,20-year averages at these settings
+fig:shot-layer-n1[0].file,../figures/annot/p2_fig-shot-layer-n1_0.png
+fig:shot-layer-n1[0].labels[0].kind,text
+fig:shot-layer-n1[0].labels[0].text,Coarse Loam
+fig:shot-layer-n1[0].labels[1].kind,text
+fig:shot-layer-n1[0].labels[1].text,soil has Its own trigger
+fig:shot-layer-n1[0].labels[2].kind,text
+fig:shot-layer-n1[0].labels[2].text,Sandy
+fig:shot-layer-n1[0].labels[3].kind,text
+fig:shot-layer-n1[0].labels[3].text,starts
+fig:shot-layer-v3[0].file,../figures/annot/p2_fig-shot-layer-v3_0.png
+fig:shot-layer-v3[0].labels[0].kind,text
+fig:shot-layer-v3[0].labels[0].text,Conventional
+fig:shot-layer-v3[0].labels[1].kind,text
+fig:shot-layer-v3[0].labels[1].text,Reduced pore 0.68
+fig:shot-layer-v3[1].file,../figures/annot/p2_fig-shot-layer-v3_1.png
+fig:shot-layer-v3[1].labels[0].kind,text
+fig:shot-layer-v3[1].labels[0].text,SWAFL View Run Daisy Help
+fig:shot-layer-v3[1].labels[1].kind,text
+fig:shot-layer-v3[1].labels[1].text,Field balance
+fig:shot-layer-v3[1].labels[2].kind,text
+fig:shot-layer-v3[1].labels[2].text,Import weather... Online weather
+fig:shot-layer-v3[1].labels[3].kind,text
+fig:shot-layer-v3[1].labels[3].text,design
+fig:shot-layer-r1[0].file,../figures/annot/p2_fig-shot-layer-r1_0.png
+fig:shot-layer-r1[0].labels[0].kind,text
+fig:shot-layer-r1[0].labels[0].text,Refresh Review Run Help
+fig:shot-layer-r1[0].labels[1].kind,text
+fig:shot-layer-r1[0].labels[1].text,Untitled project
+fig:shot-layer-r1[0].labels[2].kind,text
+fig:shot-layer-r1[0].labels[2].text,Field balance
+fig:shot-layer-r1[0].labels[3].kind,text
+fig:shot-layer-r1[0].labels[3].text,Coarse Loam v
+fig:shot-layer-r1[0].labels[4].kind,text
+fig:shot-layer-r1[0].labels[4].text,click one
+fig:shot-layer-r1[0].labels[5].kind,text
+fig:shot-layer-r1[0].labels[5].text,Strength (vapour-flux factor)
+fig:shot-layer-e1[0].file,../figures/annot/p2_fig-shot-layer-e1_0.png
+fig:shot-layer-e1[0].labels[0].kind,text
+fig:shot-layer-e1[0].labels[0].text,"Evaporation rate, mm per day"
+fig:shot-layer-e1[0].labels[1].kind,text
+fig:shot-layer-e1[0].labels[1].text,Water lost since wetting
+fig:shot-layer-e1[0].labels[2].kind,text
+fig:shot-layer-e1[0].labels[2].text,Stage 2: vapour via dry layer
+fig:shot-layer-e1[0].labels[3].kind,text
+fig:shot-layer-e1[0].labels[3].text,O quartz mineral
+fig:shot-layer-e1[1].file,../figures/annot/p2_fig-shot-layer-e1_1.png
+fig:shot-layer-e1[1].labels[0].kind,text
+fig:shot-layer-e1[1].labels[0].text,Mulched against bare soil
+fig:shot-layer-e1[1].labels[1].kind,text
+fig:shot-layer-e1[1].labels[1].text,no layer
+fig:shot-layer-e1[1].labels[2].kind,text
+fig:shot-layer-e1[1].labels[2].text,yours
+fig:shot-layer-e1[1].labels[3].kind,text
+fig:shot-layer-e1[1].labels[3].text,evaporation -0 mm
+fig:shot-layer-v6[0].file,../figures/annot/p2_fig-shot-layer-v6_0.png
+fig:shot-layer-v6[0].labels[0].kind,text
+fig:shot-layer-v6[0].labels[0].text,Irrigation design
+fig:shot-layer-v6[0].labels[1].kind,text
+fig:shot-layer-v6[0].labels[1].text,coarse Loam
+fig:shot-layer-v6[0].labels[2].kind,text
+fig:shot-layer-v6[0].labels[2].text,Next 14 days
+fig:shot-layer-v6[0].labels[3].kind,text
+fig:shot-layer-v6[0].labels[3].text,20-year averages at these settings
+fig:shot-layer-v6[1].file,../figures/annot/p2_fig-shot-layer-v6_1.png
+fig:shot-layer-v6[1].labels[0].kind,text
+fig:shot-layer-v6[1].labels[0].text,Irrigation design
+fig:shot-layer-v6[1].labels[1].kind,text
+fig:shot-layer-v6[1].labels[1].text,17 mm storage and other 22
+fig:shot-layer-v6[1].labels[2].kind,text
+fig:shot-layer-v6[1].labels[2].text,Daisy
+fig:shot-layer-v6[1].labels[3].kind,text
+fig:shot-layer-v6[1].labels[3].text,wheat
+fig:shot-layer-n3[0].file,../figures/annot/p2_fig-shot-layer-n3_0.png
+fig:shot-layer-n3[0].labels[0].kind,text
+fig:shot-layer-n3[0].labels[0].text,SWAFL View Run Daisy Help
+fig:shot-layer-n3[0].labels[1].kind,text
+fig:shot-layer-n3[0].labels[1].text,No-till
+fig:shot-layer-n3[0].labels[2].kind,text
+fig:shot-layer-n3[0].labels[2].text,Where mulch and rainfall pat you
+fig:shot-layer-n3[0].labels[3].kind,text
+fig:shot-layer-n3[0].labels[3].text,Next 14 days
+fig:shot-layer-n3[1].file,../figures/annot/p2_fig-shot-layer-n3_1.png
+fig:shot-layer-n3[1].labels[0].kind,text
+fig:shot-layer-n3[1].labels[0].text,Output
+fig:shot-layer-n3[1].labels[1].kind,text
+fig:shot-layer-n3[1].labels[1].text,Feedback loops
+fig:shot-layer-n3[1].labels[2].kind,text
+fig:shot-layer-n3[1].labels[2].text,sensor 20 cm
+fig:shot-layer-n3[1].labels[3].kind,text
+fig:shot-layer-n3[1].labels[3].text,No-till
+fig:shot-layer-sid[0].file,../figures/annot/p2_fig-shot-layer-sid_0.png
+fig:shot-layer-sid[0].labels[0].kind,text
+fig:shot-layer-sid[0].labels[0].text,border
+fig:shot-layer-sid[0].labels[1].kind,text
+fig:shot-layer-sid[0].labels[1].text,Required depth Zn from the DSS
+fig:shot-layer-sid[0].labels[2].kind,text
+fig:shot-layer-sid[0].labels[2].text,per metre
+fig:shot-layer-sid[0].labels[3].kind,text
+fig:shot-layer-sid[0].labels[3].text,Organic matter (%)
+fig:shot-layer-sid[1].file,../figures/annot/p2_fig-shot-layer-sid_1.png
+fig:shot-layer-sid[1].labels[0].kind,text
+fig:shot-layer-sid[1].labels[0].text,Save picture
+fig:shot-layer-sid[1].labels[1].kind,text
+fig:shot-layer-sid[1].labels[1].text,after the front arrives
+fig:shot-layer-sid[1].labels[2].kind,text
+fig:shot-layer-sid[1].labels[2].text,Organic matter
+fig:shot-layer-sid[1].labels[3].kind,text
+fig:shot-layer-sid[1].labels[3].text,Runoff
+fig:shot-sid-sec-sched[0].file,../figures/annot/p2_fig-shot-sid-sec-sched_0.png
+fig:shot-sid-sec-sched[0].labels[0].kind,text
+fig:shot-sid-sec-sched[0].labels[0].text,SWAFL View Run Daisy Help
+fig:shot-sid-sec-sched[0].labels[1].kind,text
+fig:shot-sid-sec-sched[0].labels[1].text,design
+fig:shot-sid-sec-sched[0].labels[2].kind,text
+fig:shot-sid-sec-sched[0].labels[2].text,Zn depth 34m
+fig:shot-sid-sec-sched[0].labels[3].kind,text
+fig:shot-sid-sec-sched[0].labels[3].text,Next 14 days
+fig:shot-sid-sec-sched[1].file,../figures/annot/p2_fig-shot-sid-sec-sched_1.png
+fig:shot-sid-sec-sched[1].labels[0].kind,text
+fig:shot-sid-sec-sched[1].labels[0].text,SWAFL View Run Daisy Help
+fig:shot-sid-sec-sched[1].labels[1].kind,text
+fig:shot-sid-sec-sched[1].labels[1].text,Coarse Loam
+fig:shot-sid-sec-sched[1].labels[2].kind,text
+fig:shot-sid-sec-sched[1].labels[2].text,Next 14 days
+fig:shot-sid-sec-sched[1].labels[3].kind,text
+fig:shot-sid-sec-sched[1].labels[3].text,Weather and climate
+fig:shot-layer-drip[0].file,../figures/annot/p2_fig-shot-layer-drip_0.png
+fig:shot-layer-drip[0].labels[0].kind,text
+fig:shot-layer-drip[0].labels[0].text,Coarse Loam - Cereal
+fig:shot-layer-drip[0].labels[1].kind,text
+fig:shot-layer-drip[0].labels[1].text,Chips
+fig:shot-layer-drip[0].labels[2].kind,text
+fig:shot-layer-drip[0].labels[2].text,Length and width
+fig:shot-layer-drip[0].labels[3].kind,text
+fig:shot-layer-drip[0].labels[3].text,Farm supply Qs
+fig:shot-layer-drip[1].file,../figures/annot/p2_fig-shot-layer-drip_1.png
+fig:shot-layer-drip[1].labels[0].kind,text
+fig:shot-layer-drip[1].labels[0].text,SWAFL View Run Daisy Help
+fig:shot-layer-drip[1].labels[1].kind,text
+fig:shot-layer-drip[1].labels[1].text,Import weather... Online weather
+fig:shot-layer-drip[1].labels[2].kind,text
+fig:shot-layer-drip[1].labels[2].text,Next 14 days
+fig:shot-layer-drip[1].labels[3].kind,text
+fig:shot-layer-drip[1].labels[3].text,Weather and climate
+fig:shot-drip-sec-lateral[0].file,../figures/annot/p2_fig-shot-drip-sec-lateral_0.png
+fig:shot-drip-sec-lateral[0].labels[0].kind,text
+fig:shot-drip-sec-lateral[0].labels[0].text,SWAFL View Run Daisy Help
+fig:shot-drip-sec-lateral[0].labels[1].kind,text
+fig:shot-drip-sec-lateral[0].labels[1].text,Import weather... Online weather
+fig:shot-drip-sec-lateral[0].labels[2].kind,text
+fig:shot-drip-sec-lateral[0].labels[2].text,design
+fig:shot-drip-sec-lateral[0].labels[3].kind,text
+fig:shot-drip-sec-lateral[0].labels[3].text,Next 14 days
+fig:shot-drip-sec-lateral[1].file,../figures/annot/p2_fig-shot-drip-sec-lateral_1.png
+fig:shot-drip-sec-lateral[1].labels[0].kind,text
+fig:shot-drip-sec-lateral[1].labels[0].text,SWAFL View Run Daisy Help
+fig:shot-drip-sec-lateral[1].labels[1].kind,text
+fig:shot-drip-sec-lateral[1].labels[1].text,Import weather... Online weather
+fig:shot-drip-sec-lateral[1].labels[2].kind,text
+fig:shot-drip-sec-lateral[1].labels[2].text,Next 14 days
+fig:shot-drip-sec-lateral[1].labels[3].kind,text
+fig:shot-drip-sec-lateral[1].labels[3].text,Weather and climate
+fig:shot-drip-sec-table[0].file,../figures/annot/p2_fig-shot-drip-sec-table_0.png
+fig:shot-drip-sec-table[0].labels[0].kind,text
+fig:shot-drip-sec-table[0].labels[0].text,Irrigation design
+fig:shot-drip-sec-table[0].labels[1].kind,text
+fig:shot-drip-sec-table[0].labels[1].text,Choose a case
+fig:shot-drip-sec-table[0].labels[2].kind,text
+fig:shot-drip-sec-table[0].labels[2].text,Your current design
+fig:shot-drip-sec-table[0].labels[3].kind,text
+fig:shot-drip-sec-table[0].labels[3].text,Peak crop need / interval
+fig:shot-drip-sec-table[0].labels[4].kind,text
+fig:shot-drip-sec-table[0].labels[4].text,Next 14 days
+fig:shot-drip-sec-table[0].labels[5].kind,text
+fig:shot-drip-sec-table[0].labels[5].text,Weather and climate
+fig:shot-layer-spr[0].file,../figures/annot/p2_fig-shot-layer-spr_0.png
+fig:shot-layer-spr[0].labels[0].kind,text
+fig:shot-layer-spr[0].labels[0].text,Surface © Sprinklers
+fig:shot-layer-spr[0].labels[1].kind,text
+fig:shot-layer-spr[0].labels[1].text,Coarse Lo
+fig:shot-layer-spr[0].labels[2].kind,text
+fig:shot-layer-spr[0].labels[2].text,Reduced No-till
+fig:shot-layer-spr[0].labels[3].kind,text
+fig:shot-layer-spr[0].labels[3].text,Surface storage (mm) - from tillage
+fig:shot-layer-spr[1].file,../figures/annot/p2_fig-shot-layer-spr_1.png
+fig:shot-layer-spr[1].labels[0].kind,text
+fig:shot-layer-spr[1].labels[0].text,Output
+fig:shot-layer-spr[1].labels[1].kind,text
+fig:shot-layer-spr[1].labels[1].text,Coarse Loam v
+fig:shot-layer-spr[1].labels[2].kind,text
+fig:shot-layer-spr[1].labels[2].text,How a sprinkler works
+fig:shot-layer-spr[1].labels[3].kind,text
+fig:shot-layer-spr[1].labels[3].text,Weather and climate
+fig:shot-spr-sec-intake[0].file,../figures/annot/p2_fig-shot-spr-sec-intake_0.png
+fig:shot-spr-sec-intake[0].labels[0].kind,text
+fig:shot-spr-sec-intake[0].labels[0].text,Irrigation design
+fig:shot-spr-sec-intake[0].labels[1].kind,text
+fig:shot-spr-sec-intake[0].labels[1].text,Coarse Loam v
+fig:shot-spr-sec-intake[0].labels[2].kind,text
+fig:shot-spr-sec-intake[0].labels[2].text,Drip irrigation design
+fig:shot-spr-sec-intake[0].labels[3].kind,text
+fig:shot-spr-sec-intake[0].labels[3].text,Weather and climate
+fig:shot-spr-sec-intake[1].file,../figures/annot/p2_fig-shot-spr-sec-intake_1.png
+fig:shot-spr-sec-intake[1].labels[0].kind,text
+fig:shot-spr-sec-intake[1].labels[0].text,Figure
+fig:shot-spr-sec-intake[1].labels[1].kind,text
+fig:shot-spr-sec-intake[1].labels[1].text,Profile evolution
+fig:shot-spr-sec-intake[1].labels[2].kind,text
+fig:shot-spr-sec-intake[1].labels[2].text,Precipitation
+fig:shot-spr-sec-intake[1].labels[3].kind,text
+fig:shot-spr-sec-intake[1].labels[3].text,Coarse Loam v
+fig:shot-dash-results[0].file,../figures/annot/p2_fig-shot-dash-results_0.png
+fig:shot-dash-results[0].labels[0].kind,text
+fig:shot-dash-results[0].labels[0].text,"Soil, and air"
+fig:shot-dash-results[0].labels[1].kind,text
+fig:shot-dash-results[0].labels[1].text,Field balance
+fig:shot-dash-results[0].labels[2].kind,text
+fig:shot-dash-results[0].labels[2].text,Coarse Loam v
+fig:shot-dash-results[0].labels[3].kind,text
+fig:shot-dash-results[0].labels[3].text,Next 14 days
+fig:shot-dash-results[1].file,../figures/annot/p2_fig-shot-dash-results_1.png
+fig:shot-dash-results[1].labels[0].kind,text
+fig:shot-dash-results[1].labels[0].text,SWAFL View Run Daisy Help
+fig:shot-dash-results[1].labels[1].kind,text
+fig:shot-dash-results[1].labels[1].text,No-till
+fig:shot-dash-results[1].labels[2].kind,text
+fig:shot-dash-results[1].labels[2].text,Irrigation design
+fig:shot-dash-results[1].labels[3].kind,text
+fig:shot-dash-results[1].labels[3].text,Weather and climate
+fig:shot-dash-messages[0].file,../figures/annot/p2_fig-shot-dash-messages_0.png
+fig:shot-dash-messages[0].labels[0].kind,text
+fig:shot-dash-messages[0].labels[0].text,Untitled project
+fig:shot-dash-messages[0].labels[1].kind,text
+fig:shot-dash-messages[0].labels[1].text,Profile evolution
+fig:shot-dash-messages[0].labels[2].kind,text
+fig:shot-dash-messages[0].labels[2].text,Precipitation
+fig:shot-dash-messages[0].labels[3].kind,text
+fig:shot-dash-messages[0].labels[3].text,Soil evaporation
+fig:shot-dash-messages[0].labels[4].kind,text
+fig:shot-dash-messages[0].labels[4].text,Coarse Loam v
+fig:shot-dash-messages[0].labels[5].kind,text
+fig:shot-dash-messages[0].labels[5].text,Drainage below 1m
+fig:shot-real-balance[0].file,../figures/annot/p2_fig-shot-real-balance_0.png
+fig:shot-real-balance[0].labels[0].kind,text
+fig:shot-real-balance[0].labels[0].text,drainage (inverted) event
+fig:shot-real-balance[1].file,../figures/annot/p2_fig-shot-real-balance_1.png
+fig:shot-real-balance[1].labels[0].kind,text
+fig:shot-real-balance[1].labels[0].text,Water the crop uses
+fig:shot-real-balance[1].labels[1].kind,text
+fig:shot-real-balance[1].labels[1].text,reaching the root zone
+fig:shot-real-balance[1].labels[2].kind,text
+fig:shot-real-balance[1].labels[2].text,below capacity
+fig:shot-real-balance[1].labels[3].kind,text
+fig:shot-real-balance[1].labels[3].text,trigger (50 % of available water)
+fig:shot-real-flux[0].file,../figures/annot/p2_fig-shot-real-flux_0.png
+fig:shot-real-flux[0].labels[0].kind,text
+fig:shot-real-flux[0].labels[0].text,Conventional
+fig:shot-real-flux[0].labels[1].kind,text
+fig:shot-real-flux[0].labels[1].text,water velocity
+fig:shot-real-flux[0].labels[2].kind,text
+fig:shot-real-flux[0].labels[2].text,4 where the water moves
+fig:shot-real-flux[0].labels[3].kind,text
+fig:shot-real-flux[0].labels[3].text,(b) water velocity
+fig:shot-real-flux[0].labels[4].kind,text
+fig:shot-real-flux[0].labels[4].text,"content, per cm?"
+fig:shot-real-flux[0].labels[5].kind,text
+fig:shot-real-flux[0].labels[5].text,"velocity, cm per day"

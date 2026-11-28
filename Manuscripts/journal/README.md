@@ -12,6 +12,16 @@ Each package also has a folder **`Data_and_analysis`**, so that every figure and
 
 Supplementary Material S2 of each article is the existing derivations, data and mechanisms PDF in `../pdf/Supplementary`.
 
+## Data and analysis: download
+
+Each package has a folder `Data_and_analysis` (the data of every figure and table, all the data of the study as CSV, the scripts) and the same folder as one zip file:
+
+* Paper 1 (Agricultural Water Management): [download Data_and_analysis.zip](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Manuscripts/pdf/Journal_versions/1_Agricultural_Water_Management_Paper1/Data_and_analysis.zip) · [open the folder](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/tree/main/Manuscripts/pdf/Journal_versions/1_Agricultural_Water_Management_Paper1/Data_and_analysis) · [README](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/blob/main/Manuscripts/pdf/Journal_versions/1_Agricultural_Water_Management_Paper1/Data_and_analysis/README.md)
+* Paper 4 (Agricultural Water Management): [download Data_and_analysis.zip](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Manuscripts/pdf/Journal_versions/2_Agricultural_Water_Management_Paper4/Data_and_analysis.zip) · [open the folder](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/tree/main/Manuscripts/pdf/Journal_versions/2_Agricultural_Water_Management_Paper4/Data_and_analysis) · [README](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/blob/main/Manuscripts/pdf/Journal_versions/2_Agricultural_Water_Management_Paper4/Data_and_analysis/README.md)
+* SWAFL (SoftwareX): [download Data_and_analysis.zip](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Manuscripts/pdf/Journal_versions/3_SoftwareX_SWAFL/Data_and_analysis.zip) · [open the folder](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/tree/main/Manuscripts/pdf/Journal_versions/3_SoftwareX_SWAFL/Data_and_analysis) · [README](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/blob/main/Manuscripts/pdf/Journal_versions/3_SoftwareX_SWAFL/Data_and_analysis/README.md)
+
+The comprehensive data (every value of every Daisy run, one compressed CSV per experiment): [Data/Comprehensive_Summary](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/tree/main/Data/Comprehensive_Summary).
+
 ## Rebuild
 
 ```

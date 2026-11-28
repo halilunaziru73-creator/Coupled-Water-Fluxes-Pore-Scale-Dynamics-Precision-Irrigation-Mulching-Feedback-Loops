@@ -1,0 +1,65 @@
+panel,panel_title,x_label,y_label,kind,series,i,x,x_category,y,y_category,y_low,y_high,x_scale,y_scale
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),transpiration,0,0,S05 n=1.89,0.63750746,,0,0.63750746,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),transpiration,1,1,S02 n=1.60,0.23229613,,0,0.23229613,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),transpiration,2,2,S06 n=1.56,0.40931885,,0,0.40931885,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),transpiration,3,3,S08 n=1.48,0.45857971,,0,0.45857971,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),transpiration,4,4,S07 n=1.41,0.35230047,,0,0.35230047,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),transpiration,5,5,S01 n=1.35,0.38009636,,0,0.38009636,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),transpiration,6,6,S09 n=1.31,0.36258616,,0,0.36258616,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),transpiration,7,7,S10 n=1.23,0.34064955,,0,0.34064955,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),soil evaporation,0,0,S05 n=1.89,0.11299564,,0.63750746,0.7505031,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),soil evaporation,1,1,S02 n=1.60,0.18649283,,0.23229613,0.41878896,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),soil evaporation,2,2,S06 n=1.56,0.22022093,,0.40931885,0.62953978,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),soil evaporation,3,3,S08 n=1.48,0.18432504,,0.45857971,0.64290475,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),soil evaporation,4,4,S07 n=1.41,0.2951259,,0.35230047,0.64742637,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),soil evaporation,5,5,S01 n=1.35,0.3228029,,0.38009636,0.70289926,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),soil evaporation,6,6,S09 n=1.31,0.28687264,,0.36258616,0.6494588,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),soil evaporation,7,7,S10 n=1.23,0.29203556,,0.34064955,0.63268512,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),"other evaporation (canopy, ponds, litter)",0,0,S05 n=1.89,0.13687759,,0.7505031,0.88738069,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),"other evaporation (canopy, ponds, litter)",1,1,S02 n=1.60,0.26110966,,0.41878896,0.67989862,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),"other evaporation (canopy, ponds, litter)",2,2,S06 n=1.56,0.17386134,,0.62953978,0.80340112,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),"other evaporation (canopy, ponds, litter)",3,3,S08 n=1.48,0.16427865,,0.64290475,0.8071834,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),"other evaporation (canopy, ponds, litter)",4,4,S07 n=1.41,0.18699489,,0.64742637,0.83442126,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),"other evaporation (canopy, ponds, litter)",5,5,S01 n=1.35,0.18629529,,0.70289926,0.88919456,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),"other evaporation (canopy, ponds, litter)",6,6,S09 n=1.31,0.18115504,,0.6494588,0.83061384,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),"other evaporation (canopy, ponds, litter)",7,7,S10 n=1.23,0.17718324,,0.63268512,0.80986835,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),drainage below 1 m,0,0,S05 n=1.89,0.07473295,,0.88738069,0.96211364,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),drainage below 1 m,1,1,S02 n=1.60,0.31614113,,0.67989862,0.99603975,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),drainage below 1 m,2,2,S06 n=1.56,0.15187185,,0.80340112,0.95527297,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),drainage below 1 m,3,3,S08 n=1.48,0.14738838,,0.8071834,0.95457178,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),drainage below 1 m,4,4,S07 n=1.41,0.14783916,,0.83442126,0.98226042,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),drainage below 1 m,5,5,S01 n=1.35,0.080460827,,0.88919456,0.96965539,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),drainage below 1 m,6,6,S09 n=1.31,0.15289365,,0.83061384,0.98350749,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),drainage below 1 m,7,7,S10 n=1.23,0.14655917,,0.80986835,0.95642753,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),storage and runoff,0,0,S05 n=1.89,0.037886361,,0.96211364,1,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),storage and runoff,1,1,S02 n=1.60,0.0039602543,,0.99603975,1,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),storage and runoff,2,2,S06 n=1.56,0.04472703,,0.95527297,1,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),storage and runoff,3,3,S08 n=1.48,0.045428221,,0.95457178,1,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),storage and runoff,4,4,S07 n=1.41,0.01773958,,0.98226042,1,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),storage and runoff,5,5,S01 n=1.35,0.030344613,,0.96965539,1,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),storage and runoff,6,6,S09 n=1.31,0.016492512,,0.98350749,1,linear,linear
+1,"a Soils (E10, 744 irrigated runs)",,share of each irrigation millimetre,bar (y = height; low/high = bottom/top),storage and runoff,7,7,S10 n=1.23,0.043572475,,0.95642753,1,linear,linear
+2,b Methods (E4 all soils; E15 coarse loam),,,bar (y = height; low/high = bottom/top),,0,0,surface E4,0.336,,0,0.336,linear,linear
+2,b Methods (E4 all soils; E15 coarse loam),,,bar (y = height; low/high = bottom/top),,1,1,overhead E4,-0.08,,0,-0.08,linear,linear
+2,b Methods (E4 all soils; E15 coarse loam),,,bar (y = height; low/high = bottom/top),,2,2,subsoil E4,0.511,,0,0.511,linear,linear
+2,b Methods (E4 all soils; E15 coarse loam),,,bar (y = height; low/high = bottom/top),,3,3,surface E15,0.325,,0,0.325,linear,linear
+2,b Methods (E4 all soils; E15 coarse loam),,,bar (y = height; low/high = bottom/top),,4,4,overhead E15,-0.01,,0,-0.01,linear,linear
+2,b Methods (E4 all soils; E15 coarse loam),,,bar (y = height; low/high = bottom/top),,5,5,subsoil E15,0.404,,0,0.404,linear,linear
+2,b Methods (E4 all soils; E15 coarse loam),,,bar (y = height; low/high = bottom/top),,0,0,surface E4,0.068,,0.336,0.404,linear,linear
+2,b Methods (E4 all soils; E15 coarse loam),,,bar (y = height; low/high = bottom/top),,1,1,overhead E4,0.117,,0,0.117,linear,linear
+2,b Methods (E4 all soils; E15 coarse loam),,,bar (y = height; low/high = bottom/top),,2,2,subsoil E4,0.177,,0.511,0.688,linear,linear
+2,b Methods (E4 all soils; E15 coarse loam),,,bar (y = height; low/high = bottom/top),,3,3,surface E15,0.255,,0.325,0.58,linear,linear
+2,b Methods (E4 all soils; E15 coarse loam),,,bar (y = height; low/high = bottom/top),,4,4,overhead E15,0.274,,0,0.274,linear,linear
+2,b Methods (E4 all soils; E15 coarse loam),,,bar (y = height; low/high = bottom/top),,5,5,subsoil E15,0.234,,0.404,0.638,linear,linear
+2,b Methods (E4 all soils; E15 coarse loam),,,bar (y = height; low/high = bottom/top),,0,0,surface E4,0.428,,0.404,0.832,linear,linear
+2,b Methods (E4 all soils; E15 coarse loam),,,bar (y = height; low/high = bottom/top),,1,1,overhead E4,0.786,,0.117,0.903,linear,linear
+2,b Methods (E4 all soils; E15 coarse loam),,,bar (y = height; low/high = bottom/top),,2,2,subsoil E4,0.04,,0.688,0.728,linear,linear
+2,b Methods (E4 all soils; E15 coarse loam),,,bar (y = height; low/high = bottom/top),,3,3,surface E15,0.242,,0.58,0.822,linear,linear
+2,b Methods (E4 all soils; E15 coarse loam),,,bar (y = height; low/high = bottom/top),,4,4,overhead E15,0.559,,0.274,0.833,linear,linear
+2,b Methods (E4 all soils; E15 coarse loam),,,bar (y = height; low/high = bottom/top),,5,5,subsoil E15,0.033,,0.638,0.671,linear,linear
+2,b Methods (E4 all soils; E15 coarse loam),,,bar (y = height; low/high = bottom/top),,0,0,surface E4,0.138,,0.832,0.97,linear,linear
+2,b Methods (E4 all soils; E15 coarse loam),,,bar (y = height; low/high = bottom/top),,1,1,overhead E4,0.144,,0.903,1.047,linear,linear
+2,b Methods (E4 all soils; E15 coarse loam),,,bar (y = height; low/high = bottom/top),,2,2,subsoil E4,0.228,,0.728,0.956,linear,linear
+2,b Methods (E4 all soils; E15 coarse loam),,,bar (y = height; low/high = bottom/top),,3,3,surface E15,0.131,,0.822,0.953,linear,linear
+2,b Methods (E4 all soils; E15 coarse loam),,,bar (y = height; low/high = bottom/top),,4,4,overhead E15,0.13,,0.833,0.963,linear,linear
+2,b Methods (E4 all soils; E15 coarse loam),,,bar (y = height; low/high = bottom/top),,5,5,subsoil E15,0.282,,0.671,0.953,linear,linear

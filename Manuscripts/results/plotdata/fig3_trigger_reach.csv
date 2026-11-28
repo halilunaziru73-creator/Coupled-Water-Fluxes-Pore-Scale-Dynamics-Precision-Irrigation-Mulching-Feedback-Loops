@@ -1,0 +1,626 @@
+panel,panel_title,x_label,y_label,kind,series,i,x,x_category,y,y_category,y_low,y_high,x_scale,y_scale
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S01 Coarse loam,0,50,,335.16,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S01 Coarse loam,1,75,,311.76,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S01 Coarse loam,2,100,,296.88,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S01 Coarse loam,3,150,,270.84,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S01 Coarse loam,4,200,,254.04,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S01 Coarse loam,5,250,,242.52,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S01 Coarse loam,6,300,,228.48,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S01 Coarse loam,7,350,,219,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S01 Coarse loam,8,400,,211.8,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S01 Coarse loam,9,500,,202.32,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S01 Coarse loam,10,600,,191.52,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S01 Coarse loam,11,700,,183.84,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S01 Coarse loam,12,800,,177.48,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S01 Coarse loam,13,1000,,168.72,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S01 Coarse loam,14,1200,,160.8,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S01 Coarse loam,15,1500,,152.28,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S01 Coarse loam,16,2000,,142.08,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S01 Coarse loam,17,3000,,124.08,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S01 Coarse loam,18,5000,,97.92,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S01 Coarse loam,19,10000,,60.48,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S02 Coarse sand,0,50,,441.6,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S02 Coarse sand,1,75,,441.24,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S02 Coarse sand,2,100,,438.84,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S02 Coarse sand,3,150,,433.2,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S02 Coarse sand,4,200,,427.08,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S02 Coarse sand,5,250,,419.4,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S02 Coarse sand,6,300,,411.12,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S02 Coarse sand,7,350,,402.6,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S02 Coarse sand,8,400,,394.08,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S02 Coarse sand,9,500,,379.2,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S02 Coarse sand,10,600,,366.36,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S02 Coarse sand,11,700,,352.44,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S02 Coarse sand,12,800,,341.04,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S02 Coarse sand,13,2000,,248.04,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S02 Coarse sand,14,3000,,218.52,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S02 Coarse sand,15,5000,,180.72,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S02 Coarse sand,16,10000,,139.32,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S03 Sand,0,50,,122.16,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S03 Sand,1,75,,38.52,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S03 Sand,2,100,,6.36,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S03 Sand,3,150,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S03 Sand,4,200,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S03 Sand,5,250,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S03 Sand,6,300,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S03 Sand,7,350,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S03 Sand,8,400,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S03 Sand,9,500,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S03 Sand,10,600,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S03 Sand,11,700,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S03 Sand,12,800,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S03 Sand,13,1000,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S03 Sand,14,1200,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S03 Sand,15,1500,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S03 Sand,16,2000,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S03 Sand,17,3000,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S03 Sand,18,5000,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S03 Sand,19,10000,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S04 Loamy sand,0,50,,223.08,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S04 Loamy sand,1,75,,152.76,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S04 Loamy sand,2,100,,122.88,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S04 Loamy sand,3,150,,50.04,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S04 Loamy sand,4,200,,16.8,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S04 Loamy sand,5,250,,4.08,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S04 Loamy sand,6,300,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S04 Loamy sand,7,350,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S04 Loamy sand,8,400,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S04 Loamy sand,9,500,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S04 Loamy sand,10,600,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S04 Loamy sand,11,700,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S04 Loamy sand,12,800,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S04 Loamy sand,13,1000,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S04 Loamy sand,14,1200,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S04 Loamy sand,15,1500,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S04 Loamy sand,16,2000,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S04 Loamy sand,17,3000,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S04 Loamy sand,18,5000,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S04 Loamy sand,19,10000,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S05 Sandy loam,0,50,,365.64,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S05 Sandy loam,1,75,,282.72,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S05 Sandy loam,2,100,,230.04,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S05 Sandy loam,3,150,,181.68,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S05 Sandy loam,4,200,,159.36,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S05 Sandy loam,5,250,,143.28,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S05 Sandy loam,6,300,,127.56,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S05 Sandy loam,7,350,,117.12,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S05 Sandy loam,8,400,,99.12,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S05 Sandy loam,9,500,,72.12,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S05 Sandy loam,10,600,,47.76,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S05 Sandy loam,11,700,,35.88,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S05 Sandy loam,12,800,,17.52,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S05 Sandy loam,13,1000,,4.08,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S05 Sandy loam,14,1200,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S05 Sandy loam,15,1500,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S05 Sandy loam,16,2000,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S05 Sandy loam,17,3000,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S05 Sandy loam,18,5000,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S05 Sandy loam,19,10000,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S06 Loam,0,50,,423.6,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S06 Loam,1,75,,381.36,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S06 Loam,2,100,,346.44,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S06 Loam,3,150,,294,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S06 Loam,4,200,,257.28,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S06 Loam,5,250,,230.28,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S06 Loam,6,300,,211.68,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S06 Loam,7,350,,201,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S06 Loam,8,400,,189.6,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S06 Loam,9,500,,173.04,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S06 Loam,10,600,,158.76,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S06 Loam,11,700,,147.12,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S06 Loam,12,800,,137.4,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S06 Loam,13,1000,,116.16,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S06 Loam,14,1200,,104.64,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S06 Loam,15,1500,,87.12,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S06 Loam,16,2000,,67.8,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S06 Loam,17,3000,,36.72,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S06 Loam,18,5000,,5.16,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S06 Loam,19,10000,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S07 Silt loam,0,50,,430.92,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S07 Silt loam,1,75,,406.2,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S07 Silt loam,2,100,,379.08,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S07 Silt loam,3,150,,338.52,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S07 Silt loam,4,200,,311.64,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S07 Silt loam,5,250,,290.64,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S07 Silt loam,6,300,,271.8,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S07 Silt loam,7,350,,257.52,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S07 Silt loam,8,400,,242.76,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S07 Silt loam,9,500,,218.64,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S07 Silt loam,10,600,,199.92,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S07 Silt loam,11,700,,188.4,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S07 Silt loam,12,800,,180.6,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S07 Silt loam,13,1000,,166.92,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S07 Silt loam,14,1200,,156.96,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S07 Silt loam,15,1500,,145.44,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S07 Silt loam,16,2000,,125.52,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S07 Silt loam,17,3000,,107.76,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S07 Silt loam,18,5000,,79.68,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S07 Silt loam,19,10000,,19.2,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S08 Sandy clay loam,0,50,,377.28,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S08 Sandy clay loam,1,75,,330.24,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S08 Sandy clay loam,2,100,,294.48,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S08 Sandy clay loam,3,150,,247.2,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S08 Sandy clay loam,4,200,,220.2,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S08 Sandy clay loam,5,250,,205.44,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S08 Sandy clay loam,6,300,,191.52,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S08 Sandy clay loam,7,350,,180.48,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S08 Sandy clay loam,8,400,,171.24,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S08 Sandy clay loam,9,500,,158.52,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S08 Sandy clay loam,10,600,,146.52,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S08 Sandy clay loam,11,700,,134.28,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S08 Sandy clay loam,12,800,,121.32,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S08 Sandy clay loam,13,1000,,109.32,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S08 Sandy clay loam,14,1200,,97.2,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S08 Sandy clay loam,15,1500,,82.2,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S08 Sandy clay loam,16,2000,,64.2,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S08 Sandy clay loam,17,3000,,36.84,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S08 Sandy clay loam,18,5000,,6,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S08 Sandy clay loam,19,10000,,0,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S09 Clay loam,0,50,,407.04,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S09 Clay loam,1,75,,377.64,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S09 Clay loam,2,100,,354.84,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S09 Clay loam,3,150,,324.12,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S09 Clay loam,4,200,,300.6,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S09 Clay loam,5,250,,282.48,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S09 Clay loam,6,300,,266.88,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S09 Clay loam,7,350,,253.68,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S09 Clay loam,8,400,,241.56,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S09 Clay loam,9,500,,221.88,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S09 Clay loam,10,600,,205.2,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S09 Clay loam,11,700,,193.92,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S09 Clay loam,12,800,,185.76,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S09 Clay loam,13,1000,,174.48,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S09 Clay loam,14,1200,,165.48,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S09 Clay loam,15,1500,,157.68,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S09 Clay loam,16,2000,,143.64,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S09 Clay loam,17,3000,,124.32,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S09 Clay loam,18,5000,,105.48,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S09 Clay loam,19,10000,,60.72,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S10 Silty clay loam,0,50,,383.16,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S10 Silty clay loam,1,75,,362.64,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S10 Silty clay loam,2,100,,346.8,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S10 Silty clay loam,3,150,,324.6,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S10 Silty clay loam,4,200,,306,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S10 Silty clay loam,5,250,,291.48,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S10 Silty clay loam,6,300,,278.4,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S10 Silty clay loam,7,350,,268.2,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S10 Silty clay loam,8,400,,259.8,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S10 Silty clay loam,9,500,,241.56,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S10 Silty clay loam,10,600,,225.36,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S10 Silty clay loam,11,700,,212.64,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S10 Silty clay loam,12,800,,203.4,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S10 Silty clay loam,13,1000,,190.32,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S10 Silty clay loam,14,1200,,182.04,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S10 Silty clay loam,15,1500,,175.08,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S10 Silty clay loam,16,2000,,163.08,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S10 Silty clay loam,17,3000,,149.88,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S10 Silty clay loam,18,5000,,127.92,,,,log,linear
+1,a Irrigation against the trigger,trigger suction $h_t$ (cm),irrigation (mm yr$^{-1}$),line,S10 Silty clay loam,19,10000,,95.04,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,0,0.0063797106,,1,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,1,0.0095695659,,0.9301826,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,2,0.012759421,,0.88578589,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,3,0.019139132,,0.80809166,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,4,0.025518842,,0.75796634,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,5,0.031898553,,0.7235947,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,6,0.038278263,,0.68170426,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,7,0.044657974,,0.65341926,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,8,0.051037685,,0.63193699,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,9,0.063797106,,0.60365199,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,10,0.076556527,,0.57142857,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,11,0.089315948,,0.54851414,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,12,0.10207537,,0.52953813,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,13,0.12759421,,0.50340136,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,14,0.15311305,,0.47977086,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,15,0.19139132,,0.45435016,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,16,0.25518842,,0.42391694,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,17,0.38278263,,0.37021124,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,18,0.63797106,,0.29215897,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,19,1.2759421,,0.18045113,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,0,0.0093063062,,1,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,1,0.013959459,,0.99918478,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,2,0.018612612,,0.99375,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,3,0.027918918,,0.98097826,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,4,0.037225225,,0.96711957,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,5,0.046531531,,0.94972826,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,6,0.055837837,,0.93097826,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,7,0.065144143,,0.91168478,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,8,0.074450449,,0.8923913,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,9,0.093063062,,0.85869565,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,10,0.11167567,,0.82961957,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,11,0.13028829,,0.79809783,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,12,0.1489009,,0.77228261,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,13,0.37225225,,0.56168478,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,14,0.55837837,,0.49483696,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,15,0.93063062,,0.40923913,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,16,1.8612612,,0.31548913,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,0,0.25119406,,1,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,1,0.37679109,,0.31532417,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,2,0.50238813,,0.052062868,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,3,0.75358219,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,4,1.0047763,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,5,1.2559703,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,6,1.5071644,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,7,1.7583584,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,8,2.0095525,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,9,2.5119406,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,10,3.0143288,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,11,3.5167169,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,12,4.019105,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,13,5.0238813,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,14,6.0286575,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,15,7.5358219,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,16,10.047763,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,17,15.071644,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,18,25.119406,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,19,50.238813,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,0,0.11739604,,1,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,1,0.17609406,,0.68477676,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,2,0.23479208,,0.55083378,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,3,0.35218813,,0.22431415,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,4,0.46958417,,0.075309306,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,5,0.58698021,,0.018289403,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,6,0.70437625,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,7,0.8217723,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,8,0.93916834,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,9,1.1739604,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,10,1.4087525,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,11,1.6435446,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,12,1.8783367,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,13,2.3479208,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,14,2.817505,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,15,3.5218813,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,16,4.6958417,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,17,7.0437625,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,18,11.739604,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,19,23.479208,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,0,0.030894318,,1,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,1,0.046341477,,0.77321956,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,2,0.061788636,,0.62914342,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,3,0.092682954,,0.49688218,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,4,0.12357727,,0.43583853,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,5,0.15447159,,0.39186085,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,6,0.18536591,,0.34886774,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,7,0.21626023,,0.32031506,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,8,0.24715454,,0.27108631,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,9,0.30894318,,0.19724319,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,10,0.37073182,,0.13062028,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,11,0.43252045,,0.098129308,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,12,0.49430909,,0.047915983,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,13,0.61788636,,0.011158517,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,14,0.74146363,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,15,0.92682954,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,16,1.2357727,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,17,1.8536591,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,18,3.0894318,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,19,6.1788636,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,0,0.005429234,,1,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,1,0.0081438509,,0.90028329,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,2,0.010858468,,0.81784703,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,3,0.016287702,,0.69405099,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,4,0.021716936,,0.60736544,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,5,0.02714617,,0.54362606,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,6,0.032575404,,0.49971671,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,7,0.038004638,,0.47450425,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,8,0.043433872,,0.44759207,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,9,0.05429234,,0.40849858,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,10,0.065150807,,0.37478754,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,11,0.076009275,,0.34730878,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,12,0.086867743,,0.32436261,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,13,0.10858468,,0.27422096,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,14,0.13030161,,0.2470255,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,15,0.16287702,,0.20566572,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,16,0.21716936,,0.16005666,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,17,0.32575404,,0.086685552,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,18,0.5429234,,0.012181303,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,19,1.0858468,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,0,0.0016884887,,1,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,1,0.0025327331,,0.94263436,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,2,0.0033769774,,0.87969925,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,3,0.0050654662,,0.78557505,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,4,0.0067539549,,0.72319688,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,5,0.0084424436,,0.67446394,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,6,0.010130932,,0.63074353,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,7,0.011819421,,0.59760512,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,8,0.01350791,,0.56335283,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,9,0.016884887,,0.50737956,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,10,0.020261865,,0.46393762,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,11,0.023638842,,0.43720412,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,12,0.027015819,,0.41910331,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,13,0.033769774,,0.38735728,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,14,0.040523729,,0.36424394,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,15,0.050654662,,0.33751044,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,16,0.067539549,,0.29128376,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,17,0.10130932,,0.25006962,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,18,0.16884887,,0.18490671,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,19,0.33769774,,0.044555834,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,0,0.0065964023,,1,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,1,0.0098946035,,0.87531807,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,2,0.013192805,,0.78053435,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,3,0.019789207,,0.65521628,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,4,0.026385609,,0.5836514,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,5,0.032982012,,0.54452926,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,6,0.039578414,,0.50763359,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,7,0.046174816,,0.4783715,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,8,0.052771219,,0.45388041,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,9,0.065964023,,0.42016539,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,10,0.079156828,,0.38835878,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,11,0.092349633,,0.35591603,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,12,0.10554244,,0.32156489,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,13,0.13192805,,0.28975827,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,14,0.15831366,,0.25763359,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,15,0.19789207,,0.21787532,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,16,0.26385609,,0.17016539,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,17,0.39578414,,0.09764631,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,18,0.65964023,,0.015903308,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,19,1.3192805,,0,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,0,0.0010469666,,1,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,1,0.00157045,,0.92777123,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,2,0.0020939333,,0.87175708,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,3,0.0031408999,,0.79628538,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,4,0.0041878666,,0.73850236,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,5,0.0052348332,,0.69398585,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,6,0.0062817998,,0.65566038,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,7,0.0073287665,,0.62323113,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,8,0.0083757331,,0.59345519,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,9,0.010469666,,0.54510613,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,10,0.0125636,,0.50412736,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,11,0.014657533,,0.47641509,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,12,0.016751466,,0.45636792,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,13,0.020939333,,0.42865566,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,14,0.025127199,,0.40654481,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,15,0.031408999,,0.38738208,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,16,0.041878666,,0.35288915,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,17,0.062817998,,0.30542453,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,18,0.10469666,,0.25913915,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,19,0.20939333,,0.14917453,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,0,0.00038983347,,1,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,1,0.00058475021,,0.94644535,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,2,0.00077966694,,0.90510492,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,3,0.0011695004,,0.84716567,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,4,0.0015593339,,0.79862199,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,5,0.0019491674,,0.76072659,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,6,0.0023390008,,0.72658941,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,7,0.0027288343,,0.69996868,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,8,0.0031186678,,0.67804573,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,9,0.0038983347,,0.63044159,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,10,0.0046780016,,0.5881616,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,11,0.0054576686,,0.55496398,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,12,0.0062373355,,0.53084873,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,13,0.0077966694,,0.49671156,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,14,0.0093560033,,0.47510179,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,15,0.011695004,,0.45693705,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,16,0.015593339,,0.42561854,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,17,0.023390008,,0.39116818,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,18,0.038983347,,0.33385531,,,,log,linear
+2,b The same runs on the reach scale,$h_t/h_c$ (trigger over reach),irrigation / soil maximum,line,,19,0.077966694,,0.24804259,,,,log,linear
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,0,7837.3461,,10000,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,1,7837.3461,,200000,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,0,7837.3461,,10000,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,0,5372.701,,10000,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,1,5372.701,,200000,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,0,5372.701,,10000,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,0,199.04929,,100,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,1,199.04929,,150,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,0,199.04929,,100,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,0,425.90874,,200,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,1,425.90874,,250,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,0,425.90874,,200,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,0,1618.4206,,800,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,1,1618.4206,,1000,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,0,1618.4206,,800,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,0,9209.4024,,5000,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,1,9209.4024,,10000,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,0,9209.4024,,5000,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,0,29612.28,,10000,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,1,29612.28,,200000,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,0,29612.28,,10000,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,0,7579.8894,,5000,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,1,7579.8894,,10000,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,0,7579.8894,,5000,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,0,47757.014,,10000,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,1,47757.014,,200000,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,0,47757.014,,10000,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,0,128259.9,,10000,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,1,128259.9,,200000,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,0,128259.9,,10000,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,0,40,,40,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),line,,1,300000,,300000,,,,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),band,,0,40,,50,,20,80,log,log
+3,c Closed form against Daisy,"predicted reach $h_c$ (cm), Eq. (4)",observed reach interval (cm),band,,1,300000,,375000,,150000,600000,log,log
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,0,50,,6.62,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,1,75,,6.624,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,2,100,,6.62,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,3,150,,6.317,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,4,200,,6.271,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,5,250,,6.318,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,6,300,,6.158,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,7,350,,6.088,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,8,400,,6.078,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,9,500,,6.064,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,10,600,,6.041,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,11,700,,6.022,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,12,800,,5.996,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,13,1000,,5.928,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,14,1200,,5.828,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,15,1500,,5.707,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,16,2000,,5.526,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,17,3000,,5.087,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,18,5000,,4.547,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,19,10000,,3.798,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,0,50,,6.32,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,1,75,,6.32,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,2,100,,6.317,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,3,150,,6.306,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,4,200,,6.295,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,5,250,,6.281,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,6,300,,6.254,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,7,350,,6.222,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,8,400,,6.189,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,9,500,,6.106,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,10,600,,6.044,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,11,700,,5.916,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,12,800,,5.844,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,13,2000,,4.861,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,14,3000,,4.586,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,15,5000,,4.283,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,16,10000,,3.853,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,0,50,,3.038,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,1,75,,1.765,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,2,100,,1.234,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,3,150,,1.132,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,4,200,,1.132,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,5,250,,1.132,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,6,300,,1.132,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,7,350,,1.132,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,8,400,,1.132,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,9,500,,1.132,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,10,600,,1.132,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,11,700,,1.132,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,12,800,,1.132,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,13,1000,,1.132,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,14,1200,,1.132,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,15,1500,,1.132,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,16,2000,,1.132,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,17,3000,,1.132,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,18,5000,,1.132,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,19,10000,,1.132,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,0,50,,4.544,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,1,75,,3.893,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,2,100,,3.455,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,3,150,,2.276,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,4,200,,1.67,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,5,250,,1.433,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,6,300,,1.378,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,7,350,,1.378,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,8,400,,1.378,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,9,500,,1.378,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,10,600,,1.378,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,11,700,,1.378,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,12,800,,1.378,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,13,1000,,1.378,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,14,1200,,1.378,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,15,1500,,1.378,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,16,2000,,1.378,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,17,3000,,1.378,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,18,5000,,1.378,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,19,10000,,1.378,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,0,50,,6.02,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,1,75,,5.756,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,2,100,,5.263,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,3,150,,5.016,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,4,200,,4.783,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,5,250,,4.579,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,6,300,,4.351,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,7,350,,4.094,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,8,400,,3.834,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,9,500,,3.314,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,10,600,,2.847,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,11,700,,2.652,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,12,800,,2.28,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,13,1000,,1.986,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,14,1200,,1.851,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,15,1500,,1.851,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,16,2000,,1.851,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,17,3000,,1.851,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,18,5000,,1.851,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,19,10000,,1.851,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,0,50,,6.623,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,1,75,,6.62,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,2,100,,6.606,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,3,150,,6.552,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,4,200,,6.385,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,5,250,,6.161,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,6,300,,6.123,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,7,350,,6.098,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,8,400,,6.063,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,9,500,,5.955,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,10,600,,5.806,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,11,700,,5.672,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,12,800,,5.523,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,13,1000,,5.189,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,14,1200,,4.909,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,15,1500,,4.597,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,16,2000,,4.199,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,17,3000,,3.574,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,18,5000,,2.764,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,19,10000,,2.615,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,0,50,,6.626,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,1,75,,6.623,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,2,100,,6.624,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,3,150,,6.622,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,4,200,,6.62,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,5,250,,6.628,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,6,300,,6.573,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,7,350,,6.564,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,8,400,,6.425,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,9,500,,6.388,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,10,600,,6.359,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,11,700,,6.31,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,12,800,,6.288,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,13,1000,,6.198,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,14,1200,,6.06,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,15,1500,,5.838,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,16,2000,,5.529,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,17,3000,,5.178,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,18,5000,,4.654,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,19,10000,,3.341,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,0,50,,6.566,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,1,75,,6.515,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,2,100,,6.449,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,3,150,,6.144,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,4,200,,5.998,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,5,250,,5.91,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,6,300,,5.853,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,7,350,,5.79,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,8,400,,5.725,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,9,500,,5.554,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,10,600,,5.399,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,11,700,,5.229,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,12,800,,5.039,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,13,1000,,4.773,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,14,1200,,4.527,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,15,1500,,4.276,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,16,2000,,3.923,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,17,3000,,3.348,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,18,5000,,2.546,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,19,10000,,2.384,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,0,50,,6.605,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,1,75,,6.62,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,2,100,,6.617,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,3,150,,6.618,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,4,200,,6.62,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,5,250,,6.622,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,6,300,,6.584,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,7,350,,6.55,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,8,400,,6.474,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,9,500,,6.451,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,10,600,,6.427,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,11,700,,6.409,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,12,800,,6.386,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,13,1000,,6.311,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,14,1200,,6.21,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,15,1500,,6.031,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,16,2000,,5.778,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,17,3000,,5.436,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,18,5000,,5.079,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,19,10000,,4.275,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,0,50,,5.986,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,1,75,,6.103,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,2,100,,6.229,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,3,150,,6.418,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,4,200,,6.509,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,5,250,,6.547,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,6,300,,6.575,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,7,350,,6.585,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,8,400,,6.59,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,9,500,,6.507,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,10,600,,6.491,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,11,700,,6.469,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,12,800,,6.455,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,13,1000,,6.425,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,14,1200,,6.393,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,15,1500,,6.318,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,16,2000,,6.163,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,17,3000,,5.874,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,18,5000,,5.496,,,,log,linear
+4,d Yield: a trigger beyond the reach is rainfed,trigger suction $h_t$ (cm),yield (Mg ha$^{-1}$),line,,19,10000,,4.905,,,,log,linear

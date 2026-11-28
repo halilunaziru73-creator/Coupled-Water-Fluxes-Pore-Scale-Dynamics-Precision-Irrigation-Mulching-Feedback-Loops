@@ -1,0 +1,124 @@
+key,value
+0.675.umax,8
+0.675.qmax,1.44
+0.675.tset,15.999999999999998
+0.675.sets,1
+0.675.N,15
+0.675.Nm,12
+0.675.Tint,10
+0.675.opts[0].n,1
+0.675.opts[0].Nd,12
+0.675.opts[0].Qin,10.124999999999998
+0.675.opts[0].okT,False
+0.675.opts[0].okQ,True
+0.675.opts[1].n,2
+0.675.opts[1].Nd,6
+0.675.opts[1].Qin,20.249999999999996
+0.675.opts[1].okT,True
+0.675.opts[1].okQ,True
+0.675.opts[2].n,3
+0.675.opts[2].Nd,4
+0.675.opts[2].Qin,30.374999999999996
+0.675.opts[2].okT,True
+0.675.opts[2].okQ,False
+0.675.opts[3].n,4
+0.675.opts[3].Nd,3
+0.675.opts[3].Qin,40.49999999999999
+0.675.opts[3].okT,True
+0.675.opts[3].okQ,False
+0.675.pick,2
+0.675.Rw_ok,1
+0.675.chk[0],Spacing along the lateral S ≤ k·Rw True
+0.675.chk[1],Spacing between laterals Sm ≤ 1.5 Rw True
+0.675.chk[2],Wind below 16 km/h True
+0.675.chk[3],Application rate r ≤ maximum allowed True
+0.675.chk[4],Rate below the soil’s saturated conductivity True
+0.675.chk[5],Christiansen uniformity CU ≥ 85 % False
+0.675.chk[6],Lateral head loss ≤ 20 % of hs True
+0.675.chk[7],Mainline gradient J < 0.05 True
+0.675.chk[8],Whole field done within the interval T True
+0.675.chk[9],Flow within the farm supply True
+1.35.umax,8
+1.35.qmax,1.44
+1.35.tset,7.999999999999999
+1.35.sets,2
+1.35.N,15
+1.35.Nm,12
+1.35.Tint,10
+1.35.opts[0].n,1
+1.35.opts[0].Nd,6
+1.35.opts[0].Qin,20.249999999999996
+1.35.opts[0].okT,True
+1.35.opts[0].okQ,True
+1.35.opts[1].n,2
+1.35.opts[1].Nd,3
+1.35.opts[1].Qin,40.49999999999999
+1.35.opts[1].okT,True
+1.35.opts[1].okQ,False
+1.35.opts[2].n,3
+1.35.opts[2].Nd,2
+1.35.opts[2].Qin,60.74999999999999
+1.35.opts[2].okT,True
+1.35.opts[2].okQ,False
+1.35.opts[3].n,4
+1.35.opts[3].Nd,2
+1.35.opts[3].Qin,80.99999999999999
+1.35.opts[3].okT,True
+1.35.opts[3].okQ,False
+1.35.pick,1
+1.35.Rw_ok,1
+1.35.chk[0],Spacing along the lateral S ≤ k·Rw True
+1.35.chk[1],Spacing between laterals Sm ≤ 1.5 Rw True
+1.35.chk[2],Wind below 16 km/h True
+1.35.chk[3],Application rate r ≤ maximum allowed True
+1.35.chk[4],Rate below the soil’s saturated conductivity True
+1.35.chk[5],Christiansen uniformity CU ≥ 85 % False
+1.35.chk[6],Lateral head loss ≤ 20 % of hs True
+1.35.chk[7],Mainline gradient J < 0.05 True
+1.35.chk[8],Whole field done within the interval T True
+1.35.chk[9],Flow within the farm supply True
+2.03.umax,8
+2.03.qmax,1.44
+2.03.tset,5.320197044334976
+2.03.sets,3
+2.03.N,15
+2.03.Nm,12
+2.03.Tint,10
+2.03.opts[0].n,1
+2.03.opts[0].Nd,4
+2.03.opts[0].Qin,30.449999999999996
+2.03.opts[0].okT,True
+2.03.opts[0].okQ,False
+2.03.opts[1].n,2
+2.03.opts[1].Nd,2
+2.03.opts[1].Qin,60.89999999999999
+2.03.opts[1].okT,True
+2.03.opts[1].okQ,False
+2.03.opts[2].n,3
+2.03.opts[2].Nd,2
+2.03.opts[2].Qin,91.35
+2.03.opts[2].okT,True
+2.03.opts[2].okQ,False
+2.03.opts[3].n,4
+2.03.opts[3].Nd,1
+2.03.opts[3].Qin,121.79999999999998
+2.03.opts[3].okT,True
+2.03.opts[3].okQ,False
+2.03.pick,1
+2.03.Rw_ok,1
+2.03.chk[0],Spacing along the lateral S ≤ k·Rw True
+2.03.chk[1],Spacing between laterals Sm ≤ 1.5 Rw True
+2.03.chk[2],Wind below 16 km/h True
+2.03.chk[3],Application rate r ≤ maximum allowed False
+2.03.chk[4],Rate below the soil’s saturated conductivity True
+2.03.chk[5],Christiansen uniformity CU ≥ 85 % False
+2.03.chk[6],Lateral head loss ≤ 20 % of hs True
+2.03.chk[7],Mainline gradient J < 0.05 True
+2.03.chk[8],Whole field done within the interval T True
+2.03.chk[9],Flow within the farm supply False
+nozzle.q,22.382177428555085
+nozzle.R,14.489693827086539
+nozzle.h,24
+nozzle_check.q,22.382177428555085
+nozzle_check.R,14.489720494198638
+nozzle_check.h,24

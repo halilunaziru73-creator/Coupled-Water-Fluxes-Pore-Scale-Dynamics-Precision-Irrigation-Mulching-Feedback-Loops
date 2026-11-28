@@ -2,12 +2,15 @@
 
 *Soil hydraulic memory, the recoverability of evaporation savings and the closure of the water balance (Agricultural Water Management)*
 
+**Download this whole folder as one file: [Data_and_analysis.zip](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Manuscripts/pdf/Journal_versions/1_Agricultural_Water_Management_Paper1/Data_and_analysis.zip)**
+
 Every figure and table of the article can be traced here to the numbers it shows.
 
 * `figures/Figure_N_*.csv`: every point drawn in Figure N, one row per point, with the panel, its title, the axis labels, the kind of mark (line, scatter, bar, error bar, band, cell of a map), the series name and the values (`x`, `y`, `y_low`/`y_high` for bars, error bars and bands; `x_category`/`y_category` give the label of a categorical axis, e.g. the soil). The rows were recorded while the original script drew the figure, so they are exactly what is plotted.
 * `figures/Figure_N_*__<result file>`: the result tables the figure was drawn from.
 * `tables/Table_N_*.csv`: every table of the article.
 * `replot_from_csv.py`: redraws every figure from the CSV files alone into `replot/` (`python3 replot_from_csv.py`; needs pandas and matplotlib).
+* `data/`: all the data of the study as plain CSV (see *All the data* below).
 * `analysis/`: the original analysis: the Daisy ensemble (`data/daisy_ensemble.csv.gz`, 10 190 runs, 10 041 valid), all scripts, the archived results and `run_original.sh`, which runs it again.
 
 ## Figures
@@ -39,6 +42,38 @@ Every figure and table of the article can be traced here to the numbers it shows
 | 8 | Drainage share of the change of evaporation in the mulch experiment E7 (20 combinations per soil), computed against the closed non-transpiration term E_nt=ET-T (as in the memory analysis) and … | `tables/Table_8_Drainage_share_of_the_change_of_evaporat.csv` (11 rows) |
 | 9 | Qualitative reading of the diagnostics for management. ρ_R from E16 (Table 3); "mulch" column from E7. | `tables/Table_9_Qualitative_reading_of_the_diagnostics_f.csv` (4 rows) |
 | A.10 | Closure of the loss fates. Δ: mean paired change in non-transpirational evapotranspiration for E_p=0.3→1.2 (mm yr^-1); ψ_D,ψ_I,ψ_T: shares; : their sum (the remainder is storage and runoff); span … | `tables/Table_A.10_Closure_of_the_loss_fates_mean_paired_ch.csv` (11 rows) |
+
+## All the data
+
+| File | Content |
+|---|---|
+| `data/daisy_ensemble.csv` | the run table of the Daisy ensemble: 10 190 runs (10 041 valid), 32 columns: experiment, soil, settings, yield, irrigation, rain, drainage at 1 m, ET, transpiration, soil and canopy evaporation, water stress, nitrogen and the indexes |
+| `data/Comprehensive_Summary/00_SUMMARY_ALL_EXPERIMENTS.csv` | one row per Daisy experiment (E0 to E16) and the total |
+| `data/Comprehensive_Summary/00_summary_all_simulations.csv` | one row per run (10 190) with the settings read from its set-up file, the long-term means of every output file and the indexes IE, IWUE, DPF, PFPn, NLF |
+| `data/Comprehensive_Summary/Experiment_Summaries/E*_SUMMARY.csv` | the same, one file per experiment |
+| `data/Comprehensive_Summary/00_README.txt` | how the comprehensive data were collected from the Daisy output files, column names and index definitions |
+| `data/results/*.csv` | every result of the analysis scripts (JSON results flattened to key and value) |
+| `data/derived_tables/*.csv` | the derived tables: soil-specific triggers, controllability, effect sizes, elasticities, Pareto runs, production functions |
+
+**The comprehensive data, every value of every run** (all dates of every Daisy output file, one compressed CSV per experiment; open with any spreadsheet or `pandas.read_csv`): [folder on GitHub](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/tree/main/Data/Comprehensive_Summary). Download each file:
+
+* [E00_Baselines.csv.gz](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Data/Comprehensive_Summary/E00_Baselines.csv.gz)
+* [E01_Doses.csv.gz](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Data/Comprehensive_Summary/E01_Doses.csv.gz)
+* [E02_TriggerPressure.csv.gz](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Data/Comprehensive_Summary/E02_TriggerPressure.csv.gz)
+* [E03_SensorDepth.csv.gz](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Data/Comprehensive_Summary/E03_SensorDepth.csv.gz)
+* [E04_Methods.csv.gz](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Data/Comprehensive_Summary/E04_Methods.csv.gz)
+* [E05_SHP_Dynamics.csv.gz](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Data/Comprehensive_Summary/E05_SHP_Dynamics.csv.gz)
+* [E06_Mediterranean_Pollution.csv.gz](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Data/Comprehensive_Summary/E06_Mediterranean_Pollution.csv.gz)
+* [E07_Mulching.csv.gz](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Data/Comprehensive_Summary/E07_Mulching.csv.gz)
+* [E08_Rain_Intensity_Moisture.csv.gz](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Data/Comprehensive_Summary/E08_Rain_Intensity_Moisture.csv.gz)
+* [E09_Soil_Moisture_Rain.csv.gz](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Data/Comprehensive_Summary/E09_Soil_Moisture_Rain.csv.gz)
+* [E10_Amount_Timing_Soil.csv.gz](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Data/Comprehensive_Summary/E10_Amount_Timing_Soil.csv.gz)
+* [E11_Temp_Evap_Rain.csv.gz](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Data/Comprehensive_Summary/E11_Temp_Evap_Rain.csv.gz)
+* [E12_Sensor_Trigger_Rain.csv.gz](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Data/Comprehensive_Summary/E12_Sensor_Trigger_Rain.csv.gz)
+* [E13_N_Water_Soil.csv.gz](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Data/Comprehensive_Summary/E13_N_Water_Soil.csv.gz)
+* [E14_Mulch_Rain.csv.gz](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Data/Comprehensive_Summary/E14_Mulch_Rain.csv.gz)
+* [E15_Method_Depth_Amount.csv.gz](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Data/Comprehensive_Summary/E15_Method_Depth_Amount.csv.gz)
+* [E16_Edge_Cases.csv.gz](https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Data/Comprehensive_Summary/E16_Edge_Cases.csv.gz)
 
 ## Running the analysis again
 

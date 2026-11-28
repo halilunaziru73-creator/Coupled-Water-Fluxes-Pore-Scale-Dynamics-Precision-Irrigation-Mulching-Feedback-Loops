@@ -1,0 +1,21 @@
+key,value
+$n$ vs $\phi_D$.rho,0.9515151515151514
+$n$ vs $\phi_D$.lo,0.6883116883116882
+$n$ vs $\phi_D$.hi,1.0
+$n$ vs $\phi_D$.p,0.00015
+$\phi_D$ vs $\psi_D$(E16).rho,0.8545454545454544
+$\phi_D$ vs $\psi_D$(E16).lo,0.3702726017943409
+$\phi_D$ vs $\psi_D$(E16).hi,1.0
+$\phi_D$ vs $\psi_D$(E16).p,0.00195
+$\phi_D$ vs $\psi_D$(E7).rho,0.8909090909090909
+$\phi_D$ vs $\psi_D$(E7).lo,0.5471698113207548
+$\phi_D$ vs $\psi_D$(E7).hi,1.0
+$\phi_D$ vs $\psi_D$(E7).p,0.00135
+$n$ vs $\psi_D$(E16).rho,0.6969696969696969
+$n$ vs $\psi_D$(E16).lo,-0.05660377358490567
+$n$ vs $\psi_D$(E16).hi,1.0
+$n$ vs $\psi_D$(E16).p,0.03185
+$n$ vs $\psi_D$(E7).rho,0.8909090909090909
+$n$ vs $\psi_D$(E7).lo,0.4716981132075472
+$n$ vs $\psi_D$(E7).hi,1.0
+$n$ vs $\psi_D$(E7).p,0.001

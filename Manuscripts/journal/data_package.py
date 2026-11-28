@@ -18,7 +18,8 @@ import numpy as np, pandas as pd
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 MS = os.path.dirname(HERE); REP = os.path.join(MS, 'reproducibility'); RES = os.path.join(MS, 'results')
-PLOT = os.path.join(RES, 'plotdata'); PKG = os.path.join(MS, 'pdf', 'Journal_versions')
+PLOT = os.path.join(RES, 'plotdata'); PKG = os.path.join(MS, 'pdf', 'Journal_versions'); DATA = os.path.join(os.path.dirname(MS), 'Data')
+REPO = 'https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops'
 
 # ------------------------------------------------------------------ where every figure comes from
 SRC = {   # figure file -> (script that draws it, result files it reads)
@@ -130,13 +131,14 @@ def build(art, folder, key):
             part = '' if len(files) == 1 else chr(ord('a') + k)
             stem = 'Figure_%s%s_%s' % (num, part, slug(f.replace('_A4', '')))
             src = os.path.join(PLOT, f.replace('_A4', '') + '.csv')
-            entry = dict(file=f, part=part, csv=None, extra=[], script=SRC.get(f, ('', []))[0], note=NODATA.get(f, ''), sub=subs[k] if len(subs) == len(files) else '')
+            entry = dict(file=f, part=part, csv=None, extra=[], script=SRC.get(f, ('', []))[0], note='', sub=subs[k] if len(subs) == len(files) else '')
             if os.path.exists(src) and sum(1 for _ in open(src)) > 1:
                 shutil.copy(src, os.path.join(out, 'figures', stem + '.csv')); entry['csv'] = stem + '.csv'
             for r in SRC.get(f, ('', []))[1]:
                 if os.path.exists(os.path.join(RES, r)):
                     shutil.copy(os.path.join(RES, r), os.path.join(out, 'figures', stem + '__' + r)); entry['extra'].append(stem + '__' + r)
-            if f == 'fig2_curves_reach':
+            if not entry['csv']: entry['note'] = NODATA.get(f, '')
+            if f == 'fig2_curves_reach' and not entry['csv']:
                 d = fig2_curves(); d.to_csv(os.path.join(out, 'figures', stem + '.csv'), index=False, float_format='%.6g'); entry['csv'] = stem + '.csv'
                 entry['note'] = 'curves (a, b) computed from α and n of Table A.4 with Eqs. 1-2; circles and panel c: column reach_Eq4_cm of Table A.4'
             if f == 'fig5_dose' and not entry['csv']: entry['note'] = 'drawn from the result table below'
@@ -170,8 +172,66 @@ def build(art, folder, key):
     for f in glob.glob(os.path.join(RES, '*.*')): shutil.copy(f, os.path.join(A, 'results'))
     open(os.path.join(A, 'run_original.sh'), 'w').write(RUN[key])
     shutil.copy(os.path.join(HERE, 'replot_from_csv.py'), out)
-    open(os.path.join(out, 'README.md'), 'w').write(readme(art, figs, tabs, key))
+    if key == 'p4':      # p4_reach.py reads the run summary of the comprehensive data
+        os.makedirs(os.path.join(A, 'Comprehensive_Summary'))
+        shutil.copy(os.path.join(DATA, 'Comprehensive_Summary', '00_summary_all_simulations.csv.gz'), os.path.join(A, 'Comprehensive_Summary'))
+    data_folder(os.path.join(out, 'data'))
+    open(os.path.join(out, 'README.md'), 'w').write(readme(art, figs, tabs, key, folder))
     return figs, tabs
+
+def flat(o, pre=''):
+    if isinstance(o, dict):
+        for k, v in o.items(): yield from flat(v, pre + ('.' if pre else '') + str(k))
+    elif isinstance(o, list) and o and all(not isinstance(v, (dict, list)) for v in o) and len(o) <= 12:
+        yield pre, ' '.join(str(v) for v in o)
+    elif isinstance(o, list):
+        for i, v in enumerate(o): yield from flat(v, '%s[%d]' % (pre, i))
+    else:
+        yield pre, o
+
+def data_folder(D):
+    """all the data of the study as plain CSV"""
+    import gzip
+    os.makedirs(D)
+    def gunzip(src, dst):
+        with gzip.open(src, 'rb') as a, open(dst, 'wb') as b: shutil.copyfileobj(a, b)
+    gunzip(os.path.join(DATA, 'daisy_ensemble.csv.gz'), os.path.join(D, 'daisy_ensemble.csv'))
+    C = os.path.join(D, 'Comprehensive_Summary'); os.makedirs(os.path.join(C, 'Experiment_Summaries'))
+    for f in ['00_SUMMARY_ALL_EXPERIMENTS', '00_summary_all_simulations']:
+        gunzip(os.path.join(DATA, 'Comprehensive_Summary', f + '.csv.gz'), os.path.join(C, f + '.csv'))
+    for f in sorted(glob.glob(os.path.join(DATA, 'Comprehensive_Summary', 'Experiment_Summaries', '*.csv.gz'))):
+        gunzip(f, os.path.join(C, 'Experiment_Summaries', os.path.basename(f)[:-3]))
+    shutil.copy(os.path.join(DATA, 'Comprehensive_Summary', '00_README.txt'), C)
+    R = os.path.join(D, 'results'); os.makedirs(R)
+    for f in sorted(glob.glob(os.path.join(RES, '*.*'))):
+        n = os.path.basename(f)
+        if n.endswith('.csv'): shutil.copy(f, R)
+        elif n.endswith('.json'):
+            with open(os.path.join(R, n[:-5] + '.csv'), 'w', newline='') as fh:
+                w = csv.writer(fh); w.writerow(['key', 'value'])
+                for k, v in flat(json.load(open(f))): w.writerow([k, v])
+    T = os.path.join(D, 'derived_tables'); os.makedirs(T)
+    import openpyxl
+    wb = openpyxl.load_workbook(os.path.join(DATA, 'Manuscript_Data', 'SWAFL_Manuscripts_Data.xlsx'), read_only=True, data_only=True)
+    for sh in wb.sheetnames:
+        if not sh.startswith('D_'): continue
+        with open(os.path.join(T, sh[2:] + '.csv'), 'w', newline='') as fh:
+            w = csv.writer(fh)
+            for row in wb[sh].iter_rows(values_only=True):
+                if any(v is not None for v in row): w.writerow(['' if v is None else v for v in row])
+
+def zip_package(folder):
+    z = os.path.join(PKG, folder, 'Data_and_analysis.zip')
+    if os.path.exists(z): os.remove(z)
+    import zipfile
+    with zipfile.ZipFile(z, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
+        base = os.path.join(PKG, folder)
+        for root, dirs, files in os.walk(os.path.join(base, 'Data_and_analysis')):
+            dirs[:] = sorted(d for d in dirs if d not in ('__pycache__', 'work')); 
+            for f in sorted(files):
+                p = os.path.join(root, f); zi = zipfile.ZipInfo(os.path.relpath(p, base), date_time=(2026, 1, 1, 0, 0, 0))
+                zi.compress_type = zipfile.ZIP_DEFLATED; zf.writestr(zi, open(p, 'rb').read())
+    return z
 
 RUN = {
  'p1': '''#!/bin/sh
@@ -186,18 +246,18 @@ for s in p1_core p1_stats p1_mech p1_omega p1_rate_law p1_figs_a p1_figs_b p1_fi
 python3 compare_results.py "$W/out" results 1e-6 | tail -3     # the regenerated numbers against the archived numbers of the article
 ''',
  'p4': '''#!/bin/sh
-# The reach and the fate of irrigation water: the result tables in results/ (p4_*.csv, p4_numbers.json) were computed by
-# scripts/p4_reach.py from the Daisy ensemble; the figure of kappa (Figure 4) is redrawn here from them.
-set -e; cd "$(dirname "$0")"; mkdir -p work/plotdata
-export MPLBACKEND=Agg PLOTDATA_DIR="$PWD/work/plotdata" PYTHONPATH="$PWD/plotdata"
-python3 - <<'EOF'
-import runpy, os, sys
-# p4_kappa.py reads ../../results relative to the repository; point it at the copy in this folder
-src = open('scripts/p4_kappa.py').read().replace("ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..'))", "ROOT = None")
-src = src.replace("RES = os.path.join(ROOT, 'Manuscripts/results'); OUT = os.path.join(ROOT, 'Manuscripts/figures/paper4')", "RES = 'results'; OUT = 'work'")
-exec(compile(src, 'p4_kappa.py', 'exec'))
-EOF
-echo "work/fig6_kappa.pdf and work/plotdata/fig6_kappa.csv written"
+# Runs the analysis of this article again from the run summary of the comprehensive data
+# (Comprehensive_Summary/00_summary_all_simulations.csv.gz, 10 190 Daisy runs): scripts/p4_reach.py gives every number
+# (p4_numbers.json) and Figures 2, 3, 5 and 6, scripts/p4_concept.py Figure 1 and scripts/p4_kappa.py Figure 4.
+# Writes into ./work; the point data of every figure go to work/plotdata.  About one minute.
+set -e; cd "$(dirname "$0")"; W="$PWD/work"; rm -rf "$W"
+mkdir -p "$W/Manuscripts/reproducibility" "$W/Manuscripts/figures/paper4" "$W/Data/Comprehensive_Summary" "$W/plotdata"
+cp -r scripts "$W/Manuscripts/reproducibility/analysis"; cp -r results "$W/Manuscripts/results"
+cp Comprehensive_Summary/00_summary_all_simulations.csv.gz "$W/Data/Comprehensive_Summary/"
+export MPLBACKEND=Agg PYTHONHASHSEED=0 PLOTDATA_DIR="$W/plotdata" PYTHONPATH="$PWD/plotdata"
+for s in p4_reach p4_concept p4_kappa; do python3 "$W/Manuscripts/reproducibility/analysis/$s.py" > "$W/log_$s.txt" 2>&1 && echo "ok $s" || echo "FAILED $s (see work/log_$s.txt)"; done
+python3 compare_results.py "$W/Manuscripts/results" results 1e-6 | tail -2     # the regenerated numbers against the archived numbers of the article
+echo "figures in work/Manuscripts/figures/paper4, their point data in work/plotdata"
 ''',
  'sx': '''#!/bin/sh
 # The verification figure (Figure 5) of the software article is drawn by scripts/p3_figs.py from the results of the
@@ -208,11 +268,13 @@ python3 scripts/p3_figs.py > work/log_p3_figs.txt 2>&1 || true   # its last figu
 ls work/fig/p3/fig03_ws_verification.pdf work/fig/p3/fig05_engine1_heldout.pdf && echo "Figure 5a and 5b redrawn in work/fig/p3, their point data in work/plotdata"
 '''}
 
-def readme(art, figs, tabs, key):
+def readme(art, figs, tabs, key, folder):
     title = {'p1': 'Soil hydraulic memory, the recoverability of evaporation savings and the closure of the water balance (Agricultural Water Management)',
              'p4': 'The reach of suction-triggered irrigation and the marginal fate of irrigation water (Agricultural Water Management)',
              'sx': 'SWAFL: an open desktop application for equation-traceable irrigation scheduling and design with a graphical interface to the Daisy model (SoftwareX)'}[key]
+    zurl = '%s/raw/main/Manuscripts/pdf/Journal_versions/%s/Data_and_analysis.zip' % (REPO, folder)
     s = ['# Data and analysis of the article', '', '*%s*' % title, '',
+         '**Download this whole folder as one file: [Data_and_analysis.zip](%s)**' % zurl, '',
          'Every figure and table of the article can be traced here to the numbers it shows.', '',
          '* `figures/Figure_N_*.csv`: every point drawn in Figure N, one row per point, with the panel, its title, the axis labels, the kind of mark '
          '(line, scatter, bar, error bar, band, cell of a map), the series name and the values (`x`, `y`, `y_low`/`y_high` for bars, error bars and bands; '
@@ -220,6 +282,7 @@ def readme(art, figs, tabs, key):
          '* `figures/Figure_N_*__<result file>`: the result tables the figure was drawn from.',
          '* `tables/Table_N_*.csv`: every table of the article.',
          '* `replot_from_csv.py`: redraws every figure from the CSV files alone into `replot/` (`python3 replot_from_csv.py`; needs pandas and matplotlib).',
+         '* `data/`: all the data of the study as plain CSV (see *All the data* below).',
          '* `analysis/`: the original analysis: the Daisy ensemble (`data/daisy_ensemble.csv.gz`, 10 190 runs, 10 041 valid), all scripts, the archived results and `run_original.sh`, which runs it again.', '',
          '## Figures', '', '| Figure | What it shows | Data | Made by |', '|---|---|---|---|']
     for f in figs:
@@ -233,6 +296,20 @@ def readme(art, figs, tabs, key):
     for t in tabs:
         cap = t['caption'] if len(t['caption']) < 200 else t['caption'][:197].rsplit(' ', 1)[0] + ' …'
         s.append('| %s | %s | `tables/%s` (%d rows) |' % (t['num'], cap.replace('|', '/'), t['csv'], t['rows']))
+    CS = '%s/raw/main/Data/Comprehensive_Summary/' % REPO
+    exps = sorted(os.path.basename(f) for f in glob.glob(os.path.join(DATA, 'Comprehensive_Summary', 'E*.csv.gz')))
+    s += ['', '## All the data', '',
+          '| File | Content |', '|---|---|',
+          '| `data/daisy_ensemble.csv` | the run table of the Daisy ensemble: 10 190 runs (10 041 valid), 32 columns: experiment, soil, settings, yield, irrigation, rain, drainage at 1 m, ET, transpiration, soil and canopy evaporation, water stress, nitrogen and the indexes |',
+          '| `data/Comprehensive_Summary/00_SUMMARY_ALL_EXPERIMENTS.csv` | one row per Daisy experiment (E0 to E16) and the total |',
+          '| `data/Comprehensive_Summary/00_summary_all_simulations.csv` | one row per run (10 190) with the settings read from its set-up file, the long-term means of every output file and the indexes IE, IWUE, DPF, PFPn, NLF |',
+          '| `data/Comprehensive_Summary/Experiment_Summaries/E*_SUMMARY.csv` | the same, one file per experiment |',
+          '| `data/Comprehensive_Summary/00_README.txt` | how the comprehensive data were collected from the Daisy output files, column names and index definitions |',
+          '| `data/results/*.csv` | every result of the analysis scripts (JSON results flattened to key and value) |',
+          '| `data/derived_tables/*.csv` | the derived tables: soil-specific triggers, controllability, effect sizes, elasticities, Pareto runs, production functions |',
+          '', '**The comprehensive data, every value of every run** (all dates of every Daisy output file, one compressed CSV per experiment; open with any spreadsheet or `pandas.read_csv`): '
+          '[folder on GitHub](%s/tree/main/Data/Comprehensive_Summary). Download each file:' % REPO, '']
+    s += ['* [%s](%s%s)' % (e, CS, e) for e in exps]
     s += ['', '## Running the analysis again', '', '```', 'cd analysis', 'python3 -m pip install -r requirements.txt', 'sh run_original.sh', '```', '',
           'Seeds are fixed (see `scripts/` and `Manuscripts/reproducibility/README_REPRODUCE.md` of the repository), so the numbers come out the same as in `analysis/results`.', '']
     return '\n'.join(s)
@@ -240,4 +317,6 @@ def readme(art, figs, tabs, key):
 if __name__ == '__main__':
     for art, folder, key in ARTICLES:
         f, t = build(art, folder, key)
-        print('%-16s %2d figures (%d with point data), %2d tables' % (art, len(f), sum(1 for x in f for p in x['parts'] if p['csv'] or p['extra']), len(t)))
+        import subprocess; subprocess.run(['python3', 'replot_from_csv.py'], cwd=os.path.join(PKG, folder, 'Data_and_analysis'), check=True, capture_output=True)
+        z = zip_package(folder)
+        print('%-16s %2d figures (%d with point data), %2d tables, zip %.1f MB' % (art, len(f), sum(1 for x in f for p in x['parts'] if p['csv']), len(t), os.path.getsize(z) / 1e6))

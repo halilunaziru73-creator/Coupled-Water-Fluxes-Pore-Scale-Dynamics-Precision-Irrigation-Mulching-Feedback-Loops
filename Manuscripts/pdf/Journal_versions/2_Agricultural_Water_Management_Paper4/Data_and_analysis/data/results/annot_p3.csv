@@ -1,0 +1,305 @@
+key,value
+fig:system[0].file,../figures/annot/p3_fig-system_0.png
+fig:system[0].labels[0].kind,panel
+fig:system[0].labels[0].text,a
+fig:zaria1[0].file,../figures/annot/p3_fig-zaria1_0.png
+fig:zaria1[0].labels[0].kind,text
+fig:zaria1[0].labels[0].text,Export the report
+fig:zaria1[0].labels[1].kind,text
+fig:zaria1[0].labels[1].text,Opened maps (2)
+fig:zaria1[0].labels[2].kind,text
+fig:zaria1[0].labels[2].text,Clouds below
+fig:zaria1[0].labels[3].kind,text
+fig:zaria1[0].labels[3].text,Bands read
+fig:zaria1[1].file,../figures/annot/p3_fig-zaria1_1.png
+fig:zaria1[1].labels[0].kind,text
+fig:zaria1[1].labels[0].text,Scenes found
+fig:zaria1[1].labels[1].kind,text
+fig:zaria1[1].labels[1].text,Bands read
+fig:zaria1[1].labels[2].kind,text
+fig:zaria1[1].labels[2].text,Next step
+fig:zaria1[1].labels[3].kind,text
+fig:zaria1[1].labels[3].text,red edge
+fig:zaria1[2].file,../figures/annot/p3_fig-zaria1_2.png
+fig:zaria1[2].labels[0].kind,text
+fig:zaria1[2].labels[0].text,6. Running
+fig:zaria1[2].labels[1].kind,text
+fig:zaria1[2].labels[1].text,main 1m
+fig:zaria1[2].labels[2].kind,text
+fig:zaria1[2].labels[2].text,Make a rectangle of this size
+fig:zaria1[2].labels[3].kind,text
+fig:zaria1[2].labels[3].text,Next question
+fig:zaria2[0].file,../figures/annot/p3_fig-zaria2_0.png
+fig:zaria2[0].labels[0].kind,text
+fig:zaria2[0].labels[0].text,Open in Google Earth
+fig:zaria2[0].labels[1].kind,text
+fig:zaria2[0].labels[1].text,zones
+fig:zaria2[0].labels[2].kind,text
+fig:zaria2[0].labels[2].text,m to the highest point
+fig:zaria2[0].labels[3].kind,text
+fig:zaria2[0].labels[3].text,Imagery ©
+fig:zaria2[1].file,../figures/annot/p3_fig-zaria2_1.png
+fig:zaria2[1].labels[0].kind,text
+fig:zaria2[1].labels[0].text,Irrigation layout on the map
+fig:zaria2[1].labels[1].kind,text
+fig:zaria2[1].labels[1].text,Source Score
+fig:zaria2[1].labels[2].kind,text
+fig:zaria2[1].labels[2].text,Watershed and channel network
+fig:zaria2[1].labels[3].kind,text
+fig:zaria2[1].labels[3].text,(no name)
+fig:zaria2[2].file,../figures/annot/p3_fig-zaria2_2.png
+fig:zaria2[2].labels[0].kind,text
+fig:zaria2[2].labels[0].text,Zaria
+fig:zaria2[2].labels[1].kind,text
+fig:zaria2[2].labels[1].text,Irrigation layout on the map
+fig:zaria2[2].labels[2].kind,text
+fig:zaria2[2].labels[2].text,Do everything at once
+fig:zaria2[2].labels[3].kind,text
+fig:zaria2[2].labels[3].text,global map
+fig:zaria2[3].file,../figures/annot/p3_fig-zaria2_3.png
+fig:zaria2[3].labels[0].kind,text
+fig:zaria2[3].labels[0].text,layout on the map
+fig:zaria2[3].labels[1].kind,text
+fig:zaria2[3].labels[1].text,Collapse all
+fig:zaria2[3].labels[2].kind,text
+fig:zaria2[3].labels[2].text,Trigger water content (SWAFL decision)
+fig:zaria2[3].labels[3].kind,text
+fig:zaria2[3].labels[3].text,Days to the trigger
+fig:zaria3[0].file,../figures/annot/p3_fig-zaria3_0.png
+fig:zaria3[0].labels[0].kind,text
+fig:zaria3[0].labels[0].text,Irrigation layout on the map
+fig:zaria3[0].labels[1].kind,text
+fig:zaria3[0].labels[1].text,Show on the map
+fig:zaria3[0].labels[2].kind,text
+fig:zaria3[0].labels[2].text,Depth of the next
+fig:zaria3[0].labels[3].kind,text
+fig:zaria3[0].labels[3].text,Bands read
+fig:pheno-screens[0].file,../figures/annot/p3_fig-pheno-screens_0.png
+fig:pheno-screens[0].labels[0].kind,text
+fig:pheno-screens[0].labels[0].text,Water status Carbon Roots
+fig:pheno-screens[0].labels[1].kind,text
+fig:pheno-screens[0].labels[1].text,Field report
+fig:pheno-screens[0].labels[2].kind,text
+fig:pheno-screens[0].labels[2].text,recovery
+fig:pheno-screens[0].labels[3].kind,text
+fig:pheno-screens[0].labels[3].text,Vegetation and water indices
+fig:pheno-screens[0].labels[4].kind,text
+fig:pheno-screens[0].labels[4].text,Share of the field
+fig:pheno-screens[0].labels[5].kind,text
+fig:pheno-screens[0].labels[5].text,Coarse Loam
+fig:season-film[0].file,../figures/annot/p3_fig-season-film_0.png
+fig:season-film[0].labels[0].kind,text
+fig:season-film[0].labels[0].text,"film, from sowing to maturity"
+fig:season-film[0].labels[1].kind,text
+fig:season-film[0].labels[1].text,day 0
+fig:wb[0].file,../figures/annot/p3_fig-wb_0.png
+fig:wb[0].labels[0].kind,panel
+fig:wb[0].labels[0].text,a
+fig:screens[0].file,../figures/annot/p3_fig-screens_0.png
+fig:screens[0].labels[0].kind,text
+fig:screens[0].labels[0].text,Snowfall
+fig:screens[0].labels[1].kind,text
+fig:screens[0].labels[1].text,Temperature
+fig:screens[0].labels[2].kind,text
+fig:screens[0].labels[2].text,Soil water
+fig:screens[0].labels[3].kind,text
+fig:screens[0].labels[3].text,input
+fig:screens[0].labels[4].kind,text
+fig:screens[0].labels[4].text,Exchange of information within modules
+fig:column[0].file,../figures/annot/p3_fig-column_0.png
+fig:column[0].labels[0].kind,text
+fig:column[0].labels[0].text,content of the soil column
+fig:column[0].labels[1].kind,text
+fig:column[0].labels[1].text,Day of the run
+fig:column[0].labels[2].kind,text
+fig:column[0].labels[2].text,saturation
+fig:wbsteps[0].file,../figures/annot/p3_fig-wbsteps_0.png
+fig:wbsteps[0].labels[0].kind,text
+fig:wbsteps[0].labels[0].text,"Daisy runs, figures, tests and calibration"
+fig:wbsteps[0].labels[1].kind,text
+fig:wbsteps[0].labels[1].text,Daisy weather stations (bundled)
+fig:wbsteps[0].labels[2].kind,text
+fig:wbsteps[0].labels[2].text,annual rain (mm)
+fig:wbsteps[0].labels[3].kind,text
+fig:wbsteps[0].labels[3].text,Place
+fig:wbsteps[1].file,../figures/annot/p3_fig-wbsteps_1.png
+fig:wbsteps[1].labels[0].kind,text
+fig:wbsteps[1].labels[0].text,Parameter library
+fig:wbsteps[1].labels[1].kind,text
+fig:wbsteps[1].labels[1].text,Leg plots
+fig:wbsteps[1].labels[2].kind,text
+fig:wbsteps[1].labels[2].text,Hide tos
+fig:wbsteps[1].labels[3].kind,text
+fig:wbsteps[1].labels[3].text,"alpha, n"
+fig:wbsteps[2].file,../figures/annot/p3_fig-wbsteps_2.png
+fig:wbsteps[2].labels[0].kind,text
+fig:wbsteps[2].labels[0].text,Log plots
+fig:wbsteps[2].labels[1].kind,text
+fig:wbsteps[2].labels[1].text,SWAFL layers
+fig:wbsteps[2].labels[2].kind,text
+fig:wbsteps[2].labels[2].text,water
+fig:wbsteps[2].labels[3].kind,text
+fig:wbsteps[2].labels[3].text,Soil 6
+fig:wbsteps[3].file,../figures/annot/p3_fig-wbsteps_3.png
+fig:wbsteps[3].labels[0].kind,text
+fig:wbsteps[3].labels[0].text,Parameter library
+fig:wbsteps[3].labels[1].kind,text
+fig:wbsteps[3].labels[1].text,Run comparison
+fig:wbsteps[3].labels[2].kind,text
+fig:wbsteps[3].labels[2].text,Response curves
+fig:wbsteps[3].labels[3].kind,text
+fig:wbsteps[3].labels[3].text,Loaded logs
+fig:wbsteps[4].file,../figures/annot/p3_fig-wbsteps_4.png
+fig:wbsteps[4].labels[0].kind,text
+fig:wbsteps[4].labels[0].text,Learn the Daisy files
+fig:wbsteps[4].labels[1].kind,text
+fig:wbsteps[4].labels[1].text,Open Chemicals and drinking
+fig:wbsteps[4].labels[2].kind,text
+fig:wbsteps[4].labels[2].text,Open Chemical
+fig:wbsteps[4].labels[3].kind,text
+fig:wbsteps[4].labels[3].text,D6 and the best edge
+fig:wbsteps[5].file,../figures/annot/p3_fig-wbsteps_5.png
+fig:wbsteps[5].labels[0].kind,text
+fig:wbsteps[5].labels[0].text,"runs, figures, tests and cal"
+fig:wbsteps[5].labels[1].kind,text
+fig:wbsteps[5].labels[1].text,Mass balance
+fig:wbsteps[5].labels[2].kind,text
+fig:wbsteps[5].labels[2].text,Back to the guided path
+fig:wbsteps[5].labels[3].kind,text
+fig:wbsteps[5].labels[3].text,Choose file farm rotation
+fig:wbsteps[6].file,../figures/annot/p3_fig-wbsteps_6.png
+fig:wbsteps[6].labels[0].kind,text
+fig:wbsteps[6].labels[0].text,Experiments Scenarios
+fig:wbsteps[6].labels[1].kind,text
+fig:wbsteps[6].labels[1].text,editor builder
+fig:wbsteps[6].labels[2].kind,text
+fig:wbsteps[6].labels[2].text,Back to the guided path
+fig:wbsteps[6].labels[3].kind,text
+fig:wbsteps[6].labels[3].text,"14 runs, best loss"
+fig:wbsteps[7].file,../figures/annot/p3_fig-wbsteps_7.png
+fig:wbsteps[7].labels[0].kind,text
+fig:wbsteps[7].labels[0].text,Setup editor
+fig:wbsteps[7].labels[1].kind,text
+fig:wbsteps[7].labels[1].text,Back to the guided path
+fig:wbsteps[7].labels[2].kind,text
+fig:wbsteps[7].labels[2].text,it your own
+fig:wbsteps[7].labels[3].kind,text
+fig:wbsteps[7].labels[3].text,How a Daisy out
+fig:mainzaria[0].file,../figures/annot/p3_fig-mainzaria_0.png
+fig:mainzaria[0].labels[0].kind,text
+fig:mainzaria[0].labels[0].text,SWAFL Tools Run Daisy Help
+fig:mainzaria[0].labels[1].kind,text
+fig:mainzaria[0].labels[1].text,Untitled project
+fig:mainzaria[0].labels[2].kind,text
+fig:mainzaria[0].labels[2].text,Irrigation stopped: soil wet enough
+fig:mainzaria[0].labels[3].kind,text
+fig:mainzaria[0].labels[3].text,Feedback loops Full screen
+fig:mainzaria[0].labels[4].kind,text
+fig:mainzaria[0].labels[4].text,Import weather... Online weather
+fig:mainzaria[0].labels[5].kind,text
+fig:mainzaria[0].labels[5].text,yield irrigation -11 mm
+fig:bridge[0].file,../figures/annot/p3_fig-bridge_0.png
+fig:bridge[0].labels[0].kind,panel
+fig:bridge[0].labels[0].text,a
+fig:fidelity[0].file,../figures/annot/p3_fig-fidelity_0.png
+fig:fidelity[0].labels[0].kind,panel
+fig:fidelity[0].labels[0].text,a
+fig:fidelity[0].labels[1].kind,panel
+fig:fidelity[0].labels[1].text,b
+fig:richards[0].file,../figures/annot/p3_fig-richards_0.png
+fig:richards[0].labels[0].kind,panel
+fig:richards[0].labels[0].text,a
+fig:richards[0].labels[1].kind,panel
+fig:richards[0].labels[1].text,b
+fig:richards[0].labels[2].kind,panel
+fig:richards[0].labels[2].text,c
+fig:deni[0].file,../figures/annot/p3_fig-deni_0.png
+fig:deni[0].labels[0].kind,panel
+fig:deni[0].labels[0].text,a
+fig:deni[0].labels[1].kind,panel
+fig:deni[0].labels[1].text,b
+fig:econ[0].file,../figures/annot/p3_fig-econ_0.png
+fig:econ[0].labels[0].kind,panel
+fig:econ[0].labels[0].text,a
+fig:econ[0].labels[1].kind,panel
+fig:econ[0].labels[1].text,b
+fig:flow[0].file,../figures/annot/p3_fig-flow_0.png
+fig:flow[0].labels[0].kind,text
+fig:flow[0].labels[0].text,y decision table
+fig:flow[0].labels[1].kind,text
+fig:flow[0].labels[1].text,Drainage
+fig:flow[0].labels[2].kind,text
+fig:flow[0].labels[2].text,Climate
+fig:flow[0].labels[3].kind,text
+fig:flow[0].labels[3].text,sum of all seasons
+fig:flow[0].labels[4].kind,text
+fig:flow[0].labels[4].text,Yield season by season
+fig:flow[0].labels[5].kind,text
+fig:flow[0].labels[5].text,Water season by season
+fig:ui11[0].file,../figures/annot/p3_fig-ui11_0.png
+fig:ui11[0].labels[0].kind,text
+fig:ui11[0].labels[0].text,Irrigation design
+fig:ui11[0].labels[1].kind,text
+fig:ui11[0].labels[1].text,Crops
+fig:ui11[0].labels[2].kind,text
+fig:ui11[0].labels[2].text,Experiments and scenarios
+fig:ui11[0].labels[3].kind,text
+fig:ui11[0].labels[3].text,Documentation
+fig:ui11[1].file,../figures/annot/p3_fig-ui11_1.png
+fig:ui11[1].labels[0].kind,text
+fig:ui11[1].labels[0].text,2. Vegetation and water indices
+fig:ui11[1].labels[1].kind,text
+fig:ui11[1].labels[1].text,Clouds below
+fig:ui11[1].labels[2].kind,text
+fig:ui11[1].labels[2].text,Analyse the site (real open data)
+fig:ui11[1].labels[3].kind,text
+fig:ui11[1].labels[3].text,Do everything at once
+fig:ui11[2].file,../figures/annot/p3_fig-ui11_2.png
+fig:ui11[2].labels[0].kind,text
+fig:ui11[2].labels[0].text,global map
+fig:ui11[2].labels[1].kind,text
+fig:ui11[2].labels[1].text,Use this field in the DSS
+fig:ui11[2].labels[2].kind,text
+fig:ui11[2].labels[2].text,5. Use and export
+fig:ui11[2].labels[3].kind,text
+fig:ui11[2].labels[3].text,Organisation
+fig:engine[0].file,../figures/annot/p3_fig-engine_0.png
+fig:engine[0].labels[0].kind,text
+fig:engine[0].labels[0].text,Irrigation
+fig:engine[0].labels[1].kind,text
+fig:engine[0].labels[1].text,efficiency
+fig:engine[0].labels[2].kind,text
+fig:engine[0].labels[2].text,productivity
+fig:engine[0].labels[3].kind,text
+fig:engine[0].labels[3].text,Nitrogen
+fig:engine[1].file,../figures/annot/p3_fig-engine_1.png
+fig:engine[1].labels[0].kind,text
+fig:engine[1].labels[0].text,Leaf area index (LAI)
+fig:engine[1].labels[1].kind,text
+fig:engine[1].labels[1].text,Water limit per crop season: 120
+fig:engine[1].labels[2].kind,text
+fig:engine[1].labels[2].text,Month of the year
+fig:diag[0].file,../figures/annot/p3_fig-diag_0.png
+fig:diag[0].labels[0].kind,text
+fig:diag[0].labels[0].text,Why 3 runs gave no results
+fig:diag[1].file,../figures/annot/p3_fig-diag_1.png
+fig:diag[1].labels[0].kind,text
+fig:diag[1].labels[0].text,Every simulated
+fig:diag[1].labels[1].kind,text
+fig:diag[1].labels[1].text,Daily-Theta.dlf
+fig:diag[1].labels[2].kind,text
+fig:diag[1].labels[2].text,example reservoir
+fig:diag[1].labels[3].kind,text
+fig:diag[1].labels[3].text,balance
+fig:pheno[0].file,../figures/annot/p3_fig-pheno_0.png
+fig:pheno[0].labels[0].kind,panel
+fig:pheno[0].labels[0].text,a
+fig:pheno[0].labels[1].kind,panel
+fig:pheno[0].labels[1].text,b
+fig:crops[0].file,../figures/annot/p3_fig-crops_0.png
+fig:crops[0].labels[0].kind,panel
+fig:crops[0].labels[0].text,a
+fig:crops[0].labels[1].kind,panel
+fig:crops[0].labels[1].text,b
+fig:crops[0].labels[2].kind,panel
+fig:crops[0].labels[2].text,c

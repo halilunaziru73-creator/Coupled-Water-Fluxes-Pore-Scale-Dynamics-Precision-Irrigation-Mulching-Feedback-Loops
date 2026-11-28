@@ -1,0 +1,47 @@
+key,value
+svd.sv,240.2501220224052 82.59874020001472 57.94545850980447 39.368820585363004 21.837542833486417 18.167089773243465 5.461260070940265
+svd.null[0].k,1
+svd.null[0].sv,5.461260070940265
+svd.null[0].vec.rain_mm,0.8956398078994108
+svd.null[0].vec.irrigation_mm,0.8342583612040544
+svd.null[0].vec.ET_mm,-1.0
+svd.null[0].vec.transpiration_mm,0.3674685312799245
+svd.null[0].vec.soil_evap_mm,0.12067558072901709
+svd.null[0].vec.canopy_evap_mm,-0.12162872899094887
+svd.null[0].vec.drainage_1m_mm,-0.932521421695129
+svd.null[1].k,2
+svd.null[1].sv,18.167089773243465
+svd.null[1].vec.rain_mm,-0.3584952645605694
+svd.null[1].vec.irrigation_mm,-0.211137900001495
+svd.null[1].vec.ET_mm,-0.1924650615698007
+svd.null[1].vec.transpiration_mm,0.7876171059587775
+svd.null[1].vec.soil_evap_mm,0.4981743883276118
+svd.null[1].vec.canopy_evap_mm,1.0
+svd.null[1].vec.drainage_1m_mm,0.17989717952754186
+svd.null[2].k,3
+svd.null[2].sv,21.837542833486417
+svd.null[2].vec.rain_mm,-0.0392714013679668
+svd.null[2].vec.irrigation_mm,0.03899424857231373
+svd.null[2].vec.ET_mm,-0.02946145946269041
+svd.null[2].vec.transpiration_mm,-0.37257239235262213
+svd.null[2].vec.soil_evap_mm,0.2027029320928861
+svd.null[2].vec.canopy_evap_mm,1.0
+svd.null[2].vec.drainage_1m_mm,-0.019203095000868337
+balance (W-ET-D),47.832060130189646 5.434999999999974 81.737
+ET partition (ET-T-Es-Ec),190.03537100650243 128.961 334.71200000000005
+clrpca,0.8857529197082173 0.07316890907910184 0.03277942937842149 0.008298741834259434 0.0
+clr_load.transpiration_mm.0,-0.218
+clr_load.transpiration_mm.1,0.035
+clr_load.transpiration_mm.2,-0.22
+clr_load.soil_evap_mm.0,-0.334
+clr_load.soil_evap_mm.1,-0.557
+clr_load.soil_evap_mm.2,-0.449
+clr_load.canopy_evap_mm.0,-0.034
+clr_load.canopy_evap_mm.1,0.801
+clr_load.canopy_evap_mm.2,-0.21
+clr_load.R.0,-0.285
+clr_load.R.1,-0.079
+clr_load.R.2,0.839
+clr_load.drainage_1m_mm.0,0.871
+clr_load.drainage_1m_mm.1,-0.2
+clr_load.drainage_1m_mm.2,0.04
