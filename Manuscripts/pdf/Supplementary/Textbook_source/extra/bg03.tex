@@ -6,8 +6,12 @@ Irrigation scheduling methods are grouped into four classes. \kw{Calendar} (fixe
 
 Soil-based triggers are of two kinds: a \emph{suction trigger} $h_t$ (irrigate when the sensor reads more than $h_t$ cm) and a \emph{depletion trigger} $f_t$ (irrigate when a fraction $f_t$ of the available water has gone). The two are linked by the retention curve of the soil, $f=f(h)$ (Equation~\ref{eq:fdep}, Chapter~9). A suction of 300 cm is a light depletion in a sand and a deep one in a silt loam; that is the reason the same trigger behaves differently in different soils.
 
-\exbox{A suction trigger as a depletion}{For the sand S03 ($\alpha=0.145$, $n=2.68$) and the silt loam S07 ($\alpha=0.020$, $n=1.41$) find the depletion $f$ that a suction trigger of 300 cm means (field capacity at 100 cm, wilting point at 15\,849 cm).}\sol \givenline{$\alpha=0.145$ ; $n=2.68$ ; $\alpha=0.020$ ; $n=1.41$}\ans Sand: \[f(300)=[S_e(100)-S_e(300)]/[S_e(100)-S_e(15849)]=(0.0112-0.0018)/(0.0112-0.0000)=0.842\]
-Silt loam: \[f(300)=[S_e(100)-S_e(300)]/[S_e(100)-S_e(15849)]=(0.6859-0.4691)/(0.6859-0.0943)=0.366\] \ans The same 300 cm trigger is a near-complete depletion in the sand and a modest one in the silt loam. \finans
+\exbox{A suction trigger as a depletion}{For the sand S03 ($\alpha=0.145$, $n=2.68$) and the silt loam S07 ($\alpha=0.020$, $n=1.41$) find the depletion $f$ that a suction trigger of 300 cm means (field capacity at 100 cm, wilting point at 15\,849 cm).}\sol \givenline{$\alpha=0.145$ ; $n=2.68$ ; $\alpha=0.020$ ; $n=1.41$}\ans Sand: \[f(300)=[S_e(100)-S_e(300)]/[S_e(100)-S_e(15849)]\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[f(300)=(0.0112-0.0018)/(0.0112-0.0000)=0.842\]
+Silt loam: \[f(300)=[S_e(100)-S_e(300)]/[S_e(100)-S_e(15849)]\ti{ii}\]
+Substituting the values in equation \rfi{ii},
+\[f(300)=(0.6859-0.4691)/(0.6859-0.0943)=0.366\] \ans The same 300 cm trigger is a near-complete depletion in the sand and a modest one in the silt loam. \finans
 
 \section{The reach of a trigger}
 A trigger can fire only if the soil can reach the suction at which it is set. A crop dries the soil until the conductivity around its roots falls so low that the soil can no longer supply the demand; beyond that suction the roots meet a wall. Writing that $K_r(h_c)=\kappa$ at that point, and using the dry-end form $K_r\simeq m^2(\alpha h)^{-E}$ with $E=2n+\ell(n-1)$ (Chapter~4, Equations on the reach), the reach is
@@ -33,7 +37,10 @@ S08 & Sandy clay loam & 1.48 & 3.20 & 7\,559 & yes\\
 S09 & Clay loam & 1.31 & 2.78 & 47\,608 & yes\\
 S10 & Silty clay loam & 1.23 & 2.58 & 127\,830 & yes\\\bottomrule\end{tabular}\end{table}
 
-\exbox{Reach of a loam}{Compute the reach of the loam S06 ($\alpha=0.036$, $n=1.56$) step by step, and say whether a trigger of 1000 cm would fire.}\sol \givenline{$\alpha=0.036$ ; $n=1.56$}\ans $m=1-1/1.56=0.3590$, $m^2=0.1289$; \[E=2n+\ell(n-1)=3.12+0.5\times0.56=3.40\]
+\exbox{Reach of a loam}{Compute the reach of the loam S06 ($\alpha=0.036$, $n=1.56$) step by step, and say whether a trigger of 1000 cm would fire.}\sol \givenline{$\alpha=0.036$ ; $n=1.56$}\ans $m=1-1/1.56=0.3590$, $m^2=0.1289$; \par\indent We know that
+\[E=2n+\ell(n-1)\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[E=3.12+0.5\times0.56=3.40\]
 \[m^2/\kappa=0.1289/3.5\times10^{-10}=3.682\times10^{8}\]
 its power $1/E=0.2941$ is $330.70$, so $h_c=330.70/0.036=9186$ cm \ans A trigger of 1000 cm is below the reach and fires. \finans
 
@@ -45,11 +52,21 @@ An irrigation millimetre does not all go to the crop. Written against a rainfed 
 
 where $\eta_D$ is the saturation level of the drained share and $d_D$ the dose scale. The law is a fit to the ensemble, not a derivation; its use is to choose a dose that keeps drainage low.
 
-\exbox{Drained share against dose}{A soil with $\eta_D=0.45$ and $d_D=9$ mm gives the dose law. Find the drained share at doses of 5, 10, 15, 20 and 30 mm per event, and the dose at which half of the saturation level is reached.}\sol \givenline{$\eta_D=0.45$ ; $d_D=9$ mm gives}\ans $d=5$: \[\phi_D=0.45(1-e^{-5/9})=0.192\]
-$d=10$: \[\phi_D=0.45(1-e^{-10/9})=0.302\]
-$d=15$: \[\phi_D=0.45(1-e^{-15/9})=0.365\]
-$d=20$: \[\phi_D=0.45(1-e^{-20/9})=0.401\]
-$d=30$: \[\phi_D=0.45(1-e^{-30/9})=0.434\]
+\exbox{Drained share against dose}{A soil with $\eta_D=0.45$ and $d_D=9$ mm gives the dose law. Find the drained share at doses of 5, 10, 15, 20 and 30 mm per event, and the dose at which half of the saturation level is reached.}\sol \givenline{$\eta_D=0.45$ ; $d_D=9$ mm gives}\ans $d=5$: \[\phi_D=0.45(1-e^{-5/9})\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[\phi_D=0.192\]
+$d=10$: \[\phi_D=0.45(1-e^{-10/9})\ti{ii}\]
+Substituting the values in equation \rfi{ii},
+\[\phi_D=0.302\]
+$d=15$: \[\phi_D=0.45(1-e^{-15/9})\ti{iii}\]
+Substituting the values in equation \rfi{iii},
+\[\phi_D=0.365\]
+$d=20$: \[\phi_D=0.45(1-e^{-20/9})\ti{iv}\]
+Substituting the values in equation \rfi{iv},
+\[\phi_D=0.401\]
+$d=30$: \[\phi_D=0.45(1-e^{-30/9})\ti{v}\]
+Substituting the values in equation \rfi{v},
+\[\phi_D=0.434\]
 Half of saturation: $1-e^{-d/9}=0.5$, $d=9\ln2=6.2$ mm \ans Doses below about 6 mm lose less than a third of the saturation level to drainage, so frequent small doses are efficient in this soil; a 30 mm dose loses almost the full 0.45. \finans
 
 \section{Hydraulic memory}

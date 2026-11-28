@@ -26,7 +26,11 @@ Substituting (\ref{eq:darcy}) in (\ref{eq:cont}) and writing $C(h)=\mathrm d\the
 
 
 
-\exbox{Darcy flux in a drying column}{In a column of loam, the suction is 80 cm at 20 cm depth and 120 cm at 40 cm depth (z positive upward, surface at 0). The conductivity at the mean suction of 100 cm is 0.65 cm\,d$^{-1}$. Find the heads, the gradient and the flux, and say whether the soil is draining or wetting at this depth.}\sol With $z$ upward, $z_{20}=-20$ and $z_{40}=-40$. Heads: $H_{20}=-80-20=-100$ cm, $H_{40}=-120-40=-160$ cm. The gradient \[\partial H/\partial z=(H_{20}-H_{40})/(z_{20}-z_{40})=(-100+160)/(20)=3.0\] (dimensionless). Flux \[q=-K\,\partial H/\partial z=-0.65\times3.0=-1.95\ \text{cm\,d$^{-1}$}\] \ans The sign is negative, so the flow is \emph{downward}: the column is draining at 19.5 mm per day, mostly under the gradient of suction, not gravity alone. \finans
+\exbox{Darcy flux in a drying column}{In a column of loam, the suction is 80 cm at 20 cm depth and 120 cm at 40 cm depth (z positive upward, surface at 0). The conductivity at the mean suction of 100 cm is 0.65 cm\,d$^{-1}$. Find the heads, the gradient and the flux, and say whether the soil is draining or wetting at this depth.}\sol With $z$ upward, $z_{20}=-20$ and $z_{40}=-40$. Heads: $H_{20}=-80-20=-100$ cm, $H_{40}=-120-40=-160$ cm. The gradient \[\partial H/\partial z=(H_{20}-H_{40})/(z_{20}-z_{40})\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[\partial H/\partial z=(-100+160)/(20)=3.0\] (dimensionless). Flux \[q=-K\,\partial H/\partial z\ti{ii}\]
+Substituting the values in equation \rfi{ii},
+\[q=-0.65\times3.0=-1.95\ \text{cm\,d$^{-1}$}\] \ans The sign is negative, so the flow is \emph{downward}: the column is draining at 19.5 mm per day, mostly under the gradient of suction, not gravity alone. \finans
 
 \section{Boundary and initial conditions}
 Equation~(\ref{eq:richards}) needs one condition at each end of the column and one initial profile. Three types of boundary condition are used. A \kw{Dirichlet} condition fixes the head (a ponded surface, $h=0$ or a water table, $h=0$ at its depth). A \kw{Neumann} condition fixes the flux (a known rain or evaporation rate, or zero flux across an impermeable layer). A \kw{free drainage} condition sets the gradient of head to zero at the lower boundary, so that $q=-K$: water leaves at the rate of the conductivity. At the surface, Daisy and the application switch between the Neumann condition (the rain or irrigation rate) and the Dirichlet condition (ponding) according to which one the soil can accept: if the rate exceeds the infiltration capacity, the surplus becomes surface storage or runoff.
@@ -37,7 +41,9 @@ Roots take water from the soil to supply transpiration. Two families of models d
 \begin{equation}S(z)=\alpha(h)\,S_p(z),\qquad S_p(z)=T_p\,\frac{R(z)}{\int_0^{Z_r}R(z')\,\mathrm dz'},\qquad \alpha(h)=\begin{cases}\dfrac{h-h_4}{h_3-h_4}&h_4<h<h_3\\[4pt]1&h_3\le h\le h_2\\0&\text{otherwise}\end{cases}\label{eq:feddes}\end{equation}
 \par\noindent where $S(z)$ is the uptake at depth $z$ (d$^{-1}$), $\alpha(h)$ the Feddes stress function (0 to 1), $S_p(z)$ the potential uptake, $T_p$ the potential transpiration (cm\,d$^{-1}$), $R(z)$ the root density at depth $z$, $Z_r$ the rooting depth, $z'$ the variable of integration and $h_2,h_3,h_4$ the suction limits of the stress function (cm).
 
-\exbox{Feddes uptake in four layers}{A root zone has four layers with relative root densities 0.40, 0.30, 0.20, 0.10 (top to bottom) and suctions $|h|$ of 150, 500, 2000 and 8000 cm. The potential transpiration is $T_p=5.0$ mm\,d$^{-1}$; the critical suction is $|h_3|=400$ cm and the wilting suction is 15\,849 cm. Find the actual uptake of each layer and the total.}\sol \givenline{$T_p=5.0$ mm\,d$^{-1}$; ; $|h_3|=400$ cm}\ans The potential sinks are \[S_p=T_p R_i/\sum R=5.0\times(0.40,0.30,0.20,0.10)=(2.00,1.50,1.00,0.50)\ \text{mm\,d$^{-1}$}\]
+\exbox{Feddes uptake in four layers}{A root zone has four layers with relative root densities 0.40, 0.30, 0.20, 0.10 (top to bottom) and suctions $|h|$ of 150, 500, 2000 and 8000 cm. The potential transpiration is $T_p=5.0$ mm\,d$^{-1}$; the critical suction is $|h_3|=400$ cm and the wilting suction is 15\,849 cm. Find the actual uptake of each layer and the total.}\sol \givenline{$T_p=5.0$ mm\,d$^{-1}$; ; $|h_3|=400$ cm}\ans The potential sinks are \[S_p=T_p R_i/\sum R\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[S_p=5.0\times(0.40,0.30,0.20,0.10)=(2.00,1.50,1.00,0.50)\ \text{mm\,d$^{-1}$}\]
 The reduction factors: layer 1 ($|h|=150<400$): $\alpha=1$; layer 2 ($500$): \[\alpha=(15849-500)/(15849-400)=0.994\]
 layer 3 ($2000$): \[\alpha=(15849-2000)/15449=0.896\]
 layer 4 ($8000$): \[\alpha=(15849-8000)/15449=0.508\]

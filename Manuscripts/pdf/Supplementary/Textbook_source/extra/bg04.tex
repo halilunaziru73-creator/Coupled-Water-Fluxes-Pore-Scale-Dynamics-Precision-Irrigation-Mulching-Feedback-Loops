@@ -23,7 +23,9 @@ For a run of $y$ years the balance of Chapter~2 gives, for each year, the residu
 \section{Uncertainty of a mean and of a slope}
 A mean of $n$ values with standard deviation $s$ has a standard error $s/\sqrt n$ and a 95 per cent confidence interval $\bar x\pm t_{0.975,n-1}s/\sqrt n$. A regression slope $b$ of $y$ on $x$ has standard error $s_b=s_e/\sqrt{\sum(x-\bar x)^2}$ with $s_e$ the residual standard deviation, and the interval $b\pm t\,s_b$. When the distribution is not normal or the statistic is awkward, the \kw{bootstrap} resamples the data with replacement many times and reads the interval from the percentiles of the statistic. An ensemble of simulations has no sampling noise in the usual sense (the same inputs give the same output), so the intervals describe the spread over soils and years, not experimental error; this is stated in every table that quotes them.
 
-\exbox{Slope and its interval}{The data $(x,y)$ are $(1,2.1),(2,3.9),(3,6.2),(4,7.8),(5,10.1),(6,12.2),(7,13.8),(8,16.1)$. Fit a line, find the standard error of the slope and its 95 \% interval ($t_{0.975,6}=2.447$).}\sol \givenline{$t_{0.975,6}=2.447$}\ans $\bar x=4.5$, $\sum(x-\bar x)^2=42$. Slope $b=1.9976$, intercept $a=0.0357$. Residual standard deviation \[s_e=\sqrt{\sum e^2/6}=0.1802\]
+\exbox{Slope and its interval}{The data $(x,y)$ are $(1,2.1),(2,3.9),(3,6.2),(4,7.8),(5,10.1),(6,12.2),(7,13.8),(8,16.1)$. Fit a line, find the standard error of the slope and its 95 \% interval ($t_{0.975,6}=2.447$).}\sol \givenline{$t_{0.975,6}=2.447$}\ans $\bar x=4.5$, $\sum(x-\bar x)^2=42$. Slope $b=1.9976$, intercept $a=0.0357$. Residual standard deviation \[s_e=\sqrt{\sum e^2/6}\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[s_e=0.1802\]
 \[s_b=0.1802/\sqrt{42}=0.0278\]
 The interval is \[1.9976\pm2.447\times0.0278=[1.930,\,2.066]\quad\text{\finans}\]
 

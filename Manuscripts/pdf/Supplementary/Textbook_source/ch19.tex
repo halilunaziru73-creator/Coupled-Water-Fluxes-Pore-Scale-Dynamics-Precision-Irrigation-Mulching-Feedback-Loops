@@ -48,7 +48,9 @@ This group holds 5 figures: Feedback loops with data-derived effect sizes; Exper
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E0; Daisy output used: Annual-FWater\_100cm.dlf, Annual-SWater.dlf.
 \exbox{Closing the water balance of a rainfed-plus-irrigated season}{In one season a field receives $P=600$ mm of rain and $I=150$ mm of irrigation. The model gives transpiration $T=380$ mm, soil evaporation $E_s=150$ mm, canopy evaporation $E_c=40$ mm, other evaporation $E_o=15$ mm, drainage below 1 m $D=120$ mm and a change of storage $\Delta S=-5$ mm. Find the runoff $R$ that closes the balance of the figure (illustrative values).}\sol \givenline{$P=600$ ; $I=150$ ; $T=380$ ; $E_s=150$ ; $E_c=40$ ; $E_o=15$ ; $D=120$ ; $\Delta S=-5$ (mm)}
 \par\noindent From the balance under the figure, $P+I=T+E_s+E_c+E_o+D+\Delta S+R$, so
-\[R=(P+I)-(T+E_s+E_c+E_o+D)-\Delta S=750-705-(-5)=50\ \text{mm}\quad\text{\finans}\]
+\[R=(P+I)-(T+E_s+E_c+E_o+D)-\Delta S\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[R=750-705-(-5)=50\ \text{mm}\quad\text{\finans}\]
 The fluxes of the soil account for $705$ of the $750$ mm that came in; the store lost $5$ mm, and $50$ mm left as runoff. A residual that is much larger than the error of the log files would be the unattributed term of the audit of Chapter~\ref{chap:04}.
 
 \section{The pore scale and the structure of the soils}
@@ -123,7 +125,9 @@ This group holds 8 figures: Retention curves of the 10 soils; Pore-size distribu
 \par\noindent With $m=1-1/n=1/3$, the term \[(\alpha|h|)^n=(0.02\times300)^{1.5}=6^{1.5}=14.70\]
 Then
 \[\theta=0.05+\frac{0.45-0.05}{(1+14.70)^{1/3}}=0.05+\frac{0.40}{2.503}=0.210\quad\text{\finans}\]
-The equivalent pore radius from the Young--Laplace relation is \[r=0.149/h=0.149/300=4.97\times10^{-4}\ \text{cm}\]
+The equivalent pore radius from the Young--Laplace relation is \[r=0.149/h\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[r=0.149/300=4.97\times10^{-4}\ \text{cm}\]
 that is $r=4.97$ $\mu$m \finans. Pores wider than about 5 $\mu$m are empty at this suction, and the curve above shows how much water is held in the finer pores.
 
 \section{The coupled water fluxes}
@@ -211,7 +215,9 @@ This group holds 10 figures: Water-flux Sankey, loam vs sand; Seasonal E/T parti
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Boxplots of the yearly values for each trigger and each method.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E2,E4 per year; Daisy output used: per-year Annual-Harvest.dlf, Annual-FWater\_100cm.dlf.
 \exbox{The three indices of a season}{A season has $P+I=750$ mm, drainage $D=120$ mm and a grain yield $Y=8$ Mg\,ha$^{-1}$ with an irrigation of $I=150$ mm. Find the drainage fraction DPF and the irrigation efficiency IE of the figures (illustrative values).}\sol \givenline{$P+I=750$ mm ; $D=120$ mm ; $Y=8$ Mg\,ha$^{-1}$ ; $I=150$ mm}
-\par\noindent The drainage fraction is \[\mathrm{DPF}=D/(P+I)=120/750=0.16\quad\text{\finans}\]
+\par\noindent The drainage fraction is \[\mathrm{DPF}=D/(P+I)\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[\mathrm{DPF}=120/750=0.16\quad\text{\finans}\]
 The irrigation efficiency is $\mathrm{IE}=1000\,Y/(10\,I)$, where $1000\,Y=8000$ kg\,ha$^{-1}$ and $10\,I=1500$ m$^3$\,ha$^{-1}$ (1 mm is 10 m$^3$\,ha$^{-1}$), so \[\mathrm{IE}=8000/1500=5.33\ \text{kg\,m$^{-3}$}\quad\text{\finans}\]
 A sixth of the water that enters the field leaves below the roots, and each cubic metre of irrigation is paired with $5.3$ kg of grain.
 
@@ -229,6 +235,7 @@ A sixth of the water that enters the field leaves below the roots, and each cubi
 \item Write the equation from which the figure ``Rainfed water balance per soil'' is computed and state what each symbol means. \exans{see the equation under the figure}
 \item Write the equation from which the figure ``Retention curves of the 10 soils'' is computed and state what each symbol means. \exans{see the equation under the figure}
 \end{exlist}
+\IfFileExists{extra/more19x.tex}{\input{extra/more19x}}{}
 \dykband{DO YOU KNOW ?}\begin{exlist}
 \item What does the figure ``Feedback loops with data-derived effect sizes'' show, and from which experiment does its data come?
 \item What does the figure ``Experiment design matrix'' show, and from which experiment does its data come?
@@ -251,5 +258,5 @@ A sixth of the water that enters the field leaves below the roots, and each cubi
 \opt{E2,E4 per year}{E10-E16}{E9,E12,E14}{E10-E15}
 \end{exlist}
 \objkey{1.\ (b),\quad 2.\ (a),\quad 3.\ (a),\quad 4.\ (b),\quad 5.\ (a)}
-\IfFileExists{extra/more19.tex}{\input{extra/more19}}{}
+\IfFileExists{extra/more19s.tex}{\input{extra/more19s}}{}
 \swaflvideo{19}

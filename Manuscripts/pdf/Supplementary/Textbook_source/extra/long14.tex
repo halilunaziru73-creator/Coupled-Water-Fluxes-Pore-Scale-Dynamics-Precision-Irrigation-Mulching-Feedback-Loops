@@ -1,16 +1,24 @@
 \subsection{Complete design: a subsurface drainage system for 20 ha}
 \exbox{Design of a subsurface drainage system for 20 ha}{A field of 20 ha of loam S06 needs drainage. The pipe drains (100 mm) are laid at 1.4 m on a barrier 3 m below, the design recharge is 7 mm\,d$^{-1}$ and the water table must stay 0.6 m below the surface. Laterals are 300 m long with a grade of 0.2 per cent. Find the spacing, the number and total length of laterals, the discharge and pipe size, and the outlet flow.}\sol
-\ans Soil S06 (loam): $K_s=12.1$ mm\,h$^{-1}$, so $K_1=K_2=0.290$ m\,d$^{-1}$; drainable porosity \[\mu=\theta_s-\theta_{33}=0.164\]
+\ans Soil S06 (loam): $K_s=12.1$ mm\,h$^{-1}$, so $K_1=K_2=0.290$ m\,d$^{-1}$; drainable porosity \[\mu=\theta_s-\theta_{33}\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[\mu=0.164\]
 \ans Design recharge $q=7$ mm\,d$^{-1}$, drains at $1.4$ m on a barrier $D=3$ m below, critical water table $z_c=0.6$ m, so the allowed head is $h=1.4-0.6=0.80$ m
 \ans Perimeter of the pipe $u=\pi r_0=\pi(0.05)=0.157$ m
-\ans First guess for the spacing with the real depth, \[L_0=\sqrt{(4K_1h^2+8K_2Dh)/q}=\sqrt{(4\times0.290\times0.64+8\times0.290\times3\times0.80)/0.007}=30\ \text{m}\]
+\ans First guess for the spacing with the real depth, \[L_0=\sqrt{(4K_1h^2+8K_2Dh)/q}\ti{ii}\]
+Substituting the values in equation \rfi{ii},
+\[L_0=\sqrt{(4\times0.290\times0.64+8\times0.290\times3\times0.80)/0.007}=30\ \text{m}\]
 \ans Equivalent depth at this spacing: $x=2\pi D/L=0.628$; the series $F(x)$ and Hooghoudt's expression give $d_e=1.71$ m, much less than $D$
 \ans Iterating $L=\sqrt{(8K_2d_eh+4K_1h^2)/q}$ to a change below 1 cm: $L=22.4$ m with $d_e=1.50$ m; adopt $L=22$ m
 \ans Number of laterals of 300 m: $20$ ha $=200\,000$ m$^2$; $200\,000/(22\times300)=31$ laterals, total pipe $9300$ m, or $465$ m per hectare
-\ans Discharge at the lower end of a lateral: \[Q=q\,L\,\ell=0.007\times22\times300=46.2\] m$^3$\,d$^{-1}$ $=0.53$ L\,s$^{-1}$
+\ans Discharge at the lower end of a lateral: \[Q=q\,L\,\ell\ti{iii}\]
+Substituting the values in equation \rfi{iii},
+\[Q=0.007\times22\times300=46.2\] m$^3$\,d$^{-1}$ $=0.53$ L\,s$^{-1}$
 \ans Manning for a pipe running full, $n=0.016$, slope 0.2 per cent: \[Q=\dfrac{1}{n}\dfrac{\pi D_p^2}{4}\left(\dfrac{D_p}{4}\right)^{2/3}S^{1/2}\]
 keeping a margin of 20 per cent the smallest standard diameter that carries $0.53$ L\,s$^{-1}$ is $80$ mm
-\ans Collector: the whole area delivers \[Q_c=q\,A=0.007\times200\,000/86.4=16.2\] L\,s$^{-1}$ to the outlet
+\ans Collector: the whole area delivers \[Q_c=q\,A\ti{iv}\]
+Substituting the values in equation \rfi{iv},
+\[Q_c=0.007\times200\,000/86.4=16.2\] L\,s$^{-1}$ to the outlet
 \ans Water table in the middle at this spacing, from $q=(8K_2d_eh+4K_1h^2)/L^2$: $h=0.80$ m, so the water table is 0.60 m below the surface, deeper than $z_c=0.6$ m \finans
 
 

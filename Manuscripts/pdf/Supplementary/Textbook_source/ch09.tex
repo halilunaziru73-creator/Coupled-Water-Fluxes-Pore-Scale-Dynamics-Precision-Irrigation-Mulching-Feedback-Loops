@@ -12,7 +12,9 @@ After tillage the relative pore space $p$ (1 is freshly loosened) relaxes to a c
 \begin{equation}\boxed{p(t)=p_c+(p_0-p_c)e^{-\tau_ct},\qquad p_0=1.00\ (\text{conventional}),\ 0.72\ (\text{reduced}),}\end{equation}
 with $t$ in days since tillage; no-till keeps $p=0.42$. The half-life of loose pores is $\ln2/\tau_c$.
 
-\exbox{Consolidation after tillage}{Compute $p(t)$ at 30 and 120 days for conventional and reduced tillage at the four rates $\tau_c=0.001,0.005,0.01,0.02$ d$^{-1}$, with the half-lives.}\sol \givenline{$\tau_c=0.001,0.005,0.01,0.02$ d$^{-1}$}\ans Half-life $=\ln2/\tau_c$: $693$ d at $0.001$, $139$ d at $0.005$, $69$ d at $0.01$ and $35$ d at $0.02$. For conventional tillage at $\tau_c=0.01$ and $t=30$: \[p=0.30+0.70e^{-0.3}=0.30+0.70(0.7408)=0.8186\]
+\exbox{Consolidation after tillage}{Compute $p(t)$ at 30 and 120 days for conventional and reduced tillage at the four rates $\tau_c=0.001,0.005,0.01,0.02$ d$^{-1}$, with the half-lives.}\sol \givenline{$\tau_c=0.001,0.005,0.01,0.02$ d$^{-1}$}\ans Half-life $=\ln2/\tau_c$: $693$ d at $0.001$, $139$ d at $0.005$, $69$ d at $0.01$ and $35$ d at $0.02$. For conventional tillage at $\tau_c=0.01$ and $t=30$: \[p=0.30+0.70e^{-0.3}\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[p=0.30+0.70(0.7408)=0.8186\]
 At $t=120$: \[0.30+0.70e^{-1.2}=0.30+0.70(0.3012)=0.511\]
 Table~\ref{tab:pore} lists all cases.\begin{table}[!htbp]\centering\small\caption{Relative pore space after tillage.}\label{tab:pore}
 \begin{tabular}{lrrrrr}\toprule
@@ -164,7 +166,10 @@ $t_1=8.43/1.428=5.90$ d. Table~\ref{tab:mulchev} lists the six cases. Mulch leng
 0.2 & 0.8 & 0.571 & 14.76 & 5.7 & 8.9\\\bottomrule\end{tabular}\end{table} \finans
 
 
-\exbox{The drying front}{After stage 1, the depth of the dry layer is $\ell(t)=\min\{60,(Q(t)-Q_1)/\Delta\theta\}$ mm with $\Delta\theta=\mathrm{clip}(\theta(h_i)-\theta(10^4);0.05,0.4)$. For the loam bare soil at 10 days, find $\ell$ and the suction at depth $z=40$ mm from $\log_{10}h(z)=\log_{10}h_s+(\log_{10}h_i-\log_{10}h_s)(1-e^{-(z-\ell)/\lambda})$, $\lambda=L_1/3$.}\sol \givenline{$\ell(t)=\min\{60,(Q(t)-Q_1)/\Delta\theta\}$ mm ; $z=40$ mm ; $\lambda=L_1/3$}\ans \[\Delta\theta=\theta(6.94)-\theta(10^4)=0.375\]
+\exbox{The drying front}{After stage 1, the depth of the dry layer is $\ell(t)=\min\{60,(Q(t)-Q_1)/\Delta\theta\}$ mm with $\Delta\theta=\mathrm{clip}(\theta(h_i)-\theta(10^4);0.05,0.4)$. For the loam bare soil at 10 days, find $\ell$ and the suction at depth $z=40$ mm from $\log_{10}h(z)=\log_{10}h_s+(\log_{10}h_i-\log_{10}h_s)(1-e^{-(z-\ell)/\lambda})$, $\lambda=L_1/3$.}\sol \givenline{$\ell(t)=\min\{60,(Q(t)-Q_1)/\Delta\theta\}$ mm ; $z=40$ mm ; $\lambda=L_1/3$}\ans \par\indent We know that
+\[\Delta\theta=\theta(6.94)-\theta(10^4)\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[\Delta\theta=0.375\]
 At 10 days $Q=11.9$ mm, so \[\ell=(11.9-8.43)/0.375=9.3\ \text{mm}\]
 With $\lambda=13.3$ mm, at $z=40$ mm the exponent is $-(40-9.3)/13.3=-2.30$ and $\log_{10}h=0.962$, that is $h=9$ cm.
 \banner{Feedback loops and the hidden questions of the vadose zone}\label{ch:fb}
@@ -282,7 +287,8 @@ The topsoil delivers water against the demand until stage 2 begins; mulch reduce
 \IfFileExists{extra/tenx09.tex}{\input{extra/tenx09}}{}
 \IfFileExists{extra/tenbx09.tex}{\input{extra/tenbx09}}{}
 \IfFileExists{extra/ex09.tex}{\input{extra/ex09}}{}
+\IfFileExists{extra/more09x.tex}{\input{extra/more09x}}{}
 \IfFileExists{extra/dyk09.tex}{\input{extra/dyk09}}{}
 \IfFileExists{extra/obj09.tex}{\input{extra/obj09}}{}
-\IfFileExists{extra/more09.tex}{\input{extra/more09}}{}
+\IfFileExists{extra/more09s.tex}{\input{extra/more09s}}{}
 \swaflvideo{09}

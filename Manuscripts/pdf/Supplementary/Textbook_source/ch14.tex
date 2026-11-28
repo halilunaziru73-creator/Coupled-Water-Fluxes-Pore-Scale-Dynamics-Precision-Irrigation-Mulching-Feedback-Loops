@@ -42,7 +42,10 @@ with $u=\pi r_0$ the wetted perimeter of a pipe running half full. Because $d$ d
 7 & 22.758 & 1.704 & 22.756\\
 8 & 22.756 & 1.703 & 22.756\\\bottomrule\end{tabular}\end{table}
 
-\exbox{One converged step}{Verify the converged spacing of Table~\ref{tab:hoogit}.}\sol  At $L=22.76$ m: $x=2\pi\times5/22.76=1.381$. \[F(x)=4e^{-2x}/(1-e^{-2x})+\dots=0.2703\] (the $n=1$ term dominates). $u=\pi\times0.05=0.1571$ m, \[\ln(L/u)=\ln(22.76/0.1571)=4.976\]
+\exbox{One converged step}{Verify the converged spacing of Table~\ref{tab:hoogit}.}\sol  At $L=22.76$ m: $x=2\pi\times5/22.76=1.381$. \par\indent We know that
+\[F(x)=4e^{-2x}/(1-e^{-2x})+\dots\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[F(x)=0.2703\] (the $n=1$ term dominates). $u=\pi\times0.05=0.1571$ m, \[\ln(L/u)=\ln(22.76/0.1571)=4.976\]
 Then \[d=(\pi\times22.76/8)/(4.976+0.2703)=8.936/5.246=1.703\] m ($<D$). Check the spacing: \[8K_2dh=8\times0.290\times1.703\times0.70=2.7631\]
 \[4K_1h^2=4\times0.290\times0.49=0.5677\]
 sum $=3.3309$; $L^2=3.3309/0.00643=517.8$, $L=22.76$ m. ({\it Without} the correction, using $d=D=5$ m, the spacing would be \[\sqrt{(8\times0.290\times5\times0.7+0.5677)/0.00643}=36.7\ \text{m}\]
@@ -124,7 +127,11 @@ choosing the smallest standard size (80--500 mm) that carries the design flow at
 400 & 75.67 & 60.54 & 0.60\\
 500 & 137.20 & 109.76 & 0.70\\\bottomrule\end{tabular}\end{table}
 
-\exbox{Pipes of the scheme}{The field is 400 m $\times$ 300 m; laterals run 200 m at slope 0.2\%. Size the lateral and the collector.}\sol  The lateral drains a strip $L=11.0$ m wide and 200 m long: \[Q=qLL_{\rm lat}=0.00643\times11.0\times200=14.18\] m$^3$ d$^{-1}=0.164$ L s$^{-1}$. With 80\% of capacity allowed, Table~\ref{tab:pipe} gives the smallest pipe whose $0.8Q$ exceeds 0.164 L s$^{-1}$: $D=80$ mm. The collector carries the whole 12 ha: \[Q=qA=0.00643\times120{,}000=771.9\] m$^3$ d$^{-1}=8.93$ L s$^{-1}$, so $D=200$ mm. The full-pipe speed of the lateral is 0.21 m s$^{-1}$, below the silting limit of 0.3 m s$^{-1}$. \finans
+\exbox{Pipes of the scheme}{The field is 400 m $\times$ 300 m; laterals run 200 m at slope 0.2\%. Size the lateral and the collector.}\sol  The lateral drains a strip $L=11.0$ m wide and 200 m long: \[Q=qLL_{\rm lat}\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[Q=0.00643\times11.0\times200=14.18\] m$^3$ d$^{-1}=0.164$ L s$^{-1}$. With 80\% of capacity allowed, Table~\ref{tab:pipe} gives the smallest pipe whose $0.8Q$ exceeds 0.164 L s$^{-1}$: $D=80$ mm. The collector carries the whole 12 ha: \[Q=qA\ti{ii}\]
+Substituting the values in equation \rfi{ii},
+\[Q=0.00643\times120{,}000=771.9\] m$^3$ d$^{-1}=8.93$ L s$^{-1}$, so $D=200$ mm. The full-pipe speed of the lateral is 0.21 m s$^{-1}$, below the silting limit of 0.3 m s$^{-1}$. \finans
 
 
 \section{Salt and the leaching requirement}
@@ -161,7 +168,8 @@ Gross $=211.68/(1-0.1111)=238.1$ mm: an extra 26.5 mm, which must leave through 
 \IfFileExists{extra/tenx14.tex}{\input{extra/tenx14}}{}
 \IfFileExists{extra/tenbx14.tex}{\input{extra/tenbx14}}{}
 \IfFileExists{extra/ex14.tex}{\input{extra/ex14}}{}
+\IfFileExists{extra/more14x.tex}{\input{extra/more14x}}{}
 \IfFileExists{extra/dyk14.tex}{\input{extra/dyk14}}{}
 \IfFileExists{extra/obj14.tex}{\input{extra/obj14}}{}
-\IfFileExists{extra/more14.tex}{\input{extra/more14}}{}
+\IfFileExists{extra/more14s.tex}{\input{extra/more14s}}{}
 \swaflvideo{14}

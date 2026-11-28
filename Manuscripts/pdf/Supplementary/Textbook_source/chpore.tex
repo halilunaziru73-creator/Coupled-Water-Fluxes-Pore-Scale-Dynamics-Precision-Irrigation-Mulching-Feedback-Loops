@@ -115,8 +115,12 @@ where $Q$ is the flow (m$^3$\,s$^{-1}$), $\mu=1.0\times10^{-3}$ Pa\,s the dynami
 \par\noindent \textbf{Notes:} 1. The flow depends on the \emph{fourth power} of the radius: a tube twice as wide carries sixteen times as much water. 2. The law holds for laminar flow, which is the case when the Reynolds number $Re=\rho\bar v\,2r/\mu$ is below about 2000; in soil pores $Re$ is much smaller than 1. 3. The viscosity of water falls as the temperature rises (it is 1.0 mPa\,s at 20 $^\circ$C and 1.8 at 0 $^\circ$C), so that the conductivity of a soil rises by about 2 per cent per degree.
 
 \exbox{The flow in one macropore}{A cylindrical pore of radius 0.5 mm, such as a worm channel, is full of water and drains under gravity (unit gradient). Find the mean velocity and the discharge.}\sol \givenline{$r=0.5\times10^{-3}$ m ; $\Delta p/L=\rho_wg=998\times9.81=9790$ Pa\,m$^{-1}$ ; $\mu=1.0\times10^{-3}$ Pa\,s}
-\par\noindent From Equation~(\ref{eq:pg-hp}), \[\bar v=\dfrac{r^2\,(\Delta p/L)}{8\mu}=\dfrac{(0.5\times10^{-3})^2\times9790}{8\times10^{-3}}=0.306\ \text{m\,s$^{-1}$}\quad\text{\finans}\]
-about 30 cm per second, which is fast. The discharge is \[Q=\pi r^2\bar v=\pi\times(0.5\times10^{-3})^2\times0.306=2.40\times10^{-7}\] m$^3$\,s$^{-1}$ $=0.24$ mL\,s$^{-1}$, or $865$ mL per hour \finans. One such channel can pass nearly a litre of water per hour. Remember that the law assumes a smooth tube full of water; a real burrow is rough and partly filled, so the figure is an upper limit.
+\par\noindent From Equation~(\ref{eq:pg-hp}), \[\bar v=\dfrac{r^2\,(\Delta p/L)}{8\mu}\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[\bar v=\dfrac{(0.5\times10^{-3})^2\times9790}{8\times10^{-3}}=0.306\ \text{m\,s$^{-1}$}\quad\text{\finans}\]
+about 30 cm per second, which is fast. The discharge is \[Q=\pi r^2\bar v\ti{ii}\]
+Substituting the values in equation \rfi{ii},
+\[Q=\pi\times(0.5\times10^{-3})^2\times0.306=2.40\times10^{-7}\] m$^3$\,s$^{-1}$ $=0.24$ mL\,s$^{-1}$, or $865$ mL per hour \finans. One such channel can pass nearly a litre of water per hour. Remember that the law assumes a smooth tube full of water; a real burrow is rough and partly filled, so the figure is an upper limit.
 
 \section{The bundle of capillaries and the conductivity}\label{sec:bundle}
 A porous medium is now represented by a bundle of straight, parallel capillaries. Let there be $N$ pores of radius $r$ per unit area of cross-section; the porosity is $\phi=N\pi r^2$ (the fraction of the area that is open). The volume of water that crosses a unit area in a unit time under the gradient $i=\Delta p/(\rho_wgL)$ is $q=N\,Q=N\pi r^4\rho_wg\,i/(8\mu)$. By Darcy's law $q=K_s\,i$, so that the saturated conductivity of the bundle is
@@ -140,8 +144,12 @@ which is smaller than the share of the pore volume $\Phi_V(r)=\phi(r)/\phi$ for 
 \par\noindent This distribution has an important consequence for the unsaturated soil. As the soil dries, the largest pores empty first, and with them the largest part of the conductivity: when the suction rises to 100 cm (the field capacity), all pores wider than 15 $\mu$m are empty and the conductivity has fallen by one or two orders of magnitude although more than half of the water is still there. This is the geometric reason for the curve of the conductivity in Chapter~\ref{chap:01} and for the failure of a dry soil to supply a root.
 
 \exbox{How many small pores equal one large pore?}{How many pores of radius 10 $\mu$m are needed to carry the same flow as one earthworm channel of radius 2 mm, under the same gradient?}\sol \givenline{$r_1=2000\ \mu$m ; $r_2=10\ \mu$m ; same $\Delta p/L$}
-\par\noindent From Equation~(\ref{eq:pg-hp}), the flow of a tube is proportional to $r^4$, so the number of small tubes is \[N=(r_1/r_2)^4=(2000/10)^4=200^4=1.6\times10^{9}\quad\text{\finans}\]
-It takes 1.6 thousand million small pores to carry the water of one worm channel. A square metre of soil of porosity 0.3 that consisted of nothing but pores of radius 10 $\mu$m would hold \[N=\phi/(\pi r^2)=0.3/(\pi\times10^{-10})=9.5\times10^{8}\] of them: fewer than the number needed to replace one worm channel. This explains why a few biopores, in a soil in which the matrix is slow, determine the rate at which the soil takes water in a heavy rain.
+\par\noindent From Equation~(\ref{eq:pg-hp}), the flow of a tube is proportional to $r^4$, so the number of small tubes is \[N=(r_1/r_2)^4\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[N=(2000/10)^4=200^4=1.6\times10^{9}\quad\text{\finans}\]
+It takes 1.6 thousand million small pores to carry the water of one worm channel. A square metre of soil of porosity 0.3 that consisted of nothing but pores of radius 10 $\mu$m would hold \[N=\phi/(\pi r^2)\ti{ii}\]
+Substituting the values in equation \rfi{ii},
+\[N=0.3/(\pi\times10^{-10})=9.5\times10^{8}\] of them: fewer than the number needed to replace one worm channel. This explains why a few biopores, in a soil in which the matrix is slow, determine the rate at which the soil takes water in a heavy rain.
 
 \banner{Tortuosity, connection and the real conductivity}
 \section{Tortuosity}
@@ -172,7 +180,10 @@ Kozeny (1927) and Carman (1937) used the hydraulic radius and the tortuosity to 
 where $c_{KC}\approx5$ is the Kozeny constant (it contains the shape factor and the tortuosity), and $S_0=6/d_e$ for grains with an effective diameter $d_e$. The strong dependence of the conductivity on the porosity, as $\phi^3/(1-\phi)^2$, shows that a small change of the porosity gives a large change in the conductivity: a decrease of $\phi$ from 0.40 to 0.35 reduces $K_s$ by a factor of $(0.35/0.40)^3\,(0.60/0.65)^2=0.57$.
 
 \exbox{The conductivity of a sand and of a silt from the grain size}{Use the Kozeny--Carman equation to find the saturated conductivity of (a) a sand of effective grain diameter $d=0.5$ mm and (b) a silt of $d=0.05$ mm. Take $\phi=0.40$ and $c_{KC}=5$.}\sol \givenline{$\phi=0.40$ ; $c_{KC}=5$ ; (a) $d=0.5$ mm ; (b) $d=0.05$ mm ; $\rho_wg/\mu=9.79\times10^{6}$ m$^{-1}$\,s$^{-1}$}
-\par\noindent \textbf{(a)} \[S_0=6/d=6/(0.5\times10^{-3})=1.2\times10^{4}\ \text{m$^{-1}$}\]
+\par\noindent \textbf{(a)} \par\indent We know that
+\[S_0=6/d\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[S_0=6/(0.5\times10^{-3})=1.2\times10^{4}\ \text{m$^{-1}$}\]
 The permeability is
 \[k=\frac{0.40^3}{5\times(1.2\times10^4)^2\times0.60^2}=\frac{0.064}{2.592\times10^{8}}=2.47\times10^{-10}\ \text{m}^2.\]
 Then \[K_s=9.79\times10^{6}\times2.47\times10^{-10}=2.42\times10^{-3}\] m\,s$^{-1}$ $=2.1\times10^{4}$ cm\,d$^{-1}$ \finans, the order of magnitude of a clean medium sand.
@@ -242,6 +253,7 @@ Four groups of methods are used.
 \item A soil is compacted from $\rho_b=1.30$ to $1.50$ g\,cm$^{-3}$ ($\rho_s=2.65$). How much porosity is lost? \exans{0.075}
 \end{exlist}
 
+\IfFileExists{extra/more00x.tex}{\input{extra/more00x}}{}
 \dykband{DO YOU KNOW ?}
 \begin{exlist}
 \item What is the difference between a textural and a structural pore?
@@ -270,5 +282,5 @@ Four groups of methods are used.
 \opt{$b$}{$b^{2}$}{$b^{3}$}{$b^{4}$}
 \end{exlist}
 \objkey{1.\ (b),\quad 2.\ (d),\quad 3.\ (b),\quad 4.\ (c),\quad 5.\ (a),\quad 6.\ (c)}
-\IfFileExists{extra/more00.tex}{\input{extra/more00}}{}
+\IfFileExists{extra/more00s.tex}{\input{extra/more00s}}{}
 \swaflvideo{23}

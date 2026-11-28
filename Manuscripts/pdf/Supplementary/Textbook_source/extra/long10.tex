@@ -4,7 +4,9 @@
 \ans Centroids: $\bar P=(1.00, 1.50, 2.00)$, $\bar Q=(1.772, 1.082, 2.400)$
 \ans Cross-covariance \[H=\sum(P_i-\bar P)(Q_i-\bar Q)^{T}\] has singular values $32.00, 18.00, 8.00$
 \ans Rotation from the SVD $H=U\Sigma V^T$: $R=VU^T$ gives an angle \[\arctan(R_{21}/R_{11})=25.000^\circ\] (true $25^\circ$) and $\det R=1.000$
-\ans Translation \[t=\bar Q-R\bar P=(1.500, -0.700, 0.400)\]
+\ans Translation \[t=\bar Q-R\bar P\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[t=(1.500, -0.700, 0.400)\]
 \ans Residual of the registration \[\sqrt{\frac{1}{N}\sum|RP_i+t-Q_i|^2}=3.2\times10^{-16}\ \text{cm}\]
 \ans Voxel volume: with voxels of 0.5 cm, the box contains $4\times6\times8=192$ voxels of 0.125 cm$^3$, giving $192\times0.125=24$ cm$^3$ (true 24 cm$^3$) \finans
 

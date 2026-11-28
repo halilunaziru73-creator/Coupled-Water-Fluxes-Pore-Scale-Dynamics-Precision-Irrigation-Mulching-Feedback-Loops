@@ -16,7 +16,9 @@ This group holds 1 figures: Soil pore structure gates management controllability
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Seven levers (E1 to E7), four outcomes, ten soils; the lever's range (10th to 90th percentile) relative to the median measures how much the lever can move the outcome.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E1-E7; Daisy output used: Per-run 20-year means: yield\_Mg\_ha, irrigation\_mm, drainage\_1m\_mm, N\_leached\_kg\_ha.
 \exbox{The controllability of an outcome by a management lever}{Over the runs of one soil, a lever changes the yield so that the 10th, 50th and 90th percentiles are $Q_{10}=6.0$, $Q_{50}=7.5$ and $Q_{90}=9.0$ Mg\,ha$^{-1}$. Find the controllability.}\sol \givenline{$Q_{10}=6.0$ ; $Q_{50}=7.5$ ; $Q_{90}=9.0$ Mg\,ha$^{-1}$}
-\par\noindent \[\mathrm{lev}=100\,\frac{Q_{90}-Q_{10}}{|Q_{50}|}=100\times\frac{9.0-6.0}{7.5}=40\ \text{per cent}\quad\text{\finans}\]
+\par\noindent \[\mathrm{lev}=100\,\frac{Q_{90}-Q_{10}}{|Q_{50}|}\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[\mathrm{lev}=100\times\frac{9.0-6.0}{7.5}=40\ \text{per cent}\quad\text{\finans}\]
 The lever can move the yield of this soil over a range of 40 per cent of its median. A soil whose pores hold the water at the sensor is controllable; a soil that drains freely is not, which is the result of the key figure.
 
 \section{The three novel contributions}
@@ -125,7 +127,9 @@ This group holds 8 figures: Sensor suction time series; Trigger pressure respons
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E2 daily; Daisy output used: daily irrigation log.
 \exbox{The irrigation production function and its marginal value}{A crop follows $Y=y_0+a\,(1-e^{-I/b})$ with $y_0=3.0$ Mg\,ha$^{-1}$, $a=5.0$ Mg\,ha$^{-1}$ and $b=120$ mm. Find the yield at $I=150$ mm and the gain of yield per extra millimetre at that point (illustrative values).}\sol \givenline{$y_0=3.0$ ; $a=5.0$ ; $b=120$ mm ; $I=150$ mm}
 \par\noindent $e^{-I/b}=e^{-1.25}=0.2865$, so \[Y=3.0+5.0\times0.7135=6.57\ \text{Mg\,ha$^{-1}$}\quad\text{\finans}\]
-The slope is \[\mathrm dY/\mathrm dI=(a/b)\,e^{-I/b}=(5.0/120)\times0.2865=0.0119\ \text{Mg\,ha$^{-1}$\,mm$^{-1}$}\]
+The slope is \[\mathrm dY/\mathrm dI=(a/b)\,e^{-I/b}\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[\mathrm dY/\mathrm dI=(5.0/120)\times0.2865=0.0119\ \text{Mg\,ha$^{-1}$\,mm$^{-1}$}\]
 that is $11.9$ kg\,ha$^{-1}$ per millimetre \finans. The curve is flattening: the first millimetres give $41.7$ kg\,ha$^{-1}$ each, the last ones less than a third of that.
 
 \section{Evaporation control and mulching}
@@ -251,7 +255,9 @@ This group holds 7 figures: Temperature $\times$ rain response surfaces; Thresho
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Daily trajectories show how drying of the soil limits ET.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E0,E2,E7 daily; Daisy output used: profile log h @ -20; daily ET.
 \exbox{The regime index of a season}{Two seasons have soil evaporation and drainage $E_s=180$, $D=90$ mm and $E_s=60$, $D=220$ mm. Find the loss-pathway index DI of each.}\sol \givenline{(1) $E_s=180$, $D=90$ ; (2) $E_s=60$, $D=220$ (mm)}
-\par\noindent \[\mathrm{DI}=\frac{E_s-D}{E_s+\max(D,0)}:\quad \mathrm{DI}_1=\frac{180-90}{180+90}=+0.33,\qquad \mathrm{DI}_2=\frac{60-220}{60+220}=-0.57\quad\text{\finans}\]
+\par\noindent \[\mathrm{DI}=\frac{E_s-D}{E_s+\max(D,0)}:\quad \mathrm{DI}_1\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[\mathrm{DI}=\frac{180-90}{180+90}=+0.33,\qquad \mathrm{DI}_2=\frac{60-220}{60+220}=-0.57\quad\text{\finans}\]
 The first season is dominated by evaporation, so a mulch pays; the second is dominated by drainage, so a mulch changes little and the irrigation is the lever.
 
 \section{The coupling to nitrogen}
@@ -281,7 +287,9 @@ This group holds 3 figures: N rate $\times$ water strategy; Mediterranean pathwa
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Concentration against drainage on log axes with the EU drinking-water limit.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E6,E13; Daisy output used: N\_leached\_kg\_ha, drainage\_1m\_mm (E6, E13).
 \exbox{The nitrate in the drainage water}{A field is given $N_{fert}=120$ kg\,N\,ha$^{-1}$, loses $N_{leach}=20$ kg\,N\,ha$^{-1}$ and drains $D=120$ mm. Find the leaching fraction NLF and the concentration of nitrogen in the drainage, and compare it with the drinking-water limit of 11.3 mg N per litre.}\sol \givenline{$N_{fert}=120$ ; $N_{leach}=20$ kg\,N\,ha$^{-1}$ ; $D=120$ mm}
-\par\noindent $\mathrm{NLF}=20/120=0.167$ \finans. The concentration is \[c=N_{leach}/D\times100=20/120\times100=16.7\ \text{mg\,N\,L$^{-1}$}\quad\text{\finans}\]
+\par\noindent $\mathrm{NLF}=20/120=0.167$ \finans. The concentration is \[c=N_{leach}/D\times100\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[c=20/120\times100=16.7\ \text{mg\,N\,L$^{-1}$}\quad\text{\finans}\]
 which is $1.5$ times the limit of $11.3$ mg\,N\,L$^{-1}$ ($50$ mg nitrate per litre). One sixth of the fertiliser is lost, and the water that carries it is not fit to drink.
 
 \section{The synthesis}
@@ -319,6 +327,7 @@ This group holds 2 figures: Edge-case robustness and factor ranking; Trade-off (
 \item Write the equation from which the figure ``Sensor suction time series'' is computed and state what each symbol means. \exans{see the equation under the figure}
 \item Write the equation from which the figure ``Trigger pressure response'' is computed and state what each symbol means. \exans{see the equation under the figure}
 \end{exlist}
+\IfFileExists{extra/more20x.tex}{\input{extra/more20x}}{}
 \dykband{DO YOU KNOW ?}\begin{exlist}
 \item What does the figure ``Soil pore structure gates management controllability'' show, and from which experiment does its data come?
 \item What does the figure ``Soil-independent trigger law (data collapse)'' show, and from which experiment does its data come?
@@ -341,5 +350,5 @@ This group holds 2 figures: Edge-case robustness and factor ranking; Trade-off (
 \opt{E4,E15}{E7,E14}{E2 daily}{E9,E12,E14}
 \end{exlist}
 \objkey{1.\ (a),\quad 2.\ (d),\quad 3.\ (b),\quad 4.\ (b),\quad 5.\ (b)}
-\IfFileExists{extra/more20.tex}{\input{extra/more20}}{}
+\IfFileExists{extra/more20s.tex}{\input{extra/more20s}}{}
 \swaflvideo{20}

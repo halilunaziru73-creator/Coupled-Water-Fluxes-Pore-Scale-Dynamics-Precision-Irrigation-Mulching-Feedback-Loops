@@ -135,11 +135,19 @@ where $M$ is the melt (mm of water per day), $C_m$ the \kw{degree-day factor} (2
 \givenline{$W=80$ mm ; $C_m=3$ mm\,$^\circ$C$^{-1}$\,d$^{-1}$ ; $T_b=0$ $^\circ$C ; $T_a=4$ $^\circ$C ; $\theta_0=0.25$ ; $\theta_{fc}=0.33$}
 \sh{Daily melt and duration}
 \wkt\ by the degree-day method (Equation~\ref{eq:dm-ddf})
-\[M=C_m\,(T_a-T_b)=3\times(4-0)=12\ \text{mm\,d}^{-1}\]
-\[\therefore\quad\text{Duration}=\frac{W}{M}=\frac{80}{12}=6.7\ \text{days}\Ans\]
+\par\indent We know that
+\[M=C_m\,(T_a-T_b)\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[M=3\times(4-0)=12\ \text{mm\,d}^{-1}\]
+\par\indent We know that
+\[\therefore\quad\text{Duration}=\frac{W}{M}\ti{ii}\]
+Substituting the values in equation \rfi{ii},
+\[\therefore\quad\text{Duration}=\frac{80}{12}=6.7\ \text{days}\Ans\]
 \sh{Depth of soil raised to field capacity}
 Each metre of soil can take $1000(\theta_{fc}-\theta_0)$ mm before it reaches field capacity. Thus
-\[Z=\frac{W}{1000(\theta_{fc}-\theta_0)}=\frac{80}{1000\times(0.33-0.25)}=\frac{80}{80}=1.0\ \text{m}\Ans\]
+\[Z=\frac{W}{1000(\theta_{fc}-\theta_0)}\ti{iii}\]
+Substituting the values in equation \rfi{iii},
+\[Z=\frac{80}{1000\times(0.33-0.25)}=\frac{80}{80}=1.0\ \text{m}\Ans\]
 
 \section{Capillary rise from a water table}\label{sec:dm-rise}
 Below the root zone a shallow water table can feed the crop. With the exponential conductivity of Gardner, $K(h)=K_s\,e^{-ah}$, the steady upward flux that a profile can carry from a water table at depth $L$ to a dry root zone is limited to

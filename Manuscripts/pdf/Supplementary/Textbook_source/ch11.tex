@@ -13,15 +13,27 @@ The chain of the layer is: texture $\to$ Saxton and Rawls $\to$ Green and Ampt $
 \section{Soil water properties (Saxton and Rawls)}
 
 \exbox{Saxton and Rawls for the loam}{For the loam (sand $S=0.40$, clay $C=0.20$, OM $=1.5$ per cent) compute $\theta_{1500}$, $\theta_{33}$, $\theta_s$, $\lambda$ and $K_s$ with the Saxton and Rawls (2006) equations.}\sol \givenline{$S=0.40$ ; $C=0.20$ ; $=1.5$ per cent}\ans {\bfseries\color{khmag}1.}\ \[\theta_{1500,t}=-0.024(0.40)+0.487(0.20)+0.006(1.5)+0.005(0.40)(1.5)-0.013(0.20)(1.5)+0.068(0.40)(0.20)+0.031=0.13234\]
-correction: \[\theta_{1500}=\theta_{1500,t}+(0.14\theta_{1500,t}-0.02)=0.1309\quad\text{\finans}\]
+correction: \[\theta_{1500}=\theta_{1500,t}+(0.14\theta_{1500,t}-0.02)\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[\theta_{1500}=0.1309\quad\text{\finans}\]
 
 {\bfseries\color{khmag}2.}\ \[\theta_{33,t}=-0.251(0.40)+0.195(0.20)+0.011(1.5)+0.006(0.40)(1.5)-0.027(0.20)(1.5)+0.452(0.40)(0.20)+0.299=0.28576\]
-\[\theta_{33}=\theta_{33,t}+(1.283\theta_{33,t}^2-0.374\theta_{33,t}-0.015)=0.2687\]
+\par\indent We know that
+\[\theta_{33}=\theta_{33,t}+(1.283\theta_{33,t}^2-0.374\theta_{33,t}-0.015)\ti{ii}\]
+Substituting the values in equation \rfi{ii},
+\[\theta_{33}=0.2687\]
 \par\indent{\bfseries\color{khmag}3.}\ \[\theta_{(S-33),t}=0.278(0.40)+0.034(0.20)+0.022(1.5)-0.018(0.40)(1.5)-0.027(0.20)(1.5)-0.584(0.40)(0.20)+0.078=0.16338\]
 corrected \[\theta_{(S-33)}=0.16338+(0.636\times0.16338-0.107)=0.16029\]
-so \[\theta_s=\theta_{33}+\theta_{(S-33)}-0.097S+0.043=0.4331\]
-\par\indent{\bfseries\color{khmag}4.}\ \[B=(\ln1500-\ln33)/(\ln\theta_{33}-\ln\theta_{1500})=5.307\]
-$\lambda=1/B=0.1884$, \[K_s=1930(\theta_s-\theta_{33})^{3-\lambda}=1930(0.1645)^{2.812}=12.07\ \text{mm h$^{-1}$}\]
+so \[\theta_s=\theta_{33}+\theta_{(S-33)}-0.097S+0.043\ti{iii}\]
+Substituting the values in equation \rfi{iii},
+\[\theta_s=0.4331\]
+\par\indent{\bfseries\color{khmag}4.}\ \par\indent We know that
+\[B=(\ln1500-\ln33)/(\ln\theta_{33}-\ln\theta_{1500})\ti{iv}\]
+Substituting the values in equation \rfi{iv},
+\[B=5.307\]
+$\lambda=1/B=0.1884$, \[K_s=1930(\theta_s-\theta_{33})^{3-\lambda}\ti{v}\]
+Substituting the values in equation \rfi{v},
+\[K_s=1930(0.1645)^{2.812}=12.07\ \text{mm h$^{-1}$}\]
 \subhd{Reading.} Field capacity $\theta_{fc}=\theta_{33}=0.269$ and wilting $\theta_{wp}=\theta_{1500}=0.131$ give plant-available water $0.138$ cm$^3$ cm$^{-3}$, i.e. 1.38 mm per cm, close to the engineered AWC of 1.7 mm per cm for this soil. These are regressions on a US soil database and carry its scatter: they serve design and not prediction at a site.
 
 
@@ -51,7 +63,9 @@ The effective suction at the wetting front is $\psi_f=\frac{10}{\alpha}\dfrac{0.
 Denominator: $1+4.7(0.3590)+16(0.3590)^2=4.7490$. So \[\psi_f=\frac{10}{0.036}\times0.2496=69.3\ \text{mm}\]
 (For the coarse loam, $\alpha=0.0961$, the same formula gives 15.7 mm, the 16 mm quoted by the application.) Storage: \[\theta_0=0.2687-0.468(0.2687-0.1309)=0.2042\] and \[\Delta\theta=\max\{0.05,0.95(0.4331)-0.2042\}=0.2073\quad\text{\finans}\]
 
-Newton for $t=60$ min: $K_st/60=12.07$ mm and $\psi_f\Delta\theta=14.37$ mm. Start \[F_0=\max\{12.07,\sqrt{2(\psi_f\Delta\theta)K_st/60}\}=18.63\ \text{mm}\]
+Newton for $t=60$ min: $K_st/60=12.07$ mm and $\psi_f\Delta\theta=14.37$ mm. Start \[F_0=\max\{12.07,\sqrt{2(\psi_f\Delta\theta)K_st/60}\}\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[F_0=18.63\ \text{mm}\]
 Each step $F\leftarrow F-g/g'$ with $g=F-c\ln(1+F/c)-K_st/60$, $g'=1-1/(1+F/c)$, $c=\psi_f\Delta\theta$.\begin{table}[!htbp]\centering\small\caption{Newton iteration for $F(60\ \mathrm{min})$.}\label{tab:newton}
 \begin{tabular}{lrrr}\toprule
 \hd{Iteration} & \hd{$F$ (mm)} & \hd{$g$} & \hd{new $F$}\\\midrule
@@ -81,7 +95,9 @@ The rate falls toward the saturated conductivity 12.1 mm h$^{-1}$ but is still 1
 \section{The Kostiakov fit}
 The design converts the Green--Ampt curve into the power law $Z(\tau)=k\tau^A$ ($Z$ in m, $\tau$ in min) by least squares on $\ln Z=\ln k+A\ln\tau$ at 25 times spaced geometrically between 10 and 600 min.
 
-\exbox{Fitting the Kostiakov law}{Fit $k$ and $A$ for the loam, and report $R^2$.}\sol  With $x_i=\ln\tau_i$, $y_i=\ln(F_i/1000)$ over 25 points: $\bar x=4.3498$, $\bar y=-3.3721$, $\sum(x-\bar x)^2=37.8346$, $\sum(x-\bar x)(y-\bar y)=26.2682$. So $A=0.6943$ and \[\ln k=\bar y-A\bar x=-6.3921\]
+\exbox{Fitting the Kostiakov law}{Fit $k$ and $A$ for the loam, and report $R^2$.}\sol  With $x_i=\ln\tau_i$, $y_i=\ln(F_i/1000)$ over 25 points: $\bar x=4.3498$, $\bar y=-3.3721$, $\sum(x-\bar x)^2=37.8346$, $\sum(x-\bar x)(y-\bar y)=26.2682$. So $A=0.6943$ and \[\ln k=\bar y-A\bar x\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[\ln k=-6.3921\]
 $k=0.001675$ m min$^{-A}$ ($=1.675$ mm min$^{-A}$), $R^2=0.9972$. Table~\ref{tab:kost} compares every fourth point of the Green--Ampt curve with the fitted power law.\begin{table}[!htbp]\centering\small\caption{Kostiakov fit of the loam (every fourth of 25 points).}\label{tab:kost}
 \begin{tabular}{lrrrr}\toprule
 \hd{$\tau$ (min)} & \hd{$F$ (mm)} & \hd{$x$} & \hd{$y$} & \hd{$k\tau^A$ (mm)}\\\midrule
@@ -127,7 +143,10 @@ since $0.3536^{2/3}=0.5000$ and $0.5\times0.05477/0.04=0.6847$, $Q(y)=0.6847\,y^
 8 & 0.08603 & 0.9876 & upper\\\bottomrule\end{tabular}\end{table} \finans
 
 
-\exbox{Sheet flow in a border}{For a border strip with $q=6$ L s$^{-1}$ per metre width ($0.006$ m$^2$ s$^{-1}$), $S=0.20$ per cent, $n=0.15$: find $y_0$ and $A_0$.}\sol \givenline{$q=6$ L s$^{-1}$ per metre width ; $S=0.20$ per cent ; $n=0.15$}\ans \[y_0=(qn/\sqrt S)^{0.6}=(0.006\times0.15/0.04472)^{0.6}=(0.02012)^{0.6}=0.0960\ \text{m}\]
+\exbox{Sheet flow in a border}{For a border strip with $q=6$ L s$^{-1}$ per metre width ($0.006$ m$^2$ s$^{-1}$), $S=0.20$ per cent, $n=0.15$: find $y_0$ and $A_0$.}\sol \givenline{$q=6$ L s$^{-1}$ per metre width ; $S=0.20$ per cent ; $n=0.15$}\ans \par\indent We know that
+\[y_0=(qn/\sqrt S)^{0.6}\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[y_0=(0.006\times0.15/0.04472)^{0.6}=(0.02012)^{0.6}=0.0960\ \text{m}\]
 so $A_0=0.0960$ m$^2$ per metre of width. A sheet flow 3.7 cm deep at the inlet. \finans
 
 
@@ -153,7 +172,9 @@ with $\sigma_y=0.8$. The exponent $r$ is found by iterating ten times from $\sig
 
 
 \exbox{Advance table}{Give the advance times to 20, 45, 90, 135 and 180 m, and check that the advance follows $x=pt^r$.}\sol  Solve $x(t)=x$ at the converged $\sigma_z$ (Table~\ref{tab:adv}). The ratio of the times for $x=90$ and $x=180$ is 0.321 and \[2^{-1/r}=2^{-1/0.6103}=0.321\]
-the two agree, because $r$ was derived from exactly these two times. Between 20 and 45 m the same exponent gives \[t_{45}/t_{20}=(2.250)^{1/r}=3.78\] against the computed 2.65; the power law is an approximation of the volume balance, good in the middle of the field.\begin{table}[!htbp]\centering\small\caption{Advance times.}\label{tab:adv}
+the two agree, because $r$ was derived from exactly these two times. Between 20 and 45 m the same exponent gives \[t_{45}/t_{20}=(2.250)^{1/r}\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[t_{45}/t_{20}=3.78\] against the computed 2.65; the power law is an approximation of the volume balance, good in the middle of the field.\begin{table}[!htbp]\centering\small\caption{Advance times.}\label{tab:adv}
 \begin{tabular}{lrr}\toprule
 \hd{$x$ (m)} & \hd{$t_x$ (min)} & \hd{$t_x$ (h)}\\\midrule
 20 & 2.3 & 0.04\\
@@ -170,7 +191,9 @@ The time to infiltrate the required depth is $t_{st}=(Z_n/k)^{1/A}$; the cut-off
 
 
 \exbox{Cut-off, depths and efficiencies}{Compute the cut-off, depths, volumes and efficiencies of the design.}\sol  1. Opportunity time to infiltrate $Z_n$: \[t_{st}=(0.0733/0.001675)^{1/0.6943}=(43.77)^{1.4403}=231.1\ \text{min}\]
-\par\indent{\bfseries\color{khmag}2.}\ Cut-off \[t_{co}=t_L+t_{st}=49.8+231.1=280.8\] min (4.68 h). 3. Inlet depth $Z_0=k t_{co}^A=83.9$ mm; tail depth $Z_L=k(t_{co}-t_L)^A=73.3$ mm ($=Z_n$ by construction). 4. Volumes (per furrow): \[V_{app}=0.072\times280.8=20.221\ \text{m$^3$}\]
+\par\indent{\bfseries\color{khmag}2.}\ Cut-off \[t_{co}=t_L+t_{st}\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[t_{co}=49.8+231.1=280.8\] min (4.68 h). 3. Inlet depth $Z_0=k t_{co}^A=83.9$ mm; tail depth $Z_L=k(t_{co}-t_L)^A=73.3$ mm ($=Z_n$ by construction). 4. Volumes (per furrow): \[V_{app}=0.072\times280.8=20.221\ \text{m$^3$}\]
 \[V_{req}=0.0733\times180\times0.75=9.896\ \text{m$^3$}\]
 trapezoidal integration with $N=300$ gives $V_{inf}=10.791$, $V_{st}=9.896$, $V_{dp}=0.896$, $V_{df}=0.000$ and runoff $V_{ro}=9.430$ m$^3$. 5. Efficiencies: $E_a=0.489$, $E_s=1.000$, $DP=0.044$, $RO=0.466$, $CU=96.7$ per cent. \textbf{Closure:} $E_a+DP+RO=1.0000$. \finans
 
@@ -234,9 +257,15 @@ Slope $S$ & $\pm$30\% & -0.9 & +0.6 & 0.9\\\bottomrule\end{tabular}\end{table} \
 The ranking is Intake $A$, Intake $k$, Length $L$ first: those are the inputs around which a design should be tested. The test is local to this layout and not a global importance.
 
 
-\exbox{Season and farm}{Season and farm (Equation 12.24 of the application): with the net irrigation $\sum I=150$ mm of the working year, $Z_n=73.3$ mm, farm supply $Q_s=30$ L s$^{-1}$, field width $W_f=120$ m, find the number of events, the gross depth, the seasonal depth, the number of furrows run at once, the number of sets and the pumping time.}\sol \givenline{$\sum I=150$ mm ; $Z_n=73.3$ mm ; $Q_s=30$ L s$^{-1}$ ; $W_f=120$ m}\ans $n_{ev}=150/73.3=2.05$ events (rounded, about 2). Gross depth per event \[Z_g=V_{app}/(Lw)\times1000=9.263/(180\times0.75)\times1000=68.6\ \text{mm}\]
-$Z_{season}=n_{ev}Z_g=140$ mm, that is $1404$ m$^3$ ha$^{-1}$. Furrows at once: $N_{0M}=Q_s/q=30/0.71=42.5$; units: \[N_{units}=W_f/w=120/0.75=160\]
-sets: \[N_{sets}=\max(1,\lceil160/42.5\rceil)=4\]
+\exbox{Season and farm}{Season and farm (Equation 12.24 of the application): with the net irrigation $\sum I=150$ mm of the working year, $Z_n=73.3$ mm, farm supply $Q_s=30$ L s$^{-1}$, field width $W_f=120$ m, find the number of events, the gross depth, the seasonal depth, the number of furrows run at once, the number of sets and the pumping time.}\sol \givenline{$\sum I=150$ mm ; $Z_n=73.3$ mm ; $Q_s=30$ L s$^{-1}$ ; $W_f=120$ m}\ans $n_{ev}=150/73.3=2.05$ events (rounded, about 2). Gross depth per event \[Z_g=V_{app}/(Lw)\times1000\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[Z_g=9.263/(180\times0.75)\times1000=68.6\ \text{mm}\]
+$Z_{season}=n_{ev}Z_g=140$ mm, that is $1404$ m$^3$ ha$^{-1}$. Furrows at once: $N_{0M}=Q_s/q=30/0.71=42.5$; units: \[N_{units}=W_f/w\ti{ii}\]
+Substituting the values in equation \rfi{ii},
+\[N_{units}=120/0.75=160\]
+sets: \[N_{sets}=\max(1,\lceil160/42.5\rceil)\ti{iii}\]
+Substituting the values in equation \rfi{iii},
+\[N_{sets}=4\]
 total set time \[T_{tot}=4\times219/60=14.6\] h per round, so the season pumps $n_{ev}T_{tot}=30$ hours. \finans
 
 
@@ -267,7 +296,8 @@ After cut-off the water left on the surface (an upper bound, $V_s\le V_{app}-V_{
 \IfFileExists{extra/tenx11.tex}{\input{extra/tenx11}}{}
 \IfFileExists{extra/tenbx11.tex}{\input{extra/tenbx11}}{}
 \IfFileExists{extra/ex11.tex}{\input{extra/ex11}}{}
+\IfFileExists{extra/more11x.tex}{\input{extra/more11x}}{}
 \IfFileExists{extra/dyk11.tex}{\input{extra/dyk11}}{}
 \IfFileExists{extra/obj11.tex}{\input{extra/obj11}}{}
-\IfFileExists{extra/more11.tex}{\input{extra/more11}}{}
+\IfFileExists{extra/more11s.tex}{\input{extra/more11s}}{}
 \swaflvideo{11}

@@ -200,12 +200,21 @@ T&=\min\Big(0.9ET,\;T_m\,\mathrm{clip}\Big(\frac{ET_{a,c}}{ET_{c,c}}\cdot\frac{E
 D&=\max(0.2D_m,D_m+0.5(DP_c-DP_r)),\quad ET=\mathrm{clip}(P+I-D-\Delta S_m;50,5000),\quad N_L=N_{L,m}\frac{D+5}{D_m+5}.\end{align}
 The remainder of the balance, $ET-T$, is shared between soil evaporation and the other evaporation terms in proportion to their targets ($E_{\rm other}^*=E_{{\rm other},m}ET/ET_m$).
 
-\exbox{Transferring sorghum from the cereal result}{The cereal model run of the loam (trigger $-300$ cm, 600 mm rain; Chapter~\ref{ch:e2}) gives $P=606$, $I_m=90$, $D_m=200$, $E_m=158$, $T_m=230$ mm, so $ET_m=P+I_m-D_m=496$ mm and $E_{{\rm other},m}=ET_m-T_m-E_m=108$ mm; assume $\Delta S_m=0$ and $N_{L,m}=40$ kg ha$^{-1}$. Transfer sorghum with ground covers $f_{c,c}=0.80$ and $f_{c,r}=0.85$ (assumed mid-season values). The balances of this chapter give: sorghum $I_c=538$ mm, $ET_{a,c}/ET_{c,c}=1.000$, $ET_{c,c}=527$ mm, $DP_c=11$ mm; reference $I_r=609$ mm, $ET_{c,r}=543$ mm, $DP_r=0$ mm.}\sol \givenline{$P=606$ ; $I_m=90$ ; $D_m=200$ ; $E_m=158$ ; $T_m=230$ mm ; $ET_m=P+I_m-D_m=496$ mm ; \[E_{{\rm other},m}=ET_m-T_m-E_m=108\ \text{mm}\]
-assume ; $\Delta S_m=0$ ; $N_{L,m}=40$ kg ha$^{-1}$}\ans \emph{Irrigation:} \[I=90\times\mathrm{clip}(538/609)=90\times0.884=80\ \text{mm}\]
+\exbox{Transferring sorghum from the cereal result}{The cereal model run of the loam (trigger $-300$ cm, 600 mm rain; Chapter~\ref{ch:e2}) gives $P=606$, $I_m=90$, $D_m=200$, $E_m=158$, $T_m=230$ mm, so $ET_m=P+I_m-D_m=496$ mm and $E_{{\rm other},m}=ET_m-T_m-E_m=108$ mm; assume $\Delta S_m=0$ and $N_{L,m}=40$ kg ha$^{-1}$. Transfer sorghum with ground covers $f_{c,c}=0.80$ and $f_{c,r}=0.85$ (assumed mid-season values). The balances of this chapter give: sorghum $I_c=538$ mm, $ET_{a,c}/ET_{c,c}=1.000$, $ET_{c,c}=527$ mm, $DP_c=11$ mm; reference $I_r=609$ mm, $ET_{c,r}=543$ mm, $DP_r=0$ mm.}\sol \givenline{$P=606$ ; $I_m=90$ ; $D_m=200$ ; $E_m=158$ ; $T_m=230$ mm ; $ET_m=P+I_m-D_m=496$ mm ; \par\indent We know that
+\[E_{{\rm other},m}=ET_m-T_m-E_m\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[E_{{\rm other},m}=108\ \text{mm}\]
+assume ; $\Delta S_m=0$ ; $N_{L,m}=40$ kg ha$^{-1}$}\ans \emph{Irrigation:} \par\indent We know that
+\[I=90\times\mathrm{clip}(538/609)\ti{ii}\]
+Substituting the values in equation \rfi{ii},
+\[I=90\times0.884=80\ \text{mm}\]
 \emph{Drainage:} \[D=\max(0.2\times200,200+0.5(11-0))=206\ \text{mm}\]
 \emph{Evapotranspiration:} $ET=P+I-D=606+80-206=480$ mm. \emph{Transpiration:} ratio \[=1.000\times(527/543)\times(0.80/0.85)^{0.3}=0.952\]
 so \[T=\min(0.9\times480,\,230\times0.952)=219\ \text{mm}\]
-\emph{Evaporation:} \[E^*=158\times\mathrm{clip}((1-0.56)/(1-0.595))=158\times1.086=172\ \text{mm}\]
+\emph{Evaporation:} \par\indent We know that
+\[E^*=158\times\mathrm{clip}((1-0.56)/(1-0.595))\ti{iii}\]
+Substituting the values in equation \rfi{iii},
+\[E^*=158\times1.086=172\ \text{mm}\]
 \[E^*_{\rm other}=108\times480/496=104\ \text{mm}\]
 sharing $ET-T=261$ mm in that proportion gives $E=163$ and $E_{\rm other}=99$ mm. Leaching: \[N_L=40\times(206+5)/(200+5)=41.1\ \text{kg ha$^{-1}$}\]
 The balance closes: $T+E+E_{\rm other}=480=ET$. \finans
@@ -232,7 +241,8 @@ The balance closes: $T+E+E_{\rm other}=480=ET$. \finans
 \IfFileExists{extra/tenx05.tex}{\input{extra/tenx05}}{}
 \IfFileExists{extra/tenbx05.tex}{\input{extra/tenbx05}}{}
 \IfFileExists{extra/ex05.tex}{\input{extra/ex05}}{}
+\IfFileExists{extra/more05x.tex}{\input{extra/more05x}}{}
 \IfFileExists{extra/dyk05.tex}{\input{extra/dyk05}}{}
 \IfFileExists{extra/obj05.tex}{\input{extra/obj05}}{}
-\IfFileExists{extra/more05.tex}{\input{extra/more05}}{}
+\IfFileExists{extra/more05s.tex}{\input{extra/more05s}}{}
 \swaflvideo{05}

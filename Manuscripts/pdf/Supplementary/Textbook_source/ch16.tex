@@ -46,8 +46,12 @@ The box \emph{Photosynthesis} turns the absorbed light and the carbon dioxide in
 \exbox{The light response of a leaf}{A leaf has $A_{\max}=30$ $\mu$mol\,m$^{-2}$\,s$^{-1}$ and $\varepsilon=0.05$. Find the assimilation at $I=500$ and $I=1500$ $\mu$mol photons\,m$^{-2}$\,s$^{-1}$, and the share of the maximum that each represents.}\sol \givenline{$A_{\max}=30$ ; $\varepsilon=0.05$ ; $I=500,\ 1500$}
 \par\noindent At $I=500$: \[\varepsilon I/A_{\max}=25/30=0.833\]
 so
-\[A=30\bigl(1-e^{-0.833}\bigr)=30\times0.565=17.0\ \mu\text{mol\,m}^{-2}\,\text{s}^{-1}\quad\text{\finans}\]
-which is $17.0/30=57$ per cent of the maximum. At $I=1500$: $\varepsilon I/A_{\max}=2.5$, and \[A=30(1-e^{-2.5})=30\times0.918=27.5\quad\text{\finans}\]
+\[A=30\bigl(1-e^{-0.833}\bigr)\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[A=30\times0.565=17.0\ \mu\text{mol\,m}^{-2}\,\text{s}^{-1}\quad\text{\finans}\]
+which is $17.0/30=57$ per cent of the maximum. At $I=1500$: $\varepsilon I/A_{\max}=2.5$, and \[A=30(1-e^{-2.5})\ti{ii}\]
+Substituting the values in equation \rfi{ii},
+\[A=30\times0.918=27.5\quad\text{\finans}\]
 92 per cent of the maximum. Tripling the light raises the assimilation by only 62 per cent: a leaf in bright sun is almost saturated, while the leaves in the shade of the same canopy are not, which is why the light is distributed between sun leaves and shade leaves.
 
 \section{Stomatal conductance}
@@ -79,7 +83,9 @@ What remains in the assimilate pool, after the maintenance, is shared between th
 
 \exbox{Where does a day of assimilate go?}{After flowering ($DS=1.3$) the daily assimilate is $12$ g\,m$^{-2}$ and the maintenance respiration is $3.55$ g\,m$^{-2}$ (the value of the previous example at 20 $^\circ$C). The growth efficiency is $Y_g=0.75$ and the fractions at this stage are leaf $0$, stem $0.15$, root $0.05$ and storage organ $0.80$ (illustrative values). Find the growth of each organ, and the yield that results if this goes on for 40 days.}\sol \givenline{$A_{pool}=12$ ; $R_m=3.55$ ; $Y_g=0.75$ ; $f=(0,\ 0.15,\ 0.05,\ 0.80)$}
 \par\noindent The assimilate available for growth is $12-3.55=8.45$ g\,m$^{-2}$, and the new dry matter is $0.75\times8.45=6.34$ g\,m$^{-2}$. From Equation~(\ref{eq:dm-part}):
-\[\Delta W_{leaf}=0,\quad\Delta W_{stem}=0.15\times6.34=0.95,\quad\Delta W_{root}=0.05\times6.34=0.32,\quad\Delta W_{storage}=0.80\times6.34=5.07\ \text{g\,m}^{-2}\,\text{d}^{-1}\ \ \text{\finans}\]
+\[\Delta W_{leaf}=0,\quad\Delta W_{stem}\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[\Delta W_{leaf}=0.15\times6.34=0.95,\quad\Delta W_{root}=0.05\times6.34=0.32,\quad\Delta W_{storage}=0.80\times6.34=5.07\ \text{g\,m}^{-2}\,\text{d}^{-1}\ \ \text{\finans}\]
 Over 40 days the storage organ gains $40\times5.07=203$ g\,m$^{-2}$, that is $2.0$ t\,ha$^{-1}$ of dry matter. Of the $12$ g assimilated each day, $5.07/12=42$ per cent ends up in the yield; the rest is respired (maintenance and growth, $8.45\times0.25+3.55=5.7$ g), or is built into stem and root. \finans
 
 \section{Canopy structure and the leaf area index}
@@ -162,6 +168,7 @@ Rotation and sequence & runs actions in order, repeats them and follows one crop
 \item Fertiliser product for 90 kg N/ha with 46 \% N (urea).\exans{196 kg/ha}
 \end{exlist}
 
+\IfFileExists{extra/more16x.tex}{\input{extra/more16x}}{}
 \dykband{DO YOU KNOW ?}
 \begin{exlist}
 \item What does the development stage measure?
@@ -172,5 +179,5 @@ Rotation and sequence & runs actions in order, repeats them and follows one crop
 \item Why does less transpiration mean less yield?
 \item Which box turns a soil suction into an irrigation?
 \end{exlist}
-\IfFileExists{extra/more16.tex}{\input{extra/more16}}{}
+\IfFileExists{extra/more16s.tex}{\input{extra/more16s}}{}
 \swaflvideo{16}

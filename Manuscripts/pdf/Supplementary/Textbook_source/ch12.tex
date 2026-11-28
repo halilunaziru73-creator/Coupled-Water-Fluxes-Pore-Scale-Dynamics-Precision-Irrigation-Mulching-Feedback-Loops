@@ -13,7 +13,10 @@
 \section{Depth per irrigation}
 By default the depth is the crop need over the interval capped by what the root zone holds at the trigger: $Z_n=\min\{Z_n^{\rm DSS},\max(4,ET_{\rm pk}\Delta t)\}$ mm, with $ET_{\rm pk}=\mathrm{clip}\{\max_d\frac15\sum_{j=0}^{4}(E_{d+j}+T_{d+j});2.5,9\}$ mm d$^{-1}$.
 
-\exbox{Depth per irrigation}{The five-day mean of $E+T$ peaks at $6.4$ mm d$^{-1}$ in the season of the loam. Find $ET_{\rm pk}$, and $Z_n$ for irrigation every 1, 2, 3 and 5 days with $Z_n^{\rm DSS}=73.3$ mm.}\sol \givenline{$Z_n^{\rm DSS}=73.3$ mm}\ans \[ET_{\rm pk}=\mathrm{clip}(6.4;2.5,9)=6.4\]
+\exbox{Depth per irrigation}{The five-day mean of $E+T$ peaks at $6.4$ mm d$^{-1}$ in the season of the loam. Find $ET_{\rm pk}$, and $Z_n$ for irrigation every 1, 2, 3 and 5 days with $Z_n^{\rm DSS}=73.3$ mm.}\sol \givenline{$Z_n^{\rm DSS}=73.3$ mm}\ans \par\indent We know that
+\[ET_{\rm pk}=\mathrm{clip}(6.4;2.5,9)\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[ET_{\rm pk}=6.4\]
 \[Z_n=\min\{73.3,\max(4,6.4\Delta t)\}\]
 $\Delta t=1$: $6.4$ mm; $2$: $12.8$; $3$: $19.2$; $5$: $32.0$ mm. All are below the root-zone limit 73.3 mm, so the crop need decides. At the default $\Delta t=2$ d the depth is 12.8 mm, which is what a drip line must deliver at each irrigation. \finans
 
@@ -35,7 +38,9 @@ and the run time of a set is
 \par\noindent\textbf{(b) Flow of one lateral.} The number of emitters on a lateral is $100/S_p=100/0.5=200$. Each delivers 2 L\,h$^{-1}$, so
 \[Q_L=200\times2=400\ \text{L\,h}^{-1}=\frac{400}{3600}=0.111\ \text{L\,s}^{-1}\quad\text{\finans}\]
 \par\noindent\textbf{(c) Laterals running at once.} The supply is 6 L\,s$^{-1}$, so the largest number of laterals that can be opened together is
-\[N_s=\left\lfloor\frac{6}{0.111}\right\rfloor=54\quad\text{\finans}\]
+\[N_s=\left\lfloor\frac{6}{0.111}\right\rfloor\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[N_s=54\quad\text{\finans}\]
 \par\noindent\textbf{(d) Sets and operating time.} One lateral serves an area of $1.5\times100=150$ m$^2$, so the field needs $20{,}000/150=133.3$, that is $134$ laterals. With 54 laterals per set the field is divided into $\lceil134/54\rceil=3$ sets (54, 54 and 26 laterals). The total operating time of one cycle is
 \[3\times5.33=16.0\ \text{h}\quad\text{\finans}\]
 This is far below the 48 hours of the two-day interval, so the supply is sufficient. As a check, the water delivered per cycle is \[134\times200\times10.7\ \text{L}=286\ \text{m}^3\]
@@ -44,7 +49,9 @@ which over $2$ days and 2 ha equals \[286/(2\times20{,}000)\times1000=7.2\] mm p
 \section{Lateral hydraulics}
 A lateral of length $L_L$ has $N=\mathrm{round}(L_L/S_e)$ intervals and $N+1$ emitters. The friction loss in the segment feeding emitter $j$ is the Hazen--Williams loss $h_{f,j}=\dfrac{10.67\,S_eQ_j^{1.852}}{C^{1.852}D^{4.871}}$ with $C=140$ and $Q_j=\sum_{i\ge j+1}q_i$ (m$^3$ s$^{-1}$); the head is $h_j=h_{j-1}-h_{f,j-1}$ with $h_0=H_0$; the emitter law is $q_j=q(h_j/H_0)^x$ (non-compensating), or for the pressure-compensating emitter $q_j=q[1+0.04(h_j-H_0)/H_0]$ above $H_{\min}=8$ m and $q(\max(h_j,0.1)/H_{\min})^{0.5}$ below it. Flows and heads depend on each other: the pair is iterated from the uniform start (three plain substitution passes, then the flows averaged with the previous pass) until the largest relative change is below $10^{-7}$.
 
-\exbox{Hand pass of a short lateral}{Hand-solve a lateral with three emitters ($N=2$): online emitter $q=4$ L h$^{-1}$ at $H_0=10$ m, $x=0.5$, $S_e=0.75$ m, $D=16$ mm, $C=140$. Do the first pass of the iteration and the check of the loss.}\sol \givenline{$N=2$ ; $q=4$ L h$^{-1}$ ; $H_0=10$ m ; $x=0.5$ ; $S_e=0.75$ m ; $D=16$ mm ; $C=140$}\ans Start with $q_j=4$ L h$^{-1}$ $=1.111\times10^{-6}$ m$^3$ s$^{-1}$ at every emitter. The segment before emitter 1 carries \[Q=q_1+q_2=2.222\times10^{-6}\ \text{m$^3$ s$^{-1}$}\]
+\exbox{Hand pass of a short lateral}{Hand-solve a lateral with three emitters ($N=2$): online emitter $q=4$ L h$^{-1}$ at $H_0=10$ m, $x=0.5$, $S_e=0.75$ m, $D=16$ mm, $C=140$. Do the first pass of the iteration and the check of the loss.}\sol \givenline{$N=2$ ; $q=4$ L h$^{-1}$ ; $H_0=10$ m ; $x=0.5$ ; $S_e=0.75$ m ; $D=16$ mm ; $C=140$}\ans Start with $q_j=4$ L h$^{-1}$ $=1.111\times10^{-6}$ m$^3$ s$^{-1}$ at every emitter. The segment before emitter 1 carries \[Q=q_1+q_2\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[Q=2.222\times10^{-6}\ \text{m$^3$ s$^{-1}$}\]
 \[h_f=10.67(0.75)(2.222\times10^{-6})^{1.852}/(140^{1.852}\times0.016^{4.871})\]
 Compute: \[(2.222\times10^{-6})^{1.852}=e^{1.852\ln(2.222\times10^{-6})}=e^{1.852\times(-13.017)}=e^{-24.11}=3.4\times10^{-11}\]
 \[140^{1.852}=e^{1.852\times4.9416}=e^{9.152}=9{,}420\]
@@ -53,7 +60,10 @@ So \[h_f=8.0\times3.4\times10^{-11}/(9420\times1.8\times10^{-9})=2.7\times10^{-1
 a negligible loss, so $q_1\approx q_0$ and the three emitters are the same at this length. Short laterals are uniform; the loss grows with the square of the length (flow) times length (pipe) so that it is of order $L^{2.852}$. \finans
 
 
-\exbox{Flow and head along a 100 m lateral}{Solve a lateral of $L_L=100$ m with the online emitter ($q=4$ L h$^{-1}$, $S_e=0.75$ m, $x=0.5$, $H_0=10$ m, $D=16$ mm): the head at the far end, $\bar q$, $q_{\min}$ and the number of passes.}\sol \givenline{$L_L=100$ m ; $q=4$ L h$^{-1}$ ; $S_e=0.75$ m ; $x=0.5$ ; $H_0=10$ m ; $D=16$ mm}\ans \[N=\mathrm{round}(100/0.75)=133\] intervals and $134$ emitters. At the start the segment at the inlet carries all 134 emitters: \[Q=134\times1.111\times10^{-6}=1.489\times10^{-4}\ \text{m$^3$ s$^{-1}$}\]
+\exbox{Flow and head along a 100 m lateral}{Solve a lateral of $L_L=100$ m with the online emitter ($q=4$ L h$^{-1}$, $S_e=0.75$ m, $x=0.5$, $H_0=10$ m, $D=16$ mm): the head at the far end, $\bar q$, $q_{\min}$ and the number of passes.}\sol \givenline{$L_L=100$ m ; $q=4$ L h$^{-1}$ ; $S_e=0.75$ m ; $x=0.5$ ; $H_0=10$ m ; $D=16$ mm}\ans \par\indent We know that
+\[N=\mathrm{round}(100/0.75)\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[N=133\] intervals and $134$ emitters. At the start the segment at the inlet carries all 134 emitters: \[Q=134\times1.111\times10^{-6}=1.489\times10^{-4}\ \text{m$^3$ s$^{-1}$}\]
 and the loss of its first 0.75 m is $h_f=0.03877$ m. Summing the losses along the lateral lowers the head, which lowers the flows, which lowers the losses: Table~\ref{tab:latiter} lists the first ten passes (the first three are plain substitution). The iteration converges (to $10^{-7}$) after 13 passes to $\bar q=3.7590$ L h$^{-1}$, $q_{\min}=3.6722$ L h$^{-1}$ at the last emitter and an end head $H_{\rm end}=8.428$ m. The loss along the lateral is $h_f=H_0-H_{\rm end}=1.57$ m, 15.7 per cent of the inlet head (the warning level is 20 per cent).\begin{table}[!htbp]\centering\small\caption{Convergence of the lateral solution.}\label{tab:latiter}
 \begin{tabular}{lrrrr}\toprule
 \hd{Pass} & \hd{$\bar q$ (L/h)} & \hd{$q_{\min}$ (L/h)} & \hd{$H_{\rm end}$ (m)} & \hd{max change}\\\midrule
@@ -122,8 +132,14 @@ S09 & Clay loam & 3.2 & 0.062 & 0.78\\
 S10 & Silty clay loam & 3.8 & 0.074 & 0.81\\\bottomrule\end{tabular}\end{table}
 
 
-\exbox{Efficiencies over the spread of emitters}{Evaluate the efficiencies of a drip system on the loam: online emitter ($q=4$ L h$^{-1}$, $\bar q=0.94q=3.76$), $S_e=0.75$ m, laterals $S_l=1.0$ m (cereal), buried at 250 mm, $Z_n=12.8$ mm, root zone $R_{\max}=920$ mm, $E_0=3$ mm d$^{-1}$, $E_u=0.89$, $\sigma_q=\sqrt{0.07^2+0.03^2}=0.076$ (assumed $\sigma_P=0.03$).}\sol \givenline{$q=4$ L h$^{-1}$ ; $\bar q=0.94q=3.76$ ; $S_e=0.75$ m ; $S_l=1.0$ m ; $Z_n=12.8$ mm ; $R_{\max}=920$ mm ; $E_0=3$ mm d$^{-1}$ ; $E_u=0.89$ ; $\sigma_q=\sqrt{0.07^2+0.03^2}=0.076$}\ans {\bfseries\color{khmag}1.}\ Water required per emitter: \[V_{req}=Z_nS_eS_l=12.8\times0.75\times1.0=9.60\] L (1 mm over 1 m$^2$ is 1 L). 2. Automatic run time: \[t=V_{req}/(\bar qE_u)=9.60/(3.76\times0.89)=2.87\ \text{h}\]
-\par\indent{\bfseries\color{khmag}3.}\ Mean delivery $\bar V=\bar qt=10.79$ L. 4. Five emitters at the normal quantiles $z=-1.28,-0.52,0,0.52,1.28$ deliver $V_i=\bar V(1+\sigma_qz_i)$ (Table~\ref{tab:quant}); for each the bulb radius, the part below $R_{\max}$, the evaporation \[V_{ev}=\min\{0.5V,\pi\rho(0)^2\times10^{-6}\times2E_0\}\] and the root water follow Equations (13.10) to (12.15). 5. Storage $V_{st,i}=\min(V_{root,i},V_{req})$ and the excess $V_{ex,i}$. 6. Averages over the five: $E_a=0.890$, $E_s=1.000$, $DP=0.110$, $EV=0.000$; $E_a+DP+EV=1.000$. Gross depth \[Z_{gross}=\bar V/(S_eS_l)=14.4\ \text{mm}\]
+\exbox{Efficiencies over the spread of emitters}{Evaluate the efficiencies of a drip system on the loam: online emitter ($q=4$ L h$^{-1}$, $\bar q=0.94q=3.76$), $S_e=0.75$ m, laterals $S_l=1.0$ m (cereal), buried at 250 mm, $Z_n=12.8$ mm, root zone $R_{\max}=920$ mm, $E_0=3$ mm d$^{-1}$, $E_u=0.89$, $\sigma_q=\sqrt{0.07^2+0.03^2}=0.076$ (assumed $\sigma_P=0.03$).}\sol \givenline{$q=4$ L h$^{-1}$ ; $\bar q=0.94q=3.76$ ; $S_e=0.75$ m ; $S_l=1.0$ m ; $Z_n=12.8$ mm ; $R_{\max}=920$ mm ; $E_0=3$ mm d$^{-1}$ ; $E_u=0.89$ ; $\sigma_q=\sqrt{0.07^2+0.03^2}=0.076$}\ans {\bfseries\color{khmag}1.}\ Water required per emitter: \[V_{req}=Z_nS_eS_l\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[V_{req}=12.8\times0.75\times1.0=9.60\] L (1 mm over 1 m$^2$ is 1 L). 2. Automatic run time: \[t=V_{req}/(\bar qE_u)\ti{ii}\]
+Substituting the values in equation \rfi{ii},
+\[t=9.60/(3.76\times0.89)=2.87\ \text{h}\]
+\par\indent{\bfseries\color{khmag}3.}\ Mean delivery $\bar V=\bar qt=10.79$ L. 4. Five emitters at the normal quantiles $z=-1.28,-0.52,0,0.52,1.28$ deliver $V_i=\bar V(1+\sigma_qz_i)$ (Table~\ref{tab:quant}); for each the bulb radius, the part below $R_{\max}$, the evaporation \[V_{ev}=\min\{0.5V,\pi\rho(0)^2\times10^{-6}\times2E_0\}\] and the root water follow Equations (13.10) to (12.15). 5. Storage $V_{st,i}=\min(V_{root,i},V_{req})$ and the excess $V_{ex,i}$. 6. Averages over the five: $E_a=0.890$, $E_s=1.000$, $DP=0.110$, $EV=0.000$; $E_a+DP+EV=1.000$. Gross depth \[Z_{gross}=\bar V/(S_eS_l)\ti{iii}\]
+Substituting the values in equation \rfi{iii},
+\[Z_{gross}=14.4\ \text{mm}\]
 \begin{table}[!htbp]\centering\small\caption{Five representative emitters.}\label{tab:quant}
 \begin{tabular}{lrrrrrrr}\toprule
 \hd{$z$} & \hd{$V$ (L)} & \hd{$r$ (mm)} & \hd{$V_{dp}$} & \hd{$V_{ev}$} & \hd{$V_{root}$} & \hd{$V_{st}$} & \hd{$V_{ex}$}\\\midrule
@@ -145,16 +161,34 @@ Sand & 25 cm & 2.87 & 0.890 & 1.000 & 0.110 & 0.000\\
 Sand & surface & 2.87 & 0.675 & 0.759 & 0.000 & 0.325\\\bottomrule\end{tabular}\end{table} \finans
 
 
-\exbox{Layout, pipes and pump of one hectare}{Lay out 1 ha of the loam with laterals of $L_L=100$ m, $S_l=1.0$ m, farm supply $Q_s=30$ L s$^{-1}$, mainline $L_m=120$ m, lift 12 m, inlet head $H_0=10$ m. Find the number of laterals, zones, the zone flow, the pipe diameter, the head losses, the total dynamic head and the pump power.}\sol \givenline{$L_L=100$ m ; $S_l=1.0$ m ; $Q_s=30$ L s$^{-1}$ ; $L_m=120$ m ; $H_0=10$ m}\ans \[W_f=10^4A_f/L_L=10^4/100=100\ \text{m}\]
-\[N_L=\lfloor W_f/S_l\rfloor=100\] laterals. Each carries $134\bar q/3600=0.1399$ L s$^{-1}$ ($\bar q=3.759$ L h$^{-1}$), so all together 13.99 L s$^{-1}$. Zones: \[n_{zone}=\lceil N_LQ_{lat}/Q_s\rceil=\lceil13.99/30\rceil=1\]
+\exbox{Layout, pipes and pump of one hectare}{Lay out 1 ha of the loam with laterals of $L_L=100$ m, $S_l=1.0$ m, farm supply $Q_s=30$ L s$^{-1}$, mainline $L_m=120$ m, lift 12 m, inlet head $H_0=10$ m. Find the number of laterals, zones, the zone flow, the pipe diameter, the head losses, the total dynamic head and the pump power.}\sol \givenline{$L_L=100$ m ; $S_l=1.0$ m ; $Q_s=30$ L s$^{-1}$ ; $L_m=120$ m ; $H_0=10$ m}\ans \par\indent We know that
+\[W_f=10^4A_f/L_L\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[W_f=10^4/100=100\ \text{m}\]
+\par\indent We know that
+\[N_L=\lfloor W_f/S_l\rfloor\ti{ii}\]
+Substituting the values in equation \rfi{ii},
+\[N_L=100\] laterals. Each carries $134\bar q/3600=0.1399$ L s$^{-1}$ ($\bar q=3.759$ L h$^{-1}$), so all together 13.99 L s$^{-1}$. Zones: \[n_{zone}=\lceil N_LQ_{lat}/Q_s\rceil=\lceil13.99/30\rceil=1\]
 laterals per zone $n_l=\lceil100/1\rceil=100$; zone flow $Q_z=n_lQ_{lat}=13.99$ L s$^{-1}$. Pipe: the smallest diameter of the series with $v=4Q_z/(\pi D^2)\le1.5$ m s$^{-1}$ is $D=110$ mm ($v=1.47$ m s$^{-1}$). Submain length $L_{sm}=n_lS_l=100$ m; the submain loss is 0.4 of the full Hazen--Williams loss, $h_{f,sm}=0.78$ m, and the mainline loss $h_{f,m}=2.33$ m. TDH \[=z_{lift}+H_0+h_{f,sm}+h_{f,m}+9=12+10+0.78+2.33+9=34.1\ \text{m}\]
-Pump power \[P=9.81(Q_z/1000)\,TDH/0.65=7.20\] kW. Pipe per hectare: $(N_LL_L+L_{sm})/A_f=10100$ m. \finans
+Pump power \[P=9.81(Q_z/1000)\,TDH/0.65\ti{iii}\]
+Substituting the values in equation \rfi{iii},
+\[P=7.20\] kW. Pipe per hectare: $(N_LL_L+L_{sm})/A_f=10100$ m. \finans
 
 
-\exbox{Season and farm of the drip system}{Season and farm for the same system with a net seasonal irrigation $y_I=150$ mm and $Z_n=12.8$ mm.}\sol \givenline{$y_I=150$ mm ; $Z_n=12.8$ mm}\ans \[n_{ev}=y_I/Z_n=150/12.8=11.7\] events; gross depth $Z_{gross}=14.4$ mm per event; \[Z_{season}=n_{ev}Z_{gross}=169\] mm ($=1685$ m$^3$ ha$^{-1}$). Flow per hectare \[q_{ha}=q\times10^4/(3600S_eS_l)=4\times10^4/(3600\times0.75\times1.0)=14.81\ \text{L s$^{-1}$ ha$^{-1}$}\]
+\exbox{Season and farm of the drip system}{Season and farm for the same system with a net seasonal irrigation $y_I=150$ mm and $Z_n=12.8$ mm.}\sol \givenline{$y_I=150$ mm ; $Z_n=12.8$ mm}\ans \par\indent We know that
+\[n_{ev}=y_I/Z_n\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[n_{ev}=150/12.8=11.7\] events; gross depth $Z_{gross}=14.4$ mm per event; \par\indent We know that
+\[Z_{season}=n_{ev}Z_{gross}\ti{ii}\]
+Substituting the values in equation \rfi{ii},
+\[Z_{season}=169\] mm ($=1685$ m$^3$ ha$^{-1}$). Flow per hectare \[q_{ha}=q\times10^4/(3600S_eS_l)\ti{iii}\]
+Substituting the values in equation \rfi{iii},
+\[q_{ha}=4\times10^4/(3600\times0.75\times1.0)=14.81\ \text{L s$^{-1}$ ha$^{-1}$}\]
 sets \[n_{set}=\lceil q_{ha}A_f/Q_s\rceil=\lceil14.81/30\rceil=1\]
 round time \[t_{round}=1\times2.87=2.87\ \text{h}\]
-pumping hours \[H_{pump}=n_{ev}t_{round}=34\ \text{h}\]
+pumping hours \[H_{pump}=n_{ev}t_{round}\ti{iv}\]
+Substituting the values in equation \rfi{iv},
+\[H_{pump}=34\ \text{h}\]
 energy $E_{kWh}=34\times7.20=242$ kWh.
 \IfFileExists{extra/plus12.tex}{\input{extra/plus12}}{}
 \IfFileExists{extra/app12.tex}{\input{extra/app12}}{}
@@ -167,7 +201,8 @@ energy $E_{kWh}=34\times7.20=242$ kWh.
 \IfFileExists{extra/tenx12.tex}{\input{extra/tenx12}}{}
 \IfFileExists{extra/tenbx12.tex}{\input{extra/tenbx12}}{}
 \IfFileExists{extra/ex12.tex}{\input{extra/ex12}}{}
+\IfFileExists{extra/more12x.tex}{\input{extra/more12x}}{}
 \IfFileExists{extra/dyk12.tex}{\input{extra/dyk12}}{}
 \IfFileExists{extra/obj12.tex}{\input{extra/obj12}}{}
-\IfFileExists{extra/more12.tex}{\input{extra/more12}}{}
+\IfFileExists{extra/more12s.tex}{\input{extra/more12s}}{}
 \swaflvideo{12}

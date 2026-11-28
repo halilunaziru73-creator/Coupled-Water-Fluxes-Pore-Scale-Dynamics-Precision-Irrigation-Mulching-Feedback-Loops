@@ -30,7 +30,9 @@ So \[q=0.95\times1.521\times10^{-5}\times24.49\times6\times10^4=21.23\] L min$^{
 5.0 & 22.4 & 25.0 & 27.4 & 31.7 & 35.4\\
 6.0 & 32.2 & 36.0 & 39.5 & 45.6 & 51.0\\\bottomrule\end{tabular}\end{table}
 
-\exbox{A lower discharge from the same nozzle}{Using Table~\ref{tab:qnoz}, a farmer wants to keep a 4.4 mm nozzle but cut the discharge by one quarter. What pressure is needed?}\sol  $q\propto\sqrt P$, so \[q_2/q_1=\sqrt{P_2/P_1}=0.75\] gives $P_2/P_1=0.5625$, $P_2=0.5625\times300=169$ kPa. Check with the table: $q(4.4,169)$ is $15.92$ L min$^{-1}$, which is $75.0\%$ of 21.2. The price of the lower pressure is a smaller reach (next section) and a coarser drop. \finans
+\exbox{A lower discharge from the same nozzle}{Using Table~\ref{tab:qnoz}, a farmer wants to keep a 4.4 mm nozzle but cut the discharge by one quarter. What pressure is needed?}\sol  $q\propto\sqrt P$, so \[q_2/q_1=\sqrt{P_2/P_1}\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[q_2/q_1=0.75\] gives $P_2/P_1=0.5625$, $P_2=0.5625\times300=169$ kPa. Check with the table: $q(4.4,169)$ is $15.92$ L min$^{-1}$, which is $75.0\%$ of 21.2. The price of the lower pressure is a smaller reach (next section) and a coarser drop. \finans
 
 
 \section{Wetted radius}
@@ -191,7 +193,9 @@ With $Z_k$ the depth reaching the soil at cell $k$ and $\mathrm{gross}=\bar aT$ 
 where $Z_{25}$ is the mean of the lowest quarter of $Z_k$. The automatic run time is the smallest $T\in[1,2400]$ min with $Z_{25}(T)\ge Z_n$, found by 18 bisection steps.
 
 \exbox{The water partition of the default layout}{For the default layout on the loam ($Z_n=30$ mm) the layer finds $T=371$ min. Verify the efficiencies by hand from the summary of the cells.}\sol \givenline{$Z_n=30$ mm ; $T=371$ min}\ans Gross depth \[=\bar aT=0.0983\times371=36.51\] mm ($\bar a=5.90$ mm h$^{-1}$). After drift ($w_d=3.8\%$) the supply is $35.12$ mm and the canopy retains $I_c=3.0$ mm, leaving a mean $\bar Z=32.12$ mm at the soil. The lowest-quarter mean is $Z_{25}=30.00$ mm, equal to $Z_n$ as required by Eq.~(13.12), so the run was solved correctly. Then \[\mathrm{DU}=30.00/32.12=93.4\%\]
-Because every cell receives at least about $Z_n$, $E_s=99.8\%$ and \[E_a=\overline{\min}/\mathrm{gross}=82.0\%\]
+Because every cell receives at least about $Z_n$, $E_s=99.8\%$ and \[E_a=\overline{\min}/\mathrm{gross}\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[E_a=82.0\%\]
 DP $=6.0\%$, WD $=3.8+3.0/36.51=12.0\%$ and RO $=0$. Sum: $82.0+6.0+0+12.0=100.0\%$. \finans
 
 
@@ -240,9 +244,21 @@ With $h_s=P/9.81$, $q_h=0.06q$ (m$^3$ h$^{-1}$), $W=3.6u$ (km h$^{-1}$) and wind
 
 The program picks the smallest $n$ ($1\ldots4$ laterals at once) with $N_d\le T_{\rm int}$ and $Q_{\rm in}\le3.6Q_s$ (m$^3$ h$^{-1}$, $Q_s$ in L s$^{-1}$).
 
-\exbox{How many laterals run at once}{Farm: $A_f=5$ ha, $Q_s=40$ L s$^{-1}$, $L_L=150$ m, $h_{\rm op}=16$ h d$^{-1}$, $ET_{\rm pk}=6.4$ mm d$^{-1}$, $Z_n=30$ mm; default impact layout, $u=3$ m s$^{-1}$. Find the layout and the number of laterals to run at once.}\sol \givenline{$A_f=5$ ha ; $Q_s=40$ L s$^{-1}$ ; $L_L=150$ m ; $h_{\rm op}=16$ h d$^{-1}$ ; $ET_{\rm pk}=6.4$ mm d$^{-1}$ ; $Z_n=30$ mm; default impact layout ; $u=3$ m s$^{-1}$}\ans $h_s=30.58$ m, $q_h=0.06\times21.23=1.274$ m$^3$ h$^{-1}$, $W=10.8$ km h$^{-1}$ so $k=0.9$. Spacing: \[S_s=12\le0.9\times15.66=14.1\] (OK) and \[S_l=18\le1.5\times15.66=23.5\] (OK). $L_y=10^4\times5/150=333.3$ m; $N=\lfloor150/12\rfloor=12$ sprinklers per lateral; \[N_m=\lfloor333.3/18\rfloor=18\] lateral positions. \[t_{\rm set}=36.51/5.90=6.19\ \text{h}\]
-so \[n_{\rm sets/day}=\lfloor16/6.19\rfloor=2\]
-\[T_{\rm int}=\lfloor30/6.4\rfloor=4\ \text{d}\]
+\exbox{How many laterals run at once}{Farm: $A_f=5$ ha, $Q_s=40$ L s$^{-1}$, $L_L=150$ m, $h_{\rm op}=16$ h d$^{-1}$, $ET_{\rm pk}=6.4$ mm d$^{-1}$, $Z_n=30$ mm; default impact layout, $u=3$ m s$^{-1}$. Find the layout and the number of laterals to run at once.}\sol \givenline{$A_f=5$ ha ; $Q_s=40$ L s$^{-1}$ ; $L_L=150$ m ; $h_{\rm op}=16$ h d$^{-1}$ ; $ET_{\rm pk}=6.4$ mm d$^{-1}$ ; $Z_n=30$ mm; default impact layout ; $u=3$ m s$^{-1}$}\ans $h_s=30.58$ m, $q_h=0.06\times21.23=1.274$ m$^3$ h$^{-1}$, $W=10.8$ km h$^{-1}$ so $k=0.9$. Spacing: \[S_s=12\le0.9\times15.66\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[S_s=14.1\] (OK) and \[S_l=18\le1.5\times15.66\ti{ii}\]
+Substituting the values in equation \rfi{ii},
+\[S_l=23.5\] (OK). $L_y=10^4\times5/150=333.3$ m; $N=\lfloor150/12\rfloor=12$ sprinklers per lateral; \par\indent We know that
+\[N_m=\lfloor333.3/18\rfloor\ti{iii}\]
+Substituting the values in equation \rfi{iii},
+\[N_m=18\] lateral positions. \[t_{\rm set}=36.51/5.90=6.19\ \text{h}\]
+so \[n_{\rm sets/day}=\lfloor16/6.19\rfloor\ti{iv}\]
+Substituting the values in equation \rfi{iv},
+\[n_{\rm sets/day}=2\]
+\par\indent We know that
+\[T_{\rm int}=\lfloor30/6.4\rfloor\ti{v}\]
+Substituting the values in equation \rfi{v},
+\[T_{\rm int}=4\ \text{d}\]
 Table~\ref{tab:nlat} gives $N_d$ and $Q_{\rm in}$; the supply limit is $3.6\times40=144$ m$^3$ h$^{-1}$. The smallest $n$ meeting both is $n=3$. \finans
 
 
@@ -317,9 +333,16 @@ Slope (via $S_d$) & 0.50 & 82.0 & 1.50 & 82.0 & 0.0\\\bottomrule\end{tabular}\en
 \begin{keybox}
 In Table~\ref{tab:sens} the soil intake and the slope change nothing, because on the loam no point ponds, so runoff is zero in every case; the drivers are the spacings, the nozzle and the pressure (which change uniformity and the run time) and the depth $Z_n$ (a larger depth dilutes the fixed canopy loss). On a soil that ponds, intake and slope become the dominant inputs.
 \end{keybox}
-\exbox{Sets and water for the season}{The season of the loam at trigger $-300$ cm needs $I_y=211.68$ mm of irrigation (Manuscript~4, Fig.~3 data: 6.123 Mg ha$^{-1}$). For the 5 ha farm above, find the number of irrigations, the sprinklers, the sets, the round time and the gross water.}\sol \givenline{$I_y=211.68$ mm}\ans \[n_{\rm ev}=I_y/Z_n=211.68/30=7.06\approx7\] irrigations. Sprinklers: \[n_{\rm sp}=\mathrm{round}(10^4\times5/(12\times18))=231\]
+\exbox{Sets and water for the season}{The season of the loam at trigger $-300$ cm needs $I_y=211.68$ mm of irrigation (Manuscript~4, Fig.~3 data: 6.123 Mg ha$^{-1}$). For the 5 ha farm above, find the number of irrigations, the sprinklers, the sets, the round time and the gross water.}\sol \givenline{$I_y=211.68$ mm}\ans \par\indent We know that
+\[n_{\rm ev}=I_y/Z_n\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[n_{\rm ev}=211.68/30=7.06\approx7\] irrigations. Sprinklers: \[n_{\rm sp}=\mathrm{round}(10^4\times5/(12\times18))\ti{ii}\]
+Substituting the values in equation \rfi{ii},
+\[n_{\rm sp}=231\]
 Total flow \[Q_{\rm tot}=231\times21.23/60=81.7\ \text{L s$^{-1}$}\]
-with $Q_s=40$ L s$^{-1}$ the farm needs \[n_{\rm set}=\lceil81.7/40\rceil=3\] sets. Round time \[t_{\rm round}=3\times371/60=18.6\ \text{h}\]
+with $Q_s=40$ L s$^{-1}$ the farm needs \[n_{\rm set}=\lceil81.7/40\rceil\ti{iii}\]
+Substituting the values in equation \rfi{iii},
+\[n_{\rm set}=3\] sets. Round time \[t_{\rm round}=3\times371/60=18.6\ \text{h}\]
 Gross depth per irrigation $=36.5$ mm; gross per season $=7.06\times36.5=258$ mm, i.e.\ $10\times258=2{,}576$ m$^3$ ha$^{-1}$. The gross is larger than the net $I_y$ because only $E_a=82.0\%$ of the discharge reaches the root zone usefully. \finans
 
 
@@ -344,7 +367,8 @@ The layer draws five systems to scale: solid-set (fixed laterals, $E_a$ typicall
 \IfFileExists{extra/tenx13.tex}{\input{extra/tenx13}}{}
 \IfFileExists{extra/tenbx13.tex}{\input{extra/tenbx13}}{}
 \IfFileExists{extra/ex13.tex}{\input{extra/ex13}}{}
+\IfFileExists{extra/more13x.tex}{\input{extra/more13x}}{}
 \IfFileExists{extra/dyk13.tex}{\input{extra/dyk13}}{}
 \IfFileExists{extra/obj13.tex}{\input{extra/obj13}}{}
-\IfFileExists{extra/more13.tex}{\input{extra/more13}}{}
+\IfFileExists{extra/more13s.tex}{\input{extra/more13s}}{}
 \swaflvideo{13}

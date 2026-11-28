@@ -42,7 +42,10 @@ The joined cloud is voxelised with a cube of side $v$ (default 0.6 mm) and the v
 
 \exbox{}{A canopy of a seedling is the ellipsoid with semi-axes 40, 40 and 60 mm. Compute its true volume, and the volume found by voxels of 0.6 mm and of 2.5 mm if the interior is filled.}\sol \finans
 
-\exbox{Volume of a canopy by voxels}{A canopy of a seedling is the ellipsoid with semi-axes 40, 40 and 60 mm. Compute its true volume and the volume found by voxels of 0.6 mm and of 2.5 mm if the interior is filled.}\sol \[V=\frac43\pi abc=\frac43\pi(40)(40)(60)=402124\ \text{mm$^3$}\] \ans Counting the voxels inside the ellipsoid, $v=0.6$ mm gives $402092$ mm$^3$ (-0.01 per cent error) \ans $v=2.5$ mm gives $402656$ mm$^3$ (0.13 per cent error) \ans A coarse voxel is nearly as good for a solid body; the fine voxel matters for thin leaves, whose thickness is smaller than the voxel \finans
+\exbox{Volume of a canopy by voxels}{A canopy of a seedling is the ellipsoid with semi-axes 40, 40 and 60 mm. Compute its true volume and the volume found by voxels of 0.6 mm and of 2.5 mm if the interior is filled.}\sol \par\indent We know that
+\[V=\frac43\pi abc\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[V=\frac43\pi(40)(40)(60)=402124\ \text{mm$^3$}\] \ans Counting the voxels inside the ellipsoid, $v=0.6$ mm gives $402092$ mm$^3$ (-0.01 per cent error) \ans $v=2.5$ mm gives $402656$ mm$^3$ (0.13 per cent error) \ans A coarse voxel is nearly as good for a solid body; the fine voxel matters for thin leaves, whose thickness is smaller than the voxel \finans
 
 \section{Water productivity and stress traits from the scan}
 The scan gives a biomass proxy, $B=\rho_vV$, where $\rho_v$ is a volumetric dry density of the tissue; combined with the water used in the water balance, it gives the transpiration efficiency and the water productivity of each genotype or treatment. The comparison of the well-watered and drought treatments gives the \emph{drought index}

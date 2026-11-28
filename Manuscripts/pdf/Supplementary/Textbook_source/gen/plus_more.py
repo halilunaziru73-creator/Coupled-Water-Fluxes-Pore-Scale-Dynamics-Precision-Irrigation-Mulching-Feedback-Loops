@@ -420,13 +420,15 @@ OB.update({k: v for k, v in OBJ_MISSING.items()})
 
 MAN = 'https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf'
 for k in sorted(E):
-    s = ['\\backhead{FURTHER EXERCISES}{khred}', '\\begin{exlist}'] + ['\\item ' + x for x in E[k]] + ['\\end{exlist}',
-         '\\backhead{ESSAY QUESTIONS}{khred}', '{\\small\\itshape Answer each question in about one page, with equations, a sketch and at least one number from this chapter.}\\par\\vspace{3pt}', '\\begin{exlist}'] + ['\\item ' + x for x in ES[k]] + ['\\end{exlist}',
-         '\\dykband{EXERCISES IN SWAFL}',
-         '{\\small Open SWAFL (desktop or online) with the benchmark project. The chapter of the \\href{%s}{SWAFL manual} that explains each task is given in brackets; record your values in a table and compare them with what is expected (\\emph{Check}).}\\par\\vspace{3pt}' % MAN,
-         '\\begin{exlist}'] + ['\\item {\\color{khblue}[Manual, Chapter %s]} %s\\par\\noindent{\\small\\itshape Check: %s.}' % (c, t, chk) for c, t, chk in SW[k]] + ['\\end{exlist}']
+    x = ['\\backhead{FURTHER EXERCISES}{khred}', '\\begin{exlist}'] + ['\\item ' + v for v in E[k]] + ['\\end{exlist}',
+         '\\backhead{ESSAY QUESTIONS}{khred}', '{\\small\\itshape Answer each question in about one page, with equations, a sketch and at least one number from this chapter.}\\par\\vspace{3pt}', '\\begin{exlist}'] + ['\\item ' + v for v in ES[k]] + ['\\end{exlist}']
+    sw = []
     if OB.get(k):
         q, a = OB[k]
-        s += ['\\backhead{OBJECTIVE TYPE QUESTIONS}{khred}', '\\begin{exlist}', '\\item ' + q, '\\end{exlist}', '\\objkey{%s}' % a]
-    write('more' + k, '\n'.join(s) + '\n')
+        sw += ['\\backhead{OBJECTIVE TYPE QUESTIONS}{khred}', '\\begin{exlist}', '\\item ' + q, '\\end{exlist}', '\\objkey{%s}' % a]
+    sw += ['\\dykband{EXERCISES IN SWAFL}',
+         '{\\small Open SWAFL (desktop or online) with the benchmark project. The chapter of the \\href{%s}{SWAFL manual} that explains each task is given in brackets; record your values in a table and compare them with what is expected (\\emph{Check}).}\\par\\vspace{3pt}' % MAN,
+         '\\begin{exlist}'] + ['\\item {\\color{khblue}[Manual, Chapter %s]} %s\\par\\noindent{\\small\\itshape Check: %s.}' % (c, t, chk) for c, t, chk in SW[k]] + ['\\end{exlist}']
+    write('more' + k + 'x', '\n'.join(x) + '\n'); write('more' + k + 's', '\n'.join(sw) + '\n')
+    if os.path.exists(os.path.join(EXTRA, 'more' + k + '.tex')): os.remove(os.path.join(EXTRA, 'more' + k + '.tex'))
 print('written', sorted(E))

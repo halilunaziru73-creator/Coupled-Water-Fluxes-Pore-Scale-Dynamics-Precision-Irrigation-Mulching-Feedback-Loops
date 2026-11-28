@@ -120,8 +120,12 @@ The study behind SWAFL is reported in six papers that look at the same ensemble 
 \par\vspace{6pt}\noindent\hd{How far management can move each outcome}\par\nobreak
 \fig{at/a22_42.jpg}{0.84}{How far management can move each outcome, by soil. Controllability of yield, irrigation efficiency, drainage and nitrate-leaching fractions by seven management levers (E1 to E7) across the ten soils, and its rank correlation with the plant-available water of the soil.}\label{fig:a22_42}
 \exbox{The dose of an irrigation event}{The drained share of an irrigation dose $d$ follows $\eta_D=\eta_\infty(1-e^{-d/d_D})$ with a plateau $\eta_\infty=0.15$ and a dose scale $d_D=4.1$ mm. Find the drained share for doses of 1 mm and 10 mm.}\sol \givenline{$\eta_\infty=0.15$ ; $d_D=4.1$ mm ; $d=1,\ 10$ mm}
-\par\noindent For $d=1$ mm, \[\eta_D=0.15\,(1-e^{-0.244})=0.15\times0.217=0.032\]
-for $d=10$ mm, \[\eta_D=0.15\,(1-e^{-2.44})=0.15\times0.913=0.137\quad\text{\finans}\]
+\par\noindent For $d=1$ mm, \[\eta_D=0.15\,(1-e^{-0.244})\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[\eta_D=0.15\times0.217=0.032\]
+for $d=10$ mm, \[\eta_D=0.15\,(1-e^{-2.44})\ti{ii}\]
+Substituting the values in equation \rfi{ii},
+\[\eta_D=0.15\times0.913=0.137\quad\text{\finans}\]
 A dose of 1 mm drains $3$ per cent and one of 10 mm drains $14$ per cent, almost the plateau: small doses are lost by evaporation, large doses by drainage, which is the result of the dose figure.
 
 \section{The workbench, the hand-over, the field and the plants}
@@ -165,6 +169,7 @@ Each of the studies ends in a one-picture summary, a \emph{graphical abstract}, 
 \fig{at/a22_56.jpg}{0.84}{Graphical abstract of the third paper: the engines of SWAFL Desktop, from the soil to the decision.}\label{fig:a22_56}
 \begin{itemize}\item The six papers report one study: the memory of soil water, the audit of the model, the engines of SWAFL, the reach of the trigger, the workbench and the field tools.\item A figure of a paper is read with its caption: the panels (a), (b), (c) are separate statements.\item Every figure can be redrawn from the scripts and the tables of the repository.\end{itemize}
 \backhead{EXERCISES}{khred}\begin{exlist}\item Name the three places where the antecedent storage of the root zone can go. \exans{drainage, soil evaporation, transpiration (and other evaporation)}\item In which figure do the ten soils collapse onto one curve? \exans{depletion trigger law}\item Which figure compares the engines of SWAFL with Daisy on held-out runs? \exans{Engine 1 held-out, Paper 3}\end{exlist}
+\IfFileExists{extra/more22x.tex}{\input{extra/more22x}}{}
 \dykband{DO YOU KNOW ?}\begin{exlist}\item What is the unattributed term of the water balance?\item What does the reach of a trigger mean?\item How is the fate of an irrigation millimetre defined?\item Why is the dose of irrigation important?\end{exlist}
-\IfFileExists{extra/more22.tex}{\input{extra/more22}}{}
+\IfFileExists{extra/more22s.tex}{\input{extra/more22s}}{}
 \swaflvideo{22}

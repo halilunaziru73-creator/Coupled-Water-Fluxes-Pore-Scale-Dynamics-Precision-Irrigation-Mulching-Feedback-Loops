@@ -117,7 +117,10 @@ Drainage: \[D=40+(55-38)+(44-40)=40+17+4=61\ \text{mm}\]
 The daily model has $N=40$ layers of thickness $\Delta z=2.5$ cm. Layer $i$ holds water $w_i$ between $0$ and $W_{\max}=\mathrm{AWC}\,\Delta z$ (mm); relative content $s_i=w_i/W_{\max}$ and depletion $f_i=1-s_i$. All layers start at $0.72W_{\max}$. The sensor layer is $j_s=\mathrm{round}(z_s/\Delta z)$. \finans
 
 \exbox{Layout and state}{For the loam (AWC $=1.7$ mm cm$^{-1}$) with sensor depth 20 cm find $W_{\max}$, the sensor layer, the starting water and the trigger depletion for $-300$ cm.}\sol \givenline{$=1.7$ mm cm$^{-1}$}\ans \[W_{\max}=1.7\times2.5=4.25\ \text{mm}\]
-\[j_s=\mathrm{round}(20/2.5)=8\]
+\par\indent We know that
+\[j_s=\mathrm{round}(20/2.5)\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[j_s=8\]
 starting water $0.72\times4.25=3.06$ mm per layer, so the 100 cm profile holds $40\times3.06=122.4$ mm of plant-available water out of $170$ mm. The trigger depletion is $f_T=0.468$ (Chapter~\ref{ch:e1}), so the sensor layer must fall to $s_8\le1-0.468=0.532$, that is $w_8\le2.26$ mm, to start irrigation. At the start $w_8=3.06>2.26$, so no irrigation is due. \finans
 
 
@@ -203,7 +206,9 @@ Daily soil evaporation spreads the annual $E_{\rm yr}$ with a sinusoidal weight 
 
 drawn from the top four layers with weights $(0.55,0.25,0.12,0.08)$, never below $0.05W_{\max}$. Transpiration demand is $T_d=k_tT_{\rm yr}c(d)/(\bar C\cdot365)$ divided among layers by $q_i^T=T_d\rho_ia_i/\sum_j\rho_ja_j$ with $a_i=\mathrm{clip}\bigl((s_i-0.15)/0.6;0,1\bigr)$.
 
-\exbox{Evaporation of one day}{With $E_{\rm yr}=170$ mm, find the evaporation on day 181 (doy index 180), when the canopy cover is $c=0.8$, and how it is drawn from the layers.}\sol \givenline{$E_{\rm yr}=170$ mm ; $c=0.8$}\ans The seasonal weight is \[w(180)=0.35+0.65\times0.5[1+\sin(2\pi\,80/364)]=0.35+0.325[1+0.9820]=0.9942\]
+\exbox{Evaporation of one day}{With $E_{\rm yr}=170$ mm, find the evaporation on day 181 (doy index 180), when the canopy cover is $c=0.8$, and how it is drawn from the layers.}\sol \givenline{$E_{\rm yr}=170$ mm ; $c=0.8$}\ans The seasonal weight is \[w(180)=0.35+0.65\times0.5[1+\sin(2\pi\,80/364)]\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[w(180)=0.35+0.325[1+0.9820]=0.9942\]
 The sum of the weights over the year is $\sum w=246.05$ (mean 0.674). Hence \[E_d=170\times0.9942/246.05\times(1-0.24)=0.522\ \text{mm}\]
 It is taken from layers 1 to 4 as $0.55,0.25,0.12,0.08$ times this: $0.287,0.131,0.063,0.042$ mm, provided that each layer stays above $0.05W_{\max}=0.21$ mm. Without a canopy ($c=0$) the same day would lose $0.687$ mm, 30 per cent more than 0.522: shade reduces evaporation. \finans
 
@@ -316,8 +321,13 @@ Drainage $D$ & 200.2\\
 Storage change $\Delta S$ & 46.1\\
 Deepest roots (cm) & 82\\\bottomrule\end{tabular}\end{table}
 
-\exbox{Closing the year}{Verify the closure of Table~\ref{tab:year}.}\sol  \[\Delta S=P+I-E_{\rm other}-E-T-D=606.1+90.0-61.7-158.5-229.6-200.2=46.1\ \text{mm}\]
-Independently, the root-zone store of the 100 cm profile rose from 122.4 mm on 1 January to 168.5 mm on 31 December, a change of 46.1 mm. The two agree because $E_{\rm other}$ is, by construction, the rain that did not reach the soil: \[E_{\rm other}=\sum(P_k-P_k^{\rm soil})=61.7\ \text{mm}\quad\text{\finans}\]
+\exbox{Closing the year}{Verify the closure of Table~\ref{tab:year}.}\sol  \par\indent We know that
+\[\Delta S=P+I-E_{\rm other}-E-T-D\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[\Delta S=606.1+90.0-61.7-158.5-229.6-200.2=46.1\ \text{mm}\]
+Independently, the root-zone store of the 100 cm profile rose from 122.4 mm on 1 January to 168.5 mm on 31 December, a change of 46.1 mm. The two agree because $E_{\rm other}$ is, by construction, the rain that did not reach the soil: \[E_{\rm other}=\sum(P_k-P_k^{\rm soil})\ti{ii}\]
+Substituting the values in equation \rfi{ii},
+\[E_{\rm other}=61.7\ \text{mm}\quad\text{\finans}\]
 
 
 \section{Block 4 and the Charts tab: twenty seasons}
@@ -369,7 +379,8 @@ Every Dashboard number is a read-out, a sum, a mean or a difference of the daily
 \IfFileExists{extra/tenx08.tex}{\input{extra/tenx08}}{}
 \IfFileExists{extra/tenbx08.tex}{\input{extra/tenbx08}}{}
 \IfFileExists{extra/ex08.tex}{\input{extra/ex08}}{}
+\IfFileExists{extra/more08x.tex}{\input{extra/more08x}}{}
 \IfFileExists{extra/dyk08.tex}{\input{extra/dyk08}}{}
 \IfFileExists{extra/obj08.tex}{\input{extra/obj08}}{}
-\IfFileExists{extra/more08.tex}{\input{extra/more08}}{}
+\IfFileExists{extra/more08s.tex}{\input{extra/more08s}}{}
 \swaflvideo{08}

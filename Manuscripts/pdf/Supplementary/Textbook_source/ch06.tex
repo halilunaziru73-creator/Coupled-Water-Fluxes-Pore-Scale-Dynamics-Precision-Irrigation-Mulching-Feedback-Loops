@@ -80,8 +80,13 @@ $G_{sc}=0.0820$ MJ m$^{-2}$ min$^{-1}$. With the daily mean temperature and the 
 \par\noindent where $ET_0$ is the reference evapotranspiration (mm\,d$^{-1}$) estimated from the solar radiation $R_s$ (MJ\,m$^{-2}$\,d$^{-1}$), 2.45 is the latent heat of vaporisation (MJ\,kg$^{-1}$), $\Delta$ the slope of the vapour-pressure curve (kPa\,K$^{-1}$), $T$ the air temperature (\textdegree C) and $\gamma$ the psychrometric constant.
 
 
-\exbox{Hargreaves at 10$^\circ$N}{A site at latitude $10^\circ$N on day of year $J=180$ has $T_{\max}=33^\circ$C and $T_{\min}=21^\circ$C. Compute $R_a$ and Hargreaves ET$_0$.}\sol \givenline{$J=180$ has ; $T_{\max}=33^\circ$ C ; $T_{\min}=21^\circ$ C}\ans $\varphi=10^\circ=0.1745$ rad. \[d_r=1+0.033\cos(2\pi\times180/365)=1+0.033\times-0.9991=0.9670\]
-\[\delta=0.409\sin(2\pi\times180/365-1.39)=0.409\sin(1.7086)=0.4051\] rad. \[\omega_s=\arccos(-\tan\varphi\tan\delta)=\arccos(-0.1763\times0.4288)=1.6465\] rad. Then \[R_a=(1440/\pi)\times0.0820\times0.9670\times[1.6465\times\sin\varphi\sin\delta+\cos\varphi\cos\delta\sin\omega_s]=36.90\ \text{MJ m$^{-2}$ d$^{-1}$}\]
+\exbox{Hargreaves at 10$^\circ$N}{A site at latitude $10^\circ$N on day of year $J=180$ has $T_{\max}=33^\circ$C and $T_{\min}=21^\circ$C. Compute $R_a$ and Hargreaves ET$_0$.}\sol \givenline{$J=180$ has ; $T_{\max}=33^\circ$ C ; $T_{\min}=21^\circ$ C}\ans $\varphi=10^\circ=0.1745$ rad. \par\indent We know that
+\[d_r=1+0.033\cos(2\pi\times180/365)\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[d_r=1+0.033\times-0.9991=0.9670\]
+\[\delta=0.409\sin(2\pi\times180/365-1.39)=0.409\sin(1.7086)=0.4051\] rad. \[\omega_s=\arccos(-\tan\varphi\tan\delta)=\arccos(-0.1763\times0.4288)=1.6465\] rad. Then \[R_a=(1440/\pi)\times0.0820\times0.9670\times[1.6465\times\sin\varphi\sin\delta+\cos\varphi\cos\delta\sin\omega_s]\ti{ii}\]
+Substituting the values in equation \rfi{ii},
+\[R_a=36.90\ \text{MJ m$^{-2}$ d$^{-1}$}\]
 $T_{\rm mean}=27^\circ$C, $\sqrt{33-21}=3.464$. \[ET_0=0.0023\times(27+17.8)\times3.464\times36.90\times0.408=5.37\ \text{mm d$^{-1}$}\quad\text{\finans}\]
 
 
@@ -93,7 +98,10 @@ $T_{\rm mean}=27^\circ$C, $\sqrt{33-21}=3.464$. \[ET_0=0.0023\times(27+17.8)\tim
 30 & 21.1 & 36.8 & 40.5 & 27.5 & 5.51\\
 50 & 8.9 & 31.5 & 40.2 & 16.8 & 5.46\\\bottomrule\end{tabular}\end{table}
 
-\exbox{Makkink}{Makkink: $T=27^\circ$C, $R_s=20$ MJ m$^{-2}$ d$^{-1}$.}\sol \givenline{$T=27^\circ$ C ; $R_s=20$ MJ m$^{-2}$ d$^{-1}$}\ans \[e^{17.27\times27/(27+237.3)}=e^{1.7642}=5.8372\]
+\exbox{Makkink}{Makkink: $T=27^\circ$C, $R_s=20$ MJ m$^{-2}$ d$^{-1}$.}\sol \givenline{$T=27^\circ$ C ; $R_s=20$ MJ m$^{-2}$ d$^{-1}$}\ans \par\indent We know that
+\[e^{17.27\times27/(27+237.3)}=e^{1.7642}\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[e^{17.27\times27/(27+237.3)}=5.8372\]
 saturation pressure $0.6108\times5.8372=3.5653$ kPa; \[\Delta=4098\times3.5653/(264.3)^2=0.2092\ \text{kPa K$^{-1}$}\]
 \[\Delta/(\Delta+\gamma)=0.2092/(0.2092+0.066)=0.7601\]
 \[ET_0=0.61\times0.7601\times20/2.45-0.12=3.67\ \text{mm d$^{-1}$}\quad\text{\finans}\]
@@ -107,9 +115,17 @@ When the weather of a place is fetched the reference ET$_0$ comes from the weath
 The program does not compute this itself (the service does), so the example below is for understanding and for checking the Hargreaves value, not a reproduction of the app.
 
 \exbox{FAO Penman--Monteith for comparison}{Same day: $T_{\max}=33$, $T_{\min}=21^\circ$C, mean RH 60\%, wind $u_2=2.0$ m s$^{-1}$, $R_s=20$ MJ m$^{-2}$ d$^{-1}$, altitude 100 m.}\sol \givenline{$T_{\max}=33$ ; $T_{\min}=21^\circ$ C ; $u_2=2.0$ m s$^{-1}$ ; $R_s=20$ MJ m$^{-2}$ d$^{-1}$}\ans $T=27$; pressure \[P=101.3[(293-0.0065\times100)/293]^{5.26}=100.12\ \text{kPa}\]
-$\gamma=0.000665P=0.06658$. \[e_s=[e^\circ(33)+e^\circ(21)]/2=3.759\ \text{kPa}\]
-$e_a=0.60e_s=2.255$. $\Delta=0.2092$. $R_a=36.90$; clear-sky \[R_{so}=(0.75+2\times10^{-5}\times100)R_a=27.75\]
-$R_{ns}=0.77\times20=15.40$; \[R_{nl}=4.903\times10^{-9}[\ldots](0.34-0.14\sqrt{e_a})(1.35R_s/R_{so}-0.35)=3.23\]
+$\gamma=0.000665P=0.06658$. \par\indent We know that
+\[e_s=[e^\circ(33)+e^\circ(21)]/2\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[e_s=3.759\ \text{kPa}\]
+$e_a=0.60e_s=2.255$. $\Delta=0.2092$. $R_a=36.90$; clear-sky \[R_{so}=(0.75+2\times10^{-5}\times100)R_a\ti{ii}\]
+Substituting the values in equation \rfi{ii},
+\[R_{so}=27.75\]
+$R_{ns}=0.77\times20=15.40$; \par\indent We know that
+\[R_{nl}=4.903\times10^{-9}[\ldots](0.34-0.14\sqrt{e_a})(1.35R_s/R_{so}-0.35)\ti{iii}\]
+Substituting the values in equation \rfi{iii},
+\[R_{nl}=3.23\]
 $R_n=12.17$. Then \[ET_0=[0.408\times0.2092\times12.17+0.06658\times900/300\times2\times(3.759-2.255)]/[0.2092+0.06658(1+0.68)]=5.11\ \text{mm d$^{-1}$}\]
 Compare Hargreaves (5.37) and Makkink (3.67): the three differ by up to about 1.7 mm d$^{-1}$, which is why the layer reports how ET$_0$ was obtained. \finans
 
@@ -155,8 +171,13 @@ The ground slope is that of the least-squares plane $z=a+bx+cy$ through the elev
 0 & 100 & 512.2\\
 150 & 100 & 511.0\\\bottomrule\end{tabular}\end{table}
 
-\exbox{Slope of the field}{Fit the plane to Table~\ref{tab:dem}; give the slope in per cent and the downhill direction.}\sol  The nine points are symmetric about the centre, so the normal equations decouple: $a=\bar z=511.744$, \[b=\sum xz/\sum x^2=-0.00722\]
-\[c=\sum yz/\sum y^2=0.00450\] (\[\sum x^2=6\times150^2=135{,}000\]
+\exbox{Slope of the field}{Fit the plane to Table~\ref{tab:dem}; give the slope in per cent and the downhill direction.}\sol  The nine points are symmetric about the centre, so the normal equations decouple: $a=\bar z=511.744$, \[b=\sum xz/\sum x^2\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[b=-0.00722\]
+\par\indent We know that
+\[c=\sum yz/\sum y^2\ti{ii}\]
+Substituting the values in equation \rfi{ii},
+\[c=0.00450\] (\[\sum x^2=6\times150^2=135{,}000\]
 \[\sum y^2=6\times100^2=60{,}000\]). \[s=100\sqrt{-0.00722^2+0.00450^2}=0.85\%\]
 The ground falls toward $-(b,c)$, that is toward the east-south-east: bearing $122^\circ$ from north. A slope of 0.85\% is the value used by the sprinkler layer (Chapter~\ref{ch:sprinkler}) to look up the allowed application rate (0--5\% column). \finans
 
@@ -312,7 +333,8 @@ $[40/60]^{0.3}=0.8855$; organic-carbon term $0.8749$; sand term $0.9999$; $K=0.2
 \IfFileExists{extra/tenx06.tex}{\input{extra/tenx06}}{}
 \IfFileExists{extra/tenbx06.tex}{\input{extra/tenbx06}}{}
 \IfFileExists{extra/ex06.tex}{\input{extra/ex06}}{}
+\IfFileExists{extra/more06x.tex}{\input{extra/more06x}}{}
 \IfFileExists{extra/dyk06.tex}{\input{extra/dyk06}}{}
 \IfFileExists{extra/obj06.tex}{\input{extra/obj06}}{}
-\IfFileExists{extra/more06.tex}{\input{extra/more06}}{}
+\IfFileExists{extra/more06s.tex}{\input{extra/more06s}}{}
 \swaflvideo{06}

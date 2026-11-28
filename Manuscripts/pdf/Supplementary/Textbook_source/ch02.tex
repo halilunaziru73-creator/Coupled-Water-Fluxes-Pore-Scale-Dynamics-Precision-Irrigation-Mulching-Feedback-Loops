@@ -283,7 +283,10 @@ Heat moves by conduction (and with the water flux): $C_h\,\partial T/\partial t=
 daily & 0.122 & 44.2 & 1.7 & 0.0 & 0.0 & 0.6\\
 annual & 2.340 & 95.8 & 80.8 & 65.2 & 42.5 & 12.4\\\bottomrule\end{tabular}\end{table}
 
-\exbox{Damping with depth}{The mean annual temperature is 12$^\circ$C with an annual amplitude of 10 K at the surface. Find the amplitude and the time of the maximum at 1 m.}\sol  \[D=\lambda/C_h=1.2/(2.2\times10^6)=5.455\times10^{-7}\ \text{m$^2$ s$^{-1}$}\]
+\exbox{Damping with depth}{The mean annual temperature is 12$^\circ$C with an annual amplitude of 10 K at the surface. Find the amplitude and the time of the maximum at 1 m.}\sol  \par\indent We know that
+\[D=\lambda/C_h\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[D=1.2/(2.2\times10^6)=5.455\times10^{-7}\ \text{m$^2$ s$^{-1}$}\]
 \[\omega=2\pi/(365\times86400)=1.992\times10^{-7}\ \text{s$^{-1}$}\]
 $d_T=\sqrt{2D/\omega}=2.34$ m. At $z=1$ m: amplitude $=10e^{-1/2.34}=6.52$ K, phase lag $z/d_T=0.427$ rad $=25$ days. So at 1 m the temperature varies by $12\pm6.52$ K and is about 25 days behind the surface maximum. For the daily wave $d_T=0.122$ m: at 0.5 m the daily amplitude is only $1.69\%$ of the surface value, which is why the factors of biological rates at depth do not follow the weather. \finans
 
@@ -362,7 +365,12 @@ The potential rate follows the CO$_2$ produced, $r_{pot}=f_T(\alpha_F\mathrm{CO}
 \section{The crop: light, assimilates and growth}
 Absorbed light is $I_a=I_0(1-e^{-k\,\mathrm{LAI}})$; the gross assimilation of a leaf layer is $A=A_{\max}(1-e^{-\varepsilon I/A_{\max}})$; maintenance respiration is $R_m=\sum_or_of_TW_o$ with a $Q_{10}$ temperature factor; the rest is partitioned among the organs by fractions that depend on the development stage DS (0 at emergence, 1 at flowering, 2 at maturity); DS advances with the temperature sum.
 
-\exbox{Light interception and assimilation}{A canopy has LAI = 4, $k=0.6$, incident light $I_0=40$ mol m$^{-2}$d$^{-1}$ (about 18 MJ m$^{-2}$d$^{-1}$ of global radiation in the PAR range), $A_{\max}=1.2$ g CH$_2$O m$^{-2}$h$^{-1}$ per unit of leaf, $\varepsilon=0.012$ in the same units per unit of light. Illustrate the saturating response and the light absorbed.}\sol \givenline{$k=0.6$ ; $I_0=40$ mol m$^{-2}$d$^{-1}$ ; $A_{\max}=1.2$ g CH ; $\varepsilon=0.012$}\ans \[I_a=40(1-e^{-0.6\times4})=40\times(1-0.091)=36.4\] mol m$^{-2}$ d$^{-1}$ (91\% intercepted). The assimilation response of a leaf layer at three light levels: \[A(I=20)=1.2(1-e^{-0.012\times20/1.2})=0.218\]
+\exbox{Light interception and assimilation}{A canopy has LAI = 4, $k=0.6$, incident light $I_0=40$ mol m$^{-2}$d$^{-1}$ (about 18 MJ m$^{-2}$d$^{-1}$ of global radiation in the PAR range), $A_{\max}=1.2$ g CH$_2$O m$^{-2}$h$^{-1}$ per unit of leaf, $\varepsilon=0.012$ in the same units per unit of light. Illustrate the saturating response and the light absorbed.}\sol \givenline{$k=0.6$ ; $I_0=40$ mol m$^{-2}$d$^{-1}$ ; $A_{\max}=1.2$ g CH ; $\varepsilon=0.012$}\ans \par\indent We know that
+\[I_a=40(1-e^{-0.6\times4})\ti{i}\]
+Substituting the values in equation \rfi{i},
+\[I_a=40\times(1-0.091)=36.4\] mol m$^{-2}$ d$^{-1}$ (91\% intercepted). The assimilation response of a leaf layer at three light levels: \[A(I=20)=1.2(1-e^{-0.012\times20/1.2})\ti{ii}\]
+Substituting the values in equation \rfi{ii},
+\[A(I=20)=0.218\]
 $A(100)=0.759$, $A(500)=1.192$ g m$^{-2}$h$^{-1}$: it rises almost linearly at low light and saturates toward $A_{\max}=1.2$. Water stress, temperature, senescence and leaf nitrogen multiply $A$ by factors below 1, so a stressed crop is on a lower curve, not a different shape. \finans
 
 
@@ -404,7 +412,8 @@ true & - & 0.0360 & 1.560 & 1.334e-05\\\bottomrule\end{tabular}\end{table}
 \IfFileExists{extra/tenx02.tex}{\input{extra/tenx02}}{}
 \IfFileExists{extra/tenbx02.tex}{\input{extra/tenbx02}}{}
 \IfFileExists{extra/ex02.tex}{\input{extra/ex02}}{}
+\IfFileExists{extra/more02x.tex}{\input{extra/more02x}}{}
 \IfFileExists{extra/dyk02.tex}{\input{extra/dyk02}}{}
 \IfFileExists{extra/obj02.tex}{\input{extra/obj02}}{}
-\IfFileExists{extra/more02.tex}{\input{extra/more02}}{}
+\IfFileExists{extra/more02s.tex}{\input{extra/more02s}}{}
 \swaflvideo{02}
