@@ -1,0 +1,28 @@
+\banner{Further analysis: the energy line of a pipe and the intake curve}
+\section{The energy grade line of a pipe}\label{sec:dmegl}
+The total head of water in a pipe is the sum of the elevation $z$, the pressure head $p/(\rho_wg)$ and the velocity head $v^2/(2g)$. Along the pipe it falls by the friction loss $h_f$ and by local losses at fittings. Drawing the \kw{energy grade line} and the \kw{hydraulic grade line} (energy line less the velocity head) shows at once where the pressure is lowest, which is where an emitter or a sprinkler will deliver least.
+\begin{equation}\label{eq:dmbern}\boxed{z_1+\frac{p_1}{\rho_wg}+\frac{v_1^2}{2g}=z_2+\frac{p_2}{\rho_wg}+\frac{v_2^2}{2g}+h_f}\end{equation}
+
+\begin{kfig}{Energy grade line (EGL) and hydraulic grade line (HGL) of a pipe: the energy falls along the pipe by the friction loss $h_f$; the pressure head is the height of the HGL above the pipe.}
+\draw[ln,line width=1.2pt] (0,0.3)--(7,-0.4);\node[lab,below] at (3.5,-0.15) {pipe};
+\draw[crv] (0,3.4)--(7,2.0);\draw[gd] (0,3.0)--(7,1.6);
+\node[lab,right] at (7,2.0) {EGL};\node[lab,right] at (7,1.6) {HGL};
+\draw[<->,ln] (1.5,0.15)--(1.5,2.7);\node[lab,right] at (1.5,1.5) {$p/\rho_wg$};
+\draw[<->,ln] (2.5,2.5)--(2.5,2.9);\node[lab,right] at (2.55,2.75) {$v^2/2g$};
+\draw[ln] (0,3.4)--(7,3.4);\draw[<->,ln] (6.5,3.4)--(6.5,2.1);\node[lab,left] at (6.45,2.8) {$h_f$};
+\draw[ln] (-0.3,-0.6)--(7.3,-0.6);\node[lab,below] at (0.3,-0.6) {datum};
+\end{kfig}
+
+\section{The intake curve of Kostiakov}\label{sec:dmkost}
+The cumulative infiltration of a soil after an opportunity time $\tau$ is often fitted by $Z=k\tau^{a}$ ($0<a<1$). It answers the question that every surface design asks: how long must water stand on the soil to infiltrate the required depth?
+\begin{equation}\label{eq:dmkost}\boxed{Z=k\,\tau^{a}\quad\Longrightarrow\quad\tau_{\mathrm{req}}=\Bigl(\frac{Z_{\mathrm{req}}}{k}\Bigr)^{1/a}}\end{equation}
+
+\begin{kfig}{The Kostiakov intake curve $Z=k\tau^a$: the infiltration rate is high at first and falls with time; the time to infiltrate the required depth is read from the curve.}
+\draw[axis] (0,0)--(6.6,0);\draw[axis] (0,0)--(0,3.4);
+\node[lab,below] at (3.2,-0.1) {opportunity time $\tau$};\node[lab,rotate=90] at (-0.4,1.6) {cumulative intake $Z$};
+\draw[crv,smooth,domain=0:6.2] plot (\x,{1.25*\x^0.55});
+\draw[gd] (0,2.6)--(3.78,2.6)--(3.78,0);\node[lab,left] at (0,2.6) {$Z_{\mathrm{req}}$};\node[lab,below] at (3.78,0) {$\tau_{\mathrm{req}}$};
+\end{kfig}
+
+\exbox{Time to infiltrate the required depth}{A soil has $k=0.012$ m\,min$^{-a}$ and $a=0.45$. How long must water stand on it to infiltrate 80 mm?}\sol
+\[\tau_{\mathrm{req}}=\Bigl(\frac{0.080}{0.012}\Bigr)^{1/0.45}=6.667^{2.222}=67.7\ \text{min}\quad\text{\finans}\]

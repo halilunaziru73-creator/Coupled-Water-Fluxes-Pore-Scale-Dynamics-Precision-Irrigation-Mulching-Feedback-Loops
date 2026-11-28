@@ -1,0 +1,31 @@
+\banner{Further analysis: the crop coefficient curve and the stress coefficient}
+\section{Building the crop coefficient curve}\label{sec:etkc}
+The single crop coefficient of FAO-56 is drawn as four straight segments over the four stages of the season: initial ($K_{c,ini}$, constant), development (rising linearly), mid-season ($K_{c,mid}$, constant) and late season (falling linearly to $K_{c,end}$). On a day $i$ of the development stage,
+\begin{equation}\label{eq:etkc}\boxed{K_c=K_{c,ini}+\frac{i-L_{ini}}{L_{dev}}\bigl(K_{c,mid}-K_{c,ini}\bigr)}\end{equation}
+where $L_{ini}$ and $L_{dev}$ are the lengths of the initial and the development stages (days).
+
+\begin{kfig}{The crop coefficient curve of FAO-56: four stages, with $K_{c,ini}$, $K_{c,mid}$ and $K_{c,end}$ joined by straight lines.}
+\draw[axis] (0,0)--(7.4,0);\draw[axis] (0,0)--(0,3.2);
+\node[lab,below] at (3.6,-0.45) {days after sowing};\node[lab,rotate=90] at (-0.5,1.5) {$K_c$};
+\draw[crv] (0,0.75)--(1.2,0.75)--(3.0,2.6)--(5.4,2.6)--(6.9,0.9);
+\foreach \x/\t in {0.6/ini,2.1/dev,4.2/mid,6.15/late}{\node[lab] at (\x,3.05) {\t};}
+\foreach \x in {1.2,3.0,5.4}{\draw[gd] (\x,0)--(\x,2.9);}
+\node[lab,left] at (0,0.75) {$K_{c,ini}$};\node[lab,left] at (0,2.6) {$K_{c,mid}$};\node[lab,right] at (6.9,0.9) {$K_{c,end}$};
+\end{kfig}
+
+\exbox{Crop water use in the development stage}{A crop has $K_{c,ini}=0.30$, $K_{c,mid}=1.15$, $L_{ini}=20$ d and $L_{dev}=30$ d. Find $K_c$ and $ET_c$ on day 35 when $ET_0=5.0$ mm\,d$^{-1}$.}\sol
+\[K_c=0.30+\frac{35-20}{30}(1.15-0.30)=0.725,\qquad ET_c=0.725\times5.0=3.6\ \text{mm\,d}^{-1}\quad\text{\finans}\]
+
+\section{The water stress coefficient}\label{sec:etks}
+When the depletion of the root zone $D_r$ exceeds the readily available water, the crop transpires less. FAO-56 writes $ET_{c,adj}=K_sK_cET_0$ with
+\begin{equation}\label{eq:etks}\boxed{K_s=\frac{\TAW-D_r}{(1-p)\,\TAW}\quad\text{for }D_r>p\,\TAW,\qquad K_s=1\ \text{otherwise}}\end{equation}
+
+\begin{kfig}{The water stress coefficient against the depletion of the root zone: no stress until the readily available water $p\,\TAW$ is used, then a linear fall to zero at $\TAW$.}
+\draw[axis] (0,0)--(6.4,0);\draw[axis] (0,0)--(0,2.8);
+\node[lab,below] at (3.0,-0.45) {depletion $D_r$};\node[lab,rotate=90] at (-0.4,1.2) {$K_s$};
+\draw[crv] (0,2.2)--(2.8,2.2)--(5.8,0);\draw[gd] (2.8,0)--(2.8,2.2);
+\node[lab,below] at (2.8,0) {$p\,\TAW$};\node[lab,below] at (5.8,0) {$\TAW$};\node[lab,left] at (0,2.2) {1};
+\end{kfig}
+
+\exbox{Stressed water use}{A root zone has $\TAW=120$ mm and $p=0.5$. Find $K_s$ when the depletion is 84 mm, and the actual water use if $K_c=1.15$ and $ET_0=6$ mm\,d$^{-1}$.}\sol
+\par\noindent $D_r=84>60$ mm, so $K_s=(120-84)/(0.5\times120)=0.60$; $ET_{c,adj}=0.60\times1.15\times6=4.1$ mm\,d$^{-1}$.\finans

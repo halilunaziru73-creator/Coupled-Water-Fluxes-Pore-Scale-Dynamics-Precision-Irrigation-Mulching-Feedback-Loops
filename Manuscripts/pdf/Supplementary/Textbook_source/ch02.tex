@@ -369,6 +369,7 @@ true & - & 0.0360 & 1.560 & 1.334e-05\\\bottomrule\end{tabular}\end{table}
 \exbox{Three optimisers}{Compare the three optimisers in Table~\ref{tab:calib}.}\sol  The data have an error of up to 0.005, so the noise variance is $0.005^2/3=8.33e-06$; the true parameters give an MSE of $1.33e-05$. The grid finds $(\alpha,n)=(0.0375,1.550)$ with MSE $1.34e-05$ after 957 evaluations; the random search is a little worse for the same effort order; Nelder--Mead converges to $(0.0364,1.563)$ with MSE $1.20e-05$ in only 103 evaluations. All three land near the true values: the retention data constrain $\alpha$ and $n$ well, but the grid is limited by its spacing and the random search by luck, while the simplex uses the shape of the loss surface. The fitted MSE is below the true-parameter MSE: with nine points the fit absorbs part of the noise, a reminder that a low loss does not prove the parameters are right. \finans
 
 
+\IfFileExists{extra/plus02.tex}{\input{extra/plus02}}{}
 \section{Summary}
 \begin{itemize}
 \item van Genuchten--Mualem $\theta(h)$, $K(h)$; Richards equation by an implicit, mass-conserving Picard scheme; the balance $P+I=E_s+E_i+T+D+R+\Delta S$ closes to the tolerance.
@@ -390,4 +391,5 @@ true & - & 0.0360 & 1.560 & 1.334e-05\\\bottomrule\end{tabular}\end{table}
 \IfFileExists{extra/ex02.tex}{\input{extra/ex02}}{}
 \IfFileExists{extra/dyk02.tex}{\input{extra/dyk02}}{}
 \IfFileExists{extra/obj02.tex}{\input{extra/obj02}}{}
+\IfFileExists{extra/more02.tex}{\input{extra/more02}}{}
 \swaflvideo{02}

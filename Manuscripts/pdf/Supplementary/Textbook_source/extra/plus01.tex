@@ -1,0 +1,33 @@
+\banner{Further analysis: the three phases and the tensiometer}
+\section{The three-phase diagram of a soil}\label{sec:sw3ph}
+All the mass and volume relations of a soil follow from one picture: the three phases separated into blocks (Fig.~\ref{fig:sw3ph}). The volumes are written on the left and the masses on the right. Every definition of this chapter is a ratio of two blocks: porosity $\phi=(V_a+V_w)/V_t$, void ratio $e=(V_a+V_w)/V_s$, volumetric water content $\theta=V_w/V_t$, gravimetric water content $w=M_w/M_s$, degree of saturation $S=V_w/(V_a+V_w)$ and bulk density $\rho_b=M_s/V_t$. Two identities follow at once and are worth remembering: $\phi=1-\rho_b/\rho_s$ and $\theta=w\,\rho_b/\rho_w$.
+
+\begin{kfig}{The three-phase diagram: the air, water and solid of a soil sample drawn as separate blocks, volumes on the left and masses on the right.\label{fig:sw3ph}}
+\draw[ln,fill=white] (0,3.0) rectangle (3,4.0);\node[lab] at (1.5,3.5) {air};
+\draw[wtr] (0,1.8) rectangle (3,3.0);\node[lab] at (1.5,2.4) {water};
+\draw[soil] (0,0) rectangle (3,1.8);\node[lab] at (1.5,0.9) {solid};
+\foreach \a/\b/\t in {3.0/4.0/V_a,1.8/3.0/V_w,0/1.8/V_s}{\draw[<->,ln] (-0.35,\a)--(-0.35,\b);\node[lab,left] at (-0.4,{(\a+\b)/2}) {$\t$};}
+\draw[<->,ln] (-1.5,0)--(-1.5,4.0);\node[lab,left] at (-1.55,2) {$V_t$};
+\draw[<->,ln] (-0.95,1.8)--(-0.95,4.0);\node[lab,left] at (-1.0,3.15) {$V_v$};
+\node[lab,right] at (3.35,3.5) {$M_a\approx0$};\draw[<->,ln] (3.25,1.8)--(3.25,3.0);\node[lab,right] at (3.3,2.4) {$M_w=\rho_wV_w$};
+\draw[<->,ln] (3.25,0)--(3.25,1.8);\node[lab,right] at (3.3,0.9) {$M_s=\rho_sV_s$};
+\end{kfig}
+
+\section{Reading a tensiometer}\label{sec:swtens}
+A tensiometer is a water-filled tube closed at the bottom by a porous ceramic cup buried at the depth of measurement. Water flows through the cup until the water in the tube is in equilibrium with the soil water; the gauge at the top then shows the pressure, below atmospheric, at its own level. The cup lies a distance $z_g$ below the gauge, and the column of water adds a pressure $\rho_wgz_g$, so the suction at the cup is
+\begin{equation}\label{eq:swtens}\boxed{h=\frac{P_g}{\rho_w g}-z_g}\end{equation}
+where $P_g$ is the vacuum read on the gauge. A tensiometer works only up to about 80 kPa (about 800 cm), beyond which air enters the cup; it therefore covers the range of the triggers of most irrigation schedules but not the dry end.
+
+\begin{kfig}{A tensiometer: a water-filled tube with a vacuum gauge at the top and a porous ceramic cup at the depth of measurement; the suction at the cup is the gauge reading less the height $z_g$ of the water column.}
+\draw[soil] (-2.6,-4.2) rectangle (2.6,0);\draw[ln] (-2.6,0)--(2.6,0);
+\fill[white] (-0.25,-3.6) rectangle (0.25,1.2);\draw[ln] (-0.25,-3.6)--(-0.25,1.2);\draw[ln] (0.25,-3.6)--(0.25,1.2);
+\fill[khcyan!25] (-0.23,-3.6) rectangle (0.23,1.15);
+\draw[ln,fill=khsalmon!20] (0,-3.85) ellipse (0.36 and 0.42);\node[lab,right] at (0.45,-3.9) {porous cup};
+\draw[ln,fill=white] (0,1.65) circle (0.48);\draw[vec] (0,1.65)--(0.28,1.92);\node[lab,right] at (0.55,1.65) {vacuum gauge $P_g$};
+\draw[<->,ln] (-0.7,1.2)--(-0.7,-3.85);\node[lab,left] at (-0.75,-1.3) {$z_g$};
+\foreach \x/\y in {-1.6/-3.4,1.5/-3.0,1.9/-4.0,-1.9/-2.2}{\fill[khcyan!40] (\x,\y) circle (0.12);}
+\end{kfig}
+
+\exbox{The suction at the cup}{The gauge of a tensiometer reads a vacuum of 45 kPa. The gauge is 50 cm above the centre of the cup. Find the matric suction at the cup. Has a trigger of 300 cm been reached?}\sol \givenline{$P_g=45$ kPa ; $z_g=50$ cm}
+\par\noindent $P_g/(\rho_wg)=45\,000/9810=4.59$ m $=459$ cm. From Equation~\ref{eq:swtens}, $h=459-50=409$ cm.\finans
+\par\noindent The suction at the cup exceeds 300 cm, so the trigger has been reached; reading the gauge without the correction for $z_g$ would overstate the suction by 50 cm.

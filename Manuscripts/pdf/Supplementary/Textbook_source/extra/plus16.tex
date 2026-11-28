@@ -1,0 +1,84 @@
+\banner{From light to yield: the quantitative chain of the crop}\label{ch:map2-deep}
+\section{Thermal time in practice}\label{sec:dm-gdd}
+The development stage of Equation~\ref{eq:dm-tsum} advances with the \kw{thermal time}, the sum of the daily mean temperatures above a base temperature $T_b$. Below $T_b$ the crop does not develop; above an upper limit (about 30 $^\circ$C for temperate cereals) the rate stops rising. The stage is the ratio of the accumulated sum to the sum required for the phase:
+\begin{equation}\label{eq:dm-ds}\boxed{DS=\frac{TS}{TS_{\mathrm{req}}},\qquad TS=\sum_{d}\min\bigl(\max(T_d-T_b,0),\,T_{u}-T_b\bigr)}\end{equation}
+Daisy uses $DS=0$ at emergence, $DS=1$ at flowering and $DS=2$ at maturity, each phase with its own requirement. Because the sum counts only degrees above $T_b$, a cool spring delays the crop more than the fall in mean temperature suggests.
+
+\exbox{A week of thermal time}{The daily mean temperatures of a spring week are 12, 14, 17, 9, $-1$, 6 and 11 $^\circ$C. Find the thermal time accumulated by a maize crop with $T_b=4$ $^\circ$C. How many such weeks does it need for a vegetative phase of 700 $^\circ$C\,d?}\sol
+\par\noindent The daily contributions are $8+10+13+5+0+2+7=45$ $^\circ$C\,d. The phase needs $700/45=15.6$ such weeks.\finans
+\par\noindent A wheat crop ($T_b=0$ $^\circ$C) at a steady 15 $^\circ$C would reach flowering (1100 $^\circ$C\,d) in $1100/15=73$ days.\finans
+
+\section{Light interception and radiation-use efficiency}\label{sec:dm-rue}
+The light that reaches a depth in the canopy where the cumulative leaf area above is $L$ follows the exponential law of Monsi and Saeki (Equation~\ref{eq:dm-beer}). The fraction intercepted by the whole canopy, $f=1-e^{-kL}$, rises quickly at first and then saturates: the last leaves add little. A useful summary of production is the \kw{radiation-use efficiency} (RUE), the dry matter formed per unit of intercepted photosynthetically active radiation (PAR):
+\begin{equation}\label{eq:dm-rueq}\boxed{\frac{\mathrm dW}{\mathrm dt}=\mathrm{RUE}\times f\times\mathrm{PAR},\qquad f=1-e^{-kL}}\end{equation}
+For C$_3$ cereals RUE is about 2.5 to 3.0 g\,MJ$^{-1}$ of intercepted PAR, and for maize (C$_4$) about 3.5 to 4.0 g\,MJ$^{-1}$. Daisy does not use RUE; it computes the photosynthesis leaf layer by leaf layer, but the result can be checked against Equation~\ref{eq:dm-rueq}.
+
+\begin{kfig}{Light in a canopy of four leaf layers: the flux falls exponentially with the cumulative leaf area $L$ above, $I=I_0e^{-kL}$; the fraction intercepted by the canopy is $1-e^{-kL_{\mathrm{tot}}}$.}
+\foreach \y/\l in {3.2/1,2.4/2,1.6/3,0.8/4}{\draw[draw=green!45!black,line width=1.2pt] (0.3,\y)--(3.2,\y);\node[lab,left] at (0.25,\y) {$L=\l$};}
+\foreach \x in {0.7,1.4,2.1,2.8}{\draw[vec] (\x,4.2)--(\x,3.35);}
+\foreach \x in {0.9,1.9,2.6}{\draw[vec] (\x,3.1)--(\x,2.55);}\foreach \x in {1.4,2.4}{\draw[vec] (\x,2.3)--(\x,1.75);}\draw[vec] (1.9,1.5)--(1.9,0.95);
+\draw[soil] (0,0) rectangle (3.5,0.4);
+\begin{scope}[xshift=5cm]
+\draw[axis] (0,0)--(3.6,0);\draw[axis] (0,0)--(0,4.4);\node[lab,below] at (1.8,-0.1) {$I/I_0$};\node[lab,rotate=90] at (-0.35,2.1) {cumulative $L$ (down)};
+\draw[crv,smooth,domain=0:4] plot ({3.3*exp(-0.6*\x)},{4-\x});
+\node[lab] at (2.6,3.3) {$e^{-kL}$};
+\end{scope}
+\end{kfig}
+
+\exbox{Interception and growth rate of a wheat canopy}{A wheat canopy has $k=0.6$ and $L=3$. Find the fraction of light intercepted and the leaf area needed to intercept 95 per cent. With RUE $=3.0$ g\,MJ$^{-1}$ and PAR $=10$ MJ\,m$^{-2}$\,d$^{-1}$, find the daily growth.}\sol
+\par\noindent $f=1-e^{-0.6\times3}=1-0.165=0.835$.\finans
+\par\noindent For $f=0.95$: $e^{-0.6L}=0.05$, $L=\ln20/0.6=5.0$.\finans
+\par\noindent Growth: $3.0\times0.835\times10=25$ g\,m$^{-2}$\,d$^{-1}$, that is 250 kg of dry matter per hectare per day.\finans
+
+\section{The light-response curve of a leaf}\label{sec:dm-lrc}
+The gross photosynthesis of a leaf rises linearly with light at low irradiance, with the \kw{initial light-use efficiency} $\varepsilon$, and saturates at $A_{\max}$ (Equation~\ref{eq:dm-light}). The curve explains two facts of the canopy. Sunlit leaves at the top work near saturation and waste part of their light; shaded leaves below work on the linear part and use every photon well. A canopy therefore produces more when the same light is spread over more leaf area, which is why its response to light is nearly linear even when each leaf saturates.
+
+\begin{kfig}{Light-response curve of a leaf, $A=A_{\max}(1-e^{-\varepsilon I/A_{\max}})$: initial slope $\varepsilon$, saturation at $A_{\max}$; the shaded leaf (open circle) works on the linear part, the sunlit leaf (filled) near saturation.}
+\draw[axis] (0,0)--(6.6,0);\draw[axis] (0,0)--(0,4.0);
+\node[lab,below] at (3.3,-0.1) {absorbed light $I$ (W\,m$^{-2}$)};\node[lab,rotate=90] at (-0.45,2) {gross photosynthesis $A$};
+\draw[crv,smooth,domain=0:6.2] plot (\x,{3.3*(1-exp(-1.1*\x/3.3*1.8))});
+\draw[gd] (0,3.3)--(6.2,3.3);\node[lab,left] at (0,3.3) {$A_{\max}$};
+\draw[gd] (0,0)--(1.7,3.2);\node[lab] at (1.25,2.6) {$\varepsilon$};
+\draw[khmag,fill=white] (0.55,{3.3*(1-exp(-1.1*0.55/3.3*1.8))}) circle (0.09);\fill[khmag] (4.6,{3.3*(1-exp(-1.1*4.6/3.3*1.8))}) circle (0.09);
+\node[lab,right] at (0.65,0.9) {shade leaf};\node[lab,below] at (4.6,3.15) {sunlit leaf};
+\end{kfig}
+
+\exbox{Sunlit and shaded leaves}{A leaf has $A_{\max}=40$ kg CO$_2$\,ha$^{-1}$\,h$^{-1}$ and $\varepsilon=0.45$ kg CO$_2$\,ha$^{-1}$\,h$^{-1}$ per W\,m$^{-2}$. Find its photosynthesis at 200 W\,m$^{-2}$ (sunlit) and at 50 W\,m$^{-2}$ (shaded). Which leaf uses its light more efficiently?}\sol
+\par\noindent Sunlit: $A=40(1-e^{-0.45\times200/40})=40(1-e^{-2.25})=35.8$ kg CO$_2$\,ha$^{-1}$\,h$^{-1}$.\finans
+\par\noindent Shaded: $A=40(1-e^{-0.5625})=17.2$ kg CO$_2$\,ha$^{-1}$\,h$^{-1}$.\finans
+\par\noindent Per unit of light the shaded leaf gives $17.2/50=0.34$ and the sunlit leaf $35.8/200=0.18$ kg CO$_2$\,ha$^{-1}$\,h$^{-1}$ per W\,m$^{-2}$: the shaded leaf is nearly twice as efficient.
+
+\section{Maintenance and growth respiration}\label{sec:dm-resp}
+Part of the assimilate is burnt. \kw{Maintenance respiration} keeps the living tissue; it is proportional to the dry mass and doubles for each 10 $^\circ$C (a $Q_{10}$ of 2):
+\begin{equation}\label{eq:dm-rm}\boxed{R_m=c_m\,W\,Q_{10}^{(T-T_{\mathrm{ref}})/10},\qquad \Delta W=E_g\,(A-R_m)}\end{equation}
+The remainder is converted into new tissue with the \kw{conversion efficiency} $E_g$ (about 0.72 for leaves and stems, lower for oil-rich seeds); the loss $1-E_g$ is the \kw{growth respiration}. A large, old crop in a warm period can spend half of its daily assimilate on maintenance.
+
+\exbox{The daily carbon budget of a crop}{A crop of 800 g\,m$^{-2}$ dry mass assimilates 25 g\,m$^{-2}$\,d$^{-1}$ of carbohydrate at a mean temperature of 15 $^\circ$C. Take $c_m=0.015$ g\,g$^{-1}$\,d$^{-1}$ at $T_{\mathrm{ref}}=25$ $^\circ$C, $Q_{10}=2$ and $E_g=0.72$. Find the maintenance respiration and the growth. Repeat at 25 $^\circ$C.}\sol
+\par\noindent At 15 $^\circ$C: $R_m=0.015\times800\times2^{-1}=6.0$ g\,m$^{-2}$\,d$^{-1}$; growth $0.72\times(25-6)=13.7$ g\,m$^{-2}$\,d$^{-1}$.\finans
+\par\noindent At 25 $^\circ$C: $R_m=12.0$ and growth $0.72\times13=9.4$ g\,m$^{-2}$\,d$^{-1}$, if the assimilation is unchanged.\finans
+\par\noindent A warmer period reduces the growth by a third through respiration alone, which is one reason why warming shortens and lowers the yield of temperate cereals.
+
+\section{Water stress and yield: the yield-response factor}\label{sec:dm-ky}
+Over a season the relative loss of yield is nearly proportional to the relative deficit of evapotranspiration. Doorenbos and Kassam (FAO paper 33) wrote
+\begin{equation}\label{eq:dm-ky}\boxed{1-\frac{Y_a}{Y_m}=K_y\Bigl(1-\frac{ET_a}{ET_m}\Bigr)}\end{equation}
+where $Y_a$ and $Y_m$ are the actual and the maximum yield and $K_y$ the \kw{yield-response factor}. $K_y>1$ (maize 1.25, wheat 1.15) means that the yield falls faster than the water use: such crops should not be stressed. $K_y<1$ (groundnut 0.7, soybean 0.85) allows a planned deficit. Daisy does not use Equation~\ref{eq:dm-ky}; its yield follows from the stress factor on photosynthesis day by day, but the twenty seasons of a SWAFL run can be plotted in this form.
+
+\begin{kfig}{The yield-response factor: relative yield loss against relative evapotranspiration deficit. A crop with $K_y>1$ loses more yield than water.}
+\draw[axis] (0,0)--(4.6,0);\draw[axis] (0,0)--(0,4.6);
+\node[lab,below] at (2.2,-0.1) {$1-ET_a/ET_m$};\node[lab,rotate=90] at (-0.45,2.2) {$1-Y_a/Y_m$};
+\draw[gd] (0,0)--(4.2,4.2);\node[lab] at (3.9,3.5) {$K_y=1$};
+\draw[crv] (0,0)--(3.4,4.25);\node[lab,left] at (3.0,4.1) {$K_y=1.25$};
+\draw[ln] (0,0)--(4.2,2.94);\node[lab] at (4.1,2.6) {$K_y=0.7$};
+\end{kfig}
+
+\exbox{Yield under a planned deficit}{A wheat crop ($K_y=1.15$) with a potential yield of 7.0 Mg\,ha$^{-1}$ receives irrigation that meets 80 per cent of its seasonal water use. Find the expected yield.}\sol
+\par\noindent $1-Y_a/Y_m=1.15\times(1-0.8)=0.23$, so $Y_a=0.77\times7.0=5.39$ Mg\,ha$^{-1}$.\finans
+
+\section{The distribution of the roots}\label{sec:dm-rootdist}
+The root length density usually falls exponentially with depth, $L_v(z)=L_{v0}\,e^{-z/\lambda}$, with a decay length $\lambda$ of 15 to 30 cm for annual crops. The share of the roots above a depth $z_1$ in a root zone of depth $Z_r$ is
+\begin{equation}\label{eq:dm-rootfrac}\boxed{F(z_1)=\frac{1-e^{-z_1/\lambda}}{1-e^{-Z_r/\lambda}}}\end{equation}
+The uptake of Equation~\ref{eq:dm-feddes} is distributed in the same proportion when the soil is wet, which is why the upper soil dries first and why a sensor in the upper root zone sees the depletion early.
+
+\exbox{Where are the roots?}{A crop has a root zone 100 cm deep with $\lambda=20$ cm. What fraction of its roots lies in the top 30 cm?}\sol
+\[F(30)=\frac{1-e^{-1.5}}{1-e^{-5}}=\frac{0.777}{0.993}=0.78\quad\text{\finans}\]
+Nearly four-fifths of the roots are in the top 30 cm; a sensor at 20 cm therefore watches the part of the profile that delivers most of the water.

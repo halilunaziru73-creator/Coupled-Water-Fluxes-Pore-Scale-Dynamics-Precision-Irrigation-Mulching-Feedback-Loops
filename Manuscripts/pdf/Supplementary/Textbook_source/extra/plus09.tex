@@ -1,0 +1,30 @@
+\banner{Further analysis: consolidation after tillage and the vapour barrier of a mulch}
+\section{Consolidation of a tilled layer}\label{sec:stconsol}
+Tillage loosens the plough layer; rain and wetting--drying cycles then consolidate it back towards its natural porosity. The change is close to an exponential decay with a consolidation time $\tau_c$:
+\begin{equation}\label{eq:stconsol}\boxed{\phi(t)=\phi_c+(\phi_0-\phi_c)\,e^{-t/\tau_c}}\end{equation}
+where $\phi_0$ is the porosity just after tillage and $\phi_c$ the consolidated porosity. The large pores made by tillage are lost first, so the conductivity and the retention near saturation change faster than the total porosity.
+
+\begin{kfig}{Porosity of a tilled layer after tillage: an exponential return towards the consolidated porosity $\phi_c$ with time constant $\tau_c$.}
+\draw[axis] (0,0)--(6.6,0);\draw[axis] (0,0)--(0,3.2);
+\node[lab,below] at (3.2,-0.1) {days after tillage};\node[lab,rotate=90] at (-0.4,1.5) {porosity $\phi$};
+\draw[crv,smooth,domain=0:6.3] plot (\x,{1.0+1.9*exp(-\x/1.6)});
+\draw[gd] (0,1.0)--(6.3,1.0);\node[lab,left] at (0,1.0) {$\phi_c$};\node[lab,left] at (0,2.9) {$\phi_0$};
+\draw[gd] (1.6,0)--(1.6,1.70);\node[lab,below] at (1.6,0) {$\tau_c$};
+\end{kfig}
+
+\exbox{Porosity a month after tillage}{A plough layer has $\phi_0=0.55$ after tillage and $\phi_c=0.45$ when consolidated, with $\tau_c=60$ days. Find the porosity after 30 days.}\sol
+\[\phi(30)=0.45+0.10\,e^{-0.5}=0.511\quad\text{\finans}\]
+
+\section{The vapour barrier of a mulch}\label{sec:stmulch}
+A mulch of thickness $b$ adds a diffusion resistance $r_m=b\,\tau_m/D_v$ in series with the resistance of the air above, where $\tau_m$ is the tortuosity of the mulch and $D_v$ the diffusivity of vapour ($2.5\times10^{-5}$ m$^2$\,s$^{-1}$). The evaporation from a wet soil under the mulch is reduced in the ratio of the resistances, $E/E_0=r_a/(r_a+r_m)$, so a thin mulch on a still day, when $r_a$ is large, saves less than the same mulch on a windy day.
+
+\begin{kfig}{Evaporation through a mulch: vapour from the wet soil diffuses through the mulch (resistance $r_m$) and then into the air (resistance $r_a$); the two resistances act in series.}
+\draw[soil] (0,0) rectangle (6,1.2);\fill[khgold!40] (0,1.2) rectangle (6,1.9);
+\foreach \x in {0.3,0.8,...,5.8}{\draw[draw=khgold!80!black,line width=0.6pt] (\x,1.3)--(\x+0.35,1.8);}
+\draw[vec] (1.5,1.0)--(1.5,3.2);\draw[vec] (4.5,1.0)--(4.5,3.2);
+\draw[<->,ln] (6.3,1.2)--(6.3,1.9);\node[lab,right] at (6.35,1.55) {mulch, $r_m$};\node[lab,right] at (6.35,2.6) {air, $r_a$};\node[lab,right] at (6.35,0.6) {wet soil};
+\end{kfig}
+
+\exbox{Saving by a straw mulch}{A straw mulch 5 cm thick has a tortuosity of 1.5. The aerodynamic resistance of the air is 100 s\,m$^{-1}$. Find the resistance of the mulch and the fraction of the evaporation that remains.}\sol
+\par\noindent $r_m=0.05\times1.5/2.5\times10^{-5}=3000$ s\,m$^{-1}$; $E/E_0=100/3100=0.032$.\finans
+\par\noindent The mulch cuts the evaporation of a wet surface to about 3 per cent; in practice the saving is smaller, because the soil under the mulch also dries and water reaches the surface between the straws.

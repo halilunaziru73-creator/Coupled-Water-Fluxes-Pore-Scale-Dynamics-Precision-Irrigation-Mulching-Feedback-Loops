@@ -1,0 +1,29 @@
+\banner{Further analysis: measuring the conductivity and the stress of the roots}
+\section{The constant-head permeameter}\label{sec:flperm}
+The saturated conductivity of a core is measured by keeping a constant head difference $\Delta H$ across it and collecting the outflow. Darcy's law for the core of length $L$ and cross-section $A$ gives
+\begin{equation}\label{eq:flperm}\boxed{K_s=\frac{V\,L}{A\,\Delta H\,t}}\end{equation}
+where $V$ is the volume collected in the time $t$. The method suits sands and loams; for clays, whose outflow is small, the falling-head method is used instead.
+
+\begin{kfig}{The constant-head permeameter: water is kept at a constant level above a saturated core of length $L$; the head difference $\Delta H$ drives the flow, and the outflow $V$ is collected in a time $t$.}
+\draw[ln] (0,0) rectangle (2.0,2.2);\draw[soil] (0.02,0.02) rectangle (1.98,1.6);\fill[khcyan!25] (0.02,1.6) rectangle (1.98,2.15);
+\draw[khcyan,line width=1pt] (0,2.15)--(2.0,2.15);\draw[vec] (1.0,3.1)--(1.0,2.25);\node[lab,above] at (1.0,3.1) {inflow};
+\draw[vec] (2.05,2.15)--(2.8,2.15);\node[lab,right] at (2.8,2.15) {overflow};
+\draw[ln] (1.0,0)--(1.0,-0.6)--(3.2,-0.6);\draw[vec] (3.2,-0.6)--(3.2,-1.2);\draw[ln] (2.9,-1.2) rectangle (3.5,-2.2);\fill[khcyan!25] (2.92,-1.7) rectangle (3.48,-2.18);\node[lab,right] at (3.55,-1.7) {$V$ in $t$};
+\draw[<->,ln] (-0.35,0.02)--(-0.35,1.6);\node[lab,left] at (-0.4,0.8) {$L$};
+\draw[<->,ln] (-1.0,-0.6)--(-1.0,2.15);\node[lab,left] at (-1.05,0.8) {$\Delta H$};\draw[gd] (-1.1,-0.6)--(1.0,-0.6);
+\end{kfig}
+
+\exbox{Conductivity of a core}{A core of length 20 cm and cross-section 78.5 cm$^2$ under a head difference of 30 cm passes 50 cm$^3$ of water in 10 minutes. Find $K_s$ in cm\,d$^{-1}$.}\sol
+\[K_s=\frac{50\times20}{78.5\times30\times10}=0.0425\ \text{cm\,min}^{-1}=61\ \text{cm\,d}^{-1}\quad\text{\finans}\]
+This value lies between the loam and the sandy loam of the ten soils.
+
+\section{The reduction of root uptake by stress}\label{sec:flfeddes}
+The uptake of Equation~(\ref{eq:dm-feddes}) is reduced by the factor $\alpha_s(h)$ of Feddes, a trapezoid in the suction: zero in a saturated soil (lack of oxygen, $h<h_1$), one between $h_2$ and $h_3$, falling linearly to zero at the wilting point $h_4$. The upper point $h_3$ depends on the demand: when the atmosphere asks for much water, the roots cannot keep up at a lower suction than on a dull day.
+
+\begin{kfig}{The stress-reduction function of root uptake (Feddes): no uptake in a saturated soil and at the wilting point, full uptake between $h_2$ and $h_3$; $h_3$ is lower at high demand (dashed).}
+\draw[axis] (0,0)--(7.2,0);\draw[axis] (0,0)--(0,2.8);
+\node[lab,below] at (3.6,-0.5) {suction $h$ (log scale)};\node[lab,rotate=90] at (-0.4,1.2) {$\alpha_s$};
+\draw[crv] (0.2,0)--(0.9,2.2)--(3.4,2.2)--(6.6,0);\draw[gd] (2.5,2.2)--(6.6,0);
+\foreach \x/\t in {0.2/h_1,0.9/h_2,3.4/h_3,6.6/h_4}{\draw[ln] (\x,0)--(\x,-0.1);\node[lab,below] at (\x,-0.1) {$\t$};}
+\node[lab,left] at (0,2.2) {1};\node[lab] at (2.3,2.5) {high demand};
+\end{kfig}

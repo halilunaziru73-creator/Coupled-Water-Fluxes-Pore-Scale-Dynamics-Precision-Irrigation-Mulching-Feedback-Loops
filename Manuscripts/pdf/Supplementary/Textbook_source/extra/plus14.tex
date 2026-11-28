@@ -1,0 +1,30 @@
+\banner{Further analysis: the geometry of drainage and the falling water table}
+\section{The geometry of the Hooghoudt equation}\label{sec:drgeom}
+Parallel drains at spacing $L$ lie at a depth $d$ above an impermeable layer; between them the water table rises to a height $h$ above the drain level. The flow is horizontal above the drains and converges radially near them; Hooghoudt replaced the true depth by an \kw{equivalent depth} $d_e<d$ that accounts for the convergence.
+
+\begin{kfig}{Parallel drains: spacing $L$, drain depth $d$ above an impermeable layer and the water table rising to $h$ midway between the drains under a recharge $q$.}
+\draw[soil] (-0.4,-0.6) rectangle (8.4,3.6);\fill[pattern=north east lines,pattern color=khink] (-0.4,-0.6) rectangle (8.4,-0.25);\draw[ln] (-0.4,-0.25)--(8.4,-0.25);\node[lab,above right] at (5.6,-0.22) {impermeable layer};
+\draw[ln] (-0.4,3.6)--(8.4,3.6);\foreach \x in {0.6,2.4,4.2,6.0,7.8}{\draw[vec] (\x,4.3)--(\x,3.7);}\node[lab,above] at (4.2,4.3) {recharge $q$};
+\fill[khcyan!25] (0,1.3) circle (0.18);\fill[khcyan!25] (8,1.3) circle (0.18);\draw[ln] (0,1.3) circle (0.18);\draw[ln] (8,1.3) circle (0.18);
+\draw[khcyan,line width=1pt,smooth,domain=0:8] plot (\x,{1.3+1.3*sqrt(1-((\x-4)/4)^2)});
+\draw[<->,ln] (0,0.6)--(8,0.6);\node[lab,below] at (4,0.6) {$L$};
+\draw[<->,ln] (4,1.3)--(4,2.6);\node[lab,right] at (4,1.95) {$h$};\draw[gd] (0,1.3)--(8,1.3);
+\draw[<->,ln] (8.2,-0.25)--(8.2,1.3);\node[lab,right] at (8.2,0.5) {$d$};
+\end{kfig}
+
+\section{The falling water table after a heavy rain}\label{sec:drglover}
+After a heavy rain the water table falls between drains. Glover and Dumm described the fall of the midway head $h_t$ from its initial value $h_0$ by
+\begin{equation}\label{eq:drglover}\boxed{\frac{h_t}{h_0}=1.16\,e^{-\alpha t},\qquad \alpha=\frac{\pi^2KD}{\mu L^2}}\end{equation}
+where $D=d_e+h/2$ is the mean thickness of the flow region and $\mu$ the drainable porosity. The design asks that the water table falls from near the surface to a safe depth within one or two days.
+
+\begin{kfig}{The falling water table between drains after a heavy rain (Glover--Dumm): the midway head decays exponentially with the reaction factor $\alpha$.}
+\draw[axis] (0,0)--(6.4,0);\draw[axis] (0,0)--(0,3.2);
+\node[lab,below] at (3.1,-0.1) {time $t$};\node[lab,rotate=90] at (-0.4,1.4) {$h_t/h_0$};
+\draw[crv,smooth,domain=0.35:6.1] plot (\x,{2.8*1.16*exp(-0.5*\x)});\draw[gd] (0,1.4)--(1.68,1.4)--(1.68,0);
+\node[lab,left] at (0,1.4) {0.5};\node[lab,left] at (0,2.8) {1};\node[lab,below] at (1.68,0) {$t_{1/2}$};
+\end{kfig}
+
+\exbox{Time for the water table to fall}{Drains are spaced 37.3 m in a soil with $K=0.8$ m\,d$^{-1}$, $\mu=0.05$ and $D=1.5$ m. How long does the midway water table take to fall to half its initial height?}\sol
+\par\noindent $\alpha=\pi^2\times0.8\times1.5/(0.05\times37.3^2)=0.170$ d$^{-1}$.
+\par\noindent $0.5=1.16\,e^{-0.170t}$, so $t=\ln(2.32)/0.170=4.9$ days.\finans
+\par\noindent This is too slow for most crops; a design for a two-day fall needs a smaller spacing, since $\alpha\propto1/L^2$: $L=37.3\sqrt{2/4.9}=24$ m.

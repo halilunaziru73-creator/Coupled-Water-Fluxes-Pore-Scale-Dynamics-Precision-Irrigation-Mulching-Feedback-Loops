@@ -1,0 +1,26 @@
+\banner{Further analysis: overlap of the patterns and the path of the jet}
+\section{Overlap of the patterns}\label{sec:sprov}
+A single sprinkler wets a circle with a depth that falls from the centre outwards. A uniform application comes from the overlap of neighbouring patterns: at a spacing of about half the wetted diameter the falling edges of two patterns add to a nearly constant depth. The uniformity is measured with catch cans on a grid and summarised by the coefficient of Christiansen,
+\begin{equation}\label{eq:sprcu}\boxed{CU=100\Bigl(1-\frac{\sum|x_i-\overline x|}{n\,\overline x}\Bigr)}\end{equation}
+
+\begin{kfig}{Overlap of two triangular patterns of application depth: at a spacing $S$ near the wetted radius the sum (thick) is nearly uniform.}
+\draw[axis] (0,0)--(7.2,0);\draw[axis] (0,0)--(0,3.2);
+\node[lab,below] at (3.5,-0.45) {distance};\node[lab,rotate=90] at (-0.4,1.4) {depth};
+\draw[ln] (0,2.0)--(4.0,0);\draw[ln] (2.8,0)--(6.8,2.0);
+\draw[crv,line width=1.2pt] (0,2.0)--(2.8,0.6)--(4.0,0.6)--(6.8,2.0);
+\fill[khmag] (0,0) circle (0.08);\fill[khmag] (6.8,0) circle (0.08);\node[lab,below] at (0,0) {sprinkler};\node[lab,below] at (6.8,0) {sprinkler};
+\end{kfig}
+
+\section{The path of the jet}\label{sec:sprjet}
+Without air resistance a jet leaving the nozzle with speed $v_0$ at angle $\vartheta$ above the horizontal travels a distance $x=v_0^2\sin2\vartheta/g$ on level ground, largest at $45^\circ$. Air drag and the break-up of the jet into drops shorten the path considerably, and sprinklers use angles of 21 to 28$^\circ$ to keep the jet low in the wind.
+
+\begin{kfig}{The path of a sprinkler jet: ideal parabola without drag (dashed) and the shorter path with drag and break-up into drops (solid).}
+\draw[ln] (0,0)--(7,0);\draw[ln,fill=khfeat] (-0.1,0) rectangle (0.1,0.4);
+\draw[gd,smooth,domain=0:6.6] plot (\x,{0.4+0.47*\x-0.071*\x^2});\draw[crv,smooth] plot coordinates {(0,0.4) (1,0.78) (2,1.0) (3,1.02) (3.8,0.8) (4.4,0.35) (4.7,0)};
+\foreach \x/\y in {4.6/0.2,4.4/0.5,4.8/0.1}{\fill[khcyan] (\x,\y) circle (0.05);}
+\node[lab] at (5.6,1.2) {no drag};\node[lab] at (2.6,1.3) {real jet};
+\end{kfig}
+
+\exbox{Uniformity from catch cans}{Eight catch cans collect 12, 14, 11, 13, 15, 10, 14 and 11 mm. Find Christiansen's coefficient of uniformity.}\sol
+\par\noindent $\overline x=100/8=12.5$ mm; $\sum|x_i-\overline x|=0.5+1.5+1.5+0.5+2.5+2.5+1.5+1.5=12$ mm.
+\[CU=100\Bigl(1-\frac{12}{8\times12.5}\Bigr)=88\ \text{per cent}\quad\text{\finans}\]

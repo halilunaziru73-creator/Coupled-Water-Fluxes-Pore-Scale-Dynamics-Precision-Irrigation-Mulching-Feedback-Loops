@@ -1,0 +1,69 @@
+\banner{More worked solutions: from the soil to the design}\label{ch:ws-deep}
+\section{Irrigation interval and gross depth from the root zone}\label{sec:ws-int}
+\exbox{The schedule of a loam}{A crop on the loam S06 has a root zone holding $\TAW=120$ mm, a depletion fraction $p=0.5$ and a peak water use $ET_c=6$ mm\,d$^{-1}$. The surface system has an application efficiency of 0.75. Find the readily available water, the longest interval at peak, the net and the gross depth per irrigation, and the volume for 4 ha.}\sol \givenline{$\TAW=120$ mm ; $p=0.5$ ; $ET_c=6$ mm\,d$^{-1}$ ; $E_a=0.75$ ; $A=4$ ha}
+\par\noindent Readily available water: $RAW=p\,\TAW=0.5\times120=60$ mm.
+\par\noindent Interval: $t=RAW/ET_c=60/6=10$ days.\finans
+\par\noindent Net depth $d_n=RAW=60$ mm; gross depth $d_g=d_n/E_a=60/0.75=80$ mm.\finans
+\par\noindent Volume: $80\times10\times4=3200$ m$^3$ per irrigation (1 mm on 1 ha $=10$ m$^3$).\finans
+
+\section{Drain spacing by Hooghoudt}\label{sec:ws-hoog}
+\exbox{Spacing of field drains}{Drains are to keep the water table at least 0.8 m above the drains midway between them (head $h=0.8$ m) for a design discharge $q=7$ mm\,d$^{-1}$. The soil has $K=0.8$ m\,d$^{-1}$ above and below the drains, and the equivalent depth to the impermeable layer is $d=1.5$ m. Find the spacing.}\sol \givenline{$q=0.007$ m\,d$^{-1}$ ; $K_1=K_2=0.8$ m\,d$^{-1}$ ; $d=1.5$ m ; $h=0.8$ m}
+\[L^2=\frac{8K_2dh+4K_1h^2}{q}=\frac{8\times0.8\times1.5\times0.8+4\times0.8\times0.64}{0.007}=\frac{7.68+2.05}{0.007}=1390\ \text{m}^2\]
+\[L=37.3\ \text{m}\quad\text{\finans}\]
+The flow below the drains (first term) carries 79 per cent of the discharge; it is why the depth to the impermeable layer matters so much.
+
+\section{Sprinkler discharge and the soil intake}\label{sec:ws-spr}
+\exbox{Will this sprinkler cause runoff?}{A sprinkler with a 4.5 mm nozzle (discharge coefficient 0.95) works at 300 kPa on a $12\times18$ m spacing. Find its discharge and the application rate. Compare with basic intake rates of 13 mm\,h$^{-1}$ (sandy loam) and 5 mm\,h$^{-1}$ (silt loam).}\sol \givenline{$d=4.5$ mm ; $C_d=0.95$ ; $p=300$ kPa ; $S_l\times S_m=216$ m$^2$}
+\par\noindent Pressure head $H=p/(\rho_wg)=300\,000/9810=30.6$ m.
+\par\noindent $q=C_dA\sqrt{2gH}=0.95\times\pi(0.00225)^2\times\sqrt{2\times9.81\times30.6}=3.70\times10^{-4}$ m$^3$\,s$^{-1}=1.33$ m$^3$\,h$^{-1}$.\finans
+\par\noindent Application rate $=1.33/216=0.00617$ m\,h$^{-1}=6.2$ mm\,h$^{-1}$.\finans
+\par\noindent The sandy loam takes the water (6.2 $<$ 13 mm\,h$^{-1}$); on the silt loam (6.2 $>$ 5 mm\,h$^{-1}$) the excess ponds and runs off. A smaller nozzle or a wider spacing is needed there.
+
+\section{Head loss along a drip lateral}\label{sec:ws-drip}
+\exbox{Is this lateral too long?}{A drip lateral of 100 m with inside diameter 14 mm carries 200 emitters of 2 L\,h$^{-1}$ spaced 0.5 m. Find the friction loss by Hazen--Williams ($C=140$) with the Christiansen factor $F$ for multiple outlets, and judge it against the usual limit of 20 per cent of a 10 m operating head.}\sol \givenline{$Q=400$ L\,h$^{-1}=1.111\times10^{-4}$ m$^3$\,s$^{-1}$ ; $D=0.014$ m ; $L=100$ m ; $N=200$}
+\par\noindent Loss of a plain pipe carrying the full flow: $h_f=10.67\,L\,Q^{1.852}/(C^{1.852}D^{4.87})=5.74$ m.
+\par\noindent Christiansen factor: $F=\frac1{m+1}+\frac1{2N}+\frac{\sqrt{m-1}}{6N^2}=0.350+0.0025+0.0000=0.353$ with $m=1.852$.
+\par\noindent Loss of the lateral: $0.353\times5.74=2.03$ m.\finans
+\par\noindent The allowed loss is $0.2\times10=2.0$ m: the lateral is just at the limit. A 16 mm pipe would cut the loss to about $2.03\times(14/16)^{4.87}=1.05$ m.
+
+\section{Additional reference tables}\label{sec:ws-ref}
+\begin{table}[!htbp]\centering\small\caption{Readily available water and the reach of the trigger for the ten soils of the study ($\TAW$ to 1 m from the data set; $p=0.5$; interval at $ET_c=5$ mm\,d$^{-1}$; reach $h_c$ from Equation~\ref{eq:reach} with $\kappa=3.47\times10^{-10}$).}\label{tab:ws-raw}
+\begin{tabular}{llrrrrl}\toprule
+Soil & Texture & $\TAW$ (mm) & $RAW$ (mm) & Interval (d) & $h_c$ (cm) & 300 cm trigger\\\midrule
+S03 & Sand & 60 & 30 & 6.0 & 199 & never fires \\
+S04 & Loamy sand & 75 & 38 & 7.5 & 426 & fires \\
+S05 & Sandy loam & 95 & 48 & 9.5 & 1618 & fires \\
+S02 & Coarse sand & 105 & 52 & 10.5 & 5373 & fires \\
+S08 & Sandy clay loam & 160 & 80 & 16.0 & 7580 & fires \\
+S01 & Coarse loam & 130 & 65 & 13.0 & 7837 & fires \\
+S06 & Loam & 150 & 75 & 15.0 & 9209 & fires \\
+S07 & Silt loam & 220 & 110 & 22.0 & 29612 & fires \\
+S09 & Clay loam & 175 & 88 & 17.5 & 47757 & fires \\
+S10 & Silty clay loam & 195 & 98 & 19.5 & 128260 & fires \\
+\bottomrule\end{tabular}\end{table}
+\begin{table}[!htbp]\centering\small\caption{Suction, pF, pressure and the radius of the largest pore that is still full ($r=2\gamma/(\rho_wgh)$, $\gamma=0.0728$ N\,m$^{-1}$).}\label{tab:ws-pf}
+\begin{tabular}{rrrr}\toprule
+Suction $h$ (cm) & pF & Pressure (kPa) & Pore radius ($\mu$m)\\\midrule
+1 & 0.00 & 0.1 & 1484.2 \\
+10 & 1.00 & 1.0 & 148.4 \\
+33 & 1.52 & 3.2 & 45.0 \\
+100 & 2.00 & 9.8 & 14.8 \\
+330 & 2.52 & 32.4 & 4.5 \\
+1\,000 & 3.00 & 98.1 & 1.5 \\
+3\,300 & 3.52 & 324 & 0.45 \\
+15\,849 & 4.20 & 1555 & 0.094 \\
+\bottomrule\end{tabular}\end{table}
+\begin{table}[!htbp]\centering\small\caption{Constants and conversions used in this book.}\label{tab:ws-const}
+\begin{tabular}{ll}\toprule
+Quantity & Value\\\midrule
+Surface tension of water, 20 $^\circ$C & $\gamma=0.0728$ N\,m$^{-1}$\\
+Dynamic viscosity of water, 20 $^\circ$C & $\mu=1.002\times10^{-3}$ Pa\,s\\
+Density of water; gravity & $\rho_w=1000$ kg\,m$^{-3}$; $g=9.81$ m\,s$^{-2}$\\
+Latent heat of vaporisation & $\lambda=2.45$ MJ\,kg$^{-1}$ (1 mm d$^{-1}$ = 2.45 MJ\,m$^{-2}$\,d$^{-1}$)\\
+Stefan--Boltzmann constant & $\sigma=4.903\times10^{-9}$ MJ\,K$^{-4}$\,m$^{-2}$\,d$^{-1}$\\
+Psychrometric constant at sea level & $\gamma_p=0.0665$ kPa\,$^\circ$C$^{-1}$\\
+1 mm of water on 1 ha & 10 m$^3$\\
+1 cm of suction & 0.0981 kPa; 1 bar $=1020$ cm; 1 atm $=1033$ cm\\
+1 m$^3$\,h$^{-1}$ & 0.2778 L\,s$^{-1}$\\
+NO$_3$ to N; N$_2$O-N to N$_2$O & $\times14/62$; $\times44/28$\\
+\bottomrule\end{tabular}\end{table}

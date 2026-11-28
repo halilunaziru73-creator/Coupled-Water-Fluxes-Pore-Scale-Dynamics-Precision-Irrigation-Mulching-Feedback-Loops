@@ -1,0 +1,23 @@
+\banner{Further analysis: the wetted bulb and the pressure along a lateral}
+\section{The shape of the wetted bulb}\label{sec:dribulb}
+Below a dripper, water spreads sideways by capillarity and downwards by gravity. In a fine soil the capillary pull is strong and the bulb is wide and shallow; in a coarse soil gravity dominates and the bulb is narrow and deep. The ratio of width to depth is the \kw{aspect ratio} of the bulb; it decides the spacing of the emitters that gives a continuous wetted strip.
+
+\begin{kfig}{Wetted bulbs under a dripper: wide and shallow in a fine soil (left), narrow and deep in a coarse soil (right).}
+\draw[soil] (-6.2,-3.4) rectangle (6.2,0);\draw[ln] (-6.2,0)--(6.2,0);
+\fill[wtr,opacity=0.6] (-3.1,0) ellipse (2.2 and 1.4);\fill[wtr,opacity=0.6] (3.1,0) ellipse (1.1 and 2.8);
+\fill[khmag] (-3.1,0.12) circle (0.1);\fill[khmag] (3.1,0.12) circle (0.1);
+\node[lab,above] at (-3.1,0.25) {fine soil};\node[lab,above] at (3.1,0.25) {coarse soil};
+\end{kfig}
+
+\section{Pressure along a lateral on a slope}\label{sec:drislope}
+The pressure along a lateral is the inlet head less the friction loss accumulated so far plus the drop in elevation. Downhill, the gain of elevation can balance the friction, so that the pressure is nearly uniform; uphill, the two add and the last emitters receive least. The emission uniformity $EU=100\,(1-1.27\,C_v/\sqrt{n_e})\,q_{\min}/q_{\mathrm{avg}}$ summarises the result, where $C_v$ is the manufacturing coefficient of variation and $n_e$ the number of emitters per plant.
+
+\begin{kfig}{Pressure head along a lateral: on level ground it falls by friction (solid); downhill the elevation gain balances part of the loss (dashed).}
+\draw[axis] (0,0)--(6.6,0);\draw[axis] (0,0)--(0,3.4);
+\node[lab,below] at (3.2,-0.1) {distance along the lateral};\node[lab,rotate=90] at (-0.4,1.6) {pressure head};
+\draw[crv,smooth,domain=0:6.2] plot (\x,{3.0-1.4*(1-(1-\x/6.2)^2.852)});\draw[gd,smooth,domain=0:6.2] plot (\x,{3.0-1.4*(1-(1-\x/6.2)^2.852)+0.2*\x});
+\node[lab] at (5.4,1.4) {level};\node[lab] at (5.4,2.75) {downhill};
+\end{kfig}
+
+\exbox{Emission uniformity of a drip block}{Emitters with $C_v=0.05$, one per plant, deliver a minimum of 92 per cent of the mean discharge in a block. Find the emission uniformity.}\sol
+\[EU=100\Bigl(1-\frac{1.27\times0.05}{\sqrt1}\Bigr)\times0.92=86\ \text{per cent}\quad\text{\finans}\]

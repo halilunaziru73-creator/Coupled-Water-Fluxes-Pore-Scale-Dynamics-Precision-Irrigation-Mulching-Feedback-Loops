@@ -1,0 +1,26 @@
+\backhead{FURTHER EXERCISES}{khred}
+\begin{exlist}
+\item A column of loam 50 cm long is saturated and ponded with 5 cm of water; the outflow is free at the bottom. (a) Find the gradient. (b) With $K_s=25$ cm\,d$^{-1}$, find the flux. (c) How long does 30 mm take to pass?\exans{(a) 1.1; (b) 27.5 cm\,d$^{-1}$; (c) 2.6 h}
+\item In Green--Ampt infiltration $i=K_s(1+\psi_f\Delta\theta/F)$. A loam has $K_s=1.0$ cm\,h$^{-1}$, wetting-front suction $\psi_f=11$ cm and $\Delta\theta=0.3$. Find the infiltration rate when 1, 3 and 10 cm have infiltrated.\exans{4.3, 2.1, 1.33 cm\,h$^{-1}$}
+\item The Feddes function has $h_1=10$, $h_2=25$, $h_3=400$ and $h_4=8000$ cm. Find $\alpha_s$ at 15, 200, 1000 and 5000 cm (linear in $h$ between the points).\exans{0.333, 1.0, 0.921, 0.395}
+\item A root zone of 80 cm has roots distributed exponentially with $\lambda=25$ cm. What fraction of the uptake comes from the top 20 cm and from the bottom 30 cm when the soil is wet everywhere?\exans{0.57; 0.10}
+\item A Daisy run of 20 years at daily steps logs 14 files with an average of 12 columns. How many numbers does it write? If the comprehensive summary keeps the means of each column over the 20 years, how many numbers per run remain?\exans{about 1.2 million; 168}
+\end{exlist}
+\backhead{ESSAY QUESTIONS}{khred}
+{\small\itshape Answer each question in about one page, with equations, a sketch and at least one number from this chapter.}\par\vspace{3pt}
+\begin{exlist}
+\item Derive the Richards equation from Darcy's law and the conservation of mass, and explain the assumptions that make it valid in the vadose zone.
+\item Describe how Daisy represents root water uptake. How do the root density, the soil conductivity and the atmospheric demand together determine the uptake from each layer?
+\item Explain how the hydraulic properties of a soil enter Daisy, and discuss why the choice of retention model matters less in the wet range than in the dry range.
+\item Discuss the strengths and limits of a one-dimensional model such as Daisy for irrigation by drip, where the flow is two- or three-dimensional.
+\item Explain the role of the lower boundary condition (free drainage, groundwater, drains) in a simulation of irrigation, and give an example of a wrong conclusion that a wrong boundary can cause.
+\item How does a modeller check that a long simulation is credible? Discuss the balances, the comparison with data and the sensitivity tests.
+\end{exlist}
+\dykband{EXERCISES IN SWAFL}
+{\small Open SWAFL (desktop or online) with the benchmark project. The chapter of the \href{https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf}{SWAFL manual} that explains each task is given in brackets; record your values in a table and compare them with what is expected (\emph{Check}).}\par\vspace{3pt}
+\begin{exlist}
+\item {\color{khblue}[Manual, Chapter 25]} Open the Daisy workbench and the process map. Click the boxes of root water uptake and soil water and read their descriptions. List the inputs that each box needs.\par\noindent{\small\itshape Check: uptake needs the root density, the suction and the potential transpiration.}
+\item {\color{khblue}[Manual, Chapter 28]} In \emph{Experiments and scenarios} choose an irrigation scenario for the loam and look at the plan of the runs before starting. How many runs does it hold, and which factors are varied?\par\noindent{\small\itshape Check: the plan lists every run with its factors and the budget.}
+\item {\color{khblue}[Manual, Chapter 30]} After a run, open \emph{Results and analysis} and the plot of soil water suction (pF) over depth and time. Identify a dry summer and the wetting by irrigation.\par\noindent{\small\itshape Check: the pF rises in summer in the upper layers and falls after each irrigation.}
+\item {\color{khblue}[Manual, Chapter 7]} In \emph{Profile evolution} compare the profile of the loam and of the sand two days after the same rain. Explain the difference with the Richards equation.\par\noindent{\small\itshape Check: the sand drains faster and holds less water near the surface.}
+\end{exlist}

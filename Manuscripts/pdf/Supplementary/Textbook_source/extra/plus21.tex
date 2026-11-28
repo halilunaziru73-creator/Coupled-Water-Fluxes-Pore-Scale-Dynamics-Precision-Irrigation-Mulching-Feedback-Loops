@@ -1,0 +1,24 @@
+\banner{Working with the Daisy output: structure, units and checks}\label{ch:at3-deep}
+\section{The structure of a Daisy log file}\label{sec:at-dlf}
+Every Daisy run writes its results as \kw{log files} with the extension \texttt{.dlf}. A log file has three parts: a header that names the set-up file, the simulation, the version of Daisy and the interval of the log; a line of column names and a line of units; and one row per logged time (hour, day, harvest or year). The columns of the comprehensive data set of this study are named \texttt{<file> | <variable> [unit]}, for example \texttt{Annual-FN | Matrix-Leaching [kg N/ha]}. Reading a log correctly therefore needs three checks: that the interval is the one expected, that the unit is understood, and that a flux is summed over the right period.
+
+\begin{kfig}{The structure of a Daisy log file: header, column names, units and the rows of logged times; the comprehensive data set joins the files of one simulation side by side on the same date.}
+\tikzset{lg/.style={draw=khcyan,line width=0.5pt,font=\ttfamily\scriptsize,align=left,anchor=north west,text width=7.4cm,inner sep=3pt}}
+\node[lg,fill=khfeat] (h) at (0,0) {SIMFILE: setup.dai \quad SIM: S06\_E2\_t300\\ VERSION: 7.1.14 \quad INTERVAL: daily};
+\node[lg,fill=khpeach] (c) at (h.south west) {year month mday \ \ Matrix-Leaching \ \ Transpiration};
+\node[lg,fill=khpeach] (u) at (c.south west) {\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [kg N/ha] \ \ \ \ \ \ \ \ \ [mm]};
+\node[lg,fill=white] (r) at (u.south west) {1981 \ \ 4 \ \ \ 1 \ \ \ \ 0.012 \ \ \ \ \ \ \ \ \ \ \ \ 1.84\\ 1981 \ \ 4 \ \ \ 2 \ \ \ \ 0.011 \ \ \ \ \ \ \ \ \ \ \ \ 2.07\\ \ \ \vdots};
+\node[lab,right] at ([xshift=2mm]h.east) {header};\node[lab,right] at ([xshift=2mm]c.east) {names};\node[lab,right] at ([xshift=2mm]u.east) {units};\node[lab,right] at ([xshift=2mm]r.east) {rows};
+\end{kfig}
+
+\exbox{From dry matter to yield and water productivity}{A Daisy log gives the storage-organ dry matter at harvest as 6.0 Mg DM\,ha$^{-1}$, a seasonal transpiration of 310 mm and an irrigation of 120 mm. Find the yield at the usual 15 per cent moisture of grain, the transpiration efficiency and the irrigation water use efficiency if the rainfed yield (at 15 per cent moisture) is 4.2 Mg\,ha$^{-1}$.}\sol
+\par\noindent Yield at 15 per cent moisture: $6.0/0.85=7.06$ Mg\,ha$^{-1}$.\finans
+\par\noindent Transpiration efficiency: $6000/(310\times10)=1.94$ kg DM\,m$^{-3}$.\finans
+\par\noindent Irrigation water use efficiency: $(7060-4200)/(120\times10)=2.38$ kg\,m$^{-3}$.\finans
+
+\section{Checking a log: the water balance of a year}\label{sec:at-check}
+Before a log is used, its water balance is closed for one year by hand: $P+I-T-E_s-E_o-D-Q-\Delta S=\varepsilon$, with a residual $\varepsilon$ that should be below 1 mm. A larger residual points to a missing term (snow, the pond, a biopore) or to a flux logged at another interval. In this study the closure was better than 0.5 mm per year in every valid run; the 149 runs that did not complete were kept apart and analysed as failures.
+
+\exbox{Closing the balance of a year}{A yearly log of the loam reads $P=612$, $I=95$, $T=318$, $E_s=141$, $E_o=63$, $D=172$ and $Q=4$ mm, and the storage rose by 8 mm. Find the residual. If the canopy interception (21 mm) had been forgotten in $E_o$, what would the residual have been?}\sol
+\par\noindent $\varepsilon=612+95-318-141-63-172-4-8=1$ mm: the balance closes.\finans
+\par\noindent Without interception $E_o$ would read 42 mm and $\varepsilon=22$ mm: a residual of this size signals the missing term.\finans

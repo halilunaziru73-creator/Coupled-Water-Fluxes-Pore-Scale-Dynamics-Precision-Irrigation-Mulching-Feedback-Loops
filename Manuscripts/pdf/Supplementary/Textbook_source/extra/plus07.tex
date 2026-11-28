@@ -1,0 +1,25 @@
+\banner{Further analysis: how the layers share their data}
+\section{The data flow between the layers}\label{sec:tourflow}
+The layers of SWAFL are not independent screens. They share one project: a soil, a crop, a weather record, a field and a set of management choices. Each layer reads the project and writes its results back to the Dashboard, so that a change made in one layer (a mulch, a trigger, a crop) is seen by every other layer after the next run. Fig.~\ref{fig:tourflow} draws the flow. Reading a result therefore always begins by asking which inputs of the project it depends on.
+
+\begin{kfig}{The data flow of a SWAFL project: the shared inputs feed the engines; the engines feed the layers of the field, the control and the design; every layer reports to the Dashboard.\label{fig:tourflow}}
+\tikzset{bx/.style={draw=khcyan,fill=khfeat,line width=0.6pt,minimum width=2.1cm,minimum height=0.75cm,font=\sffamily\scriptsize,align=center}}
+\node[bx] (in) at (0,2.2) {Project inputs\\ soil, crop, weather,\\ field, management};
+\node[bx] (e) at (3.4,2.2) {Engines\\ 1 (ensemble)\\ 2 (Richards)};
+\node[bx] (f) at (6.8,3.4) {Field balance,\\ soil structure, mulch};
+\node[bx] (c) at (6.8,2.2) {Control: sensor,\\ trigger, schedule};
+\node[bx] (d) at (6.8,1.0) {Design: surface,\\ drip, sprinkler, drains};
+\node[bx] (db) at (3.4,0) {Dashboard: results,\\ charts, messages};
+\draw[vec] (in)--(e);\draw[vec] (e.east)--(f.west);\draw[vec] (e)--(c);\draw[vec] (e.east)--(d.west);
+\draw[vec] (f.south east)--++(0.5,-0.3)|-(db.east);\draw[vec] (d.south)|-(db.east);\draw[vec] (db.west)-|(in.south);
+\node[lab] at (1.2,-0.25) {next run};
+\end{kfig}
+
+\section{The Daisy workbench beside the layers}\label{sec:tourdaisy}
+The Daisy workbench is the second half of the program. The layers answer questions from the archived ensemble and the fast engines in seconds; the workbench prepares and runs new Daisy simulations, which take minutes to hours, and hands their results back to the layers. The choice between them follows from the question: a decision on a known soil and crop is answered by the layers; a new soil, crop or management that the ensemble does not contain needs a new Daisy experiment.
+
+\begin{kfig}{Two routes to an answer: the layers answer from the ensemble and the engines in seconds; the workbench runs Daisy in minutes to hours and hands the result back.}
+\tikzset{bx/.style={draw=khcyan,fill=khfeat,line width=0.6pt,minimum width=2.4cm,minimum height=0.8cm,font=\sffamily\scriptsize,align=center}}
+\node[bx] (q) at (0,1) {Question};\node[bx] (l) at (3.6,2) {Layers\\ seconds};\node[bx] (w) at (3.6,0) {Daisy workbench\\ minutes to hours};\node[bx] (a) at (7.2,1) {Decision};
+\draw[vec] (q)--(l);\draw[vec] (q)--(w);\draw[vec] (l)--(a);\draw[vec] (w)--(a);\draw[vec,dashed] (w)--node[right,lab]{hand-over}(l);
+\end{kfig}

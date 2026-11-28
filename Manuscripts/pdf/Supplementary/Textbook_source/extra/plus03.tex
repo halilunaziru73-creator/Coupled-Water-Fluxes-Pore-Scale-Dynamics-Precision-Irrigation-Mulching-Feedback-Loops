@@ -1,0 +1,38 @@
+\banner{Further analysis: the reach on the conductivity curve and the interval of a trigger}
+\section{Where the conductivity meets $\kappa$}\label{sec:trkr}
+The reach of a trigger is not read off a table; it is the suction at which the conductivity curve of the soil crosses the constant $\kappa$ (Fig.~\ref{fig:trkr}). The figure is drawn from Equation~(\ref{eq:asym}) and the exact Mualem curve for the sand and the loam of the study. The sand crosses the line at 199 cm, before the usual triggers of 300 to 600 cm; the loam crosses it at about 9\,200 cm, far beyond them.
+
+\begin{kfig}{Relative conductivity of the sand (magenta) and the loam (blue) against suction, with the line $K_r=\kappa=3.47\times10^{-10}$. The crossings are the reaches: 199 cm for the sand, about 9\,200 cm for the loam.\label{fig:trkr}}
+\draw[axis] (0,0)--(7.40,0);\draw[axis] (0,0)--(0,4.60);
+\draw[ln] (0.000,0)--(0.000,-0.1);\node[lab,below] at (0.000,-0.1) {1};
+\draw[ln] (2.800,0)--(2.800,-0.1);\node[lab,below] at (2.800,-0.1) {$10^2$};
+\draw[ln] (5.600,0)--(5.600,-0.1);\node[lab,below] at (5.600,-0.1) {$10^4$};
+\draw[ln] (0,0.000)--(-0.1,0.000);\node[lab,left] at (-0.1,0.000) {$10^{-16}$};
+\draw[ln] (0,2.100)--(-0.1,2.100);\node[lab,left] at (-0.1,2.100) {$10^{-8}$};
+\draw[ln] (0,4.200)--(-0.1,4.200);\node[lab,left] at (-0.1,4.200) {1};
+\node[lab,below] at (3.50,-0.6) {suction $h$ (cm)};
+\node[lab,rotate=90] at (-1.05,2.10) {$K_r$ (log scale)};
+\draw[crv,smooth] plot coordinates {(0.000,4.191) (0.101,4.188) (0.203,4.184) (0.304,4.178) (0.406,4.170) (0.507,4.160) (0.609,4.146) (0.710,4.128) (0.812,4.103) (0.913,4.070) (1.014,4.028) (1.116,3.974) (1.217,3.908) (1.319,3.830) (1.420,3.742) (1.522,3.646) (1.623,3.543) (1.725,3.435) (1.826,3.323) (1.928,3.210) (2.029,3.095) (2.130,2.979) (2.232,2.862) (2.333,2.745) (2.435,2.627) (2.536,2.509) (2.638,2.392) (2.739,2.274) (2.841,2.156) (2.942,2.038) (3.043,1.920) (3.145,1.802) (3.246,1.684) (3.348,1.567) (3.449,1.449) (3.551,1.331) (3.652,1.213) (3.754,1.095) (3.855,0.977) (3.957,0.859) (4.058,0.741) (4.159,0.623) (4.261,0.505) (4.362,0.387) (4.464,0.269) (4.565,0.151) (4.667,0.033) (4.768,0.000) (4.870,0.000) (4.971,0.000) (5.072,0.000) (5.174,0.000) (5.275,0.000) (5.377,0.000) (5.478,0.000) (5.580,0.000) (5.681,0.000) (5.783,0.000) (5.884,0.000) (5.986,0.000) (6.087,0.000) (6.188,0.000) (6.290,0.000) (6.391,0.000) (6.493,0.000) (6.594,0.000) (6.696,0.000) (6.797,0.000) (6.899,0.000) (7.000,0.000)};
+\draw[ln,smooth] plot coordinates {(0.000,4.161) (0.101,4.157) (0.203,4.153) (0.304,4.147) (0.406,4.142) (0.507,4.135) (0.609,4.128) (0.710,4.120) (0.812,4.110) (0.913,4.100) (1.014,4.088) (1.116,4.074) (1.217,4.058) (1.319,4.041) (1.420,4.021) (1.522,3.998) (1.623,3.973) (1.725,3.944) (1.826,3.912) (1.928,3.877) (2.029,3.838) (2.130,3.795) (2.232,3.750) (2.333,3.701) (2.435,3.650) (2.536,3.596) (2.638,3.540) (2.739,3.483) (2.841,3.424) (2.942,3.364) (3.043,3.302) (3.145,3.240) (3.246,3.178) (3.348,3.115) (3.449,3.052) (3.551,2.988) (3.652,2.924) (3.754,2.860) (3.855,2.796) (3.957,2.731) (4.058,2.667) (4.159,2.603) (4.261,2.538) (4.362,2.473) (4.464,2.409) (4.565,2.344) (4.667,2.280) (4.768,2.215) (4.870,2.150) (4.971,2.086) (5.072,2.021) (5.174,1.956) (5.275,1.892) (5.377,1.827) (5.478,1.762) (5.580,1.698) (5.681,1.633) (5.783,1.568) (5.884,1.504) (5.986,1.439) (6.087,1.374) (6.188,1.310) (6.290,1.245) (6.391,1.180) (6.493,1.116) (6.594,1.051) (6.696,0.986) (6.797,0.922) (6.899,0.857) (7.000,0.792)};
+\draw[gd] (0.000,1.717)--(7.000,1.717);\node[lab,above right] at (0.000,1.717) {$\kappa$};
+\draw[gd] (3.219,0)--(3.219,1.717);\draw[gd] (5.550,0)--(5.550,1.717);
+\fill[khmag] (3.219,1.717) circle (0.07);\fill[khcyan] (5.550,1.717) circle (0.07);
+\node[lab,text=khmag] at (2.0,1.4) {sand};\node[lab,text=khcyan!70!black] at (5.6,2.9) {loam};
+\end{kfig}
+
+\section{The interval between irrigations at a trigger}\label{sec:trint}
+For a trigger inside the reach, the water depleted between two irrigations is the water released by the root zone between field capacity and the trigger suction. With the retention curve of the soil,
+\begin{equation}\label{eq:trint}\boxed{\Delta S=1000\,Z_r\bigl[\theta(h_{fc})-\theta(h_t)\bigr],\qquad t_i=\frac{\Delta S}{ET_c}}\end{equation}
+where $Z_r$ is the root depth (m), $h_{fc}=100$ cm and $h_t$ the trigger. The formula assumes that the sensor sees the mean state of the root zone; a sensor in the upper roots sees a drier soil and fires earlier.
+
+\begin{kfig}{The sensor in the root zone: water is withdrawn by the roots until the suction at the sensor reaches the trigger $h_t$; the depletion $\Delta S$ is then replaced by irrigation.}
+\draw[soil] (0,0) rectangle (5,3.0);\draw[ln] (0,3.0)--(5,3.0);
+\foreach \x in {1,2.5,4}{\draw[draw=green!45!black,line width=0.8pt] (\x,3.0)--(\x,3.7);\draw[draw=green!45!black] (\x,3.0)--(\x,1.4) (\x,2.6)--(\x-0.4,1.8) (\x,2.6)--(\x+0.4,1.8) (\x,2.0)--(\x-0.3,1.4) (\x,2.0)--(\x+0.3,1.4);}
+\draw[ln,fill=khsalmon!20] (3.2,2.1) rectangle (3.5,2.4);\draw[ln] (3.35,2.4)--(3.35,3.4);\node[lab,right] at (3.5,3.4) {sensor: $h=h_t$?};
+\draw[gd] (0,1.2)--(5,1.2);\node[lab,right] at (5,1.2) {$Z_r$};
+\draw[vec] (0.4,4.2)--(0.4,3.1);\node[lab,above] at (0.4,4.2) {$I=\Delta S/E_a$};
+\end{kfig}
+
+\exbox{Interval at a 300 cm trigger on the loam}{The loam S06 ($\alpha=0.036$ cm$^{-1}$, $n=1.56$, $\theta_r=0.078$, $\theta_s=0.43$) has a root zone of 0.6 m and a crop using 5 mm\,d$^{-1}$. Find the depletion between field capacity (100 cm) and a trigger of 300 cm, and the interval between irrigations.}\sol
+\par\noindent $\theta(100)=0.078+0.352\,S_e(100)=0.242$ and $\theta(300)=0.170$.
+\par\noindent $\Delta S=1000\times0.6\times(0.242-0.170)=43.2$ mm; $t_i=43.2/5=8.6$ days.\finans

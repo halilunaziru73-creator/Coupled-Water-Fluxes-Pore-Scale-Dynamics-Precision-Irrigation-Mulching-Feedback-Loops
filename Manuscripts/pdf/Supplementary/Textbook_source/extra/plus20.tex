@@ -1,0 +1,47 @@
+\banner{The irrigation results in numbers}\label{ch:at2-deep}
+\section{The fate of an irrigation millimetre, soil by soil}\label{sec:at-fate}
+Experiment E10 applied irrigation on eight soils that fire the 300 cm trigger and compared each run with the rainfed run of the same soil and years. The difference of each flux, divided by the irrigation, is the \kw{marginal fate} of the water: what one more millimetre becomes. The five shares add to one:
+\begin{equation}\label{eq:at-fate}\boxed{\eta_T+\eta_{E_s}+\eta_{E_o}+\eta_D+\eta_{S,Q}=\frac{\Delta T+\Delta E_s+\Delta E_o+\Delta D+\Delta(S+Q)}{I}=1}\end{equation}
+Across the soils, the transpired share ranged from 0.23 in the coarse sand to 0.64 in the sandy loam, and the drained share from 0.07 to 0.32.
+
+\begin{kfig}{The marginal fate of an irrigation millimetre in three soils (E10): stacked shares of transpiration $T$, soil evaporation $E_s$, other evaporation $E_o$, drainage $D$ and storage and runoff.\label{fig:at2-fatebar}}
+\draw[axis] (0,0)--(0,4.3);\draw[ln] (0,0)--(6.2,0);
+\foreach \y/\t in {0/0,2/0.5,4/1}{\draw[ln] (0,\y)--(-0.1,\y);\node[lab,left] at (-0.1,\y) {\t};}
+\node[lab,rotate=90] at (-0.75,2) {share of irrigation};
+\def\fatebar#1#2#3#4#5#6{\fill[green!45!black!60] (#1,0) rectangle ++(1.1,{4*#2});\fill[khsalmon] (#1,{4*#2}) rectangle ++(1.1,{4*#3});\fill[khgold!70] (#1,{4*(#2+#3)}) rectangle ++(1.1,{4*#4});\fill[khcyan!60] (#1,{4*(#2+#3+#4)}) rectangle ++(1.1,{4*#5});\fill[gray!40] (#1,{4*(#2+#3+#4+#5)}) rectangle ++(1.1,{4*#6});}
+\fatebar{0.5}{0.638}{0.113}{0.137}{0.075}{0.037}\fatebar{2.4}{0.409}{0.220}{0.174}{0.152}{0.045}\fatebar{4.3}{0.232}{0.186}{0.261}{0.316}{0.005}
+\node[lab,below] at (1.05,0) {sandy loam};\node[lab,below] at (2.95,0) {loam};\node[lab,below] at (4.85,0) {coarse sand};
+\node[lab,right] at (5.6,0.5) {$T$};\node[lab,right] at (5.6,1.4) {$E_s$};\node[lab,right] at (5.6,2.2) {$E_o$};\node[lab,right] at (5.6,3.2) {$D$};
+\end{kfig}
+
+\exbox{Where 30 mm of irrigation go}{Using the shares of Fig.~\ref{fig:at2-fatebar}, find the water transpired and drained from an irrigation of 30 mm on the sandy loam (transpired 0.638, drained 0.075) and on the coarse sand (0.232 and 0.316).}\sol
+\par\noindent Sandy loam: transpired $0.638\times30=19.1$ mm, drained $2.2$ mm.\finans
+\par\noindent Coarse sand: transpired $7.0$ mm, drained $9.5$ mm.\finans
+\par\noindent On the coarse sand more of the irrigation drains than is transpired; smaller, more frequent doses (next section) are the remedy.
+
+\section{The dose law: why small doses drain less}\label{sec:at-dose}
+The drained share of an irrigation rose with the dose per event towards a plateau on a scale of about 4 mm, the same in every soil:
+\begin{equation}\label{eq:at-dose}\boxed{\eta_D(d)=\eta_\infty\bigl(1-e^{-d/d_D}\bigr),\qquad d_D\approx4\ \text{mm}}\end{equation}
+where $d$ is the dose per event, $\eta_\infty$ the plateau of the soil and $d_D$ the dose scale. A dose well below $d_D$ is held in the upper root zone and used; a dose several times $d_D$ drains at the plateau rate. The dose scale is about one day of crop water use, which gives a simple rule: \emph{dose against the daily use of the crop, trigger against the reach of the soil}.
+
+\begin{kfig}{The dose law: the drained share rises with the dose per event and levels off at the plateau $\eta_\infty$ of the soil; at $d=d_D$ it has reached 63 per cent of the plateau.}
+\draw[axis] (0,0)--(6.6,0);\draw[axis] (0,0)--(0,3.6);
+\node[lab,below] at (3.2,-0.1) {dose per event $d$ (mm)};\node[lab,rotate=90] at (-0.4,1.7) {drained share $\eta_D$};
+\draw[crv,smooth,domain=0:6.2] plot (\x,{3.0*(1-exp(-\x/1.2))});
+\draw[gd] (0,3.0)--(6.2,3.0);\node[lab,left] at (0,3.0) {$\eta_\infty$};
+\draw[gd] (1.2,0)--(1.2,1.9)--(0,1.9);\node[lab,below] at (1.2,0) {$d_D$};\node[lab,left] at (0,1.9) {$0.63\eta_\infty$};
+\end{kfig}
+
+\exbox{Small or large doses on the coarse loam}{The coarse loam has $\eta_\infty=0.109$ and $d_D=4.43$ mm. Find the drained share of doses of 4 mm and 15 mm, and the water drained from 120 mm of irrigation given in each way.}\sol
+\par\noindent $d=4$ mm: $\eta_D=0.109(1-e^{-4/4.43})=0.109\times0.595=0.065$; 120 mm drain $7.8$ mm.\finans
+\par\noindent $d=15$ mm: $\eta_D=0.109(1-e^{-3.39})=0.106$; 120 mm drain $12.7$ mm.\finans
+\par\noindent Splitting the same water into small doses cuts the drainage by 40 per cent, at the cost of more events.
+
+\section{Reading a feedback loop quantitatively}\label{sec:at-loop}
+A feedback loop links a change in one variable through a chain of others back to itself. If each link $i$ has a sensitivity $s_i=\partial y_{i+1}/\partial y_i$, the \kw{loop gain} is the product $G=\prod s_i$. A loop with $G<0$ damps a perturbation (negative feedback); with $0<G<1$ it amplifies it but stays stable; with $G\geq1$ it runs away. After the loop is closed, a first perturbation $\Delta x_0$ becomes
+\begin{equation}\label{eq:at-gain}\boxed{\Delta x=\frac{\Delta x_0}{1-G}}\end{equation}
+The mulch--evaporation--soil-water loop is negative: less evaporation leaves a wetter surface, which raises the next evaporation. The warming--demand--dry-soil loop is positive in a dry climate: higher demand dries the soil, which warms the surface further.
+
+\exbox{Amplification by a feedback loop}{A warming raises the potential evaporation by 6 per cent. Drier soil heats the surface; the chain soil water $\to$ surface temperature $\to$ demand has a gain of $G=0.25$. Find the total rise of the demand. What would it be with $G=-0.25$?}\sol
+\par\noindent $G=0.25$: $\Delta x=6/(1-0.25)=8.0$ per cent.\finans
+\par\noindent $G=-0.25$: $\Delta x=6/1.25=4.8$ per cent.\finans

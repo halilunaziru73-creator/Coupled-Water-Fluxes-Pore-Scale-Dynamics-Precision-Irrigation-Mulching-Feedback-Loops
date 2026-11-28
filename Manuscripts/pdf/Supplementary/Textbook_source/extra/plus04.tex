@@ -1,0 +1,16 @@
+\banner{Further analysis: reading the agreement of a model with a reference}
+\section{The 1:1 plot and its three kinds of error}\label{sec:au11}
+A model is compared with a reference (measurements, or a more complete model) on a plot of predicted against observed values. Three kinds of disagreement can be seen on it: a \kw{bias}, when the points lie on a line parallel to the 1:1 line; a \kw{scale error}, when they lie on a line of another slope; and \kw{scatter}, when they spread about their own line. The mean squared error separates exactly into these parts,
+\begin{equation}\label{eq:aumse}\boxed{\overline{(P-O)^2}=(\overline P-\overline O)^2+(s_P-r\,s_O)^2+(1-r^2)\,s_O^2}\end{equation}
+where $s_P$ and $s_O$ are the standard deviations and $r$ the correlation. The first term is the bias, the second the error of scale and the third the scatter that no linear correction can remove.
+
+\begin{kfig}{The 1:1 plot: a biased model (left), a model with a scale error (centre) and a scattered but unbiased model (right).}
+\foreach \s/\lab in {0/bias,3.2/scale,6.4/scatter}{\begin{scope}[xshift=\s cm]\draw[axis] (0,0)--(2.6,0);\draw[axis] (0,0)--(0,2.6);\draw[gd] (0,0)--(2.4,2.4);\node[lab,below] at (1.2,-0.05) {observed};\node[lab,above] at (1.2,2.6) {\lab};\end{scope}}
+\foreach \x in {0.3,0.7,1.1,1.5,1.9}{\fill[khmag] (\x,\x+0.4) circle (0.06);\fill[khmag] (3.2+\x,{0.25+0.55*\x}) circle (0.06);}
+\foreach \x/\d in {0.3/0.25,0.6/-0.3,0.9/0.35,1.2/-0.25,1.5/0.3,1.8/-0.35,2.1/0.15}{\fill[khmag] (6.4+\x,\x+\d) circle (0.06);}
+\end{kfig}
+
+\exbox{Splitting an error}{Twenty years of drainage give $\overline O=172$ mm, $s_O=48$ mm from Daisy, and $\overline P=181$ mm, $s_P=44$ mm from a simpler model, with $r=0.95$. Find the three parts of the mean squared error and the RMSE.}\sol
+\par\noindent Bias: $(181-172)^2=81$; scale: $(44-0.95\times48)^2=(44-45.6)^2=2.6$; scatter: $(1-0.9025)\times48^2=224.6$ mm$^2$.
+\par\noindent $MSE=81+2.6+224.6=308$ mm$^2$ and $RMSE=17.6$ mm.\finans
+\par\noindent Most of the error is scatter (73 per cent): the simple model has the right level and range but misses year-to-year detail.

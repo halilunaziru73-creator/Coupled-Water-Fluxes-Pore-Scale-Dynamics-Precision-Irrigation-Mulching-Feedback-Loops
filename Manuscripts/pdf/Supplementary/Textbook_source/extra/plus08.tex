@@ -1,0 +1,16 @@
+\banner{Further analysis: composing a result by ratios}
+\section{Composition by ratios in Engine 1}\label{sec:engratio}
+Engine 1 does not run a model. It composes a result from the archived Daisy experiments: it starts from the baseline of the chosen soil and multiplies it by the ratio that each chosen factor produced in its own experiment. For a yield,
+\begin{equation}\label{eq:engratio}\boxed{Y=Y_0\prod_{j}\frac{Y_j}{Y_{0,j}}}\end{equation}
+where $Y_0$ is the baseline yield and $Y_j/Y_{0,j}$ the ratio found for factor $j$ in its experiment. Additive quantities (drainage, evaporation) are composed by differences instead of ratios. The composition is exact for each factor alone and approximate when factors interact; the held-out test of this chapter measures that approximation.
+
+\begin{kfig}{Engine 1 composes a result: the baseline of the soil is multiplied by the ratio of each chosen factor, read from its own Daisy experiment.}
+\tikzset{bx/.style={draw=khcyan,fill=khfeat,line width=0.6pt,minimum width=1.9cm,minimum height=0.75cm,font=\sffamily\scriptsize,align=center}}
+\node[bx] (b) at (0,0) {baseline\\ $Y_0$};\node[bx] (r1) at (2.6,1.1) {trigger ratio};\node[bx] (r2) at (2.6,0) {mulch ratio};\node[bx] (r3) at (2.6,-1.1) {climate ratio};
+\node[draw=khmag,circle,font=\large] (x) at (4.8,0) {$\times$};\node[bx] (y) at (6.9,0) {result $Y$};
+\draw[vec] (b)--(x);\foreach \r in {r1,r2,r3}{\draw[vec] (\r.east)--(x);}\draw[vec] (x)--(y);
+\end{kfig}
+
+\exbox{A composed yield}{The rainfed baseline yield of a soil is 5.0 Mg\,ha$^{-1}$. In its experiments a 300 cm trigger raised the yield by the ratio 1.12 and a mulch by 1.05. Find the composed yield of the irrigated, mulched field.}\sol
+\[Y=5.0\times1.12\times1.05=5.88\ \text{Mg\,ha}^{-1}\quad\text{\finans}\]
+If the true combined effect were 5.70 Mg\,ha$^{-1}$, the composition error would be 3 per cent: the interaction of irrigation and mulch is mildly negative, because each saves part of the same water.

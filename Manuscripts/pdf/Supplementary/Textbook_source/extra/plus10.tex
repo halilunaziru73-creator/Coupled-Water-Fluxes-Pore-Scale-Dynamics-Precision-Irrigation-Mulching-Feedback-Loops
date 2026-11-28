@@ -1,0 +1,22 @@
+\banner{Further analysis: the geometry of a scan and the volume of a plant}
+\section{The ring of views around the plant}\label{sec:phring}
+A three-dimensional scan of a plant is built from views taken all around it. With $N$ cameras (or positions) on a ring of radius $R$ at height $z_c$, two neighbouring views overlap when their angular separation $360^\circ/N$ is smaller than the field of view of the camera, and every point of the plant is seen from at least two directions when the overlap is large enough. Points seen in two views are matched and their position is found by triangulation; the clouds of all views are then joined (registered) into one.
+
+\begin{kfig}{A ring of $N$ views around the plant: each camera sees the plant from an angle $360^\circ/N$ apart; overlapping views allow triangulation of points of the leaves.}
+\draw[gd] (0,0) circle (2.4);\draw[draw=green!45!black,line width=1pt] (0,-0.9)--(0,0.9) (0,0.2)--(-0.6,0.7) (0,0.4)--(0.6,0.9) (0,-0.2)--(0.55,0.2) (0,-0.4)--(-0.5,-0.05);
+\foreach \a in {0,60,...,300}{\begin{scope}[rotate=\a]\draw[ln,fill=khfeat] (2.4,-0.18) rectangle (2.75,0.18);\draw[thin ln] (2.4,0)--(0.4,0.9);\draw[thin ln] (2.4,0)--(0.4,-0.9);\end{scope}}
+\node[lab] at (0,-2.9) {$N=6$ views, $60^\circ$ apart, ring radius $R$};
+\end{kfig}
+
+\section{The volume of a crown}\label{sec:phvol}
+The simplest summary of a scanned plant is the volume of its crown. An ellipsoid fitted to the cloud of points gives $V=\tfrac43\pi abc$ with semi-axes $a$, $b$ (horizontal) and $c$ (vertical); the convex hull of the points gives an upper bound and the voxel count of the points a lower bound. Under drought the leaves roll and the crown shrinks, which is the signal that the volumetric phenotyping layer reads.
+
+\begin{kfig}{Three measures of the volume of a crown: the convex hull (outer polygon), a fitted ellipsoid (dashed) and the voxels occupied by points (squares).}
+\foreach \x/\y in {-1.2/0.2,-0.9/0.9,-0.3/1.4,0.4/1.3,1.0/0.8,1.3/0.1,0.9/-0.6,0.2/-0.9,-0.6/-0.7,-0.2/0.3,0.5/0.4,-0.6/0.4,0.2/-0.2}{\fill[khcyan!60] (\x-0.12,\y-0.12) rectangle (\x+0.12,\y+0.12);}
+\draw[crv] (-1.35,0.2)--(-0.95,1.05)--(-0.3,1.55)--(0.45,1.45)--(1.15,0.85)--(1.45,0.1)--(1.0,-0.75)--(0.2,-1.05)--(-0.7,-0.85)--cycle;
+\draw[gd] (0,0.25) ellipse (1.3 and 1.15);
+\end{kfig}
+
+\exbox{Volume of a crown}{A scanned maize plant has a crown 0.8 m high and 0.6 m wide in both horizontal directions. Find the volume of the fitted ellipsoid. Under drought the leaves roll and the width falls to 0.45 m; find the relative fall of the volume.}\sol
+\par\noindent $V=\tfrac43\pi\times0.3\times0.3\times0.4=0.151$ m$^3$.\finans
+\par\noindent After rolling: $V=\tfrac43\pi\times0.225\times0.225\times0.4=0.0848$ m$^3$, a fall of $1-(0.45/0.6)^2=44$ per cent.\finans

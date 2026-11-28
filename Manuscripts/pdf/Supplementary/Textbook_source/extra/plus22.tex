@@ -1,0 +1,37 @@
+\banner{The methods of the research: design of experiments, validation and uncertainty}\label{ch:res-deep}
+\section{Designing a simulation experiment}\label{sec:res-doe}
+A model experiment is designed like a field trial. The \kw{factors} are the inputs that are varied (trigger, dose, mulch, rain), the \kw{levels} are the values chosen for each, and the \kw{responses} are the outputs that are compared. Three designs were used in this study.
+\begin{enumerate}[leftmargin=2em,itemsep=2pt,label={\bfseries\color{khmag}\arabic*.}]
+\item \hd{One factor at a time.} Each factor is varied over many levels with the others fixed (E1 doses, E2 triggers). Cheap and easy to read, but blind to interactions.
+\item \hd{Full factorial.} Every combination of every level: $k$ factors at two levels need $2^k$ runs per soil (E16: $2^6=64$). It estimates all main effects and interactions.
+\item \hd{Latin hypercube.} For many factors at many levels, $N$ runs are drawn so that each factor is sampled once in each of $N$ equal strata. The design covers the space evenly with far fewer runs than a factorial; SWAFL uses it with a fixed seed to keep a Daisy experiment within its run budget.
+\end{enumerate}
+
+\begin{kfig}{Two designs for two factors. Left: a full factorial of $3\times3$ levels (9 runs). Right: a Latin hypercube of 6 runs, one in each row and each column of the strata.}
+\draw[ln] (0,0) rectangle (3,3);\foreach \x in {0.5,1.5,2.5}{\foreach \y in {0.5,1.5,2.5}{\fill[khmag] (\x,\y) circle (0.09);}}
+\node[lab,below] at (1.5,-0.1) {factor 1};\node[lab,rotate=90] at (-0.3,1.5) {factor 2};\node[lab,above] at (1.5,3.05) {full factorial};
+\begin{scope}[xshift=4.5cm]
+\draw[ln] (0,0) rectangle (3,3);\foreach \i in {0.5,1,...,2.5}{\draw[thin ln,dashed] (\i,0)--(\i,3);\draw[thin ln,dashed] (0,\i)--(3,\i);}
+\foreach \x/\y in {0.3/1.7,0.8/0.2,1.2/2.8,1.7/1.1,2.3/0.6,2.7/2.2}{\fill[khmag] (\x,\y) circle (0.09);}
+\node[lab,below] at (1.5,-0.1) {factor 1};\node[lab,above] at (1.5,3.05) {Latin hypercube};
+\end{scope}
+\end{kfig}
+
+\exbox{Counting the runs of a design}{(a) How many runs does a two-level full factorial of six factors need for ten soils? (b) If thirteen extra edge cases are run per soil, what is the total? (c) How many runs would a three-level factorial of the same six factors need for one soil?}\sol
+\par\noindent (a) $2^6\times10=640$ runs.\finans\quad (b) $640+13\times10=770$ runs.\finans\quad (c) $3^6=729$ runs for one soil.\finans
+\par\noindent The jump from 64 to 729 runs per soil when one level is added is why Latin hypercubes are used once more than a few factors are varied.
+
+\section{Validation with each soil left out}\label{sec:res-loso}
+A law fitted to ten soils will always fit them well; the question is whether it predicts a soil that it has not seen. In \kw{leave-one-soil-out} (LOSO) validation the law is fitted ten times, each time without one soil, and the left-out soil is predicted. The error measures of Section~\ref{sec:at-rcl} are then computed on the ten predictions. A law that does well in-sample and badly in LOSO is \kw{overfitted}: it has learnt the soils, not the process.
+
+\begin{kfig}{Leave-one-soil-out validation: in each of ten rounds nine soils (blue) are used to fit the law and the tenth (magenta) is predicted.}
+\foreach \r in {0,...,4}{\foreach \c in {0,...,9}{\fill[khcyan!50] (\c*0.62,-\r*0.5) rectangle ++(0.5,0.36);}\fill[khmag] (\r*0.62,-\r*0.5) rectangle ++(0.5,0.36);\node[lab,left] at (-0.1,{-\r*0.5+0.18}) {round \pgfmathparse{int(\r+1)}\pgfmathresult};}
+\node[lab] at (3.0,-2.55) {$\vdots$};\foreach \c in {0,...,9}{\node[lab,above] at ({\c*0.62+0.25},0.4) {S\pgfmathparse{int(\c+1)}\pgfmathresult};}
+\end{kfig}
+
+\section{Uncertainty by the bootstrap}\label{sec:res-boot}
+A fitted constant, such as $q^*$ or $\kappa$, is uncertain because the soils are a sample. The \kw{bootstrap} draws, many times, a new set of ten soils from the ten with replacement (so a soil may appear twice and another not at all), refits the constant on each set and takes the 2.5 and 97.5 percentiles of the refitted values as the 95 per cent interval. For $q^*$, 4999 resamples gave 58 to 105 cm\,d$^{-1}$ around the estimate of 71.5. The interval is not symmetric because the law is non-linear in $q^*$.
+
+\exbox{How sure is the constant?}{The bootstrap interval of $q^*$ is 58.4 to 105.2 cm\,d$^{-1}$. Find the range of the predicted $\phi_D$ of the loam ($K_s=24.96$ cm\,d$^{-1}$) over this interval, and compare it with the change of $\phi_D$ between the loam and the sandy loam ($K_s=106.1$, $\phi_D=0.60$).}\sol
+\par\noindent At $q^*=58.4$: $\phi_D=24.96/83.36=0.299$; at $q^*=105.2$: $\phi_D=24.96/130.16=0.192$.\finans
+\par\noindent The uncertainty of the constant moves the loam by about 0.1, while the difference between the two soils is 0.34: the ranking of the soils is robust even though the constant is uncertain.

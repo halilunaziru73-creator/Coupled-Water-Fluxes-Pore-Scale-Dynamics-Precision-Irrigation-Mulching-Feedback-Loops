@@ -1,0 +1,109 @@
+\banner{The energy at the surface, heat in the soil and capillary supply}\label{ch:map-deep}
+\section{Net radiation step by step}\label{sec:dm-rn}
+The energy term of Equation~\ref{eq:dm-pm} needs the net radiation $R_n$, which a weather station rarely measures. It is built from four quantities that follow from the date, the latitude, the hours of bright sunshine and the air temperature and humidity. The chain is the one of FAO paper 56 and of the radiation box of Daisy.
+
+\subhd{1. Extraterrestrial radiation.} The radiation at the top of the atmosphere on a horizontal plane, for day of year $J$ and latitude $\varphi$, is
+\begin{equation}\label{eq:dm-ra}\boxed{R_a=\frac{24\times60}{\pi}\,G_{sc}\,d_r\bigl[\omega_s\sin\varphi\sin\delta+\cos\varphi\cos\delta\sin\omega_s\bigr]}\end{equation}
+where $G_{sc}=0.0820$ MJ\,m$^{-2}$\,min$^{-1}$ is the solar constant, $d_r=1+0.033\cos(2\pi J/365)$ the inverse relative distance Earth--Sun, $\delta=0.409\sin(2\pi J/365-1.39)$ the solar declination (rad) and $\omega_s=\arccos(-\tan\varphi\tan\delta)$ the sunset hour angle. The day length is $N=24\,\omega_s/\pi$ hours.
+
+\subhd{2. Solar radiation at the ground.} With $n$ hours of bright sunshine, the Angstr\"om relation gives $R_s=(0.25+0.50\,n/N)R_a$, and the clear-sky value is $R_{so}=(0.75+2\times10^{-5}z)R_a$ at elevation $z$ (m).
+
+\subhd{3. Net short-wave radiation.} A green crop reflects about 23 per cent, so $R_{ns}=(1-0.23)R_s$.
+
+\subhd{4. Net long-wave radiation.} The surface emits more long-wave radiation than it receives from the sky; the loss rises with temperature and falls with humidity and cloud:
+\begin{equation}\label{eq:dm-rnl}\boxed{R_{nl}=\sigma\,\frac{T_{x,K}^4+T_{n,K}^4}{2}\,\bigl(0.34-0.14\sqrt{e_a}\bigr)\Bigl(1.35\frac{R_s}{R_{so}}-0.35\Bigr)}\end{equation}
+with $\sigma=4.903\times10^{-9}$ MJ\,K$^{-4}$\,m$^{-2}$\,d$^{-1}$, the daily maximum and minimum temperatures in kelvin and the actual vapour pressure $e_a$ in kPa. Then $R_n=R_{ns}-R_{nl}$.
+
+\begin{kfig}{The radiation balance of a crop surface. Short-wave radiation $R_s$ arrives and a fraction $\alpha_r\approx0.23$ is reflected; the surface emits long-wave radiation and receives less back from the sky, a net loss $R_{nl}$. The remainder $R_n=R_{ns}-R_{nl}$ is shared between evaporation $\lambda ET$, sensible heat $H$ and the soil heat flux $G$.}
+\fill[khgold!30] (0.8,4.6) circle (0.45);\node[lab] at (0.8,4.6) {Sun};
+\draw[soil] (0,0) rectangle (8,1.0);\draw[ln] (0,1.0)--(8,1.0);
+\foreach \x in {0.4,0.9,...,7.9}{\draw[draw=green!50!black,line width=0.7pt] (\x,1.0)--(\x+0.08,1.45);}
+\draw[vec] (1.2,4.1)--(1.9,1.15);\node[lab,right] at (1.6,2.8) {$R_s$};
+\draw[vec] (2.2,1.15)--(2.9,3.4);\node[lab,right] at (2.7,3.2) {$\alpha_rR_s$};
+\draw[vec,dashed] (4.0,1.15)--(4.0,3.7);\node[lab,above] at (4.0,3.7) {$\varepsilon\sigma T_s^4$};
+\draw[vec,dashed] (4.8,3.7)--(4.8,1.15);\node[lab,above] at (4.8,3.7) {sky};
+\draw[vec] (6.0,1.2)--(6.0,3.0);\node[lab,above] at (6.0,3.0) {$\lambda ET$};
+\draw[vec] (7.1,1.2)--(7.1,3.0);\node[lab,above] at (7.1,3.0) {$H$};
+\draw[vec] (6.55,0.95)--(6.55,0.15);\node[lab,right] at (6.6,0.45) {$G$};
+\node[lab] at (4,-0.45) {$R_n=(1-\alpha_r)R_s-R_{nl}=\lambda ET+H+G$};
+\end{kfig}
+
+\exbox{Net radiation of a summer day}{Find the net radiation over a grass reference surface on 15 July ($J=196$) at latitude $50^\circ$N and 100 m elevation, with 9.25 h of bright sunshine, $T_{\max}=25.1$ $^\circ$C, $T_{\min}=19.1$ $^\circ$C and $e_a=2.10$ kPa.}\sol \givenline{$J=196$ ; $\varphi=0.873$ rad ; $n=9.25$ h ; $z=100$ m}
+\par\noindent $d_r=1+0.033\cos(2\pi\times196/365)=0.968$, $\delta=0.409\sin(2\pi\times196/365-1.39)=0.375$ rad and $\omega_s=\arccos(-\tan0.873\tan0.375)=2.058$ rad.
+\par\noindent From Equation~\ref{eq:dm-ra}, $R_a=40.21$ MJ\,m$^{-2}$\,d$^{-1}$, and the day length is $N=24\times2.058/\pi=15.7$ h.
+\par\noindent $R_s=(0.25+0.50\times9.25/15.7)\times40.21=21.88$ MJ\,m$^{-2}$\,d$^{-1}$ and $R_{so}=(0.75+0.002)\times40.21=30.24$ MJ\,m$^{-2}$\,d$^{-1}$.
+\par\noindent $R_{ns}=0.77\times21.88=16.85$ MJ\,m$^{-2}$\,d$^{-1}$.
+\par\noindent From Equation~\ref{eq:dm-rnl}: $\sigma(T_{x,K}^4+T_{n,K}^4)/2=4.903\times10^{-9}\times\tfrac12(298.26^4+292.26^4)=37.3$; the humidity factor is $0.34-0.14\sqrt{2.10}=0.137$ and the cloud factor $1.35\times21.88/30.24-0.35=0.627$. So $R_{nl}=37.3\times0.137\times0.627=3.20$ MJ\,m$^{-2}$\,d$^{-1}$.
+\[R_n=16.85-3.20=13.64\ \text{MJ\,m}^{-2}\,\text{d}^{-1}\quad\text{\finans}\]
+Expressed as evaporation, $0.408\times13.64=5.6$ mm\,d$^{-1}$: the energy that would evaporate 5.6 mm if all of it went to latent heat.
+
+\section{When the data are few: Hargreaves, Priestley--Taylor and Makkink}\label{sec:dm-alt}
+Daisy falls back on simpler equations when wind or humidity is missing. Each keeps one part of the physics of Penman--Monteith:
+\begin{align}
+ET_0^{\mathrm{HG}}&=0.0023\,(0.408R_a)\,(T+17.8)\sqrt{T_{\max}-T_{\min}} ,\label{eq:dm-hg}\\
+ET_0^{\mathrm{PT}}&=1.26\,\frac{\Delta}{\Delta+\gamma}\,0.408\,(R_n-G) ,\label{eq:dm-pt}\\
+ET_0^{\mathrm{MK}}&=0.61\,\frac{\Delta}{\Delta+\gamma}\,\frac{R_s}{2.45}-0.12 .\label{eq:dm-mk}
+\end{align}
+Hargreaves (\ref{eq:dm-hg}) uses the daily range of temperature as a measure of cloudiness and dryness of the air; Priestley--Taylor (\ref{eq:dm-pt}) keeps the energy term and replaces the aerodynamic term by the factor 1.26 found over large wet surfaces; Makkink (\ref{eq:dm-mk}) works with the incoming solar radiation alone. In humid climates the three agree with Penman--Monteith within about 15 per cent; in dry, windy climates Priestley--Taylor and Makkink underestimate the demand because the advection of dry air is not in them.
+
+\exbox{Four estimates of the same day}{For the day of the previous example, with $u_2=2.0$ m\,s$^{-1}$ ($T=22.1$ $^\circ$C, $e_s=2.70$ kPa, $\Delta=0.162$ and $\gamma=0.0666$ kPa\,$^\circ$C$^{-1}$), compare Penman--Monteith with the three simpler equations.}\sol \givenline{$R_a=40.21$, $R_s=21.88$, $R_n=13.64$ MJ\,m$^{-2}$\,d$^{-1}$ ; $G=0$}
+\par\noindent Penman--Monteith: numerator $0.408\times0.162\times13.64+0.0666\times\frac{900}{295.1}\times2.0\times(2.70-2.10)=0.902+0.244=1.146$; denominator $0.162+0.0666\times1.68=0.274$; $ET_0=4.18$ mm\,d$^{-1}$.
+\par\noindent Hargreaves: $0.0023\times16.41\times39.9\times\sqrt{6.0}=3.69$ mm\,d$^{-1}$.
+\par\noindent Priestley--Taylor: $1.26\times0.709\times0.408\times13.64=4.97$ mm\,d$^{-1}$.
+\par\noindent Makkink: $0.61\times0.709\times21.88/2.45-0.12=3.74$ mm\,d$^{-1}$.\finans
+\par\noindent The spread, 3.7 to 5.0 mm\,d$^{-1}$, is 30 per cent of the mean. On this humid, moderately windy day Priestley--Taylor is high because the factor 1.26 assumes more energy-limited conditions than the vapour-pressure deficit allows, and Hargreaves is low because the small temperature range (6 $^\circ$C) is read as a cloudy day.
+
+\section{Heat waves in the soil: damping depth and phase lag}\label{sec:dm-damp}
+The surface temperature of a soil rises and falls with the day and with the year. If the soil is uniform, with thermal diffusivity $D_h=\lambda/C_h$ (m$^2$\,s$^{-1}$), and the surface temperature varies as a sine wave of amplitude $A_0$ and angular frequency $\omega=2\pi/P$, the solution of the heat equation (\ref{eq:dm-heat}) is
+\begin{equation}\label{eq:dm-wave}\boxed{T(z,t)=\overline T+A_0\,e^{-z/d}\sin\Bigl(\omega t-\frac zd\Bigr),\qquad d=\sqrt{\frac{2D_h}{\omega}}}\end{equation}
+The amplitude falls by the factor $e$ over each \kw{damping depth} $d$, and the wave arrives later at depth: the maximum at depth $z$ lags the surface by $z/(d\omega)$. Because $d\propto\sqrt P$, the annual wave penetrates $\sqrt{365}=19$ times deeper than the daily one. A wet soil has a larger conductivity and a larger heat capacity; its diffusivity, and so its damping depth, peaks at an intermediate water content.
+
+\begin{kfig}{Envelopes of the daily temperature wave in a soil: the amplitude falls as $e^{-z/d}$ with depth, and the time of the maximum moves later (dashed curves: the profile at three times of day).}
+\draw[axis] (0,0)--(0,-4.2);\draw[axis] (-3.2,0)--(3.4,0);
+\node[lab,above] at (3.4,0) {$T-\overline T$};\node[lab,left] at (0,-4.2) {$z$};
+\draw[crv,smooth,domain=0:3.9,samples=40] plot ({2.6*exp(-\x/1.17)},{-\x});
+\draw[crv,smooth,domain=0:3.9,samples=40] plot ({-2.6*exp(-\x/1.17)},{-\x});
+\draw[gd,smooth,domain=0:3.9,samples=60] plot ({2.6*exp(-\x/1.17)*cos(deg(\x/1.17))},{-\x});
+\draw[gd,smooth,domain=0:3.9,samples=60] plot ({2.6*exp(-\x/1.17)*cos(deg(\x/1.17)+120)},{-\x});
+\draw[gd,smooth,domain=0:3.9,samples=60] plot ({2.6*exp(-\x/1.17)*cos(deg(\x/1.17)+240)},{-\x});
+\draw[ln] (-0.1,-1.17)--(0.1,-1.17);\node[lab,left] at (-0.05,-1.17) {$d$};
+\node[lab,right] at (2.6,-0.25) {$A_0$};\node[lab] at (1.9,-1.4) {$A_0e^{-z/d}$};
+\end{kfig}
+
+\exbox{Daily and annual temperature waves}{A moist loam has $D_h=5\times10^{-7}$ m$^2$\,s$^{-1}$. Find the damping depths of the daily and the annual waves. If the daily amplitude at the surface is 10 $^\circ$C, find the amplitude and the time lag at 20 cm.}\sol \givenline{$D_h=5\times10^{-7}$ m$^2$\,s$^{-1}$ ; $A_0=10$ $^\circ$C ; $z=0.20$ m}
+\par\noindent Daily: $\omega=2\pi/86\,400=7.27\times10^{-5}$ s$^{-1}$, $d=\sqrt{2\times5\times10^{-7}/7.27\times10^{-5}}=0.117$ m.\finans
+\par\noindent Annual: $\omega=1.99\times10^{-7}$ s$^{-1}$, $d=2.24$ m.\finans
+\par\noindent At 20 cm: amplitude $10\,e^{-0.20/0.117}=1.8$ $^\circ$C; lag $\dfrac{z/d}{\omega}=\dfrac{1.71}{2\pi}\times24=6.5$ h.\finans
+\par\noindent The maximum at 20 cm therefore comes in the evening. A temperature-dependent process at that depth, such as nitrification (Chapter~\ref{chap:17}), sees a much smaller daily swing than the surface.
+
+\section{Snowmelt by the degree-day method}\label{sec:dm-ddf}
+The energy balance of the snowpack (Equation~\ref{eq:dm-melt}) needs radiation and wind over the snow. When these are missing, the melt is estimated from the air temperature alone,
+\begin{equation}\label{eq:dm-ddf}\boxed{M=C_m\,\max(T_a-T_b,\,0)}\end{equation}
+where $M$ is the melt (mm of water per day), $C_m$ the \kw{degree-day factor} (2 to 6 mm\,$^\circ$C$^{-1}$\,d$^{-1}$, larger for old, dirty snow and in spring) and $T_b$ a base temperature near 0 $^\circ$C. The melt water is first held in the pack (up to about 5 per cent of its water equivalent) and then released to the litter and the soil.
+
+\exbox{Duration of the melt}{A snowpack holds 80 mm of water equivalent. With $C_m=3$ mm\,$^\circ$C$^{-1}$\,d$^{-1}$, $T_b=0$ $^\circ$C and a mean air temperature of 4 $^\circ$C, how long does the melt last? What depth of soil, initially at $\theta=0.25$, does it raise to field capacity $\theta_{fc}=0.33$?}\sol
+\par\noindent $M=3\times(4-0)=12$ mm\,d$^{-1}$, so the pack lasts $80/12=6.7$ days.\finans
+\par\noindent The water fills a depth $80/(0.33-0.25)=1000$ mm, that is 1.0 m of soil.\finans
+
+\section{Capillary rise from a water table}\label{sec:dm-rise}
+Below the root zone a shallow water table can feed the crop. With the exponential conductivity of Gardner, $K(h)=K_s\,e^{-ah}$, the steady upward flux that a profile can carry from a water table at depth $L$ to a dry root zone is limited to
+\begin{equation}\label{eq:dm-rise}\boxed{q_{\max}=\frac{K_s\,e^{-aL}}{1-e^{-aL}}}\end{equation}
+The flux falls exponentially with the depth of the water table: lowering the table by a few decimetres can cut the supply by an order of magnitude. Daisy computes the same flux from the Richards equation with its groundwater lower boundary; Equation~\ref{eq:dm-rise} gives its order of magnitude by hand.
+
+\begin{kfig}{Capillary rise from a water table at depth $L$ into a drying root zone: the steady flux $q$ falls exponentially with $L$ (Equation~\ref{eq:dm-rise}).}
+\draw[soil] (0,0) rectangle (4,4);\draw[wtr] (0,0) rectangle (4,0.9);\draw[ln] (0,4)--(4,4);
+\draw[khcyan,line width=1pt] (0,0.9)--(4,0.9);\node[lab,right] at (4.1,0.9) {water table};
+\foreach \x in {0.8,1.6,2.4,3.2}{\draw[vec] (\x,1.0)--(\x,2.7);}
+\draw[draw=green!45!black,line width=0.8pt] (2,4)--(2,3.0) (2,3.6)--(1.5,3.0) (2,3.6)--(2.5,3.0);
+\node[lab] at (2,4.3) {root zone};
+\draw[<->,ln] (-0.4,0.9)--(-0.4,4);\node[lab,left] at (-0.4,2.4) {$L$};
+\begin{scope}[xshift=5.6cm]
+\draw[axis] (0,0)--(3.6,0);\draw[axis] (0,0)--(0,3.6);\node[lab,below] at (1.8,-0.1) {depth $L$};\node[lab,rotate=90] at (-0.35,1.8) {$q_{\max}$};
+\draw[crv,smooth,domain=0.35:3.4] plot (\x,{3.3*exp(-1.4*(\x-0.35))});
+\end{scope}
+\end{kfig}
+
+\exbox{Supply from a shallow water table}{A sandy loam has $K_s=50$ cm\,d$^{-1}$ and Gardner parameter $a=0.04$ cm$^{-1}$. Find the largest steady capillary flux from a water table at 1.0 m and at 1.5 m below the root zone, and compare with a crop demand of 5 mm\,d$^{-1}$.}\sol
+\par\noindent At $L=100$ cm: $q_{\max}=50e^{-4}/(1-e^{-4})=0.933$ cm\,d$^{-1}=9.3$ mm\,d$^{-1}$: more than the demand.\finans
+\par\noindent At $L=150$ cm: $q_{\max}=50e^{-6}/(1-e^{-6})=0.124$ cm\,d$^{-1}=1.2$ mm\,d$^{-1}$: a quarter of the demand.\finans
+\par\noindent Half a metre of extra depth reduces the supply by a factor of 7.5. This is why drainage (Chapter~\ref{chap:14}) that lowers a water table can increase the need for irrigation.

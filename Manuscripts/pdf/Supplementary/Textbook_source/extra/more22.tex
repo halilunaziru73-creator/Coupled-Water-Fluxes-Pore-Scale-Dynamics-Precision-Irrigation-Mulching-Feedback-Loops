@@ -1,0 +1,35 @@
+\backhead{FURTHER EXERCISES}{khred}
+\begin{exlist}
+\item How many runs does a two-level full factorial of eight factors need per soil? A Latin hypercube of 50 runs covers each factor in how many strata?\exans{256; 50}
+\item A bootstrap of 4999 resamples gives the 2.5 and 97.5 percentiles of a constant. Which resamples (by rank) are these?\exans{the 125th and the 4875th}
+\item In leave-one-soil-out validation of ten soils, how many fits are made, and on how many soils is each fitted?\exans{10; 9}
+\item Two laws have LOSO RMSE 0.058 and 0.111. By what percentage is the first better?\exans{48 per cent}
+\item A constant has the interval 58 to 105 around 71.5. Is the interval symmetric? Find the distances below and above.\exans{no; 13.5 and 33.5}
+\end{exlist}
+\backhead{ESSAY QUESTIONS}{khred}
+{\small\itshape Answer each question in about one page, with equations, a sketch and at least one number from this chapter.}\par\vspace{3pt}
+\begin{exlist}
+\item Describe the design of the simulation experiments of the study and the reasons for each design.
+\item Discuss leave-one-out validation and why it is the main test of the laws of this book.
+\item Explain the bootstrap and what its intervals mean.
+\item Discuss the verification of SWAFL against textbook examples and held-out runs.
+\item Explain how the studies of the project fit together into one argument.
+\item Choose one study and write a critical review of its methods and conclusions.
+\end{exlist}
+\dykband{EXERCISES IN SWAFL}
+{\small Open SWAFL (desktop or online) with the benchmark project. The chapter of the \href{https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf}{SWAFL manual} that explains each task is given in brackets; record your values in a table and compare them with what is expected (\emph{Check}).}\par\vspace{3pt}
+\begin{exlist}
+\item {\color{khblue}[Manual, Chapter 28]} Design a Daisy experiment with a Latin hypercube of 20 runs and inspect the plan.\par\noindent{\small\itshape Check: each factor is sampled in 20 strata.}
+\item {\color{khblue}[Manual, Chapter 29]} Open the best combinations and choose one for your field.\par\noindent{\small\itshape Check: the plan of the combination is shown.}
+\item {\color{khblue}[Manual, Chapter 30]} Read the interactions of an experiment and identify the strongest.\par\noindent{\small\itshape Check: usually between water and nitrogen.}
+\item {\color{khblue}[Manual, Chapter 18]} Use the search for the most efficient inputs and compare with the best combination of Daisy.\par\noindent{\small\itshape Check: the two agree in direction.}
+\end{exlist}
+\backhead{OBJECTIVE TYPE QUESTIONS}{khred}
+\begin{exlist}
+\item A two-level full factorial of six factors has\opt{12}{36}{64}{720} runs
+\item In leave-one-soil-out validation of ten soils each fit uses\opt{1}{5}{9}{10} soils
+\item A bootstrap draws soils\opt{without replacement}{with replacement}{in order}{once each}
+\item A Latin hypercube samples each factor\opt{at two levels}{once in each stratum}{at random only}{at its mean}
+\item An overfitted law has\opt{a low LOSO error}{a low in-sample error and a high LOSO error}{no parameters}{a high in-sample error}
+\end{exlist}
+\objkey{1.\ (c),\quad 2.\ (c),\quad 3.\ (b),\quad 4.\ (b),\quad 5.\ (b)}

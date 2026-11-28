@@ -1,0 +1,27 @@
+\banner{Further analysis: the furrow and the opportunity time}
+\section{The cross-section of a furrow}\label{sec:sifurrow}
+A furrow is a small trapezoidal channel. Its flow area $A$, wetted perimeter $P_w$ and hydraulic radius $R=A/P_w$ set the velocity by Manning's equation, $v=R^{2/3}S_0^{1/2}/n$, and the wetted perimeter also sets the area through which water infiltrates.
+
+\begin{kfig}{Cross-section of a furrow: bottom width $b$, side slope $z$ (horizontal per unit vertical) and flow depth $y$; area $A=by+zy^2$ and wetted perimeter $P_w=b+2y\sqrt{1+z^2}$.}
+\draw[soil] (-3,-1.6) rectangle (3,0.6);\fill[white] (-2.4,0.6)--(-0.5,-1.2)--(0.5,-1.2)--(2.4,0.6)--cycle;
+\fill[wtr] (-1.55,-0.2)--(-0.5,-1.2)--(0.5,-1.2)--(1.55,-0.2)--cycle;\draw[ln] (-2.4,0.6)--(-0.5,-1.2)--(0.5,-1.2)--(2.4,0.6);
+\draw[<->,ln] (-0.5,-1.45)--(0.5,-1.45);\node[lab,below] at (0,-1.45) {$b$};
+\draw[<->,ln] (2.7,-1.2)--(2.7,-0.2);\node[lab,right] at (2.75,-0.7) {$y$};
+\draw[ln] (1.55,-0.2)--(2.1,-0.2)--(2.1,0.3);\node[lab] at (2.35,0.0) {1};\node[lab] at (1.8,-0.42) {$z$};
+\end{kfig}
+
+\section{Advance, recession and the opportunity time}\label{sec:siopp}
+Water advances down the field and later recedes after the inflow is cut off. At each distance $x$ the \kw{opportunity time} is the time between the arrival of the advance front and the passage of the recession: $\tau(x)=t_r(x)-t_a(x)$. The infiltrated depth follows from $\tau$ by the intake curve (Equation~\ref{eq:dmkost}). A uniform application needs the two curves to be nearly parallel.
+
+\begin{kfig}{Advance and recession curves of a surface irrigation: the vertical distance between them is the opportunity time $\tau(x)$, which sets the infiltrated depth.}
+\draw[axis] (0,0)--(6.8,0);\draw[axis] (0,0)--(0,4.2);
+\node[lab,below] at (3.2,-0.1) {distance along the field $x$};\node[lab,rotate=90] at (-0.4,2) {time $t$};
+\draw[crv,smooth] plot coordinates {(0,0) (1.5,0.45) (3,1.05) (4.5,1.75) (6.2,2.6)};\node[lab] at (5.2,1.75) {advance};
+\draw[ln,smooth] plot coordinates {(0,3.2) (2,3.4) (4,3.6) (6.2,3.8)};\node[lab,above] at (3,3.5) {recession};
+\draw[<->,ln] (3,1.05)--(3,3.5);\node[lab,right] at (3,2.3) {$\tau(x)$};\draw[gd] (0,3.0)--(0.6,3.0);\node[lab,left] at (0,3.0) {cut-off};
+\end{kfig}
+
+\exbox{Depth at the head and at the tail}{The advance reaches the end of a furrow in 120 min; the inflow is cut off at 300 min and the recession takes 20 min, uniformly. With $Z=0.0045\,\tau^{0.5}$ (m, min), find the depths infiltrated at the head and at the tail.}\sol
+\par\noindent Head: $\tau=300+20=320$ min, $Z=0.0045\sqrt{320}=0.0805$ m $=80$ mm.
+\par\noindent Tail: $\tau=320-120=200$ min, $Z=0.0045\sqrt{200}=0.0636$ m $=64$ mm.\finans
+\par\noindent The tail receives 79 per cent of the head depth; to reach a required 64 mm at the tail, the head is over-irrigated by 16 mm.

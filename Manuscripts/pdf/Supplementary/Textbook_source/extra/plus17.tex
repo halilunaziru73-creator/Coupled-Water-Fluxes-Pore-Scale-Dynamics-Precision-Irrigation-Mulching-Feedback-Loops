@@ -1,0 +1,81 @@
+\banner{Rates, pools and the transport of solutes: the quantitative chain}\label{ch:map3-deep}
+\section{Temperature and moisture factors of the biological rates}\label{sec:dm-tf}
+Every biological rate of the brown area of the map is written as a rate at reference conditions multiplied by dimensionless factors. The temperature factor is given either by a $Q_{10}$ or by the law of Arrhenius,
+\begin{equation}\label{eq:dm-arr}\boxed{f_T=Q_{10}^{(T-T_{\mathrm{ref}})/10}\qquad\text{or}\qquad f_T=\exp\Bigl[\frac{E_a}{R}\Bigl(\frac{1}{T_{\mathrm{ref}}}-\frac1T\Bigr)\Bigr]}\end{equation}
+where $E_a$ is the activation energy (J\,mol$^{-1}$), $R=8.314$ J\,mol$^{-1}$\,K$^{-1}$ and the temperatures are in kelvin in the second form. The two forms agree near the reference temperature: an activation energy of 50 to 60 kJ\,mol$^{-1}$ corresponds to a $Q_{10}$ of about 2.
+
+The moisture factor $f_\theta$ is zero in a very dry soil (microbes are inactive below about pF 4.5), rises to one between field capacity and a wetter soil, and falls again near saturation, where oxygen diffuses too slowly (Section~\ref{sec:pg-diff}). Decomposition and nitrification follow this rise-and-fall; denitrification, which needs the absence of oxygen, does the opposite and rises sharply above about 80 per cent of the pores filled with water.
+
+\begin{kfig}{The two rate factors of the biology of the soil. Left: the temperature factor for $Q_{10}=2$ (relative to 10 $^\circ$C). Right: the moisture factor of aerobic processes (decomposition, nitrification; solid) and of denitrification (dashed) against the water-filled pore space.}
+\draw[axis] (0,0)--(3.8,0);\draw[axis] (0,0)--(0,3.6);\node[lab,below] at (1.8,-0.1) {$T$ ($^\circ$C)};\node[lab,rotate=90] at (-0.4,1.7) {$f_T$};
+\foreach \x/\t in {0/0,1.1/10,2.2/20,3.3/30}{\node[lab,below] at (\x,0) {\t};}
+\draw[crv,smooth,domain=0:3.4] plot (\x,{0.8*2^((\x-1.1)/1.1)*0.88});
+\begin{scope}[xshift=5.2cm]
+\draw[axis] (0,0)--(3.8,0);\draw[axis] (0,0)--(0,3.6);\node[lab,below] at (1.8,-0.1) {water-filled pores (\%)};\node[lab,rotate=90] at (-0.4,1.7) {$f_\theta$};
+\foreach \x/\t in {0/0,1.7/50,3.4/100}{\node[lab,below] at (\x,0) {\t};}
+\draw[crv] (0,0)--(0.5,0.4)--(1.6,2.9)--(2.2,2.9)--(3.4,1.0);
+\draw[gd,line width=0.7pt] (0,0.05)--(2.5,0.2)--(3.0,1.6)--(3.4,3.1);
+\node[lab] at (1.4,3.2) {aerobic};\node[lab] at (2.45,2.0) {denitrification};
+\end{scope}
+\end{kfig}
+
+\exbox{Two ways of correcting for temperature}{A decomposition rate is known at 20 $^\circ$C. Find the factor by which it is lower at 10 $^\circ$C with $Q_{10}=2$, and with the law of Arrhenius and $E_a=55$ kJ\,mol$^{-1}$.}\sol
+\par\noindent With $Q_{10}$: $f=2^{(10-20)/10}=0.50$; the rate is halved.\finans
+\par\noindent With Arrhenius: $\dfrac{k_{20}}{k_{10}}=\exp\Bigl[\dfrac{55\,000}{8.314}\Bigl(\dfrac1{283.15}-\dfrac1{293.15}\Bigr)\Bigr]=\exp(0.797)=2.22$, so $f=1/2.22=0.45$.\finans
+
+\section{First-order decay of the organic pools}\label{sec:dm-decay}
+Each organic pool of Daisy (added organic matter, soil microbial biomass, soil organic matter) loses carbon at a rate proportional to its size:
+\begin{equation}\label{eq:dm-dec}\boxed{\frac{\mathrm dC}{\mathrm dt}=-k\,f_T\,f_\theta\,C\quad\Longrightarrow\quad C(t)=C_0\,e^{-kt},\qquad t_{1/2}=\frac{\ln2}{k}}\end{equation}
+The pools differ by orders of magnitude in $k$: fresh residues turn over in weeks, the microbial biomass in months and the stabilised organic matter in centuries. Of the carbon that leaves a pool, a fraction $e$ (the substrate-use efficiency, about 0.4 to 0.6) becomes new microbial biomass and the rest is respired as CO$_2$.
+
+\begin{kfig}{The pools of soil organic matter: added organic matter (AOM) and soil organic matter (SOM) are decomposed by the soil microbial biomass (SMB). A fraction $e$ of the decomposed carbon becomes biomass and $1-e$ is respired; nitrogen follows the carbon according to the C:N ratio of each pool.}
+\tikzset{pool/.style={draw=khcyan,fill=khfeat,line width=0.6pt,minimum width=2.2cm,minimum height=0.9cm,font=\sffamily\footnotesize,align=center}}
+\node[pool] (aom) at (0,2.6) {AOM\\ residues, manure};\node[pool] (smb) at (4,1.3) {SMB\\ microbes};\node[pool] (som) at (0,0) {SOM\\ humus};
+\node[draw=khmag,fill=white,circle,minimum size=1.1cm,font=\sffamily\footnotesize] (co2) at (7.6,1.3) {CO$_2$};
+\draw[vec] (aom.east)--(smb.north west);\draw[vec] (som.east)--(smb.south west);\draw[vec] (smb.east)--node[above,lab]{$1-e$}(co2.west);
+\draw[vec] (smb.south)--++(0,-1.2)--(som.south east);\node[lab] at (3.3,-0.25) {death, stabilisation};
+\node[lab] at (2.3,2.4) {$k_{\mathrm{AOM}}$};\node[lab] at (2.1,0.3) {$k_{\mathrm{SOM}}$};
+\end{kfig}
+
+\exbox{Half-life and residue left after a season}{Fresh residue decomposes with $k=0.02$ d$^{-1}$ at reference conditions. Find its half-life and the fraction left after 90 days at reference conditions.}\sol
+\par\noindent $t_{1/2}=\ln2/0.02=34.7$ d; after 90 d, $C/C_0=e^{-0.02\times90}=e^{-1.8}=0.165$.\finans
+
+\section{Mineralisation or immobilisation: the critical C:N ratio}\label{sec:dm-cn}
+When microbes decompose a substrate with carbon-to-nitrogen ratio $CN_s$ they build biomass of a lower ratio $CN_m$ (about 8). Per unit of decomposed carbon they need $e/CN_m$ of nitrogen and the substrate supplies $1/CN_s$. The net release of mineral nitrogen is therefore
+\begin{equation}\label{eq:dm-nmin}\boxed{N_{\mathrm{net}}=C_d\Bigl(\frac1{CN_s}-\frac{e}{CN_m}\Bigr),\qquad CN_{\mathrm{crit}}=\frac{CN_m}{e}}\end{equation}
+where $C_d$ is the decomposed carbon. A substrate richer in nitrogen than the critical ratio (about 20 for $e=0.4$ and $CN_m=8$) releases mineral nitrogen; a poorer substrate, such as cereal straw with a ratio of 80, takes mineral nitrogen from the soil (\kw{immobilisation}). This is why incorporating straw can cause a temporary nitrogen deficiency of the next crop.
+
+\exbox{Immobilisation by cereal straw}{Five tonnes of straw dry matter per hectare (45 per cent carbon, $CN_s=80$) are incorporated. The microbes have $e=0.4$ and $CN_m=8$. If all the straw carbon is decomposed, how much mineral nitrogen is immobilised?}\sol \givenline{$C_d=5000\times0.45=2250$ kg C\,ha$^{-1}$}
+\par\noindent The straw supplies $2250/80=28.1$ kg N\,ha$^{-1}$; the microbes need $2250\times0.4/8=112.5$ kg N\,ha$^{-1}$.
+\[N_{\mathrm{net}}=28.1-112.5=-84.4\ \text{kg N\,ha}^{-1}\quad\text{\finans}\]
+About 84 kg of mineral nitrogen per hectare are taken up by the microbes; it is released again later, as the microbial biomass itself is decomposed.
+
+\section{Transport of solutes: convection, dispersion and sorption}\label{sec:dm-cde}
+A solute dissolved in the soil water moves with the water (\kw{convection}) and spreads about the mean position by molecular diffusion and by the variation of the velocities in the pores (\kw{hydrodynamic dispersion}). A sorbed solute is held back. For steady flow these processes are summarised by the convection--dispersion equation with retardation,
+\begin{equation}\label{eq:dm-cde}\boxed{R\,\frac{\partial C}{\partial t}=D\,\frac{\partial^2C}{\partial z^2}-v\,\frac{\partial C}{\partial z}-\mu\,R\,C,\qquad R=1+\frac{\rho_b K_d}{\theta},\quad v=\frac q\theta,\quad D=\lambda_dv}\end{equation}
+where $C$ is the concentration in the soil water, $v$ the pore-water velocity, $D$ the dispersion coefficient with dispersivity $\lambda_d$ (a few centimetres in the field), $K_d$ the sorption coefficient (L\,kg$^{-1}$), $\rho_b$ the bulk density (kg\,L$^{-1}$) and $\mu$ the first-order degradation rate. The centre of a pulse moves at $v/R$ and its spread grows as $\sqrt{2Dt/R}$. Nitrate is not sorbed ($R=1$) and travels with the water; a pesticide with $K_d$ of a few L\,kg$^{-1}$ travels several times slower and is degraded on the way.
+
+\begin{kfig}{Breakthrough of a solute pulse at three depths: the pulse moves down at the velocity $v/R$ and spreads as $\sqrt{2Dt}$; a sorbed solute (dashed, $R>1$) arrives later and more degraded.}
+\draw[axis] (0,0)--(7.0,0);\draw[axis] (0,0)--(0,3.4);\node[lab,below] at (3.5,-0.1) {depth $z$};\node[lab,rotate=90] at (-0.4,1.6) {concentration $C$};
+\draw[crv,smooth,domain=0:6.6,samples=80] plot (\x,{3.0*exp(-((\x-1.0)^2)/0.18)});
+\draw[crv,smooth,domain=0:6.6,samples=80] plot (\x,{1.6*exp(-((\x-3.0)^2)/0.62)});
+\draw[crv,smooth,domain=0:6.6,samples=80] plot (\x,{1.1*exp(-((\x-5.0)^2)/1.3)});
+\draw[gd,smooth,domain=0:6.6,samples=80] plot (\x,{1.2*exp(-((\x-1.8)^2)/0.35)});
+\node[lab] at (1.0,3.2) {$t_1$};\node[lab] at (3.0,1.85) {$t_2$};\node[lab] at (5.0,1.35) {$t_3$};\node[lab] at (2.35,1.25) {sorbed, $t_2$};
+\end{kfig}
+
+\exbox{Travel time and the survival of a pesticide}{A soil has $\theta=0.30$, $\rho_b=1.5$ kg\,L$^{-1}$ and a drainage flux of 300 mm\,yr$^{-1}$. Find the time a pesticide needs to travel 1 m when $K_d=0.5$ L\,kg$^{-1}$ and when $K_d=0.05$ L\,kg$^{-1}$, and the fraction that reaches 1 m if its half-life is 30 days (the attenuation factor $AF=\exp(-0.693\,t/t_{1/2})$).}\sol \givenline{$v=q/\theta=0.30/0.30=1.0$ m\,yr$^{-1}$}
+\par\noindent $K_d=0.5$: $R=1+1.5\times0.5/0.30=3.5$; travel time $3.5$ years $=1278$ d; $AF=\exp(-0.693\times1278/30)=1.5\times10^{-13}$.\finans
+\par\noindent $K_d=0.05$: $R=1.25$; travel time $456$ d; $AF=\exp(-0.693\times456/30)=2.6\times10^{-5}$.\finans
+\par\noindent A tenfold weaker sorption raises the fraction that leaches by eight orders of magnitude: the leaching of pesticides is governed by the ratio of the travel time to the half-life, which is very sensitive to $K_d$ and to the drainage flux.
+
+\exbox{Spread of a nitrate pulse}{Nitrate ($R=1$) moves with a pore velocity of 100 cm\,yr$^{-1}$ in a soil of dispersivity 5 cm. Find the standard deviation of the pulse when its centre reaches 1 m.}\sol
+\par\noindent $D=\lambda_dv=5\times100=500$ cm$^2$\,yr$^{-1}$, $t=1$ yr, $\sigma=\sqrt{2Dt}=\sqrt{1000}=31.6$ cm.\finans
+\par\noindent The pulse is about 60 cm wide (two standard deviations) at 1 m; a single sampling depth therefore sees the nitrate of one fertilisation over several months.
+
+\section{Nitrate leaching and nitrous oxide in numbers}\label{sec:dm-nlos}
+The nitrate leached below the root zone is the drainage multiplied by the concentration of the drainage water, $N_L=D\,C_N$. With $D$ in mm and $C_N$ in mg N\,L$^{-1}$, $N_L$ in kg N\,ha$^{-1}$ is $D\,C_N/100$. Concentrations are often given as nitrate (mg NO$_3$\,L$^{-1}$); the conversion is $C_N=C_{\mathrm{NO_3}}\times14/62$. Of the nitrogen that is denitrified, a fraction leaves as nitrous oxide, a greenhouse gas 273 times more potent than CO$_2$ over 100 years.
+
+\exbox{Leaching at the drinking-water limit, and the climate cost of denitrification}{(a) A field drains 250 mm in a winter at the European limit of 50 mg NO$_3$\,L$^{-1}$. How much nitrogen is leached? (b) A wet spring denitrifies 20 kg N\,ha$^{-1}$, a tenth of it as N$_2$O. Find the CO$_2$ equivalent.}\sol
+\par\noindent (a) $C_N=50\times14/62=11.3$ mg N\,L$^{-1}$; $N_L=250\times11.3/100=28.2$ kg N\,ha$^{-1}$.\finans
+\par\noindent (b) N$_2$O-N $=2$ kg\,ha$^{-1}$, that is $2\times44/28=3.14$ kg N$_2$O\,ha$^{-1}$, or $3.14\times273=858$ kg CO$_2$-eq\,ha$^{-1}$.\finans

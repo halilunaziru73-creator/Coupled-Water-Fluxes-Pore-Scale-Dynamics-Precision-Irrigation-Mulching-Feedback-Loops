@@ -1,0 +1,52 @@
+\banner{How to read a figure of the atlas, and the laws behind it in numbers}\label{ch:at1-deep}
+\section{A method for reading a scientific figure}\label{sec:at-read}
+Every figure of this atlas is a compressed argument. Read it in the same six steps each time.
+\begin{enumerate}[leftmargin=2em,itemsep=2pt,label={\bfseries\color{khmag}\arabic*.}]
+\item \hd{The question.} Read the caption first and say in one sentence what the figure is meant to show.
+\item \hd{The axes.} Name the quantity and the unit of each axis, and note whether the scale is linear or logarithmic. On a logarithmic axis equal distances are equal \emph{ratios}.
+\item \hd{The units of the data.} Find out what one point is: one run, one soil, one year, or a mean over many runs.
+\item \hd{The reference.} Look for the line or level against which the data are judged: a 1:1 line, a zero line, a threshold, a fitted law.
+\item \hd{The spread.} Separate the trend from the scatter and read the error bars or bands: are they standard deviations, standard errors or confidence intervals?
+\item \hd{The claim.} State what the figure supports, and what it does not (a correlation across ten soils is not a law for every soil).
+\end{enumerate}
+
+\begin{kfig}{The anatomy of a figure of the atlas: axes with units (here logarithmic on $x$), data points with error bars, a fitted law (solid), a reference line (dashed), and the legend that names the series.}
+\draw[axis] (0,0)--(7,0);\draw[axis] (0,0)--(0,4.2);
+\node[lab,below] at (3.4,-0.55) {cause, with unit (log scale)};\node[lab,rotate=90] at (-0.85,2.0) {effect, with unit};
+\foreach \x/\t in {0.4/1,2.2/10,4.0/100,5.8/1000}{\draw[ln] (\x,0)--(\x,-0.1);\node[lab,below] at (\x,-0.1) {\t};}
+\draw[crv,smooth,domain=0:6.6] plot (\x,{0.2+3.5/(1+exp(-1.6*(\x-3.4)))});
+\foreach \x/\y/\e in {0.8/0.35/0.15,1.9/0.55/0.2,2.7/1.2/0.3,3.3/1.9/0.35,4.1/2.8/0.3,5.0/3.35/0.2,6.0/3.6/0.15}{\draw[ln] (\x,\y-\e)--(\x,\y+\e);\fill[khmag] (\x,\y) circle (0.07);}
+\draw[gd] (0,3.7)--(6.8,3.7);\node[lab,above] at (1.3,3.7) {reference level};
+\node[draw=khcyan,fill=white,lab,align=left] at (5.4,1.0) {$\bullet$ data (mean $\pm$ s.d.)\\ --- fitted law};
+\end{kfig}
+
+\section{The rate-competition law in numbers}\label{sec:at-rcl}
+The memory fate of drainage, the share of released storage that leaves the root zone downwards, was found to follow a single law across the ten soils:
+\begin{equation}\label{eq:at-rcl}\boxed{\phi_D=\frac{K_s}{K_s+q^*},\qquad q^*=71.5\ \text{cm\,d}^{-1}\ \ (95\ \%\ \text{interval }58\text{ to }105)}\end{equation}
+The law states that drainage and the other sinks (transpiration, evaporation) compete for the same released water, and that the drainage side wins in proportion to the saturated conductivity. The constant $q^*$ is the conductivity at which the two sides are equal. It was fitted by least squares; its interval comes from 4999 bootstrap resamples of the soils, and its predictive error with each soil left out is 0.058.
+
+\begin{kfig}{The rate-competition law: the memory fate of drainage against the saturated conductivity (log scale). At $K_s=q^*$ the share is one half.}
+\draw[axis] (0,0)--(6.8,0);\draw[axis] (0,0)--(0,4.0);
+\node[lab,below] at (3.3,-0.55) {$K_s$ (cm\,d$^{-1}$)};\node[lab,rotate=90] at (-0.7,1.8) {$\phi_D$};
+\foreach \x/\t in {0/0.1,1.6/1,3.2/10,4.8/100,6.4/1000}{\draw[ln] (\x,0)--(\x,-0.1);\node[lab,below] at (\x,-0.1) {\t};}
+\foreach \y/\t in {0/0,1.75/0.5,3.5/1}{\draw[ln] (0,\y)--(-0.1,\y);\node[lab,left] at (-0.1,\y) {\t};}
+\draw[crv,smooth,domain=0:6.6,samples=60] plot (\x,{3.5/(1+10^((ln(71.5)/ln(10)+1)-\x/1.6))});
+\draw[gd] (4.57,0)--(4.57,1.75)--(0,1.75);\node[lab,below right] at (4.57,0.9) {$q^*$};
+\end{kfig}
+
+\exbox{Predicting the memory fate of three soils}{Use Equation~\ref{eq:at-rcl} to predict $\phi_D$ for the sand ($K_s=712.8$ cm\,d$^{-1}$), the loam (24.96) and the silty clay loam (1.68), and compare with the values found in experiment E9: 0.846, 0.289 and 0.022.}\sol
+\par\noindent Sand: $712.8/(712.8+71.5)=0.909$; loam: $24.96/96.46=0.259$; silty clay loam: $1.68/73.18=0.023$.\finans
+\par\noindent The errors are $+0.063$, $-0.030$ and $+0.001$. The law places the three soils correctly over a range of a factor 40 in the fate, with one constant.
+
+\exbox{Error measures of a law}{The predictions of the law for five soils are 0.909, 0.830, 0.598, 0.259 and 0.023 against observations 0.846, 0.741, 0.643, 0.289 and 0.022. Find the root-mean-square error, the mean bias and the Nash--Sutcliffe efficiency $NSE=1-\sum(P_i-O_i)^2/\sum(O_i-\overline O)^2$.}\sol
+\par\noindent The errors $P-O$ are $0.063,\ 0.089,\ -0.045,\ -0.030,\ 0.001$.
+\par\noindent $RMSE=\sqrt{(0.063^2+0.089^2+0.045^2+0.030^2+0.001^2)/5}=0.054$; bias $=+0.016$.\finans
+\par\noindent $\overline O=0.508$ and $\sum(O-\overline O)^2=0.471$, so $NSE=1-0.0148/0.471=0.97$.\finans
+
+\section{From the fates to the recoverable water}\label{sec:at-rec}
+The loss fate $\psi_D$ of a change of evaporation is the share of the water saved (or lost) at the surface that ends as drainage. Only the remainder, $1-\psi_D$, stays in the root zone, is transpired or avoids irrigation: it is the \kw{recoverable fraction}. For the warming contrast of experiment E16 the loam has $\psi_D=0.469$, so 53 per cent of a reduction of evaporation is recoverable; the sand has $\psi_D=1.21$, larger than one, because in a sand a reduction of evaporation also changes the irrigation, and more water than was saved drains.
+
+\exbox{Recoverable water of a mulch}{Under the mulch contrast of experiment E7 the silty clay loam saves 160.4 mm of evaporation over twenty years with $\psi_D=0.414$, and the sand saves 58.9 mm with $\psi_D=0.706$. Find the water that drains and the water that is recovered in each soil.}\sol
+\par\noindent Silty clay loam: drained $0.414\times160.4=66.3$ mm, recovered $94.1$ mm.\finans
+\par\noindent Sand: drained $0.706\times58.9=41.6$ mm, recovered $17.3$ mm.\finans
+\par\noindent A mulch on the fine soil recovers more than five times as much water as on the sand: it saves more, and less of the saving drains away.
